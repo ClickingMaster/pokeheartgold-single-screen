@@ -189790,24 +189790,24 @@ _0207CB50: .word 0x00000654
 FUN_0207CB54: ; 0x0207CB54
 	push {r4, lr}
 	add r4, r0, #0
-	ldr r0, _0207CB68 ; =0x0000005E
+	ldr r0, _0207CB68 ; =SDK_OVERLAY_OVY_94_ID
 	mov r1, #2
 	bl FUN_02006FF8
 	add r0, r4, #0
-	bl FUN_021E5900
+	bl ovy94_021E5900
 	pop {r4, pc}
 	.align 2, 0
-_0207CB68: .word 0x0000005E
+_0207CB68: .word SDK_OVERLAY_OVY_94_ID
 	thumb_func_end FUN_0207CB54
 
 	thumb_func_start FUN_0207CB6C
 FUN_0207CB6C: ; 0x0207CB6C
 	ldr r3, _0207CB74 ; =FUN_02006F7C
-	ldr r0, _0207CB78 ; =0x0000005E
+	ldr r0, _0207CB78 ; =SDK_OVERLAY_OVY_94_ID
 	bx r3
 	nop
 _0207CB74: .word FUN_02006F7C
-_0207CB78: .word 0x0000005E
+_0207CB78: .word SDK_OVERLAY_OVY_94_ID
 	thumb_func_end FUN_0207CB6C
 
 	thumb_func_start FUN_0207CB7C
