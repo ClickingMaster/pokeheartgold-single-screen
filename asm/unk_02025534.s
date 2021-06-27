@@ -970,7 +970,7 @@ FUN_02025BB0: ; 0x02025BB0
 	bl FUN_02025BDC
 	ldr r1, [r4, #4]
 	add r0, r4, #0
-	bl FUN_020D2894
+	bl DC_FlushRange
 	add r0, r4, #0
 	mov r1, #1
 	bl FUN_0201F78C
@@ -31204,7 +31204,7 @@ _020328DC:
 	str r1, [r4, r0]
 	add r0, r4, r0
 	mov r1, #4
-	bl FUN_020D2894
+	bl DC_FlushRange
 	ldr r0, _0203292C ; =FUN_02032934
 	bl FUN_020DF680
 	cmp r0, #2
@@ -32300,7 +32300,7 @@ FUN_0203314C: ; 0x0203314C
 	add r0, r1, r0
 	ldr r1, [r1, r2]
 	add r7, r3, #0
-	bl FUN_020D2894
+	bl DC_FlushRange
 	ldr r0, _0203319C ; =0x0000FFFF
 	add r1, r7, #0
 	str r0, [sp]
@@ -33146,7 +33146,7 @@ _0203378A:
 	ldr r0, _020337CC ; =0x00001220
 	add r0, r1, r0
 	mov r1, #0xc0
-	bl FUN_020D2894
+	bl DC_FlushRange
 	bl FUN_020D28B8
 	bl FUN_02032E9C
 	add sp, #4
@@ -37115,7 +37115,7 @@ _02035388:
 	ldr r0, _020353AC ; =0x00000D88
 	ldr r0, [r1, r0]
 	mov r1, #0x5c
-	bl FUN_020D2894
+	bl DC_FlushRange
 	ldr r0, _020353A8 ; =0x021D4134
 	ldr r1, [r0, #8]
 	ldr r0, _020353AC ; =0x00000D88
@@ -37148,7 +37148,7 @@ FUN_020353B8: ; 0x020353B8
 	ldr r0, _02035408 ; =0x00000D88
 	ldr r0, [r1, r0]
 	mov r1, #0x5c
-	bl FUN_020D2894
+	bl DC_FlushRange
 	ldr r0, _02035404 ; =0x021D4134
 	ldr r1, [r0, #8]
 	ldr r0, _02035408 ; =0x00000D88
@@ -47940,7 +47940,7 @@ FUN_0203A4AC: ; 0x0203A4AC
 	mov r1, #0x96
 	ldr r0, [sp]
 	lsl r1, r1, #2
-	bl FUN_020D2894
+	bl DC_FlushRange
 	ldr r0, [sp]
 	pop {r3, pc}
 	nop
@@ -47966,7 +47966,7 @@ FUN_0203A4D4: ; 0x0203A4D4
 	mov r1, #0x96
 	ldr r0, [sp, #4]
 	lsl r1, r1, #2
-	bl FUN_020D2894
+	bl DC_FlushRange
 	ldr r0, [sp, #4]
 	add r1, sp, #0
 	bl FUN_020B7140
@@ -48018,7 +48018,7 @@ _0203A550:
 	mov r1, #0x96
 	ldr r0, [sp, #0x14]
 	lsl r1, r1, #2
-	bl FUN_020D2894
+	bl DC_FlushRange
 	b _0203A578
 _0203A568:
 	ldr r0, _0203A598 ; =0x0210F964
@@ -48026,7 +48026,7 @@ _0203A568:
 	mov r1, #0x13
 	ldr r0, [sp, #0x14]
 	lsl r1, r1, #6
-	bl FUN_020D2894
+	bl DC_FlushRange
 _0203A578:
 	ldr r0, [sp, #0x14]
 	add r1, sp, #0
@@ -48174,7 +48174,7 @@ _0203A672:
 	beq _0203A694
 	mov r1, #2
 	lsl r1, r1, #8
-	bl FUN_020D2894
+	bl DC_FlushRange
 	mov r2, #2
 	ldr r0, [r5, #0x14]
 	add r1, r6, #0
@@ -48184,7 +48184,7 @@ _0203A672:
 _0203A694:
 	mov r1, #1
 	lsl r1, r1, #0xa
-	bl FUN_020D2894
+	bl DC_FlushRange
 	mov r2, #1
 	ldr r0, [r5, #0x14]
 	add r1, r6, #0
@@ -48197,7 +48197,7 @@ _0203A6AA:
 	beq _0203A6C6
 	mov r1, #2
 	lsl r1, r1, #8
-	bl FUN_020D2894
+	bl DC_FlushRange
 	mov r2, #2
 	ldr r0, [r5, #0x14]
 	add r1, r6, #0
@@ -48207,7 +48207,7 @@ _0203A6AA:
 _0203A6C6:
 	mov r1, #1
 	lsl r1, r1, #0xa
-	bl FUN_020D2894
+	bl DC_FlushRange
 	mov r1, #0xf
 	mov r2, #1
 	ldr r0, [r5, #0x14]
@@ -194064,7 +194064,7 @@ FUN_0207ECE0: ; 0x0207ECE0
 	ldr r1, [sp, #0x18]
 	ldr r0, [r1, #0x14]
 	ldr r1, [r1, #0x10]
-	bl FUN_020D2894
+	bl DC_FlushRange
 	ldr r2, [sp, #0x18]
 	ldr r1, [sp, #0x14]
 	ldr r0, [r2, #0x14]
@@ -194081,7 +194081,7 @@ FUN_0207ECE0: ; 0x0207ECE0
 	add r7, r0, #0
 	ldr r0, [r1, #0x14]
 	ldr r1, [r1, #0x10]
-	bl FUN_020D2894
+	bl DC_FlushRange
 	ldr r2, [sp, #0x18]
 	add r1, r7, #0
 	ldr r0, [r2, #0x14]
@@ -203237,7 +203237,7 @@ _02083812:
 	mov r1, #2
 	ldr r0, [r5, r0]
 	lsl r1, r1, #8
-	bl FUN_020D2894
+	bl DC_FlushRange
 	bl FUN_02074490
 	mov r2, #0x13
 	lsl r2, r2, #6
@@ -203251,7 +203251,7 @@ _02083812:
 	add r0, r1, #4
 	ldr r0, [r5, r0]
 	mov r1, #0x80
-	bl FUN_020D2894
+	bl DC_FlushRange
 _020838FC:
 	mov r3, #1
 	str r3, [sp]
@@ -204965,7 +204965,7 @@ FUN_02084664: ; 0x02084664
 	bl FUN_02084640
 	mov r1, #2
 	lsl r1, r1, #0xa
-	bl FUN_020D2894
+	bl DC_FlushRange
 	add r7, r6, #0
 	mov r4, #0
 	add r7, #0x30
@@ -204981,7 +204981,7 @@ _02084694:
 	mov r1, #1
 	add r0, r5, #0
 	lsl r1, r1, #8
-	bl FUN_020D2894
+	bl DC_FlushRange
 	ldr r1, _02084734 ; =0x02101D3C
 	mov r2, #1
 	ldrb r1, [r1, r4]
@@ -205021,7 +205021,7 @@ _020846D6:
 	bl FUN_02084640
 	mov r1, #0x80
 	add r7, r0, #0
-	bl FUN_020D2894
+	bl DC_FlushRange
 	ldr r1, _0208473C ; =0x02101D54
 	lsl r2, r5, #2
 	ldr r1, [r1, r2]
@@ -220302,7 +220302,7 @@ _0208BE36:
 	mov r1, #2
 	ldr r0, [r0, #0x14]
 	lsl r1, r1, #8
-	bl FUN_020D2894
+	bl DC_FlushRange
 	ldr r0, [sp, #4]
 	mov r2, #2
 	ldr r0, [r0, #0x14]
@@ -237716,7 +237716,7 @@ _02094766:
 	add r0, r5, #0
 	add r0, #0xc
 	add r1, r6, #0
-	bl FUN_020D2894
+	bl DC_FlushRange
 	add r0, r5, #0
 	ldr r1, [r5]
 	add r0, #0xc
