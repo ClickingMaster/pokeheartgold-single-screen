@@ -3919,7 +3919,7 @@ sub_02027098: ; 0x02027098
 	ldr r0, _020270C0 ; =0x027FFC2C
 	str r1, [r0]
 	mov r0, #0
-	bl sub_020D3B84
+	bl OS_ResetSystem
 _020270BC:
 	add sp, #0x48
 	pop {r4, pc}
@@ -5730,7 +5730,7 @@ sub_02027D6C: ; 0x02027D6C
 	ldr r1, _02027DB0 ; =0x00023010
 	str r2, [r0, r1]
 _02027D7C:
-	bl sub_020DD1A4
+	bl CARD_TryWaitBackupAsync
 	cmp r0, #0
 	bne _02027D88
 	bl sub_020DD1B0
@@ -49118,13 +49118,13 @@ _0203ADEE:
 	and r0, r1
 	lsl r0, r0, #0x10
 	lsr r5, r0, #0x10
-	bl sub_0200110C
+	bl HandleDSLidAction
 	add r0, r5, #0
 	tst r0, r7
 	bne _0203AE12
 	mov r0, #1
 	add r1, r0, #0
-	bl sub_020D0E6C
+	bl OS_WaitIrq
 	b _0203ADEE
 _0203AE12:
 	add r0, sp, #0x14
@@ -55670,7 +55670,7 @@ sub_0203DED4: ; 0x0203DED4
 	bl sub_0203E058
 	ldr r0, _0203DEE8 ; =0x0000003C
 	ldr r1, _0203DEEC ; =0x021EAFE0
-	bl sub_02000EF4
+	bl RegisterMainOverlay
 	mov r0, #1
 	pop {r3, pc}
 	nop
@@ -55704,7 +55704,7 @@ _0203DF0C:
 	str r1, [r0, #8]
 	ldr r0, _0203DF30 ; =0x02206378
 	add r1, r4, #0
-	bl sub_0200724C
+	bl OverlayManager_new
 	ldr r1, [r4]
 	str r0, [r1]
 	pop {r4, pc}
@@ -55822,7 +55822,7 @@ _0203DFC8:
 	add r0, r4, #0
 	add r1, r6, #0
 	mov r2, #0xb
-	bl sub_0200724C
+	bl OverlayManager_new
 	ldr r1, [r5]
 	str r0, [r1, #4]
 	pop {r4, r5, r6, pc}
@@ -55926,11 +55926,11 @@ sub_0203E0AC: ; 0x0203E0AC
 	ldr r0, [r4]
 	cmp r0, #0
 	beq _0203E0C8
-	bl sub_020072A8
+	bl OverlayManager_run
 	cmp r0, #0
 	beq _0203E0C8
 	ldr r0, [r4]
-	bl sub_02007278
+	bl OverlayManager_delete
 	mov r0, #0
 	str r0, [r4]
 _0203E0C8:
@@ -81842,11 +81842,11 @@ _0204A678:
 
 	thumb_func_start sub_0204A68C
 sub_0204A68C: ; 0x0204A68C
-	ldr r3, _0204A694 ; =sub_020D3B84
+	ldr r3, _0204A694 ; =OS_ResetSystem
 	mov r0, #0
 	bx r3
 	nop
-_0204A694: .word sub_020D3B84
+_0204A694: .word OS_ResetSystem
 	thumb_func_end sub_0204A68C
 
 	thumb_func_start sub_0204A698
@@ -98881,7 +98881,7 @@ _02052C86:
 	mov r0, #4
 	bl sub_0201A9C4
 	mov r0, #0
-	bl sub_020D3B84
+	bl OS_ResetSystem
 	add sp, #0xc
 	mov r0, #1
 	pop {r4, r5, r6, r7, pc}
@@ -170189,7 +170189,7 @@ _02073690:
 	add r1, r1, r2
 	add r0, r0, r1
 	str r0, [sp, #0x6c]
-	bl sub_0201FD38
+	bl SetLCRNGSeed
 	add r0, r4, r5
 	add r0, #0x29
 	ldrb r0, [r0]
@@ -170302,7 +170302,7 @@ _0207377A:
 	add r1, r1, r2
 	add r0, r0, r1
 	str r0, [sp, #0x18]
-	bl sub_0201FD38
+	bl SetLCRNGSeed
 	add r0, r4, r5
 	add r0, #0x29
 	ldrb r0, [r0]
@@ -170431,7 +170431,7 @@ _02073884:
 	add r1, r1, r2
 	add r0, r0, r1
 	str r0, [sp, #0x1c]
-	bl sub_0201FD38
+	bl SetLCRNGSeed
 	add r0, r4, r5
 	add r0, #0x29
 	ldrb r0, [r0]
@@ -170555,7 +170555,7 @@ _02073998:
 	add r1, r1, r2
 	add r0, r0, r1
 	str r0, [sp, #0x20]
-	bl sub_0201FD38
+	bl SetLCRNGSeed
 	add r0, r4, r5
 	add r0, #0x29
 	ldrb r0, [r0]
@@ -170652,7 +170652,7 @@ _02073A82:
 	add r0, r6, #0
 	bl sub_0201AB0C
 	ldr r0, [sp, #0x68]
-	bl sub_0201FD38
+	bl SetLCRNGSeed
 	add sp, #0x80
 	pop {r3, r4, r5, r6, r7, pc}
 	thumb_func_end sub_02073604
@@ -176702,14 +176702,14 @@ _020766BC:
 	pop {r4, pc}
 _02076748:
 	ldr r0, [r4, #0x38]
-	bl sub_020072A8
+	bl OverlayManager_run
 	cmp r0, #0
 	bne _02076754
 _02076752:
 	b _02076C76
 _02076754:
 	ldr r0, [r4, #0x38]
-	bl sub_02007278
+	bl OverlayManager_delete
 	mov r0, #0
 	str r0, [r4, #0x38]
 	ldr r1, [r4]
@@ -178154,7 +178154,7 @@ sub_02077394: ; 0x02077394
 	ldr r0, _020773A8 ; =0x02103A1C
 	ldr r1, [r4, #0x3c]
 	ldr r2, [r4, #0x5c]
-	bl sub_0200724C
+	bl OverlayManager_new
 	str r0, [r4, #0x38]
 	pop {r4, pc}
 	nop
@@ -181518,7 +181518,7 @@ _020789CC:
 	mov r0, #0x35
 	bl sub_0221BA00
 	mov r0, #0
-	bl sub_020D3B84
+	bl OS_ResetSystem
 	b _02078B20
 _020789E8:
 	ldr r0, [r4]
@@ -211891,12 +211891,12 @@ sub_02087BE8: ; 0x02087BE8
 	bne _02087C06
 	ldr r0, _02087C30 ; =0x021028B4
 	add r1, r4, #0
-	bl sub_0200724C
+	bl OverlayManager_new
 	b _02087C0E
 _02087C06:
 	ldr r0, _02087C34 ; =0x021028C4
 	add r1, r4, #0
-	bl sub_0200724C
+	bl OverlayManager_new
 _02087C0E:
 	str r0, [r4, #8]
 	ldr r0, [r4]
@@ -211905,11 +211905,11 @@ _02087C0E:
 	b _02087C2C
 _02087C18:
 	ldr r0, [r4, #8]
-	bl sub_020072A8
+	bl OverlayManager_run
 	cmp r0, #0
 	beq _02087C2C
 	ldr r0, [r4, #8]
-	bl sub_02007278
+	bl OverlayManager_delete
 	mov r0, #1
 	pop {r4, pc}
 _02087C2C:
@@ -212050,7 +212050,7 @@ _02087D46:
 	ldr r0, _02087E0C ; =0x020FA484
 	ldr r1, [r5, #0x10]
 	add r2, r4, #0
-	bl sub_0200724C
+	bl OverlayManager_new
 	str r0, [r5, #8]
 	ldr r0, [r5]
 	add r0, r0, #1
@@ -212058,7 +212058,7 @@ _02087D46:
 	b _02087DEC
 _02087D5A:
 	ldr r0, [r5, #8]
-	bl sub_020072A8
+	bl OverlayManager_run
 	cmp r0, #0
 	beq _02087DEC
 	mov r0, #0x71
@@ -212088,7 +212088,7 @@ _02087D88:
 	ldr r0, [r5, #0x10]
 	bl sub_02051BF8
 	ldr r0, [r5, #8]
-	bl sub_02007278
+	bl OverlayManager_delete
 	mov r0, #0
 	bl sub_02005B68
 	mov r0, #0
@@ -231486,7 +231486,7 @@ sub_020915F0: ; 0x020915F0
 	bl sub_020915E0
 	bl sub_020915C0
 	mov r0, #0
-	bl sub_020D3B84
+	bl OS_ResetSystem
 	pop {r4, pc}
 	.align 2, 0
 	thumb_func_end sub_020915F0
@@ -231529,7 +231529,7 @@ sub_02091634: ; 0x02091634
 	mov r0, #0x30
 	bl sub_0201A9C4
 	mov r0, #0
-	bl sub_020D3B84
+	bl OS_ResetSystem
 	mov r0, #1
 	pop {r4, pc}
 	.align 2, 0
@@ -232644,7 +232644,7 @@ sub_02091E34: ; 0x02091E34
 	add r0, r4, #0
 	bl sub_0201A9C4
 	mov r0, #0
-	bl sub_020D3B84
+	bl OS_ResetSystem
 	mov r0, #1
 	pop {r3, r4, r5, pc}
 	thumb_func_end sub_02091E34
@@ -233182,7 +233182,7 @@ sub_02092288: ; 0x02092288
 	bl sub_0201A9C4
 	ldr r0, _020922B0 ; =0x0000004A
 	ldr r1, _020922B4 ; =0x0223B310
-	bl sub_02000EF4
+	bl RegisterMainOverlay
 	mov r0, #1
 	pop {r3, r4, r5, pc}
 	.align 2, 0
@@ -233777,10 +233777,10 @@ sub_0209263C: ; 0x0209263C
 	bl sub_0200B4F0
 	mov r4, #1
 _02092790:
-	bl sub_0200110C
+	bl HandleDSLidAction
 	add r0, r4, #0
 	add r1, r4, #0
-	bl sub_020D0E6C
+	bl OS_WaitIrq
 	b _02092790
 	nop
 _020927A0: .word 0xFFFFE0FF
@@ -233939,10 +233939,10 @@ sub_020927D0: ; 0x020927D0
 	bl sub_0200B4F0
 	mov r4, #1
 _02092924:
-	bl sub_0200110C
+	bl HandleDSLidAction
 	add r0, r4, #0
 	add r1, r4, #0
-	bl sub_020D0E6C
+	bl OS_WaitIrq
 	b _02092924
 	nop
 _02092934: .word 0xFFFFE0FF
@@ -234109,10 +234109,10 @@ _02092974:
 	bl sub_0200B4F0
 	mov r4, #1
 _02092AC6:
-	bl sub_0200110C
+	bl HandleDSLidAction
 	add r0, r4, #0
 	add r1, r4, #0
-	bl sub_020D0E6C
+	bl OS_WaitIrq
 	b _02092AC6
 	.align 2, 0
 _02092AD4: .word 0xFFFFE0FF
@@ -241541,14 +241541,14 @@ _02096346:
 	bl sub_02038D90
 	mov r4, #1
 _020964D8:
-	bl sub_0200110C
+	bl HandleDSLidAction
 	bl sub_02036144
 	bl sub_02039AA4
 	cmp r0, #0
 	bne _020964F2
 	add r0, r4, #0
 	add r1, r4, #0
-	bl sub_020D0E6C
+	bl OS_WaitIrq
 	b _020964D8
 _020964F2:
 	ldr r5, _02096584 ; =0x04000130
@@ -241556,7 +241556,7 @@ _020964F2:
 	ldr r7, _0209658C ; =0x00002FFF
 	mov r6, #1
 _020964FA:
-	bl sub_0200110C
+	bl HandleDSLidAction
 	ldrh r1, [r5]
 	ldrh r0, [r4]
 	orr r1, r0
@@ -241569,7 +241569,7 @@ _020964FA:
 	bne _0209651C
 	mov r0, #1
 	add r1, r0, #0
-	bl sub_020D0E6C
+	bl OS_WaitIrq
 	b _020964FA
 _0209651C:
 	ldr r1, _02096590 ; =0x00007FFF
@@ -241585,7 +241585,7 @@ _0209651C:
 	ldr r0, [sp, #0x10]
 	bl sub_0201AB0C
 	mov r0, #0
-	bl sub_020D3B84
+	bl OS_ResetSystem
 _02096544:
 	add sp, #0x24
 	pop {r4, r5, r6, r7, pc}
@@ -241736,11 +241736,11 @@ _02096670:
 	b _02096734
 _02096686:
 	ldr r0, [r4, #4]
-	bl sub_020072A8
+	bl OverlayManager_run
 	cmp r0, #1
 	bne _02096734
 	ldr r0, [r4, #4]
-	bl sub_02007278
+	bl OverlayManager_delete
 	bl sub_020967BC
 	ldr r1, [r4, #0xc]
 	cmp r1, #0
@@ -241971,7 +241971,7 @@ _02096834:
 	add r0, r7, #0
 	add r1, r4, #0
 	mov r2, #0xb
-	bl sub_0200724C
+	bl OverlayManager_new
 	str r0, [r5, #4]
 	str r4, [r5, #8]
 	ldr r0, [sp, #0x18]
