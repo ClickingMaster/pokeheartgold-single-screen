@@ -212209,7 +212209,7 @@ sub_02087E70: ; 0x02087E70
 	add r0, r4, #0
 	bl sub_02087A78
 	add r4, r0, #0
-	bl sub_0222C480
+	bl ov40_0222C480
 	mov r0, #1
 	mov r1, #0x2a
 	bl sub_02005B50
@@ -212283,7 +212283,7 @@ sub_02087F10: ; 0x02087F10
 	bl sub_02087A78
 	add r1, r4, #0
 	str r4, [r0, #0x10]
-	bl sub_0222BD30
+	bl ov40_0222BD30
 	cmp r0, #0
 	beq _02087F28
 	mov r0, #1
@@ -212320,7 +212320,7 @@ _02087F50:
 	str r0, [r4]
 	b _02087FC2
 _02087F5C:
-	bl sub_0222CA8C
+	bl ov40_0222CA8C
 	add r0, r5, #0
 	bl ov40_0222CF94
 	add r0, r5, #0
@@ -241792,7 +241792,7 @@ _020966FA:
 	bl ov80_0222AAD8
 	add r6, r0, #0
 	ldr r0, [r4, #0x14]
-	bl sub_0222A920
+	bl ov80_0222A920
 	ldr r2, [r4]
 	add r0, r4, #0
 	add r2, #0x20
@@ -241827,7 +241827,7 @@ sub_0209673C: ; 0x0209673C
 	bl sub_02007290
 	add r4, r0, #0
 	ldr r0, [r4, #0x14]
-	bl sub_0222A920
+	bl ov80_0222A920
 	add r0, r4, #0
 	bl sub_02096770
 	add r0, r5, #0
