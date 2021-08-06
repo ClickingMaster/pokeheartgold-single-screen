@@ -70967,7 +70967,7 @@ sub_020452B0: ; 0x020452B0
 	bl sub_02040374
 	add r5, r0, #0
 	ldr r0, [r4]
-	bl sub_02259B50
+	bl ov23_02259B50
 	strh r0, [r5]
 	mov r0, #0
 	pop {r3, r4, r5, pc}
@@ -71056,7 +71056,7 @@ sub_02045374: ; 0x02045374
 	mov r1, #0x15
 	bl sub_020402F0
 	ldr r0, [r0]
-	bl sub_02259944
+	bl ov23_02259944
 	ldr r0, _02045390 ; =SDK_OVERLAY_OVY_23_ID
 	bl UnloadOverlayByID
 	mov r0, #0
@@ -76277,7 +76277,7 @@ sub_02047BF4: ; 0x02047BF4
 	push {r3, lr}
 	add r0, #0x80
 	ldr r0, [r0]
-	bl sub_02251554
+	bl ov02_02251554
 	mov r0, #1
 	pop {r3, pc}
 	.align 2, 0
@@ -144960,7 +144960,7 @@ _02067990:
 	ldr r1, [r4]
 	ldr r2, [r4, #8]
 	add r0, r6, #0
-	bl sub_02259B88
+	bl ov23_02259B88
 	ldr r1, [r4]
 	ldr r2, [r4, #8]
 	add r0, r6, #0
@@ -173529,7 +173529,7 @@ _02074E54:
 sub_02074E5C: ; 0x02074E5C
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
-	bl sub_0223B514
+	bl ov12_0223B514
 	mov r1, #0x10
 	tst r0, r1
 	bne _02074EB6
@@ -173552,7 +173552,7 @@ sub_02074E5C: ; 0x02074E5C
 	strb r0, [r6, #4]
 	add r0, r5, #0
 	add r1, r4, #4
-	bl sub_0223BBFC
+	bl ov12_0223BBFC
 	add r0, r5, #0
 	add r1, r6, #4
 	bl ov12_0223BC08
