@@ -7921,7 +7921,7 @@ sub_02028DE8: ; 0x02028DE8
 	str r0, [r4]
 	add r0, r4, #4
 	add r1, #0x14
-	bl sub_02014708
+	bl GF_RTC_CopyDateTime
 	add r0, r4, #4
 	bl sub_020DC284
 	add r1, r4, #0
@@ -7984,7 +7984,7 @@ sub_02028E4C: ; 0x02028E4C
 	str r0, [r4, #0x34]
 	add r0, r4, #4
 	add r1, #0x14
-	bl sub_02014708
+	bl GF_RTC_CopyDateTime
 	add r0, r4, #4
 	bl sub_020DC284
 	str r0, [r4, #0x20]
@@ -11916,12 +11916,12 @@ _0202A898:
 
 	thumb_func_start sub_0202A8A8
 sub_0202A8A8: ; 0x0202A8A8
-	ldr r3, _0202A8B0 ; =sub_02014708
+	ldr r3, _0202A8B0 ; =GF_RTC_CopyDateTime
 	add r1, r0, #0
 	add r1, #0x10
 	bx r3
 	.align 2, 0
-_0202A8B0: .word sub_02014708
+_0202A8B0: .word GF_RTC_CopyDateTime
 	thumb_func_end sub_0202A8A8
 
 	thumb_func_start sub_0202A8B4
@@ -41852,7 +41852,7 @@ sub_0203778C: ; 0x0203778C
 	add r4, r0, #0
 	add r0, sp, #0x10
 	add r1, sp, #4
-	bl sub_02014708
+	bl GF_RTC_CopyDateTime
 	ldr r0, _02037810 ; =0x021D110C
 	ldr r6, [sp, #0x10]
 	mov r5, #0
@@ -45962,7 +45962,7 @@ _020395C2:
 _020395CE:
 	add r0, sp, #4
 	add r1, sp, #0
-	bl ov01_021EC11C
+	bl ov00_021EC11C
 	cmp r0, #0
 	beq _02039600
 	bl ov00_021EC210
@@ -45974,7 +45974,7 @@ _020395E4:
 	bne _02039600
 	add r0, sp, #4
 	add r1, sp, #0
-	bl ov01_021EC11C
+	bl ov00_021EC11C
 	cmp r0, #0
 	beq _02039600
 	ldr r0, [sp]
@@ -96596,7 +96596,7 @@ _0205193C:
 	str r0, [r4, r1]
 	add r0, sp, #0x10
 	add r1, sp, #4
-	bl sub_02014708
+	bl GF_RTC_CopyDateTime
 	ldr r0, _02051A5C ; =0x021D110C
 	ldr r6, [sp, #0x14]
 	ldr r5, [r0, #0x2c]
@@ -104127,7 +104127,7 @@ sub_02055418: ; 0x02055418
 	beq _0205544A
 	add r0, sp, #0xc
 	add r1, sp, #0
-	bl sub_02014708
+	bl GF_RTC_CopyDateTime
 	add r0, r5, #0
 	add r1, r4, #0
 	add r2, sp, #0xc
@@ -169367,7 +169367,7 @@ sub_020730B4: ; 0x020730B4
 	add r6, r0, #0
 	add r0, sp, #0x18
 	add r1, sp, #0xc
-	bl sub_02014708
+	bl GF_RTC_CopyDateTime
 	lsl r0, r6, #2
 	ldr r1, _0207322C ; =0x020FF6B6
 	add r0, r6, r0
@@ -189794,7 +189794,7 @@ sub_0207CB54: ; 0x0207CB54
 	mov r1, #2
 	bl HandleLoadOverlay
 	add r0, r4, #0
-	bl ovy94_021E5900
+	bl ov94_021E5900
 	pop {r4, pc}
 	.align 2, 0
 _0207CB68: .word SDK_OVERLAY_OVY_94_ID
@@ -246984,7 +246984,7 @@ _020FA3E4:
 	.word ov101_021ED7F8
 	.word ov101_021ED8B4
 	.word ov101_021ED924
-	.word SDK_OVERLAY_OV_101_ID
+	.word SDK_OVERLAY_OVY_101_ID
 _020FA3F4:
 	.byte 0x2D, 0x64, 0x1E, 0x02, 0x21, 0x65, 0x1E, 0x02, 0xBD, 0x65, 0x1E, 0x02
 	.byte 0x64, 0x00, 0x00, 0x00
