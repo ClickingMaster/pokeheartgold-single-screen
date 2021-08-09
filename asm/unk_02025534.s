@@ -8092,7 +8092,7 @@ sub_02028EF0: ; 0x02028EF0
 	mov r0, #2
 	strb r0, [r4, #0x19]
 	add r0, r4, #0
-	mov r1, #7
+	mov r1, #GAME_VERSION
 	bl sub_02029080
 	pop {r4, pc}
 	.balign 4, 0
@@ -28204,7 +28204,7 @@ _02031566:
 	mov r2, #0
 	bl sub_0205B46C
 	strb r0, [r5, #0x16]
-	mov r0, #7
+	mov r0, #GAME_VERSION
 	strb r0, [r5, #0x19]
 	mov r0, #2
 	strb r0, [r5, #0x1a]
@@ -28601,7 +28601,7 @@ sub_020317F4: ; 0x020317F4
 	mov r1, #0
 	mov r2, #0x64
 	bl sub_020D4994
-	mov r0, #7
+	mov r0, #GAME_VERSION
 	strb r0, [r4]
 	mov r0, #2
 	strb r0, [r4, #1]
@@ -50711,7 +50711,11 @@ sub_0203B88C: ; 0x0203B88C
 	bl sub_0203B344
 	add r2, r0, #0
 	add r0, r5, #0
+#ifdef HEARTGOLD
 	mov r1, #0x25
+#else
+	mov r1, #0x88
+#endif
 	bl sub_02007508
 _0203B8B4:
 	pop {r3, r4, r5, pc}
@@ -55675,7 +55679,11 @@ sub_0203DED4: ; 0x0203DED4
 	pop {r3, pc}
 	nop
 _0203DEE8: .word SDK_OVERLAY_OVY_60_ID
+#ifdef HEARTGOLD
 _0203DEEC: .word 0x021EAFE0
+#else
+_0203DEEC: .word 0x021EAFD8
+#endif
 	thumb_func_end sub_0203DED4
 
 	thumb_func_start sub_0203DEF0
@@ -71371,7 +71379,7 @@ sub_020455F0: ; 0x020455F0
 	add r1, r0, #0
 	ldr r0, [r4]
 	bl sub_02040374
-	mov r1, #7
+	mov r1, #GAME_VERSION
 	strh r1, [r0]
 	mov r0, #0
 	pop {r4, pc}
@@ -148018,7 +148026,7 @@ sub_02068FC8: ; 0x02068FC8
 	ldr r0, [sp, #0x10]
 	ldr r2, [sp, #0x24]
 	ldr r3, [sp, #0x18]
-	mov r1, #7
+	mov r1, #GAME_VERSION
 	bl sub_020692A0
 	add r0, r7, #0
 	bl sub_02028F88
@@ -201962,6 +201970,9 @@ sub_02082E28: ; 0x02082E28
 	mov r0, #0x17
 	lsl r0, r0, #4
 	ldr r0, [r5, r0]
+#ifndef HEARTGOLD
+	add r1, #0x2A
+#endif
 	bl sub_0200BBA0
 	add r6, r0, #0
 	b _02082E6E
@@ -201974,7 +201985,11 @@ _02082E52:
 	mov r0, #0x17
 	lsl r0, r0, #4
 	ldr r0, [r5, r0]
+#ifdef HEARTGOLD
 	add r1, #0x12
+#else
+	add r1, #0x3C
+#endif
 	bl sub_0200BBA0
 	add r6, r0, #0
 _02082E6E:
@@ -201995,7 +202010,11 @@ _02082E8A:
 	mov r0, #0x17
 	lsl r0, r0, #4
 	ldr r0, [r5, r0]
+#ifdef HEARTGOLD
 	mov r1, #0x54
+#else
+	mov r1, #0x55
+#endif
 	bl sub_0200BBA0
 	add r5, r0, #0
 	ldr r0, [r4, #0x18]
@@ -233187,7 +233206,11 @@ sub_02092288: ; 0x02092288
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 _020922B0: .word SDK_OVERLAY_OVY_74_ID
+#ifdef HEARTGOLD
 _020922B4: .word 0x0223B310
+#else
+_020922B4: .word 0x0223B314
+#endif
 	thumb_func_end sub_02092288
 
 	thumb_func_start sub_020922B8
@@ -245327,9 +245350,9 @@ _02097FF0: .word 0x02108F4C
 	.rodata
 
 _020F566C:
-	.byte 0x07, 0x00, 0x00, 0x00
+	.word GAME_VERSION
 _020F5670:
-	.byte 0x02, 0x00, 0x00, 0x00
+	.word GAME_LANGUAGE
 _020F5674:
 	.byte 0xA2, 0x00, 0xA3, 0x00, 0xA4, 0x00, 0xA5, 0x00, 0xA6, 0x00, 0xA7, 0x00
 	.byte 0xA8, 0x00, 0xA9, 0x00, 0xAA, 0x00, 0xAB, 0x00, 0xAC, 0x00, 0xAD, 0x00, 0xAE, 0x00, 0xAF, 0x00
@@ -246915,8 +246938,7 @@ _020FA274:
 	.byte 0x01, 0x59, 0x1E, 0x02, 0x39, 0x5A, 0x1E, 0x02, 0x75, 0x5F, 0x1E, 0x02
 	.byte 0x3D, 0x00, 0x00, 0x00
 _020FA284:
-	.byte 0xA1, 0x5A, 0x1E, 0x02, 0x65, 0x5B, 0x1E, 0x02, 0x81, 0x5B, 0x1E, 0x02
-	.byte 0x12, 0x00, 0x00, 0x00
+	.word ov18_021E5AA0, ov18_021E5B64, ov18_021E5B80, SDK_OVERLAY_OVY_18_ID
 _020FA294:
 	.byte 0x25, 0x59, 0x1E, 0x02, 0x5D, 0x59, 0x1E, 0x02, 0xA9, 0x59, 0x1E, 0x02
 	.byte 0x32, 0x00, 0x00, 0x00
