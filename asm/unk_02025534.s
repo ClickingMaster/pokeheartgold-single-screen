@@ -47969,7 +47969,7 @@ sub_0203A4D4: ; 0x0203A4D4
 	bl DC_FlushRange
 	ldr r0, [sp, #4]
 	add r1, sp, #0
-	bl sub_020B7140
+	bl NNS_G2dGetUnpackedPaletteData
 	cmp r5, #1
 	bne _0203A518
 	ldr r0, [sp]
@@ -154863,7 +154863,7 @@ sub_0206C488: ; 0x0206C488
 	mov r0, #0xe7
 	add r2, r1, #0
 	mov r3, #4
-	bl sub_02007A44
+	bl GfGfxLoader_LoadFromNarc
 	mov r4, #0
 	add r5, r0, #0
 	ldr r0, [sp, #4]
@@ -157398,7 +157398,7 @@ sub_0206D894: ; 0x0206D894
 	mov r2, #0
 	mov r3, #0xb
 	add r6, r1, #0
-	bl sub_02007A44
+	bl GfGfxLoader_LoadFromNarc
 	add r4, r0, #0
 	add r0, r5, #0
 	add r1, r4, #0
@@ -183610,7 +183610,7 @@ sub_02079A14: ; 0x02079A14
 	bl NARC_AllocAndReadWholeMember
 	add r1, sp, #0x10
 	add r7, r0, #0
-	bl sub_020B7140
+	bl NNS_G2dGetUnpackedPaletteData
 	ldr r1, [sp, #0x10]
 	mov r0, #0xc
 	ldr r1, [r1, #8]
@@ -207280,7 +207280,7 @@ sub_02085820: ; 0x02085820
 	bl sub_0203A4AC
 	add r1, sp, #0x14
 	add r4, r0, #0
-	bl sub_020B7140
+	bl NNS_G2dGetUnpackedPaletteData
 	mov r0, #0x20
 	str r0, [sp]
 	mov r0, #0xbf
@@ -243880,7 +243880,7 @@ _020974F8:
 	ldrb r1, [r1, r7]
 	mov r0, #0xe8
 	mov r2, #0
-	bl sub_02007A44
+	bl GfGfxLoader_LoadFromNarc
 	add r5, r0, #0
 	bne _02097522
 	ldr r0, [sp, #0x20]
