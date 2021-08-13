@@ -3554,8 +3554,8 @@ sub_02026E18: ; 0x02026E18
 	bx lr
 	thumb_func_end sub_02026E18
 
-	thumb_func_start sub_02026E30
-sub_02026E30: ; 0x02026E30
+	thumb_func_start GF_InitRTCWork
+GF_InitRTCWork: ; 0x02026E30
 	ldr r0, _02026E40 ; =0x021D221C
 	mov r1, #0
 	str r1, [r0]
@@ -3567,7 +3567,7 @@ sub_02026E30: ; 0x02026E30
 	.balign 4, 0
 _02026E40: .word 0x021D221C
 _02026E44: .word 0x021D221C
-	thumb_func_end sub_02026E30
+	thumb_func_end GF_InitRTCWork
 
 	thumb_func_start sub_02026E48
 sub_02026E48: ; 0x02026E48
@@ -4091,8 +4091,8 @@ sub_020271A0: ; 0x020271A0
 	.balign 4, 0
 	thumb_func_end sub_020271A0
 
-	thumb_func_start sub_020271B0
-sub_020271B0: ; 0x020271B0
+	thumb_func_start SaveBlock2_new
+SaveBlock2_new: ; 0x020271B0
 	push {r3, r4, r5, lr}
 	sub sp, #8
 	ldr r1, _02027298 ; =0x0002330C
@@ -4215,7 +4215,7 @@ _020272A0: .word 0x00023308
 _020272A4: .word 0x00023014
 _020272A8: .word 0x000232B4
 _020272AC: .word 0x000232F8
-	thumb_func_end sub_020271B0
+	thumb_func_end SaveBlock2_new
 
 	thumb_func_start sub_020272B0
 sub_020272B0: ; 0x020272B0
@@ -8028,14 +8028,14 @@ sub_02028E9C: ; 0x02028E9C
 	pop {r3, pc}
 	thumb_func_end sub_02028E9C
 
-	thumb_func_start sub_02028EA8
-sub_02028EA8: ; 0x02028EA8
+	thumb_func_start Sav2_PlayerData_GetOptionsAddr
+Sav2_PlayerData_GetOptionsAddr: ; 0x02028EA8
 	ldr r3, _02028EB0 ; =sub_020272C8
 	mov r1, #1
 	bx r3
 	nop
 _02028EB0: .word sub_020272C8
-	thumb_func_end sub_02028EA8
+	thumb_func_end Sav2_PlayerData_GetOptionsAddr
 
 	thumb_func_start sub_02028EB4
 sub_02028EB4: ; 0x02028EB4
@@ -12573,7 +12573,7 @@ sub_0202ACF4: ; 0x0202ACF4
 	push {r3, lr}
 	cmp r0, #0
 	beq _0202AD04
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	bl sub_0202ADAC
 	add r1, r0, #0
 _0202AD04:
@@ -17654,14 +17654,14 @@ sub_0202CE50: ; 0x0202CE50
 	pop {r4, pc}
 	thumb_func_end sub_0202CE50
 
-	thumb_func_start sub_0202CE64
-sub_0202CE64: ; 0x0202CE64
+	thumb_func_start Sav2_Chatot_get
+Sav2_Chatot_get: ; 0x0202CE64
 	ldr r3, _0202CE6C ; =sub_020272C8
 	mov r1, #0x12
 	bx r3
 	nop
 _0202CE6C: .word sub_020272C8
-	thumb_func_end sub_0202CE64
+	thumb_func_end Sav2_Chatot_get
 
 	thumb_func_start sub_0202CE70
 sub_0202CE70: ; 0x0202CE70
@@ -25950,7 +25950,7 @@ _02030614:
 	cmp r7, #4
 	blt _02030604
 	ldr r0, [sp]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	mov r1, #0x13
 	lsl r1, r1, #4
 	ldr r1, [r6, r1]
@@ -48965,8 +48965,8 @@ sub_0203AC90: ; 0x0203AC90
 	bx lr
 	thumb_func_end sub_0203AC90
 
-	thumb_func_start sub_0203AC94
-sub_0203AC94: ; 0x0203AC94
+	thumb_func_start ShowWFCUserInfoWarning
+ShowWFCUserInfoWarning: ; 0x0203AC94
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x24
 	add r4, r0, #0
@@ -49178,7 +49178,7 @@ _0203AE9C: .word 0x020F6B50
 _0203AEA0: .word 0x04000130
 _0203AEA4: .word 0x027FFFA8
 _0203AEA8: .word 0x00002FFF
-	thumb_func_end sub_0203AC94
+	thumb_func_end ShowWFCUserInfoWarning
 
 	thumb_func_start sub_0203AEAC
 sub_0203AEAC: ; 0x0203AEAC
@@ -53210,7 +53210,7 @@ _0203CB1A:
 	bl sub_02074904
 	str r0, [r7]
 	ldr r0, [r5, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r7, #4]
 	mov r0, #1
 	strb r0, [r7, #0x11]
@@ -53269,7 +53269,7 @@ _0203CBA8:
 	bl sub_02074904
 	str r0, [r7]
 	ldr r0, [r5, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r7, #4]
 	mov r1, #1
 	add r0, r6, #0
@@ -53333,7 +53333,7 @@ _0203CC3E:
 	bl sub_02074904
 	str r0, [r7]
 	ldr r0, [r5, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r7, #4]
 	mov r1, #1
 	add r0, r6, #0
@@ -53723,7 +53723,7 @@ sub_0203CF74: ; 0x0203CF74
 	bl sub_0202B50C
 	str r0, [r5, #8]
 	ldr r0, [r4, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r5, #0xc]
 	mov r0, #0x37
 	lsl r0, r0, #4
@@ -55022,7 +55022,7 @@ sub_0203D9E8: ; 0x0203D9E8
 	cmp r0, #0
 	ldr r0, [r4, #0xc]
 	bne _0203DA72
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [sp, #0x24]
 	ldr r0, [r4, #0xc]
 	bl sub_02088288
@@ -55054,7 +55054,7 @@ sub_0203D9E8: ; 0x0203D9E8
 	bl sub_02075A7C
 	b _0203DABA
 _0203DA72:
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [sp, #0x30]
 	ldr r0, [r4, #0xc]
 	bl sub_02088288
@@ -56555,7 +56555,7 @@ sub_0203E4FC: ; 0x0203E4FC
 	bl sub_0202B50C
 	str r0, [r4, #8]
 	ldr r0, [r5, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r4, #0xc]
 	add r0, r4, #0
 	add r0, #0x25
@@ -56875,7 +56875,7 @@ sub_0203E76C: ; 0x0203E76C
 	add r4, r0, #0
 	bl sub_020D4994
 	add r0, r5, #0
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r4, #4]
 	add r0, r5, #0
 	bl sub_02074904
@@ -56936,7 +56936,7 @@ sub_0203E7F4: ; 0x0203E7F4
 	bl sub_02074904
 	str r0, [r4]
 	ldr r0, [r5, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r4, #4]
 	mov r0, #1
 	strb r0, [r4, #0x11]
@@ -57717,7 +57717,7 @@ sub_0203EDDC: ; 0x0203EDDC
 	str r7, [r4, #4]
 	str r0, [r4, #8]
 	ldr r0, [r5, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r4, #0xc]
 	add r0, r5, #0
 	add r1, r4, #0
@@ -57747,7 +57747,7 @@ sub_0203EE24: ; 0x0203EE24
 	add r4, r0, #0
 	add r0, r5, #0
 	bl sub_0203E344
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r4, #4]
 	mov r0, #0x43
 	lsl r0, r0, #2
@@ -58114,7 +58114,7 @@ sub_0203F0D0: ; 0x0203F0D0
 	str r4, [r5, #4]
 	str r0, [r5, #8]
 	add r0, r6, #0
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r5, #0xc]
 	add r0, r6, #0
 	bl sub_0202CF54
@@ -58271,7 +58271,7 @@ sub_0203F218: ; 0x0203F218
 	bl sub_0202CA44
 	str r0, [r5, #0x14]
 	ldr r0, [r4, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r5, #0x18]
 	ldr r0, [r4, #0xc]
 	bl sub_0202A634
@@ -58416,7 +58416,7 @@ _0203F354:
 	bl sub_02070DB0
 	str r0, [r4, #0x48]
 	ldr r0, [r5, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r4, #0x58]
 	mov r0, #1
 	str r0, [r4, #0x54]
@@ -58484,7 +58484,7 @@ _0203F3C2:
 	lsl r2, r0, #0x10
 	bl sub_0201A910
 	ldr r0, [r5, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [sp, #0x20]
 	ldr r0, [r5, #0xc]
 	bl sub_02088288
@@ -58596,7 +58596,7 @@ sub_0203F4C8: ; 0x0203F4C8
 	ldr r0, [r0]
 	str r0, [r4]
 	ldr r0, [r5, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r4, #4]
 	ldr r1, _0203F4F4 ; =0x020FA2C4
 	add r0, r5, #0
@@ -58622,7 +58622,7 @@ sub_0203F4F8: ; 0x0203F4F8
 	ldr r0, [r0]
 	str r0, [r4, #4]
 	ldr r0, [r5, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r4, #8]
 	ldr r0, [r5, #0xc]
 	bl sub_0202CF54
@@ -58878,7 +58878,7 @@ sub_0203F6E0: ; 0x0203F6E0
 	ldr r0, [sp, #0x30]
 	str r0, [r4, #8]
 	ldr r0, [r6, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [sp]
 	mov r0, #0x43
 	lsl r0, r0, #2
@@ -59076,7 +59076,7 @@ sub_0203F844: ; 0x0203F844
 	bl sub_02028E9C
 	str r0, [r4, #0x1c]
 	ldr r0, [r5, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r4, #0x24]
 	ldr r0, [r5, #0xc]
 	bl sub_0202CF54
@@ -59133,7 +59133,7 @@ sub_0203F8EC: ; 0x0203F8EC
 	bl sub_02028D30
 	str r0, [r4, #8]
 	ldr r0, [r5, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r4, #0x10]
 	ldr r0, [r5, #0xc]
 	bl sub_0202C6F4
@@ -59259,7 +59259,7 @@ sub_0203F9F4: ; 0x0203F9F4
 _0203FA0C:
 	str r5, [sp]
 	ldr r0, [r4, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [sp, #4]
 	ldr r0, [r4, #0xc]
 	bl sub_02028E9C
@@ -59294,7 +59294,7 @@ sub_0203FA38: ; 0x0203FA38
 	bl sub_02028EB4
 	str r0, [r4, #4]
 	add r0, r6, #0
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r4]
 	mov r0, #0x43
 	lsl r0, r0, #2
@@ -59386,7 +59386,7 @@ sub_0203FAE8: ; 0x0203FAE8
 	bl sub_0202B50C
 	str r0, [r4, #8]
 	ldr r0, [r5, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r4, #0xc]
 	ldr r0, [r5, #0xc]
 	bl sub_020270C4
@@ -59460,7 +59460,7 @@ sub_0203FB94: ; 0x0203FB94
 	bl sub_02074904
 	str r0, [r4]
 	ldr r0, [r5, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r4, #4]
 	mov r0, #1
 	strb r0, [r4, #0x11]
@@ -62563,7 +62563,7 @@ sub_02041110: ; 0x02041110
 	add r7, r0, #0
 	ldr r0, [r5]
 	ldr r0, [r0, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	add r1, r0, #0
 	add r0, r7, #0
 	bl sub_0205B564
@@ -63017,7 +63017,7 @@ sub_0204146C: ; 0x0204146C
 	bl ov01_021F3D80
 	add r6, r0, #0
 	ldr r0, [r4, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	bl sub_0202AD3C
 	mov r3, #0
 	str r3, [sp]
@@ -67762,7 +67762,7 @@ sub_02043990: ; 0x02043990
 	add r0, #0x80
 	ldr r0, [r0]
 	ldr r0, [r0, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	add r2, r0, #0
 	ldr r1, [r6]
 	add r0, r4, #0
@@ -73233,7 +73233,7 @@ _0204647E:
 	add r0, #0x80
 	ldr r0, [r0]
 	ldr r0, [r0, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r4, #4]
 	add r0, r4, #0
 	add r0, #0x20
@@ -79380,7 +79380,7 @@ sub_02049344: ; 0x02049344
 	add r4, r0, #0
 	ldr r0, [r5]
 	ldr r0, [r0, #0xc]
-	bl sub_0202CE64
+	bl Sav2_Chatot_get
 	bl sub_02006CC8
 	cmp r0, #1
 	bne _02049374
@@ -79439,7 +79439,7 @@ sub_020493C0: ; 0x020493C0
 	add r0, #0x80
 	ldr r0, [r0]
 	ldr r0, [r0, #0xc]
-	bl sub_0202CE64
+	bl Sav2_Chatot_get
 	bl sub_02006E28
 	mov r0, #1
 	pop {r3, pc}
@@ -90830,7 +90830,7 @@ sub_0204ECD0: ; 0x0204ECD0
 	add r0, #0x80
 	ldr r0, [r0]
 	ldr r0, [r0, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r4, #8]
 	str r6, [r4, #0x10]
 	add r0, r5, #0
@@ -91628,7 +91628,7 @@ sub_0204F320: ; 0x0204F320
 	bl sub_0202B50C
 	str r0, [r4, #8]
 	ldr r0, [r6, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	add r1, r4, #0
 	str r0, [r4, #0xc]
 	mov r0, #0
@@ -91770,7 +91770,7 @@ sub_0204F448: ; 0x0204F448
 	add r4, r0, #0
 	bl sub_020D4994
 	add r0, r5, #0
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r4, #4]
 	add r0, r5, #0
 	bl sub_02074904
@@ -92811,7 +92811,7 @@ sub_0204FC78: ; 0x0204FC78
 	bl sub_0202B50C
 	str r0, [r4, #8]
 	ldr r0, [r6, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	add r1, r4, #0
 	str r0, [r4, #0xc]
 	mov r0, #0
@@ -92953,7 +92953,7 @@ sub_0204FDA0: ; 0x0204FDA0
 	add r4, r0, #0
 	bl sub_020D4994
 	add r0, r5, #0
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r4, #4]
 	add r0, r5, #0
 	bl sub_02074904
@@ -93488,7 +93488,7 @@ sub_020501B8: ; 0x020501B8
 	bl sub_0202B50C
 	str r0, [r4, #8]
 	ldr r0, [r6, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	add r1, r4, #0
 	str r0, [r4, #0xc]
 	mov r0, #0
@@ -93630,7 +93630,7 @@ sub_020502E0: ; 0x020502E0
 	add r4, r0, #0
 	bl sub_020D4994
 	add r0, r5, #0
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r4, #4]
 	add r0, r5, #0
 	bl sub_02074904
@@ -96720,7 +96720,7 @@ sub_02051AAC: ; 0x02051AAC
 	bl sub_02028E9C
 	str r0, [sp, #0x10]
 	ldr r0, [r5, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	mov r1, #1
 	str r0, [sp, #0x14]
 	add r0, r6, #0
@@ -97029,10 +97029,10 @@ sub_02051D18: ; 0x02051D18
 	bl sub_0202A634
 	str r0, [sp, #0x10]
 	add r0, r4, #0
-	bl sub_0202CE64
+	bl Sav2_Chatot_get
 	str r0, [sp, #0xc]
 	add r0, r4, #0
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [sp, #8]
 	add r0, r4, #0
 	bl sub_0203B9C4
@@ -97274,11 +97274,11 @@ sub_02051F2C: ; 0x02051F2C
 	str r0, [sp, #0xc]
 	ldr r0, [sp]
 	ldr r0, [r0, #0xc]
-	bl sub_0202CE64
+	bl Sav2_Chatot_get
 	str r0, [sp, #8]
 	ldr r0, [sp]
 	ldr r0, [r0, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [sp, #4]
 	mov r0, #0x53
 	mov r1, #6
@@ -97441,11 +97441,11 @@ sub_020520B0: ; 0x020520B0
 	str r0, [sp, #0x18]
 	ldr r0, [sp]
 	ldr r0, [r0, #0xc]
-	bl sub_0202CE64
+	bl Sav2_Chatot_get
 	str r0, [sp, #0x14]
 	ldr r0, [sp]
 	ldr r0, [r0, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [sp, #0x10]
 	ldr r0, [sp]
 	mov r1, #6
@@ -99048,7 +99048,7 @@ sub_02052E0C: ; 0x02052E0C
 	push {r3, r4, r5, lr}
 	ldr r0, [r0, #0xc]
 	add r5, r1, #0
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	add r4, r0, #0
 	mov r0, #0x1b
 	mov r1, #0x28
@@ -99148,7 +99148,7 @@ _02052EDC:
 	add r0, r7, #0
 	bl sub_0200BB44
 	ldr r0, [r5, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	add r2, r0, #0
 	add r0, r4, #0
 	ldr r1, [r4, #0x2c]
@@ -111389,7 +111389,7 @@ sub_02058AEC: ; 0x02058AEC
 	bl sub_02088288
 	str r0, [r4, #0x2c]
 	add r0, r5, #0
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r4, #4]
 	ldr r0, [sp]
 	str r0, [r4]
@@ -111440,7 +111440,7 @@ sub_02058B84: ; 0x02058B84
 	bl sub_020D4994
 	ldr r0, [r5, #0x24]
 	ldr r0, [r0, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r4, #0xc]
 	ldr r0, [r5, #0x24]
 	add r0, #0xa4
@@ -112575,7 +112575,7 @@ sub_02059478: ; 0x02059478
 	bl sub_0205B514
 	ldr r0, [r5, #0x24]
 	ldr r0, [r0, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	add r1, r0, #0
 	add r0, r4, #0
 	bl sub_0205B564
@@ -112586,7 +112586,7 @@ _020594AA:
 _020594B0:
 	ldr r0, [r5, #0x24]
 	ldr r0, [r0, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	add r2, r0, #0
 	add r0, r4, #0
 	add r1, r6, #0
@@ -113581,13 +113581,13 @@ _02059C10:
 	mov r2, #3
 	bl sub_0205B514
 	ldr r0, [r5, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	add r1, r0, #0
 	add r0, r4, #0
 	add r0, #8
 	bl sub_0205B564
 	ldr r0, [r5, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	add r2, r0, #0
 	add r0, r4, #0
 	ldr r1, [r4, #4]
@@ -138718,7 +138718,7 @@ sub_02064B54: ; 0x02064B54
 	bl sub_0202B50C
 	str r0, [r4, #8]
 	ldr r0, [r5, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r4, #0xc]
 	ldr r0, [r5, #0xc]
 	bl sub_020270C4
@@ -139056,7 +139056,7 @@ sub_02064E18: ; 0x02064E18
 	bl sub_0202B50C
 	str r0, [r4, #8]
 	ldr r0, [r5, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r4, #0xc]
 	mov r0, #0x37
 	lsl r0, r0, #4
@@ -139512,7 +139512,7 @@ _020651AE:
 	mov r2, #3
 	bl sub_0205B514
 	ldr r0, [r4, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	add r4, r0, #0
 	add r0, r5, #0
 	add r1, r4, #0
@@ -139616,7 +139616,7 @@ _02065280:
 	bl sub_0202B50C
 	str r0, [r4, #8]
 	ldr r0, [r5, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r4, #0xc]
 	ldr r0, [r5, #0xc]
 	bl sub_020270C4
@@ -143557,7 +143557,7 @@ sub_02066EDC: ; 0x02066EDC
 	add r4, r0, #0
 	bl sub_020D4994
 	add r0, r7, #0
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r4, #0xc]
 	add r0, r7, #0
 	bl sub_02074904
@@ -143695,7 +143695,7 @@ sub_02066FEC: ; 0x02066FEC
 	add r4, r0, #0
 	bl sub_020D4994
 	add r0, r5, #0
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r4, #4]
 	add r0, r5, #0
 	bl sub_02074904
@@ -153396,7 +153396,7 @@ _0206B92C:
 	str r0, [r4, #4]
 	bl memset
 	add r0, r5, #0
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	ldr r1, [r4, #4]
 	str r0, [r1, #0x24]
 	ldr r0, [r4, #4]
@@ -154111,7 +154111,7 @@ _0206BE8A:
 	cmp r0, #0
 	bne _0206BED0
 	add r0, r7, #0
-	bl sub_0202CE64
+	bl Sav2_Chatot_get
 	bl sub_0202CE74
 _0206BED0:
 	add sp, #0x24
@@ -230108,7 +230108,7 @@ sub_02090C94: ; 0x02090C94
 	strb r0, [r4, #2]
 	strb r1, [r4, #3]
 	add r0, r6, #0
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	bl sub_0202ADCC
 	str r0, [r4, #8]
 	ldr r0, [sp]
@@ -230850,7 +230850,7 @@ _0209119A:
 	add r7, r0, #0
 	add r0, r6, #0
 	bl sub_0203E344
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [sp]
 	mov r0, #0
 	str r0, [sp, #4]
@@ -241086,7 +241086,7 @@ _02096086:
 	str r1, [r0]
 	ldr r0, [sp, #0x1c]
 	ldr r0, [r0, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	ldr r1, [r7, #4]
 	mov r5, #0
 	str r0, [r1, #4]
@@ -242093,7 +242093,7 @@ sub_020968B0: ; 0x020968B0
 	bl sub_020D4994
 	str r6, [r4]
 	ldr r0, [r5, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r4, #4]
 	ldr r0, [r5, #0xc]
 	mov r1, #0xe
@@ -243244,7 +243244,7 @@ sub_0209707C: ; 0x0209707C
 	ldr r0, [r0]
 	str r0, [r4, #0x14]
 	ldr r0, [r5, #0xc]
-	bl sub_02028EA8
+	bl Sav2_PlayerData_GetOptionsAddr
 	str r0, [r4, #0x18]
 	ldr r0, [r5, #0xc]
 	bl sub_0202CF54
