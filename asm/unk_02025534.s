@@ -7928,7 +7928,7 @@ sub_02028DE8: ; 0x02028DE8
 	str r0, [r4, #0x20]
 	add r0, r4, #4
 	add r1, #0x14
-	bl sub_020DC330
+	bl RTC_ConvertDateTimeToSecond
 	str r0, [r4, #0x24]
 	str r1, [r4, #0x28]
 	mov r0, #0
@@ -16096,7 +16096,7 @@ sub_0202C4B0: ; 0x0202C4B0
 	add r5, r0, #0
 	add r0, sp, #0
 	add r4, r1, #0
-	bl sub_02014780
+	bl GF_RTC_CopyDate
 	cmp r4, #0
 	blt _0202C4E6
 	cmp r4, #0x20
@@ -22093,7 +22093,7 @@ sub_0202EC28: ; 0x0202EC28
 	add r1, r5, r0
 	ldr r0, _0202EC64 ; =0x00000588
 	str r4, [r1, r0]
-	bl sub_020147DC
+	bl GF_RTC_DateTimeToSec
 	lsl r2, r6, #3
 	add r3, r5, r2
 	ldr r2, _0202EC68 ; =0x000005D8
@@ -23935,7 +23935,7 @@ sub_0202F7D8: ; 0x0202F7D8
 	bl String_dtor
 	mov r0, #1
 	strb r0, [r4, #0x10]
-	bl sub_020147DC
+	bl GF_RTC_DateTimeToSec
 	mov r2, #0x5d
 	lsl r2, r2, #4
 	str r0, [r6, r2]
@@ -23999,7 +23999,7 @@ sub_0202F890: ; 0x0202F890
 	ldrb r0, [r4, #0x10]
 	cmp r0, #0
 	beq _0202F8CE
-	bl sub_020147DC
+	bl GF_RTC_DateTimeToSec
 	ldr r3, [r4]
 	ldr r2, [r4, #4]
 	sub r3, r0, r3
@@ -49538,7 +49538,7 @@ sub_0203B114: ; 0x0203B114
 	bl sub_020503D0
 	add r4, r0, #0
 	add r0, sp, #0
-	bl sub_02014780
+	bl GF_RTC_CopyDate
 	add r0, r4, #0
 	mov r1, #0xca
 	bl sub_020503DC
@@ -71292,7 +71292,7 @@ sub_02045540: ; 0x02045540
 	bl sub_02040374
 	add r4, r0, #0
 	add r0, sp, #0
-	bl sub_02014780
+	bl GF_RTC_CopyDate
 	ldr r0, [sp, #0xc]
 	strh r0, [r4]
 	mov r0, #0
@@ -73853,7 +73853,7 @@ sub_02046970: ; 0x02046970
 	ldr r0, [r4]
 	bl sub_02040374
 	add r4, r0, #0
-	bl sub_020147DC
+	bl GF_RTC_DateTimeToSec
 	add r2, r5, #0
 	add r2, #0xb4
 	add r5, #0xb8
@@ -77164,7 +77164,7 @@ sub_02048218: ; 0x02048218
 	ldr r0, [r0, #0xc]
 	bl sub_020503D0
 	add r0, sp, #0xc
-	bl sub_02014780
+	bl GF_RTC_CopyDate
 	add r0, r4, #0
 	add r0, #0x80
 	ldr r0, [r0]
@@ -77288,7 +77288,7 @@ sub_020482F4: ; 0x020482F4
 	add r4, r6, #0
 	bl sub_020503D0
 	add r0, sp, #4
-	bl sub_02014780
+	bl GF_RTC_CopyDate
 	add r5, #0x80
 	ldr r0, [r5]
 	ldr r0, [r0, #0xc]
@@ -97090,7 +97090,7 @@ _02051DB6:
 	add r0, r4, #0
 	bl sub_02028D3C
 	ldr r0, [r0, #0x14]
-	bl sub_02014844
+	bl GF_RTC_GetTimeOfDayByHour
 	mov r1, #0x57
 	lsl r1, r1, #2
 	str r0, [r5, r1]
@@ -98631,7 +98631,7 @@ _02052A74:
 	bl sub_02074904
 	add r6, r0, #0
 	add r0, sp, #4
-	bl sub_02014780
+	bl GF_RTC_CopyDate
 	add r0, r4, #0
 	add r1, r6, #0
 	add r2, sp, #4
@@ -103519,7 +103519,7 @@ sub_02054FA8: ; 0x02054FA8
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
 	add r4, r1, #0
-	bl sub_02014804
+	bl IsNighttime
 	cmp r0, #0
 	bne _02054FBE
 	add r0, r4, #0
@@ -104185,13 +104185,13 @@ sub_02055478: ; 0x02055478
 	add r5, r1, #0
 	add r0, r4, #0
 	add r1, r6, #0
-	bl sub_020DC330
+	bl RTC_ConvertDateTimeToSecond
 	str r1, [sp, #8]
 	add r1, r5, #0
 	add r7, r0, #0
 	add r0, r5, #4
 	add r1, #0x14
-	bl sub_020DC330
+	bl RTC_ConvertDateTimeToSecond
 	sub r2, r7, r0
 	ldr r2, [sp, #8]
 	sbc r2, r1
@@ -104339,7 +104339,7 @@ sub_020555E0: ; 0x020555E0
 	ldr r0, [r0, #0xc]
 	bl sub_02028D3C
 	ldr r0, [r0, #0x14]
-	bl sub_02014844
+	bl GF_RTC_GetTimeOfDayByHour
 	pop {r3, pc}
 	thumb_func_end sub_020555E0
 
@@ -104418,7 +104418,7 @@ sub_0205565C: ; 0x0205565C
 	ldr r0, [r0, #0xc]
 	bl sub_02028D3C
 	add r4, r0, #0
-	bl sub_020147DC
+	bl GF_RTC_DateTimeToSec
 	str r0, [r4, #0x2c]
 	str r1, [r4, #0x30]
 	pop {r4, pc}
@@ -104657,7 +104657,7 @@ sub_020557F8: ; 0x020557F8
 	bl sub_0205592C
 	ldr r0, _02055820 ; =0x021D4178
 	bl sub_020559D0
-	bl sub_020147DC
+	bl GF_RTC_DateTimeToSec
 	ldr r2, _02055824 ; =0x021D4178
 	str r0, [r2, #0x40]
 	str r1, [r2, #0x44]
@@ -104674,13 +104674,13 @@ sub_02055828: ; 0x02055828
 	ldr r4, _0205586C ; =0x021D4178
 	bl sub_0202CF54
 	add r5, r0, #0
-	bl sub_020147DC
+	bl GF_RTC_DateTimeToSec
 	add r3, r1, #0
 	ldr r1, _02055870 ; =0x021D4178
 	add r2, r0, #0
 	ldr r0, [r1, #0x40]
 	ldr r1, [r1, #0x44]
-	bl sub_0201487C
+	bl GF_RTC_TimeDelta
 	mov r2, #0xfa
 	mov r3, #0
 	lsl r2, r2, #2
@@ -105643,7 +105643,7 @@ _02055F24:
 	bne _02055F56
 	mov r7, #1
 _02055F56:
-	bl sub_0201481C
+	bl GF_RTC_GetTimeOfDay
 	add r2, r0, #0
 	lsl r2, r2, #0x18
 	ldr r1, [sp]
@@ -152278,7 +152278,7 @@ sub_0206B014: ; 0x0206B014
 	add r0, r5, #0
 	bl sub_0202FB98
 	add r0, sp, #0x2c
-	bl sub_02014780
+	bl GF_RTC_CopyDate
 	ldr r0, [sp, #0x34]
 	ldr r3, [sp, #0x30]
 	lsl r0, r0, #0x18
@@ -152332,7 +152332,7 @@ sub_0206B014: ; 0x0206B014
 	orr r0, r1
 	strb r0, [r5, #4]
 	add r0, sp, #0x20
-	bl sub_0201474C
+	bl GF_RTC_CopyTime
 	ldr r0, [sp, #0x20]
 	add r1, r5, #0
 	strh r0, [r5, #0x3c]
@@ -153048,7 +153048,7 @@ _0206B652:
 	bl sub_0202FA88
 	add r6, r0, #0
 	add r0, sp, #0x20
-	bl sub_02014780
+	bl GF_RTC_CopyDate
 	ldr r0, [sp, #0x28]
 	ldr r3, [sp, #0x24]
 	lsl r0, r0, #0x18
@@ -153065,7 +153065,7 @@ _0206B652:
 	ldr r0, [r4, #0x40]
 	str r1, [r0, #0x38]
 	add r0, sp, #0x14
-	bl sub_0201474C
+	bl GF_RTC_CopyTime
 	ldr r1, [sp, #0x14]
 	ldr r0, [r4, #0x40]
 	add r2, r6, #0
@@ -164878,7 +164878,7 @@ _02070F74:
 	str r0, [r5]
 	b _0207115C
 _02070F82:
-	bl sub_02014804
+	bl IsNighttime
 	cmp r0, #0
 	bne _02071050
 	ldr r0, [sp, #0x24]
@@ -164889,7 +164889,7 @@ _02070F82:
 	str r0, [r5]
 	b _0207115C
 _02070F98:
-	bl sub_02014804
+	bl IsNighttime
 	cmp r0, #1
 	bne _02071050
 	ldr r0, [sp, #0x24]
@@ -165021,7 +165021,7 @@ _02071086:
 	str r0, [r5]
 	b _0207115C
 _02071096:
-	bl sub_02014804
+	bl IsNighttime
 	cmp r0, #0
 	bne _0207115C
 	ldrh r1, [r4, #2]
@@ -165033,7 +165033,7 @@ _02071096:
 	str r0, [r5]
 	b _0207115C
 _020710AE:
-	bl sub_02014804
+	bl IsNighttime
 	cmp r0, #1
 	bne _0207115C
 	ldrh r1, [r4, #2]
@@ -166838,7 +166838,7 @@ sub_02071DB4: ; 0x02071DB4
 	bl sub_0206E540
 	add r4, r0, #0
 	add r0, sp, #4
-	bl sub_0201474C
+	bl GF_RTC_CopyTime
 	mov r0, #0x7b
 	lsl r0, r0, #2
 	cmp r5, r0
@@ -190524,7 +190524,7 @@ _0207D106:
 	lsl r1, r1, #4
 	ldr r0, [r5, r0]
 	ldr r1, [r3, r1]
-	bl sub_02014980
+	bl ListMenuItems_AddItem
 	add r0, r6, #1
 	lsl r0, r0, #0x10
 	lsr r6, r0, #0x10
@@ -190541,7 +190541,7 @@ _0207D12E:
 	lsl r1, r1, #4
 	ldr r0, [r5, r0]
 	ldr r1, [r3, r1]
-	bl sub_02014980
+	bl ListMenuItems_AddItem
 _0207D14A:
 	add r0, r4, #1
 	lsl r0, r0, #0x10
@@ -194974,7 +194974,7 @@ sub_0207F438: ; 0x0207F438
 	ldr r0, [r5, r1]
 	sub r1, #0x44
 	ldr r1, [r5, r1]
-	bl sub_02014980
+	bl ListMenuItems_AddItem
 	mov r0, #4
 	bl sub_0207F42C
 	mov r1, #0x82
@@ -194983,7 +194983,7 @@ sub_0207F438: ; 0x0207F438
 	ldr r0, [r5, r1]
 	sub r1, #0x40
 	ldr r1, [r5, r1]
-	bl sub_02014980
+	bl ListMenuItems_AddItem
 	mov r0, #9
 	bl sub_0207F42C
 	mov r1, #0x82
@@ -194992,7 +194992,7 @@ sub_0207F438: ; 0x0207F438
 	ldr r0, [r5, r1]
 	sub r1, #0x2c
 	ldr r1, [r5, r1]
-	bl sub_02014980
+	bl ListMenuItems_AddItem
 	mov r0, #0x82
 	lsl r0, r0, #4
 	ldr r0, [r5, r0]
@@ -195336,7 +195336,7 @@ sub_0207F73C: ; 0x0207F73C
 	ldr r0, [r5, r1]
 	sub r1, #0x38
 	ldr r1, [r5, r1]
-	bl sub_02014980
+	bl ListMenuItems_AddItem
 	mov r0, #7
 	bl sub_0207F42C
 	mov r1, #0x82
@@ -195345,7 +195345,7 @@ sub_0207F73C: ; 0x0207F73C
 	ldr r0, [r5, r1]
 	sub r1, #0x34
 	ldr r1, [r5, r1]
-	bl sub_02014980
+	bl ListMenuItems_AddItem
 	mov r0, #9
 	bl sub_0207F42C
 	mov r1, #0x82
@@ -195354,7 +195354,7 @@ sub_0207F73C: ; 0x0207F73C
 	ldr r0, [r5, r1]
 	sub r1, #0x2c
 	ldr r1, [r5, r1]
-	bl sub_02014980
+	bl ListMenuItems_AddItem
 	mov r0, #0x82
 	lsl r0, r0, #4
 	ldr r0, [r5, r0]
@@ -201011,7 +201011,7 @@ _02082632:
 	sub r1, #0x54
 	ldr r1, [r5, r1]
 	add r2, r6, #0
-	bl sub_02014980
+	bl ListMenuItems_AddItem
 	mov r0, #1
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
@@ -201080,7 +201080,7 @@ _02082682:
 	ldr r0, [r5, r1]
 	sub r1, #0x2c
 	ldr r1, [r5, r1]
-	bl sub_02014980
+	bl ListMenuItems_AddItem
 	mov r0, #0x82
 	lsl r0, r0, #4
 	ldr r0, [r5, r0]
@@ -227006,7 +227006,7 @@ sub_0208F550: ; 0x0208F550
 	add r5, r0, #0
 	add r0, sp, #0
 	add r4, r2, #0
-	bl sub_02014780
+	bl GF_RTC_CopyDate
 	cmp r4, #0
 	add r2, sp, #0x24
 	bne _0208F596
