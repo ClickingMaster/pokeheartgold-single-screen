@@ -48030,7 +48030,7 @@ _0203A568:
 _0203A578:
 	ldr r0, [sp, #0x14]
 	add r1, sp, #0
-	bl sub_020B70F4
+	bl NNS_G2dGetUnpackedBGCharacterData
 	ldr r0, [sp]
 	pop {r3}
 	pop {r3}
@@ -51986,7 +51986,7 @@ _0203C18E:
 	mov r0, #0xe
 	mov r1, #0xc
 	mov r3, #3
-	bl sub_020078F0
+	bl GfGfxLoader_LoadCharData
 	mov r0, #0x20
 	str r0, [sp]
 	mov r0, #0xb
@@ -51995,7 +51995,7 @@ _0203C18E:
 	mov r1, #0xf
 	mov r2, #0
 	lsl r3, r0, #5
-	bl sub_02007938
+	bl GfGfxLoader_GXLoadPal
 	mov r0, #0
 	str r0, [sp]
 	str r0, [sp, #4]
@@ -52007,7 +52007,7 @@ _0203C18E:
 	mov r0, #0xe
 	mov r1, #0xd
 	mov r3, #3
-	bl sub_02007914
+	bl GfGfxLoader_LoadScrnData
 	ldr r0, [r4, #0xc]
 	bl sub_02028E9C
 	bl sub_02028F94
@@ -52249,7 +52249,7 @@ sub_0203C38C: ; 0x0203C38C
 	ldr r0, [r4, #8]
 	mov r1, #3
 	add r3, r2, #0
-	bl sub_0201C8C4
+	bl FillBgTilemapRect
 	mov r0, #0
 	str r0, [r5, #0x20]
 	add sp, #0x10
@@ -98080,7 +98080,7 @@ sub_020525BC: ; 0x020525BC
 	mov r1, #7
 	mov r2, #0
 	lsl r3, r3, #4
-	bl sub_02007938
+	bl GfGfxLoader_GXLoadPal
 	ldr r1, _02052608 ; =0x00007FFF
 	mov r0, #3
 	bl sub_0201C2D8
@@ -99030,7 +99030,7 @@ sub_02052D84: ; 0x02052D84
 	ldr r0, [r4, #0x18]
 	mov r1, #3
 	add r3, r2, #0
-	bl sub_0201C8C4
+	bl FillBgTilemapRect
 	ldr r0, [r4, #0x18]
 	mov r1, #3
 	bl sub_0201BF7C
@@ -112613,7 +112613,7 @@ sub_020594C8: ; 0x020594C8
 	bl sub_0200E9BC
 	add r0, r5, #0
 	add r0, #0x14
-	bl sub_0201D8C8
+	bl ClearWindowTilemapAndCopyToVram
 _020594EE:
 	add r0, r5, #0
 	add r0, #0x14
@@ -117003,7 +117003,7 @@ sub_0205B564: ; 0x0205B564
 	sub sp, #8
 	add r4, r1, #0
 	add r5, r0, #0
-	bl sub_0201EE8C
+	bl GetWindowBgId
 	add r6, r0, #0
 	add r0, r4, #0
 	bl sub_0202ADCC
@@ -117173,7 +117173,7 @@ sub_0205B6A0: ; 0x0205B6A0
 	add r4, r1, #0
 	add r5, r0, #0
 	add r6, r2, #0
-	bl sub_0201EE8C
+	bl GetWindowBgId
 	add r1, r0, #0
 	lsl r0, r4, #0x18
 	lsr r0, r0, #0x18
@@ -150955,7 +150955,7 @@ sub_0206A5D0: ; 0x0206A5D0
 	mov r2, #0
 	mov r0, #0x96
 	add r3, r2, #0
-	bl sub_02007938
+	bl GfGfxLoader_GXLoadPal
 	mov r0, #0
 	str r0, [sp]
 	str r0, [sp, #4]
@@ -150975,7 +150975,7 @@ sub_0206A5D0: ; 0x0206A5D0
 	ldr r2, [r4, #0xc]
 	mov r0, #0x96
 	mov r3, #2
-	bl sub_020078F0
+	bl GfGfxLoader_LoadCharData
 	mov r0, #0
 	str r0, [sp]
 	str r0, [sp, #4]
@@ -150995,7 +150995,7 @@ sub_0206A5D0: ; 0x0206A5D0
 	ldr r2, [r4, #0xc]
 	mov r0, #0x96
 	mov r3, #2
-	bl sub_02007914
+	bl GfGfxLoader_LoadScrnData
 	add sp, #0x10
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
@@ -153332,7 +153332,7 @@ sub_0206B8AC: ; 0x0206B8AC
 	add r2, r1, #0
 	add r3, r1, #0
 	str r4, [sp, #4]
-	bl sub_02007938
+	bl GfGfxLoader_GXLoadPal
 	mov r0, #0
 	str r0, [sp]
 	str r0, [sp, #4]
@@ -153342,7 +153342,7 @@ sub_0206B8AC: ; 0x0206B8AC
 	add r2, r5, #0
 	mov r3, #2
 	str r4, [sp, #0xc]
-	bl sub_020078F0
+	bl GfGfxLoader_LoadCharData
 	mov r0, #0
 	str r0, [sp]
 	mov r0, #6
@@ -153355,7 +153355,7 @@ sub_0206B8AC: ; 0x0206B8AC
 	add r2, r5, #0
 	add r3, r1, #0
 	str r4, [sp, #0xc]
-	bl sub_02007914
+	bl GfGfxLoader_LoadScrnData
 	add r0, r5, #0
 	mov r1, #2
 	bl sub_0201BF7C
@@ -177699,7 +177699,7 @@ _02076F38:
 	str r0, [sp, #0xc]
 	mov r0, #0x73
 	mov r3, #3
-	bl sub_020078F0
+	bl GfGfxLoader_LoadCharData
 	mov r0, #0
 	str r0, [sp]
 	str r0, [sp, #4]
@@ -177710,7 +177710,7 @@ _02076F38:
 	str r0, [sp, #0xc]
 	mov r0, #0x73
 	mov r3, #3
-	bl sub_02007914
+	bl GfGfxLoader_LoadScrnData
 	mov r1, #0
 	str r1, [sp]
 	mov r0, #0x40
@@ -184541,7 +184541,7 @@ _0207A1A2:
 	mov r1, #2
 	mov r2, #0x4b
 	lsr r3, r3, #0x18
-	bl sub_0201C8C4
+	bl FillBgTilemapRect
 _0207A1FC:
 	mov r0, #0x10
 	str r0, [sp]
@@ -189720,7 +189720,7 @@ sub_0207CAAC: ; 0x0207CAAC
 	bl AllocAndReadWholeNarcMemberByIdPair
 	add r1, sp, #0xc
 	str r0, [sp, #8]
-	bl sub_020B71D8
+	bl NNS_G2dGetUnpackedScreenData
 	ldr r0, [sp, #0xc]
 	mov r4, #0
 	str r0, [sp, #4]
@@ -192652,7 +192652,7 @@ _0207E21C:
 	ldr r0, [r0]
 	add r2, r1, #0
 	add r3, r1, #0
-	bl sub_0201C8C4
+	bl FillBgTilemapRect
 	mov r0, #0x13
 	str r0, [sp]
 	mov r0, #7
@@ -192665,7 +192665,7 @@ _0207E21C:
 	ldr r0, [r0]
 	add r2, r1, #0
 	mov r3, #0x19
-	bl sub_0201C8C4
+	bl FillBgTilemapRect
 	ldr r0, [sp, #0x10]
 	mov r1, #0
 	ldr r0, [r0]
@@ -192976,7 +192976,7 @@ _0207E3E0:
 	ldrh r2, [r2, #8]
 	ldrb r3, [r4]
 	ldr r0, [r5]
-	bl sub_0201C8C4
+	bl FillBgTilemapRect
 	ldrb r0, [r4, #1]
 	add r2, sp, #0x10
 	mov r1, #0
@@ -193001,7 +193001,7 @@ _0207E3E0:
 	sub r3, r3, #1
 	lsl r3, r3, #0x18
 	lsr r3, r3, #0x18
-	bl sub_0201C8C4
+	bl FillBgTilemapRect
 	ldrb r0, [r4, #1]
 	add r2, sp, #0x10
 	mov r1, #0
@@ -193021,7 +193021,7 @@ _0207E3E0:
 	add r3, r3, #1
 	lsl r3, r3, #0x18
 	lsr r3, r3, #0x18
-	bl sub_0201C8C4
+	bl FillBgTilemapRect
 	ldrb r1, [r4, #1]
 	ldrb r0, [r4, #3]
 	add r2, sp, #0x10
@@ -193046,7 +193046,7 @@ _0207E3E0:
 	add r3, r3, #1
 	lsl r3, r3, #0x18
 	lsr r3, r3, #0x18
-	bl sub_0201C8C4
+	bl FillBgTilemapRect
 	add sp, #0x20
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
@@ -194066,7 +194066,7 @@ sub_0207ECE0: ; 0x0207ECE0
 	bl sub_02007C98
 	add r1, sp, #0x18
 	str r0, [sp, #4]
-	bl sub_020B70A8
+	bl NNS_G2dGetUnpackedCharacterData
 	cmp r0, #0
 	beq _0207ED8E
 	ldr r1, [sp, #0x18]
@@ -195949,11 +195949,11 @@ _0207FC72:
 	strb r1, [r6, r0]
 	ldr r0, [r6]
 	mov r1, #2
-	bl sub_0201CC08
+	bl GetBgTilemapBuffer
 	str r0, [sp, #0x14]
 	ldr r0, [r6]
 	mov r1, #1
-	bl sub_0201CC08
+	bl GetBgTilemapBuffer
 	ldr r1, _0207FD4C ; =0x00000C4C
 	str r0, [sp, #0x10]
 	ldrb r3, [r6, r1]
@@ -196262,7 +196262,7 @@ sub_0207FEE8: ; 0x0207FEE8
 	ldr r3, [sp, #0x1c]
 	mov r1, #2
 	mov r2, #0
-	bl sub_0201C8C4
+	bl FillBgTilemapRect
 	str r6, [sp]
 	mov r1, #0x10
 	str r1, [sp, #4]
@@ -196273,7 +196273,7 @@ sub_0207FEE8: ; 0x0207FEE8
 	ldr r3, [sp, #0x1c]
 	mov r1, #1
 	mov r2, #0
-	bl sub_0201C8C4
+	bl FillBgTilemapRect
 	ldr r1, _02080038 ; =0x00000302
 	add r0, r4, r7
 	ldrb r0, [r0, r1]
@@ -202978,7 +202978,7 @@ sub_02083654: ; 0x02083654
 	mov r1, #0x47
 	mov r2, #4
 	mov r3, #0
-	bl sub_02007938
+	bl GfGfxLoader_GXLoadPal
 	mov r0, #4
 	mov r1, #0
 	bl sub_0201C2D8
@@ -203249,7 +203249,7 @@ _02083812:
 	mov r0, #0x14
 	mov r2, #0
 	add r3, r5, r3
-	bl sub_020079BC
+	bl GfGfxLoader_GetCharData
 	ldr r1, _020839B0 ; =0x000004B4
 	str r0, [r5, r1]
 	add r0, r1, #4
@@ -203850,7 +203850,7 @@ _02083D74:
 	mov r0, #0x1f
 	add r1, r7, #6
 	add r3, r6, #0
-	bl sub_02007914
+	bl GfGfxLoader_LoadScrnData
 	add r0, r4, #0
 	add r1, r6, #0
 	bl sub_0208423C
@@ -204880,7 +204880,7 @@ _02084578:
 	mov r2, #0
 	ldr r0, [sp, #0x18]
 	add r3, r2, #0
-	bl sub_0201D9D8
+	bl BlitBitmapRectToWindow
 	b _0208461A
 _020845C4:
 	ldr r0, _0208463C ; =0x0000D004
@@ -216104,7 +216104,7 @@ sub_02089D68: ; 0x02089D68
 	ldr r0, [r5]
 	mov r1, #1
 	add r3, r2, #0
-	bl sub_0201C8C4
+	bl FillBgTilemapRect
 	ldr r0, [r5]
 	mov r1, #1
 	bl sub_0201BF7C
@@ -216119,7 +216119,7 @@ sub_02089D68: ; 0x02089D68
 	ldr r0, [r5]
 	mov r1, #4
 	add r3, r2, #0
-	bl sub_0201C8C4
+	bl FillBgTilemapRect
 	ldr r0, [r5]
 	mov r1, #4
 	bl sub_0201BF7C
@@ -216328,7 +216328,7 @@ sub_02089F50: ; 0x02089F50
 	bl AllocAndReadWholeNarcMemberByIdPair
 	add r1, sp, #0xc
 	add r7, r0, #0
-	bl sub_020B71D8
+	bl NNS_G2dGetUnpackedScreenData
 	mov r3, #0
 	lsl r1, r4, #0x18
 	str r3, [sp]
@@ -216587,7 +216587,7 @@ _0208A152:
 	ldr r0, [r6]
 	mov r1, #3
 	lsr r3, r3, #0x18
-	bl sub_0201C8C4
+	bl FillBgTilemapRect
 	cmp r4, #8
 	bhs _0208A178
 	mov r4, #0
@@ -216667,7 +216667,7 @@ _0208A1E8:
 	ldr r0, [r6]
 	mov r1, #6
 	lsr r3, r3, #0x18
-	bl sub_0201C8C4
+	bl FillBgTilemapRect
 	cmp r4, #8
 	bhs _0208A20C
 	mov r4, #0
@@ -218437,7 +218437,7 @@ sub_0208AF70: ; 0x0208AF70
 	ldr r0, [r4]
 	ldr r2, _0208AF9C ; =0x00003006
 	mov r3, #0
-	bl sub_0201C8C4
+	bl FillBgTilemapRect
 	ldr r0, [r4]
 	mov r1, #6
 	bl sub_0201EFBC
@@ -218687,7 +218687,7 @@ _0208B140:
 	ldr r0, [r4]
 	mov r2, #1
 	mov r3, #0x18
-	bl sub_0201C8C4
+	bl FillBgTilemapRect
 	ldr r0, [r4]
 	mov r1, #6
 	bl sub_0201EFBC
@@ -218720,7 +218720,7 @@ _0208B186:
 	ldr r0, [r4]
 	mov r2, #1
 	mov r3, #0x18
-	bl sub_0201C8C4
+	bl FillBgTilemapRect
 	ldr r0, [r4]
 	mov r1, #6
 	bl sub_0201EFBC
@@ -220315,7 +220315,7 @@ _0208BE36:
 	mov r0, #0x14
 	mov r2, #0
 	add r3, sp, #4
-	bl sub_020079BC
+	bl GfGfxLoader_GetCharData
 	add r4, r0, #0
 	ldr r0, [sp, #4]
 	mov r1, #2
@@ -221185,7 +221185,7 @@ _0208C512:
 	lsl r0, r0, #2
 	ldr r0, [r4, r0]
 	add r0, r0, r5
-	bl sub_0201D8C8
+	bl ClearWindowTilemapAndCopyToVram
 	ldr r0, [r4, r7]
 	add r6, r6, #1
 	add r5, #0x10
@@ -221196,7 +221196,7 @@ _0208C52A:
 	mov r0, #0x89
 	lsl r0, r0, #2
 	ldr r0, [r4, r0]
-	bl sub_0201D8C8
+	bl ClearWindowTilemapAndCopyToVram
 	b _0208C548
 _0208C536:
 	mov r0, #0x8b
@@ -222028,7 +222028,7 @@ sub_0208CBD4: ; 0x0208CBD4
 	ldr r0, [r4]
 	mov r1, #1
 	add r3, r2, #0
-	bl sub_0201C8C4
+	bl FillBgTilemapRect
 	mov r0, #2
 	str r0, [sp]
 	mov r0, #0x12
@@ -222041,7 +222041,7 @@ sub_0208CBD4: ; 0x0208CBD4
 	ldr r0, [r4]
 	mov r1, #1
 	add r3, r2, #0
-	bl sub_0201C8C4
+	bl FillBgTilemapRect
 	mov r0, #1
 	str r0, [sp]
 	mov r0, #0x12
@@ -222054,7 +222054,7 @@ sub_0208CBD4: ; 0x0208CBD4
 	ldr r0, [r4]
 	mov r1, #4
 	add r3, r2, #0
-	bl sub_0201C8C4
+	bl FillBgTilemapRect
 	ldr r0, _0208CC84 ; =0x000007BC
 	ldrsb r0, [r4, r0]
 	cmp r0, #3
@@ -222551,7 +222551,7 @@ _0208D04E:
 	ldr r0, [r5]
 	mov r1, #1
 	mov r3, #0x10
-	bl sub_0201C8C4
+	bl FillBgTilemapRect
 	add r0, r4, #0
 	bl sub_0208E994
 	add sp, #0x10
@@ -236211,7 +236211,7 @@ _02093A7A:
 	str r0, [sp, #4]
 	mov r0, #0x14
 	add r3, #0xff
-	bl sub_02007938
+	bl GfGfxLoader_GXLoadPal
 	add sp, #0x10
 	pop {r3, r4, r5, r6, r7, pc}
 	thumb_func_end sub_02093A50
@@ -237058,7 +237058,7 @@ sub_020941CC: ; 0x020941CC
 	add r2, r6, #0
 	mov r3, #2
 	str r4, [sp, #0xc]
-	bl sub_02007914
+	bl GfGfxLoader_LoadScrnData
 	mov r0, #0x20
 	str r0, [sp]
 	mov r0, #0x18
@@ -237085,7 +237085,7 @@ sub_020941CC: ; 0x020941CC
 	add r2, r6, #0
 	mov r3, #3
 	str r4, [sp, #0xc]
-	bl sub_02007914
+	bl GfGfxLoader_LoadScrnData
 	mov r0, #0x20
 	str r0, [sp]
 	mov r0, #0x18
@@ -237106,7 +237106,7 @@ sub_020941CC: ; 0x020941CC
 	mov r2, #1
 	add r3, r5, r3
 	str r4, [sp]
-	bl sub_020079D8
+	bl GfGfxLoader_GetScrnData
 	ldr r3, _02094284 ; =0x000046C8
 	mov r1, #1
 	str r0, [r5, r3]
@@ -237115,7 +237115,7 @@ sub_020941CC: ; 0x020941CC
 	add r2, r1, #0
 	add r3, r5, r3
 	str r4, [sp]
-	bl sub_020079D8
+	bl GfGfxLoader_GetScrnData
 	ldr r1, _02094288 ; =0x000046CC
 	str r0, [r5, r1]
 	mov r0, #8
@@ -238395,7 +238395,7 @@ sub_02094C6C: ; 0x02094C6C
 	bl NARC_ReadWholeMember
 	add r0, r4, #0
 	add r1, r5, #0
-	bl sub_020B70F4
+	bl NNS_G2dGetUnpackedBGCharacterData
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
 	thumb_func_end sub_02094C6C
@@ -238543,7 +238543,7 @@ sub_02094D9C: ; 0x02094D9C
 	add r2, r1, #0
 	add r3, r1, #0
 	str r4, [sp, #4]
-	bl sub_02007938
+	bl GfGfxLoader_GXLoadPal
 	mov r0, #0
 	str r0, [sp]
 	mov r0, #5
@@ -238556,7 +238556,7 @@ sub_02094D9C: ; 0x02094D9C
 	add r2, r5, #0
 	add r3, r1, #0
 	str r4, [sp, #0xc]
-	bl sub_020078F0
+	bl GfGfxLoader_LoadCharData
 	mov r1, #0
 	add r0, r5, #0
 	add r2, r1, #0
@@ -238956,7 +238956,7 @@ sub_020950F8: ; 0x020950F8
 	bl sub_02022C60
 _0209510E:
 	add r0, r4, #0
-	bl sub_0201D8C8
+	bl ClearWindowTilemapAndCopyToVram
 	add r0, r4, #0
 	bl RemoveWindow
 _0209511A:
