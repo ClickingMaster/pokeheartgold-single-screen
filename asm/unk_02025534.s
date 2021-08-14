@@ -8129,7 +8129,7 @@ sub_02028F24: ; 0x02028F24
 _02028F38:
 	add r0, r5, #0
 	add r1, r4, #0
-	bl StringCopy
+	bl CopyU16StringArray
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 	thumb_func_end sub_02028F24
@@ -13334,7 +13334,7 @@ sub_0202B178: ; 0x0202B178
 	add r1, r0, #0
 	ldr r0, [sp]
 	add r0, #8
-	bl StringCopy
+	bl CopyU16StringArray
 	add r0, r4, #0
 	bl sub_02028F94
 	ldr r1, [sp]
@@ -16697,7 +16697,7 @@ _0202C8A2:
 	add r0, r6, #0
 	add r1, r5, #0
 	add r2, r7, #0
-	bl StringCompareN
+	bl StringNotEqualN
 	cmp r0, #0
 	bne _0202C8B4
 	mov r0, #1
@@ -16742,7 +16742,7 @@ sub_0202C8E4: ; 0x0202C8E4
 	add r0, #0x10
 	add r1, #0x10
 	mov r2, #8
-	bl StringCompareN
+	bl StringNotEqualN
 	cmp r0, #0
 	beq _0202C8FC
 	mov r0, #0
@@ -16751,7 +16751,7 @@ _0202C8FC:
 	add r0, r5, #0
 	add r1, r4, #0
 	mov r2, #8
-	bl StringCompareN
+	bl StringNotEqualN
 	cmp r0, #0
 	beq _0202C90E
 	mov r0, #0
@@ -28143,7 +28143,7 @@ sub_020314C4: ; 0x020314C4
 	bl sub_02028F54
 	add r1, r0, #0
 	add r0, r5, #0
-	bl StringCopy
+	bl CopyU16StringArray
 	add r0, r4, #0
 	bl sub_02028F84
 	str r0, [r5, #0x10]
@@ -28619,7 +28619,7 @@ sub_020317F4: ; 0x020317F4
 	add r1, r0, #0
 	add r0, r4, #0
 	add r0, #8
-	bl StringCopy
+	bl CopyU16StringArray
 	mov r0, #0
 	str r0, [r4, #0x18]
 	add r0, r4, #0
@@ -97662,7 +97662,7 @@ _020521F6:
 	add r1, r0, #0
 	add r0, r5, #0
 	add r0, #0x3c
-	bl StringCopy
+	bl CopyU16StringArray
 	add r3, r5, #0
 	add r3, #0x28
 	add r5, #0x90
@@ -98042,7 +98042,7 @@ sub_02052580: ; 0x02052580
 	add r1, r0, #0
 	add r0, r4, #0
 	add r0, #0x3c
-	bl StringCopy
+	bl CopyU16StringArray
 	add r3, r4, #0
 	add r3, #0x28
 	add r4, #0x90
@@ -152300,7 +152300,7 @@ sub_0206B014: ; 0x0206B014
 	add r1, r0, #0
 	add r0, r5, #0
 	add r0, #8
-	bl StringCopy
+	bl CopyU16StringArray
 	add r0, r6, #0
 	bl sub_02028F94
 	ldrb r1, [r5, #4]
@@ -169832,7 +169832,7 @@ _02073404:
 	bne _02073422
 	ldr r1, [sp, #0xc]
 	add r0, r5, #0
-	bl StringCopy
+	bl CopyU16StringArray
 	b _0207343A
 _02073422:
 	ldr r0, [sp, #0x10]
@@ -174565,7 +174565,7 @@ sub_02075554: ; 0x02075554
 	bl sub_02028F54
 	add r1, r0, #0
 	add r0, r4, #0
-	bl StringCopy
+	bl CopyU16StringArray
 	add r0, r6, #0
 	bl sub_02028F84
 	str r0, [r4, #0x10]
@@ -202124,12 +202124,12 @@ _02082F62:
 	add r1, r4, #0
 	add r0, r4, r0
 	add r1, #0xd8
-	bl StringCopy
+	bl CopyU16StringArray
 	add r0, r5, #0
 	add r1, r4, #0
 	add r0, #0x1c
 	add r1, #0xd8
-	bl StringCopy
+	bl CopyU16StringArray
 	add r1, r4, #0
 	ldr r0, [r5, #0x18]
 	add r1, #0xd8
@@ -204329,7 +204329,7 @@ _02084122:
 	add r0, r5, #0
 	add r0, #0xd8
 	add r1, r5, r1
-	bl StringCopy
+	bl CopyU16StringArray
 	mov r0, #0xc
 	str r0, [sp]
 	mov r2, #0
