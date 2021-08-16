@@ -2102,8 +2102,8 @@ _020263CC: .word 0xB6F8D2EC
 _020263D0: .word 0x0000FFFF
 	thumb_func_end StringSetEmpty
 
-	thumb_func_start sub_020263D4
-sub_020263D4: ; 0x020263D4
+	thumb_func_start StringCopy
+StringCopy: ; 0x020263D4
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	add r4, r1, #0
@@ -2146,7 +2146,7 @@ _02026420:
 	pop {r3, r4, r5, pc}
 	nop
 _02026428: .word 0xB6F8D2EC
-	thumb_func_end sub_020263D4
+	thumb_func_end StringCopy
 
 	thumb_func_start StringDup
 StringDup: ; 0x0202642C
@@ -2170,7 +2170,7 @@ _02026446:
 	add r4, r0, #0
 	beq _0202645A
 	add r1, r5, #0
-	bl sub_020263D4
+	bl StringCopy
 _0202645A:
 	add r0, r4, #0
 	pop {r3, r4, r5, pc}
@@ -2895,8 +2895,8 @@ _02026998: .word 0xB6F8D2EC
 _0202699C: .word 0x000001DE
 	thumb_func_end sub_020268EC
 
-	thumb_func_start sub_020269A0
-sub_020269A0: ; 0x020269A0
+	thumb_func_start CopyU16ArrayToString
+CopyU16ArrayToString: ; 0x020269A0
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	add r4, r1, #0
@@ -2947,7 +2947,7 @@ _020269EE:
 	nop
 _020269FC: .word 0xB6F8D2EC
 _02026A00: .word 0x0000FFFF
-	thumb_func_end sub_020269A0
+	thumb_func_end CopyU16ArrayToString
 
 	thumb_func_start CopyU16ArrayToStringN
 CopyU16ArrayToStringN: ; 0x02026A04
@@ -8146,21 +8146,21 @@ sub_02028F44: ; 0x02028F44
 _02028F50: .word sub_02026A68
 	thumb_func_end sub_02028F44
 
-	thumb_func_start sub_02028F54
-sub_02028F54: ; 0x02028F54
+	thumb_func_start PlayerProfile_GetNamePtr
+PlayerProfile_GetNamePtr: ; 0x02028F54
 	bx lr
 	.balign 4, 0
-	thumb_func_end sub_02028F54
+	thumb_func_end PlayerProfile_GetNamePtr
 
 	thumb_func_start sub_02028F58
 sub_02028F58: ; 0x02028F58
-	ldr r3, _02028F64 ; =sub_020269A0
+	ldr r3, _02028F64 ; =CopyU16ArrayToString
 	add r2, r0, #0
 	add r0, r1, #0
 	add r1, r2, #0
 	bx r3
 	nop
-_02028F64: .word sub_020269A0
+_02028F64: .word CopyU16ArrayToString
 	thumb_func_end sub_02028F58
 
 	thumb_func_start sub_02028F68
@@ -8486,7 +8486,7 @@ sub_020290E4: ; 0x020290E4
 	bl String_ctor
 	add r1, r5, #0
 	add r4, r0, #0
-	bl sub_020269A0
+	bl CopyU16ArrayToString
 	add r0, r4, #0
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
@@ -12062,13 +12062,13 @@ sub_0202A998: ; 0x0202A998
 	pop {r3, pc}
 	thumb_func_end sub_0202A998
 
-	thumb_func_start sub_0202A9A8
-sub_0202A9A8: ; 0x0202A9A8
+	thumb_func_start GetRivalNamePtr
+GetRivalNamePtr: ; 0x0202A9A8
 	mov r1, #0x27
 	lsl r1, r1, #4
 	add r0, r0, r1
 	bx lr
-	thumb_func_end sub_0202A9A8
+	thumb_func_end GetRivalNamePtr
 
 	thumb_func_start sub_0202A9B0
 sub_0202A9B0: ; 0x0202A9B0
@@ -12963,7 +12963,7 @@ sub_0202AF08: ; 0x0202AF08
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	add r4, r1, #0
-	bl StringCompare
+	bl StringNotEqual
 	cmp r0, #0
 	bne _0202AF22
 	ldr r1, [r5, #0x10]
@@ -13269,7 +13269,7 @@ _0202B122:
 	add r1, r4, #0
 	add r0, #8
 	add r1, #8
-	bl StringCompare
+	bl StringNotEqual
 	cmp r0, #0
 	beq _0202B136
 	mov r0, #0
@@ -13330,7 +13330,7 @@ sub_0202B178: ; 0x0202B178
 	add r0, r4, #0
 	bl sub_02028E9C
 	add r4, r0, #0
-	bl sub_02028F54
+	bl PlayerProfile_GetNamePtr
 	add r1, r0, #0
 	ldr r0, [sp]
 	add r0, #8
@@ -15226,13 +15226,13 @@ _0202BEC8: .word 0x00002345
 	thumb_func_start sub_0202BECC
 sub_0202BECC: ; 0x0202BECC
 	add r2, r0, #0
-	ldr r3, _0202BED8 ; =sub_020269A0
+	ldr r3, _0202BED8 ; =CopyU16ArrayToString
 	add r2, #0x20
 	add r0, r1, #0
 	add r1, r2, #0
 	bx r3
 	.balign 4, 0
-_0202BED8: .word sub_020269A0
+_0202BED8: .word CopyU16ArrayToString
 	thumb_func_end sub_0202BECC
 
 	thumb_func_start sub_0202BEDC
@@ -20895,11 +20895,11 @@ _0202E376:
 	ldrb r0, [r5, #3]
 	strb r0, [r4, #0x13]
 	ldr r0, [r4]
-	bl sub_020269A0
+	bl CopyU16ArrayToString
 	add r1, r5, #0
 	ldr r0, [r4, #4]
 	add r1, #0x22
-	bl sub_020269A0
+	bl CopyU16ArrayToString
 	mov r1, #0
 _0202E3AE:
 	ldrh r0, [r5, #0x32]
@@ -21390,7 +21390,7 @@ sub_0202E708: ; 0x0202E708
 _0202E716:
 	add r0, #8
 	add r1, #8
-	bl StringCompare
+	bl StringNotEqual
 	cmp r0, #0
 	bne _0202E726
 	mov r0, #1
@@ -21901,7 +21901,7 @@ _0202EAA4:
 	add r1, r5, #0
 	ldr r0, [r0, #0xc]
 	add r1, #8
-	bl sub_020269A0
+	bl CopyU16ArrayToString
 	ldr r0, [r4]
 	add r0, r0, #1
 	str r0, [r4]
@@ -28140,7 +28140,7 @@ sub_020314C4: ; 0x020314C4
 	mov r2, #0x80
 	bl MIi_CpuFill8
 	add r0, r4, #0
-	bl sub_02028F54
+	bl PlayerProfile_GetNamePtr
 	add r1, r0, #0
 	add r0, r5, #0
 	bl CopyU16StringArray
@@ -28615,7 +28615,7 @@ sub_020317F4: ; 0x020317F4
 	bl sub_02028F84
 	str r0, [r4, #4]
 	add r0, r7, #0
-	bl sub_02028F54
+	bl PlayerProfile_GetNamePtr
 	add r1, r0, #0
 	add r0, r4, #0
 	add r0, #8
@@ -30008,12 +30008,12 @@ sub_020320E0: ; 0x020320E0
 	mov r1, #8
 	bl StringFillEOS
 	add r0, r5, #0
-	bl sub_02028F54
+	bl PlayerProfile_GetNamePtr
 	add r1, r0, #0
 	add r0, r4, #0
 	add r0, #8
 	mov r2, #7
-	bl StringCopyN
+	bl CopyU16StringArrayN
 	add r2, r4, #0
 	add r0, r7, #0
 	mov r1, #8
@@ -30066,7 +30066,7 @@ _0203217E:
 _0203218A:
 	add r0, #8
 	add r1, #8
-	bl StringCompare
+	bl StringNotEqual
 	cmp r0, #0
 	bne _0203219A
 	mov r0, #1
@@ -30265,7 +30265,7 @@ _020322E2:
 	add r4, #0x28
 	add r0, r6, #0
 	add r1, r4, r5
-	bl sub_020269A0
+	bl CopyU16ArrayToString
 _02032304:
 	add r0, r6, #0
 	pop {r3, r4, r5, r6, r7, pc}
@@ -31093,7 +31093,7 @@ _0203282A:
 _0203282E:
 	add r0, #8
 	add r1, #8
-	bl StringCompare
+	bl StringNotEqual
 	cmp r0, #0
 	bne _0203283E
 	mov r0, #1
@@ -47739,7 +47739,7 @@ _0203A334:
 	bl sub_02034884
 	add r1, r0, #0
 	ldr r0, [sp, #0x10]
-	bl sub_020269A0
+	bl CopyU16ArrayToString
 	ldr r2, [sp, #0x10]
 	add r0, r4, #0
 	add r1, r5, #0
@@ -48866,7 +48866,7 @@ _0203AAA0:
 	str r0, [sp, #0x10]
 	bl sub_02020080
 	add r0, r4, #0
-	bl sub_0200BD08
+	bl ScrStrBufs_new
 	add r4, r0, #0
 	ldr r2, _0203AC84 ; =0x020F6AD0
 	add r0, r6, #0
@@ -48927,7 +48927,7 @@ _0203AAA0:
 	ldr r0, [sp, #0xc]
 	bl DestroyMsgData
 	add r0, r4, #0
-	bl sub_0200BDA0
+	bl ScrStrBufs_delete
 	add r0, r6, #0
 	bl FreeToHeap
 	add sp, #0x24
@@ -58930,12 +58930,12 @@ _0203F75A:
 	beq _0203F79C
 	ldr r0, [r4, #0x10]
 	add r1, r5, #0
-	bl sub_020269A0
+	bl CopyU16ArrayToString
 	b _0203F79C
 _0203F784:
 	ldr r0, [r4, #0x10]
 	add r1, r5, #0
-	bl sub_020269A0
+	bl CopyU16ArrayToString
 	b _0203F79C
 _0203F78E:
 	cmp r5, #0
@@ -58943,7 +58943,7 @@ _0203F78E:
 	ldr r0, [r4, #0xc]
 	add r1, r5, #0
 	ldr r0, [r0, #0x18]
-	bl sub_020269A0
+	bl CopyU16ArrayToString
 _0203F79C:
 	ldr r0, [sp, #8]
 	ldr r1, _0203F7AC ; =sub_0203F580
@@ -60011,7 +60011,7 @@ _0203FF64:
 	mov r0, #8
 	mov r1, #0x40
 	mov r2, #0xb
-	bl sub_0200BD18
+	bl ScrStrBufs_new_custom
 	str r0, [r4, #0x44]
 	mov r0, #1
 	lsl r0, r0, #0xa
@@ -60066,7 +60066,7 @@ _0203FFCE:
 	add r0, #0xa8
 	ldr r5, [r0]
 	ldr r0, [r4, #0x44]
-	bl sub_0200BDA0
+	bl ScrStrBufs_delete
 	ldr r0, [r4, #0x48]
 	bl String_dtor
 	ldr r0, [r4, #0x4c]
@@ -63008,7 +63008,7 @@ sub_0204146C: ; 0x0204146C
 	ldr r2, [r6]
 	bl StringExpandPlaceholders
 	mov r0, #1
-	bl sub_02002B34
+	bl TextFlags_SetCanABSpeedUpPrint
 	mov r0, #0
 	bl sub_02002B50
 	mov r0, #0
@@ -72908,7 +72908,7 @@ sub_020461A0: ; 0x020461A0
 	bl sub_020403AC
 	add r7, r0, #0
 	mov r0, #0x20
-	bl sub_0200BD08
+	bl ScrStrBufs_new
 	add r4, r0, #0
 	mov r0, #0
 	mov r1, #0x1b
@@ -72960,7 +72960,7 @@ _0204626E:
 	add r0, r5, #0
 	bl DestroyMsgData
 	add r0, r4, #0
-	bl sub_0200BDA0
+	bl ScrStrBufs_delete
 	mov r0, #0
 	add sp, #0x10
 	pop {r3, r4, r5, r6, r7, pc}
@@ -76729,7 +76729,7 @@ sub_02047EC4: ; 0x02047EC4
 	ldrh r1, [r6]
 	ldr r0, [r7]
 	add r2, r4, #0
-	bl sub_0200BE48
+	bl BufferPlayersName
 	add r0, r4, #0
 	bl FreeToHeap
 	mov r0, #0
@@ -77431,7 +77431,7 @@ sub_02048414: ; 0x02048414
 	add r2, r0, #0
 	ldr r0, [r4]
 	add r1, r5, #0
-	bl sub_0200BE48
+	bl BufferPlayersName
 	mov r0, #0
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
@@ -77452,7 +77452,7 @@ sub_02048448: ; 0x02048448
 	ldrb r1, [r2]
 	ldr r0, [r0]
 	ldr r2, [r4, #0xc]
-	bl sub_0200BE6C
+	bl BufferRivalsName
 	mov r0, #0
 	pop {r3, r4, r5, pc}
 	thumb_func_end sub_02048448
@@ -77957,7 +77957,7 @@ sub_02048818: ; 0x02048818
 	ldr r3, [sp, #8]
 	add r1, r4, #0
 	add r2, r6, #0
-	bl sub_0200BE3C
+	bl BufferString
 	add r0, r6, #0
 	bl String_dtor
 	mov r0, #0
@@ -78015,7 +78015,7 @@ sub_020488A4: ; 0x020488A4
 	add r1, r5, #0
 	add r2, r4, #0
 	mov r3, #0
-	bl sub_0200BE3C
+	bl BufferString
 	add r0, r4, #0
 	bl String_dtor
 	mov r0, #0
@@ -78053,7 +78053,7 @@ sub_020488F4: ; 0x020488F4
 	add r1, r5, #0
 	add r2, r4, #0
 	mov r3, #0
-	bl sub_0200BE3C
+	bl BufferString
 	add r0, r4, #0
 	bl String_dtor
 	mov r0, #0
@@ -78091,7 +78091,7 @@ sub_02048944: ; 0x02048944
 	add r1, r5, #0
 	add r2, r4, #0
 	mov r3, #0
-	bl sub_0200BE3C
+	bl BufferString
 	add r0, r4, #0
 	bl String_dtor
 	mov r0, #0
@@ -78205,7 +78205,7 @@ sub_02048A1C: ; 0x02048A1C
 	add r1, r6, #0
 	add r2, r4, #0
 	mov r3, #0
-	bl sub_0200BE3C
+	bl BufferString
 	add r0, r4, #0
 	bl String_dtor
 	mov r0, #0
@@ -78263,7 +78263,7 @@ _02048AD4:
 	add r1, r6, #0
 	add r2, r5, #0
 	mov r3, #0
-	bl sub_0200BE3C
+	bl BufferString
 	add r0, r5, #0
 	bl String_dtor
 	mov r0, #0
@@ -83819,7 +83819,7 @@ sub_0204B538: ; 0x0204B538
 	mov r0, #0x13
 	mov r1, #0xe
 	mov r2, #4
-	bl sub_0200BD18
+	bl ScrStrBufs_new_custom
 	mov r1, #0
 	str r1, [sp]
 	mov r3, #1
@@ -83850,7 +83850,7 @@ _0204B58C:
 	ldr r0, [sp, #0x14]
 	ldr r3, [sp, #8]
 	add r1, r1, #1
-	bl sub_0200BE3C
+	bl BufferString
 	ldrb r0, [r5]
 	add r0, r0, #1
 	strb r0, [r5]
@@ -85189,7 +85189,7 @@ sub_0204BFD0: ; 0x0204BFD0
 	add r2, r0, #0
 	ldr r0, [r4, #4]
 	mov r1, #0
-	bl sub_0200BE48
+	bl BufferPlayersName
 	pop {r4, pc}
 	thumb_func_end sub_0204BFD0
 
@@ -85580,7 +85580,7 @@ sub_0204C330: ; 0x0204C330
 	add r2, r0, #0
 	ldr r0, [r5, #4]
 	mov r1, #0
-	bl sub_0200BE48
+	bl BufferPlayersName
 	add r0, r7, #4
 	bl sub_02070DB0
 	add r2, r0, #0
@@ -85627,7 +85627,7 @@ sub_0204C380: ; 0x0204C380
 	add r2, r0, #0
 	ldr r0, [r5, #4]
 	mov r1, #0
-	bl sub_0200BE48
+	bl BufferPlayersName
 	add r0, r7, #4
 	bl sub_02070DB0
 	add r2, r0, #0
@@ -85709,7 +85709,7 @@ sub_0204C420: ; 0x0204C420
 	add r2, r0, #0
 	ldr r0, [r5, #4]
 	mov r1, #0
-	bl sub_0200BE48
+	bl BufferPlayersName
 	ldr r0, [r5, #4]
 	mov r1, #1
 	add r2, r7, #0
@@ -85781,7 +85781,7 @@ sub_0204C4A4: ; 0x0204C4A4
 	add r2, r0, #0
 	ldr r0, [r5, #4]
 	mov r1, #0
-	bl sub_0200BE48
+	bl BufferPlayersName
 	add r0, r7, #0
 	mov r1, #0x20
 	bl sub_020290E4
@@ -85793,7 +85793,7 @@ sub_0204C4A4: ; 0x0204C4A4
 	ldr r0, [r5, #4]
 	add r2, r4, #0
 	mov r3, #0
-	bl sub_0200BE3C
+	bl BufferString
 	add r0, r4, #0
 	bl String_dtor
 	add sp, #8
@@ -85842,7 +85842,7 @@ sub_0204C50C: ; 0x0204C50C
 	add r2, r0, #0
 	ldr r0, [r5, #4]
 	mov r1, #0
-	bl sub_0200BE48
+	bl BufferPlayersName
 	ldr r0, [r5, #4]
 	mov r1, #1
 	add r2, r7, #0
@@ -85974,7 +85974,7 @@ _0204C614:
 	add r2, r0, #0
 	ldr r0, [r5, #4]
 	mov r1, #0
-	bl sub_0200BE48
+	bl BufferPlayersName
 	pop {r4, r5, r6, pc}
 	thumb_func_end sub_0204C5D8
 
@@ -86190,7 +86190,7 @@ sub_0204C700: ; 0x0204C700
 	add r2, r0, #0
 	ldr r0, [r5, #4]
 	mov r1, #0
-	bl sub_0200BE48
+	bl BufferPlayersName
 	ldrb r2, [r7]
 	ldr r0, [r5, #4]
 	mov r1, #1
@@ -86221,7 +86221,7 @@ sub_0204C738: ; 0x0204C738
 	add r2, r0, #0
 	ldr r0, [r5, #4]
 	mov r1, #0
-	bl sub_0200BE48
+	bl BufferPlayersName
 	ldrb r2, [r7]
 	ldr r0, [r5, #4]
 	mov r1, #1
@@ -86289,7 +86289,7 @@ sub_0204C7C8: ; 0x0204C7C8
 	add r2, r0, #0
 	ldr r0, [r5, #4]
 	mov r1, #0
-	bl sub_0200BE48
+	bl BufferPlayersName
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
 	thumb_func_end sub_0204C7C8
@@ -86325,7 +86325,7 @@ _0204C822:
 	add r2, r0, #0
 	ldr r0, [r5, #4]
 	mov r1, #0
-	bl sub_0200BE48
+	bl BufferPlayersName
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
 _0204C838: .word 0x000001F5
@@ -97658,7 +97658,7 @@ _020521F6:
 	add r0, r5, #0
 	add r0, #0xf8
 	ldr r0, [r0]
-	bl sub_02028F54
+	bl PlayerProfile_GetNamePtr
 	add r1, r0, #0
 	add r0, r5, #0
 	add r0, #0x3c
@@ -98038,7 +98038,7 @@ sub_02052580: ; 0x02052580
 	add r0, r4, #0
 	add r0, #0xf8
 	ldr r0, [r0]
-	bl sub_02028F54
+	bl PlayerProfile_GetNamePtr
 	add r1, r0, #0
 	add r0, r4, #0
 	add r0, #0x3c
@@ -98134,7 +98134,7 @@ _02052622:
 	bl NewMsgDataFromNarc
 	str r0, [r4, #0x1c]
 	mov r0, #0xb
-	bl sub_0200BD08
+	bl ScrStrBufs_new
 	str r0, [r4, #0x20]
 	add r1, r4, #0
 	ldr r0, [r4, #8]
@@ -98147,7 +98147,7 @@ _02052622:
 	add r2, r0, #0
 	ldr r0, [r4, #0x20]
 	mov r1, #0
-	bl sub_0200BE48
+	bl BufferPlayersName
 	ldr r0, [r5, #0x20]
 	ldr r0, [r0]
 	cmp r0, #0x3f
@@ -98276,7 +98276,7 @@ _02052780:
 	add r0, #0xc
 	bl RemoveWindow
 	ldr r0, [r4, #0x20]
-	bl sub_0200BDA0
+	bl ScrStrBufs_delete
 	ldr r0, [r4, #0x1c]
 	bl DestroyMsgData
 	ldr r0, [r4, #8]
@@ -99033,7 +99033,7 @@ sub_02052D84: ; 0x02052D84
 	bl FillBgTilemapRect
 	ldr r0, [r4, #0x18]
 	mov r1, #3
-	bl sub_0201BF7C
+	bl BgCommitTilemapBufferToVram
 	add sp, #0x10
 	pop {r4, pc}
 	nop
@@ -99123,14 +99123,14 @@ sub_02052E8C: ; 0x02052E8C
 	cmp r6, #2
 	bne _02052ED4
 	mov r0, #4
-	bl sub_0200BD08
+	bl ScrStrBufs_new
 	add r6, r0, #0
 	ldr r0, [r5, #0xc]
 	bl sub_02028E9C
 	add r2, r0, #0
 	add r0, r6, #0
 	mov r1, #0
-	bl sub_0200BE48
+	bl BufferPlayersName
 	add r0, r6, #0
 	add r1, r7, #0
 	mov r2, #0x10
@@ -99138,7 +99138,7 @@ sub_02052E8C: ; 0x02052E8C
 	bl ReadMsgData_ExpandPlaceholders
 	str r0, [r4, #0x2c]
 	add r0, r6, #0
-	bl sub_0200BDA0
+	bl ScrStrBufs_delete
 	b _02052EDC
 _02052ED4:
 	mov r1, #0x12
@@ -112147,7 +112147,7 @@ _020590E4:
 	ldr r0, [r4, #0x28]
 	ldr r2, [r4, #0x74]
 	mov r1, #0
-	bl sub_0200BE48
+	bl BufferPlayersName
 	ldr r0, [r4, #0x2c]
 	ldr r2, [r4, #0xc]
 	mov r1, #0xe
@@ -112673,7 +112673,7 @@ _02059546:
 	str r5, [r4, #0x24]
 	str r6, [r4, #8]
 	mov r0, #0xb
-	bl sub_0200BD08
+	bl ScrStrBufs_new
 	str r0, [r4, #0x28]
 	mov r0, #0
 	mov r1, #0x1b
@@ -112803,7 +112803,7 @@ _02059672:
 	ldr r0, [r4, #0x2c]
 	bl DestroyMsgData
 	ldr r0, [r4, #0x28]
-	bl sub_0200BDA0
+	bl ScrStrBufs_delete
 	ldr r0, [r4, #0xc]
 	bl String_dtor
 	ldr r0, [r4, #0x10]
@@ -113507,7 +113507,7 @@ _02059B96: ; jump table
 	.short _02059D24 - _02059B96 - 2 ; case 7
 _02059BA6:
 	mov r0, #4
-	bl sub_0200BD08
+	bl ScrStrBufs_new
 	str r0, [r4, #0x18]
 	mov r0, #0
 	mov r1, #0x1b
@@ -113570,7 +113570,7 @@ _02059C10:
 	add r2, r0, #0
 	ldr r0, [r4, #0x18]
 	mov r1, #0
-	bl sub_0200BE48
+	bl BufferPlayersName
 	ldr r0, [r4, #0x18]
 	ldr r1, [r4, #4]
 	ldr r2, [r4]
@@ -113614,7 +113614,7 @@ _02059C6C:
 	ldr r0, [r4, #0x1c]
 	bl DestroyMsgData
 	ldr r0, [r4, #0x18]
-	bl sub_0200BDA0
+	bl ScrStrBufs_delete
 	ldr r0, [r4]
 	bl String_dtor
 	ldr r0, [r4, #4]
@@ -115577,11 +115577,11 @@ _0205AADE:
 	add r0, r5, #0
 	mov r1, #0
 	add r2, r4, #0
-	bl sub_0200BE48
+	bl BufferPlayersName
 	ldr r2, [sp, #8]
 	add r0, r5, #0
 	mov r1, #1
-	bl sub_0200BE48
+	bl BufferPlayersName
 	add r0, r4, #0
 	bl sub_02029088
 	add r4, r0, #0
@@ -115650,7 +115650,7 @@ _0205AB56:
 	add r2, r7, #0
 	mov r3, #0
 	str r4, [sp, #4]
-	bl sub_0200BE3C
+	bl BufferString
 	add r0, r7, #0
 	bl FreeToHeap
 	add r0, r6, #0
@@ -117047,7 +117047,7 @@ sub_0205B5B4: ; 0x0205B5B4
 	add r0, r3, #0
 	add r4, r1, #0
 	add r6, r2, #0
-	bl sub_02002B34
+	bl TextFlags_SetCanABSpeedUpPrint
 	mov r0, #0
 	bl sub_02002B50
 	mov r0, #0
@@ -117076,7 +117076,7 @@ sub_0205B5EC: ; 0x0205B5EC
 	add r6, r1, #0
 	add r7, r2, #0
 	add r4, r3, #0
-	bl sub_02002B34
+	bl TextFlags_SetCanABSpeedUpPrint
 	ldr r0, [sp, #0x24]
 	bl sub_02002B50
 	mov r0, #0
@@ -148035,7 +148035,7 @@ sub_02068FC8: ; 0x02068FC8
 	bl sub_02028F94
 	str r0, [sp, #0x2c]
 	add r0, r7, #0
-	bl sub_02028F54
+	bl PlayerProfile_GetNamePtr
 	str r0, [sp, #0x30]
 	add r0, r7, #0
 	bl sub_02029024
@@ -148361,7 +148361,7 @@ sub_020692C4: ; 0x020692C4
 	add r0, #8
 	mov r2, #8
 	add r5, r3, #0
-	bl StringCopyN
+	bl CopyU16StringArrayN
 	ldr r0, [sp, #0x10]
 	str r5, [r4, #0x1c]
 	str r0, [r4, #0x20]
@@ -148685,7 +148685,7 @@ sub_02069528: ; 0x02069528
 	mov r2, #0xe4
 	bl MIi_CpuFill8
 	add r0, r4, #0
-	bl sub_02028F54
+	bl PlayerProfile_GetNamePtr
 	add r1, r7, #0
 	add r1, #0xa8
 	mov r2, #0x10
@@ -152296,7 +152296,7 @@ sub_0206B014: ; 0x0206B014
 	bl sub_02074640
 	str r0, [sp, #0xc]
 	add r0, r6, #0
-	bl sub_02028F54
+	bl PlayerProfile_GetNamePtr
 	add r1, r0, #0
 	add r0, r5, #0
 	add r0, #8
@@ -153358,7 +153358,7 @@ sub_0206B8AC: ; 0x0206B8AC
 	bl GfGfxLoader_LoadScrnData
 	add r0, r5, #0
 	mov r1, #2
-	bl sub_0201BF7C
+	bl BgCommitTilemapBufferToVram
 	mov r0, #2
 	mov r1, #0
 	bl sub_0201BB68
@@ -154068,7 +154068,7 @@ sub_0206BE34: ; 0x0206BE34
 	str r0, [sp, #4]
 	add r0, r7, #0
 	bl sub_02028E9C
-	bl sub_02028F54
+	bl PlayerProfile_GetNamePtr
 	add r2, sp, #0xc
 	add r0, r4, #0
 	mov r1, #0x75
@@ -159722,14 +159722,14 @@ _0206EA90:
 	add r5, r0, #0
 	ldr r0, [sp, #8]
 	add r1, r5, #0
-	bl sub_020263D4
+	bl StringCopy
 	add r0, r5, #0
 	bl String_dtor
 	b _0206EC36
 _0206EAB4:
 	ldr r0, [sp, #8]
 	add r1, r7, #0
-	bl sub_020269A0
+	bl CopyU16ArrayToString
 	b _0206EC36
 _0206EABE:
 	ldrb r4, [r7, #0x16]
@@ -159776,7 +159776,7 @@ _0206EAF0:
 	b _0206EC36
 _0206EB08:
 	ldr r0, [sp, #8]
-	bl sub_020269A0
+	bl CopyU16ArrayToString
 	b _0206EC36
 _0206EB10:
 	ldrb r4, [r1, #0x10]
@@ -160780,7 +160780,7 @@ _0206F23C:
 	bl GetSpeciesNameIntoArray
 	add r0, sp, #0x38
 	add r1, r4, #0
-	bl StringCompare
+	bl StringNotEqual
 	ldr r2, [r5, #0x10]
 	ldr r1, _0206F494 ; =0x7FFFFFFF
 	lsl r0, r0, #0x1f
@@ -160814,7 +160814,7 @@ _0206F272:
 	add r0, sp, #0x20
 	add r0, #2
 	add r1, sp, #0xc
-	bl StringCompare
+	bl StringNotEqual
 	ldr r2, [r5, #0x10]
 	ldr r1, _0206F494 ; =0x7FFFFFFF
 	lsl r0, r0, #0x1f
@@ -169801,7 +169801,7 @@ sub_020733C0: ; 0x020733C0
 	str r0, [sp, #0x10]
 	add r0, r4, #0
 	bl sub_0202A960
-	bl sub_0202A9A8
+	bl GetRivalNamePtr
 	ldr r4, [sp]
 	str r0, [sp, #0xc]
 	add r0, r4, #0
@@ -171342,7 +171342,7 @@ _02073F12:
 	mov r2, #0x28
 	mul r2, r1
 	add r1, r3, r2
-	bl sub_020269A0
+	bl CopyU16ArrayToString
 	pop {r3, pc}
 _02073F28:
 	bl GF_AssertFail
@@ -174562,7 +174562,7 @@ sub_02075554: ; 0x02075554
 	add r4, r2, #0
 	add r6, r0, #0
 	add r5, r1, #0
-	bl sub_02028F54
+	bl PlayerProfile_GetNamePtr
 	add r1, r0, #0
 	add r0, r4, #0
 	bl CopyU16StringArray
@@ -175425,7 +175425,7 @@ sub_02075A7C: ; 0x02075A7C
 	bl NewMsgDataFromNarc
 	str r0, [r4, #8]
 	add r0, r5, #0
-	bl sub_0200BD08
+	bl ScrStrBufs_new
 	str r0, [r4, #0xc]
 	mov r0, #5
 	lsl r0, r0, #6
@@ -175484,7 +175484,7 @@ sub_02075A7C: ; 0x02075A7C
 	mov r2, #0
 	bl sub_0200E320
 	mov r0, #1
-	bl sub_02002B34
+	bl TextFlags_SetCanABSpeedUpPrint
 	mov r0, #1
 	bl sub_02002B8C
 	bl sub_0203A880
@@ -175585,7 +175585,7 @@ sub_02075D4C: ; 0x02075D4C
 	ldr r0, [r4, #8]
 	bl DestroyMsgData
 	ldr r0, [r4, #0xc]
-	bl sub_0200BDA0
+	bl ScrStrBufs_delete
 	ldr r0, [r4, #0x10]
 	bl FreeToHeap
 	ldr r0, [r4, #0x3c]
@@ -175601,7 +175601,7 @@ sub_02075D4C: ; 0x02075D4C
 	add r0, r4, #0
 	bl FreeToHeap
 	mov r0, #0
-	bl sub_02002B34
+	bl TextFlags_SetCanABSpeedUpPrint
 	mov r0, #0
 	bl sub_02002B8C
 	ldr r0, _02075E10 ; =0x021D116C
@@ -179066,7 +179066,7 @@ sub_02077980: ; 0x02077980
 	bl NewMsgDataFromNarc
 	add r6, r0, #0
 	add r0, r4, #0
-	bl sub_0200BD08
+	bl ScrStrBufs_new
 	add r4, r0, #0
 	cmp r5, #0
 	bne _020779B0
@@ -179163,7 +179163,7 @@ _02077A48:
 	bl sub_0200BFCC
 	b _02077A82
 _02077A72:
-	bl sub_0200BDA0
+	bl ScrStrBufs_delete
 	add r0, r6, #0
 	bl DestroyMsgData
 	add sp, #0xc
@@ -179177,7 +179177,7 @@ _02077A82:
 	add r0, r5, #0
 	bl String_dtor
 	add r0, r4, #0
-	bl sub_0200BDA0
+	bl ScrStrBufs_delete
 	add r0, r6, #0
 	bl DestroyMsgData
 	mov r0, #1
@@ -179245,7 +179245,7 @@ _02077B14:
 	bl NewMsgDataFromNarc
 	add r7, r0, #0
 	add r0, r4, #0
-	bl sub_0200BD08
+	bl ScrStrBufs_new
 	add r4, r0, #0
 	add r0, r7, #0
 	mov r1, #0x25
@@ -179254,7 +179254,7 @@ _02077B14:
 	ldr r2, [sp]
 	add r0, r4, #0
 	mov r1, #0
-	bl sub_0200BE48
+	bl BufferPlayersName
 	add r0, r4, #0
 	add r1, r5, #0
 	add r2, r6, #0
@@ -179262,7 +179262,7 @@ _02077B14:
 	add r0, r6, #0
 	bl String_dtor
 	add r0, r4, #0
-	bl sub_0200BDA0
+	bl ScrStrBufs_delete
 	add r0, r7, #0
 	bl DestroyMsgData
 	pop {r3, r4, r5, r6, r7, pc}
@@ -183138,7 +183138,7 @@ _0207963E:
 	bl sub_0200CD94
 	ldr r0, _020796AC ; =0x000007C4
 	ldr r0, [r6, r0]
-	bl sub_0200BDA0
+	bl ScrStrBufs_delete
 	ldr r0, _020796B0 ; =0x00000C74
 	ldr r0, [r6, r0]
 	cmp r0, #0
@@ -183832,7 +183832,7 @@ _02079C26:
 	ldr r1, _02079CD0 ; =0x000007BC
 	str r0, [r4, r1]
 	mov r0, #0xc
-	bl sub_0200BD08
+	bl ScrStrBufs_new
 	ldr r1, _02079CD4 ; =0x000007C4
 	mov r6, #0
 	add r7, r1, #0
@@ -189954,7 +189954,7 @@ _0207CC44:
 	bl sub_0207E28C
 	ldr r0, [r5]
 	mov r1, #0
-	bl sub_0201BF7C
+	bl BgCommitTilemapBufferToVram
 	b _0207CC9A
 _0207CC76:
 	ldrb r0, [r4, #5]
@@ -190026,7 +190026,7 @@ _0207CCB6:
 	bl sub_0207E28C
 	ldr r0, [r5]
 	mov r1, #0
-	bl sub_0201BF7C
+	bl BgCommitTilemapBufferToVram
 	b _0207CD30
 _0207CD0A:
 	ldrb r0, [r4, #5]
@@ -191797,7 +191797,7 @@ sub_0207DB30: ; 0x0207DB30
 	sub sp, #0xc
 	add r4, r0, #0
 	mov r0, #1
-	bl sub_02002B34
+	bl TextFlags_SetCanABSpeedUpPrint
 	mov r0, #0
 	bl sub_02002B50
 	ldr r0, _0207DB70 ; =0x00000654
@@ -192669,7 +192669,7 @@ _0207E21C:
 	ldr r0, [sp, #0x10]
 	mov r1, #0
 	ldr r0, [r0]
-	bl sub_0201BF7C
+	bl BgCommitTilemapBufferToVram
 	add sp, #0x14
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
@@ -201397,7 +201397,7 @@ _0208291E:
 	bl NARC_ctor
 	add r7, r0, #0
 	mov r0, #0x12
-	bl sub_0200BD08
+	bl ScrStrBufs_new
 	mov r1, #0x5a
 	lsl r1, r1, #2
 	str r0, [r4, r1]
@@ -201995,7 +201995,7 @@ _02082E52:
 _02082E6E:
 	ldr r0, [r4, #0x18]
 	add r1, r6, #0
-	bl sub_020263D4
+	bl StringCopy
 	add r0, r6, #0
 	bl String_dtor
 	ldr r0, [r4, #0x18]
@@ -202019,7 +202019,7 @@ _02082E8A:
 	add r5, r0, #0
 	ldr r0, [r4, #0x18]
 	add r1, r5, #0
-	bl sub_020263D4
+	bl StringCopy
 	add r0, r5, #0
 	bl String_dtor
 	ldr r0, [r4, #0x18]
@@ -202105,7 +202105,7 @@ _02082F32:
 	sub r1, #0x40
 	add r0, #0xd8
 	add r1, r4, r1
-	bl StringCompare
+	bl StringNotEqual
 	cmp r0, #0
 	beq _02082F58
 	add r0, r4, #0
@@ -202133,7 +202133,7 @@ _02082F62:
 	add r1, r4, #0
 	ldr r0, [r5, #0x18]
 	add r1, #0xd8
-	bl sub_020269A0
+	bl CopyU16ArrayToString
 _02082F86:
 	mov r0, #0x61
 	lsl r0, r0, #2
@@ -202252,7 +202252,7 @@ _02083060:
 	mov r0, #0x5a
 	lsl r0, r0, #2
 	ldr r0, [r4, r0]
-	bl sub_0200BDA0
+	bl ScrStrBufs_delete
 	ldr r0, [sp, #0x10]
 	bl sub_02007294
 	mov r0, #0
@@ -202888,7 +202888,7 @@ _020835BC:
 	add r1, r5, #0
 	add r0, r7, #0
 	add r1, #0xd8
-	bl sub_020269A0
+	bl CopyU16ArrayToString
 	mov r1, #0
 	str r1, [sp]
 	mov r0, #0x5a
@@ -202897,7 +202897,7 @@ _020835BC:
 	ldr r0, [r5, r0]
 	add r2, r7, #0
 	add r3, r1, #0
-	bl sub_0200BE3C
+	bl BufferString
 _020835EA:
 	mov r1, #0x5a
 	lsl r1, r1, #2
@@ -204900,7 +204900,7 @@ _020845CE:
 	add r5, r0, #0
 	ldr r0, [sp, #0x28]
 	add r1, sp, #0x38
-	bl sub_020269A0
+	bl CopyU16ArrayToString
 	ldr r0, [sp, #0x20]
 	sub r3, r6, r5
 	str r0, [sp]
@@ -205032,7 +205032,7 @@ _020846D6:
 	bl FillWindowPixelBuffer
 	add r0, r4, #0
 	add r1, sp, #0xc
-	bl sub_020269A0
+	bl CopyU16ArrayToString
 	ldr r3, _02084730 ; =0x000D0E0F
 	add r0, r6, r7
 	add r1, r4, #0
@@ -213528,7 +213528,7 @@ sub_02088894: ; 0x02088894
 	ldr r1, _02088948 ; =0x0000079C
 	str r0, [r4, r1]
 	mov r0, #0x13
-	bl sub_0200BD08
+	bl ScrStrBufs_new
 	ldr r1, _0208894C ; =0x000007A8
 	str r0, [r4, r1]
 	mov r0, #0xc
@@ -213574,7 +213574,7 @@ sub_02088894: ; 0x02088894
 	cmp r1, #0
 	beq _0208893C
 	ldr r0, [r4, r2]
-	bl sub_020269A0
+	bl CopyU16ArrayToString
 _0208893C:
 	pop {r4, pc}
 	nop
@@ -213606,7 +213606,7 @@ sub_0208895C: ; 0x0208895C
 	bl sub_0200CD94
 	ldr r0, _020889C8 ; =0x000007A8
 	ldr r0, [r4, r0]
-	bl sub_0200BDA0
+	bl ScrStrBufs_delete
 	mov r0, #0x23
 	lsl r0, r0, #4
 	ldr r0, [r4, r0]
@@ -216107,7 +216107,7 @@ sub_02089D68: ; 0x02089D68
 	bl FillBgTilemapRect
 	ldr r0, [r5]
 	mov r1, #1
-	bl sub_0201BF7C
+	bl BgCommitTilemapBufferToVram
 	mov r0, #3
 	str r0, [sp]
 	mov r0, #0x12
@@ -216122,7 +216122,7 @@ sub_02089D68: ; 0x02089D68
 	bl FillBgTilemapRect
 	ldr r0, [r5]
 	mov r1, #4
-	bl sub_0201BF7C
+	bl BgCommitTilemapBufferToVram
 	add r0, r5, #0
 	bl sub_0208CBD4
 	add r0, r5, #0
@@ -218102,7 +218102,7 @@ sub_0208AD34: ; 0x0208AD34
 	add r4, r1, #0
 	add r5, r0, #0
 	add r0, r4, #0
-	bl sub_02028F54
+	bl PlayerProfile_GetNamePtr
 	str r0, [r5, #8]
 	add r0, r4, #0
 	bl sub_02028F84
@@ -223319,7 +223319,7 @@ sub_0208D6B8: ; 0x0208D6B8
 	bl sub_0201D5C8
 	ldr r0, [r4]
 	mov r1, #4
-	bl sub_0201BF7C
+	bl BgCommitTilemapBufferToVram
 	add sp, #4
 	pop {r3, r4, pc}
 	.balign 4, 0
@@ -225147,7 +225147,7 @@ sub_0208E600: ; 0x0208E600
 	ldr r2, [r4]
 	mov r0, #9
 	mov r1, #0x20
-	bl sub_0200BD18
+	bl ScrStrBufs_new_custom
 	str r0, [r4, #8]
 	str r5, [r4, #0xc]
 	str r6, [r4, #0x10]
@@ -225571,7 +225571,7 @@ _0208E9C0:
 	bl FreeToHeap
 _0208E9CA:
 	ldr r0, [r4, #8]
-	bl sub_0200BDA0
+	bl ScrStrBufs_delete
 	ldr r0, [r4, #4]
 	bl DestroyMsgData
 	add r0, r4, #0
@@ -237072,7 +237072,7 @@ sub_020941CC: ; 0x020941CC
 	bl sub_0201CA4C
 	add r0, r6, #0
 	mov r1, #2
-	bl sub_0201BF7C
+	bl BgCommitTilemapBufferToVram
 	mov r0, #0
 	str r0, [sp]
 	mov r0, #6
@@ -237099,7 +237099,7 @@ sub_020941CC: ; 0x020941CC
 	bl sub_0201CA4C
 	add r0, r6, #0
 	mov r1, #3
-	bl sub_0201BF7C
+	bl BgCommitTilemapBufferToVram
 	ldr r3, _02094280 ; =0x000046D0
 	mov r0, #0x97
 	mov r1, #3
@@ -241234,7 +241234,7 @@ sub_020961D8: ; 0x020961D8
 	add r4, r0, #0
 	str r5, [r4]
 	mov r0, #0x20
-	bl sub_0200BD08
+	bl ScrStrBufs_new
 	str r0, [r4, #4]
 	mov r3, #0x20
 	str r3, [sp]
@@ -241278,7 +241278,7 @@ sub_02096248: ; 0x02096248
 	ldr r0, [r4, #0x10]
 	bl sub_02090D0C
 	ldr r0, [r4, #4]
-	bl sub_0200BDA0
+	bl ScrStrBufs_delete
 	add r0, r4, #0
 	bl FreeToHeap
 	pop {r4, pc}
