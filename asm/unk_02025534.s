@@ -183628,7 +183628,7 @@ sub_02079A14: ; 0x02079A14
 	add r1, r6, #0
 	lsl r2, r2, #0x10
 	lsr r2, r2, #0x10
-	bl sub_0201C260
+	bl BG_LoadPlttData
 	add r0, r6, #0
 	bl FreeToHeap
 	ldr r1, [sp, #0x10]
@@ -185331,7 +185331,7 @@ _0207A858:
 	mov r0, #2
 	mov r2, #0x10
 	lsr r3, r3, #0x10
-	bl sub_0201C260
+	bl BG_LoadPlttData
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
 _0207A870: .word 0x00000654
@@ -191056,7 +191056,7 @@ _0207D53C:
 	add r1, r5, r1
 	mov r2, #4
 	lsr r3, r3, #0x10
-	bl sub_0201C260
+	bl BG_LoadPlttData
 	b _0207D582
 _0207D554:
 	ldrb r3, [r4, #9]
@@ -191068,7 +191068,7 @@ _0207D554:
 	add r1, r5, r1
 	mov r2, #4
 	lsr r3, r3, #0x10
-	bl sub_0201C260
+	bl BG_LoadPlttData
 	b _0207D582
 _0207D56C:
 	ldrb r3, [r4, #9]
@@ -191080,7 +191080,7 @@ _0207D56C:
 	add r1, r5, r1
 	mov r2, #4
 	lsr r3, r3, #0x10
-	bl sub_0201C260
+	bl BG_LoadPlttData
 _0207D582:
 	ldr r0, [sp, #8]
 	ldrh r1, [r7, r6]
