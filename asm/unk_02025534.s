@@ -11971,13 +11971,13 @@ sub_0202A8BC: ; 0x0202A8BC
 	lsl r0, r0, #4
 	add r0, r4, r0
 	mov r1, #4
-	bl sub_02015834
+	bl MailMsg_init_withBank
 	ldr r0, _0202A94C ; =0x000002A2
 	mov r1, #0
 	strh r1, [r4, r0]
 	ldr r0, _0202A950 ; =0x0000011F
 	mov r1, #0x63
-	bl sub_02015B60
+	bl GetECWordIndexByPair
 	mov r1, #0xa9
 	lsl r1, r1, #2
 	strh r0, [r4, r1]
@@ -13186,7 +13186,7 @@ _0202B08A:
 	add r4, #0x20
 _0202B09A:
 	add r0, r4, #0
-	bl sub_0201581C
+	bl MailMsg_init
 	add r5, r5, #1
 	add r4, #8
 	cmp r5, #3
@@ -13297,7 +13297,7 @@ _0202B148:
 _0202B158:
 	add r0, r5, #0
 	add r1, r4, #0
-	bl sub_020159EC
+	bl MailMsg_compare
 	cmp r0, #0
 	bne _0202B168
 	mov r0, #0
@@ -13504,47 +13504,47 @@ sub_0202B2D4: ; 0x0202B2D4
 	str r0, [r4]
 	add r0, r4, #0
 	add r0, #0x20
-	bl sub_02015A44
+	bl MailMsg_SetMsgBankAndNum
 	add r0, r4, #0
 	ldr r2, _0202B3D0 ; =0x00000545
 	add r0, #0x20
 	mov r1, #0
-	bl sub_02015A5C
+	bl MailMsg_SetFieldI
 	add r0, r4, #0
 	ldr r2, _0202B3D4 ; =0x0000FFFF
 	add r0, #0x20
 	mov r1, #1
-	bl sub_02015A5C
+	bl MailMsg_SetFieldI
 	add r0, r4, #0
 	add r0, #0x28
 	mov r1, #1
 	mov r2, #0xf
-	bl sub_02015A44
+	bl MailMsg_SetMsgBankAndNum
 	add r0, r4, #0
 	ldr r2, _0202B3D8 ; =0x0000055B
 	add r0, #0x28
 	mov r1, #0
-	bl sub_02015A5C
+	bl MailMsg_SetFieldI
 	add r0, r4, #0
 	ldr r2, _0202B3D4 ; =0x0000FFFF
 	add r0, #0x28
 	mov r1, #1
-	bl sub_02015A5C
+	bl MailMsg_SetFieldI
 	add r0, r4, #0
 	add r0, #0x30
 	mov r1, #2
 	mov r2, #1
-	bl sub_02015A44
+	bl MailMsg_SetMsgBankAndNum
 	add r0, r4, #0
 	add r0, #0x30
 	mov r1, #0
 	mov r2, #0x29
-	bl sub_02015A5C
+	bl MailMsg_SetFieldI
 	add r0, r4, #0
 	ldr r2, _0202B3D4 ; =0x0000FFFF
 	add r0, #0x30
 	mov r1, #1
-	bl sub_02015A5C
+	bl MailMsg_SetFieldI
 	mov r2, #0
 	add r0, r5, #0
 	mov r1, #5
@@ -13784,7 +13784,7 @@ sub_0202B4F8: ; 0x0202B4F8
 	add r0, #0x20
 	lsl r2, r2, #3
 	add r0, r0, r2
-	bl sub_02015A24
+	bl MailMsg_copy
 _0202B508:
 	pop {r3, pc}
 	.balign 4, 0
@@ -15042,12 +15042,12 @@ sub_0202BD7C: ; 0x0202BD7C
 _0202BD90:
 	add r0, r5, #0
 	add r0, #0x40
-	bl sub_0201581C
+	bl MailMsg_init
 	add r5, #0x40
 	add r0, r5, #0
 	mov r1, #0
 	add r2, r4, #0
-	bl sub_02015A5C
+	bl MailMsg_SetFieldI
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 	thumb_func_end sub_0202BD7C
@@ -15192,12 +15192,12 @@ _0202BE92:
 
 	thumb_func_start sub_0202BE98
 sub_0202BE98: ; 0x0202BE98
-	ldr r3, _0202BEA0 ; =sub_020159DC
+	ldr r3, _0202BEA0 ; =MailMsg_GetFieldI
 	add r0, #0x40
 	mov r1, #0
 	bx r3
 	.balign 4, 0
-_0202BEA0: .word sub_020159DC
+_0202BEA0: .word MailMsg_GetFieldI
 	thumb_func_end sub_0202BE98
 
 	thumb_func_start sub_0202BEA4
@@ -18245,7 +18245,7 @@ sub_0202D254: ; 0x0202D254
 _0202D25C:
 	add r0, r5, #0
 	add r1, r4, #0
-	bl sub_0201585C
+	bl MailMsg_init_fromTemplate
 	add r6, r6, #1
 	add r4, #8
 	add r5, #8
@@ -18877,7 +18877,7 @@ sub_0202D640: ; 0x0202D640
 	lsl r0, r5, #3
 	add r0, r1, r0
 	add r1, r4, #0
-	bl sub_02015A24
+	bl MailMsg_copy
 	pop {r3, r4, r5, pc}
 	nop
 _0202D65C: .word 0x00000ABC
@@ -28361,7 +28361,7 @@ _02031680:
 	beq _02031694
 	add r1, sp, #4
 	add r2, sp, #0
-	bl sub_02015BB0
+	bl GetCategoryAndMsgNoByECWordIdx
 	cmp r0, #0
 	beq _020316A8
 _02031694:
@@ -28371,7 +28371,7 @@ _02031694:
 	beq _020316AA
 	add r1, sp, #4
 	add r2, sp, #0
-	bl sub_02015BB0
+	bl GetCategoryAndMsgNoByECWordIdx
 	cmp r0, #0
 	bne _020316AA
 _020316A8:
@@ -28381,12 +28381,12 @@ _020316AA:
 	ble _020316C8
 	add r0, r4, #0
 	mov r1, #4
-	bl sub_02015834
+	bl MailMsg_init_withBank
 	mov r0, #0
 	strh r0, [r4, #2]
 	ldr r0, _020316EC ; =0x0000011F
 	mov r1, #0x63
-	bl sub_02015B60
+	bl GetECWordIndexByPair
 	strh r0, [r4, #4]
 	ldr r0, _020316E8 ; =0x0000FFFF
 	strh r0, [r4, #6]
@@ -36065,7 +36065,7 @@ sub_02034B0C: ; 0x02034B0C
 	ldr r0, [r2, #8]
 	sub r1, #0x1c
 	add r0, r0, r1
-	bl sub_0201581C
+	bl MailMsg_init
 	add r0, r7, #0
 	bl sub_02034DF0
 	bl sub_020DF250
@@ -54262,7 +54262,7 @@ sub_0203D3B8: ; 0x0203D3B8
 	str r0, [r4, r1]
 	add r0, sp, #4
 	mov r1, #4
-	bl sub_02015834
+	bl MailMsg_init_withBank
 	mov r0, #0xe
 	lsl r0, r0, #6
 	ldr r0, [r4, r0]
@@ -57087,7 +57087,7 @@ _0203E926:
 	bl sub_0202D640
 	add r0, sp, #0
 	mov r1, #0
-	bl sub_020159DC
+	bl MailMsg_GetFieldI
 	ldr r1, [r4, #4]
 	strh r0, [r1]
 _0203E946:
@@ -113865,7 +113865,7 @@ sub_02059E88: ; 0x02059E88
 	cmp r0, #0
 	beq _02059EB4
 	add r0, sp, #0
-	bl sub_0201584C
+	bl MailMsg_init_default
 	add r0, sp, #0
 	bl sub_0205AB88
 	add r0, r4, #0
@@ -115430,7 +115430,7 @@ _0205A9C8:
 	mov r0, #0x5e
 	lsl r0, r0, #2
 	add r0, r5, r0
-	bl sub_02015920
+	bl MailMsg_IsInit
 	cmp r0, #0
 	bne _0205A9DA
 	mov r0, #0xa7
@@ -115439,7 +115439,7 @@ _0205A9DA:
 	mov r0, #0x5e
 	lsl r0, r0, #2
 	add r0, r5, r0
-	bl sub_020159E4
+	bl MailMsg_GetMsgBank
 	cmp r0, #4
 	beq _0205AA0C
 	ldr r0, [r5, #8]
@@ -115460,7 +115460,7 @@ _0205AA0C:
 	mov r0, #0x5e
 	lsl r0, r0, #2
 	add r0, r5, r0
-	bl sub_020159E8
+	bl MailMsg_GetMsgNo
 	add r4, r0, #0
 	cmp r4, #0x14
 	blt _0205AA1E
@@ -115470,7 +115470,7 @@ _0205AA1E:
 	lsl r0, r0, #2
 	add r0, r5, r0
 	mov r1, #0
-	bl sub_020159DC
+	bl MailMsg_GetFieldI
 	add r2, r0, #0
 	ldr r0, _0205AA44 ; =0x0000FFFF
 	cmp r2, r0
@@ -115516,7 +115516,7 @@ sub_0205AA6C: ; 0x0205AA6C
 	mov r0, #0x5e
 	lsl r0, r0, #2
 	add r0, r4, r0
-	bl sub_02015A24
+	bl MailMsg_copy
 	mov r0, #6
 	mov r1, #1
 	lsl r0, r0, #6
@@ -116689,7 +116689,7 @@ sub_0205B338: ; 0x0205B338
 	str r1, [r4, #4]
 	add r0, #0x14
 	str r1, [r4, #8]
-	bl sub_02015834
+	bl MailMsg_init_withBank
 	mov r0, #0
 	str r0, [r4, #0x10]
 	str r0, [r4, #0xc]
@@ -230118,7 +230118,7 @@ sub_02090C94: ; 0x02090C94
 	add r0, r4, #0
 	add r0, #0x14
 	mov r1, #3
-	bl sub_02015834
+	bl MailMsg_init_withBank
 	b _02090D02
 _02090CF2:
 	ldr r0, _02090D08 ; =0x0000FFFF
@@ -230222,13 +230222,13 @@ sub_02090D54: ; 0x02090D54
 	thumb_func_start sub_02090D60
 sub_02090D60: ; 0x02090D60
 	add r2, r0, #0
-	ldr r3, _02090D6C ; =sub_02015A24
+	ldr r3, _02090D6C ; =MailMsg_copy
 	add r2, #0x14
 	add r0, r1, #0
 	add r1, r2, #0
 	bx r3
 	.balign 4, 0
-_02090D6C: .word sub_02015A24
+_02090D6C: .word MailMsg_copy
 	thumb_func_end sub_02090D60
 
 	thumb_func_start sub_02090D70
@@ -230343,7 +230343,7 @@ _02090DF4:
 _02090DF8:
 	add r0, #0x14
 	add r1, r2, #0
-	bl sub_020159EC
+	bl MailMsg_compare
 	pop {r3, pc}
 	.balign 4, 0
 	thumb_func_end sub_02090DC0
@@ -231887,7 +231887,7 @@ sub_02091880: ; 0x02091880
 	add r4, r0, #0
 	add r0, r6, #0
 	str r5, [r4]
-	bl sub_02015A9C
+	bl EasyChatManager_new
 	str r0, [r4, #4]
 	mov r3, #0
 	ldr r0, _020918BC ; =0x0000189E
@@ -231915,7 +231915,7 @@ sub_020918C0: ; 0x020918C0
 	add r4, r0, #0
 	beq _020918D2
 	ldr r0, [r4, #4]
-	bl sub_02015AD4
+	bl EasyChatManager_delete
 	add r0, r4, #0
 	bl FreeToHeap
 _020918D2:
@@ -232070,7 +232070,7 @@ sub_020919C4: ; 0x020919C4
 	str r0, [sp, #0xc]
 	ldr r0, _02091A30 ; =0x00000122
 	mov r1, #0
-	bl sub_02015B60
+	bl GetECWordIndexByPair
 	str r0, [sp, #8]
 	mov r7, #0
 	ldr r0, [sp, #4]
@@ -232130,7 +232130,7 @@ sub_02091A38: ; 0x02091A38
 	str r0, [sp, #0x10]
 	ldr r0, _02091AB8 ; =0x0000011F
 	mov r1, #0
-	bl sub_02015B60
+	bl GetECWordIndexByPair
 	add r6, r0, #0
 	add r0, r6, #5
 	lsl r0, r0, #0x10
@@ -232416,7 +232416,7 @@ sub_02091C40: ; 0x02091C40
 	add r1, #0x68
 	ldrh r1, [r1]
 	add r2, r3, #0
-	bl sub_02015AF4
+	bl EasyChatManager_ReadWordIntoString
 	pop {r4, pc}
 	.balign 4, 0
 	thumb_func_end sub_02091C40
@@ -232461,7 +232461,7 @@ sub_02091C84: ; 0x02091C84
 	add r1, r0, #0
 	ldr r0, [r5, #4]
 	add r2, r4, #0
-	bl sub_02015AF4
+	bl EasyChatManager_ReadWordIntoString
 _02091CA4:
 	pop {r4, r5, r6, pc}
 	nop
@@ -241253,7 +241253,7 @@ sub_020961D8: ; 0x020961D8
 	str r6, [r4, #0x20]
 	add r0, #8
 	mov r1, #4
-	bl sub_02015834
+	bl MailMsg_init_withBank
 	add r1, r4, #0
 	ldr r0, [r4, #0x14]
 	add r1, #8
