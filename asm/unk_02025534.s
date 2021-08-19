@@ -107011,7 +107011,7 @@ sub_02056A54: ; 0x02056A54
 	str r0, [r3]
 	add r0, r2, #0
 	add r2, sp, #0x1c
-	bl sub_020CCDAC
+	bl VEC_Subtract
 	ldr r0, [r4, #0x40]
 	bl sub_0205C654
 	add r5, r0, #0
@@ -107081,7 +107081,7 @@ sub_02056AEC: ; 0x02056AEC
 	str r0, [r3]
 	add r0, r2, #0
 	add r2, sp, #0x1c
-	bl sub_020CCDAC
+	bl VEC_Subtract
 	ldr r0, [r5, #0x40]
 	bl sub_0205C654
 	add r4, r0, #0
@@ -107178,7 +107178,7 @@ sub_02056BC8: ; 0x02056BC8
 	str r0, [r3]
 	add r0, r2, #0
 	add r2, sp, #0x18
-	bl sub_020CCDAC
+	bl VEC_Subtract
 	ldr r0, [r4, #0x40]
 	bl sub_0205C6DC
 	add r5, r0, #0
@@ -107244,7 +107244,7 @@ sub_02056C64: ; 0x02056C64
 	str r0, [r3]
 	add r0, r2, #0
 	add r2, sp, #0x18
-	bl sub_020CCDAC
+	bl VEC_Subtract
 	ldr r0, [r4, #0x40]
 	bl sub_0205C6DC
 	add r5, r0, #0
@@ -135411,7 +135411,7 @@ _02063336:
 _02063344:
 	bl _ftoi
 	ldr r1, [sp, #8]
-	bl sub_020CCBA0
+	bl FX_Div
 	ldr r1, [r4, #8]
 	str r0, [r1, #4]
 	lsl r0, r7, #4
@@ -135433,7 +135433,7 @@ _0206336A:
 _02063378:
 	bl _ftoi
 	ldr r1, [sp, #8]
-	bl sub_020CCBA0
+	bl FX_Div
 	ldr r1, [r4, #8]
 	str r0, [r1, #8]
 	ldr r0, [sp, #4]
@@ -135458,7 +135458,7 @@ _020633A2:
 _020633B2:
 	bl _ftoi
 	ldr r1, [sp, #8]
-	bl sub_020CCBA0
+	bl FX_Div
 	ldr r1, [r4, #8]
 	str r0, [r1, #0xc]
 	mov r0, #0xb4
@@ -210752,7 +210752,7 @@ _02087344:
 	bl _fsub
 _02087352:
 	bl _ftoi
-	bl sub_020CCBEC
+	bl FX_Sqrt
 	bl _itof
 	ldr r1, _020873D0 ; =0x45800000
 	bl _fdiv
@@ -211004,7 +211004,7 @@ _02087576:
 	bl _ftoi
 	add r1, r0, #0
 	ldr r0, [sp, #0x2c]
-	bl sub_020CD5DC
+	bl FX_Atan2Idx
 	str r0, [r5, #0x30]
 	b _020875AC
 _0208758E:
