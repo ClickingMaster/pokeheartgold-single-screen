@@ -55675,7 +55675,7 @@ sub_0203DED4: ; 0x0203DED4
 	push {r3, lr}
 	bl sub_0203E058
 	ldr r0, _0203DEE8 ; =SDK_OVERLAY_OVY_60_ID
-	ldr r1, _0203DEEC ; =0x021EAFE0
+	ldr r1, _0203DEEC ; =ov60_021EAFE0
 	bl RegisterMainOverlay
 	mov r0, #1
 	pop {r3, pc}
@@ -233185,6 +233185,8 @@ _02092280: .word 0xFFFFE0FF
 _02092284: .word 0x04001000
 	thumb_func_end sub_020921E4
 
+	.public ov74_0223B310
+
 	thumb_func_start sub_02092288
 sub_02092288: ; 0x02092288
 	push {r3, r4, r5, lr}
@@ -233198,17 +233200,13 @@ sub_02092288: ; 0x02092288
 	add r0, r4, #0
 	bl sub_0201A9C4
 	ldr r0, _020922B0 ; =SDK_OVERLAY_OVY_74_ID
-	ldr r1, _020922B4 ; =0x0223B310
+	ldr r1, _020922B4 ; =ov74_0223B310
 	bl RegisterMainOverlay
 	mov r0, #1
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 _020922B0: .word SDK_OVERLAY_OVY_74_ID
-#ifdef HEARTGOLD
-_020922B4: .word 0x0223B310
-#else
-_020922B4: .word 0x0223B314
-#endif
+_020922B4: .word ov74_0223B310
 	thumb_func_end sub_02092288
 
 	thumb_func_start sub_020922B8
