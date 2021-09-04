@@ -48812,7 +48812,7 @@ _0203AAA0:
 	and r1, r2
 	str r1, [r0]
 	ldr r0, _0203AC70 ; =0x020F6B04
-	bl sub_02022BE8
+	bl GX_SetBanks
 	add r0, r4, #0
 	bl sub_0201AC88
 	add r6, r0, #0
@@ -49016,7 +49016,7 @@ ShowWFCUserInfoWarning: ; 0x0203AC94
 	and r0, r1
 	str r0, [r2]
 	ldr r0, _0203AE88 ; =0x020F6B84
-	bl sub_02022BE8
+	bl GX_SetBanks
 	add r0, r4, #0
 	bl sub_0201AC88
 	str r0, [sp, #0x10]
@@ -98061,7 +98061,7 @@ sub_020525BC: ; 0x020525BC
 	sub sp, #8
 	add r4, r0, #0
 	ldr r0, _020525FC ; =0x020FC550
-	bl sub_02022BE8
+	bl GX_SetBanks
 	ldr r0, _02052600 ; =0x020FC524
 	bl sub_0201ACB0
 	ldr r2, _02052604 ; =0x020FC534
@@ -98997,7 +98997,7 @@ sub_02052D84: ; 0x02052D84
 	add r0, #0x1c
 	bl sub_0201D3C4
 	ldr r0, _02052DFC ; =0x020FC5A4
-	bl sub_02022BE8
+	bl GX_SetBanks
 	ldr r2, _02052E00 ; =0x04000304
 	ldrh r1, [r2]
 	lsr r0, r2, #0xb
@@ -177563,7 +177563,7 @@ _02076E76:
 	sub r2, r2, #1
 	bne _02076E76
 	add r0, sp, #0x20
-	bl sub_02022BE8
+	bl GX_SetBanks
 	mov r1, #6
 	mov r2, #2
 	mov r0, #0
@@ -183216,7 +183216,7 @@ _0207970A:
 	sub r2, r2, #1
 	bne _0207970A
 	add r0, sp, #0
-	bl sub_02022BE8
+	bl GX_SetBanks
 	add sp, #0x28
 	pop {r4, pc}
 	.balign 4, 0
@@ -202382,7 +202382,7 @@ _0208318E:
 	sub r2, r2, #1
 	bne _0208318E
 	add r0, sp, #0
-	bl sub_02022BE8
+	bl GX_SetBanks
 	add sp, #0x28
 	pop {r4, pc}
 	.balign 4, 0
@@ -206766,7 +206766,7 @@ _0208546C:
 	sub r2, r2, #1
 	bne _0208546C
 	add r0, sp, #0
-	bl sub_02022BE8
+	bl GX_SetBanks
 	mov r1, #6
 	mov r2, #2
 	mov r0, #0
@@ -213208,7 +213208,7 @@ _0208861A:
 	sub r2, r2, #1
 	bne _0208861A
 	add r0, sp, #0
-	bl sub_02022BE8
+	bl GX_SetBanks
 	add sp, #0x28
 	pop {r4, pc}
 	.balign 4, 0
@@ -232689,7 +232689,7 @@ _02091E6C:
 	sub r2, r2, #1
 	bne _02091E6C
 	add r0, sp, #0x34
-	bl sub_02022BE8
+	bl GX_SetBanks
 	ldr r0, [r4]
 	bl sub_0201AC88
 	add r3, sp, #0x24
@@ -233223,7 +233223,7 @@ _020922C4:
 	sub r2, r2, #1
 	bne _020922C4
 	add r0, sp, #0x34
-	bl sub_02022BE8
+	bl GX_SetBanks
 	ldr r0, [r4]
 	bl sub_0201AC88
 	add r3, sp, #0x24
@@ -233705,7 +233705,7 @@ sub_0209263C: ; 0x0209263C
 	and r0, r1
 	str r0, [r2]
 	ldr r0, _020927B8 ; =0x021082BC
-	bl sub_02022BE8
+	bl GX_SetBanks
 	add r0, r4, #0
 	bl sub_0201AC88
 	add r5, r0, #0
@@ -233867,7 +233867,7 @@ sub_020927D0: ; 0x020927D0
 	and r0, r1
 	str r0, [r2]
 	ldr r0, _0209294C ; =0x021082BC
-	bl sub_02022BE8
+	bl GX_SetBanks
 	add r0, r4, #0
 	bl sub_0201AC88
 	add r5, r0, #0
@@ -234037,7 +234037,7 @@ _02092974:
 	and r1, r2
 	str r1, [r0]
 	ldr r0, _02092AEC ; =0x02108318
-	bl sub_02022BE8
+	bl GX_SetBanks
 	add r0, r4, #0
 	bl sub_0201AC88
 	add r5, r0, #0
@@ -241468,7 +241468,7 @@ _02096346:
 	and r0, r1
 	str r0, [r2]
 	ldr r0, _0209656C ; =0x0210855C
-	bl sub_02022BE8
+	bl GX_SetBanks
 	mov r0, #0
 	bl sub_0201AC88
 	str r0, [sp, #0x10]
