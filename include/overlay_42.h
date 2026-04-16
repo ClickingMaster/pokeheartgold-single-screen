@@ -2,6 +2,7 @@
 #define POKEHEARTGOLD_OVY_42_H
 
 #include "overlay_44.h"
+#include "overlay_44_02232E9C.h"
 
 u32 ov42_02229248(u32 a0);
 void ov42_022291AC(u32 a0);
@@ -40,7 +41,7 @@ void ov42_02228068(u32, u32*);
 s32 ov42_02228C80(u16*, u32, u32*, u32*);
 s32 ov42_02229AC8(u32, u32*);
 u32 ov42_02228270(UnkStruct_ov44_02232914, u16);
-void ov42_022282A4(void);
+s32 ov42_022282A4(void);
 void ov42_02228100(s32);
 void ov42_022290C4(s32);
 void ov42_02229420(u32, u32*);

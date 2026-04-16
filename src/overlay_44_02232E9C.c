@@ -1,4 +1,4 @@
-#include "overlay_44.h"
+#include "overlay_44_02232E9C.h"
 
 #include "vram_transfer_manager.h"
 #include "math_util.h"
@@ -157,8 +157,8 @@ void ov44_02231B4C(UnkStruct_ov44_02232DA0* arg0) {
     memset(arg0, 0, sizeof(UnkStruct_ov44_02232DA0));
 }
 
-s32 ov44_02231BB0(s32* arg0) {
-    return arg0[0];
+s32 ov44_02231BB0(UnkStruct_ov44_02232DA0* arg0) {
+    return arg0->unk0;
 }
 
 s32 ov44_02231BB4(UnkStruct_ov44_02232DA0* arg0) {
@@ -303,9 +303,9 @@ u8 ov44_02231EF4(s32* arg0) {
     return ov42_02228188(arg0[0], 4);
 }
 
-void ov44_02231F04(s32* arg0) {
-    ov42_02228188(arg0[0], 6);
-    ov42_022282A4();
+s32 ov44_02231F04(UnkStruct_ov44_02232B74* arg0) {
+    ov42_02228188(arg0->unk0, 6);
+    return ov42_022282A4();
 }
 
 void ov44_02231F14(UnkStruct_ov44_02232DA0* arg0, UnkStruct_ov44_02232B74* arg1, s32 arg2) {
@@ -321,7 +321,7 @@ void ov44_02231F14(UnkStruct_ov44_02232DA0* arg0, UnkStruct_ov44_02232B74* arg1,
     ov42_022291D8(arg1->unk4, temp_r3);
 }
 
-void ov44_02231F88(s32 arg0, UnkStruct_ov44_02232B74* arg1) {
+void ov44_02231F88(UnkStruct_ov44_02232DA0* arg0, UnkStruct_ov44_02232B74* arg1) {
     if (arg1 != NULL) {
         if (arg1->unk14 != 0) {
             arg1->unk10 = arg1->unk14;
