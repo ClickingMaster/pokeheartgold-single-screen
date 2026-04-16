@@ -24,7 +24,7 @@ void sub_02030FB0(void *, u32, u32, u32, u8 *);
 u32 sub_02030FE4(void *, u32, u8, u32, u32);
 FrontierSave *Save_Frontier_GetStatic(SaveData *saveData);
 void Save_Frontier_Load(SaveData *saveData);
-int FrontierSave_GetStat(FrontierSave *, int, int);
+u16 FrontierSave_GetStat(FrontierSave *, int, int);
 void Save_Frontier_Commit(SaveData *saveData);
 u32 sub_02031108(FrontierSave *, int, int, u16);
 void sub_0203126C(FrontierSave *a0, u32 a1, u32 a2, u16 a3);

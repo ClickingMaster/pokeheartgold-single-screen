@@ -22,7 +22,6 @@
 #include "vram_transfer_manager.h"
 #include "text.h"
 #include "font.h"
-#include "sprite.h"
 #include "gf_gfx_loader.h"
 #include "constants/sndseq.h"
 #include "msgdata/msg.naix"
@@ -685,7 +684,7 @@ s32 ov44_02233E6C(UnkStruct_ov44_02235340* arg0) {
 }
 
 s32 ov44_02233E80(u32 arg0, u32 arg1) {
-    s32 var_r5 = sub_02039080(); 
+    s32 var_r5 = sub_02039080(arg0); 
     if (var_r5 == 1 ) {
         switch(arg1) {
             case 0:
