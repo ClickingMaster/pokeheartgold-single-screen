@@ -532,3 +532,22 @@
 .public ov44_02231BB4
 .public ov44_02231C60
 .public ov44_02231C70
+
+.public ov44_0223120C
+.public ov44_02230090
+.public ov44_02231720
+.public ov44_022313C8
+.public ov44_02231788
+.public ov44_02231754
+.public ov44_02231420
+.public ov44_022316B0
+.public ov44_02230234
+.public ov44_022300C8
+.public ov44_02230300
+.public ov44_02230E5C
+.public ov44_022307E0
+.public ov44_022308B0
+.public ov44_02230B2C
+.public ov44_02230C68
+.public ov44_02230D8C
+.public ov44_022316B0

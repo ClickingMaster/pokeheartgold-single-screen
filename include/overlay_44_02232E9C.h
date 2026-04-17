@@ -7,8 +7,11 @@
 #include "list_menu_2d.h"
 #include "render_window.h"
 #include "sprite.h"
+#include "obj_char_transfer.h"
 #include "yes_no_prompt.h"
 #include "unk_02009D48.h"
+#include "unk_02013534.h"
+#include "unk_0202C034.h"
 
 // overlay_44_02232E9C
 typedef struct UnkStruct_ov44_02231A28 {
@@ -40,9 +43,11 @@ typedef struct UnkStruct_ov44_02232914 {
 
 typedef struct UnkStruct_ov44_02232DA0 UnkStruct_ov44_02232DA0;
 typedef struct UnkStruct_ov44_02232B74 UnkStruct_ov44_02232B74;
+typedef struct UnkStruct_ov44_022319EC UnkStruct_ov44_022319EC;
 
 typedef s32 (*func_type_022328E4)(UnkStruct_ov44_02232DA0*, UnkStruct_ov44_02232B74*);
 typedef void (*func_type_022328A0)(UnkStruct_ov44_02232DA0*, UnkStruct_ov44_02232B74*);
+typedef void (*func_type_02236680)(UnkStruct_ov44_022319EC*, s32);
 
 struct UnkStruct_ov44_02232B74 {
     u32 unk0;
@@ -93,27 +98,148 @@ struct UnkStruct_ov44_02232DA0 {
     u32 unk6F8;
 };
 
-typedef struct UnkStruct_ov44_0223197C {
-    u8 unk0[33];
+typedef struct UnkStruct_ov44_02231800 {
+    MessageFormat* unk0;
+    void* unk4;
+    NNSG2dScreenData* unk8;
+    void* unkC[7];
+    NNSG2dScreenData* unk28[7];
+    void* unk44;
+    NNSG2dScreenData* unk48;
+    TouchHitboxController* unk4C;
+    u8 unk50[0x20];
+    u8 unk70;
+    u8 unk71;
+    u8 unk72;
+    u8 unk73;
+    s8 unk74;
+    u8 unk75;
+    u8 unk76;
+    u8 unk77;
+    u32 unk78;
+    Window unk7C[8];
+    Window unkFC[8][2];
+    Window unk1FC;
+    SpriteResource* unk20C[4];
+    Sprite* unk21C[3];
+    UnkStruct_02021AC8 unk228;
+    TextOBJ* unk234;
+    u32 unk238;
+    u32 unk23C;
+    u32 unk240;
+    TouchHitboxController* unk244;
+} UnkStruct_ov44_02231800;
+
+typedef struct UnkStruct_ov44_02231958 {
+    u16 unk0[6];
+    u16 unkC[6];
+    u8 unk18[3];
+    u8 unk1B;
+    u8 unk1C[5];
     u8 unk21;
     u8 unk22;
     u8 unk23;
-    u32 unk24;
+} UnkStruct_ov44_02231958;
+
+typedef struct UnkStruct_ov44_0223197C {
+    u8 unk0[0x24];
+    UnkStruct_ov44_02231958 unk24[0x20];
 } UnkStruct_ov44_0223197C;
 
-typedef struct UnkStruct_ov44_022319EC {
-    u32 unk0;
+struct UnkStruct_ov44_022319EC {
+    UnkStruct_021D2230* unk0;
     UnkStruct_ov44_0223197C* unk4;
-    u8 unk8[0x384];
+    u8 unk8[0x14C];
+    LISTMENUITEM* unk154;
+    struct ListMenu* unk158;
+    BgConfig* unk15C;
+    SaveData* unk160;
+    MessageFormat* unk164;
+    MsgData* unk168;
+    MsgData* unk16C;
+    String* unk170;
+    String* unk174;
+    String* unk178;
+    u8 unk17C[4];
+    u32 unk180;
+    struct ListMenu2D* unk184;
+    YesNoPrompt* unk188;
+    WaitingIcon* unk18C;
+    SpriteList* unk190;
+    u8 unk194[0x128];
+    GF_2DGfxResMan* unk2BC[4];
+    void* unk2CC;
+    Window unk2D0;
+    u8 unk2E0[0x20];
+    Window unk300;
+    u8 unk310[0x10];
+    Window unk320;
+    u8 unk330[0x10];
+    s32 unk340;
+    u8 unk344[4];
+    u32 unk348;
+    u32 unk34C;
+    u8 unk350[0xC];
+    s32 unk35C;
+    u8 unk360[4];
+    u8 unk364;
+    u8 unk365[11];
+    s32 unk370;
+    u16 unk374;
+    u16 unk376;
+    u8 unk378[4];
+    u16 unk37C;
+    u16 unk37E;
+    u16 unk380;
+    u16 unk382;
+    u32 unk384;
+    u8 unk388[4];
     UnkStruct_ov44_02232DA0 unk38C;
     u8 unkA88[0x94];
-    MessageFormat* unkB1C;
-    u8 unkB20[0x244];
+    UnkStruct_ov44_02231800 unkB1C;
     u32 unkD64;
     u8 unkD68[0x330];
-    u32 unk1098;
-} UnkStruct_ov44_022319EC;
+    UnkStruct_ov44_02231958 unk1098;
+};
 
+//2
+s32 ov44_02229EE0(UnkStruct_ov44_022319EC*); 
+u32 ov44_02229F00(UnkStruct_ov44_022319EC*, UnkStruct_ov44_02231958*); 
+s32 ov44_02229EF8(UnkStruct_ov44_022319EC*); 
+void ov44_0222AC54(BgConfig*, u8*, s32, s32, s32, u32); 
+s32 ov44_0222ABDC(BgConfig*, u8*, s32, s32, s32, s32, s32);
+void ov44_0222AD34(Window*, u8*, s32, u16, u32); 
+void ov44_0222ACE8(Window*, u8*, s32, u16, s32, s32);
+
+void ov44_02230090(UnkStruct_ov44_022319EC* arg0);
+void ov44_022300C8(UnkStruct_ov44_022319EC* arg0);
+void ov44_02230234(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+void ov44_02230300(UnkStruct_ov44_022319EC* arg0);
+void ov44_022307E0(UnkStruct_ov44_022319EC* arg0);
+void ov44_022308B0(UnkStruct_ov44_022319EC* arg0);
+void ov44_02230B2C(UnkStruct_ov44_022319EC* arg0);
+void ov44_02230C68(UnkStruct_ov44_022319EC* arg0, enum HeapID arg1);
+void ov44_02230D8C(UnkStruct_ov44_022319EC* arg0);
+void ov44_02230E5C(UnkStruct_ov44_022319EC* arg0);
+void ov44_02230FE8(UnkStruct_ov44_022319EC* arg0);
+void ov44_02231054(UnkStruct_ov44_022319EC* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5);
+void ov44_02231084(UnkStruct_ov44_022319EC* arg0, String* arg1, u32 arg2, s32 arg3);
+void ov44_022310C8(UnkStruct_ov44_022319EC* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+void ov44_02231148(UnkStruct_ov44_022319EC* arg0, u8 arg1, u8 arg2, u8 arg3, u8 arg4);
+s32 ov44_0223120C(u32 arg0, s32* arg1);
+void ov44_022312B8(UnkStruct_ov44_022319EC* arg0, Window* arg1, s32 arg2, s32 arg3, s32 arg4);
+void ov44_02231344(UnkStruct_ov44_022319EC* arg0, Window* arg1, s32 arg2, u32 arg3, u32 arg4);
+void ov44_022313C8(UnkStruct_ov44_022319EC* arg0);
+void ov44_02231420(UnkStruct_ov44_022319EC* arg0, NARC* arg1, enum HeapID arg2);
+void ov44_022316B0(UnkStruct_ov44_022319EC* arg0);
+void ov44_02231720(UnkStruct_ov44_022319EC* arg0);
+void ov44_02231754(UnkStruct_ov44_022319EC* arg0);
+s32 ov44_02231788(UnkStruct_ov44_022319EC* arg0);
+void ov44_022317F0(u32 arg0, u32 arg1, UnkStruct_ov44_022319EC* arg2);
+void ov44_02231800(UnkStruct_ov44_02231800* arg0, s32 arg1);
+s32 ov44_0223183C(UnkStruct_ov44_02231800* arg0, s32 arg1, s32 arg2, s32 arg3);
+
+//1
 s32 ov44_02229F44(s32);
 void ov44_0222F510(UnkStruct_ov44_022319EC*, s32, s32);
 void ov44_0222F7BC(UnkStruct_ov44_022319EC*);
@@ -121,7 +247,7 @@ s32 ov44_02231CE8(UnkStruct_ov44_02232DA0* arg0);
 
 // The following functions are static
 void ov44_02231918(UnkStruct_ov44_022319EC* arg0, s32 arg1);
-s32* ov44_02231958(UnkStruct_ov44_022319EC* arg0, u32 arg1);
+UnkStruct_ov44_02231958* ov44_02231958(UnkStruct_ov44_022319EC* arg0, u32 arg1);
 void ov44_02231974(void);
 void ov44_0223197C(UnkStruct_ov44_022319EC* arg0, s32 arg1, s32 arg2);
 void ov44_022319BC(UnkStruct_ov44_022319EC* arg0, s32 arg1);

@@ -51,16 +51,16 @@ void ov44_02231918(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     if (arg1 != -1) {
         PlayerProfile* playerProfile = PlayerProfile_New(HEAP_ID_53);
         Save_Profile_PlayerName_Set(playerProfile, sub_0202C254(arg0->unk0, arg1));
-        BufferPlayersName(arg0->unkB1C, 0, playerProfile);
+        BufferPlayersName(arg0->unkB1C.unk0, 0, playerProfile);
         Heap_Free(playerProfile);
     }
 }
 
-s32* ov44_02231958(UnkStruct_ov44_022319EC* arg0, u32 arg1) {
+UnkStruct_ov44_02231958* ov44_02231958(UnkStruct_ov44_022319EC* arg0, u32 arg1) {
     if (arg1 >= 32) {
         return &arg0->unk1098;
     }
-    return &arg0->unk4->unk24 + 9 * arg1;
+    return &arg0->unk4->unk24[arg1];
 }
 
 
@@ -70,7 +70,7 @@ void ov44_02231974(void) {
 
 void ov44_0223197C(UnkStruct_ov44_022319EC* arg0, s32 arg1, s32 arg2) {
     sub_020379A0(HEAP_ID_15);
-    ov00_021E70B8(arg0->unk4->unk21);
+    ov00_021E70B8(arg0->unk4->unk0[0x21]);
     if (ov44_02229F44(arg2) == 1) {
         ov00_021E714C(1, 128);
     } else {
