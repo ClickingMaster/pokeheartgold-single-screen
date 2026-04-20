@@ -42,18 +42,18 @@ extern TouchscreenHitbox ov44_022354E8[4];
 
 s32 ov44_0222EC2C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     if (TextPrinterCheckActive(arg0->unk180) == 0) {
-        if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 0xF == 1) {
-            arg0->unk184 = Std_CreateYesNoMenu(arg0->unk15C, &ov44_0223538C, 0x1D9, 0xB, HEAP_ID_53);
+        if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
+            arg0->unk184 = Std_CreateYesNoMenu(arg0->unk15C, &ov44_0223538C, 473, 11, HEAP_ID_53);
         } else {
-            arg0->unk188 = ov44_02231A14(arg0->unk15C, &ov44_02235374, 0U);
+            arg0->unk188 = ov44_02231A14(arg0->unk15C, &ov44_02235374, 0);
         }
-        arg0->unk348 = 0x3A;
+        arg0->unk348 = 58;
     }
     return arg1;
 }
 
 s32 ov44_0222EC98(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
-    if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 0xF == 1) {
+    if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
         s32 var_r5 = Handle2dMenuInput_DeleteOnFinish(arg0->unk184, HEAP_ID_53);
         if (TextPrinterCheckActive(arg0->unk180) != 0) {
             return arg1;
@@ -68,12 +68,12 @@ s32 ov44_0222EC98(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
             return arg1;
         }
         if (var_r5 == 0) {
-            ov44_0222F510(arg0, 0x1A, 1);
-            arg0->unk348 = 0x3B;
+            ov44_0222F510(arg0, 26, 1);
+            arg0->unk348 = 59;
             arg0->unk35C = 1;
         } else {
             ov44_0222F7BC(arg0);
-            arg0->unk348 = 0x13;
+            arg0->unk348 = 19;
             ov44_022319EC(arg0);
         }
     }
@@ -87,14 +87,14 @@ s32 ov44_0222EC98(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         }
         if (var_r5_2 == YESNORESPONSE_YES) {
             YesNoPrompt_Destroy(arg0->unk188);
-            ov44_0222F510(arg0, 0x1A, 1);
-            arg0->unk348 = 0x3B;
+            ov44_0222F510(arg0, 26, 1);
+            arg0->unk348 = 59;
             arg0->unk35C = 1;
         }
         else if (var_r5_2 == YESNORESPONSE_NO) {
             YesNoPrompt_Destroy(arg0->unk188);
             ov44_0222F7BC(arg0);
-            arg0->unk348 = 0x13;
+            arg0->unk348 = 19;
             ov44_022319EC(arg0);
         }
         else {
@@ -114,9 +114,9 @@ s32 ov44_0222EDB8(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     }
     if (sub_02037D78() == 0) {
         sub_0202C46C(arg0->unk0);
-        ov44_0222F510(arg0, 0x1B, 1);
-        arg0->unk348 = 0x3C;
-        arg0->unk35C = 0x1E;
+        ov44_0222F510(arg0, 27, 1);
+        arg0->unk348 = 60;
+        arg0->unk35C = 30;
     }
     return arg1;
 }
@@ -135,15 +135,15 @@ s32 ov44_0222EE10(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
 }
 
 s32 ov44_0222EE54(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
-    if (sub_02037B38(0x10) == 0) {
+    if (sub_02037B38(16) == 0) {
         return arg1;
     }
     sub_020398D4(0, 1);
     if (TextPrinterCheckActive(arg0->unk180) == 0) {
-        if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 0xF == 1) {
-            arg0->unk184 = Std_CreateYesNoMenu(arg0->unk15C, &ov44_0223538C, 0x1D9, 0xB, HEAP_ID_53);
+        if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
+            arg0->unk184 = Std_CreateYesNoMenu(arg0->unk15C, &ov44_0223538C, 473, 11, HEAP_ID_53);
         } else {
-            arg0->unk188 = ov44_02231A28(arg0->unk15C, &ov44_02235374, 0U);
+            arg0->unk188 = ov44_02231A28(arg0->unk15C, &ov44_02235374, 0);
         }
         arg0->unk348 = 0x3E;
     }
@@ -155,7 +155,7 @@ s32 ov44_0222EED4(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         return arg1;
     }
     if ((sub_02039274() != 0) || (sub_02039264() != 0) || (sub_020390C4() >= 3)) {
-        if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 0xF == 1) {
+        if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
             Clear2dMenuWindowAndDelete(arg0->unk184, HEAP_ID_53);
         } else {
             YesNoPrompt_Destroy(arg0->unk188);
@@ -165,7 +165,7 @@ s32 ov44_0222EED4(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     }
     else {
         if (sub_020393C8() != 0) {
-            if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 0xF == 1) {
+            if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
                 Clear2dMenuWindowAndDelete(arg0->unk184, HEAP_ID_53);
             } else {
                 YesNoPrompt_Destroy(arg0->unk188);
@@ -173,44 +173,44 @@ s32 ov44_0222EED4(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
             ov44_0222B9A0(arg0);
         }
         else {
-            if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 0xF == 1) {
+            if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
                 s32 temp_r0 = Handle2dMenuInput_DeleteOnFinish(arg0->unk184, HEAP_ID_53);
                 if (temp_r0 == -1) {
                     return arg1;
                 }
                 else if (temp_r0 == 0) {
-                    ov44_0222F510(arg0, 0x8A, 0);
+                    ov44_0222F510(arg0, 138, 0);
                     GF_ASSERT(arg0->unk18C == 0);
-                    arg0->unk18C = WaitingIcon_New(&arg0->unk2D0, 0x1E2);
+                    arg0->unk18C = WaitingIcon_New(&arg0->unk2D0, 482);
                     arg0->unk384 = 1;
-                    arg0->unk348 = 0x31;
-                    arg0->unk35C = 0x1E;
+                    arg0->unk348 = 49;
+                    arg0->unk35C = 30;
                 } else {
                     ov44_0222F7BC(arg0);
                     sub_020343E4();
                     sub_020393B4();
-                    arg0->unk35C = 0x14;
-                    arg0->unk348 = 0x41;
+                    arg0->unk35C = 20;
+                    arg0->unk348 = 65;
                 }
             }
             else {
                 s32 temp_r0_2 = YesNoPrompt_HandleInput(arg0->unk188);
                 if (temp_r0_2 == 1) {
                     YesNoPrompt_Destroy(arg0->unk188);
-                    ov44_0222F510(arg0, 0x8A, 0);
+                    ov44_0222F510(arg0, 138, 0);
                     GF_ASSERT(arg0->unk18C == 0);
-                    arg0->unk18C = WaitingIcon_New(&arg0->unk2D0, 0x1E2);
+                    arg0->unk18C = WaitingIcon_New(&arg0->unk2D0, 482);
                     arg0->unk384 = 1;
-                    arg0->unk348 = 0x31;
-                    arg0->unk35C = 0x1E;
+                    arg0->unk348 = 49;
+                    arg0->unk35C = 30;
                 }
                 else if (temp_r0_2 == 2) {
                     YesNoPrompt_Destroy(arg0->unk188);
                     ov44_0222F7BC(arg0);
                     sub_020343E4();
                     sub_020393B4();
-                    arg0->unk35C = 0x14;
-                    arg0->unk348 = 0x41;
+                    arg0->unk35C = 20;
+                    arg0->unk348 = 65;
                 }
                 else {
                     return arg1;
@@ -226,27 +226,27 @@ s32 ov44_0222EED4(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
 }
 
 s32 ov44_0222F0AC(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
-    u8 temp_r0 = ov44_02231C70(&arg0->unk38C);
+    u32 temp_r0 = ov44_02231C70(&arg0->unk38C);
     if (ov44_0222AAEC(arg0, temp_r0) == 0) {
         ov44_0222F780(arg0, temp_r0 - 1);
-        ov44_0222F510(arg0, 0x10, 0);
-        arg0->unk348 = 0x1D;
+        ov44_0222F510(arg0, 16, 0);
+        arg0->unk348 = 29;
         return arg1;
     }
-    UnkStruct_ov44_02231958* temp_r0_2 = ov44_02231958(arg0, temp_r0 - 1U);
+    UnkStruct_ov44_02231958* temp_r0_2 = ov44_02231958(arg0, temp_r0 - 1);
     u32 r0 = ov44_02229F00(arg0, temp_r0_2);
     u8 r7 = temp_r0_2->unk21;
     if ((arg0->unk37E != r0) || (arg0->unk380 != r7)) {
         ov44_0222F780(arg0, temp_r0 - 1);
-        ov44_0222F510(arg0, 0x10, 0);
-        arg0->unk348 = 0x1D;
+        ov44_0222F510(arg0, 16, 0);
+        arg0->unk348 = 29;
         return arg1;
     }
     if (TextPrinterCheckActive(arg0->unk180) == 0) {
-        if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 0xF == 1) {
-            arg0->unk184 = Std_CreateYesNoMenu(arg0->unk15C, &ov44_0223538C, 0x1D9, 0xB, HEAP_ID_53);
+        if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
+            arg0->unk184 = Std_CreateYesNoMenu(arg0->unk15C, &ov44_0223538C, 473, 11, HEAP_ID_53);
         } else {
-            arg0->unk188 = ov44_02231A14(arg0->unk15C, &ov44_02235374, 0U);
+            arg0->unk188 = ov44_02231A14(arg0->unk15C, &ov44_02235374, 0);
         }
         arg0->unk348 = 0x40;
     }
@@ -254,34 +254,34 @@ s32 ov44_0222F0AC(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
 }
 
 s32 ov44_0222F194(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
-    u8 temp_r0 = ov44_02231C70(&arg0->unk38C);
+    s32 temp_r0 = ov44_02231C70(&arg0->unk38C);
     if (ov44_0222AAEC(arg0, temp_r0) == 0) {
-        if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 0xF == 1) {
+        if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
             Clear2dMenuWindowAndDelete(arg0->unk184, HEAP_ID_53);
         } else {
             YesNoPrompt_Destroy(arg0->unk188);
         }
         ov44_0222F780(arg0, temp_r0 - 1);
-        ov44_0222F510(arg0, 0x10, 0);
-        arg0->unk348 = 0x1D;
+        ov44_0222F510(arg0, 16, 0);
+        arg0->unk348 = 29;
         return arg1;
     }
     UnkStruct_ov44_02231958* temp_r0_2 = ov44_02231958(arg0, temp_r0 - 1);
     u32 r0 = ov44_02229F00(arg0, temp_r0_2);
     u8 r7 = temp_r0_2->unk21;
     if ((arg0->unk37E != r0) || (arg0->unk380 != r7)) {
-        if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 0xF == 1) {
+        if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
             Clear2dMenuWindowAndDelete(arg0->unk184, HEAP_ID_53);
         } else {
             YesNoPrompt_Destroy(arg0->unk188);
         }
-        ov44_0222F780(arg0, temp_r0 - 1U);
-        ov44_0222F510(arg0, 0x10, 0);
-        arg0->unk348 = 0x1D;
+        ov44_0222F780(arg0, temp_r0 - 1);
+        ov44_0222F510(arg0, 16, 0);
+        arg0->unk348 = 29;
         return arg1;
     }
     if (sub_020393C8() != 0) {
-        if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 0xF == 1) {
+        if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
             Clear2dMenuWindowAndDelete(arg0->unk184, HEAP_ID_53);
         } else {
             YesNoPrompt_Destroy(arg0->unk188);
@@ -290,75 +290,75 @@ s32 ov44_0222F194(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     }
     else {
         if (sub_020390C4() >= 3) {
-            if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 0xF == 1) {
+            if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
                 Clear2dMenuWindowAndDelete(arg0->unk184, HEAP_ID_53);
             } else {
                 YesNoPrompt_Destroy(arg0->unk188);
             }
-            ov44_0222F510(arg0, 0x12, 0);
+            ov44_0222F510(arg0, 18, 0);
             sub_02039358();
-            arg0->unk348 = 0x1D;
+            arg0->unk348 = 29;
             return arg1;
         }
-        else if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 0xF == 1) {
+        else if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
             s32 menuInputResult = Handle2dMenuInput_DeleteOnFinish(arg0->unk184, HEAP_ID_53);
             if (menuInputResult == -1) {
                 return arg1;
             }
             if (menuInputResult == 0) {
                 u32 temp_r0 = ov44_0222A0B4(arg0->unk37E);
-                if (temp_r0 != 0x1D) {
+                if (temp_r0 != 29) {
                     if (ov44_02231974(arg0->unk382 - 1) == 6) {
                         ov44_0222F89C(arg0);
                         if (ov44_0223197C(arg0, arg0->unk382 - 1, temp_r0) != 0) {
-                            arg0->unk340 = 0x708;
+                            arg0->unk340 = 1800;
                             ov44_0222A1B4(temp_r0);
                             sub_020378E4(0);
                             ov44_0222F818(arg0, temp_r0);
                             ov44_0222F780(arg0, arg0->unk382 - 1);
-                            ov44_0222F510(arg0, 0x11, 0);
+                            ov44_0222F510(arg0, 17, 0);
                             GF_ASSERT(arg0->unk18C == 0);
-                            arg0->unk18C = WaitingIcon_New(&arg0->unk2D0, 0x1E2);
+                            arg0->unk18C = WaitingIcon_New(&arg0->unk2D0, 482);
                             if (temp_r0 != 1) {
-                                arg0->unk348 = 0x2D;
+                                arg0->unk348 = 45;
                                 return arg1;
                             }
-                            arg0->unk340 = 0x708;
-                            arg0->unk348 = 0x15;
+                            arg0->unk340 = 1800;
+                            arg0->unk348 = 21;
                             return arg1;
                         }
                     }
                 }
             }
             ov44_0222F7BC(arg0);
-            ov44_0222F818(arg0, 0x10);
+            ov44_0222F818(arg0, 16);
             ov44_0222F8F0(arg0);
             ov44_0222C120(arg0);
-            arg0->unk348 = 0x13;
+            arg0->unk348 = 19;
             return arg1;
         }
         YesNoResponse yesNoResponse = YesNoPrompt_HandleInput(arg0->unk188);
         if (yesNoResponse == 1) {
             YesNoPrompt_Destroy(arg0->unk188);
             u32 temp_r0 = ov44_0222A0B4(arg0->unk37E);
-            if (temp_r0 != 0x1D) {
+            if (temp_r0 != 29) {
                 if (ov44_02231974(arg0->unk382 - 1) == 6) {
                     ov44_0222F89C(arg0);
                     if (ov44_0223197C(arg0, arg0->unk382 - 1, temp_r0) != 0) {
-                        arg0->unk340 = 0x708;
+                        arg0->unk340 = 1800;
                         ov44_0222A1B4(temp_r0);
                         sub_020378E4(0);
                         ov44_0222F818(arg0, temp_r0);
                         ov44_0222F780(arg0, arg0->unk382 - 1);
-                        ov44_0222F510(arg0, 0x11, 0);
+                        ov44_0222F510(arg0, 17, 0);
                         GF_ASSERT(arg0->unk18C == 0);
-                        arg0->unk18C = WaitingIcon_New(&arg0->unk2D0, 0x1E2);
+                        arg0->unk18C = WaitingIcon_New(&arg0->unk2D0, 482);
                         if (temp_r0 != 1) {
-                            arg0->unk348 = 0x2D;
+                            arg0->unk348 = 45;
                             return arg1;
                         }
-                        arg0->unk340 = 0x708;
-                        arg0->unk348 = 0x15;
+                        arg0->unk340 = 1800;
+                        arg0->unk348 = 21;
                         return arg1;
                     }
                 }
@@ -367,10 +367,10 @@ s32 ov44_0222F194(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         else if (yesNoResponse == 2) {
             YesNoPrompt_Destroy(arg0->unk188);
             ov44_0222F7BC(arg0);
-            ov44_0222F818(arg0, 0x10);
+            ov44_0222F818(arg0, 16);
             ov44_0222F8F0(arg0);
             ov44_0222C120(arg0);
-            arg0->unk348 = 0x13;
+            arg0->unk348 = 19;
             return arg1;
         }
         else {
@@ -411,15 +411,15 @@ void ov44_0222F510(UnkStruct_ov44_022319EC* arg0, s32 arg1, s32 arg2) {
         RemoveTextPrinter(arg0->unk180);
         arg0->unk180 = 8;
     }
-    AddWindowParameterized(arg0->unk15C, &arg0->unk2D0, 2, 2U, 0x13, 0x1B, 4, 0xC, 0x12D);
+    AddWindowParameterized(arg0->unk15C, &arg0->unk2D0, 2, 2, 19, 27, 4, 12, 301);
     if (arg2 != 0) {
         ReadMsgDataIntoString(arg0->unk16C, arg1, arg0->unk170);
     } else {
         ReadMsgDataIntoString(arg0->unk168, arg1, arg0->unk170);
     }
     StringExpandPlaceholders(arg0->unk164, arg0->unk174, arg0->unk170);
-    FillWindowPixelBuffer(&arg0->unk2D0, 0xF);
-    DrawFrameAndWindow2(&arg0->unk2D0, 1, 0x1E2, 0xA);
+    FillWindowPixelBuffer(&arg0->unk2D0, 15);
+    DrawFrameAndWindow2(&arg0->unk2D0, 1, 482, 10);
     TextFlags_SetCanABSpeedUpPrint(1);
     TextFlags_SetAutoScrollParam(0);
     TextFlags_SetCanTouchSpeedUpPrint(1);
@@ -442,12 +442,12 @@ void ov44_0222F66C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         RemoveTextPrinter(arg0->unk180);
         arg0->unk180 = 8;
     }
-    AddWindowParameterized(arg0->unk15C, &arg0->unk300, 2, 4, 4, 0x17, 0x10, 0xC, 0x69);
+    AddWindowParameterized(arg0->unk15C, &arg0->unk300, 2, 4, 4, 23, 16, 12, 105);
     ReadMsgDataIntoString(arg0->unk16C, arg1, arg0->unk170);
     StringExpandPlaceholders(arg0->unk164, arg0->unk174, arg0->unk170);
-    FillWindowPixelBuffer(&arg0->unk300, 0xF);
-    DrawFrameAndWindow1(&arg0->unk300, 1, 0x1D9, 0xB);
-    arg0->unk180 = AddTextPrinterParameterized(&arg0->unk300, 1, arg0->unk174, 0, 0, 0xFF, 0);
+    FillWindowPixelBuffer(&arg0->unk300, 15);
+    DrawFrameAndWindow1(&arg0->unk300, 1, 473, 11);
+    arg0->unk180 = AddTextPrinterParameterized(&arg0->unk300, 1, arg0->unk174, 0, 0, 255, 0);
     ScheduleWindowCopyToVram(&arg0->unk300);
 }
 
@@ -478,7 +478,7 @@ void ov44_0222F7BC(UnkStruct_ov44_022319EC* arg0) {
 void ov44_0222F818(UnkStruct_ov44_022319EC* arg0, u32 arg1) {
     if (arg0->unk4 != NULL) {
         ov44_0222F830(arg0, arg1);
-        ov00_021E6D60(arg0->unk4, 0x24);
+        ov00_021E6D60(arg0->unk4, 36);
     }
 }
 
@@ -487,13 +487,13 @@ void ov44_0222F830(UnkStruct_ov44_022319EC* arg0, u32 arg1) {
         u32 r0 = ov44_02229F00(arg0, &arg0->unk4->unk0);
         if (r0 != arg1) {
             arg0->unk4->unk0.unk1B = arg1;
-            if ((ov44_0222A020(arg1) == 0) && (arg1 != 8) && (arg1 != 0x14) && (arg1 != 0x16) && (arg1 != 0x18) && (arg1 != 0x1A) && (arg1 != 0x12)) {
+            if ((ov44_0222A020(arg1) == 0) && (arg1 != 8) && (arg1 != 20) && (arg1 != 22) && (arg1 != 0x18) && (arg1 != 26) && (arg1 != 18)) {
                 if (arg1 == 1) {
-                    GF_SndStartFadeOutBGM(0, 0x1E);
-                } else if (arg1 == 0x10) {
+                    GF_SndStartFadeOutBGM(0, 30);
+                } else if (arg1 == 16) {
                     ov00_021E70B8(0);
                     if (ov44_0222E074() == 1) {
-                        GF_SndStartFadeInBGM(0x78, 0x1E, 1);
+                        GF_SndStartFadeInBGM(0x78, 30, 1);
                     }
                 }
             }
@@ -504,20 +504,20 @@ void ov44_0222F830(UnkStruct_ov44_022319EC* arg0, u32 arg1) {
 
 u8 ov44_0222F89C(UnkStruct_ov44_022319EC* arg0) {
     arg0->unk4->unk0.unk21 = 1 - arg0->unk4->unk0.unk21;
-    ov00_021E6D60(arg0->unk4, 0x24);
+    ov00_021E6D60(arg0->unk4, 36);
     return arg0->unk4->unk0.unk21;
 }
 
 u8 ov44_0222F8C0(UnkStruct_ov44_022319EC* arg0) {
     arg0->unk4->unk0.unk22 = 1 - arg0->unk4->unk0.unk22;
     arg0->unk4->unk0.unk21 = arg0->unk4->unk0.unk22;
-    ov00_021E6D60(arg0->unk4, 0x24);
+    ov00_021E6D60(arg0->unk4, 36);
     return arg0->unk4->unk0.unk22;
 }
 
 u8 ov44_0222F8F0(UnkStruct_ov44_022319EC* arg0) {
     arg0->unk4->unk0.unk21 = arg0->unk4->unk0.unk22;
-    ov00_021E6D60(arg0->unk4, 0x24);
+    ov00_021E6D60(arg0->unk4, 36);
     return arg0->unk4->unk0.unk22;
 }
 
@@ -608,19 +608,19 @@ u8 ov44_0222FA80(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
             arg0->unkB1C.unk75 = 0;
         }
     }
-    if ((u8) (arg0->unkB1C.unk73 + 0xFE) <= 1) {
+    if ((u8) (arg0->unkB1C.unk73 + 254) <= 1) {
         u32 temp_r0_2 = ov44_02231788(arg0);
         if (ov44_0222FBC8(arg0, temp_r0_2) == 1) {
             arg0->unkB1C.unk77 = arg0->unkB1C.unk71;
-            arg0->unkB1C.unk71 = 0U;
+            arg0->unkB1C.unk71 = 0;
             arg0->unkB1C.unk72 = 0;
-            arg0->unkB1C.unk75 = 1U;
+            arg0->unkB1C.unk75 = 1;
             arg0->unkB1C.unk78 = 1;
-            arg0->unkB1C.unk73 = 0U;
+            arg0->unkB1C.unk73 = 0;
             ov44_02231754(arg0);
-            PlaySE(0x5DD);
+            PlaySE(1501);
         } else if (temp_r0_2 != 0) {
-            PlaySE(0x5DD);
+            PlaySE(1501);
             ov44_0222FC3C(arg0, temp_r0_2);
             ov44_02230234(arg0, arg1);
         }
@@ -639,7 +639,7 @@ s32 ov44_0222FBC8(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     if (arg0->unkB1C.unk73 == 3) {
         return 0;
     }
-    if ((0xF0 & gSystem.heldKeys) || (0x403 & gSystem.newKeys) || (arg1 == 2)) {
+    if ((240 & gSystem.heldKeys) || (0x403 & gSystem.newKeys) || (arg1 == 2)) {
         return 1;
     }
     return 0;
@@ -682,7 +682,7 @@ void ov44_0222FC84(s32 arg0, enum HeapID arg1, UnkStruct_ov44_022319EC* arg2) {
     s32 temp_r0 = arg2->unkB1C.unk70 * 8 + arg0;
     if ((arg2->unkB1C.unk50[temp_r0] == 2) && (arg2->unkB1C.unk71 == 0) && (arg1 == 0)) {
         arg2->unkB1C.unk71 = temp_r0 + 1;
-        PlaySE(0x5DD);
+        PlaySE(1501);
     }
 }
 
@@ -690,21 +690,21 @@ void ov44_0222FCBC(UnkStruct_ov44_022319EC* arg0, NARC* arg1, enum HeapID arg2) 
     s32 i;
     s32 j;
     BgClearTilemapBufferAndCommit(arg0->unk15C, 4);
-    GfGfxLoader_GXLoadPalFromOpenNarc(arg1, 0x11, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0x80, arg2);
-    GfGfxLoader_GXLoadPalFromOpenNarc(arg1, 0x14, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_4_OFFSET, 0xA0, arg2);
-    GfGfxLoader_LoadCharDataFromOpenNarc(arg1, 0x10, arg0->unk15C, GF_BG_LYR_SUB_0, 0, 0, 0, arg2);
-    GfGfxLoader_LoadCharDataFromOpenNarc(arg1, 0x13, arg0->unk15C, GF_BG_LYR_SUB_2, 0x30, 0, 0, arg2);
-    GfGfxLoader_LoadScrnDataFromOpenNarc(arg1, 0x12, arg0->unk15C, GF_BG_LYR_SUB_0, 0, 0, 0, arg2);
-    arg0->unkB1C.unk4 = GfGfxLoader_GetScrnDataFromOpenNarc(arg1, 0x15, 0, &arg0->unkB1C.unk8, arg2);
-    ov44_0222FFB4(arg0->unkB1C.unk8, 0x30);
+    GfGfxLoader_GXLoadPalFromOpenNarc(arg1, 17, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 128, arg2);
+    GfGfxLoader_GXLoadPalFromOpenNarc(arg1, 20, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_4_OFFSET, 160, arg2);
+    GfGfxLoader_LoadCharDataFromOpenNarc(arg1, 16, arg0->unk15C, GF_BG_LYR_SUB_0, 0, 0, 0, arg2);
+    GfGfxLoader_LoadCharDataFromOpenNarc(arg1, 19, arg0->unk15C, GF_BG_LYR_SUB_2, 48, 0, 0, arg2);
+    GfGfxLoader_LoadScrnDataFromOpenNarc(arg1, 18, arg0->unk15C, GF_BG_LYR_SUB_0, 0, 0, 0, arg2);
+    arg0->unkB1C.unk4 = GfGfxLoader_GetScrnDataFromOpenNarc(arg1, 21, 0, &arg0->unkB1C.unk8, arg2);
+    ov44_0222FFB4(arg0->unkB1C.unk8, 48);
     
     for (i = 0; i < 7; i++) {
-        arg0->unkB1C.unkC[i] = GfGfxLoader_GetScrnDataFromOpenNarc(arg1, i + 0x16, 0, &arg0->unkB1C.unk28[i], arg2);
-        ov44_0222FFB4(arg0->unkB1C.unk28[i], 0x30);
+        arg0->unkB1C.unkC[i] = GfGfxLoader_GetScrnDataFromOpenNarc(arg1, i + 22, 0, &arg0->unkB1C.unk28[i], arg2);
+        ov44_0222FFB4(arg0->unkB1C.unk28[i], 48);
     }
     
-    arg0->unkB1C.unk44 = GfGfxLoader_GetScrnDataFromOpenNarc(arg1, 0x1D, 0, &arg0->unkB1C.unk48, arg2);
-    ov44_0222FFB4(arg0->unkB1C.unk48, 0x30);
+    arg0->unkB1C.unk44 = GfGfxLoader_GetScrnDataFromOpenNarc(arg1, 29, 0, &arg0->unkB1C.unk48, arg2);
+    ov44_0222FFB4(arg0->unkB1C.unk48, 48);
     LoadFontPal1(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_15_OFFSET, arg2);
 
     s32 sp20;
@@ -714,18 +714,18 @@ void ov44_0222FCBC(UnkStruct_ov44_022319EC* arg0, NARC* arg1, enum HeapID arg2) 
         r5 = i / 4;
         sp20 = i % 4;
 
-        AddWindowParameterized(arg0->unk15C, &arg0->unkB1C.unk7C[i], 5, r5 * 16 + 4, sp20 * 6 + 1, 9, 3, 0xF, 1 + (i * 0x1B));
+        AddWindowParameterized(arg0->unk15C, &arg0->unkB1C.unk7C[i], 5, r5 * 16 + 4, sp20 * 6 + 1, 9, 3, 15, 1 + (i * 27));
         FillWindowPixelBuffer(&arg0->unkB1C.unk7C[i], 0);
         ScheduleWindowCopyToVram(&arg0->unkB1C.unk7C[i]);
         
         for (j = 0; j < 2; j++) {
             InitWindow(&arg0->unkB1C.unkFC[i][j]);
-            AddWindowParameterized(arg0->unk15C, &arg0->unkB1C.unkFC[i][j], 5, r5 * 16 + 1 + j * 12, sp20 * 6 + 1, 2, 3, 0xD, 6 * (j + i*2) + 0xDA);
+            AddWindowParameterized(arg0->unk15C, &arg0->unkB1C.unkFC[i][j], 5, r5 * 16 + 1 + j * 12, sp20 * 6 + 1, 2, 3, 13, 6 * (j + i*2) + 218);
             FillWindowPixelBuffer(&arg0->unkB1C.unkFC[i][j], 0);
             ScheduleWindowCopyToVram(&arg0->unkB1C.unkFC[i][j]);
         }
     }
-    AddWindowParameterized(arg0->unk15C, &arg0->unkB1C.unk1FC, 7, 1, 1, 0x1E, 0x15, 0xF, 1);
+    AddWindowParameterized(arg0->unk15C, &arg0->unkB1C.unk1FC, 7, 1, 1, 30, 21, 15, 1);
     FillWindowPixelBuffer(&arg0->unkB1C.unk1FC, 0);
     ScheduleWindowCopyToVram(&arg0->unkB1C.unk1FC);
     ov44_02231420(arg0, arg1, arg2);
@@ -768,7 +768,7 @@ void ov44_0222FFF4(UnkStruct_ov44_022319EC* arg0, s32 arg1, u32 arg2) {
     if (arg2 == 0) {
         GF_AssertFail();
     }
-    if (arg2 >= 3U) {
+    if (arg2 >= 3) {
         GF_AssertFail();
     }
     arg0->unkB1C.unk50[arg1 - 1] = arg2;
