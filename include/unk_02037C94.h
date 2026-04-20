@@ -32,5 +32,8 @@ u8 *sub_020398C8(void);
 void sub_020393B4(void);
 BOOL sub_02039274(void);
 void sub_02039330(void);
+void sub_0203A1C4(SaveData* saveData, void* a1, enum HeapID heapID);
+void sub_02039B7C(void);
+BOOL sub_020392A0(void);
 
 #endif // POKEHEARTGOLD_UNK_02037C94_H

@@ -5,6 +5,7 @@
 #include "heap.h"
 #include "main.h"
 #include "list_menu_2d.h"
+#include "list_menu.h"
 #include "render_window.h"
 #include "sprite.h"
 #include "obj_char_transfer.h"
@@ -40,6 +41,11 @@ typedef struct UnkStruct_ov44_02232914 {
     u16 unk0;
     u16 unk2;
 } UnkStruct_ov44_02232914;
+
+typedef struct test {
+    u32 strno;
+    u32 value;
+} test;
 
 typedef struct UnkStruct_ov44_02232DA0 UnkStruct_ov44_02232DA0;
 typedef struct UnkStruct_ov44_02232B74 UnkStruct_ov44_02232B74;
@@ -203,6 +209,14 @@ struct UnkStruct_ov44_022319EC {
 };
 
 //2
+u32 ov44_0222ADD0(void);
+s32 ov44_02229EFC(UnkStruct_ov44_022319EC*);
+s32 ov44_0222A168(UnkStruct_ov44_022319EC*);
+u32 ov44_02229F74(u32);
+s32 ov44_02229FB4(u16);
+s32 ov44_0222A048(u16);
+s32 ov44_0222A090(u32);
+s32 ov44_0222C4EC(UnkStruct_ov44_022319EC*);
 s32 ov44_02229EE0(UnkStruct_ov44_022319EC*); 
 u32 ov44_02229F00(UnkStruct_ov44_022319EC*, UnkStruct_ov44_02231958*); 
 s32 ov44_02229EF8(UnkStruct_ov44_022319EC*); 
@@ -210,14 +224,55 @@ void ov44_0222AC54(BgConfig*, u8*, s32, s32, s32, u32);
 s32 ov44_0222ABDC(BgConfig*, u8*, s32, s32, s32, s32, s32);
 void ov44_0222AD34(Window*, u8*, s32, u16, u32); 
 void ov44_0222ACE8(Window*, u8*, s32, u16, s32, s32);
-s32 ov44_0222E074();
 s32 ov44_0222A020(u32);
 void ov44_0222C120(UnkStruct_ov44_022319EC*);
 u32 ov44_0222A0B4(u32);
 void ov44_0222A1B4(s32); 
-s32 ov44_0222AAEC(UnkStruct_ov44_022319EC*, u32);
+UnkStruct_ov44_02232B74* ov44_0222AAEC(UnkStruct_ov44_022319EC*, u32);
 void ov44_0222B9A0(UnkStruct_ov44_022319EC*);
 s32 ov44_0222C500(UnkStruct_ov44_022319EC*);
+
+s32 ov44_0222CE40(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+s32 ov44_0222CFE0(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+s32 ov44_0222D0A4(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+s32 ov44_0222D10C(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+s32 ov44_0222D1BC(s32 arg0, s32 arg1);
+s32 ov44_0222D1C0(s32 arg0, s32 arg1);
+s32 ov44_0222D1C4(s32 arg0, s32 arg1);
+s32 ov44_0222D1C8(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+s32 ov44_0222D214(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+s32 ov44_0222D23C(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+s32 ov44_0222D2B0(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+s32 ov44_0222D3DC(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+s32 ov44_0222D594(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+s32 ov44_0222D824(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+s32 ov44_0222D8B0(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+s32 ov44_0222DA64(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+s32 ov44_0222DC18(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+s32 ov44_0222DD64(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+s32 ov44_0222DFEC(UnkStruct_ov44_02231958* arg0);
+s32 ov44_0222E02C(UnkStruct_ov44_022319EC* arg0);
+void ov44_0222E030(void);
+s32 ov44_0222E074(void);
+s32 ov44_0222E090(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+s32 ov44_0222E45C(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+s32 ov44_0222E5D8(s32 arg0, s32 arg1);
+s32 ov44_0222E5DC(s32 arg0, s32 arg1);
+s32 ov44_0222E5E0(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+s32 ov44_0222E62C(s32 arg0, s32 arg1);
+s32 ov44_0222E630(s32 arg0, s32 arg1);
+s32 ov44_0222E634(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+s32 ov44_0222E7C4(UnkStruct_ov44_022319EC* arg0);
+s32 ov44_0222E860(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+s32 ov44_0222E908(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+s32 ov44_0222E948(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+s32 ov44_0222E9C4(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+s32 ov44_0222E9FC(UnkStruct_ov44_022319EC* arg0);
+s32 ov44_0222EA2C(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+s32 ov44_0222EB90(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+s32 ov44_0222EBB8(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+s32 ov44_0222EBC4(UnkStruct_ov44_022319EC* arg0, s32 arg1);
+s32 ov44_0222EC14(UnkStruct_ov44_022319EC* arg0, s32 arg1);
 
 s32 ov44_0222EC2C(UnkStruct_ov44_022319EC* arg0, s32 arg1);
 s32 ov44_0222EC98(UnkStruct_ov44_022319EC* arg0, s32 arg1);
@@ -273,7 +328,7 @@ void ov44_02231054(UnkStruct_ov44_022319EC* arg0, s32 arg1, s32 arg2, s32 arg3, 
 void ov44_02231084(UnkStruct_ov44_022319EC* arg0, String* arg1, u32 arg2, s32 arg3);
 void ov44_022310C8(UnkStruct_ov44_022319EC* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 void ov44_02231148(UnkStruct_ov44_022319EC* arg0, u8 arg1, u8 arg2, u8 arg3, u8 arg4);
-s32 ov44_0223120C(u32 arg0, s32* arg1);
+s32 ov44_0223120C(u32 arg0, s32* color);
 void ov44_022312B8(UnkStruct_ov44_022319EC* arg0, Window* arg1, s32 arg2, s32 arg3, s32 arg4);
 void ov44_02231344(UnkStruct_ov44_022319EC* arg0, Window* arg1, s32 arg2, u32 arg3, u32 arg4);
 void ov44_022313C8(UnkStruct_ov44_022319EC* arg0);
