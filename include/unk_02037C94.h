@@ -29,5 +29,8 @@ void sub_02039AF8(void);
 s32 sub_02039080(s32);
 s32 sub_02039264(void);
 u8 *sub_020398C8(void);
+void sub_020393B4(void);
+BOOL sub_02039274(void);
+void sub_02039330(void);
 
 #endif // POKEHEARTGOLD_UNK_02037C94_H

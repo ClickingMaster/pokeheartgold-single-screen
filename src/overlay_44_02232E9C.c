@@ -64,20 +64,20 @@ UnkStruct_ov44_02231958* ov44_02231958(UnkStruct_ov44_022319EC* arg0, u32 arg1) 
 }
 
 
-void ov44_02231974(void) {
-    ov00_021E6D68();
+s32 ov44_02231974(s32 arg0) {
+    return ov00_021E6D68(arg0);
 }
 
-void ov44_0223197C(UnkStruct_ov44_022319EC* arg0, s32 arg1, s32 arg2) {
+s32 ov44_0223197C(UnkStruct_ov44_022319EC* arg0, s32 arg1, s32 arg2) {
     sub_020379A0(HEAP_ID_15);
-    ov00_021E70B8(arg0->unk4->unk0[0x21]);
+    ov00_021E70B8(arg0->unk4->unk0.unk21);
     if (ov44_02229F44(arg2) == 1) {
         ov00_021E714C(1, 128);
     } else {
         ov00_021E714C(0, 128);
     }
     sub_02097214();
-    sub_02039080(arg1);
+    return sub_02039080(arg1);
 }
 
 void ov44_022319BC(UnkStruct_ov44_022319EC* arg0, s32 arg1) {

@@ -13,5 +13,6 @@ void *sub_0202C08C(UnkStruct_021D2230 *a0);
 u16* sub_0202C254(struct UnkStruct_021D2230 *a0, s32 a1);
 u16* sub_0202C298(struct UnkStruct_021D2230 *a0, s32 a1);
 s32 sub_0202C090(struct UnkStruct_021D2230 *a0, s32 a1, s32 a2);
+void sub_0202C46C(struct UnkStruct_021D2230 *a0);
 
 #endif // POKEHEARTGOLD_UNK_0202C034_H
