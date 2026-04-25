@@ -6405,3 +6405,97 @@ static void Task_GetExp(SysTask *task, void *inData) {
         break;
     }
 }
+
+void BattleScript_CalcEffortValues(Party* party, int partySlot, u32 species, u32 form) {
+    u8 stat_evs[6];
+    s32 stat;
+    u16 totalEVs;
+    
+    s16 gainedEVs = 0;
+    struct BaseStats* baseStats = AllocAndLoadMonPersonal_HandleAlternateForm(species, form, HEAP_ID_BATTLE);
+    Pokemon* mon = Party_GetMonByIndex(party, partySlot);
+    u16 item = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
+    s32 holdEffect = GetItemAttr(item, ITEMATTR_HOLD_EFFECT, HEAP_ID_BATTLE);
+    s32 holdEffectParam = GetItemAttr(item, ITEMATTR_HOLD_EFFECT_PARAM, HEAP_ID_BATTLE);
+    
+    totalEVs = 0;
+    // Store any pre-existing EVs to use for comparison later.
+    for (stat = STAT_HP; stat < STAT_ACC; stat++) {
+        stat_evs[stat] = GetMonData(mon, stat + MON_DATA_HP_EV, NULL);
+        totalEVs += stat_evs[stat];
+    }
+    
+    for (stat = STAT_HP; stat < STAT_ACC; stat++) {
+        // Don't bother running this loop if no more EVs can be gained.
+        if (totalEVs >= MAX_EV_SUM) {
+            break;
+        }
+        switch (stat) {
+        case STAT_HP:
+            gainedEVs = GetPersonalAttr(baseStats, BASE_HP_YIELD);
+            if (holdEffect == HOLD_EFFECT_LVLUP_HP_EV_UP) { // Power Weight
+                gainedEVs += holdEffectParam;
+            }
+            break;
+        case STAT_ATK:
+            gainedEVs = GetPersonalAttr(baseStats, BASE_ATK_YIELD);
+            if (holdEffect == HOLD_EFFECT_LVLUP_ATK_EV_UP) { // Power Bracer
+                gainedEVs += holdEffectParam;
+            }
+            break;
+        case STAT_DEF:
+            gainedEVs = GetPersonalAttr(baseStats, BASE_DEF_YIELD);
+            if (holdEffect == HOLD_EFFECT_LVLUP_DEF_EV_UP) { // Power Belt
+                gainedEVs += holdEffectParam;
+            }
+            break;
+        case STAT_SPEED:
+            gainedEVs = GetPersonalAttr(baseStats, BASE_SPEED_YIELD);
+            if (holdEffect == HOLD_EFFECT_LVLUP_SPEED_EV_UP) { // Power Anklet
+                gainedEVs += holdEffectParam;
+            }
+            break;
+        case STAT_SPATK:
+            gainedEVs = GetPersonalAttr(baseStats, BASE_SPATK_YIELD);
+            if (holdEffect == HOLD_EFFECT_LVLUP_SPATK_EV_UP) { // Power Lens
+                gainedEVs += holdEffectParam;
+            }
+            break;
+        case STAT_SPDEF:
+            gainedEVs = GetPersonalAttr(baseStats, BASE_SPDEF_YIELD);
+            if (holdEffect == HOLD_EFFECT_LVLUP_SPDEF_EV_UP) { // Power Band
+                gainedEVs += holdEffectParam;
+            }
+            break;
+        }
+        
+        // Pokerus
+        if (Party_MaskMonsWithPokerus(party, MaskOfFlagNo(partySlot))) {
+            gainedEVs *= 2;
+        }
+        
+        // Macho Brace
+        if (holdEffect == HOLD_EFFECT_EXP_UP_SPEED_DOWN) { // TODO: The Macho Brace's const isn't accurate. We should probably rectify that.
+            gainedEVs *= 2;
+        }
+        
+        // If EVs added would cause the total of all EVs to exceed 510, reduce the gain to have the total at 510.
+        // This has a very minor side effect of prioritizing EVs of a higher stat ID when reaching maximum total EVs, and discarding the remainder.
+        s32 projectedTotalEVs = totalEVs + gainedEVs;
+        if (projectedTotalEVs > MAX_EV_SUM) {
+            gainedEVs -= projectedTotalEVs - MAX_EV_SUM;
+        }
+        
+        // If EVs added to a specific stat would cause the total to exceed 255, reduce the gain to have the total at 255.
+        // The maximum practical value for any stat EV total is 252, but the value's maximum was not limited to 252 until Generation VI.
+        s32 projectedStatEVs = stat_evs[stat] + gainedEVs;
+        if (projectedStatEVs > MAX_EV_PER_STAT) {
+            gainedEVs -= projectedStatEVs - MAX_EV_PER_STAT;
+        }
+        
+        stat_evs[stat] += gainedEVs;
+        totalEVs += gainedEVs;
+        SetMonData(mon, stat + MON_DATA_HP_EV, &stat_evs[stat]);
+    }
+    FreeMonPersonal(baseStats);
+}
