@@ -21,6 +21,7 @@
 #include "msgdata/msg/msg_0197.h"
 
 #include "assert.h"
+#include "gf_gfx_loader.h"
 #include "item.h"
 #include "naming_screen.h"
 #include "obj_char_transfer.h"
@@ -7062,4 +7063,255 @@ void Task_GetPokemon(SysTask *task, void *inData) {
         }
         break;
     }
+}
+
+extern u8 ov12_0226C2EC[4];
+extern u8 ov12_0226C3CE[11][2]; // Some kind of catch rate for safari. First number is numerator, second is denominator.
+extern u16 sMoonBallPokemon[14];
+u32 ov12_0223AAB8(BattleSystem *bsys); // TODO: BattleSystem_IsFishing
+// Rename BattleContext.stateBeforeTurn to turnCounter?
+
+#define CP_SQRT_32BIT_MODE    (0UL << REG_CP_SQRTCNT_MODE_SHIFT)
+
+static inline void CP_SetSqrtImm32_NS_ (u32 param)
+{
+	*((REGType32 *)REG_SQRT_PARAM_ADDR) = param;
+}
+
+static inline void CP_SetSqrtImm32 (u32 param)
+{
+	*((REGType32 *)REG_SQRT_PARAM_ADDR) = param;
+}
+
+static inline void CP_SetSqrt32 (u32 param)
+{
+	reg_CP_SQRTCNT = CP_SQRT_32BIT_MODE;
+	CP_SetSqrtImm32_NS_(param);
+}
+
+static inline s32 CP_IsSqrtBusy (void)
+{
+	return (reg_CP_SQRTCNT & REG_CP_SQRTCNT_BUSY_MASK);
+}
+
+static inline void CP_WaitSqrt (void)
+{
+	while (CP_IsSqrtBusy()) {
+	}
+}
+
+static inline u32 CP_GetSqrtResultImm32 (void)
+{
+	return (u32)(*((REGType32 *)REG_SQRT_RESULT_ADDR));
+}
+
+static inline u32 CP_GetSqrtResult32 (void)
+{
+	CP_WaitSqrt();
+	return CP_GetSqrtResultImm32();
+}
+
+s32 GetMonWeight(u16 species);
+
+u32 ov12_02247228(BattleSystem* bsys, BattleContext* ctx) {
+    s32 catchRate;
+    s32 targetMonType1 = 0;
+    u32 ballMultiplier = 0;
+
+    if (BattleSystem_GetBattleType(bsys) & (BATTLE_TYPE_PAL_PARK | BATTLE_TYPE_TUTORIAL)) {
+        return MAX_BALL_SHAKE_COUNT;
+    }
+    if (ctx->itemTemp == ITEM_SAFARI_BALL) {
+        s32 normalCatchRate = GetMonBaseStat(ctx->battleMons[ctx->battlerIdTarget].species, BASE_CATCH_RATE);
+        // Adjust the catch rate in the safari zone by the pokemon's caution level.
+        catchRate = (ov12_0226C3CE[ctx->unk_311C][0] * normalCatchRate) / ov12_0226C3CE[ctx->unk_311C][1];
+    } else {
+        catchRate = GetMonBaseStat(ctx->battleMons[ctx->battlerIdTarget].species, BASE_CATCH_RATE);
+    }
+
+    ballMultiplier = 10; // All ball multipliers are /10, so this is x1.
+    targetMonType1 = GetBattlerVar(ctx, ctx->battlerIdTarget, BMON_DATA_TYPE_1, 0);
+    u32 targetMonType2 = GetBattlerVar(ctx, ctx->battlerIdTarget, BMON_DATA_TYPE_2, 0);
+    u32 itemTemp = ctx->itemTemp;
+    if (ctx->itemTemp > ITEM_SAFARI_BALL) { // Skip all balls that have no condition.
+        switch (ctx->itemTemp) {
+        case ITEM_NET_BALL: {
+            if (targetMonType1 == TYPE_WATER || targetMonType2 == TYPE_WATER || targetMonType1 == TYPE_BUG || targetMonType2 == TYPE_BUG) {
+                ballMultiplier = 30;
+                break;
+            }
+            break;
+        case ITEM_DIVE_BALL:
+            if (BattleSystem_GetTerrainId(bsys) == TERRAIN_WATER) {
+                ballMultiplier = 35;
+                break;
+            }
+            break;
+        case ITEM_NEST_BALL:
+            u8 level = ctx->battleMons[ctx->battlerIdTarget].level;
+            if (level < 40) {
+                // Up to a 40/10 multiplier (x4).
+                ballMultiplier = 40 - level;
+
+                // Don't let the level "bonus" make the ball worse than a pokeball.
+                if (ballMultiplier < 10) {
+                    ballMultiplier = 10;
+                }
+                break;
+            }
+            break;
+        }
+        case ITEM_REPEAT_BALL:
+            if (BattleSystem_CheckMonCaught(bsys, ctx->battleMons[ctx->battlerIdTarget].species) == TRUE) {
+                ballMultiplier = 30;
+            }
+            break;
+        case ITEM_TIMER_BALL:
+            // Use the (turn count + 10)/10 as the multiplier.
+            ballMultiplier = ctx->totalTurns + 10;
+
+            // Then cap it at 40/10 multiplier (x4).
+            if (ballMultiplier > 40) {
+                ballMultiplier = 40;
+            }
+            break;
+        case ITEM_DUSK_BALL:
+            if (BattleSystem_GetTimezone(bsys) == 3 || BattleSystem_GetTimezone(bsys) == 4 || BattleSystem_GetTerrainId(bsys) == TERRAIN_CAVE) {
+                ballMultiplier = 35;
+            }
+            break;
+        case ITEM_QUICK_BALL:
+            if (ctx->totalTurns < 1) {
+                ballMultiplier = 40;
+            }
+            break;
+            
+        // All the apricorn balls directly alter catchRate instead of setting ballMultiplier.
+        // The only side-effect is that catchRate is capped at 255, while ballMultiplier is uncapped.
+        // Simply put, Pokemon with a very high base catch rate will see diminishing returns.
+        case ITEM_FAST_BALL: {
+            u32 speed = GetMonBaseStat(ctx->battleMons[ctx->battlerIdTarget].species, BASE_SPEED);
+            if (speed >= 100) {
+                catchRate *= 4;
+            }
+            break;
+        }
+        case ITEM_LEVEL_BALL: {
+            u8 attackerLevel = ctx->battleMons[ctx->battlerIdAttacker].level;
+            u8 defenderLevel = ctx->battleMons[ctx->battlerIdTarget].level;
+            if (attackerLevel <= defenderLevel) {
+            } else if (attackerLevel / 2 <= defenderLevel) {
+                catchRate *= 2;
+            } else if (attackerLevel / 4 <= defenderLevel) {
+                catchRate *= 4;
+            } else {
+                catchRate *= 8;
+            }
+            break;
+        }
+        case ITEM_LURE_BALL:
+            if (ov12_0223AAB8(bsys)) {
+                catchRate *= 3;
+            }
+            break;
+        case ITEM_HEAVY_BALL: {
+            s32 weight = GetMonWeight(ctx->battleMons[ctx->battlerIdTarget].species);
+            // Weight is in kilograms, moved to the left by 1 decimal point.
+            if (weight >= 4096) { // 409.6 kg / 903.0 lbs. or more.
+                catchRate += 40;
+            } else if (weight >= 3072) { // 307.2 kg / 677.3 lbs. or more.
+                catchRate += 30;
+            } else if (weight >= 2048) { // 204.8 kg / 451.5 lbs. or more.
+                catchRate += 20;
+            } else if (catchRate < 1024) { // Catch rate is mistakenly checked here instead of weight, causing all Pokemon that do not benefit from the Heavy Ball to be penalized by it.
+                catchRate -= 20;
+            }
+            break;
+        }
+        case ITEM_LOVE_BALL: {
+            if (ctx->battleMons[ctx->battlerIdAttacker].species == ctx->battleMons[ctx->battlerIdTarget].species &&
+                ctx->battleMons[ctx->battlerIdAttacker].gender != ctx->battleMons[ctx->battlerIdTarget].gender) {
+                catchRate *= 8;
+            }
+            break;
+        }
+        case ITEM_MOON_BALL: {
+            u32 i;
+            for (i = 0; i < NELEMS(sMoonBallPokemon); i++) {
+                if (sMoonBallPokemon[i] == ctx->battleMons[ctx->battlerIdTarget].species) {
+                    catchRate *= 4;
+                    break;
+                }
+            }
+            break;
+        }
+        case ITEM_SPORT_BALL:
+            ballMultiplier = 15;
+            break;
+        case ITEM_FRIEND_BALL:
+        // case ITEM_PARK_BALL:
+        // case ITEM_CHERISH_BALL:
+        default:
+            ballMultiplier = 10;
+        }
+        if (catchRate > 0xFF) {
+            catchRate = 0xFF;
+        } else if (catchRate < 0) {
+            catchRate = 1;
+        }
+    } else {
+        // All standard balls: Pokeball, Great Ball, Ultra Ball, Master Ball
+        // TODO: Wait why is this -2, isn't that OOB for the Pokeball(1)?
+        ballMultiplier = ov12_0226C2EC[ctx->itemTemp - 2];
+    }
+    
+    s32 maxHpTimes3 = ctx->battleMons[ctx->battlerIdTarget].maxHp * 3;
+    u32 lostHp = maxHpTimes3 - (ctx->battleMons[ctx->battlerIdTarget].hp * 2);
+    
+    // This is written like ballMultiplier * (catch rate fraction) * (health fraction),
+    // but the CPU actually does the operations from left to right, causing weird rounding issues.
+    u32 baseCatchMultiplier = catchRate * ballMultiplier;
+    u32 modifiedCatchRate = ((baseCatchMultiplier / 10) * lostHp) / maxHpTimes3;
+    
+    s32 status = ctx->battleMons[ctx->battlerIdTarget].status;
+    if ((STATUS_SLEEP | STATUS_FREEZE) & status) {
+        modifiedCatchRate *= 2;
+    }
+    if ((STATUS_BURN | STATUS_PARALYSIS | STATUS_BAD_POISON | STATUS_POISON) & status) {
+        modifiedCatchRate = (modifiedCatchRate * 15) / 10;
+    }
+
+    s32 shakeCount;
+    if (modifiedCatchRate >= 255) {
+        shakeCount = MAX_BALL_SHAKE_COUNT;
+    } else {
+        CP_SetSqrt32(0xFF0000U / modifiedCatchRate);
+        CP_WaitSqrt();
+        CP_SetSqrt32(CP_GetSqrtResult32());
+        CP_WaitSqrt();
+        u32 shakeProbability = 0xFFFF0U / CP_GetSqrtResult32();
+        for (shakeCount = 0; shakeCount < MAX_BALL_SHAKE_COUNT; shakeCount++) {
+            if (BattleSystem_Random(bsys) >= shakeProbability) {
+                break;
+            }
+        }
+        if (ctx->itemTemp == ITEM_MASTER_BALL) {
+            shakeCount = MAX_BALL_SHAKE_COUNT;
+        }
+    }
+    if (shakeCount < MAX_BALL_SHAKE_COUNT) {
+        return shakeCount;
+    }
+    if (ctx->itemTemp == ITEM_FRIEND_BALL) {
+        u8 sp8 = FRIENDSHIP_TIER_HI_MIN;
+        SetMonData(BattleSystem_GetPartyMon(bsys, ctx->battlerIdTarget, 0), MON_DATA_FRIENDSHIP, &sp8);
+    }
+    return shakeCount;
+}
+
+s32 GetMonWeight(u16 species) {
+    s32 *weightList = GfGfxLoader_LoadFromNarc(NARC_application_zukanlist_zkn_data_zukan_data, 1, FALSE, HEAP_ID_3, TRUE);
+    s32 weight = weightList[species];
+    Heap_Free(weightList);
+    return weight;
 }
