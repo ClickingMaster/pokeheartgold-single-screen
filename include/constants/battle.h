@@ -644,5 +644,7 @@ typedef enum ControllerCommand {
 // Critical Music Flags
 #define CRITICAL_MUSIC_OFF 2
 
+#define MAX_BALL_SHAKE_COUNT 4
+
 #endif // PM_ASM
 #endif // POKEHEARTGOLD_CONSTANTS_BATTLE_H

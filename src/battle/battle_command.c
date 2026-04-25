@@ -14,6 +14,7 @@
 #include "constants/pokemon.h"
 #include "constants/sndseq.h"
 
+#include "battle/battle_022378C0.h"
 #include "battle/battle_controller.h"
 #include "battle/battle_controller_player.h"
 #include "battle/overlay_12_0224E4FC.h"
@@ -21,8 +22,12 @@
 
 #include "assert.h"
 #include "item.h"
+#include "naming_screen.h"
+#include "obj_char_transfer.h"
+#include "overlay_manager.h"
 #include "palette.h"
 #include "party.h"
+#include "pokedex_util.h"
 #include "pokemon.h"
 #include "pokemon_mood.h"
 #include "render_window.h"
@@ -33,6 +38,7 @@
 #include "text.h"
 #include "touchscreen.h"
 #include "unk_02005D10.h"
+#include "unk_0200FA24.h"
 #include "unk_0208805C.h"
 
 int BattleScriptReadWord(BattleContext *ctx);
@@ -1243,7 +1249,7 @@ BOOL BtlCmd_StartGetExpTask(BattleSystem *battleSystem, BattleContext *ctx) {
     ctx->getterWork->battleSystem = battleSystem;
     ctx->getterWork->ctx = ctx;
     ctx->getterWork->state = 0;
-    ctx->getterWork->unk30[6] = 0;
+    ctx->getterWork->unk34[5] = 0;
 
     SysTask_CreateOnMainQueue(Task_GetExp, ctx->getterWork, 0);
 
@@ -5940,7 +5946,7 @@ static void Task_GetExp(SysTask *task, void *inData) {
     expBattler = 0;
 
     // Figure out which mon we're working on
-    for (slot = data->unk30[6]; slot < BattleSystem_GetPartySize(data->battleSystem, expBattler); slot++) {
+    for (slot = data->unk34[5]; slot < BattleSystem_GetPartySize(data->battleSystem, expBattler); slot++) {
         mon = BattleSystem_GetPartyMon(data->battleSystem, expBattler, slot);
         item = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
         itemEffect = GetItemAttr(item, ITEM_VAR_HOLD_EFFECT, HEAP_ID_BATTLE);
@@ -6006,7 +6012,7 @@ static void Task_GetExp(SysTask *task, void *inData) {
             }
 
             u32 newExp = GetMonData(mon, MON_DATA_EXPERIENCE, NULL);
-            data->unk30[3] = newExp - GetMonBaseExperienceAtCurrentLevel(mon);
+            data->unk34[2] = newExp - GetMonBaseExperienceAtCurrentLevel(mon);
             newExp += totalExp;
 
             if (slot == data->ctx->selectedMonIndex[expBattler]) {
@@ -6025,8 +6031,8 @@ static void Task_GetExp(SysTask *task, void *inData) {
             msg.tag = TAG_NICKNAME_NUM;
             msg.param[0] = expBattler | (slot << 8);
             msg.param[1] = totalExp;
-            data->unk30[0] = BattleSystem_PrintBattleMessage(data->battleSystem, msgLoader, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
-            data->unk30[1] = 7;
+            data->printerId = BattleSystem_PrintBattleMessage(data->battleSystem, msgLoader, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
+            data->unk34[0] = 7;
             data->state++;
         } else {
             data->state = STATE_GET_EXP_CHECK_DONE;
@@ -6035,13 +6041,13 @@ static void Task_GetExp(SysTask *task, void *inData) {
         break;
 
     case STATE_GET_EXP_WAIT_MESSAGE_PRINT:
-        if (!TextPrinterCheckActive(data->unk30[0])) {
+        if (!TextPrinterCheckActive(data->printerId)) {
             data->state++;
         }
         break;
 
     case STATE_GET_EXP_WAIT_MESSAGE_DELAY:
-        if (--data->unk30[1] == 0) {
+        if (--data->unk34[0] == 0) {
             data->state++;
         }
         break;
@@ -6049,8 +6055,8 @@ static void Task_GetExp(SysTask *task, void *inData) {
     case STATE_GET_EXP_GAUGE:
         // Only animate the gauge for an active battler
         if (slot == data->ctx->selectedMonIndex[expBattler]) {
-            ov12_02263564(data->battleSystem, data->ctx, expBattler, data->unk30[3]);
-            data->unk30[3] = 0;
+            ov12_02263564(data->battleSystem, data->ctx, expBattler, data->unk34[2]);
+            data->unk34[2] = 0;
             data->state++;
         } else {
             data->state = STATE_GET_EXP_CHECK_LEVEL_UP;
@@ -6103,15 +6109,15 @@ static void Task_GetExp(SysTask *task, void *inData) {
             msg.tag = TAG_NICKNAME_NUM;
             msg.param[0] = expBattler | (slot << 8);
             msg.param[1] = level;
-            data->unk30[0] = BattleSystem_PrintBattleMessage(data->battleSystem, msgLoader, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
+            data->printerId = BattleSystem_PrintBattleMessage(data->battleSystem, msgLoader, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
             data->state = STATE_GET_EXP_WAIT_LEVEL_UP_MESSAGE_PRINT;
         }
         break;
 
     case STATE_GET_EXP_WAIT_LEVEL_UP_MESSAGE_PRINT:
-        if (TextPrinterCheckActive(data->unk30[0]) == 0) {
+        if (TextPrinterCheckActive(data->printerId) == 0) {
             data->state = STATE_GET_EXP_LEVEL_UP_SUMMARY_LOAD_ICON;
-            data->unk30[2] = 0;
+            data->unk34[1] = 0;
         }
         break;
 
@@ -6220,14 +6226,14 @@ static void Task_GetExp(SysTask *task, void *inData) {
         u16 move;
         BgConfig *bgConfig = BattleSystem_GetBgConfig(data->battleSystem); // unused, but must be kept to match
 
-        switch (MonTryLearnMoveOnLevelUp(mon, &data->unk30[2], &move)) {
+        switch (MonTryLearnMoveOnLevelUp(mon, &data->unk34[1], &move)) {
         case 0:
             data->state = STATE_GET_EXP_GAUGE;
             break;
         case 0xFFFE:
             break;
         case 0xFFFF:
-            data->unk30[4] = move;
+            data->unk34[3] = move;
             data->state = STATE_GET_EXP_WANTS_TO_LEARN_MOVE_PRINT;
             break;
         default:
@@ -6239,7 +6245,7 @@ static void Task_GetExp(SysTask *task, void *inData) {
             msg.tag = TAG_NICKNAME_MOVE;
             msg.param[0] = expBattler | (slot << 8);
             msg.param[1] = move;
-            data->unk30[0] = BattleSystem_PrintBattleMessage(data->battleSystem, msgLoader, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
+            data->printerId = BattleSystem_PrintBattleMessage(data->battleSystem, msgLoader, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
             data->state = STATE_GET_EXP_LEARNED_MOVE_WAIT;
             break;
         }
@@ -6250,8 +6256,8 @@ static void Task_GetExp(SysTask *task, void *inData) {
         msg.id = msg_0197_01178; // "{0} wants to learn the move {1}."
         msg.tag = TAG_NICKNAME_MOVE;
         msg.param[0] = expBattler | (slot << 8);
-        msg.param[1] = data->unk30[4];
-        data->unk30[0] = BattleSystem_PrintBattleMessage(data->battleSystem, msgLoader, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
+        msg.param[1] = data->unk34[3];
+        data->printerId = BattleSystem_PrintBattleMessage(data->battleSystem, msgLoader, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
         data->state++;
         break;
 
@@ -6259,7 +6265,7 @@ static void Task_GetExp(SysTask *task, void *inData) {
         msg.id = msg_0197_01179; // "But {0} can't learn more than four moves."
         msg.tag = TAG_NICKNAME;
         msg.param[0] = expBattler | (slot << 8);
-        data->unk30[0] = BattleSystem_PrintBattleMessage(data->battleSystem, msgLoader, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
+        data->printerId = BattleSystem_PrintBattleMessage(data->battleSystem, msgLoader, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
         data->state++;
         break;
 
@@ -6269,7 +6275,7 @@ static void Task_GetExp(SysTask *task, void *inData) {
     case STATE_GET_EXP_FORGOT_HOW_TO_USE_WAIT:
     case STATE_GET_EXP_AND_DOTDOTDOT_WAIT:
     case STATE_GET_EXP_MAKE_IT_FORGET_CANCELLED_WAIT:
-        if (!TextPrinterCheckActive(data->unk30[0])) {
+        if (!TextPrinterCheckActive(data->printerId)) {
             data->state++;
         }
         break;
@@ -6287,15 +6293,15 @@ static void Task_GetExp(SysTask *task, void *inData) {
             } else {
                 msg.id = msg_0197_01183; // "Which move should be forgotten?"
                 msg.tag = TAG_NONE;
-                data->unk30[0] = BattleSystem_PrintBattleMessage(data->battleSystem, msgLoader, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
+                data->printerId = BattleSystem_PrintBattleMessage(data->battleSystem, msgLoader, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
                 data->state = STATE_GET_EXP_MAKE_IT_FORGET_WAIT;
             }
         }
         break;
 
     case STATE_GET_EXP_MAKE_IT_FORGET_WAIT:
-        if (!TextPrinterCheckActive(data->unk30[0])) {
-            ov12_02263D14(data->battleSystem, expBattler, data->unk30[4], slot);
+        if (!TextPrinterCheckActive(data->printerId)) {
+            ov12_02263D14(data->battleSystem, expBattler, data->unk34[3], slot);
             data->state++;
         }
         break;
@@ -6304,7 +6310,7 @@ static void Task_GetExp(SysTask *task, void *inData) {
         if (BattleBuffer_GetNext(data->ctx, expBattler) == 0xFF) {
             data->state = STATE_GET_EXP_MAKE_IT_FORGET_CANCELLED;
         } else if (BattleBuffer_GetNext(data->ctx, expBattler)) {
-            data->unk30[5] = data->ctx->battleBuffer[expBattler][0] - 1;
+            data->unk34[4] = data->ctx->battleBuffer[expBattler][0] - 1;
             data->state = STATE_GET_EXP_ONE_TWO_POOF;
         }
         break;
@@ -6312,13 +6318,13 @@ static void Task_GetExp(SysTask *task, void *inData) {
     case STATE_GET_EXP_MAKE_IT_FORGET_CANCELLED:
         msg.id = msg_0197_01184; // "Well, then..."
         msg.tag = TAG_NONE;
-        data->unk30[0] = BattleSystem_PrintBattleMessage(data->battleSystem, msgLoader, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
+        data->printerId = BattleSystem_PrintBattleMessage(data->battleSystem, msgLoader, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
         data->state++;
         break;
 
     case STATE_GET_EXP_GIVE_UP_LEARNING_PROMPT:
         // "Should this Pokémon give up on learning this new move?"
-        BattleController_EmitDrawYesNoBox(data->battleSystem, data->ctx, expBattler, msg_0197_01185, 2, data->unk30[4], 0);
+        BattleController_EmitDrawYesNoBox(data->battleSystem, data->ctx, expBattler, msg_0197_01185, 2, data->unk34[3], 0);
         data->state++;
         break;
 
@@ -6330,15 +6336,15 @@ static void Task_GetExp(SysTask *task, void *inData) {
                 msg.id = msg_0197_01188; // "{0} did not learn {1}."
                 msg.tag = TAG_NICKNAME_MOVE;
                 msg.param[0] = expBattler | (slot << 8);
-                msg.param[1] = data->unk30[4];
-                data->unk30[0] = BattleSystem_PrintBattleMessage(data->battleSystem, msgLoader, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
+                msg.param[1] = data->unk34[3];
+                data->printerId = BattleSystem_PrintBattleMessage(data->battleSystem, msgLoader, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
                 data->state = 35;
             }
         }
         break;
 
     case STATE_GET_EXP_GIVE_UP_LEARNING_WAIT:
-        if (!TextPrinterCheckActive(data->unk30[0])) {
+        if (!TextPrinterCheckActive(data->printerId)) {
             // Check for another move to learn
             data->state = STATE_GET_EXP_CHECK_LEARN_MOVE;
         }
@@ -6347,7 +6353,7 @@ static void Task_GetExp(SysTask *task, void *inData) {
     case STATE_GET_EXP_ONE_TWO_POOF:
         msg.id = msg_0197_01189; // "1, 2, and... ... Poof!"
         msg.tag = 0;
-        data->unk30[0] = BattleSystem_PrintBattleMessage(data->battleSystem, msgLoader, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
+        data->printerId = BattleSystem_PrintBattleMessage(data->battleSystem, msgLoader, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
         data->state++;
         break;
 
@@ -6355,15 +6361,15 @@ static void Task_GetExp(SysTask *task, void *inData) {
         msg.id = msg_0197_01190; // "{0} forgot how to use {1}."
         msg.tag = TAG_NICKNAME_MOVE;
         msg.param[0] = expBattler | (slot << 8);
-        msg.param[1] = GetMonData(mon, MON_DATA_MOVE1 + data->unk30[5], NULL);
-        data->unk30[0] = BattleSystem_PrintBattleMessage(data->battleSystem, msgLoader, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
+        msg.param[1] = GetMonData(mon, MON_DATA_MOVE1 + data->unk34[4], NULL);
+        data->printerId = BattleSystem_PrintBattleMessage(data->battleSystem, msgLoader, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
         data->state++;
         break;
 
     case STATE_GET_EXP_AND_DOTDOTDOT:
         msg.id = msg_0197_01191; // "And..."
         msg.tag = TAG_NONE;
-        data->unk30[0] = BattleSystem_PrintBattleMessage(data->battleSystem, msgLoader, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
+        data->printerId = BattleSystem_PrintBattleMessage(data->battleSystem, msgLoader, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
         data->state++;
         break;
 
@@ -6371,12 +6377,12 @@ static void Task_GetExp(SysTask *task, void *inData) {
         msg.id = msg_0197_01192; // "{0} learned {1}!"
         msg.tag = TAG_NICKNAME_MOVE;
         msg.param[0] = expBattler | (slot << 8);
-        msg.param[1] = data->unk30[4];
-        data->unk30[0] = BattleSystem_PrintBattleMessage(data->battleSystem, msgLoader, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
+        msg.param[1] = data->unk34[3];
+        data->printerId = BattleSystem_PrintBattleMessage(data->battleSystem, msgLoader, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
 
         i = 0;
-        SetMonData(mon, MON_DATA_MOVE1_PP_UPS + data->unk30[5], &i);
-        MonSetMoveInSlot(mon, data->unk30[4], data->unk30[5]);
+        SetMonData(mon, MON_DATA_MOVE1_PP_UPS + data->unk34[4], &i);
+        MonSetMoveInSlot(mon, data->unk34[3], data->unk34[4]);
 
         if (data->ctx->selectedMonIndex[expBattler] == slot) {
             BattleSystem_ReloadMonData(data->battleSystem, data->ctx, expBattler, data->ctx->selectedMonIndex[expBattler]);
@@ -6386,7 +6392,7 @@ static void Task_GetExp(SysTask *task, void *inData) {
         break;
 
     case STATE_GET_EXP_LEARNED_MOVE_WAIT:
-        if (!TextPrinterCheckActive(data->unk30[0])) {
+        if (!TextPrinterCheckActive(data->printerId)) {
             // Check for another move to learn
             data->state = STATE_GET_EXP_CHECK_LEARN_MOVE;
         }
@@ -6394,7 +6400,7 @@ static void Task_GetExp(SysTask *task, void *inData) {
 
     case STATE_GET_EXP_CHECK_DONE:
         data->ctx->unk_A4[side] &= (MaskOfFlagNo(slot) ^ 0xFFFFFFFF); // this mon is done
-        data->unk30[6] = slot + 1;
+        data->unk34[5] = slot + 1;
         data->state = STATE_GET_EXP_START; // go back to the top and get the next mon
         break;
 
@@ -6498,4 +6504,562 @@ void BattleScript_CalcEffortValues(Party* party, int partySlot, u32 species, u32
         SetMonData(mon, stat + MON_DATA_HP_EV, &stat_evs[stat]);
     }
     FreeMonPersonal(baseStats);
+}
+
+void ov07_02232F58(s32, s32); // PlayBallAnimation?
+BOOL ov07_02232F60(s32, s32); // IsBallAnimationPlaying?
+s32 ov07_02233DB8(UnkStruct_134 *unkStruct_134);
+void ov07_02233ECC(s32);
+s32 ov07_02233F20(s32);
+
+void ov12_02237D00(BattleSystem *battleSystem);
+void ov12_02237CC4(BattleSystem *battleSystem);
+u32 ov12_02247228(BattleSystem *battleSystem, BattleContext *ctx); // TODO: BattleSystem_CalculateBallShakes
+void ov12_02261294(OpponentData *opponentData, s32);
+void ov12_022628A0(BattleSystem *battleSystem, s32 battlerId, s32);
+void ov12_02265FC4(UnkBattleSystemSub17C *unkBattleSystemSub17C, s32);
+
+OverlayManager *ov18_021F8974(UnkStruct_50C *unkStruct);
+s32 ov18_021F89C8(OverlayManager *overlayManager);
+void ov18_021F89D0(OverlayManager *overlayManager);
+Pokepic *ov18_021F95F8(OverlayManager *overlayManager);
+void ov18_021F95AC(OverlayManager *overlayManager);
+
+void sub_0200602C(u16, s32);
+void sub_0201649C(void *msgIcon, s32 unk0);
+
+enum {
+    STATE_GET_POKEMON_START = 0,
+    STATE_GET_POKEMON_CHECK_IF_TRAINER,
+    STATE_GET_POKEMON_CALCULATE_SHAKES,
+    STATE_GET_POKEMON_BALL_FALL,
+    STATE_GET_POKEMON_WAIT_FOR_BALL_FALL,
+    STATE_GET_POKEMON_BALL_SHAKE,
+    STATE_GET_POKEMON_BALL_SHAKE_DECREMENT,
+    STATE_GET_POKEMON_BALL_CLICK,
+    STATE_GET_POKEMON_GOTCHA,
+    STATE_GET_POKEMON_BALL_FADE,
+    STATE_GET_POKEMON_CHECK_MON_DATA, // 10
+    // 11-13
+    STATE_GET_POKEMON_MOVE_POKEPIC_TO_CENTER = 14,
+    // 15-17
+    STATE_GET_POKEMON_ASK_FOR_NICKNAME = 18,
+    STATE_GET_POKEMON_WAIT_FOR_YESNO,
+    STATE_GET_POKEMON_PREPARE_NAMING_SCREEN,
+    STATE_GET_POKEMON_WAIT_FOR_NAMING_SCREEN,
+    STATE_GET_POKEMON_STORE_NEW_MON_NO_NAMING_SCREEN,
+    // STATE_GET_POKEMON_STORE_NEW_MON_BUG_CONTEST,
+    STATE_GET_POKEMON_STORE_NEW_MON_AFTER_NAMING_SCREEN = 24,
+    // Fade out Pokemon image if no naming screen?
+    STATE_GET_POKEMON_BALL_BLOCKED = 26,
+    STATE_GET_POKEMON_NO_STEALING,
+    STATE_GET_POKEMON_DONE_NO_STEALING,
+    STATE_GET_POKEMON_BREAK_OUT,
+    // STATE_GET_POKEMON_BREAK_OUT_ANIMATION?
+    STATE_GET_POKEMON_BREAK_OUT_MESSAGE = 31,
+    STATE_GET_POKEMON_DONE_BREAK_OUT,
+    STATE_GET_POKEMON_DONE_CAUGHT,
+};
+
+enum { // These are purely speculative until we can decomp ov07_02232F58.
+    BALL_ANIM_THROW = 0,
+    BALL_ANIM_OPEN,
+    BALL_ANIM_DEFLECT,
+    BALL_ANIM_FALL,
+    BALL_ANIM_SHAKE,
+    BALL_ANIM_5, // Seemingly unused, at least here.
+    BALL_ANIM_CLICK,
+    BALL_ANIM_FADE,
+};
+
+void Task_GetPokemon(SysTask *task, void *inData) {
+    GetterWork *data = inData;
+    SysTask *sysTask = task;
+    PokepicManager *pokepicManager;
+    MsgData *msgData = BattleSystem_GetMessageLoader(data->battleSystem);
+    PaletteData *paletteData = BattleSystem_GetPaletteData(data->battleSystem);
+    pokepicManager = ov12_0223A8D4(data->battleSystem); // TODO: BattleSystem_GetPokepicManager
+    
+    s32 battlerId = BATTLER_ENEMY;
+    if (MaskOfFlagNo(1) & data->ctx->switchInFlag) {
+        battlerId = BATTLER_ENEMY2;
+    }
+    
+    switch (data->state) {
+    case STATE_GET_POKEMON_START:
+        if (data->unk24 == CAPTURE_NORMAL) {
+            UnkStruct_134 unkStruct;
+            unkStruct.unk8 = 3;
+            unkStruct.heapID = HEAP_ID_BATTLE;
+            unkStruct.unkC = battlerId + 20000;
+            unkStruct.ball = data->unk2C;
+            unkStruct.spriteSystem = BattleSystem_GetSpriteSystem(data->battleSystem);
+            unkStruct.paletteData = BattleSystem_GetPaletteData(data->battleSystem);
+            unkStruct.unk14 = 1;
+            unkStruct.unk18 = 0;
+            unkStruct.battleSystem = data->battleSystem;
+            if (BattleSystem_GetBattleType(data->battleSystem) & BATTLE_TYPE_DOUBLES) {
+                if (battlerId == BATTLER_ENEMY) {
+                    unkStruct.unk0 = 16;
+                } else { // BATTLER_ENEMY2, assumedly.
+                    unkStruct.unk0 = 17;
+                }
+            } else { // This is a single battle.
+                unkStruct.unk0 = 15;
+            }
+            data->unk8 = ov07_02233DB8(&unkStruct); // Likely returns the index for the ball, otherwise it's unclear how the game would know which sprites to use.
+            data->state = STATE_GET_POKEMON_CHECK_IF_TRAINER;
+            PlaySE(SEQ_SE_DP_THROW);
+            data->battleSystem->unk2422++;
+            ov07_02232F58(data->unk8, BALL_ANIM_THROW);
+        } else { // CAPTURE_SAFARI
+            OpponentData *opponentData = BattleSystem_GetOpponentData(data->battleSystem, BATTLER_PLAYER);
+            if (ov07_02233F20(opponentData->unk88) != 4) {
+                data->unk8 = opponentData->unk88;
+                opponentData->unk88 = 0;
+                data->state = STATE_GET_POKEMON_CHECK_IF_TRAINER;
+                PlaySE(SEQ_SE_DP_THROW);
+                data->battleSystem->unk2422++;
+                ov07_02232F58(data->unk8, BALL_ANIM_THROW);
+            }
+        }
+        data->unk34[3] = 0;
+        break;
+    case STATE_GET_POKEMON_CHECK_IF_TRAINER:
+        if (!ov07_02232F60(data->unk8, BALL_ANIM_THROW)) { // Likely checking if the current ball animation is still active.
+            if (BattleSystem_GetBattleType(data->battleSystem) & BATTLE_TYPE_TRAINER) {
+                sub_0200602C(SEQ_SE_DP_KON, 0x75);
+                ov07_02232F58(data->unk8, BALL_ANIM_DEFLECT);
+                data->state = STATE_GET_POKEMON_BALL_BLOCKED;
+                break;
+            }
+            sub_0200602C(SEQ_SE_DP_BOWA4, 0x75);
+            ov07_02232F58(data->unk8, BALL_ANIM_OPEN);
+            data->state = STATE_GET_POKEMON_CALCULATE_SHAKES;
+            data->unk34[0] = 23; // Probably a wait frame counter.
+        }
+        break;
+    case STATE_GET_POKEMON_CALCULATE_SHAKES:
+        data->unk34[0]--; // Decrement the frame counter by 1.
+        if (data->unk34[0] == 0) { // After 23 frames have passed...
+            ov12_022628A0(data->battleSystem, battlerId, data->unk2C);
+            data->unk34[1] = ov12_02247228(data->battleSystem, data->ctx);
+
+            if (data->unk34[1] < MAX_BALL_SHAKE_COUNT) {
+                data->unk34[2] = data->unk34[1]; // Store the number of shake animations we actually need to do.
+            } else {
+                data->unk34[2] = 3; // Even if we should catch, there should still only be 3 shakes. The 4th is a different animation.
+            }
+            data->state = STATE_GET_POKEMON_BALL_FALL;
+        }
+        break;
+    case STATE_GET_POKEMON_BALL_FALL:
+        if (!ov07_02232F60(data->unk8, BALL_ANIM_OPEN) && Link_QueueNotEmpty(data->ctx)) { // Wait for whatever this is to resolve before continuing.
+            ov07_02232F58(data->unk8, BALL_ANIM_FALL);
+            data->state = STATE_GET_POKEMON_WAIT_FOR_BALL_FALL;
+        }
+        break;
+    case STATE_GET_POKEMON_WAIT_FOR_BALL_FALL:
+        if (!ov07_02232F60(data->unk8, BALL_ANIM_FALL)) {
+            data->state = STATE_GET_POKEMON_BALL_SHAKE;
+        }
+        break;
+    case STATE_GET_POKEMON_BALL_SHAKE:
+        if (data->unk34[2] == 0) { // If there are no more ball shake animations to do...
+            if (data->unk34[1] == MAX_BALL_SHAKE_COUNT) { // If the Pokemon should be caught...
+                data->state = STATE_GET_POKEMON_BALL_CLICK;
+                data->unk34[0] = 12; // Set the wait frame counter.
+                break;
+            }
+            data->state = STATE_GET_POKEMON_BREAK_OUT;
+            break;
+        }
+        ov07_02232F58(data->unk8, BALL_ANIM_SHAKE);
+        data->state = STATE_GET_POKEMON_BALL_SHAKE_DECREMENT;
+        data->unk34[0] = 12;
+        break;
+    case STATE_GET_POKEMON_BALL_SHAKE_DECREMENT:
+        if (!ov07_02232F60(data->unk8, BALL_ANIM_SHAKE)) {
+            data->unk34[0]--;
+            if (data->unk34[0] == 0) { // After 12 frames have passed...
+                data->unk34[2]--; // Decrement the ball shake counter.
+                data->state = STATE_GET_POKEMON_BALL_SHAKE;
+            }
+        }
+        break;
+    case STATE_GET_POKEMON_BALL_CLICK:
+        data->unk34[0]--; // Decrement the wait frame counter.
+        if (data->unk34[0] == 0) { // Perform the next step when there are no more frames to wait.
+            ov07_02232F58(data->unk8, BALL_ANIM_CLICK);
+            sub_0200602C(SEQ_SE_DP_GETTING, 0x75);
+            data->state = STATE_GET_POKEMON_GOTCHA;
+        }
+        break;
+    case STATE_GET_POKEMON_GOTCHA:
+        if (!ov07_02232F60(data->unk8, BALL_ANIM_CLICK)) {
+            BattleMessage msg;
+            msg.id = 0x363; // Gotcha! {0} was caught!
+            msg.tag = TAG_NICKNAME | 0x80;
+            msg.param[0] = battlerId;
+            data->printerId = BattleSystem_PrintBattleMessage(data->battleSystem, msgData, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
+            data->unk34[0] = 30;
+            data->state = STATE_GET_POKEMON_BALL_FADE;
+            PlayBGM(SEQ_GS_WIN2);
+            BattleSystem_SetCriticalHpMusicFlag(data->battleSystem, 2);
+        }
+        break;
+    case STATE_GET_POKEMON_BALL_FADE:
+        if (!TextPrinterCheckActive(data->printerId)) { // Wait for the text box to finish printing.
+            data->state = STATE_GET_POKEMON_CHECK_MON_DATA;
+            ov07_02232F58(data->unk8, BALL_ANIM_FADE);
+        }
+        break;
+    case STATE_GET_POKEMON_CHECK_MON_DATA:
+        if (!ov07_02232F60(data->unk8, BALL_ANIM_FADE) && !(data->unk34[0]--, (data->unk34[0]))) {
+            ov12_0223BD8C(data->battleSystem, battlerId);
+            Pokemon *mon = BattleSystem_GetPartyMon(data->battleSystem, battlerId, data->ctx->selectedMonIndex[battlerId]); // Get the data of the caught Pokemon.
+            if (BattleSystem_GetBattleType(data->battleSystem) & (BATTLE_TYPE_PAL_PARK | BATTLE_TYPE_TUTORIAL)) { // If this was the Catching Demo or a Pal Park encounter...
+                ov12_022567D4(data->battleSystem, data->ctx, BattleSystem_GetPartyMon(data->battleSystem, battlerId, data->ctx->selectedMonIndex[battlerId]));
+                sub_0201649C(BattleSystem_GetMessageIcon(data->battleSystem), 1);
+                PaletteData_BeginPaletteFade(paletteData, 0xF, 0xFFFF, 1, 0, 0x10, 0);
+                Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, 0);
+                data->state = STATE_GET_POKEMON_DONE_CAUGHT;
+                data->unk34[3] = 1;
+                break;
+            }
+            if (BattleSystem_CheckMonCaught(data->battleSystem, GetMonData(mon, MON_DATA_SPECIES, 0))) {
+                if (BattleSystem_GetBattleType(data->battleSystem) & BATTLE_TYPE_BUG_CONTEST) { // If this was the Bug Catching Contest...
+                    sub_0201649C(BattleSystem_GetMessageIcon(data->battleSystem), 1);
+                    PaletteData_BeginPaletteFade(paletteData, 0xF, 0xFFFF, 1, 0, 0x10, 0);
+                    Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, 0);
+                    data->state = STATE_GET_POKEMON_STORE_NEW_MON_NO_NAMING_SCREEN;
+                    data->unk34[3] = 1;
+                    break;
+                }
+                sub_0201649C(BattleSystem_GetMessageIcon(data->battleSystem), 1);
+                PaletteData_BeginPaletteFade(paletteData, 5, 0xFFFF, 1, 0, 0x10, 0);
+                Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, 0);
+                data->state = 16;
+                break;
+            }
+            BattleMessage msg;
+            msg.id = 0x367; // {0}’s data has been added to the Pokédex.
+            msg.tag = TAG_NICKNAME | 0x80;
+            msg.param[0] = battlerId;
+            data->printerId = BattleSystem_PrintBattleMessage(data->battleSystem, msgData, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
+            data->unk34[0] = 30;
+            data->state = 11;
+            ov12_0223BB44(data->battleSystem);
+        }
+        break;
+    case 11:
+        if (!TextPrinterCheckActive(data->printerId)) { // Wait for the text box to finish printing.
+            data->unk34[0]--;
+            if (data->unk34[0] == 0) { // After 30 frames have passed...
+                data->state = 12;
+                PaletteData_BeginPaletteFade(paletteData, 5, 0xFFFF, 1, 0, 0x10, 0);
+                Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, 0);
+                sub_0201649C(BattleSystem_GetMessageIcon(data->battleSystem), 1);
+            }
+        }
+        break;
+    case 12:
+        if (!PaletteData_GetSelectedBuffersBitmask(paletteData)) {
+            ov07_02233ECC(data->unk8);
+            PokepicManager_DeleteAllPics(pokepicManager);
+            ov12_02237CC4(data->battleSystem);
+            ov12_02265FC4(ov12_0223A8F4(data->battleSystem, 0), 0);
+            ov12_02265FC4(ov12_0223A8F4(data->battleSystem, 1), 0);
+            ov12_02261294(BattleSystem_GetOpponentData(data->battleSystem, BATTLER_PLAYER), 0);
+            UnkStruct_50C unkStruct;
+            unkStruct.bgConfig = BattleSystem_GetBgConfig(data->battleSystem);
+            unkStruct.paletteData = BattleSystem_GetPaletteData(data->battleSystem);
+            unkStruct.pokepicManager = pokepicManager;
+            unkStruct.heapID = HEAP_ID_BATTLE;
+            unkStruct.mon = BattleSystem_GetPartyMon(data->battleSystem, battlerId, data->ctx->selectedMonIndex[battlerId]);
+            unkStruct.natDexEnabled = Pokedex_IsNatDexEnabled(BattleSystem_GetPokedex(data->battleSystem));
+            data->unk50[1] = ObjCharTransfer_PopTaskManager();
+            data->unk50[0] = ov18_021F8974(&unkStruct);
+            data->state = 13;
+        }
+        break;
+    case 13:
+        if (ov18_021F89C8(data->unk50[0]) == 1) {
+            if (PAD_BUTTON_A & gSystem.newKeys) { // If the A button is pressed...
+                data->state = STATE_GET_POKEMON_MOVE_POKEPIC_TO_CENTER;
+            } else if (System_GetTouchNew()) { // If the touch screen is pressed...
+                PlaySE(SEQ_SE_DP_SELECT); // For some reason, a sound effect only plays if the touch screen is used here.
+                data->state = STATE_GET_POKEMON_MOVE_POKEPIC_TO_CENTER;
+            }
+            if (data->state == STATE_GET_POKEMON_MOVE_POKEPIC_TO_CENTER) {
+                if (BattleSystem_GetBattleType(data->battleSystem) & BATTLE_TYPE_BUG_CONTEST) {
+                    PaletteData_BeginPaletteFade(paletteData, 0xF, 0xFFFF, 1, 0, 0x10, 0);
+                    Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, 0);
+                    break;
+                }
+                PaletteData_BeginPaletteFade(paletteData, 5, 0xFFFF, 1, 0, 0x10, 0);
+            }
+        }
+        break;
+    case STATE_GET_POKEMON_MOVE_POKEPIC_TO_CENTER:
+        if (BattleSystem_GetBattleType(data->battleSystem) & BATTLE_TYPE_BUG_CONTEST) {
+            data->state = 23;
+            break;
+        }
+        Pokepic *pic = ov18_021F95F8(data->unk50[0]);
+        Pokepic_AddAttr(pic, POKEPIC_X, 4); // Move the Pokepic 4 pixels to the right each frame.
+        if (Pokepic_GetAttr(pic, POKEPIC_X) >= 128) { // Stop when the Pokepic has reached the center of the screen.
+            Pokepic_SetAttr(pic, POKEPIC_X, 128);
+            ov18_021F95AC(data->unk50[0]);
+            data->state = 15;
+        }
+        break;
+    case 15:
+        ov18_021F89D0(data->unk50[0]);
+        ObjCharTransfer_PushTaskManager(data->unk50[1]);
+        ov12_02237D00(data->battleSystem);
+        PaletteData_BeginPaletteFade(paletteData, 5, 0xFFFF, 1, 0x10, 0, 0);
+        data->state = 17;
+        break;
+    case 16:
+        if (!PaletteData_GetSelectedBuffersBitmask(paletteData)) {
+            Pokemon *mon = BattleSystem_GetPartyMon(data->battleSystem, battlerId, data->ctx->selectedMonIndex[battlerId]);
+            ov07_02233ECC(data->unk8);
+            PokepicManager_DeleteAllPics(pokepicManager);
+            ov12_02261294(BattleSystem_GetOpponentData(data->battleSystem, BATTLER_PLAYER), 0);
+            ov12_02237CC4(data->battleSystem);
+            ov12_02237D00(data->battleSystem);
+            PokepicTemplate picTemplate;
+            GetPokemonSpriteCharAndPlttNarcIds(&picTemplate, mon, 2);
+            PokepicManager_CreatePokepic(pokepicManager, &picTemplate, 0x80, 0x48, 0, 0, 0, 0);
+            PaletteData_BeginPaletteFade(paletteData, 5, 0xFFFF, 1, 0x10, 0, 0);
+            Pokepic_StartPaletteFadeAll(pokepicManager, 0x10, 0, 0, 0);
+            data->state = 17;
+        }
+        break;
+    case 17:
+        if (!PaletteData_GetSelectedBuffersBitmask(paletteData)) {
+            data->state = STATE_GET_POKEMON_ASK_FOR_NICKNAME;
+            sub_0201649C(BattleSystem_GetMessageIcon(data->battleSystem), 0);
+            PaletteData_SetAutoTransparent(paletteData, 1);
+        }
+        break;
+    case STATE_GET_POKEMON_ASK_FOR_NICKNAME:
+        BattleController_EmitDrawYesNoBox(data->battleSystem, data->ctx, 0, 0x364, 5, 0, data->ctx->selectedMonIndex[battlerId] | battlerId); // Would you like to give {0} a nickname?
+        data->state++;
+        break;
+    case STATE_GET_POKEMON_WAIT_FOR_YESNO:
+        if (BattleBuffer_GetNext(data->ctx, BATTLER_PLAYER)) { // Wait for the player to prompt the game to continue.
+            if (BattleBuffer_GetNext(data->ctx, BATTLER_PLAYER) == 0xFF) { // If the player said no...
+                data->state = STATE_GET_POKEMON_STORE_NEW_MON_NO_NAMING_SCREEN;
+                break;
+            }
+            sub_0201649C(BattleSystem_GetMessageIcon(data->battleSystem), 1);
+            PaletteData_BeginPaletteFade(paletteData, 0xF, 0xFFFF, 1, 0, 0x10, 0);
+            Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, 0);
+            data->state = STATE_GET_POKEMON_PREPARE_NAMING_SCREEN;
+        }
+        break;
+    case STATE_GET_POKEMON_PREPARE_NAMING_SCREEN:
+        if (!PaletteData_GetSelectedBuffersBitmask(paletteData)) {
+            sub_0200FBF4(PM_LCD_TOP, RGB_BLACK);
+            sub_0200FBF4(PM_LCD_BOTTOM, RGB_BLACK);
+            Pokemon *mon = BattleSystem_GetPartyMon(data->battleSystem, battlerId, data->ctx->selectedMonIndex[battlerId]);
+            NamingScreenArgs *namingScreenArgs = NamingScreen_CreateArgs(HEAP_ID_BATTLE, NAME_SCREEN_POKEMON, GetMonData(mon, MON_DATA_SPECIES, 0), 0xA, BattleSystem_GetOptions(data->battleSystem), 0);
+            data->unk50[1] = namingScreenArgs;
+            if (BattleSystem_GetPartySize(data->battleSystem, 0) < PARTY_SIZE) {
+                namingScreenArgs->battleMsgId = 0;
+            } else {
+                // TODO: BattleSystem_MetBill
+                namingScreenArgs->battleMsgId = ov12_0223BB1C(data->battleSystem) + 0x496; // {0} was transferred to {1} in someone’s/Bill's PC!
+            }
+            namingScreenArgs->monForm = GetMonData(mon, MON_DATA_FORM, 0);
+            namingScreenArgs->pcStorage = BattleSystem_GetPcStorage(data->battleSystem);
+            namingScreenArgs->monGender = GetMonData(mon, MON_DATA_GENDER, 0);
+            data->unk50[0] = OverlayManager_New(&gOverlayTemplate_NamingScreen, namingScreenArgs, HEAP_ID_BATTLE);
+            data->state = STATE_GET_POKEMON_WAIT_FOR_NAMING_SCREEN;
+            BattleSystem_HpBar_Delete(data->battleSystem);
+            
+            for (int battlerId = 0; battlerId < BattleSystem_GetMaxBattlers(data->battleSystem); battlerId++) {
+                OpponentData *opponentData = BattleSystem_GetOpponentData(data->battleSystem, battlerId);
+                if (opponentData->managedSprite) {
+                    Sprite_DeleteAndFreeResources(opponentData->managedSprite);
+                    opponentData->managedSprite = NULL;
+                }
+            }
+            
+            ov12_02237B6C(data->battleSystem);
+            ov12_0223BBF0(data->battleSystem, 1);
+        }
+        break;
+    case STATE_GET_POKEMON_WAIT_FOR_NAMING_SCREEN:
+        if (OverlayManager_Run(data->unk50[0])) {
+            NamingScreenArgs *namingScreenArgs = data->unk50[1];
+            Pokemon *mon = BattleSystem_GetPartyMon(data->battleSystem, battlerId, data->ctx->selectedMonIndex[battlerId]);
+            if (!namingScreenArgs->noInput) {
+                SetMonData(mon, MON_DATA_NICKNAME_STRING_AND_FLAG, namingScreenArgs->nameInputString);
+                BattleSystem_GameStatIncrement(data->battleSystem, 50);
+            }
+            NamingScreen_DeleteArgs(namingScreenArgs);
+            OverlayManager_Delete(data->unk50[0]);
+            ov12_0223BBF0(data->battleSystem, 2);
+            data->state = STATE_GET_POKEMON_STORE_NEW_MON_AFTER_NAMING_SCREEN;
+        }
+        break;
+    case STATE_GET_POKEMON_STORE_NEW_MON_NO_NAMING_SCREEN:
+    case 23: // Something other than just the Bug Contest is going on here, since we can arrive in state 22 as well.
+    case STATE_GET_POKEMON_STORE_NEW_MON_AFTER_NAMING_SCREEN:
+        if (!PaletteData_GetSelectedBuffersBitmask(paletteData)) {
+            Party *party = BattleSystem_GetParty(data->battleSystem, BATTLER_PLAYER);
+            Pokemon *mon = BattleSystem_GetPartyMon(data->battleSystem, battlerId, data->ctx->selectedMonIndex[battlerId]);
+            BattleSystem_SetPokedexCaught(data->battleSystem, battlerId);
+            ov12_022567D4(data->battleSystem, data->ctx, mon);
+            ov12_0223B870(data->battleSystem, mon);
+            BattleController_EmitIncrementGameStat(data->battleSystem, BATTLER_PLAYER, 0, GAME_STAT_CAUGHT_MON);
+            if (BattleSystem_GetBattleType(data->battleSystem) & BATTLE_TYPE_BUG_CONTEST) {
+                if (data->state == 23) {
+                    ov18_021F89D0(data->unk50[0]);
+                    ObjCharTransfer_PushTaskManager(data->unk50[1]);
+                    ov12_02237D00(data->battleSystem);
+                }
+                CopyPokemonToPokemon(mon, BattleSystem_GetBugContestCaughtMon(data->battleSystem));
+                if (data->state == STATE_GET_POKEMON_STORE_NEW_MON_NO_NAMING_SCREEN) {
+                    sub_0201649C(BattleSystem_GetMessageIcon(data->battleSystem), 1);
+                }
+                data->state = STATE_GET_POKEMON_DONE_CAUGHT;
+                break;
+            }
+            if (Party_AddMon(party, mon) == TRUE) {
+                if (data->state == STATE_GET_POKEMON_STORE_NEW_MON_NO_NAMING_SCREEN) {
+                    sub_0201649C(BattleSystem_GetMessageIcon(data->battleSystem), 1);
+                    PaletteData_BeginPaletteFade(paletteData, 0xF, 0xFFFF, 1, 0, 0x10, 0);
+                    Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, 0);
+                }
+                data->state = STATE_GET_POKEMON_DONE_CAUGHT;
+                break;
+            }
+            PCStorage *pcStorage = BattleSystem_GetPcStorage(data->battleSystem);
+            int activeBox = PCStorage_GetActiveBox(pcStorage);
+            int emptyBox = PCStorage_FindFirstBoxWithEmptySlot(pcStorage);
+            PCStorage_SetActiveBox(pcStorage, emptyBox);
+
+            for (s32 moveSlot = 0; moveSlot < 4; moveSlot++) {
+                u32 maxPP = GetMonData(mon, MON_DATA_MOVE1_MAX_PP + moveSlot, 0);
+                SetMonData(mon, MON_DATA_MOVE1_PP + moveSlot, &maxPP);
+            }
+            
+            if (Mon_UpdateGiratinaForm(mon) != -1) {
+                BattleSystem_SetPokedexCaught(data->battleSystem, battlerId);
+            }
+            PCStorage_PlaceMonInBoxFirstEmptySlot(pcStorage, emptyBox, Mon_GetBoxMon(mon));
+            if (data->state == STATE_GET_POKEMON_STORE_NEW_MON_NO_NAMING_SCREEN) {
+                BattleMessage msg;
+                if (activeBox == emptyBox) {
+                    msg.id = ov12_0223BB1C(data->battleSystem) + 0x496; // {0} was transferred to {1} in someone’s PC!
+                    msg.tag = TAG_NICKNAME_BOX | 0x80;
+                    msg.param[0] = battlerId;
+                    msg.param[1] = activeBox;
+                } else {
+                    msg.id = ov12_0223BB1C(data->battleSystem) + 0x498; // {1} in someone’s PC is full. {0} was transferred to {2} instead!
+                    msg.tag = TAG_NICKNAME_BOX_BOX | 0x80;
+                    msg.param[0] = battlerId;
+                    msg.param[1] = activeBox;
+                    msg.param[2] = emptyBox;
+                }
+                data->printerId= BattleSystem_PrintBattleMessage(data->battleSystem, msgData, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
+                data->unk34[0] = 30;
+                data->state = 25;
+                break;
+            }
+            data->state = STATE_GET_POKEMON_DONE_CAUGHT;
+        }
+        break;
+    case 25:
+        if (!TextPrinterCheckActive(data->printerId)) {
+            data->unk34[0]--;
+            if (data->unk34[0] == 0) { // After 30 frames have passed...
+                sub_0201649C(BattleSystem_GetMessageIcon(data->battleSystem), 1);
+                PaletteData_BeginPaletteFade(paletteData, 0xF, 0xFFFF, 1, 0, 0x10, 0);
+                Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, 0);
+                data->state = STATE_GET_POKEMON_DONE_CAUGHT;
+            }
+        }
+        break;
+    case STATE_GET_POKEMON_BALL_BLOCKED:
+        if (!ov07_02232F60(data->unk8, BALL_ANIM_DEFLECT)) {
+            ov07_02233ECC(data->unk8);
+            BattleMessage msg;
+            msg.id = 0x35B; // The Trainer blocked the Ball!
+            msg.tag = TAG_NONE;
+            data->printerId= BattleSystem_PrintBattleMessage(data->battleSystem, msgData, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
+            data->unk34[0] = 30;
+            data->state = STATE_GET_POKEMON_NO_STEALING;
+        }
+        break;
+    case STATE_GET_POKEMON_NO_STEALING:
+        if (!TextPrinterCheckActive(data->printerId) && !--data->unk34[0]) {
+            BattleMessage msg;
+            msg.id = 0x35C; // Don’t be a thief!
+            msg.tag = TAG_NONE;
+            data->printerId = BattleSystem_PrintBattleMessage(data->battleSystem, msgData, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
+            data->unk34[0] = 30;
+            data->state = STATE_GET_POKEMON_DONE_NO_STEALING;
+        }
+        break;
+    case STATE_GET_POKEMON_DONE_NO_STEALING:
+        if (!TextPrinterCheckActive(data->printerId)) {
+            data->unk34[0]--;
+            if (data->unk34[0] == 0) { // After 30 frames have passed...
+                data->ctx->getterWork = 0;
+                Heap_Free(data);
+                SysTask_Destroy(sysTask);
+            }
+        }
+    default:
+        break;
+    case STATE_GET_POKEMON_BREAK_OUT:
+        BattleController_EmitPokemonSendOut(data->battleSystem, battlerId, data->unk2C, 1); // Breaking out hijacks the send out animation.
+        data->state = 30;
+        data->unk34[0] = 2;
+        break;
+    case 30:
+        data->unk34[0]--;
+        if (data->unk34[0] == 0) { // After 2 frames have passed...
+            ov07_02233ECC(data->unk8);
+            data->state = STATE_GET_POKEMON_BREAK_OUT_MESSAGE;
+        }
+        break;
+    case STATE_GET_POKEMON_BREAK_OUT_MESSAGE:
+        if (Link_QueueNotEmpty(data->ctx)) {
+            BattleMessage msg;
+            msg.id = data->unk34[1] + 0x35F; // Break-out messages, including ball shake offsets.
+            msg.tag = TAG_NONE;
+            data->printerId = BattleSystem_PrintBattleMessage(data->battleSystem, msgData, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
+            data->unk34[0] = 30;
+            data->state = STATE_GET_POKEMON_DONE_BREAK_OUT;
+        }
+        break;
+    case STATE_GET_POKEMON_DONE_BREAK_OUT:
+        if (!TextPrinterCheckActive(data->printerId)) {
+            data->unk34[0]--;
+            if (data->unk34[0] == 0) { // After 30 frames have passed...
+                data->ctx->getterWork = 0;
+                Heap_Free(data);
+                SysTask_Destroy(sysTask);
+            }
+        }
+        break;
+    case STATE_GET_POKEMON_DONE_CAUGHT:
+        if (PaletteData_GetSelectedBuffersBitmask(paletteData) == 0) {
+            if (data->unk34[3]) {
+                ov07_02233ECC(data->unk8);
+                PokepicManager_DeleteAllPics(pokepicManager);
+            }
+            data->battleSystem->battleOutcomeFlag = BATTLE_OUTCOME_MON_CAUGHT;
+            data->ctx->getterWork = 0;
+            Heap_Free(data);
+            SysTask_Destroy(sysTask);
+        }
+        break;
+    }
 }

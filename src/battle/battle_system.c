@@ -99,8 +99,8 @@ Pokemon *BattleSystem_GetPartyMon(BattleSystem *battleSystem, int battlerId, int
     }
 }
 
-u32 *ov12_0223A8D4(BattleSystem *battleSystem) {
-    return battleSystem->unk88;
+PokepicManager *ov12_0223A8D4(BattleSystem *battleSystem) {
+    return battleSystem->pokepicManager;
 }
 
 u32 *ov12_0223A8DC(BattleSystem *battleSystem) {
