@@ -36,11 +36,9 @@ typedef struct BattleMessage {
 } BattleMessage;
 
 typedef struct BattleMessageData {
-    u8 unk0;
-    u8 unk1;
-    u16 unk2;
-    int unk4[6];
-    int unk1C;
+    u32 unk0;
+    int unk4;
+    int unk8[6];
 } BattleMessageData;
 
 typedef struct GetterWork GetterWork;

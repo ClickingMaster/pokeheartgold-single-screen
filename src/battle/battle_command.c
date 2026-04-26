@@ -7517,3 +7517,380 @@ int GetBattlerIDBySide(BattleSystem *battleSystem, BattleContext *ctx, int side)
 
     return battlerID;
 }
+
+void InitBattleMsgData(BattleContext *ctx, BattleMessageData *msgData) {
+    int params = 0;
+    msgData->unk0 = BattleScriptReadWord(ctx); // TODO: See if we can clarify BattleMessageData.
+    u32 tag = BattleScriptReadWord(ctx);
+    msgData->unk4 = tag;
+    switch(tag) {
+        case TAG_NONE:
+            params = 0;
+            break;
+        case TAG_NONE_SIDE:
+        case TAG_NICKNAME:
+        case TAG_MOVE:
+        case TAG_STAT:
+        case TAG_ITEM:
+        case TAG_NUMBER:
+        case TAG_NUMBERS:
+        case TAG_TRNAME:
+            params = 1;
+            break;
+        case TAG_NICKNAME_NICKNAME:
+        case TAG_NICKNAME_MOVE:
+        case TAG_NICKNAME_ABILITY:
+        case TAG_NICKNAME_STAT:
+        case TAG_NICKNAME_TYPE:
+        case TAG_NICKNAME_POKE:
+        case TAG_NICKNAME_ITEM:
+        case TAG_NICKNAME_POFFIN:
+        case TAG_NICKNAME_NUM:
+        case TAG_NICKNAME_TRNAME:
+        case TAG_NICKNAME_BOX:
+        case TAG_MOVE_SIDE:
+        case TAG_MOVE_NICKNAME:
+        case TAG_MOVE_MOVE:
+        case TAG_ABILITY_NICKNAME:
+        case TAG_ITEM_MOVE:
+        case TAG_NUMBER_NUMBER:
+        case TAG_TRNAME_TRNAME:
+        case TAG_TRNAME_NICKNAME:
+        case TAG_TRNAME_ITEM:
+        case TAG_TRNAME_NUM:
+        case TAG_TRCLASS_TRNAME:
+            params = 2;
+            break;
+        case TAG_NICKNAME_NICKNAME_MOVE:
+        case TAG_NICKNAME_NICKNAME_ABILITY:
+        case TAG_NICKNAME_NICKNAME_ITEM:
+        case TAG_NICKNAME_MOVE_MOVE:
+        case TAG_NICKNAME_MOVE_NUMBER:
+        case TAG_NICKNAME_ABILITY_NICKNAME:
+        case TAG_NICKNAME_ABILITY_MOVE:
+        case TAG_NICKNAME_ABILITY_ITEM:
+        case TAG_NICKNAME_ABILITY_STAT:
+        case TAG_NICKNAME_ABILITY_TYPE:
+        case TAG_NICKNAME_ABILITY_STATUS:
+        case TAG_NICKNAME_ABILITY_NUMBER:
+        case TAG_NICKNAME_ITEM_NICKNAME:
+        case TAG_NICKNAME_ITEM_MOVE:
+        case TAG_NICKNAME_ITEM_STAT:
+        case TAG_NICKNAME_ITEM_STATUS:
+        case TAG_NICKNAME_BOX_BOX:
+        case TAG_ITEM_NICKNAME_FLAVOR:
+        case TAG_TRNAME_NICKNAME_NICKNAME:
+        case TAG_TRCLASS_TRNAME_NICKNAME:
+        case TAG_TRCLASS_TRNAME_ITEM:
+            params = 3;
+            break;
+        case TAG_NICKNAME_ABILITY_NICKNAME_MOVE:
+        case TAG_NICKNAME_ABILITY_NICKNAME_ABILITY:
+        case TAG_NICKNAME_ABILITY_NICKNAME_STAT:
+        case TAG_NICKNAME_ITEM_NICKNAME_ITEM:
+        case TAG_TRNAME_NICKNAME_TRNAME_NICKNAME:
+        case TAG_TRCLASS_TRNAME_NICKNAME_NICKNAME:
+        case TAG_TRCLASS_TRNAME_NICKNAME_TRNAME:
+        case TAG_TRCLASS_TRNAME_TRCLASS_TRNAME:
+            params = 4;
+            break;
+        case TAG_TRCLASS_TRNAME_NICKNAME_TRCLASS_TRNAME_NICKNAME:
+            params = 6;
+            break;
+    }
+
+    for (int i = 0; i < params; i++) {
+        msgData->unk8[i] = BattleScriptReadWord(ctx);
+    }
+}
+
+s32 ov12_022480C0(BattleSystem *battleSystem, BattleContext *ctx, s32);
+s32 ov12_0224810C(BattleContext *ctx, s32);
+s32 ov12_02248184(BattleContext *ctx, s32);
+s32 ov12_02248190(BattleContext *ctx, s32);
+s32 ov12_0224819C(BattleSystem *battleSystem, BattleContext *ctx, s32);
+s32 ov12_022481D0(BattleContext *ctx, s32);
+s32 ov12_022481DC(BattleContext *ctx, s32);
+s32 ov12_022481E8(BattleSystem *battleSystem, BattleContext *ctx, s32);
+s32 ov12_02248200(BattleContext *ctx, s32);
+s32 ov12_0224820C(BattleContext *ctx, s32);
+s32 ov12_02248218(BattleSystem *battleSystem, BattleContext *ctx, s32);
+s32 ov12_02248220(BattleSystem *battleSystem, BattleContext *ctx, s32);
+
+void InitBattleMsg(BattleSystem *battleSystem, BattleContext *ctx, BattleMessageData *msgData, BattleMessage *msg) {
+    msg->id = msgData->unk0;
+    msg->tag = msgData->unk4;
+    switch (msg->tag) {
+    case TAG_NONE_SIDE:
+        msg->param[0] = GetBattlerIDBySide(battleSystem, ctx, msgData->unk8[0]);
+        return;
+    case TAG_NICKNAME:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        return;
+    case TAG_MOVE:
+        msg->param[0] = GetMoveMessageNo(ctx, msgData->unk8[0]);
+        return;
+    case TAG_STAT:
+        msg->param[0] = ov12_022481D0(ctx, msgData->unk8[0]);
+        return;
+    case TAG_ITEM:
+        msg->param[0] = ov12_0224810C(ctx, msgData->unk8[0]);
+        return;
+    case TAG_NUMBER:
+    case TAG_NUMBERS:
+        msg->param[0] = ov12_02248184(ctx, msgData->unk8[0]);
+        return;
+    case TAG_TRNAME:
+        msg->param[0] = ov12_02248220(battleSystem, ctx, msgData->unk8[0]);
+        return;
+    case TAG_NICKNAME_NICKNAME:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->unk8[1]);
+        return;
+    case TAG_NICKNAME_MOVE:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = GetMoveMessageNo(ctx, msgData->unk8[1]);
+        return;
+    case TAG_NICKNAME_ABILITY:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->unk8[1]);
+        return;
+    case TAG_NICKNAME_STAT:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_022481D0(ctx, msgData->unk8[1]);
+        return;
+    case TAG_NICKNAME_TYPE:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_02248190(ctx, msgData->unk8[1]);
+        return;
+    case TAG_NICKNAME_POKE:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_022481E8(battleSystem, ctx, msgData->unk8[1]);
+        return;
+    case TAG_NICKNAME_ITEM:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_0224810C(ctx, msgData->unk8[1]);
+        return;
+    case TAG_NICKNAME_POFFIN:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_02248200(ctx, msgData->unk8[1]);
+        return;
+    case TAG_NICKNAME_NUM:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_02248184(ctx, msgData->unk8[1]);
+        return;
+    case TAG_NICKNAME_TRNAME:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_02248220(battleSystem, ctx, msgData->unk8[1]);
+        return;
+    case TAG_NICKNAME_BOX:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = msgData->unk8[1];
+        return;
+    case TAG_MOVE_SIDE:
+        msg->param[0] = GetMoveMessageNo(ctx, msgData->unk8[0]);
+        msg->param[1] = GetBattlerIDBySide(battleSystem, ctx, msgData->unk8[1]);
+        return;
+    case TAG_MOVE_NICKNAME:
+        msg->param[0] = GetMoveMessageNo(ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->unk8[1]);
+        return;
+    case TAG_MOVE_MOVE:
+        msg->param[0] = GetMoveMessageNo(ctx, msgData->unk8[0]);
+        msg->param[1] = GetMoveMessageNo(ctx, msgData->unk8[1]);
+        return;
+    case TAG_ABILITY_NICKNAME:
+        msg->param[0] = ov12_0224819C(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->unk8[1]);
+        return;
+    case TAG_ITEM_MOVE:
+        msg->param[0] = ov12_0224810C(ctx, msgData->unk8[0]);
+        msg->param[1] = GetMoveMessageNo(ctx, msgData->unk8[1]);
+        return;
+    case TAG_NUMBER_NUMBER:
+        msg->param[0] = ov12_02248184(ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_02248184(ctx, msgData->unk8[1]);
+        return;
+    case TAG_TRNAME_TRNAME:
+        msg->param[0] = ov12_02248220(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_02248220(battleSystem, ctx, msgData->unk8[1]);
+        return;
+    case TAG_TRNAME_NICKNAME:
+        msg->param[0] = ov12_02248220(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->unk8[1]);
+        return;
+    case TAG_TRNAME_ITEM:
+        msg->param[0] = ov12_02248220(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_0224810C(ctx, msgData->unk8[1]);
+        return;
+    case TAG_TRNAME_NUM:
+        msg->param[0] = ov12_02248220(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_02248184(ctx, msgData->unk8[1]);
+        return;
+    case TAG_TRCLASS_TRNAME:
+        msg->param[0] = ov12_02248218(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_02248220(battleSystem, ctx, msgData->unk8[1]);
+        return;
+    case TAG_NICKNAME_NICKNAME_MOVE:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[2] = GetMoveMessageNo(ctx, msgData->unk8[2]);
+        return;
+    case TAG_NICKNAME_NICKNAME_ABILITY:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[2] = ov12_0224819C(battleSystem, ctx, msgData->unk8[2]);
+        return;
+    case TAG_NICKNAME_NICKNAME_ITEM:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[2] = ov12_0224810C(ctx, msgData->unk8[2]);
+        return;
+    case TAG_NICKNAME_MOVE_MOVE:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = GetMoveMessageNo(ctx, msgData->unk8[1]);
+        msg->param[2] = GetMoveMessageNo(ctx, msgData->unk8[2]);
+        return;
+    case TAG_NICKNAME_MOVE_NUMBER:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = GetMoveMessageNo(ctx, msgData->unk8[1]);
+        msg->param[2] = ov12_02248184(ctx, msgData->unk8[2]);
+        return;
+    case TAG_NICKNAME_ABILITY_NICKNAME:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->unk8[2]);
+        return;
+    case TAG_NICKNAME_ABILITY_MOVE:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[2] = GetMoveMessageNo(ctx, msgData->unk8[2]);
+        return;
+    case TAG_NICKNAME_ABILITY_ITEM:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[2] = ov12_0224810C(ctx, msgData->unk8[2]);
+        return;
+    case TAG_NICKNAME_ABILITY_STAT:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[2] = ov12_022481D0(ctx, msgData->unk8[2]);
+        return;
+    case TAG_NICKNAME_ABILITY_TYPE:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[2] = ov12_02248190(ctx, msgData->unk8[2]);
+        return;
+    case TAG_NICKNAME_ABILITY_STATUS:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[2] = ov12_022481DC(ctx, msgData->unk8[2]);
+        return;
+    case TAG_NICKNAME_ABILITY_NUMBER:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[2] = ov12_02248184(ctx, msgData->unk8[2]);
+        return;
+    case TAG_NICKNAME_ITEM_NICKNAME:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_0224810C(ctx, msgData->unk8[1]);
+        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->unk8[2]);
+        return;
+    case TAG_NICKNAME_ITEM_MOVE:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_0224810C(ctx, msgData->unk8[1]);
+        msg->param[2] = GetMoveMessageNo(ctx, msgData->unk8[2]);
+        return;
+    case TAG_NICKNAME_ITEM_STAT:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_0224810C(ctx, msgData->unk8[1]);
+        msg->param[2] = ov12_022481D0(ctx, msgData->unk8[2]);
+        return;
+    case TAG_NICKNAME_ITEM_STATUS:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_0224810C(ctx, msgData->unk8[1]);
+        msg->param[2] = ov12_022481DC(ctx, msgData->unk8[2]);
+        return;
+    case TAG_NICKNAME_BOX_BOX:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = (s32) msgData->unk8[1];
+        msg->param[2] = (s32) msgData->unk8[2];
+        return;
+    case TAG_ITEM_NICKNAME_FLAVOR:
+        msg->param[0] = ov12_0224810C(ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[2] = ov12_0224820C(ctx, msgData->unk8[2]);
+        return;
+    case TAG_TRNAME_NICKNAME_NICKNAME:
+        msg->param[0] = ov12_02248220(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->unk8[2]);
+        return;
+    case TAG_TRCLASS_TRNAME_NICKNAME:
+        msg->param[0] = ov12_02248218(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_02248220(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->unk8[2]);
+        return;
+    case TAG_TRCLASS_TRNAME_ITEM:
+        msg->param[0] = ov12_02248218(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_02248220(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[2] = ov12_0224810C(ctx, msgData->unk8[2]);
+        return;
+    case TAG_NICKNAME_ABILITY_NICKNAME_MOVE:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->unk8[2]);
+        msg->param[3] = GetMoveMessageNo(ctx, msgData->unk8[3]);
+        return;
+    case TAG_NICKNAME_ABILITY_NICKNAME_ABILITY:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->unk8[2]);
+        msg->param[3] = ov12_0224819C(battleSystem, ctx, msgData->unk8[3]);
+        return;
+    case TAG_NICKNAME_ABILITY_NICKNAME_STAT:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->unk8[2]);
+        msg->param[3] = ov12_022481D0(ctx, msgData->unk8[3]);
+        return;
+    case TAG_NICKNAME_ITEM_NICKNAME_ITEM:
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_0224810C(ctx, msgData->unk8[1]);
+        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->unk8[2]);
+        msg->param[3] = ov12_0224810C(ctx, msgData->unk8[3]);
+        return;
+    case TAG_TRNAME_NICKNAME_TRNAME_NICKNAME:
+        msg->param[0] = ov12_02248220(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[2] = ov12_02248220(battleSystem, ctx, msgData->unk8[2]);
+        msg->param[3] = ov12_022480C0(battleSystem, ctx, msgData->unk8[3]);
+        return;
+    case TAG_TRCLASS_TRNAME_NICKNAME_NICKNAME:
+        msg->param[0] = ov12_02248218(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_02248220(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->unk8[2]);
+        msg->param[3] = ov12_022480C0(battleSystem, ctx, msgData->unk8[3]);
+        return;
+    case TAG_TRCLASS_TRNAME_NICKNAME_TRNAME:
+        msg->param[0] = ov12_02248218(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_02248220(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->unk8[2]);
+        msg->param[3] = ov12_02248220(battleSystem, ctx, msgData->unk8[3]);
+        return;
+    case TAG_TRCLASS_TRNAME_TRCLASS_TRNAME:
+        msg->param[0] = ov12_02248218(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_02248220(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[2] = ov12_02248218(battleSystem, ctx, msgData->unk8[2]);
+        msg->param[3] = ov12_02248220(battleSystem, ctx, msgData->unk8[3]);
+        return;
+    case TAG_TRCLASS_TRNAME_NICKNAME_TRCLASS_TRNAME_NICKNAME:
+        msg->param[0] = ov12_02248218(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[1] = ov12_02248220(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->unk8[2]);
+        msg->param[3] = ov12_02248218(battleSystem, ctx, msgData->unk8[3]);
+        msg->param[4] = ov12_02248220(battleSystem, ctx, msgData->unk8[4]);
+        msg->param[5] = ov12_022480C0(battleSystem, ctx, msgData->unk8[5]);
+        // fallthrough.
+    }
+}
