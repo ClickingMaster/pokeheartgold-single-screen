@@ -7604,8 +7604,8 @@ void InitBattleMsgData(BattleContext *ctx, BattleMessageData *msgData) {
     }
 }
 
-s32 ov12_022480C0(BattleSystem *battleSystem, BattleContext *ctx, s32);
-s32 ov12_0224810C(BattleContext *ctx, s32);
+s32 ov12_022480C0(BattleSystem *battleSystem, BattleContext *ctx, int side);
+int ov12_0224810C(BattleContext *ctx, int);
 s32 ov12_02248184(BattleContext *ctx, s32);
 s32 ov12_02248190(BattleContext *ctx, s32);
 s32 ov12_0224819C(BattleSystem *battleSystem, BattleContext *ctx, s32);
@@ -7893,4 +7893,44 @@ void InitBattleMsg(BattleSystem *battleSystem, BattleContext *ctx, BattleMessage
         msg->param[5] = ov12_022480C0(battleSystem, ctx, msgData->unk8[5]);
         // fallthrough.
     }
+}
+
+s32 ov12_022480C0(BattleSystem *battleSystem, BattleContext *ctx, int side) {
+    int battlerID = GetBattlerIDBySide(battleSystem, ctx, side);
+    if (side == 0x16) {
+        return battlerID | (ctx->unk_21A0[battlerID] << 8);
+    } else {
+        return battlerID | (ctx->selectedMonIndex[battlerID] << 8);
+    }
+}
+
+int GetMoveMessageNo(BattleContext* ctx, int move) {
+    switch(move){
+        case 1: return ctx->moveNoCur;
+        case 255: return ctx->moveTemp;
+    }
+}
+
+void ov12_02248654(BattleContext* ctx, u8 battlerId, u16 item); // TODO: BattlerSetItem
+
+int ov12_0224810C(BattleContext* ctx, int arg1) {
+    int item;
+    switch (arg1) {
+    case 1:
+        item = ctx->battleMons[ctx->battlerIdAttacker].item;
+        ov12_02248654(ctx, ctx->battlerIdAttacker, item);
+        break;
+    case 2:
+        item = ctx->battleMons[ctx->battlerIdTarget].item;
+        ov12_02248654(ctx, ctx->battlerIdTarget, item);
+        break;
+    case 21:
+        item = ctx->battleMons[ctx->battlerIdTemp].item;
+        ov12_02248654(ctx, ctx->battlerIdTemp, item);
+        break;
+    case 255:
+        item = ctx->itemTemp;
+        break;
+    }
+    return item;
 }
