@@ -48,7 +48,7 @@ static void BattleScriptJump(BattleContext *ctx, NarcId narcId, int adrs);
 static void BattleScriptGotoSubscript(BattleContext *ctx, NarcId narcId, int adrs);
 static void *BattleScriptGetVarPointer(BattleSystem *battleSystem, BattleContext *ctx, int var);
 
-u8 GetBattlerIDBySide(BattleSystem *battleSystem, BattleContext *ctx, u32 a2);
+int GetBattlerIDBySide(BattleSystem *battleSystem, BattleContext *ctx, int side);
 
 extern BtlCmdFunc sBattleScriptCommandTable[];
 
@@ -911,7 +911,7 @@ BOOL BtlCmd_FlickerMon(BattleSystem *battleSystem, BattleContext *ctx) {
 BOOL BtlCmd_UpdateHealthbarValue(BattleSystem *battleSystem, BattleContext *ctx) {
     BattleScriptIncrementPointer(ctx, 1);
 
-    u8 battlerId = GetBattlerIDBySide(battleSystem, ctx, BattleScriptReadWord(ctx));
+    int battlerId = GetBattlerIDBySide(battleSystem, ctx, BattleScriptReadWord(ctx));
 
     if ((ctx->battleMons[battlerId].hp + ctx->hpCalc) <= 0) {
         ctx->hitDamage = ctx->battleMons[battlerId].hp * -1;
@@ -7314,4 +7314,206 @@ s32 GetMonWeight(u16 species) {
     s32 weight = weightList[species];
     Heap_Free(weightList);
     return weight;
+}
+
+// TODO: clarify OpponentData unk194 and unk195 for client_no and battlerPosition respectively.
+int GetBattlerIDBySide(BattleSystem *battleSystem, BattleContext *ctx, int side)
+{
+    int battlerID;
+    switch (side)
+    {
+        default:
+        case 1: // BTL_PARAM_BATTLER_ATTACKER?
+            battlerID = ctx->battlerIdAttacker;
+            break;
+        case 2: // BTL_PARAM_BATTLER_DEFENDER?
+            battlerID = ctx->battlerIdTarget;
+            break;
+        case 5: // BTL_PARAM_BATTLER_FAINTED?
+            battlerID = ctx->battlerIdFainted;
+            break;
+        case 6: // BTL_PARAM_BATTLER_REPLACE?
+        case 22: // BTL_PARAM_BATTLER_ALL_REPLACED?
+            battlerID = ctx->battlerIdSwitch;
+            break;
+        case 7: // BTL_PARAM_BATTLER_ADDL_EFFECT?
+            battlerID = ctx->battlerIdStatChange;
+            break;
+        case 8: // BTL_PARAM_BATTLER_CHAR_CHECKED?
+            battlerID = ctx->battlerIdAbility;
+            break;
+        case 4: // BTL_PARAM_BATTLER_OPPONENT?
+            {
+                int maxBattlers = BattleSystem_GetMaxBattlers(battleSystem);
+                for (battlerID = 0; battlerID < maxBattlers; battlerID++)
+                {
+                    OpponentData *opponentData = BattleSystem_GetOpponentData(battleSystem, battlerID);
+                    if (opponentData->unk195 & 1)
+                    {
+                        break;
+                    }
+                }
+            }
+            break;
+        case 10: // BTL_PARAM_BATTLER_ENEMY_LEFT?
+            {
+                int maxBattlers = BattleSystem_GetMaxBattlers(battleSystem);
+                for (battlerID = 0; battlerID < maxBattlers; battlerID++)
+                {
+                    OpponentData *opponentData = BattleSystem_GetOpponentData(battleSystem, battlerID);
+                    if (opponentData->unk195 == 3 || opponentData->unk195 == 1)
+                    {
+                        break;
+                    }
+                }
+            }
+            break;
+        case 12: // BTL_PARAM_BATTLER_ENEMY_RIGHT?
+            {
+                int type;
+                if (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_DOUBLES)
+                {
+                    type = 5;
+                }
+                else
+                {
+                    type = 1;
+                }
+
+                int maxBattlers = BattleSystem_GetMaxBattlers(battleSystem);
+                for (battlerID = 0; battlerID < maxBattlers; battlerID++)
+                {
+                    OpponentData *opponentData = BattleSystem_GetOpponentData(battleSystem, battlerID);
+                    if (opponentData->unk195 == type)
+                    {
+                        break;
+                    }
+                }
+            }
+            break;
+        case 3: // BTL_PARAM_BATTLER_PLAYER?
+            {
+                int maxBattlers = BattleSystem_GetMaxBattlers(battleSystem);
+                for (battlerID = 0; battlerID < maxBattlers; battlerID++)
+                {
+                    OpponentData *opponentData = BattleSystem_GetOpponentData(battleSystem, battlerID);
+                    if (!(opponentData->unk195 & 1))
+                    {
+                        break;
+                    }
+                }
+            }
+            break;
+        case 9: // BTL_PARAM_BATTLER_PLAYER_LEFT?
+            {
+                int maxBattlers = BattleSystem_GetMaxBattlers(battleSystem);
+                for (battlerID = 0; battlerID < maxBattlers; battlerID++)
+                {
+                    OpponentData *opponentData = BattleSystem_GetOpponentData(battleSystem, battlerID);
+                    if (opponentData->unk195 == 2 || opponentData->unk195 == 0)
+                    {
+                        break;
+                    }
+                }
+            }
+            break;
+        case 11: // BTL_PARAM_BATTLER_PLAYER_RIGHT?
+            {
+                int type;
+                if (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_DOUBLES)
+                {
+                    type = 4;
+                }
+                else
+                {
+                    type = 0;
+                }
+
+                int maxBattlers = BattleSystem_GetMaxBattlers(battleSystem);
+                for (battlerID = 0; battlerID < maxBattlers; battlerID++)
+                {
+                    OpponentData *opponentData = BattleSystem_GetOpponentData(battleSystem, battlerID);
+                    if (opponentData->unk195 == type)
+                    {
+                        break;
+                    }
+                }
+            }
+            break;
+        case 14: // BTL_PARAM_BATTLER_ATTACKER2
+            battlerID = ctx->battlerIdLeechSeedRecv; // DISCUSS: Is this actually the naming convention we want?
+            break;
+        case 15: // BTL_PARAM_BATTLER_DEFENDER2
+            battlerID = ctx->battlerIdLeechSeeded;
+            break;
+        case 16: // BTL_PARAM_BATTLER_ATTACKER_PARTNER
+            {
+                int maxBattlers = BattleSystem_GetMaxBattlers(battleSystem);
+                for (battlerID = 0; battlerID < maxBattlers; battlerID++)
+                {
+                    if (battlerID != ctx->battlerIdAttacker
+                    && (BattleSystem_GetFieldSide(battleSystem, battlerID) == BattleSystem_GetFieldSide(battleSystem, ctx->battlerIdAttacker)))
+                    {
+                        break;
+                    }
+                }
+                if (battlerID == maxBattlers)
+                {
+                    battlerID = 0;
+                }
+            }
+            break;
+        case 17: // BTL_PARAM_BATTLER_DEFENDER_PARTNER
+            {
+                int maxBattlers = BattleSystem_GetMaxBattlers(battleSystem);
+                for (battlerID = 0; battlerID < maxBattlers; battlerID++)
+                {
+                    if (battlerID != ctx->battlerIdTarget
+                    && BattleSystem_GetFieldSide(battleSystem, battlerID) == BattleSystem_GetFieldSide(battleSystem, ctx->battlerIdTarget))
+                    {
+                        break;
+                    }
+                }
+                if (battlerID == maxBattlers)
+                {
+                    battlerID = 0;
+                }
+            }
+            break;
+        case 19: // BTL_PARAM_BATTLER_x13
+            {
+                int maxBattlers = BattleSystem_GetMaxBattlers(battleSystem);
+                int attackerFieldSide = BattleSystem_GetFieldSide(battleSystem, ctx->battlerIdAttacker);
+                for (battlerID = 0; battlerID < maxBattlers; battlerID++)
+                {
+                    if (attackerFieldSide != BattleSystem_GetFieldSide(battleSystem, battlerID))
+                    {
+                        break;
+                    }
+                }
+            }
+            break;
+        case 20: // BTL_PARAM_BATTLER_x14
+            {
+                int maxBattlers = BattleSystem_GetMaxBattlers(battleSystem);
+                int targetFieldSide = BattleSystem_GetFieldSide(battleSystem, ctx->battlerIdTarget);
+                for (battlerID = 0; battlerID < maxBattlers; battlerID++)
+                {
+                    if (targetFieldSide != BattleSystem_GetFieldSide(battleSystem, battlerID))
+                    {
+                        break;
+                    }
+                }
+            }
+            break;
+        case 0xFF: // BTL_PARAM_BATTLER_WORK
+        case 21: // BTL_PARAM_BATTLER_x15
+            battlerID = ctx->battlerIdTemp;
+            break;
+    }
+
+    if (battlerID == 0xFF)
+        GF_AssertFail();
+
+    return battlerID;
 }
