@@ -20,7 +20,7 @@ FrontierFieldSystem *FrontierFieldSystem_New(SaveData *saveData, BOOL resumeFrom
 void FrontierFieldSystem_Free(FrontierFieldSystem *frontierFsys);
 void FrontierFieldSystem_0204AA58(FrontierFieldSystem *frontierFsys, TaskManager *taskManager, void *a2);
 BOOL FrontierFieldSystem_0204AA78(FrontierFieldSystem *frontierFsys, void **a1, SaveData *saveData);
-u32 FrontierFieldSystem_SelectedPartyHasDuplicateSpeciesOrItem(FrontierFieldSystem *frontierFsys, SaveData *saveData);
+u32 FrontierFieldSystem_PartyHasDuplicateSpeciesOrItems(FrontierFieldSystem *frontierFsys, SaveData *saveData);
 void FrontierFieldSystem_SetRandomFrontierTrainers(FrontierFieldSystem *frontierFsys, SaveData *saveData);
 u8 FrontierFieldSystem_GetFrontierBattleNumber(FrontierFieldSystem *frontierFsys);
 BOOL FrontierFieldSystem_0204AC7C(FrontierFieldSystem *frontierFsys);

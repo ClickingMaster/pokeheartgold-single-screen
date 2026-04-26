@@ -127,7 +127,6 @@ static const u16 FrontierTrainerBracketBosses[][2] = {
     { 200, 299 }, // Bracket 7: All trainers are no longer special. This appears to be unused.
 };
 
-
 MessageFormat *sub_0204B538(SaveData *saveData, u16 numEligiblePokemon, u16 a2, u8 a3, u8 *numLegendaryPokemonSeen) {
     String *speciesName, *unused;
     Pokedex *pokedex;
@@ -165,7 +164,7 @@ u32 GetFrontierTrainerOverworld(u8 trainerClass) {
 
 u16 sub_0204B610(FieldSystem *fieldSystem, u16 *linkAllyData) { // SetLinkAllyData?
     u16 match = 0;
-    FrontierFieldSystem *frontierFsys = fieldSystem->frontier;
+    FrontierFieldSystem *frontierFsys = fieldSystem->frontierFsys;
     frontierFsys->linkAllyGender = linkAllyData[0];
     frontierFsys->linkAllyMonSpecies[0] = linkAllyData[1];
     frontierFsys->linkAllyMonSpecies[1] = linkAllyData[2];
@@ -181,7 +180,7 @@ u16 sub_0204B610(FieldSystem *fieldSystem, u16 *linkAllyData) { // SetLinkAllyDa
 }
 
 BOOL sub_0204B66C(FieldSystem *fieldSystem, u16 *a1) {
-    FrontierFieldSystem *frontierFsys = fieldSystem->frontier;
+    FrontierFieldSystem *frontierFsys = fieldSystem->frontierFsys;
     if (sub_0203769C() == 0) {
         return FALSE;
     }
@@ -190,7 +189,7 @@ BOOL sub_0204B66C(FieldSystem *fieldSystem, u16 *a1) {
 }
 
 BOOL sub_0204B690(FieldSystem *fieldSystem, u16 *a1) {
-    return fieldSystem->frontier->unk10_3 || a1[0] != 0;
+    return fieldSystem->frontierFsys->unk10_3 || a1[0] != 0;
 }
 
 void FrontierFieldSystem_0204B6AC(FrontierFieldSystem *frontierFsys, SaveData *saveData) {

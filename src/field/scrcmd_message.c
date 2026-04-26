@@ -99,7 +99,7 @@ BOOL ScrCmd_442(ScriptContext *ctx) {
 
 BOOL ScrCmd_443(ScriptContext *ctx) {
     u8 index = ScriptReadByte(ctx);
-    FrontierFieldSystem *frontierFsys = ctx->fieldSystem->frontier;
+    FrontierFieldSystem *frontierFsys = ctx->fieldSystem->frontierFsys;
     if (frontierFsys == NULL) {
         return FALSE;
     }

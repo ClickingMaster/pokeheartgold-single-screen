@@ -54,7 +54,7 @@ static u32 NumMonsForTowerMode(u32 towerMode) {
     }
 }
 
-static BOOL PlayerHasDuplicateItem(SpeciesAndItem *validMons, u32 species, u32 item, s32 partySize) {
+static BOOL SpeciesAndItem_Contains(SpeciesAndItem *validMons, u32 species, u32 item, s32 partySize) {
     for (s32 i = 0; i < partySize; i++) {
         if (species == validMons[i].species
             && item != ITEM_NONE
@@ -65,7 +65,7 @@ static BOOL PlayerHasDuplicateItem(SpeciesAndItem *validMons, u32 species, u32 i
     return FALSE;
 }
 
-static BOOL PlayerSpeciesAndItemsAreUnique(SpeciesAndItem *mons, s32 size) {
+static BOOL SpeciesAndItem_ValidateUnique(SpeciesAndItem *mons, s32 size) {
     for (s32 i = 0; i < size - 1; i++) {
         for (s32 j = i + 1; j < size; j++) {
             if (mons[i].species == mons[j].species) {
@@ -79,7 +79,7 @@ static BOOL PlayerSpeciesAndItemsAreUnique(SpeciesAndItem *mons, s32 size) {
     return TRUE;
 }
 
-static BOOL PlayerHasEnoughValidUniqueSpeciesAndItems(SpeciesAndItem *validMons, u32 numRequired, s32 numValid, s32 n) {
+static BOOL SpeciesAndItem_ValidateAllUnique(SpeciesAndItem *validMons, u32 numRequired, s32 numValid, s32 n) {
     SpeciesAndItem mons[4];
     MI_CpuClear8(mons, sizeof(SpeciesAndItem) * NELEMS(mons));
     for (s32 i = 0; i < n; i++) {
@@ -87,7 +87,7 @@ static BOOL PlayerHasEnoughValidUniqueSpeciesAndItems(SpeciesAndItem *validMons,
         for (s32 j = i + 1; j < numValid; j++) {
             mons[1] = validMons[j];
             if (numRequired == 2) {
-                if (PlayerSpeciesAndItemsAreUnique(mons, numRequired)) {
+                if (SpeciesAndItem_ValidateUnique(mons, numRequired)) {
                     return TRUE;
                 }
                 continue;
@@ -95,14 +95,14 @@ static BOOL PlayerHasEnoughValidUniqueSpeciesAndItems(SpeciesAndItem *validMons,
             for (s32 k = j + 1; k < numValid; k++) {
                 mons[2] = validMons[k];
                 if (numRequired == 3) {
-                    if (PlayerSpeciesAndItemsAreUnique(mons, numRequired)) {
+                    if (SpeciesAndItem_ValidateUnique(mons, numRequired)) {
                         return TRUE;
                     }
                     continue;
                 }
                 for (s32 l = k + 1; l < numValid; l++) {
                     mons[3] = validMons[l];
-                    if (PlayerSpeciesAndItemsAreUnique(mons, numRequired)) {
+                    if (SpeciesAndItem_ValidateUnique(mons, numRequired)) {
                         return TRUE;
                     }
                 }
@@ -137,7 +137,7 @@ BOOL PartyIsValidForFrontier(u16 numRequired, SaveData *saveData, BOOL checkDupl
         if (IsPokemonBannedFromBattleFrontier(species, form) == TRUE) {
             continue;
         }
-        if (checkDuplicateItems == TRUE && PlayerHasDuplicateItem(validMons, species, item, numValid) == TRUE) {
+        if (checkDuplicateItems == TRUE && SpeciesAndItem_Contains(validMons, species, item, numValid) == TRUE) {
             continue;
         }
         validMons[numValid].species = species;
@@ -147,7 +147,7 @@ BOOL PartyIsValidForFrontier(u16 numRequired, SaveData *saveData, BOOL checkDupl
     if (numValid < numRequired) {
         return FALSE;
     }
-    return PlayerHasEnoughValidUniqueSpeciesAndItems(validMons, numRequired, numValid, numValid - numRequired + 1);
+    return SpeciesAndItem_ValidateAllUnique(validMons, numRequired, numValid, numValid - numRequired + 1);
 }
 
 void ResetSystem(void) {
@@ -332,7 +332,7 @@ BOOL FrontierFieldSystem_0204AA78(FrontierFieldSystem *frontierFsys, void **a1, 
     return TRUE;
 }
 
-u32 FrontierFieldSystem_SelectedPartyHasDuplicateSpeciesOrItem(FrontierFieldSystem *frontierFsys, SaveData *saveData) {
+u32 FrontierFieldSystem_PartyHasDuplicateSpeciesOrItems(FrontierFieldSystem *frontierFsys, SaveData *saveData) {
     u16 species[4];
     u16 items[4];
     Party *party = SaveArray_Party_Get(saveData);
