@@ -13,6 +13,7 @@
 #include "item.h"
 #include "move.h"
 #include "msgdata.h"
+#include "obj_char_transfer.h"
 #include "options.h"
 #include "palette.h"
 #include "player_data.h"
@@ -634,9 +635,9 @@ struct GetterWork {
     BattleSystem *battleSystem;
     BattleContext *ctx;
     u32 unk8;
-    u32 unkC[2];
-    u32 unk14;
-    u32 unk18[3];
+    ManagedSprite *unkC[2];
+    void *unk14; // TODO: TextObjTemplate?
+    UnkStruct_02021AC8 unk18;
     int unk24;
     int state;
     int unk2C;

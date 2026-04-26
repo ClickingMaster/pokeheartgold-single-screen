@@ -388,7 +388,7 @@
 .public InitBattleMsgData
 .public InitBattleMsg
 .public GetMoveMessageNo
-.public UpdateFrienshipFainted
+.public UpdateFriendshipFainted
 .public BattlerSetAbility
 .public BattleSystem_ReloadMonData
 .public Link_QueueNotEmpty

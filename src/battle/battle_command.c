@@ -30,10 +30,12 @@
 #include "party.h"
 #include "pokedex_util.h"
 #include "pokemon.h"
+#include "pokemon_icon_idx.h"
 #include "pokemon_mood.h"
 #include "render_window.h"
 #include "sound.h"
 #include "sound_chatot.h"
+#include "sprite_system.h"
 #include "sys_task_api.h"
 #include "system.h"
 #include "text.h"
@@ -41,6 +43,7 @@
 #include "unk_02005D10.h"
 #include "unk_0200FA24.h"
 #include "unk_0208805C.h"
+#include "unk_02013534.h"
 
 int BattleScriptReadWord(BattleContext *ctx);
 static void BattleScriptIncrementPointer(BattleContext *ctx, int adrs);
@@ -953,7 +956,7 @@ BOOL BtlCmd_TryFaintMon(BattleSystem *battleSystem, BattleContext *ctx) {
         ctx->battlerIdFainted = battlerId;
         ctx->battleStatus |= MaskOfFlagNo(battlerId) << BATTLE_STATUS_FAINTED_SHIFT;
         ctx->totalTimesFainted[battlerId]++;
-        UpdateFrienshipFainted(battleSystem, ctx, battlerId);
+        UpdateFriendshipFainted(battleSystem, ctx, battlerId);
     }
 
     return FALSE;
@@ -7606,16 +7609,16 @@ void InitBattleMsgData(BattleContext *ctx, BattleMessageData *msgData) {
 
 s32 ov12_022480C0(BattleSystem *battleSystem, BattleContext *ctx, int side);
 int ov12_0224810C(BattleContext *ctx, int);
-s32 ov12_02248184(BattleContext *ctx, s32);
-s32 ov12_02248190(BattleContext *ctx, s32);
-s32 ov12_0224819C(BattleSystem *battleSystem, BattleContext *ctx, s32);
-s32 ov12_022481D0(BattleContext *ctx, s32);
-s32 ov12_022481DC(BattleContext *ctx, s32);
-s32 ov12_022481E8(BattleSystem *battleSystem, BattleContext *ctx, s32);
-s32 ov12_02248200(BattleContext *ctx, s32);
-s32 ov12_0224820C(BattleContext *ctx, s32);
-s32 ov12_02248218(BattleSystem *battleSystem, BattleContext *ctx, s32);
-s32 ov12_02248220(BattleSystem *battleSystem, BattleContext *ctx, s32);
+int ov12_02248184(BattleContext *ctx, s32);
+int ov12_02248190(BattleContext *ctx, s32);
+int ov12_0224819C(BattleSystem *battleSystem, BattleContext *ctx, u32 side);
+int ov12_022481D0(BattleContext *ctx, s32);
+int ov12_022481DC(BattleContext *ctx, s32);
+int ov12_022481E8(BattleSystem *battleSystem, BattleContext *ctx, u32 side);
+int ov12_02248200(BattleContext *ctx, s32);
+int ov12_0224820C(BattleContext *ctx, s32);
+int ov12_02248218(BattleSystem *battleSystem, BattleContext *ctx, u32 side);
+int ov12_02248220(BattleSystem *battleSystem, BattleContext *ctx, u32 side);
 
 void InitBattleMsg(BattleSystem *battleSystem, BattleContext *ctx, BattleMessageData *msgData, BattleMessage *msg) {
     msg->id = msgData->unk0;
@@ -7911,26 +7914,213 @@ int GetMoveMessageNo(BattleContext* ctx, int move) {
     }
 }
 
-void ov12_02248654(BattleContext* ctx, u8 battlerId, u16 item); // TODO: BattlerSetItem
+void BattlerSetItem(BattleContext* ctx, u8 battlerId, u16 item);
 
 int ov12_0224810C(BattleContext* ctx, int arg1) {
     int item;
     switch (arg1) {
     case 1:
         item = ctx->battleMons[ctx->battlerIdAttacker].item;
-        ov12_02248654(ctx, ctx->battlerIdAttacker, item);
+        BattlerSetItem(ctx, ctx->battlerIdAttacker, item);
         break;
     case 2:
         item = ctx->battleMons[ctx->battlerIdTarget].item;
-        ov12_02248654(ctx, ctx->battlerIdTarget, item);
+        BattlerSetItem(ctx, ctx->battlerIdTarget, item);
         break;
     case 21:
         item = ctx->battleMons[ctx->battlerIdTemp].item;
-        ov12_02248654(ctx, ctx->battlerIdTemp, item);
+        BattlerSetItem(ctx, ctx->battlerIdTemp, item);
         break;
     case 255:
         item = ctx->itemTemp;
         break;
     }
     return item;
+}
+
+int ov12_02248184(BattleContext* ctx, s32 arg1) {
+    if (arg1 == 0xFF) return ctx->msgTemp;
+}
+
+int ov12_02248190(BattleContext* ctx, s32 arg1) {
+    if (arg1 == 0xFF) return ctx->msgTemp;
+}
+
+int ov12_0224819C(BattleSystem* battleSystem, BattleContext* ctx, u32 side) {
+    u32 ability;
+    int battlerID;
+    if (side == 0xFF) {
+        ability = ctx->abilityTemp;
+    } else {
+        battlerID = GetBattlerIDBySide(battleSystem, ctx, side);
+        ability = ctx->battleMons[battlerID].ability;
+        BattlerSetAbility(ctx, battlerID, ability);
+    }
+    return ability;
+}
+
+int ov12_022481D0(BattleContext* ctx, s32 arg1) {
+    if (arg1 == 0xFF) return ctx->msgTemp;
+}
+
+int ov12_022481DC(BattleContext* ctx, s32 arg1) {
+    if (arg1 == 0xFF) return ctx->msgTemp;
+}
+
+int ov12_022481E8(BattleSystem* battleSystem, BattleContext* ctx, u32 side) {
+    u32 battlerID = GetBattlerIDBySide(battleSystem, ctx, side);
+    return battlerID | ctx->selectedMonIndex[battlerID] << 8;
+}
+
+int ov12_02248200(BattleContext* ctx, s32 arg1) {
+    if (arg1 == 0xFF) return ctx->msgTemp;
+}
+
+int ov12_0224820C(BattleContext* ctx, s32 arg1) {
+    if (arg1 == 0xFF) return ctx->msgTemp;
+}
+
+int ov12_02248218(BattleSystem* battleSystem, BattleContext* ctx, u32 side) {
+    return GetBattlerIDBySide(battleSystem, ctx, side);
+}
+
+int ov12_02248220(BattleSystem* battleSystem, BattleContext* ctx, u32 side) {
+    return GetBattlerIDBySide(battleSystem, ctx, side);
+}
+
+extern ManagedSpriteTemplate ov12_0226C428;
+extern ManagedSpriteTemplate ov12_0226C45C;
+
+void ov12_02248228(BattleSystem* battleSystem, GetterWork* data, Pokemon* mon) {
+    Window window;
+    UnkStruct_02021AC8 unkStruct;
+    TextOBJTemplate textObjTemplate;
+    MsgData* msgData;
+    MessageFormat* messageFormat;
+    String* messageBuffer;
+    BgConfig* bgConfig;
+    PaletteData* palData;
+    SpriteManager* spriteManager;
+    SpriteSystem* spriteSystem;
+    String* string;
+
+    msgData = BattleSystem_GetMessageLoader(battleSystem);
+    messageBuffer = BattleSystem_GetMessageBuffer(battleSystem);
+    messageFormat = BattleSystem_GetMessageFormat(battleSystem);
+    bgConfig = BattleSystem_GetBgConfig(battleSystem);
+    spriteSystem = BattleSystem_GetSpriteSystem(battleSystem);
+    spriteManager = BattleSystem_GetSpriteManager(battleSystem);
+    palData = BattleSystem_GetPaletteData(battleSystem);
+    SpriteSystem_LoadCharResObj(spriteSystem, spriteManager, NARC_a_0_0_8, 256, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 20021);
+    SpriteSystem_LoadPaletteBuffer(palData, PLTTBUF_MAIN_OBJ, spriteSystem, spriteManager, NARC_a_0_0_8, 82, 0, 2, NNS_G2D_VRAM_TYPE_2DMAIN, 20016);
+    SpriteSystem_LoadCellResObj(spriteSystem, spriteManager, NARC_a_0_0_8, 257, 1, 20013);
+    SpriteSystem_LoadAnimResObj(spriteSystem, spriteManager, NARC_a_0_0_8, 258, 1, 20013);
+    data->unkC[0] = SpriteSystem_NewSprite(spriteSystem, spriteManager, &ov12_0226C428);
+    ManagedSprite_TickFrame(data->unkC[0]);
+    SpriteSystem_LoadCharResObjAtEndWithHardwareMappingType(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, Pokemon_GetIconNaix(mon), 0, NNS_G2D_VRAM_TYPE_2DMAIN, 20022);
+    SpriteSystem_LoadPaletteBuffer(palData, PLTTBUF_MAIN_OBJ, spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, sub_02074490(), 0, 3, NNS_G2D_VRAM_TYPE_2DMAIN, 20017);
+    SpriteSystem_LoadCellResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, sub_0207449C(), 0, 20014);
+    SpriteSystem_LoadAnimResObj(spriteSystem, spriteManager, NARC_poketool_icongra_poke_icon, sub_020744A8(), 0, 20014);
+    data->unkC[1] = SpriteSystem_NewSprite(spriteSystem, spriteManager, &ov12_0226C45C);
+    Sprite_SetPalOffsetRespectVramOffset(data->unkC[1]->sprite, Pokemon_GetIconPalette(mon));
+    ManagedSprite_TickFrame(data->unkC[1]);
+    data->unk50[0] = FontSystem_NewInit(1, HEAP_ID_BATTLE);
+
+    u32 gender;
+    if (GetMonData(mon, MON_DATA_NO_PRINT_GENDER, NULL) == 0) {
+        gender = MON_GENDERLESS;
+    } 
+    else {
+        gender = GetMonData(mon, MON_DATA_GENDER, NULL);
+    }
+    if (gender == MON_MALE) {
+        string = NewString_ReadMsgData(msgData, 944);
+    } 
+    else if (gender == MON_FEMALE) {
+        string = NewString_ReadMsgData(msgData, 945);
+    } 
+    else {
+        string = NewString_ReadMsgData(msgData, 946);
+    }
+    BufferBoxMonNickname(messageFormat, 0, Mon_GetBoxMon(mon));
+    BufferIntegerAsString(messageFormat, 1, GetMonData(mon, MON_DATA_LEVEL, NULL), 3, PRINTING_MODE_LEFT_ALIGN, 1);
+    StringExpandPlaceholders(messageFormat, messageBuffer, string);
+    String_Delete(string);
+    InitWindow(&window);
+    AddTextWindowTopLeftCorner(bgConfig, &window, 12, 4, 0, 0);
+    AddTextPrinterParameterizedWithColor(&window, 0, messageBuffer, 0, 0, 255, 0x10200, NULL);
+    sub_02021AC8(sub_02013688(&window, NNS_G2D_VRAM_TYPE_2DMAIN, 5), 1, NNS_G2D_VRAM_TYPE_2DMAIN, &unkStruct);
+    textObjTemplate.fontSystem = data->unk50[0];
+    textObjTemplate.window = &window;
+    textObjTemplate.spriteList = SpriteManager_GetSpriteList(spriteManager);
+    textObjTemplate.plttResourceProxy = SpriteManager_FindPlttResourceProxy(spriteManager, 20016);
+    textObjTemplate.offset = unkStruct.offset;
+    textObjTemplate.sprite = NULL;
+    textObjTemplate.x = 176;
+    textObjTemplate.y = 8;
+    textObjTemplate.unk_24 = 100;
+    textObjTemplate.vram = 1;
+    textObjTemplate.heapID = HEAP_ID_BATTLE;
+    textObjTemplate.unk_20 = 0;
+    data->unk14 = sub_020135D8(&textObjTemplate);
+    data->unk18 = unkStruct;
+    sub_020138E0(data->unk14, 1);
+    RemoveWindow(&window);
+}
+
+void ov12_022484D4(BattleSystem* battleSystem, GetterWork* data) {
+    SpriteManager* spriteManager = BattleSystem_GetSpriteManager(battleSystem);
+    Sprite_DeleteAndFreeResources((ManagedSprite* ) data->unkC[0]);
+    Sprite_DeleteAndFreeResources((ManagedSprite* ) data->unkC[1]);
+    FontOAM_Delete(data->unk14);
+    sub_02021B5C(&data->unk18);
+    SpriteManager_UnloadCharObjById(spriteManager, 0x4E35);
+    SpriteManager_UnloadPlttObjById(spriteManager, 0x4E30);
+    SpriteManager_UnloadCellObjById(spriteManager, 0x4E2D);
+    SpriteManager_UnloadAnimObjById(spriteManager, 0x4E2D);
+    SpriteManager_UnloadCharObjById(spriteManager, 0x4E36);
+    SpriteManager_UnloadPlttObjById(spriteManager, 0x4E31);
+    SpriteManager_UnloadCellObjById(spriteManager, 0x4E2E);
+    SpriteManager_UnloadAnimObjById(spriteManager, 0x4E2E);
+    sub_020135AC(data->unk50[0]);
+}
+
+void UpdateFriendshipFainted(BattleSystem* battleSystem, BattleContext* ctx, int battlerID) {
+    if (BattleSystem_GetFieldSide(battleSystem, battlerID) == 0) {
+        u8 var_r6;
+        if (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_DOUBLES) {
+            var_r6 = BattleSystem_GetBattlerFromBattlerType(battleSystem, 3);
+            u8 temp_r1 = BattleSystem_GetBattlerFromBattlerType(battleSystem, 5);
+            if (ctx->battleMons[temp_r1].level > ctx->battleMons[var_r6].level) {
+                var_r6 = temp_r1;
+            }
+        }
+        else {
+            var_r6 = BattleSystem_GetBattlerFromBattlerType(battleSystem, 1);
+        }
+        Pokemon *mon = BattleSystem_GetPartyMon(battleSystem, battlerID, ctx->selectedMonIndex[battlerID]);
+        u8 temp_r0 = ctx->battleMons[battlerID].level;
+        u8 temp_r1_2 = ctx->battleMons[var_r6].level;
+        if (temp_r1_2 > temp_r0) {
+            if ((temp_r1_2 - temp_r0) >= 0x1E) {
+                MonApplyFriendshipMod(mon, 8, BattleSystem_GetLocation(battleSystem));
+                ApplyMonMoodModifier(mon, 6);
+                return;
+            }
+            MonApplyFriendshipMod(mon, 6, BattleSystem_GetLocation(battleSystem));
+            ApplyMonMoodModifier(mon, 4);
+            return;
+        }
+        MonApplyFriendshipMod(mon, 6, BattleSystem_GetLocation(battleSystem));
+        ApplyMonMoodModifier(mon, 4);
+    }
+}
+
+void BattlerSetAbility(BattleContext* ctx, u8 battlerID, u8 ability) {
+    ctx->trainerAIData.unk5C[battlerID] = ability;
+    return;
+}
+
+void BattlerSetItem(BattleContext* ctx, u8 battlerID, u16 item) {
+    ctx->trainerAIData.unk60[battlerID] = item;
 }
