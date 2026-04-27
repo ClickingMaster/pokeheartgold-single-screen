@@ -122,7 +122,7 @@
 .public BattleSystem_GetParty
 .public BattleSystem_GetPartySize
 .public BattleSystem_GetPartyMon
-.public ov12_0223A8D4
+.public BattleSystem_GetPokepicManager
 .public BattleSystem_GetSpriteSystem
 .public BattleSystem_GetSpriteManager
 .public ov12_0223A8F4

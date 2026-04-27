@@ -99,7 +99,7 @@ Pokemon *BattleSystem_GetPartyMon(BattleSystem *battleSystem, int battlerId, int
     }
 }
 
-PokepicManager *ov12_0223A8D4(BattleSystem *battleSystem) {
+PokepicManager *BattleSystem_GetPokepicManager(BattleSystem *battleSystem) {
     return battleSystem->pokepicManager;
 }
 

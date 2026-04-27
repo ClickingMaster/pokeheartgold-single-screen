@@ -6582,7 +6582,7 @@ void Task_GetPokemon(SysTask *task, void *inData) {
     PokepicManager *pokepicManager;
     MsgData *msgData = BattleSystem_GetMessageLoader(data->battleSystem);
     PaletteData *paletteData = BattleSystem_GetPaletteData(data->battleSystem);
-    pokepicManager = ov12_0223A8D4(data->battleSystem); // TODO: BattleSystem_GetPokepicManager
+    pokepicManager = BattleSystem_GetPokepicManager(data->battleSystem);
     
     s32 battlerId = BATTLER_ENEMY;
     if (MaskOfFlagNo(1) & data->ctx->switchInFlag) {
