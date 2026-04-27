@@ -131,7 +131,7 @@
 .public BattleSystem_GetPokedex
 .public BattleSystem_GetMessageFormat
 .public BattleSystem_GetMessageBuffer
-.public ov12_0223AAB8
+.public BattleSystem_IsFishing
 .public BattleSystem_GetBattlerFromBattlerType
 .public BattleSystem_GetFieldSide
 .public BattleSystem_GetMessageIcon
@@ -142,7 +142,7 @@
 .public BattleSystem_GetOptions
 .public BattleSystem_GetTextFrameDelay
 .public ov12_0223B870
-.public ov12_0223BB1C
+.public BattleSystem_MetBill
 .public BattleSystem_GameStatIncrement
 .public ov12_0223BB44
 .public ov12_0223BBF0
@@ -384,7 +384,7 @@
 .public BattleScriptReadWord
 .public Task_GetExp
 .public Task_GetPokemon
-.public GetBattlerIDBySide
+.public BattleSystem_GetBattlerIDBySide
 .public InitBattleMsgData
 .public InitBattleMsg
 .public GetMoveMessageNo

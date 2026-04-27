@@ -6570,16 +6570,16 @@ static u8 Battler_GetType(BattleContext *ctx, int battlerId, int var) {
 
 static void ov12_02258584(BattleContext *ctx, u8 battlerId) {
     for (int i = 0; i < MAX_MON_MOVES; i++) {
-        ctx->trainerAIData.unk1C[battlerId][i] = 0;
+        ctx->trainerAIData.moves[battlerId][i] = MOVE_NONE;
     }
 }
 
 static void ov12_0225859C(BattleContext *ctx, u8 battlerId) {
-    ctx->trainerAIData.unk5C[battlerId] = 0;
+    ctx->trainerAIData.abilities[battlerId] = ABILITY_NONE;
 }
 
 static void ov12_022585A8(BattleContext *ctx, u8 battlerId) {
-    ctx->trainerAIData.unk60[battlerId] = 0;
+    ctx->trainerAIData.heldItems[battlerId] = ITEM_NONE;
 }
 
 static int ov12_022585B8(BattleSystem *battleSystem, BattleContext *ctx, int battlerIdTarget1, int battlerIdTarget2) {

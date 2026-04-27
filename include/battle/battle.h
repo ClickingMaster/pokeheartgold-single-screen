@@ -26,6 +26,7 @@
 #include "sys_task_api.h"
 #include "trainer_data.h"
 #include "unk_0200CE7C.h"
+#include "unk_02013534.h"
 
 typedef struct BattleMessage {
     u8 unk0;
@@ -37,9 +38,9 @@ typedef struct BattleMessage {
 } BattleMessage;
 
 typedef struct BattleMessageData {
-    u32 unk0;
-    int unk4;
-    int unk8[6];
+    u32 id;
+    int tag;
+    int params[6];
 } BattleMessageData;
 
 typedef struct GetterWork GetterWork;
@@ -124,9 +125,9 @@ typedef struct TrainerAIData {
     u8 unk13;
     u8 *unk14;
     u8 unk18[4];
-    u16 unk1C[4][4];
-    u8 unk5C[4];
-    u16 unk60[4];
+    u16 moves[4][4]; // Battler, move slot.
+    u8 abilities[4];
+    u16 heldItems[4];
     u16 unk68[2][4];
     u32 unk78[8];
     u8 unk98;
@@ -605,7 +606,7 @@ struct BattleSystem {
     int unk2424;
     int unk2428;
     int weather;
-    int unk2430;
+    BOOL metBill;
     u32 unk2434;
     int unk2438;
     int unk243C;
@@ -622,7 +623,7 @@ struct BattleSystem {
     u32 isRecordingPaused : 1;
     u32 unk2474_1 : 1;
     u32 unk2474_2 : 1;
-    u32 unk2474_3 : 1;
+    u32 isFishing : 1;
     u32 unk2474_4 : 28;
     u32 unk2478;
     SysTask *unk247C;
@@ -636,7 +637,7 @@ struct GetterWork {
     BattleContext *ctx;
     u32 unk8;
     ManagedSprite *unkC[2];
-    void *unk14; // TODO: TextObjTemplate?
+    TextOBJ *unk14;
     UnkStruct_02021AC8 unk18;
     int unk24;
     int state;

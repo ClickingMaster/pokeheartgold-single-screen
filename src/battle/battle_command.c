@@ -51,7 +51,7 @@ static void BattleScriptJump(BattleContext *ctx, NarcId narcId, int adrs);
 static void BattleScriptGotoSubscript(BattleContext *ctx, NarcId narcId, int adrs);
 static void *BattleScriptGetVarPointer(BattleSystem *battleSystem, BattleContext *ctx, int var);
 
-int GetBattlerIDBySide(BattleSystem *battleSystem, BattleContext *ctx, int side);
+int BattleSystem_GetBattlerIDBySide(BattleSystem *battleSystem, BattleContext *ctx, int side);
 
 extern BtlCmdFunc sBattleScriptCommandTable[];
 
@@ -290,7 +290,7 @@ BOOL BtlCmd_RecallPokemon(BattleSystem *battleSystem, BattleContext *ctx) {
         }
         break;
     default:
-        BattleController_EmitRecallPokemon(battleSystem, ctx, GetBattlerIDBySide(battleSystem, ctx, side));
+        BattleController_EmitRecallPokemon(battleSystem, ctx, BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side));
         break;
     }
 
@@ -300,7 +300,7 @@ BOOL BtlCmd_RecallPokemon(BattleSystem *battleSystem, BattleContext *ctx) {
 BOOL BtlCmd_DeletePokemon(BattleSystem *battleSystem, BattleContext *ctx) {
     BattleScriptIncrementPointer(ctx, 1);
 
-    u32 battlerId = GetBattlerIDBySide(battleSystem, ctx, BattleScriptReadWord(ctx));
+    u32 battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, BattleScriptReadWord(ctx));
     BattleController_EmitDeletePokemon(battleSystem, battlerId);
 
     return FALSE;
@@ -616,7 +616,7 @@ BOOL BtlCmd_HealthbarSlideIn(BattleSystem *battleSystem, BattleContext *ctx) {
         }
         break;
     default:
-        BattleController_EmitHealthbarSlideIn(battleSystem, ctx, GetBattlerIDBySide(battleSystem, ctx, side), 0);
+        BattleController_EmitHealthbarSlideIn(battleSystem, ctx, BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side), 0);
         break;
     }
 
@@ -659,7 +659,7 @@ BOOL BtlCmd_HealthbarSlideInDelay(BattleSystem *battleSystem, BattleContext *ctx
         }
         break;
     default:
-        BattleController_EmitHealthbarSlideIn(battleSystem, ctx, GetBattlerIDBySide(battleSystem, ctx, side), 0);
+        BattleController_EmitHealthbarSlideIn(battleSystem, ctx, BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side), 0);
         break;
     }
 
@@ -697,7 +697,7 @@ BOOL BtlCmd_HealthbarSlideOut(BattleSystem *battleSystem, BattleContext *ctx) {
         }
         break;
     default:
-        BattleController_EmitHealthbarSlideOut(battleSystem, GetBattlerIDBySide(battleSystem, ctx, side));
+        BattleController_EmitHealthbarSlideOut(battleSystem, BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side));
         break;
     }
 
@@ -841,7 +841,7 @@ BOOL BtlCmd_BufferLocalMessage(BattleSystem *battleSystem, BattleContext *ctx) {
     InitBattleMsg(battleSystem, ctx, &msgdata, &msg);
 
     msg.tag |= 64;
-    msg.battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    msg.battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
     BattleController_EmitPrintMessage(battleSystem, ctx, &msg);
 
@@ -886,8 +886,8 @@ BOOL BtlCmd_PlayMoveAnimationOnMons(BattleSystem *battleSystem, BattleContext *c
         move = ctx->moveNoCur;
     }
 
-    u32 attacker = GetBattlerIDBySide(battleSystem, ctx, attackerSide);
-    u32 defender = GetBattlerIDBySide(battleSystem, ctx, defenderSide);
+    u32 attacker = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, attackerSide);
+    u32 defender = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, defenderSide);
 
     if ((!(ctx->battleStatus & BATTLE_STATUS_MOVE_ANIMATIONS_OFF) && BattleSystem_AreBattleAnimationsOn(battleSystem) == TRUE) || move == MOVE_TRANSFORM) {
         ctx->battleStatus |= BATTLE_STATUS_MOVE_ANIMATIONS_OFF;
@@ -906,7 +906,7 @@ BOOL BtlCmd_FlickerMon(BattleSystem *battleSystem, BattleContext *ctx) {
 
     u32 side = BattleScriptReadWord(ctx);
 
-    BattleController_EmitMonFlicker(battleSystem, GetBattlerIDBySide(battleSystem, ctx, side), ctx->moveStatusFlag);
+    BattleController_EmitMonFlicker(battleSystem, BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side), ctx->moveStatusFlag);
 
     return FALSE;
 }
@@ -914,7 +914,7 @@ BOOL BtlCmd_FlickerMon(BattleSystem *battleSystem, BattleContext *ctx) {
 BOOL BtlCmd_UpdateHealthbarValue(BattleSystem *battleSystem, BattleContext *ctx) {
     BattleScriptIncrementPointer(ctx, 1);
 
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, BattleScriptReadWord(ctx));
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, BattleScriptReadWord(ctx));
 
     if ((ctx->battleMons[battlerId].hp + ctx->hpCalc) <= 0) {
         ctx->hitDamage = ctx->battleMons[battlerId].hp * -1;
@@ -942,7 +942,7 @@ BOOL BtlCmd_UpdateHealthbarValue(BattleSystem *battleSystem, BattleContext *ctx)
 BOOL BtlCmd_UpdateHealthbar(BattleSystem *battleSystem, BattleContext *ctx) {
     BattleScriptIncrementPointer(ctx, 1);
 
-    BattleController_EmitHealthbarUpdate(battleSystem, ctx, GetBattlerIDBySide(battleSystem, ctx, BattleScriptReadWord(ctx)));
+    BattleController_EmitHealthbarUpdate(battleSystem, ctx, BattleSystem_GetBattlerIDBySide(battleSystem, ctx, BattleScriptReadWord(ctx)));
 
     return FALSE;
 }
@@ -950,7 +950,7 @@ BOOL BtlCmd_UpdateHealthbar(BattleSystem *battleSystem, BattleContext *ctx) {
 BOOL BtlCmd_TryFaintMon(BattleSystem *battleSystem, BattleContext *ctx) {
     BattleScriptIncrementPointer(ctx, 1);
 
-    u32 battlerId = GetBattlerIDBySide(battleSystem, ctx, BattleScriptReadWord(ctx));
+    u32 battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, BattleScriptReadWord(ctx));
 
     if (ctx->battleMons[battlerId].hp == 0) {
         ctx->battlerIdFainted = battlerId;
@@ -1013,7 +1013,7 @@ BOOL BtlCmd_PlaySound(BattleSystem *battleSystem, BattleContext *ctx) {
     u32 side = BattleScriptReadWord(ctx);
     u32 sound = BattleScriptReadWord(ctx);
 
-    BattleController_EmitPlaySE(battleSystem, ctx, sound, GetBattlerIDBySide(battleSystem, ctx, side));
+    BattleController_EmitPlaySE(battleSystem, ctx, sound, BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side));
 
     return FALSE;
 }
@@ -1082,7 +1082,7 @@ BOOL BtlCmd_CompareMonDataToValue(BattleSystem *battleSystem, BattleContext *ctx
     int cmp = BattleScriptReadWord(ctx);
     u32 adrs = BattleScriptReadWord(ctx);
 
-    int var = GetBattlerVar(ctx, GetBattlerIDBySide(battleSystem, ctx, side), varId, NULL);
+    int var = GetBattlerVar(ctx, BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side), varId, NULL);
 
     switch (opcode) {
     case 0:
@@ -1709,7 +1709,7 @@ BOOL BtlCmd_UpdateMonData(BattleSystem *battleSystem, BattleContext *ctx) {
     int side = BattleScriptReadWord(ctx);
     int varId = BattleScriptReadWord(ctx);
     int val = BattleScriptReadWord(ctx);
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
     int var = GetBattlerVar(ctx, battlerId, varId, NULL);
 
     switch (opcode) {
@@ -1781,7 +1781,7 @@ BOOL BtlCmd_ClearVolatileStatus(BattleSystem *battleSystem, BattleContext *ctx) 
     int side = BattleScriptReadWord(ctx);
     int var = BattleScriptReadWord(ctx);
 
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
     ctx->unk_218C[battlerId] |= var;
 
@@ -1793,7 +1793,7 @@ BOOL BtlCmd_ToggleVanish(BattleSystem *battleSystem, BattleContext *ctx) {
 
     int side = BattleScriptReadWord(ctx);
     int unkA = BattleScriptReadWord(ctx);
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
     BattleController_EmitToggleVanish(battleSystem, battlerId, unkA);
 
@@ -1825,7 +1825,7 @@ BOOL BtlCmd_CheckAbility(BattleSystem *battleSystem, BattleContext *ctx) {
             }
         }
     } else {
-        battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+        battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
         if (unkA == 0) {
             if (GetBattlerAbility(ctx, battlerId) == ability) {
@@ -1928,7 +1928,7 @@ BOOL BtlCmd_UpdateMonDataFromVar(BattleSystem *battleSystem, BattleContext *ctx)
     int varId = BattleScriptReadWord(ctx);
     int valId = BattleScriptReadWord(ctx);
 
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
     int var = GetBattlerVar(ctx, battlerId, varId, NULL);
     int *val = BattleScriptGetVarPointer(battleSystem, ctx, valId);
@@ -2071,7 +2071,7 @@ BOOL BtlCmd_ResetAllStatChanges(BattleSystem *battleSystem, BattleContext *ctx) 
 BOOL BtlCmd_LockMoveChoice(BattleSystem *battleSystem, BattleContext *ctx) {
     BattleScriptIncrementPointer(ctx, 1);
 
-    LockBattlerIntoCurrentMove(battleSystem, ctx, GetBattlerIDBySide(battleSystem, ctx, BattleScriptReadWord(ctx)));
+    LockBattlerIntoCurrentMove(battleSystem, ctx, BattleSystem_GetBattlerIDBySide(battleSystem, ctx, BattleScriptReadWord(ctx)));
 
     return FALSE;
 }
@@ -2079,7 +2079,7 @@ BOOL BtlCmd_LockMoveChoice(BattleSystem *battleSystem, BattleContext *ctx) {
 BOOL BtlCmd_UnlockMoveChoice(BattleSystem *battleSystem, BattleContext *ctx) {
     BattleScriptIncrementPointer(ctx, 1);
 
-    UnlockBattlerOutOfCurrentMove(battleSystem, ctx, GetBattlerIDBySide(battleSystem, ctx, BattleScriptReadWord(ctx)));
+    UnlockBattlerOutOfCurrentMove(battleSystem, ctx, BattleSystem_GetBattlerIDBySide(battleSystem, ctx, BattleScriptReadWord(ctx)));
 
     return FALSE;
 }
@@ -2090,7 +2090,7 @@ BOOL BtlCmd_SetHealthbarStatus(BattleSystem *battleSystem, BattleContext *ctx) {
     int side = BattleScriptReadWord(ctx);
     int status = BattleScriptReadWord(ctx);
 
-    BattleController_EmitHealthbarStatus(battleSystem, GetBattlerIDBySide(battleSystem, ctx, side), status);
+    BattleController_EmitHealthbarStatus(battleSystem, BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side), status);
 
     return FALSE;
 }
@@ -2101,7 +2101,7 @@ BOOL BtlCmd_PrintTrainerMessage(BattleSystem *battleSystem, BattleContext *ctx) 
     int side = BattleScriptReadWord(ctx);
     int msg = BattleScriptReadWord(ctx);
 
-    BattleController_EmitPrintTrainerMessage(battleSystem, GetBattlerIDBySide(battleSystem, ctx, side), msg);
+    BattleController_EmitPrintTrainerMessage(battleSystem, BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side), msg);
 
     return FALSE;
 }
@@ -2214,7 +2214,7 @@ BOOL BtlCmd_PlayBattleAnimation(BattleSystem *battleSystem, BattleContext *ctx) 
     int status = BattleScriptReadWord(ctx);
 
     if (BattleSystem_AreBattleAnimationsOn(battleSystem) == TRUE || status == 15 || status == 16 || status == 25 || status == 26) {
-        int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+        int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
         if (CheckStatusEffectsSubstitute(ctx, battlerId, status) == TRUE) {
             BattleController_EmitSetStatus2Effect(battleSystem, ctx, battlerId, status);
         }
@@ -2231,8 +2231,8 @@ BOOL BtlCmd_PlayBattleAnimationOnMons(BattleSystem *battleSystem, BattleContext 
     int status = BattleScriptReadWord(ctx);
 
     if (BattleSystem_AreBattleAnimationsOn(battleSystem) == TRUE || status == 15 || status == 16 || status == 26 || status == 25) {
-        int battlerIdA = GetBattlerIDBySide(battleSystem, ctx, sideA);
-        int battlerIdB = GetBattlerIDBySide(battleSystem, ctx, sideB);
+        int battlerIdA = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, sideA);
+        int battlerIdB = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, sideB);
         if (CheckStatusEffectsSubstitute(ctx, battlerIdA, status) == TRUE && CheckStatusEffectsSubstitute(ctx, battlerIdB, status) == TRUE) {
             BattleController_EmitCopyStatus2Effect(battleSystem, ctx, battlerIdA, battlerIdB, status);
         }
@@ -2247,7 +2247,7 @@ BOOL BtlCmd_PlayBattleAnimationFromVar(BattleSystem *battleSystem, BattleContext
     int side = BattleScriptReadWord(ctx);
     int status = BattleScriptReadWord(ctx);
 
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
     int *data = BattleScriptGetVarPointer(battleSystem, ctx, status);
 
     if (BattleSystem_AreBattleAnimationsOn(battleSystem) == TRUE || status == 15 || status == 16 || *data == 25 || *data == 26) {
@@ -2262,7 +2262,7 @@ BOOL BtlCmd_PlayBattleAnimationFromVar(BattleSystem *battleSystem, BattleContext
 BOOL BtlCmd_PrintRecallMessage(BattleSystem *battleSystem, BattleContext *ctx) {
     BattleScriptIncrementPointer(ctx, 1);
 
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, BattleScriptReadWord(ctx));
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, BattleScriptReadWord(ctx));
 
     BattleController_EmitPrintReturnMessage(battleSystem, ctx, battlerId, ctx->selectedMonIndex[battlerId]);
 
@@ -2272,7 +2272,7 @@ BOOL BtlCmd_PrintRecallMessage(BattleSystem *battleSystem, BattleContext *ctx) {
 BOOL BtlCmd_PrintSendOutMessage(BattleSystem *battleSystem, BattleContext *ctx) {
     BattleScriptIncrementPointer(ctx, 1);
 
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, BattleScriptReadWord(ctx));
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, BattleScriptReadWord(ctx));
 
     BattleController_EmitPrintSendOutMessage(battleSystem, ctx, battlerId, ctx->selectedMonIndex[battlerId]);
 
@@ -2282,7 +2282,7 @@ BOOL BtlCmd_PrintSendOutMessage(BattleSystem *battleSystem, BattleContext *ctx) 
 BOOL BtlCmd_PrintEncounterMessage(BattleSystem *battleSystem, BattleContext *ctx) {
     BattleScriptIncrementPointer(ctx, 1);
 
-    BattleController_EmitPrintEncounterMessage(battleSystem, ctx, GetBattlerIDBySide(battleSystem, ctx, BattleScriptReadWord(ctx)));
+    BattleController_EmitPrintEncounterMessage(battleSystem, ctx, BattleSystem_GetBattlerIDBySide(battleSystem, ctx, BattleScriptReadWord(ctx)));
 
     return FALSE;
 }
@@ -2290,7 +2290,7 @@ BOOL BtlCmd_PrintEncounterMessage(BattleSystem *battleSystem, BattleContext *ctx
 BOOL BtlCmd_PrintFirstSendOutMessage(BattleSystem *battleSystem, BattleContext *ctx) {
     BattleScriptIncrementPointer(ctx, 1);
 
-    BattleController_EmitPrintFirstSendOutMessage(battleSystem, ctx, GetBattlerIDBySide(battleSystem, ctx, BattleScriptReadWord(ctx)));
+    BattleController_EmitPrintFirstSendOutMessage(battleSystem, ctx, BattleSystem_GetBattlerIDBySide(battleSystem, ctx, BattleScriptReadWord(ctx)));
 
     return FALSE;
 }
@@ -2298,7 +2298,7 @@ BOOL BtlCmd_PrintFirstSendOutMessage(BattleSystem *battleSystem, BattleContext *
 BOOL BtlCmd_PrintBufferedTrainerMessage(BattleSystem *battleSystem, BattleContext *ctx) {
     BattleScriptIncrementPointer(ctx, 1);
 
-    BattleController_EmitPrintTrainerMessage(battleSystem, GetBattlerIDBySide(battleSystem, ctx, BattleScriptReadWord(ctx)), ctx->msgTemp);
+    BattleController_EmitPrintTrainerMessage(battleSystem, BattleSystem_GetBattlerIDBySide(battleSystem, ctx, BattleScriptReadWord(ctx)), ctx->msgTemp);
 
     return FALSE;
 }
@@ -2426,7 +2426,7 @@ BOOL BtlCmd_CompareMonDataToVar(BattleSystem *battleSystem, BattleContext *ctx) 
     int cmpNo = BattleScriptReadWord(ctx);
     int adrs = BattleScriptReadWord(ctx);
 
-    u32 var = GetBattlerVar(ctx, GetBattlerIDBySide(battleSystem, ctx, side), varNo, NULL);
+    u32 var = GetBattlerVar(ctx, BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side), varNo, NULL);
     u32 *cmp = BattleScriptGetVarPointer(battleSystem, ctx, cmpNo);
 
     switch (opcode) {
@@ -3001,7 +3001,7 @@ BOOL BtlCmd_TryPartyStatusRefresh(BattleSystem *battleSystem, BattleContext *ctx
         }
 
         if (battleType & BATTLE_TYPE_DOUBLES) {
-            battlerId = GetBattlerIDBySide(battleSystem, ctx, BATTLER_CATEGORY_ATTACKER_PARTNER);
+            battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, BATTLER_CATEGORY_ATTACKER_PARTNER);
             if (!(ctx->switchInFlag & MaskOfFlagNo(battlerId))) {
                 if (!CheckBattlerAbilityIfNotIgnored(ctx, ctx->battlerIdAttacker, battlerId, ABILITY_SOUNDPROOF)) {
                     ctx->battleMons[battlerId].status = STATUS_NONE;
@@ -3018,7 +3018,7 @@ BOOL BtlCmd_TryPartyStatusRefresh(BattleSystem *battleSystem, BattleContext *ctx
         ctx->battleMons[ctx->battlerIdAttacker].status = STATUS_NONE;
         ctx->battleMons[ctx->battlerIdAttacker].status2 &= ~STATUS2_NIGHTMARE;
         if (battleType & BATTLE_TYPE_DOUBLES) {
-            battlerId = GetBattlerIDBySide(battleSystem, ctx, BATTLER_CATEGORY_ATTACKER_PARTNER);
+            battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, BATTLER_CATEGORY_ATTACKER_PARTNER);
             if (!(ctx->switchInFlag & MaskOfFlagNo(battlerId))) {
                 ctx->battleMons[battlerId].status = STATUS_NONE;
                 ctx->battleMons[battlerId].status2 &= ~STATUS2_NIGHTMARE;
@@ -3268,7 +3268,7 @@ BOOL BtlCmd_CheckSpikes(BattleSystem *battleSystem, BattleContext *ctx) {
 
     int side = BattleScriptReadWord(ctx);
     int adrs = BattleScriptReadWord(ctx);
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
     int fieldSide = BattleSystem_GetFieldSide(battleSystem, battlerId);
 
     if (ctx->fieldSideConditionData[fieldSide].spikesLayers && ctx->battleMons[battlerId].hp) {
@@ -3334,7 +3334,7 @@ BOOL BtlCmd_GoToIfValidMon(BattleSystem *battleSystem, BattleContext *ctx) {
 BOOL BtlCmd_EndOfTurnWeatherEffect(BattleSystem *battleSystem, BattleContext *ctx) {
     BattleScriptIncrementPointer(ctx, 1);
 
-    u32 battlerId = GetBattlerIDBySide(battleSystem, ctx, BattleScriptReadWord(ctx));
+    u32 battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, BattleScriptReadWord(ctx));
 
     ctx->tempData = 0;
     ctx->hpCalc = 0;
@@ -3541,7 +3541,7 @@ BOOL BtlCmd_TryReplaceFaintedMon(BattleSystem *battleSystem, BattleContext *ctx)
     int flag = BattleScriptReadWord(ctx);
     int adrs = BattleScriptReadWord(ctx);
 
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
     if (!CanSwitchMon(battleSystem, ctx, battlerId)) {
         BattleScriptIncrementPointer(ctx, adrs);
@@ -3679,8 +3679,8 @@ BOOL BtlCmd_CheckMoveHit(BattleSystem *battleSystem, BattleContext *ctx) {
     int move = BattleScriptReadWord(ctx);
     int adrs = BattleScriptReadWord(ctx);
 
-    int battlerIdAttacker = GetBattlerIDBySide(battleSystem, ctx, sideAttacker);
-    int battlerIdTarget = GetBattlerIDBySide(battleSystem, ctx, sideTarget);
+    int battlerIdAttacker = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, sideAttacker);
+    int battlerIdTarget = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, sideTarget);
     int moveMsgNo = GetMoveMessageNo(ctx, move);
 
     BattleSystem_CheckMoveHitEffect(battleSystem, ctx, battlerIdAttacker, battlerIdTarget, moveMsgNo);
@@ -3799,7 +3799,7 @@ BOOL BtlCmd_TryHelpingHand(BattleSystem *battleSystem, BattleContext *ctx) {
     u32 battleType = BattleSystem_GetBattleType(battleSystem);
 
     if (battleType & BATTLE_TYPE_DOUBLES) {
-        battlerId = GetBattlerIDBySide(battleSystem, ctx, 16);
+        battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, 16);
         if ((ctx->switchInFlag & MaskOfFlagNo(battlerId)) == 0 && ctx->playerActions[battlerId].command != CONTROLLER_COMMAND_40 && ctx->battleMons[battlerId].hp && !ctx->turnData[ctx->battlerIdAttacker].helpingHandFlag && !ctx->turnData[battlerId].helpingHandFlag) {
             ctx->battlerIdTemp = battlerId;
             ctx->turnData[battlerId].helpingHandFlag = TRUE;
@@ -4223,7 +4223,7 @@ BOOL BtlCmd_IfTurnFlag(BattleSystem *battleSystem, BattleContext *ctx) {
     int val = BattleScriptReadWord(ctx);
     int adrs = BattleScriptReadWord(ctx);
 
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
     switch (flag) {
     case 0:
@@ -4277,7 +4277,7 @@ BOOL BtlCmd_SetTurnFlag(BattleSystem *battleSystem, BattleContext *ctx) {
     int flag = BattleScriptReadWord(ctx);
     int val = BattleScriptReadWord(ctx);
 
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
     switch (flag) {
     case 0:
@@ -4471,7 +4471,7 @@ BOOL BtlCmd_CheckSideCondition(BattleSystem *battleSystem, BattleContext *ctx) {
     int flag = BattleScriptReadWord(ctx);
     int adrs = BattleScriptReadWord(ctx);
 
-    int fieldSide = BattleSystem_GetFieldSide(battleSystem, GetBattlerIDBySide(battleSystem, ctx, side));
+    int fieldSide = BattleSystem_GetFieldSide(battleSystem, BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side));
 
     int var;
 
@@ -4601,7 +4601,7 @@ BOOL BtlCmd_CheckToxicSpikes(BattleSystem *battleSystem, BattleContext *ctx) {
     int side = BattleScriptReadWord(ctx);
     int adrs = BattleScriptReadWord(ctx);
 
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
     int fieldSide = BattleSystem_GetFieldSide(battleSystem, battlerId);
 
     if (ctx->fieldSideConditionData[fieldSide].toxicSpikesLayers) {
@@ -4648,7 +4648,7 @@ BOOL BtlCmd_CheckIgnorableAbility(BattleSystem *battleSystem, BattleContext *ctx
             }
         }
     } else {
-        battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+        battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
         if (flag == 0) {
             if (CheckBattlerAbilityIfNotIgnored(ctx, ctx->battlerIdAttacker, battlerId, ability) == TRUE && ctx->battleMons[battlerId].hp) {
                 BattleScriptIncrementPointer(ctx, adrs);
@@ -4670,8 +4670,8 @@ BOOL BtlCmd_IfSameSide(BattleSystem *battleSystem, BattleContext *ctx) {
     int sideB = BattleScriptReadWord(ctx);
     int adrs = BattleScriptReadWord(ctx);
 
-    int battlerIdA = GetBattlerIDBySide(battleSystem, ctx, sideA);
-    int battlerIdB = GetBattlerIDBySide(battleSystem, ctx, sideB);
+    int battlerIdA = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, sideA);
+    int battlerIdB = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, sideB);
 
     if (BattleSystem_GetFieldSide(battleSystem, battlerIdA) == BattleSystem_GetFieldSide(battleSystem, battlerIdB)) {
         BattleScriptIncrementPointer(ctx, adrs);
@@ -4755,7 +4755,7 @@ BOOL BtlCmd_IfMovedThisTurn(BattleSystem *battleSystem, BattleContext *ctx) {
 
     int side = BattleScriptReadWord(ctx);
     int adrs = BattleScriptReadWord(ctx);
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
     if (ov12_0225561C(ctx, battlerId) == TRUE) {
         BattleScriptIncrementPointer(ctx, adrs);
@@ -4772,7 +4772,7 @@ BOOL BtlCmd_CheckItemHoldEffect(BattleSystem *battleSystem, BattleContext *ctx) 
     int itemEffect = BattleScriptReadWord(ctx);
     int adrs = BattleScriptReadWord(ctx);
 
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
     if (flag == 0) {
         if (GetBattlerHeldItemEffect(ctx, battlerId) == itemEffect) {
@@ -4791,7 +4791,7 @@ BOOL BtlCmd_GetItemHoldEffect(BattleSystem *battleSystem, BattleContext *ctx) {
     int side = BattleScriptReadWord(ctx);
     int varId = BattleScriptReadWord(ctx);
     int *holdEffect = BattleScriptGetVarPointer(battleSystem, ctx, varId);
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
     u16 item = GetBattlerHeldItem(ctx, battlerId);
     *holdEffect = GetItemVar(ctx, item, ITEM_VAR_HOLD_EFFECT);
@@ -4805,7 +4805,7 @@ BOOL BtlCmd_GetItemEffectParam(BattleSystem *battleSystem, BattleContext *ctx) {
     int side = BattleScriptReadWord(ctx);
     int varId = BattleScriptReadWord(ctx);
     int *var = BattleScriptGetVarPointer(battleSystem, ctx, varId);
-    u16 item = GetBattlerHeldItem(ctx, GetBattlerIDBySide(battleSystem, ctx, side));
+    u16 item = GetBattlerHeldItem(ctx, BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side));
     *var = GetItemVar(ctx, item, ITEM_VAR_MODIFIER);
 
     return FALSE;
@@ -4986,7 +4986,7 @@ BOOL BtlCmd_CheckStealthRock(BattleSystem *battleSystem, BattleContext *ctx) {
     int side = BattleScriptReadWord(ctx);
     int adrs = BattleScriptReadWord(ctx);
 
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
     int fieldSide = BattleSystem_GetFieldSide(battleSystem, battlerId);
     int type1 = GetBattlerVar(ctx, battlerId, BMON_DATA_TYPE_1, NULL);
     int type2 = GetBattlerVar(ctx, battlerId, BMON_DATA_TYPE_2, NULL);
@@ -5100,7 +5100,7 @@ BOOL BtlCmd_SetMosaic(BattleSystem *battleSystem, BattleContext *ctx) {
     int param = BattleScriptReadWord(ctx);
     int delay = BattleScriptReadWord(ctx);
 
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
     BattleController_EmitPlayMosaicAnimation(battleSystem, battlerId, param, delay);
 
@@ -5111,7 +5111,7 @@ BOOL BtlCmd_ChangeForm(BattleSystem *battleSystem, BattleContext *ctx) {
     BattleScriptIncrementPointer(ctx, 1);
 
     int side = BattleScriptReadWord(ctx);
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
     BattleController_EmitChangeForm(battleSystem, battlerId);
 
     return FALSE;
@@ -5127,7 +5127,7 @@ BOOL BtlCmd_UseBagItem(BattleSystem *battleSystem, BattleContext *ctx) {
     BattleScriptIncrementPointer(ctx, 1);
 
     int side = BattleScriptReadWord(ctx);
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
     BattleSystem_RecoverStatus(battleSystem, battlerId, ctx->selectedMonIndex[battlerId], 0, ctx->itemTemp);
 
@@ -5139,7 +5139,7 @@ BOOL BtlCmd_TryEscape(BattleSystem *battleSystem, BattleContext *ctx) {
 
     int side = BattleScriptReadWord(ctx);
     int adrs = BattleScriptReadWord(ctx);
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
     if (BattleTryRun(battleSystem, ctx, battlerId)) {
         BattleScriptIncrementPointer(ctx, adrs);
@@ -5152,7 +5152,7 @@ BOOL BtlCmd_ShowBattleStartPartyGauge(BattleSystem *battleSystem, BattleContext 
     BattleScriptIncrementPointer(ctx, 1);
 
     int side = BattleScriptReadWord(ctx);
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
     BattleController_EmitInitStartBallGauge(battleSystem, battlerId);
 
@@ -5163,7 +5163,7 @@ BOOL BtlCmd_HideBattleStartPartyGauge(BattleSystem *battleSystem, BattleContext 
     BattleScriptIncrementPointer(ctx, 1);
 
     int side = BattleScriptReadWord(ctx);
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
     BattleController_EmitDeleteStartBallGauge(battleSystem, battlerId);
 
@@ -5174,7 +5174,7 @@ BOOL BtlCmd_ShowPartyGauge(BattleSystem *battleSystem, BattleContext *ctx) {
     BattleScriptIncrementPointer(ctx, 1);
 
     int side = BattleScriptReadWord(ctx);
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
     BattleController_EmitInitBallGauge(battleSystem, battlerId);
 
@@ -5185,7 +5185,7 @@ BOOL BtlCmd_HidePartyGauge(BattleSystem *battleSystem, BattleContext *ctx) {
     BattleScriptIncrementPointer(ctx, 1);
 
     int side = BattleScriptReadWord(ctx);
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
     BattleController_EmitDeleteBallGauge(battleSystem, battlerId);
 
@@ -5215,7 +5215,7 @@ BOOL BtlCmd_IncrementGameStat(BattleSystem *battleSystem, BattleContext *ctx) {
     int flag = BattleScriptReadWord(ctx);
     int id = BattleScriptReadWord(ctx);
 
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
     BattleController_EmitIncrementGameStat(battleSystem, battlerId, flag, id);
 
@@ -5226,7 +5226,7 @@ BOOL BtlCmd_RestoreSprite(BattleSystem *battleSystem, BattleContext *ctx) {
     BattleScriptIncrementPointer(ctx, 1);
 
     int side = BattleScriptReadWord(ctx);
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
     ov12_02263F8C(battleSystem, ctx, battlerId);
 
     return FALSE;
@@ -5270,7 +5270,7 @@ BOOL BtlCmd_SpriteToOAM(BattleSystem *battleSystem, BattleContext *ctx) {
         }
         break;
     default:
-        battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+        battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
         ov12_02264038(battleSystem, battlerId);
         break;
     }
@@ -5305,7 +5305,7 @@ BOOL BtlCmd_OAMToSprite(BattleSystem *battleSystem, BattleContext *ctx) {
         }
         break;
     default:
-        battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+        battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
         ov12_02264054(battleSystem, battlerId);
         break;
     }
@@ -5327,7 +5327,7 @@ BOOL BtlCmd_CheckWhiteout(BattleSystem *battleSystem, BattleContext *ctx) {
     adrs = BattleScriptReadWord(ctx);
 
     int battleType = BattleSystem_GetBattleType(battleSystem);
-    battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
     if (battleType & BATTLE_TYPE_MULTI || (battleType & BATTLE_TYPE_TAG && BattleSystem_GetFieldSide(battleSystem, battlerId))) {
         Party *party1 = BattleSystem_GetParty(battleSystem, battlerId);
@@ -5407,7 +5407,7 @@ BOOL BtlCmd_RemoveItem(BattleSystem *battleSystem, BattleContext *ctx) {
     BattleScriptIncrementPointer(ctx, 1);
 
     int side = BattleScriptReadWord(ctx);
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
     ctx->recycleItem[battlerId] = ctx->battleMons[battlerId].item;
 
@@ -5475,7 +5475,7 @@ BOOL BtlCmd_CheckHoldOnWith1HP(BattleSystem *battleSystem, BattleContext *ctx) {
 
     int side = BattleScriptReadWord(ctx);
 
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
     int itemEffect = GetBattlerHeldItemEffect(ctx, battlerId);
     int activationChance = GetHeldItemModifier(ctx, battlerId, 0);
 
@@ -5500,7 +5500,7 @@ BOOL BtlCmd_TryRestoreStatusOnSwitch(BattleSystem *battleSystem, BattleContext *
     int side = BattleScriptReadWord(ctx);
     int adrs = BattleScriptReadWord(ctx);
 
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
     if (ctx->battleMons[battlerId].hp && ctx->selectedMonIndex[battlerId] != 6) {
         Pokemon *mon = BattleSystem_GetPartyMon(battleSystem, battlerId, ctx->selectedMonIndex[battlerId]);
         int ability = GetMonData(mon, MON_DATA_ABILITY, NULL);
@@ -5521,7 +5521,7 @@ BOOL BtlCmd_CheckSubstitute(BattleSystem *battleSystem, BattleContext *ctx) {
     int side = BattleScriptReadWord(ctx);
     int adrs = BattleScriptReadWord(ctx);
 
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
     if (ctx->battleMons[battlerId].status2 & (1 << 24) || ctx->selfTurnData[battlerId].unk14 & 8) {
         BattleScriptIncrementPointer(ctx, adrs);
@@ -5548,7 +5548,7 @@ BOOL BtlCmd_SetRandomTarget(BattleSystem *battleSystem, BattleContext *ctx) {
     BattleScriptIncrementPointer(ctx, 1);
 
     int side = BattleScriptReadWord(ctx);
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
     ctx->battlerIdTarget = Battler_GetRandomOpposingBattlerId(battleSystem, ctx, battlerId);
 
@@ -5571,7 +5571,7 @@ BOOL BtlCmd_RefreshSprite(BattleSystem *battleSystem, BattleContext *ctx) {
     BattleScriptIncrementPointer(ctx, 1);
 
     int side = BattleScriptReadWord(ctx);
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
     BattleController_EmitSwapToSubstituteSprite(battleSystem, ctx, battlerId);
 
@@ -5582,7 +5582,7 @@ BOOL BtlCmd_PlayMoveHitSound(BattleSystem *battleSystem, BattleContext *ctx) {
     BattleScriptIncrementPointer(ctx, 1);
 
     int side = BattleScriptReadWord(ctx);
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
     BattleController_EmitPlayMoveSE(battleSystem, ctx, battlerId);
 
@@ -5594,7 +5594,7 @@ BOOL BtlCmd_PlayBGM(BattleSystem *battleSystem, BattleContext *ctx) {
 
     int side = BattleScriptReadWord(ctx);
     int song = BattleScriptReadWord(ctx);
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
     BattleController_EmitPlaySong(battleSystem, battlerId, song);
 
@@ -5669,7 +5669,7 @@ BOOL BtlCmd_RefreshMonData(BattleSystem *battleSystem, BattleContext *ctx) {
     BattleScriptIncrementPointer(ctx, 1);
 
     int side = BattleScriptReadWord(ctx);
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
     BattleSystem_ReloadMonData(battleSystem, ctx, battlerId, ctx->selectedMonIndex[battlerId]);
 
@@ -5682,7 +5682,7 @@ BOOL BtlCmd_222(BattleSystem *battleSystem, BattleContext *ctx) {
     int side = BattleScriptReadWord(ctx);
     int msgIndex = BattleScriptReadWord(ctx);
 
-    int battlerId = GetBattlerIDBySide(battleSystem, ctx, side);
+    int battlerId = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 
     if (TrainerMessageWithIdPairExists(BattleSystem_GetTrainerIndex(battleSystem, battlerId), msgIndex, HEAP_ID_BATTLE)) {
         ctx->msgTemp = msgIndex;
@@ -6565,7 +6565,7 @@ enum {
     STATE_GET_POKEMON_DONE_CAUGHT,
 };
 
-enum { // These are purely speculative until we can decomp ov07_02232F58.
+enum { // These are purely speculative until we can decomp ov07_02233D60.
     BALL_ANIM_THROW = 0,
     BALL_ANIM_OPEN,
     BALL_ANIM_DEFLECT,
@@ -6874,8 +6874,7 @@ void Task_GetPokemon(SysTask *task, void *inData) {
             if (BattleSystem_GetPartySize(data->battleSystem, 0) < PARTY_SIZE) {
                 namingScreenArgs->battleMsgId = 0;
             } else {
-                // TODO: BattleSystem_MetBill
-                namingScreenArgs->battleMsgId = ov12_0223BB1C(data->battleSystem) + 0x496; // {0} was transferred to {1} in someone’s/Bill's PC!
+                namingScreenArgs->battleMsgId = BattleSystem_MetBill(data->battleSystem) + 0x496; // {0} was transferred to {1} in someone’s/Bill's PC!
             }
             namingScreenArgs->monForm = GetMonData(mon, MON_DATA_FORM, 0);
             namingScreenArgs->pcStorage = BattleSystem_GetPcStorage(data->battleSystem);
@@ -6959,12 +6958,12 @@ void Task_GetPokemon(SysTask *task, void *inData) {
             if (data->state == STATE_GET_POKEMON_STORE_NEW_MON_NO_NAMING_SCREEN) {
                 BattleMessage msg;
                 if (activeBox == emptyBox) {
-                    msg.id = ov12_0223BB1C(data->battleSystem) + 0x496; // {0} was transferred to {1} in someone’s PC!
+                    msg.id = BattleSystem_MetBill(data->battleSystem) + 0x496; // {0} was transferred to {1} in someone’s PC!
                     msg.tag = TAG_NICKNAME_BOX | 0x80;
                     msg.param[0] = battlerId;
                     msg.param[1] = activeBox;
                 } else {
-                    msg.id = ov12_0223BB1C(data->battleSystem) + 0x498; // {1} in someone’s PC is full. {0} was transferred to {2} instead!
+                    msg.id = BattleSystem_MetBill(data->battleSystem) + 0x498; // {1} in someone’s PC is full. {0} was transferred to {2} instead!
                     msg.tag = TAG_NICKNAME_BOX_BOX | 0x80;
                     msg.param[0] = battlerId;
                     msg.param[1] = activeBox;
@@ -7071,7 +7070,7 @@ void Task_GetPokemon(SysTask *task, void *inData) {
 extern u8 ov12_0226C2EC[4];
 extern u8 ov12_0226C3CE[11][2]; // Some kind of catch rate for safari. First number is numerator, second is denominator.
 extern u16 sMoonBallPokemon[14];
-u32 ov12_0223AAB8(BattleSystem *bsys); // TODO: BattleSystem_IsFishing
+BOOL BattleSystem_IsFishing(BattleSystem *bsys);
 // Rename BattleContext.stateBeforeTurn to turnCounter?
 
 #define CP_SQRT_32BIT_MODE    (0UL << REG_CP_SQRTCNT_MODE_SHIFT)
@@ -7213,7 +7212,7 @@ u32 ov12_02247228(BattleSystem* bsys, BattleContext* ctx) {
             break;
         }
         case ITEM_LURE_BALL:
-            if (ov12_0223AAB8(bsys)) {
+            if (BattleSystem_IsFishing(bsys)) {
                 catchRate *= 3;
             }
             break;
@@ -7320,7 +7319,7 @@ s32 GetMonWeight(u16 species) {
 }
 
 // TODO: clarify OpponentData unk194 and unk195 for client_no and battlerPosition respectively.
-int GetBattlerIDBySide(BattleSystem *battleSystem, BattleContext *ctx, int side)
+int BattleSystem_GetBattlerIDBySide(BattleSystem *battleSystem, BattleContext *ctx, int side)
 {
     int battlerID;
     switch (side)
@@ -7523,9 +7522,9 @@ int GetBattlerIDBySide(BattleSystem *battleSystem, BattleContext *ctx, int side)
 
 void InitBattleMsgData(BattleContext *ctx, BattleMessageData *msgData) {
     int params = 0;
-    msgData->unk0 = BattleScriptReadWord(ctx); // TODO: See if we can clarify BattleMessageData.
+    msgData->id = BattleScriptReadWord(ctx);
     u32 tag = BattleScriptReadWord(ctx);
-    msgData->unk4 = tag;
+    msgData->tag = tag;
     switch(tag) {
         case TAG_NONE:
             params = 0;
@@ -7603,303 +7602,303 @@ void InitBattleMsgData(BattleContext *ctx, BattleMessageData *msgData) {
     }
 
     for (int i = 0; i < params; i++) {
-        msgData->unk8[i] = BattleScriptReadWord(ctx);
+        msgData->params[i] = BattleScriptReadWord(ctx);
     }
 }
 
-s32 ov12_022480C0(BattleSystem *battleSystem, BattleContext *ctx, int side);
+int ov12_022480C0(BattleSystem *battleSystem, BattleContext *ctx, int side);
 int ov12_0224810C(BattleContext *ctx, int);
-int ov12_02248184(BattleContext *ctx, s32);
-int ov12_02248190(BattleContext *ctx, s32);
-int ov12_0224819C(BattleSystem *battleSystem, BattleContext *ctx, u32 side);
-int ov12_022481D0(BattleContext *ctx, s32);
-int ov12_022481DC(BattleContext *ctx, s32);
-int ov12_022481E8(BattleSystem *battleSystem, BattleContext *ctx, u32 side);
-int ov12_02248200(BattleContext *ctx, s32);
-int ov12_0224820C(BattleContext *ctx, s32);
-int ov12_02248218(BattleSystem *battleSystem, BattleContext *ctx, u32 side);
-int ov12_02248220(BattleSystem *battleSystem, BattleContext *ctx, u32 side);
+int ov12_02248184(BattleContext *ctx, int);
+int ov12_02248190(BattleContext *ctx, int);
+int ov12_0224819C(BattleSystem *battleSystem, BattleContext *ctx, int side);
+int ov12_022481D0(BattleContext *ctx, int);
+int ov12_022481DC(BattleContext *ctx, int);
+int ov12_022481E8(BattleSystem *battleSystem, BattleContext *ctx, int side);
+int ov12_02248200(BattleContext *ctx, int);
+int ov12_0224820C(BattleContext *ctx, int);
+int ov12_02248218(BattleSystem *battleSystem, BattleContext *ctx, int side);
+int ov12_02248220(BattleSystem *battleSystem, BattleContext *ctx, int side);
 
 void InitBattleMsg(BattleSystem *battleSystem, BattleContext *ctx, BattleMessageData *msgData, BattleMessage *msg) {
-    msg->id = msgData->unk0;
-    msg->tag = msgData->unk4;
+    msg->id = msgData->id;
+    msg->tag = msgData->tag;
     switch (msg->tag) {
     case TAG_NONE_SIDE:
-        msg->param[0] = GetBattlerIDBySide(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[0] = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, msgData->params[0]);
         return;
     case TAG_NICKNAME:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
         return;
     case TAG_MOVE:
-        msg->param[0] = GetMoveMessageNo(ctx, msgData->unk8[0]);
+        msg->param[0] = GetMoveMessageNo(ctx, msgData->params[0]);
         return;
     case TAG_STAT:
-        msg->param[0] = ov12_022481D0(ctx, msgData->unk8[0]);
+        msg->param[0] = ov12_022481D0(ctx, msgData->params[0]);
         return;
     case TAG_ITEM:
-        msg->param[0] = ov12_0224810C(ctx, msgData->unk8[0]);
+        msg->param[0] = ov12_0224810C(ctx, msgData->params[0]);
         return;
     case TAG_NUMBER:
     case TAG_NUMBERS:
-        msg->param[0] = ov12_02248184(ctx, msgData->unk8[0]);
+        msg->param[0] = ov12_02248184(ctx, msgData->params[0]);
         return;
     case TAG_TRNAME:
-        msg->param[0] = ov12_02248220(battleSystem, ctx, msgData->unk8[0]);
+        msg->param[0] = ov12_02248220(battleSystem, ctx, msgData->params[0]);
         return;
     case TAG_NICKNAME_NICKNAME:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->params[1]);
         return;
     case TAG_NICKNAME_MOVE:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = GetMoveMessageNo(ctx, msgData->unk8[1]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = GetMoveMessageNo(ctx, msgData->params[1]);
         return;
     case TAG_NICKNAME_ABILITY:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->params[1]);
         return;
     case TAG_NICKNAME_STAT:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_022481D0(ctx, msgData->unk8[1]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_022481D0(ctx, msgData->params[1]);
         return;
     case TAG_NICKNAME_TYPE:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_02248190(ctx, msgData->unk8[1]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_02248190(ctx, msgData->params[1]);
         return;
     case TAG_NICKNAME_POKE:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_022481E8(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_022481E8(battleSystem, ctx, msgData->params[1]);
         return;
     case TAG_NICKNAME_ITEM:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_0224810C(ctx, msgData->unk8[1]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_0224810C(ctx, msgData->params[1]);
         return;
     case TAG_NICKNAME_POFFIN:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_02248200(ctx, msgData->unk8[1]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_02248200(ctx, msgData->params[1]);
         return;
     case TAG_NICKNAME_NUM:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_02248184(ctx, msgData->unk8[1]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_02248184(ctx, msgData->params[1]);
         return;
     case TAG_NICKNAME_TRNAME:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_02248220(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_02248220(battleSystem, ctx, msgData->params[1]);
         return;
     case TAG_NICKNAME_BOX:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = msgData->unk8[1];
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = msgData->params[1];
         return;
     case TAG_MOVE_SIDE:
-        msg->param[0] = GetMoveMessageNo(ctx, msgData->unk8[0]);
-        msg->param[1] = GetBattlerIDBySide(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[0] = GetMoveMessageNo(ctx, msgData->params[0]);
+        msg->param[1] = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, msgData->params[1]);
         return;
     case TAG_MOVE_NICKNAME:
-        msg->param[0] = GetMoveMessageNo(ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[0] = GetMoveMessageNo(ctx, msgData->params[0]);
+        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->params[1]);
         return;
     case TAG_MOVE_MOVE:
-        msg->param[0] = GetMoveMessageNo(ctx, msgData->unk8[0]);
-        msg->param[1] = GetMoveMessageNo(ctx, msgData->unk8[1]);
+        msg->param[0] = GetMoveMessageNo(ctx, msgData->params[0]);
+        msg->param[1] = GetMoveMessageNo(ctx, msgData->params[1]);
         return;
     case TAG_ABILITY_NICKNAME:
-        msg->param[0] = ov12_0224819C(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[0] = ov12_0224819C(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->params[1]);
         return;
     case TAG_ITEM_MOVE:
-        msg->param[0] = ov12_0224810C(ctx, msgData->unk8[0]);
-        msg->param[1] = GetMoveMessageNo(ctx, msgData->unk8[1]);
+        msg->param[0] = ov12_0224810C(ctx, msgData->params[0]);
+        msg->param[1] = GetMoveMessageNo(ctx, msgData->params[1]);
         return;
     case TAG_NUMBER_NUMBER:
-        msg->param[0] = ov12_02248184(ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_02248184(ctx, msgData->unk8[1]);
+        msg->param[0] = ov12_02248184(ctx, msgData->params[0]);
+        msg->param[1] = ov12_02248184(ctx, msgData->params[1]);
         return;
     case TAG_TRNAME_TRNAME:
-        msg->param[0] = ov12_02248220(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_02248220(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[0] = ov12_02248220(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_02248220(battleSystem, ctx, msgData->params[1]);
         return;
     case TAG_TRNAME_NICKNAME:
-        msg->param[0] = ov12_02248220(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[0] = ov12_02248220(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->params[1]);
         return;
     case TAG_TRNAME_ITEM:
-        msg->param[0] = ov12_02248220(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_0224810C(ctx, msgData->unk8[1]);
+        msg->param[0] = ov12_02248220(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_0224810C(ctx, msgData->params[1]);
         return;
     case TAG_TRNAME_NUM:
-        msg->param[0] = ov12_02248220(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_02248184(ctx, msgData->unk8[1]);
+        msg->param[0] = ov12_02248220(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_02248184(ctx, msgData->params[1]);
         return;
     case TAG_TRCLASS_TRNAME:
-        msg->param[0] = ov12_02248218(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_02248220(battleSystem, ctx, msgData->unk8[1]);
+        msg->param[0] = ov12_02248218(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_02248220(battleSystem, ctx, msgData->params[1]);
         return;
     case TAG_NICKNAME_NICKNAME_MOVE:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->unk8[1]);
-        msg->param[2] = GetMoveMessageNo(ctx, msgData->unk8[2]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->params[1]);
+        msg->param[2] = GetMoveMessageNo(ctx, msgData->params[2]);
         return;
     case TAG_NICKNAME_NICKNAME_ABILITY:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->unk8[1]);
-        msg->param[2] = ov12_0224819C(battleSystem, ctx, msgData->unk8[2]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->params[1]);
+        msg->param[2] = ov12_0224819C(battleSystem, ctx, msgData->params[2]);
         return;
     case TAG_NICKNAME_NICKNAME_ITEM:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->unk8[1]);
-        msg->param[2] = ov12_0224810C(ctx, msgData->unk8[2]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->params[1]);
+        msg->param[2] = ov12_0224810C(ctx, msgData->params[2]);
         return;
     case TAG_NICKNAME_MOVE_MOVE:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = GetMoveMessageNo(ctx, msgData->unk8[1]);
-        msg->param[2] = GetMoveMessageNo(ctx, msgData->unk8[2]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = GetMoveMessageNo(ctx, msgData->params[1]);
+        msg->param[2] = GetMoveMessageNo(ctx, msgData->params[2]);
         return;
     case TAG_NICKNAME_MOVE_NUMBER:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = GetMoveMessageNo(ctx, msgData->unk8[1]);
-        msg->param[2] = ov12_02248184(ctx, msgData->unk8[2]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = GetMoveMessageNo(ctx, msgData->params[1]);
+        msg->param[2] = ov12_02248184(ctx, msgData->params[2]);
         return;
     case TAG_NICKNAME_ABILITY_NICKNAME:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->unk8[1]);
-        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->unk8[2]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->params[1]);
+        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->params[2]);
         return;
     case TAG_NICKNAME_ABILITY_MOVE:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->unk8[1]);
-        msg->param[2] = GetMoveMessageNo(ctx, msgData->unk8[2]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->params[1]);
+        msg->param[2] = GetMoveMessageNo(ctx, msgData->params[2]);
         return;
     case TAG_NICKNAME_ABILITY_ITEM:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->unk8[1]);
-        msg->param[2] = ov12_0224810C(ctx, msgData->unk8[2]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->params[1]);
+        msg->param[2] = ov12_0224810C(ctx, msgData->params[2]);
         return;
     case TAG_NICKNAME_ABILITY_STAT:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->unk8[1]);
-        msg->param[2] = ov12_022481D0(ctx, msgData->unk8[2]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->params[1]);
+        msg->param[2] = ov12_022481D0(ctx, msgData->params[2]);
         return;
     case TAG_NICKNAME_ABILITY_TYPE:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->unk8[1]);
-        msg->param[2] = ov12_02248190(ctx, msgData->unk8[2]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->params[1]);
+        msg->param[2] = ov12_02248190(ctx, msgData->params[2]);
         return;
     case TAG_NICKNAME_ABILITY_STATUS:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->unk8[1]);
-        msg->param[2] = ov12_022481DC(ctx, msgData->unk8[2]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->params[1]);
+        msg->param[2] = ov12_022481DC(ctx, msgData->params[2]);
         return;
     case TAG_NICKNAME_ABILITY_NUMBER:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->unk8[1]);
-        msg->param[2] = ov12_02248184(ctx, msgData->unk8[2]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->params[1]);
+        msg->param[2] = ov12_02248184(ctx, msgData->params[2]);
         return;
     case TAG_NICKNAME_ITEM_NICKNAME:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_0224810C(ctx, msgData->unk8[1]);
-        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->unk8[2]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_0224810C(ctx, msgData->params[1]);
+        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->params[2]);
         return;
     case TAG_NICKNAME_ITEM_MOVE:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_0224810C(ctx, msgData->unk8[1]);
-        msg->param[2] = GetMoveMessageNo(ctx, msgData->unk8[2]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_0224810C(ctx, msgData->params[1]);
+        msg->param[2] = GetMoveMessageNo(ctx, msgData->params[2]);
         return;
     case TAG_NICKNAME_ITEM_STAT:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_0224810C(ctx, msgData->unk8[1]);
-        msg->param[2] = ov12_022481D0(ctx, msgData->unk8[2]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_0224810C(ctx, msgData->params[1]);
+        msg->param[2] = ov12_022481D0(ctx, msgData->params[2]);
         return;
     case TAG_NICKNAME_ITEM_STATUS:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_0224810C(ctx, msgData->unk8[1]);
-        msg->param[2] = ov12_022481DC(ctx, msgData->unk8[2]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_0224810C(ctx, msgData->params[1]);
+        msg->param[2] = ov12_022481DC(ctx, msgData->params[2]);
         return;
     case TAG_NICKNAME_BOX_BOX:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = (s32) msgData->unk8[1];
-        msg->param[2] = (s32) msgData->unk8[2];
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = msgData->params[1];
+        msg->param[2] = msgData->params[2];
         return;
     case TAG_ITEM_NICKNAME_FLAVOR:
-        msg->param[0] = ov12_0224810C(ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->unk8[1]);
-        msg->param[2] = ov12_0224820C(ctx, msgData->unk8[2]);
+        msg->param[0] = ov12_0224810C(ctx, msgData->params[0]);
+        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->params[1]);
+        msg->param[2] = ov12_0224820C(ctx, msgData->params[2]);
         return;
     case TAG_TRNAME_NICKNAME_NICKNAME:
-        msg->param[0] = ov12_02248220(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->unk8[1]);
-        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->unk8[2]);
+        msg->param[0] = ov12_02248220(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->params[1]);
+        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->params[2]);
         return;
     case TAG_TRCLASS_TRNAME_NICKNAME:
-        msg->param[0] = ov12_02248218(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_02248220(battleSystem, ctx, msgData->unk8[1]);
-        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->unk8[2]);
+        msg->param[0] = ov12_02248218(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_02248220(battleSystem, ctx, msgData->params[1]);
+        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->params[2]);
         return;
     case TAG_TRCLASS_TRNAME_ITEM:
-        msg->param[0] = ov12_02248218(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_02248220(battleSystem, ctx, msgData->unk8[1]);
-        msg->param[2] = ov12_0224810C(ctx, msgData->unk8[2]);
+        msg->param[0] = ov12_02248218(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_02248220(battleSystem, ctx, msgData->params[1]);
+        msg->param[2] = ov12_0224810C(ctx, msgData->params[2]);
         return;
     case TAG_NICKNAME_ABILITY_NICKNAME_MOVE:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->unk8[1]);
-        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->unk8[2]);
-        msg->param[3] = GetMoveMessageNo(ctx, msgData->unk8[3]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->params[1]);
+        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->params[2]);
+        msg->param[3] = GetMoveMessageNo(ctx, msgData->params[3]);
         return;
     case TAG_NICKNAME_ABILITY_NICKNAME_ABILITY:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->unk8[1]);
-        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->unk8[2]);
-        msg->param[3] = ov12_0224819C(battleSystem, ctx, msgData->unk8[3]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->params[1]);
+        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->params[2]);
+        msg->param[3] = ov12_0224819C(battleSystem, ctx, msgData->params[3]);
         return;
     case TAG_NICKNAME_ABILITY_NICKNAME_STAT:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->unk8[1]);
-        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->unk8[2]);
-        msg->param[3] = ov12_022481D0(ctx, msgData->unk8[3]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_0224819C(battleSystem, ctx, msgData->params[1]);
+        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->params[2]);
+        msg->param[3] = ov12_022481D0(ctx, msgData->params[3]);
         return;
     case TAG_NICKNAME_ITEM_NICKNAME_ITEM:
-        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_0224810C(ctx, msgData->unk8[1]);
-        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->unk8[2]);
-        msg->param[3] = ov12_0224810C(ctx, msgData->unk8[3]);
+        msg->param[0] = ov12_022480C0(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_0224810C(ctx, msgData->params[1]);
+        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->params[2]);
+        msg->param[3] = ov12_0224810C(ctx, msgData->params[3]);
         return;
     case TAG_TRNAME_NICKNAME_TRNAME_NICKNAME:
-        msg->param[0] = ov12_02248220(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->unk8[1]);
-        msg->param[2] = ov12_02248220(battleSystem, ctx, msgData->unk8[2]);
-        msg->param[3] = ov12_022480C0(battleSystem, ctx, msgData->unk8[3]);
+        msg->param[0] = ov12_02248220(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_022480C0(battleSystem, ctx, msgData->params[1]);
+        msg->param[2] = ov12_02248220(battleSystem, ctx, msgData->params[2]);
+        msg->param[3] = ov12_022480C0(battleSystem, ctx, msgData->params[3]);
         return;
     case TAG_TRCLASS_TRNAME_NICKNAME_NICKNAME:
-        msg->param[0] = ov12_02248218(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_02248220(battleSystem, ctx, msgData->unk8[1]);
-        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->unk8[2]);
-        msg->param[3] = ov12_022480C0(battleSystem, ctx, msgData->unk8[3]);
+        msg->param[0] = ov12_02248218(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_02248220(battleSystem, ctx, msgData->params[1]);
+        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->params[2]);
+        msg->param[3] = ov12_022480C0(battleSystem, ctx, msgData->params[3]);
         return;
     case TAG_TRCLASS_TRNAME_NICKNAME_TRNAME:
-        msg->param[0] = ov12_02248218(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_02248220(battleSystem, ctx, msgData->unk8[1]);
-        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->unk8[2]);
-        msg->param[3] = ov12_02248220(battleSystem, ctx, msgData->unk8[3]);
+        msg->param[0] = ov12_02248218(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_02248220(battleSystem, ctx, msgData->params[1]);
+        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->params[2]);
+        msg->param[3] = ov12_02248220(battleSystem, ctx, msgData->params[3]);
         return;
     case TAG_TRCLASS_TRNAME_TRCLASS_TRNAME:
-        msg->param[0] = ov12_02248218(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_02248220(battleSystem, ctx, msgData->unk8[1]);
-        msg->param[2] = ov12_02248218(battleSystem, ctx, msgData->unk8[2]);
-        msg->param[3] = ov12_02248220(battleSystem, ctx, msgData->unk8[3]);
+        msg->param[0] = ov12_02248218(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_02248220(battleSystem, ctx, msgData->params[1]);
+        msg->param[2] = ov12_02248218(battleSystem, ctx, msgData->params[2]);
+        msg->param[3] = ov12_02248220(battleSystem, ctx, msgData->params[3]);
         return;
     case TAG_TRCLASS_TRNAME_NICKNAME_TRCLASS_TRNAME_NICKNAME:
-        msg->param[0] = ov12_02248218(battleSystem, ctx, msgData->unk8[0]);
-        msg->param[1] = ov12_02248220(battleSystem, ctx, msgData->unk8[1]);
-        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->unk8[2]);
-        msg->param[3] = ov12_02248218(battleSystem, ctx, msgData->unk8[3]);
-        msg->param[4] = ov12_02248220(battleSystem, ctx, msgData->unk8[4]);
-        msg->param[5] = ov12_022480C0(battleSystem, ctx, msgData->unk8[5]);
+        msg->param[0] = ov12_02248218(battleSystem, ctx, msgData->params[0]);
+        msg->param[1] = ov12_02248220(battleSystem, ctx, msgData->params[1]);
+        msg->param[2] = ov12_022480C0(battleSystem, ctx, msgData->params[2]);
+        msg->param[3] = ov12_02248218(battleSystem, ctx, msgData->params[3]);
+        msg->param[4] = ov12_02248220(battleSystem, ctx, msgData->params[4]);
+        msg->param[5] = ov12_022480C0(battleSystem, ctx, msgData->params[5]);
         // fallthrough.
     }
 }
 
-s32 ov12_022480C0(BattleSystem *battleSystem, BattleContext *ctx, int side) {
-    int battlerID = GetBattlerIDBySide(battleSystem, ctx, side);
+int ov12_022480C0(BattleSystem *battleSystem, BattleContext *ctx, int side) {
+    int battlerID = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
     if (side == 0x16) {
         return battlerID | (ctx->unk_21A0[battlerID] << 8);
     } else {
@@ -7938,54 +7937,54 @@ int ov12_0224810C(BattleContext* ctx, int arg1) {
     return item;
 }
 
-int ov12_02248184(BattleContext* ctx, s32 arg1) {
+int ov12_02248184(BattleContext* ctx, int arg1) {
     if (arg1 == 0xFF) return ctx->msgTemp;
 }
 
-int ov12_02248190(BattleContext* ctx, s32 arg1) {
+int ov12_02248190(BattleContext* ctx, int arg1) {
     if (arg1 == 0xFF) return ctx->msgTemp;
 }
 
-int ov12_0224819C(BattleSystem* battleSystem, BattleContext* ctx, u32 side) {
+int ov12_0224819C(BattleSystem* battleSystem, BattleContext* ctx, int side) {
     u32 ability;
     int battlerID;
     if (side == 0xFF) {
         ability = ctx->abilityTemp;
     } else {
-        battlerID = GetBattlerIDBySide(battleSystem, ctx, side);
+        battlerID = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
         ability = ctx->battleMons[battlerID].ability;
         BattlerSetAbility(ctx, battlerID, ability);
     }
     return ability;
 }
 
-int ov12_022481D0(BattleContext* ctx, s32 arg1) {
+int ov12_022481D0(BattleContext* ctx, int arg1) {
     if (arg1 == 0xFF) return ctx->msgTemp;
 }
 
-int ov12_022481DC(BattleContext* ctx, s32 arg1) {
+int ov12_022481DC(BattleContext* ctx, int arg1) {
     if (arg1 == 0xFF) return ctx->msgTemp;
 }
 
-int ov12_022481E8(BattleSystem* battleSystem, BattleContext* ctx, u32 side) {
-    u32 battlerID = GetBattlerIDBySide(battleSystem, ctx, side);
+int ov12_022481E8(BattleSystem* battleSystem, BattleContext* ctx, int side) {
+    u32 battlerID = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
     return battlerID | ctx->selectedMonIndex[battlerID] << 8;
 }
 
-int ov12_02248200(BattleContext* ctx, s32 arg1) {
+int ov12_02248200(BattleContext* ctx, int arg1) {
     if (arg1 == 0xFF) return ctx->msgTemp;
 }
 
-int ov12_0224820C(BattleContext* ctx, s32 arg1) {
+int ov12_0224820C(BattleContext* ctx, int arg1) {
     if (arg1 == 0xFF) return ctx->msgTemp;
 }
 
-int ov12_02248218(BattleSystem* battleSystem, BattleContext* ctx, u32 side) {
-    return GetBattlerIDBySide(battleSystem, ctx, side);
+int ov12_02248218(BattleSystem* battleSystem, BattleContext* ctx, int side) {
+    return BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 }
 
-int ov12_02248220(BattleSystem* battleSystem, BattleContext* ctx, u32 side) {
-    return GetBattlerIDBySide(battleSystem, ctx, side);
+int ov12_02248220(BattleSystem* battleSystem, BattleContext* ctx, int side) {
+    return BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 }
 
 extern ManagedSpriteTemplate ov12_0226C428;
@@ -8048,7 +8047,7 @@ void ov12_02248228(BattleSystem* battleSystem, GetterWork* data, Pokemon* mon) {
     String_Delete(string);
     InitWindow(&window);
     AddTextWindowTopLeftCorner(bgConfig, &window, 12, 4, 0, 0);
-    AddTextPrinterParameterizedWithColor(&window, 0, messageBuffer, 0, 0, 255, 0x10200, NULL);
+    AddTextPrinterParameterizedWithColor(&window, 0, messageBuffer, 0, 0, 255, 0x10200, NULL); // TODO: What color is 0x10200? Is 255 instant print speed?
     sub_02021AC8(sub_02013688(&window, NNS_G2D_VRAM_TYPE_2DMAIN, 5), 1, NNS_G2D_VRAM_TYPE_2DMAIN, &unkStruct);
     textObjTemplate.fontSystem = data->unk50[0];
     textObjTemplate.window = &window;
@@ -8070,8 +8069,8 @@ void ov12_02248228(BattleSystem* battleSystem, GetterWork* data, Pokemon* mon) {
 
 void ov12_022484D4(BattleSystem* battleSystem, GetterWork* data) {
     SpriteManager* spriteManager = BattleSystem_GetSpriteManager(battleSystem);
-    Sprite_DeleteAndFreeResources((ManagedSprite* ) data->unkC[0]);
-    Sprite_DeleteAndFreeResources((ManagedSprite* ) data->unkC[1]);
+    Sprite_DeleteAndFreeResources(data->unkC[0]);
+    Sprite_DeleteAndFreeResources(data->unkC[1]);
     FontOAM_Delete(data->unk14);
     sub_02021B5C(&data->unk18);
     SpriteManager_UnloadCharObjById(spriteManager, 0x4E35);
@@ -8086,23 +8085,23 @@ void ov12_022484D4(BattleSystem* battleSystem, GetterWork* data) {
 }
 
 void UpdateFriendshipFainted(BattleSystem* battleSystem, BattleContext* ctx, int battlerID) {
-    if (BattleSystem_GetFieldSide(battleSystem, battlerID) == 0) {
-        u8 var_r6;
+    if (BattleSystem_GetFieldSide(battleSystem, battlerID) == 0) { // TODO: Side consts?
+        u8 enemyID;
         if (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_DOUBLES) {
-            var_r6 = BattleSystem_GetBattlerFromBattlerType(battleSystem, 3);
-            u8 temp_r1 = BattleSystem_GetBattlerFromBattlerType(battleSystem, 5);
-            if (ctx->battleMons[temp_r1].level > ctx->battleMons[var_r6].level) {
-                var_r6 = temp_r1;
+            enemyID = BattleSystem_GetBattlerFromBattlerType(battleSystem, BATTLER_TYPE_ENEMY_SIDE_SLOT_1);
+            u8 enemyID_slot2 = BattleSystem_GetBattlerFromBattlerType(battleSystem, BATTLER_TYPE_ENEMY_SIDE_SLOT_2);
+            if (ctx->battleMons[enemyID_slot2].level > ctx->battleMons[enemyID].level) { // The penalty is incurred by the higher level opponent, regardless of which (if either) landed the finishing blow.
+                enemyID = enemyID_slot2;
             }
         }
         else {
-            var_r6 = BattleSystem_GetBattlerFromBattlerType(battleSystem, 1);
+            enemyID = BattleSystem_GetBattlerFromBattlerType(battleSystem, BATTLER_TYPE_SOLO_ENEMY);
         }
         Pokemon *mon = BattleSystem_GetPartyMon(battleSystem, battlerID, ctx->selectedMonIndex[battlerID]);
-        u8 temp_r0 = ctx->battleMons[battlerID].level;
-        u8 temp_r1_2 = ctx->battleMons[var_r6].level;
-        if (temp_r1_2 > temp_r0) {
-            if ((temp_r1_2 - temp_r0) >= 0x1E) {
+        u8 playerLevel = ctx->battleMons[battlerID].level;
+        u8 enemyLevel = ctx->battleMons[enemyID].level;
+        if (enemyLevel > playerLevel) {
+            if (enemyLevel - playerLevel >= 30) { // Incur a more severe friendship penalty if the enemy is 30+ levels higher.
                 MonApplyFriendshipMod(mon, 8, BattleSystem_GetLocation(battleSystem));
                 ApplyMonMoodModifier(mon, 6);
                 return;
@@ -8117,10 +8116,10 @@ void UpdateFriendshipFainted(BattleSystem* battleSystem, BattleContext* ctx, int
 }
 
 void BattlerSetAbility(BattleContext* ctx, u8 battlerID, u8 ability) {
-    ctx->trainerAIData.unk5C[battlerID] = ability;
+    ctx->trainerAIData.abilities[battlerID] = ability;
     return;
 }
 
 void BattlerSetItem(BattleContext* ctx, u8 battlerID, u16 item) {
-    ctx->trainerAIData.unk60[battlerID] = item;
+    ctx->trainerAIData.heldItems[battlerID] = item;
 }
