@@ -622,3 +622,46 @@
 
 .public ov44_0222E02C
 .public ov44_0222D8B0
+
+.public ov44_0222C288
+.public ov44_0222C288
+.public ov44_0222C288
+.public ov44_0222C288
+.public ov44_0222B228
+.public ov44_0222B36C
+.public ov44_0222B3A8
+.public ov44_0222B42C
+.public ov44_0222B494
+.public ov44_0222B528
+.public ov44_0222B64C
+.public ov44_0222BA6C
+.public ov44_0222BAB8
+.public ov44_0222BAC4
+.public ov44_0222BAD0
+.public ov44_0222BB38
+.public ov44_0222BBA4
+.public ov44_0222BC78
+.public ov44_0222B744
+.public ov44_0222BE3C
+.public ov44_0222C060
+.public ov44_0222C084
+.public ov44_0222C35C
+.public ov44_0222C684
+.public ov44_0222C9AC
+.public ov44_0222C9F4
+.public ov44_0222CB34
+.public ov44_0222CB7C
+.public ov44_0222CC34
+.public ov44_0222CDAC
+.public ov44_0222BFF0
+.public ov44_0222BEE0
+.public ov44_0222BF6C
+
+.public ov44_0222AEC0
+.public ov44_0222AFE8
+.public ov44_0222B030
+.public ov44_0222B0A4
+.public ov44_0222ADF8
+.public ov44_0222B164
+.public ov44_0222AE74
+.public ov44_0222AE44

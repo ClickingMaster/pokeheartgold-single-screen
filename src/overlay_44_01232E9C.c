@@ -27,6 +27,7 @@
 #include "unk_02034354.h"
 #include "unk_020379A0.h"
 #include "unk_02035900.h"
+#include "unk_020971F8.h"
 
 extern u8 _0223535C[4];
 extern u8 ov44_02235360[4];
@@ -2144,7 +2145,7 @@ void ov44_02230300(UnkStruct_ov44_022319EC* arg0) {
         width = 232 - FontID_String_GetWidth(0, arg0->unk178, 0);
         AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, width, 128, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     }
-    ov44_0222AC54(arg0->unk15C, &arg0->unkA88[132], 6, 2, 2, temp_r0);
+    ov44_0222AC54(arg0->unk15C, &arg0->unkB0C, 6, 2, 2, temp_r0);
 
     s32 var_r1;
     if (sp10->unk21 != 0) {
@@ -2152,7 +2153,7 @@ void ov44_02230300(UnkStruct_ov44_022319EC* arg0) {
     } else {
         var_r1 = 1;
     }
-    ov44_0222ABDC(arg0->unk15C, &arg0->unkA88[132], 6, 28, 2, var_r1, 0);
+    ov44_0222ABDC(arg0->unk15C, &arg0->unkB0C, 6, 28, 2, var_r1, 0);
 }
 
 void ov44_022307E0(UnkStruct_ov44_022319EC* arg0) {
@@ -2413,14 +2414,14 @@ void ov44_02231344(UnkStruct_ov44_022319EC* arg0, Window* arg1, s32 arg2, u32 ar
     for (s32 i = 0; i < 2; i ++) {
         FillWindowPixelBuffer(&arg1[i], 0);
         if (i == 0) {
-            ov44_0222AD34(&arg1[i], &arg0->unkA88[132], 0, temp_r7, sp8);
+            ov44_0222AD34(&arg1[i], &arg0->unkB0C, 0, temp_r7, sp8);
         } else {
             if (spC->unk21 != 0) {
                 var_r0 = 8;
             } else {
                 var_r0 = 1;
             }
-            ov44_0222ACE8(&arg1[i], &arg0->unkA88[132], 0, temp_r7, var_r0, 0);
+            ov44_0222ACE8(&arg1[i], &arg0->unkB0C, 0, temp_r7, var_r0, 0);
         }
         ScheduleWindowCopyToVram(&arg1[i]);
     }
@@ -2447,10 +2448,10 @@ void ov44_02231420(UnkStruct_ov44_022319EC* arg0, NARC* arg1, enum HeapID arg2) 
     spriteTemplateList = ov44_02235570;
 
     GfGfx_EngineBTogglePlanes(16, 0);
-    arg0->unkB1C.unk20C[0] = AddCharResObjFromOpenNarc(arg0->unk2BC[0], arg1, 43, FALSE, 30, 2, arg2);
-    arg0->unkB1C.unk20C[1] = AddPlttResObjFromOpenNarc(arg0->unk2BC[1], arg1, 44, FALSE, 30, 2, 8, arg2);
-    arg0->unkB1C.unk20C[2] = AddCellOrAnimResObjFromOpenNarc(arg0->unk2BC[2], arg1, 41, FALSE, 30, GF_GFX_RES_TYPE_CELL, arg2);
-    arg0->unkB1C.unk20C[3] = AddCellOrAnimResObjFromOpenNarc(arg0->unk2BC[3], arg1, 42, FALSE, 30, GF_GFX_RES_TYPE_ANIM, arg2);
+    arg0->unkB1C.unk20C[0] = AddCharResObjFromOpenNarc(arg0->unk2BC[0], arg1, NARC_a_0_4_3, FALSE, 30, NNS_G2D_VRAM_TYPE_2DSUB, arg2);
+    arg0->unkB1C.unk20C[1] = AddPlttResObjFromOpenNarc(arg0->unk2BC[1], arg1, NARC_a_0_4_4, FALSE, 30, NNS_G2D_VRAM_TYPE_2DSUB, 8, arg2);
+    arg0->unkB1C.unk20C[2] = AddCellOrAnimResObjFromOpenNarc(arg0->unk2BC[2], arg1, NARC_fielddata_mapmatrix_map_matrix, FALSE, 30, GF_GFX_RES_TYPE_CELL, arg2);
+    arg0->unkB1C.unk20C[3] = AddCellOrAnimResObjFromOpenNarc(arg0->unk2BC[3], arg1, NARC_a_0_4_2, FALSE, 30, GF_GFX_RES_TYPE_ANIM, arg2);
     GF_ASSERT(sub_0200AE18(arg0->unkB1C.unk20C[0]) != 0);
     GF_ASSERT(sub_0200B00C(arg0->unkB1C.unk20C[1]) != 0);
     sub_0200A740(arg0->unkB1C.unk20C[0]);
@@ -2591,4 +2592,54 @@ s32 ov44_0223183C(UnkStruct_ov44_02231800* arg0, s32 arg1, s32 arg2, s32 arg3) {
         Sprite_UpdateAnim(arg0->unk21C[arg1], 2 * FX32_ONE);
     }
     return sp8;
+}
+
+void ov44_02231918(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+    if (arg1 != -1) {
+        PlayerProfile* playerProfile = PlayerProfile_New(HEAP_ID_53);
+        Save_Profile_PlayerName_Set(playerProfile, sub_0202C254(arg0->unk0, arg1));
+        BufferPlayersName(arg0->unkB1C.unk0, 0, playerProfile);
+        Heap_Free(playerProfile);
+    }
+}
+
+UnkStruct_ov44_02231958* ov44_02231958(UnkStruct_ov44_022319EC* arg0, u32 arg1) {
+    if (arg1 >= 32) {
+        return &arg0->unk1098;
+    }
+    return &arg0->unk4->unk24[arg1];
+}
+
+s32 ov44_02231974(s32 arg0) {
+    return ov00_021E6D68(arg0);
+}
+
+s32 ov44_0223197C(UnkStruct_ov44_022319EC* arg0, s32 arg1, s32 arg2) {
+    sub_020379A0(HEAP_ID_15);
+    ov00_021E70B8(arg0->unk4->unk0.unk21);
+    if (ov44_02229F44(arg2) == 1) {
+        ov00_021E714C(1, 128);
+    } else {
+        ov00_021E714C(0, 128);
+    }
+    sub_02097214();
+    return sub_02039080(arg1);
+}
+
+void ov44_022319BC(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+    if (arg0->unkD64 == 0) {
+        arg0->unkD64 = 1;
+        ov44_02231D94(&arg0->unk38C, 1);
+        if (arg1 == 1) {
+            ov44_0222F510(arg0, 9, 0);
+        }
+    }
+}
+
+void ov44_022319EC(UnkStruct_ov44_022319EC* arg0) {
+    if (arg0->unkD64 == 1) {
+        arg0->unkD64 = 0;
+        ov44_0222F7BC(arg0);
+        ov44_02231D94(&arg0->unk38C, 0);
+    }
 }

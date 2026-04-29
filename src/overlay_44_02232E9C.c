@@ -47,57 +47,6 @@ extern u8 ov44_02235610[1];
 extern u8 ov44_02235611[1];
 extern u8 ov44_02235612[30];
 
-void ov44_02231918(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
-    if (arg1 != -1) {
-        PlayerProfile* playerProfile = PlayerProfile_New(HEAP_ID_53);
-        Save_Profile_PlayerName_Set(playerProfile, sub_0202C254(arg0->unk0, arg1));
-        BufferPlayersName(arg0->unkB1C.unk0, 0, playerProfile);
-        Heap_Free(playerProfile);
-    }
-}
-
-UnkStruct_ov44_02231958* ov44_02231958(UnkStruct_ov44_022319EC* arg0, u32 arg1) {
-    if (arg1 >= 32) {
-        return &arg0->unk1098;
-    }
-    return &arg0->unk4->unk24[arg1];
-}
-
-
-s32 ov44_02231974(s32 arg0) {
-    return ov00_021E6D68(arg0);
-}
-
-s32 ov44_0223197C(UnkStruct_ov44_022319EC* arg0, s32 arg1, s32 arg2) {
-    sub_020379A0(HEAP_ID_15);
-    ov00_021E70B8(arg0->unk4->unk0.unk21);
-    if (ov44_02229F44(arg2) == 1) {
-        ov00_021E714C(1, 128);
-    } else {
-        ov00_021E714C(0, 128);
-    }
-    sub_02097214();
-    return sub_02039080(arg1);
-}
-
-void ov44_022319BC(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
-    if (arg0->unkD64 == 0) {
-        arg0->unkD64 = 1;
-        ov44_02231D94(&arg0->unk38C, 1);
-        if (arg1 == 1) {
-            ov44_0222F510(arg0, 9, 0);
-        }
-    }
-}
-
-void ov44_022319EC(UnkStruct_ov44_022319EC* arg0) {
-    if (arg0->unkD64 == 1) {
-        arg0->unkD64 = 0;
-        ov44_0222F7BC(arg0);
-        ov44_02231D94(&arg0->unk38C, 0);
-    }
-}
-
 YesNoPrompt* ov44_02231A14(BgConfig* arg0, UnkStruct_ov44_02231A28* arg1, u32 arg2) {
     YesNoPrompt* yesNoPrompt = ov44_02231A28(arg0, arg1, arg2);
     YesNoPrompt_SetIgnoreTouch(yesNoPrompt, 1);
@@ -226,13 +175,13 @@ s32 ov44_02231CE8(UnkStruct_ov44_02232DA0* arg0) {
     ov42_02227FDC(arg0->unk6E4, (s16)sp0.unk0 / 16, ((s16)sp0.unk2 / 16) + 1);
 }
 
-void ov44_02231D48(UnkStruct_ov44_02232DA0* arg0, s32* arg1) {    
-    u32 temp_r0 = ov42_022282DC(arg1[0]);
+void ov44_02231D48(UnkStruct_ov44_02232DA0* arg0, UnkStruct_ov44_02232B74* arg1) {    
+    u32 temp_r0 = ov42_022282DC(arg1->unk0);
     UnkStruct_ov44_02232914 sp0[2];
     sp0[0].unk0 = temp_r0;
     sp0[0].unk2 = temp_r0 >> 16;
     sp0[1] = sp0[0];
-    ov44_022325A4(arg0, sp0[1], ov42_0222920C(arg1[1]) - 2);
+    ov44_022325A4(arg0, sp0[1], ov42_0222920C(arg1->unk4) - 2);
 }
 
 void ov44_02231D8C(UnkStruct_ov44_02232DA0* arg0) {
@@ -299,8 +248,8 @@ void ov44_02231ED4(s32* arg0) {
     __builtin__clear(arg0, 28);
 }
 
-u8 ov44_02231EF4(s32* arg0) {
-    return ov42_02228188(arg0[0], 4);
+u8 ov44_02231EF4(UnkStruct_ov44_02232B74* arg0) {
+    return ov42_02228188(arg0->unk0, 4);
 }
 
 s32 ov44_02231F04(UnkStruct_ov44_02232B74* arg0) {

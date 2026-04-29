@@ -31,5 +31,6 @@ void sub_0203126C(FrontierSave *a0, u32 a1, u32 a2, u16 a3);
 u32 *sub_020312C4(SaveData *saveData, u32 a1, u32 *out);
 u32 sub_020312E0(SaveData *saveData, u32 *a1, u32 a2, u32 a3);
 u32 sub_02030E98(u32 a0);
+void sub_02031188(void);
 
 #endif // POKEHEARTGOLD_UNK_02030A98_H
