@@ -261,7 +261,7 @@ s32 ov44_0222A048(u16 arg0);
 s32 ov44_0222A090(u32 arg0);
 u32 ov44_0222A0B4(u32 arg0);
 s32 ov44_0222A168(UnkStruct_ov44_022319EC* arg0);
-void ov44_0222A1B4(s32 arg0);
+void ov44_0222A1B4(u32 arg0);
 void ov44_0222A1FC(UnkStruct_ov44_022319EC* arg0);
 
 s32 ov44_02229FDC(u32);
@@ -282,7 +282,7 @@ void ov44_0222ABDC(BgConfig* arg0, UnkStruct_ov44_0222AB24* arg1, s32 arg2, u8 a
 void ov44_0222AC54(BgConfig* arg0, UnkStruct_ov44_0222AB24* arg1, s32 arg2, u8 arg3, u8 arg4, u32 arg5);
 void ov44_0222ACE8(Window* arg0, UnkStruct_ov44_0222AB24* arg1, u8 arg2, u16 arg3, s32 arg4, s32 arg5);
 void ov44_0222AD34(Window* arg0, UnkStruct_ov44_0222AB24* arg1, u8 arg2, u16 arg3, u32 arg4);
-s32 ov44_0222ADC4(s32 arg0);
+s32 ov44_0222ADC4(u32 arg0);
 u32 ov44_0222ADD0(void);
 void ov44_0222ADF8(UnkStruct_ov44_022319EC* arg0);
 void ov44_0222AE44(UnkStruct_ov44_022319EC* arg0);

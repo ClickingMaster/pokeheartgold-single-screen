@@ -2,6 +2,9 @@
 
 #include <nitro/gx.h>
 
+#include "msgdata/msg/msg_0778.h"
+#include "msgdata/msg/msg_0800.h"
+
 #include "save_frontier.h"
 #include "render_window.h"
 #include "render_text.h"
@@ -29,8 +32,11 @@
 #include "unk_02035900.h"
 #include "unk_020971F8.h"
 
-extern u8 _0223535C[4];
-extern u8 ov44_02235360[4];
+static const u8 _0223535C[4] = {1, 3, 5, 0};
+// extern u8 _0223535C[4];
+
+static const u8 ov44_02235360[4] = {0, 2, 4, 0};
+// extern u8 ov44_02235360[4];
 extern u8 ov44_02235364[4];
 extern u8 ov44_02235368[4];
 extern s8 ov44_0223536C[8];
@@ -2084,7 +2090,8 @@ void ov44_02230300(UnkStruct_ov44_022319EC* arg0) {
         color = MAKE_TEXT_COLOR(3, 4, 0);
     }
     ov44_02231918(arg0, temp_r4);
-    ReadMsgDataIntoString(arg0->unk168, 42, arg0->unk170);
+    // {STRVAR_1 3, 0, 0}
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00042, arg0->unk170);
     StringExpandPlaceholders(arg0->unkB1C.unk0, arg0->unk178, arg0->unk170);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 1, arg0->unk178, 32, 8, 255, color, 0);
     UnkStruct_ov44_02231958* sp10 = ov44_02231958(arg0, temp_r4);
@@ -2095,51 +2102,62 @@ void ov44_02230300(UnkStruct_ov44_022319EC* arg0) {
     Save_Profile_PlayerName_Set(temp_r6, sub_0202C298(arg0->unk0, temp_r4));
     BufferPlayersName(arg0->unkB1C.unk0, 0, temp_r6);
     Heap_Free(temp_r6);
-    ReadMsgDataIntoString(arg0->unk168, 43, arg0->unk178);
+    // GROUP
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00043, arg0->unk178);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 32, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
-    ReadMsgDataIntoString(arg0->unk168, 150, arg0->unk170);
+    // {STRVAR_1 3, 0, 0}
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00150, arg0->unk170);
     StringExpandPlaceholders(arg0->unkB1C.unk0, arg0->unk178, arg0->unk170);
 
     u32 width = 232 - FontID_String_GetWidth(0, arg0->unk178, 0);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, width, 32, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
-    ReadMsgDataIntoString(arg0->unk168, 44, arg0->unk178);
+    // BATTLE RECORD
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00044, arg0->unk178);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 56, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     BufferIntegerAsString(arg0->unkB1C.unk0, 0, sub_0202C090(arg0->unk0, temp_r4, 1), 4, PRINTING_MODE_RIGHT_ALIGN, TRUE);
-    ReadMsgDataIntoString(arg0->unk168, 45, arg0->unk170);
+    // W: {STRVAR_1 53, 0, 0}
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00045, arg0->unk170);
     StringExpandPlaceholders(arg0->unkB1C.unk0, arg0->unk178, arg0->unk170);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 120, 56, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     BufferIntegerAsString(arg0->unkB1C.unk0, 0, sub_0202C090(arg0->unk0, temp_r4, 2), 4, PRINTING_MODE_RIGHT_ALIGN, TRUE);
-    ReadMsgDataIntoString(arg0->unk168, 46, arg0->unk170);
+    // L: {STRVAR_1 53, 0, 0}
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00046, arg0->unk170);
     StringExpandPlaceholders(arg0->unkB1C.unk0, arg0->unk178, arg0->unk170);
     
     width = 232 - FontID_String_GetWidth(0, arg0->unk178, 0);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, width, 56, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
-    ReadMsgDataIntoString(arg0->unk168, 47, arg0->unk178);
+    // POKéMON TRADES
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00047, arg0->unk178);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 80, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     BufferIntegerAsString(arg0->unkB1C.unk0, 0, sub_0202C090(arg0->unk0, temp_r4, 3), 4, PRINTING_MODE_RIGHT_ALIGN, TRUE);
-    ReadMsgDataIntoString(arg0->unk168, 48, arg0->unk170);
+    // {STRVAR_1 53, 0, 0}
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00048, arg0->unk170);
     StringExpandPlaceholders(arg0->unkB1C.unk0, arg0->unk178, arg0->unk170);
 
     width = 232 - FontID_String_GetWidth(0, arg0->unk178, 0);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, width, 80, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     if (ov44_02229EF8(arg0) == 1) {
-        ReadMsgDataIntoString(arg0->unk168, 49, arg0->unk178);
+        // POFFIN SESSIONS
+        ReadMsgDataIntoString(arg0->unk168, msg_0778_00049, arg0->unk178);
         AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 104, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
         BufferIntegerAsString(arg0->unkB1C.unk0, 0, sub_0202C090(arg0->unk0, temp_r4, 9), 4, PRINTING_MODE_RIGHT_ALIGN, TRUE);
-        ReadMsgDataIntoString(arg0->unk168, 50, arg0->unk170);
+        // {STRVAR_1 53, 0, 0}
+        ReadMsgDataIntoString(arg0->unk168, msg_0778_00050, arg0->unk170);
         StringExpandPlaceholders(arg0->unkB1C.unk0, arg0->unk178, arg0->unk170);
 
         width = 232 - FontID_String_GetWidth(0, arg0->unk178, 0);
         AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, width, 104, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     }
-    ReadMsgDataIntoString(arg0->unk168, 51, arg0->unk178);
+    // DATE LAST PLAYED
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00051, arg0->unk178);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 128, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     s32 temp_r0_2 = sub_0202C090(arg0->unk0, temp_r4, 6);
     if (temp_r0_2 != 0) {
         BufferIntegerAsString(arg0->unkB1C.unk0, 2, temp_r0_2, 2, PRINTING_MODE_LEFT_ALIGN, TRUE);
         BufferIntegerAsString(arg0->unkB1C.unk0, 0, sub_0202C090(arg0->unk0, temp_r4, 4), 4, PRINTING_MODE_LEFT_ALIGN, TRUE);
         BufferMonthNameAbbr(arg0->unkB1C.unk0, 1, sub_0202C090(arg0->unk0, temp_r4, 5));
-        ReadMsgDataIntoString(arg0->unk168, 74, arg0->unk170);
+        // {STRVAR_34 16, 1, 0} {STRVAR_1 51, 2, 0}, {STRVAR_1 53, 0, 0}
+        ReadMsgDataIntoString(arg0->unk168, msg_0778_00074, arg0->unk170);
         StringExpandPlaceholders(arg0->unkB1C.unk0, arg0->unk178, arg0->unk170);
 
         width = 232 - FontID_String_GetWidth(0, arg0->unk178, 0);
@@ -2158,23 +2176,28 @@ void ov44_02230300(UnkStruct_ov44_022319EC* arg0) {
 
 void ov44_022307E0(UnkStruct_ov44_022319EC* arg0) {
     s32 temp_r4 = arg0->unkB1C.unk71 - 1;
-    ReadMsgDataIntoString(arg0->unk168, 52, arg0->unk178);
+    // BATTLE TOWER
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00052, arg0->unk178);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 0, 255, MAKE_TEXT_COLOR(15, 14, 0), 0);
     ov44_02231084(arg0, arg0->unk178, 0, temp_r4);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 24, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     ov44_02231054(arg0, 65, 113, temp_r4, 120, 24);
-    ReadMsgDataIntoString(arg0->unk168, 59, arg0->unk178);
+    // RECORD
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00059, arg0->unk178);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 48, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     ov44_02231054(arg0, 65, 112, temp_r4, 120, 48);
 }
 
 void ov44_022308B0(UnkStruct_ov44_022319EC* arg0) {
     s32 temp_r4 = arg0->unkB1C.unk71 - 1;
-    ReadMsgDataIntoString(arg0->unk168, 53, arg0->unk178);
+    // BATTLE FACTORY
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00053, arg0->unk178);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 0, 255, MAKE_TEXT_COLOR(15, 14, 0), 0);
-    ReadMsgDataIntoString(arg0->unk168, 60, arg0->unk178);
+    // LEVEL 50
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00060, arg0->unk178);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 24, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
-    ReadMsgDataIntoString(arg0->unk168, 62, arg0->unk178);
+    // RENTAL/TRADE
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00062, arg0->unk178);
     
     u32 width = 232 - FontID_String_GetWidth(0, arg0->unk178, 0);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, width, 24, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
@@ -2182,13 +2205,16 @@ void ov44_022308B0(UnkStruct_ov44_022319EC* arg0) {
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 48, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     ov44_02231054(arg0, 65, 115, temp_r4, 104, 48);
     ov44_02231054(arg0, 66, 117, temp_r4, 212, 48);
-    ReadMsgDataIntoString(arg0->unk168, 59, arg0->unk178);
+    // RECORD
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00059, arg0->unk178);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 64, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     ov44_02231054(arg0, 65, 114, temp_r4, 104, 64);
     ov44_02231054(arg0, 66, 116, temp_r4, 212, 64);
-    ReadMsgDataIntoString(arg0->unk168, 61, arg0->unk178);
+    // OPEN LEVEL
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00061, arg0->unk178);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 88, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
-    ReadMsgDataIntoString(arg0->unk168, 62, arg0->unk178);
+    // RENTAL/TRADE
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00062, arg0->unk178);
 
     width = 232 - FontID_String_GetWidth(0, arg0->unk178, 0);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, width, 88, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
@@ -2196,7 +2222,8 @@ void ov44_022308B0(UnkStruct_ov44_022319EC* arg0) {
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 112, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     ov44_02231054(arg0, 65, 119, temp_r4, 104, 112);
     ov44_02231054(arg0, 66, 121, temp_r4, 212, 112);
-    ReadMsgDataIntoString(arg0->unk168, 59, arg0->unk178);
+    // RECORD
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00059, arg0->unk178);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 128, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     ov44_02231054(arg0, 65, 118, temp_r4, 104, 128);
     ov44_02231054(arg0, 66, 120, temp_r4, 212, 128);
@@ -2204,9 +2231,11 @@ void ov44_022308B0(UnkStruct_ov44_022319EC* arg0) {
 
 void ov44_02230B2C(UnkStruct_ov44_022319EC* arg0) {
     s32 temp_r4 = arg0->unkB1C.unk71 - 1;
-    ReadMsgDataIntoString(arg0->unk168, 54, arg0->unk178);
+    // BATTLE CASTLE
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00054, arg0->unk178);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 0, 255, MAKE_TEXT_COLOR(15, 14, 0), 0);
-    ReadMsgDataIntoString(arg0->unk168, 63, arg0->unk178);
+    // CASTLE POINTS
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00063, arg0->unk178);
     
     u32 width = 180 -(FontID_String_GetWidth(0, arg0->unk178, 0) + 1) / 2;
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, width, 24, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
@@ -2214,7 +2243,8 @@ void ov44_02230B2C(UnkStruct_ov44_022319EC* arg0) {
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 48, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     ov44_02231054(arg0, 68, 135, temp_r4, 104, 48);
     ov44_02231054(arg0, 67, 136, temp_r4, 212, 48);
-    ReadMsgDataIntoString(arg0->unk168, 59, arg0->unk178);
+    // RECORD
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00059, arg0->unk178);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 80, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     ov44_02231054(arg0, 68, 134, temp_r4, 104, 80);
     ov44_02231054(arg0, 67, 138, temp_r4, 212, 80);
@@ -2223,7 +2253,8 @@ void ov44_02230B2C(UnkStruct_ov44_022319EC* arg0) {
 void ov44_02230C68(UnkStruct_ov44_022319EC* arg0, enum HeapID arg1) {
     FrontierSave* frontierSave = Save_Frontier_GetStatic(arg0->unk160);
     s32 temp_r4 = arg0->unkB1C.unk71 - 1;
-    ReadMsgDataIntoString(arg0->unk168, 55, arg0->unk178);
+    // BATTLE HALL
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00055, arg0->unk178);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 0, 255, MAKE_TEXT_COLOR(15, 14, 0), 0);
     String* temp_r0 = GetSpeciesName(FrontierSave_GetStat(frontierSave, 124, temp_r4), arg1);
     u32 width = 33 - (FontID_String_GetWidth(0, temp_r0, 0) + 1) / 2;
@@ -2232,19 +2263,22 @@ void ov44_02230C68(UnkStruct_ov44_022319EC* arg0, enum HeapID arg1) {
     ov44_02231084(arg0, arg0->unk178, 4, temp_r4);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 48, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     ov44_02231054(arg0, 65, 123, temp_r4, 108, 48);
-    ReadMsgDataIntoString(arg0->unk168, 59, arg0->unk178);
+    // RECORD
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00059, arg0->unk178);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 80, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     ov44_02231054(arg0, 65, 122, temp_r4, 108, 80);
 }
 
 void ov44_02230D8C(UnkStruct_ov44_022319EC* arg0) {
     s32 temp_r4 = arg0->unkB1C.unk71 - 1;
-    ReadMsgDataIntoString(arg0->unk168, 56, arg0->unk178);
+    // BATTLE ARCADE
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00056, arg0->unk178);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 0, 255, MAKE_TEXT_COLOR(15, 14, 0), 0);
     ov44_02231084(arg0, arg0->unk178, 5, temp_r4);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 24, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     ov44_02231054(arg0, 69, 143, temp_r4, 112, 24);
-    ReadMsgDataIntoString(arg0->unk168, 59, arg0->unk178);
+    // RECORD
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00059, arg0->unk178);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 48, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     ov44_02231054(arg0, 69, 142, temp_r4, 112, 48);
 }
@@ -2252,23 +2286,30 @@ void ov44_02230D8C(UnkStruct_ov44_022319EC* arg0) {
 void ov44_02230E5C(UnkStruct_ov44_022319EC* arg0) {
     UnkStruct_021D2230* temp_r6 = sub_0202C6F4(arg0->unk160);
     s32 temp_r4 = arg0->unkB1C.unk71 - 1;
-    ReadMsgDataIntoString(arg0->unk168, 70, arg0->unk178);
+    // PLAZA GAMES PLAYED
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00070, arg0->unk178);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 0, 255, MAKE_TEXT_COLOR(15, 14, 0), 0);
     BufferWiFiPlazaActivityName(arg0->unkB1C.unk0, 0, 0);
-    ReadMsgDataIntoString(arg0->unk168, 71, arg0->unk170);
+    // {STRVAR_3 0, 0, 0}
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00071, arg0->unk170);
     StringExpandPlaceholders(arg0->unkB1C.unk0, arg0->unk178, arg0->unk170);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 24, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
-    ov44_022310C8(arg0, 72, sub_0202C090(temp_r6, temp_r4, 10), 164, 24);
+    // {STRVAR_1 53, 0, 0}
+    ov44_022310C8(arg0, msg_0778_00072, sub_0202C090(temp_r6, temp_r4, 10), 164, 24);
     BufferWiFiPlazaActivityName(arg0->unkB1C.unk0, 0, 1);
-    ReadMsgDataIntoString(arg0->unk168, 71, arg0->unk170);
+    // {STRVAR_3 0, 0, 0}
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00071, arg0->unk170);
     StringExpandPlaceholders(arg0->unkB1C.unk0, arg0->unk178, arg0->unk170);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 48, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
-    ov44_022310C8(arg0, 72, sub_0202C090(temp_r6, temp_r4, 11), 164, 48);
+    // {STRVAR_1 53, 0, 0}
+    ov44_022310C8(arg0, msg_0778_00072, sub_0202C090(temp_r6, temp_r4, 11), 164, 48);
     BufferWiFiPlazaActivityName(arg0->unkB1C.unk0, 0, 2);
-    ReadMsgDataIntoString(arg0->unk168, 71, arg0->unk170);
+    // {STRVAR_3 0, 0, 0}
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00071, arg0->unk170);
     StringExpandPlaceholders(arg0->unkB1C.unk0, arg0->unk178, arg0->unk170);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 72, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
-    ov44_022310C8(arg0, 72, sub_0202C090(temp_r6, temp_r4, 12), 164, 72);
+    // {STRVAR_1 53, 0, 0}
+    ov44_022310C8(arg0, msg_0778_00072, sub_0202C090(temp_r6, temp_r4, 12), 164, 72);
 }
 
 void ov44_02230FE8(UnkStruct_ov44_022319EC* arg0) {
@@ -2287,9 +2328,11 @@ void ov44_02231084(UnkStruct_ov44_022319EC* arg0, String* arg1, u32 arg2, s32 ar
     GF_ASSERT(arg2 < 6);
     s32 var_r1;
     if (FrontierSave_GetStat(Save_Frontier_GetStatic(arg0->unk160), ov44_022353D0[arg2], arg3) == 0) {
-        var_r1 = 57;
+        // PREV
+        var_r1 = msg_0778_00057;
     } else {
-        var_r1 = 58;
+        // CURRENT
+        var_r1 = msg_0778_00058;
     }
     ReadMsgDataIntoString(arg0->unk168, var_r1, arg1);
 }
@@ -2400,7 +2443,8 @@ void ov44_022312B8(UnkStruct_ov44_022319EC* arg0, Window* arg1, s32 arg2, s32 ar
         color = MAKE_TEXT_COLOR(3, 4, 0);
     }
     ov44_02231918(arg0, sp14);
-    ReadMsgDataIntoString(arg0->unk168, 42, arg0->unk170);
+    // {STRVAR_1 3, 0, 0}
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00042, arg0->unk170);
     StringExpandPlaceholders(arg0->unkB1C.unk0, arg0->unk178, arg0->unk170);
     AddTextPrinterParameterizedWithColor(arg1, 1, arg0->unk178, 0, temp_r7, 255, color, 0);
     ScheduleWindowCopyToVram(arg1);
@@ -2471,7 +2515,8 @@ void ov44_02231420(UnkStruct_ov44_022319EC* arg0, NARC* arg1, enum HeapID arg2) 
     InitWindow(&window);
     AddTextWindowTopLeftCorner(arg0->unk15C, &window, 8, 2, 0, 0);
     String* string = String_New(64, arg2);
-    ReadMsgDataIntoString(arg0->unk168, 73, string);
+    // CLOSE
+    ReadMsgDataIntoString(arg0->unk168, msg_0778_00073, string);
     AddTextPrinterParameterizedWithColor(&window, 2, string, FontID_String_GetCenterAlignmentX(2, string, 0, 64), 0, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     String_Delete(string);
     UnkStruct_02013910* temp_r0_4 = sub_02013910(&window, arg2);

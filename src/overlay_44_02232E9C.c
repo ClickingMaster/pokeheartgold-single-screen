@@ -145,16 +145,12 @@ void ov44_02231C60(UnkStruct_ov44_02232DA0* arg0) {
 }
 
 u8 ov44_02231C70(UnkStruct_ov44_02232DA0* arg0) {
-    if (arg0->unk6CC == NULL) {
-        GF_AssertFail();
-    }
+    GF_ASSERT(arg0->unk6CC != NULL);
     return arg0->unk6CC->unkA;
 }
 
 s32 ov44_02231C8C(UnkStruct_ov44_02232DA0* arg0) {
-    if (arg0->unk6CC == NULL) {
-        GF_AssertFail();
-    }
+    GF_ASSERT(arg0->unk6CC != NULL);
     u32 temp_r0 = ov42_022282DC(arg0->unk6CC->unk0);
     vu16 sp0[4];
     sp0[0] = temp_r0;
@@ -165,10 +161,7 @@ s32 ov44_02231C8C(UnkStruct_ov44_02232DA0* arg0) {
 }
 
 s32 ov44_02231CE8(UnkStruct_ov44_02232DA0* arg0) {
-    if (arg0->unk6CC == NULL) {
-        GF_AssertFail();
-    }
-    
+    GF_ASSERT(arg0->unk6CC != NULL);
     u32 temp_r0 = ov42_022282DC(arg0->unk6CC->unk0);
     UnkStruct_ov44_02232914 sp0;
     sp0 = (UnkStruct_ov44_02232914){temp_r0,  temp_r0 >> 16};
@@ -292,9 +285,7 @@ void ov44_02231FA8(UnkStruct_ov44_02232DA0* arg0, UnkStruct_ov44_02232B74* arg1,
 void ov44_02231FCC(UnkStruct_ov44_02232DA0* arg0) {
     if (ov44_02232070(arg0) == 1) {
         s8 temp_r4 = (s8) ov44_02231CE8(arg0) - 3;
-        if (temp_r4 < 0 || temp_r4 >= 4) {
-            GF_AssertFail();
-        }
+        GF_ASSERT(temp_r4 >= 0 && temp_r4 < 4);
         ov44_02232E5C(&arg0->unk6D0, temp_r4);
         return;
     }
@@ -456,12 +447,8 @@ void ov44_0223237C(UnkStruct_ov44_02231A7C* arg0, enum HeapID heapID, NARC* narc
     arg0->unk13C[1] = AddPlttResObjFromOpenNarc(arg0->unk12C[1], narc, NARC_fielddata_encountdata_g_enc_data, FALSE, 50, NNS_G2D_VRAM_TYPE_2DMAIN, 1, heapID);
     arg0->unk13C[2] = AddCellOrAnimResObjFromOpenNarc(arg0->unk12C[2], narc, NARC_a_0_3_9, FALSE, 50, GF_GFX_RES_TYPE_CELL, heapID);
     arg0->unk13C[3] = AddCellOrAnimResObjFromOpenNarc(arg0->unk12C[3], narc, NARC_a_0_4_0, FALSE, 50, GF_GFX_RES_TYPE_ANIM, heapID);
-    if (sub_0200ADA4(arg0->unk13C[0]) != 1) {
-        GF_AssertFail();
-    }
-    if (sub_0200B00C(arg0->unk13C[1]) != 1) {
-        GF_AssertFail();
-    }
+    GF_ASSERT(sub_0200ADA4(arg0->unk13C[0]) == TRUE);
+    GF_ASSERT(sub_0200B00C(arg0->unk13C[1]) == TRUE);
     sub_0200A740(arg0->unk13C[0]);
     sub_0200A740(arg0->unk13C[1]);
     CreateSpriteResourcesHeader(&arg0->unk14C, 50, 50, 50, 50, -1, -1, 0, 2, arg0->unk12C[0], arg0->unk12C[1], arg0->unk12C[2], arg0->unk12C[3], 0, 0);
