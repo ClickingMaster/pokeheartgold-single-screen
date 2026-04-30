@@ -14,17 +14,6 @@
 #include "unk_02013534.h"
 #include "unk_0202C034.h"
 
-// overlay_44_02232E9C
-typedef struct UnkStruct_ov44_02231A28 {
-    u8 unk0;
-    u8 unk1;
-    u8 unk2;
-    u8 unk3;
-    u8 unk4;
-    u8 unk5;
-    u16 unk6;
-} UnkStruct_ov44_02231A28;
-
 typedef struct UnkStruct_ov44_02232E80 {
     void* unk0;
     NNSG2dPaletteData* unk4;
@@ -42,10 +31,10 @@ typedef struct UnkStruct_ov44_02232914 {
     u16 unk2;
 } UnkStruct_ov44_02232914;
 
-typedef struct test {
+typedef struct UnkStruct_ov44_0222DD64 {
     u32 strno;
     u32 value;
-} test;
+} UnkStruct_ov44_0222DD64;
 
 typedef struct UnkStruct_ov44_02232DA0 UnkStruct_ov44_02232DA0;
 typedef struct UnkStruct_ov44_02232B74 UnkStruct_ov44_02232B74;
@@ -457,8 +446,8 @@ s32 ov44_02231974(s32 arg0);
 s32 ov44_0223197C(UnkStruct_ov44_022319EC* arg0, s32 arg1, s32 arg2);
 void ov44_022319BC(UnkStruct_ov44_022319EC* arg0, s32 arg1);
 void ov44_022319EC(UnkStruct_ov44_022319EC* arg0);
-YesNoPrompt* ov44_02231A14(BgConfig* arg0, UnkStruct_ov44_02231A28* arg1, u32 arg2);
-YesNoPrompt* ov44_02231A28(BgConfig* arg0, UnkStruct_ov44_02231A28* arg1, u32 arg2);
+YesNoPrompt* ov44_02231A14(BgConfig* arg0, const WindowTemplate* arg1, u32 arg2);
+YesNoPrompt* ov44_02231A28(BgConfig* arg0, const WindowTemplate* arg1, u32 arg2);
 void ov44_02231A7C(UnkStruct_ov44_02232DA0* arg0, enum HeapID heapID, NARC* arg2, BgConfig* arg3, s32 arg4, u32 arg5);
 void ov44_02231B4C(UnkStruct_ov44_02232DA0* arg0);
 s32 ov44_02231BB0(UnkStruct_ov44_02232DA0* arg0);

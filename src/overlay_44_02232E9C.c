@@ -40,28 +40,28 @@
 extern u16 ov44_02235600[2];
 extern u8 ov44_02235604[11];
 extern u32 ov44_02235630[4];
-extern u32 ov44_0223688C[4];
 
 extern u8 ov44_0223560F[1];
 extern u8 ov44_02235610[1];
 extern u8 ov44_02235611[1];
 extern u8 ov44_02235612[30];
+extern u32 ov44_0223688C[4];
 
-YesNoPrompt* ov44_02231A14(BgConfig* arg0, UnkStruct_ov44_02231A28* arg1, u32 arg2) {
+YesNoPrompt* ov44_02231A14(BgConfig* arg0, const WindowTemplate* arg1, u32 arg2) {
     YesNoPrompt* yesNoPrompt = ov44_02231A28(arg0, arg1, arg2);
     YesNoPrompt_SetIgnoreTouch(yesNoPrompt, 1);
     return yesNoPrompt;
 }
 
-YesNoPrompt* ov44_02231A28(BgConfig* arg0, UnkStruct_ov44_02231A28* arg1, u32 arg2) {
+YesNoPrompt* ov44_02231A28(BgConfig* arg0, const WindowTemplate* arg1, u32 arg2) {
     YesNoPrompt* yesNoPrompt = YesNoPrompt_Create(HEAP_ID_53);
     YesNoPromptTemplate yesNoPromptTemplate;
     yesNoPromptTemplate.bgConfig = arg0;
-    yesNoPromptTemplate.bgId = arg1->unk0;
-    yesNoPromptTemplate.tileStart = arg1->unk6;
-    yesNoPromptTemplate.plttSlot = arg1->unk5;
-    yesNoPromptTemplate.x = arg1->unk1;
-    yesNoPromptTemplate.y = arg1->unk2;
+    yesNoPromptTemplate.bgId = arg1->bgId;
+    yesNoPromptTemplate.tileStart = arg1->baseTile;
+    yesNoPromptTemplate.plttSlot = arg1->palette;
+    yesNoPromptTemplate.x = arg1->left;
+    yesNoPromptTemplate.y = arg1->top;
     yesNoPromptTemplate.ignoreTouchFlag = 0;
     yesNoPromptTemplate.initialCursorPos = arg2;
     yesNoPromptTemplate.shapeParam = 0;
