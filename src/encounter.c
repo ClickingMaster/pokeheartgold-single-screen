@@ -271,7 +271,7 @@ static BOOL Task_020509F0(TaskManager *taskManager) {
         break;
     case 3:
         sub_02052444(encounter->setup, fieldSystem);
-        if (fieldSystem->frontier != NULL) {
+        if (fieldSystem->frontierFsys != NULL) {
             sub_02067484(fieldSystem, &encounter->setup->unk138);
         }
         Encounter_GetResult(encounter, fieldSystem);

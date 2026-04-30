@@ -43,18 +43,18 @@ static const u16 StatTrainerOverworlds[] = { SPRITE_SEVEN1, SPRITE_SEVEN5, SPRIT
 BOOL ScrCmd_410(ScriptContext *ctx) {
     u16 resumeFromPrevious = ScriptReadHalfword(ctx);
     u16 towerMode = ScriptReadHalfword(ctx);
-    ctx->fieldSystem->frontier = FrontierFieldSystem_New(FieldSystem_GetSaveData(ctx->fieldSystem), resumeFromPrevious, towerMode);
+    ctx->fieldSystem->frontierFsys = FrontierFieldSystem_New(FieldSystem_GetSaveData(ctx->fieldSystem), resumeFromPrevious, towerMode);
     return FALSE;
 }
 
 BOOL ScrCmd_409(ScriptContext *ctx) {
-    FrontierFieldSystem_0204A810(&ctx->fieldSystem->frontier);
+    FrontierFieldSystem_0204A810(&ctx->fieldSystem->frontierFsys);
     return FALSE;
 }
 
 BOOL ScrCmd_411(ScriptContext *ctx) {
-    FrontierFieldSystem_Free(ctx->fieldSystem->frontier);
-    ctx->fieldSystem->frontier = NULL;
+    FrontierFieldSystem_Free(ctx->fieldSystem->frontierFsys);
+    ctx->fieldSystem->frontierFsys = NULL;
     return FALSE;
 }
 
@@ -64,7 +64,7 @@ BOOL ScrCmd_412(ScriptContext *ctx) {
     u16 arg = ScriptGetVar(ctx);
     u16 resultVarId = ScriptReadHalfword(ctx);
     u16 *result = GetVarPointer(ctx->fieldSystem, resultVarId);
-    FrontierFieldSystem *frontierFsys = ctx->fieldSystem->frontier;
+    FrontierFieldSystem *frontierFsys = ctx->fieldSystem->frontierFsys;
     switch (id) {
     case 1:
         if (arg == 0) {
@@ -121,7 +121,7 @@ BOOL ScrCmd_412(ScriptContext *ctx) {
         *result = FrontierFieldSystem_0204AA78(frontierFsys, unk, ctx->fieldSystem->saveData);
         break;
     case 32:
-        *result = FrontierFieldSystem_SelectedPartyHasDuplicateSpeciesOrItem(frontierFsys, ctx->fieldSystem->saveData);
+        *result = FrontierFieldSystem_PartyHasDuplicateSpeciesOrItems(frontierFsys, ctx->fieldSystem->saveData);
         break;
     case 35:
         *result = FrontierFieldSystem_0204AC7C(frontierFsys);
@@ -196,7 +196,7 @@ BOOL ScrCmd_412(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_413(ScriptContext *ctx) {
-    FrontierFieldSystem *frontierFsys = ctx->fieldSystem->frontier;
+    FrontierFieldSystem *frontierFsys = ctx->fieldSystem->frontierFsys;
     u16 multiBattleAllyIndex = ScriptGetVar(ctx);
     u16 allyMonIndex = ScriptGetVar(ctx);
     u16 *speciesPtr = ScriptGetVarPointer(ctx);
@@ -222,21 +222,21 @@ BOOL ScrCmd_416(ScriptContext *ctx) {
     u16 unk7 = ScriptGetVar(ctx);
     u16 unk4 = ScriptGetVar(ctx);
     u16 *unkPtr = ScriptGetVarPointer(ctx);
-    FrontierFieldSystem *frontierFsys = ctx->fieldSystem->frontier;
+    FrontierFieldSystem *frontierFsys = ctx->fieldSystem->frontierFsys;
     *unkPtr = FALSE;
     u32 unk0;
     switch (unk7) {
     case 0:
         unk0 = 62;
-        FrontierFieldSystem_0204B6AC(ctx->fieldSystem->frontier, ctx->fieldSystem->saveData);
+        FrontierFieldSystem_0204B6AC(ctx->fieldSystem->frontierFsys, ctx->fieldSystem->saveData);
         break;
     case 1:
         unk0 = 63;
-        FrontierFieldSystem_0204B708(ctx->fieldSystem->frontier);
+        FrontierFieldSystem_0204B708(ctx->fieldSystem->frontierFsys);
         break;
     case 2:
         unk0 = 64;
-        FrontierFieldSystem_0204B720(ctx->fieldSystem->frontier, unk4);
+        FrontierFieldSystem_0204B720(ctx->fieldSystem->frontierFsys, unk4);
         break;
     }
     if (sub_0205C298(ctx->fieldSystem->saveData) == 1) {
@@ -255,7 +255,7 @@ BOOL ScrCmd_416(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_417(ScriptContext *ctx) {
-    FrontierFieldSystem *frontierFsys = ctx->fieldSystem->frontier;
+    FrontierFieldSystem *frontierFsys = ctx->fieldSystem->frontierFsys;
     u16 unk6 = ScriptGetVar(ctx);
     u16 unk7 = ScriptReadHalfword(ctx);
     if (sub_0205C298(ctx->fieldSystem->saveData) == 1) {
@@ -269,7 +269,7 @@ BOOL ScrCmd_417(ScriptContext *ctx) {
 }
 
 static BOOL sub_0204A1E8(ScriptContext *ctx) {
-    FrontierFieldSystem *frontierFsys = ctx->fieldSystem->frontier;
+    FrontierFieldSystem *frontierFsys = ctx->fieldSystem->frontierFsys;
     u16 *unkPtr = GetVarPointer(ctx->fieldSystem, frontierFsys->unk8DA);
     u32 unk = frontierFsys->unk8D5 == 1 ? 1 : 2;
     if (frontierFsys->unk8D4 == unk) {
