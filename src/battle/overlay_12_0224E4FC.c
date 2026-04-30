@@ -949,14 +949,14 @@ void BattleMon_AddVar(BattleMon *mon, u32 varId, int data) {
 }
 
 static const u8 sSpeedHalvingItemEffects[] = {
-    HOLD_EFFECT_EXP_UP_SPEED_DOWN,
-    HOLD_EFFECT_SPEED_DOWN_GROUNDED,
-    HOLD_EFFECT_LVLUP_HP_EV_UP,
-    HOLD_EFFECT_LVLUP_ATK_EV_UP,
-    HOLD_EFFECT_LVLUP_DEF_EV_UP,
-    HOLD_EFFECT_LVLUP_SPEED_EV_UP,
-    HOLD_EFFECT_LVLUP_SPATK_EV_UP,
-    HOLD_EFFECT_LVLUP_SPDEF_EV_UP
+    HOLD_EFFECT_EVS_UP_SPEED_DOWN,      // Macho Brace
+    HOLD_EFFECT_SPEED_DOWN_GROUNDED,    // Iron Ball
+    HOLD_EFFECT_LVLUP_HP_EV_UP,         // Power Weight
+    HOLD_EFFECT_LVLUP_ATK_EV_UP,        // Power Bracer
+    HOLD_EFFECT_LVLUP_DEF_EV_UP,        // Power Belt
+    HOLD_EFFECT_LVLUP_SPEED_EV_UP,      // Power Anklet
+    HOLD_EFFECT_LVLUP_SPATK_EV_UP,      // Power Lens
+    HOLD_EFFECT_LVLUP_SPDEF_EV_UP       // Power Band
 };
 
 u8 CheckSortSpeed(BattleSystem *battleSystem, BattleContext *ctx, int battlerId1, int battlerId2, int flag) {

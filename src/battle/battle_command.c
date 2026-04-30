@@ -6485,7 +6485,7 @@ void BattleScript_CalcEffortValues(Party* party, int partySlot, u32 species, u32
         }
         
         // Macho Brace
-        if (holdEffect == HOLD_EFFECT_EXP_UP_SPEED_DOWN) { // TODO: The Macho Brace's const isn't accurate. We should probably rectify that.
+        if (holdEffect == HOLD_EFFECT_EVS_UP_SPEED_DOWN) {
             gainedEVs *= 2;
         }
         
@@ -6510,15 +6510,15 @@ void BattleScript_CalcEffortValues(Party* party, int partySlot, u32 species, u32
     FreeMonPersonal(baseStats);
 }
 
-void ov07_02232F58(s32, s32); // PlayBallAnimation?
-BOOL ov07_02232F60(s32, s32); // IsBallAnimationPlaying?
+void ov07_02232F58(s32 unkData, s32 ballAnim); // SetBallAnimation?
+BOOL ov07_02232F60(s32 unkData, s32 ballAnim_Unused); // IsBallAnimationPlaying?
 s32 ov07_02233DB8(UnkStruct_134 *unkStruct_134);
-void ov07_02233ECC(s32);
+void ov07_02233ECC(s32 unkData); // unkData_Destroy?
 s32 ov07_02233F20(s32);
 
 void ov12_02237D00(BattleSystem *battleSystem);
 void ov12_02237CC4(BattleSystem *battleSystem);
-u32 ov12_02247228(BattleSystem *battleSystem, BattleContext *ctx); // TODO: BattleSystem_CalculateBallShakes
+u32 BattleSystem_CalculateBallShakes(BattleSystem *battleSystem, BattleContext *ctx);
 void ov12_02261294(OpponentData *opponentData, s32);
 void ov12_022628A0(BattleSystem *battleSystem, s32 battlerId, s32);
 void ov12_02265FC4(UnkBattleSystemSub17C *unkBattleSystemSub17C, s32);
@@ -6544,34 +6544,38 @@ enum {
     STATE_GET_POKEMON_GOTCHA,
     STATE_GET_POKEMON_BALL_FADE,
     STATE_GET_POKEMON_CHECK_MON_DATA, // 10
-    // 11-13
-    STATE_GET_POKEMON_MOVE_POKEPIC_TO_CENTER = 14,
-    // 15-17
-    STATE_GET_POKEMON_ASK_FOR_NICKNAME = 18,
+    STATE_GET_POKEMON_FADE_TO_POKEDEX,
+    STATE_GET_POKEMON_POKEDEX_ENTRY,
+    STATE_GET_POKEMON_DISMISS_POKEDEX_ENTRY,
+    STATE_GET_POKEMON_MOVE_POKEPIC_TO_CENTER,
+    STATE_GET_POKEMON_15,
+    STATE_GET_POKEMON_ALREADY_CAUGHT,
+    STATE_GET_POKEMON_FADE_TO_NICKNAME_ASK,
+    STATE_GET_POKEMON_ASK_FOR_NICKNAME,
     STATE_GET_POKEMON_WAIT_FOR_YESNO,
-    STATE_GET_POKEMON_PREPARE_NAMING_SCREEN,
+    STATE_GET_POKEMON_PREPARE_NAMING_SCREEN, // 20
     STATE_GET_POKEMON_WAIT_FOR_NAMING_SCREEN,
-    STATE_GET_POKEMON_STORE_NEW_MON_NO_NAMING_SCREEN,
-    // STATE_GET_POKEMON_STORE_NEW_MON_BUG_CONTEST,
-    STATE_GET_POKEMON_STORE_NEW_MON_AFTER_NAMING_SCREEN = 24,
-    // Fade out Pokemon image if no naming screen?
-    STATE_GET_POKEMON_BALL_BLOCKED = 26,
+    STATE_GET_POKEMON_STORE_MON_NO_NAMING_SCREEN,
+    STATE_GET_POKEMON_STORE_NEW_MON_BUG_CONTEST,
+    STATE_GET_POKEMON_STORE_MON_AFTER_NAMING_SCREEN,
+    STATE_GET_POKEMON_FADE_UNNAMED_BOXED_MON,
+    STATE_GET_POKEMON_BALL_BLOCKED,
     STATE_GET_POKEMON_NO_STEALING,
     STATE_GET_POKEMON_DONE_NO_STEALING,
     STATE_GET_POKEMON_BREAK_OUT,
-    // STATE_GET_POKEMON_BREAK_OUT_ANIMATION?
-    STATE_GET_POKEMON_BREAK_OUT_MESSAGE = 31,
+    STATE_GET_POKEMON_BREAK_OUT_CLEANUP, // 30
+    STATE_GET_POKEMON_BREAK_OUT_MESSAGE,
     STATE_GET_POKEMON_DONE_BREAK_OUT,
     STATE_GET_POKEMON_DONE_CAUGHT,
 };
 
-enum { // These are purely speculative until we can decomp ov07_02233D60.
+enum { // These are purely speculative for now.
     BALL_ANIM_THROW = 0,
     BALL_ANIM_OPEN,
     BALL_ANIM_DEFLECT,
     BALL_ANIM_FALL,
     BALL_ANIM_SHAKE,
-    BALL_ANIM_5, // Seemingly unused, at least here.
+    BALL_ANIM_5, // Seemingly unused, at least here. When forcibly implemented, does not seem to do much for regular Pokeballs.
     BALL_ANIM_CLICK,
     BALL_ANIM_FADE,
 };
@@ -6615,10 +6619,10 @@ void Task_GetPokemon(SysTask *task, void *inData) {
             data->state = STATE_GET_POKEMON_CHECK_IF_TRAINER;
             PlaySE(SEQ_SE_DP_THROW);
             data->battleSystem->unk2422++;
-            ov07_02232F58(data->unk8, BALL_ANIM_THROW);
+            ov07_02232F58(data->unk8, BALL_ANIM_THROW); // Sets unk8->unk0 to the second parameter and resets unk8->unk4 to 0.
         } else { // CAPTURE_SAFARI
             OpponentData *opponentData = BattleSystem_GetOpponentData(data->battleSystem, BATTLER_PLAYER);
-            if (ov07_02233F20(opponentData->unk88) != 4) {
+            if (ov07_02233F20(opponentData->unk88) != 4) { // Checks unk88->unk90.unk8.
                 data->unk8 = opponentData->unk88;
                 opponentData->unk88 = 0;
                 data->state = STATE_GET_POKEMON_CHECK_IF_TRAINER;
@@ -6630,7 +6634,7 @@ void Task_GetPokemon(SysTask *task, void *inData) {
         data->unk34[3] = 0;
         break;
     case STATE_GET_POKEMON_CHECK_IF_TRAINER:
-        if (!ov07_02232F60(data->unk8, BALL_ANIM_THROW)) { // Likely checking if the current ball animation is still active.
+        if (!ov07_02232F60(data->unk8, BALL_ANIM_THROW)) { // Likely checking if the current ball animation is still active. The second parameter is unused, as the same data is contained in unk8.
             if (BattleSystem_GetBattleType(data->battleSystem) & BATTLE_TYPE_TRAINER) {
                 sub_0200602C(SEQ_SE_DP_KON, 0x75);
                 ov07_02232F58(data->unk8, BALL_ANIM_DEFLECT);
@@ -6647,7 +6651,7 @@ void Task_GetPokemon(SysTask *task, void *inData) {
         data->unk34[0]--; // Decrement the frame counter by 1.
         if (data->unk34[0] == 0) { // After 23 frames have passed...
             ov12_022628A0(data->battleSystem, battlerId, data->unk2C);
-            data->unk34[1] = ov12_02247228(data->battleSystem, data->ctx);
+            data->unk34[1] = BattleSystem_CalculateBallShakes(data->battleSystem, data->ctx);
 
             if (data->unk34[1] < MAX_BALL_SHAKE_COUNT) {
                 data->unk34[2] = data->unk34[1]; // Store the number of shake animations we actually need to do.
@@ -6725,25 +6729,25 @@ void Task_GetPokemon(SysTask *task, void *inData) {
             if (BattleSystem_GetBattleType(data->battleSystem) & (BATTLE_TYPE_PAL_PARK | BATTLE_TYPE_TUTORIAL)) { // If this was the Catching Demo or a Pal Park encounter...
                 ov12_022567D4(data->battleSystem, data->ctx, BattleSystem_GetPartyMon(data->battleSystem, battlerId, data->ctx->selectedMonIndex[battlerId]));
                 sub_0201649C(BattleSystem_GetMessageIcon(data->battleSystem), 1);
-                PaletteData_BeginPaletteFade(paletteData, 0xF, 0xFFFF, 1, 0, 0x10, 0);
-                Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, 0);
+                PaletteData_BeginPaletteFade(paletteData, 0xF, 0xFFFF, 1, 0, 0x10, RGB_BLACK);
+                Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, RGB_BLACK);
                 data->state = STATE_GET_POKEMON_DONE_CAUGHT;
                 data->unk34[3] = 1;
                 break;
             }
-            if (BattleSystem_CheckMonCaught(data->battleSystem, GetMonData(mon, MON_DATA_SPECIES, 0))) {
+            if (BattleSystem_CheckMonCaught(data->battleSystem, GetMonData(mon, MON_DATA_SPECIES, 0))) { // If this was already caught...
                 if (BattleSystem_GetBattleType(data->battleSystem) & BATTLE_TYPE_BUG_CONTEST) { // If this was the Bug Catching Contest...
                     sub_0201649C(BattleSystem_GetMessageIcon(data->battleSystem), 1);
-                    PaletteData_BeginPaletteFade(paletteData, 0xF, 0xFFFF, 1, 0, 0x10, 0);
-                    Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, 0);
-                    data->state = STATE_GET_POKEMON_STORE_NEW_MON_NO_NAMING_SCREEN;
+                    PaletteData_BeginPaletteFade(paletteData, 0xF, 0xFFFF, 1, 0, 0x10, RGB_BLACK);
+                    Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, RGB_BLACK);
+                    data->state = STATE_GET_POKEMON_STORE_MON_NO_NAMING_SCREEN;
                     data->unk34[3] = 1;
                     break;
                 }
                 sub_0201649C(BattleSystem_GetMessageIcon(data->battleSystem), 1);
-                PaletteData_BeginPaletteFade(paletteData, 5, 0xFFFF, 1, 0, 0x10, 0);
-                Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, 0);
-                data->state = 16;
+                PaletteData_BeginPaletteFade(paletteData, 5, 0xFFFF, 1, 0, 0x10, RGB_BLACK);
+                Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, RGB_BLACK);
+                data->state = STATE_GET_POKEMON_ALREADY_CAUGHT;
                 break;
             }
             BattleMessage msg;
@@ -6752,22 +6756,22 @@ void Task_GetPokemon(SysTask *task, void *inData) {
             msg.param[0] = battlerId;
             data->printerId = BattleSystem_PrintBattleMessage(data->battleSystem, msgData, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
             data->unk34[0] = 30;
-            data->state = 11;
+            data->state = STATE_GET_POKEMON_FADE_TO_POKEDEX;
             ov12_0223BB44(data->battleSystem);
         }
         break;
-    case 11:
+    case STATE_GET_POKEMON_FADE_TO_POKEDEX:
         if (!TextPrinterCheckActive(data->printerId)) { // Wait for the text box to finish printing.
             data->unk34[0]--;
             if (data->unk34[0] == 0) { // After 30 frames have passed...
-                data->state = 12;
-                PaletteData_BeginPaletteFade(paletteData, 5, 0xFFFF, 1, 0, 0x10, 0);
-                Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, 0);
+                data->state = STATE_GET_POKEMON_POKEDEX_ENTRY;
+                PaletteData_BeginPaletteFade(paletteData, 5, 0xFFFF, 1, 0, 16, RGB_BLACK);
+                Pokepic_StartPaletteFadeAll(pokepicManager, 0, 16, 0, RGB_BLACK);
                 sub_0201649C(BattleSystem_GetMessageIcon(data->battleSystem), 1);
             }
         }
         break;
-    case 12:
+    case STATE_GET_POKEMON_POKEDEX_ENTRY:
         if (!PaletteData_GetSelectedBuffersBitmask(paletteData)) {
             ov07_02233ECC(data->unk8);
             PokepicManager_DeleteAllPics(pokepicManager);
@@ -6784,10 +6788,10 @@ void Task_GetPokemon(SysTask *task, void *inData) {
             unkStruct.natDexEnabled = Pokedex_IsNatDexEnabled(BattleSystem_GetPokedex(data->battleSystem));
             data->unk50[1] = ObjCharTransfer_PopTaskManager();
             data->unk50[0] = ov18_021F8974(&unkStruct);
-            data->state = 13;
+            data->state = STATE_GET_POKEMON_DISMISS_POKEDEX_ENTRY;
         }
         break;
-    case 13:
+    case STATE_GET_POKEMON_DISMISS_POKEDEX_ENTRY:
         if (ov18_021F89C8(data->unk50[0]) == 1) {
             if (PAD_BUTTON_A & gSystem.newKeys) { // If the A button is pressed...
                 data->state = STATE_GET_POKEMON_MOVE_POKEPIC_TO_CENTER;
@@ -6797,17 +6801,17 @@ void Task_GetPokemon(SysTask *task, void *inData) {
             }
             if (data->state == STATE_GET_POKEMON_MOVE_POKEPIC_TO_CENTER) {
                 if (BattleSystem_GetBattleType(data->battleSystem) & BATTLE_TYPE_BUG_CONTEST) {
-                    PaletteData_BeginPaletteFade(paletteData, 0xF, 0xFFFF, 1, 0, 0x10, 0);
-                    Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, 0);
+                    PaletteData_BeginPaletteFade(paletteData, 15, 0xFFFF, 1, 0, 16, RGB_BLACK);
+                    Pokepic_StartPaletteFadeAll(pokepicManager, 0, 16, 0, RGB_BLACK);
                     break;
                 }
-                PaletteData_BeginPaletteFade(paletteData, 5, 0xFFFF, 1, 0, 0x10, 0);
+                PaletteData_BeginPaletteFade(paletteData, 5, 0xFFFF, 1, 0, 16, RGB_BLACK);
             }
         }
         break;
     case STATE_GET_POKEMON_MOVE_POKEPIC_TO_CENTER:
         if (BattleSystem_GetBattleType(data->battleSystem) & BATTLE_TYPE_BUG_CONTEST) {
-            data->state = 23;
+            data->state = STATE_GET_POKEMON_STORE_NEW_MON_BUG_CONTEST;
             break;
         }
         Pokepic *pic = ov18_021F95F8(data->unk50[0]);
@@ -6815,17 +6819,17 @@ void Task_GetPokemon(SysTask *task, void *inData) {
         if (Pokepic_GetAttr(pic, POKEPIC_X) >= 128) { // Stop when the Pokepic has reached the center of the screen.
             Pokepic_SetAttr(pic, POKEPIC_X, 128);
             ov18_021F95AC(data->unk50[0]);
-            data->state = 15;
+            data->state = STATE_GET_POKEMON_15;
         }
         break;
-    case 15:
+    case STATE_GET_POKEMON_15: // It's hard to discern what this state does right now.
         ov18_021F89D0(data->unk50[0]);
         ObjCharTransfer_PushTaskManager(data->unk50[1]);
-        ov12_02237D00(data->battleSystem);
-        PaletteData_BeginPaletteFade(paletteData, 5, 0xFFFF, 1, 0x10, 0, 0);
-        data->state = 17;
+        ov12_02237D00(data->battleSystem); // Commenting out this line causes the game to freeze as soon as it is reached. Go figure.
+        PaletteData_BeginPaletteFade(paletteData, 5, 0xFFFF, 1, 16, 0, RGB_BLACK);
+        data->state = STATE_GET_POKEMON_FADE_TO_NICKNAME_ASK;
         break;
-    case 16:
+    case STATE_GET_POKEMON_ALREADY_CAUGHT:
         if (!PaletteData_GetSelectedBuffersBitmask(paletteData)) {
             Pokemon *mon = BattleSystem_GetPartyMon(data->battleSystem, battlerId, data->ctx->selectedMonIndex[battlerId]);
             ov07_02233ECC(data->unk8);
@@ -6835,13 +6839,13 @@ void Task_GetPokemon(SysTask *task, void *inData) {
             ov12_02237D00(data->battleSystem);
             PokepicTemplate picTemplate;
             GetPokemonSpriteCharAndPlttNarcIds(&picTemplate, mon, 2);
-            PokepicManager_CreatePokepic(pokepicManager, &picTemplate, 0x80, 0x48, 0, 0, 0, 0);
-            PaletteData_BeginPaletteFade(paletteData, 5, 0xFFFF, 1, 0x10, 0, 0);
-            Pokepic_StartPaletteFadeAll(pokepicManager, 0x10, 0, 0, 0);
-            data->state = 17;
+            PokepicManager_CreatePokepic(pokepicManager, &picTemplate, 128, 72, 0, 0, 0, 0);
+            PaletteData_BeginPaletteFade(paletteData, 5, 0xFFFF, 1, 16, 0, RGB_BLACK);
+            Pokepic_StartPaletteFadeAll(pokepicManager, 16, 0, 0, RGB_BLACK);
+            data->state = STATE_GET_POKEMON_FADE_TO_NICKNAME_ASK;
         }
         break;
-    case 17:
+    case STATE_GET_POKEMON_FADE_TO_NICKNAME_ASK:
         if (!PaletteData_GetSelectedBuffersBitmask(paletteData)) {
             data->state = STATE_GET_POKEMON_ASK_FOR_NICKNAME;
             sub_0201649C(BattleSystem_GetMessageIcon(data->battleSystem), 0);
@@ -6855,12 +6859,12 @@ void Task_GetPokemon(SysTask *task, void *inData) {
     case STATE_GET_POKEMON_WAIT_FOR_YESNO:
         if (BattleBuffer_GetNext(data->ctx, BATTLER_PLAYER)) { // Wait for the player to prompt the game to continue.
             if (BattleBuffer_GetNext(data->ctx, BATTLER_PLAYER) == 0xFF) { // If the player said no...
-                data->state = STATE_GET_POKEMON_STORE_NEW_MON_NO_NAMING_SCREEN;
+                data->state = STATE_GET_POKEMON_STORE_MON_NO_NAMING_SCREEN;
                 break;
             }
             sub_0201649C(BattleSystem_GetMessageIcon(data->battleSystem), 1);
-            PaletteData_BeginPaletteFade(paletteData, 0xF, 0xFFFF, 1, 0, 0x10, 0);
-            Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, 0);
+            PaletteData_BeginPaletteFade(paletteData, 0xF, 0xFFFF, 1, 0, 0x10, RGB_BLACK);
+            Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, RGB_BLACK);
             data->state = STATE_GET_POKEMON_PREPARE_NAMING_SCREEN;
         }
         break;
@@ -6869,7 +6873,7 @@ void Task_GetPokemon(SysTask *task, void *inData) {
             sub_0200FBF4(PM_LCD_TOP, RGB_BLACK);
             sub_0200FBF4(PM_LCD_BOTTOM, RGB_BLACK);
             Pokemon *mon = BattleSystem_GetPartyMon(data->battleSystem, battlerId, data->ctx->selectedMonIndex[battlerId]);
-            NamingScreenArgs *namingScreenArgs = NamingScreen_CreateArgs(HEAP_ID_BATTLE, NAME_SCREEN_POKEMON, GetMonData(mon, MON_DATA_SPECIES, 0), 0xA, BattleSystem_GetOptions(data->battleSystem), 0);
+            NamingScreenArgs *namingScreenArgs = NamingScreen_CreateArgs(HEAP_ID_BATTLE, NAME_SCREEN_POKEMON, GetMonData(mon, MON_DATA_SPECIES, 0), 10, BattleSystem_GetOptions(data->battleSystem), 0);
             data->unk50[1] = namingScreenArgs;
             if (BattleSystem_GetPartySize(data->battleSystem, 0) < PARTY_SIZE) {
                 namingScreenArgs->battleMsgId = 0;
@@ -6901,17 +6905,17 @@ void Task_GetPokemon(SysTask *task, void *inData) {
             Pokemon *mon = BattleSystem_GetPartyMon(data->battleSystem, battlerId, data->ctx->selectedMonIndex[battlerId]);
             if (!namingScreenArgs->noInput) {
                 SetMonData(mon, MON_DATA_NICKNAME_STRING_AND_FLAG, namingScreenArgs->nameInputString);
-                BattleSystem_GameStatIncrement(data->battleSystem, 50);
+                BattleSystem_GameStatIncrement(data->battleSystem, GAME_STAT_NICKNAMES_GIVEN);
             }
             NamingScreen_DeleteArgs(namingScreenArgs);
             OverlayManager_Delete(data->unk50[0]);
             ov12_0223BBF0(data->battleSystem, 2);
-            data->state = STATE_GET_POKEMON_STORE_NEW_MON_AFTER_NAMING_SCREEN;
+            data->state = STATE_GET_POKEMON_STORE_MON_AFTER_NAMING_SCREEN;
         }
         break;
-    case STATE_GET_POKEMON_STORE_NEW_MON_NO_NAMING_SCREEN:
-    case 23: // Something other than just the Bug Contest is going on here, since we can arrive in state 22 as well.
-    case STATE_GET_POKEMON_STORE_NEW_MON_AFTER_NAMING_SCREEN:
+    case STATE_GET_POKEMON_STORE_MON_NO_NAMING_SCREEN:
+    case STATE_GET_POKEMON_STORE_NEW_MON_BUG_CONTEST:
+    case STATE_GET_POKEMON_STORE_MON_AFTER_NAMING_SCREEN:
         if (!PaletteData_GetSelectedBuffersBitmask(paletteData)) {
             Party *party = BattleSystem_GetParty(data->battleSystem, BATTLER_PLAYER);
             Pokemon *mon = BattleSystem_GetPartyMon(data->battleSystem, battlerId, data->ctx->selectedMonIndex[battlerId]);
@@ -6920,23 +6924,23 @@ void Task_GetPokemon(SysTask *task, void *inData) {
             ov12_0223B870(data->battleSystem, mon);
             BattleController_EmitIncrementGameStat(data->battleSystem, BATTLER_PLAYER, 0, GAME_STAT_CAUGHT_MON);
             if (BattleSystem_GetBattleType(data->battleSystem) & BATTLE_TYPE_BUG_CONTEST) {
-                if (data->state == 23) {
+                if (data->state == STATE_GET_POKEMON_STORE_NEW_MON_BUG_CONTEST) {
                     ov18_021F89D0(data->unk50[0]);
                     ObjCharTransfer_PushTaskManager(data->unk50[1]);
                     ov12_02237D00(data->battleSystem);
                 }
                 CopyPokemonToPokemon(mon, BattleSystem_GetBugContestCaughtMon(data->battleSystem));
-                if (data->state == STATE_GET_POKEMON_STORE_NEW_MON_NO_NAMING_SCREEN) {
+                if (data->state == STATE_GET_POKEMON_STORE_MON_NO_NAMING_SCREEN) {
                     sub_0201649C(BattleSystem_GetMessageIcon(data->battleSystem), 1);
                 }
                 data->state = STATE_GET_POKEMON_DONE_CAUGHT;
                 break;
             }
             if (Party_AddMon(party, mon) == TRUE) {
-                if (data->state == STATE_GET_POKEMON_STORE_NEW_MON_NO_NAMING_SCREEN) {
+                if (data->state == STATE_GET_POKEMON_STORE_MON_NO_NAMING_SCREEN) {
                     sub_0201649C(BattleSystem_GetMessageIcon(data->battleSystem), 1);
-                    PaletteData_BeginPaletteFade(paletteData, 0xF, 0xFFFF, 1, 0, 0x10, 0);
-                    Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, 0);
+                    PaletteData_BeginPaletteFade(paletteData, 0xF, 0xFFFF, 1, 0, 0x10, RGB_BLACK);
+                    Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, RGB_BLACK);
                 }
                 data->state = STATE_GET_POKEMON_DONE_CAUGHT;
                 break;
@@ -6955,7 +6959,7 @@ void Task_GetPokemon(SysTask *task, void *inData) {
                 BattleSystem_SetPokedexCaught(data->battleSystem, battlerId);
             }
             PCStorage_PlaceMonInBoxFirstEmptySlot(pcStorage, emptyBox, Mon_GetBoxMon(mon));
-            if (data->state == STATE_GET_POKEMON_STORE_NEW_MON_NO_NAMING_SCREEN) {
+            if (data->state == STATE_GET_POKEMON_STORE_MON_NO_NAMING_SCREEN) {
                 BattleMessage msg;
                 if (activeBox == emptyBox) {
                     msg.id = BattleSystem_MetBill(data->battleSystem) + 0x496; // {0} was transferred to {1} in someone’s PC!
@@ -6971,19 +6975,19 @@ void Task_GetPokemon(SysTask *task, void *inData) {
                 }
                 data->printerId= BattleSystem_PrintBattleMessage(data->battleSystem, msgData, &msg, BattleSystem_GetTextFrameDelay(data->battleSystem));
                 data->unk34[0] = 30;
-                data->state = 25;
+                data->state = STATE_GET_POKEMON_FADE_UNNAMED_BOXED_MON;
                 break;
             }
             data->state = STATE_GET_POKEMON_DONE_CAUGHT;
         }
         break;
-    case 25:
+    case STATE_GET_POKEMON_FADE_UNNAMED_BOXED_MON:
         if (!TextPrinterCheckActive(data->printerId)) {
             data->unk34[0]--;
             if (data->unk34[0] == 0) { // After 30 frames have passed...
                 sub_0201649C(BattleSystem_GetMessageIcon(data->battleSystem), 1);
-                PaletteData_BeginPaletteFade(paletteData, 0xF, 0xFFFF, 1, 0, 0x10, 0);
-                Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, 0);
+                PaletteData_BeginPaletteFade(paletteData, 0xF, 0xFFFF, 1, 0, 0x10, RGB_BLACK);
+                Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, RGB_BLACK);
                 data->state = STATE_GET_POKEMON_DONE_CAUGHT;
             }
         }
@@ -7022,10 +7026,10 @@ void Task_GetPokemon(SysTask *task, void *inData) {
         break;
     case STATE_GET_POKEMON_BREAK_OUT:
         BattleController_EmitPokemonSendOut(data->battleSystem, battlerId, data->unk2C, 1); // Breaking out hijacks the send out animation.
-        data->state = 30;
+        data->state = STATE_GET_POKEMON_BREAK_OUT_CLEANUP;
         data->unk34[0] = 2;
         break;
-    case 30:
+    case STATE_GET_POKEMON_BREAK_OUT_CLEANUP:
         data->unk34[0]--;
         if (data->unk34[0] == 0) { // After 2 frames have passed...
             ov07_02233ECC(data->unk8);
@@ -7115,7 +7119,7 @@ static inline u32 CP_GetSqrtResult32 (void)
 
 s32 GetMonWeight(u16 species);
 
-u32 ov12_02247228(BattleSystem* bsys, BattleContext* ctx) {
+u32 BattleSystem_CalculateBallShakes(BattleSystem* bsys, BattleContext* ctx) {
     s32 catchRate;
     s32 targetMonType1 = 0;
     u32 ballMultiplier = 0;
@@ -8026,20 +8030,20 @@ void ov12_02248228(BattleSystem* battleSystem, GetterWork* data, Pokemon* mon) {
     data->unk50[0] = FontSystem_NewInit(1, HEAP_ID_BATTLE);
 
     u32 gender;
-    if (GetMonData(mon, MON_DATA_NO_PRINT_GENDER, NULL) == 0) {
+    if (GetMonData(mon, MON_DATA_NO_PRINT_GENDER, NULL) == FALSE) { // Used for Nidoran.
         gender = MON_GENDERLESS;
     } 
     else {
         gender = GetMonData(mon, MON_DATA_GENDER, NULL);
     }
     if (gender == MON_MALE) {
-        string = NewString_ReadMsgData(msgData, 944);
+        string = NewString_ReadMsgData(msgData, msg_0197_00944); // {0} ♂ Lv. {1}
     } 
     else if (gender == MON_FEMALE) {
-        string = NewString_ReadMsgData(msgData, 945);
+        string = NewString_ReadMsgData(msgData, msg_0197_00945); // {0} ♀ Lv. {1}
     } 
     else {
-        string = NewString_ReadMsgData(msgData, 946);
+        string = NewString_ReadMsgData(msgData, msg_0197_00946); // {0} Lv. {1}
     }
     BufferBoxMonNickname(messageFormat, 0, Mon_GetBoxMon(mon));
     BufferIntegerAsString(messageFormat, 1, GetMonData(mon, MON_DATA_LEVEL, NULL), 3, PRINTING_MODE_LEFT_ALIGN, 1);
@@ -8047,7 +8051,7 @@ void ov12_02248228(BattleSystem* battleSystem, GetterWork* data, Pokemon* mon) {
     String_Delete(string);
     InitWindow(&window);
     AddTextWindowTopLeftCorner(bgConfig, &window, 12, 4, 0, 0);
-    AddTextPrinterParameterizedWithColor(&window, 0, messageBuffer, 0, 0, 255, 0x10200, NULL); // TODO: What color is 0x10200? Is 255 instant print speed?
+    AddTextPrinterParameterizedWithColor(&window, 0, messageBuffer, 0, 0, TEXT_SPEED_NOTRANSFER, 0x10200, NULL); // TODO: What color is 0x10200?
     sub_02021AC8(sub_02013688(&window, NNS_G2D_VRAM_TYPE_2DMAIN, 5), 1, NNS_G2D_VRAM_TYPE_2DMAIN, &unkStruct);
     textObjTemplate.fontSystem = data->unk50[0];
     textObjTemplate.window = &window;
