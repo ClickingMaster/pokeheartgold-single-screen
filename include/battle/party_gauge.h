@@ -14,7 +14,7 @@ typedef struct PartyGaugeArrow {
     u8 state;
     u8 delay;
 } PartyGaugeArrow;
-    
+
 typedef struct {
     ManagedSprite *managedSprite;
     SysTask *task;
@@ -33,14 +33,14 @@ typedef struct {
     u8 flipAnimation;
     u8 startDelay;
 } PartyGaugePokeballs;
-    
+
 typedef struct PartyGauge {
     PartyGaugeArrow arrow;
     PartyGaugePokeballs pokeballs[6];
     s8 numBalls;
 } PartyGauge;
 
-void PartyGauge_LoadGraphics(SpriteSystem *spriteSystem, SpriteManager *spriteManager, PaletteData  *paletteData);
+void PartyGauge_LoadGraphics(SpriteSystem *spriteSystem, SpriteManager *spriteManager, PaletteData *paletteData);
 void PartyGauge_FreeGraphics(SpriteManager *spriteManager);
 PartyGauge *PartyGauge_NewAndShow(u8 *ballStatus, s32 side, s32 showType, s32 position, SpriteSystem *spriteSystem, SpriteManager *spriteManager);
 BOOL PartyGauge_IsArrowTaskFinished(PartyGauge *partyGauge);

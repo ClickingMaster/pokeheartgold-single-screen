@@ -1,7 +1,8 @@
+#include "battle/party_gauge.h"
+
 #include "global.h"
 
 #include "battle/battle_system.h"
-#include "battle/party_gauge.h"
 
 #include "unk_02005D10.h"
 

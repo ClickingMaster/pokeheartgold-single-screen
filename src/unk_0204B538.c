@@ -344,7 +344,7 @@ static u32 FrontierFieldSystem_0204BABC(FrontierFieldSystem *frontierFsys, u16 *
     FrontierMonNarcData frontierMonNarcData_1;
     FrontierMonNarcData frontierMonNarcData_2;
     GF_ASSERT(numPokemon <= 4);
-    
+
     s32 count = 0;
     failedItemGenAttempts = 0;
     while (count != numPokemon) {
