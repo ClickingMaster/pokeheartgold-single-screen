@@ -7129,7 +7129,7 @@ u32 BattleSystem_CalculateBallShakes(BattleSystem* bsys, BattleContext* ctx) {
     if (ctx->itemTemp == ITEM_SAFARI_BALL) {
         s32 normalCatchRate = GetMonBaseStat(ctx->battleMons[ctx->battlerIdTarget].species, BASE_CATCH_RATE);
         // Adjust the catch rate in the safari zone by the pokemon's caution level.
-        catchRate = (sSafariCatchRateStages[ctx->unk_311C][0] * normalCatchRate) / sSafariCatchRateStages[ctx->unk_311C][1];
+        catchRate = (sSafariCatchRateStages[ctx->safariCatchRateStage][0] * normalCatchRate) / sSafariCatchRateStages[ctx->safariCatchRateStage][1];
     } else {
         catchRate = GetMonBaseStat(ctx->battleMons[ctx->battlerIdTarget].species, BASE_CATCH_RATE);
     }

@@ -1766,7 +1766,7 @@ void ov12_02251038(BattleSystem *battleSystem, BattleContext *ctx) {
         ctx->switchInFlag |= MaskOfFlagNo(3);
     }
 
-    ctx->unk_311C = 6;
+    ctx->safariCatchRateStage = 6;
     ctx->safariRunAttempts = 6;
 }
 
