@@ -29,7 +29,7 @@
 .public G2x_SetBlendAlpha_
 .public MI_CpuFill8
 .public BattleSystem_SetDefaultBlend
-.public ov12_0226ADE0
+.public PartyGauge_LoadGraphics
 .public ov12_0226AE78
 .public ov12_0226AEE0
 .public ov12_0226AF48

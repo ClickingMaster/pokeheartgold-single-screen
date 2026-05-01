@@ -291,7 +291,7 @@
 .public BattleInput_GetKeyPressed
 .public BattleInput_SetKeyPressed
 .public BattleInput_GetCancelRunFlag
-.public ov12_0226ADE0
+.public PartyGauge_LoadGraphics
 .public ov12_0226AE78
 .public ov12_0226AEE0
 .public ov12_0226AF48

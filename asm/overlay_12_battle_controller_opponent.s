@@ -1937,7 +1937,7 @@ ov12_02259658: ; 0x02259658
 	add r2, r0, #0
 	add r0, r6, #0
 	add r1, r7, #0
-	bl ov12_0226ADE0
+	bl PartyGauge_LoadGraphics
 	mov r1, #0x65
 	lsl r1, r1, #2
 	ldrb r1, [r4, r1]
