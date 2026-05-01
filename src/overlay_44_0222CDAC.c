@@ -350,12 +350,14 @@ static const SpriteTemplate ov44_02235570[3] = {
     },
 };
 
-// static UnkStruct_ov44_0222DD64 _02236660[4] = {
+// UnkStruct_ov44_0222DD64 _02236660[4] = {
 //     {.strno = 0x1E, .value = 0x13}, {.strno = 0x22, .value = 0x1D},
 // 	{.strno = 0x29, .value = 0xFFFFFFFE}, {.strno = 0x20, .value = 0x15}
 // };
+// func_type_02236680 ov44_02236680[7] = {ov44_02230300, ov44_02230E5C, ov44_022307E0, ov44_022308B0, ov44_02230B2C, ov44_02230C68, ov44_02230D8C};
+
 extern UnkStruct_ov44_0222DD64 _02236660[4];
-extern func_type_02236680 ov44_02236680[6];
+extern func_type_02236680 ov44_02236680[7];
 extern UnkStruct_ov44_0222DD64 ov44_0223669C[4];
 extern UnkStruct_ov44_0222DD64 ov44_022366BC[4];
 extern UnkStruct_ov44_0222DD64 ov44_022366DC[4];
@@ -2034,15 +2036,15 @@ s32 ov44_0222C524(UnkStruct_ov44_022319EC* arg0) {
     return sp8;
 }
 
-void ov44_0222C658(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+void ov44_0222C658(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
     if (ov44_0222B8E0(arg0) > 0) {
-        ov44_02230060(arg0, arg1);
+        ov44_02230060(arg0, heapID);
     }
 }
 
-void ov44_0222C670(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+void ov44_0222C670(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
     ov44_0222C524(arg0);
-    ov44_0222C658(arg0, arg1);
+    ov44_0222C658(arg0, heapID);
 }
 
 s32 ov44_0222C684(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
@@ -3988,15 +3990,15 @@ void ov44_0222F910(UnkStruct_ov44_022319EC* arg0) {
     }
 }
 
-void ov44_0222F950(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+void ov44_0222F950(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
     ov44_0222FC0C(arg0);
     ov44_02231D8C(&arg0->unk38C);
-    ov44_02230060(arg0, arg1);
+    ov44_02230060(arg0, heapID);
 }
 
-void ov44_0222F970(UnkStruct_ov44_022319EC* arg0, s32 arg1, s32 arg2) {
+void ov44_0222F970(UnkStruct_ov44_022319EC* arg0, s32 arg1, enum HeapID heapID) {
     if (arg1 == ov44_0222FC00(arg0)) {
-        ov44_0222F950(arg0, arg2);
+        ov44_0222F950(arg0, heapID);
     }
 }
 
@@ -4035,7 +4037,7 @@ void ov44_0222FA28(UnkStruct_ov44_022319EC* arg0) {
     }
 }
 
-u8 ov44_0222FA80(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+u8 ov44_0222FA80(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
     u32 var_r5 = ov44_02231C8C(&arg0->unk38C);
     u32 temp_r0 = ov44_02231CE8(&arg0->unk38C);
     if ((temp_r0 >= 3) && (temp_r0 <= 6)) {
@@ -4053,7 +4055,7 @@ u8 ov44_0222FA80(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     if (arg0->unkB1C.unk73 == 1) {
         arg0->unkB1C.unk73 = 2;
         arg0->unkB1C.unk74 = 0;
-        ov44_02230234(arg0, arg1);
+        ov44_02230234(arg0, heapID);
         ov44_02231720(arg0);
     }
     if (arg0->unkB1C.unk73 == 0) {
@@ -4078,7 +4080,7 @@ u8 ov44_0222FA80(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         } else if (temp_r0_2 != 0) {
             PlaySE(1501);
             ov44_0222FC3C(arg0, temp_r0_2);
-            ov44_02230234(arg0, arg1);
+            ov44_02230234(arg0, heapID);
         }
     }
     return arg0->unkB1C.unk71;
@@ -4236,9 +4238,9 @@ u8 ov44_02230048(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg0->unkB1C.unk50[arg1 - 1];
 }
 
-void ov44_02230060(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+void ov44_02230060(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
     if (arg0->unkB1C.unk73 != 0) {
-        ov44_02230234(arg0, arg1);
+        ov44_02230234(arg0, heapID);
         return;
     }
     arg0->unkB1C.unk78 = 1;
@@ -4310,7 +4312,7 @@ void ov44_022300C8(UnkStruct_ov44_022319EC* arg0) {
     GfGfx_EngineBTogglePlanes(8, 0);
 }
 
-void ov44_02230234(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+void ov44_02230234(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
     s32 var_r4;
     if (sub_0202C090(arg0->unk0, arg0->unkB1C.unk71 - 1, 8) == 1) {
         var_r4 = 7;
@@ -4325,14 +4327,14 @@ void ov44_02230234(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         ov44_02230FE8(arg0);
     }
     FillWindowPixelBuffer(&arg0->unkB1C.unk1FC, 0);
-    ov44_02236680[arg0->unkB1C.unk74](arg0, arg1);
+    ov44_02236680[arg0->unkB1C.unk74](arg0, heapID);
     ScheduleBgTilemapBufferTransfer(arg0->unk15C, 6);
     ScheduleWindowCopyToVram(&arg0->unkB1C.unk1FC);
     GfGfx_EngineBTogglePlanes(2, 0);
     GfGfx_EngineBTogglePlanes(8, 1);
 }
 
-void ov44_02230300(UnkStruct_ov44_022319EC* arg0) {
+void ov44_02230300(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
     s32 color;
     s32 temp_r4 = arg0->unkB1C.unk71 - 1;
     if (sub_0202C090(arg0->unk0, temp_r4, 8) == 0) {
@@ -4425,7 +4427,7 @@ void ov44_02230300(UnkStruct_ov44_022319EC* arg0) {
     ov44_0222ABDC(arg0->unk15C, &arg0->unkB0C, 6, 28, 2, var_r1, 0);
 }
 
-void ov44_022307E0(UnkStruct_ov44_022319EC* arg0) {
+void ov44_022307E0(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
     s32 temp_r4 = arg0->unkB1C.unk71 - 1;
     // BATTLE TOWER
     ReadMsgDataIntoString(arg0->unk168, msg_0778_00052, arg0->unk178);
@@ -4439,7 +4441,7 @@ void ov44_022307E0(UnkStruct_ov44_022319EC* arg0) {
     ov44_02231054(arg0, 65, 112, temp_r4, 120, 48);
 }
 
-void ov44_022308B0(UnkStruct_ov44_022319EC* arg0) {
+void ov44_022308B0(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
     s32 temp_r4 = arg0->unkB1C.unk71 - 1;
     // BATTLE FACTORY
     ReadMsgDataIntoString(arg0->unk168, msg_0778_00053, arg0->unk178);
@@ -4480,7 +4482,7 @@ void ov44_022308B0(UnkStruct_ov44_022319EC* arg0) {
     ov44_02231054(arg0, 66, 120, temp_r4, 212, 128);
 }
 
-void ov44_02230B2C(UnkStruct_ov44_022319EC* arg0) {
+void ov44_02230B2C(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
     s32 temp_r4 = arg0->unkB1C.unk71 - 1;
     // BATTLE CASTLE
     ReadMsgDataIntoString(arg0->unk168, msg_0778_00054, arg0->unk178);
@@ -4520,7 +4522,7 @@ void ov44_02230C68(UnkStruct_ov44_022319EC* arg0, enum HeapID arg1) {
     ov44_02231054(arg0, 65, 122, temp_r4, 108, 80);
 }
 
-void ov44_02230D8C(UnkStruct_ov44_022319EC* arg0) {
+void ov44_02230D8C(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
     s32 temp_r4 = arg0->unkB1C.unk71 - 1;
     // BATTLE ARCADE
     ReadMsgDataIntoString(arg0->unk168, msg_0778_00056, arg0->unk178);
@@ -4534,7 +4536,7 @@ void ov44_02230D8C(UnkStruct_ov44_022319EC* arg0) {
     ov44_02231054(arg0, 69, 142, temp_r4, 112, 48);
 }
 
-void ov44_02230E5C(UnkStruct_ov44_022319EC* arg0) {
+void ov44_02230E5C(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
     UnkStruct_021D2230* temp_r6 = sub_0202C6F4(arg0->unk160);
     s32 temp_r4 = arg0->unkB1C.unk71 - 1;
     // PLAZA GAMES PLAYED
