@@ -308,7 +308,7 @@ s32 ov44_0222BFF0(UnkStruct_ov44_022319EC* arg0, s32 arg1);
 s32 ov44_0222C060(UnkStruct_ov44_022319EC* arg0, s32 arg1);
 s32 ov44_0222C084(UnkStruct_ov44_022319EC* arg0, s32 arg1);
 void ov44_0222C120(UnkStruct_ov44_022319EC* arg0);
-void ov44_0222C288(s32 arg0, s32 arg1, s32 arg2);
+void ov44_0222C288(struct ListMenu *list, s32 index, u8 onInit);
 void ov44_0222C29C(UnkStruct_ov44_022319EC* arg0);
 s32 ov44_0222C35C(UnkStruct_ov44_022319EC* arg0, s32 arg1);
 s32 ov44_0222C4EC(UnkStruct_ov44_022319EC* arg0);

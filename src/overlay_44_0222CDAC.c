@@ -47,55 +47,56 @@
 #include "unk_020915B0.h"
 #include "unk_0203A3B0.h"
 
-static const u8 _0223535C[4] = {1, 3, 5, 0};
 static const u8 ov44_02235360[4] = {0, 2, 4, 0};
-static const u8 ov44_02235364[4] = {0x08, 0x07, 0x05, 0x07};
-static const u8 ov44_02235368[4] = {0x00, 0x01, 0x02, 0x01};
-static const s8 ov44_0223536C[8] = {0xF8, 0xF7, 0xF6, 0xF6, 0xF7, 0x00, 0x00, 0x00};
+static const u8 ov44_02235364[4] = {8, 7, 5, 7};
+static const u8 ov44_02235368[4] = {0, 1, 2, 1};
+static const u8 _0223535C[4] = {1, 3, 5, 0};
+static const s8 ov44_0223536C[8] = {248, 247, 246, 246, 247, 0, 0, 0};
+
+static const WindowTemplate ov44_02235384 = {
+    .bgId = 1,
+    .left = 25,
+    .top = 16,
+    .width = 6,
+    .height = 8,
+    .palette = 14,
+    .baseTile = 393,
+};
 static const WindowTemplate ov44_02235374 = {
-    .bgId = 0x02,
-    .left = 0x19,
-    .top = 0x0A,
-    .width = 0x06,
-    .height = 0x08,
-    .palette = 0x0E,
-    .baseTile = 0x0051,
+    .bgId = 2,
+    .left = 25,
+    .top = 10,
+    .width = 6,
+    .height = 8,
+    .palette = 14,
+    .baseTile = 81,
 };
 static const WindowTemplate ov44_0223537C = {
-    .bgId = 0x02,
-    .left = 0x19,
-    .top = 0x0A,
-    .width = 0x06,
-    .height = 0x08,
-    .palette = 0x0E,
-    .baseTile = 0x0051,
-};
-static const WindowTemplate ov44_02235384 = {
-    .bgId = 0x01,
-    .left = 0x19,
-    .top = 0x10,
-    .width = 0x06,
-    .height = 0x08,
-    .palette = 0x0E,
-    .baseTile = 0x0189,
+    .bgId = 2,
+    .left = 25,
+    .top = 10,
+    .width = 6,
+    .height = 8,
+    .palette = 14,
+    .baseTile = 81,
 };
 static const WindowTemplate ov44_0223538C = {
-    .bgId = 0x02,
-    .left = 0x19,
-    .top = 0x0D,
-    .width = 0x06,
-    .height = 0x04,
-    .palette = 0x0D,
-    .baseTile = 0x0051,
+    .bgId = 2,
+    .left = 25,
+    .top = 13,
+    .width = 6,
+    .height = 4,
+    .palette = 13,
+    .baseTile = 81,
 };
 static const TouchscreenHitbox ov44_02235394[3] = {
-    { .rect = { .top = 0xA0, .bottom = 0xC0, .left = 0x08, .right = 0x40 } },
-    { .rect = { .top = 0xA0, .bottom = 0xC0, .left = 0x50, .right = 0xB0 } },
-    { .rect = { .top = 0xA0, .bottom = 0xC0, .left = 0xC0, .right = 0xF8 } },
+    { .rect = { .top = 160, .bottom = 192, .left = 8, .right = 64 } },
+    { .rect = { .top = 160, .bottom = 192, .left = 80, .right = 176 } },
+    { .rect = { .top = 160, .bottom = 192, .left = 192, .right = 248 } },
 };
 static const UnkStruct_ov44_0222DD64 ov44_022353A0[2] = {
-    { .strno = 0x27, .value = 0x01 },
-    { .strno = 0x29, .value = 0xFFFFFFFE },
+    { .strno = 39, .value = 1 },
+    { .strno = 41, .value = 0xFFFFFFFE },
 };
 static const GraphicsModes ov44_022353B0 = {
     .dispMode = GX_DISPMODE_GRAPHICS,
@@ -104,57 +105,255 @@ static const GraphicsModes ov44_022353B0 = {
     ._2d3dMode = GX_BG0_AS_2D,
 };
 static const ObjCharTransferTemplate ov44_022353C0 = {
-    .maxTasks = 0x14,
+    .maxTasks = 20,
     .sizeMain = 0x20000,
     .sizeSub = 0x4000,
     .heapID = HEAP_ID_53,
 };
-static const u32 ov44_022353D0[6] = {0x64, 0x66, 0x68, 0x6C, 0x6A, 0x6E};
+static const u32 ov44_022353D0[6] = {100, 102, 104, 108, 106, 110};
 
 static const BgTemplate ov44_022353E8 = {
     .x = 0,
     .y = 0,
-    .bufferSize = 0x1000,
+    .bufferSize = 4096,
     .baseTile = 0,
-    .size = 0x03,
-    .colorMode = 0x00,
-    .screenBase = 0x1C,
-    .charBase = 0x00,
-    .bgExtPltt = 0x00,
-    .priority = 0x00,
-    .areaOver = 0x00,
-    .dummy = 0x00,
+    .size = 3,
+    .colorMode = 0,
+    .screenBase = 28,
+    .charBase = 0,
+    .bgExtPltt = 0,
+    .priority = 0,
+    .areaOver = 0,
+    .dummy = 0,
+    .mosaic = 0,
+};
+static const BgTemplate ov44_02235420 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 2048,
+    .baseTile = 0,
+    .size = 1,
+    .colorMode = 0,
+    .screenBase = 30,
+    .charBase = 6,
+    .bgExtPltt = 1,
+    .priority = 3,
+    .areaOver = 0,
+    .dummy = 0,
+    .mosaic = 0,
+};
+static const BgTemplate ov44_0223543C = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 2048,
+    .baseTile = 0,
+    .size = 1,
+    .colorMode = 0,
+    .screenBase = 28,
+    .charBase = 0,
+    .bgExtPltt = 0,
+    .priority = 3,
+    .areaOver = 0,
+    .dummy = 0,
+    .mosaic = 0,
+};
+static const BgTemplate ov44_02235458 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 2048,
+    .baseTile = 0,
+    .size = 1,
+    .colorMode = 0,
+    .screenBase = 29,
+    .charBase = 2,
+    .bgExtPltt = 0,
+    .priority = 0,
+    .areaOver = 0,
+    .dummy = 0,
+    .mosaic = 0,
+};
+static const BgTemplate ov44_02235474 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 2048,
+    .baseTile = 0,
+    .size = 1,
+    .colorMode = 0,
+    .screenBase = 30,
+    .charBase = 4,
+    .bgExtPltt = 0,
+    .priority = 2,
+    .areaOver = 0,
+    .dummy = 0,
+    .mosaic = 0,
+};
+static const BgTemplate ov44_02235490 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 2048,
+    .baseTile = 0,
+    .size = 1,
+    .colorMode = 0,
+    .screenBase = 27,
+    .charBase = 2,
+    .bgExtPltt = 1,
+    .priority = 2,
+    .areaOver = 0,
+    .dummy = 0,
+    .mosaic = 0,
+};
+static const BgTemplate ov44_022354AC = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 2048,
+    .baseTile = 0,
+    .size = 1,
+    .colorMode = 0,
+    .screenBase = 31,
+    .charBase = 6,
+    .bgExtPltt = 0,
+    .priority = 0,
+    .areaOver = 0,
+    .dummy = 0,
     .mosaic = 0,
 };
 static const BgTemplate ov44_02235404 = {
     .x = 0,
     .y = 0,
-    .bufferSize = 0x800,
+    .bufferSize = 2048,
     .baseTile = 0,
-    .size = 0x01,
-    .colorMode = 0x00,
-    .screenBase = 0x1A,
-    .charBase = 0x04,
-    .bgExtPltt = 0x00,
-    .priority = 0x01,
-    .areaOver = 0x00,
-    .dummy = 0x00,
+    .size = 1,
+    .colorMode = 0,
+    .screenBase = 26,
+    .charBase = 4,
+    .bgExtPltt = 0,
+    .priority = 1,
+    .areaOver = 0,
+    .dummy = 0,
     .mosaic = 0,
 };
-extern BgTemplate ov44_02235420;
-extern BgTemplate ov44_0223543C;
-extern BgTemplate ov44_02235458;
-extern BgTemplate ov44_02235474;
-extern BgTemplate ov44_02235490;
-extern BgTemplate ov44_022354AC;
+static const ListMenuTemplate ov44_022354C8 = {
+    .items = NULL,
+    .moveCursorFunc = ov44_0222C288,
+    .itemPrintFunc = NULL,
+    .window = NULL,
+    .totalItems = 2,
+    .maxShowed = 2,
+    .header_X = 0,
+    .item_X = 8,
+    .cursor_X = 0,
+    .upText_Y = 0,
+    .cursorPal = 1,
+    .fillValue = 15,
+    .cursorShadowPal = 2,
+    .lettersSpacing = 0,
+    .itemVerticalPadding = 0,
+    .scrollMultiple = 0,
+    .fontId = 0,
+    .cursorKind = 0,
+    .unk_1C = 0,
+};
+static const ListMenuTemplate ov44_02235508 = {
+    .items = NULL,
+    .moveCursorFunc = ov44_0222C288,
+    .itemPrintFunc = NULL,
+    .window = NULL,
+    .totalItems = 4,
+    .maxShowed = 4,
+    .header_X = 0,
+    .item_X = 8,
+    .cursor_X = 0,
+    .upText_Y = 0,
+    .cursorPal = 1,
+    .fillValue = 15,
+    .cursorShadowPal = 2,
+    .lettersSpacing = 0,
+    .itemVerticalPadding = 0,
+    .scrollMultiple = 0,
+    .fontId = 0,
+    .cursorKind = 0,
+    .unk_1C = 0,
+};
+static const ListMenuTemplate ov44_02235528 = {
+    .items = NULL,
+    .moveCursorFunc = ov44_0222C288,
+    .itemPrintFunc = NULL,
+    .window = NULL,
+    .totalItems = 4,
+    .maxShowed = 4,
+    .header_X = 0,
+    .item_X = 8,
+    .cursor_X = 0,
+    .upText_Y = 0,
+    .cursorPal = 1,
+    .fillValue = 15,
+    .cursorShadowPal = 2,
+    .lettersSpacing = 0,
+    .itemVerticalPadding = 0,
+    .scrollMultiple = 0,
+    .fontId = 0,
+    .cursorKind = 0,
+    .unk_1C = 0,
+};
+static const TouchscreenHitbox ov44_022354E8[8] = {
+    { .rect = { .top = 0, .bottom = 47, .left = 0, .right = 119 } },
+    { .rect = { .top = 48, .bottom = 95, .left = 0, .right = 119 } },
+    { .rect = { .top = 96, .bottom = 143, .left = 0, .right = 119 } },
+    { .rect = { .top = 144, .bottom = 191, .left = 0, .right = 119 } },
+    { .rect = { .top = 0, .bottom = 47, .left = 128, .right = 255 } },
+    { .rect = { .top = 48, .bottom = 95, .left = 128, .right = 255 } },
+    { .rect = { .top = 96, .bottom = 143, .left = 128, .right = 255 } },
+    { .rect = { .top = 144, .bottom = 191, .left = 128, .right = 255 } },
+};
+static const GraphicsBanks ov44_02235548 = {
+    .bg = GX_VRAM_BG_128_A,
+    .bgextpltt = GX_VRAM_BGEXTPLTT_NONE,
+    .subbg = GX_VRAM_SUB_BG_128_C,
+    .subbgextpltt = GX_VRAM_SUB_BGEXTPLTT_NONE,
+    .obj = GX_VRAM_OBJ_128_B,
+    .objextpltt = GX_VRAM_OBJEXTPLTT_NONE,
+    .subobj = GX_VRAM_SUB_OBJ_16_I,
+    .subobjextpltt = GX_VRAM_SUB_OBJEXTPLTT_NONE,
+    .tex = GX_VRAM_TEX_NONE,
+    .texpltt = GX_VRAM_TEXPLTT_NONE,
+};
+static const SpriteTemplate ov44_02235570[3] = {
+    {
+        .spriteList = NULL,
+        .header = NULL,
+        .position = { .x = 0x28000, .y = 0x1AC000, .z = 0 },
+        .scale = { .x = 4096, .y = 4096, .z = 4096 },
+        .rotation = 0,
+        .drawPriority = 128,
+        .whichScreen = NNS_G2D_VRAM_TYPE_2DSUB,
+        .heapID = HEAP_ID_DEFAULT,
+    },
+    {
+        .spriteList = NULL,
+        .header = NULL,
+        .position = { .x = 0x80000, .y = 0x1AC000, .z = 0 },
+        .scale = { .x = 4096, .y = 4096, .z = 4096 },
+        .rotation = 0,
+        .drawPriority = 128,
+        .whichScreen = NNS_G2D_VRAM_TYPE_2DSUB,
+        .heapID = HEAP_ID_DEFAULT,
+    },
+    {
+        .spriteList = NULL,
+        .header = NULL,
+        .position = { .x = 0xE0000, .y = 0x1AC000, .z = 0 },
+        .scale = { .x = 4096, .y = 4096, .z = 4096 },
+        .rotation = 0,
+        .drawPriority = 128,
+        .whichScreen = NNS_G2D_VRAM_TYPE_2DSUB,
+        .heapID = HEAP_ID_DEFAULT,
+    },
+};
 
-extern ListMenuTemplate ov44_022354C8;
-extern TouchscreenHitbox ov44_022354E8[4];
-extern ListMenuTemplate ov44_02235508;
-extern ListMenuTemplate ov44_02235528;
-extern GraphicsBanks ov44_02235548;
-extern SpriteTemplate ov44_02235570[3];
-
+// static UnkStruct_ov44_0222DD64 _02236660[4] = {
+//     {.strno = 0x1E, .value = 0x13}, {.strno = 0x22, .value = 0x1D},
+// 	{.strno = 0x29, .value = 0xFFFFFFFE}, {.strno = 0x20, .value = 0x15}
+// };
 extern UnkStruct_ov44_0222DD64 _02236660[4];
 extern func_type_02236680 ov44_02236680[6];
 extern UnkStruct_ov44_0222DD64 ov44_0223669C[4];
@@ -1693,8 +1892,8 @@ void ov44_0222C120(UnkStruct_ov44_022319EC* arg0) {
     ScheduleWindowCopyToVram(&arg0->unk2E0);
 }
 
-void ov44_0222C288(s32 arg0, s32 arg1, s32 arg2) {
-    if (arg2 == 0) {
+void ov44_0222C288(struct ListMenu *list, s32 index, u8 onInit) {
+    if (onInit == 0) {
         PlaySE(1500);
     }
 }

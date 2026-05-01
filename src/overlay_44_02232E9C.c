@@ -24,9 +24,8 @@
 #include "unk_020379A0.h"
 #include "overlay_00_thumb.h"
 
-// const u16 ov44_02235600[2] = {3, 2};
-
-// const u8 ov44_02235604[11] = {0, 0, 0, 28, 0, 0, 3, 0, 88, 22, 0};
+const u16 ov44_02235600[2] = {3, 2};
+// const u8 ov44_02235604[11] = {0, 0, 0, 28, 0, 0, 3, 0, 88, 33, 0};
 
 // const u32 ov44_02235630[4] = {0xB0010, 0xB0010, 0xB0016, 0xB001C};
 
@@ -37,14 +36,14 @@
 // const u8 ov44_02235611[1] = {0};
 // const u8 ov44_02235612[30] = {1, 1, 2, 1, 0, 1, 4, 1, 1, 1, 2, 1, 0, 0, 0, 0, 1, 1, 2, 1, 1, 1, 4, 1, 0, 1, 3, 1, 1, 0};
 
-extern u16 ov44_02235600[2];
+// extern u16 ov44_02235600[2];
 extern u8 ov44_02235604[11];
-extern u32 ov44_02235630[4];
-
 extern u8 ov44_0223560F[1];
 extern u8 ov44_02235610[1];
 extern u8 ov44_02235611[1];
 extern u8 ov44_02235612[30];
+extern u32 ov44_02235630[4];
+
 extern u32 ov44_0223688C[4];
 
 YesNoPrompt* ov44_02231A14(BgConfig* arg0, const WindowTemplate* arg1, u32 arg2) {
