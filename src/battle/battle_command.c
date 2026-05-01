@@ -7881,14 +7881,14 @@ void InitBattleMsg(BattleSystem *battleSystem, BattleContext *ctx, BattleMessage
 
 int ov12_022480C0(BattleSystem *battleSystem, BattleContext *ctx, int side) {
     int battlerID = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
-    if (side == 0x16) {
+    if (side == BATTLER_CATEGORY_SWITCHED_MON_AFTER) {
         return battlerID | (ctx->unk_21A0[battlerID] << 8);
     } else {
         return battlerID | (ctx->selectedMonIndex[battlerID] << 8);
     }
 }
 
-int GetMoveMessageNo(BattleContext* ctx, int move) {
+int GetMoveMessageNo(BattleContext* ctx, int move) { // Is this actually move, or is it battler side/category?
     switch(move){
         case 1: return ctx->moveNoCur;
         case 255: return ctx->moveTemp;
@@ -7897,40 +7897,40 @@ int GetMoveMessageNo(BattleContext* ctx, int move) {
 
 void BattlerSetItem(BattleContext* ctx, u8 battlerId, u16 item);
 
-int ov12_0224810C(BattleContext* ctx, int arg1) {
+int ov12_0224810C(BattleContext* ctx, int side) {
     int item;
-    switch (arg1) {
-    case 1:
+    switch (side) {
+    case BATTLER_CATEGORY_ATTACKER:
         item = ctx->battleMons[ctx->battlerIdAttacker].item;
         BattlerSetItem(ctx, ctx->battlerIdAttacker, item);
         break;
-    case 2:
+    case BATTLER_CATEGORY_DEFENDER:
         item = ctx->battleMons[ctx->battlerIdTarget].item;
         BattlerSetItem(ctx, ctx->battlerIdTarget, item);
         break;
-    case 21:
+    case BATTLER_CATEGORY_MSG_BATTLER_TEMP:
         item = ctx->battleMons[ctx->battlerIdTemp].item;
         BattlerSetItem(ctx, ctx->battlerIdTemp, item);
         break;
-    case 255:
+    case BATTLER_CATEGORY_MSG_TEMP:
         item = ctx->itemTemp;
         break;
     }
     return item;
 }
 
-int ov12_02248184(BattleContext* ctx, int arg1) {
+int ov12_02248184(BattleContext* ctx, int side) {
     if (arg1 == 0xFF) return ctx->msgTemp;
 }
 
-int ov12_02248190(BattleContext* ctx, int arg1) {
+int ov12_02248190(BattleContext* ctx, int side) {
     if (arg1 == 0xFF) return ctx->msgTemp;
 }
 
 int ov12_0224819C(BattleSystem* battleSystem, BattleContext* ctx, int side) {
     u32 ability;
     int battlerID;
-    if (side == 0xFF) {
+    if (side == BATTLER_CATEGORY_MSG_TEMP) {
         ability = ctx->abilityTemp;
     } else {
         battlerID = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
@@ -7940,12 +7940,12 @@ int ov12_0224819C(BattleSystem* battleSystem, BattleContext* ctx, int side) {
     return ability;
 }
 
-int ov12_022481D0(BattleContext* ctx, int arg1) {
-    if (arg1 == 0xFF) return ctx->msgTemp;
+int ov12_022481D0(BattleContext* ctx, int side) {
+    if (side == BATTLER_CATEGORY_MSG_TEMP) return ctx->msgTemp;
 }
 
-int ov12_022481DC(BattleContext* ctx, int arg1) {
-    if (arg1 == 0xFF) return ctx->msgTemp;
+int ov12_022481DC(BattleContext* ctx, int side) {
+    if (side == BATTLER_CATEGORY_MSG_TEMP) return ctx->msgTemp;
 }
 
 int ov12_022481E8(BattleSystem* battleSystem, BattleContext* ctx, int side) {
@@ -7954,11 +7954,11 @@ int ov12_022481E8(BattleSystem* battleSystem, BattleContext* ctx, int side) {
 }
 
 int ov12_02248200(BattleContext* ctx, int arg1) {
-    if (arg1 == 0xFF) return ctx->msgTemp;
+    if (side == BATTLER_CATEGORY_MSG_TEMP) return ctx->msgTemp;
 }
 
 int ov12_0224820C(BattleContext* ctx, int arg1) {
-    if (arg1 == 0xFF) return ctx->msgTemp;
+    if (side == BATTLER_CATEGORY_MSG_TEMP) return ctx->msgTemp;
 }
 
 int ov12_02248218(BattleSystem* battleSystem, BattleContext* ctx, int side) {
@@ -8029,8 +8029,8 @@ void ov12_02248228(BattleSystem* battleSystem, GetterWork* data, Pokemon* mon) {
     String_Delete(string);
     InitWindow(&window);
     AddTextWindowTopLeftCorner(bgConfig, &window, 12, 4, 0, 0);
-    AddTextPrinterParameterizedWithColor(&window, 0, messageBuffer, 0, 0, TEXT_SPEED_NOTRANSFER, 0x10200, NULL); // TODO: What color is 0x10200?
-    sub_02021AC8(sub_02013688(&window, NNS_G2D_VRAM_TYPE_2DMAIN, 5), 1, NNS_G2D_VRAM_TYPE_2DMAIN, &unkStruct);
+    AddTextPrinterParameterizedWithColor(&window, 0, messageBuffer, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL); // Second param should be something like FONT_ID_0.
+    sub_02021AC8(sub_02013688(&window, NNS_G2D_VRAM_TYPE_2DMAIN, 5), TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &unkStruct);
     textObjTemplate.fontSystem = data->unk50[0];
     textObjTemplate.window = &window;
     textObjTemplate.spriteList = SpriteManager_GetSpriteList(spriteManager);
@@ -8067,7 +8067,7 @@ void ov12_022484D4(BattleSystem* battleSystem, GetterWork* data) {
 }
 
 void UpdateFriendshipFainted(BattleSystem* battleSystem, BattleContext* ctx, int battlerID) {
-    if (BattleSystem_GetFieldSide(battleSystem, battlerID) == 0) { // TODO: Side consts?
+    if (BattleSystem_GetFieldSide(battleSystem, battlerID) == 0) { // TODO: Side consts? Is this BATTLER_CATEGORY_ATTACKER?
         u8 enemyID;
         if (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_DOUBLES) {
             enemyID = BattleSystem_GetBattlerFromBattlerType(battleSystem, BATTLER_TYPE_ENEMY_SIDE_SLOT_1);
