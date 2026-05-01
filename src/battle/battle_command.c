@@ -91,7 +91,7 @@ BOOL BtlCmd_SetPokemonEncounter(BattleSystem *battleSystem, BattleContext *ctx) 
         OpponentData *opponentData;
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (opponentData->unk195 & 1) {
+            if (opponentData->battlerType & 1) {
                 BattleController_EmitPokemonEncounter(battleSystem, battlerId);
                 BattleSystem_SetPokedexSeen(battleSystem, battlerId);
             }
@@ -121,7 +121,7 @@ BOOL BtlCmd_PokemonSlideIn(BattleSystem *battleSystem, BattleContext *ctx) {
     case BATTLER_CATEGORY_PLAYER:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (!(opponentData->unk195 & 1)) {
+            if (!(opponentData->battlerType & 1)) {
                 BattleController_EmitPokemonSlideIn(battleSystem, battlerId);
                 BattleSystem_SetPokedexSeen(battleSystem, battlerId);
             }
@@ -132,7 +132,7 @@ BOOL BtlCmd_PokemonSlideIn(BattleSystem *battleSystem, BattleContext *ctx) {
     case BATTLER_CATEGORY_ENEMY:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (opponentData->unk195 & 1) {
+            if (opponentData->battlerType & 1) {
                 BattleSystem_ClearExperienceEarnFlags(ctx, battlerId);
                 BattleSystem_SetExperienceEarnFlags(battleSystem, ctx, battlerId);
                 BattleController_EmitPokemonSlideIn(battleSystem, battlerId);
@@ -142,7 +142,7 @@ BOOL BtlCmd_PokemonSlideIn(BattleSystem *battleSystem, BattleContext *ctx) {
         break;
     case BATTLER_CATEGORY_ATTACKER:
         opponentData = BattleSystem_GetOpponentData(battleSystem, ctx->battlerIdAttacker);
-        if (!(opponentData->unk195 & 1)) {
+        if (!(opponentData->battlerType & 1)) {
             BattleSystem_SetExperienceEarnFlags(battleSystem, ctx, BATTLER_ENEMY);
             BattleSystem_SetExperienceEarnFlags(battleSystem, ctx, BATTLER_ENEMY2);
         } else {
@@ -154,7 +154,7 @@ BOOL BtlCmd_PokemonSlideIn(BattleSystem *battleSystem, BattleContext *ctx) {
         break;
     case BATTLER_CATEGORY_DEFENDER:
         opponentData = BattleSystem_GetOpponentData(battleSystem, ctx->battlerIdTarget);
-        if (!(opponentData->unk195 & 1)) {
+        if (!(opponentData->battlerType & 1)) {
             BattleSystem_SetExperienceEarnFlags(battleSystem, ctx, BATTLER_ENEMY);
             BattleSystem_SetExperienceEarnFlags(battleSystem, ctx, BATTLER_ENEMY2);
         } else {
@@ -166,7 +166,7 @@ BOOL BtlCmd_PokemonSlideIn(BattleSystem *battleSystem, BattleContext *ctx) {
         break;
     case BATTLER_CATEGORY_SWITCHED_MON:
         opponentData = BattleSystem_GetOpponentData(battleSystem, ctx->battlerIdSwitch);
-        if (!(opponentData->unk195 & 1)) {
+        if (!(opponentData->battlerType & 1)) {
             BattleSystem_SetExperienceEarnFlags(battleSystem, ctx, BATTLER_ENEMY);
             BattleSystem_SetExperienceEarnFlags(battleSystem, ctx, BATTLER_ENEMY2);
         } else {
@@ -199,7 +199,7 @@ BOOL BtlCmd_PokemonSendOut(BattleSystem *battleSystem, BattleContext *ctx) {
     case 3:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (!(opponentData->unk195 & 1)) {
+            if (!(opponentData->battlerType & 1)) {
                 BattleController_EmitPokemonSendOut(battleSystem, battlerId, 0, 0);
                 BattleSystem_SetPokedexSeen(battleSystem, battlerId);
             }
@@ -210,7 +210,7 @@ BOOL BtlCmd_PokemonSendOut(BattleSystem *battleSystem, BattleContext *ctx) {
     case 4:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (opponentData->unk195 & 1) {
+            if (opponentData->battlerType & 1) {
                 BattleSystem_ClearExperienceEarnFlags(ctx, battlerId);
                 BattleSystem_SetExperienceEarnFlags(battleSystem, ctx, battlerId);
                 BattleController_EmitPokemonSendOut(battleSystem, battlerId, 0, 0);
@@ -220,7 +220,7 @@ BOOL BtlCmd_PokemonSendOut(BattleSystem *battleSystem, BattleContext *ctx) {
         break;
     case 1:
         opponentData = BattleSystem_GetOpponentData(battleSystem, ctx->battlerIdAttacker);
-        if (!(opponentData->unk195 & 1)) {
+        if (!(opponentData->battlerType & 1)) {
             BattleSystem_SetExperienceEarnFlags(battleSystem, ctx, BATTLER_ENEMY);
             BattleSystem_SetExperienceEarnFlags(battleSystem, ctx, BATTLER_ENEMY2);
         } else {
@@ -232,7 +232,7 @@ BOOL BtlCmd_PokemonSendOut(BattleSystem *battleSystem, BattleContext *ctx) {
         break;
     case 2:
         opponentData = BattleSystem_GetOpponentData(battleSystem, ctx->battlerIdTarget);
-        if (!(opponentData->unk195 & 1)) {
+        if (!(opponentData->battlerType & 1)) {
             BattleSystem_SetExperienceEarnFlags(battleSystem, ctx, BATTLER_ENEMY);
             BattleSystem_SetExperienceEarnFlags(battleSystem, ctx, BATTLER_ENEMY2);
         } else {
@@ -244,7 +244,7 @@ BOOL BtlCmd_PokemonSendOut(BattleSystem *battleSystem, BattleContext *ctx) {
         break;
     case 6:
         opponentData = BattleSystem_GetOpponentData(battleSystem, ctx->battlerIdSwitch);
-        if (!(opponentData->unk195 & 1)) {
+        if (!(opponentData->battlerType & 1)) {
             BattleSystem_SetExperienceEarnFlags(battleSystem, ctx, BATTLER_ENEMY);
             BattleSystem_SetExperienceEarnFlags(battleSystem, ctx, BATTLER_ENEMY2);
         } else {
@@ -276,7 +276,7 @@ BOOL BtlCmd_RecallPokemon(BattleSystem *battleSystem, BattleContext *ctx) {
     case BATTLER_CATEGORY_PLAYER:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if ((opponentData->unk195 & 1) == 0) {
+            if ((opponentData->battlerType & 1) == 0) {
                 BattleController_EmitRecallPokemon(battleSystem, ctx, battlerId);
             }
         }
@@ -284,7 +284,7 @@ BOOL BtlCmd_RecallPokemon(BattleSystem *battleSystem, BattleContext *ctx) {
     case BATTLER_CATEGORY_ENEMY:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (opponentData->unk195 & 1 && !(ctx->switchInFlag & MaskOfFlagNo(battlerId))) {
+            if (opponentData->battlerType & 1 && !(ctx->switchInFlag & MaskOfFlagNo(battlerId))) {
                 BattleController_EmitRecallPokemon(battleSystem, ctx, battlerId);
             }
         }
@@ -319,7 +319,7 @@ BOOL BtlCmd_SetTrainerEncounter(BattleSystem *battleSystem, BattleContext *ctx) 
         if (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_TAG) {
             for (battlerId = 0; battlerId < battlersMax; battlerId++) {
                 opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-                if (opponentData->unk195 != 4) {
+                if (opponentData->battlerType != 4) {
                     BattleController_EmitTrainerEncounter(battleSystem, battlerId);
                 }
             }
@@ -335,7 +335,7 @@ BOOL BtlCmd_SetTrainerEncounter(BattleSystem *battleSystem, BattleContext *ctx) 
     case 3:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (!(opponentData->unk195 & 1)) {
+            if (!(opponentData->battlerType & 1)) {
                 BattleController_EmitTrainerEncounter(battleSystem, battlerId);
                 if ((BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_MULTI) == 0 && (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_DOUBLES)) {
                     break;
@@ -346,7 +346,7 @@ BOOL BtlCmd_SetTrainerEncounter(BattleSystem *battleSystem, BattleContext *ctx) 
     case 4:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (opponentData->unk195 & 1) {
+            if (opponentData->battlerType & 1) {
                 BattleController_EmitTrainerEncounter(battleSystem, battlerId);
                 if ((BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_MULTI) == 0 && (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_TAG) == 0 && (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_DOUBLES)) {
                     break;
@@ -382,7 +382,7 @@ BOOL BtlCmd_ThrowPokeball(BattleSystem *battleSystem, BattleContext *ctx) {
     case 3:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (!(opponentData->unk195 & 1)) {
+            if (!(opponentData->battlerType & 1)) {
                 BattleController_EmitThrowPokeball(battleSystem, battlerId, unkC);
                 if ((BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_MULTI) == 0 && (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_DOUBLES)) {
                     break;
@@ -393,7 +393,7 @@ BOOL BtlCmd_ThrowPokeball(BattleSystem *battleSystem, BattleContext *ctx) {
     case 4:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (opponentData->unk195 & 1) {
+            if (opponentData->battlerType & 1) {
                 BattleController_EmitThrowPokeball(battleSystem, battlerId, unkC);
                 if ((BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_MULTI) == 0 && (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_TAG) == 0 && (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_DOUBLES)) {
                     break;
@@ -430,7 +430,7 @@ BOOL BtlCmd_TrainerSlideOut(BattleSystem *battleSystem, BattleContext *ctx) {
     case 3:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (!(opponentData->unk195 & 1)) {
+            if (!(opponentData->battlerType & 1)) {
                 BattleController_EmitTrainerSlideOut(battleSystem, battlerId);
                 if ((BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_MULTI) == 0 && (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_DOUBLES)) {
                     break;
@@ -441,7 +441,7 @@ BOOL BtlCmd_TrainerSlideOut(BattleSystem *battleSystem, BattleContext *ctx) {
     case 4:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (opponentData->unk195 & 1) {
+            if (opponentData->battlerType & 1) {
                 BattleController_EmitTrainerSlideOut(battleSystem, battlerId);
                 if ((BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_MULTI) == 0 && (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_TAG) == 0 && (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_DOUBLES)) {
                     break;
@@ -452,7 +452,7 @@ BOOL BtlCmd_TrainerSlideOut(BattleSystem *battleSystem, BattleContext *ctx) {
     case 9:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (opponentData->unk195 == 0 || opponentData->unk195 == 2) {
+            if (opponentData->battlerType == 0 || opponentData->battlerType == 2) {
                 BattleController_EmitTrainerSlideOut(battleSystem, battlerId);
                 break;
             }
@@ -461,7 +461,7 @@ BOOL BtlCmd_TrainerSlideOut(BattleSystem *battleSystem, BattleContext *ctx) {
     case 10:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (opponentData->unk195 == 1 || opponentData->unk195 == 3) {
+            if (opponentData->battlerType == 1 || opponentData->battlerType == 3) {
                 BattleController_EmitTrainerSlideOut(battleSystem, battlerId);
                 break;
             }
@@ -470,7 +470,7 @@ BOOL BtlCmd_TrainerSlideOut(BattleSystem *battleSystem, BattleContext *ctx) {
     case 11:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (opponentData->unk195 == 4) {
+            if (opponentData->battlerType == 4) {
                 BattleController_EmitTrainerSlideOut(battleSystem, battlerId);
                 break;
             }
@@ -479,7 +479,7 @@ BOOL BtlCmd_TrainerSlideOut(BattleSystem *battleSystem, BattleContext *ctx) {
     case 12:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (opponentData->unk195 == 5) {
+            if (opponentData->battlerType == 5) {
                 BattleController_EmitTrainerSlideOut(battleSystem, battlerId);
                 break;
             }
@@ -513,7 +513,7 @@ BOOL BtlCmd_TrainerSlideIn(BattleSystem *battleSystem, BattleContext *ctx) {
     case BATTLER_CATEGORY_PLAYER:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (!(opponentData->unk195 & 1)) {
+            if (!(opponentData->battlerType & 1)) {
                 BattleController_EmitTrainerSlideIn(battleSystem, battlerId, index);
                 if (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_DOUBLES) {
                     break;
@@ -524,7 +524,7 @@ BOOL BtlCmd_TrainerSlideIn(BattleSystem *battleSystem, BattleContext *ctx) {
     case BATTLER_CATEGORY_ENEMY:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (opponentData->unk195 & 1) {
+            if (opponentData->battlerType & 1) {
                 BattleController_EmitTrainerSlideIn(battleSystem, battlerId, index);
                 if (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_DOUBLES) {
                     break;
@@ -535,7 +535,7 @@ BOOL BtlCmd_TrainerSlideIn(BattleSystem *battleSystem, BattleContext *ctx) {
     case BATTLER_CATEGORY_PLAYER_SLOT_1:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (opponentData->unk195 == 0 || opponentData->unk195 == 2) {
+            if (opponentData->battlerType == 0 || opponentData->battlerType == 2) {
                 BattleController_EmitTrainerSlideIn(battleSystem, battlerId, index);
                 break;
             }
@@ -544,7 +544,7 @@ BOOL BtlCmd_TrainerSlideIn(BattleSystem *battleSystem, BattleContext *ctx) {
     case BATTLER_CATEGORY_ENEMY_SLOT_1:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (opponentData->unk195 == 1 || opponentData->unk195 == 3) {
+            if (opponentData->battlerType == 1 || opponentData->battlerType == 3) {
                 BattleController_EmitTrainerSlideIn(battleSystem, battlerId, index);
                 break;
             }
@@ -553,7 +553,7 @@ BOOL BtlCmd_TrainerSlideIn(BattleSystem *battleSystem, BattleContext *ctx) {
     case BATTLER_CATEGORY_PLAYER_SLOT_2:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (opponentData->unk195 == 4) {
+            if (opponentData->battlerType == 4) {
                 BattleController_EmitTrainerSlideIn(battleSystem, battlerId, index);
                 break;
             }
@@ -562,7 +562,7 @@ BOOL BtlCmd_TrainerSlideIn(BattleSystem *battleSystem, BattleContext *ctx) {
     case BATTLER_CATEGORY_ENEMY_SLOT_2:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (opponentData->unk195 == 5) {
+            if (opponentData->battlerType == 5) {
                 BattleController_EmitTrainerSlideIn(battleSystem, battlerId, index);
                 break;
             }
@@ -602,7 +602,7 @@ BOOL BtlCmd_HealthbarSlideIn(BattleSystem *battleSystem, BattleContext *ctx) {
     case BATTLER_CATEGORY_PLAYER:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if ((opponentData->unk195 & 1) == 0) {
+            if ((opponentData->battlerType & 1) == 0) {
                 BattleController_EmitHealthbarSlideIn(battleSystem, ctx, battlerId, 0);
             }
         }
@@ -610,7 +610,7 @@ BOOL BtlCmd_HealthbarSlideIn(BattleSystem *battleSystem, BattleContext *ctx) {
     case BATTLER_CATEGORY_ENEMY:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (opponentData->unk195 & 1) {
+            if (opponentData->battlerType & 1) {
                 BattleController_EmitHealthbarSlideIn(battleSystem, ctx, battlerId, 0);
             }
         }
@@ -643,7 +643,7 @@ BOOL BtlCmd_HealthbarSlideInDelay(BattleSystem *battleSystem, BattleContext *ctx
     case BATTLER_CATEGORY_PLAYER:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if ((opponentData->unk195 & 1) == 0) {
+            if ((opponentData->battlerType & 1) == 0) {
                 BattleController_EmitHealthbarSlideIn(battleSystem, ctx, battlerId, delay);
                 delay += 4;
             }
@@ -652,7 +652,7 @@ BOOL BtlCmd_HealthbarSlideInDelay(BattleSystem *battleSystem, BattleContext *ctx
     case BATTLER_CATEGORY_ENEMY:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (opponentData->unk195 & 1) {
+            if (opponentData->battlerType & 1) {
                 BattleController_EmitHealthbarSlideIn(battleSystem, ctx, battlerId, delay);
                 delay += 4;
             }
@@ -683,7 +683,7 @@ BOOL BtlCmd_HealthbarSlideOut(BattleSystem *battleSystem, BattleContext *ctx) {
     case BATTLER_CATEGORY_PLAYER:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if ((opponentData->unk195 & 1) == 0 && (ctx->switchInFlag & MaskOfFlagNo(battlerId)) == 0) {
+            if ((opponentData->battlerType & 1) == 0 && (ctx->switchInFlag & MaskOfFlagNo(battlerId)) == 0) {
                 BattleController_EmitHealthbarSlideOut(battleSystem, battlerId);
             }
         }
@@ -691,7 +691,7 @@ BOOL BtlCmd_HealthbarSlideOut(BattleSystem *battleSystem, BattleContext *ctx) {
     case BATTLER_CATEGORY_ENEMY:
         for (battlerId = 0; battlerId < battlersMax; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (opponentData->unk195 & 1) {
+            if (opponentData->battlerType & 1) {
                 BattleController_EmitHealthbarSlideOut(battleSystem, battlerId);
             }
         }
@@ -1200,7 +1200,7 @@ BOOL BtlCmd_CalcExpGain(BattleSystem *battleSystem, BattleContext *ctx) {
 
     adrs = BattleScriptReadWord(ctx);
 
-    if ((opponentData->unk195 & 1) && !(battleType & (BATTLE_TYPE_LINK | BATTLE_TYPE_SAFARI | BATTLE_TYPE_FRONTIER | BATTLE_TYPE_PAL_PARK))) {
+    if ((opponentData->battlerType & 1) && !(battleType & (BATTLE_TYPE_LINK | BATTLE_TYPE_SAFARI | BATTLE_TYPE_FRONTIER | BATTLE_TYPE_PAL_PARK))) {
         int expMonsCnt = 0;
         int expShareMonsCnt = 0;
         u16 totalExp;
@@ -5256,7 +5256,7 @@ BOOL BtlCmd_SpriteToOAM(BattleSystem *battleSystem, BattleContext *ctx) {
     case 3:
         for (battlerId = 0; battlerId < maxBattlers; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (!(opponentData->unk195 & 1)) {
+            if (!(opponentData->battlerType & 1)) {
                 ov12_02264038(battleSystem, battlerId);
             }
         }
@@ -5264,7 +5264,7 @@ BOOL BtlCmd_SpriteToOAM(BattleSystem *battleSystem, BattleContext *ctx) {
     case 4:
         for (battlerId = 0; battlerId < maxBattlers; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (opponentData->unk195 & 1) {
+            if (opponentData->battlerType & 1) {
                 ov12_02264038(battleSystem, battlerId);
             }
         }
@@ -5291,7 +5291,7 @@ BOOL BtlCmd_OAMToSprite(BattleSystem *battleSystem, BattleContext *ctx) {
     case 3:
         for (battlerId = 0; battlerId < maxBattlers; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (!(opponentData->unk195 & 1)) {
+            if (!(opponentData->battlerType & 1)) {
                 ov12_02264054(battleSystem, battlerId);
             }
         }
@@ -5299,7 +5299,7 @@ BOOL BtlCmd_OAMToSprite(BattleSystem *battleSystem, BattleContext *ctx) {
     case 4:
         for (battlerId = 0; battlerId < maxBattlers; battlerId++) {
             opponentData = BattleSystem_GetOpponentData(battleSystem, battlerId);
-            if (opponentData->unk195 & 1) {
+            if (opponentData->battlerType & 1) {
                 ov12_02264054(battleSystem, battlerId);
             }
         }
@@ -7320,172 +7320,118 @@ s32 GetMonWeight(u16 species) {
     return weight;
 }
 
-enum
-{
-    BTL_PARAM_BATTLER_ALL,
-    BTL_PARAM_BATTLER_ATTACKER,
-    BTL_PARAM_BATTLER_DEFENDER,
-    BTL_PARAM_BATTLER_PLAYER,
-    BTL_PARAM_BATTLER_OPPONENT,
-    BTL_PARAM_BATTLER_FAINTED,
-    BTL_PARAM_BATTLER_REPLACE,
-    BTL_PARAM_BATTLER_ADDL_EFFECT,
-    BTL_PARAM_BATTLER_CHAR_CHECKED,
-    BTL_PARAM_BATTLER_PLAYER_LEFT,
-    BTL_PARAM_BATTLER_ENEMY_LEFT,
-    BTL_PARAM_BATTLER_PLAYER_RIGHT,
-    BTL_PARAM_BATTLER_ENEMY_RIGHT,
-    BTL_PARAM_BATTLER_13,
-    BTL_PARAM_BATTLER_ATTACKER2,
-    BTL_PARAM_BATTLER_DEFENDER2,
-    BTL_PARAM_BATTLER_ATTACKER_PARTNER,
-    BTL_PARAM_BATTLER_DEFENDER_PARTNER,
-    BTL_PARAM_BATTLER_WHIRLWINDED,
-    BTL_PARAM_BATTLER_19,
-    BTL_PARAM_BATTLER_20,
-    BTL_PARAM_BATTLER_21,
-    BTL_PARAM_BATTLER_ALL_REPLACED,
-    BTL_PARAM_BATTLER_ATTACKER_OPP_LEFT,
-    BTL_PARAM_BATTLER_ATTACKER_OPP_RIGHT,
-    BTL_PARAM_BATTLER_xFF                = 0xFF,
-    BTL_PARAM_BATTLER_WORK               = 0xFF,
-
-    BTL_PARAM_BATTLER_ALLY               = 0x8000,
-    BTL_PARAM_BATTLER_ENEMY              = 0x4000,
-    BTL_PARAM_BATTLER_ACROSS             = 0x2000,
-};
-
-// TODO: clarify OpponentData unk194 and unk195 for battlerID and battlerPosition respectively.
 int BattleSystem_GetBattlerIDBySide(BattleSystem *battleSystem, BattleContext *ctx, int side)
 {
     int battlerID;
     switch (side)
     {
         default:
-        case 1: // BTL_PARAM_BATTLER_ATTACKER?
+        case BATTLER_CATEGORY_ATTACKER:
             battlerID = ctx->battlerIdAttacker;
             break;
-        case 2: // BTL_PARAM_BATTLER_DEFENDER?
+        case BATTLER_CATEGORY_DEFENDER:
             battlerID = ctx->battlerIdTarget;
             break;
-        case 5: // BTL_PARAM_BATTLER_FAINTED?
+        case BATTLER_CATEGORY_FAINTED_MON:
             battlerID = ctx->battlerIdFainted;
             break;
-        case 6: // BTL_PARAM_BATTLER_REPLACE?
-        case 22: // BTL_PARAM_BATTLER_ALL_REPLACED?
+        case BATTLER_CATEGORY_SWITCHED_MON:
+        case BATTLER_CATEGORY_SWITCHED_MON_AFTER:
             battlerID = ctx->battlerIdSwitch;
             break;
-        case 7: // BTL_PARAM_BATTLER_ADDL_EFFECT?
+        case BATTLER_CATEGORY_SIDE_EFFECT_MON:
             battlerID = ctx->battlerIdStatChange;
             break;
-        case 8: // BTL_PARAM_BATTLER_CHAR_CHECKED?
+        case BATTLER_CATEGORY_ABILITY_MON:
             battlerID = ctx->battlerIdAbility;
             break;
-        case 4: // BTL_PARAM_BATTLER_OPPONENT?
+        case BATTLER_CATEGORY_ENEMY:
             {
                 int maxBattlers = BattleSystem_GetMaxBattlers(battleSystem);
                 for (battlerID = 0; battlerID < maxBattlers; battlerID++)
                 {
                     OpponentData *opponentData = BattleSystem_GetOpponentData(battleSystem, battlerID);
-                    if (opponentData->unk195 & 1)
+                    if (opponentData->battlerType & BATTLER_TYPE_SOLO_ENEMY)
                     {
                         break;
                     }
                 }
             }
             break;
-        case 10: // BTL_PARAM_BATTLER_ENEMY_LEFT?
+        case BATTLER_CATEGORY_ENEMY_SLOT_1:
             {
                 int maxBattlers = BattleSystem_GetMaxBattlers(battleSystem);
                 for (battlerID = 0; battlerID < maxBattlers; battlerID++)
                 {
                     OpponentData *opponentData = BattleSystem_GetOpponentData(battleSystem, battlerID);
-                    if (opponentData->unk195 == 3 || opponentData->unk195 == 1)
+                    if (opponentData->battlerType == BATTLER_TYPE_ENEMY_SIDE_SLOT_1 || opponentData->battlerType == BATTLER_TYPE_SOLO_ENEMY)
                     {
                         break;
                     }
                 }
             }
             break;
-        case 12: // BTL_PARAM_BATTLER_ENEMY_RIGHT?
+        case BATTLER_CATEGORY_ENEMY_SLOT_2:
             {
-                int type;
-                if (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_DOUBLES)
-                {
-                    type = 5;
-                }
-                else
-                {
-                    type = 1;
-                }
-
+                int battlerType = BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_DOUBLES ? BATTLER_TYPE_ENEMY_SIDE_SLOT_2 : BATTLER_TYPE_SOLO_ENEMY;
                 int maxBattlers = BattleSystem_GetMaxBattlers(battleSystem);
                 for (battlerID = 0; battlerID < maxBattlers; battlerID++)
                 {
                     OpponentData *opponentData = BattleSystem_GetOpponentData(battleSystem, battlerID);
-                    if (opponentData->unk195 == type)
+                    if (opponentData->battlerType == battlerType)
                     {
                         break;
                     }
                 }
             }
             break;
-        case 3: // BTL_PARAM_BATTLER_PLAYER?
+        case BATTLER_CATEGORY_PLAYER:
             {
                 int maxBattlers = BattleSystem_GetMaxBattlers(battleSystem);
                 for (battlerID = 0; battlerID < maxBattlers; battlerID++)
                 {
                     OpponentData *opponentData = BattleSystem_GetOpponentData(battleSystem, battlerID);
-                    if (!(opponentData->unk195 & 1))
+                    if (!(opponentData->battlerType & BATTLER_TYPE_SOLO_ENEMY))
                     {
                         break;
                     }
                 }
             }
             break;
-        case 9: // BTL_PARAM_BATTLER_PLAYER_LEFT?
+        case BATTLER_CATEGORY_PLAYER_SLOT_1:
             {
                 int maxBattlers = BattleSystem_GetMaxBattlers(battleSystem);
                 for (battlerID = 0; battlerID < maxBattlers; battlerID++)
                 {
                     OpponentData *opponentData = BattleSystem_GetOpponentData(battleSystem, battlerID);
-                    if (opponentData->unk195 == 2 || opponentData->unk195 == 0)
+                    if (opponentData->battlerType == BATTLER_TYPE_PLAYER_SIDE_SLOT_1 || opponentData->battlerType == BATTLER_TYPE_SOLO_PLAYER)
                     {
                         break;
                     }
                 }
             }
             break;
-        case 11: // BTL_PARAM_BATTLER_PLAYER_RIGHT?
+        case BATTLER_CATEGORY_PLAYER_SLOT_2:
             {
-                int type;
-                if (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_DOUBLES)
-                {
-                    type = 4;
-                }
-                else
-                {
-                    type = 0;
-                }
-
+                int battlerType = BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_DOUBLES ? BATTLER_TYPE_PLAYER_SIDE_SLOT_2 : BATTLER_TYPE_SOLO_PLAYER;
                 int maxBattlers = BattleSystem_GetMaxBattlers(battleSystem);
                 for (battlerID = 0; battlerID < maxBattlers; battlerID++)
                 {
                     OpponentData *opponentData = BattleSystem_GetOpponentData(battleSystem, battlerID);
-                    if (opponentData->unk195 == type)
+                    if (opponentData->battlerType == battlerType)
                     {
                         break;
                     }
                 }
             }
             break;
-        case 14: // BTL_PARAM_BATTLER_ATTACKER2
+        case BATTLER_CATEGORY_MSG_ATTACKER:
             battlerID = ctx->battlerIdLeechSeedRecv; // DISCUSS: Is this actually the naming convention we want?
             break;
-        case 15: // BTL_PARAM_BATTLER_DEFENDER2
+        case BATTLER_CATEGORY_MSG_DEFENDER:
             battlerID = ctx->battlerIdLeechSeeded;
             break;
-        case 16: // BTL_PARAM_BATTLER_ATTACKER_PARTNER
+        case BATTLER_CATEGORY_ATTACKER_PARTNER:
             {
                 int maxBattlers = BattleSystem_GetMaxBattlers(battleSystem);
                 for (battlerID = 0; battlerID < maxBattlers; battlerID++)
@@ -7498,11 +7444,11 @@ int BattleSystem_GetBattlerIDBySide(BattleSystem *battleSystem, BattleContext *c
                 }
                 if (battlerID == maxBattlers)
                 {
-                    battlerID = 0;
+                    battlerID = BATTLER_PLAYER;
                 }
             }
             break;
-        case 17: // BTL_PARAM_BATTLER_DEFENDER_PARTNER
+        case BATTLER_CATEGORY_DEFENDER_PARTNER:
             {
                 int maxBattlers = BattleSystem_GetMaxBattlers(battleSystem);
                 for (battlerID = 0; battlerID < maxBattlers; battlerID++)
@@ -7519,7 +7465,7 @@ int BattleSystem_GetBattlerIDBySide(BattleSystem *battleSystem, BattleContext *c
                 }
             }
             break;
-        case 19: // BTL_PARAM_BATTLER_x13
+        case BATTLER_CATEGORY_ATTACKER_ENEMY:
             {
                 int maxBattlers = BattleSystem_GetMaxBattlers(battleSystem);
                 int attackerFieldSide = BattleSystem_GetFieldSide(battleSystem, ctx->battlerIdAttacker);
@@ -7532,7 +7478,7 @@ int BattleSystem_GetBattlerIDBySide(BattleSystem *battleSystem, BattleContext *c
                 }
             }
             break;
-        case 20: // BTL_PARAM_BATTLER_x14
+        case BATTLER_CATEGORY_DEFENDER_ENEMY:
             {
                 int maxBattlers = BattleSystem_GetMaxBattlers(battleSystem);
                 int targetFieldSide = BattleSystem_GetFieldSide(battleSystem, ctx->battlerIdTarget);
@@ -7545,13 +7491,13 @@ int BattleSystem_GetBattlerIDBySide(BattleSystem *battleSystem, BattleContext *c
                 }
             }
             break;
-        case 0xFF: // BTL_PARAM_BATTLER_WORK
-        case 21: // BTL_PARAM_BATTLER_x15
+        case BATTLER_CATEGORY_MSG_TEMP:
+        case BATTLER_CATEGORY_MSG_BATTLER_TEMP:
             battlerID = ctx->battlerIdTemp;
             break;
     }
 
-    if (battlerID == 0xFF)
+    if (battlerID == BATTLER_NONE)
         GF_AssertFail();
 
     return battlerID;
