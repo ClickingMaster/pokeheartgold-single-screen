@@ -7506,9 +7506,8 @@ int BattleSystem_GetBattlerIDBySide(BattleSystem *battleSystem, BattleContext *c
 void InitBattleMsgData(BattleContext *ctx, BattleMessageData *msgData) {
     int params = 0;
     msgData->id = BattleScriptReadWord(ctx);
-    u32 tag = BattleScriptReadWord(ctx);
-    msgData->tag = tag;
-    switch(tag) {
+    msgData->tag = BattleScriptReadWord(ctx);
+    switch(msgData->tag) {
         case TAG_NONE:
             params = 0;
             break;
