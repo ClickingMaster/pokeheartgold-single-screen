@@ -12,9 +12,9 @@
 
     .rodata
 
-.public ov12_0226C2EC
+.public sStandardBallCatchRates
 
-ov12_0226C2EC: ; 0x0226C2EC
+sStandardBallCatchRates: ; 0x0226C2EC
 	.byte 20, 15, 10, 15
 
 .public sTrumpCardPowerTable
@@ -110,8 +110,8 @@ sNaturePowerMoveTable: ; 0x0226C3B4
 	.short MOVE_EARTHQUAKE, MOVE_EARTHQUAKE, MOVE_SEED_BOMB, MOVE_SEED_BOMB, MOVE_ROCK_SLIDE, MOVE_ROCK_SLIDE
 	.short MOVE_BLIZZARD, MOVE_HYDRO_PUMP, MOVE_ICE_BEAM, MOVE_TRI_ATTACK, MOVE_MUD_BOMB, MOVE_AIR_SLASH, MOVE_TRI_ATTACK
 
-.public ov12_0226C3CE
-	; Stat change multipliers
+.public sSafariCatchRateStages
+; Numerator, Denominator
 ov12_0226C3CE: ; 0x0226C3CE
 	.byte 10, 40
 	.byte 10, 35

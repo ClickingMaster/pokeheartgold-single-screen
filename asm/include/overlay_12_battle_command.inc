@@ -407,14 +407,14 @@
 .public ov12_02263D14
 .public BattleController_EmitIncrementGameStat
 .public ov12_02265FC4
-.public ov12_0226C2EC
+.public sStandardBallCatchRates
 .public sTrumpCardPowerTable
 .public sProtectSuccessChance
 .public sFlailDamageTable
 .public sPickupTable2
 .public sLowKickDamageTable
 .public sNaturePowerMoveTable
-.public ov12_0226C3CE
+.public sSafariCatchRateStages
 .public sMoonBallPokemon
 .public sPickupTable1
 .public sSecretPowerEffectTable

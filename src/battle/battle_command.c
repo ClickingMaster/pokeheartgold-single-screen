@@ -6822,7 +6822,7 @@ void Task_GetPokemon(SysTask *task, void *inData) {
             data->state = STATE_GET_POKEMON_15;
         }
         break;
-    case STATE_GET_POKEMON_15: // It's hard to discern what this state does right now.
+    case STATE_GET_POKEMON_15: // It's hard to discern what this state does.
         ov18_021F89D0(data->unk50[0]);
         ObjCharTransfer_PushTaskManager(data->unk50[1]);
         ov12_02237D00(data->battleSystem); // Commenting out this line causes the game to freeze as soon as it is reached. Go figure.
@@ -7071,11 +7071,10 @@ void Task_GetPokemon(SysTask *task, void *inData) {
     }
 }
 
-extern u8 ov12_0226C2EC[4];
-extern u8 ov12_0226C3CE[11][2]; // Some kind of catch rate for safari. First number is numerator, second is denominator.
+extern u8 sStandardBallCatchRates[4];
+extern u8 sSafariCatchRateStages[13][2];
 extern u16 sMoonBallPokemon[14];
 BOOL BattleSystem_IsFishing(BattleSystem *bsys);
-// Rename BattleContext.stateBeforeTurn to turnCounter?
 
 #define CP_SQRT_32BIT_MODE    (0UL << REG_CP_SQRTCNT_MODE_SHIFT)
 
@@ -7130,7 +7129,7 @@ u32 BattleSystem_CalculateBallShakes(BattleSystem* bsys, BattleContext* ctx) {
     if (ctx->itemTemp == ITEM_SAFARI_BALL) {
         s32 normalCatchRate = GetMonBaseStat(ctx->battleMons[ctx->battlerIdTarget].species, BASE_CATCH_RATE);
         // Adjust the catch rate in the safari zone by the pokemon's caution level.
-        catchRate = (ov12_0226C3CE[ctx->unk_311C][0] * normalCatchRate) / ov12_0226C3CE[ctx->unk_311C][1];
+        catchRate = (sSafariCatchRateStages[ctx->unk_311C][0] * normalCatchRate) / sSafariCatchRateStages[ctx->unk_311C][1];
     } else {
         catchRate = GetMonBaseStat(ctx->battleMons[ctx->battlerIdTarget].species, BASE_CATCH_RATE);
     }
@@ -7266,9 +7265,8 @@ u32 BattleSystem_CalculateBallShakes(BattleSystem* bsys, BattleContext* ctx) {
             catchRate = 1;
         }
     } else {
-        // All standard balls: Pokeball, Great Ball, Ultra Ball, Master Ball
-        // TODO: Wait why is this -2, isn't that OOB for the Pokeball(1)?
-        ballMultiplier = ov12_0226C2EC[ctx->itemTemp - 2];
+        // Item IDs from 2-5: Ultra Ball, Great Ball, Pokeball, Safari Ball.
+        ballMultiplier = sStandardBallCatchRates[ctx->itemTemp - 2];
     }
     
     s32 maxHpTimes3 = ctx->battleMons[ctx->battlerIdTarget].maxHp * 3;
@@ -7309,8 +7307,8 @@ u32 BattleSystem_CalculateBallShakes(BattleSystem* bsys, BattleContext* ctx) {
         return shakeCount;
     }
     if (ctx->itemTemp == ITEM_FRIEND_BALL) {
-        u8 sp8 = FRIENDSHIP_TIER_HI_MIN;
-        SetMonData(BattleSystem_GetPartyMon(bsys, ctx->battlerIdTarget, 0), MON_DATA_FRIENDSHIP, &sp8);
+        u8 friendship = FRIENDSHIP_TIER_HI_MIN;
+        SetMonData(BattleSystem_GetPartyMon(bsys, ctx->battlerIdTarget, 0), MON_DATA_FRIENDSHIP, &friendship);
     }
     return shakeCount;
 }
