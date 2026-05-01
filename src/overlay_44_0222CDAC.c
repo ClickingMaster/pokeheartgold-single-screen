@@ -49,23 +49,98 @@
 
 static const u8 _0223535C[4] = {1, 3, 5, 0};
 static const u8 ov44_02235360[4] = {0, 2, 4, 0};
-extern u8 ov44_02235364[4];
-extern u8 ov44_02235368[4];
-extern s8 ov44_0223536C[8];
+static const u8 ov44_02235364[4] = {0x08, 0x07, 0x05, 0x07};
+static const u8 ov44_02235368[4] = {0x00, 0x01, 0x02, 0x01};
+static const s8 ov44_0223536C[8] = {0xF8, 0xF7, 0xF6, 0xF6, 0xF7, 0x00, 0x00, 0x00};
+static const WindowTemplate ov44_02235374 = {
+    .bgId = 0x02,
+    .left = 0x19,
+    .top = 0x0A,
+    .width = 0x06,
+    .height = 0x08,
+    .palette = 0x0E,
+    .baseTile = 0x0051,
+};
+static const WindowTemplate ov44_0223537C = {
+    .bgId = 0x02,
+    .left = 0x19,
+    .top = 0x0A,
+    .width = 0x06,
+    .height = 0x08,
+    .palette = 0x0E,
+    .baseTile = 0x0051,
+};
+static const WindowTemplate ov44_02235384 = {
+    .bgId = 0x01,
+    .left = 0x19,
+    .top = 0x10,
+    .width = 0x06,
+    .height = 0x08,
+    .palette = 0x0E,
+    .baseTile = 0x0189,
+};
+static const WindowTemplate ov44_0223538C = {
+    .bgId = 0x02,
+    .left = 0x19,
+    .top = 0x0D,
+    .width = 0x06,
+    .height = 0x04,
+    .palette = 0x0D,
+    .baseTile = 0x0051,
+};
+static const TouchscreenHitbox ov44_02235394[3] = {
+    { .rect = { .top = 0xA0, .bottom = 0xC0, .left = 0x08, .right = 0x40 } },
+    { .rect = { .top = 0xA0, .bottom = 0xC0, .left = 0x50, .right = 0xB0 } },
+    { .rect = { .top = 0xA0, .bottom = 0xC0, .left = 0xC0, .right = 0xF8 } },
+};
+static const UnkStruct_ov44_0222DD64 ov44_022353A0[2] = {
+    { .strno = 0x27, .value = 0x01 },
+    { .strno = 0x29, .value = 0xFFFFFFFE },
+};
+static const GraphicsModes ov44_022353B0 = {
+    .dispMode = GX_DISPMODE_GRAPHICS,
+    .bgMode = GX_BGMODE_0,
+    .subMode = GX_BGMODE_0,
+    ._2d3dMode = GX_BG0_AS_2D,
+};
+static const ObjCharTransferTemplate ov44_022353C0 = {
+    .maxTasks = 0x14,
+    .sizeMain = 0x20000,
+    .sizeSub = 0x4000,
+    .heapID = HEAP_ID_53,
+};
+static const u32 ov44_022353D0[6] = {0x64, 0x66, 0x68, 0x6C, 0x6A, 0x6E};
 
-extern WindowTemplate ov44_02235374;
-extern WindowTemplate ov44_0223537C;
-extern WindowTemplate ov44_02235384;
-extern WindowTemplate ov44_0223538C;
-
-extern const TouchscreenHitbox ov44_02235394[3];
-extern UnkStruct_ov44_0222DD64 ov44_022353A0[2];
-extern GraphicsModes ov44_022353B0;
-extern ObjCharTransferTemplate ov44_022353C0;
-extern u32 ov44_022353D0[6];
-extern BgTemplate ov44_022353E8;
-
-extern BgTemplate ov44_02235404;
+static const BgTemplate ov44_022353E8 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x1000,
+    .baseTile = 0,
+    .size = 0x03,
+    .colorMode = 0x00,
+    .screenBase = 0x1C,
+    .charBase = 0x00,
+    .bgExtPltt = 0x00,
+    .priority = 0x00,
+    .areaOver = 0x00,
+    .dummy = 0x00,
+    .mosaic = 0,
+};
+static const BgTemplate ov44_02235404 = {
+    .x = 0,
+    .y = 0,
+    .bufferSize = 0x800,
+    .baseTile = 0,
+    .size = 0x01,
+    .colorMode = 0x00,
+    .screenBase = 0x1A,
+    .charBase = 0x04,
+    .bgExtPltt = 0x00,
+    .priority = 0x01,
+    .areaOver = 0x00,
+    .dummy = 0x00,
+    .mosaic = 0,
+};
 extern BgTemplate ov44_02235420;
 extern BgTemplate ov44_0223543C;
 extern BgTemplate ov44_02235458;
@@ -2659,7 +2734,7 @@ s32 ov44_0222DD64(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     }
     s32 sp1C = 2;
     ListMenuTemplate listMenuTemplate = ov44_022354C8;
-    UnkStruct_ov44_0222DD64* listMenuItems = ov44_022353A0;
+    const UnkStruct_ov44_0222DD64* listMenuItems = ov44_022353A0;
     UnkStruct_ov44_02231958* r6 = ov44_02231958(arg0, ov44_02231C70(&arg0->unk38C) - 1);
     u16 temp_r4 = ov44_02229F00(arg0, r6);
     u8 r1 = r6->unk21;
