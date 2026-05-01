@@ -112,7 +112,7 @@ sNaturePowerMoveTable: ; 0x0226C3B4
 
 .public sSafariCatchRateStages
 ; Numerator, Denominator
-ov12_0226C3CE: ; 0x0226C3CE
+sSafariCatchRateStages: ; 0x0226C3CE
 	.byte 10, 40
 	.byte 10, 35
 	.byte 10, 30
