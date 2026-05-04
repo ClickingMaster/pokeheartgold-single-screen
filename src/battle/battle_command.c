@@ -6510,11 +6510,11 @@ void BattleScript_CalcEffortValues(Party* party, int partySlot, u32 species, u32
     FreeMonPersonal(baseStats);
 }
 
-void ov07_02232F58(s32 unkData, s32 ballAnim); // SetBallAnimation?
-BOOL ov07_02232F60(s32 unkData, s32 ballAnim_Unused); // IsBallAnimationPlaying?
-s32 ov07_02233DB8(UnkStruct_134 *unkStruct_134);
-void ov07_02233ECC(s32 unkData); // unkData_Destroy?
-s32 ov07_02233F20(s32);
+void UnkBallData_SetBallAnimation(UnkBallData *data, s32 ballAnim); // ov07_02232F58
+BOOL ov07_02232F60(UnkBallData *data, s32 ballAnim_Unused); // IsBallAnimationPlaying?
+UnkBallData *ov07_02233DB8(UnkStruct_134 *unkStruct_134);
+void ov07_02233ECC(UnkBallData *data); // unkBallData_Destroy?
+s32 ov07_02233F20(UnkBallData *data);
 
 void ov12_02237D00(BattleSystem *battleSystem);
 void ov12_02237CC4(BattleSystem *battleSystem);
@@ -6615,11 +6615,11 @@ void Task_GetPokemon(SysTask *task, void *inData) {
             } else { // This is a single battle.
                 unkStruct.unk0 = 15;
             }
-            data->unk8 = ov07_02233DB8(&unkStruct); // Likely returns the index for the ball, otherwise it's unclear how the game would know which sprites to use.
+            data->unk8 = ov07_02233DB8(&unkStruct); // Initializes whatever this is and gets it all ready to go.
             data->state = STATE_GET_POKEMON_CHECK_IF_TRAINER;
             PlaySE(SEQ_SE_DP_THROW);
             data->battleSystem->unk2422++;
-            ov07_02232F58(data->unk8, BALL_ANIM_THROW); // Sets unk8->unk0 to the second parameter and resets unk8->unk4 to 0.
+            UnkBallData_SetBallAnimation(data->unk8, BALL_ANIM_THROW); // Sets unk8->unk0 to the second parameter and resets unk8->unk4 to 0.
         } else { // CAPTURE_SAFARI
             OpponentData *opponentData = BattleSystem_GetOpponentData(data->battleSystem, BATTLER_PLAYER);
             if (ov07_02233F20(opponentData->unk88) != 4) { // Checks unk88->unk90.unk8.
@@ -6628,7 +6628,7 @@ void Task_GetPokemon(SysTask *task, void *inData) {
                 data->state = STATE_GET_POKEMON_CHECK_IF_TRAINER;
                 PlaySE(SEQ_SE_DP_THROW);
                 data->battleSystem->unk2422++;
-                ov07_02232F58(data->unk8, BALL_ANIM_THROW);
+                UnkBallData_SetBallAnimation(data->unk8, BALL_ANIM_THROW);
             }
         }
         data->unk34[3] = 0;
@@ -6637,12 +6637,12 @@ void Task_GetPokemon(SysTask *task, void *inData) {
         if (!ov07_02232F60(data->unk8, BALL_ANIM_THROW)) { // Likely checking if the current ball animation is still active. The second parameter is unused, as the same data is contained in unk8.
             if (BattleSystem_GetBattleType(data->battleSystem) & BATTLE_TYPE_TRAINER) {
                 sub_0200602C(SEQ_SE_DP_KON, 0x75);
-                ov07_02232F58(data->unk8, BALL_ANIM_DEFLECT);
+                UnkBallData_SetBallAnimation(data->unk8, BALL_ANIM_DEFLECT);
                 data->state = STATE_GET_POKEMON_BALL_BLOCKED;
                 break;
             }
             sub_0200602C(SEQ_SE_DP_BOWA4, 0x75);
-            ov07_02232F58(data->unk8, BALL_ANIM_OPEN);
+            UnkBallData_SetBallAnimation(data->unk8, BALL_ANIM_OPEN);
             data->state = STATE_GET_POKEMON_CALCULATE_SHAKES;
             data->unk34[0] = 23; // Probably a wait frame counter.
         }
@@ -6663,7 +6663,7 @@ void Task_GetPokemon(SysTask *task, void *inData) {
         break;
     case STATE_GET_POKEMON_BALL_FALL:
         if (!ov07_02232F60(data->unk8, BALL_ANIM_OPEN) && Link_QueueNotEmpty(data->ctx)) { // Wait for whatever this is to resolve before continuing.
-            ov07_02232F58(data->unk8, BALL_ANIM_FALL);
+            UnkBallData_SetBallAnimation(data->unk8, BALL_ANIM_FALL);
             data->state = STATE_GET_POKEMON_WAIT_FOR_BALL_FALL;
         }
         break;
@@ -6682,7 +6682,7 @@ void Task_GetPokemon(SysTask *task, void *inData) {
             data->state = STATE_GET_POKEMON_BREAK_OUT;
             break;
         }
-        ov07_02232F58(data->unk8, BALL_ANIM_SHAKE);
+        UnkBallData_SetBallAnimation(data->unk8, BALL_ANIM_SHAKE);
         data->state = STATE_GET_POKEMON_BALL_SHAKE_DECREMENT;
         data->unk34[0] = 12;
         break;
@@ -6698,7 +6698,7 @@ void Task_GetPokemon(SysTask *task, void *inData) {
     case STATE_GET_POKEMON_BALL_CLICK:
         data->unk34[0]--; // Decrement the wait frame counter.
         if (data->unk34[0] == 0) { // Perform the next step when there are no more frames to wait.
-            ov07_02232F58(data->unk8, BALL_ANIM_CLICK);
+            UnkBallData_SetBallAnimation(data->unk8, BALL_ANIM_CLICK);
             sub_0200602C(SEQ_SE_DP_GETTING, 0x75);
             data->state = STATE_GET_POKEMON_GOTCHA;
         }
@@ -6719,7 +6719,7 @@ void Task_GetPokemon(SysTask *task, void *inData) {
     case STATE_GET_POKEMON_BALL_FADE:
         if (!TextPrinterCheckActive(data->printerId)) { // Wait for the text box to finish printing.
             data->state = STATE_GET_POKEMON_CHECK_MON_DATA;
-            ov07_02232F58(data->unk8, BALL_ANIM_FADE);
+            UnkBallData_SetBallAnimation(data->unk8, BALL_ANIM_FADE);
         }
         break;
     case STATE_GET_POKEMON_CHECK_MON_DATA:
@@ -7920,11 +7920,11 @@ int ov12_0224810C(BattleContext* ctx, int side) {
 }
 
 int ov12_02248184(BattleContext* ctx, int side) {
-    if (arg1 == 0xFF) return ctx->msgTemp;
+    if (side == 0xFF) return ctx->msgTemp;
 }
 
 int ov12_02248190(BattleContext* ctx, int side) {
-    if (arg1 == 0xFF) return ctx->msgTemp;
+    if (side == 0xFF) return ctx->msgTemp;
 }
 
 int ov12_0224819C(BattleSystem* battleSystem, BattleContext* ctx, int side) {
@@ -7953,11 +7953,11 @@ int ov12_022481E8(BattleSystem* battleSystem, BattleContext* ctx, int side) {
     return battlerID | ctx->selectedMonIndex[battlerID] << 8;
 }
 
-int ov12_02248200(BattleContext* ctx, int arg1) {
+int ov12_02248200(BattleContext* ctx, int side) {
     if (side == BATTLER_CATEGORY_MSG_TEMP) return ctx->msgTemp;
 }
 
-int ov12_0224820C(BattleContext* ctx, int arg1) {
+int ov12_0224820C(BattleContext* ctx, int side) {
     if (side == BATTLER_CATEGORY_MSG_TEMP) return ctx->msgTemp;
 }
 

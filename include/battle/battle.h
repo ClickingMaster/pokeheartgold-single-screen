@@ -474,6 +474,8 @@ typedef struct BattleHpBar {
     u16 unk54;
 } BattleHpBar;
 
+typedef struct UnkBallData UnkBallData;
+
 typedef struct OpponentData {
     u32 unk0[6];
     ManagedSprite *managedSprite;
@@ -483,7 +485,7 @@ typedef struct OpponentData {
     BattleHpBar hpBar;
     void *unk80;
     u8 unk84[0x4];
-    int unk88;
+    UnkBallData *unk88;
     u8 unk8C[0x108];
     u8 unk194;
     u8 battlerType;
@@ -635,7 +637,7 @@ struct BattleSystem {
 struct GetterWork {
     BattleSystem *battleSystem;
     BattleContext *ctx;
-    u32 unk8;
+    UnkBallData *unk8;
     ManagedSprite *unkC[2];
     TextOBJ *unk14;
     UnkStruct_02021AC8 unk18;
@@ -682,7 +684,7 @@ typedef struct BattleCursorPosition BattleCursorPosition;
 
 typedef struct UnkStruct_134 {
     s32 unk0;
-    s32 heapID;
+    enum HeapID heapID;
     s32 unk8;
     s32 unkC;
     int ball;
@@ -699,7 +701,36 @@ typedef struct UnkStruct_50C {
     PokepicManager *pokepicManager;
     Pokemon *mon;
     BOOL natDexEnabled;
-    u32 heapID;
+    enum HeapID heapID;
 } UnkStruct_50C;
+
+struct UnkBallData { // TODO: Give a better name.
+    int unk0;
+    int unk4;
+    int unk8;
+    int unkC;
+    int unk10;
+    int unk14;
+    int unk18;
+    int unk1C;
+    u8 unk20;
+    u8 unk21;
+    s8 unk22;
+    u8 unk23;
+    BOOL unk24;
+    int unk28;
+    SpriteManager *spriteManager;
+    ManagedSprite *managedSprite;
+    u8 unk34[0x5C];
+    UnkStruct_134 unk90;
+    u8 unkB8[0xC];
+    int unkC4;
+    int unkC8;
+    SysTask *unkCC;
+    int unkD0;
+    int unkD4;
+    int unkD8;
+    int unkDC;
+}; // Size: 0xe0
 
 #endif
