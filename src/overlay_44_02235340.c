@@ -32,7 +32,7 @@
 
 // const u8 ov44_02236458[4] = {0x08, 0x00, 0x04, 0x0C};
 // const WindowTemplate ov44_0223645C = {2, 25, 13, 5, 4, 1, 57};
-// const func_type ov44_02236464[4] = {ov44_02234324, ov44_02234328, ov44_0223435C, ov44_02234388};
+// const func_type_022341C0 ov44_02236464[4] = {ov44_02234324, ov44_02234328, ov44_0223435C, ov44_02234388};
 // const GraphicsModes ov44_02236474 = {
 //     GX_DISPMODE_GRAPHICS,
 //     GX_BGMODE_0,
@@ -41,8 +41,8 @@
 // };
 // const ObjCharTransferTemplate ov44_02236484 = {
 //     4,
-//     0x00020000,
-//     0x00004000,
+//     0x20000,
+//     0x4000,
 //     HEAP_ID_DEFAULT
 // };
 // const BgTemplate ov44_02236494 = {0, 0, 2048, 0, 1, 0, 26, 4, 0, 1, 0, 0, 0};
@@ -60,7 +60,7 @@
 //     { 208, 96, 2, 0, 0, 0 },
 //     { 184, 72, 3, 0, 3, 0 },
 // };
-// const func_type_1 ov44_02236540[30] =
+// const func_type_02232F64 ov44_02236540[30] =
 //     {ov44_02234BF0, ov44_02234C10, Wifi_PromptAwaitingResponse, ov44_02234C88, ov44_02234CE8,
 //     ov44_02234D28, ov44_02234D4C, ov44_02234D88, Wifi_PromptAwaitingMembers,
 //     ov44_02234DE4, ov44_02234E08, ov44_02234EA4, ov44_02234EF4,
@@ -70,7 +70,7 @@
 //     ov44_022351DC, ov44_02235218, ov44_02235268, ov44_0223532C,
 //     ov44_02235340};
 
-// const func_type_1 ov44_022365B8[33] =
+// const func_type_02232F64 ov44_022365B8[33] =
 //     {ov44_02234474, Wifi_PromptReadyMessage, ov44_022344C4, Wifi_PromptUserJoinRequest,
 //     ov44_022345C8, ov44_022345FC, Wifi_PromptInsufficientMembers, ov44_022346B4,
 //     Wifi_PromptConfirmMembers, ov44_022346E8, ov44_0223471C, ov44_02234764,

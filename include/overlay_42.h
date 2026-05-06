@@ -52,7 +52,7 @@ void ov42_02227F28(u16*);
 void ov42_02229A78(u32);
 u32 ov42_02229A40(s32, s32);
 void ov42_02229394(u32*);
-void ov42_02227F48(u16*, s32);
+void ov42_02227F48(u16*, u32*);
 u16* ov42_02227EE0(u16, u16, enum HeapID);
 
 #endif // POKEHEARTGOLD_OVY_42_H

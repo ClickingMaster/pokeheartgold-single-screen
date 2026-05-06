@@ -1,7 +1,5 @@
 #include "overlay_44_02232E9C.h"
 
-#include <nitro/gx.h>
-
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0778.h"
 #include "msgdata/msg/msg_0800.h"
@@ -354,7 +352,60 @@ static const SpriteTemplate ov44_02235570[3] = {
 //     {.strno = 0x1E, .value = 0x13}, {.strno = 0x22, .value = 0x1D},
 // 	{.strno = 0x29, .value = 0xFFFFFFFE}, {.strno = 0x20, .value = 0x15}
 // };
+
 // func_type_02236680 ov44_02236680[7] = {ov44_02230300, ov44_02230E5C, ov44_022307E0, ov44_022308B0, ov44_02230B2C, ov44_02230C68, ov44_02230D8C};
+
+// ListMenuTemplate ov44_022366FC = {
+//     .items = NULL,
+//     .moveCursorFunc = ov44_0222C288,
+//     .itemPrintFunc = NULL,
+//     .window = NULL,
+//     .totalItems = 3,
+//     .maxShowed = 3,
+//     .header_X = 0,
+//     .item_X = 8,
+//     .cursor_X = 0,
+//     .upText_Y = 0,
+//     .cursorPal = 1,
+//     .fillValue = 0xF,
+//     .cursorShadowPal = 2,
+//     .lettersSpacing = 0,
+//     .itemVerticalPadding = 0,
+//     .scrollMultiple = 0,
+//     .fontId = 0,
+//     .cursorKind = 0,
+//     .unk_1C = 0
+// };
+
+// UnkStruct_ov44_0222DD64 ov44_022366BC[4] = {
+// 	{.strno = 0x5F, .value = 0x0B}, {.strno = 0x60, .value = 0x09},
+//     {.strno = 0x61, .value = 0x0A}, {.strno = 0x29, .value = 0xFFFFFFFE}
+// };
+// UnkStruct_ov44_0222DD64 ov44_022366DC[4] = {
+// 	{.strno = 0x62, .value = 0x0E}, {.strno = 0x63, .value = 0x0C},
+//     {.strno = 0x64, .value = 0x0D}, {.strno = 0x29, .value = 0xFFFFFFFE}
+// };
+// UnkStruct_ov44_0222DD64 ov44_0223669C[4] = {
+//     {.strno = 0x47, .value = 0x17}, {.strno = 0x47, .value = 0x19},
+//     {.strno = 0x47, .value = 0x1B}, {.strno = 0x29, .value = 0xFFFFFFFE}
+// };
+
+// UnkStruct_ov44_0222DD64 ov44_0223671C[10] = {
+//     {.strno = 0x5D, .value = 0x00}, {.strno = 0x5E, .value = 0x01},
+//     {.strno = 0x1C, .value = 0x0F}, {.strno = 0x00, .value = 0x00},
+//     {.strno = 0x00, .value = 0x00}, {.strno = 0x00, .value = 0x00},
+//     {.strno = 0x00, .value = 0x00}, {.strno = 0x00, .value = 0x00},
+//     {.strno = 0x00, .value = 0x00}, {.strno = 0x00, .value = 0x00}
+// };
+// func_type_0222A60C ov44_0223676C[72] = {
+//     ov44_0222B228, ov44_0222B36C, ov44_0222B3A8, ov44_0222B42C, ov44_0222B494, ov44_0222B528, ov44_0222B64C, ov44_0222BA6C, ov44_0222BAB8, ov44_0222BAC4,
+//     ov44_0222BAD0, ov44_0222BB38, ov44_0222BBA4, ov44_0222BC78, ov44_0222B744, ov44_0222BE3C, ov44_0222C060, ov44_0222C084, ov44_0222C35C, ov44_0222C684,
+//     ov44_0222C9AC, ov44_0222C9F4, ov44_0222CB34, ov44_0222CB7C, ov44_0222CC34, ov44_0222CDAC, ov44_0222CE40, ov44_0222CFE0, ov44_0222D0A4, ov44_0222D10C,
+//     ov44_0222D1BC, ov44_0222D1C0, ov44_0222D1C4, ov44_0222EB90, ov44_0222F4E0, ov44_0222D1C8, ov44_0222D3DC, ov44_0222D594, ov44_0222DA64, ov44_0222D214,
+//     ov44_0222D23C, ov44_0222D2B0, ov44_0222DC18, ov44_0222DD64, ov44_0222E090, ov44_0222E45C, ov44_0222E62C, ov44_0222E630, ov44_0222E634, ov44_0222E860,
+//     ov44_0222E908, ov44_0222E948, ov44_0222E9C4, ov44_0222EA2C, ov44_0222EBB8, ov44_0222EBC4, ov44_0222EC14, ov44_0222EC2C, ov44_0222EC98, ov44_0222EDB8,
+//     ov44_0222EE10, ov44_0222EE54, ov44_0222EED4, ov44_0222F0AC, ov44_0222F194, ov44_0222BFF0, ov44_0222E5D8, ov44_0222E5DC, ov44_0222D824, ov44_0222BEE0,
+//     ov44_0222E5E0, ov44_0222BF6C};
 
 extern UnkStruct_ov44_0222DD64 _02236660[4];
 extern func_type_02236680 ov44_02236680[7];
@@ -364,8 +415,10 @@ extern UnkStruct_ov44_0222DD64 ov44_022366DC[4];
 extern ListMenuTemplate ov44_022366FC;
 extern UnkStruct_ov44_0222DD64 ov44_0223671C[4];
 extern func_type_0222A60C ov44_0223676C[20];
-extern s32 _022368A0;
 
+// static s32 _022368A0[8];
+
+extern s32 _022368A0[8];
 extern void* sub_02078D24;
 
 FS_EXTERN_OVERLAY(OVY_42);
@@ -794,7 +847,7 @@ s32 ov44_0222A60C(OverlayManager* overlayManager, s32* arg1) {
         int temp_r2 = data->unk348;
         func_type_0222A60C temp_r6 = ov44_0223676C[temp_r2];
         if (temp_r6 != NULL) {
-            _022368A0 = temp_r2;
+            *_022368A0 = temp_r2;
             *arg1 = temp_r6(data, r1);
         }
         break;
@@ -2457,15 +2510,15 @@ s32 ov44_0222D10C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222D1BC(s32 arg0, s32 arg1) {
+s32 ov44_0222D1BC(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222D1C0(s32 arg0, s32 arg1) {
+s32 ov44_0222D1C0(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222D1C4(s32 arg0, s32 arg1) {
+s32 ov44_0222D1C4(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
@@ -3210,11 +3263,11 @@ s32 ov44_0222E45C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222E5D8(s32 arg0, s32 arg1) {
+s32 ov44_0222E5D8(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222E5DC(s32 arg0, s32 arg1) {
+s32 ov44_0222E5DC(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
@@ -3233,11 +3286,11 @@ s32 ov44_0222E5E0(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222E62C(s32 arg0, s32 arg1) {
+s32 ov44_0222E62C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222E630(s32 arg0, s32 arg1) {
+s32 ov44_0222E630(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
@@ -3838,7 +3891,7 @@ s32 ov44_0222F194(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222F4E0(s32 arg0, s32 arg1) {
+s32 ov44_0222F4E0(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     if (sub_02037D78() == 0) {
         BeginNormalPaletteFade(0, 0, 0, 0, 6, 1, HEAP_ID_53);
         arg1 = 2;
