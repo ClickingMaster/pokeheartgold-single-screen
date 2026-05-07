@@ -239,7 +239,7 @@ void InitBattleMsg(BattleSystem *battleSystem, BattleContext *ctx, BattleMessage
 void UpdateFriendshipFainted(BattleSystem *battleSystem, BattleContext *ctx, int battlerId);
 int GetMoveMessageNo(BattleContext *ctx, int move);
 void BattleScript_CalcEffortValues(Party *party, int slot, u32 species, u32 form);
-void ov12_02248228(BattleSystem *battleSystem, GetterWork *data, Pokemon *mon);
-void ov12_022484D4(BattleSystem *battleSystem, GetterWork *data);
+void BattleSystem_LoadLevelUpNameplate(BattleSystem *battleSystem, GetterWork *data, Pokemon *mon);
+void BattleSystem_UnloadLevelUpNameplate(BattleSystem *battleSystem, GetterWork *data);
 
 #endif

@@ -152,18 +152,18 @@ sPickupTable1: ; 0x0226C404
 	.short ITEM_FULL_HEAL, ITEM_HYPER_POTION, ITEM_ULTRA_BALL, ITEM_REVIVE, ITEM_RARE_CANDY, ITEM_SUN_STONE, ITEM_MOON_STONE, ITEM_HEART_SCALE
 	.short ITEM_FULL_RESTORE, ITEM_MAX_REVIVE, ITEM_PP_UP, ITEM_MAX_ELIXIR
 
-.public ov12_0226C428
+.public sLevelUpNameplateTemplate
 
-ov12_0226C428: ; 0x0226C428
+sLevelUpNameplateTemplate: ; 0x0226C428
 	.short 0x80, 0x00, 0x00
 	.short 0
 	.word 200, 0, 1
 	.word 20021, 20016, 20013, 20013, -1, -1
 	.word 1, 0
 
-.public ov12_0226C45C
+.public sPokeIconTemplate
 
-ov12_0226C45C: ; 0x0226C45C
+sPokeIconTemplate: ; 0x0226C45C
 	.short 0x98, 0x18, 0x00
 	.short 0
 	.word 100, 0, 1

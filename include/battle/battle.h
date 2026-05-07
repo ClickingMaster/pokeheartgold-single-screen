@@ -125,9 +125,9 @@ typedef struct TrainerAIData {
     u8 unk13;
     u8 *unk14;
     u8 unk18[4];
-    u16 moves[4][4]; // Battler, move slot.
-    u8 abilities[4];
-    u16 heldItems[4];
+    u16 moves[BATTLER_MAX][MOVES_MAX];
+    u8 abilities[BATTLER_MAX];
+    u16 heldItems[BATTLER_MAX];
     u16 unk68[2][4];
     u32 unk78[8];
     u8 unk98;
@@ -485,7 +485,7 @@ typedef struct OpponentData {
     BattleHpBar hpBar;
     void *unk80;
     u8 unk84[0x4];
-    UnkBallData *unk88;
+    UnkBallData *ballData;
     u8 unk8C[0x108];
     u8 unk194;
     u8 battlerType;
@@ -637,16 +637,15 @@ struct BattleSystem {
 struct GetterWork {
     BattleSystem *battleSystem;
     BattleContext *ctx;
-    UnkBallData *unk8;
+    UnkBallData *ballData;
     ManagedSprite *unkC[2];
     TextOBJ *unk14;
     UnkStruct_02021AC8 unk18;
     int unk24;
     int state;
-    int unk2C;
-    int printerId;
-    int unk34[7];
-    void *unk50[2];
+    int ballID;
+    int workVars[8];
+    void *workPointers[2];
 }; // size: 0x58
 
 typedef BOOL (*BtlCmdFunc)(BattleSystem *, BattleContext *);

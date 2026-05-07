@@ -17,6 +17,8 @@
 #define BATTLER_TYPE_PLAYER_SIDE_SLOT_2 4
 #define BATTLER_TYPE_ENEMY_SIDE_SLOT_2  5
 
+#define BATTLER_TYPE_IS_ENEMY 1
+
 // Battler Category
 #define BATTLER_CATEGORY_ALL                0
 #define BATTLER_CATEGORY_ATTACKER           1
@@ -644,7 +646,8 @@ typedef enum ControllerCommand {
 // Critical Music Flags
 #define CRITICAL_MUSIC_OFF 2
 
-#define MAX_BALL_SHAKE_COUNT 4
+#define BALL_SHAKE_MAX 4
+#define MOVES_MAX 4
 
 #endif // PM_ASM
 #endif // POKEHEARTGOLD_CONSTANTS_BATTLE_H
