@@ -15,8 +15,11 @@
 #include "constants/sndseq.h"
 
 #include "battle/battle_022378C0.h"
+#include "battle/battle_02265E28.h"
 #include "battle/battle_controller.h"
+#include "battle/battle_controller_opponent.h"
 #include "battle/battle_controller_player.h"
+#include "battle/battle_system.h"
 #include "battle/overlay_12_0224E4FC.h"
 #include "msgdata/msg/msg_0197.h"
 
@@ -26,6 +29,8 @@
 #include "naming_screen.h"
 #include "obj_char_transfer.h"
 #include "overlay_manager.h"
+#include "overlay_07.h"
+#include "overlay_18.h"
 #include "palette.h"
 #include "party.h"
 #include "pokedex_util.h"
@@ -44,14 +49,37 @@
 #include "unk_0200FA24.h"
 #include "unk_0208805C.h"
 #include "unk_02013534.h"
+#include "unk_020163E0.h"
 
 int BattleScriptReadWord(BattleContext *ctx);
 static void BattleScriptIncrementPointer(BattleContext *ctx, int adrs);
 static void BattleScriptJump(BattleContext *ctx, NarcId narcId, int adrs);
 static void BattleScriptGotoSubscript(BattleContext *ctx, NarcId narcId, int adrs);
 static void *BattleScriptGetVarPointer(BattleSystem *battleSystem, BattleContext *ctx, int var);
-
-int BattleSystem_GetBattlerIDBySide(BattleSystem *battleSystem, BattleContext *ctx, int side);
+static int BattleSystem_GetBattlerIDBySide(BattleSystem *battleSystem, BattleContext *ctx, int side);
+static void BattlerSetAbility(BattleContext *ctx, u8 a1, u8 a2);
+static void BattlerSetItem(BattleContext* ctx, u8 battlerId, u16 item);
+static void BattleScript_CalcEffortValues(Party *party, int slot, u32 species, u32 form);
+static u32 BattleSystem_CalculateBallShakes(BattleSystem *battleSystem, BattleContext *ctx);
+static s32 GetMonWeight(u16 species);
+static void InitBattleMsgData(BattleContext *ctx, BattleMessageData *msgdata);
+static int ov12_022480C0(BattleSystem *battleSystem, BattleContext *ctx, int side);
+static int GetMoveMessageNo(BattleContext *ctx, int move);
+static int ov12_0224810C(BattleContext *ctx, int);
+static int ov12_02248184(BattleContext *ctx, int);
+static int ov12_02248190(BattleContext *ctx, int);
+static int ov12_0224819C(BattleSystem *battleSystem, BattleContext *ctx, int side);
+static int ov12_022481D0(BattleContext *ctx, int);
+static int ov12_022481DC(BattleContext *ctx, int);
+static int ov12_022481E8(BattleSystem *battleSystem, BattleContext *ctx, int side);
+static int ov12_02248200(BattleContext *ctx, int);
+static int ov12_0224820C(BattleContext *ctx, int);
+static int ov12_02248218(BattleSystem *battleSystem, BattleContext *ctx, int side);
+static int ov12_02248220(BattleSystem *battleSystem, BattleContext *ctx, int side);
+static void InitBattleMsg(BattleSystem *battleSystem, BattleContext *ctx, BattleMessageData *msgdata, BattleMessage *msg);
+static void UpdateFriendshipFainted(BattleSystem *battleSystem, BattleContext *ctx, int battlerId);
+static void BattleSystem_LoadLevelUpNameplate(BattleSystem *battleSystem, GetterWork *data, Pokemon *mon);
+static void BattleSystem_UnloadLevelUpNameplate(BattleSystem *battleSystem, GetterWork *data);
 
 extern BtlCmdFunc sBattleScriptCommandTable[];
 
@@ -1698,9 +1726,6 @@ BOOL BtlCmd_ChangeStatStage(BattleSystem *battleSystem, BattleContext *ctx) {
 
     return FALSE;
 }
-
-// TODO: Move to above of file once defined as static
-void BattlerSetAbility(BattleContext *ctx, u8 a1, u8 a2);
 
 BOOL BtlCmd_UpdateMonData(BattleSystem *battleSystem, BattleContext *ctx) {
     BattleScriptIncrementPointer(ctx, 1);
@@ -6415,7 +6440,7 @@ static void Task_GetExp(SysTask *task, void *inData) {
     }
 }
 
-void BattleScript_CalcEffortValues(Party* party, int partySlot, u32 species, u32 form) {
+static void BattleScript_CalcEffortValues(Party* party, int partySlot, u32 species, u32 form) {
     u8 stat_evs[6];
     s32 stat;
     u16 totalEVs;
@@ -6508,28 +6533,6 @@ void BattleScript_CalcEffortValues(Party* party, int partySlot, u32 species, u32
     }
     FreeMonPersonal(baseStats);
 }
-
-void UnkBallData_SetBallAnimation(UnkBallData *data, s32 ballAnim); // ov07_02232F58
-BOOL ov07_02232F60(UnkBallData *data, s32 ballAnim_Unused); // IsBallAnimationPlaying?
-UnkBallData *ov07_02233DB8(UnkStruct_134 *unkStruct_134); // unkBallData_Init?
-void ov07_02233ECC(UnkBallData *data); // unkBallData_Destroy?
-s32 ov07_02233F20(UnkBallData *data);
-
-void ov12_02237D00(BattleSystem *battleSystem);
-void ov12_02237CC4(BattleSystem *battleSystem);
-u32 BattleSystem_CalculateBallShakes(BattleSystem *battleSystem, BattleContext *ctx);
-void ov12_02261294(OpponentData *opponentData, s32);
-void ov12_022628A0(BattleSystem *battleSystem, s32 battlerId, s32);
-void ov12_02265FC4(UnkBattleSystemSub17C *unkBattleSystemSub17C, s32);
-
-OverlayManager *ov18_021F8974(UnkStruct_50C *unkStruct);
-s32 ov18_021F89C8(OverlayManager *overlayManager);
-void ov18_021F89D0(OverlayManager *overlayManager);
-Pokepic *ov18_021F95F8(OverlayManager *overlayManager);
-void ov18_021F95AC(OverlayManager *overlayManager);
-
-void sub_0200602C(u16, s32);
-void sub_0201649C(void *msgIcon, s32 unk0);
 
 enum {
     STATE_GET_POKEMON_START = 0,
@@ -7073,7 +7076,6 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
 extern u8 sStandardBallCatchRates[4];
 extern u8 sSafariCatchRateStages[13][2];
 extern u16 sMoonBallPokemon[14];
-BOOL BattleSystem_IsFishing(BattleSystem *bsys);
 
 #define CP_SQRT_32BIT_MODE    (0UL << REG_CP_SQRTCNT_MODE_SHIFT)
 
@@ -7115,9 +7117,7 @@ static inline u32 CP_GetSqrtResult32 (void)
 	return CP_GetSqrtResultImm32();
 }
 
-s32 GetMonWeight(u16 species);
-
-u32 BattleSystem_CalculateBallShakes(BattleSystem* bsys, BattleContext* ctx) {
+static u32 BattleSystem_CalculateBallShakes(BattleSystem* bsys, BattleContext* ctx) {
     s32 catchRate;
     s32 targetMonType1 = 0;
     u32 ballMultiplier = 0;
@@ -7312,14 +7312,14 @@ u32 BattleSystem_CalculateBallShakes(BattleSystem* bsys, BattleContext* ctx) {
     return shakeCount;
 }
 
-s32 GetMonWeight(u16 species) {
+static s32 GetMonWeight(u16 species) {
     s32 *weightList = GfGfxLoader_LoadFromNarc(NARC_application_zukanlist_zkn_data_zukan_data, 1, FALSE, HEAP_ID_3, TRUE);
     s32 weight = weightList[species];
     Heap_Free(weightList);
     return weight;
 }
 
-int BattleSystem_GetBattlerIDBySide(BattleSystem *battleSystem, BattleContext *ctx, int side)
+static int BattleSystem_GetBattlerIDBySide(BattleSystem *battleSystem, BattleContext *ctx, int side)
 {
     int battlerID;
     switch (side)
@@ -7502,7 +7502,7 @@ int BattleSystem_GetBattlerIDBySide(BattleSystem *battleSystem, BattleContext *c
     return battlerID;
 }
 
-void InitBattleMsgData(BattleContext *ctx, BattleMessageData *msgData) {
+static void InitBattleMsgData(BattleContext *ctx, BattleMessageData *msgData) {
     int params = 0;
     msgData->id = BattleScriptReadWord(ctx);
     msgData->tag = BattleScriptReadWord(ctx);
@@ -7587,20 +7587,7 @@ void InitBattleMsgData(BattleContext *ctx, BattleMessageData *msgData) {
     }
 }
 
-int ov12_022480C0(BattleSystem *battleSystem, BattleContext *ctx, int side);
-int ov12_0224810C(BattleContext *ctx, int);
-int ov12_02248184(BattleContext *ctx, int);
-int ov12_02248190(BattleContext *ctx, int);
-int ov12_0224819C(BattleSystem *battleSystem, BattleContext *ctx, int side);
-int ov12_022481D0(BattleContext *ctx, int);
-int ov12_022481DC(BattleContext *ctx, int);
-int ov12_022481E8(BattleSystem *battleSystem, BattleContext *ctx, int side);
-int ov12_02248200(BattleContext *ctx, int);
-int ov12_0224820C(BattleContext *ctx, int);
-int ov12_02248218(BattleSystem *battleSystem, BattleContext *ctx, int side);
-int ov12_02248220(BattleSystem *battleSystem, BattleContext *ctx, int side);
-
-void InitBattleMsg(BattleSystem *battleSystem, BattleContext *ctx, BattleMessageData *msgData, BattleMessage *msg) {
+static void InitBattleMsg(BattleSystem *battleSystem, BattleContext *ctx, BattleMessageData *msgData, BattleMessage *msg) {
     msg->id = msgData->id;
     msg->tag = msgData->tag;
     switch (msg->tag) {
@@ -7878,7 +7865,7 @@ void InitBattleMsg(BattleSystem *battleSystem, BattleContext *ctx, BattleMessage
     }
 }
 
-int ov12_022480C0(BattleSystem *battleSystem, BattleContext *ctx, int side) {
+static int ov12_022480C0(BattleSystem *battleSystem, BattleContext *ctx, int side) {
     int battlerID = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
     if (side == BATTLER_CATEGORY_SWITCHED_MON_AFTER) {
         return battlerID | (ctx->unk_21A0[battlerID] << 8);
@@ -7887,16 +7874,14 @@ int ov12_022480C0(BattleSystem *battleSystem, BattleContext *ctx, int side) {
     }
 }
 
-int GetMoveMessageNo(BattleContext* ctx, int arg1) {
+static int GetMoveMessageNo(BattleContext* ctx, int arg1) {
     switch (arg1) {
         case 1: return ctx->moveNoCur;
         case 255: return ctx->moveTemp;
     }
 }
 
-void BattlerSetItem(BattleContext* ctx, u8 battlerId, u16 item);
-
-int ov12_0224810C(BattleContext* ctx, int side) {
+static int ov12_0224810C(BattleContext* ctx, int side) {
     int item;
     switch (side) {
     case BATTLER_CATEGORY_ATTACKER:
@@ -7918,15 +7903,15 @@ int ov12_0224810C(BattleContext* ctx, int side) {
     return item;
 }
 
-int ov12_02248184(BattleContext* ctx, int side) {
+static int ov12_02248184(BattleContext* ctx, int side) {
     if (side == 0xFF) return ctx->msgTemp;
 }
 
-int ov12_02248190(BattleContext* ctx, int side) {
+static int ov12_02248190(BattleContext* ctx, int side) {
     if (side == 0xFF) return ctx->msgTemp;
 }
 
-int ov12_0224819C(BattleSystem* battleSystem, BattleContext* ctx, int side) {
+static int ov12_0224819C(BattleSystem* battleSystem, BattleContext* ctx, int side) {
     u32 ability;
     int battlerID;
     if (side == BATTLER_CATEGORY_MSG_TEMP) {
@@ -7939,39 +7924,39 @@ int ov12_0224819C(BattleSystem* battleSystem, BattleContext* ctx, int side) {
     return ability;
 }
 
-int ov12_022481D0(BattleContext* ctx, int side) {
+static int ov12_022481D0(BattleContext* ctx, int side) {
     if (side == BATTLER_CATEGORY_MSG_TEMP) return ctx->msgTemp;
 }
 
-int ov12_022481DC(BattleContext* ctx, int side) {
+static int ov12_022481DC(BattleContext* ctx, int side) {
     if (side == BATTLER_CATEGORY_MSG_TEMP) return ctx->msgTemp;
 }
 
-int ov12_022481E8(BattleSystem* battleSystem, BattleContext* ctx, int side) {
+static int ov12_022481E8(BattleSystem* battleSystem, BattleContext* ctx, int side) {
     u32 battlerID = BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
     return battlerID | ctx->selectedMonIndex[battlerID] << 8;
 }
 
-int ov12_02248200(BattleContext* ctx, int side) {
+static int ov12_02248200(BattleContext* ctx, int side) {
     if (side == BATTLER_CATEGORY_MSG_TEMP) return ctx->msgTemp;
 }
 
-int ov12_0224820C(BattleContext* ctx, int side) {
+static int ov12_0224820C(BattleContext* ctx, int side) {
     if (side == BATTLER_CATEGORY_MSG_TEMP) return ctx->msgTemp;
 }
 
-int ov12_02248218(BattleSystem* battleSystem, BattleContext* ctx, int side) {
+static int ov12_02248218(BattleSystem* battleSystem, BattleContext* ctx, int side) {
     return BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 }
 
-int ov12_02248220(BattleSystem* battleSystem, BattleContext* ctx, int side) {
+static int ov12_02248220(BattleSystem* battleSystem, BattleContext* ctx, int side) {
     return BattleSystem_GetBattlerIDBySide(battleSystem, ctx, side);
 }
 
 extern ManagedSpriteTemplate sLevelUpNameplateTemplate;
 extern ManagedSpriteTemplate sPokeIconTemplate;
 
-void BattleSystem_LoadLevelUpNameplate(BattleSystem* battleSystem, GetterWork* data, Pokemon* mon) {
+static void BattleSystem_LoadLevelUpNameplate(BattleSystem* battleSystem, GetterWork* data, Pokemon* mon) {
     Window window;
     UnkStruct_02021AC8 unkStruct;
     TextOBJTemplate textObjTemplate;
@@ -8048,7 +8033,7 @@ void BattleSystem_LoadLevelUpNameplate(BattleSystem* battleSystem, GetterWork* d
     RemoveWindow(&window);
 }
 
-void BattleSystem_UnloadLevelUpNameplate(BattleSystem* battleSystem, GetterWork* data) {
+static void BattleSystem_UnloadLevelUpNameplate(BattleSystem* battleSystem, GetterWork* data) {
     SpriteManager* spriteManager = BattleSystem_GetSpriteManager(battleSystem);
     Sprite_DeleteAndFreeResources(data->unkC[0]);
     Sprite_DeleteAndFreeResources(data->unkC[1]);
@@ -8065,7 +8050,7 @@ void BattleSystem_UnloadLevelUpNameplate(BattleSystem* battleSystem, GetterWork*
     sub_020135AC(data->workPointers[0]);
 }
 
-void UpdateFriendshipFainted(BattleSystem* battleSystem, BattleContext* ctx, int battlerID) {
+static void UpdateFriendshipFainted(BattleSystem* battleSystem, BattleContext* ctx, int battlerID) {
     if (BattleSystem_GetFieldSide(battleSystem, battlerID) == 0) { // TODO: Side consts? Is this BATTLER_CATEGORY_ATTACKER?
         u8 enemyID;
         if (BattleSystem_GetBattleType(battleSystem) & BATTLE_TYPE_DOUBLES) {
@@ -8096,11 +8081,11 @@ void UpdateFriendshipFainted(BattleSystem* battleSystem, BattleContext* ctx, int
     }
 }
 
-void BattlerSetAbility(BattleContext* ctx, u8 battlerID, u8 ability) {
+static void BattlerSetAbility(BattleContext* ctx, u8 battlerID, u8 ability) {
     ctx->trainerAIData.abilities[battlerID] = ability;
     return;
 }
 
-void BattlerSetItem(BattleContext* ctx, u8 battlerID, u16 item) {
+static void BattlerSetItem(BattleContext* ctx, u8 battlerID, u16 item) {
     ctx->trainerAIData.heldItems[battlerID] = item;
 }

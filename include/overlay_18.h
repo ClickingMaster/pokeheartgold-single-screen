@@ -7,6 +7,8 @@
 #include "pokedex.h"
 #include "unk_02092BB8.h"
 
+#include "battle/battle.h"
+
 typedef struct PokedexArgs {
     Pokedex *pokedex;
     PlayerProfile *playerProfile;
@@ -21,5 +23,11 @@ typedef struct PokedexArgs {
 BOOL Pokedex_Init(OverlayManager *man, int *state);
 BOOL Pokedex_Main(OverlayManager *man, int *state);
 BOOL Pokedex_Exit(OverlayManager *man, int *state);
+
+OverlayManager *ov18_021F8974(UnkStruct_50C *unkStruct);
+s32 ov18_021F89C8(OverlayManager *man);
+void ov18_021F89D0(OverlayManager *man);
+Pokepic *ov18_021F95F8(OverlayManager *man);
+void ov18_021F95AC(OverlayManager *man);
 
 #endif // POKEHEARTGOLD_OVY_18_H

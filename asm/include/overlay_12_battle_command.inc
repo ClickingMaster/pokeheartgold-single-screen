@@ -106,7 +106,7 @@
 .public gGameLanguage
 .public gOverlayTemplate_NamingScreen
 .public gSystem
-.public ov07_02232F58
+.public UnkBallData_SetBallAnimation
 .public ov07_02232F60
 .public ov07_02233DB8
 .public ov07_02233ECC
