@@ -1330,13 +1330,13 @@ void ov44_0222B164(UnkStruct_ov44_022319EC* arg0) {
 s32 ov44_0222B228(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     if (sub_02039998() != 0) {
         ov44_0222F780(arg0, ov00_021E6EBC());
-        arg0->unk4 = (UnkStruct_ov44_0223197C*)sub_020398C8();
+        arg0->unk4 = sub_020398C8();
         u32 temp_r0 = ov44_02229F00(arg0, &arg0->unk4->unk0);
         if ((temp_r0 == 8) || (temp_r0 == 18) || (temp_r0 == 20) || (temp_r0 == 22) || (temp_r0 == 23) || (temp_r0 == 24) || (temp_r0 == 25) || (temp_r0 == 26) || (temp_r0 == 27) || (temp_r0 == 19)) {
             ov44_0222F818(arg0, 16);
             sub_020343E4();
             sub_02039378();
-            UnkStruct_ov44_0223197C* temp_r0_2 = (UnkStruct_ov44_0223197C*)sub_020398C8();
+            UnkStruct_ov44_0223197C* temp_r0_2 = sub_020398C8();
             arg0->unk4 = temp_r0_2;
             temp_r0_2->unk0.unk21 = temp_r0_2->unk0.unk22;
             arg0->unk35C = 20;
@@ -3728,7 +3728,7 @@ s32 ov44_0222EED4(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
                 }
             }
             if (arg0->unk384 == 0) {
-                arg0->unk4 = (UnkStruct_ov44_0223197C*)sub_020398C8(); //TODO: Update overlay_44_02235340
+                arg0->unk4 = sub_020398C8();
                 arg0->unk4->unk0.unk21 = arg0->unk4->unk0.unk22;
             }
         }

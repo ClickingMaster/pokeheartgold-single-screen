@@ -2,6 +2,7 @@
 #define POKEHEARTGOLD_OVY_44_H
 
 #include "global.h"
+#include "overlay_44_02232E9C.h"
 
 #include "heap.h"
 #include "list_menu_2d.h"
@@ -62,7 +63,7 @@ typedef struct UnkStruct_ov44_02232F64 {
 } UnkStruct_ov44_02232F64;
 
 typedef struct UnkStruct_ov44_02235340 {
-    u8 *unk0;
+    UnkStruct_ov44_02231958 *unk0;
     u8 unk4;
     u8 unk5;
     u8 unk6;
