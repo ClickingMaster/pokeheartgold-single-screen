@@ -641,11 +641,11 @@ struct GetterWork {
     ManagedSprite *unkC[2];
     TextOBJ *unk14;
     UnkStruct_02021AC8 unk18;
-    int unk24;
+    int captureType;
     int state;
     int ballID;
-    int workVars[8];
-    void *workPointers[2];
+    int tempData[8];
+    void *tempPointers[2];
 }; // size: 0x58
 
 typedef BOOL (*BtlCmdFunc)(BattleSystem *, BattleContext *);

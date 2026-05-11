@@ -1,13 +1,13 @@
 #ifndef POKEHEARTGOLD_OVY_18_H
 #define POKEHEARTGOLD_OVY_18_H
 
+#include "battle/battle.h"
+
 #include "menu_input_state.h"
 #include "overlay_manager.h"
 #include "player_data.h"
 #include "pokedex.h"
 #include "unk_02092BB8.h"
-
-#include "battle/battle.h"
 
 typedef struct PokedexArgs {
     Pokedex *pokedex;

@@ -3,6 +3,7 @@
 #include "constants/sndseq.h"
 
 #include "camera.h"
+#include "field_bgm.h"
 #include "field_warp_tasks.h"
 #include "follow_mon.h"
 #include "heap.h"
@@ -23,7 +24,6 @@
 #include "unk_02005D10.h"
 #include "unk_0200FA24.h"
 #include "unk_02054648.h"
-#include "field_bgm.h"
 #include "unk_02055244.h"
 #include "unk_020552A4.h"
 #include "unk_02056680.h"
