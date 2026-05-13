@@ -2380,8 +2380,8 @@ s32 ov44_0222CE40(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
             arg0->unk348 = 24;
         }
     } else {
-        enum YesNoResponse temp_r0_2 = YesNoPrompt_HandleInput(arg0->unk188);
-        if (temp_r0_2 == YESNORESPONSE_YES) {
+        enum YesNoResponse yesNoReponse = YesNoPrompt_HandleInput(arg0->unk188);
+        if (yesNoReponse == YESNORESPONSE_YES) {
             YesNoPrompt_Destroy(arg0->unk188);
             if (sub_020393C8() == 0) {
                 ov44_0222F818(arg0, 16);
@@ -2392,7 +2392,7 @@ s32 ov44_0222CE40(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
             } else {
                 ov44_0222B9A0(arg0);
             }
-        } else if (temp_r0_2 == YESNORESPONSE_NO) {
+        } else if (yesNoReponse == YESNORESPONSE_NO) {
             YesNoPrompt_Destroy(arg0->unk188);
             arg0->unk348 = 24;
         } else {
