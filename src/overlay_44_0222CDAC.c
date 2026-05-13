@@ -1,55 +1,54 @@
-#include "overlay_44_02232E9C.h"
-
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0778.h"
 #include "msgdata/msg/msg_0800.h"
 
-#include "save_wifi_history.h"
+#include "bg_window.h"
+#include "dwcaccount.h"
+#include "font.h"
+#include "gf_gfx_loader.h"
+#include "gf_gfx_planes.h"
+#include "msgdata.h"
 #include "obj_pltt_transfer.h"
+#include "overlay_00_thumb.h"
+#include "overlay_44_02232E9C.h"
+#include "party.h"
 #include "pokedex.h"
 #include "pokemon.h"
-#include "party.h"
-#include "sys_flags.h"
-#include "vram_transfer_manager.h"
-#include "dwcaccount.h"
-#include "text.h"
-#include "font.h"
-#include "gf_gfx_planes.h"
-#include "gf_gfx_loader.h"
-#include "save_frontier.h"
-#include "render_window.h"
 #include "render_text.h"
-#include "system.h"
+#include "render_window.h"
+#include "save_frontier.h"
+#include "save_wifi_history.h"
 #include "sound.h"
 #include "sound_02004A44.h"
+#include "sys_flags.h"
+#include "system.h"
+#include "text.h"
 #include "touch_hitbox_controller.h"
-#include "bg_window.h"
-#include "msgdata.h"
-#include "overlay_00_thumb.h"
-#include "unk_02034354.h"
-#include "unk_020379A0.h"
-#include "unk_02035900.h"
-#include "unk_020971F8.h"
-#include "unk_0200B150.h"
-#include "unk_02034B0C.h"
-#include "unk_0200ACF0.h"
-#include "unk_02013534.h"
+#include "unk_02005D10.h"
 #include "unk_0200A090.h"
+#include "unk_0200ACF0.h"
+#include "unk_0200B150.h"
+#include "unk_0200FA24.h"
+#include "unk_02013534.h"
+#include "unk_020210A0.h"
 #include "unk_0202C034.h"
 #include "unk_02030A98.h"
-#include "unk_02005D10.h"
-#include "unk_0200FA24.h"
-#include "unk_02037C94.h"
 #include "unk_0203170C.h"
-#include "unk_020210A0.h"
-#include "unk_020915B0.h"
+#include "unk_02034354.h"
+#include "unk_02034B0C.h"
+#include "unk_02035900.h"
+#include "unk_020379A0.h"
+#include "unk_02037C94.h"
 #include "unk_0203A3B0.h"
+#include "unk_020915B0.h"
+#include "unk_020971F8.h"
+#include "vram_transfer_manager.h"
 
-static const u8 ov44_02235360[4] = {0, 2, 4, 0};
-static const u8 ov44_02235364[4] = {8, 7, 5, 7};
-static const u8 ov44_02235368[4] = {0, 1, 2, 1};
-static const u8 _0223535C[4] = {1, 3, 5, 0};
-static const s8 ov44_0223536C[8] = {248, 247, 246, 246, 247, 0, 0, 0};
+static const u8 ov44_02235360[4] = { 0, 2, 4, 0 };
+static const u8 ov44_02235364[4] = { 8, 7, 5, 7 };
+static const u8 ov44_02235368[4] = { 0, 1, 2, 1 };
+static const u8 _0223535C[4] = { 1, 3, 5, 0 };
+static const s8 ov44_0223536C[8] = { 248, 247, 246, 246, 247, 0, 0, 0 };
 
 static const WindowTemplate ov44_02235384 = {
     .bgId = 1,
@@ -93,7 +92,7 @@ static const TouchscreenHitbox ov44_02235394[3] = {
     { .rect = { .top = 160, .bottom = 192, .left = 192, .right = 248 } },
 };
 static const UnkStruct_ov44_0222DD64 ov44_022353A0[2] = {
-    { .strno = 39, .value = 1 },
+    { .strno = 39, .value = 1          },
     { .strno = 41, .value = 0xFFFFFFFE },
 };
 static const GraphicsModes ov44_022353B0 = {
@@ -108,7 +107,7 @@ static const ObjCharTransferTemplate ov44_022353C0 = {
     .sizeSub = 0x4000,
     .heapID = HEAP_ID_53,
 };
-static const u32 ov44_022353D0[6] = {100, 102, 104, 108, 106, 110};
+static const u32 ov44_022353D0[6] = { 100, 102, 104, 108, 106, 110 };
 
 static const BgTemplate ov44_022353E8 = {
     .x = 0,
@@ -317,35 +316,35 @@ static const GraphicsBanks ov44_02235548 = {
 };
 static const SpriteTemplate ov44_02235570[3] = {
     {
-        .spriteList = NULL,
-        .header = NULL,
-        .position = { .x = 0x28000, .y = 0x1AC000, .z = 0 },
-        .scale = { .x = 4096, .y = 4096, .z = 4096 },
-        .rotation = 0,
-        .drawPriority = 128,
-        .whichScreen = NNS_G2D_VRAM_TYPE_2DSUB,
-        .heapID = HEAP_ID_DEFAULT,
-    },
+     .spriteList = NULL,
+     .header = NULL,
+     .position = { .x = 0x28000, .y = 0x1AC000, .z = 0 },
+     .scale = { .x = 4096, .y = 4096, .z = 4096 },
+     .rotation = 0,
+     .drawPriority = 128,
+     .whichScreen = NNS_G2D_VRAM_TYPE_2DSUB,
+     .heapID = HEAP_ID_DEFAULT,
+     },
     {
-        .spriteList = NULL,
-        .header = NULL,
-        .position = { .x = 0x80000, .y = 0x1AC000, .z = 0 },
-        .scale = { .x = 4096, .y = 4096, .z = 4096 },
-        .rotation = 0,
-        .drawPriority = 128,
-        .whichScreen = NNS_G2D_VRAM_TYPE_2DSUB,
-        .heapID = HEAP_ID_DEFAULT,
-    },
+     .spriteList = NULL,
+     .header = NULL,
+     .position = { .x = 0x80000, .y = 0x1AC000, .z = 0 },
+     .scale = { .x = 4096, .y = 4096, .z = 4096 },
+     .rotation = 0,
+     .drawPriority = 128,
+     .whichScreen = NNS_G2D_VRAM_TYPE_2DSUB,
+     .heapID = HEAP_ID_DEFAULT,
+     },
     {
-        .spriteList = NULL,
-        .header = NULL,
-        .position = { .x = 0xE0000, .y = 0x1AC000, .z = 0 },
-        .scale = { .x = 4096, .y = 4096, .z = 4096 },
-        .rotation = 0,
-        .drawPriority = 128,
-        .whichScreen = NNS_G2D_VRAM_TYPE_2DSUB,
-        .heapID = HEAP_ID_DEFAULT,
-    },
+     .spriteList = NULL,
+     .header = NULL,
+     .position = { .x = 0xE0000, .y = 0x1AC000, .z = 0 },
+     .scale = { .x = 4096, .y = 4096, .z = 4096 },
+     .rotation = 0,
+     .drawPriority = 128,
+     .whichScreen = NNS_G2D_VRAM_TYPE_2DSUB,
+     .heapID = HEAP_ID_DEFAULT,
+     },
 };
 
 // UnkStruct_ov44_0222DD64 _02236660[4] = {
@@ -419,23 +418,23 @@ extern func_type_0222A60C ov44_0223676C[20];
 // static s32 _022368A0[8];
 
 extern s32 _022368A0[8];
-extern void* sub_02078D24;
+extern void *sub_02078D24;
 
 FS_EXTERN_OVERLAY(OVY_42);
 
-s32 ov44_02229EE0(UnkStruct_ov44_022319EC* arg0) {
-    return Save_VarsFlags_FlypointFlagAction(Save_VarsFlags_Get(arg0->unk160), 2, 27);
+s32 ov44_02229EE0(UnkStruct_ov44_022319EC *arg0) {
+    return Save_VarsFlags_FlypointFlagAction(Save_VarsFlags_Get(arg0->saveData), 2, 27);
 }
 
-s32 ov44_02229EF8(UnkStruct_ov44_022319EC* arg0) {
+s32 ov44_02229EF8(UnkStruct_ov44_022319EC *arg0) {
     return 0;
 }
 
-s32 ov44_02229EFC(UnkStruct_ov44_022319EC* arg0) {
+s32 ov44_02229EFC(UnkStruct_ov44_022319EC *arg0) {
     return 1;
 }
 
-u32 ov44_02229F00(UnkStruct_ov44_022319EC* arg0, UnkStruct_ov44_02231958* arg1) {
+u32 ov44_02229F00(UnkStruct_ov44_022319EC *arg0, UnkStruct_ov44_02231958 *arg1) {
     u32 var_r4 = arg1->unk1B;
     if ((var_r4 - 20 <= 1) && (ov44_02229EE0(arg0) == 0)) {
         var_r4 = 29;
@@ -504,15 +503,15 @@ s32 ov44_02229FDC(u32 arg0) {
         return 1;
     }
     switch (arg0 - 15) {
-        case 0:
-        case 4:
-        case 6:
-        case 8:
-        case 10:
-        case 12:
-            return 1;
-        default:
-            return 0;
+    case 0:
+    case 4:
+    case 6:
+    case 8:
+    case 10:
+    case 12:
+        return 1;
+    default:
+        return 0;
     }
     return 0;
 }
@@ -536,16 +535,16 @@ s32 ov44_0222A048(u16 arg0) {
         return 1;
     }
     switch (arg0) {
-        case 1:
-        case 8:
-        case 18:
-        case 20:
-        case 22:
-        case 24:
-        case 26:
-            return 1;
-        default:
-            return 0;
+    case 1:
+    case 8:
+    case 18:
+    case 20:
+    case 22:
+    case 24:
+    case 26:
+        return 1;
+    default:
+        return 0;
     }
 }
 
@@ -651,15 +650,15 @@ u32 ov44_0222A0B4(u32 arg0) {
     return var_r1;
 }
 
-s32 ov44_0222A168(UnkStruct_ov44_022319EC* arg0) {
-    Party* party = SaveArray_Party_Get(arg0->unk160);
+s32 ov44_0222A168(UnkStruct_ov44_022319EC *arg0) {
+    Party *party = SaveArray_Party_Get(arg0->saveData);
     int partyCount = Party_GetCount(party);
     int i;
     int var_r5 = 0;
-    
+
     for (i = 0; i < partyCount; i++) {
-        Pokemon* pokemon = Party_GetMonByIndex(party, i);
-        if ((GetMonData(pokemon, 163, NULL) != 0) && (GetMonData(pokemon, 76, NULL) == 0)) {
+        Pokemon *pokemon = Party_GetMonByIndex(party, i);
+        if ((GetMonData(pokemon, MON_DATA_HP, NULL) != 0) && (GetMonData(pokemon, MON_DATA_IS_EGG, NULL) == 0)) {
             var_r5 += 1;
         }
     }
@@ -688,7 +687,7 @@ void ov44_0222A1B4(u32 arg0) {
     sub_02039B7C();
 }
 
-void ov44_0222A1FC(UnkStruct_ov44_022319EC* arg0) {
+void ov44_0222A1FC(UnkStruct_ov44_022319EC *arg0) {
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
     GfGfx_DisableEngineAPlanes();
@@ -696,7 +695,7 @@ void ov44_0222A1FC(UnkStruct_ov44_022319EC* arg0) {
     reg_GX_DISPCNT &= 0xFFFFE0FF;
     reg_GXS_DB_DISPCNT &= 0xFFFFE0FF;
     SetKeyRepeatTimers(4, 8);
-    NARC* temp_r0 = NARC_New(NARC_a_0_8_8, HEAP_ID_53);
+    NARC *temp_r0 = NARC_New(NARC_a_0_8_8, HEAP_ID_53);
     arg0->unk15C = BgConfig_Alloc(HEAP_ID_53);
     arg0->unk164 = MessageFormat_New(HEAP_ID_53);
     arg0->unk168 = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0778_bin, HEAP_ID_53);
@@ -706,8 +705,8 @@ void ov44_0222A1FC(UnkStruct_ov44_022319EC* arg0) {
     ov44_0222AEC0(arg0, temp_r0);
     MI_CpuFill8(&arg0->unkD68, 0, sizeof(UnkStruct_ov44_0222A40C));
 
-    NNSG2dPaletteData* sp2C;
-    void* temp_r4 = GfGfxLoader_GetPlttDataFromOpenNarc(temp_r0, 5, &sp2C, HEAP_ID_53);
+    NNSG2dPaletteData *sp2C;
+    void *temp_r4 = GfGfxLoader_GetPlttDataFromOpenNarc(temp_r0, 5, &sp2C, HEAP_ID_53);
     MIi_CpuCopy16(sp2C->pRawData, *arg0->unkD68.unk8, 128);
     MIi_CpuCopy16(sp2C->pRawData, *arg0->unkD68.unk88, 128);
     Heap_Free(temp_r4);
@@ -746,7 +745,7 @@ void ov44_0222A1FC(UnkStruct_ov44_022319EC* arg0) {
     NARC_Delete(temp_r0);
 }
 
-void ov44_0222A40C(s32 arg0, UnkStruct_ov44_0222A40C* arg1) {
+void ov44_0222A40C(s32 arg0, UnkStruct_ov44_0222A40C *arg1) {
     if (arg1->unk4 != 0) {
         arg1->unk32B ^= 1;
         if ((1 & arg1->unk32B) == 0) {
@@ -774,10 +773,10 @@ void ov44_0222A40C(s32 arg0, UnkStruct_ov44_0222A40C* arg1) {
     }
 }
 
-s32 ov44_0222A4B4(OverlayManager* overlayMananger, s32* arg1) {
+s32 ov44_0222A4B4(OverlayManager *overlayMananger, s32 *arg1) {
     switch (*arg1) {
     case 0:
-        UnkStruct_ov44_0222A758_args* overlayArgs = OverlayManager_GetArgs(overlayMananger);
+        UnkStruct_ov44_0222A758_args *overlayArgs = OverlayManager_GetArgs(overlayMananger);
         if (sub_02039998() != 0) {
             switch (overlayArgs->unk4) {
             case 1:
@@ -803,12 +802,12 @@ s32 ov44_0222A4B4(OverlayManager* overlayMananger, s32* arg1) {
         } else {
             Heap_Create(HEAP_ID_3, HEAP_ID_53, 0xA0000);
         }
-        UnkStruct_ov44_022319EC* data = OverlayManager_CreateAndGetData(overlayMananger, 4288, HEAP_ID_53);
+        UnkStruct_ov44_022319EC *data = OverlayManager_CreateAndGetData(overlayMananger, 4288, HEAP_ID_53);
         MI_CpuFill8(data, 0, 4288);
         GF_CreateVramTransferManager(32, HEAP_ID_53);
         data->unk180 = 8;
-        data->unk160 = overlayArgs->unk0;
-        data->unk0 = sub_0202C6F4(data->unk160);
+        data->saveData = overlayArgs->unk0;
+        data->unk0 = sub_0202C6F4(data->saveData);
         data->unk354 = overlayArgs->unk4;
         data->unk34C = 8;
         data->unk370 = -1;
@@ -834,8 +833,8 @@ s32 ov44_0222A4B4(OverlayManager* overlayMananger, s32* arg1) {
     return 0;
 }
 
-s32 ov44_0222A60C(OverlayManager* overlayManager, s32* arg1) {
-    UnkStruct_ov44_022319EC* data = OverlayManager_GetData(overlayManager);
+s32 ov44_0222A60C(OverlayManager *overlayManager, s32 *arg1) {
+    UnkStruct_ov44_022319EC *data = OverlayManager_GetData(overlayManager);
     int r1 = arg1[0];
     switch (r1) {
     case 0:
@@ -856,7 +855,7 @@ s32 ov44_0222A60C(OverlayManager* overlayManager, s32* arg1) {
             return 1;
         }
     }
-    SpriteList* temp_r0 = data->unk190;
+    SpriteList *temp_r0 = data->unk190;
     if (temp_r0 != NULL) {
         SpriteList_RenderAndAnimateSprites(temp_r0);
     }
@@ -866,7 +865,7 @@ s32 ov44_0222A60C(OverlayManager* overlayManager, s32* arg1) {
     return 0;
 }
 
-void ov44_0222A68C(UnkStruct_ov44_022319EC* arg0) {
+void ov44_0222A68C(UnkStruct_ov44_022319EC *arg0) {
     Main_SetVBlankIntrCB(NULL, 0);
     if (arg0->unkD68.unk0) {
         SysTask_Destroy(arg0->unkD68.unk0);
@@ -896,10 +895,10 @@ void ov44_0222A68C(UnkStruct_ov44_022319EC* arg0) {
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_42));
 }
 
-s32 ov44_0222A758(OverlayManager* overlayManager) {
-    UnkStruct_ov44_022319EC* data = OverlayManager_GetData(overlayManager);
+s32 ov44_0222A758(OverlayManager *overlayManager) {
+    UnkStruct_ov44_022319EC *data = OverlayManager_GetData(overlayManager);
     ov44_0222A68C(data);
-    UnkStruct_ov44_0222A758_args* args = OverlayManager_GetArgs(overlayManager);
+    UnkStruct_ov44_0222A758_args *args = OverlayManager_GetArgs(overlayManager);
     args->unk4 = data->unk34C;
     if ((data->unk34C == 8) || (data->unk34C == 10)) {
         UnloadDwcOverlay();
@@ -933,7 +932,7 @@ s32 ov44_0222A758(OverlayManager* overlayManager) {
     return 1;
 }
 
-void ov44_0222A7F8(UnkStruct_ov44_022319EC* arg0) {
+void ov44_0222A7F8(UnkStruct_ov44_022319EC *arg0) {
     DoScheduledBgGpuUpdates(arg0->unk15C);
     GF_RunVramTransferTasks();
     OamManager_ApplyAndResetBuffers();
@@ -949,15 +948,15 @@ void ov44_0222A830(void) {
     GfGfx_SetBanks(&graphicsBanks);
 }
 
-void ov44_0222A850(BgConfig* arg0) {
+void ov44_0222A850(BgConfig *arg0) {
     GraphicsModes graphicsModes = ov44_022353B0;
     SetBothScreensModesAndDisable(&graphicsModes);
-    
+
     BgTemplate bgTemplate0 = ov44_022353E8;
     InitBgFromTemplate(arg0, 0, &bgTemplate0, 0);
     BG_ClearCharDataRange(0, 32, 0, HEAP_ID_53);
     BgClearTilemapBufferAndCommit(arg0, 0);
-    
+
     BgTemplate bgTemplate1 = ov44_02235404;
     InitBgFromTemplate(arg0, 1, &bgTemplate1, 0);
     BG_ClearCharDataRange(1, 32, 0, HEAP_ID_53);
@@ -1004,7 +1003,7 @@ void ov44_0222A850(BgConfig* arg0) {
     reg_G2S_DB_BLDCNT = 0;
 }
 
-void ov44_0222AA94(UnkStruct_ov44_022319EC* arg0, UnkStruct_ov44_02232B74* arg1) {
+void ov44_0222AA94(UnkStruct_ov44_022319EC *arg0, UnkStruct_ov44_02232B74 *arg1) {
     for (int i = 0; i < 33; i++) {
         if (arg0->unkA88[i] == NULL) {
             arg0->unkA88[i] = arg1;
@@ -1015,7 +1014,7 @@ void ov44_0222AA94(UnkStruct_ov44_022319EC* arg0, UnkStruct_ov44_02232B74* arg1)
     return;
 }
 
-void ov44_0222AAC0(UnkStruct_ov44_022319EC* arg0, UnkStruct_ov44_02232B74* arg1) {
+void ov44_0222AAC0(UnkStruct_ov44_022319EC *arg0, UnkStruct_ov44_02232B74 *arg1) {
     for (int i = 0; i < 33; i++) {
         if (arg0->unkA88[i] == arg1) {
             arg0->unkA88[i] = NULL;
@@ -1026,7 +1025,7 @@ void ov44_0222AAC0(UnkStruct_ov44_022319EC* arg0, UnkStruct_ov44_02232B74* arg1)
     return;
 }
 
-UnkStruct_ov44_02232B74* ov44_0222AAEC(UnkStruct_ov44_022319EC* arg0, u32 arg1) {
+UnkStruct_ov44_02232B74 *ov44_0222AAEC(UnkStruct_ov44_022319EC *arg0, u32 arg1) {
     for (s32 i = 0; i < 33; i++) {
         if ((arg0->unkA88[i] != NULL) && (arg1 == ov44_02231EF4(arg0->unkA88[i]))) {
             return arg0->unkA88[i];
@@ -1035,7 +1034,7 @@ UnkStruct_ov44_02232B74* ov44_0222AAEC(UnkStruct_ov44_022319EC* arg0, u32 arg1) 
     return NULL;
 }
 
-void ov44_0222AB24(BgConfig* arg0, UnkStruct_ov44_0222AB24* arg1, NARC* arg2, enum HeapID arg3) {
+void ov44_0222AB24(BgConfig *arg0, UnkStruct_ov44_0222AB24 *arg1, NARC *arg2, enum HeapID arg3) {
     GfGfxLoader_GXLoadPalFromOpenNarc(arg2, 14, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_8_OFFSET, 64, arg3);
     GfGfxLoader_GXLoadPalFromOpenNarc(arg2, 14, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_13_OFFSET, 64, arg3);
     GfGfxLoader_LoadCharDataFromOpenNarc(arg2, 13, arg0, GF_BG_LYR_MAIN_1, 0, 0, 0, arg3);
@@ -1048,7 +1047,7 @@ void ov44_0222AB24(BgConfig* arg0, UnkStruct_ov44_0222AB24* arg1, NARC* arg2, en
     }
 }
 
-void ov44_0222ABB8(UnkStruct_ov44_0222AB24* arg0) {
+void ov44_0222ABB8(UnkStruct_ov44_0222AB24 *arg0) {
     if (arg0->unk0) {
         Heap_Free(arg0->unk0);
         arg0->unk0 = NULL;
@@ -1059,14 +1058,14 @@ void ov44_0222ABB8(UnkStruct_ov44_0222AB24* arg0) {
     }
 }
 
-void ov44_0222ABDC(BgConfig* arg0, UnkStruct_ov44_0222AB24* arg1, s32 arg2, u8 arg3, u8 arg4, s32 arg5, s32 arg6) {
+void ov44_0222ABDC(BgConfig *arg0, UnkStruct_ov44_0222AB24 *arg1, s32 arg2, u8 arg3, u8 arg4, s32 arg5, s32 arg6) {
     CopyToBgTilemapRect(arg0, arg2, arg3, arg4, 2, 2, arg1->unk4->rawData, (arg5 * 2), 0, arg1->unk4->screenWidth / 8, arg1->unk4->screenHeight / 8);
     s32 r0 = ov44_0222ADC4(arg2);
     BgTilemapRectChangePalette(arg0, arg2, arg3, arg4, 2, 2, r0 + arg6);
     ScheduleBgTilemapBufferTransfer(arg0, arg2);
 }
 
-void ov44_0222AC54(BgConfig* arg0, UnkStruct_ov44_0222AB24* arg1, s32 arg2, u8 arg3, u8 arg4, u32 arg5) {
+void ov44_0222AC54(BgConfig *arg0, UnkStruct_ov44_0222AB24 *arg1, s32 arg2, u8 arg3, u8 arg4, u32 arg5) {
     s32 var_r4;
     s32 var_r5;
 
@@ -1130,13 +1129,13 @@ void ov44_0222AC54(BgConfig* arg0, UnkStruct_ov44_0222AB24* arg1, s32 arg2, u8 a
     ov44_0222ABDC(arg0, arg1, arg2, arg3, arg4, var_r5, var_r4);
 }
 
-void ov44_0222ACE8(Window* arg0, UnkStruct_ov44_0222AB24* arg1, u8 arg2, u16 arg3, s32 arg4, s32 arg5) {
+void ov44_0222ACE8(Window *arg0, UnkStruct_ov44_0222AB24 *arg1, u8 arg2, u16 arg3, s32 arg4, s32 arg5) {
     BlitBitmapRectToWindow(arg0, arg1->unkC->pRawData, arg4 * 16, 0, arg1->unkC->W * 8, arg1->unkC->H * 8, arg2, arg3, 16, 16);
     s32 r0 = ov44_0222ADC4(arg0->bgId);
     SetWindowPaletteNum(arg0, r0 + arg5);
 }
 
-void ov44_0222AD34(Window* arg0, UnkStruct_ov44_0222AB24* arg1, u8 arg2, u16 arg3, u32 arg4) {
+void ov44_0222AD34(Window *arg0, UnkStruct_ov44_0222AB24 *arg1, u8 arg2, u16 arg3, u32 arg4) {
     u8 var_r5;
     u8 var_r4 = 0;
     switch (arg4) {
@@ -1211,7 +1210,7 @@ u32 ov44_0222ADD0(void) {
     return 18;
 }
 
-void ov44_0222ADF8(UnkStruct_ov44_022319EC* arg0) {
+void ov44_0222ADF8(UnkStruct_ov44_022319EC *arg0) {
     arg0->unk174 = String_New(380, HEAP_ID_53);
     arg0->unk17C = String_New(380, HEAP_ID_53);
     arg0->unk170 = String_New(380, HEAP_ID_53);
@@ -1219,14 +1218,14 @@ void ov44_0222ADF8(UnkStruct_ov44_022319EC* arg0) {
     arg0->unk348 = 0;
 }
 
-void ov44_0222AE44(UnkStruct_ov44_022319EC* arg0) {
+void ov44_0222AE44(UnkStruct_ov44_022319EC *arg0) {
     String_Delete(arg0->unk178);
     String_Delete(arg0->unk174);
     String_Delete(arg0->unk17C);
     String_Delete(arg0->unk170);
 }
 
-void ov44_0222AE74(BgConfig* arg0) {
+void ov44_0222AE74(BgConfig *arg0) {
     FreeBgTilemapBuffer(arg0, 7);
     FreeBgTilemapBuffer(arg0, 6);
     FreeBgTilemapBuffer(arg0, 5);
@@ -1238,8 +1237,8 @@ void ov44_0222AE74(BgConfig* arg0) {
     Heap_Free(arg0);
 }
 
-void ov44_0222AEC0(UnkStruct_ov44_022319EC* arg0, NARC* arg1) {
-    BgConfig* bgConfig = arg0->unk15C;
+void ov44_0222AEC0(UnkStruct_ov44_022319EC *arg0, NARC *arg1) {
+    BgConfig *bgConfig = arg0->unk15C;
     GfGfx_EngineATogglePlanes(1, 1);
     GfGfx_EngineATogglePlanes(2, 1);
     GfGfx_EngineATogglePlanes(4, 1);
@@ -1253,7 +1252,7 @@ void ov44_0222AEC0(UnkStruct_ov44_022319EC* arg0, NARC* arg1) {
     GfGfxLoader_LoadScrnDataFromOpenNarc(arg1, 6, bgConfig, GF_BG_LYR_MAIN_0, 0, 0, 0, HEAP_ID_53);
     GfGfxLoader_LoadCharDataFromOpenNarc(arg1, 11, bgConfig, GF_BG_LYR_SUB_0, 0, 0, 0, HEAP_ID_53);
     GfGfxLoader_LoadScrnDataFromOpenNarc(arg1, 12, bgConfig, GF_BG_LYR_SUB_0, 0, 0, 0, HEAP_ID_53);
-    Options* options = Save_PlayerData_GetOptionsAddr(arg0->unk160);
+    Options *options = Save_PlayerData_GetOptionsAddr(arg0->saveData);
     LoadUserFrameGfx2(bgConfig, GF_BG_LYR_MAIN_2, 482, 10, Options_GetFrame(options), HEAP_ID_53);
     LoadUserFrameGfx1(bgConfig, GF_BG_LYR_MAIN_2, 473, 11, 0, HEAP_ID_53);
     LoadUserFrameGfx1(bgConfig, GF_BG_LYR_MAIN_1, 473, 11, 0, HEAP_ID_53);
@@ -1269,22 +1268,22 @@ void ov44_0222AFE8(void) {
     G2dRenderer_SetPlttTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN);
 }
 
-void ov44_0222B030(UnkStruct_ov44_022319EC* arg0, NARC* arg1) {
+void ov44_0222B030(UnkStruct_ov44_022319EC *arg0, NARC *arg1) {
     NNS_G2dInitOamManagerModule();
     OamManager_Create(0, 126, 0, 32, 0, 126, 0, 32, HEAP_ID_53);
     arg0->unk190 = G2dRenderer_Init(8, &arg0->unk194, HEAP_ID_53);
     G2dRenderer_SetSubSurfaceCoords(&arg0->unk194, 0, 0x100000);
-    for (int i = 0; i < 4; i ++) {
+    for (int i = 0; i < 4; i++) {
         arg0->unk2BC[i] = Create2DGfxResObjMan(1, (GfGfxResType)i, HEAP_ID_53);
     }
     arg0->unk2CC = FontSystem_NewInit(1, HEAP_ID_53);
 }
 
-void ov44_0222B0A4(UnkStruct_ov44_022319EC* arg0) {
+void ov44_0222B0A4(UnkStruct_ov44_022319EC *arg0) {
     GfGfx_EngineATogglePlanes(16, 1);
 }
 
-void ov44_0222B0B0(UnkStruct_ov44_022319EC* arg0) {
+void ov44_0222B0B0(UnkStruct_ov44_022319EC *arg0) {
     if (WindowIsInUse(&arg0->unk2F0) != 0) {
         sub_0200E5D4(&arg0->unk2F0, 0);
         RemoveWindow(&arg0->unk2F0);
@@ -1298,7 +1297,7 @@ void ov44_0222B0B0(UnkStruct_ov44_022319EC* arg0) {
     ScheduleWindowCopyToVram(&arg0->unk2F0);
 }
 
-void ov44_0222B164(UnkStruct_ov44_022319EC* arg0) {
+void ov44_0222B164(UnkStruct_ov44_022319EC *arg0) {
     ov44_0222F7BC(arg0);
     if (WindowIsInUse(&arg0->unk2F0) != 0) {
         RemoveWindow(&arg0->unk2F0);
@@ -1327,7 +1326,7 @@ void ov44_0222B164(UnkStruct_ov44_022319EC* arg0) {
     }
 }
 
-s32 ov44_0222B228(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222B228(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (sub_02039998() != 0) {
         ov44_0222F780(arg0, ov00_021E6EBC());
         arg0->unk4 = sub_020398C8();
@@ -1336,7 +1335,7 @@ s32 ov44_0222B228(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
             ov44_0222F818(arg0, 16);
             sub_020343E4();
             sub_02039378();
-            UnkStruct_ov44_0223197C* temp_r0_2 = sub_020398C8();
+            UnkStruct_ov44_0223197C *temp_r0_2 = sub_020398C8();
             arg0->unk4 = temp_r0_2;
             temp_r0_2->unk0.unk21 = temp_r0_2->unk0.unk22;
             arg0->unk35C = 20;
@@ -1348,7 +1347,7 @@ s32 ov44_0222B228(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
             arg0->unk348 = 61;
         }
     } else {
-        Sound_SetSceneAndPlayBGM(11, 1149, 1);
+        Sound_SetSceneAndPlayBGM(11, SEQ_GS_WIFI_ACCESS, 1);
         ov44_0222B0B0(arg0);
         sub_0202C08C(arg0->unk0);
         if (DWC_CheckHasProfile() == 0) {
@@ -1373,7 +1372,7 @@ s32 ov44_0222B228(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222B36C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222B36C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (TextPrinterCheckActive(arg0->unk180) == 0) {
         arg0->unk188 = ov44_02231A28(arg0->unk15C, &ov44_0223537C, 0);
         arg0->unk348 = 2;
@@ -1381,28 +1380,26 @@ s32 ov44_0222B36C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222B3A8(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222B3A8(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     enum YesNoResponse response = YesNoPrompt_HandleInput(arg0->unk188);
     if (response == YESNORESPONSE_YES) {
         YesNoPrompt_Destroy(arg0->unk188);
-        arg0->unk4 = sub_020396FC(arg0->unk160, 1188);
+        arg0->unk4 = sub_020396FC(arg0->saveData, 1188);
         ov44_0222F510(arg0, 23, 1);
         GF_ASSERT(arg0->unk18C == NULL);
         arg0->unk18C = WaitingIcon_New(&arg0->unk2D0, 482);
         arg0->unk348 = 14;
-    }
-    else if (response == YESNORESPONSE_NO) {
+    } else if (response == YESNORESPONSE_NO) {
         YesNoPrompt_Destroy(arg0->unk188);
         arg0->unk348 = 34;
-    }
-    else {
+    } else {
         return arg1;
     }
     return arg1;
 }
 
-s32 ov44_0222B42C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
-    if ((3 & gSystem.newKeys) || (System_GetTouchNew() == 1)) {
+s32 ov44_0222B42C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
+    if ((gSystem.newKeys & (PAD_BUTTON_B | PAD_BUTTON_A)) || (System_GetTouchNew() == 1)) {
         ov44_0222F66C(arg0, 21);
         SetBgPriority(3, 0);
         SetBgPriority(2, 1);
@@ -1414,7 +1411,7 @@ s32 ov44_0222B42C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222B494(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222B494(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     enum YesNoResponse response = YesNoPrompt_HandleInput(arg0->unk188);
     if (response == YESNORESPONSE_YES) {
         YesNoPrompt_Destroy(arg0->unk188);
@@ -1423,20 +1420,18 @@ s32 ov44_0222B494(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         ov44_0222F66C(arg0, 22);
         arg0->unk188 = ov44_02231A28(arg0->unk15C, &ov44_02235384, 1);
         arg0->unk348 = 5;
-    }
-    else if (response == YESNORESPONSE_NO) {
+    } else if (response == YESNORESPONSE_NO) {
         YesNoPrompt_Destroy(arg0->unk188);
         ClearFrameAndWindow2(&arg0->unk300, 0);
         RemoveWindow(&arg0->unk300);
         arg0->unk348 = 34;
-    }
-    else {
+    } else {
         return arg1;
     }
     return arg1;
 }
 
-s32 ov44_0222B528(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222B528(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     enum YesNoResponse response = YesNoPrompt_HandleInput(arg0->unk188);
     if (response == YESNORESPONSE_YES) {
         YesNoPrompt_Destroy(arg0->unk188);
@@ -1447,18 +1442,17 @@ s32 ov44_0222B528(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         ClearFrameAndWindow2(&arg0->unk300, 0);
         RemoveWindow(&arg0->unk300);
         sub_0202C03C(arg0->unk0);
-        void* saveArray = SaveArray_Get(arg0->unk160, 31);
+        void *saveArray = SaveArray_Get(arg0->saveData, 31);
         sub_02031710(saveArray);
-        Save_Frontier_GetStatic(arg0->unk160);
+        Save_Frontier_GetStatic(arg0->saveData);
         sub_02031188();
         arg0->unk348 = 14;
-        arg0->unk4 = sub_020396FC(arg0->unk160, 1188);
+        arg0->unk4 = sub_020396FC(arg0->saveData, 1188);
         ov44_0222F510(arg0, 23, 1);
         GF_ASSERT(arg0->unk18C == NULL);
         arg0->unk18C = WaitingIcon_New(&arg0->unk2D0, 482);
         arg0->unk368 = 1;
-    }
-    else if (response == YESNORESPONSE_NO) {
+    } else if (response == YESNORESPONSE_NO) {
         YesNoPrompt_Destroy(arg0->unk188);
         SetBgPriority(3, 0);
         SetBgPriority(2, 0);
@@ -1468,14 +1462,13 @@ s32 ov44_0222B528(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         RemoveWindow(&arg0->unk300);
         ov44_0222F66C(arg0, 20);
         arg0->unk348 = 3;
-    }
-    else {
-        return arg1;    
+    } else {
+        return arg1;
     }
     return arg1;
 }
 
-s32 ov44_0222B64C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222B64C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     enum YesNoResponse response = YesNoPrompt_HandleInput(arg0->unk188);
     if (response == YESNORESPONSE_YES) {
         YesNoPrompt_Destroy(arg0->unk188);
@@ -1486,13 +1479,12 @@ s32 ov44_0222B64C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         ClearFrameAndWindow2(&arg0->unk300, 0);
         RemoveWindow(&arg0->unk300);
         arg0->unk348 = 14;
-        arg0->unk4 = sub_020396FC(arg0->unk160, 1188);
+        arg0->unk4 = sub_020396FC(arg0->saveData, 1188);
         ov44_0222F510(arg0, 23, 1);
         GF_ASSERT(arg0->unk18C == NULL);
         arg0->unk18C = WaitingIcon_New(&arg0->unk2D0, 482);
         arg0->unk368 = 1;
-    }
-    else if (response == YESNORESPONSE_NO) {
+    } else if (response == YESNORESPONSE_NO) {
         YesNoPrompt_Destroy(arg0->unk188);
         SetBgPriority(0, 3);
         SetBgPriority(1, 1);
@@ -1501,14 +1493,13 @@ s32 ov44_0222B64C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         ClearFrameAndWindow2(&arg0->unk300, 0);
         RemoveWindow(&arg0->unk300);
         arg0->unk348 = 34;
-    }
-    else {
+    } else {
         return arg1;
     }
     return arg1;
 }
 
-s32 ov44_0222B744(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222B744(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     SetBgPriority(0, 3);
     SetBgPriority(1, 1);
     SetBgPriority(3, 0);
@@ -1517,17 +1508,17 @@ s32 ov44_0222B744(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-void ov44_0222B778(UnkStruct_ov44_022319EC* arg0, u32 arg1) {
-    PlayerProfile* playerProfile = Save_PlayerData_GetProfile(arg0->unk160);
-    Pokedex* pokedex = Save_Pokedex_Get(arg0->unk160);
-    Party* party = SaveArray_Party_Get(arg0->unk160);
-    SaveWiFiHistory* saveWiFiHistory = Save_WiFiHistory_Get(arg0->unk160);
+void ov44_0222B778(UnkStruct_ov44_022319EC *arg0, u32 arg1) {
+    PlayerProfile *playerProfile = Save_PlayerData_GetProfile(arg0->saveData);
+    Pokedex *pokedex = Save_Pokedex_Get(arg0->saveData);
+    Party *party = SaveArray_Party_Get(arg0->saveData);
+    SaveWiFiHistory *saveWiFiHistory = Save_WiFiHistory_Get(arg0->saveData);
     s32 partyCount = Party_GetCount(party);
 
     for (s32 i = 0; i < partyCount; i++) {
-        Pokemon* pokemon = Party_GetMonByIndex(party, i);
-        arg0->unk4->unk0.unk0[i] = GetMonData(pokemon, 5, 0);
-        arg0->unk4->unk0.unkC[i]  = GetMonData(pokemon, 6, 0);
+        Pokemon *pokemon = Party_GetMonByIndex(party, i);
+        arg0->unk4->unk0.unk0[i] = GetMonData(pokemon, MON_DATA_SPECIES, 0);
+        arg0->unk4->unk0.unkC[i] = GetMonData(pokemon, MON_DATA_HELD_ITEM, 0);
     }
     arg0->unk4->unk0.unk18[0] = PlayerProfile_GetVersion(playerProfile);
     arg0->unk4->unk0.unk18[1] = PlayerProfile_GetLanguage(playerProfile);
@@ -1545,12 +1536,12 @@ void ov44_0222B778(UnkStruct_ov44_022319EC* arg0, u32 arg1) {
     ov00_021E6CCC(arg0->unk4->unk24, 36);
 }
 
-s32 ov44_0222B870(UnkStruct_ov44_022319EC* arg0) {
+s32 ov44_0222B870(UnkStruct_ov44_022319EC *arg0) {
     s32 counter = 0;
     for (s32 i = 0; i < 32; i++) {
         arg0->unkC[i] = 0;
         if ((arg0->unk10BE > i) && (ov44_02231974(i) != 0)) {
-            UnkStruct_ov44_02231958* temp_r0 = ov44_02231958(arg0, i);
+            UnkStruct_ov44_02231958 *temp_r0 = ov44_02231958(arg0, i);
             u32 temp_r0_2 = ov44_02229F00(arg0, temp_r0);
             if ((temp_r0_2 != 0) && (temp_r0_2 != 28) && (temp_r0->unk1C[1] != 0)) {
                 arg0->unkC[counter] = i + 1;
@@ -1563,14 +1554,14 @@ s32 ov44_0222B870(UnkStruct_ov44_022319EC* arg0) {
     return counter;
 }
 
-s32 ov44_0222B8E0(UnkStruct_ov44_022319EC* arg0) {
+s32 ov44_0222B8E0(UnkStruct_ov44_022319EC *arg0) {
     s32 counter = 0;
     s32 sp8;
     for (s32 i = 0; i < 32; i++) {
-        UnkStruct_ov44_02231958* temp_r0 = ov44_02231958(arg0, i);
+        UnkStruct_ov44_02231958 *temp_r0 = ov44_02231958(arg0, i);
         s32 temp_r0_2 = ov44_02229F00(arg0, temp_r0);
         if ((temp_r0_2 != arg0->unk4C[i]) || (temp_r0->unk21 != arg0->unkCC[i])) {
-            UnkStruct_ov44_02232B74* temp_r0_3 = ov44_0222AAEC(arg0, i + 1);
+            UnkStruct_ov44_02232B74 *temp_r0_3 = ov44_0222AAEC(arg0, i + 1);
             if (temp_r0_3 != NULL) {
                 sp8 = ov44_02229FDC(arg0->unk4C[i]);
                 s32 temp_r0_4 = ov44_02229FDC(temp_r0_2);
@@ -1590,8 +1581,8 @@ s32 ov44_0222B8E0(UnkStruct_ov44_022319EC* arg0) {
     return counter;
 }
 
-void ov44_0222B9A0(UnkStruct_ov44_022319EC* arg0) {
-    u32* temp_r0 = sub_020392D8();
+void ov44_0222B9A0(UnkStruct_ov44_022319EC *arg0) {
+    u32 *temp_r0 = sub_020392D8();
     s32 temp_r6 = temp_r0[0];
     s32 var_r5 = ov00_021E6A70(temp_r6, temp_r0[1]);
     s32 var_r7;
@@ -1615,27 +1606,27 @@ void ov44_0222B9A0(UnkStruct_ov44_022319EC* arg0) {
     arg0->unk35C = 30;
     ov44_0222F66C(arg0, var_r7);
     switch (var_r5) {
-        case 1:
-        case 4:
-        case 5:
-        case 11:
-            arg0->unk348 = 10;
-            return;
-        case 6:
-        case 7:
-        case 8:
-        case 9:
-            arg0->unk348 = 10;
-            return;
-        case 10:
-            arg0->unk348 = 10;
-            return;
+    case 1:
+    case 4:
+    case 5:
+    case 11:
+        arg0->unk348 = 10;
+        return;
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+        arg0->unk348 = 10;
+        return;
+    case 10:
+        arg0->unk348 = 10;
+        return;
     }
     arg0->unk348 = 35;
 }
 
-s32 ov44_0222BA6C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
-    if ((3 & gSystem.newKeys) || (System_GetTouchNew() == 1)) {
+s32 ov44_0222BA6C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
+    if ((gSystem.newKeys & (PAD_BUTTON_B | PAD_BUTTON_A)) || (System_GetTouchNew() == 1)) {
         if (WindowIsInUse(&arg0->unk300) != 0) {
             ClearFrameAndWindow2(&arg0->unk300, 0);
             RemoveWindow(&arg0->unk300);
@@ -1645,17 +1636,17 @@ s32 ov44_0222BA6C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222BAB8(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222BAB8(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     arg0->unk348 = 9;
     return arg1;
 }
 
-s32 ov44_0222BAC4(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222BAC4(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     arg0->unk348 = 11;
     return arg1;
 }
 
-s32 ov44_0222BAD0(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222BAD0(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     s32 temp_r1;
 
     temp_r1 = arg0->unk35C;
@@ -1663,7 +1654,7 @@ s32 ov44_0222BAD0(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         arg0->unk35C = temp_r1 - 1;
         return arg1;
     }
-    if ((3 & gSystem.newKeys) || (System_GetTouchNew() == 1)) {
+    if ((gSystem.newKeys & (PAD_BUTTON_B | PAD_BUTTON_A)) || (System_GetTouchNew() == 1)) {
         if (WindowIsInUse(&arg0->unk300) != 0) {
             ClearFrameAndWindow2(&arg0->unk300, 0);
             RemoveWindow(&arg0->unk300);
@@ -1674,7 +1665,7 @@ s32 ov44_0222BAD0(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222BB38(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222BB38(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (TextPrinterCheckActive(arg0->unk180) == 0) {
         if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
             arg0->unk184 = Std_CreateYesNoMenu(arg0->unk15C, &ov44_0223538C, 473, 11, HEAP_ID_53);
@@ -1686,7 +1677,7 @@ s32 ov44_0222BB38(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222BBA4(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222BBA4(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
         s32 temp_r0 = Handle2dMenuInput_DeleteOnFinish(arg0->unk184, HEAP_ID_53);
         if (temp_r0 == -1) {
@@ -1703,24 +1694,21 @@ s32 ov44_0222BBA4(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
             arg0->unk34C = 8;
             arg0->unk348 = 34;
         }
-    }
-    else {
+    } else {
         enum YesNoResponse response = YesNoPrompt_HandleInput(arg0->unk188);
         if (response == YESNORESPONSE_YES) {
             YesNoPrompt_Destroy(arg0->unk188);
             sub_02039330();
             ov44_0222F818(arg0, 16);
             arg0->unk348 = 13;
-        }
-        else if (response == YESNORESPONSE_NO) {
+        } else if (response == YESNORESPONSE_NO) {
             YesNoPrompt_Destroy(arg0->unk188);
             ov44_0222F818(arg0, 16);
             sub_02039330();
             sub_020343E4();
             arg0->unk34C = 8;
             arg0->unk348 = 34;
-        }
-        else {
+        } else {
             return arg1;
         }
     }
@@ -1728,7 +1716,7 @@ s32 ov44_0222BBA4(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222BC78(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222BC78(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (sub_02034DB8() != 0) {
 
     } else {
@@ -1737,7 +1725,7 @@ s32 ov44_0222BC78(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
             sub_0200FBF4(1, 0);
             ov44_02231B4C(&arg0->unk38C);
             for (s32 i = 0; i < 33; i++) {
-                arg0->unkA88[i] = 0;                
+                arg0->unkA88[i] = 0;
             }
             thunk_ClearMainOAM(HEAP_ID_53);
             thunk_ClearSubOAM(HEAP_ID_53);
@@ -1753,7 +1741,7 @@ s32 ov44_0222BC78(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
             RemoveWindow(&arg0->unk2E0);
         }
         BgClearTilemapBufferAndCommit(arg0->unk15C, 3);
-        NARC* temp_r0 = NARC_New(NARC_a_0_8_8, HEAP_ID_53);
+        NARC *temp_r0 = NARC_New(NARC_a_0_8_8, HEAP_ID_53);
         ov44_0222AEC0(arg0, temp_r0);
         NARC_Delete(temp_r0);
         arg0->unkD68.unk4 = 1;
@@ -1774,7 +1762,7 @@ s32 ov44_0222BC78(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         MI_CpuFill8(arg0->unk4C, 0, 128);
         MI_CpuFill8(arg0->unkCC, 0, 128);
         ov44_0222B0B0(arg0);
-        arg0->unk4 = sub_020396FC(arg0->unk160, 1188);
+        arg0->unk4 = sub_020396FC(arg0->saveData, 1188);
         ov44_0222F510(arg0, 23, 1);
         GF_ASSERT(arg0->unk18C == NULL);
         arg0->unk18C = WaitingIcon_New(&arg0->unk2D0, 482);
@@ -1783,7 +1771,7 @@ s32 ov44_0222BC78(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222BE3C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222BE3C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (TextPrinterCheckActive(arg0->unk180) != 0) {
         return arg1;
     }
@@ -1807,12 +1795,12 @@ s32 ov44_0222BE3C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222BEE0(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222BEE0(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (TextPrinterCheckActive(arg0->unk180) != 0) {
         return arg1;
     }
     if (ov00_021E7314() != 0) {
-        Save_PrepareForAsyncWrite(arg0->unk160, 0);
+        Save_PrepareForAsyncWrite(arg0->saveData, 0);
         arg0->unk348 = 71;
         return arg1;
     }
@@ -1830,14 +1818,13 @@ s32 ov44_0222BEE0(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222BF6C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222BF6C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (ov00_021E7314() != 0) {
-        s32 temp_r0 = Save_WriteFileAsync(arg0->unk160);
+        s32 temp_r0 = Save_WriteFileAsync(arg0->saveData);
         if ((temp_r0 != 0) && (temp_r0 != 1)) {
             ov00_021E7328();
-            Save_ClearStatusFlags(arg0->unk160);
-        }
-        else {
+            Save_ClearStatusFlags(arg0->saveData);
+        } else {
             return arg1;
         }
     }
@@ -1855,7 +1842,7 @@ s32 ov44_0222BF6C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222BFF0(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222BFF0(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (arg0->unk35C > 0) {
         arg0->unk35C--;
         return arg1;
@@ -1871,7 +1858,7 @@ s32 ov44_0222BFF0(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222C060(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222C060(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     ov44_0222F7BC(arg0);
     ov44_0222F66C(arg0, 19);
     arg0->unk348 = 17;
@@ -1879,8 +1866,8 @@ s32 ov44_0222C060(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222C084(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
-    if ((3 & gSystem.newKeys) || (System_GetTouchNew() == 1)) {
+s32 ov44_0222C084(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
+    if ((gSystem.newKeys & (PAD_BUTTON_B | PAD_BUTTON_A)) || (System_GetTouchNew() == 1)) {
         if (arg0->unk354 == 1) {
             arg0->unk34C = 10;
             arg0->unk348 = 34;
@@ -1902,22 +1889,22 @@ s32 ov44_0222C084(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-void ov44_0222C120(UnkStruct_ov44_022319EC* arg0) {
-    PlayerProfile* temp_r0 = Save_PlayerData_GetProfile(arg0->unk160);
-    String* temp_r4 = PlayerProfile_GetPlayerName_NewString(temp_r0, HEAP_ID_53);
+void ov44_0222C120(UnkStruct_ov44_022319EC *arg0) {
+    PlayerProfile *playerProfile = Save_PlayerData_GetProfile(arg0->saveData);
+    String *strPlayerName = PlayerProfile_GetPlayerName_NewString(playerProfile, HEAP_ID_53);
     if (WindowIsInUse(&arg0->unk2E0) == 0) {
-        String_Delete(temp_r4);
+        String_Delete(strPlayerName);
         return;
     }
     u32 color;
     FillWindowPixelBuffer(&arg0->unk2E0, 0);
-    if (PlayerProfile_GetTrainerGender(temp_r0) == 0) {
+    if (PlayerProfile_GetTrainerGender(playerProfile) == 0) {
         color = MAKE_TEXT_COLOR(5, 6, 0);
     } else {
         color = MAKE_TEXT_COLOR(3, 4, 0);
     }
-    AddTextPrinterParameterizedWithColor(&arg0->unk2E0, 0, temp_r4, 32, 0, 255, color, NULL);
-    String_Delete(temp_r4);
+    AddTextPrinterParameterizedWithColor(&arg0->unk2E0, 0, strPlayerName, 32, 0, 255, color, NULL);
+    String_Delete(strPlayerName);
     s32 temp_r0_2 = ov44_02229F00(arg0, &arg0->unk4->unk0);
     s32 temp_r6 = ov44_0223120C(temp_r0_2, &color);
     if (temp_r0_2 == 1) {
@@ -1949,11 +1936,11 @@ void ov44_0222C120(UnkStruct_ov44_022319EC* arg0) {
 
 void ov44_0222C288(struct ListMenu *list, s32 index, u8 onInit) {
     if (onInit == 0) {
-        PlaySE(1500);
+        PlaySE(SEQ_SE_DP_SELECT);
     }
 }
 
-void ov44_0222C29C(UnkStruct_ov44_022319EC* arg0) {
+void ov44_0222C29C(UnkStruct_ov44_022319EC *arg0) {
     if (WindowIsInUse(&arg0->unk2E0) != 0) {
         RemoveWindow(&arg0->unk2E0);
     }
@@ -1968,7 +1955,7 @@ void ov44_0222C29C(UnkStruct_ov44_022319EC* arg0) {
     DrawFrameAndWindow1(&arg0->unk2F0, 0, 473, 11);
 }
 
-s32 ov44_0222C35C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222C35C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (IsPaletteFadeFinished() == 0) {
         return arg1;
     }
@@ -1977,7 +1964,7 @@ s32 ov44_0222C35C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     }
     ov00_021E5CBC(&sub_02078D24);
     arg0->unkD68.unk4 = 0;
-    NARC* temp_r0 = NARC_New(NARC_a_0_8_8, HEAP_ID_53);
+    NARC *temp_r0 = NARC_New(NARC_a_0_8_8, HEAP_ID_53);
     ov44_0222AB24(arg0->unk15C, &arg0->unkB0C, temp_r0, HEAP_ID_53);
     ov44_0222F8F0(arg0);
     ov44_0222F7BC(arg0);
@@ -1990,7 +1977,7 @@ s32 ov44_0222C35C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         arg0->unk14C = NULL;
     }
     if (ov44_02231BB0(&arg0->unk38C) == 0) {
-        s16 var_r4;   
+        s16 var_r4;
         if (arg0->unk4->unk0.unk1C[2] == 0) {
             var_r4 = 0;
         } else {
@@ -2019,14 +2006,14 @@ s32 ov44_0222C35C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222C4EC(UnkStruct_ov44_022319EC* arg0) {
+s32 ov44_0222C4EC(UnkStruct_ov44_022319EC *arg0) {
     if (sub_020390C4() == 1) {
         return 1;
     }
     return 0;
 }
 
-s32 ov44_0222C500(UnkStruct_ov44_022319EC* arg0) {
+s32 ov44_0222C500(UnkStruct_ov44_022319EC *arg0) {
     if (ov00_021E709C() != -1) {
         ov00_021E70B8(arg0->unk4->unk0.unk21);
         return 1;
@@ -2034,7 +2021,7 @@ s32 ov44_0222C500(UnkStruct_ov44_022319EC* arg0) {
     return 0;
 }
 
-s32 ov44_0222C524(UnkStruct_ov44_022319EC* arg0) {
+s32 ov44_0222C524(UnkStruct_ov44_022319EC *arg0) {
     int sp8 = ov44_0222B870(arg0);
     int sp4 = 0;
     int sp0 = 0;
@@ -2049,7 +2036,7 @@ s32 ov44_0222C524(UnkStruct_ov44_022319EC* arg0) {
                 }
             }
             if ((var_r2 == 0) && (arg0->unk2C[i] != 0)) {
-                UnkStruct_ov44_02232B74* temp_r0 = ov44_0222AAEC(arg0, arg0->unk2C[i]);
+                UnkStruct_ov44_02232B74 *temp_r0 = ov44_0222AAEC(arg0, arg0->unk2C[i]);
                 if (temp_r0 != NULL) {
                     ov44_02231E94(&arg0->unk38C, temp_r0);
                     ov44_0222AAC0(arg0, temp_r0);
@@ -2066,8 +2053,8 @@ s32 ov44_0222C524(UnkStruct_ov44_022319EC* arg0) {
                 }
             }
             if (var_r2 == 0 && arg0->unkC[i] != 0) {
-                UnkStruct_ov44_02231958* temp = ov44_02231958(arg0, arg0->unkC[i] - 1);
-                UnkStruct_ov44_02232B74* temp_r0_2 = ov44_02231E08(&arg0->unk38C, temp->unk1C[1], arg0->unkC[i]);
+                UnkStruct_ov44_02231958 *temp = ov44_02231958(arg0, arg0->unkC[i] - 1);
+                UnkStruct_ov44_02232B74 *temp_r0_2 = ov44_02231E08(&arg0->unk38C, temp->unk1C[1], arg0->unkC[i]);
                 if (temp_r0_2 != NULL) {
                     ov44_0222FFF4(arg0, arg0->unkC[i], 2);
                     ov44_0222AA94(arg0, temp_r0_2);
@@ -2081,26 +2068,26 @@ s32 ov44_0222C524(UnkStruct_ov44_022319EC* arg0) {
         memcpy(arg0->unk2C, arg0->unkC, 32);
         ov44_02230080(arg0);
         if (sp4 == 1) {
-            PlaySE(1614);
+            PlaySE(SEQ_SE_DP_TELE2);
         } else if (sp0 == 1) {
-            PlaySE(1614);
+            PlaySE(SEQ_SE_DP_TELE2);
         }
     }
     return sp8;
 }
 
-void ov44_0222C658(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
+void ov44_0222C658(UnkStruct_ov44_022319EC *arg0, enum HeapID heapID) {
     if (ov44_0222B8E0(arg0) > 0) {
         ov44_02230060(arg0, heapID);
     }
 }
 
-void ov44_0222C670(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
+void ov44_0222C670(UnkStruct_ov44_022319EC *arg0, enum HeapID heapID) {
     ov44_0222C524(arg0);
     ov44_0222C658(arg0, heapID);
 }
 
-s32 ov44_0222C684(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222C684(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     u32 var_r7 = 0;
     if (IsPaletteFadeFinished() == 0) {
         return arg1;
@@ -2121,20 +2108,20 @@ s32 ov44_0222C684(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     ov44_0222FBA0(arg0);
     ov44_02232008(&arg0->unk38C);
     if (ov44_02231D98(&arg0->unk38C) == 0) {
-        if ((ov00_021E709C() == -1) && (1024 & gSystem.newKeys)) {
+        if ((ov00_021E709C() == -1) && (gSystem.newKeys & PAD_BUTTON_X)) {
             if (ov44_0222F8C0(arg0) != 0) {
                 ov44_0222F510(arg0, 90, 0);
             } else {
                 ov44_0222F510(arg0, 91, 0);
             }
-            PlaySE(1501);
+            PlaySE(SEQ_SE_DP_DECIDE);
             ov44_0222C120(arg0);
             arg0->unk348 = 20;
             ov44_0222F950(arg0, HEAP_ID_53);
             return arg1;
         }
         u32 temp_r0 = ov44_0222FA80(arg0, HEAP_ID_53);
-        UnkStruct_ov44_02232B74* temp_r1 = ov44_0222AAEC(arg0, temp_r0);
+        UnkStruct_ov44_02232B74 *temp_r1 = ov44_0222AAEC(arg0, temp_r0);
         if (temp_r0 != 0) {
             if (temp_r1 != NULL) {
                 ov44_02231D48(&arg0->unk38C, temp_r1);
@@ -2146,7 +2133,7 @@ s32 ov44_0222C684(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         }
     }
     if ((ov44_0222C4EC(arg0) != 0) && (arg0->unk370 != -1)) {
-        PlaySE(1571);
+        PlaySE(SEQ_SE_DP_UG_020);
         arg0->unk348 = 48;
         return arg1;
     }
@@ -2156,8 +2143,7 @@ s32 ov44_0222C684(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         ov44_0222F510(arg0, 76, 0);
         ov00_021E70B8(arg0->unk4->unk0.unk21);
         arg0->unk344 = 0;
-    }
-    else if ((arg0->unk370 != -1) && (ov00_021E709C() == -1)) {
+    } else if ((arg0->unk370 != -1) && (ov00_021E709C() == -1)) {
         ov00_021E70B8(0);
         ov44_0222F780(arg0, arg0->unk370);
         ov44_0222F510(arg0, 18, 0);
@@ -2170,8 +2156,8 @@ s32 ov44_0222C684(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     }
     u32 r0 = ov44_02229F00(arg0, &arg0->unk4->unk0);
     if (arg0->unk370 == -1) {
-        if ((2 & gSystem.newKeys) && (ov44_02229FDC(r0) != 0)) {
-            PlaySE(1501);
+        if ((gSystem.newKeys & PAD_BUTTON_B) && (ov44_02229FDC(r0) != 0)) {
+            PlaySE(SEQ_SE_DP_DECIDE);
             arg0->unk348 = 39;
             ov44_0222F950(arg0, HEAP_ID_53);
             return arg1;
@@ -2180,48 +2166,45 @@ s32 ov44_0222C684(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         ov44_02232018(&arg0->unk38C);
     }
     switch (var_r7) {
-        case 0:
-            return arg1;
-        case 1:
-            PlaySE(1501);
-            if (ov44_02229FDC(r0) != 0) {
-                arg0->unk348 = 39;
-            }
-            else {
-                arg0->unk34C = 8;
-                arg0->unk348 = 57;
-                ov44_0222F510(arg0, 25, 1);
-            }
-            ov44_0222F950(arg0, HEAP_ID_53);
-            return arg1;
-        case 3:
-            PlaySE(1501);
-            if (ov44_02229FDC(r0) != 0) {
-                ov44_02231FCC(&arg0->unk38C);
-                arg0->unk348 = 39;
-            }
-            else if (r0 == 16 && sub_020392A0() == 1) {
-                ov44_02231FCC(&arg0->unk38C);
-                arg0->unk348 = 36;
-            }
-            ov44_0222F950(arg0, HEAP_ID_53);
-            return arg1;
-        case 2:
-            PlaySE(1501);
-            if (ov44_02229FDC(r0) != 0) {
-                arg0->unk348 = 39;
-            } 
-            else {
-                arg0->unk348 = 42;
-            }
-            ov44_0222F950(arg0, HEAP_ID_53);
-            return arg1;
+    case 0:
+        return arg1;
+    case 1:
+        PlaySE(SEQ_SE_DP_DECIDE);
+        if (ov44_02229FDC(r0) != 0) {
+            arg0->unk348 = 39;
+        } else {
+            arg0->unk34C = 8;
+            arg0->unk348 = 57;
+            ov44_0222F510(arg0, 25, 1);
+        }
+        ov44_0222F950(arg0, HEAP_ID_53);
+        return arg1;
+    case 3:
+        PlaySE(SEQ_SE_DP_DECIDE);
+        if (ov44_02229FDC(r0) != 0) {
+            ov44_02231FCC(&arg0->unk38C);
+            arg0->unk348 = 39;
+        } else if (r0 == 16 && sub_020392A0() == 1) {
+            ov44_02231FCC(&arg0->unk38C);
+            arg0->unk348 = 36;
+        }
+        ov44_0222F950(arg0, HEAP_ID_53);
+        return arg1;
+    case 2:
+        PlaySE(SEQ_SE_DP_DECIDE);
+        if (ov44_02229FDC(r0) != 0) {
+            arg0->unk348 = 39;
+        } else {
+            arg0->unk348 = 42;
+        }
+        ov44_0222F950(arg0, HEAP_ID_53);
+        return arg1;
     }
     GF_AssertFail();
     return arg1;
 }
 
-s32 ov44_0222C9AC(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222C9AC(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (ov44_0222C500(arg0) != 0) {
         arg0->unk348 = 19;
         ov44_022319EC(arg0);
@@ -2233,8 +2216,8 @@ s32 ov44_0222C9AC(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222C9F4(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
-    UnkStruct_ov44_02231958* temp_r0 = ov44_02231958(arg0, arg0->unk382 - 1);
+s32 ov44_0222C9F4(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
+    UnkStruct_ov44_02231958 *temp_r0 = ov44_02231958(arg0, arg0->unk382 - 1);
     u8 temp_r4 = temp_r0->unk21;
     u32 temp_r6 = ov44_02229F00(arg0, temp_r0);
     arg0->unk340 -= 1;
@@ -2271,7 +2254,7 @@ s32 ov44_0222C9F4(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222CB34(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222CB34(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     ov44_0222F780(arg0, ov00_021E6EBC());
     ov44_0222F510(arg0, 14, 0);
     ov44_0222F818(arg0, 1);
@@ -2282,7 +2265,7 @@ s32 ov44_0222CB34(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222CB7C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222CB7C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (sub_020393C8() != 0) {
         ov44_0222B9A0(arg0);
         return arg1;
@@ -2300,7 +2283,7 @@ s32 ov44_0222CB7C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         return arg1;
     }
     if (TextPrinterCheckActive(arg0->unk180) == 0) {
-        if ((3 & gSystem.newKeys) || (System_GetTouchNew() == 1)) {
+        if ((gSystem.newKeys & (PAD_BUTTON_B | PAD_BUTTON_A)) || (System_GetTouchNew() == 1)) {
             ov44_0222F7BC(arg0);
             arg0->unk348 = 24;
         } else {
@@ -2310,7 +2293,7 @@ s32 ov44_0222CB7C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222CC34(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222CC34(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (ov00_021E6EBC() < 0) {
         ov44_0222F510(arg0, 19, 0);
         arg0->unk348 = 27;
@@ -2337,7 +2320,7 @@ s32 ov44_0222CC34(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         ov44_0222F780(arg0, ov00_021E6EBC());
         ov44_0222F510(arg0, 16, 0);
         arg0->unk348 = 27;
-    } else if ((3 & gSystem.newKeys) || (System_GetTouchNew() == 1)) {
+    } else if ((gSystem.newKeys & (PAD_BUTTON_B | PAD_BUTTON_A)) || (System_GetTouchNew() == 1)) {
         ov44_0222F510(arg0, 20, 0);
         arg0->unk348 = 25;
     } else if (ov00_021E7078() != 0) {
@@ -2348,7 +2331,7 @@ s32 ov44_0222CC34(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222CDAC(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222CDAC(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (sub_020393C8() != 0) {
         ov44_0222B9A0(arg0);
         return arg1;
@@ -2367,7 +2350,7 @@ s32 ov44_0222CDAC(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222CE40(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222CE40(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
         s32 temp_r0 = Handle2dMenuInput_DeleteOnFinish(arg0->unk184, HEAP_ID_53);
         if (temp_r0 == -1) {
@@ -2396,8 +2379,7 @@ s32 ov44_0222CE40(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         } else {
             arg0->unk348 = 24;
         }
-    }
-    else {
+    } else {
         enum YesNoResponse temp_r0_2 = YesNoPrompt_HandleInput(arg0->unk188);
         if (temp_r0_2 == YESNORESPONSE_YES) {
             YesNoPrompt_Destroy(arg0->unk188);
@@ -2410,12 +2392,10 @@ s32 ov44_0222CE40(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
             } else {
                 ov44_0222B9A0(arg0);
             }
-        }
-        else if (temp_r0_2 == YESNORESPONSE_NO) {
+        } else if (temp_r0_2 == YESNORESPONSE_NO) {
             YesNoPrompt_Destroy(arg0->unk188);
             arg0->unk348 = 24;
-        }
-        else {
+        } else {
             if ((sub_020390C4() >= 4) || (sub_02039264() != 0) || (sub_020373B4(0) == 0)) {
                 ov44_0222F7BC(arg0);
                 ov44_0222F818(arg0, 16);
@@ -2423,8 +2403,7 @@ s32 ov44_0222CE40(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
                 arg0->unk370 = -1;
                 arg0->unk35C = 20;
                 arg0->unk348 = 65;
-            } 
-            else if (sub_020393C8() != 0) {
+            } else if (sub_020393C8() != 0) {
                 ov44_0222B9A0(arg0);
             }
             return arg1;
@@ -2434,7 +2413,7 @@ s32 ov44_0222CE40(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222CFE0(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222CFE0(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (sub_020393C8() != 0) {
         ov44_0222B9A0(arg0);
         return arg1;
@@ -2447,7 +2426,7 @@ s32 ov44_0222CFE0(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         return arg1;
     }
     arg0->unk35C -= 1;
-    if ((3 & gSystem.newKeys) || (arg0->unk35C == 0) || (System_GetTouchNew() == 1)) {
+    if ((gSystem.newKeys & (PAD_BUTTON_B | PAD_BUTTON_A)) || (arg0->unk35C == 0) || (System_GetTouchNew() == 1)) {
         ov44_0222F7BC(arg0);
         sub_02039358();
         sub_02039B58();
@@ -2465,7 +2444,7 @@ s32 ov44_0222CFE0(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222D0A4(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222D0A4(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (sub_020393C8() != 0) {
         ov44_0222B9A0(arg0);
         return arg1;
@@ -2473,7 +2452,7 @@ s32 ov44_0222D0A4(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     if (TextPrinterCheckActive(arg0->unk180) != 0) {
         return arg1;
     }
-    if ((3 & gSystem.newKeys) || (System_GetTouchNew() == 1)) {
+    if ((gSystem.newKeys & (PAD_BUTTON_B | PAD_BUTTON_A)) || (System_GetTouchNew() == 1)) {
         ov44_0222F7BC(arg0);
         ov44_0222F818(arg0, 16);
         sub_02039358();
@@ -2483,7 +2462,7 @@ s32 ov44_0222D0A4(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222D10C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222D10C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (sub_020393C8() != 0) {
         ov44_0222B9A0(arg0);
         return arg1;
@@ -2493,7 +2472,7 @@ s32 ov44_0222D10C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         return arg1;
     }
     arg0->unk35C -= 1;
-    if ((3 & gSystem.newKeys) || (arg0->unk35C == 0) || (System_GetTouchNew() == 1)) {
+    if ((gSystem.newKeys & (PAD_BUTTON_B | PAD_BUTTON_A)) || (arg0->unk35C == 0) || (System_GetTouchNew() == 1)) {
         ov44_0222F7BC(arg0);
         ov44_0222F818(arg0, 16);
         sub_02039B58();
@@ -2510,24 +2489,24 @@ s32 ov44_0222D10C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222D1BC(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222D1BC(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222D1C0(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222D1C0(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222D1C4(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222D1C4(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222D1C8(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222D1C8(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (arg0->unk35C > 0) {
         arg0->unk35C--;
         return arg1;
     }
-    if ((3 & gSystem.newKeys) || (System_GetTouchNew() == 1)) {
+    if ((gSystem.newKeys & (PAD_BUTTON_B | PAD_BUTTON_A)) || (System_GetTouchNew() == 1)) {
         ov44_0222F510(arg0, 26, 1);
         arg0->unk348 = 59;
         arg0->unk35C = 1;
@@ -2535,14 +2514,14 @@ s32 ov44_0222D1C8(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222D214(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222D214(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     ov44_02232018(&arg0->unk38C);
     ov44_0222F510(arg0, 10, 0);
     arg0->unk348 = 40;
     return arg1;
 }
 
-s32 ov44_0222D23C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222D23C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     ov44_02232018(&arg0->unk38C);
     if (TextPrinterCheckActive(arg0->unk180) == 0) {
         if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
@@ -2555,7 +2534,7 @@ s32 ov44_0222D23C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222D2B0(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222D2B0(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
         s32 var_r5 = Handle2dMenuInput_DeleteOnFinish(arg0->unk184, HEAP_ID_53);
         ov44_02232018(&arg0->unk38C);
@@ -2568,8 +2547,7 @@ s32 ov44_0222D2B0(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         }
         if (var_r5 == -1) {
             return arg1;
-        }
-        else if (var_r5 == 0) {
+        } else if (var_r5 == 0) {
             ov44_0222F818(arg0, 16);
             sub_02039B58();
             ov44_022319EC(arg0);
@@ -2577,26 +2555,23 @@ s32 ov44_0222D2B0(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
             ov44_022319EC(arg0);
             ov44_022319BC(arg0, 1);
         }
-    }
-    else {
-        enum YesNoResponse var_r5_2 = YesNoPrompt_HandleInput(arg0->unk188);
+    } else {
+        enum YesNoResponse yesNoResponse = YesNoPrompt_HandleInput(arg0->unk188);
         ov44_02232018(&arg0->unk38C);
         if ((arg0->unk370 == -1) && (ov00_021E709C() != -1)) {
             ov00_021E70B8(arg0->unk4->unk0.unk21);
-            var_r5_2 = YESNORESPONSE_NO;
+            yesNoResponse = YESNORESPONSE_NO;
         }
-        if (var_r5_2 == YESNORESPONSE_YES) {
+        if (yesNoResponse == YESNORESPONSE_YES) {
             YesNoPrompt_Destroy(arg0->unk188);
             ov44_0222F818(arg0, 16);
             sub_02039B58();
             ov44_022319EC(arg0);
-        }
-        else if (var_r5_2 == YESNORESPONSE_NO) {
+        } else if (yesNoResponse == YESNORESPONSE_NO) {
             YesNoPrompt_Destroy(arg0->unk188);
             ov44_022319EC(arg0);
             ov44_022319BC(arg0, 1);
-        }
-        else {
+        } else {
             return arg1;
         }
     }
@@ -2604,16 +2579,16 @@ s32 ov44_0222D2B0(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222D3DC(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222D3DC(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     s32 listLen = 3;
-    ListMenuTemplate listMenuTemplate = ov44_022366FC; 
-    UnkStruct_ov44_0222DD64* listMenuItems = ov44_0223671C;
+    ListMenuTemplate listMenuTemplate = ov44_022366FC;
+    UnkStruct_ov44_0222DD64 *listMenuItems = ov44_0223671C;
 
     if (ov44_02229EF8(arg0) == 1) {
         listLen++;
         listMenuTemplate.totalItems++;
         listMenuTemplate.maxShowed++;
-        
+
         s32 index = listLen - 1;
         listMenuItems[index] = _02236660[0];
     }
@@ -2658,7 +2633,7 @@ s32 ov44_0222D3DC(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222D594(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222D594(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     s32 sp0 = ov44_0222A168(arg0);
     s32 temp_r6 = ov44_0222E02C(arg0);
     ov44_02232018(&arg0->unk38C);
@@ -2687,15 +2662,15 @@ s32 ov44_0222D594(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         var_r4 = -2;
     }
     switch (var_r4) {
-        case -1:
-            return arg1;
-        case -2:
-            arg0->unk348 = 19;
-            ov44_0222F7BC(arg0);
-            PlaySE(1501);
+    case -1:
+        return arg1;
+    case -2:
+        arg0->unk348 = 19;
+        ov44_0222F7BC(arg0);
+        PlaySE(SEQ_SE_DP_DECIDE);
         break;
-        default:
-        PlaySE(1501);
+    default:
+        PlaySE(SEQ_SE_DP_DECIDE);
         if ((var_r4 == 19) && (temp_r6 != 0)) {
             if (temp_r6 == 1) {
                 ov44_0222F510(arg0, 104, 0);
@@ -2705,16 +2680,13 @@ s32 ov44_0222D594(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
                 ov44_0222F510(arg0, 105, 0);
             }
             arg0->unk348 = 29;
-        }
-        else if ((var_r4 == 15) && (sp0 < 2)) {
+        } else if ((var_r4 == 15) && (sp0 < 2)) {
             ov44_0222F510(arg0, 89, 0);
             arg0->unk348 = 29;
-        }
-        else if ((var_r4 == 1) && (sp0 < 2)) {
+        } else if ((var_r4 == 1) && (sp0 < 2)) {
             ov44_0222F510(arg0, 103, 0);
             arg0->unk348 = 29;
-        }
-        else if ((var_r4 == 0) || (var_r4 == 1) || (var_r4 == 29)) {
+        } else if ((var_r4 == 0) || (var_r4 == 1) || (var_r4 == 29)) {
             sub_0200E5D4(&arg0->unk320, 0);
             RemoveWindow(&arg0->unk320);
             DestroyListMenu(arg0->unk158, NULL, &arg0->unk374);
@@ -2722,8 +2694,7 @@ s32 ov44_0222D594(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
             ov44_0222D8B0(arg0, var_r4);
             arg0->unk348 = 38;
             return arg1;
-        }
-        else {
+        } else {
             ov44_0222F818(arg0, var_r4);
             arg0->unk348 = 19;
             ov44_0222F7BC(arg0);
@@ -2743,7 +2714,7 @@ s32 ov44_0222D594(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         if (arg0->unk348 == 19) {
             ov44_022319BC(arg0, var_r6);
         }
-    } 
+    }
 
     sub_0200E5D4(&arg0->unk320, 0);
     RemoveWindow(&arg0->unk320);
@@ -2752,7 +2723,7 @@ s32 ov44_0222D594(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222D824(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222D824(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (sub_020393C8() != 0) {
         ov44_0222B9A0(arg0);
         return arg1;
@@ -2766,7 +2737,7 @@ s32 ov44_0222D824(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         sub_020378E4(0);
         BeginNormalPaletteFade(0, 0, 0, 0, 6, 1, HEAP_ID_53);
         arg0->unk384 = 0;
-        sub_02034354(arg0->unk160, 0);
+        sub_02034354(arg0->saveData, 0);
         sub_02034434();
         sub_0203476C(sub_0203769C());
         arg1 = 2;
@@ -2774,9 +2745,9 @@ s32 ov44_0222D824(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222D8B0(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222D8B0(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     ListMenuTemplate listMenuTemplate;
-    UnkStruct_ov44_0222DD64* listMenuItems;
+    UnkStruct_ov44_0222DD64 *listMenuItems;
     s32 listLen;
     switch (arg1) {
     case 0:
@@ -2823,7 +2794,7 @@ s32 ov44_0222D8B0(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return 1;
 }
 
-s32 ov44_0222DA64(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222DA64(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     ov44_02232018(&arg0->unk38C);
     if (sub_020393C8() != 0) {
         sub_0200E5D4(&arg0->unk320, 0);
@@ -2848,17 +2819,17 @@ s32 ov44_0222DA64(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     }
     s32 temp_r0 = ListMenu_ProcessInput(arg0->unk158);
     switch (temp_r0) {
-        case -1:
-            return arg1;
-        case -2:
-            PlaySE(1501);
-            arg0->unk348 = 36;
-            break;
-        default:
-            PlaySE(1501);
-            ov44_0222F818(arg0, temp_r0);
-            arg0->unk348 = 19;
-            ov44_0222F7BC(arg0);
+    case -1:
+        return arg1;
+    case -2:
+        PlaySE(SEQ_SE_DP_DECIDE);
+        arg0->unk348 = 36;
+        break;
+    default:
+        PlaySE(SEQ_SE_DP_DECIDE);
+        ov44_0222F818(arg0, temp_r0);
+        arg0->unk348 = 19;
+        ov44_0222F7BC(arg0);
     }
     if (arg0->unk348 == 19) {
         s32 var_r7 = 1;
@@ -2882,11 +2853,11 @@ s32 ov44_0222DA64(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222DC18(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222DC18(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     u8 temp_r5 = ov44_02231C70(&arg0->unk38C);
-    UnkStruct_ov44_02232B74* temp_r0 = ov44_0222AAEC(arg0, 0);
+    UnkStruct_ov44_02232B74 *temp_r0 = ov44_0222AAEC(arg0, 0);
     GF_ASSERT(temp_r0 != 0);
-    UnkStruct_ov44_02232B74* temp_r0_2 = ov44_0222AAEC(arg0, temp_r5);
+    UnkStruct_ov44_02232B74 *temp_r0_2 = ov44_0222AAEC(arg0, temp_r5);
     if (temp_r0_2 == 0) {
         ov44_0222F780(arg0, temp_r5 - 1);
         ov44_0222F510(arg0, 16, 0);
@@ -2902,41 +2873,30 @@ s32 ov44_0222DC18(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
 
     if (temp_r5_2 == 15) {
         var_r1 = 3;
-    }
-    else if (temp_r5_2 == 19) {
+    } else if (temp_r5_2 == 19) {
         var_r1 = 4;
-    }
-    else if (temp_r5_2 == 18) {
+    } else if (temp_r5_2 == 18) {
         var_r1 = 83;
-    }
-    else if (temp_r5_2 == 21) {
+    } else if (temp_r5_2 == 21) {
         var_r1 = 5;
-    }
-    else if (temp_r5_2 == 20) {
+    } else if (temp_r5_2 == 20) {
         var_r1 = 84;
-    }
-    else if (temp_r5_2 == 23) {
+    } else if (temp_r5_2 == 23) {
         BufferWiFiPlazaActivityName(arg0->unk164, 1, 0);
         var_r1 = 6;
-    }
-    else if (temp_r5_2 == 22) {
+    } else if (temp_r5_2 == 22) {
         var_r1 = 85;
-    }
-    else if (temp_r5_2 == 25) {
+    } else if (temp_r5_2 == 25) {
         BufferWiFiPlazaActivityName(arg0->unk164, 1, 1);
         var_r1 = 6;
-    }
-    else if (temp_r5_2 == 24) {
+    } else if (temp_r5_2 == 24) {
         var_r1 = 85;
-    }
-    else if (temp_r5_2 == 27) {
+    } else if (temp_r5_2 == 27) {
         BufferWiFiPlazaActivityName(arg0->unk164, 1, 2);
         var_r1 = 6;
-    }
-    else if (temp_r5_2 == 26) {
+    } else if (temp_r5_2 == 26) {
         var_r1 = 85;
-    }
-    else {
+    } else {
         if (ov44_02229FB4(temp_r5_2) != 0) {
             var_r1 = 2;
         } else if (temp_r5_2 == 8) {
@@ -2954,14 +2914,14 @@ s32 ov44_0222DC18(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222DD64(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222DD64(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     s32 i;
     if (sub_020393C8() != 0) {
         ov44_0222B9A0(arg0);
         return arg1;
     }
     s32 temp_r0 = ov44_02231C70(&arg0->unk38C);
-    UnkStruct_ov44_02232B74* temp_r6 = ov44_0222AAEC(arg0, temp_r0);
+    UnkStruct_ov44_02232B74 *temp_r6 = ov44_0222AAEC(arg0, temp_r0);
     if (ov44_0222C500(arg0) != 0) {
         ov44_02231F88(&arg0->unk38C, temp_r6);
         ov44_0222F7BC(arg0);
@@ -2988,14 +2948,13 @@ s32 ov44_0222DD64(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     }
     s32 sp1C = 2;
     ListMenuTemplate listMenuTemplate = ov44_022354C8;
-    const UnkStruct_ov44_0222DD64* listMenuItems = ov44_022353A0;
-    UnkStruct_ov44_02231958* r6 = ov44_02231958(arg0, ov44_02231C70(&arg0->unk38C) - 1);
+    const UnkStruct_ov44_0222DD64 *listMenuItems = ov44_022353A0;
+    UnkStruct_ov44_02231958 *r6 = ov44_02231958(arg0, ov44_02231C70(&arg0->unk38C) - 1);
     u16 temp_r4 = ov44_02229F00(arg0, r6);
     u8 r1 = r6->unk21;
     arg0->unk380 = r1;
     u16 val = r1 + arg0->unk4->unk0.unk21;
     arg0->unk154 = ListMenuItems_New(2, HEAP_ID_53);
-    
 
     for (i = 0; i < NELEMS(ov44_022353A0); i++) {
         if (i == 0) {
@@ -3020,7 +2979,7 @@ s32 ov44_0222DD64(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     }
     AddWindowParameterized(arg0->unk15C, &arg0->unk320, 2, 16, (((3 - sp1C) * 2) + 11), 15, (sp1C * 2), 13, 59);
     DrawFrameAndWindow1(&arg0->unk320, 1, 473, 11);
-    listMenuTemplate.items = arg0->unk154; //itemPrintFunc
+    listMenuTemplate.items = arg0->unk154; // itemPrintFunc
     listMenuTemplate.window = &arg0->unk320;
     arg0->unk158 = ListMenuInit(&listMenuTemplate, 0, 0, HEAP_ID_53);
     ScheduleWindowCopyToVram(&arg0->unk320);
@@ -3028,7 +2987,7 @@ s32 ov44_0222DD64(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222DFEC(UnkStruct_ov44_02231958* arg0) {
+s32 ov44_0222DFEC(UnkStruct_ov44_02231958 *arg0) {
     for (s32 i = 0; i < 6; i++) {
         if (arg0->unk0[i] == 495) {
             return 0;
@@ -3043,39 +3002,39 @@ s32 ov44_0222DFEC(UnkStruct_ov44_02231958* arg0) {
     return 1;
 }
 
-s32 ov44_0222E02C(UnkStruct_ov44_022319EC* arg0) {
+s32 ov44_0222E02C(UnkStruct_ov44_022319EC *arg0) {
     return 3;
 }
 
 void ov44_0222E030(void) {
     ov00_021E70B8(0);
-    if (ov44_0222E074() == 0) {
+    if (ov44_0222E074() == FALSE) {
         IsNighttime();
         Sound_SetScene(0);
-        Sound_SetSceneAndPlayBGM(11, 1063, 1);
+        Sound_SetSceneAndPlayBGM(11, SEQ_GS_POKESEN, 1);
         return;
     }
-    u16 temp_r4 = GF_GetCurrentPlayingBGM();
+    u16 bgm = GF_GetCurrentPlayingBGM();
     GF_GetCurrentPlayingBGM();
-    GF_SetVolumeBySeqNo(temp_r4, GF_GetVolumeBySeqNo());
+    GF_SetVolumeBySeqNo(bgm, GF_GetVolumeBySeqNo());
 }
 
-s32 ov44_0222E074(void) {
-    u16 temp_r0 = GF_GetCurrentPlayingBGM();
-    if ((temp_r0 != 1063) && (temp_r0 != 1063)) {
-        return 0;
+BOOL ov44_0222E074(void) {
+    u16 bgm = GF_GetCurrentPlayingBGM();
+    if ((bgm != SEQ_GS_POKESEN) && (bgm != SEQ_GS_POKESEN)) {
+        return FALSE;
     }
-    return 1;
+    return TRUE;
 }
 
-s32 ov44_0222E090(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222E090(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     s32 var_r6 = 0;
     s32 var_r7 = ListMenu_ProcessInput(arg0->unk158);
     if (ov44_0222C500(arg0) != 0) {
         var_r7 = -2;
     }
     s32 temp_r0 = ov44_02231C70(&arg0->unk38C);
-    UnkStruct_ov44_02232B74* sp14 = ov44_0222AAEC(arg0, temp_r0);
+    UnkStruct_ov44_02232B74 *sp14 = ov44_0222AAEC(arg0, temp_r0);
     if (sub_020393C8() != 0) {
         sub_0200E5D4(&arg0->unk320, 0);
         RemoveWindow(&arg0->unk320);
@@ -3088,34 +3047,33 @@ s32 ov44_0222E090(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         return arg1;
     }
     switch (var_r7) {
-        case -1:
-            if (sp14 == 0) {
-                DestroyListMenu(arg0->unk158, 0, NULL);
+    case -1:
+        if (sp14 == 0) {
+            DestroyListMenu(arg0->unk158, 0, NULL);
+            ov44_0222F780(arg0, temp_r0 - 1);
+            ov44_0222F510(arg0, 16, 0);
+            arg0->unk348 = 29;
+            var_r6 = 1;
+            break;
+        } else {
+            UnkStruct_ov44_02231958 *temp_r0_2 = ov44_02231958(arg0, temp_r0 - 1);
+            u32 r0 = ov44_02229F00(arg0, temp_r0_2);
+            u8 r6 = temp_r0_2->unk21;
+            if ((arg0->unk37E != r0) || ((ov44_02229F44(r0) == 0) && (arg0->unk380 != r6))) {
                 ov44_0222F780(arg0, temp_r0 - 1);
                 ov44_0222F510(arg0, 16, 0);
                 arg0->unk348 = 29;
                 var_r6 = 1;
                 break;
             }
-            else {
-                UnkStruct_ov44_02231958* temp_r0_2 = ov44_02231958(arg0, temp_r0 - 1);
-                u32 r0 = ov44_02229F00(arg0, temp_r0_2);
-                u8 r6 = temp_r0_2->unk21;
-                if ((arg0->unk37E != r0) || ((ov44_02229F44(r0) == 0) && (arg0->unk380 != r6))) {
-                    ov44_0222F780(arg0, temp_r0 - 1);
-                    ov44_0222F510(arg0, 16, 0);
-                    arg0->unk348 = 29;
-                    var_r6 = 1;
-                    break;
-                }
-                return arg1;
-            }
-        case -2:
-            PlaySE(1501);
-            arg0->unk348 = 19;
-            break;
-        default:
-        PlaySE(1501);
+            return arg1;
+        }
+    case -2:
+        PlaySE(SEQ_SE_DP_DECIDE);
+        arg0->unk348 = 19;
+        break;
+    default:
+        PlaySE(SEQ_SE_DP_DECIDE);
         if (var_r7 == 1) {
             arg0->unk348 = 19;
             arg0->unk382 = temp_r0;
@@ -3124,7 +3082,7 @@ s32 ov44_0222E090(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
             } else {
                 s32 sp10 = ov44_0222A168(arg0);
                 s32 spC = ov44_0222E02C(arg0);
-                UnkStruct_ov44_02231958* sp8 = ov44_02231958(arg0, temp_r0 - 1);
+                UnkStruct_ov44_02231958 *sp8 = ov44_02231958(arg0, temp_r0 - 1);
                 u32 temp_r7 = ov44_02229F00(arg0, sp8);
                 s32 sp4 = sp8->unk21;
                 if ((arg0->unk37E != temp_r7) || ((ov44_02229F44(temp_r7) == 0) && (arg0->unk380 != sp4))) {
@@ -3178,7 +3136,7 @@ s32 ov44_0222E090(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
                                 arg0->unk18C = WaitingIcon_New(&arg0->unk2D0, 482);
                                 if (temp_r0_3 != 1) {
                                     arg0->unk348 = 45;
-                                    
+
                                 } else {
                                     arg0->unk340 = 1800;
                                     arg0->unk348 = 21;
@@ -3219,7 +3177,7 @@ s32 ov44_0222E090(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222E45C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222E45C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     arg0->unk340 -= 1;
     if (arg0->unk340 < 0) {
         arg0->unk348 = 70;
@@ -3242,11 +3200,11 @@ s32 ov44_0222E45C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         if (ov44_02229F44(temp_r6) == 0) {
             arg0->unk348 = 49;
             ov44_0222F7BC(arg0);
-            sub_02034354(arg0->unk160, 0);
+            sub_02034354(arg0->saveData, 0);
             arg0->unk35C = 30;
         } else if (sub_020373B4(0) == 1) {
             ov44_0222F7BC(arg0);
-            sub_02034354(arg0->unk160, 0);
+            sub_02034354(arg0->saveData, 0);
             sub_020398D4(0, 1);
             ov44_0222A1B4(temp_r6);
             arg0->unk34C = ov44_02229F74(temp_r6);
@@ -3263,15 +3221,15 @@ s32 ov44_0222E45C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222E5D8(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222E5D8(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222E5DC(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222E5DC(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222E5E0(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222E5E0(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (sub_020393C8() != 0) {
         ov44_0222B9A0(arg0);
         return arg1;
@@ -3286,61 +3244,48 @@ s32 ov44_0222E5E0(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222E62C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222E62C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222E630(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222E630(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222E634(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
-    UnkStruct_ov44_02231958* temp_r7 = ov44_02231958(arg0, ov00_021E6EBC());
+s32 ov44_0222E634(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
+    UnkStruct_ov44_02231958 *temp_r7 = ov44_02231958(arg0, ov00_021E6EBC());
     u32 temp_r4 = ov44_02229F00(arg0, &arg0->unk4->unk0);
     u32 temp_r0 = ov44_02229F00(arg0, temp_r7);
 
     s32 r1 = arg0->unk4->unk0.unk21;
     if (temp_r4 == 12 && temp_r0 == 5) {
         arg0->unk348 = 49;
-    }
-    else if (temp_r4 == 13 && temp_r0 == 6) {
+    } else if (temp_r4 == 13 && temp_r0 == 6) {
         arg0->unk348 = 49;
-    }
-    else if (temp_r4 == 14 && temp_r0 == 7) {
+    } else if (temp_r4 == 14 && temp_r0 == 7) {
         arg0->unk348 = 49;
-    }
-    else if (temp_r4 == 9 && temp_r0 == 2) {
+    } else if (temp_r4 == 9 && temp_r0 == 2) {
         arg0->unk348 = 49;
-    }
-    else if (temp_r4 == 10 && temp_r0 == 3) {
+    } else if (temp_r4 == 10 && temp_r0 == 3) {
         arg0->unk348 = 49;
-    }
-    else if (temp_r4 == 11 && temp_r0 == 4) {
+    } else if (temp_r4 == 11 && temp_r0 == 4) {
         arg0->unk348 = 49;
-    }
-    else if (temp_r4 == 15 && temp_r0 == 8) {
+    } else if (temp_r4 == 15 && temp_r0 == 8) {
         arg0->unk348 = 49;
-    }
-    else if (temp_r4 == 19 && temp_r0 == 18) {
+    } else if (temp_r4 == 19 && temp_r0 == 18) {
         arg0->unk348 = 49;
-    }
-    else if (temp_r4 == 21 && temp_r0 == 20) {
+    } else if (temp_r4 == 21 && temp_r0 == 20) {
         arg0->unk348 = 49;
-    }
-    else if (temp_r4 == 23 && temp_r0 == 22) {
+    } else if (temp_r4 == 23 && temp_r0 == 22) {
         arg0->unk348 = 49;
-    }
-    else if (temp_r4 == 25 && temp_r0 == 24) {
+    } else if (temp_r4 == 25 && temp_r0 == 24) {
         arg0->unk348 = 49;
-    }
-    else if (temp_r4 == 27 && temp_r0 == 26) {
+    } else if (temp_r4 == 27 && temp_r0 == 26) {
         arg0->unk348 = 49;
-    }
-    else if (temp_r4 == 16 && temp_r0 == 1 && r1 > 0) {
+    } else if (temp_r4 == 16 && temp_r0 == 1 && r1 > 0) {
         arg0->unk348 = 22;
         return arg1;
-    }
-    else {
+    } else {
         if (sub_020393C8() != 0) {
             ov44_0222B9A0(arg0);
             return arg1;
@@ -3354,23 +3299,21 @@ s32 ov44_0222E634(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     }
     ov44_0222F780(arg0, ov00_021E6EBC());
     ov44_0222F510(arg0, 11, 0);
-    sub_02034354(arg0->unk160, 0);
+    sub_02034354(arg0->saveData, 0);
     arg0->unk348 = 49;
     arg0->unk35C = 30;
     return arg1;
 }
 
-s32 ov44_0222E7C4(UnkStruct_ov44_022319EC* arg0) {
+s32 ov44_0222E7C4(UnkStruct_ov44_022319EC *arg0) {
     if (sub_020390C4() >= 3) {
         ov44_0222F780(arg0, arg0->unk370);
         ov44_0222F510(arg0, 18, 0);
         arg0->unk348 = 27;
-    }
-    else if (sub_020393C8() != 0) {
+    } else if (sub_020393C8() != 0) {
         ov44_0222B9A0(arg0);
-    }
-    else {
-        UnkStruct_ov44_02231958* temp_r6 = ov44_02231958(arg0, ov00_021E6EBC());
+    } else {
+        UnkStruct_ov44_02231958 *temp_r6 = ov44_02231958(arg0, ov00_021E6EBC());
         u32 temp_r4 = ov44_02229F00(arg0, &arg0->unk4->unk0);
         u32 temp_r0 = ov44_02229F00(arg0, temp_r6);
         if ((temp_r4 != ov44_0222A0B4(temp_r0)) && (temp_r4 != temp_r0)) {
@@ -3378,8 +3321,7 @@ s32 ov44_0222E7C4(UnkStruct_ov44_022319EC* arg0) {
             ov44_0222F510(arg0, 16, 0);
             arg0->unk348 = 27;
 
-        }
-        else {
+        } else {
             return 0;
         }
     }
@@ -3387,7 +3329,7 @@ s32 ov44_0222E7C4(UnkStruct_ov44_022319EC* arg0) {
     return 1;
 }
 
-s32 ov44_0222E860(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222E860(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if ((sub_020390C4() >= 4) || (sub_02039264() != 0) || (sub_020373B4(0) == 0)) {
         if (arg0->unk384 != 0) {
             ov44_0222F510(arg0, 101, 0);
@@ -3416,7 +3358,7 @@ s32 ov44_0222E860(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222E908(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222E908(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if ((ov44_0222E7C4(arg0) == 0) && (sub_02037B38(14) != 0)) {
         u16 r1 = ov44_02229F00(arg0, &arg0->unk4->unk0);
         if (sub_02037C0C(sub_0203769C(), &r1) != 0) {
@@ -3426,14 +3368,14 @@ s32 ov44_0222E908(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222E948(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222E948(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     s32 var_r0;
     if (sub_0203769C() == 0) {
         var_r0 = 1;
     } else {
         var_r0 = 0;
     }
-    u16* temp_r4 = sub_02037C44(var_r0);
+    u16 *temp_r4 = sub_02037C44(var_r0);
     if ((ov44_0222E7C4(arg0) == 0) && (temp_r4 != NULL)) {
         u16 temp_r6 = ov44_02229F00(arg0, &arg0->unk4->unk0);
         u16 r0 = ov44_0222A0B4(temp_r6);
@@ -3449,7 +3391,7 @@ s32 ov44_0222E948(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222E9C4(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222E9C4(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if ((ov44_0222E7C4(arg0) == 0) && (sub_02037B38(15) != 0)) {
         sub_02034434();
         sub_020398D4(1, 1);
@@ -3459,7 +3401,7 @@ s32 ov44_0222E9C4(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222E9FC(UnkStruct_ov44_022319EC* arg0) {
+s32 ov44_0222E9FC(UnkStruct_ov44_022319EC *arg0) {
     if (TextPrinterCheckActive(arg0->unk180) == 0) {
         return 1;
     }
@@ -3469,10 +3411,10 @@ s32 ov44_0222E9FC(UnkStruct_ov44_022319EC* arg0) {
     return 0;
 }
 
-s32 ov44_0222EA2C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222EA2C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     ListMenuTemplate spC; // Unknown struct of size 0x20
     if ((ov44_0222E7C4(arg0) == 0) && (sub_02037B38(18) != 0) && (ov44_0222E9FC(arg0) == 1)) {
-        sub_0203A1C4(arg0->unk160, &spC, HEAP_ID_53);
+        sub_0203A1C4(arg0->saveData, &spC, HEAP_ID_53);
         ov44_0222F7BC(arg0);
         u32 temp_r0 = ov44_02229F00(arg0, ov44_02231958(arg0, ov00_021E6EBC()));
         u32 var_r1 = temp_r0;
@@ -3512,7 +3454,7 @@ s32 ov44_0222EA2C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         } else if (var_r1 == 14 || var_r1 == 7) {
             var_r1 = 7;
             arg0->unk34C = 6;
-        } 
+        }
         ov44_0222F818(arg0, var_r1);
         BeginNormalPaletteFade(0, 0, 0, 0, 6, 1, HEAP_ID_53);
         arg1 = 2;
@@ -3520,38 +3462,38 @@ s32 ov44_0222EA2C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222EB90(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222EB90(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     BgClearTilemapBufferAndCommit(arg0->unk15C, 3);
     arg0->unk364 = 0;
     arg0->unk348 = ov44_0222ADD0();
     return arg1;
 }
 
-s32 ov44_0222EBB8(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222EBB8(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     arg0->unk348 = 55;
     return arg1;
 }
 
-s32 ov44_0222EBC4(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222EBC4(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (TextPrinterCheckActive(arg0->unk180) != 0) {
         return arg1;
     }
     if (ov44_0222C4EC(arg0) != 0) {
         arg0->unk348 = 56;
     }
-    if ((3 & gSystem.newKeys) || (System_GetTouchNew() == 1)) {
+    if ((gSystem.newKeys & (PAD_BUTTON_B | PAD_BUTTON_A)) || (System_GetTouchNew() == 1)) {
         arg0->unk348 = 56;
     }
     return arg1;
 }
 
-s32 ov44_0222EC14(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222EC14(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     ov44_0222F7BC(arg0);
     arg0->unk348 = 19;
     return arg1;
 }
 
-s32 ov44_0222EC2C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222EC2C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (TextPrinterCheckActive(arg0->unk180) == 0) {
         if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
             arg0->unk184 = Std_CreateYesNoMenu(arg0->unk15C, &ov44_0223538C, 473, 11, HEAP_ID_53);
@@ -3563,7 +3505,7 @@ s32 ov44_0222EC2C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222EC98(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222EC98(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
         s32 var_r5 = Handle2dMenuInput_DeleteOnFinish(arg0->unk184, HEAP_ID_53);
         if (TextPrinterCheckActive(arg0->unk180) != 0) {
@@ -3587,35 +3529,32 @@ s32 ov44_0222EC98(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
             arg0->unk348 = 19;
             ov44_022319EC(arg0);
         }
-    }
-    else {
-        YesNoResponse var_r5_2 = YesNoPrompt_HandleInput(arg0->unk188);
+    } else {
+        YesNoResponse yesNoResponse = YesNoPrompt_HandleInput(arg0->unk188);
         if (TextPrinterCheckActive(arg0->unk180) != 0) {
             return arg1;
         }
         if (ov44_0222C500(arg0) != 0) {
-            var_r5_2 = YESNORESPONSE_NO;
+            yesNoResponse = YESNORESPONSE_NO;
         }
-        if (var_r5_2 == YESNORESPONSE_YES) {
+        if (yesNoResponse == YESNORESPONSE_YES) {
             YesNoPrompt_Destroy(arg0->unk188);
             ov44_0222F510(arg0, 26, 1);
             arg0->unk348 = 59;
             arg0->unk35C = 1;
-        }
-        else if (var_r5_2 == YESNORESPONSE_NO) {
+        } else if (yesNoResponse == YESNORESPONSE_NO) {
             YesNoPrompt_Destroy(arg0->unk188);
             ov44_0222F7BC(arg0);
             arg0->unk348 = 19;
             ov44_022319EC(arg0);
-        }
-        else {
+        } else {
             return arg1;
         }
     }
     return arg1;
 }
 
-s32 ov44_0222EDB8(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222EDB8(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (TextPrinterCheckActive(arg0->unk180) != 0) {
         return arg1;
     }
@@ -3632,7 +3571,7 @@ s32 ov44_0222EDB8(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222EE10(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222EE10(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (TextPrinterCheckActive(arg0->unk180) != 0) {
         return arg1;
     }
@@ -3645,7 +3584,7 @@ s32 ov44_0222EE10(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222EE54(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222EE54(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (sub_02037B38(16) == 0) {
         return arg1;
     }
@@ -3661,7 +3600,7 @@ s32 ov44_0222EE54(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222EED4(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222EED4(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (TextPrinterCheckActive(arg0->unk180) != 0) {
         return arg1;
     }
@@ -3673,8 +3612,7 @@ s32 ov44_0222EED4(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         }
         ov44_0222F510(arg0, 101, 0);
         arg0->unk348 = 28;
-    }
-    else {
+    } else {
         if (sub_020393C8() != 0) {
             if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
                 Clear2dMenuWindowAndDelete(arg0->unk184, HEAP_ID_53);
@@ -3682,14 +3620,12 @@ s32 ov44_0222EED4(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
                 YesNoPrompt_Destroy(arg0->unk188);
             }
             ov44_0222B9A0(arg0);
-        }
-        else {
+        } else {
             if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
                 s32 temp_r0 = Handle2dMenuInput_DeleteOnFinish(arg0->unk184, HEAP_ID_53);
                 if (temp_r0 == -1) {
                     return arg1;
-                }
-                else if (temp_r0 == 0) {
+                } else if (temp_r0 == 0) {
                     ov44_0222F510(arg0, 138, 0);
                     GF_ASSERT(arg0->unk18C == 0);
                     arg0->unk18C = WaitingIcon_New(&arg0->unk2D0, 482);
@@ -3703,8 +3639,7 @@ s32 ov44_0222EED4(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
                     arg0->unk35C = 20;
                     arg0->unk348 = 65;
                 }
-            }
-            else {
+            } else {
                 s32 temp_r0_2 = YesNoPrompt_HandleInput(arg0->unk188);
                 if (temp_r0_2 == 1) {
                     YesNoPrompt_Destroy(arg0->unk188);
@@ -3714,16 +3649,14 @@ s32 ov44_0222EED4(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
                     arg0->unk384 = 1;
                     arg0->unk348 = 49;
                     arg0->unk35C = 30;
-                }
-                else if (temp_r0_2 == 2) {
+                } else if (temp_r0_2 == 2) {
                     YesNoPrompt_Destroy(arg0->unk188);
                     ov44_0222F7BC(arg0);
                     sub_020343E4();
                     sub_020393B4();
                     arg0->unk35C = 20;
                     arg0->unk348 = 65;
-                }
-                else {
+                } else {
                     return arg1;
                 }
             }
@@ -3736,7 +3669,7 @@ s32 ov44_0222EED4(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222F0AC(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222F0AC(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     u32 temp_r0 = ov44_02231C70(&arg0->unk38C);
     if (ov44_0222AAEC(arg0, temp_r0) == 0) {
         ov44_0222F780(arg0, temp_r0 - 1);
@@ -3744,7 +3677,7 @@ s32 ov44_0222F0AC(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         arg0->unk348 = 29;
         return arg1;
     }
-    UnkStruct_ov44_02231958* temp_r0_2 = ov44_02231958(arg0, temp_r0 - 1);
+    UnkStruct_ov44_02231958 *temp_r0_2 = ov44_02231958(arg0, temp_r0 - 1);
     u32 r0 = ov44_02229F00(arg0, temp_r0_2);
     u8 r7 = temp_r0_2->unk21;
     if ((arg0->unk37E != r0) || (arg0->unk380 != r7)) {
@@ -3764,7 +3697,7 @@ s32 ov44_0222F0AC(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-s32 ov44_0222F194(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222F194(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     s32 temp_r0 = ov44_02231C70(&arg0->unk38C);
     if (ov44_0222AAEC(arg0, temp_r0) == 0) {
         if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
@@ -3777,7 +3710,7 @@ s32 ov44_0222F194(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         arg0->unk348 = 29;
         return arg1;
     }
-    UnkStruct_ov44_02231958* temp_r0_2 = ov44_02231958(arg0, temp_r0 - 1);
+    UnkStruct_ov44_02231958 *temp_r0_2 = ov44_02231958(arg0, temp_r0 - 1);
     u32 r0 = ov44_02229F00(arg0, temp_r0_2);
     u8 r7 = temp_r0_2->unk21;
     if ((arg0->unk37E != r0) || (arg0->unk380 != r7)) {
@@ -3798,8 +3731,7 @@ s32 ov44_0222F194(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
             YesNoPrompt_Destroy(arg0->unk188);
         }
         ov44_0222B9A0(arg0);
-    }
-    else {
+    } else {
         if (sub_020390C4() >= 3) {
             if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
                 Clear2dMenuWindowAndDelete(arg0->unk184, HEAP_ID_53);
@@ -3810,8 +3742,7 @@ s32 ov44_0222F194(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
             sub_02039358();
             arg0->unk348 = 29;
             return arg1;
-        }
-        else if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
+        } else if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
             s32 menuInputResult = Handle2dMenuInput_DeleteOnFinish(arg0->unk184, HEAP_ID_53);
             if (menuInputResult == -1) {
                 return arg1;
@@ -3874,8 +3805,7 @@ s32 ov44_0222F194(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
                     }
                 }
             }
-        }
-        else if (yesNoResponse == 2) {
+        } else if (yesNoResponse == 2) {
             YesNoPrompt_Destroy(arg0->unk188);
             ov44_0222F7BC(arg0);
             ov44_0222F818(arg0, 16);
@@ -3883,15 +3813,14 @@ s32 ov44_0222F194(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
             ov44_0222C120(arg0);
             arg0->unk348 = 19;
             return arg1;
-        }
-        else {
+        } else {
             return arg1;
         }
     }
     return arg1;
 }
 
-s32 ov44_0222F4E0(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222F4E0(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (sub_02037D78() == 0) {
         BeginNormalPaletteFade(0, 0, 0, 0, 6, 1, HEAP_ID_53);
         arg1 = 2;
@@ -3899,12 +3828,12 @@ s32 ov44_0222F4E0(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     return arg1;
 }
 
-void ov44_0222F510(UnkStruct_ov44_022319EC* arg0, s32 arg1, s32 arg2) {
+void ov44_0222F510(UnkStruct_ov44_022319EC *arg0, s32 arg1, s32 arg2) {
     u32 textSpeed_int;
     if (arg2 != 0) {
         textSpeed_int = 1;
     } else {
-        Options* options = Save_PlayerData_GetOptionsAddr(arg0->unk160);
+        Options *options = Save_PlayerData_GetOptionsAddr(arg0->saveData);
         textSpeed_int = Options_GetTextFrameDelay(options);
     }
     u8 textSpeed = textSpeed_int;
@@ -3938,7 +3867,7 @@ void ov44_0222F510(UnkStruct_ov44_022319EC* arg0, s32 arg1, s32 arg2) {
     ScheduleWindowCopyToVram(&arg0->unk2D0);
 }
 
-void ov44_0222F66C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+void ov44_0222F66C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     ov44_0222F910(arg0);
     if (WindowIsInUse(&arg0->unk300) != 0) {
         ClearFrameAndWindow2(&arg0->unk300, 0);
@@ -3962,16 +3891,16 @@ void ov44_0222F66C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     ScheduleWindowCopyToVram(&arg0->unk300);
 }
 
-void ov44_0222F780(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+void ov44_0222F780(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (arg1 != -1) {
-        PlayerProfile* playerProfile = PlayerProfile_New(HEAP_ID_53);
+        PlayerProfile *playerProfile = PlayerProfile_New(HEAP_ID_53);
         Save_Profile_PlayerName_Set(playerProfile, sub_0202C254(arg0->unk0, arg1));
         BufferPlayersName(arg0->unk164, 0, playerProfile);
         Heap_Free(playerProfile);
     }
 }
 
-void ov44_0222F7BC(UnkStruct_ov44_022319EC* arg0) {
+void ov44_0222F7BC(UnkStruct_ov44_022319EC *arg0) {
     s32 temp_r0;
 
     ov44_0222F910(arg0);
@@ -3986,14 +3915,14 @@ void ov44_0222F7BC(UnkStruct_ov44_022319EC* arg0) {
     }
 }
 
-void ov44_0222F818(UnkStruct_ov44_022319EC* arg0, u32 arg1) {
+void ov44_0222F818(UnkStruct_ov44_022319EC *arg0, u32 arg1) {
     if (arg0->unk4 != NULL) {
         ov44_0222F830(arg0, arg1);
         ov00_021E6D60(arg0->unk4, 36);
     }
 }
 
-void ov44_0222F830(UnkStruct_ov44_022319EC* arg0, u32 arg1) {
+void ov44_0222F830(UnkStruct_ov44_022319EC *arg0, u32 arg1) {
     if (arg0->unk4 != NULL) {
         u32 r0 = ov44_02229F00(arg0, &arg0->unk4->unk0);
         if (r0 != arg1) {
@@ -4013,26 +3942,26 @@ void ov44_0222F830(UnkStruct_ov44_022319EC* arg0, u32 arg1) {
     }
 }
 
-u8 ov44_0222F89C(UnkStruct_ov44_022319EC* arg0) {
+u8 ov44_0222F89C(UnkStruct_ov44_022319EC *arg0) {
     arg0->unk4->unk0.unk21 = 1 - arg0->unk4->unk0.unk21;
     ov00_021E6D60(arg0->unk4, 36);
     return arg0->unk4->unk0.unk21;
 }
 
-u8 ov44_0222F8C0(UnkStruct_ov44_022319EC* arg0) {
+u8 ov44_0222F8C0(UnkStruct_ov44_022319EC *arg0) {
     arg0->unk4->unk0.unk22 = 1 - arg0->unk4->unk0.unk22;
     arg0->unk4->unk0.unk21 = arg0->unk4->unk0.unk22;
     ov00_021E6D60(arg0->unk4, 36);
     return arg0->unk4->unk0.unk22;
 }
 
-u8 ov44_0222F8F0(UnkStruct_ov44_022319EC* arg0) {
+u8 ov44_0222F8F0(UnkStruct_ov44_022319EC *arg0) {
     arg0->unk4->unk0.unk21 = arg0->unk4->unk0.unk22;
     ov00_021E6D60(arg0->unk4, 36);
     return arg0->unk4->unk0.unk22;
 }
 
-void ov44_0222F910(UnkStruct_ov44_022319EC* arg0) {
+void ov44_0222F910(UnkStruct_ov44_022319EC *arg0) {
     if (arg0->unk18C != 0) {
         sub_0200F478();
         arg0->unk18C = 0;
@@ -4043,26 +3972,26 @@ void ov44_0222F910(UnkStruct_ov44_022319EC* arg0) {
     }
 }
 
-void ov44_0222F950(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
+void ov44_0222F950(UnkStruct_ov44_022319EC *arg0, enum HeapID heapID) {
     ov44_0222FC0C(arg0);
     ov44_02231D8C(&arg0->unk38C);
     ov44_02230060(arg0, heapID);
 }
 
-void ov44_0222F970(UnkStruct_ov44_022319EC* arg0, s32 arg1, enum HeapID heapID) {
+void ov44_0222F970(UnkStruct_ov44_022319EC *arg0, s32 arg1, enum HeapID heapID) {
     if (arg1 == ov44_0222FC00(arg0)) {
         ov44_0222F950(arg0, heapID);
     }
 }
 
-s32 ov44_0222F98C(UnkStruct_ov44_022319EC* arg0) {
+s32 ov44_0222F98C(UnkStruct_ov44_022319EC *arg0) {
     if (arg0->unkB1C.unk4C != 0) {
         return 1;
     }
     return 0;
 }
 
-void ov44_0222F9A0(UnkStruct_ov44_022319EC* arg0, NARC* arg1, enum HeapID arg2) {
+void ov44_0222F9A0(UnkStruct_ov44_022319EC *arg0, NARC *arg1, enum HeapID arg2) {
     memset(&arg0->unkB1C, 0, sizeof(UnkStruct_ov44_02231800));
     GfGfx_EngineBTogglePlanes(1, 1);
     GfGfx_EngineBTogglePlanes(2, 1);
@@ -4076,7 +4005,7 @@ void ov44_0222F9A0(UnkStruct_ov44_022319EC* arg0, NARC* arg1, enum HeapID arg2) 
     ov44_022300C8(arg0);
 }
 
-void ov44_0222FA28(UnkStruct_ov44_022319EC* arg0) {
+void ov44_0222FA28(UnkStruct_ov44_022319EC *arg0) {
     if (ov44_0222F98C(arg0) != 0) {
         ov44_0222FF30(arg0);
         TouchHitboxController_Destroy(arg0->unkB1C.unk4C);
@@ -4090,7 +4019,7 @@ void ov44_0222FA28(UnkStruct_ov44_022319EC* arg0) {
     }
 }
 
-u8 ov44_0222FA80(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
+u8 ov44_0222FA80(UnkStruct_ov44_022319EC *arg0, enum HeapID heapID) {
     u32 var_r5 = ov44_02231C8C(&arg0->unk38C);
     u32 temp_r0 = ov44_02231CE8(&arg0->unk38C);
     if ((temp_r0 >= 3) && (temp_r0 <= 6)) {
@@ -4099,7 +4028,7 @@ u8 ov44_0222FA80(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
     if ((var_r5 >= 3) && (var_r5 <= 6)) {
         if (arg0->unkB1C.unk70 != var_r5 - 3) {
             arg0->unkB1C.unk70 = var_r5 - 3;
-            PlaySE(1505);
+            PlaySE(SEQ_SE_DP_SELECT5);
             ov44_02230090(arg0);
             arg0->unkB1C.unk75 = 1;
             arg0->unkB1C.unk78 = 1;
@@ -4119,7 +4048,7 @@ u8 ov44_0222FA80(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
             arg0->unkB1C.unk75 = 0;
         }
     }
-    if ((u8) (arg0->unkB1C.unk73 + 254) <= 1) {
+    if ((u8)(arg0->unkB1C.unk73 + 254) <= 1) {
         u32 temp_r0_2 = ov44_02231788(arg0);
         if (ov44_0222FBC8(arg0, temp_r0_2) == 1) {
             arg0->unkB1C.unk77 = arg0->unkB1C.unk71;
@@ -4129,9 +4058,9 @@ u8 ov44_0222FA80(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
             arg0->unkB1C.unk78 = 1;
             arg0->unkB1C.unk73 = 0;
             ov44_02231754(arg0);
-            PlaySE(1501);
+            PlaySE(SEQ_SE_DP_DECIDE);
         } else if (temp_r0_2 != 0) {
-            PlaySE(1501);
+            PlaySE(SEQ_SE_DP_DECIDE);
             ov44_0222FC3C(arg0, temp_r0_2);
             ov44_02230234(arg0, heapID);
         }
@@ -4139,28 +4068,28 @@ u8 ov44_0222FA80(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
     return arg0->unkB1C.unk71;
 }
 
-void ov44_0222FBA0(UnkStruct_ov44_022319EC* arg0) {
+void ov44_0222FBA0(UnkStruct_ov44_022319EC *arg0) {
     if ((arg0->unkB1C.unk73 == 0) && (arg0->unkB1C.unk75 == 1)) {
         ov44_022300C8(arg0);
         arg0->unkB1C.unk75 = 0;
     }
 }
 
-s32 ov44_0222FBC8(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+s32 ov44_0222FBC8(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (arg0->unkB1C.unk73 == 3) {
         return 0;
     }
-    if ((240 & gSystem.heldKeys) || (1027 & gSystem.newKeys) || (arg1 == 2)) {
+    if ((gSystem.heldKeys & (PAD_KEY_DOWN | PAD_KEY_UP | PAD_KEY_LEFT | PAD_KEY_RIGHT)) || (gSystem.newKeys & (PAD_BUTTON_X | PAD_BUTTON_A | PAD_BUTTON_B)) || (arg1 == 2)) {
         return 1;
     }
     return 0;
 }
 
-u8 ov44_0222FC00(UnkStruct_ov44_022319EC* arg0) {
+u8 ov44_0222FC00(UnkStruct_ov44_022319EC *arg0) {
     return arg0->unkB1C.unk71;
 }
 
-void ov44_0222FC0C(UnkStruct_ov44_022319EC* arg0) {
+void ov44_0222FC0C(UnkStruct_ov44_022319EC *arg0) {
     if (ov44_0222F98C(arg0) == 1) {
         arg0->unkB1C.unk71 = 0;
         arg0->unkB1C.unk72 = 0;
@@ -4171,7 +4100,7 @@ void ov44_0222FC0C(UnkStruct_ov44_022319EC* arg0) {
     }
 }
 
-void ov44_0222FC3C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+void ov44_0222FC3C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     u32 var_r1;
     if (ov44_02229EE0(arg0) == 1) {
         var_r1 = 7;
@@ -4182,22 +4111,22 @@ void ov44_0222FC3C(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
         arg0->unkB1C.unk74 = (arg0->unkB1C.unk74 + 1) % var_r1;
         return;
     }
-    s8* ptr = &arg0->unkB1C.unk74;
+    s8 *ptr = &arg0->unkB1C.unk74;
     ptr[0]--;
     if (arg0->unkB1C.unk74 < 0) {
         ptr[0] += var_r1;
     }
 }
 
-void ov44_0222FC84(s32 arg0, enum HeapID arg1, UnkStruct_ov44_022319EC* arg2) {
+void ov44_0222FC84(s32 arg0, enum HeapID arg1, UnkStruct_ov44_022319EC *arg2) {
     s32 temp_r0 = arg2->unkB1C.unk70 * 8 + arg0;
     if ((arg2->unkB1C.unk50[temp_r0] == 2) && (arg2->unkB1C.unk71 == 0) && (arg1 == 0)) {
         arg2->unkB1C.unk71 = temp_r0 + 1;
-        PlaySE(1501);
+        PlaySE(SEQ_SE_DP_DECIDE);
     }
 }
 
-void ov44_0222FCBC(UnkStruct_ov44_022319EC* arg0, NARC* arg1, enum HeapID arg2) {
+void ov44_0222FCBC(UnkStruct_ov44_022319EC *arg0, NARC *arg1, enum HeapID arg2) {
     s32 i;
     s32 j;
     BgClearTilemapBufferAndCommit(arg0->unk15C, 4);
@@ -4208,12 +4137,12 @@ void ov44_0222FCBC(UnkStruct_ov44_022319EC* arg0, NARC* arg1, enum HeapID arg2) 
     GfGfxLoader_LoadScrnDataFromOpenNarc(arg1, 18, arg0->unk15C, GF_BG_LYR_SUB_0, 0, 0, 0, arg2);
     arg0->unkB1C.unk4 = GfGfxLoader_GetScrnDataFromOpenNarc(arg1, 21, 0, &arg0->unkB1C.unk8, arg2);
     ov44_0222FFB4(arg0->unkB1C.unk8, 48);
-    
+
     for (i = 0; i < 7; i++) {
         arg0->unkB1C.unkC[i] = GfGfxLoader_GetScrnDataFromOpenNarc(arg1, i + 22, 0, &arg0->unkB1C.unk28[i], arg2);
         ov44_0222FFB4(arg0->unkB1C.unk28[i], 48);
     }
-    
+
     arg0->unkB1C.unk44 = GfGfxLoader_GetScrnDataFromOpenNarc(arg1, 29, 0, &arg0->unkB1C.unk48, arg2);
     ov44_0222FFB4(arg0->unkB1C.unk48, 48);
     LoadFontPal1(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_15_OFFSET, arg2);
@@ -4228,10 +4157,10 @@ void ov44_0222FCBC(UnkStruct_ov44_022319EC* arg0, NARC* arg1, enum HeapID arg2) 
         AddWindowParameterized(arg0->unk15C, &arg0->unkB1C.unk7C[i], 5, r5 * 16 + 4, sp20 * 6 + 1, 9, 3, 15, 1 + (i * 27));
         FillWindowPixelBuffer(&arg0->unkB1C.unk7C[i], 0);
         ScheduleWindowCopyToVram(&arg0->unkB1C.unk7C[i]);
-        
+
         for (j = 0; j < 2; j++) {
             InitWindow(&arg0->unkB1C.unkFC[i][j]);
-            AddWindowParameterized(arg0->unk15C, &arg0->unkB1C.unkFC[i][j], 5, r5 * 16 + 1 + j * 12, sp20 * 6 + 1, 2, 3, 13, 6 * (j + i*2) + 218);
+            AddWindowParameterized(arg0->unk15C, &arg0->unkB1C.unkFC[i][j], 5, r5 * 16 + 1 + j * 12, sp20 * 6 + 1, 2, 3, 13, 6 * (j + i * 2) + 218);
             FillWindowPixelBuffer(&arg0->unkB1C.unkFC[i][j], 0);
             ScheduleWindowCopyToVram(&arg0->unkB1C.unkFC[i][j]);
         }
@@ -4242,7 +4171,7 @@ void ov44_0222FCBC(UnkStruct_ov44_022319EC* arg0, NARC* arg1, enum HeapID arg2) 
     ov44_02231420(arg0, arg1, arg2);
 }
 
-void ov44_0222FF30(UnkStruct_ov44_022319EC* arg0) {
+void ov44_0222FF30(UnkStruct_ov44_022319EC *arg0) {
     s32 i;
     ov44_022316B0(arg0);
     for (i = 0; i < 8; i++) {
@@ -4259,10 +4188,10 @@ void ov44_0222FF30(UnkStruct_ov44_022319EC* arg0) {
     Heap_Free(arg0->unkB1C.unk44);
 }
 
-void ov44_0222FFB4(NNSG2dScreenData* arg0, s32 arg1) {
+void ov44_0222FFB4(NNSG2dScreenData *arg0, s32 arg1) {
     s32 i;
     s32 j;
-    u16* ip = (u16*)&arg0->rawData[0];
+    u16 *ip = (u16 *)&arg0->rawData[0];
     s32 width = arg0->screenWidth / 8;
     s32 height = arg0->screenHeight / 8;
     for (i = 0; i < height; i++) {
@@ -4272,7 +4201,7 @@ void ov44_0222FFB4(NNSG2dScreenData* arg0, s32 arg1) {
     }
 }
 
-void ov44_0222FFF4(UnkStruct_ov44_022319EC* arg0, s32 arg1, u32 arg2) {
+void ov44_0222FFF4(UnkStruct_ov44_022319EC *arg0, s32 arg1, u32 arg2) {
     GF_ASSERT(arg1 != 0);
     GF_ASSERT(arg2 != 0);
     GF_ASSERT(arg2 < 3);
@@ -4280,18 +4209,18 @@ void ov44_0222FFF4(UnkStruct_ov44_022319EC* arg0, s32 arg1, u32 arg2) {
     arg0->unkB1C.unk75 = 1;
 }
 
-void ov44_02230028(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+void ov44_02230028(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     GF_ASSERT(arg1 != 0);
     arg0->unkB1C.unk50[arg1 - 1] = 0;
     arg0->unkB1C.unk75 = 1;
 }
 
-u8 ov44_02230048(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+u8 ov44_02230048(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     GF_ASSERT(arg1 != 0);
     return arg0->unkB1C.unk50[arg1 - 1];
 }
 
-void ov44_02230060(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
+void ov44_02230060(UnkStruct_ov44_022319EC *arg0, enum HeapID heapID) {
     if (arg0->unkB1C.unk73 != 0) {
         ov44_02230234(arg0, heapID);
         return;
@@ -4300,17 +4229,17 @@ void ov44_02230060(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
     ov44_022300C8(arg0);
 }
 
-void ov44_02230080(UnkStruct_ov44_022319EC* arg0) {
+void ov44_02230080(UnkStruct_ov44_022319EC *arg0) {
     arg0->unkB1C.unk78 = 1;
     arg0->unkB1C.unk75 = 1;
 }
 
-void ov44_02230090(UnkStruct_ov44_022319EC* arg0) {
+void ov44_02230090(UnkStruct_ov44_022319EC *arg0) {
     BgTilemapRectChangePalette(arg0->unk15C, 4, 0, 0, 32, 24, arg0->unkB1C.unk70);
     ScheduleBgTilemapBufferTransfer(arg0->unk15C, 4);
 }
 
-void ov44_022300C8(UnkStruct_ov44_022319EC* arg0) {
+void ov44_022300C8(UnkStruct_ov44_022319EC *arg0) {
     s32 sp1C;
     s32 sp18;
     if (arg0->unkB1C.unk78 == 1) {
@@ -4346,7 +4275,7 @@ void ov44_022300C8(UnkStruct_ov44_022319EC* arg0) {
             var_r1 = 0;
         }
         if (sp18 == 1 || var_r1 == 1) {
-            ov44_02231148(arg0,  r2 << 4,  (6 * temp_ip), sp1C, var_r5);
+            ov44_02231148(arg0, r2 << 4, (6 * temp_ip), sp1C, var_r5);
             if (sp1C != 2) {
                 ov44_022312B8(arg0, &arg0->unkB1C.unk7C[i], temp_r4, var_r5, i);
                 ov44_02231344(arg0, &arg0->unkB1C.unkFC[i][0], temp_r4, var_r5, i);
@@ -4365,14 +4294,14 @@ void ov44_022300C8(UnkStruct_ov44_022319EC* arg0) {
     GfGfx_EngineBTogglePlanes(8, 0);
 }
 
-void ov44_02230234(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
+void ov44_02230234(UnkStruct_ov44_022319EC *arg0, enum HeapID heapID) {
     s32 var_r4;
     if (sub_0202C090(arg0->unk0, arg0->unkB1C.unk71 - 1, 8) == 1) {
         var_r4 = 7;
     } else {
         var_r4 = 8;
     }
-    NNSG2dScreenData* temp_r3 = arg0->unkB1C.unk28[arg0->unkB1C.unk74];
+    NNSG2dScreenData *temp_r3 = arg0->unkB1C.unk28[arg0->unkB1C.unk74];
     BG_LoadScreenTilemapData(arg0->unk15C, 6, &temp_r3->rawData[0], temp_r3->szByte);
     BgTilemapRectChangePalette(arg0->unk15C, 6, 0, 0, 32, 24, var_r4);
     BgClearTilemapBufferAndCommit(arg0->unk15C, 7);
@@ -4387,7 +4316,7 @@ void ov44_02230234(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
     GfGfx_EngineBTogglePlanes(8, 1);
 }
 
-void ov44_02230300(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
+void ov44_02230300(UnkStruct_ov44_022319EC *arg0, enum HeapID heapID) {
     s32 color;
     s32 temp_r4 = arg0->unkB1C.unk71 - 1;
     if (sub_0202C090(arg0->unk0, temp_r4, 8) == 0) {
@@ -4400,14 +4329,14 @@ void ov44_02230300(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
     ReadMsgDataIntoString(arg0->unk168, msg_0778_00042, arg0->unk170);
     StringExpandPlaceholders(arg0->unkB1C.unk0, arg0->unk178, arg0->unk170);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 1, arg0->unk178, 32, 8, 255, color, 0);
-    UnkStruct_ov44_02231958* sp10 = ov44_02231958(arg0, temp_r4);
+    UnkStruct_ov44_02231958 *sp10 = ov44_02231958(arg0, temp_r4);
     u32 temp_r0 = ov44_02229F00(arg0, sp10);
     ReadMsgDataIntoString(arg0->unk168, ov44_0223120C(temp_r0, &color), arg0->unk170);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk170, 104, 8, 255, color, 0);
-    PlayerProfile* temp_r6 = PlayerProfile_New(HEAP_ID_53);
-    Save_Profile_PlayerName_Set(temp_r6, sub_0202C298(arg0->unk0, temp_r4));
-    BufferPlayersName(arg0->unkB1C.unk0, 0, temp_r6);
-    Heap_Free(temp_r6);
+    PlayerProfile *playerProfile = PlayerProfile_New(HEAP_ID_53);
+    Save_Profile_PlayerName_Set(playerProfile, sub_0202C298(arg0->unk0, temp_r4));
+    BufferPlayersName(arg0->unkB1C.unk0, 0, playerProfile);
+    Heap_Free(playerProfile);
     // GROUP
     ReadMsgDataIntoString(arg0->unk168, msg_0778_00043, arg0->unk178);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 32, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
@@ -4429,7 +4358,7 @@ void ov44_02230300(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
     // L: {STRVAR_1 53, 0, 0}
     ReadMsgDataIntoString(arg0->unk168, msg_0778_00046, arg0->unk170);
     StringExpandPlaceholders(arg0->unkB1C.unk0, arg0->unk178, arg0->unk170);
-    
+
     width = 232 - FontID_String_GetWidth(0, arg0->unk178, 0);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, width, 56, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     // POKéMON TRADES
@@ -4480,7 +4409,7 @@ void ov44_02230300(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
     ov44_0222ABDC(arg0->unk15C, &arg0->unkB0C, 6, 28, 2, var_r1, 0);
 }
 
-void ov44_022307E0(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
+void ov44_022307E0(UnkStruct_ov44_022319EC *arg0, enum HeapID heapID) {
     s32 temp_r4 = arg0->unkB1C.unk71 - 1;
     // BATTLE TOWER
     ReadMsgDataIntoString(arg0->unk168, msg_0778_00052, arg0->unk178);
@@ -4494,7 +4423,7 @@ void ov44_022307E0(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
     ov44_02231054(arg0, 65, 112, temp_r4, 120, 48);
 }
 
-void ov44_022308B0(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
+void ov44_022308B0(UnkStruct_ov44_022319EC *arg0, enum HeapID heapID) {
     s32 temp_r4 = arg0->unkB1C.unk71 - 1;
     // BATTLE FACTORY
     ReadMsgDataIntoString(arg0->unk168, msg_0778_00053, arg0->unk178);
@@ -4504,7 +4433,7 @@ void ov44_022308B0(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 24, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     // RENTAL/TRADE
     ReadMsgDataIntoString(arg0->unk168, msg_0778_00062, arg0->unk178);
-    
+
     u32 width = 232 - FontID_String_GetWidth(0, arg0->unk178, 0);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, width, 24, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     ov44_02231084(arg0, arg0->unk178, 1, temp_r4);
@@ -4535,15 +4464,15 @@ void ov44_022308B0(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
     ov44_02231054(arg0, 66, 120, temp_r4, 212, 128);
 }
 
-void ov44_02230B2C(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
+void ov44_02230B2C(UnkStruct_ov44_022319EC *arg0, enum HeapID heapID) {
     s32 temp_r4 = arg0->unkB1C.unk71 - 1;
     // BATTLE CASTLE
     ReadMsgDataIntoString(arg0->unk168, msg_0778_00054, arg0->unk178);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 0, 255, MAKE_TEXT_COLOR(15, 14, 0), 0);
     // CASTLE POINTS
     ReadMsgDataIntoString(arg0->unk168, msg_0778_00063, arg0->unk178);
-    
-    u32 width = 180 -(FontID_String_GetWidth(0, arg0->unk178, 0) + 1) / 2;
+
+    u32 width = 180 - (FontID_String_GetWidth(0, arg0->unk178, 0) + 1) / 2;
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, width, 24, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     ov44_02231084(arg0, arg0->unk178, 3, temp_r4);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 48, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
@@ -4556,13 +4485,13 @@ void ov44_02230B2C(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
     ov44_02231054(arg0, 67, 138, temp_r4, 212, 80);
 }
 
-void ov44_02230C68(UnkStruct_ov44_022319EC* arg0, enum HeapID arg1) {
-    FrontierSave* frontierSave = Save_Frontier_GetStatic(arg0->unk160);
+void ov44_02230C68(UnkStruct_ov44_022319EC *arg0, enum HeapID arg1) {
+    FrontierSave *frontierSave = Save_Frontier_GetStatic(arg0->saveData);
     s32 temp_r4 = arg0->unkB1C.unk71 - 1;
     // BATTLE HALL
     ReadMsgDataIntoString(arg0->unk168, msg_0778_00055, arg0->unk178);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 0, 255, MAKE_TEXT_COLOR(15, 14, 0), 0);
-    String* temp_r0 = GetSpeciesName(FrontierSave_GetStat(frontierSave, 124, temp_r4), arg1);
+    String *temp_r0 = GetSpeciesName(FrontierSave_GetStat(frontierSave, 124, temp_r4), arg1);
     u32 width = 33 - (FontID_String_GetWidth(0, temp_r0, 0) + 1) / 2;
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, temp_r0, width, 24, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     String_Delete(temp_r0);
@@ -4575,7 +4504,7 @@ void ov44_02230C68(UnkStruct_ov44_022319EC* arg0, enum HeapID arg1) {
     ov44_02231054(arg0, 65, 122, temp_r4, 108, 80);
 }
 
-void ov44_02230D8C(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
+void ov44_02230D8C(UnkStruct_ov44_022319EC *arg0, enum HeapID heapID) {
     s32 temp_r4 = arg0->unkB1C.unk71 - 1;
     // BATTLE ARCADE
     ReadMsgDataIntoString(arg0->unk168, msg_0778_00056, arg0->unk178);
@@ -4589,8 +4518,8 @@ void ov44_02230D8C(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
     ov44_02231054(arg0, 69, 142, temp_r4, 112, 48);
 }
 
-void ov44_02230E5C(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
-    UnkStruct_021D2230* temp_r6 = sub_0202C6F4(arg0->unk160);
+void ov44_02230E5C(UnkStruct_ov44_022319EC *arg0, enum HeapID heapID) {
+    UnkStruct_021D2230 *temp_r6 = sub_0202C6F4(arg0->saveData);
     s32 temp_r4 = arg0->unkB1C.unk71 - 1;
     // PLAZA GAMES PLAYED
     ReadMsgDataIntoString(arg0->unk168, msg_0778_00070, arg0->unk178);
@@ -4618,22 +4547,22 @@ void ov44_02230E5C(UnkStruct_ov44_022319EC* arg0, enum HeapID heapID) {
     ov44_022310C8(arg0, msg_0778_00072, sub_0202C090(temp_r6, temp_r4, 12), 164, 72);
 }
 
-void ov44_02230FE8(UnkStruct_ov44_022319EC* arg0) {
+void ov44_02230FE8(UnkStruct_ov44_022319EC *arg0) {
     for (s32 i = 0; i < 5; i++) {
         CopyToBgTilemapRect(arg0->unk15C, 6, i + 26, 0, 1, 1, &arg0->unkB1C.unk48->rawData[0], 0, 0, arg0->unkB1C.unk48->screenWidth / 8, arg0->unkB1C.unk48->screenHeight / 8);
     }
     BgTilemapRectChangePalette(arg0->unk15C, 6, 26, 0, 5, 1, 6);
 }
 
-void ov44_02231054(UnkStruct_ov44_022319EC* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
-    ov44_022310C8(arg0, arg1, FrontierSave_GetStat(Save_Frontier_GetStatic(arg0->unk160), arg2, arg3), arg4, arg5);
+void ov44_02231054(UnkStruct_ov44_022319EC *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
+    ov44_022310C8(arg0, arg1, FrontierSave_GetStat(Save_Frontier_GetStatic(arg0->saveData), arg2, arg3), arg4, arg5);
 }
 
-void ov44_02231084(UnkStruct_ov44_022319EC* arg0, String* arg1, u32 arg2, s32 arg3) {
+void ov44_02231084(UnkStruct_ov44_022319EC *arg0, String *arg1, u32 arg2, s32 arg3) {
 
     GF_ASSERT(arg2 < 6);
     s32 var_r1;
-    if (FrontierSave_GetStat(Save_Frontier_GetStatic(arg0->unk160), ov44_022353D0[arg2], arg3) == 0) {
+    if (FrontierSave_GetStat(Save_Frontier_GetStatic(arg0->saveData), ov44_022353D0[arg2], arg3) == 0) {
         // PREV
         var_r1 = msg_0778_00057;
     } else {
@@ -4643,7 +4572,7 @@ void ov44_02231084(UnkStruct_ov44_022319EC* arg0, String* arg1, u32 arg2, s32 ar
     ReadMsgDataIntoString(arg0->unk168, var_r1, arg1);
 }
 
-void ov44_022310C8(UnkStruct_ov44_022319EC* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+void ov44_022310C8(UnkStruct_ov44_022319EC *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     BufferIntegerAsString(arg0->unkB1C.unk0, 0, arg2, 4, PRINTING_MODE_RIGHT_ALIGN, TRUE);
     ReadMsgDataIntoString(arg0->unk168, arg1, arg0->unk170);
     StringExpandPlaceholders(arg0->unkB1C.unk0, arg0->unk178, arg0->unk170);
@@ -4651,7 +4580,7 @@ void ov44_022310C8(UnkStruct_ov44_022319EC* arg0, s32 arg1, s32 arg2, s32 arg3, 
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, width, arg4, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
 }
 
-void ov44_02231148(UnkStruct_ov44_022319EC* arg0, u8 arg1, u8 arg2, u8 arg3, u8 arg4) {
+void ov44_02231148(UnkStruct_ov44_022319EC *arg0, u8 arg1, u8 arg2, u8 arg3, u8 arg4) {
     GF_ASSERT(arg4 < 4);
     if (arg4 == 3) {
         arg4 = 1;
@@ -4665,7 +4594,7 @@ void ov44_02231148(UnkStruct_ov44_022319EC* arg0, u8 arg1, u8 arg2, u8 arg3, u8 
     BgTilemapRectChangePalette(arg0->unk15C, 6, arg1, arg2, 16, 6, arg3 + 4);
 }
 
-s32 ov44_0223120C(u32 arg0, s32* color) {
+s32 ov44_0223120C(u32 arg0, s32 *color) {
     *color = MAKE_TEXT_COLOR(1, 2, 0);
     s32 ret = 0;
     switch (arg0) {
@@ -4714,7 +4643,7 @@ s32 ov44_0223120C(u32 arg0, s32* color) {
     case 20:
         ret = 33;
         *color = MAKE_TEXT_COLOR(2, 14, 0);
-        break;    
+        break;
     case 21:
         ret = 32;
         break;
@@ -4738,7 +4667,7 @@ s32 ov44_0223120C(u32 arg0, s32* color) {
     return ret;
 }
 
-void ov44_022312B8(UnkStruct_ov44_022319EC* arg0, Window* arg1, s32 arg2, s32 arg3, s32 arg4) {    
+void ov44_022312B8(UnkStruct_ov44_022319EC *arg0, Window *arg1, s32 arg2, s32 arg3, s32 arg4) {
     FillWindowPixelBuffer(arg1, 0);
     u8 temp_r7 = ov44_02235364[arg3];
     s32 sp14 = arg2 - 1;
@@ -4756,12 +4685,12 @@ void ov44_022312B8(UnkStruct_ov44_022319EC* arg0, Window* arg1, s32 arg2, s32 ar
     ScheduleWindowCopyToVram(arg1);
 }
 
-void ov44_02231344(UnkStruct_ov44_022319EC* arg0, Window* arg1, s32 arg2, u32 arg3, u32 arg4) {
+void ov44_02231344(UnkStruct_ov44_022319EC *arg0, Window *arg1, s32 arg2, u32 arg3, u32 arg4) {
     s32 var_r0;
-    UnkStruct_ov44_02231958* spC = ov44_02231958(arg0, arg2 - 1);
+    UnkStruct_ov44_02231958 *spC = ov44_02231958(arg0, arg2 - 1);
     u32 sp8 = ov44_02229F00(arg0, spC);
     u32 temp_r7 = ov44_02235364[arg3];
-    for (s32 i = 0; i < 2; i ++) {
+    for (s32 i = 0; i < 2; i++) {
         FillWindowPixelBuffer(&arg1[i], 0);
         if (i == 0) {
             ov44_0222AD34(&arg1[i], &arg0->unkB0C, 0, temp_r7, sp8);
@@ -4777,7 +4706,7 @@ void ov44_02231344(UnkStruct_ov44_022319EC* arg0, Window* arg1, s32 arg2, u32 ar
     }
 }
 
-void ov44_022313C8(UnkStruct_ov44_022319EC* arg0) {
+void ov44_022313C8(UnkStruct_ov44_022319EC *arg0) {
     if (arg0->unkB1C.unk71 != 0) {
         arg0->unkB1C.unk76++;
         if (arg0->unkB1C.unk76 >= ov44_02235368[arg0->unkB1C.unk72]) {
@@ -4793,7 +4722,7 @@ void ov44_022313C8(UnkStruct_ov44_022319EC* arg0) {
     }
 }
 
-void ov44_02231420(UnkStruct_ov44_022319EC* arg0, NARC* arg1, enum HeapID arg2) {
+void ov44_02231420(UnkStruct_ov44_022319EC *arg0, NARC *arg1, enum HeapID arg2) {
     SpriteTemplate spriteTemplateList[3];
     spriteTemplateList = ov44_02235570;
 
@@ -4806,7 +4735,7 @@ void ov44_02231420(UnkStruct_ov44_022319EC* arg0, NARC* arg1, enum HeapID arg2) 
     GF_ASSERT(sub_0200B00C(arg0->unkB1C.unk20C[1]) != 0);
     sub_0200A740(arg0->unkB1C.unk20C[0]);
     sub_0200A740(arg0->unkB1C.unk20C[1]);
-    
+
     SpriteResourcesHeader spriteResourcesHeader;
     CreateSpriteResourcesHeader(&spriteResourcesHeader, 30, 30, 30, 30, -1, -1, 0, 0, arg0->unk2BC[0], arg0->unk2BC[1], arg0->unk2BC[2], arg0->unk2BC[3], 0, 0);
     for (s32 i = 0; i < 3; i++) {
@@ -4820,20 +4749,20 @@ void ov44_02231420(UnkStruct_ov44_022319EC* arg0, NARC* arg1, enum HeapID arg2) 
     Window window;
     InitWindow(&window);
     AddTextWindowTopLeftCorner(arg0->unk15C, &window, 8, 2, 0, 0);
-    String* string = String_New(64, arg2);
+    String *string = String_New(64, arg2);
     // CLOSE
     ReadMsgDataIntoString(arg0->unk168, msg_0778_00073, string);
     AddTextPrinterParameterizedWithColor(&window, 2, string, FontID_String_GetCenterAlignmentX(2, string, 0, 64), 0, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     String_Delete(string);
-    UnkStruct_02013910* temp_r0_4 = sub_02013910(&window, arg2);
+    UnkStruct_02013910 *temp_r0_4 = sub_02013910(&window, arg2);
     GF_ASSERT(sub_02021AC8(sub_02013948(temp_r0_4, NNS_G2D_VRAM_TYPE_2DSUB), TRUE, NNS_G2D_VRAM_TYPE_2DSUB, &arg0->unkB1C.unk228) != 0);
-    
+
     TextOBJTemplate textObjTemplate;
     textObjTemplate.fontSystem = arg0->unk2CC;
     textObjTemplate.window = &window;
     textObjTemplate.spriteList = arg0->unk190;
     textObjTemplate.plttResourceProxy = SpriteTransfer_GetPaletteProxy(arg0->unkB1C.unk20C[1], NULL);
-    textObjTemplate.sprite = arg0->unkB1C.unk21C[1]; 
+    textObjTemplate.sprite = arg0->unkB1C.unk21C[1];
     textObjTemplate.offset = arg0->unkB1C.unk228.offset;
     textObjTemplate.x = -32;
     textObjTemplate.y = -8;
@@ -4848,7 +4777,7 @@ void ov44_02231420(UnkStruct_ov44_022319EC* arg0, NARC* arg1, enum HeapID arg2) 
     arg0->unkB1C.unk244 = TouchHitboxController_Create(ov44_02235394, 3, (TouchHitboxControllerCallback)ov44_022317F0, arg0, arg2);
 }
 
-void ov44_022316B0(UnkStruct_ov44_022319EC* arg0) {
+void ov44_022316B0(UnkStruct_ov44_022319EC *arg0) {
     TouchHitboxController_Destroy(arg0->unkB1C.unk244);
     TextOBJ_Destroy(arg0->unkB1C.unk234);
     sub_02021B5C(&arg0->unkB1C.unk228);
@@ -4864,7 +4793,7 @@ void ov44_022316B0(UnkStruct_ov44_022319EC* arg0) {
     }
 }
 
-void ov44_02231720(UnkStruct_ov44_022319EC* arg0) {
+void ov44_02231720(UnkStruct_ov44_022319EC *arg0) {
     arg0->unkB1C.unk238 = 1;
     GfGfx_EngineBTogglePlanes(16, 1);
     arg0->unkB1C.unk23C = 0;
@@ -4873,7 +4802,7 @@ void ov44_02231720(UnkStruct_ov44_022319EC* arg0) {
     }
 }
 
-void ov44_02231754(UnkStruct_ov44_022319EC* arg0) {
+void ov44_02231754(UnkStruct_ov44_022319EC *arg0) {
     if (arg0->unkB1C.unk238 == 2) {
         Sprite_SetDrawFlag(arg0->unkB1C.unk21C[1], 1);
         TextOBJ_SetSpritesDrawFlag(arg0->unkB1C.unk234, 1);
@@ -4882,7 +4811,7 @@ void ov44_02231754(UnkStruct_ov44_022319EC* arg0) {
     GfGfx_EngineBTogglePlanes(16, 0);
 }
 
-s32 ov44_02231788(UnkStruct_ov44_022319EC* arg0) {
+s32 ov44_02231788(UnkStruct_ov44_022319EC *arg0) {
     if (arg0->unkB1C.unk238 == 0) {
         return 0;
     }
@@ -4890,20 +4819,20 @@ s32 ov44_02231788(UnkStruct_ov44_022319EC* arg0) {
     arg0->unkB1C.unk240 = 255;
     TouchHitboxController_IsTriggered(arg0->unkB1C.unk244);
 
-    for (s32 i = 0; i < 3; i ++){
+    for (s32 i = 0; i < 3; i++) {
         if ((arg0->unkB1C.unk238 != 2 || i != 1) && ov44_0223183C(&arg0->unkB1C, i, arg0->unkB1C.unk23C, arg0->unkB1C.unk240) == 1) {
             return i + 1;
         }
-    } 
+    }
     return 0;
 }
 
-void ov44_022317F0(u32 arg0, u32 arg1, UnkStruct_ov44_022319EC* arg2) {
+void ov44_022317F0(u32 arg0, u32 arg1, UnkStruct_ov44_022319EC *arg2) {
     arg2->unkB1C.unk23C = arg0;
     arg2->unkB1C.unk240 = arg1;
 }
 
-void ov44_02231800(UnkStruct_ov44_02231800* arg0, s32 arg1) {
+void ov44_02231800(UnkStruct_ov44_02231800 *arg0, s32 arg1) {
     Sprite_SetAnimCtrlSeq(arg0->unk21C[arg1], _0223535C[arg1]);
     Sprite_SetAnimationFrame(arg0->unk21C[arg1], 4);
     if (arg1 == 1) {
@@ -4911,7 +4840,7 @@ void ov44_02231800(UnkStruct_ov44_02231800* arg0, s32 arg1) {
     }
 }
 
-s32 ov44_0223183C(UnkStruct_ov44_02231800* arg0, s32 arg1, s32 arg2, s32 arg3) {
+s32 ov44_0223183C(UnkStruct_ov44_02231800 *arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 sp8 = 0;
     if (arg2 == arg1) {
         u32 temp_r0 = Sprite_GetAnimationFrame(arg0->unk21C[arg1]);
@@ -4929,8 +4858,7 @@ s32 ov44_0223183C(UnkStruct_ov44_02231800* arg0, s32 arg1, s32 arg2, s32 arg3) {
                     sp8 = 1;
                 }
             }
-        }
-        else if (arg3 == 1 && temp_r0 < 3) {
+        } else if (arg3 == 1 && temp_r0 < 3) {
             sp8 = 1;
         }
     } else {
@@ -4945,16 +4873,16 @@ s32 ov44_0223183C(UnkStruct_ov44_02231800* arg0, s32 arg1, s32 arg2, s32 arg3) {
     return sp8;
 }
 
-void ov44_02231918(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+void ov44_02231918(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (arg1 != -1) {
-        PlayerProfile* playerProfile = PlayerProfile_New(HEAP_ID_53);
+        PlayerProfile *playerProfile = PlayerProfile_New(HEAP_ID_53);
         Save_Profile_PlayerName_Set(playerProfile, sub_0202C254(arg0->unk0, arg1));
         BufferPlayersName(arg0->unkB1C.unk0, 0, playerProfile);
         Heap_Free(playerProfile);
     }
 }
 
-UnkStruct_ov44_02231958* ov44_02231958(UnkStruct_ov44_022319EC* arg0, u32 arg1) {
+UnkStruct_ov44_02231958 *ov44_02231958(UnkStruct_ov44_022319EC *arg0, u32 arg1) {
     if (arg1 >= 32) {
         return &arg0->unk1098;
     }
@@ -4965,7 +4893,7 @@ s32 ov44_02231974(s32 arg0) {
     return ov00_021E6D68(arg0);
 }
 
-s32 ov44_0223197C(UnkStruct_ov44_022319EC* arg0, s32 arg1, s32 arg2) {
+s32 ov44_0223197C(UnkStruct_ov44_022319EC *arg0, s32 arg1, s32 arg2) {
     sub_020379A0(HEAP_ID_15);
     ov00_021E70B8(arg0->unk4->unk0.unk21);
     if (ov44_02229F44(arg2) == 1) {
@@ -4977,7 +4905,7 @@ s32 ov44_0223197C(UnkStruct_ov44_022319EC* arg0, s32 arg1, s32 arg2) {
     return sub_02039080(arg1);
 }
 
-void ov44_022319BC(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
+void ov44_022319BC(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (arg0->unkD64 == 0) {
         arg0->unkD64 = 1;
         ov44_02231D94(&arg0->unk38C, 1);
@@ -4987,7 +4915,7 @@ void ov44_022319BC(UnkStruct_ov44_022319EC* arg0, s32 arg1) {
     }
 }
 
-void ov44_022319EC(UnkStruct_ov44_022319EC* arg0) {
+void ov44_022319EC(UnkStruct_ov44_022319EC *arg0) {
     if (arg0->unkD64 == 1) {
         arg0->unkD64 = 0;
         ov44_0222F7BC(arg0);

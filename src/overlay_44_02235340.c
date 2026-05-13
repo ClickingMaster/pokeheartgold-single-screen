@@ -1,5 +1,7 @@
 #include "global.h"
 
+#include "constants/sndseq.h"
+
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0778.h"
 
@@ -28,7 +30,6 @@
 #include "unk_0203A3B0.h"
 #include "unk_020971F8.h"
 #include "vram_transfer_manager.h"
-#include "constants/sndseq.h"
 
 // const u8 ov44_02236458[4] = {0x08, 0x00, 0x04, 0x0C};
 // const WindowTemplate ov44_0223645C = {2, 25, 13, 5, 4, 1, 57};
@@ -678,16 +679,16 @@ s32 ov44_02233E6C(UnkStruct_ov44_02235340 *arg0) {
 }
 
 s32 ov44_02233E80(u32 arg0, u32 arg1) {
-    s32 var_r5 = sub_02039080(arg0); 
-    if (var_r5 == 1 ) {
-        switch(arg1) {
-            case 0:
-                sub_02039AF8();
-                break;
-            case 1:
-            case 2:
-            case 3:
-                sub_02039B18();
+    s32 var_r5 = sub_02039080(arg0);
+    if (var_r5 == 1) {
+        switch (arg1) {
+        case 0:
+            sub_02039AF8();
+            break;
+        case 1:
+        case 2:
+        case 3:
+            sub_02039B18();
         }
     }
     return var_r5;
@@ -948,7 +949,7 @@ void ov44_0223435C(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_022341C0 *arg1)
 void ov44_02234388(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_022341C0 *arg1) {
 }
 
-void ov44_0223438C(UnkStruct_ov44_02235340* arg0) {
+void ov44_0223438C(UnkStruct_ov44_02235340 *arg0) {
     int sp0 = 0;
     if (sub_02034420() != 0) {
         int sp_count = sub_020347A0();
@@ -1046,7 +1047,7 @@ s32 ov44_022344C4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
             }
         }
     }
-    if (1 & gSystem.newKeys) {
+    if (gSystem.newKeys & PAD_BUTTON_A) {
         PlaySE(SEQ_SE_DP_DECIDE);
         if (ov44_02233E6C(arg0) == 0) {
             arg0->unk5 = 6;
@@ -1055,13 +1056,13 @@ s32 ov44_022344C4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
         } else {
             arg0->unk5 = 6;
         }
-    } else if (gSystem.newKeys & 2) {
+    } else if (gSystem.newKeys & PAD_BUTTON_B) {
         PlaySE(SEQ_SE_DP_DECIDE);
         arg0->unk5 = 22;
     } else if (arg0->unk6 != 255) {
         PlaySE(SEQ_SE_DP_DECIDE);
         arg0->unk5 = 3;
-    } else if (gSystem.newKeys & 1024) {
+    } else if (gSystem.newKeys & PAD_BUTTON_X) {
         arg0->unk5 = 30;
         PlaySE(SEQ_SE_DP_DECIDE);
     }
@@ -1576,7 +1577,7 @@ s32 ov44_02234E08(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
         arg0->unk8 = 300;
         ov44_022342B8(arg0);
         arg0->unk5 = 11;
-    } else if (1024 & gSystem.newKeys) {
+    } else if (gSystem.newKeys & PAD_BUTTON_X) {
         ov44_022342E0(arg0, arg1, heapID);
         arg0->unk5 = 18;
     }

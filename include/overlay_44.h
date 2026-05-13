@@ -2,15 +2,15 @@
 #define POKEHEARTGOLD_OVY_44_H
 
 #include "global.h"
-#include "overlay_44_02232E9C.h"
 
 #include "heap.h"
 #include "list_menu_2d.h"
 #include "main.h"
+#include "overlay_44_02232E9C.h"
 #include "render_window.h"
 #include "sprite.h"
-#include "yes_no_prompt.h"
 #include "unk_02009D48.h"
+#include "yes_no_prompt.h"
 
 typedef struct UnkStruct_ov44_022341C0 {
     u32 unk0;
