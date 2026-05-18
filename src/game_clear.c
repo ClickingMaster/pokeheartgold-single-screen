@@ -9,6 +9,7 @@
 #include "msgdata/msg/msg_0040.h"
 
 #include "bg_window.h"
+#include "field_bgm.h"
 #include "game_stats.h"
 #include "hall_of_fame.h"
 #include "launch_application.h"
@@ -27,7 +28,6 @@
 #include "text.h"
 #include "unk_02005D10.h"
 #include "unk_0200FA24.h"
-#include "field_bgm.h"
 #include "unk_020552A4.h"
 #include "unk_02055418.h"
 #include "unk_0206793C.h"
