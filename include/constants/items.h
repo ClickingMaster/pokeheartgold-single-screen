@@ -839,8 +839,9 @@
 #define HM_WATERFALL    ITEM_HM07
 #define HM_ROCK_CLIMB   ITEM_HM08
 
-#define NUM_TMS 92
-#define NUM_HMS 8
+#define NUM_TMS   92
+#define NUM_HMS   8
+#define NUM_TMHMS 100
 
 // Key Items
 #define ITEM_EXPLORER_KIT 428
