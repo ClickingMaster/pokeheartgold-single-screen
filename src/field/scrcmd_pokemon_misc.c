@@ -9,7 +9,6 @@
 #include "msgdata/msg/msg_0096_D31R0201.h"
 #include "overlay_2/overlay_02_02251E74.h"
 #include "overlay_2/overlay_02_gear_phone.h"
-
 #include "pokeathlon/pokeathlon_save.h"
 
 #include "bag.h"

@@ -22,6 +22,7 @@
 #define GAME_STAT_MONS_SENT_TO_DAYCARE      41
 #define GAME_STAT_OPPONENT_MON_FAINTED      42
 #define GAME_STAT_UNK46                     46
+#define GAME_STAT_NICKNAMES_GIVEN           50
 #define GAME_STAT_BATTLE_POINTS             69
 #define GAME_STAT_UNK70                     70
 #define GAME_STAT_UNK74                     74

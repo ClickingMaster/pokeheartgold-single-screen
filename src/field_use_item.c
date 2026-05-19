@@ -10,6 +10,7 @@
 
 #include "alph_checks.h"
 #include "bag_view.h"
+#include "field_bgm.h"
 #include "follow_mon.h"
 #include "launch_application.h"
 #include "map_header.h"
@@ -35,7 +36,6 @@
 #include "unk_0200FA24.h"
 #include "unk_0203DB6C.h"
 #include "unk_02054648.h"
-#include "field_bgm.h"
 #include "unk_02062108.h"
 #include "unk_02066EDC.h"
 

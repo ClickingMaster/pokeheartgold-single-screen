@@ -6,8 +6,11 @@
 #include "heap.h"
 #include "list_menu_2d.h"
 #include "main.h"
+#include "overlay_44_02232E9C.h"
 #include "render_window.h"
+#include "sprite.h"
 #include "unk_02009D48.h"
+#include "yes_no_prompt.h"
 
 typedef struct UnkStruct_ov44_022341C0 {
     u32 unk0;
@@ -60,7 +63,7 @@ typedef struct UnkStruct_ov44_02232F64 {
 } UnkStruct_ov44_02232F64;
 
 typedef struct UnkStruct_ov44_02235340 {
-    u8 *unk0;
+    UnkStruct_ov44_02231958 *unk0;
     u8 unk4;
     u8 unk5;
     u8 unk6;
