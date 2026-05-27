@@ -3,5 +3,6 @@
 
 void sub_02034D8C(void);
 BOOL sub_02035650(void);
+BOOL sub_02034DB8(void);
 
 #endif // POKEHEARTGOLD_UNK_02034B0C_H
