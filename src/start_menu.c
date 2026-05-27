@@ -10,6 +10,7 @@
 #include "msgdata/msg/msg_0196.h"
 
 #include "bag_view.h"
+#include "field_bgm.h"
 #include "field_move.h"
 #include "field_move_environment.h"
 #include "field_system.h"
@@ -34,7 +35,6 @@
 #include "unk_0200FA24.h"
 #include "unk_02034B0C.h"
 #include "unk_02037C94.h"
-#include "field_bgm.h"
 #include "unk_0205A44C.h"
 #include "unk_0205AC88.h"
 #include "unk_0205CB48.h"

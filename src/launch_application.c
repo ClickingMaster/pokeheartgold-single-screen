@@ -14,6 +14,7 @@
 #include "certificates_app.h"
 #include "choose_starter_app.h"
 #include "fashion_case.h"
+#include "field_bgm.h"
 #include "field_system.h"
 #include "friend_group.h"
 #include "frontier_data.h"
@@ -73,7 +74,6 @@
 #include "unk_0202D230.h"
 #include "unk_0202DB34.h"
 #include "unk_02037C94.h"
-#include "field_bgm.h"
 #include "unk_02055244.h"
 #include "unk_020552A4.h"
 #include "unk_02055418.h"
@@ -1253,7 +1253,7 @@ void MoveRelearner_LaunchApp(FieldSystem *menuInputStatePtr, MoveRelearnerArgs *
 void HatchEggInParty(FieldSystem *fieldSystem) {
     UnkStruct_02091240 data;
 
-    Pokemon *mon = sub_0206CE44(SaveArray_Party_Get(fieldSystem->saveData));
+    Pokemon *mon = Party_GetMonToHatch(SaveArray_Party_Get(fieldSystem->saveData));
     GF_ASSERT(mon != NULL);
 
     data.mon = mon;

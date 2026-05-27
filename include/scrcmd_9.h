@@ -5,13 +5,13 @@
 #include "mail_message.h"
 #include "save.h"
 
-#define TOWER_MODE_SINGLE               0
-#define TOWER_MODE_DOUBLE               1
-#define TOWER_MODE_MULTI                2
-#define TOWER_MODE_LINK                 3
-#define TOWER_MODE_WIFI                 4
-#define TOWER_MODE_WIFI_PRACTICE        5
-#define TOWER_MODE_6                    6
+#define TOWER_MODE_SINGLE        0
+#define TOWER_MODE_DOUBLE        1
+#define TOWER_MODE_MULTI         2
+#define TOWER_MODE_LINK          3
+#define TOWER_MODE_WIFI          4
+#define TOWER_MODE_WIFI_PRACTICE 5
+#define TOWER_MODE_6             6
 
 typedef struct FrontierMon {
     u16 species : 11;
@@ -76,7 +76,7 @@ typedef struct FrontierFieldSystem {
     u16 linkAllyRound; // Takes precedence over currentRound in Link Mode if it is higher.
     u16 linkAllyMonSpecies[2];
     u16 currentBattleInSession; // Battles won in this session.
-    u16 currentRound; // Rounds (sets of 7 battles) won in the current streak.
+    u16 currentRound;           // Rounds (sets of 7 battles) won in the current streak.
     u8 filler1e[2];
     u32 totalTowerWins;
     u16 unk24;
