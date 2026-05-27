@@ -19,6 +19,7 @@
 #define GAME_STAT_BADGE_GET                 22
 #define GAME_STAT_UNK26                     26
 #define GAME_STAT_BATTLE_TOWER_WIN_COUNT    30
+#define GAME_STAT_MONS_SENT_TO_DAYCARE      41
 #define GAME_STAT_OPPONENT_MON_FAINTED      42
 #define GAME_STAT_UNK46                     46
 #define GAME_STAT_NICKNAMES_GIVEN           50
