@@ -1581,10 +1581,10 @@ ov52_021E8DC4: ; 0x021E8DC4
 	b _021E8E46
 _021E8DDE:
 	ldr r0, [r5, #8]
-	mov r1, #4
+	mov r1, #4 ; SCORE_EVENT_TRAINER_CARD_SIGNED
 	bl GameStats_AddScore
 	ldr r0, [r5, #8]
-	mov r1, #0x73
+	mov r1, #0x73 ; GAME_STAT_TRAINER_CARDS_SIGNED
 	bl GameStats_Inc
 	mov r0, #0xb5
 	lsl r0, r0, #2

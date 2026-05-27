@@ -16672,7 +16672,7 @@ _0223FDE2:
 	mov r1, #1
 	bl ov70_022409C0
 	ldr r0, [r4]
-	mov r1, #0x2d
+	mov r1, #0x2d ; GAME_STAT_UNK45
 	ldr r0, [r0, #0x28]
 	bl GameStats_Inc
 	mov r0, #0x1e
@@ -17627,10 +17627,10 @@ ov70_02240500: ; 0x02240500
 	ldr r0, [r5]
 	add r4, r1, #0
 	ldr r0, [r0, #0x28]
-	mov r1, #0x18
+	mov r1, #0x18 ; SCORE_EVENT_GTS_TRADE
 	bl GameStats_AddScore
 	ldr r0, [r5]
-	mov r1, #0x19
+	mov r1, #0x19 ; GAME_STAT_WIFI_TRADES
 	ldr r0, [r0, #0x28]
 	bl GameStats_Inc
 	add r0, r4, #0

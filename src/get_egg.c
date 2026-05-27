@@ -111,7 +111,7 @@ static void DaycareMon_CopyFromPartySlot(Party *party, int partyIdx, DaycareMon 
 }
 
 void Save_Daycare_PutMonIn(Party *party, u8 partyIdx, Daycare *dayCare, SaveData *saveData) {
-    GameStats_Inc(Save_GameStats_Get(saveData), 41);
+    GameStats_Inc(Save_GameStats_Get(saveData), GAME_STAT_MONS_SENT_TO_DAYCARE);
     DaycareMon_CopyFromPartySlot(party, partyIdx, Save_Daycare_GetMonX(dayCare, Save_Daycare_GetAvailableSlot(dayCare)), saveData);
 }
 

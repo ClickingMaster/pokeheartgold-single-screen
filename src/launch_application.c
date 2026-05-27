@@ -627,7 +627,7 @@ ApricornBoxArgs *ApricornBox_LaunchApp(FieldSystem *fieldSystem, int a1) {
     MI_CpuFill8(args, 0, sizeof(ApricornBoxArgs));
     args->saveData = FieldSystem_GetSaveData(fieldSystem);
     args->menuInputStatePtr = &fieldSystem->menuInputState;
-    args->unk10 = GameStats_GetCapped(Save_GameStats_Get(args->saveData), GAME_STAT_UNK0);
+    args->steps = GameStats_GetCapped(Save_GameStats_Get(args->saveData), GAME_STAT_STEPS_WALKED);
     if (a1 == 1 && !CheckFlag997(Save_VarsFlags_Get(fieldSystem->saveData))) {
         args->unk0 = 0;
     } else {
@@ -642,7 +642,7 @@ ApricornBoxArgs *sub_0203ED80(FieldSystem *fieldSystem, u32 a1, u16 *a2) {
     MI_CpuFill8(args, 0, sizeof(ApricornBoxArgs));
     args->saveData = FieldSystem_GetSaveData(fieldSystem);
     args->menuInputStatePtr = &fieldSystem->menuInputState;
-    args->unk10 = GameStats_GetCapped(Save_GameStats_Get(args->saveData), GAME_STAT_UNK0);
+    args->steps = GameStats_GetCapped(Save_GameStats_Get(args->saveData), GAME_STAT_STEPS_WALKED);
     args->unk0 = 3;
     args->unkC = a1;
     args->unk8 = a2;
@@ -976,7 +976,7 @@ static BOOL Task_WirelessTrade(TaskManager *taskman) {
         data->wirelessTradeSelectMon.unk30++;
         data->state = 2;
         GameStats *gameStats = Save_GameStats_Get(fieldSystem->saveData);
-        GameStats_AddScore(gameStats, SCORE_EVENT_16);
+        GameStats_AddScore(gameStats, SCORE_EVENT_LINK_TRADE);
         if (sub_02039998()) {
             GameStats_Inc(gameStats, GAME_STAT_UNK114);
         }

@@ -485,7 +485,7 @@ void FrontierFieldSystem_0204AE20(FrontierFieldSystem *frontierFsys, SaveData *s
     if (frontierFsys->towerMode != TOWER_MODE_6) {
         GameStats_Add(gameStats, GAME_STAT_BATTLE_TOWER_BATTLE_COUNT, 1);
     }
-    GameStats_AddScore(gameStats, SCORE_EVENT_14);
+    GameStats_AddScore(gameStats, SCORE_EVENT_BATTLE_TOWER_SET_WON);
     FrontierFieldSystem_0204B318(frontierFsys);
     sub_0204ACA0(frontierFsys, saveData, 1, unk6);
 }

@@ -91,7 +91,7 @@ _022354D8:
 	ldr r0, [r5, #8]
 	bl Save_GameStats_Get
 	ldrh r2, [r4]
-	mov r1, #0x45
+	mov r1, #0x45 ; GAME_STAT_BATTLE_POINTS
 	bl GameStats_Add
 	b _0223557E
 _022354EE:

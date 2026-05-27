@@ -10,6 +10,7 @@
 #include "constants/message_tags.h"
 #include "constants/move_effects.h"
 #include "constants/moves.h"
+#include "constants/game_stats.h"
 #include "constants/species.h"
 #include "constants/trainers.h"
 
@@ -2818,7 +2819,7 @@ BOOL BattleTryRun(BattleSystem *battleSystem, BattleContext *ctx, int battlerId)
             ret = TRUE;
         }
         if (!ret) {
-            BattleController_EmitIncrementGameStat(battleSystem, battlerId, 0, 99);
+            BattleController_EmitIncrementGameStat(battleSystem, battlerId, 0, GAME_STAT_RUN_FAILURES);
         }
         ctx->runAttempts++;
     }
