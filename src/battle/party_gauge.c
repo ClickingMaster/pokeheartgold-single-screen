@@ -200,10 +200,10 @@ u32 PartyGauge_IsHideTaskFinished(PartyGauge *partyGauge) {
             }
         }
         if (i == 6) {
-            return 1;
+            return TRUE;
         }
     }
-    return 0;
+    return FALSE;
 }
 
 void PartyGauge_DeleteAndFreeResources(PartyGauge *partyGauge) {

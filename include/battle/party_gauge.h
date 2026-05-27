@@ -15,7 +15,7 @@ typedef struct PartyGaugeArrow {
     u8 delay;
 } PartyGaugeArrow;
 
-typedef struct {
+typedef struct PartyGaugePokeballs {
     ManagedSprite *managedSprite;
     SysTask *task;
     u32 side;
