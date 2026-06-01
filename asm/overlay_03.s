@@ -5786,8 +5786,8 @@ Mart_Alloc: ; 0x02256D18
 	pop {r4, pc}
 	thumb_func_end Mart_Alloc
 
-	thumb_func_start Mart_Init
-Mart_Init: ; 0x02256D34
+	thumb_func_start Mart_InitUI
+Mart_InitUI: ; 0x02256D34
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r1, #0
 	add r7, r0, #0
@@ -5901,7 +5901,7 @@ _02256E04:
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
 _02256E28: .word Task_Mart
-	thumb_func_end Mart_Init
+	thumb_func_end Mart_InitUI
 
 	thumb_func_start Task_Mart
 Task_Mart: ; 0x02256E2C

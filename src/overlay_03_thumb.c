@@ -8,7 +8,9 @@
 
 extern UnkStruct_ov03* ov03_022598A0;
 
-static void ov03_02253E20(s32 strno, BOOL arg1) { // ov03 func #1
+void ov03_02253E20(s32 strno, BOOL arg1); // TODO: Make static
+
+void ov03_02253E20(s32 strno, BOOL arg1) {
     if (IsPrintFinished(ov03_022598A0->printerID) == FALSE) {
         RemoveTextPrinter(ov03_022598A0->printerID);
     }
@@ -24,3 +26,4 @@ static void ov03_02253E20(s32 strno, BOOL arg1) { // ov03 func #1
     sub_0205B564(&ov03_022598A0->windows[2], Save_PlayerData_GetOptionsAddr(ov03_022598A0->fieldSystem->saveData));
     ov03_022598A0->printerID = sub_0205B5B4(&ov03_022598A0->windows[2], ov03_022598A0->string[5], Save_PlayerData_GetOptionsAddr(ov03_022598A0->fieldSystem->saveData), TRUE);
 }
+

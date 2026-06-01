@@ -256,7 +256,8 @@
 .public ov03_02256730
 .public ov03_02256A2C
 .public ov03_02256B40
-.public ov03_02256E2C
+.public Mart_InitUI
+.public Task_Mart
 .public ov03_02257814
 .public ov03_02257978
 .public ov03_02258120
