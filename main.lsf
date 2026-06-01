@@ -580,6 +580,7 @@ Overlay OVY_2
 Overlay OVY_3
 {
     After OVY_2
+    Object src/overlay_03_thumb.o
     Object asm/overlay_03.o
 }
 Overlay OVY_4

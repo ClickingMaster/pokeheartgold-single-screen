@@ -4,91 +4,6 @@
 
 	.text
 
-	thumb_func_start ov03_02253E20
-ov03_02253E20: ; 0x02253E20
-	push {r3, r4, r5, lr}
-	add r5, r0, #0
-	ldr r0, _02253ECC ; =ov03_022598A0
-	add r4, r1, #0
-	ldr r0, [r0]
-	add r0, #0x94
-	ldrb r0, [r0]
-	bl IsPrintFinished
-	cmp r0, #0
-	bne _02253E42
-	ldr r0, _02253ECC ; =ov03_022598A0
-	ldr r0, [r0]
-	add r0, #0x94
-	ldrb r0, [r0]
-	bl RemoveTextPrinter
-_02253E42:
-	cmp r4, #0
-	beq _02253E64
-	ldr r0, _02253ECC ; =ov03_022598A0
-	add r1, r5, #0
-	ldr r2, [r0]
-	ldr r0, [r2, #0x74]
-	ldr r2, [r2, #0x10]
-	bl ReadMsgDataIntoString
-	ldr r0, _02253ECC ; =ov03_022598A0
-	ldr r2, [r0]
-	ldr r0, [r2, #0x58]
-	ldr r1, [r2, #0x14]
-	ldr r2, [r2, #0x10]
-	bl StringExpandPlaceholders
-	b _02253E72
-_02253E64:
-	ldr r0, _02253ECC ; =ov03_022598A0
-	add r1, r5, #0
-	ldr r2, [r0]
-	ldr r0, [r2, #0x74]
-	ldr r2, [r2, #0x14]
-	bl ReadMsgDataIntoString
-_02253E72:
-	ldr r0, _02253ECC ; =ov03_022598A0
-	ldr r0, [r0]
-	add r0, #0x40
-	bl WindowIsInUse
-	cmp r0, #0
-	bne _02253E90
-	ldr r0, _02253ECC ; =ov03_022598A0
-	mov r2, #3
-	ldr r1, [r0]
-	ldr r0, [r1, #0x68]
-	add r1, #0x40
-	ldr r0, [r0, #8]
-	bl sub_0205B514
-_02253E90:
-	ldr r0, _02253ECC ; =ov03_022598A0
-	ldr r0, [r0]
-	ldr r0, [r0, #0x68]
-	ldr r0, [r0, #0xc]
-	bl Save_PlayerData_GetOptionsAddr
-	add r1, r0, #0
-	ldr r0, _02253ECC ; =ov03_022598A0
-	ldr r0, [r0]
-	add r0, #0x40
-	bl sub_0205B564
-	ldr r0, _02253ECC ; =ov03_022598A0
-	ldr r4, [r0]
-	ldr r0, [r4, #0x68]
-	ldr r0, [r0, #0xc]
-	bl Save_PlayerData_GetOptionsAddr
-	add r2, r0, #0
-	add r0, r4, #0
-	ldr r1, [r4, #0x14]
-	add r0, #0x40
-	mov r3, #1
-	bl sub_0205B5B4
-	ldr r1, _02253ECC ; =ov03_022598A0
-	ldr r1, [r1]
-	add r1, #0x94
-	strb r0, [r1]
-	pop {r3, r4, r5, pc}
-	.balign 4, 0
-_02253ECC: .word ov03_022598A0
-	thumb_func_end ov03_02253E20
-
 	thumb_func_start ov03_02253ED0
 ov03_02253ED0: ; 0x02253ED0
 	push {r0, r1, r2, r3}
@@ -5855,8 +5770,8 @@ _02256D06:
 _02256D14: .word 0x00000283
 	thumb_func_end ov03_02256CB4
 
-	thumb_func_start ov03_02256D18
-ov03_02256D18: ; 0x02256D18
+	thumb_func_start Mart_Alloc
+Mart_Alloc: ; 0x02256D18
 	push {r4, lr}
 	mov r1, #0xa9
 	mov r0, #0xb
@@ -5869,16 +5784,16 @@ ov03_02256D18: ; 0x02256D18
 	bl memset
 	add r0, r4, #0
 	pop {r4, pc}
-	thumb_func_end ov03_02256D18
+	thumb_func_end Mart_Alloc
 
-	thumb_func_start InitMartUI
-InitMartUI: ; 0x02256D34
+	thumb_func_start Mart_Init
+Mart_Init: ; 0x02256D34
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r1, #0
 	add r7, r0, #0
 	str r2, [sp]
 	add r6, r3, #0
-	bl ov03_02256D18
+	bl Mart_Alloc
 	add r4, r0, #0
 	ldr r0, [r5, #8]
 	mov r1, #0xb
@@ -5979,17 +5894,17 @@ _02256E04:
 	ldr r3, [sp, #0x20]
 	add r0, r4, #0
 	bl ov03_02256CB4
-	ldr r1, _02256E28 ; =ov03_02256E2C
+	ldr r1, _02256E28 ; =Task_Mart
 	add r0, r7, #0
 	add r2, r4, #0
 	bl TaskManager_Call
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
-_02256E28: .word ov03_02256E2C
-	thumb_func_end InitMartUI
+_02256E28: .word Task_Mart
+	thumb_func_end Mart_Init
 
-	thumb_func_start ov03_02256E2C
-ov03_02256E2C: ; 0x02256E2C
+	thumb_func_start Task_Mart
+Task_Mart: ; 0x02256E2C
 	push {r3, r4, r5, r6, r7, lr}
 	add r6, r0, #0
 	bl TaskManager_GetFieldSystem
@@ -6037,7 +5952,7 @@ _02256E52: ; jump table
 	.short _0225701E - _02256E52 - 2 ; case 26
 	.short _0225702C - _02256E52 - 2 ; case 27
 _02256E8A:
-	bl ov03_0225706C
+	bl MartTask_InitMartMessageData
 	ldr r0, _02257068 ; =0x00000273
 	ldrb r1, [r4, r0]
 	cmp r1, #0
@@ -6054,7 +5969,7 @@ _02256E9E:
 _02256EA6:
 	add r0, r5, #0
 	add r1, r4, #0
-	bl ov03_022570D4
+	bl Mart_AllocCamera
 	add r0, r5, #0
 	mov r1, #2
 	add r2, r4, #0
@@ -6175,7 +6090,7 @@ _02256F7C:
 	str r0, [r4, r1]
 	b _02257036
 _02256F9A:
-	bl ov03_02257E6C
+	bl MartData_PerformTransaction
 	ldr r1, _02257064 ; =0x00000272
 	strb r0, [r4, r1]
 	b _02257036
@@ -6200,7 +6115,7 @@ _02256FC2:
 	strb r0, [r4, r1]
 	b _02257036
 _02256FCC:
-	bl ov03_022572EC
+	bl MartData_RestoreBgPriorities
 	add r0, r5, #0
 	add r1, r4, #0
 	bl ov03_02258164
@@ -6279,18 +6194,18 @@ _02257060:
 	.balign 4, 0
 _02257064: .word 0x00000272
 _02257068: .word 0x00000273
-	thumb_func_end ov03_02256E2C
+	thumb_func_end Task_Mart
 
-	thumb_func_start ov03_0225706C
-ov03_0225706C: ; 0x0225706C
-	ldr r3, _02257070 ; =ov03_02257074
+	thumb_func_start MartTask_InitMartMessageData
+MartTask_InitMartMessageData: ; 0x0225706C
+	ldr r3, _02257070 ; =Mart_AllocMessageData
 	bx r3
 	.balign 4, 0
-_02257070: .word ov03_02257074
-	thumb_func_end ov03_0225706C
+_02257070: .word Mart_AllocMessageData
+	thumb_func_end MartTask_InitMartMessageData
 
-	thumb_func_start ov03_02257074
-ov03_02257074: ; 0x02257074
+	thumb_func_start Mart_AllocMessageData
+Mart_AllocMessageData: ; 0x02257074
 	push {r4, lr}
 	ldr r2, _02257098 ; =0x000001B3
 	add r4, r0, #0
@@ -6308,7 +6223,7 @@ ov03_02257074: ; 0x02257074
 	pop {r4, pc}
 	nop
 _02257098: .word 0x000001B3
-	thumb_func_end ov03_02257074
+	thumb_func_end Mart_AllocMessageData
 
 	thumb_func_start ov03_0225709C
 ov03_0225709C: ; 0x0225709C
@@ -6337,8 +6252,8 @@ ov03_0225709C: ; 0x0225709C
 	.balign 4, 0
 	thumb_func_end ov03_0225709C
 
-	thumb_func_start ov03_022570D4
-ov03_022570D4: ; 0x022570D4
+	thumb_func_start Mart_AllocCamera
+Mart_AllocCamera: ; 0x022570D4
 	push {r3, r4, r5, lr}
 	sub sp, #0x10
 	add r5, r0, #0
@@ -6359,7 +6274,7 @@ ov03_022570D4: ; 0x022570D4
 	mov r1, #3
 	bl ScheduleBgTilemapBufferTransfer
 	add r0, r4, #0
-	bl ov03_02257134
+	bl MartData_AddWindows
 	mov r0, #0xb
 	bl Camera_New
 	add r1, r4, #0
@@ -6381,10 +6296,10 @@ ov03_022570D4: ; 0x022570D4
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 _02257130: .word 0x00000281
-	thumb_func_end ov03_022570D4
+	thumb_func_end Mart_AllocCamera
 
-	thumb_func_start ov03_02257134
-ov03_02257134: ; 0x02257134
+	thumb_func_start MartData_AddWindows
+MartData_AddWindows: ; 0x02257134
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	add r4, r5, #0
@@ -6423,7 +6338,7 @@ _0225716A:
 _02257178: .word ov03_022594C6
 _0225717C: .word 0x00000283
 _02257180: .word ov03_02259464
-	thumb_func_end ov03_02257134
+	thumb_func_end MartData_AddWindows
 
 	thumb_func_start ov03_02257184
 ov03_02257184: ; 0x02257184
@@ -6594,8 +6509,8 @@ _022572E4: .word 0x0000027A
 _022572E8: .word 0x0000027B
 	thumb_func_end ov03_0225725C
 
-	thumb_func_start ov03_022572EC
-ov03_022572EC: ; 0x022572EC
+	thumb_func_start MartData_RestoreBgPriorities
+MartData_RestoreBgPriorities: ; 0x022572EC
 	push {r4, lr}
 	mov r1, #0x9e
 	add r4, r0, #0
@@ -6624,7 +6539,7 @@ ov03_022572EC: ; 0x022572EC
 _02257328: .word 0x00000279
 _0225732C: .word 0x0000027A
 _02257330: .word 0x0000027B
-	thumb_func_end ov03_022572EC
+	thumb_func_end MartData_RestoreBgPriorities
 
 	thumb_func_start ov03_02257334
 ov03_02257334: ; 0x02257334
@@ -7998,8 +7913,8 @@ _02257DF2:
 	.balign 4, 0
 	thumb_func_end ov03_02257D90
 
-	thumb_func_start ov03_02257DF8
-ov03_02257DF8: ; 0x02257DF8
+	thumb_func_start MartData_SubCurrency
+MartData_SubCurrency: ; 0x02257DF8
 	push {r4, lr}
 	ldr r3, _02257E30 ; =0x00000283
 	add r2, r0, #0
@@ -8029,10 +7944,10 @@ _02257E18:
 	pop {r4, pc}
 	.balign 4, 0
 _02257E30: .word 0x00000283
-	thumb_func_end ov03_02257DF8
+	thumb_func_end MartData_SubCurrency
 
-	thumb_func_start ov03_02257E34
-ov03_02257E34: ; 0x02257E34
+	thumb_func_start MartData_Inventory_AddApricornOrItem
+MartData_Inventory_AddApricornOrItem: ; 0x02257E34
 	push {r3, lr}
 	ldr r2, _02257E68 ; =0x000001E5
 	add r3, r0, #0
@@ -8060,10 +7975,10 @@ _02257E54:
 	pop {r3, pc}
 	.balign 4, 0
 _02257E68: .word 0x000001E5
-	thumb_func_end ov03_02257E34
+	thumb_func_end MartData_Inventory_AddApricornOrItem
 
-	thumb_func_start ov03_02257E6C
-ov03_02257E6C: ; 0x02257E6C
+	thumb_func_start MartData_PerformTransaction
+MartData_PerformTransaction: ; 0x02257E6C
 	push {r3, r4, r5, lr}
 	add r4, r0, #0
 	mov r0, #0xa
@@ -8095,7 +8010,7 @@ _02257EA0:
 	add r1, r2, #1
 	ldrh r1, [r4, r1]
 	add r0, r4, #0
-	bl ov03_02257E34
+	bl MartData_Inventory_AddApricornOrItem
 	mov r2, #0x95
 	lsl r2, r2, #2
 	add r1, r2, #0
@@ -8136,7 +8051,7 @@ _02257EF0:
 	ldrsh r1, [r4, r1]
 	add r0, r4, #0
 	mul r1, r2
-	bl ov03_02257DF8
+	bl MartData_SubCurrency
 	mov r3, #0x97
 	lsl r3, r3, #2
 	add r2, r3, #0
@@ -8152,7 +8067,7 @@ _02257EF0:
 	pop {r3, r4, r5, pc}
 	nop
 _02257F20: .word 0x00000283
-	thumb_func_end ov03_02257E6C
+	thumb_func_end MartData_PerformTransaction
 
 	thumb_func_start ov03_02257F24
 ov03_02257F24: ; 0x02257F24
@@ -10736,5 +10651,6 @@ ov03_02259880: ; 0x02259880
 
 	.bss
 
+	.public ov03_022598A0
 ov03_022598A0: ; 0x022598A0
 	.space 0x20

@@ -243,6 +243,7 @@
 .public Field3dObjectList_GetRenderObjectByID
 .public ov02_0224E698
 .public ov02_0224E754
+.public ov03_02253E20
 .public ov03_02255BB0
 .public ov03_02255BEC
 .public ov03_02255BFC
@@ -255,7 +256,6 @@
 .public ov03_02256730
 .public ov03_02256A2C
 .public ov03_02256B40
-.public InitMartUI
 .public ov03_02256E2C
 .public ov03_02257814
 .public ov03_02257978
