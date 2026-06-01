@@ -121,3 +121,16 @@
 .public ov42_02229A78
 .public ov42_02229A8C
 .public ov42_02229AC8
+
+.public ov42_02228CDC
+.public ov42_02228D08
+.public ov42_02228D44
+.public ov42_02228DB8
+.public ov42_02228DC8
+.public ov42_02228DF0
+.public ov42_02228DFC
+.public ov42_02228D44
+.public ov42_02228E0C
+.public ov42_02228E0C
+.public ov42_02228E0C
+.public ov42_02228E0C

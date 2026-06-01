@@ -2,6 +2,7 @@
 #define POKEHEARTGOLD_FRONTIER_MAP_H
 
 #include "palette.h"
+#include "overlay_42.h"
 
 typedef struct FrontierMap {
     u32 unk0;
@@ -13,7 +14,7 @@ typedef struct FrontierMap {
 
 typedef struct UnkStruct_02239938 {
     u32 unk0;
-    u32 unk4;
+    UnkStruct_ov42_0222903C* unk4;
 } UnkStruct_02239938;
 
 UnkStruct_02239938 *ov80_02239938(void *a0, u32 a1);
