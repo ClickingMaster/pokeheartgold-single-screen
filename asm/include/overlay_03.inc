@@ -178,7 +178,6 @@
 .public TaskManager_GetFieldSystem
 .public TaskManager_GetEnvironment
 .public sub_020580E4
-.public sub_02058124
 .public sub_02058164
 .public sub_02058180
 .public sub_02058284
@@ -244,6 +243,12 @@
 .public ov02_0224E698
 .public ov02_0224E754
 .public ov03_02253E20
+.public ov03_02253ED0
+.public ov03_02253F74
+.public Unk03_Delete
+.public ov03_022540E8
+.public ov03_02254100
+.public ov03_02254120
 .public ov03_02255BB0
 .public ov03_02255BEC
 .public ov03_02255BFC

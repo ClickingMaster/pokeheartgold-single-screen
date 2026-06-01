@@ -28,7 +28,7 @@ typedef struct UnkStruct_ov03 {
     MessageFormat *messageFormat[3];
     ListMenu *listMenu;
     u32 unk60;
-    ListMenuTemplate *listMenuTemplate;
+    LISTMENUITEM *listMenuItems;
     FieldSystem *fieldSystem;
     void *unk6C;
     u32 unk70;
@@ -46,6 +46,9 @@ typedef struct UnkStruct_ov03 {
     u8 unk96;
     u8 unk97;
     u8 unk98;
+    u8 unk99;
+    u16 unk9A;
+    u8 unk9C[0x10];
 } UnkStruct_ov03;
 
 #endif // POKEHEARTGOLD_OVERLAY_03_H
