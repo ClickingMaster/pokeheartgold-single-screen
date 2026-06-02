@@ -10,6 +10,7 @@
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0182.h"
 
+extern u16 ov03_0225927A[41];
 extern UnkStruct_ov03* ov03_022598A0;
 
 // TODO: Make all of these static.
@@ -19,8 +20,11 @@ void ov03_02253F74(FieldSystem *fieldSystem);
 void Unk03_Delete();
 void ov03_022540E8(UnkStruct_ov03 *unk_ov03);
 void ov03_02254100(u32 unused_0, u32 unused_1, BOOL arg2);
-void ov03_02254120(ListMenu *list, enum ListMenuAttr attr_unused, s32 unk2_unused);
-static void ov03_02254150(ListMenu *list, u16 cursorPos_unused, u16 itemsAbove);
+static void ov03_02254150(ListMenu *list, u16 cursorPos_unused, u8 itemsAbove);
+void ov03_022542C8(UnkStruct_ov03* unk_ov03);
+
+void ov03_022543AC(UnkStruct_ov03 *unk_ov03);
+void ov03_02254D64(SysTask *, void *);
 u32 ov03_02255B98();
 
 int sub_0203511C();
@@ -50,7 +54,7 @@ void ov03_02253ED0(ListMenuTemplate listMenuTemplate, u8 x, u8 y, u8 width, u8 h
     }
     DrawFrameAndWindow1(&ov03_022598A0->windows[0], TRUE, 0x3D9, HEAP_ID_FIELD2);
     ListMenuTemplate temp = listMenuTemplate;
-    temp.items = ov03_022598A0->listMenuItems;
+    temp.items = ov03_022598A0->items;
     temp.window = &ov03_022598A0->windows[0];
     ov03_022598A0->listMenu = ListMenuInit(&temp, 0, 0, HEAP_ID_FIELD1);
     CopyWindowToVram(&ov03_022598A0->windows[0]);
@@ -132,7 +136,7 @@ void ov03_02254120(ListMenu *list, enum ListMenuAttr attr_unused, s32 unk2_unuse
     };
 }
 
-static void ov03_02254150(ListMenu *list, u16 cursorPos_unused, u16 itemsAbove) {
+static void ov03_02254150(ListMenu *list, u16 cursorPos_unused, u8 itemsAbove) {
     s32 res = sub_0203511C();
     u16 cursorPos = 0;
     if (ov03_022598A0->listMenu) {
@@ -158,3 +162,68 @@ static void ov03_02254150(ListMenu *list, u16 cursorPos_unused, u16 itemsAbove) 
         AddTextPrinterParameterized(&ov03_022598A0->windows[0], 0, ov03_022598A0->string[0], 8, itemsAbove * 16, TEXT_SPEED_NOTRANSFER, 0);
     }
 }
+
+/*void ov03_022542C8(UnkStruct_ov03* unk_ov03) {
+    if (WindowIsInUse(&ov03_022598A0->windows[1]) == FALSE) {
+        AddWindowParameterized(ov03_022598A0->fieldSystem->bgConfig, &ov03_022598A0->windows[1], 3, 23, 2, 8, 4, 13, 201);
+    }
+    DrawFrameAndWindow1(&ov03_022598A0->windows[1], TRUE, 985, HEAP_ID_FIELD2);
+    FillWindowPixelBuffer(&ov03_022598A0->windows[1], 15);
+    CopyWindowToVram(&ov03_022598A0->windows[1]);
+    unk_ov03->unk97 = 1;
+    SysTask_CreateOnMainQueue(ov03_02254D64, unk_ov03, 0);
+    ov03_022543AC(ov03_022598A0);
+    
+    u16 ov03_0225927A[41] = {
+        48,
+        49,
+        50,
+        52,
+        51,
+        51,
+        56,
+        57,
+        58,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        59,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        60,
+        61,
+        0,
+        62,
+        63,
+        64,
+        0,
+        0,
+        0,
+        0,
+        53,
+        53,
+        54,
+        55,
+    };
+
+    if (ov03_022598A0->unk91 == 8) {
+        ov03_02253E20(ov03_022598A0->unk92 + 0x7A, FALSE);
+    } else if (ov03_022598A0->unk91 == 0x28) {
+        ov03_02253E20(ov03_022598A0->unk92 + 0x94, FALSE);
+    } else {
+        ov03_02253E20(ov03_0225927A[ov03_022598A0->unk91], 0);
+    }
+    ov03_02254B4C(&ov03_02254420);
+}*/
