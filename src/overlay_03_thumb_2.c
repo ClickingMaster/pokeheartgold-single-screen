@@ -15,25 +15,38 @@
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0182.h"
 
-extern ListMenuTemplate ov03_02259164;
+extern u32 ov03_02254D78;
+extern u32 ov03_0225912C;
 extern u32 ov03_02259134;
+extern ListMenuTemplate ov03_02259164;
 extern UnkStruct_ov03* ov03_022598A0;
 
 // TODO: Make all of these static.
 static void ov03_02254500(void *arg0, UnkStruct_ov03 *unk_ov03);
 static void ov03_02254600(UnkStruct_ov03* unk_ov03_unused);
 static void ov03_02254660(void *arg0, UnkStruct_ov03 *unk_ov03);
-void ov03_022546B0(void *arg0, UnkStruct_ov03 *unk_ov03);
-BOOL ov03_022547D8(void *arg0, UnkStruct_ov03 *unk_ov03);
-void ov03_022548E0(s32 arg0, void* arg1);
+static void ov03_022546B0(void *arg0, UnkStruct_ov03 *unk_ov03);
+static BOOL ov03_022547D8(void *arg0, UnkStruct_ov03 *unk_ov03);
+static void ov03_022548E0(void *arg0, UnkStruct_ov03 *unk_ov03);
+static void ov03_0225499C(void *arg0, UnkStruct_ov03 *unk_ov03);
+static void ov03_022549D8(void *arg0, UnkStruct_ov03 *unk_ov03);
+void ov03_02254A54(ListMenu *listMenu_unused, u16 arg1_unused, u8 arg2);
+void ov03_02254B2C(UnkStruct_ov03 *unk_ov03);
 void ov03_02254B44();
+void ov03_02254B58(UnkStruct_ov03 *unk_ov03);
+void ov03_02254BEC();
+void ov03_02254D64(SysTask *, void *);
 void ov03_02255280(s32 arg0, s32 arg1);
-void ov03_02255804(UnkStruct_ov03 *unk_ov03); 
-s32 ov03_02255B70();
 void ov03_0225574C(void *arg0, UnkStruct_ov03 *unk_ov03);
+void ov03_02255804(UnkStruct_ov03 *unk_ov03); 
 void ov03_02255A70(UnkStruct_ov03 *unk_ov03);
 void ov03_02255ADC(UnkStruct_ov03 *unk_ov03);
+s32 ov03_02255B70();
 BOOL ov03_02255C80();
+void ov03_02255C84(UnkStruct_ov03 *unk_ov03);
+int ov03_02255CA0(UnkStruct_ov03 *unk_ov03);
+BOOL ov03_02255CD0(UnkStruct_ov03 *unk_ov03);
+void ov03_02255CE4(void*);
 
 int sub_0203511C();
 u32 sub_02035150(u32 index);
@@ -43,7 +56,9 @@ void sub_020351DC(u16, PlayerProfile *profile);
 BOOL sub_02037700();
 s32 sub_02037BA0(s32, s32);
 void sub_02037BC8();
+void sub_020580E4(FieldSystem *fieldSystem, s32 arg1, s32 arg2);
 void sub_02058164(u16 arg0);
+void sub_02058284();
 
 void ov03_022543AC(UnkStruct_ov03* unk_ov03_unused) {
     BufferPlayersName(ov03_022598A0->messageFormat[1], 0, ov03_022598A0->playerProfile[0]);
@@ -147,7 +162,7 @@ static void ov03_02254660(void *arg0, UnkStruct_ov03 *unk_ov03) {
     }
 }
 
-void ov03_022546B0(void *arg0, UnkStruct_ov03 *unk_ov03) {
+static void ov03_022546B0(void *arg0, UnkStruct_ov03 *unk_ov03) {
     if (sub_02037700()) {
         ov03_0225574C(arg0, unk_ov03);
         ov03_02253E20(0, FALSE);
@@ -179,7 +194,7 @@ void ov03_022546B0(void *arg0, UnkStruct_ov03 *unk_ov03) {
     ov03_02254B4C(&ov03_022548E0);
 }
 
-BOOL ov03_022547D8(void *arg0, UnkStruct_ov03 *unk_ov03) {
+static BOOL ov03_022547D8(void *arg0, UnkStruct_ov03 *unk_ov03) {
     if (sub_02037700()) {
         ov03_0225574C(arg0, unk_ov03);
         ov03_02253E20(0, FALSE);
@@ -210,4 +225,108 @@ BOOL ov03_022547D8(void *arg0, UnkStruct_ov03 *unk_ov03) {
         return FALSE;
     }
     return TRUE;
+}
+
+static void ov03_022548E0(void *arg0, UnkStruct_ov03* unk_ovo3) {
+    if (IsPrintFinished(ov03_022598A0->printerID)) {
+        if (unk_ovo3->unkA8 == 0) {
+            ov03_022598A0->unk9C = &ov03_0225912C;
+            ov03_022598A0->unkA0 = 1;
+            ov03_022598A0->unkA2 = 0xFFFF;
+            ov03_022598A0->unkA1 = 0;
+            ov01_021F6A9C(ov03_022598A0->fieldSystem, 7, &ov03_022598A0->unk9C);
+            unk_ovo3->unkA8 = 1;
+        }
+        else if (ov01_021F6B10(unk_ovo3->fieldSystem) == TRUE) {
+            if (ov03_022547D8(arg0, unk_ovo3)) {
+                unk_ovo3->unkA1 = 2;
+            }
+            else if (PAD_BUTTON_B & gSystem.newKeys || unk_ovo3->unkA2 == 0) {
+                PlaySE(SEQ_SE_DP_SELECT);
+                unk_ovo3->unkA8 = 0;
+                ov03_02253E20(3, FALSE);
+                ov03_02254B4C(&ov03_0225499C);
+            }
+        }
+    }
+}
+
+static void ov03_0225499C(void *arg0, UnkStruct_ov03 *unk_ov03) {
+    if (ov03_022547D8(arg0, unk_ov03)) {
+        unk_ov03->unkA1 = 2;
+        return;
+    }
+    if (IsPrintFinished(ov03_022598A0->printerID)) {
+        ov03_02255C84(unk_ov03);
+        ov03_02254B4C(&ov03_022549D8);
+    }
+}
+
+static void ov03_022549D8(void *arg0, UnkStruct_ov03 *unk_ov03) {
+    if (unk_ov03->unkA8 == 0) {
+        if (ov03_02255CA0(unk_ov03) == 1) {
+            unk_ov03->unkA8 = 1;
+        } else {
+            return;
+        }
+    }
+    if (ov03_02255CD0(unk_ov03)) {
+        if (ov03_022547D8(arg0, unk_ov03)) {
+            ov03_02255CE4(unk_ov03);
+        }
+        else if (ov01_021F6AEC(unk_ov03->fieldSystem) == 6) {
+            if (unk_ov03->unkA4 == 0) {
+                ov03_0225574C(arg0, unk_ov03);
+                ov03_02253E20(6, 0);
+                ov03_02255ADC(unk_ov03);
+            } else if (unk_ov03->unkA4 == 1) {
+                ov03_02254B4C(&ov03_022546B0);
+            }
+        }
+    }
+}
+
+void ov03_02254A54(ListMenu *listMenu_unused, u16 arg1_unused, u8 arg2) {
+    u16 spC = 0;
+    if (ov03_022598A0->listMenu) {
+        ListMenuGetScrollAndRow(ov03_022598A0->listMenu, &spC, NULL);
+    }
+    spC += arg2;
+    if (sub_02034818(spC)) {
+        BufferPlayersName(ov03_022598A0->messageFormat[0], 0, sub_02034818(spC));
+        ReadMsgDataIntoString(ov03_022598A0->msgData, 79, ov03_022598A0->string[1]);
+        StringExpandPlaceholders(ov03_022598A0->messageFormat[0], ov03_022598A0->string[0], ov03_022598A0->string[1]);
+        s32 temp_r4 = arg2 * 16;
+        AddTextPrinterParameterized(&ov03_022598A0->windows[0], 0, ov03_022598A0->string[0], 8, temp_r4, 0, 0);
+        BufferIntegerAsString(ov03_022598A0->messageFormat[0], 2, PlayerProfile_GetTrainerID_VisibleHalf(sub_02034818(spC)), 5, PRINTING_MODE_LEADING_ZEROS, TRUE);
+        ReadMsgDataIntoString(ov03_022598A0->msgData, 78, ov03_022598A0->string[3]);
+        StringExpandPlaceholders(ov03_022598A0->messageFormat[0], ov03_022598A0->string[2], ov03_022598A0->string[3]);
+        AddTextPrinterParameterized(&ov03_022598A0->windows[0], 0, ov03_022598A0->string[2], 72, temp_r4, 0, 0);
+    }
+}
+
+void ov03_02254B2C(UnkStruct_ov03 *unk_ov03) {
+    sub_020580E4(unk_ov03->fieldSystem, unk_ov03->unk91, ov03_02255B98());
+}
+
+void ov03_02254B44() {
+    sub_02058284();
+}
+
+void ov03_02254B4C(void* arg0) {
+    ov03_022598A0->unk6C = arg0;
+}
+
+void ov03_02254B58(UnkStruct_ov03 *unk_ov03) {
+    SysTask_CreateOnMainQueue(&ov03_02254D64, unk_ov03, 0);
+    ov03_02254BEC();
+    if (WindowIsInUse(&ov03_022598A0->windows[1]) == FALSE) {
+        AddWindowParameterized(ov03_022598A0->fieldSystem->bgConfig, &ov03_022598A0->windows[1], 3, 0x16, 2, 9, 4, 0xD, 0xCD);
+    }
+    DrawFrameAndWindow1(&ov03_022598A0->windows[1], 1, 0x3D9, 0xB);
+    FillWindowPixelBuffer(&ov03_022598A0->windows[1], 0xF);
+    CopyWindowToVram(&ov03_022598A0->windows[1]);
+    unk_ov03->unk97 = 1;
+    sub_0203476C(0);
+    ov03_02254B4C(&ov03_02254D78);
 }

@@ -252,9 +252,11 @@
 .public ov03_022542C8
 .public ov03_022543AC
 .public ov03_02254420
-.public ov03_022546B0
-.public ov03_022547D8
+.public ov03_02254A54
+.public ov03_02254B44
+.public ov03_02254B2C
 .public ov03_02254B4C
+.public ov03_02254B58
 .public ov03_02254D64
 .public ov03_02255BB0
 .public ov03_02255BEC

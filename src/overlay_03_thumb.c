@@ -24,7 +24,6 @@ void ov03_022542C8(UnkStruct_ov03* unk_ov03);
 
 void ov03_022543AC(UnkStruct_ov03 *unk_ov03);
 void ov03_02254D64(SysTask *, void *);
-u32 ov03_02255B98();
 
 int sub_0203511C();
 void sub_020351DC(u16 cursorPos, PlayerProfile *profile);
