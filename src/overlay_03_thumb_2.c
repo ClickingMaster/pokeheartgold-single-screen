@@ -4,8 +4,10 @@
 #include "field_system.h"
 #include "global.h"
 #include "mart.h"
+#include "render_text.h"
 #include "task.h"
 #include "text.h"
+#include "text_0205B4EC.h"
 #include "unk_02005D10.h"
 #include "unk_02034354.h"
 #include "unk_02035900.h"
@@ -22,15 +24,24 @@ static void ov03_02254500(void *arg0, UnkStruct_ov03 *unk_ov03);
 static void ov03_02254600(UnkStruct_ov03* unk_ov03_unused);
 static void ov03_02254660(void *arg0, UnkStruct_ov03 *unk_ov03);
 void ov03_022546B0(void *arg0, UnkStruct_ov03 *unk_ov03);
-void ov03_0225574C(void *arg0, UnkStruct_ov03 *unk_ov03);
+BOOL ov03_022547D8(void *arg0, UnkStruct_ov03 *unk_ov03);
+void ov03_022548E0(s32 arg0, void* arg1);
 void ov03_02254B44();
+void ov03_02255280(s32 arg0, s32 arg1);
+void ov03_02255804(UnkStruct_ov03 *unk_ov03); 
+s32 ov03_02255B70();
+void ov03_0225574C(void *arg0, UnkStruct_ov03 *unk_ov03);
+void ov03_02255A70(UnkStruct_ov03 *unk_ov03);
 void ov03_02255ADC(UnkStruct_ov03 *unk_ov03);
+BOOL ov03_02255C80();
 
 int sub_0203511C();
 u32 sub_02035150(u32 index);
 u8 sub_02035184();
 void sub_02035198();
+void sub_020351DC(u16, PlayerProfile *profile);
 BOOL sub_02037700();
+s32 sub_02037BA0(s32, s32);
 void sub_02037BC8();
 void sub_02058164(u16 arg0);
 
@@ -134,4 +145,69 @@ static void ov03_02254660(void *arg0, UnkStruct_ov03 *unk_ov03) {
             ov03_022546B0(arg0, unk_ov03);
         }
     }
+}
+
+void ov03_022546B0(void *arg0, UnkStruct_ov03 *unk_ov03) {
+    if (sub_02037700()) {
+        ov03_0225574C(arg0, unk_ov03);
+        ov03_02253E20(0, FALSE);
+        ov03_02255ADC(unk_ov03);
+        ov03_022598A0->unkA1 = 1;
+        return;
+    }
+    sub_020351DC(unk_ov03->unk8E, ov03_022598A0->playerProfile[1]);
+    BufferPlayersName(unk_ov03->messageFormat[2], 1, ov03_022598A0->playerProfile[1]);
+    if (ov03_02255B70() <= 2) {
+        ov03_02253E20(1, TRUE);
+    } else {
+        if (IsPrintFinished(ov03_022598A0->printerID) == FALSE) {
+            RemoveTextPrinter(ov03_022598A0->printerID);
+        }
+        ReadMsgDataIntoString(ov03_022598A0->msgData, 2, ov03_022598A0->string[4]);
+        StringExpandPlaceholders(ov03_022598A0->messageFormat[2], ov03_022598A0->string[5], ov03_022598A0->string[4]);
+        if (WindowIsInUse(&ov03_022598A0->windows[2]) == FALSE) {
+            sub_0205B514(ov03_022598A0->fieldSystem->bgConfig, &ov03_022598A0->windows[2], 3);
+        }
+        sub_0205B564(&ov03_022598A0->windows[2], Save_PlayerData_GetOptionsAddr(ov03_022598A0->fieldSystem->saveData));
+        TextFlags_SetCanABSpeedUpPrint(TRUE);
+        TextFlags_SetAutoScrollParam(0);
+        TextFlags_SetCanTouchSpeedUpPrint(FALSE);
+        ov03_022598A0->printerID = AddTextPrinterParameterized(&ov03_022598A0->windows[2], 1, ov03_022598A0->string[5], 0, 0, 1, 0);
+    }
+    ov03_022598A0->unkA8 = 0;
+    ov03_022598A0->unkA1 = 1;
+    ov03_02254B4C(&ov03_022548E0);
+}
+
+BOOL ov03_022547D8(void *arg0, UnkStruct_ov03 *unk_ov03) {
+    if (sub_02037700()) {
+        ov03_0225574C(arg0, unk_ov03);
+        ov03_02253E20(0, FALSE);
+        ov03_02255ADC(unk_ov03);
+    } else if (sub_02037BA0(0, 3) == sub_0203769C()) {
+        sub_02037BC8();
+        ov03_0225574C(arg0, unk_ov03);
+        ov03_02255A70(unk_ov03);
+    } else if (sub_02037BA0(0, 5) != -1) {
+        sub_02037BC8();
+        ov03_0225574C(arg0, unk_ov03);
+        ov03_02255A70(unk_ov03);
+    } else if (sub_02037BA0(0, 4) == sub_0203769C()) {
+        ov03_02253E20(0x74, FALSE);
+        ov03_02254B4C(&ov03_02255280);
+    } else if (sub_02037BA0(0, 2) == sub_0203769C()) {
+        sub_02037BC8();
+        unk_ov03->unk90 = sub_020347A0();
+        if (IsPrintFinished(ov03_022598A0->printerID) == FALSE) {
+            RemoveTextPrinter(ov03_022598A0->printerID);
+        }
+        ov03_0225574C(arg0, unk_ov03);
+        ov03_02255804(unk_ov03);
+    } else if (ov03_02255C80()) {
+        ov03_0225574C(arg0, unk_ov03);
+        ov03_02255A70(unk_ov03);
+    } else {
+        return FALSE;
+    }
+    return TRUE;
 }
