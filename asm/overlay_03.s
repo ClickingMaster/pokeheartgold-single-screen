@@ -4,158 +4,6 @@
 
 	.text
 
-	thumb_func_start ov03_02254BEC
-ov03_02254BEC: ; 0x02254BEC
-	push {lr}
-	sub sp, #0x54
-	ldr r3, _02254C94 ; =ov03_0225931E
-	add r2, sp, #0
-	mov r1, #0x29
-_02254BF6:
-	ldrh r0, [r3]
-	add r3, r3, #2
-	strh r0, [r2]
-	add r2, r2, #2
-	sub r1, r1, #1
-	bne _02254BF6
-	ldr r0, _02254C98 ; =ov03_022598A0
-	ldr r0, [r0]
-	add r0, #0x91
-	ldrb r0, [r0]
-	cmp r0, #0x29
-	blo _02254C12
-	bl GF_AssertFail
-_02254C12:
-	ldr r0, _02254C98 ; =ov03_022598A0
-	ldr r0, [r0]
-	add r0, #0x91
-	ldrb r0, [r0]
-	cmp r0, #8
-	bne _02254C4E
-	bl sub_020347A0
-	cmp r0, #1
-	ble _02254C3A
-	ldr r0, _02254C98 ; =ov03_022598A0
-	mov r1, #0
-	ldr r0, [r0]
-	add r0, #0x92
-	ldrb r0, [r0]
-	add r0, #0x7f
-	bl ov03_02253E20
-	add sp, #0x54
-	pop {pc}
-_02254C3A:
-	ldr r0, _02254C98 ; =ov03_022598A0
-	mov r1, #0
-	ldr r0, [r0]
-	add r0, #0x92
-	ldrb r0, [r0]
-	add r0, #0x75
-	bl ov03_02253E20
-	add sp, #0x54
-	pop {pc}
-_02254C4E:
-	cmp r0, #0x28
-	bne _02254C82
-	bl sub_020347A0
-	cmp r0, #1
-	ble _02254C6E
-	ldr r0, _02254C98 ; =ov03_022598A0
-	mov r1, #0
-	ldr r0, [r0]
-	add r0, #0x92
-	ldrb r0, [r0]
-	add r0, #0x9a
-	bl ov03_02253E20
-	add sp, #0x54
-	pop {pc}
-_02254C6E:
-	ldr r0, _02254C98 ; =ov03_022598A0
-	mov r1, #0
-	ldr r0, [r0]
-	add r0, #0x92
-	ldrb r0, [r0]
-	add r0, #0x8e
-	bl ov03_02253E20
-	add sp, #0x54
-	pop {pc}
-_02254C82:
-	lsl r1, r0, #1
-	add r0, sp, #0
-	ldrh r0, [r0, r1]
-	mov r1, #0
-	bl ov03_02253E20
-	add sp, #0x54
-	pop {pc}
-	nop
-_02254C94: .word ov03_0225931E
-_02254C98: .word ov03_022598A0
-	thumb_func_end ov03_02254BEC
-
-	thumb_func_start ov03_02254C9C
-ov03_02254C9C: ; 0x02254C9C
-	push {r3, r4, lr}
-	sub sp, #0xc
-	bl sub_020347A0
-	add r4, r0, #0
-	bl ov03_02255B70
-	cmp r4, r0
-	blt _02254CB8
-	bl sub_020347A0
-	add r2, r0, #0
-	mov r4, #0x51
-	b _02254CC6
-_02254CB8:
-	bl ov03_02255B70
-	add r4, r0, #0
-	bl sub_020347A0
-	sub r2, r4, r0
-	mov r4, #0x50
-_02254CC6:
-	mov r0, #5
-	str r0, [sp]
-	mov r0, #1
-	str r0, [sp, #4]
-	ldr r0, _02254D20 ; =ov03_022598A0
-	mov r1, #0
-	ldr r0, [r0]
-	mov r3, #2
-	ldr r0, [r0, #0x54]
-	bl BufferIntegerAsString
-	ldr r0, _02254D20 ; =ov03_022598A0
-	mov r1, #0xf
-	ldr r0, [r0]
-	add r0, #0x30
-	bl FillWindowPixelBuffer
-	ldr r0, _02254D20 ; =ov03_022598A0
-	add r1, r4, #0
-	ldr r2, [r0]
-	ldr r0, [r2, #0x74]
-	ldr r2, [r2, #0x1c]
-	bl ReadMsgDataIntoString
-	ldr r0, _02254D20 ; =ov03_022598A0
-	ldr r2, [r0]
-	ldr r0, [r2, #0x54]
-	ldr r1, [r2, #0x18]
-	ldr r2, [r2, #0x1c]
-	bl StringExpandPlaceholders
-	ldr r0, _02254D20 ; =ov03_022598A0
-	mov r3, #2
-	ldr r2, [r0]
-	mov r1, #0
-	str r3, [sp]
-	str r1, [sp, #4]
-	add r0, r2, #0
-	str r1, [sp, #8]
-	ldr r2, [r2, #0x18]
-	add r0, #0x30
-	bl AddTextPrinterParameterized
-	add sp, #0xc
-	pop {r3, r4, pc}
-	.balign 4, 0
-_02254D20: .word ov03_022598A0
-	thumb_func_end ov03_02254C9C
-
 	thumb_func_start ov03_02254D24
 ov03_02254D24: ; 0x02254D24
 	push {r4, r5, lr}
@@ -8882,7 +8730,7 @@ ov03_02259228: ; 0x02259228
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4A, 0x00
 
-.public ov03_0225927A
+	.public ov03_0225927A
 ov03_0225927A: ; 0x0225927A
 	.byte 0x30, 0x00, 0x31, 0x00, 0x32, 0x00
 	.byte 0x34, 0x00, 0x33, 0x00, 0x33, 0x00, 0x38, 0x00, 0x39, 0x00, 0x3A, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -8899,6 +8747,7 @@ ov03_022592CC: ; 0x022592CC
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x44, 0x00
 
+	.public ov03_0225931E
 ov03_0225931E: ; 0x0225931E
 	.byte 0x07, 0x00
 	.byte 0x08, 0x00, 0x09, 0x00, 0x0B, 0x00, 0x0A, 0x00, 0x0A, 0x00, 0x0F, 0x00, 0x10, 0x00, 0x11, 0x00

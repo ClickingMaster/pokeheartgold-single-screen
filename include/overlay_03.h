@@ -51,6 +51,7 @@ void ov03_02254120(ListMenu *list, enum ListMenuAttr attr_unused, s32 unk2_unuse
 void ov03_022543AC(UnkStruct_ov03* unk_ov03_unused);
 void ov03_02254420();
 void ov03_02254B4C(void *);
+s32 ov03_02255B70();
 u32 ov03_02255B98();
 
 void ov03_02255BB0(FieldSystem *fieldSystem, u16 a1, u16 a2, u16 a3);

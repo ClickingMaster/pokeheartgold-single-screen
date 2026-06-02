@@ -41,7 +41,6 @@ void ov03_0225574C(void *arg0, UnkStruct_ov03 *unk_ov03);
 void ov03_02255804(UnkStruct_ov03 *unk_ov03); 
 void ov03_02255A70(UnkStruct_ov03 *unk_ov03);
 void ov03_02255ADC(UnkStruct_ov03 *unk_ov03);
-s32 ov03_02255B70();
 BOOL ov03_02255C80();
 void ov03_02255C84(UnkStruct_ov03 *unk_ov03);
 int ov03_02255CA0(UnkStruct_ov03 *unk_ov03);
@@ -330,3 +329,68 @@ void ov03_02254B58(UnkStruct_ov03 *unk_ov03) {
     sub_0203476C(0);
     ov03_02254B4C(&ov03_02254D78);
 }
+
+/*void ov03_02254BEC() {
+    u16 ov03_0225931E[41] = {
+        7,
+        8,
+        9,
+        11,
+        10,
+        10,
+        15,
+        16,
+        17,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        18,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        19,
+        20,
+        0,
+        21,
+        22,
+        23,
+        0,
+        0,
+        0,
+        0,
+        12,
+        12,
+        13,
+        0,
+    };
+
+    if (ov03_022598A0->unk91 >= 41) {
+        GF_AssertFail();
+    }
+    if (ov03_022598A0->unk91 == 8) {
+        if (sub_020347A0() > 1) {
+            ov03_02253E20(ov03_022598A0->unk92 + 127, 0);
+        } else {
+            ov03_02253E20(ov03_022598A0->unk92 + 117, 0);
+        }
+    } else if (ov03_022598A0->unk91 == 40) {
+        if (sub_020347A0() > 1) {
+            ov03_02253E20(ov03_022598A0->unk92 + 154, 0);
+        } else {
+            ov03_02253E20(ov03_022598A0->unk92 + 142, 0);
+        }
+    } else {
+        ov03_02253E20(ov03_0225931E[ov03_022598A0->unk91], 0);
+    }
+}*/
