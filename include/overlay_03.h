@@ -45,6 +45,7 @@ typedef struct UnkStruct_ov03 {
     u32 unkA8;
 } UnkStruct_ov03;
 
+void ov03_02253E20(s32 strno, BOOL arg1);
 void ov03_02253ED0(ListMenuTemplate listMenuTemplate, u8 x, u8 y, u8 width, u8 height, u16 baseTile);
 void ov03_02254120(ListMenu *list, enum ListMenuAttr attr_unused, s32 unk2_unused);
 void ov03_022543AC(UnkStruct_ov03* unk_ov03_unused);

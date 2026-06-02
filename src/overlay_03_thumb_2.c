@@ -7,6 +7,8 @@
 #include "task.h"
 #include "text.h"
 #include "unk_02005D10.h"
+#include "unk_02034354.h"
+#include "unk_02035900.h"
 
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0182.h"
@@ -18,9 +20,11 @@ extern UnkStruct_ov03* ov03_022598A0;
 // TODO: Make all of these static.
 static void ov03_02254500(void *arg0, UnkStruct_ov03 *unk_ov03);
 static void ov03_02254600(UnkStruct_ov03* unk_ov03_unused);
-void ov03_02254660(s32 arg0, s32 arg1);
+static void ov03_02254660(void *arg0, UnkStruct_ov03 *unk_ov03);
+void ov03_022546B0(void *arg0, UnkStruct_ov03 *unk_ov03);
 void ov03_0225574C(void *arg0, UnkStruct_ov03 *unk_ov03);
 void ov03_02254B44();
+void ov03_02255ADC(UnkStruct_ov03 *unk_ov03);
 
 int sub_0203511C();
 u32 sub_02035150(u32 index);
@@ -115,5 +119,19 @@ static void ov03_02254600(UnkStruct_ov03 *unk_ov03_unused) {
         FillWindowPixelRect(&ov03_022598A0->windows[0], 0xF, 8, 0, 0xC, 0x50);
         ov03_02254120(ov03_022598A0->listMenu, LISTMENUATTR_MOVECURSORFUNC, 0);
         CopyWindowToVram(&ov03_022598A0->windows[0]);
+    }
+}
+
+static void ov03_02254660(void *arg0, UnkStruct_ov03 *unk_ov03) {
+    if (sub_02037700()) {
+        ov03_0225574C(arg0, unk_ov03);
+        ov03_02253E20(0, FALSE);
+        ov03_02255ADC(unk_ov03);
+        ov03_022598A0->unkA1 = 1;
+    } else {
+        if (sub_02034818(sub_0203769C())) {
+            sub_02037BC8();
+            ov03_022546B0(arg0, unk_ov03);
+        }
     }
 }

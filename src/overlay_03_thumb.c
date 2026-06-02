@@ -14,7 +14,6 @@ extern u16 ov03_0225927A[41];
 extern UnkStruct_ov03* ov03_022598A0;
 
 // TODO: Make all of these static.
-void ov03_02253E20(s32 strno, BOOL arg1);
 void ov03_02253ED0(ListMenuTemplate listMenuTemplate, u8 x, u8 y, u8 width, u8 height, u16 baseTile);
 void ov03_02253F74(FieldSystem *fieldSystem); 
 void Unk03_Delete();

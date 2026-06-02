@@ -4,43 +4,6 @@
 
 	.text
 
-	thumb_func_start ov03_02254660
-ov03_02254660: ; 0x02254660
-	push {r3, r4, r5, lr}
-	add r5, r0, #0
-	add r4, r1, #0
-	bl sub_02037700
-	cmp r0, #0
-	beq _02254690
-	add r0, r5, #0
-	add r1, r4, #0
-	bl ov03_0225574C
-	mov r0, #0
-	add r1, r0, #0
-	bl ov03_02253E20
-	add r0, r4, #0
-	bl ov03_02255ADC
-	ldr r0, _022546AC ; =ov03_022598A0
-	mov r1, #1
-	ldr r0, [r0]
-	add r0, #0xa1
-	strb r1, [r0]
-	pop {r3, r4, r5, pc}
-_02254690:
-	bl sub_0203769C
-	bl sub_02034818
-	cmp r0, #0
-	beq _022546A8
-	bl sub_02037BC8
-	add r0, r5, #0
-	add r1, r4, #0
-	bl ov03_022546B0
-_022546A8:
-	pop {r3, r4, r5, pc}
-	nop
-_022546AC: .word ov03_022598A0
-	thumb_func_end ov03_02254660
-
 	thumb_func_start ov03_022546B0
 ov03_022546B0: ; 0x022546B0
 	push {r4, r5, lr}
