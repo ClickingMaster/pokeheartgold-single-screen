@@ -185,7 +185,7 @@ void ov42_02227434(UnkStruct_ov42_02227114* arg0, s16 arg1, s16 arg2);
 void ov42_02227474(UnkStruct_ov42_02227114* arg0, u16 arg1);
 u16 ov42_02227480(UnkStruct_ov42_02227114* arg0);
 void ov42_02227490(UnkStruct_ov42_02227114* arg0, u16 arg1);
-s32 ov42_022274AC(UnkStruct_ov42_02227114* arg0);
+BOOL ov42_022274AC(UnkStruct_ov42_02227114* arg0);
 s32 ov42_022274B8(UnkStruct_ov42_02227114* arg0);
 u32 ov42_022274C0(UnkStruct_ov42_02227114* arg0);
 void ov42_022274C4(UnkStruct_ov42_02227114* arg0, u16 arg1);

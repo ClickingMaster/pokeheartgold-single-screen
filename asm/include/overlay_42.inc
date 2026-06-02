@@ -151,3 +151,21 @@
 .public ov42_02228BC8
 .public ov42_02228BCC
 .public ov42_02228BD4
+
+.public ov42_02227D48
+.public ov42_02227D54
+.public ov42_02227D64
+.public ov42_02227D74
+.public ov42_02227D88
+.public ov42_02227D98
+.public ov42_02227DA8
+.public ov42_02227DB8
+.public ov42_02227DC8
+.public ov42_02227DD8
+.public ov42_02227DE8
+.public ov42_02227DF8
+.public ov42_02227E18
+.public ov42_02227E28
+.public ov42_02227E38
+.public ov42_02227E48
+.public ov42_02227E58
