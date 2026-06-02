@@ -1,8 +1,6 @@
 #ifndef POKEHEARTGOLD_OVY_42_H
 #define POKEHEARTGOLD_OVY_42_H
 
-// #include "overlay_44.h"
-// #include "overlay_44_02232E9C.h"
 #include "global.h"
 
 #include "unk_02009D48.h"
@@ -159,7 +157,12 @@ typedef struct UnkStruct_ov42_02228EDC {
     u8 unkB;
 } UnkStruct_ov42_02228EDC;
 
-typedef void (*func_type_02229E74)(UnkStruct_ov42_02228110* arg0, int arg1, UnkStruct_ov42_022280A8* arg2, UnkStruct_ov42_02228CDC* arg3, int);
+typedef struct UnkStruct_ov42_02227FA4 {
+    u32 unk0;
+} UnkStruct_ov42_02227FA4;
+
+
+typedef s32 (*func_type_02229E74)(UnkStruct_ov42_02228110* arg0, UnkStruct_ov42_02227F68* arg1, UnkStruct_ov42_022280A8* arg2, UnkStruct_ov42_02228CDC* arg3, UnkStruct_ov42_02228EB0* arg4);
 typedef void (*func_type_022285A4)(UnkStruct_ov42_02228110* arg0, UnkStruct_ov44_02232914 arg2, u32 arg3);
 typedef s32 (*func_type_02228574)(UnkStruct_ov42_02228110* arg0);
 typedef void (*func_type_02229B48)(UnkStruct_ov42_02227114* arg0);
@@ -237,7 +240,7 @@ void ov42_02227F48(UnkStruct_ov42_02227F68* arg0, void* arg1);
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-u32 ov42_02227F68(UnkStruct_ov42_02227F68* arg0, u32 arg1, u32 arg2);
+UnkStruct_ov42_02227FA4 ov42_02227F68(UnkStruct_ov42_02227F68* arg0, u32 arg1, u32 arg2);
 s32 ov42_02227FA4(UnkStruct_ov42_02227F68* arg0, u16 arg1, u16 arg2);
 u32 ov42_02227FDC(UnkStruct_ov42_02227F68* arg0, u16 arg1, u16 arg2);
 UnkStruct_ov42_022280A8* ov42_02228010(u32 a0, enum HeapID heapID);
@@ -277,11 +280,11 @@ void ov42_0222898C(UnkStruct_ov42_02228110* arg0, UnkStruct_ov44_02232914 arg1, 
 void ov42_022289F8(UnkStruct_ov42_02228110* arg0, UnkStruct_ov44_02232914 arg1, u32 arg2);
 void ov42_02228A64(UnkStruct_ov42_02228110* arg0, UnkStruct_ov44_02232914 arg1, u32 arg2);
 void ov42_02228AD0(UnkStruct_ov42_02228110* arg0, UnkStruct_ov44_02232914 arg1, u32 arg2);
-s32 ov42_02228B3C(void);
+s32 ov42_02228B3C(UnkStruct_ov42_02228110* arg0);
 s32 ov42_02228B40(UnkStruct_ov42_02228110* arg0);
 s32 ov42_02228B48(UnkStruct_ov42_02228110* arg0);
 s32 ov42_02228B88(UnkStruct_ov42_02228110* arg0);
-s32 ov42_02228BC8(void);
+s32 ov42_02228BC8(UnkStruct_ov42_02228110* arg0);
 void ov42_02228BCC(UnkStruct_ov42_02228110* arg0);
 void ov42_02228BD4(UnkStruct_ov42_02228110* arg0);
 UnkStruct_ov44_02232914 ov42_02228BDC(UnkStruct_ov44_02232914 arg0, s32 arg1);

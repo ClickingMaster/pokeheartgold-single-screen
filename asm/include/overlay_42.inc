@@ -131,6 +131,23 @@
 .public ov42_02228DFC
 .public ov42_02228D44
 .public ov42_02228E0C
-.public ov42_02228E0C
-.public ov42_02228E0C
-.public ov42_02228E0C
+
+.public ov42_022285A4
+.public ov42_022285FC
+.public ov42_02228668
+.public ov42_02228700
+.public ov42_02228798
+.public ov42_022287F0
+.public ov42_0222885C
+.public ov42_022288F4
+.public ov42_0222898C
+.public ov42_022289F8
+.public ov42_02228A64
+.public ov42_02228AD0
+.public ov42_02228B3C
+.public ov42_02228B40
+.public ov42_02228B48
+.public ov42_02228B88
+.public ov42_02228BC8
+.public ov42_02228BCC
+.public ov42_02228BD4
