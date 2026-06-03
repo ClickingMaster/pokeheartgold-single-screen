@@ -7,28 +7,26 @@ const u8 ov42_02229AFC[8] = {0, 1, 149, 150, 151, 152, 0, 0};
 const u8 ov42_02229B04[12] = {1, 255, 8, 2, 4, 16, 16, 2, 4, 0, 0, 0};
 const u8 ov42_02229B10[16] = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17};
 
-const func_type_02227504 ov42_02229B20[10] = {ov42_02227D48, ov42_02227D54, ov42_02227D64,
-                                                ov42_02227D74, ov42_02227D88, ov42_02227D98,
-                                                ov42_02227DA8, ov42_02227DB8, ov42_02227DC8, NULL};
-
 const func_type_02229B48 ov42_02229B48[10] = {NULL, ov42_02227DD8, ov42_02227DE8, 
                                                 ov42_02227DF8, ov42_02227E18, ov42_02227E28,
                                                 ov42_02227E38, ov42_02227E48, ov42_02227E58, NULL};
 
+const func_type_02227504 ov42_02229B20[10] = {ov42_02227D48, ov42_02227D54, ov42_02227D64,
+                                                ov42_02227D74, ov42_02227D88, ov42_02227D98,
+                                                ov42_02227DA8, ov42_02227DB8, ov42_02227DC8, NULL};
+
 const u32 ov42_02229B70[12] = {3, 4, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-// const u16 ov42_02229BA0[1] = {0};
-// const u16 ov42_02229BA2[305] = {0, 3, 2, 5, 3, 11, 4, 31, 5, 50, 6, 51, 7, 62, 8,
-//                             70, 9, 97, 1, 6, 10, 7, 11, 13, 12, 14, 13, 35, 14, 37, 15,
-//                             42, 16, 63, 17, 4, 18, 8, 19, 52, 20, 53, 21, 2, 22, 15, 23,
-//                             16, 24, 59, 25, 60, 26, 9, 27, 12, 28, 23, 29, 22, 30, 41, 31,
-//                             38, 32, 39, 33, 17, 34, 68, 35, 69, 36, 1, 37, 45, 38, 54, 39,
-//                             56, 40, 20, 41, 10, 42, 19, 43, 29, 44, 36, 45, 40, 46, 43, 47,
-//                             34, 48, 55, 49, 71, 50, 141, 51, 142, 52, 143, 53, 144, 54, 145, 55,
-//                             169, 56, 44, 58, 30, 59, 175, 94, 18, 103, 148, 114, 84, 115, 24, 116,
-//                             25, 117, 168, 132, 86, 135, 277, 139, 278, 140, 279, 141, 280, 142, 281, 143,
-//                             282, 144, 283, 145, 284, 146, 285, 147, 286, 148, 238, 149, 239, 150, 295, 151, 296, 152};
-extern const u16 ov42_02229BA0[1];
-extern const u16 ov42_02229BA2[305];
+const u16 ov42_02229BA2[305] = {0, 0, 3, 2, 5, 3, 11, 4, 31, 5, 50, 6, 51, 7, 62, 8,
+                            70, 9, 97, 1, 6, 10, 7, 11, 13, 12, 14, 13, 35, 14, 37, 15,
+                            42, 16, 63, 17, 4, 18, 8, 19, 52, 20, 53, 21, 2, 22, 15, 23,
+                            16, 24, 59, 25, 60, 26, 9, 27, 12, 28, 23, 29, 22, 30, 41, 31,
+                            38, 32, 39, 33, 17, 34, 68, 35, 69, 36, 1, 37, 45, 38, 54, 39,
+                            56, 40, 20, 41, 10, 42, 19, 43, 29, 44, 36, 45, 40, 46, 43, 47, 34,
+                            48, 55, 49, 71, 50, 141, 51, 142, 52, 143, 53, 144, 54, 145, 55, 169,
+                            56, 44, 58, 30, 59, 175, 94, 18, 103, 148, 114, 84, 115, 24, 116, 25,
+                            117, 168, 132, 86, 135, 277, 139, 278, 140, 279, 141, 280, 142, 281,
+                            143, 282, 144, 283, 145, 284, 146, 285, 147, 286, 148, 238, 149, 239,
+                            150, 295 ,151, 296, 152};
 
 UnkStruct_ov42_02227060* ov42_02227060(SpriteList* arg0, PaletteData* arg1, s32 arg2, enum HeapID arg3) {
     int i;
@@ -39,10 +37,10 @@ UnkStruct_ov42_02227060* ov42_02227060(SpriteList* arg0, PaletteData* arg1, s32 
     temp_r0->unk2304 = NARC_New(NARC_a_1_7_9, arg3);
     temp_r0->unk2308 = NARC_New(NARC_a_1_8_6, arg3);
     for (i = 0; i < 2; i++) {
-        temp_r0->unk22F0[i] = Create2DGfxResObjMan(0x9A, (GfGfxResType)i, arg3);
+        temp_r0->unk22F0[i] = Create2DGfxResObjMan(154, (GfGfxResType)i, arg3);
     }
     for (i = 0; i < 2; i++) {
-        temp_r0->unk22F8[i] = Create2DGfxResObjMan(0x17, (GfGfxResType)(i + 2), arg3);
+        temp_r0->unk22F8[i] = Create2DGfxResObjMan(23, (GfGfxResType)(i + 2), arg3);
     }
     for (i = 0; i < 3; i++) {
         ov42_02227570(temp_r0, i, arg3);
@@ -89,7 +87,7 @@ void ov42_022271F8(UnkStruct_ov42_02227060* arg0) {
     if (arg0->unk2300 != 0) {
         ov42_02227274(arg0);
     }
-    for (int i = 0; i < 0x99; i++) {
+    for (int i = 0; i < 153; i++) {
         if (ov42_022279E8(arg0, i) == 1) {
             ov42_02227948(arg0, i);
         }
@@ -204,8 +202,8 @@ void ov42_02227434(UnkStruct_ov42_02227114* arg0, s16 arg1, s16 arg2) {
     sp0.z = 0;
     Sprite_SetMatrix(arg0->unk4, &sp0);
     if (arg0->unk8 != 0) {
-        sp0.x += 0x8000;
-        sp0.y += 0xE000;
+        sp0.x += 32768;
+        sp0.y += 57344;
         Sprite_SetMatrix(arg0->unk8, &sp0);
     }
 }
@@ -249,14 +247,14 @@ void ov42_022274DC(UnkStruct_ov42_02227114* arg0, s16 arg1, s16 arg2) {
     if (arg0->unk8 != 0) {
         VecFx32 sp0;
         sp0.x = (arg1 + 8) * 4096;
-        sp0.y = (arg2 + 0xE) * 4096;
+        sp0.y = (arg2 + 14) * 4096;
         sp0.z = 0;
         Sprite_SetMatrix(arg0->unk8, &sp0);
     }
 }
 
 void ov42_02227504(UnkStruct_ov42_02227114* arg0, s32 arg1, s32 arg2) {
-    GF_ASSERT(arg1 < 0xA);
+    GF_ASSERT(arg1 < 10);
     GF_ASSERT(arg2 < 4);
     arg0->unkC = arg1;
     arg0->unk14 = 0;
@@ -269,7 +267,7 @@ void ov42_02227504(UnkStruct_ov42_02227114* arg0, s32 arg1, s32 arg2) {
 void ov42_02227538(UnkStruct_ov42_02227114* arg0) {
     BOOL var_r0 = FALSE;
     u8 temp_r2 = ov42_02229B04[arg0->unkC];
-    if (temp_r2 == 0xFF) {
+    if (temp_r2 == 255) {
         var_r0 = TRUE;
     } else if (temp_r2 >= arg0->unk14 + 1) {
         var_r0 = TRUE;
@@ -302,9 +300,9 @@ void ov42_02227604(UnkStruct_ov42_02227060* arg0, s32 arg1) {
 
 u16 ov42_02227654(s32 arg0) {
     int j = 0;
-    for (int i = 0; i < 0x99; i++) {
-        if (arg0 == ov42_02229BA0[j]) {
-            return ov42_02229BA2[i * 2];
+    for (s32 i = 0; i < 153; i++) {
+        if (arg0 == ov42_02229BA2[j]) {
+            return ov42_02229BA2[i * 2 + 1];
         }    
         j += 2;
     }
@@ -314,7 +312,7 @@ u16 ov42_02227654(s32 arg0) {
 
 s32 ov42_02227680(u32 arg0, s32 arg1) {
     if (arg1 == 0) {
-        if ((arg0 == 0) || (arg0 == 0x61) || (arg0 == 0xEE) || (arg0 == 0xEF) || (arg0 - 0x127 <= 1)) {
+        if ((arg0 == 0) || (arg0 == 97) || (arg0 == 238) || (arg0 == 239) || (arg0 - 295 <= 1)) {
             return 1;
         }
         return 0;
@@ -328,7 +326,7 @@ s32 ov42_022276AC(s32 arg0, s32 arg1, s32 arg2) {
     if (arg2 == 0) {
         var_r1 += 2;
     }
-    return  0x100 + (arg0 * 2) + _02229AF8[var_r1];
+    return  256 + (arg0 * 2) + _02229AF8[var_r1];
 }
 
 void ov42_022276DC(UnkStruct_ov42_02227060* arg0, s32 arg1, u8 arg2, s32 arg3, enum HeapID arg4, s32 arg5) {
@@ -341,23 +339,23 @@ void ov42_022276DC(UnkStruct_ov42_02227060* arg0, s32 arg1, u8 arg2, s32 arg3, e
 }
 
 void ov42_02227720(UnkStruct_ov42_02227060* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
-    arg0->unk10[arg1].unk4 = AddCharResObjFromOpenNarc(arg0->unk22F0[0], arg0->unk2304, arg1 * 2 + 0xE, 0, arg1 + 0x200, arg2, (enum HeapID)arg4);
-    arg0->unk10[arg1].unk8 = AddPlttResObjFromOpenNarc(arg0->unk22F0[1], arg0->unk2304, arg1 * 2 + 0xD, 0, arg1 + 0x200, arg2, 1, (enum HeapID)arg4);
+    arg0->unk10[arg1].unk4 = AddCharResObjFromOpenNarc(arg0->unk22F0[0], arg0->unk2304, arg1 * 2 + 14, 0, arg1 + 512, arg2, (enum HeapID)arg4);
+    arg0->unk10[arg1].unk8 = AddPlttResObjFromOpenNarc(arg0->unk22F0[1], arg0->unk2304, arg1 * 2 + 13, 0, arg1 + 512, arg2, 1, (enum HeapID)arg4);
     NNSG2dCharacterData* charData = GF2DGfxResObj_GetCharDataPtr(arg0->unk10[arg1].unk4);
 
     s32 sp34;
-    if (charData->szByte != 0x1800) {
+    if (charData->szByte != 6144) {
         sp34 = 1;
     } else {
         sp34 = 0;
     }
     if (arg3 == 2) {
-        charData->szByte = 0x800;
+        charData->szByte = 2048;
     } else if (arg3 == 1) {
         if (sp34 != 0) {
-            charData->szByte = 0x1400;
+            charData->szByte = 5120;
         } else {
-            charData->szByte = 0x1800;
+            charData->szByte = 6144;
         }
     }
     if (sub_0200AE18(arg0->unk10[arg1].unk4) == 0) {
@@ -375,16 +373,16 @@ void ov42_02227720(UnkStruct_ov42_02227060* arg0, s32 arg1, s32 arg2, s32 arg3, 
     arg0->unk10[arg1].unk10 = arg3;
     arg0->unk10[arg1].unk0 = 0;
     s32 temp_r6_2 = ov42_022276AC(arg3, 2, sp34);
-    CreateSpriteResourcesHeader(&arg0->unk10[arg1].unk14, arg1 + 0x200, arg1 + 0x200, temp_r6_2, ov42_022276AC(arg3, 3, sp34), -1, -1, 0, 0, arg0->unk22F0[0], arg0->unk22F0[1], arg0->unk22F0[2], arg0->unk22F0[3], 0, 0);
+    CreateSpriteResourcesHeader(&arg0->unk10[arg1].unk14, arg1 + 512, arg1 + 512, temp_r6_2, ov42_022276AC(arg3, 3, sp34), -1, -1, 0, 0, arg0->unk22F0[0], arg0->unk22F0[1], arg0->unk22F0[2], arg0->unk22F0[3], 0, 0);
 }
 
 void ov42_02227874(UnkStruct_ov42_02227060* arg0, s32 arg1, s32 arg2, s32 arg3, enum HeapID arg4) {
     s32 r7 = arg1 - 2;
-    arg0->unk10[arg1].unk4 = AddCharResObjFromOpenNarc(arg0->unk22F0[0], arg0->unk2308, arg1 - 1, 0, arg1 + 0x200, arg2, arg4);
+    arg0->unk10[arg1].unk4 = AddCharResObjFromOpenNarc(arg0->unk22F0[0], arg0->unk2308, arg1 - 1, 0, arg1 + 512, arg2, arg4);
     if (arg3 == 2) {
-        GF2DGfxResObj_GetCharDataPtr(arg0->unk10[arg1].unk4)->szByte = 0x800;
+        GF2DGfxResObj_GetCharDataPtr(arg0->unk10[arg1].unk4)->szByte = 2048;
     } else if (arg3 == 1) {
-        GF2DGfxResObj_GetCharDataPtr(arg0->unk10[arg1].unk4)->szByte = 0x1400;
+        GF2DGfxResObj_GetCharDataPtr(arg0->unk10[arg1].unk4)->szByte = 5120;
     }
     GF_ASSERT(sub_0200AE18(arg0->unk10[arg1].unk4));
     sub_0200A740(arg0->unk10[arg1].unk4);
@@ -392,7 +390,7 @@ void ov42_02227874(UnkStruct_ov42_02227060* arg0, s32 arg1, s32 arg2, s32 arg3, 
     arg0->unk10[arg1].unkC = arg2;
     arg0->unk10[arg1].unk10 = arg3;
     arg0->unk10[arg1].unk0 = 1;
-    CreateSpriteResourcesHeader(&arg0->unk10[arg1].unk14, arg1 + 0x200, 0x402, r7 + 0x180, r7 + 0x180, -1, -1, 0, 0, arg0->unk22F0[0], arg0->unk22F0[1], arg0->unk22F0[2], arg0->unk22F0[3], 0, 0);
+    CreateSpriteResourcesHeader(&arg0->unk10[arg1].unk14, arg1 + 512, 1026, r7 + 384, r7 + 384, -1, -1, 0, 0, arg0->unk22F0[0], arg0->unk22F0[1], arg0->unk22F0[2], arg0->unk22F0[3], 0, 0);
 }
 
 void ov42_02227948(UnkStruct_ov42_02227060* arg0, s32 arg1) {
@@ -440,14 +438,14 @@ void ov42_022279FC(UnkStruct_ov42_02227060* arg0, s32 arg1, enum HeapID arg2) {
     }
     GF_ASSERT(sp34 == 1);
     for (i = 0; i < 2; i++) {
-        arg0->unk22C0[i] = AddCellOrAnimResObjFromOpenNarc(arg0->unk22F8[i], arg0->unk2304, i, 0, 0x120, (GfGfxResType)(i + 2), arg2);
+        arg0->unk22C0[i] = AddCellOrAnimResObjFromOpenNarc(arg0->unk22F8[i], arg0->unk2304, i, 0, 288, (GfGfxResType)(i + 2), arg2);
     }
-    arg0->unk22B8 = AddCharResObjFromOpenNarc(arg0->unk22F0[0], arg0->unk2304, 2, 0, 0x120, arg1, arg2);
+    arg0->unk22B8 = AddCharResObjFromOpenNarc(arg0->unk22F0[0], arg0->unk2304, 2, 0, 288, arg1, arg2);
     if (sub_0200AE18(arg0->unk22B8) == 0) {
         GF_AssertFail();
     }
     sub_0200A740(arg0->unk22B8);
-    CreateSpriteResourcesHeader(&arg0->unk22C8, 0x120, sp30 + 0x200, 0x120, 0x120, -1, -1, 0, 0, arg0->unk22F0[0], arg0->unk22F0[1], arg0->unk22F0[2], arg0->unk22F0[3], 0, 0);
+    CreateSpriteResourcesHeader(&arg0->unk22C8, 288, sp30 + 512, 288, 288, -1, -1, 0, 0, arg0->unk22F0[0], arg0->unk22F0[1], arg0->unk22F0[2], arg0->unk22F0[3], 0, 0);
 }
 
 void ov42_02227B04(UnkStruct_ov42_02227060* arg0) {
@@ -471,7 +469,7 @@ s32 ov42_02227B5C(SpriteResource** arg0) {
 
 void ov42_02227B6C(UnkStruct_ov42_02227060* arg0, s32 arg1, enum HeapID arg2) {
     GF_ASSERT(!arg0->unk2300);
-    arg0->unk2300 = AddPlttResObjFromOpenNarc(arg0->unk22F0[1], arg0->unk2308, 0, 0, 0x402, arg1, 8, arg2);
+    arg0->unk2300 = AddPlttResObjFromOpenNarc(arg0->unk22F0[1], arg0->unk2308, 0, 0, 1026, arg1, 8, arg2);
     GF_ASSERT(sub_0200B00C(arg0->unk2300));
     if (arg0->unk4 != 0) {
         ov42_02227E78(arg0, arg0->unk2300, 8);
@@ -489,14 +487,14 @@ void ov42_02227BE0(UnkStruct_ov42_02227060* arg0) {
 void ov42_02227C18(UnkStruct_ov42_02227060* arg0, enum HeapID arg1) {
     GF_ASSERT(!arg0->unk21B8[0].unk0);
     for (int i = 0; i < 16; i++) {
-        arg0->unk21B8[i].unk0 = AddCellOrAnimResObjFromOpenNarc(arg0->unk22F8[0], arg0->unk2308, 0x11 + (i * 2), 0, i + 0x180, GF_GFX_RES_TYPE_CELL, arg1);
-        arg0->unk21B8[i].unk4 = AddCellOrAnimResObjFromOpenNarc(arg0->unk22F8[1], arg0->unk2308, 0x12 + (i * 2), 0, i + 0x180, GF_GFX_RES_TYPE_ANIM, arg1);
+        arg0->unk21B8[i].unk0 = AddCellOrAnimResObjFromOpenNarc(arg0->unk22F8[0], arg0->unk2308, 17 + (i * 2), 0, i + 384, GF_GFX_RES_TYPE_CELL, arg1);
+        arg0->unk21B8[i].unk4 = AddCellOrAnimResObjFromOpenNarc(arg0->unk22F8[1], arg0->unk2308, 18 + (i * 2), 0, i + 384, GF_GFX_RES_TYPE_ANIM, arg1);
     }
 }
 
 void ov42_02227CA8(UnkStruct_ov42_02227060* arg0) {
     GF_ASSERT(arg0->unk21B8[0].unk0);
-    for (int i = 0; i < 0x10; i++) {
+    for (int i = 0; i < 16; i++) {
         DestroySingle2DGfxResObj(arg0->unk22F8[0], arg0->unk21B8[i].unk0);
         DestroySingle2DGfxResObj(arg0->unk22F8[1], arg0->unk21B8[i].unk4);
         arg0->unk21B8[i].unk0 = NULL;
@@ -519,135 +517,4 @@ void ov42_02227D30(UnkStruct_ov42_02227114* arg0) {
     if (spriteFunc != NULL) {
         spriteFunc(arg0);
     }
-}
-
-void ov42_02227D48(UnkStruct_ov42_02227114* arg0, s32 arg1) {
-    arg0->unk10 = arg1;
-    Sprite_TryChangeAnimSeq(arg0->unk4, arg1);
-}
-
-void ov42_02227D54(UnkStruct_ov42_02227114* arg0, s32 arg1) {
-    arg0->unk10 = arg1;
-    Sprite_TryChangeAnimSeq(arg0->unk4, 4);
-}
-
-void ov42_02227D64(UnkStruct_ov42_02227114* arg0, s32 arg1) {
-    arg0->unk10 = arg1;
-    Sprite_TryChangeAnimSeq(arg0->unk4, arg1 + 5);
-}
-
-void ov42_02227D74(UnkStruct_ov42_02227114* arg0, s32 arg1) {
-    Sprite_TryChangeAnimSeq(arg0->unk4, arg0->unk10 + 5);
-    arg0->unk10 = arg1;
-}
-
-void ov42_02227D88(UnkStruct_ov42_02227114* arg0, s32 arg1) {
-    arg0->unk10 = arg1;
-    Sprite_TryChangeAnimSeq(arg0->unk4, arg1 + 9);
-}
-
-void ov42_02227D98(UnkStruct_ov42_02227114* arg0, s32 arg1) {
-    arg0->unk10 = arg1;
-    Sprite_TryChangeAnimSeq(arg0->unk4, arg1 + 5);
-}
-
-void ov42_02227DA8(UnkStruct_ov42_02227114* arg0, s32 arg1) {
-    arg0->unk10 = arg1;
-    Sprite_TryChangeAnimSeq(arg0->unk4, arg1 + 5);
-}
-
-void ov42_02227DB8(UnkStruct_ov42_02227114* arg0, s32 arg1) {
-    arg0->unk10 = arg1;
-    Sprite_TryChangeAnimSeq(arg0->unk4, arg1 + 5);
-}
-
-void ov42_02227DC8(UnkStruct_ov42_02227114* arg0, s32 arg1) {
-    arg0->unk10 = arg1;
-    Sprite_TryChangeAnimSeq(arg0->unk4, arg1 + 5);
-}
-
-void ov42_02227DD8(UnkStruct_ov42_02227114* arg0) {
-    Sprite_UpdateAnim(arg0->unk4, 0x2000);
-}
-
-void ov42_02227DE8(UnkStruct_ov42_02227114* arg0) {
-    Sprite_UpdateAnim(arg0->unk4, 0x2000);
-}
-
-void ov42_02227DF8(UnkStruct_ov42_02227114* arg0) {
-    if (arg0->unk14 == 0) {
-        Sprite_SetAnimationFrame(arg0->unk4, 1);
-        return;
-    }
-    Sprite_SetAnimCtrlSeq(arg0->unk4, arg0->unk10 + 5);
-}
-
-void ov42_02227E18(UnkStruct_ov42_02227114* arg0) {
-    Sprite_UpdateAnim(arg0->unk4, 0x2000);
-}
-
-void ov42_02227E28(UnkStruct_ov42_02227114* arg0) {
-    Sprite_UpdateAnim(arg0->unk4, 0x1000);
-}
-
-void ov42_02227E38(UnkStruct_ov42_02227114* arg0) {
-    Sprite_UpdateAnim(arg0->unk4, 0x1000);
-}
-
-void ov42_02227E48(UnkStruct_ov42_02227114* arg0) {
-    Sprite_UpdateAnim(arg0->unk4, 0x8000);
-}
-
-void ov42_02227E58(UnkStruct_ov42_02227114* arg0) {
-    Sprite_UpdateAnim(arg0->unk4, 0x6000);
-}
-
-s32 ov42_02227E68(UnkStruct_ov42_02227114* arg0) {
-    if (arg0->unk4 == NULL) {
-        return 1;
-    }
-    return 0;
-}
-
-void ov42_02227E78(UnkStruct_ov42_02227060* arg0, SpriteResource* arg1, s32 arg2) {
-    NNSG2dPaletteData* sp4 = GF2DGfxResObj_GetPlttDataPtr(arg1);
-    s32 temp_r7 = SpriteTransfer_GetPlttOffset(arg1, NNS_G2D_VRAM_TYPE_2DMAIN);
-    s32 temp_r6 = SpriteTransfer_GetPlttOffset(arg1, NNS_G2D_VRAM_TYPE_2DSUB);
-    if (temp_r7 != -1) {
-        PaletteData_LoadPalette(arg0->unk4, sp4->pRawData, PLTTBUF_MAIN_OBJ, (temp_r7 * 0x10), (arg2 << 5));
-    }
-    if (temp_r6 != -1) {
-        PaletteData_LoadPalette(arg0->unk4, sp4->pRawData, PLTTBUF_SUB_OBJ, (temp_r6 * 0x10), (arg2 << 5));
-    }
-}
-
-void* ov42_02227EE0(u16 arg0, u16 arg1, enum HeapID arg2) {
-    UnkStruct_ov42_02227F68* temp_r0 = Heap_Alloc(arg2, sizeof(UnkStruct_ov42_02227F68));
-    GF_ASSERT(temp_r0);
-    temp_r0->unk0 = arg0;
-    temp_r0->unk2 = arg1;
-    void* temp_r0_2 = Heap_Alloc(arg2, temp_r0->unk0 * temp_r0->unk2 * 4);
-    temp_r0->unk4 = temp_r0_2;
-    GF_ASSERT(temp_r0_2);
-    memset(temp_r0->unk4, 0, temp_r0->unk0 * temp_r0->unk2 * 4);
-    return temp_r0;
-}
-
-void ov42_02227F28(UnkStruct_ov42_02227F68* arg0) {
-    GF_ASSERT(arg0);
-    Heap_Free(arg0->unk4);
-    Heap_Free(arg0);
-}
-
-u16 ov42_02227F40(UnkStruct_ov42_02227F68* arg0) {
-    return arg0->unk0;
-}
-
-u16 ov42_02227F44(UnkStruct_ov42_02227F68* arg0) {
-    return arg0->unk2;
-}
-
-void ov42_02227F48(UnkStruct_ov42_02227F68* arg0, void* arg1) {
-    GF_ASSERT(arg0);
-    memcpy(arg0->unk4, arg1, arg0->unk0 * arg0->unk2 * 4);
 }

@@ -1,35 +1,19 @@
 #include "overlay_42.h"
 
-// const UnkStruct_ov42_02227FA4 ov42_02229E04 = {0xFFFFFFFF};
-// const u8 ov42_02229E08[] = {0x01, 0x00, 0x03, 0x02};
-// const s8 ov42_02229E0C[] = {0x00};
-// const s8 ov42_02229E0D[] = {0xF0, 0x00, 0x10, 0xF0, 0x00, 0x10, 0x00};
-
-extern const UnkStruct_ov42_02227FA4 ov42_02229E04;
-extern const u8 ov42_02229E08[];
-extern const s8 ov42_02229E0C[];
-extern const s8 ov42_02229E0D[];
-
-const func_type_02228574 ov42_02229E44[] = {ov42_02228B3C, ov42_02228B40, ov42_02228B48, ov42_02228B88,
-                                            ov42_02228BC8, ov42_02228BCC, ov42_02228B48, ov42_02228B48,
-                                            ov42_02228BD4, ov42_02228BD4, ov42_02228BD4, ov42_02228BD4};
+const s8 ov42_02229E0D[8] = {0, 240, 0, 16, 240, 0, 16, 0};                                        
+const u8 ov42_02229E08[4] = {1, 0, 3, 2};
 
 const func_type_022285A4 ov42_02229E14[] = {ov42_022285A4, ov42_022285FC, ov42_02228668, ov42_02228700,
                                             ov42_02228798, ov42_022287F0, ov42_0222885C, ov42_022288F4,
                                             ov42_0222898C, ov42_022289F8, ov42_02228A64, ov42_02228AD0};
 
+const func_type_02228574 ov42_02229E44[] = {ov42_02228B3C, ov42_02228B40, ov42_02228B48, ov42_02228B88,
+                                            ov42_02228BC8, ov42_02228BCC, ov42_02228B48, ov42_02228B48,
+                                            ov42_02228BD4, ov42_02228BD4, ov42_02228BD4, ov42_02228BD4};
+
 const func_type_02229E74 ov42_02229E74[] = {ov42_02228CDC, ov42_02228D08, ov42_02228D44, ov42_02228DB8,
                                             ov42_02228DC8, ov42_02228DF0, ov42_02228DFC, ov42_02228D44,
                                             ov42_02228E0C, ov42_02228E0C, ov42_02228E0C, ov42_02228E0C};
-
-UnkStruct_ov42_02227FA4 ov42_02227F68(UnkStruct_ov42_02227F68* arg0, u32 arg1, u32 arg2) {
-    UnkStruct_ov42_02227FA4 sp0 = ov42_02229E04;
-    GF_ASSERT(arg0);
-    if ((arg0->unk0 > arg1) && (arg0->unk2 > arg2)) {
-        sp0.unk0 = arg0->unk4[arg0->unk0 * arg2 + arg1];
-    }
-    return sp0;
-}
 
 s32 ov42_02227FA4(UnkStruct_ov42_02227F68* arg0, u16 arg1, u16 arg2) {
     GF_ASSERT(arg0);
@@ -103,7 +87,7 @@ UnkStruct_ov42_02228110* ov42_022280B8(UnkStruct_ov42_022280A8* arg0, UnkStruct_
 }
 
 void ov42_02228100(void* arg0) {
-    __builtin__clear(arg0, 0x18);
+    __builtin__clear(arg0, 24);
 }
 
 UnkStruct_ov42_02228110* ov42_02228110(UnkStruct_ov42_022280A8* arg0, u8 arg1) {
@@ -194,7 +178,7 @@ void ov42_022281F8(UnkStruct_ov42_02228110* arg0, u32 arg1, s32 arg2) {
             arg0->unkC = arg2;
             return;
         case 5:
-            GF_ASSERT(arg2 < 0xC);
+            GF_ASSERT(arg2 < 12);
             arg0->unk15 = arg2;
             return;
         case 6:
@@ -219,8 +203,8 @@ void ov42_022281F8(UnkStruct_ov42_02228110* arg0, u32 arg1, s32 arg2) {
 
 UnkStruct_ov44_02232914 ov42_02228270(UnkStruct_ov44_02232914 arg0, s32 arg1) {
     s32 temp_r0 = arg1 * 2;
-    arg0.unk0 = (s16)arg0.unk0 + ov42_02229E0C[arg1 * 2];
-    arg0.unk2 = (s16)arg0.unk2 + ov42_02229E0D[arg1 * 2];
+    arg0.unk0 = arg0.unk0 + ov42_02229E0D[arg1 * 2];
+    arg0.unk2 = arg0.unk2 + ov42_02229E0D[arg1 * 2 + 1];
 
     return arg0;
 }
@@ -358,10 +342,10 @@ void ov42_02228668(UnkStruct_ov42_02228110* arg0, UnkStruct_ov44_02232914 arg1, 
     UnkStruct_ov44_02232914 temp_r0 = ov42_02228BDC(arg1, arg2);
     ov42_022283AC(arg0, arg1);
     ov42_0222839C(arg0, temp_r0);
-    ov42_022281F8(arg0, 6U, arg2);
-    ov42_022281F8(arg0, 5U, 2);
-    ov42_022281F8(arg0, 8U, 0);
-    ov42_022281F8(arg0, 9U, 8);
+    ov42_022281F8(arg0, 6, arg2);
+    ov42_022281F8(arg0, 5, 2);
+    ov42_022281F8(arg0, 8, 0);
+    ov42_022281F8(arg0, 9, 8);
 }
 
 void ov42_02228700(UnkStruct_ov42_02228110* arg0, UnkStruct_ov44_02232914 arg1, u32 arg2) {
@@ -369,28 +353,28 @@ void ov42_02228700(UnkStruct_ov42_02228110* arg0, UnkStruct_ov44_02232914 arg1, 
     UnkStruct_ov44_02232914 temp_r0 = ov42_02228BDC(arg1, arg2);
     ov42_022283AC(arg0, arg1);
     ov42_0222839C(arg0, temp_r0);
-    ov42_022281F8(arg0, 6U, arg2);
-    ov42_022281F8(arg0, 5U, 3);
-    ov42_022281F8(arg0, 8U, 0);
-    ov42_022281F8(arg0, 9U, 4);
+    ov42_022281F8(arg0, 6, arg2);
+    ov42_022281F8(arg0, 5, 3);
+    ov42_022281F8(arg0, 8, 0);
+    ov42_022281F8(arg0, 9, 4);
 }
 
 void ov42_02228798(UnkStruct_ov42_02228110* arg0, UnkStruct_ov44_02232914 arg1, u32 arg2) {
     GF_ASSERT(arg0);
     ov42_0222839C(arg0, arg1);
     ov42_022283AC(arg0, arg1);
-    ov42_022281F8(arg0, 6U, arg2);
-    ov42_022281F8(arg0, 5U, 4);
+    ov42_022281F8(arg0, 6, arg2);
+    ov42_022281F8(arg0, 5, 4);
 }
 
 void ov42_022287F0(UnkStruct_ov42_02228110* arg0, UnkStruct_ov44_02232914 arg1, u32 arg2) {
     GF_ASSERT(arg0);
     ov42_0222839C(arg0, arg1);
     ov42_022283AC(arg0, arg1);
-    ov42_022281F8(arg0, 6U, arg2);
-    ov42_022281F8(arg0, 5U, 5);
-    ov42_022281F8(arg0, 8U, 0);
-    ov42_022281F8(arg0, 9U, 0x10);
+    ov42_022281F8(arg0, 6, arg2);
+    ov42_022281F8(arg0, 5, 5);
+    ov42_022281F8(arg0, 8, 0);
+    ov42_022281F8(arg0, 9, 16);
 }
 
 void ov42_0222885C(UnkStruct_ov42_02228110* arg0, UnkStruct_ov44_02232914 arg1, u32 arg2) {
@@ -409,50 +393,50 @@ void ov42_022288F4(UnkStruct_ov42_02228110* arg0, UnkStruct_ov44_02232914 arg1, 
     UnkStruct_ov44_02232914 temp_r0 = ov42_02228BDC(arg1, arg2);
     ov42_022283AC(arg0, arg1);
     ov42_0222839C(arg0, temp_r0);
-    ov42_022281F8(arg0, 6U, arg2);
-    ov42_022281F8(arg0, 5U, 7);
-    ov42_022281F8(arg0, 8U, 0);
-    ov42_022281F8(arg0, 9U, 4);
+    ov42_022281F8(arg0, 6, arg2);
+    ov42_022281F8(arg0, 5, 7);
+    ov42_022281F8(arg0, 8, 0);
+    ov42_022281F8(arg0, 9, 4);
 }
 
 void ov42_0222898C(UnkStruct_ov42_02228110* arg0, UnkStruct_ov44_02232914 arg1, u32 arg2) {
     GF_ASSERT(arg0);
     ov42_022283AC(arg0, arg1);
     ov42_0222839C(arg0, arg1);
-    ov42_022281F8(arg0, 6U, arg2);
-    ov42_022281F8(arg0, 5U, 8);
-    ov42_022281F8(arg0, 8U, 0);
-    ov42_022281F8(arg0, 9U, 2);
+    ov42_022281F8(arg0, 6, arg2);
+    ov42_022281F8(arg0, 5, 8);
+    ov42_022281F8(arg0, 8, 0);
+    ov42_022281F8(arg0, 9, 2);
 }
 
 void ov42_022289F8(UnkStruct_ov42_02228110* arg0, UnkStruct_ov44_02232914 arg1, u32 arg2) {
     GF_ASSERT(arg0);
     ov42_022283AC(arg0, arg1);
     ov42_0222839C(arg0, arg1);
-    ov42_022281F8(arg0, 6U, arg2);
-    ov42_022281F8(arg0, 5U, 9);
-    ov42_022281F8(arg0, 8U, 0);
-    ov42_022281F8(arg0, 9U, 4);
+    ov42_022281F8(arg0, 6, arg2);
+    ov42_022281F8(arg0, 5, 9);
+    ov42_022281F8(arg0, 8, 0);
+    ov42_022281F8(arg0, 9, 4);
 }
 
 void ov42_02228A64(UnkStruct_ov42_02228110* arg0, UnkStruct_ov44_02232914 arg1, u32 arg2) {
     GF_ASSERT(arg0);
     ov42_022283AC(arg0, arg1);
     ov42_0222839C(arg0, arg1);
-    ov42_022281F8(arg0, 6U, arg2);
-    ov42_022281F8(arg0, 5U, 0xA);
-    ov42_022281F8(arg0, 8U, 0);
-    ov42_022281F8(arg0, 9U, 8);
+    ov42_022281F8(arg0, 6, arg2);
+    ov42_022281F8(arg0, 5, 10);
+    ov42_022281F8(arg0, 8, 0);
+    ov42_022281F8(arg0, 9, 8);
 }
 
 void ov42_02228AD0(UnkStruct_ov42_02228110* arg0, UnkStruct_ov44_02232914 arg1, u32 arg2) {
     GF_ASSERT(arg0);
     ov42_022283AC(arg0, arg1);
     ov42_0222839C(arg0, arg1);
-    ov42_022281F8(arg0, 6U, arg2);
-    ov42_022281F8(arg0, 5U, 0xB);
-    ov42_022281F8(arg0, 8U, 0);
-    ov42_022281F8(arg0, 9U, 0x10);
+    ov42_022281F8(arg0, 6, arg2);
+    ov42_022281F8(arg0, 5, 11);
+    ov42_022281F8(arg0, 8, 0);
+    ov42_022281F8(arg0, 9, 16);
 }
 
 s32 ov42_02228B3C(UnkStruct_ov42_02228110* arg0) {

@@ -2,12 +2,12 @@
 
 #include "gf_gfx_loader.h"
 
-const u8 ov42_02229EB0[] = {0x00, 0x03, 0x02, 0x04, 0x00, 0x05, 0x06, 0x08, 0x07, 0x08, 0x02, 0x06};
-const u8 ov42_02229EA4[] = {0x00, 0x00, 0x01, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00};
+const u8 ov42_02229EB0[] = {0, 3, 2, 4, 0, 5, 6, 8, 7, 8, 2, 6};
+const u8 ov42_02229EA4[] = {0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0};
 const BgTemplate ov42_02229EBC = {
     .x = 0,
     .y = 0,
-    .bufferSize = 0x1000,
+    .bufferSize = 4096,
     .baseTile = 0,
     .size = 3,
     .colorMode = 0,
@@ -45,7 +45,7 @@ s32 ov42_02228D44(UnkStruct_ov42_02228110* arg0, UnkStruct_ov42_02227F68* arg1, 
         ov42_02228EB0(arg4, arg0, arg3->unk0, arg3->unk3, arg3->unk2);
         return 1;
     }
-    if ((temp_r0 == 0) && (ov42_02228188(arg0, 0xA) >= 8)) {
+    if ((temp_r0 == 0) && (ov42_02228188(arg0, 10) >= 8)) {
         ov42_02228EB0(arg4, arg0, 5U, arg3->unk3, arg3->unk2);
         return 1;
     }
@@ -105,9 +105,9 @@ UnkStruct_ov42_02228EDC* ov42_02228EDC(SpriteList* arg0, PaletteData* arg1, u16 
     UnkStruct_ov42_02228EDC* temp_r4 = Heap_Alloc(arg4, sizeof(UnkStruct_ov42_02228EDC));
     temp_r4->unk0 = ov42_02227060(arg0, arg1, arg2, arg4);
     temp_r4->unk8 = arg2;
-    UnkStruct_ov42_0222903C* temp_r0 = Heap_Alloc(arg4, 0x14 * temp_r4->unk8);
+    UnkStruct_ov42_0222903C* temp_r0 = Heap_Alloc(arg4, 20 * temp_r4->unk8);
     temp_r4->unk4 = temp_r0;
-    memset(temp_r0, 0, 0x14 * temp_r4->unk8);
+    memset(temp_r0, 0, 20 * temp_r4->unk8);
     temp_r4->unkA = 2;
     temp_r4->unkB = arg3;
     return temp_r4;
@@ -117,13 +117,13 @@ UnkStruct_ov42_02228EDC* ov42_02228F24(SpriteList* arg0, PaletteData* arg1, u16 
     UnkStruct_ov42_02228EDC* temp_r4 = Heap_Alloc(arg6, sizeof(UnkStruct_ov42_02228EDC));
     temp_r4->unk0 = ov42_02227060(arg0, arg1, arg2, arg6);
     temp_r4->unk8 = arg2;
-    UnkStruct_ov42_0222903C* temp_r0 = Heap_Alloc(arg6, 0x14 * temp_r4->unk8);
+    UnkStruct_ov42_0222903C* temp_r0 = Heap_Alloc(arg6, 20 * temp_r4->unk8);
     temp_r4->unk4 = temp_r0;
-    memset(temp_r0, 0, 0x14 * temp_r4->unk8);
+    memset(temp_r0, 0, 20 * temp_r4->unk8);
     temp_r4->unkA = 2;
     temp_r4->unkB = arg5;
     ov42_02227194(temp_r4->unk0, arg3, temp_r4->unkB, arg4, arg6);
-    ov42_0222729C(temp_r4->unk0, temp_r4->unkB, 0x9C41, arg6);
+    ov42_0222729C(temp_r4->unk0, temp_r4->unkB, 40001, arg6);
     return temp_r4;
 }
 
@@ -255,9 +255,9 @@ void ov42_02229218(UnkStruct_ov42_0222903C* arg0, s32 arg1) {
 
 u32 ov42_0222922C(s16 arg0, u8 arg1) {
     if (arg1 == 1) {
-        return 0x9C40 - (arg0 * 2);
+        return 40000 - (arg0 * 2);
     }
-    return 0x9C41 - (arg0 * 2);
+    return 40001 - (arg0 * 2);
 }
 
 u8 ov42_02229248(UnkStruct_ov42_0222903C* arg0) {
@@ -318,7 +318,7 @@ void ov42_02229308(UnkStruct_ov42_0222903C* arg0, u8 arg1, s32 arg2) {
 
 void ov42_02229358(UnkStruct_ov44_02232914* arg0, UnkStruct_ov42_02228110* arg1) {
     UnkStruct_ov44_02232914 sp0 = ov42_022282F4(arg1);
-    ov42_022293A0(arg0, sp0.unk2 - 0x60, sp0.unk0 - 0x70);
+    ov42_022293A0(arg0, sp0.unk2 - 96, sp0.unk0 - 112);
 }
 
 void ov42_02229394(UnkStruct_ov44_02232914* arg0) {
@@ -365,30 +365,30 @@ void ov42_02229420(UnkStruct_ov42_022293B8* arg0, UnkStruct_ov44_02232914* arg1)
         f32 var_r0;
         f32 var_r0_2;
         if (temp_r5 > 0) {
-            var_r0 = 0.5f + (temp_r5 << 0xC);
+            var_r0 = 0.5f + (temp_r5 << 12);
         } else {
-            var_r0 = (temp_r5 << 0xC) - 0.5f;
+            var_r0 = (temp_r5 << 12) - 0.5f;
         }
         if (temp_r4 > 0) {
-            var_r0_2 = 0.5f + (temp_r4 << 0xC);
+            var_r0_2 = 0.5f + (temp_r4 << 12);
         } else {
-            var_r0_2 = (temp_r4 << 0xC) - 0.5f;
+            var_r0_2 = (temp_r4 << 12) - 0.5f;
         }
         G2dRenderer_SetMainSurfaceCoords(arg0->unk0, var_r0_2, var_r0);
     } else {
         f32 var_r0_3;
         f32 var_r0_4;
         if (temp_r5 > 0) {
-            var_r0_3 = 0.5f + (temp_r5 << 0xC);
+            var_r0_3 = 0.5f + (temp_r5 << 12);
         } else {
-            var_r0_3 = (temp_r5 << 0xC) - 0.5f;
+            var_r0_3 = (temp_r5 << 12) - 0.5f;
         }
         if (temp_r4 > 0) {
-            var_r0_4 = 0.5f + (temp_r4 << 0xC);
+            var_r0_4 = 0.5f + (temp_r4 << 12);
         } else {
-            var_r0_4 = (temp_r4 << 0xC) - 0.5f;
+            var_r0_4 = (temp_r4 << 12) - 0.5f;
         }
-        G2dRenderer_SetSubSurfaceCoords(arg0->unk0, var_r0_4, (fx32) var_r0_3 + 0xC0000);
+        G2dRenderer_SetSubSurfaceCoords(arg0->unk0, var_r0_4, (fx32)var_r0_3 + 0xC0000);
     }
     ov42_02229570(arg0, temp_r4, temp_r5);
 }
@@ -444,8 +444,8 @@ void ov42_02229600(BgConfig* arg0, s32 arg1, NNSG2dScreenData* arg2, s16 arg3, s
     if (arg4 <= 0) {
         arg4 = 0;
     }
-    s16 var_r7 = 0x21 - arg3;
-    s16 var_r6 = 0x19 - arg4;
+    s16 var_r7 = 33 - arg3;
+    s16 var_r6 = 25 - arg4;
     s32 temp_r1 = sp2C + var_r7;
     if (sp34 < temp_r1) {
         var_r7 -= temp_r1 - sp34;
@@ -454,7 +454,7 @@ void ov42_02229600(BgConfig* arg0, s32 arg1, NNSG2dScreenData* arg2, s16 arg3, s
     if (sp30 < temp_r1_2) {
         var_r6 -= temp_r1_2 - sp30;
     }
-    FillBgTilemapRect(arg0, arg1, 0, 0, 0, 0x21, 0x19, 0x11);
+    FillBgTilemapRect(arg0, arg1, 0, 0, 0, 33, 25, 17);
     ov42_022296F0(arg0, arg1, arg3, arg4, var_r7, var_r6, arg2->rawData, sp2C, sp28, sp34, sp30);
 }
 
@@ -501,22 +501,22 @@ void ov42_022296F0(BgConfig* arg0, u8 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5, 
 }
 
 u8 ov42_02229880(u8 arg0, u8 arg1) {
-    if (arg0 > 0x40U) {
+    if (arg0 > 64) {
         GF_AssertFail();
     }
-    if (arg1 > 0x40U) {
+    if (arg1 > 64) {
         GF_AssertFail();
     }
-    if (arg0 <= 0x20U) {
-        if (arg1 <= 0x20U) {
+    if (arg0 <= 32) {
+        if (arg1 <= 32) {
             return 0;
         }
-        return 2U;
+        return 2;
     }
-    if (arg1 <= 0x20U) {
-        return 1U;
+    if (arg1 <= 32) {
+        return 1;
     }
-    return 3U;
+    return 3;
 }
 
 void* ov42_022298B4(void* arg0, u8 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5, UnkStruct_ov44_02232914* arg6) {
@@ -528,7 +528,7 @@ void* ov42_022298B4(void* arg0, u8 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5, Unk
     case 1:
         int var_r4;
         if (((arg1 + 1) << 5) <= arg4) {
-            var_r4 = 0x20;
+            var_r4 = 32;
         } else {
             var_r4 = arg4 - (arg1 << 5);
         }
@@ -539,7 +539,7 @@ void* ov42_022298B4(void* arg0, u8 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5, Unk
         arg6->unk0 = arg4;
         int var_r1;
         if (((arg2 + 1) << 5) <= arg5) {
-            var_r1 = 0x20;
+            var_r1 = 32;
         } else {
             var_r1 = arg5 - (arg2 << 5);
         }
@@ -548,13 +548,13 @@ void* ov42_022298B4(void* arg0, u8 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5, Unk
     case 3:
         int var_r5;
         if (((arg1 + 1) << 5) <= arg4) {
-            var_r5 = 0x20;
+            var_r5 = 32;
         } else {
             var_r5 = arg4 - (arg1 << 5);
         }
         arg6->unk0 = var_r5;
         if (((arg2 + 1) << 5) <= arg5) {
-            var_r5 = 0x20;
+            var_r5 = 32;
         } else {
             var_r5 = arg5 - (arg2 << 5);
         }
@@ -563,7 +563,7 @@ void* ov42_022298B4(void* arg0, u8 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5, Unk
         if (arg2 == 0) {
             var_r2 = 0;
             if (arg1 != 0) {
-                var_r2 += 0x0800;
+                var_r2 += 2048;
             }
         } else {
             var_r2 = (arg4 << 6);
