@@ -1,12 +1,26 @@
 #include "overlay_42.h"
 
+// const UnkStruct_ov42_02227FA4 ov42_02229E04 = {0xFFFFFFFF};
+// const u8 ov42_02229E08[] = {0x01, 0x00, 0x03, 0x02};
+// const s8 ov42_02229E0C[] = {0x00};
+// const s8 ov42_02229E0D[] = {0xF0, 0x00, 0x10, 0xF0, 0x00, 0x10, 0x00};
+
 extern const UnkStruct_ov42_02227FA4 ov42_02229E04;
 extern const u8 ov42_02229E08[];
 extern const s8 ov42_02229E0C[];
 extern const s8 ov42_02229E0D[];
-extern const func_type_022285A4 ov42_02229E14[];
-extern const func_type_02228574 ov42_02229E44[];
-extern const func_type_02229E74 ov42_02229E74[];
+
+const func_type_02228574 ov42_02229E44[] = {ov42_02228B3C, ov42_02228B40, ov42_02228B48, ov42_02228B88,
+                                            ov42_02228BC8, ov42_02228BCC, ov42_02228B48, ov42_02228B48,
+                                            ov42_02228BD4, ov42_02228BD4, ov42_02228BD4, ov42_02228BD4};
+
+const func_type_022285A4 ov42_02229E14[] = {ov42_022285A4, ov42_022285FC, ov42_02228668, ov42_02228700,
+                                            ov42_02228798, ov42_022287F0, ov42_0222885C, ov42_022288F4,
+                                            ov42_0222898C, ov42_022289F8, ov42_02228A64, ov42_02228AD0};
+
+const func_type_02229E74 ov42_02229E74[] = {ov42_02228CDC, ov42_02228D08, ov42_02228D44, ov42_02228DB8,
+                                            ov42_02228DC8, ov42_02228DF0, ov42_02228DFC, ov42_02228D44,
+                                            ov42_02228E0C, ov42_02228E0C, ov42_02228E0C, ov42_02228E0C};
 
 UnkStruct_ov42_02227FA4 ov42_02227F68(UnkStruct_ov42_02227F68* arg0, u32 arg1, u32 arg2) {
     UnkStruct_ov42_02227FA4 sp0 = ov42_02229E04;
@@ -471,12 +485,12 @@ s32 ov42_02228BC8(UnkStruct_ov42_02228110* arg0) {
     return 0;
 }
 
-void ov42_02228BCC(UnkStruct_ov42_02228110* arg0) {
-    ov42_02228C0C(arg0);
+s32 ov42_02228BCC(UnkStruct_ov42_02228110* arg0) {
+    return ov42_02228C0C(arg0);
 }
 
-void ov42_02228BD4(UnkStruct_ov42_02228110* arg0) {
-    ov42_02228C0C(arg0);
+s32 ov42_02228BD4(UnkStruct_ov42_02228110* arg0) {
+    return ov42_02228C0C(arg0);
 }
 
 UnkStruct_ov44_02232914 ov42_02228BDC(UnkStruct_ov44_02232914 arg0, s32 arg1) {

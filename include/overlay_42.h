@@ -285,8 +285,8 @@ s32 ov42_02228B40(UnkStruct_ov42_02228110* arg0);
 s32 ov42_02228B48(UnkStruct_ov42_02228110* arg0);
 s32 ov42_02228B88(UnkStruct_ov42_02228110* arg0);
 s32 ov42_02228BC8(UnkStruct_ov42_02228110* arg0);
-void ov42_02228BCC(UnkStruct_ov42_02228110* arg0);
-void ov42_02228BD4(UnkStruct_ov42_02228110* arg0);
+s32 ov42_02228BCC(UnkStruct_ov42_02228110* arg0);
+s32 ov42_02228BD4(UnkStruct_ov42_02228110* arg0);
 UnkStruct_ov44_02232914 ov42_02228BDC(UnkStruct_ov44_02232914 arg0, s32 arg1);
 s32 ov42_02228C0C(UnkStruct_ov42_02228110* arg0);
 void ov42_02228C40(UnkStruct_ov42_02228110* arg0);
@@ -294,14 +294,14 @@ s32 ov42_02228C80(UnkStruct_ov42_02227F68* arg0, UnkStruct_ov42_022280A8* arg1, 
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-s32 ov42_02228CDC(UnkStruct_ov42_02228110* arg0, s32 arg1, s32 arg2, UnkStruct_ov42_02228CDC* arg3, UnkStruct_ov42_02228EB0* arg4);
-s32 ov42_02228D08(UnkStruct_ov42_02228110* arg0, s32 arg1, s32 arg2, UnkStruct_ov42_02228CDC* arg3, UnkStruct_ov42_02228EB0* arg4) ;
+s32 ov42_02228CDC(UnkStruct_ov42_02228110* arg0, UnkStruct_ov42_02227F68* arg1, UnkStruct_ov42_022280A8* arg2, UnkStruct_ov42_02228CDC* arg3, UnkStruct_ov42_02228EB0* arg4);
+s32 ov42_02228D08(UnkStruct_ov42_02228110* arg0, UnkStruct_ov42_02227F68* arg1, UnkStruct_ov42_022280A8* arg2, UnkStruct_ov42_02228CDC* arg3, UnkStruct_ov42_02228EB0* arg4) ;
 s32 ov42_02228D44(UnkStruct_ov42_02228110* arg0, UnkStruct_ov42_02227F68* arg1, UnkStruct_ov42_022280A8* arg2, UnkStruct_ov42_02228CDC* arg3, UnkStruct_ov42_02228EB0* arg4);
-void ov42_02228DB8(UnkStruct_ov42_02228110* arg0, UnkStruct_ov42_02227F68* arg1, UnkStruct_ov42_022280A8* arg2, UnkStruct_ov42_02228CDC* arg3, UnkStruct_ov42_02228EB0* arg4);
-s32 ov42_02228DC8(UnkStruct_ov42_02228110* arg0, s32 arg1, s32 arg2, UnkStruct_ov42_02228CDC* arg3, UnkStruct_ov42_02228EB0* arg4);
-s32 ov42_02228DF0(void);
-void ov42_02228DFC(UnkStruct_ov42_02228110* arg0, UnkStruct_ov42_02227F68* arg1, UnkStruct_ov42_022280A8* arg2, UnkStruct_ov42_02228CDC* arg3, UnkStruct_ov42_02228EB0* arg4);
-BOOL ov42_02228E0C(UnkStruct_ov42_02228110* arg0, s32 arg1, s32 arg2, UnkStruct_ov42_02228CDC* arg3, UnkStruct_ov42_02228EB0* arg4);
+s32 ov42_02228DB8(UnkStruct_ov42_02228110* arg0, UnkStruct_ov42_02227F68* arg1, UnkStruct_ov42_022280A8* arg2, UnkStruct_ov42_02228CDC* arg3, UnkStruct_ov42_02228EB0* arg4);
+s32 ov42_02228DC8(UnkStruct_ov42_02228110* arg0, UnkStruct_ov42_02227F68* arg1, UnkStruct_ov42_022280A8* arg2, UnkStruct_ov42_02228CDC* arg3, UnkStruct_ov42_02228EB0* arg4);
+s32 ov42_02228DF0(UnkStruct_ov42_02228110* arg0, UnkStruct_ov42_02227F68* arg1, UnkStruct_ov42_022280A8* arg2, UnkStruct_ov42_02228CDC* arg3, UnkStruct_ov42_02228EB0* arg4);
+s32 ov42_02228DFC(UnkStruct_ov42_02228110* arg0, UnkStruct_ov42_02227F68* arg1, UnkStruct_ov42_022280A8* arg2, UnkStruct_ov42_02228CDC* arg3, UnkStruct_ov42_02228EB0* arg4);
+s32 ov42_02228E0C(UnkStruct_ov42_02228110* arg0, UnkStruct_ov42_02227F68* arg1, UnkStruct_ov42_022280A8* arg2, UnkStruct_ov42_02228CDC* arg3, UnkStruct_ov42_02228EB0* arg4);
 s32 ov42_02228E34(UnkStruct_ov42_02228110* arg0, UnkStruct_ov42_02227F68* arg1, u8 arg2);
 BOOL ov42_02228E9C(UnkStruct_ov42_02228110* arg0, UnkStruct_ov42_022280A8* arg1, u8 arg2);
 void ov42_02228EB0(UnkStruct_ov42_02228EB0* arg0, UnkStruct_ov42_02228110* arg1, u16 arg2, u8 arg3, s32 arg4);
