@@ -13,8 +13,8 @@
 #include "yes_no_prompt.h"
 
 typedef struct UnkStruct_ov44_022341C0 {
-    UnkStruct_ov42_02228110* unk0;
-    UnkStruct_ov42_0222903C* unk4;
+    UnkStruct_ov42_02228110 *unk0;
+    UnkStruct_ov42_0222903C *unk4;
     u16 unk8;
     s16 unkA;
 } UnkStruct_ov44_022341C0;
