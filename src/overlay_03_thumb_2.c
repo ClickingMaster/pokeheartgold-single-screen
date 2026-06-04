@@ -15,7 +15,6 @@
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0182.h"
 
-extern u32 ov03_02254D78;
 extern u32 ov03_0225912C;
 extern u32 ov03_02259134;
 extern ListMenuTemplate ov03_02259164;
@@ -32,27 +31,17 @@ static void ov03_0225499C(void *arg0, UnkStruct_ov03 *unk_ov03);
 static void ov03_022549D8(void *arg0, UnkStruct_ov03 *unk_ov03);
 void ov03_02254A54(ListMenu *listMenu_unused, u16 arg1_unused, u8 arg2);
 void ov03_02254B2C(UnkStruct_ov03 *unk_ov03);
-void ov03_02254B44();
 void ov03_02254B58(UnkStruct_ov03 *unk_ov03);
-void ov03_02254BEC();
 void ov03_02254D64(SysTask *, void *);
-void ov03_02255280(s32 arg0, s32 arg1);
-void ov03_0225574C(void *arg0, UnkStruct_ov03 *unk_ov03);
 void ov03_02255804(UnkStruct_ov03 *unk_ov03); 
 void ov03_02255A70(UnkStruct_ov03 *unk_ov03);
 void ov03_02255ADC(UnkStruct_ov03 *unk_ov03);
-BOOL ov03_02255C80();
-void ov03_02255C84(UnkStruct_ov03 *unk_ov03);
-int ov03_02255CA0(UnkStruct_ov03 *unk_ov03);
-BOOL ov03_02255CD0(UnkStruct_ov03 *unk_ov03);
-void ov03_02255CE4(void*);
 
 int sub_0203511C();
 u32 sub_02035150(u32 index);
 u8 sub_02035184();
 void sub_02035198();
 void sub_020351DC(u16, PlayerProfile *profile);
-BOOL sub_02037700();
 s32 sub_02037BA0(s32, s32);
 void sub_02037BC8();
 void sub_020580E4(FieldSystem *fieldSystem, s32 arg1, s32 arg2);

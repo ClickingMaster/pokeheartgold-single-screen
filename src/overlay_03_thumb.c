@@ -23,7 +23,6 @@ static void ov03_02254150(ListMenu *list, u16 cursorPos_unused, u8 itemsAbove);
 void ov03_022542C8(UnkStruct_ov03* unk_ov03);
 
 void ov03_022543AC(UnkStruct_ov03 *unk_ov03);
-void ov03_02254D64(SysTask *, void *);
 
 int sub_0203511C();
 void sub_020351DC(u16 cursorPos, PlayerProfile *profile);
