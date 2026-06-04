@@ -346,7 +346,7 @@ UnkStruct_ov42_022293B8 *ov42_022293B8(G2dRenderer *arg0, BgConfig *arg1, u8 *ar
     u8 temp_r1 = arg2[1];
     temp_r0->unk14 = temp_r1;
     ov42_02229514(temp_r0->unk4, temp_r1, arg2);
-    temp_r0->unk8 = GfGfxLoader_GetScrnData((NarcId)arg2[8], arg2[9], arg2[10], &temp_r0->unkC, heapID); // TODO; clarify arg2
+    temp_r0->unk8 = GfGfxLoader_GetScrnData((NarcId)arg2[8], arg2[9], arg2[10], &temp_r0->unkC, heapID);
     return temp_r0;
 }
 
