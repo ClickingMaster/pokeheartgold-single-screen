@@ -30,8 +30,6 @@ static void ov03_022548E0(void *arg0, UnkStruct_ov03 *unk_ov03);
 static void ov03_0225499C(void *arg0, UnkStruct_ov03 *unk_ov03);
 static void ov03_022549D8(void *arg0, UnkStruct_ov03 *unk_ov03);
 void ov03_02254A54(ListMenu *listMenu_unused, u16 arg1_unused, u8 arg2);
-void ov03_02254B2C(UnkStruct_ov03 *unk_ov03);
-void ov03_02254B58(UnkStruct_ov03 *unk_ov03);
 void ov03_02254D64(SysTask *, void *);
 void ov03_02255804(UnkStruct_ov03 *unk_ov03); 
 void ov03_02255A70(UnkStruct_ov03 *unk_ov03);
@@ -252,7 +250,7 @@ static void ov03_0225499C(void *arg0, UnkStruct_ov03 *unk_ov03) {
 
 static void ov03_022549D8(void *arg0, UnkStruct_ov03 *unk_ov03) {
     if (unk_ov03->unkA8 == 0) {
-        if (ov03_02255CA0(unk_ov03) == 1) {
+        if (ov03_02255CA0(unk_ov03) == TRUE) {
             unk_ov03->unkA8 = 1;
         } else {
             return;

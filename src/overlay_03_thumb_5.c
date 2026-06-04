@@ -26,7 +26,7 @@ void sub_02037B8C(u32, u8);
 void ov03_02255078(void *arg0, UnkStruct_ov03 *unk_ov03) {
     ov03_02254C9C(unk_ov03);
     if (unk_ov03->unkA8 == 0) {
-        if (ov03_02255CA0(unk_ov03) == 1) {
+        if (ov03_02255CA0(unk_ov03) == TRUE) {
             unk_ov03->unkA8 = 1;
         } else {
             return;

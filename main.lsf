@@ -595,6 +595,8 @@ Overlay OVY_3
     Object src/overlay_03_thumb_7.o
     Object asm/overlay_03_0225558C.o
     Object src/overlay_03_thumb_8.o
+    Object asm/overlay_03_022558C4.o
+    Object src/overlay_03_thumb_9.o
     Object asm/overlay_03.o
 }
 Overlay OVY_4

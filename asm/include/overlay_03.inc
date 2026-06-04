@@ -271,6 +271,8 @@
 .public ov03_022555F4
 .public ov03_02255714
 .public ov03_0225574C
+.public ov03_02255A00
+.public ov03_02255B44
 .public ov03_02255B70
 .public ov03_02255B84
 .public ov03_02255BB0
@@ -279,6 +281,7 @@
 .public ov03_02255C18
 .public ov03_02255C54
 .public ov03_02255C64
+.public ov03_02255C80
 .public ov03_022566B0
 .public ov03_022566D0
 .public ov03_02256710
@@ -295,9 +298,10 @@
 .public ov03_02258CFC
 .public ov03_02259184
 .public ov03_022591D6
+.public ov03_02259228
 .public ov03_0225927A
+.public ov03_022592CC
 .public ov03_0225931E
 .public ov03_02259370
-.public ov03_022598A0
-.public ov03_022592CC
 .public ov03_022593C2
+.public ov03_022598A0

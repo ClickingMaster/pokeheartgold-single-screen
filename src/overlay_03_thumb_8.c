@@ -18,7 +18,6 @@
 #include "msgdata/msg/msg_0182.h"
 
 extern UnkStruct_ov03* ov03_022598A0;
-extern u32 ov03_022558C4;
 extern u32 ov03_02255A00;
 
 void ov03_022555F4(void* arg0_unused, UnkStruct_ov03* unk_ov03);
@@ -27,6 +26,7 @@ void ov03_022556BC(void *arg0, UnkStruct_ov03 *unk_ov03);
 void ov03_02255714(s32 arg0_unused, UnkStruct_ov03 *unk_ov03);
 void ov03_02255804(UnkStruct_ov03 *unk_ov03);
 void ov03_02255860(u32 arg0_unused, UnkStruct_ov03 *unk_ov03);
+void ov03_022558C4(void *task, UnkStruct_ov03 *unk_ov03);
 void ov03_02255B44(UnkStruct_ov03 *unk_ov03);
 
 BOOL sub_02037A10();
@@ -43,7 +43,7 @@ void ov03_022555F4(void* arg0_unused, UnkStruct_ov03* unk_ov03) {
 void ov03_0225562C(void *arg0, UnkStruct_ov03 *unk_ov03) {
     ov03_02254C9C(unk_ov03);
     if (unk_ov03->unkA8 == 0) {
-        if (ov03_02255CA0(unk_ov03) == 1) {
+        if (ov03_02255CA0(unk_ov03) == TRUE) {
             unk_ov03->unkA8 = 1;
         } else {
             return;
@@ -137,3 +137,87 @@ void ov03_02255860(u32 arg0_unused, UnkStruct_ov03 *unk_ov03) {
         ov03_02254B4C(&ov03_022558C4);
     }
 }
+
+/*void ov03_022558C4(void *task, UnkStruct_ov03 *unk_ov03) {
+    if (sub_0203769C() == 0 && unk_ov03->unk90 != sub_02037454()) {
+        ov03_02254B4C(&ov03_02255A00);
+    }
+    else if (ov03_02255C80() || sub_02037700()) {
+        ov03_02254B4C(&ov03_02255A00);
+        return;
+    }
+    else if (sub_020373B4(0) == 0) {
+        ov03_02254B4C(&ov03_02255A00);
+        return;
+    }
+    else if (sub_02037BA0(0, 5) != -1) {
+        ov03_02254B4C(&ov03_02255A00);
+        return;
+    }
+    else if (sub_02037B38(10) && sub_02037A10()) {
+        if (IsPrintFinished(ov03_022598A0->printerID) == FALSE) {
+            RemoveTextPrinter(ov03_022598A0->printerID);
+        }
+        unk_ov03->unk90 = sub_02037454();
+        ov03_02255B44(unk_ov03);
+        SysTask_Destroy(task);
+        return;
+    }
+    
+    if (ov03_022598A0->unk96 != 0) {
+        ov03_022598A0->unk96--;
+        if (ov03_022598A0->unk96 == 0) {
+            u16 ov03_02259228[] = {
+                0,
+                0,
+                0,
+                0x46,
+                0x46,
+                0x46,
+                0x47,
+                0x48,
+                0x49,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0x4A,
+            };
+            
+            if (ov03_022598A0->unk91 == 8) {
+                ov03_02253E20(ov03_022598A0->unk92 + 0x84, 0);
+            } else if (ov03_022598A0->unk91 == 40) {
+                ov03_02253E20(ov03_022598A0->unk92 + 0xA0, 0);
+            } else {
+                ov03_02253E20(ov03_02259228[unk_ov03->unk91], 0);
+            }
+        }
+    }
+}*/
