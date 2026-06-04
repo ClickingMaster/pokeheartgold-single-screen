@@ -18,12 +18,15 @@
 #include "msgdata/msg/msg_0182.h"
 
 extern UnkStruct_ov03* ov03_022598A0;
-extern u32 ov03_02255860;
+extern u32 ov03_022558C4;
+extern u32 ov03_02255A00;
 
 void ov03_022555F4(void* arg0_unused, UnkStruct_ov03* unk_ov03);
 void ov03_0225562C(void *arg0, UnkStruct_ov03 *unk_ov03);
 void ov03_022556BC(void *arg0, UnkStruct_ov03 *unk_ov03);
 void ov03_02255714(s32 arg0_unused, UnkStruct_ov03 *unk_ov03);
+void ov03_02255804(UnkStruct_ov03 *unk_ov03);
+void ov03_02255860(u32 arg0_unused, UnkStruct_ov03 *unk_ov03);
 void ov03_02255B44(UnkStruct_ov03 *unk_ov03);
 
 BOOL sub_02037A10();
@@ -112,4 +115,25 @@ void ov03_022557CC(UnkStruct_ov03 *unk_ov03) {
     ov03_02253E20(69, TRUE);
     SysTask_CreateOnMainQueue(&ov03_02254D64, unk_ov03, 0);
     ov03_02254B4C(&ov03_02255860);
+}
+
+void ov03_02255804(UnkStruct_ov03 *unk_ov03) {
+    sub_020351DC(unk_ov03->unk8E, ov03_022598A0->playerProfile[1]);
+    BufferPlayersName(unk_ov03->messageFormat[2], 1, ov03_022598A0->playerProfile[1]);
+    ov03_02253E20(4, 1);
+    unk_ov03->unk90 = sub_02037454();
+    SysTask_CreateOnMainQueue(&ov03_02254D64, unk_ov03, 0);
+    ov03_02254B4C(&ov03_02255860);
+    ov03_022598A0->unk96 = 90;
+}
+
+void ov03_02255860(u32 arg0_unused, UnkStruct_ov03 *unk_ov03) {
+    if (sub_0203769C() == FALSE && unk_ov03->unk90 != sub_02037454()) {
+        ov03_02254B4C(&ov03_02255A00);
+    } else if (ov03_02255C80() || sub_02037700()) {
+        ov03_02254B4C(&ov03_02255A00);
+    } else if (IsPrintFinished(ov03_022598A0->printerID)) {
+        sub_02037AC0(10);
+        ov03_02254B4C(&ov03_022558C4);
+    }
 }

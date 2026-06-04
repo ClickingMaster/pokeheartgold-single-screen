@@ -25,7 +25,6 @@ void ov03_022542C8(UnkStruct_ov03* unk_ov03);
 void ov03_022543AC(UnkStruct_ov03 *unk_ov03);
 
 int sub_0203511C();
-void sub_020351DC(u16 cursorPos, PlayerProfile *profile);
 void sub_02058124(FieldSystem *fieldSystem, u8, u32);
 
 void ov03_02253E20(s32 strno, BOOL arg1) {

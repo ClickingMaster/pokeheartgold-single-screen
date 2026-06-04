@@ -88,6 +88,7 @@ void ov03_02258910(FieldSystem *fieldSystem);
 void ov03_02258CFC(TaskManager *taskManager, enum PokeathlonData data);
 u32 ov03_02256B40(int);
 
+void sub_020351DC(u16 cursorPos, PlayerProfile *profile);
 BOOL sub_02037700();
 
 #endif // POKEHEARTGOLD_OVERLAY_03_H
