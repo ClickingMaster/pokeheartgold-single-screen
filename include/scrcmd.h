@@ -520,7 +520,7 @@ BOOL ScrCmd_GiveRibbon(ScriptContext *ctx);
 BOOL ScrCmd_BufferRibbonName(ScriptContext *ctx);
 BOOL ScrCmd_GetEVTotal(ScriptContext *ctx);
 BOOL ScrCmd_GetWeekday(ScriptContext *ctx);
-BOOL ScrCmd_485(ScriptContext *ctx);
+BOOL ScrCmd_StartBattleRegulationMenuTask(ScriptContext *ctx);
 // BOOL ScrCmd_Dummy(ScriptContext *ctx);
 BOOL ScrCmd_PokeCenAnim(ScriptContext *ctx);
 BOOL ScrCmd_ElevatorAnim(ScriptContext *ctx);

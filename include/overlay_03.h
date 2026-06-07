@@ -1,6 +1,7 @@
 #ifndef POKEHEARTGOLD_OVERLAY_03_H
 #define POKEHEARTGOLD_OVERLAY_03_H
 
+#include "dex_mon_measures.h"
 #include "list_menu.h"
 #include "script.h"
 
@@ -45,6 +46,44 @@ typedef struct UnkStruct_ov03 {
     u32 unkA8;
 } UnkStruct_ov03;
 
+enum {
+    REGULATION_MENU_REGULATIONS,
+    REGULATION_MENU_CONFIRM,
+    REGULATION_MENU_MAX,
+};
+
+enum {
+    REGULATION_MENU_STRING_FMT,
+    REGULATION_MENU_STRING_DESTINATION,
+    REGULATION_MENU_STRING_REGULATION_NAME,
+    REGULATION_MENU_STRING_CUP_NAME,
+    REGULATION_MENU_STRING_MAX,
+};
+
+enum {
+    REGULATION_MENU_WINDOW_RULES,
+    REGULATION_MENU_WINDOW_REGULATIONS,
+    REGULATION_MENU_WINDOW_CONFIRM,
+    REGULATION_MENU_WINDOW_MSGBOX,
+    REGULATION_MENU_WINDOW_MAX,
+};
+
+typedef struct BattleRegulationMenu {
+    ListMenu *listMenu[REGULATION_MENU_MAX];
+    LISTMENUITEM *items[REGULATION_MENU_MAX];
+    FieldSystem *fieldSystem;
+    String *strings[REGULATION_MENU_STRING_MAX];
+    Window windows[REGULATION_MENU_WINDOW_MAX];
+    MessageFormat *messageFormat;
+    MsgData *msgData;
+    PokedexData *pokedexData;
+    u16 *result;
+    int printerID;
+    u16 itemsAbove[REGULATION_MENU_MAX];
+    int state;
+    u16 unk80[REGULATION_MENU_MAX];
+} BattleRegulationMenu;
+
 extern u32 ov03_02259130;
 extern u32 ov03_0225913C[2];
 
@@ -75,23 +114,40 @@ void ov03_022557CC(UnkStruct_ov03 *unk_ov03);
 int ov03_02255B70();
 int ov03_02255B84();
 int ov03_02255B98();
+void ov03_02255BB0(FieldSystem *fieldSystem, u32 arg1, u16 arg2, u16 arg3);
+u32 ov03_02255BFC();
+void ov03_02255C18(FieldSystem *fieldSystem, u32 arg1, u16 arg2, u16 arg3);
+u32 ov03_02255C64();
 BOOL ov03_02255C80();
 void ov03_02255C84(UnkStruct_ov03 *unk_ov03);
 BOOL ov03_02255CA0(UnkStruct_ov03 *unk_ov03);
 BOOL ov03_02255CD0(UnkStruct_ov03 *unk_ov03);
 void ov03_02255CE4(UnkStruct_ov03 *unk_ov03);
 
-void ov03_02255BB0(FieldSystem *fieldSystem, u32 arg1, u16 arg2, u16 arg3);
-u32 ov03_02255BFC();
-void ov03_02255C18(FieldSystem *fieldSystem, u32 arg1, u16 arg2, u16 arg3);
-u32 ov03_02255C64();
-void ov03_022566B0(TaskManager *taskManager, u16 *p_var);
-void ov03_022566D0(FieldSystem *fieldSystem, MessageFormat *msgFmt, u16 ruleset);
-u16 ov03_02256A2C(FieldSystem *fieldSystem, MessageFormat *msgFmt, u16 a2);
+void BattleRegulationMenu_GetRegulationName(BattleRegulationMenu *data, int index);
+void BattleRegulationMenu_ShowListMenuRegulations(BattleRegulationMenu *menu);
+void BattleRegulationMenu_RemoveListMenuRegulations(BattleRegulationMenu *data);
+void BattleRegulationMenu_PrintMessage(BattleRegulationMenu *data, int entryID);
+int BattleRegulationMenu_ProcessListMenuInputConfirm(BattleRegulationMenu *data);
+BOOL BattleRegulationMenu_HandleValidationResult(BattleRegulationMenu *menu);
+int BattleRegulationMenu_ProcessListMenuInputRegulations(BattleRegulationMenu *data);
+void BattleRegulationMenu_RemoveMsgBox(BattleRegulationMenu *data, BOOL copyToVram);
+void BattleRegulationMenu_RemoveRulesWindow(BattleRegulationMenu *menu);
+void BattleRegulationMenu_ShowListMenuConfirm(BattleRegulationMenu *menu);
+void BattleRegulationMenu_ShowRules(BattleRegulationMenu *menu);
+BOOL Task_BattleRegulationMenu(TaskManager *taskManager);
+BattleRegulationMenu *BattleRegulationMenu_New(FieldSystem *fieldSystem);
+void StartTask_BattleRegulationMenu(TaskManager *taskManager, u16 *result);
+void ov03_022566D0(FieldSystem *fieldSystem, MessageFormat *messageFormat, u32 ruleset);
+void ov03_02256730(FieldSystem *fieldSystem, Window *window, u32 ruleset);
+u32 ov03_02256B40(int);
+void ov03_02256BA8(FieldSystem *fieldSystem, u8 index);
+
+u16 ov03_02256A2C(FieldSystem *fieldSystem, MessageFormat *msgFmt, u32 a2);
 void ov03_02256710(FieldSystem *fieldSystem, u16 a1);
 void ov03_02258910(FieldSystem *fieldSystem);
 void ov03_02258CFC(TaskManager *taskManager, enum PokeathlonData data);
-u32 ov03_02256B40(int);
+
 
 void sub_020351DC(u16 cursorPos, PlayerProfile *profile);
 BOOL sub_02037700();

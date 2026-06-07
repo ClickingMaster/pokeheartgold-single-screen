@@ -2768,7 +2768,7 @@
 	.short \arg0
 	.endm
 
-	.macro ScrCmd_485 arg0
+	.macro StartBattleRegulationMenuTask arg0
 	.short 485
 	.short \arg0
 	.endm

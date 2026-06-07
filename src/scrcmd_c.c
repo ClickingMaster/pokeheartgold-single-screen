@@ -3552,9 +3552,9 @@ BOOL ScrCmd_GetWeekday(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_485(ScriptContext *ctx) {
-    u16 *p_var = ScriptGetVarPointer(ctx);
-    ov03_022566B0(ctx->taskman, p_var);
+BOOL ScrCmd_StartBattleRegulationMenuTask(ScriptContext *ctx) {
+    u16 *result = ScriptGetVarPointer(ctx);
+    StartTask_BattleRegulationMenu(ctx->taskman, result);
     return TRUE;
 }
 

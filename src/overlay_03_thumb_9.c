@@ -3,6 +3,7 @@
 
 #include "field_system.h"
 #include "global.h"
+#include "link_ruleset_data.h"
 #include "mart.h"
 #include "render_text.h"
 #include "render_window.h"
@@ -171,3 +172,86 @@ BOOL ov03_02255CA0(UnkStruct_ov03 *data) {
 BOOL ov03_02255CD0(UnkStruct_ov03 *data) {
     return ov01_021F6AEC(data->fieldSystem) >= 4;
 }
+
+void ov03_02255CE4(UnkStruct_ov03 *data) {
+    ov01_021F6ABC(data->fieldSystem, 3, 11, &data->unkA4);
+}
+
+void BattleRegulationMenu_PrintMessage(BattleRegulationMenu *menu, int entryID) {
+    if (WindowIsInUse(&menu->windows[REGULATION_MENU_WINDOW_MSGBOX]) == FALSE) {
+        InitWindow(&menu->windows[REGULATION_MENU_WINDOW_MSGBOX]);
+        sub_0205B514(menu->fieldSystem->bgConfig, &menu->windows[REGULATION_MENU_WINDOW_MSGBOX], 3);
+        sub_0205B564(&menu->windows[REGULATION_MENU_WINDOW_MSGBOX], Save_PlayerData_GetOptionsAddr(menu->fieldSystem->saveData));
+    } else {
+        sub_0205B5A8(&menu->windows[REGULATION_MENU_WINDOW_MSGBOX]);
+    }
+    ReadMsgDataIntoString(menu->msgData, entryID, menu->strings[REGULATION_MENU_STRING_FMT]);
+    StringExpandPlaceholders(menu->messageFormat, menu->strings[REGULATION_MENU_STRING_DESTINATION], menu->strings[REGULATION_MENU_STRING_FMT]);
+    menu->printerID = sub_0205B5B4(&menu->windows[REGULATION_MENU_WINDOW_MSGBOX], menu->strings[REGULATION_MENU_STRING_DESTINATION], Save_PlayerData_GetOptionsAddr(menu->fieldSystem->saveData), 1);
+}
+
+void BattleRegulationMenu_RemoveMsgBox(BattleRegulationMenu *menu, BOOL clear) {
+    if (clear) {
+        ClearFrameAndWindow2(&menu->windows[REGULATION_MENU_WINDOW_MSGBOX], FALSE);
+        ClearWindowTilemapAndCopyToVram(&menu->windows[REGULATION_MENU_WINDOW_MSGBOX]);
+    }
+    RemoveWindow(&menu->windows[REGULATION_MENU_WINDOW_MSGBOX]);
+}
+
+void BattleRegulationMenu_GetRegulationName(BattleRegulationMenu *menu, int index) {
+    sub_0202921C(menu->fieldSystem->saveData, index, menu->strings[REGULATION_MENU_STRING_REGULATION_NAME], HEAP_ID_FIELD1);
+    BufferString(menu->messageFormat, 0, menu->strings[REGULATION_MENU_STRING_REGULATION_NAME], 0, 1, LANGUAGE_ENGLISH);
+}
+
+/*void BattleRegulationMenu_ShowListMenuRegulations(BattleRegulationMenu *menu) {
+    Window *window = &menu->windows[REGULATION_MENU_WINDOW_REGULATIONS];
+    LinkBattleRuleset *ruleset = Save_LinkBattleRuleset_GetByIndex(menu->fieldSystem->saveData, 0);
+    int items = 5;
+    if (ruleset) {
+        items++;
+    }
+    if (!WindowIsInUse(window)) {
+        menu->items[REGULATION_MENU_REGULATIONS] = ListMenuItems_New(items + 2, HEAP_ID_FIELD1);
+        AddWindowParameterized(menu->fieldSystem->bgConfig, window, 3, 1, 1, 16, (items + 2) * 2, 13, 1);
+        DrawFrameAndWindow1(&menu->windows[REGULATION_MENU_WINDOW_REGULATIONS], TRUE, 0x3D9, 11);
+        ListMenuItems_AppendFromMsgData(menu->items[REGULATION_MENU_REGULATIONS], menu->msgData, 0x8A, 12); // PokemonCenter2FCommon_Text_NoRestrictions?
+        for (int i = 0; i < items; i++) {
+            ov03_02255D8C(menu, i);
+            ReadMsgDataIntoString(menu->msgData, 0x80, menu->strings[REGULATION_MENU_STRING_REGULATION_NAME]); // PokemonCenter2FCommon_Text_Cup?
+            StringExpandPlaceholders(menu->messageFormat, menu->strings[REGULATION_MENU_STRING_CUP_NAME], menu->strings[REGULATION_MENU_STRING_REGULATION_NAME]);
+            ListMenuItems_AddItem(menu->items[REGULATION_MENU_REGULATIONS], menu->strings[REGULATION_MENU_STRING_CUP_NAME], i);
+        }
+        ListMenuItems_AppendFromMsgData(menu->items[REGULATION_MENU_REGULATIONS], menu->msgData, 0x81, -2); // PokemonCenter2FCommon_Text_Cancel?
+    }
+
+    ListMenuTemplate ov03_0225943C = {
+        NULL,     // LISTMENUITEM *items;
+        0,        // LM_MoveCursorFunc_t moveCursorFunc;
+        0,        // LM_ItemPrintFunc_t itemPrintFunc;
+        NULL,     // Window *window;
+        0,        // u16 totalItems;
+        0,        // u16 maxShowed;
+        0,        // u8 header_X;
+        8,        // u8 item_X;
+        0,        // u8 cursor_X;
+        0,        // u8 upText_Y : 4;
+        1,        // u8 cursorPal : 4;
+        15,       // u8 fillValue : 4;
+        3,        // u8 cursorShadowPal : 4;
+        0,        // u16 lettersSpacing : 3;
+        0,        // u16 itemVerticalPadding : 4;
+        1,        // u16 scrollMultiple : 2;
+        0,        // u16 fontId : 6;
+        0,        // u16 cursorKind : 1;
+        0,        // u32 unk_1C;
+    };
+
+    ov03_0225943C.totalItems = items + 2;
+    ov03_0225943C.maxShowed = items + 2;
+    ov03_0225943C.items = menu->items[REGULATION_MENU_REGULATIONS];
+    ov03_0225943C.window = &menu->windows[REGULATION_MENU_WINDOW_REGULATIONS];
+    ov03_0225943C.data = menu;
+    
+    menu->listMenu[REGULATION_MENU_REGULATIONS] = ListMenuInit(&ov03_0225943C, 0, menu->itemsAbove[REGULATION_MENU_REGULATIONS], HEAP_ID_FIELD1);
+    CopyWindowToVram(&menu->windows[REGULATION_MENU_WINDOW_REGULATIONS]);
+}*/
