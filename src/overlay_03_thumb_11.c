@@ -513,3 +513,62 @@ void ov03_02256BA8(FieldSystem *fieldSystem, u8 index) {
     }
 }
 
+u32 ov03_02256BEC(u16 *items, u16 *priceOverrides, u32 unk283) {
+    int i;
+    if (unk283 - 3 <= 1) {
+        for (i = 0; i < 0x100; i++) {
+            if (*priceOverrides != 0xFFFF) {
+                priceOverrides += 2;
+            } else {
+                break;
+            }
+        }
+    } else {
+        for (i = 0; i < 0x100; i++) {
+            if (*items != 0xFFFF) {
+                items++;
+            } else {
+                break;
+            }
+        }
+    }
+    return i;
+}
+
+void ov03_02256C2C(MartData *data, u16 *items, BOOL flag09A) {
+    int max = data->unk270;
+    int i;
+    int k = 0;
+    for (i = 0; i < max; i++) {
+        if (flag09A == FALSE) {
+            if(items[i] == 4) {
+                data->unk270--;
+            } else {
+                data->unk268[k] = items[i];
+                k++;
+            }
+        } else {
+            data->unk268[k] = items[i];
+            k++;
+        }
+    }
+}
+
+void ov03_02256C84(MartData *data, u16 *priceOverrides) {
+    for (int i = 0, j = 0; i < data->unk270; i++, j += 2) {
+        data->unk268[i] = priceOverrides[j]; // martItem->cost?
+    }
+}
+
+void ov03_02256CB4(MartData *data, u16 *items, BOOL flag09A, const struct MartItem *priceOverrides) {
+    data->unk270 = ov03_02256BEC(items, (u16 *)priceOverrides, data->unk283);
+    if (data->unk270 >= 0xFF) {
+        GF_AssertFail();
+    }
+    data->unk268 = Heap_Alloc(HEAP_ID_FIELD2, data->unk270 * 2);
+    if ((u8)(data->unk283 + 0xFD) <= 1) {
+        ov03_02256C84(data, (u16 *)priceOverrides);
+    } else {
+        ov03_02256C2C(data, items, flag09A);
+    }
+}

@@ -301,6 +301,10 @@
 .public ov03_02256730
 .public ov03_02256A2C
 .public ov03_02256B40
+.public ov03_02256BEC
+.public ov03_02256C84
+.public ov03_02256C2C
+.public ov03_02256CB4
 .public Mart_InitUI
 .public Task_Mart
 .public ov03_02257814

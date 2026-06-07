@@ -2,8 +2,14 @@
 #define POKEHEARTGOLD_OVERLAY_03_H
 
 #include "dex_mon_measures.h"
+#include "game_stats.h"
 #include "list_menu.h"
+#include "mart.h"
+#include "save_vars_flags.h"
 #include "script.h"
+#include "unk_02031B0C.h"
+
+#include "pokeathlon/pokeathlon_save.h"
 
 enum PokeathlonData {
     OVERALL_DATA,
@@ -87,6 +93,52 @@ typedef struct BattleRegulationMenu {
 extern u32 ov03_02259130;
 extern u32 ov03_0225913C[2];
 
+typedef struct MartData {
+    BgConfig *bgConfig;
+    u32 unk4;
+    Window windows[6];
+    u8 unk68[0x20];
+    MsgData *messageData;
+    MessageFormat *messageFormat;
+    Camera *camera;
+    SpriteList *spriteList;
+    u8 unk98[0x12C];
+    GF_2DGfxResMan *gfxResManagers[2];
+    u8 unk1CC[0x2C];
+    Sprite *sprites[19];
+    u32 unk244;
+    PlayerProfile *playerProfile;
+    void *inventory;
+    Options *options;
+    PokeathlonSave *pokeathlonSave;
+    SaveApricornBox *apricornBox;
+    GameStats *gameStats;
+    SaveVarsFlags *varsFlags;
+    u32 unk264;
+    u16 *unk268;
+    const struct MartItem *priceOverrides;
+    u8 unk270;
+    u8 unk271;
+    u8 state;
+    u8 unk273;
+    String *unk274;
+    u8 bgPriority[4];
+    u32 unk27C; // engineAPlanes?
+    u8 unk280;
+    u8 unk281;
+    u8 unk282;
+    u8 unk283;
+    u16 item;
+    s16 quantity;
+    u32 unk288;
+    s32 cost;
+    u32 unk290;
+    u32 unk294;
+    u32 unk298;
+    u32 unk29C;
+    u32 unk2A0;
+} MartData;
+
 void ov03_02253E20(s32 strno, BOOL arg1);
 void ov03_02253ED0(ListMenuTemplate listMenuTemplate, u8 x, u8 y, u8 width, u8 height, u16 baseTile);
 void ov03_02253F74(FieldSystem *fieldSystem);
@@ -139,15 +191,20 @@ BOOL Task_BattleRegulationMenu(TaskManager *taskManager);
 BattleRegulationMenu *BattleRegulationMenu_New(FieldSystem *fieldSystem);
 void StartTask_BattleRegulationMenu(TaskManager *taskManager, u16 *result);
 void ov03_022566D0(FieldSystem *fieldSystem, MessageFormat *messageFormat, u32 ruleset);
+void ov03_02256710(FieldSystem *fieldSystem, u16 a1);
 void ov03_02256730(FieldSystem *fieldSystem, Window *window, u32 ruleset);
+
+u16 ov03_02256A2C(FieldSystem *fieldSystem, MessageFormat *msgFmt, u32 a2);
 u32 ov03_02256B40(int);
 void ov03_02256BA8(FieldSystem *fieldSystem, u8 index);
 
-u16 ov03_02256A2C(FieldSystem *fieldSystem, MessageFormat *msgFmt, u32 a2);
-void ov03_02256710(FieldSystem *fieldSystem, u16 a1);
-void ov03_02258910(FieldSystem *fieldSystem);
-void ov03_02258CFC(TaskManager *taskManager, enum PokeathlonData data);
+u32 ov03_02256BEC(u16 *items, u16 *priceOverrides, u32 unk283);
+void ov03_02256C2C(MartData *data, u16 *items, BOOL flag09A);
+void ov03_02256C84(MartData *data, u16 *priceOverrides);
+void ov03_02256CB4(MartData *data, u16 *items, BOOL flag09A, const struct MartItem *priceOverrides);
 
+void ov03_02258910(FieldSystem *fieldSystem);
+void ov03_02258CFC(TaskManager *taskManager, enum PokeathlonData data);\
 
 void sub_020351DC(u16 cursorPos, PlayerProfile *profile);
 BOOL sub_02037700();
