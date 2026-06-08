@@ -305,10 +305,17 @@
 .public ov03_02256C84
 .public ov03_02256C2C
 .public ov03_02256CB4
+.public Mart_Alloc
 .public Mart_InitUI
 .public Task_Mart
+.public ov03_02257184
+.public ov03_022571AC
+.public ov03_02257378
+.public ov03_022573D4
+.public ov03_02257758
 .public ov03_02257814
 .public ov03_02257978
+.public MartData_PerformTransaction
 .public ov03_02258120
 .public ov03_022581BC
 .public ov03_02258910

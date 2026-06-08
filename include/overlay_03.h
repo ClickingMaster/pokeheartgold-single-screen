@@ -93,6 +93,14 @@ typedef struct BattleRegulationMenu {
 extern u32 ov03_02259130;
 extern u32 ov03_0225913C[2];
 
+enum MartTypes {
+    MART_TYPE_NORMAL = 0,
+    MART_TYPE_1, // MART_TYPE_DECOR? Would be unused in HGSS if true. Interesting that it was reserved instead of replaced.
+    MART_TYPE_2, // MART_TYPE_SEAL?
+    MART_TYPE_3, // MART_TYPE_FRONTIER?
+    MART_TYPE_4, // MART_TYPE_POKEATHLON?
+};
+
 typedef struct MartData {
     BgConfig *bgConfig;
     u32 unk4;
@@ -106,7 +114,7 @@ typedef struct MartData {
     GF_2DGfxResMan *gfxResManagers[2];
     u8 unk1CC[0x2C];
     Sprite *sprites[19];
-    u32 unk244;
+    u16 spriteDrawn[2]; // Draw flags for sprites 0 and 1.
     PlayerProfile *playerProfile;
     void *inventory;
     Options *options;
@@ -121,18 +129,19 @@ typedef struct MartData {
     u8 unk271;
     u8 state;
     u8 unk273;
-    String *unk274;
+    String *string;
     u8 bgPriority[4];
-    u32 unk27C; // engineAPlanes?
-    u8 unk280;
+    u32 engineAPlanes;
+    u8 printerID;
     u8 unk281;
     u8 unk282;
-    u8 unk283;
+    u8 martType;
     u16 item;
     s16 quantity;
-    u32 unk288;
-    s32 cost;
-    u32 unk290;
+    u16 unk288;
+    u16 unk28A;
+    int cost;
+    int unk290;
     u32 unk294;
     u32 unk298;
     u32 unk29C;
@@ -197,11 +206,7 @@ void ov03_02256730(FieldSystem *fieldSystem, Window *window, u32 ruleset);
 u16 ov03_02256A2C(FieldSystem *fieldSystem, MessageFormat *msgFmt, u32 a2);
 u32 ov03_02256B40(int);
 void ov03_02256BA8(FieldSystem *fieldSystem, u8 index);
-
-u32 ov03_02256BEC(u16 *items, u16 *priceOverrides, u32 unk283);
-void ov03_02256C2C(MartData *data, u16 *items, BOOL flag09A);
-void ov03_02256C84(MartData *data, u16 *priceOverrides);
-void ov03_02256CB4(MartData *data, u16 *items, BOOL flag09A, const struct MartItem *priceOverrides);
+int ov03_02257814(MartData *data, u32 unkAmount);
 
 void ov03_02258910(FieldSystem *fieldSystem);
 void ov03_02258CFC(TaskManager *taskManager, enum PokeathlonData data);\
