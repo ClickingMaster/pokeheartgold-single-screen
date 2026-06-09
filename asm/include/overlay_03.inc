@@ -315,6 +315,8 @@
 .public ov03_02257758
 .public ov03_02257814
 .public ov03_02257978
+.public MartData_SubCurrency
+.public MartData_Inventory_AddApricornOrItem
 .public MartData_PerformTransaction
 .public ov03_02258120
 .public ov03_022581BC

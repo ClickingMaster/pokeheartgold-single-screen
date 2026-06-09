@@ -96,7 +96,7 @@ extern u32 ov03_0225913C[2];
 enum MartTypes {
     MART_TYPE_NORMAL = 0,
     MART_TYPE_1, // MART_TYPE_DECOR? Would be unused in HGSS if true. Interesting that it was reserved instead of replaced.
-    MART_TYPE_2, // MART_TYPE_SEAL?
+    MART_TYPE_SEAL,
     MART_TYPE_3, // MART_TYPE_FRONTIER?
     MART_TYPE_4, // MART_TYPE_POKEATHLON?
 };
@@ -207,11 +207,13 @@ u16 ov03_02256A2C(FieldSystem *fieldSystem, MessageFormat *msgFmt, u32 a2);
 u32 ov03_02256B40(int);
 void ov03_02256BA8(FieldSystem *fieldSystem, u8 index);
 int ov03_02257814(MartData *data, u32 unkAmount);
+int ov03_02257978(MartData *data, int itemID);
 
 void ov03_02258910(FieldSystem *fieldSystem);
-void ov03_02258CFC(TaskManager *taskManager, enum PokeathlonData data);\
+void ov03_02258CFC(TaskManager *taskManager, enum PokeathlonData data);
 
 void sub_020351DC(u16 cursorPos, PlayerProfile *profile);
 BOOL sub_02037700();
+int sub_020881C0(s16 *quantity, u16 a1);
 
 #endif // POKEHEARTGOLD_OVERLAY_03_H

@@ -13,6 +13,7 @@
 #include "save_link_ruleset.h"
 #include "scrcmd.h"
 #include "sys_flags.h"
+#include "sys_vars.h"
 #include "task.h"
 #include "text.h"
 #include "text_0205B4EC.h"
@@ -531,19 +532,21 @@ void ov03_02257758(MartData *data, int, u8);
 u8 ov03_022577D0(MartData *data);
 static u8 ov03_02257874(MartData *data, u16 itemID);
 static u8 ov03_02257944(MartData *data);
-u8 ov03_022579E0(MartData *data);
-u8 ov03_02257A70(MartData *data);
-u8 ov03_02257ADC(MartData *data);
+static u8 ov03_022579E0(MartData *data);
+static u8 ov03_02257A70(MartData *data);
+static u8 ov03_02257ADC(MartData *data);
 u8 ov03_02257B4C(MartData *data, u32);
-u8 ov03_02257CA0(MartData *data);
-u8 ov03_02257D6C(MartData *data);
-u8 ov03_02257D90(MartData *data, u32);
-u8 MartData_PerformTransaction(MartData *data);
-u8 ov03_02257F24(MartData *data);
-u8 ov03_02257FF8();
-u8 ov03_02258078();
-void ov03_02258164(FieldSystem *fieldSystem, MartData *data);
-u8 ov03_02258170(FieldSystem *fieldSystem, MartData *data);
+static u8 ov03_02257CA0(MartData *data);
+static u8 ov03_02257D6C(MartData *data);
+static u8 ov03_02257D90(MartData *data, u32);
+static u8 MartData_PerformTransaction(MartData *data);
+static u8 ov03_02257F24(MartData *data);
+static u8 ov03_02257FF8(MartData *data);
+static u8 ov03_02258078(MartData *data);
+static void ov03_02258164(FieldSystem *fieldSystem, MartData *data_unused);
+static u8 ov03_02258170(FieldSystem *fieldSystem, MartData *data);
+void ov03_02258288(MartData *data);
+void ov03_02258560(MartData *data, int);
 void ov03_022586BC(MartData *data, int);
 u8 ov03_022586CC(MartData *data, int, int);
 u8 ov03_022586E0();
@@ -552,10 +555,11 @@ void ov03_02258764(TaskManager *taskManager);
 u8 ov03_022587D4(FieldSystem *fieldSystem, MartData *data);
 static void MartData_RestoreBgPriorities(MartData *data);
 static BOOL ov03_0225709C(FieldSystem *fieldSystem_unused, MartData *data);
-u32 ov03_02258120(MartData *data, u16 itemID);
+/*static*/ u32 ov03_02258120(MartData *data, u16 itemID);
 void ov03_022582C0(MartData *data, int);
 void ov03_022585A4(MartData *data, u16 itemID);
 void ov03_02258648(MartData *data, int charID, int paletteID, u16 item);
+s16 ov03_022587E8(s16 currentQuantity, u16, s16 modifier);
 
 extern WindowTemplate ov03_02259464;
 extern WindowTemplate ov03_022594C6[6];
@@ -569,7 +573,7 @@ extern u8 ov03_0225947A[][4];
 
 static u32 ov03_02256BEC(const u16 *items, u16 *priceOverrides, u32 martType) {
     int i;
-    if (martType - 3 <= 1) { // MART_TYPE_2, MART_TYPE_3, MART_TYPE_4
+    if (martType == MART_TYPE_3 || martType == MART_TYPE_4) {
         for (i = 0; i < 0x100; i++) {
             if (*priceOverrides != 0xFFFF) {
                 priceOverrides += 2;
@@ -620,7 +624,7 @@ static void ov03_02256CB4(MartData *data, const u16 *items, BOOL flag09A, const 
         GF_AssertFail();
     }
     data->unk268 = Heap_Alloc(HEAP_ID_FIELD2, data->unk270 * 2);
-    if ((u8)(data->martType + 0xFD) <= 1) { // MART_TYPE_3, MART_TYPE_4
+    if (data->martType == MART_TYPE_3 || data->martType == MART_TYPE_4) {
         ov03_02256C84(data, (u16 *)priceOverrides);
     } else {
         ov03_02256C2C(data, items, flag09A);
@@ -762,10 +766,10 @@ BOOL Task_Mart(TaskManager *taskManager) {
         data->state = ov03_02257F24(data);
         break;
     case TASK_MART_14:
-        data->state = ov03_02257FF8();
+        data->state = ov03_02257FF8(data);
         break;
     case TASK_MART_15:
-        data->state = ov03_02258078();
+        data->state = ov03_02258078(data);
         break;
     case TASK_MART_16:
         data->state = ov03_022577D0(data); // Always returns 17.
@@ -861,7 +865,7 @@ void ov03_022571AC(MartData *data);
 
 /*static*/ void ov03_022571AC(MartData *data) { // MartData_LoadGraphics?
     GfGfxLoader_LoadCharData(NARC_a_0_6_0, 0, data->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, HEAP_ID_FIELD2);
-    if (data->martType == MART_TYPE_NORMAL || (u8) (data->martType + 0xFD) <= 1) { // MART_TYPE_3, MART_TYPE_4
+    if (data->martType == MART_TYPE_NORMAL || data->martType == MART_TYPE_3 || data->martType == MART_TYPE_4) {
         GfGfxLoader_LoadScrnData(NARC_a_0_6_0, 2, data->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, HEAP_ID_FIELD2);
     } else {
         GfGfxLoader_LoadScrnData(NARC_a_0_6_0, 3, data->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, HEAP_ID_FIELD2);
@@ -935,10 +939,10 @@ static void ov03_022573D4(MartData *data, u32 arg1) {
         case 5:
             FillWindowPixelBuffer(&data->windows[1], 0);
             if (data->unk290 + data->unk271 < data->unk270) {
-                if (data->martType == 0 || (u8)(data->martType + 0xFD) <= 1) {
+                if (data->martType == MART_TYPE_NORMAL || data->martType == MART_TYPE_3 || data->martType == MART_TYPE_4) {
                     string = String_New(130, HEAP_ID_FIELD2);
                     GetItemDescIntoString(string, itemID, HEAP_ID_FIELD2);
-                } else if (data->martType == 1) {
+                } else if (data->martType == MART_TYPE_1) {
                     msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 0x2E1, HEAP_ID_FIELD2);
                     string = NewString_ReadMsgData(msgData, itemID + 0x8A);
                     DestroyMsgData(msgData);
@@ -1101,7 +1105,7 @@ u8 ov03_022577D0(MartData *data) {
 u32 ov03_022577F4(MartData *data, u32 martType);
 
 u32 ov03_022577F4(MartData *data, u32 martType) {
-    if (martType - 3 <= 1) { // MART_TYPE_3 or MART_TYPE_4
+    if (martType == MART_TYPE_3 || martType == MART_TYPE_4) {
         return PokeathlonSave_GetAthletePoints(data->pokeathlonSave);
     } else {
         return PlayerProfile_GetMoney(data->playerProfile);
@@ -1109,12 +1113,12 @@ u32 ov03_022577F4(MartData *data, u32 martType) {
 }
 
 int ov03_02257814(MartData *data, u32 unkAmount) {
-    if (data->martType == 3) {
+    if (data->martType == MART_TYPE_3) {
         if (PokeathlonSave_GetUnkB7C_AtIndex(data->pokeathlonSave, data->unk290 + data->unk271)) {
             return 2;
         }
     }
-    else if (data->martType == 4 && PokeathlonSave_GetUnkB78_AtIndex(data->pokeathlonSave, data->item - 0x1F9)) {
+    else if (data->martType == MART_TYPE_4 && PokeathlonSave_GetUnkB78_AtIndex(data->pokeathlonSave, data->item - 505)) {
         return 3;
     }
     
@@ -1139,7 +1143,7 @@ static u8 ov03_02257874(MartData *data, u16 itemID) {
     if (data->unk288 > 99) {
         data->unk288 = 99;
     }
-    if (data->martType == 1 || (u8)(data->martType + 0xFD) <= 1) {
+    if (data->martType == 1 || data->martType == MART_TYPE_3 || data->martType == MART_TYPE_4) {
         return ov03_02257CA0(data);
     }
     ov03_022582C0(data, 1);
@@ -1154,4 +1158,302 @@ static u8 ov03_02257944(MartData *data) {
     Sprite_SetDrawFlag(data->sprites[0], FALSE);
     Sprite_SetDrawFlag(data->sprites[1], FALSE);
     return TASK_MART_7;
+}
+
+int ov03_02257978(MartData *data, int itemID) {
+    if (data->martType == MART_TYPE_NORMAL || data->martType == MART_TYPE_1 || data->martType == MART_TYPE_3 || data->martType == MART_TYPE_4) {
+        if (itemID >= ITEM_RED_APRICORN && itemID <= ITEM_BLK_APRICORN) {
+            return ApricornBox_CountApricorn(data->apricornBox, itemID - ITEM_RED_APRICORN);
+        }
+        return Bag_GetQuantity(data->inventory, data->item, HEAP_ID_FIELD2);
+    }
+    if (data->martType == MART_TYPE_SEAL) {
+        return SealCase_CountSealOccurrenceAnywhere(data->inventory, data->item);
+    }
+    return 0;
+}
+
+static u8 ov03_022579E0(MartData *data) {
+    Sprite_SetDrawFlag(data->sprites[0], FALSE);
+    Sprite_SetDrawFlag(data->sprites[1], FALSE);
+    sub_0200E5D4(&data->windows[4], TRUE);
+    sub_0200E5D4(&data->windows[3], TRUE);
+    FillWindowPixelBuffer(&data->windows[5], 15);
+    data->unk298 = 7;
+    Sprite_SetDrawFlag(data->sprites[18], FALSE);
+    Sprite_SetDrawFlag(data->sprites[13], FALSE);
+    Sprite_SetDrawFlag(data->sprites[14], FALSE);
+    Sprite_SetDrawFlag(data->sprites[15], FALSE);
+    Sprite_SetDrawFlag(data->sprites[16], FALSE);
+    Sprite_SetDrawFlag(data->sprites[17], FALSE);
+    return ov03_02257CA0(data);
+}
+
+static u8 ov03_02257A70(MartData *data) {
+    sub_0200E5D4(&data->windows[4], TRUE);
+    sub_0200E5D4(&data->windows[3], TRUE);
+    ClearFrameAndWindow2(&data->windows[5], FALSE);
+    ov03_02258560(data, 0);
+    Sprite_SetDrawFlag(data->sprites[0], data->spriteDrawn[0]);
+    Sprite_SetDrawFlag(data->sprites[1], data->spriteDrawn[1]);
+    ov03_022586BC(data, 0);
+    ov03_022582C0(data, 0);
+    data->unk298 = 4;
+    Sprite_SetDrawFlag(data->sprites[13], TRUE);
+    return TASK_MART_3;
+}
+
+static u8 ov03_02257ADC(MartData *data) {
+    if (sub_020881C0(&data->quantity, data->unk288)) {
+        PlaySE(SEQ_SE_DP_BAG_004);
+        data->unk298 = 6;
+        return TASK_MART_7;
+    }
+    if (PAD_BUTTON_A & gSystem.newKeys) {
+        PlaySE(SEQ_SE_DP_SELECT);
+        return ov03_022586CC(data, 18, 8);
+    }
+    if (PAD_BUTTON_B & gSystem.newKeys) {
+        PlaySE(SEQ_SE_GS_GEARCANCEL);
+        return ov03_022586CC(data, 13, 9);
+    }
+    return TASK_MART_7;
+}
+
+u8 ov03_02257B4C(MartData *data, u32 arg1) {
+    switch (arg1)
+    {
+        case 0:
+            if (data->unk288 >= 10) {
+                data->quantity = ov03_022587E8(data->quantity, data->unk288, 10);
+                Sprite_SetAnimationFrame(data->sprites[14], 0);
+                Sprite_SetAnimCtrlSeq(data->sprites[14], 13);
+                PlaySE(SEQ_SE_DP_BAG_004);
+                data->unk298 = 6;
+            }
+            break;
+        case 1:
+            if (data->unk288 != 1) {
+                data->quantity = ov03_022587E8(data->quantity, data->unk288, 1);
+                Sprite_SetAnimationFrame(data->sprites[15], 0);
+                Sprite_SetAnimCtrlSeq(data->sprites[15], 13);
+                PlaySE(SEQ_SE_DP_BAG_004);
+                data->unk298 = 6;
+            }
+            break;
+        case 2:
+            if (data->unk288 >= 10) {
+                data->quantity = ov03_022587E8(data->quantity, data->unk288, -10);
+                Sprite_SetAnimationFrame(data->sprites[16], 0);
+                Sprite_SetAnimCtrlSeq(data->sprites[16], 15);
+                PlaySE(SEQ_SE_DP_BAG_004);
+                data->unk298 = 6;
+            }
+            break;
+        case 3:
+            if (data->unk288 != 1) {
+                data->quantity = ov03_022587E8(data->quantity, data->unk288, -1);
+                Sprite_SetAnimationFrame(data->sprites[17], 0);
+                Sprite_SetAnimCtrlSeq(data->sprites[17], 15);
+                PlaySE(SEQ_SE_DP_BAG_004);
+                data->unk298 = 6;
+            }
+            break;
+        case 4:
+            PlaySE(SEQ_SE_DP_SELECT);
+            return ov03_022586CC(data, 18, 8);
+        case 5:
+            PlaySE(SEQ_SE_GS_GEARCANCEL);
+            return ov03_022586CC(data, 13, 9);
+    }
+    return TASK_MART_7;
+}
+
+static u8 ov03_02257CA0(MartData *data) {
+    int quantity;
+    if (data->martType == MART_TYPE_NORMAL) {
+        quantity = Bag_HasSpaceForItem(data->inventory, data->item, data->quantity, HEAP_ID_FIELD2);
+    } else if (data->martType == MART_TYPE_1) {
+        quantity = 0;
+    } else if (data->martType == MART_TYPE_3 || data->martType == MART_TYPE_4) {
+        if (data->item >= ITEM_RED_APRICORN && data->item <= ITEM_BLK_APRICORN) {
+            if (ApricornBox_CountApricorn(data->apricornBox, data->item - ITEM_RED_APRICORN) == 99) {
+                data->unk298 = 12;
+                return TASK_MART_14;
+            }
+        } else if (Bag_HasSpaceForItem(data->inventory, data->item, data->quantity, HEAP_ID_FIELD2) == FALSE) {
+            data->unk298 = 12;
+            return TASK_MART_14;
+        }
+        ov03_022582C0(data, 2);
+        data->unk298 = 3;
+        return TASK_MART_10;
+    } else {
+        quantity = SealCase_CheckSealQuantity(data->inventory, data->item, data->quantity);
+    }
+    
+    if (quantity == 0) {
+        data->quantity = 0;
+        data->unk298 = 11;
+        return TASK_MART_13;
+    }
+    return TASK_MART_10;
+}
+
+static u8 ov03_02257D6C(MartData *data) {
+    if (IsPrintFinished(data->printerID) == FALSE) {
+        return TASK_MART_10;
+    }
+    data->unk298 = 8;
+    return TASK_MART_11;
+}
+
+static u8 ov03_02257D90(MartData *data, u32 arg1) {
+    switch (arg1) {
+    case 0:
+        data->unk298 = 9;
+        return TASK_MART_12;
+    case 1:
+        ClearFrameAndWindow2(&data->windows[5], FALSE);
+        ov03_02258560(data, 0);
+        Sprite_SetDrawFlag(data->sprites[0], data->spriteDrawn[0]);
+        Sprite_SetDrawFlag(data->sprites[1], data->spriteDrawn[1]);
+        ov03_022586BC(data, 0);
+        ov03_022582C0(data, 0);
+        data->unk298 = 4;
+        return TASK_MART_3;
+    default:
+        return TASK_MART_11;
+    }
+}
+
+static void MartData_SubCurrency(MartData *data, int currency) {
+    if (data->martType == MART_TYPE_3 || data->martType == MART_TYPE_4) {
+        PokeathlonSave_SubAthletePoints(data->pokeathlonSave, currency);
+    } else {
+        PlayerProfile_SubMoney(data->playerProfile, data->cost * data->quantity);
+    }
+}
+
+static void MartData_Inventory_AddApricornOrItem(MartData *data, int item) {
+    if (item >= ITEM_RED_APRICORN && item <= ITEM_BLK_APRICORN) {
+        ApricornBox_GiveApricorn(data->apricornBox, item - ITEM_RED_APRICORN, 1);
+    } else {
+        Bag_AddItem(data->inventory, data->item, 1, HEAP_ID_FIELD2);
+    }
+}
+
+static u8 MartData_PerformTransaction(MartData *data) {
+    if (IsPrintFinished(data->printerID) == FALSE) {
+        return TASK_MART_12;
+    }
+    if (data->martType == MART_TYPE_NORMAL) {
+        Bag_AddItem(data->inventory, data->item, data->quantity, HEAP_ID_FIELD2);
+    } else if (data->martType == MART_TYPE_3) {
+        MartData_Inventory_AddApricornOrItem(data, data->item);
+        PokeathlonSave_SetUnkB7C_AtIndex(data->pokeathlonSave, data->unk290 + data->unk271);
+    } else if (data->martType == MART_TYPE_4) {
+        PokeathlonSave_SetUnkB78_AtIndex(data->pokeathlonSave, data->item - 505);
+    } else {
+        GiveOrTakeSeal(data->inventory, data->item, data->quantity);
+    }
+    MartData_SubCurrency(data, data->cost * data->quantity);
+    GameStats_Add(data->gameStats, GAME_STAT_CURRENCY_SPENT, data->cost * data->quantity);
+    return TASK_MART_13;
+}
+
+static u8 ov03_02257F24(MartData *data) {
+    if (IsPrintFinished(data->printerID) == FALSE) {
+        return TASK_MART_13;
+    }
+    if ((PAD_BUTTON_A | PAD_BUTTON_B) & gSystem.newKeys || gSystem.touchNew) {
+        if (data->unk264 == 1) {
+            sub_02066D80(data->varsFlags);
+        }
+        if (data->martType == MART_TYPE_NORMAL && data->item == ITEM_POKE_BALL && data->quantity >= 10 && Bag_AddItem(data->inventory, ITEM_PREMIER_BALL, 1, HEAP_ID_FIELD2) == TRUE) {
+            data->unk298 = 13;
+            GameStats_Inc(data->gameStats, GAME_STAT_PREMIER_BALLS_EARNED);
+            return TASK_MART_15;
+        }
+        ClearFrameAndWindow2(&data->windows[5], 0);
+        ov03_02258560(data, 0);
+        Sprite_SetDrawFlag(data->sprites[0], data->spriteDrawn[0]);
+        Sprite_SetDrawFlag(data->sprites[1], data->spriteDrawn[1]);
+        ov03_022586BC(data, 0);
+        ov03_022582C0(data, 0);
+        data->unk298 = 4;
+        return TASK_MART_4;
+    }
+    return TASK_MART_13;
+}
+
+static u8 ov03_02257FF8(MartData *data) {
+    if (IsPrintFinished(data->printerID) == FALSE) {
+        return TASK_MART_14;
+    }
+    if ((PAD_BUTTON_A | PAD_BUTTON_B) & gSystem.newKeys || gSystem.touchNew) {
+        ClearFrameAndWindow2(&data->windows[5], FALSE);
+        ov03_02258560(data, 0);
+        Sprite_SetDrawFlag(data->sprites[0], data->spriteDrawn[0]);
+        Sprite_SetDrawFlag(data->sprites[1], data->spriteDrawn[1]);
+        ov03_022586BC(data, 0);
+        ov03_022582C0(data, 0);
+        data->unk298 = 5;
+        return TASK_MART_4;
+    }
+    return TASK_MART_14;
+}
+
+static u8 ov03_02258078(MartData *data) {
+    if (IsPrintFinished(data->printerID) == FALSE) {
+        return TASK_MART_15;
+    }
+    if ((PAD_BUTTON_A | PAD_BUTTON_B) & gSystem.newKeys || gSystem.touchNew) {
+        ClearFrameAndWindow2(&data->windows[5], FALSE);
+        ov03_02258560(data, 0);
+        Sprite_SetDrawFlag(data->sprites[0], data->spriteDrawn[0]);
+        Sprite_SetDrawFlag(data->sprites[1], data->spriteDrawn[1]);
+        ov03_022586BC(data, 0);
+        ov03_022582C0(data, 0);
+        data->unk298 = 4;
+        return TASK_MART_3;
+    }
+    return TASK_MART_15;
+}
+
+static u16 ov03_022580F8(u16 itemID, const struct MartItem *priceOverrides, u8 unk270) {
+    for (int i = 0; i < unk270; i++) {
+        if (itemID == priceOverrides[i].item_id) {
+            return priceOverrides[i].cost;
+        }
+    }
+    GF_AssertFail();
+    return 0;
+}
+
+/*static*/ u32 ov03_02258120(MartData *data, u16 itemID) {
+    if (data->martType == MART_TYPE_NORMAL) {
+        return GetItemAttr(itemID, 0, HEAP_ID_FIELD2);
+    } else if (data->martType == MART_TYPE_1) {
+        return 100;
+    } else if (data->martType == MART_TYPE_3 || data->martType == MART_TYPE_4) {
+        return ov03_022580F8(itemID, data->priceOverrides, data->unk270);
+    }
+    return 100;
+}
+
+static void ov03_02258164(FieldSystem *fieldSystem, MartData *data_unused) {
+    ov01_021F6A9C(fieldSystem, fieldSystem->unk1C, NULL);
+}
+
+static u8 ov03_02258170(FieldSystem *fieldSystem, MartData *data) {
+    if (ov01_021F6B10(fieldSystem) == FALSE && ov01_021F6B00(fieldSystem) != 1) {
+        return TASK_MART_18;
+    }
+    data->unk281 = 0;
+    Camera_Copy(data->camera, fieldSystem->camera);
+    Camera_Delete(data->camera);
+    Camera_SetStaticPtr(fieldSystem->camera);
+    ov03_02258288(data);
+    return TASK_MART_27;
 }
