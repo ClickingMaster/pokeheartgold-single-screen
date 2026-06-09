@@ -2,14 +2,18 @@
 #include "overlay_03.h"
 
 #include "bag.h"
+#include "bag_types_def.h"
+#include "bag_view.h"
 #include "field_system.h"
 #include "font.h"
 #include "gf_gfx_loader.h"
 #include "global.h"
+#include "launch_application.h"
 #include "link_ruleset_data.h"
 #include "mart.h"
 #include "render_text.h"
 #include "render_window.h"
+#include "safari_zone.h"
 #include "save_link_ruleset.h"
 #include "scrcmd.h"
 #include "sys_flags.h"
@@ -18,6 +22,9 @@
 #include "text.h"
 #include "text_0205B4EC.h"
 #include "unk_02005D10.h"
+#include "unk_0200ACF0.h"
+#include "unk_0200FA24.h"
+#include "unk_02033AE0.h"
 #include "unk_02034354.h"
 #include "unk_02035900.h"
 #include "unk_020379A0.h"
@@ -546,22 +553,22 @@ static u8 ov03_02257FF8(MartData *data);
 static u8 ov03_02258078(MartData *data);
 static void ov03_02258164(FieldSystem *fieldSystem, MartData *data_unused);
 static u8 ov03_02258170(FieldSystem *fieldSystem, MartData *data);
-void ov03_02258288(MartData *data);
-void ov03_02258560(MartData *data, int);
-void ov03_022586BC(MartData *data, int);
-u8 ov03_022586CC(MartData *data, int, int);
-u8 ov03_022586E0();
-void ov03_0225874C(FieldSystem *fieldSystem, MartData *data);
-void ov03_02258764(TaskManager *taskManager);
-u8 ov03_022587D4(FieldSystem *fieldSystem, MartData *data);
+static void ov03_02258288(MartData *data);
+static void ov03_02258560(MartData *data, BOOL);
+static void ov03_022586BC(MartData *data, int flag);
+static u8 ov03_022586CC(MartData *data, u8, u8);
+static u8 ov03_022586E0(MartData *data);
+static void ov03_0225874C(FieldSystem *fieldSystem_unused, MartData *data);
+static void ov03_02258764(TaskManager *taskManager);
+static u8 ov03_022587D4(FieldSystem *fieldSystem_unused, MartData *data_unused);
 static void MartData_RestoreBgPriorities(MartData *data);
 static BOOL ov03_0225709C(FieldSystem *fieldSystem_unused, MartData *data);
 u32 ov03_02258120(MartData *data, u16 itemID);
 void ov03_022581BC(MartData *data);
-void ov03_022582C0(MartData *data, int);
-void ov03_022585A4(MartData *data, u16 itemID);
-void ov03_02258648(MartData *data, int charID, int paletteID, u16 item);
-s16 ov03_022587E8(s16 currentQuantity, u16, s16 modifier);
+static void ov03_022582C0(MartData *data, int);
+static void ov03_022585A4(MartData *data, u16 itemID);
+static void ov03_02258648(MartData *data, int charID, int paletteID, u16 item);
+static int ov03_022587E8(s16 currentQuantity, u16, s16 modifier);
 
 extern WindowTemplate ov03_02259464;
 extern WindowTemplate ov03_022594C6[6];
@@ -574,7 +581,13 @@ extern u8 ov03_022594A1;
 extern u8 ov03_0225947A[][4];
 
 extern u16 ov03_0225946C;
-extern SpriteTemplate_ov01_021E81F0 ov03_022594F8[];
+extern SpriteTemplate_ov01_021E81F0 ov03_022594F8[6];
+
+extern u8 ov03_02259850[15][3];
+
+extern u8 ov03_022597F0;
+
+extern u32 ov03_022597FC;
 
 static u32 ov03_02256BEC(const u16 *items, u16 *priceOverrides, u32 martType) {
     int i;
@@ -794,10 +807,10 @@ BOOL Task_Mart(TaskManager *taskManager) {
         data->state = ov03_02257728(data); // Always returns 3.
         break;
     case TASK_MART_21:
-        data->state = ov03_022586E0();
+        data->state = ov03_022586E0(data);
         break;
     case TASK_MART_22:
-        ov03_0225874C(fieldSystem, data);
+        ov03_0225874C(fieldSystem, data); // Always sets state to 23. Not sure why it doesn't return like the others.
         break;
     case TASK_MART_23:
         ov03_02258764(taskManager);
@@ -1195,7 +1208,7 @@ static u8 ov03_02257A70(MartData *data) {
     sub_0200E5D4(&data->windows[4], TRUE);
     sub_0200E5D4(&data->windows[3], TRUE);
     ClearFrameAndWindow2(&data->windows[5], FALSE);
-    ov03_02258560(data, 0);
+    ov03_02258560(data, FALSE);
     Sprite_SetDrawFlag(data->sprites[0], data->spriteDrawn[0]);
     Sprite_SetDrawFlag(data->sprites[1], data->spriteDrawn[1]);
     ov03_022586BC(data, 0);
@@ -1317,7 +1330,7 @@ static u8 ov03_02257D90(MartData *data, u32 arg1) {
         return TASK_MART_12;
     case 1:
         ClearFrameAndWindow2(&data->windows[5], FALSE);
-        ov03_02258560(data, 0);
+        ov03_02258560(data, FALSE);
         Sprite_SetDrawFlag(data->sprites[0], data->spriteDrawn[0]);
         Sprite_SetDrawFlag(data->sprites[1], data->spriteDrawn[1]);
         ov03_022586BC(data, 0);
@@ -1378,7 +1391,7 @@ static u8 ov03_02257F24(MartData *data) {
             return TASK_MART_15;
         }
         ClearFrameAndWindow2(&data->windows[5], 0);
-        ov03_02258560(data, 0);
+        ov03_02258560(data, FALSE);
         Sprite_SetDrawFlag(data->sprites[0], data->spriteDrawn[0]);
         Sprite_SetDrawFlag(data->sprites[1], data->spriteDrawn[1]);
         ov03_022586BC(data, 0);
@@ -1395,7 +1408,7 @@ static u8 ov03_02257FF8(MartData *data) {
     }
     if ((PAD_BUTTON_A | PAD_BUTTON_B) & gSystem.newKeys || gSystem.touchNew) {
         ClearFrameAndWindow2(&data->windows[5], FALSE);
-        ov03_02258560(data, 0);
+        ov03_02258560(data, FALSE);
         Sprite_SetDrawFlag(data->sprites[0], data->spriteDrawn[0]);
         Sprite_SetDrawFlag(data->sprites[1], data->spriteDrawn[1]);
         ov03_022586BC(data, 0);
@@ -1412,7 +1425,7 @@ static u8 ov03_02258078(MartData *data) {
     }
     if ((PAD_BUTTON_A | PAD_BUTTON_B) & gSystem.newKeys || gSystem.touchNew) {
         ClearFrameAndWindow2(&data->windows[5], FALSE);
-        ov03_02258560(data, 0);
+        ov03_02258560(data, FALSE);
         Sprite_SetDrawFlag(data->sprites[0], data->spriteDrawn[0]);
         Sprite_SetDrawFlag(data->sprites[1], data->spriteDrawn[1]);
         ov03_022586BC(data, 0);
@@ -1477,4 +1490,253 @@ void ov03_022581BC(MartData *data) {
     ov03_022582C0(data, 0);
     ov03_02257378(data, data->unk290, 0);
     ov03_02257758(data, data->unk271, data->unk270);
+}
+
+static void ov03_02258288(MartData *data) {
+    for (u32 i = 0; i < 19; i++) {
+        Sprite_Delete(data->sprites[i]);
+        data->sprites[i] = NULL;
+    }
+    UnkFieldSpriteRenderer_ov01_021E7FDC_Release(&data->unk_ov01_021E7FDC);
+    data->unk_ov01_021E7FDC.spriteList = NULL;
+}
+
+static void ov03_022582C0(MartData *data, int arg1) {
+    int i;
+    int j;
+    switch (arg1) {
+    case 0:
+        for (j = 0; j < 6; j++) {
+            VecFx32 vec;
+            vec.x = ov03_022594F8[j + 4].unk_4 << 12;
+            vec.y = (ov03_022594F8[j + 4].unk_6 << 12) + 0xC0000;
+            vec.z = ov03_022594F8[j + 4].unk_8 << 12;
+            Sprite_SetMatrix(data->sprites[j + 4], &vec);
+        }
+        for (i = 0; i < NELEMS(ov03_02259850); i++) {
+            if (ov03_02259850[i][1] == 4) {
+                if (data->unk271 + 6 < data->unk270) {
+                    Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], TRUE);
+                } else {
+                    Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], FALSE);
+                }
+            } else if (ov03_02259850[i][1] == 3){
+                if (data->unk271 == 0) {
+                    Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], FALSE);
+                } else {
+                    Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], TRUE);
+                }
+            } else if (ov03_02259850[i][1] == 5) {
+                if (data->unk271 + i < data->unk270) {
+                    Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], TRUE);
+                } else {
+                    Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], FALSE);
+                }
+            } else {
+                Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], ov03_02259850[i][1]);
+            }
+        }
+        Sprite_SetAnimationFrame(data->sprites[13], 0);
+        Sprite_SetAnimCtrlSeq(data->sprites[13], 6);
+        break;
+    case 1:
+        for (i = 0; i < NELEMS(ov03_02259850); i++) {
+            if (ov03_02259850[i][2] == 2) {
+                if (data->unk290 == i) {
+                    VecFx32 vec2;
+                    vec2.x = 0x56000;
+                    vec2.y = 0x10C000;
+                    vec2.z = 0;
+                    Sprite_SetMatrix(data->sprites[ov03_02259850[i][0]], &vec2);
+                    Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], TRUE);
+                } else {
+                    Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], FALSE);
+                }
+            } else {
+                if (ov03_02259850[i][0] == 14 || ov03_02259850[i][0] == 16) {
+                    if (data->unk288 < 10) {
+                        Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], FALSE);
+                    } else {
+                        Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], TRUE);
+                    }
+                } else if (ov03_02259850[i][0] == 15 || ov03_02259850[i][0] == 17) {
+                    if (data->unk288 == 1) {
+                        Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], FALSE);
+                    } else {
+                        Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], TRUE);
+                    }
+                } else {
+                    Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], ov03_02259850[i][2]);
+                }
+            }
+        }
+        Sprite_SetAnimationFrame(data->sprites[13], 0);
+        Sprite_SetAnimCtrlSeq(data->sprites[13], 0x1A);
+        break;
+    case 2:
+        for (i = 0; i < NELEMS(ov03_02259850); i++) {
+            if (data->unk290 == i) {
+                VecFx32 vec3;
+                vec3.x = 0x56000;
+                vec3.y = 0x10C000;
+                vec3.z = 0;
+                Sprite_SetMatrix(data->sprites[ov03_02259850[i][0]], &vec3);
+                Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], TRUE);
+            } else {
+                Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], FALSE);
+            }
+        }
+        break;
+    
+    }
+}
+
+static void ov03_02258560(MartData *data, BOOL arg1) {
+    if (arg1 == FALSE) {
+        Sprite_SetPositionXY(data->sprites[0], 177, 8);
+        Sprite_SetPositionXY(data->sprites[1], 177, 132);
+    } else { // This is never used.
+        Sprite_SetPositionXY(data->sprites[0], 162, 108);
+        Sprite_SetPositionXY(data->sprites[1], 162, 132);
+    }
+}
+
+static void ov03_022585A4(MartData *data, u16 itemID) {
+    SpriteResource *spriteResource;
+    if (data->martType != 0 && data->martType != 3 && data->martType != 4) {
+        Sprite_SetDrawFlag(data->sprites[3], FALSE);
+    } else {
+        spriteResource = SpriteResourceCollection_Find(data->unk_ov01_021E7FDC.spriteResManagers[0], 2);
+        ReplaceCharResObjFromNarc(data->unk_ov01_021E7FDC.spriteResManagers[0], spriteResource, NARC_itemtool_itemdata_item_icon, GetItemIndexMapping(itemID, 1), FALSE, HEAP_ID_FIELD2);
+        sub_0200AE8C(spriteResource);
+        spriteResource = SpriteResourceCollection_Find(data->unk_ov01_021E7FDC.spriteResManagers[1], 1);
+        ReplacePlttResObjFromNarc(data->unk_ov01_021E7FDC.spriteResManagers[1], spriteResource, NARC_itemtool_itemdata_item_icon, GetItemIndexMapping(itemID, 2), FALSE, HEAP_ID_FIELD2);
+        sub_0200B084(spriteResource);
+        Sprite_SetDrawFlag(data->sprites[3], TRUE);
+    }
+}
+
+static void ov03_02258648(MartData *data, int charID, int paletteID, u16 item) {
+    SpriteResource *charResObj = SpriteResourceCollection_Find(data->unk_ov01_021E7FDC.spriteResManagers[0], charID);
+    ReplaceCharResObjFromNarc(data->unk_ov01_021E7FDC.spriteResManagers[0], charResObj, NARC_itemtool_itemdata_item_icon, GetItemIndexMapping(item, 1), FALSE, HEAP_ID_FIELD2);
+    sub_0200AE8C(charResObj);
+    SpriteResource *plttResObj = SpriteResourceCollection_Find(data->unk_ov01_021E7FDC.spriteResManagers[1], paletteID);
+    ReplacePlttResObjFromNarc(data->unk_ov01_021E7FDC.spriteResManagers[1], plttResObj, NARC_itemtool_itemdata_item_icon, GetItemIndexMapping(item, 2), FALSE, HEAP_ID_FIELD2);
+    sub_0200B084(plttResObj);
+}
+
+static void ov03_022586BC(MartData *data, int flag) {
+    thunk_Sprite_SetPaletteOverride(data->sprites[2], flag);
+}
+
+static u8 ov03_022586CC(MartData *data, u8 arg1, u8 arg2) {
+    UnkMiniStruct *mini = &data->unk29C;
+    mini->unk0[0] = arg1;
+    mini->unk0[1] = 0;
+    mini->unk0[2] = 0;
+    mini->unk0[3] = arg2;
+    return TASK_MART_21;
+}
+
+static u8 ov03_022586E0(MartData *data) {
+    UnkMiniStruct *mini = &data->unk29C;
+    switch (mini->unk0[1]) {
+    case 0:
+        thunk_Sprite_SetPaletteOverride(data->sprites[data->unk29C.unk0[0]], 7);
+        mini->unk0[1]++;
+        break;
+    case 1:
+        mini->unk0[2]++;
+        if (mini->unk0[2] == 4) {
+            thunk_Sprite_SetPaletteOverride(data->sprites[data->unk29C.unk0[0]], 6);
+            mini->unk0[2] = 0;
+            mini->unk0[1]++;
+        }
+        break;
+    case 2:
+        mini->unk0[2]++;
+        if (mini->unk0[2] == 2) {
+            return mini->unk0[3];
+        }
+        break;
+    }
+    return TASK_MART_21;
+}
+
+static void ov03_0225874C(FieldSystem *fieldSystem_unused, MartData *data) {
+    ov01_021E636C(0);
+    data->state = TASK_MART_23;
+}
+
+static void ov03_02258764(TaskManager *taskManager) {
+    if (IsPaletteFadeFinished()) {
+        FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
+        MartData *data = TaskManager_GetEnvironment(taskManager);
+        data->bagView = Bag_CreateView(Save_Bag_Get(fieldSystem->saveData), &ov03_022597F0, HEAP_ID_FIELD2);
+        sub_0207789C(data->bagView, fieldSystem->saveData, 2, fieldSystem->bagCursor, &fieldSystem->menuInputState);
+        Bag_LaunchApp(fieldSystem, data->bagView);
+        TaskManager_Jump(taskManager, sub_02092B04, data);
+        data->state = TASK_MART_24;
+    }
+}
+
+static u8 ov03_022587D4(FieldSystem *fieldSystem_unused, MartData *data_unused) {
+    return IsPaletteFadeFinished() == FALSE ? (u8)TASK_MART_26 : (u8)TASK_MART_27;
+}
+
+static int ov03_022587E8(s16 currentQuantity, u16 arg1, s16 modifier) {
+    int ret;
+    if (modifier > 0) {
+        if (currentQuantity == arg1) {
+            return 1;
+        }
+        ret = currentQuantity + modifier;
+        if (ret > arg1) {
+            return arg1;
+        }
+    } else if (currentQuantity == 1) {
+        return arg1;
+    } else {
+        ret = currentQuantity + modifier;
+        if (ret <= 0) {
+            ret = 1;
+        }
+    }
+    return ret;
+}
+
+void ov03_02258810(int arg0, int* arg1);
+
+void ov03_02258810(int arg0, int* arg1) {
+    *arg1 = arg0;
+}
+
+void ov03_02258814(void *arg0);
+
+/*static*/ void ov03_02258814(void *arg0) {
+    sub_0203410C(&ov03_022597FC, 1, arg0);
+}
+
+u32 ov03_02258828();
+
+/*static*/ u32 ov03_02258828() {
+    return 744;
+}
+
+u32 ov03_02258830(int mult, int arg1);
+
+/*static*/ u32 ov03_02258830(int mult, int arg1) {
+    if (mult >= 2) {
+        GF_AssertFail();
+    }
+    return arg1 + 8 + (744 * mult);
+}
+
+void ov03_0225884C(BOOL unkBool, u32 arg1_unused, SafariZoneAreaSet *areaSetSrc, UnkCommStruct* unkCommStruct);
+
+/*static*/ void ov03_0225884C(BOOL unkBool, u32 arg1_unused, SafariZoneAreaSet *areaSetSrc, UnkCommStruct* unkCommStruct) {
+    if (unkBool != sub_0203769C()) {
+        SafariZone_SetAreaSet(unkCommStruct->safariZone, 1, areaSetSrc);
+        SafariZone_SetLinkLeaderFromProfile(unkCommStruct->safariZone, sub_02034818(unkBool), HEAP_ID_FIELD2);
+    }
 }

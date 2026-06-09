@@ -320,6 +320,11 @@
 .public MartData_PerformTransaction
 .public ov03_02258120
 .public ov03_022581BC
+.public ov03_02258810
+.public ov03_02258814
+.public ov03_02258828
+.public ov03_02258830
+.public ov03_0225884C
 .public ov03_02258910
 .public ov03_02258CFC
 .public ov03_02259184

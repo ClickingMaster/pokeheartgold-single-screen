@@ -1,10 +1,12 @@
 #ifndef POKEHEARTGOLD_OVERLAY_03_H
 #define POKEHEARTGOLD_OVERLAY_03_H
 
+#include "bag_types_def.h"
 #include "dex_mon_measures.h"
 #include "game_stats.h"
 #include "list_menu.h"
 #include "mart.h"
+#include "safari_zone.h"
 #include "save_vars_flags.h"
 #include "script.h"
 #include "unk_02031B0C.h"
@@ -102,9 +104,13 @@ enum MartTypes {
     MART_TYPE_4, // MART_TYPE_POKEATHLON?
 };
 
+typedef struct UnkMiniStruct {
+    u8 unk0[4];
+} UnkMiniStruct;
+
 typedef struct MartData {
     BgConfig *bgConfig;
-    u32 unk4;
+    BagView *bagView;
     Window windows[6];
     u8 unk68[0x20];
     MsgData *messageData;
@@ -142,7 +148,7 @@ typedef struct MartData {
     int unk290;
     u32 unk294;
     u32 unk298;
-    u32 unk29C;
+    UnkMiniStruct unk29C;
     u32 unk2A0;
 } MartData;
 
@@ -213,5 +219,11 @@ void ov03_02258CFC(TaskManager *taskManager, enum PokeathlonData data);
 void sub_020351DC(u16 cursorPos, PlayerProfile *profile);
 BOOL sub_02037700();
 int sub_020881C0(s16 *quantity, u16 a1);
+BOOL sub_02092B04(TaskManager *taskManager);
+
+typedef struct UnkCommStruct {
+    u32 unk0;
+    SafariZone *safariZone;
+} UnkCommStruct;
 
 #endif // POKEHEARTGOLD_OVERLAY_03_H
