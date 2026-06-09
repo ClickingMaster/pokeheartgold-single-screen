@@ -9,6 +9,7 @@
 #include "script.h"
 #include "unk_02031B0C.h"
 
+#include "field/ov01_021E7FDC.h"
 #include "pokeathlon/pokeathlon_save.h"
 
 enum PokeathlonData {
@@ -109,10 +110,7 @@ typedef struct MartData {
     MsgData *messageData;
     MessageFormat *messageFormat;
     Camera *camera;
-    SpriteList *spriteList;
-    u8 unk98[0x12C];
-    GF_2DGfxResMan *gfxResManagers[2];
-    u8 unk1CC[0x2C];
+    UnkStruct_ov01_021E7FDC unk_ov01_021E7FDC;
     Sprite *sprites[19];
     u16 spriteDrawn[2]; // Draw flags for sprites 0 and 1.
     PlayerProfile *playerProfile;

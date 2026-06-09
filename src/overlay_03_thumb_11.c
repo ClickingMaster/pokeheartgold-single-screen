@@ -25,6 +25,7 @@
 #include "unk_02091054.h"
 
 #include "field/overlay_01_021E8744.h"
+#include "field/ov01_021E7FDC.h"
 #include "field/overlay_01_02204004.h"
 
 #include "msgdata/msg.naix"
@@ -528,7 +529,7 @@ static int ov03_02257510(MartData *data);
 u8 ov03_0225761C(MartData *data, u32);
 static u8 ov03_022576F8(MartData *data);
 static u8 ov03_02257728(MartData *data);
-void ov03_02257758(MartData *data, int, u8);
+static void ov03_02257758(MartData *data, int, u8);
 u8 ov03_022577D0(MartData *data);
 static u8 ov03_02257874(MartData *data, u16 itemID);
 static u8 ov03_02257944(MartData *data);
@@ -555,7 +556,8 @@ void ov03_02258764(TaskManager *taskManager);
 u8 ov03_022587D4(FieldSystem *fieldSystem, MartData *data);
 static void MartData_RestoreBgPriorities(MartData *data);
 static BOOL ov03_0225709C(FieldSystem *fieldSystem_unused, MartData *data);
-/*static*/ u32 ov03_02258120(MartData *data, u16 itemID);
+u32 ov03_02258120(MartData *data, u16 itemID);
+void ov03_022581BC(MartData *data);
 void ov03_022582C0(MartData *data, int);
 void ov03_022585A4(MartData *data, u16 itemID);
 void ov03_02258648(MartData *data, int charID, int paletteID, u16 item);
@@ -570,6 +572,9 @@ extern u8 ov03_022594A0;
 extern u8 ov03_022594A1;
 
 extern u8 ov03_0225947A[][4];
+
+extern u16 ov03_0225946C;
+extern SpriteTemplate_ov01_021E81F0 ov03_022594F8[];
 
 static u32 ov03_02256BEC(const u16 *items, u16 *priceOverrides, u32 martType) {
     int i;
@@ -809,8 +814,8 @@ BOOL Task_Mart(TaskManager *taskManager) {
             Sprite_UpdateAnim(data->sprites[i], 0x1000);
         }
     }
-    if (data->spriteList) {
-        SpriteList_RenderAndAnimateSprites(data->spriteList);
+    if (data->unk_ov01_021E7FDC.spriteList) {
+        SpriteList_RenderAndAnimateSprites(data->unk_ov01_021E7FDC.spriteList);
     }
     return FALSE;
 }
@@ -911,10 +916,7 @@ static u8 ov03_02257334(FieldSystem *fieldSystem, MartData *data) {
     return TASK_MART_3;
 }
 
-// TODO: Make static
-void ov03_02257378(MartData *data, int arg1, int arg2);
-
-void ov03_02257378(MartData *data, int arg1, int arg2) {
+static void ov03_02257378(MartData *data, int arg1, int arg2) {
     switch (arg2) {
     case 0:
         Sprite_SetAnimCtrlSeq(data->sprites[10], *(&ov03_022594A0 + (data->unk290 * 4)));
@@ -1074,7 +1076,7 @@ static u8 ov03_02257728(MartData *data) {
     return TASK_MART_3;
 }
 
-void ov03_02257758(MartData *data, int arg1, u8 arg2) {
+static void ov03_02257758(MartData *data, int arg1, u8 arg2) {
     int temp;
     for (int i = 0; i < 6; i++) {
         if (arg2 - arg1 > 6) {
@@ -1431,7 +1433,7 @@ static u16 ov03_022580F8(u16 itemID, const struct MartItem *priceOverrides, u8 u
     return 0;
 }
 
-/*static*/ u32 ov03_02258120(MartData *data, u16 itemID) {
+u32 ov03_02258120(MartData *data, u16 itemID) {
     if (data->martType == MART_TYPE_NORMAL) {
         return GetItemAttr(itemID, 0, HEAP_ID_FIELD2);
     } else if (data->martType == MART_TYPE_1) {
@@ -1456,4 +1458,23 @@ static u8 ov03_02258170(FieldSystem *fieldSystem, MartData *data) {
     Camera_SetStaticPtr(fieldSystem->camera);
     ov03_02258288(data);
     return TASK_MART_27;
+}
+
+void ov03_022581BC(MartData *data) {
+    UnkFieldSpriteRenderer_ov01_021E7FDC_Init(&data->unk_ov01_021E7FDC, &ov03_0225946C, 19, HEAP_ID_FIELD2);
+    for (u32 i = 0; i < 19; i++) {
+        data->sprites[i] = ov01_021E81F0(&data->unk_ov01_021E7FDC, &ov03_022594F8[i]);
+    }
+    Sprite_SetPriority(data->sprites[13], 1);
+    Sprite_SetPriority(data->sprites[18], 1);
+    Sprite_SetAnimActiveFlag(data->sprites[10], 1);
+    Sprite_SetDrawFlag(data->sprites[2], 0);
+    Sprite_SetDrawFlag(data->sprites[0], 0);
+    Sprite_SetDrawFlag(data->sprites[1], 0);
+    Sprite_SetDrawFlag(data->sprites[3], 0);
+    GfGfx_EngineATogglePlanes(0x10, 1);
+    GfGfx_EngineBTogglePlanes(0x10, 1);
+    ov03_022582C0(data, 0);
+    ov03_02257378(data, data->unk290, 0);
+    ov03_02257758(data, data->unk271, data->unk270);
 }

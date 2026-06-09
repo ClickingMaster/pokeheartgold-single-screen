@@ -4,97 +4,6 @@
 
 	.text
 
-	thumb_func_start ov03_022581BC
-ov03_022581BC: ; 0x022581BC
-	push {r3, r4, r5, r6, r7, lr}
-	ldr r1, _0225827C ; =ov03_0225946C
-	add r7, r0, #0
-	add r0, #0x94
-	mov r2, #0x13
-	mov r3, #0xb
-	bl UnkFieldSpriteRenderer_ov01_021E7FDC_Init
-	add r0, r7, #0
-	str r0, [sp]
-	add r0, #0x94
-	ldr r4, _02258280 ; =ov03_022594F8
-	mov r6, #0
-	add r5, r7, #0
-	str r0, [sp]
-_022581DA:
-	ldr r0, [sp]
-	add r1, r4, #0
-	bl ov01_021E81F0
-	mov r1, #0x7e
-	lsl r1, r1, #2
-	str r0, [r5, r1]
-	add r6, r6, #1
-	add r4, #0x28
-	add r5, r5, #4
-	cmp r6, #0x13
-	blo _022581DA
-	add r0, r1, #0
-	add r0, #0x34
-	ldr r0, [r7, r0]
-	mov r1, #1
-	bl Sprite_SetPriority
-	mov r0, #9
-	lsl r0, r0, #6
-	ldr r0, [r7, r0]
-	mov r1, #1
-	bl Sprite_SetPriority
-	mov r0, #0x22
-	lsl r0, r0, #4
-	ldr r0, [r7, r0]
-	mov r1, #1
-	bl Sprite_SetAnimActiveFlag
-	mov r0, #2
-	lsl r0, r0, #8
-	ldr r0, [r7, r0]
-	mov r1, #0
-	bl Sprite_SetDrawFlag
-	mov r0, #0x7e
-	lsl r0, r0, #2
-	ldr r0, [r7, r0]
-	mov r1, #0
-	bl Sprite_SetDrawFlag
-	mov r0, #0x7f
-	lsl r0, r0, #2
-	ldr r0, [r7, r0]
-	mov r1, #0
-	bl Sprite_SetDrawFlag
-	mov r0, #0x81
-	lsl r0, r0, #2
-	ldr r0, [r7, r0]
-	mov r1, #0
-	bl Sprite_SetDrawFlag
-	mov r0, #0x10
-	mov r1, #1
-	bl GfGfx_EngineATogglePlanes
-	mov r0, #0x10
-	mov r1, #1
-	bl GfGfx_EngineBTogglePlanes
-	add r0, r7, #0
-	mov r1, #0
-	bl ov03_022582C0
-	mov r1, #0x29
-	lsl r1, r1, #4
-	ldr r1, [r7, r1]
-	add r0, r7, #0
-	mov r2, #0
-	bl ov03_02257378
-	ldr r2, _02258284 ; =0x00000271
-	add r0, r7, #0
-	ldrb r1, [r7, r2]
-	sub r2, r2, #1
-	ldrb r2, [r7, r2]
-	bl ov03_02257758
-	pop {r3, r4, r5, r6, r7, pc}
-	.balign 4, 0
-_0225827C: .word ov03_0225946C
-_02258280: .word ov03_022594F8
-_02258284: .word 0x00000271
-	thumb_func_end ov03_022581BC
-
 	thumb_func_start ov03_02258288
 ov03_02258288: ; 0x02258288
 	push {r3, r4, r5, r6, r7, lr}
@@ -2136,6 +2045,7 @@ ov03_0225945C: ; 0x0225945C
 ov03_02259464: ; 0x02259464
 	.byte 0x02, 0x01, 0x12, 0x1B, 0x06, 0x0D, 0xFD, 0x00
 
+	.public ov03_0225946C
 ov03_0225946C: ; 0x0225946C
 	.byte 0x42, 0x00, 0x43, 0x00
 	.byte 0x41, 0x00, 0x40, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x58, 0x00
