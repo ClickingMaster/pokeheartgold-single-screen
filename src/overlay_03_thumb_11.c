@@ -29,7 +29,10 @@
 #include "unk_02035900.h"
 #include "unk_020379A0.h"
 #include "unk_02037C94.h"
+#include "unk_0205FD20.h"
 #include "unk_02091054.h"
+#include "unk_02097268.h"
+#include "unk_02097720.h"
 
 #include "field/overlay_01_021E8744.h"
 #include "field/ov01_021E7FDC.h"
@@ -1705,16 +1708,12 @@ static int ov03_022587E8(s16 currentQuantity, u16 arg1, s16 modifier) {
     return ret;
 }
 
-void ov03_02258810(int arg0, int* arg1);
-
-void ov03_02258810(int arg0, int* arg1) {
-    *arg1 = arg0;
+static void ov03_02258810(void *ptr, UnkCommStruct *unkCommStruct) {
+    unkCommStruct->func = ptr;
 }
 
-void ov03_02258814(void *arg0);
-
-/*static*/ void ov03_02258814(void *arg0) {
-    sub_0203410C(&ov03_022597FC, 1, arg0);
+static void ov03_02258814(UnkCommStruct *unkCommStruct) {
+    sub_0203410C(&ov03_022597FC, 1, unkCommStruct);
 }
 
 u32 ov03_02258828();
@@ -1740,3 +1739,188 @@ void ov03_0225884C(BOOL unkBool, u32 arg1_unused, SafariZoneAreaSet *areaSetSrc,
         SafariZone_SetLinkLeaderFromProfile(unkCommStruct->safariZone, sub_02034818(unkBool), HEAP_ID_FIELD2);
     }
 }
+
+static UnkCommStruct *ov03_02258878() {
+    UnkCommStruct *unkCommStruct = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(UnkCommStruct));
+    MI_CpuFill8(unkCommStruct, 0, sizeof(UnkCommStruct));
+    return unkCommStruct;
+}
+
+static BOOL ov03_02258894(TaskManager *taskManager) {
+    UnkCommStruct *unkCommStruct = TaskManager_GetEnvironment(taskManager);
+    if (unkCommStruct->func == NULL) {
+        Heap_Free(unkCommStruct);
+        return TRUE;
+    }
+    unkCommStruct->func();
+    return FALSE;
+}
+
+static void ov03_022588B0(UnkCommStruct *unkCommStruct) {
+    if (sub_02037B38(13)) {
+        sub_02034818(1 - sub_0203769C());
+        ov03_02258810(NULL, unkCommStruct);
+    }
+}
+
+static void ov03_022588D4(UnkCommStruct *unkCommStruct) {
+    if (sub_02037B38(12) && sub_02034818(1)) {
+        sub_020376D4(22, SafariZone_GetAreaSet(unkCommStruct->safariZone, 0));
+        sub_02037AC0(13);
+        ov03_02258810(&ov03_022588B0, unkCommStruct);
+    }
+}
+
+void ov03_02258910(FieldSystem *fieldSystem) {
+    UnkCommStruct *unkCommStruct = ov03_02258878();
+    unkCommStruct->safariZone = Save_SafariZone_Get(fieldSystem->saveData);
+    ov03_02258814(unkCommStruct);
+    sub_02037AC0(12);
+    ov03_02258810(&ov03_022588D4, unkCommStruct);
+    TaskManager_Call(fieldSystem->taskman, &ov03_02258894, unkCommStruct);
+}
+
+BOOL ScrCmd_716(ScriptContext *ctx) {
+    SafariAreaCustomizerArgs **safariAreaArgs = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
+    *safariAreaArgs = SafariAreaCustomizer_LaunchApp(ctx->fieldSystem);
+    SetupNativeScript(ctx, &ScrNative_WaitApplication_DestroyTaskData);
+    return TRUE;
+}
+
+BOOL ScrCmd_717(ScriptContext * ctx) {
+    sub_02097720(ctx->taskman, GetVarPointer(ctx->fieldSystem, ScriptReadHalfword(ctx)));
+    return TRUE;
+}
+
+BOOL ScrCmd_718(ScriptContext *ctx) {
+    MessageFormat **messageFormat = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
+    const u8* temp_r1 = ctx->script_ptr;
+    ctx->script_ptr++;
+    u8 fieldno = *temp_r1;
+    BufferSafariZoneObjectName(*messageFormat, fieldno, (u8)FieldSystem_VarGet(ctx->fieldSystem, ScriptReadHalfword(ctx)));
+    return FALSE;
+}
+
+// TODO: Move this where it belongs.
+u16 ov02_0224E754(FieldSystem *fieldSystem, u16 *varPointer);
+
+BOOL ScrCmd_719(ScriptContext *ctx) {
+    FieldSystem *fieldSystem = ctx->fieldSystem;
+    FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
+    *GetVarPointer(ctx->fieldSystem, ScriptReadHalfword(ctx)) = ov02_0224E754(fieldSystem, GetVarPointer(ctx->fieldSystem, ScriptReadHalfword(ctx)));
+    return FALSE;
+}
+
+// TODO: Move these where they belong.
+BOOL ov01_021F3B30();
+void ov01_021F630C(int, FieldSystemUnkSub2C *, s32 *);
+u8 ov01_021F6320(FieldSystemUnkSub2C *);
+void ov01_021F3B2C(int, int);
+
+void ov01_021F3B0C(VecFx32 *vec, int);
+
+int ov01_021F3B44(int, u8 index);
+u16 *ov01_021F65E4(FieldSystemUnkSub2C *, u8);
+u8 *ov01_021F65F0(FieldSystemUnkSub2C *, u8);
+
+BOOL ScrCmd_720(ScriptContext *ctx) {
+    FieldSystem *fieldSystem = ctx->fieldSystem;
+    FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
+    
+    u32 areaID;
+    SafariZoneAreaSet *areaSet;
+    u16 *sp8;
+    u8 *sp4;
+    
+    u16 safariObjectID = FieldSystem_VarGet(ctx->fieldSystem, ScriptReadHalfword(ctx));
+    u32 facingDirection = PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar);
+    u32 xCoord = PlayerAvatar_GetXCoord(fieldSystem->playerAvatar);
+    int deltaX = GetDeltaXByFacingDirection(facingDirection);
+    u32 zCoord = PlayerAvatar_GetZCoord(fieldSystem->playerAvatar);
+    int deltaY = GetDeltaYByFacingDirection(facingDirection);
+    
+    int areaX = xCoord + deltaX - 32;
+    int areaY = zCoord + deltaY - 32;
+    areaID = areaX / 32 + (areaY / 32 * 3);
+    
+    areaSet = SafariZone_GetAreaSet(Save_SafariZone_Get(fieldSystem->saveData), 0);
+    u32 temp_r0 = ov01_021F6320(fieldSystem->unk2C);
+
+    int sp20;
+    ov01_021F630C((u8)temp_r0, fieldSystem->unk2C, &sp20);
+    sp8 = ov01_021F65E4(fieldSystem->unk2C, (u8)temp_r0);
+    sp4 = ov01_021F65F0(fieldSystem->unk2C, (u8)temp_r0);
+    
+    SAFARIZONE_OBJECT *safariObject = &areaSet->areas[areaID].objects[safariObjectID];
+
+    SafariObjectConfig objectConfig;
+    GetSafariObjectConfig((void *)&objectConfig, safariObject->unk[0], (u8)PlayerProfile_GetTrainerGender(Save_PlayerData_GetProfile(fieldSystem->saveData)));
+    
+    for (int unkHeightCounter = safariObject->unk[3]; unkHeightCounter > safariObject->unk[3] - objectConfig.height; unkHeightCounter--) {
+        for (int unkWidthCounter = safariObject->unk[1]; unkWidthCounter < safariObject->unk[1] + objectConfig.width; unkWidthCounter++) {
+            sp8[unkWidthCounter + unkHeightCounter * 32] = sp4[unkWidthCounter + unkHeightCounter * 32];
+        }
+    }
+    
+    for (int index = 0; index < 32; index++) {
+        int sp18 = ov01_021F3B44(sp20, index);
+        if (ov01_021F3B30()) {
+            VecFx32 position;
+            ov01_021F3B0C(&position, sp18);
+            
+            s16 localX = (s16)(((position.x >> 12) + 0xf8) / 16);
+            s16 localZ = (s16)(((position.z >> 12) + 0xf8) / 16);
+            
+            if (localX >= safariObject->unk[1] 
+                && localZ <= safariObject->unk[3] 
+                && localX < safariObject->unk[1] + objectConfig.width 
+                && localZ > safariObject->unk[3] - objectConfig.height) {
+                ov01_021F3B2C(sp18, 1);
+                break;
+            }
+        } 
+    }
+    
+    SafariZone_RemoveObjectFromArea(areaSet, areaID, (u8)safariObjectID);
+    
+    return FALSE;
+}
+
+// TODO
+u16 ov02_0224E698(FieldSystem *fieldSystem);
+
+BOOL ScrCmd_721(ScriptContext *ctx) {
+    u16* var = GetVarPointer(ctx->fieldSystem, ScriptReadHalfword(ctx));
+    *var = ov02_0224E698(ctx->fieldSystem);
+    return FALSE;
+}
+
+/*BOOL ScrCmd_CheckSafariZoneChallengeCompleted(ScriptContext *ctx) { // ScrCmd_791
+    u16 sChallengeSpecies[] = { // ov03_02259808
+    SPECIES_GEODUDE,
+    SPECIES_SANDSHREW,
+};
+    u32 trainerID;
+    FieldSystem *fieldSystem = ctx->fieldSystem;
+    u8 challengeNo = *ctx->script_ptr++;
+    Party *party;
+    u16 *challengeCompleted = GetVarPointer(ctx->fieldSystem, ScriptReadHalfword(ctx));
+    party = SaveArray_Party_Get(fieldSystem->saveData);
+    int partyCount = Party_GetCount(party);
+    trainerID = PlayerProfile_GetTrainerID(Save_PlayerData_GetProfile(fieldSystem->saveData));
+    u16 mapSec = MapHeader_GetMapSec(MAP_SAFARI_ZONE_ENTRANCE_EXTERIOR);
+
+    for (int index = 0; index < partyCount; index++) {
+        Pokemon *mon = Party_GetMonByIndex(party, index);
+        if (GetMonData(mon, MON_DATA_IS_EGG, NULL) == FALSE 
+        && trainerID == GetMonData(mon, MON_DATA_OT_ID, NULL)
+        && sChallengeSpecies[challengeNo] == GetMonData(mon, MON_DATA_SPECIES, NULL)
+        && GetMonData(mon, MON_DATA_EGG_LOCATION, NULL) == FALSE // Make sure the player didn't cheat by hatching an egg in the Safari Zone.
+        && mapSec == GetMonData(mon, MON_DATA_MET_LOCATION, NULL)) {
+            *challengeCompleted = TRUE;
+            return FALSE;
+        }
+    }
+    *challengeCompleted = FALSE;
+    return FALSE;
+}*/

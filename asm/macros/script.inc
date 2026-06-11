@@ -4446,13 +4446,13 @@
 	.short \arg1
 	.endm
 
-	.macro ScrCmd_791 arg0, arg1
+	.macro ScrCmd_CheckSafariZoneChallengeCompleted arg0, arg1
 	.short 791
 	.byte \arg0
 	.short \arg1
 	.endm
 
-	.macro ScrCmd_792
+	.macro ScrCmd_UpdateSafariZoneIGT
 	.short 792
 	.endm
 

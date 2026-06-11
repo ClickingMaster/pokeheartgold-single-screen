@@ -4971,14 +4971,14 @@
       ]
     },
     {
-      "name": "ScrCmd_791",
+      "name": "ScrCmd_CheckSafariZoneChallengeCompleted",
       "args": [
         1,
         "var"
       ]
     },
     {
-      "name": "ScrCmd_792",
+      "name": "ScrCmd_UpdateSafariZoneIGT",
       "args": []
     },
     {

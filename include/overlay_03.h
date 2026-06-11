@@ -217,13 +217,28 @@ void ov03_02258910(FieldSystem *fieldSystem);
 void ov03_02258CFC(TaskManager *taskManager, enum PokeathlonData data);
 
 void sub_020351DC(u16 cursorPos, PlayerProfile *profile);
+void sub_020376D4(s32, SafariZoneAreaSet *areaSet);
 BOOL sub_02037700();
 int sub_020881C0(s16 *quantity, u16 a1);
 BOOL sub_02092B04(TaskManager *taskManager);
 
 typedef struct UnkCommStruct {
-    u32 unk0;
+    void (*func)();
     SafariZone *safariZone;
-} UnkCommStruct;
+    u8 unk8[0x5D0];
+} UnkCommStruct; // Size: 0x5D8
+
+typedef struct UnkStruct_02258CFC {
+    int state;
+    enum PokeathlonData pokeathlonDataType;
+    FieldSystem *fieldSystem;
+    BgConfig *bgConfig;
+    Window window;
+    PokeathlonSave *pokeathlonSave;
+    Pokeathlon_UnkSubStruct_B00 *pokeathlonStruct;
+    MsgData *msgData;
+    MessageFormat *messageFormat;
+    String *strings[4];
+} UnkStruct_02258CFC;
 
 #endif // POKEHEARTGOLD_OVERLAY_03_H
