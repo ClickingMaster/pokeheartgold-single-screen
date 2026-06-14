@@ -1748,7 +1748,7 @@ ov85_021E6594: ; 0x021E6594
 	add r0, r4, #0
 	add r0, #0xcc
 	ldr r0, [r0]
-	mov r1, #0x22 ; SCORE_EVENT_EGG_SPUN
+	mov r1, #0x22 ; SCORE_EVENT_SPIN_TRADE
 	ldr r0, [r0, #0x28]
 	bl GameStats_AddScore
 	add r0, r4, #0
