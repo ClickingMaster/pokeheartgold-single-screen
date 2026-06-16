@@ -15,7 +15,7 @@
 	.endm
 
 	; Dummy command
-	.macro Nop
+	.macro Noop
 	.short 0
 	.endm
 
