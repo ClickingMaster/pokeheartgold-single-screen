@@ -319,17 +319,17 @@ BOOL ScrCmd_554(ScriptContext *ctx) {
 
 BOOL ScrCmd_555(ScriptContext *ctx) {
     SaveData *saveData = ctx->fieldSystem->saveData;
-    u16 unk = ScriptGetVar(ctx);
-    GameStats_Add(Save_GameStats_Get(ctx->fieldSystem->saveData), GAME_STAT_BATTLE_POINTS, unk);
-    FrontierData_BattlePointAction(Save_FrontierData_Get(saveData), unk, 5);
+    u16 battlePoints = ScriptGetVar(ctx);
+    GameStats_Add(Save_GameStats_Get(ctx->fieldSystem->saveData), GAME_STAT_BATTLE_POINTS_RECEIVED, battlePoints);
+    FrontierData_BattlePointAction(Save_FrontierData_Get(saveData), battlePoints, 5);
     return FALSE;
 }
 
 BOOL ScrCmd_556(ScriptContext *ctx) {
     SaveData *saveData = ctx->fieldSystem->saveData;
-    u16 unk = ScriptGetVar(ctx);
-    GameStats_Add(Save_GameStats_Get(ctx->fieldSystem->saveData), GAME_STAT_UNK70, unk);
-    FrontierData_BattlePointAction(Save_FrontierData_Get(saveData), unk, 6);
+    u16 battlePoints = ScriptGetVar(ctx);
+    GameStats_Add(Save_GameStats_Get(ctx->fieldSystem->saveData), GAME_STAT_BATTLE_POINTS_SPENT, battlePoints);
+    FrontierData_BattlePointAction(Save_FrontierData_Get(saveData), battlePoints, 6);
     return FALSE;
 }
 

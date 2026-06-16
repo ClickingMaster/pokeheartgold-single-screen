@@ -81,7 +81,7 @@ void CatchingShow_End(FieldSystem *fieldSystem) {
         catchingShow->timePoints = 0;
     }
 
-    GameStats_AddScore(stats, SCORE_EVENT_17);
+    GameStats_AddScore(stats, SCORE_EVENT_CATCHING_SHOW);
 }
 
 BOOL CatchingShow_CheckWildEncounter(FieldSystem *fieldSystem, int playerX, int playerY) {

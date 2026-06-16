@@ -2759,15 +2759,15 @@ sub_0205E048: ; 0x0205E048
 	add r5, r0, #0
 	ldr r0, [r5, #0xc]
 	bl Save_GameStats_Get
-	mov r1, #0
+	mov r1, #0 ; GAME_STAT_STEPS_WALKED
 	add r4, r0, #0
 	bl GameStats_Inc
 	ldr r0, [r5, #0x40]
 	bl PlayerAvatar_GetState
-	cmp r0, #1
+	cmp r0, #1 ; PLAYER_STATE_CYCLING
 	bne _0205E074
 	add r0, r4, #0
-	mov r1, #1
+	mov r1, #1 ; GAME_STAT_STEPS_BIKED
 	bl GameStats_Inc
 _0205E074:
 	pop {r3, r4, r5, pc}

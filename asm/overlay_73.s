@@ -2341,7 +2341,7 @@ ov73_021E6C20: ; 0x021E6C20
 	mov r1, #1
 	strb r1, [r0, #0xc]
 	ldr r0, [r5, #8]
-	mov r1, #0x13
+	mov r1, #0x13 ; SCORE_EVENT_RECORDS_MIXED
 	ldr r0, [r0, #0xc]
 	bl GameStats_AddScore
 	mov r0, #0xdd
