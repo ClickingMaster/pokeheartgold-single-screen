@@ -6855,7 +6855,7 @@ _0221F6BC:
 	ldr r1, [sp, #8]
 	bl Party_ResetMonAprijuiceModifiers
 	ldr r0, [r5, #0x1c]
-	mov r1, #0x14
+	mov r1, #0x14 ; GAME_STAT_LOCAL_LINK_TRADES
 	bl GameStats_Inc
 	ldr r0, [sp, #0xc]
 	bl Heap_Free

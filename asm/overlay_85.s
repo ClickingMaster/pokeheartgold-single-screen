@@ -1742,13 +1742,13 @@ ov85_021E6594: ; 0x021E6594
 	add r4, r0, #0
 	add r0, #0xcc
 	ldr r0, [r0]
-	mov r1, #0x78
+	mov r1, #0x78 ; GAME_STAT_EGGS_SPUN
 	ldr r0, [r0, #0x28]
 	bl GameStats_Inc
 	add r0, r4, #0
 	add r0, #0xcc
 	ldr r0, [r0]
-	mov r1, #0x22
+	mov r1, #0x22 ; SCORE_EVENT_SPIN_TRADE
 	ldr r0, [r0, #0x28]
 	bl GameStats_AddScore
 	add r0, r4, #0
@@ -8380,7 +8380,7 @@ ov85_021E9834: ; 0x021E9834
 	mov r1, #1
 	strb r1, [r0, #0xc]
 	ldr r0, [r5, #0xc]
-	mov r1, #0x13
+	mov r1, #0x13 ; SCORE_EVENT_RECORDS_MIXED
 	ldr r0, [r0, #0x28]
 	bl GameStats_AddScore
 	mov r0, #0x3b

@@ -2813,7 +2813,7 @@ static void BattleControllerPlayer_HpCalc(BattleSystem *battleSystem, BattleCont
         GF_ASSERT(ctx->damage < 0);
 
         if (BattleSystem_GetFieldSide(battleSystem, ctx->battlerIdAttacker) == BattleSystem_GetFieldSide(battleSystem, ctx->battlerIdTarget)) {
-            BattleController_EmitIncrementGameStat(battleSystem, ctx->battlerIdAttacker, 0, GAME_STAT_UNK98);
+            BattleController_EmitIncrementGameStat(battleSystem, ctx->battlerIdAttacker, 0, GAME_STAT_ALLIES_DAMAGED);
         }
 
         ctx->unk_30F4[ctx->battlerIdTarget] = ctx->battlerIdAttacker;
