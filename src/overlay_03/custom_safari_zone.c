@@ -1,47 +1,20 @@
 #include "overlay_01.h"
 #include "overlay_03.h"
 
-#include "bag.h"
-#include "bag_types_def.h"
-#include "bag_view.h"
-#include "field_system.h"
-#include "font.h"
-#include "gf_gfx_loader.h"
 #include "global.h"
-#include "launch_application.h"
-#include "link_ruleset_data.h"
-#include "mart.h"
-#include "render_text.h"
-#include "render_window.h"
 #include "safari_zone.h"
-#include "save_link_ruleset.h"
-#include "scrcmd.h"
-#include "sys_flags.h"
-#include "sys_vars.h"
 #include "task.h"
-#include "text.h"
-#include "text_0205B4EC.h"
-#include "unk_02005D10.h"
-#include "unk_0200ACF0.h"
-#include "unk_0200FA24.h"
 #include "unk_02033AE0.h"
 #include "unk_02034354.h"
 #include "unk_02035900.h"
 #include "unk_020379A0.h"
-#include "unk_02037C94.h"
-#include "unk_0205FD20.h"
-#include "unk_02091054.h"
-#include "unk_02097268.h"
-#include "unk_02097720.h"
+#include "unk_020379A0.h"
 
-#include "field/overlay_01_021E8744.h"
-#include "field/ov01_021E7FDC.h"
-#include "field/overlay_01_02204004.h"
-
-#include "msgdata/msg.naix"
-#include "msgdata/msg/msg_0046.h"
-#include "msgdata/msg/msg_0182.h"
-#include "msgdata/msg/msg_0277.h"
+typedef struct UnkCommStruct {
+    void (*func)();
+    SafariZone *safariZone;
+    u8 unk8[0x5D0];
+} UnkCommStruct; // Size: 0x5D8
 
 typedef struct UnkFuncs {
     void (*unk0)(BOOL, u32, SafariZoneAreaSet*, UnkCommStruct*);
