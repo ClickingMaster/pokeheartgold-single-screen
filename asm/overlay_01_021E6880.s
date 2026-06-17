@@ -2007,10 +2007,10 @@ ov01_021E788C: ; 0x021E788C
 	ldr r0, [r4, #0xc]
 	bl Save_GameStats_Get
 	add r5, r0, #0
-	mov r1, #0xc
+	mov r1, #0xc ; GAME_STAT_EGGS_HATCHED
 	bl GameStats_Inc
 	add r0, r5, #0
-	mov r1, #0xf
+	mov r1, #0xf ; SCORE_EVENT_HATCHED_EGG
 	bl GameStats_AddScore
 	ldr r1, _021E78D4 ; =std_hatch_egg
 	add r0, r4, #0
@@ -2205,7 +2205,7 @@ ov01_021E7A08: ; 0x021E7A08
 	bne _021E7A56
 	ldr r0, [r4, #0xc]
 	bl Save_GameStats_Get
-	mov r1, #1
+	mov r1, #1 ; GAME_STAT_STEPS_BIKED
 	bl GameStats_GetCapped
 	mov r1, #1
 	lsl r1, r1, #0xa
