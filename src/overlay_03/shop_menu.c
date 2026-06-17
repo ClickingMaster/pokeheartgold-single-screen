@@ -39,496 +39,11 @@
 #include "field/overlay_01_02204004.h"
 
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0046.h"
 #include "msgdata/msg/msg_0182.h"
+#include "msgdata/msg/msg_0277.h"
 
-extern u8 ov03_02259820[9];
-extern u8 ov03_0225982C[9];
-extern u16 ov03_0225945C[3];
-
-int BattleRegulationMenu_ProcessListMenuInputConfirm(BattleRegulationMenu *menu) {
-    int input = ListMenu_ProcessInput(menu->listMenu[REGULATION_MENU_CONFIRM]);
-    ListMenuGetScrollAndRow(menu->listMenu[REGULATION_MENU_CONFIRM], 0, &menu->itemsAbove[REGULATION_MENU_CONFIRM]);
-    
-    u16 prev = menu->unk80[REGULATION_MENU_CONFIRM];
-    ListMenuGetCurrentItemArrayId(menu->listMenu[REGULATION_MENU_CONFIRM], &menu->unk80[REGULATION_MENU_CONFIRM]);
-    
-    if (prev != menu->unk80[REGULATION_MENU_CONFIRM]) {
-        PlaySE(SEQ_SE_DP_SELECT);
-    }
-
-    switch(input) {
-        case -1:
-            return 0;
-        case -2:
-            PlaySE(SEQ_SE_DP_SELECT);
-            input = -1;
-            break;
-        default:
-            PlaySE(SEQ_SE_DP_SELECT);
-            BattleRegulationMenu_RemoveListMenuRegulations(menu);
-            break;
-    }
-
-    if (menu->listMenu[REGULATION_MENU_CONFIRM]) {
-        DestroyListMenu(menu->listMenu[REGULATION_MENU_CONFIRM], NULL, NULL);
-        sub_0200E5D4(&menu->windows[REGULATION_MENU_WINDOW_CONFIRM], TRUE);
-        ScheduleBgTilemapBufferTransfer(menu->windows[REGULATION_MENU_WINDOW_CONFIRM].bgConfig, menu->windows[REGULATION_MENU_WINDOW_CONFIRM].bgId);
-        RemoveWindow(&menu->windows[REGULATION_MENU_WINDOW_CONFIRM]);
-        ListMenuItems_Delete(menu->items[REGULATION_MENU_CONFIRM]);
-        menu->listMenu[REGULATION_MENU_CONFIRM] = NULL;
-    }
-    return input;
-}
-
-void BattleRegulationMenu_ShowRules(BattleRegulationMenu *menu) {
-    MessageFormat *messageFormat = menu->messageFormat;
-    int i, ruleValue, valueMessage;
-    const int yOffset = 16;
-    const int xOffset = 2;
-    const int lineHeight = 15;
-    const int xOffsetCupName = 55;
-    const int xRightSide = (24 * 8) - 1;
-    
-    MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 0xB6, HEAP_ID_FIELD1);
-    String *fmtString = String_New(180, HEAP_ID_FIELD1);
-    String *destString = String_New(180, HEAP_ID_FIELD1);
-    Window *window = &menu->windows[REGULATION_MENU_WINDOW_RULES];
-    
-    AddWindowParameterized(menu->fieldSystem->bgConfig, window, 3, 4, 2, 24, 19, 13, 1);
-    DrawFrameAndWindow1(window, 1, 0x3D9, 11);
-    FillWindowPixelBuffer(window, 15);
-    
-    BattleRegulationMenu_GetRegulationName(menu, menu->itemsAbove[REGULATION_MENU_REGULATIONS] - 1);
-    
-    ReadMsgDataIntoString(msgData, 0x71, fmtString); // Text_Cup?
-    StringExpandPlaceholders(messageFormat, destString, fmtString);
-    AddTextPrinterParameterized(window, 0, destString, xOffset + xOffsetCupName, 0, TEXT_SPEED_NOTRANSFER, NULL);
-
-    for (i = 0; i < 9; i++) {
-        ReadMsgDataIntoString(msgData, i + 0x5D, fmtString);
-        AddTextPrinterParameterized(window, 0, fmtString, xOffset, yOffset + lineHeight * i, TEXT_SPEED_NOTRANSFER, NULL);
-    };
-
-    for (i = 0; i < 9; i++) {
-        ruleValue = LinkBattleRuleset_GetRuleValue(&menu->fieldSystem->linkBattleRuleset->rules[0], (LinkBattleRule)ov03_02259820[i]);
-        valueMessage = ov03_0225982C[i];
-        
-        switch (ov03_02259820[i]) {
-        case LINKBATTLERULE_PARTY_COUNT:
-            BufferIntegerAsString(messageFormat, 0, ruleValue, 1, PRINTING_MODE_RIGHT_ALIGN, TRUE);
-            break;
-        case LINKBATTLERULE_MAX_LEVEL:
-            BufferIntegerAsString(messageFormat, 0, ruleValue, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
-            break;
-        case LINKBATTLERULE_MAX_TOTAL_LEVEL:
-            if (ruleValue == 0) {
-                valueMessage = 0x72; // NoRestrictions
-            } else {
-                BufferIntegerAsString(messageFormat, 0, ruleValue, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
-            }
-            break;
-        case LINKBATTLERULE_HEIGHT_LIMIT:
-            ruleValue = (ruleValue >= 0) ? (((ruleValue * 10 * 1000) / 254 + 5) / 10) : -(((-ruleValue * 10 * 1000) / 254 + 5) / 10);
-
-            BufferIntegerAsString(messageFormat, 0, abs(ruleValue / 12), 2, PRINTING_MODE_LEFT_ALIGN, TRUE);
-            BufferIntegerAsString(messageFormat, 1, abs(ruleValue % 12), 2, PRINTING_MODE_LEADING_ZEROS, TRUE);
-            
-            if (ruleValue == 0) {
-                valueMessage = 0x72; // NoRestrictions
-            } else if (ruleValue > 0) {
-                valueMessage++;
-            }
-            break;
-        case LINKBATTLERULE_WEIGHT_LIMIT:
-            ruleValue = (ruleValue >= 0) ? (((ruleValue * 220462) + 50000) / 100000) : -(((-ruleValue * 220462) + 50000) / 100000);
-            BufferIntegerAsString(messageFormat, 0, abs(ruleValue), 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
-            if (ruleValue == 0) {
-                valueMessage = 0x72; // NoRestrictions
-            } else if (ruleValue > 0) {
-                valueMessage++;
-            }
-            break;
-        case LINKBATTLERULE_UBERS_CLAUSE:
-            if (LinkBattleRuleset_GetRuleValue(&menu->fieldSystem->linkBattleRuleset->rules[0], LINKBATTLERULE_SOUL_DEW_CLAUSE) == FLAG_RULESET_BAN_SOUL_DEW) {
-                valueMessage = 0x73;
-            } else if (ruleValue == 0) {
-                valueMessage++;
-            }
-            break;
-        case LINKBATTLERULE_EVOLVED_POKEMON:
-        case LINKBATTLERULE_ITEM_DUPE_CLAUSE:
-        case LINKBATTLERULE_SPECIES_DUPE_CLAUSE:
-            if (ruleValue == 0) {
-                valueMessage++;
-            }
-            break;
-        }
-        
-        ReadMsgDataIntoString(msgData, valueMessage, fmtString);
-        StringExpandPlaceholders(messageFormat, destString, fmtString);
-
-        int valueWidth = FontID_String_GetWidth(0, destString, 0);
-        int valueXOffset = xRightSide - valueWidth;
-        
-        AddTextPrinterParameterized(window, 0, destString, valueXOffset, yOffset + lineHeight * i, 0xFF, NULL);
-    }
-    String_Delete(fmtString);
-    String_Delete(destString);
-    DestroyMsgData(msgData);
-    CopyWindowToVram(window);
-}
-
-void BattleRegulationMenu_RemoveRulesWindow(BattleRegulationMenu *menu) {
-    sub_0200E5D4(&menu->windows[REGULATION_MENU_WINDOW_RULES], TRUE);
-    ScheduleBgTilemapBufferTransfer(menu->windows[REGULATION_MENU_WINDOW_RULES].bgConfig, menu->windows[REGULATION_MENU_WINDOW_RULES].bgId);
-    RemoveWindow(&menu->windows[REGULATION_MENU_WINDOW_RULES]);
-}
-
-BOOL BattleRegulationMenu_HandleValidationResult(BattleRegulationMenu *menu) {
-    int result = sub_02074CD0(&menu->fieldSystem->linkBattleRuleset->rules[0], SaveArray_Party_Get(menu->fieldSystem->saveData), menu->pokedexData);
-    switch (result) {
-    case 0: // BATTLE_REGULATION_VALIDATION_RESULT_SUCCESS
-        return TRUE;
-    case 4: // BATTLE_REGULATION_VALIDATION_RESULT_INVALID_TEAM_SIZE
-        PlaySE(SEQ_SE_DP_BOX03);
-        BattleRegulationMenu_GetRegulationName(menu, menu->itemsAbove[REGULATION_MENU_REGULATIONS] - 1);
-        BufferIntegerAsString(menu->messageFormat, 1, LinkBattleRuleset_GetRuleValue(&menu->fieldSystem->linkBattleRuleset->rules[0], LINKBATTLERULE_PARTY_COUNT), 1, PRINTING_MODE_RIGHT_ALIGN, TRUE);
-        BattleRegulationMenu_PrintMessage(menu, 0x7A); // PokemonCenter2FCommon_Text_NeedXPokemonForCup
-        break;
-    default:
-    case 1: // BATTLE_REGULATION_VALIDATION_RESULT_TOTAL_LEVEL_EXCEEDED
-        PlaySE(SEQ_SE_DP_BOX03);
-        BattleRegulationMenu_GetRegulationName(menu, menu->itemsAbove[REGULATION_MENU_REGULATIONS] - 1);
-        BufferIntegerAsString(menu->messageFormat, 1, LinkBattleRuleset_GetRuleValue(&menu->fieldSystem->linkBattleRuleset->rules[0], LINKBATTLERULE_MAX_TOTAL_LEVEL), 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
-        BattleRegulationMenu_PrintMessage(menu, 0x88); // PokemonCenter2FCommon_Text_CantFormTeamWithLevelLimit
-        break;
-    }
-    return FALSE;
-}
-
-enum BattleRegulationMenuState {
-    STATE_REGULATION_MENU_PRINT_WHICH_RULESET = 0,
-    STATE_REGULATION_MENU_SHOW_LIST_MENU_REGULATIONS,
-    STATE_REGULATION_MENU_HANDLE_INPUT_REGULATIONS,
-    STATE_REGULATION_MENU_SHOW_LIST_MENU_CONFIRM,
-    STATE_REGULATION_MENU_HANDLE_INPUT_CONFIRM,
-    STATE_REGULATION_MENU_CHECK_VALID_TEAM, // 5
-    STATE_REGULATION_MENU_WAIT_MESSAGE_INVALID_TEAM,
-    STATE_REGULATION_MENU_PRINT_RULES,
-    STATE_REGULATION_MENU_RESHOW_MENU_AFTER_RULES,
-    STATE_REGULATION_MENU_WAIT_RESHOW_CONFIRM_MENU,
-    STATE_REGULATION_MENU_UNUSED, // 10
-    STATE_REGULATION_MENU_EXIT,
-};
-
-BOOL Task_BattleRegulationMenu(TaskManager *taskManager) {
-    FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    BattleRegulationMenu *menu = TaskManager_GetEnvironment(taskManager);
-    int input;
-    switch (menu->state) {
-    case STATE_REGULATION_MENU_PRINT_WHICH_RULESET:
-        BattleRegulationMenu_PrintMessage(menu, 0x78); // PokemonCenter2FCommon_Text_WhichSetOfRules
-        menu->state++;
-        break;
-    case STATE_REGULATION_MENU_SHOW_LIST_MENU_REGULATIONS:
-        if (IsPrintFinished(menu->printerID)) {
-            BattleRegulationMenu_ShowListMenuRegulations(menu);
-            menu->state++;
-        }
-        break;
-    case STATE_REGULATION_MENU_HANDLE_INPUT_REGULATIONS:
-        input = BattleRegulationMenu_ProcessListMenuInputRegulations(menu);
-        if (input == -1) {
-            *menu->result = 2;
-            menu->state = STATE_REGULATION_MENU_EXIT;
-        } else if (input == 2) {
-            *menu->result = 3;
-            menu->state = STATE_REGULATION_MENU_EXIT;
-        } else if (input == 1) {
-            menu->state = STATE_REGULATION_MENU_SHOW_LIST_MENU_CONFIRM;
-        }
-        break;
-    case STATE_REGULATION_MENU_SHOW_LIST_MENU_CONFIRM:
-        BattleRegulationMenu_ShowListMenuConfirm(menu);
-        menu->state++;
-        break;
-    case STATE_REGULATION_MENU_HANDLE_INPUT_CONFIRM:
-        input = BattleRegulationMenu_ProcessListMenuInputConfirm(menu);
-        if (input == -1) {
-            menu->state = STATE_REGULATION_MENU_HANDLE_INPUT_REGULATIONS;
-        } else if (input == 1) {
-            menu->state = STATE_REGULATION_MENU_CHECK_VALID_TEAM;
-        } else if (input == 2) {
-            menu->state = STATE_REGULATION_MENU_PRINT_RULES;
-        }
-        break;
-    case STATE_REGULATION_MENU_CHECK_VALID_TEAM:
-        if (BattleRegulationMenu_HandleValidationResult(menu)) {
-            *menu->result = 1;
-            menu->state = STATE_REGULATION_MENU_EXIT;
-        } else {
-            menu->state = STATE_REGULATION_MENU_WAIT_MESSAGE_INVALID_TEAM;
-        }
-        break;
-    case STATE_REGULATION_MENU_WAIT_MESSAGE_INVALID_TEAM:
-        if (IsPrintFinished(menu->printerID) && (PAD_BUTTON_A | PAD_BUTTON_B) & gSystem.newKeys) {
-            menu->state = STATE_REGULATION_MENU_PRINT_WHICH_RULESET;
-        }
-        break;
-    case STATE_REGULATION_MENU_PRINT_RULES:
-        BattleRegulationMenu_RemoveMsgBox(menu, TRUE);
-        BattleRegulationMenu_ShowRules(menu);
-        menu->state++;
-        break;
-    case STATE_REGULATION_MENU_RESHOW_MENU_AFTER_RULES:
-        if ((PAD_BUTTON_A | PAD_BUTTON_B) & gSystem.newKeys) {
-            BattleRegulationMenu_RemoveRulesWindow(menu);
-            BattleRegulationMenu_PrintMessage(menu, 0x78); // PokemonCenter2FCommon_Text_WhichSetOfRules
-            BattleRegulationMenu_ShowListMenuRegulations(menu);
-            menu->state = STATE_REGULATION_MENU_WAIT_RESHOW_CONFIRM_MENU;
-        }
-        break;
-    case STATE_REGULATION_MENU_WAIT_RESHOW_CONFIRM_MENU:
-        if (IsPrintFinished(menu->printerID)) {
-            menu->state = STATE_REGULATION_MENU_SHOW_LIST_MENU_CONFIRM;
-        }
-        break;
-    case STATE_REGULATION_MENU_UNUSED:
-        break;
-    case STATE_REGULATION_MENU_EXIT:
-        BattleRegulationMenu_RemoveListMenuRegulations(menu);
-        BattleRegulationMenu_RemoveMsgBox(menu, FALSE);
-        MessageFormat_Delete(menu->messageFormat);
-        DestroyMsgData(menu->msgData);
-        String_Delete(menu->strings[REGULATION_MENU_STRING_FMT]);
-        String_Delete(menu->strings[REGULATION_MENU_STRING_DESTINATION]);
-        String_Delete(menu->strings[REGULATION_MENU_STRING_REGULATION_NAME]);
-        String_Delete(menu->strings[REGULATION_MENU_STRING_CUP_NAME]);
-        PokedexData_UnloadAndDelete(menu->pokedexData);
-        Heap_Free(menu);
-        return TRUE;
-    default:
-        return TRUE;
-    }
-    return FALSE;
-}
-
-BattleRegulationMenu *BattleRegulationMenu_New(FieldSystem *fieldSystem) {
-    BattleRegulationMenu *menu = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(BattleRegulationMenu));
-    MI_CpuFill8(menu, 0, sizeof(BattleRegulationMenu));
-    menu->state = STATE_REGULATION_MENU_PRINT_WHICH_RULESET;
-    menu->fieldSystem = fieldSystem;
-    fieldSystem->linkBattleRuleset = NULL;
-    menu->messageFormat = MessageFormat_New(HEAP_ID_FIELD1);
-    menu->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 0x2E, HEAP_ID_FIELD1); // TEXT_BANK_POKEMON_CENTER_2F_COMMON
-    menu->strings[REGULATION_MENU_STRING_FMT] = String_New(180, HEAP_ID_FIELD1);
-    menu->strings[REGULATION_MENU_STRING_DESTINATION] = String_New(180, HEAP_ID_FIELD1);
-    menu->strings[REGULATION_MENU_STRING_REGULATION_NAME] = String_New(180, HEAP_ID_FIELD1);
-    menu->strings[REGULATION_MENU_STRING_CUP_NAME] = String_New(180, HEAP_ID_FIELD1);
-    menu->pokedexData = PokedexData_CreateAndLoad(HEAP_ID_FIELD2);
-    return menu;
-}
-
-void StartTask_BattleRegulationMenu(TaskManager *taskManager, u16 *result) {
-    BattleRegulationMenu *menu = BattleRegulationMenu_New(TaskManager_GetFieldSystem(taskManager));
-    menu->result = result;
-    TaskManager_Call(taskManager, Task_BattleRegulationMenu, menu);
-}
-
-void ov03_022566D0(FieldSystem *fieldSystem, MessageFormat *messageFormat, u32 ruleset) {
-    String *string = String_New(180, HEAP_ID_FIELD1);
-    sub_0202921C(fieldSystem->saveData, ruleset, string, HEAP_ID_FIELD1);
-    BufferString(messageFormat, 0, string, 0, 1, 2);
-    String_Delete(string);
-}
-
-void ov03_02256710(FieldSystem *fieldSystem, u16 arg1) {
-    if (arg1 == 12 || arg1 == 6) {
-        &fieldSystem->linkBattleRuleset->rules[0] = NULL;
-    } else {
-        &fieldSystem->linkBattleRuleset->rules[0] = sub_020291E8(fieldSystem->saveData, arg1);
-    }
-}
-
-void ov03_02256730(FieldSystem *fieldSystem, Window *window, u32 ruleset) {
-    int ruleValue, valueMessage;
-    const int yOffset = 16;
-    const int xOffset = 2;
-    const int lineHeight = 15;
-    const int xOffsetCupName = 55;
-    const int xRightSide = (24 * 8) - 1;
-
-    AddWindowParameterized(fieldSystem->bgConfig, window, 3, 4, 2, 24, 19, 13, 1);
-    LoadUserFrameGfx1(fieldSystem->bgConfig, GF_BG_LYR_MAIN_3, 0x3D9, 11, 0, HEAP_ID_FIELD1);
-    DrawFrameAndWindow1(window, 1, 0x3D9, 11);
-    FillWindowPixelBuffer(window, 15);
-    MsgData *msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 0xB6, HEAP_ID_FIELD1);
-    MessageFormat *messageFormat = MessageFormat_New(HEAP_ID_FIELD1);
-    String *fmtString = String_New(180, HEAP_ID_FIELD1);
-    String *destString = String_New(180, HEAP_ID_FIELD1);
-    ov03_022566D0(fieldSystem, messageFormat, ruleset);
-    ReadMsgDataIntoString(msgData, 0x71, fmtString);
-    StringExpandPlaceholders(messageFormat, destString, fmtString);
-    AddTextPrinterParameterized(window, 0, destString, xOffset + xOffsetCupName, 0, TEXT_SPEED_NOTRANSFER, 0);
-
-    for (int i = 0; i < 9; i++) {
-        ReadMsgDataIntoString(msgData, i + 0x5D, fmtString);
-        AddTextPrinterParameterized(window, 0, fmtString, xOffset, yOffset + lineHeight * i, TEXT_SPEED_NOTRANSFER, NULL);
-        ruleValue = LinkBattleRuleset_GetRuleValue(&fieldSystem->linkBattleRuleset->rules[0], (LinkBattleRule)ov03_02259820[i]);
-        valueMessage = ov03_0225982C[i];
-        switch (ov03_02259820[i]) {
-        case LINKBATTLERULE_PARTY_COUNT:
-            BufferIntegerAsString(messageFormat, 0, ruleValue, 1, PRINTING_MODE_RIGHT_ALIGN, TRUE);
-            break;
-        case LINKBATTLERULE_MAX_LEVEL:
-            BufferIntegerAsString(messageFormat, 0, ruleValue, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
-            break;
-        case LINKBATTLERULE_MAX_TOTAL_LEVEL:
-            if (ruleValue == 0) {
-                valueMessage = 0x72;
-            } else {
-                BufferIntegerAsString(messageFormat, 0, ruleValue, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
-            }
-            break;
-        case LINKBATTLERULE_HEIGHT_LIMIT:
-            ruleValue = (ruleValue >= 0) ? (((ruleValue * 10 * 1000) / 254 + 5) / 10) : -(((-ruleValue * 10 * 1000) / 254 + 5) / 10);
-            BufferIntegerAsString(messageFormat, 0, abs(ruleValue / 12), 2, PRINTING_MODE_LEFT_ALIGN, TRUE);
-            BufferIntegerAsString(messageFormat, 1, abs(ruleValue % 12), 2, PRINTING_MODE_LEADING_ZEROS, TRUE);
-            if (ruleValue == 0) {
-                valueMessage = 0x72;
-            } else if (ruleValue > 0) {
-                valueMessage++;
-            }
-            break;
-        case LINKBATTLERULE_WEIGHT_LIMIT:
-            ruleValue = (ruleValue >= 0) ? (((ruleValue * 220462) + 50000) / 100000) : -(((-ruleValue * 220462) + 50000) / 100000);
-            BufferIntegerAsString(messageFormat, 0, abs(ruleValue), 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
-            if (ruleValue == 0) {
-                valueMessage = 0x72;
-            } else if (ruleValue > 0) {
-                valueMessage++;
-            }
-            break;
-        case LINKBATTLERULE_UBERS_CLAUSE:
-            if (LinkBattleRuleset_GetRuleValue(&fieldSystem->linkBattleRuleset->rules[0], LINKBATTLERULE_SOUL_DEW_CLAUSE) == FLAG_RULESET_BAN_SOUL_DEW) {
-                valueMessage = 0x73;
-            } else if (ruleValue == 0) {
-                valueMessage++;
-            }
-            break;
-        case LINKBATTLERULE_EVOLVED_POKEMON:
-        case LINKBATTLERULE_ITEM_DUPE_CLAUSE:
-        case LINKBATTLERULE_SPECIES_DUPE_CLAUSE:
-            if (ruleValue == 0) {
-                valueMessage++;
-            }
-            break;
-        }
-        ReadMsgDataIntoString(msgData, valueMessage, fmtString);
-        StringExpandPlaceholders(messageFormat, destString, fmtString);
-        
-        int valueWidth = FontID_String_GetWidth(0, destString, 0);
-        int valueXOffset = xRightSide - valueWidth;
-        AddTextPrinterParameterized(window, 0, destString, valueXOffset, yOffset + lineHeight * i, TEXT_SPEED_NOTRANSFER, NULL);
-    }
-    String_Delete(destString);
-    String_Delete(fmtString);
-    MessageFormat_Delete(messageFormat);
-    DestroyMsgData(msgData);
-    CopyWindowToVram(window);
-}
-
-u16 ov03_02256A2C(FieldSystem *fieldSystem, MessageFormat *messageFormat, u32 ruleset) {
-    Party *party = SaveArray_Party_Get(fieldSystem->saveData);
-    PokedexData *pokedexData = PokedexData_CreateAndLoad(HEAP_ID_FIELD2);
-    u32 unkValue;
-    if (ruleset == 10) {
-        int partySize = Party_GetCount(party);
-        int validMons = partySize;
-        for (int index = 0; index < partySize; index++) {
-            if (GetMonData(Party_GetMonByIndex(party, index), MON_DATA_IS_EGG, NULL)) {
-                validMons--;
-            }
-        }
-        unkValue = validMons < 2 ? 7 : 0;
-    } else {
-        unkValue = sub_02074CD0(&fieldSystem->linkBattleRuleset->rules[0], party, pokedexData);
-    }
-    PokedexData_UnloadAndDelete(pokedexData);
-    int ruleValue;
-    switch (unkValue)
-    {
-        case 0:
-            return 0;
-        case 4:
-            ov03_022566D0(fieldSystem, messageFormat, ruleset);
-            ruleValue = LinkBattleRuleset_GetRuleValue(&fieldSystem->linkBattleRuleset->rules[0], LINKBATTLERULE_PARTY_COUNT);
-            BufferIntegerAsString(messageFormat, 1, ruleValue, 1, PRINTING_MODE_RIGHT_ALIGN, TRUE);
-            return 1;
-        case 7:
-            ov03_022566D0(fieldSystem, messageFormat, ruleset);
-            BufferIntegerAsString(messageFormat, 1, 2, 1, PRINTING_MODE_RIGHT_ALIGN, TRUE);
-            return 1;
-        case 1:
-        case 2:
-        case 3:
-        case 5:
-        case 6:
-        default:
-            ov03_022566D0(fieldSystem, messageFormat, ruleset);
-            ruleValue = LinkBattleRuleset_GetRuleValue(&fieldSystem->linkBattleRuleset->rules[0], LINKBATTLERULE_MAX_TOTAL_LEVEL);
-            BufferIntegerAsString(messageFormat, 1, ruleValue, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
-            return 2;
-    }
-}
-
-u32 ov03_02256B40(int arg0) {
-    u32 unkValue = arg0;
-    switch (unkValue) {
-        case 6:
-            return 0xFF;
-        case 7:
-            return 0;
-        case 8:
-            return 3;
-        case 9:
-            return 4;
-        case 10:
-        case 11:
-            return -1;
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-        case 5:
-        default:
-            break;
-    }
-    if (unkValue >= 9) {
-        unkValue = 0xFF;
-    }
-    return unkValue;
-}
-
-BOOL ScrCmd_710(ScriptContext *ctx) {
-    for (int i = 0; i < 3; i++) {
-        ov03_02256BA8(ctx->fieldSystem, i);
-    }
-    return FALSE;
-}
-
-void ov03_02256BA8(FieldSystem *fieldSystem, u8 index) {
-    u16 modelID = ov03_0225945C[index];
-    UnkStruct_FieldSysC0_SubC *renderObject = Field3dObjectList_GetRenderObjectByID(fieldSystem->unkC0, modelID);
-    if (renderObject == NULL) {
-        GF_AssertFail();
-    } else {
-        ov01_021E8970(modelID, sub_020669B4(Save_VarsFlags_Get(fieldSystem->saveData), index), 1, renderObject, fieldSystem->unk54); 
-    }
-}
-
-BOOL Task_Mart(TaskManager *taskManager);
+static void ov03_02256BA8(FieldSystem *fieldSystem, u8 index);
 static void MartTask_InitMartMessageData(MartData *data);
 static void MartData_InitMessageData(MartData *data);
 static void MartData_InitCamera(FieldSystem *fieldSystem, MartData *data);
@@ -536,17 +51,17 @@ static void MartData_AddWindows(MartData *data);
 static u8 ov03_02257334(FieldSystem *fieldSystem, MartData *data);
 static void ov03_022573D4(MartData *data, u32 arg1);
 static int ov03_02257510(MartData *data);
-u8 ov03_0225761C(MartData *data, u32);
+static u8 ov03_0225761C(MartData *data, u32);
 static u8 ov03_022576F8(MartData *data);
 static u8 ov03_02257728(MartData *data);
 static void ov03_02257758(MartData *data, int, u8);
-u8 ov03_022577D0(MartData *data);
+static u8 ov03_022577D0(MartData *data);
 static u8 ov03_02257874(MartData *data, u16 itemID);
 static u8 ov03_02257944(MartData *data);
 static u8 ov03_022579E0(MartData *data);
 static u8 ov03_02257A70(MartData *data);
 static u8 ov03_02257ADC(MartData *data);
-u8 ov03_02257B4C(MartData *data, u32);
+static u8 ov03_02257B4C(MartData *data, u32);
 static u8 ov03_02257CA0(MartData *data);
 static u8 ov03_02257D6C(MartData *data);
 static u8 ov03_02257D90(MartData *data, u32);
@@ -566,36 +81,110 @@ static void ov03_02258764(TaskManager *taskManager);
 static u8 ov03_022587D4(FieldSystem *fieldSystem_unused, MartData *data_unused);
 static void MartData_RestoreBgPriorities(MartData *data);
 static BOOL ov03_0225709C(FieldSystem *fieldSystem_unused, MartData *data);
-u32 ov03_02258120(MartData *data, u16 itemID);
-void ov03_022581BC(MartData *data);
 static void ov03_022582C0(MartData *data, int);
 static void ov03_022585A4(MartData *data, u16 itemID);
 static void ov03_02258648(MartData *data, int charID, int paletteID, u16 item);
 static int ov03_022587E8(s16 currentQuantity, u16, s16 modifier);
 
-extern WindowTemplate ov03_02259464;
-extern WindowTemplate ov03_022594C6[6];
+static const u16 ov03_0225945C[4] = {
+    149,
+    152,
+    153,
+    0
+};
 
-extern u8 ov03_0225949E;
-extern u8 ov03_0225949F;
-extern u8 ov03_022594A0;
-extern u8 ov03_022594A1;
+static const WindowTemplate ov03_022594C6[6] = {
+    {
+        .bgId = GF_BG_LYR_MAIN_2,
+        .left = 13,
+        .top = 2,
+        .width = 18,
+        .height = 14,
+        .palette = 13,
+        .baseTile = 1,
+    },
+    {
+        .bgId = GF_BG_LYR_MAIN_2,
+        .left = 5,
+        .top = 18,
+        .width = 27,
+        .height = 6,
+        .palette = 13,
+        .baseTile = 253,
+    },
+    {
+        .bgId = GF_BG_LYR_MAIN_3,
+        .left = 1,
+        .top = 1,
+        .width = 10,
+        .height = 4,
+        .palette = 13,
+        .baseTile = 40,
+    },
+    {
+        .bgId = GF_BG_LYR_MAIN_3,
+        .left = 19,
+        .top = 13,
+        .width = 12,
+        .height = 4,
+        .palette = 13,
+        .baseTile = 80,
+    },
+    {
+        .bgId = GF_BG_LYR_MAIN_3,
+        .left = 1,
+        .top = 15,
+        .width = 14,
+        .height = 2,
+        .palette = 13,
+        .baseTile = 128,
+    },
+    {
+        .bgId = GF_BG_LYR_MAIN_3,
+        .left = 2,
+        .top = 19,
+        .width = 27,
+        .height = 4,
+        .palette = 12,
+        .baseTile = 156,
+    }
+};
 
-extern u8 ov03_0225947A[][4];
+static const WindowTemplate ov03_02259464 = {
+    .bgId = GF_BG_LYR_MAIN_2,
+    .left = 1,
+    .top = 18,
+    .width = 27,
+    .height = 6,
+    .palette = 13,
+    .baseTile = 253,
+};
 
-extern u16 ov03_0225946C;
-extern SpriteTemplate_ov01_021E81F0 ov03_022594F8[6];
+// ???
 
-extern u8 ov03_02259850[15][3];
+BOOL ScrCmd_710(ScriptContext *ctx) {
+    for (int i = 0; i < 3; i++) {
+        ov03_02256BA8(ctx->fieldSystem, i);
+    }
+    return FALSE;
+}
 
-extern u8 ov03_022597F0;
+static void ov03_02256BA8(FieldSystem *fieldSystem, u8 index) {
+    u16 modelID = ov03_0225945C[index];
+    UnkStruct_FieldSysC0_SubC *renderObject = Field3dObjectList_GetRenderObjectByID(fieldSystem->unkC0, modelID);
+    if (renderObject == NULL) {
+        GF_AssertFail();
+    } else {
+        ov01_021E8970(modelID, sub_020669B4(Save_VarsFlags_Get(fieldSystem->saveData), index), 1, renderObject, fieldSystem->unk54); 
+    }
+}
 
-extern u32 ov03_022597FC;
+// ???
 
 static u32 ov03_02256BEC(const u16 *items, u16 *priceOverrides, u32 martType) {
     int i;
     if (martType == MART_TYPE_3 || martType == MART_TYPE_4) {
-        for (i = 0; i < 0x100; i++) {
+        for (i = 0; i < 256; i++) {
             if (*priceOverrides != 0xFFFF) {
                 priceOverrides += 2;
             } else {
@@ -603,7 +192,7 @@ static u32 ov03_02256BEC(const u16 *items, u16 *priceOverrides, u32 martType) {
             }
         }
     } else { // MART_TYPE_NORMAL, MART_TYPE_1
-        for (i = 0; i < 0x100; i++) {
+        for (i = 0; i < 256; i++) {
             if (*items != 0xFFFF) {
                 items++;
             } else {
@@ -841,7 +430,7 @@ static void MartTask_InitMartMessageData(MartData *data) {
 }
 
 static void MartData_InitMessageData(MartData *data) {
-    data->messageData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 0x1B3, HEAP_ID_FIELD2);
+    data->messageData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0435_bin, HEAP_ID_FIELD2);
     data->messageFormat = MessageFormat_New(HEAP_ID_FIELD2);
 }
 
@@ -855,7 +444,7 @@ static BOOL ov03_0225709C(FieldSystem *fieldSystem_unused, MartData *data) {
 }
 
 static void MartData_InitCamera(FieldSystem *fieldSystem, MartData *data) {
-    FillBgTilemapRect(data->bgConfig, 3, 0, 0, 0x12, 0x20, 6, 0);
+    FillBgTilemapRect(data->bgConfig, 3, 0, 0, 18, 32, 6, 0);
     ScheduleBgTilemapBufferTransfer(data->bgConfig, 3);
     MartData_AddWindows(data);
     data->camera = Camera_New(HEAP_ID_FIELD2);
@@ -882,9 +471,7 @@ static void ov03_02257184(MartData *data) {
     };
 }
 
-void ov03_022571AC(MartData *data);
-
-/*static*/ void ov03_022571AC(MartData *data) { // MartData_LoadGraphics?
+static void ov03_022571AC(MartData *data) { // MartData_LoadGraphics?
     GfGfxLoader_LoadCharData(NARC_a_0_6_0, 0, data->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, HEAP_ID_FIELD2);
     if (data->martType == MART_TYPE_NORMAL || data->martType == MART_TYPE_3 || data->martType == MART_TYPE_4) {
         GfGfxLoader_LoadScrnData(NARC_a_0_6_0, 2, data->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, FALSE, HEAP_ID_FIELD2);
@@ -932,12 +519,25 @@ static u8 ov03_02257334(FieldSystem *fieldSystem, MartData *data) {
     return TASK_MART_3;
 }
 
-static void ov03_02257378(MartData *data, int arg1, int arg2) {
+static const u8 ov03_0225949E[10][4] = {
+    {48, 56, 0, 7},
+    {176, 56, 0, 7},
+    {48, 96, 0, 7},
+    {176, 96, 0, 7},
+    {48, 136, 0, 7},
+    {176, 136, 0, 7},
+    {24, 176, 4, 7},
+    {64, 176, 4, 7},
+    {224, 176, 7, 7},
+    {160, 176, 7, 7}
+};
+
+static void ov03_02257378(MartData *data, int index, int arg2) {
     switch (arg2) {
     case 0:
-        Sprite_SetAnimCtrlSeq(data->sprites[10], *(&ov03_022594A0 + (data->unk290 * 4)));
-        thunk_Sprite_SetPaletteOverride(data->sprites[10], *(&ov03_022594A1 + arg1 * 4));
-        Sprite_SetPositionXY(data->sprites[10], *(&ov03_0225949E + arg1 * 4), *(&ov03_0225949F + arg1 * 4));
+        Sprite_SetAnimCtrlSeq(data->sprites[10], ov03_0225949E[data->unk290][2]);
+        thunk_Sprite_SetPaletteOverride(data->sprites[10], ov03_0225949E[index][3]);
+        Sprite_SetPositionXY(data->sprites[10], ov03_0225949E[index][0], ov03_0225949E[index][1]);
     case 1:
     case 2:
         break;
@@ -961,11 +561,11 @@ static void ov03_022573D4(MartData *data, u32 arg1) {
                     string = String_New(130, HEAP_ID_FIELD2);
                     GetItemDescIntoString(string, itemID, HEAP_ID_FIELD2);
                 } else if (data->martType == MART_TYPE_1) {
-                    msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 0x2E1, HEAP_ID_FIELD2);
-                    string = NewString_ReadMsgData(msgData, itemID + 0x8A);
+                    msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0737_bin, HEAP_ID_FIELD2);
+                    string = NewString_ReadMsgData(msgData, itemID + 138);
                     DestroyMsgData(msgData);
                 } else {
-                    msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 0x1B2, HEAP_ID_FIELD2);
+                    msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0434_bin, HEAP_ID_FIELD2);
                     string = NewString_ReadMsgData(msgData, sub_020910B8((u8)itemID));
                     DestroyMsgData(msgData);
                 }
@@ -986,6 +586,18 @@ static void ov03_022573D4(MartData *data, u32 arg1) {
             break;
     }
 }
+
+static const u8 ov03_0225947A[9][4] = {
+    {4, 2, 6, 1},
+    {8, 3, 0, 7},
+    {0, 4, 6, 3},
+    {1, 5, 2, 7},
+    {2, 0, 6, 5},
+    {3, 8, 4, 7},
+    {4, 0, 8, 8},
+    {4, 0, 8, 8},
+    {5, 1, 8, 8}
+};
 
 static int ov03_02257510(MartData *data) {
     u8 unkExternVal;
@@ -1037,7 +649,7 @@ static int ov03_02257510(MartData *data) {
     return TASK_MART_3;
 }
 
-u8 ov03_0225761C(MartData *data, u32 arg1) {
+static u8 ov03_0225761C(MartData *data, u32 arg1) {
     switch (arg1) {
         case 0:
         case 1:
@@ -1113,16 +725,14 @@ static void ov03_02257758(MartData *data, int arg1, u8 arg2) {
     ov03_022582C0(data, 0);
 }
 
-u8 ov03_022577D0(MartData *data) {
+static u8 ov03_022577D0(MartData *data) {
     ov03_02257184(data);
     BgFillTilemapBufferAndSchedule(data->bgConfig, 1, 0);
     Sprite_SetDrawFlag(data->sprites[3], FALSE);
     return TASK_MART_17;
 }
 
-u32 ov03_022577F4(MartData *data, u32 martType);
-
-u32 ov03_022577F4(MartData *data, u32 martType) {
+static u32 ov03_022577F4(MartData *data, u32 martType) {
     if (martType == MART_TYPE_3 || martType == MART_TYPE_4) {
         return PokeathlonSave_GetAthletePoints(data->pokeathlonSave);
     } else {
@@ -1238,7 +848,7 @@ static u8 ov03_02257ADC(MartData *data) {
     return TASK_MART_7;
 }
 
-u8 ov03_02257B4C(MartData *data, u32 arg1) {
+static u8 ov03_02257B4C(MartData *data, u32 arg1) {
     switch (arg1)
     {
         case 0:
@@ -1476,8 +1086,250 @@ static u8 ov03_02258170(FieldSystem *fieldSystem, MartData *data) {
     return TASK_MART_27;
 }
 
+static const u16 ov03_0225946C[7] = {
+    66,
+    67,
+    65,
+    64,
+    0xFFFF,
+    0xFFFF,
+    88
+};
+
+static const SpriteTemplate_ov01_021E81F0 ov03_022594F8[19] = {
+    {
+        .unk_0 = 0, 
+        .unk_4 = 177,
+        .unk_6 = 8,
+        .unk_8 = 0,
+        .unk_A = 0,
+        .unk_C = 0,
+        .unk_10 = 0,
+        .unk_14 = 1,
+        .unk_18 = 0,
+        .filler_1C = 0,
+    },
+    {
+        .unk_0 = 0,
+        .unk_4 = 177,
+        .unk_6 = 132,
+        .unk_8 = 0,
+        .unk_A = 1,
+        .unk_C = 0,
+        .unk_10 = 0,
+        .unk_14 = 1,
+        .unk_18 = 0,
+        .filler_1C = 0,
+    },
+   
+    {
+        .unk_0 = 1,
+        .unk_4 = 176,
+        .unk_6 = 24,
+        .unk_8 = 0,
+        .unk_A = 0,
+        .unk_C = 0,
+        .unk_10 = 0,
+        .unk_14 = 1,
+        .unk_18 = 0,
+        .filler_1C = 0,
+    },
+    {
+        .unk_0 = 2,
+        .unk_4 = 22,
+        .unk_6 = 172,
+        .unk_8 = 0,
+        .unk_A = 0,
+        .unk_C = 0,
+        .unk_10 = 0,
+        .unk_14 = 1,
+        .unk_18 = 0,
+        .filler_1C = 0,
+    },
+    {
+        .unk_0 = 3,
+        .unk_4 = 22,
+        .unk_6 = 59,
+        .unk_8 = 0,
+        .unk_A = 0,
+        .unk_C = 0,
+        .unk_10 = 0,
+        .unk_14 = 2,
+        .unk_18 = 0,
+        .filler_1C = 0,
+    },
+    {
+        .unk_0 = 4,
+        .unk_4 = 152,
+        .unk_6 = 59,
+        .unk_8 = 0,
+        .unk_A = 0,
+        .unk_C = 0,
+        .unk_10 = 0,
+        .unk_14 = 2,
+        .unk_18 = 0,
+        .filler_1C = 0,
+    },
+    {
+        .unk_0 = 5,
+        .unk_4 = 22,
+        .unk_6 = 100,
+        .unk_8 = 0,
+        .unk_A = 0,
+        .unk_C = 0,
+        .unk_10 = 0,
+        .unk_14 = 2,
+        .unk_18 = 0,
+        .filler_1C = 0,
+    },
+    {
+        .unk_0 = 6,
+        .unk_4 = 152,
+        .unk_6 = 100,
+        .unk_8 = 0,
+        .unk_A = 0,
+        .unk_C = 0,
+        .unk_10 = 0,
+        .unk_14 = 2,
+        .unk_18 = 0,
+        .filler_1C = 0,
+    },
+    {
+        .unk_0 = 7,
+        .unk_4 = 22,
+        .unk_6 = 139,
+        .unk_8 = 0,
+        .unk_A = 0,
+        .unk_C = 0,
+        .unk_10 = 0,
+        .unk_14 = 2,
+        .unk_18 = 0,
+        .filler_1C = 0,
+    },
+    {
+        .unk_0 = 8,
+        .unk_4 = 152,
+        .unk_6 = 139,
+        .unk_8 = 0,
+        .unk_A = 0,
+        .unk_C = 0,
+        .unk_10 = 0,
+        .unk_14 = 2,
+        .unk_18 = 0,
+        .filler_1C = 0,
+    },
+    {
+        .unk_0 = 9,
+        .unk_4 = 0,
+        .unk_6 = 0,
+        .unk_8 = 0,
+        .unk_A = 0,
+        .unk_C = 0,
+        .unk_10 = 0,
+        .unk_14 = 2,
+        .unk_18 = 0,
+        .filler_1C = 0,
+    },
+    {
+        .unk_0 = 9,
+        .unk_4 = 24,
+        .unk_6 = 176,
+        .unk_8 = 0,
+        .unk_A = 2,
+        .unk_C = 0,
+        .unk_10 = 0,
+        .unk_14 = 2,
+        .unk_18 = 0,
+        .filler_1C = 0,
+    },
+    {
+        .unk_0 = 9,
+        .unk_4 = 64,
+        .unk_6 = 176,
+        .unk_8 = 0,
+        .unk_A = 3,
+        .unk_C = 0,
+        .unk_10 = 0,
+        .unk_14 = 2,
+        .unk_18 = 0,
+        .filler_1C = 0,
+    },
+    {
+        .unk_0 = 9,
+        .unk_4 = 224,
+        .unk_6 = 176,
+        .unk_8 = 0,
+        .unk_A = 6,
+        .unk_C = 0,
+        .unk_10 = 0,
+        .unk_14 = 2,
+        .unk_18 = 0,
+        .filler_1C = 0,
+    },
+    {
+        .unk_0 = 9,
+        .unk_4 = 136,
+        .unk_6 = 104,
+        .unk_8 = 0,
+        .unk_A = 12,
+        .unk_C = 0,
+        .unk_10 = 0,
+        .unk_14 = 2,
+        .unk_18 = 0,
+        .filler_1C = 0,
+    },
+    {
+        .unk_0 = 9,
+        .unk_4 = 168,
+        .unk_6 = 104,
+        .unk_8 = 0,
+        .unk_A = 12,
+        .unk_C = 0,
+        .unk_10 = 0,
+        .unk_14 = 2,
+        .unk_18 = 0,
+        .filler_1C = 0,
+    },
+    {
+        .unk_0 = 9,
+        .unk_4 = 136,
+        .unk_6 = 152,
+        .unk_8 = 0,
+        .unk_A = 14,
+        .unk_C = 0,
+        .unk_10 = 0,
+        .unk_14 = 2,
+        .unk_18 = 0,
+        .filler_1C = 0,
+    },
+    {
+        .unk_0 = 9,
+        .unk_4 = 168,
+        .unk_6 = 152,
+        .unk_8 = 0,
+        .unk_A = 14,
+        .unk_C = 0,
+        .unk_10 = 0,
+        .unk_14 = 2,
+        .unk_18 = 0,
+        .filler_1C = 0,
+    },
+    {
+        .unk_0 = 9,
+        .unk_4 = 136,
+        .unk_6 = 176,
+        .unk_8 = 0,
+        .unk_A = 24,
+        .unk_C = 0,
+        .unk_10 = 0,
+        .unk_14 = 2,
+        .unk_18 = 0,
+        .filler_1C = 0,
+    }
+};
+
 void ov03_022581BC(MartData *data) {
-    UnkFieldSpriteRenderer_ov01_021E7FDC_Init(&data->unk_ov01_021E7FDC, &ov03_0225946C, 19, HEAP_ID_FIELD2);
+    UnkFieldSpriteRenderer_ov01_021E7FDC_Init(&data->unk_ov01_021E7FDC, ov03_0225946C, 19, HEAP_ID_FIELD2);
     for (u32 i = 0; i < 19; i++) {
         data->sprites[i] = ov01_021E81F0(&data->unk_ov01_021E7FDC, &ov03_022594F8[i]);
     }
@@ -1488,8 +1340,8 @@ void ov03_022581BC(MartData *data) {
     Sprite_SetDrawFlag(data->sprites[0], 0);
     Sprite_SetDrawFlag(data->sprites[1], 0);
     Sprite_SetDrawFlag(data->sprites[3], 0);
-    GfGfx_EngineATogglePlanes(0x10, 1);
-    GfGfx_EngineBTogglePlanes(0x10, 1);
+    GfGfx_EngineATogglePlanes(16, 1);
+    GfGfx_EngineBTogglePlanes(16, 1);
     ov03_022582C0(data, 0);
     ov03_02257378(data, data->unk290, 0);
     ov03_02257758(data, data->unk271, data->unk270);
@@ -1503,6 +1355,24 @@ static void ov03_02258288(MartData *data) {
     UnkFieldSpriteRenderer_ov01_021E7FDC_Release(&data->unk_ov01_021E7FDC);
     data->unk_ov01_021E7FDC.spriteList = NULL;
 }
+
+static u8 ov03_02259850[15][3] = { // Sprite index, ?, ?
+    {4, 5, 2},
+    {5, 5, 2},
+    {6, 5, 2},
+    {7, 5, 2},
+    {8, 5, 2},
+    {9, 5, 2},
+    {10, 1, 0},
+    {11, 3, 0},
+    {12, 4, 0},
+    {13, 1, 1},
+    {14, 0, 1},
+    {15, 0, 1},
+    {16, 0, 1},
+    {17, 0, 1},
+    {18, 0, 1}
+};
 
 static void ov03_022582C0(MartData *data, int arg1) {
     int i;
@@ -1574,7 +1444,7 @@ static void ov03_022582C0(MartData *data, int arg1) {
             }
         }
         Sprite_SetAnimationFrame(data->sprites[13], 0);
-        Sprite_SetAnimCtrlSeq(data->sprites[13], 0x1A);
+        Sprite_SetAnimCtrlSeq(data->sprites[13], 26);
         break;
     case 2:
         for (i = 0; i < NELEMS(ov03_02259850); i++) {
@@ -1671,11 +1541,23 @@ static void ov03_0225874C(FieldSystem *fieldSystem_unused, MartData *data) {
     data->state = TASK_MART_23;
 }
 
+static const u8 ov03_022597F0[9] = {
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    0xFF
+};
+
 static void ov03_02258764(TaskManager *taskManager) {
     if (IsPaletteFadeFinished()) {
         FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
         MartData *data = TaskManager_GetEnvironment(taskManager);
-        data->bagView = Bag_CreateView(Save_Bag_Get(fieldSystem->saveData), &ov03_022597F0, HEAP_ID_FIELD2);
+        data->bagView = Bag_CreateView(Save_Bag_Get(fieldSystem->saveData), ov03_022597F0, HEAP_ID_FIELD2);
         sub_0207789C(data->bagView, fieldSystem->saveData, 2, fieldSystem->bagCursor, &fieldSystem->menuInputState);
         Bag_LaunchApp(fieldSystem, data->bagView);
         TaskManager_Jump(taskManager, sub_02092B04, data);
@@ -1707,220 +1589,3 @@ static int ov03_022587E8(s16 currentQuantity, u16 arg1, s16 modifier) {
     }
     return ret;
 }
-
-static void ov03_02258810(void *ptr, UnkCommStruct *unkCommStruct) {
-    unkCommStruct->func = ptr;
-}
-
-static void ov03_02258814(UnkCommStruct *unkCommStruct) {
-    sub_0203410C(&ov03_022597FC, 1, unkCommStruct);
-}
-
-u32 ov03_02258828();
-
-/*static*/ u32 ov03_02258828() {
-    return 744;
-}
-
-u32 ov03_02258830(int mult, int arg1);
-
-/*static*/ u32 ov03_02258830(int mult, int arg1) {
-    if (mult >= 2) {
-        GF_AssertFail();
-    }
-    return arg1 + 8 + (744 * mult);
-}
-
-void ov03_0225884C(BOOL unkBool, u32 arg1_unused, SafariZoneAreaSet *areaSetSrc, UnkCommStruct* unkCommStruct);
-
-/*static*/ void ov03_0225884C(BOOL unkBool, u32 arg1_unused, SafariZoneAreaSet *areaSetSrc, UnkCommStruct* unkCommStruct) {
-    if (unkBool != sub_0203769C()) {
-        SafariZone_SetAreaSet(unkCommStruct->safariZone, 1, areaSetSrc);
-        SafariZone_SetLinkLeaderFromProfile(unkCommStruct->safariZone, sub_02034818(unkBool), HEAP_ID_FIELD2);
-    }
-}
-
-static UnkCommStruct *ov03_02258878() {
-    UnkCommStruct *unkCommStruct = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(UnkCommStruct));
-    MI_CpuFill8(unkCommStruct, 0, sizeof(UnkCommStruct));
-    return unkCommStruct;
-}
-
-static BOOL ov03_02258894(TaskManager *taskManager) {
-    UnkCommStruct *unkCommStruct = TaskManager_GetEnvironment(taskManager);
-    if (unkCommStruct->func == NULL) {
-        Heap_Free(unkCommStruct);
-        return TRUE;
-    }
-    unkCommStruct->func();
-    return FALSE;
-}
-
-static void ov03_022588B0(UnkCommStruct *unkCommStruct) {
-    if (sub_02037B38(13)) {
-        sub_02034818(1 - sub_0203769C());
-        ov03_02258810(NULL, unkCommStruct);
-    }
-}
-
-static void ov03_022588D4(UnkCommStruct *unkCommStruct) {
-    if (sub_02037B38(12) && sub_02034818(1)) {
-        sub_020376D4(22, SafariZone_GetAreaSet(unkCommStruct->safariZone, 0));
-        sub_02037AC0(13);
-        ov03_02258810(&ov03_022588B0, unkCommStruct);
-    }
-}
-
-void ov03_02258910(FieldSystem *fieldSystem) {
-    UnkCommStruct *unkCommStruct = ov03_02258878();
-    unkCommStruct->safariZone = Save_SafariZone_Get(fieldSystem->saveData);
-    ov03_02258814(unkCommStruct);
-    sub_02037AC0(12);
-    ov03_02258810(&ov03_022588D4, unkCommStruct);
-    TaskManager_Call(fieldSystem->taskman, &ov03_02258894, unkCommStruct);
-}
-
-BOOL ScrCmd_716(ScriptContext *ctx) {
-    SafariAreaCustomizerArgs **safariAreaArgs = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
-    *safariAreaArgs = SafariAreaCustomizer_LaunchApp(ctx->fieldSystem);
-    SetupNativeScript(ctx, &ScrNative_WaitApplication_DestroyTaskData);
-    return TRUE;
-}
-
-BOOL ScrCmd_717(ScriptContext * ctx) {
-    sub_02097720(ctx->taskman, GetVarPointer(ctx->fieldSystem, ScriptReadHalfword(ctx)));
-    return TRUE;
-}
-
-BOOL ScrCmd_718(ScriptContext *ctx) {
-    MessageFormat **messageFormat = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
-    const u8* temp_r1 = ctx->script_ptr;
-    ctx->script_ptr++;
-    u8 fieldno = *temp_r1;
-    BufferSafariZoneObjectName(*messageFormat, fieldno, (u8)FieldSystem_VarGet(ctx->fieldSystem, ScriptReadHalfword(ctx)));
-    return FALSE;
-}
-
-// TODO: Move this where it belongs.
-u16 ov02_0224E754(FieldSystem *fieldSystem, u16 *varPointer);
-
-BOOL ScrCmd_719(ScriptContext *ctx) {
-    FieldSystem *fieldSystem = ctx->fieldSystem;
-    FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
-    *GetVarPointer(ctx->fieldSystem, ScriptReadHalfword(ctx)) = ov02_0224E754(fieldSystem, GetVarPointer(ctx->fieldSystem, ScriptReadHalfword(ctx)));
-    return FALSE;
-}
-
-// TODO: Move these where they belong.
-BOOL ov01_021F3B30();
-void ov01_021F630C(int, FieldSystemUnkSub2C *, s32 *);
-u8 ov01_021F6320(FieldSystemUnkSub2C *);
-void ov01_021F3B2C(int, int);
-
-void ov01_021F3B0C(VecFx32 *vec, int);
-
-int ov01_021F3B44(int, u8 index);
-u16 *ov01_021F65E4(FieldSystemUnkSub2C *, u8);
-u8 *ov01_021F65F0(FieldSystemUnkSub2C *, u8);
-
-BOOL ScrCmd_720(ScriptContext *ctx) {
-    FieldSystem *fieldSystem = ctx->fieldSystem;
-    FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_MESSAGE_FORMAT);
-    
-    u32 areaID;
-    SafariZoneAreaSet *areaSet;
-    u16 *sp8;
-    u8 *sp4;
-    
-    u16 safariObjectID = FieldSystem_VarGet(ctx->fieldSystem, ScriptReadHalfword(ctx));
-    u32 facingDirection = PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar);
-    u32 xCoord = PlayerAvatar_GetXCoord(fieldSystem->playerAvatar);
-    int deltaX = GetDeltaXByFacingDirection(facingDirection);
-    u32 zCoord = PlayerAvatar_GetZCoord(fieldSystem->playerAvatar);
-    int deltaY = GetDeltaYByFacingDirection(facingDirection);
-    
-    int areaX = xCoord + deltaX - 32;
-    int areaY = zCoord + deltaY - 32;
-    areaID = areaX / 32 + (areaY / 32 * 3);
-    
-    areaSet = SafariZone_GetAreaSet(Save_SafariZone_Get(fieldSystem->saveData), 0);
-    u32 temp_r0 = ov01_021F6320(fieldSystem->unk2C);
-
-    int sp20;
-    ov01_021F630C((u8)temp_r0, fieldSystem->unk2C, &sp20);
-    sp8 = ov01_021F65E4(fieldSystem->unk2C, (u8)temp_r0);
-    sp4 = ov01_021F65F0(fieldSystem->unk2C, (u8)temp_r0);
-    
-    SAFARIZONE_OBJECT *safariObject = &areaSet->areas[areaID].objects[safariObjectID];
-
-    SafariObjectConfig objectConfig;
-    GetSafariObjectConfig((void *)&objectConfig, safariObject->unk[0], (u8)PlayerProfile_GetTrainerGender(Save_PlayerData_GetProfile(fieldSystem->saveData)));
-    
-    for (int unkHeightCounter = safariObject->unk[3]; unkHeightCounter > safariObject->unk[3] - objectConfig.height; unkHeightCounter--) {
-        for (int unkWidthCounter = safariObject->unk[1]; unkWidthCounter < safariObject->unk[1] + objectConfig.width; unkWidthCounter++) {
-            sp8[unkWidthCounter + unkHeightCounter * 32] = sp4[unkWidthCounter + unkHeightCounter * 32];
-        }
-    }
-    
-    for (int index = 0; index < 32; index++) {
-        int sp18 = ov01_021F3B44(sp20, index);
-        if (ov01_021F3B30()) {
-            VecFx32 position;
-            ov01_021F3B0C(&position, sp18);
-            
-            s16 localX = (s16)(((position.x >> 12) + 0xf8) / 16);
-            s16 localZ = (s16)(((position.z >> 12) + 0xf8) / 16);
-            
-            if (localX >= safariObject->unk[1] 
-                && localZ <= safariObject->unk[3] 
-                && localX < safariObject->unk[1] + objectConfig.width 
-                && localZ > safariObject->unk[3] - objectConfig.height) {
-                ov01_021F3B2C(sp18, 1);
-                break;
-            }
-        } 
-    }
-    
-    SafariZone_RemoveObjectFromArea(areaSet, areaID, (u8)safariObjectID);
-    
-    return FALSE;
-}
-
-// TODO
-u16 ov02_0224E698(FieldSystem *fieldSystem);
-
-BOOL ScrCmd_721(ScriptContext *ctx) {
-    u16* var = GetVarPointer(ctx->fieldSystem, ScriptReadHalfword(ctx));
-    *var = ov02_0224E698(ctx->fieldSystem);
-    return FALSE;
-}
-
-/*BOOL ScrCmd_CheckSafariZoneChallengeCompleted(ScriptContext *ctx) { // ScrCmd_791
-    u16 sChallengeSpecies[] = { // ov03_02259808
-    SPECIES_GEODUDE,
-    SPECIES_SANDSHREW,
-};
-    u32 trainerID;
-    FieldSystem *fieldSystem = ctx->fieldSystem;
-    u8 challengeNo = *ctx->script_ptr++;
-    Party *party;
-    u16 *challengeCompleted = GetVarPointer(ctx->fieldSystem, ScriptReadHalfword(ctx));
-    party = SaveArray_Party_Get(fieldSystem->saveData);
-    int partyCount = Party_GetCount(party);
-    trainerID = PlayerProfile_GetTrainerID(Save_PlayerData_GetProfile(fieldSystem->saveData));
-    u16 mapSec = MapHeader_GetMapSec(MAP_SAFARI_ZONE_ENTRANCE_EXTERIOR);
-
-    for (int index = 0; index < partyCount; index++) {
-        Pokemon *mon = Party_GetMonByIndex(party, index);
-        if (GetMonData(mon, MON_DATA_IS_EGG, NULL) == FALSE 
-        && trainerID == GetMonData(mon, MON_DATA_OT_ID, NULL)
-        && sChallengeSpecies[challengeNo] == GetMonData(mon, MON_DATA_SPECIES, NULL)
-        && GetMonData(mon, MON_DATA_EGG_LOCATION, NULL) == FALSE // Make sure the player didn't cheat by hatching an egg in the Safari Zone.
-        && mapSec == GetMonData(mon, MON_DATA_MET_LOCATION, NULL)) {
-            *challengeCompleted = TRUE;
-            return FALSE;
-        }
-    }
-    *challengeCompleted = FALSE;
-    return FALSE;
-}*/

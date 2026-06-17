@@ -39,16 +39,18 @@
 #include "field/overlay_01_02204004.h"
 
 #include "msgdata/msg.naix"
+#include "msgdata/msg/msg_0046.h"
 #include "msgdata/msg/msg_0182.h"
-
-// Likely used for Safari Zone time-gated upgrades.
-BOOL ScrCmd_UpdateSafariZoneIGT(ScriptContext *ctx) {
-    FieldSystem *fieldSystem = ctx->fieldSystem;
-    sub_0202F784(Save_SafariZone_Get(fieldSystem->saveData), Save_PlayerData_GetIGTAddr(fieldSystem->saveData));
-    return FALSE;
-}
+#include "msgdata/msg/msg_0277.h"
 
 static BOOL ov03_02258D3C(TaskManager *taskManager);
+static BOOL ov03_02258D88(UnkStruct_02258CFC *data);
+static void ov03_02258DE8(UnkStruct_02258CFC *data);
+static void ov03_02258E88(UnkStruct_02258CFC *data);
+static void ov03_02258EE8(UnkStruct_02258CFC *data, enum PokeathlonData dataType);
+static void ov03_02258F48(UnkStruct_02258CFC *data, int y);
+static void ov03_02258F8C(UnkStruct_02258CFC *data, int y, int strno);
+static u32 ov03_02259070(Pokeathlon_UnkSubStruct_B00 *pokeathlonStruct, int strno);
 
 void ov03_02258CFC(TaskManager *taskManager, enum PokeathlonData dataType) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
@@ -61,11 +63,6 @@ void ov03_02258CFC(TaskManager *taskManager, enum PokeathlonData dataType) {
     data->pokeathlonStruct = PokeathlonSave_GetUnkB00(data->pokeathlonSave);
     TaskManager_Call(fieldSystem->taskman, &ov03_02258D3C, data);
 }
-
-static BOOL ov03_02258D88(UnkStruct_02258CFC *data);
-static void ov03_02258DE8(UnkStruct_02258CFC *data);
-static void ov03_02258E88(UnkStruct_02258CFC *data);
-static void ov03_02258EE8(UnkStruct_02258CFC *data, enum PokeathlonData dataType);
 
 static BOOL ov03_02258D3C(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
@@ -105,10 +102,10 @@ static BOOL ov03_02258D88(UnkStruct_02258CFC *data) {
 
 static void ov03_02258DE8(UnkStruct_02258CFC *data) {
     AddWindowParameterized(data->bgConfig, &data->window, 3, 2, 1, 28, 22, 13, 1);
-    LoadUserFrameGfx1(data->bgConfig, GF_BG_LYR_MAIN_3, 0x3D9, HEAP_ID_FIELD2, 0, HEAP_ID_FIELD1);
-    DrawFrameAndWindow1(&data->window, TRUE, 0x3D9, HEAP_ID_FIELD2);
+    LoadUserFrameGfx1(data->bgConfig, GF_BG_LYR_MAIN_3, 985, HEAP_ID_FIELD2, 0, HEAP_ID_FIELD1);
+    DrawFrameAndWindow1(&data->window, TRUE, 985, HEAP_ID_FIELD2);
     FillWindowPixelBuffer(&data->window, 15);
-    data->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 277, HEAP_ID_FIELD1);
+    data->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0277_bin, HEAP_ID_FIELD1);
     data->messageFormat = MessageFormat_New_Custom(3, 16, HEAP_ID_FIELD1);
     data->strings[0] = String_New(128, HEAP_ID_FIELD1);
     data->strings[1] = String_New(128, HEAP_ID_FIELD1);
@@ -128,7 +125,40 @@ static void ov03_02258E88(UnkStruct_02258CFC *data) {
     ScheduleBgTilemapBufferTransfer(data->bgConfig, 3);
 }
 
-extern u8 ov03_02259880[];
+static u8 ov03_02259880[] = { // 32?
+    0,
+    1,
+    2,
+    25,
+    21,
+    22,
+    0,
+    19,
+    20,
+    27,
+    5,
+    7,
+    18,
+    8,
+    9,
+    17,
+	6,
+    16,
+    10,
+    24,
+    26,
+    3,
+    4,
+    14,
+    23,
+    13,
+    11,
+    12,
+    15,
+    0,
+    0,
+    0
+};
 
 static BOOL ov03_02258ECC(UnkStruct_02258CFC *data, int index_02259880) {
     u8 index = ov03_02259880[index_02259880];
@@ -138,10 +168,11 @@ static BOOL ov03_02258ECC(UnkStruct_02258CFC *data, int index_02259880) {
     return PokeathlonSave_GetUnkB78_AtIndex(data->pokeathlonSave, index - 1);
 }
 
-extern int ov03_0225980C[3];
-
-static void ov03_02258F48(UnkStruct_02258CFC *data, int y);
-static void ov03_02258F8C(UnkStruct_02258CFC *data, int y, int strno);
+static const int ov03_0225980C[3] = {
+    10,
+    10,
+    9
+};
 
 static void ov03_02258EE8(UnkStruct_02258CFC *data, enum PokeathlonData dataType) {
     for (int i = 0; i < ov03_0225980C[dataType]; i++) {
@@ -163,8 +194,6 @@ static void ov03_02258F48(UnkStruct_02258CFC *data, int y) {
     AddTextPrinterParameterizedWithColor(&data->window, 0, data->strings[2], 8, y, TEXT_SPEED_NOTRANSFER, 0x1020F, NULL);
 }
 
-static u32 ov03_02259070(Pokeathlon_UnkSubStruct_B00 *pokeathlonStruct, int strno);
-
 static void ov03_02258F8C(UnkStruct_02258CFC *data, int y, int strno) {
     ReadMsgDataIntoString(data->msgData, strno + 4, data->strings[1]);
     AddTextPrinterParameterizedWithColor(&data->window, 0, data->strings[1], 8, y, TEXT_SPEED_NOTRANSFER, 0x1020F, NULL);
@@ -173,7 +202,7 @@ static void ov03_02258F8C(UnkStruct_02258CFC *data, int y, int strno) {
         seconds = 9999999;
     }
     if (strno == 9) {
-        ReadMsgDataIntoString(data->msgData, 2, data->strings[0]);
+        ReadMsgDataIntoString(data->msgData, msg_0277_00002, data->strings[0]); // {STRVAR_1 52, 0, 0}:{STRVAR_1 51, 1, 0}
         u16 minutes = seconds / 60;
         u16 displaySeconds = seconds % 60;
         if (minutes > 999) {

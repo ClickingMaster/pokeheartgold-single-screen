@@ -20,82 +20,6 @@ enum PokeathlonData {
     ACTION_DATA
 };
 
-typedef struct UnkStruct_ov03 {
-    String *string[8];
-    Window windows[3];
-    MessageFormat *messageFormat[3];
-    ListMenu *listMenu;
-    u32 unk60;
-    LISTMENUITEM *items;
-    FieldSystem *fieldSystem;
-    void (*unk6C)();
-    u32 unk70;
-    MsgData *msgData;
-    PlayerProfile *playerProfile[2];
-    u8 unk80[8];
-    u32 unk88;
-    u16 unk8C;
-    u16 unk8E;
-    u8 unk90;
-    u8 unk91;
-    u8 unk92;
-    u8 unk93;
-    u8 printerID;
-    u8 unk95;
-    u8 unk96;
-    u8 unk97;
-    u8 unk98;
-    u8 unk99;
-    u16 unk9A;
-    void *unk9C;
-    u8 unkA0;
-    u8 unkA1;
-    u16 unkA2;
-    u32 unkA4;
-    u32 unkA8;
-} UnkStruct_ov03;
-
-enum {
-    REGULATION_MENU_REGULATIONS,
-    REGULATION_MENU_CONFIRM,
-    REGULATION_MENU_MAX,
-};
-
-enum {
-    REGULATION_MENU_STRING_FMT,
-    REGULATION_MENU_STRING_DESTINATION,
-    REGULATION_MENU_STRING_REGULATION_NAME,
-    REGULATION_MENU_STRING_CUP_NAME,
-    REGULATION_MENU_STRING_MAX,
-};
-
-enum {
-    REGULATION_MENU_WINDOW_RULES,
-    REGULATION_MENU_WINDOW_REGULATIONS,
-    REGULATION_MENU_WINDOW_CONFIRM,
-    REGULATION_MENU_WINDOW_MSGBOX,
-    REGULATION_MENU_WINDOW_MAX,
-};
-
-typedef struct BattleRegulationMenu {
-    ListMenu *listMenu[REGULATION_MENU_MAX];
-    LISTMENUITEM *items[REGULATION_MENU_MAX];
-    FieldSystem *fieldSystem;
-    String *strings[REGULATION_MENU_STRING_MAX];
-    Window windows[REGULATION_MENU_WINDOW_MAX];
-    MessageFormat *messageFormat;
-    MsgData *msgData;
-    PokedexData *pokedexData;
-    u16 *result;
-    int printerID;
-    u16 itemsAbove[REGULATION_MENU_MAX];
-    int state;
-    u16 unk80[REGULATION_MENU_MAX];
-} BattleRegulationMenu;
-
-extern u32 ov03_02259130;
-extern u32 ov03_0225913C[2];
-
 enum MartTypes {
     MART_TYPE_NORMAL = 0,
     MART_TYPE_1, // MART_TYPE_DECOR? Would be unused in HGSS if true. Interesting that it was reserved instead of replaced.
@@ -152,76 +76,6 @@ typedef struct MartData {
     u32 unk2A0;
 } MartData;
 
-void ov03_02253E20(s32 strno, BOOL arg1);
-void ov03_02253ED0(ListMenuTemplate listMenuTemplate, u8 x, u8 y, u8 width, u8 height, u16 baseTile);
-void ov03_02253F74(FieldSystem *fieldSystem);
-void Unk03_Delete();
-void ov03_022540E8(UnkStruct_ov03 *unk_ov03);
-void ov03_02254120(ListMenu *list, enum ListMenuAttr attr_unused, s32 unk2_unused);
-void ov03_022542C8(UnkStruct_ov03* unk_ov03);
-void ov03_022543AC(UnkStruct_ov03* unk_ov03_unused);
-void ov03_02254420();
-void ov03_02254B2C(UnkStruct_ov03 *unk_ov03);
-void ov03_02254B44();
-void ov03_02254B4C(void *);
-void ov03_02254BEC();
-void ov03_02254C9C(UnkStruct_ov03 *unk_ov03_unused);
-void ov03_02254D64(SysTask *task, void *data);
-void ov03_02254D78(s32 arg0_unused,  UnkStruct_ov03 *unk_ov03);
-void ov03_02254E70(s32 arg0, void* arg1);
-void ov03_02255078(void *arg0, UnkStruct_ov03 *unk_ov03);
-void ov03_02255280(void *arg0, UnkStruct_ov03 *unk_ov03);
-void ov03_0225530C(void *arg0_unused, UnkStruct_ov03 *unk_ov03);
-void ov03_022554E0(void *arg0, UnkStruct_ov03 *unk_ov03);
-void ov03_02254B58(UnkStruct_ov03 *unk_ov03);
-void ov03_0225574C(void *arg0, UnkStruct_ov03 *unk_ov03);
-void ov03_022557CC(UnkStruct_ov03 *unk_ov03);
-int ov03_02255B70();
-int ov03_02255B84();
-int ov03_02255B98();
-void ov03_02255BB0(FieldSystem *fieldSystem, u32 arg1, u16 arg2, u16 arg3);
-u32 ov03_02255BFC();
-void ov03_02255C18(FieldSystem *fieldSystem, u32 arg1, u16 arg2, u16 arg3);
-u32 ov03_02255C64();
-BOOL ov03_02255C80();
-void ov03_02255C84(UnkStruct_ov03 *unk_ov03);
-BOOL ov03_02255CA0(UnkStruct_ov03 *unk_ov03);
-BOOL ov03_02255CD0(UnkStruct_ov03 *unk_ov03);
-void ov03_02255CE4(UnkStruct_ov03 *unk_ov03);
-
-void BattleRegulationMenu_GetRegulationName(BattleRegulationMenu *data, int index);
-void BattleRegulationMenu_ShowListMenuRegulations(BattleRegulationMenu *menu);
-void BattleRegulationMenu_RemoveListMenuRegulations(BattleRegulationMenu *data);
-void BattleRegulationMenu_PrintMessage(BattleRegulationMenu *data, int entryID);
-int BattleRegulationMenu_ProcessListMenuInputConfirm(BattleRegulationMenu *data);
-BOOL BattleRegulationMenu_HandleValidationResult(BattleRegulationMenu *menu);
-int BattleRegulationMenu_ProcessListMenuInputRegulations(BattleRegulationMenu *data);
-void BattleRegulationMenu_RemoveMsgBox(BattleRegulationMenu *data, BOOL copyToVram);
-void BattleRegulationMenu_RemoveRulesWindow(BattleRegulationMenu *menu);
-void BattleRegulationMenu_ShowListMenuConfirm(BattleRegulationMenu *menu);
-void BattleRegulationMenu_ShowRules(BattleRegulationMenu *menu);
-BOOL Task_BattleRegulationMenu(TaskManager *taskManager);
-BattleRegulationMenu *BattleRegulationMenu_New(FieldSystem *fieldSystem);
-void StartTask_BattleRegulationMenu(TaskManager *taskManager, u16 *result);
-void ov03_022566D0(FieldSystem *fieldSystem, MessageFormat *messageFormat, u32 ruleset);
-void ov03_02256710(FieldSystem *fieldSystem, u16 a1);
-void ov03_02256730(FieldSystem *fieldSystem, Window *window, u32 ruleset);
-
-u16 ov03_02256A2C(FieldSystem *fieldSystem, MessageFormat *msgFmt, u32 a2);
-u32 ov03_02256B40(int);
-void ov03_02256BA8(FieldSystem *fieldSystem, u8 index);
-int ov03_02257814(MartData *data, u32 unkAmount);
-int ov03_02257978(MartData *data, int itemID);
-
-void ov03_02258910(FieldSystem *fieldSystem);
-void ov03_02258CFC(TaskManager *taskManager, enum PokeathlonData data);
-
-void sub_020351DC(u16 cursorPos, PlayerProfile *profile);
-void sub_020376D4(s32, SafariZoneAreaSet *areaSet);
-BOOL sub_02037700();
-int sub_020881C0(s16 *quantity, u16 a1);
-BOOL sub_02092B04(TaskManager *taskManager);
-
 typedef struct UnkCommStruct {
     void (*func)();
     SafariZone *safariZone;
@@ -240,5 +94,68 @@ typedef struct UnkStruct_02258CFC {
     MessageFormat *messageFormat;
     String *strings[4];
 } UnkStruct_02258CFC;
+
+// Shared between files within the overlay:
+
+// Called from outside the overlay:
+void ov03_02255BB0(FieldSystem *fieldSystem, u32 arg1, u16 arg2, u16 arg3);
+void ov03_02255BEC();
+u32 ov03_02255BFC();
+void ov03_02255C18(FieldSystem *fieldSystem, u32 arg1, u16 arg2, u16 arg3);
+void ov03_02255C54();
+u32 ov03_02255C64();
+
+void StartTask_BattleRegulationMenu(TaskManager *taskManager, u16 *result);
+void ov03_022566D0(FieldSystem *fieldSystem, MessageFormat *messageFormat, u32 ruleset);
+void ov03_02256710(FieldSystem *fieldSystem, u16 a1);
+void ov03_02256730(FieldSystem *fieldSystem, Window *window, u32 ruleset);
+u16 ov03_02256A2C(FieldSystem *fieldSystem, MessageFormat *msgFmt, u32 a2);
+u32 ov03_02256B40(int);
+
+BOOL Task_Mart(TaskManager *taskManager);
+int ov03_02257814(MartData *data, u32 unkAmount);
+int ov03_02257978(MartData *data, int itemID);
+u32 ov03_02258120(MartData *data, u16 itemID);
+void ov03_022581BC(MartData *data);
+void ov03_02258910(FieldSystem *fieldSystem);
+void ov03_02258CFC(TaskManager *taskManager, enum PokeathlonData data);
+
+// TODO: Move these to where they belong.
+BOOL ov01_021F3B30();
+void ov01_021F630C(int, FieldSystemUnkSub2C *, s32 *);
+u8 ov01_021F6320(FieldSystemUnkSub2C *);
+void ov01_021F3B2C(int, int);
+void ov01_021F3B0C(VecFx32 *vec, int);
+int ov01_021F3B44(int, u8 index);
+u16 *ov01_021F65E4(FieldSystemUnkSub2C *, u8);
+u8 *ov01_021F65F0(FieldSystemUnkSub2C *, u8);
+
+u16 ov02_0224E698(FieldSystem *fieldSystem);
+u16 ov02_0224E754(FieldSystem *fieldSystem, u16 *varPointer);
+
+s32 sub_020348F0();
+int sub_0203511C();
+u32 sub_02035150(u32 index);
+u8 sub_02035184();
+void sub_02035198();
+void sub_020351DC(u16 cursorPos, PlayerProfile *profile);
+void sub_020356C0(u32 arg0);
+int sub_02037454();
+void sub_020376D4(s32, SafariZoneAreaSet *areaSet);
+BOOL sub_02037700();
+int sub_0203774C(u32 arg0);
+int sub_0203775C(u32 arg0);
+BOOL sub_02037A10();
+void sub_02037B8C(u32, u8);
+s32 sub_02037BA0(s32, s32);
+void sub_02037BC8();
+void sub_02037EC0(u32 arg0);
+void sub_020580E4(FieldSystem *fieldSystem, s32 arg1, s32 arg2);
+void sub_02058124(FieldSystem *fieldSystem, u8, u32);
+void sub_02058164(u16 arg0);
+void sub_02058180();
+void sub_02058284();
+int sub_020881C0(s16 *quantity, u16 a1);
+BOOL sub_02092B04(TaskManager *taskManager);
 
 #endif // POKEHEARTGOLD_OVERLAY_03_H

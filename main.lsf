@@ -580,30 +580,12 @@ Overlay OVY_2
 Overlay OVY_3
 {
     After OVY_2
-    Object src/overlay_03_thumb.o
-    Object asm/overlay_03_022542C8.o
-    Object src/overlay_03_thumb_2.o
-    Object asm/overlay_03_02254BEC.o
-    Object src/overlay_03_thumb_3.o
-    Object asm/overlay_03_02254D24.o
-    Object src/overlay_03_thumb_4.o
-    Object asm/overlay_03_02254E70.o
-    Object src/overlay_03_thumb_5.o
-    Object asm/overlay_03_02255388.o
-    Object src/overlay_03_thumb_6.o
-    Object asm/overlay_03_022554E0.o
-    Object src/overlay_03_thumb_7.o
-    Object asm/overlay_03_0225558C.o
-    Object src/overlay_03_thumb_8.o
-    Object asm/overlay_03_022558C4.o
-    Object src/overlay_03_thumb_9.o
-    Object asm/overlay_03_02255DB8.o
-    Object src/overlay_03_thumb_10.o
-    Object asm/overlay_03_02255F98.o
-    Object src/overlay_03_thumb_11.o
-    Object asm/overlay_03_ScrCmd_CheckSafariZoneChallengeCompleted.o
-    Object src/overlay_03_thumb_12.o
-    Object asm/overlay_03_data.o
+    Object src/overlay_03/communication_club.o
+    Object src/overlay_03/battle_regulation_menu.o
+    Object src/overlay_03/shop_menu.o
+    Object src/overlay_03/custom_safari_zone.o
+    Object src/overlay_03/overlay_03_scrcmds.o
+    Object src/overlay_03/pokeathlon_records.o
 }
 Overlay OVY_4
 {
