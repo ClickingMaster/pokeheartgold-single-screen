@@ -4,6 +4,7 @@
 #include "font.h"
 #include "global.h"
 #include "link_ruleset_data.h"
+#include "list_menu_items.h"
 #include "save_link_ruleset.h"
 #include "task.h"
 #include "text.h"
@@ -57,26 +58,26 @@ typedef struct ConfirmMenuEntry {
     u32 index;
 } ConfirmMenuEntry;
 
-static const ListMenuTemplate ov03_0225943C = {
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    0,
-    0,
-    0,
-    8,
-    0,
-    0,
-    1,
-    15,
-    2,
-    0,
-    16,
-    1,
-    0,
-    0,
-    NULL
+static const ListMenuTemplate sListMenuTemplate = {
+    .items = NULL,
+    .moveCursorFunc = NULL,
+    .itemPrintFunc = NULL,
+    .window = NULL,
+    .totalItems = 0,
+    .maxShowed = 0,
+    .header_X = 0,
+    .item_X = 8,
+    .cursor_X = 0,
+    .upText_Y = 0,
+    .cursorPal = 1,
+    .fillValue = 15,
+    .cursorShadowPal = 2,
+    .lettersSpacing = 0,
+    .itemVerticalPadding = 16,
+    .scrollMultiple = LIST_MULTIPLE_SCROLL_DPAD,
+    .fontId = 0, // FONT_SYSTEM
+    .cursorKind = 0,
+    .data = NULL
 };
 
 static void BattleRegulationMenu_PrintMessage(BattleRegulationMenu *menu, int entryID) {
@@ -127,7 +128,7 @@ static void BattleRegulationMenu_ShowListMenuRegulations(BattleRegulationMenu *m
         ListMenuItems_AppendFromMsgData(menu->items[REGULATION_MENU_REGULATIONS], menu->msgData, 129, -2); // PokemonCenter2FCommon_Text_Cancel?
     }
 
-    listMenuTemplate = ov03_0225943C;
+    listMenuTemplate = sListMenuTemplate;
     listMenuTemplate.totalItems = items + 2;
     listMenuTemplate.maxShowed = items + 2;
     listMenuTemplate.items = menu->items[REGULATION_MENU_REGULATIONS];
@@ -161,14 +162,14 @@ static int BattleRegulationMenu_ProcessListMenuInputRegulations(BattleRegulation
     }
     
     switch (input) {
-    case -1:
+    case -1: // MENU_NOTHING_CHOSEN
         return 0;
     case 12:
         PlaySE(SEQ_SE_DP_SELECT);
         menu->fieldSystem->linkBattleRuleset = NULL;
         BattleRegulationMenu_RemoveListMenuRegulations(menu);
         return 2;
-    case -2:
+    case -2: // MENU_CANCEL
         PlaySE(SEQ_SE_DP_SELECT);
         menu->fieldSystem->linkBattleRuleset = NULL;
         BattleRegulationMenu_RemoveListMenuRegulations(menu);
@@ -191,14 +192,14 @@ static void BattleRegulationMenu_ShowListMenuConfirm(BattleRegulationMenu *menu)
     ConfirmMenuEntry *menuEntry = sConfirmMenuEntries;
     menu->items[REGULATION_MENU_CONFIRM] = ListMenuItems_New(3, HEAP_ID_FIELD1);
     AddWindowParameterized(menu->fieldSystem->bgConfig, &menu->windows[REGULATION_MENU_WINDOW_CONFIRM], 3, 22, 10, 9, 6, 13, 513);
-    DrawFrameAndWindow1(&menu->windows[REGULATION_MENU_WINDOW_CONFIRM], TRUE, 985, 11);
+    DrawFrameAndWindow1(&menu->windows[REGULATION_MENU_WINDOW_CONFIRM], TRUE, 985, 11); // 985 == BASE_TILE_STANDARD_WINDOW_FRAME
 
     for (int i = 0; i < 3; i++) {
         ListMenuItems_AppendFromMsgData(menu->items[REGULATION_MENU_CONFIRM], menu->msgData, menuEntry->bankEntry, menuEntry->index);
         menuEntry++;
     };
     
-    listMenuTemplate = ov03_0225943C;
+    listMenuTemplate = sListMenuTemplate;
     listMenuTemplate.totalItems = 3;
     listMenuTemplate.maxShowed = 3;
     listMenuTemplate.items = menu->items[REGULATION_MENU_CONFIRM];
