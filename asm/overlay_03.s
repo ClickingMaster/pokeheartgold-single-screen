@@ -8145,7 +8145,7 @@ _02257EF0:
 	add r3, #0x2a
 	ldr r5, [r4, r2]
 	ldrsh r2, [r4, r3]
-	mov r1, #0x24
+	mov r1, #0x24 ; GAME_STAT_CURRENCY_SPENT
 	mul r2, r5
 	bl GameStats_Add
 	mov r0, #0xd
@@ -8192,7 +8192,7 @@ _02257F5E:
 	bne _02257F9E
 	add r0, r1, #1
 	ldrh r0, [r4, r0]
-	cmp r0, #4
+	cmp r0, #4 ; ITEM_POKE_BALL
 	bne _02257F9E
 	add r0, r1, #3
 	ldrsh r0, [r4, r0]
@@ -8200,7 +8200,7 @@ _02257F5E:
 	blt _02257F9E
 	sub r1, #0x37
 	ldr r0, [r4, r1]
-	mov r1, #0xc
+	mov r1, #0xc ; ITEM_PREMIER_BALL
 	mov r2, #1
 	mov r3, #0xb
 	bl Bag_AddItem
@@ -8212,7 +8212,7 @@ _02257F5E:
 	str r1, [r4, r0]
 	sub r0, #0x3c
 	ldr r0, [r4, r0]
-	mov r1, #0x33
+	mov r1, #0x33 ; GAME_STAT_PREMIER_BALLS_EARNED
 	bl GameStats_Inc
 	mov r0, #0xf
 	pop {r4, pc}

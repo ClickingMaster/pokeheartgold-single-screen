@@ -17190,7 +17190,7 @@ _022608D2:
 	lsr r1, r1, #0x18
 	bl ov49_0225A038
 	ldr r0, [sp, #0xc]
-	bl ov45_0222B108
+	bl IncrementGameStat119
 	ldr r0, [sp, #0xc]
 	ldr r1, [sp, #8]
 	bl ov45_0222B118
@@ -22118,7 +22118,7 @@ _022631E4:
 	bl _02263B5E
 _022631F0:
 	add r0, r7, #0
-	bl ov45_0222B0F8
+	bl IncrementGameStat47
 	add r0, r7, #0
 	mov r1, #7
 	bl ov45_0222B118
@@ -23384,7 +23384,7 @@ _02263CCE:
 	b _022644DA
 _02263CF4:
 	add r0, r7, #0
-	bl ov45_0222B0F8
+	bl IncrementGameStat47
 	add r0, r7, #0
 	mov r1, #7
 	bl ov45_0222B118

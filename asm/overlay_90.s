@@ -2007,7 +2007,7 @@ _02259688:
 	ldrb r1, [r4, #0x13]
 	cmp r1, #0
 	beq _0225969A
-	mov r1, #0x27
+	mov r1, #0x27 ; SCORE_EVENT_WIFI_PLAZA_MINIGAME
 	bl GameStats_AddScore
 _0225969A:
 	add r0, r4, #0
