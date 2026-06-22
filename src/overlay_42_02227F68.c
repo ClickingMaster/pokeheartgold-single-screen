@@ -148,7 +148,7 @@ s32 ov42_02228188(UnkStruct_ov42_02228110 *arg0, s32 arg1) {
         var_r5 = arg0->unk16;
         break;
     default:
-        GF_AssertFail();
+        GF_ASSERT(FALSE);
     }
     return var_r5;
 }
@@ -192,7 +192,7 @@ void ov42_022281F8(UnkStruct_ov42_02228110 *arg0, u32 arg1, s32 arg2) {
         arg0->unk16 = arg2;
         return;
     }
-    GF_AssertFail();
+    GF_ASSERT(FALSE);
 }
 
 UnkStruct_ov44_02232914 ov42_02228270(UnkStruct_ov44_02232914 arg0, s32 arg1) {
@@ -213,7 +213,7 @@ UnkStruct_ov42_02228110 *ov42_022282B0(UnkStruct_ov42_022280A8 *arg0) {
             return &arg0->unk0[i];
         }
     }
-    GF_AssertFail();
+    GF_ASSERT(FALSE);
     return NULL;
 }
 

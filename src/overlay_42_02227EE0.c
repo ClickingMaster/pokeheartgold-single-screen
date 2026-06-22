@@ -59,9 +59,9 @@ void ov42_02227DE8(UnkStruct_ov42_02227114 *arg0) {
 void ov42_02227DF8(UnkStruct_ov42_02227114 *arg0) {
     if (arg0->unk14 == 0) {
         Sprite_SetAnimationFrame(arg0->unk4, 1);
-        return;
+    } else {
+        Sprite_SetAnimCtrlSeq(arg0->unk4, arg0->unk10 + 5);
     }
-    Sprite_SetAnimCtrlSeq(arg0->unk4, arg0->unk10 + 5);
 }
 
 void ov42_02227E18(UnkStruct_ov42_02227114 *arg0) {
