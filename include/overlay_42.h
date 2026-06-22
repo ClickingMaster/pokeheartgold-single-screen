@@ -355,6 +355,6 @@ s32 ov42_02229A08(UnkStruct_ov42_022299C0 *arg0, UnkStruct_ov44_02232031 *arg1);
 UnkStruct_ov42_02229A40 *ov42_02229A40(s32 arg0, enum HeapID heapID);
 void ov42_02229A78(UnkStruct_ov42_02229A40 *arg0);
 void ov42_02229A8C(UnkStruct_ov42_02229A40 *arg0, UnkStruct_ov42_02228CDC *arg1);
-s32 ov42_02229AC8(UnkStruct_ov42_02229A40 *arg0, UnkStruct_ov42_02228CDC *arg1);
+u32 ov42_02229AC8(UnkStruct_ov42_02229A40 *arg0, UnkStruct_ov42_02228CDC *arg1);
 
 #endif // POKEHEARTGOLD_OVY_42_H

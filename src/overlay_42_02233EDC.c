@@ -639,7 +639,7 @@ void ov42_02229A8C(UnkStruct_ov42_02229A40 *arg0, UnkStruct_ov42_02228CDC *arg1)
     arg0->unkA = (arg0->unkA + 1) % arg0->unk4;
 }
 
-s32 ov42_02229AC8(UnkStruct_ov42_02229A40 *arg0, UnkStruct_ov42_02228CDC *arg1) {
+u32 ov42_02229AC8(UnkStruct_ov42_02229A40 *arg0, UnkStruct_ov42_02228CDC *arg1) {
     if (arg0->unkA == arg0->unk8) {
         return 0;
     }
