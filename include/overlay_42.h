@@ -213,6 +213,7 @@ void ov42_02227C18(UnkStruct_ov42_02227060 *arg0, enum HeapID heapID);
 void ov42_02227CA8(UnkStruct_ov42_02227060 *arg0);
 UnkStruct_ov42_02227114 *ov42_02227CF8(UnkStruct_ov42_02227060 *arg0);
 void ov42_02227D30(UnkStruct_ov42_02227114 *arg0);
+
 void ov42_02227D48(UnkStruct_ov42_02227114 *arg0, s32 arg1);
 void ov42_02227D54(UnkStruct_ov42_02227114 *arg0, s32 arg1);
 void ov42_02227D64(UnkStruct_ov42_02227114 *arg0, s32 arg1);
@@ -237,8 +238,6 @@ void ov42_02227F28(UnkStruct_ov42_02227F68 *arg0);
 u16 ov42_02227F40(UnkStruct_ov42_02227F68 *arg0);
 u16 ov42_02227F44(UnkStruct_ov42_02227F68 *arg0);
 void ov42_02227F48(UnkStruct_ov42_02227F68 *arg0, void *arg1);
-
-//////////////////////////////////////////////////////////////////////////////////////
 
 UnkStruct_ov42_02227FA4 ov42_02227F68(UnkStruct_ov42_02227F68 *arg0, u32 arg1, u32 arg2);
 s32 ov42_02227FA4(UnkStruct_ov42_02227F68 *arg0, u16 arg1, u16 arg2);
@@ -291,8 +290,6 @@ UnkStruct_ov44_02232914 ov42_02228BDC(UnkStruct_ov44_02232914 arg0, s32 arg1);
 s32 ov42_02228C0C(UnkStruct_ov42_02228110 *arg0);
 void ov42_02228C40(UnkStruct_ov42_02228110 *arg0);
 s32 ov42_02228C80(UnkStruct_ov42_02227F68 *arg0, UnkStruct_ov42_022280A8 *arg1, UnkStruct_ov42_02228CDC *arg2, UnkStruct_ov42_02228EB0 *arg3);
-
-//////////////////////////////////////////////////////////////////////////////////////
 
 s32 ov42_02228CDC(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov42_02227F68 *arg1, UnkStruct_ov42_022280A8 *arg2, UnkStruct_ov42_02228CDC *arg3, UnkStruct_ov42_02228EB0 *arg4);
 s32 ov42_02228D08(UnkStruct_ov42_02228110 *arg0, UnkStruct_ov42_02227F68 *arg1, UnkStruct_ov42_022280A8 *arg2, UnkStruct_ov42_02228CDC *arg3, UnkStruct_ov42_02228EB0 *arg4);

@@ -197,7 +197,7 @@ void ov42_02227474(UnkStruct_ov42_02227114 *arg0, u16 arg1) {
 }
 
 u16 ov42_02227480(UnkStruct_ov42_02227114 *arg0) {
-    return Sprite_GetDrawPriority(arg0->unk4) * 1;
+    return Sprite_GetDrawPriority(arg0->unk4);
 }
 
 void ov42_02227490(UnkStruct_ov42_02227114 *arg0, u16 arg1) {
