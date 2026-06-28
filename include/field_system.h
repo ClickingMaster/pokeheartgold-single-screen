@@ -181,9 +181,24 @@ struct FieldSystem {
 }; // size: 0x128
 
 typedef struct FieldInput {
-    u8 unk0[6];
-    u16 unk6;
-    u16 unk8;
+    u16 unk0_0:1;
+    u16 unk0_1:1;
+    u16 unk0_2:1;
+    u16 unk0_3:2;
+    u16 unk0_4:1;
+    u16 unk0_5:1;
+    u16 unk0_6:1;
+    u16 unk0_7:1;
+    u16 unk0_8:1;
+    u16 unk0_9:1;
+    u16 unk0_A:1;
+    u16 unk0_B:1;
+    u16 unk0_C:1;
+    u16 unk2;
+    u8 unk4;
+    s8 unk5;
+    u16 newKeys;
+    u16 heldKeys;
     u16 unkA;
 } FieldInput;
 

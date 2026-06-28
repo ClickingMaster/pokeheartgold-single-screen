@@ -186,3 +186,6 @@
 .public ov02_02252334
 .public ov04_02255090
 .public ov04_02256BE4
+.public ov01_021E6880
+.public ov01_021E690C
+.public ov01_021F6B64_thunk
