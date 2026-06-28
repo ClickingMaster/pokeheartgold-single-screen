@@ -15,13 +15,13 @@
 #include "msgdata/msg/msg_0046.h"
 #include "msgdata/msg/msg_0182.h"
 
-enum {
+enum RegulationMenus {
     REGULATION_MENU_REGULATIONS,
     REGULATION_MENU_CONFIRM,
     REGULATION_MENU_MAX,
 };
 
-enum {
+enum RegulationMenuStrings {
     REGULATION_MENU_STRING_FMT,
     REGULATION_MENU_STRING_DESTINATION,
     REGULATION_MENU_STRING_REGULATION_NAME,
@@ -29,7 +29,7 @@ enum {
     REGULATION_MENU_STRING_MAX,
 };
 
-enum {
+enum RegulationMenuWindows {
     REGULATION_MENU_WINDOW_RULES,
     REGULATION_MENU_WINDOW_REGULATIONS,
     REGULATION_MENU_WINDOW_CONFIRM,
@@ -39,7 +39,7 @@ enum {
 
 typedef struct BattleRegulationMenu {
     ListMenu *listMenu[REGULATION_MENU_MAX];
-    LISTMENUITEM *items[REGULATION_MENU_MAX];
+    ListMenuItem *items[REGULATION_MENU_MAX];
     FieldSystem *fieldSystem;
     String *strings[REGULATION_MENU_STRING_MAX];
     Window windows[REGULATION_MENU_WINDOW_MAX];
@@ -162,14 +162,14 @@ static int BattleRegulationMenu_ProcessListMenuInputRegulations(BattleRegulation
     }
     
     switch (input) {
-    case -1: // MENU_NOTHING_CHOSEN
+    case -1:
         return 0;
     case 12:
         PlaySE(SEQ_SE_DP_SELECT);
         menu->fieldSystem->linkBattleRuleset = NULL;
         BattleRegulationMenu_RemoveListMenuRegulations(menu);
         return 2;
-    case -2: // MENU_CANCEL
+    case -2:
         PlaySE(SEQ_SE_DP_SELECT);
         menu->fieldSystem->linkBattleRuleset = NULL;
         BattleRegulationMenu_RemoveListMenuRegulations(menu);
@@ -182,9 +182,9 @@ static int BattleRegulationMenu_ProcessListMenuInputRegulations(BattleRegulation
 }
 
 static ConfirmMenuEntry sConfirmMenuEntries[3] = {
-    {msg_0046_00130, 1},         // CONFIRM
-    {msg_0046_00131, 2},         // RULES
-    {msg_0046_00129, 0xFFFFFFFE} // CANCEL
+    {msg_0046_Confirm, 1},          // CONFIRM
+    {msg_0046_Rules, 2},            // RULES
+    {msg_0046_Cancel, 0xFFFFFFFE}   // CANCEL
 };
 
 static void BattleRegulationMenu_ShowListMenuConfirm(BattleRegulationMenu *menu) {
@@ -192,7 +192,7 @@ static void BattleRegulationMenu_ShowListMenuConfirm(BattleRegulationMenu *menu)
     ConfirmMenuEntry *menuEntry = sConfirmMenuEntries;
     menu->items[REGULATION_MENU_CONFIRM] = ListMenuItems_New(3, HEAP_ID_FIELD1);
     AddWindowParameterized(menu->fieldSystem->bgConfig, &menu->windows[REGULATION_MENU_WINDOW_CONFIRM], 3, 22, 10, 9, 6, 13, 513);
-    DrawFrameAndWindow1(&menu->windows[REGULATION_MENU_WINDOW_CONFIRM], TRUE, 985, 11); // 985 == BASE_TILE_STANDARD_WINDOW_FRAME
+    DrawFrameAndWindow1(&menu->windows[REGULATION_MENU_WINDOW_CONFIRM], TRUE, 985, 11); // 985 == BASE_TILE_STANDARD_WINDOW_FRAME in pokeplatinum
 
     for (int i = 0; i < 3; i++) {
         ListMenuItems_AppendFromMsgData(menu->items[REGULATION_MENU_CONFIRM], menu->msgData, menuEntry->bankEntry, menuEntry->index);
@@ -246,7 +246,7 @@ static int BattleRegulationMenu_ProcessListMenuInputConfirm(BattleRegulationMenu
 
 #define RULES_COUNT 9
 
-static u8 ov03_02259820[RULES_COUNT] = {
+static u8 sLinkBattleRules[RULES_COUNT] = {
     LINKBATTLERULE_PARTY_COUNT,
     LINKBATTLERULE_MAX_LEVEL,
     LINKBATTLERULE_MAX_TOTAL_LEVEL,
@@ -258,16 +258,16 @@ static u8 ov03_02259820[RULES_COUNT] = {
     LINKBATTLERULE_ITEM_DUPE_CLAUSE,
 };
 
-static u8 ov03_0225982C[RULES_COUNT] = {
-    msg_0182_00102, // {STRVAR_1 50, 0, 0}
-    msg_0182_00103, // Max. {STRVAR_1 52, 0, 0}
-    msg_0182_00104, // Max. {STRVAR_1 52, 0, 0}
-    msg_0182_00105, // Max. {STRVAR_1 50, 0, 0}’ {STRVAR_1 50, 1, 0}"
-    msg_0182_00107, // Max. {STRVAR_1 51, 0, 0} lbs.
-    msg_0182_00109, // Permitted
-    msg_0182_00109, // Permitted
-    msg_0182_00109, // Permitted
-    msg_0182_00111, // Permitted
+static u8 sLinkBattleRuleValueMessages[RULES_COUNT] = {
+    msg_0182_ValueNoOfPokemon,      // {STRVAR_1 50, 0, 0}
+    msg_0182_ValueMaxLevel,         // Max. {STRVAR_1 52, 0, 0}
+    msg_0182_ValueMaxTotalLevels,   // Max. {STRVAR_1 52, 0, 0}
+    msg_0182_ValueMaxHeight,        // Max. {STRVAR_1 50, 0, 0}’ {STRVAR_1 50, 1, 0}"
+    msg_0182_ValueMaxWeight,        // Max. {STRVAR_1 51, 0, 0} lbs.
+    msg_0182_ValuePokemonPermitted, // Permitted
+    msg_0182_ValuePokemonPermitted, // Permitted
+    msg_0182_ValuePokemonPermitted, // Permitted
+    msg_0182_ValueItemsPermitted,   // Permitted
 };
 
 static void BattleRegulationMenu_ShowRules(BattleRegulationMenu *menu) {
@@ -290,20 +290,20 @@ static void BattleRegulationMenu_ShowRules(BattleRegulationMenu *menu) {
     
     BattleRegulationMenu_GetRegulationName(menu, menu->itemsAbove[REGULATION_MENU_REGULATIONS] - 1);
     
-    ReadMsgDataIntoString(msgData, msg_0182_00113, fmtString); // {STRVAR_1 26, 0, 0} Cup
+    ReadMsgDataIntoString(msgData, msg_0182_Cup, fmtString); // {STRVAR_1 26, 0, 0} Cup
     StringExpandPlaceholders(messageFormat, destString, fmtString);
     AddTextPrinterParameterized(window, 0, destString, xOffset + xOffsetCupName, 0, TEXT_SPEED_NOTRANSFER, NULL);
 
     for (i = 0; i < RULES_COUNT; i++) {
-        ReadMsgDataIntoString(msgData, i + msg_0182_00093, fmtString); // Prints rule names.
+        ReadMsgDataIntoString(msgData, i + msg_0182_RuleNoOfPokemon, fmtString); // Prints rule names.
         AddTextPrinterParameterized(window, 0, fmtString, xOffset, yOffset + lineHeight * i, TEXT_SPEED_NOTRANSFER, NULL);
     };
 
     for (i = 0; i < RULES_COUNT; i++) {
-        ruleValue = LinkBattleRuleset_GetRuleValue(&menu->fieldSystem->linkBattleRuleset->rules[0], (LinkBattleRule)ov03_02259820[i]);
-        valueMessage = ov03_0225982C[i];
+        ruleValue = LinkBattleRuleset_GetRuleValue(&menu->fieldSystem->linkBattleRuleset->rules[0], (LinkBattleRule)sLinkBattleRules[i]);
+        valueMessage = sLinkBattleRuleValueMessages[i];
         
-        switch (ov03_02259820[i]) {
+        switch (sLinkBattleRules[i]) {
         case LINKBATTLERULE_PARTY_COUNT:
             BufferIntegerAsString(messageFormat, 0, ruleValue, 1, PRINTING_MODE_RIGHT_ALIGN, TRUE);
             break;
@@ -312,7 +312,7 @@ static void BattleRegulationMenu_ShowRules(BattleRegulationMenu *menu) {
             break;
         case LINKBATTLERULE_MAX_TOTAL_LEVEL:
             if (ruleValue == 0) {
-                valueMessage = msg_0182_00114; // NO RESTRICTIONS
+                valueMessage = msg_0182_NoRestrictions; // NO RESTRICTIONS
             } else {
                 BufferIntegerAsString(messageFormat, 0, ruleValue, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
             }
@@ -324,7 +324,7 @@ static void BattleRegulationMenu_ShowRules(BattleRegulationMenu *menu) {
             BufferIntegerAsString(messageFormat, 1, abs(ruleValue % 12), 2, PRINTING_MODE_LEADING_ZEROS, TRUE);
             
             if (ruleValue == 0) {
-                valueMessage = msg_0182_00114; // NO RESTRICTIONS
+                valueMessage = msg_0182_NoRestrictions; // NO RESTRICTIONS
             } else if (ruleValue > 0) {
                 valueMessage++;
             }
@@ -333,14 +333,14 @@ static void BattleRegulationMenu_ShowRules(BattleRegulationMenu *menu) {
             ruleValue = (ruleValue >= 0) ? (((ruleValue * 220462) + 50000) / 100000) : -(((-ruleValue * 220462) + 50000) / 100000);
             BufferIntegerAsString(messageFormat, 0, abs(ruleValue), 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
             if (ruleValue == 0) {
-                valueMessage = msg_0182_00114; // NO RESTRICTIONS
+                valueMessage = msg_0182_NoRestrictions; // NO RESTRICTIONS
             } else if (ruleValue > 0) {
                 valueMessage++;
             }
             break;
         case LINKBATTLERULE_UBERS_CLAUSE:
             if (LinkBattleRuleset_GetRuleValue(&menu->fieldSystem->linkBattleRuleset->rules[0], LINKBATTLERULE_SOUL_DEW_CLAUSE) == FLAG_RULESET_BAN_SOUL_DEW) {
-                valueMessage = msg_0182_00115; // Limit 2
+                valueMessage = msg_0182_Limit2; // Limit 2
             } else if (ruleValue == 0) {
                 valueMessage++;
             }
@@ -377,20 +377,20 @@ static void BattleRegulationMenu_RemoveRulesWindow(BattleRegulationMenu *menu) {
 static BOOL BattleRegulationMenu_HandleValidationResult(BattleRegulationMenu *menu) {
     int result = sub_02074CD0(&menu->fieldSystem->linkBattleRuleset->rules[0], SaveArray_Party_Get(menu->fieldSystem->saveData), menu->pokedexData);
     switch (result) {
-    case 0: // BATTLE_REGULATION_VALIDATION_RESULT_SUCCESS
+    case BATTLE_REGULATION_VALIDATION_RESULT_SUCCESS:
         return TRUE;
-    case 4: // BATTLE_REGULATION_VALIDATION_RESULT_INVALID_TEAM_SIZE
+    case BATTLE_REGULATION_VALIDATION_RESULT_INVALID_TEAM_SIZE:
         PlaySE(SEQ_SE_DP_BOX03);
         BattleRegulationMenu_GetRegulationName(menu, menu->itemsAbove[REGULATION_MENU_REGULATIONS] - 1);
         BufferIntegerAsString(menu->messageFormat, 1, LinkBattleRuleset_GetRuleValue(&menu->fieldSystem->linkBattleRuleset->rules[0], LINKBATTLERULE_PARTY_COUNT), 1, PRINTING_MODE_RIGHT_ALIGN, TRUE);
-        BattleRegulationMenu_PrintMessage(menu, 122); // PokemonCenter2FCommon_Text_NeedXPokemonForCup
+        BattleRegulationMenu_PrintMessage(menu, msg_0046_NeedXPokemonForCup); // You need at least {STRVAR_1 50, 1, 0} Pokémon\nthat qualify under the\f{STRVAR_1 26, 0, 0} Cup rules.
         break;
     default:
-    case 1: // BATTLE_REGULATION_VALIDATION_RESULT_TOTAL_LEVEL_EXCEEDED
+    case BATTLE_REGULATION_VALIDATION_RESULT_TOTAL_LEVEL_EXCEEDED:
         PlaySE(SEQ_SE_DP_BOX03);
         BattleRegulationMenu_GetRegulationName(menu, menu->itemsAbove[REGULATION_MENU_REGULATIONS] - 1);
         BufferIntegerAsString(menu->messageFormat, 1, LinkBattleRuleset_GetRuleValue(&menu->fieldSystem->linkBattleRuleset->rules[0], LINKBATTLERULE_MAX_TOTAL_LEVEL), 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
-        BattleRegulationMenu_PrintMessage(menu, 136); // PokemonCenter2FCommon_Text_CantFormTeamWithLevelLimit
+        BattleRegulationMenu_PrintMessage(menu, msg_0046_CantFormTeamWithLevelLimit); // It’s impossible to form a team of\nPokémon that qualify under the\f{STRVAR_1 26, 0, 0} Cup rules with a\ftotal level limit of {STRVAR_1 52, 1, 0}.
         break;
     }
     return FALSE;
@@ -417,7 +417,7 @@ static BOOL Task_BattleRegulationMenu(TaskManager *taskManager) {
     int input;
     switch (menu->state) {
     case STATE_REGULATION_MENU_PRINT_WHICH_RULESET:
-        BattleRegulationMenu_PrintMessage(menu, 120); // PokemonCenter2FCommon_Text_WhichSetOfRules
+        BattleRegulationMenu_PrintMessage(menu, msg_0046_WhichSetOfRules); // Which set of rules would you like\nto use? {YESNO 0}
         menu->state++;
         break;
     case STATE_REGULATION_MENU_SHOW_LIST_MENU_REGULATIONS:
@@ -473,7 +473,7 @@ static BOOL Task_BattleRegulationMenu(TaskManager *taskManager) {
     case STATE_REGULATION_MENU_RESHOW_MENU_AFTER_RULES:
         if ((PAD_BUTTON_A | PAD_BUTTON_B) & gSystem.newKeys) {
             BattleRegulationMenu_RemoveRulesWindow(menu);
-            BattleRegulationMenu_PrintMessage(menu, 120); // PokemonCenter2FCommon_Text_WhichSetOfRules
+            BattleRegulationMenu_PrintMessage(menu, msg_0046_WhichSetOfRules); // Which set of rules would you like\nto use? {YESNO 0}
             BattleRegulationMenu_ShowListMenuRegulations(menu);
             menu->state = STATE_REGULATION_MENU_WAIT_RESHOW_CONFIRM_MENU;
         }
@@ -557,16 +557,16 @@ void ov03_02256730(FieldSystem *fieldSystem, Window *window, u32 ruleset) {
     String *fmtString = String_New(180, HEAP_ID_FIELD1);
     String *destString = String_New(180, HEAP_ID_FIELD1);
     ov03_022566D0(fieldSystem, messageFormat, ruleset);
-    ReadMsgDataIntoString(msgData, msg_0182_00113, fmtString); // {STRVAR_1 26, 0, 0} Cup
+    ReadMsgDataIntoString(msgData, msg_0182_Cup, fmtString); // {STRVAR_1 26, 0, 0} Cup
     StringExpandPlaceholders(messageFormat, destString, fmtString);
     AddTextPrinterParameterized(window, 0, destString, xOffset + xOffsetCupName, 0, TEXT_SPEED_NOTRANSFER, 0);
 
     for (int i = 0; i < RULES_COUNT; i++) {
-        ReadMsgDataIntoString(msgData, i + msg_0182_00093, fmtString); // // Prints rule names.
+        ReadMsgDataIntoString(msgData, i + msg_0182_RuleNoOfPokemon, fmtString); // // Prints rule names.
         AddTextPrinterParameterized(window, 0, fmtString, xOffset, yOffset + lineHeight * i, TEXT_SPEED_NOTRANSFER, NULL);
-        ruleValue = LinkBattleRuleset_GetRuleValue(&fieldSystem->linkBattleRuleset->rules[0], (LinkBattleRule)ov03_02259820[i]);
-        valueMessage = ov03_0225982C[i];
-        switch (ov03_02259820[i]) {
+        ruleValue = LinkBattleRuleset_GetRuleValue(&fieldSystem->linkBattleRuleset->rules[0], (LinkBattleRule)sLinkBattleRules[i]);
+        valueMessage = sLinkBattleRuleValueMessages[i];
+        switch (sLinkBattleRules[i]) {
         case LINKBATTLERULE_PARTY_COUNT:
             BufferIntegerAsString(messageFormat, 0, ruleValue, 1, PRINTING_MODE_RIGHT_ALIGN, TRUE);
             break;
@@ -575,7 +575,7 @@ void ov03_02256730(FieldSystem *fieldSystem, Window *window, u32 ruleset) {
             break;
         case LINKBATTLERULE_MAX_TOTAL_LEVEL:
             if (ruleValue == 0) {
-                valueMessage = msg_0182_00114; // NO RESTRICTIONS
+                valueMessage = msg_0182_NoRestrictions; // NO RESTRICTIONS
             } else {
                 BufferIntegerAsString(messageFormat, 0, ruleValue, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
             }
@@ -585,7 +585,7 @@ void ov03_02256730(FieldSystem *fieldSystem, Window *window, u32 ruleset) {
             BufferIntegerAsString(messageFormat, 0, abs(ruleValue / 12), 2, PRINTING_MODE_LEFT_ALIGN, TRUE);
             BufferIntegerAsString(messageFormat, 1, abs(ruleValue % 12), 2, PRINTING_MODE_LEADING_ZEROS, TRUE);
             if (ruleValue == 0) {
-                valueMessage = msg_0182_00114; // NO RESTRICTIONS
+                valueMessage = msg_0182_NoRestrictions; // NO RESTRICTIONS
             } else if (ruleValue > 0) {
                 valueMessage++;
             }
@@ -594,14 +594,14 @@ void ov03_02256730(FieldSystem *fieldSystem, Window *window, u32 ruleset) {
             ruleValue = (ruleValue >= 0) ? (((ruleValue * 220462) + 50000) / 100000) : -(((-ruleValue * 220462) + 50000) / 100000);
             BufferIntegerAsString(messageFormat, 0, abs(ruleValue), 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
             if (ruleValue == 0) {
-                valueMessage = msg_0182_00114; // NO RESTRICTIONS
+                valueMessage = msg_0182_NoRestrictions; // NO RESTRICTIONS
             } else if (ruleValue > 0) {
                 valueMessage++;
             }
             break;
         case LINKBATTLERULE_UBERS_CLAUSE:
             if (LinkBattleRuleset_GetRuleValue(&fieldSystem->linkBattleRuleset->rules[0], LINKBATTLERULE_SOUL_DEW_CLAUSE) == FLAG_RULESET_BAN_SOUL_DEW) {
-                valueMessage = msg_0182_00115; // Limit 2
+                valueMessage = msg_0182_Limit2; // Limit 2
             } else if (ruleValue == 0) {
                 valueMessage++;
             }

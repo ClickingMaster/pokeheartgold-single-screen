@@ -37,20 +37,20 @@ static void MartData_AddWindows(MartData *data);
 static u8 ov03_02257334(FieldSystem *fieldSystem, MartData *data);
 static void ov03_022573D4(MartData *data, u32 arg1);
 static int ov03_02257510(MartData *data);
-static u8 ov03_0225761C(MartData *data, u32);
+static u8 ov03_0225761C(MartData *data, u32 arg1);
 static u8 ov03_022576F8(MartData *data);
 static u8 ov03_02257728(MartData *data);
-static void ov03_02257758(MartData *data, int, u8);
+static void ov03_02257758(MartData *data, int arg1, u8 arg2);
 static u8 ov03_022577D0(MartData *data);
 static u8 ov03_02257874(MartData *data, u16 itemID);
 static u8 ov03_02257944(MartData *data);
 static u8 ov03_022579E0(MartData *data);
 static u8 ov03_02257A70(MartData *data);
 static u8 ov03_02257ADC(MartData *data);
-static u8 ov03_02257B4C(MartData *data, u32);
+static u8 ov03_02257B4C(MartData *data, u32 arg1);
 static u8 ov03_02257CA0(MartData *data);
 static u8 ov03_02257D6C(MartData *data);
-static u8 ov03_02257D90(MartData *data, u32);
+static u8 ov03_02257D90(MartData *data, u32 arg1);
 static u8 MartData_PerformTransaction(MartData *data);
 static u8 ov03_02257F24(MartData *data);
 static u8 ov03_02257FF8(MartData *data);
@@ -58,19 +58,19 @@ static u8 ov03_02258078(MartData *data);
 static void ov03_02258164(FieldSystem *fieldSystem, MartData *data_unused);
 static u8 ov03_02258170(FieldSystem *fieldSystem, MartData *data);
 static void ov03_02258288(MartData *data);
-static void ov03_02258560(MartData *data, BOOL);
+static void ov03_02258560(MartData *data, BOOL arg1);
 static void ov03_022586BC(MartData *data, int flag);
-static u8 ov03_022586CC(MartData *data, u8, u8);
+static u8 ov03_022586CC(MartData *data, u8 arg1, u8 arg2);
 static u8 ov03_022586E0(MartData *data);
 static void ov03_0225874C(FieldSystem *fieldSystem_unused, MartData *data);
 static void ov03_02258764(TaskManager *taskManager);
 static u8 ov03_022587D4(FieldSystem *fieldSystem_unused, MartData *data_unused);
 static void MartData_RestoreBgPriorities(MartData *data);
 static BOOL ov03_0225709C(FieldSystem *fieldSystem_unused, MartData *data);
-static void ov03_022582C0(MartData *data, int);
+static void ov03_022582C0(MartData *data, int arg1);
 static void ov03_022585A4(MartData *data, u16 itemID);
 static void ov03_02258648(MartData *data, int charID, int paletteID, u16 item);
-static int ov03_022587E8(s16 currentQuantity, u16, s16 modifier);
+static int ov03_022587E8(s16 currentQuantity, u16 arg1, s16 modifier);
 
 static const u16 ov03_0225945C[4] = {
     149,
@@ -146,8 +146,6 @@ static const WindowTemplate ov03_02259464 = {
     .baseTile = 253,
 };
 
-// ???
-
 BOOL ScrCmd_710(ScriptContext *ctx) {
     for (int i = 0; i < 3; i++) {
         ov03_02256BA8(ctx->fieldSystem, i);
@@ -165,8 +163,6 @@ static void ov03_02256BA8(FieldSystem *fieldSystem, u8 index) {
     }
 }
 
-// ???
-
 static u32 ov03_02256BEC(const u16 *items, u16 *priceOverrides, u32 martType) {
     int i;
     if (martType == MART_TYPE_3 || martType == MART_TYPE_4) {
@@ -177,7 +173,7 @@ static u32 ov03_02256BEC(const u16 *items, u16 *priceOverrides, u32 martType) {
                 break;
             }
         }
-    } else { // MART_TYPE_NORMAL, MART_TYPE_1
+    } else {
         for (i = 0; i < 256; i++) {
             if (*items != 0xFFFF) {
                 items++;
@@ -261,7 +257,7 @@ void Mart_Init(TaskManager *taskManager, FieldSystem *fieldSystem, const u16 *it
     TaskManager_Call(taskManager, Task_Mart, martData);
 }
 
-enum {
+enum MartTaskStates {
     TASK_MART_START,
     TASK_MART_1,
     TASK_MART_2,
@@ -298,7 +294,7 @@ BOOL Task_Mart(TaskManager *taskManager) {
     
     switch (data->state) {
     case TASK_MART_START:
-        MartTask_InitMartMessageData(data); // MartData_InitMessageData
+        MartTask_InitMartMessageData(data);
         if (data->unk273 == 0) {
             data->state = TASK_MART_1;
         } else {
@@ -306,8 +302,8 @@ BOOL Task_Mart(TaskManager *taskManager) {
         }
         break;
     case TASK_MART_1:
-        MartData_InitCamera(fieldSystem, data); // Initialize Camera & Windows.
-        ov01_021F6A9C(fieldSystem, 2, data); // Some sort of generic SysTask function.
+        MartData_InitCamera(fieldSystem, data);
+        ov01_021F6A9C(fieldSystem, 2, data);
         data->state = TASK_MART_2;
         break;
     case TASK_MART_2:
@@ -330,7 +326,7 @@ BOOL Task_Mart(TaskManager *taskManager) {
         }
         break;
     case TASK_MART_5:
-        data->state = ov03_02257944(data); // Returns 5 or 7. Why these are out of order, I have no idea.
+        data->state = ov03_02257944(data); // Returns 5 or 7.
         break;
     case TASK_MART_7:
         if (data->unk294 == -1) {
@@ -388,7 +384,7 @@ BOOL Task_Mart(TaskManager *taskManager) {
         data->state = ov03_022586E0(data);
         break;
     case TASK_MART_22:
-        ov03_0225874C(fieldSystem, data); // Always sets state to 23. Not sure why it doesn't return like the others.
+        ov03_0225874C(fieldSystem, data); // Always sets state to 23.
         break;
     case TASK_MART_23:
         ov03_02258764(taskManager);
@@ -757,7 +753,7 @@ static u8 ov03_02257874(MartData *data, u16 itemID) {
     if (data->unk288 > 99) {
         data->unk288 = 99;
     }
-    if (data->martType == 1 || data->martType == MART_TYPE_3 || data->martType == MART_TYPE_4) {
+    if (data->martType == MART_TYPE_1 || data->martType == MART_TYPE_3 || data->martType == MART_TYPE_4) {
         return ov03_02257CA0(data);
     }
     ov03_022582C0(data, 1);
@@ -835,50 +831,49 @@ static u8 ov03_02257ADC(MartData *data) {
 }
 
 static u8 ov03_02257B4C(MartData *data, u32 arg1) {
-    switch (arg1)
-    {
-        case 0:
-            if (data->unk288 >= 10) {
-                data->quantity = ov03_022587E8(data->quantity, data->unk288, 10);
-                Sprite_SetAnimationFrame(data->sprites[14], 0);
-                Sprite_SetAnimCtrlSeq(data->sprites[14], 13);
-                PlaySE(SEQ_SE_DP_BAG_004);
-                data->unk298 = 6;
-            }
-            break;
-        case 1:
-            if (data->unk288 != 1) {
-                data->quantity = ov03_022587E8(data->quantity, data->unk288, 1);
-                Sprite_SetAnimationFrame(data->sprites[15], 0);
-                Sprite_SetAnimCtrlSeq(data->sprites[15], 13);
-                PlaySE(SEQ_SE_DP_BAG_004);
-                data->unk298 = 6;
-            }
-            break;
-        case 2:
-            if (data->unk288 >= 10) {
-                data->quantity = ov03_022587E8(data->quantity, data->unk288, -10);
-                Sprite_SetAnimationFrame(data->sprites[16], 0);
-                Sprite_SetAnimCtrlSeq(data->sprites[16], 15);
-                PlaySE(SEQ_SE_DP_BAG_004);
-                data->unk298 = 6;
-            }
-            break;
-        case 3:
-            if (data->unk288 != 1) {
-                data->quantity = ov03_022587E8(data->quantity, data->unk288, -1);
-                Sprite_SetAnimationFrame(data->sprites[17], 0);
-                Sprite_SetAnimCtrlSeq(data->sprites[17], 15);
-                PlaySE(SEQ_SE_DP_BAG_004);
-                data->unk298 = 6;
-            }
-            break;
-        case 4:
-            PlaySE(SEQ_SE_DP_SELECT);
-            return ov03_022586CC(data, 18, 8);
-        case 5:
-            PlaySE(SEQ_SE_GS_GEARCANCEL);
-            return ov03_022586CC(data, 13, 9);
+    switch (arg1) {
+    case 0:
+        if (data->unk288 >= 10) {
+            data->quantity = ov03_022587E8(data->quantity, data->unk288, 10);
+            Sprite_SetAnimationFrame(data->sprites[14], 0);
+            Sprite_SetAnimCtrlSeq(data->sprites[14], 13);
+            PlaySE(SEQ_SE_DP_BAG_004);
+            data->unk298 = 6;
+        }
+        break;
+    case 1:
+        if (data->unk288 != 1) {
+            data->quantity = ov03_022587E8(data->quantity, data->unk288, 1);
+            Sprite_SetAnimationFrame(data->sprites[15], 0);
+            Sprite_SetAnimCtrlSeq(data->sprites[15], 13);
+            PlaySE(SEQ_SE_DP_BAG_004);
+            data->unk298 = 6;
+        }
+        break;
+    case 2:
+        if (data->unk288 >= 10) {
+            data->quantity = ov03_022587E8(data->quantity, data->unk288, -10);
+            Sprite_SetAnimationFrame(data->sprites[16], 0);
+            Sprite_SetAnimCtrlSeq(data->sprites[16], 15);
+            PlaySE(SEQ_SE_DP_BAG_004);
+            data->unk298 = 6;
+        }
+        break;
+    case 3:
+        if (data->unk288 != 1) {
+            data->quantity = ov03_022587E8(data->quantity, data->unk288, -1);
+            Sprite_SetAnimationFrame(data->sprites[17], 0);
+            Sprite_SetAnimCtrlSeq(data->sprites[17], 15);
+            PlaySE(SEQ_SE_DP_BAG_004);
+            data->unk298 = 6;
+        }
+        break;
+    case 4:
+        PlaySE(SEQ_SE_DP_SELECT);
+        return ov03_022586CC(data, 18, 8);
+    case 5:
+        PlaySE(SEQ_SE_GS_GEARCANCEL);
+        return ov03_022586CC(data, 13, 9);
     }
     return TASK_MART_7;
 }
@@ -1342,7 +1337,14 @@ static void ov03_02258288(MartData *data) {
     data->unk_ov01_021E7FDC.spriteList = NULL;
 }
 
-static u8 ov03_02259850[15][3] = { // Sprite index, ?, ?
+enum OV03_02259850_Data {
+    OV03_02259850_SPRITE_INDEX,
+    OV03_02259850_DATA_1,
+    OV03_02259850_DATA_2,
+    OV03_02259850_MAX
+};
+
+static u8 ov03_02259850[15][OV03_02259850_MAX] = {
     {4, 5, 2},
     {5, 5, 2},
     {6, 5, 2},
@@ -1373,26 +1375,26 @@ static void ov03_022582C0(MartData *data, int arg1) {
             Sprite_SetMatrix(data->sprites[j + 4], &vec);
         }
         for (i = 0; i < NELEMS(ov03_02259850); i++) {
-            if (ov03_02259850[i][1] == 4) {
+            if (ov03_02259850[i][OV03_02259850_DATA_1] == 4) {
                 if (data->unk271 + 6 < data->unk270) {
-                    Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], TRUE);
+                    Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], TRUE);
                 } else {
-                    Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], FALSE);
+                    Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], FALSE);
                 }
-            } else if (ov03_02259850[i][1] == 3){
+            } else if (ov03_02259850[i][OV03_02259850_DATA_1] == 3){
                 if (data->unk271 == 0) {
-                    Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], FALSE);
+                    Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], FALSE);
                 } else {
-                    Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], TRUE);
+                    Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], TRUE);
                 }
-            } else if (ov03_02259850[i][1] == 5) {
+            } else if (ov03_02259850[i][OV03_02259850_DATA_1] == 5) {
                 if (data->unk271 + i < data->unk270) {
-                    Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], TRUE);
+                    Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], TRUE);
                 } else {
-                    Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], FALSE);
+                    Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], FALSE);
                 }
             } else {
-                Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], ov03_02259850[i][1]);
+                Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], ov03_02259850[i][OV03_02259850_DATA_1]);
             }
         }
         Sprite_SetAnimationFrame(data->sprites[13], 0);
@@ -1400,32 +1402,32 @@ static void ov03_022582C0(MartData *data, int arg1) {
         break;
     case 1:
         for (i = 0; i < NELEMS(ov03_02259850); i++) {
-            if (ov03_02259850[i][2] == 2) {
+            if (ov03_02259850[i][OV03_02259850_DATA_2] == 2) {
                 if (data->unk290 == i) {
                     VecFx32 vec2;
                     vec2.x = 0x56000;
                     vec2.y = 0x10C000;
                     vec2.z = 0;
-                    Sprite_SetMatrix(data->sprites[ov03_02259850[i][0]], &vec2);
-                    Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], TRUE);
+                    Sprite_SetMatrix(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], &vec2);
+                    Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], TRUE);
                 } else {
-                    Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], FALSE);
+                    Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], FALSE);
                 }
             } else {
-                if (ov03_02259850[i][0] == 14 || ov03_02259850[i][0] == 16) {
+                if (ov03_02259850[i][OV03_02259850_SPRITE_INDEX] == 14 || ov03_02259850[i][OV03_02259850_SPRITE_INDEX] == 16) {
                     if (data->unk288 < 10) {
-                        Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], FALSE);
+                        Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], FALSE);
                     } else {
-                        Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], TRUE);
+                        Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], TRUE);
                     }
-                } else if (ov03_02259850[i][0] == 15 || ov03_02259850[i][0] == 17) {
+                } else if (ov03_02259850[i][OV03_02259850_SPRITE_INDEX] == 15 || ov03_02259850[i][OV03_02259850_SPRITE_INDEX] == 17) {
                     if (data->unk288 == 1) {
-                        Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], FALSE);
+                        Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], FALSE);
                     } else {
-                        Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], TRUE);
+                        Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], TRUE);
                     }
                 } else {
-                    Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], ov03_02259850[i][2]);
+                    Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], ov03_02259850[i][OV03_02259850_DATA_2]);
                 }
             }
         }
@@ -1439,10 +1441,10 @@ static void ov03_022582C0(MartData *data, int arg1) {
                 vec3.x = 0x56000;
                 vec3.y = 0x10C000;
                 vec3.z = 0;
-                Sprite_SetMatrix(data->sprites[ov03_02259850[i][0]], &vec3);
-                Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], TRUE);
+                Sprite_SetMatrix(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], &vec3);
+                Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], TRUE);
             } else {
-                Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][0]], FALSE);
+                Sprite_SetDrawFlag(data->sprites[ov03_02259850[i][OV03_02259850_SPRITE_INDEX]], FALSE);
             }
         }
         break;

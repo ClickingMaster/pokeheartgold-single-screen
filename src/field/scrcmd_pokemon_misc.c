@@ -75,7 +75,7 @@ typedef struct UnkStructScr_648 {
     struct ListMenuTemplate listMenuTemplate;
     struct ListMenu *listMenu_23C;
     u32 unk_240;
-    LISTMENUITEM items[120];
+    ListMenuItem items[120];
     u16 unk_604[120];
     u16 unk_6F4;
 } SCR_648_STRUCT;

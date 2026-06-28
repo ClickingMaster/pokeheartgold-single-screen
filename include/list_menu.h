@@ -34,7 +34,7 @@ typedef void (*LM_MoveCursorFunc_t)(struct ListMenu *list, s32 index, u8 onInit)
 typedef void (*LM_ItemPrintFunc_t)(struct ListMenu *list, s32 index, u8 y);
 
 typedef struct ListMenuTemplate {
-    /*0x00*/ LISTMENUITEM *items;
+    /*0x00*/ ListMenuItem *items;
     /*0x04*/ LM_MoveCursorFunc_t moveCursorFunc;
     /*0x08*/ LM_ItemPrintFunc_t itemPrintFunc;
     /*0x0C*/ Window *window;

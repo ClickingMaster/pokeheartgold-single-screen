@@ -28,7 +28,7 @@ struct CommClubManager {
     MessageFormat *messageFormat[3];
     ListMenu *listMenu;
     u32 menu; // Menu?
-    LISTMENUITEM *items;
+    ListMenuItem *items;
     FieldSystem *fieldSystem;
     CommClubManagerTaskFunc commClubTask;
     UnkFuncPtr_CommClub unk70;
@@ -219,7 +219,7 @@ static void ov03_02253F74(FieldSystem *fieldSystem) {
     sCommClubManager->messageFormat[2] = MessageFormat_New(HEAP_ID_FIELD1);
     sCommClubManager->unk98 = 0;
     int i;
-    for (i = 0; i < 8; i++) { // Fascinating choice not to just do these together as one loop.
+    for (i = 0; i < 8; i++) {
         sCommClubManager->unk80[i] = 0;
     }
     for (i = 0; i < 8; i++) {
