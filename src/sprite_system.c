@@ -752,11 +752,11 @@ void ManagedSprite_SetDrawPriority(ManagedSprite *managedSprite, u16 a1) {
     thunk_Sprite_SetDrawPriority(managedSprite->sprite, a1);
 }
 
-u16 thunk_Sprite_GetDrawPriority(Sprite *sprite) {
+u32 thunk_Sprite_GetDrawPriority(Sprite *sprite) {
     return Sprite_GetDrawPriority(sprite);
 }
 
-u16 ManagedSprite_GetDrawPriority(ManagedSprite *managedSprite) {
+u32 ManagedSprite_GetDrawPriority(ManagedSprite *managedSprite) {
     return thunk_Sprite_GetDrawPriority(managedSprite->sprite);
 }
 

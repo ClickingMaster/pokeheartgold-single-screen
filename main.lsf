@@ -803,7 +803,10 @@ Overlay OVY_41
 Overlay OVY_42
 {
     After OVY_38
-    Object asm/overlay_42.o
+    Object src/overlay_42_02227D30.o
+    Object src/overlay_42_02227EE0.o
+    Object src/overlay_42_02227F68.o
+    Object src/overlay_42_02233EDC.o
 }
 Overlay OVY_43
 {
