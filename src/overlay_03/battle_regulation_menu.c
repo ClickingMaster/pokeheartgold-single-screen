@@ -259,15 +259,15 @@ static u8 sLinkBattleRules[RULES_COUNT] = {
 };
 
 static u8 sLinkBattleRuleValueMessages[RULES_COUNT] = {
-    msg_0182_ValueNoOfPokemon,      // {STRVAR_1 50, 0, 0}
-    msg_0182_ValueMaxLevel,         // Max. {STRVAR_1 52, 0, 0}
-    msg_0182_ValueMaxTotalLevels,   // Max. {STRVAR_1 52, 0, 0}
-    msg_0182_ValueMaxHeight,        // Max. {STRVAR_1 50, 0, 0}’ {STRVAR_1 50, 1, 0}"
-    msg_0182_ValueMaxWeight,        // Max. {STRVAR_1 51, 0, 0} lbs.
-    msg_0182_ValuePokemonPermitted, // Permitted
-    msg_0182_ValuePokemonPermitted, // Permitted
-    msg_0182_ValuePokemonPermitted, // Permitted
-    msg_0182_ValueItemsPermitted,   // Permitted
+    CommunicationClub_Text_ValueNoOfPokemon,      // {STRVAR_1 50, 0, 0}
+    CommunicationClub_Text_ValueMaxLevel,         // Max. {STRVAR_1 52, 0, 0}
+    CommunicationClub_Text_ValueMaxTotalLevels,   // Max. {STRVAR_1 52, 0, 0}
+    CommunicationClub_Text_ValueMaxHeight,        // Max. {STRVAR_1 50, 0, 0}’ {STRVAR_1 50, 1, 0}"
+    CommunicationClub_Text_ValueMaxWeight,        // Max. {STRVAR_1 51, 0, 0} lbs.
+    CommunicationClub_Text_ValuePokemonPermitted, // Permitted
+    CommunicationClub_Text_ValuePokemonPermitted, // Permitted
+    CommunicationClub_Text_ValuePokemonPermitted, // Permitted
+    CommunicationClub_Text_ValueItemsPermitted,   // Permitted
 };
 
 static void BattleRegulationMenu_ShowRules(BattleRegulationMenu *menu) {
@@ -290,12 +290,12 @@ static void BattleRegulationMenu_ShowRules(BattleRegulationMenu *menu) {
     
     BattleRegulationMenu_GetRegulationName(menu, menu->itemsAbove[REGULATION_MENU_REGULATIONS] - 1);
     
-    ReadMsgDataIntoString(msgData, msg_0182_Cup, fmtString); // {STRVAR_1 26, 0, 0} Cup
+    ReadMsgDataIntoString(msgData, CommunicationClub_Text_Cup, fmtString); // {STRVAR_1 26, 0, 0} Cup
     StringExpandPlaceholders(messageFormat, destString, fmtString);
     AddTextPrinterParameterized(window, 0, destString, xOffset + xOffsetCupName, 0, TEXT_SPEED_NOTRANSFER, NULL);
 
     for (i = 0; i < RULES_COUNT; i++) {
-        ReadMsgDataIntoString(msgData, i + msg_0182_RuleNoOfPokemon, fmtString); // Prints rule names.
+        ReadMsgDataIntoString(msgData, i + CommunicationClub_Text_RuleNoOfPokemon, fmtString); // Prints rule names.
         AddTextPrinterParameterized(window, 0, fmtString, xOffset, yOffset + lineHeight * i, TEXT_SPEED_NOTRANSFER, NULL);
     };
 
@@ -312,7 +312,7 @@ static void BattleRegulationMenu_ShowRules(BattleRegulationMenu *menu) {
             break;
         case LINKBATTLERULE_MAX_TOTAL_LEVEL:
             if (ruleValue == 0) {
-                valueMessage = msg_0182_NoRestrictions; // NO RESTRICTIONS
+                valueMessage = CommunicationClub_Text_NoRestrictions; // NO RESTRICTIONS
             } else {
                 BufferIntegerAsString(messageFormat, 0, ruleValue, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
             }
@@ -324,7 +324,7 @@ static void BattleRegulationMenu_ShowRules(BattleRegulationMenu *menu) {
             BufferIntegerAsString(messageFormat, 1, abs(ruleValue % 12), 2, PRINTING_MODE_LEADING_ZEROS, TRUE);
             
             if (ruleValue == 0) {
-                valueMessage = msg_0182_NoRestrictions; // NO RESTRICTIONS
+                valueMessage = CommunicationClub_Text_NoRestrictions; // NO RESTRICTIONS
             } else if (ruleValue > 0) {
                 valueMessage++;
             }
@@ -333,14 +333,14 @@ static void BattleRegulationMenu_ShowRules(BattleRegulationMenu *menu) {
             ruleValue = (ruleValue >= 0) ? (((ruleValue * 220462) + 50000) / 100000) : -(((-ruleValue * 220462) + 50000) / 100000);
             BufferIntegerAsString(messageFormat, 0, abs(ruleValue), 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
             if (ruleValue == 0) {
-                valueMessage = msg_0182_NoRestrictions; // NO RESTRICTIONS
+                valueMessage = CommunicationClub_Text_NoRestrictions; // NO RESTRICTIONS
             } else if (ruleValue > 0) {
                 valueMessage++;
             }
             break;
         case LINKBATTLERULE_UBERS_CLAUSE:
             if (LinkBattleRuleset_GetRuleValue(&menu->fieldSystem->linkBattleRuleset->rules[0], LINKBATTLERULE_SOUL_DEW_CLAUSE) == FLAG_RULESET_BAN_SOUL_DEW) {
-                valueMessage = msg_0182_Limit2; // Limit 2
+                valueMessage = CommunicationClub_Text_Limit2; // Limit 2
             } else if (ruleValue == 0) {
                 valueMessage++;
             }
@@ -557,12 +557,12 @@ void ov03_02256730(FieldSystem *fieldSystem, Window *window, u32 ruleset) {
     String *fmtString = String_New(180, HEAP_ID_FIELD1);
     String *destString = String_New(180, HEAP_ID_FIELD1);
     ov03_022566D0(fieldSystem, messageFormat, ruleset);
-    ReadMsgDataIntoString(msgData, msg_0182_Cup, fmtString); // {STRVAR_1 26, 0, 0} Cup
+    ReadMsgDataIntoString(msgData, CommunicationClub_Text_Cup, fmtString); // {STRVAR_1 26, 0, 0} Cup
     StringExpandPlaceholders(messageFormat, destString, fmtString);
     AddTextPrinterParameterized(window, 0, destString, xOffset + xOffsetCupName, 0, TEXT_SPEED_NOTRANSFER, 0);
 
     for (int i = 0; i < RULES_COUNT; i++) {
-        ReadMsgDataIntoString(msgData, i + msg_0182_RuleNoOfPokemon, fmtString); // // Prints rule names.
+        ReadMsgDataIntoString(msgData, i + CommunicationClub_Text_RuleNoOfPokemon, fmtString); // // Prints rule names.
         AddTextPrinterParameterized(window, 0, fmtString, xOffset, yOffset + lineHeight * i, TEXT_SPEED_NOTRANSFER, NULL);
         ruleValue = LinkBattleRuleset_GetRuleValue(&fieldSystem->linkBattleRuleset->rules[0], (LinkBattleRule)sLinkBattleRules[i]);
         valueMessage = sLinkBattleRuleValueMessages[i];
@@ -575,7 +575,7 @@ void ov03_02256730(FieldSystem *fieldSystem, Window *window, u32 ruleset) {
             break;
         case LINKBATTLERULE_MAX_TOTAL_LEVEL:
             if (ruleValue == 0) {
-                valueMessage = msg_0182_NoRestrictions; // NO RESTRICTIONS
+                valueMessage = CommunicationClub_Text_NoRestrictions; // NO RESTRICTIONS
             } else {
                 BufferIntegerAsString(messageFormat, 0, ruleValue, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
             }
@@ -585,7 +585,7 @@ void ov03_02256730(FieldSystem *fieldSystem, Window *window, u32 ruleset) {
             BufferIntegerAsString(messageFormat, 0, abs(ruleValue / 12), 2, PRINTING_MODE_LEFT_ALIGN, TRUE);
             BufferIntegerAsString(messageFormat, 1, abs(ruleValue % 12), 2, PRINTING_MODE_LEADING_ZEROS, TRUE);
             if (ruleValue == 0) {
-                valueMessage = msg_0182_NoRestrictions; // NO RESTRICTIONS
+                valueMessage = CommunicationClub_Text_NoRestrictions; // NO RESTRICTIONS
             } else if (ruleValue > 0) {
                 valueMessage++;
             }
@@ -594,14 +594,14 @@ void ov03_02256730(FieldSystem *fieldSystem, Window *window, u32 ruleset) {
             ruleValue = (ruleValue >= 0) ? (((ruleValue * 220462) + 50000) / 100000) : -(((-ruleValue * 220462) + 50000) / 100000);
             BufferIntegerAsString(messageFormat, 0, abs(ruleValue), 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
             if (ruleValue == 0) {
-                valueMessage = msg_0182_NoRestrictions; // NO RESTRICTIONS
+                valueMessage = CommunicationClub_Text_NoRestrictions; // NO RESTRICTIONS
             } else if (ruleValue > 0) {
                 valueMessage++;
             }
             break;
         case LINKBATTLERULE_UBERS_CLAUSE:
             if (LinkBattleRuleset_GetRuleValue(&fieldSystem->linkBattleRuleset->rules[0], LINKBATTLERULE_SOUL_DEW_CLAUSE) == FLAG_RULESET_BAN_SOUL_DEW) {
-                valueMessage = msg_0182_Limit2; // Limit 2
+                valueMessage = CommunicationClub_Text_Limit2; // Limit 2
             } else if (ruleValue == 0) {
                 valueMessage++;
             }

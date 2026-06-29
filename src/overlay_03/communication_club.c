@@ -288,18 +288,18 @@ static void ov03_02254150(ListMenu *list, u16 cursorPos_unused, u8 itemsAbove) {
         sub_020351DC(cursorPos, sCommClubManager->playerProfile[1]);
         BufferIntegerAsString(sCommClubManager->messageFormat[0], 0, cursorPos + 1, 2, PRINTING_MODE_LEADING_ZEROS, TRUE);
         BufferPlayersName(sCommClubManager->messageFormat[0], 1, sCommClubManager->playerProfile[1]);
-        ReadMsgDataIntoString(sCommClubManager->msgData, msg_0182_00076, sCommClubManager->string[1]); // {STRVAR_1 51, 0, 0}:{STRVAR_1 3, 1, 0}
+        ReadMsgDataIntoString(sCommClubManager->msgData, CommunicationClub_Text_00076, sCommClubManager->string[1]); // {STRVAR_1 51, 0, 0}:{STRVAR_1 3, 1, 0}
         StringExpandPlaceholders(sCommClubManager->messageFormat[0], sCommClubManager->string[0], sCommClubManager->string[1]);
-        AddTextPrinterParameterized(&sCommClubManager->windows[0], 0, sCommClubManager->string[0], 8, itemsAbove * 16, TEXT_SPEED_NOTRANSFER, 0);
+        AddTextPrinterParameterized(&sCommClubManager->windows[0], 0, sCommClubManager->string[0], 8, itemsAbove * 16, TEXT_SPEED_NOTRANSFER, NULL);
         BufferIntegerAsString(sCommClubManager->messageFormat[0], 2, PlayerProfile_GetTrainerID(sCommClubManager->playerProfile[1]) % 0x10000, 5, PRINTING_MODE_LEADING_ZEROS, TRUE);
-        ReadMsgDataIntoString(sCommClubManager->msgData, msg_0182_00078, sCommClubManager->string[3]); // ID{STRVAR_1 54, 2, 0}
+        ReadMsgDataIntoString(sCommClubManager->msgData, CommunicationClub_Text_ID_1, sCommClubManager->string[3]); // ID{STRVAR_1 54, 2, 0}
         StringExpandPlaceholders(sCommClubManager->messageFormat[0], sCommClubManager->string[2], sCommClubManager->string[3]);
-        AddTextPrinterParameterized(&sCommClubManager->windows[0], 0, sCommClubManager->string[2], 88, itemsAbove * 16, TEXT_SPEED_NOTRANSFER, 0);
+        AddTextPrinterParameterized(&sCommClubManager->windows[0], 0, sCommClubManager->string[2], 88, itemsAbove * 16, TEXT_SPEED_NOTRANSFER, NULL);
     } else {
         BufferIntegerAsString(sCommClubManager->messageFormat[0], 0, cursorPos + 1, 2, PRINTING_MODE_LEADING_ZEROS, TRUE);
-        ReadMsgDataIntoString(sCommClubManager->msgData, msg_0182_00077, sCommClubManager->string[1]); // {STRVAR_1 51, 0, 0}:
+        ReadMsgDataIntoString(sCommClubManager->msgData, CommunicationClub_Text_00077, sCommClubManager->string[1]); // {STRVAR_1 51, 0, 0}:
         StringExpandPlaceholders(sCommClubManager->messageFormat[0], sCommClubManager->string[0], sCommClubManager->string[1]);
-        AddTextPrinterParameterized(&sCommClubManager->windows[0], 0, sCommClubManager->string[0], 8, itemsAbove * 16, TEXT_SPEED_NOTRANSFER, 0);
+        AddTextPrinterParameterized(&sCommClubManager->windows[0], 0, sCommClubManager->string[0], 8, itemsAbove * 16, TEXT_SPEED_NOTRANSFER, NULL);
     }
 }
 
@@ -314,16 +314,16 @@ static void ov03_022542C8(CommClubManager* commClubManager) {
     SysTask_CreateOnMainQueue(ov03_02254D64, commClubManager, 0);
     ov03_022543AC(sCommClubManager);
     
-    u16 ov03_0225927A[NUM_COMM_TYPES] = {
-        msg_0182_00048,
-        msg_0182_Choose_SingleBattle,    // Choose the Single Battle you would like to join.
-        msg_0182_Choose_DoubleBattle,    // Choose the Double Battle you would like to join.
-        msg_0182_Choose_MixBattle,       // Choose the Mix Battle you would like to join.
-        msg_0182_Choose_MultiBattle,     // Choose the Multi Battle you would like to join.
-        msg_0182_Choose_MultiBattle,     // Choose the Multi Battle you would like to join.
-        msg_0182_00056,
-        msg_0182_00057,
-        msg_0182_00058, // Unreachable.
+    u16 sChooseText[NUM_COMM_TYPES] = {
+        CommunicationClub_Text_00048_Dummy,
+        CommunicationClub_Text_Choose_SingleBattle,    // Choose the Single Battle you would like to join.
+        CommunicationClub_Text_Choose_DoubleBattle,    // Choose the Double Battle you would like to join.
+        CommunicationClub_Text_Choose_MixBattle,       // Choose the Mix Battle you would like to join.
+        CommunicationClub_Text_Choose_MultiBattle,     // Choose the Multi Battle you would like to join.
+        CommunicationClub_Text_Choose_MultiBattle,     // Choose the Multi Battle you would like to join.
+        CommunicationClub_Text_00056_Dummy,
+        CommunicationClub_Text_00057_Dummy,
+        CommunicationClub_Text_00058_Dummy, // Unreachable.
         0,
         0,
         0,
@@ -331,7 +331,7 @@ static void ov03_022542C8(CommClubManager* commClubManager) {
         0,
         0,
         0,
-        msg_0182_ChooseFriend_BattleTower,  // Choose the friend you want to take to the Battle Tower.
+        CommunicationClub_Text_ChooseFriend_BattleTower,  // Choose the friend you want to take to the Battle Tower.
         0,
         0,
         0,
@@ -342,28 +342,28 @@ static void ov03_022542C8(CommClubManager* commClubManager) {
         0,
         0,
         0,
-        msg_0182_ChooseFriend_BattleFactory_Lv50,   // Choose the friend to play with at the Battle Factory--Level 50.
-        msg_0182_ChooseFriend_BattleFactory_Open,   // Choose the friend to play with at the Battle Factory--Open Level.
+        CommunicationClub_Text_ChooseFriend_BattleFactory_Lv50,   // Choose the friend to play with at the Battle Factory--Level 50.
+        CommunicationClub_Text_ChooseFriend_BattleFactory_Open,   // Choose the friend to play with at the Battle Factory--Open Level.
         0,
-        msg_0182_ChooseFriend_BattleHall,           // Choose the friend to play with at the Battle Hall.
-        msg_0182_ChooseFriend_BattleCastle,         // Choose the friend to play with at the Battle Castle.
-        msg_0182_ChooseFriend_BattleArcade,         // Choose the friend to play with at the Battle Arcade.
-        0,
-        0,
+        CommunicationClub_Text_ChooseFriend_BattleHall,           // Choose the friend to play with at the Battle Hall.
+        CommunicationClub_Text_ChooseFriend_BattleCastle,         // Choose the friend to play with at the Battle Castle.
+        CommunicationClub_Text_ChooseFriend_BattleArcade,         // Choose the friend to play with at the Battle Arcade.
         0,
         0,
-        msg_0182_Choose_FlatBattle,     // Choose the Flat Battle you would like to join.
-        msg_0182_Choose_FlatBattle,     // Choose the Flat Battle you would like to join.
-        msg_0182_Choose_SafariZoneLink, // Choose the Safari Zone Link you would like to join.
-        msg_0182_Choose_Pokeathlon      // Unreachable.
+        0,
+        0,
+        CommunicationClub_Text_Choose_FlatBattle,     // Choose the Flat Battle you would like to join.
+        CommunicationClub_Text_Choose_FlatBattle,     // Choose the Flat Battle you would like to join.
+        CommunicationClub_Text_Choose_SafariZoneLink, // Choose the Safari Zone Link you would like to join.
+        CommunicationClub_Text_Choose_Pokeathlon      // Unreachable.
     };
 
     if (sCommClubManager->commType == COMM_TYPE_8) {
         ov03_02253E20(sCommClubManager->unk92 + 122, FALSE);
     } else if (sCommClubManager->commType == COMM_TYPE_POKEATHLON) {
-        ov03_02253E20(sCommClubManager->unk92 + msg_0182_ChooseCourseLeader_Jump, FALSE);
+        ov03_02253E20(sCommClubManager->unk92 + CommunicationClub_Text_ChooseLeader_JumpCourse, FALSE);
     } else {
-        ov03_02253E20(ov03_0225927A[sCommClubManager->commType], FALSE);
+        ov03_02253E20(sChooseText[sCommClubManager->commType], FALSE);
     }
     ov03_02254B4C(&ov03_02254420);
 }
@@ -371,7 +371,7 @@ static void ov03_022542C8(CommClubManager* commClubManager) {
 static void ov03_022543AC(CommClubManager* commClubManager_unused) {
     BufferPlayersName(sCommClubManager->messageFormat[1], 0, sCommClubManager->playerProfile[0]);
     BufferIntegerAsString(sCommClubManager->messageFormat[1], 1, PlayerProfile_GetTrainerID(sCommClubManager->playerProfile[0]) % 0x10000, 5, PRINTING_MODE_LEADING_ZEROS, TRUE);
-    ReadMsgDataIntoString(sCommClubManager->msgData, msg_0182_00075, sCommClubManager->string[6]); // {STRVAR_1 3, 0, 0}\nID{STRVAR_1 54, 1, 0}
+    ReadMsgDataIntoString(sCommClubManager->msgData, CommunicationClub_Text_ID_2, sCommClubManager->string[6]); // {STRVAR_1 3, 0, 0}\nID{STRVAR_1 54, 1, 0}
     StringExpandPlaceholders(sCommClubManager->messageFormat[1], sCommClubManager->string[7], sCommClubManager->string[6]);
     AddTextPrinterParameterized(&sCommClubManager->windows[1], 0, sCommClubManager->string[7], 2, 2, 0, NULL);
 }
@@ -381,7 +381,7 @@ static void ov03_02254420() {
         sCommClubManager->items = ListMenuItems_New(16, HEAP_ID_FIELD1);
         for (int i = 0; i < 16; i++) {
             BufferIntegerAsString(sCommClubManager->messageFormat[0], 0, i + 1, 2, PRINTING_MODE_LEADING_ZEROS, TRUE);
-            ReadMsgDataIntoString(sCommClubManager->msgData, msg_0182_00077, sCommClubManager->string[1]); // {STRVAR_1 51, 0, 0}:
+            ReadMsgDataIntoString(sCommClubManager->msgData, CommunicationClub_Text_00077, sCommClubManager->string[1]); // {STRVAR_1 51, 0, 0}:
             StringExpandPlaceholders(sCommClubManager->messageFormat[0], sCommClubManager->string[0], sCommClubManager->string[1]);
             ListMenuItems_AddItem(sCommClubManager->items, sCommClubManager->string[0], 0);
         };
@@ -486,7 +486,7 @@ static void ov03_022546B0(void *arg0, CommClubManager *commClubManager) {
         if (IsPrintFinished(sCommClubManager->printerID) == FALSE) {
             RemoveTextPrinter(sCommClubManager->printerID);
         }
-        ReadMsgDataIntoString(sCommClubManager->msgData, msg_0182_00002, sCommClubManager->string[4]); // Asking {STRVAR_1 3, 1, 0} to do member\nregistration. Please wait.
+        ReadMsgDataIntoString(sCommClubManager->msgData, CommunicationClub_Text_AskingForRegistration, sCommClubManager->string[4]); // Asking {STRVAR_1 3, 1, 0} to do member\nregistration. Please wait.
         StringExpandPlaceholders(sCommClubManager->messageFormat[2], sCommClubManager->string[5], sCommClubManager->string[4]);
         if (WindowIsInUse(&sCommClubManager->windows[2]) == FALSE) {
             sub_0205B514(sCommClubManager->fieldSystem->bgConfig, &sCommClubManager->windows[2], 3);
@@ -495,7 +495,7 @@ static void ov03_022546B0(void *arg0, CommClubManager *commClubManager) {
         TextFlags_SetCanABSpeedUpPrint(TRUE);
         TextFlags_SetAutoScrollParam(0);
         TextFlags_SetCanTouchSpeedUpPrint(FALSE);
-        sCommClubManager->printerID = AddTextPrinterParameterized(&sCommClubManager->windows[2], 1, sCommClubManager->string[5], 0, 0, 1, 0);
+        sCommClubManager->printerID = AddTextPrinterParameterized(&sCommClubManager->windows[2], 1, sCommClubManager->string[5], 0, 0, 1, NULL);
     }
     sCommClubManager->unkA8 = 0;
     sCommClubManager->unkA1 = 1;
@@ -602,14 +602,14 @@ static void ov03_02254A54(ListMenu *listMenu_unused, u16 arg1_unused, u8 arg2) {
     spC += arg2;
     if (sub_02034818(spC)) {
         BufferPlayersName(sCommClubManager->messageFormat[0], 0, sub_02034818(spC));
-        ReadMsgDataIntoString(sCommClubManager->msgData, msg_0182_00079, sCommClubManager->string[1]); // {STRVAR_1 3, 0, 0}
+        ReadMsgDataIntoString(sCommClubManager->msgData, CommunicationClub_Text_00079, sCommClubManager->string[1]); // {STRVAR_1 3, 0, 0}
         StringExpandPlaceholders(sCommClubManager->messageFormat[0], sCommClubManager->string[0], sCommClubManager->string[1]);
         s32 temp_r4 = arg2 * 16;
-        AddTextPrinterParameterized(&sCommClubManager->windows[0], 0, sCommClubManager->string[0], 8, temp_r4, 0, 0);
+        AddTextPrinterParameterized(&sCommClubManager->windows[0], 0, sCommClubManager->string[0], 8, temp_r4, 0, NULL);
         BufferIntegerAsString(sCommClubManager->messageFormat[0], 2, PlayerProfile_GetTrainerID_VisibleHalf(sub_02034818(spC)), 5, PRINTING_MODE_LEADING_ZEROS, TRUE);
-        ReadMsgDataIntoString(sCommClubManager->msgData, msg_0182_00078, sCommClubManager->string[3]); // ID{STRVAR_1 54, 2, 0}
+        ReadMsgDataIntoString(sCommClubManager->msgData, CommunicationClub_Text_ID_1, sCommClubManager->string[3]); // ID{STRVAR_1 54, 2, 0}
         StringExpandPlaceholders(sCommClubManager->messageFormat[0], sCommClubManager->string[2], sCommClubManager->string[3]);
-        AddTextPrinterParameterized(&sCommClubManager->windows[0], 0, sCommClubManager->string[2], 72, temp_r4, 0, 0);
+        AddTextPrinterParameterized(&sCommClubManager->windows[0], 0, sCommClubManager->string[2], 72, temp_r4, 0, NULL);
     }
 }
 
@@ -640,16 +640,16 @@ static void ov03_02254B58(CommClubManager *commClubManager) {
 }
 
 static void ov03_02254BEC() {
-    u16 ov03_0225931E[NUM_COMM_TYPES] = {
-        msg_0182_00007,
-        msg_0182_AwaitingContact_SingleBattle, // Single Battle! Awaiting contact from your friend.
-        msg_0182_AwaitingContact_DoubleBattle, 
-        msg_0182_AwaitingContact_MixBattle,
-        msg_0182_AwaitingContact_MultiBattle,
-        msg_0182_AwaitingContact_MultiBattle,
-        msg_0182_00015,
-        msg_0182_00016,
-        msg_0182_00017,
+    u16 sAwaitingContactText[NUM_COMM_TYPES] = {
+        CommunicationClub_Text_00007_Dummy,
+        CommunicationClub_Text_AwaitingContact_SingleBattle,    // Single Battle! Awaiting contact from your friend.
+        CommunicationClub_Text_AwaitingContact_DoubleBattle,    // Double Battle! Awaiting contact from your friend.
+        CommunicationClub_Text_AwaitingContact_MixBattle,       // Mix Battle! Awaiting contact from your friend.
+        CommunicationClub_Text_AwaitingContact_MultiBattle,     // Multi Battle! Awaiting contact from your friends.
+        CommunicationClub_Text_AwaitingContact_MultiBattle,     // Multi Battle! Awaiting contact from your friends.
+        CommunicationClub_Text_ProceedWhenReady,                // When the group is ready: A Button: Proceed   B Button: Cancel
+        CommunicationClub_Text_00016_Dummy,
+        CommunicationClub_Text_ProceedWhenReady_2,              // When the group is ready: A Button: Proceed   B Button: Cancel
         0,
         0,
         0,
@@ -657,7 +657,7 @@ static void ov03_02254BEC() {
         0,
         0,
         0,
-        msg_0182_AwaitingContact_BattleTower,
+        CommunicationClub_Text_AwaitingContact_BattleTower,     // Battle Tower! Awaiting contact from your friend.
         0,
         0,
         0,
@@ -668,19 +668,19 @@ static void ov03_02254BEC() {
         0,
         0,
         0,
-        msg_0182_AwaitingContact_BattleFactory_Lv50,
-        msg_0182_AwaitingContact_BattleFactory_Open,
+        CommunicationClub_Text_AwaitingContact_BattleFactory_Lv50,  // Battle Factory--Level 50! Awaiting contact from your friend.
+        CommunicationClub_Text_AwaitingContact_BattleFactory_Open,  // Battle Factory--Open Level! Awaiting contact from your friend.
         0,
-        msg_0182_AwaitingContact_BattleHall,
-        msg_0182_AwaitingContact_BattleCastle,
-        msg_0182_AwaitingContact_BattleArcade,
-        0,
-        0,
+        CommunicationClub_Text_AwaitingContact_BattleHall,          // Battle Hall! Awaiting contact from your friend.
+        CommunicationClub_Text_AwaitingContact_BattleCastle,        // Battle Castle! Awaiting contact from your friend.
+        CommunicationClub_Text_AwaitingContact_BattleArcade,        // Battle Arcade! Awaiting contact from your friend.
         0,
         0,
-        msg_0182_AwaitingContact_FlatBattle,
-        msg_0182_AwaitingContact_FlatBattle,
-        msg_0182_AwaitingContact_SafariZoneLink,
+        0,
+        0,
+        CommunicationClub_Text_AwaitingContact_FlatBattle,          // Flat Battle! Awaiting contact from your friend.
+        CommunicationClub_Text_AwaitingContact_FlatBattle,          // Flat Battle! Awaiting contact from your friend.
+        CommunicationClub_Text_AwaitingContact_SafariZoneLink,      // Safari Zone Link! Awaiting contact from your friend.
         0
     };
 
@@ -701,7 +701,7 @@ static void ov03_02254BEC() {
             ov03_02253E20(sCommClubManager->unk92 + 142, FALSE);
         }
     } else {
-        ov03_02253E20(ov03_0225931E[sCommClubManager->commType], FALSE);
+        ov03_02253E20(sAwaitingContactText[sCommClubManager->commType], FALSE);
     }
 }
 
@@ -711,10 +711,10 @@ static void ov03_02254C9C(CommClubManager *commClubManager_unused) {
 
     if (sub_020347A0() >= ov03_02255B70()) {
         num = sub_020347A0();
-        strno = msg_0182_00081; // {STRVAR_1 50, 0, 0} Players
+        strno = CommunicationClub_Text_NumPlayers; // {STRVAR_1 50, 0, 0} Players
     } else {
         num = ov03_02255B70() - sub_020347A0();
-        strno = msg_0182_00080; // {STRVAR_1 50, 0, 0} more\nneeded.
+        strno = CommunicationClub_Text_NumNeeded; // {STRVAR_1 50, 0, 0} more needed.
     }
     BufferIntegerAsString(sCommClubManager->messageFormat[1], 0, num, 2, PRINTING_MODE_5_UNUSED, TRUE);
     FillWindowPixelBuffer(&sCommClubManager->windows[1], 15);
@@ -724,16 +724,16 @@ static void ov03_02254C9C(CommClubManager *commClubManager_unused) {
 }
 
 static void ov03_02254D24(u32 arg0, CommClubManager *commClubManager) {
-    u16 ov03_02259370[NUM_COMM_TYPES] = {
-        msg_0182_00024,
-        msg_0182_Contacted_SingleBattle,
-        msg_0182_Contacted_DoubleBattle,
-        msg_0182_Contacted_MixBattle,
-        msg_0182_Contacted_MultiBattle,
-        msg_0182_Contacted_MultiBattle,
-        msg_0182_00037,
-        msg_0182_Contacted_MultiBattle,
-        msg_0182_Contacted_MultiBattle,
+    u16 sContactedText[NUM_COMM_TYPES] = {
+        CommunicationClub_Text_00024_Dummy,
+        CommunicationClub_Text_Contacted_SingleBattle,    // {STRVAR_1 3, 1, 0} has contacted you. Start a Single Battle?
+        CommunicationClub_Text_Contacted_DoubleBattle,    // {STRVAR_1 3, 1, 0} has contacted you. Start a Double Battle?
+        CommunicationClub_Text_Contacted_MixBattle,       // {STRVAR_1 3, 1, 0} has contacted you. Start a Mix Battle?
+        CommunicationClub_Text_Contacted_MultiBattle,     // {STRVAR_1 3, 1, 0} has contacted you. Let {STRVAR_1 3, 1, 0} join your group?
+        CommunicationClub_Text_Contacted_MultiBattle,     // {STRVAR_1 3, 1, 0} has contacted you. Let {STRVAR_1 3, 1, 0} join your group?
+        CommunicationClub_Text_00037_Dummy,
+        CommunicationClub_Text_Contacted_MultiBattle,     // {STRVAR_1 3, 1, 0} has contacted you. Let {STRVAR_1 3, 1, 0} join your group?
+        CommunicationClub_Text_Contacted_MultiBattle,     // {STRVAR_1 3, 1, 0} has contacted you. Let {STRVAR_1 3, 1, 0} join your group?
         0,
         0,
         0,
@@ -741,7 +741,7 @@ static void ov03_02254D24(u32 arg0, CommClubManager *commClubManager) {
         0,
         0,
         0,
-        msg_0182_Contacted_BattleTower,
+        CommunicationClub_Text_Contacted_BattleTower,     // {STRVAR_1 3, 1, 0} has contacted you. Take Battle Tower challenge?
         0,
         0,
         0,
@@ -752,27 +752,27 @@ static void ov03_02254D24(u32 arg0, CommClubManager *commClubManager) {
         0,
         0,
         0,
-        msg_0182_Contacted_BattleFactory,
-        msg_0182_Contacted_BattleFactory,
+        CommunicationClub_Text_Contacted_BattleFactory,   // {STRVAR_1 3, 1, 0} has contacted you. Take Battle Factory challenge?
+        CommunicationClub_Text_Contacted_BattleFactory,   // {STRVAR_1 3, 1, 0} has contacted you. Take Battle Factory challenge?
         0,
-        msg_0182_Contacted_BattleHall,
-        msg_0182_Contacted_BattleCastle,
-        msg_0182_Contacted_BattleArcade,
-        0,
-        0,
+        CommunicationClub_Text_Contacted_BattleHall,      // {STRVAR_1 3, 1, 0} has contacted you. Start the Battle Hall challenge?
+        CommunicationClub_Text_Contacted_BattleCastle,    // {STRVAR_1 3, 1, 0} has contacted you. Take Battle Castle challenge?
+        CommunicationClub_Text_Contacted_BattleArcade,    // {STRVAR_1 3, 1, 0} has contacted you. Take Battle Arcade challenge?
         0,
         0,
-        msg_0182_Contacted_FlatBattle,
-        msg_0182_Contacted_FlatBattle,
-        msg_0182_Contacted_SafariZoneLink,
-        msg_0182_Contacted_Pokeathlon
+        0,
+        0,
+        CommunicationClub_Text_Contacted_FlatBattle,      // {STRVAR_1 3, 1, 0} has contacted you. Start a Flat Battle?
+        CommunicationClub_Text_Contacted_FlatBattle,      // {STRVAR_1 3, 1, 0} has contacted you. Start a Flat Battle?
+        CommunicationClub_Text_Contacted_SafariZoneLink,  // {STRVAR_1 3, 1, 0} has contacted you. Start a Safari Zone Link?
+        CommunicationClub_Text_Contacted_Pokeathlon       // {STRVAR_1 3, 1, 0} has contacted you. Let {STRVAR_1 3, 1, 0} join your group?
     };
     
     PlayerProfile *profile = sub_02034818(arg0);
     if (profile) {
         BufferPlayersName(commClubManager->messageFormat[2], 1, profile);
     }
-    ov03_02253E20(ov03_02259370[commClubManager->commType], TRUE);
+    ov03_02253E20(sContactedText[commClubManager->commType], TRUE);
 }
 
 static void ov03_02254D64(SysTask *task, void *arg1) {
@@ -873,20 +873,16 @@ static void ov03_02254E70(void *arg0, CommClubManager *commClubManager) {
         break;
     default:
         if (ov03_02255B70() <= sub_020347A0()) {
-            u16 ov03_02259184[NUM_COMM_TYPES] = {
+            u16 sConfirmGroupText[NUM_COMM_TYPES] = {
                 0,
                 0,
                 0,
-                msg_0182_ConfirmGroup_MultiBattle,
-                msg_0182_ConfirmGroup_MultiBattle,
-                msg_0182_ConfirmGroup_MultiBattle,
-                msg_0182_ConfirmGroup,
-                msg_0182_00040,
-                msg_0182_00041,
-                0,
-                0,
-                0,
-                0,
+                CommunicationClub_Text_ConfirmGroup_MultiBattle,  // Multi Battle! Is this group OK?
+                CommunicationClub_Text_ConfirmGroup_MultiBattle,  // Multi Battle! Is this group OK?
+                CommunicationClub_Text_ConfirmGroup_MultiBattle,  // Multi Battle! Is this group OK?
+                CommunicationClub_Text_ConfirmGroup,              // Is this group OK?
+                CommunicationClub_Text_00040_Dummy,
+                CommunicationClub_Text_00041_Dummy,
                 0,
                 0,
                 0,
@@ -914,11 +910,15 @@ static void ov03_02254E70(void *arg0, CommClubManager *commClubManager) {
                 0,
                 0,
                 0,
-                msg_0182_ConfirmGroup_Pokeathlon
+                0,
+                0,
+                0,
+                0,
+                CommunicationClub_Text_ConfirmGroup_Pokeathlon // Pokéathlon! Is this group OK?
             };
             PlaySE(SEQ_SE_DP_SELECT);
             commClubManager->connectedCount = sub_020347A0();
-            ov03_02253E20(ov03_02259184[commClubManager->commType], FALSE);
+            ov03_02253E20(sConfirmGroupText[commClubManager->commType], FALSE);
             ov03_02254B4C(&ov03_022553C8);
         }
         break;
@@ -1038,20 +1038,16 @@ static void ov03_0225530C(void *arg0_unused, CommClubManager *commClubManager) {
 }
 
 static void ov03_02255388(void *arg0_unused, CommClubManager *commClubManager) {
-    u16 ov03_022591D6[NUM_COMM_TYPES] = {
+    u16 sConfirmGroupText[NUM_COMM_TYPES] = {
         0,
         0,
         0,
-        msg_0182_ConfirmGroup_MultiBattle,
-        msg_0182_ConfirmGroup_MultiBattle,
-        msg_0182_ConfirmGroup_MultiBattle,
-        msg_0182_ConfirmGroup,
-        msg_0182_00040,
-        msg_0182_00041,
-        0,
-        0,
-        0,
-        0,
+        CommunicationClub_Text_ConfirmGroup_MultiBattle,  // Multi Battle! Is this group OK?
+        CommunicationClub_Text_ConfirmGroup_MultiBattle,  // Multi Battle! Is this group OK?
+        CommunicationClub_Text_ConfirmGroup_MultiBattle,  // Multi Battle! Is this group OK?
+        CommunicationClub_Text_ConfirmGroup,              // Is this group OK?
+        CommunicationClub_Text_00040_Dummy,
+        CommunicationClub_Text_00041_Dummy,
         0,
         0,
         0,
@@ -1079,10 +1075,14 @@ static void ov03_02255388(void *arg0_unused, CommClubManager *commClubManager) {
         0,
         0,
         0,
-        msg_0182_ConfirmGroup_Pokeathlon
+        0,
+        0,
+        0,
+        0,
+        CommunicationClub_Text_ConfirmGroup_Pokeathlon // Pokéathlon! Is this group OK?
     };
     ov03_02254C9C(commClubManager);
-    ov03_02253E20(ov03_022591D6[commClubManager->commType], FALSE);
+    ov03_02253E20(sConfirmGroupText[commClubManager->commType], FALSE);
     ov03_02254B4C(&ov03_022553C8);
 }
 
@@ -1114,8 +1114,7 @@ static void ov03_02255404(void *arg0, CommClubManager *commClubManager) {
             if (ov01_021F6AEC(commClubManager->fieldSystem) == 6) {
                 if (commClubManager->unkA4 == 0) {
                     if (commClubManager->commType == COMM_TYPE_8 || commClubManager->commType == COMM_TYPE_POKEATHLON) {
-                        for (int i = 1; i < sub_02037454(); i++)
-                        {
+                        for (int i = 1; i < sub_02037454(); i++) {
                             if (sub_020373B4(i) == 0) {
                                 ov03_02254B4C(&ov03_022554E0);
                                 return;
@@ -1136,23 +1135,16 @@ static void ov03_02255404(void *arg0, CommClubManager *commClubManager) {
 }
 
 static void ov03_022554E0(void *arg0, CommClubManager *commClubManager) {
-    u16 ov03_022592CC[NUM_COMM_TYPES] = {
+    u16 sGroupCancelledText[NUM_COMM_TYPES] = {
         0,
         0,
         0,
         0,
         0,
         0,
-        msg_0182_GroupCancelled,
-        msg_0182_00066,
-        msg_0182_00067,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
+        CommunicationClub_Text_GroupCancelled, // A member has dropped out. Please repeat the registration process from the beginning.
+        CommunicationClub_Text_00066_Dummy,
+        CommunicationClub_Text_00067_Dummy,
         0,
         0,
         0,
@@ -1177,14 +1169,21 @@ static void ov03_022554E0(void *arg0, CommClubManager *commClubManager) {
         0,
         0,
         0,
-        msg_0182_GroupCancelled_Pokeathlon
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        CommunicationClub_Text_GroupCancelled_Pokeathlon // A Pokéathlon involving this group will be canceled.
     };
 
     ov03_0225574C(arg0, commClubManager);
     if (sCommClubManager->commType == COMM_TYPE_8) {
         ov03_02253E20(sCommClubManager->unk92 + 137, FALSE);
     } else {
-        ov03_02253E20(ov03_022592CC[commClubManager->commType], FALSE);
+        ov03_02253E20(sGroupCancelledText[commClubManager->commType], FALSE);
     }
     sub_02058284();
     SysTask_CreateOnMainQueue(&ov03_0225554C, commClubManager, 0);
@@ -1198,20 +1197,16 @@ static void ov03_0225554C(SysTask *task, void *commClubManager_unused) {
 }
 
 static void ov03_0225558C(void *arg0, CommClubManager *commClubManager) {
-    u16 ov03_022593C2[NUM_COMM_TYPES] = {
+    u16 sCancelGroupText[NUM_COMM_TYPES] = {
         0,
         0,
         0,
-        msg_0182_CancelGroup,
-        msg_0182_CancelGroup,
-        msg_0182_CancelGroup,
-        msg_0182_00044,
-        msg_0182_00045,
-        msg_0182_00046,
-        0,
-        0,
-        0,
-        0,
+        CommunicationClub_Text_CancelGroup_MultiBattle,   // Cancel a Multi Battle involving this group?
+        CommunicationClub_Text_CancelGroup_MultiBattle,   // Cancel a Multi Battle involving this group?
+        CommunicationClub_Text_CancelGroup_MultiBattle,   // Cancel a Multi Battle involving this group?
+        CommunicationClub_Text_00044_Dummy,
+        CommunicationClub_Text_00045_Dummy,
+        CommunicationClub_Text_00046_Dummy,
         0,
         0,
         0,
@@ -1239,11 +1234,15 @@ static void ov03_0225558C(void *arg0, CommClubManager *commClubManager) {
         0,
         0,
         0,
-        msg_0182_CancelGroup_Pokeathlon
+        0,
+        0,
+        0,
+        0,
+        CommunicationClub_Text_CancelGroup_Pokeathlon // Cancel holding a Pokéathlon with this group?
     };
     ov03_02254C9C(commClubManager);
     if (sub_020347A0() > 1) {
-        ov03_02253E20(ov03_022593C2[commClubManager->commType], FALSE);
+        ov03_02253E20(sCancelGroupText[commClubManager->commType], FALSE);
         ov03_02254B4C(&ov03_022555F4);
     } else {
         ov03_02254B44();
@@ -1388,20 +1387,16 @@ static void ov03_022558C4(void *task, CommClubManager *commClubManager) {
     if (sCommClubManager->messageDelay != 0) {
         sCommClubManager->messageDelay--;
         if (sCommClubManager->messageDelay == 0) {
-            u16 ov03_02259228[NUM_COMM_TYPES] = {
+            u16 sGroupWaitingText[NUM_COMM_TYPES] = {
                 0,
                 0,
                 0,
-                70,
-                70,
-                70,
-                71,
-                72,
-                73,
-                0,
-                0,
-                0,
-                0,
+                CommunicationClub_Text_GroupWaiting_MultiBattle,  // Multi Battle! Waiting for the rest of the group.
+                CommunicationClub_Text_GroupWaiting_MultiBattle,  // Multi Battle! Waiting for the rest of the group.
+                CommunicationClub_Text_GroupWaiting_MultiBattle,  // Multi Battle! Waiting for the rest of the group.
+                CommunicationClub_Text_GroupWaiting,              // Waiting for the rest of the group.
+                CommunicationClub_Text_00072_Dummy,
+                CommunicationClub_Text_00073_Dummy,
                 0,
                 0,
                 0,
@@ -1429,14 +1424,18 @@ static void ov03_022558C4(void *task, CommClubManager *commClubManager) {
                 0,
                 0,
                 0,
-                74
+                0,
+                0,
+                0,
+                0,
+                CommunicationClub_Text_GroupWaiting_Pokeathlon // Pokéathlon! Waiting for the rest of the group.
             };
             if (sCommClubManager->commType == COMM_TYPE_8) {
                 ov03_02253E20(sCommClubManager->unk92 + 132, FALSE);
             } else if (sCommClubManager->commType == COMM_TYPE_POKEATHLON) {
                 ov03_02253E20(sCommClubManager->unk92 + 160, FALSE);
             } else {
-                ov03_02253E20(ov03_02259228[commClubManager->commType], FALSE);
+                ov03_02253E20(sGroupWaitingText[commClubManager->commType], FALSE);
             }
         }
     }
