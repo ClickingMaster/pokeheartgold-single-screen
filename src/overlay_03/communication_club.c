@@ -315,15 +315,15 @@ static void ov03_022542C8(CommClubManager* commClubManager) {
     ov03_022543AC(sCommClubManager);
     
     u16 ov03_0225927A[NUM_COMM_TYPES] = {
-        48,
-        49,
-        50,
-        52,
-        51,
-        51,
-        56,
-        57,
-        58, // Unreachable.
+        msg_0182_00048,
+        msg_0182_Choose_SingleBattle,    // Choose the Single Battle you would like to join.
+        msg_0182_Choose_DoubleBattle,    // Choose the Double Battle you would like to join.
+        msg_0182_Choose_MixBattle,       // Choose the Mix Battle you would like to join.
+        msg_0182_Choose_MultiBattle,     // Choose the Multi Battle you would like to join.
+        msg_0182_Choose_MultiBattle,     // Choose the Multi Battle you would like to join.
+        msg_0182_00056,
+        msg_0182_00057,
+        msg_0182_00058, // Unreachable.
         0,
         0,
         0,
@@ -331,7 +331,7 @@ static void ov03_022542C8(CommClubManager* commClubManager) {
         0,
         0,
         0,
-        59,
+        msg_0182_ChooseFriend_BattleTower,  // Choose the friend you want to take to the Battle Tower.
         0,
         0,
         0,
@@ -342,26 +342,26 @@ static void ov03_022542C8(CommClubManager* commClubManager) {
         0,
         0,
         0,
-        60,
-        61,
+        msg_0182_ChooseFriend_BattleFactory_Lv50,   // Choose the friend to play with at the Battle Factory--Level 50.
+        msg_0182_ChooseFriend_BattleFactory_Open,   // Choose the friend to play with at the Battle Factory--Open Level.
         0,
-        62,
-        63,
-        64,
-        0,
-        0,
+        msg_0182_ChooseFriend_BattleHall,           // Choose the friend to play with at the Battle Hall.
+        msg_0182_ChooseFriend_BattleCastle,         // Choose the friend to play with at the Battle Castle.
+        msg_0182_ChooseFriend_BattleArcade,         // Choose the friend to play with at the Battle Arcade.
         0,
         0,
-        53,
-        53,
-        54, 
-        55  // Unreachable.
+        0,
+        0,
+        msg_0182_Choose_FlatBattle,     // Choose the Flat Battle you would like to join.
+        msg_0182_Choose_FlatBattle,     // Choose the Flat Battle you would like to join.
+        msg_0182_Choose_SafariZoneLink, // Choose the Safari Zone Link you would like to join.
+        msg_0182_Choose_Pokeathlon      // Unreachable.
     };
 
     if (sCommClubManager->commType == COMM_TYPE_8) {
         ov03_02253E20(sCommClubManager->unk92 + 122, FALSE);
-    } else if (sCommClubManager->commType == COMM_TYPE_40) {
-        ov03_02253E20(sCommClubManager->unk92 + 148, FALSE);
+    } else if (sCommClubManager->commType == COMM_TYPE_POKEATHLON) {
+        ov03_02253E20(sCommClubManager->unk92 + msg_0182_ChooseCourseLeader_Jump, FALSE);
     } else {
         ov03_02253E20(ov03_0225927A[sCommClubManager->commType], FALSE);
     }
@@ -641,15 +641,15 @@ static void ov03_02254B58(CommClubManager *commClubManager) {
 
 static void ov03_02254BEC() {
     u16 ov03_0225931E[NUM_COMM_TYPES] = {
-        7,
-        8,
-        9,
-        11,
-        10,
-        10,
-        15,
-        16,
-        17,
+        msg_0182_00007,
+        msg_0182_AwaitingContact_SingleBattle, // Single Battle! Awaiting contact from your friend.
+        msg_0182_AwaitingContact_DoubleBattle, 
+        msg_0182_AwaitingContact_MixBattle,
+        msg_0182_AwaitingContact_MultiBattle,
+        msg_0182_AwaitingContact_MultiBattle,
+        msg_0182_00015,
+        msg_0182_00016,
+        msg_0182_00017,
         0,
         0,
         0,
@@ -657,7 +657,7 @@ static void ov03_02254BEC() {
         0,
         0,
         0,
-        18,
+        msg_0182_AwaitingContact_BattleTower,
         0,
         0,
         0,
@@ -668,19 +668,19 @@ static void ov03_02254BEC() {
         0,
         0,
         0,
-        19,
-        20,
+        msg_0182_AwaitingContact_BattleFactory_Lv50,
+        msg_0182_AwaitingContact_BattleFactory_Open,
         0,
-        21,
-        22,
-        23,
-        0,
-        0,
+        msg_0182_AwaitingContact_BattleHall,
+        msg_0182_AwaitingContact_BattleCastle,
+        msg_0182_AwaitingContact_BattleArcade,
         0,
         0,
-        12,
-        12,
-        13,
+        0,
+        0,
+        msg_0182_AwaitingContact_FlatBattle,
+        msg_0182_AwaitingContact_FlatBattle,
+        msg_0182_AwaitingContact_SafariZoneLink,
         0
     };
 
@@ -725,15 +725,15 @@ static void ov03_02254C9C(CommClubManager *commClubManager_unused) {
 
 static void ov03_02254D24(u32 arg0, CommClubManager *commClubManager) {
     u16 ov03_02259370[NUM_COMM_TYPES] = {
-        24,
-        25,
-        26,
-        27,
-        31,
-        31,
-        37,
-        31,
-        31,
+        msg_0182_00024,
+        msg_0182_Contacted_SingleBattle,
+        msg_0182_Contacted_DoubleBattle,
+        msg_0182_Contacted_MixBattle,
+        msg_0182_Contacted_MultiBattle,
+        msg_0182_Contacted_MultiBattle,
+        msg_0182_00037,
+        msg_0182_Contacted_MultiBattle,
+        msg_0182_Contacted_MultiBattle,
         0,
         0,
         0,
@@ -741,7 +741,7 @@ static void ov03_02254D24(u32 arg0, CommClubManager *commClubManager) {
         0,
         0,
         0,
-        32,
+        msg_0182_Contacted_BattleTower,
         0,
         0,
         0,
@@ -752,20 +752,20 @@ static void ov03_02254D24(u32 arg0, CommClubManager *commClubManager) {
         0,
         0,
         0,
-        33,
-        33,
+        msg_0182_Contacted_BattleFactory,
+        msg_0182_Contacted_BattleFactory,
         0,
-        34,
-        35,
-        36,
-        0,
-        0,
+        msg_0182_Contacted_BattleHall,
+        msg_0182_Contacted_BattleCastle,
+        msg_0182_Contacted_BattleArcade,
         0,
         0,
-        28,
-        28,
-        29,
-        30
+        0,
+        0,
+        msg_0182_Contacted_FlatBattle,
+        msg_0182_Contacted_FlatBattle,
+        msg_0182_Contacted_SafariZoneLink,
+        msg_0182_Contacted_Pokeathlon
     };
     
     PlayerProfile *profile = sub_02034818(arg0);
@@ -877,12 +877,12 @@ static void ov03_02254E70(void *arg0, CommClubManager *commClubManager) {
                 0,
                 0,
                 0,
-                38,
-                38,
-                38,
-                39,
-                40,
-                41,
+                msg_0182_ConfirmGroup_MultiBattle,
+                msg_0182_ConfirmGroup_MultiBattle,
+                msg_0182_ConfirmGroup_MultiBattle,
+                msg_0182_ConfirmGroup,
+                msg_0182_00040,
+                msg_0182_00041,
                 0,
                 0,
                 0,
@@ -914,7 +914,7 @@ static void ov03_02254E70(void *arg0, CommClubManager *commClubManager) {
                 0,
                 0,
                 0,
-                42
+                msg_0182_ConfirmGroup_Pokeathlon
             };
             PlaySE(SEQ_SE_DP_SELECT);
             commClubManager->connectedCount = sub_020347A0();
@@ -943,7 +943,7 @@ static void ov03_02255078(void *arg0, CommClubManager *commClubManager) {
         int i;
         if (sub_020373B4(commClubManager->unk95) == FALSE) {
             ov03_02255CE4(commClubManager);
-            if (commClubManager->commType == COMM_TYPE_8 || commClubManager->commType == COMM_TYPE_40) {
+            if (commClubManager->commType == COMM_TYPE_8 || commClubManager->commType == COMM_TYPE_POKEATHLON) {
                 for (i = 1; i < ov03_02255B84(); i++) {
                     if (sub_020373B4(i)) {
                         sub_020346E8(i);
@@ -964,7 +964,7 @@ static void ov03_02255078(void *arg0, CommClubManager *commClubManager) {
             ov03_02254B4C(&ov03_022552C8);
         } else if (ov01_021F6AEC(commClubManager->fieldSystem) == 6) {
             if (commClubManager->unkA4 == 0) {
-            if ((commClubManager->commType == COMM_TYPE_SINGLE_BATTLE || commClubManager->commType == COMM_TYPE_DOUBLE_BATTLE || commClubManager->commType == COMM_TYPE_37 || commClubManager->commType == COMM_TYPE_38) && sub_020348F0() == 0) {
+            if ((commClubManager->commType == COMM_TYPE_SINGLE_BATTLE || commClubManager->commType == COMM_TYPE_DOUBLE_BATTLE || commClubManager->commType == COMM_TYPE_FLAT_BATTLE_1 || commClubManager->commType == COMM_TYPE_FLAT_BATTLE_2) && sub_020348F0() == 0) {
                 ov03_02253E20(116, FALSE);
                 ov03_02254B4C(&ov03_02255280);
                 sub_02037B8C(4, commClubManager->unk95);
@@ -985,7 +985,7 @@ static void ov03_02255078(void *arg0, CommClubManager *commClubManager) {
                 }
             }
         } else if (commClubManager->unkA4 == 1) {
-            if (commClubManager->commType == COMM_TYPE_8 || commClubManager->commType == COMM_TYPE_40) {
+            if (commClubManager->commType == COMM_TYPE_8 || commClubManager->commType == COMM_TYPE_POKEATHLON) {
                 for (i = 1; i < ov03_02255B84(); i++) {
                     if (sub_020373B4(i)) {
                         sub_020346E8(i);
@@ -1042,12 +1042,12 @@ static void ov03_02255388(void *arg0_unused, CommClubManager *commClubManager) {
         0,
         0,
         0,
-        38,
-        38,
-        38,
-        39,
-        40,
-        41,
+        msg_0182_ConfirmGroup_MultiBattle,
+        msg_0182_ConfirmGroup_MultiBattle,
+        msg_0182_ConfirmGroup_MultiBattle,
+        msg_0182_ConfirmGroup,
+        msg_0182_00040,
+        msg_0182_00041,
         0,
         0,
         0,
@@ -1079,7 +1079,7 @@ static void ov03_02255388(void *arg0_unused, CommClubManager *commClubManager) {
         0,
         0,
         0,
-        42
+        msg_0182_ConfirmGroup_Pokeathlon
     };
     ov03_02254C9C(commClubManager);
     ov03_02253E20(ov03_022591D6[commClubManager->commType], FALSE);
@@ -1113,7 +1113,7 @@ static void ov03_02255404(void *arg0, CommClubManager *commClubManager) {
         } else {
             if (ov01_021F6AEC(commClubManager->fieldSystem) == 6) {
                 if (commClubManager->unkA4 == 0) {
-                    if (commClubManager->commType == COMM_TYPE_8 || commClubManager->commType == COMM_TYPE_40) {
+                    if (commClubManager->commType == COMM_TYPE_8 || commClubManager->commType == COMM_TYPE_POKEATHLON) {
                         for (int i = 1; i < sub_02037454(); i++)
                         {
                             if (sub_020373B4(i) == 0) {
@@ -1143,9 +1143,9 @@ static void ov03_022554E0(void *arg0, CommClubManager *commClubManager) {
         0,
         0,
         0,
-        65,
-        66,
-        67,
+        msg_0182_GroupCancelled,
+        msg_0182_00066,
+        msg_0182_00067,
         0,
         0,
         0,
@@ -1177,7 +1177,7 @@ static void ov03_022554E0(void *arg0, CommClubManager *commClubManager) {
         0,
         0,
         0,
-        68
+        msg_0182_GroupCancelled_Pokeathlon
     };
 
     ov03_0225574C(arg0, commClubManager);
@@ -1202,12 +1202,12 @@ static void ov03_0225558C(void *arg0, CommClubManager *commClubManager) {
         0,
         0,
         0,
-        43,
-        43,
-        43,
-        44,
-        45,
-        46,
+        msg_0182_CancelGroup,
+        msg_0182_CancelGroup,
+        msg_0182_CancelGroup,
+        msg_0182_00044,
+        msg_0182_00045,
+        msg_0182_00046,
         0,
         0,
         0,
@@ -1239,7 +1239,7 @@ static void ov03_0225558C(void *arg0, CommClubManager *commClubManager) {
         0,
         0,
         0,
-        47
+        msg_0182_CancelGroup_Pokeathlon
     };
     ov03_02254C9C(commClubManager);
     if (sub_020347A0() > 1) {
@@ -1433,7 +1433,7 @@ static void ov03_022558C4(void *task, CommClubManager *commClubManager) {
             };
             if (sCommClubManager->commType == COMM_TYPE_8) {
                 ov03_02253E20(sCommClubManager->unk92 + 132, FALSE);
-            } else if (sCommClubManager->commType == COMM_TYPE_40) {
+            } else if (sCommClubManager->commType == COMM_TYPE_POKEATHLON) {
                 ov03_02253E20(sCommClubManager->unk92 + 160, FALSE);
             } else {
                 ov03_02253E20(ov03_02259228[commClubManager->commType], FALSE);
