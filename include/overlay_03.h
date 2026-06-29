@@ -85,10 +85,10 @@ typedef struct MartData {
     u32 unk2A0;
 } MartData;
 
-void ov03_02255BB0(FieldSystem *fieldSystem, u32 arg1, u16 arg2, u16 arg3);
+void ov03_02255BB0(FieldSystem *fieldSystem, u32 commType, u16 arg2, u16 arg3);
 void ov03_02255BEC();
 u32 ov03_02255BFC();
-void ov03_02255C18(FieldSystem *fieldSystem, u32 arg1, u16 arg2, u16 arg3);
+void ov03_02255C18(FieldSystem *fieldSystem, u32 commType, u16 arg2, u16 arg3);
 void ov03_02255C54();
 u32 ov03_02255C64();
 

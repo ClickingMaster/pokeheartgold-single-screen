@@ -2417,11 +2417,11 @@ BOOL sub_02043A98(ScriptContext *ctx);
 
 BOOL ScrCmd_226(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
-    u16 r7 = ScriptGetVar(ctx);
+    u16 commType = ScriptGetVar(ctx);
     u16 sp0 = ScriptGetVar(ctx);
     u16 sp4 = ScriptGetVar(ctx);
     u16 r6 = ScriptReadHalfword(ctx);
-    ov03_02255BB0(fieldSystem, r7, sp0, sp4);
+    ov03_02255BB0(fieldSystem, commType, sp0, sp4);
     ctx->data[0] = r6;
     SetupNativeScript(ctx, sub_02043A98);
     return TRUE;
@@ -2442,11 +2442,11 @@ BOOL sub_02043B30(ScriptContext *ctx);
 
 BOOL ScrCmd_227(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
-    u16 r7 = ScriptGetVar(ctx);
+    u16 commType = ScriptGetVar(ctx);
     u16 sp0 = ScriptGetVar(ctx);
     u16 sp4 = ScriptGetVar(ctx);
     u16 r6 = ScriptReadHalfword(ctx);
-    ov03_02255C18(fieldSystem, r7, sp0, sp4);
+    ov03_02255C18(fieldSystem, commType, sp0, sp4);
     ctx->data[0] = r6;
     SetupNativeScript(ctx, sub_02043B30);
     return TRUE;

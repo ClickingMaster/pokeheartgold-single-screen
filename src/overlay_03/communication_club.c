@@ -15,6 +15,8 @@
 #include "unk_02037C94.h"
 #include "unk_02058034.h"
 
+#include "constants/comm_type.h"
+
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0182.h"
 
@@ -312,7 +314,7 @@ static void ov03_022542C8(CommClubManager* commClubManager) {
     SysTask_CreateOnMainQueue(ov03_02254D64, commClubManager, 0);
     ov03_022543AC(sCommClubManager);
     
-    u16 ov03_0225927A[41] = {
+    u16 ov03_0225927A[NUM_COMM_TYPES] = {
         48,
         49,
         50,
@@ -321,7 +323,7 @@ static void ov03_022542C8(CommClubManager* commClubManager) {
         51,
         56,
         57,
-        58,
+        58, // Unreachable.
         0,
         0,
         0,
@@ -352,16 +354,16 @@ static void ov03_022542C8(CommClubManager* commClubManager) {
         0,
         53,
         53,
-        54,
-        55
+        54, 
+        55  // Unreachable.
     };
 
-    if (sCommClubManager->commType == 8) {
+    if (sCommClubManager->commType == COMM_TYPE_8) {
         ov03_02253E20(sCommClubManager->unk92 + 122, FALSE);
-    } else if (sCommClubManager->commType == 40) {
+    } else if (sCommClubManager->commType == COMM_TYPE_40) {
         ov03_02253E20(sCommClubManager->unk92 + 148, FALSE);
     } else {
-        ov03_02253E20(ov03_0225927A[sCommClubManager->commType], 0);
+        ov03_02253E20(ov03_0225927A[sCommClubManager->commType], FALSE);
     }
     ov03_02254B4C(&ov03_02254420);
 }
@@ -583,7 +585,7 @@ static void ov03_022549D8(void *arg0, CommClubManager *commClubManager) {
         else if (ov01_021F6AEC(commClubManager->fieldSystem) == 6) {
             if (commClubManager->unkA4 == 0) {
                 ov03_0225574C(arg0, commClubManager);
-                ov03_02253E20(6, 0);
+                ov03_02253E20(6, FALSE);
                 ov03_02255ADC(commClubManager);
             } else if (commClubManager->unkA4 == 1) {
                 ov03_02254B4C(&ov03_022546B0);
@@ -638,7 +640,7 @@ static void ov03_02254B58(CommClubManager *commClubManager) {
 }
 
 static void ov03_02254BEC() {
-    u16 ov03_0225931E[41] = {
+    u16 ov03_0225931E[NUM_COMM_TYPES] = {
         7,
         8,
         9,
@@ -682,24 +684,24 @@ static void ov03_02254BEC() {
         0
     };
 
-    if (sCommClubManager->commType >= 41) {
+    if (sCommClubManager->commType >= NUM_COMM_TYPES) {
         GF_AssertFail();
     }
 
     if (sCommClubManager->commType == 8) {
         if (sub_020347A0() > 1) {
-            ov03_02253E20(sCommClubManager->unk92 + 127, 0);
+            ov03_02253E20(sCommClubManager->unk92 + 127, FALSE);
         } else {
-            ov03_02253E20(sCommClubManager->unk92 + 117, 0);
+            ov03_02253E20(sCommClubManager->unk92 + 117, FALSE);
         }
     } else if (sCommClubManager->commType == 40) {
         if (sub_020347A0() > 1) {
-            ov03_02253E20(sCommClubManager->unk92 + 154, 0);
+            ov03_02253E20(sCommClubManager->unk92 + 154, FALSE);
         } else {
-            ov03_02253E20(sCommClubManager->unk92 + 142, 0);
+            ov03_02253E20(sCommClubManager->unk92 + 142, FALSE);
         }
     } else {
-        ov03_02253E20(ov03_0225931E[sCommClubManager->commType], 0);
+        ov03_02253E20(ov03_0225931E[sCommClubManager->commType], FALSE);
     }
 }
 
@@ -722,7 +724,7 @@ static void ov03_02254C9C(CommClubManager *commClubManager_unused) {
 }
 
 static void ov03_02254D24(u32 arg0, CommClubManager *commClubManager) {
-    u16 ov03_02259370[41] = {
+    u16 ov03_02259370[NUM_COMM_TYPES] = {
         24,
         25,
         26,
@@ -871,7 +873,7 @@ static void ov03_02254E70(void *arg0, CommClubManager *commClubManager) {
         break;
     default:
         if (ov03_02255B70() <= sub_020347A0()) {
-            u16 ov03_02259184[41] = {
+            u16 ov03_02259184[NUM_COMM_TYPES] = {
                 0,
                 0,
                 0,
@@ -916,7 +918,7 @@ static void ov03_02254E70(void *arg0, CommClubManager *commClubManager) {
             };
             PlaySE(SEQ_SE_DP_SELECT);
             commClubManager->connectedCount = sub_020347A0();
-            ov03_02253E20(ov03_02259184[commClubManager->commType], 0);
+            ov03_02253E20(ov03_02259184[commClubManager->commType], FALSE);
             ov03_02254B4C(&ov03_022553C8);
         }
         break;
@@ -941,29 +943,29 @@ static void ov03_02255078(void *arg0, CommClubManager *commClubManager) {
         int i;
         if (sub_020373B4(commClubManager->unk95) == FALSE) {
             ov03_02255CE4(commClubManager);
-            if (commClubManager->commType == 8 || commClubManager->commType == 40) {
+            if (commClubManager->commType == COMM_TYPE_8 || commClubManager->commType == COMM_TYPE_40) {
                 for (i = 1; i < ov03_02255B84(); i++) {
                     if (sub_020373B4(i)) {
                         sub_020346E8(i);
                         sub_02037B8C(5, i);
                     }
                 }
-                ov03_02253E20(0, 0);
+                ov03_02253E20(0, FALSE);
                 ov03_02254B4C(&ov03_022552C8);
             } else {
                 sub_020346E8(commClubManager->unk95);
-                ov03_02253E20(0, 0);
+                ov03_02253E20(0, FALSE);
                 ov03_02254B4C(&ov03_022552C8);
             }
         } else if (sub_02037700() || ov03_02255C80()) {
             ov03_02255CE4(commClubManager);
             sub_020346E8(commClubManager->unk95);
-            ov03_02253E20(0, 0);
+            ov03_02253E20(0, FALSE);
             ov03_02254B4C(&ov03_022552C8);
         } else if (ov01_021F6AEC(commClubManager->fieldSystem) == 6) {
             if (commClubManager->unkA4 == 0) {
-            if ((commClubManager->commType == 1 || commClubManager->commType == 2 || (u8) (commClubManager->commType + 219) <= 1) && sub_020348F0() == 0) {
-                ov03_02253E20(116, 0);
+            if ((commClubManager->commType == COMM_TYPE_SINGLE_BATTLE || commClubManager->commType == COMM_TYPE_DOUBLE_BATTLE || commClubManager->commType == COMM_TYPE_37 || commClubManager->commType == COMM_TYPE_38) && sub_020348F0() == 0) {
+                ov03_02253E20(116, FALSE);
                 ov03_02254B4C(&ov03_02255280);
                 sub_02037B8C(4, commClubManager->unk95);
             } else {
@@ -983,7 +985,7 @@ static void ov03_02255078(void *arg0, CommClubManager *commClubManager) {
                 }
             }
         } else if (commClubManager->unkA4 == 1) {
-            if (commClubManager->commType == 8 || commClubManager->commType == 40) {
+            if (commClubManager->commType == COMM_TYPE_8 || commClubManager->commType == COMM_TYPE_40) {
                 for (i = 1; i < ov03_02255B84(); i++) {
                     if (sub_020373B4(i)) {
                         sub_020346E8(i);
@@ -1036,7 +1038,7 @@ static void ov03_0225530C(void *arg0_unused, CommClubManager *commClubManager) {
 }
 
 static void ov03_02255388(void *arg0_unused, CommClubManager *commClubManager) {
-    u16 ov03_022591D6[41] = {
+    u16 ov03_022591D6[NUM_COMM_TYPES] = {
         0,
         0,
         0,
@@ -1080,7 +1082,7 @@ static void ov03_02255388(void *arg0_unused, CommClubManager *commClubManager) {
         42
     };
     ov03_02254C9C(commClubManager);
-    ov03_02253E20(ov03_022591D6[commClubManager->commType], 0);
+    ov03_02253E20(ov03_022591D6[commClubManager->commType], FALSE);
     ov03_02254B4C(&ov03_022553C8);
 }
 
@@ -1111,7 +1113,7 @@ static void ov03_02255404(void *arg0, CommClubManager *commClubManager) {
         } else {
             if (ov01_021F6AEC(commClubManager->fieldSystem) == 6) {
                 if (commClubManager->unkA4 == 0) {
-                    if (commClubManager->commType == 8 || commClubManager->commType == 40) {
+                    if (commClubManager->commType == COMM_TYPE_8 || commClubManager->commType == COMM_TYPE_40) {
                         for (int i = 1; i < sub_02037454(); i++)
                         {
                             if (sub_020373B4(i) == 0) {
@@ -1134,7 +1136,7 @@ static void ov03_02255404(void *arg0, CommClubManager *commClubManager) {
 }
 
 static void ov03_022554E0(void *arg0, CommClubManager *commClubManager) {
-    u16 ov03_022592CC[41] = {
+    u16 ov03_022592CC[NUM_COMM_TYPES] = {
         0,
         0,
         0,
@@ -1179,10 +1181,10 @@ static void ov03_022554E0(void *arg0, CommClubManager *commClubManager) {
     };
 
     ov03_0225574C(arg0, commClubManager);
-    if (sCommClubManager->commType == 8) {
-        ov03_02253E20(sCommClubManager->unk92 + 137, 0);
+    if (sCommClubManager->commType == COMM_TYPE_8) {
+        ov03_02253E20(sCommClubManager->unk92 + 137, FALSE);
     } else {
-        ov03_02253E20(ov03_022592CC[commClubManager->commType], 0);
+        ov03_02253E20(ov03_022592CC[commClubManager->commType], FALSE);
     }
     sub_02058284();
     SysTask_CreateOnMainQueue(&ov03_0225554C, commClubManager, 0);
@@ -1196,7 +1198,7 @@ static void ov03_0225554C(SysTask *task, void *commClubManager_unused) {
 }
 
 static void ov03_0225558C(void *arg0, CommClubManager *commClubManager) {
-    u16 ov03_022593C2[41] = {
+    u16 ov03_022593C2[NUM_COMM_TYPES] = {
         0,
         0,
         0,
@@ -1241,7 +1243,7 @@ static void ov03_0225558C(void *arg0, CommClubManager *commClubManager) {
     };
     ov03_02254C9C(commClubManager);
     if (sub_020347A0() > 1) {
-        ov03_02253E20(ov03_022593C2[commClubManager->commType], 0);
+        ov03_02253E20(ov03_022593C2[commClubManager->commType], FALSE);
         ov03_02254B4C(&ov03_022555F4);
     } else {
         ov03_02254B44();
@@ -1339,7 +1341,7 @@ static void ov03_022557CC(CommClubManager *commClubManager) {
 static void ov03_02255804(CommClubManager *commClubManager) {
     sub_020351DC(commClubManager->connectionIndex, sCommClubManager->playerProfile[1]);
     BufferPlayersName(commClubManager->messageFormat[2], 1, sCommClubManager->playerProfile[1]);
-    ov03_02253E20(4, 1);
+    ov03_02253E20(4, TRUE);
     commClubManager->connectedCount = sub_02037454();
     SysTask_CreateOnMainQueue(&ov03_02254D64, commClubManager, 0);
     ov03_02254B4C(&ov03_02255860);
@@ -1386,7 +1388,7 @@ static void ov03_022558C4(void *task, CommClubManager *commClubManager) {
     if (sCommClubManager->messageDelay != 0) {
         sCommClubManager->messageDelay--;
         if (sCommClubManager->messageDelay == 0) {
-            u16 ov03_02259228[41] = {
+            u16 ov03_02259228[NUM_COMM_TYPES] = {
                 0,
                 0,
                 0,
@@ -1429,12 +1431,12 @@ static void ov03_022558C4(void *task, CommClubManager *commClubManager) {
                 0,
                 74
             };
-            if (sCommClubManager->commType == 8) {
-                ov03_02253E20(sCommClubManager->unk92 + 132, 0);
-            } else if (sCommClubManager->commType == 40) {
-                ov03_02253E20(sCommClubManager->unk92 + 160, 0);
+            if (sCommClubManager->commType == COMM_TYPE_8) {
+                ov03_02253E20(sCommClubManager->unk92 + 132, FALSE);
+            } else if (sCommClubManager->commType == COMM_TYPE_40) {
+                ov03_02253E20(sCommClubManager->unk92 + 160, FALSE);
             } else {
-                ov03_02253E20(ov03_02259228[commClubManager->commType], 0);
+                ov03_02253E20(ov03_02259228[commClubManager->commType], FALSE);
             }
         }
     }
@@ -1506,10 +1508,10 @@ static int ov03_02255B98() {
     return sCommClubManager->unk92 + (sCommClubManager->unk93 * 16);
 }
 
-void ov03_02255BB0(FieldSystem *fieldSystem, u32 arg1, u16 arg2, u16 arg3) {
+void ov03_02255BB0(FieldSystem *fieldSystem, u32 commType, u16 arg2, u16 arg3) {
     ov03_02253F74(fieldSystem);
-    sCommClubManager->commType = arg1;
-    if (arg1 - 3 <= 1) {
+    sCommClubManager->commType = commType;
+    if (commType - 3 <= 1) {
         fieldSystem->linkBattleRuleset = NULL;
     }
     sCommClubManager->unk92 = arg2;
@@ -1529,10 +1531,10 @@ u32 ov03_02255BFC() {
     return retCode;
 }
 
-void ov03_02255C18(FieldSystem *fieldSystem, u32 arg1, u16 arg2, u16 arg3) {
+void ov03_02255C18(FieldSystem *fieldSystem, u32 commType, u16 arg2, u16 arg3) {
     ov03_02253F74(fieldSystem);
-    sCommClubManager->commType = arg1;
-    if (arg1 - 3 <= 1) {
+    sCommClubManager->commType = commType;
+    if (commType - 3 <= 1) {
         fieldSystem->linkBattleRuleset = NULL;
     }
     sCommClubManager->unk92 = arg2;
