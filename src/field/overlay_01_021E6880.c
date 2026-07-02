@@ -39,6 +39,7 @@
 #include "unk_0206D494.h"
 
 #include "constants/game_stats.h"
+#include "constants/global_fieldmap.h"
 #include "constants/maps.h"
 #include "constants/movements.h"
 #include "constants/moves.h"
@@ -92,7 +93,7 @@ BOOL ov01_021E690C(FieldSystem *fieldSystem) {
     return ov01_021F6B10(fieldSystem) == TRUE;
 }
 
-void ov01_021F6B64_thunk(FieldSystem *fieldSystem, int arg1) { // ov01_021E6920
+void ov01_021F6B64_thunk(FieldSystem *fieldSystem, int arg1) {
     ov01_021F6B64(fieldSystem, arg1);
 }
 
@@ -532,27 +533,27 @@ u16 GetInteractedMetatileScript(FieldSystem *fieldSystem, u8 metatileBehavior) {
     u32 standingTile = GetMetatileBehavior(fieldSystem, PlayerAvatar_GetXCoord(fieldSystem->playerAvatar), PlayerAvatar_GetZCoord(fieldSystem->playerAvatar));
     if (sub_0205B78C(standingTile)) {
         return 0xFFFF;
-    } else if (sub_0205B7E0(metatileBehavior) && facingDirection == 0) {
+    } else if (MetatileBehavior_IsPokecenterPC(metatileBehavior) && facingDirection == DIR_NORTH) {
         return std_pokecenter_pc;
-    } else if (sub_0205B84C(metatileBehavior)) {
+    } else if (MetatileBehavior_IsPictureBooks(metatileBehavior)) {
         return std_picture_books;
-    } else if (sub_0205B858(metatileBehavior)) {
+    } else if (MetatileBehavior_IsBooksForPokemon(metatileBehavior)) {
         return std_books_for_pkmn;
-    } else if (sub_0205B864(metatileBehavior)) {
+    } else if (MetatileBehavior_IsChockFull(metatileBehavior)) {
         return std_chock_full;
-    } else if (sub_0205B870(metatileBehavior)) {
+    } else if (MetatileBehavior_IsMagazines(metatileBehavior)) {
         return std_magazines;
-    } else if (sub_0205B87C(metatileBehavior)) {
+    } else if (MetatileBehavior_IsEmptyTrash(metatileBehavior)) {
         return std_trash_empty;
-    } else if (sub_0205B888(metatileBehavior)) {
+    } else if (MetatileBehavior_IsPokemonGoods(metatileBehavior)) {
         return std_vibrant_pkmn_goods;
-    } else if (sub_0205B894(metatileBehavior)) {
+    } else if (MetatileBehavior_IsConvenientItems(metatileBehavior)) {
         return std_convenient_items;
-    } else if (sub_0205B8A0(metatileBehavior)) {
+    } else if (MetatileBehavior_IsPokemonMerchandise(metatileBehavior)) {
         return std_pkmn_merchandise;
     } else if (MetatileBehavior_IsTownMap(metatileBehavior)) {
         return std_town_map;
-    } else if (sub_0205B9AC(metatileBehavior) && facingDirection == 0) {
+    } else if (MetatileBehavior_IsTV(metatileBehavior) && facingDirection == DIR_NORTH) {
         return std_tv;
     } else if (MetatileBehavior_IsHeadbutt(metatileBehavior)) {
         return std_field_headbutt;
@@ -644,10 +645,10 @@ static BOOL ov01_021E7784(FieldSystem *fieldSystem, int x, int z, u8 metatileBeh
         return FALSE;
     } else if (sub_0205B7F8(metatileBehavior) == TRUE) {
         facingDirection = PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar);
-        if (facingDirection == 2) {
-            dir = 3;
-        } else if (facingDirection == 3) {
-            dir = 2;
+        if (facingDirection == DIR_WEST) {
+            dir = DIR_EAST;
+        } else if (facingDirection == DIR_EAST) {
+            dir = DIR_WEST;
         } else {
             GF_AssertFail();
             return FALSE;
@@ -656,7 +657,7 @@ static BOOL ov01_021E7784(FieldSystem *fieldSystem, int x, int z, u8 metatileBeh
         return TRUE;
     } else if (sub_0205B804(metatileBehavior) == TRUE) {
         facingDirection = PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar);
-        if (facingDirection != 2 && facingDirection != 3) {
+        if (facingDirection != DIR_WEST && facingDirection != DIR_EAST) {
             GF_AssertFail();
             return FALSE;
         }
@@ -787,16 +788,16 @@ static void PlayerAvatar_GetFacingTileCoords(FieldSystem *fieldSystem, int *x, i
 static void ShiftFieldCoordsByCompassDirection(FieldSystem *fieldSystem, u32 facingDirection, int *x, int *z) {
     PlayerAvatar_GetStandingTileCoords(fieldSystem, x, z);
     switch (facingDirection) {
-        case 0:
+        case DIR_NORTH:
             (*z)--;
             return;
-        case 1:
+        case DIR_SOUTH:
             (*z)++;
             return;
-        case 2:
+        case DIR_WEST:
             (*x)--;
             return;
-        case 3:
+        case DIR_EAST:
             (*x)++;
             return;
     }
@@ -863,7 +864,7 @@ static void ov01_021E7C28(FieldSystem *fieldSystem, int x, int z, int facingDire
     specialWarp->direction = facingDirection;
     specialWarp->x = x;
     specialWarp->y = z;
-    if (facingDirection == 0) {
+    if (facingDirection == DIR_NORTH) {
         specialWarp->y++;
     }
     specialWarp->mapId = fieldSystem->location->mapId;
@@ -911,7 +912,13 @@ static const u8 sSoundplateVolume[16][3] = {
     {0x2E, 0x60, 0x7F}
 };
 
-static const u16 sSoundplateSounds[16][2] = {
+enum SoundplateSoundParams {
+    SOUNDPLATE_SOUND_SEQ = 0,
+    SOUNDPLATE_SOUND_UNK_BOOL,
+    SOUNDPLATE_SOUND_PARAMS
+};
+
+static const u16 sSoundplateSounds[16][SOUNDPLATE_SOUND_PARAMS] = {
     { SEQ_SE_GS_N_SESERAGI,     TRUE  }, // Water Flow
 	{ SEQ_SE_GS_N_HUUSHA,       FALSE }, // Windmill
 	{ SEQ_SE_GS_N_UMIBE,        FALSE }, // Seashore
@@ -962,11 +969,6 @@ static BOOL ov01_021E7D58(FieldSystem *fieldSystem, SoundplateStruct *soundplate
     }
     return TRUE;
 }
-
-enum SoundplateSoundParams {
-    SOUNDPLATE_SOUND_SEQ = 0,
-    SOUNDPLATE_SOUND_UNK_BOOL
-};
 
 static void ov01_021E7DFC(FieldSystem *fieldSystem, int x, int z) {
     SoundplateStruct *soundplateStruct = sub_02054874(fieldSystem, x, z);

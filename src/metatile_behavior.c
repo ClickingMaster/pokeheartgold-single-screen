@@ -9,7 +9,7 @@ static const u8 _020FCA74[] = {
 };
 
 BOOL MetatileBehavior_IsEncounterGrass(u8 tile) {
-    return tile == TILE_BEHAVIOR_2;
+    return tile == TILE_BEHAVIOR_ENCOUNTER_GRASS;
 }
 
 BOOL sub_0205B6F4(u8 tile) {
@@ -88,8 +88,8 @@ BOOL sub_0205B7D4(u8 tile) {
     return tile == TILE_BEHAVIOR_56;
 }
 
-BOOL sub_0205B7E0(u8 tile) {
-    return tile == TILE_BEHAVIOR_131;
+BOOL MetatileBehavior_IsPokecenterPC(u8 tile) {
+    return tile == TILE_BEHAVIOR_POKECENTER_PC;
 }
 
 BOOL MetatileBehavior_IsTownMap(u8 tile) {
@@ -124,36 +124,36 @@ BOOL sub_0205B840(u8 tile) {
     return tile == TILE_BEHAVIOR_76;
 }
 
-BOOL sub_0205B84C(u8 tile) {
-    return tile == TILE_BEHAVIOR_224;
+BOOL MetatileBehavior_IsPictureBooks(u8 tile) {
+    return tile == TILE_BEHAVIOR_PICTURE_BOOKS;
 }
 
-BOOL sub_0205B858(u8 tile) {
-    return tile == TILE_BEHAVIOR_234;
+BOOL MetatileBehavior_IsBooksForPokemon(u8 tile) {
+    return tile == TILE_BEHAVIOR_BOOKS_FOR_POKEMON;
 }
 
-BOOL sub_0205B864(u8 tile) {
-    return tile == TILE_BEHAVIOR_225;
+BOOL MetatileBehavior_IsChockFull(u8 tile) {
+    return tile == TILE_BEHAVIOR_CHOCK_FULL;
 }
 
-BOOL sub_0205B870(u8 tile) {
-    return tile == TILE_BEHAVIOR_226;
+BOOL MetatileBehavior_IsMagazines(u8 tile) {
+    return tile == TILE_BEHAVIOR_MAGAZINES;
 }
 
-BOOL sub_0205B87C(u8 tile) {
-    return tile == TILE_BEHAVIOR_228;
+BOOL MetatileBehavior_IsEmptyTrash(u8 tile) {
+    return tile == TILE_BEHAVIOR_EMPTY_TRASH;
 }
 
-BOOL sub_0205B888(u8 tile) {
-    return tile == TILE_BEHAVIOR_229;
+BOOL MetatileBehavior_IsPokemonGoods(u8 tile) {
+    return tile == TILE_BEHAVIOR_POKEMON_GOODS;
 }
 
-BOOL sub_0205B894(u8 tile) {
-    return tile == TILE_BEHAVIOR_235;
+BOOL MetatileBehavior_IsConvenientItems(u8 tile) {
+    return tile == TILE_BEHAVIOR_CONVENIENT_ITEMS;
 }
 
-BOOL sub_0205B8A0(u8 tile) {
-    return tile == TILE_BEHAVIOR_236;
+BOOL MetatileBehavior_IsPokemonMerchandise(u8 tile) {
+    return tile == TILE_BEHAVIOR_POKEMON_MERCHANDISE;
 }
 
 BOOL sub_0205B8AC(u8 tile) {
@@ -204,8 +204,8 @@ BOOL MetatileBehavior_CanGenerateWalkingEncounters(u8 tile) {
     return (_020FCA74[tile] & 2) != 0;
 }
 
-BOOL sub_0205B9AC(u8 tile) {
-    return tile == TILE_BEHAVIOR_134;
+BOOL MetatileBehavior_IsTV(u8 tile) {
+    return tile == TILE_BEHAVIOR_TV;
 }
 
 BOOL sub_0205B9B8(u8 tile) {
