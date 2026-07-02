@@ -65,7 +65,7 @@ void SetFlag99A(SaveVarsFlags *state);
 void ClearFlag99A(SaveVarsFlags *state);
 BOOL CheckFlag99A(SaveVarsFlags *state);
 BOOL CheckBattledSnorlax(SaveVarsFlags *state);
-BOOL CheckBattledRedGyarados(SaveVarsFlags *state);
+BOOL CheckRocketHideoutCleared(SaveVarsFlags *state);
 void ChangeFlag99D(SaveVarsFlags *state, BOOL set);
 
 #endif

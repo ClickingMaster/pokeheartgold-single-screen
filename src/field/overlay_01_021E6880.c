@@ -94,11 +94,11 @@ static void FieldInput_Clear(FieldInput *fieldInput) {
     fieldInput->transitionDir = DIR_NONE;
 }
 
-BOOL ov01_021E690C(FieldSystem *fieldSystem) {
+static BOOL ov01_021E690C(FieldSystem *fieldSystem) {
     return ov01_021F6B10(fieldSystem) == TRUE;
 }
 
-void ov01_021F6B64_thunk(FieldSystem *fieldSystem, int arg1) {
+static void ov01_021F6B64_thunk(FieldSystem *fieldSystem, int arg1) {
     ov01_021F6B64(fieldSystem, arg1);
 }
 
@@ -986,7 +986,7 @@ static BOOL ov01_021E7D58(FieldSystem *fieldSystem, SoundplateStruct *soundplate
         return FALSE;
     } else if (CheckBattledSnorlax(state) == TRUE && sndSeq == SEQ_SE_GS_KABIGON_IBIKI) {
         return FALSE;
-    } else if (CheckBattledRedGyarados(state) && sndSeq == SEQ_SE_GS_N_MOTER) {
+    } else if (CheckRocketHideoutCleared(state) && sndSeq == SEQ_SE_GS_N_MOTER) {
         return FALSE;
     }
     return TRUE;

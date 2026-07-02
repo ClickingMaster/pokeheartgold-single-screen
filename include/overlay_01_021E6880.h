@@ -21,8 +21,6 @@ typedef struct SoundplateStruct {
     Soundplate soundplates[];
 } SoundplateStruct;
 
-BOOL ov01_021E690C(FieldSystem *fieldSystem);
-void ov01_021F6B64_thunk(FieldSystem *fieldSystem, int arg1);
 void FieldInput_Update(FieldInput *fieldInput, FieldSystem *fieldSystem, u16 newKeys, u16 heldKeys);
 int FieldInput_Process(FieldInput *fieldInput, FieldSystem *fieldSystem);
 BOOL FieldInput_Process_Colosseum(FieldInput *fieldInput, FieldSystem *fieldSystem);

@@ -218,7 +218,7 @@
 #define FLAG_GOT_TM10_FROM_LAKE_OF_RAGE_MAN             0xC7
 #define FLAG_UNK_0C8                                    0xC8
 #define FLAG_GOT_RED_SCALE                              0xC9
-#define FLAG_RED_GYARADOS_MEET                          0xCA
+#define FLAG_ROCKET_HIDEOUT_CLEARED                     0xCA
 #define FLAG_REMOVED_ROCKET_HIDEOUT_B3F_ELECTRODE_1     0xCB
 #define FLAG_REMOVED_ROCKET_HIDEOUT_B3F_ELECTRODE_2     0xCC
 #define FLAG_REMOVED_ROCKET_HIDEOUT_B3F_ELECTRODE_3     0xCD

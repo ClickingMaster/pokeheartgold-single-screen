@@ -336,8 +336,8 @@ BOOL CheckBattledSnorlax(SaveVarsFlags *state) {
     return CheckScriptFlag(state, FLAG_SNORLAX_MEET);
 }
 
-BOOL CheckBattledRedGyarados(SaveVarsFlags *state) {
-    return CheckScriptFlag(state, FLAG_RED_GYARADOS_MEET);
+BOOL CheckRocketHideoutCleared(SaveVarsFlags *state) {
+    return CheckScriptFlag(state, FLAG_ROCKET_HIDEOUT_CLEARED);
 }
 
 void ChangeFlag99D(SaveVarsFlags *state, BOOL set) {
