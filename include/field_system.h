@@ -202,6 +202,9 @@ typedef struct FieldInput {
     u16 unkA;
 } FieldInput;
 
+BOOL ov01_021E5924(OverlayManager *man, int *arg1);
+BOOL ov01_021E5BE4(OverlayManager *man, int *arg1);
+BOOL ov01_021E5C24(OverlayManager *man, int *arg1);
 BOOL Field_Continue_AppInit(OverlayManager *man, int *unused);
 BOOL Field_NewGame_AppInit(OverlayManager *man, int *unused);
 BOOL Field_AppExec(OverlayManager *man, int *unused);

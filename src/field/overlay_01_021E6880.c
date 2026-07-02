@@ -69,10 +69,6 @@ static void ov01_021E7C70(FieldSystem *fieldSystem);
 static void ov01_021E7DFC(FieldSystem *fieldSystem, int x, int z);
 static u16 ov01_021E7F38(FieldSystem *fieldSystem);
 
-extern u8 sBGMVolume[3];
-extern u8 sSoundplateVolume[16][3];
-extern u16 sSoundplateSounds[16][2];
-
 static void ov01_021E6880(FieldInput *fieldInput) {
     fieldInput->unk0_0 = 0;
     fieldInput->unk0_1 = 0;
@@ -889,6 +885,50 @@ static void ov01_021E7C70(FieldSystem *fieldSystem) {
         }
     }
 }
+
+static const u8 sBGMVolume[3] = {
+    0x60,
+    0x40,
+    0x20
+};
+
+static const u8 sSoundplateVolume[16][3] = {
+    {0x40, 0x60, 0x7F},
+    {0x2E, 0x60, 0x7F},
+    {0x2E, 0x60, 0x7F},
+    {0x40, 0x60, 0x7F},
+    {0x2E, 0x40, 0x60},
+    {0x40, 0x60, 0x6C},
+    {0x2E, 0x60, 0x6C},
+    {0x2E, 0x60, 0x7F},
+    {0x2E, 0x60, 0x7F},
+    {0x2E, 0x60, 0x7F},
+    {0x2E, 0x60, 0x7F},
+    {0x2E, 0x48, 0x6C},
+    {0x2E, 0x60, 0x7F},
+    {0x2E, 0x60, 0x7F},
+    {0x40, 0x60, 0x7F},
+    {0x2E, 0x60, 0x7F}
+};
+
+static const u16 sSoundplateSounds[16][2] = {
+    { SEQ_SE_GS_N_SESERAGI,     TRUE  }, // Water Flow
+	{ SEQ_SE_GS_N_HUUSHA,       FALSE }, // Windmill
+	{ SEQ_SE_GS_N_UMIBE,        FALSE }, // Seashore
+	{ SEQ_SE_GS_N_HASHIRA,      TRUE  }, // Pillar
+	{ SEQ_SE_GS_N_UZUSIO,       FALSE }, // Whirlpool
+	{ SEQ_SE_GS_N_TAKI,         FALSE }, // Waterfall
+	{ SEQ_SE_GS_N_YOUGAN,       TRUE  }, // Lava
+	{ SEQ_SE_GS_N_KANSEI,       FALSE }, // Cheers
+	{ SEQ_SE_GS_N_KITEKI,       FALSE }, // Steam Whistle
+	{ SEQ_SE_GS_KABIGON_IBIKI,  TRUE  }, // Snorlax's Snoring
+	{ SEQ_SE_GS_N_MOTER,        TRUE  }, // Motor
+	{ SEQ_SE_GS_N_KANE,         TRUE  }, // Bells
+	{ SEQ_SE_GS_KYOUHUU,        TRUE  }, // Strong Wind
+	{ SEQ_SE_GS_N_ENGINE,       TRUE  }, // Engine
+	{ SEQ_SE_GS_N_HUNSUI,       FALSE }, // Fountain
+	{ SEQ_SE_GS_DENGEKIBARIA,   FALSE }  // Electric Barrier
+};
 
 static int ov01_021E7D00(SoundplateStruct *soundplateStruct, int globalX, int globalZ) { // GetLocalSoundplateID?
     int i;
