@@ -4,6 +4,23 @@
 #include "field_system.h"
 #include "unk_02031B0C.h"
 
+typedef struct Soundplate {
+    u8 soundplateSoundID;
+    u8 volumeIndex;
+    u8 unk2;
+    u8 unk3;
+    u8 x;
+    u8 z;
+    u8 xBounds;
+    u8 zBounds;
+} Soundplate;
+
+typedef struct SoundplateStruct {
+    u8 unk0[2];
+    vu16 unk2; // fakematch?
+    Soundplate soundplates[];
+} SoundplateStruct;
+
 BOOL ov01_021E690C(FieldSystem *fieldSystem);
 void ov01_021F6B64_thunk(FieldSystem *fieldSystem, int arg1);
 void FieldInput_Update(FieldInput *fieldInput, FieldSystem *fieldSystem, u16 newKeys, u16 heldKeys);
@@ -15,8 +32,8 @@ BOOL ov01_021E6DC4(FieldSystem *fieldSystem);
 BOOL ov01_021E7114(FieldSystem *fieldSystem);
 BOOL ov01_021E7198(FieldSystem *fieldSystem, FieldInput *fieldInput);
 BOOL ov01_021E7628(FieldSystem *fieldSystem);
-void ov01_021E7F00(FieldSystem *fieldSystem, BOOL a1);
-u32 ov01_021E7F38(FieldSystem *fieldSystem);
+void ov01_021E7F00(FieldSystem *fieldSystem, BOOL arg1);
+u32 ov01_021E7F54(FieldSystem *fieldSystem);
 
 // TODO: Put in the relevant headers.
 int sub_0205DD94(PlayerAvatar *avatar, u16 newKeys, u16 heldKeys);
@@ -44,5 +61,7 @@ u16 sub_0203DE04(FieldSystem *fieldSystem, const COORD_EVENT *coordEvent, int nu
 BOOL PlayerStepEvent_RepelCounterDecrement(SaveData* saveData, FieldSystem* fieldSystem);
 void ov01_021FB630(u32 unk20);
 void sub_02032058(SaveApricornBox *saveApricornBox, u32 steps);
+void sub_02006088(u16 sndseq);
+SoundplateStruct *sub_02054874(FieldSystem *fieldSystem, u32 x, u32 z);
 
 #endif

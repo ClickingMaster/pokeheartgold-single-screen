@@ -15,6 +15,7 @@
 #include "gymmick_init.h"
 #include "map_events.h"
 #include "map_header.h"
+#include "map_matrix.h"
 #include "map_object.h"
 #include "menu_input_state.h"
 #include "metatile_behavior.h"
@@ -22,6 +23,7 @@
 #include "safari_zone.h"
 #include "save_pokegear.h"
 #include "script_pokemon_util.h"
+#include "sound_02004A44.h"
 #include "start_menu.h"
 #include "sys_flags.h"
 #include "sys_vars.h"
@@ -30,12 +32,14 @@
 #include "unk_02035900.h"
 #include "unk_02037C94.h"
 #include "unk_02054648.h"
+#include "unk_02054E00.h"
 #include "unk_02055BF0.h"
 #include "unk_0205A44C.h"
 #include "unk_0205CB48.h"
 #include "unk_0206D494.h"
 
 #include "constants/game_stats.h"
+#include "constants/maps.h"
 #include "constants/movements.h"
 #include "constants/moves.h"
 #include "constants/std_script.h"
@@ -53,8 +57,8 @@ static BOOL SafariBallsOutCheck(FieldSystem *fieldSystem);
 static BOOL ov01_021E7A08(FieldSystem *fieldSystem);
 static BOOL BugContestTimeoutCheck(FieldSystem *fieldSystem);
 static void ov01_021E7A98(FieldSystem *fieldSystem);
-/*static*/ void PlayerAvatar_GetStandingTileCoords(FieldSystem *fieldSystem, int *x, int *z);
-/*static*/ void PlayerAvatar_GetFacingTileCoords(FieldSystem *fieldSystem, int *x, int *z);
+static void PlayerAvatar_GetStandingTileCoords(FieldSystem *fieldSystem, int *x, int *z);
+static void PlayerAvatar_GetFacingTileCoords(FieldSystem *fieldSystem, int *x, int *z);
 static void ShiftFieldCoordsByCompassDirection(FieldSystem *fieldSystem, u32 facingDirection, int *x, int *z);
 static u8 ov01_021E7B38(FieldSystem *fieldSystem);
 static u8 ov01_021E7B54(FieldSystem *fieldSystem);
@@ -62,8 +66,12 @@ static u8 ov01_021E7B70(FieldSystem *fieldSystem);
 static BOOL ov01_021E7B90(FieldSystem *fieldSystem, int x, int z, Location *location);
 static void ov01_021E7C28(FieldSystem *fieldSystem, int x, int z, int facingDirection);
 static void ov01_021E7C70(FieldSystem *fieldSystem);
-/*static*/ void ov01_021E7DFC(FieldSystem *fieldSystem, int x, int z);
+static void ov01_021E7DFC(FieldSystem *fieldSystem, int x, int z);
+static u16 ov01_021E7F38(FieldSystem *fieldSystem);
 
+extern u8 sBGMVolume[3];
+extern u8 sSoundplateVolume[16][3];
+extern u16 sSoundplateSounds[16][2];
 
 static void ov01_021E6880(FieldInput *fieldInput) {
     fieldInput->unk0_0 = 0;
@@ -771,12 +779,12 @@ static void ov01_021E7A98(FieldSystem *fieldSystem) {
     sub_02032058(Save_ApricornBox_Get(fieldSystem->saveData), steps);
 }
 
-void PlayerAvatar_GetStandingTileCoords(FieldSystem *fieldSystem, int *x, int *z) {
+static void PlayerAvatar_GetStandingTileCoords(FieldSystem *fieldSystem, int *x, int *z) {
     *x = PlayerAvatar_GetXCoord(fieldSystem->playerAvatar);
     *z = PlayerAvatar_GetZCoord(fieldSystem->playerAvatar);
 }
 
-void PlayerAvatar_GetFacingTileCoords(FieldSystem *fieldSystem, int *x, int *z) {
+static void PlayerAvatar_GetFacingTileCoords(FieldSystem *fieldSystem, int *x, int *z) {
     ShiftFieldCoordsByCompassDirection(fieldSystem, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar), x, z);
 }
 
@@ -880,4 +888,127 @@ static void ov01_021E7C70(FieldSystem *fieldSystem) {
             ov01_021E7C28(fieldSystem, x, z, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
         }
     }
+}
+
+static int ov01_021E7D00(SoundplateStruct *soundplateStruct, int globalX, int globalZ) { // GetLocalSoundplateID?
+    int i;
+    int ret = -1;
+    int localX = globalX % 32;
+    int localZ = globalZ % 32;
+
+    // Gets the highest-numbered local ID. Likely important because plates are overlaid.
+    for (i = 0; i < soundplateStruct->unk2 / 8; i++) {
+        if (soundplateStruct->soundplates[i].x <= localX && localX <= soundplateStruct->soundplates[i].xBounds
+        && soundplateStruct->soundplates[i].z <= localZ && localZ <= soundplateStruct->soundplates[i].zBounds) {
+            ret = i;
+        }
+    }
+    return ret;
+}
+
+static BOOL ov01_021E7D58(FieldSystem *fieldSystem, SoundplateStruct *soundplateStruct, int soundplateID) {
+    SaveVarsFlags *state = Save_VarsFlags_Get(fieldSystem->saveData);
+    u16 sndSeq = sSoundplateSounds[soundplateStruct->soundplates[soundplateID].soundplateSoundID][0];
+    Location *location = LocalFieldData_GetCurrentPosition(Save_LocalFieldData_Get(fieldSystem->saveData));
+    
+    if (location->mapId == MAP_CIANWOOD_GYM && CheckDisabledCianwoodWaterfall(state) && sndSeq == SEQ_SE_GS_N_TAKI) {
+        return FALSE;
+    } else if (location->mapId == MAP_VERMILION_GYM && CheckSolvedLtSurgeGym(state) && sndSeq == SEQ_SE_GS_DENGEKIBARIA) {
+        return FALSE;
+    } else if (CheckBattledSnorlax(state) == TRUE && sndSeq == SEQ_SE_GS_KABIGON_IBIKI) {
+        return FALSE;
+    } else if (CheckBattledRedGyarados(state) && sndSeq == SEQ_SE_GS_N_MOTER) {
+        return FALSE;
+    }
+    return TRUE;
+}
+
+enum SoundplateSoundParams {
+    SOUNDPLATE_SOUND_SEQ = 0,
+    SOUNDPLATE_SOUND_UNK_BOOL
+};
+
+static void ov01_021E7DFC(FieldSystem *fieldSystem, int x, int z) {
+    SoundplateStruct *soundplateStruct = sub_02054874(fieldSystem, x, z);
+    
+    if (fieldSystem->unkC4 == -2) {
+        fieldSystem->unkC4 = -1;
+    } else if (fieldSystem->unkC4 == -3) {
+        fieldSystem->unkC4 = -1;
+    }
+    
+    z = ov01_021E7D00(soundplateStruct, x, z);
+    if (z != -1) {
+        if (ov01_021E7D58(fieldSystem, soundplateStruct, z)) {
+            u8 soundplateSoundID = soundplateStruct->soundplates[z].soundplateSoundID;
+            if (soundplateSoundID < 16) {
+                if (fieldSystem->unkC4 != sSoundplateSounds[soundplateSoundID][SOUNDPLATE_SOUND_SEQ]) {
+                    if (sSoundplateSounds[soundplateSoundID][SOUNDPLATE_SOUND_UNK_BOOL] == TRUE) {
+                        sub_02006088(sSoundplateSounds[soundplateSoundID][SOUNDPLATE_SOUND_SEQ]);
+                    } else {
+                        PlaySE(sSoundplateSounds[soundplateSoundID][SOUNDPLATE_SOUND_SEQ]);
+                    }
+                }
+                fieldSystem->unkC4 = sSoundplateSounds[soundplateStruct->soundplates[z].soundplateSoundID][SOUNDPLATE_SOUND_SEQ];
+                u8 volumeIndex = soundplateStruct->soundplates[z].volumeIndex;
+                if (volumeIndex < 3) {
+                    GF_SndHandleMoveVolume(0, sBGMVolume[volumeIndex], 15);
+                    GF_SndHandleMoveVolume(5, sSoundplateVolume[soundplateStruct->soundplates[z].soundplateSoundID][soundplateStruct->soundplates[z].volumeIndex], 5);
+                }
+            } else if (z >= 16) {
+                GF_AssertFail();
+            }
+        }
+    } else {
+        if (fieldSystem->unkC4 != -1) {
+            StopSE(fieldSystem->unkC4, 10);
+            GF_SndHandleMoveVolume(0, 128, 15);
+            fieldSystem->unkC4 = -1;
+        }
+    }
+}
+
+void ov01_021E7F00(FieldSystem *fieldSystem, BOOL arg1) {
+    if (fieldSystem->unkAC == 0) {
+        int x = PlayerAvatar_GetXCoord(fieldSystem->playerAvatar);
+        int z = PlayerAvatar_GetZCoord(fieldSystem->playerAvatar);
+        if (arg1) {
+            fieldSystem->unkC4 = -1;
+        }
+        ov01_021E7DFC(fieldSystem, x, z);
+    }
+}
+
+static u16 ov01_021E7F38(FieldSystem *fieldSystem) {
+    if (FieldSystem_FacingModelIsHeadbuttTree(fieldSystem)) {
+        return std_field_headbutt;
+    }
+    return 0xFFFF;
+}
+
+u32 ov01_021E7F54(FieldSystem *fieldSystem) {
+    LocalMapObject *facingObject;
+    if (sub_0203DC64(fieldSystem, &facingObject) == 1) {
+        switch (MapObject_GetType(facingObject)) {
+            case 3:
+                return 0;
+            case 0:
+                return 1;
+            default:
+                return 1;
+        }
+    }
+    if (GetInteractedBackgroundEventScript(fieldSystem, Field_GetBgEvents(fieldSystem), Field_GetNumBgEvents(fieldSystem)) != 0xFFFF) {
+        return 2;
+    }
+    return 0;
+}
+
+BOOL FieldSystem_FacingModelIsHeadbuttTree(FieldSystem *fieldSystem) {
+    int x, z;
+    PlayerAvatar_GetFacingTileCoords(fieldSystem, &x, &z);
+    if (MapModel_IsHeadbuttTree(GetMapModelNo(MapCoordToMatrixIndex(fieldSystem, x, z), fieldSystem->mapMatrix))) {
+        return TRUE;
+    }
+    return FALSE;
 }

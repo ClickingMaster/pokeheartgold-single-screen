@@ -195,3 +195,6 @@
 .public ShiftFieldCoordsByCompassDirection
 .public ov01_021E7B90
 .public ov01_021E7C28
+.public ov01_021E7D00
+.public ov01_021E7D58
+.public ov01_021E7DFC
