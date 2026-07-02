@@ -189,3 +189,9 @@
 .public ov01_021E6880
 .public ov01_021E690C
 .public ov01_021F6B64_thunk
+.public ov01_021E6ED8
+.public PlayerAvatar_GetStandingTileCoords
+.public PlayerAvatar_GetFacingTileCoords
+.public ShiftFieldCoordsByCompassDirection
+.public ov01_021E7B90
+.public ov01_021E7C28

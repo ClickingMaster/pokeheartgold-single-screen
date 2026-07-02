@@ -185,7 +185,6 @@ typedef struct FieldInput {
     u16 unk0_1:1;
     u16 unk0_2:1;
     u16 unk0_3:2;
-    u16 unk0_4:1;
     u16 unk0_5:1;
     u16 unk0_6:1;
     u16 unk0_7:1;
@@ -194,6 +193,7 @@ typedef struct FieldInput {
     u16 unk0_A:1;
     u16 unk0_B:1;
     u16 unk0_C:1;
+    u16 unk0_D:1;
     u16 unk2;
     u8 unk4;
     s8 unk5;
