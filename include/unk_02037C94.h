@@ -7,6 +7,7 @@
 
 BOOL sub_02037D78(void);
 void sub_02037FF0(void);
+void sub_020380B0(void);
 void sub_020380CC(void);
 u32 *sub_020392D8(void);
 BOOL sub_020393C8(void);
