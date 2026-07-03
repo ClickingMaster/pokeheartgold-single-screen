@@ -2179,28 +2179,28 @@ _0205DC36: ; jump table
 	.short _0205DC58 - _0205DC36 - 2 ; case 2
 	.short _0205DC66 - _0205DC36 - 2 ; case 3
 _0205DC3E:
-	bl sub_0205B730
+	bl MetatileBehavior_IsWarpEntranceNorth
 	cmp r0, #1
 	bne _0205DC4A
 	mov r0, #1
 	pop {r3, r4, r5, r6, r7, pc}
 _0205DC4A:
 	add r0, r5, #0
-	bl sub_0205B73C
+	bl MetatileBehavior_IsWarpEntranceSouth
 	cmp r0, #1
 	bne _0205DC58
 	mov r0, #1
 	pop {r3, r4, r5, r6, r7, pc}
 _0205DC58:
 	add r0, r5, #0
-	bl sub_0205B724
+	bl MetatileBehavior_IsWarpEntranceWest
 	cmp r0, #1
 	bne _0205DC66
 	mov r0, #1
 	pop {r3, r4, r5, r6, r7, pc}
 _0205DC66:
 	add r0, r5, #0
-	bl sub_0205B718
+	bl MetatileBehavior_IsWarpEntranceEast
 	cmp r0, #1
 	bne _0205DC74
 	mov r0, #1
@@ -2217,7 +2217,7 @@ _0205DC74:
 	add r1, r6, r5
 	add r2, r2, r3
 	bl GetMetatileBehavior
-	bl sub_0205B70C
+	bl MetatileBehavior_IsDoor
 	cmp r0, #1
 	bne _0205DC9C
 	mov r0, #1

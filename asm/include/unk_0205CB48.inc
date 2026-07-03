@@ -10,11 +10,11 @@
 .public sub_020549F4
 .public MetatileBehavior_IsEncounterGrass
 .public sub_0205B6F4
-.public sub_0205B70C
-.public sub_0205B718
-.public sub_0205B724
-.public sub_0205B730
-.public sub_0205B73C
+.public MetatileBehavior_IsDoor
+.public MetatileBehavior_IsWarpEntranceEast
+.public MetatileBehavior_IsWarpEntranceWest
+.public MetatileBehavior_IsWarpEntranceNorth
+.public MetatileBehavior_IsWarpEntranceSouth
 .public sub_0205B798
 .public sub_0205B7A4
 .public sub_0205B7B0

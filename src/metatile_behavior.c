@@ -20,40 +20,40 @@ BOOL sub_0205B700(u8 tile) {
     return tile == TILE_BEHAVIOR_128;
 }
 
-BOOL sub_0205B70C(u8 tile) {
-    return tile == TILE_BEHAVIOR_105;
+BOOL MetatileBehavior_IsDoor(u8 tile) {
+    return tile == TILE_BEHAVIOR_DOOR;
 }
 
-BOOL sub_0205B718(u8 tile) {
-    return tile == TILE_BEHAVIOR_98;
+BOOL MetatileBehavior_IsWarpEntranceEast(u8 tile) {
+    return tile == TILE_BEHAVIOR_WARP_ENTRANCE_EAST;
 }
 
-BOOL sub_0205B724(u8 tile) {
-    return tile == TILE_BEHAVIOR_99;
+BOOL MetatileBehavior_IsWarpEntranceWest(u8 tile) {
+    return tile == TILE_BEHAVIOR_WARP_ENTRANCE_WEST;
 }
 
-BOOL sub_0205B730(u8 tile) {
-    return tile == TILE_BEHAVIOR_100;
+BOOL MetatileBehavior_IsWarpEntranceNorth(u8 tile) {
+    return tile == TILE_BEHAVIOR_WARP_ENTRANCE_NORTH;
 }
 
-BOOL sub_0205B73C(u8 tile) {
-    return tile == TILE_BEHAVIOR_101;
+BOOL MetatileBehavior_IsWarpEntranceSouth(u8 tile) {
+    return tile == TILE_BEHAVIOR_WARP_ENTRANCE_SOUTH;
 }
 
-BOOL sub_0205B748(u8 tile) {
-    return tile == TILE_BEHAVIOR_108;
+BOOL MetatileBehavior_IsWarpEast(u8 tile) {
+    return tile == TILE_BEHAVIOR_WARP_EAST;
 }
 
-BOOL sub_0205B754(u8 tile) {
-    return tile == TILE_BEHAVIOR_109;
+BOOL MetatileBehavior_IsWarpWest(u8 tile) {
+    return tile == TILE_BEHAVIOR_WARP_WEST;
 }
 
-BOOL sub_0205B760(u8 tile) {
-    return tile == TILE_BEHAVIOR_110;
+BOOL MetatileBehavior_IsWarpNorth(u8 tile) {
+    return tile == TILE_BEHAVIOR_WARP_NORTH;
 }
 
-BOOL sub_0205B76C(u8 tile) {
-    return tile == TILE_BEHAVIOR_111;
+BOOL MetatileBehavior_IsWarpSouth(u8 tile) {
+    return tile == TILE_BEHAVIOR_WARP_SOUTH;
 }
 
 BOOL MetatileBehavior_IsSurfableWater(u8 tile) {
@@ -96,20 +96,20 @@ BOOL MetatileBehavior_IsTownMap(u8 tile) {
     return tile == TILE_BEHAVIOR_TOWN_MAP;
 }
 
-BOOL sub_0205B7F8(u8 tile) {
-    return tile == TILE_BEHAVIOR_106;
+BOOL MetatileBehavior_IsEscalatorFlipFace(u8 tile) {
+    return tile == TILE_BEHAVIOR_ESCALATOR_FLIP_FACE;
 }
 
-BOOL sub_0205B804(u8 tile) {
-    return tile == TILE_BEHAVIOR_107;
+BOOL MetatileBehavior_IsEscalator(u8 tile) {
+    return tile == TILE_BEHAVIOR_ESCALATOR;
 }
 
-BOOL sub_0205B810(u8 tile) {
-    return tile == TILE_BEHAVIOR_94;
+BOOL MetatileBehavior_IsWarpStairsEast(u8 tile) {
+    return tile == TILE_BEHAVIOR_WARP_STAIRS_EAST;
 }
 
-BOOL sub_0205B81C(u8 tile) {
-    return tile == TILE_BEHAVIOR_95;
+BOOL MetatileBehavior_IsWarpStairsWest(u8 tile) {
+    return tile == TILE_BEHAVIOR_WARP_STAIRS_WEST;
 }
 
 BOOL sub_0205B828(u8 tile) {
@@ -232,8 +232,8 @@ BOOL sub_0205BA0C(u8 tile) {
     return tile == TILE_BEHAVIOR_77;
 }
 
-BOOL sub_0205BA18(u8 tile) {
-    return tile == TILE_BEHAVIOR_103;
+BOOL MetatileBehavior_IsWarpPanel(u8 tile) {
+    return tile == TILE_BEHAVIOR_WARP_PANEL;
 }
 
 BOOL sub_0205BA24(u8 tile) {
