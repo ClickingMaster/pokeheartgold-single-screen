@@ -638,7 +638,7 @@ static BOOL FieldSystem_ProcessStep(FieldSystem *fieldSystem) {
         return TRUE;
     }
     
-    if (PlayerAvatar_CheckFlag0(fieldSystem->playerAvatar)) { // PlayerAvatar_CheckForcedMovement
+    if (PlayerAvatar_CheckForcedMovement(fieldSystem->playerAvatar)) {
         return FALSE;
     }
     

@@ -7,7 +7,7 @@
 #include "save.h"
 
 typedef enum PlayerAvatarFlags {
-    AVATAR_FLAG_UNK0 = (1 << 0),
+    AVATAR_FLAG_FORCED_MOVEMENT = (1 << 0),
     AVATAR_FLAG_UNK1 = (1 << 1),
     AVATAR_FLAG_UNK2 = (1 << 2),
     AVATAR_FLAG_LOCK_BIKE_STATE = (1 << 3), // Blocks the player from mounting/dismounting their bike (though this was intended to stop dismounting during Cycling Road)
@@ -102,8 +102,8 @@ void PlayerAvatar_ToggleAutomaticHeightUpdatingImmediate(PlayerAvatar *avatar, B
 u32 PlayerAvatar_GetSpriteByStateAndGender(s32 state, u32 gender);
 u32 PlayerAvatar_GetTransitionBits(s32 state);
 PlayerAvatar *FieldSystem_GetPlayerAvatar(FieldSystem *fieldSystem);
-void PlayerAvatar_SetFlag0(PlayerAvatar *avatar, BOOL set);
-BOOL PlayerAvatar_CheckFlag0(PlayerAvatar *avatar);
+void PlayerAvatar_SetForcedMovement(PlayerAvatar *avatar, BOOL set);
+BOOL PlayerAvatar_CheckForcedMovement(PlayerAvatar *avatar);
 void PlayerAvatar_SetFlag1(PlayerAvatar *avatar, BOOL set);
 BOOL PlayerAvatar_CheckFlag1(PlayerAvatar *avatar);
 void PlayerAvatar_SetFlag2(PlayerAvatar *avatar, BOOL set);

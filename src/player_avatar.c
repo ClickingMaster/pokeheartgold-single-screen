@@ -628,16 +628,16 @@ PlayerAvatar *FieldSystem_GetPlayerAvatar(FieldSystem *fieldSystem) {
     return fieldSystem->playerAvatar;
 }
 
-void PlayerAvatar_SetFlag0(PlayerAvatar *avatar, BOOL set) {
+void PlayerAvatar_SetForcedMovement(PlayerAvatar *avatar, BOOL set) {
     if (set == TRUE) {
-        PlayerAvatar_SetFlagsBits(avatar, AVATAR_FLAG_UNK0);
+        PlayerAvatar_SetFlagsBits(avatar, AVATAR_FLAG_FORCED_MOVEMENT);
     } else {
-        PlayerAvatar_ClearFlagsBits(avatar, AVATAR_FLAG_UNK0);
+        PlayerAvatar_ClearFlagsBits(avatar, AVATAR_FLAG_FORCED_MOVEMENT);
     }
 }
 
-BOOL PlayerAvatar_CheckFlag0(PlayerAvatar *avatar) {
-    if (PlayerAvatar_GetFlagsBitsMask(avatar, AVATAR_FLAG_UNK0)) {
+BOOL PlayerAvatar_CheckForcedMovement(PlayerAvatar *avatar) {
+    if (PlayerAvatar_GetFlagsBitsMask(avatar, AVATAR_FLAG_FORCED_MOVEMENT)) {
         return TRUE;
     }
     return FALSE;

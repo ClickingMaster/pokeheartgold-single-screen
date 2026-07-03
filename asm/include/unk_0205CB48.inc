@@ -48,8 +48,8 @@
 .public PlayerAvatar_ToggleUnkC
 .public PlayerAvatar_ResetUnkC
 .public PlayerSaveData_CheckRunningShoes
-.public PlayerAvatar_SetFlag0
-.public PlayerAvatar_CheckFlag0
+.public PlayerAvatar_SetForcedMovement
+.public PlayerAvatar_CheckForcedMovement
 .public PlayerAvatar_SetFlag1
 .public PlayerAvatar_CheckFlag1
 .public PlayerAvatar_SetFlag2

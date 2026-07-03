@@ -356,7 +356,7 @@ ov01_021F1D94: ; 0x021F1D94
 	add r0, r5, #0
 	add r4, r2, #0
 	add r7, r3, #0
-	bl PlayerAvatar_CheckFlag0
+	bl PlayerAvatar_CheckForcedMovement
 	cmp r0, #1
 	bne _021F1DBE
 	add r0, r6, #0

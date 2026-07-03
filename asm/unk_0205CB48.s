@@ -714,7 +714,7 @@ sub_0205D0A8: ; 0x0205D0A8
 	add r7, r0, #0
 	add r0, r5, #0
 	mov r1, #1
-	bl PlayerAvatar_SetFlag0
+	bl PlayerAvatar_SetForcedMovement
 	cmp r7, #0
 	beq _0205D10A
 	add r0, r4, #0
@@ -773,7 +773,7 @@ _0205D136:
 	bl PlayerAvatar_SetFlag1
 	add r0, r5, #0
 	mov r1, #1
-	bl PlayerAvatar_SetFlag0
+	bl PlayerAvatar_SetForcedMovement
 	mov r1, #0
 	mvn r1, r1
 	add r0, r5, #0
@@ -849,7 +849,7 @@ _0205D1CE:
 sub_0205D1FC: ; 0x0205D1FC
 	push {r4, lr}
 	add r4, r0, #0
-	bl PlayerAvatar_CheckFlag0
+	bl PlayerAvatar_CheckForcedMovement
 	cmp r0, #1
 	bne _0205D23E
 	add r0, r4, #0
@@ -866,7 +866,7 @@ sub_0205D1FC: ; 0x0205D1FC
 _0205D226:
 	add r0, r4, #0
 	mov r1, #0
-	bl PlayerAvatar_SetFlag0
+	bl PlayerAvatar_SetForcedMovement
 	add r0, r4, #0
 	mov r1, #0
 	bl PlayerAvatar_SetFlag7
@@ -1720,7 +1720,7 @@ _0205D86E:
 	bl PlayerAvatar_SetFlag6
 	add r0, r5, #0
 	mov r1, #1
-	bl PlayerAvatar_SetFlag0
+	bl PlayerAvatar_SetForcedMovement
 	b _0205D93A
 _0205D898:
 	add r0, r6, #0
