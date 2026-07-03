@@ -6,7 +6,7 @@
 #include "main.h"
 #include "map_events.h"
 #include "math_util.h"
-#include "overlay_01_021E6880.h"
+#include "field/overlay_01_field_control.h"
 #include "overlay_01_021F1AFC.h"
 #include "overlay_01_021F3D38.h"
 #include "overlay_01_021F6830.h"

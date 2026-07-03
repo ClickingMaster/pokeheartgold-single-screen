@@ -1,6 +1,6 @@
 #include "overlay_01.h"
 #include "overlay_01_021F6830.h"
-#include "overlay_01_021E6880.h"
+#include "field/overlay_01_field_control.h"
 #include "field/encounter_check.h"
 #include "overlay_2/event_cutscene.h"
 #include "overlay_2/overlay_02_gear_phone.h"
