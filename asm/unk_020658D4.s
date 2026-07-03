@@ -516,7 +516,7 @@ sub_02065C90: ; 0x02065C90
 	strb r0, [r5]
 _02065CBE:
 	add r0, r4, #0
-	bl PlayerAvatar_GetUnk14
+	bl PlayerAvatar_GetPlayerMoveState
 	cmp r0, #3
 	bne _02065CCC
 	mov r0, #0

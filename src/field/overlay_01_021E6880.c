@@ -44,6 +44,7 @@
 #include "constants/maps.h"
 #include "constants/movements.h"
 #include "constants/moves.h"
+#include "constants/player_avatar.h"
 #include "constants/std_script.h"
 
 #include "global.h"
@@ -109,8 +110,8 @@ void FieldInput_Update(FieldInput *fieldInput, FieldSystem *fieldSystem, u16 new
         heldKeys |= PAD_BUTTON_B;
     }
 
-    u32 moveState = PlayerAvatar_GetUnk14(fieldSystem->playerAvatar);
-    u32 avatarState = PlayerAvatar_GetUnk10(fieldSystem->playerAvatar);
+    u32 moveState = PlayerAvatar_GetPlayerMoveState(fieldSystem->playerAvatar);
+    u32 avatarMoveState = PlayerAvatar_GetMoveState(fieldSystem->playerAvatar);
     u32 facingDirection = PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar);
 
     fieldInput->newKeys = newKeys;
@@ -118,7 +119,7 @@ void FieldInput_Update(FieldInput *fieldInput, FieldSystem *fieldSystem, u16 new
 
     BOOL shouldDrawBagIcon = FieldSystem_ShouldDrawStartMenuIcon(fieldSystem, START_MENU_ICON_BAG);
 
-    if (moveState == 3 || moveState == 0) {
+    if (moveState == PLAYER_MOVE_STATE_END || moveState == PLAYER_MOVE_STATE_NONE) {
         if (shouldDrawBagIcon && (newKeys & PAD_BUTTON_Y) || fieldSystem->lastTouchMenuInput == 9) {
             if (ov01_021E690C(fieldSystem) == TRUE) {
                 fieldInput->registeredItem = 1;
@@ -155,10 +156,10 @@ void FieldInput_Update(FieldInput *fieldInput, FieldSystem *fieldSystem, u16 new
         fieldSystem->lastTouchMenuInput = 0;
     }
     
-    if (moveState == 3 && avatarState == 1) { // PLAYER_MOVE_STATE_END && AVATAR_MOVE_STATE_MOVING
+    if (moveState == PLAYER_MOVE_STATE_END && avatarMoveState == AVATAR_MOVE_STATE_MOVING) {
         fieldInput->movement = TRUE;
     }
-    if (moveState == 3) {
+    if (moveState == PLAYER_MOVE_STATE_END) {
         fieldInput->endMovement = TRUE;
     }
 
@@ -206,15 +207,15 @@ int FieldInput_Process(FieldInput *fieldInput, FieldSystem *fieldSystem) {
         return 1;
     }
     
-    int playerEvent = 0; // PLAYER_EVENT_NONE
+    int playerEvent = PLAYER_EVENT_NONE;
     int direction = sub_0205DD94(fieldSystem->playerAvatar, fieldInput->newKeys, fieldInput->heldKeys);
     
     if (StrengthFlagAction(Save_VarsFlags_Get(fieldSystem->saveData), 2)) {
-        playerEvent |= 1; // PLAYER_EVENT_USED_STRENGTH
+        playerEvent |= PLAYER_EVENT_USED_STRENGTH;
     }
     
     if (GetIdxOfFirstPartyMonWithMove(SaveArray_Party_Get(fieldSystem->saveData), MOVE_WATERFALL) != 0xFF) {
-        playerEvent |= 2; // PLAYER_EVENT_USED_WATERFALL
+        playerEvent |= PLAYER_EVENT_USED_WATERFALL;
     }
     
     if (ov01_021F1D94(fieldSystem, fieldSystem->playerAvatar, direction, playerEvent) == TRUE) {
@@ -1004,7 +1005,7 @@ static const u16 sSoundplateSounds[16][SOUNDPLATE_SOUND_PARAMS] = {
 	{ SEQ_SE_GS_DENGEKIBARIA,   FALSE }  // Electric Barrier
 };
 
-static int ov01_021E7D00(SoundplateStruct *soundplateStruct, int globalX, int globalZ) { // GetLocalSoundplateID?
+static int GetLocalSoundplateID(SoundplateStruct *soundplateStruct, int globalX, int globalZ) {
     int i;
     int ret = -1;
     int localX = globalX % 32;
@@ -1046,7 +1047,7 @@ static void ov01_021E7DFC(FieldSystem *fieldSystem, int x, int z) {
         fieldSystem->unkC4 = -1;
     }
     
-    z = ov01_021E7D00(soundplateStruct, x, z);
+    z = GetLocalSoundplateID(soundplateStruct, x, z);
     if (z != -1) {
         if (ov01_021E7D58(fieldSystem, soundplateStruct, z)) {
             u8 soundplateSoundID = soundplateStruct->soundplates[z].soundplateSoundID;

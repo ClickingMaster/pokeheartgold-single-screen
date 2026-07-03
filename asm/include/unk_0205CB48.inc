@@ -28,10 +28,10 @@
 .public PlayerAvatar_GetNextFacingDirection
 .public PlayerAvatar_GetXCoord
 .public PlayerAvatar_GetZCoord
-.public PlayerAvatar_SetUnk10
-.public PlayerAvatar_GetUnk10
-.public PlayerAvatar_SetUnk14
-.public PlayerAvatar_GetUnk14
+.public PlayerAvatar_SetMoveState
+.public PlayerAvatar_GetMoveState
+.public PlayerAvatar_SetPlayerMoveState
+.public PlayerAvatar_GetPlayerMoveState
 .public PlayerAvatar_GetMapObject
 .public PlayerAvatar_GetState
 .public PlayerAvatar_GetUnk24

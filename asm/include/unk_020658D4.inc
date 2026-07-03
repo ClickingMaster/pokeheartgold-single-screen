@@ -10,7 +10,7 @@
 .public PlayerAvatar_GetZCoord
 .public PlayerAvatar_GetPreviousXCoord
 .public PlayerAvatar_GetPreviousZCoord
-.public PlayerAvatar_GetUnk14
+.public PlayerAvatar_GetPlayerMoveState
 .public PlayerAvatar_GetMapObject
 .public FieldSystem_GetPlayerAvatar
 .public PlayerAvatar_CheckFlag6
