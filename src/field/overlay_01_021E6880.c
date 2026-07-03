@@ -74,7 +74,7 @@ static BOOL FieldSystem_MapConnection(FieldSystem *fieldSystem, int x, int z, Lo
 static void FieldSystem_SetMapConnection(FieldSystem *fieldSystem, int x, int z, int facingDirection);
 static void FieldSystem_TrySetMapConnection(FieldSystem *fieldSystem);
 static void ov01_021E7DFC(FieldSystem *fieldSystem, int x, int z);
-static u16 ov01_021E7F38(FieldSystem *fieldSystem);
+static u16 GetInteractedHeadbuttTreeScript(FieldSystem *fieldSystem);
 
 static void FieldInput_Clear(FieldInput *fieldInput) {
     fieldInput->interact = 0;
@@ -263,9 +263,9 @@ int FieldInput_Process(FieldInput *fieldInput, FieldSystem *fieldSystem) {
             fieldSystem->lastTouchMenuInput = 0;
             return 1;
         }
-        u32 unkScript = ov01_021E7F38(fieldSystem);
-        if (unkScript != 0xFFFF) {
-            StartMapSceneScript(fieldSystem, unkScript, NULL);
+        u32 headbuttScript = GetInteractedHeadbuttTreeScript(fieldSystem);
+        if (headbuttScript != 0xFFFF) {
+            StartMapSceneScript(fieldSystem, headbuttScript, NULL);
             fieldSystem->lastTouchMenuInput = 0;
             return 1;
         }
@@ -1088,7 +1088,7 @@ void ov01_021E7F00(FieldSystem *fieldSystem, BOOL arg1) {
     }
 }
 
-static u16 ov01_021E7F38(FieldSystem *fieldSystem) {
+static u16 GetInteractedHeadbuttTreeScript(FieldSystem *fieldSystem) {
     if (FieldSystem_FacingModelIsHeadbuttTree(fieldSystem)) {
         return std_field_headbutt;
     }
