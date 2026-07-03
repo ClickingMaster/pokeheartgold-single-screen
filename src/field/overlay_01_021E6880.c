@@ -1013,7 +1013,7 @@ static int ov01_021E7D00(SoundplateStruct *soundplateStruct, int globalX, int gl
     // Gets the highest-numbered local ID. Likely important because plates are overlaid.
     for (i = 0; i < soundplateStruct->unk2 / 8; i++) {
         if (soundplateStruct->soundplates[i].x <= localX && localX <= soundplateStruct->soundplates[i].xBounds
-        && soundplateStruct->soundplates[i].z <= localZ && localZ <= soundplateStruct->soundplates[i].zBounds) {
+            && soundplateStruct->soundplates[i].z <= localZ && localZ <= soundplateStruct->soundplates[i].zBounds) {
             ret = i;
         }
     }

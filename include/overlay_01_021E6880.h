@@ -55,6 +55,6 @@ BOOL PlayerStepEvent_RepelCounterDecrement(SaveData* saveData, FieldSystem* fiel
 void ov01_021FB630(u32 unk20);
 void sub_02032058(SaveApricornBox *saveApricornBox, u32 steps);
 void sub_02006088(u16 sndseq);
-SoundplateStruct *sub_02054874(FieldSystem *fieldSystem, u32 x, u32 z);
+SoundplateStruct *sub_02054874(FieldSystem *fieldSystem, int x, int z);
 
 #endif
