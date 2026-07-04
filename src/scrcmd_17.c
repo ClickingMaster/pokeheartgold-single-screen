@@ -120,14 +120,14 @@ BOOL ScrCmd_GetStepTakenFlag(ScriptContext *ctx) {
     return FALSE;
 }
 
-BOOL ScrCmd_305(ScriptContext *ctx) {
+BOOL ScrCmd_CheckGameClearFlag(ScriptContext *ctx) {
     u16 *ret = ScriptGetVarPointer(ctx);
 
     *ret = CheckGameClearFlag(Save_VarsFlags_Get(ctx->fieldSystem->saveData));
     return FALSE;
 }
 
-BOOL ScrCmd_306(ScriptContext *ctx) {
+BOOL ScrCmd_SetGameClearFlag(ScriptContext *ctx) {
     SetGameClearFlag(Save_VarsFlags_Get(ctx->fieldSystem->saveData));
     return FALSE;
 }

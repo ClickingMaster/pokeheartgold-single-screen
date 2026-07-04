@@ -304,8 +304,8 @@ BOOL ScrCmd_ClearEscortMode(ScriptContext *ctx);
 BOOL ScrCmd_CheckStepTakenFlag(ScriptContext *ctx);
 BOOL ScrCmd_SetStepTakenFlag(ScriptContext *ctx);
 BOOL ScrCmd_GetStepTakenFlag(ScriptContext *ctx);
-BOOL ScrCmd_305(ScriptContext *ctx);
-BOOL ScrCmd_306(ScriptContext *ctx);
+BOOL ScrCmd_CheckGameClearFlag(ScriptContext *ctx);
+BOOL ScrCmd_SetGameClearFlag(ScriptContext *ctx);
 BOOL ScrCmd_307(ScriptContext *ctx);
 BOOL ScrCmd_308(ScriptContext *ctx);
 BOOL ScrCmd_309(ScriptContext *ctx);
@@ -1159,8 +1159,8 @@ const ScrCmdFunc gScriptCmdTable[] = {
     ScrCmd_CheckStepTakenFlag,
     ScrCmd_SetStepTakenFlag,
     ScrCmd_GetStepTakenFlag,
-    ScrCmd_305,
-    ScrCmd_306,
+    ScrCmd_CheckGameClearFlag,
+    ScrCmd_SetGameClearFlag,
     ScrCmd_307,
     ScrCmd_308,
     ScrCmd_309,

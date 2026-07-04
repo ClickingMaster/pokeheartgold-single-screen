@@ -1865,13 +1865,13 @@
       "args": []
     },
     {
-      "name": "ScrCmd_305",
+      "name": "ScrCmd_CheckGameClearFlag",
       "args": [
         2
       ]
     },
     {
-      "name": "ScrCmd_306",
+      "name": "ScrCmd_SetGameClearFlag",
       "args": []
     },
     {

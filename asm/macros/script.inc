@@ -1760,12 +1760,12 @@
 	.short 304
 	.endm
 
-	.macro ScrCmd_305 arg0
+	.macro CheckGameClearFlag arg0
 	.short 305
 	.short \arg0
 	.endm
 
-	.macro ScrCmd_306
+	.macro SetGameClearFlag
 	.short 306
 	.endm
 
