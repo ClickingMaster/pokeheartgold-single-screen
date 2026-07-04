@@ -96,7 +96,7 @@ extern const BgTemplate ov44_02236494;
 extern const BgTemplate ov44_022364B0;
 extern const BgTemplate ov44_022364CC;
 extern const GraphicsBanks ov44_022364E8;
-extern const u16 ov44_02236510[4][6];
+extern const UnkStruct_ov42_02122667 ov44_02236510[4];
 
 extern const func_type_02232F64 ov44_02236540[];
 extern const func_type_02232F64 ov44_022365B8[];
@@ -845,7 +845,7 @@ void ov44_022340BC(UnkStruct_ov44_02235340 *arg0, s32 arg1, enum HeapID heapID) 
 }
 
 void ov44_022340EC(UnkStruct_ov44_02235340 *arg0, s32 arg1, enum HeapID heapID) {
-    u16 sp4[6];
+    UnkStruct_ov42_02122667 sp4;
 
     if (arg0->unk30.unk15C[arg1].unk0 == 0) {
         sp4 = ov44_02236510[arg1];
@@ -853,15 +853,15 @@ void ov44_022340EC(UnkStruct_ov44_02235340 *arg0, s32 arg1, enum HeapID heapID) 
         if (arg1 != sub_0203769C()) {
             PlayerProfile *playerProfile = sub_02034818(arg1);
             GF_ASSERT(playerProfile);
-            sp4[5] = PlayerProfile_GetAvatar(playerProfile);
+            sp4.unkA = PlayerProfile_GetAvatar(playerProfile);
         } else if (arg0->unk0->unk1C[2] == 0) {
-            sp4[5] = 0;
+            sp4.unkA = 0;
         } else {
-            sp4[5] = 97;
+            sp4.unkA = 97;
         }
-        arg0->unk30.unk15C[arg1].unk0 = ov42_022280B8(arg0->unk30.unk154, sp4);
-        if (ov42_02229010(arg0->unk30.unk158, sp4[5]) == 0) {
-            ov42_02228FE0(arg0->unk30.unk158, sp4[5], 2, heapID);
+        arg0->unk30.unk15C[arg1].unk0 = ov42_022280B8(arg0->unk30.unk154, &sp4);
+        if (ov42_02229010(arg0->unk30.unk158, sp4.unkA) == 0) {
+            ov42_02228FE0(arg0->unk30.unk158, sp4.unkA, 2, heapID);
         }
 
         arg0->unk30.unk15C[arg1].unk4 = ov42_0222903C(arg0->unk30.unk158, arg0->unk30.unk15C[arg1].unk0, 0, heapID);
