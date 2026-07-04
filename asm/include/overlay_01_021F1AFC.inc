@@ -25,8 +25,8 @@
 .public FieldBGM_TryFadeOut
 .public MetatileBehavior_IsSurfableWater
 .public sub_0205B78C
-.public sub_0205B834
-.public sub_0205B840
+.public MetatileBehavior_IsRockClimbNorthSouth
+.public MetatileBehavior_IsRockClimbEastWest
 .public MetatileBehavior_IsWaterfall
 .public MetatileBehavior_IsWhirlpool
 .public sub_0205BA24

@@ -225,8 +225,7 @@ static u32 sub_0206D7B8(LocalMapObject *object, u32 x, u32 height, u32 y) {
     if (sub_020549F4(MapObject_GetFieldSystem(object), &position, x, y, &unk) == 1) {
         flags |= 1;
     }
-    u8 behavior = GetMetatileBehavior(MapObject_GetFieldSystem(object), x, y);
-    if (sub_0205B828(behavior) == 0) {
+    if (MetatileBehavior_IsIce(GetMetatileBehavior(MapObject_GetFieldSystem(object), x, y)) == FALSE) {
         flags |= 4;
     }
     if (sub_02060BFC(object, x, height, y) == 1) {

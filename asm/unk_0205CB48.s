@@ -215,7 +215,7 @@ _0205CCC8:
 	lsr r7, r0, #0x18
 _0205CCD2:
 	add r0, r5, #0
-	bl sub_0205B984
+	bl MetatileBehavior_IsPuddle
 	cmp r0, #1
 	bne _0205CCE4
 	mov r0, #SEQ_SE_DP_FOOT3_0>>6
@@ -223,16 +223,16 @@ _0205CCD2:
 	bl PlaySE
 _0205CCE4:
 	add r0, r5, #0
-	bl sub_0205B7A4
+	bl MetatileBehavior_IsShallowWater
 	cmp r0, #1
 	bne _0205CCF4
 	ldr r0, _0205CD60 ; =SEQ_SE_DP_FOOT3_1
 	bl PlaySE
 _0205CCF4:
 	add r0, r5, #0
-	bl sub_0205B798
+	bl MetatileBehavior_IsSand
 	add r0, r5, #0
-	bl sub_0205B8AC
+	bl MetatileBehavior_IsMud
 	cmp r0, #1
 	bne _0205CD0A
 	ldr r0, _0205CD64 ; =SEQ_SE_DP_MARSH_WALK
@@ -248,11 +248,11 @@ _0205CD0A:
 	cmp r0, #0
 	bne _0205CD56
 	add r0, r5, #0
-	bl sub_0205B6F4
+	bl MetatileBehavior_IsVeryTallGrass
 	cmp r0, #1
 	beq _0205CD36
 	add r0, r7, #0
-	bl sub_0205B6F4
+	bl MetatileBehavior_IsVeryTallGrass
 	cmp r0, #1
 	bne _0205CD3C
 _0205CD36:
@@ -260,11 +260,11 @@ _0205CD36:
 	bl PlaySE
 _0205CD3C:
 	add r0, r5, #0
-	bl MetatileBehavior_IsEncounterGrass
+	bl MetatileBehavior_IsTallGrass
 	cmp r0, #1
 	beq _0205CD50
 	add r0, r7, #0
-	bl MetatileBehavior_IsEncounterGrass
+	bl MetatileBehavior_IsTallGrass
 	cmp r0, #1
 	bne _0205CD56
 _0205CD50:
@@ -300,19 +300,19 @@ sub_0205CD70: ; 0x0205CD70
 	lsl r0, r0, #0x18
 	lsr r7, r0, #0x18
 	add r0, r7, #0
-	bl sub_0205B6F4
+	bl MetatileBehavior_IsVeryTallGrass
 	cmp r0, #0
 	bne _0205CE58
 	add r0, r7, #0
-	bl sub_0205B984
+	bl MetatileBehavior_IsPuddle
 	cmp r0, #1
 	beq _0205CE58
 	add r0, r7, #0
-	bl sub_0205B7A4
+	bl MetatileBehavior_IsShallowWater
 	cmp r0, #1
 	beq _0205CE58
 	add r0, r7, #0
-	bl MetatileBehavior_IsEncounterGrass
+	bl MetatileBehavior_IsTallGrass
 	cmp r0, #0
 	bne _0205CE58
 	mov r1, #0
@@ -2114,25 +2114,25 @@ _0205DBB8: ; jump table
 	.short _0205DBD8 - _0205DBB8 - 2 ; case 2
 	.short _0205DBE4 - _0205DBB8 - 2 ; case 3
 _0205DBC0:
-	bl sub_0205B7B0
+	bl MetatileBehavior_IsJumpNorth
 	cmp r0, #1
 	bne _0205DBF0
 	mov r0, #1
 	pop {r3, r4, r5, r6, r7, pc}
 _0205DBCC:
-	bl sub_0205B7BC
+	bl MetatileBehavior_IsJumpSouth
 	cmp r0, #1
 	bne _0205DBF0
 	mov r0, #1
 	pop {r3, r4, r5, r6, r7, pc}
 _0205DBD8:
-	bl sub_0205B7C8
+	bl MetatileBehavior_IsJumpWest
 	cmp r0, #1
 	bne _0205DBF0
 	mov r0, #1
 	pop {r3, r4, r5, r6, r7, pc}
 _0205DBE4:
-	bl sub_0205B7D4
+	bl MetatileBehavior_IsJumpEast
 	cmp r0, #1
 	bne _0205DBF0
 	mov r0, #1
@@ -2324,7 +2324,7 @@ _0205DD5C:
 	pop {r3, r4, r5, r6, r7, pc}
 _0205DD6E:
 	add r0, r4, #0
-	bl sub_0205B6F4
+	bl MetatileBehavior_IsVeryTallGrass
 	cmp r0, #0
 	beq _0205DD7E
 	add sp, #8
@@ -2332,7 +2332,7 @@ _0205DD6E:
 	pop {r3, r4, r5, r6, r7, pc}
 _0205DD7E:
 	add r0, r4, #0
-	bl sub_0205B8AC
+	bl MetatileBehavior_IsMud
 	cmp r0, #0
 	beq _0205DD8E
 	add sp, #8
@@ -2819,7 +2819,7 @@ _020FCB7C:
 	.word sub_0205D0A8
 	.word sub_0205D190
 _020FCB88:
-	.word sub_0205B828, 1
+	.word MetatileBehavior_IsIce, 1
 	.word 0, 3
 _020FCB98:
 	.short SEQ_SE_GS_ASHIOTO_A_WALK, 0

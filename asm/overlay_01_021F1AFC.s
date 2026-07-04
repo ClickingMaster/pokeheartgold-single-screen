@@ -1413,7 +1413,7 @@ _021F25FA: ; jump table
 _021F2602:
 	lsl r0, r0, #0x18
 	lsr r0, r0, #0x18
-	bl sub_0205B834
+	bl MetatileBehavior_IsRockClimbNorthSouth
 	cmp r0, #1
 	bne _021F2622
 	mov r0, #1
@@ -1421,7 +1421,7 @@ _021F2602:
 _021F2612:
 	lsl r0, r0, #0x18
 	lsr r0, r0, #0x18
-	bl sub_0205B840
+	bl MetatileBehavior_IsRockClimbEastWest
 	cmp r0, #1
 	bne _021F2622
 	mov r0, #1

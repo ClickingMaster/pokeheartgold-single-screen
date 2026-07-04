@@ -2,8 +2,8 @@
 #pragma once
 .public GF_AssertFail
 .public GetMetatileBehavior
-.public MetatileBehavior_IsEncounterGrass
-.public sub_0205B6F4
+.public MetatileBehavior_IsTallGrass
+.public MetatileBehavior_IsVeryTallGrass
 .public MapObjectManager_GetFirstActiveObjectWithMovement1
 .public PlayerAvatar_GetFacingDirection
 .public PlayerAvatar_GetXCoord

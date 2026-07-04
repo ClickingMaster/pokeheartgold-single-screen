@@ -576,23 +576,23 @@ static u16 GetInteractedMetatileScript(FieldSystem *fieldSystem, u8 metatileBeha
     u32 standingTile = GetMetatileBehavior(fieldSystem, PlayerAvatar_GetXCoord(fieldSystem->playerAvatar), PlayerAvatar_GetZCoord(fieldSystem->playerAvatar));
     if (sub_0205B78C(standingTile)) {
         return 0xFFFF;
-    } else if (MetatileBehavior_IsPokecenterPC(metatileBehavior) && facingDirection == DIR_NORTH) {
+    } else if (MetatileBehavior_IsPC(metatileBehavior) && facingDirection == DIR_NORTH) {
         return std_pokecenter_pc;
-    } else if (MetatileBehavior_IsPictureBooks(metatileBehavior)) {
+    } else if (MetatileBehavior_IsSmallBookshelf1(metatileBehavior)) {
         return std_picture_books;
-    } else if (MetatileBehavior_IsBooksForPokemon(metatileBehavior)) {
+    } else if (MetatileBehavior_IsSmallBookshelf2(metatileBehavior)) {
         return std_books_for_pkmn;
-    } else if (MetatileBehavior_IsChockFull(metatileBehavior)) {
+    } else if (TileBehavior_IsBookshelf1(metatileBehavior)) {
         return std_chock_full;
-    } else if (MetatileBehavior_IsMagazines(metatileBehavior)) {
+    } else if (TileBehavior_IsBookshelf2(metatileBehavior)) {
         return std_magazines;
-    } else if (MetatileBehavior_IsEmptyTrash(metatileBehavior)) {
+    } else if (MetatileBehavior_IsEmptyTrashCan(metatileBehavior)) {
         return std_trash_empty;
-    } else if (MetatileBehavior_IsPokemonGoods(metatileBehavior)) {
+    } else if (MetatileBehavior_IsMartShelf1(metatileBehavior)) {
         return std_vibrant_pkmn_goods;
-    } else if (MetatileBehavior_IsConvenientItems(metatileBehavior)) {
+    } else if (MetatileBehavior_IsMartShelf2(metatileBehavior)) {
         return std_convenient_items;
-    } else if (MetatileBehavior_IsPokemonMerchandise(metatileBehavior)) {
+    } else if (MetatileBehavior_IsMartShelf3(metatileBehavior)) {
         return std_pkmn_merchandise;
     } else if (MetatileBehavior_IsTownMap(metatileBehavior)) {
         return std_town_map;
@@ -737,7 +737,7 @@ static BOOL FieldSystem_CheckTransition(FieldSystem *fieldSystem, int x, int z, 
         return TRUE;
     }
     
-    if (sub_0205BAB8(metatileBehavior)) {
+    if (MetatileBehavior_IsLadderDown(metatileBehavior)) {
         NewFieldTransitionEnvironment(fieldSystem, location.mapId, location.warpId, 0, 0, 0, 8);
         return TRUE;
     }
