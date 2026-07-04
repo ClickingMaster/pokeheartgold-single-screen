@@ -494,14 +494,13 @@ static BOOL FieldSystem_CheckMapTransition(FieldSystem *fieldSystem, FieldInput 
     PlayerAvatar_GetStandingTileCoords(fieldSystem, &x, &z);
     u8 metatileBehavior = GetMetatileBehavior(fieldSystem, x, z);
     
-    // Ladders?
-    if (sub_0205BAA0(metatileBehavior)) {
+    if (MetatileBehavior_IsLadderNorth(metatileBehavior)) {
         if (fieldInput->transitionDir == DIR_NORTH && FieldSystem_MapConnection(fieldSystem, x, z, &nextMap)) {
             NewFieldTransitionEnvironment(fieldSystem, nextMap.mapId, nextMap.warpId, 0, 0, fieldInput->transitionDir, 7);
             return TRUE;
         }
         return FALSE;
-    } else if (sub_0205BAAC(metatileBehavior)) {
+    } else if (MetatileBehavior_IsLadderSouth(metatileBehavior)) {
         if (fieldInput->transitionDir == DIR_SOUTH && FieldSystem_MapConnection(fieldSystem, x, z, &nextMap)) {
             NewFieldTransitionEnvironment(fieldSystem, nextMap.mapId, nextMap.warpId, 0, 0, fieldInput->transitionDir, 7);
             return TRUE;
