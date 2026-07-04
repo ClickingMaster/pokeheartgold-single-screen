@@ -1708,7 +1708,7 @@
 #define FLAG_STRENGTH_ACTIVE                              0x962
 #define FLAG_UNK_963                                      0x963
 #define FLAG_GAME_CLEAR                                   0x964
-#define FLAG_UNK_965                                      0x965
+#define FLAG_SYS_STEP_TAKEN                               0x965
 #define FLAG_UNK_966                                      0x966
 #define FLAG_SYS_SAFARI                                   0x967
 #define FLAG_UNK_968                                      0x968

@@ -1747,16 +1747,16 @@
 	.short 301
 	.endm
 
-	.macro ScrCmd_302 arg0
+	.macro CheckStepTakenFlag arg0
 	.short 302
 	.short \arg0
 	.endm
 
-	.macro ScrCmd_303
+	.macro SetStepTakenFlag
 	.short 303
 	.endm
 
-	.macro ScrCmd_304
+	.macro GetStepTakenFlag
 	.short 304
 	.endm
 

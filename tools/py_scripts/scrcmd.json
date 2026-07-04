@@ -1851,17 +1851,17 @@
       "args": []
     },
     {
-      "name": "ScrCmd_302",
+      "name": "CheckStepTakenFlag",
       "args": [
         2
       ]
     },
     {
-      "name": "ScrCmd_303",
+      "name": "SetStepTakenFlag",
       "args": []
     },
     {
-      "name": "ScrCmd_304",
+      "name": "GetStepTakenFlag",
       "args": []
     },
     {

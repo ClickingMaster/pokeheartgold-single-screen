@@ -208,7 +208,7 @@ int FieldInput_Process(FieldInput *fieldInput, FieldSystem *fieldSystem) {
     }
     
     if (fieldInput->movement) {
-        ClearFlag965(Save_VarsFlags_Get(fieldSystem->saveData)); // VarsFlags_ClearStep?
+        Save_VarsFlags_ClearStepTakenFlag(Save_VarsFlags_Get(fieldSystem->saveData));
         if (FieldSystem_ProcessStep(fieldSystem) == TRUE) {
             return 1;
         }

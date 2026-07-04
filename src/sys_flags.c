@@ -89,16 +89,16 @@ void SetFlag99C(SaveVarsFlags *state) {
     SetScriptFlag(state, FLAG_UNK_99C);
 }
 
-void SetFlag965(SaveVarsFlags *state) {
-    SetScriptFlag(state, FLAG_UNK_965);
+void Save_VarsFlags_SetStepTakenFlag(SaveVarsFlags *state) {
+    SetScriptFlag(state, FLAG_SYS_STEP_TAKEN);
 }
 
-void ClearFlag965(SaveVarsFlags *state) {
-    ClearScriptFlag(state, FLAG_UNK_965);
+void Save_VarsFlags_ClearStepTakenFlag(SaveVarsFlags *state) {
+    ClearScriptFlag(state, FLAG_SYS_STEP_TAKEN);
 }
 
-BOOL CheckFlag965(SaveVarsFlags *state) {
-    return CheckScriptFlag(state, FLAG_UNK_965);
+BOOL Save_VarsFlags_CheckStepTakenFlag(SaveVarsFlags *state) {
+    return CheckScriptFlag(state, FLAG_SYS_STEP_TAKEN);
 }
 
 void Save_VarsFlags_SetRocketCostumeFlag(SaveVarsFlags *state) {
