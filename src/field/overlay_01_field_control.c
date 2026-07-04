@@ -50,6 +50,7 @@
 #include "unk_020632B0.h"
 #include "unk_0206D494.h"
 
+#include "constants/field_poison.h"
 #include "constants/game_stats.h"
 #include "constants/global_fieldmap.h"
 #include "constants/maps.h"
@@ -234,7 +235,7 @@ int FieldInput_Process(FieldInput *fieldInput, FieldSystem *fieldSystem) {
     }
     
     if (fieldInput->endMovement) {
-        if (FieldSystem_CheckWildEncounter(fieldSystem)) { // FieldSystem_CheckWildEncounter?
+        if (FieldSystem_CheckWildEncounter(fieldSystem)) {
             return 1;
         }
         if (FieldSystem_CheckSign(fieldSystem) == TRUE) {
@@ -250,7 +251,7 @@ int FieldInput_Process(FieldInput *fieldInput, FieldSystem *fieldSystem) {
     
     if (fieldInput->interact) {
         LocalMapObject* mapObject;
-        if (sub_0203DC64(fieldSystem, &mapObject) == TRUE) { // IsInteractionValid?
+        if (sub_0203DC64(fieldSystem, &mapObject) == TRUE) {
             if (sub_0205CF60(fieldSystem->playerAvatar) == TRUE) {
                 sub_0205CFBC(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
             }
@@ -444,7 +445,7 @@ int FieldInput_Process_BattleTower(FieldInput *fieldInput, FieldSystem *fieldSys
         }
     }
 
-    if (fieldInput->mapTransition && FieldSystem_CheckMapTransition(fieldSystem, fieldInput) == TRUE) { // FieldSystem_CheckMapTransition
+    if (fieldInput->mapTransition && FieldSystem_CheckMapTransition(fieldSystem, fieldInput) == TRUE) {
         return 1;
     }
 
@@ -794,13 +795,13 @@ static BOOL FieldSystem_UpdatePoison(FieldSystem *fieldSystem) {
     }
     
     switch (ApplyPoisonStep(party, MapHeader_GetMapSec(fieldSystem->location->mapId))) {
-    case 0: // FIELD_POISON_NONE
+    case FIELD_POISON_NONE:
         return FALSE;
-    case 1: // FIELD_POISON_DAMAGE
-        ov01_021FB630(fieldSystem->unk4->unk20); // FieldSystem_DoPoisonEffect
+    case FIELD_POISON_DAMAGE:
+        FieldSystem_DoPoisonEffect(fieldSystem->unk4->unk20);
         return FALSE;
-    case 2: // FIELD_POISON_SURVIVE
-        ov01_021FB630(fieldSystem->unk4->unk20);
+    case FIELD_POISON_SURVIVE:
+        FieldSystem_DoPoisonEffect(fieldSystem->unk4->unk20);
         StartMapSceneScript(fieldSystem, std_survive_poisoning, NULL);
         return TRUE;
     default:
