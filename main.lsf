@@ -580,7 +580,12 @@ Overlay OVY_2
 Overlay OVY_3
 {
     After OVY_2
-    Object asm/overlay_03.o
+    Object src/overlay_03/communication_club.o
+    Object src/overlay_03/battle_regulation_menu.o
+    Object src/overlay_03/shop_menu.o
+    Object src/overlay_03/custom_safari_zone.o
+    Object src/overlay_03/overlay_03_scrcmds.o
+    Object src/overlay_03/pokeathlon_records.o
 }
 Overlay OVY_4
 {
