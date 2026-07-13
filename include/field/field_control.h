@@ -17,7 +17,7 @@ typedef struct Soundplate {
 
 typedef struct SoundplateStruct {
     u8 unk0[2];
-    vu16 unk2;
+    u16 unk2;
     Soundplate soundplates[];
 } SoundplateStruct;
 

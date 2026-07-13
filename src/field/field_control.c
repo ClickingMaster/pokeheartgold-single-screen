@@ -1016,7 +1016,7 @@ static const u16 sSoundplateSounds[16][SOUNDPLATE_SOUND_PARAMS] = {
 	{ SEQ_SE_GS_DENGEKIBARIA,   FALSE }  // Electric Barrier
 };
 
-static int GetLocalSoundplateID(SoundplateStruct *soundplateStruct, int globalX, int globalZ) {
+static int GetLocalSoundplateID(const SoundplateStruct *soundplateStruct, int globalX, int globalZ) {
     int i;
     int ret = -1;
     int localX = globalX % 32;
