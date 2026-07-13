@@ -484,7 +484,7 @@ BOOL ScrCmd_GiveRibbon(ScriptContext *ctx);
 BOOL ScrCmd_BufferRibbonName(ScriptContext *ctx);
 BOOL ScrCmd_GetEVTotal(ScriptContext *ctx);
 BOOL ScrCmd_GetWeekday(ScriptContext *ctx);
-BOOL ScrCmd_485(ScriptContext *ctx);
+BOOL ScrCmd_StartBattleRegulationMenuTask(ScriptContext *ctx);
 BOOL ScrCmd_Dummy(ScriptContext *ctx);
 BOOL ScrCmd_PokeCenAnim(ScriptContext *ctx);
 BOOL ScrCmd_ElevatorAnim(ScriptContext *ctx);
@@ -790,8 +790,8 @@ BOOL ScrCmd_JudgeBugContest(ScriptContext *ctx);
 BOOL ScrCmd_BufferBugContestMonNick(ScriptContext *ctx);
 BOOL ScrCmd_BugContestGetTimeLeft(ScriptContext *ctx);
 BOOL ScrCmd_IsBugContestantRegistered(ScriptContext *ctx);
-BOOL ScrCmd_791(ScriptContext *ctx);
-BOOL ScrCmd_792(ScriptContext *ctx);
+BOOL ScrCmd_CheckSafariZoneChallengeCompleted(ScriptContext *ctx);
+BOOL ScrCmd_UpdateSafariZoneIGT(ScriptContext *ctx);
 BOOL ScrCmd_BankTransaction(ScriptContext *ctx);
 BOOL ScrCmd_CheckBankBalance(ScriptContext *ctx);
 BOOL ScrCmd_795(ScriptContext *ctx);
@@ -1339,7 +1339,7 @@ const ScrCmdFunc gScriptCmdTable[] = {
     ScrCmd_BufferRibbonName,
     ScrCmd_GetEVTotal,
     ScrCmd_GetWeekday,
-    ScrCmd_485,
+    ScrCmd_StartBattleRegulationMenuTask,
     ScrCmd_Dummy,
     ScrCmd_PokeCenAnim,
     ScrCmd_ElevatorAnim,
@@ -1645,8 +1645,8 @@ const ScrCmdFunc gScriptCmdTable[] = {
     ScrCmd_BufferBugContestMonNick,
     ScrCmd_BugContestGetTimeLeft,
     ScrCmd_IsBugContestantRegistered,
-    ScrCmd_791,
-    ScrCmd_792,
+    ScrCmd_CheckSafariZoneChallengeCompleted,
+    ScrCmd_UpdateSafariZoneIGT,
     ScrCmd_BankTransaction,
     ScrCmd_CheckBankBalance,
     ScrCmd_795,
