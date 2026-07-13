@@ -24,7 +24,7 @@
 #include "map_object.h"
 #include "map_section.h"
 #include "math_util.h"
-#include "overlay_01_021E6880.h"
+#include "field/field_control.h"
 #include "overlay_01_021F72DC.h"
 #include "overlay_01_021F944C.h"
 #include "overlay_02.h"

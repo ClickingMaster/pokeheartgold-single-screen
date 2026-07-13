@@ -1490,20 +1490,20 @@ BOOL ScrCmd_FacePlayer(ScriptContext *ctx) {
             ov01_02205604(*p_lastInteracted, &x, &y);
             metatile = GetMetatileBehavior(fieldSystem, x, y);
             if (rvsDir == 2 || rvsDir == 3) {
-                if (MetatileBehavior_IsEncounterGrass(metatile) == TRUE) {
+                if (MetatileBehavior_IsTallGrass(metatile) == TRUE) {
                     ov01_021FF0E4(*p_lastInteracted, 0, x, y, 1);
-                } else if (sub_0205B6F4(metatile) == TRUE) {
+                } else if (MetatileBehavior_IsVeryTallGrass(metatile) == TRUE) {
                     ov01_021FF964(*p_lastInteracted, 0, x, y, 1);
                 }
             }
-            if (MetatileBehavior_IsEncounterGrass(metatile) == FALSE
-                && sub_0205B6F4(metatile) == FALSE
+            if (MetatileBehavior_IsTallGrass(metatile) == FALSE
+                && MetatileBehavior_IsVeryTallGrass(metatile) == FALSE
                 && sub_02060E54(*p_lastInteracted, metatile) == FALSE
-                && sub_0205B984(metatile) == FALSE
-                && sub_0205B7A4(metatile) == FALSE
+                && MetatileBehavior_IsPuddle(metatile) == FALSE
+                && MetatileBehavior_IsShallowWater(metatile) == FALSE
                 && sub_02060EBC(*p_lastInteracted, metatile) == FALSE
-                && sub_0205B8AC(metatile) == FALSE
-                && sub_0205BA70(metatile) == FALSE) {
+                && MetatileBehavior_IsMud(metatile) == FALSE
+                && MetatileBehavior_IsReflective(metatile) == FALSE) {
                 MapObject_ClearFlagsBits(*p_lastInteracted, MAPOBJECTFLAG_UNK20);
             }
         }

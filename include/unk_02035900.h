@@ -5,7 +5,7 @@
 #include "safari_zone.h"
 
 BOOL sub_02036144(void);
-BOOL sub_020373B4(u16 arg1);
+BOOL sub_020373B4(u16 arg0);
 BOOL sub_02037030(int arg0, void *arg1, int arg2);
 int sub_02037454(void);
 BOOL sub_02037474(void);
@@ -22,5 +22,9 @@ void sub_020380F4(void);
 void sub_02038104(void);
 int sub_02037824(int arg0);
 BOOL sub_02037880(void);
+int sub_020378AC(int);
+BOOL sub_02037958(void);
+void sub_020380F4(void);
+void sub_02038104(void);
 
 #endif // POKEHEARTGOLD_UNK_02035900_H
