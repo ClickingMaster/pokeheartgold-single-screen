@@ -1,5 +1,5 @@
-#ifndef POKEHEARTGOLD_OV_01_021E6880_H
-#define POKEHEARTGOLD_OV_01_021E6880_H
+#ifndef POKEHEARTGOLD_FIELD_CONTROL_H
+#define POKEHEARTGOLD_FIELD_CONTROL_H
 
 #include "field_system.h"
 #include "unk_02031B0C.h"
@@ -17,7 +17,7 @@ typedef struct Soundplate {
 
 typedef struct SoundplateStruct {
     u8 unk0[2];
-    vu16 unk2; // fakematch?
+    vu16 unk2;
     Soundplate soundplates[];
 } SoundplateStruct;
 
@@ -29,4 +29,4 @@ BOOL FieldInput_Process_BattleTower(FieldInput *fieldInput, FieldSystem *fieldSy
 void ov01_021E7F00(FieldSystem *fieldSystem, BOOL arg1);
 u32 ov01_021E7F54(FieldSystem *fieldSystem);
 
-#endif
+#endif // POKEHEARTGOLD_FIELD_CONTROL_H
