@@ -1,15 +1,23 @@
-#include "text_0205B4EC.h"
-
+#include "dialog_box.h"
 #include "font.h"
 #include "render_text.h"
 #include "render_window.h"
 #include "text.h"
 
-#define BASE_TILE_MAIN  0x237
-#define BASE_TILE_SUB   0x194
-#define FRAME_BASE_TILE 0x3E2
+#define BASE_TILE_MAIN             0x237
+#define BASE_TILE_SUB              0x194
+#define BASE_TILE_MAP_GFX          0x2A3
+#define FRAME_BASE_TILE            0x3E2
+#define DIALOG_BOX_X               2
+#define DIALOG_BOX_Y               19
+#define DIALOG_BOX_W               27
+#define DIALOG_BOX_H               4
+#define DIALOG_BOX_MAP_GFX_W       7
+#define DIALOG_BOX_PLTTNUM_DEFAULT 12
+#define DIALOG_BOX_PLTTNUM_FRAME   10
+#define DIALOG_BOX_PLTTNUM_MAPGFX  9
 
-void sub_0205B4EC(enum GFPalLoadLocation location, BOOL resetPrinters) {
+void DialogBox_LoadFontPals(enum GFPalLoadLocation location, BOOL resetPrinters) {
     if (resetPrinters == TRUE) {
         ResetAllTextPrinters();
     }
@@ -17,62 +25,63 @@ void sub_0205B4EC(enum GFPalLoadLocation location, BOOL resetPrinters) {
     LoadFontPal1(location, GF_PAL_SLOT_12_OFFSET, HEAP_ID_FIELD1);
 }
 
-void sub_0205B514(BgConfig *bgConfig, Window *window, GFBgLayer layer) {
+void DialogBox_AddWindowToLayer3(BgConfig *bgConfig, Window *window, GFBgLayer layer) {
     if (layer == GF_BG_LYR_MAIN_3) {
-        AddWindowParameterized(bgConfig, window, GF_BG_LYR_MAIN_3, 2, 19, 27, 4, 12, BASE_TILE_MAIN);
+        AddWindowParameterized(bgConfig, window, GF_BG_LYR_MAIN_3, DIALOG_BOX_X, DIALOG_BOX_Y, DIALOG_BOX_W, DIALOG_BOX_H, DIALOG_BOX_PLTTNUM_DEFAULT, BASE_TILE_MAIN);
     } else {
-        AddWindowParameterized(bgConfig, window, GF_BG_LYR_SUB_3, 2, 19, 27, 4, 12, BASE_TILE_SUB);
+        AddWindowParameterized(bgConfig, window, GF_BG_LYR_SUB_3, DIALOG_BOX_X, DIALOG_BOX_Y, DIALOG_BOX_W, DIALOG_BOX_H, DIALOG_BOX_PLTTNUM_DEFAULT, BASE_TILE_SUB);
     }
 }
 
-void sub_0205B564(Window *window, Options *options) {
-    LoadUserFrameGfx2(window->bgConfig, (GFBgLayer)GetWindowBgId(window), FRAME_BASE_TILE, 10, Options_GetFrame(options), HEAP_ID_FIELD1);
-    sub_0205B5A8(window);
-    DrawFrameAndWindow2(window, FALSE, FRAME_BASE_TILE, 10);
+void DialogBox_LoadFrame(Window *window, Options *options) {
+    LoadUserFrameGfx2(window->bgConfig, (GFBgLayer)GetWindowBgId(window), FRAME_BASE_TILE, DIALOG_BOX_PLTTNUM_FRAME, Options_GetFrame(options), HEAP_ID_FIELD1);
+    DialogBox_Clear(window);
+    DrawFrameAndWindow2(window, FALSE, FRAME_BASE_TILE, DIALOG_BOX_PLTTNUM_FRAME);
 }
 
-void sub_0205B5A8(Window *window) {
+void DialogBox_Clear(Window *window) {
     FillWindowPixelBuffer(window, 15);
 }
 
-u8 sub_0205B5B4(Window *window, String *string, Options *options, BOOL speedupFlag) {
+u8 DialogBox_PrintMessage(Window *window, String *string, Options *options, BOOL speedupFlag) {
     TextFlags_SetCanABSpeedUpPrint(speedupFlag);
     TextFlags_SetAutoScrollParam(0);
     TextFlags_SetCanTouchSpeedUpPrint(FALSE);
     return AddTextPrinterParameterized(window, 1, string, 0, 0, Options_GetTextFrameDelay(options), NULL);
 }
 
-u32 sub_0205B5EC(Window *window, String *message, FontID fontId, u32 textSpeed, u8 speedUpEnabled, u32 autoScrollParam) {
+u32 DialogBox_PrintMessageEx(Window *window, String *message, FontID fontId, u32 textSpeed, u8 speedUpEnabled, u32 autoScrollParam) {
     TextFlags_SetCanABSpeedUpPrint(speedUpEnabled);
     TextFlags_SetAutoScrollParam(autoScrollParam);
     TextFlags_SetCanTouchSpeedUpPrint(FALSE);
     return AddTextPrinterParameterized(window, fontId, message, 0, 0, textSpeed, NULL);
 }
 
-u8 IsPrintFinished(u8 printerId) {
+u8 DialogBox_IsPrintFinished(u8 printerId) {
     return !TextPrinterCheckActive(printerId);
 }
 
-void sub_0205B63C(BgConfig *bgConfig, Window *window, u8 position, GFBgLayer layer) {
+void DialogBox_AddWindowToLayer3WithXOffset(BgConfig *bgConfig, Window *window, u8 type, GFBgLayer layer) {
     int x;
     int width;
 
-    if (position == 0 || position == 1) {
-        x = 9;
-        width = 20;
+    // types 0 and 1 have an extra graphic to the left
+    if (type == 0 || type == 1) {
+        x = DIALOG_BOX_X + DIALOG_BOX_MAP_GFX_W;
+        width = DIALOG_BOX_W - DIALOG_BOX_MAP_GFX_W;
     } else {
-        x = 2;
-        width = 27;
+        x = DIALOG_BOX_X;
+        width = DIALOG_BOX_W;
     }
     if (layer == GF_BG_LYR_MAIN_3) {
-        AddWindowParameterized(bgConfig, window, GF_BG_LYR_MAIN_3, x, 19, width, 4, 9, BASE_TILE_MAIN);
+        AddWindowParameterized(bgConfig, window, GF_BG_LYR_MAIN_3, x, DIALOG_BOX_Y, width, DIALOG_BOX_H, DIALOG_BOX_PLTTNUM_MAPGFX, BASE_TILE_MAIN);
     } else {
-        AddWindowParameterized(bgConfig, window, GF_BG_LYR_SUB_3, x, 19, width, 4, 9, BASE_TILE_SUB);
+        AddWindowParameterized(bgConfig, window, GF_BG_LYR_SUB_3, x, DIALOG_BOX_Y, width, DIALOG_BOX_H, DIALOG_BOX_PLTTNUM_MAPGFX, BASE_TILE_SUB);
     }
 }
 
-void sub_0205B6A0(Window *window, u16 srcPlttNum, u16 map) {
-    sub_0200EC0C(window->bgConfig, GetWindowBgId(window), 0x2A3, 9, srcPlttNum, map, HEAP_ID_FIELD1);
+void DialogBox_DrawFrameWithWayfindingGraphic(Window *window, u16 type, u16 map) {
+    LoadMapSignpostFrameAndGraphic(window->bgConfig, GetWindowBgId(window), BASE_TILE_MAP_GFX, DIALOG_BOX_PLTTNUM_MAPGFX, type, map, HEAP_ID_FIELD1);
     FillWindowPixelBuffer(window, 15);
-    DrawFrameAndWindow3(window, 0, 0x2A3, 9, srcPlttNum);
+    DrawFrameAndWindow3(window, FALSE, BASE_TILE_MAP_GFX, DIALOG_BOX_PLTTNUM_MAPGFX, type);
 }
