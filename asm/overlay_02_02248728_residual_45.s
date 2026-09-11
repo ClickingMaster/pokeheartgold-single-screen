@@ -1759,6 +1759,8 @@
 	.public ov02_0224FB44
 	.public ov02_0224FC74
 	.public ov02_022508B4
+	.public ov02_0224D868
+	.public ov02_0224D98C
 
 	thumb_func_start ov02_0224D698
 ov02_0224D698: ; 0x0224D698
@@ -1812,6 +1814,8 @@ _0224D6FC: .word SEQ_SE_DP_UG_023
 	thumb_func_end ov02_0224D698
 
 
+
+
 	thumb_func_start ov02_0224D700
 ov02_0224D700: ; 0x0224D700
 	push {r3, r4, r5, r6, r7, lr}
@@ -1845,6 +1849,8 @@ _0224D716:
 _0224D73A:
 	pop {r3, r4, r5, r6, r7, pc}
 	thumb_func_end ov02_0224D700
+
+
 
 
 	thumb_func_start ov02_0224D73C
@@ -1886,6 +1892,8 @@ _0224D75E:
 	thumb_func_end ov02_0224D73C
 
 
+
+
 	thumb_func_start ov02_0224D788
 ov02_0224D788: ; 0x0224D788
 	push {r3, r4, r5, r6, r7, lr}
@@ -1908,6 +1916,8 @@ _0224D794:
 	bl memset
 	pop {r3, r4, r5, r6, r7, pc}
 	thumb_func_end ov02_0224D788
+
+
 
 
 	thumb_func_start ov02_0224D7B0
@@ -1971,6 +1981,8 @@ _0224D81C: .word 0x00000CE8
 	thumb_func_end ov02_0224D7B0
 
 
+
+
 	thumb_func_start ov02_0224D820
 ov02_0224D820: ; 0x0224D820
 	push {r4, lr}
@@ -2009,180 +2021,3 @@ _0224D858:
 	pop {r4, pc}
 	.balign 4, 0
 	thumb_func_end ov02_0224D820
-
-
-	thumb_func_start ov02_0224D868
-ov02_0224D868: ; 0x0224D868
-	push {r3, r4, r5, lr}
-	add r5, r0, #0
-	mov r4, #0
-	add r5, #0x10
-_0224D870:
-	add r0, r5, #0
-	bl ov02_0224D700
-	add r4, r4, #1
-	add r5, #0xcc
-	cmp r4, #0x10
-	blt _0224D870
-	pop {r3, r4, r5, pc}
-	thumb_func_end ov02_0224D868
-
-
-	thumb_func_start ov02_0224D880
-ov02_0224D880: ; 0x0224D880
-	push {r3, r4, r5, r6, r7, lr}
-	sub sp, #8
-	add r5, r2, #0
-	mov r2, #0xd1
-	str r1, [sp, #4]
-	add r0, r5, #0
-	mov r1, #0
-	lsl r2, r2, #4
-	bl memset
-	ldr r0, _0224D90C ; =0x00000CFC
-	mov r1, #4
-	add r0, r5, r0
-	mov r2, #0x20
-	bl HeapExp_FndInitAllocator
-	add r0, r5, #0
-	mov r1, #0x86
-	mov r2, #8
-	mov r3, #4
-	bl Field3dModel_LoadFromFilesystem
-	mov r7, #0xcd
-	mov r4, #0
-	add r6, r5, #0
-	lsl r7, r7, #4
-_0224D8B4:
-	mov r0, #0
-	str r0, [sp]
-	mov r0, #0x86
-	add r1, r4, #4
-	mov r2, #0
-	mov r3, #4
-	bl GfGfxLoader_LoadFromNarc
-	str r0, [r6, r7]
-	add r4, r4, #1
-	add r6, r6, #4
-	cmp r4, #4
-	blt _0224D8B4
-	add r4, r5, #0
-	mov r7, #0xcd
-	mov r6, #0
-	add r4, #0x10
-	lsl r7, r7, #4
-_0224D8D8:
-	ldr r2, _0224D90C ; =0x00000CFC
-	add r0, r4, #0
-	add r1, r5, #0
-	add r2, r5, r2
-	add r3, r5, r7
-	bl ov02_0224D73C
-	add r6, r6, #1
-	add r4, #0xcc
-	cmp r6, #0x10
-	blt _0224D8D8
-	mov r1, #0xce
-	ldr r0, [sp, #4]
-	lsl r1, r1, #4
-	str r0, [r5, r1]
-	ldr r0, [r5, r1]
-	add r1, #0x10
-	ldr r0, [r0, #0x40]
-	add r1, r5, r1
-	bl PlayerAvatar_CopyPositionVector
-	ldr r0, _0224D910 ; =0x00000D0C
-	mov r1, #0
-	str r1, [r5, r0]
-	add sp, #8
-	pop {r3, r4, r5, r6, r7, pc}
-	.balign 4, 0
-_0224D90C: .word 0x00000CFC
-_0224D910: .word 0x00000D0C
-	thumb_func_end ov02_0224D880
-
-
-	thumb_func_start ov02_0224D914
-ov02_0224D914: ; 0x0224D914
-	push {r3, r4, r5, r6, r7, lr}
-	add r5, r2, #0
-	add r4, r5, #0
-	ldr r7, _0224D94C ; =0x00000CFC
-	mov r6, #0
-	add r4, #0x10
-_0224D920:
-	add r0, r4, #0
-	add r1, r5, r7
-	bl ov02_0224D788
-	add r6, r6, #1
-	add r4, #0xcc
-	cmp r6, #0x10
-	blt _0224D920
-	add r0, r5, #0
-	bl Field3dModel_Unload
-	mov r6, #0xcd
-	mov r4, #0
-	lsl r6, r6, #4
-_0224D93C:
-	ldr r0, [r5, r6]
-	bl Heap_Free
-	add r4, r4, #1
-	add r5, r5, #4
-	cmp r4, #4
-	blt _0224D93C
-	pop {r3, r4, r5, r6, r7, pc}
-	.balign 4, 0
-_0224D94C: .word 0x00000CFC
-	thumb_func_end ov02_0224D914
-
-
-	thumb_func_start ov02_0224D950
-ov02_0224D950: ; 0x0224D950
-	push {r4, lr}
-	ldr r1, _0224D988 ; =0x00000D0C
-	add r4, r2, #0
-	ldr r0, [r4, r1]
-	cmp r0, #0
-	bne _0224D986
-	add r0, r1, #0
-	sub r0, #0x28
-	ldr r0, [r4, r0]
-	sub r2, r0, #1
-	add r0, r1, #0
-	sub r0, #0x28
-	str r2, [r4, r0]
-	add r0, r1, #0
-	sub r0, #0x28
-	ldr r0, [r4, r0]
-	cmp r0, #0
-	bge _0224D980
-	mov r0, #4
-	sub r1, #0x28
-	str r0, [r4, r1]
-	add r0, r4, #0
-	bl ov02_0224D820
-_0224D980:
-	add r0, r4, #0
-	bl ov02_0224D868
-_0224D986:
-	pop {r4, pc}
-	.balign 4, 0
-_0224D988: .word 0x00000D0C
-	thumb_func_end ov02_0224D950
-
-
-	thumb_func_start ov02_0224D98C
-ov02_0224D98C: ; 0x0224D98C
-	push {r3, r4, r5, lr}
-	add r5, r2, #0
-	mov r4, #0
-	add r5, #0x10
-_0224D994:
-	add r0, r5, #0
-	bl Field3dObject_Draw
-	add r4, r4, #1
-	add r5, #0xcc
-	cmp r4, #0x10
-	blt _0224D994
-	pop {r3, r4, r5, pc}
-	thumb_func_end ov02_0224D98C
