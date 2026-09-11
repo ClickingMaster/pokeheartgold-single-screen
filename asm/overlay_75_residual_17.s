@@ -1,6 +1,7 @@
 	.include "asm/macros.inc"
 	.include "overlay_75.inc"
 	.include "global.inc"
+	.include "overlay75_message_helpers.inc"
 	.public gApplication_TitleScreen
 
 	.text
@@ -125,78 +126,11 @@
 	.public ov75_022494A4
 	.public ov75_02249758
 	.public ov75_0224976C
-
-	thumb_func_start ov75_022494CC
-ov75_022494CC: ; 0x022494CC
-	push {r3, r4, r5, r6, lr}
-	sub sp, #0xc
-	add r5, r0, #0
-	add r0, r1, #0
-	add r1, r2, #0
-	add r4, r3, #0
-	bl NewString_ReadMsgData
-	add r6, r0, #0
-	ldr r0, [r5, #0x20]
-	ldr r1, [r5, #0x38]
-	add r2, r6, #0
-	bl StringExpandPlaceholders
-	add r0, r6, #0
-	bl String_Delete
-	add r0, r5, #0
-	add r0, #0x48
-	mov r1, #0xf
-	bl FillWindowPixelBuffer
-	add r0, r5, #0
-	add r0, #0x48
-	mov r1, #0
-	mov r2, #1
-	mov r3, #0xa
-	bl DrawFrameAndWindow2
-	mov r3, #0
-	str r3, [sp]
-	str r4, [sp, #4]
-	str r3, [sp, #8]
-	add r0, r5, #0
-	ldr r2, [r5, #0x38]
-	add r0, #0x48
-	mov r1, #1
-	bl AddTextPrinterParameterized
-	str r0, [r5, #0x44]
-	add r0, r5, #0
-	mov r1, #0
-	add r0, #0x90
-	str r1, [r0]
-	cmp r4, #0xff
-	beq _0224952C
-	cmp r4, #0
-	bne _02249530
-_0224952C:
-	mov r0, #0xff
-	str r0, [r5, #0x44]
-_02249530:
-	add sp, #0xc
-	pop {r3, r4, r5, r6, pc}
-	thumb_func_end ov75_022494CC
-
-
-	thumb_func_start ov75_02249534
-ov75_02249534: ; 0x02249534
-	push {r3, lr}
-	cmp r0, #0xff
-	beq _02249546
-	lsl r0, r0, #0x18
-	lsr r0, r0, #0x18
-	bl TextPrinterCheckActive
-	cmp r0, #0
-	bne _0224954A
-_02249546:
-	mov r0, #0
-	pop {r3, pc}
-_0224954A:
-	mov r0, #1
-	pop {r3, pc}
-	.balign 4, 0
-	thumb_func_end ov75_02249534
+	.public ov75_022494CC
+	.public ov75_02249534
+	.public ov75_0224964C
+	.public ov75_022496B8
+	.public ov75_0224971C
 
 
 	thumb_func_start ov75_02249550
@@ -253,6 +187,8 @@ _022495A6:
 	.balign 4, 0
 _022495AC: .word 0x00000F0F
 	thumb_func_end ov75_02249550
+
+
 
 
 	thumb_func_start ov75_022495B0
@@ -335,147 +271,3 @@ _02249640:
 	nop
 _02249648: .word 0x00000F0F
 	thumb_func_end ov75_022495B0
-
-
-	thumb_func_start ov75_0224964C
-ov75_0224964C: ; 0x0224964C
-	push {r4, lr}
-	add r4, r0, #0
-	cmp r3, #1
-	beq _0224965A
-	cmp r3, #2
-	beq _02249670
-	b _0224967E
-_0224965A:
-	ldr r0, [sp, #0xc]
-	mov r2, #0
-	bl FontID_String_GetWidth
-	ldrb r1, [r4, #7]
-	lsl r1, r1, #3
-	sub r1, r1, r0
-	lsr r0, r1, #0x1f
-	add r0, r1, r0
-	asr r2, r0, #1
-	b _0224967E
-_02249670:
-	ldr r0, [sp, #0xc]
-	mov r2, #0
-	bl FontID_String_GetWidth
-	ldrb r1, [r4, #7]
-	lsl r1, r1, #3
-	sub r2, r1, r0
-_0224967E:
-	add r0, r2, #0
-	pop {r4, pc}
-	.balign 4, 0
-	thumb_func_end ov75_0224964C
-
-
-	thumb_func_start ov75_02249684
-ov75_02249684: ; 0x02249684
-	push {r4, r5, r6, lr}
-	sub sp, #0x10
-	add r4, r3, #0
-	ldr r3, [sp, #0x24]
-	add r5, r0, #0
-	str r3, [sp]
-	mov r3, #1
-	str r3, [sp, #4]
-	ldr r3, [sp, #0x20]
-	add r6, r1, #0
-	bl ov75_0224964C
-	add r3, r0, #0
-	str r4, [sp]
-	mov r1, #0
-	ldr r0, [sp, #0x24]
-	str r1, [sp, #4]
-	str r0, [sp, #8]
-	str r1, [sp, #0xc]
-	add r0, r5, #0
-	mov r1, #1
-	add r2, r6, #0
-	bl AddTextPrinterParameterizedWithColor
-	add sp, #0x10
-	pop {r4, r5, r6, pc}
-	thumb_func_end ov75_02249684
-
-
-	thumb_func_start ov75_022496B8
-ov75_022496B8: ; 0x022496B8
-	push {r3, r4, r5, r6, lr}
-	sub sp, #0xc
-	add r5, r0, #0
-	mov r0, #1
-	add r6, r1, #0
-	lsl r0, r0, #8
-	mov r1, #0x74
-	bl String_New
-	add r4, r0, #0
-	ldr r0, [r5, #0x30]
-	add r1, r6, #0
-	add r2, r4, #0
-	bl ReadMsgDataIntoString
-	ldr r0, [r5, #0x20]
-	ldr r1, [r5, #0x40]
-	add r2, r4, #0
-	bl StringExpandPlaceholders
-	add r0, r5, #0
-	add r0, #0x68
-	mov r1, #0xf
-	bl FillWindowPixelBuffer
-	add r0, r5, #0
-	add r0, #0x68
-	mov r1, #1
-	mov r2, #0x1f
-	mov r3, #0xb
-	bl DrawFrameAndWindow1
-	mov r3, #0
-	str r3, [sp]
-	str r3, [sp, #4]
-	str r3, [sp, #8]
-	add r0, r5, #0
-	ldr r2, [r5, #0x40]
-	add r0, #0x68
-	mov r1, #1
-	bl AddTextPrinterParameterized
-	mov r0, #0xff
-	str r0, [r5, #0x44]
-	add r0, r4, #0
-	bl String_Delete
-	add sp, #0xc
-	pop {r3, r4, r5, r6, pc}
-	.balign 4, 0
-	thumb_func_end ov75_022496B8
-
-
-	thumb_func_start ov75_0224971C
-ov75_0224971C: ; 0x0224971C
-	push {r3, r4, r5, lr}
-	sub sp, #8
-	add r5, r0, #0
-	mov r0, #0
-	add r4, r1, #0
-	mvn r0, r0
-	cmp r4, r0
-	bne _0224972E
-	mov r4, #0xb
-_0224972E:
-	mov r0, #2
-	str r0, [sp]
-	mov r0, #1
-	str r0, [sp, #4]
-	ldr r0, [r5, #0x20]
-	mov r1, #0
-	mov r3, #5
-	bl BufferIntegerAsString
-	add r0, r5, #0
-	add r0, #0x48
-	mov r1, #1
-	bl ClearFrameAndWindow2
-	add r0, r5, #0
-	add r1, r4, #0
-	bl ov75_022496B8
-	add sp, #8
-	pop {r3, r4, r5, pc}
-	.balign 4, 0
-	thumb_func_end ov75_0224971C
