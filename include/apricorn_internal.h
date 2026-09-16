@@ -43,7 +43,7 @@ typedef struct ApricornMix {
     u8 values[5];
 } ApricornMix;
 
-u8 sub_02031C08(SaveApricornBox *);
+int sub_02031C08(SaveApricornBox *);
 int ApricornBox_TakeApricorn(SaveApricornBox *, int, u32);
 void sub_02031B5C(void *);
 BOOL sub_02031CEC(SaveApricornBox *, u16, UnkStruct_02031CEC *);

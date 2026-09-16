@@ -1058,3 +1058,30 @@ adding 23,298 mapped C bytes (1,934,688 → 1,957,986) out of 4,077,556
 classified bytes. The mapped total decreased by six alignment bytes supplied
 by the linker. The treemap was refreshed and progress tests passed. Validation
 used local builds only; GitHub CI remained disabled.
+
+### Independently verified public-fork pass
+
+Audited candidate C from the public `antonsynd/pokeheartgold-slop` fork at
+commit `808283ee256ca702d4fcf1407697b5d55f784a34`. The candidates were treated
+as leads rather than trusted output: each accepted function was rebuilt with
+this repository's MWCC toolchain and flags, compared against frozen reference
+objects, and checked for relocation identity, RELA addends, data ownership,
+COMMON symbols, and source order. Partial or unsupported candidates stayed in
+residual assembly.
+
+The audit considered 185 candidate functions (28,976 bytes) and accepted 150
+functions. After integration and linker-supplied alignment, the batch adds
+19,138 mapped C bytes. No leaked Nintendo, Game Freak, SDK, or compiler source
+was used.
+
+Both complete retail ROM SHA1s match after formatting and sequential local
+rebuilds:
+
+- HeartGold: `4fcded0e2713dc03929845de631d0932ea2b5a37`
+- SoulSilver: `f8dc38ea20c17541a43b58c5e6d18c1732c7e582`
+
+HeartGold C-only mapped coverage increased from 48.018617% to 48.488799%
+(+0.470182 percentage points), from 1,957,986 to 1,977,124 C bytes. The
+classified total decreased by 70 alignment bytes supplied by the linker. The
+treemap was refreshed and progress tests passed. Validation used local builds
+only; GitHub CI remained disabled.
