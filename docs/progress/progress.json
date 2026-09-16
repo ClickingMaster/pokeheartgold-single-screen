@@ -1,18 +1,18 @@
 {
   "schema_version": 1,
   "game": "heartgold.us",
-  "commit": "d5122797e565bbb760ec70dfeb135e6af703d79b",
+  "commit": "2b5548eafbea7ff48ac0f2b7bba0eeeb03715db6",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "876a454d8358a1552c21112cca77929bad7a45aa828908adc69ce44cd0daa169",
-    "ARM7": "4b2d2a30a853004dc8afb61d8547084dc2a2cd9f2bb8d816a1adc27946e8ef5f"
+    "ARM9": "7ba3228890b4583794ff49ebe1d9fe01618a7e40bf268c10edd9b156b89f63a0",
+    "ARM7": "323a8332befb62bc75699d3db6b6491a02edb552b810301c0a2c72aec77c8a38"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from C-only.",
   "totals": {
-    "asm": 2115812,
+    "c": 1957986,
     "mixed": 18270,
-    "c": 1934688,
+    "asm": 2092508,
     "unknown": 8792
   },
   "objects": [
@@ -21,16 +21,16 @@
       "module": "ITCM",
       "object": "mi_dma.o",
       "bytes": 312,
-      "status": "asm",
-      "source": "lib/NitroSDK/asm/mi_dma.s"
+      "status": "c",
+      "source": "lib/NitroSDK/src/mi/mi_dma.c"
     },
     {
       "cpu": "ARM9",
       "module": "ITCM",
       "object": "mi_dma_gxcommand.o",
       "bytes": 148,
-      "status": "asm",
-      "source": "lib/NitroSDK/asm/mi_dma_gxcommand.s"
+      "status": "c",
+      "source": "lib/NitroSDK/src/mi/mi_dma_gxcommand.c"
     },
     {
       "cpu": "ARM9",
@@ -3459,10 +3459,74 @@
     {
       "cpu": "ARM9",
       "module": "OVY_12",
+      "object": "battle_ai_post_ko.o",
+      "bytes": 1396,
+      "status": "c",
+      "source": "src/battle_ai_post_ko.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_12",
       "object": "battle_command.o",
       "bytes": 46728,
       "status": "c",
       "source": "src/battle/battle_command.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_12",
+      "object": "battle_controller_opponent_pr_residual_0.o",
+      "bytes": 34096,
+      "status": "asm",
+      "source": "asm/battle_controller_opponent_pr_residual_0.s"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_12",
+      "object": "battle_controller_opponent_pr_residual_1.o",
+      "bytes": 1948,
+      "status": "asm",
+      "source": "asm/battle_controller_opponent_pr_residual_1.s"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_12",
+      "object": "battle_controller_opponent_pr_residual_2.o",
+      "bytes": 704,
+      "status": "asm",
+      "source": "asm/battle_controller_opponent_pr_residual_2.s"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_12",
+      "object": "battle_controller_opponent_pr_residual_3.o",
+      "bytes": 156,
+      "status": "asm",
+      "source": "asm/battle_controller_opponent_pr_residual_3.s"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_12",
+      "object": "battle_controller_opponent_pr_run1.o",
+      "bytes": 236,
+      "status": "c",
+      "source": "src/battle_controller_opponent_pr_run1.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_12",
+      "object": "battle_controller_opponent_pr_run2.o",
+      "bytes": 84,
+      "status": "c",
+      "source": "src/battle_controller_opponent_pr_run2.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_12",
+      "object": "battle_controller_opponent_pr_run3.o",
+      "bytes": 242,
+      "status": "c",
+      "source": "src/battle_controller_opponent_pr_run3.c"
     },
     {
       "cpu": "ARM9",
@@ -3895,14 +3959,6 @@
       "bytes": 276,
       "status": "c",
       "source": "src/battle/overlay_12_0226BEC4.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_12",
-      "object": "overlay_12_battle_controller_opponent.o",
-      "bytes": 38868,
-      "status": "asm",
-      "source": "asm/overlay_12_battle_controller_opponent.s"
     },
     {
       "cpu": "ARM9",
@@ -47725,8 +47781,8 @@
       "module": "main",
       "object": "fx_cp.o",
       "bytes": 472,
-      "status": "asm",
-      "source": "lib/NitroSDK/asm/fx_cp.s"
+      "status": "c",
+      "source": "lib/NitroSDK/src/fx/fx_cp.c"
     },
     {
       "cpu": "ARM9",
@@ -47739,26 +47795,114 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "fx_mtx33.o",
-      "bytes": 1728,
+      "object": "fx_mtx33_identity_residual.o",
+      "bytes": 36,
       "status": "asm",
-      "source": "lib/NitroSDK/asm/fx_mtx33.s"
+      "source": "lib/NitroSDK/asm/fx_mtx33_identity_residual.s"
     },
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "fx_mtx43.o",
-      "bytes": 2456,
+      "object": "fx_mtx33_middle_residual.o",
+      "bytes": 832,
       "status": "asm",
-      "source": "lib/NitroSDK/asm/fx_mtx43.s"
+      "source": "lib/NitroSDK/asm/fx_mtx33_middle_residual.s"
     },
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "fx_mtx44.o",
-      "bytes": 2908,
+      "object": "fx_mtx33_scale.o",
+      "bytes": 192,
+      "status": "c",
+      "source": "lib/NitroSDK/src/fx/fx_mtx33_scale.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "fx_mtx33_tail.o",
+      "bytes": 668,
+      "status": "c",
+      "source": "lib/NitroSDK/src/fx/fx_mtx33_tail.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "fx_mtx43_residual_0.o",
+      "bytes": 288,
       "status": "asm",
-      "source": "lib/NitroSDK/asm/fx_mtx44.s"
+      "source": "lib/NitroSDK/asm/fx_mtx43_residual_0.s"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "fx_mtx43_residual_1.o",
+      "bytes": 60,
+      "status": "asm",
+      "source": "lib/NitroSDK/asm/fx_mtx43_residual_1.s"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "fx_mtx43_residual_2.o",
+      "bytes": 264,
+      "status": "asm",
+      "source": "lib/NitroSDK/asm/fx_mtx43_residual_2.s"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "fx_mtx43_scale_apply.o",
+      "bytes": 52,
+      "status": "c",
+      "source": "lib/NitroSDK/src/fx/fx_mtx43_scale_apply.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "fx_mtx43_tail.o",
+      "bytes": 1792,
+      "status": "c",
+      "source": "lib/NitroSDK/src/fx/fx_mtx43_tail.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "fx_mtx44_concat.o",
+      "bytes": 1636,
+      "status": "c",
+      "source": "lib/NitroSDK/src/fx/fx_mtx44_concat.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "fx_mtx44_residual_head.o",
+      "bytes": 96,
+      "status": "asm",
+      "source": "lib/NitroSDK/asm/fx_mtx44_residual_head.s"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "fx_mtx44_residual_rot.o",
+      "bytes": 108,
+      "status": "asm",
+      "source": "lib/NitroSDK/asm/fx_mtx44_residual_rot.s"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "fx_mtx44_residual_tail.o",
+      "bytes": 852,
+      "status": "asm",
+      "source": "lib/NitroSDK/asm/fx_mtx44_residual_tail.s"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "fx_mtx44_trans_apply.o",
+      "bytes": 216,
+      "status": "c",
+      "source": "lib/NitroSDK/src/fx/fx_mtx44_trans_apply.c"
     },
     {
       "cpu": "ARM9",
@@ -47771,18 +47915,34 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "fx_vec.o",
-      "bytes": 1412,
+      "object": "fx_vec_exact_prefix.o",
+      "bytes": 616,
+      "status": "c",
+      "source": "lib/NitroSDK/src/fx/fx_vec_exact_prefix.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "fx_vec_exact_suffix.o",
+      "bytes": 216,
+      "status": "c",
+      "source": "lib/NitroSDK/src/fx/fx_vec_exact_suffix.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "fx_vec_normalize_residual.o",
+      "bytes": 580,
       "status": "asm",
-      "source": "lib/NitroSDK/asm/fx_vec.s"
+      "source": "lib/NitroSDK/asm/fx_vec_normalize_residual.s"
     },
     {
       "cpu": "ARM9",
       "module": "main",
       "object": "g2.o",
       "bytes": 312,
-      "status": "asm",
-      "source": "lib/NitroSDK/asm/g2.s"
+      "status": "c",
+      "source": "lib/NitroSDK/src/gx/g2.c"
     },
     {
       "cpu": "ARM9",
@@ -47805,16 +47965,16 @@
       "module": "main",
       "object": "g3_util.o",
       "bytes": 356,
-      "status": "asm",
-      "source": "lib/NitroSDK/asm/g3_util.s"
+      "status": "c",
+      "source": "lib/NitroSDK/src/gx/g3_util.c"
     },
     {
       "cpu": "ARM9",
       "module": "main",
       "object": "g3b.o",
       "bytes": 784,
-      "status": "asm",
-      "source": "lib/NitroSDK/asm/g3b.s"
+      "status": "c",
+      "source": "lib/NitroSDK/src/gx/g3b.c"
     },
     {
       "cpu": "ARM9",
@@ -47828,9 +47988,17 @@
       "cpu": "ARM9",
       "module": "main",
       "object": "g3x.o",
-      "bytes": 1444,
+      "bytes": 1296,
+      "status": "c",
+      "source": "lib/NitroSDK/src/gx/g3x.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "g3x_nop_fifo_residual.o",
+      "bytes": 148,
       "status": "asm",
-      "source": "lib/NitroSDK/asm/g3x.s"
+      "source": "lib/NitroSDK/asm/g3x_nop_fifo_residual.s"
     },
     {
       "cpu": "ARM9",
@@ -47949,40 +48117,56 @@
       "module": "main",
       "object": "gx.o",
       "bytes": 808,
-      "status": "asm",
-      "source": "lib/NitroSDK/asm/gx.s"
+      "status": "c",
+      "source": "lib/NitroSDK/src/gx/gx.c"
     },
     {
       "cpu": "ARM9",
       "module": "main",
       "object": "gx_bgcnt.o",
       "bytes": 1136,
-      "status": "asm",
-      "source": "lib/NitroSDK/asm/gx_bgcnt.s"
+      "status": "c",
+      "source": "lib/NitroSDK/src/gx/gx_bgcnt.c"
     },
     {
       "cpu": "ARM9",
       "module": "main",
       "object": "gx_load2d.o",
       "bytes": 3200,
-      "status": "asm",
-      "source": "lib/NitroSDK/asm/gx_load2d.s"
+      "status": "c",
+      "source": "lib/NitroSDK/src/gx/gx_load2d.c"
     },
     {
       "cpu": "ARM9",
       "module": "main",
       "object": "gx_load3d.o",
       "bytes": 1140,
-      "status": "asm",
-      "source": "lib/NitroSDK/asm/gx_load3d.s"
+      "status": "c",
+      "source": "lib/NitroSDK/src/gx/gx_load3d.c"
     },
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "gx_vramcnt.o",
-      "bytes": 4336,
+      "object": "gx_vramcnt_prefix.o",
+      "bytes": 2076,
+      "status": "c",
+      "source": "lib/NitroSDK/src/gx/gx_vramcnt_prefix.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "gx_vramcnt_residual.o",
+      "bytes": 232,
       "status": "asm",
-      "source": "lib/NitroSDK/asm/gx_vramcnt.s"
+      "source": "lib/NitroSDK/asm/gx_vramcnt_residual.s"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "gx_vramcnt_suffix.o",
+      "bytes": 2028,
+      "status": "c",
+      "source": "lib/NitroSDK/src/gx/gx_vramcnt_suffix.c"
     },
     {
       "cpu": "ARM9",
@@ -48805,8 +48989,8 @@
       "module": "main",
       "object": "mi_dma.o",
       "bytes": 1140,
-      "status": "asm",
-      "source": "lib/NitroSDK/asm/mi_dma.s"
+      "status": "c",
+      "source": "lib/NitroSDK/src/mi/mi_dma.c"
     },
     {
       "cpu": "ARM9",
@@ -48821,8 +49005,8 @@
       "module": "main",
       "object": "mi_dma_gxcommand.o",
       "bytes": 744,
-      "status": "asm",
-      "source": "lib/NitroSDK/asm/mi_dma_gxcommand.s"
+      "status": "c",
+      "source": "lib/NitroSDK/src/mi/mi_dma_gxcommand.c"
     },
     {
       "cpu": "ARM9",

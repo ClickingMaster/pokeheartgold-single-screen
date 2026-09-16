@@ -997,25 +997,41 @@ Static main
     ### NitroSDK ###
     Object lib/NitroSDK/asm/fx_sincos.o
     Object lib/NitroSDK/asm/fx_mtx22.o
-    Object lib/NitroSDK/asm/fx_mtx33.o
-    Object lib/NitroSDK/asm/fx_mtx43.o
-    Object lib/NitroSDK/asm/fx_mtx44.o
-    Object lib/NitroSDK/asm/fx_cp.o
-    Object lib/NitroSDK/asm/fx_vec.o
+    Object lib/NitroSDK/asm/fx_mtx33_identity_residual.o
+    Object lib/NitroSDK/src/fx/fx_mtx33_scale.o
+    Object lib/NitroSDK/asm/fx_mtx33_middle_residual.o
+    Object lib/NitroSDK/src/fx/fx_mtx33_tail.o
+    Object lib/NitroSDK/asm/fx_mtx43_residual_0.o
+    Object lib/NitroSDK/src/fx/fx_mtx43_scale_apply.o
+    Object lib/NitroSDK/asm/fx_mtx43_residual_1.o
+    Object lib/NitroSDK/src/fx/fx_mtx43_tail.o
+    Object lib/NitroSDK/asm/fx_mtx43_residual_2.o
+    Object lib/NitroSDK/asm/fx_mtx44_residual_head.o
+    Object lib/NitroSDK/src/fx/fx_mtx44_trans_apply.o
+    Object lib/NitroSDK/asm/fx_mtx44_residual_rot.o
+    Object lib/NitroSDK/src/fx/fx_mtx44_concat.o
+    Object lib/NitroSDK/asm/fx_mtx44_residual_tail.o
+    Object lib/NitroSDK/src/fx/fx_cp.o
+    Object lib/NitroSDK/src/fx/fx_vec_exact_prefix.o
+    Object lib/NitroSDK/asm/fx_vec_normalize_residual.o
+    Object lib/NitroSDK/src/fx/fx_vec_exact_suffix.o
     Object lib/NitroSDK/asm/fx_trig.o
     Object lib/NitroSDK/asm/fx_atanidx.o
     Object lib/NitroSDK/asm/fx.o
-    Object lib/NitroSDK/asm/gx.o
+    Object lib/NitroSDK/src/gx/gx.o
     Object lib/NitroSDK/asm/gxstate.o
-    Object lib/NitroSDK/asm/gx_vramcnt.o
-    Object lib/NitroSDK/asm/gx_bgcnt.o
-    Object lib/NitroSDK/asm/g2.o
-    Object lib/NitroSDK/asm/g3b.o
+    Object lib/NitroSDK/src/gx/gx_vramcnt_prefix.o
+    Object lib/NitroSDK/asm/gx_vramcnt_residual.o
+    Object lib/NitroSDK/src/gx/gx_vramcnt_suffix.o
+    Object lib/NitroSDK/src/gx/gx_bgcnt.o
+    Object lib/NitroSDK/src/gx/g2.o
+    Object lib/NitroSDK/src/gx/g3b.o
     Object lib/NitroSDK/asm/g3imm.o
-    Object lib/NitroSDK/asm/g3x.o
-    Object lib/NitroSDK/asm/g3_util.o
-    Object lib/NitroSDK/asm/gx_load2d.o
-    Object lib/NitroSDK/asm/gx_load3d.o
+    Object lib/NitroSDK/src/gx/g3x.o
+    Object lib/NitroSDK/asm/g3x_nop_fifo_residual.o
+    Object lib/NitroSDK/src/gx/g3_util.o
+    Object lib/NitroSDK/src/gx/gx_load2d.o
+    Object lib/NitroSDK/src/gx/gx_load3d.o
     Object lib/NitroSDK/asm/g3.o
     Object lib/NitroSDK/asm/gxasm.o
     Object lib/NitroSDK/src/os/os_irqHandler.o
@@ -1047,9 +1063,9 @@ Static main
     Object lib/NitroSDK/src/os/os_entropy.o
     Object lib/NitroSDK/src/os/os_terminate_proc.o
     Object lib/NitroSDK/asm/mi_wram.o
-    Object lib/NitroSDK/asm/mi_dma.o
+    Object lib/NitroSDK/src/mi/mi_dma.o
     Object lib/NitroSDK/asm/mi_dma_hblank.o
-    Object lib/NitroSDK/asm/mi_dma_gxcommand.o
+    Object lib/NitroSDK/src/mi/mi_dma_gxcommand.o
     Object lib/NitroSDK/asm/mi_memory.o
     Object lib/NitroSDK/asm/mi_swap.o
     Object lib/NitroSDK/asm/mi_uncompress.o
@@ -1106,8 +1122,8 @@ Autoload ITCM
     Address 0x01FF8000
     Object lib/NitroSDK/src/os/os_irqHandler.o (.itcm)
     Object lib/NitroSDK/src/os/os_reset.o (.itcm)
-    Object lib/NitroSDK/asm/mi_dma.o (.itcm)
-    Object lib/NitroSDK/asm/mi_dma_gxcommand.o (.itcm)
+    Object lib/NitroSDK/src/mi/mi_dma.o (.itcm)
+    Object lib/NitroSDK/src/mi/mi_dma_gxcommand.o (.itcm)
     Object lib/asm/nitro.o (.itcm)
 }
 
@@ -1844,7 +1860,14 @@ Overlay OVY_12
     Object asm/overlay_12_battle_command.o
     Object src/battle/battle_controller_player.o
     Object src/battle/overlay_12_0224E4FC.o
-    Object asm/overlay_12_battle_controller_opponent.o
+    Object src/battle_ai_post_ko.o
+    Object asm/battle_controller_opponent_pr_residual_0.o
+    Object src/battle_controller_opponent_pr_run1.o
+    Object asm/battle_controller_opponent_pr_residual_1.o
+    Object src/battle_controller_opponent_pr_run2.o
+    Object asm/battle_controller_opponent_pr_residual_2.o
+    Object src/battle_controller_opponent_pr_run3.o
+    Object asm/battle_controller_opponent_pr_residual_3.o
     Object src/battle/battle_02261FD4.o
     Object asm/overlay_12_battle_controller_prefix.o
     Object src/overlay12_battle_controller_core.o

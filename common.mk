@@ -80,7 +80,7 @@ NATIVE_TOOLS := \
 TOOLDIRS := $(foreach tool,$(NATIVE_TOOLS),$(dir $(tool)))
 
 # Directories
-NITROSDK_SRC_SUBDIRS      := os mi
+NITROSDK_SRC_SUBDIRS      := os mi fx gx
 
 LIB_SUBDIRS               := cw NitroSDK NitroSystem NitroDWC NitroWiFi libCPS libVCT MSL_C
 SRC_SUBDIR                := src

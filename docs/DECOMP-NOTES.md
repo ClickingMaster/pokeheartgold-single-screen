@@ -1028,3 +1028,33 @@ linker. This brings the fork to 2,254 converted functions and 99,330
 additional mapped C bytes relative to the initial baseline. The treemap was
 refreshed after both builds. Validation used local builds only; GitHub CI
 remained disabled.
+
+### Clean public SDK and battle-controller pass
+
+Reimplemented 203 NitroSDK functions in C across the FX matrix/vector,
+GX/G2/G3, VRAM, background, display-list loading, and MI DMA modules. The
+starting point was manually decompiled public source from `pret/pokediamond`,
+adapted and independently compiled against HeartGold's MWCC 2.0/sp2p3 objects.
+Only functions that matched the repository objects were integrated; eleven
+inline-assembly functions were excluded and remain in residual assembly.
+
+Integrated nine further battle-controller functions from human-authored
+upstream PRs #504 and #426. PR #426 was closed because it depended on the
+withdrawn PR #504, rather than because its functions failed to match. Their
+combined C and residual-assembly layout was reverified for both game builds.
+
+No leaked Nintendo, Game Freak, NitroSDK, or compiler source was used. A
+separate 38-function CARD candidate bank was verified from public clean-room
+work but remains untracked because safely splitting the monolithic `nitro.o`
+requires a dedicated full-link layout proof.
+
+Both complete retail ROM SHA1s match from sequential local builds:
+
+- HeartGold: `4fcded0e2713dc03929845de631d0932ea2b5a37`
+- SoulSilver: `f8dc38ea20c17541a43b58c5e6d18c1732c7e582`
+
+HeartGold C-only mapped coverage increased from 47.447176% to 48.018617%,
+adding 23,298 mapped C bytes (1,934,688 → 1,957,986) out of 4,077,556
+classified bytes. The mapped total decreased by six alignment bytes supplied
+by the linker. The treemap was refreshed and progress tests passed. Validation
+used local builds only; GitHub CI remained disabled.
