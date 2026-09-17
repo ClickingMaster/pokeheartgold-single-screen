@@ -56,3 +56,32 @@ void ov01_021F3F9C(MessageFormat *msgFmt, struct SaveStatsPrinterStats *stats) {
 int ov01_021F4044(struct SaveStatsPrinterStats *stats) {
     return 10;
 }
+void ov01_021F4048(struct SaveStatsPrinter *printer) {
+    String *str;
+    int y;
+    int lineHeight;
+    u32 i;
+
+    lineHeight = GetFontAttribute(0, 1) + GetFontAttribute(0, 3);
+    y = 0;
+
+    str = ReadMsgData_ExpandPlaceholders(printer->msgFmt, printer->msgData, 0, printer->heapId);
+    AddTextPrinterParameterized(printer->window, 0, str, 0, 0, 0xFF, NULL);
+    String_Delete(str);
+
+    for (i = 1; i < 5; i++) {
+        if (sMsgIdsSub[i] == 3 && printer->stats.dexOwned == 0) {
+            continue;
+        }
+        y += lineHeight;
+        str = NewString_ReadMsgData(printer->msgData, sMsgIdsSub[i]);
+        AddTextPrinterParameterized(printer->window, 0, str, 0, y, 0xFF, NULL);
+        String_Delete(str);
+        str = ReadMsgData_ExpandPlaceholders(printer->msgFmt, printer->msgData, sMsgIdsMain[i - 1], printer->heapId);
+        {
+            int x = 0x68 - FontID_String_GetWidth(0, str, GetFontAttribute(0, 2));
+            AddTextPrinterParameterized(printer->window, 0, str, x, y, 0xFF, NULL);
+        }
+        String_Delete(str);
+    }
+}

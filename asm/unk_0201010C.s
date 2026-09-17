@@ -148,7 +148,9 @@ _020F5F1C:
 	.data
 
 	.public _0210F64C
+.public _0210F64C_call
 _0210F64C:
+_0210F64C_call:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00
 	.public _0210F654
 _0210F654:
@@ -188,31 +190,3 @@ _0210F6B4:
 
 	.text
 	.public FadeFunc_01
-	thumb_func_start FadeFunc_02
-FadeFunc_02: ; 0x02010148
-	push {r4, lr}
-	add r4, r0, #0
-	ldr r1, [r4, #0xc]
-	cmp r1, #0
-	bne _02010170
-	ldr r1, _02010178 ; =_020F5D60
-	ldr r0, _0201017C ; =_0210F64C
-	str r1, [r0]
-	ldrh r0, [r4, #0x24]
-	bl sub_0200FCDC
-	ldr r1, _02010180 ; =_0210F64C
-	add r0, r4, #0
-	bl sub_0201289C
-	mov r0, #1
-	str r0, [r4, #0x28]
-	mov r0, #0
-	str r0, [r4, #0x2c]
-	pop {r4, pc}
-_02010170:
-	bl sub_020128E0
-	pop {r4, pc}
-	nop
-_02010178: .word _020F5D60
-_0201017C: .word _0210F64C
-_02010180: .word _0210F64C
-	thumb_func_end FadeFunc_02

@@ -15,7 +15,7 @@ typedef struct SaveApricornBox SaveApricornBox;
 
 SaveApricornBox *Save_ApricornBox_Get(SaveData *saveData);
 void sub_02031CCC(SaveApricornBox *, int);
-BOOL sub_02031CEC(SaveApricornBox *apricornBox, u16 a1, UnkStruct_02031CEC *a2);
+BOOL sub_02031CEC(SaveApricornBox *apricornBox, int a1, UnkStruct_02031CEC *a2);
 int sub_02031D80(UnkStruct_02031CEC *a0);
 void sub_02032058(SaveApricornBox *saveApricornBox, u32 steps);
 String *sub_020322AC(SaveApricornBox *apricornBox, int a1, u32 a2);

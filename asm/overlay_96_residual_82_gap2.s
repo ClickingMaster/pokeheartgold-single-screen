@@ -5,36 +5,6 @@
 
 	.text
 
-	thumb_func_start ov96_0220146C
-ov96_0220146C: ; 0x0220146C
-	push {r4, lr}
-	sub sp, #0x80
-	mov r1, #0xa7
-	lsl r1, r1, #2
-	add r0, r0, r1
-	mov r2, #0
-	add r1, sp, #0
-_0220147A:
-	add r2, r2, #1
-	stmia r1!, {r0}
-	add r0, #0x14
-	cmp r2, #0x10
-	blt _0220147A
-	add r0, sp, #0
-	add r1, sp, #0x40
-	bl ov96_022014A4
-	add r4, r0, #0
-	bl LCRandom
-	add r1, r4, #0
-	bl _s32_div_f
-	lsl r0, r1, #0x18
-	lsr r1, r0, #0x16
-	add r0, sp, #0x40
-	ldr r0, [r0, r1]
-	add sp, #0x80
-	pop {r4, pc}
-	thumb_func_end ov96_0220146C
-
 	thumb_func_start ov96_022014A4
 ov96_022014A4: ; 0x022014A4
 	push {r3, r4, r5, r6, r7, lr}

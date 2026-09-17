@@ -182,6 +182,7 @@ $(BUILD_DIR)/%.o: %.c $(BUILD_DIR)/%.d
 	@$(BUILD_C) $@ $< || { rm -f $(BUILD_DIR)/%.d; exit 1; }
 	@if test -f "$(basename $<).snd-section-map.json"; then $(PYTHON) tools/nitro-section-renames/rename_snd_sections.py "$@" "$@" "$(basename $<).snd-section-map.json"; fi
 	@if test -f "$(basename $<).card-section-map.json"; then $(PYTHON) tools/nitro-section-renames/rename_card_sections.py "$@" "$@" "$(basename $<).card-section-map.json"; fi
+	@if test -f "$(basename $<).alias-map.json"; then $(PYTHON) tools/object_aliases.py "$@" "$(basename $<).alias-map.json"; fi
 	@$(call fixdep,$(BUILD_DIR)/$*.d)
 
 $(BUILD_DIR)/%.o: %.s
@@ -199,6 +200,7 @@ $(BUILD_DIR)/%.o: %.c
 	$(BUILD_C) $@ $<
 	if test -f "$(basename $<).snd-section-map.json"; then $(PYTHON) tools/nitro-section-renames/rename_snd_sections.py "$@" "$@" "$(basename $<).snd-section-map.json"; fi
 	if test -f "$(basename $<).card-section-map.json"; then $(PYTHON) tools/nitro-section-renames/rename_card_sections.py "$@" "$@" "$(basename $<).card-section-map.json"; fi
+	if test -f "$(basename $<).alias-map.json"; then $(PYTHON) tools/object_aliases.py "$@" "$(basename $<).alias-map.json"; fi
 
 $(BUILD_DIR)/%.o: %.s
 	$(WINE) $(MWAS) $(MWASFLAGS) -o $@ $<

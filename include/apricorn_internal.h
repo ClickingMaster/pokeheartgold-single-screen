@@ -46,7 +46,7 @@ typedef struct ApricornMix {
 int sub_02031C08(SaveApricornBox *);
 int ApricornBox_TakeApricorn(SaveApricornBox *, int, u32);
 void sub_02031B5C(void *);
-BOOL sub_02031CEC(SaveApricornBox *, u16, UnkStruct_02031CEC *);
+BOOL sub_02031CEC(SaveApricornBox *, int, UnkStruct_02031CEC *);
 BOOL sub_02031D6C(UnkStruct_02031CEC *);
 int sub_02031D80(UnkStruct_02031CEC *);
 void sub_02031DA0(void *, void *);
