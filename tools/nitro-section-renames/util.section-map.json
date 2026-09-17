@@ -1,0 +1,13 @@
+{
+  "text": {
+    "SND_CalcChannelVolume": ".text.snd_06"
+  },
+  "sections": {
+    "SNDi_DecibelTable": ".rodata.snd_decibel",
+    "sVolumeTable": ".rodata.snd_volume"
+  },
+  "globalize": [
+    "SNDi_DecibelTable",
+    "sVolumeTable"
+  ]
+}

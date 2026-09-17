@@ -1085,3 +1085,32 @@ HeartGold C-only mapped coverage increased from 48.018617% to 48.488799%
 classified total decreased by 70 alignment bytes supplied by the linker. The
 treemap was refreshed and progress tests passed. Validation used local builds
 only; GitHub CI remained disabled.
+
+### Fifty-percent clean-room integration pass
+
+Integrated 410 byte-matched functions from parallel clean-room reconstruction
+and the independently verified public NitroSDK work. The SDK sources were
+adapted from the public `pret/pokediamond` repository and rebuilt with this
+repository's exact compiler versions and flags. No leaked Nintendo, Game
+Freak, SDK, or compiler source was used. Every accepted function was checked
+against frozen retail-derived objects before integration.
+
+The full link exposed three layout issues that per-function object comparison
+could not prove: a discarded writable data symbol shifted later main data by
+eight bytes, and two residual assembly splits placed exact C functions in the
+wrong link order. Keeping the related data in one assembly section and
+splitting each residual at the true function boundary restored the retail
+layout without dropping the matched C.
+
+Both complete retail ROM SHA1s match after formatting and sequential local
+rebuilds:
+
+- HeartGold: `4fcded0e2713dc03929845de631d0932ea2b5a37`
+- SoulSilver: `f8dc38ea20c17541a43b58c5e6d18c1732c7e582`
+
+HeartGold C-only mapped coverage increased from 48.488799% to 50.691369%
+(+2.202569 percentage points), from 1,977,124 to 2,043,804 C bytes. The
+classified mapped total changed from 4,077,486 to 4,031,858 bytes as assembly
+objects were split and the SDK link unit was reconstructed. The treemap was
+refreshed and progress tests passed. Validation used local builds only; GitHub
+CI remained disabled.

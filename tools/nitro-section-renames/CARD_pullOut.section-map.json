@@ -1,0 +1,4 @@
+{
+ "CARD_InitPulledOutCallback":".text.card_pullout_prefix", "CARDi_PulledOutCallback":".text.card_pullout_prefix", "CARD_IsPulledOut":".text.card_pullout_prefix",
+ "CARDi_CheckPulledOutCore":".text.card_pullout_suffix", "CARDi_SendtoPxi":".text.card_pullout_suffix"
+}

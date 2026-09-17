@@ -1,0 +1,16 @@
+{
+  "text": {
+    "SND_AssignWaveArc": ".text.snd_06",
+    "SND_DestroyWaveArc": ".text.snd_07",
+    "SND_GetFirstInstDataPos": ".text.snd_07",
+    "SND_GetWaveDataCount": ".text.snd_08",
+    "SND_SetWaveDataAddress": ".text.snd_08",
+    "SND_GetWaveDataAddress": ".text.snd_08"
+  },
+  "sections": {},
+  "globalize": [],
+  "undefine": [
+    "SND_DestroyBank",
+    "SND_GetNextInstData"
+  ]
+}

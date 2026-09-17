@@ -1,0 +1,14 @@
+{
+  "text": {
+    "SND_AlarmInit": ".text.snd_05",
+    "SNDi_IncAlarmId": ".text.snd_05",
+    "SNDi_SetAlarmHandler": ".text.snd_05",
+    "SNDi_CallAlarmHandler": ".text.snd_05"
+  },
+  "sections": {
+    "sCallbackTable": ".bss.snd_alarm"
+  },
+  "globalize": [
+    "sCallbackTable"
+  ]
+}

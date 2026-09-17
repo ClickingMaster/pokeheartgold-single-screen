@@ -1,0 +1,4 @@
+{
+ "CARDi_ReadFromCache":".text.card_rom_prefix", "CARDi_SetRomOp":".text.card_rom_prefix", "CARDi_SetCardDma":".text.card_rom_prefix", "CARDi_OnReadCard":".text.card_rom_prefix",
+ "CARDi_ReadRomIDCore":".text.card_rom_suffix", "CARDi_ReadRomSyncCore":".text.card_rom_suffix", "CARDi_ReadRom":".text.card_rom_suffix", "CARD_Init":".text.card_rom_suffix", "CARD_WaitRomAsync":".text.card_rom_suffix", "CARDi_GetRomAccessor":".text.card_rom_suffix"
+}

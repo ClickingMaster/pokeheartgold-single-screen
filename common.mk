@@ -80,7 +80,7 @@ NATIVE_TOOLS := \
 TOOLDIRS := $(foreach tool,$(NATIVE_TOOLS),$(dir $(tool)))
 
 # Directories
-NITROSDK_SRC_SUBDIRS      := os mi fx gx
+NITROSDK_SRC_SUBDIRS      := os mi fx gx card cp ctrdg fs math pxi rtc snd
 
 LIB_SUBDIRS               := cw NitroSDK NitroSystem NitroDWC NitroWiFi libCPS libVCT MSL_C
 SRC_SUBDIR                := src
@@ -122,7 +122,7 @@ XMAP              := $(ELF).xMAP
 
 EXCCFLAGS         := -Cpp_exceptions off
 
-MWCFLAGS           = $(DEFINES) $(OPTFLAGS) -sym on -enum int -lang c99 $(EXCCFLAGS) -gccext,on -proc $(PROC) -msgstyle gcc -gccinc -i ./src -i ./include -i ./include/library -i $(WORK_DIR)/files -I$(WORK_DIR)/lib/include -ipa file -interworking -inline on,noauto -char signed -W all -W pedantic -W noimpl_signedunsigned -W noimplicitconv -W nounusedarg -W nomissingreturn -W error
+MWCFLAGS           = $(DEFINES) $(OPTFLAGS) -sym on -enum int -lang c99 $(EXCCFLAGS) -gccext,on -proc $(PROC) -msgstyle gcc -gccinc -i ./src -i ./include -i ./include/library -i $(WORK_DIR)/files -I$(WORK_DIR)/lib/include -i $(WORK_DIR)/lib/NitroSDK/include -i $(WORK_DIR)/lib/NitroSDK/include-mw -i $(WORK_DIR)/lib/NitroSDK/include-pokediamond -ipa file -interworking -inline on,noauto -char signed -W all -W pedantic -W noimpl_signedunsigned -W noimplicitconv -W nounusedarg -W nomissingreturn -W error
 
 MWASFLAGS          = $(DEFINES) -proc $(PROC_S) -g -gccinc -i . -i ./include -i $(WORK_DIR)/asm/include -i $(WORK_DIR)/files -i $(WORK_DIR)/lib/asm/include -i $(WORK_DIR)/lib/NitroDWC/asm/include -i $(WORK_DIR)/lib/MSL_C/asm/include -i $(WORK_DIR)/lib/NitroSDK/asm/include -i $(WORK_DIR)/lib/syscall/asm/include -i $(WORK_DIR)/asm -i $(WORK_DIR)/files/msgdata -I$(WORK_DIR)/lib/include -DSDK_ASM
 MWLDFLAGS         := -proc $(PROC) -sym on -nopic -nopid -interworking -map closure,unused -symtab sort -m _start -msgstyle gcc
@@ -180,6 +180,8 @@ $(BUILD_DIR)/%.o: %.c
 $(BUILD_DIR)/%.o: %.c $(BUILD_DIR)/%.d
 	@echo $(BUILD_C) $@ $<
 	@$(BUILD_C) $@ $< || { rm -f $(BUILD_DIR)/%.d; exit 1; }
+	@if test -f "$(basename $<).snd-section-map.json"; then $(PYTHON) tools/nitro-section-renames/rename_snd_sections.py "$@" "$@" "$(basename $<).snd-section-map.json"; fi
+	@if test -f "$(basename $<).card-section-map.json"; then $(PYTHON) tools/nitro-section-renames/rename_card_sections.py "$@" "$@" "$(basename $<).card-section-map.json"; fi
 	@$(call fixdep,$(BUILD_DIR)/$*.d)
 
 $(BUILD_DIR)/%.o: %.s
@@ -195,6 +197,8 @@ BUILD_C ?= $(MW_COMPILE) -c -o
 
 $(BUILD_DIR)/%.o: %.c
 	$(BUILD_C) $@ $<
+	if test -f "$(basename $<).snd-section-map.json"; then $(PYTHON) tools/nitro-section-renames/rename_snd_sections.py "$@" "$@" "$(basename $<).snd-section-map.json"; fi
+	if test -f "$(basename $<).card-section-map.json"; then $(PYTHON) tools/nitro-section-renames/rename_card_sections.py "$@" "$@" "$(basename $<).card-section-map.json"; fi
 
 $(BUILD_DIR)/%.o: %.s
 	$(WINE) $(MWAS) $(MWASFLAGS) -o $@ $<
@@ -215,6 +219,7 @@ $(LCF): $(LSF) $(LCF_TEMPLATE)
 	$(WINE) $(MAKELCF) $(MAKELCF_FLAGS) $^ $@
 ifeq ($(PROC),arm946e)
 	$(SED) -i '1i KEEP_SECTION\n{\n\t.exceptix\n}' $@
+	python3 tools/nitro-section-renames/patch_nitro_lcf.py $@
 else
 	$(SED) -i '/\} > check\.WORKRAM/a SDK_SUBPRIV_ARENA_LO = SDK_SUBPRIV_ARENA_LO + SDK_AUTOLOAD.EXT_WRAM.SIZE + SDK_AUTOLOAD.EXT_WRAM.BSS_SIZE;' $@
 endif

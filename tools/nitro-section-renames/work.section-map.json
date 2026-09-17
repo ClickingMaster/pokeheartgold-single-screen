@@ -1,0 +1,14 @@
+{
+  "text": {
+    "SND_GetPlayerStatus": ".text.snd_05",
+    "SND_GetChannelStatus": ".text.snd_05",
+    "SNDi_GetFinishedCommandTag": ".text.snd_06",
+    "SNDi_InitSharedWork": ".text.snd_06"
+  },
+  "sections": {
+    "SNDi_SharedWork": ".bss.snd_work"
+  },
+  "globalize": [
+    "SNDi_SharedWork"
+  ]
+}

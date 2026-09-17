@@ -1,0 +1,14 @@
+{
+  "text": {
+    "SND_Init": ".text.snd_03",
+    "SNDi_LockMutex": ".text.snd_03",
+    "SNDi_UnlockMutex": ".text.snd_03"
+  },
+  "sections": {
+    "sSndInitialized": ".bss.snd_main"
+  },
+  "globalize": [
+    "sSndInitialized",
+    "sSndMutex"
+  ]
+}

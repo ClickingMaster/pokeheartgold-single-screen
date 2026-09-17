@@ -1,0 +1,38 @@
+{
+  "text": {
+    "SND_RecvCommandReply": ".text.snd_04",
+    "SND_AllocCommand": ".text.snd_04",
+    "SND_PushCommand": ".text.snd_04",
+    "SND_WaitForCommandProc": ".text.snd_05",
+    "SND_GetCurrentCommandTag": ".text.snd_05",
+    "SND_IsFinishedCommandTag": ".text.snd_05",
+    "SND_CountFreeCommand": ".text.snd_05",
+    "SND_CountReservedCommand": ".text.snd_05",
+    "SND_CountWaitingCommand": ".text.snd_05",
+    "PxiFifoCallback": ".text.snd_05",
+    "InitPXI": ".text.snd_05",
+    "RequestCommandProc": ".text.snd_05",
+    "AllocCommand": ".text.snd_05",
+    "IsCommandAvailable": ".text.snd_05"
+  },
+  "sections": {
+    "sFreeList": ".bss.snd_command_ctrl",
+    "sSharedWork": ".bss.snd_command_shared",
+    "sCommandArray": ".bss.snd_command_array"
+  },
+  "globalize": [
+    "sFreeList",
+    "sWaitingCommandListQueue",
+    "sSharedWork",
+    "sCommandArray",
+    "AllocCommand",
+    "InitPXI",
+    "IsCommandAvailable",
+    "PxiFifoCallback",
+    "RequestCommandProc"
+  ],
+  "undefine": [
+    "SND_CommandInit",
+    "SND_FlushCommand"
+  ]
+}

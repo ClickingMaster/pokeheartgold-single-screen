@@ -1,0 +1,35 @@
+{
+  "text": {
+    "SND_StopSeq": ".text.snd_00",
+    "SND_PrepareSeq": ".text.snd_00",
+    "SND_StartPreparedSeq": ".text.snd_00",
+    "SND_PauseSeq": ".text.snd_00",
+    "SND_SetPlayerVolume": ".text.snd_01",
+    "SND_SetPlayerChannelPriority": ".text.snd_01",
+    "SND_SetTrackPitch": ".text.snd_01",
+    "SND_SetTrackPan": ".text.snd_01",
+    "SND_SetTrackAllocatableChannel": ".text.snd_01",
+    "SND_StartTimer": ".text.snd_01",
+    "SND_StopTimer": ".text.snd_01",
+    "SND_SetupAlarm": ".text.snd_01",
+    "SND_LockChannel": ".text.snd_01",
+    "SND_UnlockChannel": ".text.snd_01",
+    "SND_SetChannelTimer": ".text.snd_01",
+    "SND_SetChannelVolume": ".text.snd_01",
+    "SND_SetChannelPan": ".text.snd_01",
+    "SND_SetupChannelPcm": ".text.snd_01",
+    "SND_InvalidateSeqData": ".text.snd_01",
+    "SND_InvalidateBankData": ".text.snd_01",
+    "SND_InvalidateWaveData": ".text.snd_01",
+    "SND_SetOutputSelector": ".text.snd_02",
+    "SND_SetMasterPan": ".text.snd_02",
+    "SND_ResetMasterPan": ".text.snd_02",
+    "SNDi_SetPlayerParam": ".text.snd_03",
+    "SNDi_SetTrackParam": ".text.snd_03",
+    "PushCommand_impl": ".text.snd_03"
+  },
+  "sections": {},
+  "globalize": [
+    "PushCommand_impl"
+  ]
+}

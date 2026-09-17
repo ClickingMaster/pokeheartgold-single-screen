@@ -1,0 +1,434 @@
+{
+  "objects": [
+    "lib/NitroSDK/src/snd/snd_interface.o",
+    "lib/asm/nitro_unified_residual.o",
+    "lib/NitroSDK/src/snd/SND_main.o",
+    "lib/NitroSDK/src/snd/SND_command.o",
+    "lib/NitroSDK/src/snd/SND_alarm.o",
+    "lib/NitroSDK/src/snd/SND_work.o",
+    "lib/NitroSDK/src/snd/SND_util.o",
+    "lib/NitroSDK/src/snd/SND_bank.o",
+    "lib/NitroSDK/src/pxi/PXI_init.o",
+    "lib/NitroSDK/src/pxi/PXI_fifo.o",
+    "lib/NitroSDK/src/fs/FS_command.o",
+    "lib/NitroSDK/src/fs/FS_command_default.o",
+    "lib/NitroSDK/src/fs/FS_archive_prefix.o",
+    "lib/NitroSDK/src/fs/FS_archive_suffix.o",
+    "lib/NitroSDK/src/fs/FS_file.o",
+    "lib/NitroSDK/src/fs/FS_rom.o",
+    "lib/NitroSDK/src/fs/FS_overlay.o",
+    "lib/NitroSDK/src/cp/CP_context.o",
+    "lib/NitroSDK/src/rtc/rtc_internal.o",
+    "lib/NitroSDK/src/rtc/rtc_convert_pre.o",
+    "lib/NitroSDK/src/rtc/rtc_convert_post.o",
+    "lib/NitroSDK/src/card/CARD_common.o",
+    "lib/NitroSDK/src/card/CARD_backup.o",
+    "lib/NitroSDK/src/card/CARD_rom.o",
+    "lib/NitroSDK/src/card/CARD_request.o",
+    "lib/NitroSDK/src/card/CARD_pullOut.o",
+    "lib/NitroSDK/src/ctrdg/CTRDG_common.o",
+    "lib/NitroSDK/src/ctrdg/CTRDG_backup.o",
+    "lib/NitroSDK/src/ctrdg/CTRDG_flash_AT29LV512.o",
+    "lib/NitroSDK/src/math/MATH_pop.o",
+    "lib/NitroSDK/src/math/MATH_dgt.o",
+    "lib/NitroSDK/src/math/MATH_crc.o"
+  ],
+  "sections": {
+    "text": [
+      {
+        "path": "lib/NitroSDK/src/snd/snd_interface.o",
+        "selector": ".text.snd_00"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".text.unified_01"
+      },
+      {
+        "path": "lib/NitroSDK/src/snd/snd_interface.o",
+        "selector": ".text.snd_01"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".text.unified_03"
+      },
+      {
+        "path": "lib/NitroSDK/src/snd/snd_interface.o",
+        "selector": ".text.snd_02"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".text.unified_05"
+      },
+      {
+        "path": "lib/NitroSDK/src/snd/snd_interface.o",
+        "selector": ".text.snd_03"
+      },
+      {
+        "path": "lib/NitroSDK/src/snd/SND_main.o",
+        "selector": ".text.snd_03"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".text.unified_07"
+      },
+      {
+        "path": "lib/NitroSDK/src/snd/SND_command.o",
+        "selector": ".text.snd_04"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".text.unified_09"
+      },
+      {
+        "path": "lib/NitroSDK/src/snd/SND_command.o",
+        "selector": ".text.snd_05"
+      },
+      {
+        "path": "lib/NitroSDK/src/snd/SND_alarm.o",
+        "selector": ".text.snd_05"
+      },
+      {
+        "path": "lib/NitroSDK/src/snd/SND_work.o",
+        "selector": ".text.snd_05"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".text.unified_11"
+      },
+      {
+        "path": "lib/NitroSDK/src/snd/SND_work.o",
+        "selector": ".text.snd_06"
+      },
+      {
+        "path": "lib/NitroSDK/src/snd/SND_util.o",
+        "selector": ".text.snd_06"
+      },
+      {
+        "path": "lib/NitroSDK/src/snd/SND_bank.o",
+        "selector": ".text.snd_06"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".text.unified_13"
+      },
+      {
+        "path": "lib/NitroSDK/src/snd/SND_bank.o",
+        "selector": ".text.snd_07"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".text.unified_15"
+      },
+      {
+        "path": "lib/NitroSDK/src/snd/SND_bank.o",
+        "selector": ".text.snd_08"
+      },
+      {
+        "path": "lib/NitroSDK/src/pxi/PXI_init.o",
+        "selector": ".text"
+      },
+      {
+        "path": "lib/NitroSDK/src/pxi/PXI_fifo.o",
+        "selector": ".text"
+      },
+      {
+        "path": "lib/NitroSDK/src/fs/FS_command.o",
+        "selector": ".text"
+      },
+      {
+        "path": "lib/NitroSDK/src/fs/FS_command_default.o",
+        "selector": ".text"
+      },
+      {
+        "path": "lib/NitroSDK/src/fs/FS_archive_prefix.o",
+        "selector": ".text"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".text.unified_19"
+      },
+      {
+        "path": "lib/NitroSDK/src/fs/FS_archive_suffix.o",
+        "selector": ".text"
+      },
+      {
+        "path": "lib/NitroSDK/src/fs/FS_file.o",
+        "selector": ".text"
+      },
+      {
+        "path": "lib/NitroSDK/src/fs/FS_rom.o",
+        "selector": ".text"
+      },
+      {
+        "path": "lib/NitroSDK/src/fs/FS_overlay.o",
+        "selector": ".text"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".text.unified_21"
+      },
+      {
+        "path": "lib/NitroSDK/src/cp/CP_context.o",
+        "selector": ".text"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".text.unified_23"
+      },
+      {
+        "path": "lib/NitroSDK/src/rtc/rtc_internal.o",
+        "selector": ".text"
+      },
+      {
+        "path": "lib/NitroSDK/src/rtc/rtc_convert_pre.o",
+        "selector": ".text"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".text.unified_26"
+      },
+      {
+        "path": "lib/NitroSDK/src/rtc/rtc_convert_post.o",
+        "selector": ".text"
+      },
+      {
+        "path": "lib/NitroSDK/src/card/CARD_common.o",
+        "selector": ".text"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".text.unified_29"
+      },
+      {
+        "path": "lib/NitroSDK/src/card/CARD_backup.o",
+        "selector": ".text"
+      },
+      {
+        "path": "lib/NitroSDK/src/card/CARD_rom.o",
+        "selector": ".text.card_rom_prefix"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".text.unified_32"
+      },
+      {
+        "path": "lib/NitroSDK/src/card/CARD_rom.o",
+        "selector": ".text.card_rom_suffix"
+      },
+      {
+        "path": "lib/NitroSDK/src/card/CARD_request.o",
+        "selector": ".text"
+      },
+      {
+        "path": "lib/NitroSDK/src/card/CARD_pullOut.o",
+        "selector": ".text.card_pullout_prefix"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".text.unified_36"
+      },
+      {
+        "path": "lib/NitroSDK/src/card/CARD_pullOut.o",
+        "selector": ".text.card_pullout_suffix"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".text.unified_38"
+      },
+      {
+        "path": "lib/NitroSDK/src/ctrdg/CTRDG_common.o",
+        "selector": ".text"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".text.unified_40"
+      },
+      {
+        "path": "lib/NitroSDK/src/ctrdg/CTRDG_backup.o",
+        "selector": ".text"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".text.unified_42"
+      },
+      {
+        "path": "lib/NitroSDK/src/ctrdg/CTRDG_flash_AT29LV512.o",
+        "selector": ".text"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".text.unified_44"
+      },
+      {
+        "path": "lib/NitroSDK/src/math/MATH_pop.o",
+        "selector": ".text"
+      },
+      {
+        "path": "lib/NitroSDK/src/math/MATH_dgt.o",
+        "selector": ".text"
+      },
+      {
+        "path": "lib/NitroSDK/src/math/MATH_crc.o",
+        "selector": ".text"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".text.unified_46"
+      }
+    ],
+    "rodata": [
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".rodata.unified_00"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".rodata.alias_d750"
+      },
+      {
+        "path": "lib/NitroSDK/src/snd/SND_util.o",
+        "selector": ".rodata.snd_decibel"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".rodata.unified_01"
+      },
+      {
+        "path": "lib/NitroSDK/src/snd/SND_util.o",
+        "selector": ".rodata.snd_volume"
+      },
+      {
+        "path": "lib/NitroSDK/src/fs/FS_command_default.o",
+        "selector": ".rodata"
+      },
+      {
+        "path": "lib/NitroSDK/src/fs/FS_overlay.o",
+        "selector": ".rodata"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".rodata.unified_02"
+      },
+      {
+        "path": "lib/NitroSDK/src/ctrdg/CTRDG_backup.o",
+        "selector": ".rodata"
+      },
+      {
+        "path": "lib/NitroSDK/src/ctrdg/CTRDG_flash_AT29LV512.o",
+        "selector": ".rodata"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".rodata.unified_03"
+      }
+    ],
+    "data": [
+      {
+        "path": "lib/NitroSDK/src/fs/FS_command_default.o",
+        "selector": ".data"
+      },
+      {
+        "path": "lib/NitroSDK/src/fs/FS_rom.o",
+        "selector": ".data"
+      },
+      {
+        "path": "lib/NitroSDK/src/fs/FS_overlay.o",
+        "selector": ".data"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".data.unified_00"
+      },
+      {
+        "path": "lib/NitroSDK/src/rtc/rtc_convert_pre.o",
+        "selector": ".data"
+      },
+      {
+        "path": "lib/NitroSDK/src/card/CARD_rom.o",
+        "selector": ".data"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".data.unified_01"
+      }
+    ],
+    "bss": [
+      {
+        "path": "lib/NitroSDK/src/snd/SND_main.o",
+        "selector": ".bss.snd_main"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".bss.unified_00"
+      },
+      {
+        "path": "lib/NitroSDK/src/snd/SND_command.o",
+        "selector": ".bss.snd_command_ctrl"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".bss.unified_01"
+      },
+      {
+        "path": "lib/NitroSDK/src/snd/SND_command.o",
+        "selector": ".bss.snd_command_shared"
+      },
+      {
+        "path": "lib/NitroSDK/src/snd/SND_command.o",
+        "selector": ".bss.snd_command_array"
+      },
+      {
+        "path": "lib/NitroSDK/src/snd/SND_alarm.o",
+        "selector": ".bss.snd_alarm"
+      },
+      {
+        "path": "lib/NitroSDK/src/snd/SND_work.o",
+        "selector": ".bss.snd_work"
+      },
+      {
+        "path": "lib/NitroSDK/src/pxi/PXI_fifo.o",
+        "selector": ".bss"
+      },
+      {
+        "path": "lib/NitroSDK/src/fs/FS_archive_suffix.o",
+        "selector": ".bss"
+      },
+      {
+        "path": "lib/NitroSDK/src/fs/FS_file.o",
+        "selector": ".bss"
+      },
+      {
+        "path": "lib/NitroSDK/src/fs/FS_rom.o",
+        "selector": ".bss"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".bss.unified_02"
+      },
+      {
+        "path": "lib/NitroSDK/src/card/CARD_common.o",
+        "selector": ".bss"
+      },
+      {
+        "path": "lib/NitroSDK/src/card/CARD_rom.o",
+        "selector": ".bss"
+      },
+      {
+        "path": "lib/NitroSDK/src/card/CARD_pullOut.o",
+        "selector": ".bss"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".bss.unified_03"
+      },
+      {
+        "path": "lib/NitroSDK/src/ctrdg/CTRDG_common.o",
+        "selector": ".bss"
+      },
+      {
+        "path": "lib/asm/nitro_unified_residual.o",
+        "selector": ".bss.unified_04"
+      }
+    ]
+  }
+}
