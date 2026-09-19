@@ -1114,3 +1114,32 @@ classified mapped total changed from 4,077,486 to 4,031,858 bytes as assembly
 objects were split and the SDK link unit was reconstructed. The treemap was
 refreshed and progress tests passed. Validation used local builds only; GitHub
 CI remained disabled.
+
+### Fifty-two-percent clean-room integration pass
+
+Integrated parallel clean-room reconstructions that were compiled with the
+project's exact MWCC toolchain and checked against frozen HeartGold and
+SoulSilver reference objects. Accepted functions passed byte, relocation,
+RELA-addend, data-ownership, source-order, and residual-assembly checks. No
+leaked Nintendo, Game Freak, SDK, or compiler source was used.
+
+The full link caught two issues that the per-function comparisons could not
+prove. Splitting overlay 8 into many small objects allowed the linker to
+discard nine unreferenced objects, shifting that overlay and callers in
+overlay 12, so that unsafe package was excluded. One overlay 57 C function was
+also initially placed after its residual assembly rather than at its original
+middle position; splitting the residual at the true boundary restored the
+retail layout.
+
+Both complete retail ROM SHA1s match after formatting and sequential local
+rebuilds:
+
+- HeartGold: `4fcded0e2713dc03929845de631d0932ea2b5a37`
+- SoulSilver: `f8dc38ea20c17541a43b58c5e6d18c1732c7e582`
+
+HeartGold C-only mapped coverage increased from 51.012916% to 52.007483%
+(+0.994567 percentage points), from 2,056,752 to 2,096,794 C bytes. This adds
+40,042 mapped C bytes; the classified total changed from 4,031,826 to
+4,031,716 bytes as linker-supplied alignment replaced assembly padding. The
+treemap was refreshed after both builds. Validation used local builds only;
+GitHub CI remained disabled.

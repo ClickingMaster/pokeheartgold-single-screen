@@ -1,0 +1,7 @@
+#ifndef TO50_OVERLAY80_RESIDUAL21_PRIVATE_H
+#define TO50_OVERLAY80_RESIDUAL21_PRIVATE_H
+#include "global.h"
+BOOL ov80_0222D244(void);
+BOOL sub_02037D78(void);
+BOOL sub_02035650(void);
+#endif
