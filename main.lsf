@@ -2102,7 +2102,57 @@ Overlay OVY_12
     Object src/battle/battle_controller_player.o
     Object src/battle/overlay_12_0224E4FC.o
     Object src/battle_ai_post_ko.o
-    Object asm/battle_controller_opponent_pr_residual_0.o
+    Object src/battle/battle_c_00_w13.o
+    Object asm/battle_residual_00.o
+    Object src/battle/battle_c_01_w13.o
+    Object asm/battle_residual_01.o
+    Object src/battle/battle_c_02_w13.o
+    Object asm/battle_residual_02.o
+    Object src/battle/battle_c_03_w13.o
+    Object asm/battle_residual_03.o
+    Object src/battle/battle_c_04_w13.o
+    Object asm/battle_residual_04.o
+    Object src/battle/battle_c_05_w13.o
+    Object asm/battle_residual_05.o
+    Object src/battle/battle_c_06_w13.o
+    Object asm/battle_residual_06.o
+    Object src/battle/battle_c_07_w14.o
+    Object asm/battle_residual_07.o
+    Object src/battle/battle_c_08_w14.o
+    Object asm/battle_residual_08.o
+    Object src/battle/battle_c_09_w14.o
+    Object asm/battle_residual_09.o
+    Object src/battle/battle_c_10_w14.o
+    Object asm/battle_residual_10.o
+    Object src/battle/battle_c_11_w14.o
+    Object asm/battle_residual_11.o
+    Object src/battle/battle_c_12_w14.o
+    Object asm/battle_residual_12.o
+    Object src/battle/battle_c_13_w14.o
+    Object asm/battle_residual_13.o
+    Object src/battle/battle_c_14_w15.o
+    Object asm/battle_residual_14.o
+    Object src/battle/battle_c_15_w15.o
+    Object asm/battle_residual_15.o
+    Object src/battle/battle_c_16_w16.o
+    Object asm/battle_residual_16.o
+    Object src/battle/battle_c_17_w16.o
+    Object asm/battle_residual_17.o
+    Object src/battle/battle_c_18_w16.o
+    Object asm/battle_residual_18.o
+    Object src/battle/battle_c_19_w16.o
+    Object asm/battle_residual_19.o
+    Object src/battle/battle_c_w17_group1.o
+    Object asm/battle_residual_20.o
+    Object src/battle/battle_c_w17_group2.o
+    Object asm/battle_residual_21.o
+    Object src/battle/battle_c_w17_group3.o
+    Object asm/battle_residual_22.o
+    Object src/battle/battle_c_w17_group4.o
+    Object asm/battle_residual_23.o
+    Object src/battle/battle_c_w17_group5.o
+    Object asm/battle_residual_24.o
+    Object src/battle/battle_c_w17_group6.o
     Object src/battle_controller_opponent_pr_run1.o
     Object src/battle_controller_opponent_pr_messages.o
     Object src/battle_controller_opponent_pr_run2.o
