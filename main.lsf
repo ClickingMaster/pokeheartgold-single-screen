@@ -2223,7 +2223,54 @@ Overlay OVY_13
     After OVY_0
     Object src/overlay_13_thumb_1.o
     Object lib/NitroSDK/asm/mb.o
-    Object asm/overlay_13_thumb_2.o
+    Object src/to53_overlay13/to53_overlay13_c01_w09.o
+    Object asm/to53_overlay13_r01.o
+    Object src/to53_overlay13/to53_overlay13_c02_w09.o
+    Object asm/to53_overlay13_r02.o
+    Object src/to53_overlay13/to53_overlay13_c03_w09.o
+    Object asm/to53_overlay13_r03.o
+    Object src/to53_overlay13/to53_overlay13_c04_w09.o
+    Object asm/to53_overlay13_r04.o
+    Object src/to53_overlay13/to53_overlay13_c05_w09.o
+    Object asm/to53_overlay13_r05.o
+    Object src/to53_overlay13/to53_overlay13_c06_w09.o
+    Object asm/to53_overlay13_r06.o
+    Object src/to53_overlay13/to53_overlay13_c07_w09.o
+    Object asm/to53_overlay13_r07.o
+    Object src/to53_overlay13/to53_overlay13_c08_w10.o
+    Object asm/to53_overlay13_r08.o
+    Object src/to53_overlay13/to53_overlay13_c09_w10.o
+    Object asm/to53_overlay13_r09.o
+    Object src/to53_overlay13/to53_overlay13_c10_w10.o
+    Object asm/to53_overlay13_r10.o
+    Object src/to53_overlay13/to53_overlay13_c11_w10.o
+    Object asm/to53_overlay13_r11.o
+    Object src/to53_overlay13/to53_overlay13_c12_w10.o
+    Object asm/to53_overlay13_r12.o
+    Object src/to53_overlay13/to53_overlay13_c13_w10.o
+    Object asm/to53_overlay13_r13.o
+    Object src/to53_overlay13/to53_overlay13_c14_w10.o
+    Object asm/to53_overlay13_r14.o
+    Object src/to53_overlay13/to53_overlay13_c15_w10.o
+    Object asm/to53_overlay13_r15.o
+    Object src/to53_overlay13/to53_overlay13_c16_w11.o
+    Object asm/to53_overlay13_r16.o
+    Object src/to53_overlay13/to53_overlay13_c17_w11.o
+    Object asm/to53_overlay13_r17.o
+    Object src/to53_overlay13/to53_overlay13_c18_w11.o
+    Object asm/to53_overlay13_r18.o
+    Object src/to53_overlay13/to53_overlay13_c19_w12.o
+    Object asm/to53_overlay13_r19.o
+    Object src/to53_overlay13/to53_overlay13_c20_w12.o
+    Object asm/to53_overlay13_r20.o
+    Object src/to53_overlay13/to53_overlay13_c21_w12.o
+    Object asm/to53_overlay13_r21.o
+    Object src/to53_overlay13/to53_overlay13_c22_w12.o
+    Object asm/to53_overlay13_r22.o
+    Object src/to53_overlay13/to53_overlay13_c23_w12.o
+    Object asm/to53_overlay13_r23.o
+    Object src/to53_overlay13/to53_overlay13_c24_w12.o
+    Object asm/to53_overlay13_r24_data.o
     Object lib/NitroDWC/asm/overlay_13_arm_2.o
 }
 Overlay OVY_14
