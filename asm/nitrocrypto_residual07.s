@@ -1,0 +1,131 @@
+	.include "asm/macros.inc"
+	.include "nitrocrypto.inc"
+	.include "global.inc"
+
+	.text
+
+	.extern ASN1Skip
+	.extern BN_CTX_free
+	.extern BN_CTX_init
+	.extern BN_CTX_new
+	.extern BN_MONT_CTX_free
+	.extern BN_MONT_CTX_init
+	.extern BN_MONT_CTX_new
+	.extern BN_MONT_CTX_set_word
+	.extern BN_RECP_CTX_free
+	.extern BN_RECP_CTX_init
+	.extern BN_RECP_CTX_set
+	.extern BN_add
+	.extern BN_add_word
+	.extern BN_bin2bn
+	.extern BN_bn2bin
+	.extern BN_clear
+	.extern BN_clear_free
+	.extern BN_copy
+	.extern BN_div
+	.extern BN_div_recp
+	.extern BN_free
+	.extern BN_gen_exp_bits
+	.extern BN_gen_exp_string
+	.extern BN_init
+	.extern BN_is_bit_set
+	.extern BN_lshift
+	.extern BN_mod
+	.extern BN_mod_exp
+	.extern BN_mod_exp_mont
+	.extern BN_mod_exp_recp
+	.extern BN_mod_inverse_word
+	.extern BN_mod_mul_reciprocal
+	.extern BN_mul
+	.extern BN_new
+	.extern BN_reciprocal
+	.extern BN_rshift
+	.extern BN_set_bit
+	.extern BN_set_word
+	.extern BN_sqr
+	.extern BN_sub
+	.extern BN_sub_word
+	.extern BN_uadd
+	.extern BN_ucmp
+	.extern BN_usub
+	.extern CRYPTO_RC4Encrypt
+	.extern CRYPTO_SetAllocator
+	.extern CRYPTO_VerifySignature
+	.extern CRYPTO_VerifySignatureWithHash
+	.extern CRYPTOi_MyAlloc
+	.extern CRYPTOi_MyAllocFunc
+	.extern CRYPTOi_MyFree
+	.extern CRYPTOi_MyFreeFunc
+	.extern CRYPTOi_RSA
+	.extern ParseSignHash
+	.extern SkipPadding
+	.extern TEMPNAME__$p16
+	.extern TEMPNAME__$p2
+	.extern TEMPNAME__$p4
+	.extern bits$7808
+	.extern bn_add_words
+	.extern bn_div_words
+	.extern bn_expand2
+	.extern bn_fix_top
+	.extern bn_from_montgomery_words
+	.extern bn_mul_add_words
+	.extern bn_mul_normal
+	.extern bn_mul_words
+	.extern bn_sqr_normal
+	.extern bn_sqr_words
+	.extern bn_sub_words
+	.extern bn_zexpand
+	.extern shift_val
+
+
+	arm_func_start BN_num_bits
+BN_num_bits: ; 0x0223B180
+	stmdb sp!, {r4, lr}
+	ldr r1, [r0, #4]
+	cmp r1, #0
+	moveq r0, #0
+	ldmeqia sp!, {r4, lr}
+	bxeq lr
+	ldr r0, [r0]
+	sub r4, r1, #1
+	ldr r0, [r0, r4, lsl #2]
+	bl BN_num_bits_word
+	add r0, r0, r4, lsl #5
+	ldmia sp!, {r4, lr}
+	bx lr
+	arm_func_end BN_num_bits
+
+	arm_func_start BN_num_bits_word
+BN_num_bits_word: ; 0x0223B1B4
+	mov r1, #0x10000
+	rsb r1, r1, #0
+	ands r1, r0, r1
+	beq _0223B1D4
+	ands r1, r0, #0xff000000
+	movne r2, #0x18
+	moveq r2, #0x10
+	b _0223B1E0
+_0223B1D4:
+	ands r1, r0, #0xff00
+	movne r2, #8
+	moveq r2, #0
+_0223B1E0:
+	mov r1, r0, lsr r2
+	ands r0, r1, #0xf0
+	ldreq r0, _0223B210 ; =bits$7808
+	ldreqsb r0, [r0, r1]
+	addeq r0, r0, r2
+	bxeq lr
+	ldr r0, _0223B210 ; =bits$7808
+	mov r1, r1, lsr #4
+	ldrsb r0, [r0, r1]
+	add r0, r0, r2
+	add r0, r0, #4
+	bx lr
+	.balign 4, 0
+_0223B210: .word bits$7808
+	arm_func_end BN_num_bits_word
+
+	; util.o
+
+	.text
