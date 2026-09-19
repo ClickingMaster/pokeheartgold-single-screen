@@ -2587,7 +2587,7 @@ Overlay OVY_18
     Object src/sol_r9_ov18_run04.o
     Object src/to52_overlay18_dex_measurement_text.o
     Object src/sol_r9_ov18_run04b.o
-    Object asm/sol_r9_ov18_gap07.o
+    Object src/overlay18_pokedex_entries/overlay18_pokedex_entries.o
     Object src/sol_r9_ov18_run05.o
     Object asm/sol_r9_ov18_gap08.o
     Object src/sol_r9_ov18_run06.o
@@ -2681,7 +2681,7 @@ Overlay OVY_18
     Object src/overlay18_sol_partial_20.o
     Object asm/overlay_18_residual_21_gap_1.o
     Object src/overlay18_profile_animation_run1.o
-    Object asm/overlay_18_residual_21_gap_2.o
+    Object src/overlay18_profile_animation/overlay18_profile_animation.o
     Object src/overlay18_profile_animation_run2.o
     Object asm/overlay_18_residual_21_gap_3.o
     Object src/overlay18_profile_animation_run3.o
@@ -2711,7 +2711,7 @@ Overlay OVY_18
     Object src/overlay18_sol_partial_25.o
     Object asm/overlay_18_residual_26.o
     Object src/overlay18_sol_partial_26.o
-    Object asm/overlay_18_residual_27.o
+    Object src/overlay18_pokedex_grid/overlay18_pokedex_grid.o
     Object src/overlay18_sol_partial_27.o
     Object src/overlay18_pokedex_grid_navigation_r28.o
     Object src/overlay18_sol_partial_28.o
@@ -2926,7 +2926,7 @@ Overlay OVY_31
     Object src/overlay31_helpers_6.o
     Object src/to45_overlay31_status_text_r7.o
     Object src/overlay31_helpers_7.o
-    Object asm/overlay_31_residual_8.o
+    Object src/overlay31_points_display/overlay31_points_display.o
     Object src/overlay31_helpers_8.o
     Object asm/to45_overlay31_message_r9_residual.o
     Object src/to45_overlay31_yesno_prompt_r9.o
@@ -3609,7 +3609,7 @@ Overlay OVY_43
     Object asm/overlay_43_residual_15_gap_4.o
     Object src/overlay43_touch_menu_r15_run4.o
     Object src/overlay43_partial_15.o
-    Object asm/overlay_43_residual_16.o
+    Object src/overlay43_palpad_list_render/overlay43_palpad_list_render.o
     Object src/overlay43_partial_16.o
     Object asm/overlay_43_residual_17.o
     Object src/overlay43_partial_17.o
@@ -3619,15 +3619,17 @@ Overlay OVY_43
     Object src/overlay43_partial_19.o
     Object src/r40_overlay_43_residual_20_run1.o
     Object src/overlay43_partial_20.o
-    Object asm/overlay_43_residual_21_head.o
+    Object asm/overlay43_palpad_list_residual.o
+    Object src/overlay43_palpad_list/overlay43_palpad_list.o
     Object src/to52_overlay43_r21_tail.o
     Object src/overlay43_partial_21.o
-    Object asm/overlay_43_residual_22.o
+    Object src/overlay43_palpad_naming/overlay43_palpad_naming.o
     Object src/overlay43_partial_22.o
     Object src/r40_overlay_43_residual_23_run1.o
     Object asm/overlay_43_residual_23.o
     Object src/overlay43_partial_23.o
-    Object asm/overlay_43_residual_24.o
+    Object src/overlay43_palpad_windows/overlay43_palpad_windows.o
+    Object asm/overlay43_palpad_windows_residual.o
     Object src/overlay43_partial_24.o
     Object asm/overlay_43_residual_25.o
     Object src/overlay43_partial_25.o
@@ -3709,11 +3711,12 @@ Overlay OVY_45
     Object src/overlay45_lobby_state_r15_run2.o
     Object asm/overlay_45_thumb_r15_gap_2.o
     Object src/overlay45_lobby_state_r15_run3.o
-    Object asm/overlay_45_thumb_r15_gap_3.o
+    Object asm/overlay45_wireless_profile_residual.o
+    Object src/overlay45_wireless_profile/overlay45_wireless_profile.o
     Object src/overlay45_lobby_state_r15_run4.o
     Object asm/overlay_45_thumb_r15_gap_4.o
     Object src/overlay45_helpers_15.o
-    Object asm/overlay_45_thumb_residual_16.o
+    Object src/overlay45_state_timers/overlay45_state_timers.o
     Object src/overlay45_helpers_16.o
     Object src/r40_overlay_45_thumb_residual_17_run1.o
     Object src/overlay45_helpers_17.o
@@ -3941,7 +3944,7 @@ Overlay OVY_49
 {
     After OVY_45
     Object src/overlay_49_sol_partial_1.o
-    Object asm/overlay_49.o
+    Object src/overlay49_model_resources/overlay49_model_resources.o
     Object src/overlay_49_sol_partial_2.o
     Object asm/overlay_49_residual_2.o
     Object src/overlay_49_sol_partial_3.o
@@ -4346,7 +4349,7 @@ Overlay OVY_57
     Object asm/overlay_57_residual_6_residual_6.o
     Object src/overlay57_vram_helpers_6.o
     Object src/overlay57_helpers_7.o
-    Object asm/overlay_57_residual_7.o
+    Object src/overlay57_lobby_sprites/overlay57_lobby_sprites.o
     Object src/overlay57_window_resource_helpers.o
     Object src/overlay57_helpers_8.o
     Object src/overlay57_resource_setup_r8.o
@@ -4909,7 +4912,7 @@ Overlay OVY_70
     Object src/overlay70_sol_partial_41.o
     Object src/ov70_wave42_prompt.o
     Object src/overlay70_sol_partial_42.o
-    Object asm/overlay_70_residual_43.o
+    Object src/overlay70_wireless_session/overlay70_wireless_session.o
     Object src/overlay70_sol_partial_43.o
     Object src/overlay70_network_state_44.o
     Object src/overlay70_sol_partial_44.o
@@ -5503,7 +5506,9 @@ Overlay OVY_80
     Object src/overlay80_command_helpers_30.o
     Object src/to50_overlay80_command_helper_r30.o
     Object src/overlay80_command_helpers_31.o
-    Object asm/overlay_80_0222BDF4_residual_31.o
+    Object src/overlay80_frontier_messages/overlay80_printer_commands.o
+    Object asm/overlay80_frontier_messages_residual.o
+    Object src/overlay80_frontier_messages/overlay80_message_window.o
     Object src/overlay80_command_helpers_32.o
     Object asm/overlay_80_0222BDF4_residual_32.o
     Object src/r40_overlay_80_0222BDF4_residual_32_run1.o
@@ -6246,7 +6251,9 @@ Overlay OVY_89
     Object src/r40_overlay_89_residual_6_run1.o
     Object asm/overlay_89_residual_6_r40_residual_2.o
     Object src/overlay89_partial_6.o
-    Object asm/overlay_89_residual_7.o
+    Object src/overlay89_score_display/overlay89_text_measure.o
+    Object asm/overlay89_score_display_residual.o
+    Object src/overlay89_score_display/overlay89_scroll_debit.o
     Object src/overlay89_partial_7.o
     Object src/overlay89_r8_c_a49c.o
     Object asm/overlay89_r8_residual_00.o
@@ -6810,7 +6817,7 @@ Overlay OVY_96
     Object src/overlay96_exact_bank_21.o
     Object asm/overlay_96_residual_22.o
     Object src/overlay96_exact_bank_22.o
-    Object asm/overlay_96_residual_23.o
+    Object src/overlay96_sprite_factory/overlay96_sprite_factory.o
     Object src/overlay96_exact_bank_23.o
     Object asm/overlay_96_residual_24.o
     Object src/overlay96_exact_bank_24.o
@@ -6899,7 +6906,7 @@ Overlay OVY_96
     Object asm/overlay_96_residual_47_head.o
     Object src/overlay96_course_scene_gap47_tail.o
     Object src/overlay96_exact_bank_47.o
-    Object asm/overlay_96_residual_48.o
+    Object src/overlay96_course_cleanup/overlay96_course_cleanup.o
     Object src/overlay96_exact_bank_48.o
     Object asm/overlay_96_residual_49_gap_1_unmatched.o
     Object src/overlay96_results_setup_gap1.o
@@ -6913,7 +6920,7 @@ Overlay OVY_96
     Object src/overlay96_exact_bank_49.o
     Object asm/overlay_96_residual_50.o
     Object src/overlay96_exact_bank_50.o
-    Object asm/overlay_96_residual_51.o
+    Object src/overlay96_bg_affine/overlay96_bg_affine.o
     Object src/overlay96_exact_bank_51.o
     Object src/overlay96_results_transition_r52.o
     Object asm/overlay_96_residual_52_tail.o
@@ -7023,7 +7030,10 @@ Overlay OVY_96
     Object src/overlay96_course_results_r62_run3.o
     Object asm/overlay_96_residual_62_part3.o
     Object src/overlay96_exact_bank_62.o
-    Object asm/overlay_96_residual_63.o
+    Object asm/overlay96_ui_items_head_residual.o
+    Object src/overlay96_ui_items/overlay96_ui_items_head.o
+    Object asm/overlay96_ui_items_middle_residual.o
+    Object src/overlay96_ui_items/overlay96_ui_items_tail.o
     Object src/overlay96_exact_bank_63.o
     Object asm/to52_r5_overlay96_r64_head.o
     Object src/to52_r5_overlay96_r64_tail.o
@@ -7166,7 +7176,8 @@ Overlay OVY_96
     Object src/overlay96_course_scene_start_r86.o
     Object asm/overlay_96_residual_86_gap1.o
     Object src/overlay96_course_scene_resources_r86.o
-    Object asm/overlay_96_residual_86_gap2.o
+    Object src/overlay96_sprite_pool/overlay96_sprite_pool.o
+    Object asm/overlay96_sprite_pool_residual.o
     Object src/overlay96_course_scene_state_r86.o
     Object src/to51_ov96_r86_gap3_exact.o
     Object asm/to52_ov96_r86_gap3_head_residual.o
@@ -7210,7 +7221,8 @@ Overlay OVY_96
     Object src/overlay96_course_scene_helpers.o
     Object asm/overlay_96_residual_92_gap_3.o
     Object src/overlay96_course_scene_transition.o
-    Object asm/overlay_96_residual_92_gap_4.o
+    Object src/overlay96_course_results/overlay96_course_results.o
+    Object asm/overlay96_course_results_residual.o
     Object src/overlay96_exact_bank_92.o
     Object asm/overlay_96_residual_93.o
     Object src/to41_overlay_96_residual_93_run1.o
@@ -7434,7 +7446,8 @@ Overlay OVY_96
     Object src/overlay96_exact_bank_119.o
     Object asm/overlay_96_residual_120_gap_1.o
     Object src/overlay96_course_entity_motion_r17_state.o
-    Object asm/overlay_96_residual_120_gap_2.o
+    Object asm/overlay96_motion_target_residual.o
+    Object src/overlay96_motion_target/overlay96_motion_target.o
     Object src/overlay96_course_entity_motion_r17_vectors.o
     Object asm/overlay_96_residual_120_gap_3.o
     Object src/overlay96_course_entity_motion_r17_transition.o
@@ -7456,7 +7469,7 @@ Overlay OVY_96
     Object src/overlay96_record_helpers_2.o
     Object asm/overlay_96_residual_122_residual_3.o
     Object src/overlay96_record_helpers_3.o
-    Object asm/overlay_96_residual_122_residual_4.o
+    Object src/overlay96_record_sprites/overlay96_record_sprites.o
     Object src/overlay96_record_helpers_4.o
     Object asm/overlay_96_residual_122_residual_5.o
     Object src/overlay96_exact_bank_122.o

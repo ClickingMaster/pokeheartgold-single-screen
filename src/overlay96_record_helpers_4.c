@@ -28,7 +28,7 @@ void ov96_02219DA8(void *, u32, void *, u32, u8);
 void ov96_0221996C(void *, u32, u32, u32);
 void ov96_02219EE0(void *, s32);
 void *ov96_022199A8(void *, void *, u16, u16, u16, u32);
-void *ov96_02219E00(void *, void *, u16, u16, u16, u32);
+void *ov96_02219E00(void *, void *, u16, u16, u16, u16);
 void *ov96_02219F7C(void *, u32);
 void ov96_02219A08(void *);
 void ov96_02219B30(void *);
