@@ -1,0 +1,68 @@
+#include "global.h"
+
+extern void GF_AssertFail(void);
+extern void ov112_021F135C(void *, int, int, int, int);
+extern void ManagedSprite_SetAnimNoRestart(void *, int);
+extern void ManagedSprite_SetPositionXY(void *, int, int);
+extern void ManagedSprite_SetDrawFlag(void *, int);
+extern int ManagedSprite_GetDrawFlag(void *);
+extern int ManagedSprite_IsAnimated(void *);
+extern int ManagedSprite_GetActiveAnim(void *);
+extern void ManagedSprite_SetAnim(void *, int);
+extern void Sprite_DeleteAndFreeResources(void *);
+extern void SpriteSystem_FreeResourcesAndManager(void *, void *);
+extern void SpriteSystem_Free(void *);
+extern void Heap_Free(void *);
+extern void FreeBgTilemapBuffer(void *, int);
+extern void RemoveWindow(void *);
+extern void MessageFormat_Delete(void *);
+extern void DestroyMsgData(void *);
+extern void FontID_Release(int);
+extern void PlayBGM(int);
+extern u32 ov112_021FF9B8[];
+extern void ov112_021F1FD0(void *);
+extern void ov112_021F1EFC(void *, int);
+void ov112_021F0C30(void *, u32, u32, u32, u32);
+int ov112_021F0F48(void *, int);
+u8 ov112_021F0F60(void *);
+int ov112_021F0F70(u32 **, u32 **);
+void ov112_021F1324(void *);
+void ov112_021F13BC(void *, int, int, int);
+void ov112_021F178C(void *);
+void ov112_021F1814(void *);
+void ov112_021F194C(void *, u32);
+void ov112_021F1A08(void *);
+void ov112_021F1CC8(void *, int);
+void ov112_021F1D28(void *, int);
+void ov112_021F1D58(void *, int);
+void ov112_021F1F3C(void *, int);
+void ov112_021F1F54(void *, int, int, int);
+void ov112_021F1FD0(void *);
+
+
+void ov112_021F1CC8(void *vp, int draw) {
+    u8 *p = vp;
+    ov112_021F1EFC(p + 0x98, draw);
+    ov112_021F1EFC(p + 0xac, draw);
+    ManagedSprite_SetDrawFlag(*(void **)(p + 0x80), draw);
+    ManagedSprite_SetDrawFlag(*(void **)(p + 0x84), draw);
+    ManagedSprite_SetDrawFlag(*(void **)(p + 0x88), draw);
+    ManagedSprite_SetDrawFlag(*(void **)(p + 0x94), draw);
+    ManagedSprite_SetDrawFlag(*(void **)(p + 0x8c), draw);
+    ManagedSprite_SetDrawFlag(*(void **)(p + 0x90), draw);
+}
+
+void ov112_021F1D28(void *vp, int index) {
+    u8 *p = vp;
+    u32 off = index * 4;
+    p += 0x70;
+    if (ManagedSprite_GetDrawFlag(*(void **)(p + off)) && !ManagedSprite_IsAnimated(*(void **)(p + off))) {
+        u16 anim = ManagedSprite_GetActiveAnim(*(void **)(p + off)) + 1;
+        ManagedSprite_SetAnim(*(void **)(p + off), anim);
+    }
+}
+
+void ov112_021F1D58(void *p, int anim) {
+    if ((u32)anim >= 8) GF_AssertFail();
+    ManagedSprite_SetAnimNoRestart(*(void **)((u8 *)p + 0x7c), anim);
+}
