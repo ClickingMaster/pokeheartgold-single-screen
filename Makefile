@@ -17,6 +17,8 @@ $(ASM_OBJS): MWASFLAGS += -DPM_ASM
 $(BUILD_DIR)/asm/nitrocrypto.o:  MWCCVER := 1.2/sp2p3
 $(BUILD_DIR)/src/nitrocrypto_run01.o $(BUILD_DIR)/src/nitrocrypto_run02.o $(BUILD_DIR)/src/nitrocrypto_run03.o $(BUILD_DIR)/src/nitrocrypto_run04.o $(BUILD_DIR)/src/nitrocrypto_run05.o $(BUILD_DIR)/src/nitrocrypto_run06.o $(BUILD_DIR)/src/nitrocrypto_run07.o $(BUILD_DIR)/src/nitrocrypto_run08.o: MWCCVER := 1.2/sp2p3
 $(BUILD_DIR)/src/nitrocrypto_run01.o $(BUILD_DIR)/src/nitrocrypto_run02.o $(BUILD_DIR)/src/nitrocrypto_run03.o $(BUILD_DIR)/src/nitrocrypto_run04.o $(BUILD_DIR)/src/nitrocrypto_run05.o $(BUILD_DIR)/src/nitrocrypto_run06.o $(BUILD_DIR)/src/nitrocrypto_run07.o $(BUILD_DIR)/src/nitrocrypto_run08.o: MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/to55_nitrocrypto_residual01_sign.o $(BUILD_DIR)/src/to55_nitrocrypto_residual01_bignum.o $(BUILD_DIR)/src/to55_nitrocrypto_residual02.o: MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/src/to55_nitrocrypto_residual01_sign.o $(BUILD_DIR)/src/to55_nitrocrypto_residual01_bignum.o $(BUILD_DIR)/src/to55_nitrocrypto_residual02.o: MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/lib/msl/src/*.o:    EXCCFLAGS := -Cpp_exceptions on
 
 $(ASM_OBJS): $(WORK_DIR)/include/config.h

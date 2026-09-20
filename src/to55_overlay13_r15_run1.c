@@ -1,0 +1,209 @@
+#include "global.h"
+#pragma require_prototypes off
+
+extern u8 ov13_0224DEE0[];
+extern u8 ov13_0224DF08[];
+extern u8 ov13_0224DF10[];
+extern u8 ov13_0224DF30[];
+extern u8 ov13_0224E3E8[];
+extern u8 ov13_0224E420[];
+extern u8 _02108FC0[];
+extern u8 _02108FC8[];
+extern int WCM_LockApList(int lock);
+extern int WCM_CountApList(void);
+extern void *WCM_PointApList(u16 index);
+extern int WCM_SearchAsync(void *, void *, int);
+extern int WCM_DisconnectAsync(void);
+extern int WCM_CleanupAsync(void);
+extern int WCM_StartupAsync(void *, void (*)(void *));
+extern int WCM_ConnectAsync(void *, void *, int);
+
+typedef struct WcmSmall {
+    void *work;
+    int searchArg;
+    void *startupArg;
+    int connectArg;
+    void *bssid;
+    void *ssid;
+    int state;
+    void (*callback)(int, int);
+    void *connectBssid;
+    void *connectSsid;
+} WcmSmall;
+
+typedef struct WcmLarge {
+    u8 pad00[0x28];
+    void *connectSsid;
+    int state;
+    u8 pad30[0x14];
+    void *bssid;
+    void *ssid;
+    void *connectBssid;
+    int connectArg;
+    u8 pad54[0xc];
+    int searchArg;
+} WcmLarge;
+
+#define SMALL (*(WcmSmall *)ov13_0224DEE0)
+#define LARGE (*(WcmLarge *)ov13_0224DF30)
+
+void ov13_02223114(void *arg);
+void ov13_02223770(void *arg);
+
+int ov13_022233CC(void) {
+    switch (SMALL.state) {
+    case 5:
+        if (WCM_SearchAsync(NULL, NULL, 0) != 3) {
+            return 0;
+        }
+        break;
+    case 7:
+        if (WCM_DisconnectAsync() != 3) {
+            return 0;
+        }
+        break;
+    case 1:
+        if (WCM_StartupAsync(SMALL.startupArg, ov13_02223114) != 3) {
+            return 0;
+        }
+        break;
+    case 0:
+    case 2:
+    case 3:
+    case 4:
+    case 6:
+    case 8:
+    default:
+        return 0;
+    }
+    return 1;
+}
+
+int ov13_02223434(u8 *dst, int max) {
+    int count;
+    int i;
+    WCM_LockApList(1);
+    count = WCM_CountApList();
+    if (count > 0) {
+        i = 0;
+        if (count > 0) {
+            do {
+                if (i >= max) {
+                    break;
+                }
+                MIi_CpuCopy32(WCM_PointApList((u16)i), (u32 *)dst, 0xc0);
+                i++;
+                dst += 0xc0;
+            } while (i < count);
+        }
+    }
+    WCM_LockApList(0);
+    return count;
+}
+
+int ov13_02223478(const u8 *bssid, const u8 *ssid, int len, int searchArg) {
+    OSIntrMode irq;
+    int i;
+    irq = OS_DisableInterrupts();
+    SMALL.searchArg = searchArg;
+    if (bssid != NULL) {
+        for (i = 0; i < 6; i++) {
+            ov13_0224DF08[i] = *bssid++;
+        }
+        SMALL.bssid = ov13_0224DF08;
+    } else {
+        MI_CpuFill8(ov13_0224DF08, 0xff, 6);
+        SMALL.bssid = _02108FC0;
+    }
+    if (ssid != NULL && len > 0 && len <= 0x20) {
+        for (i = 0; i < len; i++) {
+            ov13_0224DF10[i] = *ssid++;
+        }
+        for (; i < 0x20; i++) {
+            ov13_0224DF10[i] = 0;
+        }
+        SMALL.ssid = ov13_0224DF10;
+    } else {
+        MI_CpuFill8(ov13_0224DF10, 0xff, 0x20);
+        SMALL.ssid = _02108FC8;
+    }
+    if (SMALL.state == 3) {
+        if (WCM_SearchAsync(SMALL.bssid, SMALL.ssid, SMALL.searchArg) == 3) {
+            SMALL.state = 6;
+            OS_RestoreInterrupts(irq);
+            return 1;
+        }
+    } else if (ov13_022233CC() == 1) {
+        SMALL.state = 6;
+        OS_RestoreInterrupts(irq);
+        return 1;
+    }
+    OS_RestoreInterrupts(irq);
+    return 0;
+}
+
+int ov13_02223568(void) {
+    OSIntrMode irq = OS_DisableInterrupts();
+    if (SMALL.state == 5 && WCM_SearchAsync(NULL, NULL, 0) == 3) {
+        SMALL.state = 4;
+        OS_RestoreInterrupts(irq);
+        return 1;
+    }
+    OS_RestoreInterrupts(irq);
+    return 0;
+}
+
+int ov13_022235A4(void) {
+    OSIntrMode irq = OS_DisableInterrupts();
+    if (SMALL.state == 7 && WCM_DisconnectAsync() == 3) {
+        SMALL.state = 4;
+        OS_RestoreInterrupts(irq);
+        return 1;
+    }
+    OS_RestoreInterrupts(irq);
+    return 0;
+}
+
+int ov13_022235DC(void) {
+    OSIntrMode irq = OS_DisableInterrupts();
+    if (SMALL.state == 3) {
+        if (WCM_CleanupAsync() != 3) {
+            OS_RestoreInterrupts(irq);
+            return 0;
+        }
+        SMALL.state = 2;
+        OS_RestoreInterrupts(irq);
+        return 1;
+    }
+    if (ov13_022233CC() == 1) {
+        SMALL.state = 2;
+        OS_RestoreInterrupts(irq);
+        return 1;
+    }
+    OS_RestoreInterrupts(irq);
+    return 0;
+}
+
+int ov13_02223634(void *bssid, void *ssid, int arg) {
+    OSIntrMode irq;
+    irq = OS_DisableInterrupts();
+    SMALL.connectArg = arg;
+    if (ssid != NULL) {
+        MI_CpuCopy8(ssid, SMALL.connectSsid, 0x50);
+    } else {
+        MI_CpuFill8(SMALL.connectSsid, 0, 0x50);
+    }
+    MIi_CpuCopy32(bssid, SMALL.connectBssid, 0xc0);
+    if (ov13_022233CC() == 1) {
+        SMALL.state = 8;
+        OS_RestoreInterrupts(irq);
+        return 1;
+    }
+    if (SMALL.state == 3 && WCM_ConnectAsync(SMALL.connectBssid, SMALL.connectSsid, SMALL.connectArg) == 3) {
+        SMALL.state = 8;
+        OS_RestoreInterrupts(irq);
+        return 1;
+    }
+    OS_RestoreInterrupts(irq);
+    return 0;
+}

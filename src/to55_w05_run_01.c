@@ -1,0 +1,21 @@
+#include "to55_w05_private.h"
+#define W(p, o)  (*(u32 *)((u8 *)(p) + (o)))
+#define SW(p, o) (*(s32 *)((u8 *)(p) + (o)))
+#define H(p, o)  (*(s16 *)((u8 *)(p) + (o)))
+#define P(p, o)  (*(void **)((u8 *)(p) + (o)))
+
+void ov07_0222F434(void *p) {
+    float x, y;
+    ov07_02222590((u8 *)p + 0x28, 10, 10, 10, 20, 10, 8);
+    ov07_02222508((u8 *)p + 0x4c, 10, 10, 1, 4);
+    W(p, 0x94) = 0;
+    W(p, 0x98) = 6;
+    ManagedSprite_SetDrawFlag(P(p, 0x20), ov07_02236800[ov07_02231924(P(p, 0), ov07_0221C468(P(p, 0)))]);
+    ManagedSprite_SetDrawFlag(P(p, 0x18), 1);
+    ov07_02222644((u8 *)p + 0x28, &x, &y);
+    if (W(p, 0xc8) == 1) {
+        x = 0.0f - x;
+    }
+    ManagedSprite_SetAffineScale(P(p, 0x18), x, y);
+    ov07_0222F408(p, P(p, 0x18));
+}
