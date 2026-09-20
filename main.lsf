@@ -1868,7 +1868,11 @@ Overlay OVY_7
     Object asm/overlay07_callbacks_residual_0221c5c8_0221c5c8.o
     Object src/overlay07_callbacks_c_0221c624_0221c62c.o
     Object src/to54_atomic_w01_01_to54_w01_c01.o
-Object asm/to54_atomic_w01_02_to54_w01_a01.o
+Object src/to56_w06_c01.o
+Object asm/to56_w06_a01.o
+Object src/to56_w06_c02.o
+Object asm/to56_w06_a02.o
+Object src/to56_w06_c03.o
 Object src/to54_atomic_w01_03_to54_w01_c02.o
 Object asm/to54_atomic_w01_04_to54_w01_a02.o
 Object src/to54_atomic_w01_05_to54_w01_c03.o
@@ -1901,7 +1905,8 @@ Object src/to54_atomic_w14_06_run3.o
     Object src/overlay07_callbacks_c_0221ef14_0221ef34.o
     Object asm/overlay07_callbacks_residual_0221ef54_0221f024.o
     Object src/overlay07_callbacks_c_0221f084_0221f094.o
-    Object asm/overlay07_callbacks_residual_0221f098_0221f340.o
+    Object asm/to56_r2_w04_overlay07_callbacks_asm01.o
+    Object src/to56_r2_w04_overlay07_callbacks_c01.o
     Object src/overlay07_callbacks_c_0221f398_0221f398.o
     Object asm/overlay07_callbacks_residual_0221f39c_0221f3f4.o
     Object src/overlay07_callbacks_c_0221f424_0221f42c.o
@@ -1989,11 +1994,21 @@ Object src/to54_atomic_w02_11_to54_ov07_w02_run6.o
     Object src/to55_r2_t01_01_run01.o
     Object asm/to55_r2_t01_02_residual01.o
     Object src/to55_r2_t01_03_run02.o
-    Object asm/to55_r2_t01_04_residual02.o
+    Object asm/to56_w03_overlay07_23240_prefix.o
+    Object src/to56_w03_overlay07_23a1c.o
+    Object asm/to56_w03_overlay07_23240_middle.o
+    Object src/to56_w03_overlay07_23b70_tail.o
+    Object asm/to56_w03_overlay07_23240_suffix.o
     Object src/to55_r2_t01_05_run03.o
-    Object asm/to55_r2_t01_06_residual03.o
+    Object src/to56_w10_overlay07_02223eb4_0222446c.o
+    Object asm/to56_w10_overlay07_022245bc_residual.o
     Object src/to55_r2_t01_07_run04.o
-    Object asm/to55_r2_t01_08_residual04.o
+    Object asm/to56_w08_residual00.o
+    Object src/to56_w08_run01.o
+    Object asm/to56_w08_residual01.o
+    Object src/to56_w08_run02.o
+    Object src/to56_w08_run03.o
+    Object asm/to56_w08_residual02.o
     Object src/to55_r2_t01_09_run05.o
     Object asm/to55_r2_t01_10_residual05.o
     Object src/overlay07_callbacks_c_02225444_02225444.o
@@ -2010,21 +2025,26 @@ Object asm/to54_atomic_w07_04_residual02.o
 Object src/to54_atomic_w07_05_run03.o
 Object asm/to54_atomic_w07_06_residual03.o
 Object src/to54_atomic_w07_07_run04.o
-Object asm/to54_atomic_w07_08_residual04.o
+Object asm/to56_w15_overlay07_motion_prefix.o
+Object src/to56_w15_overlay07_motion_tail.o
     Object src/overlay07_callbacks_c_02226804_02226804.o
     Object asm/overlay07_callbacks_residual_02226838_022269d8.o
     Object src/overlay07_callbacks_c_02226a68_02226a68.o
     Object asm/overlay07_callbacks_residual_02226a9c_02226c4c.o
     Object src/overlay07_callbacks_c_02226c90_02226c90.o
-    Object asm/overlay07_callbacks_residual_02226cb0_02226f80.o
+    Object asm/to56_r2_w06_a01.o
+    Object src/to56_r2_w06_c01.o
     Object src/overlay07_callbacks_c_0222719c_0222719c.o
     Object asm/overlay07_callbacks_residual_022271dc_02227248.o
     Object src/overlay07_callbacks_c_022272d0_022272d0.o
-    Object asm/to54_atomic_x01_01_residual01_ov07_02227300_ov07_02227630.o
+    Object src/to56_w23_ov07_02227300.o
+    Object src/to56_w23_ov07_022274F8.o
+    Object src/to56_w23_ov07_02227630.o
 Object src/to54_atomic_x01_02_run01_ov07_02227824.o
 Object asm/to54_atomic_x01_03_residual02_ov07_022278B0_ov07_022278B0.o
 Object src/to54_atomic_x01_04_run02_ov07_02227AEC.o
-Object asm/to54_atomic_x01_05_residual03_ov07_02227B58_ov07_02227FA4.o
+Object asm/to56_r2w05_ov07_02227B58_residual.o
+Object src/to56_r2w05_ov07_02227FA4.o
     Object src/overlay07_callbacks_c_02228070_02228070.o
     Object asm/overlay07_callbacks_residual_022280a8_022280a8.o
     Object src/overlay07_callbacks_c_02228174_02228174.o
@@ -2056,7 +2076,9 @@ Object asm/to54_atomic_w11_02_asm_run1.o
 Object src/to54_atomic_w11_03_c_run2.o
 Object asm/to54_atomic_w11_04_asm_run2.o
 Object src/to54_atomic_w11_05_c_run3.o
-Object asm/to54_atomic_w11_06_asm_run3.o
+Object asm/to56_w22_overlay07_before.o
+Object src/to56_w22_overlay07_transition.o
+Object asm/to56_w22_overlay07_after.o
 Object src/to54_atomic_w11_07_c_run4.o
     Object src/overlay07_callbacks_c_0222badc_0222badc.o
     Object asm/to55_overlay07_baf4_residual1.o
@@ -2070,9 +2092,13 @@ Object src/to54_atomic_w11_07_c_run4.o
     Object asm/to55_r2_t13_residual.o
     Object src/to55_r2_t13_run02.o
     Object src/overlay07_callbacks_c_0222c850_0222c850.o
-    Object asm/to55_bank_w15_residual_01.o
+    Object src/to56_w01_ov07_c870.o
+    Object src/to56_w01_ov07_c918.o
+    Object asm/to56_w01_residual.o
     Object src/to55_bank_w15_run_01.o
-    Object asm/to55_bank_w15_residual_02.o
+    Object src/to56_r2_w13_ov07_c00.o
+    Object asm/to56_r2_w13_ov07_asm01.o
+    Object src/to56_r2_w13_ov07_c02.o
     Object src/to55_bank_w15_run_02.o
     Object src/overlay07_callbacks_c_0222d56c_0222d578.o
     Object src/to54_atomic_x07_01_to54_ov07_x07_run1.o
@@ -2107,7 +2133,8 @@ Object asm/to54_atomic_x08_04_residual2.o
     Object src/to55_w05_run_03.o
     Object asm/to55_w05_residual_03.o
     Object src/to55_w05_run_04.o
-    Object asm/to55_w05_residual_04.o
+    Object asm/to56_r2_w16_residual.o
+    Object src/to56_r2_w16_ffd0.o
     Object src/to55_w05_run_05.o
     Object asm/to55_w05_residual_05.o
     Object src/overlay07_callbacks_c_02230170_02230170.o
@@ -2185,49 +2212,94 @@ Object src/to54_atomic_w03_10_run05.o
 Overlay OVY_8
 {
     After OVY_6
-    Object asm/overlay08_bank_00_asm.o
+    Object src/to56_w05_overlay08_bank00_c01.o
+    Object asm/to56_w05_overlay08_bank00_asm01.o
+    Object src/to56_w05_overlay08_bank00_c02.o
+    Object asm/to56_w05_overlay08_bank00_asm02.o
+    Object src/to56_w05_overlay08_bank00_c03.o
+    Object asm/to56_w05_overlay08_bank00_asm03.o
     Object src/overlay08_bank_01_c.o
-    Object asm/overlay08_bank_02_asm.o
+    Object src/to56_r3_w18_overlay08_bank_02.o
     Object src/overlay08_bank_03_c.o
     Object asm/overlay08_bank_04_asm.o
     Object src/overlay08_bank_05_c.o
-    Object asm/overlay08_bank_06_asm.o
+    Object asm/to56_w04_overlay08_bank06_asm01.o
+    Object src/to56_w04_overlay08_bank06_c01.o
+    Object asm/to56_w04_overlay08_bank06_asm02.o
+    Object src/to56_w04_overlay08_bank06_c02.o
+    Object asm/to56_w04_overlay08_bank06_asm03.o
+    Object src/to56_w04_overlay08_bank06_c03.o
     Object src/overlay08_bank_07_c.o
-    Object asm/overlay08_bank_08_asm.o
+    Object src/to56_w21_00_c.o
+    Object asm/to56_w21_01_asm.o
+    Object src/to56_w21_02_c.o
+    Object asm/to56_w21_03_asm.o
+    Object src/to56_w21_04_c.o
+    Object asm/to56_w21_05_asm.o
+    Object src/to56_w21_06_c.o
     Object src/overlay08_bank_09_c.o
-    Object asm/overlay08_bank_10_asm.o
+    Object asm/to56_r3b_w07_overlay08_bank10_residual.o
+    Object src/to56_r3b_w07_overlay08_bank10_tail.o
     Object src/overlay08_bank_11_c.o
-    Object asm/overlay08_bank_12_asm.o
+    Object src/to56_overlay08_bank12.o
     Object src/overlay08_bank_13_c.o
     Object asm/overlay08_bank_14_asm.o
     Object src/overlay08_bank_15_c.o
-    Object asm/overlay08_bank_16_asm.o
+    Object src/to56_overlay08_bank16.o
     Object src/overlay08_bank_17_c.o
-    Object asm/overlay08_bank_18_asm.o
+    Object src/to56_overlay08_bank18_run0.o
+    Object asm/to56_overlay08_bank18_residual.o
+    Object src/to56_overlay08_bank18_run1.o
     Object src/overlay08_bank_19_c.o
-    Object asm/overlay08_bank_20_asm.o
+    Object asm/to56_r3_w01_residual_a.o
+    Object src/to56_r3_w01_run1.o
+    Object asm/to56_r3_w01_residual_b.o
+    Object src/to56_r3_w01_run2.o
+    Object asm/to56_r3_w01_residual_c.o
     Object src/overlay08_bank_21_c.o
     Object asm/overlay08_bank_22_asm.o
     Object src/overlay08_bank_23_c.o
-    Object asm/overlay08_bank_24_asm.o
+    Object src/to56_overlay08_bank24_e04.o
+    Object asm/to56_overlay08_bank24_mid1.o
+    Object src/to56_overlay08_bank24_bg.o
+    Object asm/to56_overlay08_bank24_mid2.o
+    Object src/to56_overlay08_bank24_text.o
     Object src/overlay08_bank_25_c.o
-    Object asm/overlay08_bank_26_asm.o
+    Object src/to56_w15_overlay08_bank26.o
     Object src/overlay08_bank_27_c.o
-    Object asm/overlay08_bank_28_asm.o
+    Object src/to56_r2_w23_overlay08_bank28.o
     Object src/overlay08_bank_29_c.o
-    Object asm/overlay08_bank_30_asm.o
+    Object src/to56_overlay08_bank30_exact_a.o
+    Object asm/to56_overlay08_bank30_residual_a.o
+    Object src/to56_overlay08_bank30_exact_b.o
+    Object asm/to56_overlay08_bank30_residual_b.o
+    Object src/to56_overlay08_bank30_exact_c.o
     Object src/overlay08_bank_31_c.o
-    Object asm/overlay08_bank_32_asm.o
+    Object asm/to56_w13_overlay08_bank32_asm00.o
+    Object src/to56_w13_overlay08_bank32_c01.o
+    Object asm/to56_w13_overlay08_bank32_asm02.o
+    Object src/to56_w13_overlay08_bank32_c03.o
+    Object asm/to56_w13_overlay08_bank32_asm04.o
+    Object src/to56_w13_overlay08_bank32_c05.o
+    Object asm/to56_w13_overlay08_bank32_asm06.o
+    Object src/to56_w13_overlay08_bank32_c07.o
     Object src/overlay08_bank_33_c.o
-    Object asm/overlay08_bank_34_asm.o
+    Object src/to56_overlay08_bank34_exact.o
+    Object asm/to56_overlay08_bank34_residual.o
     Object src/overlay08_bank_35_c.o
-    Object asm/overlay08_bank_36_asm.o
+    Object src/to56_w07_overlay08_bank36_run01.o
+    Object asm/to56_w07_overlay08_bank36_residual01.o
+    Object src/to56_w07_overlay08_bank36_run02.o
+    Object asm/to56_w07_overlay08_bank36_residual02.o
+    Object src/to56_w07_overlay08_bank36_run03.o
+    Object asm/to56_w07_overlay08_bank36_residual03.o
     Object src/overlay08_bank_37_c.o
     Object asm/overlay08_bank_38_asm.o
     Object src/overlay08_bank_39_c.o
     Object asm/overlay08_bank_40_asm.o
     Object src/overlay08_bank_41_c.o
-    Object asm/overlay08_bank_42_asm.o
+    Object src/to56_overlay08_bank42.o
+    Object asm/to56_overlay08_bank42_residual.o
 }
 Overlay OVY_9
 {
@@ -2291,7 +2363,7 @@ Overlay OVY_12
     Object src/battle/battle_c_05_w13.o
     Object asm/battle_residual_05.o
     Object src/battle/battle_c_06_w13.o
-    Object asm/to54_atomic_w04_01_run01.o
+    Object src/to56_battle_opponent_sprite_setup_w20.o
 Object src/to54_atomic_w04_02_run02.o
 Object asm/to54_atomic_w04_03_run03.o
 Object src/to54_atomic_w04_04_run04.o
@@ -2307,21 +2379,21 @@ Object asm/to54_atomic_w04_13_run13.o
     Object src/battle/battle_c_07_w14.o
     Object asm/battle_residual_07.o
     Object src/battle/battle_c_08_w14.o
-    Object asm/battle_residual_08.o
+    Object src/to56_battle_r08_exact.o
     Object src/battle/battle_c_09_w14.o
     Object asm/battle_residual_09.o
     Object src/battle/battle_c_10_w14.o
-    Object asm/battle_residual_10.o
+    Object src/battle/to56_battle_residual10.o
     Object src/battle/battle_c_11_w14.o
-    Object asm/battle_residual_11.o
+    Object src/battle/to56_r3_w17_battle_b234.o
     Object src/battle/battle_c_12_w14.o
-    Object asm/battle_residual_12.o
+    Object src/to56_battle_residual12.o
     Object src/battle/battle_c_13_w14.o
     Object asm/battle_residual_13.o
     Object src/battle/battle_c_14_w15.o
-    Object asm/battle_residual_14.o
+    Object src/battle/to56_battle_r14_w09.o
     Object src/battle/battle_c_15_w15.o
-    Object asm/battle_residual_15.o
+    Object src/battle/to56_battle_r15_w09.o
     Object src/battle/battle_c_16_w16.o
     Object asm/battle_residual_16.o
     Object src/battle/battle_c_17_w16.o
@@ -2329,15 +2401,19 @@ Object asm/to54_atomic_w04_13_run13.o
     Object src/battle/battle_c_18_w16.o
     Object asm/battle_residual_18.o
     Object src/battle/battle_c_19_w16.o
-    Object asm/battle_residual_19.o
+    Object asm/to56_r2_w18_battle_residual_19_prefix.o
+    Object src/battle/to56_r2_w18_battle_choice_cleanup.o
     Object src/battle/battle_c_w17_group1.o
     Object asm/battle_residual_20.o
     Object src/battle/battle_c_w17_group2.o
     Object asm/battle_residual_21.o
     Object src/battle/battle_c_w17_group3.o
-    Object asm/battle_residual_22.o
+    Object asm/to56_r2w10_battle_prefix_residual.o
+    Object src/to56_r2w10_battle_fade_0226037c.o
+    Object asm/to56_r2w10_battle_suffix_residual.o
     Object src/battle/battle_c_w17_group4.o
-    Object asm/battle_residual_23.o
+    Object asm/to56_battle_r23_residual.o
+    Object src/to56_battle_r23_exact.o
     Object src/battle/battle_c_w17_group5.o
     Object src/to54_atomic_x05_01_landing.o
 Object asm/to54_atomic_x05_02_residual.o
@@ -2426,7 +2502,7 @@ Overlay OVY_13
     Object src/to53_overlay13/to53_overlay13_c06_w09.o
     Object asm/to53_overlay13_r06.o
     Object src/to53_overlay13/to53_overlay13_c07_w09.o
-    Object asm/to55_r2_t08_residual_prefix.o
+    Object src/to56_r2_w17_overlay13_22108.o
     Object src/to55_r2_t08_224cc.o
     Object asm/to55_r2_t08_residual_middle.o
     Object src/to55_r2_t08_cipher.o
@@ -2454,9 +2530,19 @@ Overlay OVY_13
     Object asm/to53_overlay13_r16.o
     Object src/to53_overlay13/to53_overlay13_c17_w11.o
     Object src/to55_overlay13_r17_run01.o
-    Object asm/to55_overlay13_r17_residual01.o
+    Object asm/to56_w16_residual01.o
+    Object src/to56_w16_f84.o
+    Object asm/to56_w16_residual02.o
+    Object src/to56_w16_24100.o
+    Object asm/to56_w16_residual03.o
     Object src/to55_overlay13_r17_run02.o
-    Object asm/to55_overlay13_r17_residual02.o
+    Object asm/to56_overlay13_r17_residual02a.o
+    Object src/to56_overlay13_r17_run03.o
+    Object asm/to56_overlay13_r17_residual02b.o
+    Object src/to56_overlay13_r17_run04.o
+    Object asm/to56_overlay13_r17_residual02c.o
+    Object src/to56_overlay13_r17_run05.o
+    Object asm/to56_overlay13_r17_residual02d.o
     Object src/to53_overlay13/to53_overlay13_c18_w11.o
     Object asm/to55_overlay13_r18_residual01.o
     Object src/to55_overlay13_r18_hex_decode.o
@@ -5518,7 +5604,11 @@ Object src/to54_atomic_w08_11_run5.o
     Object src/overlay74_thumb_c_02229e60_02229e60.o
     Object asm/overlay74_thumb_residual_02229e68_02229e68.o
     Object src/overlay74_thumb_c_02229f04_02229f78.o
-    Object asm/overlay74_thumb_residual_02229f90_0222a240.o
+    Object src/to56_r2_w08_run01.o
+    Object asm/to56_r2_w08_residual01.o
+    Object src/to56_r2_w08_run02.o
+    Object asm/to56_r2_w08_residual02.o
+    Object src/to56_r2_w08_run03.o
     Object src/overlay74_thumb_c_0222a2a4_0222a2a4.o
     Object asm/overlay74_thumb_residual_0222a2e0_0222a43c.o
     Object src/overlay74_thumb_c_0222a494_0222a494.o
@@ -5576,7 +5666,7 @@ Object src/to54_atomic_w06_07_run_06.o
     Object asm/overlay74_thumb_residual_0222df2c_0222df2c.o
     Object src/overlay74_thumb_c_0222e03c_0222e03c.o
     Object src/overlay74_thumb_e060_run1.o
-    Object asm/overlay74_thumb_e1f4_residual.o
+    Object src/to56_overlay74_mystery_gift_state_w20.o
     Object src/overlay74_thumb_e060_run2.o
     Object src/overlay74_thumb_c_0222e85c_0222e898.o
     Object asm/overlay74_thumb_residual_0222e8b4_0222ea88.o
@@ -5595,7 +5685,11 @@ Object src/to54_atomic_w06_07_run_06.o
     Object src/overlay74_thumb_c_0222f598_0222f600.o
     Object asm/overlay74_thumb_residual_0222f624_0222f624.o
     Object src/overlay74_thumb_c_0222f688_0222f688.o
-    Object asm/overlay74_thumb_residual_0222f6c4_0222fd98.o
+    Object asm/to56_w14_overlay74_residual_prefix.o
+    Object src/to56_w14_overlay74_exit.o
+    Object asm/to56_w14_overlay74_residual_fc50.o
+    Object src/to56_w14_overlay74_graphics.o
+    Object asm/to56_w14_overlay74_residual_fd98.o
     Object src/overlay74_thumb_c_0222fe4c_0222fe4c.o
     Object asm/overlay74_thumb_residual_0222fe5c_0222fe68.o
     Object src/overlay74_thumb_c_0222fe78_0222fe78.o
@@ -5939,7 +6033,8 @@ Overlay OVY_80
     Object src/overlay_80_02236B78_opus_partial_4.o
     Object asm/overlay_80_02236B78_residual_4.o
     Object src/overlay80_frontier_setup_r22_run1.o
-    Object asm/overlay_80_022372D8_gap_r22.o
+    Object src/to56_r2_w03_overlay80_37334.o
+    Object asm/to56_r2_w03_overlay80_37448_residual.o
     Object src/overlay80_frontier_setup_r22_run2.o
     Object src/ov80_2237a70_partial_1.o
     Object asm/overlay_80_02237A70.o
@@ -7156,7 +7251,7 @@ Overlay OVY_96
     Object src/overlay96_exact_bank_18.o
     Object asm/overlay_96_residual_19.o
     Object src/overlay96_exact_bank_19.o
-    Object asm/overlay_96_residual_20_part1.o
+    Object src/to56_overlay96_r20_part1_exact.o
     Object src/overlay96_sprite_factories_r20_run1.o
     Object asm/overlay_96_residual_20_part2.o
     Object src/overlay96_sprite_factories_r20_run2.o
@@ -8495,7 +8590,8 @@ Object asm/to53_overlay112_072.o
 Object src/to53_overlay112_073.o
 Object asm/to53_overlay112_074.o
 Object src/to53_overlay112_075.o
-Object asm/to53_overlay112_076.o
+Object src/to56_w22_overlay112_states.o
+Object asm/to56_w22_overlay112_tail.o
 Object src/to53_overlay112_077.o
 Object asm/to53_overlay112_078.o
 Object src/to53_overlay112_079.o
@@ -8591,7 +8687,9 @@ Object asm/to53_overlay112_160.o
 Object src/to53_overlay112_161.o
 Object asm/to53_overlay112_162.o
 Object src/to53_overlay112_163.o
-Object asm/to53_overlay112_164.o
+Object src/to56_w22_overlay112_before.o
+Object asm/to56_w22_overlay112_middle.o
+Object src/to56_w22_overlay112_after.o
 Object src/to53_overlay112_165.o
 Object asm/to53_overlay112_166.o
 Object src/to53_overlay112_167.o
@@ -8720,7 +8818,7 @@ Overlay OVY_119
     Object src/overlay119_transition_f020.o
     Object src/overlay119_transition_f37c.o
     Object src/overlay119_transition_f670.o
-    Object asm/overlay_119_prefix_tail.o
+    Object src/to56_r3_w06_overlay119_prefix_tail.o
     Object src/overlay119_scene_transition.o
     Object src/overlay119_final_transition.o
 }
@@ -8730,7 +8828,7 @@ Overlay OVY_120
     Object src/overlay120_helpers_1.o
     Object src/r40_overlay_120_run1.o
     Object src/overlay120_helpers_2.o
-    Object asm/overlay_120_residual_2.o
+    Object src/to56_r2_w21_overlay120_grid_step.o
     Object src/overlay120_helpers_3.o
     Object asm/overlay_120_residual_3.o
     Object src/overlay120_helpers_4.o
