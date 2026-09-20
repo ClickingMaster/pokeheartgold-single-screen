@@ -1,0 +1,96 @@
+#include "global.h"
+
+#include "bg_window.h"
+#include "pokepic.h"
+#include "sprite_system.h"
+
+typedef struct W10Work {
+    u8 pad00[0x14];
+    void *owner14;
+    u8 pad18[0x8];
+    SpriteManager *sprites20;
+    u8 pad24[0x14];
+    ManagedSprite *sprite38;
+    u8 pad3C[0x98];
+    s32 rotationD4;
+} W10Work;
+
+BOOL ov07_022223CC(void *a, void *b, ManagedSprite *sprite);
+BOOL ov07_02222440(void *a);
+void ov07_0221C448(void *owner, int arg);
+void ov07_02232508(void *work);
+void ov07_0222928C(int arg0, W10Work *work);
+
+typedef struct W10EndWork {
+    u8 pad00[8];
+    void *owner08;
+    u8 pad0C[0x14];
+    ManagedSprite *sprite20;
+    ManagedSprite *sprite24;
+    u8 pad28[0x2C];
+} W10EndWork;
+
+void *ov07_022324D8(void *owner, u32 size);
+void ov07_02231FE4(void *owner, void *work);
+ManagedSprite *ov07_0221C4E8(void *owner, int index);
+void ov07_02222AC4(void *work, int a, int b, int c, int d, int e);
+void ov07_0221EB98(void *owner, int arg);
+void ov07_0221C410(void *owner, void (*callback)(int, void *), void *work);
+void ov07_0222A710(int arg0, void *work);
+void ov07_0222A838(void *owner);
+
+void ov07_0222A4B4(int arg0, void *arg1);
+
+Pokepic *ov07_0221FA48(void *owner, int index);
+int ov07_0221C468(void *owner);
+BOOL ov07_02222AF4(void *work);
+int ov07_0221FAF8(void *owner, int index);
+int ov07_02222D88(int a, int b);
+int ov07_0221BFD0(void *owner);
+void *ov07_02222CCC(int a, int b, int c, int d, int e, int f, int g, int h, int i);
+void ov07_02222D3C(void *arg);
+void ov07_0221EC7C(void *owner, int arg);
+void ov07_0222A710(int arg0, void *arg1);
+
+void ov07_0222A710(int arg0, void *arg1) {
+    W10EndWork *work = arg1;
+    int a, b;
+    switch (((u8 *)work)[4]) {
+    case 0:
+        Pokepic_SetAttr(ov07_0221FA48(work->owner08, ov07_0221C468(work->owner08)), 6, 1);
+        ((u8 *)work)[4]++;
+        break;
+    case 1:
+        if (ov07_02222AF4((u8 *)work + 0x2C)) {
+            *(int *)work = 0;
+            a = ov07_0221FAF8(work->owner08, 1);
+            b = ov07_02222D88(0, 0);
+            *(void **)((u8 *)work + 0x28) = ov07_02222CCC(0, 0xA0, 0x16C, 0xC000, 0xC8, a, 0, b, ov07_0221BFD0(work->owner08));
+            ((u8 *)work)[4]++;
+        }
+        break;
+    case 2:
+        (*(int *)work)++;
+        if (*(int *)work >= 0x78) {
+            ov07_02222D3C(*(void **)((u8 *)work + 0x28));
+            ov07_02222AC4((u8 *)work + 0x2C, 2, 0x10, 0x10, 2, 0x10);
+            ((u8 *)work)[4]++;
+        }
+        break;
+    case 3:
+        if (ov07_02222AF4((u8 *)work + 0x2C)) {
+            Pokepic_SetAttr(ov07_0221FA48(work->owner08, ov07_0221C468(work->owner08)), 6, 0);
+            ((u8 *)work)[4]++;
+        }
+        break;
+    default:
+        *(volatile u32 *)0x04000000 &= 0xFFFF1FFF;
+        ov07_0221EC7C(work->owner08, 2);
+        ov07_0221C448(work->owner08, arg0);
+        Heap_Free(work);
+        return;
+    }
+    ManagedSprite_TickFrame(work->sprite24);
+    ManagedSprite_TickFrame(work->sprite20);
+    SpriteSystem_DrawSprites(*(SpriteManager **)((u8 *)work + 0x10));
+}
