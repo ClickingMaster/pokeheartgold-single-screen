@@ -476,7 +476,7 @@ _0225A298: .word ov07_022377DC
 _0225A29C: .word ov12_0225CE28
 	thumb_func_end ov12_0225A07C
 
-	
+
 	thumb_func_start ov12_0225A2A0
 ov12_0225A2A0: ; 0x0225A2A0
 	push {r3, r4, r5, r6, r7, lr}

@@ -486,7 +486,7 @@ _02259BA0: .word ov12_0225B7B8
 _02259BA4: .word ov12_0225B494
 	thumb_func_end ov12_02259968
 
-	
+
 	thumb_func_start ov12_02259BA8
 ov12_02259BA8: ; 0x02259BA8
 	push {r4, r5, r6, r7, lr}
@@ -687,7 +687,7 @@ _02259D40: .word ov12_0225B960
 _02259D44: .word ov12_0225BE38
 	thumb_func_end ov12_02259BA8
 
-	
+
 	thumb_func_start ov12_02259D48
 ov12_02259D48: ; 0x02259D48
 	push {r4, r5, r6, r7, lr}
@@ -928,7 +928,7 @@ _02259F28: .word ov12_0225C18C
 _02259F2C: .word ov12_0225C6C8
 	thumb_func_end ov12_02259D48
 
-	
+
 	thumb_func_start ov12_02259F30
 ov12_02259F30: ; 0x02259F30
 	push {r4, r5, r6, r7, lr}

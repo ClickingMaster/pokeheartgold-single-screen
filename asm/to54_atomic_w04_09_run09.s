@@ -286,7 +286,7 @@ _0225A6F0:
 	.balign 4, 0
 	thumb_func_end ov12_0225A674
 
-	
+
 	thumb_func_start ov12_0225A700
 ov12_0225A700: ; 0x0225A700
 	push {r3, r4, r5, r6, r7, lr}
@@ -374,7 +374,7 @@ _0225A778:
 	.balign 4, 0
 	thumb_func_end ov12_0225A700
 
-	
+
 	thumb_func_start ov12_0225A7AC
 ov12_0225A7AC: ; 0x0225A7AC
 	push {r3, r4, r5, r6, r7, lr}
