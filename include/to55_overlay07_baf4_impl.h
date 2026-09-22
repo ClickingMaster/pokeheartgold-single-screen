@@ -24,8 +24,12 @@ typedef struct Ov07MoveWork {
     u8 pad0A[2];
     void *pic;
     u8 movement[0x24];
-    int motionValue;
-    u8 pad38[0x10];
+    struct {
+        int value;
+        u8 pad04[4];
+        int scale;
+        u8 pad0C[8];
+    } motion;
     s16 x;
     s16 y;
     u8 pad4C[0xA4];
@@ -114,6 +118,9 @@ extern int Pokepic_GetAttr(void *, int);
 extern void Pokepic_SetAttr(void *, int, int);
 extern void Heap_Free(void *);
 extern void SetBgPriority(int, int);
+
+void ov07_0222BD90(void *task, Ov07LargeWork *work);
+void ov07_0222BF18(void *task, Ov07MoveWork *work);
 
 #if !defined(T04_ONLY) || defined(T04_BAF4)
 void ov07_0222BAF4(void *task, Ov07MosaicWork *work) {
@@ -259,7 +266,7 @@ void ov07_0222BE00(void *owner) {
         ManagedSprite_SetPriority(work->sprites[i], 1);
         ManagedSprite_SetOamMode(work->sprites[i], 1);
     }
-    ov07_02222864(work->move1, &localMove, ov07_02222180, work->x, work->y - work->valueEC, 2, 2, 0, work->sprites[0], work->sprites[1], 0, 0);
+    ov07_02222864(work->move1, &localMove, ov07_02222180, work->x, (s16)(work->y - work->valueEC), 2, 2, 0, work->sprites[0], work->sprites[1], 0, 0);
     ov07_02231E08(work->owner, -1, -1);
     ov07_0221C410(work->owner, ov07_0222BD90, work);
 }
@@ -277,11 +284,11 @@ void ov07_0222BF18(void *task, Ov07MoveWork *work) {
         work->state++;
         return;
     case 1:
-        if (ov07_02222440(&work->motionValue)) {
-            Pokepic_SetAttr(work->pic, 9, work->motionValue);
+        if (ov07_02222440(&work->motion.value)) {
+            Pokepic_SetAttr(work->pic, 9, work->motion.value);
             return;
         }
-        ov07_022223F0(&work->motionValue, work->motionValue, 0, 4);
+        ov07_022223F0(&work->motion.value, work->motion.value, 0, 4);
         work->state++;
         work->timer = 2;
         return;
@@ -304,8 +311,8 @@ void ov07_0222BF18(void *task, Ov07MoveWork *work) {
         }
         return;
     case 5:
-        if (ov07_02222440(&work->motionValue)) {
-            Pokepic_SetAttr(work->pic, 9, work->motionValue);
+        if (ov07_02222440(&work->motion.value)) {
+            Pokepic_SetAttr(work->pic, 9, work->motion.value);
             return;
         }
         work->state++;
@@ -331,17 +338,17 @@ void ov07_0222C074(void *owner) {
     work = Heap_Alloc(ov07_0221BFD0(owner), 0xF0);
     work->owner = owner;
     work->state = 0;
-    work->pic = ov07_0221FA48(owner, ov07_0221C468(owner));
+    work->pic = ov07_0221FA48(work->owner, ov07_0221C468(work->owner));
     work->x = Pokepic_GetAttr(work->pic, 0);
     work->y = Pokepic_GetAttr(work->pic, 1);
     ov07_02222268(work->movement, 0, -32, 0, 0, 3);
-    ov07_022223F0(&work->motionValue, 0, 0xE38, 8);
-    multiplier = ov07_02222004(owner, ov07_0221C468(owner));
+    ov07_022223F0(&work->motion.value, 0, 0xE38, 8);
+    multiplier = ov07_02222004(work->owner, ov07_0221C468(work->owner));
     *(int *)(work->movement + 8) *= multiplier;
-    *(int *)((u8 *)&work->motionValue + 8) *= multiplier;
-    multiplier = ov07_02222004(owner, ov07_0221C470(owner));
-    kind0 = (int)ov07_0223192C(owner, ov07_0221C468(owner));
-    kind1 = (int)ov07_0223192C(owner, ov07_0221C470(owner));
+    work->motion.scale *= multiplier;
+    multiplier = ov07_02222004(work->owner, ov07_0221C470(work->owner));
+    kind0 = (int)ov07_0223192C(owner, ov07_0221C468(work->owner));
+    kind1 = (int)ov07_0223192C(owner, ov07_0221C470(work->owner));
     if (kind0 == 3 && kind1 == 3) {
         Pokepic_SetAttr(work->pic, 0xA, -40);
         Pokepic_SetAttr(work->pic, 0xB, 40);
@@ -352,7 +359,7 @@ void ov07_0222C074(void *owner) {
         Pokepic_SetAttr(work->pic, 0xA, 40 * multiplier);
         Pokepic_SetAttr(work->pic, 0xB, 40);
     }
-    ov07_0221C410(owner, ov07_0222BF18, work);
+    ov07_0221C410(work->owner, ov07_0222BF18, work);
 }
 #endif
 
