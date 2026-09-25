@@ -1005,11 +1005,201 @@ Static main
     Object asm/middleware.o
     Object lib/asm/jn_spl.o
     Object lib/NitroSDK/asm/wvr.o
-    Object lib/NitroDWC/asm/dwcbm.o
-    Object lib/NitroDWC/asm/dwcaccount.o
-    Object lib/asm/wifi.o
+    Object lib/NitroDWC/asm/to59_dwcbm_anchor.o
+    Object src/to59_dwcbm_run01.o
+    Object lib/NitroDWC/asm/to59_dwcbm_residual_1.o
+    Object src/to59_dwcbm_run02.o
+    Object lib/NitroDWC/asm/to59_dwcbm_residual_2.o
+    Object src/to59_dwcbm_run03.o
+    Object lib/NitroDWC/asm/to59_dwcbm_residual_3.o
+    Object src/to59_dwcbm_run04.o
+    Object lib/NitroDWC/asm/to59_dwcbm_residual_4.o
+    Object src/to59_dwcbm_run05.o
+    Object lib/NitroDWC/asm/to59_dwcbm_residual_5.o
+    Object src/to59_dwcbm_run06.o
+    Object lib/NitroDWC/asm/to59_dwcbm_residual_6.o
+    Object src/to59_dwcbm_run07.o
+    Object lib/NitroDWC/asm/to59_dwcbm_residual_7.o
+    Object lib/NitroDWC/asm/to59_dwcaccount_anchor.o
+    Object src/to59_dwcaccount_run01.o
+    Object lib/NitroDWC/asm/to59_dwcaccount_residual_1.o
+    Object src/to59_dwcaccount_run02.o
+    Object lib/NitroDWC/asm/to59_dwcaccount_residual_2.o
+    Object src/to59_dwcaccount_run03.o
+    Object lib/NitroDWC/asm/to59_dwcaccount_residual_3.o
+    Object lib/asm/to59_wifi_anchor.o
+    Object lib/asm/to59_wifi_residual_1.o
+    Object src/to59_wifi_run01.o
+    Object src/to59_wifi_run02.o
+    Object src/to59_wifi_run03.o
+    Object lib/asm/to59_wifi_residual_2.o
+    Object src/to59_wifi_run04.o
+    Object lib/asm/to59_wifi_residual_3.o
+    Object src/to59_wifi_run05.o
+    Object lib/asm/to59_wifi_residual_4.o
+    Object src/to59_wifi_run06.o
+    Object lib/asm/to59_wifi_residual_5.o
+    Object src/to59_wifi_run07.o
+    Object lib/asm/to59_wifi_residual_6.o
+    Object src/to59_wifi_run08.o
+    Object lib/asm/to59_wifi_residual_7.o
+    Object src/to59_wifi_run09.o
+    Object lib/asm/to59_wifi_residual_8.o
+    Object src/to59_wifi_run10.o
+    Object lib/asm/to59_wifi_residual_9.o
+    Object src/to59_wifi_run11.o
+    Object lib/asm/to59_wifi_residual_10.o
+    Object src/to59_wifi_run12.o
+    Object lib/asm/to59_wifi_residual_11.o
     Object lib/asm/libVCT.o
-    Object lib/asm/nnsys.o
+    Object lib/asm/to59_nnsys_anchor.o
+    Object src/to59_nnsys_run01.o
+    Object lib/asm/to59_nnsys_residual_1.o
+    Object src/to59_nnsys_run02.o
+    Object src/to59_nnsys_run03.o
+    Object lib/asm/to59_nnsys_residual_2.o
+    Object src/to59_nnsys_run04.o
+    Object lib/asm/to59_nnsys_residual_3.o
+    Object src/to59_nnsys_run05.o
+    Object lib/asm/to59_nnsys_residual_4.o
+    Object src/to59_nnsys_run06.o
+    Object lib/asm/to59_nnsys_residual_5.o
+    Object src/to59_nnsys_run07.o
+    Object lib/asm/to59_nnsys_residual_6.o
+    Object src/to59_nnsys_run08.o
+    Object src/to59_nnsys_run09.o
+    Object lib/asm/to59_nnsys_residual_7.o
+    Object src/to59_nnsys_run10.o
+    Object src/to59_nnsys_run11.o
+    Object lib/asm/to59_nnsys_residual_8.o
+    Object src/to59_nnsys_run12.o
+    Object src/to59_nnsys_run13.o
+    Object lib/asm/to59_nnsys_residual_9.o
+    Object src/to59_nnsys_run14.o
+    Object lib/asm/to59_nnsys_residual_10.o
+    Object src/to59_nnsys_run15.o
+    Object lib/asm/to59_nnsys_residual_11.o
+    Object src/to59_nnsys_run16.o
+    Object lib/asm/to59_nnsys_residual_12.o
+    Object src/to59_nnsys_run17.o
+    Object lib/asm/to59_nnsys_residual_13.o
+    Object src/to59_nnsys_run18.o
+    Object lib/asm/to59_nnsys_residual_14.o
+    Object src/to59_nnsys_run19.o
+    Object lib/asm/to59_nnsys_residual_15.o
+    Object src/to59_nnsys_run20.o
+    Object lib/asm/to59_nnsys_residual_16.o
+    Object src/to59_nnsys_run21.o
+    Object src/to59_nnsys_run22.o
+    Object src/to59_nnsys_run23.o
+    Object lib/asm/to59_nnsys_residual_17.o
+    Object src/to59_nnsys_run24.o
+    Object lib/asm/to59_nnsys_residual_18.o
+    Object src/to59_nnsys_run25.o
+    Object lib/asm/to59_nnsys_residual_19.o
+    Object src/to59_nnsys_run26.o
+    Object src/to59_nnsys_run27.o
+    Object src/to59_nnsys_run28.o
+    Object src/to59_nnsys_run29.o
+    Object src/to59_nnsys_run30.o
+    Object lib/asm/to59_nnsys_residual_20.o
+    Object src/to59_nnsys_run31.o
+    Object lib/asm/to59_nnsys_residual_21.o
+    Object src/to59_nnsys_run32.o
+    Object src/to59_nnsys_run33.o
+    Object lib/asm/to59_nnsys_residual_22.o
+    Object src/to59_nnsys_run34.o
+    Object lib/asm/to59_nnsys_residual_23.o
+    Object src/to59_nnsys_run35.o
+    Object lib/asm/to59_nnsys_residual_24.o
+    Object src/to59_nnsys_run36.o
+    Object lib/asm/to59_nnsys_residual_25.o
+    Object src/to59_nnsys_run37.o
+    Object lib/asm/to59_nnsys_residual_26.o
+    Object src/to59_nnsys_run38.o
+    Object lib/asm/to59_nnsys_residual_27.o
+    Object src/to59_nnsys_run39.o
+    Object lib/asm/to59_nnsys_residual_28.o
+    Object src/to59_nnsys_run40.o
+    Object lib/asm/to59_nnsys_residual_29.o
+    Object src/to59_nnsys_run41.o
+    Object lib/asm/to59_nnsys_residual_30.o
+    Object src/to59_nnsys_run42.o
+    Object lib/asm/to59_nnsys_residual_31.o
+    Object src/to59_nnsys_run43.o
+    Object lib/asm/to59_nnsys_residual_32.o
+    Object src/to59_nnsys_run44.o
+    Object lib/asm/to59_nnsys_residual_33.o
+    Object src/to59_nnsys_run45.o
+    Object lib/asm/to59_nnsys_residual_34.o
+    Object src/to59_nnsys_run46.o
+    Object lib/asm/to59_nnsys_residual_35.o
+    Object src/to59_nnsys_run47.o
+    Object lib/asm/to59_nnsys_residual_36.o
+    Object src/to59_nnsys_run48.o
+    Object lib/asm/to59_nnsys_residual_37.o
+    Object src/to59_nnsys_run49.o
+    Object lib/asm/to59_nnsys_residual_38.o
+    Object src/to59_nnsys_run50.o
+    Object lib/asm/to59_nnsys_residual_39.o
+    Object src/to59_nnsys_run51.o
+    Object lib/asm/to59_nnsys_residual_40.o
+    Object src/to59_nnsys_run52.o
+    Object lib/asm/to59_nnsys_residual_41.o
+    Object src/to59_nnsys_run53.o
+    Object lib/asm/to59_nnsys_residual_42.o
+    Object src/to59_nnsys_run54.o
+    Object lib/asm/to59_nnsys_residual_43.o
+    Object src/to59_nnsys_run55.o
+    Object lib/asm/to59_nnsys_residual_44.o
+    Object src/to59_nnsys_run56.o
+    Object lib/asm/to59_nnsys_residual_45.o
+    Object src/to59_nnsys_run57.o
+    Object lib/asm/to59_nnsys_residual_46.o
+    Object src/to59_nnsys_run58.o
+    Object lib/asm/to59_nnsys_residual_47.o
+    Object src/to59_nnsys_run59.o
+    Object lib/asm/to59_nnsys_residual_48.o
+    Object src/to59_nnsys_run60.o
+    Object lib/asm/to59_nnsys_residual_49.o
+    Object src/to59_nnsys_run61.o
+    Object src/to59_nnsys_run62.o
+    Object lib/asm/to59_nnsys_residual_50.o
+    Object src/to59_nnsys_run63.o
+    Object lib/asm/to59_nnsys_residual_51.o
+    Object src/to59_nnsys_run64.o
+    Object lib/asm/to59_nnsys_residual_52.o
+    Object src/to59_nnsys_run65.o
+    Object lib/asm/to59_nnsys_residual_53.o
+    Object src/to59_nnsys_run66.o
+    Object lib/asm/to59_nnsys_residual_54.o
+    Object src/to59_nnsys_run67.o
+    Object lib/asm/to59_nnsys_residual_55.o
+    Object src/to59_nnsys_run68.o
+    Object lib/asm/to59_nnsys_residual_56.o
+    Object src/to59_nnsys_run69.o
+    Object lib/asm/to59_nnsys_residual_57.o
+    Object src/to59_nnsys_run70.o
+    Object lib/asm/to59_nnsys_residual_58.o
+    Object src/to59_nnsys_run71.o
+    Object lib/asm/to59_nnsys_residual_59.o
+    Object src/to59_nnsys_run72.o
+    Object lib/asm/to59_nnsys_residual_60.o
+    Object src/to59_nnsys_run73.o
+    Object lib/asm/to59_nnsys_residual_61.o
+    Object src/to59_nnsys_run74.o
+    Object lib/asm/to59_nnsys_residual_62.o
+    Object src/to59_nnsys_run75.o
+    Object lib/asm/to59_nnsys_residual_63.o
+    Object src/to59_nnsys_run76.o
+    Object src/to59_nnsys_run77.o
+    Object lib/asm/to59_nnsys_residual_64.o
+    Object src/to59_nnsys_run78.o
+    Object lib/asm/to59_nnsys_residual_65.o
+    Object src/to59_nnsys_run79.o
+    Object lib/asm/to59_nnsys_residual_66.o
+    Object src/to59_nnsys_run80.o
+    Object src/to59_nnsys_run81.o
 
     ### NitroSDK ###
     Object lib/NitroSDK/asm/fx_sincos.o
@@ -1128,29 +1318,47 @@ Static main
     Object lib/MSL_C/asm/MSL_Common_ansi_files.o
     Object lib/MSL_C/src/arith.o
     Object lib/MSL_C/asm/MSL_Common_assert.o
-    Object lib/MSL_C/asm/MSL_Common_buffer_io.o
+    Object lib/MSL_C/asm/to59_msl_buffer_exception.o
+    Object lib/MSL_C/src/to59_msl_buffer.o
     Object lib/MSL_C/asm/MSL_Common_ctype.o
-    Object lib/MSL_C/asm/MSL_Common_direct_io.o
+    Object lib/MSL_C/src/to59_msl_fread.o
+    Object lib/MSL_C/asm/to59_msl_direct_io_residual.o
     Object lib/MSL_C/asm/MSL_Common_errno.o
     Object lib/MSL_C/asm/MSL_Common_file_io.o
-    Object lib/MSL_C/asm/MSL_Common_file_pos.o
+    Object lib/MSL_C/src/msl_filepos_ftell_core.o
+    Object lib/MSL_C/src/msl_filepos_ftell.o
+    Object lib/MSL_C/asm/MSL_Common_file_pos_residual.o
+    Object lib/MSL_C/src/msl_filepos_fseek.o
+    Object lib/MSL_C/src/msl_filepos_rewind.o
     Object lib/MSL_C/asm/MSL_Common_float.o
-    Object lib/MSL_C/asm/MSL_Common_mbstring.o
-    Object lib/MSL_C/asm/MSL_Common_mem.o
+    Object lib/MSL_C/src/to59_msl_mbstring_prefix.o
+    Object lib/MSL_C/asm/to59_msl_mbstring_residual.o
+    Object lib/MSL_C/src/to59_msl_mbstring_suffix.o
+    Object lib/MSL_C/asm/to59_msl_mem_exception.o
+    Object lib/MSL_C/src/to59_msl_mem.o
     Object lib/MSL_C/asm/MSL_Common_mem_funcs.o
     Object lib/MSL_C/asm/MSL_Common_printf.o
     Object lib/MSL_C/asm/MSL_Common_qsort.o
     Object lib/MSL_C/src/rand.o
     Object lib/MSL_C/asm/MSL_Common_scanf.o
     Object lib/MSL_C/asm/MSL_Common_signal.o
-    Object lib/MSL_C/asm/MSL_Common_string.o
+    Object lib/MSL_C/src/msl_string_run0.o
+    Object lib/MSL_C/asm/MSL_Common_string_residual0.o
+    Object lib/MSL_C/src/msl_string_run1.o
+    Object lib/MSL_C/asm/MSL_Common_string_residual1.o
+    Object lib/MSL_C/src/msl_string_run2.o
+    Object lib/MSL_C/asm/MSL_Common_string_residual2.o
+    Object lib/MSL_C/src/msl_string_run3.o
     Object lib/MSL_C/asm/MSL_Common_strtold.o
-    Object lib/MSL_C/asm/MSL_Common_strtoul.o
+    Object lib/MSL_C/asm/to59_msl_strtoul_residual.o
+    Object lib/MSL_C/src/to59_msl_strtoul_tail.o
     Object lib/MSL_C/asm/MSL_Common_wchar_io.o
     Object lib/MSL_C/asm/MSL_Common_wctype.o
     Object lib/MSL_C/asm/MSL_Common_wmem.o
     Object lib/MSL_C/asm/MSL_Common_wprintf.o
-    Object lib/MSL_C/asm/MSL_Common_wstring.o
+    Object lib/MSL_C/src/to59_msl_wstring_start.o
+    Object lib/MSL_C/asm/to59_msl_wstring_wcscpy.o
+    Object lib/MSL_C/src/to59_msl_wstring_end.o
     Object lib/MSL_C/asm/MSL_DPMath_e_pow.o
     Object lib/MSL_C/asm/MSL_DPMath_s_copysign.o
     Object lib/MSL_C/asm/MSL_DPMath_s_fabs.o
