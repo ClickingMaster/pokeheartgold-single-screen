@@ -165,7 +165,6 @@
 	.public ov12_0225E568
 	.public ov12_0225E6FC
 	.public ov12_0225E740
-	.public ov12_0225E760
 	.public ov12_0225E830
 	.public ov12_0225F3A4
 	.public ov12_0225F3FC
@@ -231,114 +230,6 @@
 	.public ov12_0226D1E8
 	.public ov12_0226D1EA
 	.public ov12_0226D350
-
-	thumb_func_start ov12_0225E760
-ov12_0225E760: ; 0x0225E760
-	push {r3, r4, r5, r6, r7, lr}
-	add r4, r1, #0
-	ldrb r1, [r4, #0xd]
-	add r7, r0, #0
-	ldr r0, [r4]
-	add r2, sp, #0
-	bl ov12_0223BE0C
-	cmp r0, #1
-	bne _0225E77A
-	ldr r0, [r4]
-	bl ov12_02261ED4
-_0225E77A:
-	add r0, sp, #0
-	ldrb r0, [r0]
-	cmp r0, #0
-	beq _0225E786
-	cmp r0, #4
-	bls _0225E78E
-_0225E786:
-	ldr r0, [r4]
-	bl ov12_02261EB8
-	b _0225E80C
-_0225E78E:
-	sub r5, r0, #1
-	ldrh r0, [r4, #0x30]
-	cmp r0, #0x40
-	bgt _0225E7C4
-	bge _0225E80C
-	cmp r0, #0x10
-	bgt _0225E7C0
-	bge _0225E80C
-	cmp r0, #8
-	bhi _0225E80C
-	add r1, r0, r0
-	add r1, pc
-	ldrh r1, [r1, #6]
-	lsl r1, r1, #0x10
-	asr r1, r1, #0x10
-	add pc, r1
-_0225E7AE: ; jump table
-	.short _0225E7E2 - _0225E7AE - 2 ; case 0
-	.short _0225E80C - _0225E7AE - 2 ; case 1
-	.short _0225E80C - _0225E7AE - 2 ; case 2
-	.short _0225E80C - _0225E7AE - 2 ; case 3
-	.short _0225E80C - _0225E7AE - 2 ; case 4
-	.short _0225E80C - _0225E7AE - 2 ; case 5
-	.short _0225E80C - _0225E7AE - 2 ; case 6
-	.short _0225E80C - _0225E7AE - 2 ; case 7
-	.short _0225E80C - _0225E7AE - 2 ; case 8
-_0225E7C0:
-	cmp r0, #0x20
-	b _0225E80C
-_0225E7C4:
-	mov r2, #1
-	lsl r2, r2, #8
-	cmp r0, r2
-	bgt _0225E7D2
-	bge _0225E80C
-	cmp r0, #0x80
-	b _0225E80C
-_0225E7D2:
-	lsl r1, r2, #1
-	cmp r0, r1
-	bgt _0225E7DC
-	beq _0225E7F0
-	b _0225E80C
-_0225E7DC:
-	lsl r1, r2, #2
-	cmp r0, r1
-	b _0225E80C
-_0225E7E2:
-	ldrb r0, [r4, #0xd]
-	cmp r0, r5
-	bne _0225E80C
-	ldr r0, [r4]
-	bl ov12_02261EB8
-	b _0225E80C
-_0225E7F0:
-	ldrb r1, [r4, #0xd]
-	ldr r0, [r4]
-	bl BattleSystem_GetFieldSide
-	add r6, r0, #0
-	ldr r0, [r4]
-	add r1, r5, #0
-	bl BattleSystem_GetFieldSide
-	cmp r6, r0
-	beq _0225E80C
-	ldr r0, [r4]
-	bl ov12_02261EB8
-_0225E80C:
-	add r2, sp, #0
-	ldrb r1, [r4, #0xd]
-	ldrb r2, [r2]
-	ldr r0, [r4]
-	bl ov12_0226311C
-	ldrb r1, [r4, #0xd]
-	ldrb r2, [r4, #0xc]
-	ldr r0, [r4]
-	bl ov12_0226430C
-	add r0, r4, #0
-	bl Heap_Free
-	add r0, r7, #0
-	bl SysTask_Destroy
-	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end ov12_0225E760
 
 	thumb_func_start ov12_0225E830
 ov12_0225E830: ; 0x0225E830

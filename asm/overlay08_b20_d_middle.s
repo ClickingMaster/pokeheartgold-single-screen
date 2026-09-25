@@ -1656,947 +1656,246 @@
 	.force_active on
 
 
-	thumb_func_start ov08_0221E408
-ov08_0221E408: ; 0x0221E408
-	push {r4, r5, r6, r7, lr}
-	sub sp, #0x24
-	add r5, r0, #0
-	mov r0, #0x50
-	mul r0, r1
-	add r2, r5, #4
-	add r4, r2, r0
-	ldr r1, _0221E5C4 ; =0x00002075
-	mov r0, #0x16
-	ldrb r2, [r5, r1]
-	sub r1, #0xcd
-	mul r0, r2
-	lsl r0, r0, #0x10
-	lsr r6, r0, #0x10
-	ldr r0, [r5, r1]
-	mov r1, #0x17
-	bl NewString_ReadMsgData
-	mov r1, #0
-	add r7, r0, #0
-	str r1, [sp]
-	mov r0, #0xff
-	str r0, [sp, #4]
-	ldr r2, _0221E5C8 ; =0x000F0E00
-	add r0, #0x31
-	str r2, [sp, #8]
-	ldr r2, _0221E5CC ; =0x00002070
-	str r1, [sp, #0xc]
-	ldr r2, [r5, r2]
-	add r3, r1, #0
-	add r0, r2, r0
-	add r2, r7, #0
-	bl AddTextPrinterParameterizedWithColor
-	add r0, r7, #0
-	bl String_Delete
-	ldr r0, _0221E5D0 ; =0x00001FA8
-	mov r1, #0x18
-	ldr r0, [r5, r0]
-	bl NewString_ReadMsgData
-	ldr r1, [r5]
-	str r0, [sp, #0x18]
-	ldr r1, [r1, #0xc]
-	mov r0, #8
-	bl String_New
-	mov r1, #0
-	str r0, [sp, #0x1c]
-	str r1, [sp]
-	mov r0, #1
-	str r0, [sp, #4]
-	ldrb r2, [r4, #0x16]
-	ldr r0, _0221E5D4 ; =0x00001FAC
-	mov r3, #3
-	lsl r2, r2, #0x19
-	ldr r0, [r5, r0]
-	lsr r2, r2, #0x19
-	bl BufferIntegerAsString
-	ldr r0, _0221E5D4 ; =0x00001FAC
-	ldr r1, [sp, #0x1c]
-	ldr r0, [r5, r0]
-	ldr r2, [sp, #0x18]
-	bl StringExpandPlaceholders
-	mov r1, #0
-	add r0, r6, #0
-	add r0, #0xb
-	lsl r7, r0, #4
-	str r1, [sp]
-	mov r0, #0xff
-	str r0, [sp, #4]
-	ldr r0, _0221E5C8 ; =0x000F0E00
-	ldr r2, [sp, #0x1c]
-	str r0, [sp, #8]
-	ldr r0, _0221E5CC ; =0x00002070
-	str r1, [sp, #0xc]
-	ldr r0, [r5, r0]
-	add r3, r1, #0
-	add r0, r0, r7
-	bl AddTextPrinterParameterizedWithColor
-	ldr r0, [sp, #0x18]
-	bl String_Delete
-	ldr r0, [sp, #0x1c]
-	bl String_Delete
-	ldr r0, _0221E5D0 ; =0x00001FA8
-	mov r1, #0x19
-	ldr r0, [r5, r0]
-	bl NewString_ReadMsgData
-	mov r1, #0
-	str r0, [sp, #0x20]
-	str r1, [sp]
-	mov r0, #0xff
-	str r0, [sp, #4]
-	ldr r2, _0221E5C8 ; =0x000F0E00
-	add r0, #0x41
-	str r2, [sp, #8]
-	ldr r2, _0221E5CC ; =0x00002070
-	str r1, [sp, #0xc]
-	ldr r2, [r5, r2]
-	add r3, r1, #0
-	add r0, r2, r0
-	ldr r2, [sp, #0x20]
-	bl AddTextPrinterParameterizedWithColor
-	ldr r0, [sp, #0x20]
-	bl String_Delete
-	ldr r0, _0221E5D0 ; =0x00001FA8
-	mov r1, #0x1a
-	ldr r0, [r5, r0]
-	bl NewString_ReadMsgData
-	ldr r1, [r5]
-	str r0, [sp, #0x14]
-	ldr r1, [r1, #0xc]
-	mov r0, #0xe
-	bl String_New
-	str r0, [sp, #0x10]
-	ldrb r0, [r4, #0x16]
-	lsl r0, r0, #0x19
-	lsr r0, r0, #0x19
-	cmp r0, #0x64
-	bhs _0221E528
-	mov r0, #1
-	str r0, [sp]
-	str r0, [sp, #4]
-	ldr r0, _0221E5D4 ; =0x00001FAC
-	ldr r2, [r4, #0x24]
-	ldr r3, [r4, #0x1c]
-	ldr r0, [r5, r0]
-	sub r2, r2, r3
-	mov r1, #0
-	mov r3, #6
-	bl BufferIntegerAsString
-	b _0221E53C
-_0221E528:
-	mov r0, #1
-	str r0, [sp]
-	str r0, [sp, #4]
-	ldr r0, _0221E5D4 ; =0x00001FAC
-	mov r1, #0
-	ldr r0, [r5, r0]
-	add r2, r1, #0
-	mov r3, #6
-	bl BufferIntegerAsString
-_0221E53C:
-	ldr r0, _0221E5D4 ; =0x00001FAC
-	ldr r1, [sp, #0x10]
-	ldr r0, [r5, r0]
-	ldr r2, [sp, #0x14]
-	bl StringExpandPlaceholders
-	ldr r0, _0221E5CC ; =0x00002070
-	add r6, #0xc
-	ldr r0, [r5, r0]
-	lsl r4, r6, #4
-	add r0, r0, r4
-	bl GetWindowWidth
-	add r6, r0, #0
-	mov r0, #0
-	ldr r1, [sp, #0x10]
-	add r2, r0, #0
-	bl FontID_String_GetWidth
-	lsl r1, r6, #3
-	sub r0, r1, r0
-	lsl r0, r0, #0x10
-	mov r1, #0
-	lsr r3, r0, #0x10
-	str r1, [sp]
-	mov r0, #0xff
-	str r0, [sp, #4]
-	ldr r0, _0221E5D8 ; =0x00010200
-	ldr r2, [sp, #0x10]
-	str r0, [sp, #8]
-	ldr r0, _0221E5CC ; =0x00002070
-	str r1, [sp, #0xc]
-	ldr r0, [r5, r0]
-	add r0, r0, r4
-	bl AddTextPrinterParameterizedWithColor
-	ldr r0, [sp, #0x14]
-	bl String_Delete
-	ldr r0, [sp, #0x10]
-	bl String_Delete
-	ldr r0, _0221E5CC ; =0x00002070
-	ldr r1, [r5, r0]
-	mov r0, #0x13
-	lsl r0, r0, #4
-	add r0, r1, r0
-	bl ScheduleWindowCopyToVram
-	ldr r0, _0221E5CC ; =0x00002070
-	ldr r0, [r5, r0]
-	add r0, r0, r7
-	bl ScheduleWindowCopyToVram
-	ldr r0, _0221E5CC ; =0x00002070
-	ldr r1, [r5, r0]
-	mov r0, #5
-	lsl r0, r0, #6
-	add r0, r1, r0
-	bl ScheduleWindowCopyToVram
-	ldr r0, _0221E5CC ; =0x00002070
-	ldr r0, [r5, r0]
-	add r0, r0, r4
-	bl ScheduleWindowCopyToVram
-	add sp, #0x24
-	pop {r4, r5, r6, r7, pc}
-	.balign 4, 0
-_0221E5C4: .word 0x00002075
-_0221E5C8: .word 0x000F0E00
-_0221E5CC: .word 0x00002070
-_0221E5D0: .word 0x00001FA8
-_0221E5D4: .word 0x00001FAC
-_0221E5D8: .word 0x00010200
-	thumb_func_end ov08_0221E408
 
-thumb_func_start ov08_0221E5DC
-ov08_0221E5DC: ; 0x0221E5DC
-	push {r4, r5, r6, r7, lr}
-	sub sp, #0x14
-	add r7, r1, #0
-	add r5, r0, #0
-	ldr r1, _0221E6C0 ; =0x00002075
-	mov r0, #0x16
-	ldrb r2, [r5, r1]
-	sub r1, #0xcd
-	mul r0, r2
-	lsl r0, r0, #0x10
-	lsr r4, r0, #0x10
-	ldr r0, [r5, r1]
-	mov r1, #0x20
-	bl NewString_ReadMsgData
-	mov r1, #0
-	add r6, r0, #0
-	str r1, [sp]
-	mov r0, #0xff
-	str r0, [sp, #4]
-	ldr r0, _0221E6C4 ; =0x000F0E00
-	add r2, r6, #0
-	str r0, [sp, #8]
-	ldr r0, _0221E6C8 ; =0x00002070
-	str r1, [sp, #0xc]
-	ldr r0, [r5, r0]
-	add r3, r1, #0
-	add r0, #0xe0
-	bl AddTextPrinterParameterizedWithColor
-	add r0, r6, #0
-	bl String_Delete
-	ldr r0, _0221E6CC ; =0x00001FA8
-	mov r1, #0x21
-	ldr r0, [r5, r0]
-	bl NewString_ReadMsgData
-	ldr r1, [r5]
-	str r0, [sp, #0x10]
-	ldr r1, [r1, #0xc]
-	mov r0, #8
-	bl String_New
-	mov r1, #0
-	mov r2, #0x50
-	add r6, r0, #0
-	mul r2, r7
-	str r1, [sp]
-	mov r0, #1
-	str r0, [sp, #4]
-	ldr r0, _0221E6D0 ; =0x00001FAC
-	add r2, r5, r2
-	ldrh r2, [r2, #0xa]
-	ldr r0, [r5, r0]
-	mov r3, #3
-	bl BufferIntegerAsString
-	ldr r0, _0221E6D0 ; =0x00001FAC
-	ldr r2, [sp, #0x10]
-	ldr r0, [r5, r0]
-	add r1, r6, #0
-	bl StringExpandPlaceholders
-	mov r0, #0
-	add r1, r6, #0
-	add r2, r0, #0
-	bl FontID_String_GetWidth
-	lsl r0, r0, #0x18
-	lsr r7, r0, #0x18
-	add r0, r4, #5
-	lsl r4, r0, #4
-	ldr r0, _0221E6C8 ; =0x00002070
-	ldr r0, [r5, r0]
-	add r0, r0, r4
-	bl GetWindowWidth
-	lsl r0, r0, #3
-	sub r0, r0, r7
-	lsl r0, r0, #0x18
-	mov r1, #0
-	lsr r3, r0, #0x18
-	str r1, [sp]
-	mov r0, #0xff
-	str r0, [sp, #4]
-	ldr r0, _0221E6D4 ; =0x00010200
-	add r2, r6, #0
-	str r0, [sp, #8]
-	ldr r0, _0221E6C8 ; =0x00002070
-	str r1, [sp, #0xc]
-	ldr r0, [r5, r0]
-	add r0, r0, r4
-	bl AddTextPrinterParameterizedWithColor
-	ldr r0, [sp, #0x10]
-	bl String_Delete
-	add r0, r6, #0
-	bl String_Delete
-	ldr r0, _0221E6C8 ; =0x00002070
-	ldr r0, [r5, r0]
-	add r0, #0xe0
-	bl ScheduleWindowCopyToVram
-	ldr r0, _0221E6C8 ; =0x00002070
-	ldr r0, [r5, r0]
-	add r0, r0, r4
-	bl ScheduleWindowCopyToVram
-	add sp, #0x14
-	pop {r4, r5, r6, r7, pc}
-	nop
-_0221E6C0: .word 0x00002075
-_0221E6C4: .word 0x000F0E00
-_0221E6C8: .word 0x00002070
-_0221E6CC: .word 0x00001FA8
-_0221E6D0: .word 0x00001FAC
-_0221E6D4: .word 0x00010200
-	thumb_func_end ov08_0221E5DC
 
-thumb_func_start ov08_0221E6D8
-ov08_0221E6D8: ; 0x0221E6D8
-	push {r4, r5, r6, r7, lr}
-	sub sp, #0x14
-	add r7, r1, #0
-	add r5, r0, #0
-	ldr r1, _0221E7BC ; =0x00002075
-	mov r0, #0x16
-	ldrb r2, [r5, r1]
-	sub r1, #0xcd
-	mul r0, r2
-	lsl r0, r0, #0x10
-	lsr r4, r0, #0x10
-	ldr r0, [r5, r1]
-	mov r1, #0x22
-	bl NewString_ReadMsgData
-	mov r1, #0
-	add r6, r0, #0
-	str r1, [sp]
-	mov r0, #0xff
-	str r0, [sp, #4]
-	ldr r0, _0221E7C0 ; =0x000F0E00
-	add r2, r6, #0
-	str r0, [sp, #8]
-	ldr r0, _0221E7C4 ; =0x00002070
-	str r1, [sp, #0xc]
-	ldr r0, [r5, r0]
-	add r3, r1, #0
-	add r0, #0xf0
-	bl AddTextPrinterParameterizedWithColor
-	add r0, r6, #0
-	bl String_Delete
-	ldr r0, _0221E7C8 ; =0x00001FA8
-	mov r1, #0x23
-	ldr r0, [r5, r0]
-	bl NewString_ReadMsgData
-	ldr r1, [r5]
-	str r0, [sp, #0x10]
-	ldr r1, [r1, #0xc]
-	mov r0, #8
-	bl String_New
-	mov r1, #0
-	mov r2, #0x50
-	add r6, r0, #0
-	mul r2, r7
-	str r1, [sp]
-	mov r0, #1
-	str r0, [sp, #4]
-	ldr r0, _0221E7CC ; =0x00001FAC
-	add r2, r5, r2
-	ldrh r2, [r2, #0xc]
-	ldr r0, [r5, r0]
-	mov r3, #3
-	bl BufferIntegerAsString
-	ldr r0, _0221E7CC ; =0x00001FAC
-	ldr r2, [sp, #0x10]
-	ldr r0, [r5, r0]
-	add r1, r6, #0
-	bl StringExpandPlaceholders
-	mov r0, #0
-	add r1, r6, #0
-	add r2, r0, #0
-	bl FontID_String_GetWidth
-	lsl r0, r0, #0x18
-	lsr r7, r0, #0x18
-	add r0, r4, #6
-	lsl r4, r0, #4
-	ldr r0, _0221E7C4 ; =0x00002070
-	ldr r0, [r5, r0]
-	add r0, r0, r4
-	bl GetWindowWidth
-	lsl r0, r0, #3
-	sub r0, r0, r7
-	lsl r0, r0, #0x18
-	mov r1, #0
-	lsr r3, r0, #0x18
-	str r1, [sp]
-	mov r0, #0xff
-	str r0, [sp, #4]
-	ldr r0, _0221E7D0 ; =0x00010200
-	add r2, r6, #0
-	str r0, [sp, #8]
-	ldr r0, _0221E7C4 ; =0x00002070
-	str r1, [sp, #0xc]
-	ldr r0, [r5, r0]
-	add r0, r0, r4
-	bl AddTextPrinterParameterizedWithColor
-	ldr r0, [sp, #0x10]
-	bl String_Delete
-	add r0, r6, #0
-	bl String_Delete
-	ldr r0, _0221E7C4 ; =0x00002070
-	ldr r0, [r5, r0]
-	add r0, #0xf0
-	bl ScheduleWindowCopyToVram
-	ldr r0, _0221E7C4 ; =0x00002070
-	ldr r0, [r5, r0]
-	add r0, r0, r4
-	bl ScheduleWindowCopyToVram
-	add sp, #0x14
-	pop {r4, r5, r6, r7, pc}
-	nop
-_0221E7BC: .word 0x00002075
-_0221E7C0: .word 0x000F0E00
-_0221E7C4: .word 0x00002070
-_0221E7C8: .word 0x00001FA8
-_0221E7CC: .word 0x00001FAC
-_0221E7D0: .word 0x00010200
-	thumb_func_end ov08_0221E6D8
 
-thumb_func_start ov08_0221E7D4
-ov08_0221E7D4: ; 0x0221E7D4
-	push {r4, r5, r6, r7, lr}
-	sub sp, #0x14
-	add r7, r1, #0
-	add r5, r0, #0
-	ldr r1, _0221E8BC ; =0x00002075
-	mov r0, #0x16
-	ldrb r2, [r5, r1]
-	sub r1, #0xcd
-	mul r0, r2
-	lsl r0, r0, #0x10
-	lsr r4, r0, #0x10
-	ldr r0, [r5, r1]
-	mov r1, #0x28
-	bl NewString_ReadMsgData
-	mov r1, #0
-	add r6, r0, #0
-	str r1, [sp]
-	mov r2, #0xff
-	str r2, [sp, #4]
-	ldr r0, _0221E8C0 ; =0x000F0E00
-	add r2, r2, #1
-	str r0, [sp, #8]
-	ldr r0, _0221E8C4 ; =0x00002070
-	str r1, [sp, #0xc]
-	ldr r0, [r5, r0]
-	add r3, r1, #0
-	add r0, r0, r2
-	add r2, r6, #0
-	bl AddTextPrinterParameterizedWithColor
-	add r0, r6, #0
-	bl String_Delete
-	ldr r0, _0221E8C8 ; =0x00001FA8
-	mov r1, #0x29
-	ldr r0, [r5, r0]
-	bl NewString_ReadMsgData
-	ldr r1, [r5]
-	str r0, [sp, #0x10]
-	ldr r1, [r1, #0xc]
-	mov r0, #8
-	bl String_New
-	mov r1, #0
-	mov r2, #0x50
-	add r6, r0, #0
-	mul r2, r7
-	str r1, [sp]
-	mov r0, #1
-	str r0, [sp, #4]
-	ldr r0, _0221E8CC ; =0x00001FAC
-	add r2, r5, r2
-	ldrh r2, [r2, #0xe]
-	ldr r0, [r5, r0]
-	mov r3, #3
-	bl BufferIntegerAsString
-	ldr r0, _0221E8CC ; =0x00001FAC
-	ldr r2, [sp, #0x10]
-	ldr r0, [r5, r0]
-	add r1, r6, #0
-	bl StringExpandPlaceholders
-	mov r0, #0
-	add r1, r6, #0
-	add r2, r0, #0
-	bl FontID_String_GetWidth
-	lsl r0, r0, #0x18
-	lsr r7, r0, #0x18
-	add r0, r4, #7
-	lsl r4, r0, #4
-	ldr r0, _0221E8C4 ; =0x00002070
-	ldr r0, [r5, r0]
-	add r0, r0, r4
-	bl GetWindowWidth
-	lsl r0, r0, #3
-	sub r0, r0, r7
-	lsl r0, r0, #0x18
-	mov r1, #0
-	lsr r3, r0, #0x18
-	str r1, [sp]
-	mov r0, #0xff
-	str r0, [sp, #4]
-	ldr r0, _0221E8D0 ; =0x00010200
-	add r2, r6, #0
-	str r0, [sp, #8]
-	ldr r0, _0221E8C4 ; =0x00002070
-	str r1, [sp, #0xc]
-	ldr r0, [r5, r0]
-	add r0, r0, r4
-	bl AddTextPrinterParameterizedWithColor
-	ldr r0, [sp, #0x10]
-	bl String_Delete
-	add r0, r6, #0
-	bl String_Delete
-	ldr r0, _0221E8C4 ; =0x00002070
-	ldr r1, [r5, r0]
-	mov r0, #1
-	lsl r0, r0, #8
-	add r0, r1, r0
-	bl ScheduleWindowCopyToVram
-	ldr r0, _0221E8C4 ; =0x00002070
-	ldr r0, [r5, r0]
-	add r0, r0, r4
-	bl ScheduleWindowCopyToVram
-	add sp, #0x14
-	pop {r4, r5, r6, r7, pc}
-	.balign 4, 0
-_0221E8BC: .word 0x00002075
-_0221E8C0: .word 0x000F0E00
-_0221E8C4: .word 0x00002070
-_0221E8C8: .word 0x00001FA8
-_0221E8CC: .word 0x00001FAC
-_0221E8D0: .word 0x00010200
-	thumb_func_end ov08_0221E7D4
 
-thumb_func_start ov08_0221E8D4
-ov08_0221E8D4: ; 0x0221E8D4
-	push {r4, r5, r6, r7, lr}
-	sub sp, #0x14
-	add r7, r1, #0
-	add r4, r0, #0
-	ldr r1, _0221E9BC ; =0x00002075
-	mov r0, #0x16
-	ldrb r2, [r4, r1]
-	sub r1, #0xcd
-	mul r0, r2
-	lsl r0, r0, #0x10
-	lsr r5, r0, #0x10
-	ldr r0, [r4, r1]
-	mov r1, #0x24
-	bl NewString_ReadMsgData
-	mov r1, #0
-	add r6, r0, #0
-	str r1, [sp]
-	mov r0, #0xff
-	str r0, [sp, #4]
-	ldr r2, _0221E9C0 ; =0x000F0E00
-	add r0, #0x11
-	str r2, [sp, #8]
-	ldr r2, _0221E9C4 ; =0x00002070
-	str r1, [sp, #0xc]
-	ldr r2, [r4, r2]
-	add r3, r1, #0
-	add r0, r2, r0
-	add r2, r6, #0
-	bl AddTextPrinterParameterizedWithColor
-	add r0, r6, #0
-	bl String_Delete
-	ldr r0, _0221E9C8 ; =0x00001FA8
-	mov r1, #0x25
-	ldr r0, [r4, r0]
-	bl NewString_ReadMsgData
-	ldr r1, [r4]
-	str r0, [sp, #0x10]
-	ldr r1, [r1, #0xc]
-	mov r0, #8
-	bl String_New
-	mov r1, #0
-	mov r2, #0x50
-	add r6, r0, #0
-	mul r2, r7
-	str r1, [sp]
-	mov r0, #1
-	str r0, [sp, #4]
-	ldr r0, _0221E9CC ; =0x00001FAC
-	add r2, r4, r2
-	ldrh r2, [r2, #0x10]
-	ldr r0, [r4, r0]
-	mov r3, #3
-	bl BufferIntegerAsString
-	ldr r0, _0221E9CC ; =0x00001FAC
-	ldr r2, [sp, #0x10]
-	ldr r0, [r4, r0]
-	add r1, r6, #0
-	bl StringExpandPlaceholders
-	mov r0, #0
-	add r1, r6, #0
-	add r2, r0, #0
-	bl FontID_String_GetWidth
-	lsl r0, r0, #0x18
-	lsr r7, r0, #0x18
-	ldr r0, _0221E9C4 ; =0x00002070
-	add r5, #8
-	ldr r0, [r4, r0]
-	lsl r5, r5, #4
-	add r0, r0, r5
-	bl GetWindowWidth
-	lsl r0, r0, #3
-	sub r0, r0, r7
-	lsl r0, r0, #0x18
-	mov r1, #0
-	lsr r3, r0, #0x18
-	str r1, [sp]
-	mov r0, #0xff
-	str r0, [sp, #4]
-	ldr r0, _0221E9D0 ; =0x00010200
-	add r2, r6, #0
-	str r0, [sp, #8]
-	ldr r0, _0221E9C4 ; =0x00002070
-	str r1, [sp, #0xc]
-	ldr r0, [r4, r0]
-	add r0, r0, r5
-	bl AddTextPrinterParameterizedWithColor
-	ldr r0, [sp, #0x10]
-	bl String_Delete
-	add r0, r6, #0
-	bl String_Delete
-	ldr r0, _0221E9C4 ; =0x00002070
-	ldr r1, [r4, r0]
-	mov r0, #0x11
-	lsl r0, r0, #4
-	add r0, r1, r0
-	bl ScheduleWindowCopyToVram
-	ldr r0, _0221E9C4 ; =0x00002070
-	ldr r0, [r4, r0]
-	add r0, r0, r5
-	bl ScheduleWindowCopyToVram
-	add sp, #0x14
-	pop {r4, r5, r6, r7, pc}
-	.balign 4, 0
-_0221E9BC: .word 0x00002075
-_0221E9C0: .word 0x000F0E00
-_0221E9C4: .word 0x00002070
-_0221E9C8: .word 0x00001FA8
-_0221E9CC: .word 0x00001FAC
-_0221E9D0: .word 0x00010200
-	thumb_func_end ov08_0221E8D4
 
-thumb_func_start ov08_0221E9D4
-ov08_0221E9D4: ; 0x0221E9D4
-	push {r4, r5, r6, r7, lr}
-	sub sp, #0x14
-	add r7, r1, #0
-	add r4, r0, #0
-	ldr r1, _0221EABC ; =0x00002075
-	mov r0, #0x16
-	ldrb r2, [r4, r1]
-	sub r1, #0xcd
-	mul r0, r2
-	lsl r0, r0, #0x10
-	lsr r5, r0, #0x10
-	ldr r0, [r4, r1]
-	mov r1, #0x26
-	bl NewString_ReadMsgData
-	mov r1, #0
-	add r6, r0, #0
-	str r1, [sp]
-	mov r0, #0xff
-	str r0, [sp, #4]
-	ldr r2, _0221EAC0 ; =0x000F0E00
-	add r0, #0x21
-	str r2, [sp, #8]
-	ldr r2, _0221EAC4 ; =0x00002070
-	str r1, [sp, #0xc]
-	ldr r2, [r4, r2]
-	add r3, r1, #0
-	add r0, r2, r0
-	add r2, r6, #0
-	bl AddTextPrinterParameterizedWithColor
-	add r0, r6, #0
-	bl String_Delete
-	ldr r0, _0221EAC8 ; =0x00001FA8
-	mov r1, #0x27
-	ldr r0, [r4, r0]
-	bl NewString_ReadMsgData
-	ldr r1, [r4]
-	str r0, [sp, #0x10]
-	ldr r1, [r1, #0xc]
-	mov r0, #8
-	bl String_New
-	mov r1, #0
-	mov r2, #0x50
-	add r6, r0, #0
-	mul r2, r7
-	str r1, [sp]
-	mov r0, #1
-	str r0, [sp, #4]
-	ldr r0, _0221EACC ; =0x00001FAC
-	add r2, r4, r2
-	ldrh r2, [r2, #0x12]
-	ldr r0, [r4, r0]
-	mov r3, #3
-	bl BufferIntegerAsString
-	ldr r0, _0221EACC ; =0x00001FAC
-	ldr r2, [sp, #0x10]
-	ldr r0, [r4, r0]
-	add r1, r6, #0
-	bl StringExpandPlaceholders
-	mov r0, #0
-	add r1, r6, #0
-	add r2, r0, #0
-	bl FontID_String_GetWidth
-	lsl r0, r0, #0x18
-	lsr r7, r0, #0x18
-	ldr r0, _0221EAC4 ; =0x00002070
-	add r5, #9
-	ldr r0, [r4, r0]
-	lsl r5, r5, #4
-	add r0, r0, r5
-	bl GetWindowWidth
-	lsl r0, r0, #3
-	sub r0, r0, r7
-	lsl r0, r0, #0x18
-	mov r1, #0
-	lsr r3, r0, #0x18
-	str r1, [sp]
-	mov r0, #0xff
-	str r0, [sp, #4]
-	ldr r0, _0221EAD0 ; =0x00010200
-	add r2, r6, #0
-	str r0, [sp, #8]
-	ldr r0, _0221EAC4 ; =0x00002070
-	str r1, [sp, #0xc]
-	ldr r0, [r4, r0]
-	add r0, r0, r5
-	bl AddTextPrinterParameterizedWithColor
-	ldr r0, [sp, #0x10]
-	bl String_Delete
-	add r0, r6, #0
-	bl String_Delete
-	ldr r0, _0221EAC4 ; =0x00002070
-	ldr r1, [r4, r0]
-	mov r0, #0x12
-	lsl r0, r0, #4
-	add r0, r1, r0
-	bl ScheduleWindowCopyToVram
-	ldr r0, _0221EAC4 ; =0x00002070
-	ldr r0, [r4, r0]
-	add r0, r0, r5
-	bl ScheduleWindowCopyToVram
-	add sp, #0x14
-	pop {r4, r5, r6, r7, pc}
-	.balign 4, 0
-_0221EABC: .word 0x00002075
-_0221EAC0: .word 0x000F0E00
-_0221EAC4: .word 0x00002070
-_0221EAC8: .word 0x00001FA8
-_0221EACC: .word 0x00001FAC
-_0221EAD0: .word 0x00010200
-	thumb_func_end ov08_0221E9D4
 
-thumb_func_start ov08_0221EAD4
-ov08_0221EAD4: ; 0x0221EAD4
+
+
+	thumb_func_start ov08_02222918
+ov08_02222918: ; 0x02222918
 	push {r3, r4, r5, r6, r7, lr}
-	sub sp, #0x28
+	ldr r1, _02222A64 ; =ov08_02225B68
+	add r4, r0, #0
+	bl ov08_02223368
 	add r5, r0, #0
-	mov r0, #0x50
-	mul r0, r1
-	add r2, r5, #4
-	add r7, r2, r0
-	ldr r1, _0221EC54 ; =0x00002075
-	mov r0, #0x16
-	ldrb r2, [r5, r1]
-	sub r1, #0xcd
-	mul r0, r2
-	lsl r0, r0, #0x10
-	lsr r4, r0, #0x10
-	ldr r0, [r5, r1]
-	mov r1, #0x1c
-	bl NewString_ReadMsgData
-	mov r1, #0
+	mov r0, #0
+	mvn r0, r0
+	cmp r5, r0
+	bne _0222298C
+	ldr r0, [r4, #0x34]
+	bl ov08_02224B8C
 	add r6, r0, #0
-	str r1, [sp]
-	mov r0, #0xff
-	str r0, [sp, #4]
-	ldr r0, _0221EC58 ; =0x000F0E00
-	add r2, r6, #0
-	str r0, [sp, #8]
-	ldr r0, _0221EC5C ; =0x00002070
-	str r1, [sp, #0xc]
-	ldr r0, [r5, r0]
-	add r3, r1, #0
-	add r0, #0xd0
-	bl AddTextPrinterParameterizedWithColor
-	add r0, r6, #0
-	bl String_Delete
-	ldr r0, _0221EC60 ; =0x00001FA8
-	mov r1, #0x1f
-	ldr r0, [r5, r0]
-	bl NewString_ReadMsgData
-	str r0, [sp, #0x10]
-	mov r0, #0
-	ldr r1, [sp, #0x10]
-	add r2, r0, #0
-	bl FontID_String_GetWidth
-	str r0, [sp, #0x14]
-	ldr r0, _0221EC5C ; =0x00002070
-	ldr r0, [r5, r0]
-	add r0, #0x40
-	bl GetWindowWidth
-	lsl r1, r0, #3
-	ldr r0, [sp, #0x14]
-	ldr r2, [sp, #0x10]
-	sub r0, r1, r0
-	lsl r0, r0, #0xf
-	lsr r6, r0, #0x10
-	add r0, r4, #4
-	mov r1, #0
-	lsl r4, r0, #4
-	str r1, [sp]
-	mov r0, #0xff
-	str r0, [sp, #4]
-	ldr r0, _0221EC64 ; =0x00010200
-	add r3, r6, #0
-	str r0, [sp, #8]
-	ldr r0, _0221EC5C ; =0x00002070
-	str r1, [sp, #0xc]
-	ldr r0, [r5, r0]
-	add r0, r0, r4
-	bl AddTextPrinterParameterizedWithColor
-	ldr r0, [sp, #0x10]
-	bl String_Delete
-	ldr r0, _0221EC60 ; =0x00001FA8
-	mov r1, #0x1d
-	ldr r0, [r5, r0]
-	bl NewString_ReadMsgData
-	ldr r1, [r5]
-	str r0, [sp, #0x18]
-	ldr r1, [r1, #0xc]
-	mov r0, #8
-	bl String_New
-	str r0, [sp, #0x1c]
-	mov r1, #0
-	str r1, [sp]
-	mov r0, #1
-	str r0, [sp, #4]
-	ldr r0, _0221EC68 ; =0x00001FAC
-	ldrh r2, [r7, #0x10]
-	ldr r0, [r5, r0]
-	mov r3, #3
-	bl BufferIntegerAsString
-	ldr r0, _0221EC68 ; =0x00001FAC
-	ldr r1, [sp, #0x1c]
-	ldr r0, [r5, r0]
-	ldr r2, [sp, #0x18]
-	bl StringExpandPlaceholders
-	mov r0, #0
-	ldr r1, [sp, #0x1c]
-	add r2, r0, #0
-	bl FontID_String_GetWidth
-	add r3, r0, #0
-	mov r1, #0
-	str r1, [sp]
-	mov r0, #0xff
-	str r0, [sp, #4]
-	ldr r0, _0221EC64 ; =0x00010200
-	ldr r2, [sp, #0x1c]
-	str r0, [sp, #8]
-	ldr r0, _0221EC5C ; =0x00002070
-	str r1, [sp, #0xc]
-	ldr r0, [r5, r0]
-	sub r3, r6, r3
-	add r0, r0, r4
-	bl AddTextPrinterParameterizedWithColor
-	ldr r0, [sp, #0x18]
-	bl String_Delete
-	ldr r0, [sp, #0x1c]
-	bl String_Delete
-	ldr r0, _0221EC60 ; =0x00001FA8
-	mov r1, #0x1e
-	ldr r0, [r5, r0]
-	bl NewString_ReadMsgData
-	ldr r1, [r5]
-	str r0, [sp, #0x20]
-	ldr r1, [r1, #0xc]
-	mov r0, #8
-	bl String_New
-	mov r1, #0
-	str r0, [sp, #0x24]
-	str r1, [sp]
-	mov r0, #1
-	str r0, [sp, #4]
-	ldr r0, _0221EC68 ; =0x00001FAC
-	ldrh r2, [r7, #0x12]
-	ldr r0, [r5, r0]
-	mov r3, #3
-	bl BufferIntegerAsString
-	ldr r0, _0221EC68 ; =0x00001FAC
-	ldr r1, [sp, #0x24]
-	ldr r0, [r5, r0]
-	ldr r2, [sp, #0x20]
-	bl StringExpandPlaceholders
-	mov r1, #0
-	ldr r3, [sp, #0x14]
-	str r1, [sp]
-	mov r0, #0xff
-	str r0, [sp, #4]
-	ldr r0, _0221EC64 ; =0x00010200
-	ldr r2, [sp, #0x24]
-	str r0, [sp, #8]
-	ldr r0, _0221EC5C ; =0x00002070
-	str r1, [sp, #0xc]
-	ldr r0, [r5, r0]
-	add r3, r6, r3
-	add r0, r0, r4
-	bl AddTextPrinterParameterizedWithColor
-	ldr r0, [sp, #0x20]
-	bl String_Delete
-	ldr r0, [sp, #0x24]
-	bl String_Delete
-	ldr r0, _0221EC5C ; =0x00002070
-	ldr r0, [r5, r0]
-	add r0, #0xd0
-	bl ScheduleWindowCopyToVram
-	ldr r0, _0221EC5C ; =0x00002070
-	ldr r0, [r5, r0]
-	add r0, r0, r4
-	bl ScheduleWindowCopyToVram
-	add sp, #0x28
+	ldr r0, [r4, #0x34]
+	bl ov08_02224B88
+	add r7, r0, #0
+	ldr r0, [r4, #0x34]
+	bl ov08_02224C94
+	add r5, r0, #0
+	ldr r0, [r4, #0x34]
+	bl ov08_02224B88
+	mov r1, #1
+	mvn r1, r1
+	cmp r5, r1
+	bne _02222956
+	mov r5, #6
+	b _02222992
+_02222956:
+	cmp r6, #1
+	bne _02222992
+	cmp r7, r0
+	bne _02222992
+	ldr r1, _02222A68 ; =gSystem
+	mov r2, #0x20
+	ldr r1, [r1, #0x4c]
+	tst r2, r1
+	beq _02222976
+	cmp r0, #0
+	beq _02222974
+	cmp r0, #2
+	beq _02222974
+	cmp r0, #4
+	bne _02222976
+_02222974:
+	mov r5, #7
+_02222976:
+	mov r2, #0x10
+	tst r1, r2
+	beq _02222992
+	cmp r0, #1
+	beq _02222988
+	cmp r0, #3
+	beq _02222988
+	cmp r0, #5
+	bne _02222992
+_02222988:
+	mov r5, #8
+	b _02222992
+_0222298C:
+	add r0, r4, #0
+	bl ov08_0222417C
+_02222992:
+	cmp r5, #8
+	bhi _02222A60
+	add r0, r5, r5
+	add r0, pc
+	ldrh r0, [r0, #6]
+	lsl r0, r0, #0x10
+	asr r0, r0, #0x10
+	add pc, r0
+_022229A2: ; jump table
+	.short _022229B4 - _022229A2 - 2 ; case 0
+	.short _022229B4 - _022229A2 - 2 ; case 1
+	.short _022229B4 - _022229A2 - 2 ; case 2
+	.short _022229B4 - _022229A2 - 2 ; case 3
+	.short _022229B4 - _022229A2 - 2 ; case 4
+	.short _022229B4 - _022229A2 - 2 ; case 5
+	.short _022229EA - _022229A2 - 2 ; case 6
+	.short _02222A04 - _022229A2 - 2 ; case 7
+	.short _02222A32 - _022229A2 - 2 ; case 8
+_022229B4:
+	add r0, r4, #0
+	add r1, r5, #0
+	bl ov08_02223CD4
+	cmp r0, #0
+	beq _02222A60
+	ldr r0, _02222A6C ; =0x000005DD
+	bl PlaySE
+	ldr r0, _02222A70 ; =0x0000114D
+	ldr r2, [r4]
+	ldrb r1, [r4, r0]
+	sub r0, r0, #2
+	add r1, r2, r1
+	add r1, #0x27
+	strb r5, [r1]
+	mov r1, #6
+	strb r1, [r4, r0]
+	add r1, r5, #6
+	lsl r1, r1, #0x18
+	add r0, r4, #0
+	lsr r1, r1, #0x18
+	mov r2, #0
+	bl ov08_02224938
+	mov r0, #0xb
+	pop {r3, r4, r5, r6, r7, pc}
+_022229EA:
+	ldr r0, _02222A6C ; =0x000005DD
+	bl PlaySE
+	ldr r0, _02222A74 ; =0x0000114B
+	mov r1, #4
+	strb r1, [r4, r0]
+	add r0, r4, #0
+	mov r1, #0xe
+	mov r2, #0
+	bl ov08_02224938
+	mov r0, #0xb
+	pop {r3, r4, r5, r6, r7, pc}
+_02222A04:
+	ldr r0, _02222A70 ; =0x0000114D
+	ldrb r1, [r4, r0]
+	add r0, r0, #7
+	add r1, r4, r1
+	ldrb r0, [r1, r0]
+	cmp r0, #0
+	beq _02222A60
+	ldr r0, _02222A6C ; =0x000005DD
+	bl PlaySE
+	ldr r0, _02222A74 ; =0x0000114B
+	mov r1, #7
+	strb r1, [r4, r0]
+	sub r1, #8
+	add r0, r0, #3
+	strb r1, [r4, r0]
+	add r0, r4, #0
+	mov r1, #0xc
+	mov r2, #0
+	bl ov08_02224938
+	mov r0, #0xb
+	pop {r3, r4, r5, r6, r7, pc}
+_02222A32:
+	ldr r0, _02222A70 ; =0x0000114D
+	ldrb r1, [r4, r0]
+	add r0, r0, #7
+	add r1, r4, r1
+	ldrb r0, [r1, r0]
+	cmp r0, #0
+	beq _02222A60
+	ldr r0, _02222A6C ; =0x000005DD
+	bl PlaySE
+	ldr r0, _02222A74 ; =0x0000114B
+	mov r1, #7
+	strb r1, [r4, r0]
+	mov r1, #1
+	add r0, r0, #3
+	strb r1, [r4, r0]
+	add r0, r4, #0
+	mov r1, #0xd
+	mov r2, #0
+	bl ov08_02224938
+	mov r0, #0xb
+	pop {r3, r4, r5, r6, r7, pc}
+_02222A60:
+	mov r0, #2
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-_0221EC54: .word 0x00002075
-_0221EC58: .word 0x000F0E00
-_0221EC5C: .word 0x00002070
-_0221EC60: .word 0x00001FA8
-_0221EC64: .word 0x00010200
-_0221EC68: .word 0x00001FAC
-	thumb_func_end ov08_0221EAD4
+_02222A64: .word ov08_02225B68
+_02222A68: .word gSystem
+_02222A6C: .word 0x000005DD
+_02222A70: .word 0x0000114D
+_02222A74: .word 0x0000114B
+	thumb_func_end ov08_02222918
+
+
+
+	thumb_func_start ov08_02222A78
+ov08_02222A78: ; 0x02222A78
+	push {r3, r4, r5, lr}
+	add r4, r0, #0
+	ldr r0, _02222AE8 ; =0x0000114D
+	ldr r1, [r4]
+	ldrb r2, [r4, r0]
+	mov r3, #0
+	add r5, r1, r2
+	mov r1, #0x2c
+	ldrsb r2, [r5, r1]
+	add r5, #0x27
+	add r1, r0, #1
+	strb r3, [r5]
+	ldrsb r1, [r4, r1]
+	add r1, r2, r1
+	lsl r1, r1, #0x18
+	asr r2, r1, #0x18
+	ldrb r1, [r4, r0]
+	add r0, r0, #7
+	add r5, r4, r1
+	ldrb r5, [r5, r0]
+	cmp r2, r5
+	ble _02222AAE
+	ldr r0, [r4]
+	add r0, r0, r1
+	add r0, #0x2c
+	strb r3, [r0]
+	b _02222AC2
+_02222AAE:
+	cmp r2, #0
+	ldr r0, [r4]
+	bge _02222ABC
+	add r0, r0, r1
+	add r0, #0x2c
+	strb r5, [r0]
+	b _02222AC2
+_02222ABC:
+	add r0, r0, r1
+	add r0, #0x2c
+	strb r2, [r0]
+_02222AC2:
+	add r0, r4, #0
+	bl ov08_0222377C
+	add r0, r4, #0
+	bl ov08_022237C4
+	ldr r1, _02222AEC ; =0x0000114C
+	add r0, r4, #0
+	ldrb r1, [r4, r1]
+	bl ov08_02223F94
+	ldr r1, _02222AEC ; =0x0000114C
+	add r0, r4, #0
+	ldrb r1, [r4, r1]
+	bl ov08_02224A50
+	mov r0, #2
+	pop {r3, r4, r5, pc}
+	nop
+_02222AE8: .word 0x0000114D
+_02222AEC: .word 0x0000114C
+	thumb_func_end ov08_02222A78

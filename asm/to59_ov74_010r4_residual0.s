@@ -511,403 +511,131 @@
 
 
 
-	thumb_func_start ov74_02231A1C
-ov74_02231A1C: ; 0x02231A1C
-	push {r4, r5, r6, r7, lr}
-	sub sp, #0x24
-	add r5, r1, #0
-	ldr r7, [r5, #0x44]
+
+	thumb_func_start ov74_02232E3C
+ov74_02232E3C: ; 0x02232E3C
+	push {r3, r4, r5, r6, r7, lr}
 	add r6, r0, #0
-	add r4, r2, #0
-	cmp r7, #0
-	bne _02231A2E
-	mov r7, #0xff
-_02231A2E:
-	ldr r1, [r5]
-	ldr r0, [r1]
-	cmp r0, #0
-	bne _02231A6C
-	ldr r0, [r5, #0xc]
-	lsl r0, r0, #0x18
-	lsr r0, r0, #0x18
-	str r0, [sp]
-	ldr r0, [r5, #0x10]
-	lsl r0, r0, #0x18
-	lsr r0, r0, #0x18
-	str r0, [sp, #4]
-	ldr r0, [r5, #0x14]
-	lsl r0, r0, #0x18
-	lsr r0, r0, #0x18
-	str r0, [sp, #8]
-	mov r0, #0xf
-	str r0, [sp, #0xc]
-	ldr r0, [r5, #0x20]
-	lsl r0, r0, #0x10
-	lsr r0, r0, #0x10
-	str r0, [sp, #0x10]
-	ldr r2, [r5, #0x24]
-	ldr r3, [r5, #8]
-	lsl r2, r2, #0x18
-	lsl r3, r3, #0x18
-	ldr r0, [r6, #0x20]
-	lsr r2, r2, #0x18
-	lsr r3, r3, #0x18
-	bl AddWindowParameterized
-_02231A6C:
-	mov r0, #2
-	tst r0, r4
-	bne _02231A7E
-	ldr r1, [r5, #0x30]
-	ldr r0, [r5]
-	lsl r1, r1, #0x18
-	lsr r1, r1, #0x18
-	bl FillWindowPixelBuffer
-_02231A7E:
 	mov r0, #0
-	ldr r1, [r5, #0x34]
-	mvn r0, r0
-	cmp r1, r0
-	beq _02231B0E
-	ldr r2, _02231BB0 ; =0x0000012D
-	mov r0, #1
-	mov r1, #0x1b
-	mov r3, #0x4c
-	bl NewMsgDataFromNarc
-	str r0, [sp, #0x18]
-	ldr r0, [r5, #0x40]
-	str r0, [sp, #0x14]
-	cmp r0, #0
-	bne _02231AA6
-	mov r0, #0x4c
-	bl MessageFormat_New
-	str r0, [sp, #0x14]
-_02231AA6:
-	ldr r0, _02231BB4 ; =0x00012608
-	ldr r0, [r6, r0]
-	bl String_SetEmpty
-	ldr r0, _02231BB4 ; =0x00012608
-	ldr r1, [r5, #0x34]
-	ldr r0, [r6, r0]
-	str r0, [sp, #0x1c]
-	ldr r0, [sp, #0x18]
-	bl NewString_ReadMsgData
-	str r0, [sp, #0x20]
-	ldr r1, _02231BB4 ; =0x00012608
-	ldr r0, [sp, #0x14]
-	ldr r1, [r6, r1]
-	ldr r2, [sp, #0x20]
-	bl StringExpandPlaceholders
-	ldr r0, [sp, #0x20]
-	bl String_Delete
-	ldr r1, [sp, #0x1c]
-	add r0, r5, #0
-	add r2, r4, #0
-	bl ov74_022319F8
-	add r3, r0, #0
-	ldr r0, [r5, #0x1c]
-	ldr r2, [sp, #0x1c]
-	str r0, [sp]
-	str r7, [sp, #4]
-	ldr r0, [r5, #0x2c]
-	str r0, [sp, #8]
-	mov r0, #0
-	str r0, [sp, #0xc]
-	ldr r0, [r5]
-	ldr r1, [r5, #0x28]
-	bl AddTextPrinterParameterizedWithColor
-	str r0, [r5, #0x48]
-	ldr r0, [r5, #0x40]
-	cmp r0, #0
-	bne _02231B02
-	ldr r0, [sp, #0x14]
-	bl MessageFormat_Delete
-_02231B02:
-	ldr r0, [sp, #0x18]
-	bl DestroyMsgData
-	mov r0, #0
-	mvn r0, r0
-	str r0, [r5, #0x34]
-_02231B0E:
-	ldr r1, [r5, #0x38]
-	cmp r1, #0
-	beq _02231B4A
-	ldr r0, _02231BB8 ; =0x0001260C
-	mov r2, #0x40
-	ldr r6, [r6, r0]
-	add r0, r6, #0
-	bl CopyU16ArrayToStringN
-	add r0, r5, #0
-	add r1, r6, #0
-	add r2, r4, #0
-	bl ov74_022319F8
-	add r3, r0, #0
-	ldr r0, [r5, #0x1c]
-	add r2, r6, #0
-	str r0, [sp]
-	str r7, [sp, #4]
-	ldr r0, [r5, #0x2c]
-	str r0, [sp, #8]
-	mov r0, #0
-	str r0, [sp, #0xc]
-	ldr r0, [r5]
-	ldr r1, [r5, #0x28]
-	bl AddTextPrinterParameterizedWithColor
-	str r0, [r5, #0x48]
-	mov r0, #0
-	str r0, [r5, #0x38]
-_02231B4A:
-	ldr r1, [r5, #0x3c]
-	cmp r1, #0
-	beq _02231B78
-	add r0, r5, #0
-	add r2, r4, #0
-	bl ov74_022319F8
-	add r3, r0, #0
-	ldr r0, [r5, #0x1c]
-	str r0, [sp]
-	str r7, [sp, #4]
-	ldr r0, [r5, #0x2c]
-	str r0, [sp, #8]
-	mov r0, #0
-	str r0, [sp, #0xc]
-	ldr r0, [r5]
-	ldr r1, [r5, #0x28]
-	ldr r2, [r5, #0x3c]
-	bl AddTextPrinterParameterizedWithColor
-	str r0, [r5, #0x48]
-	mov r0, #0
-	str r0, [r5, #0x3c]
-_02231B78:
-	mov r0, #4
-	tst r0, r4
-	bne _02231B84
-	ldr r0, [r5]
-	bl CopyWindowToVram
-_02231B84:
-	mov r0, #8
-	tst r0, r4
-	beq _02231BAC
-	mov r0, #0x10
-	tst r0, r4
-	ldr r0, [r5]
-	beq _02231BA0
-	ldr r2, _02231BBC ; =0x000003D2
-	mov r1, #0
-	mov r3, #0xd
-	bl DrawFrameAndWindow2
-	add sp, #0x24
-	pop {r4, r5, r6, r7, pc}
-_02231BA0:
-	mov r2, #0x3f
-	mov r1, #0
-	lsl r2, r2, #4
-	mov r3, #0xe
-	bl DrawFrameAndWindow1
-_02231BAC:
-	add sp, #0x24
-	pop {r4, r5, r6, r7, pc}
-	.balign 4, 0
-_02231BB0: .word 0x0000012D
-_02231BB4: .word 0x00012608
-_02231BB8: .word 0x0001260C
-_02231BBC: .word 0x000003D2
-	thumb_func_end ov74_02231A1C
-
-
-
-
-	thumb_func_start ov74_02231BC0
-ov74_02231BC0: ; 0x02231BC0
-	push {r4, lr}
-	sub sp, #0x10
-	ldr r4, _02231BEC ; =_0223B4E8
-	add r3, sp, #0
-	add r2, r3, #0
-	ldmia r4!, {r0, r1}
-	stmia r3!, {r0, r1}
-	ldmia r4!, {r0, r1}
-	stmia r3!, {r0, r1}
-	add r0, r2, #0
-	bl ObjCharTransfer_Init
-	mov r0, #0x14
-	mov r1, #0x4c
-	bl ObjPlttTransfer_Init
-	bl ObjCharTransfer_ClearBuffers
-	bl ObjPlttTransfer_Reset
-	add sp, #0x10
-	pop {r4, pc}
-	.balign 4, 0
-_02231BEC: .word _0223B4E8
-	thumb_func_end ov74_02231BC0
-
-
-
-
-	thumb_func_start ov74_02231BF0
-ov74_02231BF0: ; 0x02231BF0
-	push {r4, r5, r6, r7, lr}
-	sub sp, #0x14
-	add r6, r0, #0
-	bl NNS_G2dInitOamManagerModule
-	mov r0, #0
-	str r0, [sp]
-	mov r1, #0x7e
-	str r1, [sp, #4]
-	str r0, [sp, #8]
-	mov r3, #0x20
-	str r3, [sp, #0xc]
-	mov r2, #0x4c
-	str r2, [sp, #0x10]
-	add r2, r0, #0
-	bl OamManager_Create
-	add r1, r6, #0
-	mov r0, #0x50
-	add r1, #0x2c
-	mov r2, #0x4c
-	bl G2dRenderer_Init
-	str r0, [r6, #0x28]
-	add r0, r6, #0
-	mov r2, #1
-	add r0, #0x2c
-	mov r1, #0
-	lsl r2, r2, #0x14
-	bl G2dRenderer_SetSubSurfaceCoords
-	mov r7, #0x55
+	add r1, r0, #0
+	bl Main_SetVBlankIntrCB
+	mov r7, #0x6a
 	mov r4, #0
 	add r5, r6, #0
 	lsl r7, r7, #2
-_02231C36:
-	mov r0, #3
-	add r1, r4, #0
-	mov r2, #0x4c
-	bl Create2DGfxResObjMan
-	str r0, [r5, r7]
+_02232E50:
+	ldr r0, [r5, r7]
+	cmp r0, #0
+	beq _02232E5A
+	bl Sprite_Delete
+_02232E5A:
+	mov r0, #0x6b
+	lsl r0, r0, #2
+	ldr r0, [r5, r0]
+	cmp r0, #0
+	beq _02232E68
+	bl Sprite_Delete
+_02232E68:
 	add r4, r4, #1
-	add r5, r5, #4
-	cmp r4, #6
-	blt _02231C36
-	mov r0, #0
-	str r0, [sp]
-	mov r3, #1
-	str r3, [sp, #4]
-	mov r0, #0x4c
-	str r0, [sp, #8]
-	mov r0, #0x55
+	add r5, #0xc
+	cmp r4, #0x1e
+	blt _02232E50
+	mov r7, #0xf2
+	mov r5, #0
+	add r4, r6, #0
+	lsl r7, r7, #2
+_02232E78:
+	ldr r0, [r4, r7]
+	cmp r0, #0
+	beq _02232E82
+	bl Sprite_Delete
+_02232E82:
+	add r5, r5, #1
+	add r4, #0xc
+	cmp r5, #6
+	blt _02232E78
+	mov r0, #0xe6
 	lsl r0, r0, #2
 	ldr r0, [r6, r0]
-	mov r1, #0x71
-	mov r2, #0x1e
-	bl AddCharResObjFromNarc
-	mov r1, #0x5b
-	lsl r1, r1, #2
-	str r0, [r6, r1]
-	mov r3, #0
-	str r3, [sp]
-	mov r0, #1
-	str r0, [sp, #4]
-	mov r0, #4
-	str r0, [sp, #8]
-	mov r0, #0x4c
-	sub r1, #0x14
-	str r0, [sp, #0xc]
-	ldr r0, [r6, r1]
-	mov r1, #0x71
-	mov r2, #0x1b
-	bl AddPlttResObjFromNarc
-	mov r1, #0x17
-	lsl r1, r1, #4
-	str r0, [r6, r1]
-	mov r0, #0
-	str r0, [sp]
+	cmp r0, #0
+	beq _02232E98
+	bl Sprite_Delete
+_02232E98:
+	mov r0, #0xee
+	lsl r0, r0, #2
+	ldr r0, [r6, r0]
+	cmp r0, #0
+	beq _02232EA6
+	bl Sprite_Delete
+_02232EA6:
+	mov r0, #0xea
+	lsl r0, r0, #2
+	ldr r0, [r6, r0]
+	cmp r0, #0
+	beq _02232EB4
+	bl Sprite_Delete
+_02232EB4:
+	ldr r0, _02232F48 ; =0x00000478
+	add r0, r6, r0
+	bl ov74_02232DA4
+	ldr r0, _02232F4C ; =0x00000488
+	add r0, r6, r0
+	bl ov74_02232DA4
+	ldr r0, _02232F50 ; =0x00000498
+	add r0, r6, r0
+	bl ov74_02232DA4
 	mov r0, #2
-	str r0, [sp, #4]
-	mov r0, #0x4c
-	sub r1, #0x14
-	str r0, [sp, #8]
-	ldr r0, [r6, r1]
-	mov r1, #0x71
-	mov r2, #0x1d
-	mov r3, #1
-	bl AddCellOrAnimResObjFromNarc
-	mov r1, #0x5d
-	lsl r1, r1, #2
-	str r0, [r6, r1]
-	mov r0, #0
-	str r0, [sp]
-	mov r0, #3
-	str r0, [sp, #4]
-	mov r0, #0x4c
-	sub r1, #0x14
-	str r0, [sp, #8]
-	ldr r0, [r6, r1]
-	mov r1, #0x71
-	mov r2, #0x1c
-	mov r3, #1
-	bl AddCellOrAnimResObjFromNarc
-	mov r1, #0x5e
-	lsl r1, r1, #2
-	str r0, [r6, r1]
-	sub r1, #0xc
-	ldr r0, [r6, r1]
-	bl SpriteTransfer_CreateCharTransferTask
+	bl FontID_Release
+	mov r0, #0x5b
+	lsl r0, r0, #2
+	ldr r0, [r6, r0]
+	bl SpriteTransfer_DeleteCharTransferTask
 	mov r0, #0x17
 	lsl r0, r0, #4
 	ldr r0, [r6, r0]
-	bl SpriteTransfer_CreateExtPlttTransferTask
-	bl sub_02074490
-	add r1, r0, #0
+	bl SpriteTransfer_DeletePlttTransferTask
+	mov r7, #0x55
+	mov r5, #0
+	add r4, r6, #0
+	lsl r7, r7, #2
+_02232EEE:
+	ldr r0, [r4, r7]
+	bl Destroy2DGfxResObjMan
+	add r5, r5, #1
+	add r4, r4, #4
+	cmp r5, #6
+	blt _02232EEE
+	ldr r0, [r6, #0x28]
+	bl SpriteList_Delete
 	mov r0, #0
-	mov r2, #1
-	str r0, [sp]
-	mov r0, #0x4c
-	add r3, r2, #0
-	str r0, [sp, #4]
-	mov r0, #0x14
-	add r3, #0xff
-	bl GfGfxLoader_GXLoadPal
-	add sp, #0x14
-	pop {r4, r5, r6, r7, pc}
-	thumb_func_end ov74_02231BF0
-
-
-
-
-	thumb_func_start ov74_02231CFC
-ov74_02231CFC: ; 0x02231CFC
-	push {lr}
-	sub sp, #0x2c
+	str r0, [r6, #0x28]
+	bl OamManager_Free
+	bl ObjCharTransfer_Destroy
+	bl ObjPlttTransfer_Destroy
+	ldr r0, _02232F54 ; =0x0000E88C
+	ldr r0, [r6, r0]
+	bl YesNoPrompt_Destroy
+	ldr r0, _02232F58 ; =gSystem + 0x60
 	mov r1, #0
-	str r1, [sp]
-	sub r2, r1, #1
-	str r2, [sp, #4]
-	str r2, [sp, #8]
-	str r1, [sp, #0xc]
-	mov r3, #0x55
-	str r1, [sp, #0x10]
-	lsl r3, r3, #2
-	ldr r2, [r0, r3]
-	str r2, [sp, #0x14]
-	add r2, r3, #4
-	ldr r2, [r0, r2]
-	str r2, [sp, #0x18]
-	add r2, r3, #0
-	add r2, #8
-	ldr r2, [r0, r2]
-	str r2, [sp, #0x1c]
-	add r2, r3, #0
-	add r2, #0xc
-	ldr r2, [r0, r2]
-	add r3, #0x30
-	str r2, [sp, #0x20]
-	str r1, [sp, #0x24]
-	add r0, r0, r3
-	add r2, r1, #0
-	add r3, r1, #0
-	str r1, [sp, #0x28]
-	bl CreateSpriteResourcesHeader
-	mov r0, #0x10
+	strb r1, [r0, #9]
+	bl GfGfx_SwapDisplay
+	ldr r0, [r6, #0x20]
+	mov r1, #0
+	bl FreeBgTilemapBuffer
+	ldr r0, [r6, #0x20]
 	mov r1, #1
-	bl GfGfx_EngineATogglePlanes
-	add sp, #0x2c
-	pop {pc}
-	thumb_func_end ov74_02231CFC
+	bl FreeBgTilemapBuffer
+	ldr r0, [r6, #0x20]
+	mov r1, #2
+	bl FreeBgTilemapBuffer
+	ldr r0, [r6, #0x20]
+	mov r1, #3
+	bl FreeBgTilemapBuffer
+	pop {r3, r4, r5, r6, r7, pc}
+	nop
+_02232F48: .word 0x00000478
+_02232F4C: .word 0x00000488
+_02232F50: .word 0x00000498
+_02232F54: .word 0x0000E88C
+_02232F58: .word gSystem + 0x60
+	thumb_func_end ov74_02232E3C
