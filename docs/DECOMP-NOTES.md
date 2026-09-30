@@ -1038,10 +1038,9 @@ adapted and independently compiled against HeartGold's MWCC 2.0/sp2p3 objects.
 Only functions that matched the repository objects were integrated; eleven
 inline-assembly functions were excluded and remain in residual assembly.
 
-Integrated nine further battle-controller functions from human-authored
-upstream PRs #504 and #426. PR #426 was closed because it depended on the
-withdrawn PR #504, rather than because its functions failed to match. Their
-combined C and residual-assembly layout was reverified for both game builds.
+Integrated nine further battle-controller functions from independently
+verified public C. Their combined C and residual-assembly layout was
+reverified for both game builds.
 
 No leaked Nintendo, Game Freak, NitroSDK, or compiler source was used. A
 separate 38-function CARD candidate bank was verified from public clean-room

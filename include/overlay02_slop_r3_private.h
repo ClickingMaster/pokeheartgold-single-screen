@@ -7,7 +7,7 @@
 // so the int-return extern below stands without an indirect-call cast.
 #define MapPropManager_LoadOne MapPropManager_LoadOne_UpstreamVoidDecl
 
-// Upstream PR #500/#502 named the map-prop animation/manager API and published it in
+// The map-prop animation/manager API has named declarations published in
 // map_prop_animation.h / map_prop.h (both visible here via field_system.h). This TU was
 // matched against the untyped `void *` view below, so shadow every upstream decl we
 // consume and keep our own -- see the IPA header discipline note in CLAUDE.md.
