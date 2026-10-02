@@ -1,0 +1,35 @@
+	.extern ov87_021E5AFC
+	.extern ov87_021E5B48
+	.extern ov87_021E5C38
+	.extern ov87_021E5CEC
+	.extern ov87_021E5E00
+	.extern ov87_021E6080
+	.extern ov87_021E64F8
+	.extern ov87_021E65FC
+	.extern ov87_021E6668
+	.extern ov87_021E66B8
+	.extern ov87_021E6760
+	.extern ov87_021E68A4
+	.extern ov87_021E68DC
+	.extern ov87_021E725C
+	.extern ov87_021E7334
+	.extern ov87_021E5AFC
+	.extern ov87_021E5B48
+	.extern ov87_021E5C38
+	.extern ov87_021E5CEC
+	.extern ov87_021E5E00
+	.extern ov87_021E6080
+	.extern ov87_021E64F8
+	.extern ov87_021E65FC
+	.extern ov87_021E6668
+	.extern ov87_021E66B8
+	.extern ov87_021E6760
+	.extern ov87_021E68A4
+	.extern ov87_021E68DC
+	.extern ov87_021E725C
+	.extern ov87_021E7334
+	.include "asm/macros.inc"
+	.include "overlay_87.inc"
+	.include "global.inc"
+
+.text

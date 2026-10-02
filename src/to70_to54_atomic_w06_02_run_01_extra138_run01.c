@@ -1,0 +1,15 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+typedef struct Work{void*bg,*save,*p8,*format,*msg,*string;u8 pad18[0x50];u32 speed,printer;u8 pad70[8];void*menu,*items;}Work;
+extern void*OverlayManager_GetData(void*),*NewMsgDataFromNarc(int,int,int,int),*MessageFormat_New(int),*ReadMsgData_ExpandPlaceholders(void*,void*,int,int);extern int GetFontAttribute(int,int);extern void FillWindowPixelBuffer(void*,int),String_Delete(void*),DrawFrameAndWindow2(void*,int,int,int),DestroyMsgData(void*),MessageFormat_Delete(void*);extern u8 AddTextPrinterParameterizedWithColor(void*,int,void*,int,int,int,u32,void*);
+void ov74_0222AA18(void*,void*,int);
+typedef struct Item{u32 msg,value;}Item;typedef struct Template{void*items;void*callback1,*callback2,*window;u16 count,max;u32 rest[3];}Template;
+extern Template ov74_0223C270;extern void ListMenuItems_Delete(void*),ListMenuItems_AppendFromMsgData(void*,void*,int,int),DestroyListMenu(void*,void*,void*);extern void*ListMenuItems_New(int,int),*ListMenuInit(const Template*,int,int,int);
+void ov74_0222A89C(void*,const Item*,int,void*,int);
+typedef struct Table{u8 pad[0x70];Item a,b;}Table;
+extern Table ov74_0223C220;extern Item ov74_0223C2A0[2];extern void*Save_MysteryGift_Get(void*);extern int SaveMysteryGift_HasAnyCard(void*),SaveMysteryGift_SpecialCardTagIsValid(void*);extern void AddWindowParameterized(void*,void*,u8,u8,u8,u8,u8,u8,u16),DrawFrameAndWindow1(void*,int,int,int);
+void ov74_0222A94C(void*,int,int);
+void ov74_0222A89C(void*manager,const Item*p,int count,void*window,int msg){Work*w=OverlayManager_GetData(manager);if(w->items)ListMenuItems_Delete(w->items);w->items=ListMenuItems_New(count,84);w->msg=NewMsgDataFromNarc(0,27,247,84);int i=0;if(count>0){do{ListMenuItems_AppendFromMsgData(w->items,w->msg,p->msg,p->value);i++;p++;}while(i<count);}DestroyMsgData(w->msg);Template t=ov74_0223C270;t.items=w->items;t.max=count;t.count=t.max;t.window=window;if(w->menu)DestroyListMenu(w->menu,0,0);w->menu=ListMenuInit(&t,0,0,84);if(msg!=-1)ov74_0222AA18(manager,(u8*)w+24,msg);}
+void ov74_0222A94C(void*manager,int tile,int msg){Work*w=OverlayManager_GetData(manager);int count=0;void*gift=Save_MysteryGift_Get(w->save);Item items[4];void*window=(u8*)w+0x28;items[count++]=ov74_0223C220.a;if(SaveMysteryGift_HasAnyCard(gift))items[count++]=ov74_0223C220.b;if(SaveMysteryGift_SpecialCardTagIsValid(gift))items[count++]=ov74_0223C2A0[0];items[count]=ov74_0223C2A0[1];if(!*(void**)window)AddWindowParameterized(w->bg,window,0,6,7,20,(u8)(2*(count+1)),0,(u16)tile);DrawFrameAndWindow1(window,1,31,3);ov74_0222A89C(manager,items,count+1,window,msg);}
+void ov74_0222AA18(void*manager,void*window,int msg){Work*w=OverlayManager_GetData(manager);w->msg=NewMsgDataFromNarc(1,27,247,84);w->format=MessageFormat_New(84);FillWindowPixelBuffer(window,GetFontAttribute(1,6));void*s=w->string;if(!s)s=ReadMsgData_ExpandPlaceholders(w->format,w->msg,msg,84);w->printer=AddTextPrinterParameterizedWithColor(window,1,s,0,0,w->speed,0x1020f,0);if(!w->string)String_Delete(s);DrawFrameAndWindow2(window,0,1,2);DestroyMsgData(w->msg);MessageFormat_Delete(w->format);w->speed=255;}

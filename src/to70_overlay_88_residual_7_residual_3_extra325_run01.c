@@ -1,0 +1,5 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+typedef struct P{u8 pad[12];u8*data;}P;extern int GF_CreateNewVramTransferTask(int,int,const void*,int);void ov88_022592B8(const u8*,P*,int);typedef struct Palette{u8 pad[12];u8*data;}Palette;typedef struct W{u8 records[3][32];u8 windows[3][16];void*string;void*allocation;Palette*palette;}W;typedef struct Parent{void*bg;u8 pad[0x140-4];void*narc;}Parent;extern const u8 _02259904[3];extern void ov88_02259508(void*,Parent*,int,int),AddWindowParameterized(void*,void*,int,u8,u8,u8,u8,u8,u16),FillWindowPixelBuffer(void*,int),ScheduleWindowCopyToVram(void*),BG_LoadPlttData(int,const void*,u32,u32);extern void*String_New(int,int),*GfGfxLoader_GetPlttDataFromOpenNarc(void*,int,Palette**,int);void ov88_022592EC(W*,Parent*,int);
+void ov88_022592B8(const u8*digits,P*p,int row){int i=0;int base=row*32;u8*data=p->data;int offset=i;base+=10;for(;i<4;i++,offset+=4){if(!GF_CreateNewVramTransferTask(15,base+offset,data+(digits[i]*2+224),4))GF_AssertFail();}}

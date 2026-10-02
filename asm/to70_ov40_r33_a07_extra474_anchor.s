@@ -1,0 +1,21 @@
+	.extern AddTextPrinterParameterizedWithColor
+	.extern AddWindowParameterized
+	.extern FillWindowPixelBuffer
+	.extern InitWindow
+	.extern NewString_ReadMsgData
+	.extern ScheduleWindowCopyToVram
+	.extern String_Delete
+	.extern ov40_022306C0
+	.public AddTextPrinterParameterizedWithColor
+	.public AddWindowParameterized
+	.public FillWindowPixelBuffer
+	.public InitWindow
+	.public NewString_ReadMsgData
+	.public ScheduleWindowCopyToVram
+	.public String_Delete
+	.public ov40_022306C0
+	.public ov40_0223CD58
+	.include "asm/macros.inc"
+	.include "overlay_40.inc"
+	.include "global.inc"
+.text

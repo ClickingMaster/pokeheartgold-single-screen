@@ -1,0 +1,23 @@
+	.extern ManagedSprite_SetAnim
+	.extern ManagedSprite_SetPositionXY
+	.extern TextOBJ_SetSpritesDrawFlag
+	.extern ov40_0222D5AC
+	.extern ov40_0222D66C
+	.extern ov40_0222D6EC
+	.extern ov40_0222D800
+	.extern ov40_022359B4
+	.extern sub_020136B4
+	.public ManagedSprite_SetAnim
+	.public ManagedSprite_SetPositionXY
+	.public TextOBJ_SetSpritesDrawFlag
+	.public ov40_0222D5AC
+	.public ov40_0222D66C
+	.public ov40_0222D6EC
+	.public ov40_0222D800
+	.public ov40_022359B4
+	.public ov40_02235A30
+	.public sub_020136B4
+	.include "asm/macros.inc"
+	.include "overlay_40.inc"
+	.include "global.inc"
+.text

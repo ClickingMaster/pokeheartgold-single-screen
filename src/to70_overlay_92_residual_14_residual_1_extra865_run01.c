@@ -1,0 +1,11 @@
+#pragma force_active on
+#include "global.h"
+#include <string.h>
+#include "heap.h"
+#include "sys_task_api.h"
+#pragma force_active on
+typedef struct Job {u32 state,tick;void*x,*a,*b;u8 p14[0x18];void*owner;}Job;
+typedef struct J2 {u32 state,tick;u8 p8[4];void*resource;u8 p10[0x18];void*value;void**slot;u32 active;u8 p34[8];void*owner;u32 arg;}J2;
+typedef struct W {u8 p[0x14];void*owner;u8 p18[4];void*a[3],*b[3],*c[3];u8 p40[0xb4];u16 index[1];}W;extern void ov92_0225F254(SysTask*,void*),ov92_0225F338(SysTask*,void*);SysTask*ov92_0225EDB4(W*,int);void ov92_0225EE04(W*,int);
+SysTask*ov92_0225EDB4(W*w,int index){Job*j=Heap_Alloc((enum HeapID)113,0x30);memset(j,0,0x30);j->a=w->a[w->index[index]];j->b=w->b[w->index[index]];j->state=0;j->tick=0;j->owner=w->owner;return SysTask_CreateOnMainQueue(ov92_0225F254,j,4096);}
+void ov92_0225EE04(W*w,int i){J2*j=(J2*)((u8*)w+0x29d0+i*0x44);if(j->active==1)return;j->arg=*(u32*)((u8*)w+0x2bb4);j->active=1;j->slot=(void**)((u8*)w+0x2b08+i*4);j->value=*j->slot;j->resource=w->c[w->index[i]];j->state=0;j->tick=0;j->owner=w->owner;SysTask_CreateOnMainQueue(ov92_0225F338,j,4096);}

@@ -1,0 +1,5 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+typedef struct Mode{u32 fields[4];}Mode;typedef struct Template{u32 fields[7];}Template;extern Mode ov106_021E6F24;extern Template ov106_021E6F74,ov106_021E6F90,ov106_021E6FAC;extern void*BgConfig_Alloc(int);extern void SetBothScreensModesAndDisable(Mode*),InitBgFromTemplate(void*,int,Template*,int),BgClearTilemapBufferAndCommit(void*,int),BG_ClearCharDataRange(int,int,int,int),BG_SetMaskColor(int,int);void ov106_021E6418(void**);
+void ov106_021E6418(void**w){Mode mode;Template a,b,c;*w=BgConfig_Alloc(153);mode=ov106_021E6F24;SetBothScreensModesAndDisable(&mode);a=ov106_021E6F74;InitBgFromTemplate(*w,0,&a,0);BgClearTilemapBufferAndCommit(*w,0);BG_ClearCharDataRange(0,64,0,153);b=ov106_021E6F90;InitBgFromTemplate(*w,1,&b,0);BgClearTilemapBufferAndCommit(*w,1);BG_ClearCharDataRange(1,64,0,153);c=ov106_021E6FAC;InitBgFromTemplate(*w,2,&c,0);BgClearTilemapBufferAndCommit(*w,2);BG_ClearCharDataRange(2,64,0,153);BG_SetMaskColor(0,0);BG_SetMaskColor(4,0);}

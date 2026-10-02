@@ -1,3 +1,6 @@
+	.public ov47_02259E48
+	.public ov47_02259E68
+	.public ov47_02259F18
 	.include "asm/macros.inc"
 	.include "overlay_47.inc"
 	.include "global.inc"

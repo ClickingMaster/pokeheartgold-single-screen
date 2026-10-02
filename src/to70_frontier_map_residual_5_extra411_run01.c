@@ -1,0 +1,6 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+typedef struct State {u8 pad[60];void *items[8];u8 pad5c[20];u16 ids[8];void *sprites[4];} State;
+void ov80_02239BE8(void *),ov80_02239B7C(void *,u16),Sprite_DeleteAndFreeResources(void *),SpriteManager_UnloadCharObjById(void *,int),SpriteManager_UnloadPlttObjById(void *,int),SpriteManager_UnloadCellObjById(void *,int),SpriteManager_UnloadAnimObjById(void *,int),SpriteSystem_FreeResourcesAndManager(void *,void *),SpriteSystem_Free(void *),ov42_02228FE0(void *,u16,u8,int),ov80_022393E8(u8 *),ov80_0223947C(u8 *,u16 *);u16 *sub_02096864(void *);
+void ov80_022393E8(u8 *s){int i;for(i=0;i<8;i++)if(((State *)s)->items[i])ov80_02239BE8(((State *)s)->items[i]);for(i=0;i<8;i++)if(((State *)s)->ids[i]!=65535)ov80_02239B7C(*(void **)(s+56),((State *)s)->ids[i]);for(i=0;i<4;i++)if(((State *)s)->sprites[i]){Sprite_DeleteAndFreeResources(((State *)s)->sprites[i]);SpriteManager_UnloadCharObjById(*(void **)(s+56),50000+i);SpriteManager_UnloadPlttObjById(*(void **)(s+56),50000+i);SpriteManager_UnloadCellObjById(*(void **)(s+56),50000+i);SpriteManager_UnloadAnimObjById(*(void **)(s+56),50000+i);}SpriteSystem_FreeResourcesAndManager(*(void **)(s+52),*(void **)(s+56));SpriteSystem_Free(*(void **)(s+52));}

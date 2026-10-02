@@ -1,0 +1,7 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+typedef struct Input{u8 a,b,c,d;}Input;typedef struct Output{int values[6];u8 kind;}Output;
+extern void ReadWholeNarcMemberByIdPair(void*,int,int);extern Input*ov96_021E60D8(void*,int,int);extern Output*ov96_0221935C(void*,u8,u8);
+void ov96_0221918C(void*);
+void ov96_0221918C(void*owner){int table[6][5]={0};ReadWholeNarcMemberByIdPair(table,170,9);u8 index;for(int i=0;i<4;i++){int j=0;float half=0.5f;index=(u8)i;for(;j<3;j++){Input*p=ov96_021E60D8(owner,i,j);Output*q=ov96_0221935C(owner,index,(u8)j);if(p->a>=5)GF_AssertFail();if(p->d>=5)GF_AssertFail();if(p->b>=5)GF_AssertFail();if(p->c>=5)GF_AssertFail();{int value=table[0][p->a];float f;if(value>0)f=half+(float)(value<<12);else f=(float)(value<<12)-half;q->values[0]=((int)f)/10;}{int value=table[1][p->a];float f;if(value>0)f=half+(float)(value<<12);else f=(float)(value<<12)-half;q->values[1]=((int)f)/10;}{int value=table[2][p->d];float f;if(value>0)f=half+(float)(value<<12);else f=(float)(value<<12)-half;q->values[2]=((int)f);}{int value=table[3][p->b];float f;if(value>0)f=half+(float)(value<<12);else f=(float)(value<<12)-half;q->values[3]=((int)f)/10;}{int value=table[5][p->c];float f;if(value>0)f=half+(float)(value<<12);else f=(float)(value<<12)-half;q->values[4]=((int)f)/10;}{int value=table[5][p->c];float f;if(value>0)f=half+(float)(value<<12);else f=(float)(value<<12)-half;q->values[5]=((int)f)/10;}q->kind=p->c;}}}

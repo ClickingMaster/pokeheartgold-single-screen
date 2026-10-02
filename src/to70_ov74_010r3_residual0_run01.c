@@ -1,0 +1,6 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+struct D{u8 pad[20];void*data;};int TranslateAgbSpecies(int);int ov74_02231E54(int,u32,int);int GetMonIconNaixEx(int,int,int);void*ov74_02231E00(int,int,struct D**,int);void DC_FlushRange(const void*,u32);void GX_LoadOBJ(const void*,u32,u32);int GetMonIconPaletteEx(int,int,int);void Sprite_SetPaletteOverride(void*,int);void Heap_Free(void*);void ov74_02231EC4(int,int,u32,int,int,void*);
+int ov74_02231E54(int species,u32 personality,int form){u8 result=0;switch(species){case 201:result=(u8)((((personality&0x03000000)>>18)|((personality&0x00030000)>>12)|((personality&0x00000300)>>6)|(personality&3))%28);break;case 386:switch(form){default:case 0:case 1:case 2:result=0;break;case 4:result=1;break;case 5:result=2;break;case 3:result=3;break;}break;}return result;}
+void ov74_02231EC4(int species,int egg,u32 personality,int form,int slot,void*sprite){struct D*d;int mon=TranslateAgbSpecies(species);int f=ov74_02231E54(mon,personality,form);void*mem=ov74_02231E00(20,GetMonIconNaixEx(mon,egg,f),&d,76);DC_FlushRange(d->data,512);GX_LoadOBJ(d->data,((slot<<4)+100)<<5,512);Sprite_SetPaletteOverride(sprite,GetMonIconPaletteEx(mon,f,egg)+8);Heap_Free(mem);}

@@ -1,0 +1,5 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+typedef struct W{void*bg,*format,*msg,*other;u32 x,heap;u8 p18[16];u32 arg,tick,zero;u32 pre:16,delay:8,layer:3,tail:5;}W;extern void*Save_PlayerData_GetOptionsAddr(void*),*NewMsgDataFromNarc(int,int,int,int),*MessageFormat_New(int);extern u32 Options_GetTextFrameDelay(void*);extern void ResetAllTextPrinters(void),ov96_021EE9D8(void*,u8,int),LoadFontPal0(int,int,int),BG_FillCharDataRange(void*,int,int,int,int);void ov96_021EE75C(W*,void*,u32,u32,void*);
+void ov96_021EE75C(W*w,void*bg,u32 layer,u32 arg,void*save){u32 delay=4;if(arg==0)delay=Options_GetTextFrameDelay(Save_PlayerData_GetOptionsAddr(save));w->bg=bg;w->tick=-1;w->layer=layer;w->arg=arg;w->delay=delay;w->msg=NewMsgDataFromNarc(1,27,309,w->heap);w->other=NewMsgDataFromNarc(1,27,311,w->heap);w->format=MessageFormat_New(w->heap);ResetAllTextPrinters();ov96_021EE9D8(w->bg,(u8)w->layer,w->heap);LoadFontPal0(4,480,w->heap);BG_FillCharDataRange(w->bg,w->layer,0,1,0);}

@@ -1,0 +1,6 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+struct V{int x,y,z;};struct State{u8 p[52];void*list;u8 p38[0x208-0x38];void*sprite;int timer;};extern struct State ov74_0223D454;extern u32 ov74_0223D654[];int Sprite_GetDrawFlag(void*);void Sprite_SetDrawFlag(void*,int);struct V*Sprite_GetMatrixPtr(void*);void SpriteList_RenderAndAnimateSprites(void*);void ov74_022358C8(int);
+void ov74_022358C8(int hide){struct State*s=&ov74_0223D454;if(ov74_0223D654[2]){if(s->timer==0){struct V*v;if(!Sprite_GetDrawFlag(s->sprite) && hide==0)Sprite_SetDrawFlag(s->sprite,1);v=Sprite_GetMatrixPtr(s->sprite);if(v->y<0x180000)v->y+=0x3000;}else s->timer--;}if(s->list)SpriteList_RenderAndAnimateSprites(s->list);}
+struct Resources{void*list;u8 pad4[0x12c-4];void*managers[6];void*char1,*pltt1;u8 p14c[16];void*char2,*pltt2;};extern struct Resources ov74_0223D488;void Sprite_Delete(void*);void SpriteTransfer_DeleteCharTransferTask(void*);void SpriteTransfer_DeletePlttTransferTask(void*);void Destroy2DGfxResObjMan(void*);void SpriteList_Delete(void*);void OamManager_Free(void);void ObjCharTransfer_Destroy(void);void ObjPlttTransfer_Destroy(void);void Main_SetVBlankIntrCB(void*,void*);void ov74_022359BC(void);

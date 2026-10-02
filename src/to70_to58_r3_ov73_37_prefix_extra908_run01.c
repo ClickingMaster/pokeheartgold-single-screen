@@ -1,0 +1,4 @@
+#pragma force_active on
+#include "global.h"
+typedef struct{u8 p[0xbd0];void *expand;u8 q[8];void *msg;u8 r[0x10];void *text;u32 printer;u8 s[0xe18-0xbf8];u8 window[16];} Work;extern void *String_New(int,int);extern void ReadMsgDataIntoString(void *,int,void *),StringExpandPlaceholders(void *,void *,void *),FillWindowPixelBuffer(void *,int),DrawFrameAndWindow1(void *,int,int,int),String_Delete(void *);extern u8 AddTextPrinterParameterized(void *,int,void *,int,int,int,void *);void ov73_021EA19C(Work *,int);
+void ov73_021EA19C(Work *w,int message){void *s=String_New(256,150);ReadMsgDataIntoString(w->msg,message,s);StringExpandPlaceholders(w->expand,w->text,s);FillWindowPixelBuffer(w->window,15);DrawFrameAndWindow1(w->window,1,31,11);w->printer=AddTextPrinterParameterized(w->window,1,w->text,0,0,0,0);String_Delete(s);}

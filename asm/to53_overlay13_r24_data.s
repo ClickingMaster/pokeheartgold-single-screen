@@ -1,3 +1,15 @@
+	.public ov13_02242680
+	.public ov13_02245A58
+	.public ov13_0224E3D8
+	.public ov13_0224E464
+	.public _0224CF98
+	.public ov13_022459B4
+	.public ov13_0224DD80
+	.public ov13_0224DD8C
+	.public ov13_02245A20
+	.public ov13_0224DCF8
+	.public ov13_0224DF30
+	.public ov13_0224DFB0
 	.include "asm/macros.inc"
 	.include "overlay_13_thumb_2.inc"
 	.include "global.inc"

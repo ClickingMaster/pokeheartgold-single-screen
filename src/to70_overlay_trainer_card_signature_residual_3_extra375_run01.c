@@ -1,0 +1,5 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+void GfGfxLoader_GXLoadPalFromOpenNarc(void *,int,int,int,int,int),LoadFontPal1(int,int,int),BG_ClearCharDataRange(int,int,int,int),GfGfxLoader_LoadCharDataFromOpenNarc(void *,int,void *,int,int,int,int,int),GfGfxLoader_LoadScrnDataFromOpenNarc(void *,int,void *,int,int,int,int,int),LoadUserFrameGfx2(void *,int,int,int,u8,int),LoadUserFrameGfx1(void *,int,int,int,int,int);int Options_GetFrame(void *);void ov52_021E85DC(void **,void *);
+void ov52_021E85DC(void **s,void *narc){void *bg=s[0];GfGfxLoader_GXLoadPalFromOpenNarc(narc,0,0,0,96,39);GfGfxLoader_GXLoadPalFromOpenNarc(narc,2,4,0,64,39);LoadFontPal1(0,416,39);LoadFontPal1(4,416,39);BG_ClearCharDataRange(1,32,0,39);GfGfxLoader_LoadCharDataFromOpenNarc(narc,3,bg,2,0,8192,1,39);GfGfxLoader_LoadScrnDataFromOpenNarc(narc,5,bg,2,0,1536,1,39);GfGfxLoader_LoadCharDataFromOpenNarc(narc,4,bg,5,0,8192,1,39);GfGfxLoader_LoadScrnDataFromOpenNarc(narc,6,bg,5,0,1536,1,39);LoadUserFrameGfx2(bg,0,1,10,(u8)Options_GetFrame(s[3]),39);LoadUserFrameGfx1(bg,0,31,11,0,39);}

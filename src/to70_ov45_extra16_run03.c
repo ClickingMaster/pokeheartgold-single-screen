@@ -1,0 +1,48 @@
+#pragma force_active on
+// clang-format off
+#include "global.h"
+#include <nitro/code32.h>
+#include <string.h>
+// clang-format on
+#pragma force_active on
+#define I(p,o) (*(s32*)((u8*)(p)+(o)))
+#define P(p,o) (*(void**)((u8*)(p)+(o)))
+typedef union Str {struct{u32 flag:1;u32 capacity:31;u32 size;char *data;} l;struct{u8 flag:1;u8 size:7;char data[11];} s;u32 words[3];} Str;
+extern void *_022577C4;
+extern char *_02254D04[];
+extern void ov45_02237B58(Str*,const char*),ov45_02237BC8(Str*),ov45_022320B4(Str*,void*),ov45_02237BFC(Str*,u32);
+extern int ov45_02237F7C(Str*,Str*),ov45_02240A80(const char*),ov45_0223E4A8(void*),ov45_02233434(u32,u32,const void*,const void*,u32);
+extern void *ov45_02231C78(void*);
+extern u32 ov00_021FF368(void);
+extern void ov45_02233BC8(Str*,const char*,...);
+extern void ov45_0223325C(u32,u32,u32,u32,u32,const void*,u32),ov45_02241E24(const char*,void (*)(void),s32),ov45_022417B4(const char*,s32,const char*,void(*)(void),s32);
+extern void ov45_022367E0(void),ov45_0223683C(void),ov45_0223694C(void),ov45_0223AF04(void*,void*);
+extern void ov45_02233ABC(Str*,Str*,const char*),ov45_022339F4(Str*,Str*,Str*);
+extern char ov45_022550B8[];
+extern char ov45_022550BC[];
+extern char ov45_022550C4[];
+extern char ov45_022550D4[];
+extern char ov45_022550E4[];
+extern char ov45_022550F4[];
+void ov45_02233994(Str *out,u32 id,Str *s);
+void ov45_02233B74(Str *out);
+int ov45_022340F8(Str *a,Str *b);
+int ov45_02234688(void);
+int ov45_02234764(void);
+int ov45_022347C4(void);
+int ov45_02234814(void);
+int ov45_02234870(void);
+int ov45_022348C8(void);
+int ov45_02234944(void);
+int ov45_022349CC(u32 type);
+int ov45_02234A24(int valid,u8 *data,u32 size,void **output,u32 *length);
+void ov45_022353F0(int valid,u8 *data,u32 size);
+void ov45_022354AC(int status);
+
+#pragma warn_uninitializedvar off
+extern Str *ov45_02238104(Str*,u32,u32,const char*,const char*,u8);
+static inline u32 short_length(Str *p){if(p->l.flag)return p->l.size;return p->s.size;}
+int ov45_022347C4(void){void *p=_022577C4;if(!I(p,0x10c))return 1;I(p,0x10c)=0;ov45_02233434(I(_022577C4,0x4c),0,ov45_022550D4,(u8*)p+0xfc,16);return 1;}
+int ov45_02234814(void){void *p=_022577C4;if(!I(p,0x68))return 0;ov45_0223325C(I(p,0x4c),0,1,0,1,(u8*)p+0x74,0x44);return 1;}
+int ov45_02234870(void){Str s;ov45_022320B4(&s,(u8*)_022577C4+0xb8);ov45_02241E24(!s.l.flag?s.s.data:s.l.data,ov45_022367E0,0);ov45_02237BC8(&s);return 1;}
+int ov45_022348C8(void){Str s;if(I(_022577C4,328)!=0)return 0;ov45_022320B4(&s,(u8*)_022577C4+0xb8);ov45_022417B4(!s.l.flag?s.s.data:s.l.data,-1,ov45_022550E4,ov45_0223683C,0);ov45_02237BC8(&s);return 1;}

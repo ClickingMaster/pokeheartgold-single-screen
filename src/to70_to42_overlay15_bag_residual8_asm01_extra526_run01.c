@@ -1,0 +1,5 @@
+#pragma force_active on
+#include "global.h"
+typedef struct{u8 p[6];s16 y;u8 x,z,pad[2];} Item;typedef struct{int p;Item items[8];u8 current;} Items;typedef struct{u8 p[0x234];Items *items;u8 q[0x644-0x238];int y;u8 r[0x24];int y2;u8 a[1];u8 flag,cursor;} Work;
+extern void ov15_021FED60(Work *),ov15_021FB114(Work *),ov15_02200294(Work *),ov15_021FF560(Work *),ov15_021FF7AC(void *),ov15_021FED58(Work *);extern int ov15_021FA074(Work *);extern void ov15_021FD574(Work *,int,int,int),ov15_021FF364(Work *,int,int,int),ov15_021FF6BC(Work *,int,int,int),ov15_02200140(Work *,Item *,int,int),ov15_022001C4(Work *,Item *,int),ov15_021FFECC(Work *,int);void ov15_021FAC48(Work *);
+void ov15_021FAC48(Work *w){Item *item=&w->items->items[w->items->current];w->flag=1;w->cursor=item->y+w->y-8;ov15_021FED60(w);ov15_021FB114(w);ov15_02200294(w);ov15_021FF560(w);ov15_021FF7AC((u8 *)w+0x184);ov15_021FED58(w);item=&w->items->items[w->items->current];ov15_021FD574(w,1,ov15_021FA074(w),w->y-8);ov15_021FF364(w,item->y,w->y-8,1);ov15_021FF6BC(w,item->z,item->y,0);ov15_02200140(w,item,ov15_021FA074(w),0);ov15_022001C4(w,item,item->y+w->y-8);ov15_021FFECC(w,w->y);w->y2=w->y-8;}

@@ -1,0 +1,8 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+typedef struct {void *owner,*system,*manager;u32 a;void *p,*q,*sprites[15];} State;
+extern State *ov07_022324D8(void *,int);extern int ov07_0221C468(void *);extern void *ov07_0221FA48(void *,int),*SpriteSystem_NewSprite(void *,void *,void *),*ov07_02222004(void *,int),*ov07_0222202C(void *,int);extern int Pokepic_GetAttr(void *,int);
+extern void ov07_0221F9E8(void *,void *),ManagedSprite_SetDrawPriority(void *,int),ManagedSprite_SetPriority(void *,int),ManagedSprite_SetAffineOverwriteMode(void *,int),ManagedSprite_SetDrawFlag(void *,int),ManagedSprite_SetPositionXY(void *,s16,s16),ManagedSprite_SetAnim(void *,int),ov07_0221C410(void *,void (*)(void),void *),ov07_02230058(void);
+void ov07_02230094(void *,void *,void *,void *);
+void ov07_02230094(void *owner,void *sys,void *man,void *sprite){u32 template[13];s16 x,y;void *pic;int i;State *s=ov07_022324D8(owner,632);s->owner=owner;s->system=sys;s->manager=man;pic=ov07_0221FA48(s->owner,ov07_0221C468(owner));x=Pokepic_GetAttr(pic,0);y=Pokepic_GetAttr(pic,1);ov07_0221F9E8(template,owner);for(i=0;i<15;i++){if(i==0)s->sprites[i]=sprite;else s->sprites[i]=SpriteSystem_NewSprite(s->system,s->manager,template);ManagedSprite_SetDrawPriority(s->sprites[i],100);ManagedSprite_SetPriority(s->sprites[i],1);ManagedSprite_SetAffineOverwriteMode(s->sprites[i],2);ManagedSprite_SetDrawFlag(s->sprites[i],0);ManagedSprite_SetPositionXY(s->sprites[i],x,y);ManagedSprite_SetAnim(s->sprites[i],i%3);}s->p=ov07_02222004(s->owner,ov07_0221C468(s->owner));s->q=ov07_0222202C(s->owner,ov07_0221C468(s->owner));ov07_0221C410(s->owner,ov07_02230058,s);}

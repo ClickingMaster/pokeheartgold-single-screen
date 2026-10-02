@@ -1,0 +1,527 @@
+	.extern _0223B330
+	.extern _0223B340
+	.extern _0223B368
+	.extern _0223B390
+	.extern _0223B3A0
+	.extern _0223B3BC
+	.extern _0223B410
+	.extern _0223B420
+	.extern _0223B430
+	.extern _0223B440
+	.extern _0223B45C
+	.extern _0223B478
+	.extern _0223B494
+	.extern _0223B4B0
+	.extern gApp_MainMenu_SelectOption_ConnectToRanger
+	.extern gApp_MainMenu_SelectOption_MigrateFromAgb
+	.extern gApp_MainMenu_SelectOption_MysteryGift
+	.extern ov74_02228C84
+	.extern ov74_02228D20
+	.extern ov74_02228D64
+	.extern ov74_02228E98
+	.extern ov74_02228F14
+	.extern ov74_02228F8C
+	.extern ov74_02229084
+	.extern ov74_02229190
+	.extern ov74_02229200
+	.extern ov74_02229294
+	.extern ov74_02229450
+	.extern ov74_0222947C
+	.extern ov74_022295C8
+	.extern ov74_022295D0
+	.extern ov74_0222962C
+	.extern ov74_02229B68
+	.extern ov74_02229BC0
+	.extern ov74_02229BD0
+	.extern ov74_02229C0C
+	.extern ov74_02229C44
+	.extern ov74_02229C5C
+	.extern ov74_02229C60
+	.extern ov74_02229C80
+	.extern ov74_02229CB4
+	.extern ov74_02229CB8
+	.extern ov74_02229CE0
+	.extern ov74_02229D0C
+	.extern ov74_02229D1C
+	.extern ov74_02229D50
+	.extern ov74_02229D6C
+	.extern ov74_02229DA0
+	.extern ov74_02229DBC
+	.extern ov74_02229DCC
+	.extern ov74_02229DD4
+	.extern ov74_02229DE0
+	.extern ov74_02229DF8
+	.extern ov74_02229E14
+	.extern ov74_02229E28
+	.extern ov74_02229E60
+	.extern ov74_02229E68
+	.extern ov74_02229F04
+	.extern ov74_02229F28
+	.extern ov74_02229F60
+	.extern ov74_02229F78
+	.extern ov74_02229F90
+	.extern ov74_02229FF4
+	.extern ov74_0222A078
+	.extern ov74_0222A0E4
+	.extern ov74_0222A130
+	.extern ov74_0222A174
+	.extern ov74_0222A240
+	.extern ov74_0222A2A4
+	.extern ov74_0222A2E0
+	.extern ov74_0222A35C
+	.extern ov74_0222A3CC
+	.extern ov74_0222A43C
+	.extern ov74_0222A494
+	.extern ov74_0222A4CC
+	.extern ov74_0222A504
+	.extern ov74_0222A538
+	.extern ov74_0222A560
+	.extern ov74_0222A5AC
+	.extern ov74_0222A5CC
+	.extern ov74_0222A650
+	.extern ov74_0222A688
+	.extern ov74_0222A6C0
+	.extern ov74_0222A6F8
+	.extern ov74_0222A744
+	.extern ov74_0222A7A0
+	.extern ov74_0222A81C
+	.extern ov74_0222A89C
+	.extern ov74_0222A94C
+	.extern ov74_0222AA18
+	.extern ov74_0222AAAC
+	.extern ov74_0222AB0C
+	.extern ov74_0222AB70
+	.extern ov74_0222AC1C
+	.extern ov74_0222ACD8
+	.extern ov74_0222AD6C
+	.extern ov74_0222ADBC
+	.extern ov74_0222AE3C
+	.extern ov74_0222AE6C
+	.extern ov74_0222AF28
+	.extern ov74_0222B0C8
+	.extern ov74_0222B144
+	.extern ov74_0222B19C
+	.extern ov74_0222B1F4
+	.extern ov74_0222B20C
+	.extern ov74_0222B224
+	.extern ov74_0222B288
+	.extern ov74_0222B2C4
+	.extern ov74_0222B30C
+	.extern ov74_0222B344
+	.extern ov74_0222B374
+	.extern ov74_0222B3A4
+	.extern ov74_0222B5F8
+	.extern ov74_0222B760
+	.extern ov74_0222B950
+	.extern ov74_0222BA48
+	.extern ov74_0222BED8
+	.extern ov74_0222BEF0
+	.extern ov74_0222BF08
+	.extern ov74_0222BF18
+	.extern ov74_0222BF2C
+	.extern ov74_0222BFA0
+	.extern ov74_0222C014
+	.extern ov74_0222C04C
+	.extern ov74_0222C2EC
+	.extern ov74_0222CD7C
+	.extern ov74_0222CD88
+	.extern ov74_0222CD94
+	.extern ov74_0222CE10
+	.extern ov74_0222CE6C
+	.extern ov74_0222CEC0
+	.extern ov74_0222CEE0
+	.extern ov74_0222CFFC
+	.extern ov74_0222D024
+	.extern ov74_0222D098
+	.extern ov74_0222D0EC
+	.extern ov74_0222D104
+	.extern ov74_0222D11C
+	.extern ov74_0222D1D4
+	.extern ov74_0222D248
+	.extern ov74_0222D2D4
+	.extern ov74_0222D308
+	.extern ov74_0222D358
+	.extern ov74_0222D414
+	.extern ov74_0222D448
+	.extern ov74_0222D490
+	.extern ov74_0222D494
+	.extern ov74_0222D4E4
+	.extern ov74_0222D55C
+	.extern ov74_0222D5C4
+	.extern ov74_0222D614
+	.extern ov74_0222D690
+	.extern ov74_0222D774
+	.extern ov74_0222D78C
+	.extern ov74_0222D7A4
+	.extern ov74_0222D7D0
+	.extern ov74_0222D7F0
+	.extern ov74_0222D824
+	.extern ov74_0222D9E0
+	.extern ov74_0222DAF8
+	.extern ov74_0222DB30
+	.extern ov74_0222DB70
+	.extern ov74_0222DC60
+	.extern ov74_0222DCD4
+	.extern ov74_0222DDFC
+	.extern ov74_0222DE68
+	.extern ov74_0222DE8C
+	.extern ov74_0222DEF0
+	.extern ov74_0222DF2C
+	.extern ov74_0222E03C
+	.extern ov74_0222E060
+	.extern ov74_0222E0D4
+	.extern ov74_0222E1F4
+	.extern ov74_0222E7EC
+	.extern ov74_0222E85C
+	.extern ov74_0222E898
+	.extern ov74_0222E8B4
+	.extern ov74_0222EA88
+	.extern ov74_0222EB28
+	.extern ov74_0222EB44
+	.extern ov74_0222EC08
+	.extern ov74_0222EC60
+	.extern ov74_0222ECD4
+	.extern ov74_0222ECEC
+	.extern ov74_0222ED04
+	.extern ov74_0222EDC0
+	.extern ov74_0222EE08
+	.extern ov74_0222EE0C
+	.extern ov74_0222EE58
+	.extern ov74_0222EEB0
+	.extern ov74_0222EF18
+	.extern ov74_0222EF64
+	.extern ov74_0222EF68
+	.extern ov74_0222EFF0
+	.extern ov74_0222F024
+	.extern ov74_0222F1BC
+	.extern ov74_0222F2D4
+	.extern ov74_0222F314
+	.extern ov74_0222F404
+	.extern ov74_0222F478
+	.extern ov74_0222F598
+	.extern ov74_0222F600
+	.extern ov74_0222F624
+	.extern ov74_0222F688
+	.extern ov74_0222F6C4
+	.extern ov74_0222F7D4
+	.extern ov74_0222FB8C
+	.extern ov74_0222FC50
+	.extern ov74_0222FCA4
+	.extern ov74_0222FCC4
+	.extern ov74_0222FD98
+	.extern ov74_0222FE4C
+	.extern ov74_0222FE5C
+	.extern ov74_0222FE68
+	.extern ov74_0222FE78
+	.extern ov74_0222FEA0
+	.extern ov74_0222FEC8
+	.extern ov74_0222FF28
+	.extern ov74_0222FF68
+	.extern ov74_0222FF80
+	.extern ov74_0222FFAC
+	.extern ov74_0222FFFC
+	.extern ov74_02230018
+	.extern ov74_02230030
+	.extern ov74_02230070
+	.extern ov74_022300A8
+	.extern ov74_02230110
+	.extern ov74_02230138
+	.extern ov74_0223026C
+	.extern ov74_0223030C
+	.extern ov74_02230320
+	.extern ov74_02230404
+	.extern ov74_02230478
+	.extern ov74_02230520
+	.extern ov74_02230590
+	.extern ov74_022305E4
+	.extern ov74_02230674
+	.extern ov74_022306C8
+	.extern ov74_02230714
+	.extern ov74_0223078C
+	.extern ov74_02230818
+	.extern ov74_022308E0
+	.extern ov74_02230964
+	.extern ov74_02230988
+	.extern ov74_022309AC
+	.extern ov74_022309F0
+	.extern ov74_02230A14
+	.extern ov74_02230A34
+	.extern ov74_02230A4C
+	.extern ov74_02230A74
+	.extern ov74_02230A7C
+	.extern ov74_02230A84
+	.extern ov74_02230BB4
+	.extern ov74_02230C10
+	.extern ov74_02230CCC
+	.extern ov74_02230CEC
+	.extern ov74_02230D18
+	.extern ov74_02230D28
+	.extern ov74_02230D6C
+	.extern ov74_02230D80
+	.extern ov74_02230DB8
+	.extern ov74_02230DF4
+	.extern ov74_02230E44
+	.extern ov74_02230E7C
+	.extern ov74_02230E94
+	.extern ov74_02230EB4
+	.extern ov74_02230EE8
+	.extern ov74_02230F14
+	.extern ov74_02230F40
+	.extern ov74_02230F6C
+	.extern ov74_02230F98
+	.extern ov74_02230FD4
+	.extern ov74_02231008
+	.extern ov74_02231048
+	.extern ov74_02231054
+	.extern ov74_0223105C
+	.extern ov74_02231064
+	.extern ov74_02231070
+	.extern ov74_0223107C
+	.extern ov74_02231088
+	.extern ov74_02231094
+	.extern ov74_022310A0
+	.extern ov74_022310B8
+	.extern ov74_022310C4
+	.extern ov74_02231100
+	.extern ov74_0223110C
+	.extern ov74_02231118
+	.extern ov74_02231124
+	.extern ov74_02231130
+	.extern ov74_0223113C
+	.extern ov74_02231154
+	.extern ov74_0223115C
+	.extern ov74_02231164
+	.extern ov74_02231184
+	.extern ov74_02231194
+	.extern ov74_022311A0
+	.extern ov74_022311AC
+	.extern ov74_022311BC
+	.extern ov74_022311CC
+	.extern ov74_022311DC
+	.extern ov74_022311F4
+	.extern ov74_02231214
+	.extern ov74_02231238
+	.extern ov74_02231260
+	.extern ov74_022312C0
+	.extern ov74_022313F0
+	.extern ov74_02231424
+	.extern ov74_02231448
+	.extern ov74_0223144C
+	.extern ov74_02231450
+	.extern ov74_02231454
+	.extern ov74_02231458
+	.extern ov74_0223145C
+	.extern ov74_02231460
+	.extern ov74_022314A0
+	.extern ov74_022314BC
+	.extern ov74_022314DC
+	.extern ov74_02231508
+	.extern ov74_02231544
+	.extern ov74_02231560
+	.extern ov74_02231584
+	.extern ov74_0223161C
+	.extern ov74_02231638
+	.extern ov74_02231670
+	.extern ov74_022316E8
+	.extern ov74_02231704
+	.extern ov74_02231724
+	.extern ov74_02231744
+	.extern ov74_0223512C
+	.extern ov74_02235230
+	.extern ov74_02235258
+	.extern ov74_022352A0
+	.extern ov74_022352D0
+	.extern ov74_02235308
+	.extern ov74_02235390
+	.extern ov74_0223539C
+	.extern ov74_022353FC
+	.extern ov74_02235414
+	.extern ov74_02235464
+	.extern ov74_0223546C
+	.extern ov74_02235474
+	.extern ov74_02235568
+	.extern ov74_02235634
+	.extern ov74_0223563C
+	.extern ov74_0223567C
+	.extern ov74_02235690
+	.extern ov74_02235708
+	.extern ov74_02235728
+	.extern ov74_022358BC
+	.extern ov74_022358C8
+	.extern ov74_02235930
+	.extern ov74_022359BC
+	.extern ov74_02235A68
+	.extern ov74_02235DC4
+	.extern ov74_02235ED0
+	.extern ov74_02235F58
+	.extern ov74_02236034
+	.extern ov74_022360A0
+	.extern ov74_022360B0
+	.extern ov74_02236128
+	.extern ov74_02236140
+	.extern ov74_0223615C
+	.extern ov74_022365FC
+	.extern ov74_02236680
+	.extern ov74_022368D4
+	.extern ov74_02236980
+	.extern ov74_02236988
+	.extern ov74_02236AE0
+	.extern ov74_0223BD5C
+	.extern ov74_0223BD68
+	.extern ov74_0223C1F4
+	.extern ov74_0223C220
+	.extern ov74_0223C230
+	.extern ov74_0223C240
+	.extern ov74_0223C250
+	.extern ov74_0223C260
+	.extern ov74_0223C270
+	.extern ov74_0223C2A0
+	.extern ov74_0223C2B0
+	.extern ov74_0223C2D0
+	.extern ov74_0223C2E0
+	.extern ov74_0223C2F0
+	.extern ov74_0223C320
+	.extern ov74_0223C340
+	.extern ov74_0223C6D0
+	.extern ov74_0223C6E0
+	.extern ov74_0223C700
+	.extern ov74_0223D080
+	.extern ov74_0223D090
+	.extern ov74_0223D0A4
+	.extern ov74_0223D0A8
+	.extern ov74_0223D0BC
+	.extern ov74_0223D0C0
+	.extern ov74_IntToWstring5
+#include "config.h"
+#include "msgdata/msg/msg_0247.h"
+#include "msgdata/msg/msg_0442.h"
+#include "constants/sndseq.h"
+	.include "asm/macros.inc"
+	.include "overlay_74_thumb.inc"
+	.include "global.inc"
+	.public ov74_0222EB44
+	.public ov74_0222EC08
+
+.text
+	thumb_func_start ov74_0222EB44
+ov74_0222EB44: ; 0x0222EB44
+	push {r3, r4, r5, r6, r7, lr}
+	str r0, [sp]
+	bl OverlayManager_GetData
+	add r7, r0, #0
+	ldr r0, _0222EBF0 ; =0x00002A08
+	mov r6, #0
+	add r4, r7, #0
+	add r5, r7, r0
+_0222EB56:
+	ldr r0, _0222EBF0 ; =0x00002A08
+	ldr r0, [r4, r0]
+	cmp r0, #0
+	beq _0222EB6A
+	add r0, r5, #0
+	bl ClearWindowTilemapAndCopyToVram
+	add r0, r5, #0
+	bl RemoveWindow
+_0222EB6A:
+	add r6, r6, #1
+	add r4, #0x10
+	add r5, #0x10
+	cmp r6, #0x13
+	blo _0222EB56
+	ldr r0, _0222EBF4 ; =0x00002BD0
+	ldr r1, [r7, r0]
+	cmp r1, #0
+	beq _0222EB8A
+	add r0, r7, r0
+	bl ClearWindowTilemapAndCopyToVram
+	ldr r0, _0222EBF4 ; =0x00002BD0
+	add r0, r7, r0
+	bl RemoveWindow
+_0222EB8A:
+	ldr r0, _0222EBF8 ; =0x00002BE0
+	ldr r1, [r7, r0]
+	cmp r1, #0
+	beq _0222EBA0
+	add r0, r7, r0
+	bl ClearWindowTilemapAndCopyToVram
+	ldr r0, _0222EBF8 ; =0x00002BE0
+	add r0, r7, r0
+	bl RemoveWindow
+_0222EBA0:
+	ldr r0, _0222EBFC ; =0x000029FC
+	mov r1, #0
+	ldr r0, [r7, r0]
+	bl FreeBgTilemapBuffer
+	ldr r0, _0222EBFC ; =0x000029FC
+	mov r1, #1
+	ldr r0, [r7, r0]
+	bl FreeBgTilemapBuffer
+	ldr r0, _0222EBFC ; =0x000029FC
+	mov r1, #2
+	ldr r0, [r7, r0]
+	bl FreeBgTilemapBuffer
+	ldr r0, _0222EBFC ; =0x000029FC
+	mov r1, #3
+	ldr r0, [r7, r0]
+	bl FreeBgTilemapBuffer
+	ldr r0, _0222EBFC ; =0x000029FC
+	ldr r0, [r7, r0]
+	bl Heap_Free
+	ldr r0, _0222EC00 ; =FS_OVERLAY_ID(OVY_74)
+	ldr r1, _0222EC04 ; =gApp_MainMenu_SelectOption_MysteryGift
+	bl RegisterMainOverlay
+	mov r0, #0x59
+	bl Heap_Destroy
+	ldr r0, [sp]
+	bl OverlayManager_FreeData
+	mov r0, #0x55
+	bl Heap_Destroy
+	mov r0, #1
+	pop {r3, r4, r5, r6, r7, pc}
+	nop
+_0222EBF0: .word 0x00002A08
+_0222EBF4: .word 0x00002BD0
+_0222EBF8: .word 0x00002BE0
+_0222EBFC: .word 0x000029FC
+_0222EC00: .word FS_OVERLAY_ID(OVY_74)
+_0222EC04: .word gApp_MainMenu_SelectOption_MysteryGift
+	thumb_func_end ov74_0222EB44
+
+	thumb_func_start ov74_0222EC08
+ov74_0222EC08: ; 0x0222EC08
+	push {r3, r4, r5, r6, r7, lr}
+	add r6, r0, #0
+	add r7, r1, #0
+	add r5, r2, #0
+	bl ov74_0222FCC4
+	ldr r1, _0222EC54 ; =0x00003D54
+	add r0, r5, #0
+	bl Heap_AllocAtEnd
+	ldr r2, _0222EC54 ; =0x00003D54
+	mov r1, #0
+	add r4, r0, #0
+	bl memset
+	ldr r0, _0222EC58 ; =0x000029FC
+	mov r1, #0x1e
+	str r6, [r4, r0]
+	mov r0, #0
+	lsl r1, r1, #4
+	add r2, r5, #0
+	str r5, [r4]
+	bl LoadFontPal0
+	ldr r0, _0222EC5C ; =0x00002BB4
+	mov r2, #0
+	str r7, [r4, r0]
+	add r0, #0xc
+	str r2, [r4, r0]
+	add r0, r4, #0
+	mov r1, #1
+	bl ov74_0222D824
+	add r0, r4, #0
+	bl Heap_Free
+	pop {r3, r4, r5, r6, r7, pc}
+	nop
+_0222EC54: .word 0x00003D54
+_0222EC58: .word 0x000029FC
+_0222EC5C: .word 0x00002BB4
+	thumb_func_end ov74_0222EC08

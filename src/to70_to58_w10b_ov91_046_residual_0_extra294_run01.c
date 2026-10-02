@@ -1,0 +1,6 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+typedef struct W{u8 pad[0x34];void*sprite;u8 unused,count,state,sound;int timer;}W;typedef struct G{u8 pad[0x8544];u8 graphic[1];}G;
+extern const s16 ov91_02261C84[];extern void Sprite_SetAnimationFrame(void*,int),Sprite_UpdateAnim(void*,int),Sprite_SetDrawFlag(void*,int),ov91_02260CB4(void*),ov91_02260CE0(void*,int,int),ov91_02260D00(void*),ov91_0225D500(G*,int,int,int,int,int),PlaySE(int),ov91_0225E40C(G*),ov91_0225E62C(G*);extern int Sprite_GetAnimationFrame(void*),ov91_0225E6D0(G*);int ov91_0225F25C(W*,G*);
+int ov91_0225F25C(W*w,G*g){switch(w->state){case 0:Sprite_SetAnimationFrame(w->sprite,0);ov91_02260CB4(g->graphic);ov91_02260CE0(g->graphic,128,177);w->sound=0;w->state++;break;case 1:{int frame;Sprite_UpdateAnim(w->sprite,8192);frame=Sprite_GetAnimationFrame(w->sprite);switch(frame){case 10:if(w->sound==0){ov91_0225D500(g,128,96,128,64,2);PlaySE(0x64f);w->sound=1;}break;case 11:w->count++;if(w->count>=2)w->state=3;else{w->state=2;w->timer=16;}ov91_02260D00(g->graphic);break;}ov91_02260CE0(g->graphic,128,ov91_02261C84[frame]);break;}case 2:w->timer--;if(w->timer<=0)w->state=0;break;case 3:if(ov91_0225E6D0(g)==0){Sprite_SetDrawFlag(w->sprite,0);return 1;}break;}ov91_0225E40C(g);ov91_0225E62C(g);return 0;}

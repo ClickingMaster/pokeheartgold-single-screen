@@ -1,0 +1,5 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+typedef struct Entry{u8 pad[48];int kind,ticks;}Entry;extern const int _0225E694[];extern void CopyToBgTilemapRect(void*,int,int,u8,int,int,void*,int,u8,int,int),BgSetPosTextAndCommit(void*,u8,int,int),BgCopyOrUncompressTilemapBufferRangeToVram(void*,int,void*,u32,int);extern void*GetBgTilemapBuffer(void*,int);void ov34_0225E1C4(void*,u8*,Entry*,int,int,int*);
+void ov34_0225E1C4(void*bg,u8*screen,Entry*entries,int skip,int count,int*sum){int i;int total=0;Entry*e;if(count>3)count=3;i=0;if(count>0){e=entries;do{if(skip!=i&&e->ticks!=0)e->ticks--;total+=e->ticks;i++;e++;}while(i<count);}if(total==0&&*sum==0){*sum=total;return;}*sum=total;{int y;i=0;if(count>0){screen+=12;y=2;do{int half=entries->ticks/2;CopyToBgTilemapRect(bg,7,0,(u8)y,32,7,screen,0,(u8)(half*8+24*entries->kind),32,48);BgSetPosTextAndCommit(bg,(u8)(i+4),3,_0225E694[half]);i++;entries++;y+=7;}while(i<count);}}DC_FlushRange(GetBgTilemapBuffer(bg,7),1536);BgCopyOrUncompressTilemapBufferRangeToVram(bg,7,GetBgTilemapBuffer(bg,7),1536,0);}

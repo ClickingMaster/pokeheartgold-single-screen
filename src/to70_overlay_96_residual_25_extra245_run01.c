@@ -1,0 +1,7 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+typedef struct W{void*owner;u8 pad[0x30];u32 state,anim;}W;extern void*ov96_021E8BAC(void*);extern void Sprite_TryChangeAnimSeq(void*,u8);void ov96_021EAC0C(W*,u32),ov96_021EAC5C(W*,int),ov96_021EAD08(W*,int);
+void ov96_021EAC0C(W*w,u32 state){w->state=state;if(state){void*sprite=ov96_021E8BAC(w->owner);u8 seq;switch(state){case 1:seq=0;break;case 2:seq=1;break;case 3:seq=2;break;case 4:seq=3;break;case 5:seq=4;break;case 6:seq=8;break;default:GF_AssertFail();return;}Sprite_TryChangeAnimSeq(sprite,seq);}}
+void ov96_021EAC5C(W*w,int state){void*sprite=ov96_021E8BAC(w->owner);switch(state){case 0:case 4:case 8:case 12:case 16:case 20:case 21:case 22:case 26:w->anim=state;break;default:return;}u8 seq;if(state!=20&&state!=21){switch(w->state){case 1:seq=(u8)state;break;case 2:seq=(u8)(state+1);break;case 3:seq=(u8)(state+2);break;case 4:seq=(u8)(state+3);break;default:GF_AssertFail();return;}}else seq=(u8)state;Sprite_TryChangeAnimSeq(sprite,seq);}
+void ov96_021EAD08(W*w,int state){void*sprite=ov96_021E8BAC(w->owner);switch(state){case 0:w->anim=0;break;case 20:w->anim=4;break;case 21:w->anim=5;break;default:return;}u8 seq;if(state!=20&&state!=21){switch(w->state){case 1:seq=0;break;case 2:seq=1;break;case 3:seq=2;break;case 4:seq=3;break;default:GF_AssertFail();return;}}else seq=(u8)w->anim;Sprite_TryChangeAnimSeq(sprite,seq);}

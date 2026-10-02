@@ -1,0 +1,7 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+typedef struct W{u8 pad[0x2a04];void*messages;u8 gap[0x2bbc-0x2a08];void*menu;void*items;u8 gap2[16];u8 window[16];}W;typedef struct Item{int message,value;}Item;typedef struct T{void*items;u32 a,b;void*window;u16 total,shown;u32 c,d,e;}T;
+extern const T ov74_0223C6E0;extern void ListMenuItems_Delete(void*),DestroyListMenu(void*,void*,void*),ListMenuItems_AppendFromMsgData(void*,void*,int,int),DestroyMsgData(void*),ov74_0222ECD4(void*),ClearWindowTilemapAndCopyToVram(void*),RemoveWindow(void*);extern void*ListMenuItems_New(int,int),*NewMsgDataFromNarc(int,int,int,int),*ListMenuInit(T*,u16,u16,int);void ov74_0222ED04(W*,Item*,int,void*,int),ov74_0222EDC0(W*);
+void ov74_0222ED04(W*w,Item*items,int count,void*window,int cursor){int i;T t;if(w->items)ListMenuItems_Delete(w->items);if(w->menu)DestroyListMenu(w->menu,NULL,NULL);w->items=ListMenuItems_New(count,85);w->messages=NewMsgDataFromNarc(0,27,247,85);for(i=0;i<count;i++){ListMenuItems_AppendFromMsgData(w->items,w->messages,items[i].message,items[i].value);}DestroyMsgData(w->messages);t=ov74_0223C6E0;t.items=w->items;t.total=count;t.window=window;w->menu=ListMenuInit(&t,0,(u16)cursor,85);}
+void ov74_0222EDC0(W*w){ListMenuItems_Delete(w->items);w->items=NULL;DestroyListMenu(w->menu,NULL,NULL);w->menu=NULL;ov74_0222ECD4(w->window);ClearWindowTilemapAndCopyToVram(w->window);RemoveWindow(w->window);}

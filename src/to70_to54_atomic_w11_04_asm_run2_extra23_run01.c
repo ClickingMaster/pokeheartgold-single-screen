@@ -1,0 +1,18 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+typedef struct SpriteWrap {void*s;} SpriteWrap;
+typedef struct Work {u8 state,pad[3];void*owner,*p8,*system;u8 pad10[16];s16 x,y;void*pic;SpriteWrap*first;u32 p2c;SpriteWrap*second;u8 motion1[36],motion2[36],motion3[36];u8 counter,flag,a,b;s16 delta;u16 padend;} Work;
+extern Work *ov07_022324D8(void*,u32);
+extern void ov07_02231FE4(void*,Work*),ov07_02231E08(void*,int,int),ov07_0221C410(void*,void(*)(void*,Work*),Work*),ov07_0221C448(void*,void*),ov07_02232508(void*);
+extern int ov07_0221C468(void*),ov07_0221FA80(void*,int),ov07_0221FA90(void*,int),ov07_0221FAE8(void*),ov07_0221BFD0(void*);
+extern void *ov07_0221FA48(void*,int),*ov07_0221FA78(void*);
+extern SpriteWrap *ov07_0221C4E8(void*,int);
+extern int Pokepic_GetAttr(void*,int);
+extern void ManagedSprite_SetPriority(void*,int),ManagedSprite_SetOamMode(void*,int),ManagedSprite_TickFrame(void*),SpriteSystem_DrawSprites(void*);
+extern void*Sprite_GetPaletteProxy(void*);extern u32 ObjPlttTransfer_GetPaletteVramOffset(void*,int);
+extern void PaletteData_LoadNarc_CustomTint(void*,int,int,int,int,u32,u16,int,int,int);
+extern void ov07_02222268(void*,s16,s16,s16,s16,u16);
+extern int ov07_022222F0(void*,void*),ov07_02222314(void*,void*);
+void ov07_0222AFAC(void*,Work*);void ov07_0222B130(void*);
+void ov07_0222B130(void*owner){Work*w=ov07_022324D8(owner,168);ov07_02231FE4(owner,w);w->flag=0;w->a=8;w->b=8;ov07_02231E08(w->owner,-1,-1);*(volatile u16*)0x4000052=w->a|(w->b<<8);w->pic=ov07_0221FA48(w->owner,ov07_0221C468(w->owner));w->x=Pokepic_GetAttr(w->pic,0);w->y=Pokepic_GetAttr(w->pic,1);w->first=ov07_0221C4E8(w->owner,0);w->second=ov07_0221C4E8(w->owner,1);w->delta=-Pokepic_GetAttr(w->pic,41);int member=ov07_0221FA80(w->owner,ov07_0221C468(w->owner));int narc=ov07_0221FA90(w->owner,ov07_0221C468(w->owner));SpriteWrap*s=w->first;ManagedSprite_SetPriority(s,ov07_0221FAE8(w->owner)+1);u32 offset=ObjPlttTransfer_GetPaletteVramOffset(Sprite_GetPaletteProxy(s->s),1);void*pd=ov07_0221FA78(w->owner);PaletteData_LoadNarc_CustomTint(pd,narc,member,ov07_0221BFD0(w->owner),2,32,(u16)(offset<<4),196,196,196);ManagedSprite_SetOamMode(s,1);s=w->second;ManagedSprite_SetPriority(s,ov07_0221FAE8(w->owner)+1);offset=ObjPlttTransfer_GetPaletteVramOffset(Sprite_GetPaletteProxy(s->s),1);pd=ov07_0221FA78(w->owner);PaletteData_LoadNarc_CustomTint(pd,narc,member,ov07_0221BFD0(w->owner),2,32,(u16)(offset<<4),196,196,196);ManagedSprite_SetOamMode(s,1);ov07_0221C410(w->owner,ov07_0222AFAC,w);}

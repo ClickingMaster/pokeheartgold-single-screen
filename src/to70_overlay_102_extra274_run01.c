@@ -1,0 +1,8 @@
+#pragma force_active on
+#include "global.h"
+#include "system.h"
+#pragma force_active on
+struct S{int a,mode,b,c,d;void*engine;int f,state;int(*main)(struct S*,int*);int j,k;void(*sub)(struct S*,int*);u16 newkeys,held,repeated;u16 pad;int choice,unused;void*touch;u8 rest[0x6a-0x44];u8 trigger;};void Sound_SetSceneAndPlayBGM(int,int,int);struct S*ov102_021E7888(void*);void ov102_021E940C(void*,int);int ov102_021E9464(void*);int ov102_021EA238(void*);void*OverlayManager_GetData(void*);void TouchHitboxController_IsTriggered(void*);int EasyChat_Init(void*,int*);int EasyChat_Main(void*,int*);void ov102_021E77F8(int,u32,struct S*);
+int EasyChat_Init(void*m,int*state){struct S*s;switch(*state){case 0:Sound_SetSceneAndPlayBGM(62,0,0);Heap_Create((enum HeapID)3,(enum HeapID)34,32768);Heap_Create((enum HeapID)3,(enum HeapID)35,163840);s=ov102_021E7888(m);ov102_021E940C(s->engine,0);(*state)++;break;case 1:s=OverlayManager_GetData(m);if(ov102_021E9464(s->engine)){s->trigger=(s->mode==2?ov102_021EA238(s->engine):0);return 1;}break;}return 0;}
+int EasyChat_Main(void*m,int*state){struct S*s=OverlayManager_GetData(m);s->newkeys=gSystem.newKeys;s->held=gSystem.heldKeys;s->repeated=gSystem.newAndRepeatedKeys;TouchHitboxController_IsTriggered(s->touch);if(s->sub){s->sub(s,&s->k);return 0;}return s->main(s,&s->state);}
+void ov102_021E77F8(int selection,u32 event,struct S*s){switch(event){case 0:s->choice=selection;switch(selection){case 2:ov102_021E940C(s->engine,28);break;case 3:ov102_021E940C(s->engine,29);break;}return;case 1:case 3:switch(selection){case 2:ov102_021E940C(s->engine,30);break;case 3:ov102_021E940C(s->engine,31);break;}s->choice=4;break;case 2:if((u32)(selection-2)<=1)s->choice=selection;break;default:s->choice=4;break;}}

@@ -1,0 +1,6 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+struct A{int heap;int pad;void*system;void*manager;u8 gap[8];void*res;};struct Six{u32 a[6];};struct Eight{u32 a[8];};struct Five{u32 a[5];};extern const struct Six ov96_0221D720;extern const struct Eight ov96_0221D754;extern const struct Five ov96_0221D6F4;
+void*SpriteSystem_Alloc(int);void*SpriteManager_New(void*);void SpriteSystem_Init(void*,const void*,const void*,int);void SpriteSystem_InitSprites(void*,void*,int);void SpriteSystem_InitManagerWithCapacities(void*,void*,const void*);void*SpriteSystem_GetRenderer(void*);void G2dRenderer_SetSubSurfaceCoords(void*,int,int);void*ov96_021E9A78(int,int,int);void ov96_022162F4(struct A*);
+void ov96_022162F4(struct A*s){struct Six caps=ov96_0221D720;struct Eight oam=ov96_0221D754;struct Five init=ov96_0221D6F4;init.a[0]=128;s->system=SpriteSystem_Alloc(s->heap);s->manager=SpriteManager_New(s->system);SpriteSystem_Init(s->system,&oam,&init,32);SpriteSystem_InitSprites(s->system,s->manager,128);SpriteSystem_InitManagerWithCapacities(s->system,s->manager,&caps);G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(s->system),0,30<<16);s->res=ov96_021E9A78(s->heap,743,1);}

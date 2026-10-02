@@ -1,0 +1,7 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+typedef struct A {int first;void *second;} A;typedef struct B {int first,second,third;} B;typedef struct State {u8 pad[4];A a[12];u8 pad64[552];B b[12];} State;typedef struct Params32 {u32 words[8];} Params32;typedef struct Params20 {u32 words[5];} Params20;typedef struct Params24 {u32 words[6];} Params24;extern Params32 ov57_0223BDB4;extern Params20 ov57_0223BD88;extern Params24 ov57_0223BD9C;
+int ov57_0223A07C(void *),SpriteSystem_InitSprites(void *,void *,int),SpriteSystem_InitManagerWithCapacities(void *,void *,void *);void ov57_0223BC4C(void *,int),SpriteSystem_Init(void *,Params32 *,Params20 *,int),ov57_02239014(State *),ov57_02239058(u8 *);void *SpriteSystem_Alloc(int),*SpriteManager_New(void *),*TouchscreenListMenuSpawner_Create(int,void *);
+void ov57_02239014(State *s){int i;for(i=0;i<12;i++){s->b[i].second=ov57_0223A07C(s->a[i].second);s->b[i].first=s->a[i].first;if(s->b[i].second==0&&s->b[i].first!=255)ov57_0223BC4C(s,i);}}
+void ov57_02239058(u8 *s){Params32 a;Params20 b;Params24 c;*(void **)(s+8)=SpriteSystem_Alloc(52);a=ov57_0223BDB4;b=ov57_0223BD88;SpriteSystem_Init(*(void **)(s+8),&a,&b,32);c=ov57_0223BD9C;*(void **)(s+12)=SpriteManager_New(*(void **)(s+8));if(SpriteSystem_InitSprites(*(void **)(s+8),*(void **)(s+12),128)==0)GF_AssertFail();if(SpriteSystem_InitManagerWithCapacities(*(void **)(s+8),*(void **)(s+12),&c)==0)GF_AssertFail();*(void **)(s+372)=TouchscreenListMenuSpawner_Create(52,*(void **)(s+20));}

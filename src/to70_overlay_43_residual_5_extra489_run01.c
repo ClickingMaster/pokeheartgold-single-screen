@@ -1,0 +1,7 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+typedef struct State {u8 pad0[4];void *save;u8 pad8[8];int count,valid;u8 indices[32],numbers[32];void *narc;} State;extern u8 gSystem[];
+void *sub_0202C6F4(void *),*NARC_New(int,int);int sub_0202C2DC(void *,int),sub_0202C090(void *,int,int);void ov43_0222A550(void),ov43_0222A570(void *,int),ov43_0222A690(void *,int),ov43_0222A87C(void *,int),ov43_0222A8C0(void *,void *,int),ov43_0222AC28(void *,int),ov43_0222A998(void *,int),GfGfx_SwapDisplay(void),GfGfx_EngineATogglePlanes(int,int),TextFlags_SetCanABSpeedUpPrint(int),TextFlags_SetAutoScrollParam(int),TextFlags_SetCanTouchSpeedUpPrint(int),ov43_0222A420(State *),ov43_0222A48C(State *,void *,int);
+void ov43_0222A420(State *s){void *data;int i;memset(&s->count,0,72);data=sub_0202C6F4(s->save);s->count=0;for(i=0;i<32;i++){if(sub_0202C2DC(data,i)==1){s->indices[s->count]=i;if(sub_0202C090(data,i,8)==2)s->numbers[s->count]=255;else{s->numbers[s->count]=s->valid++;}s->count++;}}}
+void ov43_0222A48C(State *s,void *arg,int heap){gSystem[105]=1;GfGfx_SwapDisplay();s->narc=NARC_New(85,heap);ov43_0222A550();ov43_0222A570(s,heap);ov43_0222A690(s,heap);ov43_0222A87C(s,heap);ov43_0222A8C0(s,arg,heap);ov43_0222AC28(s,heap);ov43_0222A998(s,heap);GfGfx_EngineATogglePlanes(16,1);TextFlags_SetCanABSpeedUpPrint(1);TextFlags_SetAutoScrollParam(0);TextFlags_SetCanTouchSpeedUpPrint(0);}

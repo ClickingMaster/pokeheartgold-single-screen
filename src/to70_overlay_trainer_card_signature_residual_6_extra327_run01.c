@@ -1,0 +1,7 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+typedef struct W{u8 pad0[8];void*stats;u8 padc[580];u8 drawing[1];u8 pad251[115];u8 windowA[16];u8 windowB[16];u8 pad2e4[40];int state;u8 pad310[16412];u8 flags;u8 pad432d[6511];void*prompt;}W;
+extern int YesNoPrompt_HandleInput(void*);extern void GameStats_AddScore(void*,int),GameStats_Inc(void*,int),ClearFrameAndWindow2(void*,int),YesNoPrompt_Reset(void*),BeginNormalPaletteFade(int,int,int,int,int,int,int),ov52_021E8CDC(void*,int),ov52_021E8D3C(W*),ov52_021E9488(W*,int),FillWindowPixelBuffer(void*,int),CopyWindowToVram(void*);int ov52_021E8DC4(W*,int),ov52_021E8E64(W*,int);
+int ov52_021E8DC4(W*w,int state){switch(YesNoPrompt_HandleInput(w->prompt)){case 1:GameStats_AddScore(w->stats,4);GameStats_Inc(w->stats,115);ClearFrameAndWindow2(w->windowB,1);YesNoPrompt_Reset(w->prompt);BeginNormalPaletteFade(0,0,0,0,16,1,39);return 2;case 2:w->state=4;ov52_021E8CDC(w->drawing,0);ClearFrameAndWindow2(w->windowB,1);YesNoPrompt_Reset(w->prompt);break;}w->flags&=~0xf0;ov52_021E8D3C(w);return state;}
+int ov52_021E8E64(W*w,int state){switch(YesNoPrompt_HandleInput(w->prompt)){case 1:w->state=1;ClearFrameAndWindow2(w->windowB,1);YesNoPrompt_Reset(w->prompt);ov52_021E9488(w,0);FillWindowPixelBuffer(w->windowA,2);CopyWindowToVram(w->windowA);break;case 2:w->state=1;ClearFrameAndWindow2(w->windowB,1);YesNoPrompt_Reset(w->prompt);ov52_021E9488(w,0);break;}return state;}

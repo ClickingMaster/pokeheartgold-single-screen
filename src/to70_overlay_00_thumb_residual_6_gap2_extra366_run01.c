@@ -1,0 +1,5 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+extern u8 *_0221A680;int ov00_021EC11C(int *,u32 *),sub_0203993C(void),ov00_021E6690(void);void ov00_021EC210(void),ov00_021ED9B4(void),ov00_021EC8D8(void),sub_02038F74(int,u32,int);
+int ov00_021E6690(void){int error;u32 type;int status;int result=0;status=ov00_021EC11C(&error,&type);if(status){result=error;if(error==0||type==1)result=status;switch(type){case 1:ov00_021EC210();break;case 2:ov00_021EC210();break;case 3:case 4:case 5:case 6:if(_0221A680){switch(*(u32 *)(_0221A680+0x1070)){case 3:case 4:case 5:case 6:case 7:case 8:case 9:case 12:case 16:case 17:case 18:ov00_021ED9B4();case 0:case 1:case 2:if(sub_0203993C()!=33)ov00_021EC8D8();break;}ov00_021EC210();}if(_0221A680)*(int *)(_0221A680+0x1070)=14;break;case 7:if(_0221A680){*(int *)(_0221A680+0x1070)=15;if(*(void (**)(int))(_0221A680+0xfc0))(*(void (**)(int))(_0221A680+0xfc0))(-error);}break;}}if(_0221A680[0x10de])result=26;if(status)sub_02038F74(error,type,status);return result;}

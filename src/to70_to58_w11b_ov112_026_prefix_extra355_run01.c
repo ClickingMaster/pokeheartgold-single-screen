@@ -1,0 +1,5 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+typedef struct W{u8 pad[24];void*bg;u8 gap[0x1e43c-28];void*options;}W;extern void*NARC_New(int,int);extern void NARC_Delete(void*),GfGfxLoader_LoadCharDataFromOpenNarc(void*,int,void*,int,int,int,int,int),GfGfxLoader_LoadScrnDataFromOpenNarc(void*,int,void*,int,int,int,int,int),GfGfxLoader_GXLoadPalFromOpenNarc(void*,int,int,int,int,int),LoadFontPal1(int,int,int),LoadUserFrameGfx2(void*,int,int,int,u8,int);extern int Options_GetFrame(void*);void ov112_021E7B18(W*);
+void ov112_021E7B18(W*w){void*narc=NARC_New(249,154);GfGfxLoader_LoadCharDataFromOpenNarc(narc,4,w->bg,3,0,0,1,154);GfGfxLoader_LoadScrnDataFromOpenNarc(narc,8,w->bg,3,0,0,1,154);GfGfxLoader_GXLoadPalFromOpenNarc(narc,0,0,0,0,154);LoadFontPal1(0,448,154);LoadUserFrameGfx2(w->bg,1,994,13,(u8)Options_GetFrame(w->options),154);GfGfxLoader_GXLoadPalFromOpenNarc(narc,1,4,0,0,154);LoadFontPal1(4,448,154);GfGfxLoader_LoadCharDataFromOpenNarc(narc,5,w->bg,6,0,0,1,154);GfGfxLoader_LoadScrnDataFromOpenNarc(narc,9,w->bg,6,0,0,1,154);LoadUserFrameGfx2(w->bg,4,994,13,(u8)Options_GetFrame(w->options),154);NARC_Delete(narc);}
