@@ -1449,7 +1449,75 @@ Overlay OVY_0
     Object src/ov00_partial_18.o
     Object asm/overlay_00_thumb_residual_19.o
     Object lib/NitroDWC/asm/to60_overlay_00_arm_anchor.o
-    Object lib/NitroDWC/asm/to60_overlay_00_arm_residual_1.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_anchor.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_1.o
+    Object src/to61_overlay_00_arm_residual_1_run01.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_2.o
+    Object src/to61_overlay_00_arm_residual_1_run02.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_3.o
+    Object src/to61_overlay_00_arm_residual_1_run03.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_4.o
+    Object src/to61_overlay_00_arm_residual_1_run04.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_5.o
+    Object src/to61_overlay_00_arm_residual_1_run05.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_6.o
+    Object src/to61_overlay_00_arm_residual_1_run06.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_7.o
+    Object src/to61_overlay_00_arm_residual_1_run07.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_8.o
+    Object src/to61_overlay_00_arm_residual_1_run08.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_9.o
+    Object src/to61_overlay_00_arm_residual_1_run09.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_10.o
+    Object src/to61_overlay_00_arm_residual_1_run10.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_11.o
+    Object src/to61_overlay_00_arm_residual_1_run11.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_12.o
+    Object src/to61_overlay_00_arm_residual_1_run12.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_13.o
+    Object src/to61_overlay_00_arm_residual_1_run13.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_14.o
+    Object src/to61_overlay_00_arm_residual_1_run14.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_15.o
+    Object src/to61_overlay_00_arm_residual_1_run15.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_16.o
+    Object src/to61_overlay_00_arm_residual_1_run16.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_17.o
+    Object src/to61_overlay_00_arm_residual_1_run17.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_18.o
+    Object src/to61_overlay_00_arm_residual_1_run18.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_19.o
+    Object src/to61_overlay_00_arm_residual_1_run19.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_20.o
+    Object src/to61_overlay_00_arm_residual_1_run20.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_21.o
+    Object src/to61_overlay_00_arm_residual_1_run21.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_22.o
+    Object src/to61_overlay_00_arm_residual_1_run22.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_23.o
+    Object src/to61_overlay_00_arm_residual_1_run23.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_24.o
+    Object src/to61_overlay_00_arm_residual_1_run24.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_25.o
+    Object src/to61_overlay_00_arm_residual_1_run25.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_26.o
+    Object src/to61_overlay_00_arm_residual_1_run26.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_27.o
+    Object src/to61_overlay_00_arm_residual_1_run27.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_28.o
+    Object src/to61_overlay_00_arm_residual_1_run28.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_29.o
+    Object src/to61_overlay_00_arm_residual_1_run29.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_30.o
+    Object src/to61_overlay_00_arm_residual_1_run30.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_31.o
+    Object src/to61_overlay_00_arm_residual_1_run31.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_32.o
+    Object src/to61_overlay_00_arm_residual_1_run32.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_33.o
+    Object src/to61_overlay_00_arm_residual_1_run33.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_1_residual_34.o
+    Object src/to61_overlay_00_arm_residual_1_run34.o
     Object src/to60_ov00_run01.o
     Object lib/NitroDWC/asm/to60_overlay_00_arm_residual_2.o
     Object src/to60_ov00_run02.o
@@ -1475,7 +1543,64 @@ Overlay OVY_0
     Object src/to60_ov00_run13.o
     Object lib/NitroDWC/asm/to60_overlay_00_arm_residual_12.o
     Object src/to60_ov00_run14.o
-    Object lib/NitroDWC/asm/to60_overlay_00_arm_residual_13.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_13_anchor.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_13_residual_1.o
+    Object src/to61_overlay_00_arm_residual_13_run01.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_13_residual_2.o
+    Object src/to61_overlay_00_arm_residual_13_run02.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_13_residual_3.o
+    Object src/to61_overlay_00_arm_residual_13_run03.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_13_residual_4.o
+    Object src/to61_overlay_00_arm_residual_13_run04.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_13_residual_5.o
+    Object src/to61_overlay_00_arm_residual_13_run05.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_13_residual_6.o
+    Object src/to61_overlay_00_arm_residual_13_run06.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_13_residual_7.o
+    Object src/to61_overlay_00_arm_residual_13_run07.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_13_residual_8.o
+    Object src/to61_overlay_00_arm_residual_13_run08.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_13_residual_9.o
+    Object src/to61_overlay_00_arm_residual_13_run09.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_13_residual_10.o
+    Object src/to61_overlay_00_arm_residual_13_run10.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_13_residual_11.o
+    Object src/to61_overlay_00_arm_residual_13_run11.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_13_residual_12.o
+    Object src/to61_overlay_00_arm_residual_13_run12.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_13_residual_13.o
+    Object src/to61_overlay_00_arm_residual_13_run13.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_13_residual_14.o
+    Object src/to61_overlay_00_arm_residual_13_run14.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_13_residual_15.o
+    Object src/to61_overlay_00_arm_residual_13_run15.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_13_residual_16.o
+    Object src/to61_overlay_00_arm_residual_13_run16.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_13_residual_17.o
+    Object src/to61_overlay_00_arm_residual_13_run17.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_13_residual_18.o
+    Object src/to61_overlay_00_arm_residual_13_run18.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_13_residual_19.o
+    Object src/to61_overlay_00_arm_residual_13_run19.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_13_residual_20.o
+    Object src/to61_overlay_00_arm_residual_13_run20.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_13_residual_21.o
+    Object src/to61_overlay_00_arm_residual_13_run21.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_13_residual_22.o
+    Object src/to61_overlay_00_arm_residual_13_run22.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_13_residual_23.o
+    Object src/to61_overlay_00_arm_residual_13_run23.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_13_residual_24.o
+    Object src/to61_overlay_00_arm_residual_13_run24.o
+    Object lib/NitroDWC/asm/to61_overlay_00_arm_residual_13_residual_25.o
+    Object src/to61_overlay_00_arm_residual_13_run25.o
+    Object lib/NitroDWC/asm/to61_ov00_extra05_anchor.o
+    Object lib/NitroDWC/asm/to61_ov00_extra05_residual_1.o
+    Object src/to61_ov00_extra05_run01.o
+    Object lib/NitroDWC/asm/to61_ov00_extra05_residual_2.o
+    Object src/to61_ov00_extra05_run02.o
+    Object lib/NitroDWC/asm/to61_ov00_extra05_residual_3.o
+    Object src/to61_ov00_extra05_run03.o
 }
 Overlay field
 {
@@ -2875,7 +3000,22 @@ Overlay OVY_13
     Object src/to53_overlay13/to53_overlay13_c24_w12.o
     Object asm/to53_overlay13_r24_data.o
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor.o
-    Object lib/NitroDWC/asm/to60_overlay_13_arm_2_residual_1.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_1_anchor.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_1_residual_1.o
+    Object src/to61_overlay_13_arm_2_residual_1_run01.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_1_residual_2.o
+    Object src/to61_overlay_13_arm_2_residual_1_run02.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_1_residual_3.o
+    Object src/to61_overlay_13_arm_2_residual_1_run03.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_1_residual_4.o
+    Object src/to61_overlay_13_arm_2_residual_1_run04.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_1_residual_5.o
+    Object src/to61_overlay_13_arm_2_residual_1_run05.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_1_residual_6.o
+    Object src/to61_overlay_13_arm_2_residual_1_run06.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_1_residual_7.o
+    Object src/to61_overlay_13_arm_2_residual_1_run07.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_1_residual_8.o
     Object src/to60_ov13_run01.o
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_residual_2.o
     Object src/to60_ov13_run02.o
@@ -2884,7 +3024,24 @@ Overlay OVY_13
     Object src/to60_ov13_run04.o
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_residual_4.o
     Object src/to60_ov13_run05.o
-    Object lib/NitroDWC/asm/to60_overlay_13_arm_2_residual_5.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_5_anchor.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_5_residual_1.o
+    Object src/to61_overlay_13_arm_2_residual_5_run01.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_5_residual_2.o
+    Object src/to61_overlay_13_arm_2_residual_5_run02.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_5_residual_3.o
+    Object src/to61_overlay_13_arm_2_residual_5_run03.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_5_residual_4.o
+    Object src/to61_overlay_13_arm_2_residual_5_run04.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_5_residual_5.o
+    Object src/to61_overlay_13_arm_2_residual_5_run05.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_5_residual_6.o
+    Object src/to61_overlay_13_arm_2_residual_5_run06.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_5_residual_7.o
+    Object src/to61_overlay_13_arm_2_residual_5_run07.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_5_residual_8.o
+    Object src/to61_overlay_13_arm_2_residual_5_run08.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_5_residual_9.o
     Object src/to60_ov13_run06.o
     Object src/to60_ov13_run07.o
     Object src/to60_ov13_run08.o
@@ -2906,7 +3063,36 @@ Overlay OVY_13
     Object src/to60_ov13_run16.o
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_residual_14.o
     Object src/to60_ov13_run17.o
-    Object lib/NitroDWC/asm/to60_overlay_13_arm_2_residual_15.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_15_anchor.o
+    Object src/to61_overlay_13_arm_2_residual_15_run01.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_15_residual_1.o
+    Object src/to61_overlay_13_arm_2_residual_15_run02.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_15_residual_2.o
+    Object src/to61_overlay_13_arm_2_residual_15_run03.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_15_residual_3.o
+    Object src/to61_overlay_13_arm_2_residual_15_run04.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_15_residual_4.o
+    Object src/to61_overlay_13_arm_2_residual_15_run05.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_15_residual_5.o
+    Object src/to61_overlay_13_arm_2_residual_15_run06.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_15_residual_6.o
+    Object src/to61_overlay_13_arm_2_residual_15_run07.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_15_residual_7.o
+    Object src/to61_overlay_13_arm_2_residual_15_run08.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_15_residual_8.o
+    Object src/to61_overlay_13_arm_2_residual_15_run09.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_15_residual_9.o
+    Object src/to61_overlay_13_arm_2_residual_15_run10.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_15_residual_10.o
+    Object src/to61_overlay_13_arm_2_residual_15_run11.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_15_residual_11.o
+    Object src/to61_overlay_13_arm_2_residual_15_run12.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_15_residual_12.o
+    Object src/to61_overlay_13_arm_2_residual_15_run13.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_15_residual_13.o
+    Object src/to61_overlay_13_arm_2_residual_15_run14.o
+    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_15_residual_14.o
+    Object src/to61_overlay_13_arm_2_residual_15_run15.o
     Object src/to60_ov13_run18.o
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_residual_16.o
     Object src/to60_ov13_run19.o
@@ -3745,7 +3931,35 @@ Overlay OVY_38
     Object src/to60_ov38_run01.o
     Object lib/NitroDWC/asm/to60_overlay_38_arm_residual_1.o
     Object src/to60_ov38_run02.o
-    Object lib/NitroDWC/asm/to60_overlay_38_arm_residual_2.o
+    Object lib/NitroDWC/asm/to61_overlay_38_arm_residual_2_anchor.o
+    Object lib/NitroDWC/asm/to61_overlay_38_arm_residual_2_residual_1.o
+    Object src/to61_overlay_38_arm_residual_2_run01.o
+    Object lib/NitroDWC/asm/to61_overlay_38_arm_residual_2_residual_2.o
+    Object src/to61_overlay_38_arm_residual_2_run02.o
+    Object lib/NitroDWC/asm/to61_overlay_38_arm_residual_2_residual_3.o
+    Object src/to61_overlay_38_arm_residual_2_run03.o
+    Object lib/NitroDWC/asm/to61_overlay_38_arm_residual_2_residual_4.o
+    Object src/to61_overlay_38_arm_residual_2_run04.o
+    Object lib/NitroDWC/asm/to61_overlay_38_arm_residual_2_residual_5.o
+    Object src/to61_overlay_38_arm_residual_2_run05.o
+    Object lib/NitroDWC/asm/to61_overlay_38_arm_residual_2_residual_6.o
+    Object src/to61_overlay_38_arm_residual_2_run06.o
+    Object lib/NitroDWC/asm/to61_overlay_38_arm_residual_2_residual_7.o
+    Object src/to61_overlay_38_arm_residual_2_run07.o
+    Object lib/NitroDWC/asm/to61_overlay_38_arm_residual_2_residual_8.o
+    Object src/to61_overlay_38_arm_residual_2_run08.o
+    Object lib/NitroDWC/asm/to61_overlay_38_arm_residual_2_residual_9.o
+    Object src/to61_overlay_38_arm_residual_2_run09.o
+    Object lib/NitroDWC/asm/to61_overlay_38_arm_residual_2_residual_10.o
+    Object src/to61_overlay_38_arm_residual_2_run10.o
+    Object lib/NitroDWC/asm/to61_overlay_38_arm_residual_2_residual_11.o
+    Object src/to61_overlay_38_arm_residual_2_run11.o
+    Object src/to61_overlay_38_arm_residual_2_run12.o
+    Object lib/NitroDWC/asm/to61_overlay_38_arm_residual_2_residual_12.o
+    Object src/to61_overlay_38_arm_residual_2_run13.o
+    Object lib/NitroDWC/asm/to61_overlay_38_arm_residual_2_residual_13.o
+    Object src/to61_overlay_38_arm_residual_2_run14.o
+    Object lib/NitroDWC/asm/to61_overlay_38_arm_residual_2_residual_14.o
 }
 Overlay OVY_39
 {
@@ -4528,7 +4742,16 @@ Object src/to58_r3_overlay_45_thumb_residual_8_suffix.o
     Object src/overlay45_entry_render_run2.o
     Object asm/overlay_45_thumb_residual_42_tail.o
     Object lib/NitroDWC/asm/to60_overlay_45_arm_anchor.o
-    Object lib/NitroDWC/asm/to60_overlay_45_arm_residual_1.o
+    Object lib/NitroDWC/asm/to61_overlay_45_arm_residual_1_anchor.o
+    Object lib/NitroDWC/asm/to61_overlay_45_arm_residual_1_residual_1.o
+    Object src/to61_overlay_45_arm_residual_1_run01.o
+    Object lib/NitroDWC/asm/to61_overlay_45_arm_residual_1_residual_2.o
+    Object src/to61_overlay_45_arm_residual_1_run02.o
+    Object lib/NitroDWC/asm/to61_overlay_45_arm_residual_1_residual_3.o
+    Object src/to61_overlay_45_arm_residual_1_run03.o
+    Object lib/NitroDWC/asm/to61_overlay_45_arm_residual_1_residual_4.o
+    Object src/to61_overlay_45_arm_residual_1_run04.o
+    Object lib/NitroDWC/asm/to61_overlay_45_arm_residual_1_residual_5.o
     Object src/to60_ov45_run01.o
     Object lib/NitroDWC/asm/to60_overlay_45_arm_residual_2.o
     Object src/to60_ov45_run02.o
