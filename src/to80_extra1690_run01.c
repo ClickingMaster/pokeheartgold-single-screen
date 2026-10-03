@@ -1,0 +1,8 @@
+#pragma force_active on
+#pragma force_active on
+#include "global.h"
+typedef struct {u8 command,unused,status[6];} Packet;
+extern u32 BattleSystem_GetBattleType(void*);extern int BattleSystem_GetFieldSide(void*,int),ov12_0223AB0C(void*,int),BattleSystem_GetBattlerIdPartner(void*,int);extern void*BattleSystem_GetParty(void*,int);extern int Party_GetCount(void*);extern void*Party_GetMonByIndex(void*,int);extern u32 GetMonData(void*,int,void*);
+void ov12_022645F8(void*,u8*,Packet*,int,int);
+#define FILL(PARTY,WHO,START) do {PARTY=BattleSystem_GetParty(system,WHO);int slot=START;int i=0;if(Party_GetCount(PARTY)>0){u8 *order=context+WHO*6;do{void *mon=Party_GetMonByIndex(PARTY,order[0x312c]);u32 species=GetMonData(mon,174,NULL);if(species!=0&&species!=494){if(GetMonData(mon,163,NULL)!=0){if(GetMonData(mon,160,NULL)!=0)out->status[slot]=3;else out->status[slot]=1;}else out->status[slot]=2;slot++;}order++;i++;}while(i<Party_GetCount(PARTY));}}while(0)
+void ov12_022645F8(void*system,u8*context,Packet*out,int command,int battler){void*first,*single,*second;u32 type;int partner;MI_CpuClearFast(out,8);type=BattleSystem_GetBattleType(system);out->command=command;if((type&12)==12||((type&16)&&BattleSystem_GetFieldSide(system,battler)!=0)||(type==75&&BattleSystem_GetFieldSide(system,battler)!=0)||type==203){if(ov12_0223AB0C(system,battler)==2||ov12_0223AB0C(system,battler)==3){partner=battler;battler=BattleSystem_GetBattlerIdPartner(system,battler);}else partner=BattleSystem_GetBattlerIdPartner(system,battler);FILL(first,partner,0);FILL(second,battler,3);}else{if((type&2)&&!(type&8))battler&=1;FILL(single,battler,0);}}

@@ -1,0 +1,12 @@
+#pragma force_active on
+#include "global.h"
+#include "heap.h"
+typedef struct{u8 raw[0x24];}Motion;
+typedef struct{void*parent;u32 state;s32 timer;void*sys;u32 index;void*sprites[2];Motion a[2],b[2];}Work;
+typedef struct{s16 x,y;u8 rest[0x30];}Template;
+extern Work*ov07_022324D8(void*,int);extern int ov07_0221C468(void*),ov07_02222004(void*,int),ov07_02221F80(void*,int,int);extern void ov07_0221F9E8(Template*,void*),ov07_0221C410(void*,void(*)(void*,Work*),Work*),ov07_0221C448(void*,void*);
+extern void ManagedSprite_SetPositionXY(void*,s16,s16),ManagedSprite_SetDrawFlag(void*,int),ManagedSprite_SetDrawPriority(void*,int),ManagedSprite_SetPriority(void*,int),Sprite_DeleteAndFreeResources(void*),SpriteSystem_DrawSprites(void*);extern void*SpriteSystem_NewSprite(void*,void*,Template*);
+extern void ov07_02230F0C(void*,Motion*,Motion*,u32);extern int ov07_02230F6C(void*,Motion*,Motion*);
+void ov07_02230D74(void*,void*,void*,void*);void ov07_02230E20(void*,Work*);
+void ov07_02230D74(void*parent,void*manager,void*system,void*sprite){Work*w;Template template;int index,i;w=ov07_022324D8(parent,172);w->parent=parent;w->sys=system;index=ov07_0221C468(parent);w->index=ov07_02222004(parent,index);ov07_0221F9E8(&template,w->parent);template.x=ov07_02221F80(parent,index,0);template.y=ov07_02221F80(parent,index,1);for(i=0;i<2;i++){if(i==0){w->sprites[i]=sprite;ManagedSprite_SetPositionXY(sprite,template.x,template.y);}else w->sprites[i]=SpriteSystem_NewSprite(manager,system,&template);ManagedSprite_SetDrawFlag(w->sprites[i],0);ManagedSprite_SetDrawPriority(w->sprites[i],100);ManagedSprite_SetPriority(w->sprites[i],1);}ov07_0221C410(w->parent,ov07_02230E20,w);}
+void ov07_02230E20(void*task,Work*w){int i;switch(w->state){case 0:ov07_02230F0C(w->sprites[0],&w->a[0],&w->b[0],w->index);ov07_02230F6C(w->sprites[0],&w->a[0],&w->b[0]);w->state++;w->timer=8;break;case 1:w->timer--;ov07_02230F6C(w->sprites[0],&w->a[0],&w->b[0]);if(w->timer<0)w->state++;break;case 2:ov07_02230F0C(w->sprites[1],&w->a[1],&w->b[1],w->index);ov07_02230F6C(w->sprites[1],&w->a[1],&w->b[1]);ov07_02230F6C(w->sprites[0],&w->a[0],&w->b[0]);w->state++;break;case 3:ov07_02230F6C(w->sprites[0],&w->a[0],&w->b[0]);if(ov07_02230F6C(w->sprites[1],&w->a[1],&w->b[1]))w->state++;break;case 4:for(i=0;i<2;i++)Sprite_DeleteAndFreeResources(w->sprites[i]);ov07_0221C448(w->parent,task);Heap_Free(w);return;}SpriteSystem_DrawSprites(w->sys);}

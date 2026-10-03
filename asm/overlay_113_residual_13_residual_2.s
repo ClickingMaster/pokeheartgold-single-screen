@@ -1,3 +1,11 @@
+	.public ov113_021E6B94
+	.public ov113_021E6BD0
+	.public ov113_021E6BE8
+	.public ov113_021E6C04
+	.public ov113_021E6C20
+	.public ov113_021E6C3C
+	.public ov113_021E6C58
+	.public ov113_021E6C74
 	.include "asm/macros.inc"
 	.include "overlay_113.inc"
 	.include "asm/include/overlay_113_split.inc"

@@ -1,0 +1,31 @@
+	.extern ov71_022473D0
+	.extern ov71_0224744C
+	.extern ov71_022474CC
+	.extern ov71_02247610
+	.extern ov71_022476EC
+	.extern ov71_02247ED0
+	.extern ov71_02247F9C
+	.extern ov71_02247FF8
+	.extern ov71_0224BC5C
+	.extern ov71_0224BC74
+	.extern ov71_0224BC84
+	.extern ov71_0224BCA0
+	.extern ov71_0224BCBC
+	.extern ov71_022473D0
+	.extern ov71_0224744C
+	.extern ov71_022474CC
+	.extern ov71_02247610
+	.extern ov71_022476EC
+	.extern ov71_02247ED0
+	.extern ov71_02247F9C
+	.extern ov71_02247FF8
+	.extern ov71_0224BC5C
+	.extern ov71_0224BC74
+	.extern ov71_0224BC84
+	.extern ov71_0224BCA0
+	.extern ov71_0224BCBC
+	.include "asm/macros.inc"
+	.include "overlay_71.inc"
+	.include "global.inc"
+
+.text

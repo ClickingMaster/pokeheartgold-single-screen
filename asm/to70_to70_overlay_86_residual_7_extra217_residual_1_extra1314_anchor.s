@@ -1,0 +1,33 @@
+	.extern ov86_021E7344
+	.extern ov86_021E73CC
+	.extern ov86_021E752C
+	.extern ov86_021E757C
+	.extern ov86_021E7630
+	.extern ov86_021E77BC
+	.extern ov86_021E7860
+	.extern ov86_021E7B68
+	.extern ov86_021E7C70
+	.extern ov86_021E7CA0
+	.extern ov86_021E7CF8
+	.extern ov86_021E7D8C
+	.extern ov86_021E7DA8
+	.extern ov86_021E7DD4
+	.extern ov86_021E73CC
+	.extern ov86_021E752C
+	.extern ov86_021E757C
+	.extern ov86_021E7630
+	.extern ov86_021E77BC
+	.extern ov86_021E7860
+	.extern ov86_021E7B68
+	.extern ov86_021E7C70
+	.extern ov86_021E7CA0
+	.extern ov86_021E7CF8
+	.extern ov86_021E7D8C
+	.extern ov86_021E7DA8
+	.extern ov86_021E7DD4
+	.extern ov86_021E7344
+	.include "asm/macros.inc"
+	.include "overlay_86.inc"
+	.include "global.inc"
+
+.text

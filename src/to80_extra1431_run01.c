@@ -1,0 +1,23 @@
+#pragma force_active on
+// clang-format off
+#include "global.h"
+#include <nitro/code32.h>
+// clang-format on
+#pragma force_active on
+typedef struct {u32 *data;u32 start,size,capacity;} Queue;
+extern u32 ov45_022577D0,ov45_022551A4;extern void ov45_0223BD0C(void);
+static inline u32 Count(Queue*q){return q->capacity==0?0:q->capacity-1;}
+static inline u32 Limit(void){if(!(ov45_022577D0&1)){ov45_022551A4=0x3ffffffe;ov45_022577D0|=1;}return ov45_022551A4;}
+static inline const u32 *Max(const u32*a,const u32*b){return *a>*b?a:b;}
+u32 ov45_0223BBFC(Queue*,u32,...);
+typedef struct {Queue q;u32 *capacity;} Temp;
+typedef struct {u32 *current,*begin,*end,*limit;} Iter;
+typedef struct {u8 byte;} Empty;
+extern void ov45_0223CB04(Temp*,u32,Empty),ov45_0223CC78(Temp*,Iter*,Iter*,Empty),ov45_0223CB6C(Temp*,Iter*,Iter*,Empty),ov45_0223CAB4(Temp*);
+static inline void Init(Temp*t,Queue*q){t->q.data=0;t->q.start=0;t->q.size=0;t->q.capacity=0;t->capacity=&q->capacity;}
+static inline Empty MakeEmpty(void){Empty e;e.byte=0;return e;}
+static inline void Begin(Iter*i,Queue*q){i->current=q->data+(q->capacity?(q->start+q->size)%q->capacity:0);{u32 *data=q->data;i->begin=data;i->end=data+q->start;i->limit=data+q->capacity;}}
+static inline void End(Iter*i,Queue*q){i->current=q->data+q->start;{u32 *data=q->data;i->begin=data;i->end=data+q->start;i->limit=data+q->capacity;}}
+static inline void Swap(Queue*a,Queue*b){u32*p;u32 n;p=a->data;a->data=b->data;b->data=p;n=a->start;a->start=b->start;b->start=n;n=a->size;a->size=b->size;b->size=n;{u32 *last=&b->capacity;n=a->capacity;a->capacity=*last;*last=n;}}
+void ov45_0223B8E0(Queue*,u32);void ov45_0223BA3C(Queue*,u32*);
+u32 ov45_0223BBFC(Queue*q,u32 extra,...){u32 size,limit,first,second;limit=Limit();size=Count(q);if(extra>limit-size)ov45_0223BD0C();if(size<limit/3){first=(size+1)*3/5;return size+*Max(&extra,&first);}else if(size<limit/3*2){second=(size+1)/2;return size+*Max(&extra,&second);}return limit;}

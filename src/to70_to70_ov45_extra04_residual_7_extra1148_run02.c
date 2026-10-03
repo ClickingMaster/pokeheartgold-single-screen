@@ -1,0 +1,14 @@
+#pragma force_active on
+// clang-format off
+#include "global.h"
+#include <stdarg.h>
+#include <nitro/code32.h>
+// clang-format on
+typedef struct {u8 *data;u32 len,cap;}Vec;
+typedef struct{u32 a,b;}Pair;typedef struct{Pair first,second;u32 e,f;}Six;
+typedef struct{u32 type;Six value;}Record;
+extern void *ov45_02237890(Vec*,u32);extern void ov45_02237820(Vec*,u32,void*);
+typedef struct{u8*p;u32 extra;}Iterator;
+void ov45_022327B8(Vec*,...);
+void *ov45_0223259C(Vec*);void ov45_02232760(Vec*,u8*,u8*,int);void ov45_02232AE8(Record*,u32,Six*);
+void ov45_02232760(Vec*v,u8*first,u8*last,int unused){u32 len=last-first;if(len>v->cap){volatile u8 tag=0;ov45_02237820(v,len,ov45_02237890(v,len-v->cap));}memmove(v->data,first,(u32)last-(u32)first);v->len=len;}

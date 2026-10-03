@@ -233,3 +233,71 @@ $(BUILD_DIR)/src/to70_MSL_Common_strtold_extra119_run01.o: MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/to70_MSL_Common_wmem_extra120_run01.o: MWCCVER := 2.0/sp2p3
 
 $(BUILD_DIR)/src/to70_msl_mbstring_residual_run01.o: MWCCVER := 2.0/sp2p3
+
+$(BUILD_DIR)/src/to80_extra1377_run01.o: MWCCVER := 2.0/sp2p3
+
+$(BUILD_DIR)/src/to80_extra1378_run01.o: MWCCVER := 2.0/sp2p3
+
+$(BUILD_DIR)/src/to80_extra1379_run01.o: MWCCVER := 2.0/sp2p3
+
+$(BUILD_DIR)/src/to80_extra1380_run01.o: MWCCVER := 2.0/sp2p3
+
+$(BUILD_DIR)/src/to80_extra1381_run01.o: MWCCVER := 2.0/sp2p3
+
+$(BUILD_DIR)/src/to80_extra1469_run01.o: MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/src/to80_extra1469_run01.o: MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+
+$(BUILD_DIR)/src/to80_extra1470_run01.o: MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/src/to80_extra1470_run01.o: MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/to80_extra1470_run02.o: MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/src/to80_extra1470_run02.o: MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+
+$(BUILD_DIR)/src/to80_extra1471_run01.o: MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/src/to80_extra1471_run01.o: MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+
+$(BUILD_DIR)/src/to80_extra1472_run01.o: MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/src/to80_extra1472_run01.o: MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+
+$(BUILD_DIR)/src/to80_extra1486_run01.o: MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/src/to80_extra1486_run01.o: MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/to80_extra1486_run02.o: MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/src/to80_extra1486_run02.o: MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+
+$(BUILD_DIR)/src/to80_extra1487_run01.o: MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/src/to80_extra1487_run01.o: MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/to80_extra1487_run02.o: MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/src/to80_extra1487_run02.o: MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+
+$(BUILD_DIR)/src/to80_extra1615_run01.o: MWCCVER := 2.0/sp2p3
+
+$(BUILD_DIR)/src/to80_extra1616_run01.o: MWCCVER := 2.0/sp2p3
+
+$(BUILD_DIR)/src/to80_extra1617_run01.o: MWCCVER := 2.0/sp2p3
+
+$(BUILD_DIR)/src/to80_extra1680_run01.o: MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/src/to80_extra1680_run01.o: MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/to80_extra1680_run02.o: MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/src/to80_extra1680_run02.o: MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/to80_extra1680_run03.o: MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/src/to80_extra1680_run03.o: MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/to80_extra1680_run04.o: MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/src/to80_extra1680_run04.o: MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+
+$(BUILD_DIR)/src/to80_extra1681_run01.o: MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/src/to80_extra1681_run01.o: MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+
+$(BUILD_DIR)/src/to80_extra1682_run01.o: MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/src/to80_extra1682_run01.o: MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+
+$(BUILD_DIR)/src/to80_extra1718_run01.o: MWCCVER := 2.0/sp2p3
+
+$(BUILD_DIR)/src/to80_extra1719_run01.o: MWCCVER := 2.0/sp2p3
+
+$(BUILD_DIR)/src/to80_extra1834_run01.o: MWCCVER := 2.0/sp2p3
+
+$(BUILD_DIR)/src/to80_extra1835_run01.o: MWCCVER := 2.0/sp2p3
+
+$(BUILD_DIR)/src/to80_extra1836_run01.o: MWCCVER := 2.0/sp2p3
+
+$(BUILD_DIR)/src/to80_extra1860_run01.o: MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/src/to80_extra1860_run01.o: MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))

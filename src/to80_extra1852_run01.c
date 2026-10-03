@@ -1,0 +1,14 @@
+#pragma force_active on
+// clang-format off
+#include "global.h"
+#include <nitro/code32.h>
+// clang-format on
+extern int ov45_0224739C(void *,int);extern void __msl_assertion_failed(const char *,const char *,const char *,int);extern const char ov45_0225590C[],ov45_02255918[],ov45_02255668[],ov45_02255928[];extern u8 __lower_mapC[];int ov45_022474FC(void *,int),ov45_02247518(const signed char *,int);
+typedef struct{int kind;void *callback,*data;int value,key;char *label;} Node;typedef struct{u8 p[0x820];void *array;} Collection;extern char ov45_022554F0[],ov45_02255468[],ov45_02255420[],ov45_02255458[],ov45_02255478[],ov45_02255488[],ov45_022554A4[],ov45_022554BC[],ov45_022554DC[];extern int ArrayLength(void *);extern Node *ov00_021FE6EC(void *,int);int ov45_0224739C(void *,int);
+static inline void assertNode(Node *n){if(!n)__msl_assertion_failed(ov45_02255458,ov45_02255468,ov45_02255420,0x648);if(n->kind<0)__msl_assertion_failed(ov45_02255478,ov45_02255468,ov45_02255420,0x648);if(n->kind>=32)__msl_assertion_failed(ov45_02255488,ov45_02255468,ov45_02255420,0x648);if(!n->callback)__msl_assertion_failed(ov45_022554A4,ov45_02255468,ov45_02255420,0x648);if(!n->data)__msl_assertion_failed(ov45_022554BC,ov45_02255468,ov45_02255420,0x648);if(n->key<0)__msl_assertion_failed(ov45_022554DC,ov45_02255468,ov45_02255420,0x648);}
+extern char ov45_022553E8[];extern int ov45_02248238(Collection *,const char *),ov45_0224861C(Collection *,const char *);extern void ov45_02244500(Node *),ov00_021FE968(void *,int),ov45_02246BA4(Collection *,Node *);void ov45_022471A0(Collection *,int);
+static inline void assertQueueNode(Node *n){if(!n)__msl_assertion_failed(ov45_02255458,ov45_02255468,ov45_022553E8,0x605);if(n->kind<0)__msl_assertion_failed(ov45_02255478,ov45_02255468,ov45_022553E8,0x605);if(n->kind>=32)__msl_assertion_failed(ov45_02255488,ov45_02255468,ov45_022553E8,0x605);if(!n->callback)__msl_assertion_failed(ov45_022554A4,ov45_02255468,ov45_022553E8,0x605);if(!n->data)__msl_assertion_failed(ov45_022554BC,ov45_02255468,ov45_022553E8,0x605);if(n->key<0)__msl_assertion_failed(ov45_022554DC,ov45_02255468,ov45_022553E8,0x605);}
+static inline Node *getQueueNode(Collection *c,int i){Node *n=ov00_021FE6EC(c->array,i);assertQueueNode(n);return n;}
+static inline Node *getSearchNode(Collection *c,int i){Node *n=ov00_021FE6EC(c->array,i);assertNode(n);return n;}
+#pragma force_active on
+int ov45_0224739C(void *data,int key){Collection *c=data;Node *n;int i,count;if(!c)__msl_assertion_failed(ov45_022554F0,ov45_02255468,ov45_02255420,0x63b);count=ArrayLength(c->array);for(i=0;i<count;i++){n=ov00_021FE6EC(c->array,i);assertNode(n);if(n->key==key)return i;}return -1;}

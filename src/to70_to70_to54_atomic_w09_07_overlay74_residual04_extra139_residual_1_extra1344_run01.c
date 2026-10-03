@@ -1,0 +1,6 @@
+#pragma force_active on
+#include "global.h"
+typedef struct{u32 x[3];void*buffer;u16 size,id;} Input;typedef struct{u32 x;void*out;u32 z;u32*buffer;u8 pad[9];volatile u8 state;u8 timer,flag,type;} Work;typedef struct{u8 p[6];u16 id;u8 flag,state;u16 x;} Entry;extern Work*ov74_02231184(void);extern int ov74_02231094(void);extern u32 ov74_022311AC(void),ov74_022311BC(void);extern Entry*ov74_0223115C(void);extern void ov74_022313F0(void*),ov74_0223145C(void*);extern int ov74_02231424(void*);extern void DC_FlushRange(const void*,u32),MI_CpuCopy8(const void*,void*,u32);
+void ov74_0223078C(Input*);void ov74_02230818(Input*);
+static inline void Find(Entry*e,u16 id,Work*w){int i;for(i=0;i<8;i++){if(id==e[i].id){e[i].flag=1;e[i].state=3;w->timer=180;w->state=0;return;}}}
+void ov74_02230818(Input*in){Work*w=ov74_02231184();u32*p;if(w->type==253){ov74_0223078C(in);return;}if((w->state==1 || w->state==3)&&w->flag==0){p=w->buffer;DC_FlushRange(in->buffer,in->size);MI_CpuCopy8(in->buffer,w->buffer,in->size);if((p[0]&255)!=ov74_022311AC())return;if(((p[0]<<20)>>28)>ov74_022311BC())return;ov74_022313F0(w->buffer);if((p[2]&255)!=w->type)return;ov74_0223145C(w->buffer);w->state=0;if(ov74_02231424(w->buffer)){if((p[2]&255)==253)ov74_0223078C(in);else MI_CpuCopy8((u8*)w->buffer+(p[3]&255),w->out,p[3]>>8);p[2]&=0xffff00ff;w->flag=4;}else p[2]=(p[2]&0xffff00ff)|256;}}

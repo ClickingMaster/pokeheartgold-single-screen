@@ -1,0 +1,6 @@
+#pragma force_active on
+#include "global.h"
+typedef struct{u32 state,direction;void*field,*avatar,*other;}Work;
+extern void*TaskManager_GetEnvironment(void*),*PlayerAvatar_GetMapObject(void*);extern int MapObject_AreBitsSetForMovementScriptInit(void*),sub_0205DE38(void*),sub_0206234C(u32,int),MapObject_IsMovementPaused(void*),ov01_021F2004(void*,void*,void*);extern void MapObject_SetHeldMovement(void*,int),PlaySE(int),MapObject_ClearHeldMovementIfActive(void*),ov01_021F30F4(Work*);
+int ov01_021F1ECC(void*);
+int ov01_021F1ECC(void*task){Work*w=TaskManager_GetEnvironment(task);void*player=PlayerAvatar_GetMapObject(w->avatar);void*other=w->other;switch(w->state){case 0:if(!MapObject_AreBitsSetForMovementScriptInit(other))break;if(!MapObject_AreBitsSetForMovementScriptInit(player)&&!sub_0205DE38(w->avatar))break;MapObject_SetHeldMovement(other,sub_0206234C(w->direction,8));MapObject_SetHeldMovement(player,sub_0206234C(w->direction,32));PlaySE(1574);w->state++;break;case 1:if(!MapObject_IsMovementPaused(other))break;if(!MapObject_IsMovementPaused(player))break;MapObject_ClearHeldMovementIfActive(other);MapObject_ClearHeldMovementIfActive(player);w->state++;case 2:{void*field=w->field;ov01_021F30F4(w);if(**(u32**)((u8*)field+0x20)==237)return ov01_021F2004(task,field,other);return 1;}}return 0;}

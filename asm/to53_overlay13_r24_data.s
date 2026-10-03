@@ -1,3 +1,10 @@
+	.public ov13_02245A28
+	.public ov13_0224E184
+	.public ov13_0224E284
+	.public ov13_0224E2B0
+	.public ov13_0224E2E8
+	.public ov13_0224E380
+	.public ov13_0224DEE0
 	.public ov13_02242680
 	.public ov13_02245A58
 	.public ov13_0224E3D8

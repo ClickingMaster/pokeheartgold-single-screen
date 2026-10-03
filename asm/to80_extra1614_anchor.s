@@ -1,0 +1,63 @@
+	.extern _020FFEC0
+	.extern sub_02075630
+	.extern sub_02075770
+	.extern sub_0207584C
+	.extern sub_02075A04
+	.extern sub_02076C90
+	.extern sub_02076E64
+	.extern sub_020771A0
+	.extern sub_020772F8
+	.extern sub_02077394
+	.public _020FFEC0
+	.public _020FFED8
+	.public _020FFF34
+	.public _020FFF90
+	.public _020FFFE4
+	.public sub_020755E8
+	.public sub_02075630
+	.public sub_02075770
+	.public sub_020757AC
+	.public sub_02075804
+	.public sub_0207584C
+	.public sub_020758D0
+	.public sub_020759CC
+	.public sub_02075A04
+	.public sub_02075A7C
+	.public sub_02075D08
+	.public sub_02075D3C
+	.public sub_02075D4C
+	.public sub_02075E14
+	.public sub_02076C90
+	.public sub_02076E64
+	.public sub_020771A0
+	.public sub_020771E8
+	.public sub_02077270
+	.public sub_020772F8
+	.public sub_02077340
+	.public sub_02077394
+	.public sub_020755E8
+	.public sub_02075630
+	.public sub_02075770
+	.public sub_020757AC
+	.public sub_02075804
+	.public sub_0207584C
+	.public sub_020758D0
+	.public sub_020759CC
+	.public sub_02075A04
+	.public sub_02075D08
+	.public sub_02075D3C
+	.public sub_02075D4C
+	.public sub_020771A0
+	.public sub_020771E8
+	.public sub_020772F8
+	.public sub_02077340
+	.public sub_02077394
+#include "constants/items.h"
+#include "constants/moves.h"
+#include "constants/pokemon.h"
+	.include "asm/macros.inc"
+	.include "unk_020755E8.inc"
+	.include "global.inc"
+
+
+.text

@@ -1,0 +1,37 @@
+	.extern ov99_021E82E4
+	.extern ov99_021E84EC
+	.extern ov99_021E8544
+	.extern ov99_021E88EC
+	.extern ov99_021E8C50
+	.extern ov99_021E8C88
+	.extern ov99_021E8D5C
+	.extern ov99_021E8D88
+	.extern ov99_021E8EBC
+	.extern ov99_021E9020
+	.extern ov99_021E945C
+	.extern ov99_021E94CC
+	.extern ov99_021E94FC
+	.extern ov99_021E9508
+	.extern ov99_021E9518
+	.extern ov99_021EA3AC
+	.extern ov99_021E82E4
+	.extern ov99_021E84EC
+	.extern ov99_021E8544
+	.extern ov99_021E88EC
+	.extern ov99_021E8C50
+	.extern ov99_021E8C88
+	.extern ov99_021E8D5C
+	.extern ov99_021E8D88
+	.extern ov99_021E8EBC
+	.extern ov99_021E9020
+	.extern ov99_021E945C
+	.extern ov99_021E94CC
+	.extern ov99_021E94FC
+	.extern ov99_021E9508
+	.extern ov99_021E9518
+	.extern ov99_021EA3AC
+	.include "asm/macros.inc"
+	.include "overlay_99.inc"
+	.include "global.inc"
+
+.text

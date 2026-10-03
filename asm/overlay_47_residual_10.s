@@ -1,3 +1,4 @@
+	.public ov47_02259E9C
 	.public ov47_02259E48
 	.public ov47_02259E68
 	.public ov47_02259F18
