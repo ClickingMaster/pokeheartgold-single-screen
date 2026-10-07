@@ -52,9 +52,9 @@ typedef struct Obj {
 } Obj;
 
 typedef struct Node {
-    struct Node *left;
-    struct Node *right;
-    struct Node *parent;
+    void *left;
+    void *right;
+    u32 parent;
     union {
         int i;
         Obj *obj;
@@ -67,9 +67,8 @@ typedef struct Tree {
     Node head;
 } Tree;
 
-typedef struct Iter {
-    Node *n;
-} Iter;
+#include "../lib/NitroDWC/src/tree-iterator4.h"
+typedef Iterator Iter;
 
 extern void ov45_02236E58(Iter *it);
 
@@ -126,8 +125,8 @@ typedef struct Blob24 {
 
 typedef struct TreeHdr {
     int count;
-    Node *root;
-    Node *leftmost;
+    void *root;
+    void *leftmost;
 } TreeHdr;
 
 typedef struct Entry {
@@ -148,7 +147,7 @@ typedef struct Empty2 {
     u8 b;
 } Empty2;
 
-extern Node *ov45_022370D0(Node *n, Node *root);
+extern Node *ov45_022370D0(Node *n,void *root);
 extern void ov45_0223FD8C(Iter *out, Tree *t, void *key);
 extern void *ov45_02255238;
 extern u32 ov00_021FF368(void);
@@ -192,24 +191,24 @@ static inline Pred MakePred(int id) {
 static inline BOOL PredCallV(Pred p, Node *n) {
     Iter r;
     ov45_02243128(&r, (Tree *)((u8 *)n + 0x1c), &p.id);
-    return r.n != (Node *)((u8 *)n + 0x20);
+    return r.current != (Node *)((u8 *)n + 0x20);
 }
 
 static inline BOOL PredCall(Pred *p, Node *n) {
     Iter r;
     ov45_02243128(&r, (Tree *)((u8 *)n + 0x1c), &p->id);
-    return r.n != (Node *)((u8 *)n + 0x20);
+    return r.current != (Node *)((u8 *)n + 0x20);
 }
 
 static inline Iter FindIf(Iter first, Node *last, Pred p) {
-    while (first.n != last && !PredCall(&p, first.n)) {
+    while (first.current != last && !PredCall(&p, first.current)) {
         ov45_02236E58(&first);
     }
     return first;
 }
 
 static inline void FindIfP(Iter *first, Node *last, Pred p) {
-    while (first->n != last && !PredCall(&p, first->n)) {
+    while (first->current != last && !PredCall(&p, first->current)) {
         ov45_02236E58(first);
     }
 }
@@ -351,9 +350,9 @@ extern void ov45_0223E910(Vec *v, u32 *val, Tag t);
 
 typedef struct Tree16 {
     int count;
-    Node *root;
+    void *root;
     Node *unk8;
-    Node *leftmost;
+    void *leftmost;
 } Tree16;
 
 typedef struct Blob12 {
@@ -388,13 +387,13 @@ typedef struct CtxFull {
 extern NameTable ov45_02254DC4;
 extern char ov45_02254DBC[];
 extern char ov45_02255398[];
-extern void ov45_02233ABC(Str *out, Str *a, const char *b);
-extern void ov45_022339F4(Str *out, Str *a, Str *b);
+extern Str *ov45_02233ABC(Str *out, Str *a, char *b);
+extern Str *ov45_022339F4(Str *out, Str *a, Str *b);
 
 extern char ov45_0225533C[];
 extern int printf(const char *fmt, ...);
 extern void abort(void);
-extern void ov45_02236EC4(Node *n, Node *root);
+extern void ov45_02236EC4(Node *n,void *root);
 
 typedef struct NodeHolder {
     Node **hdr;
@@ -448,10 +447,10 @@ BOOL ov45_02243280(u8 *obj, Str *name, Str *key2);
 void ov45_02243128(Iter *out, Tree *t, int *key) {
     Node *n = ov45_0224317C(t, key, t->head.left, &t->head);
     if (n == &t->head || *key < n->key.i) {
-        out->n = &t->head;
+        out->current = &t->head;
         return;
     }
-    out->n = n;
+    out->current = n;
 }
 
 // @fn ov45_0224317C
@@ -473,10 +472,10 @@ BOOL ov45_022431AC(Tree *t, int *key) {
     Iter res;
     Iter tmp;
     ov45_022431FC(&it, t, key);
-    if (it.n == &t->head) {
+    if (it.current == &t->head) {
         return FALSE;
     }
-    tmp.n = it.n;
+    tmp.current = it.current;
     ov45_02243FD4(&res, t, tmp);
     return TRUE;
 }
@@ -485,10 +484,10 @@ BOOL ov45_022431AC(Tree *t, int *key) {
 void ov45_022431FC(Iter *out, Tree *t, int *key) {
     Node *n = ov45_02243250(t, key, t->head.left, &t->head);
     if (n == &t->head || *key < n->key.i) {
-        out->n = &t->head;
+        out->current = &t->head;
         return;
     }
-    out->n = n;
+    out->current = n;
 }
 
 // @fn ov45_02243250
@@ -513,10 +512,10 @@ BOOL ov45_02243280(u8 *obj, Str *name, Str *key2) {
         return FALSE;
     }
     ov45_02242C74(&it, (Tree *)(obj + 0x80), key2);
-    if (it.n == (Node *)(obj + 0x84)) {
+    if (it.current == (Node *)(obj + 0x84)) {
         return FALSE;
     }
-    if (!ov45_0224330C((Tree *)((u8 *)it.n + 0x1c), &id)) {
+    if (!ov45_0224330C((Tree *)((u8 *)it.current + 0x1c), &id)) {
         return FALSE;
     }
     ov45_0224307C(obj, id);

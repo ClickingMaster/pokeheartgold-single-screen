@@ -10,7 +10,8 @@ void ManagedSprite_GetAffineScale(void *sprite, f32 *x, f32 *y);
 void ManagedSprite_SetPaletteOverrideOffset(void *sprite, int offset);
 void ManagedSprite_SetAffineScale(void *sprite, f32 x, f32 y);
 
-void ov92_0225F338(SysTask *task, Ov92SpriteTask *work) {
+void ov92_0225F338(SysTask *task, void *data) {
+    Ov92SpriteTask *work = data;
     BOOL done;
     f32 x;
     f32 y;

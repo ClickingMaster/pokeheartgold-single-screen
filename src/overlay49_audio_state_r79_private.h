@@ -28,7 +28,7 @@ extern u32 ov49_0225EF88();
 extern u32 *ov49_0225EF40();
 extern void ov49_02258E60();
 extern u32 ov42_022282A4();
-extern void ov49_02258EEC();
+extern void ov49_02258EEC(void *, void *, int);
 extern void ov49_02259130();
 extern void ov49_02259160();
 extern u32 ov45_0222A330();

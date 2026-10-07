@@ -10,7 +10,7 @@ void ov96_0220C3E0(u8 *e) {
 void ov96_0220C40C(u8 *e) {
     RSlot *arr;
     u32 g;
-    arr = (RSlot *)ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(ECOURSE(e)) + 0xf0);
+    arr = (RSlot *)(void *)ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(ECOURSE(e)) + 0xf0);
     g = EW38(e).b.g;
     if (EW38(e).b.f == arr[g].b.s) {
         ov96_0220C004(e, &arr[g]);

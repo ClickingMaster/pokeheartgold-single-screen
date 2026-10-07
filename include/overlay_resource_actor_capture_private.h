@@ -155,7 +155,7 @@ extern void SpriteSystem_TransferOam(void);
 extern void GF_RunVramTransferTasks(void);
 extern void PaletteData_PushTransparentBuffers(void *);
 extern void DoScheduledBgGpuUpdates(void *);
-void sub_02077270(Work *);
+void sub_02077270(void *);
 extern const Config32 _020FFF14;
 extern const Config20 _020FFEE8;
 extern const Config24 _020FFEFC;
@@ -213,7 +213,7 @@ extern void GfGfxLoader_LoadCharDataFromOpenNarc(void *, int, void *, int, int, 
 extern void GfGfxLoader_LoadScrnDataFromOpenNarc(void *, int, void *, int, int, int, int, u32);
 extern void GfGfx_EngineBTogglePlanes(int, int);
 extern void GfGfx_BothDispOn(void);
-extern void sub_02077270(Work *);
-void sub_02076E64(Work *, void *);
+extern void sub_02077270(void *);
+void sub_02076E64(void *, void *);
 
 #endif

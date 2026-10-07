@@ -30,7 +30,7 @@ extern void ov49_0225913C(void *, Ov49R60Coord *);
 extern u32 ov49_022591CC(void *);
 extern void ov49_022591C0(void *, u32);
 extern u32 ov49_02258F38(void *);
-extern void ov49_02258EEC(void *, void *, u32);
+extern void ov49_02258EEC(void *, void *, int);
 extern void ov49_0225A04C(void *, u8, u32);
 extern void ov49_0225A06C(void *, u8, u32);
 extern u32 ov45_0222B0B0(void *);
@@ -51,7 +51,7 @@ extern void *ov49_0225EF40(void *, u32);
 extern void ov49_0225EF68(void *);
 extern void ov49_0225EF98(void *, u32, const void *, u32);
 extern void *ov49_02259FF8(void *);
-extern int ov45_0222ADA8(void *, u32);
+extern int ov45_0222ADA8(void *, int);
 extern void ov45_0222AE08(int, int *, int *);
 extern void ov49_0225E420(void *, int, int, VecFx32 *);
 extern void ov49_02259154(void *, VecFx32 *);
@@ -105,7 +105,7 @@ BOOL ov49_02261930(void *state, void *ctx, u32 index) {
         work->unk04 = ov45_0222ADA8(field, index);
         GF_ASSERT(work->unk04 != -1);
         ov45_0222AE08(work->unk04, &work->unk04, &work->unk08);
-        ov49_02258EEC(map, work->unk00, 3);
+        ov49_02258EEC(map, (void*)(work->unk00), 3);
         ov49_0225EF8C(state, 1);
         break;
     case 1:
@@ -196,7 +196,7 @@ BOOL ov49_02261B74(void *state, void *ctx, u32 index) {
         }
         break;
     case 1:
-        ov49_02258EEC(map, object, 3);
+        ov49_02258EEC(map, (void*)(object), 3);
         ov49_0225EF90(state);
         break;
     case 2:
@@ -215,14 +215,14 @@ BOOL ov49_02261B74(void *state, void *ctx, u32 index) {
         if (ov49_022591CC(object) == 0) {
             ov49_022591C0(object, 1);
         }
-        ov49_02258EEC(map, object, 4);
+        ov49_02258EEC(map, (void*)(object), 4);
         ov49_0225EF90(state);
         break;
     }
     case 4:
         if (ov49_02258F38(object) == TRUE) {
             ov49_0225EF90(state);
-            ov49_02258EEC(map, object, 0);
+            ov49_02258EEC(map, (void*)(object), 0);
             ov49_0225A04C(ctx, index, 0);
             ov49_0225A06C(ctx, index, 0);
         }
@@ -252,7 +252,7 @@ BOOL ov49_02261B74(void *state, void *ctx, u32 index) {
         }
         break;
     case 6:
-        ov49_02258EEC(map, object, 3);
+        ov49_02258EEC(map, (void*)(object), 3);
         ov49_0225EF90(state);
         break;
     case 8:
@@ -261,12 +261,12 @@ BOOL ov49_02261B74(void *state, void *ctx, u32 index) {
             coord.y = ((Ov49R60Input *)work)->y << 4;
             ov49_02258DB4(object, coord);
             ov49_0225913C(object, &coord);
-            ov49_02258EEC(map, object, 4);
+            ov49_02258EEC(map, (void*)(object), 4);
             ov49_0225EF90(state);
         }
         break;
     case 10:
-        ov49_02258EEC(map, object, 2);
+        ov49_02258EEC(map, (void*)(object), 2);
         ov49_0225A04C(ctx, index, 0);
         ov49_0225A06C(ctx, index, 0);
         return TRUE;

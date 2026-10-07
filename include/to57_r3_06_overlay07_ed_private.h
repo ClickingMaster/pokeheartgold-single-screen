@@ -26,7 +26,8 @@ extern Ov07EdCallback ov07_02234BC0[];
 extern const char ov07_0223789C[];
 
 Ov07EdWork *ov07_0221DF1C(void *);
-int ov07_0221C4A8(void *, int);
+
+extern u32 ov07_0221C4A8(void *p, int i);
 void *SysTask_CreateOnMainQueue(void (*)(void *, void *), void *, u32);
 void SysTask_Destroy(void *);
 void Heap_Free(void *);

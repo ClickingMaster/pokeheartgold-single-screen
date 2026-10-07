@@ -11,7 +11,7 @@ extern int ov07_0221C514(int);
 extern int ov07_0221FA48(int, int);
 extern int ov07_0221FA80(int, int);
 extern int ov07_0221FA90(int, int);
-extern int ov07_0221FAE8(int);
+extern int ov07_0221FAE8(void *);
 extern int ov07_0221FA78(int);
 extern int ov07_0221C4E8(int, int);
 extern int ov07_0223192C(int, int);
@@ -60,7 +60,7 @@ void ov07_02227D1C(int arg0) {
     ov07_02231E08(FIELD(work, int, 0xc), -1, -1);
     *(volatile u16 *)0x04000052 = FIELD(work, u8, 4) | (FIELD(work, u8, 5) << 8);
     archive = ov07_0221FA80(FIELD(work, int, 0xc), ov07_0221C468(FIELD(work, int, 0xc)));
-    priority = ov07_0221FAE8(FIELD(work, int, 0xc));
+    priority = ov07_0221FAE8((void *)(u32)FIELD(work, int, 0xc));
     tex = ov07_0221FA90(FIELD(work, int, 0xc), ov07_0221C468(FIELD(work, int, 0xc)));
     i = 0;
     slot = work;

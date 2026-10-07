@@ -1,3 +1,5 @@
+	.public _022459B0
+	.public ov13_02245A6C
 	.public ov13_02245A28
 	.public ov13_0224E184
 	.public ov13_0224E284

@@ -7,8 +7,8 @@
 #define W(p,o) (*(int *)((char *)(p)+(o)))
 #define P(p,o) (*(void **)((char *)(p)+(o)))
 #define A(p,o) ((void *)((char *)(p)+(o)))
-typedef struct Node {struct Node *left,*right;u32 parent;int key;} Node;
-typedef struct {int count;Node *root,*last;} Tree;
+typedef struct Node {void *left,*right;u32 parent;int key;} Node;
+typedef struct {int count;void *root,*last;} Tree;
 extern void ov00_021EC2EC(int,void*,int),ov00_021EC3D8(void*);
 extern void ov45_02237A24(void*,void*),ov45_02237BC8(void*),ov45_02242C74(void**,void*,void*);
 extern void __msl_assertion_failed(char*,char*,char*,int);
@@ -51,7 +51,7 @@ void ov45_022442D4(void *p,void *node){if(P(node,0))ov45_022442D4(p,P(node,0));i
 
 void *ov45_02244330(void *p){if(P(p,4))ov45_022443DC(p,P(p,4));return p;}
 
-void ov45_02244350(Tree *p,Tree *q){int n;Node *v;if(p==q)return;n=p->count;p->count=q->count;q->count=n;v=p->root;p->root=q->root;q->root=v;v=p->last;p->last=q->last;q->last=v;if(!p->root)p->last=(Node*)&p->root;else p->root->parent=(u32)&p->root|(p->root->parent&1);if(!q->root)q->last=(Node*)&q->root;else q->root->parent=(u32)&q->root|(q->root->parent&1);}
+void ov45_02244350(Tree *p,Tree *q){int n;Node *v;if(p==q)return;n=p->count;p->count=q->count;q->count=n;v=p->root;p->root=q->root;q->root=v;v=p->last;p->last=q->last;q->last=v;if(!p->root)p->last=(Node*)&p->root;else ((Node*)p->root)->parent=(u32)&p->root|(((Node*)p->root)->parent&1);if(!q->root)q->last=(Node*)&q->root;else ((Node*)q->root)->parent=(u32)&q->root|(((Node*)q->root)->parent&1);}
 
 void ov45_022443DC(void *p,void *node){if(P(node,0))ov45_022443DC(p,P(node,0));if(P(node,4))ov45_022443DC(p,P(node,4));if(node)ov00_021EC2EC(0,node,0);}
 

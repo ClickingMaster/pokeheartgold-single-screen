@@ -1,14 +1,16 @@
 #include "overlay49_input_direction_private.h"
 
-void ov49_02259410(Ov49R13Work *work, void *ctx)
+void ov49_02259410(void *opaque,void *ctx)
 {
+    Ov49EntryR4 *entry=opaque;
+    Ov49InputWork *work=&entry->storage.input;
     int pos = ov42_02228188(work->field, 6);
     int kind = ov42_02228188(work->field, 4);
     int other = ov42_02228188(work->field, 5);
     int mode;
     u32 input;
     if (other != 0) return;
-    input = gSystem.input;
+    input = gSystem.heldKeys;
     mode = 2;
     if (input & 2) mode = 3;
     if (input & 0x40) {

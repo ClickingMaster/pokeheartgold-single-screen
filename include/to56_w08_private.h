@@ -100,7 +100,8 @@ typedef struct {
 } WorkMoveB;
 extern void *ov07_022324D8(void *, int);
 extern void *ov07_0221C514(void *);
-extern int ov07_0221C4A8(void *, int);
+
+extern u32 ov07_0221C4A8(void *p, int i);
 extern void *ov07_0221C4E8(void *, int);
 extern void ManagedSprite_SetOamMode(void *, int);
 extern void ov07_02231E08(void *, int, int);

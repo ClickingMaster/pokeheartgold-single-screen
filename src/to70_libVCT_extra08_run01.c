@@ -1,15 +1,15 @@
 #pragma force_active on
 // clang-format off
 #include "global.h"
+#include "to90_vct_ssp_private.h"
 #include <nitro/code32.h>
 // clang-format on
 #pragma force_active on
 typedef struct AdpcmState { s16 value; u8 index; u8 pad; } AdpcmState;
 typedef struct AudioContext {u16 seq; u16 pad; u32 mask; u32 flag; u32 packetSize; AdpcmState state; u32 reset; u32 echo; s32 codec; u32 sessions; u32 size; u32 vad; u8 gap[0xed4]; u32 sendRead,sendWrite,sendBuffer,sendMask,balanceIndex,balance;} AudioContext;
-typedef struct Session {u8 pad[5]; u8 id; u8 pad2[2]; u32 mask; s32 status;} Session;
 typedef struct Stream {u8 pad[0x94];} Stream;
 extern AudioContext _021D6040;
-extern u32 __vct[];
+
 extern u8 sCodecInfo[];
 extern s32 sEnableVAD;
 extern Session *sAudioSession[];

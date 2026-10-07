@@ -2,6 +2,7 @@
 // clang-format off
 #include "global.h"
 #include <nitro/code32.h>
+typedef void (*W17HeapCallback)(void *,u32,void *,int);
 // clang-format on
 typedef struct Wave {u32 p00[2],size;u8 p0c[44];u32 index;u32 offset[1];} Wave;
 typedef struct SeqInfo {u32 data;u16 bank;u8 volume,channel,priority,player;} SeqInfo;
@@ -19,8 +20,8 @@ int SND_GetWaveDataCount(Wave *);
 void SND_SetWaveDataAddress(Wave *,int,void *);
 InstPos SND_GetFirstInstDataPos(void);
 int SND_GetNextInstData(void *,InstData *,InstPos *);
-void SingleWaveDisposeCallback(void *,u32,void *,u32);
-void *NNS_SndHeapAlloc(void *,u32,void (*)(void*,u32,void*,u32),void *,u32);
+void SingleWaveDisposeCallback(void *,u32,void *,int);
+void *NNS_SndHeapAlloc(void *,u32,W17HeapCallback,void *,int);
 int NNS_SndArcReadFile(int,void *,u32,u32);
 void *NNS_SndArcGetCurrent(void);
 StreamInfo *NNS_SndArcGetStrmInfo(int);

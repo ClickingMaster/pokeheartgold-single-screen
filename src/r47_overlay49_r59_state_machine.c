@@ -12,7 +12,7 @@ BOOL ov49_022607C4(void *controller, void *work, u32 arg) {
     switch (ov49_0225EF88(controller)) {
     case 0: {
         u8 *selection = ov49_0225EF40(controller, 4);
-        ov49_02258EEC(object, entry, 0);
+        ov49_02258EEC(object, (void*)(entry), 0);
         ov49_0225EF90(controller);
         selection[0] = 0;
         switch (ov49_0225A040(work)) {
@@ -141,7 +141,7 @@ BOOL ov49_022607C4(void *controller, void *work, u32 arg) {
     case 7:
         ov49_0225EF68(controller);
         ov45_0222A5E8(ov49_02259FE8(work), 1);
-        ov49_02258EEC(object, entry, 1);
+        ov49_02258EEC(object, (void*)(entry), 1);
         ov49_0225EF98(ov49_0225A010(work), arg, ov49_02269B38, 0);
         break;
     }

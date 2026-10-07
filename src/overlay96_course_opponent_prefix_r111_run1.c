@@ -1,6 +1,6 @@
 #include "overlay96_course_opponent_prefix_r111_private.h"
 
-int ov96_02214DBC(void *objectRaw, const void *sourceRaw, u8 state, u8 quadrant) {
+int ov96_02214DBC(void *objectRaw, const void *sourceRaw, u8 state, int quadrant) {
     Ov96R111MovingObject *object = objectRaw;
     const Ov96R111Source *source = sourceRaw;
     u8 random = (s32)LCRandom() % 100;

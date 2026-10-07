@@ -11,6 +11,7 @@ typedef struct R2Motion {
     s32 currentY;
     s32 deltaX;
     s32 deltaY;
+    s32 deltaTail;
 } R2Motion;
 
 typedef struct R2TaskWork {

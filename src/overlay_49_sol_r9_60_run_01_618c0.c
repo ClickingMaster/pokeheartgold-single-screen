@@ -6,7 +6,7 @@ BOOL ov49_022618C0(void *state, void *ctx, u32 index) {
 
     switch (ov49_0225EF88(state)) {
     case 0:
-        ov49_02258EEC(object, (u32)target, 3);
+        ov49_02258EEC(object, (void*)((u32)target), 3);
         ov49_0225EF90(state);
         break;
     case 1:

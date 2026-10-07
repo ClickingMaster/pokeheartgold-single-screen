@@ -13,7 +13,7 @@ extern void FillWindowPixelBuffer(void *, int);
 extern void ov75_02249684(void *, void *, u32, u32, u32, u32);
 
 void ov75_022476E8(void *task, Sub *p);
-void ov75_02247790(State *p);
+void ov75_02247790(void *p);
 
 void ov75_022476E8(void *task, Sub *p) {
     if (*(void **)((u8 *)p + 4)) {
@@ -42,7 +42,7 @@ void ov75_022476E8(void *task, Sub *p) {
     }
 }
 
-void ov75_02247790(State *p) {
+void ov75_02247790(void *p) {
     AddWindowParameterized(*(void **)((u8 *)p + 4), (u8 *)p + 0x68, 0, 4, 4, 23, 16, 13, 148);
     FillWindowPixelBuffer((u8 *)p + 0x68, 0);
     AddWindowParameterized(*(void **)((u8 *)p + 4), (u8 *)p + 0x58, 0, 4, 1, 24, 2, 13, 516);

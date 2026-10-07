@@ -3,23 +3,9 @@
 
 #include "global.h"
 
-typedef struct Ov07T10Slot {
-    u32 unk00;
-    s16 xy[2];
-    void *pokepic;
-    void *sprite;
-    u32 index;
-} Ov07T10Slot;
+#include "overlay07_script_slot_private.h"
 
-typedef struct Ov07T10Work {
-    u8 state[4];
-    void *owner;
-    void *field08;
-    void *field0C;
-    void *field10;
-    void *field14;
-    void *field18;
-} Ov07T10Work;
+
 
 void *ov07_0221C530(void *);
 void *ov07_0221C514(void *);

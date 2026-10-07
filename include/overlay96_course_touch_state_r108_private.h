@@ -25,7 +25,7 @@ typedef struct Ov96TouchRec {
 
 void *PokeathlonCourse_GetHeapAllocPtr4(void *);
 void *PokeathlonCourse_GetDataCopyArea(void *);
-void *ov96_021E8A20(void *);
+u8 *ov96_021E8A20(void *ptr);
 void ov96_021EB63C(void *);
 void ov96_021EB144(void *, int);
 void ov96_021E65A4(void *);

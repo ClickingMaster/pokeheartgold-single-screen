@@ -1,7 +1,8 @@
 #include "private.h"
 
-BOOL ov89_0225A41C(Ov89WorkR7 *work, s32 amount)
+BOOL ov89_0225A41C(void *opaque, s32 amount)
 {
+    Ov89WorkR7 *work = opaque;
     s32 delta;
 
     if (work->target < amount) {

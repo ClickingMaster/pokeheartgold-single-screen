@@ -194,7 +194,7 @@ BOOL Bag_TakeItem(Bag *bag, u16 itemId, u16 quantity, enum HeapID heapID) {
     return TRUE;
 }
 
-BOOL Pocket_TakeItem(ItemSlot *slots, u32 count, u16 itemId, u16 quantity) {
+BOOL Pocket_TakeItem(ItemSlot *slots, u32 count, u16 itemId, u16 quantity, u32 unusedHeapId) {
     ItemSlot *slot = Pocket_GetItemSlotForRemove(slots, count, itemId, quantity);
     if (slot == NULL) {
         return FALSE;

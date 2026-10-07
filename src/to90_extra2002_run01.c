@@ -1,0 +1,8 @@
+#pragma force_active on
+#include "global.h"
+#include "system.h"
+#pragma force_active on
+void PlaySE(u16);
+typedef struct{u8 p[0x2d0];void*sprites[5];u8 q[0x680-0x2e4];s16 value;u16 kind;} Work;
+int ov15_021FAC2C(Work*,int),ov15_022002EC(u16),ov15_021FBD28(int,u16,int),sub_020881C0(s16*,u16),ov15_021FD7D0(Work*,int,int,int,int);void ManagedSprite_SetAnimationFrame(void*,int),ManagedSprite_SetAnim(void*,int),ov15_021FF068(Work*),ov15_021FEDEC(Work*,int);int ov15_021FCDE4(Work*);
+int ov15_021FCDE4(Work*w){int action=0;int selected=ov15_021FAC2C(w,4);if(selected!=-1){if(ov15_022002EC(w->kind)==2){if(selected==0||selected==2)selected=-1;}switch(selected){case 0:w->value=ov15_021FBD28(w->value,w->kind,10);ManagedSprite_SetAnimationFrame(w->sprites[0],0);ManagedSprite_SetAnim(w->sprites[0],26);action=1;break;case 1:w->value=ov15_021FBD28(w->value,w->kind,1);ManagedSprite_SetAnimationFrame(w->sprites[1],0);ManagedSprite_SetAnim(w->sprites[1],26);action=1;break;case 2:w->value=ov15_021FBD28(w->value,w->kind,-10);ManagedSprite_SetAnimationFrame(w->sprites[3],0);ManagedSprite_SetAnim(w->sprites[3],28);action=2;break;case 3:w->value=ov15_021FBD28(w->value,w->kind,-1);ManagedSprite_SetAnimationFrame(w->sprites[4],0);ManagedSprite_SetAnim(w->sprites[4],28);action=2;break;case 4:action=3;break;case 5:action=4;break;}}else{action=sub_020881C0(&w->value,w->kind);if(!action){if(gSystem.newKeys&1)action=3;else if(gSystem.newKeys&2)action=4;}}switch(action){case 1:ov15_021FF068(w);ov15_021FEDEC(w,2);PlaySE(1591);return 18;case 2:ov15_021FF068(w);ov15_021FEDEC(w,2);PlaySE(1591);return 18;case 3:PlaySE(1500);return ov15_021FD7D0(w,38,9,8,19);case 4:PlaySE(2368);return ov15_021FD7D0(w,19,9,8,20);}return 18;}

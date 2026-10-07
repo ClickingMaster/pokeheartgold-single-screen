@@ -3,6 +3,7 @@
 #include "global.h"
 #include <nitro/code32.h>
 // clang-format on
+#include "renderer_joint_family_private.h"
 extern void GX_BeginLoadTex(void),GX_EndLoadTex(void),GX_BeginLoadTexPltt(void),GX_EndLoadTexPltt(void);
 extern void GX_LoadTex(const void *,u32,u32),GX_LoadTexPltt(const void *,u32,u32);
 extern int MTX_Inverse43(const MtxFx43 *,MtxFx43 *);
@@ -44,17 +45,13 @@ MtxFx43 *NNS_G3dGlbGetInvWV(void) ;
 MtxFx44 *NNS_G3dGlbGetInvVP(void) ;
 void NNS_G3dGlbGetViewPort(u32 *a,u32 *b,u32 *c,u32 *d) ;
 void blendScaleVec_(s32 *dst,const s32 *src,s32 ratio,int one) ;
-void G3dDrawInternal_Loop_(u8 *p) ;
 void updateHintVec___g3d(u32 *p,NNSG3dAnmObj *a) ;
 void NNSi_G3dFuncSbc_NOP(u8 *p) ;
 void NNSi_G3dFuncSbc_RET(u8 *p) ;
 
-extern u8 *_021DA700;
-extern u32 _02110A80[],_02110A74[],_02110A8C[];
 extern void MIi_CpuClearFast(u32,u32 *,u32);
 int NNSi_G3dAnmBlendMat(void *p,const NNSG3dAnmObj *a,u32 i);
 int NNSi_G3dAnmBlendVis(u32 *p,const NNSG3dAnmObj *a,u32 i);
-void G3dDrawInternal_(u8 *p,NNSG3dRenderObj *r);
 void NNS_G3dDraw(NNSG3dRenderObj *r);
 void NNS_G3dGlbInit(void);
 

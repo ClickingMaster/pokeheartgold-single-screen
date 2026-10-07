@@ -48,7 +48,7 @@ void ManagedSprite_SetPositionXY(void *sprite, s16 x, s16 y);
 void ManagedSprite_SetPriority(void *sprite, int priority);
 void ov108_021E78F4(SafariAreaCustomizer *s, u32 idx, u32 anim);
 void ov108_021E77D4(SafariAreaCustomizer *s);
-void ov108_021E79A8(SafariAreaCustomizer *s, u32 a, u32 b, u32 c);
+void ov108_021E79A8(void *, u8, int, int);
 void ov108_021E78C0(SafariAreaCustomizer *s, u32 idx, u32 anim, u32 on);
 void ov108_021E84F8(void *sub, u8 idx, u8 value);
 void ov108_021E7EB0(SafariAreaCustomizer *s);

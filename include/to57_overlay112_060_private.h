@@ -15,7 +15,7 @@ typedef struct W12Work {
 #define PTR(w, n) (*(void **)((w)->raw + (n)))
 
 extern void ov112_021E9C10(W12Work *, int);
-extern void ov112_021E9A78(W12Work *, int);
+extern void ov112_021E9A78(void *, int);
 extern void FillBgTilemapRect(void *, int, int, int, int, int, int, int);
 extern void BgCommitTilemapBufferToVram(void *, int);
 extern void ov112_021E7CA4(W12Work *, int, int);

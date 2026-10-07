@@ -3,66 +3,7 @@
 
 #include "global.h"
 
-typedef struct Ov37Window {
-    u8 dummy[0x10];
-} Ov37Window;
-
-typedef struct Ov37SpriteHolder {
-    u8 unk_00[0x20];
-    void *unk_20;
-} Ov37SpriteHolder;
-
-typedef struct Ov37Pair {
-    u32 cur;
-    u32 prev;
-} Ov37Pair;
-
-typedef struct Ov37Work {
-    void *bgConfig; /* 0x0000 */
-    u8 unk_0004[0x000C - 0x0004];
-    void *msgFormat; /* 0x000C */
-    u8 unk_0010[0x0014 - 0x0010];
-    void *strbuf[5]; /* 0x0014 */
-    void *unk_0028;  /* 0x0028 */
-    void *unk_002C;  /* 0x002C */
-    u32 printerId;   /* 0x0030 */
-    u8 unk_0034[0x01D8 - 0x0034];
-    void *sprites[5]; /* 0x01D8 */
-    u8 unk_01EC[0x0248 - 0x01EC];
-    Ov37SpriteHolder holder; /* 0x0248 */
-    u8 unk_026C[0x0278 - 0x026C];
-    Ov37Window windows[5]; /* 0x0278 */
-    Ov37Window winB2;      /* 0x02C8 */
-    Ov37Window winB6;      /* 0x02D8 */
-    Ov37Window winBA;      /* 0x02E8 */
-    u8 unk_02F8[0x0304 - 0x02F8];
-    u32 prevState; /* 0x0304 */
-    u32 state;     /* 0x0308 */
-    u8 unk_030C[0x0310 - 0x030C];
-    u32 counter; /* 0x0310 */
-    u8 unk_0314[0x0320 - 0x0314];
-    u32 unk_0320; /* 0x0320 */
-    u8 unk_0324[0x0334 - 0x0324];
-    Ov37Pair pair[5]; /* 0x0334 */
-    u8 unk_035C[0x4380 - 0x035C];
-    u8 flags; /* 0x4380 */
-    u8 unk_4381;
-    u8 unk_4382[0x43B4 - 0x4382]; /* 0x4382 */
-    u8 unk_43B4[0x43C8 - 0x43B4]; /* 0x43B4 */
-    void *unk_43C8;               /* 0x43C8 */
-    u8 unk_43CC[0x93B0 - 0x43CC];
-    u32 unk_93B0; /* 0x93B0 */
-    u8 unk_93B4[0x93BA - 0x93B4];
-    u16 unk_93BA; /* 0x93BA */
-    u8 unk_93BC;  /* 0x93BC */
-    u8 unk_93BD[0x93F0 - 0x93BD];
-    void *yesNoPrompt; /* 0x93F0 */
-    u8 unk_93F4[0x93F8 - 0x93F4];
-    u32 yesNoActive; /* 0x93F8 */
-    u8 unk_93FC[0x9404 - 0x93FC];
-    u32 unk_9404; /* 0x9404 */
-    u8 unk_9408[0x940C - 0x9408];
-} Ov37Work;
+#include "overlay_37_work.h"
 
 typedef struct Ov37YesNoTemplate {
     void *bgConfig;
@@ -75,10 +16,6 @@ typedef struct Ov37YesNoTemplate {
     u8 unk_13;
 } Ov37YesNoTemplate;
 
-typedef struct Ov37StateEntry {
-    u32 unk_00;
-    u32 unk_04;
-} Ov37StateEntry;
 
 /* module-local rodata blobs, left in the assembly */
 extern const Ov37StateEntry ov37_021E7D20[];
@@ -135,16 +72,16 @@ u32 ov37_021E6CC0(Ov37Work *work, u32 arg1);
 u32 ov37_021E6DD0(Ov37Work *work, u32 arg1);
 u32 ov37_021E6E04(Ov37Work *work, u32 arg1);
 u32 ov37_021E6E2C(Ov37Work *work, u32 arg1);
-u32 ov37_021E6E6C(u32 arg0, u32 arg1);
+u32 ov37_021E6E6C(Ov37Work *arg0, u32 arg1);
 u32 ov37_021E6E70(Ov37Work *work, u32 arg1);
 u32 ov37_021E6E90(Ov37Work *work, u32 arg1);
 u32 ov37_021E6EB4(Ov37Work *work, u32 arg1);
 u32 ov37_021E6F14(Ov37Work *work, u32 arg1);
-u32 ov37_021E741C(u16 *arg0);
+void ov37_021E741C(u16 *arg0);
 u32 ov37_021E745C(void);
 void ov37_021E755C(Ov37Work *work);
 u32 ov37_021E65EC(Ov37Work *work);
-void ov37_021E72E8(Ov37Window *window, const u8 *a1, const u8 *a2, u32 a3);
+void ov37_021E72E8(Ov37Window *window, Ov37Entry *entries, Ov37Point *points, u32 arg3);
 void ov37_021E73B4(Ov37Work *work);
 u32 ov37_021E75C4(void);
 u32 ov37_021E75E0(void);

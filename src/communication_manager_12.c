@@ -40,11 +40,11 @@ int sub_020376D4(void *a, void *b) {
 }
 
 int sub_020376E0(void *a, void *b) {
-    return sub_02037030(a, b, 0);
+    return sub_02037030((int)a, b, 0);
 }
 
 int sub_020376EC(void *a) {
-    return sub_02037030(a, NULL, 0);
+    return sub_02037030((int)a, NULL, 0);
 }
 
 int sub_020376F8(void) {

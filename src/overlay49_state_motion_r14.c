@@ -83,7 +83,10 @@ void ov49_02259764(Ov49R14Anim *work, u32 arg1, u32 arg2) {
     }
 }
 
-void ov49_0225991C(Ov49R14Spin *work) {
+void ov49_0225991C(void *opaque,void *ctx)
+{
+    Ov49EntryR4 *entry=opaque;
+    Ov49R14Spin *work=&entry->storage.spin;
     VecFx32 pos;
     s16 angle;
     s32 deg;

@@ -11,7 +11,7 @@ void ov18_021F23E4(void *p);
 void ov18_021F2424(void *p, int idx, const ManagedSpriteTemplate *tmpl);
 void ov18_021F2468(void *p);
 void ov18_021F24E0(void *p, int a1, int idx);
-void ov18_021F2530(void *p, int a1, int a2);
+void ov18_021F2530(void *p, u16 species, int a2);
 void ov18_021F2270(void *p);
 void ov18_021F1CB4(void *p);
 void ov18_021F1E70(void *p);
@@ -65,7 +65,7 @@ void ov18_021F281C(void *p) {
 }
 
 void ov18_021F2880(void *p) {
-    int a;
+    u16 a;
     int b;
     ov18_021F2964(p);
     ov18_021F1424(p, 24);

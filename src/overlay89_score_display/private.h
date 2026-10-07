@@ -16,7 +16,7 @@ typedef struct Ov89WorkR7 {
     s32 step;
 } Ov89WorkR7;
 void ov89_0225A368(int font, void *string, int *widthOut, int *tilesOut);
-void ov89_0225A398(Ov89WorkR7 *work);
-BOOL ov89_0225A41C(Ov89WorkR7 *work, s32 amount);
+void ov89_0225A398(void *work);
+BOOL ov89_0225A41C(void *work, s32 amount);
 
 #endif

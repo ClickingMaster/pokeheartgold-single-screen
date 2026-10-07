@@ -41,9 +41,16 @@ typedef struct Pokeathlon_RecordsLink {
     u8 unk_28[0x7C];
 } Pokeathlon_RecordsLink; // size: 0xA4
 
+typedef union PokeathlonSavePrefix {
+    struct {
+        u8 bytesDC[0xDC];
+        u8 bytes1F0[0x1F0];
+    } legacy;
+    u16 nativeHalfwords[0x2CC / 2];
+} PokeathlonSavePrefix;
+
 typedef struct PokeathlonSave {
-    u8 unk_0[0xDC];
-    u8 unk_DC[0x1F0];                       // sub-struct pointed to by PokeathlonSave_GetUnkDC; byte[slot-1] holds per-pokemon course bits
+    PokeathlonSavePrefix prefix;           // 0x000: serialized byte and halfword views
     Pokeathlon_RecordsSolo recordsSolo[10]; // 0x2CC
     Pokeathlon_RecordsLink recordsLink[10]; // 0x484
     u8 unk_AEC[0x14];                       // pointed to by PokeathlonSave_GetUnkAEC

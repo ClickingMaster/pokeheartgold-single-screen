@@ -1,0 +1,35 @@
+	.extern ov43_0222A358
+	.extern ov43_0222AAA4
+	.extern ov43_0222ADB8
+	.extern ov43_0222AE2C
+	.extern ov43_0222B0A0
+	.extern ov43_0222B1FC
+	.extern ov43_0222B374
+	.extern ov43_0222B408
+	.extern ov43_0222B440
+	.extern ov43_0222B458
+	.extern ov43_0222B4BC
+	.extern ov43_0222B534
+	.extern ov43_0222B55C
+	.extern ov43_0222B574
+	.extern ov43_0222F0C8
+	.include "asm/macros.inc"
+	.include "overlay_43.inc"
+	.include "global.inc"
+	.extern ov43_0222A358
+	.extern ov43_0222AAA4
+	.extern ov43_0222ADB8
+	.extern ov43_0222AE2C
+	.extern ov43_0222B0A0
+	.extern ov43_0222B1FC
+	.extern ov43_0222B374
+	.extern ov43_0222B408
+	.extern ov43_0222B440
+	.extern ov43_0222B458
+	.extern ov43_0222B4BC
+	.extern ov43_0222B534
+	.extern ov43_0222B55C
+	.extern ov43_0222B574
+	.extern ov43_0222F0C8
+
+.text

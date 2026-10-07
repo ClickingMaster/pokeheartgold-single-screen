@@ -65,7 +65,7 @@ void ov92_0225E9A8(void *p);
 void ov92_0225EB68(void *p);
 int ov92_0225EB70(void *p);
 void ov92_0225ED60(void *p);
-int ov92_0225ED68(void *p);
+int ov92_0225ED68(void *p, int unused);
 void ov92_0225ED80(void *p);
 void ov92_0225FEB4(void *p);
 void ov92_0225FEE4(void *p);

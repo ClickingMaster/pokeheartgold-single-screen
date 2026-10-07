@@ -29,9 +29,10 @@ extern void NNS_GfdGetFrmTexVramState(void *);
 extern void NNS_GfdGetFrmPlttVramState(void *);
 extern void SPL_Load(void *, void *);
 extern void SPL_LoadTexByVRAMManager(void *);
-extern void SPL_LoadTexByCallbackFunction(void *);
+typedef struct Manager Manager;
+extern int SPL_LoadTexByCallbackFunction(Manager *, texAllocFun);
 extern void SPL_LoadTexPlttByVRAMManager(void *);
-extern void SPL_LoadTexPlttByCallbackFunction(void *);
+extern int SPL_LoadTexPlttByCallbackFunction(Manager *, plttAllocFun);
 extern void NNS_G3dGlbFlushP(void);
 extern void SPL_Draw(void *, void *);
 extern void SPL_Calc(void *);
@@ -145,7 +146,7 @@ void sub_0201526C(SPLEmitter *emitter, void *data, u32 flag, BOOL loadNow) {
 void sub_02015300(ParticleContext *ctx) {
     texAllocFun texAlloc;
     plttAllocFun plttAlloc;
-    SPLManager *manager;
+    void *manager;
     SPL_Load(ctx->manager, ctx->resource);
     _021D10A0[0] = ctx;
     texAlloc = ctx->texAlloc;
@@ -153,14 +154,14 @@ void sub_02015300(ParticleContext *ctx) {
     if (texAlloc == NULL) {
         SPL_LoadTexByVRAMManager(manager);
     } else {
-        SPL_LoadTexByCallbackFunction(manager);
+        SPL_LoadTexByCallbackFunction(manager, texAlloc);
     }
     plttAlloc = ctx->plttAlloc;
     manager = ctx->manager;
     if (plttAlloc == NULL) {
         SPL_LoadTexPlttByVRAMManager(manager);
     } else {
-        SPL_LoadTexPlttByCallbackFunction(manager);
+        SPL_LoadTexPlttByCallbackFunction(manager, plttAlloc);
     }
     _021D10A0[0] = NULL;
 }

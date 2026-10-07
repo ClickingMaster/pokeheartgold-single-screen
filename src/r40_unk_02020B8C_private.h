@@ -5,6 +5,6 @@
 
 fx32 FX_Div(fx32 numerator, fx32 denominator);
 void sub_02020E10(s32 angle, fx32 first, fx32 second, fx32 *outSecond, fx32 *outFirst);
-BOOL sub_02020E80(const VecFx32 *first, const VecFx32 *second, const VecFx32 *third);
+BOOL sub_02020E80(const void *first, const void *second, const void *third);
 
 #endif

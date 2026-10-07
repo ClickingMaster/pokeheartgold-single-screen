@@ -17,7 +17,7 @@ extern void PlaySE(int);
 extern void TouchscreenListMenu_DestroyButtons(void*);
 extern void ov83_02246C70(Work*);
 extern void ov83_022478B4(void*);
-void ov83_02245318(Work*,int);
-void ov83_02245390(Work*);
-void ov83_02245318(Work*w,int choice){ov83_02247944(w->window,Options_GetFrame(w->options));ov83_02244AB0(w,0,Mon_GetBoxMon(Party_GetMonByIndex(w->party,ov83_02247768(w->kind,choice))));w->flagA=ov83_022448AC(w,0x53,1);ov83_02245300(w,choice);ov83_02245C80(w);if(w->choice==choice){ov83_02245D48(w);ov83_02246114(w,0);}PlaySE(0x623);}
-void ov83_02245390(Work*w){if(w->flags==1){TouchscreenListMenu_DestroyButtons(w->buttons);ov83_02246C70(w);}ov83_022478B4(w->stuff);}
+void ov83_02245318(void *, int);
+void ov83_02245390(void *);
+void ov83_02245318(void *parent,int choice){Work *w=parent;ov83_02247944(w->window,Options_GetFrame(w->options));ov83_02244AB0(w,0,Mon_GetBoxMon(Party_GetMonByIndex(w->party,ov83_02247768(w->kind,choice))));w->flagA=ov83_022448AC(w,0x53,1);ov83_02245300(w,choice);ov83_02245C80(w);if(w->choice==choice){ov83_02245D48(w);ov83_02246114(w,0);}PlaySE(0x623);}
+void ov83_02245390(void *parent){Work *w=parent;if(w->flags==1){TouchscreenListMenu_DestroyButtons(w->buttons);ov83_02246C70(w);}ov83_022478B4(w->stuff);}

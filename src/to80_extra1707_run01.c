@@ -14,7 +14,7 @@ extern void ov96_021E8228(void *,u8,int,int,int);
 extern u32 ov96_021F5F68(State *,int,int);
 extern void ov96_021F5F34(u8,u8,Vec *,Vec *);
 extern void ov96_021F6088(State *,int,Vec *);
-extern Block *ov96_021E8A20(void *);
+extern u8 *ov96_021E8A20(void *ptr);
 extern void ov96_021F7740(void *,int);
 void ov96_021F5BA0(void *);
 void ov96_021F5BA0(void *arg){u8 *data=PokeathlonCourse_GetDataCopyArea(arg);State *s=PokeathlonCourse_GetHeapAllocPtr4(arg);u32 selected;
@@ -26,5 +26,5 @@ void ov96_021F5BA0(void *arg){u8 *data=PokeathlonCourse_GetDataCopyArea(arg);Sta
  }else{
  if(s->selected<3&&s->count<7){Vec v={0,0,0};ov96_021F5F34((u8)gSystem.touchX,(u8)gSystem.touchY,&s->pos,&v);ov96_021F6088(s,s->selected,&v);}s->selected=3;s->count=0;
  }
- if(ov96_021E5F24(arg)==0){Block *first=ov96_021E8A20(data+0x28);Block *dest=ov96_021E8A20(data+0x50);*dest=*ov96_021E8A20(data);ov96_021F7740(arg,s->value);{u8 values[4];int i;i=0;data+=0x50;for(;i<4;i++){values[i]=ov96_021E8A20(data)->v[0];data+=0x28;}for(i=0;i<4;i++)first->bytes[i]=values[i];}}
+ if(ov96_021E5F24(arg)==0){Block *first=(Block *)ov96_021E8A20(data+0x28);Block *dest=(Block *)ov96_021E8A20(data+0x50);*dest=*(Block *)ov96_021E8A20(data);ov96_021F7740(arg,s->value);{u8 values[4];int i;i=0;data+=0x50;for(;i<4;i++){values[i]=((Block *)ov96_021E8A20(data))->v[0];data+=0x28;}for(i=0;i<4;i++)first->bytes[i]=values[i];}}
 }

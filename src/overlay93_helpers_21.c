@@ -59,7 +59,7 @@ void *ov93_02260F84(void *sys);
 void ov93_02260AD8(void *sys, void *e);
 u32 ov93_02260B70(s32 n);
 void ov93_02260B84(void *sys);
-void ov93_02260F14(void *a, u16 b, u32 c, void *out);
+void ov93_02260F14(void *a, u32 b, u32 c, void *out);
 void ov93_0226114C(void *sys, void *arr);
 void ov93_022612E0(void *sys, void *arr);
 u32 ov93_022614F4(void *sys, void **out);

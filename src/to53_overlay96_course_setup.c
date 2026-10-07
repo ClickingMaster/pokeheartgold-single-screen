@@ -6,7 +6,7 @@ void ov96_021F5EC4(void *course) {
     int i;
     u8 *entry;
 
-    data = ov96_021E8A20((u8 *)PokeathlonCourse_GetDataCopyArea(course) + 0xF0);
+    data = (void *)ov96_021E8A20((u8 *)PokeathlonCourse_GetDataCopyArea(course) + 0xF0);
     work = PokeathlonCourse_GetHeapAllocPtr4(course);
     for (i = 0, entry = work; i < 4; i++, entry += 4) {
         if (i == ov96_021E5F24(course)) {

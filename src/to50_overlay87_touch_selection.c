@@ -37,7 +37,7 @@ void ov87_021E73E0(State *, u8);
 void ov87_021E7A2C(State *);
 void ov87_021E7334(State *);
 void ov87_021E7324(State *, int);
-void ov87_021E734C(State *, int);
+void ov87_021E734C(void *, int);
 void ov87_021E74B8(State *);
 void ov87_021E74D4(State *);
 void ov87_021E7460(State *, int, int, int, u8);

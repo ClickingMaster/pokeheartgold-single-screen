@@ -1,15 +1,16 @@
 #pragma force_active on
 // clang-format off
 #include "global.h"
+#include "to90_login_callback_private.h"
 #include <nitro/code32.h>
 // clang-format on
 #pragma force_active on
 #include <string.h>
 extern u8 *ov00_0221A784;
 extern u8 ov00_0221B430[],ov00_0221B530[];
-extern void ov00_021EC210(void *),ov00_021F2BBC(void),ov00_021EEE34(void),ov00_021EEE40(void),ov00_021EF1A8(void),ov00_021EEA74(void);
+extern void ov00_021EC210(void *),ov00_021F2BBC(void),ov00_021EEE34(void),ov00_021EEE40(void),ov00_021EF1A8(void),ov00_021EEA74(int,int,void *);
 extern void ov00_021EE6FC(void);
-extern void ov00_021EF1F0(void *,void *,void *,int,u32,void *,void (*)(void),int);
+extern void ov00_021EF1F0(void *,void *,GPConnection *,int,u32,void *,LoginCallback,void *);
 extern void ov00_021EFF48(void *,void *,void *,int,int);
 extern void ov00_021F1620(void *,void *,void *,void *,void *,void *,int,int);
 extern void ov00_021F99D4(void *);
@@ -33,7 +34,7 @@ void ov00_021ED730(u8 *work,u8 *ctx,int c,const char *name,const char *other,int
  W(144)=0;
  W(148)=0;
  ov00_021EE6FC();
- ov00_021EF1F0(ov00_0221A784+0x98,ctx,ov00_0221A784+0x1c,c,*(u32 *)(ctx+0x24),ov00_0221A784+0x2e,ov00_021EEA74,0);
+ ov00_021EF1F0(ov00_0221A784+0x98,ctx,(GPConnection *)(ov00_0221A784+0x1c),c,*(u32 *)(ctx+0x24),ov00_0221A784+0x2e,ov00_021EEA74,0);
  ov00_021EFF48(ov00_0221A784+0x318,ov00_0221A784+0x1c,ov00_0221A784+0x2e,d,e);
  ov00_021F1620(ov00_0221A784+0x374,ov00_0221A784+0x1c,ov00_0221A784,ov00_0221A784+4,ov00_0221B430,ov00_0221B530,d,e);
  ov00_021F99D4(ov00_0221A784+0x7f8);

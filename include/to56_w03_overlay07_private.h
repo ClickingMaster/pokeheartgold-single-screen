@@ -29,7 +29,8 @@ void ov07_022223F0(void *, int, int, int);
 void ov07_02223A1C(void *, void *);
 void ov07_02223B70(void *, void *);
 int ov07_0221BFD0(void *);
-void *ov07_0221C4A8(void *, int);
+
+extern u32 ov07_0221C4A8(void *p, int i);
 void ov07_02222A44(void *, int, int);
 u16 ov07_0221C468(void *);
 u16 ov07_0221C470(void *);

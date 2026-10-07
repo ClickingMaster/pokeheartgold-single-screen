@@ -13,7 +13,8 @@ void SpriteSystem_DrawSprites(void *);
 void Sprite_DeleteAndFreeResources(void *);
 void Sprite_TickFrame(void *);
 void ov07_0221C448(void *, int);
-int ov07_0221C4A8(void *, int);
+
+extern u32 ov07_0221C4A8(void *p, int i);
 void ov07_02222508(void *, s16, int, s16, int);
 int ov07_02222558(void *);
 void ov07_02222590(void *, int, int, int, int, int, int);
@@ -47,7 +48,7 @@ void ov07_02227300(int task, W23A *work) {
     switch (work->state) {
     case 0:
         work->timer++;
-        for (i = 0; i < ov07_0221C4A8(work->ctx, 0); i++) {
+        for (i = 0; i < ((s32)ov07_0221C4A8(work->ctx, 0)); i++) {
             ManagedSprite_GetPositionXY(work->sprites[i], &pos[1], &pos[0]);
             if (work->timer >= ov07_022366D2[i][0]) {
                 work->spriteState[i]++;
@@ -64,7 +65,7 @@ void ov07_02227300(int task, W23A *work) {
             }
         }
         if (work->timer >= 45) {
-            for (i = 0; i < ov07_0221C4A8(work->ctx, 0); i++) {
+            for (i = 0; i < ((s32)ov07_0221C4A8(work->ctx, 0)); i++) {
                 ManagedSprite_SetDrawFlag(work->sprites[i], 1);
             }
             work->timer = 0;
@@ -77,7 +78,7 @@ void ov07_02227300(int task, W23A *work) {
         break;
     case 2:
         if (ov07_0222260C(work->anim) == 1) {
-            for (i = 0; i < ov07_0221C4A8(work->ctx, 0); i++) {
+            for (i = 0; i < ((s32)ov07_0221C4A8(work->ctx, 0)); i++) {
                 ov07_02222644(work->anim, &sx, &sy);
                 ManagedSprite_SetAffineScale(work->sprites[i], sx, sy);
             }
@@ -101,14 +102,14 @@ void ov07_02227300(int task, W23A *work) {
         *(vu16 *)0x04000052 = work->blendA | (work->blendB << 8);
         break;
     default:
-        for (i = 0; i < ov07_0221C4A8(work->ctx, 0); i++) {
+        for (i = 0; i < ((s32)ov07_0221C4A8(work->ctx, 0)); i++) {
             Sprite_DeleteAndFreeResources(work->sprites[i]);
         }
         ov07_0221C448(work->ctx, task);
         Heap_Free(work);
         return;
     }
-    for (i = 0; i < ov07_0221C4A8(work->ctx, 0); i++) {
+    for (i = 0; i < ((s32)ov07_0221C4A8(work->ctx, 0)); i++) {
         Sprite_TickFrame(*(void **)work->sprites[i]);
     }
     SpriteSystem_DrawSprites(work->spriteSystemB);

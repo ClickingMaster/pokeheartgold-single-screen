@@ -1,0 +1,12 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+
+typedef struct{int first,second,fade,result;}Aux;
+typedef struct{u8 pad[8];int step;u8 padC[8];void*narc;u8 pad18[12];void*bg,*palette;u8 pad2c[44];u32 color;u8 pad5c[0x860-0x5c];Aux*aux;u8 pad864[8];int extra;}State;
+extern u8 ov40_02245CA0[],ov40_02245CA4[];
+extern void ov40_022443B4(State*),ov40_0224428C(State*,int),ov40_02230944(State*),ov40_022442CC(State*),ov40_022306E0(State*),ov40_02244494(State*),ov40_0222BF80(State*,int),ov40_0222FDC4(State*),ov40_0222FCCC(State*),ov40_0222DA84(int*,int),GfGfx_EngineATogglePlanes(int,int),GfGfx_EngineBTogglePlanes(int,int),GfGfxLoader_LoadScrnDataFromOpenNarc(void*,int,void*,int,int,int,int,int),PaletteData_BlendPalettes(void*,int,u16,u8,u16);
+extern void ov40_022442F0(void*,int,int);
+extern int ov40_0222DA00(int*,int*,int,int),ov40_022306F0(State*),TouchscreenHitbox_TouchNewIsIn(void*),System_GetTouchNew(void);
+int ov40_0224462C(State*);
+int ov40_0224462C(State*s){Aux*a=s->aux;switch(s->step){case 0:ov40_022443B4(s);ov40_0224428C(s,0);GfGfxLoader_LoadScrnDataFromOpenNarc(s->narc,84,s->bg,7,0,0,0,109);GfGfx_EngineATogglePlanes(8,1);GfGfx_EngineBTogglePlanes(8,1);GfGfx_EngineATogglePlanes(4,0);GfGfx_EngineBTogglePlanes(4,0);s->step++;break;case 1:ov40_0222DA84(&a->fade,0);if(ov40_0222DA00(&a->first,&a->second,0,2)){ov40_022442F0(s,282,s->extra);GfGfx_EngineATogglePlanes(4,1);GfGfx_EngineBTogglePlanes(4,1);s->step++;}PaletteData_BlendPalettes(s->palette,3,12,(u8)a->fade,(u16)s->color);break;case 2:if(TouchscreenHitbox_TouchNewIsIn(ov40_02245CA0)){ov40_02230944(s);ov40_022442F0(s,283,0);s->step++;}else if(TouchscreenHitbox_TouchNewIsIn(ov40_02245CA4)){ov40_02230944(s);a->result=1;ov40_022442CC(s);s->step=4;}break;case 3:if(TouchscreenHitbox_TouchNewIsIn(ov40_02245CA0)){ov40_02230944(s);ov40_022306E0(s);a->result=0;s->step++;}else if(TouchscreenHitbox_TouchNewIsIn(ov40_02245CA4)){ov40_02230944(s);ov40_022442CC(s);a->result=1;s->step++;}break;case 4:ov40_02244494(s);s->step++;break;case 5:ov40_0222DA84(&a->fade,1);if(ov40_0222DA00(&a->first,&a->second,1,0)){if(a->result==1)ov40_0222BF80(s,3);else s->step++;}PaletteData_BlendPalettes(s->palette,3,12,(u8)a->fade,(u16)s->color);break;case 6:if(ov40_022306F0(s)){ov40_0222FDC4(s);ov40_0222FCCC(s);ov40_022442F0(s,285,0);s->step++;}else ov40_0222BF80(s,3);break;default:if(System_GetTouchNew()){ov40_022442CC(s);ov40_0222BF80(s,3);}break;}return 0;}

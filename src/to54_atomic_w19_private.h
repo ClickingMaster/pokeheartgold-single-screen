@@ -32,7 +32,7 @@ extern void ov112_021EC440(Ov112State *, int, int, int);
 extern void ov112_021E7CA4(Ov112State *, int, int);
 extern void ov112_021E9F40(Ov112State *, int);
 extern void ov112_021E9C10(Ov112State *, int);
-extern void ov112_021E9A78(Ov112State *, int);
+extern void ov112_021E9A78(void *, int);
 extern void *NewString_ReadMsgData(void *, int);
 extern void String_Delete(void *);
 extern void BufferIntegerAsString(void *, int, int, int, int, int);

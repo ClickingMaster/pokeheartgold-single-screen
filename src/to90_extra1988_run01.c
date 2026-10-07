@@ -1,0 +1,7 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+typedef struct{u32 file;u8 animation[4];u32 flags;}Spec;typedef struct{u8 render[0x54];void*model,*header,*animHeader[4],*animObj[4];}Object;typedef struct{u8 pad[8];u8 allocator[20];Object objects[8];u32 count;}State;
+extern void HeapExp_FndInitAllocator(void*,int,int),GF3dRender_InitObjFromHeader(void*,void**,void**);extern void*GfGfxLoader_LoadFromNarc(void*,int,int,int,int);
+void ov106_021E5AA8(State*,void*,const Spec*,u32);
+void ov106_021E5AA8(State*s,void*narc,const Spec*spec,u32 count){void*tex;u16 i;Object*o;u16 j;const Spec*cur;HeapExp_FndInitAllocator(s->allocator,153,4);for(i=0;i<count;i++){o=&s->objects[i];cur=&spec[i];o->header=GfGfxLoader_LoadFromNarc(narc,cur->file,1,153,1);GF3dRender_InitObjFromHeader(o,&o->model,&o->header);tex=NNS_G3dGetTex(o->header);if(cur->flags==1){NNSi_G3dModifyMatFlag(o->model,0,NNS_G3D_MATFLAG_DIFFUSE);NNSi_G3dModifyMatFlag(o->model,0,NNS_G3D_MATFLAG_AMBIENT);NNSi_G3dModifyMatFlag(o->model,0,NNS_G3D_MATFLAG_SPECULAR);NNSi_G3dModifyMatFlag(o->model,0,NNS_G3D_MATFLAG_EMISSION);}for(j=0;j<4;j++){if(cur->animation[j]==255){o->animHeader[j]=NULL;o->animObj[j]=NULL;}else{void*anm;o->animHeader[j]=GfGfxLoader_LoadFromNarc(narc,cur->animation[j],1,153,1);anm=NNS_G3dGetAnmByIdx(o->animHeader[j],0);o->animObj[j]=NNS_G3dAllocAnmObj((NNSFndAllocator*)s->allocator,anm,o->model);NNS_G3dAnmObjInit(o->animObj[j],anm,o->model,tex);NNS_G3dRenderObjAddAnmObj((NNSG3dRenderObj*)o,o->animObj[j]);}}}s->count=count;}

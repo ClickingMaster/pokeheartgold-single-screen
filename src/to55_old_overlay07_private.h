@@ -37,7 +37,7 @@ void ov07_0221F398(void);
 void ov07_0221F42C(void);
 void ov07_0221F8AC(void);
 u8 ov07_0221F8C4(void *p);
-int ov07_0221FAE8(void);
+int ov07_0221FAE8(void *);
 int ov07_0221FB78(void);
 void ov07_0221FE84(void);
 void ov07_0221FF74(void);
@@ -155,7 +155,8 @@ void ManagedSprite_TickFrame(void *sprite);
 void ov07_0222A8D8(void *sprite);
 void ov07_02232508(void *p);
 BOOL ov07_0221C3DC(void *p);
-void *ov07_0221C4A8(void *p, int i);
+
+extern u32 ov07_0221C4A8(void *p, int i);
 BOOL ov07_0221FAB0(void *p);
 void SysTask_Destroy(void *task);
 void ov07_02222EF8(void *p);

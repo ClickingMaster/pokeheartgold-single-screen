@@ -1,10 +1,9 @@
 #ifndef SOL40_OV49_R13_PRIVATE_H
 #define SOL40_OV49_R13_PRIVATE_H
 #include "global.h"
-typedef struct { void *field; } Ov49R13Work;
-typedef struct { u8 pad[0x44]; u32 input; } Ov49System;
-extern Ov49System gSystem;
-int ov42_02228188(void *, int);
+#include "overlay49_entry40.h"
+#include "system.h"
+s32 ov42_02228188(struct UnkStruct_ov42_02228110 *, s32);
 void ov49_0225927C(void *, int, int, int);
-void ov49_02259410(Ov49R13Work *, void *);
+void ov49_02259410(void *, void *);
 #endif

@@ -2,6 +2,7 @@
 #define OV40_R27_U6_PRIVATE_H
 
 #include "global.h"
+#include "sys_task_api.h"
 
 #define PTR(p, off)   (*(void **)((u8 *)(p) + (off)))
 #define WORD(p, off)  (*(u32 *)((u8 *)(p) + (off)))
@@ -10,13 +11,11 @@
 #define S32(p, off)   (*(s32 *)((u8 *)(p) + (off)))
 #define BYTE(p, off)  (*(u8 *)((u8 *)(p) + (off)))
 
-typedef void (*Ov40TaskFn)(void *task, void *arg);
+typedef SysTaskFunc Ov40TaskFn;
 
 void *Heap_Alloc(u32 heapId, u32 size);
 void Heap_Free(void *ptr);
 void MI_CpuFill8(void *dest, u8 value, u32 size);
-void *SysTask_CreateOnMainQueue(Ov40TaskFn fn, void *arg, u32 priority);
-void SysTask_Destroy(void *task);
 void PaletteData_BlendPalettes(void *data, int buffer, u16 selected, u8 amount, u16 color);
 void SetBgPriority(u8 bgId, u16 priority);
 void BgClearTilemapBufferAndCommit(void *bgConfig, u32 layer);
@@ -59,7 +58,7 @@ void ov40_02233044(void *p);
 extern const u8 ov40_02245134[];
 extern const u8 ov40_02232ED4[];
 
-void ov40_022318C8(void *task, void *arg);
+void ov40_022318C8(SysTask *task, void *arg);
 int ov40_022319A4(void *p);
 int ov40_02231C78(void *p);
 int ov40_02231EA4(void *p);

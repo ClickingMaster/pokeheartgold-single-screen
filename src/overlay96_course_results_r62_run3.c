@@ -12,5 +12,5 @@ void ov96_021F7DA8(void *work) {
 }
 
 int ov96_021F7E64(void *course) {
-    return U8(ov96_021E8A20((u8 *)PokeathlonCourse_GetDataCopyArea(course) + 0xf0), 2);
+    return U8((void *)ov96_021E8A20((u8 *)PokeathlonCourse_GetDataCopyArea(course) + 0xf0), 2);
 }

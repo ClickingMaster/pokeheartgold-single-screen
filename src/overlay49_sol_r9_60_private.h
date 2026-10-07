@@ -56,7 +56,7 @@ void ov49_02262E04(void *, void *, u32);
 void ov49_02262DB8(void *, void *);
 void *ov49_02259FF0(void *);
 u32 ov49_02258DAC(void *);
-void ov49_02258EEC(void *, u32, u32);
+void ov49_02258EEC(void *, void *, int);
 void *ov49_02258D70(void *, u32);
 u8 ov49_02258F38(void *);
 void ov49_02258D54(void *);

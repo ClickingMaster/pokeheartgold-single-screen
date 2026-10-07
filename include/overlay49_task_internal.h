@@ -61,7 +61,7 @@ extern u32 ov49_0225BFEC();
 extern void ov49_02268968();
 extern PlayerProfile *PlayerProfile_New();
 extern void Heap_Free();
-extern u32 ov45_0222A53C();
+extern int ov45_0222A53C(void *);
 extern PlayerProfile *ov45_0222A5C0();
 extern PlayerProfile *ov45_0222A578();
 extern void ov45_0222A844();

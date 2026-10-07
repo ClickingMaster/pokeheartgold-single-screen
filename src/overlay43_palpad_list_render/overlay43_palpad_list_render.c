@@ -22,7 +22,7 @@ void ov43_0222C378(void *position, void *arg1, void *context, int value, int sel
     offset = page * 0x38;
     item = (u8 *)position + 8 + offset;
     ov43_0222C7F8(item, context, (u8 *)context + 0x200);
-    ov43_0222C918(item, arg1, context, U32(position, 0xB4), (u8 *)context + 0x200, (u8 *)arg1 + 0x10, value, arg6);
+    ov43_0222C918(item, arg1, context, PTR(position, 0xB4), (u8 *)context + 0x200, (u8 *)arg1 + 0x10, value, arg6);
     ov43_0222C844(item, context, selected);
 }
 

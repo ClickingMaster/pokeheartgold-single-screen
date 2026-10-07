@@ -41,9 +41,9 @@ int ov96_021F9240(void *course, u8 *state) {
         void *p;
         ov96_021FBDBC(work);
         ov96_021FB630(course);
-        p = ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course));
+        p = (void *)ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course));
         ((u8 *)p)[9] = 1;
-        p = ov96_021E8A20((u8 *)PokeathlonCourse_GetDataCopyArea(course) + 0xF0);
+        p = (void *)ov96_021E8A20((u8 *)PokeathlonCourse_GetDataCopyArea(course) + 0xF0);
         if (*(u32 *)p != 0) {
             (*state)++;
             *(u32 *)(work + 0x234) = 0;

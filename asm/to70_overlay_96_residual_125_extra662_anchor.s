@@ -1,3 +1,21 @@
+	.public ov96_0221D69C
+	.public ov96_0221D7D0
+	.public ov96_0221C0B0
+	.public ov96_0221C0B4
+	.public ov96_0221D708
+	.public ov96_0221D70A
+	.public ov96_0221D70C
+	.public ov96_0221B1AC
+	.public ov96_0221C0F4
+	.public ov96_0221D1F4
+	.public ov96_0221C748
+	.public ov96_0221C754
+	.public ov96_0221CAF0
+	.public ov96_0221CB10
+	.public ov96_0221CB2C
+	.public ov96_0221CB48
+	.public ov96_0221CB64
+	.public ov96_0221CB80
 	.public ov96_0221C290
 	.public ov96_0221C298
 	.public ov96_0221C2B4

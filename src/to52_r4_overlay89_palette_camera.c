@@ -1,6 +1,6 @@
 #include "to52_r4_overlay89_palette_camera_private.h"
 
-BOOL ov89_02259A3C(int id, int b, Sprite **sprite, NARC *narc, int mode, int which, int x) {
+BOOL ov89_02259A3C(int id, int b, ManagedSprite *sprite, NARC *narc, NARC *alternate, int which, void *network) {
     void *file;
     NNSG2dCharacterData *charData;
     u8 *src1;
@@ -9,8 +9,8 @@ BOOL ov89_02259A3C(int id, int b, Sprite **sprite, NARC *narc, int mode, int whi
     if (id == 0 || id > 0x1ed) {
         return FALSE;
     }
-    if (ov89_0225C88C(id, b, x) == 1) {
-        file = GfGfxLoader_LoadFromOpenNarc((NARC *)mode, id + 3, TRUE, HEAP_ID_125, TRUE);
+    if (ov89_0225C88C(id, b, (u32)network) == 1) {
+        file = GfGfxLoader_LoadFromOpenNarc(alternate, id + 3, TRUE, HEAP_ID_125, TRUE);
         NNS_G2dGetUnpackedCharacterData(file, &charData);
         DC_FlushRange(charData->pRawData, 0x100);
         src2 = charData->pRawData;
@@ -29,7 +29,7 @@ BOOL ov89_02259A3C(int id, int b, Sprite **sprite, NARC *narc, int mode, int whi
         dst = 0x6600000;
     }
     {
-        NNSG2dImageProxy *proxy = Sprite_GetImageProxy(*sprite);
+        NNSG2dImageProxy *proxy = Sprite_GetImageProxy(sprite->sprite);
         MIi_CpuCopy16((u16 *)src1, (u16 *)(dst + proxy->vramLocation.baseAddrOfVram[which]), 0x40);
         MIi_CpuCopy16((u16 *)src2, (u16 *)(dst + 0x40 + proxy->vramLocation.baseAddrOfVram[which]), 0x40);
     }

@@ -1,7 +1,9 @@
 #include "overlay49_position_helpers_private.h"
 
-void ov49_022599F8(Ov49R14Work *work)
+void ov49_022599F8(void *opaque,void *ctx)
 {
+    Ov49EntryR4 *entry=opaque;
+    Ov49R14Work *work=&entry->storage.cleanup;
     u32 pos[3];
     ov45_0223089C(work->obj, 1);
     ov45_02230908(work->obj, pos);

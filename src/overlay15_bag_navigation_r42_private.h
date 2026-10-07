@@ -2,6 +2,7 @@
 #define TO42_OV15_RESIDUAL7_PRIVATE_H
 
 #include "global.h"
+#include "to91_bag_choices41560_private.h"
 
 #include "sys_vars.h"
 #include "system.h"
@@ -55,7 +56,7 @@ void ov15_021FECD8(BagWorkRaw *, void *, u32);
 void ov15_021FD574(BagWorkRaw *, s32, s32, s32);
 void ov15_021FF4EC(BagWorkRaw *, s32, s32);
 void ov15_022002B4(BagWorkRaw *, s32);
-void ov15_021FB14C(BagWorkRaw *);
+
 void ov15_021FAD80(BagWorkRaw *, BagPocketEntryRaw *);
 void ov15_021FFF34(BagWorkRaw *, void *);
 s32 ov15_021FA074(BagWorkRaw *);

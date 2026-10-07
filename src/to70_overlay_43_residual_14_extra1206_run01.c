@@ -5,7 +5,7 @@ typedef struct { s16 a,b,c,d;u8 data[0xec];int timer; } State;
 typedef struct {u32 x;void *save;u8 state,x9,xa;s8 index;u8 padc[0xc];u8 slots[0x40];u32 value;}Work;
 extern void ov43_0222A420(Work *),ov43_0222BB20(State *,Work *,void *,int),ov43_0222C53C(State *,Work *,int),ov43_0222BFD4(State *,Work *,void *,int);
 extern int ov43_0222BFA4(State *,Work *,void *),ov43_0222C024(State *,Work *,void *,int),ov43_0222C620(State *),ov43_0222C228(State *,Work *,void *);
-extern void ov43_0222A41C(Work *,int),ov43_0222C148(State *,Work *,void *,int),ov43_0222BBB8(State *,Work *,void *),ov43_0222A318(Work *,int,int);
+extern void ov43_0222A41C(Work *,int),ov43_0222C148(void *,void *,void *,int),ov43_0222BBB8(State *,Work *,void *),ov43_0222A318(Work *,int,int);
 extern void BeginNormalPaletteFade(int,int,int,int,int,int,int);extern int IsPaletteFadeFinished(void);
 extern void *sub_0202C6F4(void *),*Save_Frontier_GetStatic(void *);
 extern int sub_0202C254(void *,int);extern void sub_0202C270(void *,int,u32),sub_0202C338(void *,int),sub_020311AC(void *,int),ov43_0222A414(Work *,int);

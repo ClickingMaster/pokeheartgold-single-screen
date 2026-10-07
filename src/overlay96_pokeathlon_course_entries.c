@@ -60,7 +60,7 @@ extern void PokeathlonCourse_SetStateField07(void *, u32);
 
 extern u32 ov96_021E637C(void *);
 extern void ov96_021E8318(void *, u8);
-extern void *ov96_021E8A20(void *);
+extern u8 *ov96_021E8A20(void *ptr);
 extern u32 ov96_021E5F24(void *);
 extern u32 ov96_021E667C(void *);
 extern void ov96_021E6670(void *, u32);
@@ -186,7 +186,7 @@ u32 ov96_0220E2DC(void *course, u8 *state) {
     case 1: {
         void *p;
         ov96_0220F03C(course);
-        p = ov96_021E8A20((u8 *)PokeathlonCourse_GetDataCopyArea(course) + 0xf0);
+        p = (void *)ov96_021E8A20((u8 *)PokeathlonCourse_GetDataCopyArea(course) + 0xf0);
         ov96_02210324(PTR(w, 0xc4), (u8)BITS(p, 0x1c).g.top, (u16)BITS(p, 0x20).h.v7);
         if (ov96_021E667C(course)) {
             if (ov96_0220D408((u8 *)w + 0x6a8)) {
@@ -275,7 +275,7 @@ u32 ov96_0220E3F0(void *course) {
         PokeathlonCourse_SetField1F4(course, 1);
         ov96_0220F4A0(w);
         if (ov96_021E5F24(course) == 0) {
-            void *p = ov96_021E8A20((u8 *)PokeathlonCourse_GetDataCopyArea(course) + 0x28);
+            void *p = (void *)ov96_021E8A20((u8 *)PokeathlonCourse_GetDataCopyArea(course) + 0x28);
             BITS(p, 0x1c).k.b = (u32)_s32_div_f((s32)(U32(w, 0x50c) + 0x1e), 0x1e);
             ov96_0220FA18((u8 *)w + 0xcc, course);
         }

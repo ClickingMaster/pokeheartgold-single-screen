@@ -11,11 +11,11 @@
 #define H(p,o) (*(u16*)((p)+(o)))
 typedef union S {struct{u32 flag:1;u32 cap:31;u32 len;char*ptr;}l;struct{u8 flag:1;u8 len:7;char data[11];}s;} S;
 typedef struct Vec {S*data;u32 len,cap,z,extra;} Vec;
-typedef struct Node {struct Node*left,*right,*parent;u32 key;} Node;
+typedef struct Node {void *left,*right;u32 parent;u32 key;} Node;
 typedef struct Small {u8 x;} Small;
 typedef struct E {int key,val;} E;
 extern void ov45_02237800(Vec*,u32,Small);
-extern S*ov45_02238024(S*,u32,u32,char*,u32);
+extern int ov45_02238024(const u8*,u32,u32,const void*,u32);
 extern S*ov45_02238104(S*,u32,u32,char*,char*,Small);
 extern void*ov45_02242394(u32);
 extern void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
@@ -23,8 +23,7 @@ extern u8*ov45_02231C78(S*);
 extern int ov00_021EC2EC();
 extern int ov45_022377AC();
 extern int ov45_02237BC8();
-void ov45_02237EB0(S*p,S*q,u32 pos);
-u32 ov45_02237EE4(S*p,char*q,u32 pos,u32 len);
+#include "overlay45_string_search.h"
 void ov45_02237F7C(S*p,S*q);
 void ov45_02237FD8(S*p,char*q);
 void* ov45_02238450(Node*p,u32*key,Node**out,u8*less,u8*empty);

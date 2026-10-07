@@ -51,7 +51,8 @@ void GF_AssertFail(void);
 void Heap_Free(void *);
 void *ov07_022324D8(void *, int);
 void *ov07_0221FA78(void *);
-int ov07_0221C4A8(void *, int);
+
+extern u32 ov07_0221C4A8(void *p, int i);
 int ov07_0221E6C8(void *);
 void *ov07_0221C410(void *, void *, void *);
 void ov07_0221C448(void *, void *);

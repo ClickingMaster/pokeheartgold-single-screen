@@ -272,9 +272,9 @@ struct PokedexAppData {
     MsgData *msgData;                               // 0x065C
     MessageFormat *msgFormat;                       // 0x0660
     String *strBufFormatted;                        // 0x0664
-    u8 filler_0668[4];                              // 0x0668
+    SpriteSystem *spriteSystem;                              // 0x0668
     SpriteManager *unk_066C;                        // 0x066C
-    u8 filler_0770[0x1E0];                          // 0x0770
+    ManagedSprite *sprites[59]; u8 spriteOwnerRemainder[0xF4];                          // 0x0770
     PaletteData *paletteData;                       // 0x0850
     NARC *gfxNarc;                                  // 0x0854
     u8 filler_0858[4];                              // 0x0858
@@ -467,7 +467,7 @@ void ov18_021F1CAC(PokedexAppData *pokedexApp, int species, int a2, int a3);
 void ov18_021F1DE4(PokedexAppData *pokedexApp, u32 species, int a2, int a3);
 void ov18_021F209C(PokedexAppData *pokedexApp, u32 species, int a2, int a3);
 void ov18_021F24E0(PokedexAppData *pokedexApp, u32 species, int a2);
-void ov18_021F2530(PokedexAppData *pokedexApp, u32 species, int a2);
+void ov18_021F2530(PokedexAppData *pokedexApp, u16 species, int a2);
 void ov18_021F2880(PokedexAppData *pokedexApp);
 void ov18_021F2A2C(PokedexAppData *pokedexApp, int a1, int a2);
 void ov18_021F2A84(PokedexAppData *pokedexApp, int a1, int a2);

@@ -5,7 +5,7 @@ typedef struct {int id;u16 next,choice,timer;u8 state,ticks;void*mon;u8 tail[8];
 extern void *ov49_02259FF0(void*),*ov49_02259FF8(void*),*ov49_0225A008(void*),*ov49_02259FE8(void*),*ov49_0225EF84(void*),*ov49_0225EF40(void*,int),*ov49_02258D70(void*,int),*ov49_0225A010(void*);
 extern int ov49_0225EF88(void*),ov49_0225A040(void*),ov45_0222A374(void*),ov45_0222A330(void*),ov45_0222ADB8(void*,int,int),ov49_022611F4(C*,void*),ov49_02261234(C*,void*,void*),ov49_022613AC(C*,void*),ov49_02258E60(void*,int),ov49_0225A0AC(void*);
 extern void* ov49_0225A30C(void*,int,int);
-extern void ov49_0225EF8C(void*,int),ov49_0225A09C(void*,void*),ov49_0225A0BC(void*),ov45_0222ADC8(void*,int),ov49_0225A0CC(void*),ov45_0222AE44(void*),ov45_0222A5E8(void*,int),ov49_0225A044(void*),ov49_0225CC44(void*),ov49_02259130(void*,int),ov49_0225916C(void*,int),PlaySE(int),ov49_0225A510(void*),ov49_02259160(void*,int),ov49_022591B4(void*,int),ov49_02261434(C*,void*,void*),ov49_022611D4(C*,void*),ov49_0225A53C(void*,int),ov49_02259154(void*,int*),ov49_02261460(C*,void*,void*),ov49_02258EAC(void*,void*,int,int),ov49_0225A08C(void*,void*),ov49_0225A0EC(void*),ov49_0225A034(void*,int),ov49_0225A038(void*,int),ov49_02258EEC(void*,void*,int),ov49_0225EF68(void*),ov49_0225EF98(void*,int,const void*,int);
+extern void ov49_0225EF8C(void*,int),ov49_0225A09C(void*,void*),ov49_0225A0BC(void*),ov45_0222ADC8(void*,int),ov49_0225A0CC(void*),ov45_0222AE44(void*),ov45_0222A5E8(void*,int),ov49_0225A044(void*),ov49_0225CC44(void*),ov49_02259130(void*,int),ov49_0225916C(void*,int),PlaySE(int),ov49_0225A510(void*),ov49_02259160(void*,int),ov49_022591B4(void*,int),ov49_02261434(C*,void*,void*),ov49_022611D4(C*,void*),ov49_0225A53C(void*,int),ov49_02259154(void*,int*),ov49_02261460(C*,void*,void*),ov49_02258EAC(void*,void*,int,int),ov49_0225A08C(void*,void*),ov49_0225A0EC(void*),ov49_0225A034(void*,int),ov49_0225A038(void*,int),ov49_02258EEC(void *, void *, int),ov49_0225EF68(void*),ov49_0225EF98(void*,int,const void*,int);
 extern const u8 ov49_02269B38[];
 int ov49_02260E2C(void*,void*,int);
 int ov49_02260E2C(void*owner,void*ui,int index){void*map=ov49_02259FF0(ui);void*extra=ov49_02259FF8(ui);void*ptr=ov49_0225A008(ui);void*net=ov49_02259FE8(ui);C*c=ov49_0225EF84(owner);int v[3];
@@ -25,5 +25,5 @@ case 11:if(ov49_0225A0AC(ui)==1)ov49_0225EF8C(owner,c->next);break;
 case 12:ov49_0225A0EC(ui);ov49_0225EF8C(owner,c->state);break;
 case 13:ov49_02261434(c,extra,ui);ov49_02261460(c,extra,ui);c->ticks++;if(c->ticks>120){ov49_0225A034(ui,1);ov49_0225A038(ui,0);ov49_0225A0EC(ui);ov45_0222A5E8(ov49_02259FE8(ui),11);ov49_0225EF8C(owner,14);}break;
 case 14:ov49_02261434(c,extra,ui);ov49_02261460(c,extra,ui);break;
-case 15:{void*obj=ov49_0225A010(ui);ov49_0225A0EC(ui);ov49_02258EEC(map,c->mon,1);ov49_0225EF68(owner);ov49_0225EF98(obj,index,ov49_02269B38,0);break;}}
+case 15:{void*obj=ov49_0225A010(ui);ov49_0225A0EC(ui);ov49_02258EEC(map, (void*)(c->mon),1);ov49_0225EF68(owner);ov49_0225EF98(obj,index,ov49_02269B38,0);break;}}
 return 0;}

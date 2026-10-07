@@ -10,7 +10,7 @@ typedef struct {u8 pad[8];u8 revision,count;u8 rest[6];} ModelSet;
 typedef struct {u8 pad[52];u16 paletteOffset;u8 rest[6];Dict texDict;} Texture;
 extern void bindMdlTex_Internal_(Materials *,Binding *,Texture *,void *);
 extern void releaseMdlTex_Internal_(Materials *,Binding *);
-extern void bindMdlPltt_Internal_(Materials *,Binding *,Texture *,void *);
+extern void bindMdlPltt_Internal_(void *,void *,void *,void *);
 int NNS_G3dForceBindMdlTex(Model *,Texture *,u32,u32);
 int NNS_G3dForceBindMdlPltt(Model *,Texture *,u32,u32);
 void NNS_G3dReleaseMdlTex(Model *);void NNS_G3dReleaseMdlPltt(Model *);

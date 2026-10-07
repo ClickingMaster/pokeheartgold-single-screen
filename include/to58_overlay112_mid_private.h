@@ -24,7 +24,7 @@ extern int TextPrinterCheckActive(u8);
 #include "system.h"
 #define W(p,o) (*(u32 *)((u8 *)(p)+(o)))
 extern void ov112_021E9C10();
-extern void ov112_021E9A78(Ov112State *, int);
+extern void ov112_021E9A78(void *, int);
 extern void ov112_021EA570(Ov112State *);
 extern int ov112_021E9338(Ov112State *);
 extern int ov112_021E9750(Ov112State *);

@@ -17,7 +17,7 @@ typedef struct{B4 size;u16 cmd,pad;Z312 config;} Packet;
 typedef struct{int x[12];} B48;
 typedef struct{int type,len;void*p;u32**addr;} Host;
 typedef struct{u8 len,family;u16 port;u32 addr;} Addr;
-extern u8 _0222A9AC[];
+extern u8 to91_w41520_ov39_heap_size_ids[];
 extern Host*SOC_GetHostByName(char*);
 typedef struct{u32 addr;} InAddr;
 
@@ -101,6 +101,6 @@ int ov39_02229630(int cmd,void*in,void*out,int n);
 
 int ov39_0222A59C(int n){int size;switch(n){case 0:size=0x400;break;case 0x4e20:size=224;break;case 0x4e21:size=12;break;case 0x5208:size=544;break;case 0x5209:size=12;break;case 0x55f0:size=0;break;case 0x55f1:size=36;break;case 0x59d8:size=7500;break;case 0x59d9:size=28;break;case 0x59da:size=12;break;case 0x59db:size=8;break;default:return -1;}return size+0x140;}
 
-int ov39_0222A6DC(int n){B48 list=*(B48*)_0222A9AC;int size;switch(n){case -1:{int i=0;size=-1;while(1){int v=list.x[i];if(v==-1)break;v=ov39_0222A6DC(v);if(v>size)size=v;i++;}if(size==-1)return -1;break;}case 0:size=0x400;break;case 0x4e20:size=8;break;case 0x4e21:size=0x93c;break;case 0x5208:size=8;break;case 0x5209:size=0x2b74;break;case 0x55f0:size=4;break;case 0x55f1:size=0x630;break;case 0x59d8:size=8;break;case 0x59d9:size=0x1c24;break;case 0x59da:size=0x1d58;break;case 0x59db:size=0;break;default:return -1;}return size+8;}
+int ov39_0222A6DC(int n){B48 list=*(B48*)to91_w41520_ov39_heap_size_ids;int size;switch(n){case -1:{int i=0;size=-1;while(1){int v=list.x[i];if(v==-1)break;v=ov39_0222A6DC(v);if(v>size)size=v;i++;}if(size==-1)return -1;break;}case 0:size=0x400;break;case 0x4e20:size=8;break;case 0x4e21:size=0x93c;break;case 0x5208:size=8;break;case 0x5209:size=0x2b74;break;case 0x55f0:size=4;break;case 0x55f1:size=0x630;break;case 0x59d8:size=8;break;case 0x59d9:size=0x1c24;break;case 0x59da:size=0x1d58;break;case 0x59db:size=0;break;default:return -1;}return size+8;}
 
 void ov39_0222A8AC(void*p,void*q){}

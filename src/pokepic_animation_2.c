@@ -15,7 +15,8 @@ void sub_02017088(PicManager *mgr, u32 index) {
     }
 }
 
-void sub_020170C4(SysTask *task, PicEntry *entry) {
+void sub_020170C4(SysTask *task, void *data) {
+    PicEntry *entry = data;
     if (entry->delay == 0) {
         sub_020170FC(entry);
     } else {

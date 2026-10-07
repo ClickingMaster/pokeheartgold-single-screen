@@ -43,7 +43,7 @@ extern void ov96_021E7718(Work *);
 extern BOOL ov96_021E87B4(u32, void *, void *, void *);
 extern void ov96_021E87B0(void *, u32);
 extern BOOL ov96_021E87EC(u32, void *, void *, void *);
-extern void *ov96_021E8A20(void *);
+extern u8 *ov96_021E8A20(void *ptr);
 extern void *ov96_021E9A14(void);
 extern void *ov96_021E9A18(void);
 extern void *ov96_021E9A1C(void);
@@ -98,7 +98,7 @@ u32 ov96_021E6FFC(Work *w) {
 }
 
 u32 ov96_021E7030(Work *w) {
-    u16 *src = ov96_021E8A20(w->d + 0x37c);
+    u16 *src = (void *)ov96_021E8A20(w->d + 0x37c);
     u16 *dst = (u16 *)(w->d + 0x5f0);
     u32 n = 0x12;
     do {
@@ -181,8 +181,8 @@ u32 ov96_021E7190(Work *w) {
         PokeathlonCourse_SetStateField07(w, 0x1c);
     } else if (!ov96_021E5F24(w)) {
         ov96_021E87B4(0x1b, w->d + 0x2b4, ov96_021E9A14(), (void *)U32(w, 0x288));
-        u8 *dst = ov96_021E8A20(w->d + 0x2dc);
-        u8 *src = ov96_021E8A20(w->d + 0x28c);
+        u8 *dst = (void *)ov96_021E8A20(w->d + 0x2dc);
+        u8 *src = (void *)ov96_021E8A20(w->d + 0x28c);
         u32 n = 0x28;
         do {
             *dst++ = *src++;
@@ -243,8 +243,8 @@ u32 ov96_021E7320(Work *w) {
         PokeathlonCourse_SetStateField07(w, 0x22);
     } else if (!ov96_021E5F24(w)) {
         ov96_021E87B4(0x1b, w->d + 0x2b4, ov96_021E9A14(), (void *)U32(w, 0x288));
-        u8 *dst = ov96_021E8A20(w->d + 0x2dc);
-        u8 *src = ov96_021E8A20(w->d + 0x28c);
+        u8 *dst = (void *)ov96_021E8A20(w->d + 0x2dc);
+        u8 *src = (void *)ov96_021E8A20(w->d + 0x28c);
         u32 n = 0x28;
         do {
             *dst++ = *src++;

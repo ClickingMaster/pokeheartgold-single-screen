@@ -47,11 +47,7 @@ typedef struct Ov39Cb {
     void *arg;
 } Ov39Cb;
 
-typedef struct Ov39Cb2 {
-    u8 pad00[8];
-    void (*fn)(void *);
-    void *arg;
-} Ov39Cb2;
+#include "overlay39_state_words.h"
 
 typedef struct Ov39Ev {
     u8 pad00[2];
@@ -150,7 +146,7 @@ void ov39_02228948(Ov39App *app);
 BOOL ov39_02228A70(u32 printerId);
 void ov39_02228A8C(Ov39App *app);
 void ov39_02228AA8(Ov39App *app);
-void ov39_02228B6C(Ov39Cb2 *cb, void (*fn)(void *), void *arg);
+
 u32 ov39_02228D90(Ov39App *app);
 u32 ov39_0222908C(Ov39App *app);
 

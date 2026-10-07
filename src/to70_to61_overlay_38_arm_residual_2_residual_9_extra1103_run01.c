@@ -1,6 +1,7 @@
 #pragma force_active on
 // clang-format off
 #include "global.h"
+#include "to91_http_lookup41558_private.h"
 #include <nitro/code32.h>
 // clang-format on
 typedef struct Payload { char pad[0x2c]; void *a; void *b; int gap[2]; void (*callback)(int,void*,void*); } Payload;
@@ -11,7 +12,7 @@ extern Node *ov38_02226230;
 extern volatile int ov38_0222622C;
 extern void ov38_02222B98(Payload*);
 int ov38_02221E2C(Payload*);
-Node *ov38_02221EE0(int);
+
 int ov38_02221F38(int);
 int ov38_02221F38(int id) {
  int result=0; Node *n=ov38_02221EE0(id);

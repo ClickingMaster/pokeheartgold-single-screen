@@ -1,6 +1,7 @@
 #pragma force_active on
 // clang-format off
 #include "global.h"
+#include "to91_http_lookup41558_private.h"
 #include <nitro/code32.h>
 // clang-format on
 #pragma force_active on
@@ -71,7 +72,7 @@ s8 ov38_02221CA4(u8 v);
 int ov38_02221D78(void *p,void *key,int val);
 int ov38_02221D9C(void *p,void *key,void *v);
 int ov38_02221E10(void *p,int v,int w);
-Node *ov38_02221EE0(int id);
+
 void ov38_02221FD8(void);
 Node *ov38_02222008(void);
 int ov38_0222201C(void);
@@ -124,7 +125,7 @@ s8 ov38_02221CA4(u8 v);
 int ov38_02221D78(void *p,void *key,int val);
 int ov38_02221D9C(void *p,void *key,void *v);
 int ov38_02221E10(void *p,int v,int w);
-Node *ov38_02221EE0(int id);
+
 void ov38_02221FD8(void);
 Node *ov38_02222008(void);
 int ov38_0222201C(void);
@@ -191,7 +192,7 @@ int ov38_02221D78(void *p,void *key,int val);
 int ov38_02221D9C(void *p,void *key,void *v);
 int ov38_02221E10(void *p,int v,int w);
 int ov38_02221E2C(void *p);
-Node *ov38_02221EE0(int id);
+
 int ov38_02221F38(int id);
 void ov38_02221FD8(void);
 Node *ov38_02222008(void);

@@ -36,7 +36,7 @@ extern void YesNoPrompt_Destroy(void *prompt);
 extern void ov75_02247854(Ov75Residual10State *state, u32 value, u32 amount);
 extern int sub_0203A05C(void *saveData);
 extern void ov75_02246BCC(void *work, u32 value, u32 unused);
-extern void ov75_02246BE0(void *work, u32 value);
+extern void ov75_02246BE0(void *work, int value);
 extern void ov75_0224785C(Ov75Residual10State *state);
 extern void sub_0203957C(void);
 

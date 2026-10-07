@@ -28,7 +28,7 @@ void BgClearTilemapBufferAndCommit(void *, u32);
 u32 ov40_0222DA00(void *, void *, u32, u32);
 void GfGfxLoader_LoadScrnDataFromOpenNarc(void *, u32, void *, u32, u32, u32, u32, u32);
 void ov40_0222C710(void *, u32);
-void ov40_02237030(void *, u32);
+void ov40_02237030(void *, int);
 void ov40_02236F38(void *);
 void ov40_0222BF80(void *, u32);
 u32 ov40_022383C8(void *);

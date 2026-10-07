@@ -17,7 +17,7 @@ BOOL ov96_021E75E4(Ov96R7Work *w) {
     src = w->d + 0x5e0;
     for (i = 0; i < 4; i++, src += 4) {
         size = PokeathlonCourse_GetUnkConstant4(w);
-        memcpy((u8 *)ov96_021E8A20((u8 *)copy + 0x28) + i * size, src, size);
+        memcpy((u8 *)(void *)ov96_021E8A20((u8 *)copy + 0x28) + i * size, src, size);
     }
     desc = ov96_021E9A14();
     system = PokeathlonCourse_GetSystem(w);

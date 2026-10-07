@@ -11,7 +11,7 @@ void ov96_021FB400(void *course) {
     Ov96R71Node nodes[12];
 
     copy = PokeathlonCourse_GetDataCopyArea(course);
-    packed = ov96_021E8A20(copy + 0x28);
+    packed = (void *)ov96_021E8A20(copy + 0x28);
     outer = 0;
     head.prev = NULL;
     head.next = &nodes[0];
@@ -23,7 +23,7 @@ void ov96_021FB400(void *course) {
     copy += 0x50;
     base = outer;
     for (; outer < 4; outer++) {
-        row = ov96_021E8A20(copy);
+        row = (void *)ov96_021E8A20(copy);
         for (inner = 0; inner < 3; inner++) {
             Ov96R71Node *node;
             Ov96R71Node *at = &head;

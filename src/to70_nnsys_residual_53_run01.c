@@ -13,7 +13,7 @@ void NNS_FndRemoveListObject(void *,void *);
 void NNS_FndInsertListObject(void *,void *,void *);
 void NNS_FndAppendListObject(void *,void *);
 void NNS_FndInitList(void *,int);
-void NNS_SndHeapClear(void *);
+u32 NNS_SndHeapClear(void *);
 void NNS_SndHeapDestroy(void *);
 void NNSi_SndFaderInit(void *);
 void NNSi_SndFaderSet(void *,int,int);
@@ -29,7 +29,7 @@ void InsertPrioList(SndPlayer *);
 void ForceStopSeq(SndPlayer *);
 SndPlayer *AllocSeqPlayer(int);
 void ShutdownPlayer(SndPlayer *);
-void PlayerHeapDisposeCallback(SndHeap *);
+void PlayerHeapDisposeCallback(void *,u32,void *,int);
 void SetPlayerPriority(SndPlayer *,int);
 void NNS_SndStrmInit(u32 *);
 int NNS_SndStrmAllocChannel(u8 *,int,const volatile u8 *);
@@ -47,7 +47,7 @@ void InsertPrioList(SndPlayer *p){SndPlayer *it=NNS_FndGetNextListObject(_021DF9
 void ForceStopSeq(SndPlayer *p){if(p->status==2)SND_SetPlayerVolume(p->id,-723);SND_StopSeq(p->id);ShutdownPlayer(p);}
 SndPlayer *AllocSeqPlayer(int prio){SndPlayer *p=NNS_FndGetNextListObject(_021DF96C,0);if(!p){p=NNS_FndGetNextListObject(_021DF978,0);if(prio<p->priority)return 0;ForceStopSeq(p);}NNS_FndRemoveListObject(_021DF96C,p);p->priority=prio;InsertPrioList(p);return p;}
 void ShutdownPlayer(SndPlayer *p){void *list;if(p->handle){*p->handle=0;p->handle=0;}list=p->list;NNS_FndRemoveListObject(list,p);p->list=0;if(p->heap){NNS_FndAppendListObject((u8 *)list+12,p->heap);p->heap->owner=0;p->heap=0;}NNS_FndRemoveListObject(_021DF978,p);NNS_FndAppendListObject(_021DF96C,p);p->status=0;}
-void PlayerHeapDisposeCallback(SndHeap *h){if(!h->heap)return;NNS_SndHeapDestroy(h->heap);if(h->owner)h->owner->heap=0;else NNS_FndRemoveListObject(_021DFDC4+h->index*36+12,h);}
+void PlayerHeapDisposeCallback(void *memory,u32 size,void *context,int tag){SndHeap *h=memory;if(!h->heap)return;NNS_SndHeapDestroy(h->heap);if(h->owner)h->owner->heap=0;else NNS_FndRemoveListObject(_021DFDC4+h->index*36+12,h);}
 void SetPlayerPriority(SndPlayer *p,int prio){void *list=p->list;if(list){NNS_FndRemoveListObject(list,p);p->list=0;}NNS_FndRemoveListObject(_021DF978,p);p->priority=prio;if(list)InsertPlayerList(list,p);InsertPrioList(p);}
 void NNS_SndStrmInit(u32 *p){if(!_021E0244){NNS_FndInitList(_021E0248,0);_021E0244=1;}p[2]=(u32)BeginSleep__Strm;p[3]=(u32)p;p[5]=(u32)EndSleep__Strm;p[6]=(u32)p;p[17]=0;p[18]=0;p[9]&=~1;p[9]&=~2;}
 int NNS_SndStrmAllocChannel(u8 *p,int n,const volatile u8 *channels){u32 bits=0;int i;for(i=0;i<n;i++){p[76+i]=channels[i];bits|=1<<channels[i];}if(!NNS_SndLockChannel(bits))return 0;*(int *)(p+72)=n;*(u32 *)(p+68)=bits;return 1;}

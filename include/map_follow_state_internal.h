@@ -15,8 +15,13 @@ typedef struct FollowStateSol {
     s16 z;
     u16 unk6;
     u16 unk8;
-    u16 flag0 : 1;
-    u16 flags : 15;
+    union {
+        u16 bits;
+        struct {
+            u16 flag0 : 1;
+            u16 flags : 15;
+        };
+    };
 } FollowStateSol;
 
 extern BOOL sub_02065D24(LocalMapObject *, FollowStateSol *);

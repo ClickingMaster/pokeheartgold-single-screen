@@ -1,0 +1,304 @@
+	.extern _022667AA
+	.extern _022667BA
+	.extern _022667C6
+	.extern _022667D6
+	.extern _022667FA
+	.extern _02266806
+	.extern _02266812
+	.extern _02266818
+	.extern _0226681C
+	.extern _02266836
+	.extern _0226684E
+	.extern _022668A0
+	.extern _022668AA
+	.extern _022668B6
+	.extern _022668F0
+	.extern _0226691E
+	.extern _02266952
+	.extern _02266956
+	.extern _02266968
+	.extern _0226696C
+	.extern _02266970
+	.extern _02266974
+	.extern _0226698A
+	.extern _022669A0
+	.extern _022669AC
+	.extern _022669E0
+	.extern _02266A08
+	.extern _02266A18
+	.extern _02266A1C
+	.extern _02266A2C
+	.extern _02266A4E
+	.extern _02266A5C
+	.extern _02266A74
+	.extern _02266A7C
+	.extern _02266A80
+	.extern _02266A84
+	.extern _02266AA8
+	.extern _02266AAC
+	.extern _02266AD8
+	.extern _02266AE8
+	.extern _02266AEC
+	.extern _02266B04
+	.extern _02266B06
+	.extern _02266B1C
+	.extern _02266B44
+	.extern _02266B84
+	.extern _02266B86
+	.extern _02266B96
+	.extern _02266BB0
+	.extern _02266BE2
+	.extern _02266C2A
+	.extern _02266C4A
+	.extern _02266C58
+	.extern _02266C5C
+	.extern _02266C60
+	.extern _02266C64
+	.extern _02266C68
+	.extern _02266C9A
+	.extern _02266CA8
+	.extern _02266CEC
+	.extern _02266CF0
+	.extern _02266CF4
+	.extern _02266CF8
+	.extern _02266CFC
+	.extern _02266D00
+	.extern _02266D50
+	.extern _02266D54
+	.extern _02266D58
+	.extern _02266D5C
+	.extern _02266D70
+	.extern _02266D78
+	.extern _02266DD0
+	.extern _02266DEA
+	.extern _02266DFC
+	.extern _02266E16
+	.extern _02266E1E
+	.extern _02266E26
+	.extern _02266E2E
+	.extern _02266E5E
+	.extern _02266E64
+	.extern _02266E68
+	.extern _02266E6C
+	.extern _02266E70
+	.extern _02266E74
+	.extern _02266ECE
+	.extern _02266EE0
+	.extern _02266EE8
+	.extern _02266EEC
+	.extern _02266EF0
+	.extern _02266EF4
+	.extern _02266F08
+	.extern _02266F10
+	.extern _02266F44
+	.extern _02266F52
+	.extern _02266F9A
+	.extern _02266FBC
+	.extern _02266FD6
+	.extern _02266FF0
+	.extern _02267008
+	.extern _02267052
+	.extern _0226705C
+	.extern _02267060
+	.extern _02267064
+	.extern _02267068
+	.extern _0226706C
+	.extern _02267070
+	.extern _022670B0
+	.extern _022670B4
+	.extern _022670C8
+	.extern _022670D0
+	.extern _022670F0
+	.extern _022670FA
+	.extern _0226710A
+	.extern _0226710C
+	.extern _02267112
+	.extern _02267128
+	.extern _0226715E
+	.extern _022671B6
+	.extern _02267228
+	.extern _0226722E
+	.extern _02267230
+	.extern _02267262
+	.extern _022672AA
+	.extern _022672C4
+	.extern _022672F8
+	.extern _02267300
+	.extern _02267304
+	.extern _02267308
+	.extern _0226730C
+	.extern _02267310
+	.extern _02267314
+	.extern _02267318
+	.extern _0226731C
+	.extern _02267320
+	.extern _02267324
+	.extern _0226733C
+	.extern _0226734E
+	.extern _02267358
+	.extern _02267364
+	.extern _0226736C
+	.extern _02267382
+	.extern _02267396
+	.extern _0226739E
+	.extern _022673B4
+	.extern _022673EA
+	.extern _02267456
+	.extern _0226745C
+	.extern _02267464
+	.extern _02267468
+	.extern _0226746C
+	.extern _02267470
+	.extern _02267474
+	.extern _02267478
+	.extern _0226749A
+	.extern _022674EA
+	.extern _02267586
+	.extern _02267670
+	.extern _02267692
+	.extern _022676E2
+	.extern _0226777E
+	.extern _02267868
+	.extern _02267896
+	.extern _022678D0
+	.extern _022678D8
+	.extern _022678E8
+	.extern _022678FC
+	.extern _0226792A
+	.extern _02267934
+	.extern _02267950
+	.extern _022679E6
+	.extern _02267A04
+	.extern _02267A08
+	.extern _02267A0C
+	.extern _02267A10
+	.extern _02267A14
+	.extern _02267A18
+	.extern _02267A7C
+	.extern _02267A80
+	.extern _02267A9A
+	.extern _02267ADE
+	.extern _02267AE8
+	.extern _02267AEC
+	.extern _02267B42
+	.extern _02267B74
+	.extern _02267B84
+	.extern _02267BB0
+	.extern _02267BBE
+	.extern _02267BE2
+	.extern _02267BF4
+	.extern _02267C00
+	.extern _02267C0E
+	.extern _02267C14
+	.extern _02267C18
+	.extern _02267C1C
+	.extern _02267C34
+	.extern _02267C74
+	.extern _02267C84
+	.extern _02267C88
+	.extern _02267CC0
+	.extern _02267CFC
+	.extern ov49_0226676C
+	.extern ov49_02266820
+	.extern ov49_02266978
+	.extern ov49_022669B0
+	.extern ov49_02266A88
+	.extern ov49_02266AB0
+	.extern ov49_02266AF0
+	.extern ov49_02266B28
+	.extern ov49_02266C6C
+	.extern ov49_02266D04
+	.extern ov49_02266D60
+	.extern ov49_02266D7C
+	.extern ov49_02266E78
+	.extern ov49_02266EF8
+	.extern ov49_02266F14
+	.extern ov49_02267074
+	.extern ov49_022670B8
+	.extern ov49_022670D4
+	.extern ov49_02267328
+	.extern ov49_0226747C
+	.extern ov49_02267674
+	.extern ov49_0226786C
+	.extern ov49_0226789C
+	.extern ov49_02267908
+	.extern ov49_02267A1C
+	.extern ov49_02267A84
+	.extern ov49_02267AF0
+	.extern ov49_02267C20
+	.extern ov49_02267C8C
+	.extern ov49_02267EBC
+	.extern ov49_02267EF8
+	.extern ov49_02267F40
+	.include "asm/macros.inc"
+	.include "overlay_49.inc"
+	.include "global.inc"
+
+.text
+	thumb_func_start ov49_02267D98
+ov49_02267D98: ; 0x02267D98
+	push {r3, r4, r5, r6, r7, lr}
+	sub sp, #0x18
+	add r5, r0, #0
+	ldr r0, [sp, #0x30]
+	mov r7, #2
+	str r0, [sp, #0x30]
+	ldr r0, [sp, #0x34]
+	mov r6, #1
+	str r0, [sp, #0x34]
+	mov r0, #0x3b
+	lsl r0, r0, #4
+	str r1, [r5, r0]
+	add r1, r0, #4
+	ldr r4, [sp, #0x34]
+	strh r2, [r5, r1]
+	add r0, r0, #6
+	strh r3, [r5, r0]
+	mov r0, #0
+	str r0, [sp, #0x14]
+	mov r0, #3
+	str r0, [sp, #0x10]
+	ldr r0, [sp, #0x14]
+	add r4, #0xc
+	str r0, [sp, #0xc]
+_02267DC8:
+	ldr r1, [sp, #0x10]
+	mov r0, #0x78
+	mul r0, r1
+	add r0, r4, r0
+	str r0, [sp]
+	ldr r0, [sp, #0x34]
+	ldr r2, [sp, #0xc]
+	ldr r0, [r0, #8]
+	mov r1, #0x78
+	mul r1, r2
+	str r0, [sp, #4]
+	ldr r0, [sp, #0x30]
+	mov r2, #0x78
+	mov r3, #0x78
+	mul r2, r6
+	mul r3, r7
+	str r0, [sp, #8]
+	add r0, r5, #0
+	add r1, r4, r1
+	add r2, r4, r2
+	add r3, r4, r3
+	bl ov49_02267EBC
+	ldr r0, [sp, #0x10]
+	add r7, r7, #4
+	add r0, r0, #4
+	str r0, [sp, #0x10]
+	ldr r0, [sp, #0xc]
+	add r6, r6, #4
+	add r0, r0, #4
+	str r0, [sp, #0xc]
+	ldr r0, [sp, #0x14]
+	add r5, #0xec
+	add r0, r0, #1
+	str r0, [sp, #0x14]
+	cmp r0, #4
+	blt _02267DC8
+	add sp, #0x18
+	pop {r3, r4, r5, r6, r7, pc}
+	.balign 4, 0
+	thumb_func_end ov49_02267D98

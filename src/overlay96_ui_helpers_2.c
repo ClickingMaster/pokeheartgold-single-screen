@@ -2,7 +2,7 @@
 
 BOOL ov96_021EE54C(void *course) {
     void *area = PokeathlonCourse_GetDataCopyArea(course);
-    u8 *p = ov96_021E8A20((u8 *)area + 0xF0);
+    u8 *p = (void *)ov96_021E8A20((u8 *)area + 0xF0);
     if (course == NULL) GF_AssertFail();
     if (area == NULL) GF_AssertFail();
     if (p == NULL) GF_AssertFail();
@@ -11,7 +11,7 @@ BOOL ov96_021EE54C(void *course) {
 
 BOOL ov96_021EE580(void *course) {
     void *area = PokeathlonCourse_GetDataCopyArea(course);
-    u8 *p = ov96_021E8A20((u8 *)area + 0xF0);
+    u8 *p = (void *)ov96_021E8A20((u8 *)area + 0xF0);
     if (course == NULL) GF_AssertFail();
     if (area == NULL) GF_AssertFail();
     if (p == NULL) GF_AssertFail();

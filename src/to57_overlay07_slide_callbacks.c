@@ -25,9 +25,9 @@ void ov07_02224A20(void *ctx) {
     WorkSlideA *w = ov07_022324D8(ctx, sizeof(WorkSlideA));
     int kind, picno;
     w->owner = ctx;
-    w->param = ov07_0221C4A8(ctx, 0);
-    w->delta = ov07_0221C4A8(ctx, 1);
-    kind = ov07_0221C4A8(ctx, 2);
+    w->param = ((s32)ov07_0221C4A8(ctx, 0));
+    w->delta = ((s32)ov07_0221C4A8(ctx, 1));
+    kind = ((s32)ov07_0221C4A8(ctx, 2));
     picno = 0xff;
     switch (kind) {
     case 0x102:
@@ -89,9 +89,9 @@ void ov07_02224BAC(void *ctx) {
     WorkSlideB *w = ov07_022324D8(ctx, sizeof(WorkSlideB));
     int kind, picno;
     w->owner = ctx;
-    w->param = ov07_0221C4A8(ctx, 0);
-    w->delta = ov07_0221C4A8(ctx, 1);
-    kind = ov07_0221C4A8(ctx, 2);
+    w->param = ((s32)ov07_0221C4A8(ctx, 0));
+    w->delta = ((s32)ov07_0221C4A8(ctx, 1));
+    kind = ((s32)ov07_0221C4A8(ctx, 2));
     ov07_02231FE4(ctx, w->cfg);
     picno = 0xff;
     switch (kind) {

@@ -14,7 +14,7 @@ u16 CalcAngleBetweenVecs(VecFx32 *a, VecFx32 *b);
 void sub_02020D2C(MtxFx33 *rotation, VecFx32 *a1);
 void sub_02020E10(u16 perspectiveAngle, fx32 distance, fx32 aspect, fx32 *dx, fx32 *dy);
 void sub_02020DA4(MtxFx33 *rotation, u16 x, u16 y, u16 z);
-BOOL sub_02020E80(const VecFx32 *a, const VecFx32 *b, const VecFx32 *c);
-BOOL sub_02020EB0(const VecFx32 *a, const VecFx32 *b, const VecFx32 *c, const VecFx32 *d);
+BOOL sub_02020E80(const void *a, const void *b, const void *c);
+BOOL sub_02020EB0(const void *a, const void *b, const void *c, const void *d);
 
 #endif // POKEHEARTGOLD_UNK_02020B8C_H

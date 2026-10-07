@@ -3,85 +3,8 @@
 
 #include "global.h"
 
-typedef struct Ov37Window {
-    u8 dummy[0x10];
-} Ov37Window;
+#include "overlay_37_work.h"
 
-typedef struct Ov37SpriteHolder {
-    u8 unk_00[0x20];
-    void *unk_20;
-} Ov37SpriteHolder;
-
-typedef struct Ov37Pair {
-    u32 cur;
-    u32 prev;
-} Ov37Pair;
-
-typedef struct Ov37Slot {
-    u16 unk_00;
-    u16 unk_02;
-} Ov37Slot;
-
-typedef struct Ov37Rec10 {
-    u8 flags;
-    u8 pad[9];
-} Ov37Rec10;
-
-typedef struct Ov37Work {
-    void *bgConfig; /* 0x0000 */
-    u8 unk_0004[0x0008 - 0x0004];
-    void *args;       /* 0x0008 */
-    void *msgFormat;  /* 0x000C */
-    void *msgData;    /* 0x0010 */
-    void *strbuf[5];  /* 0x0014 */
-    void *unk_0028;   /* 0x0028 */
-    void *unk_002C;   /* 0x002C */
-    u32 printerId;    /* 0x0030 */
-    void *spriteList; /* 0x0034 */
-    u8 unk_0038[0x0160 - 0x0038];
-    void *resObjMan[4]; /* 0x0160 */
-    void *charTask0;    /* 0x0170 */
-    void *plttTask0;    /* 0x0174 */
-    u8 unk_0178[0x0180 - 0x0178];
-    void *charTask1; /* 0x0180 */
-    void *plttTask1; /* 0x0184 */
-    u8 unk_0188[0x0278 - 0x0188];
-    Ov37Window windows[5]; /* 0x0278 */
-    u8 unk_02C8[0x0300 - 0x02C8];
-    u32 curState;  /* 0x0300 */
-    u32 prevState; /* 0x0304 */
-    u32 state;     /* 0x0308 */
-    u8 unk_030C[0x0314 - 0x030C];
-    u32 unk_0314; /* 0x0314 */
-    u32 unk_0318; /* 0x0318 */
-    u32 unk_031C; /* 0x031C */
-    u32 unk_0320; /* 0x0320 */
-    u8 unk_0324[0x0334 - 0x0324];
-    Ov37Pair pair[5]; /* 0x0334 */
-    u8 unk_035C[0x4374 - 0x035C];
-    u16 unk_4374; /* 0x4374 */
-    u8 unk_4376;  /* 0x4376 */
-    u8 unk_4377;  /* 0x4377 */
-    u8 unk_4378[0x43B4 - 0x4378];
-    Ov37Slot unk_43B4[5]; /* 0x43B4 */
-    void *unk_43C8;       /* 0x43C8 */
-    u8 unk_43CC[0x93B0 - 0x43CC];
-    u32 unk_93B0; /* 0x93B0 */
-    u32 unk_93B4; /* 0x93B4 */
-    u8 unk_93B8[0x93F0 - 0x93B8];
-    void *yesNoPrompt; /* 0x93F0 */
-    u32 unk_93F4;      /* 0x93F4 */
-    u32 unk_93F8;      /* 0x93F8 */
-    u32 unk_93FC;      /* 0x93FC */
-    u32 unk_9400;      /* 0x9400 */
-    u32 unk_9404;      /* 0x9404 */
-    u32 unk_9408;      /* 0x9408 */
-} Ov37Work;
-
-typedef struct Ov37StateEntry {
-    u32 (*main)(Ov37Work *);
-    u32 unk_04;
-} Ov37StateEntry;
 
 typedef struct Ov37GraphicsBanks {
     u32 bg;
@@ -198,7 +121,7 @@ extern void ov37_021E60C0(Ov37Work *work, void *narc);
 extern void ov37_021E6244(Ov37Work *work);
 extern void ov37_021E6418(Ov37Work *work, void *manager);
 extern void ov37_021E6540(Ov37Work *work);
-extern u32 ov37_021E741C(u16 *arg0);
+extern void ov37_021E741C(u16 *arg0);
 extern void ov37_021E7478(Ov37Window *windows, u32 a1, u32 a2, Ov37Work *work);
 extern s32 ov37_021E75C4(void);
 extern u32 ov37_021E76F0(Ov37Work *work);

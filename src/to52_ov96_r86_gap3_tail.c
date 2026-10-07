@@ -7,9 +7,9 @@ BOOL ov96_02205C94(void *course) {
 
     work = PokeathlonCourse_GetHeapAllocPtr4(course);
     copy = PokeathlonCourse_GetDataCopyArea(course);
-    touch = ov96_021E8A20(copy);
+    touch = (void *)ov96_021E8A20(copy);
     *(u32 *)touch = 0;
-    copy = ov96_021E8A20(copy + 0xf0);
+    copy = (void *)ov96_021E8A20(copy + 0xf0);
     {
         u8 flag = 1;
         flag &= (*(u32 *)(copy + 0x10) >> 31);

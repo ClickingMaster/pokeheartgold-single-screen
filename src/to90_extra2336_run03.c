@@ -1,0 +1,10 @@
+#pragma force_active on
+// clang-format off
+#include "global.h"
+#include <nitro/code32.h>
+// clang-format on
+typedef struct Node {void *left,*right;u32 parent,key;} Node;
+typedef struct {u32 pad;void *root;} Tree;
+Node *ov45_02238450(Tree *,const u32 *,Node **,u8 *,u8 *);
+#pragma force_active on
+Node *ov45_02238450(Tree *t,const u32 *key,Node **last,u8 *left,u8 *first){Node *n;Node *parent=(Node*)&t->root;*last=NULL;n=t->root;*left=1;*first=1;while(n){parent=n;if(*key<n->key){n=n->left;*left=1;}else{*last=n;n=n->right;*left=0;*first=0;}}return parent;}

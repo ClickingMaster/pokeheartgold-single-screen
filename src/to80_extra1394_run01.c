@@ -4,6 +4,7 @@
 #include <nitro/code32.h>
 // clang-format on
 #pragma force_active on
+#include "to90_login_callback_private.h"
 typedef struct Friend{u32 v[3];} Friend;
 typedef struct FriendWork{u32 pad0;void *connection;u8 pad8[20];u8 index,changed,state;} FriendWork;
 extern struct{u32 a,b;FriendWork *work;} ov00_0221A918;
@@ -18,8 +19,8 @@ extern void ov00_021F0B58(u32);
 extern void *ov00_021EF3A4(void);
 extern int DWC_GetGsProfileId(void *,Friend *);
 extern void DWC_LoginIdToUserName(void *,Friend *,char *);
-extern void ov00_021F0CBC(void *,void *,void *);
-extern void ov00_021FFF58(void *,int,int,int,int,char *,int,int,void (*)(void *,void *,void *),int);
+extern void ov00_021F0CBC(GPConnection *,void *,void *);
+extern int ov00_021FFF58(GPConnection *,int,int,int,int,int,int,int,GPCallback,void *);
 void ov00_021F06A8(Friend *,int);
 void ov00_021F06A8(Friend *list,int length){
  struct{int i;volatile int count;} local;char username[24];Status status;
@@ -44,7 +45,7 @@ void ov00_021F06A8(Friend *list,int length){
    }
   }else if(DWC_GetGsProfileId(ov00_021EF3A4(),&list[ov00_0221A918.work->index])==-1){
    DWC_LoginIdToUserName(ov00_021EF3A4(),&list[ov00_0221A918.work->index],username);
-   ov00_021FFF58(ov00_0221A918.work->connection,0,0,0,0,username,0,0,ov00_021F0CBC,ov00_0221A918.work->index);
+   ov00_021FFF58(ov00_0221A918.work->connection,0,0,0,0,(int)(u32)username,0,0,ov00_021F0CBC,(void *)(u32)ov00_0221A918.work->index);
    ov00_0221A918.work->state=2;return;
   }
   ov00_0221A918.work->index++;

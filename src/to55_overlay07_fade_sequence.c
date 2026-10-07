@@ -65,7 +65,8 @@ extern const Ov07Callback ov07_02234C40[];
 
 BOOL ov07_0221DEB0(u32, u32);
 void GF_AssertFail(void);
-int ov07_0221C4A8(void *, int);
+
+extern u32 ov07_0221C4A8(void *p, int i);
 void ov07_0221EB98(void *, int);
 u8 ov07_0221FB04(void *, int);
 int ov07_0221BFC0(void *);
@@ -119,13 +120,13 @@ Ov07FadeWork *ov07_0221DF1C(Ov07Owner *owner) {
     work->evb = 31;
     work->evaTarget = 29;
     work->evbTarget = 2;
-    if (ov07_0221C4A8(owner, 5) == 1) {
+    if (((s32)ov07_0221C4A8(owner, 5)) == 1) {
         work->eva = 0;
         work->evb = 31;
         work->evaTarget = 15;
         work->evbTarget = 7;
     }
-    if (ov07_0221C4A8(owner, 5) == 2) {
+    if (((s32)ov07_0221C4A8(owner, 5)) == 2) {
         work->eva = 7;
         work->evb = 15;
         work->evaTarget = 29;

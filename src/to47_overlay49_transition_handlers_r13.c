@@ -1,6 +1,9 @@
 #include "to47_overlay49_transition_handlers_r13_private.h"
 
-void ov49_022594D8(Ov49R13Work *work, void *ctx) {
+void ov49_022594D8(void *opaque,void *ctx)
+{
+    Ov49EntryR4 *entry=opaque;
+    Ov49R13Work *work=&entry->storage.transition;
     int value;
     int pos;
 
@@ -46,7 +49,10 @@ void ov49_022594D8(Ov49R13Work *work, void *ctx) {
     }
 }
 
-void ov49_022595CC(Ov49R13Work *work) {
+void ov49_022595CC(void *opaque,void *ctx)
+{
+    Ov49EntryR4 *entry=opaque;
+    Ov49R13Work *work=&entry->storage.transition;
     int done;
     Ov49R13Position position;
 
@@ -83,7 +89,10 @@ void ov49_022595CC(Ov49R13Work *work) {
     }
 }
 
-void ov49_0225967C(Ov49R13Work *work) {
+void ov49_0225967C(void *opaque,void *ctx)
+{
+    Ov49EntryR4 *entry=opaque;
+    Ov49R13Work *work=&entry->storage.transition;
     int done;
     Ov49R13Position position;
 

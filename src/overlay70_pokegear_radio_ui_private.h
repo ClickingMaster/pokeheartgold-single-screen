@@ -97,7 +97,7 @@ void *AllocMonZeroed(int);
 void Heap_Free(void *);
 void BufferBoxMonNickname(void *, int, void *);
 void Pokemon_RemoveCapsule(void *);
-void ShowCommunicationError(int, int);
+#include "communication_error.h"
 void sub_0203A930(void);
 void sub_020399EC(void);
 void sub_02039AD8(int);

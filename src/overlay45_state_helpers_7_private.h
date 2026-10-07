@@ -18,8 +18,8 @@ typedef struct Ov45Work {
 
 void Sound_SetSceneAndPlayBGM(int, int, int);
 void ov45_0222BC84(void *);
-int ov45_0222E9E0(void);
-void ov45_0222EC68(void);
+void *ov45_0222E9E0(void);
+int ov45_0222EC68(int);
 void ov45_0222EC10(void *);
 void *ov45_0222EA2C(int);
 int ov45_0222BADC(void *, void *);
@@ -41,7 +41,7 @@ void ov45_0222BD5C(void *);
 void ov45_0222A5E8(Ov45Work *, int);
 void ov45_0222A4D0(Ov45Work *);
 void ov45_0222A520(Ov45Work *, int);
-void ov45_0222A53C(void);
+int ov45_0222A53C(void *unused);
 void ov45_0222A548(void);
 BOOL ov45_0222A550(void *, int);
 void *ov45_0222A578(Ov45Work *, u32);

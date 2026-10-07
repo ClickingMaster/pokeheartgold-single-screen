@@ -1,0 +1,10 @@
+#pragma force_active on
+#pragma force_active on
+#include "global.h"
+typedef struct {u8 head[8];int x,y;u8 tail[0x20];} Template;
+extern void ov74_02231D48(Template *,u8 *,void *,int),ov74_02231DDC(void *,int,int,int,int),Sprite_SetAnimActiveFlag(void *,int),Sprite_SetAnimCtrlSeq(void *,int),Sprite_SetPriority(void *,int),Sprite_SetDrawFlag(void *,int),Sprite_SetDrawPriority(void *,int);extern void *Sprite_CreateAffine(Template *);void ov74_02232154(u8 *);
+#include "system.h"
+extern void *NARC_New(int,int);extern void NARC_Delete(void *),Heap_Free(void *),ov74_02231F30(int,int,int,int,void *,void *,void *),ov74_02231FB0(void *),ov74_02232678(u8 *,int),ov74_0223262C(u8 *);extern int AGB_GetBoxMonData(void *,int,void *),ov74_02231D70(u8 *,int,int),ov74_02231D94(u8 *,int,int),ov74_02231DB8(u8 *,int,int),TranslateAgbSpecies(int),ov74_02231E54(int,int,u8);void ov74_02231FF4(u8 *);
+static inline int fixed(int value){return value<<12;}
+#pragma opt_strength_reduction off
+void ov74_02232154(u8 *p){Template t;volatile struct {int y,row,col;} loops;int x,index,yfixed;u8 *q;ov74_02231D48(&t,p,p+0x184,1);loops.y=40;index=0;loops.row=0;q=p+0x310;for(;;){loops.col=0;yfixed=loops.y<<12;x=28;for(;;){ov74_02231DDC(q,x,loops.y,28,28);t.x=fixed(x);t.y=yfixed;if(*(void**)(p+0x1a8)==0)*(void**)(p+0x1a8)=Sprite_CreateAffine(&t);Sprite_SetAnimActiveFlag(*(void**)(p+0x1a8),1);Sprite_SetAnimCtrlSeq(*(void**)(p+0x1a8),index+10);Sprite_SetPriority(*(void**)(p+0x1a8),1);Sprite_SetDrawFlag(*(void**)(p+0x1a8),1);Sprite_SetDrawPriority(*(void**)(p+0x1a8),index+100);t.x+=6<<12;t.y+=12<<12;if(*(void**)(p+0x1ac)==0)*(void**)(p+0x1ac)=Sprite_CreateAffine(&t);Sprite_SetAnimActiveFlag(*(void**)(p+0x1ac),1);Sprite_SetAnimCtrlSeq(*(void**)(p+0x1ac),40);Sprite_SetPriority(*(void**)(p+0x1ac),1);Sprite_SetDrawFlag(*(void**)(p+0x1ac),0);Sprite_SetDrawPriority(*(void**)(p+0x1ac),index);index++;q+=4;p+=12;if(index==30)goto end;{int next=loops.col+1;x+=40;loops.col=next;if(next>=6)break;}}loops.y+=24;{int next=loops.row+1;loops.row=next;if(next>=5)break;}}end:;}

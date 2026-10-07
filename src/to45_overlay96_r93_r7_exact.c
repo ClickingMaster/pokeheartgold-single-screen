@@ -43,7 +43,7 @@ typedef struct Ov96TouchWork {
 
 void ov96_0220A424(void *course) {
     u8 *work = PokeathlonCourse_GetHeapAllocPtr4(course);
-    Ov96PackedResult *out = ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course));
+    Ov96PackedResult *out = (void *)ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course));
     u32 *input = ov96_0220B758(PTR(work, 0x4c));
     u32 mode = ov96_0220B730(PTR(work, 0x4c));
 
@@ -76,11 +76,11 @@ void ov96_0220A4DC(void *course) {
         GF_AssertFail();
     }
     if (mode == NULL) {
-        out = ov96_021E8A20(data + 0x28);
-        *(Ov96NineWords *)ov96_021E8A20(data + 0x50) = *(Ov96NineWords *)ov96_021E8A20(data);
+        out = (void *)ov96_021E8A20(data + 0x28);
+        *(Ov96NineWords *)(void *)ov96_021E8A20(data + 0x50) = *(Ov96NineWords *)(void *)ov96_021E8A20(data);
         data += 0x50;
         for (i = 0; i < 4; i++, data += 0x28, out++) {
-            Ov96PackedInput *input = ov96_021E8A20(data);
+            Ov96PackedInput *input = (void *)ov96_021E8A20(data);
             out->field00 = input->multi.field00;
             out->field08 = input->multi.field08;
             out->field10 = input->multi.field10;

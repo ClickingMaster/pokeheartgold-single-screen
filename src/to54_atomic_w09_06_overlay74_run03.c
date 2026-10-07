@@ -34,10 +34,10 @@ extern void ov74_0222FE4C(void);
 extern BOOL ov74_0222FE78(void);
 extern void ov74_0222FEA0(u16);
 extern BOOL ov74_0222FF28(void);
-extern void ov74_0222FEC8(void);
+extern int ov74_0222FEC8(void);
 extern void ov74_0222FF80(void);
 extern void ov74_0222FFAC(void);
-extern BOOL ov74_022314DC(void);
+extern BOOL ov74_022314DC(u32);
 
 void ov74_0223030C(void);
 BOOL ov74_02230320(void *);
@@ -140,8 +140,7 @@ void ov74_02230674(void) {
             return;
         }
         if (ov74_0222FF28()) {
-            ov74_0222FEC8();
-            if (ov74_022314DC()) {
+            if (ov74_022314DC(ov74_0222FEC8())) {
                 U8AT(ov74_0223115C(), 0x60) = 1;
                 ov74_02231070(3);
                 return;

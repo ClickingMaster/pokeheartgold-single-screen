@@ -74,7 +74,8 @@ extern void Heap_Free(void *);
 extern void *ov07_022324D8(void *, int);
 extern int ov07_0221C514(void *);
 extern int ov07_0221C4A0(void *);
-extern int ov07_0221C4A8(void *, int);
+
+extern u32 ov07_0221C4A8(void *p, int i);
 extern void *ov07_0221C410(void *, void (*)(void *, void *), void *);
 extern void ov07_02231FE4(void *, void *);
 extern void *ov07_0221C4E8(void *, int);
@@ -93,11 +94,11 @@ void ov07_02225E9C(void *owner) {
     work->owner = owner;
     work->resource = (void *)ov07_0221C514(owner);
     work->bgConfig = (void *)ov07_0221C4A0(work->owner);
-    work->arg0 = ov07_0221C4A8(owner, 0);
-    work->arg1 = ov07_0221C4A8(owner, 1);
-    work->arg2 = ov07_0221C4A8(owner, 2);
-    work->arg3 = ov07_0221C4A8(owner, 3);
-    work->limit = ov07_0221C4A8(owner, 4);
-    work->mode = ov07_0221C4A8(owner, 5) == 0 ? 3 : 2;
+    work->arg0 = ((s32)ov07_0221C4A8(owner, 0));
+    work->arg1 = ((s32)ov07_0221C4A8(owner, 1));
+    work->arg2 = ((s32)ov07_0221C4A8(owner, 2));
+    work->arg3 = ((s32)ov07_0221C4A8(owner, 3));
+    work->limit = ((s32)ov07_0221C4A8(owner, 4));
+    work->mode = ((s32)ov07_0221C4A8(owner, 5)) == 0 ? 3 : 2;
     ov07_0221C410(work->owner, ov07_02225DC4, work);
 }

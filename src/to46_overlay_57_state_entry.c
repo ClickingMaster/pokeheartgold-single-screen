@@ -19,7 +19,7 @@ int ov57_0223A6B8(void *work) {
         w->state++;
         break;
     case 1:
-        if (ov57_0223B940() == TRUE || IsPaletteFadeFinished() != TRUE) {
+        if (ov57_0223B940((u8 *)work) == (void *)1 || IsPaletteFadeFinished() != TRUE) {
             break;
         }
         GfGfx_EngineATogglePlanes(0x10, FALSE);

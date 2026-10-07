@@ -1,3 +1,8 @@
+	.public ov113_021E6C90
+	.public ov113_021E6B74
+	.public ov113_021E6BA4
+	.public ov113_021E6BB8
+	.public ov113_021E6CB0
 	.public ov113_021E6B94
 	.public ov113_021E6BD0
 	.public ov113_021E6BE8

@@ -54,18 +54,18 @@ extern void ov49_0225CAA8(void *);
 extern void Camera_UnsetStaticPtr(void *);
 extern void Camera_Delete(void *);
 
-void ov49_02259734(void *p, u32 a) {
-    ov49_02259764(p, a, 2);
+void ov49_02259734(void *p, void *a) {
+    ov49_02259764(p, (u32)a, 2);
 }
 
-void ov49_02259740(void *p, u32 a) {
-    ov49_02259764(p, a, 3);
+void ov49_02259740(void *p, void *a) {
+    ov49_02259764(p, (u32)a, 3);
 }
 
-void ov49_0225974C(void *p, u32 a) {
-    ov49_02259764(p, a, 0);
+void ov49_0225974C(void *p, void *a) {
+    ov49_02259764(p, (u32)a, 0);
 }
 
-void ov49_02259758(void *p, u32 a) {
-    ov49_02259764(p, a, 1);
+void ov49_02259758(void *p, void *a) {
+    ov49_02259764(p, (u32)a, 1);
 }

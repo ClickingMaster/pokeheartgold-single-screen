@@ -31,7 +31,7 @@ BOOL ov96_021F85F4(void *);
 void *PokeathlonCourse_GetHeapAllocPtr4(void *);
 u32 PokeathlonCourse_GetMode(void *);
 void *PokeathlonCourse_GetDataCopyArea(void *);
-void *ov96_021E8A20(void *);
+u8 *ov96_021E8A20(void *ptr);
 void GF_AssertFail(void);
 void Sprite_DeleteAndFreeResources(void *);
 void SpriteSystem_FreeResourcesAndManager(void *, void *);

@@ -31,7 +31,8 @@ void *ov07_0221C478(void *p);
 void *ov07_0221C488(void *p, int i);
 void *ov07_0221C494(void *p, int i);
 void *ov07_0221C4A0(void *p);
-void *ov07_0221C4A8(void *p, int i);
+
+extern u32 ov07_0221C4A8(void *p, int i);
 void *ov07_0221C514(void *p);
 void *ov07_0221C528(void *p);
 void *ov07_0221C530(void *p);

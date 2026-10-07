@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-void ov45_0222C5B4(void *state, int value);
+int ov45_0222C5B4(void *state, int value);
 void ov45_0222C408(void *state, int value, int other);
 void ov45_0222C480(void *state, int value);
 void ov45_0222C514(void *state, int value);
@@ -16,7 +16,7 @@ void ov45_0222EEF0(int kind, void *output, int size);
 int ov45_0222EC90(int value);
 void ov45_0222EF4C(int kind, int value, void *state, int size);
 
-void ov45_0222ADA8(void *state, int value);
+int ov45_0222ADA8(void *state, int value);
 void ov45_0222ADB8(void *state, int value, int other);
 void ov45_0222ADC8(void *state, int value);
 void ov45_0222ADD8(void *state, int value);

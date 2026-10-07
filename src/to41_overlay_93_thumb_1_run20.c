@@ -121,7 +121,7 @@ void ov93_0225E7AC(void);
 void ov93_0225E860(void *a, void *p);
 void ov93_0225EA50(void *a, void *p);
 s32 ov93_0225EA6C(void *p, s32 b);
-void ov93_0225EA98(void *p);
+void ov93_0225EA98(void *p, s32 observedRequest);
 void ov93_0225EB38(void *p);
 u32 ov93_0225EDB8(void *p, s32 d);
 void ov93_0225EDE8(void *p);
@@ -166,7 +166,7 @@ s32 ov93_0225EA6C(void *p, s32 b) {
     return ov93_022630D8[U32AT(p, 0x270)] * n / 100;
 }
 
-void ov93_0225EA98(void *p) {
+void ov93_0225EA98(void *p, s32 observedRequest) {
     if (S32AT(p, 0x244) >= 0x62) {
         S32AT(p, 0x248) += 1 << 0xc;
     } else if (S32AT(p, 0x244) >= 0x62) {

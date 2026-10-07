@@ -1,5 +1,6 @@
 #include <nitro/code32.h>
 #include <nitro/types.h>
+typedef void (*W17HeapCallback)(void *,u32,void *,int);
 typedef struct {
     u32 a, b;
 } FileId;
@@ -20,9 +21,9 @@ void *NNS_SndArcGetGroupInfo(int index);
 u32 NNS_SndArcGetFileSize(u32 index);
 void *NNS_SndArcGetFileAddress(u32 index);
 void NNS_SndArcSetFileAddress(u32 index, void *address);
-void InfoDisposeCallback(void *a, void *b, u8 *arc);
-void FatDisposeCallback(void *a, void *b, u8 *arc);
-void SymbolDisposeCallback(void *a, void *b, u8 *arc);
+void InfoDisposeCallback(void *a,u32 size,void *context,int tag);
+void FatDisposeCallback(void *a,u32 size,void *context,int tag);
+void SymbolDisposeCallback(void *a,u32 size,void *context,int tag);
 void *NNS_SndArcGetSeqInfo(int index);
 extern u32 NNS_FndGetAllocatableSizeForFrmHeapEx(void *, u32);
 extern void NNS_FndInitList(void *, u32);
@@ -46,7 +47,7 @@ extern void NNS_FndDestroyFrmHeap(void *);
 extern void *NNS_FndCreateFrmHeapEx(void *, u32, u32);
 extern void *NNS_FndAllocFromFrmHeapEx(void *, u32, u32);
 extern void NNS_FndAppendListObject(void *, void *);
-void NNS_SndHeapClear(void *heap);
+u32 NNS_SndHeapClear(void *heap);
 void NNS_SndHeapDestroy(void *heap);
 u32 InitHeap(void *heap, void *frame);
 u32 NewSection(void *heap);
@@ -55,7 +56,7 @@ extern BOOL NNS_FndRecordStateForFrmHeap(void *, u32);
 extern void NNS_FndFreeByStateToFrmHeap(void *, u32);
 int NNS_SndHeapSaveState(void *heap);
 extern void *NNS_FndGetPrevListObject(void *, void *);
-void *NNS_SndHeapAlloc(void *heap, u32 size, void *callback, void *arg, u32 tag);
+void *NNS_SndHeapAlloc(void *heap,u32 size,W17HeapCallback callback,void *arg,int tag);
 extern void *LoadSeqArc(u32 id, void *heap, u32 load);
 u32 NNSi_SndArcLoadSeqArc(u32 id, u32 flags, void *heap, u32 load, void **out);
 extern void *LoadSeq(u32 id, void *heap, u32 load);
@@ -70,7 +71,7 @@ extern BOOL NNS_SndArcSetup(void *, void *, BOOL);
 void NNS_SndArcInit(void *arc, const char *path, void *heap, BOOL loadSymbols);
 extern int NNS_SndArcReadFile(u32 id, void *dst, u32 len, u32 offset);
 extern void DC_StoreRange(void *ptr, u32 len);
-void *NNSi_SndArcLoadFile(u32 id, void *callback, void *arg, u32 tag, void *heap);
+void *NNSi_SndArcLoadFile(u32 id,W17HeapCallback callback,void *arg,int tag,void *heap);
 
 u32 NNS_SndHeapGetSize(void *heap) {
     u8 *frame = *(u8 **)heap;

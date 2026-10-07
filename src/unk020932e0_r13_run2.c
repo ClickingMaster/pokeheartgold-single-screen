@@ -2,7 +2,7 @@
 
 void sub_020955EC(Residual13Work *work) {
     VecFx32 matrix;
-    int value;
+    u8 value;
     u8 remainder;
 
     work->selection++;

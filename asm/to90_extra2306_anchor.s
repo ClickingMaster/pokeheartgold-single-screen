@@ -1,0 +1,37 @@
+	.extern ov08_0221DDCC
+	.extern ov08_0221E244
+	.extern ov08_0221E2E8
+	.extern ov08_0221E340
+	.extern ov08_0221ECE8
+	.extern ov08_0221ED30
+	.extern ov08_0221EE18
+	.extern ov08_0221EE60
+	.extern ov08_0221EF48
+	.extern ov08_0221EFA8
+	.extern ov08_0221F00C
+	.extern ov08_0221F07C
+	.extern ov08_0221F1B0
+	.extern ov08_0221F284
+	.extern ov08_02224FE0
+#include "constants/moves.h"
+	.include "asm/macros.inc"
+	.include "overlay_08.inc"
+	.include "global.inc"
+	.extern ov08_0221DDCC
+	.extern ov08_0221E244
+	.extern ov08_0221E2E8
+	.extern ov08_0221E340
+	.extern ov08_0221ECE8
+	.extern ov08_0221ED30
+	.extern ov08_0221EE18
+	.extern ov08_0221EE60
+	.extern ov08_0221EF48
+	.extern ov08_0221EFA8
+	.extern ov08_0221F00C
+	.extern ov08_0221F07C
+	.extern ov08_0221F1B0
+	.extern ov08_0221F284
+	.extern ov08_02224FE0
+
+.text
+	.force_active on

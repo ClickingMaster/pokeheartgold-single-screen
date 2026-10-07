@@ -1,5 +1,7 @@
 #include "global.h"
 
+struct TouchscreenListMenu;
+
 extern void PlaySE(int);
 extern void Sprite_SetDrawFlag(void *, int);
 extern void Sprite_SetAnimCtrlSeq(void *, int);
@@ -10,7 +12,7 @@ extern s16 ov43_0222EFA0[];
 extern s16 ov43_0222EFA2[];
 
 int ov43_0222C620(s16 *p);
-void ov43_0222C630(void *, void *, void *, int);
+void ov43_0222C630(struct TouchscreenListMenu *, u8, void *, int);
 void ov43_0222C65C(u8 *, u8 *);
 
 int ov43_0222C620(s16 *p) {
@@ -18,7 +20,7 @@ int ov43_0222C620(s16 *p) {
     return x + p[2];
 }
 
-void ov43_0222C630(void *a0, void *a1, void *a2, int state) {
+void ov43_0222C630(struct TouchscreenListMenu *a0, u8 a1, void *a2, int state) {
     if (state == 1) {
         PlaySE(0x5DC);
         return;

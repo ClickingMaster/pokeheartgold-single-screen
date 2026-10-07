@@ -1,5 +1,7 @@
 #include "global.h"
 
+struct TouchscreenListMenu;
+
 extern void ov43_0222B0A0(void *);
 extern void ov43_0222BAB8(void *);
 extern void ov43_0222CE48(void *);
@@ -110,7 +112,7 @@ void ov43_0222A2F0(u8 *, u8 *);
 BOOL ov43_0222B534(u8 *, u32 *);
 BOOL ov43_0222C5D8(u8 *, u32 *);
 void ov43_0222DED0(u8 *, u32);
-void ov43_0222C630(void *, void *, void *, int);
+void ov43_0222C630(struct TouchscreenListMenu *, u8, void *, int);
 void ov43_0222B5A8(u8 *, u8 *, void *, void *);
 void ov43_0222D134(u8 *, u8 *, void *, void *);
 void ov43_0222A87C(u8 *, int);

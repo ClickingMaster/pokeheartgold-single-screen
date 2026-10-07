@@ -1,8 +1,8 @@
 #include "global.h"
 
 extern int ov83_022450A8(u8 *work, int a, int b);
-extern void ov83_02245ACC(u8 *work, int index, int mode);
-extern void ov83_0224563C(u8 *work, int index);
+extern void ov83_02245ACC(void *work, u8 index, int mode);
+extern void ov83_0224563C(u8 *, u8, u32);
 extern int ov83_0224776C(u8 a, u8 b);
 extern int ov83_02244E24(u8 *work, int value, u8 mode);
 extern int ov83_02244F60(u8 *work, int value, u8 mode);
@@ -34,7 +34,7 @@ int ov83_02243C88(u8 *work) {
             if (mode == 5) {
                 ov83_02245ACC(work, index, 5);
             } else {
-                ov83_0224563C(work, index);
+                ov83_0224563C(work, index, mode);
             }
             work[8]++;
         }

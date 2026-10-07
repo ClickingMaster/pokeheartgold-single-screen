@@ -1,0 +1,7 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+typedef struct W31690 {u8 a[0x10];void *narc;u8 b[0x54];void *system,*manager;u8 c[0xcc];u8 state;} W31690;
+extern void SpriteSystem_LoadPlttResObjFromOpenNarc(void *,void *,void *,int,int,int,int,int),SpriteSystem_LoadCharResObjFromOpenNarc(void *,void *,void *,int,int,int,int),SpriteSystem_LoadCellResObjFromOpenNarc(void *,void *,void *,int,int,int),SpriteSystem_LoadAnimResObjFromOpenNarc(void *,void *,void *,int,int,int);
+BOOL ov112_021F1DC0(W31690 *);
+BOOL ov112_021F1DC0(W31690 *ctx){void *system=ctx->system,*manager=ctx->manager;switch(ctx->state){case 0:SpriteSystem_LoadPlttResObjFromOpenNarc(system,manager,ctx->narc,12,0,1,1,2);SpriteSystem_LoadPlttResObjFromOpenNarc(system,manager,ctx->narc,12,0,1,1,3);ctx->state++;break;case 1:SpriteSystem_LoadCharResObjFromOpenNarc(system,manager,ctx->narc,20,1,1,2);SpriteSystem_LoadCharResObjFromOpenNarc(system,manager,ctx->narc,20,1,1,3);SpriteSystem_LoadCellResObjFromOpenNarc(system,manager,ctx->narc,21,1,2);SpriteSystem_LoadAnimResObjFromOpenNarc(system,manager,ctx->narc,22,1,2);ctx->state++;break;case 2:SpriteSystem_LoadCharResObjFromOpenNarc(system,manager,ctx->narc,23,1,1,4);SpriteSystem_LoadCharResObjFromOpenNarc(system,manager,ctx->narc,23,1,1,5);SpriteSystem_LoadCellResObjFromOpenNarc(system,manager,ctx->narc,24,1,3);SpriteSystem_LoadAnimResObjFromOpenNarc(system,manager,ctx->narc,25,1,3);ctx->state++;break;case 3:return TRUE;default:GF_AssertFail();}return FALSE;}

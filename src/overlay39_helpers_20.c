@@ -1,8 +1,8 @@
 #include "overlay39_helpers_internal.h"
 
-void ov39_02228B6C(Ov39Cb2 *cb, void (*fn)(void *), void *arg) {
-    cb->fn = fn;
-    cb->arg = arg;
+void ov39_02228B6C(void *owner, u32 current, u32 next) {
+    *(u32 *)((u8 *)owner + 8) = current;
+    *(u32 *)((u8 *)owner + 12) = next;
 }
 
 BOOL ov39_02228B74(int a0, int a1) {

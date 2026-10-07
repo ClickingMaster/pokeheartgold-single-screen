@@ -74,7 +74,8 @@ extern void Heap_Free(void *);
 extern void *ov07_022324D8(void *, int);
 extern int ov07_0221C514(void *);
 extern int ov07_0221C4A0(void *);
-extern int ov07_0221C4A8(void *, int);
+
+extern u32 ov07_0221C4A8(void *p, int i);
 extern void *ov07_0221C410(void *, void (*)(void *, void *), void *);
 extern void ov07_02231FE4(void *, void *);
 extern void *ov07_0221C4E8(void *, int);

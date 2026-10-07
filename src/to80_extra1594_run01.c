@@ -7,11 +7,11 @@
 #define S(d,n) (*(s16*)P(d,n))
 #define F(d,n) (*(float*)P(d,n))
 typedef struct Vector{int x,y,z;} Vector;
-void*PokeathlonCourse_GetHeapAllocPtr4(void*);void*PokeathlonCourse_GetDataCopyArea(void*);void*ov96_021E8A20(void*);
+void*PokeathlonCourse_GetHeapAllocPtr4(void*);void*PokeathlonCourse_GetDataCopyArea(void*);u8 *ov96_021E8A20(void *ptr);
 void ov96_021FAFFC(void*,void*);void*ov96_021EB5B8(void*);void ov96_021EB52C(void*,int,int);int ov96_021E5F24(void*);
 void Sprite_SetAffineScale(void*,const Vector*);void Sprite_SetAnimCtrlSeq(void*,int);Vector*Sprite_GetMatrixPtr(void*);void Sprite_SetMatrix(void*,const Vector*);Vector*Sprite_GetScalePtr(void*);void ov96_021FB994(void*);
 void ov96_021FB0F4(void*);
-void ov96_021FB0F4(void*course){void*copy;void*d=PokeathlonCourse_GetHeapAllocPtr4(course);copy=ov96_021E8A20(P(PokeathlonCourse_GetDataCopyArea(course),0xf0));
+void ov96_021FB0F4(void*course){void*copy;void*d=PokeathlonCourse_GetHeapAllocPtr4(course);copy=(void *)ov96_021E8A20(P(PokeathlonCourse_GetDataCopyArea(course),0xf0));
  if(B(d,0x3c7))H(d,0x3c4)++;
  if(!B(d,0x3c6)){
  if(H(d,0x3c4)>=150){u8 i;H(d,0x3c4)=0;B(d,0x3c6)=1;ov96_021FAFFC(d,copy);

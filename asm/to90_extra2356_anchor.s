@@ -1,0 +1,65 @@
+	.extern ov01_02206028
+#include "constants/sndseq.h"
+#include "constants/moves.h"
+#include "constants/std_script.h"
+#include "constants/species.h"
+#include "constants/sprites.h"
+#include "constants/maps.h"
+#include "constants/mmodel.h"
+#include "constants/items.h"
+#include "msgdata/msg/msg_0096_D31R0201.h"
+#include "msgdata/msg/msg_0066_D23R0102.h"
+	.include "asm/macros.inc"
+	.include "overlay_01_022053EC.inc"
+	.include "global.inc"
+	.public ov01_022054E0
+	.public ov01_022057DC
+	.public ov01_0220589C
+	.public ov01_02205B14
+	.public ov01_02205DB4
+	.public ov01_02205F00
+	.public ov01_0220610C
+	.public ov01_02206268
+	.public ov01_022096E0
+	.public ov01_022096F0
+	.public ov01_022096F8
+	.public ov01_02209704
+	.public ov01_02209710
+	.public ov01_02209720
+	.public ov01_02209730
+	.public ov01_02209740
+	.public ov01_02209750
+	.public ScrCmd_808
+	.public ov01_02205424
+	.public ov01_0220542C
+	.public ov01_0220553C
+	.public ov01_02205564
+	.public ov01_02205584
+	.public ov01_022055B0
+	.public ov01_022055DC
+	.public ov01_02205604
+	.public ov01_02205664
+	.public ov01_022056C4
+	.public ov01_02205720
+	.public ov01_02205784
+	.public ov01_02205790
+	.public ov01_022057C4
+	.public ov01_022057D0
+	.public ov01_02205808
+	.public ov01_02205870
+	.public ov01_0220596C
+	.public ov01_02205990
+	.public ov01_022059AC
+	.public ov01_02205A34
+	.public ov01_02205A60
+	.public ov01_02205AEC
+	.public ov01_02205CF0
+	.public ov01_02205D68
+	.public ov01_02205EE0
+	.public ov01_02206028
+	.public ov01_02206088
+	.public ov01_0220609C
+	.public ov01_022060B8
+	.public ov01_022062CC
+
+.text

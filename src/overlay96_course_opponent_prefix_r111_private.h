@@ -12,7 +12,7 @@ extern const u16 ov96_0221D67C[];
 extern const u16 ov96_0221D680[];
 
 extern BOOL ov96_022156A8(int x, int y, const u16 (*points)[2]);
-int ov96_02214DBC(void *object, const void *source, u8 state, u8 quadrant);
+int ov96_02214DBC(void *object, const void *source, u8 state, int quadrant);
 int ov96_02215058(void *object, void *source, int state, int index);
 
 typedef struct Ov96R111MovingObject {

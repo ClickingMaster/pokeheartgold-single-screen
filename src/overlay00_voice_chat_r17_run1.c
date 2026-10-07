@@ -34,7 +34,7 @@ BOOL ov00_021E74FC(void) {
     return FALSE;
 }
 
-void ov00_021E7544(void *unused, u32 event, void *session) {
+void ov00_021E7544(u32 unusedId, u32 event, Session *session, void *unusedContext) {
     switch (event) {
     case 9:
         ov00_021E7638(session);

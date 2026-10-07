@@ -80,7 +80,7 @@ void ov96_0221768C(R10Work *work, R10Course *course) {
     u32 anim;
     int i;
 
-    data = (R10Data *)ov96_021E8A20((u8 *)PokeathlonCourse_GetDataCopyArea(course) + 0xf0);
+    data = (R10Data *)(void *)ov96_021E8A20((u8 *)PokeathlonCourse_GetDataCopyArea(course) + 0xf0);
     heap = PokeathlonCourse_GetHeapAllocPtr4(course);
     ov96_02216C38(work, data, course);
     ov96_021E6454(course, (data->unk020 << 13) >> 16);

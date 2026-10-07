@@ -17,7 +17,8 @@ typedef struct Work2554C {
 
 extern Work2554C *ov07_022324D8(void *, int);
 extern void ov07_02231FE4(void *, Work2554C *);
-extern int ov07_0221C4A8(void *, int);
+
+extern u32 ov07_0221C4A8(void *p, int i);
 extern void *ov07_0221C468(void *);
 extern void *ov07_0221C470(void *);
 extern void *ov07_0223197C(void *, void *);
@@ -44,8 +45,8 @@ void ov07_0222554C(void *owner) {
 
     work = ov07_022324D8(owner, 0x5C);
     ov07_02231FE4(owner, work);
-    kind = ov07_0221C4A8(owner, 0);
-    param = ov07_0221C4A8(owner, 1);
+    kind = ((s32)ov07_0221C4A8(owner, 0));
+    param = ((s32)ov07_0221C4A8(owner, 1));
     switch (kind) {
     case 2:
         *(void **)&slots[0] = ov07_0221C468(owner);
@@ -80,9 +81,9 @@ void ov07_02225640(void *owner) {
 
     work = ov07_022324D8(owner, 0x5C);
     ov07_02231FE4(owner, work);
-    slots[1] = ov07_0221C4A8(owner, 0);
-    kind = ov07_0221C4A8(owner, 1);
-    param = ov07_0221C4A8(owner, 2);
+    slots[1] = ((s32)ov07_0221C4A8(owner, 0));
+    kind = ((s32)ov07_0221C4A8(owner, 1));
+    param = ((s32)ov07_0221C4A8(owner, 2));
     switch (kind) {
     case 2:
         *(void **)&slots[0] = ov07_0221C468(owner);
@@ -123,7 +124,7 @@ void ov07_02225768(void *owner) {
     int count;
     s16 a[2];
     Slot b;
-    int kind = ov07_0221C4A8(owner, 0);
+    int kind = ((s32)ov07_0221C4A8(owner, 0));
     void *selected;
     switch (kind) {
     case 2:

@@ -132,7 +132,7 @@ BOOL ov81_0223FC74(u8 *p) {
         break;
     case 4: {
         int i;
-        if (((BOOL (*)(void *))ov81_022404B4)(p) != 1) {
+        if (ov81_022404B4(p) != 1) {
             break;
         }
         StopSE(0x611, 0);

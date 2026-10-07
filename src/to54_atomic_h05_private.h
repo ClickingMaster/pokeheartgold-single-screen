@@ -88,7 +88,7 @@ extern void ov81_02242FB0(void *, int);
 extern BOOL ov81_02242DD8(void *);
 extern void ov81_02242EB8(void *, int);
 extern void *ov81_022412C4(void *, int);
-extern BOOL ov81_022404B4(void);
+extern BOOL ov81_022404B4(void *);
 extern void ov81_02240658(void *, int);
 extern void ov81_02241398(void *);
 extern void ov81_0224093C(void *, void *, int, int, int);

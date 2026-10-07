@@ -1,3 +1,4 @@
+#include "overlay07_slot_motion_work_private.h"
 #include "global.h"
 
 typedef struct CallbackWork {
@@ -40,7 +41,8 @@ typedef struct Work2719C {
     s32 timer;
 } Work2719C;
 
-extern int ov07_0221C4A8(void *, int);
+
+extern u32 ov07_0221C4A8(void *p, int i);
 extern void ov07_02222FC4(void *);
 extern void ov07_02222FF4(void *);
 extern int ov07_02222EE8(void *);
@@ -53,11 +55,11 @@ extern void ManagedSprite_TickFrame(void *);
 extern void SpriteSystem_DrawSprites(void *);
 extern void *ov07_022324D8(void *, int);
 extern void ov07_02231FE4(void *, void *);
-extern void ov07_0221C410(void *, void (*)(void *, void *), void *);
+extern void ov07_0221C410(void *, void *, void *);
 extern void ov07_02227248(void *, void *);
-extern int ov07_02222240(void *, s16, s16, void *);
+extern BOOL ov07_02222240(W02SinMotion *, s16, s16, void *);
 extern int ov07_022222B4(void *);
-extern void Pokepic_SetAttr(void *, int, int);
+#include "pokepic.h"
 extern void *ov07_0221C468(void *);
 extern void *ov07_0221C470(void *);
 extern void *ov07_0223197C(void *, void *);
@@ -68,16 +70,17 @@ void ov07_02225810(void *task, CallbackWork *work);
 void ov07_02226804(void *task, CallbackWork *work);
 void ov07_02226A68(void *task, CallbackWork *work);
 void ov07_022272D0(void *arg);
-void ov07_02225444(void *task, Work25444 *work);
+void ov07_02225444(SysTask *task, void *data);
 void ov07_02225504(void *task, Work25444 *work);
 void *ov07_02225AE0(void *arg, int kind);
 void ov07_0222719C(void *task, Work2719C *work);
 
-void ov07_02225444(void *task, Work25444 *work) {
-    if (ov07_02222240(work->movement, work->x, work->y, work->pokepic) == 0) {
-        Pokepic_SetAttr(work->pokepic, 0, work->x);
-        Pokepic_SetAttr(work->pokepic, 1, work->y - 8);
-        ov07_0221C448(work->owner, task);
+void ov07_02225444(SysTask *task, void *data) {
+    Ov07SlotMotionWork *work = data;
+    if (ov07_02222240(&work->motion.updater, work->slot.xy[0], work->slot.xy[1], work->slot.pokepic) == 0) {
+        Pokepic_SetAttr(work->slot.pokepic, 0, work->slot.xy[0]);
+        Pokepic_SetAttr(work->slot.pokepic, 1, work->slot.xy[1] - 8);
+        ov07_0221C448(work->prefix.owner, task);
         Heap_Free(work);
     }
 }

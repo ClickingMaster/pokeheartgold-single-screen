@@ -21,10 +21,18 @@ typedef struct PicEntry {
     s32 current;
     void **saved;
     u32 delay;
-    u8 rest58[0x1CD - 0x58];
-    u8 flag1CD;
-    u8 mode1CE;
-    u8 rest1CF;
+    union {
+        u8 rest58[0x1CD - 0x58];
+        struct {
+            s32 originX, originY;
+            u32 clearWords[7];
+            u8 remaining[0x1CC - 0x7C];
+            u8 enabled;
+            u8 flag1CD;
+            u8 mode1CE;
+            u8 rest1CF;
+        };
+    };
 } PicEntry;
 
 typedef struct PicManager {
@@ -39,7 +47,7 @@ PicManager *sub_02016EDC(enum HeapID heapId, int count, int flag);
 void sub_02016F2C(PicManager *mgr);
 u32 sub_02017068(PicManager *mgr, u32 index);
 void sub_02017088(PicManager *mgr, u32 index);
-void sub_020170C4(SysTask *task, PicEntry *entry);
+void sub_020170C4(SysTask *task, void *data);
 void sub_020170FC(PicEntry *entry);
 void *sub_020171F4(void **array, int index, int expected);
 void *sub_02017208(void **array, int expected);
@@ -76,7 +84,7 @@ PicManager *sub_02016EDC(enum HeapID heapId, int count, int flag);
 void sub_02016F2C(PicManager *mgr);
 u32 sub_02017068(PicManager *mgr, u32 index);
 void sub_02017088(PicManager *mgr, u32 index);
-void sub_020170C4(SysTask *task, PicEntry *entry);
+void sub_020170C4(SysTask *task, void *data);
 void *sub_020171F4(void **array, int index, int expected);
 void *sub_02017208(void **array, int expected);
 void *sub_02017214(void **array);

@@ -15,8 +15,17 @@ import subprocess
 
 CODE = {'.text', '.init', '.itcm', '.sinit', '.wram'}
 ROW = re.compile(r'\s+([0-9A-Fa-f]{8}) ([0-9A-Fa-f]{8}) (\.\S+)\s+(.+?)\s+\(([^)]+)\)')
-COLORS = {'c': '#35b85a', 'mixed': '#e4ad42', 'asm': '#455268', 'unknown': '#b875ae'}
-LABELS = {'c': 'C-only source', 'mixed': 'C with assembly', 'asm': 'Assembly', 'unknown': 'Unresolved source'}
+SOURCE_LANGUAGES = {'.c': 'c', '.cpp': 'cpp', '.s': 'asm'}
+COLORS = {'c': '#35b85a', 'cpp': '#35a9b8', 'mixed': '#e4ad42', 'asm': '#455268', 'unknown': '#b875ae'}
+LABELS = {'c': 'C-only source', 'cpp': 'C++-only source', 'mixed': 'C/C++ with assembly', 'asm': 'Assembly', 'unknown': 'Unresolved source'}
+
+
+def code_family(section):
+    """Return the code family for ordinary and named code sections."""
+    for family in CODE:
+        if section == family or section.startswith(family + '.'):
+            return family
+    return None
 
 
 def union_size(ranges):
@@ -32,13 +41,13 @@ def source_index(root, arm7=False):
     candidates = defaultdict(set)
     for folder in ('src', 'asm', 'lib'):
         for p in (base / folder).rglob('*'):
-            if p.suffix in ('.c', '.s'):
+            if p.suffix in SOURCE_LANGUAGES:
                 candidates[p.stem + '.o'].add(p.relative_to(root).as_posix())
-    # The linker spec resolves duplicate C/ASM basenames left in the tree.
+    # The linker spec resolves duplicate source basenames left in the tree.
     spec = base / ('ichneumon_sub.lsf' if arm7 else 'main.lsf')
     linked = defaultdict(set)
     for obj in re.findall(r'^\s*Object\s+(\S+\.o)', spec.read_text(), re.M):
-        for ext in ('.c', '.s'):
+        for ext in SOURCE_LANGUAGES:
             p = (base / obj).with_suffix(ext)
             if p.is_file():
                 linked[Path(obj).name].add(p.relative_to(root).as_posix())
@@ -56,7 +65,17 @@ def classify(root, paths):
     text = re.sub(r'/\*.*?\*/|//[^\n]*', '', text, flags=re.S)
     # Conservatively mark the entire object mixed, including conditional ASM.
     mixed = re.search(r'\b(?:asm|__asm|__asm__|GLOBAL_ASM)\b', text)
-    return ('mixed' if mixed else 'c'), path
+    return ('mixed' if mixed else SOURCE_LANGUAGES[Path(path).suffix]), path
+
+
+def source_coverage(totals):
+    """Separate clean C/C++ coverage, using the existing classified denominator."""
+    denominator = sum(totals.values())
+    c_bytes, cpp_bytes = totals.get('c', 0), totals.get('cpp', 0)
+    def portion(size):
+        return dict(bytes=size, percent=100 * size / denominator if denominator else 0)
+    return dict(denominator_bytes=denominator, c=portion(c_bytes),
+                cpp=portion(cpp_bytes), combined=portion(c_bytes + cpp_bytes))
 
 
 def parse_map(path, root, cpu):
@@ -71,9 +90,10 @@ def parse_map(path, root, cpu):
             continue
         address, size, section, symbol, obj = match.groups()
         size = int(size, 16)
-        if size and section in CODE:
+        family = code_family(section)
+        if size and family is not None:
             start = int(address, 16)
-            ranges[module, obj.strip(), section].append((start, start + size))
+            ranges[module, obj.strip(), family].append((start, start + size))
     objects = Counter()
     for (module, obj, section), intervals in ranges.items():
         objects[module, obj] += union_size(intervals)
@@ -114,23 +134,23 @@ def layout(items, x, y, width, height):
 
 def svg(report):
     total = sum(report['totals'].values())
-    pct = 100 * report['totals'].get('c', 0) / total
+    pct = source_coverage(report['totals'])['combined']['percent']
     game_title = 'HeartGold' if report['game'] == 'heartgold.us' else 'SoulSilver'
     esc = html.escape
     out = ['<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="780" viewBox="0 0 1200 780" role="img">',
            f'<title>{game_title} decompilation source-language treemap</title>',
-           '<desc>Rectangle area represents mapped code bytes. Green is C-only source, amber is mixed C and assembly, slate is assembly, purple is unresolved. Hover for file details.</desc>',
+           '<desc>Rectangle area represents mapped code bytes. Green is C-only source, teal is C++-only source, amber is mixed source and assembly, slate is assembly, purple is unresolved. Hover for file details.</desc>',
            '<rect width="1200" height="780" rx="16" fill="#101722"/>',
            '<g font-family="system-ui, sans-serif" fill="#edf2fa">',
            f'<text x="28" y="42" font-size="25" font-weight="700">{game_title} · decompilation</text>',
-           f'<text x="1172" y="42" text-anchor="end" font-size="22">{pct:.2f}% C-only source</text>',
+           f'<text x="1172" y="42" text-anchor="end" font-size="22">{pct:.2f}% C + C++ source</text>',
            f'<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · {esc(report["commit"][:9])} · ARM9 + ARM7 · {total:,} mapped code bytes</text>']
     x = 28
     for status, color in COLORS.items():
         percent = report['totals'].get(status, 0) / total * 100
         out += [f'<rect x="{x}" y="91" width="12" height="12" rx="2" fill="{color}"/>',
                 f'<text x="{x+19}" y="102" font-size="14">{LABELS[status]} {percent:.1f}%</text>']
-        x += 288
+        x += 228
     groups = defaultdict(list)
     for item in report['objects']:
         groups[item['cpu'], item['module']].append(item)
@@ -146,7 +166,7 @@ def svg(report):
             label = module['name']
             out += [f'<rect x="{x+3:.3f}" y="{y+3:.3f}" width="{min(w-6, len(label)*7+14):.3f}" height="22" rx="3" fill="#101722" opacity="0.88"/>',
                     f'<text x="{x+9:.3f}" y="{y+19:.3f}" font-size="12">{esc(label)}</text>']
-    out += ['<text x="28" y="744" font-size="14" fill="#b9c7da">Area = code-section bytes · Hover for files · Mixed objects are not counted as C-only</text>',
+    out += ['<text x="28" y="744" font-size="14" fill="#b9c7da">Area = code-section bytes · Hover for files · Mixed objects are excluded from C + C++ source</text>',
             '<text x="28" y="765" font-size="12" fill="#b9c7da">Source-language coverage, not a per-function matching score. Assets and unmapped padding are excluded; code literal pools are included.</text>',
             '</g></svg>']
     return '\n'.join(out) + '\n'
@@ -166,13 +186,13 @@ def generate(root, game):
     totals = Counter()
     for item in objects:
         totals[item['status']] += item['bytes']
-    return dict(schema_version=1, game=game, commit=subprocess.check_output(
+    return dict(schema_version=2, game=game, commit=subprocess.check_output(
         ['git', 'rev-parse', 'HEAD'], cwd=root, text=True).strip(), rom_sha1=actual,
         tracked_worktree_dirty=bool(subprocess.check_output(
             ['git', 'status', '--porcelain', '--untracked-files=no'], cwd=root, text=True)),
         map_sha256={cpu: hashlib.sha256(path.read_bytes()).hexdigest() for cpu, path in maps.items()},
-        metric='Mapped code-section bytes classified by source language; mixed objects excluded from C-only.',
-        totals=dict(totals), objects=objects)
+        metric='Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.',
+        totals=dict(totals), coverage=source_coverage(totals), objects=objects)
 
 
 def main():
@@ -188,7 +208,7 @@ def main():
     args.output.mkdir(parents=True, exist_ok=True)
     (args.output / 'progress.json').write_text(json.dumps(report, indent=2) + '\n')
     (args.output / 'treemap.svg').write_text(svg(report))
-    print(json.dumps({k: report[k] for k in ('game', 'rom_sha1', 'totals')}, indent=2))
+    print(json.dumps({k: report[k] for k in ('game', 'rom_sha1', 'totals', 'coverage')}, indent=2))
     print(f'Treemap: {args.output / "treemap.svg"}')
 
 

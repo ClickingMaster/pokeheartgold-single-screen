@@ -152,7 +152,7 @@ extern void SpriteSystem_TransferOam(void);
 extern void GF_RunVramTransferTasks(void);
 extern void PaletteData_PushTransparentBuffers(void *);
 extern void DoScheduledBgGpuUpdates(void *);
-void sub_02077270(Work *);
+void sub_02077270(void *);
 extern const Config32 _020FFF14;
 extern const Config20 _020FFEE8;
 extern const Config24 _020FFEFC;

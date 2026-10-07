@@ -1,12 +1,12 @@
 #include "overlay115_remaining_internal.h"
 
-void ov115_0225F020(Ov115Work *work, void *a, void *b, void *c, void *d) {
+void ov115_0225F020(Ov115Work *work, void *a, void *b, fx32 x, fx32 y, int heapID) {
     int i;
 
     work->delay = 0;
     work->count = 0;
     for (i = 0; i < 4; i++) {
-        work->sprites[i] = ov01_021F0718(a, b, c, d, 0, 0);
+        work->sprites[i] = ov01_021F0718(a, b, (void *)x, (void *)y, 0, 0);
         Sprite_SetDrawFlag(work->sprites[i], 0);
         Sprite_SetAnimActiveFlag(work->sprites[i], 1);
         if (i != 3) {

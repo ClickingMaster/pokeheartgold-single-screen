@@ -8,7 +8,8 @@ void ov07_02226CB0(Ov07R2Work *);
 void ov07_02226F04(void *, Ov07R2Work *);
 void *ov07_022324D8(void *, u32);
 void ov07_02231FE4(void *, void *);
-void *ov07_0221C4A8(void *, int);
+
+extern u32 ov07_0221C4A8(void *p, int i);
 ManagedSprite *ov07_0221C4E8(void *, void *);
 void ov07_0221C448(void *, void *);
 void SpriteSystem_DrawSprites(SpriteSystem *);

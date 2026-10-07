@@ -12,7 +12,7 @@
 typedef union S {struct{u32 flag:1;u32 cap:31;u32 len;char*ptr;}l;struct{u8 flag:1;u8 len:7;char data[11];}s;} S;
 typedef struct Small {u8 x;} Small;
 typedef struct Vec {char*data;u32 len,cap;} Vec;
-typedef struct Node {struct Node*left,*right,*parent;u32 key;} Node;
+typedef struct Node {void *left,*right;u32 parent;u32 key;} Node;
 typedef struct Body {u64 a,b;u32 c,d;} Body;
 typedef struct Record {int type;u32 words[6];} Record;
 extern int DWC_CheckUserData(void*);
@@ -29,7 +29,6 @@ extern int ov45_02231144();
 extern int ov45_0223325C();
 extern int ov45_02233434();
 extern int ov45_02236B88();
-extern int ov45_02236C40();
 extern int ov45_02236CB0();
 extern int ov45_022377AC();
 extern int ov45_02237820();

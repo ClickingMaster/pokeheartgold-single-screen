@@ -18,7 +18,7 @@ void ov96_0220BE28(u8 *e, void *a1, void *a2, void *a3, u8 a4, void *course, u32
         EA(e + n * 4, 0) = ov96_021EAA04(a3, (u8)(n + EW38(e).b.h * 3));
         EB(e + n * 4, 0) = tmp[n];
     }
-    ((RSlot *)ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course) + 0x50 + v * 0x28))->b.q = tmp[0];
+    ((RSlot *)(void *)ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(course) + 0x50 + v * 0x28))->b.q = tmp[0];
     x = EW38(e).b.h * 64 + 0x48;
     ESPR(e, 0) = ov96_0220D13C(a1, a2, x, 0x38, 0xc, 0x1d);
     ESPR(e, 1) = ov96_0220D13C(a1, a2, x, 0x38, 5, 0x1c);

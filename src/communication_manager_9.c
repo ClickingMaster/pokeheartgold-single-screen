@@ -24,11 +24,11 @@ int sub_02036FD8(void *data, void *size, int arg) {
     return 0;
 }
 
-int sub_02037030(void *data, void *size, int arg) {
+int sub_02037030(int command, void *payload, int size) {
     if (!sub_020373B4(sub_0203769C())) {
         return 0;
     }
-    if (sub_02033DF0(_021D4140.work + 0x580, data, (int)size, arg, 1, 1)) {
+    if (sub_02033DF0(_021D4140.work + 0x580, (void *)command, (int)payload, size, 1, 1)) {
         return 1;
     }
     if (sub_0203993C() == 10) {
@@ -66,7 +66,7 @@ int sub_02037108(void *data, void *size, int arg) {
         return 0;
     }
     if (sub_02035FF0() == 1) {
-        return sub_02037030(data, size, arg);
+        return sub_02037030((int)data, size, arg);
     }
     if (sub_02033DF0(_021D4140.work + 0x5A0, data, (int)size, arg, 1, 1)) {
         return 1;

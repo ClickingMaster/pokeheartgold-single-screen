@@ -87,5 +87,5 @@ typedef struct B8Work {
     int attr[3];
 } B8Work;
 
-void ov07_0222B898(void *task, B8Work *work);
+void ov07_0222B898(SysTask *task, void *data);
 void ov07_0222B988(void *owner);

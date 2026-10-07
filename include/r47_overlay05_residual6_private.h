@@ -18,7 +18,7 @@ void ov05_0221EA18(Overlay05State *);
 void ov05_0221EA38(Overlay05State *);
 int ov05_0221CCF4(void *);
 void ov05_0221E564(Overlay05State *, s32);
-void ov05_0221DE6C(Overlay05State *, u32);
+void ov05_0221DE6C(void *, u8);
 void ReadMsgDataIntoString(void *, u32, void *);
 u8 AddTextPrinterParameterized(void *, u32, void *, u32, u32, u32, void *);
 void FillWindowPixelRect(void *, u32, u32, u32, u32, u32);

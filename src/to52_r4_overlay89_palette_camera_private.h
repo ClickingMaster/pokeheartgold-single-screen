@@ -16,10 +16,10 @@
 extern const u16 _0225C9B0[4];
 extern const CameraAngle ov89_0225C9B8;
 extern const VecFx32 ov89_0225C9C0;
-extern int ov89_0225C88C(int, int, int);
+extern u32 ov89_0225C88C(u32, int, u32);
 extern void ov89_0225A1D8(void *, int);
 extern void ManagedSprite_SetDrawFlag(ManagedSprite *, BOOL);
-BOOL ov89_02259A3C(int, int, Sprite **, NARC *, int, int, int);
+BOOL ov89_02259A3C(int, int, ManagedSprite *, NARC *, NARC *, int, void *);
 void ov89_02259B00(u8 *);
 
 #endif

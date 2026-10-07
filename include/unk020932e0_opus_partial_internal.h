@@ -84,8 +84,8 @@ typedef struct UnkStruct_020932E0 {
     void *plttTransferTask;          // 0x0160
     u8 filler_164[0x174 - 0x164];    // 0x0164
     u8 header[0x198 - 0x174];        // 0x0174
-    UnkEntry_020932E0 entriesB[3];   // 0x0198
-    u8 filler_234[0x7E4 - 0x234];    // 0x0234
+    UnkEntry_020932E0 entriesB[30];   // 0x0198
+    u8 filler_7B0[0x7E4 - 0x7B0];    // 0x07B0
     TouchscreenHitbox *hitboxes;     // 0x07E4
     UnkEntry_020932E0 entries[3];    // 0x07E8
     UnkRow_020932E0 rows[3];         // 0x0884
@@ -103,7 +103,13 @@ typedef struct UnkStruct_020932E0 {
     Window window2;                  // 0x4670
     int unk_4680;                    // 0x4680
     int unk_4684;                    // 0x4684
-    u8 filler_4688[0x46B0 - 0x4688]; // 0x4688
+    u8 filler_4688[0x4694 - 0x4688]; // 0x4688
+    s32 posX;                       // 0x4694
+    s32 posY;                       // 0x4698
+    u8 filler_469C[4];              // 0x469C
+    UnkEntry_020932E0 *entriesPtr;   // 0x46A0
+    UnkPair_020932E0 *rowsPtr;       // 0x46A4
+    u8 filler_46A8[0x46B0 - 0x46A8]; // 0x46A8
     int unk_46B0;                    // 0x46B0
     UnkPair_020932E0 *pairs;         // 0x46B4
     GridCursor *cursor;              // 0x46B8

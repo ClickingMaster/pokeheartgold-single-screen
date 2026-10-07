@@ -17,4 +17,22 @@ for sec, rows in plan['sections'].items():
     lines=[line for i,line in enumerate(lines) if i not in remove]
     ordered=[f"{indent}{Path(row['path']).name} ({row['selector']})" for row in rows]
     lines[at:at]=ordered
+def apply_finite_interleaves(lines, groups):
+    for group in groups:
+        old = group['input']
+        assert len(old) == len(set(old)) and old
+        found = [i for i, line in enumerate(lines) if line.strip() in set(old)]
+        assert len(found) == len(old), 'finite interleave missing/duplicate input'
+        at = min(found)
+        assert found == list(range(at, at + len(old)))
+        assert [line.strip() for line in lines[at:at + len(old)]] == old
+        assert lines[at - 1].strip() == group['previous']
+        assert lines[at + len(old)].strip() == group['next']
+        pos = sum(len(line) + 1 for line in lines[:at])
+        text = '\n'.join(lines)
+        assert 0 <= text.find(group['start_marker']) < pos < text.find(group['end_marker'])
+        indent = lines[at][:-len(lines[at].lstrip())]
+        lines[at:at + len(old)] = [indent + row for row in group['output']]
+    return lines
+lines = apply_finite_interleaves(lines, plan.get('finite_interleaves', []))
 path.write_text('\n'.join(lines)+'\n')

@@ -70,7 +70,7 @@ typedef union Ov96R118PacketFlagsW14 {
 } Ov96R118PacketFlagsW14;
 
 extern void *PokeathlonCourse_GetDataCopyArea(void *course);
-extern void *ov96_021E8A20(void *p);
+extern u8 *ov96_021E8A20(void *ptr);
 void ov96_02218330(void *base, void *course);
 
 void ov96_02218330(void *base, void *course) {
@@ -82,7 +82,7 @@ void ov96_02218330(void *base, void *course) {
     Ov96R118PacketFlagsW14 *packetFlags;
 
     any = 0;
-    copy = ov96_021E8A20((u8 *)PokeathlonCourse_GetDataCopyArea(course) + 0x28);
+    copy = (void *)ov96_021E8A20((u8 *)PokeathlonCourse_GetDataCopyArea(course) + 0x28);
 
     for (i = 0, record = (Ov96R118ObjectW14 *)((u8 *)base + 0x1C), packet = copy; i < 4; i++, record++, packet++) {
         s32 x = (record->vec2C[0] << 4) >> 16;

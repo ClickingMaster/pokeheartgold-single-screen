@@ -7,12 +7,12 @@ extern void ov49_0225D04C(void *);
 extern void ov49_0225D064(void *);
 extern void ov49_0225D040(void *, int);
 extern void ov49_0225D07C(void *, int);
-extern void ov49_0225D088(void *);
-extern void ov49_0225D090(void *);
+extern u32 ov49_0225D088(void *);
+extern u32 ov49_0225D090(void *);
 typedef struct { s16 value; s16 pad; } Ov49Stride4;
 extern const Ov49Stride4 ov49_02269A7C[];
 extern const Ov49Stride4 ov49_02269A7E[];
-void ov49_0225E3B8(void*,int,int);void ov49_0225E3F4(void*,int,int);void ov49_0225E420(void*,int,int,void*);void ov49_0225E47C(void*,int);void ov49_0225E4A4(void*,int);void ov49_0225E4CC(void*,int,int);void ov49_0225E4F8(void*,int,int);void ov49_0225E524(void*,int);void ov49_0225E54C(void*,int);
+void ov49_0225E3B8(void*,int,int);void ov49_0225E3F4(void*,int,int);void ov49_0225E420(void*,int,int,void*);void ov49_0225E47C(void*,int);void ov49_0225E4A4(void*,int);void ov49_0225E4CC(void*,int,int);void ov49_0225E4F8(void*,int,int);u32 ov49_0225E524(void*,int);u32 ov49_0225E54C(void*,int);
 #define CHECK(p,i) do{if(*((u8*)(p)+0x613)<=(u32)(i))GF_AssertFail();}while(0)
 #define OBJ(p,i) (*(void **)((u8*)(p)+0x208+(i)*4))
 
@@ -30,6 +30,6 @@ void ov49_0225E4CC(void*p,int i,int arg){CHECK(p,i);ov49_0225D040(OBJ(p,i),arg);
 
 void ov49_0225E4F8(void*p,int i,int arg){CHECK(p,i);ov49_0225D07C(OBJ(p,i),arg);}
 
-void ov49_0225E524(void*p,int i){CHECK(p,i);ov49_0225D088(OBJ(p,i));}
+u32 ov49_0225E524(void*p,int i){CHECK(p,i);return ov49_0225D088(OBJ(p,i));}
 
-void ov49_0225E54C(void*p,int i){CHECK(p,i);ov49_0225D090(OBJ(p,i));}
+u32 ov49_0225E54C(void*p,int i){CHECK(p,i);return ov49_0225D090(OBJ(p,i));}

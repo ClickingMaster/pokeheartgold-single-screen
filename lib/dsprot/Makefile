@@ -46,7 +46,8 @@ LIBRARY_FILES := \
 	$(BUILD_DIR)/integrity_encrypted.o            \
 	$(BUILD_DIR)/integrity_decrypter_encoded.o    \
 	$(BUILD_DIR)/integrity_decrypter_decoder.o    \
-	$(BUILD_DIR)/encryptor_encoded.o              \
+	$(BUILD_DIR)/encryptor_plain.o                \
+	$(BUILD_DIR)/encryptor_encoded_residual.o     \
 	$(BUILD_DIR)/encryptor_decoder.o              \
 	$(BUILD_DIR)/mac_owner_encrypted.o            \
 	$(BUILD_DIR)/mac_owner_decrypter_encoded.o    \
@@ -87,6 +88,14 @@ $(BUILD_DIR)/%.o: $(BUILD_DIR)/%.s
 $(C_OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(WINE) $(MWCC) $(CC_PARAM) $(DEP_PARAM) $< -o $@
 	@$(call fixdep,$(@:.o=.d))
+
+
+# Plain encryptor helpers remain ordinary C; encoded bodies remain assembly.
+$(BUILD_DIR)/encryptor_plain.o: $(C_OBJ_DIR)/encryptor_plain.o ../../tools/dsprot-private-cache-alias.py
+	python3 ../../tools/dsprot-private-cache-alias.py $< $@
+
+$(BUILD_DIR)/encryptor_encoded_residual.o: asm/encryptor_encoded_residual.s
+	$(WINE) $(MWAS) $(ASM_PARAM) $< -o $@
 
 
 # Main module function encoding

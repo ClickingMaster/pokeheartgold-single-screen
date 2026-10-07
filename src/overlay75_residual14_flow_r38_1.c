@@ -28,7 +28,7 @@ extern void *ov75_02247890(void *work, u32 msgId, u32 mode);
 extern void ov75_02247854(Ov75Task *task, u32 next, u32 arg);
 extern void ov75_0224785C(Ov75Task *task);
 extern void ov75_02246BCC(void *work, u32 a, u32 b);
-extern void ov75_02246BE0(void *work, u32 state);
+extern void ov75_02246BE0(void *work, int state);
 extern void ov75_02246C3C(void *work);
 extern void ov75_02246C68(void *work);
 extern void ov75_02246C8C(void *work);

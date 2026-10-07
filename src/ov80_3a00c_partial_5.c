@@ -1,6 +1,6 @@
 #include "ov80_3a00c_partial_internal.h"
 
-void ov80_0223AA4C(void *task, void *data) {
+void ov80_0223AA4C(SysTask *task, void *data) {
     u8 *p = data;
     if (++*(s32 *)(p + 0x38) >= 0) {
         *(s32 *)(p + 0x38) = 0;

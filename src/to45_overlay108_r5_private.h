@@ -46,7 +46,7 @@ extern void SafariZone_InitAreaInSet(void *areaSet, u32 areaNo, u32 areaId);
 extern void ov108_021E6A58(SafariAreaCustomizer *s);
 extern void ov108_021E6B00(SafariAreaCustomizer *s);
 extern void ov108_021E78F4(SafariAreaCustomizer *s, u32 index, u32 anim);
-extern void ov108_021E79A8(SafariAreaCustomizer *s, u32 a, u32 b, u32 c);
+extern void ov108_021E79A8(void *, u8, int, int);
 extern void ov108_021E7BB4(SafariAreaCustomizer *s, u32 index, u32 value);
 extern void ov108_021E7CD8(SafariAreaCustomizer *s, u32 value);
 extern void ov108_021E7EB0(SafariAreaCustomizer *s);

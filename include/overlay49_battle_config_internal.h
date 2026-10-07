@@ -22,7 +22,7 @@ extern const u16 ov49_02269EC6[];
 void *ov49_02259FE8(void *ctx);
 int ov45_0222AB28(void *object, void *value);
 void *ov49_0225A30C(void *ctx, u32 type, u32 value);
-u32 ov45_0222A53C(void *object);
+int ov45_0222A53C(void *object);
 void *ov45_0222A5C0(void *object);
 void *ov45_0222A578(void *object, u8 index);
 void *ov45_0222A9C8(void *state);

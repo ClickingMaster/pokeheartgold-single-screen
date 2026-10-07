@@ -3,11 +3,11 @@
 BOOL ov96_02211AF0(void *course) {
     u8 *alloc = PokeathlonCourse_GetHeapAllocPtr4(course);
     u8 *area = PokeathlonCourse_GetDataCopyArea(course);
-    Ov96TouchRec *rec = ov96_021E8A20(area);
+    Ov96TouchRec *rec = (void *)ov96_021E8A20(area);
     Ov96FlagState *flags;
 
     rec->unk00 = 0;
-    flags = ov96_021E8A20(area + 0xF0);
+    flags = (void *)ov96_021E8A20(area + 0xF0);
     u8 f = 1;
     f &= flags->word >> 24;
     if (f) {

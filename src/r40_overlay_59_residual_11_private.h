@@ -18,7 +18,8 @@ typedef struct Ov59MonEntry {
     u8 padding[2];
     String *name;
     PartyExtraSub aprijuice;
-    u8 padding15[9];
+    u8 padding15;
+    struct PokeathlonPerformanceStars stars;
     struct PokeathlonTodayPerformance performance;
 } Ov59MonEntry;
 

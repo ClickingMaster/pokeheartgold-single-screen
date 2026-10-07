@@ -23,7 +23,7 @@ extern int ov112_021EA08C(W12Work *, int, int);
 extern void PlayFanfare(int);
 extern void BeginNormalPaletteFade(int, int, int, int, int, int, int);
 extern void ov112_021E9C10(W12Work *, int);
-extern void ov112_021E9A78(W12Work *, int);
+extern void ov112_021E9A78(void *, int);
 extern void ov112_021EA688(W12Work *, int);
 extern void GF_AssertFail(void);
 extern int TextPrinterCheckActive(u8);

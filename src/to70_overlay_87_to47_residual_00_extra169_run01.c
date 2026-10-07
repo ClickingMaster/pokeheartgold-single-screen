@@ -7,7 +7,7 @@ int ov87_021E5B48(struct S*);
 int ov87_021E5C38(struct S*);
 int ov87_021E5CEC(struct S*);
 int ov87_021E5E00(struct S*);
-int ov87_021E6080(struct S*);
+int ov87_021E6080(void*);
 int ov87_021E64F8(struct S*);
 int ov87_021E65FC(struct S*);
 void ov87_021E68A4(void);void Heap_Create(int,int,u32);void*OverlayManager_CreateAndGetData(void*,u32,int);void*OverlayManager_GetArgs(void*);void*memset(void*,int,u32);void*BgConfig_Alloc(int);void*Save_PlayerData_GetOptionsAddr(void*);void ov87_021E7334(struct S*);void ov87_021E68DC(struct S*);void Sound_SetSceneAndPlayBGM(int,int,int);int ScratchOffCards_Init(void*,int*);

@@ -74,7 +74,8 @@ extern void Heap_Free(void *);
 extern void *ov07_022324D8(void *, int);
 extern int ov07_0221C514(void *);
 extern int ov07_0221C4A0(void *);
-extern int ov07_0221C4A8(void *, int);
+
+extern u32 ov07_0221C4A8(void *p, int i);
 extern void *ov07_0221C410(void *, void (*)(void *, void *), void *);
 extern void ov07_02231FE4(void *, void *);
 extern void *ov07_0221C4E8(void *, int);
@@ -90,10 +91,10 @@ void ov07_02225F94(void *owner) {
     int index;
 
     ov07_02231FE4(owner, work);
-    work->delta = ov07_0221C4A8(work->owner, 1);
-    work->target = ov07_0221C4A8(work->owner, 2);
-    work->unused28 = ov07_0221C4A8(work->owner, 3);
-    index = ov07_0221C4A8(work->owner, 0);
+    work->delta = ((s32)ov07_0221C4A8(work->owner, 1));
+    work->target = ((s32)ov07_0221C4A8(work->owner, 2));
+    work->unused28 = ((s32)ov07_0221C4A8(work->owner, 3));
+    index = ((s32)ov07_0221C4A8(work->owner, 0));
     work->sprite = ov07_0221C4E8(work->owner, index);
     ManagedSprite_SetDrawFlag(work->sprite, TRUE);
     work->mosaic = work->delta < 0 ? 0 : 15;

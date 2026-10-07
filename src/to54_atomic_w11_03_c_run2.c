@@ -91,7 +91,7 @@ void ov07_0222AEA0(void *owner) {
         ManagedSprite_SetDrawPriority(work->sprite2, 50);
     }
     ov07_02222590(work->anim, 100, 20, 100, 20, 100, 10);
-    ov07_0221C410(work->owner, (void (*)(void))ov07_0222AE14, work);
+    ov07_0221C410(work->owner, (void *)ov07_0222AE14, work);
 }
 
 typedef struct B8Work {
@@ -114,5 +114,5 @@ typedef struct B8Work {
     int attr[3];
 } B8Work;
 
-void ov07_0222B898(void *task, B8Work *work);
+void ov07_0222B898(SysTask *task, void *data);
 void ov07_0222B988(void *owner);

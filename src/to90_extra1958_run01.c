@@ -1,0 +1,9 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+typedef struct {u32 pad[2],size;u16 tiles[1];} Screen;
+typedef struct {int heap;void *course,*bg;u8 pad[0x100-12];Screen *screens[7];u8 pad2[0x154-0x11c];void *raw[7];} Work;
+extern void *GfGfxLoader_GetScrnData(int,int,int,Screen **,int);
+extern void BG_LoadScreenTilemapData(void*,int,void*,u32),BgTilemapRectChangePalette(void*,int,int,int,int,int,int),ScheduleBgTilemapBufferTransfer(void*,int),Heap_Free(void*),GfGfx_EngineBTogglePlanes(int,int),ov96_021F4FD8(int,Screen*),ov96_021F4EF8(void*,void*);
+void ov96_021F3CBC(Work*);
+void ov96_021F3CBC(Work*w){Screen *screen;void*raw=GfGfxLoader_GetScrnData(167,13,0,&screen,w->heap);BG_LoadScreenTilemapData(w->bg,5,screen->tiles,screen->size);BgTilemapRectChangePalette(w->bg,5,0,0,32,24,2);ScheduleBgTilemapBufferTransfer(w->bg,5);Heap_Free(raw);w->raw[5]=GfGfxLoader_GetScrnData(167,23,0,&w->screens[0],w->heap);w->raw[6]=GfGfxLoader_GetScrnData(167,24,0,&w->screens[1],w->heap);BG_LoadScreenTilemapData(w->bg,7,w->screens[0]->tiles,w->screens[0]->size);GfGfx_EngineBTogglePlanes(8,0);w->raw[0]=GfGfxLoader_GetScrnData(167,18,0,&w->screens[3],w->heap);w->raw[1]=GfGfxLoader_GetScrnData(167,19,0,&w->screens[4],w->heap);w->raw[2]=GfGfxLoader_GetScrnData(167,17,0,&w->screens[2],w->heap);w->raw[3]=GfGfxLoader_GetScrnData(167,20,0,&w->screens[5],w->heap);w->raw[4]=GfGfxLoader_GetScrnData(167,16,0,&w->screens[6],w->heap);ov96_021F4FD8(128,w->screens[3]);ov96_021F4FD8(128,w->screens[4]);ov96_021F4FD8(128,w->screens[5]);ov96_021F4FD8(128,w->screens[2]);ov96_021F4FD8(128,w->screens[6]);BG_LoadScreenTilemapData(w->bg,6,w->screens[3]->tiles,w->screens[3]->size);ov96_021F4EF8((u8*)w+0x68,w->bg);BgTilemapRectChangePalette(w->bg,6,0,0,32,24,3);ScheduleBgTilemapBufferTransfer(w->bg,6);}

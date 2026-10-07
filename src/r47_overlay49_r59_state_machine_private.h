@@ -23,7 +23,7 @@ void *ov49_02258DAC(void *);
 void *ov49_02259FE8(void *);
 u32 ov49_0225EF88(void *);
 u8 *ov49_0225EF40(void *, u32);
-void ov49_02258EEC(void *, void *, u32);
+void ov49_02258EEC(void *, void *, int);
 void ov49_0225EF90(void *);
 u32 ov49_0225A040(void *);
 void ov49_0225EFC4(void *, u32, const void *, void *);

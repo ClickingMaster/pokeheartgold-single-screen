@@ -8,7 +8,7 @@ int ov40_02232288(void *p);
 int ov40_022322E0(void *p);
 int ov40_02232470(void *p);
 
-void ov40_022318C8(void *task, void *arg) {
+void ov40_022318C8(SysTask *task, void *arg) {
     s16 x;
     s16 y;
     void *w = arg;

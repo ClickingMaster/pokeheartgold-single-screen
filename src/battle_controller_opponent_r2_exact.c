@@ -8,10 +8,10 @@ void ov12_02261B80(BattleSystem *bsys, u8 *ctx, void *arg2, BattleSourceR1 *src)
     int i;
 
     if (src->mode4C == 0) {
-        params.value68 = 10;
+        params.value68 = NARC_a_0_1_0;
         selected = src->unk2;
     } else {
-        params.value68 = 0x3D;
+        params.value68 = NARC_a_0_6_1;
         selected = src->value50;
     }
     params.bgConfig = BattleSystem_GetBgConfig(bsys);
@@ -32,13 +32,13 @@ void ov12_02261B80(BattleSystem *bsys, u8 *ctx, void *arg2, BattleSourceR1 *src)
     params.chatot = BattleSystem_GetChatotVoice(bsys, ctx[0x194]);
     params.bad0 = ov12_0223BAD0(bsys);
     params.bad8 = ov12_0223BAD8(bsys);
-    params.value6C = 7;
-    params.value70 = BattleSystem_GetBackgroundId(bsys) + 3;
-    params.value74 = ov12_0223B52C(bsys) + (BattleSystem_GetBackgroundId(bsys) * 3 + 0xB0);
-    params.value78 = 2;
-    params.value7C = 0;
-    params.value80 = 8;
-    ov07_0221C01C(arg2, src, selected, &params);
+    params.vector.v[0] = 7;
+    params.vector.v[1] = BattleSystem_GetBackgroundId(bsys) + 3;
+    params.vector.v[2] = ov12_0223B52C(bsys) + (BattleSystem_GetBackgroundId(bsys) * 3 + 0xB0);
+    params.vector.v[3] = 2;
+    params.vector.v[4] = 0;
+    params.vector.v[5] = 8;
+    ov07_0221C01C((BattleEngineWork *)arg2, src, selected, &params);
 }
 
 void ov12_02261CA8(BattleSystem *bsys, BattleSourceR2 *src, BattleParamsR2 *dst, u32 value) {

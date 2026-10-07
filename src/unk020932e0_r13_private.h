@@ -4,6 +4,7 @@
 #include "global.h"
 
 #include "sprite.h"
+#include "grid_cursor_internal.h"
 
 typedef struct Residual13Work {
     u8 filler_0000[0x0F];
@@ -20,9 +21,6 @@ typedef struct Residual13Work {
     void *cursor;
 } Residual13Work;
 
-int sub_02095DD8(void *cursor);
-int sub_02095DE8(void *cursor);
-void sub_02095D40(void *cursor, int mode, int value);
 void sub_020943EC(Residual13Work *work);
 void sub_02094A90(Residual13Work *work, int value);
 void sub_0209569C(Residual13Work *work);

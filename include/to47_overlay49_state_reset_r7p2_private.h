@@ -3,20 +3,13 @@
 
 #include "global.h"
 
-typedef struct Ov49Res7P2State {
-    u8 pad00[8];
-    u16 unk08;
-    u8 unk0A;
-    u8 unk0B;
-    u8 unk0C[24];
-    u32 unk24;
-} Ov49Res7P2State;
-
-typedef void (*Ov49Res7P2Callback)(Ov49Res7P2State *, void *);
+#include "overlay49_entry40.h"
+typedef Ov49EntryR4 Ov49Res7P2State;
+typedef Ov49EntryCallback Ov49Res7P2Callback;
 
 extern Ov49Res7P2Callback ov49_02269698[];
-extern u32 ov49_022696C0[];
+extern Ov49EntryCallback ov49_022696C0[10];
 
-void ov49_02258EEC(void *, Ov49Res7P2State *, int);
+void ov49_02258EEC(void *, void *, int);
 
 #endif

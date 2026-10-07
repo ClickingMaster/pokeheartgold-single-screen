@@ -1,6 +1,7 @@
 #pragma force_active on
 // clang-format off
 #include "global.h"
+#include "to90_login_callback_private.h"
 #include <nitro/code32.h>
 // clang-format on
 #include <string.h>
@@ -19,9 +20,9 @@ extern int ov00_021F35E4(u8 **);
 extern void *ov00_021F3398(int);
 extern void ov00_021EC24C(int,int);
 extern void ov00_021EF6F4(void *,void *);
-extern void ov00_021EF508(void *,void *);
+extern void ov00_021EF508(GPConnection *,void *,void *);
 extern void ov00_021EF8C0(void);
-extern int ov00_021FFE20(void *,const char *,const char *,int,int,void *,void *);
+extern int ov00_021FFE20(GPConnection *,const char *,const char *,const char *,int,GPCallback,void *);
 extern int ov00_021EFCB0(void *,u32,u32,char *);
 extern int ov00_021EBF90(void *,int,void *,int);
 extern int ov00_021EBE08(void *,int,void *,int);
@@ -51,9 +52,9 @@ void ov00_021EE7FC(void) ;
 void ov00_021EE800(int n) ;
 void *ov00_021EE820(int id) ;
 u32 ov00_021EE880(u8 *p,int n) ;
-void ov00_021EEA74(int a,int b) ;
+void ov00_021EEA74(int a,int b,void *parameter) ;
 void ov00_021EEAD4(int a,int b) ;
-void ov00_021EF1F0(void *p,void *a,void *b,void *c,void *d,void *e,void *f,void *g) ;
+void ov00_021EF1F0(void *p,void *a,GPConnection *b,int c,u32 d,void *e,LoginCallback f,void *g) ;
 void ov00_021EF274(void) ;
 void *ov00_021EF3A4(void) ;
 void ov00_021EF3C0(int a,int b) ;
@@ -61,7 +62,7 @@ void ov00_021EF410(void) ;
 void ov00_021EF46C(void) ;
 int ov00_021EF494(u32 a) ;
 void ov00_021EF640(const char *a,const char *b) ;
-void ov00_021EF658(const char *a,const char *b,void *cb,int state) ;
+void ov00_021EF658(const char *a,const char *b,GPCallback cb,int state) ;
 int ov00_021EFC6C(void) ;
 int ov00_021EFC98(void *p,char *s) ;
 int ov00_021EFDCC(void *p,char *s,int *n) ;
@@ -100,4 +101,4 @@ void ov00_021EF1B4(void *p);
 
 void ov00_021EF640(const char *a,const char *b) { ov00_021EF658(a,b,ov00_021EF508,2); }
 
-void ov00_021EF658(const char *a,const char *b,void *cb,int state) { u8 *p; strcpy((char *)L+0x48,a); strcpy((char *)L+0x148,b); p=L; *(u64 *)(p+0x34)=OS_GetTick(); W(p,0x30)=1; if(ov00_021EF494(ov00_021FFE20((void *)W(L,0),(char *)L+0x48,(char *)L+0x148,1,0,cb,0))==0)W(L,4)=state; }
+void ov00_021EF658(const char *a,const char *b,GPCallback cb,int state) { u8 *p; strcpy((char *)L+0x48,a); strcpy((char *)L+0x148,b); p=L; *(u64 *)(p+0x34)=OS_GetTick(); W(p,0x30)=1; if(ov00_021EF494(ov00_021FFE20((void *)W(L,0),(char *)L+0x48,(char *)L+0x148,(const char *)1,0,cb,0))==0)W(L,4)=state; }

@@ -131,7 +131,7 @@ u32 ov96_02215AC4(void *course) {
     case 3: {
         u8 flag = (u8)ov96_021E5F24(course);
         PTR_AT(work, 0x184) = ov96_02219F7C(course, U32_AT(work, 0));
-        PTR_AT(work, 0x180) = ov96_022194C4(PTR_AT(work, 8), PTR_AT(work, 0xc), PTR_AT(work, 0x18), PTR_AT(work, 4), PTR_AT(work, 0x14), PTR_AT(work, 0x10), flag, PTR_AT(work, 0), course);
+        PTR_AT(work, 0x180) = ov96_022194C4(PTR_AT(work, 8), PTR_AT(work, 0xc), PTR_AT(work, 0x18), PTR_AT(work, 4), PTR_AT(work, 0x14), PTR_AT(work, 0x10), flag, (enum HeapID)U32_AT(work, 0), course);
         PokeathlonCourse_IncrementField1ED(course);
         break;
     }
@@ -143,7 +143,7 @@ u32 ov96_02215AC4(void *course) {
         ov96_0221587C((u8 *)work + 0x7f8, PTR_AT(work, 4), PTR_AT(work, 8));
         PokeathlonCourse_SetField1F4(course, 1);
         if (ov96_021E5F24(course) == 0) {
-            void *p = ov96_021E8A20((u8 *)PokeathlonCourse_GetDataCopyArea(course) + 0x28);
+            void *p = (void *)ov96_021E8A20((u8 *)PokeathlonCourse_GetDataCopyArea(course) + 0x28);
             U32_AT(p, 0x20) = (0xfff80007 & U32_AT(p, 0x20)) | ((u16)U32_AT(work, 0x438) << 3);
             ov96_02218330((u8 *)work + 0x188, course);
         }

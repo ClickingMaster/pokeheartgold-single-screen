@@ -22,9 +22,8 @@ void ov45_0222A520(Ov45Work *w, int value) {
     ov45_0222BC84(w->data + 0x1fc);
 }
 
-void ov45_0222A53C(void) {
-    ov45_0222E9E0();
-    ov45_0222EC68();
+int ov45_0222A53C(void *unused) {
+    return ov45_0222EC68((s32)ov45_0222E9E0());
 }
 void ov45_0222A548(void) {
     ov45_0222E9E0();
@@ -47,7 +46,7 @@ void *ov45_0222A578(Ov45Work *w, u32 idx) {
     if (value == -1) {
         return NULL;
     }
-    if (value == ov45_0222E9E0()) {
+    if (value == (s32)ov45_0222E9E0()) {
         return w->data + 0x128;
     }
     return ov45_0222EA2C(value);

@@ -1,5 +1,7 @@
 #include "global.h"
 
+struct OverlayManager;
+
 #define U8(p, o) (*(u8 *)((u8 *)(p) + (o)))
 #define U16(p, o) (*(u16 *)((u8 *)(p) + (o)))
 #define U32(p, o) (*(u32 *)((u8 *)(p) + (o)))
@@ -91,7 +93,7 @@ void ov74_02229DF8(void);
 void ov74_02229E14(void *);
 void ov74_02229E28(void *, int);
 void ov74_02229E60(void *, int);
-void ov74_02229E68(void *);
+void ov74_02229E68(struct OverlayManager *);
 void ov74_02229F04(void);
 void ov74_02229F60(void *, int);
 void ov74_02229F78(void *, int);

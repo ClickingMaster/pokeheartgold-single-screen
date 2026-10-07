@@ -21,8 +21,10 @@ int ov96_02215614(int x, int y, int otherX, int otherY) {
     return 4;
 }
 
-BOOL ov96_02215650(int x1, int y1, int x2, int y2, u8 quadrant, u8 otherQuadrant) {
+BOOL ov96_02215650(int x1, int y1, int x2, int y2, int quadrantInput, int otherQuadrantInput) {
     int result = ov96_02215614(x1, y1, x2, y2);
+    u8 otherQuadrant = *(const u8 *)&otherQuadrantInput;
+    u8 quadrant = *(const u8 *)&quadrantInput;
     u8 target;
 
     if (otherQuadrant != quadrant) {
@@ -33,8 +35,10 @@ BOOL ov96_02215650(int x1, int y1, int x2, int y2, u8 quadrant, u8 otherQuadrant
     return result == target;
 }
 
-BOOL ov96_0221567C(int x1, int y1, int x2, int y2, u8 quadrant, u8 otherQuadrant) {
+BOOL ov96_0221567C(int x1, int y1, int x2, int y2, int quadrantInput, int otherQuadrantInput) {
     int result = ov96_02215614(x1, y1, x2, y2);
+    u8 quadrant = *(const u8 *)&quadrantInput;
+    u8 otherQuadrant = *(const u8 *)&otherQuadrantInput;
 
     if (otherQuadrant == quadrant) {
         return (3 - otherQuadrant) != result;

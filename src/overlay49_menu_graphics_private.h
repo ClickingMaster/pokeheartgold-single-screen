@@ -26,6 +26,8 @@ typedef struct Ov49Graphics {
 
 #pragma require_prototypes off
 
+int ov45_0222A53C(void *);
+
 extern u32 ov49_02269734[];
 extern u16 ov49_02269754[];
 

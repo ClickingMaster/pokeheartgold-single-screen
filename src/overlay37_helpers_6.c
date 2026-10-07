@@ -42,7 +42,7 @@ u32 ov37_021E6E2C(Ov37Work *work, u32 arg1) {
     return arg1;
 }
 
-u32 ov37_021E6E6C(u32 arg0, u32 arg1) {
+u32 ov37_021E6E6C(Ov37Work *arg0, u32 arg1) {
 #pragma unused(arg0)
     return arg1;
 }

@@ -1,6 +1,7 @@
 #pragma force_active on
 #include "global.h"
-extern int sub_02095DD8(void*),sub_02095DE8(void*),sub_020947C0(void*,int),sub_02094894(void*,int);
+#include "grid_cursor_internal.h"
+extern int sub_020947C0(void*,int),sub_02094894(void*,int);
 typedef struct{u8 pad[15];u8 mode;} Head;
 typedef void(*Callback)(int,int,void*);
 typedef struct{u8 pad[15];u8 mode;u8 q[0x874];struct{int a,b,c,d;} entries[1];u8 r[0x3dec];int active,value;u8 t[0x30];void*manager;u8 z[0x1c];Callback callback;void*context;int savedB,savedA;} Work;

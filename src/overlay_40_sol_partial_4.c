@@ -23,6 +23,6 @@ void ov40_0222D288(void *sprite, int x, int y) {
     ManagedSprite_SetPositionXYWithSubscreenOffset(sprite, x, y, 1 << 20);
 }
 
-void ov40_0222D294(void *sprite, int *x, int *y) {
+void ov40_0222D294(void *sprite, s16 *x, s16 *y) {
     ManagedSprite_GetPositionXYWithSubscreenOffset(sprite, x, y, 1 << 20);
 }

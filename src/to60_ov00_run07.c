@@ -2,6 +2,8 @@
 #pragma warn_unusedvar off
 // clang-format off
 #include "global.h"
+#include "dgt.h"
+#include "WIFI_stubsmd5_dummy.h"
 #include <nitro/code32.h>
 // clang-format on
 
@@ -61,9 +63,7 @@ typedef struct SocPollFd {
     s16 revents;
 } SocPollFd;
 
-typedef struct Md5Ctx {
-    u8 data[0x58];
-} Md5Ctx;
+typedef struct DGTHash1Context Md5Ctx;
 
 extern char ov00_02217C4C[];
 extern char ov00_02217CD4[];
@@ -94,9 +94,6 @@ extern char ov00_02217E94[];
 extern unsigned char __lower_mapC[];
 
 extern int sprintf(char *, const char *, ...);
-extern void MD5Init(Md5Ctx *);
-extern void MD5Update(Md5Ctx *, const void *, u32);
-extern void MD5Final(u8 *, Md5Ctx *);
 extern int SOC_Fcntl(int, int, int);
 extern int SOC_Poll(SocPollFd *, int, s64);
 

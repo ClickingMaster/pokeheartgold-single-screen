@@ -1,5 +1,6 @@
 #pragma force_active on
 #include "global.h"
+struct OverlayManager;
 #include <string.h>
 #pragma force_active on
 typedef struct Payload {u16 kind,pad;u32 id;u8 rest[0x350];} Payload;
@@ -20,7 +21,7 @@ extern void *Heap_Alloc(int,u32),*ov74_02235708(void);
 extern void ov74_0222C04C(void *,void *);
 extern void *SysTask_CreateOnMainQueue(void (*)(void *,void *),void *,u32);
 extern int ov74_0222ADBC(void *,void *,int,...),ov74_0223615C(void),ov74_02229D6C(State *),ov74_02229DBC(void);
-extern void ov74_02236128(void),ov74_02236140(void),PlaySE(int),GfGfx_EngineATogglePlanes(int,int),GfGfx_EngineBTogglePlanes(int,int),ov74_02229DF8(void),sub_0203A914(void),sub_020398D4(int,int),sub_02037AC0(int),ov74_0222A240(void *,int),ov74_0222A94C(void *,int,int),ov74_02235258(void *,int),ov74_0222AE3C(State *),ov74_02229E68(void *),ov74_02235390(int),ov74_0222A7A0(void *),ov74_0222FC50(void *,void *,int),ov74_0222EC08(void *,void *,int),ov74_022358C8(int);
+extern void ov74_02236128(void),ov74_02236140(void),PlaySE(int),GfGfx_EngineATogglePlanes(int,int),GfGfx_EngineBTogglePlanes(int,int),ov74_02229DF8(void),sub_0203A914(void),sub_020398D4(int,int),sub_02037AC0(int),ov74_0222A240(void *,int),ov74_0222A94C(void *,int,int),ov74_02235258(void *,int),ov74_0222AE3C(State *),ov74_02229E68(struct OverlayManager *),ov74_02235390(int),ov74_0222A7A0(void *),ov74_0222FC50(void *,void *,int),ov74_0222EC08(void *,void *,int),ov74_022358C8(int);
 extern int sub_0203769C(void),sub_020373B4(u16),sub_02037B38(int);
 extern u32 gSystem[];
 int ov74_0222C2EC(void *,int *);

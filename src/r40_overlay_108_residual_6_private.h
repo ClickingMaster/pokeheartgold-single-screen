@@ -49,7 +49,7 @@ extern const TouchscreenHitbox ov108_021EA760[];
 extern const u8 _021EA720[];
 extern const u16 ov108_021EA748[];
 extern const u16 ov108_021EA74A[];
-void ov108_021E79A8(SafariAreaCustomizer *work, u32 a, u32 b, u32 c);
+void ov108_021E79A8(void *, u8, int, int);
 void ov108_021E7BB4(SafariAreaCustomizer *work, u32 index, int member);
 void ov108_021E767C(SafariAreaCustomizer *work, u32 a);
 void ov108_021E7700(SafariAreaCustomizer *work, u32 a, u32 b, u32 c);

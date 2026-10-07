@@ -8,7 +8,7 @@
 
 void *PokeathlonCourse_GetDataCopyArea(void *);
 void *PokeathlonCourse_GetHeapAllocPtr4(void *);
-void *ov96_021E8A20(void *);
+u8 *ov96_021E8A20(void *ptr);
 u32 ov96_021E5F24(void *);
 BOOL ov96_021EB57C(void *);
 void ov96_021EB564(void *, int);

@@ -25,12 +25,12 @@ void ov07_02226F80(void *owner) {
 
     work = ov07_022324D8(owner, sizeof(Ov07R2Work));
     ov07_02231FE4(owner, work);
-    work->value20 = (u32)ov07_0221C4A8(owner, 0);
-    work->duration = (int)ov07_0221C4A8(owner, 1);
-    work->value28 = (u32)ov07_0221C4A8(owner, 2);
-    work->value2C = (u32)ov07_0221C4A8(owner, 3);
-    work->enabled = (u32)ov07_0221C4A8(owner, 5);
-    work->value34 = (u32)ov07_0221C4A8(owner, 6);
+    work->value20 = (u32)(ov07_0221C4A8(owner, 0));
+    work->duration = (int)(ov07_0221C4A8(owner, 1));
+    work->value28 = (u32)(ov07_0221C4A8(owner, 2));
+    work->value2C = (u32)(ov07_0221C4A8(owner, 3));
+    work->enabled = (u32)(ov07_0221C4A8(owner, 5));
+    work->value34 = (u32)(ov07_0221C4A8(owner, 6));
     work->sprite = ov07_0221C4E8(work->owner, (void *)work->value20);
     work->counter = 0;
 
@@ -42,14 +42,14 @@ void ov07_02226F80(void *owner) {
     }
 
     if (ov07_0221FAB0(owner) != 1) {
-        if ((u32)ov07_0221C4A8(owner, 4) == 2 || (u32)ov07_0221C4A8(owner, 4) == 3) {
+        if ((u32)(ov07_0221C4A8(owner, 4)) == 2 || (u32)(ov07_0221C4A8(owner, 4)) == 3) {
             ManagedSprite_SetDrawFlag(work->sprite, FALSE);
             Heap_Free(work);
             return;
         }
     }
 
-    type = (int)ov07_0221C4A8(owner, 4);
+    type = (int)(ov07_0221C4A8(owner, 4));
     first = ov07_0221C468(owner);
     second = ov07_0221C470(owner);
     if (work->value2C != 0xFF) {

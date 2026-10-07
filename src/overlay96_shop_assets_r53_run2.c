@@ -11,9 +11,9 @@ BOOL ov96_021F107C(void *course) {
 
     work = PokeathlonCourse_GetHeapAllocPtr4(course);
     copy = PokeathlonCourse_GetDataCopyArea(course);
-    touch = ov96_021E8A20(copy);
+    touch = (void *)ov96_021E8A20(copy);
     *(u32 *)touch = 0;
-    copy = ov96_021E8A20(copy + 0xF0);
+    copy = (void *)ov96_021E8A20(copy + 0xF0);
     {
         s32 raw = *(s32 *)(copy + 0x20);
         u8 flag = (raw >> 12) & 1;

@@ -15,7 +15,7 @@ extern int ov45_0222D844(void *);
 extern void ov45_0222EFAC(int, void *, int);
 extern void FreeBgTilemapBuffer(void *, int);
 
-void ov89_0225A468(void);
+void ov89_0225A468(void *);
 int ov89_0225B078(void);
 void ov89_02259E10(void *);
 void *ov89_02259E48(u8 *);

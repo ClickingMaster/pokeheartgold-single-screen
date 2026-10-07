@@ -1,0 +1,867 @@
+{
+  "header": [
+    "7f454c46010101000000000000000000",
+    1,
+    40,
+    1,
+    0,
+    0,
+    0,
+    34603008,
+    52,
+    0,
+    0,
+    40,
+    27,
+    3
+  ],
+  "sections": [
+    {
+      "index": 0,
+      "name": "",
+      "record": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 1,
+      "name": ".symtab",
+      "record": [
+        1,
+        2,
+        0,
+        0,
+        0,
+        512,
+        2,
+        20,
+        0,
+        16
+      ],
+      "payload_sha256": null
+    },
+    {
+      "index": 2,
+      "name": ".strtab",
+      "record": [
+        9,
+        3,
+        0,
+        0,
+        0,
+        726,
+        0,
+        0,
+        0,
+        0
+      ],
+      "payload_sha256": "19176d7c9f26d05efc09330f5c62f85dde175fa9249d2d8634fe5b47e21ec88c"
+    },
+    {
+      "index": 3,
+      "name": ".shstrtab",
+      "record": [
+        17,
+        3,
+        0,
+        0,
+        0,
+        312,
+        0,
+        0,
+        0,
+        0
+      ],
+      "payload_sha256": "e35a2ad785298b6b4fac24f8b389a77a8533e852e353014d2f8bf5ff3a40dbeb"
+    },
+    {
+      "index": 4,
+      "name": ".comment",
+      "record": [
+        27,
+        1,
+        0,
+        0,
+        0,
+        35,
+        0,
+        0,
+        0,
+        0
+      ],
+      "payload_sha256": "eba72d2c608d7c2a6c4444e793f9eb0e7f2178b83247288c66d4dfc42e3ac851"
+    },
+    {
+      "index": 5,
+      "name": ".debug_info",
+      "record": [
+        36,
+        1,
+        0,
+        0,
+        0,
+        533,
+        0,
+        0,
+        0,
+        0
+      ],
+      "payload_sha256": "05c5ce79abf6bb90634dc62eaae1edaadede7414d2a3dae0ee1bc5f57548880e"
+    },
+    {
+      "index": 6,
+      "name": ".rel.debug_info",
+      "record": [
+        48,
+        4,
+        0,
+        0,
+        0,
+        288,
+        1,
+        5,
+        0,
+        12
+      ],
+      "payload_sha256": "b3552627aeebefd4b233dd3ff1ecb2e738f2870999f1c1b6ff0bbc337e9042d0"
+    },
+    {
+      "index": 7,
+      "name": ".debug_macinfo",
+      "record": [
+        64,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 8,
+      "name": ".debug_loc",
+      "record": [
+        79,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 9,
+      "name": " rel.debug_loc",
+      "record": [
+        90,
+        4,
+        0,
+        0,
+        0,
+        0,
+        1,
+        8,
+        0,
+        12
+      ],
+      "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 10,
+      "name": ".debug_line",
+      "record": [
+        105,
+        1,
+        0,
+        0,
+        0,
+        237,
+        0,
+        0,
+        0,
+        0
+      ],
+      "payload_sha256": "c4a85465df498235c3a6da97e31deeeac7b6cd29c629a6c8bd4fe71be4db0337"
+    },
+    {
+      "index": 11,
+      "name": ".rel.debug_line",
+      "record": [
+        117,
+        4,
+        0,
+        0,
+        0,
+        24,
+        1,
+        10,
+        0,
+        12
+      ],
+      "payload_sha256": "3d04462304a59195ed2e997160ce6eccdba8feb605119627db48da387253c3fa"
+    },
+    {
+      "index": 12,
+      "name": ".debug_line",
+      "record": [
+        133,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 13,
+      "name": ".rel.debug_line",
+      "record": [
+        145,
+        4,
+        0,
+        0,
+        0,
+        0,
+        1,
+        12,
+        0,
+        12
+      ],
+      "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 14,
+      "name": ".debug_pubnames",
+      "record": [
+        161,
+        1,
+        0,
+        0,
+        0,
+        18,
+        0,
+        0,
+        0,
+        0
+      ],
+      "payload_sha256": "30b6468b83807d9148a3668054de94750f5653016445bce0ce5c8ca0b5137a64"
+    },
+    {
+      "index": 15,
+      "name": ".debug_aranges",
+      "record": [
+        177,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 16,
+      "name": ".debug_abbrev",
+      "record": [
+        192,
+        1,
+        0,
+        0,
+        0,
+        117,
+        0,
+        0,
+        0,
+        0
+      ],
+      "payload_sha256": "7f64cab7f254e558ab54f3ea4f91ccf222984c137038188af7a7814679f5bfd7"
+    },
+    {
+      "index": 17,
+      "name": ".exceptix",
+      "record": [
+        206,
+        1,
+        2,
+        0,
+        0,
+        12,
+        0,
+        0,
+        4,
+        0
+      ],
+      "payload_sha256": "2b24b722b3ae64cdc8bcbf645ae952ec8fe40cedff2300ca2fb8c86747d928b3"
+    },
+    {
+      "index": 18,
+      "name": ".rela.exceptix",
+      "record": [
+        216,
+        4,
+        0,
+        0,
+        0,
+        24,
+        1,
+        17,
+        0,
+        12
+      ],
+      "payload_sha256": "1516c8ee60f60ad66badd3af2c462fcd80d50861fa1ba68a12a9d096e1103dcd"
+    },
+    {
+      "index": 19,
+      "name": ".exception",
+      "record": [
+        231,
+        1,
+        2,
+        0,
+        0,
+        17,
+        0,
+        0,
+        1,
+        0
+      ],
+      "payload_sha256": "3612cb98e0c706a68d6dc041880d670eccc3967d4e9666d33b6e7934d1547027"
+    },
+    {
+      "index": 20,
+      "name": ".text",
+      "record": [
+        242,
+        1,
+        536870918,
+        0,
+        0,
+        64,
+        0,
+        0,
+        4,
+        0
+      ],
+      "payload_sha256": "c5dd8517dbb9912db36908ce09eb56d7eea25c042a87e524b0c5fea481f8bb00"
+    },
+    {
+      "index": 21,
+      "name": ".rela.text",
+      "record": [
+        248,
+        4,
+        0,
+        0,
+        0,
+        24,
+        1,
+        20,
+        0,
+        12
+      ],
+      "payload_sha256": "08b14a1e75c788097f9c3495a666d7795b55c41afe097741c481e2e8b2350afd"
+    },
+    {
+      "index": 22,
+      "name": ".exceptix",
+      "record": [
+        259,
+        1,
+        2,
+        0,
+        0,
+        12,
+        0,
+        0,
+        4,
+        0
+      ],
+      "payload_sha256": "2b24b722b3ae64cdc8bcbf645ae952ec8fe40cedff2300ca2fb8c86747d928b3"
+    },
+    {
+      "index": 23,
+      "name": ".rela.exceptix",
+      "record": [
+        269,
+        4,
+        0,
+        0,
+        0,
+        24,
+        1,
+        22,
+        0,
+        12
+      ],
+      "payload_sha256": "ff51a246787cc4fd3343cb13fd6608d648ea300ba7ae128b5f3d3973a16363b6"
+    },
+    {
+      "index": 24,
+      "name": ".exception",
+      "record": [
+        284,
+        1,
+        2,
+        0,
+        0,
+        17,
+        0,
+        0,
+        1,
+        0
+      ],
+      "payload_sha256": "3612cb98e0c706a68d6dc041880d670eccc3967d4e9666d33b6e7934d1547027"
+    },
+    {
+      "index": 25,
+      "name": ".text",
+      "record": [
+        295,
+        1,
+        536870918,
+        0,
+        0,
+        64,
+        0,
+        0,
+        4,
+        0
+      ],
+      "payload_sha256": "c5dd8517dbb9912db36908ce09eb56d7eea25c042a87e524b0c5fea481f8bb00"
+    },
+    {
+      "index": 26,
+      "name": ".rela.text",
+      "record": [
+        301,
+        4,
+        0,
+        0,
+        0,
+        24,
+        1,
+        25,
+        0,
+        12
+      ],
+      "payload_sha256": "08b14a1e75c788097f9c3495a666d7795b55c41afe097741c481e2e8b2350afd"
+    }
+  ],
+  "symbols": [
+    {
+      "index": 0,
+      "name": "",
+      "record": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "index": 1,
+      "name": "$a",
+      "record": [
+        235,
+        0,
+        0,
+        2,
+        0,
+        20
+      ]
+    },
+    {
+      "index": 2,
+      "name": "$a",
+      "record": [
+        333,
+        0,
+        0,
+        2,
+        0,
+        25
+      ]
+    },
+    {
+      "index": 3,
+      "name": ".debug_info",
+      "record": [
+        1,
+        0,
+        0,
+        3,
+        0,
+        5
+      ]
+    },
+    {
+      "index": 4,
+      "name": ".debug_line",
+      "record": [
+        13,
+        0,
+        0,
+        3,
+        0,
+        10
+      ]
+    },
+    {
+      "index": 5,
+      "name": ".debug_frame",
+      "record": [
+        25,
+        0,
+        0,
+        3,
+        0,
+        12
+      ]
+    },
+    {
+      "index": 6,
+      "name": ".debug_abbrev",
+      "record": [
+        38,
+        0,
+        0,
+        3,
+        0,
+        16
+      ]
+    },
+    {
+      "index": 7,
+      "name": ".exceptix",
+      "record": [
+        52,
+        0,
+        0,
+        3,
+        0,
+        22
+      ]
+    },
+    {
+      "index": 8,
+      "name": ".exception",
+      "record": [
+        62,
+        0,
+        0,
+        3,
+        0,
+        24
+      ]
+    },
+    {
+      "index": 9,
+      "name": "@ET@_ZNSt3tr110shared_ptrIcED1Ev",
+      "record": [
+        73,
+        0,
+        17,
+        1,
+        0,
+        19
+      ]
+    },
+    {
+      "index": 10,
+      "name": "@EX@_ZNSt3tr110shared_ptrIcED1Ev",
+      "record": [
+        106,
+        0,
+        12,
+        1,
+        0,
+        17
+      ]
+    },
+    {
+      "index": 11,
+      "name": "@ET@_ZNSt3tr110shared_ptrIcED2Ev",
+      "record": [
+        238,
+        0,
+        17,
+        1,
+        0,
+        24
+      ]
+    },
+    {
+      "index": 12,
+      "name": "@EX@_ZNSt3tr110shared_ptrIcED2Ev",
+      "record": [
+        271,
+        0,
+        12,
+        1,
+        0,
+        22
+      ]
+    },
+    {
+      "index": 13,
+      "name": ".dwarf_type.41",
+      "record": [
+        336,
+        109,
+        6,
+        1,
+        0,
+        5
+      ]
+    },
+    {
+      "index": 14,
+      "name": ".dwarf_type.42",
+      "record": [
+        368,
+        127,
+        6,
+        1,
+        0,
+        5
+      ]
+    },
+    {
+      "index": 15,
+      "name": ".dwarf_type.43",
+      "record": [
+        419,
+        193,
+        6,
+        1,
+        0,
+        5
+      ]
+    },
+    {
+      "index": 16,
+      "name": ".dwarf_type.44",
+      "record": [
+        451,
+        211,
+        6,
+        1,
+        0,
+        5
+      ]
+    },
+    {
+      "index": 17,
+      "name": ".dwarf_type.45",
+      "record": [
+        557,
+        324,
+        6,
+        1,
+        0,
+        5
+      ]
+    },
+    {
+      "index": 18,
+      "name": ".dwarf_line._ZNSt3tr110shared_ptrIcED1Ev",
+      "record": [
+        572,
+        189,
+        24,
+        1,
+        0,
+        10
+      ]
+    },
+    {
+      "index": 19,
+      "name": ".dwarf_line._ZNSt3tr110shared_ptrIcED2Ev",
+      "record": [
+        649,
+        213,
+        24,
+        1,
+        0,
+        10
+      ]
+    },
+    {
+      "index": 20,
+      "name": "_ZNSt3tr110shared_ptrIcED1Ev",
+      "record": [
+        139,
+        0,
+        64,
+        18,
+        0,
+        20
+      ]
+    },
+    {
+      "index": 21,
+      "name": "_ZNSt3tr16detail25shared_ptr_deleter_common7releaseEv",
+      "record": [
+        168,
+        0,
+        0,
+        16,
+        0,
+        0
+      ]
+    },
+    {
+      "index": 22,
+      "name": "__unexpected",
+      "record": [
+        222,
+        0,
+        0,
+        16,
+        0,
+        0
+      ]
+    },
+    {
+      "index": 23,
+      "name": "_ZNSt3tr110shared_ptrIcED2Ev",
+      "record": [
+        304,
+        0,
+        64,
+        18,
+        0,
+        25
+      ]
+    },
+    {
+      "index": 24,
+      "name": ".dwarf_type.void",
+      "record": [
+        351,
+        115,
+        12,
+        33,
+        0,
+        5
+      ]
+    },
+    {
+      "index": 25,
+      "name": ".dwarf_type.NSt3tr110shared_ptrIcEE",
+      "record": [
+        383,
+        133,
+        60,
+        33,
+        0,
+        5
+      ]
+    },
+    {
+      "index": 26,
+      "name": ".dwarf_type.char",
+      "record": [
+        434,
+        199,
+        12,
+        33,
+        0,
+        5
+      ]
+    },
+    {
+      "index": 27,
+      "name": ".dwarf_type.NSt3tr16detail25shared_ptr_deleter_commonE",
+      "record": [
+        466,
+        217,
+        85,
+        33,
+        0,
+        5
+      ]
+    },
+    {
+      "index": 28,
+      "name": ".dwarf_type.int",
+      "record": [
+        521,
+        302,
+        11,
+        33,
+        0,
+        5
+      ]
+    },
+    {
+      "index": 29,
+      "name": ".dwarf_typedef.BOOL",
+      "record": [
+        537,
+        313,
+        11,
+        33,
+        0,
+        5
+      ]
+    },
+    {
+      "index": 30,
+      "name": ".dwarf._ZNSt3tr110shared_ptrIcED1Ev",
+      "record": [
+        613,
+        330,
+        96,
+        17,
+        0,
+        5
+      ]
+    },
+    {
+      "index": 31,
+      "name": ".dwarf._ZNSt3tr110shared_ptrIcED2Ev",
+      "record": [
+        690,
+        426,
+        106,
+        17,
+        0,
+        5
+      ]
+    }
+  ],
+  "normalization": "Only the declared source directory in nonallocated DWARF-v2 line-header and actual compile-unit DW_AT_comp_dir: exact directory strings, header/CU/pubnames lengths and affected local symbol/relocation offsets plus parser-identified sibling references to later DIEs in the same CU. All other bytes and all runtime payloads/names/bindings remain fixed.",
+  "source_basename": "to91_msl_shared_ptr_char_d1.cpp"
+}

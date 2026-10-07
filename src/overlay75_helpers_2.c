@@ -1,4 +1,5 @@
 #include "global.h"
+struct Overlay75State;
 typedef struct {
     u8 raw[0x400];
 } State;
@@ -45,8 +46,8 @@ extern void PlaySE(int);
 void ov75_02246B98(State *);
 void ov75_02246BCC(State *, int, int);
 void ov75_02246BD8(State *);
-void ov75_02246BE0(State *, int);
-u8 ov75_02246BE8(State *);
+void ov75_02246BE0(void *, int);
+u8 ov75_02246BE8(void *);
 void *ov75_02246BF0(int, u32, int);
 void ov75_02246C18(int, void *);
 void ov75_02246C68(State *);
@@ -59,11 +60,11 @@ u32 ov75_02246CE0(State *);
 u32 ov75_02246CE8(State *);
 void ov75_02246CF0(State *, u8);
 u8 ov75_02246CF8(State *);
-void ov75_02246D00(void);
+void *ov75_02246D00(struct Overlay75State *);
 void ov75_02246D04(void);
 void *ov75_02246EAC(State *);
 void ov75_02246EDC(State *);
-void ov75_02247234(State *);
+void ov75_02247234(void *);
 void ov75_0224741C(void *);
 void ov75_02247838(State *);
 void ov75_02247854(State *, u32, u32);
@@ -128,7 +129,8 @@ u8 ov75_02246CF8(State *p) {
     return *((u8 *)p + 0x10c);
 }
 
-void ov75_02246D00(void) {
+void *ov75_02246D00(struct Overlay75State *state) {
+    return state;
 }
 
 void ov75_02246D04(void) {

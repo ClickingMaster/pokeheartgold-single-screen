@@ -42,15 +42,27 @@ extern void ov49_022686E4(void *, const u16 *);
 extern void ov49_022686F0(void *);
 extern void ov49_02259148(void *, VecFx32 *);
 
+typedef struct Ov49Interpolation {
+    s32 duration;
+    s32 x;
+    s32 y;
+    s32 z;
+    s32 deltaX;
+    s32 startX;
+    s32 deltaY;
+    s32 startY;
+    s32 deltaZ;
+    s32 startZ;
+} Ov49Interpolation;
+
+
 typedef struct Ov49Ctl {
     s16 state;
     u16 kind;
     u16 count;
     u8 active;
     u8 phase;
-    struct {
-        u8 raw[0x28];
-    } emitters[4];
+    Ov49Interpolation emitters[4];
     struct {
         u8 raw[0xC];
     } motions[4];

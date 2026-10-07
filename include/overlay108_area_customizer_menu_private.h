@@ -17,7 +17,7 @@ s32 TouchscreenListMenu_HandleInput(void *);
 void TouchscreenListMenu_Destroy(void *);
 void ov108_021E61E8(Ov108Work2 *);
 void ov108_021E6238(Ov108Work2 *);
-void ov108_021E79A8(Ov108Work2 *, u32, u32, u32);
+void ov108_021E79A8(void *, u8, int, int);
 void ov108_021E6804(Ov108Work2 *);
 u32 ov108_021E5DB8(Ov108Work2 *);
 u32 ov108_021E5E68(Ov108Work2 *);

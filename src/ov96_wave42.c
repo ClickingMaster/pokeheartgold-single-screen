@@ -10,7 +10,7 @@ u32 ov96_021F83DC(void *w) {
 }
 u32 ov96_021F83FC(void *w) {
     u32 i = PokeathlonCourse_GetCurrentParticipantIndex(w);
-    u8 *p = ov96_021E8A20((u8 *)PokeathlonCourse_GetDataCopyArea(w) + 0xf0);
+    u8 *p = (void *)ov96_021E8A20((u8 *)PokeathlonCourse_GetDataCopyArea(w) + 0xf0);
     u32 n;
     if (*p >= 5) {
         GF_AssertFail();
@@ -72,8 +72,8 @@ void ov96_021F85A0(Work *w) {
 BOOL ov96_021F85F4(void *course) {
     u8 *heap = PokeathlonCourse_GetHeapAllocPtr4(course);
     u8 *data = PokeathlonCourse_GetDataCopyArea(course);
-    u8 *a = ov96_021E8A20(data + 0x28);
-    u8 *b = ov96_021E8A20(data + 0xf0);
+    u8 *a = (void *)ov96_021E8A20(data + 0x28);
+    u8 *b = (void *)ov96_021E8A20(data + 0xf0);
     u8 participant = (u8)ov96_021E5F24(course);
     u8 index = (u8) * (u32 *)(heap + 0xa4);
     BOOL active = 0;
@@ -84,8 +84,8 @@ BOOL ov96_021F85F4(void *course) {
         u32 n;
         int i;
         a[1] = index;
-        dst = ov96_021E8A20(data + 0x50);
-        src = ov96_021E8A20(data);
+        dst = (void *)ov96_021E8A20(data + 0x50);
+        src = (void *)ov96_021E8A20(data);
         n = 0x24;
         while (n != 0) {
             *dst++ = *src++;
@@ -95,7 +95,7 @@ BOOL ov96_021F85F4(void *course) {
         if (PokeathlonCourse_GetParticipantCount(course) > 0) {
             u8 *p = data + 0x50;
             do {
-                u8 *r = ov96_021E8A20(p);
+                u8 *r = (void *)ov96_021E8A20(p);
                 if (r[0] < index || r[1] == 1) {
                     active = 1;
                 }
@@ -111,7 +111,7 @@ BOOL ov96_021F85F4(void *course) {
         }
         a[3] = active;
     }
-    a = ov96_021E8A20(data);
+    a = (void *)ov96_021E8A20(data);
     a[0] = index;
     a[1] = (u8)ov96_021EEA80(*(void **)(heap + 0x18));
     a[2] = (u8) * (u32 *)(heap + 0xa8);

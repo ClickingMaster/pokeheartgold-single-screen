@@ -5,7 +5,7 @@
 
 fx32 FX_Div(fx32 numerator, fx32 denominator);
 fx32 FX_Modf(fx32 value, fx32 *integerPart);
-BOOL sub_02020EB0(VecFx32 *a, VecFx32 *b, VecFx32 *c, VecFx32 *d);
+BOOL sub_02020EB0(const void *a, const void *b, const void *c, const void *d);
 BOOL sub_02020F4C(VecFx32 *a, VecFx32 *b, VecFx32 *c, VecFx32 *d, VecFx32 *out);
 
 #endif

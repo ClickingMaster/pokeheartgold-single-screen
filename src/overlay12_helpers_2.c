@@ -1,4 +1,6 @@
 #include "global.h"
+#include "heap.h"
+typedef struct GF3DVramMan GF3DVramMan;
 
 #include "overlay_manager.h"
 
@@ -39,7 +41,7 @@ extern void HandleLoadOverlay(int overlayId, int mode);
 extern void GfGfx_EngineATogglePlanes(int mask, BOOL enable);
 extern void FreeBgTilemapBuffer(void *bgConfig, int bgId);
 extern void BgConfig_CleanupBattleMenuBackgrounds(void *bgConfig);
-extern void *GF_3DVramMan_Create(int a0, int a1, int a2, int a3, int a4, void (*callback)(void));
+extern GF3DVramMan *GF_3DVramMan_Create(enum HeapID heapID, int texMode, int numTex, int plttMode, int numPltt, void (*initializer)(void));
 extern void ov12_02239664(void);
 extern void PaletteData_PushTransparentBuffers(void *paletteData);
 extern void GF_RunVramTransferTasks(void);
@@ -72,7 +74,7 @@ extern void sub_02014DA0(void);
 void ov12_02238A64(void);
 void ov12_022396E8(void);
 void ov12_022399BC(void);
-void ov12_02239644(void);
+GF3DVramMan *ov12_02239644(void);
 void ov12_02238A30(void *bgConfig);
 void ov12_0223998C(void *task, Ov12ScrollData *data);
 void ov12_0223A620(Ov12TextData *data);
@@ -118,6 +120,6 @@ BOOL ov12_022395BC(int value) {
     }
 }
 
-void ov12_02239644(void) {
-    GF_3DVramMan_Create(5, 0, 2, 0, 2, ov12_02239664);
+GF3DVramMan *ov12_02239644(void) {
+    return GF_3DVramMan_Create(HEAP_ID_BATTLE, 0, 2, 0, 2, ov12_02239664);
 }

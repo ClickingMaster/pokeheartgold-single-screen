@@ -1,6 +1,7 @@
-#pragma force_active on
 #include "global.h"
+#include "unk_0202C034.h"
 #pragma force_active on
-extern void *sub_0202C6F4(void*);extern int sub_0202C2DC(void*,int);
-int ov43_0222B574(int*a,void**b);
-int ov43_0222B574(int*a,void**b){int i;void*p;if(*a==1){p=sub_0202C6F4(b[1]);for(i=0;i<32;i++){if(sub_0202C2DC(p,i)==0)return 1;}}else return 1;return 0;}
+extern BOOL sub_0202C2DC(UnkStruct_021D2230*,int);
+int ov43_0222B574(int*,void*);
+// @fn ov43_0222B574
+int ov43_0222B574(int *selection,void *shared){int i;UnkStruct_021D2230 *roster;if(*selection==1){void *save=*(void **)((u8*)shared+4);roster=sub_0202C6F4(save);for(i=0;i<32;i++){if(sub_0202C2DC(roster,i)==0)return 1;}}else return 1;return 0;}

@@ -65,7 +65,7 @@ void ov07_0222A988(void *owner, int unused1, int unused2, ManagedSprite *first) 
     ManagedSprite_OffsetPositionXY(work->sprite[1], -32, 32);
     ManagedSprite_OffsetPositionXY(work->sprite[2], 32, 0);
     ManagedSprite_OffsetPositionXY(work->sprite[3], 32, 32);
-    ov07_0221C410(work->owner, (void (*)(void))ov07_0222A8EC, work);
+    ov07_0221C410(work->owner, (void *)ov07_0222A8EC, work);
 }
 
 typedef struct AEWork {
@@ -114,5 +114,5 @@ typedef struct B8Work {
     int attr[3];
 } B8Work;
 
-void ov07_0222B898(void *task, B8Work *work);
+void ov07_0222B898(SysTask *task, void *data);
 void ov07_0222B988(void *owner);

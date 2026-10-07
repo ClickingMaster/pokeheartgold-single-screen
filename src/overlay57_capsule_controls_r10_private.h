@@ -1,6 +1,7 @@
 #ifndef POKEHEARTGOLD_OVERLAY57_RESIDUAL10_PRIVATE_H
 #define POKEHEARTGOLD_OVERLAY57_RESIDUAL10_PRIVATE_H
 #include "global.h"
+struct BgConfig;
 
 #define U32(p, o) (*(u32 *)((u8 *)(p) + (o)))
 #define PTR(p, o) (*(void **)((u8 *)(p) + (o)))
@@ -29,7 +30,7 @@ extern void ov57_02238134(void);
 extern void ov57_022383AC(void *);
 extern void ov57_022383D0(void *, int);
 extern void ov57_0223853C(void *);
-extern void ov57_02238C30(void *, void *, int, void *, int);
+extern void ov57_02238C30(struct BgConfig *, void *, int, void *, int);
 extern void ov57_02238DAC(int, s16 *, s16 *);
 extern void ov57_022394AC(void *);
 extern void ov57_022394D8(void *, int);

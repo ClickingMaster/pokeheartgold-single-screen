@@ -8,7 +8,7 @@ extern u8 *_021D5FEC;
 extern void WcmEditScanExParam(void *,void *,u32);
 extern void WcmSetPhase(int);
 extern void WcmWmcbScanEx(void *);
-extern int WM_StartScanEx(void (*)(void *),void *);
+extern int WM_StartScanEx(void *,void *);
 int WCM_BeginSearchAsync(void *,void *,u32);
 #define F32(x) (*(u32 *)(_021D5FEC+(x)))
 #define F16(x) (*(u16 *)(_021D5FEC+(x)))
@@ -24,7 +24,7 @@ int WCM_BeginSearchAsync(void *a,void *b,u32 c){
  WcmEditScanExParam(a,b,c);
  DC_InvalidateRange((void *)F32(0x2288),F16(0x228c));
  F32(0x2284)++;
- switch(WM_StartScanEx(WcmWmcbScanEx,_021D5FEC+0x2288)){
+ switch(WM_StartScanEx((void *)WcmWmcbScanEx,_021D5FEC+0x2288)){
  case 2:WcmSetPhase(5);F16(0x2280)=3;break;
  case 8:OS_RestoreInterrupts(irq);return 4;
  case 3:default:WcmSetPhase(11);OS_RestoreInterrupts(irq);return 7;

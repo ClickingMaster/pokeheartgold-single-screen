@@ -39,7 +39,7 @@ u32 ov96_022021D4(void *course, u8 *state) {
     if (ov96_021E5F24(course)) {
         return 1;
     }
-    values = ov96_021E8A20(copy + 0x28);
+    values = (void *)ov96_021E8A20(copy + 0x28);
     for (i = 0; i < 4; i++) {
         PokeathlonCourse_SetField5E0_AtIndex(course, (u8)i, values[i] & 0x3ff);
     }

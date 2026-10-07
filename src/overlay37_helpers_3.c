@@ -45,13 +45,13 @@ u32 ov37_021E6860(Ov37Work *work, u32 arg1) {
         ov37_021E755C(work);
     }
     ov37_021E73B4(work);
-    ov37_021E72E8(&work->winB2, work->unk_4382, work->unk_43B4, 1);
+    ov37_021E72E8(&work->winB2, work->entries, work->points, 1);
     return arg1;
 }
 
 void ov37_021E68AC(Ov37Work *work) {
     ov37_021E73B4(work);
-    ov37_021E72E8(&work->winB2, work->unk_4382, work->unk_43B4, 0);
+    ov37_021E72E8(&work->winB2, work->entries, work->points, 0);
 }
 
 u32 ov37_021E68D0(Ov37Work *work, u32 arg1) {

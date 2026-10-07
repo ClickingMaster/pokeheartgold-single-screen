@@ -1,4 +1,5 @@
 #include "global.h"
+#include "sys_task.h"
 
 #include "overlay_manager.h"
 
@@ -74,7 +75,7 @@ void ov12_022396E8(void);
 void ov12_022399BC(void);
 void ov12_02239644(void);
 void ov12_02238A30(void *bgConfig);
-void ov12_0223998C(void *task, Ov12ScrollData *data);
+void ov12_0223998C(SysTask *task, void *context);
 void ov12_0223A620(Ov12TextData *data);
 
 
@@ -85,11 +86,12 @@ BOOL ov12_0223A5E4(OverlayManager *man);
 BOOL ov12_0223A218(OverlayManager *man);
 BOOL ov12_0223A3A8(OverlayManager *man);
 void ov12_0223A7A0(void);
-void ov12_02239810(void *unused, Ov12MainData *data);
+void ov12_02239810(SysTask *unused, void *context);
 BOOL ov12_022395BC(int value);
 void ov12_022396F0(void);
 
-void ov12_02239810(void *unused, Ov12MainData *data) {
+void ov12_02239810(SysTask *unused, void *context) {
+    Ov12MainData *data = context;
     sub_020399FC(5, data->bgConfig);
     if (*((u8 *)data + 0x23FD) == 0 || *((u8 *)data + 0x23FD) == 3) {
         if (*((u8 *)data + 0x23FD) == 0) {

@@ -1,7 +1,5 @@
 #include "global.h"
-typedef struct {
-    u8 raw[0x40];
-} FieldSystem;
+#include "ov115_transition_helpers.h"
 extern int ov115_0225F220(void *, int, const void *);
 extern int ov115_0225F978(void *, int, const void *);
 extern void ov01_021EFCDC(void *, void *);
@@ -12,7 +10,6 @@ extern void *NewMsgDataFromNarc(int, int, int, int);
 extern void *MessageFormat_New(int);
 extern void *String_New(int, int);
 extern void ReadMsgDataIntoString(void *, int, void *);
-extern void BufferTrainerName(void *, int, void *);
 extern void BufferRivalsName(void *, int, void *);
 extern void StringExpandPlaceholders(void *, void *, void *);
 extern void DestroyMsgData(void *);
@@ -56,11 +53,8 @@ extern const u8 ov115_022603A0[];
 extern const u8 ov115_022603A8[];
 
 void ov115_0225F09C(void *p);
-void ov115_0225F020(void *, void *, void *, void *, void *);
 void ov115_02260254(void *, int, void *, int, u16);
 int ov115_0225F0B4(void *);
-int ov115_0225F968(FieldSystem *fs);
-void *ov115_0225F158(void *name, int heap);
 void *ov115_0225F1BC(void *name, int heap);
 void ov115_0225F704(void *arg, void *ctx);
 void ov115_0225F728(void *arg, void *ctx);

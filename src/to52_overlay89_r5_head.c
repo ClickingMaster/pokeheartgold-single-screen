@@ -40,7 +40,7 @@ BOOL ov89_02259EC4(u8 *context, Ov89PartyEntry *entry, void *network) {
                 spriteOffset = index * 4;
                 ov89_02259A3C(entry->species, entry->form, *(void **)(sprites + spriteOffset), *(void **)(context + 0x160), *(void **)(context + 0x164), 2, *(void **)(context + 0x19E0));
                 ManagedSprite_SetDrawFlag(*(void **)(sprites + spriteOffset), TRUE);
-                PaletteData_FillPaletteInBuffer(*(void **)(context + 0xC), 1, 2, entry->value, index + 0x21, index + 0x22);
+                PaletteData_FillPaletteInBuffer(*(void **)(context + 0xC), PLTTBUF_SUB_BG, PLTTSEL_BOTH, entry->value, index + 0x21, index + 0x22);
             }
         }
         PlaySE(0x5EB);

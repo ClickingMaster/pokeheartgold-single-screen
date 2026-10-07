@@ -1,6 +1,7 @@
 #include "r40_unk_020755E8_residual_3_private.h"
 
-void sub_02077270(Work *work) {
+void sub_02077270(void *data) {
+    Work *work = data;
     u8 *raw = (u8 *)work;
 
     G2_SetWnd0Position(raw[0x72], raw[0x73], raw[0x74], raw[0x75]);

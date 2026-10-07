@@ -95,19 +95,26 @@ LIB_SRC_BUILDDIR          := $(addprefix $(BUILD_DIR)/,$(LIB_SRC_SUBDIR))
 LIB_ASM_BUILDDIR          := $(addprefix $(BUILD_DIR)/,$(LIB_ASM_SUBDIR))
 
 C_SRCS                    := $(call rwildcard,src,*.c)
+CXX_SRCS                  := $(call rwildcard,src,*.cpp)
 ASM_SRCS                  := $(foreach dname,$(ASM_SUBDIR),$(wildcard $(dname)/*.s))
 GLOBAL_ASM_SRCS           != grep -rl 'GLOBAL_ASM(' $(C_SRCS)
 LIB_C_SRCS                := $(foreach dname,$(LIB_SRC_SUBDIR),$(wildcard $(dname)/*.c))
+LIB_CXX_SRCS              := $(foreach dname,$(LIB_SRC_SUBDIR),$(wildcard $(dname)/*.cpp))
 LIB_ASM_SRCS              := $(foreach dname,$(LIB_ASM_SUBDIR),$(wildcard $(dname)/*.s))
-ALL_SRCS                  := $(C_SRCS) $(ASM_SRCS) $(GLOBAL_ASM_SRCS) $(LIB_C_SRCS) $(LIB_ASM_SRCS)
+ALL_SRCS                  := $(C_SRCS) $(CXX_SRCS) $(ASM_SRCS) $(GLOBAL_ASM_SRCS) $(LIB_C_SRCS) $(LIB_CXX_SRCS) $(LIB_ASM_SRCS)
 
 C_OBJS                    = $(C_SRCS:%.c=$(BUILD_DIR)/%.o)
+CXX_OBJS                  = $(CXX_SRCS:%.cpp=$(BUILD_DIR)/%.o)
 ASM_OBJS                  = $(ASM_SRCS:%.s=$(BUILD_DIR)/%.o)
 GLOBAL_ASM_OBJS           = $(GLOBAL_ASM_SRCS:%.c=$(BUILD_DIR)/%.o)
 LIB_C_OBJS                = $(LIB_C_SRCS:%.c=$(BUILD_DIR)/%.o)
+LIB_CXX_OBJS              = $(LIB_CXX_SRCS:%.cpp=$(BUILD_DIR)/%.o)
 LIB_ASM_OBJS              = $(LIB_ASM_SRCS:%.s=$(BUILD_DIR)/%.o)
-ALL_GAME_OBJS             = $(C_OBJS) $(ASM_OBJS) $(GLOBAL_ASM_OBJS)
-ALL_LIB_OBJS              = $(LIB_C_OBJS) $(LIB_ASM_OBJS)
+ALL_GAME_OBJS             = $(C_OBJS) $(CXX_OBJS) $(ASM_OBJS) $(GLOBAL_ASM_OBJS)
+ifeq ($(PROC),arm946e)
+LIB_ASM_OBJS += $(BUILD_DIR)/lib/NitroSDK/asm/to91_os_exception_anchor.o $(BUILD_DIR)/lib/NitroSDK/asm/to91_os_exception_residual.o
+endif
+ALL_LIB_OBJS              = $(LIB_C_OBJS) $(LIB_CXX_OBJS) $(LIB_ASM_OBJS)
 ALL_OBJS                  = $(ALL_GAME_OBJS) $(ALL_LIB_OBJS)
 
 $(ALL_LIB_OBJS): DEFINES = $(GLB_DEFINES)
@@ -152,6 +159,9 @@ DUMMY := $(shell mkdir -p $(ALL_BUILDDIRS))
 patch_mwasmarm:
 	$(ASPATCH) -q $(MWAS)
 
+$(BUILD_DIR)/lib/NitroSDK/%.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/%.o: private MWCCVER := 2.0/sp2p3
+
 ifeq ($(NODEP),)
 ifneq ($(WINPATH),)
 PROJECT_ROOT_NT := $(shell $(WINPATH) -w $(PROJECT_ROOT) | $(SED) 's/\\/\//g')
@@ -168,13 +178,24 @@ endif
 DEPFLAGS := -gccdep -MD
 DEPFILES := $(ALL_OBJS:%.o=%.d)
 MW_COMPILE += $(DEPFLAGS)
-$(GLOBAL_ASM_OBJS): BUILD_C := $(ASM_PROCESSOR) "$(MW_COMPILE)" "$(MW_ASSEMBLE)"
+$(GLOBAL_ASM_OBJS): private BUILD_C := $(ASM_PROCESSOR) "$(MW_COMPILE)" "$(MW_ASSEMBLE)"
 BUILD_C ?= $(MW_COMPILE) -c -o
+BUILD_CPP ?= $(subst -lang c99,-lang c++,$(MW_COMPILE)) -c -o
 
 $(DEPFILES):
 
-$(BUILD_DIR)/lib/NitroSDK/%.o: MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/lib/MSL_C/%.o: MWCCVER := 2.0/sp2p3
+ifeq ($(PROC),arm946e)
+
+# Derive retained native exception groups from the unchanged SDK producer.
+$(BUILD_DIR)/lib/NitroSDK/asm/to91_os_exception_anchor.o: $(BUILD_DIR)/lib/NitroSDK/src/os/os_exception.o tools/nitro-section-renames/partition_os_exception.py
+	@mkdir -p $(dir $@)
+	$(PYTHON) tools/nitro-section-renames/partition_os_exception.py $< $@ anchor
+$(BUILD_DIR)/lib/NitroSDK/asm/to91_os_exception_residual.o: $(BUILD_DIR)/lib/NitroSDK/src/os/os_exception.o tools/nitro-section-renames/partition_os_exception.py
+	@mkdir -p $(dir $@)
+	$(PYTHON) tools/nitro-section-renames/partition_os_exception.py $< $@ residual
+endif
+$(BUILD_DIR)/lib/NitroSDK/src/os/os_thread.o: lib/NitroSDK/src/os/os_thread.os-thread-section-map.json tools/nitro-section-renames/rename_os_thread_sections.py
+$(BUILD_DIR)/lib/NitroSDK/src/os/to90_reset_pure.o: lib/NitroSDK/src/os/to90_reset_pure.os-reset-section-map.json tools/nitro-section-renames/rename_os_reset_sections.py
 
 $(BUILD_DIR)/%.o: %.c
 $(BUILD_DIR)/%.o: %.c $(BUILD_DIR)/%.d
@@ -182,6 +203,19 @@ $(BUILD_DIR)/%.o: %.c $(BUILD_DIR)/%.d
 	@$(BUILD_C) $@ $< || { rm -f $(BUILD_DIR)/%.d; exit 1; }
 	@if test -f "$(basename $<).snd-section-map.json"; then $(PYTHON) tools/nitro-section-renames/rename_snd_sections.py "$@" "$@" "$(basename $<).snd-section-map.json"; fi
 	@if test -f "$(basename $<).card-section-map.json"; then $(PYTHON) tools/nitro-section-renames/rename_card_sections.py "$@" "$@" "$(basename $<).card-section-map.json"; fi
+	@if test -f "$(basename $<).os-thread-section-map.json"; then $(PYTHON) tools/nitro-section-renames/rename_os_thread_sections.py "$@" "$@" "$(basename $<).os-thread-section-map.json"; fi
+	@if test -f "$(basename $<).os-reset-section-map.json"; then $(PYTHON) tools/nitro-section-renames/rename_os_reset_sections.py "$@" "$@" "$(basename $<).os-reset-section-map.json"; fi
+	@if test -f "$(basename $<).alias-map.json"; then $(PYTHON) tools/object_aliases.py "$@" "$(basename $<).alias-map.json"; fi
+	@$(call fixdep,$(BUILD_DIR)/$*.d)
+
+$(BUILD_DIR)/%.o: %.cpp
+$(BUILD_DIR)/%.o: %.cpp $(BUILD_DIR)/%.d
+	@echo $(BUILD_CPP) $@ $<
+	@$(BUILD_CPP) $@ $< || { rm -f $(BUILD_DIR)/%.d; exit 1; }
+	@if test -f "$(basename $<).snd-section-map.json"; then $(PYTHON) tools/nitro-section-renames/rename_snd_sections.py "$@" "$@" "$(basename $<).snd-section-map.json"; fi
+	@if test -f "$(basename $<).card-section-map.json"; then $(PYTHON) tools/nitro-section-renames/rename_card_sections.py "$@" "$@" "$(basename $<).card-section-map.json"; fi
+	@if test -f "$(basename $<).os-thread-section-map.json"; then $(PYTHON) tools/nitro-section-renames/rename_os_thread_sections.py "$@" "$@" "$(basename $<).os-thread-section-map.json"; fi
+	@if test -f "$(basename $<).os-reset-section-map.json"; then $(PYTHON) tools/nitro-section-renames/rename_os_reset_sections.py "$@" "$@" "$(basename $<).os-reset-section-map.json"; fi
 	@if test -f "$(basename $<).alias-map.json"; then $(PYTHON) tools/object_aliases.py "$@" "$(basename $<).alias-map.json"; fi
 	@$(call fixdep,$(BUILD_DIR)/$*.d)
 
@@ -193,13 +227,24 @@ $(BUILD_DIR)/%.o: %.s $(BUILD_DIR)/%.d
 
 include $(wildcard $(DEPFILES))
 else
-$(GLOBAL_ASM_OBJS): BUILD_C := $(ASM_PROCESSOR) "$(MW_COMPILE)" "$(MW_ASSEMBLE)"
+$(GLOBAL_ASM_OBJS): private BUILD_C := $(ASM_PROCESSOR) "$(MW_COMPILE)" "$(MW_ASSEMBLE)"
 BUILD_C ?= $(MW_COMPILE) -c -o
+BUILD_CPP ?= $(subst -lang c99,-lang c++,$(MW_COMPILE)) -c -o
 
 $(BUILD_DIR)/%.o: %.c
 	$(BUILD_C) $@ $<
 	if test -f "$(basename $<).snd-section-map.json"; then $(PYTHON) tools/nitro-section-renames/rename_snd_sections.py "$@" "$@" "$(basename $<).snd-section-map.json"; fi
 	if test -f "$(basename $<).card-section-map.json"; then $(PYTHON) tools/nitro-section-renames/rename_card_sections.py "$@" "$@" "$(basename $<).card-section-map.json"; fi
+	if test -f "$(basename $<).os-thread-section-map.json"; then $(PYTHON) tools/nitro-section-renames/rename_os_thread_sections.py "$@" "$@" "$(basename $<).os-thread-section-map.json"; fi
+	if test -f "$(basename $<).os-reset-section-map.json"; then $(PYTHON) tools/nitro-section-renames/rename_os_reset_sections.py "$@" "$@" "$(basename $<).os-reset-section-map.json"; fi
+	if test -f "$(basename $<).alias-map.json"; then $(PYTHON) tools/object_aliases.py "$@" "$(basename $<).alias-map.json"; fi
+
+$(BUILD_DIR)/%.o: %.cpp
+	$(BUILD_CPP) $@ $<
+	if test -f "$(basename $<).snd-section-map.json"; then $(PYTHON) tools/nitro-section-renames/rename_snd_sections.py "$@" "$@" "$(basename $<).snd-section-map.json"; fi
+	if test -f "$(basename $<).card-section-map.json"; then $(PYTHON) tools/nitro-section-renames/rename_card_sections.py "$@" "$@" "$(basename $<).card-section-map.json"; fi
+	if test -f "$(basename $<).os-thread-section-map.json"; then $(PYTHON) tools/nitro-section-renames/rename_os_thread_sections.py "$@" "$@" "$(basename $<).os-thread-section-map.json"; fi
+	if test -f "$(basename $<).os-reset-section-map.json"; then $(PYTHON) tools/nitro-section-renames/rename_os_reset_sections.py "$@" "$@" "$(basename $<).os-reset-section-map.json"; fi
 	if test -f "$(basename $<).alias-map.json"; then $(PYTHON) tools/object_aliases.py "$@" "$(basename $<).alias-map.json"; fi
 
 $(BUILD_DIR)/%.o: %.s
@@ -217,11 +262,19 @@ clean-tools:
 	$(foreach tool,$(TOOLDIRS),$(MAKE) -C $(tool) clean;)
 	$(TOOLSDIR)/asmdiff/asmdiff.sh -c
 
+ifeq ($(PROC),arm946e)
+$(LCF): tools/nitro-section-renames/nitro_link_order.json tools/nitro-section-renames/patch_nitro_lcf.py
+$(LCF): tools/nitro-section-renames/patch_os_thread_lcf.py lib/NitroSDK/src/os/os_thread.os-thread-section-map.json
+$(LCF): tools/nitro-section-renames/patch_os_reset_lcf.py lib/NitroSDK/src/os/to90_reset_pure.os-reset-section-map.json
+endif
+
 $(LCF): $(LSF) $(LCF_TEMPLATE)
-	$(WINE) $(MAKELCF) $(MAKELCF_FLAGS) $^ $@
+	$(WINE) $(MAKELCF) $(MAKELCF_FLAGS) $(LSF) $(LCF_TEMPLATE) $@
 ifeq ($(PROC),arm946e)
 	$(SED) -i '1i KEEP_SECTION\n{\n\t.exceptix\n}' $@
 	python3 tools/nitro-section-renames/patch_nitro_lcf.py $@
+	python3 tools/nitro-section-renames/patch_os_thread_lcf.py $@
+	python3 tools/nitro-section-renames/patch_os_reset_lcf.py $@
 else
 	$(SED) -i '/\} > check\.WORKRAM/a SDK_SUBPRIV_ARENA_LO = SDK_SUBPRIV_ARENA_LO + SDK_AUTOLOAD.EXT_WRAM.SIZE + SDK_AUTOLOAD.EXT_WRAM.BSS_SIZE;' $@
 endif
@@ -242,7 +295,7 @@ ifeq ($(COMPARE),1)
 	$(SHA1SUM) --quiet -c $*.sha1
 endif
 
-$(ELF): $(ALL_OBJS)
+$(ELF): $(ALL_OBJS) $(LCF) $(RESPONSE)
 	$(MAKE) $(LCF)
 	$(MAKE) $(RESPONSE)
 	cd $(BUILD_DIR) && LM_LICENSE_FILE=$(BACK_REL)/$(LM_LICENSE_FILE) $(WINE) $(MWLD) $(MWLDFLAGS) $(LIBS) -o $(BACK_REL)/$(ELF) $(LCF:$(BUILD_DIR)/%=%) @$(RESPONSE:$(BUILD_DIR)/%=%) $(CRT0_OBJ)

@@ -3,6 +3,7 @@
 #include "global.h"
 #include <nitro/code32.h>
 // clang-format on
+#include "renderer_joint_family_private.h"
 extern void GX_BeginLoadTex(void),GX_EndLoadTex(void),GX_BeginLoadTexPltt(void),GX_EndLoadTexPltt(void);
 extern void GX_LoadTex(const void *,u32,u32),GX_LoadTexPltt(const void *,u32,u32);
 extern int MTX_Inverse43(const MtxFx43 *,MtxFx43 *);
@@ -44,23 +45,19 @@ MtxFx43 *NNS_G3dGlbGetInvWV(void) ;
 MtxFx44 *NNS_G3dGlbGetInvVP(void) ;
 void NNS_G3dGlbGetViewPort(u32 *a,u32 *b,u32 *c,u32 *d) ;
 void blendScaleVec_(s32 *dst,const s32 *src,s32 ratio,int one) ;
-void G3dDrawInternal_Loop_(u8 *p) ;
 void updateHintVec___g3d(u32 *p,NNSG3dAnmObj *a) ;
 void NNSi_G3dFuncSbc_NOP(u8 *p) ;
 void NNSi_G3dFuncSbc_RET(u8 *p) ;
 
-extern u8 *_021DA700;
-extern u32 _02110A80[],_02110A74[],_02110A8C[];
 extern void MIi_CpuClearFast(u32,u32 *,u32);
 int NNSi_G3dAnmBlendMat(void *p,const NNSG3dAnmObj *a,u32 i);
 int NNSi_G3dAnmBlendVis(u32 *p,const NNSG3dAnmObj *a,u32 i);
-void G3dDrawInternal_(u8 *p,NNSG3dRenderObj *r);
 void NNS_G3dDraw(NNSG3dRenderObj *r);
 void NNS_G3dGlbInit(void);
 
 void updateHintVec___g3d(u32 *p,NNSG3dAnmObj *a) { int i;if(!a)return;do{for(i=0;i<a->numMapData;i++)if(a->mapData[i]&256)p[i>>5]|=1<<(i&31);a=a->next;}while(a); }
 
-void NNS_G3dDraw(NNSG3dRenderObj *r) { u32 state[0x188/4];if((r->flag&16)==16){MIi_CpuClear32(0,r->hintMatAnmExist,8);MIi_CpuClear32(0,r->hintJntAnmExist,8);MIi_CpuClear32(0,r->hintVisAnmExist,8);if(r->anmMat)updateHintVec___g3d(r->hintMatAnmExist,r->anmMat);if(r->anmJnt)updateHintVec___g3d(r->hintJntAnmExist,r->anmJnt);if(r->anmVis)updateHintVec___g3d(r->hintVisAnmExist,r->anmVis);r->flag&=~16;}if(_021DA700){G3dDrawInternal_(_021DA700,r);return;}_021DA700=(u8 *)state;G3dDrawInternal_((u8 *)state,r);_021DA700=0; }
+void NNS_G3dDraw(NNSG3dRenderObj *r) { MdlRenderState state;if((r->flag&16)==16){MIi_CpuClear32(0,r->hintMatAnmExist,8);MIi_CpuClear32(0,r->hintJntAnmExist,8);MIi_CpuClear32(0,r->hintVisAnmExist,8);if(r->anmMat)updateHintVec___g3d(r->hintMatAnmExist,r->anmMat);if(r->anmJnt)updateHintVec___g3d(r->hintJntAnmExist,r->anmJnt);if(r->anmVis)updateHintVec___g3d(r->hintVisAnmExist,r->anmVis);r->flag&=~16;}if(_021DA700){G3dDrawInternal_(_021DA700,r);return;}_021DA700=&state;G3dDrawInternal_(&state,r);_021DA700=0; }
 
 void NNSi_G3dFuncSbc_NOP(u8 *p) { if(W(p,12))((void (*)(void *))W(p,12))(p);W(p,0)++; }
 

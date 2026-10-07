@@ -1,0 +1,8 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+extern void InitWindow(void*),AddWindowParameterized(void*,void*,int,int,int,int,int,int,int),FillWindowPixelBuffer(void*,int),String_Delete(void*),BufferPlayersName(void*,int,void*),ReadMsgDataIntoString(void*,int,void*),StringExpandPlaceholders(void*,void*,void*),AddTextPrinterParameterizedWithColor(void*,int,void*,u32,int,int,u32,void*);
+extern void *String_New(int,int),*Save_PlayerData_GetOptionsAddr(void*),*Save_PlayerData_GetProfile(void*),*GfGfxLoader_GetScrnDataFromOpenNarc(void*,int,int,void*,int);
+extern int Options_GetTextFrameDelay(void*);extern u32 FontID_String_GetWidth(int,void*,int);
+void ov43_0222B0A0(u8*,u8*,u8*,int);
+void ov43_0222B0A0(u8*w,u8*save,u8*ctx,int heap){void*expanded,*text;int i,y;InitWindow(w+8);AddWindowParameterized(*(void**)ctx,w+8,3,4,4,24,20,11,1);InitWindow(w+32);AddWindowParameterized(*(void**)ctx,w+32,1,2,19,27,4,11,172);FillWindowPixelBuffer(w+8,0);FillWindowPixelBuffer(w+32,0);*(void**)(w+60)=String_New(128,heap);*(int*)(w+56)=Options_GetTextFrameDelay(Save_PlayerData_GetOptionsAddr(*(void**)(save+4)));expanded=String_New(128,heap);text=String_New(128,heap);BufferPlayersName(*(void**)(ctx+80),0,Save_PlayerData_GetProfile(*(void**)(save+4)));for(i=0,y=8;i<4;i++,y+=40){u32 width;ReadMsgDataIntoString(*(void**)(ctx+84),i+1,text);StringExpandPlaceholders(*(void**)(ctx+80),expanded,text);width=FontID_String_GetWidth(4,expanded,0);AddTextPrinterParameterizedWithColor(w+8,4,expanded,(192-width)/2,y,255,0x10f00,0);}String_Delete(expanded);String_Delete(text);*(void**)(w+24)=GfGfxLoader_GetScrnDataFromOpenNarc(*(void**)(ctx+88),11,1,w+28,heap);}

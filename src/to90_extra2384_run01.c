@@ -1,0 +1,6 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+typedef struct{void*bg;u8 p[0x24];u32 heap;u8 p2[2];u8 pal,layer,font,p3,layer2;}W;
+extern void*NARC_New(int,u32),*GfGfxLoader_GetScrnDataFromOpenNarc(void*,int,int,void**,u32),*GetBgTilemapBuffer(void*,int);extern void GfGfxLoader_GXLoadPalFromOpenNarc(void*,int,int,int,int,u32),LoadFontPal0(int,int,u32),GfGfxLoader_LoadCharDataFromOpenNarc(void*,int,void*,int,int,int,int,u32),BgCommitTilemapBufferToVram(void*,int),Heap_Free(void*),NARC_Delete(void*),ToggleBgLayer(int,int);void ov72_0223B0C4(W*);
+void ov72_0223B0C4(W*w){void*narc=NARC_New(239,w->heap);void*buffer,*screen;int i;u16*src,*dst;if(w->layer<=3){GfGfxLoader_GXLoadPalFromOpenNarc(narc,0,0,w->pal*32,32,w->heap);LoadFontPal0(0,w->font*32,w->heap);}else{GfGfxLoader_GXLoadPalFromOpenNarc(narc,0,4,w->pal*32,32,w->heap);LoadFontPal0(4,w->font*32,w->heap);}GfGfxLoader_LoadCharDataFromOpenNarc(narc,1,w->bg,w->layer,0,0,0,w->heap);buffer=GfGfxLoader_GetScrnDataFromOpenNarc(narc,10,0,&screen,w->heap);dst=GetBgTilemapBuffer(w->bg,w->layer);i=0;src=(u16*)((u8*)screen+12);do{int tile=*src;int pal=w->pal;i++;tile&=0xfff;*dst=(pal<<12)|tile;src++;dst++;}while(i<768);BgCommitTilemapBufferToVram(w->bg,w->layer);Heap_Free(buffer);NARC_Delete(narc);ToggleBgLayer(w->layer,1);ToggleBgLayer(w->layer2,1);}

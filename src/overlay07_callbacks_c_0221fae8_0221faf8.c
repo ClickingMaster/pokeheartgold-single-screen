@@ -17,6 +17,6 @@ typedef struct Outer {
     Inner *inner;
 } Outer;
 
-BOOL ov07_0221FAE8(void) { return TRUE; }
+BOOL ov07_0221FAE8(void *owner) { return TRUE; }
 u32 ov07_0221FAEC(void *p, int i) { extern u32 ov07_02234B8C[]; return ov07_02234B8C[i]; }
 u32 ov07_0221FAF8(void *p, int i) { extern u32 _02234B80[]; return _02234B80[i]; }

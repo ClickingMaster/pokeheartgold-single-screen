@@ -72,7 +72,7 @@ BOOL ov49_02268DCC(void *task, void *ctx) {
         PlaySE(0x5DC);
         ov49_02258E60(sub, 6);
         value = ov42_022282A4();
-        ov49_02258EEC(field, manager, 0);
+        ov49_02258EEC(field, (void*)(manager), 0);
         ov49_02259130(manager, 0);
         ov49_02259160(manager, value);
         if (ov45_0222A330(state) != 0) {
@@ -126,7 +126,7 @@ BOOL ov49_02268DCC(void *task, void *ctx) {
     case 4:
         ov49_0225A0EC(ctx);
         ov49_0225A2F8(ctx);
-        ov49_02258EEC(field, sub, 1);
+        ov49_02258EEC(field, (void*)(sub), 1);
         ov49_0225EF68(task);
         ov49_02259130(manager, 1);
         ov49_02258EAC(field, manager, 0, 1);

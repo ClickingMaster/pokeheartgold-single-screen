@@ -1,4 +1,5 @@
 #include "global.h"
+#include "sys_task_api.h"
 
 #include "overlay_manager.h"
 
@@ -45,7 +46,6 @@ extern void PaletteData_PushTransparentBuffers(void *paletteData);
 extern void GF_RunVramTransferTasks(void);
 extern void DoScheduledBgGpuUpdates(void *bgConfig);
 extern void BgSetPosTextAndCommit(void *bgConfig, int bgId, int op, int value);
-extern void SysTask_Destroy(void *task);
 extern void TextFlags_SetAutoScrollParam(int value);
 extern void TextFlags_SetCanABSpeedUpPrint(BOOL value);
 extern void TextFlags_SetCanTouchSpeedUpPrint(BOOL value);
@@ -74,7 +74,7 @@ void ov12_022396E8(void);
 void ov12_022399BC(void);
 void ov12_02239644(void);
 void ov12_02238A30(void *bgConfig);
-void ov12_0223998C(void *task, Ov12ScrollData *data);
+void ov12_0223998C(SysTask *task, void *context);
 void ov12_0223A620(Ov12TextData *data);
 
 
@@ -85,11 +85,12 @@ BOOL ov12_0223A5E4(OverlayManager *man);
 BOOL ov12_0223A218(OverlayManager *man);
 BOOL ov12_0223A3A8(OverlayManager *man);
 void ov12_0223A7A0(void);
-void ov12_02239810(void *unused, Ov12MainData *data);
+void ov12_02239810(SysTask *unused, void *context);
 BOOL ov12_022395BC(int value);
 void ov12_022396F0(void);
 
-void ov12_0223998C(void *task, Ov12ScrollData *data) {
+void ov12_0223998C(SysTask *task, void *context) {
+    Ov12ScrollData *data = context;
     data->scroll += 3;
     BgSetPosTextAndCommit(data->bgConfig, 1, 3, data->scroll);
     if (data->scroll == 0) {

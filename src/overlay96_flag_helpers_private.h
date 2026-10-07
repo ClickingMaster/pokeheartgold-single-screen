@@ -13,7 +13,7 @@ void BufferPlayersName(void *,int,void *);
 void ov96_021EDF3C(void *,int,int,int);
 void ov96_021ED524(void *,int,int,int);
 void *PokeathlonCourse_GetDataCopyArea(void *);
-void *ov96_021E8A20(void *);
+u8 *ov96_021E8A20(void *ptr);
 void GF_AssertFail(void);
 u32 MATH_CountPopulation(u32);
 void ov96_021ED578(void *,int,int);

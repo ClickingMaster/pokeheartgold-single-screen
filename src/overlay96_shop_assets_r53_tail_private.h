@@ -22,7 +22,7 @@ void ov96_021F3CBC(void *);
 void ov96_021F0D60(Ov96ShopWorkR53 *work);
 void *PokeathlonCourse_GetHeapAllocPtr4(void *course);
 void *PokeathlonCourse_GetDataCopyArea(void *course);
-void *ov96_021E8A20(void *ptr);
+u8 *ov96_021E8A20(void *ptr);
 void ov96_021EB63C(void *ptr, int value);
 void ov96_021EB144(void *ptr, int value);
 void ov96_021E65A4(void *course);

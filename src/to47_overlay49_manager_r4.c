@@ -28,7 +28,7 @@ void ov49_02258B20(Ov49ManagerR4 *manager) {
 
 void ov49_02258B44(Ov49ManagerR4 *manager) {
     ov42_0222807C(manager->object0);
-    ov49_02259A54(manager->sub18, manager->object4);
+    ov49_02259A54(manager->sub18.bytes, manager->object4);
 }
 
 void ov49_02258B5C(Ov49ManagerR4 *manager) {
@@ -44,7 +44,7 @@ void ov49_02258B5C(Ov49ManagerR4 *manager) {
         do {
             if (ov49_022593FC((Ov49EntryR4 *)((u8 *)manager->entries + offset)) == 0) {
                 Ov49EntryR4 *current = (Ov49EntryR4 *)((u8 *)manager->entries + offset);
-                current->callback(current, manager);
+                current->tail.callback(current, manager);
             }
             i++;
             offset += sizeof(Ov49EntryR4);

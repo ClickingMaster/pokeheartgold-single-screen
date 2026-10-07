@@ -56,7 +56,7 @@ extern void ov49_02258994(void *);
 extern void ov49_0225A7D0(void *);
 extern void sub_0200616C(u32);
 extern void sub_02006300(u32);
-extern u32 ov45_0222A53C(void *);
+extern int ov45_0222A53C(void *);
 extern void GF_AssertFail(void);
 extern void TextFlags_SetCanABSpeedUpPrint(BOOL);
 extern void TextFlags_SetAutoScrollParam(int);

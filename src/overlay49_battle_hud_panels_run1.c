@@ -23,7 +23,7 @@ extern void ov49_0225A08C(void *p, u32 a);
 extern void PlaySE(u32 id);
 extern u32 ov49_0225A0AC(void *p);
 extern void ov49_0225A0EC(void *p);
-extern void ov49_02258EEC(void *p, u32 a, u32 b);
+extern void ov49_02258EEC(void *, void *, int);
 extern u32 ov49_0225A520(void *p, fx32 a);
 extern BOOL ov49_0225F438(void *p);
 extern void ov49_0225F374(void *p);

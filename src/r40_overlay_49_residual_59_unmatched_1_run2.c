@@ -51,7 +51,7 @@ BOOL ov49_0225FA14(void *controller, void *work, u32 arg) {
         }
         break;
     case 5:
-        ov49_02258EEC(object, entry, 1);
+        ov49_02258EEC(object, (void*)(entry), 1);
         controller = ov49_0225A010(work);
         ov49_0225EF98(controller, ov49_0225A02C(work), ov49_02269B38, 0);
         break;
@@ -110,7 +110,7 @@ BOOL ov49_0225FB5C(void *controller, void *work, u32 arg) {
         }
         break;
     case 5:
-        ov49_02258EEC(object, entry, 1);
+        ov49_02258EEC(object, (void*)(entry), 1);
         controller = ov49_0225A010(work);
         ov49_0225EF98(controller, ov49_0225A02C(work), ov49_02269B38, 0);
         break;
@@ -159,7 +159,7 @@ BOOL ov49_0225FCA8(void *controller, void *work, u32 arg) {
         }
         break;
     case 5:
-        ov49_02258EEC(object, entry, 1);
+        ov49_02258EEC(object, (void*)(entry), 1);
         controller = ov49_0225A010(work);
         ov49_0225EF98(controller, ov49_0225A02C(work), ov49_02269B38, 0);
         break;

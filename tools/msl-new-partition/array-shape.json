@@ -1,0 +1,913 @@
+{
+  "header": [
+    "7f454c46010101000000000000000000",
+    1,
+    40,
+    1,
+    0,
+    0,
+    0,
+    34603008,
+    52,
+    0,
+    0,
+    40,
+    29,
+    3
+  ],
+  "sections": [
+    {
+      "index": 0,
+      "name": "",
+      "record": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 1,
+      "name": ".symtab",
+      "record": [
+        1,
+        2,
+        0,
+        0,
+        0,
+        528,
+        2,
+        19,
+        0,
+        16
+      ],
+      "payload_sha256": null
+    },
+    {
+      "index": 2,
+      "name": ".strtab",
+      "record": [
+        9,
+        3,
+        0,
+        0,
+        0,
+        508,
+        0,
+        0,
+        0,
+        0
+      ],
+      "payload_sha256": "ad917f597da7f2448f1247c94732fb7b890fd2c88c0b02c1603394d0c2683139"
+    },
+    {
+      "index": 3,
+      "name": ".shstrtab",
+      "record": [
+        17,
+        3,
+        0,
+        0,
+        0,
+        334,
+        0,
+        0,
+        0,
+        0
+      ],
+      "payload_sha256": "1bf4c78dd11a516425a2954dee2e26325e6383963416541479a61af548ca26c7"
+    },
+    {
+      "index": 4,
+      "name": ".comment",
+      "record": [
+        27,
+        1,
+        0,
+        0,
+        0,
+        35,
+        0,
+        0,
+        0,
+        0
+      ],
+      "payload_sha256": "562c8a338e43d900a4c473877639e878999d003b899d77e2b11a73a21106a3eb"
+    },
+    {
+      "index": 5,
+      "name": ".debug_info",
+      "record": [
+        36,
+        1,
+        0,
+        0,
+        0,
+        449,
+        0,
+        0,
+        0,
+        0
+      ],
+      "payload_sha256": "17452d6ca704212e5e1cdc9191d9a603b11c567567e8ca55bf767334fff033ea"
+    },
+    {
+      "index": 6,
+      "name": ".rel.debug_info",
+      "record": [
+        48,
+        4,
+        0,
+        0,
+        0,
+        264,
+        1,
+        5,
+        0,
+        12
+      ],
+      "payload_sha256": "e7bf0f94b7fd68266588ae316d79df0e5338df8862d96077b9a0f14fb3bfcce8"
+    },
+    {
+      "index": 7,
+      "name": ".debug_macinfo",
+      "record": [
+        64,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 8,
+      "name": ".debug_loc",
+      "record": [
+        79,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 9,
+      "name": " rel.debug_loc",
+      "record": [
+        90,
+        4,
+        0,
+        0,
+        0,
+        0,
+        1,
+        8,
+        0,
+        12
+      ],
+      "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 10,
+      "name": ".debug_line",
+      "record": [
+        105,
+        1,
+        0,
+        0,
+        0,
+        222,
+        0,
+        0,
+        0,
+        0
+      ],
+      "payload_sha256": "98d48c59c65d497b338295ce2795068ff09d28f6f57c3bdc7f1700e94b98f30a"
+    },
+    {
+      "index": 11,
+      "name": ".rel.debug_line",
+      "record": [
+        117,
+        4,
+        0,
+        0,
+        0,
+        24,
+        1,
+        10,
+        0,
+        12
+      ],
+      "payload_sha256": "d321531865dd4c5eeba049d31567c237c3ee7a394f0e87442dd5c19aac4824a4"
+    },
+    {
+      "index": 12,
+      "name": ".debug_line",
+      "record": [
+        133,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 13,
+      "name": ".rel.debug_line",
+      "record": [
+        145,
+        4,
+        0,
+        0,
+        0,
+        0,
+        1,
+        12,
+        0,
+        12
+      ],
+      "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 14,
+      "name": ".debug_pubnames",
+      "record": [
+        161,
+        1,
+        0,
+        0,
+        0,
+        18,
+        0,
+        0,
+        0,
+        0
+      ],
+      "payload_sha256": "0598b109f92dba2156ebdfa479f3daaf23ba0548550acbb7d4c8c2633c6b6206"
+    },
+    {
+      "index": 15,
+      "name": ".debug_aranges",
+      "record": [
+        177,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 16,
+      "name": ".debug_abbrev",
+      "record": [
+        192,
+        1,
+        0,
+        0,
+        0,
+        105,
+        0,
+        0,
+        0,
+        0
+      ],
+      "payload_sha256": "ae97ca0c41620b79554ddda2c497f5cd7821d3bf930c65cc3d842ccae1a6aca5"
+    },
+    {
+      "index": 17,
+      "name": ".data",
+      "record": [
+        206,
+        1,
+        536870915,
+        0,
+        0,
+        17,
+        0,
+        0,
+        1,
+        0
+      ],
+      "payload_sha256": "81c1d014d30996807c863d1a9d8f387c10e6233434cc4af9e2ae769704c2eda7"
+    },
+    {
+      "index": 18,
+      "name": ".exceptix",
+      "record": [
+        212,
+        1,
+        2,
+        0,
+        0,
+        12,
+        0,
+        0,
+        4,
+        0
+      ],
+      "payload_sha256": "7ceea1911ec9ca9e94fb2625c0abf17953128fb124a3ba7bd0b65139e6092ef1"
+    },
+    {
+      "index": 19,
+      "name": ".rela.exceptix",
+      "record": [
+        222,
+        4,
+        0,
+        0,
+        0,
+        24,
+        1,
+        18,
+        0,
+        12
+      ],
+      "payload_sha256": "08f4dfc45b8cf9b91d8e38c54f1f355296c03380ba2c62c830818bf57ae34ff0"
+    },
+    {
+      "index": 20,
+      "name": ".exception",
+      "record": [
+        237,
+        1,
+        2,
+        0,
+        0,
+        21,
+        0,
+        0,
+        1,
+        0
+      ],
+      "payload_sha256": "84d30bb5553bd6ec1d5c9a7dd514a2983a78d4d55b4851e3539c5991fcebf0da"
+    },
+    {
+      "index": 21,
+      "name": ".rela.exception",
+      "record": [
+        248,
+        4,
+        0,
+        0,
+        0,
+        12,
+        1,
+        20,
+        0,
+        12
+      ],
+      "payload_sha256": "d9f71e8b07cf03ed659544ce7114416b9ecc25b626092d4e4cfab3734fd90248"
+    },
+    {
+      "index": 22,
+      "name": ".text",
+      "record": [
+        264,
+        1,
+        536870918,
+        0,
+        0,
+        44,
+        0,
+        0,
+        4,
+        0
+      ],
+      "payload_sha256": "eb67cbcd1529e80350f41bed0df8199b68d8489ba0fb816860999c5f222c2fe5"
+    },
+    {
+      "index": 23,
+      "name": ".rela.text",
+      "record": [
+        270,
+        4,
+        0,
+        0,
+        0,
+        24,
+        1,
+        22,
+        0,
+        12
+      ],
+      "payload_sha256": "ce2801464c67048d8030553b5353290221a11495f1ebc966e8fbaf76be126fc4"
+    },
+    {
+      "index": 24,
+      "name": ".exceptix",
+      "record": [
+        281,
+        1,
+        2,
+        0,
+        0,
+        12,
+        0,
+        0,
+        4,
+        0
+      ],
+      "payload_sha256": "7ceea1911ec9ca9e94fb2625c0abf17953128fb124a3ba7bd0b65139e6092ef1"
+    },
+    {
+      "index": 25,
+      "name": ".rela.exceptix",
+      "record": [
+        291,
+        4,
+        0,
+        0,
+        0,
+        24,
+        1,
+        24,
+        0,
+        12
+      ],
+      "payload_sha256": "38f62abbc257a64d5bdad1a5a6035c164ba736d4c642462356e728a915fb3943"
+    },
+    {
+      "index": 26,
+      "name": ".exception",
+      "record": [
+        306,
+        1,
+        2,
+        0,
+        0,
+        17,
+        0,
+        0,
+        1,
+        0
+      ],
+      "payload_sha256": "2d3d9a855981b73cd5516e5ff67d02b35e80a363f8f98eb6e1b645bc67a8ab30"
+    },
+    {
+      "index": 27,
+      "name": ".text",
+      "record": [
+        317,
+        1,
+        536870918,
+        0,
+        0,
+        44,
+        0,
+        0,
+        4,
+        0
+      ],
+      "payload_sha256": "eb67cbcd1529e80350f41bed0df8199b68d8489ba0fb816860999c5f222c2fe5"
+    },
+    {
+      "index": 28,
+      "name": ".rela.text",
+      "record": [
+        323,
+        4,
+        0,
+        0,
+        0,
+        24,
+        1,
+        27,
+        0,
+        12
+      ],
+      "payload_sha256": "366632bcc3dba9c52ad51622a4e5fcf8d1ff9b1f2ade7f84b22c3591a5be59da"
+    }
+  ],
+  "symbols": [
+    {
+      "index": 0,
+      "name": "",
+      "record": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "index": 1,
+      "name": "$a",
+      "record": [
+        121,
+        0,
+        0,
+        2,
+        0,
+        22
+      ]
+    },
+    {
+      "index": 2,
+      "name": "$a",
+      "record": [
+        212,
+        0,
+        0,
+        2,
+        0,
+        27
+      ]
+    },
+    {
+      "index": 3,
+      "name": ".debug_info",
+      "record": [
+        1,
+        0,
+        0,
+        3,
+        0,
+        5
+      ]
+    },
+    {
+      "index": 4,
+      "name": ".debug_line",
+      "record": [
+        13,
+        0,
+        0,
+        3,
+        0,
+        10
+      ]
+    },
+    {
+      "index": 5,
+      "name": ".debug_frame",
+      "record": [
+        25,
+        0,
+        0,
+        3,
+        0,
+        12
+      ]
+    },
+    {
+      "index": 6,
+      "name": ".debug_abbrev",
+      "record": [
+        38,
+        0,
+        0,
+        3,
+        0,
+        16
+      ]
+    },
+    {
+      "index": 7,
+      "name": "@8",
+      "record": [
+        52,
+        0,
+        17,
+        1,
+        0,
+        17
+      ]
+    },
+    {
+      "index": 8,
+      "name": ".exceptix",
+      "record": [
+        55,
+        0,
+        0,
+        3,
+        0,
+        24
+      ]
+    },
+    {
+      "index": 9,
+      "name": ".exception",
+      "record": [
+        65,
+        0,
+        0,
+        3,
+        0,
+        26
+      ]
+    },
+    {
+      "index": 10,
+      "name": "@ET@_Znam",
+      "record": [
+        76,
+        0,
+        21,
+        1,
+        0,
+        20
+      ]
+    },
+    {
+      "index": 11,
+      "name": "@EX@_Znam",
+      "record": [
+        86,
+        0,
+        12,
+        1,
+        0,
+        18
+      ]
+    },
+    {
+      "index": 12,
+      "name": "@ET@_ZnamRKSt9nothrow_t",
+      "record": [
+        124,
+        0,
+        17,
+        1,
+        0,
+        26
+      ]
+    },
+    {
+      "index": 13,
+      "name": "@EX@_ZnamRKSt9nothrow_t",
+      "record": [
+        148,
+        0,
+        12,
+        1,
+        0,
+        24
+      ]
+    },
+    {
+      "index": 14,
+      "name": ".dwarf_type.34",
+      "record": [
+        215,
+        100,
+        6,
+        1,
+        0,
+        5
+      ]
+    },
+    {
+      "index": 15,
+      "name": ".dwarf_type.35",
+      "record": [
+        363,
+        193,
+        6,
+        1,
+        0,
+        5
+      ]
+    },
+    {
+      "index": 16,
+      "name": ".dwarf_type.36",
+      "record": [
+        378,
+        199,
+        6,
+        1,
+        0,
+        5
+      ]
+    },
+    {
+      "index": 17,
+      "name": ".dwarf_line._Znam",
+      "record": [
+        418,
+        180,
+        21,
+        1,
+        0,
+        10
+      ]
+    },
+    {
+      "index": 18,
+      "name": ".dwarf_line._ZnamRKSt9nothrow_t",
+      "record": [
+        449,
+        201,
+        21,
+        1,
+        0,
+        10
+      ]
+    },
+    {
+      "index": 19,
+      "name": "_Znam",
+      "record": [
+        96,
+        0,
+        44,
+        18,
+        0,
+        22
+      ]
+    },
+    {
+      "index": 20,
+      "name": "_Znwm",
+      "record": [
+        102,
+        0,
+        0,
+        16,
+        0,
+        0
+      ]
+    },
+    {
+      "index": 21,
+      "name": "__unexpected",
+      "record": [
+        108,
+        0,
+        0,
+        16,
+        0,
+        0
+      ]
+    },
+    {
+      "index": 22,
+      "name": "_ZnamRKSt9nothrow_t",
+      "record": [
+        172,
+        0,
+        44,
+        18,
+        0,
+        27
+      ]
+    },
+    {
+      "index": 23,
+      "name": "_ZnwmRKSt9nothrow_t",
+      "record": [
+        192,
+        0,
+        0,
+        16,
+        0,
+        0
+      ]
+    },
+    {
+      "index": 24,
+      "name": ".dwarf_type.void",
+      "record": [
+        230,
+        106,
+        12,
+        33,
+        0,
+        5
+      ]
+    },
+    {
+      "index": 25,
+      "name": ".dwarf_type.unsigned long",
+      "record": [
+        247,
+        118,
+        21,
+        33,
+        0,
+        5
+      ]
+    },
+    {
+      "index": 26,
+      "name": ".dwarf_typedef.vu32",
+      "record": [
+        273,
+        139,
+        11,
+        33,
+        0,
+        5
+      ]
+    },
+    {
+      "index": 27,
+      "name": ".dwarf_typedef.REGType32",
+      "record": [
+        293,
+        150,
+        16,
+        33,
+        0,
+        5
+      ]
+    },
+    {
+      "index": 28,
+      "name": ".dwarf_typedef.REGType32v",
+      "record": [
+        318,
+        166,
+        17,
+        33,
+        0,
+        5
+      ]
+    },
+    {
+      "index": 29,
+      "name": ".dwarf_typedef.u32",
+      "record": [
+        344,
+        183,
+        10,
+        33,
+        0,
+        5
+      ]
+    },
+    {
+      "index": 30,
+      "name": ".dwarf_type.St9nothrow_t",
+      "record": [
+        393,
+        205,
+        17,
+        33,
+        0,
+        5
+      ]
+    },
+    {
+      "index": 31,
+      "name": ".dwarf._Znam",
+      "record": [
+        436,
+        222,
+        99,
+        17,
+        0,
+        5
+      ]
+    },
+    {
+      "index": 32,
+      "name": ".dwarf._ZnamRKSt9nothrow_t",
+      "record": [
+        481,
+        321,
+        127,
+        17,
+        0,
+        5
+      ]
+    }
+  ],
+  "normalization": "Only the declared source directory in nonallocated DWARF-v2 line-header and actual compile-unit DW_AT_comp_dir: exact directory strings, header/CU/pubnames lengths and affected local symbol/relocation offsets plus parser-identified sibling references to later DIEs in the same CU. All other bytes and all runtime payloads/names/bindings remain fixed.",
+  "source_basename": "to91_msl_array_new.cpp"
+}

@@ -2,6 +2,7 @@
 #define POKEHEARTGOLD_OVERLAY00_VOICE_CHAT_R17_PRIVATE_H
 
 #include "global.h"
+#include "to90_vct_ssp_private.h"
 
 typedef struct Ov00VoiceChatGlobalR17 {
     u32 field0;
@@ -22,7 +23,7 @@ void NNS_SndStrmStart(void *stream);
 void ov00_021E6A4C(void);
 BOOL ov00_021E74A8(u32 value);
 BOOL ov00_021E74FC(void);
-void ov00_021E7544(void *unused, u32 event, void *session);
+void ov00_021E7544(u32 unusedId, u32 event, Session *session, void *unusedContext);
 void ov00_021E7638(void *session);
 BOOL ov00_021E77A4(u32 value, void *a1, void *a2);
 void ov00_021E77CC(void **allocation, void **aligned, u32 size, u32 heapId);

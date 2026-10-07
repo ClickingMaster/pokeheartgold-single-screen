@@ -39,7 +39,7 @@ void *ov07_0221FA48(void *, void *);
 int ov07_0221FAC8(void *, void *);
 u32 ov07_0221FAEC(void *, int);
 u32 ov07_0221FB04(void *, int);
-u32 ov07_0221FAE8(void *);
+int ov07_0221FAE8(void *);
 void *ov07_0221FAF8(void *, int);
 void *ov07_0221FA78(void *);
 u32 ov07_0221E6C8(void *);

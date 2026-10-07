@@ -6,7 +6,7 @@
 
 extern Ov111EntryR7 *ov111_021E63D0(Ov111EntryOwnerR7 *owner, void *a1, void *a2, int index, void *a4);
 extern void ov111_021E6268(void *a0, void *a1, s8 a2, void *a3);
-extern void ov111_021E64C8(Ov111EntryR7 *entry, void *a1);
+extern void ov111_021E64C8(void *entry, void *a1);
 
 void ov111_021E6694(Ov111PanelR7 *panel) {
     int i;

@@ -3,6 +3,7 @@
 #include "global.h"
 
 #include "sprite.h"
+#include "grid_cursor_internal.h"
 typedef struct Entry34R13 {
     Sprite *sprite;
     u8 pad[0x30];
@@ -47,14 +48,12 @@ typedef struct WorkR13Prefix {
 } WorkR13Prefix;
 void sub_0209515C(WorkR13Prefix *);
 void sub_02095238(WorkR13Prefix *);
-int sub_02095354(WorkR13Prefix *);
+struct UnkStruct_020932E0;
+int sub_02095354(struct UnkStruct_020932E0 *);
 int sub_02094794(WorkR13Prefix *, int);
 int sub_02094860(WorkR13Prefix *, int);
 void sub_020948C4(WorkR13Prefix *, int, int);
 void sub_02094A70(WorkR13Prefix *);
 void sub_0209569C(WorkR13Prefix *);
-void sub_02095D40(void *, int, int);
-int sub_02095DD8(void *);
-int sub_02095DE8(void *);
 void sub_020956B8(WorkR13Prefix *);
 #endif

@@ -4,7 +4,8 @@
 
 void *ov07_022324D8(void *, int);
 void ov07_02231FE4(void *, void *);
-int ov07_0221C4A8(void *, int);
+
+extern u32 ov07_0221C4A8(void *p, int i);
 void ov07_02232020(void *, u32, void *, void *);
 void ov07_022323FC(void *, u32, void *, void *);
 void ov07_0221C410(void *, void *, void *);

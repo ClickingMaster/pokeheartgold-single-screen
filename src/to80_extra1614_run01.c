@@ -53,7 +53,7 @@ extern void sub_02089D40(Summary *,const void *);
 extern void sub_02077394(Work *);
 extern int OverlayManager_Run(void *);
 extern void OverlayManager_Delete(void *);
-extern void sub_02076E64(Work *,void *);
+extern void sub_02076E64(void *,void *);
 extern void sub_02075630(Work *);
 extern void DrawFrameAndWindow2(void *,int,int,int);
 extern void Pokepic_ScheduleReloadFromNarc(void *);

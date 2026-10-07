@@ -136,6 +136,6 @@ void ov00_02213EC0(void *p) { W(p,4)=(u32)ov00_021FE5B4(4,100,0); W(p,0x5d0)=0; 
 
 char *ov00_02213EE8(void *p,const char *s) { struct { char *s; int refs; } v; u32 *found; v.s=(char *)s; found=ov00_021FF0C0(ov00_02212C08(p),&v); if(found) { found[1]++; return (char *)found[0]; } v.s=ov00_021FF3D4(s); v.refs=1; ov00_021FEF74(ov00_02212C08(p),&v); return v.s; }
 
-void ov00_02213F58(void *p,void *s) { struct {void *s; int refs;} v; int *found; v.s=s; found=ov00_021FF0C0(ov00_02212C08(p),&v); if(!found)__msl_assertion_failed(ov00_0221A5BC,ov00_0221A5C8,ov00_0221A530,244); if(!found)return; if(--found[1]!=0)return; ov00_021FF01C(ov00_02212C08(p),&v); }
+void ov00_02213F58(void *p,void *s) { struct {char *s; int refs;} v; int *found; v.s=(char *)s; found=ov00_021FF0C0(ov00_02212C08(p),&v); if(!found)__msl_assertion_failed(ov00_0221A5BC,ov00_0221A5C8,ov00_0221A530,244); if(!found)return; if(--found[1]!=0)return; ov00_021FF01C(ov00_02212C08(p),&v); }
 
 int ov00_02213FD4(const char *p,int n) { int i; for(i=0;i<n;i++) if(p[i]==0)return i+1; return -1; }

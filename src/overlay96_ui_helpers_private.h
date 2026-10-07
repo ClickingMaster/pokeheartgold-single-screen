@@ -4,7 +4,7 @@
 #include "constants/heap.h"
 extern void GF_AssertFail(void);
 extern void *PokeathlonCourse_GetDataCopyArea(void *);
-extern void *ov96_021E8A20(void *);
+extern u8 *ov96_021E8A20(void *ptr);
 extern void *Heap_Alloc(enum HeapID, u32);
 extern void *NARC_New(int, enum HeapID);
 extern const u8 ov96_0221B19A[];

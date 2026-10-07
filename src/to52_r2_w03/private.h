@@ -6,13 +6,13 @@ void SpriteSystem_LoadCharResObjFromOpenNarc(void *, void *, void *, int, int, i
 void SpriteSystem_LoadCellResObjFromOpenNarc(void *, void *, void *, int, int, int);
 void SpriteSystem_LoadAnimResObjFromOpenNarc(void *, void *, void *, int, int, int);
 void ov40_02243A28(u8 *);
-void ov40_02243D64(u8 *);
+void ov40_02243D64(void *);
 void *SpriteSystem_NewSprite(void *, void *, const void *);
 void ManagedSprite_SetAnim(void *, int);
 void ManagedSprite_TickFrame(void *);
 void ManagedSprite_SetOamMode(void *, int);
 void ManagedSprite_SetAffineOverwriteMode(void *, int);
-void ov40_02243EEC(u8 *);
+void ov40_02243EEC(u8 *, int);
 int ov40_02244054(int, int);
 void ov40_02243C54(u8 *);
 typedef struct R41SpriteTemplate {

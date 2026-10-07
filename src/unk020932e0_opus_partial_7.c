@@ -23,7 +23,7 @@ void sub_02094F5C(UnkStruct_020932E0 *ptr, int a1);
 void sub_020950C0(UnkStruct_020932E0 *ptr);
 void sub_02094A90(UnkStruct_020932E0 *ptr, int a1);
 int sub_02093CE4(UnkStruct_020932E0 *ptr);
-void sub_020947C0(UnkStruct_020932E0 *ptr, int a1);
+int sub_020947C0(UnkStruct_020932E0 *ptr, int a1);
 int sub_02094894(UnkStruct_020932E0 *ptr, int a1);
 int sub_02094528(UnkStruct_020932E0 *ptr);
 int sub_02094400(UnkStruct_020932E0 *ptr);
@@ -36,7 +36,7 @@ void sub_02094150(SpriteTemplate *tmpl, UnkStruct_020932E0 *ptr, NNS_G2D_VRAM_TY
 void sub_0209428C(TouchscreenHitbox *rect, int x, int y, int width, int height);
 int sub_020943EC(UnkStruct_020932E0 *ptr);
 void sub_02094758(UnkGfxBuf_02094758 *buf);
-void sub_02094794(UnkStruct_020932E0 *ptr, int index);
+int sub_02094794(UnkStruct_020932E0 *ptr, int index);
 int sub_02094860(UnkStruct_020932E0 *ptr, int index);
 void sub_02094A70(UnkStruct_020932E0 *ptr);
 void sub_02094F14(UnkStruct_020932E0 *ptr, int index, MonDisplayInfo *dest);
@@ -66,7 +66,7 @@ void sub_02094758(UnkGfxBuf_02094758 *buf) {
     }
 }
 
-void sub_02094794(UnkStruct_020932E0 *ptr, int index) {
+int sub_02094794(UnkStruct_020932E0 *ptr, int index) {
     Sprite_SetMatrix(ptr->spriteB, Sprite_GetMatrixPtr(ptr->entriesB[index].sprite));
-    sub_020947C0(ptr, index);
+    return sub_020947C0(ptr, index);
 }

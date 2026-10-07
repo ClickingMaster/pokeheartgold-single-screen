@@ -6,7 +6,8 @@
 typedef struct Work Work;
 void *ov07_022324D8(void *, u32);
 void ov07_02231FE4(void *, void *);
-int ov07_0221C4A8(void *, int);
+
+extern u32 ov07_0221C4A8(void *p, int i);
 int ov07_0221C468(void *);
 int ov07_0221C470(void *);
 int ov07_02222004(void *, int);
@@ -24,10 +25,10 @@ void ov07_022292E4(void *arg0, int unused1, int unused2, ManagedSprite *arg3) {
     void *w;
     w = ov07_022324D8(arg0, 0xE8);
     ov07_02231FE4(arg0, (u8 *)w + 0x10);
-    F(w, s16, 0xC) = ov07_0221C4A8(arg0, 0);
-    F(w, s16, 0xE) = ov07_0221C4A8(arg0, 1);
-    F(w, int, 4) = ov07_0221C4A8(arg0, 2);
-    F(w, int, 8) = ov07_0221C4A8(arg0, 3);
+    F(w, s16, 0xC) = ((s32)ov07_0221C4A8(arg0, 0));
+    F(w, s16, 0xE) = ((s32)ov07_0221C4A8(arg0, 1));
+    F(w, int, 4) = ((s32)ov07_0221C4A8(arg0, 2));
+    F(w, int, 8) = ((s32)ov07_0221C4A8(arg0, 3));
     var_r5 = ov07_02222004(arg0, ov07_0221C468(arg0));
     F(w, ManagedSprite *, 0x38) = arg3;
     ManagedSprite_SetAffineOverwriteMode(arg3, 2);

@@ -57,7 +57,7 @@ BOOL ov49_02262B14(void *state, void *ctx) {
             ov49_02262DB8(object, ctx);
             ov49_0225A0EC(ctx);
             object = ov49_02259FF0(ctx);
-            ov49_02258EEC(object, ov49_02258DAC(object), 1);
+            ov49_02258EEC(object, (void*)(ov49_02258DAC(object)), 1);
             ov49_0225EF68(state);
             return TRUE;
         }

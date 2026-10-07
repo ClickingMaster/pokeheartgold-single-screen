@@ -1,7 +1,7 @@
 #include "overlay45_state_transition_r13_private.h"
 
-void ov45_0222ADA8(void *state, int value) {
-    ov45_0222C5B4((u8 *)state + 0x20C, value);
+int ov45_0222ADA8(void *state, int value) {
+    return ov45_0222C5B4((u8 *)state + 0x20C, value);
 }
 
 void ov45_0222ADB8(void *state, int value, int other) {

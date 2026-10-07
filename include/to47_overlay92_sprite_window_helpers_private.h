@@ -20,7 +20,7 @@ typedef struct Ov92SpriteWork {
     void *second[3];
     void *third[3];
     u8 pad40[0xB4];
-    u16 slot[1];
+    u16 slot[4];
 } Ov92SpriteWork;
 extern const Ov92AnimPair ov92_02263BCC;
 extern const Ov92AnimPair ov92_02263B8C;

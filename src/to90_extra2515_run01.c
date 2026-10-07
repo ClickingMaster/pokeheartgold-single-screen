@@ -1,0 +1,8 @@
+#pragma force_active on
+#include "global.h"
+#include "palette.h"
+#pragma force_active on
+typedef struct{u8 state,index,flip,count;u32 unused;void*bg,*owner;u8 gap[4];struct{s16 x,p;u32 q;void*image;u32 tail[2];}nodes[4];u8 rest[0xb4-0x64];s16 motion;}W31711;
+extern s16 ov07_02236722[];extern PaletteData *ov07_0221FA78(void*);extern int ov07_0221E6C8(void*),ov07_022227D8(void*);extern void ov07_022227A8(void*,int,int,int,int),ov07_0221C448(void*,void*),Heap_Free(void*),Pokepic_SetAttr(void*,int,int),BgSetPosTextAndCommit(void*,int,int,int);
+void ov07_02228B38(void*,W31711*);
+void ov07_02228B38(void*task,W31711*w){int i;u8*p;switch(w->state){case 0:{PaletteData*d=ov07_0221FA78(w->owner);u32 bits=ov07_0221E6C8(w->owner);PaletteData_BeginPaletteFade(d,1,(u16)bits,1,0,10,0);w->state++;break;}case 1:if(PaletteData_GetSelectedBuffersBitmask(ov07_0221FA78(w->owner)))break;w->state++;case 2:ov07_022227A8(&w->motion,ov07_02236722[w->index],0,0,5);if(!w->flip)PaletteData_BlendPalettes(ov07_0221FA78(w->owner),(PaletteBufferId)0,255,10,0);else PaletteData_BlendPalettes(ov07_0221FA78(w->owner),(PaletteBufferId)0,255,10,32767);w->count=3;w->flip^=1;w->index++;w->state++;case 3:if(!ov07_022227D8(&w->motion)){if(w->index>=8)w->state++;else w->state--;}if(w->count){w->count--;if(!w->count)PaletteData_BlendPalettes(ov07_0221FA78(w->owner),(PaletteBufferId)0,255,0,0);}for(i=0,p=(u8*)w;i<4;i++,p+=20){if((*(void**)(p+0x1c)))Pokepic_SetAttr((*(void**)(p+0x1c)),0,w->motion+(*(s16*)(p+0x14)));}BgSetPosTextAndCommit(w->bg,3,0,w->motion);break;default:ov07_0221C448(w->owner,task);Heap_Free(w);break;}}

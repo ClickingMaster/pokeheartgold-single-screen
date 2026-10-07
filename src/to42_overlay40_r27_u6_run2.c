@@ -1,6 +1,6 @@
 #include "to42_overlay40_r27_u6_private.h"
 
-void ov40_022318C8(void *task, void *arg);
+void ov40_022318C8(SysTask *task, void *arg);
 int ov40_022319A4(void *p);
 int ov40_02231C78(void *p);
 int ov40_02231EA4(void *p);

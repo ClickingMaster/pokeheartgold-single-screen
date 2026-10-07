@@ -1,8 +1,9 @@
 #pragma force_active on
 #include "global.h"
+#include "to91_ov71_bounce_private.h"
 #pragma force_active on
-typedef struct Work {void *ctx;int state,count;u8 padc[8];void *pic;u8 pad18[0x2c];void*sprite;u8 pad48[0x30];void *resource;u32 other,finished;void*narc;} Work;
-extern void ov71_0224B9CC(Work*,u32*),Sprite_SetAnimCtrlSeq(void*,int),Sprite_SetDrawFlag(void*,int),ov71_02247704(void*,int),Pokepic_SetAttr(void*,int,int),ov71_0224B910(Work*,int,int,int),sub_020729A4(void*,u8*,void*,int),sub_020062E0(void*,u8,u8),Pokepic_StartAnim(void*,int);
+typedef struct Work {void *ctx;int state,count;u8 padc[8];void *pic;u8 pad18[0x2c];void*sprite;u8 pad48[0x30];void *resource;u32 other;SysTask *finished;void*narc;} Work;
+extern void ov71_0224B9CC(void*,SysTask**),Sprite_SetAnimCtrlSeq(void*,int),Sprite_SetDrawFlag(void*,int),ov71_02247704(void*,int),Pokepic_SetAttr(void*,int,int),ov71_0224B910(Work*,int,int,int),sub_020729A4(void*,u8*,void*,int),sub_020062E0(void*,u8,u8),Pokepic_StartAnim(void*,int);
 extern int ov71_0224B960(Work*),GetBoxMonData(void*,int,void*),ov71_022473C4(void*);
 extern void *ov71_02247398(void*),*ov71_022473BC(void*);
 int ov71_0224B47C(Work*,u32*);

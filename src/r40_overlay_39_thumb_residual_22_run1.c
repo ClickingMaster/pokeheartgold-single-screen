@@ -9,7 +9,7 @@ extern void sub_0203A914(void);
 extern void ov39_02228AA8(void *app);
 extern void BeginNormalPaletteFade(int a0, int a1, int a2, int a3, int a4, int a5, int a6);
 extern void ov39_02228B04(void *app, void *window, int message, u32 a3, u32 color);
-extern void ov39_02228B6C(void *app, int a1, int a2);
+#include "overlay39_state_words.h"
 extern BOOL ov39_02228A70(u32 printerId);
 extern void ov00_021EC8D8(void);
 

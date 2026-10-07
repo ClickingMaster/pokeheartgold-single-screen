@@ -24,7 +24,7 @@ extern void *PokeathlonCourse_GetDataCopyArea(Ov96R7Work *);
 extern u32 ov96_021E5F24(Ov96R7Work *);
 extern void GF_AssertFail(void);
 extern u32 PokeathlonCourse_GetUnkConstant4(Ov96R7Work *);
-extern void *ov96_021E8A20(void *);
+extern u8 *ov96_021E8A20(void *ptr);
 extern void *ov96_021E9A14(void);
 extern void *PokeathlonCourse_GetSystem(Ov96R7Work *);
 extern BOOL ov96_021E87B4(u32, void *, void *, void *);

@@ -4,6 +4,7 @@
 #include "global.h"
 
 #include "message_format.h"
+#include "sprite.h"
 
 typedef struct Ov40State {
     u8 raw[0x4000];
@@ -12,7 +13,7 @@ typedef struct Ov40State {
 void TouchHitboxController_IsTriggered(void *controller);
 void TouchHitboxController_Destroy(void *controller);
 void ManagedSprite_SetPositionXYWithSubscreenOffset(void *sprite, int x, int y, int offset);
-void ManagedSprite_GetPositionXYWithSubscreenOffset(void *sprite, int *x, int *y, int offset);
+void ManagedSprite_GetPositionXYWithSubscreenOffset(ManagedSprite *sprite, s16 *x, s16 *y, fx32 offset);
 void ManagedSprite_SetDrawFlag(void *sprite, BOOL draw);
 void Sprite_DeleteAndFreeResources(void *sprite);
 void ClearWindowTilemapAndCopyToVram(void *window);
@@ -93,7 +94,7 @@ void ov40_0222FA18(void *p);
 void *ov40_0222FE8C(void);
 int ov40_02230404(void *p);
 void ov40_0222D288(void *sprite, int x, int y);
-void ov40_0222D294(void *sprite, int *x, int *y);
+void ov40_0222D294(void *sprite, s16 *x, s16 *y);
 void ov40_0222F9D4(void *p, int value);
 int ov40_0223A274(void);
 int ov40_0223FD80(void *p);

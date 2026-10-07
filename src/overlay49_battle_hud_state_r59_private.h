@@ -6,7 +6,7 @@
 u32 ov49_0225EF88(void *);
 void *ov49_02259FF0(void *);
 void *ov49_02258DAC(void *);
-void ov49_02258EEC(void *, void *, u32);
+void ov49_02258EEC(void *, void *, int);
 void *ov49_02259FE8(void *);
 void ov45_0222A5E8(void *, u32);
 void PlaySE(u32);

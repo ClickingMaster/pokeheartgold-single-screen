@@ -70,7 +70,7 @@ void ov92_0225C540(void *, void *, const u32 *, void *);
 void ov92_0225DF28(void *);
 void ov92_0225DF40(void *);
 int ov92_0225EB70(void *);
-int ov92_0225ED68(void *);
+int ov92_0225ED68(void *, int);
 void ov92_0225DEF0(void *);
 void ov92_0225DF0C(void *, int);
 int ov92_0226077C(void *, u32);
@@ -99,7 +99,7 @@ void ov92_0225ED60(void *p) {
     Heap_Free(p);
 }
 
-int ov92_0225ED68(void *p) {
+int ov92_0225ED68(void *p, int unused) {
     if ((S32AT(p, 0x1fcc) >> 12) <= 45) {
         return 1;
     }

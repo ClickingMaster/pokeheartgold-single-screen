@@ -10,7 +10,7 @@ extern void PlaySE(int),ov81_02241C0C(void*),ov81_02242218(void*,void*,u32,int),
 extern int ov80_02237254(int),IsPaletteFadeFinished(void),PaletteData_GetSelectedBuffersBitmask(void*),ov81_02242F40(void*);
 extern u8 gOverlayTemplate_PokemonSummary[];
 extern void *OverlayManager_New(const void*,void*,int);
-extern int ov81_0223E318(void*),ov81_0223EC88(void*),ov81_0223E520(void*),ov81_02241144(void*),ov81_0223ECE4(void*),ov81_02240F28(void*),ov81_0223F1A4(void*),ov81_0223F314(void*),ov81_0223F38C(void*),ov81_0223F6A8(void*),ov81_0223F770(void*),ov81_0223FBAC(void*),ov81_0223FC74(void*),ov81_02240008(void*),ov81_02240048(void*),ov81_02240088(void*),ov81_022400D0(void*);
+extern int ov81_0223E318(u8*),ov81_0223EC88(void*),ov81_0223E520(void*),ov81_02241144(void*),ov81_0223ECE4(void*),ov81_02240F28(void*),ov81_0223F1A4(void*),ov81_0223F314(void*),ov81_0223F38C(void*),ov81_0223F6A8(void*),ov81_0223F770(void*),ov81_0223FBAC(void*),ov81_0223FC74(void*),ov81_02240008(void*),ov81_02240048(void*),ov81_02240088(void*),ov81_022400D0(void*);
 extern void *OverlayManager_GetData(void*);
 extern void ov81_022404AC(void*,int*,int),ov81_02242514(void*),ov81_02240F38(void*,int),ov81_0223E8BC(void*),ov81_0223EA98(void*),SpriteList_RenderAndAnimateSprites(void*),ov81_02242C48(void*);
 extern int ov81_02240F08(void*,int),ov81_02240F18(int);

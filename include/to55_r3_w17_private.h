@@ -30,7 +30,7 @@ extern void Sprite_SetPaletteOverride(void *sprite, int index);
 extern const u8 ov96_0221C5C4[];
 extern void *PokeathlonCourse_GetDataCopyArea(void *);
 extern void *PokeathlonCourse_GetHeapAllocPtr4(void *);
-extern void *ov96_021E8A20(void *);
+extern u8 *ov96_021E8A20(void *ptr);
 extern int ov96_021E5F24(void *);
 extern void ov96_021E8318(void *p, u16 v);
 extern void ov96_021FFD80(void *p, int a, int b);

@@ -9,7 +9,7 @@ void *PokeathlonCourse_GetDataCopyArea(void *course);
 BOOL IsPaletteFadeFinished(void);
 BOOL ov96_021E5F24(void *course);
 void PokeathlonCourse_SetField5E0_AtIndex(void *course, u8 index, u16 value);
-void *ov96_021E8A20(void *ptr);
+u8 *ov96_021E8A20(void *ptr);
 void ov96_021EB52C(void *ptr, int, int);
 void Sprite_SetDrawFlag(void *sprite, BOOL draw);
 void ov96_021EB63C(void *ptr, int);

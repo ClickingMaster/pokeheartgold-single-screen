@@ -40,9 +40,9 @@ void ov43_0222C890(s16 *pos, void *ctx, int selected, int mode) {
     ScheduleBgTilemapBufferTransfer(PTR(ctx, 0), 0);
 }
 
-void ov43_0222C918(void *rect, void *args, void *ctx, int a3, int a4, u8 *list, int page, int a7) {
+void ov43_0222C918(void *rect, void *args, void *ctx, void *a3, void *a4, u8 *list, int page, int a7) {
     int offset, i;
-    int heap;
+    UnkStruct_021D2230 *heap;
     heap = sub_0202C6F4(PTR(args, 4));
     FillWindowPixelBuffer((u8 *)rect + 8, 0);
     ov43_0222CA30(rect, ctx);
@@ -51,7 +51,7 @@ void ov43_0222C918(void *rect, void *args, void *ctx, int a3, int a4, u8 *list, 
     u8 *entry = list + offset;
     do {
         if (*(u32 *)list > (u32)(offset + i)) {
-            ov43_0222CA50(rect, (void *)a3, ctx, a4, i, heap, entry[8], a7);
+            ov43_0222CA50(rect, a3, ctx, a4, i, heap, entry[8], a7);
         } else {
             ov43_0222CB34(rect, ctx, a4, i);
         }

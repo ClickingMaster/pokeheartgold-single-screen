@@ -37,10 +37,10 @@ extern int ov45_02251EF0(void *p);
 extern void ov45_02252530(void *p,int *a,int *b,int *c);
 extern int ov45_0224FABC(int,void*,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
 extern void ov45_02244D30(void*,int,void*,void*,void*,int,int,int);
-extern int ov45_0224A874(void*,char*,int,int,int,char*);
+#include "to90_ov45_input_private.h"
 extern void ov45_02247A44(void*,char*);
 extern int ov45_022502D0(void *p,int a,int b,int c,int d,int e,int f,int g,int h,int i,int j,int k);
-extern void ov45_02250688(void *p,char *name,char *other,int x,int y,int z,int wait);
+
 extern void ov45_02251554(void *p,char *a,char *b,int n,char **keys,char **values);
 extern void *ov00_021EC3BC(void*,int);
 extern int ov45_02251C50(void *p,int n);

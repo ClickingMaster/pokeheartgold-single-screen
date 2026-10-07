@@ -5,7 +5,7 @@
 void ov96_02205D30(void *course) {
     u8 *p = PokeathlonCourse_GetHeapAllocPtr4(course);
     u8 *copy = PokeathlonCourse_GetDataCopyArea(course);
-    u8 *v = ov96_021E8A20(copy + 0xF0);
+    u8 *v = (void *)ov96_021E8A20(copy + 0xF0);
     u8 mode = ov96_021E5F24(course);
     u32 packed = *(u32 *)(v + mode * 4);
     u32 x = packed & 0x1FF;

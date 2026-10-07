@@ -3,7 +3,7 @@
 #include "global.h"
 #include <nitro/code32.h>
 // clang-format on
-typedef void *(*Alloc)(int,int); typedef void (*Free)(void*);
+typedef void *(*Alloc)(u32,int); typedef void (*Free)(void*);
 typedef struct Work { int pad,result; void *bufB; Alloc alloc; void *bufA; int active,value,error; Free release; int minus,zero28,zero2c,zero30; } Work;
 extern Work ov38_02226050;
 extern char ov38_02226090[],ov38_022260D8[],ov38_02226084[],ov38_022260BC[],ov38_022260A4[];

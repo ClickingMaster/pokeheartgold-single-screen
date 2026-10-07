@@ -14,7 +14,7 @@ void ov07_0221ED44(Ov07EdOwner *owner) {
     Ov07EdWork *work = ov07_0221DF1C(owner);
     u32 word;
 
-    work->kind = ov07_0221C4A8(owner, 4);
+    work->kind = ((s32)ov07_0221C4A8(owner, 4));
     U32_AT(owner, 0x18) += 4;
     work->value = *(u32 *)U32_AT(owner, 0x18);
     U32_AT(owner, 0x18) += 4;
@@ -31,7 +31,7 @@ void ov07_0221ED94(void *owner) {
     s16 kind;
     s16 amount;
 
-    work->kind = ov07_0221C4A8(owner, 4);
+    work->kind = ((s32)ov07_0221C4A8(owner, 4));
     U32_AT(owner, 0x18) += 4;
     work->value = *(u32 *)U32_AT(owner, 0x18);
     U32_AT(owner, 0x18) += 4;
@@ -104,7 +104,7 @@ void ov07_0221EEC0(void *owner) {
     Ov07EdWork *work = ov07_0221DF1C(owner);
     u32 word;
 
-    work->kind = ov07_0221C4A8(owner, 4);
+    work->kind = ((s32)ov07_0221C4A8(owner, 4));
     U32_AT(owner, 0x18) += 4;
     work->value = *(u32 *)U32_AT(owner, 0x18);
     U32_AT(owner, 0x18) += 4;

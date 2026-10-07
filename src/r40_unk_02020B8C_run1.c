@@ -9,10 +9,14 @@ void sub_02020E10(s32 angle, fx32 first, fx32 second, fx32 *outSecond, fx32 *out
     *outSecond = FX_Mul(*outFirst, second);
 }
 
-BOOL sub_02020E80(const VecFx32 *first, const VecFx32 *second, const VecFx32 *third) {
-    s32 thirdTerm = second->x * (third->y - first->y);
-    s32 secondTerm = first->x * (second->y - third->y);
-    s32 firstTerm = third->x * (first->y - second->y);
+static inline s32 GeometryXY_Read(const void *point, u32 offset) {
+    return *(const s32 *)((const u8 *)point + offset);
+}
+
+BOOL sub_02020E80(const void *first, const void *second, const void *third) {
+    s32 thirdTerm = GeometryXY_Read(second, 0) * (GeometryXY_Read(third, 4) - GeometryXY_Read(first, 4));
+    s32 secondTerm = GeometryXY_Read(first, 0) * (GeometryXY_Read(second, 4) - GeometryXY_Read(third, 4));
+    s32 firstTerm = GeometryXY_Read(third, 0) * (GeometryXY_Read(first, 4) - GeometryXY_Read(second, 4));
 
     return firstTerm + secondTerm + thirdTerm >= 0;
 }

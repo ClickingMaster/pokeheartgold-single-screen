@@ -26,14 +26,14 @@ BOOL ov49_0225F448(void *controller, void *work, u32 index) {
         break;
     case 2:
         if (index == ov45_0222A53C(temp.selection)) {
-            ov49_02258EEC(object, temp.entry, 1);
+            ov49_02258EEC(object, (void*)(temp.entry), 1);
         } else {
             if (ov49_0225A4F0(work) == 1) {
                 if (index != ov49_0225A4E0(work)) {
-                    ov49_02258EEC(object, temp.entry, 2);
+                    ov49_02258EEC(object, (void*)(temp.entry), 2);
                 }
             } else {
-                ov49_02258EEC(object, temp.entry, 2);
+                ov49_02258EEC(object, (void*)(temp.entry), 2);
             }
             ov49_0225A04C(work, (u8)index, 0);
         }

@@ -34,7 +34,7 @@ u32 ov07_0221C470(void *);
 Pokepic *ov07_0221FA48(void *, u32);
 u32 ov07_0221FAA0(void *, u32);
 ManagedSprite *ov07_0221C4E8(void *, int);
-u32 ov07_0221FAE8(void *);
+int ov07_0221FAE8(void *);
 u32 ov07_0221FA04(void *, u32);
 u32 Pokepic_GetAttr(Pokepic *, int);
 void ov07_02222268(void *, s32, s32, s32, s32, s32);
@@ -47,7 +47,8 @@ void ov07_0223475C(void *, void *);
 u32 ov07_0221C468(void *);
 void ov07_02231A50(void *, u32, s16 *);
 u32 ov07_0223192C(void *, u32);
-void *ov07_0221C4A8(void *, int);
+
+extern u32 ov07_0221C4A8(void *p, int i);
 void ov07_02232020(void *, void *, s16 *, void *);
 void *Sprite_GetPaletteProxy(void *);
 u32 ObjPlttTransfer_GetPaletteVramOffset(void *, int);

@@ -28,9 +28,10 @@ extern void ov00_02211D9C(void *);
 extern void ov00_022116C0(void *,void *,int);
 extern void ov00_02212404(void *,Node *);
 extern void ov00_022128C4(void *,int);
-extern int ov00_0221321C(void *);
-extern int strnicmp(const char *,const char *,int);
-extern void *ov00_021FED4C(int,int,int,int (*)(void **),int (*)(const char **,const char **,int),void (*)(void **));
+extern u32 ov00_0221321C(const char *,u32);
+extern int strnicmp(const char *,const char *);
+typedef struct HashTable HashTable;
+extern HashTable *ov00_021FED4C(int,int,int,int (*)(const void *,int),int (*)(const void *,const void *),void (*)(void *));
 extern int ov00_021FEF00(void *);
 extern void ov00_021FEE8C(void *);
 extern void ov00_021FEF74(void *,void *);
@@ -71,9 +72,9 @@ void ov00_02212AE8(void *p);
 void ov00_02212B28(void *p);
 void ov00_02212B88(void *p,int v);
 void ov00_02212BA8(void *p,Node *n);
-int ov00_02212BD4(void **p);
-int ov00_02212BE4(const char **a,const char **b,int n);
-void ov00_02212BF8(void **p);
+int ov00_02212BD4(const void *p,int buckets);
+int ov00_02212BE4(const void *a,const void *b);
+void ov00_02212BF8(void *p);
 void ov00_02212C6C(void);
 void ov00_02212CAC(void **p);
 void ov00_02212CD0(void *p,char *key,char *v);
@@ -118,9 +119,9 @@ void ov00_02212AE8(void *p);
 void ov00_02212B28(void *p);
 void ov00_02212B88(void *p,int v);
 void ov00_02212BA8(void *p,Node *n);
-int ov00_02212BD4(void **p);
-int ov00_02212BE4(const char **a,const char **b,int n);
-void ov00_02212BF8(void **p);
+int ov00_02212BD4(const void *p,int buckets);
+int ov00_02212BE4(const void *a,const void *b);
+void ov00_02212BF8(void *p);
 void ov00_02212C6C(void);
 void ov00_02212CAC(void **p);
 void ov00_02212CD0(void *p,char *key,char *v);
@@ -136,7 +137,7 @@ void ov00_02211D9C(void *p);
 u8 ov00_02212028(u8 *p,u32 max,u8 *key,u32 len,u8 *v,u32 *pos);
 u8 ov00_022121EC(u8 *p,u8 v);
 void ov00_02212A58(void *p);
-void *ov00_02212C08(void);
+void *ov00_02212C08(void *unusedState);
 
 typedef struct Host { u32 x[3]; u8 **list; } Host;
 typedef struct Addr { u8 b[2]; u16 port; u32 ip; } Addr;
@@ -195,10 +196,10 @@ void ov00_02212AE8(void *p);
 void ov00_02212B28(void *p);
 void ov00_02212B88(void *p,int v);
 void ov00_02212BA8(void *p,Node *n);
-int ov00_02212BD4(void **p);
-int ov00_02212BE4(const char **a,const char **b,int n);
-void ov00_02212BF8(void **p);
-void *ov00_02212C08(void);
+int ov00_02212BD4(const void *p,int buckets);
+int ov00_02212BE4(const void *a,const void *b);
+void ov00_02212BF8(void *p);
+void *ov00_02212C08(void *unusedState);
 void ov00_02212C6C(void);
 void ov00_02212CAC(void **p);
 void ov00_02212CD0(void *p,char *key,char *v);
@@ -217,10 +218,10 @@ void ov00_02212AE8(void *p) { while(I(p,0x10)<I(p,4) && I(p,0x1c)>0)ov00_0221240
 void ov00_02212B28(void *p) { if(!I(p,0x10))return; ov00_022128C4(p,0); ov00_02212A58(p); if(I(p,0x1c)>0)ov00_02212AE8(p); if(!I(p,0x10))((void (*)(void *,int,void *,int))I(p,0x44))(p,2,0,I(p,0x48)); }
 void ov00_02212B88(void *p,int v) { int n=I(p,0x40); if(n>=20)return; I(p,0x40)=n+1; ((u8 *)p+n)[0x2c]=v; }
 void ov00_02212BA8(void *p,Node *n) { if(ov00_02212384((List *)((char *)p+8),n))return; ov00_02212384((List *)((char *)p+0x14),n); }
-int ov00_02212BD4(void **p) { return ov00_0221321C(*p); }
-int ov00_02212BE4(const char **a,const char **b,int n) { return strnicmp(*a,*b,n); }
-void ov00_02212BF8(void **p) { ov00_021EC3D8(*p); }
-void *ov00_02212C08(void) { if(!ov00_0221B9D0[2])ov00_0221B9D0[2]=(int)ov00_021FED4C(8,100,2,ov00_02212BD4,ov00_02212BE4,ov00_02212BF8); return (void *)ov00_0221B9D0[2]; }
+int ov00_02212BD4(const void *p,int buckets) { return (int)ov00_0221321C(*(char *const *)p,(u32)buckets); }
+int ov00_02212BE4(const void *a,const void *b) { return strnicmp(*(char *const *)a,*(char *const *)b); }
+void ov00_02212BF8(void *p) { ov00_021EC3D8(*(char **)p); }
+void *ov00_02212C08(void *unusedState) { if(!ov00_0221B9D0[2])ov00_0221B9D0[2]=(int)ov00_021FED4C(8,100,2,ov00_02212BD4,ov00_02212BE4,ov00_02212BF8); return (void *)ov00_0221B9D0[2]; }
 
 void ov00_02212C6C(void) { if(!ov00_0221B9D0[2])return; if(ov00_021FEF00((void *)ov00_0221B9D0[2]))return; ov00_021FEE8C((void *)ov00_0221B9D0[2]); ov00_0221B9D0[2]=0; }
 void ov00_02212CAC(void **p) { void *v=*p; ov00_021FEE8C((void *)I(v,0x18)); I(v,0x18)=0; ov00_021EC3D8(v); }

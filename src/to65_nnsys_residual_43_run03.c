@@ -5,6 +5,7 @@
 #undef NNS_G3dGetResDictIdxByName
 #include <nitro/code32.h>
 // clang-format on
+#include "renderer_joint_family_private.h"
 #define W(p,o) (*(s32 *)((char *)(p)+(o)))
 #define P(p,o) (*(void **)((char *)(p)+(o)))
 #define H(p,o) (*(u16 *)((char *)(p)+(o)))
@@ -16,7 +17,6 @@ typedef struct {u8 pad[26];u16 ids[1];} IndexMap;
 #define MUL(a,b) ((s32)(((s64)(a)*(b))>>12))
 extern void *_02110A08,*_02110A04;
 
-extern void getJntSRTAnmResult_(void *,int,int,void *);
 
 extern void FX_DivAsync(fx32,fx32);
 extern fx32 FX_GetDivResult(void);
@@ -29,11 +29,9 @@ extern void SetTexParamaters_(void *,void *,void *);
 extern int NNS_G3dGetResDictIdxByName(void *,void *);
 extern void *NNS_G3dGetResDataByName(void *,void *);
 void NNSi_G3dAnmObjInitNsBca(void *out,void *s,void *mdl);
-void NNSi_G3dAnmCalcNsBca(void *out,void *s,int id);
 void NNSi_G3dAnmObjInitNsBva(void *out,void *s,void *mdl);
 void NNSi_G3dAnmCalcNsBva(void *out,void *s,u32 id);
 void NNSi_G3dSendJointSRTBasic(void *s);
-void NNSi_G3dGetJointScaleBasic(void *out,void *s,void *unused,int flags);
 void texmtxCalc_flagTRS_(void *out,void *s);
 void texmtxCalc_flagRS_(void *out,void *s);
 void texmtxCalc_flagTR_(void *out,void *s);
@@ -80,4 +78,4 @@ void NNSi_G3dAnmCalcNsBva(void *out,void *s,u32 id) { void *p=P(s,8);u32 n=(W(s,
 
 void NNSi_G3dSendJointSRTBasic(void *s) { if(!(W(s,0)&4)){if(!(W(s,0)&2))NNS_G3dGeBufferOP_N(25,(u32 *)A(s,0x28),12);else NNS_G3dGeBufferOP_N(28,(u32 *)A(s,0x4c),3);}else if(!(W(s,0)&2))NNS_G3dGeBufferOP_N(26,(u32 *)A(s,0x28),9);if(!(W(s,0)&1))NNS_G3dGeBufferOP_N(27,(u32 *)A(s,4),3); }
 
-void NNSi_G3dGetJointScaleBasic(void *out,void *s,void *unused,int flags) { if(flags&4)W(out,0)|=1;else{W(out,4)=W(s,0);W(out,8)=W(s,4);W(out,12)=W(s,8);}W(out,0)|=0x18; }
+void NNSi_G3dGetJointScaleBasic(MdlJointResult *out,const fx32 *s,const u8 *command,u32 flags) { if(flags&4)out->flags|=1;else{out->scale[0]=s[0];out->scale[1]=s[1];out->scale[2]=s[2];}out->flags|=0x18; }

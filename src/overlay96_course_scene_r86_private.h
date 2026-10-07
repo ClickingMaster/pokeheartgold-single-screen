@@ -48,7 +48,7 @@ void ov96_021EB334(void *, int, int, int);
 void ov96_021EB36C(void *, int, int, int);
 void BeginNormalPaletteFade(int, int, int, int, int, int, void *);
 BOOL IsPaletteFadeFinished(void);
-void *ov96_021E8A20(void *);
+u8 *ov96_021E8A20(void *ptr);
 void ScheduleSetBgPosText(void *, int, int, int);
 void ov96_02206380(void *, int, void *, void *);
 void ov96_02206A24(void *, int, int);

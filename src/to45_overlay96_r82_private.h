@@ -39,7 +39,7 @@ extern void PokeathlonCourse_FreePtr4HeapAlloc(void *);
 extern u32 ov96_021E5F24(void *);
 extern u32 ov96_021E637C(void *);
 extern u32 ov96_021E667C(void *);
-extern void *ov96_021E8A20(void *);
+extern u8 *ov96_021E8A20(void *ptr);
 extern void *ov96_021E60D8(void *, void *, void *);
 extern void ov96_021E9510(void *);
 extern void ov96_021E95F8(void *, void *, u32, u32, u32, u32, u32);

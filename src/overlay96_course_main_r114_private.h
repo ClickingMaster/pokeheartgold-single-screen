@@ -2,6 +2,7 @@
 #define R23_OV96_114_PRIVATE_H
 
 #include "global.h"
+#include "constants/heap.h"
 
 #define U8_AT(p, o)  (*(u8 *)((u8 *)(p) + (o)))
 #define U16_AT(p, o) (*(u16 *)((u8 *)(p) + (o)))
@@ -22,7 +23,7 @@ extern u16 PokeathlonCourse_GetField5F0_AtIndex(void *, u8);
 extern void PokeathlonCourse_SetVBlankIntrCB(void *);
 extern void PokeathlonCourse_SetField1F4(void *, u32);
 extern void PokeathlonCourse_SetStateField07(void *, u32);
-extern void *ov96_021E8A20(void *);
+extern u8 *ov96_021E8A20(void *ptr);
 extern u32 ov96_021E5F24(void *);
 extern u32 ov96_021E637C(void *);
 extern u32 ov96_021E667C(void *);
@@ -64,7 +65,7 @@ extern void ov96_022162F4(void *);
 extern void ov96_02217AE4(void *, void *);
 extern void ov96_022163AC(void *);
 extern void *ov96_02219F7C(void *, u32);
-extern void *ov96_022194C4(void *, void *, void *, void *, void *, void *, u32, void *, void *);
+extern void *ov96_022194C4(void *, void *, void *, void *, void *, void *, u8, enum HeapID, void *);
 extern void ov96_02217B84(void *, void *);
 extern void ov96_022195C8(void *);
 extern void ov96_02217544(void *, void *, void *, void *, void *, void *);

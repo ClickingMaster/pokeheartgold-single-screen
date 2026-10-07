@@ -35,7 +35,8 @@ M2C_UNK ov07_0221C410(s32, void (*)(s32, void *), void *);                      
 M2C_UNK ov07_0221C448(s32, s32);                                                           /* extern */
 s32 ov07_0221C468(s32);                                                                    /* extern */
 s32 ov07_0221C470(s32);                                                                    /* extern */
-s32 ov07_0221C4A8(s32, s32);                                                               /* extern */
+
+extern u32 ov07_0221C4A8(void *p, int i);                                                               /* extern */
 s32 ov07_0221C4E8(s32, s32);                                                               /* extern */
 s32 ov07_0221C514(s32);                                                                    /* extern */
 M2C_UNK ov07_0221F9E8(void *, s32);                                                        /* extern */
@@ -109,7 +110,7 @@ void ov07_022274F8(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
         ov07_02231A20(1, ov07_0221BFC0(sp0), &sp4);
     }
     var_r6 = 1;
-    if (ov07_0221C4A8(M2C_FIELD(temp_r0, s32 *, 8), 0) > 1) {
+    if (((s32)ov07_0221C4A8((void *)(M2C_FIELD(temp_r0, s32 *, 8)), 0)) > 1) {
         var_r5 = temp_r0 + 4;
         do {
             temp_r0_2 = SpriteSystem_NewSprite(M2C_FIELD(temp_r0, s32 *, 0xC), M2C_FIELD(temp_r0, s32 *, 0x10), &sp8);
@@ -117,11 +118,11 @@ void ov07_022274F8(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
             ManagedSprite_SetPositionXY(temp_r0_2, M2C_FIELD(&sp4, s16 *, 0), M2C_FIELD(&sp4, s16 *, 2));
             var_r5 += 4;
             var_r6 += 1;
-        } while (var_r6 < ov07_0221C4A8(M2C_FIELD(temp_r0, s32 *, 8), 0));
+        } while (var_r6 < ((s32)ov07_0221C4A8((void *)(M2C_FIELD(temp_r0, s32 *, 8)), 0)));
     }
     ManagedSprite_SetPositionXY(M2C_FIELD(temp_r0, s32 *, 0x14), M2C_FIELD(&sp4, s16 *, 0), M2C_FIELD(&sp4, s16 *, 2));
     var_r6_2 = 0;
-    if (ov07_0221C4A8(M2C_FIELD(temp_r0, s32 *, 8), 0) > 0) {
+    if (((s32)ov07_0221C4A8((void *)(M2C_FIELD(temp_r0, s32 *, 8)), 0)) > 0) {
         var_r5_2 = temp_r0;
         var_r7 = 0;
         do {
@@ -132,7 +133,7 @@ void ov07_022274F8(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
             var_r5_2 += 4;
             var_r7 += 4;
             var_r6_2 += 1;
-        } while (var_r6_2 < ov07_0221C4A8(M2C_FIELD(temp_r0, s32 *, 8), 0));
+        } while (var_r6_2 < ((s32)ov07_0221C4A8((void *)(M2C_FIELD(temp_r0, s32 *, 8)), 0)));
     }
     ov07_0221C3F4(sp0, ov07_02227300, temp_r0, 0x1000);
 }

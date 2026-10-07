@@ -1,0 +1,9 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+typedef struct{void*first,*second;u32 third;}Sprites;
+typedef struct{u8 p0[0x20];void*bg;u32 p24;void*list;u8 p2c[0x154-0x2c];void*managers[6];void*charTask,*palTask;u8 p174[0x1a8-0x174];Sprites grid[30];u8 p310[0x398-0x310];void*sprite1;u8 p39c[12];void*sprite3;u8 p3ac[12];void*sprite2;u8 p3bc[12];Sprites row[6];u8 p410[0x478-0x410];u8 windows[3][16];u8 p4a8[0xe88c-0x4a8];void*prompt;}Work;
+typedef struct{u8 p[0x69];u8 display;}System;extern System gSystem;
+extern void Main_SetVBlankIntrCB(void(*)(void*),void*),Sprite_Delete(void*),ov74_02232DA4(void*),FontID_Release(int),SpriteTransfer_DeleteCharTransferTask(void*),SpriteTransfer_DeletePlttTransferTask(void*),Destroy2DGfxResObjMan(void*),SpriteList_Delete(void*),OamManager_Free(void),ObjCharTransfer_Destroy(void),ObjPlttTransfer_Destroy(void),YesNoPrompt_Destroy(void*),GfGfx_SwapDisplay(void),FreeBgTilemapBuffer(void*,int);
+void ov74_02232E3C(Work*);
+void ov74_02232E3C(Work*w){int i;Main_SetVBlankIntrCB(0,0);for(i=0;i<30;i++){if(w->grid[i].first)Sprite_Delete(w->grid[i].first);if(w->grid[i].second)Sprite_Delete(w->grid[i].second);}for(i=0;i<6;i++)if(w->row[i].first)Sprite_Delete(w->row[i].first);if(w->sprite1)Sprite_Delete(w->sprite1);if(w->sprite2)Sprite_Delete(w->sprite2);if(w->sprite3)Sprite_Delete(w->sprite3);ov74_02232DA4(w->windows[0]);ov74_02232DA4(w->windows[1]);ov74_02232DA4(w->windows[2]);FontID_Release(2);SpriteTransfer_DeleteCharTransferTask(w->charTask);SpriteTransfer_DeletePlttTransferTask(w->palTask);for(i=0;i<6;i++)Destroy2DGfxResObjMan(w->managers[i]);SpriteList_Delete(w->list);w->list=0;OamManager_Free();ObjCharTransfer_Destroy();ObjPlttTransfer_Destroy();YesNoPrompt_Destroy(w->prompt);gSystem.display=0;GfGfx_SwapDisplay();FreeBgTilemapBuffer(w->bg,0);FreeBgTilemapBuffer(w->bg,1);FreeBgTilemapBuffer(w->bg,2);FreeBgTilemapBuffer(w->bg,3);}

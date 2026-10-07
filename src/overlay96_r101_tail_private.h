@@ -124,7 +124,7 @@ void *ov96_021E64F8(void *, void *, void *, void *, u32);
 void Sprite_SetDrawPriority(void *, u32);
 void ov96_021EABA8(void *, u32);
 void *PokeathlonCourse_GetDataCopyArea(void *);
-void *ov96_021E8A20(void *);
+u8 *ov96_021E8A20(void *ptr);
 void ov96_021E62AC(void *, int, void *, void *, u32, u32, void *);
 void *PokeathlonCourse_GetHeapAllocPtr4(void *);
 BOOL ov96_0220D694(Ov96Object *);

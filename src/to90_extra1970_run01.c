@@ -1,0 +1,11 @@
+#pragma force_active on
+// clang-format off
+#include "global.h"
+#include <nitro/code32.h>
+// clang-format on
+#define F(p,n,t) (*(t*)((char*)(p)+(n)))
+typedef struct {u32 unused0,participants;int trigger,unusedC;u16 sample;u8 index,unused13;int reset,filter,mode;u32 unused20,samples;int vad;u8 pad2c[0xed4];u32 sent,record,unusedf08;volatile u32 mask;int next,count;} State;extern State _021D6040;extern u8 sSendInfo[],sAdpcmState[],__vct[];extern int sEnableVAD;
+u32 HPFFilter(void*,u32);void vct_process_fir(void*,u32,u32);int VCTi_GetVADStatus(u32,u32,int);void vct_encode_adpcm(void*,void*,u32,void*,int);void vct_encode_g711_ulaw(void*,void*,u32);void vct_encode_8bit_raw(void*,void*,u32);int MATH_CountPopulation(u32);void*vct_prepare_send_buffer(void);
+#pragma force_active on
+void*vct_prepare_send_buffer(void){char*audio,*packet;u32 power,root;int mode;u32 pending;mode=_021D6040.mode;pending=_021D6040.record-_021D6040.sent;if(pending>1){_021D6040.sent=_021D6040.record-1;pending=1;}if(!pending)return 0;packet=(char*)sSendInfo+((_021D6040.sent&1)?0:0x460);audio=packet+12;if(mode>=2)audio+=4;power=HPFFilter(audio,_021D6040.samples);*(volatile u16*)0x040002b0=0;*(volatile u32*)0x040002b8=power;while(*(volatile u16*)0x040002b0&0x8000){}root=*(volatile u32*)0x040002b4;if(_021D6040.filter)vct_process_fir(audio,_021D6040.samples,root);F(packet,5,u8)=mode;if(sEnableVAD){int status=VCTi_GetVADStatus(power,root,0);_021D6040.vad=status;switch(status){case 0:_021D6040.sent++;return 0;case 1:F(packet,5,u8)|=128;break;case 3:F(packet,4,u8)=65;break;default:break;}}
+ if(!sEnableVAD&&_021D6040.trigger){{int zero=0;u8 flags=F(packet,5,u8);_021D6040.trigger=zero;F(packet,5,u8)=flags|128;}}if(_021D6040.reset){{int zero=0;u8 flags=F(packet,5,u8);_021D6040.reset=zero;F(packet,5,u8)=flags|128;}}if(mode>=2){if(F(packet,5,u8)&128){_021D6040.sample=0;_021D6040.index=0;}vct_encode_adpcm(audio-4,audio,_021D6040.samples>>1,sAdpcmState,mode);}else if(mode==1)vct_encode_g711_ulaw(audio,audio,_021D6040.samples>>1);else if(mode==0)vct_encode_8bit_raw(audio,audio,_021D6040.samples>>1);{u32 mask=_021D6040.participants;_021D6040.mask=mask;mask&=~(1u<<__vct[0]);_021D6040.mask=mask;_021D6040.count=MATH_CountPopulation(mask)-1;}if(_021D6040.count>7)return 0;_021D6040.next=0;return packet;}

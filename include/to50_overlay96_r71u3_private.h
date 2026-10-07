@@ -55,7 +55,7 @@ extern void *PokeathlonCourse_GetHeapAllocPtr4(void *);
 extern void *PokeathlonCourse_GetDataCopyArea(void *);
 extern u32 PokeathlonCourse_GetParticipantCount(void *);
 extern u32 ov96_021E5F24(void *);
-extern void *ov96_021E8A20(void *);
+extern u8 *ov96_021E8A20(void *ptr);
 extern void ov96_021FC2B4(void *, u32);
 extern void ov96_021FC248(void *, u32, u32);
 extern void ov96_021FC28C(void *, u32, u32);

@@ -20,7 +20,7 @@ int ov96_02205520(void *course, u8 *state) {
         return 1;
     }
     copy += 0x28;
-    p = ov96_021E8A20(copy);
+    p = (void *)ov96_021E8A20(copy);
     for (i = 0; i < 4; i++) {
         u16 a = (p[i] >> 18) & 0x3ff;
         u16 b = (((u16 *)p)[i + 12] >> 11) & 31;

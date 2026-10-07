@@ -1,0 +1,5 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+int ov80_0222CC70(int,int);
+int ov80_0222CC70(int group,int choice){int result=15;switch(group){case 0:break;case 1:switch(choice){case 0:result=15;break;case 1:result=16;break;case 2:case 3:case 6:result=17;break;case 4:case 5:result=15;break;default:GF_AssertFail();break;}break;case 2:switch(choice){case 0:result=18;break;case 1:result=19;break;case 2:case 3:result=20;break;default:GF_AssertFail();break;}break;case 3:switch(choice){case 0:result=21;break;case 1:result=22;break;case 2:case 3:result=23;break;default:GF_AssertFail();break;}break;case 4:switch(choice){case 0:result=27;break;case 1:result=28;break;case 2:case 3:result=29;break;default:GF_AssertFail();break;}break;case 5:switch(choice){case 0:result=24;break;case 1:result=25;break;case 2:case 3:result=26;break;default:GF_AssertFail();break;}break;case 6:switch(choice){case 0:result=30;break;case 1:result=31;break;case 2:case 3:result=32;break;default:GF_AssertFail();break;}break;default:break;}return result;}

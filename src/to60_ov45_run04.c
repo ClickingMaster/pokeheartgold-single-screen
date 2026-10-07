@@ -58,15 +58,15 @@ void ov00_021EC2EC(int, void *, int);
 void *ov45_02242394(u32);
 void ov45_0223BD0C(void);
 void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
-void ov45_02237DB4(Str *, u32, u32, void *);
+Str *ov45_02237DB4(Str *, u32, u32, void *);
 void ov45_0223DB08(Str *, u32, u32, const char *);
 typedef struct Tag {
     u8 c;
 } Tag;
 void ov45_02238104(Str *, u32, u32, const char *, const char *, Tag);
-void ov45_02238024(Str *, u32, u32, const char *, u32);
+int ov45_02238024(const u8 *, u32, u32, const void *, u32);
 
-static inline BOOL StrIsShort(Str *s) {
+static inline BOOL StrIsShort(const Str *s) {
     return !s->l.isLong;
 }
 
@@ -96,21 +96,20 @@ typedef struct Session {
 } Session;
 
 typedef struct Node {
-    struct Node *left;
-    struct Node *right;
-    struct Node *parent;
+    void *left;
+    void *right;
+    u32 parent;
     Session *val;
 } Node;
 
 typedef struct List {
     u32 count;
-    Node *root;
-    Node *leftmost;
+    void *root;
+    void *leftmost;
 } List;
 
-typedef struct NodeIter {
-    Node *node;
-} NodeIter;
+#include "../lib/NitroDWC/src/tree-iterator4.h"
+typedef Iterator NodeIter;
 
 typedef struct CharVec {
     char *ptr;
@@ -134,15 +133,15 @@ void ov45_0223DB8C(CharVec *, u32, const char *);
 u32 ov45_0223EA34(Vec *, u32);
 void ov45_0223EB00(Vec *, u32, u32 *);
 void ov45_02236E58(NodeIter *);
-Node *ov45_022370D0(Node *, Node *);
+Node *ov45_022370D0(Node *,void *);
 
 extern char ov45_0225520C[];
 void printf(const char *, ...);
 void abort(void);
-void ov45_02236EC4(Node *, Node *);
+void ov45_02236EC4(Node *,void *);
 
 typedef struct InsertResult {
-    Node *node;
+    Node *current;
     u8 inserted;
 } InsertResult;
 
@@ -287,7 +286,7 @@ void ov45_0223EC64(SplitBuf *b);
 int ov45_0223D7B4(int c);
 BOOL ov45_0223D7D4(int type, int mode, u32 value, const void *data, u32 len, Str *out);
 void ov45_0223DA3C(CharVec *s, const char *c);
-void ov45_0223DB54(Str *s, u32 a, u32 b, Str *o);
+int ov45_0223DB54(const u8 *s, u32 a, u32 b, const u8 *o);
 
 // @fn ov45_0223D7B4
 int ov45_0223D7B4(int c) {
@@ -395,7 +394,8 @@ void ov45_0223DB08(Str *s, u32 a, u32 b, const char *str) {
 }
 
 // @fn ov45_0223DB54
-void ov45_0223DB54(Str *s, u32 a, u32 b, Str *o) {
+int ov45_0223DB54(const u8 *s, u32 a, u32 b, const u8 *input) {
+    const Str *o = (const Str *)input;
     u32 n;
     const char *p;
     if (StrIsShort(o)) {
@@ -405,5 +405,5 @@ void ov45_0223DB54(Str *s, u32 a, u32 b, Str *o) {
         p = o->l.ptr;
         n = o->l.size;
     }
-    ov45_02238024(s, a, b, p, n);
+    return ov45_02238024(s, a, b, p, n);
 }

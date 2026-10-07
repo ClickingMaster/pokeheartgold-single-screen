@@ -57,8 +57,8 @@ void ov07_02223BC0(void *owner) {
     PicMoveWork *w;
     w = Heap_Alloc((enum HeapID)ov07_0221BFD0(owner), sizeof(PicMoveWork));
     w->owner = owner;
-    ov07_02222A44(w->anim, (int)ov07_0221C4A8(owner, 0), (int)ov07_0221C4A8(owner, 1));
-    kind = (int)ov07_0221C4A8(owner, 2);
+    ov07_02222A44(w->anim, (int)(ov07_0221C4A8(owner, 0)), (int)(ov07_0221C4A8(owner, 1)));
+    kind = (int)(ov07_0221C4A8(owner, 2));
     switch (kind) {
     case 2:
         w->pic = ov07_0221FA48(w->owner, ov07_0221C468(owner));

@@ -1,4 +1,5 @@
 #include "global.h"
+#include "to90_login_callback_private.h"
 
 #include "gf_rtc.h"
 #include "pm_string.h"
@@ -14,7 +15,7 @@ typedef struct FriendEntryArray {
     FriendEntry entries[32];
 } FriendEntryArray;
 struct UnkStruct_021D2230 {
-    u8 header[0x40];
+    W41287Account header;
     u32 friendData[32][3];
     FriendEntryArray roster;
 };

@@ -121,7 +121,7 @@ void ov93_0225E7AC(void);
 void ov93_0225E860(void *a, void *p);
 void ov93_0225EA50(void *a, void *p);
 s32 ov93_0225EA6C(void *p, s32 b);
-void ov93_0225EA98(void *p);
+void ov93_0225EA98(void *p, s32 observedRequest);
 void ov93_0225EB38(void *p);
 u32 ov93_0225EDB8(void *p, s32 d);
 void ov93_0225EDE8(void *p);

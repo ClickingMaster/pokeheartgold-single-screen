@@ -1,4 +1,5 @@
 #include "global.h"
+#include "overlay07_obj_window_init_private.h"
 
 typedef struct Ov07Args {
     int value0;
@@ -38,19 +39,7 @@ typedef struct Work30F98 {
     void *sprite;
 } Work30F98;
 
-typedef struct Ov07Init {
-    int value0;
-    int value4;
-    int value8;
-    s16 xVel;
-    s16 yVel;
-    s16 x;
-    s16 y;
-    s16 alphaA;
-    s16 alphaB;
-} Ov07Init;
-
-extern int ov07_0221C4A8(void *, int);
+extern u32 ov07_0221C4A8(void *p, int i);
 extern void *ov07_022324D8(void *, int);
 extern void ov07_02231FE4(void *, void *);
 extern void *ov07_0221C4E8(void *, int);
@@ -64,7 +53,6 @@ extern void ManagedSprite_SetPriority(void *, int);
 extern void ManagedSprite_SetDrawFlag(void *, int);
 extern void ManagedSprite_SetOamMode(void *, int);
 extern void ov07_0221C410(void *, void (*)(void *, void *), void *);
-extern void ov07_022315C0(void *, void *);
 extern void ov07_022222F0(void *, void *);
 extern int ov07_02222748(void *, void *);
 extern void ManagedSprite_GetPositionXY(void *, s16 *, s16 *);
@@ -89,7 +77,6 @@ void ov07_02231234(void *, Work310E0 *);
 void ov07_02231514(Ov07Init *, s16, s16);
 void ov07_0223151C(Ov07Init *, s16, s16);
 void ov07_0223172C(void *, Ov07Init *);
-void ov07_0223174C(void *, const Ov07Init *);
 void ov07_02231874(void *);
 void ov07_022318A0(void *);
 void ov07_022318CC(void *);

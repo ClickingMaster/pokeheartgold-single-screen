@@ -57,13 +57,13 @@ void ov00_021EC2EC(int, void *, int);
 void *ov45_02242394(u32);
 void ov45_0223BD0C(void);
 void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
-void ov45_02237DB4(Str *, u32, u32, void *);
+Str *ov45_02237DB4(Str *, u32, u32, void *);
 void ov45_0223DB08(Str *, u32, u32, const char *);
 typedef struct Tag {
     u8 c;
 } Tag;
 void ov45_02238104(Str *, u32, u32, const char *, const char *, Tag);
-void ov45_02238024(Str *, u32, u32, const char *, u32);
+int ov45_02238024(const u8 *, u32, u32, const void *, u32);
 
 static inline BOOL StrIsShort(Str *s) {
     return !s->l.isLong;
@@ -95,21 +95,20 @@ typedef struct Session {
 } Session;
 
 typedef struct Node {
-    struct Node *left;
-    struct Node *right;
-    struct Node *parent;
+    void *left;
+    void *right;
+    u32 parent;
     Session *val;
 } Node;
 
 typedef struct List {
     u32 count;
-    Node *root;
-    Node *leftmost;
+    void *root;
+    void *leftmost;
 } List;
 
-typedef struct NodeIter {
-    Node *node;
-} NodeIter;
+#include "../lib/NitroDWC/src/tree-iterator4.h"
+typedef Iterator NodeIter;
 
 typedef struct CharVec {
     char *ptr;
@@ -133,15 +132,15 @@ void ov45_0223DB8C(CharVec *, u32, const char *);
 u32 ov45_0223EA34(Vec *, u32);
 void ov45_0223EB00(Vec *, u32, u32 *);
 void ov45_02236E58(NodeIter *);
-Node *ov45_022370D0(Node *, Node *);
+Node *ov45_022370D0(Node *,void *);
 
 extern char ov45_0225520C[];
 void printf(const char *, ...);
 void abort(void);
-void ov45_02236EC4(Node *, Node *);
+void ov45_02236EC4(Node *,void *);
 
 typedef struct InsertResult {
-    Node *node;
+    Node *current;
     u8 inserted;
 } InsertResult;
 
@@ -289,22 +288,22 @@ void ov45_0223E648(InsertResult *out, List *l, Session **key) {
     u8 flag;
     Node *y = ov45_0223E940(l, key, &parent, &left, &flag);
     if (parent == NULL || parent->val->id < (*key)->id) {
-        out->node = ov45_0223E758(l, y, left, flag, key);
+        out->current = ov45_0223E758(l, y, left, flag, key);
         out->inserted = ov45_02255200[0];
         return;
     }
-    out->node = parent;
+    out->current = parent;
     out->inserted = ov45_02255200[1];
 }
 
 // @fn ov45_0223E6E8
 void ov45_0223E6E8(NodeIter *out, List *l, NodeIter it) {
-    Node *n = it.node;
+    Node *n = it.current;
     if (n == l->leftmost) {
         ov45_02236E58(&it);
-        l->leftmost = it.node;
+        l->leftmost = it.current;
     }
-    out->node = ov45_022370D0(n, l->root);
+    out->current = ov45_022370D0(n, l->root);
     if (n != NULL) {
         ov00_021EC2EC(0, n, 0);
     }
@@ -316,11 +315,11 @@ Node *ov45_0223E758(List *l, Node *parent, u8 left, u8 flag, Session **key) {
     Node *n;
     Node *tmp;
     Session **pv;
-    Node **pp;
+    u32 *pp;
     volatile struct {
         Node *a;
         Node *b;
-        Node **c;
+        void **c;
         Node *d;
     } h;
     if (l->count == (u32)-1) {
@@ -343,7 +342,7 @@ Node *ov45_0223E758(List *l, Node *parent, u8 left, u8 flag, Session **key) {
     n->left = NULL;
     pp = &n->parent;
     if (pp != NULL) {
-        *pp = parent;
+        *pp = (u32)parent;
     }
     if (left) {
         parent->left = n;

@@ -13,7 +13,7 @@ typedef struct {u32 p;void *own,*join,*update;u8 p2[16];void *disconnect;u8 p3[8
 extern void ov45_02248A98(Connection *,char *,char *);
 extern int ov45_0224861C(Connection *,char *);
 extern Callbacks *ov45_02247E98(Connection *,char *);
-extern void ov45_02247D84(Connection *,char *);
+extern void ov45_02247D84(void *,char *);
 extern void ov45_02244D30(Connection *,int,void *,void *,void *,int,char *,int);
 static inline int validCount(int n){int valid=1;if(n!=2&&n!=3)valid=0;return valid;}
 void ov45_0224BB4C(Connection *,Message *);

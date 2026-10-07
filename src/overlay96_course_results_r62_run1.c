@@ -9,7 +9,7 @@ int ov96_021F7740(void *course, Ov96CycleWork *state) {
     }
     state->tick++;
     for (slot = state->firstSlot; slot < 4; slot++) {
-        *(u32 *)ov96_021E8A20(state->data + 0x50 + slot * 0x28) = 0;
+        *(u32 *)(void *)ov96_021E8A20(state->data + 0x50 + slot * 0x28) = 0;
     }
     if (state->tick >= state->tickLimit) {
         state->active = 1;
@@ -38,7 +38,7 @@ void ov96_021F77EC(void *course, Ov96CycleWork *state, u8 slot) {
     int value;
     u8 roll;
     u8 i;
-    u32 *status = ov96_021E8A20(state->data + 0x50 + slot * 0x28);
+    u32 *status = (void *)ov96_021E8A20(state->data + 0x50 + slot * 0x28);
 
     if (state->counts[slot] == 0) {
         value = 0;

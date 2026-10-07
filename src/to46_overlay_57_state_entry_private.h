@@ -36,7 +36,7 @@ void ov57_022399F8(void *);
 void ov57_02239B0C(void *);
 void ov57_02239BAC(void);
 void ov57_02239BCC(void);
-BOOL ov57_0223B940(void);
+void *ov57_0223B940(u8 *);
 void ov57_0223B948(void *, BOOL);
 void ov57_0223B75C(void *);
 void ov57_0223B78C(void *);

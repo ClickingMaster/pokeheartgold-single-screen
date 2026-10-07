@@ -77,7 +77,7 @@ extern void PokeathlonCourse_SetStateField07(void *, u32);
 
 extern u32 ov96_021E637C(void *);
 extern void ov96_021E8318(void *, u8);
-extern void *ov96_021E8A20(void *);
+extern u8 *ov96_021E8A20(void *ptr);
 extern u32 ov96_021E5F24(void *);
 extern u32 ov96_021E667C(void *);
 extern void ov96_021E6670(void *, u32);

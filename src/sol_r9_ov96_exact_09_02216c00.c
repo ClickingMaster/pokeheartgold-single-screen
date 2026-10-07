@@ -16,7 +16,7 @@ extern const GraphicsBanks ov96_0221D774;
 extern const u32 ov96_0221D738[];
 extern void *PokeathlonCourse_GetDataCopyArea(void *course);
 extern void *PokeathlonCourse_GetHeapAllocPtr4(void *course);
-extern void *ov96_021E8A20(void *p);
+extern u8 *ov96_021E8A20(void *ptr);
 extern u16 ov96_0221978C(void *p);
 extern void ov96_021E8318(void *course, u16 value);
 extern void ov96_022193F8(void *course, u8 value);

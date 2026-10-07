@@ -132,7 +132,7 @@ void ManagedSprite_SetPositionXY(void *, s16, s16);
 void *SpriteSystem_NewSpriteWithYOffset(void *, void *, const SprTmpl *, fx32);
 void *SysTask_CreateOnMainQueue(void (*)(void *, void *), void *, int);
 u8 *PokeathlonCourse_GetDataCopyArea(void *);
-void *ov96_021E8A20(void *);
+u8 *ov96_021E8A20(void *ptr);
 u32 ov96_021E5F24(void *);
 void ov96_021E8228(void *, u8, u8, int, int);
 void *ov96_021EAA20(void *);

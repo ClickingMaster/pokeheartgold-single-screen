@@ -14,7 +14,7 @@ BOOL ManagedSprite_IsAnimated(void *sprite);
 void ManagedSprite_SetAnim(void *sprite, u32 anim);
 void ov40_02243E80(void *work, int index, int draw);
 
-void ov40_02243EEC(void *work, int index);
+void ov40_02243EEC(u8 *work, int index);
 void ov40_02243F38(void *work, int index, int slot);
 void ov40_02243F88(void *work);
 

@@ -1,3 +1,4 @@
+#include "sys_task.h"
 #ifndef PRIVATE_OVERLAY_80_0223A00C_H
 #define PRIVATE_OVERLAY_80_0223A00C_H
 #include "global.h"
@@ -19,7 +20,7 @@ void NARC_Delete(void *);
 void Heap_FreeExplicit(int, void *);
 void DestroySysTaskAndEnvironment(void *);
 void *CreateSysTaskAndEnvironment(void (*)(void *, void *), u32, u32, int);
-void *SysTask_GetData(void *);
+void *SysTask_GetData(SysTask *);
 void *NARC_New(int, int);
 void *BgGetCharPtr(int);
 void ScheduleSetBgPosText(void *, int, int, int);
@@ -47,7 +48,7 @@ void ov80_0223A81C(void *);
 void ov80_0223A8C4(MotionR21 *, s32, s32, s32);
 int ov80_0223A8D4(MotionR21 *);
 void ov80_0223A91C(Vec3R21 *, s32, s32, s32);
-void ov80_0223AA4C(void *, void *);
+void ov80_0223AA4C(SysTask *, void *);
 void ov80_0223AAD0(void *, void *);
 void ov80_0223AB34(void *, void *);
 void ov80_0223A0EC(void *, void *);

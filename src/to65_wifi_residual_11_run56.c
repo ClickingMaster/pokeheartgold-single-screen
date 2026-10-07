@@ -1,6 +1,8 @@
 #pragma force_active on
 // clang-format off
 #include "global.h"
+#include "dgt.h"
+#include "WIFI_stubsmd5_dummy.h"
 #include <nitro/code32.h>
 // clang-format on
 #pragma force_active on
@@ -14,9 +16,6 @@ extern W*_021D5FEC;
 extern I _021D5FF0;
 extern u8 _021D5FFC[],_021D5FF4[],_021D6020[],_021D601C;
 
-extern int DGT_Hash1GetDigest_R();
-extern int DGT_Hash1Reset();
-extern int DGT_Hash1SetSource();
 extern int WCM_BeginSearchAsync();
 extern int WM_Disconnect();
 extern int WM_EndDCF();
@@ -68,9 +67,6 @@ int WCM_GetLinkLevel(void);
 u8 WCMi_GetRssiAverage(void);
 int WcmGetLinkLevel(void);
 void WCMi_ShelterRssi(int x);
-void MD5Init(void*p);
-void MD5Update(void*p,void*q,u32 n);
-void MD5Final(void*p,void*q);
 int WCM_Init(W*p,u32 n);
 int WCM_CleanupAsync(void);
 void WcmConfigure(u32*p,void(*cb)(Msg*));

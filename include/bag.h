@@ -124,7 +124,7 @@ BOOL Bag_TakeItem(Bag *bag, u16 itemId, u16 quantity, enum HeapID heapID);
 BOOL Bag_HasItem(Bag *bag, u16 itemId, u16 quantity, enum HeapID heapID);
 
 /*
- * BOOL Pocket_TakeItem(ItemSlot *slots, u32 count, u16 itemId, u16 quantity)
+ * BOOL Pocket_TakeItem(ItemSlot *slots, u32 count, u16 itemId, u16 quantity, u32 unusedHeapId)
  *
  * Like BAG_TakeItem, but acts directly on an array of item slots.
  *
@@ -135,7 +135,7 @@ BOOL Bag_HasItem(Bag *bag, u16 itemId, u16 quantity, enum HeapID heapID);
  *
  * @returns: TRUE if the action succeeded, otherwise FALSE.
  */
-BOOL Pocket_TakeItem(ItemSlot *slots, u32 count, u16 itemId, u16 quantity);
+BOOL Pocket_TakeItem(ItemSlot *slots, u32 count, u16 itemId, u16 quantity, u32 unusedHeapId);
 
 /*
  * BOOL Bag_PocketNotEmpty(Bag *bag, u32 pocket)

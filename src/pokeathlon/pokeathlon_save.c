@@ -24,7 +24,7 @@ PokeathlonSave *PokeathlonSave_dummy1(PokeathlonSave *pokeathlon) {
 }
 
 void *PokeathlonSave_GetUnkDC(PokeathlonSave *pokeathlonSave) {
-    return pokeathlonSave->unk_DC;
+    return pokeathlonSave->prefix.legacy.bytes1F0;
 }
 
 Pokeathlon_RecordsSolo *PokeathlonSave_GetRecordsSolo(PokeathlonSave *pokeathlonSave) {
@@ -57,7 +57,7 @@ BOOL PokeathlonSave_GetUnkDC_AtIndex(PokeathlonSave *pokeathlonSave, int shift, 
         GF_ASSERT(FALSE);
         return FALSE;
     }
-    if (!(((int)pokeathlonSave->unk_DC[indexMinusOne]) >> shift & 1)) {
+    if (!(((int)pokeathlonSave->prefix.legacy.bytes1F0[indexMinusOne]) >> shift & 1)) {
         return FALSE;
     }
     return TRUE;
@@ -85,7 +85,7 @@ void PokeathlonSave_SetUnkDC_AtIndex(PokeathlonSave *pokeathlonSave, int shift, 
     for (i = 0; i < 5; i++) {
         if ((u8)((shift >> i) & 1) != 0) {
             bit = 1 << i;
-            pokeathlonSave->unk_DC[indexMinusOne] |= bit;
+            pokeathlonSave->prefix.legacy.bytes1F0[indexMinusOne] |= bit;
         }
     }
 }

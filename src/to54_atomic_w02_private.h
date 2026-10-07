@@ -78,7 +78,7 @@ void ov07_02221F04(int, int, s16 *, s16 *);
 void ov07_02221F38(void *, int, s16 *, s16 *);
 s16 ov07_02221F80(void *, int, u32);
 u8 ov07_02221FF0(void **);
-int ov07_02222004(void *);
+int ov07_02222004(void *, int);
 int ov07_0222202C(void *);
 int ov07_02222040(int, int, int);
 int ov07_0222204C(int, int, int);

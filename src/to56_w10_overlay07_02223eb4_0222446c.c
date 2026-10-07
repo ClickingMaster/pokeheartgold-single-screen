@@ -5,7 +5,7 @@ void ov07_02223EB4(void *owner) {
     w->owner = owner;
     w->palette = ov07_0221FA78(owner);
     u16 opaque;
-    switch (ov07_0221C4A8(owner, 0)) {
+    switch (((s32)ov07_0221C4A8(owner, 0))) {
     case 0:
         opaque = ov07_0221E6C8(owner);
         break;
@@ -19,10 +19,10 @@ void ov07_02223EB4(void *owner) {
         GF_AssertFail();
         break;
     }
-    int wait = ov07_0221C4A8(owner, 1);
-    int cur = ov07_0221C4A8(owner, 2);
-    int end = ov07_0221C4A8(owner, 3);
-    int color = ov07_0221C4A8(owner, 4);
+    int wait = ((s32)ov07_0221C4A8(owner, 1));
+    int cur = ((s32)ov07_0221C4A8(owner, 2));
+    int end = ((s32)ov07_0221C4A8(owner, 3));
+    int color = ((s32)ov07_0221C4A8(owner, 4));
     PaletteData_BeginPaletteFade(w->palette, 1, opaque, (s8)wait, (u8)cur, (u8)end, (u16)color);
     ov07_0221C410(w->owner, ov07_02223E94, w);
 }
@@ -70,7 +70,7 @@ void ov07_02224008(void *owner) {
     FadeWork *w = ov07_022324D8(owner, 0x20);
     w->owner = owner;
     w->palette = NULL;
-    int kind = ov07_0221C4A8(owner, 0);
+    int kind = ((s32)ov07_0221C4A8(owner, 0));
     int i, slot;
     switch (kind) {
     case 2:
@@ -151,11 +151,11 @@ void ov07_02224008(void *owner) {
         Heap_Free(w);
         return;
     }
-    w->unk10 = ov07_0221C4A8(owner, 1);
-    w->count = ov07_0221C4A8(owner, 2);
-    w->unk14 = ov07_0221C4A8(owner, 3);
-    w->unk18 = ov07_0221C4A8(owner, 4);
-    w->delay = ov07_0221C4A8(owner, 5);
+    w->unk10 = ((s32)ov07_0221C4A8(owner, 1));
+    w->count = ((s32)ov07_0221C4A8(owner, 2));
+    w->unk14 = ((s32)ov07_0221C4A8(owner, 3));
+    w->unk18 = ((s32)ov07_0221C4A8(owner, 4));
+    w->delay = ((s32)ov07_0221C4A8(owner, 5));
     ov07_0221C410(w->owner, ov07_02223F5C, w);
 }
 
@@ -217,7 +217,7 @@ void ov07_02224348(void *owner) {
     w->owner = owner;
     w->spriteSystem = ov07_0221C514(owner);
     void *pic;
-    if (ov07_0221C4A8(owner, 0) == 0) {
+    if (((s32)ov07_0221C4A8(owner, 0)) == 0) {
         pic = ov07_0221FA48(w->owner, ov07_0221C468(owner));
         w->y = ov07_0221FAA0(w->owner, ov07_0221C468(w->owner));
     } else {
@@ -226,20 +226,20 @@ void ov07_02224348(void *owner) {
     }
     w->x = Pokepic_GetAttr(pic, 1);
     w->x -= Pokepic_GetAttr(pic, 0x29);
-    w->a = ov07_0221C4A8(owner, 1);
-    w->b = ov07_0221C4A8(owner, 2);
-    w->c = ov07_0221C4A8(owner, 3);
-    w->d = ov07_0221C4A8(owner, 4);
-    w->count = ov07_0221C4A8(owner, 5);
-    w->mode = ov07_0221C4A8(owner, 6);
-    w->sprite = (void *)ov07_0221C4E8(w->owner, ov07_0221C4A8(owner, 7));
+    w->a = ((s32)ov07_0221C4A8(owner, 1));
+    w->b = ((s32)ov07_0221C4A8(owner, 2));
+    w->c = ((s32)ov07_0221C4A8(owner, 3));
+    w->d = ((s32)ov07_0221C4A8(owner, 4));
+    w->count = ((s32)ov07_0221C4A8(owner, 5));
+    w->mode = ((s32)ov07_0221C4A8(owner, 6));
+    w->sprite = (void *)ov07_0221C4E8(w->owner, ((s32)ov07_0221C4A8(owner, 7)));
     ManagedSprite_SetDrawPriority(w->sprite, 100);
     ManagedSprite_SetPriority(w->sprite, 1);
     ManagedSprite_SetOamMode(w->sprite, 1);
     ManagedSprite_SetAffineOverwriteMode(w->sprite, 2);
     ov07_02231E08(w->owner, w->a, 16 - w->a);
     ov07_0221C410(w->owner, ov07_022241D8, w);
-    int flag = ov07_0221C4A8(owner, 0) != 0;
+    int flag = ((s32)ov07_0221C4A8(owner, 0)) != 0;
     if (ov07_0221FB78(w->owner, flag) == 1) {
         w->flag = 1;
     }

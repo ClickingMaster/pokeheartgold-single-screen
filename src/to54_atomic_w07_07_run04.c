@@ -1,4 +1,5 @@
 #include "global.h"
+#include "library/spl_emitter.h"
 
 #pragma require_prototypes off
 
@@ -20,17 +21,6 @@ typedef struct CallbackWork {
     int attr;
 } CallbackWork;
 
-typedef struct ListNode {
-    struct ListNode *next;
-    u8 filler_04[0x20];
-    u16 value1;
-    u16 value2;
-} ListNode;
-
-typedef struct ListOwner {
-    u8 filler_00[8];
-    ListNode *list;
-} ListOwner;
 
 typedef struct BgCallbackWork {
     u8 state;
@@ -74,7 +64,8 @@ extern void Heap_Free(void *);
 extern void *ov07_022324D8(void *, int);
 extern int ov07_0221C514(void *);
 extern int ov07_0221C4A0(void *);
-extern int ov07_0221C4A8(void *, int);
+
+extern u32 ov07_0221C4A8(void *p, int i);
 extern void *ov07_0221C410(void *, void (*)(void *, void *), void *);
 extern void ov07_02231FE4(void *, void *);
 extern void *ov07_0221C4E8(void *, int);
@@ -85,16 +76,17 @@ extern void ov07_02225F18(void *, MosaicCallbackWork *);
 extern void ManagedSprite_TickFrame(void *);
 extern void SpriteSystem_DrawSprites(void *);
 
-BOOL ov07_022260DC(ListOwner *owner) {
+BOOL ov07_022260DC(void *data) {
+    SPLEmitter *owner = data;
     BOOL ret = FALSE;
-    ListNode *node = owner->list;
+    SPLParticle *node = owner->act_ptcl_list.p_begin;
     u16 value1;
     u16 value2;
 
     while (node != NULL) {
-        value1 = node->value2;
-        value2 = node->value1;
-        node = node->next;
+        value1 = node->age;
+        value2 = node->life;
+        node = node->p_next;
     }
     if (value1 != value2) {
         ret = TRUE;

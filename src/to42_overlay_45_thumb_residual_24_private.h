@@ -60,7 +60,7 @@ int ov45_0222C4FC(Ov45Grid *, u32);
 void ov45_0222C514(Ov45Grid *, int);
 int ov45_0222C54C(Ov45Grid *, u32);
 void ov45_0222C580(Ov45Grid *, u32);
-int ov45_0222C5B4(Ov45Grid *, u32);
+int ov45_0222C5B4(void *, int);
 void ov45_0222C5E8(Ov45Grid *, u32, u32);
 BOOL ov45_0222C61C(Ov45Grid *, u32, u32);
 u32 ov45_0222C658(Ov45Grid *, u32);

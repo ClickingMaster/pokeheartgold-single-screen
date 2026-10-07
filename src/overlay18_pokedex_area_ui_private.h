@@ -39,7 +39,7 @@ void ov18_021F2C5C(void *p, int a1, int a2);
 void ov18_021F2E80(void *p, int a1, int a2);
 void ov18_021F2EC8(void *p, int a1, int a2);
 int ov18_021F8824(void *p);
-int ov18_021F8838(void *p);
+u16 ov18_021F8838(void *p);
 void *ov18_021F9694(int species, int a1);
 
 #endif

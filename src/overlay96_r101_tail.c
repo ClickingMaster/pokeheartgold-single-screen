@@ -12,8 +12,8 @@ typedef struct Ov96FData {
 u32 ov96_0220F1CC(void *course) {
     u8 *work = PokeathlonCourse_GetHeapAllocPtr4(course);
     u8 *copy = PokeathlonCourse_GetDataCopyArea(course);
-    u32 *remote = ov96_021E8A20(copy + 0xf0);
-    u32 *local = ov96_021E8A20(copy);
+    u32 *remote = (void *)ov96_021E8A20(copy + 0xf0);
+    u32 *local = (void *)ov96_021E8A20(copy);
     if (remote[8] >> 31 == 1) {
         ov96_0220EAC4(work);
         ov96_021E65A4(course);

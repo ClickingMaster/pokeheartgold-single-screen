@@ -1,0 +1,43 @@
+	.extern ov01_022039BC
+	.extern ov01_022039E0
+	.extern ov01_022094B0
+	.public ov01_02203654
+	.public ov01_02203890
+	.public ov01_022094B0
+	.public ov01_022094BC
+	.public ov01_022094C8
+	.public ov01_022094DC
+	.public ov01_022094F0
+	.public ov01_02209504
+	.public ov01_02209B18
+	.public ov01_022031C0
+	.public ov01_022031E8
+	.public ov01_022031F8
+	.public ov01_02203270
+	.public ov01_0220329C
+	.public ov01_0220335C
+	.public ov01_022033E0
+	.public ov01_022033E4
+	.public ov01_022034B8
+	.public ov01_022034F8
+	.public ov01_022035A4
+	.public ov01_022035DC
+	.public ov01_022037E8
+	.public ov01_02203820
+	.public ov01_022039BC
+	.public ov01_022039E0
+#include "constants/sndseq.h"
+#include "constants/moves.h"
+#include "constants/std_script.h"
+#include "constants/species.h"
+#include "constants/sprites.h"
+#include "constants/maps.h"
+#include "constants/mmodel.h"
+#include "constants/items.h"
+#include "msgdata/msg/msg_0096_D31R0201.h"
+#include "msgdata/msg/msg_0066_D23R0102.h"
+	.include "asm/macros.inc"
+	.include "overlay_01_022031C0.inc"
+	.include "global.inc"
+
+.text

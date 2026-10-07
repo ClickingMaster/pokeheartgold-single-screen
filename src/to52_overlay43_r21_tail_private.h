@@ -18,7 +18,7 @@ void ov43_0222CD3C(void *);
 
 void ov43_0222CB34(s16 *, void *, void *, int);
 void ov43_0222CBAC(void *);
-void ov43_0222CA50(s16 *, void *, void *, int, int, void *, u8, int);
+void ov43_0222CA50(s16 *, void *, void *, void *, int, void *, int, int);
 
 
 typedef struct R21Runner {

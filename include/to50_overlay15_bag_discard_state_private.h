@@ -2,6 +2,7 @@
 #define TO50_OVERLAY15_PREFIX_R10_PRIVATE_H
 
 #include "global.h"
+struct ItemSlot;
 
 #define U8(p, o)  (*(u8 *)((u8 *)(p) + (o)))
 #define VU8(p, o) (*(volatile u8 *)((u8 *)(p) + (o)))
@@ -35,7 +36,7 @@ extern void ov15_021FD788(void *, s32);
 extern BOOL TextPrinterCheckActive(u8);
 extern void PlaySE(u32);
 extern void PlayerProfile_AddMoney(void *, u32);
-extern BOOL Pocket_TakeItem(void *, u32, u16, u16, u32);
+extern BOOL Pocket_TakeItem(struct ItemSlot *, u32, u16, u16, u32);
 extern void ov15_021F9F08(void *);
 extern void ov15_021FA044(s16 *, const u16 *, s32);
 extern void ov15_021FA070(s16 *, const u16 *, s32, s32);

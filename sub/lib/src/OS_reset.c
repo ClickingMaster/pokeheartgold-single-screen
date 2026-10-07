@@ -9,8 +9,11 @@ extern void SDK_IRQ_STACKSIZE(void);
 static vu16 OSi_IsResetOccurred = FALSE;
 static u16 OSi_IsInitReset = FALSE;
 #else
-static u16 OSi_IsInitReset = FALSE;
-static vu16 OSi_IsResetOccurred = FALSE;
+#pragma define_section RESETFLAGS ".data" ".bss" abs32 RW
+#pragma section RESETFLAGS begin
+typedef struct { u16 initialized; vu16 occurred; } ResetFlags;
+ResetFlags OSi_ResetFlags = { FALSE, FALSE };
+#pragma section RESETFLAGS end
 #endif
 
 u32 OSi_CpuClear32(u32 value, void *ptr, u32 size);
@@ -20,6 +23,7 @@ void OSi_DoResetSystem(void);
 void OSi_ReloadRomData(void);
 void OSi_DoBoot(void);
 
+#ifdef SDK_ARM9
 void OS_InitReset(void) {
     if (OSi_IsInitReset) {
         return;
@@ -57,6 +61,8 @@ void OSi_SendToPxi(u16 data) {
     pxi_send_data = (u32)(data) << OS_PXI_COMMAND_SHIFT;
     while (PXI_SendWordByFifo(PXI_FIFO_TAG_OS, pxi_send_data, FALSE) != PXI_FIFO_SUCCESS) {}
 }
+
+#endif
 
 #ifdef SDK_ARM9
 void OS_ResetSystem(u32 parameter) {
@@ -241,23 +247,7 @@ void OSi_ReadCardRom32(u32 src, void *dst, int len) {
 #include <nitro/itcm_end.h>
 
 #else
-void OS_ResetSystem(void) {
-    MI_StopDma(0);
-    MI_StopDma(1);
-    MI_StopDma(2);
-    MI_StopDma(3);
-    OS_SetIrqMask(OS_IE_FIFO_RECV);
-    OS_ResetRequestIrqMask(0xFFFFFFFF);
-    SND_Shutdown();
-    OSi_SendToPxi(OS_PXI_COMMAND_RESET);
-    OSi_DoResetSystem();
-}
-
-void OSi_DoResetSystem(void) {
-    reg_OS_IME = 0;
-    OSi_DoBoot();
-}
-
+// ARM7 ordinary C bodies are supplied by the pure C producer.
 #include <nitro/wram_begin.h>
 asm void OSi_DoBoot(void) {
     mov r12, #HW_REG_BASE

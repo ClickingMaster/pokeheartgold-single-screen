@@ -1,15 +1,15 @@
 #pragma force_active on
 // clang-format off
 #include "global.h"
+#include "to90_vct_ssp_private.h"
 #include <nitro/code32.h>
 // clang-format on
 #pragma force_active on
 typedef struct AdpcmState { s16 value; u8 index; u8 pad; } AdpcmState;
 typedef struct AudioContext {u16 seq; u16 pad; u32 mask; u32 flag; u32 packetSize; AdpcmState state; u32 reset; u32 echo; s32 codec; u32 sessions; u32 size; u32 vad; u8 gap[0xed4]; u32 sendRead,sendWrite,sendBuffer,sendMask,balanceIndex,balance;} AudioContext;
-typedef struct Session {u8 pad[5]; u8 id; u8 pad2[2]; u32 mask; s32 status;} Session;
 typedef struct Stream {u8 pad[0x94];} Stream;
 extern AudioContext _021D6040;
-extern u32 __vct[];
+
 extern u8 sCodecInfo[];
 extern s32 sEnableVAD;
 extern Session *sAudioSession[];
@@ -59,6 +59,6 @@ extern s8 cAdpcmIndexTable2[];
 extern u64 _ll_udiv(u64,u64);
 extern u8 sSendInfo[];
 extern s32 VCT_SendAudio(void*,u32);
-s32 VCT_SetCodec(s32 codec){if(codec>=5)return 0;if(__vct[4]!=1&& (u32)codec<=1)return 0;_021D6040.packetSize=sCodecInfo[codec*2]*0x44+(sCodecInfo+1)[codec*2]+12;_021D6040.codec=codec;_021D6040.state.value=0;_021D6040.state.index=0;return 1;}
+s32 VCT_SetCodec(s32 codec){if(codec>=5)return 0;if(__vct.mode!=1&& (u32)codec<=1)return 0;_021D6040.packetSize=sCodecInfo[codec*2]*0x44+(sCodecInfo+1)[codec*2]+12;_021D6040.codec=codec;_021D6040.state.value=0;_021D6040.state.index=0;return 1;}
 void VCT_EnableVAD(s32 enable){sEnableVAD=enable;VCT_ResetVAD();if(enable==0)_021D6040.flag=1;}
 void VCT_EnableEchoCancel(s32 enable){_021D6040.echo=enable;}

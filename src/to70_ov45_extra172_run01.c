@@ -7,8 +7,8 @@
 #define W(p,o) (*(int *)((char *)(p)+(o)))
 #define P(p,o) (*(void **)((char *)(p)+(o)))
 #define A(p,o) ((void *)((char *)(p)+(o)))
-typedef struct Node {struct Node *left,*right;u32 parent;int key;} Node;
-typedef struct {int count;Node *root,*last;} Tree;
+typedef struct Node {void *left,*right;u32 parent;int key;} Node;
+typedef struct {int count;void *root,*last;} Tree;
 extern void ov00_021EC2EC(int,void*,int),ov00_021EC3D8(void*);
 extern void ov45_02237A24(void*,void*),ov45_02237BC8(void*),ov45_02242C74(void**,void*,void*);
 extern void __msl_assertion_failed(char*,char*,char*,int);

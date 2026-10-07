@@ -1,6 +1,8 @@
 #ifndef TO53_W02_PRIVATE_H
 #define TO53_W02_PRIVATE_H
 #include "global.h"
+#include "heap.h"
+typedef struct BattleSystem BattleSystem;
 
 void PlaySE(u16);
 void StopSE(u16, int);
@@ -8,7 +10,7 @@ void GF_AssertFail(void);
 void ov07_0221C69C(void);
 void ov07_0221F8C8(void *, s8);
 void sub_020061EC(void);
-void ov07_0221FB90(void *, void *, u8);
+void *ov07_0221FB90(BattleSystem *, enum HeapID, u8);
 void *NARC_AllocAndReadWholeMember(u32, u32, u32);
 void ov06_0221BAD8(void);
 void sub_02015494(void *, void *, void *);
@@ -36,12 +38,12 @@ u32 ov07_0221FA80(struct Outer *, int);
 u32 ov07_0221FA90(struct Outer *, int);
 u32 ov07_0221FAA0(struct Outer *, int);
 BOOL ov07_0221FAB0(void *);
-BOOL ov07_0221FAE8(void);
+BOOL ov07_0221FAE8(void *);
 u32 ov07_0221FAEC(void *, int);
 u32 ov07_0221FAF8(void *, int);
 BOOL ov07_0221FB78(void);
 u32 ov07_0221FB7C(int, int);
-void ov07_0221FDFC(void *, void *);
+void *ov07_0221FDFC(BattleSystem *, enum HeapID);
 u8 ov07_0221FE70(void *);
 void ov07_0221FE84(void);
 void *ov07_0221FEDC(u32, u32, u32);

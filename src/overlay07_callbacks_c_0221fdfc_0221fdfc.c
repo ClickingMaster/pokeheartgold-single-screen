@@ -17,4 +17,4 @@ typedef struct Outer {
     Inner *inner;
 } Outer;
 
-void ov07_0221FDFC(void *a, void *b) { ov07_0221FB90(a, b, 0xff); }
+void *ov07_0221FDFC(BattleSystem *a, enum HeapID b) { return ov07_0221FB90(a, b, 0xff); }

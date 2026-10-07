@@ -42,7 +42,7 @@ BOOL sub_020698E8(RenderAnimation *animation, fx32 step, BOOL loop);
 BOOL sub_02069948(RenderAnimation *animation);
 void sub_02069958(NNSG3dRenderObj *object);
 void sub_02069964(NNSG3dRenderObj *object, NNSG3dResMdl *model);
-void sub_02069978(NNSG3dRenderObj *object, UnkOv01_021FFECC_sub *model);
+void sub_02069978(NNSG3dRenderObj *object, void *model);
 void sub_02069984(NNSG3dRenderObj *object, NNSG3dAnmObj *animation);
 void sub_0206998C(NNSG3dRenderObj *object, RenderAnimation *animation);
 void sub_02069998(NNSG3dRenderObj *object, UnkOv01_021FFECC_sub *model, RenderAnimation *animation);
@@ -155,8 +155,8 @@ void sub_02069964(NNSG3dRenderObj *object, NNSG3dResMdl *model) {
     sub_02069958(object);
     NNS_G3dRenderObjInit(object, model);
 }
-void sub_02069978(NNSG3dRenderObj *object, UnkOv01_021FFECC_sub *model) {
-    sub_02069964(object, model->unkC);
+void sub_02069978(NNSG3dRenderObj *object, void *model) {
+    sub_02069964(object, *(NNSG3dResMdl **)((u8 *)model + 0xC));
 }
 void sub_02069984(NNSG3dRenderObj *object, NNSG3dAnmObj *animation) {
     NNS_G3dRenderObjAddAnmObj(object, animation);

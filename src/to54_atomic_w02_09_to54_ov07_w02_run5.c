@@ -14,7 +14,7 @@ void ov07_02221F04(int set, int idx, s16 *a, s16 *b);
 void ov07_02221F38(void *p, int idx, s16 *a, s16 *b);
 s16 ov07_02221F80(void *p, int unused, u32 which);
 u8 ov07_02221FF0(void **p);
-int ov07_02222004(void *p);
+int ov07_02222004(void *p, int index);
 int ov07_0222202C(void *p);
 int ov07_02222040(int start, int end, int duration);
 int ov07_0222204C(int start, int end, int duration);

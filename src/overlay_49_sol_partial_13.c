@@ -1,4 +1,5 @@
 #include "overlay_49_sol_partial_internal.h"
+#include "overlay49_entry40.h"
 
 #pragma require_prototypes off
 
@@ -55,8 +56,9 @@ extern void Camera_UnsetStaticPtr(void *);
 extern void Camera_Delete(void *);
 
 BOOL ov49_022593FC(void *p) {
-    return U32_AT(p, 0) == 0;
+    Ov49EntryR4 *entry=p;
+    return entry->storage.fields.first == NULL;
 }
 
-void ov49_0225940C(void) {
+void ov49_0225940C(void *entry,void *ctx) {
 }

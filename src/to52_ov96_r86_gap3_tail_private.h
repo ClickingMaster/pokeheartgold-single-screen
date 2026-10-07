@@ -12,7 +12,7 @@ void *PokeathlonCourse_GetDataCopyArea(void *course);
 void PokeathlonCourse_SetField5E0_AtIndex(void *course, u8 index, u16 value);
 BOOL IsPaletteFadeFinished(void);
 BOOL ov96_021E5F24(void *course);
-void *ov96_021E8A20(void *ptr);
+u8 *ov96_021E8A20(void *ptr);
 void ov96_021E8228(void *course, u8 player, u8 type, u8 index, u32 value);
 void ov96_021E8324(void *course, void (*callback)(void));
 void ov96_021EB144(void *ptr, int);

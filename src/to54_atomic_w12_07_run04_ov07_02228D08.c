@@ -27,7 +27,8 @@ M2C_UNK ov07_0221C448(s32, s32);                                                
 s32 ov07_0221C468(s32);                                                                    /* extern */
 s32 ov07_0221C470(s32);                                                                    /* extern */
 s32 ov07_0221C4A0(s32);                                                                    /* extern */
-s16 ov07_0221C4A8(s32, s32);                                                               /* extern */
+
+extern u32 ov07_0221C4A8(void *p, int i);                                                               /* extern */
 s32 *ov07_0221C4E8(s32, s32);                                                              /* extern */
 s32 ov07_0221C514(s32);                                                                    /* extern */
 s32 ov07_0221C768(s32, s32);                                                               /* extern */

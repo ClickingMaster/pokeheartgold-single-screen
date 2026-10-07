@@ -1,0 +1,62 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+typedef struct{u8 pad[0x1fb4];void*sprites;u8 pad2[0x2078-0x1fb8];u8 state;} State;
+extern u8 ov08_0221C048(State*);
+extern u8 ov08_0221C14C(State*);
+extern u8 ov08_0221C318(State*);
+extern u8 ov08_0221C3C8(State*);
+extern u8 ov08_0221C488(State*);
+extern u8 ov08_0221C58C(State*);
+extern u8 ov08_0221C918(State*);
+extern u8 ov08_0221C924(State*);
+extern u8 ov08_0221C930(State*);
+extern u8 ov08_0221C93C(State*);
+extern u8 ov08_0221C948(State*);
+extern u8 ov08_0221C954(State*);
+extern u8 ov08_0221C978(State*);
+extern u8 ov08_0221C9A4(State*);
+extern u8 ov08_0221C9C8(State*);
+extern u8 ov08_0221CA08(State*);
+extern u8 ov08_0221CA20(State*);
+extern u8 ov08_0221CA34(State*);
+extern u8 ov08_0221CA50(State*);
+extern u8 ov08_0221C604(State*);
+extern u8 ov08_0221C6F8(State*);
+extern u8 ov08_0221C814(State*);
+extern u8 ov08_0221CA78(State*);
+extern u8 ov08_0221CA90(State*);
+extern u8 ov08_0221CC38(State*);
+extern u8 ov08_0221CD64(State*);
+extern int ov08_0221CD90(void*,State*);
+extern void ov08_0222145C(State*),ov08_022220FC(State*),SpriteSystem_DrawSprites(void*);
+void ov08_0221BE98(void*,State*);
+void ov08_0221BE98(void*arg,State*s){switch(s->state){
+case 0:s->state=ov08_0221C048(s);break;
+case 1:s->state=ov08_0221C14C(s);break;
+case 2:s->state=ov08_0221C318(s);break;
+case 3:s->state=ov08_0221C3C8(s);break;
+case 4:s->state=ov08_0221C488(s);break;
+case 5:s->state=ov08_0221C58C(s);break;
+case 6:s->state=ov08_0221C918(s);break;
+case 7:s->state=ov08_0221C924(s);break;
+case 8:s->state=ov08_0221C930(s);break;
+case 9:s->state=ov08_0221C93C(s);break;
+case 10:s->state=ov08_0221C948(s);break;
+case 11:s->state=ov08_0221C954(s);break;
+case 12:s->state=ov08_0221C978(s);break;
+case 13:s->state=ov08_0221C9A4(s);break;
+case 14:s->state=ov08_0221C9C8(s);break;
+case 15:s->state=ov08_0221CA08(s);break;
+case 16:s->state=ov08_0221CA20(s);break;
+case 17:s->state=ov08_0221CA34(s);break;
+case 18:s->state=ov08_0221CA50(s);break;
+case 19:s->state=ov08_0221C604(s);break;
+case 20:s->state=ov08_0221C6F8(s);break;
+case 21:s->state=ov08_0221C814(s);break;
+case 22:s->state=ov08_0221CA78(s);break;
+case 23:s->state=ov08_0221CA90(s);break;
+case 24:s->state=ov08_0221CC38(s);break;
+case 25:s->state=ov08_0221CD64(s);break;
+case 26:if(ov08_0221CD90(arg,s)==1)return;break;
+}ov08_0222145C(s);SpriteSystem_DrawSprites(s->sprites);ov08_022220FC(s);}

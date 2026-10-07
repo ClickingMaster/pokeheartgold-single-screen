@@ -20,7 +20,7 @@ void ov83_0224088C(void *p) {
     ScheduleWindowCopyToVram((u8 *)p + 0x3E0);
 }
 
-void ov83_022408E0(void *p, u16 item) {
+void ov83_022408E0(void *p, u32 item) {
     u16 index;
     int value;
 

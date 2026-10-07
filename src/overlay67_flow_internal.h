@@ -32,7 +32,7 @@ void ov67_021E6080(Ov67State *state);
 void ov67_021E60B4(Ov67State *state);
 void ov67_021E60F4(Ov67State *state);
 void ov67_021E6220(Ov67State *state);
-void ov67_021E63E8(Ov67State *state);
+void ov67_021E63E8(void *state);
 void ov67_021E6474(Ov67State *state);
 void ov67_021E65C0(Ov67State *state);
 void ov67_021E681C(Ov67State *state);

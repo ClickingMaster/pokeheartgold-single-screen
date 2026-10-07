@@ -1,0 +1,7 @@
+#pragma force_active on
+#include "global.h"
+typedef struct{u8 type,a;u16 hp,max;u8 slot;u8 status:5,form:2,caught:1;u32 exp,levelExp,balls;}Msg;
+typedef struct{u16 species;u8 p[0x10];u32 status;u8 p2[0x1c];u8 a;u8 p3[0x17];int hp,max;u8 p4[0x10];u32 exp;u8 p5[0x16];u8 form:4,reserved:4;u8 p6[0x41];}Mon;
+typedef struct{u8 p[0x219c];u8 slots[4];u8 p2[0x2d40-0x21a0];Mon mons[4];}Ctx;
+extern void*BattleSystem_GetPartyMon(void*,int,int);extern u32 GetMonData(void*,int,void*),GetMonExpBySpeciesAndLevel(int,int);extern int GetBattlerStatusCondition(Ctx*,int),BattleSystem_CheckMonCaught(void*,int),BattleSystem_GetSafariBallCount(void*);extern void ov12_02262240(void*,int,int,Msg*,int);void ov12_02263A1C(void*,Ctx*,int);
+void ov12_02263A1C(void*bs,Ctx*c,int battler){void*mon=BattleSystem_GetPartyMon(bs,battler,c->slots[battler]);int species=GetMonData(mon,5,NULL),level=GetMonData(mon,161,NULL);Msg msg;msg.type=38;msg.a=c->mons[battler].a;msg.hp=c->mons[battler].hp;msg.max=c->mons[battler].max;msg.slot=c->slots[battler];msg.status=(u8)GetBattlerStatusCondition(c,battler);if((c->mons[battler].species==29||c->mons[battler].species==32)&&!(c->mons[battler].status>>31))msg.form=2;else msg.form=c->mons[battler].form;msg.exp=c->mons[battler].exp-GetMonExpBySpeciesAndLevel(species,level);msg.levelExp=GetMonExpBySpeciesAndLevel(species,level+1)-GetMonExpBySpeciesAndLevel(species,level);msg.caught=(u8)BattleSystem_CheckMonCaught(bs,c->mons[battler].species);msg.balls=BattleSystem_GetSafariBallCount(bs);ov12_02262240(bs,1,battler,&msg,20);}

@@ -1,0 +1,9 @@
+#pragma force_active on
+#include "global.h"
+#pragma force_active on
+#define P(p,n) (*(void**)((u8*)(p)+(n)))
+typedef struct {s16 x,y,z,anim;u32 priority,palette,vram,ids[6],transfer,extra;} Template;
+void SpriteSystem_LoadCharResObjFromOpenNarc(void*,void*,void*,int,int,int,int);void SpriteSystem_LoadCellResObjFromOpenNarc(void*,void*,void*,int,int,int);void SpriteSystem_LoadAnimResObjFromOpenNarc(void*,void*,void*,int,int,int);void*SpriteSystem_NewSprite(void*,void*,const Template*);
+void ManagedSprite_SetPaletteOverride(void*,int),ManagedSprite_SetAnim(void*,int),ManagedSprite_TickFrame(void*),ManagedSprite_SetFlipMode(void*,int),ManagedSprite_SetPositionXY(void*,s16,s16),ov40_0222F878(void*);
+void ov40_0222F740(void*,void*,int);
+void ov40_0222F740(void*p,void*ctx,int mode){void*narc=P(ctx,0x14),*sys=P(ctx,0x18),*mgr=P(ctx,0x1c);Template t;SpriteSystem_LoadCharResObjFromOpenNarc(sys,mgr,narc,0x7f,0,mode,200000);SpriteSystem_LoadCellResObjFromOpenNarc(sys,mgr,narc,0x7e,0,200000);SpriteSystem_LoadAnimResObjFromOpenNarc(sys,mgr,narc,0x7d,0,200000);t.x=128;t.y=96;t.z=0;t.anim=0;t.priority=1;t.transfer=1;t.ids[4]=-1;t.ids[5]=-1;t.palette=0;t.vram=mode;t.extra=0;t.ids[0]=200000;t.ids[2]=200000;t.ids[3]=200000;if(mode==1)t.ids[1]=9999;else t.ids[1]=10000;P(p,0x2c)=SpriteSystem_NewSprite(P(ctx,0x18),P(ctx,0x1c),&t);P(p,0x30)=SpriteSystem_NewSprite(P(ctx,0x18),P(ctx,0x1c),&t);ManagedSprite_SetPaletteOverride(P(p,0x2c),2);ManagedSprite_SetPaletteOverride(P(p,0x30),2);ManagedSprite_SetAnim(P(p,0x2c),0);ManagedSprite_SetAnim(P(p,0x30),0);ManagedSprite_TickFrame(P(p,0x2c));ManagedSprite_TickFrame(P(p,0x30));ManagedSprite_SetFlipMode(P(p,0x30),2);if(mode==1){ManagedSprite_SetPositionXY(P(p,0x2c),128,24);ManagedSprite_SetPositionXY(P(p,0x30),128,120);}else{ManagedSprite_SetPositionXY(P(p,0x2c),128,88);ManagedSprite_SetPositionXY(P(p,0x30),128,184);}ov40_0222F878(p);}

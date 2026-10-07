@@ -1,6 +1,7 @@
 #include "frontier_data.h"
 
 #include "global.h"
+#include "to91_frontier_download_names.h"
 
 #include "heap.h"
 #include "mail_message.h"
@@ -359,7 +360,7 @@ typedef struct FrontierDownload {
     u8 availableA, availableB;
     u8 metaA0, metaA1, metaB0, metaB1;
     FrontierDownloadRecord recordsA[7];
-    u8 recordsB[0x3FC];
+    Ov67DownloadRecords recordsB;
 } FrontierDownload;
 typedef struct FrontierOpponent {
     u32 id;

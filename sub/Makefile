@@ -27,3 +27,13 @@ target: $(SBIN) $(ELF)
 
 compare: COMPARE := 1
 compare: all
+
+include $(WORK_DIR)/tools/arm7-alarm-partition/alarm.mk
+
+# Keep the original reset flag labels on their single BSS allocation.
+$(BUILD_DIR)/lib/src/OS_reset.o: lib/src/OS_reset.c $(BUILD_DIR)/lib/src/OS_reset.d $(WORK_DIR)/tools/nitro-section-renames/add_arm7_reset_aliases.py
+	@echo $(BUILD_C) $@ $<
+	@$(BUILD_C) $@ $<
+	@python3 $(WORK_DIR)/tools/nitro-section-renames/add_arm7_reset_aliases.py "$@" "$@.reset-aliases"
+	@mv "$@.reset-aliases" "$@"
+	@$(call fixdep,$(BUILD_DIR)/lib/src/OS_reset.d)

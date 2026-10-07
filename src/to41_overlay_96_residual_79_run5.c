@@ -133,7 +133,7 @@ void ov96_021FFE5C(void *w, int i, int c) {
 }
 
 void ov96_021FFEE8(void *p) {
-    void *q = ov96_021E8A20((u8 *)PokeathlonCourse_GetDataCopyArea(p) + 0xf0);
+    void *q = (void *)ov96_021E8A20((u8 *)PokeathlonCourse_GetDataCopyArea(p) + 0xf0);
     void *heap = PokeathlonCourse_GetHeapAllocPtr4(p);
     u8 idx = (u8)ov96_021E5F24(p);
     u8 v = (u8)(*((u8 *)q + idx + 0x10) & 0x7f);

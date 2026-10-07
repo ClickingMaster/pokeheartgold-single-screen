@@ -74,7 +74,7 @@ void ov90_0225BC28(Ov90Slide *slide, int direction);
 void ov90_0225BD08(Ov90Slide *slide);
 void ov90_0225BD84(Ov90Slide *slide);
 void ov90_0225BDE4(SysTask *task, void *data);
-void ov90_0225BE08(Ov90Slide *slide);
+void ov90_0225BE08(void *arg);
 void ov90_0225BEE0(SysTask *task, Ov90AnimTask *work);
 void ov90_0225C06C(SysTask *task, Ov90AnimTask *work);
 

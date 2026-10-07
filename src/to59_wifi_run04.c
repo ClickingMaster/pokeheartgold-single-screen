@@ -20,8 +20,8 @@ int SOCLi_ConsumeCallBack(void *packet);
 int SOCLi_ReadCallBack(void *packet);
 int SOCLi_ConsumeBuffer(void *socket);
 int SOCLi_ExecReadCommand(void *socket, void *buffer, u32 size, u32 port, void *address);
-void *SOCLi_ReadCPSBuffer(void *socket, s32 *available, u16 *port, u16 *sourcePort, void **address);
-int SOCLi_CopyCPSBuffer(void *socket, void *buffer, u32 size, u32 port, void *address);
+void *SOCLi_ReadCPSBuffer(void *socket, s32 *available, u16 *port, u16 *sourcePort, u32 *address);
+int SOCLi_CopyCPSBuffer(void *socket, void *buffer, int size, u16 *port, u32 *address);
 int SOCLi_ReadUdpBuffer(void *socket, void *buffer, u32 size, u32 port, void *address, u32 flags);
 int SOCLi_ReadBuffer(void *socket, void *buffer, u32 size, u32 port, void *address, u32 flags);
 int SOCLi_ReadAndConsumeBuffer(void *socket, void *buffer, u32 size, u32 port, void *address, u32 mode, u32 flags);
@@ -54,7 +54,7 @@ int SOCLi_ReadBuffer(void *socket, void *buffer, u32 size, u32 port, void *addre
     if (*(s8 *)((byte *)socket + 0x73) == 4) {
         return SOCLi_ExecReadCommand(socket, buffer, size, port, address);
     }
-    int result = SOCLi_CopyCPSBuffer(socket, buffer, size, port, address);
+    int result = SOCLi_CopyCPSBuffer(socket, buffer, (s32)size, (u16*)port, address);
     if (result != -6 || (flags & 1) == 0) {
         return result;
     }

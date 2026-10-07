@@ -30,7 +30,7 @@ extern int ov45_0222A394();
 extern int ov45_0222A330();
 extern int ov45_0222A3A0();
 extern int ov45_0222C900();
-extern int ov45_0222A53C();
+extern int ov45_0222A53C(void *);
 extern int ov45_0222AB28();
 extern void *ov45_0222CB40();
 extern void *ov45_0222CB3C();

@@ -20,9 +20,9 @@ void ov07_02224CB8(void *task, WorkMoveA *w) {
         if (++w->timer <= w->delay) {
             return;
         }
-        a = ov07_0221C4A8(w->owner, 0);
-        b = ov07_0221C4A8(w->owner, 1);
-        c = ov07_0221C4A8(w->owner, 3);
+        a = ((s32)ov07_0221C4A8(w->owner, 0));
+        b = ((s32)ov07_0221C4A8(w->owner, 1));
+        c = ((s32)ov07_0221C4A8(w->owner, 3));
         ov07_02222508(&w->move, a, 100, b, c);
         w->state++;
         return;

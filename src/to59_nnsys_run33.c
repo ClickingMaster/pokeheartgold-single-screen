@@ -43,7 +43,8 @@ void ApplyCurrentAnimResult_(CellAnim *anim);
 void NNS_G2dInitCellAnimation(CellAnim *anim, void *seq, void *bank);
 void NNS_G2dInitCellAnimationVramTransfered(CellAnim *anim, void *seq, void *bank, s32 handle, u32 a, u32 b, u32 c, u32 d, u32 e, u32 f);
 void NNS_G2dSetCellAnimationSequence(CellAnim *anim, void *seq);
-void NNS_G2dTickCellAnimation(CellAnim *anim, u32 ticks);
+struct NNSG2dCellAnimation;
+void NNS_G2dTickCellAnimation(struct NNSG2dCellAnimation *anim, s32 ticks);
 void NNS_G2dSetCellAnimationCurrentFrame(CellAnim *anim, u32 frame);
 extern void MIi_CpuClear16(u32 value, void *dst, u32 size);
 extern void *NNS_G2dGetAnimCtrlCurrentElement(void *ctrl);
@@ -164,7 +165,9 @@ void NNS_G2dSetCellAnimationSequence(CellAnim *anim, void *seq) {
     NNS_G2dBindAnimCtrl(anim, seq);
     ApplyCurrentAnimResult_(anim);
 }
-void NNS_G2dTickCellAnimation(CellAnim *anim, u32 ticks) {
+void NNS_G2dTickCellAnimation(struct NNSG2dCellAnimation *cell, s32 frames) {
+    CellAnim *anim = (CellAnim *)cell;
+    u32 ticks = (u32)frames;
     if (NNS_G2dTickAnimCtrl(anim, ticks)) {
         ApplyCurrentAnimResult_(anim);
     }

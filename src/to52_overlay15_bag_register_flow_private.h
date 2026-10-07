@@ -1,6 +1,7 @@
 #ifndef TO52_OV15_BAG_REGISTER_PRIVATE_H
 #define TO52_OV15_BAG_REGISTER_PRIVATE_H
 #include "global.h"
+struct ItemSlot;
 #define U8(p,o) (*(u8 *)((u8 *)(p)+(o)))
 #define U16(p,o) (*(u16 *)((u8 *)(p)+(o)))
 #define U32(p,o) (*(u32 *)((u8 *)(p)+(o)))
@@ -23,7 +24,7 @@ extern BOOL TextPrinterCheckActive(u8);
 extern void ClearFrameAndWindow2(void *, BOOL);
 extern void ClearWindowTilemapAndScheduleTransfer(void *);
 extern void ScheduleWindowCopyToVram(void *);
-extern BOOL Pocket_TakeItem(void *, u32, u16, u16, u32);
+extern BOOL Pocket_TakeItem(struct ItemSlot *, u32, u16, u16, u32);
 extern void ov15_021F9F08(void *);
 extern s32 ov15_021FA074(void *);
 extern void ov15_02200140(void *, void *, s32, BOOL);

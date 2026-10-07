@@ -84,7 +84,7 @@ u8 ov07_02221FF0(void **p) {
     return ObjPlttTransfer_GetPaletteVramOffset(Sprite_GetPaletteProxy(*p), 1);
 }
 
-int ov07_02222004(void *p) {
+int ov07_02222004(void *p, int index) {
     int out = 1;
     int v = ov07_0223192C(p);
     if (ov07_0221BFC0(p) != 0) {

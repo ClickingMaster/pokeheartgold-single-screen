@@ -130,7 +130,8 @@ int ov07_0221D3CC(void *p, u32 type) {
     return result;
 }
 
-void ov07_0221D4B0(SysTask *task, MotionData *data) {
+void ov07_0221D4B0(SysTask *task, void *argument) {
+    MotionData *data = argument;
     s16 x, y;
     if (data->interval != 0) {
         data->counter++;

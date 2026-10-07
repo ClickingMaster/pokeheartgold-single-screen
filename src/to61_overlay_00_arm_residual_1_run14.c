@@ -1,6 +1,7 @@
 #pragma force_active on
 // clang-format off
 #include "global.h"
+#include "to90_login_callback_private.h"
 #include <nitro/code32.h>
 // clang-format on
 #include <string.h>
@@ -19,9 +20,9 @@ extern int ov00_021F35E4(u8 **);
 extern void *ov00_021F3398(int);
 extern void ov00_021EC24C(int,int);
 extern void ov00_021EF6F4(void *,void *);
-extern void ov00_021EF508(void *,void *);
+extern void ov00_021EF508(GPConnection *,void *,void *);
 extern void ov00_021EF8C0(void);
-extern int ov00_021FFE20(void *,const char *,const char *,int,int,void *,void *);
+extern int ov00_021FFE20(GPConnection *,const char *,const char *,const char *,int,GPCallback,void *);
 extern int ov00_021EFCB0(void *,u32,u32,char *);
 extern int ov00_021EBF90(void *,int,void *,int);
 extern int ov00_021EBE08(void *,int,void *,int);
@@ -51,9 +52,9 @@ void ov00_021EE7FC(void) ;
 void ov00_021EE800(int n) ;
 void *ov00_021EE820(int id) ;
 u32 ov00_021EE880(u8 *p,int n) ;
-void ov00_021EEA74(int a,int b) ;
+void ov00_021EEA74(int a,int b,void *parameter) ;
 void ov00_021EEAD4(int a,int b) ;
-void ov00_021EF1F0(void *p,void *a,void *b,void *c,void *d,void *e,void *f,void *g) ;
+void ov00_021EF1F0(void *p,void *a,GPConnection *b,int c,u32 d,void *e,LoginCallback f,void *g) ;
 void ov00_021EF274(void) ;
 void *ov00_021EF3A4(void) ;
 void ov00_021EF3C0(int a,int b) ;
@@ -61,7 +62,7 @@ void ov00_021EF410(void) ;
 void ov00_021EF46C(void) ;
 int ov00_021EF494(u32 a) ;
 void ov00_021EF640(const char *a,const char *b) ;
-void ov00_021EF658(const char *a,const char *b,void *cb,int state) ;
+void ov00_021EF658(const char *a,const char *b,GPCallback cb,int state) ;
 int ov00_021EFC6C(void) ;
 int ov00_021EFC98(void *p,char *s) ;
 int ov00_021EFDCC(void *p,char *s,int *n) ;
@@ -100,6 +101,6 @@ void ov00_021EF1B4(void *p);
 
 int ov00_021EE9D0(u32 a) { int b,c; if(!a)return 0; switch(a){case 1:b=9;c=-1;break;case 2:case 5:b=0;c=0;a=0;break;case 3:b=6;c=-10;break;case 4:b=6;c=-30;break;case 6:b=6;c=-70;break;case 7:b=6;c=-80;break;} if(b)ov00_021EF3C0(b,c-67000); return a; }
 
-void ov00_021EEA74(int a,int b) { if(a==0){W(ov00_0221A784,0x64)=b; ov00_021EE800(3); ov00_021F0468();}else ov00_021EE800(0); if(W(ov00_0221A784,0x70))((void (*)(int,int,u32))W(ov00_0221A784,0x70))(a,b,W(ov00_0221A784,0x74)); }
+void ov00_021EEA74(int a,int b,void *parameter) { if(a==0){W(ov00_0221A784,0x64)=b; ov00_021EE800(3); ov00_021F0468();}else ov00_021EE800(0); if(W(ov00_0221A784,0x70))((void (*)(int,int,u32))W(ov00_0221A784,0x70))(a,b,W(ov00_0221A784,0x74)); }
 
 void ov00_021EEAD4(int a,int b) { if(W(ov00_0221A784,0x28)!=4)ov00_021EE800(W(ov00_0221A784,0x28)); ((void (*)(int,int,u32))W(ov00_0221A784,0x78))(a,b,W(ov00_0221A784,0x7c)); }

@@ -37,8 +37,9 @@ void ov92_0225F8B0(Ov92Work14 *);
 void ov92_0225FEE4(void *);
 void PlaySE(u32);
 
-void ov92_0225EDB4(void *, int);
-void ov92_0225EE04(void *, int);
+struct W;
+SysTask *ov92_0225EDB4(struct W *, int);
+void ov92_0225EE04(struct W *, int);
 void ov92_0225EEBC(void *);
 void ov92_0225F878(Ov92Work14 *);
 void ov92_0225FC2C(Ov92Work14 *);

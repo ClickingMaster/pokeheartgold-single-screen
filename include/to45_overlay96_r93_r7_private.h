@@ -10,7 +10,7 @@ void GF_AssertFail(void);
 void *PokeathlonCourse_GetHeapAllocPtr4(void *course);
 void *PokeathlonCourse_GetDataCopyArea(void *course);
 void *ov96_021E5F24(void *course);
-void *ov96_021E8A20(void *ptr);
+u8 *ov96_021E8A20(void *ptr);
 u16 ov96_0220AD4C(void *ptr);
 void *ov96_0220B758(void *ptr);
 u32 ov96_0220B730(void *ptr);

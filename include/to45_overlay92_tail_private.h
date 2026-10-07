@@ -34,7 +34,7 @@ typedef struct Ov92Work14 {
 
 extern const u16 ov92_02263C34[];
 
-void ov92_0225F338(SysTask *task, Ov92SpriteTask *work);
+void ov92_0225F338(SysTask *task, void *data);
 void ov92_0225F878(Ov92Work14 *work);
 void ov92_0225F8B0(Ov92Work14 *work);
 

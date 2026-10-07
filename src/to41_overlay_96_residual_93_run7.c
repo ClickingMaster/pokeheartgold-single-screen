@@ -124,7 +124,7 @@ void ov96_0220A87C(u8 *p) {
     ov96_0220B354(p);
 }
 
-BOOL ov96_0220A8CC(u8 *p, void *a) {
+BOOL ov96_0220A8CC(u8 *p, int a) {
     if (!p) {
         GF_AssertFail();
     }

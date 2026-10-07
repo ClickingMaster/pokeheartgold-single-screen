@@ -29,6 +29,6 @@ extern void ov59_0223BE44(void *, int, u8, BOOL);
 
 void ov59_0223BBD4(void *, int);
 void ov59_0223BC88(void *, int);
-void ov59_0223BD4C(u8 *, u8 *, u8);
+void ov59_0223BD4C(void *, void *, u8);
 
 #endif

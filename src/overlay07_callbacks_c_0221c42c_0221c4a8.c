@@ -16,4 +16,4 @@ void *ov07_0221C478(void *p) {
 void *ov07_0221C488(void *p, int i) { return *(void **)((u8 *)PTR_AT(p, 0xc0) + 0x1c + i * 4); }
 void *ov07_0221C494(void *p, int i) { return *(void **)((u8 *)PTR_AT(p, 0xc0) + 0x5c + i * 4); }
 void *ov07_0221C4A0(void *p) { return PTR_AT(p, 0xc4); }
-void *ov07_0221C4A8(void *p, int i) { if (i >= 10) GF_AssertFail(); return *(void **)((u8 *)p + 0x94 + i * 4); }
+u32 ov07_0221C4A8(void *p, int i) { if (i >= 10) GF_AssertFail(); return *(u32 *)((u8 *)p + 0x94 + i * 4); }

@@ -8,7 +8,7 @@
 
 extern void *PokeathlonCourse_GetHeapAllocPtr4(void *);
 extern void *PokeathlonCourse_GetDataCopyArea(void *);
-extern void *ov96_021E8A20(void *);
+extern u8 *ov96_021E8A20(void *ptr);
 extern void ov96_021EB5BC(void *);
 extern void SpriteSystem_DrawSprites(void *);
 extern void ov96_021F87D0(void *);

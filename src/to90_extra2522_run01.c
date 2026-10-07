@@ -1,0 +1,6 @@
+#pragma force_active on
+#pragma force_active on
+#include "global.h"
+typedef struct{u8 prefix[0xfe0];u32 snapshot[26],done;u8 gap[0x10e];u16 id,count,received;u32 size,errors,current;u8 gap2[12];u8*destination;void(*callback)(int);u8 seen[];} Transfer;
+extern Transfer*ov74_0223E2FC;typedef struct{u16 id,index;u32 value;u8 data[104];}Packet;extern void ov74_022366E8(void*),ov74_02236168(int);int ov74_02236768(Packet*);
+int ov74_02236768(Packet*p){Transfer*w;void(*cb)(int);if(ov74_0223E2FC->id!=p->id || ov74_0223E2FC->size!=p->value){u32 old=(ov74_0223E2FC->errors)++;if(old>=16){ov74_022366E8(p);cb=ov74_0223E2FC->callback;if(cb)cb(5);}else return 0;}if(p->index==65535){MIi_CpuCopy32((const u32*)p->data,(u32*)(ov74_0223E2FC->snapshot),104);ov74_0223E2FC->done=1;}else{ov74_0223E2FC->current=p->index;w=ov74_0223E2FC;if(p->index>=w->count){cb=w->callback;if(cb)cb(4);ov74_02236168(9);}w=ov74_0223E2FC;{u8*seen=w->seen;if(seen[p->index]==0){seen[p->index]=1;w=ov74_0223E2FC;if(p->index==w->count-1)MIi_CpuCopy32((const u32*)p->data,(u32*)(w->destination+p->index*104),w->size-p->index*104);else MIi_CpuCopy32((const u32*)p->data,(u32*)(w->destination+p->index*104),104);(ov74_0223E2FC->received)++;w=ov74_0223E2FC;if(w->received==w->count){cb=w->callback;if(cb)cb(2);return 1;}}}}return 0;}

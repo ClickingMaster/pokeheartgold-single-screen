@@ -41,7 +41,7 @@ typedef struct Ov93System {
 extern void GF_AssertFail(void);
 extern u32 sub_0203769C(void);
 extern u32 ov93_0225E3C4(void *sys, u32 id);
-extern void ov93_0225DF38(void *sys, u32 payload);
+extern int ov93_0225DF38(void *sys, u32 payload);
 extern void ov93_02261C58(void *sys, void *arg1, u32 arg2, u32 arg3, u32 arg4);
 extern BOOL ov93_02260080(void *sys, Ov93Entry *entry);
 extern void ov93_0225FE08(void *sys, void *arg1, u32 arg2, s16 arg3, u32 arg4);

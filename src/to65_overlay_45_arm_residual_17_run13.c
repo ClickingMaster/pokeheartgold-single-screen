@@ -37,10 +37,10 @@ extern int ov45_02251EF0(void *p);
 extern void ov45_02252530(void *p,int *a,int *b,int *c);
 extern int ov45_0224FABC(int,void*,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int);
 extern void ov45_02244D30(void*,int,void*,void*,void*,int,int,int);
-extern int ov45_0224A874(void*,char*,int,int,int,char*);
+#include "to90_ov45_input_private.h"
 extern void ov45_02247A44(void*,char*);
 extern int ov45_022502D0(void *p,int a,int b,int c,int d,int e,int f,int g,int h,int i,int j,int k);
-extern void ov45_02250688(void *p,char *name,char *other,int x,int y,int z,int wait);
+
 extern void ov45_02251554(void *p,char *a,char *b,int n,char **keys,char **values);
 extern void *ov00_021EC3BC(void*,int);
 extern int ov45_02251C50(void *p,int n);
@@ -60,6 +60,6 @@ int ov45_02250590(void *p){return ov45_0224F770(p,0);}
 
 void ov45_022505A0(void *p,char *name,void *x,int y,int z,int wait){int r;if(!(p))__msl_assertion_failed(ov45_02256BA0,ov45_02256B94,ov45_02256A18,1422);if(!p||!W(p,0))return;if(!(y||x))__msl_assertion_failed(ov45_02256E64,ov45_02256B94,ov45_02256A18,1425);if(!name)name=ov45_02256C2C;ov45_02252F74(A(p,28),ov45_02256E94,name);r=ov45_0224A7F0(p,x,y,z);if(!wait)return;do{ov45_0224F770(p,r);ov00_021FF3C0(10);}while(ov45_0224F660(p,r));}
 
-void ov45_02250688(void *p,char *name,char *other,int x,int y,int z,int wait){int r;if(!(p))__msl_assertion_failed(ov45_02256BA0,ov45_02256B94,ov45_02256A2C,1459);if(!p||!W(p,0))return;if(!(name))__msl_assertion_failed(ov45_02256E9C,ov45_02256B94,ov45_02256A2C,1462);if(!(*name))__msl_assertion_failed(ov45_02256EAC,ov45_02256B94,ov45_02256A2C,1462);if(!(x))__msl_assertion_failed(ov45_02256C48,ov45_02256B94,ov45_02256A2C,1463);if(!other)other=ov45_02256C2C;ov45_02252F74(A(p,28),ov45_02256EC0,name,other);r=ov45_0224A874(p,name,y,z,x,other);ov45_02247A44(p,name);if(!wait)return;do{ov45_0224F770(p,r);ov00_021FF3C0(10);}while(ov45_0224F660(p,r));}
+void ov45_02250688(void *p,char *name,char *other,const Ov45Input48 *x,int y,int z,int wait){int r;if(!(p))__msl_assertion_failed(ov45_02256BA0,ov45_02256B94,ov45_02256A2C,1459);if(!p||!W(p,0))return;if(!(name))__msl_assertion_failed(ov45_02256E9C,ov45_02256B94,ov45_02256A2C,1462);if(!(*name))__msl_assertion_failed(ov45_02256EAC,ov45_02256B94,ov45_02256A2C,1462);if(!(x))__msl_assertion_failed(ov45_02256C48,ov45_02256B94,ov45_02256A2C,1463);if(!other)other=ov45_02256C2C;ov45_02252F74(A(p,28),ov45_02256EC0,name,other);r=ov45_0224A874(p,name,y,z,x,other);ov45_02247A44(p,name);if(!wait)return;do{ov45_0224F770(p,r);ov00_021FF3C0(10);}while(ov45_0224F660(p,r));}
 
 void ov45_022507D8(void *p,char *name,char *other){if(!(p))__msl_assertion_failed(ov45_02256BA0,ov45_02256B94,ov45_02256A40,1499);if(!p||!W(p,0))return;if(!(name))__msl_assertion_failed(ov45_02256E9C,ov45_02256B94,ov45_02256A40,1502);if(!(*name))__msl_assertion_failed(ov45_02256EAC,ov45_02256B94,ov45_02256A40,1502);if(!other)other=ov45_02256C2C;ov45_02252F74(A(p,28),ov45_02256ECC,name,other);ov45_02247D84(p,name);}

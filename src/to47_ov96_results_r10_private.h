@@ -11,7 +11,7 @@
 void *PokeathlonCourse_GetDataCopyArea(void *course);
 void *PokeathlonCourse_GetHeapAllocPtr4(void *course);
 u32 ov96_021E5F24(void *course);
-void *ov96_021E8A20(void *p);
+u8 *ov96_021E8A20(void *ptr);
 void ov96_021E6454(void *course, u32 value);
 void ManagedSprite_SetAnimNoRestart(void *sprite, int anim);
 void ManagedSprite_SetDrawFlag(void *sprite, BOOL draw);

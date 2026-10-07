@@ -23,7 +23,7 @@ void ov07_0221D2F4(struct BrightnessTaskData *, int);
 void ov07_0221D330(SysTask *, struct BrightnessTaskData *);
 void ov07_0221D374(void *);
 int ov07_0221D3CC(void *, u32);
-void ov07_0221D4B0(SysTask *, struct MotionData *);
+void ov07_0221D4B0(SysTask *, void *);
 void ov07_0221D4FC(SysTask *, struct MotionData *);
 void ov07_0221D55C(void *, u32);
 #endif

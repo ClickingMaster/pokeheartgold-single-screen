@@ -16,7 +16,8 @@ u16 ov89_0225C830(u32 column, u32 value) {
     return *(const u16 *)(row + column * 2);
 }
 
-u32 ov89_0225C84C(const Ov89Entry *entries, int current) {
+u32 ov89_0225C84C(const void *input, int current) {
+    const Ov89Entry *entries = input;
     u32 ret = 0xff;
     int result = TouchscreenHitbox_FindRectAtTouchNew(ov89_0225CE50);
     if (result < 6) {
@@ -33,7 +34,7 @@ u32 ov89_0225C84C(const Ov89Entry *entries, int current) {
     return ret;
 }
 
-u32 ov89_0225C88C(u32 value, int a, int b) {
+u32 ov89_0225C88C(u32 value, int a, u32 b) {
     if (value == 0x1e7 && a > 0) {
         return 0;
     }

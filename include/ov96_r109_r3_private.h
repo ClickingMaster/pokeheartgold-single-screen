@@ -28,7 +28,7 @@ extern int LCRandom(void);
 extern int _s32_div_f(s32, s32);
 extern u8 *ov96_021E60D8(void *, void *, void *);
 extern void sub_02020F4C(void *, void *, void *, Vec2s32 *, Vec2s32 *);
-extern BOOL sub_02020EB0(Vec2s32 *, Vec2s32 *, Vec2s32 *, Vec2s32 *);
+extern BOOL sub_02020EB0(const void *, const void *, const void *, const void *);
 extern void GF_AssertFail(void);
 extern void PlaySE(int);
 extern u32 ov96_022143DC(const void *);

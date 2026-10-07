@@ -1,16 +1,6 @@
 #include "to57_new36_private.h"
-typedef struct W36 {
-    void *owner;
-    void *spriteSystem;
-    void *spriteManager;
-    int state;
-    int timer;
-    int unk14;
-    void *sprites[6];
-    u8 pad30[0x100];
-    s16 x;
-    s16 y;
-} W36;
+#include "to91_ov07_motion_owner.h"
+typedef Ov07MotionWork W36;
 void ov07_0222FD14(void *, W36 *);
 void ov07_0222FE04(void *, void *, void *, void *);
 void ov07_0222FD14(void *taskOwner, W36 *work) {
@@ -19,7 +9,7 @@ void ov07_0222FD14(void *taskOwner, W36 *work) {
     case 0:
         ov07_02231E08(work->owner, 1, 15);
         ov07_02222AC4((u8 *)work + 0x108, 1, 16, 15, 0, 10);
-        ov07_0222FBEC(work, work->unk14);
+        ov07_0222FBEC(work, work->amplitude);
         ov07_0222FC44(work);
         work->state++;
         break;
@@ -77,6 +67,6 @@ void ov07_0222FE04(void *owner, void *spriteSystem, void *spriteManager, void *f
         ManagedSprite_SetOamMode(work->sprites[i], 1);
         ManagedSprite_SetAnimateFlag(work->sprites[i], 1);
     }
-    work->unk14 = ov07_02222004(work->owner, ov07_0221C468(work->owner));
+    work->amplitude = ov07_02222004(work->owner, ov07_0221C468(work->owner));
     ov07_0221C410(work->owner, ov07_0222FD14, work);
 }

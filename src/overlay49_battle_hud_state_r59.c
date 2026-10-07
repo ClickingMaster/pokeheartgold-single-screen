@@ -9,7 +9,7 @@ BOOL ov49_02260254(void *controller, void *work, u32 arg) {
     case 0:
         object = ov49_02259FF0(work);
         entry = ov49_02258DAC(object);
-        ov49_02258EEC(object, entry, 0);
+        ov49_02258EEC(object, (void*)(entry), 0);
         ov45_0222A5E8(ov49_02259FE8(work), 0xB);
         PlaySE(0x5DD);
         ov49_0225A08C(work, ov49_0225A30C(work, 1, 0x41));
@@ -57,7 +57,7 @@ BOOL ov49_02260254(void *controller, void *work, u32 arg) {
         object = ov49_02259FF0(work);
         entry = ov49_02258DAC(object);
         ov49_0225CC44(ov49_0225A008(work));
-        ov49_02258EEC(object, entry, 3);
+        ov49_02258EEC(object, (void*)(entry), 3);
         ov49_0225EF8C(controller, 7);
         break;
     case 7:
@@ -80,7 +80,7 @@ BOOL ov49_02260254(void *controller, void *work, u32 arg) {
         controller = ov49_0225A010(work);
         entry = ov49_02258DAC(object);
         if (ov49_02258E60(entry, 5) == 0) {
-            ov49_02258EEC(object, entry, 1);
+            ov49_02258EEC(object, (void*)(entry), 1);
             ov49_0225EF98(controller, arg, ov49_02269B38, 0);
         }
         break;

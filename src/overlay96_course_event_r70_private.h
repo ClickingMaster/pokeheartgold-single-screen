@@ -53,7 +53,7 @@ extern void ov96_021FB630(void *);
 extern u32 ov96_021FB60C(void *);
 extern void ov96_021FB808(void *, s32);
 extern void *PokeathlonCourse_GetDataCopyArea(void *);
-extern void *ov96_021E8A20(void *);
+extern u8 *ov96_021E8A20(void *ptr);
 extern void ov96_021E8318(void *, u16);
 extern void ov96_021FAF1C(void *);
 extern void PokeathlonCourse_SetStateField07(void *, u8);
