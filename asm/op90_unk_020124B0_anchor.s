@@ -1,0 +1,22 @@
+	.include "asm/macros.inc"
+	.public _02012644
+	.public _02012660
+	.public _02012680
+	.public _02012684
+	.public _02012688
+	.public _02012750
+	.public _02012754
+	.public _02012758
+	.public _02012798
+	.public _020127A6
+	.public _020127AC
+	.public _020127B0
+	.public sub_020124B0
+	.public sub_020125D4
+	.public sub_020125EC
+	.public sub_0201262C
+	.public sub_0201268C
+	.public sub_0201275C
+	.include "unk_0201010C.inc"
+	.include "global.inc"
+.text

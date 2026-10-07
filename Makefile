@@ -333,3 +333,26 @@ $(BUILD_DIR)/lib/NitroSDK/src/os/to91_w41407_spin_retained.o: lib/NitroSDK/src/o
 $(BUILD_DIR)/src/to90_w41411_palette10_run01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 
 $(BUILD_DIR)/src/to91_w41418_StringRead_run01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_to80_extra1919_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_MSL_Common_wchar_io_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_op90_to80_extra1919_residual_1_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_to59_dwcaccount_residual_3_r01.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/src/op90_to59_dwcaccount_residual_3_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/op90_to59_dwcaccount_residual_3_r02.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/src/op90_to59_dwcaccount_residual_3_r02.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/op90_to70_mb_extra10_residual_12_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_to80_extra1471_residual_1_r01.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/src/op90_to80_extra1471_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/op90_to80_extra1471_residual_2_r01.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/src/op90_to80_extra1471_residual_2_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/op90_to80_extra1680_residual_1_r01.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/src/op90_to80_extra1680_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/op90_to80_extra1746_residual_2_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_to90_extra2469_residual_1_r01.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/src/op90_to90_extra2469_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/op90_to90_extra2469_residual_1_r02.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/src/op90_to90_extra2469_residual_1_r02.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/op90_to90_extra2469_residual_1_r03.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/src/op90_to90_extra2469_residual_1_r03.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/op90_to70_fx_trig_extra207_residual_1_r01.o: private MWCCVER := 2.0/sp2
+$(BUILD_DIR)/src/op90_to80_extra1853_residual_1_r01.o: private MWCCVER := 2.0/sp2p3

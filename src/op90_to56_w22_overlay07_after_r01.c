@@ -1,0 +1,165 @@
+#pragma force_active on
+#include "global.h"
+
+typedef struct ManagedSprite ManagedSprite;
+typedef struct SpriteSystem SpriteSystem;
+typedef struct Pokepic Pokepic;
+
+void *ov07_022324D8(void *, u32);
+void ov07_02231FE4(void *, void *);
+void *ov07_0221C410(void *, void *, void *);
+void ov07_0221C448(void *, void *);
+void ov07_0221F9E8(void *, void *);
+void ov07_0222A8D8(ManagedSprite *);
+void ManagedSprite_SetDrawFlag(ManagedSprite *, BOOL);
+void ManagedSprite_SetFlipMode(ManagedSprite *, int);
+void ManagedSprite_OffsetPositionXY(ManagedSprite *, int, int);
+void Sprite_DeleteAndFreeResources(ManagedSprite *);
+void SpriteSystem_DrawSprites(SpriteSystem *);
+void Heap_Free(void *);
+ManagedSprite *SpriteSystem_NewSprite(void *, void *, void *);
+
+void ov07_02232508(void *);
+BOOL ov07_0222260C(void *);
+void ov07_02222644(void *, s32 *, s32 *);
+void ov07_022226FC(ManagedSprite *, s32, s32, u32, u32);
+void ManagedSprite_SetAffineScale(ManagedSprite *, float, float);
+void ManagedSprite_TickFrame(ManagedSprite *);
+void ManagedSprite_SetAffineOverwriteMode(ManagedSprite *, int);
+void ManagedSprite_SetPriority(ManagedSprite *, int);
+void ManagedSprite_SetDrawPriority(ManagedSprite *, int);
+void ov07_02222590(void *, int, int, int, int, int, int);
+u32 ov07_0221C470(void *);
+Pokepic *ov07_0221FA48(void *, u32);
+u32 ov07_0221FAA0(void *, u32);
+ManagedSprite *ov07_0221C4E8(void *, int);
+int ov07_0221FAE8(void *);
+u32 ov07_0221FA04(void *, u32);
+u32 Pokepic_GetAttr(Pokepic *, int);
+void ov07_02222268(void *, s32, s32, s32, s32, s32);
+BOOL ov07_022222B4(void *);
+void Pokepic_SetAttr(Pokepic *, int, int);
+void ov07_0221C7B8(void *, void *, int);
+void *ov07_0221BFD0(void *);
+void ov07_0223494C(void *, void *);
+void ov07_0223475C(void *, void *);
+u32 ov07_0221C468(void *);
+void ov07_02231A50(void *, u32, s16 *);
+u32 ov07_0223192C(void *, u32);
+
+extern u32 ov07_0221C4A8(void *p, int i);
+void ov07_02232020(void *, void *, s16 *, void *);
+void *Sprite_GetPaletteProxy(void *);
+u32 ObjPlttTransfer_GetPaletteVramOffset(void *, int);
+BOOL ov07_02222EE8(void *);
+void ov07_02222EF8(void *);
+void *ov07_02222F10(void *, void *, int, int, int, int, int, int, int, int, int);
+
+typedef struct B4Work {
+    u8 state;
+    u8 pad01[3];
+    void *owner;
+    u8 pad08[4];
+    SpriteSystem *spriteSystem;
+    u8 pad10[8];
+    void *effectManager;
+    ManagedSprite *sprite1;
+    ManagedSprite *sprite2;
+    ManagedSprite *sprite3;
+    s32 timer;
+    float scaleX;
+    float scaleY;
+    u8 blendA;
+    u8 blendB;
+    s8 direction;
+    u8 pad37;
+    void *effect1;
+    void *effect2;
+} B4Work;
+
+int ov07_02222004(void *, int);
+int ov07_0221FB78(void *, int);
+int ov07_02231924(void *, int);
+int ov07_0221BFC0(void *);
+void ov07_02231A20(int, int, s16 *);
+void ov07_02231E08(void *, int, int);
+int ov07_0221FA1C(void *, int);
+int ov07_0221FA10(void *, int);
+int ov07_0221FA2C(void *, int);
+u32 ov07_0221FA38(void *, int);
+u8 GetMonPicHeightBySpeciesGenderForm(u16 species, u8 gender, u8 whichFacing, u8 form, u32 pid);
+void ManagedSprite_GetPositionXY(ManagedSprite *, s16 *, s16 *);
+void ManagedSprite_SetPositionXY(ManagedSprite *, s16, s16);
+void ov07_0222B4E0(void *task, B4Work *work);
+void ov07_0222B640(void *owner);
+
+// @fn ov07_0222B640
+void ov07_0222B640(void *owner) {
+    s16 curY, curX;
+    s16 origX, origY;
+    s16 base[2];
+    B4Work *work;
+    int offset;
+    u32 paletteOffset;
+    u8 battler;
+    u8 type;
+    int facing;
+    int species;
+    int gender;
+    int form;
+    int height;
+    void *task;
+
+    work = ov07_022324D8(owner, sizeof(B4Work));
+    ov07_02231FE4(owner, work);
+    work->sprite1 = ov07_0221C4E8(work->owner, 0);
+    work->sprite2 = ov07_0221C4E8(work->owner, 1);
+    work->sprite3 = ov07_0221C4E8(work->owner, 2);
+    offset = 0;
+    work->timer = offset;
+    offset = -32;
+    offset = (s16)ov07_02222004(owner, ov07_0221C468(owner)) * offset;
+    work->scaleX = 1.0f;
+    work->scaleY = 1.0f;
+    if (ov07_0221FB78(owner, 1) == 1) {
+        work->direction = -1;
+    } else {
+        work->direction = 1;
+    }
+    ManagedSprite_GetPositionXY(work->sprite2, &origX, &origY);
+    ManagedSprite_SetPositionXY(work->sprite1, origX + offset, origY);
+    ManagedSprite_SetAffineOverwriteMode(work->sprite1, 2);
+    ManagedSprite_SetAffineScale(work->sprite1, work->scaleX * (float)work->direction, work->scaleY);
+
+    paletteOffset = ObjPlttTransfer_GetPaletteVramOffset(Sprite_GetPaletteProxy(*(void **)work->sprite1), 1);
+    work->effect1 = ov07_02222F10(work->effectManager, ov07_0221BFD0(owner), 2, (u16)(paletteOffset << 4), 16, 0, 1, 0, 15, 0xFFFF, 1100);
+    paletteOffset = ObjPlttTransfer_GetPaletteVramOffset(Sprite_GetPaletteProxy(*(void **)work->sprite3), 1);
+    work->effect2 = ov07_02222F10(work->effectManager, ov07_0221BFD0(owner), 2, (u16)(paletteOffset << 4), 16, 0, 1, 0, 15, 0xFFFF, 1100);
+
+    battler = ov07_0221C468(work->owner);
+    type = ov07_02231924(work->owner, battler);
+    ov07_02231A20(type, ov07_0221BFC0(work->owner), base);
+    ManagedSprite_GetPositionXY(work->sprite1, &curX, &curY);
+    if (ov07_0223192C(work->owner, battler) == 3) {
+        facing = 0;
+        ManagedSprite_SetPriority(work->sprite1, 1);
+        ManagedSprite_SetDrawPriority(work->sprite1, facing);
+    } else {
+        ManagedSprite_SetPriority(work->sprite1, 2);
+        ManagedSprite_SetDrawPriority(work->sprite1, 0);
+        facing = 2;
+    }
+    battler = ov07_0221C470(work->owner);
+    species = ov07_0221FA1C(work->owner, battler);
+    gender = ov07_0221FA10(work->owner, battler);
+    form = ov07_0221FA2C(work->owner, battler);
+    height = GetMonPicHeightBySpeciesGenderForm(species, gender, facing, form, ov07_0221FA38(work->owner, battler));
+    ManagedSprite_SetPositionXY(work->sprite1, curX, base[1] + height);
+    ManagedSprite_SetDrawFlag(work->sprite1, TRUE);
+    work->blendA = 0;
+    work->blendB = 15;
+    ov07_02231E08(work->owner, -1, -1);
+    *(vu16 *)0x04000052 = work->blendA | (work->blendB << 8);
+    task = ov07_0221C410(work->owner, ov07_0222B4E0, work);
+    ov07_0222B4E0(task, work);
+}
