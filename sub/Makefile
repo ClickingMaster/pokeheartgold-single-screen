@@ -43,3 +43,5 @@ $(BUILD_DIR)/lib/src/op90_to90_arm7_sub_ext_wram_residual_36_r01.o: private MWCC
 $(BUILD_DIR)/lib/src/op90_to90_arm7_sub_ext_wram_residual_51_r01.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/src/op90_to90_arm7_sub_ext_wram_residual_62_r01.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/src/op90_to90_arm7_sub_ext_wram_residual_62_r02.o: private MWCCVER := 2.0/sp1
+$(BUILD_DIR)/lib/src/op90_to90_arm7_sub_ext_wram_residual_58_r01.o: private MWCCVER := 2.0/sp1
+$(BUILD_DIR)/lib/src/op90_to90_arm7_sub_ext_wram_residual_63_r01.o: private MWCCVER := 2.0/sp1

@@ -1,0 +1,40 @@
+#pragma force_active on
+#include "global.h"
+#include "sprite_system.h"
+#include "pokepic.h"
+typedef struct Work {
+    void *owner;
+    int a;
+    int b;
+    u8 unk0C[4];
+    Pokepic *pic;
+    u8 unk14[0x48];
+    ManagedSprite *sprite;
+    u8 unk60[0x28];
+    s16 x;
+    s16 y;
+} Work;
+void *ov07_022324D8(void *owner, u32 size);
+u32 ov07_0221C468(void *owner);
+Pokepic *ov07_0221FA48(void *owner, u32 battler);
+s16 ov07_02221F80(void *owner, u32 battler, int coord);
+void ov07_0221C410(void *owner, void *func, void *data);
+void ov07_0222F210(void *task, Work *work);
+void ov07_0222F378(void *owner, int a, int b, ManagedSprite *sprite);
+
+// @fn ov07_0222F378
+void ov07_0222F378(void *owner, int a, int b, ManagedSprite *sprite) {
+    Work *work = ov07_022324D8(owner, sizeof(Work));
+    work->owner = owner;
+    work->a = a;
+    work->b = b;
+    work->pic = ov07_0221FA48(work->owner, ov07_0221C468(owner));
+    Pokepic_SetAttr(work->pic, 6, 0);
+    work->x = ov07_02221F80(owner, ov07_0221C468(owner), 0);
+    work->y = ov07_02221F80(owner, ov07_0221C468(owner), 1);
+    work->sprite = sprite;
+    ManagedSprite_SetDrawPriority(work->sprite, 100);
+    ManagedSprite_SetPriority(work->sprite, 1);
+    ManagedSprite_SetPositionXY(work->sprite, work->x, work->y);
+    ov07_0221C410(work->owner, ov07_0222F210, work);
+}
