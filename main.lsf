@@ -1505,7 +1505,10 @@ Static main
     Object lib/asm/to70_libVCT_extra08_anchor.o
     Object src/to70_libVCT_extra08_run01.o
     Object lib/asm/to80_extra1861_anchor.o
-    Object lib/asm/to80_extra1861_residual_1.o
+    Object lib/asm/op90_to80_extra1861_residual_1_anchor.o
+    Object lib/asm/op90_to80_extra1861_residual_1_residual_1.o
+    Object src/op90_to80_extra1861_residual_1_r01.o
+    Object lib/asm/op90_to80_extra1861_residual_1_residual_2.o
     Object src/to80_extra1861_run01.o
     Object lib/asm/to80_extra1861_residual_2.o
     Object src/to70_libVCT_extra08_run02.o
@@ -2381,7 +2384,8 @@ Object src/op90_to91_w41566_texmatrix_suffix_r01.o
     Object src/op90_MSL_Common_qsort_r01.o
     Object lib/MSL_C/src/rand.o
     Object lib/asm/to90_scanf_interval_v5_anchor.o
-    Object lib/asm/to91_w41418_StringRead_prefix.o
+    Object lib/asm/op90_to91_w41418_StringRead_prefix_anchor.o
+    Object src/op90_to91_w41418_StringRead_prefix_r01.o
     Object src/to91_w41418_StringRead_run01.o
     Object src/to90_scanf_interval_v5_run01.o
     Object src/to90_scanf_interval_v5_run02.o
@@ -7717,7 +7721,9 @@ Object src/to58_r3_overlay_45_thumb_residual_8_suffix.o
     Object src/to80_extra1740_run04.o
     Object src/to80_extra1740_run05.o
     Object lib/NitroDWC/asm/op90_to80_extra1740_residual_4_anchor.o
-    Object lib/NitroDWC/asm/op90_to80_extra1740_residual_4_residual_1.o
+    Object lib/NitroDWC/asm/op90_op90_to80_extra1740_residual_4_residual_1_anchor.o
+    Object lib/NitroDWC/asm/op90_op90_to80_extra1740_residual_4_residual_1_residual_1.o
+    Object src/op90_op90_to80_extra1740_residual_4_residual_1_r01.o
     Object src/op90_to80_extra1740_residual_4_r01.o
     Object lib/NitroDWC/asm/op90_to80_extra1740_residual_4_residual_2.o
     Object src/to70_ov45_extra03_run01.o
