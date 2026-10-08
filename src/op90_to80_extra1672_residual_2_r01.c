@@ -13,4 +13,3 @@ void texmtxCalc_flagR_(s32 *m, const TexSRT *t)
     m[13] = (s32)(((s64)t->sy * t->ty) >> 8) * t->h + ((-2 * t->sy + 0x2000) * t->h << 3);
     m[4] = 0;
 }
-

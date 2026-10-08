@@ -383,3 +383,6 @@ $(BUILD_DIR)/src/op90_to90_extra2129_residual_2_r01.o: private MWCCVER := 2.0/sp
 $(BUILD_DIR)/src/op90_to90_extra2319_residual_1_r01.o: private MWCCVER := 2.0/base
 $(BUILD_DIR)/src/op90_to90_extra2537_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to91_w41566_texmatrix_suffix_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_to80_extra1719_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_to80_extra1746_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_to80_extra1836_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
