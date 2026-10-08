@@ -1,0 +1,28 @@
+#pragma force_active on
+#include "global.h"
+#include "heap.h"
+typedef struct {void *sprite;u8 system[0x140-4];u8 resource[0x34];int anim[6];u8 effect[12];u8 window[16];VecFx32 position;int timer,flag;} Data;
+typedef struct {u32 pad[2];void *bg;} Parent;
+typedef struct {int state,flag;u32 pad;Data *data;Parent *parent;int *done;u32 pad2[2];void *narc;} Context;
+typedef struct {u8 res[4];u32 msg;} Args;
+extern void ov01_021F05C4(void*,int,int),ov01_021F0614(void*,void*,void*,int,int,int,int,int,int),Sprite_SetDrawFlag(void*,int),Sprite_SetOamMode(void*,int),Sprite_SetPriority(void*,int),GfGfx_EngineATogglePlanes(int,int),SetBgPriority(int,int),ToggleBgLayer(int,int),ov01_021F0454(void*,int,int,int,int,int,void*,int),GfGfxLoader_GXLoadPalFromOpenNarc(void*,int,int,int,int,int),AddWindowParameterized(void*,void*,int,int,int,int,int,int,int),FillWindowPixelBuffer(void*,int),AddTextPrinterParameterizedWithColor(void*,int,void*,int,int,int,u32,void*),String_Delete(void*),ov01_021F12B4(void*,int),ov01_021EFCF8(int,int,int,void*,int),BgSetPosTextAndCommit(void*,int,int,int),ov01_021EFEC8(void*,int,int,int,int),ov117_0225F420(Context*,int,int),StartBrightnessTransition(int,int,int,int,int),BG_SetMaskColor(int,int),ScheduleSetBgPosText(void*,int,int,int),Sprite_SetMatrix(void*,void*),BeginNormalPaletteFade(int,int,int,int,int,int,int),ov01_021F12D0(void*),Sprite_Delete(void*),ov01_021F06EC(void*,void*),ov01_021F05F4(void*),RemoveWindow(void*),BG_ClearCharDataRange(int,int,int,int),BgClearTilemapBufferAndCommit(void*,int),ov01_021EFCDC(Context*,void*),ov01_021F1310(void*,int),SpriteList_RenderAndAnimateSprites(void*);
+extern void *ov01_021F0718(void*,void*,int,int,int,int),*ov117_0225F470(u32,int);
+extern int ov01_021EFF28(void*),IsBrightnessTransitionActive(int),IsPaletteFadeFinished(void);
+void ov117_0225F524(void*,Context*,Args*);
+#pragma opt_propagation off
+// @fn ov117_0225F524
+void ov117_0225F524(void *task,Context *c,Args *args){enum HeapID heap=HEAP_ID_FIELD1;Data *d=c->data;switch(c->state){case 0:{void *str;c->data=Heap_Alloc((enum HeapID)heap,0x1bc);memset(c->data,0,0x1bc);d=c->data;ov01_021F05C4(d->system,1,1);ov01_021F0614(c->narc,d->system,d->resource,args->res[0],1,args->res[1],args->res[2],args->res[3],600000);d->sprite=ov01_021F0718(d->system,d->resource,0x140000,0x80000,0,0);Sprite_SetDrawFlag(d->sprite,0);Sprite_SetOamMode(d->sprite,1);Sprite_SetPriority(d->sprite,0);GfGfx_EngineATogglePlanes(16,1);d->position.x=0x140000;d->position.y=0x80000;d->position.z=0;G2x_SetBlendAlpha_(0x4000050,2,61,12,4);SetBgPriority(2,0);SetBgPriority(3,1);SetBgPriority(1,2);SetBgPriority(0,3);ToggleBgLayer(1,0);ToggleBgLayer(2,0);ToggleBgLayer(3,0);ov01_021F0454(c->narc,217,216,215,0,2,c->parent->bg,1);GfGfxLoader_GXLoadPalFromOpenNarc(c->narc,16,0,64,32,heap);AddWindowParameterized(c->parent->bg,d->window,2,0,20,16,2,2,1);FillWindowPixelBuffer(d->window,0);str=ov117_0225F470(args->msg,heap);AddTextPrinterParameterizedWithColor(d->window,0,str,0,0,0,0x10200,0);String_Delete(str);ov01_021F0454(c->narc,218,216,215,0,2,c->parent->bg,3);{G2_SetWnd0InsidePlane(8,TRUE);G2_SetWndOutsidePlane(23,TRUE);G2_SetWnd0Position(0,0x60,255,0x60);}ov01_021F12B4(d->effect,HEAP_ID_FIELD1);ov01_021EFCF8(1,16,-16,&c->flag,1);c->state++;break;}
+case 1:ToggleBgLayer(1,1);d->timer=12;c->state++;
+case 2:BgSetPosTextAndCommit(c->parent->bg,1,1,24);if(--d->timer<=0)c->state++;break;
+case 3:*(volatile u32*)0x4000000=(*(volatile u32*)0x4000000 &0xffff1fff)|0x2000;ToggleBgLayer(3,1);ov01_021EFEC8(d->anim,0,0x60000,0x4000,4);c->state++;
+case 4:BgSetPosTextAndCommit(c->parent->bg,1,1,24);if(!ov01_021EFF28(d->anim)){int value=d->anim[0]>>12;*(volatile u16*)0x4000040=255;*(volatile u16*)0x4000044=(((96-value)<<8)&0xff00)|((u8)(value+96));}else{*(volatile u32*)0x4000000 &=0xffff1fff;BgSetPosTextAndCommit(c->parent->bg,1,0,0);d->timer=13;c->state++;}break;
+case 5:if(--d->timer<=0)c->state++;break;
+case 6:ov117_0225F420(c,1,221);SetBgPriority(1,1);SetBgPriority(3,2);G2x_SetBlendAlpha_(0x4000050,2,61,0,16);Sprite_SetDrawFlag(d->sprite,1);d->timer=0;c->state++;
+case 7:{int finished=0;if(d->timer<=16){d->timer+=4;if(d->timer>16){d->timer=16;finished=1;}G2x_SetBlendAlpha_(0x4000050,2,61,d->timer,16-d->timer);}d->position.x+=(0x80000-d->position.x)*2/3;if((d->position.x>>12)<=130){d->position.x=0x80000;if(finished==1){StartBrightnessTransition(8,0,16,30,1);BG_SetMaskColor(0,5285);ToggleBgLayer(0,0);c->state++;}}if(d->timer>4)ToggleBgLayer(2,1);ScheduleSetBgPosText(c->parent->bg,2,0,-((d->position.x>>12)+8));Sprite_SetMatrix(d->sprite,&d->position);break;}
+case 8:if(IsBrightnessTransitionActive(1)){d->timer=16;c->state++;}break;
+case 9:if(--d->timer<=0){ov01_021EFEC8(d->anim,d->position.x,-0x60000,0x2000,8);d->timer=8;ToggleBgLayer(3,0);c->state++;}break;
+case 10:d->position.x=d->anim[0];{int x=-((d->position.x>>12)+8);if(x<0)ScheduleSetBgPosText(c->parent->bg,2,0,x);else ToggleBgLayer(2,0);}Sprite_SetMatrix(d->sprite,&d->position);if(ov01_021EFF28(d->anim)){*(volatile u32*)0x4001000 &=0xfffeffff;BG_SetMaskColor(4,0);BeginNormalPaletteFade(0,0,0,32767,4,1,4);c->state++;}break;
+case 11:if(IsPaletteFadeFinished())c->state++;break;
+case 12:if(c->done)*c->done=1;ov01_021F12D0(d->effect);d->flag=0;Sprite_Delete(d->sprite);ov01_021F06EC(d->system,d->resource);ov01_021F05F4(d->system);RemoveWindow(d->window);BG_ClearCharDataRange(3,32,0,4);BG_ClearCharDataRange(1,32,0,4);BgClearTilemapBufferAndCommit(c->parent->bg,3);BgClearTilemapBufferAndCommit(c->parent->bg,1);ov01_021EFCDC(c,task);break;
+}if(d->flag==1)ov01_021F1310(d->effect,2);if(c->state!=12)SpriteList_RenderAndAnimateSprites(*(void**)d->system);}
+#pragma opt_propagation reset

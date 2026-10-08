@@ -1365,7 +1365,8 @@ Static main
     Object lib/asm/op90_to70_to65_wifi_residual_11_residual_21_extra1165_residual_1_anchor.o
     Object src/op90_to70_to65_wifi_residual_11_residual_21_extra1165_residual_1_r01.o
     Object src/to65_wifi_residual_11_run23.o
-    Object lib/asm/to65_wifi_residual_11_residual_22.o
+    Object lib/asm/op90_to65_wifi_residual_11_residual_22_anchor.o
+    Object src/op90_to65_wifi_residual_11_residual_22_r01.o
     Object src/to65_wifi_residual_11_run24.o
     Object lib/asm/to80_extra1856_anchor.o
     Object src/to80_extra1856_run01.o
@@ -2305,7 +2306,8 @@ Object src/op90_to91_w41566_texmatrix_suffix_r01.o
     Object src/to90_extra2309_run01.o
     Object lib/MSL_C/asm/to70_MSL_Common_alloc_extra116_anchor.o
     Object src/to70_MSL_Common_alloc_extra116_run01.o
-    Object lib/MSL_C/asm/MSL_Common_ansi_files.o
+    Object lib/MSL_C/asm/op90_MSL_Common_ansi_files_anchor.o
+    Object src/op90_MSL_Common_ansi_files_r01.o
     Object lib/MSL_C/src/arith.o
     Object lib/MSL_C/asm/to70_MSL_Common_assert_extra117_anchor.o
     Object src/to70_MSL_Common_assert_extra117_run01.o
@@ -2354,7 +2356,8 @@ Object src/op90_to91_w41566_texmatrix_suffix_r01.o
     Object lib/MSL_C/asm/to80_extra1379_anchor.o
     Object src/to80_extra1379_run01.o
     Object src/to70_MSL_Common_printf_extra110_run02.o
-    Object lib/MSL_C/asm/MSL_Common_qsort.o
+    Object lib/MSL_C/asm/op90_MSL_Common_qsort_anchor.o
+    Object src/op90_MSL_Common_qsort_r01.o
     Object lib/MSL_C/src/rand.o
     Object lib/asm/to90_scanf_interval_v5_anchor.o
     Object lib/asm/to91_w41418_StringRead_prefix.o
@@ -2408,8 +2411,10 @@ Object src/op90_to91_w41566_texmatrix_suffix_r01.o
     Object src/to70_MSL_DPMath_s_copysign_extra82_run01.o
     Object lib/MSL_C/asm/to70_MSL_DPMath_s_fabs_extra83_anchor.o
     Object src/to70_MSL_DPMath_s_fabs_extra83_run01.o
-    Object lib/MSL_C/asm/MSL_DPMath_s_frexp.o
-    Object lib/MSL_C/asm/MSL_DPMath_s_ldexp.o
+    Object lib/MSL_C/asm/op90_MSL_DPMath_s_frexp_anchor.o
+    Object src/op90_MSL_DPMath_s_frexp_r01.o
+    Object lib/MSL_C/asm/op90_MSL_DPMath_s_ldexp_anchor.o
+    Object src/op90_MSL_DPMath_s_ldexp_r01.o
     Object lib/MSL_C/asm/to90_extra2310_anchor.o
     Object src/to90_extra2310_run01.o
     Object lib/MSL_C/asm/to70_MSL_fp_ansi_extra112_anchor.o
@@ -10927,7 +10932,8 @@ Overlay OVY_82
     Object asm/op90_to52_r2_card2_overlay82_r9_residual_anchor.o
     Object src/op90_to52_r2_card2_overlay82_r9_residual_r01.o
     Object src/overlay82_helpers_9.o
-    Object asm/overlay_82_residual_10.o
+    Object asm/op90_overlay_82_residual_10_anchor.o
+    Object src/op90_overlay_82_residual_10_r01.o
     Object src/overlay82_helpers_10.o
     Object asm/to70_overlay_82_residual_11_extra510_anchor.o
     Object src/to70_overlay_82_residual_11_extra510_run01.o
@@ -12018,7 +12024,8 @@ Overlay OVY_93
     Object asm/to70_overlay_93_thumb_1_to41_residual_11_extra243_anchor.o
     Object src/to70_overlay_93_thumb_1_to41_residual_11_extra243_run01.o
     Object src/to41_overlay_93_thumb_1_run12.o
-    Object asm/overlay_93_thumb_1_to41_residual_12.o
+    Object asm/op90_overlay_93_thumb_1_to41_residual_12_anchor.o
+    Object src/op90_overlay_93_thumb_1_to41_residual_12_r01.o
     Object src/to41_overlay_93_thumb_1_run13.o
     Object src/to91_w41485_model_run01.o
     Object src/to41_overlay_93_thumb_1_run14.o
@@ -12466,7 +12473,8 @@ Overlay OVY_96
     Object src/overlay96_bg_affine/overlay96_bg_affine.o
     Object src/overlay96_exact_bank_51.o
     Object src/overlay96_results_transition_r52.o
-    Object asm/overlay_96_residual_52_tail.o
+    Object asm/op90_overlay_96_residual_52_tail_anchor.o
+    Object src/op90_overlay_96_residual_52_tail_r01.o
     Object src/overlay96_exact_bank_52.o
     Object src/overlay96_pokeathlon_shop_ui_run1.o
     Object asm/to70_overlay_96_residual_53_unmatched_1_extra373_anchor.o
@@ -12669,7 +12677,8 @@ Overlay OVY_96
     Object src/overlay96_exact_bank_69.o
     Object src/overlay96_course_event_r70_run1.o
     Object src/to47r5_ov96_course_score_gap70.o
-    Object asm/to47r5_ov96_course_score_gap70_residual.o
+    Object asm/op90_to47r5_ov96_course_score_gap70_residual_anchor.o
+    Object src/op90_to47r5_ov96_course_score_gap70_residual_r01.o
     Object src/overlay96_course_event_r70_run2.o
     Object asm/overlay_96_residual_70_tail.o
     Object src/overlay96_exact_bank_70.o
@@ -13261,7 +13270,8 @@ Overlay OVY_96
     Object src/overlay96_exact_bank_117.o
     Object src/overlay96_course_entity_r118_prefix_exact.o
     Object src/overlay96_course_entity_r118_gap_r2.o
-    Object asm/overlay_96_residual_118_prefix_gap_r2_remaining_head.o
+    Object asm/op90_overlay_96_residual_118_prefix_gap_r2_remaining_head_anchor.o
+    Object src/op90_overlay_96_residual_118_prefix_gap_r2_remaining_head_r01.o
     Object src/overlay96_course_gauge_r118.o
     Object asm/to90_extra1957_anchor.o
     Object src/to90_extra1957_run01.o
@@ -14475,7 +14485,8 @@ Overlay OVY_117
     After OVY_31
     Object src/overlay117_sprite_burst.o
     Object src/overlay117_partial_1.o
-    Object asm/overlay_117_residual_2.o
+    Object asm/op90_overlay_117_residual_2_anchor.o
+    Object src/op90_overlay_117_residual_2_r01.o
 }
 Overlay OVY_118
 {
