@@ -463,7 +463,8 @@ Autoload EXT_WRAM
 	Object lib/src/to90_arm7_sub_ext_wram_run52.o
 	Object lib/src/to90_arm7_sub_ext_wram_run53.o
 	Object asm/op90_to90_arm7_sub_ext_wram_residual_17_anchor.o
-	Object asm/op90_to90_arm7_sub_ext_wram_residual_17_residual_1.o
+	Object asm/op90_op90_to90_arm7_sub_ext_wram_residual_17_residual_1_anchor.o
+	Object lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_17_residual_1_r01.o
 	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_17_r01.o
 	Object lib/src/to90_arm7_sub_ext_wram_run54.o
 	Object lib/src/to90_arm7_sub_ext_wram_run55.o

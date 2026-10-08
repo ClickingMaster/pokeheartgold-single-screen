@@ -4,10 +4,10 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="1172" y="42" text-anchor="end" font-size="22">94.30% C + C++ source</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · c053729c6 · ARM9 + ARM7 · 4,075,362 mapped code bytes</text>
+<text x="1172" y="42" text-anchor="end" font-size="22">94.36% C + C++ source</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 760a115f6 · ARM9 + ARM7 · 4,075,362 mapped code bytes</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
-<text x="47" y="102" font-size="14">C-only source 94.1%</text>
+<text x="47" y="102" font-size="14">C-only source 94.2%</text>
 <rect x="256" y="91" width="12" height="12" rx="2" fill="#35a9b8"/>
 <text x="275" y="102" font-size="14">C++-only source 0.2%</text>
 <rect x="484" y="91" width="12" height="12" rx="2" fill="#e4ad42"/>
@@ -517,9 +517,9 @@ src/op90_to59_msl_strtoul_residual_r02.c</title></rect>
 <rect x="300.382" y="372.375" width="10.687" height="17.602" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to80_extra1653_residual_1.o
 1,132 bytes · Assembly
 lib/NitroDWC/asm/to80_extra1653_residual_1.s</title></rect>
-<rect x="311.069" y="372.375" width="10.574" height="17.602" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to80_extra1752_residual_1.o
-1,120 bytes · Assembly
-lib/asm/to80_extra1752_residual_1.s</title></rect>
+<rect x="311.069" y="372.375" width="10.574" height="17.602" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_to80_extra1752_residual_1_r01.o
+1,120 bytes · C-only source
+src/op90_to80_extra1752_residual_1_r01.c</title></rect>
 <rect x="300.382" y="389.977" width="10.650" height="17.414" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / sys_vars.o
 1,116 bytes · C-only source
 src/sys_vars.c</title></rect>
@@ -15633,9 +15633,9 @@ sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_62_r01.c</title></rect>
 <rect x="664.950" y="252.197" width="8.926" height="17.723" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / EXT_WRAM / op90_to90_arm7_sub_ext_wram_residual_32_r01.o
 952 bytes · C-only source
 sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_32_r01.c</title></rect>
-<rect x="673.876" y="252.197" width="16.877" height="9.019" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM7 / EXT_WRAM / op90_to90_arm7_sub_ext_wram_residual_17_residual_1.o
-916 bytes · Assembly
-sub/asm/op90_to90_arm7_sub_ext_wram_residual_17_residual_1.s</title></rect>
+<rect x="673.876" y="252.197" width="16.877" height="9.019" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / EXT_WRAM / op90_op90_to90_arm7_sub_ext_wram_residual_17_residual_1_r01.o
+916 bytes · C-only source
+sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_17_residual_1_r01.c</title></rect>
 <rect x="673.876" y="261.216" width="16.877" height="8.704" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / EXT_WRAM / to90_arm7_sub_ext_wram_run389.o
 884 bytes · C-only source
 sub/lib/src/to90_arm7_sub_ext_wram_run389.c</title></rect>
@@ -31829,9 +31829,9 @@ src/overlay_42_02227EE0.c</title></rect>
 <rect x="1104.654" y="492.985" width="16.295" height="13.890" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_48 / overlay48_intro_flow.o
 1,362 bytes · C-only source
 src/overlay48_intro_flow.c</title></rect>
-<rect x="1104.654" y="506.875" width="6.066" height="12.054" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_48 / to53_overlay48_to42_head.o
-440 bytes · Assembly
-asm/to53_overlay48_to42_head.s</title></rect>
+<rect x="1104.654" y="506.875" width="6.066" height="12.054" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_48 / op90_to53_overlay48_to42_head_r01.o
+440 bytes · C-only source
+src/op90_to53_overlay48_to42_head_r01.c</title></rect>
 <rect x="1110.720" y="506.875" width="10.229" height="6.336" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_48 / op90_to70_overlay_48_residual_25_extra136_residual_1_r01.o
 390 bytes · C-only source
 src/op90_to70_overlay_48_residual_25_extra136_residual_1_r01.c</title></rect>

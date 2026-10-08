@@ -1784,7 +1784,8 @@ Static main
     Object lib/asm/to70_nnsys_residual_39_anchor.o
     Object lib/asm/to70_to70_nnsys_residual_39_residual_1_extra1183_anchor.o
     Object lib/asm/to80_extra1752_anchor.o
-    Object lib/asm/to80_extra1752_residual_1.o
+    Object lib/asm/op90_to80_extra1752_residual_1_anchor.o
+    Object src/op90_to80_extra1752_residual_1_r01.o
     Object src/to80_extra1752_run01.o
     Object src/to80_extra1752_run02.o
     Object lib/asm/to80_extra1752_residual_2.o
@@ -8076,7 +8077,8 @@ Overlay OVY_48
 {
     After OVY_45
     Object src/overlay48_intro_flow.o
-    Object asm/to53_overlay48_to42_head.o
+    Object asm/op90_to53_overlay48_to42_head_anchor.o
+    Object src/op90_to53_overlay48_to42_head_r01.o
     Object src/to53_overlay48_mode_helpers.o
     Object src/overlay48_helpers_1.o
     Object src/r46_overlay48_r2_run1.o
