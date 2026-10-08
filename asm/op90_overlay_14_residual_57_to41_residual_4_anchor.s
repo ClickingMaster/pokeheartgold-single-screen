@@ -1951,9 +1951,6 @@
 	.public _021F5C5A
 	.public _021F5C6E
 	.public _021F5C80
-	.public _021F5DB8
-	.public _021F5E4A
-	.public _021F5E90
 	.public _021F5EA8
 	.public _021F5F0E
 	.public _021F5F56
@@ -2982,458 +2979,124 @@
 	.include "overlay_14.inc"
 	.include "global.inc"
 
-	.text
-	.extern _021F49F8
-	.extern _021F4A1C
-	.extern _021F4A5C
-	.extern _021F4A60
-	.extern _021F4A76
-	.extern _021F4A8A
-	.extern _021F4AF0
-	.extern _021F4AFA
-	.extern _021F4AFC
-	.extern _021F4B24
-	.extern _021F4B4A
-	.extern _021F4B84
-	.extern _021F4B88
-	.extern _021F4B8C
-	.extern _021F4C1C
-	.extern _021F4C98
-	.extern _021F4C9C
-	.extern _021F4CDA
-	.extern _021F4D08
-	.extern _021F4D0C
-	.extern _021F4E5C
-	.extern _021F4E60
-	.extern _021F4E64
-	.extern _021F4E76
-	.extern _021F4E9C
-	.extern _021F4ECC
-	.extern _021F4EE2
-	.extern _021F4EFC
-	.extern _021F4F06
-	.extern _021F4F44
-	.extern _021F4F56
-	.extern _021F4F66
-	.extern _021F5044
-	.extern _021F5050
-	.extern _021F509C
-	.extern _021F5104
-	.extern _021F5110
-	.extern _021F5162
-	.extern _021F5182
-	.extern _021F518C
-	.extern _021F5208
-	.extern _021F5218
-	.extern _021F5264
-	.extern _021F527E
-	.extern _021F5288
-	.extern _021F52D4
-	.extern _021F52EE
-	.extern _021F52F8
-	.extern _021F5340
-	.extern _021F535A
-	.extern _021F5364
-	.extern _021F541E
-	.extern _021F5422
-	.extern _021F5472
-	.extern _021F5486
-	.extern _021F553A
-	.extern _021F5546
-	.extern _021F5558
-	.extern _021F555C
-	.extern _021F5560
-	.extern _021F557C
-	.extern _021F557E
-	.extern _021F5612
-	.extern _021F5618
-	.extern _021F561C
-	.extern _021F5668
-	.extern _021F5714
-	.extern _021F57B4
-	.extern _021F58B4
-	.extern _021F58FC
-	.extern _021F590E
-	.extern _021F5918
-	.extern _021F5948
-	.extern _021F594C
-	.extern _021F599A
-	.extern _021F59AA
-	.extern _021F5A9A
-	.extern _021F5AFE
-	.extern _021F5B2A
-	.extern _021F5B8E
-	.extern _021F5BD4
-	.extern _021F5C16
-	.extern _021F5C1E
-	.extern _021F5C5A
-	.extern _021F5C6E
-	.extern _021F5C80
-	.extern ov14_021F49E0
-	.extern ov14_021F4A20
-	.extern ov14_021F4A64
-	.extern ov14_021F4B90
-	.extern ov14_021F4BC0
-	.extern ov14_021F4CA0
-	.extern ov14_021F4D10
-	.extern ov14_021F4E68
-	.extern ov14_021F4EA0
-	.extern ov14_021F4ED0
-	.extern ov14_021F4F00
-	.extern ov14_021F4F24
-	.extern ov14_021F4F84
-	.extern ov14_021F4FBC
-	.extern ov14_021F5000
-	.extern ov14_021F5054
-	.extern ov14_021F50A0
-	.extern ov14_021F5114
-	.extern ov14_021F5190
-	.extern ov14_021F521C
-	.extern ov14_021F528C
-	.extern ov14_021F52FC
-	.extern ov14_021F5368
-	.extern ov14_021F53C0
-	.extern ov14_021F5404
-	.extern ov14_021F5564
-	.extern ov14_021F5620
-	.extern ov14_021F566C
-	.extern ov14_021F5718
-	.extern ov14_021F57B8
-	.extern ov14_021F58B8
-	.extern ov14_021F5950
-	.extern ov14_021F5BD8
-	.extern ov14_021F5C84
-	.public ov14_021E5A44
-	.public ov14_021E5A50
-	.public ov14_021E5A54
-	.public ov14_021E5A60
-	.public ov14_021E5E94
-	.public ov14_021E5ED0
-	.public ov14_021E5EE8
-	.public ov14_021E7264
-	.public ov14_021E7468
-	.public ov14_021E76B8
-	.public ov14_021E7930
-	.public ov14_021E7AD4
-	.public ov14_021E7B8C
-	.public ov14_021E7B98
-	.public ov14_021E7D7C
-	.public ov14_021E7D8C
-	.public ov14_021E7DF8
-	.public ov14_021E81A8
-	.public ov14_021E821C
-	.public ov14_021E827C
-	.public ov14_021E94A8
-	.public ov14_021E9518
-	.public ov14_021E954C
-	.public ov14_021E95B4
-	.public ov14_021E9604
-	.public ov14_021EB18C
-	.public ov14_021EB27C
-	.public ov14_021EBDCC
-	.public ov14_021EBDE0
-	.public ov14_021EBF8C
-	.public ov14_021EC344
-	.public ov14_021ED2C8
-	.public ov14_021ED350
-	.public ov14_021ED60C
-	.public ov14_021ED620
-	.public ov14_021ED6C4
-	.public ov14_021ED960
-	.public ov14_021EDA3C
-	.public ov14_021EDE20
-	.public ov14_021EDF90
-	.public ov14_021EE328
-	.public ov14_021EE4D8
-	.public ov14_021F0234
-	.public ov14_021F0244
-	.public ov14_021F027C
-	.public ov14_021F1534
-	.public ov14_021F1F24
-	.public ov14_021F1F38
-	.public ov14_021F2610
-	.public ov14_021F261C
-	.public ov14_021F2624
-	.public ov14_021F262C
-	.public ov14_021F2634
-	.public ov14_021F2700
-	.public ov14_021F2728
-	.public ov14_021F2760
-	.public ov14_021F276C
-	.public ov14_021F27CC
-	.public ov14_021F2810
-	.public ov14_021F2890
-	.public ov14_021F28FC
-	.public ov14_021F29AC
-	.public ov14_021F2A04
-	.public ov14_021F2A60
-	.public ov14_021F2C04
-	.public ov14_021F33E8
-	.public ov14_021F34C8
-	.public ov14_021F34DC
-	.public ov14_021F395C
-	.public ov14_021F40DC
-	.public ov14_021F4940
-	.public ov14_021F49C8
-	.public ov14_021F604C
-	.public ov14_021F62CC
-	.public ov14_021F62E4
-	.public ov14_021F62FC
-	.public ov14_021F63A8
-	.public ov14_021F63B8
-	.public ov14_021F63F0
-	.public ov14_021F6628
-	.public ov14_021F6678
-	.public ov14_021F6688
-	.public ov14_021F6844
-	.public ov14_021F6A14
-	.public ov14_021F6A24
-	.public ov14_021F6A34
-	.public ov14_021F6B10
-	.public ov14_021F6B7C
-
-
-	thumb_func_start ov14_021F5C94
-ov14_021F5C94: ; 0x021F5C94
-	push {r4, r5, r6, r7, lr}
-	sub sp, #0x3c
-	ldr r5, [r0, #0x34]
-	lsl r4, r1, #4
-	add r5, #0x30
-	str r0, [sp, #0x1c]
-	add r0, r5, r4
-	str r2, [sp, #0x20]
-	bl GetWindowWidth
-	str r0, [sp, #0x2c]
-	mov r0, #0xa
-	str r0, [sp]
-	mov r0, #0x13
-	mov r1, #0xe
-	mov r2, #1
-	add r3, sp, #0x38
-	bl GfGfxLoader_GetCharData
-	str r0, [sp, #0x34]
-	ldr r0, [sp, #0x38]
-	mov r2, #0
-	ldr r6, [r0, #0x14]
-	mov r1, #0x18
-	str r1, [sp]
-	mov r0, #8
-	str r0, [sp, #4]
-	str r2, [sp, #8]
-	str r2, [sp, #0xc]
-	str r1, [sp, #0x10]
-	mov r1, #0xae
-	str r0, [sp, #0x14]
-	mov r0, #0xff
-	lsl r1, r1, #4
-	str r0, [sp, #0x18]
-	add r0, r5, r4
-	add r1, r6, r1
-	add r3, r2, #0
-	bl BlitBitmapRect
-	mov r1, #0x18
-	mov r2, #0
-	str r1, [sp]
-	mov r0, #8
-	str r0, [sp, #4]
-	str r2, [sp, #8]
-	str r0, [sp, #0xc]
-	str r1, [sp, #0x10]
-	mov r1, #0xb6
-	str r0, [sp, #0x14]
-	mov r0, #0xff
-	lsl r1, r1, #4
-	str r0, [sp, #0x18]
-	add r0, r5, r4
-	add r1, r6, r1
-	add r3, r2, #0
-	bl BlitBitmapRect
-	mov r3, #0x18
-	str r3, [sp]
-	mov r1, #8
-	str r1, [sp, #4]
-	mov r2, #0
-	str r2, [sp, #8]
-	mov r0, #0x10
-	str r0, [sp, #0xc]
-	str r3, [sp, #0x10]
-	str r1, [sp, #0x14]
-	mov r1, #0xb2
-	mov r0, #0xff
-	lsl r1, r1, #4
-	str r0, [sp, #0x18]
-	add r0, r5, r4
-	add r1, r6, r1
-	add r3, r2, #0
-	bl BlitBitmapRect
-	ldr r0, [sp, #0x2c]
-	sub r0, r0, #1
-	str r0, [sp, #0x28]
-	lsl r7, r0, #3
-	mov r0, #8
-	str r0, [sp]
-	lsl r1, r7, #0x10
-	mov r2, #0
-	str r0, [sp, #4]
-	lsr r1, r1, #0x10
-	str r1, [sp, #8]
-	str r2, [sp, #0xc]
-	str r0, [sp, #0x10]
-	mov r1, #0xd6
-	str r0, [sp, #0x14]
-	mov r0, #0xff
-	lsl r1, r1, #4
-	str r0, [sp, #0x18]
-	add r0, r5, r4
-	add r1, r6, r1
-	add r3, r2, #0
-	bl BlitBitmapRect
-	mov r1, #8
-	str r1, [sp]
-	lsl r0, r7, #0x10
-	mov r2, #0
-	str r1, [sp, #4]
-	lsr r0, r0, #0x10
-	str r0, [sp, #8]
-	str r1, [sp, #0xc]
-	str r1, [sp, #0x10]
-	str r1, [sp, #0x14]
-	mov r1, #0xd2
-	mov r0, #0xff
-	lsl r1, r1, #4
-	str r0, [sp, #0x18]
-	add r0, r5, r4
-	add r1, r6, r1
-	add r3, r2, #0
-	bl BlitBitmapRect
-	mov r0, #8
-	str r0, [sp]
-	lsl r1, r7, #0x10
-	mov r2, #0
-	str r0, [sp, #4]
-	lsr r1, r1, #0x10
-	str r1, [sp, #8]
-	mov r1, #0x10
-	str r1, [sp, #0xc]
-	str r0, [sp, #0x10]
-	mov r1, #0x35
-	str r0, [sp, #0x14]
-	mov r0, #0xff
-	lsl r1, r1, #6
-	str r0, [sp, #0x18]
-	add r0, r5, r4
-	add r1, r6, r1
-	add r3, r2, #0
-	bl BlitBitmapRect
-	ldr r0, [sp, #0x28]
-	mov r7, #1
-	cmp r0, #1
-	ble _021F5E4A
-	ldr r0, [sp, #0x2c]
-	sub r0, r0, #1
-	str r0, [sp, #0x30]
-_021F5DB8:
-	lsl r0, r7, #3
-	str r0, [sp, #0x24]
-	mov r0, #8
-	str r0, [sp]
-	str r0, [sp, #4]
-	ldr r0, [sp, #0x24]
-	mov r1, #0xb
-	lsl r0, r0, #0x10
-	lsr r0, r0, #0x10
-	str r0, [sp, #8]
-	mov r0, #0
-	str r0, [sp, #0xc]
-	mov r0, #8
-	str r0, [sp, #0x10]
-	str r0, [sp, #0x14]
-	mov r0, #0xff
-	lsl r1, r1, #8
-	mov r2, #0
-	str r0, [sp, #0x18]
-	add r0, r5, r4
-	add r1, r6, r1
-	add r3, r2, #0
-	bl BlitBitmapRect
-	mov r0, #8
-	str r0, [sp]
-	str r0, [sp, #4]
-	ldr r0, [sp, #0x24]
-	mov r1, #0x2e
-	lsl r0, r0, #0x10
-	lsr r0, r0, #0x10
-	str r0, [sp, #8]
-	mov r0, #8
-	str r0, [sp, #0xc]
-	str r0, [sp, #0x10]
-	str r0, [sp, #0x14]
-	mov r0, #0xff
-	lsl r1, r1, #6
-	mov r2, #0
-	str r0, [sp, #0x18]
-	add r0, r5, r4
-	add r1, r6, r1
-	add r3, r2, #0
-	bl BlitBitmapRect
-	mov r0, #8
-	str r0, [sp]
-	str r0, [sp, #4]
-	ldr r0, [sp, #0x24]
-	mov r1, #0x2d
-	lsl r0, r0, #0x10
-	lsr r0, r0, #0x10
-	str r0, [sp, #8]
-	mov r0, #0x10
-	str r0, [sp, #0xc]
-	mov r0, #8
-	str r0, [sp, #0x10]
-	str r0, [sp, #0x14]
-	mov r0, #0xff
-	lsl r1, r1, #6
-	mov r2, #0
-	str r0, [sp, #0x18]
-	add r0, r5, r4
-	add r1, r6, r1
-	add r3, r2, #0
-	bl BlitBitmapRect
-	add r0, r7, #1
-	lsl r0, r0, #0x18
-	lsr r7, r0, #0x18
-	ldr r0, [sp, #0x30]
-	cmp r7, r0
-	blt _021F5DB8
-_021F5E4A:
-	ldr r0, [sp, #0x34]
-	bl Heap_Free
-	ldr r0, [sp, #0x1c]
-	ldr r1, [sp, #0x20]
-	ldr r0, [r0, #0x34]
-	ldr r0, [r0, #0x20]
-	bl NewString_ReadMsgData
-	add r6, r0, #0
-	ldr r2, [sp, #0x2c]
-	mov r7, #4
-	lsl r3, r2, #3
-	lsr r2, r3, #0x1f
-	add r2, r3, r2
-	ldr r0, _021F5E90 ; =0x00090A00
-	str r7, [sp]
-	str r0, [sp, #4]
-	mov r0, #2
-	str r0, [sp, #8]
-	add r0, r5, r4
-	add r1, r6, #0
-	asr r2, r2, #1
-	add r3, r7, #0
-	bl ov14_021F4F24
-	add r0, r6, #0
-	bl String_Delete
-	add r0, r5, r4
-	bl CopyWindowPixelsToVram_TextMode
-	add sp, #0x3c
-	pop {r4, r5, r6, r7, pc}
-	nop
-_021F5E90: .word 0x00090A00
-	thumb_func_end ov14_021F5C94
+.text
+.extern _021F49F8
+.extern _021F4A1C
+.extern _021F4A5C
+.extern _021F4A60
+.extern _021F4A76
+.extern _021F4A8A
+.extern _021F4AF0
+.extern _021F4AFA
+.extern _021F4AFC
+.extern _021F4B24
+.extern _021F4B4A
+.extern _021F4B84
+.extern _021F4B88
+.extern _021F4B8C
+.extern _021F4C1C
+.extern _021F4C98
+.extern _021F4C9C
+.extern _021F4CDA
+.extern _021F4D08
+.extern _021F4D0C
+.extern _021F4E5C
+.extern _021F4E60
+.extern _021F4E64
+.extern _021F4E76
+.extern _021F4E9C
+.extern _021F4ECC
+.extern _021F4EE2
+.extern _021F4EFC
+.extern _021F4F06
+.extern _021F4F44
+.extern _021F4F56
+.extern _021F4F66
+.extern _021F5044
+.extern _021F5050
+.extern _021F509C
+.extern _021F5104
+.extern _021F5110
+.extern _021F5162
+.extern _021F5182
+.extern _021F518C
+.extern _021F5208
+.extern _021F5218
+.extern _021F5264
+.extern _021F527E
+.extern _021F5288
+.extern _021F52D4
+.extern _021F52EE
+.extern _021F52F8
+.extern _021F5340
+.extern _021F535A
+.extern _021F5364
+.extern _021F541E
+.extern _021F5422
+.extern _021F5472
+.extern _021F5486
+.extern _021F553A
+.extern _021F5546
+.extern _021F5558
+.extern _021F555C
+.extern _021F5560
+.extern _021F557C
+.extern _021F557E
+.extern _021F5612
+.extern _021F5618
+.extern _021F561C
+.extern _021F5668
+.extern _021F5714
+.extern _021F57B4
+.extern _021F58B4
+.extern _021F58FC
+.extern _021F590E
+.extern _021F5918
+.extern _021F5948
+.extern _021F594C
+.extern _021F599A
+.extern _021F59AA
+.extern _021F5A9A
+.extern _021F5AFE
+.extern _021F5B2A
+.extern _021F5B8E
+.extern _021F5BD4
+.extern _021F5C16
+.extern _021F5C1E
+.extern _021F5C5A
+.extern _021F5C6E
+.extern _021F5C80
+.extern ov14_021F49E0
+.extern ov14_021F4A20
+.extern ov14_021F4A64
+.extern ov14_021F4B90
+.extern ov14_021F4BC0
+.extern ov14_021F4CA0
+.extern ov14_021F4D10
+.extern ov14_021F4E68
+.extern ov14_021F4EA0
+.extern ov14_021F4ED0
+.extern ov14_021F4F00
+.extern ov14_021F4F24
+.extern ov14_021F4F84
+.extern ov14_021F4FBC
+.extern ov14_021F5000
+.extern ov14_021F5054
+.extern ov14_021F50A0
+.extern ov14_021F5114
+.extern ov14_021F5190
+.extern ov14_021F521C
+.extern ov14_021F528C
+.extern ov14_021F52FC
+.extern ov14_021F5368
+.extern ov14_021F53C0
+.extern ov14_021F5404
+.extern ov14_021F5564
+.extern ov14_021F5620
+.extern ov14_021F566C
+.extern ov14_021F5718
+.extern ov14_021F57B8
+.extern ov14_021F58B8
+.extern ov14_021F5950
+.extern ov14_021F5BD8
+.extern ov14_021F5C84

@@ -2,35 +2,13 @@
 	.include "overlay_91.inc"
 	.include "global.inc"
 
-	.public ov91_022614FC
-	.public _02261516
-	.public _0226151E
-	.public _0226154E
-	.public _02261568
-	.public ov91_02261580
-	.public _02261608
-	.public _02261616
-	.public _022616D2
-	.public _022616FA
-	.public _0226178C
-	.public ov91_02261790
-	.public ov91_02261808
-	.public _0226188C
-	.public ov91_02261890
-	.public _022618A6
-	.public _022618AC
-	.public ov91_022618B0
-	.public _0226191E
-	.public _02261924
-	.public ov91_02261928
-	.public _02261942
-	.public _0226194A
-	.public _0226195C
-	.public _02261966
-	.public _02261978
-	.public _0226198A
-	.public _022619A0
-	.public _022619C0
+	.public ov91_0225D768
+	.public ov91_0225D84C
+	.public _0225D854
+	.public _0225D872
+	.public _0225D87A
+	.public ov91_0225D884
+	.public _0225D8DC
 	.extern _0225C5BE
 	.extern _0225C5CA
 	.extern _0225C5D8
@@ -223,21 +201,6 @@
 	.extern _0225D6D0
 	.extern _0225D744
 	.extern _0225D756
-	.extern _0225D782
-	.extern _0225D794
-	.extern _0225D7B4
-	.extern _0225D7C6
-	.extern _0225D7D0
-	.extern _0225D7E6
-	.extern _0225D7EC
-	.extern _0225D7F2
-	.extern _0225D802
-	.extern _0225D808
-	.extern _0225D80A
-	.extern _0225D854
-	.extern _0225D872
-	.extern _0225D87A
-	.extern _0225D8DC
 	.extern _0225D8EC
 	.extern _0225D908
 	.extern _0225DA0E
@@ -694,6 +657,28 @@
 	.extern _022614CA
 	.extern _022614D0
 	.extern _022614FA
+	.extern _02261516
+	.extern _0226151E
+	.extern _0226154E
+	.extern _02261568
+	.extern _02261608
+	.extern _02261616
+	.extern _022616D2
+	.extern _022616FA
+	.extern _0226178C
+	.extern _0226188C
+	.extern _022618A6
+	.extern _022618AC
+	.extern _0226191E
+	.extern _02261924
+	.extern _02261942
+	.extern _0226194A
+	.extern _0226195C
+	.extern _02261966
+	.extern _02261978
+	.extern _0226198A
+	.extern _022619A0
+	.extern _022619C0
 	.extern _022619F8
 	.extern _022619FC
 	.extern _02261A22
@@ -769,9 +754,6 @@
 	.extern ov91_0225D6A0
 	.extern ov91_0225D6B8
 	.extern ov91_0225D750
-	.extern ov91_0225D768
-	.extern ov91_0225D84C
-	.extern ov91_0225D884
 	.extern ov91_0225D8E0
 	.extern ov91_0225D8F0
 	.extern ov91_0225DB0C
@@ -930,6 +912,13 @@
 	.extern ov91_022613AC
 	.extern ov91_022613C8
 	.extern ov91_022614D4
+	.extern ov91_022614FC
+	.extern ov91_02261580
+	.extern ov91_02261790
+	.extern ov91_02261808
+	.extern ov91_02261890
+	.extern ov91_022618B0
+	.extern ov91_02261928
 	.extern ov91_022619E8
 	.extern ov91_02261A00
 	.extern ov91_02261B10
@@ -1073,73 +1062,4 @@
 	.extern ov91_02262754
 	.extern ov91_022627C0
 
-	.text
-	thumb_func_start ov91_022614FC
-ov91_022614FC: ; 0x022614FC
-	push {r4, r5, r6, r7, lr}
-	sub sp, #0x14
-	add r6, r0, #0
-	lsl r0, r2, #1
-	str r1, [sp, #0xc]
-	add r1, r0, #2
-	add r0, r0, #1
-	lsl r0, r0, #0x18
-	lsr r0, r0, #0x18
-	str r0, [sp, #0x10]
-	lsl r0, r1, #0x18
-	mov r4, #0
-	lsr r7, r0, #0x18
-_02261516:
-	ldr r0, [sp, #0xc]
-	sub r5, r0, r4
-	bpl _0226151E
-	add r5, r5, #3
-_0226151E:
-	mov r1, #2
-	add r0, r5, #4
-	sub r1, r1, r4
-	lsl r0, r0, #0x18
-	lsl r1, r1, #0x18
-	lsr r0, r0, #0x18
-	lsr r1, r1, #0x18
-	bl SetBgPriority
-	cmp r4, #0
-	bne _0226154E
-	mov r0, #0x20
-	str r0, [sp]
-	str r0, [sp, #4]
-	str r7, [sp, #8]
-	add r1, r5, #4
-	lsl r1, r1, #0x18
-	mov r2, #0
-	ldr r0, [r6]
-	lsr r1, r1, #0x18
-	add r3, r2, #0
-	bl BgTilemapRectChangePalette
-	b _02261568
-_0226154E:
-	mov r0, #0x20
-	str r0, [sp]
-	str r0, [sp, #4]
-	ldr r0, [sp, #0x10]
-	add r1, r5, #4
-	str r0, [sp, #8]
-	lsl r1, r1, #0x18
-	mov r2, #0
-	ldr r0, [r6]
-	lsr r1, r1, #0x18
-	add r3, r2, #0
-	bl BgTilemapRectChangePalette
-_02261568:
-	add r1, r5, #4
-	lsl r1, r1, #0x18
-	ldr r0, [r6]
-	lsr r1, r1, #0x18
-	bl BgCommitTilemapBufferToVram
-	add r4, r4, #1
-	cmp r4, #3
-	blt _02261516
-	add sp, #0x14
-	pop {r4, r5, r6, r7, pc}
-	.balign 4, 0
-	thumb_func_end ov91_022614FC
+.text

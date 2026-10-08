@@ -2,24 +2,31 @@
 	.include "overlay_91.inc"
 	.include "global.inc"
 
-	.public ov91_0225D768
-	.public _0225D782
-	.public _0225D794
-	.public _0225D7B4
-	.public _0225D7C6
-	.public _0225D7D0
-	.public _0225D7E6
-	.public _0225D7EC
-	.public _0225D7F2
-	.public _0225D802
-	.public _0225D808
-	.public _0225D80A
-	.public ov91_0225D84C
-	.public _0225D854
-	.public _0225D872
-	.public _0225D87A
-	.public ov91_0225D884
-	.public _0225D8DC
+	.public ov91_022614FC
+	.public ov91_02261580
+	.public _02261608
+	.public _02261616
+	.public _022616D2
+	.public _022616FA
+	.public _0226178C
+	.public ov91_02261790
+	.public ov91_02261808
+	.public _0226188C
+	.public ov91_02261890
+	.public _022618A6
+	.public _022618AC
+	.public ov91_022618B0
+	.public _0226191E
+	.public _02261924
+	.public ov91_02261928
+	.public _02261942
+	.public _0226194A
+	.public _0226195C
+	.public _02261966
+	.public _02261978
+	.public _0226198A
+	.public _022619A0
+	.public _022619C0
 	.extern _0225C5BE
 	.extern _0225C5CA
 	.extern _0225C5D8
@@ -212,6 +219,21 @@
 	.extern _0225D6D0
 	.extern _0225D744
 	.extern _0225D756
+	.extern _0225D782
+	.extern _0225D794
+	.extern _0225D7B4
+	.extern _0225D7C6
+	.extern _0225D7D0
+	.extern _0225D7E6
+	.extern _0225D7EC
+	.extern _0225D7F2
+	.extern _0225D802
+	.extern _0225D808
+	.extern _0225D80A
+	.extern _0225D854
+	.extern _0225D872
+	.extern _0225D87A
+	.extern _0225D8DC
 	.extern _0225D8EC
 	.extern _0225D908
 	.extern _0225DA0E
@@ -668,28 +690,6 @@
 	.extern _022614CA
 	.extern _022614D0
 	.extern _022614FA
-	.extern _02261516
-	.extern _0226151E
-	.extern _0226154E
-	.extern _02261568
-	.extern _02261608
-	.extern _02261616
-	.extern _022616D2
-	.extern _022616FA
-	.extern _0226178C
-	.extern _0226188C
-	.extern _022618A6
-	.extern _022618AC
-	.extern _0226191E
-	.extern _02261924
-	.extern _02261942
-	.extern _0226194A
-	.extern _0226195C
-	.extern _02261966
-	.extern _02261978
-	.extern _0226198A
-	.extern _022619A0
-	.extern _022619C0
 	.extern _022619F8
 	.extern _022619FC
 	.extern _02261A22
@@ -765,6 +765,9 @@
 	.extern ov91_0225D6A0
 	.extern ov91_0225D6B8
 	.extern ov91_0225D750
+	.extern ov91_0225D768
+	.extern ov91_0225D84C
+	.extern ov91_0225D884
 	.extern ov91_0225D8E0
 	.extern ov91_0225D8F0
 	.extern ov91_0225DB0C
@@ -923,13 +926,6 @@
 	.extern ov91_022613AC
 	.extern ov91_022613C8
 	.extern ov91_022614D4
-	.extern ov91_022614FC
-	.extern ov91_02261580
-	.extern ov91_02261790
-	.extern ov91_02261808
-	.extern ov91_02261890
-	.extern ov91_022618B0
-	.extern ov91_02261928
 	.extern ov91_022619E8
 	.extern ov91_02261A00
 	.extern ov91_02261B10
@@ -1073,124 +1069,4 @@
 	.extern ov91_02262754
 	.extern ov91_022627C0
 
-	.text
-
-	thumb_func_start ov91_0225D768
-ov91_0225D768: ; 0x0225D768
-	push {r3, r4, r5, r6, r7, lr}
-	sub sp, #0x18
-	mov r4, #0
-	str r0, [sp]
-	add r0, r4, #0
-	sub r0, r0, #1
-	ldr r5, [sp]
-	str r1, [sp, #4]
-	str r2, [sp, #8]
-	str r3, [sp, #0xc]
-	str r4, [sp, #0x10]
-	str r0, [sp, #0x14]
-	add r6, r4, #0
-_0225D782:
-	ldr r0, [r5]
-	bl Sprite_GetDrawFlag
-	cmp r0, #0
-	bne _0225D794
-	mov r0, #1
-	str r6, [sp, #0x14]
-	str r0, [sp, #0x10]
-	b _0225D7B4
-_0225D794:
-	ldr r0, [r5]
-	bl Sprite_GetDrawPriority
-	add r7, r0, #0
-	ldr r0, [r5]
-	add r1, r7, #1
-	bl Sprite_SetDrawPriority
-	ldr r0, [sp, #0x10]
-	cmp r0, #0
-	bne _0225D7B4
-	add r0, r7, #1
-	cmp r4, r0
-	bhi _0225D7B4
-	add r4, r0, #0
-	str r6, [sp, #0x14]
-_0225D7B4:
-	add r6, r6, #1
-	add r5, r5, #4
-	cmp r6, #3
-	blt _0225D782
-	ldr r0, [sp, #0x14]
-	cmp r0, #0
-	bge _0225D7C6
-	bl GF_AssertFail
-_0225D7C6:
-	ldr r0, [sp, #8]
-	cmp r0, #3
-	blo _0225D7D0
-	mov r0, #2
-	str r0, [sp, #8]
-_0225D7D0:
-	ldr r0, [sp, #0xc]
-	cmp r0, #2
-	beq _0225D7F2
-	ldr r0, [sp]
-	ldr r0, [r0, #0x3c]
-	cmp r0, #1
-	bne _0225D7E6
-	ldr r0, [sp, #8]
-	add r0, r0, #2
-	str r0, [sp, #8]
-	b _0225D7EC
-_0225D7E6:
-	ldr r0, [sp, #8]
-	add r0, #8
-	str r0, [sp, #8]
-_0225D7EC:
-	ldr r0, [sp, #4]
-	add r4, r0, #3
-	b _0225D80A
-_0225D7F2:
-	ldr r0, [sp]
-	ldr r0, [r0, #0x3c]
-	cmp r0, #1
-	bne _0225D802
-	ldr r0, [sp, #8]
-	add r0, r0, #5
-	str r0, [sp, #8]
-	b _0225D808
-_0225D802:
-	ldr r0, [sp, #8]
-	add r0, #0xb
-	str r0, [sp, #8]
-_0225D808:
-	mov r4, #7
-_0225D80A:
-	ldr r0, [sp, #0x14]
-	ldr r1, [sp, #8]
-	lsl r5, r0, #2
-	ldr r0, [sp]
-	ldr r0, [r0, r5]
-	bl Sprite_SetAnimCtrlSeq
-	ldr r0, [sp]
-	mov r1, #0
-	add r0, r0, r5
-	str r1, [r0, #0xc]
-	ldr r0, [sp]
-	mov r1, #1
-	ldr r0, [r0, r5]
-	bl Sprite_SetDrawFlag
-	ldr r0, [sp]
-	ldr r1, [sp, #0x14]
-	bl ov91_0225D884
-	ldr r0, [sp]
-	mov r1, #0
-	ldr r0, [r0, r5]
-	bl Sprite_SetDrawPriority
-	ldr r0, [sp]
-	add r1, r4, #0
-	ldr r0, [r0, r5]
-	bl Sprite_SetPaletteOverride
-	add sp, #0x18
-	pop {r3, r4, r5, r6, r7, pc}
-	.balign 4, 0
-	thumb_func_end ov91_0225D768
+.text
