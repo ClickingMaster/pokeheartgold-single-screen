@@ -121,7 +121,8 @@ Autoload WRAM
 	Object lib/src/to90_arm7_sub_wram_1_run32.o
 	Object lib/src/to90_arm7_sub_wram_1_run33.o
 	Object asm/to90_a7_next1668_o07_anchor.o
-	Object asm/to90_a7_next1668_o07_residual_1.o
+	Object asm/op90_to90_a7_next1668_o07_residual_1_anchor.o
+	Object lib/src/op90_to90_a7_next1668_o07_residual_1_r01.o
 	Object lib/src/to90_a7_next1668_o07_run01.o
 	Object lib/src/to90_arm7_sub_wram_1_run34.o
 	Object lib/src/to90_arm7_sub_wram_1_run35.o
@@ -148,7 +149,8 @@ Autoload WRAM
 	Object lib/src/to90_arm7_sub_wram_1_run53.o
 	Object lib/src/to90_arm7_sub_wram_1_run54.o
 	Object asm/op90_to91_arm7_variable41458_prefix_anchor.o
-	Object asm/op90_to91_arm7_variable41458_prefix_residual_1.o
+	Object asm/op90_op90_to91_arm7_variable41458_prefix_residual_1_anchor.o
+	Object lib/src/op90_op90_to91_arm7_variable41458_prefix_residual_1_r01.o
 	Object lib/src/op90_to91_arm7_variable41458_prefix_r01.o
 	Object lib/src/to91_arm7_variable41458_run01.o
 	Object lib/src/to90_arm7_sub_wram_1_run55.o
@@ -230,7 +232,8 @@ Autoload WRAM
 	Object lib/src/op90_to90_arm7_sub_wram_2_residual_2_r01.o
 	Object lib/src/to90_arm7_sub_wram_2_run78.o
 	Object lib/src/to90_arm7_sub_wram_2_run04.o
-	Object asm/to90_arm7_sub_wram_2_residual_3.o
+	Object asm/op90_to90_arm7_sub_wram_2_residual_3_anchor.o
+	Object lib/src/op90_to90_arm7_sub_wram_2_residual_3_r01.o
 	Object lib/src/to90_arm7_sub_wram_2_run79.o
 	Object lib/src/to90_arm7_sub_wram_2_run80.o
 	Object asm/op90_to90_arm7_sub_wram_2_residual_4_anchor.o

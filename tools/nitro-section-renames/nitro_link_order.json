@@ -14,7 +14,8 @@
     "lib/asm/to90_extra2123_anchor.o",
     "src/to90_extra2123_run01.o",
     "lib/asm/op90_to90_extra2123_residual_1_anchor.o",
-    "lib/asm/op90_to90_extra2123_residual_1_residual_1.o",
+    "lib/asm/op90_op90_to90_extra2123_residual_1_residual_1_anchor.o",
+    "src/op90_op90_to90_extra2123_residual_1_residual_1_r01.o",
     "src/op90_to90_extra2123_residual_1_r01.o",
     "lib/asm/to90_extra2124_anchor.o",
     "src/to90_extra2124_run01.o",
@@ -322,7 +323,11 @@
         "selector": ".text"
       },
       {
-        "path": "lib/asm/op90_to90_extra2123_residual_1_residual_1.o",
+        "path": "lib/asm/op90_op90_to90_extra2123_residual_1_residual_1_anchor.o",
+        "selector": ".text"
+      },
+      {
+        "path": "src/op90_op90_to90_extra2123_residual_1_residual_1_r01.o",
         "selector": ".text"
       },
       {

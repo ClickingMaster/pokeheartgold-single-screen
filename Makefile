@@ -426,3 +426,4 @@ $(BUILD_DIR)/src/op90_to91_w41418_StringRead_prefix_r01.o: private MWCCVER := 2.
 $(BUILD_DIR)/src/op90_to90_extra2155_residual_1_r01.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/src/op90_overlay_80_0222BDF4_residual_12_r01.o: private MWCCVER := 2.0/sp2
 $(BUILD_DIR)/src/op90_to80_extra1754_residual_2_r01.o: private MWCCVER := 2.0/sp1p5
+$(BUILD_DIR)/src/op90_overlay_83_residual_6_head_r01.o: private MWCCVER := 2.0/sp2
