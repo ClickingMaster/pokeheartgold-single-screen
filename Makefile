@@ -402,3 +402,4 @@ $(BUILD_DIR)/src/op90_to80_extra1719_residual_2_r01.o: private MWCCVER := 2.0/sp
 $(BUILD_DIR)/src/op90_to80_extra1834_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to80_extra1836_residual_2_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to90_extra1953_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_op90_to80_extra1378_residual_2_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
