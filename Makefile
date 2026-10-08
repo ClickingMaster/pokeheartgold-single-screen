@@ -394,3 +394,11 @@ $(BUILD_DIR)/src/op90_to70_to53_overlay112_002_extra683_residual_1_r01.o: privat
 $(BUILD_DIR)/src/op90_to80_extra1453_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to80_extra1617_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_unk_02032B84_r01.o: private OPTFLAGS := -O2
+$(BUILD_DIR)/src/op90_to53_overlay13_r02_r01.o: private MWCCVER := 2.0/sp1
+$(BUILD_DIR)/src/op90_to53_overlay13_r20_r01.o: private MWCCVER := 2.0/sp2
+$(BUILD_DIR)/src/op90_to56_w16_residual03_r01.o: private MWCCVER := 2.0/sp1
+$(BUILD_DIR)/src/op90_to70_to53_overlay13_r01_extra422_residual_1_r01.o: private MWCCVER := 2.0/sp1
+$(BUILD_DIR)/src/op90_to80_extra1719_residual_2_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_to80_extra1834_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_to80_extra1836_residual_2_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_to90_extra1953_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
