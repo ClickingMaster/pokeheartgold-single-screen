@@ -679,7 +679,8 @@ Autoload EXT_WRAM
 	Object lib/src/to90_arm7_sub_ext_wram_run192.o
 	Object lib/src/to90_arm7_sub_ext_wram_run193.o
 	Object lib/src/to91_w41480_tx_end.o
-	Object asm/to91_w41480_tx_end_suffix.o
+	Object asm/op90_to91_w41480_tx_end_suffix_anchor.o
+	Object lib/src/op90_to91_w41480_tx_end_suffix_r01.o
 	Object lib/src/to90_arm7_sub_ext_wram_run194.o
 	Object asm/to90_arm7_sub_ext_wram_residual_43.o
 	Object lib/src/to90_arm7_sub_ext_wram_run376.o

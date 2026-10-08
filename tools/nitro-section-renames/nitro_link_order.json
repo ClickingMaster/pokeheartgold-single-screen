@@ -75,7 +75,8 @@
     "src/op90_to65_nitro_unified_residual_26_r01.o",
     "lib/asm/to90_extra2127_anchor.o",
     "src/to90_extra2127_run01.o",
-    "lib/asm/to90_extra2127_residual_1.o",
+    "lib/asm/op90_to90_extra2127_residual_1_anchor.o",
+    "src/op90_to90_extra2127_residual_1_r01.o",
     "src/to90_extra2127_run02.o",
     "lib/asm/to90_extra2128_anchor.o",
     "lib/asm/op90_to90_extra2128_residual_1_anchor.o",
@@ -643,7 +644,11 @@
         "selector": ".text"
       },
       {
-        "path": "lib/asm/to90_extra2127_residual_1.o",
+        "path": "lib/asm/op90_to90_extra2127_residual_1_anchor.o",
+        "selector": ".text"
+      },
+      {
+        "path": "src/op90_to90_extra2127_residual_1_r01.o",
         "selector": ".text"
       },
       {
