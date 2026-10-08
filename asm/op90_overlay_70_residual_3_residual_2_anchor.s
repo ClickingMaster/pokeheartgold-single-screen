@@ -146,12 +146,6 @@
 	.public _02237FA8
 	.public _02237FAC
 	.public _02237FB0
-	.public _02237FE2
-	.public _02237FF4
-	.public _02237FF8
-	.public _02237FFC
-	.public _02238000
-	.public _02238004
 	.public _02238036
 	.public _02238048
 	.public _0223804C
@@ -2787,102 +2781,4 @@
 	.include "overlay_70.inc"
 	.include "global.inc"
 
-	.text
-	.public ov70_02237F2C
-	.public ov70_02237F58
-	.public ov70_0223887C
-	.public ov70_02238D60
-	.public ov70_02238D84
-	.public ov70_02238E44
-	.public ov70_02238E50
-	.public ov70_02238E58
-	.public ov70_02238E64
-	.public ov70_02238F04
-	.public ov70_02238F10
-	.public ov70_02238FE0
-	.public ov70_022392BC
-	.public ov70_022392E0
-	.public ov70_022394A8
-	.public ov70_0223963C
-	.public ov70_02239698
-	.public ov70_022396CC
-	.public ov70_022396E0
-	.public ov70_02239954
-	.public ov70_0223997C
-	.public ov70_0223A0C4
-	.public ov70_0223A258
-	.public ov70_0223ABD8
-	.public ov70_0223ACE4
-	.public ov70_0223C928
-	.public ov70_0223D924
-	.public ov70_0223E114
-	.public ov70_0223E490
-	.public ov70_0223E4DC
-	.public ov70_0223E76C
-	.public ov70_0223ECA4
-	.public ov70_0223EDCC
-	.public ov70_0223EDD8
-	.public ov70_0223F948
-	.public ov70_0223F960
-	.public ov70_0224063C
-	.public ov70_02240838
-	.public ov70_02240884
-	.public ov70_022408BC
-	.public ov70_022408E0
-	.public ov70_02240D44
-	.public ov70_02240D54
-	.public ov70_0224122C
-	.public ov70_02241494
-	.public ov70_02242508
-	.public ov70_022429A0
-	.public ov70_02242FF4
-	.public ov70_0224304C
-	.public ov70_02243068
-	.public ov70_02243400
-	.public ov70_02243420
-	.public ov70_02243B1C
-	.public ov70_02244290
-	.public ov70_022446A8
-	.public ov70_02244834
-	.public ov70_02244944
-	.public ov70_02245124
-
-
-	thumb_func_start ov70_02237FB4
-ov70_02237FB4: ; 0x02237FB4
-	push {r3, lr}
-	ldr r0, _02237FF4 ; =ov70_0224680C
-	ldr r2, _02237FF8 ; =ov70_02246814
-	ldr r1, [r0]
-	ldr r0, [r0, #4]
-	str r1, [r2]
-	str r0, [r2, #4]
-	bl ov38_0221BE84
-	mov r0, #2
-	str r0, [sp]
-	ldr r0, _02237FFC ; =ov70_022460EC
-	ldr r1, _02237FF8 ; =ov70_02246814
-	ldr r3, _02238000 ; =ov70_0224693C
-	mov r2, #8
-	bl ov70_02238360
-	cmp r0, #0
-	beq _02237FE2
-	ldr r0, _02238004 ; =_02246800
-	mov r1, #4
-	str r1, [r0]
-	pop {r3, pc}
-_02237FE2:
-	ldr r0, _02238004 ; =_02246800
-	mov r1, #0x18
-	str r1, [r0]
-	sub r1, #0x25
-	str r1, [r0, #4]
-	bl ov38_0221BFEC
-	pop {r3, pc}
-	nop
-_02237FF4: .word ov70_0224680C
-_02237FF8: .word ov70_02246814
-_02237FFC: .word ov70_022460EC
-_02238000: .word ov70_0224693C
-_02238004: .word _02246800
-	thumb_func_end ov70_02237FB4
+.text
