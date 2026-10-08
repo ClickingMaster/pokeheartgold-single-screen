@@ -383,7 +383,9 @@ Autoload EXT_WRAM
 	Object lib/src/to90_arm7_WM_sp_run16.o
 	Object lib/src/to90_arm7_WM_sp_run17.o
 	Object asm/to90_arm7_sub_ext_wram_anchor.o
-	Object asm/to90_arm7_sub_ext_wram_residual_1.o
+	Object asm/op90_to90_arm7_sub_ext_wram_residual_1_anchor.o
+	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_1_r01.o
+	Object asm/op90_to90_arm7_sub_ext_wram_residual_1_residual_1.o
 	Object lib/src/to90_arm7_sub_ext_wram_run01.o
 	Object asm/to90_arm7_sub_ext_wram_residual_2.o
 	Object lib/src/to90_arm7_sub_ext_wram_run02.o
@@ -440,7 +442,8 @@ Autoload EXT_WRAM
 	Object lib/src/to90_arm7_sub_ext_wram_run41.o
 	Object asm/to91_w41430_WMSP_SetParentParam_prefix.o
 	Object lib/src/to91_w41430_WMSP_SetParentParam_run01.o
-	Object asm/to91_w41430_WMSP_SetParentParam_suffix.o
+	Object asm/op90_to91_w41430_WMSP_SetParentParam_suffix_anchor.o
+	Object lib/src/op90_to91_w41430_WMSP_SetParentParam_suffix_r01.o
 	Object lib/src/to90_arm7_sub_ext_wram_run42.o
 	Object lib/src/to90_arm7_sub_ext_wram_run406.o
 	Object lib/src/to90_arm7_sub_ext_wram_run43.o
@@ -503,7 +506,9 @@ Autoload EXT_WRAM
 	Object asm/op90_to90_arm7_sub_ext_wram_residual_20_anchor.o
 	Object asm/op90_to90_arm7_sub_ext_wram_residual_20_residual_1.o
 	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_20_r01.o
-	Object asm/op90_to90_arm7_sub_ext_wram_residual_20_residual_2.o
+	Object asm/op90_op90_to90_arm7_sub_ext_wram_residual_20_residual_2_anchor.o
+	Object lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_20_residual_2_r01.o
+	Object asm/op90_op90_to90_arm7_sub_ext_wram_residual_20_residual_2_residual_1.o
 	Object lib/src/to90_arm7_sub_ext_wram_run82.o
 	Object asm/op90_to90_arm7_sub_ext_wram_residual_21_anchor.o
 	Object asm/op90_to90_arm7_sub_ext_wram_residual_21_residual_1.o
@@ -845,7 +850,8 @@ Autoload EXT_WRAM
 	Object lib/src/to90_arm7_sub_ext_wram_run333.o
 	Object lib/src/to90_arm7_sub_ext_wram_run334.o
 	Object lib/src/to90_arm7_sub_ext_wram_run335.o
-	Object asm/to91_w41574_txq_prefix.o
+	Object asm/op90_to91_w41574_txq_prefix_anchor.o
+	Object lib/src/op90_to91_w41574_txq_prefix_r01.o
 	Object lib/src/to91_w41574_copy_tx_frame.o
 	Object lib/src/to90_arm7_sub_ext_wram_run336.o
 	Object lib/src/to90_arm7_sub_ext_wram_run392.o

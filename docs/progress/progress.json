@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "266a64b4678f2d68d48d5aa8844b7be9eb045720",
+  "commit": "cb407b4aacf2a7493d6547eb64fd28b5fe40d449",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "7647612eb2004791aa6df913bfe8a1ed8d417cf9ab74641c6a71e41bdb7bda21",
-    "ARM7": "0dffc09eb71fccc9f6904c2877bb7b98c4e6d3b922cfe889320480427b18d4d0"
+    "ARM9": "f1c7bff20be8d21c1748f90ded3435102aa05e5accb2780a7d4140063d14cad2",
+    "ARM7": "9daf1ec0fddbdb5ace35b97cd4a4023145513b9568754b74211a3081d1e3f2c6"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
   "totals": {
-    "c": 3886496,
+    "c": 3897886,
     "mixed": 2822,
-    "asm": 165188,
+    "asm": 153796,
     "cpp": 12304,
     "unknown": 8552
   },
   "coverage": {
-    "denominator_bytes": 4075362,
+    "denominator_bytes": 4075360,
     "c": {
-      "bytes": 3886496,
-      "percent": 95.3656632220647
+      "bytes": 3897886,
+      "percent": 95.64519453496133
     },
     "cpp": {
       "bytes": 12304,
-      "percent": 0.30191183016379897
+      "percent": 0.3019119783282949
     },
     "combined": {
-      "bytes": 3898800,
-      "percent": 95.66757505222849
+      "bytes": 3910190,
+      "percent": 95.94710651328963
     }
   },
   "objects": [
@@ -255,6 +255,14 @@
       "bytes": 88,
       "status": "c",
       "source": "src/op90_to80_extra1728_residual_1_r01.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_0",
+      "object": "op90_to80_extra1739_residual_1_r01.o",
+      "bytes": 652,
+      "status": "c",
+      "source": "src/op90_to80_extra1739_residual_1_r01.c"
     },
     {
       "cpu": "ARM9",
@@ -2743,14 +2751,6 @@
       "bytes": 792,
       "status": "c",
       "source": "src/to80_extra1738_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_0",
-      "object": "to80_extra1739_residual_1.o",
-      "bytes": 652,
-      "status": "asm",
-      "source": "lib/NitroDWC/asm/to80_extra1739_residual_1.s"
     },
     {
       "cpu": "ARM9",
@@ -47635,6 +47635,14 @@
     {
       "cpu": "ARM9",
       "module": "OVY_80",
+      "object": "op90_overlay_80_0222BDF4_residual_12_r01.o",
+      "bytes": 156,
+      "status": "c",
+      "source": "src/op90_overlay_80_0222BDF4_residual_12_r01.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_80",
       "object": "op90_overlay_80_022340E8_to41_residual_4_r01.o",
       "bytes": 212,
       "status": "c",
@@ -48591,14 +48599,6 @@
       "bytes": 468,
       "status": "c",
       "source": "src/overlay_80_0222AEF8.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
-      "object": "overlay_80_0222BDF4_residual_12.o",
-      "bytes": 156,
-      "status": "asm",
-      "source": "asm/overlay_80_0222BDF4_residual_12.s"
     },
     {
       "cpu": "ARM9",
@@ -50859,6 +50859,14 @@
     {
       "cpu": "ARM9",
       "module": "OVY_83",
+      "object": "op90_to91_w41472_ov83_kind_prefix_r01.o",
+      "bytes": 182,
+      "status": "c",
+      "source": "src/op90_to91_w41472_ov83_kind_prefix_r01.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_83",
       "object": "opus10_overlay83_menu_printers_run1.o",
       "bytes": 1068,
       "status": "c",
@@ -52063,14 +52071,6 @@
       "bytes": 268,
       "status": "c",
       "source": "src/to91_w41472_ov83_0224563C_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "to91_w41472_ov83_kind_prefix.o",
-      "bytes": 184,
-      "status": "asm",
-      "source": "asm/to91_w41472_ov83_kind_prefix.s"
     },
     {
       "cpu": "ARM9",
@@ -55171,6 +55171,14 @@
     {
       "cpu": "ARM9",
       "module": "OVY_91",
+      "object": "op90_to53_overlay91_run_078_r01.o",
+      "bytes": 372,
+      "status": "c",
+      "source": "src/op90_to53_overlay91_run_078_r01.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_91",
       "object": "op90_to57_overlay91_082_residual_r01.o",
       "bytes": 130,
       "status": "c",
@@ -55495,14 +55503,6 @@
       "bytes": 56,
       "status": "c",
       "source": "src/to53_overlay91/to53_overlay91_run_077.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_91",
-      "object": "to53_overlay91_run_078.o",
-      "bytes": 372,
-      "status": "asm",
-      "source": "asm/to53_overlay91_run_078.s"
     },
     {
       "cpu": "ARM9",
@@ -56875,6 +56875,14 @@
     {
       "cpu": "ARM9",
       "module": "OVY_93",
+      "object": "op90_op90_overlay_93_thumb_2_residual_7_tail_to50_residual_1_r01.o",
+      "bytes": 248,
+      "status": "c",
+      "source": "src/op90_op90_overlay_93_thumb_2_residual_7_tail_to50_residual_1_r01.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_93",
       "object": "op90_overlay_93_thumb_1_to41_residual_12_r01.o",
       "bytes": 420,
       "status": "c",
@@ -56935,14 +56943,6 @@
       "bytes": 292,
       "status": "c",
       "source": "src/op90_overlay_93_thumb_2_residual_7_tail_to50_r02.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_93",
-      "object": "op90_overlay_93_thumb_2_residual_7_tail_to50_residual_1.o",
-      "bytes": 248,
-      "status": "asm",
-      "source": "asm/op90_overlay_93_thumb_2_residual_7_tail_to50_residual_1.s"
     },
     {
       "cpu": "ARM9",
@@ -72115,6 +72115,14 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "op90_op90_op90_op90_to65_nnsys_residual_34_residual_3_residual_1_residual_1_residual_2_r01.o",
+      "bytes": 528,
+      "status": "c",
+      "source": "src/op90_op90_op90_op90_to65_nnsys_residual_34_residual_3_residual_1_residual_1_residual_2_r01.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "op90_op90_op90_to65_nnsys_residual_34_residual_3_residual_1_residual_1_r01.o",
       "bytes": 408,
       "status": "c",
@@ -72131,10 +72139,10 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "op90_op90_op90_to65_nnsys_residual_34_residual_3_residual_1_residual_1_residual_2.o",
-      "bytes": 528,
-      "status": "asm",
-      "source": "lib/asm/op90_op90_op90_to65_nnsys_residual_34_residual_3_residual_1_residual_1_residual_2.s"
+      "object": "op90_op90_to59_dwcbm_residual_5_residual_1_r01.o",
+      "bytes": 388,
+      "status": "c",
+      "source": "src/op90_op90_to59_dwcbm_residual_5_residual_1_r01.c"
     },
     {
       "cpu": "ARM9",
@@ -72295,14 +72303,6 @@
       "bytes": 476,
       "status": "c",
       "source": "src/op90_to59_dwcbm_residual_5_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to59_dwcbm_residual_5_residual_1.o",
-      "bytes": 388,
-      "status": "asm",
-      "source": "lib/NitroDWC/asm/op90_to59_dwcbm_residual_5_residual_1.s"
     },
     {
       "cpu": "ARM9",
@@ -72923,6 +72923,14 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "op90_to80_extra1754_residual_2_r01.o",
+      "bytes": 352,
+      "status": "c",
+      "source": "src/op90_to80_extra1754_residual_2_r01.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "op90_to80_extra1754_residual_5_r01.o",
       "bytes": 360,
       "status": "c",
@@ -73143,6 +73151,14 @@
       "bytes": 172,
       "status": "c",
       "source": "src/op90_to90_extra2141_residual_1_r01.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "op90_to90_extra2145_residual_1_r01.o",
+      "bytes": 344,
+      "status": "c",
+      "source": "src/op90_to90_extra2145_residual_1_r01.c"
     },
     {
       "cpu": "ARM9",
@@ -81035,14 +81051,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to80_extra1754_residual_2.o",
-      "bytes": 352,
-      "status": "asm",
-      "source": "lib/asm/to80_extra1754_residual_2.s"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to80_extra1754_residual_3.o",
       "bytes": 500,
       "status": "asm",
@@ -81823,14 +81831,6 @@
       "bytes": 228,
       "status": "c",
       "source": "src/to90_extra2144_run02.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_extra2145_residual_1.o",
-      "bytes": 344,
-      "status": "asm",
-      "source": "lib/asm/to90_extra2145_residual_1.s"
     },
     {
       "cpu": "ARM9",
@@ -85267,6 +85267,22 @@
     {
       "cpu": "ARM7",
       "module": "EXT_WRAM",
+      "object": "op90_op90_to90_arm7_sub_ext_wram_residual_20_residual_2_r01.o",
+      "bytes": 2472,
+      "status": "c",
+      "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_20_residual_2_r01.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
+      "object": "op90_op90_to90_arm7_sub_ext_wram_residual_20_residual_2_residual_1.o",
+      "bytes": 8,
+      "status": "asm",
+      "source": "sub/asm/op90_op90_to90_arm7_sub_ext_wram_residual_20_residual_2_residual_1.s"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
       "object": "op90_op90_to90_arm7_sub_ext_wram_residual_21_residual_2_r01.o",
       "bytes": 500,
       "status": "c",
@@ -85387,6 +85403,22 @@
     {
       "cpu": "ARM7",
       "module": "EXT_WRAM",
+      "object": "op90_to90_arm7_sub_ext_wram_residual_1_r01.o",
+      "bytes": 4500,
+      "status": "c",
+      "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_1_r01.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
+      "object": "op90_to90_arm7_sub_ext_wram_residual_1_residual_1.o",
+      "bytes": 48,
+      "status": "asm",
+      "source": "sub/asm/op90_to90_arm7_sub_ext_wram_residual_1_residual_1.s"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
       "object": "op90_to90_arm7_sub_ext_wram_residual_20_r01.o",
       "bytes": 1272,
       "status": "c",
@@ -85399,14 +85431,6 @@
       "bytes": 16,
       "status": "asm",
       "source": "sub/asm/op90_to90_arm7_sub_ext_wram_residual_20_residual_1.s"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "op90_to90_arm7_sub_ext_wram_residual_20_residual_2.o",
-      "bytes": 2480,
-      "status": "asm",
-      "source": "sub/asm/op90_to90_arm7_sub_ext_wram_residual_20_residual_2.s"
     },
     {
       "cpu": "ARM7",
@@ -85595,6 +85619,14 @@
     {
       "cpu": "ARM7",
       "module": "EXT_WRAM",
+      "object": "op90_to91_w41430_WMSP_SetParentParam_suffix_r01.o",
+      "bytes": 652,
+      "status": "c",
+      "source": "sub/lib/src/op90_to91_w41430_WMSP_SetParentParam_suffix_r01.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
       "object": "op90_to91_w41462_default_suffix_r01.o",
       "bytes": 652,
       "status": "c",
@@ -85631,6 +85663,14 @@
       "bytes": 1612,
       "status": "asm",
       "source": "sub/asm/op90_to91_w41568_rx_suffix_residual_1.s"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
+      "object": "op90_to91_w41574_txq_prefix_r01.o",
+      "bytes": 544,
+      "status": "c",
+      "source": "sub/lib/src/op90_to91_w41574_txq_prefix_r01.c"
     },
     {
       "cpu": "ARM7",
@@ -85847,14 +85887,6 @@
       "bytes": 12,
       "status": "c",
       "source": "sub/lib/src/to90_arm7_current1_wm_helpers_run02.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_residual_1.o",
-      "bytes": 4548,
-      "status": "asm",
-      "source": "sub/asm/to90_arm7_sub_ext_wram_residual_1.s"
     },
     {
       "cpu": "ARM7",
@@ -89283,14 +89315,6 @@
     {
       "cpu": "ARM7",
       "module": "EXT_WRAM",
-      "object": "to91_w41430_WMSP_SetParentParam_suffix.o",
-      "bytes": 652,
-      "status": "asm",
-      "source": "sub/asm/to91_w41430_WMSP_SetParentParam_suffix.s"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
       "object": "to91_w41439_lifetime.o",
       "bytes": 104,
       "status": "c",
@@ -89431,14 +89455,6 @@
       "bytes": 360,
       "status": "c",
       "source": "sub/lib/src/to91_w41574_copy_tx_frame.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to91_w41574_txq_prefix.o",
-      "bytes": 544,
-      "status": "asm",
-      "source": "sub/asm/to91_w41574_txq_prefix.s"
     },
     {
       "cpu": "ARM7",

@@ -1,0 +1,41 @@
+	.include "asm/macros.inc"
+	.include "global.inc"
+
+	.extern MI_CpuFill8
+	.extern MIi_CpuCopy16
+	.extern OS_CancelAlarm
+	.extern OS_ExitThread
+	.extern OS_GetTick
+	.extern OS_SetAlarm
+	.extern WMSP_AddRssiToList
+	.extern WMSP_CancelVAlarm
+	.extern WMSP_CheckMacAddress
+	.extern WMSP_CleanSendQueue
+	.extern WMSP_FlushSendQueue
+	.extern WMSP_GetAverageLinkLevel
+	.extern WMSP_GetInternalRequestBuf
+	.extern WMSP_GetRssi8_06001B5C
+	.extern WMSP_ParsePortPacket
+	.extern WMSP_RequestResumeMP
+	.extern WMSP_ResetSizeVars
+	.extern WMSP_SetChildSize
+	.extern WMSP_SetThreadPriorityLow
+	.extern WmspFreeBufOfWL
+	.extern WmspKickMPChild
+	.extern WmspKickMPParent
+	.extern WmspMPChildIntervalAlarmCallback
+	.extern WmspMPParentIntervalAlarmCallback
+	.extern WmspMaMultiPollAckAlarmCallback
+	.extern __VENEER_MI_CpuCopy8
+	.extern __VENEER_MIi_CpuClear16
+	.extern __VENEER_OS_DisableInterrupts
+	.extern __VENEER_OS_ReceiveMessage
+	.extern __VENEER_OS_RestoreInterrupts
+	.extern __VENEER_OS_SendMessage
+	.extern __VENEER_WMSP_GetBuffer4Callback2Wm9
+	.extern __VENEER_WMSP_ReturnResult2Wm9
+	.extern wmspMPAckAlarm
+	.extern wmspMPIntervalAlarm
+	.extern wmspW
+
+.text
