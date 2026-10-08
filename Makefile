@@ -418,3 +418,5 @@ $(BUILD_DIR)/src/op90_to59_msl_strtoul_residual_r02.o: private EXCCFLAGS := -Cpp
 $(BUILD_DIR)/src/op90_to59_msl_strtoul_residual_r03.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to59_msl_strtoul_residual_r03.o: private EXCCFLAGS := -Cpp_exceptions on
 $(BUILD_DIR)/src/op90_to65_nitro_unified_residual_26_r01.o: private MWCCVER := 2.0/sp2
+$(BUILD_DIR)/src/op90_to65_wifi_residual_11_residual_5_r01.o: private MWCCVER := 2.0/sp1p5
+$(BUILD_DIR)/src/op90_unk_02025C44_r01.o: private MWCCVER := 2.0/sp1

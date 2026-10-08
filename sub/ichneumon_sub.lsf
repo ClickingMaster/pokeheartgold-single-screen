@@ -836,7 +836,8 @@ Autoload EXT_WRAM
 	Object lib/src/to91_w41424_testrx.o
 	Object lib/src/to90_arm7_sub_ext_wram_run332.o
 	Object lib/src/to90_arm7_sub_ext_wram_run384.o
-	Object asm/to90_arm7_sub_ext_wram_residual_54.o
+	Object asm/op90_to90_arm7_sub_ext_wram_residual_54_anchor.o
+	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_54_r01.o
 	Object lib/src/to90_arm7_sub_ext_wram_run333.o
 	Object lib/src/to90_arm7_sub_ext_wram_run334.o
 	Object lib/src/to90_arm7_sub_ext_wram_run335.o
