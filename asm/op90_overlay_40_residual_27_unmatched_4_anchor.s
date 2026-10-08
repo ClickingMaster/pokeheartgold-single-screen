@@ -1,0 +1,21 @@
+	.include "asm/macros.inc"
+	.include "overlay_40.inc"
+	.include "global.inc"
+	.public GF_SinDeg
+	.public Heap_Alloc
+	.public Heap_Free
+	.public MI_CpuFill8
+	.public ManagedSprite_GetSpritePositionFxXY
+	.public ManagedSprite_SetPositonFxXY
+	.public PaletteData_BlendPalettes
+	.public TextOBJ_SetSpritesDrawFlag
+	.public _s32_div_f
+	.public ov40_0222C39C
+	.public ov40_0222D288
+	.public ov40_0222D294
+	.public ov40_0223142C
+	.public sub_020136B4
+	.public sub_020878B8
+	.public sub_02087948
+	.public sub_020879E0
+.text
