@@ -13,7 +13,9 @@
     "src/to90_extra2122_run01.o",
     "lib/asm/to90_extra2123_anchor.o",
     "src/to90_extra2123_run01.o",
-    "lib/asm/to90_extra2123_residual_1.o",
+    "lib/asm/op90_to90_extra2123_residual_1_anchor.o",
+    "lib/asm/op90_to90_extra2123_residual_1_residual_1.o",
+    "src/op90_to90_extra2123_residual_1_r01.o",
     "lib/asm/to90_extra2124_anchor.o",
     "src/to90_extra2124_run01.o",
     "lib/asm/to90_extra2125_anchor.o",
@@ -75,7 +77,8 @@
     "lib/asm/to90_extra2127_residual_1.o",
     "src/to90_extra2127_run02.o",
     "lib/asm/to90_extra2128_anchor.o",
-    "lib/asm/to90_extra2128_residual_1.o",
+    "lib/asm/op90_to90_extra2128_residual_1_anchor.o",
+    "src/op90_to90_extra2128_residual_1_r01.o",
     "src/to90_extra2128_run01.o",
     "lib/asm/to65_to65_nitro_unified_residual_36_extra22_anchor.o",
     "src/to65_to65_nitro_unified_residual_36_extra22_run01.o",
@@ -198,7 +201,8 @@
     "lib/asm/to90_extra2155_anchor.o",
     "src/to90_extra2155_run01.o",
     "src/to90_extra2155_run02.o",
-    "lib/asm/to90_extra2155_residual_1.o",
+    "lib/asm/op90_to90_extra2155_residual_1_anchor.o",
+    "src/op90_to90_extra2155_residual_1_r01.o",
     "lib/NitroSDK/src/snd/SND_main.o",
     "lib/NitroSDK/src/snd/SND_command.o",
     "lib/NitroSDK/src/snd/SND_alarm.o",
@@ -313,7 +317,15 @@
         "selector": ".text"
       },
       {
-        "path": "lib/asm/to90_extra2123_residual_1.o",
+        "path": "lib/asm/op90_to90_extra2123_residual_1_anchor.o",
+        "selector": ".text"
+      },
+      {
+        "path": "lib/asm/op90_to90_extra2123_residual_1_residual_1.o",
+        "selector": ".text"
+      },
+      {
+        "path": "src/op90_to90_extra2123_residual_1_r01.o",
         "selector": ".text"
       },
       {
@@ -645,7 +657,11 @@
         "selector": ".text"
       },
       {
-        "path": "lib/asm/to90_extra2128_residual_1.o",
+        "path": "lib/asm/op90_to90_extra2128_residual_1_anchor.o",
+        "selector": ".text"
+      },
+      {
+        "path": "src/op90_to90_extra2128_residual_1_r01.o",
         "selector": ".text"
       },
       {
@@ -1177,7 +1193,11 @@
         "selector": ".text"
       },
       {
-        "path": "lib/asm/to90_extra2155_residual_1.o",
+        "path": "lib/asm/op90_to90_extra2155_residual_1_anchor.o",
+        "selector": ".text"
+      },
+      {
+        "path": "src/op90_to90_extra2155_residual_1_r01.o",
         "selector": ".text"
       }
     ],
