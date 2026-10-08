@@ -165,7 +165,8 @@ Autoload WRAM
 	Object lib/src/to90_extra2572_run01.o
 	Object lib/src/to90_arm7_sub_wram_1_run68.o
 	Object lib/src/to90_arm7_sub_wram_1_run69.o
-	Object asm/to90_arm7_sub_wram_1_residual_16.o
+	Object asm/op90_to90_arm7_sub_wram_1_residual_16_anchor.o
+	Object lib/src/op90_to90_arm7_sub_wram_1_residual_16_r01.o
 	Object lib/src/to90_arm7_sub_wram_1_run70.o
 	Object lib/src/to90_arm7_sub_wram_1_run71.o
 	Object lib/src/to90_arm7_sub_wram_1_run72.o
@@ -195,7 +196,8 @@ Autoload WRAM
 	Object lib/src/to90_arm7_sub_wram_1_run89.o
 	Object lib/src/to90_arm7_sub_wram_1_run90.o
 	Object lib/src/to91_arm7_card41457_run01.o
-	Object asm/to91_arm7_card41457_suffix.o
+	Object asm/op90_to91_arm7_card41457_suffix_anchor.o
+	Object lib/src/op90_to91_arm7_card41457_suffix_r01.o
 	Object lib/src/to90_arm7_sub_wram_1_run91.o
 	Object lib/src/to90_arm7_sub_wram_1_run92.o
 	Object lib/src/to90_arm7_sub_wram_1_run93.o
@@ -441,7 +443,9 @@ Autoload EXT_WRAM
 	Object lib/src/to90_arm7_sub_ext_wram_run373.o
 	Object lib/src/to90_arm7_sub_ext_wram_run44.o
 	Object lib/src/to90_arm7_sub_ext_wram_run45.o
-	Object asm/to90_arm7_sub_ext_wram_residual_14.o
+	Object asm/op90_to90_arm7_sub_ext_wram_residual_14_anchor.o
+	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_14_r01.o
+	Object asm/op90_to90_arm7_sub_ext_wram_residual_14_residual_1.o
 	Object lib/src/to90_arm7_sub_ext_wram_run46.o
 	Object lib/src/to90_arm7_sub_ext_wram_run47.o
 	Object lib/src/to90_arm7_sub_ext_wram_run48.o
@@ -887,7 +891,9 @@ Object asm/op90_to91_w41568_rx_suffix_residual_1.o
 	Object lib/src/to90_arm7_sub_ext_wram_run382.o
 	Object asm/op90_to90_arm7_sub_ext_wram_residual_63_anchor.o
 	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_63_r01.o
-	Object asm/op90_to90_arm7_sub_ext_wram_residual_63_residual_1.o
+	Object asm/op90_op90_to90_arm7_sub_ext_wram_residual_63_residual_1_anchor.o
+	Object lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_63_residual_1_r01.o
+	Object asm/op90_op90_to90_arm7_sub_ext_wram_residual_63_residual_1_residual_1.o
 	Object lib/src/to90_arm7_sub_ext_wram_run365.o
 	Object lib/src/to91_w41423_rxctrl.o
 	Object lib/src/to90_arm7_sub_ext_wram_run366.o

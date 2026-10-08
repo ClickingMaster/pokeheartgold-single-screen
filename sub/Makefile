@@ -54,3 +54,5 @@ $(BUILD_DIR)/lib/src/op90_to91_w41462_default_suffix_r01.o: private MWCCVER := 2
 $(BUILD_DIR)/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_21_residual_2_r01.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_21_residual_2_r02.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/src/op90_to90_arm7_sub_ext_wram_residual_41_r01.o: private MWCCVER := 2.0/sp1
+$(BUILD_DIR)/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_63_residual_1_r01.o: private MWCCVER := 2.0/sp1
+$(BUILD_DIR)/lib/src/op90_to90_arm7_sub_ext_wram_residual_14_r01.o: private MWCCVER := 2.0/sp1
