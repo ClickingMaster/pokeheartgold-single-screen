@@ -3143,7 +3143,8 @@ Overlay field
     Object src/field_overlay_effects_17.o
     Object src/to91_w41562_particle_offsets.o
     Object src/field_overlay_effects_18.o
-    Object asm/overlay_01_021EFB38_residual_19.o
+    Object asm/op90_overlay_01_021EFB38_residual_19_anchor.o
+    Object src/op90_overlay_01_021EFB38_residual_19_r01.o
     Object src/field_effect_manager_1.o
     Object asm/to70_overlay_01_021F1348_extra737_anchor.o
     Object src/to70_overlay_01_021F1348_extra737_run01.o
@@ -5658,7 +5659,8 @@ Overlay OVY_18
     Object asm/to90_extra2245_anchor.o
     Object src/to90_extra2245_run01.o
     Object src/sol_r9_ov18_run02.o
-    Object asm/sol_r9_ov18_gap03.o
+    Object asm/op90_sol_r9_ov18_gap03_anchor.o
+    Object src/op90_sol_r9_ov18_gap03_r01.o
     Object src/sol_r9_ov18_run03.o
     Object asm/to90_extra2246_anchor.o
     Object src/to90_extra2246_run01.o
@@ -5684,7 +5686,8 @@ Overlay OVY_18
     Object asm/to90_extra2066_anchor.o
     Object src/to90_extra2066_run01.o
     Object src/to42_ov18_dex_search_gap09_run4.o
-    Object asm/to42_ov18_dex_search_gap09_asm5.o
+    Object asm/op90_to42_ov18_dex_search_gap09_asm5_anchor.o
+    Object src/op90_to42_ov18_dex_search_gap09_asm5_r01.o
     Object src/overlay18_sol_partial_1.o
     Object src/overlay18_pokedex_info_windows_run1.o
     Object asm/to90_extra2009_anchor.o
@@ -5828,7 +5831,8 @@ Overlay OVY_18
     Object src/to90_extra2196_run01.o
     Object src/to90_extra2196_run02.o
     Object src/overlay18_pokedex_search_ui_run2.o
-    Object asm/overlay_18_residual_25_residual_2.o
+    Object asm/op90_overlay_18_residual_25_residual_2_anchor.o
+    Object src/op90_overlay_18_residual_25_residual_2_r01.o
     Object src/overlay18_pokedex_search_ui_run3.o
     Object asm/to90_extra2197_anchor.o
     Object src/to90_extra2197_run01.o

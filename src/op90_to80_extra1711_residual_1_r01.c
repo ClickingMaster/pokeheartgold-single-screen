@@ -105,7 +105,7 @@ void ov96_02211F38(PokeathlonCourseData *ctx) {
     Entry *entry;
     Ball *ball;
     void *obj;
-    
+
     work = PokeathlonCourse_GetHeapAllocPtr4(ctx);
     team = ov96_021E5F24(ctx);
     packet = (Packet *)ov96_021E8A20(PokeathlonCourse_GetDataCopyArea(ctx) + 0xF0);

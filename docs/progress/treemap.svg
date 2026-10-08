@@ -4,8 +4,8 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="1172" y="42" text-anchor="end" font-size="22">90.55% C + C++ source</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · c95eb19ae · ARM9 + ARM7 · 4,075,428 mapped code bytes</text>
+<text x="1172" y="42" text-anchor="end" font-size="22">90.57% C + C++ source</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · c03aa4754 · ARM9 + ARM7 · 4,075,428 mapped code bytes</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
 <text x="47" y="102" font-size="14">C-only source 90.5%</text>
 <rect x="256" y="91" width="12" height="12" rx="2" fill="#35a9b8"/>
@@ -13260,12 +13260,12 @@ src/field_follow_shadow_1.c</title></rect>
 <rect x="604.505" y="698.401" width="4.364" height="2.132" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / field / field_map_object_render_2.o
 56 bytes · C-only source
 src/field_map_object_render_2.c</title></rect>
-<rect x="604.505" y="700.533" width="2.182" height="4.265" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / field / ov01_21f4704_opus_partial_5.o
+<rect x="604.505" y="700.533" width="2.182" height="4.265" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / field / op90_overlay_01_021EFB38_residual_19_r01.o
+56 bytes · C-only source
+src/op90_overlay_01_021EFB38_residual_19_r01.c</title></rect>
+<rect x="606.687" y="700.533" width="2.182" height="4.265" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / field / ov01_21f4704_opus_partial_5.o
 56 bytes · C-only source
 src/ov01_21f4704_opus_partial_5.c</title></rect>
-<rect x="606.687" y="700.533" width="2.182" height="4.265" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / field / overlay_01_021EFB38_residual_19.o
-56 bytes · Assembly
-asm/overlay_01_021EFB38_residual_19.s</title></rect>
 <rect x="608.869" y="693.002" width="3.402" height="2.736" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / field / to80_extra1500_run01.o
 56 bytes · C-only source
 src/to80_extra1500_run01.c</title></rect>
@@ -18134,12 +18134,12 @@ asm/overlay_18_residual_34_gap_4.s</title></rect>
 <rect x="842.087" y="364.040" width="5.605" height="9.843" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_18 / to90_extra2010_run01.o
 332 bytes · C-only source
 src/to90_extra2010_run01.c</title></rect>
-<rect x="847.693" y="364.040" width="5.267" height="9.843" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_18 / overlay18_pokedex_index_helpers.o
+<rect x="847.693" y="364.040" width="5.267" height="9.843" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_18 / op90_overlay_18_residual_25_residual_2_r01.o
+312 bytes · C-only source
+src/op90_overlay_18_residual_25_residual_2_r01.c</title></rect>
+<rect x="852.960" y="353.647" width="9.920" height="5.227" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_18 / overlay18_pokedex_index_helpers.o
 312 bytes · C-only source
 src/overlay18_pokedex_index_helpers.c</title></rect>
-<rect x="852.960" y="353.647" width="9.920" height="5.227" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_18 / overlay_18_residual_25_residual_2.o
-312 bytes · Assembly
-asm/overlay_18_residual_25_residual_2.s</title></rect>
 <rect x="852.960" y="358.874" width="9.920" height="5.227" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_18 / to46_overlay18_residual7.o
 312 bytes · C-only source
 src/to46_overlay18_residual7.c</title></rect>
@@ -18209,9 +18209,9 @@ src/to90_extra2196_run02.c</title></rect>
 <rect x="873.216" y="367.239" width="5.002" height="6.644" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_18 / to90_extra2197_run01.o
 200 bytes · C-only source
 src/to90_extra2197_run01.c</title></rect>
-<rect x="878.219" y="367.239" width="4.902" height="6.644" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_18 / sol_r9_ov18_gap03.o
-196 bytes · Assembly
-asm/sol_r9_ov18_gap03.s</title></rect>
+<rect x="878.219" y="367.239" width="4.902" height="6.644" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_18 / op90_sol_r9_ov18_gap03_r01.o
+196 bytes · C-only source
+src/op90_sol_r9_ov18_gap03_r01.c</title></rect>
 <rect x="842.087" y="373.883" width="9.295" height="3.433" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_18 / to47_overlay18_area_ui03_run1.o
 192 bytes · C-only source
 src/to47_overlay18_area_ui03_run1.c</title></rect>
@@ -18221,9 +18221,9 @@ src/to90_extra2245_run01.c</title></rect>
 <rect x="846.785" y="377.316" width="4.597" height="6.651" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_18 / overlay18_pokedex_search_ui_run1.o
 184 bytes · C-only source
 src/overlay18_pokedex_search_ui_run1.c</title></rect>
-<rect x="851.382" y="373.883" width="5.636" height="5.071" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_18 / to42_ov18_dex_search_gap09_asm5.o
-172 bytes · Assembly
-asm/to42_ov18_dex_search_gap09_asm5.s</title></rect>
+<rect x="851.382" y="373.883" width="5.636" height="5.071" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_18 / op90_to42_ov18_dex_search_gap09_asm5_r01.o
+172 bytes · C-only source
+src/op90_to42_ov18_dex_search_gap09_asm5_r01.c</title></rect>
 <rect x="851.382" y="378.955" width="5.636" height="5.012" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_18 / to90_extra2194_run01.o
 170 bytes · C-only source
 src/to90_extra2194_run01.c</title></rect>

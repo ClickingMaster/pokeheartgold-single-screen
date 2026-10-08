@@ -1,3 +1,11 @@
+	.public ov01_022067D0
+	.public ov01_022067E0
+	.public ov01_022067FC
+	.public ov01_02206844
+	.public ov01_0220689C
+	.public ov01_022068C4
+	.public ov01_02206980
+	.public ov01_02209B64
 #include "constants/sndseq.h"
 #include "constants/moves.h"
 #include "constants/std_script.h"
@@ -44,110 +52,7 @@
 	.include "overlay_01_021EFB38.inc"
 	.include "global.inc"
 
-	.text
-	.public ov01_022067D0
-	.public ov01_022067E0
-	.public ov01_022067FC
-	.public ov01_02206844
-	.public ov01_0220689C
-	.public ov01_022068C4
-	.public ov01_02206980
-	.public ov01_02209B64
-	.public ov01_021EFC94
-	.public ov01_021EFCDC
-	.public ov01_021EFCF8
-	.public ov01_021EFE30
-	.public ov01_021EFE34
-	.public ov01_021EFE44
-	.public ov01_021EFE70
-	.public ov01_021EFE80
-	.public ov01_021EFF90
-	.public ov01_021EFFB0
-	.public ov01_021EFFBC
-	.public ov01_021EFFD8
-	.public ov01_021F0028
-	.public ov01_021F00DC
-	.public ov01_021F029C
-	.public ov01_021F0330
-	.public ov01_021F05C4
-	.public ov01_021F05F4
-	.public ov01_021F06EC
-	.public ov01_021F0718
-	.public ov01_021F074C
-	.public ov01_021F0768
-	.public ov01_021F0780
-	.public ov01_021F0788
-	.public ov01_021F0848
-	.public ov01_021F0860
-	.public ov01_021F0868
-	.public ov01_021F0960
-	.public ov01_021F09BC
-	.public ov01_021F09EC
-	.public ov01_021F0A0C
-	.public ov01_021F0B44
-	.public ov01_021F0B5C
-	.public ov01_021F0C40
-	.public ov01_021F0C7C
-	.public ov01_021F0CA8
-	.public ov01_021F0DB0
-	.public ov01_021F0DC8
-	.public ov01_021F0E74
-	.public ov01_021F0E90
-	.public ov01_021F0EAC
-	.public ov01_021F0EC0
-	.public ov01_021F0FB8
-	.public ov01_021F1008
-	.public ov01_021F1044
-	.public ov01_021F1060
-	.public ov01_021F1094
-	.public ov01_021F1210
-	.public ov01_021F127C
-	.public ov01_021F1290
-	.public ov01_021F12B4
-	.public ov01_021F12D0
-	.public ov01_021F12E8
-
-	thumb_func_start ov01_021F1310
-ov01_021F1310: ; 0x021F1310
-	push {r3, r4, r5, r6, r7, lr}
-	ldr r0, [r0]
-	add r7, r1, #0
-	bl sub_02014BF8
-	add r5, r0, #0
-	mov r6, #0
-_021F131E:
-	ldr r0, [r5]
-	add r1, r7, #0
-	lsl r0, r0, #0x10
-	asr r4, r0, #0x10
-	add r0, r6, #0
-	bl _u32_div_f
-	mov r1, #1
-	tst r0, r1
-	bne _021F1336
-	lsl r0, r4, #0x10
-	b _021F133A
-_021F1336:
-	neg r0, r4
-	lsl r0, r0, #0x10
-_021F133A:
-	lsr r0, r0, #0x10
-	str r0, [r5]
-	add r6, r6, #1
-	add r5, r5, #4
-	cmp r6, #0xc0
-	blt _021F131E
-	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end ov01_021F1310
-
-	.public ov01_022067D0
-	.public ov01_022067E0
-	.public ov01_022067FC
-	.public ov01_02206844
-	.public ov01_0220689C
-	.public ov01_022068C4
-	.public ov01_02206980
-	.public ov01_02209B64
+.text
 	.rodata
 
 ov01_022067D0:
