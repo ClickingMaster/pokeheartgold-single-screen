@@ -370,3 +370,16 @@ $(BUILD_DIR)/src/op90_op90_to80_extra1680_residual_2_residual_1_r01.o: private M
 $(BUILD_DIR)/src/op90_op90_to80_extra1680_residual_2_residual_1_r02.o: private MWCCVER := 1.2/sp2p3
 $(BUILD_DIR)/src/op90_op90_to80_extra1680_residual_2_residual_1_r02.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/op90_to80_extra1442_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_MSL_Common_string_residual0_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_to57_nitrocrypto_residual04_residual_r01.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/src/op90_to57_nitrocrypto_residual04_residual_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/op90_to80_extra1378_residual_2_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_to80_extra1450_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_to80_extra1672_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_to80_extra1672_residual_2_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_to80_extra1920_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_to90_extra1964_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_to90_extra2129_residual_2_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_to90_extra2319_residual_1_r01.o: private MWCCVER := 2.0/base
+$(BUILD_DIR)/src/op90_to90_extra2537_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_to91_w41566_texmatrix_suffix_r01.o: private MWCCVER := 2.0/sp2p3
