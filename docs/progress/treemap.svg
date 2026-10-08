@@ -4,16 +4,16 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="1172" y="42" text-anchor="end" font-size="22">94.69% C + C++ source</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 0d2674eb3 · ARM9 + ARM7 · 4,075,362 mapped code bytes</text>
+<text x="1172" y="42" text-anchor="end" font-size="22">95.04% C + C++ source</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · ffac80a1c · ARM9 + ARM7 · 4,075,362 mapped code bytes</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
-<text x="47" y="102" font-size="14">C-only source 94.5%</text>
+<text x="47" y="102" font-size="14">C-only source 94.8%</text>
 <rect x="256" y="91" width="12" height="12" rx="2" fill="#35a9b8"/>
-<text x="275" y="102" font-size="14">C++-only source 0.2%</text>
+<text x="275" y="102" font-size="14">C++-only source 0.3%</text>
 <rect x="484" y="91" width="12" height="12" rx="2" fill="#e4ad42"/>
 <text x="503" y="102" font-size="14">C/C++ with assembly 0.1%</text>
 <rect x="712" y="91" width="12" height="12" rx="2" fill="#455268"/>
-<text x="731" y="102" font-size="14">Assembly 5.0%</text>
+<text x="731" y="102" font-size="14">Assembly 4.7%</text>
 <rect x="940" y="91" width="12" height="12" rx="2" fill="#b875ae"/>
 <text x="959" y="102" font-size="14">Unresolved source 0.2%</text>
 <rect x="28.000" y="125.000" width="82.111" height="61.108" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_c.o
@@ -76,9 +76,9 @@ src/sprite_system.c</title></rect>
 <rect x="100.331" y="312.294" width="38.626" height="20.315" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / field_warp_tasks.o
 4,722 bytes · C-only source
 src/field_warp_tasks.c</title></rect>
-<rect x="138.957" y="267.791" width="35.524" height="21.912" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to70_MSL_Common_strtold_extra119_residual_1.o
-4,684 bytes · Assembly
-lib/MSL_C/asm/to70_MSL_Common_strtold_extra119_residual_1.s</title></rect>
+<rect x="138.957" y="267.791" width="35.524" height="21.912" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_to70_MSL_Common_strtold_extra119_residual_1_r01.o
+4,684 bytes · C-only source
+src/op90_to70_MSL_Common_strtold_extra119_residual_1_r01.c</title></rect>
 <rect x="138.957" y="289.703" width="35.524" height="21.912" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to91_w41418_StringRead_prefix.o
 4,684 bytes · Assembly
 lib/asm/to91_w41418_StringRead_prefix.s</title></rect>
@@ -2602,27 +2602,27 @@ src/field_application_tasks_7.c</title></rect>
 <rect x="596.546" y="201.362" width="8.120" height="5.485" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / module07_bg_cell_clip_head_residual.o
 268 bytes · Assembly
 asm/module07_bg_cell_clip_head_residual.s</title></rect>
-<rect x="596.546" y="206.847" width="8.120" height="5.485" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / os_irqTable.o
+<rect x="596.546" y="206.847" width="8.120" height="5.485" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_to80_extra1755_residual_1_r01.o
+268 bytes · C-only source
+src/op90_to80_extra1755_residual_1_r01.c</title></rect>
+<rect x="604.666" y="195.878" width="5.413" height="8.227" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / os_irqTable.o
 268 bytes · C-only source
 lib/NitroSDK/src/os/os_irqTable.c</title></rect>
-<rect x="604.666" y="195.878" width="5.413" height="8.227" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / overlay_resource_actor_2.o
+<rect x="610.080" y="195.878" width="5.413" height="8.227" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / overlay_resource_actor_2.o
 268 bytes · C-only source
 src/overlay_resource_actor_2.c</title></rect>
-<rect x="610.080" y="195.878" width="5.413" height="8.227" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to59_msl_fread.o
+<rect x="604.666" y="204.105" width="5.413" height="8.227" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to59_msl_fread.o
 268 bytes · C-only source
 lib/MSL_C/src/to59_msl_fread.c</title></rect>
-<rect x="604.666" y="204.105" width="5.413" height="8.227" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to59_nnsys_run34.o
+<rect x="610.080" y="204.105" width="5.413" height="8.227" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to59_nnsys_run34.o
 268 bytes · C-only source
 src/to59_nnsys_run34.c</title></rect>
-<rect x="610.080" y="204.105" width="5.413" height="8.227" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to65_to65_nitro_unified_residual_44_extra26_run06.o
+<rect x="596.546" y="212.332" width="4.746" height="9.385" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to65_to65_nitro_unified_residual_44_extra26_run06.o
 268 bytes · C-only source
 src/to65_to65_nitro_unified_residual_44_extra26_run06.c</title></rect>
-<rect x="596.546" y="212.332" width="4.746" height="9.385" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to80_extra1474_residual_2.o
+<rect x="601.292" y="212.332" width="4.746" height="9.385" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to80_extra1474_residual_2.o
 268 bytes · Assembly
 lib/asm/to80_extra1474_residual_2.s</title></rect>
-<rect x="601.292" y="212.332" width="4.746" height="9.385" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to80_extra1755_residual_1.o
-268 bytes · Assembly
-lib/asm/to80_extra1755_residual_1.s</title></rect>
 <rect x="596.546" y="221.716" width="4.746" height="9.385" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to90_extra2102_run01.o
 268 bytes · C-only source
 src/to90_extra2102_run01.c</title></rect>
@@ -8936,9 +8936,9 @@ asm/overlay_12_022378C0_residual_11.s</title></rect>
 <rect x="143.896" y="568.173" width="32.399" height="41.915" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_0 / to60_ov00_run01.o
 8,172 bytes · C-only source
 src/to60_ov00_run01.c</title></rect>
-<rect x="176.296" y="568.173" width="27.087" height="41.915" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_0 / to70_to65_overlay_00_arm_residual_7_residual_11_extra1135_residual_1.o
-6,832 bytes · Assembly
-lib/NitroDWC/asm/to70_to65_overlay_00_arm_residual_7_residual_11_extra1135_residual_1.s</title></rect>
+<rect x="176.296" y="568.173" width="27.087" height="41.915" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_0 / op90_to70_to65_overlay_00_arm_residual_7_residual_11_extra1135_residual_1_r01.o
+6,832 bytes · C-only source
+src/op90_to70_to65_overlay_00_arm_residual_7_residual_11_extra1135_residual_1_r01.c</title></rect>
 <rect x="143.896" y="610.089" width="31.192" height="30.730" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_0 / to60_ov00_run12.o
 5,768 bytes · C-only source
 src/to60_ov00_run12.c</title></rect>
@@ -10067,208 +10067,214 @@ src/ov00_partial_16.c</title></rect>
 <rect x="143.896" y="568.173" width="221.575" height="148.827" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="146.896" y="571.173" width="98.000" height="22" rx="3" fill="#101722" opacity="0.88"/>
 <text x="152.896" y="587.173" font-size="12">ARM9 / OVY_0</text>
-<rect x="365.472" y="407.392" width="31.901" height="40.611" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1736_run01.o
+<rect x="365.472" y="407.392" width="31.569" height="41.039" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1736_run01.o
 7,796 bytes · C-only source
 src/to80_extra1736_run01.c</title></rect>
-<rect x="365.472" y="448.003" width="31.901" height="19.691" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1740_residual_4.o
-3,780 bytes · Assembly
-lib/NitroDWC/asm/to80_extra1740_residual_4.s</title></rect>
-<rect x="397.373" y="407.392" width="16.931" height="28.856" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to70_ov45_extra16_residual_6.o
+<rect x="365.472" y="448.430" width="31.569" height="15.476" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to70_ov45_extra16_residual_6.o
 2,940 bytes · Assembly
 lib/NitroDWC/asm/to70_ov45_extra16_residual_6.s</title></rect>
-<rect x="414.304" y="407.392" width="13.868" height="28.856" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1436_residual_1.o
+<rect x="397.041" y="407.392" width="15.816" height="25.301" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1436_residual_1.o
 2,408 bytes · Assembly
 lib/NitroDWC/asm/to80_extra1436_residual_1.s</title></rect>
-<rect x="397.373" y="436.248" width="30.799" height="11.158" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1649_run01.o
+<rect x="412.857" y="407.392" width="15.212" height="25.301" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_to80_extra1740_residual_4_residual_1.o
+2,316 bytes · Assembly
+lib/NitroDWC/asm/op90_to80_extra1740_residual_4_residual_1.s</title></rect>
+<rect x="397.041" y="432.693" width="31.028" height="11.076" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1649_run01.o
 2,068 bytes · C-only source
 src/to80_extra1649_run01.c</title></rect>
-<rect x="397.373" y="447.406" width="15.596" height="20.288" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1847_residual_1.o
+<rect x="397.041" y="443.769" width="15.712" height="20.138" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1847_residual_1.o
 1,904 bytes · Assembly
 lib/NitroDWC/asm/to80_extra1847_residual_1.s</title></rect>
-<rect x="412.969" y="447.406" width="15.203" height="20.288" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1667_run01.o
+<rect x="412.753" y="443.769" width="15.316" height="20.138" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1667_run01.o
 1,856 bytes · C-only source
 src/to80_extra1667_run01.c</title></rect>
-<rect x="365.472" y="467.694" width="10.478" height="29.308" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1437_run02.o
+<rect x="365.472" y="463.907" width="29.139" height="10.539" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1437_run02.o
 1,848 bytes · C-only source
 src/to80_extra1437_run02.c</title></rect>
-<rect x="375.950" y="467.694" width="20.639" height="14.718" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1656_residual_1.o
+<rect x="365.472" y="474.446" width="14.634" height="20.759" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1656_residual_1.o
 1,828 bytes · Assembly
 lib/NitroDWC/asm/to80_extra1656_residual_1.s</title></rect>
-<rect x="375.950" y="482.412" width="20.639" height="14.590" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1740_residual_3.o
+<rect x="380.105" y="474.446" width="14.505" height="20.759" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1740_residual_3.o
 1,812 bytes · Assembly
 lib/NitroDWC/asm/to80_extra1740_residual_3.s</title></rect>
-<rect x="365.472" y="497.002" width="10.624" height="26.467" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1646_run01.o
+<rect x="365.472" y="495.205" width="9.948" height="28.264" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1646_run01.o
 1,692 bytes · C-only source
 src/to80_extra1646_run01.c</title></rect>
-<rect x="376.095" y="497.002" width="20.494" height="13.363" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / overlay45_lobby_flow_handlers.o
+<rect x="375.420" y="495.205" width="19.191" height="14.271" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / overlay45_lobby_flow_handlers.o
 1,648 bytes · C-only source
 src/overlay45_lobby_flow_handlers.c</title></rect>
-<rect x="376.095" y="510.365" width="20.494" height="13.104" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to65_overlay_45_arm_residual_17_run03.o
+<rect x="375.420" y="509.475" width="19.191" height="13.994" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to65_overlay_45_arm_residual_17_run03.o
 1,616 bytes · C-only source
 src/to65_overlay_45_arm_residual_17_run03.c</title></rect>
-<rect x="396.589" y="467.694" width="10.689" height="24.625" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / overlay45_event_messages.o
+<rect x="394.611" y="463.907" width="17.043" height="15.445" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / overlay45_event_messages.o
 1,584 bytes · C-only source
 src/overlay45_event_messages.c</title></rect>
-<rect x="407.279" y="467.694" width="20.893" height="12.440" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to60_ov45_run08.o
+<rect x="394.611" y="479.352" width="17.043" height="15.250" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to60_ov45_run08.o
 1,564 bytes · C-only source
 src/to60_ov45_run08.c</title></rect>
-<rect x="407.279" y="480.134" width="20.893" height="12.185" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1736_run02.o
+<rect x="411.654" y="463.907" width="16.415" height="15.510" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1736_run02.o
 1,532 bytes · C-only source
 src/to80_extra1736_run02.c</title></rect>
-<rect x="396.589" y="492.319" width="15.962" height="15.617" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to65_overlay_45_arm_residual_17_run01.o
+<rect x="411.654" y="479.416" width="16.415" height="15.186" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to65_overlay_45_arm_residual_17_run01.o
 1,500 bytes · C-only source
 src/to65_overlay_45_arm_residual_17_run01.c</title></rect>
-<rect x="396.589" y="507.936" width="15.962" height="15.533" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to65_overlay_45_arm_residual_17_run10.o
+<rect x="394.611" y="494.602" width="17.132" height="14.472" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to65_overlay_45_arm_residual_17_run10.o
 1,492 bytes · C-only source
 src/to65_overlay_45_arm_residual_17_run10.c</title></rect>
-<rect x="412.551" y="492.319" width="15.621" height="15.788" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to65_overlay_45_arm_residual_17_run13.o
+<rect x="394.611" y="509.074" width="17.132" height="14.395" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to65_overlay_45_arm_residual_17_run13.o
 1,484 bytes · C-only source
 src/to65_overlay_45_arm_residual_17_run13.c</title></rect>
-<rect x="412.551" y="508.107" width="15.621" height="15.362" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to60_overlay_45_arm_residual_11.o
+<rect x="411.743" y="494.602" width="16.326" height="14.698" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to60_overlay_45_arm_residual_11.o
 1,444 bytes · Assembly
 lib/NitroDWC/asm/to60_overlay_45_arm_residual_11.s</title></rect>
-<rect x="428.172" y="407.392" width="16.543" height="13.984" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to65_ov45_extra31_run01.o
+<rect x="411.743" y="509.300" width="16.326" height="14.169" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to65_ov45_extra31_run01.o
 1,392 bytes · C-only source
 src/to65_ov45_extra31_run01.c</title></rect>
-<rect x="428.172" y="421.375" width="16.543" height="13.059" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to65_ov45_extra32_run05.o
+<rect x="428.069" y="407.392" width="15.495" height="13.943" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to65_ov45_extra32_run05.o
 1,300 bytes · C-only source
 src/to65_ov45_extra32_run05.c</title></rect>
-<rect x="444.714" y="407.392" width="15.436" height="13.608" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to60_ov45_run10.o
+<rect x="428.069" y="421.334" width="15.495" height="13.557" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to60_ov45_run10.o
 1,264 bytes · C-only source
 src/to60_ov45_run10.c</title></rect>
-<rect x="444.714" y="420.999" width="15.436" height="13.435" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to65_overlay_45_arm_residual_17_run17.o
+<rect x="443.563" y="407.392" width="14.987" height="13.838" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to65_overlay_45_arm_residual_17_run17.o
 1,248 bytes · C-only source
 src/to65_overlay_45_arm_residual_17_run17.c</title></rect>
-<rect x="428.172" y="434.435" width="13.207" height="15.502" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / r40_overlay_45_thumb_residual_22_run1.o
+<rect x="443.563" y="421.230" width="14.987" height="13.661" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / r40_overlay_45_thumb_residual_22_run1.o
 1,232 bytes · C-only source
 src/r40_overlay_45_thumb_residual_22_run1.c</title></rect>
-<rect x="428.172" y="449.937" width="13.207" height="14.596" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_op90_to70_ov45_extra03_residual_5_residual_1_residual_1.o
+<rect x="428.069" y="434.891" width="15.293" height="12.605" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_op90_to70_ov45_extra03_residual_5_residual_1_residual_1.o
 1,160 bytes · Assembly
 lib/NitroDWC/asm/op90_op90_to70_ov45_extra03_residual_5_residual_1_residual_1.s</title></rect>
-<rect x="441.378" y="434.435" width="18.772" height="10.198" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_to65_overlay_45_arm_residual_17_residual_6_r01.o
+<rect x="443.362" y="434.891" width="15.188" height="12.605" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_to65_overlay_45_arm_residual_17_residual_6_r01.o
 1,152 bytes · C-only source
 src/op90_to65_overlay_45_arm_residual_17_residual_6_r01.c</title></rect>
-<rect x="441.378" y="444.633" width="18.772" height="10.021" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1731_run01.o
+<rect x="428.069" y="447.496" width="10.306" height="18.253" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1731_run01.o
 1,132 bytes · C-only source
 src/to80_extra1731_run01.c</title></rect>
-<rect x="441.378" y="454.654" width="18.772" height="9.879" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to70_ov45_extra179_residual_1.o
-1,116 bytes · Assembly
-lib/NitroDWC/asm/to70_ov45_extra179_residual_1.s</title></rect>
-<rect x="460.151" y="407.392" width="12.319" height="14.839" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / overlay45_state_helpers_7.o
+<rect x="438.375" y="447.496" width="10.160" height="18.253" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_to70_ov45_extra179_residual_1_r01.o
+1,116 bytes · C++-only source
+src/op90_to70_ov45_extra179_residual_1_r01.cpp</title></rect>
+<rect x="448.535" y="447.496" width="10.015" height="18.253" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / overlay45_state_helpers_7.o
 1,100 bytes · C-only source
 src/overlay45_state_helpers_7.c</title></rect>
-<rect x="460.151" y="422.230" width="12.319" height="14.677" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1659_run01.o
+<rect x="458.550" y="407.392" width="12.960" height="13.952" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1659_run01.o
 1,088 bytes · C-only source
 src/to80_extra1659_run01.c</title></rect>
-<rect x="472.470" y="407.392" width="17.758" height="9.995" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1438_run02.o
+<rect x="458.550" y="421.343" width="12.960" height="13.695" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1438_run02.o
 1,068 bytes · C-only source
 src/to80_extra1438_run02.c</title></rect>
-<rect x="472.470" y="417.386" width="17.758" height="9.807" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to65_overlay_45_arm_residual_17_run09.o
+<rect x="471.510" y="407.392" width="18.718" height="9.304" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to65_overlay_45_arm_residual_17_run09.o
 1,048 bytes · C-only source
 src/to65_overlay_45_arm_residual_17_run09.c</title></rect>
-<rect x="472.470" y="427.194" width="17.758" height="9.714" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / overlay45_effect_spawners_29.o
+<rect x="471.510" y="416.696" width="9.404" height="18.342" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / overlay45_effect_spawners_29.o
 1,038 bytes · C-only source
 src/overlay45_effect_spawners_29.c</title></rect>
-<rect x="460.151" y="436.907" width="12.271" height="13.921" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to60_ov45_run13.o
+<rect x="480.914" y="416.696" width="9.314" height="18.342" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to60_ov45_run13.o
 1,028 bytes · C-only source
 src/to60_ov45_run13.c</title></rect>
-<rect x="460.151" y="450.829" width="12.271" height="13.705" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1435_residual_2.o
+<rect x="458.550" y="435.038" width="16.255" height="10.346" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1435_residual_2.o
 1,012 bytes · Assembly
 lib/NitroDWC/asm/to80_extra1435_residual_2.s</title></rect>
-<rect x="472.422" y="436.907" width="17.806" height="9.408" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_to91_ov45_format_string216_residual_residual_2.o
+<rect x="458.550" y="445.384" width="16.255" height="10.305" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_to91_ov45_format_string216_residual_residual_2.o
 1,008 bytes · Assembly
 lib/NitroDWC/asm/op90_to91_ov45_format_string216_residual_residual_2.s</title></rect>
-<rect x="472.422" y="446.315" width="17.806" height="9.184" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to60_ov45_run04.o
+<rect x="458.550" y="455.689" width="16.255" height="10.060" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to60_ov45_run04.o
 984 bytes · C-only source
 src/to60_ov45_run04.c</title></rect>
-<rect x="472.422" y="455.499" width="17.806" height="9.034" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_op90_to60_overlay_45_arm_residual_4_residual_1_residual_1.o
+<rect x="474.806" y="435.038" width="15.422" height="10.431" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_op90_to60_overlay_45_arm_residual_4_residual_1_residual_1.o
 968 bytes · Assembly
 lib/NitroDWC/asm/op90_op90_to60_overlay_45_arm_residual_4_residual_1_residual_1.s</title></rect>
-<rect x="428.172" y="464.533" width="16.069" height="9.907" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to41_overlay_45_thumb_residual_33_run9.o
+<rect x="474.806" y="445.469" width="15.422" height="10.323" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to41_overlay_45_thumb_residual_33_run9.o
 958 bytes · C-only source
 src/to41_overlay_45_thumb_residual_33_run9.c</title></rect>
-<rect x="428.172" y="474.440" width="16.069" height="9.556" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to65_ov45_extra32_residual_10.o
+<rect x="474.806" y="455.792" width="15.422" height="9.957" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to65_ov45_extra32_residual_10.o
 924 bytes · Assembly
 lib/NitroDWC/asm/to65_ov45_extra32_residual_10.s</title></rect>
-<rect x="428.172" y="483.996" width="16.069" height="9.473" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to60_overlay_45_arm_residual_7.o
+<rect x="428.069" y="465.748" width="15.888" height="9.581" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to60_overlay_45_arm_residual_7.o
 916 bytes · Assembly
 lib/NitroDWC/asm/to60_overlay_45_arm_residual_7.s</title></rect>
-<rect x="444.241" y="464.533" width="15.162" height="9.908" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to70_ov45_extra04_residual_9.o
+<rect x="428.069" y="475.330" width="15.888" height="9.456" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to70_ov45_extra04_residual_9.o
 904 bytes · Assembly
 lib/NitroDWC/asm/to70_ov45_extra04_residual_9.s</title></rect>
-<rect x="444.241" y="474.442" width="15.162" height="9.558" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to65_overlay_45_arm_residual_17_run04.o
+<rect x="428.069" y="484.785" width="15.888" height="9.121" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to65_overlay_45_arm_residual_17_run04.o
 872 bytes · C-only source
 src/to65_overlay_45_arm_residual_17_run04.c</title></rect>
-<rect x="444.241" y="483.999" width="15.162" height="9.470" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to65_ov45_extra32_run07.o
+<rect x="443.956" y="465.748" width="15.097" height="9.511" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to65_ov45_extra32_run07.o
 864 bytes · C-only source
 src/to65_ov45_extra32_run07.c</title></rect>
-<rect x="428.172" y="493.469" width="14.015" height="10.126" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to45_overlay45_resource_manager_36.o
+<rect x="443.956" y="475.259" width="15.097" height="9.401" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to45_overlay45_resource_manager_36.o
 854 bytes · C-only source
 src/to45_overlay45_resource_manager_36.c</title></rect>
-<rect x="428.172" y="503.596" width="14.015" height="9.960" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to90_extra1965_run01.o
+<rect x="443.956" y="484.660" width="15.097" height="9.246" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to90_extra1965_run01.o
 840 bytes · C-only source
 src/to90_extra1965_run01.c</title></rect>
-<rect x="428.172" y="513.556" width="14.015" height="9.913" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_to91_ov45_format_string216_residual_residual_1.o
+<rect x="428.069" y="493.906" width="13.603" height="10.213" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_to91_ov45_format_string216_residual_residual_1.o
 836 bytes · Assembly
 lib/NitroDWC/asm/op90_to91_ov45_format_string216_residual_residual_1.s</title></rect>
-<rect x="442.186" y="493.469" width="8.674" height="15.097" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to60_ov45_run15.o
+<rect x="428.069" y="504.119" width="13.603" height="9.724" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_to80_extra1740_residual_4_r01.o
+796 bytes · C++-only source
+src/op90_to80_extra1740_residual_4_r01.cpp</title></rect>
+<rect x="428.069" y="513.843" width="13.603" height="9.626" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to60_ov45_run15.o
 788 bytes · C-only source
 src/to60_ov45_run15.c</title></rect>
-<rect x="450.861" y="493.469" width="8.542" height="15.097" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to60_ov45_run01.o
+<rect x="441.672" y="493.906" width="8.713" height="14.801" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to60_ov45_run01.o
 776 bytes · C-only source
 src/to60_ov45_run01.c</title></rect>
-<rect x="442.186" y="508.566" width="8.608" height="14.903" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to65_ov45_extra30_run04.o
+<rect x="450.385" y="493.906" width="8.668" height="14.801" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to65_ov45_extra30_run04.o
 772 bytes · C-only source
 src/to65_ov45_extra30_run04.c</title></rect>
-<rect x="450.795" y="508.566" width="8.608" height="14.903" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to90_extra1946_residual_1.o
+<rect x="441.672" y="508.707" width="8.690" height="14.762" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to90_extra1946_residual_1.o
 772 bytes · Assembly
 lib/NitroDWC/asm/to90_extra1946_residual_1.s</title></rect>
-<rect x="459.403" y="464.533" width="15.678" height="8.183" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to90_extra2542_run01.o
+<rect x="450.363" y="508.707" width="8.690" height="14.762" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to90_extra2542_run01.o
 772 bytes · C-only source
 src/to90_extra2542_run01.c</title></rect>
-<rect x="459.403" y="472.716" width="15.678" height="8.098" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to90_extra1945_run01.o
+<rect x="459.053" y="465.748" width="8.231" height="15.424" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to90_extra1945_run01.o
 764 bytes · C-only source
 src/to90_extra1945_run01.c</title></rect>
-<rect x="475.081" y="464.533" width="15.147" height="8.250" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to70_to65_ov45_extra32_residual_2_extra1128_run01.o
+<rect x="467.285" y="465.748" width="8.102" height="15.424" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to70_to65_ov45_extra32_residual_2_extra1128_run01.o
 752 bytes · C-only source
 src/to70_to65_ov45_extra32_residual_2_extra1128_run01.c</title></rect>
-<rect x="475.081" y="472.784" width="15.147" height="8.031" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_to90_extra2336_residual_3_residual_1.o
+<rect x="459.053" y="481.172" width="8.189" height="14.854" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_to90_extra2336_residual_3_residual_1.o
 732 bytes · Assembly
 lib/NitroDWC/asm/op90_to90_extra2336_residual_3_residual_1.s</title></rect>
-<rect x="459.403" y="480.814" width="8.119" height="14.901" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to70_to65_overlay_45_arm_residual_17_residual_3_extra1142_run01.o
+<rect x="467.242" y="481.172" width="8.144" height="14.854" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to70_to65_overlay_45_arm_residual_17_residual_3_extra1142_run01.o
 728 bytes · C-only source
 src/to70_to65_overlay_45_arm_residual_17_residual_3_extra1142_run01.c</title></rect>
-<rect x="467.522" y="480.814" width="7.717" height="14.901" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to90_extra2118_residual_2.o
+<rect x="475.387" y="465.748" width="14.841" height="7.749" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to90_extra2118_residual_2.o
 692 bytes · Assembly
 lib/NitroDWC/asm/to90_extra2118_residual_2.s</title></rect>
-<rect x="475.239" y="480.814" width="7.494" height="14.901" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to90_extra1966_run01.o
+<rect x="475.387" y="473.497" width="14.841" height="7.525" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to90_extra1966_run01.o
 672 bytes · C-only source
 src/to90_extra1966_run01.c</title></rect>
-<rect x="482.733" y="480.814" width="7.494" height="14.901" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to91_w41490_stream672.o
+<rect x="475.387" y="481.022" width="14.841" height="7.525" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to91_w41490_stream672.o
 672 bytes · C-only source
 src/to91_w41490_stream672.c</title></rect>
-<rect x="459.403" y="495.716" width="7.891" height="14.069" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to90_extra1950_run01.o
+<rect x="475.387" y="488.547" width="14.841" height="7.480" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_to80_extra1740_residual_4_residual_2.o
+668 bytes · Assembly
+lib/NitroDWC/asm/op90_to80_extra1740_residual_4_residual_2.s</title></rect>
+<rect x="459.053" y="496.027" width="7.980" height="13.911" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to90_extra1950_run01.o
 668 bytes · C-only source
 src/to90_extra1950_run01.c</title></rect>
-<rect x="467.293" y="495.716" width="7.702" height="14.069" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_to90_extra2452_residual_1_residual_1.o
+<rect x="467.033" y="496.027" width="7.789" height="13.911" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_to90_extra2452_residual_1_residual_1.o
 652 bytes · Assembly
 lib/NitroDWC/asm/op90_to90_extra2452_residual_1_residual_1.s</title></rect>
-<rect x="459.403" y="509.784" width="7.820" height="13.685" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / overlay45_wireless_profile.o
+<rect x="459.053" y="509.938" width="7.909" height="13.531" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / overlay45_wireless_profile.o
 644 bytes · C-only source
 src/overlay45_wireless_profile/overlay45_wireless_profile.c</title></rect>
-<rect x="467.223" y="509.784" width="7.772" height="13.685" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to41_overlay_45_thumb_residual_33_run6.o
+<rect x="466.962" y="509.938" width="7.860" height="13.531" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to41_overlay_45_thumb_residual_33_run6.o
 640 bytes · C-only source
 src/to41_overlay_45_thumb_residual_33_run6.c</title></rect>
-<rect x="474.995" y="495.716" width="7.616" height="13.877" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to60_ov45_run05.o
+<rect x="474.822" y="496.027" width="7.703" height="13.721" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to60_ov45_run05.o
 636 bytes · C-only source
 src/to60_ov45_run05.c</title></rect>
-<rect x="482.611" y="495.716" width="7.616" height="13.877" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to60_overlay_45_arm_residual_10.o
+<rect x="482.525" y="496.027" width="7.703" height="13.721" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to60_overlay_45_arm_residual_10.o
 636 bytes · Assembly
 lib/NitroDWC/asm/to60_overlay_45_arm_residual_10.s</title></rect>
-<rect x="474.995" y="509.592" width="7.616" height="13.877" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to70_to65_overlay_45_arm_residual_17_residual_15_extra1140_run01.o
+<rect x="474.822" y="509.748" width="7.703" height="13.721" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to70_to65_overlay_45_arm_residual_17_residual_15_extra1140_run01.o
 636 bytes · C-only source
 src/to70_to65_overlay_45_arm_residual_17_residual_15_extra1140_run01.c</title></rect>
-<rect x="482.611" y="509.592" width="7.616" height="13.877" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra2577_run01.o
+<rect x="482.525" y="509.748" width="7.703" height="13.721" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra2577_run01.o
 636 bytes · C-only source
 src/to80_extra2577_run01.c</title></rect>
 <rect x="490.228" y="407.392" width="14.273" height="7.405" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to90_extra2121_run01.o
@@ -14876,9 +14882,9 @@ src/to54_atomic_w03_10_run05.c</title></rect>
 <rect x="816.907" y="240.771" width="7.388" height="3.869" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_7 / to55_w05_run_03.o
 172 bytes · C-only source
 src/to55_w05_run_03.c</title></rect>
-<rect x="816.907" y="244.639" width="7.388" height="3.779" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_7 / to54_atomic_w13_02_res1.o
-168 bytes · Assembly
-asm/to54_atomic_w13_02_res1.s</title></rect>
+<rect x="816.907" y="244.639" width="7.388" height="3.779" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_7 / op90_to54_atomic_w13_02_res1_r01.o
+168 bytes · C-only source
+src/op90_to54_atomic_w13_02_res1_r01.c</title></rect>
 <rect x="816.907" y="248.418" width="7.388" height="3.779" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_7 / to58_w09b_ov07_05_0.o
 168 bytes · C-only source
 src/to58_w09b_ov07_05_0.c</title></rect>

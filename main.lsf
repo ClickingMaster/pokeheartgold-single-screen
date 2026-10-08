@@ -1845,7 +1845,8 @@ Static main
     Object lib/asm/to80_extra1755_anchor.o
     Object src/to80_extra1755_run01.o
     Object src/to80_extra1755_run02.o
-    Object lib/asm/to80_extra1755_residual_1.o
+    Object lib/asm/op90_to80_extra1755_residual_1_anchor.o
+    Object src/op90_to80_extra1755_residual_1_r01.o
     Object src/to80_extra1755_run03.o
     Object src/to70_to70_to65_nnsys_residual_43_residual_1_extra256_residual_1_extra1187_run02.o
     Object src/to65_nnsys_residual_43_run02.o
@@ -2397,7 +2398,8 @@ Object src/op90_to91_w41566_texmatrix_suffix_r01.o
     Object src/to70_MSL_Common_string_residual2_extra81_run01.o
     Object lib/MSL_C/src/msl_string_run3.o
     Object lib/MSL_C/asm/to70_MSL_Common_strtold_extra119_anchor.o
-    Object lib/MSL_C/asm/to70_MSL_Common_strtold_extra119_residual_1.o
+    Object lib/MSL_C/asm/op90_to70_MSL_Common_strtold_extra119_residual_1_anchor.o
+    Object src/op90_to70_MSL_Common_strtold_extra119_residual_1_r01.o
     Object src/to70_MSL_Common_strtold_extra119_run01.o
     Object lib/MSL_C/asm/op90_to59_msl_strtoul_residual_anchor.o
     Object src/op90_to59_msl_strtoul_residual_r01.o
@@ -2961,7 +2963,8 @@ Object src/op90_to91_w41563_friend_callback_suffix_r01.o
     Object src/to65_overlay_00_arm_residual_7_run11.o
     Object lib/NitroDWC/asm/to70_to65_overlay_00_arm_residual_7_residual_11_extra1135_anchor.o
     Object src/to70_to65_overlay_00_arm_residual_7_residual_11_extra1135_run01.o
-    Object lib/NitroDWC/asm/to70_to65_overlay_00_arm_residual_7_residual_11_extra1135_residual_1.o
+    Object lib/NitroDWC/asm/op90_to70_to65_overlay_00_arm_residual_7_residual_11_extra1135_residual_1_anchor.o
+    Object src/op90_to70_to65_overlay_00_arm_residual_7_residual_11_extra1135_residual_1_r01.o
     Object src/to60_ov00_run08.o
     Object lib/NitroDWC/asm/op90_to60_overlay_00_arm_residual_8_anchor.o
     Object src/op90_to60_overlay_00_arm_residual_8_r01.o
@@ -3998,7 +4001,8 @@ Object src/to54_atomic_w14_06_run3.o
     Object src/to70_overlay07_callbacks_residual_0221ff34_0221ff34_extra916_run01.o
     Object src/overlay07_callbacks_c_0221ff74_0221ff74.o
     Object src/to54_atomic_w13_01_run1.o
-Object asm/to54_atomic_w13_02_res1.o
+Object asm/op90_to54_atomic_w13_02_res1_anchor.o
+Object src/op90_to54_atomic_w13_02_res1_r01.o
 Object src/to54_atomic_w13_03_run2.o
 Object asm/to80_extra1598_anchor.o
 Object asm/to90_extra2293_anchor.o
@@ -7712,7 +7716,10 @@ Object src/to58_r3_overlay_45_thumb_residual_8_suffix.o
     Object src/to80_extra1740_run03.o
     Object src/to80_extra1740_run04.o
     Object src/to80_extra1740_run05.o
-    Object lib/NitroDWC/asm/to80_extra1740_residual_4.o
+    Object lib/NitroDWC/asm/op90_to80_extra1740_residual_4_anchor.o
+    Object lib/NitroDWC/asm/op90_to80_extra1740_residual_4_residual_1.o
+    Object src/op90_to80_extra1740_residual_4_r01.o
+    Object lib/NitroDWC/asm/op90_to80_extra1740_residual_4_residual_2.o
     Object src/to70_ov45_extra03_run01.o
     Object lib/NitroDWC/asm/op90_to70_ov45_extra03_residual_2_anchor.o
     Object src/op90_to70_ov45_extra03_residual_2_r01.o
@@ -7815,7 +7822,8 @@ Object src/to58_r3_overlay_45_thumb_residual_8_suffix.o
     Object lib/NitroDWC/asm/to70_ov45_extra178_residual_2.o
     Object src/to65_overlay_45_arm_residual_9_run08.o
     Object lib/NitroDWC/asm/to70_ov45_extra179_anchor.o
-    Object lib/NitroDWC/asm/to70_ov45_extra179_residual_1.o
+    Object lib/NitroDWC/asm/op90_to70_ov45_extra179_residual_1_anchor.o
+    Object src/op90_to70_ov45_extra179_residual_1_r01.o
     Object src/to70_ov45_extra179_run01.o
     Object src/to60_ov45_run09.o
     Object lib/NitroDWC/asm/to60_overlay_45_arm_residual_10.o
