@@ -326,6 +326,9 @@ $(BUILD_DIR)/src/to90_scanf_interval_v5_run02.o: private MWCCVER := 2.0/sp2p3
 
 include tools/alarm-partition/alarm.mk
 
+$(BUILD_DIR)/lib/NitroSDK/src/snd/SND_command.o: private MWCCVER := 2.0/sp2p2
+$(BUILD_DIR)/lib/NitroSDK/src/snd/SND_command.o: lib/NitroSDK/src/snd/SND_command.snd-section-map.json tools/nitro-section-renames/rename_snd_sections.py
+
 $(BUILD_DIR)/lib/NitroSDK/src/os/os_spinLock.o: lib/NitroSDK/src/os/os_spinLock.snd-section-map.json tools/nitro-section-renames/rename_snd_sections.py
 
 $(BUILD_DIR)/lib/NitroSDK/src/os/to91_w41407_spin_retained.o: lib/NitroSDK/src/os/to91_w41407_spin_retained.snd-section-map.json tools/nitro-section-renames/rename_snd_sections.py

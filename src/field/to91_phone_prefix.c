@@ -34,7 +34,7 @@ String *GetPhoneBookEntryName(GearPhoneRingManager *gearPhone, enum HeapID heapI
     return str;
 }
 
-void GearPhoneRingManager_SetCallerParams(GearPhoneRingManager *gearPhone, u8 callerId, u8 a2, u8 a3, u8 isScriptedCall, u8 callScriptID) {
+void GearPhoneRingManager_SetCallerParams(GearPhoneRingManager *gearPhone, u8 callerId, u32 a2, u8 a3, u8 isScriptedCall, u8 callScriptID) {
     // a4 set to 2 when passed from script
     // a5 related to message id? when passed from script
     if (callerId >= NUM_PHONE_CONTACTS) {

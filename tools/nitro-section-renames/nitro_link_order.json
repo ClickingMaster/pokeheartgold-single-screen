@@ -1311,18 +1311,6 @@
         "selector": ".bss.snd_command_ctrl"
       },
       {
-        "path": "lib/asm/to65_nitro_unified_anchor.o",
-        "selector": ".bss.unified_01"
-      },
-      {
-        "path": "lib/NitroSDK/src/snd/SND_command.o",
-        "selector": ".bss.snd_command_shared"
-      },
-      {
-        "path": "lib/NitroSDK/src/snd/SND_command.o",
-        "selector": ".bss.snd_command_array"
-      },
-      {
         "path": "lib/NitroSDK/src/snd/SND_alarm.o",
         "selector": ".bss.snd_alarm"
       },

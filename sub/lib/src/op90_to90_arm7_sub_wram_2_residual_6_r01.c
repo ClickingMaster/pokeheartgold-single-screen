@@ -7,7 +7,7 @@ extern u32 OS_DisableInterrupts(void);
 extern void OS_RestoreInterrupts(u32);
 extern void SPIi_ReturnResult(u16,u32);
 extern int SPIi_SetEntry(u32,u32,u16,...);
-typedef struct{u16 words[16];u32 state;u16 flags,mode;u32 address,index,length;u16 reload,control;u8 unk38[0x18];}W37001Work;
+typedef struct{u16 words[16];u32 state;u16 flags,mode;u32 address,index,length;u16 reload,control;u8 unk38[0x4];}W37001Work;
 W37001Work micw;
 extern int MicSetTimerValue(u32);
 #define H(a) (*(volatile u16*)(a))

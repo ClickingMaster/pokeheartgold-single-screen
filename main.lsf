@@ -3628,6 +3628,7 @@ Overlay field
     Object src/to70_overlay_01_022053EC_residual_3_extra554_run01.o
     Object src/field_effect_dispatch_4.o
     Object asm/overlay_01_022053EC_residual_4.o
+    Object src/op90_overlay_01_022053EC_residual_4_r01.o
     Object src/field_effect_dispatch_5.o
     Object asm/to90_extra1985_anchor.o
     Object src/to90_extra1985_run01.o
@@ -9702,6 +9703,8 @@ Overlay OVY_71
     Object src/to47_overlay71_scene_flow_r39.o
     Object src/overlay71_opus_partial_39.o
     Object asm/overlay_71_residual_40.o
+    Object asm/to70_overlay_71_residual_50_extra320_anchor_own1.o
+    Object src/op90_overlay_71_residual_40_r01.o
     Object src/overlay71_opus_partial_40.o
     Object asm/to70_overlay_71_residual_41_extra504_anchor.o
     Object src/to70_overlay_71_residual_41_extra504_run01.o
