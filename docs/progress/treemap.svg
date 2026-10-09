@@ -4,8 +4,8 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="1172" y="42" text-anchor="end" font-size="22">98.38% C + C++ source</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · f04d95eb4 · ARM9 + ARM7 · 4,075,356 mapped code bytes</text>
+<text x="1172" y="42" text-anchor="end" font-size="22">98.39% C + C++ source</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 35cdffef2 · ARM9 + ARM7 · 4,075,356 mapped code bytes</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
 <text x="47" y="102" font-size="14">C-only source 97.6%</text>
 <rect x="256" y="91" width="12" height="12" rx="2" fill="#35a9b8"/>
@@ -33302,46 +33302,43 @@ lib/dsprot/src/rc4.c</title></rect>
 <rect x="902.651" y="684.221" width="11.425" height="10.473" fill="#b875ae" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / dsprot_main_decrypter_encoded.o
 720 bytes · Unresolved source
 Source mapping unresolved</title></rect>
-<rect x="888.687" y="694.693" width="6.404" height="12.456" fill="#b875ae" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / integrity_decrypter_encoded.o
+<rect x="888.687" y="694.693" width="11.920" height="8.978" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / encryptor_encoded.o
+644 bytes · C-only source
+lib/dsprot/src/encryptor.c</title></rect>
+<rect x="888.687" y="703.672" width="11.920" height="6.692" fill="#b875ae" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / integrity_decrypter_encoded.o
 480 bytes · Unresolved source
 Source mapping unresolved</title></rect>
-<rect x="895.091" y="694.693" width="6.350" height="12.456" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / rom_util_encrypted.o
+<rect x="888.687" y="710.364" width="11.920" height="6.636" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / rom_util_encrypted.o
 476 bytes · C-only source
 lib/dsprot/src/rom_util.c</title></rect>
-<rect x="888.687" y="707.150" width="6.613" height="9.850" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / rom_test_encrypted.o
+<rect x="900.607" y="694.693" width="5.366" height="12.140" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / rom_test_encrypted.o
 392 bytes · C-only source
 lib/dsprot/src/rom_test.c</title></rect>
-<rect x="895.301" y="707.150" width="6.141" height="9.850" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / encryptor_plain.o
-364 bytes · C-only source
-lib/dsprot/src/encryptor_plain.c</title></rect>
-<rect x="901.441" y="694.693" width="5.100" height="11.469" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / mac_owner_encrypted.o
+<rect x="905.973" y="694.693" width="8.103" height="7.219" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / mac_owner_encrypted.o
 352 bytes · C-only source
 lib/dsprot/src/mac_owner.c</title></rect>
-<rect x="906.542" y="694.693" width="7.535" height="6.176" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / encryptor_encoded_residual.o
-280 bytes · Assembly
-lib/dsprot/asm/encryptor_encoded_residual.s</title></rect>
-<rect x="906.542" y="700.869" width="7.535" height="5.293" fill="#b875ae" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / mac_owner_decrypter_encoded.o
+<rect x="905.973" y="701.912" width="8.103" height="4.922" fill="#b875ae" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / mac_owner_decrypter_encoded.o
 240 bytes · Unresolved source
 Source mapping unresolved</title></rect>
-<rect x="901.441" y="706.162" width="7.360" height="5.419" fill="#b875ae" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / rom_test_decrypter_encoded.o
+<rect x="900.607" y="706.834" width="7.846" height="5.083" fill="#b875ae" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / rom_test_decrypter_encoded.o
 240 bytes · Unresolved source
 Source mapping unresolved</title></rect>
-<rect x="901.441" y="711.581" width="7.360" height="5.419" fill="#b875ae" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / rom_util_decrypter_encoded.o
+<rect x="900.607" y="711.917" width="7.846" height="5.083" fill="#b875ae" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / rom_util_decrypter_encoded.o
 240 bytes · Unresolved source
 Source mapping unresolved</title></rect>
-<rect x="908.802" y="706.162" width="2.702" height="5.167" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / rc4_decoder.o
+<rect x="908.453" y="706.834" width="2.880" height="4.847" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / rc4_decoder.o
 84 bytes · Assembly
 lib/dsprot/build/rc4_decoder.s</title></rect>
-<rect x="911.503" y="706.162" width="2.573" height="5.167" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / dsprot_main_decrypter_decoder.o
+<rect x="911.333" y="706.834" width="2.743" height="4.847" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / dsprot_main_decrypter_decoder.o
 80 bytes · Assembly
 lib/dsprot/build/dsprot_main_decrypter_decoder.s</title></rect>
-<rect x="908.802" y="711.329" width="5.275" height="2.394" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / coretests_decrypter_decoder.o
+<rect x="908.453" y="711.680" width="2.374" height="5.320" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / coretests_decrypter_decoder.o
 76 bytes · Assembly
 lib/dsprot/build/coretests_decrypter_decoder.s</title></rect>
-<rect x="908.802" y="713.723" width="3.043" height="3.277" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / integrity_decrypter_decoder.o
+<rect x="910.827" y="711.680" width="3.249" height="3.069" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / integrity_decrypter_decoder.o
 60 bytes · Assembly
 lib/dsprot/build/integrity_decrypter_decoder.s</title></rect>
-<rect x="911.845" y="713.723" width="2.232" height="3.277" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / encryptor_decoder.o
+<rect x="910.827" y="714.749" width="3.249" height="2.251" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / encryptor_decoder.o
 44 bytes · Assembly
 lib/dsprot/build/encryptor_decoder.s</title></rect>
 <rect x="888.687" y="670.606" width="25.389" height="46.394" fill="none" stroke="#101722" stroke-width="2"/>

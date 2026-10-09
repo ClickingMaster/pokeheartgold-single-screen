@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "f04d95eb4d3bd0a78d8eb575ab4adc4cdbf4811c",
+  "commit": "35cdffef2d2915293b77684886ecc4cb14d634e7",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "469dd5128f225c7cb770953cb13df37d2e3e384d4b26367121f2f401444dcf57",
+    "ARM9": "8ba650abd41fa4992c0baabca81893ca2acacf6feec1c861b1794d1335e5ea86",
     "ARM7": "4f0699f28eb2fc4b968a7f5b97d861ba889e9a50dafc89019f0b8341064d5d7b"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
   "totals": {
-    "c": 3978114,
+    "c": 3978394,
     "mixed": 25814,
-    "asm": 35884,
+    "asm": 35604,
     "cpp": 31172,
     "unknown": 4372
   },
   "coverage": {
     "denominator_bytes": 4075356,
     "c": {
-      "bytes": 3978114,
-      "percent": 97.61390170576509
+      "bytes": 3978394,
+      "percent": 97.62077227118318
     },
     "cpp": {
       "bytes": 31172,
       "percent": 0.7648902329023526
     },
     "combined": {
-      "bytes": 4009286,
-      "percent": 98.37879193866745
+      "bytes": 4009566,
+      "percent": 98.38566250408553
     }
   },
   "objects": [
@@ -65963,18 +65963,10 @@
     {
       "cpu": "ARM9",
       "module": "ds_protect",
-      "object": "encryptor_encoded_residual.o",
-      "bytes": 280,
-      "status": "asm",
-      "source": "lib/dsprot/asm/encryptor_encoded_residual.s"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "ds_protect",
-      "object": "encryptor_plain.o",
-      "bytes": 364,
+      "object": "encryptor_encoded.o",
+      "bytes": 644,
       "status": "c",
-      "source": "lib/dsprot/src/encryptor_plain.c"
+      "source": "lib/dsprot/src/encryptor.c"
     },
     {
       "cpu": "ARM9",

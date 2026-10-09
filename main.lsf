@@ -14897,8 +14897,7 @@ Overlay ds_protect
 	Object lib/dsprot/integrity_encrypted.o
 	Object lib/dsprot/integrity_decrypter_encoded.o
 	Object lib/dsprot/integrity_decrypter_decoder.o
-	Object lib/dsprot/encryptor_plain.o
-	Object lib/dsprot/encryptor_encoded_residual.o
+	Object lib/dsprot/encryptor_encoded.o
 	Object lib/dsprot/encryptor_decoder.o
 	Object lib/dsprot/mac_owner_encrypted.o
 	Object lib/dsprot/mac_owner_decrypter_encoded.o
