@@ -481,3 +481,5 @@ $(BUILD_DIR)/src/op90_nitrocrypto_residual00_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to58_overlay13_r18_residual02_suffix_r01.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/src/op90_overlay_96_residual_70_tail_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/op90_to53_overlay13_r14_residual_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/op90_op90_overlay89_r8_residual_03_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/op90_overlay_80_022310C4_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))

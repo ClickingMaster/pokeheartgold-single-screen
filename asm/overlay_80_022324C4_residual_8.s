@@ -164,5 +164,3 @@
 	.public ov80_02233648
     .bss
 
-ov80_0223DD48: ; 0x0223DD48
-	.space 0x4
