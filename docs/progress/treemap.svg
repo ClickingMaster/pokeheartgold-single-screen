@@ -4,8 +4,8 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="1172" y="42" text-anchor="end" font-size="22">99.16% C + C++ source</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 96e2cecc7 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="1172" y="42" text-anchor="end" font-size="22">99.19% C + C++ source</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · ab6991386 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
 <text x="47" y="102" font-size="14">C-only source 98.1%</text>
 <rect x="256" y="91" width="12" height="12" rx="2" fill="#35a9b8"/>
@@ -10118,9 +10118,9 @@ src/r40_overlay_45_thumb_residual_22_run1.c</title></rect>
 <rect x="395.700" y="508.678" width="13.123" height="14.791" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_to80_extra1740_residual_3_r01.o
 1,168 bytes · C++-only source
 src/op90_to80_extra1740_residual_3_r01.cpp</title></rect>
-<rect x="408.823" y="493.076" width="18.831" height="10.237" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_op90_to70_ov45_extra03_residual_5_residual_1_residual_1.o
-1,160 bytes · Assembly
-lib/NitroDWC/asm/op90_op90_to70_ov45_extra03_residual_5_residual_1_residual_1.s</title></rect>
+<rect x="408.823" y="493.076" width="18.831" height="10.237" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_op90_op90_to70_ov45_extra03_residual_5_residual_1_residual_1_r01.o
+1,160 bytes · C++-only source
+src/op90_op90_op90_to70_ov45_extra03_residual_5_residual_1_residual_1_r01.cpp</title></rect>
 <rect x="408.823" y="503.313" width="18.831" height="10.166" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_to65_overlay_45_arm_residual_17_residual_6_r01.o
 1,152 bytes · C-only source
 src/op90_to65_overlay_45_arm_residual_17_residual_6_r01.c</title></rect>

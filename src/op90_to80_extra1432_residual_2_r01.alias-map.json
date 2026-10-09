@@ -1,0 +1,7 @@
+{
+  "section": ".text",
+  "owner": {"name": "ov45_0223CA14", "size": 160, "type": "FUNC"},
+  "aliases": [
+    {"name": "_ZN5DequeD1Ev", "offset": 0}
+  ]
+}
