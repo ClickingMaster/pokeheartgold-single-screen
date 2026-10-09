@@ -461,3 +461,5 @@ $(BUILD_DIR)/src/op90_mi_uncompress_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to90_os_vramExclusive_clz_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to90_w41415_fp_init4_suffix_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to91_w41419_ExitProcess_prefix_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_op90_op90_op90_to80_extra1740_residual_4_residual_1_residual_1_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/op90_to90_os_alarm_handler_r01.o: private MWCCVER := 2.0/sp2p3

@@ -1415,7 +1415,8 @@ Static main
     Object lib/asm/to80_extra1750_anchor.o
     Object src/to80_extra1750_run01.o
     Object src/to65_wifi_residual_11_run30.o
-    Object lib/asm/to65_wifi_residual_11_residual_29.o
+    Object lib/asm/op90_to65_wifi_residual_11_residual_29_anchor.o
+    Object src/op90_to65_wifi_residual_11_residual_29_r01.o
     Object src/to65_wifi_residual_11_run31.o
     Object src/to65_wifi_residual_11_run32.o
     Object lib/asm/to70_to65_wifi_residual_11_residual_30_extra1170_anchor.o
@@ -1492,7 +1493,8 @@ Static main
     Object src/to80_extra1676_run01.o
     Object src/to65_wifi_residual_11_run51.o
     Object lib/asm/op90_to65_wifi_residual_11_residual_49_anchor.o
-    Object lib/asm/op90_to65_wifi_residual_11_residual_49_residual_1.o
+    Object lib/asm/op90_op90_to65_wifi_residual_11_residual_49_residual_1_anchor.o
+    Object src/op90_op90_to65_wifi_residual_11_residual_49_residual_1_r01.o
     Object src/op90_to65_wifi_residual_11_residual_49_r01.o
     Object src/to65_wifi_residual_11_run52.o
     Object lib/asm/to80_extra1467_anchor.o
@@ -1783,7 +1785,8 @@ Static main
     Object lib/asm/op90_to80_extra1922_residual_1_anchor.o
     Object src/op90_to80_extra1922_residual_1_r01.o
     Object lib/asm/op90_op90_to80_extra1922_residual_1_residual_1_anchor.o
-    Object lib/asm/op90_op90_to80_extra1922_residual_1_residual_1_residual_1.o
+    Object lib/asm/op90_op90_op90_to80_extra1922_residual_1_residual_1_residual_1_anchor.o
+    Object src/op90_op90_op90_to80_extra1922_residual_1_residual_1_residual_1_r01.o
     Object src/op90_op90_to80_extra1922_residual_1_residual_1_r01.o
     Object src/to80_extra1759_run02.o
     Object src/to80_extra1477_run01.o
@@ -2128,7 +2131,8 @@ Object src/op90_to91_w41566_texmatrix_suffix_r01.o
     Object lib/NitroSDK/src/os/os_timer.o
     Object lib/NitroSDK/src/os/os_tick.o
     Object lib/NitroSDK/src/os/to90_os_alarm_prefix.o
-    Object lib/NitroSDK/asm/to90_os_alarm_handler.o
+    Object lib/NitroSDK/asm/op90_to90_os_alarm_handler_anchor.o
+    Object src/op90_to90_os_alarm_handler_r01.o
     Object lib/NitroSDK/src/os/to90_os_alarm_suffix.o
     Object lib/NitroSDK/src/os/os_valarm.o
     Object lib/NitroSDK/src/os/os_system.o
@@ -7877,7 +7881,8 @@ Object src/to58_r3_overlay_45_thumb_residual_8_suffix.o
     Object src/to80_extra1740_run01.o
     Object lib/NitroDWC/asm/op90_to80_extra1740_residual_2_anchor.o
     Object src/op90_to80_extra1740_residual_2_r01.o
-    Object lib/NitroDWC/asm/op90_to80_extra1740_residual_2_residual_1.o
+    Object lib/NitroDWC/asm/op90_op90_to80_extra1740_residual_2_residual_1_anchor.o
+    Object src/op90_op90_to80_extra1740_residual_2_residual_1_r01.o
     Object src/to80_extra1740_run02.o
     Object lib/NitroDWC/asm/op90_to80_extra1740_residual_3_anchor.o
     Object lib/NitroDWC/asm/op90_op90_to80_extra1740_residual_3_residual_1_anchor.o
@@ -7889,7 +7894,9 @@ Object src/to58_r3_overlay_45_thumb_residual_8_suffix.o
     Object lib/NitroDWC/asm/op90_to80_extra1740_residual_4_anchor.o
     Object lib/NitroDWC/asm/op90_op90_to80_extra1740_residual_4_residual_1_anchor.o
     Object lib/NitroDWC/asm/op90_op90_op90_to80_extra1740_residual_4_residual_1_residual_1_anchor.o
-    Object lib/NitroDWC/asm/op90_op90_op90_to80_extra1740_residual_4_residual_1_residual_1_residual_1.o
+    Object lib/NitroDWC/asm/op90_op90_op90_op90_to80_extra1740_residual_4_residual_1_residual_1_residual_1_anchor.o
+    Object lib/NitroDWC/asm/op90_op90_op90_op90_to80_extra1740_residual_4_residual_1_residual_1_residual_1_residual_1.o
+    Object src/op90_op90_op90_op90_to80_extra1740_residual_4_residual_1_residual_1_residual_1_r01.o
     Object src/op90_op90_op90_to80_extra1740_residual_4_residual_1_residual_1_r01.o
     Object src/op90_op90_to80_extra1740_residual_4_residual_1_r01.o
     Object src/op90_to80_extra1740_residual_4_r01.o

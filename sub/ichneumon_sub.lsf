@@ -1,7 +1,9 @@
 Static ichneumon_sub
 {
 	Object lib/src/to91_w41567_autoload_callback.o
-	Object lib/asm/to91_w41567_startup_suffix.o
+	Object lib/asm/op90_to91_w41567_startup_suffix_anchor.o
+	Object lib/src/op90_to91_w41567_startup_suffix_r01.o
+	Object lib/asm/op90_to91_w41567_startup_suffix_residual_1.o
 	Address 0x02380000
 	StackSize 1024 1024
 }
@@ -17,7 +19,8 @@ Autoload WRAM
 	Address 0x037F8000
 	Object asm/op90_sp_main_anchor.o
 	Object lib/src/op90_sp_main_r01.o
-	Object asm/op90_sp_main_residual_1.o
+	Object asm/op90_op90_sp_main_residual_1_anchor.o
+	Object lib/src/op90_op90_sp_main_residual_1_r01.o
 	Object asm/to90_a7_next1668_o01_anchor.o
 	Object lib/src/to90_a7_next1668_o01_run01.o
 	Object lib/src/OS_irqHandler.o
@@ -25,12 +28,15 @@ Autoload WRAM
 	Object lib/src/OS_interrupt.o
 	Object lib/src/to90_arm7_spinlock_run01.o
 	Object lib/src/to90_arm7_spinlock_run02.o
-	Object lib/asm/to90_arm7_spinlock_alias_cartridge.o
+	Object lib/asm/op90_to90_arm7_spinlock_alias_cartridge_anchor.o
+	Object lib/src/op90_to90_arm7_spinlock_alias_cartridge_r01.o
 	Object lib/src/to90_arm7_spinlock_run03.o
 	Object lib/asm/to90_arm7_spinlock_alias_card.o
 	Object lib/src/to90_arm7_spinlock_run04.o
-	Object lib/asm/to90_arm7_spinlock_bitmap_get.o
-	Object lib/asm/to90_arm7_spinlock_bitmap_release.o
+	Object lib/asm/op90_to90_arm7_spinlock_bitmap_get_anchor.o
+	Object lib/src/op90_to90_arm7_spinlock_bitmap_get_r01.o
+	Object lib/asm/op90_to90_arm7_spinlock_bitmap_release_anchor.o
+	Object lib/src/op90_to90_arm7_spinlock_bitmap_release_r01.o
 	Object lib/src/OS_thread.o
 	Object lib/src/OS_context.o
 	Object lib/src/OS_message.o
@@ -41,7 +47,8 @@ Autoload WRAM
 	Object lib/src/OS_timer.o
 	Object lib/src/OS_tick.o
 	Object lib/src/to90_arm7_alarm_prefix.o
-	Object lib/asm/to90_arm7_alarm_handler.o
+	Object lib/asm/op90_to90_arm7_alarm_handler_anchor.o
+	Object lib/src/op90_to90_arm7_alarm_handler_r01.o
 	Object lib/src/to90_arm7_alarm_suffix.o
 	Object lib/src/OS_valarm.o
 	Object lib/src/OS_system.o
@@ -219,7 +226,10 @@ Autoload WRAM
 	Object lib/src/to90_arm7_sub_wram_1_run96.o
 	Object asm/op90_to90_arm7_sub_wram_1_residual_20_anchor.o
 	Object lib/src/op90_to90_arm7_sub_wram_1_residual_20_r01.o
-	Object asm/libsyscall.o
+	Object asm/op90_libsyscall_anchor.o
+	Object lib/src/op90_libsyscall_r01.o
+	Object asm/op90_libsyscall_residual_1.o
+	Object lib/src/op90_libsyscall_r02.o
 	Object asm/to90_arm7_wram160_r8_anchor.o
 	Object lib/src/to90_arm7_sub_wram_2_run69.o
 	Object lib/src/to90_arm7_sub_wram_2_run70.o
