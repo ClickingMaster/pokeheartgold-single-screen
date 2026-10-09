@@ -14417,8 +14417,8 @@ Object src/overlay112_014_ir_thread.o
 Object src/to53_overlay112_015.o
 Object src/to57_r3_07_overlay112_016_head.o
 Object asm/op90_to57_r3_07_overlay112_016_residual_anchor.o
+Object asm/op90_to57_r3_07_overlay112_016_residual_bss_head.o
 Object src/op90_to57_r3_07_overlay112_016_residual_r01.o
-Object asm/op90_to57_r3_07_overlay112_016_residual_residual_1.o
 Object src/to57_r3_07_overlay112_016_tail.o
 Object src/to53_overlay112_017.o
 Object src/to58_w11b_ov112_018.o

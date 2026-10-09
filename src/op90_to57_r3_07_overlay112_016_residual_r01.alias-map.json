@@ -1,0 +1,25 @@
+[
+  {
+    "section": ".bss",
+    "owner": {"name": "ov112_021FFAC0", "offset": "0x1c", "size": "0x48"},
+    "aliases": [
+      {"name": "ov112_021FFAF0", "offset": "0x4c"},
+      {"name": "ov112_021FFAF8", "offset": "0x54"}
+    ]
+  },
+  {
+    "section": ".bss",
+    "owner": {"name": "ov112_021FFB08", "offset": "0x64", "size": "0x54"},
+    "aliases": [
+      {"name": "ov112_021FFB20", "offset": "0x7c"},
+      {"name": "ov112_021FFB24", "offset": "0x80"}
+    ]
+  },
+  {
+    "section": ".bss",
+    "owner": {"name": "ov112_021FFB5C", "offset": "0xb8", "size": "0x7c"},
+    "aliases": [
+      {"name": "ov112_021FFB64", "offset": "0xc0"}
+    ]
+  }
+]

@@ -528,7 +528,6 @@
 	.extern ov112_021F3608
 	.extern ov112_021F3630
 	.public _021FF500
-	.public _021FF9E0
 	.public ov112_021F3664
 	.public ov112_021F366C
 	.public ov112_021F3678
@@ -863,16 +862,6 @@
 	.public ov112_021FF8F8
 	.public ov112_021FF924
 	.public ov112_021FF9B8
-	.public ov112_021FFA18
-	.public ov112_021FFA20
-	.public ov112_021FFAA4
-	.public ov112_021FFAC0
-	.public ov112_021FFAF0
-	.public ov112_021FFAF8
-	.public ov112_021FFB08
-	.public ov112_021FFB20
-	.public ov112_021FFB24
-	.public ov112_021FFB64
 	.public ov112_021FFBD8
 	.public ov112_App_MainMenu_SelectOption_ConnectToPokewalker
 
@@ -5188,39 +5177,6 @@ ov112_021FF9B8: ; 0x021FF9B8
 	.byte 0x99, 0x04, 0x00, 0x00, 0x9C, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
 	.bss
-
-_021FF9E0:
-	.space 0x38
-
-ov112_021FFA18: ; 0x021FFA18
-	.space 0x8
-
-ov112_021FFA20: ; 0x021FFA20
-	.space 0x84
-
-ov112_021FFAA4: ; 0x021FFAA4
-	.space 0x1C
-
-ov112_021FFAC0: ; 0x021FFAC0
-	.space 0x30
-
-ov112_021FFAF0: ; 0x021FFAF0
-	.space 0x8
-
-ov112_021FFAF8: ; 0x021FFAF8
-	.space 0x10
-
-ov112_021FFB08: ; 0x021FFB08
-	.space 0x18
-
-ov112_021FFB20: ; 0x021FFB20
-	.space 0x4
-
-ov112_021FFB24: ; 0x021FFB24
-	.space 0x40
-
-ov112_021FFB64: ; 0x021FFB64
-	.space 0x74
 
 ov112_021FFBD8: ; 0x021FFBD8
 	.space 0xc8

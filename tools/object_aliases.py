@@ -149,7 +149,8 @@ def apply_config(args, config, objcopy, readelf) -> None:
         if name in before:
             raise SystemExit(f"refusing to duplicate existing symbol: {name}")
         offset = int(alias["offset"], 0) if isinstance(alias["offset"], str) else alias["offset"]
-        if offset < 0 or offset >= expected_owner[1]:
+        # Alias offsets are section-relative, like the owner's own offset.
+        if offset < expected_owner[0] or offset >= expected_owner[0] + expected_owner[1]:
             raise SystemExit(f"alias {name} offset {offset:#x} is outside owner")
         command += ["--add-symbol", f"{name}={section}:{offset:#x},global,{alias_kind}"]
         expected[name] = (offset, 0, expected_owner[2], "GLOBAL", section_index)
