@@ -1526,7 +1526,8 @@ Static main
     Object src/to70_libVCT_extra08_run01.o
     Object lib/asm/to80_extra1861_anchor.o
     Object lib/asm/op90_to80_extra1861_residual_1_anchor.o
-    Object lib/asm/op90_to80_extra1861_residual_1_residual_1.o
+    Object lib/asm/op90_op90_to80_extra1861_residual_1_residual_1_anchor.o
+    Object src/op90_op90_to80_extra1861_residual_1_residual_1_r01.o
     Object src/op90_to80_extra1861_residual_1_r01.o
     Object lib/asm/op90_op90_to80_extra1861_residual_1_residual_2_anchor.o
     Object src/op90_op90_to80_extra1861_residual_1_residual_2_r01.o
@@ -1899,7 +1900,8 @@ Static main
     Object src/to90_extra2534_run01.o
     Object src/to80_extra1754_run04.o
     Object lib/asm/op90_to80_extra1754_residual_5_anchor.o
-    Object lib/asm/op90_to80_extra1754_residual_5_residual_1.o
+    Object lib/asm/op90_op90_to80_extra1754_residual_5_residual_1_anchor.o
+    Object src/op90_op90_to80_extra1754_residual_5_residual_1_r01.o
     Object src/op90_to80_extra1754_residual_5_r01.o
     Object src/to80_extra1754_run05.o
     Object src/to70_to70_to65_nnsys_residual_43_residual_1_extra256_residual_1_extra1187_run01.o
@@ -5229,7 +5231,8 @@ Overlay OVY_13
     Object src/to80_extra1601_run01.o
     Object src/to55_overlay13_r18_hex_decode.o
     Object src/to58_overlay13_r18_parser.o
-    Object asm/to58_overlay13_r18_residual02_suffix.o
+    Object asm/op90_to58_overlay13_r18_residual02_suffix_anchor.o
+    Object src/op90_to58_overlay13_r18_residual02_suffix_r01.o
     Object src/to55_overlay13_r18_completion.o
     Object asm/op90_to55_overlay13_r18_residual03_anchor.o
     Object src/op90_to55_overlay13_r18_residual03_r01.o
@@ -7750,7 +7753,8 @@ Object src/to58_r3_overlay_45_thumb_residual_8_suffix.o
     Object lib/NitroDWC/asm/to90_extra2452_anchor.o
     Object lib/NitroDWC/asm/op90_to90_extra2452_residual_1_anchor.o
     Object src/op90_to90_extra2452_residual_1_r01.o
-    Object lib/NitroDWC/asm/op90_to90_extra2452_residual_1_residual_1.o
+    Object lib/NitroDWC/asm/op90_op90_to90_extra2452_residual_1_residual_1_anchor.o
+    Object src/op90_op90_to90_extra2452_residual_1_residual_1_r01.o
     Object src/to90_extra2452_run01.o
     Object src/to70_ov45_extra04_run08.o
     Object lib/NitroDWC/asm/to80_extra1434_anchor.o
@@ -10099,7 +10103,8 @@ Overlay OVY_73
     Object src/to58_r3_ov73_40.o
     Object src/overlay73_helpers_40.o
     Object src/to50_overlay73_resource_copy.o
-    Object asm/overlay_73_residual_41_remaining.o
+    Object asm/op90_overlay_73_residual_41_remaining_anchor.o
+    Object src/op90_overlay_73_residual_41_remaining_r01.o
 }
 Overlay OVY_74
 {
@@ -10516,7 +10521,8 @@ Object src/to70_to54_atomic_w09_07_overlay74_residual04_extra139_run01.o
     Object src/to70_to57_overlay_74_residual_054_extra1237_run01.o
     Object src/to57_overlay_74_exact_055.o
     Object asm/to57_overlay_74_data.o
-    Object asm/nitrocrypto_residual00.o
+    Object asm/op90_nitrocrypto_residual00_anchor.o
+    Object src/op90_nitrocrypto_residual00_r01.o
     Object src/nitrocrypto_run01.o
     Object src/to55_nitrocrypto_residual01_sign.o
     Object src/to55_nitrocrypto_residual01_bignum.o
