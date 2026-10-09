@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "97c03ff088b40ab49531c93bee51e86578d0760e",
+  "commit": "cf82d7533673390c55c9b9f6bb96db6a6509418d",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "343819c8075e53d9f19686802fe43df39eba950c0643305635a7ecd808e32908",
-    "ARM7": "e6f28bdab97a8579a826c01fcbb2ab82179b43606b7666e94ecb5fb6cb7d9577"
+    "ARM9": "398527d04722afdcbdb4dacd9c0c9cf7cba245bce897b55396db501857710c69",
+    "ARM7": "4f9852e1925121c3b195133f33d84c762e6ff9977e139f5dcdae27e6c04b3e06"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
   "totals": {
-    "c": 3957166,
+    "c": 3957342,
     "mixed": 2340,
-    "asm": 79864,
+    "asm": 79688,
     "cpp": 27432,
     "unknown": 8552
   },
   "coverage": {
     "denominator_bytes": 4075354,
     "c": {
-      "bytes": 3957166,
-      "percent": 97.09993291380331
+      "bytes": 3957342,
+      "percent": 97.10425155704266
     },
     "cpp": {
       "bytes": 27432,
       "percent": 0.6731194394401075
     },
     "combined": {
-      "bytes": 3984598,
-      "percent": 97.77305235324343
+      "bytes": 3984774,
+      "percent": 97.77737099648276
     }
   },
   "objects": [
@@ -58355,6 +58355,14 @@
     {
       "cpu": "ARM9",
       "module": "OVY_96",
+      "object": "op90_overlay_96_residual_47_head_r01.o",
+      "bytes": 176,
+      "status": "c",
+      "source": "src/op90_overlay_96_residual_47_head_r01.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_96",
       "object": "op90_overlay_96_residual_52_tail_r01.o",
       "bytes": 2008,
       "status": "c",
@@ -62015,14 +62023,6 @@
       "bytes": 2488,
       "status": "asm",
       "source": "asm/overlay_96_residual_107_gap_2_tail.s"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_96",
-      "object": "overlay_96_residual_47_head.o",
-      "bytes": 176,
-      "status": "asm",
-      "source": "asm/overlay_96_residual_47_head.s"
     },
     {
       "cpu": "ARM9",

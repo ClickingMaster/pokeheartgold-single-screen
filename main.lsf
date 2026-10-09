@@ -12720,7 +12720,8 @@ Overlay OVY_96
     Object src/overlay96_exact_bank_45.o
     Object src/r40_overlay_96_residual_46_run1.o
     Object src/overlay96_exact_bank_46.o
-    Object asm/overlay_96_residual_47_head.o
+    Object asm/op90_overlay_96_residual_47_head_anchor.o
+    Object src/op90_overlay_96_residual_47_head_r01.o
     Object src/overlay96_course_scene_gap47_tail.o
     Object src/overlay96_exact_bank_47.o
     Object src/overlay96_course_cleanup/overlay96_course_cleanup.o

@@ -4,8 +4,8 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="1172" y="42" text-anchor="end" font-size="22">97.77% C + C++ source</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 97c03ff08 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="1172" y="42" text-anchor="end" font-size="22">97.78% C + C++ source</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · cf82d7533 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
 <text x="47" y="102" font-size="14">C-only source 97.1%</text>
 <rect x="256" y="91" width="12" height="12" rx="2" fill="#35a9b8"/>
@@ -6967,12 +6967,12 @@ src/op90_to90_extra2510_residual_1_r01.c</title></rect>
 <rect x="47.941" y="707.159" width="8.916" height="3.280" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / op90_overlay_96_residual_109_residual_3_gap3_r01.o
 176 bytes · C-only source
 src/op90_overlay_96_residual_109_residual_3_gap3_r01.c</title></rect>
-<rect x="47.941" y="710.439" width="4.458" height="6.561" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / overlay96_pokeathlon_medal_grid_run3.o
+<rect x="47.941" y="710.439" width="4.458" height="6.561" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / op90_overlay_96_residual_47_head_r01.o
+176 bytes · C-only source
+src/op90_overlay_96_residual_47_head_r01.c</title></rect>
+<rect x="52.399" y="710.439" width="4.458" height="6.561" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / overlay96_pokeathlon_medal_grid_run3.o
 176 bytes · C-only source
 src/overlay96_pokeathlon_medal_grid_run3.c</title></rect>
-<rect x="52.399" y="710.439" width="4.458" height="6.561" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / overlay_96_residual_47_head.o
-176 bytes · Assembly
-asm/overlay_96_residual_47_head.s</title></rect>
 <rect x="56.858" y="678.129" width="5.955" height="4.911" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_96 / to70_sol_r9_ov96_r06_residual2_extra525_run01.o
 176 bytes · C-only source
 src/to70_sol_r9_ov96_r06_residual2_extra525_run01.c</title></rect>
