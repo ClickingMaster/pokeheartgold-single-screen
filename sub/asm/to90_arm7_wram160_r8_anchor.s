@@ -77,154 +77,30 @@ spiWork: ; 0x03808E34
 	.space 0x49C
 	.public valid_cnt$3731
 
-valid_cnt$3731: ; 0x038092D0
-	.space 1
-
-invalid_cnt$3730: ; 0x038092D1
-	.space 1
-
-	.balign 4, 0
 	.public tpw
-tpw: ; 0x038092D4
-	.space 0xD4
 	.public last_touch_flg
-
-last_touch_flg: ; 0x038093A8
-	.space 0x2
-
-	.balign 4, 0
 	.public PMi_KeyPattern
-PMi_KeyPattern: ; 0x038093AC
-	.space 0x2
 	.public PMi_TriggerBL
-
-PMi_TriggerBL: ; 0x038093AE
-	.space 0x2
-
 	.public PMi_Initialized
-PMi_Initialized: ; 0x038093B0
-	.space 0x4
 	.public PMi_Work
-
-PMi_Work: ; 0x038093B4
-	.space 0x2C
 	.public PMi_BlinkCounter
-
-PMi_BlinkCounter: ; 0x038093E0
-	.space 0x4
-
-PMi_BlinkPatternNo: ; 0x038093E4
-	.space 0x4
 	.public micw
-
-micw: ; 0x038093E8
-	.space 0x50
 	.public micIntrInfo
-
-micIntrInfo: ; 0x03809438
-	.space 0x10
 	.public CTRDGi_EnableFlag
-
-CTRDGi_EnableFlag: ; 0x03809448
-	.space 0x4
 	.public CTRDGi_Work
-
-CTRDGi_Work: ; 0x0380944C
-	.space 0x4
 	.public lock_id
-
-lock_id: ; 0x03809450
-	.space 0x2
-
-	.balign 4, 0
-current_vib: ; 0x03809454
-	.space 0x4
-
-isInitialized$3644: ; 0x03809458
-	.space 0x4
-
-isCartridgePullOut$3768: ; 0x0380945C
-	.space 0x4
-
-skipCheck$3770: ; 0x03809460
-	.space 0x4
-
-isInitialized$3633: ; 0x03809464
-	.space 0x4
-
-ctw_sp: ; 0x03809468
-	.space 0x18
 	.public pulse_edge_alarm
-
-pulse_edge_alarm: ; 0x03809480
-	.space 0x2C
 	.public nvramw
-
-nvramw: ; 0x038094AC
-	.space 0x20
 	.public rtcInitialized
-
-rtcInitialized: ; 0x038094CC
-	.space 0x2
-
-	.balign 4, 0
 	.public rtcWork
-rtcWork: ; 0x038094D0
-	.space 0x3B4
-
 	.public WVR_BSS_START
-WVR_BSS_START:
 	.public wvrStatus
-wvrStatus: ; 0x03809884
-	.space 0x1
-
-	.balign 4, 0
-wvrVramImageBuf: ; 0x03809888
-	.space 0x4
-
-wvrHeapHandle: ; 0x0380988C
-	.space 0x4
-
-wvrVramImageBufSize: ; 0x03809890
-	.space 0x4
 	.public wvrThread
-
-wvrThread: ; 0x03809894
-	.space 0xA4
 	.public wvrWlStaElement
-
-wvrWlStaElement: ; 0x03809938
-	.space 0x1C0
-
-wvrThreadStack: ; 0x03809AF8
-	.space 0x400
 	.public wvrWlStack
-
-wvrWlStack: ; 0x03809EF8
-	.space 0x600
 	.public wvrWlWork
-
-wvrWlWork: ; 0x0380A4F8
-	.space 0x700
-
 	.public wmspRequestThread
-wmspRequestThread: ; 0x0380ABF8
-	.space 0xA4
-
 	.public wmspIndicateThread
-wmspIndicateThread: ; 0x0380AC9C
-	.space 0xA4
-
 	.public wmspMPAckAlarm
-wmspMPAckAlarm: ; 0x0380AD40
-	.space 0x2C
-
 	.public wmspMPIntervalAlarm
-wmspMPIntervalAlarm: ; 0x0380AD6C
-	.space 0x2C
-
 	.public wmspVAlarm
-wmspVAlarm: ; 0x0380AD98
-	.space 0x28
-
-; 0x0380ADC0
