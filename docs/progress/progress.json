@@ -1,11 +1,11 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "82db52a29d7ce29269bdf56ee49cb9dd062d7934",
+  "commit": "7c7c408f692ce4996a907f94caa2ebc15a1d19cf",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
-  "tracked_worktree_dirty": true,
+  "tracked_worktree_dirty": false,
   "map_sha256": {
-    "ARM9": "48b08576a5b18bb8e1d626b999f1967efbbc5c21f3864a672800bb376959007a",
+    "ARM9": "c4e52558aba4f67fabbb4269cc80374db359d9087a715372c1839fda6b20247f",
     "ARM7": "30b2d696a3eceb98e6b725966c4d896a02641e0b9d75ff2cb7da038e16bafdb8"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
