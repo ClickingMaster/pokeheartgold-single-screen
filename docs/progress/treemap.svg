@@ -4,16 +4,16 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="1172" y="42" text-anchor="end" font-size="22">98.31% C + C++ source</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 50e7d286e · ARM9 + ARM7 · 4,075,356 mapped code bytes</text>
+<text x="1172" y="42" text-anchor="end" font-size="22">98.32% C + C++ source</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 57ced4254 · ARM9 + ARM7 · 4,075,356 mapped code bytes</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
-<text x="47" y="102" font-size="14">C-only source 97.5%</text>
+<text x="47" y="102" font-size="14">C-only source 97.6%</text>
 <rect x="256" y="91" width="12" height="12" rx="2" fill="#35a9b8"/>
 <text x="275" y="102" font-size="14">C++-only source 0.8%</text>
 <rect x="484" y="91" width="12" height="12" rx="2" fill="#e4ad42"/>
 <text x="503" y="102" font-size="14">C/C++ with assembly 0.6%</text>
 <rect x="712" y="91" width="12" height="12" rx="2" fill="#455268"/>
-<text x="731" y="102" font-size="14">Assembly 1.0%</text>
+<text x="731" y="102" font-size="14">Assembly 0.9%</text>
 <rect x="940" y="91" width="12" height="12" rx="2" fill="#b875ae"/>
 <text x="959" y="102" font-size="14">Unresolved source 0.1%</text>
 <rect x="28.000" y="125.000" width="82.112" height="61.108" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_c.o
@@ -12359,12 +12359,12 @@ src/to90_extra2274_run01.c</title></rect>
 <rect x="476.826" y="704.550" width="2.768" height="5.524" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_13 / to53_overlay13_c04_w09.o
 92 bytes · C-only source
 src/to53_overlay13/to53_overlay13_c04_w09.c</title></rect>
-<rect x="479.593" y="704.550" width="5.295" height="2.762" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_13 / to56_w16_f84.o
+<rect x="479.593" y="704.550" width="5.295" height="2.762" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_13 / op90_to61_overlay_13_arm_2_residual_15_residual_1_r01.o
+88 bytes · C-only source
+src/op90_to61_overlay_13_arm_2_residual_15_residual_1_r01.c</title></rect>
+<rect x="479.593" y="707.312" width="5.295" height="2.762" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_13 / to56_w16_f84.o
 88 bytes · C-only source
 src/to56_w16_f84.c</title></rect>
-<rect x="479.593" y="707.312" width="5.295" height="2.762" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_13 / to61_overlay_13_arm_2_residual_15_residual_1.o
-88 bytes · Assembly
-lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_15_residual_1.s</title></rect>
 <rect x="476.826" y="710.074" width="4.031" height="3.463" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_13 / op90_to90_extra2446_residual_1_r01.o
 84 bytes · C-only source
 src/op90_to90_extra2446_residual_1_r01.c</title></rect>
@@ -21380,9 +21380,9 @@ sub/lib/src/OS_irqHandler.c</title></rect>
 <rect x="883.121" y="366.900" width="7.867" height="7.774" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / to90_arm7_sub_wram_2_run98.o
 368 bytes · C-only source
 sub/lib/src/to90_arm7_sub_wram_2_run98.c</title></rect>
-<rect x="883.121" y="374.674" width="7.867" height="7.605" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / to90_arm7_sub_wram_2_residual_8.o
-360 bytes · Assembly
-sub/asm/to90_arm7_sub_wram_2_residual_8.s</title></rect>
+<rect x="883.121" y="374.674" width="7.867" height="7.605" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / op90_to90_arm7_sub_wram_2_residual_8_r02.o
+360 bytes · C/C++ with assembly
+sub/lib/src/op90_to90_arm7_sub_wram_2_residual_8_r02.c</title></rect>
 <rect x="890.987" y="366.900" width="11.411" height="5.126" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / OS_irqTable.o
 352 bytes · C-only source
 sub/lib/src/OS_irqTable.c</title></rect>
@@ -29943,9 +29943,9 @@ src/to47_overlay89_init_r0.c</title></rect>
 <rect x="972.572" y="436.604" width="7.191" height="12.109" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_89 / overlay89_camera_transitions_r08_run1.o
 524 bytes · C-only source
 src/overlay89_camera_transitions_r08_run1.c</title></rect>
-<rect x="961.978" y="448.714" width="9.106" height="7.811" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_89 / overlay_89_residual_5_unmatched.o
-428 bytes · Assembly
-asm/overlay_89_residual_5_unmatched.s</title></rect>
+<rect x="961.978" y="448.714" width="9.106" height="7.811" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_89 / op90_overlay_89_residual_5_unmatched_r01.o
+428 bytes · C-only source
+src/op90_overlay_89_residual_5_unmatched_r01.c</title></rect>
 <rect x="971.083" y="448.714" width="8.680" height="7.811" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_89 / to90_extra1975_run01.o
 408 bytes · C-only source
 src/to90_extra1975_run01.c</title></rect>

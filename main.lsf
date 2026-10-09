@@ -5457,7 +5457,9 @@ Overlay OVY_13
     Object src/to60_ov13_run17.o
     Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_15_anchor.o
     Object src/to61_overlay_13_arm_2_residual_15_run01.o
-    Object lib/NitroDWC/asm/to61_overlay_13_arm_2_residual_15_residual_1.o
+    Object lib/NitroDWC/asm/op90_to61_overlay_13_arm_2_residual_15_residual_1_anchor.o
+    Object src/op90_to61_overlay_13_arm_2_residual_15_residual_1_r01.o
+    Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own8.o
     Object src/to61_overlay_13_arm_2_residual_15_run02.o
     Object lib/NitroDWC/asm/op90_to61_overlay_13_arm_2_residual_15_residual_2_anchor.o
     Object src/op90_to61_overlay_13_arm_2_residual_15_residual_2_r01.o
@@ -11813,7 +11815,8 @@ Overlay OVY_89
     Object src/overlay89_r4_windows.o
     Object src/overlay89_partial_4.o
     Object src/to52_overlay89_r5_head.o
-    Object asm/overlay_89_residual_5_unmatched.o
+    Object asm/op90_overlay_89_residual_5_unmatched_anchor.o
+    Object src/op90_overlay_89_residual_5_unmatched_r01.o
     Object src/to52_overlay89_r5_tail.o
     Object src/overlay89_partial_5.o
     Object asm/to70_overlay_89_residual_6_extra861_anchor.o

@@ -283,7 +283,8 @@ Autoload WRAM
 	Object asm/op90_to90_arm7_sub_wram_2_residual_7_anchor.o
 	Object lib/src/op90_to90_arm7_sub_wram_2_residual_7_r01.o
 	Object lib/src/to90_arm7_sub_wram_2_run12.o
-	Object asm/to90_arm7_sub_wram_2_residual_8.o
+	Object asm/op90_to90_arm7_sub_wram_2_residual_8_anchor.o
+	Object lib/src/op90_to90_arm7_sub_wram_2_residual_8_r02.o
 	Object lib/src/op90_to90_arm7_sub_wram_2_residual_8_r01.o
 	Object lib/src/to90_arm7_sub_wram_2_run13.o
 	Object asm/to90_arm7_sub_wram_2_residual_9.o
