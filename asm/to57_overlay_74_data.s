@@ -1334,40 +1334,7 @@ ov74_0223D054: ; 0x0223D054
 
 	.bss
 
-ov74_0223D0A4: ; 0x0223D0A4
-	.space 0x4
-
-ov74_0223D0A8: ; 0x0223D0A8
-	.space 0x14
-
-ov74_0223D0BC: ; 0x0223D0BC
-	.space 0x4
-
-ov74_0223D0C0: ; 0x0223D0C0
-	.space 0x4
-
 	.public ov74_0223D0C4
-ov74_0223D0C4: ; 0x0223D0C4
-	.space 0x274
-
-ov74_0223D338: ; 0x0223D338
-	.space 0x4
-
-ov74_0223D33C: ; 0x0223D33C
-	.space 0x10
-
-ov74_0223D34C: ; 0x0223D34C
-	.space 0x8
-
-sPmAgbRomHeader: ; 0x0223D354
-	.space 0xFC
-
-ov74_0223D450: ; 0x0223D450
-	.space 0x4
-
-ov74_0223D454: ; 0x0223D454
-	.space 0x34
-
 ov74_0223D488: ; 0x0223D488
 	.space 0x4
 

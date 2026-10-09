@@ -76,33 +76,3 @@
 	.public BN_num_bits_word
 
 .text
-	arm_func_start BN_num_bits_word
-BN_num_bits_word: ; 0x0223B1B4
-	mov r1, #0x10000
-	rsb r1, r1, #0
-	ands r1, r0, r1
-	beq _0223B1D4
-	ands r1, r0, #0xff000000
-	movne r2, #0x18
-	moveq r2, #0x10
-	b _0223B1E0
-_0223B1D4:
-	ands r1, r0, #0xff00
-	movne r2, #8
-	moveq r2, #0
-_0223B1E0:
-	mov r1, r0, lsr r2
-	ands r0, r1, #0xf0
-	ldreq r0, _0223B210 ; =bits$7808
-	ldreqsb r0, [r0, r1]
-	addeq r0, r0, r2
-	bxeq lr
-	ldr r0, _0223B210 ; =bits$7808
-	mov r1, r1, lsr #4
-	ldrsb r0, [r0, r1]
-	add r0, r0, r2
-	add r0, r0, #4
-	bx lr
-	.balign 4, 0
-_0223B210: .word bits$7808
-	arm_func_end BN_num_bits_word
