@@ -1,0 +1,43 @@
+{
+  "section": ".text",
+  "owner": {
+    "name": "_ll_mod",
+    "type": "FUNC",
+    "offset": "0x0",
+    "size": "0x5f8"
+  },
+  "aliases": [
+    {
+      "name": "_ll_div",
+      "offset": "0x10"
+    },
+    {
+      "name": "_ll_sdiv",
+      "offset": "0x10"
+    },
+    {
+      "name": "_ll_udiv",
+      "offset": "0x1c0"
+    },
+    {
+      "name": "_s32_div_f",
+      "offset": "0x208"
+    },
+    {
+      "name": "_u32_div_f",
+      "offset": "0x414"
+    },
+    {
+      "name": "_u32_div_not_0_f",
+      "offset": "0x41c"
+    },
+    {
+      "name": "_ull_div",
+      "offset": "0x1c0"
+    },
+    {
+      "name": "_ull_mod",
+      "offset": "0x1cc"
+    }
+  ]
+}

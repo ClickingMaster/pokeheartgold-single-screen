@@ -3,7 +3,7 @@ Static ichneumon_sub
 	Object lib/src/to91_w41567_autoload_callback.o
 	Object lib/asm/op90_to91_w41567_startup_suffix_anchor.o
 	Object lib/src/op90_to91_w41567_startup_suffix_r01.o
-	Object lib/asm/op90_to91_w41567_startup_suffix_residual_1.o
+	Object lib/src/op90_to91_w41567_startup_suffix_residual_1_r01.o
 	Address 0x02380000
 	StackSize 1024 1024
 }
@@ -376,7 +376,7 @@ Autoload WRAM
 	Object asm/op90_to90_arm7_sub_wram_2_residual_23_anchor.o
 	Object lib/src/op90_to90_arm7_sub_wram_2_residual_23_r01.o
 	Object lib/src/to90_arm7_sub_wram_2_run67.o
-	Object asm/to90_arm7_sub_wram_2_residual_24.o
+	Object lib/src/op90_to90_arm7_sub_wram_2_residual_24_r01.o
 	Object lib/src/OS_reset.o (.wram)
 	Object lib/src/to90_arm7_wram160_r8_run01.o (.wram)
 	Object lib/src/to90_arm7_wram160_r8_run02.o (.wram)

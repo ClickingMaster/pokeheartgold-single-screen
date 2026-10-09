@@ -1,18 +1,18 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "7615db4e03cf48275d07dd28e0830369c04514b8",
+  "commit": "2caed14f9a3983c0a1ddbf74b5d85536177f174b",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "6118d963b430369ebc3846934c354ee4505c3dfd71cce6dd0ea06906265e2299",
-    "ARM7": "aee72b15346ce69874994c4626cc2190a719568e60181425f8399562f0b5fb07"
+    "ARM9": "400af233b36167a3efc2b5a04af68b0ce7298d9885dacdefbe203ac806a27b9d",
+    "ARM7": "0636d8cb3f2667961b7c69535b3d0a01b442f11fe88a0f01f6b4cf9d4ef9fbb4"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
   "totals": {
     "c": 3972774,
-    "mixed": 23518,
-    "asm": 44172,
+    "mixed": 25066,
+    "asm": 42624,
     "cpp": 30520,
     "unknown": 4372
   },
@@ -89979,6 +89979,14 @@
     {
       "cpu": "ARM7",
       "module": "WRAM",
+      "object": "op90_to90_arm7_sub_wram_2_residual_24_r01.o",
+      "bytes": 1528,
+      "status": "mixed",
+      "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_24_r01.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "WRAM",
       "object": "op90_to90_arm7_sub_wram_2_residual_2_r01.o",
       "bytes": 104,
       "status": "c",
@@ -91091,14 +91099,6 @@
     {
       "cpu": "ARM7",
       "module": "WRAM",
-      "object": "to90_arm7_sub_wram_2_residual_24.o",
-      "bytes": 1528,
-      "status": "asm",
-      "source": "sub/asm/to90_arm7_sub_wram_2_residual_24.s"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "WRAM",
       "object": "to90_arm7_sub_wram_2_residual_8.o",
       "bytes": 360,
       "status": "asm",
@@ -92011,10 +92011,10 @@
     {
       "cpu": "ARM7",
       "module": "ichneumon_sub",
-      "object": "op90_to91_w41567_startup_suffix_residual_1.o",
+      "object": "op90_to91_w41567_startup_suffix_residual_1_r01.o",
       "bytes": 20,
-      "status": "asm",
-      "source": "sub/lib/asm/op90_to91_w41567_startup_suffix_residual_1.s"
+      "status": "mixed",
+      "source": "sub/lib/src/op90_to91_w41567_startup_suffix_residual_1_r01.c"
     },
     {
       "cpu": "ARM7",
