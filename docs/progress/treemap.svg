@@ -5,7 +5,7 @@
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
 <text x="1172" y="42" text-anchor="end" font-size="22">98.23% C + C++ source</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · a18a20e40 · ARM9 + ARM7 · 4,075,356 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 68bbbdacb · ARM9 + ARM7 · 4,075,356 mapped code bytes</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
 <text x="47" y="102" font-size="14">C-only source 97.5%</text>
 <rect x="256" y="91" width="12" height="12" rx="2" fill="#35a9b8"/>
@@ -2806,15 +2806,15 @@ src/unk_0208C3E4.c</title></rect>
 <rect x="486.555" y="266.197" width="4.690" height="8.788" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / apricorn_save.o
 248 bytes · C-only source
 src/apricorn_save.c</title></rect>
-<rect x="491.245" y="266.197" width="4.690" height="8.788" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / r40_unk_020170FC_run1.o
+<rect x="491.245" y="266.197" width="4.690" height="8.788" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_to70_to65_nnsys_residual_34_residual_2_extra231_residual_1_r01.o
+248 bytes · C/C++ with assembly
+src/op90_to70_to65_nnsys_residual_34_residual_2_extra231_residual_1_r01.c</title></rect>
+<rect x="486.555" y="274.985" width="4.690" height="8.788" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / r40_unk_020170FC_run1.o
 248 bytes · C-only source
 src/r40_unk_020170FC_run1.c</title></rect>
-<rect x="486.555" y="274.985" width="4.690" height="8.788" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to55_bank_field_ui_sprite.o
+<rect x="491.245" y="274.985" width="4.690" height="8.788" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to55_bank_field_ui_sprite.o
 248 bytes · C-only source
 src/to55_bank_field_ui_sprite.c</title></rect>
-<rect x="491.245" y="274.985" width="4.690" height="8.788" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to70_to65_nnsys_residual_34_residual_2_extra231_residual_1.o
-248 bytes · Assembly
-lib/asm/to70_to65_nnsys_residual_34_residual_2_extra231_residual_1.s</title></rect>
 <rect x="495.935" y="266.197" width="4.671" height="8.823" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to80_extra1674_run01.o
 248 bytes · C-only source
 src/to80_extra1674_run01.c</title></rect>

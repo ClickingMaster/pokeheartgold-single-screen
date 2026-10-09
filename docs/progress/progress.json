@@ -1,18 +1,18 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "a18a20e40b0a1079170740e24413602dd36f1bf1",
+  "commit": "68bbbdacbf761fdcda23368307d8666f86effd63",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "1f3fd87642fd7b44ffccfcc90c3d62efb080b2ae9a4ff742ba39f307c1076453",
+    "ARM9": "b6bc235b08f30f805ae279730a6f2f2f396f4d4d209a94b39a035134067a90c1",
     "ARM7": "89ce1a458612e76f2aa2acb9e24464bee4875fae8839f582bf21c3764d59f693"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
   "totals": {
     "c": 3972774,
-    "mixed": 10686,
-    "asm": 57004,
+    "mixed": 10934,
+    "asm": 56756,
     "cpp": 30520,
     "unknown": 4372
   },
@@ -72931,6 +72931,14 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "op90_to70_to65_nnsys_residual_34_residual_2_extra231_residual_1_r01.o",
+      "bytes": 248,
+      "status": "mixed",
+      "source": "src/op90_to70_to65_nnsys_residual_34_residual_2_extra231_residual_1_r01.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "op90_to70_to65_nnsys_residual_38_residual_7_extra305_residual_2_r01.o",
       "bytes": 1160,
       "status": "c",
@@ -79879,14 +79887,6 @@
       "bytes": 502,
       "status": "c",
       "source": "src/to70_render_window_residual_e5d4_prefix_extra128_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_to65_nnsys_residual_34_residual_2_extra231_residual_1.o",
-      "bytes": 248,
-      "status": "asm",
-      "source": "lib/asm/to70_to65_nnsys_residual_34_residual_2_extra231_residual_1.s"
     },
     {
       "cpu": "ARM9",

@@ -1756,7 +1756,8 @@ Static main
     Object src/to65_nnsys_residual_34_run01.o
     Object lib/asm/to70_to65_nnsys_residual_34_residual_2_extra231_anchor.o
     Object src/to70_to65_nnsys_residual_34_residual_2_extra231_run01.o
-    Object lib/asm/to70_to65_nnsys_residual_34_residual_2_extra231_residual_1.o
+    Object lib/asm/op90_to70_to65_nnsys_residual_34_residual_2_extra231_residual_1_anchor.o
+    Object src/op90_to70_to65_nnsys_residual_34_residual_2_extra231_residual_1_r01.o
     Object src/to65_nnsys_residual_34_run02.o
     Object lib/asm/op90_to65_nnsys_residual_34_residual_3_anchor.o
     Object lib/asm/op90_op90_to65_nnsys_residual_34_residual_3_residual_1_anchor.o
