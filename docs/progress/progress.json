@@ -1,33 +1,33 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "f05a17250832246bf056dbe97d882b65eb0334bb",
+  "commit": "91eeb8fe0d4635b167390da38e8be436ce695c4a",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "99f546afe58b3b443c2361cf49ba2d99333b971d37e49eb3c908e07d4315ff95",
+    "ARM9": "b788ddbe5f3d21bbc89a59bf48703a9a247f357e213224cb5a0f11c7c306e24a",
     "ARM7": "4f0699f28eb2fc4b968a7f5b97d861ba889e9a50dafc89019f0b8341064d5d7b"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
   "totals": {
-    "c": 3983246,
+    "c": 3983498,
     "mixed": 28266,
-    "asm": 29468,
+    "asm": 29216,
     "cpp": 34376
   },
   "coverage": {
     "denominator_bytes": 4075356,
     "c": {
-      "bytes": 3983246,
-      "percent": 97.7398293547852
+      "bytes": 3983498,
+      "percent": 97.74601286366148
     },
     "cpp": {
       "bytes": 34376,
       "percent": 0.8435091314721953
     },
     "combined": {
-      "bytes": 4017622,
-      "percent": 98.5833384862574
+      "bytes": 4017874,
+      "percent": 98.58952199513368
     }
   },
   "objects": [
@@ -72882,10 +72882,10 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "op90_to70_libVCT_extra08_residual_3_r01.o",
-      "bytes": 312,
+      "object": "op90_to70_libVCT_extra08_residual_2_r01.o",
+      "bytes": 3424,
       "status": "c",
-      "source": "src/op90_to70_libVCT_extra08_residual_3_r01.c"
+      "source": "src/op90_to70_libVCT_extra08_residual_2_r01.c"
     },
     {
       "cpu": "ARM9",
@@ -73390,14 +73390,6 @@
       "bytes": 948,
       "status": "c",
       "source": "src/op90_to80_extra2570_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to90_extra1954_residual_1_r01.o",
-      "bytes": 588,
-      "status": "c",
-      "source": "src/op90_to90_extra1954_residual_1_r01.c"
     },
     {
       "cpu": "ARM9",
@@ -79426,14 +79418,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to70_libVCT_extra08_residual_2.o",
-      "bytes": 252,
-      "status": "asm",
-      "source": "lib/asm/to70_libVCT_extra08_residual_2.s"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to70_libVCT_extra08_run01.o",
       "bytes": 340,
       "status": "c",
@@ -79446,30 +79430,6 @@
       "bytes": 204,
       "status": "c",
       "source": "src/to70_libVCT_extra08_run02.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_libVCT_extra08_run03.o",
-      "bytes": 20,
-      "status": "c",
-      "source": "src/to70_libVCT_extra08_run03.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_libVCT_extra08_run04.o",
-      "bytes": 180,
-      "status": "c",
-      "source": "src/to70_libVCT_extra08_run04.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_libVCT_extra08_run05.o",
-      "bytes": 180,
-      "status": "c",
-      "source": "src/to70_libVCT_extra08_run05.c"
     },
     {
       "cpu": "ARM9",
@@ -80962,22 +80922,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to80_extra1473_run01.o",
-      "bytes": 284,
-      "status": "c",
-      "source": "src/to80_extra1473_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to80_extra1474_run01.o",
-      "bytes": 208,
-      "status": "c",
-      "source": "src/to80_extra1474_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to80_extra1475_run01.o",
       "bytes": 184,
       "status": "c",
@@ -81434,14 +81378,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to80_extra1757_run01.o",
-      "bytes": 492,
-      "status": "c",
-      "source": "src/to80_extra1757_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to80_extra1758_run01.o",
       "bytes": 492,
       "status": "c",
@@ -81634,14 +81570,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to90_extra1954_run01.o",
-      "bytes": 272,
-      "status": "c",
-      "source": "src/to90_extra1954_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to90_extra1964_run01.o",
       "bytes": 688,
       "status": "c",
@@ -81654,14 +81582,6 @@
       "bytes": 752,
       "status": "c",
       "source": "src/to90_extra1969_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_extra1970_run01.o",
-      "bytes": 636,
-      "status": "c",
-      "source": "src/to90_extra1970_run01.c"
     },
     {
       "cpu": "ARM9",
