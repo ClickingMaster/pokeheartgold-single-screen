@@ -1,0 +1,83 @@
+{
+  "section": ".text",
+  "owner": {
+    "name": "_secure",
+    "type": "FUNC",
+    "offset": "0x0",
+    "size": "0x800"
+  },
+  "aliases": [
+    {
+      "name": "SVC_WaitVBlankIntr",
+      "offset": "0x80"
+    },
+    {
+      "name": "SVC_SoftReset",
+      "offset": "0xe6"
+    },
+    {
+      "name": "SVC_CpuSet",
+      "offset": "0x162"
+    },
+    {
+      "name": "SVC_Sqrt",
+      "offset": "0x1d6"
+    },
+    {
+      "name": "SVC_UnpackBits",
+      "offset": "0x268"
+    },
+    {
+      "name": "SVC_DivRem",
+      "offset": "0x2e6"
+    },
+    {
+      "name": "SVC_UncompressLZ16FromDevice",
+      "offset": "0x358"
+    },
+    {
+      "name": "SVC_Div",
+      "offset": "0x3ba"
+    },
+    {
+      "name": "SVC_UncompressHuffmanFromDevice",
+      "offset": "0x41e"
+    },
+    {
+      "name": "SVC_Halt",
+      "offset": "0x47c"
+    },
+    {
+      "name": "SVC_WaitIntr",
+      "offset": "0x4ca"
+    },
+    {
+      "name": "IsMmemExpanded",
+      "offset": "0x532"
+    },
+    {
+      "name": "SVC_GetCRC16",
+      "offset": "0x580"
+    },
+    {
+      "name": "SVC_UncompressLZ8",
+      "offset": "0x5cc"
+    },
+    {
+      "name": "SVC_UncompressRL16FromDevice",
+      "offset": "0x636"
+    },
+    {
+      "name": "SVC_UncompressRL8",
+      "offset": "0x6ae"
+    },
+    {
+      "name": "SVC_CpuSetFast",
+      "offset": "0x72a"
+    },
+    {
+      "name": "SVC_WaitByLoop",
+      "offset": "0x788"
+    }
+  ]
+}

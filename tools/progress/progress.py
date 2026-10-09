@@ -43,18 +43,35 @@ def source_index(root, arm7=False):
         for p in (base / folder).rglob('*'):
             if p.suffix in SOURCE_LANGUAGES:
                 candidates[p.stem + '.o'].add(p.relative_to(root).as_posix())
+    # Archive members appear in the map as "libNAME.a member.o" (mwld lower-cases
+    # member names); libNAME.a is built from lib/NAME/{src,asm}.
+    for folder in ('src', 'asm'):
+        for p in (base / 'lib').glob(f'*/{folder}/*'):
+            if p.suffix in SOURCE_LANGUAGES:
+                member = f'lib{p.parents[1].name}.a {p.stem.lower()}.o'
+                candidates[member].add(p.relative_to(root).as_posix())
+    # Objects a build rule derives from another compiled object (section
+    # partitions) keep that object's source, including any assembly in it.
+    rules = root / 'common.mk'
+    derived = dict(re.findall(r'^\$\(BUILD_DIR\)/(\S+\.o):\s*\$\(BUILD_DIR\)/(\S+\.o)\s',
+                              rules.read_text(), re.M)) if rules.is_file() else {}
     # The linker spec resolves duplicate source basenames left in the tree.
     spec = base / ('ichneumon_sub.lsf' if arm7 else 'main.lsf')
     linked = defaultdict(set)
     for obj in re.findall(r'^\s*Object\s+(\S+\.o)', spec.read_text(), re.M):
         for ext in SOURCE_LANGUAGES:
-            p = (base / obj).with_suffix(ext)
+            p = (base / derived.get(obj, obj)).with_suffix(ext)
             if p.is_file():
                 linked[Path(obj).name].add(p.relative_to(root).as_posix())
         # dsprot links encrypted/encoded copies of objects compiled from its C sources.
         m = re.fullmatch(r'lib/dsprot/(\w+?)_(?:encrypted|encoded)\.o', obj)
         if m and not m[1].endswith('_decrypter'):
             p = base / 'lib/dsprot/src' / (m[1] + '.c')
+            if p.is_file():
+                linked[Path(obj).name].add(p.relative_to(root).as_posix())
+        # Encoded decrypter stubs are assembled from elfcoder-generated assembly.
+        if m and m[1].endswith('_decrypter'):
+            p = base / 'lib/dsprot/build' / (m[1] + '.s')
             if p.is_file():
                 linked[Path(obj).name].add(p.relative_to(root).as_posix())
     candidates.update(linked)

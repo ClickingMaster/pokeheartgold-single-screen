@@ -154,6 +154,62 @@ class NamedTextTests(unittest.TestCase):
             self.assertEqual(result[0]['source'], 'sub/lib/unit.c')
 
 
+class DerivedObjectTests(unittest.TestCase):
+    def test_archive_member_resolves_to_its_library_source(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root / 'lib/syscall/asm').mkdir(parents=True)
+            (root / 'lib/syscall/asm/_secure_IPKE.s').write_text('')
+            (root / 'lib/syscall/asm/_secure_IPGE.s').write_text('')
+            (root / 'main.lsf').write_text('')
+            path = root / 'test.xMAP'
+            path.write_text('# .main\n'
+                            '  02000000 00000800 .text   .text\t(libsyscall.a _secure_ipke.o )\n'
+                            '  0200008A 00000006 .text   SVC_DivRem\t(libsyscall.a _secure_ipke.o )\n')
+            row = parse_map(path, root, 'ARM9')[0]
+            self.assertEqual((row['status'], row['source'], row['bytes']),
+                             ('asm', 'lib/syscall/asm/_secure_IPKE.s', 0x800))
+            (root / 'lib/syscall/src').mkdir()
+            (root / 'lib/syscall/src/_secure_IPKE.c').write_text('asm void _secure(void) {}')
+            row = parse_map(path, root, 'ARM9')[0]
+            self.assertEqual(row['status'], 'unknown')
+            (root / 'lib/syscall/asm/_secure_IPKE.s').unlink()
+            row = parse_map(path, root, 'ARM9')[0]
+            self.assertEqual((row['status'], row['source']), ('mixed', 'lib/syscall/src/_secure_IPKE.c'))
+
+    def test_partitioned_object_keeps_its_producer_source(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root / 'src').mkdir()
+            (root / 'src/unit.c').write_text('void f(void) {}\nasm void g(void) {}')
+            (root / 'common.mk').write_text(
+                '$(BUILD_DIR)/asm/unit_part.o: $(BUILD_DIR)/src/unit.o tools/partition.py\n')
+            (root / 'main.lsf').write_text('Object asm/unit_part.o\n')
+            path = root / 'test.xMAP'
+            path.write_text('# .main\n  02000000 00000020 .text g (unit_part.o)\n')
+            row = parse_map(path, root, 'ARM9')[0]
+            self.assertEqual((row['status'], row['source']), ('mixed', 'src/unit.c'))
+            (root / 'common.mk').write_text('')
+            self.assertEqual(parse_map(path, root, 'ARM9')[0]['status'], 'unknown')
+
+    def test_dsprot_encoded_decrypter_is_generated_assembly(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root / 'lib/dsprot/src').mkdir(parents=True)
+            (root / 'lib/dsprot/build').mkdir()
+            (root / 'lib/dsprot/src/unit.c').write_text('void f(void) {}')
+            (root / 'lib/dsprot/build/unit_decrypter.s').write_text('')
+            (root / 'main.lsf').write_text('Object lib/dsprot/unit_encrypted.o\n'
+                                           'Object lib/dsprot/unit_decrypter_encoded.o\n')
+            path = root / 'test.xMAP'
+            path.write_text('# .main\n'
+                            '  02000000 00000020 .text f (unit_encrypted.o)\n'
+                            '  02000020 00000010 .text g (unit_decrypter_encoded.o)\n')
+            rows = {r['object']: (r['status'], r['source']) for r in parse_map(path, root, 'ARM9')}
+            self.assertEqual(rows['unit_encrypted.o'], ('c', 'lib/dsprot/src/unit.c'))
+            self.assertEqual(rows['unit_decrypter_encoded.o'], ('asm', 'lib/dsprot/build/unit_decrypter.s'))
+
+
 class CppCoverageTests(unittest.TestCase):
     def test_plain_cpp_is_explicit_and_assembly_cpp_is_mixed(self):
         with tempfile.TemporaryDirectory() as folder:

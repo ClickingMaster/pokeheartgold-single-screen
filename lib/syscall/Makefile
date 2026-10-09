@@ -19,10 +19,15 @@ all:
 	$(MAKE) patch_mwasmarm
 	$(MAKE) $(LIB)
 
-ASM_SRCS    := asm/_secure_$(GAME_CODE).s
+# The secure area is one asm function per game (src/_secure_<GAME_CODE>.c); its SVC stub
+# entry points are added by the alias-map hook in common.mk.
+C_SRCS      := src/_secure_$(GAME_CODE).c
+ASM_SRCS    :=
+# Only this object goes into the archive (common.mk adds main-ELF-only objects for arm946e).
+LIB_OBJS    := $(C_OBJS)
 
-$(LIB): $(ALL_OBJS)
-	cd $(BUILD_DIR) && LM_LICENSE_FILE=$(BACK_REL)/$(LM_LICENSE_FILE) $(WINE) $(MWLD) $(MWLDFLAGS) -o $(BACK_REL)/$(LIB) $(ALL_OBJS:$(BUILD_DIR)/%=%)
+$(LIB): $(LIB_OBJS)
+	cd $(BUILD_DIR) && LM_LICENSE_FILE=$(BACK_REL)/$(LM_LICENSE_FILE) $(WINE) $(MWLD) $(MWLDFLAGS) -o $(BACK_REL)/$(LIB) $(LIB_OBJS:$(BUILD_DIR)/%=%)
 
 install: all
 	$(shell mkdir -p $(INSTALL_LIBDIR))

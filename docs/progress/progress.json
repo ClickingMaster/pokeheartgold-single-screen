@@ -1,20 +1,19 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "35cdffef2d2915293b77684886ecc4cb14d634e7",
+  "commit": "78fd3f7904a6ea92f50c6af480dbffb72fe3f17c",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "8ba650abd41fa4992c0baabca81893ca2acacf6feec1c861b1794d1335e5ea86",
+    "ARM9": "17cd3aa28f65e25f7bd66708c7787bb0120042f6bb55511446be79a50bda2f26",
     "ARM7": "4f0699f28eb2fc4b968a7f5b97d861ba889e9a50dafc89019f0b8341064d5d7b"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
   "totals": {
     "c": 3978394,
-    "mixed": 25814,
-    "asm": 35604,
-    "cpp": 31172,
-    "unknown": 4372
+    "mixed": 28266,
+    "asm": 37524,
+    "cpp": 31172
   },
   "coverage": {
     "denominator_bytes": 4075356,
@@ -65941,8 +65940,8 @@
       "module": "ds_protect",
       "object": "dsprot_main_decrypter_encoded.o",
       "bytes": 720,
-      "status": "unknown",
-      "source": null
+      "status": "asm",
+      "source": "lib/dsprot/build/dsprot_main_decrypter.s"
     },
     {
       "cpu": "ARM9",
@@ -65981,8 +65980,8 @@
       "module": "ds_protect",
       "object": "integrity_decrypter_encoded.o",
       "bytes": 480,
-      "status": "unknown",
-      "source": null
+      "status": "asm",
+      "source": "lib/dsprot/build/integrity_decrypter.s"
     },
     {
       "cpu": "ARM9",
@@ -65997,8 +65996,8 @@
       "module": "ds_protect",
       "object": "mac_owner_decrypter_encoded.o",
       "bytes": 240,
-      "status": "unknown",
-      "source": null
+      "status": "asm",
+      "source": "lib/dsprot/build/mac_owner_decrypter.s"
     },
     {
       "cpu": "ARM9",
@@ -66029,8 +66028,8 @@
       "module": "ds_protect",
       "object": "rom_test_decrypter_encoded.o",
       "bytes": 240,
-      "status": "unknown",
-      "source": null
+      "status": "asm",
+      "source": "lib/dsprot/build/rom_test_decrypter.s"
     },
     {
       "cpu": "ARM9",
@@ -66045,8 +66044,8 @@
       "module": "ds_protect",
       "object": "rom_util_decrypter_encoded.o",
       "bytes": 240,
-      "status": "unknown",
-      "source": null
+      "status": "asm",
+      "source": "lib/dsprot/build/rom_util_decrypter.s"
     },
     {
       "cpu": "ARM9",
@@ -71069,8 +71068,8 @@
       "module": "main",
       "object": "libsyscall.a _secure_ipke.o",
       "bytes": 2048,
-      "status": "unknown",
-      "source": null
+      "status": "mixed",
+      "source": "lib/syscall/src/_secure_IPKE.c"
     },
     {
       "cpu": "ARM9",
@@ -83245,8 +83244,8 @@
       "module": "main",
       "object": "to91_os_exception_residual.o",
       "bytes": 404,
-      "status": "unknown",
-      "source": null
+      "status": "mixed",
+      "source": "lib/NitroSDK/src/os/os_exception.c"
     },
     {
       "cpu": "ARM9",
