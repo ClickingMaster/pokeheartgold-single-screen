@@ -4415,7 +4415,8 @@ Object src/to54_atomic_w11_07_c_run4.o
     Object src/overlay07_callbacks_c_0222d56c_0222d578.o
     Object src/to54_atomic_x07_01_to54_ov07_x07_run1.o
 Object src/to57_new44_ov07_pair.o
-Object asm/to57_new44_residual.o
+Object asm/op90_to57_new44_residual_anchor.o
+Object src/op90_to57_new44_residual_r01.o
 Object src/to54_atomic_x07_03_to54_ov07_x07_run2.o
 Object asm/to70_to54_atomic_x07_04_to54_ov07_x07_residual_2_extra696_anchor.o
 Object src/to70_to54_atomic_x07_04_to54_ov07_x07_residual_2_extra696_run01.o
@@ -7776,7 +7777,8 @@ Object src/to58_r3_overlay_45_thumb_residual_8_suffix.o
     Object lib/NitroDWC/asm/to80_extra1434_anchor.o
     Object src/to80_extra1434_run01.o
     Object src/to70_ov45_extra04_run09.o
-    Object lib/NitroDWC/asm/to70_ov45_extra04_residual_9.o
+    Object lib/NitroDWC/asm/op90_to70_ov45_extra04_residual_9_anchor.o
+    Object src/op90_to70_ov45_extra04_residual_9_r03.o
     Object src/to70_ov45_extra04_run10.o
     Object lib/NitroDWC/asm/to70_ov45_extra16_anchor.o
     Object lib/NitroDWC/asm/to80_extra1435_anchor.o

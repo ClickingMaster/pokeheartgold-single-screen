@@ -4,8 +4,8 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="1172" y="42" text-anchor="end" font-size="22">99.12% C + C++ source</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 8857bdbda · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="1172" y="42" text-anchor="end" font-size="22">99.15% C + C++ source</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · a697a5d63 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
 <text x="47" y="102" font-size="14">C-only source 98.1%</text>
 <rect x="256" y="91" width="12" height="12" rx="2" fill="#35a9b8"/>
@@ -10175,9 +10175,9 @@ lib/NitroDWC/asm/op90_op90_to80_extra1436_residual_1_residual_1_residual_1.s</ti
 <rect x="470.238" y="423.191" width="10.035" height="15.169" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_to60_overlay_45_arm_residual_7_r01.o
 916 bytes · C++-only source
 src/op90_to60_overlay_45_arm_residual_7_r01.cpp</title></rect>
-<rect x="480.273" y="423.191" width="9.904" height="15.169" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to70_ov45_extra04_residual_9.o
-904 bytes · Assembly
-lib/NitroDWC/asm/to70_ov45_extra04_residual_9.s</title></rect>
+<rect x="480.273" y="423.191" width="9.904" height="15.169" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_to70_ov45_extra04_residual_9_r03.o
+904 bytes · C++-only source
+src/op90_to70_ov45_extra04_residual_9_r03.cpp</title></rect>
 <rect x="460.202" y="438.360" width="15.483" height="9.359" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to65_overlay_45_arm_residual_17_run04.o
 872 bytes · C-only source
 src/to65_overlay_45_arm_residual_17_run04.c</title></rect>
@@ -14771,9 +14771,9 @@ src/to58_w09b_ov07_10_0.c</title></rect>
 <rect x="872.335" y="171.635" width="5.416" height="7.303" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_7 / to55_bank_w16_run_01.o
 238 bytes · C-only source
 src/to55_bank_w16_run_01.c</title></rect>
-<rect x="877.751" y="171.635" width="5.370" height="7.303" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_7 / to57_new44_residual.o
-236 bytes · Assembly
-asm/to57_new44_residual.s</title></rect>
+<rect x="877.751" y="171.635" width="5.370" height="7.303" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_7 / op90_to57_new44_residual_r01.o
+236 bytes · C-only source
+src/op90_to57_new44_residual_r01.c</title></rect>
 <rect x="866.874" y="178.938" width="8.176" height="4.715" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_7 / to54_atomic_w12_04_run02_ov07_02228A50.o
 232 bytes · C-only source
 src/to54_atomic_w12_04_run02_ov07_02228A50.c</title></rect>

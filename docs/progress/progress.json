@@ -1,33 +1,33 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "8857bdbdaa9a177e087f77ad74e4ec1d40112668",
+  "commit": "a697a5d6330e843d61dedd40bef2498ab909f275",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "d48c67f0c32713c45ae620f831474b2bf897ddeee8efa983f14e64be8278784d",
+    "ARM9": "2149eaa460830f53a685d28d093f0a272d68d3d300d3910b8252c082d9b75d73",
     "ARM7": "01aa6d6bb263b5752b0d787a82f224dafc986f80c6649dc28738b84fe5ebc992"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
   "totals": {
-    "c": 3996380,
+    "c": 3996616,
     "mixed": 28266,
-    "asm": 7632,
-    "cpp": 43076
+    "asm": 6492,
+    "cpp": 43980
   },
   "coverage": {
     "denominator_bytes": 4075354,
     "c": {
-      "bytes": 3996380,
-      "percent": 98.06215607282213
+      "bytes": 3996616,
+      "percent": 98.06794698080216
     },
     "cpp": {
-      "bytes": 43076,
-      "percent": 1.0569879328274305
+      "bytes": 43980,
+      "percent": 1.0791700549203824
     },
     "combined": {
-      "bytes": 4039456,
-      "percent": 99.11914400564957
+      "bytes": 4040596,
+      "percent": 99.14711703572254
     }
   },
   "objects": [
@@ -25906,6 +25906,14 @@
     {
       "cpu": "ARM9",
       "module": "OVY_45",
+      "object": "op90_to70_ov45_extra04_residual_9_r03.o",
+      "bytes": 904,
+      "status": "cpp",
+      "source": "src/op90_to70_ov45_extra04_residual_9_r03.cpp"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_45",
       "object": "op90_to70_ov45_extra16_residual_6_r01.o",
       "bytes": 428,
       "status": "cpp",
@@ -27830,14 +27838,6 @@
       "bytes": 204,
       "status": "c",
       "source": "src/to70_ov45_extra03_run08.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "to70_ov45_extra04_residual_9.o",
-      "bytes": 904,
-      "status": "asm",
-      "source": "lib/NitroDWC/asm/to70_ov45_extra04_residual_9.s"
     },
     {
       "cpu": "ARM9",
@@ -35906,6 +35906,14 @@
     {
       "cpu": "ARM9",
       "module": "OVY_7",
+      "object": "op90_to57_new44_residual_r01.o",
+      "bytes": 236,
+      "status": "c",
+      "source": "src/op90_to57_new44_residual_r01.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_7",
       "object": "op90_to58_r2_ov07_27b58_residual_r01.o",
       "bytes": 452,
       "status": "c",
@@ -37694,14 +37702,6 @@
       "bytes": 660,
       "status": "c",
       "source": "src/to57_new44_ov07_pair.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "to57_new44_residual.o",
-      "bytes": 236,
-      "status": "asm",
-      "source": "asm/to57_new44_residual.s"
     },
     {
       "cpu": "ARM9",
