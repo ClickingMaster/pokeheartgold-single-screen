@@ -1,19 +1,19 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "7488bbab03dc88bf8965d7adab080b6308917c64",
+  "commit": "d979755ce72caa05eafcccf9aa0d7f4fff5b27c5",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "7875532f99da3e1255740beb2790727799ae33a3c07206f6090043a11ec6304a",
+    "ARM9": "22a3785a6c3dbf85d46e28ca3da8a77c93386312358e131fb26ff23edd05740a",
     "ARM7": "01aa6d6bb263b5752b0d787a82f224dafc986f80c6649dc28738b84fe5ebc992"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
   "totals": {
     "c": 3992648,
     "mixed": 28266,
-    "asm": 16596,
-    "cpp": 37844
+    "asm": 14276,
+    "cpp": 40164
   },
   "coverage": {
     "denominator_bytes": 4075354,
@@ -22,12 +22,12 @@
       "percent": 97.97058120595167
     },
     "cpp": {
-      "bytes": 37844,
-      "percent": 0.9286064474399034
+      "bytes": 40164,
+      "percent": 0.9855340174129659
     },
     "combined": {
-      "bytes": 4030492,
-      "percent": 98.89918765339158
+      "bytes": 4032812,
+      "percent": 98.95611522336465
     }
   },
   "objects": [
@@ -82650,10 +82650,10 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to90_msl_interval_demo_residual_11.o",
+      "object": "to90_msl_interval_demo_residual_11_r01.o",
       "bytes": 2224,
-      "status": "asm",
-      "source": "lib/asm/to90_msl_interval_demo_residual_11.s"
+      "status": "cpp",
+      "source": "src/to90_msl_interval_demo_residual_11_r01.cpp"
     },
     {
       "cpu": "ARM9",
@@ -82666,10 +82666,10 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to90_msl_interval_demo_residual_16.o",
+      "object": "to90_msl_interval_demo_residual_16_r01.o",
       "bytes": 96,
-      "status": "asm",
-      "source": "lib/asm/to90_msl_interval_demo_residual_16.s"
+      "status": "cpp",
+      "source": "src/to90_msl_interval_demo_residual_16_r01.cpp"
     },
     {
       "cpu": "ARM9",

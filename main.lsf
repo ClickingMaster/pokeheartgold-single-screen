@@ -2574,13 +2574,14 @@ Object src/op90_to91_w41566_texmatrix_suffix_r01.o
     Object src/to90_msl_interval_demo_run07.o
     Object src/to90_msl_interval_demo_run08.o
     Object src/to90_msl_interval_demo_run09.o
-    Object lib/asm/to90_msl_interval_demo_residual_11.o
+    Object src/to90_msl_interval_demo_residual_11_r01.o
+    Object lib/asm/to90_msl_interval_demo_eh_mid.o
     Object src/to90_msl_interval_demo_run10.o
     Object src/to90_msl_interval_demo_run11.o
     Object src/to90_msl_interval_demo_residual_14_r01.o
-    Object lib/asm/to90_msl_interval_demo_eh_tail.o
     Object src/to90_msl_interval_demo_run12.o
-    Object lib/asm/to90_msl_interval_demo_residual_16.o
+    Object src/to90_msl_interval_demo_residual_16_r01.o
+    Object lib/asm/to90_msl_interval_demo_eh_tail.o
     Object src/to90_msl_interval_demo_run13.o
     Object src/to90_msl_interval_demo_run14.o
     Object src/to90_msl_interval_demo_run15.o
