@@ -1566,14 +1566,9 @@ Static main
     Object src/to70_to70_libVCT_extra08_residual_10_extra22_run04.o
     Object lib/asm/op90_to70_to70_libVCT_extra08_residual_10_extra22_residual_4_anchor.o
     Object src/op90_to70_to70_libVCT_extra08_residual_10_extra22_residual_4_r01.o
-    Object lib/asm/to70_libVCT_extra08_anchor_tail_own1.o
     Object src/to70_to70_libVCT_extra08_residual_10_extra22_run05.o
-    Object lib/asm/to80_extra1480_anchor.o
-    Object lib/asm/to80_extra1480_residual_1.o
-    Object src/to80_extra1480_run01.o
-    Object src/to70_to70_libVCT_extra08_residual_10_extra22_run06.o
-    Object lib/asm/to70_to70_libVCT_extra08_residual_10_extra22_residual_6.o
-    Object src/to70_to70_libVCT_extra08_residual_10_extra22_run07.o
+    Object src/op90_to70_to70_libVCT_extra08_residual_10_extra22_residual_6_r01.o
+    Object lib/asm/to70_libVCT_extra08_anchor_tail_own1.o
     Object lib/asm/to80_extra1481_anchor.o
     Object src/to80_extra1481_run01.o
     Object src/to70_to70_libVCT_extra08_residual_10_extra22_run08.o

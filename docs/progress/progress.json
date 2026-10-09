@@ -1,33 +1,33 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "cae1d6990780df5b1a794b697513538af61fde33",
+  "commit": "cbb832d765e28c768c4afa6e84c5badfc77105d8",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "8c2bd8f4a090cb7d85aebb108e16afc83f38df511cc56d280465b05c55e55250",
+    "ARM9": "fe92203b70eb8416a9ae4a975716a797ef37ef66c7a2299eb6f6e929ad62c225",
     "ARM7": "475faad87a88f410a8e02f23e25d2695cb4512bf7bbd7708e433ed7e2ef2f349"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
   "totals": {
-    "c": 3987644,
+    "c": 3988420,
     "mixed": 28266,
-    "asm": 22516,
+    "asm": 21740,
     "cpp": 36928
   },
   "coverage": {
     "denominator_bytes": 4075354,
     "c": {
-      "bytes": 3987644,
-      "percent": 97.84779432657875
+      "bytes": 3988420,
+      "percent": 97.86683561722491
     },
     "cpp": {
       "bytes": 36928,
       "percent": 0.9061298723988149
     },
     "combined": {
-      "bytes": 4024572,
-      "percent": 98.75392419897756
+      "bytes": 4025348,
+      "percent": 98.77296548962373
     }
   },
   "objects": [
@@ -73034,6 +73034,14 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "op90_to70_to70_libVCT_extra08_residual_10_extra22_residual_6_r01.o",
+      "bytes": 956,
+      "status": "c",
+      "source": "src/op90_to70_to70_libVCT_extra08_residual_10_extra22_residual_6_r01.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "op90_to70_to70_libVCT_extra08_residual_10_extra22_residual_8_r01.o",
       "bytes": 220,
       "status": "c",
@@ -80170,14 +80178,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to70_to70_libVCT_extra08_residual_10_extra22_residual_6.o",
-      "bytes": 540,
-      "status": "asm",
-      "source": "lib/asm/to70_to70_libVCT_extra08_residual_10_extra22_residual_6.s"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to70_to70_libVCT_extra08_residual_10_extra22_run01.o",
       "bytes": 308,
       "status": "c",
@@ -80214,22 +80214,6 @@
       "bytes": 40,
       "status": "c",
       "source": "src/to70_to70_libVCT_extra08_residual_10_extra22_run05.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_to70_libVCT_extra08_residual_10_extra22_run06.o",
-      "bytes": 24,
-      "status": "c",
-      "source": "src/to70_to70_libVCT_extra08_residual_10_extra22_run06.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_to70_libVCT_extra08_residual_10_extra22_run07.o",
-      "bytes": 32,
-      "status": "c",
-      "source": "src/to70_to70_libVCT_extra08_residual_10_extra22_run07.c"
     },
     {
       "cpu": "ARM9",
@@ -80966,22 +80950,6 @@
       "bytes": 272,
       "status": "c",
       "source": "src/to80_extra1479_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to80_extra1480_residual_1.o",
-      "bytes": 236,
-      "status": "asm",
-      "source": "lib/asm/to80_extra1480_residual_1.s"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to80_extra1480_run01.o",
-      "bytes": 124,
-      "status": "c",
-      "source": "src/to80_extra1480_run01.c"
     },
     {
       "cpu": "ARM9",
