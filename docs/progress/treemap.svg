@@ -4,16 +4,16 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="1172" y="42" text-anchor="end" font-size="22">98.77% C + C++ source</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · cbb832d76 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="1172" y="42" text-anchor="end" font-size="22">98.90% C + C++ source</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 7488bbab0 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
-<text x="47" y="102" font-size="14">C-only source 97.9%</text>
+<text x="47" y="102" font-size="14">C-only source 98.0%</text>
 <rect x="256" y="91" width="12" height="12" rx="2" fill="#35a9b8"/>
 <text x="275" y="102" font-size="14">C++-only source 0.9%</text>
 <rect x="484" y="91" width="12" height="12" rx="2" fill="#e4ad42"/>
 <text x="503" y="102" font-size="14">C/C++ with assembly 0.7%</text>
 <rect x="712" y="91" width="12" height="12" rx="2" fill="#455268"/>
-<text x="731" y="102" font-size="14">Assembly 0.5%</text>
+<text x="731" y="102" font-size="14">Assembly 0.4%</text>
 <rect x="940" y="91" width="12" height="12" rx="2" fill="#b875ae"/>
 <text x="959" y="102" font-size="14">Unresolved source 0.0%</text>
 <rect x="28.000" y="125.000" width="82.112" height="61.108" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_c.o
@@ -958,12 +958,12 @@ src/to80_extra1855_run01.c</title></rect>
 <rect x="329.958" y="266.443" width="8.342" height="14.383" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / gf_3d_render.o
 722 bytes · C-only source
 src/gf_3d_render.c</title></rect>
-<rect x="321.593" y="280.826" width="16.707" height="7.122" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to70_nnsys_residual_39_run01.o
+<rect x="321.593" y="280.826" width="16.707" height="7.122" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_to70_to65_wifi_residual_11_residual_14_extra1163_residual_1_r01.o
+716 bytes · C-only source
+src/op90_to70_to65_wifi_residual_11_residual_14_extra1163_residual_1_r01.c</title></rect>
+<rect x="321.593" y="287.948" width="8.353" height="14.244" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to70_nnsys_residual_39_run01.o
 716 bytes · C-only source
 src/to70_nnsys_residual_39_run01.c</title></rect>
-<rect x="321.593" y="287.948" width="8.353" height="14.244" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to70_to65_wifi_residual_11_residual_14_extra1163_residual_1.o
-716 bytes · Assembly
-lib/asm/to70_to65_wifi_residual_11_residual_14_extra1163_residual_1.s</title></rect>
 <rect x="329.946" y="287.948" width="8.353" height="14.244" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to80_extra1470_run02.o
 716 bytes · C-only source
 src/to80_extra1470_run02.c</title></rect>
@@ -1282,9 +1282,9 @@ src/to65_wifi_residual_11_run14.c</title></rect>
 <rect x="422.750" y="281.823" width="9.006" height="10.149" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / unk_0208805C.o
 550 bytes · C-only source
 src/unk_0208805C.c</title></rect>
-<rect x="413.712" y="291.972" width="9.022" height="10.094" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_to59_nnsys_residual_27_residual_1.o
-548 bytes · Assembly
-lib/asm/op90_to59_nnsys_residual_27_residual_1.s</title></rect>
+<rect x="413.712" y="291.972" width="9.022" height="10.094" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_op90_to59_nnsys_residual_27_residual_1_r01.o
+548 bytes · C-only source
+src/op90_op90_to59_nnsys_residual_27_residual_1_r01.c</title></rect>
 <rect x="422.734" y="291.972" width="9.022" height="10.094" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_to70_to65_wifi_residual_11_residual_27_extra1168_residual_1_r01.o
 548 bytes · C-only source
 src/op90_to70_to65_wifi_residual_11_residual_27_extra1168_residual_1_r01.c</title></rect>
@@ -1432,9 +1432,9 @@ src/dialog_box.c</title></rect>
 <rect x="404.585" y="345.408" width="9.207" height="9.060" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to70_render_window_residual_e5d4_prefix_extra128_run01.o
 502 bytes · C-only source
 src/to70_render_window_residual_e5d4_prefix_extra128_run01.c</title></rect>
-<rect x="395.341" y="354.469" width="9.226" height="9.006" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_to65_nnsys_residual_34_residual_3_residual_2.o
-500 bytes · Assembly
-lib/asm/op90_to65_nnsys_residual_34_residual_3_residual_2.s</title></rect>
+<rect x="395.341" y="354.469" width="9.226" height="9.006" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_op90_to65_nnsys_residual_34_residual_3_residual_2_r01.o
+500 bytes · C-only source
+src/op90_op90_to65_nnsys_residual_34_residual_3_residual_2_r01.c</title></rect>
 <rect x="395.341" y="363.475" width="9.226" height="9.006" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_to65_to65_nitro_unified_residual_40_extra24_residual_1_r01.o
 500 bytes · C-only source
 src/op90_to65_to65_nitro_unified_residual_40_extra24_residual_1_r01.c</title></rect>
@@ -1963,15 +1963,15 @@ src/communication_manager_12.c</title></rect>
 <rect x="492.707" y="256.622" width="6.335" height="9.549" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_op90_to80_extra1754_residual_5_residual_1_r01.o
 364 bytes · C-only source
 src/op90_op90_to80_extra1754_residual_5_residual_1_r01.c</title></rect>
-<rect x="499.042" y="256.622" width="6.335" height="9.549" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to59_nnsys_run18.o
+<rect x="499.042" y="256.622" width="6.335" height="9.549" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_unk_0203A3B0_r01.o
+364 bytes · C-only source
+src/op90_unk_0203A3B0_r01.c</title></rect>
+<rect x="505.377" y="195.900" width="7.423" height="8.149" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to59_nnsys_run18.o
 364 bytes · C-only source
 src/to59_nnsys_run18.c</title></rect>
-<rect x="505.377" y="195.900" width="7.423" height="8.149" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to70_unk_0208B1AC_residual_4_extra254_run01.o
+<rect x="505.377" y="204.049" width="7.423" height="8.149" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to70_unk_0208B1AC_residual_4_extra254_run01.o
 364 bytes · C-only source
 src/to70_unk_0208B1AC_residual_4_extra254_run01.c</title></rect>
-<rect x="505.377" y="204.049" width="7.423" height="8.149" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / unk_0203A3B0.o
-364 bytes · Assembly
-asm/unk_0203A3B0.s</title></rect>
 <rect x="512.800" y="195.900" width="11.073" height="5.463" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / wireless_status_icon_2.o
 364 bytes · C-only source
 src/wireless_status_icon_2.c</title></rect>
@@ -2197,9 +2197,9 @@ src/to90_extra2537_run01.c</title></rect>
 <rect x="551.360" y="178.049" width="9.120" height="5.904" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / brightness_transition_1.o
 324 bytes · C-only source
 src/brightness_transition_1.c</title></rect>
-<rect x="551.360" y="183.952" width="9.120" height="5.904" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_to80_extra1758_residual_1_residual_1.o
-324 bytes · Assembly
-lib/asm/op90_to80_extra1758_residual_1_residual_1.s</title></rect>
+<rect x="551.360" y="183.952" width="9.120" height="5.904" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_op90_to80_extra1758_residual_1_residual_1_r01.o
+324 bytes · C-only source
+src/op90_op90_to80_extra1758_residual_1_residual_1_r01.c</title></rect>
 <rect x="551.360" y="189.856" width="9.120" height="5.904" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / sav_system_info.o
 324 bytes · C-only source
 src/sav_system_info.c</title></rect>
@@ -2698,15 +2698,15 @@ src/to91_w41427_copycps264.c</title></rect>
 <rect x="610.202" y="231.560" width="5.289" height="8.170" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / map_object_movement_commands.o
 260 bytes · C-only source
 src/map_object_movement_commands.c</title></rect>
-<rect x="604.832" y="239.729" width="5.329" height="8.107" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_unk_0205AC88_r01.o
+<rect x="604.832" y="239.729" width="5.329" height="8.107" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_to65_wifi_residual_11_residual_4_r01.o
+260 bytes · C-only source
+src/op90_to65_wifi_residual_11_residual_4_r01.c</title></rect>
+<rect x="610.161" y="239.729" width="5.329" height="8.107" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_unk_0205AC88_r01.o
 260 bytes · C-only source
 src/op90_unk_0205AC88_r01.c</title></rect>
-<rect x="610.161" y="239.729" width="5.329" height="8.107" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / slop_small_unk_02095DF4.o
+<rect x="596.746" y="247.837" width="4.704" height="9.185" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / slop_small_unk_02095DF4.o
 260 bytes · C-only source
 src/slop_small_unk_02095DF4.c</title></rect>
-<rect x="596.746" y="247.837" width="4.704" height="9.185" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to65_wifi_residual_11_residual_4.o
-260 bytes · Assembly
-lib/asm/to65_wifi_residual_11_residual_4.s</title></rect>
 <rect x="601.450" y="247.837" width="4.704" height="9.185" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to90_extra2343_run01.o
 260 bytes · C-only source
 src/to90_extra2343_run01.c</title></rect>
@@ -9713,9 +9713,9 @@ src/to70_overlay_00_thumb_residual_17_gap_1_extra544_run01.c</title></rect>
 <rect x="324.414" y="679.859" width="6.604" height="4.731" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_0 / op90_to65_ov00_extra01_residual_9_r01.o
 188 bytes · C-only source
 src/op90_to65_ov00_extra01_residual_9_r01.c</title></rect>
-<rect x="324.414" y="684.590" width="6.604" height="4.731" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_0 / to65_ov00_extra02_residual_2.o
-188 bytes · Assembly
-lib/NitroDWC/asm/to65_ov00_extra02_residual_2.s</title></rect>
+<rect x="324.414" y="684.590" width="6.604" height="4.731" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_0 / op90_to65_ov00_extra02_residual_2_r01.o
+188 bytes · C-only source
+src/op90_to65_ov00_extra02_residual_2_r01.c</title></rect>
 <rect x="331.018" y="679.859" width="6.604" height="4.731" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_0 / to70_to61_overlay_00_arm_residual_13_residual_21_extra1082_run01.o
 188 bytes · C-only source
 src/to70_to61_overlay_00_arm_residual_13_residual_21_extra1082_run01.c</title></rect>
@@ -10172,9 +10172,9 @@ src/op90_to65_ov45_extra32_residual_10_r01.c</title></rect>
 <rect x="460.202" y="423.191" width="10.035" height="15.169" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_op90_to80_extra1436_residual_1_residual_1_residual_1.o
 916 bytes · Assembly
 lib/NitroDWC/asm/op90_op90_to80_extra1436_residual_1_residual_1_residual_1.s</title></rect>
-<rect x="470.238" y="423.191" width="10.035" height="15.169" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to60_overlay_45_arm_residual_7.o
-916 bytes · Assembly
-lib/NitroDWC/asm/to60_overlay_45_arm_residual_7.s</title></rect>
+<rect x="470.238" y="423.191" width="10.035" height="15.169" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_to60_overlay_45_arm_residual_7_r01.o
+916 bytes · C++-only source
+src/op90_to60_overlay_45_arm_residual_7_r01.cpp</title></rect>
 <rect x="480.273" y="423.191" width="9.904" height="15.169" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to70_ov45_extra04_residual_9.o
 904 bytes · Assembly
 lib/NitroDWC/asm/to70_ov45_extra04_residual_9.s</title></rect>
@@ -11732,9 +11732,9 @@ src/op90_to91_w41573_mode_prefix_r01.c</title></rect>
 <rect x="374.116" y="681.904" width="8.591" height="12.225" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_13 / to80_extra1846_run01.o
 632 bytes · C-only source
 src/to80_extra1846_run01.c</title></rect>
-<rect x="382.707" y="669.564" width="8.469" height="12.322" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_13 / op90_to65_ov13_extra04_residual_9_residual_1.o
-628 bytes · Assembly
-lib/NitroDWC/asm/op90_to65_ov13_extra04_residual_9_residual_1.s</title></rect>
+<rect x="382.707" y="669.564" width="8.469" height="12.322" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_13 / op90_op90_to65_ov13_extra04_residual_9_residual_1_r01.o
+628 bytes · C-only source
+src/op90_op90_to65_ov13_extra04_residual_9_residual_1_r01.c</title></rect>
 <rect x="391.176" y="669.564" width="8.416" height="12.322" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_13 / to65_ov13_extra04_run06.o
 624 bytes · C-only source
 src/to65_ov13_extra04_run06.c</title></rect>
@@ -11768,9 +11768,9 @@ src/to80_extra1638_run01.c</title></rect>
 <rect x="391.338" y="705.805" width="8.254" height="11.195" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_13 / to65_ov13_extra04_run04.o
 556 bytes · C-only source
 src/to65_ov13_extra04_run04.c</title></rect>
-<rect x="399.592" y="669.564" width="8.720" height="10.138" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_13 / to70_to65_ov13_extra04_residual_4_extra1119_residual_1.o
-532 bytes · Assembly
-lib/NitroDWC/asm/to70_to65_ov13_extra04_residual_4_extra1119_residual_1.s</title></rect>
+<rect x="399.592" y="669.564" width="8.720" height="10.138" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_13 / op90_to70_to65_ov13_extra04_residual_4_extra1119_residual_1_r01.o
+532 bytes · C-only source
+src/op90_to70_to65_ov13_extra04_residual_4_extra1119_residual_1_r01.c</title></rect>
 <rect x="408.312" y="669.564" width="8.655" height="10.138" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_13 / op90_to65_ov13_extra04_residual_9_r01.o
 528 bytes · C-only source
 src/op90_to65_ov13_extra04_residual_9_r01.c</title></rect>
@@ -16083,9 +16083,9 @@ sub/lib/src/to90_arm7_sub_ext_wram_run84.c</title></rect>
 <rect x="653.288" y="399.431" width="6.345" height="4.505" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / EXT_WRAM / to90_arm7_sub_ext_wram_run89.o
 172 bytes · C-only source
 sub/lib/src/to90_arm7_sub_ext_wram_run89.c</title></rect>
-<rect x="659.633" y="394.926" width="6.198" height="4.505" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM7 / EXT_WRAM / op90_op90_to90_arm7_sub_ext_wram_residual_21_residual_2_residual_2.o
-168 bytes · Assembly
-sub/asm/op90_op90_to90_arm7_sub_ext_wram_residual_21_residual_2_residual_2.s</title></rect>
+<rect x="659.633" y="394.926" width="6.198" height="4.505" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / EXT_WRAM / op90_op90_op90_to90_arm7_sub_ext_wram_residual_21_residual_2_residual_2_r01.o
+168 bytes · C-only source
+sub/lib/src/op90_op90_op90_to90_arm7_sub_ext_wram_residual_21_residual_2_residual_2_r01.c</title></rect>
 <rect x="659.633" y="399.431" width="6.198" height="4.505" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / EXT_WRAM / to90_arm7_sub_ext_wram_run127.o
 168 bytes · C-only source
 sub/lib/src/to90_arm7_sub_ext_wram_run127.c</title></rect>

@@ -483,3 +483,7 @@ $(BUILD_DIR)/src/op90_overlay_96_residual_70_tail_r01.o: private MWCFLAGS := $(f
 $(BUILD_DIR)/src/op90_to53_overlay13_r14_residual_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/op90_op90_overlay89_r8_residual_03_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/op90_overlay_80_022310C4_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/op90_op90_to80_extra1758_residual_1_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/op90_to65_wifi_residual_11_residual_4_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/op90_to70_to65_wifi_residual_11_residual_14_extra1163_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/op90_unk_0203A3B0_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
