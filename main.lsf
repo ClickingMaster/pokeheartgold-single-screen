@@ -2770,7 +2770,8 @@ Overlay OVY_0
     Object lib/NitroDWC/asm/to80_extra1844_anchor.o
     Object src/to80_extra1844_run01.o
     Object src/to70_to70_ov00_extra01_residual_1_extra1145_run01.o
-    Object lib/NitroDWC/asm/to70_to70_ov00_extra01_residual_1_extra1145_residual_2.o
+    Object lib/NitroDWC/asm/op90_to70_to70_ov00_extra01_residual_1_extra1145_residual_2_anchor.o
+    Object src/op90_to70_to70_ov00_extra01_residual_1_extra1145_residual_2_r01.o
     Object src/to70_ov00_extra01_run01.o
     Object lib/NitroDWC/asm/op90_to70_ov00_extra01_residual_2_anchor.o
     Object src/op90_to70_ov00_extra01_residual_2_r01.o
