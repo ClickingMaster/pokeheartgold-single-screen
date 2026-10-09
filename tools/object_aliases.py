@@ -33,6 +33,45 @@ def section_indices(obj: Path, readelf: str) -> dict[str, str]:
     return result
 
 
+def section_names(obj: Path, readelf: str) -> dict[str, str]:
+    result = {}
+    for line in run(readelf, "-SW", str(obj)).splitlines():
+        match = re.match(r"\s*\[\s*(\d+)\]\s+(\S+)", line)
+        if match:
+            result[match.group(1)] = match.group(2)
+    return result
+
+
+def set_symbol_section(obj: Path, name: str, shndx: int) -> None:
+    """Point the (single) global symbol `name` at section index `shndx` in place.
+
+    MWCC C++ objects can contain several sections with the same name (one
+    `.text` per function).  objcopy --add-symbol resolves a section by name and
+    always picks the first one, so for an owner in a later same-named section
+    the freshly added alias is re-targeted here (ELF32 little-endian only)."""
+    import struct
+    data = bytearray(obj.read_bytes())
+    if data[:4] != b"\x7fELF" or data[4] != 1 or data[5] != 1:
+        raise SystemExit(f"unsupported ELF class/endianness: {obj}")
+    shoff, = struct.unpack_from("<I", data, 32)
+    shentsize, shnum = struct.unpack_from("<HH", data, 46)
+    headers = [struct.unpack_from("<IIIIIIIIII", data, shoff + i * shentsize) for i in range(shnum)]
+    hits = []
+    for header in headers:
+        if header[1] != 2:  # SHT_SYMTAB
+            continue
+        strtab_off = headers[header[6]][4]
+        for pos in range(header[4], header[4] + header[5], 16):
+            name_off, = struct.unpack_from("<I", data, pos)
+            end = data.index(b"\0", strtab_off + name_off)
+            if data[strtab_off + name_off:end].decode() == name:
+                hits.append(pos)
+    if len(hits) != 1:
+        raise SystemExit(f"expected exactly one symbol {name} in {obj}, found {len(hits)}")
+    struct.pack_into("<H", data, hits[0] + 14, shndx)
+    obj.write_bytes(bytes(data))
+
+
 def symbols(obj: Path, readelf: str) -> dict[str, tuple[int, int, str, str, str]]:
     result = {}
     pattern = re.compile(
@@ -68,6 +107,16 @@ def main() -> None:
 
     before = symbols(args.object, readelf)
     owner = config["owner"]
+    # Several sections may share the configured name (MWCC C++ emits one
+    # `.text` per function).  Then the owner's own section is the target; it
+    # must still carry the configured name.
+    names = section_names(args.object, readelf)
+    duplicated = list(names.values()).count(section) > 1
+    if duplicated and owner["name"] in before:
+        owner_ndx = before[owner["name"]][4]
+        if names.get(owner_ndx) != section:
+            raise SystemExit(f"owner {owner['name']} is not in a {section} section")
+        section_index = owner_ndx
     owner_offset = owner.get("offset", 0)
     owner_offset = int(owner_offset, 0) if isinstance(owner_offset, str) else owner_offset
     expected_owner = (
@@ -109,6 +158,14 @@ def main() -> None:
     if after_section_index is None:
         raise SystemExit(f"section {section} missing after rewriting {args.object}")
     after = symbols(args.object, readelf)
+    if duplicated:
+        after_section_index = after[owner["name"]][4]
+        if section_names(args.object, readelf).get(after_section_index) != section:
+            raise SystemExit(f"owner {owner['name']} left its {section} section after rewriting")
+        for name in expected:
+            if after.get(name, (None,) * 5)[4] != after_section_index:
+                set_symbol_section(args.object, name, int(after_section_index))
+        after = symbols(args.object, readelf)
     for name, value in expected.items():
         value = (*value[:-1], after_section_index)
         if after.get(name) != value:

@@ -7757,7 +7757,7 @@ Object src/to58_r3_overlay_45_thumb_residual_8_suffix.o
     Object src/to70_ov45_extra04_run07.o
     Object lib/NitroDWC/asm/to70_to70_ov45_extra04_residual_7_extra1148_anchor.o
     Object src/to70_to70_ov45_extra04_residual_7_extra1148_run01.o
-    Object lib/NitroDWC/asm/to70_to70_ov45_extra04_residual_7_extra1148_residual_1.o
+    Object src/op90_to70_to70_ov45_extra04_residual_7_extra1148_residual_1_r01.o
     Object src/to70_to70_ov45_extra04_residual_7_extra1148_run02.o
     Object lib/NitroDWC/asm/to90_extra2452_anchor.o
     Object lib/NitroDWC/asm/op90_to90_extra2452_residual_1_anchor.o
