@@ -2571,7 +2571,7 @@ Object src/op90_to91_w41566_texmatrix_suffix_r01.o
     Object src/to70_MSL_CPP_NITRO_Ai_LE_extra108_run02.o
     Object src/to91_msl_shared_ptr_release.o
     Object src/to70_MSL_CPP_NITRO_Ai_LE_extra108_run03.o
-    Object lib/MSL_C/asm/to70_MSL_CPP_NITRO_Ai_LE_extra108_residual_3.o
+    Object src/to70_MSL_CPP_NITRO_Ai_LE_extra108_residual_3_r01.o
     Object lib/asm/to90_msl_interval_demo_anchor.o
     Object src/op90_to90_w41415_fp_init4_prefix_r01.o
     Object src/to90_w41415_fp_init4_run01.o
@@ -2589,7 +2589,8 @@ Object src/op90_to91_w41566_texmatrix_suffix_r01.o
     Object lib/asm/to90_msl_interval_demo_residual_11.o
     Object src/to90_msl_interval_demo_run10.o
     Object src/to90_msl_interval_demo_run11.o
-    Object lib/asm/to90_msl_interval_demo_residual_14.o
+    Object src/to90_msl_interval_demo_residual_14_r01.o
+    Object lib/asm/to90_msl_interval_demo_eh_tail.o
     Object src/to90_msl_interval_demo_run12.o
     Object lib/asm/to90_msl_interval_demo_residual_16.o
     Object src/to90_msl_interval_demo_run13.o

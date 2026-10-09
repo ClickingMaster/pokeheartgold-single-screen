@@ -209,7 +209,11 @@ $(BUILD_DIR)/src/to70_MSL_ARM_abort_exit_extra102_run01.o: private MWCCVER := 2.
 $(BUILD_DIR)/src/to70_MSL_CPP_NITRO_Ai_LE_extra108_run01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/to70_MSL_CPP_NITRO_Ai_LE_extra108_run02.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/to70_MSL_CPP_NITRO_Ai_LE_extra108_run03.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/to70_MSL_CPP_NITRO_Ai_LE_extra108_residual_3_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/to70_MSL_CPP_NITRO_Ai_LE_extra108_residual_3_r01.o: private EXCCFLAGS := -Cpp_exceptions on
 $(BUILD_DIR)/src/to91_msl_shared_ptr_release.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/to90_msl_interval_demo_residual_14_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/to90_msl_interval_demo_residual_14_r01.o: private EXCCFLAGS := -Cpp_exceptions on
 include tools/msl-d1-partition/d1.mk
 include tools/msl-new-partition/new.mk
 include tools/dwc-iterator-advance/iterator.mk

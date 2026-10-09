@@ -1,19 +1,19 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "ca71a7aa56fda0613561184db5543202fc07dad0",
+  "commit": "6db0e7c3fc33e4c48eb8c57cd69b5457eed23a9b",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "3546a37883ef82945ae849b1dc792d58698647f9e154e99f7e0f82e8d2a42f65",
+    "ARM9": "116392dccb9e7f12d2fdcc1ebb53cb4d1100a7b3bd64b045581203effd2171e6",
     "ARM7": "4f0699f28eb2fc4b968a7f5b97d861ba889e9a50dafc89019f0b8341064d5d7b"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
   "totals": {
     "c": 3982930,
     "mixed": 28266,
-    "asm": 30096,
-    "cpp": 34064
+    "asm": 29784,
+    "cpp": 34376
   },
   "coverage": {
     "denominator_bytes": 4075356,
@@ -22,12 +22,12 @@
       "percent": 97.73207543095621
     },
     "cpp": {
-      "bytes": 34064,
-      "percent": 0.8358533585777537
+      "bytes": 34376,
+      "percent": 0.8435091314721953
     },
     "combined": {
-      "bytes": 4016994,
-      "percent": 98.56792878953397
+      "bytes": 4017306,
+      "percent": 98.57558456242842
     }
   },
   "objects": [
@@ -78954,10 +78954,10 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to70_MSL_CPP_NITRO_Ai_LE_extra108_residual_3.o",
+      "object": "to70_MSL_CPP_NITRO_Ai_LE_extra108_residual_3_r01.o",
       "bytes": 144,
-      "status": "asm",
-      "source": "lib/MSL_C/asm/to70_MSL_CPP_NITRO_Ai_LE_extra108_residual_3.s"
+      "status": "cpp",
+      "source": "src/to70_MSL_CPP_NITRO_Ai_LE_extra108_residual_3_r01.cpp"
     },
     {
       "cpu": "ARM9",
@@ -82754,10 +82754,10 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to90_msl_interval_demo_residual_14.o",
+      "object": "to90_msl_interval_demo_residual_14_r01.o",
       "bytes": 168,
-      "status": "asm",
-      "source": "lib/asm/to90_msl_interval_demo_residual_14.s"
+      "status": "cpp",
+      "source": "src/to90_msl_interval_demo_residual_14_r01.cpp"
     },
     {
       "cpu": "ARM9",
