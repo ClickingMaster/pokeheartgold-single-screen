@@ -1,0 +1,16 @@
+[
+  {
+    "section": ".text",
+    "owner": {"name": "ov45_022379D4", "size": 80, "type": "FUNC"},
+    "aliases": [
+      {"name": "_ZN5BytesD1Ev", "offset": 0}
+    ]
+  },
+  {
+    "section": ".text",
+    "owner": {"name": "ov45_02237BC8", "size": 52, "type": "FUNC"},
+    "aliases": [
+      {"name": "_ZN6StringD1Ev", "offset": 0}
+    ]
+  }
+]

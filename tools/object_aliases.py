@@ -98,7 +98,13 @@ def main() -> None:
     if not args.object.is_file():
         raise SystemExit(f"object not found: {args.object}")
 
-    config = json.loads(args.map.read_text())
+    loaded = json.loads(args.map.read_text())
+    # A map may also be a JSON list of such configs (several owners in one object).
+    for config in loaded if isinstance(loaded, list) else [loaded]:
+        apply_config(args, config, objcopy, readelf)
+
+
+def apply_config(args, config, objcopy, readelf) -> None:
     section = config["section"]
     indices = section_indices(args.object, readelf)
     if section not in indices:
