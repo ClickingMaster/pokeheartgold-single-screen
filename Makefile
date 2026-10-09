@@ -433,3 +433,4 @@ $(BUILD_DIR)/src/op90_overlay_83_residual_6_head_r01.o: private MWCCVER := 2.0/s
 $(BUILD_DIR)/src/op90_to59_nnsys_residual_14_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to65_wifi_residual_11_residual_2_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to70_nnsys_residual_13_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_to70_overlay_93_thumb_1_to41_residual_6_extra219_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))

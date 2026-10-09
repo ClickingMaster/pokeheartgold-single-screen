@@ -44,7 +44,8 @@
     "src/to90_extra2132_run07.o",
     "src/to65_to65_nitro_unified_residual_23_extra21_run02.o",
     "lib/asm/to90_extra2133_anchor.o",
-    "lib/asm/to90_extra2133_residual_1.o",
+    "lib/asm/op90_to90_extra2133_residual_1_anchor.o",
+    "src/op90_to90_extra2133_residual_1_r01.o",
     "src/to90_extra2133_run01.o",
     "src/to65_to65_nitro_unified_residual_23_extra21_run03.o",
     "lib/asm/to90_extra2134_anchor.o",
@@ -94,7 +95,8 @@
     "lib/asm/op90_to90_extra2137_residual_1_anchor.o",
     "src/op90_to90_extra2137_residual_1_r01.o",
     "src/to90_extra2137_run04.o",
-    "lib/asm/to90_extra2137_residual_2.o",
+    "lib/asm/op90_to90_extra2137_residual_2_anchor.o",
+    "src/op90_to90_extra2137_residual_2_r01.o",
     "src/to65_to65_nitro_unified_residual_38_extra23_run02.o",
     "lib/asm/to90_extra2140_anchor.o",
     "lib/asm/to90_extra2536_anchor.o",
@@ -505,7 +507,11 @@
         "selector": ".text"
       },
       {
-        "path": "lib/asm/to90_extra2133_residual_1.o",
+        "path": "lib/asm/op90_to90_extra2133_residual_1_anchor.o",
+        "selector": ".text"
+      },
+      {
+        "path": "src/op90_to90_extra2133_residual_1_r01.o",
         "selector": ".text"
       },
       {
@@ -745,7 +751,11 @@
         "selector": ".text"
       },
       {
-        "path": "lib/asm/to90_extra2137_residual_2.o",
+        "path": "lib/asm/op90_to90_extra2137_residual_2_anchor.o",
+        "selector": ".text"
+      },
+      {
+        "path": "src/op90_to90_extra2137_residual_2_r01.o",
         "selector": ".text"
       },
       {
