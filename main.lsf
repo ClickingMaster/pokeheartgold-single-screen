@@ -239,7 +239,6 @@ Static main
     Object src/touch_sampling.o
     Object asm/unk_020210A0_residual.o
     Object src/touch_sampling_copy.o
-    Object src/touch_sampling_output.o
     Object asm/unk_02021540.o
     Object src/obj_char_transfer.o
     Object src/obj_pltt_transfer.o
@@ -2303,6 +2302,7 @@ Object src/op90_to91_w41566_texmatrix_suffix_r01.o
     Object lib/asm/to65_to65_nitro_unified_residual_40_extra24_anchor.o
     Object src/to65_to65_nitro_unified_residual_40_extra24_run01.o
     Object lib/asm/to65_to65_nitro_unified_residual_40_extra24_residual_1.o
+    Object src/op90_to65_to65_nitro_unified_residual_40_extra24_residual_1_r01.o
     Object src/to65_to65_nitro_unified_residual_40_extra24_run02.o
     Object lib/asm/to65_to65_nitro_unified_residual_42_extra25_anchor.o
     Object src/to65_to65_nitro_unified_residual_42_extra25_run01.o

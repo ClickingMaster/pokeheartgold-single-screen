@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "f589b1cff782a6c72963d6113bcbcfa76bd7ec5b",
+  "commit": "97c03ff088b40ab49531c93bee51e86578d0760e",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "0531889612db646268b7fe22f39385a9eeb1aea0c725c6cf799d3c6e7de65cf4",
+    "ARM9": "343819c8075e53d9f19686802fe43df39eba950c0643305635a7ecd808e32908",
     "ARM7": "e6f28bdab97a8579a826c01fcbb2ab82179b43606b7666e94ecb5fb6cb7d9577"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
   "totals": {
-    "c": 3956386,
+    "c": 3957166,
     "mixed": 2340,
-    "asm": 80644,
+    "asm": 79864,
     "cpp": 27432,
     "unknown": 8552
   },
   "coverage": {
     "denominator_bytes": 4075354,
     "c": {
-      "bytes": 3956386,
-      "percent": 97.08079347217445
+      "bytes": 3957166,
+      "percent": 97.09993291380331
     },
     "cpp": {
       "bytes": 27432,
       "percent": 0.6731194394401075
     },
     "combined": {
-      "bytes": 3983818,
-      "percent": 97.75391291161455
+      "bytes": 3984598,
+      "percent": 97.77305235324343
     }
   },
   "objects": [
@@ -72643,6 +72643,14 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "op90_to65_to65_nitro_unified_residual_40_extra24_residual_1_r01.o",
+      "bytes": 500,
+      "status": "c",
+      "source": "src/op90_to65_to65_nitro_unified_residual_40_extra24_residual_1_r01.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "op90_to65_to65_nitro_unified_residual_44_extra26_residual_1_r01.o",
       "bytes": 232,
       "status": "c",
@@ -78147,14 +78155,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to65_to65_nitro_unified_residual_40_extra24_residual_1.o",
-      "bytes": 500,
-      "status": "asm",
-      "source": "lib/asm/to65_to65_nitro_unified_residual_40_extra24_residual_1.s"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to65_to65_nitro_unified_residual_40_extra24_run01.o",
       "bytes": 180,
       "status": "c",
@@ -83364,17 +83364,9 @@
       "cpu": "ARM9",
       "module": "main",
       "object": "touch_sampling_copy.o",
-      "bytes": 120,
+      "bytes": 424,
       "status": "c",
       "source": "src/touch_sampling_copy.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "touch_sampling_output.o",
-      "bytes": 24,
-      "status": "c",
-      "source": "src/touch_sampling_output.c"
     },
     {
       "cpu": "ARM9",
@@ -83743,22 +83735,6 @@
       "bytes": 144,
       "status": "c",
       "source": "src/unk_02020A0C.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "unk_020210A0_residual.o",
-      "bytes": 184,
-      "status": "asm",
-      "source": "asm/unk_020210A0_residual.s"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "unk_02021540.o",
-      "bytes": 96,
-      "status": "asm",
-      "source": "asm/unk_02021540.s"
     },
     {
       "cpu": "ARM9",
