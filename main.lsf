@@ -1532,7 +1532,8 @@ Static main
     Object lib/asm/op90_op90_to80_extra1861_residual_1_residual_2_anchor.o
     Object src/op90_op90_to80_extra1861_residual_1_residual_2_r01.o
     Object src/to80_extra1861_run01.o
-    Object lib/asm/to80_extra1861_residual_2.o
+    Object lib/asm/op90_to80_extra1861_residual_2_anchor.o
+    Object src/op90_to80_extra1861_residual_2_r01.o
     Object src/to70_libVCT_extra08_run02.o
     Object lib/asm/to70_libVCT_extra08_residual_2.o
     Object src/to70_libVCT_extra08_run03.o

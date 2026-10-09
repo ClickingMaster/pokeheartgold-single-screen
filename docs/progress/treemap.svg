@@ -4,8 +4,8 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="1172" y="42" text-anchor="end" font-size="22">98.32% C + C++ source</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 57ced4254 · ARM9 + ARM7 · 4,075,356 mapped code bytes</text>
+<text x="1172" y="42" text-anchor="end" font-size="22">98.38% C + C++ source</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · f04d95eb4 · ARM9 + ARM7 · 4,075,356 mapped code bytes</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
 <text x="47" y="102" font-size="14">C-only source 97.6%</text>
 <rect x="256" y="91" width="12" height="12" rx="2" fill="#35a9b8"/>
@@ -1264,9 +1264,9 @@ src/map_object_movement_commands_3.c</title></rect>
 <rect x="401.078" y="265.813" width="12.517" height="7.435" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / oam_manager.o
 560 bytes · C-only source
 src/oam_manager.c</title></rect>
-<rect x="401.078" y="273.248" width="12.517" height="7.435" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to80_extra1861_residual_2.o
-560 bytes · Assembly
-lib/asm/to80_extra1861_residual_2.s</title></rect>
+<rect x="401.078" y="273.248" width="12.517" height="7.435" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_to80_extra1861_residual_2_r01.o
+560 bytes · C-only source
+src/op90_to80_extra1861_residual_2_r01.c</title></rect>
 <rect x="394.819" y="280.682" width="9.405" height="9.860" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / field_ui_863f4_3.o
 558 bytes · C-only source
 src/field_ui_863f4_3.c</title></rect>
@@ -15675,9 +15675,9 @@ sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_20_residual_2_r01.c</title
 <rect x="642.636" y="252.198" width="12.471" height="22.866" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / EXT_WRAM / op90_to90_arm7_sub_ext_wram_residual_63_r01.o
 1,716 bytes · C-only source
 sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_63_r01.c</title></rect>
-<rect x="655.107" y="252.198" width="11.715" height="22.866" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM7 / EXT_WRAM / op90_to91_w41568_rx_suffix_residual_1.o
-1,612 bytes · Assembly
-sub/asm/op90_to91_w41568_rx_suffix_residual_1.s</title></rect>
+<rect x="655.107" y="252.198" width="11.715" height="22.866" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / EXT_WRAM / op90_op90_to91_w41568_rx_suffix_residual_1_r01.o
+1,612 bytes · C-only source
+sub/lib/src/op90_op90_to91_w41568_rx_suffix_residual_1_r01.c</title></rect>
 <rect x="642.636" y="275.064" width="12.110" height="19.816" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / EXT_WRAM / op90_to90_arm7_sub_ext_wram_residual_15_r01.o
 1,444 bytes · C-only source
 sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_15_r01.c</title></rect>
@@ -15912,9 +15912,9 @@ sub/lib/src/to90_arm7_sub_ext_wram_run192.c</title></rect>
 <rect x="652.763" y="343.908" width="4.399" height="10.275" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / EXT_WRAM / to90_arm7_sub_ext_wram_run404.o
 272 bytes · C-only source
 sub/lib/src/to90_arm7_sub_ext_wram_run404.c</title></rect>
-<rect x="657.162" y="343.908" width="8.669" height="5.137" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM7 / EXT_WRAM / to90_arm7_sub_ext_wram_residual_43.o
-268 bytes · Assembly
-sub/asm/to90_arm7_sub_ext_wram_residual_43.s</title></rect>
+<rect x="657.162" y="343.908" width="8.669" height="5.137" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / EXT_WRAM / op90_to90_arm7_sub_ext_wram_residual_43_r01.o
+268 bytes · C-only source
+sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_43_r01.c</title></rect>
 <rect x="657.162" y="349.045" width="8.669" height="5.137" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / EXT_WRAM / to90_arm7_sub_ext_wram_run247.o
 268 bytes · C-only source
 sub/lib/src/to90_arm7_sub_ext_wram_run247.c</title></rect>
