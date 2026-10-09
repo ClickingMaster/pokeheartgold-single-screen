@@ -1,0 +1,13 @@
+{
+  "section": ".bss",
+  "owner": {
+    "name": "ov00_0221B0D8",
+    "offset": "0x8",
+    "size": "0x54"
+  },
+  "aliases": [
+    { "name": "ov00_0221B0DC", "offset": "0xc" },
+    { "name": "ov00_0221B0E0", "offset": "0x10" },
+    { "name": "ov00_0221B0E5", "offset": "0x15" }
+  ]
+}

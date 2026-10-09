@@ -2990,6 +2990,8 @@ Object src/op90_to91_w41563_friend_callback_suffix_r01.o
     Object src/op90_to60_overlay_00_arm_residual_4_r01.o
     Object src/to60_ov00_run05.o
     Object lib/NitroDWC/asm/to60_overlay_00_arm_residual_5.o
+    Object src/op90_to60_overlay_00_arm_residual_5_r01.o
+    Object lib/NitroDWC/asm/to60_overlay_00_arm_anchor_own1_own1.o
     Object src/to60_ov00_run06.o
     Object lib/NitroDWC/asm/to80_extra1618_anchor.o
     Object src/to80_extra1618_run01.o

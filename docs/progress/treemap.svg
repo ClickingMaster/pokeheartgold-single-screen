@@ -5,7 +5,7 @@
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
 <text x="1172" y="42" text-anchor="end" font-size="22">98.58% C + C++ source</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 6db0e7c3f · ARM9 + ARM7 · 4,075,356 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · f05a17250 · ARM9 + ARM7 · 4,075,356 mapped code bytes</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
 <text x="47" y="102" font-size="14">C-only source 97.7%</text>
 <rect x="256" y="91" width="12" height="12" rx="2" fill="#35a9b8"/>
@@ -9521,12 +9521,12 @@ src/to65_overlay_00_arm_residual_7_run11.c</title></rect>
 <rect x="283.329" y="679.776" width="6.911" height="7.694" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_0 / to90_extra2352_run01.o
 320 bytes · C-only source
 src/to90_extra2352_run01.c</title></rect>
-<rect x="290.240" y="679.776" width="6.825" height="7.694" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_0 / overlay00_network_state_r23_run2.o
+<rect x="290.240" y="679.776" width="6.825" height="7.694" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_0 / op90_to60_overlay_00_arm_residual_5_r01.o
+316 bytes · C-only source
+src/op90_to60_overlay_00_arm_residual_5_r01.c</title></rect>
+<rect x="283.329" y="687.470" width="4.618" height="11.372" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_0 / overlay00_network_state_r23_run2.o
 316 bytes · C-only source
 src/overlay00_network_state_r23_run2.c</title></rect>
-<rect x="283.329" y="687.470" width="4.618" height="11.372" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_0 / to60_overlay_00_arm_residual_5.o
-316 bytes · Assembly
-lib/NitroDWC/asm/to60_overlay_00_arm_residual_5.s</title></rect>
 <rect x="287.946" y="687.470" width="9.118" height="5.686" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_0 / to61_overlay_00_arm_residual_1_run09.o
 312 bytes · C-only source
 src/to61_overlay_00_arm_residual_1_run09.c</title></rect>

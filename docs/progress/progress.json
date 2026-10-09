@@ -1,33 +1,33 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "6db0e7c3fc33e4c48eb8c57cd69b5457eed23a9b",
+  "commit": "f05a17250832246bf056dbe97d882b65eb0334bb",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "116392dccb9e7f12d2fdcc1ebb53cb4d1100a7b3bd64b045581203effd2171e6",
+    "ARM9": "99f546afe58b3b443c2361cf49ba2d99333b971d37e49eb3c908e07d4315ff95",
     "ARM7": "4f0699f28eb2fc4b968a7f5b97d861ba889e9a50dafc89019f0b8341064d5d7b"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
   "totals": {
-    "c": 3982930,
+    "c": 3983246,
     "mixed": 28266,
-    "asm": 29784,
+    "asm": 29468,
     "cpp": 34376
   },
   "coverage": {
     "denominator_bytes": 4075356,
     "c": {
-      "bytes": 3982930,
-      "percent": 97.73207543095621
+      "bytes": 3983246,
+      "percent": 97.7398293547852
     },
     "cpp": {
       "bytes": 34376,
       "percent": 0.8435091314721953
     },
     "combined": {
-      "bytes": 4017306,
-      "percent": 98.57558456242842
+      "bytes": 4017622,
+      "percent": 98.5833384862574
     }
   },
   "objects": [
@@ -134,6 +134,14 @@
       "bytes": 360,
       "status": "c",
       "source": "src/op90_to60_overlay_00_arm_residual_4_r01.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_0",
+      "object": "op90_to60_overlay_00_arm_residual_5_r01.o",
+      "bytes": 316,
+      "status": "c",
+      "source": "src/op90_to60_overlay_00_arm_residual_5_r01.c"
     },
     {
       "cpu": "ARM9",
@@ -750,14 +758,6 @@
       "bytes": 136,
       "status": "asm",
       "source": "lib/NitroDWC/asm/to60_overlay_00_arm_residual_3.s"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_0",
-      "object": "to60_overlay_00_arm_residual_5.o",
-      "bytes": 316,
-      "status": "asm",
-      "source": "lib/NitroDWC/asm/to60_overlay_00_arm_residual_5.s"
     },
     {
       "cpu": "ARM9",
