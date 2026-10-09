@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "6240760364424c47baf797d0dde58063fcb73fc4",
+  "commit": "e580dd933a694ea86005d4daf0193841b3332b4e",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "78cceb2d1b140a132bdab36d00e507d6f1e0458e396d0de115dbb19e85a02129",
+    "ARM9": "d63de502997e893e84bb3d2d225b692c78aca7932ae07c52c4d50961ec9dc519",
     "ARM7": "fa9f3ecb73415b51a34c0303d5dad868de4bbf6308872e0701d9b8217fcb3a93"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
   "totals": {
-    "c": 3959554,
+    "c": 3963734,
     "mixed": 2340,
     "asm": 77488,
     "cpp": 27432,
-    "unknown": 8552
+    "unknown": 4372
   },
   "coverage": {
     "denominator_bytes": 4075366,
     "c": {
-      "bytes": 3959554,
-      "percent": 97.15824296517172
+      "bytes": 3963734,
+      "percent": 97.26081044009298
     },
     "cpp": {
       "bytes": 27432,
       "percent": 0.6731174574259097
     },
     "combined": {
-      "bytes": 3986986,
-      "percent": 97.83136042259763
+      "bytes": 3991166,
+      "percent": 97.9339278975189
     }
   },
   "objects": [
@@ -65933,8 +65933,8 @@
       "module": "ds_protect",
       "object": "dsprot_main_encrypted.o",
       "bytes": 1040,
-      "status": "unknown",
-      "source": null
+      "status": "c",
+      "source": "lib/dsprot/src/dsprot_main.c"
     },
     {
       "cpu": "ARM9",
@@ -65981,8 +65981,8 @@
       "module": "ds_protect",
       "object": "integrity_encrypted.o",
       "bytes": 984,
-      "status": "unknown",
-      "source": null
+      "status": "c",
+      "source": "lib/dsprot/src/integrity.c"
     },
     {
       "cpu": "ARM9",
@@ -65997,8 +65997,8 @@
       "module": "ds_protect",
       "object": "mac_owner_encrypted.o",
       "bytes": 352,
-      "status": "unknown",
-      "source": null
+      "status": "c",
+      "source": "lib/dsprot/src/mac_owner.c"
     },
     {
       "cpu": "ARM9",
@@ -66013,8 +66013,8 @@
       "module": "ds_protect",
       "object": "rc4_encoded.o",
       "bytes": 936,
-      "status": "unknown",
-      "source": null
+      "status": "c",
+      "source": "lib/dsprot/src/rc4.c"
     },
     {
       "cpu": "ARM9",
@@ -66029,8 +66029,8 @@
       "module": "ds_protect",
       "object": "rom_test_encrypted.o",
       "bytes": 392,
-      "status": "unknown",
-      "source": null
+      "status": "c",
+      "source": "lib/dsprot/src/rom_test.c"
     },
     {
       "cpu": "ARM9",
@@ -66045,8 +66045,8 @@
       "module": "ds_protect",
       "object": "rom_util_encrypted.o",
       "bytes": 476,
-      "status": "unknown",
-      "source": null
+      "status": "c",
+      "source": "lib/dsprot/src/rom_util.c"
     },
     {
       "cpu": "ARM9",

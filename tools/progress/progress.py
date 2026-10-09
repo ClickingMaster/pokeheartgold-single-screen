@@ -51,6 +51,12 @@ def source_index(root, arm7=False):
             p = (base / obj).with_suffix(ext)
             if p.is_file():
                 linked[Path(obj).name].add(p.relative_to(root).as_posix())
+        # dsprot links encrypted/encoded copies of objects compiled from its C sources.
+        m = re.fullmatch(r'lib/dsprot/(\w+?)_(?:encrypted|encoded)\.o', obj)
+        if m and not m[1].endswith('_decrypter'):
+            p = base / 'lib/dsprot/src' / (m[1] + '.c')
+            if p.is_file():
+                linked[Path(obj).name].add(p.relative_to(root).as_posix())
     candidates.update(linked)
     return candidates
 
