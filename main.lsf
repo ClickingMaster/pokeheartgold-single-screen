@@ -2056,16 +2056,19 @@ Object src/op90_to91_w41566_texmatrix_suffix_r01.o
     Object lib/NitroSDK/asm/op90_to90_extra2544_residual_1_anchor.o
     Object src/op90_to90_extra2544_residual_1_r01.o
     Object src/to90_extra2544_run01.o
-    Object lib/NitroSDK/asm/to90_extra2544_residual_2.o
+    Object lib/NitroSDK/asm/op90_to90_extra2544_residual_2_anchor.o
+    Object src/op90_to90_extra2544_residual_2_r01.o
     Object lib/NitroSDK/src/fx/fx_mtx43_scale_apply.o
-    Object lib/NitroSDK/asm/fx_mtx43_residual_1.o
+    Object lib/NitroSDK/asm/op90_fx_mtx43_residual_1_anchor.o
+    Object src/op90_fx_mtx43_residual_1_r01.o
     Object lib/NitroSDK/src/fx/fx_mtx43_tail.o
     Object lib/NitroSDK/asm/to80_extra1441_anchor.o
     Object src/to80_extra1441_run01.o
     Object lib/NitroSDK/asm/op90_fx_mtx44_residual_head_anchor.o
     Object src/op90_fx_mtx44_residual_head_r01.o
     Object lib/NitroSDK/src/fx/fx_mtx44_trans_apply.o
-    Object lib/NitroSDK/asm/fx_mtx44_residual_rot.o
+    Object lib/NitroSDK/asm/op90_fx_mtx44_residual_rot_anchor.o
+    Object src/op90_fx_mtx44_residual_rot_r01.o
     Object lib/NitroSDK/src/fx/fx_mtx44_concat.o
     Object lib/NitroSDK/asm/to80_extra1442_anchor.o
     Object lib/NitroSDK/asm/op90_to80_extra1442_residual_1_anchor.o
@@ -2150,7 +2153,8 @@ Object src/op90_to91_w41566_texmatrix_suffix_r01.o
     Object lib/NitroSDK/src/mi/mi_dma.o
     Object lib/NitroSDK/src/mi/mi_dma_hblank.o
     Object lib/NitroSDK/src/mi/mi_dma_gxcommand.o
-    Object lib/NitroSDK/asm/mi_memory.o
+    Object lib/NitroSDK/asm/op90_mi_memory_anchor.o
+    Object src/op90_mi_memory_r01.o
     Object lib/NitroSDK/asm/op90_mi_swap_anchor.o
     Object src/op90_mi_swap_r01.o
     Object lib/NitroSDK/asm/op90_mi_uncompress_anchor.o
@@ -2190,7 +2194,9 @@ Object src/op90_to91_w41566_texmatrix_suffix_r01.o
     Object lib/asm/op90_to80_extra2570_residual_1_anchor.o
     Object src/op90_to80_extra2570_residual_1_r01.o
     Object src/to90_extra2545_run01.o
-    Object lib/asm/to90_extra2545_residual_2.o
+    Object lib/asm/op90_to90_extra2545_residual_2_anchor.o
+    Object lib/asm/op90_to90_extra2545_residual_2_residual_1.o
+    Object src/op90_to90_extra2545_residual_2_r01.o
     Object lib/asm/to65_to65_nitro_unified_residual_23_extra21_anchor.o
     Object lib/asm/to90_extra2130_anchor.o
     Object src/to90_extra2130_run01.o

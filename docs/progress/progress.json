@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "20db3252aa443a3ae0242bd0e2d26eed0dc0a151",
+  "commit": "1315439942b9e01373f7f758f106320df883465e",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "766edf4011213fe1fe8edc495d6b094c0203baeb94f1fcdff347493dac35fdea",
+    "ARM9": "a06dc0466b4764e8b6813815ee7e4128ecd57f3902739e5bebec4ea30b1b752a",
     "ARM7": "89ce1a458612e76f2aa2acb9e24464bee4875fae8839f582bf21c3764d59f693"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
   "totals": {
     "c": 3972774,
-    "mixed": 8348,
-    "asm": 59916,
+    "mixed": 10274,
+    "asm": 57980,
     "cpp": 29956,
     "unknown": 4372
   },
   "coverage": {
-    "denominator_bytes": 4075366,
+    "denominator_bytes": 4075356,
     "c": {
       "bytes": 3972774,
-      "percent": 97.48263100786531
+      "percent": 97.48287020814868
     },
     "cpp": {
       "bytes": 29956,
-      "percent": 0.7350505451534906
+      "percent": 0.7350523488009391
     },
     "combined": {
       "bytes": 4002730,
-      "percent": 98.21768155301879
+      "percent": 98.21792255694963
     }
   },
   "objects": [
@@ -70739,14 +70739,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "fx_mtx43_residual_1.o",
-      "bytes": 60,
-      "status": "asm",
-      "source": "lib/NitroSDK/asm/fx_mtx43_residual_1.s"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "fx_mtx43_scale_apply.o",
       "bytes": 52,
       "status": "c",
@@ -70767,14 +70759,6 @@
       "bytes": 1636,
       "status": "c",
       "source": "lib/NitroSDK/src/fx/fx_mtx44_concat.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "fx_mtx44_residual_rot.o",
-      "bytes": 108,
-      "status": "asm",
-      "source": "lib/NitroSDK/asm/fx_mtx44_residual_rot.s"
     },
     {
       "cpu": "ARM9",
@@ -71851,14 +71835,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "mi_memory.o",
-      "bytes": 1104,
-      "status": "asm",
-      "source": "lib/NitroSDK/asm/mi_memory.s"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "mi_wram.o",
       "bytes": 16,
       "status": "c",
@@ -72139,10 +72115,26 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "op90_fx_mtx43_residual_1_r01.o",
+      "bytes": 56,
+      "status": "mixed",
+      "source": "src/op90_fx_mtx43_residual_1_r01.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "op90_fx_mtx44_residual_head_r01.o",
       "bytes": 96,
       "status": "mixed",
       "source": "src/op90_fx_mtx44_residual_head_r01.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "op90_fx_mtx44_residual_rot_r01.o",
+      "bytes": 106,
+      "status": "mixed",
+      "source": "src/op90_fx_mtx44_residual_rot_r01.c"
     },
     {
       "cpu": "ARM9",
@@ -72167,6 +72159,14 @@
       "bytes": 64,
       "status": "mixed",
       "source": "src/op90_gxasm_r01.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "op90_mi_memory_r01.o",
+      "bytes": 1102,
+      "status": "mixed",
+      "source": "src/op90_mi_memory_r01.c"
     },
     {
       "cpu": "ARM9",
@@ -73567,6 +73567,30 @@
       "bytes": 92,
       "status": "mixed",
       "source": "src/op90_to90_extra2544_residual_1_r01.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "op90_to90_extra2544_residual_2_r01.o",
+      "bytes": 22,
+      "status": "mixed",
+      "source": "src/op90_to90_extra2544_residual_2_r01.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "op90_to90_extra2545_residual_2_r01.o",
+      "bytes": 640,
+      "status": "mixed",
+      "source": "src/op90_to90_extra2545_residual_2_r01.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "op90_to90_extra2545_residual_2_residual_1.o",
+      "bytes": 20,
+      "status": "asm",
+      "source": "lib/asm/op90_to90_extra2545_residual_2_residual_1.s"
     },
     {
       "cpu": "ARM9",
@@ -82643,26 +82667,10 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to90_extra2544_residual_2.o",
-      "bytes": 24,
-      "status": "asm",
-      "source": "lib/NitroSDK/asm/to90_extra2544_residual_2.s"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to90_extra2544_run01.o",
       "bytes": 172,
       "status": "c",
       "source": "src/to90_extra2544_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_extra2545_residual_2.o",
-      "bytes": 660,
-      "status": "asm",
-      "source": "lib/asm/to90_extra2545_residual_2.s"
     },
     {
       "cpu": "ARM9",
