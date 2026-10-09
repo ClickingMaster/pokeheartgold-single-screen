@@ -1,18 +1,18 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "3a669d5ce019bc4a5b7c72f8ecffd598bdd318e6",
+  "commit": "7615db4e03cf48275d07dd28e0830369c04514b8",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "579b6c2fb5c5c8445644aef141121fb885455841975f664a7eb15606d149087f",
+    "ARM9": "6118d963b430369ebc3846934c354ee4505c3dfd71cce6dd0ea06906265e2299",
     "ARM7": "aee72b15346ce69874994c4626cc2190a719568e60181425f8399562f0b5fb07"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
   "totals": {
     "c": 3972774,
-    "mixed": 12166,
-    "asm": 55524,
+    "mixed": 23518,
+    "asm": 44172,
     "cpp": 30520,
     "unknown": 4372
   },
@@ -73643,6 +73643,14 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "op90_to90_w41415_fp_init4_prefix_r01.o",
+      "bytes": 11352,
+      "status": "mixed",
+      "source": "src/op90_to90_w41415_fp_init4_prefix_r01.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "op90_to90_w41415_fp_init4_suffix_r01.o",
       "bytes": 56,
       "status": "mixed",
@@ -83167,14 +83175,6 @@
       "bytes": 56,
       "status": "c",
       "source": "lib/NitroSDK/src/os/to90_spin_run03.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_w41415_fp_init4_prefix.o",
-      "bytes": 11352,
-      "status": "asm",
-      "source": "lib/asm/to90_w41415_fp_init4_prefix.s"
     },
     {
       "cpu": "ARM9",

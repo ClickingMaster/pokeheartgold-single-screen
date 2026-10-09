@@ -1,0 +1,343 @@
+{
+  "section": ".text",
+  "owner": {
+    "name": "_dadd",
+    "type": "FUNC",
+    "offset": "0x0",
+    "size": "0x2c58"
+  },
+  "aliases": [
+    {
+      "name": "_d2f",
+      "offset": "0x318"
+    },
+    {
+      "name": "_d_add",
+      "offset": "0x0"
+    },
+    {
+      "name": "_d_div",
+      "offset": "0x2714"
+    },
+    {
+      "name": "_d_dtof",
+      "offset": "0x318"
+    },
+    {
+      "name": "_d_dtoi",
+      "offset": "0x41c"
+    },
+    {
+      "name": "_d_dtou",
+      "offset": "0x468"
+    },
+    {
+      "name": "_d_dtoull",
+      "offset": "0x4c0"
+    },
+    {
+      "name": "_d_feq",
+      "offset": "0x1328"
+    },
+    {
+      "name": "_d_fge",
+      "offset": "0x10b8"
+    },
+    {
+      "name": "_d_fgt",
+      "offset": "0x1150"
+    },
+    {
+      "name": "_d_fle",
+      "offset": "0x11e8"
+    },
+    {
+      "name": "_d_flt",
+      "offset": "0x128c"
+    },
+    {
+      "name": "_d_fne",
+      "offset": "0x13b4"
+    },
+    {
+      "name": "_d_itod",
+      "offset": "0x54c"
+    },
+    {
+      "name": "_d_mul",
+      "offset": "0x5c8"
+    },
+    {
+      "name": "_d_sub",
+      "offset": "0xae0"
+    },
+    {
+      "name": "_d_utod",
+      "offset": "0x58c"
+    },
+    {
+      "name": "_ddiv",
+      "offset": "0x2714"
+    },
+    {
+      "name": "_deq",
+      "offset": "0x1328"
+    },
+    {
+      "name": "_dfix",
+      "offset": "0x41c"
+    },
+    {
+      "name": "_dfixu",
+      "offset": "0x468"
+    },
+    {
+      "name": "_dflt",
+      "offset": "0x54c"
+    },
+    {
+      "name": "_dfltu",
+      "offset": "0x58c"
+    },
+    {
+      "name": "_dgeq",
+      "offset": "0x10b8"
+    },
+    {
+      "name": "_dgr",
+      "offset": "0x1150"
+    },
+    {
+      "name": "_dleq",
+      "offset": "0x11e8"
+    },
+    {
+      "name": "_dls",
+      "offset": "0x128c"
+    },
+    {
+      "name": "_dmul",
+      "offset": "0x5c8"
+    },
+    {
+      "name": "_dneq",
+      "offset": "0x13b4"
+    },
+    {
+      "name": "_drdiv",
+      "offset": "0x26fc"
+    },
+    {
+      "name": "_drsb",
+      "offset": "0xac8"
+    },
+    {
+      "name": "_dsqrt",
+      "offset": "0x92c"
+    },
+    {
+      "name": "_dsub",
+      "offset": "0xae0"
+    },
+    {
+      "name": "_f2d",
+      "offset": "0x19f4"
+    },
+    {
+      "name": "_f_add",
+      "offset": "0xe94"
+    },
+    {
+      "name": "_f_div",
+      "offset": "0x163c"
+    },
+    {
+      "name": "_f_feq",
+      "offset": "0x1560"
+    },
+    {
+      "name": "_f_fgt",
+      "offset": "0x1440"
+    },
+    {
+      "name": "_f_fle",
+      "offset": "0x149c"
+    },
+    {
+      "name": "_f_flt",
+      "offset": "0x1504"
+    },
+    {
+      "name": "_f_fne",
+      "offset": "0x15c8"
+    },
+    {
+      "name": "_f_ftod",
+      "offset": "0x19f4"
+    },
+    {
+      "name": "_f_ftoi",
+      "offset": "0x1a78"
+    },
+    {
+      "name": "_f_ftou",
+      "offset": "0x1aac"
+    },
+    {
+      "name": "_f_itof",
+      "offset": "0x1aec"
+    },
+    {
+      "name": "_f_lltof",
+      "offset": "0x1b7c"
+    },
+    {
+      "name": "_f_mul",
+      "offset": "0x1c50"
+    },
+    {
+      "name": "_f_qtof",
+      "offset": "0x318"
+    },
+    {
+      "name": "_f_sub",
+      "offset": "0x1e3c"
+    },
+    {
+      "name": "_f_ulltof",
+      "offset": "0x1be8"
+    },
+    {
+      "name": "_f_utof",
+      "offset": "0x1b34"
+    },
+    {
+      "name": "_fadd",
+      "offset": "0xe94"
+    },
+    {
+      "name": "_fdiv",
+      "offset": "0x163c"
+    },
+    {
+      "name": "_feq",
+      "offset": "0x1560"
+    },
+    {
+      "name": "_ffix",
+      "offset": "0x1a78"
+    },
+    {
+      "name": "_ffixu",
+      "offset": "0x1aac"
+    },
+    {
+      "name": "_fflt",
+      "offset": "0x1aec"
+    },
+    {
+      "name": "_ffltu",
+      "offset": "0x1b34"
+    },
+    {
+      "name": "_fgr",
+      "offset": "0x1440"
+    },
+    {
+      "name": "_fleq",
+      "offset": "0x149c"
+    },
+    {
+      "name": "_fls",
+      "offset": "0x1504"
+    },
+    {
+      "name": "_fmul",
+      "offset": "0x1c50"
+    },
+    {
+      "name": "_fneq",
+      "offset": "0x15c8"
+    },
+    {
+      "name": "_frdiv",
+      "offset": "0x1630"
+    },
+    {
+      "name": "_frsb",
+      "offset": "0x1e30"
+    },
+    {
+      "name": "_fsub",
+      "offset": "0x1e3c"
+    },
+    {
+      "name": "_ll_div",
+      "offset": "0x20c4"
+    },
+    {
+      "name": "_ll_mod",
+      "offset": "0x20b4"
+    },
+    {
+      "name": "_ll_mul",
+      "offset": "0x22bc"
+    },
+    {
+      "name": "_ll_sdiv",
+      "offset": "0x20c4"
+    },
+    {
+      "name": "_ll_shl",
+      "offset": "0x22dc"
+    },
+    {
+      "name": "_ll_sll",
+      "offset": "0x22dc"
+    },
+    {
+      "name": "_ll_sto_f",
+      "offset": "0x1b7c"
+    },
+    {
+      "name": "_ll_udiv",
+      "offset": "0x2274"
+    },
+    {
+      "name": "_ll_ufrom_d",
+      "offset": "0x4c0"
+    },
+    {
+      "name": "_ll_uto_f",
+      "offset": "0x1be8"
+    },
+    {
+      "name": "_s32_div_f",
+      "offset": "0x230c"
+    },
+    {
+      "name": "_u32_div_f",
+      "offset": "0x2518"
+    },
+    {
+      "name": "_u32_div_not_0_f",
+      "offset": "0x2520"
+    },
+    {
+      "name": "_ull_div",
+      "offset": "0x2274"
+    },
+    {
+      "name": "_ull_mod",
+      "offset": "0x2280"
+    },
+    {
+      "name": "_ull_mul",
+      "offset": "0x22bc"
+    },
+    {
+      "name": "_ull_sll",
+      "offset": "0x22dc"
+    }
+  ]
+}

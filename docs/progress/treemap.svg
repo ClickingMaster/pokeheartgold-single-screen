@@ -5,15 +5,15 @@
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
 <text x="1172" y="42" text-anchor="end" font-size="22">98.23% C + C++ source</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 3a669d5ce · ARM9 + ARM7 · 4,075,356 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 7615db4e0 · ARM9 + ARM7 · 4,075,356 mapped code bytes</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
 <text x="47" y="102" font-size="14">C-only source 97.5%</text>
 <rect x="256" y="91" width="12" height="12" rx="2" fill="#35a9b8"/>
 <text x="275" y="102" font-size="14">C++-only source 0.7%</text>
 <rect x="484" y="91" width="12" height="12" rx="2" fill="#e4ad42"/>
-<text x="503" y="102" font-size="14">C/C++ with assembly 0.3%</text>
+<text x="503" y="102" font-size="14">C/C++ with assembly 0.6%</text>
 <rect x="712" y="91" width="12" height="12" rx="2" fill="#455268"/>
-<text x="731" y="102" font-size="14">Assembly 1.4%</text>
+<text x="731" y="102" font-size="14">Assembly 1.1%</text>
 <rect x="940" y="91" width="12" height="12" rx="2" fill="#b875ae"/>
 <text x="959" y="102" font-size="14">Unresolved source 0.1%</text>
 <rect x="28.000" y="125.000" width="82.112" height="61.108" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_c.o
@@ -28,9 +28,9 @@ src/bg_window.c</title></rect>
 <rect x="110.112" y="125.000" width="64.371" height="40.480" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / party_menu.o
 15,680 bytes · C-only source
 src/party_menu.c</title></rect>
-<rect x="110.112" y="165.480" width="64.371" height="29.307" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to90_w41415_fp_init4_prefix.o
-11,352 bytes · Assembly
-lib/asm/to90_w41415_fp_init4_prefix.s</title></rect>
+<rect x="110.112" y="165.480" width="64.371" height="29.307" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_to90_w41415_fp_init4_prefix_r01.o
+11,352 bytes · C/C++ with assembly
+src/op90_to90_w41415_fp_init4_prefix_r01.c</title></rect>
 <rect x="110.112" y="194.787" width="64.371" height="26.343" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / naming_screen.o
 10,204 bytes · C-only source
 src/naming_screen.c</title></rect>

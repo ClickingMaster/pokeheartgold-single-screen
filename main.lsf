@@ -2569,7 +2569,7 @@ Object src/op90_to91_w41566_texmatrix_suffix_r01.o
     Object src/to70_MSL_CPP_NITRO_Ai_LE_extra108_run03.o
     Object lib/MSL_C/asm/to70_MSL_CPP_NITRO_Ai_LE_extra108_residual_3.o
     Object lib/asm/to90_msl_interval_demo_anchor.o
-    Object lib/asm/to90_w41415_fp_init4_prefix.o
+    Object src/op90_to90_w41415_fp_init4_prefix_r01.o
     Object src/to90_w41415_fp_init4_run01.o
     Object lib/asm/op90_to90_w41415_fp_init4_suffix_anchor.o
     Object src/op90_to90_w41415_fp_init4_suffix_r01.o
