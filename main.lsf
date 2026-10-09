@@ -87,7 +87,6 @@ Static main
     Object src/render_window_helpers_7.o
     Object src/to52_r4_render_window_tail.o
     Object asm/unk_0200FA24_head.o
-    Object src/palette_fade_state_1.o
     Object src/palette_fade_reset.o
     Object src/palette_fade_state_2.o
     Object src/screen_fade_update.o

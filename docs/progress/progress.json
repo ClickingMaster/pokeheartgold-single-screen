@@ -1,33 +1,33 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "78fd3f7904a6ea92f50c6af480dbffb72fe3f17c",
+  "commit": "ba7b6c7fec0a79cd3217d15f213ac58926b47876",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "17cd3aa28f65e25f7bd66708c7787bb0120042f6bb55511446be79a50bda2f26",
+    "ARM9": "a2ad1cfecddf94365280385f2b3f38bc49bd202c5fef4bf364716c2419fd7007",
     "ARM7": "4f0699f28eb2fc4b968a7f5b97d861ba889e9a50dafc89019f0b8341064d5d7b"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
   "totals": {
-    "c": 3978394,
+    "c": 3978658,
     "mixed": 28266,
-    "asm": 37524,
+    "asm": 37260,
     "cpp": 31172
   },
   "coverage": {
     "denominator_bytes": 4075356,
     "c": {
-      "bytes": 3978394,
-      "percent": 97.62077227118318
+      "bytes": 3978658,
+      "percent": 97.62725023286309
     },
     "cpp": {
       "bytes": 31172,
       "percent": 0.7648902329023526
     },
     "combined": {
-      "bytes": 4009566,
-      "percent": 98.38566250408553
+      "bytes": 4009830,
+      "percent": 98.39214046576545
     }
   },
   "objects": [
@@ -74339,17 +74339,9 @@
       "cpu": "ARM9",
       "module": "main",
       "object": "palette_fade_reset.o",
-      "bytes": 108,
+      "bytes": 440,
       "status": "c",
       "source": "src/palette_fade_reset.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "palette_fade_state_1.o",
-      "bytes": 68,
-      "status": "c",
-      "source": "src/palette_fade_state_1.c"
     },
     {
       "cpu": "ARM9",
@@ -83710,14 +83702,6 @@
       "bytes": 156,
       "status": "c",
       "source": "src/unk_0200CE7C.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "unk_0200FA24_head.o",
-      "bytes": 264,
-      "status": "asm",
-      "source": "asm/unk_0200FA24_head.s"
     },
     {
       "cpu": "ARM9",
