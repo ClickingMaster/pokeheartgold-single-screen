@@ -1,18 +1,18 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "c691110fe1be08112acff34deff193ffc79b1210",
+  "commit": "169f364066f4c84eb9d44199f8965ca39db86d31",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "680de380f5b1a316566105865cf6456f91d9ad42ffbe6372774e77e7f02e68bc",
-    "ARM7": "c08dee27991c39f3c103bd462eb49473b248afb9086909b28e25fe21e3d52374"
+    "ARM9": "69ca1e1bc7f58b93291bafc2a0f8e40a49030cbdff6dec123faa9f815a4a188c",
+    "ARM7": "ca66a51337879b2aebadcd49b39e2d03be12b010d3e39fe485c1b3931e49a339"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
   "totals": {
     "c": 3967834,
-    "mixed": 3836,
-    "asm": 70924,
+    "mixed": 5108,
+    "asm": 69652,
     "cpp": 28400,
     "unknown": 4372
   },
@@ -69669,8 +69669,8 @@
       "module": "main",
       "object": "crt0.o",
       "bytes": 928,
-      "status": "asm",
-      "source": "lib/asm/crt0.s"
+      "status": "mixed",
+      "source": "lib/NitroSDK/src/crt0.c"
     },
     {
       "cpu": "ARM9",
@@ -91949,8 +91949,8 @@
       "module": "ichneumon_sub",
       "object": "crt0.o",
       "bytes": 344,
-      "status": "asm",
-      "source": "sub/lib/asm/crt0.s"
+      "status": "mixed",
+      "source": "sub/lib/src/crt0.c"
     },
     {
       "cpu": "ARM7",

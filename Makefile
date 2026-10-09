@@ -10,6 +10,9 @@ include config.mk
 
 ALL_BUILDDIRS  := $(BUILD_DIR)/lib
 include common.mk
+
+# crt0 is now C (asm functions); keep basename crt0.o for the lcf.
+CRT0_OBJ := lib/NitroSDK/src/crt0.o
 include filesystem.mk
 
 $(ASM_OBJS): private MWASFLAGS += -DPM_ASM

@@ -14,6 +14,9 @@ GLB_DEFINES  := -DSDK_ARM7
 
 include ../common.mk
 
+# crt0 is now C (asm functions); keep basename crt0.o for the lcf.
+CRT0_OBJ := lib/src/crt0.o
+
 tidy:
 	$(RM) -r $(BUILD_DIR)
 

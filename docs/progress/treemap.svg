@@ -5,7 +5,7 @@
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
 <text x="1172" y="42" text-anchor="end" font-size="22">98.06% C + C++ source</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · c691110fe · ARM9 + ARM7 · 4,075,366 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 169f36406 · ARM9 + ARM7 · 4,075,366 mapped code bytes</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
 <text x="47" y="102" font-size="14">C-only source 97.4%</text>
 <rect x="256" y="91" width="12" height="12" rx="2" fill="#35a9b8"/>
@@ -661,9 +661,9 @@ src/to90_extra2142_run01.c</title></rect>
 <rect x="321.528" y="256.622" width="16.869" height="9.181" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / mail_misc.o
 932 bytes · C-only source
 src/mail_misc.c</title></rect>
-<rect x="338.397" y="228.822" width="10.380" height="14.857" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / crt0.o
-928 bytes · Assembly
-lib/asm/crt0.s</title></rect>
+<rect x="338.397" y="228.822" width="10.380" height="14.857" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / crt0.o
+928 bytes · C/C++ with assembly
+lib/NitroSDK/src/crt0.c</title></rect>
 <rect x="348.777" y="228.822" width="10.380" height="14.857" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to65_wifi_residual_11_run17.o
 928 bytes · C-only source
 src/to65_wifi_residual_11_run17.c</title></rect>
@@ -34595,9 +34595,9 @@ src/overlay_26_022598C0.c</title></rect>
 250 bytes · C-only source
 src/overlay_26_022599D0.c</title></rect>
 <rect x="1145.187" y="705.953" width="7.823" height="11.047" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="1153.010" y="699.218" width="8.653" height="6.606" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM7 / ichneumon_sub / crt0.o
-344 bytes · Assembly
-sub/lib/asm/crt0.s</title></rect>
+<rect x="1153.010" y="699.218" width="8.653" height="6.606" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM7 / ichneumon_sub / crt0.o
+344 bytes · C/C++ with assembly
+sub/lib/src/crt0.c</title></rect>
 <rect x="1161.663" y="699.218" width="2.113" height="6.292" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM7 / ichneumon_sub / to91_w41567_startup_suffix.o
 80 bytes · Assembly
 sub/lib/asm/to91_w41567_startup_suffix.s</title></rect>
