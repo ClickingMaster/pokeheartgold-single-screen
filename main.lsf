@@ -2194,7 +2194,6 @@ Object src/op90_to91_w41566_texmatrix_suffix_r01.o
     Object src/op90_to80_extra2570_residual_1_r01.o
     Object src/to90_extra2545_run01.o
     Object lib/asm/op90_to90_extra2545_residual_2_anchor.o
-    Object lib/asm/op90_to90_extra2545_residual_2_residual_1.o
     Object src/op90_to90_extra2545_residual_2_r01.o
     Object lib/asm/to65_to65_nitro_unified_residual_23_extra21_anchor.o
     Object lib/asm/to90_extra2130_anchor.o

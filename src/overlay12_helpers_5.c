@@ -103,3 +103,9 @@ void ov12_022399BC(void) {
         HandleLoadOverlay((int)SDK_OVERLAY_OVY_18_ID, 2);
     }
 }
+
+// Overlay static initializer: the one .sinit entry of this overlay points at the function above.
+#pragma define_section SINIT ".sinit" abs32 RWX
+#pragma section SINIT begin
+SDK_FORCE_EXPORT static void (*NitroStaticInit_[])(void) = { ov12_022399BC };
+#pragma section SINIT end

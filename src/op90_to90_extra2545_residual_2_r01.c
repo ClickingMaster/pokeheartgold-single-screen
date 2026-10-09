@@ -1,19 +1,27 @@
 #pragma force_active on
 #include <nitro/types.h>
 
-void DGTi_hash2_arm4_small(register void *context, register const void *data, register u32 length);
+// _020D9960: SHA-1 constants (byte-swap mask + the four round constants) followed by the
+// hand-written DGTi_hash2_arm4_small, which reads them pc-relative. One asm function so the words
+// stay in front of the code; DGTi_hash2_arm4_small is exported at +0x14 by the .alias-map.json.
+void _020D9960(void);
 
 #include <nitro/code32.h>
 
-// @fn DGTi_hash2_arm4_small
-asm void DGTi_hash2_arm4_small(register void *context, register const void *data, register u32 length) {
+asm void _020D9960(void) {
+    dcd 0x00FF00FF // _020D9960
+    dcd 0x5A827999 // _020D9964
+    dcd 0x6ED9EBA1 // _020D9968
+    dcd 0x8F1BBCDC // _020D996C
+    dcd 0xCA62C1D6 // _020D9970
+// DGTi_hash2_arm4_small (+0x14)
     stmdb sp!, {r4, r5, r6, r7, r8, r9, r10, r11, r12, lr}
     ldmia r0, {r3, r9, r10, r11, r12}
     sub sp, sp, #0x84
     str r2, [sp, #0x80]
 @L020D9984:
-    ldr r8, [pc, #-40] // _020D9964: .word 0x5A827999 (asm data immediately before this function)
-    ldr r7, [pc, #-48] // _020D9960: .word 0x00FF00FF (asm data immediately before this function)
+    ldr r8, [pc, #-40] // _020D9964: .word 0x5A827999 (start of this function)
+    ldr r7, [pc, #-48] // _020D9960: .word 0x00FF00FF (start of this function)
     mov r6, sp
     mov r5, #0
 @L020D9994:
@@ -68,7 +76,7 @@ asm void DGTi_hash2_arm4_small(register void *context, register const void *data
     add r7, r7, #4
     cmp r7, #0x10
     blt @L020D99F4
-    ldr r8, [pc, #-252] // _020D9968: .word 0x6ED9EBA1 (asm data immediately before this function)
+    ldr r8, [pc, #-252] // _020D9968: .word 0x6ED9EBA1 (start of this function)
     mov r7, #0
 @L020D9A64:
     ldr r2, [r6]
@@ -98,7 +106,7 @@ asm void DGTi_hash2_arm4_small(register void *context, register const void *data
     moveq r6, sp
     cmp r7, #0x14
     blt @L020D9A64
-    ldr r8, [pc, #-364] // _020D996C: .word 0x8F1BBCDC (asm data immediately before this function)
+    ldr r8, [pc, #-364] // _020D996C: .word 0x8F1BBCDC (start of this function)
     mov r7, #0
 @L020D9AD8:
     ldr r2, [r6]
@@ -130,7 +138,7 @@ asm void DGTi_hash2_arm4_small(register void *context, register const void *data
     moveq r6, sp
     cmp r7, #0x14
     blt @L020D9AD8
-    ldr r8, [pc, #-484] // _020D9970: .word 0xCA62C1D6 (asm data immediately before this function)
+    ldr r8, [pc, #-484] // _020D9970: .word 0xCA62C1D6 (start of this function)
     mov r7, #0
 @L020D9B54:
     ldr r2, [r6]

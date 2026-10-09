@@ -1,0 +1,12 @@
+{
+  "section": ".text",
+  "owner": {
+    "name": "_020D9960",
+    "type": "FUNC",
+    "offset": "0x0",
+    "size": "0x294"
+  },
+  "aliases": [
+    { "name": "DGTi_hash2_arm4_small", "offset": "0x14" }
+  ]
+}
