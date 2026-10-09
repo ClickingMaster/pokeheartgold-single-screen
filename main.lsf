@@ -7020,7 +7020,8 @@ Object src/to91_w41511_choice_row_run01.o
     Object asm/op90_overlay_40_residual_35_anchor.o
     Object src/op90_overlay_40_residual_35_r01.o
     Object src/overlay40_pc_state_handlers_head_35_run2.o
-    Object asm/overlay_40_residual_35_gap2.o
+    Object asm/op90_overlay_40_residual_35_gap2_anchor.o
+    Object src/op90_overlay_40_residual_35_gap2_r01.o
     Object src/overlay40_pc_state_handlers_head_35_run3.o
     Object asm/op90_overlay_40_residual_35_gap3_anchor.o
     Object src/op90_overlay_40_residual_35_gap3_r01.o

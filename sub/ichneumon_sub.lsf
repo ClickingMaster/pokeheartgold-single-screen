@@ -15,7 +15,9 @@ Autoload MAIN
 Autoload WRAM
 {
 	Address 0x037F8000
-	Object asm/sp_main.o
+	Object asm/op90_sp_main_anchor.o
+	Object lib/src/op90_sp_main_r01.o
+	Object asm/op90_sp_main_residual_1.o
 	Object asm/to90_a7_next1668_o01_anchor.o
 	Object lib/src/to90_a7_next1668_o01_run01.o
 	Object lib/src/OS_irqHandler.o
