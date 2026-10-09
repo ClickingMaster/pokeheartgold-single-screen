@@ -494,3 +494,4 @@ $(BUILD_DIR)/src/op90_unk_0203A3B0_r01.o: private MWCFLAGS := $(filter-out -ipa 
 $(BUILD_DIR)/src/op90_to80_extra1454_residual_3_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to80_extra1754_residual_3_r01.o: private MWCCVER := 2.0/sp1p5
 $(BUILD_DIR)/src/op90_to80_extra1754_residual_3_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/op90_op90_overlay_02_02248728_to42_gap_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))

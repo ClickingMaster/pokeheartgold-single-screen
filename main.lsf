@@ -1734,7 +1734,8 @@ Static main
     Object lib/asm/op90_op90_op90_to70_nnsys_residual_32_residual_1_residual_1_residual_1_anchor.o
     Object src/op90_op90_op90_to70_nnsys_residual_32_residual_1_residual_1_residual_1_r01.o
     Object src/op90_to70_nnsys_residual_32_residual_1_r01.o
-    Object lib/asm/op90_to70_nnsys_residual_32_residual_1_residual_2.o
+    Object lib/asm/op90_op90_to70_nnsys_residual_32_residual_1_residual_2_anchor.o
+    Object src/op90_op90_to70_nnsys_residual_32_residual_1_residual_2_r01.o
     Object src/to70_nnsys_residual_32_run01.o
     Object src/to59_nnsys_run44.o
     Object lib/asm/to90_extra2459_anchor.o
@@ -3850,7 +3851,8 @@ Overlay OVY_2
     Object src/op90_overlay_02_02248728_to42_prefix_r01.o
     Object src/overlay02_safari_zone_queries_to42.o
     Object asm/op90_overlay_02_02248728_to42_gap_anchor.o
-    Object asm/op90_overlay_02_02248728_to42_gap_residual_1.o
+    Object asm/op90_op90_overlay_02_02248728_to42_gap_residual_1_anchor.o
+    Object src/op90_op90_overlay_02_02248728_to42_gap_residual_1_r01.o
     Object src/op90_overlay_02_02248728_to42_gap_r01.o
     Object src/op90_overlay_02_02248728_to42_gap_r02.o
     Object src/overlay02_safari_object_behavior_to42.o
@@ -6796,7 +6798,8 @@ Object src/op90_to54_atomic_h06_02_overlay_40_residual_4_part2_c884_r01.o
     Object src/to70_overlay_40_residual_4_part3_extra430_run01.o
     Object src/overlay40_pc_display_r4_run3.o
     Object src/to53_overlay40_transition.o
-    Object asm/to91_w41511_choice_row_prefix.o
+    Object asm/op90_to91_w41511_choice_row_prefix_anchor.o
+    Object src/op90_to91_w41511_choice_row_prefix_r01.o
 Object src/to91_w41511_choice_row_run01.o
     Object src/overlay40_pc_display_r4_run4.o
     Object src/to91_w41506_choice_run01.o
@@ -7878,7 +7881,8 @@ Object src/to58_r3_overlay_45_thumb_residual_8_suffix.o
     Object src/op90_to90_extra2336_residual_2_r01.o
     Object src/to90_extra2336_run02.o
     Object lib/NitroDWC/asm/op90_to90_extra2336_residual_3_anchor.o
-    Object lib/NitroDWC/asm/op90_to90_extra2336_residual_3_residual_1.o
+    Object lib/NitroDWC/asm/op90_op90_to90_extra2336_residual_3_residual_1_anchor.o
+    Object src/op90_op90_to90_extra2336_residual_3_residual_1_r01.o
     Object src/op90_to90_extra2336_residual_3_r01.o
     Object src/to90_extra2336_run03.o
     Object lib/NitroDWC/asm/op90_to90_extra2336_residual_4_anchor.o
