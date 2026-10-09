@@ -4,8 +4,8 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="1172" y="42" text-anchor="end" font-size="22">98.23% C + C++ source</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 2caed14f9 · ARM9 + ARM7 · 4,075,356 mapped code bytes</text>
+<text x="1172" y="42" text-anchor="end" font-size="22">98.24% C + C++ source</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 32b4504d8 · ARM9 + ARM7 · 4,075,356 mapped code bytes</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
 <text x="47" y="102" font-size="14">C-only source 97.5%</text>
 <rect x="256" y="91" width="12" height="12" rx="2" fill="#35a9b8"/>
@@ -2404,12 +2404,12 @@ src/to90_extra2129_run01.c</title></rect>
 <rect x="603.423" y="176.711" width="6.074" height="8.207" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to90_extra2138_run02.o
 300 bytes · C-only source
 src/to90_extra2138_run02.c</title></rect>
-<rect x="609.497" y="176.711" width="5.993" height="8.207" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_to90_extra2157_residual_1_r01.o
+<rect x="609.497" y="176.711" width="5.993" height="8.207" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_op90_to90_extra2470_residual_1_residual_1_r01.o
+296 bytes · C-only source
+src/op90_op90_to90_extra2470_residual_1_residual_1_r01.c</title></rect>
+<rect x="597.349" y="184.919" width="9.071" height="5.423" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_to90_extra2157_residual_1_r01.o
 296 bytes · C-only source
 src/op90_to90_extra2157_residual_1_r01.c</title></rect>
-<rect x="597.349" y="184.919" width="9.071" height="5.423" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_to90_extra2470_residual_1_residual_1.o
-296 bytes · Assembly
-lib/asm/op90_to90_extra2470_residual_1_residual_1.s</title></rect>
 <rect x="597.349" y="190.341" width="9.071" height="5.423" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_unk_02036298_residual_2_r01.o
 296 bytes · C-only source
 src/op90_unk_02036298_residual_2_r01.c</title></rect>
@@ -2632,30 +2632,30 @@ src/field_application_tasks_7.c</title></rect>
 <rect x="596.529" y="206.750" width="8.138" height="5.473" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_module07_bg_cell_clip_head_residual_r01.o
 268 bytes · C-only source
 src/op90_module07_bg_cell_clip_head_residual_r01.c</title></rect>
-<rect x="604.667" y="195.764" width="5.412" height="8.229" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_to80_extra1755_residual_1_r01.o
+<rect x="604.667" y="195.764" width="5.412" height="8.229" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_to80_extra1474_residual_2_r01.o
+268 bytes · C/C++ with assembly
+src/op90_to80_extra1474_residual_2_r01.c</title></rect>
+<rect x="610.079" y="195.764" width="5.412" height="8.229" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_to80_extra1755_residual_1_r01.o
 268 bytes · C-only source
 src/op90_to80_extra1755_residual_1_r01.c</title></rect>
-<rect x="610.079" y="195.764" width="5.412" height="8.229" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_to90_extra2123_residual_1_r01.o
+<rect x="604.667" y="203.993" width="5.412" height="8.229" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_to90_extra2123_residual_1_r01.o
 268 bytes · C-only source
 src/op90_to90_extra2123_residual_1_r01.c</title></rect>
-<rect x="604.667" y="203.993" width="5.412" height="8.229" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / os_irqTable.o
+<rect x="610.079" y="203.993" width="5.412" height="8.229" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / os_irqTable.o
 268 bytes · C-only source
 lib/NitroSDK/src/os/os_irqTable.c</title></rect>
-<rect x="610.079" y="203.993" width="5.412" height="8.229" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / overlay_resource_actor_2.o
+<rect x="596.529" y="212.223" width="4.741" height="9.395" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / overlay_resource_actor_2.o
 268 bytes · C-only source
 src/overlay_resource_actor_2.c</title></rect>
-<rect x="596.529" y="212.223" width="4.741" height="9.395" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to59_msl_fread.o
+<rect x="601.269" y="212.223" width="4.741" height="9.395" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to59_msl_fread.o
 268 bytes · C-only source
 lib/MSL_C/src/to59_msl_fread.c</title></rect>
-<rect x="601.269" y="212.223" width="4.741" height="9.395" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to59_nnsys_run34.o
+<rect x="596.529" y="221.617" width="4.741" height="9.395" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to59_nnsys_run34.o
 268 bytes · C-only source
 src/to59_nnsys_run34.c</title></rect>
-<rect x="596.529" y="221.617" width="4.741" height="9.395" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to65_to65_nitro_unified_residual_44_extra26_run06.o
+<rect x="601.269" y="221.617" width="4.741" height="9.395" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to65_to65_nitro_unified_residual_44_extra26_run06.o
 268 bytes · C-only source
 src/to65_to65_nitro_unified_residual_44_extra26_run06.c</title></rect>
-<rect x="601.269" y="221.617" width="4.741" height="9.395" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to80_extra1474_residual_2.o
-268 bytes · Assembly
-lib/asm/to80_extra1474_residual_2.s</title></rect>
 <rect x="606.010" y="212.223" width="4.741" height="9.395" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to90_extra2102_run01.o
 268 bytes · C-only source
 src/to90_extra2102_run01.c</title></rect>
