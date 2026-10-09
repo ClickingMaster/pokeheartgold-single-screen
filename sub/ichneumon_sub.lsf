@@ -363,7 +363,7 @@ Autoload WRAM
 	Object lib/src/OS_reset.o (.wram)
 	Object lib/src/to90_arm7_wram160_r8_run01.o (.wram)
 	Object lib/src/to90_arm7_wram160_r8_run02.o (.wram)
-	Object asm/to90_arm7_wram160_r8_residual_1.o (.wram)
+	Object lib/src/op90_to90_arm7_wram160_r8_residual_1_r01.o (.wram)
 }
 
 Autoload EXT_WRAM

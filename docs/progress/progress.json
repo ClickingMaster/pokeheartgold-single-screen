@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "531d5e3369bd5425f12d81c62e608b12fd0ca3c8",
+  "commit": "f589b1cff782a6c72963d6113bcbcfa76bd7ec5b",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "f0bcaacfcaa56cdecebaa02970b8e4dff62cf00c3467a2c7998b28d6339eddb2",
-    "ARM7": "60cb9ca7122c9358d1a547cef2a7854dbdeb81e332ef5cf1cd70d9c737a5b7a7"
+    "ARM9": "0531889612db646268b7fe22f39385a9eeb1aea0c725c6cf799d3c6e7de65cf4",
+    "ARM7": "e6f28bdab97a8579a826c01fcbb2ab82179b43606b7666e94ecb5fb6cb7d9577"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
   "totals": {
-    "c": 3956118,
+    "c": 3956386,
     "mixed": 2340,
-    "asm": 80912,
+    "asm": 80644,
     "cpp": 27432,
     "unknown": 8552
   },
   "coverage": {
     "denominator_bytes": 4075354,
     "c": {
-      "bytes": 3956118,
-      "percent": 97.07421735633272
+      "bytes": 3956386,
+      "percent": 97.08079347217445
     },
     "cpp": {
       "bytes": 27432,
       "percent": 0.6731194394401075
     },
     "combined": {
-      "bytes": 3983550,
-      "percent": 97.74733679577284
+      "bytes": 3983818,
+      "percent": 97.75391291161455
     }
   },
   "objects": [
@@ -89907,6 +89907,14 @@
     {
       "cpu": "ARM7",
       "module": "WRAM",
+      "object": "op90_to90_arm7_wram160_r8_residual_1_r01.o",
+      "bytes": 268,
+      "status": "c",
+      "source": "sub/lib/src/op90_to90_arm7_wram160_r8_residual_1_r01.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "WRAM",
       "object": "op90_to91_arm7_card41457_suffix_r01.o",
       "bytes": 228,
       "status": "c",
@@ -91855,14 +91863,6 @@
       "bytes": 24,
       "status": "c",
       "source": "sub/lib/src/to90_arm7_terminate.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "WRAM",
-      "object": "to90_arm7_wram160_r8_residual_1.o",
-      "bytes": 268,
-      "status": "asm",
-      "source": "sub/asm/to90_arm7_wram160_r8_residual_1.s"
     },
     {
       "cpu": "ARM7",

@@ -37,6 +37,7 @@ $(BUILD_DIR)/lib/src/OS_reset.o: lib/src/OS_reset.c $(BUILD_DIR)/lib/src/OS_rese
 	@python3 $(WORK_DIR)/tools/nitro-section-renames/add_arm7_reset_aliases.py "$@" "$@.reset-aliases"
 	@mv "$@.reset-aliases" "$@"
 	@$(call fixdep,$(BUILD_DIR)/lib/src/OS_reset.d)
+$(BUILD_DIR)/lib/src/op90_to90_arm7_wram160_r8_residual_1_r01.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/src/op90_to90_arm7_sub_ext_wram_residual_37_r01.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/src/op90_to90_arm7_sub_ext_wram_residual_32_r01.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/src/op90_to90_arm7_sub_ext_wram_residual_36_r01.o: private MWCCVER := 2.0/sp1
