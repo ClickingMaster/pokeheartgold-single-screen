@@ -491,3 +491,6 @@ $(BUILD_DIR)/src/op90_op90_to80_extra1758_residual_1_residual_1_r01.o: private M
 $(BUILD_DIR)/src/op90_to65_wifi_residual_11_residual_4_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/op90_to70_to65_wifi_residual_11_residual_14_extra1163_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/op90_unk_0203A3B0_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/op90_to80_extra1454_residual_3_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_to80_extra1754_residual_3_r01.o: private MWCCVER := 2.0/sp1p5
+$(BUILD_DIR)/src/op90_to80_extra1754_residual_3_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
