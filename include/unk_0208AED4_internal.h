@@ -48,5 +48,5 @@ int sub_0208AED4(SummaryWork8AED4 *);
 void sub_0208AF08(SummaryWork8AED4 *, int);
 void sub_0208AF70(SummaryWork8AED4 *);
 void sub_0208AFA0(SummaryWork8AED4 *, int);
-void sub_0208AFE8(void *, u8, u8, u8, u8, u8, u8, u8, u8);
+int sub_0208AFE8(void *, u8, u8, u8, u8, u8, u8, u8, u8);
 #endif
