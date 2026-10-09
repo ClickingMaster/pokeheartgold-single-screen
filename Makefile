@@ -447,3 +447,6 @@ $(BUILD_DIR)/src/op90_to70_to52_r5_overlay96_r90_gap4_tail_extra260_residual_1_r
 $(BUILD_DIR)/src/op90_to80_extra1591_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/op90_to90_extra2552_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/op90_to91_w41573_mode_prefix_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/op90_fx_mtx33_identity_residual_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_to90_extra2338_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_to90_extra2544_residual_1_r01.o: private MWCCVER := 2.0/sp2p3

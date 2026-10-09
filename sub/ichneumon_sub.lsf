@@ -52,8 +52,10 @@ Autoload WRAM
 	Object lib/src/to90_arm7_terminate.o
 	Object lib/asm/to90_a7_next1668_o02_anchor.o
 	Object lib/src/to90_a7_next1668_o02_run01.o
-	Object lib/asm/MI_memory.o
-	Object lib/asm/MI_swap.o
+	Object lib/asm/op90_MI_memory_anchor.o
+	Object lib/src/op90_MI_memory_r01.o
+	Object lib/asm/op90_MI_swap_anchor.o
+	Object lib/src/op90_MI_swap_r01.o
 	Object lib/src/PXI_fifo.o
 	Object lib/src/EXI_genPort.o
 	Object lib/src/PAD_xyButton.o
@@ -341,7 +343,8 @@ Autoload WRAM
 	Object lib/src/to90_arm7_sub_wram_2_run60.o
 	Object lib/src/to90_arm7_sub_wram_2_run61.o
 	Object lib/src/to90_arm7_sub_wram_2_run62.o
-	Object asm/to90_arm7_sub_wram_2_residual_21.o
+	Object asm/op90_to90_arm7_sub_wram_2_residual_21_anchor.o
+	Object lib/src/op90_to90_arm7_sub_wram_2_residual_21_r01.o
 	Object lib/src/to90_arm7_sub_wram_2_run63.o
 	Object lib/src/to90_arm7_sub_wram_2_run64.o
 	Object asm/op90_to90_arm7_sub_wram_2_residual_22_anchor.o
