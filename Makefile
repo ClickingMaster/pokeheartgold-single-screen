@@ -471,3 +471,5 @@ $(BUILD_DIR)/src/op90_to90_extra2545_residual_2_r01.o: private MWCCVER := 2.0/sp
 $(BUILD_DIR)/src/op90_to90_reset_reset_system_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to90_reset_boot_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to90_reset_clear32_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_op90_to91_w41419_ExitProcess_prefix_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_to90_extra2154_residual_1_r01.o: private MWCCVER := 2.0/sp2p3

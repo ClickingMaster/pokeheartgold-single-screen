@@ -2373,7 +2373,8 @@ Object src/op90_to91_w41566_texmatrix_suffix_r01.o
     Object src/to90_extra2153_run02.o
     Object lib/asm/to65_to65_nitro_unified_residual_46_extra27_anchor.o
     Object lib/asm/to90_extra2154_anchor.o
-    Object lib/asm/to90_extra2154_residual_1.o
+    Object lib/asm/op90_to90_extra2154_residual_1_anchor.o
+    Object src/op90_to90_extra2154_residual_1_r01.o
     Object src/to90_extra2154_run01.o
     Object src/to65_to65_nitro_unified_residual_46_extra27_run01.o
     Object lib/asm/to90_extra2155_anchor.o
@@ -2620,7 +2621,8 @@ Object src/op90_to91_w41566_texmatrix_suffix_r01.o
     Object src/to90_msl_interval_demo_run40.o
     Object src/to90_msl_interval_demo_run41.o
     Object lib/asm/op90_to91_w41419_ExitProcess_prefix_anchor.o
-    Object lib/asm/op90_to91_w41419_ExitProcess_prefix_residual_1.o
+    Object lib/asm/op90_op90_to91_w41419_ExitProcess_prefix_residual_1_anchor.o
+    Object src/op90_op90_to91_w41419_ExitProcess_prefix_residual_1_r01.o
     Object src/op90_to91_w41419_ExitProcess_prefix_r01.o
     Object src/to91_w41419_ExitProcess_run01.o
 }

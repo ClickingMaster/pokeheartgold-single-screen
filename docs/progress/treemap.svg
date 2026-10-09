@@ -5,7 +5,7 @@
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
 <text x="1172" y="42" text-anchor="end" font-size="22">98.23% C + C++ source</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 5590333c1 · ARM9 + ARM7 · 4,075,356 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 3a669d5ce · ARM9 + ARM7 · 4,075,356 mapped code bytes</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
 <text x="47" y="102" font-size="14">C-only source 97.5%</text>
 <rect x="256" y="91" width="12" height="12" rx="2" fill="#35a9b8"/>
@@ -916,12 +916,12 @@ src/to65_wifi_residual_11_run54.c</title></rect>
 <rect x="450.271" y="195.182" width="9.108" height="13.757" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / link_synchronization.o
 754 bytes · C-only source
 src/link_synchronization.c</title></rect>
-<rect x="459.379" y="195.182" width="9.084" height="13.757" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to90_extra1969_run01.o
+<rect x="459.379" y="195.182" width="9.084" height="13.757" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_to90_extra2154_residual_1_r01.o
+752 bytes · C/C++ with assembly
+src/op90_to90_extra2154_residual_1_r01.c</title></rect>
+<rect x="450.271" y="208.940" width="18.191" height="6.870" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to90_extra1969_run01.o
 752 bytes · C-only source
 src/to90_extra1969_run01.c</title></rect>
-<rect x="450.271" y="208.940" width="18.191" height="6.870" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to90_extra2154_residual_1.o
-752 bytes · Assembly
-lib/asm/to90_extra2154_residual_1.s</title></rect>
 <rect x="450.271" y="215.810" width="9.096" height="13.666" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / map_events.o
 748 bytes · C-only source
 src/map_events.c</title></rect>
@@ -5251,9 +5251,9 @@ src/map_object_follow_8.c</title></rect>
 <rect x="583.316" y="389.757" width="2.239" height="3.563" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / map_object_movement_commands_2.o
 48 bytes · C-only source
 src/map_object_movement_commands_2.c</title></rect>
-<rect x="585.554" y="389.757" width="2.239" height="3.563" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_to91_w41419_ExitProcess_prefix_residual_1.o
-48 bytes · Assembly
-lib/asm/op90_to91_w41419_ExitProcess_prefix_residual_1.s</title></rect>
+<rect x="585.554" y="389.757" width="2.239" height="3.563" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / op90_op90_to91_w41419_ExitProcess_prefix_residual_1_r01.o
+48 bytes · C/C++ with assembly
+src/op90_op90_to91_w41419_ExitProcess_prefix_residual_1_r01.cpp</title></rect>
 <rect x="583.316" y="393.320" width="4.477" height="1.782" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / player_avatar_movement_control_8.o
 48 bytes · C-only source
 src/player_avatar_movement_control_8.c</title></rect>
@@ -21365,9 +21365,9 @@ sub/lib/src/OS_tick.c</title></rect>
 <rect x="883.121" y="350.349" width="7.831" height="8.318" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / OS_arena.o
 392 bytes · C-only source
 sub/lib/src/OS_arena.c</title></rect>
-<rect x="883.121" y="358.667" width="7.831" height="8.233" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / to90_arm7_sub_wram_2_residual_10.o
-388 bytes · Assembly
-sub/asm/to90_arm7_sub_wram_2_residual_10.s</title></rect>
+<rect x="883.121" y="358.667" width="7.831" height="8.233" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / op90_to90_arm7_sub_wram_2_residual_10_r01.o
+388 bytes · C/C++ with assembly
+sub/lib/src/op90_to90_arm7_sub_wram_2_residual_10_r01.c</title></rect>
 <rect x="890.952" y="350.349" width="11.446" height="5.575" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / to91_w41545_read_inst_data.o
 384 bytes · C-only source
 sub/lib/src/to91_w41545_read_inst_data.c</title></rect>
