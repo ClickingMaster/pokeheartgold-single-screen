@@ -437,3 +437,13 @@ $(BUILD_DIR)/src/op90_to70_overlay_93_thumb_1_to41_residual_6_extra219_residual_
 $(BUILD_DIR)/src/op90_to53_overlay47_residual_5_tail_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/op90_to90_extra2160_residual_1_r01.o: private MWCCVER := 1.2/sp2p3
 $(BUILD_DIR)/src/op90_to90_extra2160_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/op90_MSL_DPMath_e_pow_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_MSL_DPMath_e_pow_r01.o: private EXCCFLAGS := -Cpp_exceptions on
+$(BUILD_DIR)/src/op90_overlay_40_residual_5_gap_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/op90_overlay_96_residual_80_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/op90_to42_ov40_r33_a08_gap2_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/op90_to61_overlay_13_arm_2_residual_5_residual_7_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/op90_to70_to52_r5_overlay96_r90_gap4_tail_extra260_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/op90_to80_extra1591_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/op90_to90_extra2552_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/op90_to91_w41573_mode_prefix_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
