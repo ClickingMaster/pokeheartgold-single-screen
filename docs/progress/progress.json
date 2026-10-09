@@ -1,33 +1,33 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "30d664cfce8809d9186d6aeb4ac45037adf6b1d2",
+  "commit": "ca71a7aa56fda0613561184db5543202fc07dad0",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "9c38460297a6dc24bd2416d1a5b2136f5fc18ee798c8ae16eaad80e9b9bc4677",
+    "ARM9": "3546a37883ef82945ae849b1dc792d58698647f9e154e99f7e0f82e8d2a42f65",
     "ARM7": "4f0699f28eb2fc4b968a7f5b97d861ba889e9a50dafc89019f0b8341064d5d7b"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
   "totals": {
-    "c": 3982606,
+    "c": 3982930,
     "mixed": 28266,
-    "asm": 30420,
+    "asm": 30096,
     "cpp": 34064
   },
   "coverage": {
     "denominator_bytes": 4075356,
     "c": {
-      "bytes": 3982606,
-      "percent": 97.72412520525815
+      "bytes": 3982930,
+      "percent": 97.73207543095621
     },
     "cpp": {
       "bytes": 34064,
       "percent": 0.8358533585777537
     },
     "combined": {
-      "bytes": 4016670,
-      "percent": 98.5599785638359
+      "bytes": 4016994,
+      "percent": 98.56792878953397
     }
   },
   "objects": [
@@ -20514,10 +20514,10 @@
     {
       "cpu": "ARM9",
       "module": "OVY_39",
-      "object": "to70_overlay_39_arm_extra06_residual_5.o",
+      "object": "to70_overlay_39_arm_extra06_residual_5_r01.o",
       "bytes": 324,
-      "status": "asm",
-      "source": "lib/NitroDWC/asm/to70_overlay_39_arm_extra06_residual_5.s"
+      "status": "c",
+      "source": "src/to70_overlay_39_arm_extra06_residual_5_r01.c"
     },
     {
       "cpu": "ARM9",

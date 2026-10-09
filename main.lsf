@@ -6759,6 +6759,7 @@ Overlay OVY_39
     Object src/to80_extra1726_run01.o
     Object src/to70_overlay_39_arm_extra06_run04.o
     Object lib/NitroDWC/asm/to70_overlay_39_arm_extra06_residual_5.o
+    Object src/to70_overlay_39_arm_extra06_residual_5_r01.o
     Object src/to70_overlay_39_arm_extra06_run05.o
     Object lib/NitroDWC/asm/to80_extra1439_anchor.o
     Object src/to80_extra1439_run01.o

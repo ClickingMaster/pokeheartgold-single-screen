@@ -4,8 +4,8 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="1172" y="42" text-anchor="end" font-size="22">98.56% C + C++ source</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 30d664cfc · ARM9 + ARM7 · 4,075,356 mapped code bytes</text>
+<text x="1172" y="42" text-anchor="end" font-size="22">98.57% C + C++ source</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · ca71a7aa5 · ARM9 + ARM7 · 4,075,356 mapped code bytes</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
 <text x="47" y="102" font-size="14">C-only source 97.7%</text>
 <rect x="256" y="91" width="12" height="12" rx="2" fill="#35a9b8"/>
@@ -31225,9 +31225,9 @@ src/to53_overlay39_palette_task.c</title></rect>
 <rect x="1080.634" y="459.729" width="10.321" height="5.281" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_39 / to70_to70_overlay_39_arm_extra06_residual_3_extra1153_run01.o
 328 bytes · C-only source
 src/to70_to70_overlay_39_arm_extra06_residual_3_extra1153_run01.c</title></rect>
-<rect x="1074.666" y="465.010" width="6.123" height="8.794" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_39 / to70_overlay_39_arm_extra06_residual_5.o
-324 bytes · Assembly
-lib/NitroDWC/asm/to70_overlay_39_arm_extra06_residual_5.s</title></rect>
+<rect x="1074.666" y="465.010" width="6.123" height="8.794" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_39 / to70_overlay_39_arm_extra06_residual_5_r01.o
+324 bytes · C-only source
+src/to70_overlay_39_arm_extra06_residual_5_r01.c</title></rect>
 <rect x="1080.788" y="465.010" width="5.216" height="8.794" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_39 / to70_overlay_39_arm_extra06_run03.o
 276 bytes · C-only source
 src/to70_overlay_39_arm_extra06_run03.c</title></rect>
