@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "6acae44a186bf734113044fd3c575a7891b51973",
+  "commit": "6240760364424c47baf797d0dde58063fcb73fc4",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
-  "tracked_worktree_dirty": false,
+  "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "58e9cd489d34bbfa707edb5508e43c5c6039e5e41f4370d85989d560e92af845",
-    "ARM7": "30b2d696a3eceb98e6b725966c4d896a02641e0b9d75ff2cb7da038e16bafdb8"
+    "ARM9": "78cceb2d1b140a132bdab36d00e507d6f1e0458e396d0de115dbb19e85a02129",
+    "ARM7": "fa9f3ecb73415b51a34c0303d5dad868de4bbf6308872e0701d9b8217fcb3a93"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
   "totals": {
-    "c": 3959182,
+    "c": 3959554,
     "mixed": 2340,
-    "asm": 77860,
+    "asm": 77488,
     "cpp": 27432,
     "unknown": 8552
   },
   "coverage": {
     "denominator_bytes": 4075366,
     "c": {
-      "bytes": 3959182,
-      "percent": 97.1491149506572
+      "bytes": 3959554,
+      "percent": 97.15824296517172
     },
     "cpp": {
       "bytes": 27432,
       "percent": 0.6731174574259097
     },
     "combined": {
-      "bytes": 3986614,
-      "percent": 97.8222324080831
+      "bytes": 3986986,
+      "percent": 97.83136042259763
     }
   },
   "objects": [
@@ -89795,10 +89795,10 @@
     {
       "cpu": "ARM7",
       "module": "WRAM",
-      "object": "op90_to90_arm7_sub_wram_2_residual_14_r01.o",
-      "bytes": 252,
+      "object": "op90_to90_arm7_sub_wram_2_residual_13_r01.o",
+      "bytes": 1468,
       "status": "c",
-      "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_14_r01.c"
+      "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_13_r01.c"
     },
     {
       "cpu": "ARM7",
@@ -91011,14 +91011,6 @@
     {
       "cpu": "ARM7",
       "module": "WRAM",
-      "object": "to90_arm7_sub_wram_2_residual_13.o",
-      "bytes": 372,
-      "status": "asm",
-      "source": "sub/asm/to90_arm7_sub_wram_2_residual_13.s"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "WRAM",
       "object": "to90_arm7_sub_wram_2_residual_21.o",
       "bytes": 556,
       "status": "asm",
@@ -91215,22 +91207,6 @@
       "bytes": 64,
       "status": "c",
       "source": "sub/lib/src/to90_arm7_sub_wram_2_run21.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "WRAM",
-      "object": "to90_arm7_sub_wram_2_run22.o",
-      "bytes": 52,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_wram_2_run22.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "WRAM",
-      "object": "to90_arm7_sub_wram_2_run23.o",
-      "bytes": 16,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_wram_2_run23.c"
     },
     {
       "cpu": "ARM7",
@@ -91743,30 +91719,6 @@
       "bytes": 60,
       "status": "c",
       "source": "sub/lib/src/to90_arm7_sub_wram_2_run87.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "WRAM",
-      "object": "to90_arm7_sub_wram_2_run88.o",
-      "bytes": 160,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_wram_2_run88.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "WRAM",
-      "object": "to90_arm7_sub_wram_2_run89.o",
-      "bytes": 48,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_wram_2_run89.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "WRAM",
-      "object": "to90_arm7_sub_wram_2_run90.o",
-      "bytes": 568,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_wram_2_run90.c"
     },
     {
       "cpu": "ARM7",

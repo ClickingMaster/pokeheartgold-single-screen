@@ -1,9 +1,0 @@
-#pragma force_active on
-#include <nitro/types.h>
-// clang-format off
-#include <nitro/code32.h>
-// clang-format on
-typedef struct{u32 index,count,finalDelay,on[6],off[6],active,limit,repeats;} Pulse;typedef struct{u16 id,pad;u32 state;} W;extern W lock_id;extern u8 pulse_edge_alarm[];extern u32 OS_DisableInterrupts(void),OS_ReadOwnerOfLockWord(void*);extern int OS_TryLockCartridge(u32);extern void OS_UnlockCartridge(u32),OS_SpinWait(u32),OS_CancelAlarm(void*),OS_RestoreInterrupts(u32);extern void OS_SetAlarm(void*,u64,void(*)(void*),void*);void CTRDG_VibPulseEdgeUpdate(Pulse*);
-void CTRDG_VibPulseEdgeUpdate(Pulse*p);
-// @fn CTRDG_VibPulseEdgeUpdate
-void CTRDG_VibPulseEdgeUpdate(Pulse*p){u32 own;if(p&&p->index==0){p->repeats++;if(p->limit&&p->repeats>p->limit)p=0;}if(!p||!p->active){u32 irq=OS_DisableInterrupts();if(lock_id.state==2){int done=0;while(!done){own=OS_ReadOwnerOfLockWord((void*)0x27fffe8)&128;if(own||OS_TryLockCartridge(lock_id.id)==0){lock_id.state=0;done=1;*(volatile u16*)0x8001000=0;if(!own)OS_UnlockCartridge(lock_id.id);}else OS_SpinWait(0x80e8);}}OS_CancelAlarm(pulse_edge_alarm);OS_RestoreInterrupts(irq);}else if(p){own=OS_ReadOwnerOfLockWord((void*)0x27fffe8)&128;if(own||OS_TryLockCartridge(lock_id.id)==0){if(p->index==p->count){lock_id.state=0;*(volatile u16*)0x8001000=0;OS_SetAlarm(pulse_edge_alarm,p->finalDelay,(void(*)(void*))CTRDG_VibPulseEdgeUpdate,p);p->index=0;}else if(p->index&1){lock_id.state=0;*(volatile u16*)0x8001000=0;OS_SetAlarm(pulse_edge_alarm,p->off[p->index>>1],(void(*)(void*))CTRDG_VibPulseEdgeUpdate,p);p->index++;}else{lock_id.state=2;*(volatile u16*)0x8001000=2;OS_SetAlarm(pulse_edge_alarm,p->on[p->index>>1],(void(*)(void*))CTRDG_VibPulseEdgeUpdate,p);p->index++;}if(!own)OS_UnlockCartridge(lock_id.id);}else OS_SetAlarm(pulse_edge_alarm,523,(void(*)(void*))CTRDG_VibPulseEdgeUpdate,p);}}
