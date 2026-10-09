@@ -468,3 +468,6 @@ $(BUILD_DIR)/src/op90_fx_mtx44_residual_rot_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_mi_memory_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to90_extra2544_residual_2_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to90_extra2545_residual_2_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_to90_reset_reset_system_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_to90_reset_boot_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/src/op90_to90_reset_clear32_r01.o: private MWCCVER := 2.0/sp2p3

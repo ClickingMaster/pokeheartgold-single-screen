@@ -2141,7 +2141,8 @@ Object src/op90_to91_w41566_texmatrix_suffix_r01.o
     Object lib/NitroSDK/src/os/os_system.o
     Object lib/NitroSDK/src/os/to91_os_system_pure.o
     Object lib/NitroSDK/src/os/to90_reset_pure.o
-    Object lib/NitroSDK/asm/to90_reset_reset_system.o
+    Object lib/NitroSDK/asm/op90_to90_reset_reset_system_anchor.o
+    Object src/op90_to90_reset_reset_system_r01.o
     Object lib/NitroSDK/src/os/os_ownerInfo.o
     Object lib/NitroSDK/asm/op90_to90_os_vramExclusive_clz_anchor.o
     Object src/op90_to90_os_vramExclusive_clz_r01.o
@@ -2628,8 +2629,8 @@ Autoload ITCM
     Address 0x01FF8000
     Object lib/NitroSDK/src/os/os_irqHandler.o (.itcm)
     Object lib/NitroSDK/src/os/to90_reset_pure.o (.itcm)
-    Object lib/NitroSDK/asm/to90_reset_boot.o (.itcm)
-    Object lib/NitroSDK/asm/to90_reset_clear32.o (.itcm)
+    Object src/op90_to90_reset_boot_r01.o (.itcm)
+    Object src/op90_to90_reset_clear32_r01.o (.itcm)
     Object lib/NitroSDK/src/mi/mi_dma.o (.itcm)
     Object lib/NitroSDK/src/mi/mi_dma_gxcommand.o (.itcm)
 }

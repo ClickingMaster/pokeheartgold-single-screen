@@ -9,15 +9,29 @@ def rewrite(text):
   matches=[i for i,x in enumerate(rows) if x.strip()==value]
   if len(matches)!=1:raise ValueError('unique exact reset selector required: '+value)
   return matches[0]
- main=one('to90_reset_pure.o (.text)');asm=one('to90_reset_reset_system.o (.text)')
+ def one_of(*values):
+  # the retained reset ASM objects may since have been converted to C / split:
+  # accept the original object name or its integrated replacement(s), in order
+  for vs in values:
+   vs=vs if isinstance(vs,tuple) else (vs,)
+   hits=[i for i,x in enumerate(rows) if x.strip()==vs[0]]
+   if hits:
+    i=one(vs[0])
+    if [x.strip() for x in rows[i:i+len(vs)]]!=list(vs):raise ValueError('reset replacement objects not contiguous: '+repr(vs))
+    return i,i+len(vs)-1
+  raise ValueError('unique exact reset selector required: '+repr(values))
+ main=one('to90_reset_pure.o (.text)')
+ asm,asm_last=one_of('to90_reset_reset_system.o (.text)',('op90_to90_reset_reset_system_anchor.o (.text)','op90_to90_reset_reset_system_r01.o (.text)'))
  system=one('os_system.o (.text)')
  split_system=[i for i,x in enumerate(rows) if x.strip()=='to91_os_system_pure.o (.text)']
  if split_system:
   preceding_system=(len(split_system)==1 and split_system[0]==system+1 and main==system+2)
  else:
   preceding_system=(main==system+1)
- if asm!=main+1 or not preceding_system or rows[asm+1].strip()!='os_ownerInfo.o (.text)':raise ValueError('original reset main neighbors/order')
- entry=one('to90_reset_pure.o (.itcm)');boot=one('to90_reset_boot.o (.itcm)');clear=one('to90_reset_clear32.o (.itcm)')
+ if asm!=main+1 or not preceding_system or rows[asm_last+1].strip()!='os_ownerInfo.o (.text)':raise ValueError('original reset main neighbors/order')
+ entry=one('to90_reset_pure.o (.itcm)')
+ boot,_=one_of('to90_reset_boot.o (.itcm)','op90_to90_reset_boot_r01.o (.itcm)')
+ clear,_=one_of('to90_reset_clear32.o (.itcm)','op90_to90_reset_clear32_r01.o (.itcm)')
  if (boot,clear)!=(entry+1,entry+2) or rows[entry-1].strip()!='os_irqHandler.o (.itcm)' or rows[clear+1].strip()!='mi_dma.o (.itcm)':raise ValueError('original reset ITCM neighbors/order')
  if any('.to90_reset_' in x for x in rows):raise ValueError('already reset-routed')
  rows[main]=rows[main].replace('(.text)','(.text.to90_reset_main_C)')

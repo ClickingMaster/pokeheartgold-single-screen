@@ -1,18 +1,18 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "1315439942b9e01373f7f758f106320df883465e",
+  "commit": "04683ecc512724a6d810a3143d28686acd365de1",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "a06dc0466b4764e8b6813815ee7e4128ecd57f3902739e5bebec4ea30b1b752a",
+    "ARM9": "fe035633cabde4a9e67e560df726b044f9aa3f20c5742d3424beca96c98d2788",
     "ARM7": "89ce1a458612e76f2aa2acb9e24464bee4875fae8839f582bf21c3764d59f693"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
   "totals": {
     "c": 3972774,
-    "mixed": 10274,
-    "asm": 57980,
+    "mixed": 10686,
+    "asm": 57568,
     "cpp": 29956,
     "unknown": 4372
   },
@@ -51,26 +51,26 @@
     {
       "cpu": "ARM9",
       "module": "ITCM",
+      "object": "op90_to90_reset_boot_r01.o",
+      "bytes": 204,
+      "status": "mixed",
+      "source": "src/op90_to90_reset_boot_r01.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "ITCM",
+      "object": "op90_to90_reset_clear32_r01.o",
+      "bytes": 20,
+      "status": "mixed",
+      "source": "src/op90_to90_reset_clear32_r01.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "ITCM",
       "object": "os_irqHandler.o",
       "bytes": 436,
       "status": "mixed",
       "source": "lib/NitroSDK/src/os/os_irqHandler.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "ITCM",
-      "object": "to90_reset_boot.o",
-      "bytes": 204,
-      "status": "asm",
-      "source": "lib/NitroSDK/asm/to90_reset_boot.s"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "ITCM",
-      "object": "to90_reset_clear32.o",
-      "bytes": 20,
-      "status": "asm",
-      "source": "lib/NitroSDK/asm/to90_reset_clear32.s"
     },
     {
       "cpu": "ARM9",
@@ -73611,6 +73611,14 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "op90_to90_reset_reset_system_r01.o",
+      "bytes": 188,
+      "status": "mixed",
+      "source": "src/op90_to90_reset_reset_system_r01.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "op90_to90_w41415_fp_init4_suffix_r01.o",
       "bytes": 56,
       "status": "mixed",
@@ -83111,14 +83119,6 @@
       "bytes": 180,
       "status": "c",
       "source": "lib/NitroSDK/src/os/to90_reset_pure.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_reset_reset_system.o",
-      "bytes": 188,
-      "status": "asm",
-      "source": "lib/NitroSDK/asm/to90_reset_reset_system.s"
     },
     {
       "cpu": "ARM9",
