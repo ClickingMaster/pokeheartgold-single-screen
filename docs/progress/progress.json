@@ -1,18 +1,18 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "68bbbdacbf761fdcda23368307d8666f86effd63",
+  "commit": "5590333c18e9dcbf8c803c8039bf117ea814bcb6",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "b6bc235b08f30f805ae279730a6f2f2f396f4d4d209a94b39a035134067a90c1",
-    "ARM7": "89ce1a458612e76f2aa2acb9e24464bee4875fae8839f582bf21c3764d59f693"
+    "ARM9": "e2b19dd7a445dcdafd57f242c7fb16fc8535f43854fbc5b235ff3033502db19e",
+    "ARM7": "74d01bd423d5440c80cf786232ab960c7e22032ef5a0f1856b1fbe1eba70ac1a"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
   "totals": {
     "c": 3972774,
-    "mixed": 10934,
-    "asm": 56756,
+    "mixed": 10978,
+    "asm": 56712,
     "cpp": 30520,
     "unknown": 4372
   },
@@ -89739,10 +89739,10 @@
     {
       "cpu": "ARM7",
       "module": "WRAM",
-      "object": "op90_libsyscall_residual_1.o",
+      "object": "op90_op90_libsyscall_residual_1_r01.o",
       "bytes": 44,
-      "status": "asm",
-      "source": "sub/asm/op90_libsyscall_residual_1.s"
+      "status": "mixed",
+      "source": "sub/lib/src/op90_op90_libsyscall_residual_1_r01.c"
     },
     {
       "cpu": "ARM7",

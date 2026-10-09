@@ -228,7 +228,7 @@ Autoload WRAM
 	Object lib/src/op90_to90_arm7_sub_wram_1_residual_20_r01.o
 	Object asm/op90_libsyscall_anchor.o
 	Object lib/src/op90_libsyscall_r01.o
-	Object asm/op90_libsyscall_residual_1.o
+	Object lib/src/op90_op90_libsyscall_residual_1_r01.o
 	Object lib/src/op90_libsyscall_r02.o
 	Object asm/to90_arm7_wram160_r8_anchor.o
 	Object lib/src/to90_arm7_sub_wram_2_run69.o

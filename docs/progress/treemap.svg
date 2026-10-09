@@ -5,7 +5,7 @@
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
 <text x="1172" y="42" text-anchor="end" font-size="22">98.23% C + C++ source</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 68bbbdacb · ARM9 + ARM7 · 4,075,356 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 5590333c1 · ARM9 + ARM7 · 4,075,356 mapped code bytes</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
 <text x="47" y="102" font-size="14">C-only source 97.5%</text>
 <rect x="256" y="91" width="12" height="12" rx="2" fill="#35a9b8"/>
@@ -21959,9 +21959,9 @@ sub/lib/src/to90_arm7_sub_wram_2_run13.c</title></rect>
 <rect x="954.532" y="395.728" width="2.410" height="3.310" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / to90_arm7_sub_wram_2_run64.o
 48 bytes · C-only source
 sub/lib/src/to90_arm7_sub_wram_2_run64.c</title></rect>
-<rect x="956.942" y="395.728" width="2.209" height="3.310" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / op90_libsyscall_residual_1.o
-44 bytes · Assembly
-sub/asm/op90_libsyscall_residual_1.s</title></rect>
+<rect x="956.942" y="395.728" width="2.209" height="3.310" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / op90_op90_libsyscall_residual_1_r01.o
+44 bytes · C/C++ with assembly
+sub/lib/src/op90_op90_libsyscall_residual_1_r01.c</title></rect>
 <rect x="940.112" y="399.038" width="2.187" height="3.343" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / to90_arm7_sub_wram_1_run51.o
 44 bytes · C-only source
 sub/lib/src/to90_arm7_sub_wram_1_run51.c</title></rect>

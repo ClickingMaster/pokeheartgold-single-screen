@@ -1,0 +1,18 @@
+{
+  "section": ".text",
+  "owner": {
+    "name": "SVC_WaitVBlankIntr",
+    "type": "FUNC",
+    "offset": "0x0",
+    "size": "0x2c"
+  },
+  "aliases": [
+    { "name": "SVC_Halt", "offset": "0x6" },
+    { "name": "SVC_Sleep", "offset": "0xa" },
+    { "name": "SVC_ChangeSoundBias", "offset": "0xe" },
+    { "name": "SVC_SetSoundBias", "offset": "0x12" },
+    { "name": "SVC_ResetSoundBias", "offset": "0x1a" },
+    { "name": "SVC_Div", "offset": "0x22" },
+    { "name": "SVC_DivRem", "offset": "0x26" }
+  ]
+}

@@ -4,6 +4,12 @@
 The input JSON names one owning symbol and a set of interior aliases.  This is
 used where the original assembly exported multiple labels inside one BSS object,
 something C cannot express portably and MWAS cannot express across objects.
+
+It is also used for code: an owner may be a function ("type": "FUNC") whose
+interior entry points are exported as function aliases.  This covers runs of
+hand-written Thumb stubs at 2-byte aligned addresses, which MWCC cannot emit as
+separate functions because every function gets its own 4-aligned section.  The
+section's existing $t/$a mapping symbols keep defining the instruction set.
 """
 
 import argparse
@@ -67,7 +73,7 @@ def main() -> None:
     expected_owner = (
         owner_offset,
         int(owner["size"], 0) if isinstance(owner["size"], str) else owner["size"],
-        "OBJECT",
+        owner.get("type", "OBJECT"),
         "GLOBAL",
         section_index,
     )
@@ -76,6 +82,10 @@ def main() -> None:
             f"owner mismatch: {owner['name']} is {before.get(owner['name'])}, "
             f"expected {expected_owner}"
         )
+
+    if expected_owner[2] not in ("OBJECT", "FUNC"):
+        raise SystemExit(f"unsupported owner type {expected_owner[2]}")
+    alias_kind = "function" if expected_owner[2] == "FUNC" else "object"
 
     command = [objcopy]
     expected = {}
@@ -86,8 +96,8 @@ def main() -> None:
         offset = int(alias["offset"], 0) if isinstance(alias["offset"], str) else alias["offset"]
         if offset < 0 or offset >= expected_owner[1]:
             raise SystemExit(f"alias {name} offset {offset:#x} is outside owner")
-        command += ["--add-symbol", f"{name}={section}:{offset:#x},global,object"]
-        expected[name] = (offset, 0, "OBJECT", "GLOBAL", section_index)
+        command += ["--add-symbol", f"{name}={section}:{offset:#x},global,{alias_kind}"]
+        expected[name] = (offset, 0, expected_owner[2], "GLOBAL", section_index)
     command += [str(args.object)]
     subprocess.run(command, check=True)
 
