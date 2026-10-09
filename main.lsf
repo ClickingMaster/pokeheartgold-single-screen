@@ -938,7 +938,8 @@ Static main
     Object src/field_ui_8a3f4_4.o
     Object src/summary_screen_helpers_14.o
     Object src/unk_0208AED4_decomp_1.o
-    Object asm/unk_0208AED4.o
+    Object asm/op90_unk_0208AED4_anchor.o
+    Object src/op90_unk_0208AED4_r01.o
     Object src/summary_screen_helpers_15.o
     Object src/r40_unk_0208B0B0_run1.o
     Object src/summary_screen_helpers_16.o
@@ -1339,7 +1340,8 @@ Static main
     Object lib/asm/op90_to90_extra2157_residual_1_anchor.o
     Object src/op90_to90_extra2157_residual_1_r01.o
     Object src/to90_extra2157_run01.o
-    Object lib/asm/to90_extra2157_residual_2.o
+    Object lib/asm/op90_to90_extra2157_residual_2_anchor.o
+    Object src/op90_to90_extra2157_residual_2_r01.o
     Object src/to90_extra2157_run02.o
     Object src/to80_extra1679_run01.o
     Object src/to65_wifi_residual_11_run10.o
@@ -1754,7 +1756,8 @@ Static main
     Object lib/asm/op90_op90_to65_nnsys_residual_34_residual_3_residual_1_anchor.o
     Object src/op90_op90_to65_nnsys_residual_34_residual_3_residual_1_r01.o
     Object lib/asm/op90_op90_op90_to65_nnsys_residual_34_residual_3_residual_1_residual_1_anchor.o
-    Object lib/asm/op90_op90_op90_to65_nnsys_residual_34_residual_3_residual_1_residual_1_residual_1.o
+    Object lib/asm/op90_op90_op90_op90_to65_nnsys_residual_34_residual_3_residual_1_residual_1_residual_1_anchor.o
+    Object src/op90_op90_op90_op90_to65_nnsys_residual_34_residual_3_residual_1_residual_1_residual_1_r01.o
     Object src/op90_op90_op90_to65_nnsys_residual_34_residual_3_residual_1_residual_1_r01.o
     Object lib/asm/op90_op90_op90_op90_to65_nnsys_residual_34_residual_3_residual_1_residual_1_residual_2_anchor.o
     Object src/op90_op90_op90_op90_to65_nnsys_residual_34_residual_3_residual_1_residual_1_residual_2_r01.o
@@ -7250,7 +7253,8 @@ Overlay OVY_41
     Object src/overlay41_helpers_39.o
     Object src/r40_overlay_41_residual_39_run1.o
     Object asm/to70_overlay_41_residual_39_extra135_anchor.o
-    Object asm/to70_overlay_41_residual_39_extra135_residual_1.o
+    Object asm/op90_to70_overlay_41_residual_39_extra135_residual_1_anchor.o
+    Object src/op90_to70_overlay_41_residual_39_extra135_residual_1_r01.o
     Object src/to70_overlay_41_residual_39_extra135_run01.o
     Object asm/to70_to70_overlay_41_residual_39_extra135_residual_2_extra1271_anchor.o
     Object src/to70_to70_overlay_41_residual_39_extra135_residual_2_extra1271_run01.o
