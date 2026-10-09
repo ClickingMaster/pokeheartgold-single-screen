@@ -4,8 +4,8 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="1172" y="42" text-anchor="end" font-size="22">98.22% C + C++ source</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 04683ecc5 · ARM9 + ARM7 · 4,075,356 mapped code bytes</text>
+<text x="1172" y="42" text-anchor="end" font-size="22">98.23% C + C++ source</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · a18a20e40 · ARM9 + ARM7 · 4,075,356 mapped code bytes</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
 <text x="47" y="102" font-size="14">C-only source 97.5%</text>
 <rect x="256" y="91" width="12" height="12" rx="2" fill="#35a9b8"/>
@@ -10352,9 +10352,9 @@ src/to80_extra1651_run01.c</title></rect>
 <rect x="499.078" y="425.683" width="8.074" height="11.855" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to80_extra1434_run01.o
 576 bytes · C-only source
 src/to80_extra1434_run01.c</title></rect>
-<rect x="507.152" y="407.390" width="7.689" height="12.190" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_op90_op90_op90_to80_extra1740_residual_4_residual_1_residual_1_residual_1_residual_1.o
-564 bytes · Assembly
-lib/NitroDWC/asm/op90_op90_op90_op90_to80_extra1740_residual_4_residual_1_residual_1_residual_1_residual_1.s</title></rect>
+<rect x="507.152" y="407.390" width="7.689" height="12.190" fill="#35a9b8" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / op90_op90_op90_op90_op90_to80_extra1740_residual_4_residual_1_residual_1_residual_1_residual_1_r01.o
+564 bytes · C++-only source
+src/op90_op90_op90_op90_op90_to80_extra1740_residual_4_residual_1_residual_1_residual_1_residual_1_r01.cpp</title></rect>
 <rect x="514.841" y="407.390" width="7.525" height="12.190" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_45 / to90_extra2448_run01.o
 552 bytes · C-only source
 src/to90_extra2448_run01.c</title></rect>

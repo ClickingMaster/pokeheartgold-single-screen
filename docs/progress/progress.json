@@ -1,19 +1,19 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "04683ecc512724a6d810a3143d28686acd365de1",
+  "commit": "a18a20e40b0a1079170740e24413602dd36f1bf1",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "fe035633cabde4a9e67e560df726b044f9aa3f20c5742d3424beca96c98d2788",
+    "ARM9": "1f3fd87642fd7b44ffccfcc90c3d62efb080b2ae9a4ff742ba39f307c1076453",
     "ARM7": "89ce1a458612e76f2aa2acb9e24464bee4875fae8839f582bf21c3764d59f693"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
   "totals": {
     "c": 3972774,
     "mixed": 10686,
-    "asm": 57568,
-    "cpp": 29956,
+    "asm": 57004,
+    "cpp": 30520,
     "unknown": 4372
   },
   "coverage": {
@@ -23,12 +23,12 @@
       "percent": 97.48287020814868
     },
     "cpp": {
-      "bytes": 29956,
-      "percent": 0.7350523488009391
+      "bytes": 30520,
+      "percent": 0.7488916305716605
     },
     "combined": {
-      "bytes": 4002730,
-      "percent": 98.21792255694963
+      "bytes": 4003294,
+      "percent": 98.23176183872035
     }
   },
   "objects": [
@@ -25411,18 +25411,18 @@
     {
       "cpu": "ARM9",
       "module": "OVY_45",
-      "object": "op90_op90_op90_op90_to80_extra1740_residual_4_residual_1_residual_1_residual_1_r01.o",
-      "bytes": 344,
+      "object": "op90_op90_op90_op90_op90_to80_extra1740_residual_4_residual_1_residual_1_residual_1_residual_1_r01.o",
+      "bytes": 564,
       "status": "cpp",
-      "source": "src/op90_op90_op90_op90_to80_extra1740_residual_4_residual_1_residual_1_residual_1_r01.cpp"
+      "source": "src/op90_op90_op90_op90_op90_to80_extra1740_residual_4_residual_1_residual_1_residual_1_residual_1_r01.cpp"
     },
     {
       "cpu": "ARM9",
       "module": "OVY_45",
-      "object": "op90_op90_op90_op90_to80_extra1740_residual_4_residual_1_residual_1_residual_1_residual_1.o",
-      "bytes": 564,
-      "status": "asm",
-      "source": "lib/NitroDWC/asm/op90_op90_op90_op90_to80_extra1740_residual_4_residual_1_residual_1_residual_1_residual_1.s"
+      "object": "op90_op90_op90_op90_to80_extra1740_residual_4_residual_1_residual_1_residual_1_r01.o",
+      "bytes": 344,
+      "status": "cpp",
+      "source": "src/op90_op90_op90_op90_to80_extra1740_residual_4_residual_1_residual_1_residual_1_r01.cpp"
     },
     {
       "cpu": "ARM9",
