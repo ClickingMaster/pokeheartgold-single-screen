@@ -4,9 +4,9 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 2e875ce27 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 17cdac859 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
-<text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">99.24% C + C++ source · 100.00% incl. asm functions</text>
+<text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">99.25% C + C++ source · 100.00% incl. asm functions</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
 <text x="47" y="102" font-size="14">C-only source 97.9%</text>
 <rect x="409" y="91" width="12" height="12" rx="2" fill="#35a9b8"/>
@@ -21827,8 +21827,8 @@ sub/lib/src/to90_arm7_sub_wram_2_run97.c</title></rect>
 <rect x="949.735" y="407.228" width="1.900" height="2.099" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / op90_libsyscall_r01.o
 24 bytes · C/C++ with assembly
 sub/lib/src/op90_libsyscall_r01.c</title></rect>
-<rect x="949.735" y="409.327" width="1.900" height="2.099" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / op90_op90_sp_main_residual_1_r01.o
-24 bytes · C/C++ with assembly
+<rect x="949.735" y="409.327" width="1.900" height="2.099" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / op90_op90_sp_main_residual_1_r01.o
+24 bytes · C-only source
 sub/lib/src/op90_op90_sp_main_residual_1_r01.c</title></rect>
 <rect x="951.635" y="407.228" width="2.850" height="1.399" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / to90_arm7_sub_wram_1_run01.o
 24 bytes · C-only source
@@ -21866,26 +21866,26 @@ sub/lib/src/to90_arm7_sub_wram_1_run48.c</title></rect>
 <rect x="956.484" y="407.228" width="1.523" height="1.745" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / to90_arm7_sub_wram_2_run83.o
 16 bytes · C-only source
 sub/lib/src/to90_arm7_sub_wram_2_run83.c</title></rect>
-<rect x="958.008" y="407.228" width="1.143" height="1.745" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / op90_op90_op90_to90_arm7_sub_wram_2_residual_5_residual_1_residual_1_r01.o
-12 bytes · C/C++ with assembly
+<rect x="958.008" y="407.228" width="1.143" height="1.745" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / op90_op90_op90_to90_arm7_sub_wram_2_residual_5_residual_1_residual_1_r01.o
+12 bytes · C-only source
 sub/lib/src/op90_op90_op90_to90_arm7_sub_wram_2_residual_5_residual_1_residual_1_r01.c</title></rect>
-<rect x="956.484" y="408.973" width="0.889" height="2.244" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / op90_to90_a7_next1668_o03_residual_1_r01.o
-12 bytes · C/C++ with assembly
+<rect x="956.484" y="408.973" width="0.889" height="2.244" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / op90_to90_a7_next1668_o03_residual_1_r01.o
+12 bytes · C-only source
 sub/lib/src/op90_to90_a7_next1668_o03_residual_1_r01.c</title></rect>
-<rect x="957.373" y="408.973" width="1.777" height="1.122" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / op90_to90_a7_next1668_o03_residual_2_r01.o
-12 bytes · C/C++ with assembly
+<rect x="957.373" y="408.973" width="1.777" height="1.122" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / op90_to90_a7_next1668_o03_residual_2_r01.o
+12 bytes · C-only source
 sub/lib/src/op90_to90_a7_next1668_o03_residual_2_r01.c</title></rect>
 <rect x="957.373" y="410.095" width="1.777" height="1.122" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / op90_to90_arm7_spinlock_alias_cartridge_r01.o
 12 bytes · C/C++ with assembly
 sub/lib/src/op90_to90_arm7_spinlock_alias_cartridge_r01.c</title></rect>
-<rect x="954.485" y="411.217" width="1.037" height="1.924" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / op90_to90_arm7_sub_wram_1_residual_4_r01.o
-12 bytes · C/C++ with assembly
+<rect x="954.485" y="411.217" width="1.037" height="1.924" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / op90_to90_arm7_sub_wram_1_residual_4_r01.o
+12 bytes · C-only source
 sub/lib/src/op90_to90_arm7_sub_wram_1_residual_4_r01.c</title></rect>
-<rect x="955.522" y="411.217" width="1.037" height="1.924" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / op90_to90_arm7_sub_wram_2_residual_11_r01.o
-12 bytes · C/C++ with assembly
+<rect x="955.522" y="411.217" width="1.037" height="1.924" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / op90_to90_arm7_sub_wram_2_residual_11_r01.o
+12 bytes · C-only source
 sub/lib/src/op90_to90_arm7_sub_wram_2_residual_11_r01.c</title></rect>
-<rect x="954.485" y="413.141" width="1.037" height="1.924" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / op90_to91_arm7_timer41486_veneer_r01.o
-12 bytes · C/C++ with assembly
+<rect x="954.485" y="413.141" width="1.037" height="1.924" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / op90_to91_arm7_timer41486_veneer_r01.o
+12 bytes · C-only source
 sub/lib/src/op90_to91_arm7_timer41486_veneer_r01.c</title></rect>
 <rect x="955.522" y="413.141" width="1.037" height="1.924" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM7 / WRAM / to90_arm7_sub_wram_1_run21.o
 12 bytes · C-only source

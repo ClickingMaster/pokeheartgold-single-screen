@@ -1,32 +1,32 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "2e875ce27fd202934fe7b19e3d6d648861bbb659",
+  "commit": "17cdac8590ca908b933e4ee54eba9be49988d032",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "075a54d729e2eebeae54ce23b2f33125e28e758e08ee29bbfdd4b2be8d554d10",
-    "ARM7": "65a1ac5ff9b59ec1aa1065cf21a9e149ce10dd527f40e56c4496db47a7f25a4c"
+    "ARM9": "2fe9d6beec84c2cdd3c6b5de91f4279ed8874b448857074e1d4d643cd66261f5",
+    "ARM7": "5b54b6e4cbfa1ad199f64db732d0d9291759022aabef84d1c51bb3b24052df71"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
   "totals": {
-    "c": 3989532,
-    "mixed": 30850,
+    "c": 3989628,
+    "mixed": 30754,
     "cpp": 54972
   },
   "coverage": {
     "denominator_bytes": 4075354,
     "c": {
-      "bytes": 3989532,
-      "percent": 97.89412159041889
+      "bytes": 3989628,
+      "percent": 97.89647721400398
     },
     "cpp": {
       "bytes": 54972,
       "percent": 1.3488889554134438
     },
     "combined": {
-      "bytes": 4044504,
-      "percent": 99.24301054583233
+      "bytes": 4044600,
+      "percent": 99.24536616941742
     },
     "with_asm_functions": {
       "bytes": 4075354,
@@ -89060,7 +89060,7 @@
       "module": "WRAM",
       "object": "op90_op90_op90_to90_arm7_sub_wram_2_residual_5_residual_1_residual_1_r01.o",
       "bytes": 12,
-      "status": "mixed",
+      "status": "c",
       "source": "sub/lib/src/op90_op90_op90_to90_arm7_sub_wram_2_residual_5_residual_1_residual_1_r01.c"
     },
     {
@@ -89068,7 +89068,7 @@
       "module": "WRAM",
       "object": "op90_op90_sp_main_residual_1_r01.o",
       "bytes": 24,
-      "status": "mixed",
+      "status": "c",
       "source": "sub/lib/src/op90_op90_sp_main_residual_1_r01.c"
     },
     {
@@ -89116,7 +89116,7 @@
       "module": "WRAM",
       "object": "op90_to90_a7_next1668_o03_residual_1_r01.o",
       "bytes": 12,
-      "status": "mixed",
+      "status": "c",
       "source": "sub/lib/src/op90_to90_a7_next1668_o03_residual_1_r01.c"
     },
     {
@@ -89124,7 +89124,7 @@
       "module": "WRAM",
       "object": "op90_to90_a7_next1668_o03_residual_2_r01.o",
       "bytes": 12,
-      "status": "mixed",
+      "status": "c",
       "source": "sub/lib/src/op90_to90_a7_next1668_o03_residual_2_r01.c"
     },
     {
@@ -89204,7 +89204,7 @@
       "module": "WRAM",
       "object": "op90_to90_arm7_sub_wram_1_residual_4_r01.o",
       "bytes": 12,
-      "status": "mixed",
+      "status": "c",
       "source": "sub/lib/src/op90_to90_arm7_sub_wram_1_residual_4_r01.c"
     },
     {
@@ -89236,7 +89236,7 @@
       "module": "WRAM",
       "object": "op90_to90_arm7_sub_wram_2_residual_11_r01.o",
       "bytes": 12,
-      "status": "mixed",
+      "status": "c",
       "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_11_r01.c"
     },
     {
@@ -89404,7 +89404,7 @@
       "module": "WRAM",
       "object": "op90_to91_arm7_timer41486_veneer_r01.o",
       "bytes": 12,
-      "status": "mixed",
+      "status": "c",
       "source": "sub/lib/src/op90_to91_arm7_timer41486_veneer_r01.c"
     },
     {

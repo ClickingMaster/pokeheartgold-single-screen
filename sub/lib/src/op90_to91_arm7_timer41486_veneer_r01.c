@@ -4,8 +4,7 @@
 void SVC_GetPitchTable(void);
 void __VENEER_SVC_GetPitchTable(void);
 // @fn __VENEER_SVC_GetPitchTable
-asm void __VENEER_SVC_GetPitchTable(void)
+void __VENEER_SVC_GetPitchTable(void)
 {
-    ldr r12, =SVC_GetPitchTable
-    bx r12
+    SVC_GetPitchTable();
 }
