@@ -93,7 +93,7 @@ void sub_020182A0(Obj *, int);
 void *SpriteManager_GetSpriteList(void *);
 void *ov90_02258BD4(void *, int);
 void PaletteData_LoadPaletteSlotFromHardware(void *, int, int, int);
-void ov00_021E69A8(int);
+void WifiConnection_StartVoiceChat(int);
 void ov92_0225C5C4(Ctx *ctx);
 #define ACTOR(c, o) ((Obj *)((u8 *)(c)->world->actors + (o)))
 #define PW(c, o) ((World *)((u8 *)(c)->world + (o)))
@@ -223,7 +223,7 @@ void ov92_0225C5C4(Ctx *ctx) {
     ctx->sprite = ov90_02258BD4(SpriteManager_GetSpriteList(ctx->spriteMan), 0x71);
     PaletteData_LoadPaletteSlotFromHardware(ctx->palette, 2, 0, 0x200);
     if (ctx->config->enabled) {
-        ov00_021E69A8(0x71);
+        WifiConnection_StartVoiceChat(0x71);
     }
 }
 #pragma opt_propagation reset

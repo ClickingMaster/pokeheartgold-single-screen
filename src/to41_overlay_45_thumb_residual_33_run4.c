@@ -13,7 +13,7 @@ u32 ov45_0222F3E8(int);
 void ov45_0222F4D4(int);
 u8 ov45_0222F6B0(int, int);
 extern void ov00_021E5CD0(int, int);
-extern void ov00_021E5CA0(int, int);
+extern void WifiConnection_SetDisconnectCallback(int, int);
 extern void *ov45_02232580(void);
 extern void ov45_0222E810(void *, int);
 extern int ov45_02231490(void);

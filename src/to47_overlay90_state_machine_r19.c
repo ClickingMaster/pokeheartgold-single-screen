@@ -33,7 +33,7 @@ extern void BeginNormalPaletteFade(int, int, int, int, int, int, int);
 extern void GF_AssertFail(void);
 extern BOOL IsPaletteFadeFinished(void);
 extern void ScheduleSetBgPosText(void *, int, int, int);
-extern void ov00_021E6A4C(void);
+extern void WifiConnection_StopVoiceChat(void);
 extern void sub_02037AC0(int);
 extern BOOL sub_02037B38(int);
 extern void ov90_02259170(void *);
@@ -274,7 +274,7 @@ void ov90_0225A980(void *task, void *work) {
         }
         sub_02037AC0(0x82);
         if (w->flag16 != 0) {
-            ov00_021E6A4C();
+            WifiConnection_StopVoiceChat();
         }
         w->state++;
         break;

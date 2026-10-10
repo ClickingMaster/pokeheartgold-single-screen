@@ -6,7 +6,7 @@
 #define OV70_FAIL()    \
     OV70_STATE = 0x18; \
     OV70_ERR = -13;    \
-    ov38_0221BFEC()
+    GameStats_Shutdown()
 
 void ov70_02237F64(void *a);
 void ov70_02237FB4(void);

@@ -38,7 +38,7 @@ u32 sub_0205C268(u32 param0) {
     if (param0 < 100) {
         return 255;
     }
-    return ov00_021E6EBC();
+    return WifiConnection_GetTargetFriendIndex();
 }
 
 u8 sub_0205C278(void) {

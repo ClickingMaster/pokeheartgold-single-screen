@@ -15,7 +15,7 @@ BOOL ov39_02227348(Ov39Work *work) {
 }
 
 BOOL ov39_02227364(Ov39Work *work) {
-    int res = ov00_021E6A70(-work->unk3E0, work->unk3E4);
+    int res = WifiConnection_ClassifyErrorCode(-work->unk3E0, work->unk3E4);
     ov39_02227D5C(work, res, -work->unk3E0);
     return TRUE;
 }

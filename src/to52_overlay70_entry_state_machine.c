@@ -3,14 +3,14 @@
 #define FAIL_BEGIN()                        \
     do {                                    \
         _02246800.state = 24;               \
-        ov38_0221C014();                    \
+        GameStats_GetError();                    \
         _02246800.result = ov70_02238398(); \
-        ov38_0221BFEC();                    \
+        GameStats_Shutdown();                    \
         return;                             \
     } while (0)
 #define FINISH()         \
     do {                 \
-        ov38_0221BFEC(); \
+        GameStats_Shutdown(); \
         return;          \
     } while (0)
 
@@ -19,7 +19,7 @@ void ov70_022378DC(void) {
 
     switch (_02246800.state) {
     case 2:
-        switch (ov38_0221BF48()) {
+        switch (GameStats_Update()) {
         case 1:
             FAIL_BEGIN();
         case 7:
@@ -91,7 +91,7 @@ c2_done:
             return;
         }
     case 4:
-        switch (ov38_0221BF48()) {
+        switch (GameStats_Update()) {
         case 1:
             FAIL_BEGIN();
         case 7:
@@ -133,12 +133,12 @@ c12_done:
             return;
         }
     case 6:
-        switch (ov38_0221BF48()) {
+        switch (GameStats_Update()) {
         case 1:
             FAIL_BEGIN();
         case 7:
             _02246800.state = 24;
-            if (ov38_0221C020() == 0x124) {
+            if (GameStats_GetResponseLength() == 0x124) {
                 _02246800.result = 0;
             } else {
                 switch (ov70_02246900.response[0]) {
@@ -161,12 +161,12 @@ c12_done:
             return;
         }
     case 8:
-        switch (ov38_0221BF48()) {
+        switch (GameStats_Update()) {
         case 1:
             FAIL_BEGIN();
         case 7:
             _02246800.state = 24;
-            if (ov38_0221C020() == 0x124) {
+            if (GameStats_GetResponseLength() == 0x124) {
                 _02246800.result = 1;
             } else {
                 switch (ov70_02246900.response[0]) {
@@ -192,7 +192,7 @@ c12_done:
             return;
         }
     case 10:
-        switch (ov38_0221BF48()) {
+        switch (GameStats_Update()) {
         case 1:
             FAIL_BEGIN();
         case 7:
@@ -229,7 +229,7 @@ c10_done:
             return;
         }
     case 12:
-        switch (ov38_0221BF48()) {
+        switch (GameStats_Update()) {
         case 1:
             FAIL_BEGIN();
         case 7:
@@ -271,14 +271,14 @@ c12b_done:
             return;
         }
     case 14:
-        switch (ov38_0221BF48()) {
+        switch (GameStats_Update()) {
         case 1:
             FAIL_BEGIN();
         case 7:
             _02246800.state = 24;
-            received = ov38_0221C020();
+            received = GameStats_GetResponseLength();
             if (received >= 0x124) {
-                _02246800.result = ov38_0221C020() / 0x124;
+                _02246800.result = GameStats_GetResponseLength() / 0x124;
             } else if (received == 0) {
                 _02246800.result = 0;
             } else if (ov70_02246900.response[0] == 14) {
@@ -291,12 +291,12 @@ c12b_done:
             return;
         }
     case 16:
-        switch (ov38_0221BF48()) {
+        switch (GameStats_Update()) {
         case 1:
             FAIL_BEGIN();
         case 7:
             _02246800.state = 24;
-            if (ov38_0221C020() == 0x124) {
+            if (GameStats_GetResponseLength() == 0x124) {
                 _02246800.result = 0;
             } else {
                 switch (ov70_02246900.response[0]) {
@@ -353,7 +353,7 @@ c16_done:
             return;
         }
     case 18:
-        switch (ov38_0221BF48()) {
+        switch (GameStats_Update()) {
         case 1:
             FAIL_BEGIN();
         case 7:
@@ -382,7 +382,7 @@ c18_done:
             return;
         }
     case 20:
-        switch (ov38_0221BF48()) {
+        switch (GameStats_Update()) {
         case 1:
             FAIL_BEGIN();
         case 7:
@@ -409,12 +409,12 @@ c18_done:
             return;
         }
     case 22:
-        switch (ov38_0221BF48()) {
+        switch (GameStats_Update()) {
         case 1:
             FAIL_BEGIN();
         case 7:
             _02246800.state = 24;
-            if (ov38_0221C020() == 8) {
+            if (GameStats_GetResponseLength() == 8) {
                 _02246800.result = 0;
             } else {
                 switch (ov70_02246920.mode) {

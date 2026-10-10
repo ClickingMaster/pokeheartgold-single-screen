@@ -112,11 +112,11 @@
 .public _ll_mul
 .public _s32_div_f
 .public gSystem
-.public ov00_021E5F84
-.public ov00_021E602C
-.public ov00_021E60E8
-.public ov00_021E6964
-.public ov00_021E6CB8
+.public WifiConnection_SendToHost
+.public WifiConnection_SendFromHost
+.public WifiConnection_SendToAll
+.public WifiConnection_GetAid
+.public WifiConnection_Shutdown
 .public ov00_021E7080
 .public ov00_021E70CC
 .public ov00_021EE4FC

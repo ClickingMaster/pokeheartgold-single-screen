@@ -1,4 +1,4 @@
-	.public _0221A684
+	.public gVoiceChat
 	.public _021E5918
 	.public _021E5A66
 	.public _021E5A7C
@@ -546,67 +546,67 @@
 	.public _021E7AEC
 	.public _021E7AF0
 	.public _0221602C
-	.public _02216034
-	.public _02216400
-	.public _0221640C
-	.public _02216414
-	.public _0221A680
-	.public _0221A684
-	.public _0221A688
-	.public ov00_021E5900
-	.public ov00_021E5AE8
-	.public ov00_021E5B6C
-	.public ov00_021E5C84
-	.public ov00_021E5CA0
-	.public ov00_021E5CBC
+	.public gWifiMatchFilterFormat
+	.public gWifiGameName
+	.public gWifiSecretKey
+	.public gWifiLobbyKeyName
+	.public gWifiConnection
+	.public gVoiceChat
+	.public gVoiceChatWork
+	.public WifiConnection_Init
+	.public WifiConnection_Destroy
+	.public WifiConnection_UpdateLogin
+	.public WifiConnection_SetReceiveCallbacks
+	.public WifiConnection_SetDisconnectCallback
+	.public WifiConnection_SetConnectFilterCallback
 	.public ov00_021E5CD0
 	.public ov00_021E5CEC
 	.public ov00_021E5E34
-	.public ov00_021E5E54
-	.public ov00_021E5F84
-	.public ov00_021E602C
-	.public ov00_021E60E8
-	.public ov00_021E61A8
-	.public ov00_021E6240
+	.public WifiConnection_Update
+	.public WifiConnection_SendToHost
+	.public WifiConnection_SendFromHost
+	.public WifiConnection_SendToAll
+	.public WifiConnection_LoginCallback
+	.public WifiConnection_TimeoutCallback
 	.public ov00_021E6274
 	.public ov00_021E6298
 	.public ov00_021E629C
 	.public ov00_021E62D4
-	.public ov00_021E62D8
+	.public WifiConnection_ResetKeepAliveTimers
 	.public ov00_021E62F4
 	.public ov00_021E6388
 	.public ov00_021E63CC
 	.public ov00_021E6424
-	.public ov00_021E6428
+	.public WifiConnection_SendDoneCallback
 	.public ov00_021E644C
-	.public ov00_021E6484
-	.public ov00_021E6554
-	.public ov00_021E65D4
-	.public ov00_021E6638
-	.public ov00_021E6690
-	.public ov00_021E6790
-	.public ov00_021E67E0
-	.public ov00_021E6850
-	.public ov00_021E6964
-	.public ov00_021E6994
-	.public ov00_021E69A8
-	.public ov00_021E6A4C
-	.public ov00_021E6A70
-	.public ov00_021E6BE4
-	.public ov00_021E6C68
-	.public ov00_021E6CA4
-	.public ov00_021E6CB8
-	.public ov00_021E6CCC
-	.public ov00_021E6CE8
+	.public WifiConnection_ReceiveCallback
+	.public WifiConnection_ConnectionClosedCallback
+	.public WifiConnection_Alloc
+	.public WifiConnection_Free
+	.public WifiConnection_CheckError
+	.public WifiConnection_CanSendToAll
+	.public WifiConnection_SendKeepAlive
+	.public WifiConnection_UpdateConnected
+	.public WifiConnection_GetAid
+	.public WifiConnection_ClearVoiceChatActive
+	.public WifiConnection_StartVoiceChat
+	.public WifiConnection_StopVoiceChat
+	.public WifiConnection_ClassifyErrorCode
+	.public WifiConnection_Disconnect
+	.public WifiConnection_FinishDisconnect
+	.public WifiConnection_SetErrorCallback
+	.public WifiConnection_Shutdown
+	.public WifiConnection_SetFriendStatusBuffer
+	.public WifiConnection_UpdateFriendStatus
 	.public ov00_021E6D60
-	.public ov00_021E6D68
-	.public ov00_021E6D7C
-	.public ov00_021E6EBC
+	.public WifiConnection_GetFriendStatus
+	.public WifiConnection_StartMatchmaking
+	.public WifiConnection_GetTargetFriendIndex
 	.public ov00_021E6ED8
 	.public ov00_021E6FBC
 	.public ov00_021E6FE0
 	.public ov00_021E700C
-	.public ov00_021E7078
+	.public WifiConnection_GetVoiceActivity
 	.public ov00_021E7080
 	.public ov00_021E709C
 	.public ov00_021E70B8
@@ -615,51 +615,51 @@
 	.public ov00_021E70F4
 	.public ov00_021E7130
 	.public ov00_021E7144
-	.public ov00_021E714C
+	.public WifiConnection_SetExtraHeapEnabled
 	.public ov00_021E7220
-	.public ov00_021E7234
-	.public ov00_021E727C
-	.public ov00_021E7300
+	.public WifiConnection_FreeRecvBuffer
+	.public WifiConnection_AllocRecvBuffer
+	.public WifiConnection_FreeRecvBuffers
 	.public ov00_021E7314
 	.public ov00_021E7328
-	.public ov00_021E733C
-	.public ov00_021E73E4
-	.public ov00_021E73E8
-	.public ov00_021E74A8
-	.public ov00_021E74FC
-	.public ov00_021E7544
-	.public ov00_021E756C
-	.public ov00_021E7638
-	.public ov00_021E765C
-	.public ov00_021E77A4
-	.public ov00_021E77CC
-	.public ov00_021E77F4
-	.public ov00_021E79B4
-	.public ov00_021E79CC
-	.public ov00_021E7A1C
-	.public ov00_021E7A30
-	.public ov00_021E7AA4
-	.public ov00_021E7ACC
-	.public ov00_021E7AE0
-	.public ov00_021E7AF4
-	.public ov00_021E5C84
-	.public ov00_021E5CA0
-	.public ov00_021E5CBC
+	.public VoiceChat_InitAudio
+	.public VoiceChat_MicCallback
+	.public VoiceChat_StreamCallback
+	.public VoiceChat_RequestSession
+	.public VoiceChat_AcceptSession
+	.public VoiceChat_ConferenceEventCallback
+	.public VoiceChat_PhoneEventCallback
+	.public VoiceChat_EndSession
+	.public VoiceChat_Update
+	.public VoiceChat_ReceiveData
+	.public VoiceChat_AllocAligned
+	.public VoiceChat_Init
+	.public VoiceChat_StartStream
+	.public VoiceChat_HangUp
+	.public VoiceChat_SetEndCallback
+	.public VoiceChat_Shutdown
+	.public VoiceChat_GetVoiceActivity
+	.public VoiceChat_Mute
+	.public VoiceChat_Unmute
+	.public VoiceChat_AddConferenceClients
+	.public WifiConnection_SetReceiveCallbacks
+	.public WifiConnection_SetDisconnectCallback
+	.public WifiConnection_SetConnectFilterCallback
 	.public ov00_021E5CD0
 	.public ov00_021E5E34
 	.public ov00_021E6274
 	.public ov00_021E6298
 	.public ov00_021E62D4
-	.public ov00_021E62D8
+	.public WifiConnection_ResetKeepAliveTimers
 	.public ov00_021E6424
-	.public ov00_021E6428
-	.public ov00_021E6994
-	.public ov00_021E6A4C
-	.public ov00_021E6CA4
-	.public ov00_021E6CB8
-	.public ov00_021E6CCC
-	.public ov00_021E6D68
-	.public ov00_021E6EBC
+	.public WifiConnection_SendDoneCallback
+	.public WifiConnection_ClearVoiceChatActive
+	.public WifiConnection_StopVoiceChat
+	.public WifiConnection_SetErrorCallback
+	.public WifiConnection_Shutdown
+	.public WifiConnection_SetFriendStatusBuffer
+	.public WifiConnection_GetFriendStatus
+	.public WifiConnection_GetTargetFriendIndex
 	.public ov00_021E6FBC
 	.public ov00_021E7080
 	.public ov00_021E709C
@@ -668,13 +668,13 @@
 	.public ov00_021E70E0
 	.public ov00_021E7130
 	.public ov00_021E7220
-	.public ov00_021E7300
+	.public WifiConnection_FreeRecvBuffers
 	.public ov00_021E7314
 	.public ov00_021E7328
-	.public ov00_021E73E4
-	.public ov00_021E7A1C
-	.public ov00_021E7ACC
-	.public ov00_021E7AE0
+	.public VoiceChat_MicCallback
+	.public VoiceChat_SetEndCallback
+	.public VoiceChat_Mute
+	.public VoiceChat_Unmute
 	.include "asm/macros.inc"
 	.include "overlay_00_thumb.inc"
 	.include "global.inc"
@@ -686,30 +686,30 @@ _0221602C:
 	.byte 0x01, 0x02, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 	.balign 4, 0
-_02216034:
+gWifiMatchFilterFormat:
 	.asciz "%s = '%s'"
 	.balign 4, 0
 
 	.data
 
 	.balign 4, 0
-_02216400:
+gWifiGameName:
 	.asciz "pokemondpds"
 	.balign 4, 0
-_0221640C:
+gWifiSecretKey:
 	.asciz "1vTlwb"
 	.balign 4, 0
-_02216414:
+gWifiLobbyKeyName:
 	.asciz "ppw_lobby"
 	.balign 4, 0
 
 	.bss
 
-_0221A680:
+gWifiConnection:
 	.space 0x4
 
-_0221A684:
+gVoiceChat:
 	.space 0x4
 
-_0221A688:
+gVoiceChatWork:
 	.space 0xC

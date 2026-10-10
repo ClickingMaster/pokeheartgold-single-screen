@@ -305,7 +305,7 @@
 .public gGameLanguage
 .public gOverlayTemplate_PokemonSummary
 .public gSystem
-.public ov00_021E6A70
+.public WifiConnection_ClassifyErrorCode
 .public ov00_021EC0FC
 .public ov00_021EC11C
 .public ov00_021EC210
@@ -326,12 +326,12 @@
 .public ov00_021ED9B4
 .public ov00_021FA0D8
 .public _0223F900
-.public ov38_0221BE84
-.public ov38_0221BEA8
-.public ov38_0221BF48
-.public ov38_0221BFEC
-.public ov38_0221C014
-.public ov38_0221C020
+.public GameStats_Start
+.public GameStats_PrepareRequest
+.public GameStats_Update
+.public GameStats_Shutdown
+.public GameStats_GetError
+.public GameStats_GetResponseLength
 .public ov70_022378C0
 .public ov70_022378DC
 .public ov70_02237F2C

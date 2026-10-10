@@ -32,9 +32,9 @@ sub_02039BA0: ; 0x02039BA0
 	ldr r0, [r0, #0x28]
 	lsl r2, r2, #0xe
 	add r3, r3, #1
-	bl ov00_021E5900
+	bl WifiConnection_Init
 	ldr r0, _02039C0C ; =sub_020399DC
-	bl ov00_021E6CA4
+	bl WifiConnection_SetErrorCallback
 	bl sub_02035FD8
 	mov r0, #0
 	bl ov00_021E70B8
@@ -203,7 +203,7 @@ _02039D38: .word sub_02039DC0
 sub_02039D3C: ; 0x02039D3C
 	push {r3, lr}
 	mov r0, #0
-	bl ov00_021E5E54
+	bl WifiConnection_Update
 	bl sub_02039C6C
 	cmp r0, #0
 	beq _02039D50
@@ -217,7 +217,7 @@ sub_02039D54: ; 0x02039D54
 	push {r4, lr}
 	add r4, r0, #0
 	mov r0, #0
-	bl ov00_021E5E54
+	bl WifiConnection_Update
 	cmp r0, #0x14
 	blt _02039D66
 	str r0, [r4]

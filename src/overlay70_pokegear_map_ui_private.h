@@ -59,9 +59,9 @@ extern const Ov70Modes ov70_022451F8;
 extern const Ov70Banks ov70_02245218;
 extern const Ov70Disp ov70_022463EC[];
 
-extern void ov38_0221BE84(void);
-extern void ov38_0221BFEC(void);
-extern int ov38_0221BEA8(void *, void *, void *, int, void *, int);
+extern void GameStats_Start(void);
+extern void GameStats_Shutdown(void);
+extern int GameStats_PrepareRequest(void *, void *, void *, int, void *, int);
 
 extern void GF_RunVramTransferTasks(void);
 extern void DoScheduledBgGpuUpdates(void *);

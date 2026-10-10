@@ -33,11 +33,11 @@ extern const u32 ov13_02244AB0[];
         (ct)[3] = (u8)(st);         \
     }
 
-int ov13_02225710(u32 *, const u8 *, int);
-int ov13_022259C8(u32 *, const u8 *, int);
-void ov13_02225B58(const u32 *, int, const u8 *, u8 *);
-void ov13_02225F14(const u32 *, int, const u8 *, u8 *);
-int ov13_02225710(u32 rk[/*4*(Nr + 1)*/], const u8 cipherKey[], int keyBits) {
+int WifiSetup_AesSetEncryptKey(u32 *, const u8 *, int);
+int WifiSetup_AesSetDecryptKey(u32 *, const u8 *, int);
+void WifiSetup_AesEncryptBlock(const u32 *, int, const u8 *, u8 *);
+void WifiSetup_AesDecryptBlock(const u32 *, int, const u8 *, u8 *);
+int WifiSetup_AesSetEncryptKey(u32 rk[/*4*(Nr + 1)*/], const u8 cipherKey[], int keyBits) {
     int i = 0;
     u32 temp;
 
@@ -99,12 +99,12 @@ int ov13_02225710(u32 rk[/*4*(Nr + 1)*/], const u8 cipherKey[], int keyBits) {
     return 0;
 }
 
-int ov13_022259C8(u32 rk[/*4*(Nr + 1)*/], const u8 cipherKey[], int keyBits) {
+int WifiSetup_AesSetDecryptKey(u32 rk[/*4*(Nr + 1)*/], const u8 cipherKey[], int keyBits) {
     int Nr, i, j;
     u32 temp;
 
     /* expand the cipher key: */
-    Nr = ov13_02225710(rk, cipherKey, keyBits);
+    Nr = WifiSetup_AesSetEncryptKey(rk, cipherKey, keyBits);
     /* invert the order of the round keys: */
     for (i = 0, j = 4 * Nr; i < j; i += 4, j -= 4) {
         temp = rk[i];
@@ -131,7 +131,7 @@ int ov13_022259C8(u32 rk[/*4*(Nr + 1)*/], const u8 cipherKey[], int keyBits) {
     return Nr;
 }
 
-void ov13_02225B58(const u32 rk[/*4*(Nr + 1)*/], int Nr, const u8 pt[16], u8 ct[16]) {
+void WifiSetup_AesEncryptBlock(const u32 rk[/*4*(Nr + 1)*/], int Nr, const u8 pt[16], u8 ct[16]) {
     u32 s0, s1, s2, s3, t0, t1, t2, t3;
 #ifndef FULL_UNROLL
     int r;
@@ -252,7 +252,7 @@ void ov13_02225B58(const u32 rk[/*4*(Nr + 1)*/], int Nr, const u8 pt[16], u8 ct[
     PUTU32(ct + 12, s3);
 }
 
-void ov13_02225F14(const u32 rk[/*4*(Nr + 1)*/], int Nr, const u8 ct[16], u8 pt[16]) {
+void WifiSetup_AesDecryptBlock(const u32 rk[/*4*(Nr + 1)*/], int Nr, const u8 ct[16], u8 pt[16]) {
     u32 s0, s1, s2, s3, t0, t1, t2, t3;
 #ifndef FULL_UNROLL
     int r;

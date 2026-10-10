@@ -6,7 +6,7 @@
 #define OV70_FAIL()    \
     OV70_STATE = 0x18; \
     OV70_ERR = -13;    \
-    ov38_0221BFEC()
+    GameStats_Shutdown()
 
 void ov70_02237F64(void *a);
 void ov70_02237FB4(void);
@@ -30,7 +30,7 @@ void ov70_02238818(u8 *work, void *ovy);
 
 void ov70_02238208(void *a, void *b, void *c) {
     *(void **)(ov70_02246900 + 0x40) = c;
-    ov38_0221BE84();
+    GameStats_Start();
     memcpy(ov70_02246814, b, 0x124);
     *(void **)(ov70_02246900 + 0x38) = a;
     if (ov70_02238360(ov70_022462B4, ov70_02246814, 0x128, c, 0x124)) {

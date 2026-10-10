@@ -1,12 +1,12 @@
 #pragma force_active on
 #include "global.h"
-int ov13_02225710(u32 *ctx, const void *key, int bits);
-void ov13_02225B58(const u32 *ctx, int mode, const u8 *in, u8 *out);
+int WifiSetup_AesSetEncryptKey(u32 *ctx, const void *key, int bits);
+void WifiSetup_AesEncryptBlock(const u32 *ctx, int mode, const u8 *in, u8 *out);
 void ov13_022256C8(const u8 *a, const u8 *b, u8 *out);
 void *memcpy(void *dst, const void *src, u32 n);
 int ov13_02225358(u8 *out, const u8 *in, u32 length, const void *key, u32 keylen);
-int ov13_022259C8(u32 *ctx, const void *key, int bits);
-void ov13_02225F14(const u32 *ctx, int mode, const u8 *in, u8 *out);
+int WifiSetup_AesSetDecryptKey(u32 *ctx, const void *key, int bits);
+void WifiSetup_AesDecryptBlock(const u32 *ctx, int mode, const u8 *in, u8 *out);
 int memcmp(const void *a, const void *b, u32 n);
 int ov13_02225510(u8 *out, const u8 *in, u32 length, const void *key, u32 keylen);
 
@@ -31,7 +31,7 @@ int ov13_02225358(u8 *out, const u8 *in, u32 length, const void *key, u32 keylen
     if (n < 2) {
         return 0;
     }
-    mode = ov13_02225710(ctx, key, keylen << 3);
+    mode = WifiSetup_AesSetEncryptKey(ctx, key, keylen << 3);
     memcpy(out + 8, in, length);
     {
         u8 *d = block;
@@ -45,7 +45,7 @@ int ov13_02225358(u8 *out, const u8 *in, u32 length, const void *key, u32 keylen
         for (i = 1; i <= n; i++) {
             u8 *r = (u8 *)&((u64 *)out)[i];
             *(Block8 *)(block + 8) = *(Block8 *)r;
-            ov13_02225B58(ctx, mode, block, block);
+            WifiSetup_AesEncryptBlock(ctx, mode, block, block);
             t = (s64)n * j + i;
             swapped = ((t & 0x00000000000000ffULL) << 56) | ((t & 0x000000000000ff00ULL) << 40) | ((t & 0x0000000000ff0000ULL) << 24) | ((t & 0x00000000ff000000ULL) << 8) | ((t & 0x000000ff00000000ULL) >> 8) | ((t & 0x0000ff0000000000ULL) >> 24) | ((t & 0x00ff000000000000ULL) >> 40) | ((t & 0xff00000000000000ULL) >> 56);
             ov13_022256C8(block, (const u8 *)&swapped, block);
@@ -75,7 +75,7 @@ int ov13_02225510(u8 *out, const u8 *in, u32 length, const void *key, u32 keylen
     if (n < 2) {
         return 0;
     }
-    mode = ov13_022259C8(ctx, key, keylen << 3);
+    mode = WifiSetup_AesSetDecryptKey(ctx, key, keylen << 3);
     {
         u8 *d = block;
         const u8 *p = in;
@@ -93,7 +93,7 @@ int ov13_02225510(u8 *out, const u8 *in, u32 length, const void *key, u32 keylen
             ov13_022256C8(block, (const u8 *)&swapped, block);
             r = (u8 *)&((u64 *)out)[i - 1];
             *(Block8 *)(block + 8) = *(Block8 *)r;
-            ov13_02225F14(ctx, mode, block, block);
+            WifiSetup_AesDecryptBlock(ctx, mode, block, block);
             *(Block8 *)r = *(Block8 *)(block + 8);
         }
     }

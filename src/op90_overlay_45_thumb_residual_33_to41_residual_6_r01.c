@@ -33,7 +33,7 @@ BOOL ov45_0222F74C(void);
 u32 ov45_02232580(void);
 void ov00_021E5CEC(void *a0, u32 a1, int a2, int a3);
 void ov00_021E5CD0(void (*func)(void), void *arg);
-void ov00_021E5CA0(void (*func)(void), void *arg);
+void WifiConnection_SetDisconnectCallback(void (*func)(void), void *arg);
 void ov45_02230390(void);
 void ov45_02230394(void);
 BOOL ov45_0222F028(int index, u32 arg);
@@ -63,7 +63,7 @@ BOOL ov45_0222F028(int index, u32 arg) {
     _022577C0->unk69F = 0;
     ov00_021E5CEC(_022577C0->slots[index].unk30, arg, 1, _022577C0->slots[index].timeout / 30);
     ov00_021E5CD0(ov45_02230390, _022577C0);
-    ov00_021E5CA0(ov45_02230394, _022577C0);
+    WifiConnection_SetDisconnectCallback(ov45_02230394, _022577C0);
     return TRUE;
 }
 #pragma opt_propagation reset

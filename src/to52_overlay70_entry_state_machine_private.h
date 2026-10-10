@@ -7,10 +7,10 @@ typedef struct Ov70SharedWork { u8 pad00[0x40]; u8 *response; } Ov70SharedWork;
 extern volatile Ov70GlobalState _02246800;
 extern Ov70SharedWork ov70_02246900;
 extern volatile Ov70NetworkWork ov70_02246920;
-int ov38_0221BF48(void);
-void ov38_0221C014(void);
-u32 ov38_0221C020(void);
-void ov38_0221BFEC(void);
+int GameStats_Update(void);
+void GameStats_GetError(void);
+u32 GameStats_GetResponseLength(void);
+void GameStats_Shutdown(void);
 s32 ov70_02238398(void);
 void ov70_022378DC(void);
 #endif

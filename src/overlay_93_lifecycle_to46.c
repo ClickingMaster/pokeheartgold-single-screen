@@ -115,7 +115,7 @@ extern u32 ov90_02258C74(void *);
 extern void PaletteData_LoadPaletteSlotFromHardware(void *, int, u32, int);
 extern void ov93_0225CEA0(void *);
 extern void ov93_0225D07C(void *);
-extern void ov00_021E69A8(int);
+extern void WifiConnection_StartVoiceChat(int);
 extern const u8 ov93_02262AA8[];
 extern const u8 ov93_02262A7C[];
 extern const u8 ov93_02262A90[];
@@ -198,7 +198,7 @@ u32 ov93_0225C768(void *man) {
     PaletteData_LoadPaletteSlotFromHardware(PAT(p, 0x8c), 2, (ov90_02258C74(PAT(p, 0x1c)) << 20) >> 16, 0x60);
     Main_SetVBlankIntrCB(ov93_0225CEA0, p);
     if (*(u8 *)((u8 *)PAT(p, 0) + 0x3c) != 0) {
-        ov00_021E69A8(0x75);
+        WifiConnection_StartVoiceChat(0x75);
     }
     return 1;
 }

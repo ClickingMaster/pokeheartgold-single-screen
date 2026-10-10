@@ -80,7 +80,7 @@ int ov91_0225C58C(OverlayManager *manager, int *state) {
         work->unk34 = ov91_0225CDF4(0x6A, 0x4B0, work->unk74, work->unk46, work->unk48);
         sub_0203A880();
         if (args[0x38] != 0) {
-            ov00_021E69A8(0x6A);
+            WifiConnection_StartVoiceChat(0x6A);
         }
         switch (work->unk70) {
         case 0:
@@ -197,8 +197,8 @@ int ov91_0225C58C(OverlayManager *manager, int *state) {
             return 0;
         }
         if (args[0x38] != 0) {
-            extern void ov00_021E6A4C(void);
-            ov00_021E6A4C();
+            extern void WifiConnection_StopVoiceChat(void);
+            WifiConnection_StopVoiceChat();
         }
         if (work->unk44 == 0) {
             ov91_0225CCEC(work->unk30);

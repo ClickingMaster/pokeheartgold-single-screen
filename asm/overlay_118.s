@@ -4,8 +4,8 @@
 
 	.text
 
-	thumb_func_start ov118_0225F020
-ov118_0225F020: ; 0x0225F020
+	thumb_func_start EncounterEffect_KimonoGirl
+EncounterEffect_KimonoGirl: ; 0x0225F020
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0x14
 	add r4, r1, #0
@@ -61,7 +61,7 @@ _0225F050:
 	ldr r0, [r0, #8]
 	bl FreeBgTilemapBuffer
 	ldr r0, [r4, #0x10]
-	ldr r2, _0225F268 ; =_0225F270
+	ldr r2, _0225F268 ; =gKimonoGirlEffectBg1Template
 	ldr r0, [r0, #8]
 	mov r1, #1
 	mov r3, #0
@@ -75,7 +75,7 @@ _0225F050:
 	ldr r0, [r0, #8]
 	bl FreeBgTilemapBuffer
 	ldr r0, [r4, #0x10]
-	ldr r2, _0225F26C ; =ov118_0225F28C
+	ldr r2, _0225F26C ; =gKimonoGirlEffectBg3Template
 	ldr r0, [r0, #8]
 	mov r1, #3
 	mov r3, #0
@@ -278,17 +278,17 @@ _0225F25E:
 	pop {r3, r4, r5, r6, pc}
 	nop
 _0225F264: .word 0xFFFFE0FF
-_0225F268: .word _0225F270
-_0225F26C: .word ov118_0225F28C
-	thumb_func_end ov118_0225F020
+_0225F268: .word gKimonoGirlEffectBg1Template
+_0225F26C: .word gKimonoGirlEffectBg3Template
+	thumb_func_end EncounterEffect_KimonoGirl
 
 	.rodata
 
-_0225F270:
+gKimonoGirlEffectBg1Template:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x03, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov118_0225F28C: ; 0x0225F28C
+gKimonoGirlEffectBg3Template: ; 0x0225F28C
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x02, 0x02
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00

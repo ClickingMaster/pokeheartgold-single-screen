@@ -118,7 +118,7 @@
 .public MI_CpuFill8
 .public MI_CpuCopy8
 .public gSystem
-.public ov00_021E6A70
+.public WifiConnection_ClassifyErrorCode
 .public ov00_021EC0FC
 .public ov00_021EC11C
 .public ov00_021EC210

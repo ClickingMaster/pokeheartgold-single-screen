@@ -20,7 +20,7 @@ void ov90_02258938(void *object);
 void ov91_0225CCEC(void *object);
 void ov91_0225CE80(void *object);
 void GF_DestroyVramTransferManager(void);
-void ov00_021E6A4C(void);
+void WifiConnection_StopVoiceChat(void);
 void ov90_02258A04(void *object);
 void ov91_0225CC4C(u8 *base, u8 *arg);
 void ov91_0225E294(void *record, void *out);

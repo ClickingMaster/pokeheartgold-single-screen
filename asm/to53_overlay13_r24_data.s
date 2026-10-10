@@ -11,10 +11,10 @@
 	.public ov13_02245A58
 	.public ov13_0224E3D8
 	.public ov13_0224E464
-	.public _0224CF98
+	.public gWifiSetupState
 	.public ov13_022459B4
-	.public ov13_0224DD80
-	.public ov13_0224DD8C
+	.public gWifiSetupRuntime
+	.public gWifiSetupFreeHook
 	.public ov13_02245A20
 	.public ov13_0224DCF8
 	.public ov13_0224DF30
@@ -23,17 +23,17 @@
 	.include "overlay_13_thumb_2.inc"
 	.include "global.inc"
 
-	.extern ov13_022208E8
-	.extern ov13_022208F8
+	.extern WifiSetup_Alloc
+	.extern WifiSetup_Free
 	.extern ov13_02220908
 	.extern ov13_022209F8
-	.extern ov13_02221410
-	.extern ov13_02221428
-	.extern ov13_02221454
-	.extern ov13_022214AC
-	.extern ov13_022214B8
+	.extern WifiSetup_NextHostAddress
+	.extern WifiSetup_FreeWorkBuffers
+	.extern WifiSetup_InitState
+	.extern WifiSetup_SetError
+	.extern WifiSetup_GetError
 	.extern ov13_022214C4
-	.extern ov13_022216BC
+	.extern WifiSetup_CheckPrintable
 	.extern ov13_022216E0
 	.extern ov13_0222175C
 	.extern ov13_022217A0
@@ -64,36 +64,36 @@
 	.extern ov13_022225B0
 	.extern ov13_02222638
 	.extern ov13_0222269C
-	.extern ov13_022226C8
-	.extern ov13_02222708
-	.extern ov13_02222730
-	.extern ov13_02222768
+	.extern WifiSetup_CipherNextByte
+	.extern WifiSetup_CalcCrc32
+	.extern WifiSetup_UpdateCrc32
+	.extern WifiSetup_InitCrc32Table
 	.extern ov13_022227A0
 	.extern ov13_0222281C
 	.extern ov13_02222850
 	.extern ov13_02222874
-	.extern ov13_022228A4
-	.extern ov13_022228BC
-	.extern ov13_022228CC
-	.extern ov13_02222924
-	.extern ov13_02222948
-	.extern ov13_02222968
-	.extern ov13_02222978
-	.extern ov13_02222984
-	.extern ov13_02222998
-	.extern ov13_022229EC
+	.extern WifiSetup_SocketAlloc
+	.extern WifiSetup_SocketFree
+	.extern WifiSetup_StartupSocket
+	.extern WifiSetup_CleanupSocket
+	.extern WifiSetup_MemCompare
+	.extern WifiSetup_MemCopy
+	.extern WifiSetup_MemFill
+	.extern WifiSetup_RecvFrom
+	.extern WifiSetup_Poll
+	.extern WifiSetup_SendTo
 	.extern ov13_022229FC
-	.extern ov13_02222A00
-	.extern ov13_02222A08
-	.extern ov13_02222A14
-	.extern ov13_02222A1C
-	.extern ov13_02222A44
-	.extern ov13_02222A5C
-	.extern ov13_02222A84
-	.extern ov13_02222A9C
-	.extern ov13_02222AB0
-	.extern ov13_02222B20
-	.extern ov13_02222B2C
+	.extern WifiSetup_Socket
+	.extern WifiSetup_Bind
+	.extern WifiSetup_Close
+	.extern WifiSetup_HostToNet32
+	.extern WifiSetup_HostToNet16
+	.extern WifiSetup_NetToHost32
+	.extern WifiSetup_NetToHost16
+	.extern WifiSetup_StrLen
+	.extern WifiSetup_Random
+	.extern WifiSetup_ClearPollSet
+	.extern WifiSetup_AddToPollSet
 	.extern ov13_02222B34
 	.extern ov13_02222BC0
 	.extern ov13_02222BE4
@@ -104,7 +104,7 @@
 	.extern ov13_02222D78
 	.extern ov13_02222DB0
 	.extern ov13_02222F28
-	.extern ov13_022230F8
+	.extern WifiSetup_Sleep
 	.extern ov13_02223100
 	.extern ov13_02223114
 	.extern ov13_022233CC
@@ -158,18 +158,18 @@
 	.extern ov13_02225358
 	.extern ov13_02225510
 	.extern ov13_022256C8
-	.extern ov13_02225710
-	.extern ov13_022259C8
-	.extern ov13_02225B58
-	.extern ov13_02225F14
-	.extern ov13_022262D0
-	.extern ov13_022262F8
-	.extern ov13_02226370
-	.extern ov13_022263C4
-	.extern ov13_02226C0C
-	.extern ov13_02226C38
-	.extern ov13_02226C64
-	.extern ov13_02226C7C
+	.extern WifiSetup_AesSetEncryptKey
+	.extern WifiSetup_AesSetDecryptKey
+	.extern WifiSetup_AesEncryptBlock
+	.extern WifiSetup_AesDecryptBlock
+	.extern WifiSetup_Md5Init
+	.extern WifiSetup_Md5Update
+	.extern WifiSetup_Md5Final
+	.extern WifiSetup_Md5Transform
+	.extern WifiSetup_EncodeLittleEndian
+	.extern WifiSetup_DecodeLittleEndian
+	.extern WifiSetup_CopyBytes
+	.extern WifiSetup_FillBytes
 	.extern ov13_02226C94
 	.extern ov13_02226CBC
 	.extern ov13_02226CD8
@@ -206,7 +206,7 @@
 	.global ov13_02245ACC
 	.global ov13_02245AD8
 	.global ov13_02245B18
-	.global _0224CF98
+	.global gWifiSetupState
 	.global ov13_0224CF9C
 	.global ov13_0224CFB8
 	.global ov13_0224CFBC
@@ -220,10 +220,10 @@
 	.global ov13_0224DCF8
 	.global ov13_0224DD00
 	.global ov13_0224DD02
-	.global ov13_0224DD80
-	.global ov13_0224DD8C
-	.global ov13_0224DD90
-	.global ov13_0224DDA0
+	.global gWifiSetupRuntime
+	.global gWifiSetupFreeHook
+	.global gWifiSetupMessages
+	.global gWifiSetupMessageQueue
 	.global ov13_0224DDC0
 	.global ov13_0224DE80
 	.global ov13_0224DEE0
@@ -939,8 +939,8 @@ ov13_022459B4: ; 0x022459B4
 
 ov13_022459BC: ; 0x022459BC
 	.byte 0x00, 0x00, 0x00, 0x01
-	.word ov13_022228A4
-	.word ov13_022228BC
+	.word WifiSetup_SocketAlloc
+	.word WifiSetup_SocketFree
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -1003,7 +1003,7 @@ ov13_02245B18: ; 0x02245B18
 
 	.bss
 
-_0224CF98:
+gWifiSetupState:
 	.space 0x4
 
 ov13_0224CF9C: ; 0x0224CF9C
@@ -1045,16 +1045,16 @@ ov13_0224DD00: ; 0x0224DD00
 ov13_0224DD02: ; 0x0224DD02
 	.space 0x7E
 
-ov13_0224DD80: ; 0x0224DD80
+gWifiSetupRuntime: ; 0x0224DD80
 	.space 0xC
 
-ov13_0224DD8C: ; 0x0224DD8C
+gWifiSetupFreeHook: ; 0x0224DD8C
 	.space 0x4
 
-ov13_0224DD90: ; 0x0224DD90
+gWifiSetupMessages: ; 0x0224DD90
 	.space 0x10
 
-ov13_0224DDA0: ; 0x0224DDA0
+gWifiSetupMessageQueue: ; 0x0224DDA0
 	.space 0x20
 
 ov13_0224DDC0: ; 0x0224DDC0

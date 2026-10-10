@@ -108,7 +108,7 @@ int FrtCmd_113(void *c) {
 
 int FrtCmd_183(void *c) {
     void *p = sub_0202C6F4(PTR(Frontier_GetLaunchArgs(APP(c)), 8));
-    sub_0202C4B0(p, ov00_021E6EBC());
+    sub_0202C4B0(p, WifiConnection_GetTargetFriendIndex());
     return 0;
 }
 

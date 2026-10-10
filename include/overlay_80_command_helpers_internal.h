@@ -121,7 +121,7 @@ extern void BufferRivalsName(void *, u8, void *);
 extern void *Save_FrontierData_Get(void *);
 extern u16 FrontierData_BattlePointAction(void *, u16, u16);
 extern void *sub_0202C6F4(void *);
-extern void *ov00_021E6EBC(void);
+extern void *WifiConnection_GetTargetFriendIndex(void);
 extern void sub_0202C4B0(void *, void *);
 extern void sub_02037AC0(u8);
 extern BOOL ov80_0222E198(void *);

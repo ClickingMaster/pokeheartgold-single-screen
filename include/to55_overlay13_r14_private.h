@@ -16,9 +16,9 @@ typedef struct Ov13Runtime {
     Ov13FreeCallback free;
 } Ov13Runtime;
 
-extern Ov13Runtime ov13_0224DD80;
-extern OSMessageQueue ov13_0224DDA0;
-extern OSMessage ov13_0224DD90[4];
+extern Ov13Runtime gWifiSetupRuntime;
+extern OSMessageQueue gWifiSetupMessageQueue;
+extern OSMessage gWifiSetupMessages[4];
 
 BOOL ov13_02222BF4(void *message);
 BOOL ov13_02222C08(void *message);

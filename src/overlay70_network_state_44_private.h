@@ -13,7 +13,7 @@ typedef u8 Ov70Work;
 extern u8 gSystem[];
 extern const u32 ov70_0224600C[];
 
-int ov00_021E6A70(int, int);
+int WifiConnection_ClassifyErrorCode(int, int);
 int ov00_021ECDC8(void);
 int ov00_021EC11C(int *, int *);
 void ov00_021EC210(void);

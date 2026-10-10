@@ -17,7 +17,7 @@ int sub_020373B4(u16 slot);
 BOOL sub_02036630(void);
 int sub_02035FF0(void);
 BOOL sub_02036438(int slot);
-BOOL ov00_021E602C(void *data, int size);
+BOOL WifiConnection_SendFromHost(void *data, int size);
 int sub_02033298(void);
 void sub_02036F30(u8 *packet);
 void sub_02036508(void);

@@ -6,7 +6,7 @@ void ov39_02228B6C(void *owner, u32 current, u32 next) {
 }
 
 BOOL ov39_02228B74(int a0, int a1) {
-    switch (ov00_021E6A70(a0, a1)) {
+    switch (WifiConnection_ClassifyErrorCode(a0, a1)) {
     case 1:
     case 4:
     case 5:

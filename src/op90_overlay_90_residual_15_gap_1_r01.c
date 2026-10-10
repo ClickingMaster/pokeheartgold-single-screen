@@ -58,7 +58,7 @@ void ov90_02259EA0(Ov90Obj *);
 int ov90_02259B68(Ov90Work *);
 void sub_02037AC0(int);
 int sub_02037B38(int);
-void ov00_021E6A4C(void);
+void WifiConnection_StopVoiceChat(void);
 void ov90_02259F44(Ov90Obj *, s16);
 u32 ov90_02259B38(void *, int);
 void sub_02037030(int, void *, int);
@@ -140,7 +140,7 @@ void ov90_02259794(SysTask *task, Ov90Work *work) {
             work->state++;
             sub_02037AC0(0x81);
             if (work->x12) {
-                ov00_021E6A4C();
+                WifiConnection_StopVoiceChat();
             }
         }
         break;

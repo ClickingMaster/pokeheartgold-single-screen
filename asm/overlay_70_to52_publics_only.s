@@ -2910,7 +2910,7 @@ _022378F4: ; jump table
 	.short _02237F18 - _022378F4 - 2 ; case 23
 	.short _02237F24 - _022378F4 - 2 ; case 24
 _02237926:
-	bl ov38_0221BF48
+	bl GameStats_Update
 	cmp r0, #1
 	beq _02237934
 	cmp r0, #7
@@ -2920,11 +2920,11 @@ _02237934:
 	ldr r0, _02237BC0 ; =_02246800
 	mov r1, #0x18
 	str r1, [r0]
-	bl ov38_0221C014
+	bl GameStats_GetError
 	bl ov70_02238398
 	ldr r1, _02237BC0 ; =_02246800
 	str r0, [r1, #4]
-	bl ov38_0221BFEC
+	bl GameStats_Shutdown
 	pop {r3, pc}
 _0223794C:
 	ldr r0, _02237BC0 ; =_02246800
@@ -3006,10 +3006,10 @@ _022379C6:
 	mvn r1, r1
 	str r1, [r0, #4]
 _022379CE:
-	bl ov38_0221BFEC
+	bl GameStats_Shutdown
 	pop {r3, pc}
 _022379D4:
-	bl ov38_0221BF48
+	bl GameStats_Update
 	cmp r0, #1
 	beq _022379E2
 	cmp r0, #7
@@ -3019,11 +3019,11 @@ _022379E2:
 	ldr r0, _02237BC0 ; =_02246800
 	mov r1, #0x18
 	str r1, [r0]
-	bl ov38_0221C014
+	bl GameStats_GetError
 	bl ov70_02238398
 	ldr r1, _02237BC0 ; =_02246800
 	str r0, [r1, #4]
-	bl ov38_0221BFEC
+	bl GameStats_Shutdown
 	pop {r3, pc}
 _022379FA:
 	ldr r0, _02237BC0 ; =_02246800
@@ -3080,10 +3080,10 @@ _02237A4C:
 	mvn r1, r1
 	str r1, [r0, #4]
 _02237A54:
-	bl ov38_0221BFEC
+	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237A5A:
-	bl ov38_0221BF48
+	bl GameStats_Update
 	cmp r0, #1
 	beq _02237A68
 	cmp r0, #7
@@ -3093,17 +3093,17 @@ _02237A68:
 	ldr r0, _02237BC0 ; =_02246800
 	mov r1, #0x18
 	str r1, [r0]
-	bl ov38_0221C014
+	bl GameStats_GetError
 	bl ov70_02238398
 	ldr r1, _02237BC0 ; =_02246800
 	str r0, [r1, #4]
-	bl ov38_0221BFEC
+	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237A80:
 	ldr r0, _02237BC0 ; =_02246800
 	mov r1, #0x18
 	str r1, [r0]
-	bl ov38_0221C020
+	bl GameStats_GetResponseLength
 	mov r1, #0x49
 	lsl r1, r1, #2
 	cmp r0, r1
@@ -3147,10 +3147,10 @@ _02237ACC:
 	mvn r1, r1
 	str r1, [r0, #4]
 _02237AD4:
-	bl ov38_0221BFEC
+	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237ADA:
-	bl ov38_0221BF48
+	bl GameStats_Update
 	cmp r0, #1
 	beq _02237AE8
 	cmp r0, #7
@@ -3160,17 +3160,17 @@ _02237AE8:
 	ldr r0, _02237BC0 ; =_02246800
 	mov r1, #0x18
 	str r1, [r0]
-	bl ov38_0221C014
+	bl GameStats_GetError
 	bl ov70_02238398
 	ldr r1, _02237BC0 ; =_02246800
 	str r0, [r1, #4]
-	bl ov38_0221BFEC
+	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237B00:
 	ldr r0, _02237BC0 ; =_02246800
 	mov r1, #0x18
 	str r1, [r0]
-	bl ov38_0221C020
+	bl GameStats_GetResponseLength
 	mov r1, #0x49
 	lsl r1, r1, #2
 	cmp r0, r1
@@ -3226,10 +3226,10 @@ _02237B60:
 	mvn r1, r1
 	str r1, [r0, #4]
 _02237B68:
-	bl ov38_0221BFEC
+	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237B6E:
-	bl ov38_0221BF48
+	bl GameStats_Update
 	cmp r0, #1
 	beq _02237B7C
 	cmp r0, #7
@@ -3239,11 +3239,11 @@ _02237B7C:
 	ldr r0, _02237BC0 ; =_02246800
 	mov r1, #0x18
 	str r1, [r0]
-	bl ov38_0221C014
+	bl GameStats_GetError
 	bl ov70_02238398
 	ldr r1, _02237BC0 ; =_02246800
 	str r0, [r1, #4]
-	bl ov38_0221BFEC
+	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237B94:
 	ldr r1, _02237BC0 ; =_02246800
@@ -3291,10 +3291,10 @@ _02237BDE:
 	mvn r1, r1
 	str r1, [r0, #4]
 _02237BE6:
-	bl ov38_0221BFEC
+	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237BEC:
-	bl ov38_0221BF48
+	bl GameStats_Update
 	cmp r0, #1
 	beq _02237BFA
 	cmp r0, #7
@@ -3304,11 +3304,11 @@ _02237BFA:
 	ldr r0, _02237EC0 ; =_02246800
 	mov r1, #0x18
 	str r1, [r0]
-	bl ov38_0221C014
+	bl GameStats_GetError
 	bl ov70_02238398
 	ldr r1, _02237EC0 ; =_02246800
 	str r0, [r1, #4]
-	bl ov38_0221BFEC
+	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237C12:
 	ldr r0, _02237EC0 ; =_02246800
@@ -3365,10 +3365,10 @@ _02237C64:
 	mvn r1, r1
 	str r1, [r0, #4]
 _02237C6C:
-	bl ov38_0221BFEC
+	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237C72:
-	bl ov38_0221BF48
+	bl GameStats_Update
 	cmp r0, #1
 	beq _02237C80
 	cmp r0, #7
@@ -3378,22 +3378,22 @@ _02237C80:
 	ldr r0, _02237EC0 ; =_02246800
 	mov r1, #0x18
 	str r1, [r0]
-	bl ov38_0221C014
+	bl GameStats_GetError
 	bl ov70_02238398
 	ldr r1, _02237EC0 ; =_02246800
 	str r0, [r1, #4]
-	bl ov38_0221BFEC
+	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237C98:
 	ldr r0, _02237EC0 ; =_02246800
 	mov r1, #0x18
 	str r1, [r0]
-	bl ov38_0221C020
+	bl GameStats_GetResponseLength
 	mov r1, #0x49
 	lsl r1, r1, #2
 	cmp r0, r1
 	blo _02237CBC
-	bl ov38_0221C020
+	bl GameStats_GetResponseLength
 	mov r1, #0x49
 	lsl r1, r1, #2
 	bl _u32_div_f
@@ -3424,10 +3424,10 @@ _02237CDC:
 	mvn r1, r1
 	str r1, [r0, #4]
 _02237CE4:
-	bl ov38_0221BFEC
+	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237CEA:
-	bl ov38_0221BF48
+	bl GameStats_Update
 	cmp r0, #1
 	beq _02237CF8
 	cmp r0, #7
@@ -3437,17 +3437,17 @@ _02237CF8:
 	ldr r0, _02237EC0 ; =_02246800
 	mov r1, #0x18
 	str r1, [r0]
-	bl ov38_0221C014
+	bl GameStats_GetError
 	bl ov70_02238398
 	ldr r1, _02237EC0 ; =_02246800
 	str r0, [r1, #4]
-	bl ov38_0221BFEC
+	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237D10:
 	ldr r0, _02237EC0 ; =_02246800
 	mov r1, #0x18
 	str r1, [r0]
-	bl ov38_0221C020
+	bl GameStats_GetResponseLength
 	mov r1, #0x49
 	lsl r1, r1, #2
 	cmp r0, r1
@@ -3538,10 +3538,10 @@ _02237DAE:
 	mvn r1, r1
 	str r1, [r0, #4]
 _02237DB6:
-	bl ov38_0221BFEC
+	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237DBC:
-	bl ov38_0221BF48
+	bl GameStats_Update
 	cmp r0, #1
 	beq _02237DCA
 	cmp r0, #7
@@ -3551,11 +3551,11 @@ _02237DCA:
 	ldr r0, _02237EC0 ; =_02246800
 	mov r1, #0x18
 	str r1, [r0]
-	bl ov38_0221C014
+	bl GameStats_GetError
 	bl ov70_02238398
 	ldr r1, _02237EC0 ; =_02246800
 	str r0, [r1, #4]
-	bl ov38_0221BFEC
+	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237DE2:
 	ldr r1, _02237EC0 ; =_02246800
@@ -3582,10 +3582,10 @@ _02237E06:
 	sub r2, #0x1d
 	str r2, [r1, #4]
 _02237E0A:
-	bl ov38_0221BFEC
+	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237E10:
-	bl ov38_0221BF48
+	bl GameStats_Update
 	cmp r0, #1
 	beq _02237E1E
 	cmp r0, #7
@@ -3595,11 +3595,11 @@ _02237E1E:
 	ldr r0, _02237EC0 ; =_02246800
 	mov r1, #0x18
 	str r1, [r0]
-	bl ov38_0221C014
+	bl GameStats_GetError
 	bl ov70_02238398
 	ldr r1, _02237EC0 ; =_02246800
 	str r0, [r1, #4]
-	bl ov38_0221BFEC
+	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237E36:
 	ldr r1, _02237EC0 ; =_02246800
@@ -3643,10 +3643,10 @@ _02237E72:
 	mvn r1, r1
 	str r1, [r0, #4]
 _02237E7A:
-	bl ov38_0221BFEC
+	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237E80:
-	bl ov38_0221BF48
+	bl GameStats_Update
 	cmp r0, #1
 	beq _02237E8E
 	cmp r0, #7
@@ -3656,17 +3656,17 @@ _02237E8E:
 	ldr r0, _02237EC0 ; =_02246800
 	mov r1, #0x18
 	str r1, [r0]
-	bl ov38_0221C014
+	bl GameStats_GetError
 	bl ov70_02238398
 	ldr r1, _02237EC0 ; =_02246800
 	str r0, [r1, #4]
-	bl ov38_0221BFEC
+	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237EA6:
 	ldr r0, _02237EC0 ; =_02246800
 	mov r1, #0x18
 	str r1, [r0]
-	bl ov38_0221C020
+	bl GameStats_GetResponseLength
 	cmp r0, #8
 	bne _02237EBC
 	ldr r0, _02237EC0 ; =_02246800
@@ -3723,14 +3723,14 @@ _02237F0A:
 	mvn r1, r1
 	str r1, [r0, #4]
 _02237F12:
-	bl ov38_0221BFEC
+	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237F18:
 	mov r0, #0x18
 	str r0, [r1]
 	sub r0, #0x24
 	str r0, [r1, #4]
-	bl ov38_0221BFEC
+	bl GameStats_Shutdown
 _02237F24:
 	pop {r3, pc}
 	nop

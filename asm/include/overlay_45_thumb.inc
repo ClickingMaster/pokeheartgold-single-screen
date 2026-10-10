@@ -165,10 +165,10 @@
 .public _u32_div_f
 .public gGameLanguage
 .public NNS_G3dGlb
-.public ov00_021E5CA0
+.public WifiConnection_SetDisconnectCallback
 .public ov00_021E5CD0
 .public ov00_021E5CEC
-.public ov00_021E6A70
+.public WifiConnection_ClassifyErrorCode
 .public ov00_021E7144
 .public ov42_02228188
 .public ov42_022282DC

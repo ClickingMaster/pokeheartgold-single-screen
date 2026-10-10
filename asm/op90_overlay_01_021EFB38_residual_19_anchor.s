@@ -85,53 +85,53 @@ ov01_0220689C: ; 0x0220689C
 	.byte 0x10, 0x00, 0x00, 0x00
 
 ov01_022068C4: ; 0x022068C4
-	.word ov120_0225FA5C
-	.word ov120_0225FA68
-	.word ov120_0225FCFC
-	.word ov120_0225FD08
-	.word ov120_0225FBAC
-	.word ov120_0225FBB8
-	.word ov119_0225F37C
-	.word ov119_0225F020
-	.word ov119_0225FA2C
-	.word ov119_0225F670
-	.word ov119_02260258
-	.word ov119_0225FF9C
-	.word ov115_0225F704
-	.word ov115_0225F728
-	.word ov115_0225F74C
-	.word ov115_0225F770
-	.word ov115_0225F794
-	.word ov115_0225F7B8
-	.word ov115_0225F7DC
-	.word ov115_0225F800
-	.word ov115_0225F824
-	.word ov115_0225F848
-	.word ov115_0225F86C
-	.word ov115_0225F890
-	.word ov115_0225F8B4
-	.word ov115_0225F8D8
-	.word ov115_0225F8FC
-	.word ov115_0225F920
-	.word ov115_0225F944
-	.word ov115_022602C0
-	.word ov115_022602E4
-	.word ov115_02260308
-	.word ov115_0226032C
-	.word ov115_02260350
+	.word EncounterEffect_WildRowsWhite
+	.word EncounterEffect_WildRowsBlack
+	.word EncounterEffect_WildWaveWhite
+	.word EncounterEffect_WildWaveBlack
+	.word EncounterEffect_WildDiagonalsWhite
+	.word EncounterEffect_WildDiagonalsBlack
+	.word EncounterEffect_TrainerSpinApart
+	.word EncounterEffect_TrainerSpinZoom
+	.word EncounterEffect_TrainerBallDrop
+	.word EncounterEffect_TrainerFadeSpin
+	.word EncounterEffect_TrainerBallFall
+	.word EncounterEffect_TrainerRisingBall
+	.word EncounterEffect_LeaderFalkner
+	.word EncounterEffect_LeaderBugsy
+	.word EncounterEffect_LeaderWhitney
+	.word EncounterEffect_LeaderMorty
+	.word EncounterEffect_LeaderJasmine
+	.word EncounterEffect_LeaderChuck
+	.word EncounterEffect_LeaderPryce
+	.word EncounterEffect_LeaderClair
+	.word EncounterEffect_LeaderBrock
+	.word EncounterEffect_LeaderMisty
+	.word EncounterEffect_LeaderLtSurge
+	.word EncounterEffect_LeaderErika
+	.word EncounterEffect_LeaderJanine
+	.word EncounterEffect_LeaderSabrina
+	.word EncounterEffect_LeaderBlaine
+	.word EncounterEffect_LeaderBlue
+	.word EncounterEffect_Rival
+	.word EncounterEffect_EliteFourWill
+	.word EncounterEffect_EliteFourKoga
+	.word EncounterEffect_EliteFourBruno
+	.word EncounterEffect_EliteFourKaren
+	.word EncounterEffect_Champion
 	.word ov116_0225F054
 	.word ov116_0225F364
 	.word ov116_0225F374
 	.word ov114_0225F020
 	.word ov114_0225F280
-	.word ov117_0225F020
-	.word ov117_0225F4D4
-	.word ov117_0225F4E4
-	.word ov117_0225F4F4
-	.word ov117_0225F504
-	.word ov117_0225F514
-	.word ov118_0225F020
-	.word ov120_0225F714
+	.word EncounterEffect_TeamRocket
+	.word EncounterEffect_ExecutivePetrel
+	.word EncounterEffect_ExecutiveProton
+	.word EncounterEffect_ExecutiveArcher
+	.word EncounterEffect_ExecutiveAriana
+	.word EncounterEffect_RocketBoss
+	.word EncounterEffect_KimonoGirl
+	.word EncounterEffect_PkmnTrainerRed
 
 ov01_02206980: ; 0x02206980
 	.byte 0x00, 0x02, 0x05, 0x07, 0x01, 0x06, 0x03, 0x04

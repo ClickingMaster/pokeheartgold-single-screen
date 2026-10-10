@@ -59,7 +59,7 @@ void ov90_0225AE4C(SysTask *, void *);
 void ov90_0225B230(SysTask *, void *);
 SysTask *SysTask_CreateOnMainQueue(void (*)(SysTask *, void *), void *, u32);
 SysTask *SysTask_CreateOnVWaitQueue(void (*)(SysTask *, void *), void *, u32);
-void ov00_021E69A8(enum HeapID);
+void WifiConnection_StartVoiceChat(enum HeapID);
 Ov90Main *ov90_0225A6B4(Ov90Params *params, Ov90Profile *profile, u8 mode, enum HeapID heapId);
 // @fn ov90_0225A6B4
 Ov90Main *ov90_0225A6B4(Ov90Params *params, Ov90Profile *profile, u8 mode, enum HeapID heapId) {
@@ -100,7 +100,7 @@ Ov90Main *ov90_0225A6B4(Ov90Params *params, Ov90Profile *profile, u8 mode, enum 
     }
     w->vtask = SysTask_CreateOnVWaitQueue(ov90_0225B230, w, 0);
     if (w->u.p.xA) {
-        ov00_021E69A8(heapId);
+        WifiConnection_StartVoiceChat(heapId);
     }
     return w;
 }

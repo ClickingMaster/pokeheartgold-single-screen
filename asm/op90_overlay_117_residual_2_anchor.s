@@ -31,8 +31,8 @@
 	.public _0225F3E4
 	.public _0225F41A
 	.public _0225FACC
-	.public ov117_0225F020
-	.public ov117_0225F524
+	.public EncounterEffect_TeamRocket
+	.public RocketEffect_RunExecutiveIntro
 	.public ov117_0225FAD4
 	.public ov117_0225FADC
 	.public ov117_0225FAE4
@@ -46,15 +46,15 @@
 	.public ov117_0225FB0C
 	.public ov117_0225FB10
 	.public _0225FACC
-	.public ov117_0225F020
-	.public ov117_0225F420
-	.public ov117_0225F470
-	.public ov117_0225F4D4
-	.public ov117_0225F4E4
-	.public ov117_0225F4F4
-	.public ov117_0225F504
-	.public ov117_0225F514
-	.public ov117_0225F524
+	.public EncounterEffect_TeamRocket
+	.public RocketEffect_LoadBgScreen
+	.public RocketEffect_GetTrainerNameString
+	.public EncounterEffect_ExecutivePetrel
+	.public EncounterEffect_ExecutiveProton
+	.public EncounterEffect_ExecutiveArcher
+	.public EncounterEffect_ExecutiveAriana
+	.public EncounterEffect_RocketBoss
+	.public RocketEffect_RunExecutiveIntro
 	.include "overlay_117.inc"
 	.include "global.inc"
 

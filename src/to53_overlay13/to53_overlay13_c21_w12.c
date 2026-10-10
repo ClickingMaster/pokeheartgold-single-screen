@@ -55,15 +55,15 @@ extern void OS_CreateThread(void *, void (*)(void *), void *, void *, u32, int);
 extern int ov13_02223EE0(u32);
 extern int ov13_02223F84(void);
 extern void ov13_02225320(void *);
-void ov13_022262D0(HashCtx *);
+void WifiSetup_Md5Init(HashCtx *);
 void ov13_022256C8(const u8 *, const u8 *, u8 *);
-void ov13_022262F8(HashCtx *, const u8 *, u32);
-void ov13_02226370(u8 *, HashCtx *);
-void ov13_022263C4(HashCtx *, const u8 *);
-void ov13_02226C0C(u8 *, const volatile u32 *, u32);
-void ov13_02226C38(u32 *, const u8 *, u32);
-void ov13_02226C64(u8 *, const u8 *, u32);
-void ov13_02226C7C(s8 *, s8, u32);
+void WifiSetup_Md5Update(HashCtx *, const u8 *, u32);
+void WifiSetup_Md5Final(u8 *, HashCtx *);
+void WifiSetup_Md5Transform(HashCtx *, const u8 *);
+void WifiSetup_EncodeLittleEndian(u8 *, const volatile u32 *, u32);
+void WifiSetup_DecodeLittleEndian(u32 *, const u8 *, u32);
+void WifiSetup_CopyBytes(u8 *, const u8 *, u32);
+void WifiSetup_FillBytes(s8 *, s8, u32);
 void ov13_02226C94(u8 *, const u8 *, u32);
 u32 ov13_02226CBC(void);
 void *ov13_02226CD8(u32, u32);
@@ -76,7 +76,7 @@ int ov13_02226EF0(s32 *);
 int ov13_02226F28(void *);
 void ov13_02226F3C(void);
 
-void ov13_02226C0C(u8 *dst, const volatile u32 *src, u32 len) {
+void WifiSetup_EncodeLittleEndian(u8 *dst, const volatile u32 *src, u32 len) {
     u32 i = 0;
     while (i < len) {
         u8 *p = dst + i;
@@ -87,14 +87,14 @@ void ov13_02226C0C(u8 *dst, const volatile u32 *src, u32 len) {
         i += 4;
     }
 }
-void ov13_02226C38(u32 *dst, const u8 *src, u32 len) {
+void WifiSetup_DecodeLittleEndian(u32 *dst, const u8 *src, u32 len) {
     u32 i = 0;
     while (i < len) {
         *dst++ = src[i] | (src[i + 1] << 8) | (src[i + 2] << 16) | (src[i + 3] << 24);
         i += 4;
     }
 }
-void ov13_02226C64(u8 *dst, const u8 *src, u32 len) {
+void WifiSetup_CopyBytes(u8 *dst, const u8 *src, u32 len) {
     u32 i = 0;
     while (i < len) {
         dst[i] = src[i];

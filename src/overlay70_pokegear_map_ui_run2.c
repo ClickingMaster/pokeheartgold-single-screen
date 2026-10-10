@@ -6,7 +6,7 @@
 #define OV70_FAIL()    \
     OV70_STATE = 0x18; \
     OV70_ERR = -13;    \
-    ov38_0221BFEC()
+    GameStats_Shutdown()
 
 void ov70_02237F64(void *a);
 void ov70_02237FB4(void);
@@ -26,7 +26,7 @@ void ov70_02238818(u8 *work, void *ovy);
 
 void ov70_02238008(void *b) {
     *(void **)(ov70_02246900 + 0x40) = b;
-    ov38_0221BE84();
+    GameStats_Start();
     if (ov70_02238360(ov70_0224613C, ov70_02246814, 0, b, 0x124)) {
         OV70_STATE = 6;
     } else {
@@ -36,7 +36,7 @@ void ov70_02238008(void *b) {
 
 void ov70_02238058(void *b) {
     *(void **)(ov70_02246900 + 0x40) = b;
-    ov38_0221BE84();
+    GameStats_Start();
     if (ov70_02238360(ov70_02246184, ov70_02246814, 0, b, 0x124)) {
         OV70_STATE = 8;
     } else {
@@ -45,7 +45,7 @@ void ov70_02238058(void *b) {
 }
 
 void ov70_022380A8(void) {
-    ov38_0221BE84();
+    GameStats_Start();
     if (ov70_02238360(ov70_022461D0, ov70_02246814, 0, ov70_0224693C, 2)) {
         OV70_STATE = 0xa;
     } else {
@@ -54,7 +54,7 @@ void ov70_022380A8(void) {
 }
 
 void ov70_022380EC(void) {
-    ov38_0221BE84();
+    GameStats_Start();
     if (ov70_02238360(ov70_0224621C, ov70_02246814, 0, ov70_0224693C, 2)) {
         OV70_STATE = 0xc;
     } else {
@@ -64,7 +64,7 @@ void ov70_022380EC(void) {
 
 void ov70_02238130(void *src, int n, void *c) {
     *(void **)(ov70_02246900 + 0x40) = c;
-    ov38_0221BE84();
+    GameStats_Start();
     *(Ov70Mac6 *)ov70_02246814 = *(Ov70Mac6 *)src;
     _02246800[0x1a] = (u8)n;
     if (ov70_02238360(ov70_02246268, ov70_02246814, 7, c, 0x124 * n)) {

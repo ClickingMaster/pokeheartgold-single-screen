@@ -67,9 +67,9 @@
 .public ov01_021F1310
 .public HBlankSystem_Start
 .public HBlankSystem_Stop
-.public ov119_0225F020
-.public ov119_0225F37C
-.public ov119_0225F670
-.public ov119_0225FA2C
-.public ov119_0225FF9C
-.public ov119_02260258
+.public EncounterEffect_TrainerSpinZoom
+.public EncounterEffect_TrainerSpinApart
+.public EncounterEffect_TrainerFadeSpin
+.public EncounterEffect_TrainerBallDrop
+.public EncounterEffect_TrainerRisingBall
+.public EncounterEffect_TrainerBallFall

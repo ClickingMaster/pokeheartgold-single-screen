@@ -1,5 +1,0 @@
-#pragma force_active on
-#include "global.h"
-#pragma force_active on
-typedef struct W{u8 pad[4028];int(*callback)(int);u8 gap[176];int state;u8 gap2[32];int value,other;u8 zeroGap[4];int zero;u8 gap3[52];u32 mask;u8 gap4[4];u8 ready;}W;extern W*_0221A680;extern void sub_0203993C(void),ov00_021EE384(u32*),ov00_021E6388(int);extern int sub_02034098(void);extern u32 ov00_021EE4FC(void);void ov00_021E6ED8(int,int,int,int,int);
-void ov00_021E6ED8(int status,int mode,int cancel,int ignored,int value){int reject=0;_0221A680->zero=0;if(status==0){if(mode==0){u32 mask;u32 current;sub_0203993C();if(sub_02034098()&&value==-1)reject=1;if(_0221A680->callback&&_0221A680->callback(value)==0)reject=1;if(_0221A680->ready||reject){mask=ov00_021EE4FC()&~_0221A680->mask;current=ov00_021EE4FC();if(mask){ov00_021EE384(&mask);if((mask^current)==1)_0221A680->state=6;return;}}_0221A680->value=value;_0221A680->mask=ov00_021EE4FC();if(_0221A680->mask==1){_0221A680->state=6;return;}ov00_021E6388(value);}else if(cancel==0)_0221A680->other=-1;}}

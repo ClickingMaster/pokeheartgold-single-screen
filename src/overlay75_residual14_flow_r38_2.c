@@ -34,7 +34,7 @@ extern void ov75_02246C68(void *work);
 extern void ov75_02246C8C(void *work);
 extern int YesNoPrompt_HandleInput(void *prompt);
 extern void YesNoPrompt_Destroy(void *prompt);
-extern s32 ov00_021E6A70(s32, u32);
+extern s32 WifiConnection_ClassifyErrorCode(s32, u32);
 extern void ov75_0224971C(Ov75Task *task, s32, s32);
 extern void EraseFrameAndWindow1(void *window, u32 fill);
 extern int SaveGameNormal(void *saveData);
@@ -175,7 +175,7 @@ int ov75_022490D8(Ov75Task *task) {
 }
 
 int ov75_022491CC(Ov75Task *task) {
-    s32 result = ov00_021E6A70(-task->unk18, task->unk1C);
+    s32 result = WifiConnection_ClassifyErrorCode(-task->unk18, task->unk1C);
     ov75_0224971C(task, result, -task->unk18);
     task->next = 0x1C;
     return 0;

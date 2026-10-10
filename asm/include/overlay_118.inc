@@ -17,4 +17,4 @@
 .public ov01_021EFEC8
 .public ov01_021EFF28
 .public ov01_021F0500
-.public ov118_0225F020
+.public EncounterEffect_KimonoGirl

@@ -64,37 +64,7 @@ Autoload WRAM
 	Object lib/src/sound_channel.o
 	Object lib/src/sound_main.o
 	Object lib/src/sound_ex_channel.o
-	Object lib/src/to90_arm7_sub_wram_1_run33.o
-	Object lib/src/op90_to90_a7_next1668_o07_residual_1_r01.o
-	Object lib/src/to90_a7_next1668_o07_run01.o
-	Object lib/src/to90_arm7_sub_wram_1_run34.o
-	Object lib/src/to90_arm7_sub_wram_1_run35.o
-	Object lib/src/to90_arm7_sub_wram_1_run36.o
-	Object lib/src/to90_arm7_sub_wram_1_run37.o
-	Object lib/src/to90_arm7_sub_wram_1_run38.o
-	Object lib/src/to90_arm7_sub_wram_1_run39.o
-	Object lib/src/to90_arm7_sub_wram_1_run40.o
-	Object lib/src/to90_a7_next1668_o08_run01.o
-	Object lib/src/to90_arm7_sub_wram_1_run41.o
-	Object lib/src/to90_arm7_sub_wram_1_run42.o
-	Object lib/src/to90_arm7_sub_wram_1_run43.o
-	Object lib/src/to90_arm7_sub_wram_1_run44.o
-	Object lib/src/to90_arm7_sub_wram_1_run45.o
-	Object lib/src/to90_arm7_sub_wram_1_run46.o
-	Object lib/src/to91_arm7_readarg41475_run01.o
-	Object lib/src/to90_arm7_sub_wram_1_run47.o
-	Object lib/src/to90_arm7_sub_wram_1_run48.o
-	Object lib/src/to90_arm7_sub_wram_1_run49.o
-	Object lib/src/to90_arm7_sub_wram_1_run50.o
-	Object lib/src/to90_arm7_sub_wram_1_run51.o
-	Object lib/src/to90_arm7_sub_wram_1_run52.o
-	Object lib/src/to90_arm7_sub_wram_1_run53.o
-	Object lib/src/to90_arm7_sub_wram_1_run54.o
-	Object lib/src/op90_op90_to91_arm7_variable41458_prefix_residual_1_r01.o
-	Object lib/src/op90_to91_arm7_variable41458_prefix_r01.o
-	Object lib/src/to91_arm7_variable41458_run01.o
-	Object lib/src/to90_arm7_sub_wram_1_run55.o
-	Object lib/src/to90_arm7_sub_wram_1_run56.o
+	Object lib/src/sound_seq_player.o
 	Object lib/src/sound_bank.o
 	Object lib/src/sound_shared_work.o
 	Object lib/src/sound_alarm.o

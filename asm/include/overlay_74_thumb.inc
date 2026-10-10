@@ -383,7 +383,7 @@
 .public gApp_MainMenu_SelectOption_NintendoWFCSetup
 .public _02111864
 .public gSystem
-.public ov00_021E6A70
+.public WifiConnection_ClassifyErrorCode
 .public ov00_021EC11C
 .public ov00_021EC210
 .public ov00_021EC294

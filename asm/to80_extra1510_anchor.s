@@ -1,7 +1,7 @@
-	.extern ov120_0225F6AC
-	.extern ov120_0225F6BC
-	.extern ov120_0225FECC
-	.extern ov120_0225FEE8
+	.extern WildEffectSine_Init
+	.extern WildEffectSine_Update
+	.extern WildEffectBgLoader_Start
+	.extern WildEffectBgLoader_IsDone
 	.public ov120_022601BC
 	.public ov120_022601D8
 	.public ov120_022601BC
@@ -15,45 +15,45 @@
 	.public ov120_02260314
 	.public ov120_0226032C
 	.public _0226019C
-	.public ov120_0225F020
-	.public ov120_0225F038
-	.public ov120_0225F040
-	.public ov120_0225F08C
-	.public ov120_0225F0FC
-	.public ov120_0225F118
-	.public ov120_0225F120
-	.public ov120_0225F14C
-	.public ov120_0225F1E8
-	.public ov120_0225F240
-	.public ov120_0225F268
-	.public ov120_0225F294
-	.public ov120_0225F2B8
-	.public ov120_0225F318
-	.public ov120_0225F4DC
-	.public ov120_0225F6AC
-	.public ov120_0225F6BC
-	.public ov120_0225F6FC
-	.public ov120_0225F704
-	.public ov120_0225F714
-	.public ov120_0225F8B0
-	.public ov120_0225F90C
-	.public ov120_0225F970
-	.public ov120_0225F9D4
-	.public ov120_0225FA5C
-	.public ov120_0225FA68
-	.public ov120_0225FA74
-	.public ov120_0225FBAC
-	.public ov120_0225FBB8
-	.public ov120_0225FBC4
-	.public ov120_0225FCFC
-	.public ov120_0225FD08
-	.public ov120_0225FD14
-	.public ov120_0225FD2C
-	.public ov120_0225FDA0
-	.public ov120_0225FE08
-	.public ov120_0225FECC
-	.public ov120_0225FEE8
-	.public ov120_0225FF00
+	.public WildEffectCell_New
+	.public WildEffectCell_Free
+	.public WildEffectCell_Start
+	.public WildEffectCell_Update
+	.public WildEffectRandomFill_New
+	.public WildEffectRandomFill_Free
+	.public WildEffectRandomFill_Start
+	.public WildEffectRandomFill_Update
+	.public ShuffledIndices_Init
+	.public ShuffledIndices_Next
+	.public WildEffectCellGrid_New
+	.public WildEffectCellGrid_Free
+	.public WildEffectCellGrid_Start
+	.public WildEffectCellGrid_UpdateRows
+	.public WildEffectCellGrid_UpdateDiagonals
+	.public WildEffectSine_Init
+	.public WildEffectSine_Update
+	.public WildEffectStep_Init
+	.public WildEffectStep_Run
+	.public EncounterEffect_PkmnTrainerRed
+	.public RedEffect_FillScreen
+	.public RedEffect_FirstFlash
+	.public RedEffect_SecondFlash
+	.public RedEffect_CreateSprite
+	.public EncounterEffect_WildRowsWhite
+	.public EncounterEffect_WildRowsBlack
+	.public WildEffect_RunCellGridRows
+	.public EncounterEffect_WildDiagonalsWhite
+	.public EncounterEffect_WildDiagonalsBlack
+	.public WildEffect_RunCellGridDiagonals
+	.public EncounterEffect_WildWaveWhite
+	.public EncounterEffect_WildWaveBlack
+	.public WildEffect_LoadCharData
+	.public WildEffect_LoadScreen
+	.public WildEffectBgLoader_VBlankTask
+	.public WildEffectBgLoader_Task
+	.public WildEffectBgLoader_Start
+	.public WildEffectBgLoader_IsDone
+	.public WildEffect_RunWave
 	.include "asm/macros.inc"
 	.include "overlay_120.inc"
 	.include "global.inc"

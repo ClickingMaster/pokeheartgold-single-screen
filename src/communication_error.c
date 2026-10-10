@@ -78,7 +78,7 @@ static BOOL sub_0203A9FC(u32 *error_code_ptr) {
 
     // TODO: this is probably a struct.
     u32 *unk = sub_020392D8();
-    s32 unk2 = ov00_021E6A70(unk[0], unk[1]);
+    s32 unk2 = WifiConnection_ClassifyErrorCode(unk[0], unk[1]);
 
     *error_code_ptr = unk[0];
 

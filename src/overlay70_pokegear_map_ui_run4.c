@@ -6,7 +6,7 @@
 #define OV70_FAIL()    \
     OV70_STATE = 0x18; \
     OV70_ERR = -13;    \
-    ov38_0221BFEC()
+    GameStats_Shutdown()
 
 void ov70_02237F64(void *a);
 void ov70_02237FB4(void);
@@ -25,7 +25,7 @@ void ov70_022387F8(void);
 void ov70_02238818(u8 *work, void *ovy);
 
 void ov70_022382C0(void) {
-    ov38_0221BE84();
+    GameStats_Start();
     if (ov70_02238360(ov70_02246358, ov70_02246814, 0, ov70_0224693C, 2)) {
         OV70_STATE = 0x14;
     } else {
@@ -37,7 +37,7 @@ void ov70_02238304(void *a, void *b) {
     OS_GetMacAddress((u8 *)a + 0x1c);
     memcpy(ov70_02246814, a, 0x64);
     *(void **)(ov70_02246900 + 0x40) = b;
-    ov38_0221BE84();
+    GameStats_Start();
     if (ov70_02238360(ov70_022463A4, ov70_02246814, 0x64, *(void **)(ov70_02246900 + 0x40), 8)) {
         OV70_STATE = 0x16;
     } else {
@@ -46,7 +46,7 @@ void ov70_02238304(void *a, void *b) {
 }
 
 int ov70_02238360(void *a, void *b, int c, void *d, int e) {
-    int r = ov38_0221BEA8(a, *(void **)(_02246800 + 8), b, c, d, e);
+    int r = GameStats_PrepareRequest(a, *(void **)(_02246800 + 8), b, c, d, e);
     switch (r) {
     case 0:
         return 1;

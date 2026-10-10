@@ -97,7 +97,7 @@ void sub_02036024(void) {
     int destroy = 0;
     if (_021D4140.work != NULL) {
         if (sub_02034044(sub_0203993C())) {
-            ov00_021E6CB8();
+            WifiConnection_Shutdown();
             destroy = 1;
         } else if (sub_0203507C()) {
             destroy = 1;

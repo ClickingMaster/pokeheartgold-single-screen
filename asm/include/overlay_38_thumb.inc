@@ -15,9 +15,9 @@
 .public ov00_021FA118
 .public ov00_021FA21C
 .public ov00_021FFC18
-.public ov38_0221BE84
-.public ov38_0221BEA8
-.public ov38_0221BF48
-.public ov38_0221BFEC
-.public ov38_0221C014
-.public ov38_0221C020
+.public GameStats_Start
+.public GameStats_PrepareRequest
+.public GameStats_Update
+.public GameStats_Shutdown
+.public GameStats_GetError
+.public GameStats_GetResponseLength

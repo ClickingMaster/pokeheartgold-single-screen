@@ -803,7 +803,7 @@ s32 ov44_02233EF8(UnkStruct_ov44_02235340 *arg0) {
         return 0;
     }
     if (ov44_02233E6C(arg0) == 1) {
-        ov00_021E69A8(104);
+        WifiConnection_StartVoiceChat(104);
         arg0->unk11 = 1;
         return 1;
     }
@@ -814,7 +814,7 @@ s32 ov44_02233F20(UnkStruct_ov44_02235340 *arg0) {
     if (arg0->unk11 == 0) {
         return 0;
     }
-    ov00_021E6A4C();
+    WifiConnection_StopVoiceChat();
     arg0->unk11 = 0;
     return 1;
 }
@@ -873,11 +873,11 @@ void ov44_02233FE8(UnkStruct_ov44_02235340 *arg0) {
 }
 
 void ov44_02234028(UnkStruct_ov44_02235340 *arg0) {
-    ov00_021E5CA0(ov44_02234070, arg0);
+    WifiConnection_SetDisconnectCallback(ov44_02234070, arg0);
 }
 
 void ov44_02234038(UnkStruct_ov44_02235340 *arg0) {
-    ov00_021E5CA0(0, 0);
+    WifiConnection_SetDisconnectCallback(0, 0);
 }
 
 s32 ov44_02234044(UnkStruct_ov44_02235340 *arg0) {

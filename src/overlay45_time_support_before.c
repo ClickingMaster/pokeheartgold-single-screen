@@ -28,7 +28,7 @@ extern int ov45_0222A33C(void *);
 extern void ov45_0222CE2C(R28State *, u32);
 extern int LocationGmmDatRegionCountGetByCountryMsgNo(int);
 extern void ov45_0222D638(R28Place *, u32, u32, u32);
-extern int ov00_021E6A70(u32, u32);
+extern int WifiConnection_ClassifyErrorCode(u32, u32);
 extern int sub_020393C8(void);
 extern int sub_020397FC(void);
 extern void ov45_0222DE1C(void *);

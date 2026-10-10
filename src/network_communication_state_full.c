@@ -882,7 +882,7 @@ BOOL sub_02038D90(void) {
         return TRUE;
     }
     if ((_021D4150->unk4E == 24) || (_021D4150->unk4E == 25) || (_021D4150->unk4E == 36)) {
-        ov00_021E6CB8();
+        WifiConnection_Shutdown();
         return TRUE;
     }
     if (sub_02039998()) {
@@ -923,7 +923,7 @@ void sub_02038E90(void) {
 }
 
 void sub_02038E94(void) {
-    if (ov00_021E5E54(0) < 0) {
+    if (WifiConnection_Update(0) < 0) {
         sub_020381C0(sub_02038E90, 0);
     }
 }
@@ -936,7 +936,7 @@ void sub_02038EB4(void) {
 
 void sub_02038EB8(void) {
     sub_0203786C(1);
-    s32 temp_r0 = ov00_021E5E54(0);
+    s32 temp_r0 = WifiConnection_Update(0);
     if ((temp_r0 >= 10) && (temp_r0 < 20)) {
         sub_020381C0(sub_02038EB4, 0);
     } else if (temp_r0 < 0) {
@@ -973,7 +973,7 @@ void sub_02038F74(u32 arg0, s32 arg1, s32 arg2) {
 }
 
 void sub_02038F9C(void) {
-    s32 temp_r0 = ov00_021E5E54(0);
+    s32 temp_r0 = WifiConnection_Update(0);
     if ((temp_r0 >= 10) && (temp_r0 < 20)) {
         sub_020381C0(sub_02038EB4, 0);
     } else if (temp_r0 < 0) {
@@ -990,11 +990,11 @@ void sub_02038F9C(void) {
 }
 
 void sub_0203900C(void) {
-    if (ov00_021E5E54(1) < 0) {
+    if (WifiConnection_Update(1) < 0) {
         sub_020381C0(sub_02038E90, 0);
         return;
     }
-    u32 temp_r0 = ov00_021E6D7C(_021D4150->unk51, sub_02033FC4(_021D4150->unk4E) + 1, 0) + 3;
+    u32 temp_r0 = WifiConnection_StartMatchmaking(_021D4150->unk51, sub_02033FC4(_021D4150->unk4E) + 1, 0) + 3;
     switch (temp_r0) {
     case 3:
         sub_0203622C();
@@ -1012,7 +1012,7 @@ s32 sub_02039080(s32 arg0) {
     if (_021D4150->unk24 != sub_02038F9C) {
         return 0;
     }
-    ov00_021E5C84(&sub_02036904, &sub_020367A8);
+    WifiConnection_SetReceiveCallbacks(&sub_02036904, &sub_020367A8);
     _021D4150->unk51 = arg0;
     sub_020381C0(sub_0203900C, 0);
     return 1;
@@ -1047,8 +1047,8 @@ s32 sub_020390C4(void) {
 }
 
 void sub_02039144(void) {
-    ov00_021E5C84(&sub_02036904, &sub_020367A8);
-    switch (ov00_021E6D7C(-1, 4, 1) + 4) {
+    WifiConnection_SetReceiveCallbacks(&sub_02036904, &sub_020367A8);
+    switch (WifiConnection_StartMatchmaking(-1, 4, 1) + 4) {
     case 4:
         _021D4150->unk5C = 0;
         sub_0203622C();
@@ -1062,7 +1062,7 @@ void sub_02039144(void) {
     case 2:
         break;
     }
-    s32 temp_r0_2 = ov00_021E6690();
+    s32 temp_r0_2 = WifiConnection_CheckError();
     if (temp_r0_2 < 0) {
         sub_020381C0(sub_02038E90, 0);
     } else if (temp_r0_2 == 26) {
@@ -1072,10 +1072,10 @@ void sub_02039144(void) {
 
 void sub_020391D0(void) {
     sub_0203786C(0);
-    if (ov00_021E6BE4(_021D4150->unk50) && ov00_021E6C68()) {
+    if (WifiConnection_Disconnect(_021D4150->unk50) && WifiConnection_FinishDisconnect()) {
         sub_020343E4();
         sub_020381C0(sub_02039144, 0);
-    } else if (ov00_021E5E54(0) < 0) {
+    } else if (WifiConnection_Update(0) < 0) {
         sub_020381C0(sub_02038E90, 0);
     }
 }
@@ -1125,11 +1125,11 @@ u32 *sub_020392D8(void) {
 
 void sub_020392F4(void) {
     sub_0203786C(0);
-    if (ov00_021E6BE4(0)) {
-        ov00_021E6C68();
+    if (WifiConnection_Disconnect(0)) {
+        WifiConnection_FinishDisconnect();
         sub_020381C0(sub_0203847C, 0);
     }
-    if (ov00_021E5E54(0) < 0) {
+    if (WifiConnection_Update(0) < 0) {
         sub_020381C0(sub_02038E90, 0);
     }
 }
@@ -1270,7 +1270,7 @@ BOOL sub_020395B0(void) {
 }
 
 void sub_0203960C(void) {
-    s32 temp_r0 = ov00_021E5B6C();
+    s32 temp_r0 = WifiConnection_UpdateLogin();
     _021D4150->unk44--;
     if (temp_r0 == 27) {
         if (_021D4150->unk4E == 33) {
@@ -1297,8 +1297,8 @@ void sub_02039694(void) {
     if (sub_02034DB8()) {
         Heap_CreateAtEnd(HEAP_ID_3, HEAP_ID_48, 0x35400);
         if (sub_02035ED8(1, 1, 512, 1)) {
-            ov00_021E5900(_021D4150->unk28, 48, 0x2C400, sub_02033FC4(_021D4150->unk4E) + 1);
-            ov00_021E6CA4(sub_020399DC);
+            WifiConnection_Init(_021D4150->unk28, 48, 0x2C400, sub_02033FC4(_021D4150->unk4E) + 1);
+            WifiConnection_SetErrorCallback(sub_020399DC);
             sub_02035FD8();
             sub_020381C0(sub_0203960C, 3600);
         }
@@ -1520,35 +1520,35 @@ BOOL sub_02039AD8(int arg0) {
 
 void sub_02039AF8(void) {
     _021D4150->unk4E = 29;
-    ov00_021E5C84(&sub_020369CC, &sub_020369CC);
+    WifiConnection_SetReceiveCallbacks(&sub_020369CC, &sub_020369CC);
 }
 
 void sub_02039B18(void) {
     _021D4150->unk4E = 35;
-    ov00_021E5C84(&sub_020369CC, &sub_020369CC);
+    WifiConnection_SetReceiveCallbacks(&sub_020369CC, &sub_020369CC);
 }
 
 void sub_02039B38(void) {
     _021D4150->unk4E = 33;
-    ov00_021E5C84(&sub_020369CC, &sub_020369CC);
+    WifiConnection_SetReceiveCallbacks(&sub_020369CC, &sub_020369CC);
 }
 
 void sub_02039B58(void) {
     _021D4150->unk4E = 23;
-    ov00_021E5C84(&sub_02036904, &sub_020367A8);
+    WifiConnection_SetReceiveCallbacks(&sub_02036904, &sub_020367A8);
 }
 
 void sub_02039B7C(void) {
     _021D4150->unk4E = 19;
-    ov00_021E5C84(&sub_02036904, &sub_020367A8);
+    WifiConnection_SetReceiveCallbacks(&sub_02036904, &sub_020367A8);
 }
 
 void sub_02039BA0(void) {
     if (sub_02034DB8()) {
         Heap_CreateAtEnd(HEAP_ID_3, HEAP_ID_48, 0x60000);
         if (sub_02035ED8(1, 1, 512, 1)) {
-            ov00_021E5900(_021D4150->unk28, 48, 0x58000, sub_02033FC4(_021D4150->unk4E) + 1);
-            ov00_021E6CA4(sub_020399DC);
+            WifiConnection_Init(_021D4150->unk28, 48, 0x58000, sub_02033FC4(_021D4150->unk4E) + 1);
+            WifiConnection_SetErrorCallback(sub_020399DC);
             sub_02035FD8();
             ov00_021E70B8(0);
             sub_020378E4(0);
@@ -1619,7 +1619,7 @@ s32 sub_02039D08(void) {
 }
 
 int sub_02039D3C(void) {
-    s32 ret = sub_02039C6C(ov00_021E5E54(0));
+    s32 ret = sub_02039C6C(WifiConnection_Update(0));
     if (ret) {
         return sub_02039D08();
     }
@@ -1627,7 +1627,7 @@ int sub_02039D3C(void) {
 }
 
 void sub_02039D54(s32 *arg0) {
-    s32 temp_r0 = ov00_021E5E54(0);
+    s32 temp_r0 = WifiConnection_Update(0);
     if (temp_r0 >= 20) {
         *arg0 = temp_r0;
     } else {
@@ -1645,7 +1645,7 @@ void sub_02039D78(void) {
 }
 
 void sub_02039D8C(void) {
-    ov00_021E5E54(0);
+    WifiConnection_Update(0);
     sub_02039D08();
     if (ov45_0222E944()) {
         sub_0201A738(1);
@@ -1686,11 +1686,11 @@ void sub_02039DE4(void) {
 }
 
 void sub_02039E30(void) {
-    if (ov00_021E5E54(1) < 0) {
+    if (WifiConnection_Update(1) < 0) {
         sub_020381C0(sub_02038E90, 0);
         return;
     }
-    if (sub_02039D08() && ov00_021E6BE4(0) && ov00_021E6C68()) {
+    if (sub_02039D08() && WifiConnection_Disconnect(0) && WifiConnection_FinishDisconnect()) {
         sub_0203622C();
         sub_020378E4(0);
         sub_020381C0(sub_02039C60, 0);
@@ -1698,7 +1698,7 @@ void sub_02039E30(void) {
 }
 
 void sub_02039E7C(void) {
-    if (ov00_021E5E54(0) < 0) {
+    if (WifiConnection_Update(0) < 0) {
         sub_020381C0(sub_02038E90, 0);
     }
     sub_02039D08();

@@ -14,7 +14,7 @@ void ov91_0225CC4C(u8 *base, u8 *arg) {
         GF_DestroyVramTransferManager();
     }
     if (arg[0x38] != 0) {
-        ov00_021E6A4C();
+        WifiConnection_StopVoiceChat();
     }
     if (*(void **)(base + 4) != NULL) {
         ov90_02258A04(*(void **)(base + 4));

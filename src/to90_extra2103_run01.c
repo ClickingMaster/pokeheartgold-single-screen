@@ -8,7 +8,7 @@ extern u8 _0210F900[];
 extern int sub_0203993C(void);
 extern u16 sub_0203769C(void);
 extern int sub_02034084(int),sub_02034044(int),sub_02036630(Link *),sub_02036E60(void *),sub_02036FA8(void),sub_02033FC4(u16),sub_020373B4(u16),sub_02033298(void);
-extern int ov00_021E60E8(Link *,int),ov00_021E5F84(Link *,int);
+extern int WifiConnection_SendToAll(Link *,int),WifiConnection_SendToHost(Link *,int);
 extern void sub_02036AD8(void);
 void sub_02036298(void);
 void sub_02036298(void){
@@ -20,7 +20,7 @@ void sub_02036298(void){
    if(_0210F900[1]==4){sub_02036E60(_021D4140.link);_0210F900[1]=2;}
   }else if(_0210F900[1]==4){if(!sub_02036E60(_021D4140.link))return;_0210F900[1]=2;}
   if(sub_02036FA8())return;
-  if(ov00_021E60E8(_021D4140.link,38)){
+  if(WifiConnection_SendToAll(_021D4140.link,38)){
   n=sub_02033FC4((u16)sub_0203993C())+1;
   for(i=0;i<n;i++)if(sub_020373B4((u16)i))_021D4140.link->peers[i]++;
   _0210F900[1]=4;
@@ -33,7 +33,7 @@ void sub_02036298(void){
    if(_0210F900[1]==4){sub_02036E60(_021D4140.link);_0210F900[1]=2;}
   }else if(_0210F900[1]==4){if(!sub_02036E60(_021D4140.link))return;_0210F900[1]=2;}
   if(sub_02036FA8())return;
-  if(!ov00_021E5F84(_021D4140.link,38))return;
+  if(!WifiConnection_SendToHost(_021D4140.link,38))return;
   _0210F900[1]=4;_021D4140.link->count++;
  }else if(sub_02033298()==4){
   if(!sub_020373B4(sub_0203769C()))return;

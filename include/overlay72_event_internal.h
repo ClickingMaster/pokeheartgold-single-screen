@@ -39,7 +39,7 @@ typedef struct Ov72Work {
     Ov72Cfg cfg;
 } Ov72Work;
 int ov72_0223A200(Ov72Work *);
-extern void *ov00_021E6A70(int, int);
+extern void *WifiConnection_ClassifyErrorCode(int, int);
 extern void ov72_0223A4DC(void *, void *, int);
 extern void ov72_0223A444(void *);
 extern void ov72_02238680(void *, int, int);

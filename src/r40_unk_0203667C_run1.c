@@ -28,7 +28,7 @@ void sub_0203667C(void) {
             }
             _0210F900[0] = 2;
         }
-        if (!ov00_021E602C(_021D4140.work + 0x80, 0xC0)) {
+        if (!WifiConnection_SendFromHost(_021D4140.work + 0x80, 0xC0)) {
             return;
         }
         _0210F900[0] = 4;

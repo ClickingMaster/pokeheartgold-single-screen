@@ -6,7 +6,7 @@
 s32 IsPaletteFadeFinished();                    /* extern */
 void *OverlayManager_GetData();                 /* extern */
 M2C_UNK StopSE(s32, s32);                       /* extern */
-M2C_UNK ov00_021E6A4C();                        /* extern */
+M2C_UNK WifiConnection_StopVoiceChat();                        /* extern */
 s32 ov90_02258920(void *, s32);                 /* extern */
 M2C_UNK ov90_02258938(s32);                     /* extern */
 s32 ov90_022589BC(s32);                         /* extern */
@@ -217,7 +217,7 @@ s32 ov92_0225CDF4(void *arg0, u32 *arg1) {
                 ov92_0225D344(temp_r4);
                 ov92_0225D88C(temp_r4, temp_r0_9, 0, arg1);
                 if (M2C_FIELD(M2C_FIELD(temp_r4, void **, 0x88), s32 *, 0x3C) != 0) {
-                    ov00_021E6A4C();
+                    WifiConnection_StopVoiceChat();
                 }
             } else {
                 ov92_0225D88C(temp_r4, temp_r0_9, 0x13, arg1);
@@ -226,7 +226,7 @@ s32 ov92_0225CDF4(void *arg0, u32 *arg1) {
         case 19: /* switch 2 */
             sub_02037AC0(0x1B);
             if (M2C_FIELD(M2C_FIELD(temp_r4, void **, 0x88), s32 *, 0x3C) != 0) {
-                ov00_021E6A4C();
+                WifiConnection_StopVoiceChat();
             }
             ov92_0225D88C(temp_r4, 1, 0x14, arg1);
             break;

@@ -49,7 +49,7 @@ void ov72_0223A280(void *p, void *msgData, int msgNo, int speed) {
 }
 
 int ov72_0223A2E8(void *p) {
-    void *x = ov00_021E6A70(-U32(p, 0xF54), U32(p, 0xF58));
+    void *x = WifiConnection_ClassifyErrorCode(-U32(p, 0xF54), U32(p, 0xF58));
     ov72_0223A4DC(p, x, -U32(p, 0xF54));
     U32(p, 0x1C) = 0x38;
     return 3;

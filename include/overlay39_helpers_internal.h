@@ -91,7 +91,7 @@ void ov39_022289D0(void *app, int a1);
 void ov00_021EC210(void);
 void ov00_021EC8D8(void);
 void ov00_021ECD04(void *app);
-int ov00_021E6A70(int a0, int a1);
+int WifiConnection_ClassifyErrorCode(int a0, int a1);
 void sub_0203946C(void);
 void WaitingIcon_Delete(void *p);
 

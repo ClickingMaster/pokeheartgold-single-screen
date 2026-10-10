@@ -15,10 +15,10 @@ typedef struct Ov72NetState {
 
 extern s32 _0223B820[];
 extern u8 ov72_0223B920[];
-int ov38_0221BF48(void);
-void ov38_0221C014(void);
-s32 ov38_0221C020(void);
-void ov38_0221BFEC(void);
+int GameStats_Update(void);
+void GameStats_GetError(void);
+s32 GameStats_GetResponseLength(void);
+void GameStats_Shutdown(void);
 s32 ov72_02237D88(void);
 void ov72_022378DC(void);
 BOOL ov72_02237B54(void);

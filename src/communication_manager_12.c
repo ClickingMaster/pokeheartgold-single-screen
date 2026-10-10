@@ -24,7 +24,7 @@ void sub_02037668(void *a, void *b, const u8 *data) {
 int sub_0203769C(void) {
     if (_021D4140.work != NULL) {
         if (sub_02034044(sub_0203993C())) {
-            int id = ov00_021E6964();
+            int id = WifiConnection_GetAid();
             if (id != -1) {
                 return (u16)id;
             }

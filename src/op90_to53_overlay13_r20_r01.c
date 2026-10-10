@@ -1,9 +1,9 @@
 #pragma force_active on
 #include "global.h"
-void ov13_02226C38(u32*,const u8*,u32);
-void ov13_02226C7C(void*,int,u32);
+void WifiSetup_DecodeLittleEndian(u32*,const u8*,u32);
+void WifiSetup_FillBytes(void*,int,u32);
 typedef struct HashCtx { u32 state[4]; u32 bitsLo,bitsHi; u8 buf[64]; } HashCtx;
-void ov13_022263C4(HashCtx*,const u8*);
+void WifiSetup_Md5Transform(HashCtx*,const u8*);
 #define ROL(x,s) (((x)<<(s))|((x)>>(32-(s))))
 #define F(b,c,d) (((b)&(c))|((~(b))&(d)))
 #define F14(b,c,d) (((b)&(c))|((inverse)&(d)))
@@ -14,8 +14,8 @@ void ov13_022263C4(HashCtx*,const u8*);
 #define STEP(f,a,b,c,d,x,k,s) do {(a)+=(f(b,c,d)+(x)+(k));(a)=ROL(a,s);(a)+=(b);}while(0)
 
 static inline void AccumulateDigest(HashCtx *ctx,u32 a,u32 b,u32 c,u32 d){ctx->state[0]+=a;ctx->state[1]+=b;ctx->state[2]+=c;ctx->state[3]+=d;}
-// @fn ov13_022263C4
-void ov13_022263C4(HashCtx*context,const u8*input){u32*state=context->state;u32 a=state[0],b=state[1],c=state[2],d=state[3];u32 inverse;u32 words[16];u32 w0,w1,w2,w3,w4,w5,w6,w7,w8,w9,w10,w11,w12,w13,w14,w15;ov13_02226C38(words,input,64);
+// @fn WifiSetup_Md5Transform
+void WifiSetup_Md5Transform(HashCtx*context,const u8*input){u32*state=context->state;u32 a=state[0],b=state[1],c=state[2],d=state[3];u32 inverse;u32 words[16];u32 w0,w1,w2,w3,w4,w5,w6,w7,w8,w9,w10,w11,w12,w13,w14,w15;WifiSetup_DecodeLittleEndian(words,input,64);
 w0=words[0];STEP(F,a,b,c,d,w0,0xd76aa478u,7);
 w1=words[1];STEP(F,d,a,b,c,w1,0xe8c7b756u,12);
 w2=words[2];STEP(F,c,d,a,b,w2,0x242070dbu,17);
@@ -80,4 +80,4 @@ STEP(I,a,b,c,d,w4,0xf7537e82u,6);
 STEP(I,d,a,b,c,w11,0xbd3af235u,10);
 STEP(I,c,d,a,b,w2,0x2ad7d2bbu,15);
 STEP(I,b,c,d,a,w9,0xeb86d391u,21);
-AccumulateDigest(context,a,b,c,d);ov13_02226C7C(words,0,64);}
+AccumulateDigest(context,a,b,c,d);WifiSetup_FillBytes(words,0,64);}

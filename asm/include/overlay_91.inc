@@ -204,8 +204,8 @@
 .public _u32_div_f
 .public FX_SinCosTable_
 .public gSystem
-.public ov00_021E69A8
-.public ov00_021E6A4C
+.public WifiConnection_StartVoiceChat
+.public WifiConnection_StopVoiceChat
 .public ov90_02258800
 .public ov90_0225886C
 .public ov90_022588A4

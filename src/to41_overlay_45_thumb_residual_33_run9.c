@@ -13,7 +13,7 @@ u32 ov45_0222F3E8(int);
 void ov45_0222F4D4(int);
 u8 ov45_0222F6B0(int, int);
 extern void ov00_021E5CD0(int, int);
-extern void ov00_021E5CA0(int, int);
+extern void WifiConnection_SetDisconnectCallback(int, int);
 extern void *ov45_02232580(void);
 extern void ov45_0222E810(void *, int);
 extern int ov45_02231490(void);
@@ -264,7 +264,7 @@ void ov45_0222F70C(void) {
         GF_AssertFail();
     }
     ov00_021E5CD0(0, 0);
-    ov00_021E5CA0(0, 0);
+    WifiConnection_SetDisconnectCallback(0, 0);
     *(u16 *)(_022577C0 + 0x69c) = 3;
     _022577C0[0x69e] = 0;
     _022577C0[0x69f] = 0;

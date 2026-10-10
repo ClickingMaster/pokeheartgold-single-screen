@@ -54,7 +54,7 @@ _02039608: .word _021D4150
 	thumb_func_start sub_0203960C
 sub_0203960C: ; 0x0203960C
 	push {r3, lr}
-	bl ov00_021E5B6C
+	bl WifiConnection_UpdateLogin
 	ldr r1, _02039680 ; =_021D4150
 	ldr r3, [r1]
 	ldr r2, [r3, #0x44]
@@ -147,9 +147,9 @@ sub_02039694: ; 0x02039694
 	ldr r0, [r0, #0x28]
 	lsl r2, r2, #0xa
 	add r3, r3, #1
-	bl ov00_021E5900
+	bl WifiConnection_Init
 	ldr r0, _020396F4 ; =sub_020399DC
-	bl ov00_021E6CA4
+	bl WifiConnection_SetErrorCallback
 	bl sub_02035FD8
 	mov r1, #0xe1
 	ldr r0, _020396F8 ; =sub_0203960C

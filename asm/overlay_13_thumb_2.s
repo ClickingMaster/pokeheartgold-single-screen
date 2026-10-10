@@ -4,27 +4,27 @@
 
 	.text
 
-	thumb_func_start ov13_022208E8
-ov13_022208E8: ; 0x022208E8
+	thumb_func_start WifiSetup_Alloc
+WifiSetup_Alloc: ; 0x022208E8
 	push {r3, lr}
-	ldr r1, _022208F4 ; =ov13_0224DD80
+	ldr r1, _022208F4 ; =gWifiSetupRuntime
 	ldr r1, [r1]
 	blx r1
 	pop {r3, pc}
 	nop
-_022208F4: .word ov13_0224DD80
-	thumb_func_end ov13_022208E8
+_022208F4: .word gWifiSetupRuntime
+	thumb_func_end WifiSetup_Alloc
 
-	thumb_func_start ov13_022208F8
-ov13_022208F8: ; 0x022208F8
+	thumb_func_start WifiSetup_Free
+WifiSetup_Free: ; 0x022208F8
 	push {r3, lr}
-	ldr r1, _02220904 ; =ov13_0224DD8C
+	ldr r1, _02220904 ; =gWifiSetupFreeHook
 	ldr r1, [r1]
 	blx r1
 	pop {r3, pc}
 	nop
-_02220904: .word ov13_0224DD8C
-	thumb_func_end ov13_022208F8
+_02220904: .word gWifiSetupFreeHook
+	thumb_func_end WifiSetup_Free
 
 	thumb_func_start ov13_02220908
 ov13_02220908: ; 0x02220908
@@ -75,11 +75,11 @@ _02220958:
 _0222095E:
 	mov r1, #0
 _02220960:
-	ldr r0, _022209E0 ; =ov13_0224DD80
+	ldr r0, _022209E0 ; =gWifiSetupRuntime
 	ldr r0, [r0]
 	cmp r0, #0
 	beq _02220970
-	ldr r0, _022209E4 ; =ov13_0224DD8C
+	ldr r0, _022209E4 ; =gWifiSetupFreeHook
 	ldr r0, [r0]
 	cmp r0, #0
 	bne _02220974
@@ -94,21 +94,21 @@ _02220974:
 	ldr r0, _022209E8 ; =0x00000116
 	mov r1, #0xf
 	strb r1, [r4, r0]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	mvn r0, r0
 	pop {r4, pc}
 _0222098C:
 	ldr r0, _022209EC ; =0x000005F8
-	bl ov13_022208E8
-	ldr r1, _022209F0 ; =_0224CF98
+	bl WifiSetup_Alloc
+	ldr r1, _022209F0 ; =gWifiSetupState
 	cmp r0, #0
 	str r0, [r1, #0x14]
 	bne _022209AA
 	ldr r0, _022209E8 ; =0x00000116
 	mov r1, #0xf
 	strb r1, [r4, r0]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	mvn r0, r0
 	pop {r4, pc}
@@ -119,27 +119,27 @@ _022209AA:
 	add r0, r4, #0
 	bl ov13_022209F8
 	add r4, r0, #0
-	ldr r0, _022209F0 ; =_0224CF98
+	ldr r0, _022209F0 ; =gWifiSetupState
 	ldr r0, [r0, #0x14]
-	bl ov13_022208F8
-	bl ov13_02221428
+	bl WifiSetup_Free
+	bl WifiSetup_FreeWorkBuffers
 	ldr r0, _022209F4 ; =ov13_022459B4
 	mov r1, #0
 	ldr r0, [r0]
 	mvn r1, r1
 	cmp r0, r1
 	beq _022209D6
-	bl ov13_02222A14
+	bl WifiSetup_Close
 _022209D6:
 	add r0, r4, #0
 	pop {r4, pc}
 	nop
 _022209DC: .word 0x00000106
-_022209E0: .word ov13_0224DD80
-_022209E4: .word ov13_0224DD8C
+_022209E0: .word gWifiSetupRuntime
+_022209E4: .word gWifiSetupFreeHook
 _022209E8: .word 0x00000116
 _022209EC: .word 0x000005F8
-_022209F0: .word _0224CF98
+_022209F0: .word gWifiSetupState
 _022209F4: .word ov13_022459B4
 	thumb_func_end ov13_02220908
 
@@ -167,7 +167,7 @@ ov13_022209F8: ; 0x022209F8
 	str r0, [sp, #0x1c]
 	add r0, sp, #0xb0
 	mov r2, #0x18
-	bl ov13_02222978
+	bl WifiSetup_MemFill
 	ldr r1, _02220D50 ; =0x00000106
 	ldr r0, [sp, #8]
 	ldrsh r0, [r0, r1]
@@ -235,20 +235,20 @@ _02220A8C:
 	str r0, [sp, #0xc]
 _02220AA2:
 	ldr r0, [sp, #8]
-	bl ov13_02221454
-	ldr r0, _02220D5C ; =_0224CF98
+	bl WifiSetup_InitState
+	ldr r0, _02220D5C ; =gWifiSetupState
 	ldr r1, [r0, #0x2c]
 	mov r0, #1
 	and r0, r1
 	cmp r0, #1
 	beq _02220ACE
 	mov r0, #0x13
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	ldr r1, _02220D60 ; =0x00000116
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -262,12 +262,12 @@ _02220ACE:
 	ldrsh r6, [r1, r0]
 	mov r0, #0x30
 	ldrsh r7, [r1, r0]
-	ldr r5, _02220D5C ; =_0224CF98
+	ldr r5, _02220D5C ; =gWifiSetupState
 _02220AE2:
 	ldr r0, [r5, #4]
 	cmp r0, #0
 	beq _02220AF0
-	bl ov13_022208F8
+	bl WifiSetup_Free
 	mov r0, #0
 	str r0, [r5, #4]
 _02220AF0:
@@ -281,7 +281,7 @@ _02220AF0:
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -295,7 +295,7 @@ _02220B12:
 	ldr r0, [sp, #8]
 	mov r2, #2
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -309,14 +309,14 @@ _02220B30:
 	ldr r0, [sp, #8]
 	mov r2, #1
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
 	pop {r3, r4, r5, r6, r7, pc}
 _02220B4C:
 	add r0, r6, #0
-	bl ov13_022230F8
+	bl WifiSetup_Sleep
 	add r0, r4, #1
 	lsl r0, r0, #0x10
 	asr r4, r0, #0x10
@@ -327,7 +327,7 @@ _02220B5A:
 	add r0, sp, #0x74
 	mov r1, #0
 	mov r2, #0x3c
-	bl ov13_02222978
+	bl WifiSetup_MemFill
 	add r0, sp, #0x74
 	bl ov13_0222175C
 	cmp r0, #0
@@ -336,15 +336,15 @@ _02220B5A:
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
 	pop {r3, r4, r5, r6, r7, pc}
 _02220B88:
 	mov r0, #0x58
-	bl ov13_022208E8
-	ldr r1, _02220D5C ; =_0224CF98
+	bl WifiSetup_Alloc
+	ldr r1, _02220D5C ; =gWifiSetupState
 	cmp r0, #0
 	str r0, [r1, #0xc]
 	bne _02220BAA
@@ -352,7 +352,7 @@ _02220B88:
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -360,14 +360,14 @@ _02220B88:
 _02220BAA:
 	mov r1, #0
 	mov r2, #0x58
-	bl ov13_02222978
+	bl WifiSetup_MemFill
 	add r1, sp, #0x2c
 	mov r0, #0x30
 	ldrsh r5, [r1, r0]
 	mov r4, #0
 	cmp r5, #0
 	ble _02220C02
-	ldr r7, _02220D5C ; =_0224CF98
+	ldr r7, _02220D5C ; =gWifiSetupState
 _02220BC0:
 	ldr r1, [r7, #0xc]
 	add r0, sp, #0x74
@@ -380,7 +380,7 @@ _02220BC0:
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -395,7 +395,7 @@ _02220BE4:
 	beq _02220C02
 _02220BF2:
 	add r0, r6, #0
-	bl ov13_022230F8
+	bl WifiSetup_Sleep
 	add r0, r4, #1
 	lsl r0, r0, #0x10
 	asr r4, r0, #0x10
@@ -411,7 +411,7 @@ _02220C02:
 	mov r2, #0xf
 	add r1, #0xe6
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -421,22 +421,22 @@ _02220C20:
 	mov r1, #0xff
 	mvn r1, r1
 	add r2, r0, #0
-	bl ov13_022228CC
+	bl WifiSetup_StartupSocket
 	cmp r0, #0
 	beq _02220C4A
 	mov r0, #0xc
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	ldr r1, _02220D60 ; =0x00000116
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
 	pop {r3, r4, r5, r6, r7, pc}
 _02220C4A:
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r3, #0x11
 	ldr r2, [sp, #8]
 	lsl r3, r3, #4
@@ -447,7 +447,7 @@ _02220C4A:
 	mov r0, #2
 	add r1, r0, #0
 	mov r2, #0
-	bl ov13_02222A00
+	bl WifiSetup_Socket
 	ldr r1, _02220D6C ; =ov13_022459B4
 	cmp r0, #0
 	str r0, [r1]
@@ -456,7 +456,7 @@ _02220C4A:
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -471,12 +471,12 @@ _02220C84:
 	cmp r0, #0
 	bge _02220CB0
 	mov r0, #0xb
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	ldr r1, _02220D60 ; =0x00000116
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -485,41 +485,41 @@ _02220CB0:
 	add r0, sp, #0x2c
 	mov r1, #0
 	mov r2, #8
-	bl ov13_02222978
+	bl WifiSetup_MemFill
 	mov r1, #2
 	add r0, sp, #0x2c
 	strb r1, [r0, #1]
 	ldr r0, _02220D68 ; =0xC0A80B65
-	bl ov13_02222A1C
+	bl WifiSetup_HostToNet32
 	str r0, [sp, #0x30]
 	ldr r0, _02220D74 ; =0x00005790
-	bl ov13_02222A44
+	bl WifiSetup_HostToNet16
 	add r1, sp, #0x2c
 	strh r0, [r1, #2]
 	ldr r0, _02220D6C ; =ov13_022459B4
 	add r1, sp, #0x2c
 	ldr r0, [r0]
 	mov r2, #8
-	bl ov13_02222A08
+	bl WifiSetup_Bind
 	cmp r0, #0
 	bge _02220CF6
 	ldr r1, _02220D60 ; =0x00000116
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
 	pop {r3, r4, r5, r6, r7, pc}
 _02220CF6:
-	ldr r0, _02220D5C ; =_0224CF98
+	ldr r0, _02220D5C ; =gWifiSetupState
 	mov r1, #0
 	ldr r0, [r0, #0x14]
 	mov r2, #0x14
 	str r0, [sp, #0x18]
 	add r0, sp, #0x60
-	bl ov13_02222978
+	bl WifiSetup_MemFill
 	ldr r0, _02220D68 ; =0xC0A80B65
 	mov r1, #0xfa
 	str r0, [sp, #0x70]
@@ -540,7 +540,7 @@ _02220CF6:
 	mov r1, #0x30
 	add r0, sp, #0x2c
 	ldrsh r7, [r0, r1]
-	ldr r5, _02220D5C ; =_0224CF98
+	ldr r5, _02220D5C ; =gWifiSetupState
 _02220D34:
 	ldr r0, [sp, #0x24]
 	cmp r0, #1
@@ -560,7 +560,7 @@ _02220D4C: .word _0224267C
 _02220D50: .word 0x00000106
 _02220D54: .word 0x0000010A
 _02220D58: .word 0x0000010E
-_02220D5C: .word _0224CF98
+_02220D5C: .word gWifiSetupState
 _02220D60: .word 0x00000116
 _02220D64: .word ov13_0224CF9C
 _02220D68: .word 0xC0A80B65
@@ -574,27 +574,27 @@ _02220D7C:
 	mvn r1, r1
 	cmp r0, r1
 	beq _02220D8A
-	bl ov13_02222A14
+	bl WifiSetup_Close
 _02220D8A:
 	mov r1, #0
 	ldr r0, _022210BC ; =ov13_022459B4
 	mvn r1, r1
 	str r1, [r0]
-	bl ov13_02222924
+	bl WifiSetup_CleanupSocket
 	cmp r0, #0
 	beq _02220DAE
 	ldr r1, _022210C0 ; =0x00000116
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
 	pop {r3, r4, r5, r6, r7, pc}
 _02220DAE:
 	mov r0, #0x58
-	bl ov13_022208E8
+	bl WifiSetup_Alloc
 	str r0, [r5, #4]
 	cmp r0, #0
 	bne _02220DCE
@@ -602,7 +602,7 @@ _02220DAE:
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -611,7 +611,7 @@ _02220DCE:
 	ldr r0, [r5, #4]
 	cmp r0, #0
 	beq _02220DDC
-	bl ov13_022208F8
+	bl WifiSetup_Free
 	mov r0, #0
 	str r0, [r5, #4]
 _02220DDC:
@@ -626,7 +626,7 @@ _02220DDC:
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -640,7 +640,7 @@ _02220E00:
 	ldr r0, [sp, #8]
 	mov r2, #2
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -654,14 +654,14 @@ _02220E1E:
 	ldr r0, [sp, #8]
 	mov r2, #1
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
 	pop {r3, r4, r5, r6, r7, pc}
 _02220E3A:
 	add r0, r6, #0
-	bl ov13_022230F8
+	bl WifiSetup_Sleep
 	add r0, r4, #1
 	lsl r0, r0, #0x10
 	asr r4, r0, #0x10
@@ -676,14 +676,14 @@ _02220E48:
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
 	pop {r3, r4, r5, r6, r7, pc}
 _02220E66:
 	mov r0, #0x58
-	bl ov13_022208E8
+	bl WifiSetup_Alloc
 	str r0, [r5, #0xc]
 	cmp r0, #0
 	bne _02220E86
@@ -691,7 +691,7 @@ _02220E66:
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -699,7 +699,7 @@ _02220E66:
 _02220E86:
 	mov r1, #0
 	mov r2, #0x58
-	bl ov13_02222978
+	bl WifiSetup_MemFill
 	mov r4, #0
 	cmp r7, #0
 	ble _02220ED6
@@ -715,7 +715,7 @@ _02220E94:
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -730,7 +730,7 @@ _02220EB8:
 	beq _02220ED6
 _02220EC6:
 	add r0, r6, #0
-	bl ov13_022230F8
+	bl WifiSetup_Sleep
 	add r0, r4, #1
 	lsl r0, r0, #0x10
 	asr r4, r0, #0x10
@@ -743,7 +743,7 @@ _02220ED6:
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -751,20 +751,20 @@ _02220ED6:
 _02220EEE:
 	ldr r0, [r5, #0x34]
 	ldr r1, [r5, #0x38]
-	bl ov13_02221410
+	bl WifiSetup_NextHostAddress
 	ldr r1, [r5, #0x38]
 	add r2, r0, #0
 	str r0, [sp, #0x1c]
-	bl ov13_022228CC
+	bl WifiSetup_StartupSocket
 	cmp r0, #0
 	beq _02220F1E
 	mov r0, #0xc
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	ldr r1, _022210C0 ; =0x00000116
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -773,11 +773,11 @@ _02220F1E:
 	ldr r0, _022210C8 ; =ov13_0224CFB8
 	mov r1, #1
 	strb r1, [r0, #0x1c]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #2
 	add r1, r0, #0
 	mov r2, #0
-	bl ov13_02222A00
+	bl WifiSetup_Socket
 	ldr r1, _022210BC ; =ov13_022459B4
 	cmp r0, #0
 	str r0, [r1]
@@ -786,7 +786,7 @@ _02220F1E:
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -801,12 +801,12 @@ _02220F4E:
 	cmp r0, #0
 	bge _02220F7A
 	mov r0, #0xb
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	ldr r1, _022210C0 ; =0x00000116
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -815,29 +815,29 @@ _02220F7A:
 	add r0, sp, #0x2c
 	mov r1, #0
 	mov r2, #8
-	bl ov13_02222978
+	bl WifiSetup_MemFill
 	mov r1, #2
 	add r0, sp, #0x2c
 	strb r1, [r0, #1]
 	ldr r0, [sp, #0x1c]
-	bl ov13_02222A1C
+	bl WifiSetup_HostToNet32
 	str r0, [sp, #0x30]
 	ldr r0, _022210D0 ; =0x00005790
-	bl ov13_02222A44
+	bl WifiSetup_HostToNet16
 	add r1, sp, #0x2c
 	strh r0, [r1, #2]
 	ldr r0, _022210BC ; =ov13_022459B4
 	add r1, sp, #0x2c
 	ldr r0, [r0]
 	mov r2, #8
-	bl ov13_02222A08
+	bl WifiSetup_Bind
 	cmp r0, #0
 	bge _02220FC0
 	ldr r1, _022210C0 ; =0x00000116
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -857,12 +857,12 @@ _02220FC0:
 	ldr r0, [sp, #0x24]
 	lsl r1, r1, #0xc
 	add r0, r0, r1
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	ldr r1, _022210C0 ; =0x00000116
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -871,13 +871,13 @@ _02220FF6:
 	ldr r0, [sp, #0x18]
 	ldr r2, _022210D4 ; =0x000005F8
 	mov r1, #0
-	bl ov13_02222978
+	bl WifiSetup_MemFill
 	add r0, sp, #0x3c
-	bl ov13_02222B20
+	bl WifiSetup_ClearPollSet
 	ldr r0, _022210BC ; =ov13_022459B4
 	add r1, sp, #0x3c
 	ldr r0, [r0]
-	bl ov13_02222B2C
+	bl WifiSetup_AddToPollSet
 	ldr r0, [sp, #0x14]
 	mov r2, #0
 	str r0, [sp, #0x34]
@@ -890,7 +890,7 @@ _02220FF6:
 	add r3, r2, #0
 	ldr r0, [r0]
 	add r0, r0, #1
-	bl ov13_02222998
+	bl WifiSetup_Poll
 	cmp r0, #0
 	bgt _02221070
 	ldr r0, [sp, #0x50]
@@ -905,17 +905,17 @@ _02220FF6:
 	cmp r0, #0
 	bne _0222104E
 	mov r0, #0xf
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	b _02221060
 _0222104E:
 	cmp r0, #1
 	bne _0222105A
 	mov r0, #0x10
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	b _02221060
 _0222105A:
 	mov r0, #0x11
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 _02221060:
 	mov r5, #0
 	mvn r5, r5
@@ -923,7 +923,7 @@ _02221060:
 _02221066:
 	mov r0, #0x2e
 	ldrsh r0, [r1, r0]
-	bl ov13_022230F8
+	bl WifiSetup_Sleep
 	b _02220D34
 _02221070:
 	mov r0, #8
@@ -938,14 +938,14 @@ _02221070:
 	ldr r2, _022210D8 ; =0x000005DC
 	add r1, #0xc
 	mov r3, #0
-	bl ov13_02222984
+	bl WifiSetup_RecvFrom
 	ldr r1, _022210BC ; =ov13_022459B4
 	lsl r0, r0, #0x10
 	ldr r2, [r1]
 	ldr r1, [sp, #0x18]
 	lsr r0, r0, #0x10
 	str r2, [r1]
-	bl ov13_02222A84
+	bl WifiSetup_NetToHost16
 	ldr r1, [sp, #0x18]
 	add r2, sp, #0x50
 	str r0, [r1, #4]
@@ -989,20 +989,20 @@ _022210F4:
 	ldr r0, [r0]
 	cmp r0, r5
 	beq _02221100
-	bl ov13_02222A14
+	bl WifiSetup_Close
 _02221100:
 	mov r1, #0
 	ldr r0, _022213F8 ; =ov13_022459B4
 	mvn r1, r1
 	str r1, [r0]
-	bl ov13_02222924
+	bl WifiSetup_CleanupSocket
 	cmp r0, #0
 	beq _02221124
 	ldr r1, _022213FC ; =0x00000116
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -1014,12 +1014,12 @@ _02221124:
 	add r1, sp, #0x2c
 	mov r0, #0x30
 	ldrsh r7, [r1, r0]
-	ldr r5, _02221400 ; =_0224CF98
+	ldr r5, _02221400 ; =gWifiSetupState
 _02221134:
 	ldr r0, [r5, #4]
 	cmp r0, #0
 	beq _02221142
-	bl ov13_022208F8
+	bl WifiSetup_Free
 	mov r0, #0
 	str r0, [r5, #4]
 _02221142:
@@ -1033,7 +1033,7 @@ _02221142:
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -1047,7 +1047,7 @@ _02221164:
 	ldr r0, [sp, #8]
 	mov r2, #2
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -1061,22 +1061,22 @@ _02221182:
 	ldr r0, [sp, #8]
 	mov r2, #1
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
 	pop {r3, r4, r5, r6, r7, pc}
 _0222119E:
 	add r0, r6, #0
-	bl ov13_022230F8
+	bl WifiSetup_Sleep
 	add r0, r4, #1
 	lsl r0, r0, #0x10
 	asr r4, r0, #0x10
 	b _02221134
 _022211AC:
 	mov r0, #0x58
-	bl ov13_022208E8
-	ldr r1, _02221400 ; =_0224CF98
+	bl WifiSetup_Alloc
+	ldr r1, _02221400 ; =gWifiSetupState
 	cmp r0, #0
 	str r0, [r1, #0xc]
 	bne _022211CE
@@ -1084,7 +1084,7 @@ _022211AC:
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -1092,14 +1092,14 @@ _022211AC:
 _022211CE:
 	mov r1, #0
 	mov r2, #0x58
-	bl ov13_02222978
+	bl WifiSetup_MemFill
 	add r1, sp, #0x2c
 	mov r0, #0x30
 	ldrsh r5, [r1, r0]
 	mov r4, #0
 	cmp r5, #0
 	ble _02221226
-	ldr r7, _02221400 ; =_0224CF98
+	ldr r7, _02221400 ; =gWifiSetupState
 _022211E4:
 	ldr r1, [r7, #0xc]
 	add r0, sp, #0x74
@@ -1112,7 +1112,7 @@ _022211E4:
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -1127,7 +1127,7 @@ _02221208:
 	beq _02221226
 _02221216:
 	add r0, r6, #0
-	bl ov13_022230F8
+	bl WifiSetup_Sleep
 	add r0, r4, #1
 	lsl r0, r0, #0x10
 	asr r4, r0, #0x10
@@ -1143,36 +1143,36 @@ _02221226:
 	mov r2, #0xf
 	add r1, #0xe6
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
 	pop {r3, r4, r5, r6, r7, pc}
 _02221244:
-	ldr r1, _02221400 ; =_0224CF98
+	ldr r1, _02221400 ; =gWifiSetupState
 	ldr r0, [sp, #0x1c]
 	ldr r1, [r1, #0x38]
 	add r2, r0, #0
-	bl ov13_022228CC
+	bl WifiSetup_StartupSocket
 	cmp r0, #0
 	beq _0222126E
 	mov r0, #0xc
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	ldr r1, _022213FC ; =0x00000116
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
 	pop {r3, r4, r5, r6, r7, pc}
 _0222126E:
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #2
 	add r1, r0, #0
 	mov r2, #0
-	bl ov13_02222A00
+	bl WifiSetup_Socket
 	ldr r1, _022213F8 ; =ov13_022459B4
 	cmp r0, #0
 	str r0, [r1]
@@ -1181,7 +1181,7 @@ _0222126E:
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -1196,12 +1196,12 @@ _02221298:
 	cmp r0, #0
 	bge _022212C4
 	mov r0, #0xb
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	ldr r1, _022213FC ; =0x00000116
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -1210,29 +1210,29 @@ _022212C4:
 	add r0, sp, #0x2c
 	mov r1, #0
 	mov r2, #8
-	bl ov13_02222978
+	bl WifiSetup_MemFill
 	mov r1, #2
 	add r0, sp, #0x2c
 	strb r1, [r0, #1]
 	ldr r0, [sp, #0x1c]
-	bl ov13_02222A1C
+	bl WifiSetup_HostToNet32
 	str r0, [sp, #0x30]
 	ldr r0, _0222140C ; =0x00005790
-	bl ov13_02222A44
+	bl WifiSetup_HostToNet16
 	add r1, sp, #0x2c
 	strh r0, [r1, #2]
 	ldr r0, _022213F8 ; =ov13_022459B4
 	add r1, sp, #0x2c
 	ldr r0, [r0]
 	mov r2, #8
-	bl ov13_02222A08
+	bl WifiSetup_Bind
 	cmp r0, #0
 	bge _0222130A
 	ldr r1, _022213FC ; =0x00000116
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -1253,17 +1253,17 @@ _02221310:
 	cmp r0, #0
 	bne _0222132C
 	mov r0, #0xf
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	b _0222133E
 _0222132C:
 	cmp r0, #1
 	bne _02221338
 	mov r0, #0x10
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	b _0222133E
 _02221338:
 	mov r0, #0x11
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 _0222133E:
 	mov r5, #0
 	mvn r5, r5
@@ -1271,7 +1271,7 @@ _0222133E:
 _02221344:
 	mov r0, #0x2e
 	ldrsh r0, [r1, r0]
-	bl ov13_022230F8
+	bl WifiSetup_Sleep
 	b _02220CF6
 _0222134E:
 	ldr r0, _022213F8 ; =ov13_022459B4
@@ -1280,20 +1280,20 @@ _0222134E:
 	mvn r1, r1
 	cmp r0, r1
 	beq _0222135E
-	bl ov13_02222A14
+	bl WifiSetup_Close
 _0222135E:
 	mov r1, #0
 	ldr r0, _022213F8 ; =ov13_022459B4
 	mvn r1, r1
 	str r1, [r0]
-	bl ov13_02222924
+	bl WifiSetup_CleanupSocket
 	cmp r0, #0
 	beq _02221382
 	ldr r1, _022213FC ; =0x00000116
 	ldr r0, [sp, #8]
 	mov r2, #0xf
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -1301,7 +1301,7 @@ _0222135E:
 _02221382:
 	cmp r5, #0
 	beq _022213D2
-	bl ov13_022214B8
+	bl WifiSetup_GetError
 	sub r0, #0xf
 	cmp r0, #6
 	bhi _022213BE
@@ -1340,7 +1340,7 @@ _022213C0:
 	ldr r1, _022213FC ; =0x00000116
 	ldr r0, [sp, #8]
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -1354,7 +1354,7 @@ _022213D2:
 	ldr r0, [sp, #8]
 	mov r2, #6
 	strb r2, [r0, r1]
-	bl ov13_02221428
+	bl WifiSetup_FreeWorkBuffers
 	mov r0, #0
 	add sp, #0xc8
 	mvn r0, r0
@@ -1366,14 +1366,14 @@ _022213F0:
 	nop
 _022213F8: .word ov13_022459B4
 _022213FC: .word 0x00000116
-_02221400: .word _0224CF98
+_02221400: .word gWifiSetupState
 _02221404: .word ov13_0224CF9C
 _02221408: .word 0x0000FFFF
 _0222140C: .word 0x00005790
 	thumb_func_end ov13_022209F8
 
-	thumb_func_start ov13_02221410
-ov13_02221410: ; 0x02221410
+	thumb_func_start WifiSetup_NextHostAddress
+WifiSetup_NextHostAddress: ; 0x02221410
 	add r2, r0, #0
 	and r2, r1
 	mvn r1, r1
@@ -1387,50 +1387,50 @@ ov13_02221410: ; 0x02221410
 	orr r0, r2
 _02221426:
 	bx lr
-	thumb_func_end ov13_02221410
+	thumb_func_end WifiSetup_NextHostAddress
 
-	thumb_func_start ov13_02221428
-ov13_02221428: ; 0x02221428
+	thumb_func_start WifiSetup_FreeWorkBuffers
+WifiSetup_FreeWorkBuffers: ; 0x02221428
 	push {r3, lr}
-	ldr r0, _02221450 ; =_0224CF98
+	ldr r0, _02221450 ; =gWifiSetupState
 	ldr r0, [r0, #0xc]
 	cmp r0, #0
 	beq _0222143C
-	bl ov13_022208F8
-	ldr r0, _02221450 ; =_0224CF98
+	bl WifiSetup_Free
+	ldr r0, _02221450 ; =gWifiSetupState
 	mov r1, #0
 	str r1, [r0, #0xc]
 _0222143C:
-	ldr r0, _02221450 ; =_0224CF98
+	ldr r0, _02221450 ; =gWifiSetupState
 	ldr r0, [r0, #4]
 	cmp r0, #0
 	beq _0222144E
-	bl ov13_022208F8
-	ldr r0, _02221450 ; =_0224CF98
+	bl WifiSetup_Free
+	ldr r0, _02221450 ; =gWifiSetupState
 	mov r1, #0
 	str r1, [r0, #4]
 _0222144E:
 	pop {r3, pc}
 	.balign 4, 0
-_02221450: .word _0224CF98
-	thumb_func_end ov13_02221428
+_02221450: .word gWifiSetupState
+	thumb_func_end WifiSetup_FreeWorkBuffers
 
-	thumb_func_start ov13_02221454
-ov13_02221454: ; 0x02221454
+	thumb_func_start WifiSetup_InitState
+WifiSetup_InitState: ; 0x02221454
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, _02221498 ; =ov13_0224DCF8
 	mov r1, #0
 	mov r2, #8
-	bl ov13_02222978
-	ldr r0, _0222149C ; =_0224CF98
+	bl WifiSetup_MemFill
+	ldr r0, _0222149C ; =gWifiSetupState
 	mov r1, #1
 	str r1, [r0, #0x10]
 	ldr r0, _022214A0 ; =ov13_0224CFBC
 	mov r1, #0
 	mov r2, #0x1c
-	bl ov13_02222978
-	ldr r1, _0222149C ; =_0224CF98
+	bl WifiSetup_MemFill
+	ldr r1, _0222149C ; =gWifiSetupState
 	add r0, r4, #6
 	str r0, [r1, #0x24]
 	ldrh r0, [r4, #4]
@@ -1450,29 +1450,29 @@ ov13_02221454: ; 0x02221454
 	pop {r4, pc}
 	nop
 _02221498: .word ov13_0224DCF8
-_0222149C: .word _0224CF98
+_0222149C: .word gWifiSetupState
 _022214A0: .word ov13_0224CFBC
 _022214A4: .word ov13_0224CFB8
 _022214A8: .word 0xC0A80B01
-	thumb_func_end ov13_02221454
+	thumb_func_end WifiSetup_InitState
 
-	thumb_func_start ov13_022214AC
-ov13_022214AC: ; 0x022214AC
-	ldr r1, _022214B4 ; =_0224CF98
+	thumb_func_start WifiSetup_SetError
+WifiSetup_SetError: ; 0x022214AC
+	ldr r1, _022214B4 ; =gWifiSetupState
 	str r0, [r1, #0x10]
 	bx lr
 	nop
-_022214B4: .word _0224CF98
-	thumb_func_end ov13_022214AC
+_022214B4: .word gWifiSetupState
+	thumb_func_end WifiSetup_SetError
 
-	thumb_func_start ov13_022214B8
-ov13_022214B8: ; 0x022214B8
-	ldr r0, _022214C0 ; =_0224CF98
+	thumb_func_start WifiSetup_GetError
+WifiSetup_GetError: ; 0x022214B8
+	ldr r0, _022214C0 ; =gWifiSetupState
 	ldr r0, [r0, #0x10]
 	bx lr
 	nop
-_022214C0: .word _0224CF98
-	thumb_func_end ov13_022214B8
+_022214C0: .word gWifiSetupState
+	thumb_func_end WifiSetup_GetError
 
 	thumb_func_start ov13_022214C4
 ov13_022214C4: ; 0x022214C4
@@ -1493,7 +1493,7 @@ ov13_022214C4: ; 0x022214C4
 	mvn r0, r0
 	pop {r3, r4, r5, r6, r7, pc}
 _022214E4:
-	ldr r1, _022216B0 ; =_0224CF98
+	ldr r1, _022216B0 ; =gWifiSetupState
 	add r2, #0x3d
 	ldr r0, [r1, #0x2c]
 	ldr r1, [r1, #0x30]
@@ -1501,7 +1501,7 @@ _022214E4:
 	strh r0, [r7]
 	add r0, r4, #0
 	mov r1, #0
-	bl ov13_02222978
+	bl WifiSetup_MemFill
 	ldrh r1, [r7]
 	mov r0, #1
 	tst r0, r1
@@ -1510,44 +1510,44 @@ _022214E4:
 	ldr r2, [r6, #4]
 	add r0, r4, #0
 	add r1, #0x30
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	add r1, r6, #0
 	ldr r2, [r6, #4]
 	add r0, r4, #6
 	add r1, #0x70
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	add r0, r4, #0
 	add r1, r6, #0
 	ldr r2, [r6, #4]
 	add r0, #0xc
 	add r1, #0xb0
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	add r0, r4, #0
 	add r1, r6, #0
 	ldr r2, [r6, #4]
 	add r0, #0x12
 	add r1, #0xf0
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	add r0, r6, #0
 	add r0, #8
-	bl ov13_02222A9C
+	bl WifiSetup_StrLen
 	add r1, r0, #0
 	add r0, r6, #0
 	add r0, #8
-	bl ov13_022216BC
+	bl WifiSetup_CheckPrintable
 	cmp r0, #0
 	beq _0222154C
 	b _02221688
 _0222154C:
 	add r0, r6, #0
 	add r0, #8
-	bl ov13_02222A9C
+	bl WifiSetup_StrLen
 	add r2, r0, #0
 	add r0, r4, #0
 	add r6, #8
 	add r0, #0x18
 	add r1, r6, #0
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 _02221562:
 	ldrh r1, [r7]
 	mov r0, #2
@@ -1558,43 +1558,43 @@ _02221562:
 	ldr r2, [r5, #4]
 	add r0, #0x39
 	add r1, #0x30
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	add r0, r4, #0
 	add r1, r5, #0
 	ldr r2, [r5, #4]
 	add r0, #0x47
 	add r1, #0x70
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	add r0, r4, #0
 	add r1, r5, #0
 	ldr r2, [r5, #4]
 	add r0, #0x55
 	add r1, #0xb0
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	add r0, r4, #0
 	add r1, r5, #0
 	ldr r2, [r5, #4]
 	add r0, #0x63
 	add r1, #0xf0
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	add r0, r5, #0
 	add r0, #8
-	bl ov13_02222A9C
+	bl WifiSetup_StrLen
 	add r1, r0, #0
 	add r0, r5, #0
 	add r0, #8
-	bl ov13_022216BC
+	bl WifiSetup_CheckPrintable
 	cmp r0, #0
 	bne _02221688
 	add r0, r5, #0
 	add r0, #8
-	bl ov13_02222A9C
+	bl WifiSetup_StrLen
 	add r2, r0, #0
 	add r0, r4, #0
 	add r5, #8
 	add r0, #0x71
 	add r1, r5, #0
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 _022215CE:
 	ldrh r1, [r7]
 	mov r0, #4
@@ -1605,7 +1605,7 @@ _022215CE:
 	ldr r1, [r1, #4]
 	add r0, #0x30
 	sub r1, r1, #1
-	bl ov13_022216BC
+	bl WifiSetup_CheckPrintable
 	cmp r0, #0
 	bne _02221688
 	ldr r2, [sp, #4]
@@ -1614,26 +1614,26 @@ _022215CE:
 	ldr r2, [r2, #4]
 	add r0, #0x92
 	add r1, #0x30
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	ldr r0, [sp, #4]
 	add r0, #8
-	bl ov13_02222A9C
+	bl WifiSetup_StrLen
 	add r1, r0, #0
 	ldr r0, [sp, #4]
 	add r0, #8
-	bl ov13_022216BC
+	bl WifiSetup_CheckPrintable
 	cmp r0, #0
 	bne _02221688
 	ldr r0, [sp, #4]
 	add r0, #8
-	bl ov13_02222A9C
+	bl WifiSetup_StrLen
 	ldr r1, [sp, #4]
 	add r2, r0, #0
 	add r0, r4, #0
 	add r1, #8
 	add r0, #0xd2
 	str r1, [sp, #4]
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 _02221626:
 	ldrh r1, [r7]
 	mov r0, #8
@@ -1644,7 +1644,7 @@ _02221626:
 	ldr r1, [r1, #4]
 	add r0, #0x30
 	sub r1, r1, #1
-	bl ov13_022216BC
+	bl WifiSetup_CheckPrintable
 	cmp r0, #0
 	bne _02221688
 	ldr r2, [sp]
@@ -1653,26 +1653,26 @@ _02221626:
 	ldr r2, [r2, #4]
 	add r0, #0xf3
 	add r1, #0x30
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	ldr r0, [sp]
 	add r0, #8
-	bl ov13_02222A9C
+	bl WifiSetup_StrLen
 	add r1, r0, #0
 	ldr r0, [sp]
 	add r0, #8
-	bl ov13_022216BC
+	bl WifiSetup_CheckPrintable
 	cmp r0, #0
 	bne _02221688
 	ldr r0, [sp]
 	add r0, #8
-	bl ov13_02222A9C
+	bl WifiSetup_StrLen
 	add r2, r0, #0
 	ldr r0, _022216B4 ; =0x00000133
 	ldr r1, [sp]
 	add r0, r4, r0
 	add r1, #8
 	str r1, [sp]
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 _0222167E:
 	ldr r1, _022216B8 ; =0x00000116
 	mov r0, #0
@@ -1684,7 +1684,7 @@ _02221688:
 	add r0, r4, #0
 	mov r1, #0
 	lsl r2, r2, #2
-	bl ov13_02222978
+	bl WifiSetup_MemFill
 	mov r0, #0
 	mvn r0, r0
 	add sp, #8
@@ -1695,13 +1695,13 @@ _022216A0: .word 0x00000117
 _022216A4: .word ov13_0224D930
 _022216A8: .word ov13_0224D660
 _022216AC: .word ov13_0224D790
-_022216B0: .word _0224CF98
+_022216B0: .word gWifiSetupState
 _022216B4: .word 0x00000133
 _022216B8: .word 0x00000116
 	thumb_func_end ov13_022214C4
 
-	thumb_func_start ov13_022216BC
-ov13_022216BC: ; 0x022216BC
+	thumb_func_start WifiSetup_CheckPrintable
+WifiSetup_CheckPrintable: ; 0x022216BC
 	mov r3, #0
 	cmp r1, #0
 	ble _022216DA
@@ -1724,7 +1724,7 @@ _022216DA:
 	mov r0, #0
 	bx lr
 	.balign 4, 0
-	thumb_func_end ov13_022216BC
+	thumb_func_end WifiSetup_CheckPrintable
 
 	thumb_func_start ov13_022216E0
 ov13_022216E0: ; 0x022216E0
@@ -1758,16 +1758,16 @@ _0222170C:
 	tst r0, r1
 	beq _02221736
 	ldr r0, _02221758 ; =ov13_02245A14
-	bl ov13_02222A9C
+	bl WifiSetup_StrLen
 	ldr r1, [r5, #4]
 	cmp r1, r0
 	bne _02221736
 	ldr r0, _02221758 ; =ov13_02245A14
-	bl ov13_02222A9C
+	bl WifiSetup_StrLen
 	add r2, r0, #0
 	ldr r1, _02221758 ; =ov13_02245A14
 	add r0, r6, #0
-	bl ov13_02222948
+	bl WifiSetup_MemCompare
 	cmp r0, #0
 	bne _02221736
 	add r4, r4, #1
@@ -1801,16 +1801,16 @@ ov13_0222175C: ; 0x0222175C
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, _02221798 ; =ov13_02245A14
-	bl ov13_02222A9C
+	bl WifiSetup_StrLen
 	str r0, [r4]
 	ldr r1, _02221798 ; =ov13_02245A14
 	ldr r2, [r4]
 	add r0, r4, #4
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	mov r0, #1
 	str r0, [r4, #0x24]
 	ldr r0, _0222179C ; =ov13_02245A20
-	bl ov13_02222A9C
+	bl WifiSetup_StrLen
 	add r2, r0, #0
 	str r0, [r4, #0x28]
 	cmp r2, #0xd
@@ -1822,7 +1822,7 @@ _0222178A:
 	add r4, #0x2c
 	ldr r1, _0222179C ; =ov13_02245A20
 	add r0, r4, #0
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	mov r0, #0
 	pop {r4, pc}
 	.balign 4, 0
@@ -1843,11 +1843,11 @@ _022217AE:
 	add r0, r5, #0
 	add r1, r7, #0
 	mov r2, #6
-	bl ov13_02222968
-	bl ov13_02222AB0
+	bl WifiSetup_MemCopy
+	bl WifiSetup_Random
 	strh r0, [r5, #6]
 	ldrh r0, [r5, #6]
-	bl ov13_02222A44
+	bl WifiSetup_HostToNet16
 	strh r0, [r5, #6]
 	add r4, r4, #1
 	add r5, #8
@@ -1893,7 +1893,7 @@ ov13_022217FC: ; 0x022217FC
 	add r4, r2, #0
 	str r3, [sp]
 	add r7, #0xc
-	bl ov13_02222A84
+	bl WifiSetup_NetToHost16
 	cmp r0, #1
 	bhs _0222181E
 	ldr r0, [r4]
@@ -1923,7 +1923,7 @@ _0222182E:
 	pop {r3, r4, r5, r6, r7, pc}
 _02221844:
 	ldrh r0, [r7, #6]
-	bl ov13_02222A84
+	bl WifiSetup_NetToHost16
 	ldr r1, _02221890 ; =0x00001010
 	cmp r0, r1
 	beq _0222185E
@@ -1995,7 +1995,7 @@ _022218AE:
 	pop {r3, r4, r5, r6, r7, pc}
 _022218CE:
 	ldrh r0, [r4, #2]
-	bl ov13_02222A84
+	bl WifiSetup_NetToHost16
 	cmp r0, #0
 	bne _022218E2
 	ldr r0, [r5]
@@ -2008,27 +2008,27 @@ _022218E2:
 	cmp r0, #7
 	bne _02221920
 	ldr r0, [r4, #4]
-	bl ov13_02222A5C
+	bl WifiSetup_NetToHost32
 	mov r1, #1
 	mvn r1, r1
 	cmp r0, r1
 	bne _022218FE
 	mov r0, #0x14
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	b _0222191A
 _022218FE:
 	ldr r0, [r4, #4]
-	bl ov13_02222A5C
+	bl WifiSetup_NetToHost32
 	mov r1, #2
 	mvn r1, r1
 	cmp r0, r1
 	bne _02221914
 	mov r0, #0x15
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	b _0222191A
 _02221914:
 	mov r0, #0x18
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 _0222191A:
 	mov r0, #0
 	mvn r0, r0
@@ -2052,7 +2052,7 @@ _0222192E:
 	cmp r0, r1
 	bne _0222194E
 	mov r0, #0x16
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	mov r0, #0
 	mvn r0, r0
 	pop {r3, r4, r5, r6, r7, pc}
@@ -2064,9 +2064,9 @@ _0222194E:
 	pop {r3, r4, r5, r6, r7, pc}
 _02221958:
 	ldrh r0, [r7, #0xc]
-	bl ov13_02222A84
+	bl WifiSetup_NetToHost16
 	bl ov13_022220A4
-	ldr r1, _02221974 ; =_0224CF98
+	ldr r1, _02221974 ; =gWifiSetupState
 	str r0, [r1]
 	mov r0, #0
 	str r0, [r5]
@@ -2074,7 +2074,7 @@ _02221958:
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
 _02221970: .word ov13_0224CFD8
-_02221974: .word _0224CF98
+_02221974: .word gWifiSetupState
 	thumb_func_end ov13_0222189C
 
 	thumb_func_start ov13_02221978
@@ -2107,7 +2107,7 @@ _0222198A:
 	pop {r3, r4, r5, r6, r7, pc}
 _022219AC:
 	ldrh r0, [r4, #2]
-	bl ov13_02222A84
+	bl WifiSetup_NetToHost16
 	cmp r0, #0
 	bne _022219C0
 	ldr r0, [r5]
@@ -2120,27 +2120,27 @@ _022219C0:
 	cmp r0, #7
 	bne _022219FE
 	ldr r0, [r4, #4]
-	bl ov13_02222A5C
+	bl WifiSetup_NetToHost32
 	mov r1, #1
 	mvn r1, r1
 	cmp r0, r1
 	bne _022219DC
 	mov r0, #0x14
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	b _022219F8
 _022219DC:
 	ldr r0, [r4, #4]
-	bl ov13_02222A5C
+	bl WifiSetup_NetToHost32
 	mov r1, #2
 	mvn r1, r1
 	cmp r0, r1
 	bne _022219F2
 	mov r0, #0x15
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	b _022219F8
 _022219F2:
 	mov r0, #0x18
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 _022219F8:
 	mov r0, #0
 	mvn r0, r0
@@ -2150,9 +2150,9 @@ _022219FE:
 	ldr r0, _02221A44 ; =ov13_0224D658
 	mov r1, #0
 	lsl r2, r2, #4
-	bl ov13_02222978
+	bl WifiSetup_MemFill
 	ldrh r0, [r7, #0xa]
-	bl ov13_02222A84
+	bl WifiSetup_NetToHost16
 	add r2, r0, #0
 	ldr r0, _02221A48 ; =ov13_0224CFD8
 	ldr r3, _02221A44 ; =ov13_0224D658
@@ -2168,7 +2168,7 @@ _022219FE:
 	add r0, r6, #0
 	pop {r3, r4, r5, r6, r7, pc}
 _02221A2E:
-	ldr r0, _02221A4C ; =_0224CF98
+	ldr r0, _02221A4C ; =gWifiSetupState
 	ldr r1, [r0, #0x30]
 	ldr r0, [r0, #0x2c]
 	tst r0, r1
@@ -2183,7 +2183,7 @@ _02221A3C:
 	.balign 4, 0
 _02221A44: .word ov13_0224D658
 _02221A48: .word ov13_0224CFD8
-_02221A4C: .word _0224CF98
+_02221A4C: .word gWifiSetupState
 	thumb_func_end ov13_02221978
 
 	thumb_func_start ov13_02221A50
@@ -2223,7 +2223,7 @@ _02221A80:
 	pop {r4, r5, r6, pc}
 _02221A90:
 	ldrh r0, [r4, #2]
-	bl ov13_02222A84
+	bl WifiSetup_NetToHost16
 	cmp r0, #0
 	bne _02221AA4
 	ldr r0, [r5]
@@ -2233,38 +2233,38 @@ _02221A90:
 	pop {r4, r5, r6, pc}
 _02221AA4:
 	ldr r0, [r4, #4]
-	bl ov13_02222A5C
+	bl WifiSetup_NetToHost32
 	cmp r0, #0
 	bne _02221AB2
 	mov r0, #0x64
 	pop {r4, r5, r6, pc}
 _02221AB2:
 	ldr r0, [r4, #4]
-	bl ov13_02222A5C
+	bl WifiSetup_NetToHost32
 	mov r1, #1
 	mvn r1, r1
 	cmp r0, r1
 	bne _02221ACC
 	mov r0, #0x14
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	mov r0, #0
 	mvn r0, r0
 	pop {r4, r5, r6, pc}
 _02221ACC:
 	ldr r0, [r4, #4]
-	bl ov13_02222A5C
+	bl WifiSetup_NetToHost32
 	mov r1, #2
 	mvn r1, r1
 	cmp r0, r1
 	bne _02221AE6
 	mov r0, #0x15
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	mov r0, #0
 	mvn r0, r0
 	pop {r4, r5, r6, pc}
 _02221AE6:
 	mov r0, #0x18
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	mov r0, #0
 	mvn r0, r0
 	pop {r4, r5, r6, pc}
@@ -2282,9 +2282,9 @@ ov13_02221AF4: ; 0x02221AF4
 	add r1, #0x10
 	mov r2, #8
 	add r4, #0x18
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	ldr r0, _02221BE0 ; =ov13_02245A20
-	bl ov13_02222A9C
+	bl WifiSetup_StrLen
 	add r3, r0, #0
 	ldr r2, _02221BE0 ; =ov13_02245A20
 	add r0, sp, #0xc
@@ -2295,20 +2295,20 @@ ov13_02221AF4: ; 0x02221AF4
 	cmp r0, r1
 	bne _02221B32
 	mov r0, #2
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	mov r0, #0x63
 	add sp, #0x14
 	mvn r0, r0
 	pop {r4, r5, r6, r7, pc}
 _02221B32:
 	ldrh r0, [r5, #6]
-	bl ov13_02222A84
+	bl WifiSetup_NetToHost16
 	add r1, sp, #0xc
 	bl ov13_02221BE8
 	cmp r0, #0
 	bne _02221BDA
 	ldrh r0, [r5, #6]
-	bl ov13_02222A84
+	bl WifiSetup_NetToHost16
 	mov r1, #1
 	lsl r1, r1, #0xc
 	cmp r0, r1
@@ -2316,10 +2316,10 @@ _02221B32:
 	ldr r0, _02221BE4 ; =ov13_0224DCF8
 	add r1, sp, #0xc
 	mov r2, #8
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 _02221B5A:
 	ldrh r0, [r5, #0xc]
-	bl ov13_02222A84
+	bl WifiSetup_NetToHost16
 	mov r1, #0xf
 	tst r0, r1
 	bne _02221B6C
@@ -2328,13 +2328,13 @@ _02221B5A:
 	pop {r4, r5, r6, r7, pc}
 _02221B6C:
 	ldrh r0, [r4]
-	bl ov13_02222A84
+	bl WifiSetup_NetToHost16
 	add r6, r0, #0
-	bl ov13_022208E8
+	bl WifiSetup_Alloc
 	add r7, r0, #0
 	bne _02221B88
 	mov r0, #2
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	add sp, #0x14
 	mov r0, #0x64
 	pop {r4, r5, r6, r7, pc}
@@ -2353,8 +2353,8 @@ _02221B88:
 	cmp r0, #0
 	bge _02221BBE
 	add r0, r7, #0
-	bl ov13_022208F8
-	bl ov13_022214B8
+	bl WifiSetup_Free
+	bl WifiSetup_GetError
 	cmp r0, #2
 	bne _02221BB8
 	add sp, #0x14
@@ -2368,13 +2368,13 @@ _02221BBE:
 	add r0, r4, #0
 	add r1, r7, #0
 	add r2, r6, #0
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	lsl r0, r6, #0x10
 	lsr r0, r0, #0x10
-	bl ov13_02222A44
+	bl WifiSetup_HostToNet16
 	strh r0, [r5, #0xa]
 	add r0, r7, #0
-	bl ov13_022208F8
+	bl WifiSetup_Free
 	mov r0, #0
 _02221BDA:
 	add sp, #0x14
@@ -2407,7 +2407,7 @@ _02221C04:
 	beq _02221C18
 	ldr r0, _02221C28 ; =ov13_0224DCF8
 	mov r2, #6
-	bl ov13_02222948
+	bl WifiSetup_MemCompare
 	cmp r0, #0
 	beq _02221C22
 	mov r4, #1
@@ -2432,7 +2432,7 @@ ov13_02221C2C: ; 0x02221C2C
 	ldr r0, _02221C74 ; =ov13_02245A20
 	add r5, r1, #0
 	mov r4, #0
-	bl ov13_02222A9C
+	bl WifiSetup_StrLen
 	add r3, r0, #0
 	ldr r2, _02221C74 ; =ov13_02245A20
 	add r0, r5, #0
@@ -2441,17 +2441,17 @@ ov13_02221C2C: ; 0x02221C2C
 	add r0, r6, #0
 	add r1, r5, #0
 	mov r2, #6
-	bl ov13_02222948
+	bl WifiSetup_MemCompare
 	cmp r0, #0
 	beq _02221C58
 	sub r4, r4, #1
 	b _02221C6E
 _02221C58:
 	ldrh r0, [r6, #6]
-	bl ov13_02222A84
+	bl WifiSetup_NetToHost16
 	add r6, r0, #0
 	ldrh r0, [r5, #6]
-	bl ov13_02222A84
+	bl WifiSetup_NetToHost16
 	add r1, r6, #1
 	cmp r1, r0
 	beq _02221C6E
@@ -2472,13 +2472,13 @@ ov13_02221C78: ; 0x02221C78
 	add r0, r5, #0
 	mov r1, #0
 	lsl r2, r2, #2
-	bl ov13_02222978
+	bl WifiSetup_MemFill
 	add r7, r5, #0
 	add r4, r6, #0
 	add r7, #0x80
 _02221C90:
 	ldrh r0, [r4, #2]
-	bl ov13_02222A84
+	bl WifiSetup_NetToHost16
 	add r2, r0, #0
 	cmp r2, #0
 	bgt _02221CA2
@@ -2506,23 +2506,23 @@ _02221CB4: ; jump table
 _02221CC2:
 	add r0, r5, #0
 	add r1, r4, #6
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	b _02221D1E
 _02221CCC:
 	add r0, r7, #0
 	add r1, r4, #6
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	b _02221D1E
 _02221CD6:
 	mov r0, #1
 	lsl r0, r0, #8
 	add r0, r5, r0
 	add r1, r4, #6
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	b _02221D1E
 _02221CE4:
 	ldrb r0, [r4, #6]
-	bl ov13_02222A84
+	bl WifiSetup_NetToHost16
 	cmp r0, #0
 	bgt _02221D1E
 	mov r0, #1
@@ -2532,16 +2532,16 @@ _02221CF4:
 	add r0, r4, #6
 	add r1, r2, #0
 	bl ov13_02221D34
-	bl ov13_02222A5C
-	ldr r1, _02221D30 ; =_0224CF98
+	bl WifiSetup_NetToHost32
+	ldr r1, _02221D30 ; =gWifiSetupState
 	str r0, [r1, #0x34]
 	b _02221D1E
 _02221D06:
 	add r0, r4, #6
 	add r1, r2, #0
 	bl ov13_02221D34
-	bl ov13_02222A5C
-	ldr r1, _02221D30 ; =_0224CF98
+	bl WifiSetup_NetToHost32
+	ldr r1, _02221D30 ; =gWifiSetupState
 	str r0, [r1, #0x38]
 	b _02221D1E
 _02221D18:
@@ -2552,14 +2552,14 @@ _02221D1E:
 	ldrh r0, [r4, #4]
 	cmp r0, #0
 	beq _02221D2C
-	bl ov13_02222A84
+	bl WifiSetup_NetToHost16
 	add r4, r6, r0
 	b _02221C90
 _02221D2C:
 	mov r0, #0
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-_02221D30: .word _0224CF98
+_02221D30: .word gWifiSetupState
 	thumb_func_end ov13_02221C78
 
 	thumb_func_start ov13_02221D34
@@ -2613,7 +2613,7 @@ ov13_02221D58: ; 0x02221D58
 	str r5, [sp, #0x10]
 _02221D86:
 	ldrh r0, [r5, #2]
-	bl ov13_02222A84
+	bl WifiSetup_NetToHost16
 	add r4, r0, #0
 	ldrb r0, [r5]
 	cmp r0, #0x21
@@ -2714,28 +2714,28 @@ _02221E34:
 	add r0, r7, #0
 	add r1, r5, #6
 	add r2, r4, #0
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	str r4, [r6, #4]
 	b _02221E94
 _02221E42:
 	ldr r0, [sp]
 	add r1, r5, #6
 	add r2, r4, #0
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	str r4, [r6, #4]
 	b _02221E94
 _02221E50:
 	ldr r0, [sp, #4]
 	add r1, r5, #6
 	add r2, r4, #0
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	str r4, [r6, #4]
 	b _02221E94
 _02221E5E:
 	ldr r0, [sp, #8]
 	add r1, r5, #6
 	add r2, r4, #0
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	str r4, [r6, #4]
 	b _02221E94
 _02221E6C:
@@ -2753,7 +2753,7 @@ _02221E80:
 	ldr r0, [sp, #0xc]
 	add r1, r5, #6
 	add r2, r4, #0
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	b _02221E94
 _02221E8C:
 	mov r0, #0
@@ -2764,7 +2764,7 @@ _02221E94:
 	ldrh r0, [r5, #4]
 	cmp r0, #0
 	beq _02221EA4
-	bl ov13_02222A84
+	bl WifiSetup_NetToHost16
 	ldr r1, [sp, #0x10]
 	add r5, r1, r0
 	b _02221D86
@@ -2790,7 +2790,7 @@ ov13_02221EAC: ; 0x02221EAC
 	str r4, [sp, #4]
 _02221EC2:
 	ldrh r0, [r4, #2]
-	bl ov13_02222A84
+	bl WifiSetup_NetToHost16
 	add r5, r0, #0
 	ldrb r0, [r4]
 	cmp r0, #0x35
@@ -2842,7 +2842,7 @@ _02221F18:
 	add r0, r7, #0
 	add r1, r4, #6
 	add r2, r5, #0
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	str r5, [r6, #4]
 	b _02221F4E
 _02221F26:
@@ -2860,7 +2860,7 @@ _02221F3A:
 	ldr r0, [sp]
 	add r1, r4, #6
 	add r2, r5, #0
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	b _02221F4E
 _02221F46:
 	mov r0, #0
@@ -2871,7 +2871,7 @@ _02221F4E:
 	ldrh r0, [r4, #4]
 	cmp r0, #0
 	beq _02221F5E
-	bl ov13_02222A84
+	bl WifiSetup_NetToHost16
 	ldr r1, [sp, #4]
 	add r4, r1, r0
 	b _02221EC2
@@ -2887,7 +2887,7 @@ ov13_02221F64: ; 0x02221F64
 	add r4, r0, #6
 	ldrh r0, [r4, #2]
 	add r5, r1, #0
-	bl ov13_02222A84
+	bl WifiSetup_NetToHost16
 	add r2, r0, #0
 	cmp r2, #0
 	bgt _02221F7C
@@ -2904,7 +2904,7 @@ _02221F7C:
 _02221F88:
 	add r0, r5, #0
 	add r1, r4, #6
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	mov r0, #0
 	pop {r3, r4, r5, pc}
 	thumb_func_end ov13_02221F64
@@ -2933,7 +2933,7 @@ _02221FAE:
 	cmp r0, r2
 	beq _02221FD2
 	ldrh r0, [r4, #2]
-	bl ov13_02222A84
+	bl WifiSetup_NetToHost16
 	add r0, r0, #4
 	sub r6, r6, r0
 	add r4, r4, r0
@@ -2946,7 +2946,7 @@ _02221FAE:
 _02221FD2:
 	ldrh r0, [r1, #2]
 	add r4, r4, #4
-	bl ov13_02222A84
+	bl WifiSetup_NetToHost16
 	add r7, r0, #0
 	mov r1, #0x35
 	ldr r0, [sp]
@@ -3034,13 +3034,13 @@ _0222207A:
 	cmp r0, #0
 	bne _02222098
 	ldrh r0, [r4, #2]
-	bl ov13_02222A84
+	bl WifiSetup_NetToHost16
 	add r0, r0, #4
 	sub r7, r7, r0
 	add r4, r4, r0
 	cmp r7, #0
 	bgt _02221FFC
-	ldr r0, _022220A0 ; =_0224CF98
+	ldr r0, _022220A0 ; =gWifiSetupState
 	ldr r1, [r0, #0x30]
 	orr r1, r5
 	str r1, [r0, #0x30]
@@ -3050,7 +3050,7 @@ _02222098:
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
 _0222209C: .word _022459B0
-_022220A0: .word _0224CF98
+_022220A0: .word gWifiSetupState
 	thumb_func_end ov13_02221F94
 
 	thumb_func_start ov13_022220A4
@@ -3120,19 +3120,19 @@ ov13_02222108: ; 0x02222108
 	strb r1, [r0]
 	strh r1, [r0, #4]
 	strh r1, [r0, #2]
-	ldr r0, _0222223C ; =_0224CF98
+	ldr r0, _0222223C ; =gWifiSetupState
 	str r2, [sp, #0xc]
 	ldr r5, [r0, #0x14]
 	ldr r2, _02222240 ; =0x000005DC
 	add r0, r5, #0
-	bl ov13_02222978
+	bl WifiSetup_MemFill
 	mov r0, #0x21
 	lsl r0, r0, #4
-	bl ov13_022208E8
+	bl WifiSetup_Alloc
 	add r4, r0, #0
 	bne _02222140
 	mov r0, #2
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	mov r0, #0
 	add sp, #0x20
 	mvn r0, r0
@@ -3141,18 +3141,18 @@ _02222140:
 	mov r2, #0x21
 	mov r1, #0
 	lsl r2, r2, #4
-	bl ov13_02222978
+	bl WifiSetup_MemFill
 	add r6, r5, #0
 	ldr r0, _02222244 ; =ov13_0224DCF8
 	add r1, r7, #0
 	mov r2, #8
 	add r6, #0x18
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	add r0, sp, #0x14
 	ldr r1, _02222244 ; =ov13_0224DCF8
 	add r0, #2
 	mov r2, #8
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	add r0, r4, #4
 	bl ov13_02222394
 	add r1, sp, #0x10
@@ -3162,11 +3162,11 @@ _02222140:
 	cmp r0, #0
 	bge _0222218E
 	mov r0, #3
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	cmp r4, #0
 	beq _02222186
 	add r0, r4, #0
-	bl ov13_022208F8
+	bl WifiSetup_Free
 _02222186:
 	mov r0, #0
 	add sp, #0x20
@@ -3176,7 +3176,7 @@ _0222218E:
 	mov r0, #0
 	strb r0, [r4]
 	ldrh r0, [r1, #4]
-	bl ov13_02222A44
+	bl WifiSetup_HostToNet16
 	strh r0, [r4, #2]
 	add r1, sp, #0x10
 	mov r0, #4
@@ -3208,11 +3208,11 @@ _0222218E:
 	cmp r0, #0
 	beq _022221F0
 	mov r0, #2
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	cmp r4, #0
 	beq _022221E8
 	add r0, r4, #0
-	bl ov13_022208F8
+	bl WifiSetup_Free
 _022221E8:
 	mov r0, #0
 	add sp, #0x20
@@ -3249,13 +3249,13 @@ _022221F0:
 	cmp r4, #0
 	beq _02222234
 	add r0, r4, #0
-	bl ov13_022208F8
+	bl WifiSetup_Free
 _02222234:
 	mov r0, #0
 	add sp, #0x20
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
-_0222223C: .word _0224CF98
+_0222223C: .word gWifiSetupState
 _02222240: .word 0x000005DC
 _02222244: .word ov13_0224DCF8
 _02222248: .word ov13_02245A20
@@ -3271,29 +3271,29 @@ ov13_0222224C: ; 0x0222224C
 	strb r1, [r0]
 	strh r1, [r0, #4]
 	strh r1, [r0, #2]
-	ldr r0, _0222231C ; =_0224CF98
+	ldr r0, _0222231C ; =gWifiSetupState
 	add r6, r2, #0
 	ldr r4, [r0, #0x14]
 	add r0, sp, #0x14
 	mov r2, #8
-	bl ov13_02222978
+	bl WifiSetup_MemFill
 	ldr r2, _02222320 ; =0x000005DC
 	add r0, r4, #0
 	mov r1, #0
-	bl ov13_02222978
+	bl WifiSetup_MemFill
 	mov r1, #2
 	add r0, sp, #0xc
 	strb r1, [r0, #8]
 	mov r1, #0
 	strb r1, [r0, #9]
 	mov r0, #4
-	bl ov13_02222A44
+	bl WifiSetup_HostToNet16
 	add r1, sp, #0xc
 	strh r0, [r1, #0xa]
-	ldr r0, _0222231C ; =_0224CF98
+	ldr r0, _0222231C ; =gWifiSetupState
 	ldr r0, [r0, #0x2c]
 	str r0, [sp, #0x18]
-	bl ov13_02222A1C
+	bl WifiSetup_HostToNet32
 	str r0, [sp, #0x18]
 	mov r1, #8
 	add r0, sp, #0xc
@@ -3303,7 +3303,7 @@ ov13_0222224C: ; 0x0222224C
 	str r0, [sp]
 	add r0, sp, #0xc
 	str r0, [sp, #4]
-	ldr r0, _0222231C ; =_0224CF98
+	ldr r0, _0222231C ; =gWifiSetupState
 	add r1, r4, #0
 	ldr r0, [r0]
 	add r1, #0x18
@@ -3314,7 +3314,7 @@ ov13_0222224C: ; 0x0222224C
 	add r0, sp, #0x1c
 	add r1, r5, #0
 	mov r2, #8
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	ldr r2, _02222324 ; =ov13_02245A20
 	add r0, sp, #0x1c
 	mov r1, #8
@@ -3323,7 +3323,7 @@ ov13_0222224C: ; 0x0222224C
 	cmp r0, #0
 	beq _022222DE
 	mov r0, #2
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	mov r0, #0
 	add sp, #0x24
 	mvn r0, r0
@@ -3359,7 +3359,7 @@ _022222DE:
 	add sp, #0x24
 	pop {r3, r4, r5, r6, pc}
 	.balign 4, 0
-_0222231C: .word _0224CF98
+_0222231C: .word gWifiSetupState
 _02222320: .word 0x000005DC
 _02222324: .word ov13_02245A20
 	thumb_func_end ov13_0222224C
@@ -3368,21 +3368,21 @@ _02222324: .word ov13_02245A20
 ov13_02222328: ; 0x02222328
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0x14
-	ldr r0, _02222388 ; =_0224CF98
+	ldr r0, _02222388 ; =gWifiSetupState
 	add r6, r2, #0
 	ldr r4, [r0, #0x14]
 	ldr r2, _0222238C ; =0x000005DC
 	add r5, r1, #0
 	add r0, r4, #0
 	mov r1, #0
-	bl ov13_02222978
+	bl WifiSetup_MemFill
 	add r5, #0x10
 	add r0, sp, #0xc
 	add r1, r5, #0
 	mov r2, #8
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	ldr r0, _02222390 ; =ov13_02245A20
-	bl ov13_02222A9C
+	bl WifiSetup_StrLen
 	add r3, r0, #0
 	ldr r2, _02222390 ; =ov13_02245A20
 	add r0, sp, #0xc
@@ -3408,7 +3408,7 @@ ov13_02222328: ; 0x02222328
 	add sp, #0x14
 	pop {r3, r4, r5, r6, pc}
 	nop
-_02222388: .word _0224CF98
+_02222388: .word gWifiSetupState
 _0222238C: .word 0x000005DC
 _02222390: .word ov13_02245A20
 	thumb_func_end ov13_02222328
@@ -3420,7 +3420,7 @@ ov13_02222394: ; 0x02222394
 	add r5, r0, #0
 	mov r0, #0x1d
 	ldrsb r0, [r1, r0]
-	ldr r1, _0222241C ; =_0224CF98
+	ldr r1, _0222241C ; =gWifiSetupState
 	mov r6, #0
 	strb r0, [r5]
 	mov r0, #1
@@ -3431,10 +3431,10 @@ ov13_02222394: ; 0x02222394
 	asr r4, r0, #0x10
 	add r0, r5, #6
 	add r2, r4, #0
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	lsl r0, r4, #0x10
 	lsr r0, r0, #0x10
-	bl ov13_02222A44
+	bl WifiSetup_HostToNet16
 	strh r0, [r5, #2]
 	add r0, r4, #6
 	lsl r0, r0, #0x10
@@ -3447,7 +3447,7 @@ ov13_02222394: ; 0x02222394
 	asr r7, r0, #0x10
 	lsl r0, r7, #0x10
 	lsr r0, r0, #0x10
-	bl ov13_02222A44
+	bl WifiSetup_HostToNet16
 	strh r0, [r5, #4]
 	add r0, r6, r7
 	lsl r0, r0, #0x10
@@ -3457,17 +3457,17 @@ ov13_02222394: ; 0x02222394
 	add r4, r5, r7
 	mov r0, #0
 	strb r0, [r4, #1]
-	bl ov13_02222A44
+	bl WifiSetup_HostToNet16
 	strh r0, [r4, #4]
 	mov r0, #0xe
-	bl ov13_02222A1C
+	bl WifiSetup_HostToNet32
 	str r0, [sp]
 	add r0, r4, #6
 	add r1, sp, #0
 	mov r2, #4
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	mov r0, #4
-	bl ov13_02222A44
+	bl WifiSetup_HostToNet16
 	add r6, #0xa
 	strh r0, [r4, #2]
 	lsl r0, r6, #0x10
@@ -3475,7 +3475,7 @@ ov13_02222394: ; 0x02222394
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
 _02222418: .word ov13_0224CFB8
-_0222241C: .word _0224CF98
+_0222241C: .word gWifiSetupState
 	thumb_func_end ov13_02222394
 
 	thumb_func_start ov13_02222420
@@ -3502,7 +3502,7 @@ ov13_02222420: ; 0x02222420
 	add r1, r5, #4
 	bl ov13_02222534
 	ldrh r0, [r4]
-	bl ov13_02222A44
+	bl WifiSetup_HostToNet16
 	strh r0, [r5]
 	mov r0, #0
 	ldrsh r0, [r4, r0]
@@ -3515,7 +3515,7 @@ _02222460:
 	mov r2, #0
 	ldrsh r2, [r4, r2]
 	add r0, r5, #0
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	add sp, #0xc
 	pop {r4, r5, pc}
 	.balign 4, 0
@@ -3530,24 +3530,24 @@ ov13_02222474: ; 0x02222474
 	add r4, r1, #0
 	add r6, r2, #0
 	add r7, r3, #0
-	bl ov13_02222A44
+	bl WifiSetup_HostToNet16
 	strh r0, [r5]
 	mov r0, #0
 	strh r0, [r5, #2]
 	strh r0, [r5, #4]
 	lsl r0, r4, #0x10
 	lsr r0, r0, #0x10
-	bl ov13_02222A44
+	bl WifiSetup_HostToNet16
 	strh r0, [r5, #6]
 	mov r0, #0
 	strh r0, [r5, #8]
 	lsl r0, r6, #0x10
 	lsr r0, r0, #0x10
-	bl ov13_02222A44
+	bl WifiSetup_HostToNet16
 	strh r0, [r5, #0xa]
 	lsl r0, r7, #0x10
 	lsr r0, r0, #0x10
-	bl ov13_02222A44
+	bl WifiSetup_HostToNet16
 	strh r0, [r5, #0xc]
 	add r1, sp, #8
 	mov r0, #0x10
@@ -3560,7 +3560,7 @@ ov13_02222474: ; 0x02222474
 	strb r0, [r5, #0xf]
 	add r5, #0x10
 	add r0, r5, #0
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
 	thumb_func_end ov13_02222474
@@ -3576,17 +3576,17 @@ ov13_022224CC: ; 0x022224CC
 	mov r1, #0
 	mov r2, #8
 	add r7, r3, #0
-	bl ov13_02222978
+	bl WifiSetup_MemFill
 	mov r1, #2
 	add r0, sp, #8
 	strb r1, [r0, #1]
 	ldr r0, _02222528 ; =0x00005790
-	bl ov13_02222A44
+	bl WifiSetup_HostToNet16
 	add r1, sp, #8
 	strh r0, [r1, #2]
-	ldr r0, _0222252C ; =_0224CF98
+	ldr r0, _0222252C ; =gWifiSetupState
 	ldr r0, [r0, #0x34]
-	bl ov13_02222A1C
+	bl WifiSetup_HostToNet32
 	str r0, [sp, #0xc]
 	cmp r4, #0xff
 	beq _0222250A
@@ -3608,12 +3608,12 @@ _02222510:
 	add r1, r5, #0
 	add r2, r6, #0
 	mov r3, #0
-	bl ov13_022229EC
+	bl WifiSetup_SendTo
 	add sp, #0x10
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
 _02222528: .word 0x00005790
-_0222252C: .word _0224CF98
+_0222252C: .word gWifiSetupState
 _02222530: .word ov13_0224CFB8
 	thumb_func_end ov13_022224CC
 
@@ -3626,10 +3626,10 @@ ov13_02222534: ; 0x02222534
 	add r4, r3, #0
 	add r1, r5, #0
 	add r6, r0, #0
-	bl ov13_02222708
+	bl WifiSetup_CalcCrc32
 	strb r0, [r4]
 	add r0, r5, #0
-	bl ov13_022208E8
+	bl WifiSetup_Alloc
 	str r0, [sp, #0xc]
 	cmp r0, #0
 	bne _0222255C
@@ -3638,21 +3638,21 @@ ov13_02222534: ; 0x02222534
 	mvn r0, r0
 	pop {r4, r5, r6, r7, pc}
 _0222255C:
-	bl ov13_02222AB0
+	bl WifiSetup_Random
 	add r1, sp, #0
 	strh r0, [r1]
 	ldr r0, [sp, #0x28]
 	add r1, sp, #0
 	mov r2, #2
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	ldr r0, _022225A8 ; =ov13_0224DD00
 	ldr r1, [sp, #0x28]
 	mov r2, #2
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	ldr r0, _022225AC ; =ov13_0224DD02
 	ldr r1, [sp, #0x2c]
 	ldr r2, [sp, #0x30]
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	ldr r2, [sp, #0x30]
 	ldr r1, _022225A8 ; =ov13_0224DD00
 	add r0, sp, #4
@@ -3665,7 +3665,7 @@ _0222255C:
 	add r3, r5, #0
 	bl ov13_0222269C
 	ldr r0, [sp, #0xc]
-	bl ov13_022208F8
+	bl WifiSetup_Free
 	mov r0, #0
 	add sp, #0x14
 	pop {r4, r5, r6, r7, pc}
@@ -3683,12 +3683,12 @@ ov13_022225B0: ; 0x022225B0
 	add r0, r4, #0
 	add r5, r1, #0
 	add r6, r3, #0
-	bl ov13_022208E8
+	bl WifiSetup_Alloc
 	str r0, [sp, #8]
 	cmp r0, #0
 	bne _022225D6
 	mov r0, #2
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	mov r0, #0
 	add sp, #0x10
 	mvn r0, r0
@@ -3697,11 +3697,11 @@ _022225D6:
 	ldr r0, _02222630 ; =ov13_0224DD00
 	ldr r1, [sp, #0x28]
 	mov r2, #2
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	ldr r0, _02222634 ; =ov13_0224DD02
 	ldr r1, [sp, #0x2c]
 	ldr r2, [sp, #0x30]
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	ldr r2, [sp, #0x30]
 	ldr r1, _02222630 ; =ov13_0224DD00
 	add r0, sp, #0
@@ -3715,20 +3715,20 @@ _022225D6:
 	bl ov13_0222269C
 	add r0, r5, #0
 	add r1, r4, #0
-	bl ov13_02222708
+	bl WifiSetup_CalcCrc32
 	cmp r0, r6
 	beq _02222624
 	mov r0, #0x12
-	bl ov13_022214AC
+	bl WifiSetup_SetError
 	ldr r0, [sp, #8]
-	bl ov13_022208F8
+	bl WifiSetup_Free
 	mov r0, #0
 	add sp, #0x10
 	mvn r0, r0
 	pop {r3, r4, r5, r6, r7, pc}
 _02222624:
 	ldr r0, [sp, #8]
-	bl ov13_022208F8
+	bl WifiSetup_Free
 	mov r0, #0
 	add sp, #0x10
 	pop {r3, r4, r5, r6, r7, pc}
@@ -3806,7 +3806,7 @@ ov13_0222269C: ; 0x0222269C
 	beq _022226C0
 _022226AA:
 	ldr r0, [sp]
-	bl ov13_022226C8
+	bl WifiSetup_CipherNextByte
 	lsl r0, r0, #0x18
 	lsr r1, r0, #0x18
 	ldrb r0, [r6, r4]
@@ -3821,8 +3821,8 @@ _022226C0:
 _022226C4: .word 0x00000000
 	thumb_func_end ov13_0222269C
 
-	thumb_func_start ov13_022226C8
-ov13_022226C8: ; 0x022226C8
+	thumb_func_start WifiSetup_CipherNextByte
+WifiSetup_CipherNextByte: ; 0x022226C8
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	ldr r0, [r5, #0xc]
@@ -3852,10 +3852,10 @@ ov13_022226C8: ; 0x022226C8
 	ldrb r0, [r4, r1]
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov13_022226C8
+	thumb_func_end WifiSetup_CipherNextByte
 
-	thumb_func_start ov13_02222708
-ov13_02222708: ; 0x02222708
+	thumb_func_start WifiSetup_CalcCrc32
+WifiSetup_CalcCrc32: ; 0x02222708
 	push {r3, lr}
 	add r3, r0, #0
 	ldr r0, _0222272C ; =ov13_0224D258
@@ -3865,7 +3865,7 @@ ov13_02222708: ; 0x02222708
 	add r1, r3, #0
 	mvn r0, r0
 	mov r3, #0
-	bl ov13_02222730
+	bl WifiSetup_UpdateCrc32
 	mov r1, #0
 	mvn r1, r1
 	eor r0, r1
@@ -3874,10 +3874,10 @@ ov13_02222708: ; 0x02222708
 	pop {r3, pc}
 	nop
 _0222272C: .word ov13_0224D258
-	thumb_func_end ov13_02222708
+	thumb_func_end WifiSetup_CalcCrc32
 
-	thumb_func_start ov13_02222730
-ov13_02222730: ; 0x02222730
+	thumb_func_start WifiSetup_UpdateCrc32
+WifiSetup_UpdateCrc32: ; 0x02222730
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	add r7, r1, #0
@@ -3887,7 +3887,7 @@ ov13_02222730: ; 0x02222730
 	bne _02222746
 	add r0, r3, #0
 	add r1, r6, #0
-	bl ov13_02222768
+	bl WifiSetup_InitCrc32Table
 _02222746:
 	mov r1, #0
 	cmp r4, #0
@@ -3908,10 +3908,10 @@ _02222762:
 	add r0, r5, #0
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov13_02222730
+	thumb_func_end WifiSetup_UpdateCrc32
 
-	thumb_func_start ov13_02222768
-ov13_02222768: ; 0x02222768
+	thumb_func_start WifiSetup_InitCrc32Table
+WifiSetup_InitCrc32Table: ; 0x02222768
 	push {r4, r5, r6, r7}
 	mov r5, #1
 	add r3, r5, #0
@@ -3943,7 +3943,7 @@ _02222788:
 	bx lr
 	nop
 _0222279C: .word 0xEDB88320
-	thumb_func_end ov13_02222768
+	thumb_func_end WifiSetup_InitCrc32Table
 
 	thumb_func_start ov13_022227A0
 ov13_022227A0: ; 0x022227A0
@@ -3956,7 +3956,7 @@ ov13_022227A0: ; 0x022227A0
 	asr r0, r0, #1
 	str r2, [sp, #4]
 	str r3, [sp, #8]
-	bl ov13_022208E8
+	bl WifiSetup_Alloc
 	add r6, r0, #0
 	bne _022227C2
 	mov r0, #0
@@ -3965,12 +3965,12 @@ ov13_022227A0: ; 0x022227A0
 	pop {r3, r4, r5, r6, r7, pc}
 _022227C2:
 	add r0, r5, #0
-	bl ov13_022208E8
+	bl WifiSetup_Alloc
 	str r0, [sp, #0xc]
 	cmp r0, #0
 	bne _022227DC
 	add r0, r6, #0
-	bl ov13_022208F8
+	bl WifiSetup_Free
 	mov r0, #0
 	add sp, #0x10
 	mvn r0, r0
@@ -3997,9 +3997,9 @@ _022227DE:
 	cmp r4, #2
 	blt _022227DE
 	add r0, r6, #0
-	bl ov13_022208F8
+	bl WifiSetup_Free
 	ldr r0, [sp, #0xc]
-	bl ov13_022208F8
+	bl WifiSetup_Free
 	mov r0, #0
 	add sp, #0x10
 	pop {r3, r4, r5, r6, r7, pc}
@@ -4074,26 +4074,26 @@ ov13_02222874: ; 0x02222874
 	add r0, r4, #0
 	add r1, r5, r7
 	add r2, r7, #0
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	add r0, r4, r7
 	add r1, r5, #0
 	add r2, r7, #0
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	add r0, r5, #0
 	add r1, r4, #0
 	add r2, r6, #0
-	bl ov13_02222968
+	bl WifiSetup_MemCopy
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
 	thumb_func_end ov13_02222874
 
-	thumb_func_start ov13_022228A4
-ov13_022228A4: ; 0x022228A4
+	thumb_func_start WifiSetup_SocketAlloc
+WifiSetup_SocketAlloc: ; 0x022228A4
 	push {r3, lr}
 	cmp r1, #0
 	ble _022228B4
 	add r0, r1, #0
-	ldr r1, _022228B8 ; =ov13_0224DD80
+	ldr r1, _022228B8 ; =gWifiSetupRuntime
 	ldr r1, [r1]
 	blx r1
 	pop {r3, pc}
@@ -4101,35 +4101,35 @@ _022228B4:
 	mov r0, #0
 	pop {r3, pc}
 	.balign 4, 0
-_022228B8: .word ov13_0224DD80
-	thumb_func_end ov13_022228A4
+_022228B8: .word gWifiSetupRuntime
+	thumb_func_end WifiSetup_SocketAlloc
 
-	thumb_func_start ov13_022228BC
-ov13_022228BC: ; 0x022228BC
+	thumb_func_start WifiSetup_SocketFree
+WifiSetup_SocketFree: ; 0x022228BC
 	push {r3, lr}
 	add r0, r1, #0
-	ldr r1, _022228C8 ; =ov13_0224DD8C
+	ldr r1, _022228C8 ; =gWifiSetupFreeHook
 	ldr r1, [r1]
 	blx r1
 	pop {r3, pc}
 	.balign 4, 0
-_022228C8: .word ov13_0224DD8C
-	thumb_func_end ov13_022228BC
+_022228C8: .word gWifiSetupFreeHook
+	thumb_func_end WifiSetup_SocketFree
 
-	thumb_func_start ov13_022228CC
-ov13_022228CC: ; 0x022228CC
+	thumb_func_start WifiSetup_StartupSocket
+WifiSetup_StartupSocket: ; 0x022228CC
 	push {r3, r4, r5, lr}
 	add r5, r1, #0
 	add r4, r2, #0
-	bl ov13_02222A1C
+	bl WifiSetup_HostToNet32
 	ldr r1, _02222918 ; =ov13_022459B4
 	str r0, [r1, #0x18]
 	add r0, r5, #0
-	bl ov13_02222A1C
+	bl WifiSetup_HostToNet32
 	ldr r1, _02222918 ; =ov13_022459B4
 	str r0, [r1, #0x1c]
 	add r0, r4, #0
-	bl ov13_02222A1C
+	bl WifiSetup_HostToNet32
 	ldr r1, _02222918 ; =ov13_022459B4
 	str r0, [r1, #0x20]
 	ldr r0, _0222291C ; =ov13_022459BC
@@ -4158,10 +4158,10 @@ _02222914:
 _02222918: .word ov13_022459B4
 _0222291C: .word ov13_022459BC
 _02222920: .word _021D4670
-	thumb_func_end ov13_022228CC
+	thumb_func_end WifiSetup_StartupSocket
 
-	thumb_func_start ov13_02222924
-ov13_02222924: ; 0x02222924
+	thumb_func_start WifiSetup_CleanupSocket
+WifiSetup_CleanupSocket: ; 0x02222924
 	push {r3, lr}
 	bl SOC_Cleanup
 	cmp r0, #0
@@ -4181,10 +4181,10 @@ _02222942:
 	neg r0, r0
 	pop {r3, pc}
 	.balign 4, 0
-	thumb_func_end ov13_02222924
+	thumb_func_end WifiSetup_CleanupSocket
 
-	thumb_func_start ov13_02222948
-ov13_02222948: ; 0x02222948
+	thumb_func_start WifiSetup_MemCompare
+WifiSetup_MemCompare: ; 0x02222948
 	push {r3, r4}
 	mov r3, #0
 	b _02222952
@@ -4204,10 +4204,10 @@ _02222962:
 	add r0, r3, #0
 	pop {r3, r4}
 	bx lr
-	thumb_func_end ov13_02222948
+	thumb_func_end WifiSetup_MemCompare
 
-	thumb_func_start ov13_02222968
-ov13_02222968: ; 0x02222968
+	thumb_func_start WifiSetup_MemCopy
+WifiSetup_MemCopy: ; 0x02222968
 	add r3, r0, #0
 	add r0, r1, #0
 	add r1, r3, #0
@@ -4215,20 +4215,20 @@ ov13_02222968: ; 0x02222968
 	bx r3
 	nop
 _02222974: .word MI_CpuCopy8
-	thumb_func_end ov13_02222968
+	thumb_func_end WifiSetup_MemCopy
 
-	thumb_func_start ov13_02222978
-ov13_02222978: ; 0x02222978
+	thumb_func_start WifiSetup_MemFill
+WifiSetup_MemFill: ; 0x02222978
 	ldr r3, _02222980 ; =MI_CpuFill8
 	lsl r1, r1, #0x18
 	lsr r1, r1, #0x18
 	bx r3
 	.balign 4, 0
 _02222980: .word MI_CpuFill8
-	thumb_func_end ov13_02222978
+	thumb_func_end WifiSetup_MemFill
 
-	thumb_func_start ov13_02222984
-ov13_02222984: ; 0x02222984
+	thumb_func_start WifiSetup_RecvFrom
+WifiSetup_RecvFrom: ; 0x02222984
 	push {r3, r4, r5, lr}
 	ldr r4, [sp, #0x14]
 	ldr r5, [r4]
@@ -4238,10 +4238,10 @@ ov13_02222984: ; 0x02222984
 	bl SOC_RecvFrom
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov13_02222984
+	thumb_func_end WifiSetup_RecvFrom
 
-	thumb_func_start ov13_02222998
-ov13_02222998: ; 0x02222998
+	thumb_func_start WifiSetup_Poll
+WifiSetup_Poll: ; 0x02222998
 	push {r4, r5, r6, lr}
 	sub sp, #8
 	ldr r2, [r1]
@@ -4280,10 +4280,10 @@ ov13_02222998: ; 0x02222998
 	pop {r4, r5, r6, pc}
 	nop
 _022229E8: .word 0x01FF6210
-	thumb_func_end ov13_02222998
+	thumb_func_end WifiSetup_Poll
 
-	thumb_func_start ov13_022229EC
-ov13_022229EC: ; 0x022229EC
+	thumb_func_start WifiSetup_SendTo
+WifiSetup_SendTo: ; 0x022229EC
 	push {r3, r4, r5, lr}
 	ldr r5, [sp, #0x14]
 	ldr r4, [sp, #0x10]
@@ -4291,7 +4291,7 @@ ov13_022229EC: ; 0x022229EC
 	str r4, [sp]
 	bl SOC_SendTo
 	pop {r3, r4, r5, pc}
-	thumb_func_end ov13_022229EC
+	thumb_func_end WifiSetup_SendTo
 
 	thumb_func_start ov13_022229FC
 ov13_022229FC: ; 0x022229FC
@@ -4299,33 +4299,33 @@ ov13_022229FC: ; 0x022229FC
 	.balign 4, 0
 	thumb_func_end ov13_022229FC
 
-	thumb_func_start ov13_02222A00
-ov13_02222A00: ; 0x02222A00
+	thumb_func_start WifiSetup_Socket
+WifiSetup_Socket: ; 0x02222A00
 	ldr r3, _02222A04 ; =SOC_Socket
 	bx r3
 	.balign 4, 0
 _02222A04: .word SOC_Socket
-	thumb_func_end ov13_02222A00
+	thumb_func_end WifiSetup_Socket
 
-	thumb_func_start ov13_02222A08
-ov13_02222A08: ; 0x02222A08
+	thumb_func_start WifiSetup_Bind
+WifiSetup_Bind: ; 0x02222A08
 	ldr r3, _02222A10 ; =SOC_Bind
 	strb r2, [r1]
 	bx r3
 	nop
 _02222A10: .word SOC_Bind
-	thumb_func_end ov13_02222A08
+	thumb_func_end WifiSetup_Bind
 
-	thumb_func_start ov13_02222A14
-ov13_02222A14: ; 0x02222A14
+	thumb_func_start WifiSetup_Close
+WifiSetup_Close: ; 0x02222A14
 	ldr r3, _02222A18 ; =SOC_Close
 	bx r3
 	.balign 4, 0
 _02222A18: .word SOC_Close
-	thumb_func_end ov13_02222A14
+	thumb_func_end WifiSetup_Close
 
-	thumb_func_start ov13_02222A1C
-ov13_02222A1C: ; 0x02222A1C
+	thumb_func_start WifiSetup_HostToNet32
+WifiSetup_HostToNet32: ; 0x02222A1C
 	push {r4, r5}
 	mov r3, #0xff
 	lsl r1, r0, #0x18
@@ -4346,10 +4346,10 @@ ov13_02222A1C: ; 0x02222A1C
 	orr r0, r2
 	pop {r4, r5}
 	bx lr
-	thumb_func_end ov13_02222A1C
+	thumb_func_end WifiSetup_HostToNet32
 
-	thumb_func_start ov13_02222A44
-ov13_02222A44: ; 0x02222A44
+	thumb_func_start WifiSetup_HostToNet16
+WifiSetup_HostToNet16: ; 0x02222A44
 	asr r1, r0, #8
 	lsl r1, r1, #0x18
 	lsr r2, r1, #0x18
@@ -4362,10 +4362,10 @@ ov13_02222A44: ; 0x02222A44
 	lsr r0, r0, #0x10
 	bx lr
 	.balign 4, 0
-	thumb_func_end ov13_02222A44
+	thumb_func_end WifiSetup_HostToNet16
 
-	thumb_func_start ov13_02222A5C
-ov13_02222A5C: ; 0x02222A5C
+	thumb_func_start WifiSetup_NetToHost32
+WifiSetup_NetToHost32: ; 0x02222A5C
 	push {r4, r5}
 	mov r3, #0xff
 	lsl r1, r0, #0x18
@@ -4386,10 +4386,10 @@ ov13_02222A5C: ; 0x02222A5C
 	orr r0, r2
 	pop {r4, r5}
 	bx lr
-	thumb_func_end ov13_02222A5C
+	thumb_func_end WifiSetup_NetToHost32
 
-	thumb_func_start ov13_02222A84
-ov13_02222A84: ; 0x02222A84
+	thumb_func_start WifiSetup_NetToHost16
+WifiSetup_NetToHost16: ; 0x02222A84
 	asr r1, r0, #8
 	lsl r1, r1, #0x18
 	lsr r2, r1, #0x18
@@ -4402,10 +4402,10 @@ ov13_02222A84: ; 0x02222A84
 	lsr r0, r0, #0x10
 	bx lr
 	.balign 4, 0
-	thumb_func_end ov13_02222A84
+	thumb_func_end WifiSetup_NetToHost16
 
-	thumb_func_start ov13_02222A9C
-ov13_02222A9C: ; 0x02222A9C
+	thumb_func_start WifiSetup_StrLen
+WifiSetup_StrLen: ; 0x02222A9C
 	mov r2, #0
 	ldrsb r1, [r0, r2]
 	cmp r1, #0
@@ -4418,13 +4418,13 @@ _02222AA4:
 _02222AAC:
 	add r0, r2, #0
 	bx lr
-	thumb_func_end ov13_02222A9C
+	thumb_func_end WifiSetup_StrLen
 
-	thumb_func_start ov13_02222AB0
-ov13_02222AB0: ; 0x02222AB0
+	thumb_func_start WifiSetup_Random
+WifiSetup_Random: ; 0x02222AB0
 	push {r3, r4, lr}
 	sub sp, #0xc
-	ldr r0, _02222B10 ; =_0224CF98
+	ldr r0, _02222B10 ; =gWifiSetupState
 	ldr r0, [r0, #8]
 	cmp r0, #0
 	bne _02222AF2
@@ -4432,7 +4432,7 @@ ov13_02222AB0: ; 0x02222AB0
 	add r0, sp, #0
 	add r1, r4, #0
 	mov r2, #0xc
-	bl ov13_02222978
+	bl WifiSetup_MemFill
 	add r0, sp, #0
 	bl RTC_GetTime
 	cmp r0, #0
@@ -4446,7 +4446,7 @@ ov13_02222AB0: ; 0x02222AB0
 	ldr r0, [sp, #8]
 	add r4, r1, r0
 _02222AE2:
-	ldr r0, _02222B10 ; =_0224CF98
+	ldr r0, _02222B10 ; =gWifiSetupState
 	ldr r1, _02222B14 ; =0x5D588B65
 	str r4, [r0, #0x18]
 	str r1, [r0, #0x1c]
@@ -4455,7 +4455,7 @@ _02222AE2:
 	mov r1, #1
 	str r1, [r0, #8]
 _02222AF2:
-	ldr r0, _02222B10 ; =_0224CF98
+	ldr r0, _02222B10 ; =gWifiSetupState
 	ldr r2, [r0, #0x1c]
 	ldr r1, [r0, #0x18]
 	ldr r3, [r0, #0x20]
@@ -4471,29 +4471,29 @@ _02222AF2:
 	add sp, #0xc
 	pop {r3, r4, pc}
 	.balign 4, 0
-_02222B10: .word _0224CF98
+_02222B10: .word gWifiSetupState
 _02222B14: .word 0x5D588B65
 _02222B18: .word 0x00269EC3
 _02222B1C: .word 0x00007FFF
-	thumb_func_end ov13_02222AB0
+	thumb_func_end WifiSetup_Random
 
-	thumb_func_start ov13_02222B20
-ov13_02222B20: ; 0x02222B20
+	thumb_func_start WifiSetup_ClearPollSet
+WifiSetup_ClearPollSet: ; 0x02222B20
 	mov r1, #0
 	str r1, [r0]
 	strh r1, [r0, #4]
 	strh r1, [r0, #6]
 	bx lr
 	.balign 4, 0
-	thumb_func_end ov13_02222B20
+	thumb_func_end WifiSetup_ClearPollSet
 
-	thumb_func_start ov13_02222B2C
-ov13_02222B2C: ; 0x02222B2C
+	thumb_func_start WifiSetup_AddToPollSet
+WifiSetup_AddToPollSet: ; 0x02222B2C
 	str r0, [r1]
 	mov r0, #1
 	strh r0, [r1, #4]
 	bx lr
-	thumb_func_end ov13_02222B2C
+	thumb_func_end WifiSetup_AddToPollSet
 
 	thumb_func_start ov13_02222B34
 ov13_02222B34: ; 0x02222B34
@@ -4607,24 +4607,24 @@ _02222BF0: .word ov13_02222B34
 ov13_02222BF4: ; 0x02222BF4
 	ldr r3, _02222C00 ; =OS_SendMessage
 	add r1, r0, #0
-	ldr r0, _02222C04 ; =ov13_0224DDA0
+	ldr r0, _02222C04 ; =gWifiSetupMessageQueue
 	mov r2, #0
 	bx r3
 	nop
 _02222C00: .word OS_SendMessage
-_02222C04: .word ov13_0224DDA0
+_02222C04: .word gWifiSetupMessageQueue
 	thumb_func_end ov13_02222BF4
 
 	thumb_func_start ov13_02222C08
 ov13_02222C08: ; 0x02222C08
 	ldr r3, _02222C14 ; =OS_SendMessage
 	add r1, r0, #0
-	ldr r0, _02222C18 ; =ov13_0224DDA0
+	ldr r0, _02222C18 ; =gWifiSetupMessageQueue
 	mov r2, #0
 	bx r3
 	nop
 _02222C14: .word OS_SendMessage
-_02222C18: .word ov13_0224DDA0
+_02222C18: .word gWifiSetupMessageQueue
 	thumb_func_end ov13_02222C08
 
 	thumb_func_start ov13_02222C1C
@@ -4632,8 +4632,8 @@ ov13_02222C1C: ; 0x02222C1C
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	add r6, r1, #0
-	ldr r0, _02222CCC ; =ov13_0224DDA0
-	ldr r1, _02222CD0 ; =ov13_0224DD90
+	ldr r0, _02222CCC ; =gWifiSetupMessageQueue
+	ldr r1, _02222CD0 ; =gWifiSetupMessages
 	mov r2, #4
 	mov r4, #1
 	bl OS_InitMessageQueue
@@ -4647,16 +4647,16 @@ _02222C36:
 	pop {r3, r4, r5, r6, r7, pc}
 _02222C3C:
 	bl OS_DisableInterrupts
-	ldr r1, _02222CD4 ; =ov13_0224DD80
+	ldr r1, _02222CD4 ; =gWifiSetupRuntime
 	str r5, [r1]
 	str r6, [r1, #0xc]
 	bl OS_RestoreInterrupts
-	ldr r1, _02222CD4 ; =ov13_0224DD80
+	ldr r1, _02222CD4 ; =gWifiSetupRuntime
 	ldr r0, _02222CD8 ; =0x00005890
 	ldr r1, [r1]
 	blx r1
 	add r1, r0, #0
-	ldr r0, _02222CD4 ; =ov13_0224DD80
+	ldr r0, _02222CD4 ; =gWifiSetupRuntime
 	str r1, [r0, #8]
 	bne _02222C5E
 	sub r0, r4, #2
@@ -4671,7 +4671,7 @@ _02222C5E:
 _02222C6C:
 	cmp r4, #0
 	beq _02222CBC
-	ldr r5, _02222CCC ; =ov13_0224DDA0
+	ldr r5, _02222CCC ; =gWifiSetupMessageQueue
 	add r6, sp, #0
 	mov r7, #1
 _02222C76:
@@ -4714,7 +4714,7 @@ _02222CB8:
 	cmp r4, #0
 	bne _02222C76
 _02222CBC:
-	ldr r1, _02222CD4 ; =ov13_0224DD80
+	ldr r1, _02222CD4 ; =gWifiSetupRuntime
 	ldr r0, [r1, #8]
 	ldr r1, [r1, #0xc]
 	blx r1
@@ -4722,9 +4722,9 @@ _02222CBC:
 	mvn r0, r0
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
-_02222CCC: .word ov13_0224DDA0
-_02222CD0: .word ov13_0224DD90
-_02222CD4: .word ov13_0224DD80
+_02222CCC: .word gWifiSetupMessageQueue
+_02222CD0: .word gWifiSetupMessages
+_02222CD4: .word gWifiSetupRuntime
 _02222CD8: .word 0x00005890
 _02222CDC: .word ov13_02222BF4
 	thumb_func_end ov13_02222C1C
@@ -4732,7 +4732,7 @@ _02222CDC: .word ov13_02222BF4
 	thumb_func_start ov13_02222CE0
 ov13_02222CE0: ; 0x02222CE0
 	push {r3, r4, r5, r6, r7, lr}
-	ldr r0, _02222D70 ; =ov13_0224DD80
+	ldr r0, _02222D70 ; =gWifiSetupRuntime
 	mov r4, #1
 	ldr r0, [r0, #0xc]
 	sub r5, r4, #2
@@ -4747,8 +4747,8 @@ _02222CF2:
 	sub r0, r4, #2
 	pop {r3, r4, r5, r6, r7, pc}
 _02222CFE:
-	ldr r7, _02222D74 ; =ov13_0224DDA0
-	ldr r6, _02222D70 ; =ov13_0224DD80
+	ldr r7, _02222D74 ; =gWifiSetupMessageQueue
+	ldr r6, _02222D70 ; =gWifiSetupRuntime
 _02222D02:
 	add r0, r7, #0
 	add r1, sp, #0
@@ -4798,7 +4798,7 @@ _02222D56:
 	cmp r4, #0
 	bne _02222D02
 	bl OS_DisableInterrupts
-	ldr r1, _02222D70 ; =ov13_0224DD80
+	ldr r1, _02222D70 ; =gWifiSetupRuntime
 	mov r2, #0
 	str r2, [r1]
 	str r2, [r1, #0xc]
@@ -4806,8 +4806,8 @@ _02222D56:
 	add r0, r5, #0
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
-_02222D70: .word ov13_0224DD80
-_02222D74: .word ov13_0224DDA0
+_02222D70: .word gWifiSetupRuntime
+_02222D74: .word gWifiSetupMessageQueue
 	thumb_func_end ov13_02222CE0
 
 	thumb_func_start ov13_02222D78
@@ -4818,7 +4818,7 @@ ov13_02222D78: ; 0x02222D78
 	bl ov13_022235A4
 	cmp r0, #0
 	beq _02222DA8
-	ldr r4, _02222DAC ; =ov13_0224DDA0
+	ldr r4, _02222DAC ; =gWifiSetupMessageQueue
 	add r6, sp, #0
 	mov r7, #1
 _02222D8C:
@@ -4841,7 +4841,7 @@ _02222DA8:
 	add r0, r5, #0
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-_02222DAC: .word ov13_0224DDA0
+_02222DAC: .word gWifiSetupMessageQueue
 	thumb_func_end ov13_02222D78
 
 	thumb_func_start ov13_02222DB0
@@ -4855,7 +4855,7 @@ ov13_02222DB0: ; 0x02222DB0
 	mov r0, #1
 	str r0, [sp, #0xc]
 	mov r6, #0
-	ldr r0, _02222F14 ; =ov13_0224DD80
+	ldr r0, _02222F14 ; =gWifiSetupRuntime
 	add r7, r6, #0
 	ldr r1, [r0]
 	add r5, r6, #0
@@ -4899,7 +4899,7 @@ _02222E00:
 	add r2, r6, #0
 	bl OS_SetAlarm
 _02222E16:
-	ldr r0, _02222F24 ; =ov13_0224DDA0
+	ldr r0, _02222F24 ; =gWifiSetupMessageQueue
 	add r1, sp, #0x14
 	mov r2, #1
 	bl OS_ReceiveMessage
@@ -4978,7 +4978,7 @@ _02222EA0:
 	sub r1, r7, #1
 	mov r0, #0x54
 	mul r0, r1
-	ldr r1, _02222F14 ; =ov13_0224DD80
+	ldr r1, _02222F14 ; =gWifiSetupRuntime
 	add r0, #0x58
 	ldr r1, [r1]
 	blx r1
@@ -4986,7 +4986,7 @@ _02222EA0:
 	bne _02222ECA
 	b _02222EEA
 _02222EBE:
-	ldr r1, _02222F14 ; =ov13_0224DD80
+	ldr r1, _02222F14 ; =gWifiSetupRuntime
 	mov r0, #0x58
 	ldr r1, [r1]
 	blx r1
@@ -5012,7 +5012,7 @@ _02222ED8:
 _02222EEA:
 	add r0, sp, #0x18
 	bl OS_CancelAlarm
-	ldr r5, _02222F24 ; =ov13_0224DDA0
+	ldr r5, _02222F24 ; =gWifiSetupMessageQueue
 	add r4, sp, #0x14
 	mov r6, #0
 _02222EF6:
@@ -5023,7 +5023,7 @@ _02222EF6:
 	cmp r0, #1
 	beq _02222EF6
 _02222F04:
-	ldr r1, _02222F14 ; =ov13_0224DD80
+	ldr r1, _02222F14 ; =gWifiSetupRuntime
 	ldr r0, [sp, #8]
 	ldr r1, [r1, #0xc]
 	blx r1
@@ -5031,11 +5031,11 @@ _02222F04:
 	add sp, #0x44
 	pop {r4, r5, r6, r7, pc}
 	nop
-_02222F14: .word ov13_0224DD80
+_02222F14: .word gWifiSetupRuntime
 _02222F18: .word 0x0030BFFE
 _02222F1C: .word 0x003FEC42
 _02222F20: .word ov13_02222C08
-_02222F24: .word ov13_0224DDA0
+_02222F24: .word gWifiSetupMessageQueue
 	thumb_func_end ov13_02222DB0
 
 	thumb_func_start ov13_02222F28
@@ -5126,7 +5126,7 @@ _02222FB4:
 	bl OS_SetAlarm
 	b _022230A4
 _02222FD0:
-	ldr r0, _022230EC ; =ov13_0224DDA0
+	ldr r0, _022230EC ; =gWifiSetupMessageQueue
 	add r1, sp, #0x10
 	mov r2, #1
 	bl OS_ReceiveMessage
@@ -5242,7 +5242,7 @@ _022230A4:
 	bne _02222FD0
 	add r0, sp, #0x14
 	bl OS_CancelAlarm
-	ldr r5, _022230EC ; =ov13_0224DDA0
+	ldr r5, _022230EC ; =gWifiSetupMessageQueue
 	add r4, sp, #0x10
 	mov r6, #0
 _022230B4:
@@ -5272,23 +5272,23 @@ _022230DC: .word ov13_0224DE80
 _022230E0: .word 0x0030BFFE
 _022230E4: .word 0x003FEC42
 _022230E8: .word ov13_02222C08
-_022230EC: .word ov13_0224DDA0
+_022230EC: .word gWifiSetupMessageQueue
 _022230F0: .word ov13_0224DDC0
 _022230F4: .word ov13_0224DDC0
 	thumb_func_end ov13_02222F28
 
-	thumb_func_start ov13_022230F8
-ov13_022230F8: ; 0x022230F8
+	thumb_func_start WifiSetup_Sleep
+WifiSetup_Sleep: ; 0x022230F8
 	ldr r3, _022230FC ; =OS_Sleep
 	bx r3
 	.balign 4, 0
 _022230FC: .word OS_Sleep
-	thumb_func_end ov13_022230F8
+	thumb_func_end WifiSetup_Sleep
 
 	thumb_func_start ov13_02223100
 ov13_02223100: ; 0x02223100
 	push {r3, lr}
-	ldr r1, _02223110 ; =ov13_0224DD80
+	ldr r1, _02223110 ; =gWifiSetupRuntime
 	ldr r1, [r1, #4]
 	cmp r1, #0
 	beq _0222310C
@@ -5297,7 +5297,7 @@ _0222310C:
 	mov r0, #0
 	pop {r3, pc}
 	.balign 4, 0
-_02223110: .word ov13_0224DD80
+_02223110: .word gWifiSetupRuntime
 	thumb_func_end ov13_02223100
 
 	thumb_func_start ov13_02223114
@@ -9903,7 +9903,7 @@ _0222538A:
 	add r0, sp, #0x68
 	add r1, r3, #0
 	lsl r2, r2, #3
-	bl ov13_02225710
+	bl WifiSetup_AesSetEncryptKey
 	str r0, [sp, #0x1c]
 	ldr r0, [sp]
 	add r1, r5, #0
@@ -9964,7 +9964,7 @@ _022253F2:
 	ldr r1, [sp, #0x1c]
 	add r0, sp, #0x68
 	add r3, r2, #0
-	bl ov13_02225B58
+	bl WifiSetup_AesEncryptBlock
 	ldr r0, [sp, #0xc]
 	asr r1, r4, #0x1f
 	add r3, r4, r0
@@ -10136,7 +10136,7 @@ _02225548:
 	add r0, sp, #0x68
 	add r1, r3, #0
 	lsl r2, r2, #3
-	bl ov13_022259C8
+	bl WifiSetup_AesSetDecryptKey
 	str r0, [sp, #0x20]
 	add r3, sp, #0x58
 	add r2, r5, #0
@@ -10293,7 +10293,7 @@ _02225672:
 	ldr r1, [sp, #0x20]
 	add r0, sp, #0x68
 	add r3, r2, #0
-	bl ov13_02225F14
+	bl WifiSetup_AesDecryptBlock
 	add r2, sp, #0x60
 	mov r1, #8
 _0222568E:
@@ -10369,8 +10369,8 @@ ov13_022256C8: ; 0x022256C8
 	.balign 4, 0
 	thumb_func_end ov13_022256C8
 
-	thumb_func_start ov13_02225710
-ov13_02225710: ; 0x02225710
+	thumb_func_start WifiSetup_AesSetEncryptKey
+WifiSetup_AesSetEncryptKey: ; 0x02225710
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x18
 	add r3, r1, #0
@@ -10727,13 +10727,13 @@ _022259BA:
 	.balign 4, 0
 _022259C0: .word ov13_02242688
 _022259C4: .word ov13_022442B0
-	thumb_func_end ov13_02225710
+	thumb_func_end WifiSetup_AesSetEncryptKey
 
-	thumb_func_start ov13_022259C8
-ov13_022259C8: ; 0x022259C8
+	thumb_func_start WifiSetup_AesSetDecryptKey
+WifiSetup_AesSetDecryptKey: ; 0x022259C8
 	push {r3, r4, r5, r6, r7, lr}
 	add r4, r0, #0
-	bl ov13_02225710
+	bl WifiSetup_AesSetEncryptKey
 	mov ip, r0
 	mov r1, ip
 	lsl r6, r1, #2
@@ -10930,10 +10930,10 @@ _02225B48: .word ov13_02242AB0
 _02225B4C: .word ov13_022426B0
 _02225B50: .word ov13_022446B0
 _02225B54: .word ov13_02244AB0
-	thumb_func_end ov13_022259C8
+	thumb_func_end WifiSetup_AesSetDecryptKey
 
-	thumb_func_start ov13_02225B58
-ov13_02225B58: ; 0x02225B58
+	thumb_func_start WifiSetup_AesEncryptBlock
+WifiSetup_AesEncryptBlock: ; 0x02225B58
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x4c
 	add r7, r1, #0
@@ -11410,10 +11410,10 @@ _02225F04: .word ov13_02243AB0
 _02225F08: .word ov13_022432B0
 _02225F0C: .word ov13_022436B0
 _02225F10: .word ov13_022442B0
-	thumb_func_end ov13_02225B58
+	thumb_func_end WifiSetup_AesEncryptBlock
 
-	thumb_func_start ov13_02225F14
-ov13_02225F14: ; 0x02225F14
+	thumb_func_start WifiSetup_AesDecryptBlock
+WifiSetup_AesDecryptBlock: ; 0x02225F14
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x48
 	add r7, r1, #0
@@ -11889,10 +11889,10 @@ _022262C0: .word ov13_022426B0
 _022262C4: .word ov13_022446B0
 _022262C8: .word ov13_02244AB0
 _022262CC: .word ov13_02242EB0
-	thumb_func_end ov13_02225F14
+	thumb_func_end WifiSetup_AesDecryptBlock
 
-	thumb_func_start ov13_022262D0
-ov13_022262D0: ; 0x022262D0
+	thumb_func_start WifiSetup_Md5Init
+WifiSetup_Md5Init: ; 0x022262D0
 	mov r1, #0
 	str r1, [r0, #0x14]
 	str r1, [r0, #0x10]
@@ -11910,10 +11910,10 @@ _022262E8: .word 0x67452301
 _022262EC: .word 0xEFCDAB89
 _022262F0: .word 0x98BADCFE
 _022262F4: .word 0x10325476
-	thumb_func_end ov13_022262D0
+	thumb_func_end WifiSetup_Md5Init
 
-	thumb_func_start ov13_022262F8
-ov13_022262F8: ; 0x022262F8
+	thumb_func_start WifiSetup_Md5Update
+WifiSetup_Md5Update: ; 0x022262F8
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	add r7, r1, #0
@@ -11944,11 +11944,11 @@ _02226318:
 	add r0, r1, r0
 	add r1, r7, #0
 	add r2, r4, #0
-	bl ov13_02226C64
+	bl WifiSetup_CopyBytes
 	add r1, r5, #0
 	add r0, r5, #0
 	add r1, #0x18
-	bl ov13_022263C4
+	bl WifiSetup_Md5Transform
 	add r0, r4, #0
 	add r0, #0x3f
 	cmp r0, r6
@@ -11956,7 +11956,7 @@ _02226318:
 _02226348:
 	add r0, r5, #0
 	add r1, r7, r4
-	bl ov13_022263C4
+	bl WifiSetup_Md5Transform
 	add r4, #0x40
 	add r0, r4, #0
 	add r0, #0x3f
@@ -11972,13 +11972,13 @@ _02226360:
 	add r0, r5, r0
 	add r1, r7, r4
 	sub r2, r6, r4
-	bl ov13_02226C64
+	bl WifiSetup_CopyBytes
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov13_022262F8
+	thumb_func_end WifiSetup_Md5Update
 
-	thumb_func_start ov13_02226370
-ov13_02226370: ; 0x02226370
+	thumb_func_start WifiSetup_Md5Final
+WifiSetup_Md5Final: ; 0x02226370
 	push {r3, r4, r5, lr}
 	sub sp, #8
 	add r5, r0, #0
@@ -11986,7 +11986,7 @@ ov13_02226370: ; 0x02226370
 	add r0, sp, #0
 	add r1, #0x10
 	mov r2, #8
-	bl ov13_02226C0C
+	bl WifiSetup_EncodeLittleEndian
 	ldr r0, [r4, #0x10]
 	lsr r1, r0, #3
 	mov r0, #0x3f
@@ -12001,27 +12001,27 @@ _02226394:
 	sub r2, r0, r1
 	ldr r1, _022263C0 ; =ov13_02245AD8
 	add r0, r4, #0
-	bl ov13_022262F8
+	bl WifiSetup_Md5Update
 	add r0, r4, #0
 	add r1, sp, #0
 	mov r2, #8
-	bl ov13_022262F8
+	bl WifiSetup_Md5Update
 	add r0, r5, #0
 	add r1, r4, #0
 	mov r2, #0x10
-	bl ov13_02226C0C
+	bl WifiSetup_EncodeLittleEndian
 	add r0, r4, #0
 	mov r1, #0
 	mov r2, #0x58
-	bl ov13_02226C7C
+	bl WifiSetup_FillBytes
 	add sp, #8
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 _022263C0: .word ov13_02245AD8
-	thumb_func_end ov13_02226370
+	thumb_func_end WifiSetup_Md5Final
 
-	thumb_func_start ov13_022263C4
-ov13_022263C4: ; 0x022263C4
+	thumb_func_start WifiSetup_Md5Transform
+WifiSetup_Md5Transform: ; 0x022263C4
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x84
 	add r7, r0, #0
@@ -12032,7 +12032,7 @@ ov13_022263C4: ; 0x022263C4
 	ldr r4, [r7, #4]
 	ldr r5, [r7, #8]
 	ldr r6, [r7, #0xc]
-	bl ov13_02226C38
+	bl WifiSetup_DecodeLittleEndian
 	ldr r0, [sp, #0x44]
 	add r1, r4, #0
 	str r0, [sp, #4]
@@ -12982,7 +12982,7 @@ _0222681C:
 	add r0, r0, r5
 	str r0, [r7, #0xc]
 	add r0, sp, #0x44
-	bl ov13_02226C7C
+	bl WifiSetup_FillBytes
 	add sp, #0x84
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
@@ -13018,10 +13018,10 @@ _02226BFC: .word 0x08AC817E
 _02226C00: .word 0x42C50DCB
 _02226C04: .word 0x2AD7D2BB
 _02226C08: .word 0x14792C6F
-	thumb_func_end ov13_022263C4
+	thumb_func_end WifiSetup_Md5Transform
 
-	thumb_func_start ov13_02226C0C
-ov13_02226C0C: ; 0x02226C0C
+	thumb_func_start WifiSetup_EncodeLittleEndian
+WifiSetup_EncodeLittleEndian: ; 0x02226C0C
 	push {r4, r5}
 	mov r4, #0
 	cmp r2, #0
@@ -13046,10 +13046,10 @@ _02226C14:
 _02226C34:
 	pop {r4, r5}
 	bx lr
-	thumb_func_end ov13_02226C0C
+	thumb_func_end WifiSetup_EncodeLittleEndian
 
-	thumb_func_start ov13_02226C38
-ov13_02226C38: ; 0x02226C38
+	thumb_func_start WifiSetup_DecodeLittleEndian
+WifiSetup_DecodeLittleEndian: ; 0x02226C38
 	push {r4, r5, r6, r7}
 	mov r7, #0
 	cmp r2, #0
@@ -13074,10 +13074,10 @@ _02226C5E:
 	pop {r4, r5, r6, r7}
 	bx lr
 	.balign 4, 0
-	thumb_func_end ov13_02226C38
+	thumb_func_end WifiSetup_DecodeLittleEndian
 
-	thumb_func_start ov13_02226C64
-ov13_02226C64: ; 0x02226C64
+	thumb_func_start WifiSetup_CopyBytes
+WifiSetup_CopyBytes: ; 0x02226C64
 	push {r3, r4}
 	mov r4, #0
 	cmp r2, #0
@@ -13092,10 +13092,10 @@ _02226C76:
 	pop {r3, r4}
 	bx lr
 	.balign 4, 0
-	thumb_func_end ov13_02226C64
+	thumb_func_end WifiSetup_CopyBytes
 
-	thumb_func_start ov13_02226C7C
-ov13_02226C7C: ; 0x02226C7C
+	thumb_func_start WifiSetup_FillBytes
+WifiSetup_FillBytes: ; 0x02226C7C
 	mov r3, #0
 	cmp r2, #0
 	bls _02226C90
@@ -13110,7 +13110,7 @@ _02226C86:
 _02226C90:
 	bx lr
 	.balign 4, 0
-	thumb_func_end ov13_02226C7C
+	thumb_func_end WifiSetup_FillBytes
 
 	thumb_func_start ov13_02226C94
 ov13_02226C94: ; 0x02226C94
@@ -13120,14 +13120,14 @@ ov13_02226C94: ; 0x02226C94
 	add r4, r1, #0
 	add r6, r2, #0
 	add r0, sp, #0
-	bl ov13_022262D0
+	bl WifiSetup_Md5Init
 	add r0, sp, #0
 	add r1, r4, #0
 	add r2, r6, #0
-	bl ov13_022262F8
+	bl WifiSetup_Md5Update
 	add r0, r5, #0
 	add r1, sp, #0
-	bl ov13_02226370
+	bl WifiSetup_Md5Final
 	add sp, #0x58
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
@@ -14177,8 +14177,8 @@ ov13_022459B4: ; 0x022459B4
 
 ov13_022459BC: ; 0x022459BC
 	.byte 0x00, 0x00, 0x00, 0x01
-	.word ov13_022228A4
-	.word ov13_022228BC
+	.word WifiSetup_SocketAlloc
+	.word WifiSetup_SocketFree
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -14241,7 +14241,7 @@ ov13_02245B18: ; 0x02245B18
 
 	.bss
 
-_0224CF98:
+gWifiSetupState:
 	.space 0x4
 
 ov13_0224CF9C: ; 0x0224CF9C
@@ -14283,16 +14283,16 @@ ov13_0224DD00: ; 0x0224DD00
 ov13_0224DD02: ; 0x0224DD02
 	.space 0x7E
 
-ov13_0224DD80: ; 0x0224DD80
+gWifiSetupRuntime: ; 0x0224DD80
 	.space 0xC
 
-ov13_0224DD8C: ; 0x0224DD8C
+gWifiSetupFreeHook: ; 0x0224DD8C
 	.space 0x4
 
-ov13_0224DD90: ; 0x0224DD90
+gWifiSetupMessages: ; 0x0224DD90
 	.space 0x10
 
-ov13_0224DDA0: ; 0x0224DDA0
+gWifiSetupMessageQueue: ; 0x0224DDA0
 	.space 0x20
 
 ov13_0224DDC0: ; 0x0224DDC0

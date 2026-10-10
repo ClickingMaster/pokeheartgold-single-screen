@@ -2109,63 +2109,10 @@ Autoload DTCM
 Overlay OVY_0
 {
     After main
-    Object src/to70_to53_ov00_network_cleanup_head_extra163_run01.o
-    Object src/to53_ov00_network_cleanup.o
-    Object src/to90_extra2258_run01.o
-    Object src/ov00_partial_1.o
-    Object src/to90_extra1981_run01.o
-    Object src/ov00_partial_2.o
-    Object asm/op90_overlay_00_thumb_residual_3_holdout_anchor.o
-    Object src/op90_overlay_00_thumb_residual_3_holdout_r01.o
-    Object src/overlay00_network_send_r3.o
-    Object src/ov00_partial_3.o
-    Object src/to80_extra1498_run01.o
-    Object src/ov00_partial_4.o
-    Object src/to70_overlay_00_thumb_residual_5_extra287_run01.o
-    Object src/ov00_partial_5.o
-    Object src/overlay00_network_state_r23_run1.o
-    Object src/op90_overlay_00_thumb_residual_6_gap1_r01.o
-    Object src/overlay00_network_state_r23_run2.o
-    Object src/to70_overlay_00_thumb_residual_6_gap2_extra366_run01.o
-    Object src/overlay00_network_state_r23_run3.o
-    Object src/to90_extra2472_run01.o
-    Object src/overlay00_network_state_r23_run4.o
-    Object src/ov00_partial_6.o
-    Object src/to70_overlay_00_thumb_residual_7_extra547_run01.o
-    Object src/ov00_partial_7.o
-    Object src/to47_overlay00_value_classifier.o
-    Object src/ov00_partial_8.o
-    Object src/to70_overlay_00_thumb_residual_9_extra735_run01.o
-    Object src/r40_overlay_00_thumb_residual_9_run1.o
-    Object src/ov00_partial_9.o
-    Object src/to90_extra2352_run01.o
-    Object src/ov00_partial_10.o
-    Object src/to70_overlay_00_thumb_residual_11_extra448_run01.o
-    Object src/ov00_partial_11.o
-    Object src/to80_extra1604_run01.o
-    Object src/to58_bank_ov00_profile.o
-    Object src/ov00_partial_12.o
-    Object src/to70_overlay_00_thumb_residual_13_extra919_run01.o
-    Object src/ov00_partial_13.o
-    Object src/to70_overlay_00_thumb_residual_14_extra542_run01.o
-    Object src/ov00_partial_14.o
-    Object src/to70_overlay_00_thumb_residual_15_extra476_run01.o
-    Object src/ov00_partial_15.o
-    Object src/to70_overlay_00_thumb_residual_16_extra543_run01.o
-    Object src/ov00_partial_16.o
-    Object src/to70_overlay_00_thumb_residual_17_gap_1_extra544_run01.o
-    Object src/overlay00_voice_chat_r17_run1.o
-    Object src/to70_overlay_00_thumb_residual_17_gap_2_extra545_run01.o
-    Object src/overlay00_voice_chat_r17_run2.o
-    Object src/to90_extra1979_run01.o
-    Object src/overlay00_voice_chat_r17_run3.o
-    Object src/to90_extra1980_run01.o
-    Object src/overlay00_voice_chat_r17_run4.o
-    Object src/ov00_partial_17.o
-    Object src/to70_overlay_00_thumb_residual_18_extra546_run01.o
-    Object src/ov00_partial_18.o
+    Object src/wifi_connection.o
+    Object src/voice_chat.o
     Object asm/to70_overlay_00_thumb_residual_19_extra734_anchor.o
-    Object src/to70_overlay_00_thumb_residual_19_extra734_run01.o
+    Object src/voice_chat_conference.o
     Object lib/NitroDWC/asm/to60_overlay_00_arm_anchor.o
     Object src/to65_ov00_extra14_run01.o
     Object src/to80_extra1412_run01.o
@@ -4012,49 +3959,13 @@ Overlay OVY_13
     Object src/to80_extra1447_run01.o
     Object src/to70_mb_extra10_run18.o
     Object src/to80_extra1448_run01.o
-    Object src/to53_overlay13/to53_overlay13_c01_w09.o
-    Object src/to70_to53_overlay13_r01_extra422_run01.o
-    Object src/op90_to70_to53_overlay13_r01_extra422_residual_1_r01.o
-    Object src/to53_overlay13/to53_overlay13_c02_w09.o
-    Object src/op90_to53_overlay13_r02_r01.o
-    Object src/to53_overlay13/to53_overlay13_c03_w09.o
-    Object src/op90_to58_w06b_ov13_r03_0_r01.o
-    Object src/to58_w06b_ov13_r03_1.o
-    Object src/to53_overlay13/to53_overlay13_c04_w09.o
-    Object src/to55_r3_overlay13_r04.o
-    Object src/to70_to55_r3_overlay13_r04_residual_extra408_run01.o
-    Object src/to53_overlay13/to53_overlay13_c05_w09.o
-    Object src/to57_overlay13_r05.o
-    Object src/to53_overlay13/to53_overlay13_c06_w09.o
-    Object src/to90_extra2513_run01.o
-    Object src/to53_overlay13/to53_overlay13_c07_w09.o
-    Object src/to56_r2_w17_overlay13_22108.o
-    Object src/to55_r2_t08_224cc.o
-    Object src/to57_overlay13_r07_middle.o
-    Object src/to55_r2_t08_cipher.o
-    Object src/to53_overlay13/to53_overlay13_c08_w10.o
-    Object src/to57_r3_02_crc_core.o
-    Object src/to70_to57_r3_02_residual_extra1062_run01.o
-    Object src/op90_to70_to57_r3_02_residual_extra1062_residual_1_r01.o
-    Object src/to57_r3_02_transform.o
-    Object src/to53_overlay13/to53_overlay13_c09_w10.o
-    Object src/to58_w06b_ov13_r09_0.o
-    Object src/to53_overlay13/to53_overlay13_c10_w10.o
-    Object src/to58_w06b_ov13_r10_0.o
-    Object src/to70_to58_w06b_ov13_r10_1_extra1069_run01.o
-    Object src/to58_w06b_ov13_r10_2.o
-    Object src/to53_overlay13/to53_overlay13_c11_w10.o
-    Object src/to58_w06b_ov13_r11_0.o
-    Object src/to70_to58_w06b_ov13_r11_1_extra911_run01.o
-    Object src/to53_overlay13/to53_overlay13_c12_w10.o
-    Object src/to58_w06b_ov13_r12_0.o
-    Object src/to53_overlay13/to53_overlay13_c13_w10.o
-    Object src/to80_extra1903_run01.o
-    Object src/to58_w06b_ov13_r13_1.o
-    Object src/to53_overlay13/to53_overlay13_c14_w10.o
-    Object src/to55_overlay13_r14_prefix.o
-    Object src/to57_overlay13_r14_db0.o
-    Object src/op90_to53_overlay13_r14_residual_r01.o
+    Object src/wifi_setup.o
+    Object src/wifi_setup_session.o
+    Object src/wifi_setup_state.o
+    Object src/wifi_setup_result.o
+    Object src/wifi_setup_protocol.o
+    Object src/wifi_setup_platform.o
+    Object src/wifi_setup_connect.o
     Object src/to53_overlay13/to53_overlay13_c15_w10.o
     Object src/to70_to55_overlay13_r15_residual1_extra1232_run01.o
     Object src/to55_overlay13_r15_run1.o
@@ -5121,13 +5032,8 @@ Overlay OVY_37
 Overlay OVY_38
 {
     After OVY_0
-    Object src/overlay38_http_rng.o
-    Object src/op90_overlay_38_thumb_gap_1_r01.o
-    Object src/overlay38_http_status.o
-    Object src/to70_overlay_38_thumb_gap_2_extra1199_run01.o
-    Object src/overlay38_http_start.o
-    Object src/to80_extra1875_run01.o
-    Object src/overlay38_http_state.o
+    Object src/game_stats_request.o
+    Object src/game_stats_request_state.o
     Object asm/overlay_38_thumb_data.o
     Object lib/NitroDWC/asm/to60_overlay_38_arm_anchor.o
     Object src/to60_ov38_run01.o
@@ -6725,39 +6631,7 @@ Overlay trainer_card
 Overlay trainer_card_main
 {
     After trainer_card
-    Object src/to80_extra1370_run01.o
-    Object src/trainer_card_main_lifecycle.o
-    Object src/trainer_card_main_01_ov51_021e60d4.o
-    Object src/to90_extra2443_run01.o
-    Object src/trainer_card_main_03_ov51_021e6200.o
-    Object src/trainer_card_bg_init_04.o
-    Object src/to80_extra1611_run01.o
-    Object src/trainer_card_ui_setup_04.o
-    Object src/trainer_card_main_05_ov51_021e69ec.o
-    Object src/trainer_card_touch_input.o
-    Object src/to70_trainer_card_main_06_ov51_021e6aac_residual_extra1071_run01.o
-    Object src/trainer_card_main_07_ov51_021e6b88.o
-    Object src/to70_trainer_card_main_08_ov51_021e6c00_extra711_run01.o
-    Object src/trainer_card_main_09_ov51_021e6ccc.o
-    Object src/to70_trainer_card_main_10_ov51_021e6cf0_extra473_run01.o
-    Object src/to80_extra1362_run01.o
-    Object src/trainer_card_main_11_ov51_021e6da8.o
-    Object src/trainer_card_windows_12.o
-    Object src/to80_extra1371_run01.o
-    Object src/trainer_card_main_13_ov51_021e71d0.o
-    Object src/to53_trainer_card_details.o
-    Object src/trainer_card_main_15_ov51_021e74d4.o
-    Object src/to70_trainer_card_main_16_ov51_021e757c_extra457_run01.o
-    Object src/trainer_card_main_17_ov51_021e7664.o
-    Object src/trainer_card_text_panels.o
-    Object src/trainer_card_main_19_ov51_021e77a0.o
-    Object src/trainer_card_yes_no_prompt.o
-    Object src/trainer_card_main_21_ov51_021e786c.o
-    Object src/op90_trainer_card_main_22_prefix_r01.o
-    Object src/trainer_card_sprite_grid.o
-    Object src/op90_trainer_card_main_22_middle_r01.o
-    Object src/trainer_card_sprite_teardown.o
-    Object src/trainer_card_main_23_ov51_021e7d44.o
+    Object src/overlay_trainer_card_main.o
     Object asm/trainer_card_main_24_owned_data.o
 }
 Overlay trainer_card_signature
@@ -8553,42 +8427,8 @@ Overlay OVY_81
 Overlay OVY_82
 {
     After OVY_80
-    Object src/opus_overlay82_1.o
-    Object src/op90_overlay_82_r01.o
-    Object src/opus_overlay82_2.o
-    Object src/to80_extra1557_run01.o
-    Object src/overlay82_state_e5d4.o
-    Object src/overlay82_helpers_1.o
-    Object src/to45_overlay82_exit_states_r2.o
-    Object src/overlay82_helpers_2.o
-    Object src/to70_to70_overlay_82_residual_3_extra186_residual_1_extra1310_run01.o
-    Object src/to70_overlay_82_residual_3_extra186_run01.o
-    Object src/overlay82_helpers_3.o
-    Object src/overlay82_render_cleanup.o
-    Object src/overlay82_helpers_4.o
-    Object src/overlay82_bg_setup_5.o
-    Object src/overlay82_helpers_5.o
-    Object src/r40_overlay_82_residual_6_run1.o
-    Object src/overlay82_helpers_6.o
-    Object src/to70_overlay_82_residual_7_extra279_run01.o
-    Object src/op90_to70_overlay_82_residual_7_extra279_residual_1_r01.o
-    Object src/overlay82_helpers_7.o
-    Object src/overlay82_summary_menu_r14.o
-    Object src/overlay82_helpers_8.o
-    Object src/to52_r2_card2_overlay82_summary_navigation_r9.o
-    Object src/op90_to52_r2_card2_overlay82_r9_residual_r01.o
-    Object src/overlay82_helpers_9.o
-    Object src/op90_overlay_82_residual_10_r01.o
-    Object src/overlay82_helpers_10.o
-    Object src/to70_overlay_82_residual_11_extra510_run01.o
-    Object src/overlay82_helpers_11.o
-    Object src/to52_r2_w17_overlay82_sprite_lifecycle.o
-    Object src/overlay82_helpers_12.o
-    Object src/overlay82_sprite_create.o
-    Object src/overlay82_helpers_13.o
-    Object src/to80_extra1885_run01.o
-    Object src/overlay82_helpers_14.o
-    Object asm/overlay_82_residual_15.o
+    Object src/frontier/battle_hall_app.o
+    Object asm/battle_hall_app_data.o
 }
 Overlay OVY_83
 {
@@ -11252,15 +11092,7 @@ Overlay OVY_114
 Overlay OVY_115
 {
     After OVY_31
-    Object src/overlay115_remaining_1.o
-    Object src/overlay115_helpers_1.o
-    Object src/to70_overlay_115_residual_2_extra568_run01.o
-    Object src/overlay115_helpers_2.o
-    Object src/to90_extra2478_run01.o
-    Object src/overlay115_helpers_3.o
-    Object src/to80_extra2573_run01.o
-    Object src/overlay115_palette_blend.o
-    Object src/overlay115_helpers_4.o
+    Object src/field/encounter_effect_leaders.o
     Object asm/overlay_115_residual_5.o
 }
 Overlay OVY_116
@@ -11271,44 +11103,24 @@ Overlay OVY_116
 Overlay OVY_117
 {
     After OVY_31
-    Object src/overlay117_sprite_burst.o
-    Object src/overlay117_partial_1.o
+    Object src/field/encounter_effect_rocket.o
     Object asm/op90_overlay_117_residual_2_anchor.o
-    Object src/op90_overlay_117_residual_2_r01.o
 }
 Overlay OVY_118
 {
     After OVY_31
-    Object src/overlay118_transition_1.o
+    Object src/field/encounter_effect_kimono_girl.o
 }
 Overlay OVY_119
 {
     After OVY_31
-    Object src/overlay119_transition_f020.o
-    Object src/overlay119_transition_f37c.o
-    Object src/overlay119_transition_f670.o
-    Object src/to56_r3_w06_overlay119_prefix_tail.o
-    Object src/overlay119_scene_transition.o
-    Object src/overlay119_final_transition.o
+    Object src/field/encounter_effect_trainer.o
 }
 Overlay OVY_120
 {
     After OVY_31
-    Object src/overlay120_helpers_1.o
-    Object src/r40_overlay_120_run1.o
-    Object src/overlay120_helpers_2.o
-    Object src/to56_r2_w21_overlay120_grid_step.o
-    Object src/overlay120_helpers_3.o
-    Object src/to90_extra1992_run01.o
-    Object src/overlay120_helpers_4.o
-    Object src/to90_extra2363_run01.o
-    Object src/overlay120_helpers_5.o
-    Object src/to90_extra2364_run01.o
-    Object src/overlay120_helpers_6.o
-    Object src/to58_bank_ov120_screen.o
-    Object src/overlay120_helpers_7.o
+    Object src/field/encounter_effect_wild.o
     Object asm/to80_extra1510_anchor.o
-    Object src/to80_extra1510_run01.o
 }
 Overlay view_rankings_app
 {

@@ -62,7 +62,7 @@ _020366F4:
 	mov r1, #0xc0
 	ldr r0, [r0, #8]
 	add r0, #0x80
-	bl ov00_021E602C
+	bl WifiConnection_SendFromHost
 	cmp r0, #0
 	beq _02036796
 	ldr r0, _020367A0 ; =_0210F900

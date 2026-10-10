@@ -28,7 +28,7 @@ extern int ov45_0222A33C(void *);
 extern void ov45_0222CE2C(R28State *, u32);
 extern int LocationGmmDatRegionCountGetByCountryMsgNo(int);
 extern void ov45_0222D638(R28Place *, u32, u32, u32);
-extern int ov00_021E6A70(u32, u32);
+extern int WifiConnection_ClassifyErrorCode(u32, u32);
 extern int sub_020393C8(void);
 extern int sub_020397FC(void);
 extern void ov45_0222DE1C(void *);
@@ -146,7 +146,7 @@ u8 ov45_0222D7C0(u32 i) {
     return ov45_02254BB4[i];
 }
 int ov45_0222D7CC(u32 a, u32 b) {
-    int r = ov00_021E6A70(a, b);
+    int r = WifiConnection_ClassifyErrorCode(a, b);
     if (r == 11 || a == 25) {
         if (b != 2) {
             return 14;
@@ -162,7 +162,7 @@ int ov45_0222D7CC(u32 a, u32 b) {
     return r;
 }
 BOOL ov45_0222D7FC(u32 a, u32 b) {
-    int r = ov00_021E6A70(a, b);
+    int r = WifiConnection_ClassifyErrorCode(a, b);
     if (a == 25) {
         r = 11;
     } else if (a == 26) {

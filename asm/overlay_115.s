@@ -1,36 +1,36 @@
 	.include "asm/macros.inc"
 	.public _02260374
-	.public ov115_0225F020
-	.public ov115_0225F09C
-	.public ov115_0225F0B4
-	.public ov115_0225F158
-	.public ov115_0225F1BC
-	.public ov115_0225F220
-	.public ov115_0225F704
-	.public ov115_0225F728
-	.public ov115_0225F74C
-	.public ov115_0225F770
-	.public ov115_0225F794
-	.public ov115_0225F7B8
-	.public ov115_0225F7DC
-	.public ov115_0225F800
-	.public ov115_0225F824
-	.public ov115_0225F848
-	.public ov115_0225F86C
-	.public ov115_0225F890
-	.public ov115_0225F8B4
-	.public ov115_0225F8D8
-	.public ov115_0225F8FC
-	.public ov115_0225F920
-	.public ov115_0225F944
-	.public ov115_0225F968
-	.public ov115_0225F978
-	.public ov115_02260254
-	.public ov115_022602C0
-	.public ov115_022602E4
-	.public ov115_02260308
-	.public ov115_0226032C
-	.public ov115_02260350
+	.public ScaleSprites_Init
+	.public ScaleSprites_Delete
+	.public ScaleSprites_Update
+	.public LeadersEffect_GetTrainerNameString
+	.public LeadersEffect_GetRivalNameString
+	.public LeadersEffect_RunGymLeaderIntro
+	.public EncounterEffect_LeaderFalkner
+	.public EncounterEffect_LeaderBugsy
+	.public EncounterEffect_LeaderWhitney
+	.public EncounterEffect_LeaderMorty
+	.public EncounterEffect_LeaderJasmine
+	.public EncounterEffect_LeaderChuck
+	.public EncounterEffect_LeaderPryce
+	.public EncounterEffect_LeaderClair
+	.public EncounterEffect_LeaderBrock
+	.public EncounterEffect_LeaderMisty
+	.public EncounterEffect_LeaderLtSurge
+	.public EncounterEffect_LeaderErika
+	.public EncounterEffect_LeaderJanine
+	.public EncounterEffect_LeaderSabrina
+	.public EncounterEffect_LeaderBlaine
+	.public EncounterEffect_LeaderBlue
+	.public EncounterEffect_Rival
+	.public LeadersEffect_GetPlayerGender
+	.public LeadersEffect_RunEliteFourIntro
+	.public LeadersEffect_LoadBlendedSpritePalette
+	.public EncounterEffect_EliteFourWill
+	.public EncounterEffect_EliteFourKoga
+	.public EncounterEffect_EliteFourBruno
+	.public EncounterEffect_EliteFourKaren
+	.public EncounterEffect_Champion
 	.public ov115_02260388
 	.public ov115_02260390
 	.public ov115_02260398
@@ -56,35 +56,35 @@
 	.include "global.inc"
 
 	.text
-	.public ov115_0225F09C
-	.public ov115_0225F158
-	.public ov115_0225F1BC
-	.public ov115_0225F704
-	.public ov115_0225F728
-	.public ov115_0225F74C
-	.public ov115_0225F770
-	.public ov115_0225F794
-	.public ov115_0225F7B8
-	.public ov115_0225F7DC
-	.public ov115_0225F800
-	.public ov115_0225F824
-	.public ov115_0225F848
-	.public ov115_0225F86C
-	.public ov115_0225F890
-	.public ov115_0225F8B4
-	.public ov115_0225F8D8
-	.public ov115_0225F8FC
-	.public ov115_0225F920
-	.public ov115_0225F944
-	.public ov115_0225F968
-	.public ov115_022602C0
-	.public ov115_022602E4
-	.public ov115_02260308
-	.public ov115_0226032C
-	.public ov115_02260350
+	.public ScaleSprites_Delete
+	.public LeadersEffect_GetTrainerNameString
+	.public LeadersEffect_GetRivalNameString
+	.public EncounterEffect_LeaderFalkner
+	.public EncounterEffect_LeaderBugsy
+	.public EncounterEffect_LeaderWhitney
+	.public EncounterEffect_LeaderMorty
+	.public EncounterEffect_LeaderJasmine
+	.public EncounterEffect_LeaderChuck
+	.public EncounterEffect_LeaderPryce
+	.public EncounterEffect_LeaderClair
+	.public EncounterEffect_LeaderBrock
+	.public EncounterEffect_LeaderMisty
+	.public EncounterEffect_LeaderLtSurge
+	.public EncounterEffect_LeaderErika
+	.public EncounterEffect_LeaderJanine
+	.public EncounterEffect_LeaderSabrina
+	.public EncounterEffect_LeaderBlaine
+	.public EncounterEffect_LeaderBlue
+	.public EncounterEffect_Rival
+	.public LeadersEffect_GetPlayerGender
+	.public EncounterEffect_EliteFourWill
+	.public EncounterEffect_EliteFourKoga
+	.public EncounterEffect_EliteFourBruno
+	.public EncounterEffect_EliteFourKaren
+	.public EncounterEffect_Champion
 
-	thumb_func_start ov115_0225F020
-ov115_0225F020: ; 0x0225F020
+	thumb_func_start ScaleSprites_Init
+ScaleSprites_Init: ; 0x0225F020
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x14
 	add r5, r0, #0
@@ -143,4 +143,4 @@ _0225F08C:
 	add sp, #0x14
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov115_0225F020
+	thumb_func_end ScaleSprites_Init

@@ -176,8 +176,8 @@
 .public _s32_div_f
 .public _u32_div_f
 .public gSystem
-.public ov00_021E69A8
-.public ov00_021E6A4C
+.public WifiConnection_StartVoiceChat
+.public WifiConnection_StopVoiceChat
 .public ov45_0222ACB8
 .public ov90_02258800
 .public ov90_0225886C

@@ -8,7 +8,7 @@ sub_02038EB8: ; 0x02038EB8
 	mov r0, #1
 	bl sub_0203786C
 	mov r0, #0
-	bl ov00_021E5E54
+	bl WifiConnection_Update
 	cmp r0, #0xa
 	blt _02038ED8
 	cmp r0, #0x14
@@ -121,7 +121,7 @@ _02038F98: .word _021D4150
 sub_02038F9C: ; 0x02038F9C
 	push {r3, lr}
 	mov r0, #0
-	bl ov00_021E5E54
+	bl WifiConnection_Update
 	cmp r0, #0xa
 	blt _02038FB6
 	cmp r0, #0x14
@@ -176,7 +176,7 @@ _02039008: .word sub_02038EB0
 sub_0203900C: ; 0x0203900C
 	push {r3, lr}
 	mov r0, #1
-	bl ov00_021E5E54
+	bl WifiConnection_Update
 	cmp r0, #0
 	bge _02039022
 	ldr r0, _02039074 ; =sub_02038E90
@@ -196,7 +196,7 @@ _02039022:
 	ldrsb r0, [r1, r0]
 	add r1, r2, #1
 	mov r2, #0
-	bl ov00_021E6D7C
+	bl WifiConnection_StartMatchmaking
 	add r0, r0, #3
 	cmp r0, #3
 	bhi _02039070

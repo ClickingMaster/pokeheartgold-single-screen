@@ -60,10 +60,10 @@
 .public ov01_021F12E8
 .public HBlankSystem_Start
 .public HBlankSystem_Stop
-.public ov120_0225F714
-.public ov120_0225FA5C
-.public ov120_0225FA68
-.public ov120_0225FBAC
-.public ov120_0225FBB8
-.public ov120_0225FCFC
-.public ov120_0225FD08
+.public EncounterEffect_PkmnTrainerRed
+.public EncounterEffect_WildRowsWhite
+.public EncounterEffect_WildRowsBlack
+.public EncounterEffect_WildDiagonalsWhite
+.public EncounterEffect_WildDiagonalsBlack
+.public EncounterEffect_WildWaveWhite
+.public EncounterEffect_WildWaveBlack

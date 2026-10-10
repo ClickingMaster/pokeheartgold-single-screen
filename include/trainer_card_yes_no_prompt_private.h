@@ -1,5 +1,0 @@
-#ifndef POKEHEARTGOLD_TRAINER_CARD_YES_NO_PROMPT_PRIVATE_H
-#define POKEHEARTGOLD_TRAINER_CARD_YES_NO_PROMPT_PRIVATE_H
-#include "global.h"
-void ov51_021E7804(u8 *state, int unused);
-#endif

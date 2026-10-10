@@ -182,8 +182,8 @@
 .public NNS_GfdDefaultFuncAllocPlttVram
 .public gSystem
 .public NNS_G3dGlb
-.public ov00_021E69A8
-.public ov00_021E6A4C
+.public WifiConnection_StartVoiceChat
+.public WifiConnection_StopVoiceChat
 .public ov90_02258800
 .public ov90_022588A4
 .public ov90_022588CC

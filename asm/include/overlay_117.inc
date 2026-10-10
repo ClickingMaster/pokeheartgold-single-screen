@@ -62,9 +62,9 @@
 .public ov01_021F1310
 .public HBlankSystem_Start
 .public HBlankSystem_Stop
-.public ov117_0225F020
-.public ov117_0225F4D4
-.public ov117_0225F4E4
-.public ov117_0225F4F4
-.public ov117_0225F504
-.public ov117_0225F514
+.public EncounterEffect_TeamRocket
+.public EncounterEffect_ExecutivePetrel
+.public EncounterEffect_ExecutiveProton
+.public EncounterEffect_ExecutiveArcher
+.public EncounterEffect_ExecutiveAriana
+.public EncounterEffect_RocketBoss

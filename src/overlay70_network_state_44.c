@@ -210,7 +210,7 @@ int ov70_02244B54(Ov70Work *work) {
 }
 
 int ov70_02244CA8(Ov70Work *work) {
-    int value = ov00_021E6A70(-S32(work, 0x44), S32(work, 0x48));
+    int value = WifiConnection_ClassifyErrorCode(-S32(work, 0x44), S32(work, 0x48));
     ov70_022451A8(work, value, -S32(work, 0x44));
     U32(work, 0x2c) = 0x18;
     return 3;

@@ -62,7 +62,7 @@ extern u16 ov90_0225886C(void *, u16);
 extern void *ov91_0225CCC4(u32, u32, u32, void *);
 extern void *ov91_0225CDF4(u32, u32, u32, u16, void *);
 extern void sub_0203A880(void);
-extern void ov00_021E69A8(u32);
+extern void WifiConnection_StartVoiceChat(u32);
 extern void ov91_0225D3C4(void *, void *);
 extern void sub_02037AC0(u32);
 extern BOOL sub_02037B38(u32);
