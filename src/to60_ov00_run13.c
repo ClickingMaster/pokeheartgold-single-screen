@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef struct GTSocket GTSocket;
 typedef struct GTConn GTConn;
@@ -23,19 +23,19 @@ typedef void (*GTSockErrCB)(GTSocket *, GTConn *, u32, u16, int, u8 *, int);
 typedef int (*GTUnrecCB)(GTSocket *, u32, u16, u8 *, int);
 
 struct GTSocket {
-    int handle;                 // 0x00
-    u32 ip;                     // 0x04
-    u16 port;                   // 0x08
-    void *connections;          // 0x0c
-    void *closedConnections;    // 0x10
-    int close;                  // 0x14
-    int error;                  // 0x18
-    int callbackLevel;          // 0x1c
-    void *connectAttemptCB;     // 0x20
-    void *unk24;                // 0x24
-    GTSockErrCB unk28;          // 0x28
-    GTSockErrCB unk2C;          // 0x2c
-    GTUnrecCB unrecognizedCB;   // 0x30
+    int handle;               // 0x00
+    u32 ip;                   // 0x04
+    u16 port;                 // 0x08
+    void *connections;        // 0x0c
+    void *closedConnections;  // 0x10
+    int close;                // 0x14
+    int error;                // 0x18
+    int callbackLevel;        // 0x1c
+    void *connectAttemptCB;   // 0x20
+    void *unk24;              // 0x24
+    GTSockErrCB unk28;        // 0x28
+    GTSockErrCB unk2C;        // 0x2c
+    GTUnrecCB unrecognizedCB; // 0x30
 };
 
 typedef struct GTBuffer {
@@ -60,33 +60,33 @@ typedef struct GTInMsg {
 } GTInMsg;
 
 struct GTConn {
-    u32 ip;                    // 0x00
-    u16 port;                  // 0x04
-    GTSocket *socket;          // 0x08
-    int state;                 // 0x0c
-    int initiated;             // 0x10
-    int freeAtAcceptReject;    // 0x14
-    int connectionResult;      // 0x18
-    u32 startTime;             // 0x1c
-    u32 timeout;               // 0x20
-    int callbackLevel;         // 0x24
-    GTCallbacks callbacks;     // 0x28
-    u8 *initialMessage;        // 0x38
-    int initialMessageLen;     // 0x3c
-    void *data;                // 0x40
-    GTBuffer incomingBuffer;   // 0x44
-    GTBuffer outgoingBuffer;   // 0x50
+    u32 ip;                         // 0x00
+    u16 port;                       // 0x04
+    GTSocket *socket;               // 0x08
+    int state;                      // 0x0c
+    int initiated;                  // 0x10
+    int freeAtAcceptReject;         // 0x14
+    int connectionResult;           // 0x18
+    u32 startTime;                  // 0x1c
+    u32 timeout;                    // 0x20
+    int callbackLevel;              // 0x24
+    GTCallbacks callbacks;          // 0x28
+    u8 *initialMessage;             // 0x38
+    int initialMessageLen;          // 0x3c
+    void *data;                     // 0x40
+    GTBuffer incomingBuffer;        // 0x44
+    GTBuffer outgoingBuffer;        // 0x50
     void *incomingBufferedMessages; // 0x5c
     void *outgoingBufferedMessages; // 0x60
-    u16 serialNumber;          // 0x64
-    u16 expectedSerialNumber;  // 0x66
-    u8 response[32];           // 0x68
-    u32 lastSend;              // 0x88
-    u32 challengeTime;         // 0x8c
-    int pendingAck;            // 0x90
-    u32 pendingAckTime;        // 0x94
-    void *sendFilters;         // 0x98
-    void *receiveFilters;      // 0x9c
+    u16 serialNumber;               // 0x64
+    u16 expectedSerialNumber;       // 0x66
+    u8 response[32];                // 0x68
+    u32 lastSend;                   // 0x88
+    u32 challengeTime;              // 0x8c
+    int pendingAck;                 // 0x90
+    u32 pendingAckTime;             // 0x94
+    void *sendFilters;              // 0x98
+    void *receiveFilters;           // 0x9c
 };
 
 typedef struct GTFilter {
@@ -226,7 +226,6 @@ int ov00_0220E1E0(GTSocket *socket, u8 *msg, int len, u32 ip, u16 port);
 int ov00_0220E490(GTSocket *socket, u32 ip, u16 port);
 int ov00_0220E590(GTSocket *socket);
 
-// @fn ov00_0220D9E8
 int ov00_0220D9E8(GTConn *conn, int type, u8 *msg, int len) {
     conn->expectedSerialNumber++;
     if (type == 0) {
@@ -261,12 +260,10 @@ int ov00_0220D9E8(GTConn *conn, int type, u8 *msg, int len) {
     return 1;
 }
 
-// @fn ov00_0220DAE8
 s16 ov00_0220DAE8(GTInMsg *a, GTInMsg *b) {
     return ov00_0220D34C(a->serial, b->serial);
 }
 
-// @fn ov00_0220DAFC
 int ov00_0220DAFC(GTConn *conn, int type, u16 serial, u8 *msg, int len, int *overflow) {
     int n;
     int i;
@@ -317,7 +314,6 @@ int ov00_0220DAFC(GTConn *conn, int type, u16 serial, u8 *msg, int len, int *ove
     return 1;
 }
 
-// @fn ov00_0220DCB0
 void ov00_0220DCB0(GTConn *conn, GTInMsg *msg, int index) {
     int start = msg->start;
     int len = msg->len;
@@ -342,7 +338,6 @@ void ov00_0220DCB0(GTConn *conn, GTInMsg *msg, int index) {
     ov00_0220C0C4(&conn->incomingBuffer, start, len);
 }
 
-// @fn ov00_0220DD34
 int ov00_0220DD34(GTConn *conn) {
     int i;
     GTInMsg *m;
@@ -360,7 +355,6 @@ again:
     return 1;
 }
 
-// @fn ov00_0220DDB4
 void ov00_0220DDB4(GTConn *conn) {
     if (conn->pendingAck) {
         return;
@@ -369,7 +363,6 @@ void ov00_0220DDB4(GTConn *conn) {
     conn->pendingAckTime = ov00_021FF368();
 }
 
-// @fn ov00_0220DDDC
 int ov00_0220DDDC(GTConn *conn, int type, u8 *msg, int len) {
     u16 serial;
     int overflow;
@@ -408,7 +401,6 @@ int ov00_0220DDDC(GTConn *conn, int type, u8 *msg, int len) {
     return 1;
 }
 
-// @fn ov00_0220DF28
 int ov00_0220DF28(GTConn *conn, u8 *msg, int len) {
     if (len != 2) {
         if (!ov00_0220D3F0(conn)) {
@@ -422,7 +414,6 @@ int ov00_0220DF28(GTConn *conn, u8 *msg, int len) {
     return 1;
 }
 
-// @fn ov00_0220DF74
 int ov00_0220DF74(GTConn *conn, u8 *msg, int len) {
     u16 start;
     u16 end;
@@ -453,12 +444,10 @@ int ov00_0220DF74(GTConn *conn, u8 *msg, int len) {
     return 1;
 }
 
-// @fn ov00_0220E050
 int ov00_0220E050(GTConn *conn, u8 *msg, int len) {
     return ov00_0220ED84(conn, msg, len);
 }
 
-// @fn ov00_0220E05C
 int ov00_0220E05C(GTConn *conn, u8 *msg, int len) {
     u32 time;
     if (!conn->callbacks.ping) {

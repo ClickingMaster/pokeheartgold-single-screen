@@ -1,14 +1,67 @@
 #pragma force_active on
 #include <nitro/types.h>
-// clang-format off
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
-#define ROOT (*(u8 *volatile *)0x0380FFF4)
-#define H(p,n) (*(volatile u16*)((u8*)(p)+(n)))
-#define W(p,n) (*(u32*)((u8*)(p)+(n)))
-#define P(p,n) (*(u8**)((u8*)(p)+(n)))
-extern void CAM_DecFrameCount(void*),CAM_IncFrameCount(void*),IssueMaDataConfirm(void*,void*),TxqPri(u32),CAM_SetDoze(u32),WSetPowerState(u32),MoveHeapBuf(void*,void*,void*),TxqEndManCtrl(void*,u32),CAM_ClrTIMElementBitmap(u32);extern u32 CAM_GetPowerMgtMode(u32),CAM_GetFrameCount(u32);extern u32 __VENEER_OS_DisableIrqMask(u32);extern void __VENEER_OS_EnableIrqMask(u32),WClearKSID(u32),WlIntrMpEndTask(void),ClearQueuedPri(u32),MessageDeleteTx(u32,u32),ReleaseHeapBuf(void*,void*),SetFatalErr(u32),InitManHeader(void*,void*);extern void *AllocateHeapBuf(void*,u32),*GetHeapBufNextAdrs(void*);extern u32 CAM_Search(void*),CAM_GetStaState(u32);extern void CAM_SetStaState(u16,u32),ClearTxKeyData(void),DeleteTxFrames(u32);
-extern const u16 Pri2QBit[];extern void SetManCtrlFrame(void*);extern u32 WCalcManRate(void),SetSSIDElement(void*),SetSupRateSet(void*),CAM_AllocateAID(u32),WL_ReadByte(void*);extern void WSetMacAdrs1(void*,void*),DMA_Write(void*,void*,u32),WL_WriteByte(void*,u32);extern void*CAM_GetMacAdrs(u32);
-u8*MakeAssReqFrame(u8*address);
-// @fn MakeAssReqFrame
-u8*MakeAssReqFrame(u8*address){u8*root=ROOT,*state=root+0x344,*buf=AllocateHeapBuf(root+0x188,0x5e);u32 length;if(!buf){SetFatalErr(2);return buf;}H(buf,12)=0xffff;InitManHeader(buf+16,address);H(buf,0x3c)=H(state,0x7c);H(buf,0x3e)=H(state,0x70);length=SetSSIDElement(buf+0x40);length+=SetSupRateSet(buf+0x40+length);H(buf,0x16)=(u16)(length+4);H(buf,0x22)=(u16)(H(buf,0x16)+28);H(buf,0x24)=0;return buf+16;}
+#define ROOT    (*(u8 *volatile *)0x0380FFF4)
+#define H(p, n) (*(volatile u16 *)((u8 *)(p) + (n)))
+#define W(p, n) (*(u32 *)((u8 *)(p) + (n)))
+#define P(p, n) (*(u8 **)((u8 *)(p) + (n)))
+extern void CAM_DecFrameCount(void *);
+extern void CAM_IncFrameCount(void *);
+extern void IssueMaDataConfirm(void *, void *);
+extern void TxqPri(u32);
+extern void CAM_SetDoze(u32);
+extern void WSetPowerState(u32);
+extern void MoveHeapBuf(void *, void *, void *);
+extern void TxqEndManCtrl(void *, u32);
+extern void CAM_ClrTIMElementBitmap(u32);
+extern u32 CAM_GetPowerMgtMode(u32);
+extern u32 CAM_GetFrameCount(u32);
+extern u32 __VENEER_OS_DisableIrqMask(u32);
+extern void __VENEER_OS_EnableIrqMask(u32);
+extern void WClearKSID(u32);
+extern void WlIntrMpEndTask(void);
+extern void ClearQueuedPri(u32);
+extern void MessageDeleteTx(u32, u32);
+extern void ReleaseHeapBuf(void *, void *);
+extern void SetFatalErr(u32);
+extern void InitManHeader(void *, void *);
+extern void *AllocateHeapBuf(void *, u32);
+extern void *GetHeapBufNextAdrs(void *);
+extern u32 CAM_Search(void *);
+extern u32 CAM_GetStaState(u32);
+extern void CAM_SetStaState(u16, u32);
+extern void ClearTxKeyData(void);
+extern void DeleteTxFrames(u32);
+extern const u16 Pri2QBit[];
+extern void SetManCtrlFrame(void *);
+extern u32 WCalcManRate(void);
+extern u32 SetSSIDElement(void *);
+extern u32 SetSupRateSet(void *);
+extern u32 CAM_AllocateAID(u32);
+extern u32 WL_ReadByte(void *);
+extern void WSetMacAdrs1(void *, void *);
+extern void DMA_Write(void *, void *, u32);
+extern void WL_WriteByte(void *, u32);
+extern void *CAM_GetMacAdrs(u32);
+u8 *MakeAssReqFrame(u8 *address);
+
+u8 *MakeAssReqFrame(u8 *address) {
+    u8 *root = ROOT, *state = root + 0x344, *buf = AllocateHeapBuf(root + 0x188, 0x5e);
+    u32 length;
+    if (!buf) {
+        SetFatalErr(2);
+        return buf;
+    }
+    H(buf, 12) = 0xffff;
+    InitManHeader(buf + 16, address);
+    H(buf, 0x3c) = H(state, 0x7c);
+    H(buf, 0x3e) = H(state, 0x70);
+    length = SetSSIDElement(buf + 0x40);
+    length += SetSupRateSet(buf + 0x40 + length);
+    H(buf, 0x16) = (u16)(length + 4);
+    H(buf, 0x22) = (u16)(H(buf, 0x16) + 28);
+    H(buf, 0x24) = 0;
+    return buf + 16;
+}

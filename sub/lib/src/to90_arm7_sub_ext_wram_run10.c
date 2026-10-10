@@ -1,10 +1,14 @@
 #pragma force_active on
 #include <nitro/types.h>
-// clang-format off
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
-extern u8 wmspMPIntervalAlarm[],wmspMPAckAlarm[];
-extern void __VENEER_OS_CancelAlarm(void*);
+extern u8 wmspMPIntervalAlarm[];
+extern u8 wmspMPAckAlarm[];
+extern void __VENEER_OS_CancelAlarm(void *);
 void WMSP_CancelAllAlarms(void);
-// @fn WMSP_CancelAllAlarms
-void WMSP_CancelAllAlarms(void){__VENEER_OS_CancelAlarm(wmspMPIntervalAlarm);__VENEER_OS_CancelAlarm(wmspMPAckAlarm);}
+
+void WMSP_CancelAllAlarms(void) {
+    __VENEER_OS_CancelAlarm(wmspMPIntervalAlarm);
+    __VENEER_OS_CancelAlarm(wmspMPAckAlarm);
+}

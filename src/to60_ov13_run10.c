@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef void (*Func)(void);
 typedef void (*TaskFunc)(void *, void *);
@@ -236,6 +236,7 @@ typedef struct {
     u8 state;
     u8 unkE8[7];
     u8 flags;
+
     union {
         struct {
             u8 mask[4];
@@ -244,6 +245,7 @@ typedef struct {
             u8 autoDns;
             u8 unkF7;
         } work;
+
         struct {
             u8 info[0xe];
             u16 crc;
@@ -260,6 +262,7 @@ typedef struct {
     u8 ssid[0x20];
     u8 unk60[0x20];
     u8 wep[4][0x10];
+
     union {
         struct {
             u8 ip[4];
@@ -267,8 +270,10 @@ typedef struct {
             u8 dns1[4];
             u8 dns2[4];
         };
+
         u8 addr[4][4];
     };
+
     u8 cidr;
     u8 unkD1[0x15];
     u8 mode : 2;
@@ -360,7 +365,6 @@ void ov13_0223AF10(void *, void *);
 void ov13_0223AFF4(void *, void *);
 extern void ov13_0223B0D8(void *, void *);
 
-
 u8 ov13_02239550(void);
 u8 ov13_02239564(void);
 void ov13_02239578(int value);
@@ -368,32 +372,26 @@ void ov13_02239584(void);
 void ov13_0223959C(void);
 void ov13_02239B00(void);
 
-// @fn ov13_02239550
 u8 ov13_02239550(void) {
     return ov13_0224F59C->value;
 }
 
-// @fn ov13_02239564
 u8 ov13_02239564(void) {
     return ov13_0224F59C->result;
 }
 
-// @fn ov13_02239578
 void ov13_02239578(int value) {
     ov13_02239AC4(value);
 }
 
-// @fn ov13_02239584
 void ov13_02239584(void) {
     ov13_0224F59C->disabled = 0;
 }
 
-// @fn ov13_0223959C
 void ov13_0223959C(void) {
     ov13_0224F59C->disabled = 1;
 }
 
-// @fn ov13_022395B4
 void ov13_022395B4(void *task, void *arg) {
     ov13_0224F59C->result = 0;
     switch (ov13_0224F59C->state) {
@@ -450,7 +448,6 @@ void ov13_022395B4(void *task, void *arg) {
     }
 }
 
-// @fn ov13_02239738
 void ov13_02239738(void) {
     Point p;
     Slider *s;
@@ -481,7 +478,6 @@ void ov13_02239738(void) {
     ov13_0224F59C->result = 3;
 }
 
-// @fn ov13_02239808
 void ov13_02239808(int v) {
     int d = ov13_0224F59C->value - v;
     int a;
@@ -506,13 +502,11 @@ void ov13_02239808(int v) {
     ov13_0223ABFC(0xFFFF, a);
 }
 
-// @fn ov13_02239880
 void ov13_02239880(int state) {
     ov13_0224F59C->state = state;
     ov13_0224F59C->result = (state == 2) ? 4 : 6;
 }
 
-// @fn ov13_022398AC
 void ov13_022398AC(void) {
     Point p;
     Slider *s;
@@ -536,7 +530,6 @@ void ov13_022398AC(void) {
     ov13_0224F59C->result = 3;
 }
 
-// @fn ov13_02239914
 int ov13_02239914(void) {
     Rect r;
     int i;
@@ -557,7 +550,6 @@ int ov13_02239914(void) {
     return 0;
 }
 
-// @fn ov13_022399A0
 int ov13_022399A0(int n) {
     Rect r;
     int i;
@@ -570,7 +562,6 @@ int ov13_022399A0(int n) {
     return 0;
 }
 
-// @fn ov13_022399EC
 void ov13_022399EC(int kind, Rect *r) {
     u16 x = ov13_0224F59C->pos.x;
     u16 y;
@@ -597,13 +588,11 @@ void ov13_022399EC(int kind, Rect *r) {
     }
 }
 
-// @fn ov13_02239AC4
 void ov13_02239AC4(int v) {
     ov13_0223FF18(ov13_0224F59C->obj, -1, ov13_0224F59C->pos.x, v + ov13_0224F59C->pos.y);
     ov13_0224F59C->value = v;
 }
 
-// @fn ov13_02239B00
 void ov13_02239B00(void) {
     if (ov13_0224F5A0 != NULL) {
         return;

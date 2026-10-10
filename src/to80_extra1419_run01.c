@@ -1,7 +1,108 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
-typedef struct{u8 pad[0x38];void*busy;u32 pad3c;u8 state,gap[4],flag,pad46,repeat;}Work;extern struct{u8 selected,pad[3];u16 position,pad6;Work*work;}ov13_0224F54C;extern int ov13_02233568(void),ov13_02241694(int),ov13_022416D4(int),ov13_02241714(int);extern void ov13_022335EC(int),ov13_0223ABB8(int),ov13_0222B8E8(void*),ov13_02233A6C(void),ov13_02234AA4(void),ov13_022349DC(void),ov13_02234D84(int);extern void*ov13_02242528(int,void*,int,int);void ov13_022332E8(void);
-void ov13_022332E8(void){if(ov13_0224F54C.work->busy||ov13_0224F54C.work->flag)return;if(ov13_02233568())return;if(ov13_02241694(1)){ov13_022335EC(ov13_0224F54C.selected);return;}if(ov13_02241694(2)){ov13_0223ABB8(7);ov13_0224F54C.work->state=13;ov13_0222B8E8(ov13_02233A6C);return;}if(ov13_022416D4(512)){if(ov13_0224F54C.position==145){if(ov13_0224F54C.work->repeat)return;ov13_0223ABB8(9);ov13_0224F54C.work->repeat=1;return;}ov13_0223ABB8(19);ov13_0224F54C.work->busy=ov13_02242528(0,ov13_02234AA4,0,120);return;}if(ov13_02241714(512)){ov13_0224F54C.work->repeat=0;return;}if(ov13_022416D4(256)){if(ov13_0224F54C.position==0){if(ov13_0224F54C.work->repeat)return;ov13_0223ABB8(9);ov13_0224F54C.work->repeat=1;return;}ov13_0223ABB8(19);ov13_0224F54C.work->busy=ov13_02242528(0,ov13_022349DC,0,120);return;}if(ov13_02241714(256)){ov13_0224F54C.work->repeat=0;return;}if(ov13_022416D4(64)){ov13_02234D84(1);return;}if(ov13_02241714(64)){ov13_0224F54C.work->repeat=0;return;}if(ov13_022416D4(128)){ov13_02234D84(3);return;}if(ov13_02241714(128)){ov13_0224F54C.work->repeat=0;return;}if(ov13_022416D4(32)){ov13_02234D84(0);return;}if(ov13_022416D4(16))ov13_02234D84(2);}
+
+typedef struct {
+    u8 pad[0x38];
+    void *busy;
+    u32 pad3c;
+    u8 state, gap[4], flag, pad46, repeat;
+} Work;
+
+extern struct {
+    u8 selected, pad[3];
+    u16 position, pad6;
+    Work *work;
+} ov13_0224F54C;
+
+extern int ov13_02233568(void);
+extern int ov13_02241694(int);
+extern int ov13_022416D4(int);
+extern int ov13_02241714(int);
+extern void ov13_022335EC(int);
+extern void ov13_0223ABB8(int);
+extern void ov13_0222B8E8(void *);
+extern void ov13_02233A6C(void);
+extern void ov13_02234AA4(void);
+extern void ov13_022349DC(void);
+extern void ov13_02234D84(int);
+extern void *ov13_02242528(int, void *, int, int);
+void ov13_022332E8(void);
+
+void ov13_022332E8(void) {
+    if (ov13_0224F54C.work->busy || ov13_0224F54C.work->flag) {
+        return;
+    }
+    if (ov13_02233568()) {
+        return;
+    }
+    if (ov13_02241694(1)) {
+        ov13_022335EC(ov13_0224F54C.selected);
+        return;
+    }
+    if (ov13_02241694(2)) {
+        ov13_0223ABB8(7);
+        ov13_0224F54C.work->state = 13;
+        ov13_0222B8E8(ov13_02233A6C);
+        return;
+    }
+    if (ov13_022416D4(512)) {
+        if (ov13_0224F54C.position == 145) {
+            if (ov13_0224F54C.work->repeat) {
+                return;
+            }
+            ov13_0223ABB8(9);
+            ov13_0224F54C.work->repeat = 1;
+            return;
+        }
+        ov13_0223ABB8(19);
+        ov13_0224F54C.work->busy = ov13_02242528(0, ov13_02234AA4, 0, 120);
+        return;
+    }
+    if (ov13_02241714(512)) {
+        ov13_0224F54C.work->repeat = 0;
+        return;
+    }
+    if (ov13_022416D4(256)) {
+        if (ov13_0224F54C.position == 0) {
+            if (ov13_0224F54C.work->repeat) {
+                return;
+            }
+            ov13_0223ABB8(9);
+            ov13_0224F54C.work->repeat = 1;
+            return;
+        }
+        ov13_0223ABB8(19);
+        ov13_0224F54C.work->busy = ov13_02242528(0, ov13_022349DC, 0, 120);
+        return;
+    }
+    if (ov13_02241714(256)) {
+        ov13_0224F54C.work->repeat = 0;
+        return;
+    }
+    if (ov13_022416D4(64)) {
+        ov13_02234D84(1);
+        return;
+    }
+    if (ov13_02241714(64)) {
+        ov13_0224F54C.work->repeat = 0;
+        return;
+    }
+    if (ov13_022416D4(128)) {
+        ov13_02234D84(3);
+        return;
+    }
+    if (ov13_02241714(128)) {
+        ov13_0224F54C.work->repeat = 0;
+        return;
+    }
+    if (ov13_022416D4(32)) {
+        ov13_02234D84(0);
+        return;
+    }
+    if (ov13_022416D4(16)) {
+        ov13_02234D84(2);
+    }
+}

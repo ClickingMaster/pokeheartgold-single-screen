@@ -1,9 +1,9 @@
 #pragma force_active on
 #pragma warn_uninitializedvar off
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef struct DequeBuf {
     u32 **ptr;
@@ -32,6 +32,7 @@ typedef union Str {
         u32 size;
         char *ptr;
     } l;
+
     struct {
         u8 isLong : 1;
         u8 len : 7;
@@ -40,10 +41,12 @@ typedef union Str {
 } Str;
 
 typedef struct VObj VObj;
+
 typedef struct VTable {
     void (*f0)(VObj *);
     void (*dtor)(VObj *);
 } VTable;
+
 struct VObj {
     VTable *vt;
 };
@@ -60,9 +63,11 @@ void ov45_0223BD0C(void);
 void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 Str *ov45_02237DB4(Str *, u32, u32, void *);
 void ov45_0223DB08(Str *, u32, u32, const char *);
+
 typedef struct Tag {
     u8 c;
 } Tag;
+
 void ov45_02238104(Str *, u32, u32, const char *, const char *, Tag);
 int ov45_02238024(const u8 *, u32, u32, const void *, u32);
 
@@ -133,12 +138,12 @@ void ov45_0223DB8C(CharVec *, u32, const char *);
 u32 ov45_0223EA34(Vec *, u32);
 void ov45_0223EB00(Vec *, u32, u32 *);
 void ov45_02236E58(NodeIter *);
-Node *ov45_022370D0(Node *,void *);
+Node *ov45_022370D0(Node *, void *);
 
 extern char ov45_0225520C[];
 void printf(const char *, ...);
 void abort(void);
-void ov45_02236EC4(Node *,void *);
+void ov45_02236EC4(Node *, void *);
 
 typedef struct InsertResult {
     Node *current;
@@ -209,9 +214,9 @@ static inline BOOL CallPmf(PMF *p, int adj, void *o) {
     u8 *obj = (u8 *)o + (adj >> 1);
     BOOL (*fn)(void *);
     if (adj & 1) {
-        fn = *(BOOL (**)(void *))(*(u8 **)obj + p->fn);
+        fn = *(BOOL(**)(void *))(*(u8 **)obj + p->fn);
     } else {
-        fn = (BOOL (*)(void *))p->fn;
+        fn = (BOOL(*)(void *))p->fn;
     }
     return fn(obj);
 }
@@ -281,14 +286,11 @@ typedef struct SplitBuf {
 void ov45_0223EC80(SplitBuf *b, u32 cap, Tag unused);
 void ov45_0223EC64(SplitBuf *b);
 
-
-
 int ov45_0223D7B4(int c);
 BOOL ov45_0223D7D4(int type, int mode, u32 value, const void *data, u32 len, Str *out);
 void ov45_0223DA3C(CharVec *s, const char *c);
 int ov45_0223DB54(const u8 *s, u32 a, u32 b, const u8 *o);
 
-// @fn ov45_0223D7B4
 int ov45_0223D7B4(int c) {
     if (c < 0 || c >= 0x80) {
         return c;
@@ -296,7 +298,6 @@ int ov45_0223D7B4(int c) {
     return __lower_mapC[c];
 }
 
-// @fn ov45_0223D7D4
 BOOL ov45_0223D7D4(int type, int mode, u32 value, const void *data, u32 len, Str *out) {
     char buf[0x191];
     Str s0;
@@ -365,35 +366,29 @@ BOOL ov45_0223D7D4(int type, int mode, u32 value, const void *data, u32 len, Str
     return TRUE;
 }
 
-// @fn ov45_0223DA3C
 void ov45_0223DA3C(CharVec *s, const char *c) {
     TouchTag();
     ov45_02237890(s, 1);
     ov45_0223DB8C(s, 1, c);
 }
 
-// @fn ov45_0223DA6C
 void ov45_0223DA6C(Str *s, void *arg) {
     ov45_02237DB4(s, StrSize(s), 0, arg);
 }
 
-// @fn ov45_0223DAA0
 void ov45_0223DAA0(Str *s, const char *arg) {
     ov45_0223DB08(s, StrSize(s), 0, arg);
 }
 
-// @fn ov45_0223DAD4
 void ov45_0223DAD4(Str *s, const char *arg) {
     ov45_0223DB08(s, 0, StrSize(s), arg);
 }
 
-// @fn ov45_0223DB08
 void ov45_0223DB08(Str *s, u32 a, u32 b, const char *str) {
     Tag x;
     ov45_02238104(s, a, b, str, str + strlen(str), x);
 }
 
-// @fn ov45_0223DB54
 int ov45_0223DB54(const u8 *s, u32 a, u32 b, const u8 *input) {
     const Str *o = (const Str *)input;
     u32 n;

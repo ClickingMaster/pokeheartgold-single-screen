@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef struct GHIConnection GHIConnection;
 
@@ -58,34 +58,34 @@ typedef void (*ProgressCallback)(int, int, const char *, int, int, int, void *);
 typedef void (*PostCallback)(int, int, int, int, int, void *);
 
 struct GHIConnection {
-    int inUse;             // 0x00
-    int request;           // 0x04
-    int uniqueID;          // 0x08
-    int type;              // 0x0C
-    int state;             // 0x10
-    char *URL;             // 0x14
-    char *serverAddress;   // 0x18
-    int serverIP;          // 0x1C
-    u16 serverPort;        // 0x20
-    char *requestPath;     // 0x24
-    char *sendHeaders;     // 0x28
-    int f2C;               // 0x2C
-    int blocking;          // 0x30
-    int f34;               // 0x34
-    int result;            // 0x38
+    int inUse;                           // 0x00
+    int request;                         // 0x04
+    int uniqueID;                        // 0x08
+    int type;                            // 0x0C
+    int state;                           // 0x10
+    char *URL;                           // 0x14
+    char *serverAddress;                 // 0x18
+    int serverIP;                        // 0x1C
+    u16 serverPort;                      // 0x20
+    char *requestPath;                   // 0x24
+    char *sendHeaders;                   // 0x28
+    int f2C;                             // 0x2C
+    int blocking;                        // 0x30
+    int f34;                             // 0x34
+    int result;                          // 0x38
     ProgressCallback progressCallback;   // 0x3C
     CompletedCallback completedCallback; // 0x40
-    void *callbackParam;   // 0x44
-    int socket;            // 0x48
-    int socketError;       // 0x4C
-    GHIBuffer sendBuffer;  // 0x50
-    GHIBuffer encodeBuffer; // 0x74
-    GHIBuffer recvBuffer;  // 0x98
-    GHIBuffer getFileBuffer; // 0xBC
-    int userBufferSupplied; // 0xE0
+    void *callbackParam;                 // 0x44
+    int socket;                          // 0x48
+    int socketError;                     // 0x4C
+    GHIBuffer sendBuffer;                // 0x50
+    GHIBuffer encodeBuffer;              // 0x74
+    GHIBuffer recvBuffer;                // 0x98
+    GHIBuffer getFileBuffer;             // 0xBC
+    int userBufferSupplied;              // 0xE0
     int fE4;
     int fE8;
-    int statusCode;        // 0xEC
+    int statusCode; // 0xEC
     int fF0;
     int fF4;
     int fF8;
@@ -96,17 +96,17 @@ struct GHIConnection {
     int redirectCount;     // 0x10C
     int f110;
     int f114[6];
-    int processing;        // 0x12C
+    int processing; // 0x12C
     int f130;
-    int throttle;          // 0x134
-    int lastThrottleRecv;  // 0x138
-    GHIPost *post;         // 0x13C
-    void *states;          // 0x140
-    int index;             // 0x144
-    int bytesPosted;       // 0x148
-    int totalBytes;        // 0x14C
+    int throttle;              // 0x134
+    int lastThrottleRecv;      // 0x138
+    GHIPost *post;             // 0x13C
+    void *states;              // 0x140
+    int index;                 // 0x144
+    int bytesPosted;           // 0x148
+    int totalBytes;            // 0x14C
     PostCallback postCallback; // 0x150
-    void *postParam;       // 0x154
+    void *postParam;           // 0x154
     int f158;
     char *f15C;
     u16 f160;
@@ -123,26 +123,103 @@ typedef struct GHIConnList {
 extern GHIConnList ov38_0222602C;
 extern int ov38_0222603C;
 extern void *ov38_02226028;
-extern struct { int a; int b; } ov38_0222531C;
+
+extern struct {
+    int a;
+    int b;
+} ov38_0222531C;
+
 extern int ov38_02225320;
-extern struct { int f0; int f4; int f8; int fC; } ov38_02226040;
-typedef struct { char c[4]; } Hex4;
+
+extern struct {
+    int f0;
+    int f4;
+    int f8;
+    int fC;
+} ov38_02226040;
+
+typedef struct {
+    char c[4];
+} Hex4;
+
 extern Hex4 _02224E60;
 
-extern char ov38_022251D4[], ov38_022251DC[], ov38_02225168[], ov38_022251EC[], ov38_02225200[], ov38_02225148[];
-extern char ov38_0222520C[], ov38_02225178[], ov38_0222521C[], ov38_02225228[], _02225138[], ov38_022251A4[];
-extern char ov38_02225234[], ov38_0222523C[], ov38_0222524C[], ov38_02225288[], ov38_0222528C[], ov38_0222518C[];
-extern char ov38_02225290[], ov38_02225158[], ov38_02225294[], ov38_022251BC[], ov38_022252A8[];
-extern char ov38_022252FC[], ov38_02225308[], ov38_022252E0[], ov38_022252C8[], ov38_022252B4[];
-extern char ov38_02225378[], ov38_022253A0[], ov38_02225324[], ov38_022253B4[], ov38_02225334[], ov38_022253C0[];
-extern char ov38_022253DC[], ov38_02225404[], ov38_02225418[], ov38_02225360[], ov38_02225428[], ov38_02225348[];
-extern char ov38_02225444[], ov38_02225480[], ov38_0222548C[], ov38_02225468[], ov38_02225498[];
-extern char ov38_022254D4[], ov38_0222545C[], ov38_022254E4[], ov38_022254F4[];
-extern char ov38_02225694[], ov38_02225644[], ov38_02225574[], ov38_0222569C[], ov38_022256A0[], ov38_022256E4[];
-extern char ov38_02225708[], ov38_022255E0[], ov38_02225720[], ov38_02225748[], ov38_02225620[], ov38_02225640[];
-extern char ov38_0222558C[], ov38_02225534[], ov38_02225548[], ov38_02225750[], ov38_0222550C[], ov38_02225764[];
-extern char ov38_022257B8[], ov38_022255A4[], ov38_022257C8[], ov38_02225804[], ov38_02225650[], ov38_022257F4[];
-extern char ov38_022255C0[], ov38_02225818[], ov38_02225840[];
+extern char ov38_022251D4[];
+extern char ov38_022251DC[];
+extern char ov38_02225168[];
+extern char ov38_022251EC[];
+extern char ov38_02225200[];
+extern char ov38_02225148[];
+extern char ov38_0222520C[];
+extern char ov38_02225178[];
+extern char ov38_0222521C[];
+extern char ov38_02225228[];
+extern char _02225138[];
+extern char ov38_022251A4[];
+extern char ov38_02225234[];
+extern char ov38_0222523C[];
+extern char ov38_0222524C[];
+extern char ov38_02225288[];
+extern char ov38_0222528C[];
+extern char ov38_0222518C[];
+extern char ov38_02225290[];
+extern char ov38_02225158[];
+extern char ov38_02225294[];
+extern char ov38_022251BC[];
+extern char ov38_022252A8[];
+extern char ov38_022252FC[];
+extern char ov38_02225308[];
+extern char ov38_022252E0[];
+extern char ov38_022252C8[];
+extern char ov38_022252B4[];
+extern char ov38_02225378[];
+extern char ov38_022253A0[];
+extern char ov38_02225324[];
+extern char ov38_022253B4[];
+extern char ov38_02225334[];
+extern char ov38_022253C0[];
+extern char ov38_022253DC[];
+extern char ov38_02225404[];
+extern char ov38_02225418[];
+extern char ov38_02225360[];
+extern char ov38_02225428[];
+extern char ov38_02225348[];
+extern char ov38_02225444[];
+extern char ov38_02225480[];
+extern char ov38_0222548C[];
+extern char ov38_02225468[];
+extern char ov38_02225498[];
+extern char ov38_022254D4[];
+extern char ov38_0222545C[];
+extern char ov38_022254E4[];
+extern char ov38_022254F4[];
+extern char ov38_02225694[];
+extern char ov38_02225644[];
+extern char ov38_02225574[];
+extern char ov38_0222569C[];
+extern char ov38_022256A0[];
+extern char ov38_022256E4[];
+extern char ov38_02225708[];
+extern char ov38_022255E0[];
+extern char ov38_02225720[];
+extern char ov38_02225748[];
+extern char ov38_02225620[];
+extern char ov38_02225640[];
+extern char ov38_0222558C[];
+extern char ov38_02225534[];
+extern char ov38_02225548[];
+extern char ov38_02225750[];
+extern char ov38_0222550C[];
+extern char ov38_02225764[];
+extern char ov38_022257B8[];
+extern char ov38_022255A4[];
+extern char ov38_022257C8[];
+extern char ov38_02225804[];
+extern char ov38_02225650[];
+extern char ov38_022257F4[];
+extern char ov38_022255C0[];
+extern char ov38_02225818[];
+extern char ov38_02225840[];
 
 void __msl_assertion_failed(const char *, const char *, const char *, int);
 void *ov00_021EC3BC(void *, int);
@@ -219,12 +296,12 @@ static inline void ZeroState(void *p) {
     s->len = 0;
 }
 
-#define ASSERT(e, s, f, fn, l) if (!(e)) __msl_assertion_failed(s, f, fn, l)
-
+#define ASSERT(e, s, f, fn, l) \
+    if (!(e))                  \
+    __msl_assertion_failed(s, f, fn, l)
 
 int ghiPostFileDiskStateDoPosting(GHIPostState *state, GHIConnection *c);
 
-// @fn ghiPostFileDiskStateDoPosting
 int ghiPostFileDiskStateDoPosting(GHIPostState *state, GHIConnection *c) {
     char buf[0x1000];
     int n;

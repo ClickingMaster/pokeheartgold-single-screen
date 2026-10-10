@@ -1,9 +1,14 @@
 #pragma force_active on
 #include <nitro/types.h>
-// clang-format off
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 extern u16 nvramw[];
 void NVRAM_Init(void);
-// @fn NVRAM_Init
-void NVRAM_Init(void){int i;for(i=0;i<16;i++)nvramw[i]=0;}
+
+void NVRAM_Init(void) {
+    int i;
+    for (i = 0; i < 16; i++) {
+        nvramw[i] = 0;
+    }
+}

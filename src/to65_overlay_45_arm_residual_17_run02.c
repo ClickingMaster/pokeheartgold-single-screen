@@ -1,17 +1,33 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 typedef struct HashTable HashTable;
 typedef struct DArray DArray;
-#define W(p,n) (*(int*)((u8*)(p)+(n)))
-#define P(p,n) (*(void**)((u8*)(p)+(n)))
-void __msl_assertion_failed(char*,char*,char*,int);
-int ArrayLength(void*);void *ov00_021FE6EC(void*,int);void ov00_021FE968(void*,int);void ov00_021EC3D8(void*);void *ov00_021EC3A8(int);void ov00_021FEE8C(void*);void ov00_021FE678(void*);
-void *ov00_021FF0C0(void*,void*);void *ov00_021FE5B4(int,int,int);HashTable *ov00_021FED4C(int,int,int,int(*)(const void*,int),int(*)(const void*,const void*),void(*)(void*));void ov00_021FE754(void*,void*);void ov00_021FE8D8(void*,int);void ov00_021FF01C(void*,void*);int ov00_021FEA40(DArray*,const void*,int(*)(const void*,const void*),int,int);
-int ov00_021FEF00(void*);int strnicmp(const char*,const char*);char *strncpy(char*,const char*,size_t);extern u8 __lower_mapC[];
-int ov45_0224739C(void*,int);int ov45_02247650(const void*,const void*);
+#define W(p, n) (*(int *)((u8 *)(p) + (n)))
+#define P(p, n) (*(void **)((u8 *)(p) + (n)))
+void __msl_assertion_failed(char *, char *, char *, int);
+int ArrayLength(void *);
+void *ov00_021FE6EC(void *, int);
+void ov00_021FE968(void *, int);
+void ov00_021EC3D8(void *);
+void *ov00_021EC3A8(int);
+void ov00_021FEE8C(void *);
+void ov00_021FE678(void *);
+void *ov00_021FF0C0(void *, void *);
+void *ov00_021FE5B4(int, int, int);
+HashTable *ov00_021FED4C(int, int, int, int (*)(const void *, int), int (*)(const void *, const void *), void (*)(void *));
+void ov00_021FE754(void *, void *);
+void ov00_021FE8D8(void *, int);
+void ov00_021FF01C(void *, void *);
+int ov00_021FEA40(DArray *, const void *, int (*)(const void *, const void *), int, int);
+int ov00_021FEF00(void *);
+int strnicmp(const char *, const char *);
+char *strncpy(char *, const char *, size_t);
+extern u8 __lower_mapC[];
+int ov45_0224739C(void *, int);
+int ov45_02247650(const void *, const void *);
 extern char ov45_0225565C[];
 extern char ov45_02255668[];
 extern char ov45_02255678[];
@@ -41,7 +57,7 @@ extern char ov45_022559D4[];
 extern char ov45_022559E4[];
 extern char ov45_022559F8[];
 extern char ov45_02255A2C[];
-void ov00_021FF160(void*,void(*)(void*,void*),void*);
+void ov00_021FF160(void *, void (*)(void *, void *), void *);
 extern char ov45_02255420[];
 extern char ov45_02255458[];
 extern char ov45_02255468[];
@@ -100,32 +116,52 @@ extern char ov45_02255B7C[];
 extern char ov45_02255B94[];
 extern char ov45_02255BA8[];
 extern char ov45_02255BC4[];
-int ov45_022474FC(void*c,int n);
-int ov45_02247518(char*s,int n);
-void *ov45_022475B8(void*c,char*s);
-int ov45_022475F0(const void*s,int n);
-int ov45_022477B8(const void*s,int n);
-void ov45_02247770(void*c);
-void ov45_02247934(void*c);
-int ov45_02247968(void*c);
-void ov45_022479F0(void*c);
-void ov45_02247A44(void*c,char*s);
-int ov45_02247AD4(const void*a,const void*b);
-int ov45_02247AE0(void*c,char*s);
-void ov45_02247D84(void*c,char*s);
-void *ov45_02247E98(void*c,char*s);
-int ov45_02248238(void*c,char*s);
-int ov45_02248288(void*c,char*s,void*out);
-void ov45_02248374(void*c,char*s,void*data);
-void ov45_02248454(void*c,char*s,char*data);
-void ov45_02248558(void*c,char*s);
-int ov45_0224861C(void*c,char*s);
-void ov45_022486E0(void*c,char*s,char*data);
-int ov45_022487BC(void*c,char*s);
-int ov45_02247650(const void*a,const void*b);
-int ov45_02247818(const void*a,const void*b);
-void ov45_02248A98(void*c,char*s,char*name);
-void ov45_02248BCC(void*c,void*t);
-void ov45_02248CE8(void*c,char*s,void*cb,void*arg);
-int ov45_0224739C(void*c,int id);
-void *ov45_02247E98(void*c,char*s){void*p;if(!c)__msl_assertion_failed(ov45_022559B8,ov45_02255918,ov45_02255844,0x1a9);if(!s)__msl_assertion_failed(ov45_022559D4,ov45_02255918,ov45_02255844,0x1ab);if(!*s)__msl_assertion_failed(ov45_022559E4,ov45_02255918,ov45_02255844,0x1ab);if(strlen(s)>=257)__msl_assertion_failed(ov45_022559F8,ov45_02255918,ov45_02255844,0x1ab);p=ov45_022475B8(c,s);if(p==0)return 0;return (u8*)p+0x104;}
+int ov45_022474FC(void *c, int n);
+int ov45_02247518(char *s, int n);
+void *ov45_022475B8(void *c, char *s);
+int ov45_022475F0(const void *s, int n);
+int ov45_022477B8(const void *s, int n);
+void ov45_02247770(void *c);
+void ov45_02247934(void *c);
+int ov45_02247968(void *c);
+void ov45_022479F0(void *c);
+void ov45_02247A44(void *c, char *s);
+int ov45_02247AD4(const void *a, const void *b);
+int ov45_02247AE0(void *c, char *s);
+void ov45_02247D84(void *c, char *s);
+void *ov45_02247E98(void *c, char *s);
+int ov45_02248238(void *c, char *s);
+int ov45_02248288(void *c, char *s, void *out);
+void ov45_02248374(void *c, char *s, void *data);
+void ov45_02248454(void *c, char *s, char *data);
+void ov45_02248558(void *c, char *s);
+int ov45_0224861C(void *c, char *s);
+void ov45_022486E0(void *c, char *s, char *data);
+int ov45_022487BC(void *c, char *s);
+int ov45_02247650(const void *a, const void *b);
+int ov45_02247818(const void *a, const void *b);
+void ov45_02248A98(void *c, char *s, char *name);
+void ov45_02248BCC(void *c, void *t);
+void ov45_02248CE8(void *c, char *s, void *cb, void *arg);
+int ov45_0224739C(void *c, int id);
+
+void *ov45_02247E98(void *c, char *s) {
+    void *p;
+    if (!c) {
+        __msl_assertion_failed(ov45_022559B8, ov45_02255918, ov45_02255844, 0x1a9);
+    }
+    if (!s) {
+        __msl_assertion_failed(ov45_022559D4, ov45_02255918, ov45_02255844, 0x1ab);
+    }
+    if (!*s) {
+        __msl_assertion_failed(ov45_022559E4, ov45_02255918, ov45_02255844, 0x1ab);
+    }
+    if (strlen(s) >= 257) {
+        __msl_assertion_failed(ov45_022559F8, ov45_02255918, ov45_02255844, 0x1ab);
+    }
+    p = ov45_022475B8(c, s);
+    if (p == 0) {
+        return 0;
+    }
+    return (u8 *)p + 0x104;
+}

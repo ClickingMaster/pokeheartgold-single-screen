@@ -1,9 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
-#include <nitro/code32.h>
-// clang-format on
 
+// The code below is compiled as ARM (32-bit) code.
+#include <nitro/code32.h>
 
 typedef struct MBlock {
     u16 signature;
@@ -31,15 +30,16 @@ typedef struct ExpHeap {
     u16 feature;
 } ExpHeap;
 
-
-extern void GetRegionOfMBlock(MRegion*,MBlock*);
-extern MBlock *RemoveMBlock(MBlockList*,MBlock*),*InsertMBlock(MBlockList*,MBlock*,MBlock*),*InitMBlock(MRegion*,u16);
-extern void NNSi_FndInitHeapHead(void*,u32,void*,void*,u32);
-ExpHeap *InitExpHeap(void *start,void *end,u16 opt);
-void *AllocUsedBlockFromFreeBlock(MBlockList *list,MBlock *block,u8 *address,u32 size,u16 direction);
+extern void GetRegionOfMBlock(MRegion *, MBlock *);
+extern MBlock *RemoveMBlock(MBlockList *, MBlock *);
+extern MBlock *InsertMBlock(MBlockList *, MBlock *, MBlock *);
+extern MBlock *InitMBlock(MRegion *, u16);
+extern void NNSi_FndInitHeapHead(void *, u32, void *, void *, u32);
+ExpHeap *InitExpHeap(void *start, void *end, u16 opt);
+void *AllocUsedBlockFromFreeBlock(MBlockList *list, MBlock *block, u8 *address, u32 size, u16 direction);
 
 void *AllocFromTail__ExpHeap(ExpHeap *heap, u32 size, int align);
-// @fn AllocFromTail__ExpHeap
+
 void *AllocFromTail__ExpHeap(ExpHeap *heap, u32 size, int align) {
     BOOL first = (u16)(heap->feature & 1) == 0;
     MBlock *block = heap->freeBlocks.tail, *best = 0;
@@ -53,11 +53,17 @@ void *AllocFromTail__ExpHeap(ExpHeap *heap, u32 size, int align) {
             best = block;
             min = block->size;
             address = aligned;
-            if (first) break;
-            if (block->size == size) break;
+            if (first) {
+                break;
+            }
+            if (block->size == size) {
+                break;
+            }
         }
         block = block->prev;
     }
-    if (!best) return 0;
+    if (!best) {
+        return 0;
+    }
     return AllocUsedBlockFromFreeBlock(&heap->freeBlocks, best, address, size, 1);
 }

@@ -1,24 +1,30 @@
 #pragma force_active on
 #include <nitro/types.h>
-// clang-format off
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
+
 typedef struct {
-    u16 type;      /* 0x0 */
-    u16 bits;      /* 0x2 */
-    u16 count;     /* 0x4 */
+    u16 type;  /* 0x0 */
+    u16 bits;  /* 0x2 */
+    u16 count; /* 0x4 */
     u16 x6;
-    u8 bkReg;      /* 0x8 */
+    u8 bkReg; /* 0x8 */
     u8 pad9[3];
-    u32 xc;        /* 0xc */
+    u32 xc; /* 0xc */
 } RfInfo;
+
 #define ROOT (*(u8 **)0x0380fff4)
 extern const u16 macTxRxRegAdrs[16];
 extern void FLASH_Read(u32 addr, u32 size, void *dst);
 extern void RF_Write(u32 data);
 void InitRF(void);
-typedef struct { u8 pad[0x5f8]; RfInfo rf; } RfWork;
-// @fn InitRF
+
+typedef struct {
+    u8 pad[0x5f8];
+    RfInfo rf;
+} RfWork;
+
 void InitRF(void) {
     u32 value;
     u32 data;

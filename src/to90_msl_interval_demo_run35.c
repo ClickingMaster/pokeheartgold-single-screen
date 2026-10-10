@@ -1,8 +1,12 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 #pragma force_active on
-extern void(*_02111848[2])(void);void _ZSt9terminatev(void);
-void _ZSt9terminatev(void){_02111848[0]();}
+extern void (*_02111848[2])(void);
+void _ZSt9terminatev(void);
+
+void _ZSt9terminatev(void) {
+    _02111848[0]();
+}

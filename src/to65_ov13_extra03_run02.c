@@ -1,36 +1,48 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 #pragma warn_unusedvar off
 #pragma warn_uninitializedvar off
-#define B(p,n) (((u8 *)(p))[n])
-#define S(p,n) (((s8 *)(p))[n])
-#define W(p,n) (*(u32 *)((u8 *)(p)+(n)))
-#define P(p,n) (*(void **)((u8 *)(p)+(n)))
-extern u8 *ov13_0224F4BC, *ov13_0224F4C0;
-extern u8 ov13_0224F4C4[],ov13_0224F4C8[],ov13_0224F4CC[];
-extern volatile u8 ov13_02244F4C[],ov13_02244F50[],ov13_0224521C[],ov13_02245210[];
-extern u16 ov13_02245060[],ov13_02245062[],ov13_022452A2[],ov13_022452A4[];
+#define B(p, n) (((u8 *)(p))[n])
+#define S(p, n) (((s8 *)(p))[n])
+#define W(p, n) (*(u32 *)((u8 *)(p) + (n)))
+#define P(p, n) (*(void **)((u8 *)(p) + (n)))
+extern u8 *ov13_0224F4BC;
+extern u8 *ov13_0224F4C0;
+extern u8 ov13_0224F4C4[];
+extern u8 ov13_0224F4C8[];
+extern u8 ov13_0224F4CC[];
+extern volatile u8 ov13_02244F4C[];
+extern volatile u8 ov13_02244F50[];
+extern volatile u8 ov13_0224521C[];
+extern volatile u8 ov13_02245210[];
+extern u16 ov13_02245060[];
+extern u16 ov13_02245062[];
+extern u16 ov13_022452A2[];
+extern u16 ov13_022452A4[];
 extern s8 ov13_022452DA[];
-void ov13_022290F0(int,int,int);
-void *ov13_0223FDE0(void *,int);
+void ov13_022290F0(int, int, int);
+void *ov13_0223FDE0(void *, int);
 void ov13_0223FD60(void *);
-void ov13_0223FE98(void *,int,int,int);
-void ov13_0223FF18(void *,int,int,int);
-void ov13_02240008(void *,int,int);
-void ov13_022400F0(int,int,void *);
-void ov13_02240068(void *,int,int *,int *);
+void ov13_0223FE98(void *, int, int, int);
+void ov13_0223FF18(void *, int, int, int);
+void ov13_02240008(void *, int, int);
+void ov13_022400F0(int, int, void *);
+void ov13_02240068(void *, int, int *, int *);
 void ov13_02240874(void *);
 void ov13_02241D98(void *);
-void *ov13_0224128C(u32,int);
+void *ov13_0224128C(u32, int);
 void ov13_022412F4(void *);
 void ov13_022412B0(void *);
-void ov13_022425C8(void *,void (*)(void *));
-void ov13_022425D0(int,void *);
-void ov13_0222AAFC(int,int);
-void ov13_0222A378(void);void ov13_0222A554(void);void ov13_0222A724(void);void ov13_0222A960(void);
+void ov13_022425C8(void *, void (*)(void *));
+void ov13_022425D0(int, void *);
+void ov13_0222AAFC(int, int);
+void ov13_0222A378(void);
+void ov13_0222A554(void);
+void ov13_0222A724(void);
+void ov13_0222A960(void);
 void ov13_0223ABB8(int);
 void ov13_02222CE0(void);
 int ov13_02220908(void *);
@@ -64,30 +76,56 @@ void ov13_0222AE24(void);
 void ov13_0222AEB0(int a);
 void ov13_0222B364(int a);
 int ov13_0222B3B4(void);
-void * ov13_0222B414(u32 a);
+void *ov13_0222B414(u32 a);
 void ov13_0222B424(void *a);
-int ov13_0222B4BC(int a,u32 b);
+int ov13_0222B4BC(int a, u32 b);
 
-void ov13_0222AD5C(int,int);
+void ov13_0222AD5C(int, int);
 void ov13_0222A914(int);
-struct Sprite{u32 bits;u16 attr;};
-void ov13_022293F0(int a,int b);
-void ov13_0222AD5C(int a,int b);
+
+struct Sprite {
+    u32 bits;
+    u16 attr;
+};
+
+void ov13_022293F0(int a, int b);
+void ov13_0222AD5C(int a, int b);
 void ov13_022294B8(void);
 extern u16 ov13_02244FA4[];
 void ov13_0222936C(int);
-int ov13_0222B430(void *,int,u32);
-void ov13_0222B558(void);void ov13_0222B620(void);
-void ov13_0223AAFC(void);void ov13_0222B8E8(void (*)(void));void ov13_0222C1BC(void);
-void ov13_022413E4(void);void ov13_02242478(int);void ov13_02241A44(void);void ov13_022422E0(void);void ov13_0222B898(void);
-void ov13_0222A03C(void) { ov13_0223FD60(P(ov13_0224F4C0,0x58));ov13_022425C8(P(ov13_0224F4C0,0x5c),ov13_0222AF5C); }
+int ov13_0222B430(void *, int, u32);
+void ov13_0222B558(void);
+void ov13_0222B620(void);
+void ov13_0223AAFC(void);
+void ov13_0222B8E8(void (*)(void));
+void ov13_0222C1BC(void);
+void ov13_022413E4(void);
+void ov13_02242478(int);
+void ov13_02241A44(void);
+void ov13_022422E0(void);
+void ov13_0222B898(void);
 
-int ov13_0222A070(void) { return B(ov13_0224F4C0,0x60); }
+void ov13_0222A03C(void) {
+    ov13_0223FD60(P(ov13_0224F4C0, 0x58));
+    ov13_022425C8(P(ov13_0224F4C0, 0x5c), ov13_0222AF5C);
+}
 
-void ov13_0222A084(int a) { B(ov13_0224F4C0,102)=a; }
+int ov13_0222A070(void) {
+    return B(ov13_0224F4C0, 0x60);
+}
 
-void ov13_0222A098(int a) { B(ov13_0224F4C0,103)=a; }
+void ov13_0222A084(int a) {
+    B(ov13_0224F4C0, 102) = a;
+}
 
-void ov13_0222A0AC(int a) { B(ov13_0224F4C0,104)=a; }
+void ov13_0222A098(int a) {
+    B(ov13_0224F4C0, 103) = a;
+}
 
-int ov13_0222A0C0(void) { return ov13_0224F4C0!=0; }
+void ov13_0222A0AC(int a) {
+    B(ov13_0224F4C0, 104) = a;
+}
+
+int ov13_0222A0C0(void) {
+    return ov13_0224F4C0 != 0;
+}

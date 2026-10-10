@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 #include <nnsys/g2d/g2d_RendererCore.h>
 
 extern NNSG2dRndCoreInstance *_021DA498;
@@ -23,7 +23,6 @@ static inline BOOL IsAffineEnable(const NNSG2dRndCoreInstance *pRnd) {
 
 void DrawCellToSurface2D_(const NNSG2dRndCoreSurface *pSurface, const NNSG2dCellData *pCell);
 
-// @fn DrawCellToSurface2D_
 void DrawCellToSurface2D_(const NNSG2dRndCoreSurface *pSurface, const NNSG2dCellData *pCell) {
     NNSG2dRndCoreInstance *pRnd;
     BOOL bAffine;

@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef struct GTSocket GTSocket;
 typedef struct GTConn GTConn;
@@ -23,19 +23,19 @@ typedef void (*GTSockErrCB)(GTSocket *, GTConn *, u32, u16, int, u8 *, int);
 typedef int (*GTUnrecCB)(GTSocket *, u32, u16, u8 *, int);
 
 struct GTSocket {
-    int handle;                 // 0x00
-    u32 ip;                     // 0x04
-    u16 port;                   // 0x08
-    void *connections;          // 0x0c
-    void *closedConnections;    // 0x10
-    int close;                  // 0x14
-    int error;                  // 0x18
-    int callbackLevel;          // 0x1c
-    void *connectAttemptCB;     // 0x20
-    void *unk24;                // 0x24
-    GTSockErrCB unk28;          // 0x28
-    GTSockErrCB unk2C;          // 0x2c
-    GTUnrecCB unrecognizedCB;   // 0x30
+    int handle;               // 0x00
+    u32 ip;                   // 0x04
+    u16 port;                 // 0x08
+    void *connections;        // 0x0c
+    void *closedConnections;  // 0x10
+    int close;                // 0x14
+    int error;                // 0x18
+    int callbackLevel;        // 0x1c
+    void *connectAttemptCB;   // 0x20
+    void *unk24;              // 0x24
+    GTSockErrCB unk28;        // 0x28
+    GTSockErrCB unk2C;        // 0x2c
+    GTUnrecCB unrecognizedCB; // 0x30
 };
 
 typedef struct GTBuffer {
@@ -60,33 +60,33 @@ typedef struct GTInMsg {
 } GTInMsg;
 
 struct GTConn {
-    u32 ip;                    // 0x00
-    u16 port;                  // 0x04
-    GTSocket *socket;          // 0x08
-    int state;                 // 0x0c
-    int initiated;             // 0x10
-    int freeAtAcceptReject;    // 0x14
-    int connectionResult;      // 0x18
-    u32 startTime;             // 0x1c
-    u32 timeout;               // 0x20
-    int callbackLevel;         // 0x24
-    GTCallbacks callbacks;     // 0x28
-    u8 *initialMessage;        // 0x38
-    int initialMessageLen;     // 0x3c
-    void *data;                // 0x40
-    GTBuffer incomingBuffer;   // 0x44
-    GTBuffer outgoingBuffer;   // 0x50
+    u32 ip;                         // 0x00
+    u16 port;                       // 0x04
+    GTSocket *socket;               // 0x08
+    int state;                      // 0x0c
+    int initiated;                  // 0x10
+    int freeAtAcceptReject;         // 0x14
+    int connectionResult;           // 0x18
+    u32 startTime;                  // 0x1c
+    u32 timeout;                    // 0x20
+    int callbackLevel;              // 0x24
+    GTCallbacks callbacks;          // 0x28
+    u8 *initialMessage;             // 0x38
+    int initialMessageLen;          // 0x3c
+    void *data;                     // 0x40
+    GTBuffer incomingBuffer;        // 0x44
+    GTBuffer outgoingBuffer;        // 0x50
     void *incomingBufferedMessages; // 0x5c
     void *outgoingBufferedMessages; // 0x60
-    u16 serialNumber;          // 0x64
-    u16 expectedSerialNumber;  // 0x66
-    u8 response[32];           // 0x68
-    u32 lastSend;              // 0x88
-    u32 challengeTime;         // 0x8c
-    int pendingAck;            // 0x90
-    u32 pendingAckTime;        // 0x94
-    void *sendFilters;         // 0x98
-    void *receiveFilters;      // 0x9c
+    u16 serialNumber;               // 0x64
+    u16 expectedSerialNumber;       // 0x66
+    u8 response[32];                // 0x68
+    u32 lastSend;                   // 0x88
+    u32 challengeTime;              // 0x8c
+    int pendingAck;                 // 0x90
+    u32 pendingAckTime;             // 0x94
+    void *sendFilters;              // 0x98
+    void *receiveFilters;           // 0x9c
 };
 
 typedef struct GTFilter {
@@ -226,7 +226,6 @@ int ov00_0220E1E0(GTSocket *socket, u8 *msg, int len, u32 ip, u16 port);
 int ov00_0220E490(GTSocket *socket, u32 ip, u16 port);
 int ov00_0220E590(GTSocket *socket);
 
-
 int ov00_0220CC38(GTConn *conn, u8 *msg, int len);
 int ov00_0220CE00(GTConn *conn, u32 now);
 void ov00_0220CF14(GTConn *conn);
@@ -245,7 +244,6 @@ void ov00_0220D2A4(GTConn *conn, void *data);
 void *ov00_0220D2E0(GTConn *conn);
 void ov00_0220D338(u8 *buf, int off, u16 val);
 
-// @fn ov00_0220C31C
 int ov00_0220C31C(GTConn *conn, int result, u8 *msg, int len) {
     if (!conn) {
         __msl_assertion_failed(ov00_02219C40, ov00_02219C18, ov00_02219B70, 0x69);
@@ -273,7 +271,6 @@ int ov00_0220C31C(GTConn *conn, int result, u8 *msg, int len) {
     return 1;
 }
 
-// @fn ov00_0220C404
 int ov00_0220C404(GTConn *conn, u8 *msg, int len, int reliable) {
     if (!conn) {
         __msl_assertion_failed(ov00_02219C40, ov00_02219C18, ov00_02219B58, 0x94);
@@ -300,7 +297,6 @@ int ov00_0220C404(GTConn *conn, u8 *msg, int len, int reliable) {
     return 1;
 }
 
-// @fn ov00_0220C4E8
 int ov00_0220C4E8(GTConn *conn, int reason) {
     if (!conn) {
         __msl_assertion_failed(ov00_02219C40, ov00_02219C18, ov00_02219B44, 0xba);
@@ -323,7 +319,6 @@ int ov00_0220C4E8(GTConn *conn, int reason) {
     return 1;
 }
 
-// @fn ov00_0220C5AC
 int ov00_0220C5AC(GTConn *conn, int latency) {
     if (!conn) {
         __msl_assertion_failed(ov00_02219C40, ov00_02219C18, ov00_02219B30, 0xd9);
@@ -346,7 +341,6 @@ int ov00_0220C5AC(GTConn *conn, int latency) {
     return 1;
 }
 
-// @fn ov00_0220C670
 int ov00_0220C670(GTConn *conn, int index, u8 *msg, int len, int reliable) {
     GTFilter *filter;
     if (!conn) {
@@ -375,7 +369,6 @@ int ov00_0220C670(GTConn *conn, int index, u8 *msg, int len, int reliable) {
     return 1;
 }
 
-// @fn ov00_0220C768
 int ov00_0220C768(GTConn *conn, int index, u8 *msg, int len, int reliable) {
     GTFilter *filter;
     if (!conn) {
@@ -404,7 +397,6 @@ int ov00_0220C768(GTConn *conn, int index, u8 *msg, int len, int reliable) {
     return 1;
 }
 
-// @fn ov00_0220C860
 int ov00_0220C860(GTSocket *socket, GTConn *conn, u32 ip, u16 port, int reset, u8 *msg, int len, int fatal) {
     GTSockErrCB cb;
     if (!socket) {
@@ -441,7 +433,6 @@ int ov00_0220C860(GTSocket *socket, GTConn *conn, u32 ip, u16 port, int reset, u
     return 1;
 }
 
-// @fn ov00_0220C984
 int ov00_0220C984(GTSocket *socket, u32 ip, u16 port, u8 *msg, int len, int *handled) {
     *handled = 0;
     if (!socket) {
@@ -467,7 +458,6 @@ int ov00_0220C984(GTSocket *socket, u32 ip, u16 port, u8 *msg, int len, int *han
     return 1;
 }
 
-// @fn ov00_0220CA7C
 int ov00_0220CA7C(GTSocket *socket, GTConn **conn, u32 ip, u16 port) {
     int result = ov00_0220F1A0(socket, conn, ip, port);
     if (result) {
@@ -478,7 +468,6 @@ int ov00_0220CA7C(GTSocket *socket, GTConn **conn, u32 ip, u16 port) {
     return 0;
 }
 
-// @fn ov00_0220CAAC
 int ov00_0220CAAC(GTSocket *socket, GTConn **conn, u32 ip, u16 port) {
     int result = ov00_0220F1A0(socket, conn, ip, port);
     if (result) {
@@ -489,7 +478,6 @@ int ov00_0220CAAC(GTSocket *socket, GTConn **conn, u32 ip, u16 port) {
     return 0;
 }
 
-// @fn ov00_0220CADC
 int ov00_0220CADC(GTConn *conn, u8 *msg, int len, GTCallbacks *callbacks) {
     u8 challenge[32];
     ov00_0220F958(&msg, &len);
@@ -511,7 +499,6 @@ int ov00_0220CADC(GTConn *conn, u8 *msg, int len, GTCallbacks *callbacks) {
     return 0;
 }
 
-// @fn ov00_0220CB84
 int ov00_0220CB84(GTConn *conn, GTCallbacks *callbacks) {
     if (conn->freeAtAcceptReject) {
         conn->freeAtAcceptReject = 0;
@@ -529,7 +516,6 @@ int ov00_0220CB84(GTConn *conn, GTCallbacks *callbacks) {
     return 1;
 }
 
-// @fn ov00_0220CBE0
 void ov00_0220CBE0(GTConn *conn, u8 *msg, int len) {
     conn->freeAtAcceptReject = 0;
     if (conn->state != 4) {
@@ -540,7 +526,6 @@ void ov00_0220CBE0(GTConn *conn, u8 *msg, int len) {
     conn->state = 6;
 }
 
-// @fn ov00_0220CC38
 int ov00_0220CC38(GTConn *conn, u8 *msg, int len) {
     if (!ov00_0220F474(conn->socket, conn->ip, conn->port, msg, len)) {
         return 0;
@@ -549,7 +534,6 @@ int ov00_0220CC38(GTConn *conn, u8 *msg, int len) {
     return 1;
 }
 
-// @fn ov00_0220CC80
 int ov00_0220CC80(GTConn *conn, u32 now) {
     int timedOut;
     if (conn->state < 5) {
@@ -576,7 +560,6 @@ int ov00_0220CC80(GTConn *conn, u32 now) {
     return 1;
 }
 
-// @fn ov00_0220CD24
 int ov00_0220CD24(GTConn *conn, u32 now) {
     int i;
     int n;
@@ -593,7 +576,6 @@ int ov00_0220CD24(GTConn *conn, u32 now) {
     return 1;
 }
 
-// @fn ov00_0220CD90
 int ov00_0220CD90(GTConn *conn, u32 now) {
     if (!conn->pendingAck) {
         return 1;
@@ -606,7 +588,6 @@ int ov00_0220CD90(GTConn *conn, u32 now) {
     return 1;
 }
 
-// @fn ov00_0220CDCC
 int ov00_0220CDCC(GTConn *conn, u32 now) {
     if (now - conn->lastSend > 30000) {
         if (!ov00_0220EB70(conn)) {
@@ -616,7 +597,6 @@ int ov00_0220CDCC(GTConn *conn, u32 now) {
     return 1;
 }
 
-// @fn ov00_0220CE00
 int ov00_0220CE00(GTConn *conn, u32 now) {
     if (!ov00_0220CC80(conn, now)) {
         return 0;
@@ -633,7 +613,6 @@ int ov00_0220CE00(GTConn *conn, u32 now) {
     return 1;
 }
 
-// @fn ov00_0220CE68
 void ov00_0220CE68(GTConn *conn, int hard) {
     if (hard) {
         if (conn->state >= 7) {
@@ -649,7 +628,6 @@ void ov00_0220CE68(GTConn *conn, int hard) {
     }
 }
 
-// @fn ov00_0220CEB8
 void ov00_0220CEB8(GTConn *conn) {
     if (conn->state == 7) {
         return;
@@ -659,7 +637,6 @@ void ov00_0220CEB8(GTConn *conn) {
     ov00_021FE754(conn->socket->closedConnections, &conn);
 }
 
-// @fn ov00_0220CF14
 void ov00_0220CF14(GTConn *conn) {
     if (conn->initialMessage) {
         ov00_021EC3D8(conn->initialMessage);
@@ -685,18 +662,15 @@ void ov00_0220CF14(GTConn *conn) {
     ov00_021EC3D8(conn);
 }
 
-// @fn ov00_0220CF98
 int ov00_0220CF98(void *a, void *b, void *c, void *d, void *e) {
     return ov00_0220EF24(a, b, c, d, e);
 }
 
-// @fn ov00_0220CFAC
 void ov00_0220CFAC(GTSocket *socket) {
     ov00_0220D238(socket);
     ov00_0220F144(socket);
 }
 
-// @fn ov00_0220CFC4
 void ov00_0220CFC4(GTSocket *socket) {
     if (!ov00_0220E590(socket)) {
         return;
@@ -707,22 +681,18 @@ void ov00_0220CFC4(GTSocket *socket) {
     ov00_0220F6B0(socket);
 }
 
-// @fn ov00_0220CFF4
 int ov00_0220CFF4(void *a, void *b, void *c, void *d) {
     return ov00_0220F188(a, b, c, d);
 }
 
-// @fn ov00_0220D000
 int ov00_0220D000(GTConn *conn, GTCallbacks *callbacks) {
     return ov00_0220CB84(conn, callbacks);
 }
 
-// @fn ov00_0220D00C
 void ov00_0220D00C(GTConn *conn, u8 *msg, int len) {
     ov00_0220CBE0(conn, msg, len);
 }
 
-// @fn ov00_0220D018
 int ov00_0220D018(GTSocket *socket, GTConn **connp, const char *address, u8 *msg, int len, u32 timeout, GTCallbacks *callbacks, int blocking) {
     GTConn *conn;
     u32 ip;
@@ -767,7 +737,6 @@ int ov00_0220D018(GTSocket *socket, GTConn **connp, const char *address, u8 *msg
     return conn->connectionResult;
 }
 
-// @fn ov00_0220D194
 void ov00_0220D194(GTConn *conn, u8 *msg, int len, int reliable) {
     if (conn->state != 5) {
         return;
@@ -780,17 +749,14 @@ void ov00_0220D194(GTConn *conn, u8 *msg, int len, int reliable) {
     ov00_0220EE6C(conn, msg, len, reliable);
 }
 
-// @fn ov00_0220D218
 void ov00_0220D218(GTConn *conn) {
     ov00_0220CE68(conn, 1);
 }
 
-// @fn ov00_0220D228
 void ov00_0220D228(GTConn **conn) {
     ov00_0220D218(*conn);
 }
 
-// @fn ov00_0220D238
 void ov00_0220D238(GTSocket *socket) {
     if (ov00_0221B630 == 1) {
         return;
@@ -800,27 +766,22 @@ void ov00_0220D238(GTSocket *socket) {
     ov00_0221B630 = 0;
 }
 
-// @fn ov00_0220D27C
 u16 ov00_0220D27C(GTSocket *socket) {
     return socket->port;
 }
 
-// @fn ov00_0220D284
 int ov00_0220D284(GTConn *conn) {
     return conn->outgoingBuffer.size - conn->outgoingBuffer.len;
 }
 
-// @fn ov00_0220D294
 u32 ov00_0220D294(GTConn *conn) {
     return conn->ip;
 }
 
-// @fn ov00_0220D29C
 void ov00_0220D29C(GTSocket *socket, GTUnrecCB cb) {
     socket->unrecognizedCB = cb;
 }
 
-// @fn ov00_0220D2A4
 void ov00_0220D2A4(GTConn *conn, void *data) {
     if (!conn) {
         __msl_assertion_failed(ov00_02219C88, ov00_02219C7C, ov00_02219C4C, 0x1a3);
@@ -828,7 +789,6 @@ void ov00_0220D2A4(GTConn *conn, void *data) {
     conn->data = data;
 }
 
-// @fn ov00_0220D2E0
 void *ov00_0220D2E0(GTConn *conn) {
     if (!conn) {
         __msl_assertion_failed(ov00_02219C88, ov00_02219C7C, ov00_02219C64, 0x1aa);
@@ -836,25 +796,21 @@ void *ov00_0220D2E0(GTConn *conn) {
     return conn->data;
 }
 
-// @fn ov00_0220D318
 u16 ov00_0220D318(u8 *buf, int off) {
     u16 v = (u16)((buf[off] << 8) & 0xFF00);
     v |= buf[off + 1];
     return v;
 }
 
-// @fn ov00_0220D338
 void ov00_0220D338(u8 *buf, int off, u16 val) {
     buf[off] = val >> 8;
     buf[off + 1] = val;
 }
 
-// @fn ov00_0220D34C
 s16 ov00_0220D34C(u16 a, u16 b) {
     return (s16)(a - b);
 }
 
-// @fn ov00_0220D35C
 int ov00_0220D35C(GTConn *conn, int reason, int type) {
     if (conn->state < 5) {
         if (conn->initiated) {
@@ -877,12 +833,10 @@ int ov00_0220D35C(GTConn *conn, int reason, int type) {
     return 1;
 }
 
-// @fn ov00_0220D3F0
 int ov00_0220D3F0(GTConn *conn) {
     return ov00_0220D35C(conn, 7, 2);
 }
 
-// @fn ov00_0220D404
 int ov00_0220D404(GTConn *conn) {
     if (!ov00_0220ED98(conn)) {
         return 0;
@@ -890,7 +844,6 @@ int ov00_0220D404(GTConn *conn) {
     return ov00_0220D35C(conn, 1, 4);
 }
 
-// @fn ov00_0220D430
 int ov00_0220D430(GTConn *conn, u16 ack) {
     int n;
     int i;
@@ -928,7 +881,6 @@ int ov00_0220D430(GTConn *conn, u16 ack) {
     return 1;
 }
 
-// @fn ov00_0220D52C
 int ov00_0220D52C(GTConn *conn, u8 *msg, int len) {
     if (conn->state != 5 && conn->state != 6) {
         return 1;
@@ -945,7 +897,6 @@ int ov00_0220D52C(GTConn *conn, u8 *msg, int len) {
     return 1;
 }
 
-// @fn ov00_0220D5BC
 int ov00_0220D5BC(GTConn *conn, u8 *msg, int len) {
     if (conn->state != 5 && conn->state != 6) {
         if (!ov00_0220D3F0(conn)) {
@@ -965,7 +916,6 @@ int ov00_0220D5BC(GTConn *conn, u8 *msg, int len) {
     return 1;
 }
 
-// @fn ov00_0220D668
 int ov00_0220D668(GTConn *conn, u8 *msg, int len) {
     u8 response[32];
     u8 challenge[32];
@@ -991,7 +941,6 @@ int ov00_0220D668(GTConn *conn, u8 *msg, int len) {
     return 1;
 }
 
-// @fn ov00_0220D700
 int ov00_0220D700(GTConn *conn, u8 *msg, int len) {
     u8 response[32];
     if (conn->state != 0) {
@@ -1024,7 +973,6 @@ int ov00_0220D700(GTConn *conn, u8 *msg, int len) {
     return 1;
 }
 
-// @fn ov00_0220D7DC
 int ov00_0220D7DC(GTConn *conn, u8 *msg, int len) {
     if (conn->state != 3) {
         if (!ov00_0220D3F0(conn)) {
@@ -1058,7 +1006,6 @@ int ov00_0220D7DC(GTConn *conn, u8 *msg, int len) {
     return 1;
 }
 
-// @fn ov00_0220D8EC
 int ov00_0220D8EC(GTConn *conn) {
     if (conn->state != 1) {
         if (!ov00_0220D3F0(conn)) {
@@ -1073,7 +1020,6 @@ int ov00_0220D8EC(GTConn *conn) {
     return 1;
 }
 
-// @fn ov00_0220D938
 int ov00_0220D938(GTConn *conn, u8 *msg, int len) {
     if (conn->state != 1) {
         if (!ov00_0220D3F0(conn)) {

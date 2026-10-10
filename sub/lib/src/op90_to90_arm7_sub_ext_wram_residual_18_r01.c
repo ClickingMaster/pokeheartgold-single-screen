@@ -1,16 +1,22 @@
 #pragma force_active on
 #include <nitro/types.h>
-// clang-format off
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
+
 typedef struct {
-    u16 state;          /* 0x00 */
+    u16 state; /* 0x00 */
     u8 pad2[0xc6 - 2];
-    u16 xc6;            /* 0xc6 */
+    u16 xc6; /* 0xc6 */
     u8 padc8[0xe6 - 0xc8];
-    u16 xe6;            /* 0xe6 */
+    u16 xe6; /* 0xe6 */
 } WmspStatus;
-typedef struct { u8 pad[0x1550]; WmspStatus *status; } WmspWork;
+
+typedef struct {
+    u8 pad[0x1550];
+    WmspStatus *status;
+} WmspWork;
+
 extern WmspWork wmspW;
 extern u16 *__VENEER_WMSP_GetBuffer4Callback2Wm9(void);
 extern void __VENEER_WMSP_ReturnResult2Wm9(void *);
@@ -23,7 +29,7 @@ extern u16 *WMSP_WL_MlmePowerManagement(u16 *buf, u16 pwrMgtMode, u16 wakeUp, u1
 extern u16 *WMSP_WL_MlmeMeasureChannel(u16 *buf, u16 ccaMode, u16 edThreshold, u16 measureTime, u8 *channelList);
 extern void WmspError_06005BB8(u16 code, u16 result);
 void WMSP_MeasureChannel(void *msg);
-// @fn WMSP_MeasureChannel
+
 void WMSP_MeasureChannel(void *msg) {
     u16 *req = msg;
     u8 channelList[16];

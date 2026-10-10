@@ -1,13 +1,119 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 #include <nnsys/g2d/g2d_Image.h>
-// clang-format on
 #pragma force_active on
-extern void GX_BeginLoadTex(void),GX_EndLoadTex(void),GX_LoadTex(void*,u32,u32);
-extern void NNS_G2dSetImageLocation(NNSG2dImageProxy*,NNS_G2D_VRAM_TYPE,u32);
+extern void GX_BeginLoadTex(void);
+extern void GX_EndLoadTex(void);
+extern void GX_LoadTex(void *, u32, u32);
+extern void NNS_G2dSetImageLocation(NNSG2dImageProxy *, NNS_G2D_VRAM_TYPE, u32);
 static inline u32 DecodeSize(u16 value);
-static inline u32 DecodeSize(u16 value){switch(value){case 1:return 0;case 2:return 1;case 4:return 2;case 8:return 3;case 16:return 4;case 32:return 5;default:return 0;}}
-void NNS_G2dLoadImage1DMapping(const NNSG2dCharacterData *data,u32 base,NNS_G2D_VRAM_TYPE type,NNSG2dImageProxy *proxy){GXOBJVRamModeChar mode=data->mapingType;switch(type){case NNS_G2D_VRAM_TYPE_3DMAIN:break;case NNS_G2D_VRAM_TYPE_2DMAIN:*(volatile u32*)0x04000000=(*(volatile u32*)0x04000000&0xffcfffef)|mode;break;case NNS_G2D_VRAM_TYPE_2DSUB:*(volatile u32*)0x04001000=(*(volatile u32*)0x04001000&0xffcfffef)|mode;break;default:break;}DC_FlushRange(data->pRawData,data->szByte);switch(type){case NNS_G2D_VRAM_TYPE_3DMAIN:GX_BeginLoadTex();GX_LoadTex(data->pRawData,base,data->szByte);GX_EndLoadTex();break;case NNS_G2D_VRAM_TYPE_2DMAIN:GX_LoadOBJ(data->pRawData,base,data->szByte);break;case NNS_G2D_VRAM_TYPE_2DSUB:GXS_LoadOBJ(data->pRawData,base,data->szByte);break;default:break;}if(data->mapingType==0){proxy->attr.sizeS=(GXTexSizeS)DecodeSize(data->W);proxy->attr.sizeT=(GXTexSizeT)DecodeSize(data->H);}else{proxy->attr.sizeS=(GXTexSizeS)data->W;proxy->attr.sizeT=(GXTexSizeT)data->H;}proxy->attr.fmt=data->pixelFmt;proxy->attr.bExtendedPlt=0;proxy->attr.plttUse=(GXTexPlttColor0)1;proxy->attr.mappingType=data->mapingType;NNS_G2dSetImageLocation(proxy,type,base);}
-void NNS_G2dLoadImage2DMapping(const NNSG2dCharacterData *data,u32 base,NNS_G2D_VRAM_TYPE type,NNSG2dImageProxy *proxy){GXOBJVRamModeChar mode=data->mapingType;switch(type){case NNS_G2D_VRAM_TYPE_3DMAIN:break;case NNS_G2D_VRAM_TYPE_2DMAIN:*(volatile u32*)0x04000000=(*(volatile u32*)0x04000000&0xffcfffef)|mode;break;case NNS_G2D_VRAM_TYPE_2DSUB:*(volatile u32*)0x04001000=(*(volatile u32*)0x04001000&0xffcfffef)|mode;break;default:break;}DC_FlushRange(data->pRawData,data->szByte);switch(type){case NNS_G2D_VRAM_TYPE_3DMAIN:GX_BeginLoadTex();GX_LoadTex(data->pRawData,base,data->szByte);GX_EndLoadTex();break;case NNS_G2D_VRAM_TYPE_2DMAIN:GX_LoadOBJ(data->pRawData,base,data->szByte);break;case NNS_G2D_VRAM_TYPE_2DSUB:GXS_LoadOBJ(data->pRawData,base,data->szByte);break;default:break;}if(data->mapingType==0){proxy->attr.sizeS=(GXTexSizeS)DecodeSize(data->W);proxy->attr.sizeT=(GXTexSizeT)DecodeSize(data->H);}else{proxy->attr.sizeS=(GXTexSizeS)data->W;proxy->attr.sizeT=(GXTexSizeT)data->H;}proxy->attr.fmt=data->pixelFmt;proxy->attr.bExtendedPlt=0;proxy->attr.plttUse=(GXTexPlttColor0)1;proxy->attr.mappingType=data->mapingType;NNS_G2dSetImageLocation(proxy,type,base);}
+
+static inline u32 DecodeSize(u16 value) {
+    switch (value) {
+    case 1:
+        return 0;
+    case 2:
+        return 1;
+    case 4:
+        return 2;
+    case 8:
+        return 3;
+    case 16:
+        return 4;
+    case 32:
+        return 5;
+    default:
+        return 0;
+    }
+}
+
+void NNS_G2dLoadImage1DMapping(const NNSG2dCharacterData *data, u32 base, NNS_G2D_VRAM_TYPE type, NNSG2dImageProxy *proxy) {
+    GXOBJVRamModeChar mode = data->mapingType;
+    switch (type) {
+    case NNS_G2D_VRAM_TYPE_3DMAIN:
+        break;
+    case NNS_G2D_VRAM_TYPE_2DMAIN:
+        *(volatile u32 *)0x04000000 = (*(volatile u32 *)0x04000000 & 0xffcfffef) | mode;
+        break;
+    case NNS_G2D_VRAM_TYPE_2DSUB:
+        *(volatile u32 *)0x04001000 = (*(volatile u32 *)0x04001000 & 0xffcfffef) | mode;
+        break;
+    default:
+        break;
+    }
+    DC_FlushRange(data->pRawData, data->szByte);
+    switch (type) {
+    case NNS_G2D_VRAM_TYPE_3DMAIN:
+        GX_BeginLoadTex();
+        GX_LoadTex(data->pRawData, base, data->szByte);
+        GX_EndLoadTex();
+        break;
+    case NNS_G2D_VRAM_TYPE_2DMAIN:
+        GX_LoadOBJ(data->pRawData, base, data->szByte);
+        break;
+    case NNS_G2D_VRAM_TYPE_2DSUB:
+        GXS_LoadOBJ(data->pRawData, base, data->szByte);
+        break;
+    default:
+        break;
+    }
+    if (data->mapingType == 0) {
+        proxy->attr.sizeS = (GXTexSizeS)DecodeSize(data->W);
+        proxy->attr.sizeT = (GXTexSizeT)DecodeSize(data->H);
+    } else {
+        proxy->attr.sizeS = (GXTexSizeS)data->W;
+        proxy->attr.sizeT = (GXTexSizeT)data->H;
+    }
+    proxy->attr.fmt = data->pixelFmt;
+    proxy->attr.bExtendedPlt = 0;
+    proxy->attr.plttUse = (GXTexPlttColor0)1;
+    proxy->attr.mappingType = data->mapingType;
+    NNS_G2dSetImageLocation(proxy, type, base);
+}
+
+void NNS_G2dLoadImage2DMapping(const NNSG2dCharacterData *data, u32 base, NNS_G2D_VRAM_TYPE type, NNSG2dImageProxy *proxy) {
+    GXOBJVRamModeChar mode = data->mapingType;
+    switch (type) {
+    case NNS_G2D_VRAM_TYPE_3DMAIN:
+        break;
+    case NNS_G2D_VRAM_TYPE_2DMAIN:
+        *(volatile u32 *)0x04000000 = (*(volatile u32 *)0x04000000 & 0xffcfffef) | mode;
+        break;
+    case NNS_G2D_VRAM_TYPE_2DSUB:
+        *(volatile u32 *)0x04001000 = (*(volatile u32 *)0x04001000 & 0xffcfffef) | mode;
+        break;
+    default:
+        break;
+    }
+    DC_FlushRange(data->pRawData, data->szByte);
+    switch (type) {
+    case NNS_G2D_VRAM_TYPE_3DMAIN:
+        GX_BeginLoadTex();
+        GX_LoadTex(data->pRawData, base, data->szByte);
+        GX_EndLoadTex();
+        break;
+    case NNS_G2D_VRAM_TYPE_2DMAIN:
+        GX_LoadOBJ(data->pRawData, base, data->szByte);
+        break;
+    case NNS_G2D_VRAM_TYPE_2DSUB:
+        GXS_LoadOBJ(data->pRawData, base, data->szByte);
+        break;
+    default:
+        break;
+    }
+    if (data->mapingType == 0) {
+        proxy->attr.sizeS = (GXTexSizeS)DecodeSize(data->W);
+        proxy->attr.sizeT = (GXTexSizeT)DecodeSize(data->H);
+    } else {
+        proxy->attr.sizeS = (GXTexSizeS)data->W;
+        proxy->attr.sizeT = (GXTexSizeT)data->H;
+    }
+    proxy->attr.fmt = data->pixelFmt;
+    proxy->attr.bExtendedPlt = 0;
+    proxy->attr.plttUse = (GXTexPlttColor0)1;
+    proxy->attr.mappingType = data->mapingType;
+    NNS_G2dSetImageLocation(proxy, type, base);
+}

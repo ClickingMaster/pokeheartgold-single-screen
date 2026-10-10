@@ -105,23 +105,54 @@ static BlackthornPlatformRotationBonkState ov04_02255CBC(FieldSystem *fieldSyste
 static u16 BlackthornGymmick_GetMaximumRotationAngle(FieldSystem *fieldSystem, BlackthornGymmickPlatformData *platform);
 static void SysTask_BlackthornGymmick_MovePlatform(SysTask *task, void *data);
 
-// clang-format off
 // If any point on the platform hits collision while rotating,
 // the corresponding entry is 1/256th of the total angle
 // that the platform will travel before bonking.
 // 64, being 1/256th of 0x4000, represents full travel (no bonk).
 static const u8 sMainAreaRotationExtents_Type0[] = {
-    10, 10, 13, 18, 25, 38, 51,
-    64, 64, 23, 28, 35, 45, 55,
+    10,
+    10,
+    13,
+    18,
+    25,
+    38,
+    51,
+    64,
+    64,
+    23,
+    28,
+    35,
+    45,
+    55,
 };
 static const u8 sMainAreaRotationExtents_Type1[] = {
-     8,  9, 10, 14, 19, 26, 37, 51,
-    64, 17, 19, 23, 28, 35, 46, 55,
-    64, 64, 64, 30, 35, 41, 49, 57,
+    8,
+    9,
+    10,
+    14,
+    19,
+    26,
+    37,
+    51,
+    64,
+    17,
+    19,
+    23,
+    28,
+    35,
+    46,
+    55,
+    64,
+    64,
+    64,
+    30,
+    35,
+    41,
+    49,
+    57,
 };
 static const u8 sLeadingEdgeRotationExtents_Type0[] = { 64, 64, 64, 64, 42 };
 static const u8 sLeadingEdgeRotationExtents_Type1[] = { 64, 20, 30, 46 };
-// clang-format on
 
 void GymmickInit_Blackthorn(FieldSystem *fieldSystem) {
     int modelIDs[3] = { 120, 121, 120 };

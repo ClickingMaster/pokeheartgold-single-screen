@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 #include <string.h>
 
 typedef void *(*LoginAlloc)(const char *name, u32 size);
@@ -72,12 +72,30 @@ typedef struct LoginAuthResult {
 
 extern LoginWork ov00_0221A6B8;
 extern LoginRequestParams ov00_0221A6D0; // ov00_0221A6B8.reqParams
-extern LoginAuthParams ov00_0221A6EC; // ov00_0221A6B8.authParams
+extern LoginAuthParams ov00_0221A6EC;    // ov00_0221A6B8.authParams
 extern char *ov00_022168DC;
 extern char *ov00_02216420;
-extern char ov00_022169F0[], ov00_022169FC[], ov00_02216A1C[], ov00_02216A24[], ov00_02216A2C[], ov00_02216954[], ov00_02216988[];
-extern char ov00_02216A3C[], ov00_02216A44[], ov00_02216938[], ov00_02216A4C[], ov00_02216A58[], ov00_02216A5C[], ov00_02216A64[];
-extern char ov00_022169A4[], ov00_022169B0[], ov00_022169C0[], ov00_022169D0[], ov00_02216A6C[], ov00_02216A78[], ov00_02216A84[];
+extern char ov00_022169F0[];
+extern char ov00_022169FC[];
+extern char ov00_02216A1C[];
+extern char ov00_02216A24[];
+extern char ov00_02216A2C[];
+extern char ov00_02216954[];
+extern char ov00_02216988[];
+extern char ov00_02216A3C[];
+extern char ov00_02216A44[];
+extern char ov00_02216938[];
+extern char ov00_02216A4C[];
+extern char ov00_02216A58[];
+extern char ov00_02216A5C[];
+extern char ov00_02216A64[];
+extern char ov00_022169A4[];
+extern char ov00_022169B0[];
+extern char ov00_022169C0[];
+extern char ov00_022169D0[];
+extern char ov00_02216A6C[];
+extern char ov00_02216A78[];
+extern char ov00_02216A84[];
 extern int errno;
 extern long atol(const char *);
 
@@ -102,7 +120,6 @@ extern void DWCi_BM_GetWiFiInfo(LoginWiFiInfo *info);
 
 void ov00_021EA660(void *arg);
 
-// @fn ov00_021EA660
 void ov00_021EA660(void *arg) {
     char *response;
     int status;

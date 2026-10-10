@@ -1,10 +1,10 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-#include <string.h>
 #include <stdarg.h>
-// clang-format on
+#include <string.h>
 
 int sprintf(char *, const char *, ...);
 int strncmp(const char *, const char *, size_t);
@@ -21,6 +21,7 @@ typedef struct GtVar {
     const char *name;
     int type;
     int count;
+
     union {
         int i;
         double d;
@@ -53,7 +54,6 @@ extern char ov00_02219788[];
 void *ov00_021FF0C0(void *table, void *key);
 void ov00_021FEF74(void *table, void *elem);
 
-
 extern char ov00_022196C4[];
 extern char ov00_022196C8[];
 extern char ov00_022196E0[];
@@ -74,7 +74,12 @@ extern char ov00_022197EC[];
 extern char ov00_02219868[];
 extern char ov00_02219754[];
 extern char ov00_02219878[];
-#define GP_PARSE_ERROR(c) { ov00_0220A86C(c, 1, ov00_02219878); ov00_02202990(c, 3, 1); return 3; }
+#define GP_PARSE_ERROR(c)                   \
+    {                                       \
+        ov00_0220A86C(c, 1, ov00_02219878); \
+        ov00_02202990(c, 3, 1);             \
+        return 3;                           \
+    }
 extern char ov00_02219800[];
 extern char ov00_02219838[];
 extern char ov00_02219850[];
@@ -312,52 +317,58 @@ void ov00_0220C0C4(DynBuf *b, int pos, int n);
 int ov00_0220C164(CbObj *o);
 int ov00_0220C200(CbObj *o, CbTarget *t, int a2, int a3, int a4, int a5, int a6);
 
-// @fn ov00_0220AD18
 double *ov00_0220AD18(double x) {
     ov00_0221B1F0.d = x;
     return &ov00_0221B1F0.d;
 }
 
-// @fn ov00_0220AD34
 char *ov00_0220AD34(char *s) {
     char *start = s;
     while (*s) {
-        if (*s == '\\') *s = '/';
+        if (*s == '\\') {
+            *s = '/';
+        }
         s++;
     }
     return start;
 }
 
-// @fn ov00_0220AD64
 void *ov00_0220AD64(GtVar *v, void *val) {
     if (v->type == 0) {
         v->val.i = *(int *)val;
     } else if (v->type == 1) {
         v->val.d = *(double *)val;
     } else if (v->type == 2) {
-        if (v->val.s) ov00_021EC3D8(v->val.s);
+        if (v->val.s) {
+            ov00_021EC3D8(v->val.s);
+        }
         v->val.s = val ? ov00_0220AD34(ov00_021FF3D4(val)) : 0;
     }
     return ov00_0220ADE0(v);
 }
 
-// @fn ov00_0220ADE0
 void *ov00_0220ADE0(GtVar *v) {
-    if (!v) return 0;
-    if (v->type == 2) return v->val.s;
+    if (!v) {
+        return 0;
+    }
+    if (v->type == 2) {
+        return v->val.s;
+    }
     return &v->val;
 }
 
-// @fn ov00_0220AE00
 GtVar *ov00_0220AE00(GtCtx *ctx, const char *name) {
     GtVar key;
-    if (!ctx) ctx = ov00_0221B1F0.ctx;
-    if (!ctx) __msl_assertion_failed(ov00_022198AC, ov00_022198B0, ov00_02219888, 0x153);
+    if (!ctx) {
+        ctx = ov00_0221B1F0.ctx;
+    }
+    if (!ctx) {
+        __msl_assertion_failed(ov00_022198AC, ov00_022198B0, ov00_02219888, 0x153);
+    }
     key.name = name;
     return ov00_021FF0C0(ctx->table, &key);
 }
 
-// @fn ov00_0220AE60
 void ov00_0220AE60(void) {
     if (ov00_022198D8.sock != -1) {
         ov00_021FF82C(ov00_022198D8.sock, 2);
@@ -373,17 +384,19 @@ void ov00_0220AE60(void) {
     }
 }
 
-// @fn ov00_0220AED0
 int ov00_0220AED0(void) {
     return ov00_022198D8.sock != -1;
 }
 
-// @fn ov00_0220AEF0
 int ov00_0220AEF0(void) {
     int n;
     int used;
-    if (ov00_022198D8.sock == -1) return 0;
-    if (ov00_0221B200.state != 5) return 0;
+    if (ov00_022198D8.sock == -1) {
+        return 0;
+    }
+    if (ov00_0221B200.state != 5) {
+        return 0;
+    }
     while (ov00_0220B174(ov00_022198D8.sock)) {
         if (ov00_0221B200.cap - ov00_0221B200.len < 0x80) {
             if (ov00_0221B200.cap < 0x100) {
@@ -392,7 +405,9 @@ int ov00_0220AEF0(void) {
                 ov00_0221B200.cap = ov00_0221B200.cap * 2;
             }
             ov00_0221B200.buf = ov00_021EC3BC(ov00_0221B200.buf, ov00_0221B200.cap + 1);
-            if (!ov00_0221B200.buf) return 0;
+            if (!ov00_0221B200.buf) {
+                return 0;
+            }
         }
         n = ov00_021FF92C(ov00_022198D8.sock, ov00_0221B200.buf + ov00_0221B200.len, ov00_0221B200.cap - ov00_0221B200.len, 0);
         if (n <= 0) {
@@ -409,11 +424,12 @@ int ov00_0220AEF0(void) {
             ov00_0221B200.len -= used;
         }
     }
-    if (ov00_022198D8.sock == -1) return 0;
+    if (ov00_022198D8.sock == -1) {
+        return 0;
+    }
     return 1;
 }
 
-// @fn ov00_0220B040
 void ov00_0220B040(char *buf, int len) {
     int i;
     char *k;
@@ -421,11 +437,12 @@ void ov00_0220B040(char *buf, int len) {
     for (i = 0; i < len; i++) {
         buf[i] ^= *k;
         k++;
-        if (*k == 0) k = ov00_022198D8.key;
+        if (*k == 0) {
+            k = ov00_022198D8.key;
+        }
     }
 }
 
-// @fn ov00_0220B088
 char *ov00_0220B088(const char *str, const char *key) {
     Buf256 b = ov00_022162E7;
     const char *p;
@@ -435,48 +452,55 @@ char *ov00_0220B088(const char *str, const char *key) {
     strcat(b.s, key);
     strcat(b.s, ov00_02219948);
     p = strstr(str, b.s);
-    if (!p) return 0;
+    if (!p) {
+        return 0;
+    }
     p += strlen(b.s);
     ret = ov00_0221B200.vals[ov00_0221B200.flip];
     dst = ret;
-    while (*p != 0 && *p != '\\') *dst++ = *p++;
+    while (*p != 0 && *p != '\\') {
+        *dst++ = *p++;
+    }
     *dst = 0;
     return ret;
 }
 
-// @fn ov00_0220B15C
 char *ov00_0220B15C(const char *str, const char *key) {
     char *r = ov00_0220B088(str, key);
-    if (!r) r = ov00_02219944;
+    if (!r) {
+        r = ov00_02219944;
+    }
     return r;
 }
 
-// @fn ov00_0220B174
 int ov00_0220B174(int s) {
     return ov00_021FF694(s);
 }
 
-// @fn ov00_0220B180
 char *ov00_0220B180(char *buf, int len) {
     char *p;
     for (p = buf; p - buf < len - 6; p++) {
-        if (p[0] == '\\' && p[1] == 'f' && p[2] == 'i' && p[3] == 'n' && p[4] == 'a' && p[5] == 'l' && p[6] == '\\') return p;
+        if (p[0] == '\\' && p[1] == 'f' && p[2] == 'i' && p[3] == 'n' && p[4] == 'a' && p[5] == 'l' && p[6] == '\\') {
+            return p;
+        }
     }
     return 0;
 }
 
-// @fn ov00_0220B1E8
 int ov00_0220B1E8(int a, int b, int c) {
     int i;
-    if (!ov00_0221B200.arr) return -1;
+    if (!ov00_0221B200.arr) {
+        return -1;
+    }
     for (i = 0; i < ArrayLength(ov00_0221B200.arr); i++) {
         QrEntry *e = ov00_021FE6EC(ov00_0221B200.arr, i);
-        if (e->type == a && e->x4 == b && e->x8 == c) return i;
+        if (e->type == a && e->x4 == b && e->x8 == c) {
+            return i;
+        }
     }
     return -1;
 }
 
-// @fn ov00_0220B26C
 void ov00_0220B26C(char *buf, int len) {
     int v;
     int id;
@@ -486,24 +510,26 @@ void ov00_0220B26C(char *buf, int len) {
     id = atol(ov00_0220B15C(buf, ov00_02219954));
     s = ov00_0220B15C(buf, ov00_02219958);
     idx = ov00_0220B1E8(0, id, 0);
-    if (idx == -1) return;
+    if (idx == -1) {
+        return;
+    }
     ((QrEntry *)ov00_021FE6EC(ov00_0221B200.arr, idx))->x8 = v;
     ov00_0220B694(idx, v > 0, 0, s, 0);
 }
 
-// @fn ov00_0220B31C
 void ov00_0220B31C(char *buf, int len) {
     int v = atol(ov00_0220B15C(buf, ov00_02219960));
     int id = atol(ov00_0220B15C(buf, ov00_02219954));
     int idx = ov00_0220B1E8(3, id, 0);
     QrEntry *e;
-    if (idx == -1) return;
+    if (idx == -1) {
+        return;
+    }
     e = ov00_021FE6EC(ov00_0221B200.arr, idx);
     e->x8 = v;
     ov00_0220B694(idx, v > 0, 0, 0, 0);
 }
 
-// @fn ov00_0220B3A8
 void ov00_0220B3A8(char *buf, int len) {
     int idx;
     int d;
@@ -531,18 +557,18 @@ void ov00_0220B3A8(char *buf, int len) {
     }
 }
 
-// @fn ov00_0220B48C
 void ov00_0220B48C(char *buf, int len) {
     int a = atol(ov00_0220B15C(buf, ov00_02219988));
     int b = atol(ov00_0220B15C(buf, ov00_02219970));
     int id = atol(ov00_0220B15C(buf, ov00_02219954));
     int c = atol(ov00_0220B15C(buf, ov00_02219974));
     int idx = ov00_0220B1E8(2, id, b);
-    if (idx == -1) return;
+    if (idx == -1) {
+        return;
+    }
     ov00_0220B694(idx, a, c, 0, 0);
 }
 
-// @fn ov00_0220B524
 void ov00_0220B524(char *buf, int len) {
     buf[len] = 0;
     if (strncmp(buf, ov00_02219990, 8) == 0) {
@@ -558,7 +584,6 @@ void ov00_0220B524(char *buf, int len) {
     }
 }
 
-// @fn ov00_0220B60C
 int ov00_0220B60C(char *buf, int len) {
     char *p;
     int orig;
@@ -572,16 +597,21 @@ int ov00_0220B60C(char *buf, int len) {
         ov00_0220B524(buf, n);
         len -= n + 7;
         buf = p + 7;
-        if (len > 0) p = ov00_0220B180(buf, len);
+        if (len > 0) {
+            p = ov00_0220B180(buf, len);
+        }
     }
     return orig - len;
 }
 
-// @fn ov00_0220B694
 void ov00_0220B694(int idx, int a1, int a2, char *a3, int a4) {
     QrEntry *e;
-    if (idx < 0) return;
-    if (idx >= ArrayLength(ov00_0221B200.arr)) return;
+    if (idx < 0) {
+        return;
+    }
+    if (idx >= ArrayLength(ov00_0221B200.arr)) {
+        return;
+    }
     e = ov00_021FE6EC(ov00_0221B200.arr, idx);
     if (e->cb) {
         switch (e->type) {
@@ -602,12 +632,13 @@ void ov00_0220B694(int idx, int a1, int a2, char *a3, int a4) {
     ov00_021FE968(ov00_0221B200.arr, idx);
 }
 
-// @fn ov00_0220B798
 void ov00_0220B798(void) {
     int i;
     Buf16 b;
     Buf16 a;
-    if (!ov00_0221B200.arr) return;
+    if (!ov00_0221B200.arr) {
+        return;
+    }
     i = ArrayLength(ov00_0221B200.arr) - 1;
     if (i >= 0) {
         a = ov00_02216164;
@@ -622,92 +653,103 @@ void ov00_0220B798(void) {
     ov00_0221B200.arr = 0;
 }
 
-// @fn ov00_0220B88C
 int ov00_0220B88C(QrState *p, int idx) {
-    if (!p) p = ov00_0221B200.x28;
-    if (!p) return idx;
+    if (!p) {
+        p = ov00_0221B200.x28;
+    }
+    if (!p) {
+        return idx;
+    }
     return *(int *)ov00_021FE6EC(*(void **)((char *)p + 0x20), idx);
 }
 
-// @fn ov00_0220B8BC
 int ov00_0220B8BC(QrState *p, int idx) {
-    if (!p) p = ov00_0221B200.x28;
-    if (!p) return idx;
+    if (!p) {
+        p = ov00_0221B200.x28;
+    }
+    if (!p) {
+        return idx;
+    }
     return *(int *)ov00_021FE6EC(*(void **)((char *)p + 0x1c), idx);
 }
 
-// @fn ov00_0220B8EC
 int ov00_0220B8EC(QrState *p, const char *name, void *(*get)(void *, const char *, void *), int def, ...) {
     void *r;
-    if (!p) p = ov00_0221B200.x28;
+    if (!p) {
+        p = ov00_0221B200.x28;
+    }
     if (!p) {
         r = &def;
     } else {
         r = get(p->buf, name, &def);
-        if (!r) r = ov00_0220A8A4((GtCtx *)p->buf, name, 0, &def);
+        if (!r) {
+            r = ov00_0220A8A4((GtCtx *)p->buf, name, 0, &def);
+        }
     }
     return *(int *)r;
 }
 
-// @fn ov00_0220B954
 double ov00_0220B954(QrState *p, const char *name, void *(*get)(void *, const char *, void *), double def, ...) {
     void *r;
-    if (!p) p = ov00_0221B200.x28;
+    if (!p) {
+        p = ov00_0221B200.x28;
+    }
     if (!p) {
         r = &def;
     } else {
         r = get(p->buf, name, &def);
-        if (!r) r = ov00_0220A8A4((GtCtx *)p->buf, name, 1, &def);
+        if (!r) {
+            r = ov00_0220A8A4((GtCtx *)p->buf, name, 1, &def);
+        }
     }
     return *(double *)r;
 }
 
-// @fn ov00_0220B9C4
 char *ov00_0220B9C4(QrState *p, const char *name, char *(*get)(void *, const char *, char *), char *def, int unused) {
     char *r;
-    if (!p) p = ov00_0221B200.x28;
-    if (!p) return def;
+    if (!p) {
+        p = ov00_0221B200.x28;
+    }
+    if (!p) {
+        return def;
+    }
     r = get(p->buf, name, def);
-    if (r) return r;
+    if (r) {
+        return r;
+    }
     return ov00_0220A8A4((GtCtx *)p->buf, name, 2, def);
 }
 
-// @fn ov00_0220BA20
 int ov00_0220BA20(QrState *p, int n, void *(*get)(void *, const char *, void *), int def, int idx) {
     char buf[0x40];
     sprintf(buf, ov00_022199C0, n, ov00_0220B88C(p, idx));
     return ov00_0220B8EC(p, buf, get, def, idx);
 }
 
-// @fn ov00_0220BA7C
 double ov00_0220BA7C(QrState *p, int n, void *(*get)(void *, const char *, void *), double def, int idx) {
     char buf[0x40];
     sprintf(buf, ov00_022199C0, n, ov00_0220B88C(p, idx));
     return ov00_0220B954(p, buf, get, def, idx);
 }
 
-// @fn ov00_0220BADC
 char *ov00_0220BADC(QrState *p, int n, char *(*get)(void *, const char *, char *), char *def, int idx) {
     char buf[0x40];
     sprintf(buf, ov00_022199C0, n, ov00_0220B88C(p, idx));
     return ov00_0220B9C4(p, buf, get, def, idx);
 }
 
-// @fn ov00_0220BB38
 int ov00_0220BB38(QrState *p, int n, void *(*get)(void *, const char *, void *), int def, int idx) {
     char buf[0x40];
     sprintf(buf, ov00_022199C8, n, ov00_0220B8BC(p, idx));
     return ov00_0220B8EC(p, buf, get, def, idx);
 }
 
-// @fn ov00_0220BB94
 double ov00_0220BB94(QrState *p, int n, void *(*get)(void *, const char *, void *), double def, int idx) {
     char buf[0x40];
     sprintf(buf, ov00_022199C8, n, ov00_0220B8BC(p, idx));
     return ov00_0220B954(p, buf, get, def, idx);
 }
 
-// @fn ov00_0220BBF4
 char *ov00_0220BBF4(QrState *p, int n, char *(*get)(void *, const char *, char *), char *def, int idx) {
     char buf[0x40];
     sprintf(buf, ov00_022199C8, n, ov00_0220B8BC(p, idx));

@@ -1,20 +1,38 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 #include <nnsys/g2d/g2d_RendererCore.h>
 typedef GXOamAttr Oam;
-extern u16 _02109310[3][4],_021092F8[3][4];
-void NNS_G2dDrawOneOam3DDirectWithPosFast(int,int,int,Oam*,void*,int,int);
+extern u16 _02109310[3][4];
+extern u16 _021092F8[3][4];
+void NNS_G2dDrawOneOam3DDirectWithPosFast(int, int, int, Oam *, void *, int, int);
 typedef NNSG2dRndCoreInstance Render;
-extern void G3_LoadMtx43(const MtxFx43*);extern Render *_021DA498;extern int NNS_G2dIsRndCoreFlipH(Render*),NNS_G2dIsRndCoreFlipV(Render*);
-static inline int X(Oam*o){int x=o->x;if(x>255)x=(s16)(x|0xff00);return x;}
-static inline int Y(Oam*o){int y=o->y;if(y>127)y=(s16)(y|0xff00);return y;}
-void DrawOamToSurface3D_(Oam*);
-// @fn DrawOamToSurface3D_
-void DrawOamToSurface3D_(Oam *o)
-{
+extern void G3_LoadMtx43(const MtxFx43 *);
+extern Render *_021DA498;
+extern int NNS_G2dIsRndCoreFlipH(Render *);
+extern int NNS_G2dIsRndCoreFlipV(Render *);
+
+static inline int X(Oam *o) {
+    int x = o->x;
+    if (x > 255) {
+        x = (s16)(x | 0xff00);
+    }
+    return x;
+}
+
+static inline int Y(Oam *o) {
+    int y = o->y;
+    if (y > 127) {
+        y = (s16)(y | 0xff00);
+    }
+    return y;
+}
+
+void DrawOamToSurface3D_(Oam *);
+
+void DrawOamToSurface3D_(Oam *o) {
     G3_LoadMtx43(&_021DA498->mtxFor3DGE);
     if (_021DA498->flipFlag) {
         u32 packed = o->attr01 & 0xc000c000;

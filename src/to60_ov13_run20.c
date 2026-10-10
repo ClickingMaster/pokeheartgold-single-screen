@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef struct Node {
     struct Node *prev;
@@ -139,8 +139,10 @@ typedef struct Canvas {
     CanvasVT *vt;
     TextCanvas tc;
     void *buf;
+
     union {
         void *task;
+
         struct {
             u16 charNo;
             u8 w;
@@ -300,6 +302,7 @@ static inline void TextCanvasInit(TextCanvas *tc, void *cc, Font *font, int hSpa
     tc->hSpace = hSpace;
     tc->vSpace = vSpace;
 }
+
 extern char *ov13_02247430[];
 extern char *ov13_02247438[];
 extern u16 ov13_02245950[];
@@ -424,7 +427,6 @@ void ov13_02242430(void);
 void ov13_022425C8(Task13 *t, void (*func)(void *, void *));
 void ov13_02242640(int q, u8 enabled);
 
-// @fn ov13_02240008
 void ov13_02240008(OamBlk *blk, int idx, u32 prio) {
     Oam *o = blk->oam;
     int i;
@@ -437,26 +439,22 @@ void ov13_02240008(OamBlk *blk, int idx, u32 prio) {
     }
 }
 
-// @fn ov13_02240068
 void ov13_02240068(OamBlk *blk, int idx, int *x, int *y) {
     Oam *o = blk->oam;
     *x = (o[idx].attr01 & 0x01FF0000) >> 16;
     *y = o[idx].attr01 & 0xFF;
 }
 
-// @fn ov13_02240098
 void ov13_02240098(int slot, const char *path) {
     u32 size;
     ov13_0224F5D4[slot] = ov13_0223F95C(path, &size, 4);
 }
 
-// @fn ov13_022400C8
 void ov13_022400C8(int slot) {
     ov13_0223FA50(ov13_0224F5D4[slot]);
     ov13_0224F5D4[slot] = NULL;
 }
 
-// @fn ov13_022400F0
 void ov13_022400F0(int slot, int idx, Oam *dst) {
     u8 *data = ov13_0224F5D4[slot];
     u8 *src = data + ((OamHdr *)data)[idx].off;
@@ -472,21 +470,18 @@ void ov13_022400F0(int slot, int idx, Oam *dst) {
     }
 }
 
-// @fn ov13_02240184
 Oam *ov13_02240184(int slot, int idx) {
     Oam *o = ov13_02241D78(slot);
     ov13_022400F0(slot, idx, o);
     return o;
 }
 
-// @fn ov13_022401B0
 OamBlk *ov13_022401B0(int slot, int idx, int fromFront) {
     OamBlk *blk = ov13_0223FC04(slot, ((OamHdr *)ov13_0224F5D4[slot])[idx].n, fromFront);
     ov13_022400F0(slot, idx, ov13_0223FDE0(blk, 0));
     return blk;
 }
 
-// @fn ov13_022401F8
 Pool *ov13_022401F8(int n) {
     Pool *p = ov13_0224128C((n + 1) * 4 + 8, 4);
     p->size = n + 1;
@@ -495,7 +490,6 @@ Pool *ov13_022401F8(int n) {
     return p;
 }
 
-// @fn ov13_0224022C
 Pool *ov13_0224022C(int n, void *base, int stride) {
     Pool *p = ov13_022401F8(n);
     int i;
@@ -507,12 +501,10 @@ Pool *ov13_0224022C(int n, void *base, int stride) {
     return p;
 }
 
-// @fn ov13_0224026C
 void ov13_0224026C(Pool *pool) {
     ov13_022412B0(&pool);
 }
 
-// @fn ov13_02240288
 void *ov13_02240288(Pool *pool, void *item) {
     int irq = OS_DisableIrqMask(1);
     int next = FX_ModS32(pool->tail + 1, pool->size);
@@ -524,7 +516,6 @@ void *ov13_02240288(Pool *pool, void *item) {
     OS_EnableIrqMask(irq);
 }
 
-// @fn ov13_022402E0
 void *ov13_022402E0(Pool *pool) {
     void *ret = NULL;
     int irq = OS_DisableIrqMask(1);
@@ -536,19 +527,16 @@ void *ov13_022402E0(Pool *pool) {
     return ret;
 }
 
-// @fn ov13_02240338
 void ov13_02240338(void) {
     ov13_0224F5DC = ov13_0224128C(0x18, 4);
     G2x_SetBlendBrightness_((volatile u16 *)0x04000050, 0x3F, 0x10);
     G2x_SetBlendBrightness_((volatile u16 *)0x04001050, 0x3F, 0x10);
 }
 
-// @fn ov13_02240380
 void ov13_02240380(void) {
     ov13_022412B0(&ov13_0224F5DC);
 }
 
-// @fn ov13_02240394
 u8 ov13_02240394(int screen) {
     Fade *f;
     if (screen == 1) {
@@ -559,7 +547,6 @@ u8 ov13_02240394(int screen) {
     return f->active;
 }
 
-// @fn ov13_022403B8
 int ov13_022403B8(int kind, int screen, int plane, int dur) {
     B4 tbl = *(B4 *)(ov13_02245940 + 8);
     Fade *f;
@@ -584,7 +571,6 @@ int ov13_022403B8(int kind, int screen, int plane, int dur) {
     return 1;
 }
 
-// @fn ov13_02240490
 void ov13_02240490(void *task, Fade *f) {
     B4 flags = *(B4 *)(ov13_02245940 + 4);
     B4 end = *(B4 *)(ov13_02245940 + 0);
@@ -616,7 +602,6 @@ void ov13_02240490(void *task, Fade *f) {
     ov13_022425D0(1, task);
 }
 
-// @fn ov13_022405B8
 int ov13_022405B8(int dur) {
     Fade *f = ov13_0224F5DC;
     if (f->active) {
@@ -629,7 +614,6 @@ int ov13_022405B8(int dur) {
     return 1;
 }
 
-// @fn ov13_02240610
 void ov13_02240610(void *task, Fade *f) {
     f->cnt++;
     if (f->cnt < f->dur) {
@@ -638,7 +622,7 @@ void ov13_02240610(void *task, Fade *f) {
     f->active = 0;
     ov13_022425D0(1, task);
 }
-// @fn ov13_02240648
+
 void ov13_02240648(void) {
     Text13 *m;
     int i;
@@ -657,7 +641,6 @@ void ov13_02240648(void) {
     }
 }
 
-// @fn ov13_0224074C
 void ov13_0224074C(void) {
     int i;
     for (i = 0; i < 2; i++) {

@@ -1,9 +1,12 @@
 #pragma force_active on
 #include <nitro/types.h>
-// clang-format off
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 extern u32 WSetPreambleType(u16);
-u32 PARAMSET_PreambleTypeReqCmd(u16 *p,u16 *c);
-// @fn PARAMSET_PreambleTypeReqCmd
-u32 PARAMSET_PreambleTypeReqCmd(u16 *p,u16 *c){c[1]=1;return WSetPreambleType(p[8]);}
+u32 PARAMSET_PreambleTypeReqCmd(u16 *p, u16 *c);
+
+u32 PARAMSET_PreambleTypeReqCmd(u16 *p, u16 *c) {
+    c[1] = 1;
+    return WSetPreambleType(p[8]);
+}

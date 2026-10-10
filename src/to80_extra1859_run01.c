@@ -1,12 +1,146 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
 #pragma opt_propagation off
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
-typedef struct{u8 pad[0x2140];u8 ap[0x30];u16 capability;u8 apTail[0xde];u8 wepType,wepIndex;u8 more[14];u32 phase,options;u8 z[3];u8 resetting;u8 padding[20];s16 previous;u16 aid;u32 scans;void*buffer;u16 size,channel;u8 rest[0x22f8-0x2290];u16 reason;}Work;extern Work*_021D5FEC;typedef struct{u16 api,error;u16 p[2];u16 state,aid;u16 q,count;void*entries[16];u16 values[16];}Callback;extern void WcmSetPhase(int),WcmNotify(int,void*,int,int),WcmNotifyEx(int,int,void*,void*,int),WcmWmReset(void);extern int WM_PowerOn(void*),WM_Finish(void),WM_Disable(void*),WM_SetBeaconIndication(void*,int),WM_SetWEPKeyEx(void*,int,int,void*),WM_StartConnectEx(void*,void*,int,int,u16),WM_StartScanEx(void*,void*),WM_EndScan(void*),WM_StartDCF(void*,void*,int),WM_PowerOff(void*);extern void WcmWmcbCommon(Callback*),WcmWmcbScanEx(Callback*),WcmWmcbConnect(Callback*),WcmWmcbEndScan(void*),WcmWmcbStartDCF(void*),WcmWmcbReset(Callback*);extern int WcmCountBits(u32),WcmCountLeadingZero(u32),WcmGetNextScanChannel(int);extern void WCMi_EntryApList(void*,u16),DC_InvalidateRange(void*,u32);
+
+typedef struct {
+    u8 pad[0x2140];
+    u8 ap[0x30];
+    u16 capability;
+    u8 apTail[0xde];
+    u8 wepType, wepIndex;
+    u8 more[14];
+    u32 phase, options;
+    u8 z[3];
+    u8 resetting;
+    u8 padding[20];
+    s16 previous;
+    u16 aid;
+    u32 scans;
+    void *buffer;
+    u16 size, channel;
+    u8 rest[0x22f8 - 0x2290];
+    u16 reason;
+} Work;
+
+extern Work *_021D5FEC;
+
+typedef struct {
+    u16 api, error;
+    u16 p[2];
+    u16 state, aid;
+    u16 q, count;
+    void *entries[16];
+    u16 values[16];
+} Callback;
+
+extern void WcmSetPhase(int);
+extern void WcmNotify(int, void *, int, int);
+extern void WcmNotifyEx(int, int, void *, void *, int);
+extern void WcmWmReset(void);
+extern int WM_PowerOn(void *);
+extern int WM_Finish(void);
+extern int WM_Disable(void *);
+extern int WM_SetBeaconIndication(void *, int);
+extern int WM_SetWEPKeyEx(void *, int, int, void *);
+extern int WM_StartConnectEx(void *, void *, int, int, u16);
+extern int WM_StartScanEx(void *, void *);
+extern int WM_EndScan(void *);
+extern int WM_StartDCF(void *, void *, int);
+extern int WM_PowerOff(void *);
+extern void WcmWmcbCommon(Callback *);
+extern void WcmWmcbScanEx(Callback *);
+extern void WcmWmcbConnect(Callback *);
+extern void WcmWmcbEndScan(void *);
+extern void WcmWmcbStartDCF(void *);
+extern void WcmWmcbReset(Callback *);
+extern int WcmCountBits(u32);
+extern int WcmCountLeadingZero(u32);
+extern int WcmGetNextScanChannel(int);
+extern void WCMi_EntryApList(void *, u16);
+extern void DC_InvalidateRange(void *, u32);
 #pragma force_active on
 #pragma opt_propagation on
-static inline int Connect(void){Work *work=_021D5FEC;u32 options=work->options;u16 power;u32 auth;power=(u16)((options&0xc0000)==0xc0000);auth=(options&0x30000)!=0x30000;return WM_StartConnectEx(WcmWmcbConnect,work->ap,0,auth,power);}
+
+static inline int Connect(void) {
+    Work *work = _021D5FEC;
+    u32 options = work->options;
+    u16 power;
+    u32 auth;
+    power = (u16)((options & 0xc0000) == 0xc0000);
+    auth = (options & 0x30000) != 0x30000;
+    return WM_StartConnectEx(WcmWmcbConnect, work->ap, 0, auth, power);
+}
+
 #pragma opt_propagation off
-void WcmWmcbReset(Callback*cb){u16 reason;int result;if(cb->error==0){_021D5FEC->resetting=0;_021D5FEC->aid=0;switch(_021D5FEC->phase){case 5:case 6:WcmSetPhase(3);WcmNotify(1,0,0,0x8f5);return;case 7:WcmSetPhase(3);WcmNotify(0,0,0,0x8fb);return;case 8:reason=_021D5FEC->reason;_021D5FEC->reason=0;if(reason==18&&(_021D5FEC->capability&0x24)!=0x24){_021D5FEC->capability|=0x24;{result=Connect();}if(result==2)return;if(result!=3&&result==8){WcmSetPhase(12);WcmNotify(1,_021D5FEC->ap,reason,0x91c);}else{WcmSetPhase(11);WcmNotify(7,_021D5FEC->ap,reason,0x925);}return;}WcmSetPhase(3);WcmNotify(1,_021D5FEC->ap,reason,0x92d);return;case 9:case 12:WcmSetPhase(3);WcmNotify(0,_021D5FEC->ap,1,0x935);return;case 10:WcmSetPhase(3);WcmNotify(0,_021D5FEC->ap,0,0x93c);return;case 13:result=WM_PowerOff(WcmWmcbCommon);if(result==2)return;if(result!=3&&result==8){WcmSetPhase(12);WcmNotify(1,0,0,0x94a);}else{WcmSetPhase(11);WcmNotify(7,0,0,0x953);}return;default:WcmSetPhase(11);WcmNotify(7,0,_021D5FEC->phase,0x959);return;}}WcmSetPhase(11);WcmNotify(7,0,0,0x960);}
+
+void WcmWmcbReset(Callback *cb) {
+    u16 reason;
+    int result;
+    if (cb->error == 0) {
+        _021D5FEC->resetting = 0;
+        _021D5FEC->aid = 0;
+        switch (_021D5FEC->phase) {
+        case 5:
+        case 6:
+            WcmSetPhase(3);
+            WcmNotify(1, 0, 0, 0x8f5);
+            return;
+        case 7:
+            WcmSetPhase(3);
+            WcmNotify(0, 0, 0, 0x8fb);
+            return;
+        case 8:
+            reason = _021D5FEC->reason;
+            _021D5FEC->reason = 0;
+            if (reason == 18 && (_021D5FEC->capability & 0x24) != 0x24) {
+                _021D5FEC->capability |= 0x24;
+                { result = Connect(); }
+                if (result == 2) {
+                    return;
+                }
+                if (result != 3 && result == 8) {
+                    WcmSetPhase(12);
+                    WcmNotify(1, _021D5FEC->ap, reason, 0x91c);
+                } else {
+                    WcmSetPhase(11);
+                    WcmNotify(7, _021D5FEC->ap, reason, 0x925);
+                }
+                return;
+            }
+            WcmSetPhase(3);
+            WcmNotify(1, _021D5FEC->ap, reason, 0x92d);
+            return;
+        case 9:
+        case 12:
+            WcmSetPhase(3);
+            WcmNotify(0, _021D5FEC->ap, 1, 0x935);
+            return;
+        case 10:
+            WcmSetPhase(3);
+            WcmNotify(0, _021D5FEC->ap, 0, 0x93c);
+            return;
+        case 13:
+            result = WM_PowerOff(WcmWmcbCommon);
+            if (result == 2) {
+                return;
+            }
+            if (result != 3 && result == 8) {
+                WcmSetPhase(12);
+                WcmNotify(1, 0, 0, 0x94a);
+            } else {
+                WcmSetPhase(11);
+                WcmNotify(7, 0, 0, 0x953);
+            }
+            return;
+        default:
+            WcmSetPhase(11);
+            WcmNotify(7, 0, _021D5FEC->phase, 0x959);
+            return;
+        }
+    }
+    WcmSetPhase(11);
+    WcmNotify(7, 0, 0, 0x960);
+}

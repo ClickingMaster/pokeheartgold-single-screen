@@ -1,15 +1,18 @@
 #pragma force_active on
 #include <nitro/types.h>
-// clang-format off
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
-extern int sMasterPan,sSurroundDecay;
-extern u8 sOrgPan[],sOrgVolume[];
-extern int CalcSurroundDecay(int,int);
-#define R8(c,o) (*(volatile u8 *)(0x04000000u+((u32)(c)<<4)+(o)))
-#define R16(c,o) (*(volatile u16 *)(0x04000000u+((u32)(c)<<4)+(o)))
-#define R32(c,o) (*(volatile u32 *)(0x04000000u+((u32)(c)<<4)+(o)))
+extern int sMasterPan;
+extern int sSurroundDecay;
+extern u8 sOrgPan[];
+extern u8 sOrgVolume[];
+extern int CalcSurroundDecay(int, int);
+#define R8(c, o)  (*(volatile u8 *)(0x04000000u + ((u32)(c) << 4) + (o)))
+#define R16(c, o) (*(volatile u16 *)(0x04000000u + ((u32)(c) << 4) + (o)))
+#define R32(c, o) (*(volatile u32 *)(0x04000000u + ((u32)(c) << 4) + (o)))
 
 void SNDi_LockMutex(void);
-// @fn SNDi_LockMutex
-void SNDi_LockMutex(void){}
+
+void SNDi_LockMutex(void) {
+}

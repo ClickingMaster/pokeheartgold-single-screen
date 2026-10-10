@@ -1,41 +1,46 @@
 #pragma force_active on
 #include <nitro/types.h>
-// clang-format off
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
+
 typedef struct {
-    u16 state;          /* 0x00 */
+    u16 state; /* 0x00 */
     u8 pad2[0x18 - 2];
-    u32 x18;            /* 0x18 */
+    u32 x18; /* 0x18 */
     u8 pad1c[0xa2 - 0x1c];
-    u8 xa2[6];          /* 0xa2 */
-    u16 *xa8;           /* 0xa8 */
-    u16 xac;            /* 0xac */
+    u8 xa2[6]; /* 0xa2 */
+    u16 *xa8;  /* 0xa8 */
+    u16 xac;   /* 0xac */
     u8 padae[0xe0 - 0xae];
-    u8 macAddr[6];      /* 0xe0 */
+    u8 macAddr[6]; /* 0xe0 */
     u8 pade6[0x18a - 0xe6];
-    u8 bssid[6];        /* 0x18a */
+    u8 bssid[6]; /* 0x18a */
     u8 pad190[0x1ec - 0x190];
-    u16 x1ec;           /* 0x1ec */
+    u16 x1ec; /* 0x1ec */
 } WmspStatus;
+
 typedef struct {
     u8 pad[0x1550];
     WmspStatus *status;
 } WmspWork;
+
 extern WmspWork wmspW;
+
 typedef struct {
     u16 x0;
     u16 x2, x4;
     u16 x6;
     u8 x8[6];
-    u8 rate;     /* 0xe */
+    u8 rate; /* 0xe */
     u8 xf;
     u8 x10[8];
-    u8 dst[6];   /* 0x18 */
-    u8 src[6];   /* 0x1e */
+    u8 dst[6]; /* 0x18 */
+    u8 src[6]; /* 0x1e */
     u8 x24[8];
-    u16 *data;   /* 0x2c */
+    u16 *data; /* 0x2c */
 } MaDataReq;
+
 extern u16 *__VENEER_WMSP_GetBuffer4Callback2Wm9(void);
 extern void __VENEER_WMSP_ReturnResult2Wm9(void *);
 extern void __VENEER_MI_CpuCopy8(const void *src, void *dst, u32 size);
@@ -43,7 +48,7 @@ extern void __VENEER_MIi_CpuClear16(u16 data, void *dst, u32 size);
 extern u16 *WMSP_WL_MlmePowerManagement(u16 *buf, u16 pwrMgtMode, u16 wakeUp, u16 recieveDtims);
 extern u16 *WMSP_WL_MaData(u16 *buf, MaDataReq *req);
 void WMSP_SetPowerSaveMode(void *msg);
-// @fn WMSP_SetPowerSaveMode
+
 void WMSP_SetPowerSaveMode(void *msg) {
     MaDataReq req;
     u16 bufArr[256];

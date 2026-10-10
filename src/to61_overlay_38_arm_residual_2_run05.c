@@ -1,53 +1,80 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
 #include "to91_http_lookup41558_private.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 #pragma force_active on
 extern u32 STD_GetStringLength(const char *);
-extern int STD_CompareNString(const char *,const char *,u32);
-#define I(p,o) (*(int *)((char *)(p)+(o)))
-#define P(p,o) (*(void **)((char *)(p)+(o)))
-typedef struct Node {struct Node *prev,*next; int id; void *obj; int size,pad;} Node;
-typedef struct Buffer {int size,pad[6]; struct Block *next; char data[1024];} Buffer;
-typedef struct Block {struct Block *next; char data[512];} Block;
-extern char ov38_02225E08[],ov38_02224ED8[],ov38_0222615C[],ov38_02224F87[];
+extern int STD_CompareNString(const char *, const char *, u32);
+#define I(p, o) (*(int *)((char *)(p) + (o)))
+#define P(p, o) (*(void **)((char *)(p) + (o)))
+
+typedef struct Node {
+    struct Node *prev, *next;
+    int id;
+    void *obj;
+    int size, pad;
+} Node;
+
+typedef struct Buffer {
+    int size, pad[6];
+    struct Block *next;
+    char data[1024];
+} Buffer;
+
+typedef struct Block {
+    struct Block *next;
+    char data[512];
+} Block;
+
+extern char ov38_02225E08[];
+extern char ov38_02224ED8[];
+extern char ov38_0222615C[];
+extern char ov38_02224F87[];
 extern void (*ov38_02226070)(void *);
-extern void *(*ov38_02226218)(int,int);
+extern void *(*ov38_02226218)(int, int);
 extern void (*ov38_0222621C)(void *);
-extern int ov38_02226074,ov38_0222606C,ov38_022261DC,ov38_0222622C,ov38_02226224;
+extern int ov38_02226074;
+extern int ov38_0222606C;
+extern int ov38_022261DC;
+extern int ov38_0222622C;
+extern int ov38_02226224;
 extern Node *ov38_02226230;
-extern OSMutex ov38_022261F8,ov38_022261E0,ov38_02226AF8;
-extern OSThread ov38_02226234,ov38_02226B30;
+extern OSMutex ov38_022261F8;
+extern OSMutex ov38_022261E0;
+extern OSMutex ov38_02226AF8;
+extern OSThread ov38_02226234;
+extern OSThread ov38_02226B30;
 extern OSMessageQueue ov38_02226B10;
 extern OSMessage ov38_02226AF4[];
 extern int ov38_02223384(void);
 extern int ov38_02222C10(void *);
-extern int ov38_0222308C(void *,char **);
-extern int ov38_02224B80(char *,int);
-extern int ov38_02224C18(char *,int);
-extern int ov38_022201C8(void *,void *,int);
-extern int ov38_02224CD4(void *,void *);
-extern int ov38_02224DC8(void *,int,void *,int);
+extern int ov38_0222308C(void *, char **);
+extern int ov38_02224B80(char *, int);
+extern int ov38_02224C18(char *, int);
+extern int ov38_022201C8(void *, void *, int);
+extern int ov38_02224CD4(void *, void *);
+extern int ov38_02224DC8(void *, int, void *, int);
 extern int ov38_0222334C(void *);
 extern void ov38_02222B98(void *);
 extern void ov38_02222D18(void);
 extern void ov38_022236A0(void *);
-extern void *ov38_02223224(void *,void *,void *,int,void *);
-extern void ov38_0222336C(void *,void *,int);
-extern int ov38_02220B8C(void **,void **,void *,void *,int);
+extern void *ov38_02223224(void *, void *, void *, int, void *);
+extern void ov38_0222336C(void *, void *, int);
+extern int ov38_02220B8C(void **, void **, void *, void *, int);
 extern char ov38_02226210[];
-extern int ov38_02221B48(Node **,void *,void *,int);
-extern int ov38_02221CD8(void *,void *,int);
+extern int ov38_02221B48(Node **, void *, void *, int);
+extern int ov38_02221CD8(void *, void *, int);
 extern int ov38_02221F38(int);
-int ov38_02220810(char *p,int n);
-void ov38_02220B60(void *p,void *q);
-int ov38_02220EB8(void *p,void *q);
+int ov38_02220810(char *p, int n);
+void ov38_02220B60(void *p, void *q);
+int ov38_02220EB8(void *p, void *q);
 int ov38_02220F18(void *v);
 int ov38_02221408(void);
-int ov38_02221414(void *p,void *q);
-int ov38_02221468(void *p,void *q);
+int ov38_02221414(void *p, void *q);
+int ov38_02221468(void *p, void *q);
 int ov38_02221718(void);
 void ov38_02221730(void);
 void ov38_02221734(void);
@@ -59,19 +86,19 @@ void ov38_022217D0(void);
 int ov38_022217FC(OSMessageQueue *q);
 int ov38_02221810(void *p);
 u32 ov38_02221870(const char *s);
-int ov38_0222187C(const char *a,const char *b,u32 n);
-void ov38_02221888(void *p,int n);
-void ov38_0222189C(void *p,const void *s,int n);
-int ov38_022218B4(char *p,int n);
-int ov38_022218C0(char *p,int n);
-int ov38_022219A4(char *p,u32 v,int n);
+int ov38_0222187C(const char *a, const char *b, u32 n);
+void ov38_02221888(void *p, int n);
+void ov38_0222189C(void *p, const void *s, int n);
+int ov38_022218B4(char *p, int n);
+int ov38_022218C0(char *p, int n);
+int ov38_022219A4(char *p, u32 v, int n);
 void ov38_02221AC4(void *v);
 void ov38_02221B0C(void *v);
 Node *ov38_02221C60(Node **head);
 s8 ov38_02221CA4(u8 v);
-int ov38_02221D78(void *p,void *key,int val);
-int ov38_02221D9C(void *p,void *key,void *v);
-int ov38_02221E10(void *p,int v,int w);
+int ov38_02221D78(void *p, void *key, int val);
+int ov38_02221D9C(void *p, void *key, void *v);
+int ov38_02221E10(void *p, int v, int w);
 
 void ov38_02221FD8(void);
 Node *ov38_02222008(void);
@@ -79,28 +106,28 @@ int ov38_0222201C(void);
 void ov38_02222034(void);
 void ov38_02222038(void);
 void ov38_0222204C(void);
-int ov38_02222060(int priority,u8 *stack);
+int ov38_02222060(int priority, u8 *stack);
 void ov38_022220D8(void);
 void ov38_02222100(void);
 int ov38_0222211C(void);
-void ov38_02222138(Buffer *p,int pos,Block **b,int *offset);
-int ov38_02222194(Buffer *p,Block **b,int *pos);
-int ov38_02222210(Buffer *p,int begin,int end,int *colon);
-int ov38_022222E0(Buffer *p,int begin,int end);
-int ov38_0222250C(void *p,u32 n);
-void *ov38_02222520(void *p,void *q,int offset,void *v);
-void *ov38_02222548(void *p,void *q,int offset,int n,void *v);
+void ov38_02222138(Buffer *p, int pos, Block **b, int *offset);
+int ov38_02222194(Buffer *p, Block **b, int *pos);
+int ov38_02222210(Buffer *p, int begin, int end, int *colon);
+int ov38_022222E0(Buffer *p, int begin, int end);
+int ov38_0222250C(void *p, u32 n);
+void *ov38_02222520(void *p, void *q, int offset, void *v);
+void *ov38_02222548(void *p, void *q, int offset, int n, void *v);
 void ov38_02222B1C(void *p);
 
 extern u64 ov38_02224EF4[];
 extern int ov38_02226214;
-int ov38_02220810(char *p,int n);
-void ov38_02220B60(void *p,void *q);
-int ov38_02220EB8(void *p,void *q);
+int ov38_02220810(char *p, int n);
+void ov38_02220B60(void *p, void *q);
+int ov38_02220EB8(void *p, void *q);
 int ov38_02220F18(void *v);
 int ov38_02221408(void);
-int ov38_02221414(void *p,void *q);
-int ov38_02221468(void *p,void *q);
+int ov38_02221414(void *p, void *q);
+int ov38_02221468(void *p, void *q);
 int ov38_02221718(void);
 void ov38_02221730(void);
 void ov38_02221734(void);
@@ -112,19 +139,19 @@ void ov38_022217D0(void);
 int ov38_022217FC(OSMessageQueue *q);
 int ov38_02221810(void *p);
 u32 ov38_02221870(const char *s);
-int ov38_0222187C(const char *a,const char *b,u32 n);
-void ov38_02221888(void *p,int n);
-void ov38_0222189C(void *p,const void *s,int n);
-int ov38_022218B4(char *p,int n);
-int ov38_022218C0(char *p,int n);
-int ov38_022219A4(char *p,u32 v,int n);
+int ov38_0222187C(const char *a, const char *b, u32 n);
+void ov38_02221888(void *p, int n);
+void ov38_0222189C(void *p, const void *s, int n);
+int ov38_022218B4(char *p, int n);
+int ov38_022218C0(char *p, int n);
+int ov38_022219A4(char *p, u32 v, int n);
 void ov38_02221AC4(void *v);
 void ov38_02221B0C(void *v);
 Node *ov38_02221C60(Node **head);
 s8 ov38_02221CA4(u8 v);
-int ov38_02221D78(void *p,void *key,int val);
-int ov38_02221D9C(void *p,void *key,void *v);
-int ov38_02221E10(void *p,int v,int w);
+int ov38_02221D78(void *p, void *key, int val);
+int ov38_02221D9C(void *p, void *key, void *v);
+int ov38_02221E10(void *p, int v, int w);
 
 void ov38_02221FD8(void);
 Node *ov38_02222008(void);
@@ -132,37 +159,38 @@ int ov38_0222201C(void);
 void ov38_02222034(void);
 void ov38_02222038(void);
 void ov38_0222204C(void);
-int ov38_02222060(int priority,u8 *stack);
+int ov38_02222060(int priority, u8 *stack);
 void ov38_022220D8(void);
 void ov38_02222100(void);
 int ov38_0222211C(void);
-void ov38_02222138(Buffer *p,int pos,Block **b,int *offset);
-int ov38_02222194(Buffer *p,Block **b,int *pos);
-int ov38_02222210(Buffer *p,int begin,int end,int *colon);
-int ov38_022222E0(Buffer *p,int begin,int end);
-int ov38_0222250C(void *p,u32 n);
-void *ov38_02222520(void *p,void *q,int offset,void *v);
-void *ov38_02222548(void *p,void *q,int offset,int n,void *v);
+void ov38_02222138(Buffer *p, int pos, Block **b, int *offset);
+int ov38_02222194(Buffer *p, Block **b, int *pos);
+int ov38_02222210(Buffer *p, int begin, int end, int *colon);
+int ov38_022222E0(Buffer *p, int begin, int end);
+int ov38_0222250C(void *p, u32 n);
+void *ov38_02222520(void *p, void *q, int offset, void *v);
+void *ov38_02222548(void *p, void *q, int offset, int n, void *v);
 void ov38_02222B1C(void *p);
-int ov38_022218CC(char *p,u64 value,int width);
-int ov38_022219FC(void *alloc,void *free,int priority);
-int ov38_02221B48(Node **head,void *key,void *v,int size);
-int ov38_02221CD8(void *p,void *v,int size);
+int ov38_022218CC(char *p, u64 value, int width);
+int ov38_022219FC(void *alloc, void *free, int priority);
+int ov38_02221B48(Node **head, void *key, void *v, int size);
+int ov38_02221CD8(void *p, void *v, int size);
 int ov38_02221E2C(void *p);
 int ov38_02221F38(int id);
-int ov38_02222350(Buffer *p,int begin,int end,char *s,int stop);
-int ov38_02222420(Buffer *p,char *out,int start,int n);
+int ov38_02222350(Buffer *p, int begin, int end, char *s, int stop);
+int ov38_02222420(Buffer *p, char *out, int start, int n);
 
 extern int ov38_022201AC(int);
-extern void *(*ov38_0222605C)(int,int);
-extern char ov38_02224EE4[],ov38_02225EB4[];
-int ov38_02220810(char *p,int n);
-void ov38_02220B60(void *p,void *q);
-int ov38_02220EB8(void *p,void *q);
+extern void *(*ov38_0222605C)(int, int);
+extern char ov38_02224EE4[];
+extern char ov38_02225EB4[];
+int ov38_02220810(char *p, int n);
+void ov38_02220B60(void *p, void *q);
+int ov38_02220EB8(void *p, void *q);
 int ov38_02220F18(void *v);
 int ov38_02221408(void);
-int ov38_02221414(void *p,void *q);
-int ov38_02221468(void *p,void *q);
+int ov38_02221414(void *p, void *q);
+int ov38_02221468(void *p, void *q);
 int ov38_02221718(void);
 void ov38_02221730(void);
 void ov38_02221734(void);
@@ -174,23 +202,23 @@ void ov38_022217D0(void);
 int ov38_022217FC(OSMessageQueue *q);
 int ov38_02221810(void *p);
 u32 ov38_02221870(const char *s);
-int ov38_0222187C(const char *a,const char *b,u32 n);
-void ov38_02221888(void *p,int n);
-void ov38_0222189C(void *p,const void *s,int n);
-int ov38_022218B4(char *p,int n);
-int ov38_022218C0(char *p,int n);
-int ov38_022218CC(char *p,u64 value,int width);
-int ov38_022219A4(char *p,u32 v,int n);
-int ov38_022219FC(void *alloc,void *free,int priority);
+int ov38_0222187C(const char *a, const char *b, u32 n);
+void ov38_02221888(void *p, int n);
+void ov38_0222189C(void *p, const void *s, int n);
+int ov38_022218B4(char *p, int n);
+int ov38_022218C0(char *p, int n);
+int ov38_022218CC(char *p, u64 value, int width);
+int ov38_022219A4(char *p, u32 v, int n);
+int ov38_022219FC(void *alloc, void *free, int priority);
 void ov38_02221AC4(void *v);
 void ov38_02221B0C(void *v);
-int ov38_02221B48(Node **head,void *key,void *v,int size);
+int ov38_02221B48(Node **head, void *key, void *v, int size);
 Node *ov38_02221C60(Node **head);
 s8 ov38_02221CA4(u8 v);
-int ov38_02221CD8(void *p,void *v,int size);
-int ov38_02221D78(void *p,void *key,int val);
-int ov38_02221D9C(void *p,void *key,void *v);
-int ov38_02221E10(void *p,int v,int w);
+int ov38_02221CD8(void *p, void *v, int size);
+int ov38_02221D78(void *p, void *key, int val);
+int ov38_02221D9C(void *p, void *key, void *v);
+int ov38_02221E10(void *p, int v, int w);
 int ov38_02221E2C(void *p);
 
 int ov38_02221F38(int id);
@@ -200,35 +228,99 @@ int ov38_0222201C(void);
 void ov38_02222034(void);
 void ov38_02222038(void);
 void ov38_0222204C(void);
-int ov38_02222060(int priority,u8 *stack);
+int ov38_02222060(int priority, u8 *stack);
 void ov38_022220D8(void);
 void ov38_02222100(void);
 int ov38_0222211C(void);
-void ov38_02222138(Buffer *p,int pos,Block **b,int *offset);
-int ov38_02222194(Buffer *p,Block **b,int *pos);
-int ov38_02222210(Buffer *p,int begin,int end,int *colon);
-int ov38_022222E0(Buffer *p,int begin,int end);
-int ov38_02222350(Buffer *p,int begin,int end,char *s,int stop);
-int ov38_02222420(Buffer *p,char *out,int start,int n);
-int ov38_0222250C(void *p,u32 n);
-void *ov38_02222520(void *p,void *q,int offset,void *v);
-void *ov38_02222548(void *p,void *q,int offset,int n,void *v);
+void ov38_02222138(Buffer *p, int pos, Block **b, int *offset);
+int ov38_02222194(Buffer *p, Block **b, int *pos);
+int ov38_02222210(Buffer *p, int begin, int end, int *colon);
+int ov38_022222E0(Buffer *p, int begin, int end);
+int ov38_02222350(Buffer *p, int begin, int end, char *s, int stop);
+int ov38_02222420(Buffer *p, char *out, int start, int n);
+int ov38_0222250C(void *p, u32 n);
+void *ov38_02222520(void *p, void *q, int offset, void *v);
+void *ov38_02222548(void *p, void *q, int offset, int n, void *v);
 void ov38_02222B1C(void *p);
-int ov38_0222124C(void *info,void *out,u32 capacity);
+int ov38_0222124C(void *info, void *out, u32 capacity);
 
-int ov38_02221718(void) {OS_InitMutex(&ov38_022261F8); return 1;}
-void ov38_02221730(void) {}
-void ov38_02221734(void) {OS_LockMutex(&ov38_022261F8);}
-void ov38_02221748(void) {OS_UnlockMutex(&ov38_022261F8);}
-int ov38_0222175C(void) {OS_InitMutex(&ov38_022261E0); ov38_022261DC=0; return 1;}
-void ov38_02221784(void) {}
-int ov38_02221788(void) {int ok; OS_LockMutex(&ov38_022261E0); ok=ov38_022261DC==0; if(ok)ov38_022261DC=1; OS_UnlockMutex(&ov38_022261E0); return ok;}
-void ov38_022217D0(void) {OS_LockMutex(&ov38_022261E0); ov38_022261DC=0; OS_UnlockMutex(&ov38_022261E0);}
-int ov38_022217FC(OSMessageQueue *q) {return OS_SendMessage(q,0,0);}
-int ov38_02221810(void *p) {u8 mac[6]; char b[12]; int i; OS_GetMacAddress(mac); for(i=0;i<6;i++)ov38_022219A4(b+i*2,mac[i],2); return ov38_022201C8(p,b,12);}
-u32 ov38_02221870(const char *s) {return STD_GetStringLength(s);}
-int ov38_0222187C(const char *a,const char *b,u32 n) {return STD_CompareNString(a,b,n);}
-void ov38_02221888(void *p,int n) {MI_CpuFill8(p,0,n);}
-void ov38_0222189C(void *p,const void *s,int n) {MI_CpuCopy8(s,p,n);}
-int ov38_022218B4(char *p,int n) {return ov38_02224B80(p,n);}
-int ov38_022218C0(char *p,int n) {return ov38_02224C18(p,n);}
+int ov38_02221718(void) {
+    OS_InitMutex(&ov38_022261F8);
+    return 1;
+}
+
+void ov38_02221730(void) {
+}
+
+void ov38_02221734(void) {
+    OS_LockMutex(&ov38_022261F8);
+}
+
+void ov38_02221748(void) {
+    OS_UnlockMutex(&ov38_022261F8);
+}
+
+int ov38_0222175C(void) {
+    OS_InitMutex(&ov38_022261E0);
+    ov38_022261DC = 0;
+    return 1;
+}
+
+void ov38_02221784(void) {
+}
+
+int ov38_02221788(void) {
+    int ok;
+    OS_LockMutex(&ov38_022261E0);
+    ok = ov38_022261DC == 0;
+    if (ok) {
+        ov38_022261DC = 1;
+    }
+    OS_UnlockMutex(&ov38_022261E0);
+    return ok;
+}
+
+void ov38_022217D0(void) {
+    OS_LockMutex(&ov38_022261E0);
+    ov38_022261DC = 0;
+    OS_UnlockMutex(&ov38_022261E0);
+}
+
+int ov38_022217FC(OSMessageQueue *q) {
+    return OS_SendMessage(q, 0, 0);
+}
+
+int ov38_02221810(void *p) {
+    u8 mac[6];
+    char b[12];
+    int i;
+    OS_GetMacAddress(mac);
+    for (i = 0; i < 6; i++) {
+        ov38_022219A4(b + i * 2, mac[i], 2);
+    }
+    return ov38_022201C8(p, b, 12);
+}
+
+u32 ov38_02221870(const char *s) {
+    return STD_GetStringLength(s);
+}
+
+int ov38_0222187C(const char *a, const char *b, u32 n) {
+    return STD_CompareNString(a, b, n);
+}
+
+void ov38_02221888(void *p, int n) {
+    MI_CpuFill8(p, 0, n);
+}
+
+void ov38_0222189C(void *p, const void *s, int n) {
+    MI_CpuCopy8(s, p, n);
+}
+
+int ov38_022218B4(char *p, int n) {
+    return ov38_02224B80(p, n);
+}
+
+int ov38_022218C0(char *p, int n) {
+    return ov38_02224C18(p, n);
+}

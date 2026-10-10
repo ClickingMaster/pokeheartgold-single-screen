@@ -2,9 +2,7 @@
 
 // global.h selects Thumb by default. This include must remain after the project
 // header so this translation unit is compiled as the original ARM code.
-// clang-format off
 #include <nitro/code32.h>
-// clang-format on
 
 s32 ov93_0225F8E4(Ov93SlopR1Work *work, s32 a1, s32 a2, s32 a3, s32 *p4, s32 *p5) {
     BOOL ret = FALSE;

@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef struct VctPacket {
     u8 pad0[0x18];
@@ -49,7 +49,6 @@ extern int vct_update_sequence(VctStream *s, VctPacket *p, u16 seq);
 extern u64 OS_GetTick(void);
 int vct_calc_jitter_and_skew(VctStream *s, VctPacket *p);
 
-// @fn vct_calc_jitter_and_skew
 int vct_calc_jitter_and_skew(VctStream *s, VctPacket *p) {
     u32 elapsed;
     s32 prev;

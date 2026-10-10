@@ -1,21 +1,43 @@
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 #pragma force_active on
-typedef struct{u8 v[6];} Magic;
-typedef struct{Magic magic;u8 type,pad;u32 ip;u8 code,tag,flag;u8 random[4];u8 port[2];char name[64];} Packet;
-typedef struct{int socket,peer;u32 ip,tag,pad,first,second,third,unused,ticks,deadline;} Work;
+
+typedef struct {
+    u8 v[6];
+} Magic;
+
+typedef struct {
+    Magic magic;
+    u8 type, pad;
+    u32 ip;
+    u8 code, tag, flag;
+    u8 random[4];
+    u8 port[2];
+    char name[64];
+} Packet;
+
+typedef struct {
+    int socket, peer;
+    u32 ip, tag, pad, first, second, third, unused, ticks, deadline;
+} Work;
+
 extern const Magic ov00_02219D28;
 extern const char ov00_0221B16C[];
 extern u32 ov00_0221B664[];
-extern char*strcpy(char*,const char*);
-extern u32 ov00_0220FBE4(void),ov00_021FF368(void);
-extern int ov00_0220FB90(int,int,int,void*,int);
+extern char *strcpy(char *, const char *);
+extern u32 ov00_0220FBE4(void);
+extern u32 ov00_021FF368(void);
+extern int ov00_0220FB90(int, int, int, void *, int);
 extern u16 ov00_0220FC48(int);
-static inline u32 swap32(u32 n){return ((n>>24)&0xff)|((n>>8)&0xff00)|((n<<8)&0xff0000)|((n<<24)&0xff000000);}
-void ov00_0220FC7C(Work*);
-// @fn ov00_0220FC7C
+
+static inline u32 swap32(u32 n) {
+    return ((n >> 24) & 0xff) | ((n >> 8) & 0xff00) | ((n << 8) & 0xff0000) | ((n << 24) & 0xff000000);
+}
+
+void ov00_0220FC7C(Work *);
+
 void ov00_0220FC7C(Work *w) {
     u8 buf[0x58];
     Packet *packet = (Packet *)buf;

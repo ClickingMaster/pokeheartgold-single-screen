@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef struct Ov13Pos2 {
     u16 x;
@@ -134,6 +134,7 @@ extern Ov13BannerState ov13_0224F5AC;
 extern void *ov13_0224F5B0[];
 extern Ov13ScanWork *ov13_0224F5B4;
 extern Ov13Select *ov13_0224F5B8;
+
 typedef struct Ov13MBWork {
     Ov13MBHead head;
     Ov13MBChild children[1];
@@ -142,6 +143,7 @@ typedef struct Ov13MBWork {
     void *p140;
     void *p144;
 } Ov13MBWork;
+
 extern Ov13MBWork *ov13_0224F5BC;
 extern void *ov13_0224F4F8;
 extern u8 ov13_022457EC[][5];
@@ -164,10 +166,10 @@ extern u8 ov13_0224592C[];
 extern u8 ov13_02245934[];
 extern void *ov13_02246854[];
 
-#define MBW_HEAD (ov13_0224F5BC->head)
+#define MBW_HEAD     (ov13_0224F5BC->head)
 #define MBW_CHILD(n) (ov13_0224F5BC->children[n])
-#define MBW_P140 (ov13_0224F5BC->p140)
-#define MBW_P144 (ov13_0224F5BC->p144)
+#define MBW_P140     (ov13_0224F5BC->p140)
+#define MBW_P144     (ov13_0224F5BC->p144)
 
 int ov13_0222BAF4(void *a, int b, int c, int d);
 void *ov13_022278C4(void *a);
@@ -274,13 +276,11 @@ static inline void ov13_MBKickChild(u16 aid) {
     MB_DisconnectChild(aid);
 }
 
-
 BOOL ov13_0223B6C8(void);
 BOOL ov13_0223B788(void (*cb)(int));
 BOOL ov13_0223B940(void);
 void ov13_0223BA24(void (*cb)(int));
 
-// @fn ov13_0223B35C
 void ov13_0223B35C(void *task) {
     int x;
     int y;
@@ -300,7 +300,6 @@ void ov13_0223B35C(void *task) {
     ov13_022425C8(task, ov13_0223B438);
 }
 
-// @fn ov13_0223B438
 void ov13_0223B438(void *task) {
     int x;
     int y;
@@ -320,7 +319,6 @@ void ov13_0223B438(void *task) {
     ov13_022425C8(task, ov13_0223B514);
 }
 
-// @fn ov13_0223B514
 void ov13_0223B514(void *task) {
     int x;
     int y;
@@ -340,7 +338,6 @@ void ov13_0223B514(void *task) {
     ov13_022425C8(task, ov13_0223B5F0);
 }
 
-// @fn ov13_0223B5F0
 void ov13_0223B5F0(void *task) {
     int x;
     int y;
@@ -363,7 +360,6 @@ void ov13_0223B5F0(void *task) {
     ov13_022412B0(ov13_0224F5B0);
 }
 
-// @fn ov13_0223B6C8
 BOOL ov13_0223B6C8(void) {
     if (ov13_0224F5AC.p == NULL) {
         return TRUE;
@@ -371,13 +367,11 @@ BOOL ov13_0223B6C8(void) {
     return ov13_0224F5AC.p->unk18 == 0;
 }
 
-// @fn ov13_0223B6F4
 void ov13_0223B6F4(int n) {
     ov13_0224F5AC.bg = ov13_0223F95C(ov13_022278C4(ov13_02246854[n]), 0, 4);
     ov13_02242528(1, ov13_0223B73C, 0, 0x78);
 }
 
-// @fn ov13_0223B73C
 void ov13_0223B73C(void *task) {
     DC_FlushRange(ov13_0224F5AC.bg, 0x600);
     GXS_LoadBG1Scr(ov13_0224F5AC.bg, 0, 0x600);
@@ -385,7 +379,6 @@ void ov13_0223B73C(void *task) {
     ov13_022425D0(1, task);
 }
 
-// @fn ov13_0223B788
 BOOL ov13_0223B788(void (*cb)(int)) {
     OSOwnerInfo info;
     Ov13ScanWork *w = ov13_0224128C(sizeof(Ov13ScanWork), 0x20);
@@ -412,12 +405,10 @@ BOOL ov13_0223B788(void (*cb)(int)) {
     return FALSE;
 }
 
-// @fn ov13_0223B90C
 BOOL ov13_0223B90C(void) {
     return WM_StartScanEx(ov13_0223BA3C, &ov13_0224F5B4->param) == 2;
 }
 
-// @fn ov13_0223B940
 BOOL ov13_0223B940(void) {
     ov13_0224F5B4->unk1B94 = 1;
     WM_ReadStatus(&ov13_0224F5B4->status);
@@ -441,12 +432,10 @@ BOOL ov13_0223B940(void) {
     return TRUE;
 }
 
-// @fn ov13_0223BA24
 void ov13_0223BA24(void (*cb)(int)) {
     ov13_0224F5B4->cb = cb;
 }
 
-// @fn ov13_0223BA3C
 void ov13_0223BA3C(Ov13WMArg *arg) {
     if (arg->errcode != 0) {
         return;
@@ -478,7 +467,6 @@ void ov13_0223BA3C(Ov13WMArg *arg) {
     }
 }
 
-// @fn ov13_0223BACC
 void ov13_0223BACC(Ov13WMArg *arg) {
     Ov13Bss *bss;
     int i;
@@ -512,6 +500,6 @@ void ov13_0223BACC(Ov13WMArg *arg) {
                 break;
             }
         }
-    next:;
+next:;
     }
 }

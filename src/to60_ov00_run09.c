@@ -1,10 +1,10 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-#include <string.h>
 #include <stdarg.h>
-// clang-format on
+#include <string.h>
 
 int sprintf(char *, const char *, ...);
 int strncmp(const char *, const char *, size_t);
@@ -21,6 +21,7 @@ typedef struct GtVar {
     const char *name;
     int type;
     int count;
+
     union {
         int i;
         double d;
@@ -53,7 +54,6 @@ extern char ov00_02219788[];
 void *ov00_021FF0C0(void *table, void *key);
 void ov00_021FEF74(void *table, void *elem);
 
-
 extern char ov00_022196C4[];
 extern char ov00_022196C8[];
 extern char ov00_022196E0[];
@@ -74,7 +74,12 @@ extern char ov00_022197EC[];
 extern char ov00_02219868[];
 extern char ov00_02219754[];
 extern char ov00_02219878[];
-#define GP_PARSE_ERROR(c) { ov00_0220A86C(c, 1, ov00_02219878); ov00_02202990(c, 3, 1); return 3; }
+#define GP_PARSE_ERROR(c)                   \
+    {                                       \
+        ov00_0220A86C(c, 1, ov00_02219878); \
+        ov00_02202990(c, 3, 1);             \
+        return 3;                           \
+    }
 extern char ov00_02219800[];
 extern char ov00_02219838[];
 extern char ov00_02219850[];
@@ -312,23 +317,24 @@ void ov00_0220C0C4(DynBuf *b, int pos, int n);
 int ov00_0220C164(CbObj *o);
 int ov00_0220C200(CbObj *o, CbTarget *t, int a2, int a3, int a4, int a5, int a6);
 
-// @fn ov00_0220A86C
 void ov00_0220A86C(void **p, int code, const char *msg) {
     char *x = *p;
     ov00_0220A348(x, msg, 0x100);
     *(int *)(x + 0x418) = code;
 }
 
-// @fn ov00_0220A890
 void ov00_0220A890(void **p, const char *msg) {
     ov00_0220A348(*p, msg, 0x100);
 }
 
-// @fn ov00_0220A8A4
 void *ov00_0220A8A4(GtCtx *ctx, const char *name, int type, void *val) {
     GtVar v;
-    if (!ctx) ctx = ov00_0221B1F0.ctx;
-    if (!ctx) __msl_assertion_failed(ov00_022198AC, ov00_022198B0, ov00_02219890, 0x78);
+    if (!ctx) {
+        ctx = ov00_0221B1F0.ctx;
+    }
+    if (!ctx) {
+        __msl_assertion_failed(ov00_022198AC, ov00_022198B0, ov00_02219890, 0x78);
+    }
     v.name = ov00_021FF3D4(name);
     v.type = type;
     v.val.i = 0;
@@ -338,57 +344,81 @@ void *ov00_0220A8A4(GtCtx *ctx, const char *name, int type, void *val) {
     return ov00_0220ADE0(ov00_0220AE00(ctx, name));
 }
 
-// @fn ov00_0220A940
 void *ov00_0220A940(GtCtx *ctx, const char *name, void *val) {
     GtVar *v = ov00_0220AE00(ctx, name);
-    if (!v) return 0;
+    if (!v) {
+        return 0;
+    }
     v->count = 0;
     return ov00_0220AD64(v, val);
 }
 
-// @fn ov00_0220A96C
 void *ov00_0220A96C(GtCtx *ctx, const char *name, void *val) {
     GtVar *v = ov00_0220AE00(ctx, name);
-    if (!v) return 0;
-    if (v->type == 0) return ov00_0220AD64(v, ov00_0220AD00(*(int *)val + *(int *)ov00_0220ADE0(v)));
-    if (v->type == 1) return ov00_0220AD64(v, ov00_0220AD18(*(double *)val + *(double *)ov00_0220ADE0(v)));
+    if (!v) {
+        return 0;
+    }
+    if (v->type == 0) {
+        return ov00_0220AD64(v, ov00_0220AD00(*(int *)val + *(int *)ov00_0220ADE0(v)));
+    }
+    if (v->type == 1) {
+        return ov00_0220AD64(v, ov00_0220AD18(*(double *)val + *(double *)ov00_0220ADE0(v)));
+    }
     return ov00_0220AB88(ctx, name, val);
 }
 
-// @fn ov00_0220AA00
 void *ov00_0220AA00(GtCtx *ctx, const char *name, void *val) {
     GtVar *v = ov00_0220AE00(ctx, name);
-    if (!v) return 0;
-    if (v->type == 0) return ov00_0220AD64(v, ov00_0220AD00(*(int *)ov00_0220ADE0(v) - *(int *)val));
-    if (v->type == 1) return ov00_0220AD64(v, ov00_0220AD18(*(double *)ov00_0220ADE0(v) - *(double *)val));
+    if (!v) {
+        return 0;
+    }
+    if (v->type == 0) {
+        return ov00_0220AD64(v, ov00_0220AD00(*(int *)ov00_0220ADE0(v) - *(int *)val));
+    }
+    if (v->type == 1) {
+        return ov00_0220AD64(v, ov00_0220AD18(*(double *)ov00_0220ADE0(v) - *(double *)val));
+    }
     return ov00_0220ADE0(v);
 }
 
-// @fn ov00_0220AA84
 void *ov00_0220AA84(GtCtx *ctx, const char *name, void *val) {
     GtVar *v = ov00_0220AE00(ctx, name);
-    if (!v) return 0;
-    if (v->type == 0) return ov00_0220AD64(v, ov00_0220AD00(*(int *)val * *(int *)ov00_0220ADE0(v)));
-    if (v->type == 1) return ov00_0220AD64(v, ov00_0220AD18(*(double *)val * *(double *)ov00_0220ADE0(v)));
+    if (!v) {
+        return 0;
+    }
+    if (v->type == 0) {
+        return ov00_0220AD64(v, ov00_0220AD00(*(int *)val * *(int *)ov00_0220ADE0(v)));
+    }
+    if (v->type == 1) {
+        return ov00_0220AD64(v, ov00_0220AD18(*(double *)val * *(double *)ov00_0220ADE0(v)));
+    }
     return ov00_0220ADE0(v);
 }
 
-// @fn ov00_0220AB04
 void *ov00_0220AB04(GtCtx *ctx, const char *name, void *val) {
     GtVar *v = ov00_0220AE00(ctx, name);
-    if (!v) return 0;
-    if (v->type == 0) return ov00_0220AD64(v, ov00_0220AD00(*(int *)ov00_0220ADE0(v) / *(int *)val));
-    if (v->type == 1) return ov00_0220AD64(v, ov00_0220AD18(*(double *)ov00_0220ADE0(v) / *(double *)val));
+    if (!v) {
+        return 0;
+    }
+    if (v->type == 0) {
+        return ov00_0220AD64(v, ov00_0220AD00(*(int *)ov00_0220ADE0(v) / *(int *)val));
+    }
+    if (v->type == 1) {
+        return ov00_0220AD64(v, ov00_0220AD18(*(double *)ov00_0220ADE0(v) / *(double *)val));
+    }
     return ov00_0220ADE0(v);
 }
 
-// @fn ov00_0220AB88
 void *ov00_0220AB88(GtCtx *ctx, const char *name, void *val) {
     GtVar *v = ov00_0220AE00(ctx, name);
     char *old;
     char *buf;
-    if (!v) return 0;
-    if (v->type != 2) __msl_assertion_failed(ov00_022198BC, ov00_022198B0, ov00_0221989C, 0xd1);
+    if (!v) {
+        return 0;
+    }
+    if (v->type != 2) {
+        __msl_assertion_failed(ov00_022198BC, ov00_022198B0, ov00_0221989C, 0xd1);
+    }
     old = ov00_0220ADE0(v);
     buf = ov00_021EC3A8(strlen(old) + strlen(val) + 1);
     strcpy(buf, old);
@@ -398,11 +428,12 @@ void *ov00_0220AB88(GtCtx *ctx, const char *name, void *val) {
     return ov00_0220ADE0(v);
 }
 
-// @fn ov00_0220AC2C
 void *ov00_0220AC2C(GtCtx *ctx, const char *name, void *val) {
     GtVar *v = ov00_0220AE00(ctx, name);
     int n;
-    if (!v) return 0;
+    if (!v) {
+        return 0;
+    }
     if (v->type == 0) {
         int *cur = ov00_0220ADE0(v);
         n = ++v->count;

@@ -1,85 +1,84 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
+
 #include "dgt.h"
-// clang-format on
 
 typedef struct KeyTable {
     s8 *keys[4];
 } KeyTable;
 
-// clang-format on
-
 typedef struct WProfile {
     u8 unk00[0x40];
-    u8 ssid[32];     // 0x40
-    u8 ssid2[32];    // 0x60
+    u8 ssid[32];  // 0x40
+    u8 ssid2[32]; // 0x60
     u8 unk80[0x40];
-    u8 ip[4];        // 0xc0
-    u8 gateway[4];   // 0xc4
-    u8 dns1[4];      // 0xc8
-    u8 dns2[4];      // 0xcc
-    u8 prefix;       // 0xd0
+    u8 ip[4];      // 0xc0
+    u8 gateway[4]; // 0xc4
+    u8 dns1[4];    // 0xc8
+    u8 dns2[4];    // 0xcc
+    u8 prefix;     // 0xd0
     u8 unkD1[0x16];
-    u8 wepMode;      // 0xe7
+    u8 wepMode; // 0xe7
     u8 unkE8[0x18];
 } WProfile;
 
 typedef struct WSsidEntry {
-    u8 flags : 4;    // 0x0
+    u8 flags : 4; // 0x0
     u8 flagsHi : 4;
-    u8 index;        // 0x1
+    u8 index; // 0x1
     u8 unk2;
-    u8 len;          // 0x3
-    u8 ssid[32];     // 0x4
+    u8 len;      // 0x3
+    u8 ssid[32]; // 0x4
 } WSsidEntry;
 
 typedef struct WApInfo {
-    u8 status;       // 0x0
+    u8 status; // 0x0
     u8 unk1;
-    u8 rssi;         // 0x2
-    u8 ch : 7;       // 0x3
+    u8 rssi;   // 0x2
+    u8 ch : 7; // 0x3
     u8 done : 1;
 } WApInfo;
 
 typedef struct WBss {
     u16 length;
     u16 rssi;
-    u8 bssid[6];     // 0x4
-    u16 ssidLength;  // 0xa
-    u8 ssid[32];     // 0xc
+    u8 bssid[6];    // 0x4
+    u16 ssidLength; // 0xa
+    u8 ssid[32];    // 0xc
     u8 unk2C[0xa];
-    u16 channel;     // 0x36
+    u16 channel; // 0x36
     u8 unk38[0x88];
 } WBss;
 
 typedef struct WCtx {
-    WProfile profiles[3];   // 0x000
-    WSsidEntry entries[9];  // 0x300
-    WApInfo ap[11];         // 0x444
-    WBss bss[11];           // 0x470
-    OSTick tick;            // 0xcb0
+    WProfile profiles[3];  // 0x000
+    WSsidEntry entries[9]; // 0x300
+    WApInfo ap[11];        // 0x444
+    WBss bss[11];          // 0x470
+    OSTick tick;           // 0xcb0
     u8 unkCB8[0x52];
-    u8 unkD0A;              // 0xd0a
-    u8 d0bLo : 4;           // 0xd0b
+    u8 unkD0A;    // 0xd0a
+    u8 d0bLo : 4; // 0xd0b
     u8 retry : 4;
-    u8 profileSel : 4;      // 0xd0c
+    u8 profileSel : 4; // 0xd0c
     u8 d0cB4 : 2;
     u8 mode : 2;
-    u8 profileIdx;          // 0xd0d
-    u8 nextState;           // 0xd0e
-    u8 cur;                 // 0xd0f
-    u8 numEntries;          // 0xd10
-    s8 channel;             // 0xd11
-    u8 numAps;              // 0xd12
-    u8 selAp;               // 0xd13
+    u8 profileIdx; // 0xd0d
+    u8 nextState;  // 0xd0e
+    u8 cur;        // 0xd0f
+    u8 numEntries; // 0xd10
+    s8 channel;    // 0xd11
+    u8 numAps;     // 0xd12
+    u8 selAp;      // 0xd13
     u8 unkD14;
-    u8 chIter;              // 0xd15
-    u16 chMask;             // 0xd16
+    u8 chIter;  // 0xd15
+    u16 chMask; // 0xd16
 } WCtx;
 
-#define TICKS_TO_MS(t) (((t) * 64) / 33514)
+#define TICKS_TO_MS(t)  (((t) * 64) / 33514)
 #define TICKS_TO_SEC(t) (((t) * 64) / 33514000)
 
 extern void *ov00_021FAE14(int id);
@@ -99,7 +98,6 @@ extern int WCM_DisconnectAsync(void);
 extern int WCM_TerminateAsync(void);
 extern int WCM_SearchAsync(void *bssid, void *ssid, u32 option);
 extern int WCM_StartupAsync(void *config, void *cb);
-
 
 extern int ov00_021EA340(void *p);
 extern void ov00_021EA420(void);
@@ -176,44 +174,44 @@ typedef struct WMScanParam {
 
 typedef struct WGlobal {
     u8 wm[0xf00];
-    u8 scanBuf[0x400];     // 0xf00
-    WMScanParam param;     // 0x1300
-    void (*cb)(void *);    // 0x1344
-    WMEntry entries[16];   // 0x1348
-    u16 u1a48[16];         // 0x1a48
-    u16 u1a68[16];         // 0x1a68
-    int count;             // 0x1a88
-    int writeIdx;          // 0x1a8c
-    u32 state;             // 0x1a90
-    u16 crc;               // 0x1a94
-    u16 crcTable[256];     // 0x1a96
+    u8 scanBuf[0x400];   // 0xf00
+    WMScanParam param;   // 0x1300
+    void (*cb)(void *);  // 0x1344
+    WMEntry entries[16]; // 0x1348
+    u16 u1a48[16];       // 0x1a48
+    u16 u1a68[16];       // 0x1a68
+    int count;           // 0x1a88
+    int writeIdx;        // 0x1a8c
+    u32 state;           // 0x1a90
+    u16 crc;             // 0x1a94
+    u16 crcTable[256];   // 0x1a96
 } WGlobal;
 
 extern WGlobal *ov00_0221B0C0;
 
 typedef struct WScanBss {
     u16 length;
-    u16 rssi;      // 0x2
+    u16 rssi; // 0x2
     u8 unk4[2];
-    u8 b6[4];      // 0x6
+    u8 b6[4]; // 0x6
     u8 unkA[0x36];
-    u16 u40;       // 0x40
+    u16 u40; // 0x40
     u16 unk42;
-    u32 u44;       // 0x44
-    u16 u48;       // 0x48
+    u32 u44; // 0x44
+    u16 u48; // 0x48
     u8 unk4A[6];
     u8 data[0x70]; // 0x50
 } WScanBss;
 
 typedef struct WScanCb {
     u16 apiid;
-    u16 errcode;   // 0x2
+    u16 errcode; // 0x2
     u16 unk4;
     u16 unk6;
-    u16 state;     // 0x8
+    u16 state; // 0x8
     u16 unkA;
     u16 unkC;
-    u16 bssCount;  // 0xe
+    u16 bssCount;      // 0xe
     WScanBss *bss[16]; // 0x10
 } WScanCb;
 
@@ -230,15 +228,15 @@ typedef struct WOut {
 } WOut;
 
 typedef struct HEntry {
-    u32 valid;       // 0x00
-    u16 rssi;        // 0x04
-    u8 name[0x20];   // 0x06
-    u8 key[10];      // 0x26
+    u32 valid;     // 0x00
+    u16 rssi;      // 0x04
+    u8 name[0x20]; // 0x06
+    u8 key[10];    // 0x26
     u8 unk30[0x1a];
-    u8 pass[0x20];   // 0x4a
+    u8 pass[0x20]; // 0x4a
     u8 unk6a;
-    u8 mode;         // 0x6b
-    u8 flags;        // 0x6c
+    u8 mode;  // 0x6b
+    u8 flags; // 0x6c
     u8 unk6d[0xb];
 } HEntry;
 
@@ -261,6 +259,7 @@ typedef struct HState {
     void *b;
     int state;
 } HState;
+
 extern HState ov00_0221B0C4;
 
 typedef struct NSockAddr {
@@ -271,14 +270,15 @@ typedef struct NSockAddr {
 } NSockAddr;
 
 typedef struct IState {
-    int state;       // 0x00
-    int sock;        // 0x04
-    NSockAddr addr;  // 0x08
-    u8 buf[0x40];    // 0x10
-    int len;         // 0x50
-    u32 time;        // 0x54
-    int retries;     // 0x58
+    int state;      // 0x00
+    int sock;       // 0x04
+    NSockAddr addr; // 0x08
+    u8 buf[0x40];   // 0x10
+    int len;        // 0x50
+    u32 time;       // 0x54
+    int retries;    // 0x58
 } IState;
+
 extern IState ov00_0221B0D0;
 extern NSockAddr ov00_0221B0D8;
 extern u8 ov00_0221B0DC[];
@@ -361,11 +361,9 @@ static inline BOOL CopySsid(WSsidEntry *e, u8 *ssid, s32 idx) {
     return FALSE;
 }
 
-
 int ov00_021FCBD8(void);
 int ov00_021FCC60(void);
 
-// @fn ov00_021FC150
 int ov00_021FC150(WCtx *ctx) {
     int i;
     u8 count = 0;
@@ -393,7 +391,6 @@ int ov00_021FC150(WCtx *ctx) {
     return count;
 }
 
-// @fn ov00_021FC258
 int ov00_021FC258(WCtx *ctx) {
     int i;
     u8 count = 0;
@@ -408,7 +405,6 @@ int ov00_021FC258(WCtx *ctx) {
     return count;
 }
 
-// @fn ov00_021FC2E8
 int ov00_021FC2E8(WCtx *ctx) {
     u8 i;
     u8 result = 0;
@@ -422,7 +418,6 @@ int ov00_021FC2E8(WCtx *ctx) {
     return result;
 }
 
-// @fn ov00_021FC32C
 int ov00_021FC32C(void) {
     WCtx *ctx = ov00_021FAE14(0x10);
     u32 state = 9;
@@ -455,7 +450,6 @@ int ov00_021FC32C(void) {
     return state;
 }
 
-// @fn ov00_021FC408
 int ov00_021FC408(void) {
     WCtx *ctx = ov00_021FAE14(0x10);
     int state = ov00_021FAECC();
@@ -479,7 +473,6 @@ int ov00_021FC408(void) {
     return state;
 }
 
-// @fn ov00_021FC4CC
 void ov00_021FC4CC(u32 ch) {
     WCtx *ctx = ov00_021FAE14(0x10);
     if (ch > 13) {
@@ -488,7 +481,6 @@ void ov00_021FC4CC(u32 ch) {
     ctx->chMask |= 1 << (ch - 1);
 }
 
-// @fn ov00_021FC500
 s8 ov00_021FC500(int n) {
     WCtx *ctx = ov00_021FAE14(0x10);
     u16 mask = ctx->chMask;
@@ -508,7 +500,6 @@ s8 ov00_021FC500(int n) {
     return -1;
 }
 
-// @fn ov00_021FC568
 void ov00_021FC568(int state) {
     WCtx *ctx = ov00_021FAE14(0x10);
     switch (state) {
@@ -527,7 +518,6 @@ void ov00_021FC568(int state) {
     }
 }
 
-// @fn ov00_021FC648
 int ov00_021FC648(WCtx *ctx) {
     ctx->tick = OS_GetTick();
     ctx->channel = 0;
@@ -536,7 +526,6 @@ int ov00_021FC648(WCtx *ctx) {
     return 3;
 }
 
-// @fn ov00_021FC698
 int ov00_021FC698(WCtx *ctx) {
     if (TICKS_TO_MS(OS_GetTick() - ctx->tick) >= 300) {
         ctx->channel += 2;
@@ -549,7 +538,6 @@ int ov00_021FC698(WCtx *ctx) {
     return 3;
 }
 
-// @fn ov00_021FC73C
 int ov00_021FC73C(WCtx *ctx) {
     ctx->chIter = 0;
     ctx->retry++;
@@ -558,7 +546,6 @@ int ov00_021FC73C(WCtx *ctx) {
     return 3;
 }
 
-// @fn ov00_021FC784
 int ov00_021FC784(WCtx *ctx) {
     if (TICKS_TO_MS(OS_GetTick() - ctx->tick) >= 150 || ctx->ap[ctx->cur].done == 1) {
         ctx->ap[ctx->cur].done = 1;
@@ -577,7 +564,6 @@ int ov00_021FC784(WCtx *ctx) {
     return 4;
 }
 
-// @fn ov00_021FC8AC
 int ov00_021FC8AC(WCtx *ctx) {
     if (TICKS_TO_MS(OS_GetTick() - ctx->tick) >= 150 || ctx->entries[ctx->cur].flags == 1) {
         ctx->entries[ctx->cur].flags = 0;
@@ -597,7 +583,6 @@ int ov00_021FC8AC(WCtx *ctx) {
     return 5;
 }
 
-// @fn ov00_021FC9CC
 int ov00_021FC9CC(WCtx *ctx, int state) {
     switch (state) {
     case 3:
@@ -628,7 +613,6 @@ int ov00_021FC9CC(WCtx *ctx, int state) {
     return state;
 }
 
-// @fn ov00_021FCA90
 int ov00_021FCA90(WCtx *ctx, int state) {
     u8 i;
     u8 n;
@@ -669,7 +653,6 @@ int ov00_021FCA90(WCtx *ctx, int state) {
     return state;
 }
 
-// @fn ov00_021FCB54
 int ov00_021FCB54(WCtx *ctx) {
     if (ctx->chMask != 0 && ov00_021FBF24(2)) {
         ctx->channel = ov00_021FC500(0);
@@ -681,7 +664,6 @@ int ov00_021FCB54(WCtx *ctx) {
     return ov00_021FC73C(ctx);
 }
 
-// @fn ov00_021FCBB4
 int ov00_021FCBB4(void *bssid, void *ssid, int ch, u32 option) {
     if (ch > 12) {
         ch = 12;
@@ -689,7 +671,6 @@ int ov00_021FCBB4(void *bssid, void *ssid, int ch, u32 option) {
     return WCM_SearchAsync(bssid, ssid, option | ov00_02216074[ch]);
 }
 
-// @fn ov00_021FCBD8
 int ov00_021FCBD8(void) {
     int phase = WCM_GetPhase();
     WCtx *ctx = ov00_021FAE14(0x10);
@@ -712,7 +693,6 @@ int ov00_021FCBD8(void) {
     return 2;
 }
 
-// @fn ov00_021FCC60
 int ov00_021FCC60(void) {
     int state = ov00_021FAECC();
     WCtx *ctx = ov00_021FAE14(0x10);
@@ -757,7 +737,6 @@ int ov00_021FCC60(void) {
     return state;
 }
 
-// @fn ov00_021FCD5C
 int ov00_021FCD5C(WCtx *ctx) {
     u32 *a = ov00_021FAE14(1);
     SocCfg *b = ov00_021FAE14(4);
@@ -770,7 +749,6 @@ int ov00_021FCD5C(WCtx *ctx) {
     return 0x11;
 }
 
-// @fn ov00_021FCDC0
 int ov00_021FCDC0(WCtx *ctx) {
     if (SOC_GetHostID()) {
         ov00_021FD094(ctx);
@@ -783,7 +761,6 @@ int ov00_021FCDC0(WCtx *ctx) {
     return 11;
 }
 
-// @fn ov00_021FCE50
 int ov00_021FCE50(void) {
     if (!ov00_021EA340(ov00_021FAE14(8))) {
         return 14;
@@ -792,7 +769,6 @@ int ov00_021FCE50(void) {
     return 0x11;
 }
 
-// @fn ov00_021FCE7C
 int ov00_021FCE7C(WCtx *ctx) {
     WUnk1 *p = ov00_021FAE14(1);
     int rc = ov00_021EA580();
@@ -810,13 +786,11 @@ int ov00_021FCE7C(WCtx *ctx) {
     return 14;
 }
 
-// @fn ov00_021FCEE8
 int ov00_021FCEE8(WCtx *ctx) {
     ov00_021FAF20(ctx->profileIdx);
     return 16;
 }
 
-// @fn ov00_021FCEFC
 int ov00_021FCEFC(void) {
     int rc;
     if (SOCL_CalmDown()) {
@@ -826,7 +800,6 @@ int ov00_021FCEFC(void) {
     return (rc == 0 || rc == -39) ? 9 : 11;
 }
 
-// @fn ov00_021FCF2C
 void ov00_021FCF2C(u32 *src, WCtx *ctx, SocCfg *cfg) {
     WProfile *p;
     MI_CpuCopy8(ov00_022160A8, cfg, 0x58);
@@ -855,7 +828,6 @@ void ov00_021FCF2C(u32 *src, WCtx *ctx, SocCfg *cfg) {
 
 #define SWAP32(v) ((((v) >> 24) & 0xFF) | (((v) >> 8) & 0xFF00) | (((v) << 8) & 0xFF0000) | (((v) << 24) & 0xFF000000))
 
-// @fn ov00_021FCFEC
 u32 ov00_021FCFEC(u8 *b) {
     u32 v = 0;
     v |= b[0] << 24;
@@ -865,7 +837,6 @@ u32 ov00_021FCFEC(u8 *b) {
     return SWAP32(v);
 }
 
-// @fn ov00_021FD040
 u32 ov00_021FD040(int prefix) {
     int i;
     int n = 32 - prefix;

@@ -1,11 +1,12 @@
 #pragma force_active on
 #pragma warn_unusedvar off
-// clang-format off
 #include "global.h"
-#include "dgt.h"
+
 #include "WIFI_stubsmd5_dummy.h"
+#include "dgt.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef void (*ArrayElementFreeFn)(void *);
 typedef int (*ArrayCompareFn)(const void *, const void *);
@@ -323,7 +324,6 @@ void ov00_021FE8D8(DArray *a, int n);
 void *ov00_021FECC0(const void *key, const void *base, int count, int size, ArrayCompareFn cmp, int *found);
 void *ov00_021FEC68(const void *key, const void *base, int count, int size, ArrayCompareFn cmp);
 
-
 int ov00_021FFA18(int sock, SocSockAddr *addr, int *len);
 u32 ov00_021FFA44(const char *s);
 int ov00_021FFA60(void);
@@ -350,18 +350,15 @@ int ov00_022005B0(GPConnection *conn, int profileId);
 int ov00_022005FC(GPConnection *conn, int a);
 int ov00_02200654(GPConnection *conn, int status, const char *statusString, const char *locationString);
 
-// @fn ov00_021FF9DC
 int ov00_021FF9DC(int sock, int level, int opt, void *val, int *len) {
     MI_CpuFill8(val, 0, *len);
     return ov00_021FF7EC(0, -1);
 }
 
-// @fn ov00_021FFA04
 int ov00_021FFA04(int sock, int level, int opt, const void *val, int len) {
     return ov00_021FF7EC(0, -1);
 }
 
-// @fn ov00_021FFA18
 int ov00_021FFA18(int sock, SocSockAddr *addr, int *len) {
     int ret;
     addr->len = *len;
@@ -370,7 +367,6 @@ int ov00_021FFA18(int sock, SocSockAddr *addr, int *len) {
     return ov00_021FF7EC(ret, -1);
 }
 
-// @fn ov00_021FFA44
 u32 ov00_021FFA44(const char *s) {
     u32 addr;
     if (SOC_InetAtoN(s, &addr) == 0) {
@@ -379,12 +375,10 @@ u32 ov00_021FFA44(const char *s) {
     return addr;
 }
 
-// @fn ov00_021FFA60
 int ov00_021FFA60(void) {
     return ov00_0221B1AC.lastError;
 }
 
-// @fn ov00_021FFA70
 u32 ov00_021FFA70(u32 *out) {
     u32 t;
     if (OS_IsTickAvailable() != TRUE) {
@@ -397,7 +391,6 @@ u32 ov00_021FFA70(u32 *out) {
     return t;
 }
 
-// @fn ov00_021FFAD4
 u32 ov00_021FFAD4(u32 x) {
     u32 lo = (x & 0xffff) * 16807;
     u32 hi = (x >> 16) * 16807;
@@ -414,17 +407,14 @@ u32 ov00_021FFAD4(u32 x) {
     return lo;
 }
 
-// @fn ov00_021FFB20
 u32 ov00_021FFB20(void) {
     return ov00_02217E58 = ov00_021FFAD4(ov00_02217E58);
 }
 
-// @fn ov00_021FFB40
 void ov00_021FFB40(u32 seed) {
     ov00_02217E58 = seed ? (seed & 0x7fffffff) : 1;
 }
 
-// @fn ov00_021FFB5C
 int ov00_021FFB5C(int lo, int hi) {
     int range = hi - lo;
     int r;
@@ -435,7 +425,6 @@ int ov00_021FFB5C(int lo, int hi) {
     return r + lo;
 }
 
-// @fn ov00_021FFB80
 void ov00_021FFB80(const char *in, char *out, int len) {
     u8 tmp[3];
     int i;
@@ -451,7 +440,6 @@ void ov00_021FFB80(const char *in, char *out, int len) {
     out[3] = tmp[2] & 0x3f;
 }
 
-// @fn ov00_021FFC18
 void ov00_021FFC18(const char *in, char *out, int len, int type) {
     char *tbl;
     char *start = out;
@@ -505,7 +493,6 @@ void ov00_021FFC18(const char *in, char *out, int len, int type) {
     }
 }
 
-// @fn ov00_021FFD50
 int ov00_021FFD50(int a, int b, int c) {
     if (ov00_0221B0D0.state != 1) {
         return 2;
@@ -516,7 +503,6 @@ int ov00_021FFD50(int a, int b, int c) {
     return ov00_022008F4(a, b, c);
 }
 
-// @fn ov00_021FFD80
 void ov00_021FFD80(GPConnection *conn) {
     if (!conn || !*conn) {
         return;
@@ -524,7 +510,6 @@ void ov00_021FFD80(GPConnection *conn) {
     ov00_02200A3C(conn);
 }
 
-// @fn ov00_021FFD9C
 int ov00_021FFD9C(GPConnection *conn) {
     if (!conn || !*conn) {
         return 2;
@@ -535,7 +520,6 @@ int ov00_021FFD9C(GPConnection *conn) {
     return ov00_02200ED8(conn, 0);
 }
 
-// @fn ov00_021FFDD0
 int ov00_021FFDD0(GPConnection *conn, int which, void *callback, void *param) {
     GPIConnection *iconn;
     if (!conn || !(iconn = *conn)) {
@@ -550,7 +534,6 @@ int ov00_021FFDD0(GPConnection *conn, int which, void *callback, void *param) {
     return 0;
 }
 
-// @fn ov00_021FFE20
 int ov00_021FFE20(GPConnection *conn, const char *nick, const char *email, const char *password, int firewall, GPCallback callback, void *param) {
     GPIConnection *iconn;
     GPConnectResponseArg arg;
@@ -575,7 +558,6 @@ int ov00_021FFE20(GPConnection *conn, const char *nick, const char *email, const
     return ov00_022031E4(conn, ov00_02217EE0, ov00_02217EE0, ov00_02217EE0, ov00_02217EE0, nick, email, 0, (int)password, 0, firewall, callback, param);
 }
 
-// @fn ov00_021FFF24
 void ov00_021FFF24(GPConnection *conn) {
     if (!conn || !*conn) {
         return;
@@ -587,7 +569,6 @@ void ov00_021FFF24(GPConnection *conn) {
     ov00_02200A98(conn);
 }
 
-// @fn ov00_021FFF58
 int ov00_021FFF58(GPConnection *conn, int a, int b, int c, int d, int e, int f, int g, GPCallback callback, void *param) {
     GPIConnection *iconn;
     GPResultArg arg;
@@ -607,7 +588,6 @@ int ov00_021FFF58(GPConnection *conn, int a, int b, int c, int d, int e, int f, 
     return ov00_02208330(conn, a, b, c, d, e, f, 0, g, callback, param);
 }
 
-// @fn ov00_02200020
 int ov00_02200020(GPConnection *conn, int a, int b, int c, GPCallback callback, void *param) {
     GPIConnection *iconn;
     if (!conn || !(iconn = *conn) || !a) {
@@ -618,7 +598,7 @@ int ov00_02200020(GPConnection *conn, int a, int b, int c, GPCallback callback, 
         return 2;
     }
     if (iconn->simulation) {
-        GPBigArg arg = {0};
+        GPBigArg arg = { 0 };
         callback(conn, &arg, param);
         return 0;
     }
@@ -629,7 +609,6 @@ int ov00_02200020(GPConnection *conn, int a, int b, int c, GPCallback callback, 
     return ov00_02205EE8(conn, a, b, c, callback, param);
 }
 
-// @fn ov00_022000FC
 int ov00_022000FC(GPConnection *conn, int a, int b) {
     GPIConnection *iconn;
     if (!conn || !(iconn = *conn)) {
@@ -645,7 +624,6 @@ int ov00_022000FC(GPConnection *conn, int a, int b) {
     return ov00_02205678(conn, a, b);
 }
 
-// @fn ov00_0220014C
 int ov00_0220014C(GPConnection *conn, int profile, const char *reason) {
     GPIConnection *iconn;
     char buf[0x401];
@@ -677,7 +655,6 @@ int ov00_0220014C(GPConnection *conn, int profile, const char *reason) {
     return 0;
 }
 
-// @fn ov00_022002C0
 int ov00_022002C0(GPConnection *conn, int a) {
     GPIConnection *iconn;
     if (!conn || !(iconn = *conn)) {
@@ -693,7 +670,6 @@ int ov00_022002C0(GPConnection *conn, int a) {
     return ov00_02201CAC(conn, a);
 }
 
-// @fn ov00_02200310
 int ov00_02200310(GPConnection *conn, int profileId) {
     GPIConnection *iconn;
     GPIProfile *profile;
@@ -721,7 +697,6 @@ int ov00_02200310(GPConnection *conn, int profileId) {
     return 0;
 }
 
-// @fn ov00_022003D0
 int ov00_022003D0(GPConnection *conn, int *num) {
     GPIConnection *iconn;
     if (!conn || !(iconn = *conn)) {
@@ -735,7 +710,6 @@ int ov00_022003D0(GPConnection *conn, int *num) {
     return 0;
 }
 
-// @fn ov00_02200400
 int ov00_02200400(GPConnection *conn, int index, GPBuddyStatus *status) {
     GPIConnection *iconn;
     GPIProfile *profile;
@@ -783,7 +757,6 @@ int ov00_02200400(GPConnection *conn, int index, GPBuddyStatus *status) {
     return 0;
 }
 
-// @fn ov00_02200540
 int ov00_02200540(GPConnection *conn, int profileId, int *index) {
     GPIConnection *iconn;
     GPIProfile *profile;
@@ -802,7 +775,6 @@ int ov00_02200540(GPConnection *conn, int profileId, int *index) {
     return 0;
 }
 
-// @fn ov00_022005B0
 int ov00_022005B0(GPConnection *conn, int profileId) {
     GPIConnection *iconn;
     GPIProfile *profile;
@@ -818,7 +790,6 @@ int ov00_022005B0(GPConnection *conn, int profileId) {
     return 0;
 }
 
-// @fn ov00_022005FC
 int ov00_022005FC(GPConnection *conn, int a) {
     GPIConnection *iconn;
     int result;
@@ -839,7 +810,6 @@ int ov00_022005FC(GPConnection *conn, int a) {
     return 0;
 }
 
-// @fn ov00_02200654
 int ov00_02200654(GPConnection *conn, int status, const char *statusString, const char *locationString) {
     GPIConnection *iconn;
     char statBuf[0x100];

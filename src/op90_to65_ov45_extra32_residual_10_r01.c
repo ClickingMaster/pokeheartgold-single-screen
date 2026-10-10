@@ -1,17 +1,63 @@
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 #include <string.h>
+
 #include "to90_ov45_input_private.h"
 
-typedef struct Message { u32 pad[8]; Ov45Input48 *input; u32 state; } Message;
-typedef struct List { int count; char **keys; int flag8; int flagc; } List;
-typedef struct Node { u32 pad[4]; void *callback; u32 pad14; void *data; List *list; u32 id; u32 pad24; void *cb; void *userdata; } Node;
-typedef struct Event { u32 success; char *id; u32 sender; int count; char **keys; char **values; } Event;
-typedef struct Query { u32 type; char *key; u32 zero; } Query;
-typedef struct Change { char *id; u32 sender; char *key; char *value; } Change;
-extern const char ov45_022568B8[], ov45_022568C0[], ov45_022565D0[], ov45_022568A0[], ov45_022560C4[];
+typedef struct Message {
+    u32 pad[8];
+    Ov45Input48 *input;
+    u32 state;
+} Message;
+
+typedef struct List {
+    int count;
+    char **keys;
+    int flag8;
+    int flagc;
+} List;
+
+typedef struct Node {
+    u32 pad[4];
+    void *callback;
+    u32 pad14;
+    void *data;
+    List *list;
+    u32 id;
+    u32 pad24;
+    void *cb;
+    void *userdata;
+} Node;
+
+typedef struct Event {
+    u32 success;
+    char *id;
+    u32 sender;
+    int count;
+    char **keys;
+    char **values;
+} Event;
+
+typedef struct Query {
+    u32 type;
+    char *key;
+    u32 zero;
+} Query;
+
+typedef struct Change {
+    char *id;
+    u32 sender;
+    char *key;
+    char *value;
+} Change;
+
+extern const char ov45_022568B8[];
+extern const char ov45_022568C0[];
+extern const char ov45_022565D0[];
+extern const char ov45_022568A0[];
+extern const char ov45_022560C4[];
 extern void __msl_assertion_failed(const char *, const char *, const char *, u32);
 extern Node *ov45_02247E98(void *, char *);
 extern void ov45_02244D30(void *, u32, void *, void *, void *, u32, char *, u32);
@@ -22,7 +68,7 @@ extern char *ov45_0224D240(char *, int *);
 extern void ov45_02249A0C(void *, Node *, Event *);
 void ov45_0224D588(void *ctx, Message *msg);
 #pragma force_active on
-// @fn ov45_0224D588
+
 void ov45_0224D588(void *ctx, Message *msg) {
     Query query;
     Node *record;
@@ -100,7 +146,7 @@ void ov45_0224D588(void *ctx, Message *msg) {
     }
     list = record->list;
     count = list->count;
-    values = ov00_021EC3A8(count *4);
+    values = ov00_021EC3A8(count * 4);
     if (values == NULL) {
         return;
     }
@@ -115,7 +161,7 @@ void ov45_0224D588(void *ctx, Message *msg) {
             cursor += consumed;
             b = ov45_0224D240(cursor, &consumed);
             if (b != NULL) {
-                size = (count + 1) *4;
+                size = (count + 1) * 4;
                 cursor += consumed;
                 newKeys = ov00_021EC3BC(list->keys, size);
                 if (newKeys != NULL) {

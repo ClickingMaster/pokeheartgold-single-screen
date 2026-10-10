@@ -1,14 +1,18 @@
 #pragma force_active on
 #include <nitro/types.h>
-// clang-format off
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
-#define H(a) (*(volatile u16 *)(a))
-#define WL (*(u8 **)0x0380fff4)
-#define R16(p,o) (*(u16 *)((u8 *)(p)+(o)))
-#define R32(p,o) (*(u32 *)((u8 *)(p)+(o)))
-#define P(p,o) (*(u8 **)((u8 *)(p)+(o)))
-extern u32 __VENEER_OS_DisableIrqMask(u32);extern void __VENEER_OS_SetIrqFunction(u32,void(*)(void));
+#define H(a)      (*(volatile u16 *)(a))
+#define WL        (*(u8 **)0x0380fff4)
+#define R16(p, o) (*(u16 *)((u8 *)(p) + (o)))
+#define R32(p, o) (*(u32 *)((u8 *)(p) + (o)))
+#define P(p, o)   (*(u8 **)((u8 *)(p) + (o)))
+extern u32 __VENEER_OS_DisableIrqMask(u32);
+extern void __VENEER_OS_SetIrqFunction(u32, void (*)(void));
 void ReleaseIntr(void);
-// @fn ReleaseIntr
-void ReleaseIntr(void){__VENEER_OS_DisableIrqMask(0x1000000);__VENEER_OS_SetIrqFunction(0x1000000,0);}
+
+void ReleaseIntr(void) {
+    __VENEER_OS_DisableIrqMask(0x1000000);
+    __VENEER_OS_SetIrqFunction(0x1000000, 0);
+}

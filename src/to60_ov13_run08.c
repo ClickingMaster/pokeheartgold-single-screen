@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef void (*Func)(void);
 typedef void (*TaskFunc)(void *, void *);
@@ -236,6 +236,7 @@ typedef struct {
     u8 state;
     u8 unkE8[7];
     u8 flags;
+
     union {
         struct {
             u8 mask[4];
@@ -244,6 +245,7 @@ typedef struct {
             u8 autoDns;
             u8 unkF7;
         } work;
+
         struct {
             u8 info[0xe];
             u16 crc;
@@ -260,6 +262,7 @@ typedef struct {
     u8 ssid[0x20];
     u8 unk60[0x20];
     u8 wep[4][0x10];
+
     union {
         struct {
             u8 ip[4];
@@ -267,8 +270,10 @@ typedef struct {
             u8 dns1[4];
             u8 dns2[4];
         };
+
         u8 addr[4][4];
     };
+
     u8 cidr;
     u8 unkD1[0x15];
     u8 mode : 2;
@@ -360,18 +365,15 @@ void ov13_0223AF10(void *, void *);
 void ov13_0223AFF4(void *, void *);
 extern void ov13_0223B0D8(void *, void *);
 
-
 void ov13_02238D88(void);
 void ov13_02239228(void *src);
 
-// @fn ov13_02238D88
 void ov13_02238D88(void) {
     ov13_022403B8(2, 0, 0x15, 8);
     ov13_02240EA8(0, 0x15);
     ov13_0222B8E8(ov13_02238DBC);
 }
 
-// @fn ov13_02238DBC
 void ov13_02238DBC(void) {
     if (ov13_02240394(0) != 0) {
         return;
@@ -380,7 +382,6 @@ void ov13_02238DBC(void) {
     ov13_0222B8E8(ov13_02238DE8);
 }
 
-// @fn ov13_02238DE8
 void ov13_02238DE8(void) {
     if (ov13_02227258() == -2) {
         return;
@@ -389,14 +390,12 @@ void ov13_02238DE8(void) {
     ov13_0222B8E8(ov13_02238E10);
 }
 
-// @fn ov13_02238E10
 void ov13_02238E10(void) {
     ov13_02238E24();
     ov13_02238E5C();
     ov13_02238E60();
 }
 
-// @fn ov13_02238E24
 void ov13_02238E24(void) {
     if (ov13_02241694(2)) {
         ov13_0222726C(0);
@@ -407,11 +406,9 @@ void ov13_02238E24(void) {
     }
 }
 
-// @fn ov13_02238E5C
 void ov13_02238E5C(void) {
 }
 
-// @fn ov13_02238E60
 void ov13_02238E60(void) {
     if (ov13_0224F58C != 0) {
         return;
@@ -425,14 +422,12 @@ void ov13_02238E60(void) {
     ov13_0222B8E8(ov13_02238EAC);
 }
 
-// @fn ov13_02238EAC
 void ov13_02238EAC(void) {
     ov13_022272E4();
     ov13_022405B8(8);
     ov13_0222B8E8(ov13_02238ECC);
 }
 
-// @fn ov13_02238ECC
 void ov13_02238ECC(void) {
     if (ov13_02240394(1) != 0) {
         return;
@@ -445,7 +440,6 @@ void ov13_02238ECC(void) {
     ov13_0222B8E8(ov13_02238F38);
 }
 
-// @fn ov13_02238F38
 void ov13_02238F38(void) {
     if (ov13_02240394(0) != 0) {
         return;
@@ -478,7 +472,6 @@ void ov13_02238F38(void) {
     }
 }
 
-// @fn ov13_0223902C
 void ov13_0223902C(int a) {
     if (ov13_0224F58C != 0) {
         return;
@@ -513,7 +506,6 @@ void ov13_0223902C(int a) {
     }
 }
 
-// @fn ov13_02239118
 void ov13_02239118(void) {
     if (ov13_0223C1DC() != 0) {
         return;
@@ -523,7 +515,6 @@ void ov13_02239118(void) {
     ov13_0222B8E8(ov13_02239144);
 }
 
-// @fn ov13_02239144
 void ov13_02239144(void) {
     if (ov13_0223C1F0() != 0) {
         return;
@@ -531,7 +522,6 @@ void ov13_02239144(void) {
     ov13_0222B8E8(ov13_02238EAC);
 }
 
-// @fn ov13_02239164
 void ov13_02239164(void) {
     int r = ov13_0223C1DC();
     if (r != 0) {
@@ -548,7 +538,6 @@ void ov13_02239164(void) {
     ov13_0222B8E8(ov13_022391C0);
 }
 
-// @fn ov13_022391C0
 void ov13_022391C0(void) {
     if (ov13_0223C1F0() != 0) {
         return;
@@ -564,7 +553,6 @@ void ov13_022391C0(void) {
     ov13_0222B8E8(ov13_02238E10);
 }
 
-// @fn ov13_02239228
 void ov13_02239228(void *src) {
     BgBuf *p = ov13_0224128C(0x608, 4);
     ov13_0224F590.buf = p;

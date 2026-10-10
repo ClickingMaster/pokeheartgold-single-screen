@@ -238,10 +238,12 @@ WIP_LOCAL int ov02_0224DB9C(void *a0, void *a1, void *a2);
 WIP_LOCAL int ov02_0224F108(void *a0, void *a1, void *a2);
 WIP_LOCAL int ov02_0224E828(void *a0, int a1, int a2, int a3, fx32 a4, u16 *a5, u16 *a6, int a7);
 WIP_LOCAL int ov02_0224EB48(void *a0, int a1, int a2, int a3, fx32 a4, u16 *a5, u16 *a6, int a7);
+
 typedef struct ov02_BF58Cfg {
     int unk0;
     int unk4;
 } ov02_BF58Cfg;
+
 extern void *ov01_021F771C(void *a0);            // no header included here
 extern void sub_02023E78(void *a0, VecFx32 *a1); // no header included here
 WIP_LOCAL BOOL ov02_022508D8(TaskManager *taskManager);
@@ -249,6 +251,7 @@ WIP_LOCAL BOOL ov02_022508D8(TaskManager *taskManager);
 typedef struct ov02_FieldList5 {
     u32 v[5];
 } ov02_FieldList5;
+
 extern int sub_02054C90(void *a0, void *a1, int a2, void **a3, void **a4);                                                                                 // no header included here
 extern void *MapProp_GetRenderSurface(void *a0);                                                                                                           // no header included here
 extern void *MapProp_GetResModel(void *a0);                                                                                                                // no header included here
@@ -262,6 +265,7 @@ extern int MapPropManager_LoadOne(void *a0, int a1, const VecFx32 *a2, const Vec
 extern void *MapPropManager_GetMapPropByIndex_Checked_RequireActive(void *a0, int a1);                // no header included here
 extern void MapPropOneShotAnimationManager_SetAnimationRenderObj(void *a0, int a1, int a2, void *a3); // no header included here
 extern void MapPropManager_RemoveMapPropByIndex(int a0, void *a1);                                    // no header included here
+
 typedef struct ov02_SafariObjCfg {
     u8 buildModel;
     u8 isAnimated : 1;
@@ -270,6 +274,7 @@ typedef struct ov02_SafariObjCfg {
     u8 hasGenderedLayout : 1;
     u8 objectType;
 } ov02_SafariObjCfg;
+
 extern void GetSafariObjectConfig(ov02_SafariObjCfg *a0, int a1, int a2);                                            // unk_02097268.h, not included
 extern int GetDeltaXByFacingDirection(int direction);                                                                // unk_0205FD20.h, not included
 extern int GetDeltaYByFacingDirection(int direction);                                                                // unk_0205FD20.h, not included
@@ -340,6 +345,7 @@ typedef struct ov02_LaunchTemplate {
     void *unkC;
     void *unk10;
 } ov02_LaunchTemplate;
+
 extern void *sub_02068B0C(void *mgr, const ov02_LaunchTemplate *src, VecFx32 *pos, u32 a3, void *a4, u32 priority);
 
 // STRUCT-CLEANUP TODO: the getters/setters/deleters below use byte-offset casts
@@ -817,7 +823,5 @@ WIP_LOCAL void ov02_0224D144(void *obj, void *fieldSystem);
 // Declared extern here so the create wrappers' relocations resolve by name.
 
 // ov02_02248728
-// clang-format off
-
 
 #endif // OVERLAY02_PORT_PRIVATE_H

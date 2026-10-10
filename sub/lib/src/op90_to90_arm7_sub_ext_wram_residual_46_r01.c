@@ -1,10 +1,11 @@
 #pragma force_active on
 #include <nitro/types.h>
-// clang-format off
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 extern void *AllocateHeapBuf(void *heap, u32 size);
 extern void DMA_Read(void *dst, const void *src, u32 size);
+
 typedef struct {
     u8 heapHeader[0x10];
     u8 unk10[6];
@@ -14,8 +15,9 @@ typedef struct {
     u16 unk20;
     u16 unk22;
 } RxFrameBuf;
+
 void *TakeoutRxFrame(void *src, u32 size);
-// @fn TakeoutRxFrame
+
 void *TakeoutRxFrame(void *src, u32 size) {
     RxFrameBuf *buf = AllocateHeapBuf(*(u8 **)0x0380fff4 + 0x188, size + 0x22);
     if (buf == NULL) {

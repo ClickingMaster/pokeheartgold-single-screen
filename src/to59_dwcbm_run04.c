@@ -1,7 +1,7 @@
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 extern u8 _021D43C8[];
 extern int readNvram(u32 address, u32 len, void *dst);

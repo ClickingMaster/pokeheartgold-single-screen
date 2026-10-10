@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef struct DequeBuf {
     u32 **ptr;
@@ -31,6 +31,7 @@ typedef union Str {
         u32 size;
         char *ptr;
     } l;
+
     struct {
         u8 isLong : 1;
         u8 len : 7;
@@ -39,10 +40,12 @@ typedef union Str {
 } Str;
 
 typedef struct VObj VObj;
+
 typedef struct VTable {
     void (*f0)(VObj *);
     void (*dtor)(VObj *);
 } VTable;
+
 struct VObj {
     VTable *vt;
 };
@@ -59,9 +62,11 @@ void ov45_0223BD0C(void);
 void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 Str *ov45_02237DB4(Str *, u32, u32, void *);
 void ov45_0223DB08(Str *, u32, u32, const char *);
+
 typedef struct Tag {
     u8 c;
 } Tag;
+
 void ov45_02238104(Str *, u32, u32, const char *, const char *, Tag);
 int ov45_02238024(const u8 *, u32, u32, const void *, u32);
 
@@ -132,12 +137,12 @@ void ov45_0223DB8C(CharVec *, u32, const char *);
 u32 ov45_0223EA34(Vec *, u32);
 void ov45_0223EB00(Vec *, u32, u32 *);
 void ov45_02236E58(NodeIter *);
-Node *ov45_022370D0(Node *,void *);
+Node *ov45_022370D0(Node *, void *);
 
 extern char ov45_0225520C[];
 void printf(const char *, ...);
 void abort(void);
-void ov45_02236EC4(Node *,void *);
+void ov45_02236EC4(Node *, void *);
 
 typedef struct InsertResult {
     Node *current;
@@ -208,9 +213,9 @@ static inline BOOL CallPmf(PMF *p, int adj, void *o) {
     u8 *obj = (u8 *)o + (adj >> 1);
     BOOL (*fn)(void *);
     if (adj & 1) {
-        fn = *(BOOL (**)(void *))(*(u8 **)obj + p->fn);
+        fn = *(BOOL(**)(void *))(*(u8 **)obj + p->fn);
     } else {
-        fn = (BOOL (*)(void *))p->fn;
+        fn = (BOOL(*)(void *))p->fn;
     }
     return fn(obj);
 }
@@ -280,11 +285,8 @@ typedef struct SplitBuf {
 void ov45_0223EC80(SplitBuf *b, u32 cap, Tag unused);
 void ov45_0223EC64(SplitBuf *b);
 
-
-
 BOOL ov45_0223DFC8(SessionMgr *m);
 
-// @fn ov45_0223DFC8
 BOOL ov45_0223DFC8(SessionMgr *m) {
     Vec v;
     BOOL made = FALSE;
@@ -302,7 +304,6 @@ BOOL ov45_0223DFC8(SessionMgr *m) {
     return res;
 }
 
-// @fn ov45_0223E024
 void ov45_0223E024(Vec *out, SessionMgr *m) {
     NodeIter it;
     u32 id;
@@ -314,7 +315,7 @@ void ov45_0223E024(Vec *out, SessionMgr *m) {
     hdr = (Node *)&m->list.root;
     it.current = m->list.leftmost;
     while (it.current != hdr) {
-        Session *s = ((Node*)it.current)->val;
+        Session *s = ((Node *)it.current)->val;
         if (s->unk38 != 0) {
             id = s->id;
             TouchTag();

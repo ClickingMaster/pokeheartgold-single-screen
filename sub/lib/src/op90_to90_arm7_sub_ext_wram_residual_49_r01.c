@@ -1,32 +1,35 @@
 #pragma force_active on
 #include <nitro/types.h>
-// clang-format off
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
+
 typedef struct {
-    u16 state;      /* 0x00 */
+    u16 state; /* 0x00 */
     u16 x02;
-    u8 macAdrs[6];  /* 0x04 */
+    u8 macAdrs[6]; /* 0x04 */
     u8 pad0a[0x18 - 0x0a];
-    u16 timer;      /* 0x18 */
+    u16 timer; /* 0x18 */
     u16 x1a;
 } CamSta;
+
 typedef struct {
     u8 pad0[0x31c];
-    CamSta *sta;          /* 0x31c */
+    CamSta *sta; /* 0x31c */
     u8 pad320[0x322 - 0x320];
-    u16 maxSta;           /* 0x322 */
+    u16 maxSta; /* 0x322 */
     u8 pad324[0x350 - 0x324];
-    u16 mode;             /* 0x350 */
+    u16 mode; /* 0x350 */
     u8 pad352[0x3cc - 0x352];
-    u16 aid;              /* 0x3cc */
+    u16 aid; /* 0x3cc */
     u8 pad3ce[0x52c - 0x3ce];
-    u16 numSta;           /* 0x52c */
+    u16 numSta; /* 0x52c */
     u16 x52e;
-    u16 map530;           /* 0x530 */
+    u16 map530; /* 0x530 */
     u16 map532;
-    u16 map534;           /* 0x534 */
+    u16 map534; /* 0x534 */
 } WlWork;
+
 #define ROOT (*(WlWork **)0x0380fff4)
 extern u16 CAM_GetStaState(u32 aid);
 extern void CAM_SetStaState(u16 aid, u16 state);
@@ -38,7 +41,7 @@ extern void MLME_IssueDeAuthIndication(void *mac, u16 reason);
 extern void WSetStaState(u16 state);
 extern void WClearAids(void);
 void CAM_TimerTask(void);
-// @fn CAM_TimerTask
+
 void CAM_TimerTask(void) {
     WlWork *w;
     CamSta *sta;
@@ -91,7 +94,7 @@ void CAM_TimerTask(void) {
                             MLME_IssueDeAuthIndication(sta->macAdrs, 1);
                         }
                     }
-                clear:
+clear:
                     sta->state = 0;
                     w->numSta--;
                 }

@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef struct GTSocket GTSocket;
 typedef struct GTConn GTConn;
@@ -23,19 +23,19 @@ typedef void (*GTSockErrCB)(GTSocket *, GTConn *, u32, u16, int, u8 *, int);
 typedef int (*GTUnrecCB)(GTSocket *, u32, u16, u8 *, int);
 
 struct GTSocket {
-    int handle;                 // 0x00
-    u32 ip;                     // 0x04
-    u16 port;                   // 0x08
-    void *connections;          // 0x0c
-    void *closedConnections;    // 0x10
-    int close;                  // 0x14
-    int error;                  // 0x18
-    int callbackLevel;          // 0x1c
-    void *connectAttemptCB;     // 0x20
-    void *unk24;                // 0x24
-    GTSockErrCB unk28;          // 0x28
-    GTSockErrCB unk2C;          // 0x2c
-    GTUnrecCB unrecognizedCB;   // 0x30
+    int handle;               // 0x00
+    u32 ip;                   // 0x04
+    u16 port;                 // 0x08
+    void *connections;        // 0x0c
+    void *closedConnections;  // 0x10
+    int close;                // 0x14
+    int error;                // 0x18
+    int callbackLevel;        // 0x1c
+    void *connectAttemptCB;   // 0x20
+    void *unk24;              // 0x24
+    GTSockErrCB unk28;        // 0x28
+    GTSockErrCB unk2C;        // 0x2c
+    GTUnrecCB unrecognizedCB; // 0x30
 };
 
 typedef struct GTBuffer {
@@ -60,33 +60,33 @@ typedef struct GTInMsg {
 } GTInMsg;
 
 struct GTConn {
-    u32 ip;                    // 0x00
-    u16 port;                  // 0x04
-    GTSocket *socket;          // 0x08
-    int state;                 // 0x0c
-    int initiated;             // 0x10
-    int freeAtAcceptReject;    // 0x14
-    int connectionResult;      // 0x18
-    u32 startTime;             // 0x1c
-    u32 timeout;               // 0x20
-    int callbackLevel;         // 0x24
-    GTCallbacks callbacks;     // 0x28
-    u8 *initialMessage;        // 0x38
-    int initialMessageLen;     // 0x3c
-    void *data;                // 0x40
-    GTBuffer incomingBuffer;   // 0x44
-    GTBuffer outgoingBuffer;   // 0x50
+    u32 ip;                         // 0x00
+    u16 port;                       // 0x04
+    GTSocket *socket;               // 0x08
+    int state;                      // 0x0c
+    int initiated;                  // 0x10
+    int freeAtAcceptReject;         // 0x14
+    int connectionResult;           // 0x18
+    u32 startTime;                  // 0x1c
+    u32 timeout;                    // 0x20
+    int callbackLevel;              // 0x24
+    GTCallbacks callbacks;          // 0x28
+    u8 *initialMessage;             // 0x38
+    int initialMessageLen;          // 0x3c
+    void *data;                     // 0x40
+    GTBuffer incomingBuffer;        // 0x44
+    GTBuffer outgoingBuffer;        // 0x50
     void *incomingBufferedMessages; // 0x5c
     void *outgoingBufferedMessages; // 0x60
-    u16 serialNumber;          // 0x64
-    u16 expectedSerialNumber;  // 0x66
-    u8 response[32];           // 0x68
-    u32 lastSend;              // 0x88
-    u32 challengeTime;         // 0x8c
-    int pendingAck;            // 0x90
-    u32 pendingAckTime;        // 0x94
-    void *sendFilters;         // 0x98
-    void *receiveFilters;      // 0x9c
+    u16 serialNumber;               // 0x64
+    u16 expectedSerialNumber;       // 0x66
+    u8 response[32];                // 0x68
+    u32 lastSend;                   // 0x88
+    u32 challengeTime;              // 0x8c
+    int pendingAck;                 // 0x90
+    u32 pendingAckTime;             // 0x94
+    void *sendFilters;              // 0x98
+    void *receiveFilters;           // 0x9c
 };
 
 typedef struct GTFilter {
@@ -226,7 +226,6 @@ int ov00_0220E1E0(GTSocket *socket, u8 *msg, int len, u32 ip, u16 port);
 int ov00_0220E490(GTSocket *socket, u32 ip, u16 port);
 int ov00_0220E590(GTSocket *socket);
 
-// @fn ov00_0220E128
 int ov00_0220E128(GTConn *conn, int type, u8 *msg, int len) {
     int dataLen = len - 3;
     if (type == 0x64) {
@@ -253,7 +252,6 @@ int ov00_0220E128(GTConn *conn, int type, u8 *msg, int len) {
     return 1;
 }
 
-// @fn ov00_0220E1E0
 int ov00_0220E1E0(GTSocket *socket, u8 *msg, int len, u32 ip, u16 port) {
     GTConn *conn;
     int handled;
@@ -338,7 +336,6 @@ int ov00_0220E1E0(GTSocket *socket, u8 *msg, int len, u32 ip, u16 port) {
     return 1;
 }
 
-// @fn ov00_0220E490
 int ov00_0220E490(GTSocket *socket, u32 ip, u16 port) {
     GTConn *conn = ov00_0220EEEC(socket, ip, port);
     if (socket->unk2C) {
@@ -364,7 +361,6 @@ int ov00_0220E490(GTSocket *socket, u32 ip, u16 port) {
     return 1;
 }
 
-// @fn ov00_0220E590
 int ov00_0220E590(GTSocket *socket) {
     GTSockAddr addr;
     int addrlen;

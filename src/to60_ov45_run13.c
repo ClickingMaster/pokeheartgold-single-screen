@@ -1,12 +1,22 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef union Str {
-    struct { u32 isLong : 1; u32 pad : 31; u32 size; char *ptr; } l;
-    struct { u8 isLong : 1; u8 len : 7; char buf[11]; } s;
+    struct {
+        u32 isLong : 1;
+        u32 pad : 31;
+        u32 size;
+        char *ptr;
+    } l;
+
+    struct {
+        u8 isLong : 1;
+        u8 len : 7;
+        char buf[11];
+    } s;
 } Str;
 
 typedef struct IntStrPair {
@@ -29,9 +39,17 @@ static inline void PairInit(IntStrPair *p, int *k, Str *v) {
     ov45_02237A24(&p->val, v);
 }
 
-static inline BOOL StrIsShort(Str *s) { return !s->l.isLong; }
-static inline u32 StrSize(Str *s) { return StrIsShort(s) ? s->s.len : s->l.size; }
-static inline const char *StrData(Str *s) { return StrIsShort(s) ? s->s.buf : s->l.ptr; }
+static inline BOOL StrIsShort(Str *s) {
+    return !s->l.isLong;
+}
+
+static inline u32 StrSize(Str *s) {
+    return StrIsShort(s) ? s->s.len : s->l.size;
+}
+
+static inline const char *StrData(Str *s) {
+    return StrIsShort(s) ? s->s.buf : s->l.ptr;
+}
 
 extern void ov45_02237A24(void *dst, void *src);
 extern void ov00_021EC2EC(int a, void *p, int b);
@@ -55,6 +73,7 @@ typedef struct Node {
     void *left;
     void *right;
     u32 parent;
+
     union {
         int i;
         Obj *obj;
@@ -104,11 +123,13 @@ static inline Iter IterPostInc(Iter *it) {
 }
 
 typedef struct VObj VObj;
+
 typedef struct VTable {
     void (*f0)(VObj *);
     void (*dtor)(VObj *);
     void *(*f8)(VObj *);
 } VTable;
+
 struct VObj {
     VTable *vt;
 };
@@ -141,13 +162,12 @@ typedef struct NamedEntry {
     Entry e;
 } NamedEntry;
 
-
 typedef struct Empty2 {
     u8 a;
     u8 b;
 } Empty2;
 
-extern Node *ov45_022370D0(Node *n,void *root);
+extern Node *ov45_022370D0(Node *n, void *root);
 extern void ov45_0223FD8C(Iter *out, Tree *t, void *key);
 extern void *ov45_02255238;
 extern u32 ov00_021FF368(void);
@@ -165,13 +185,17 @@ extern Node *ov45_0224404C(Tree *t, Node *parent, u8 a, u8 b, IntStrPair *val);
 extern BOOL ov45_0224330C(Tree *t, int *id);
 int ov45_02242A2C(Str *s);
 void ov45_0224261C(Iter *out, Tree *t, Iter pos);
+
 typedef struct Tag {
     u8 x;
 } Tag;
+
 IntStrPair *ov45_02242DCC(Tree *t, int *key);
+
 static inline IntStrPair *MapIndex(Tree *t, int *key, Tag a, Tag b) {
     return ov45_02242DCC(t, key);
 }
+
 Node *ov45_02242E88(Tree *t, int *key, Node **pos, u8 *a, u8 *b);
 BOOL ov45_0224307C(u8 *obj, int id);
 BOOL ov45_022431AC(Tree *t, int *key);
@@ -288,15 +312,15 @@ extern void *ov45_02255250;
 void *ov45_02242858(u8 *p);
 void ov45_022424DC(void);
 
-#define CTX_CHECK(c)                         \
-    if ((c) == NULL) {                       \
-        return 4;                            \
-    }                                        \
-    if ((c) != NULL && (c)->state == 5) {    \
-        return 7;                            \
-    }                                        \
-    if ((c) != NULL && CtxState() != 3) {    \
-        return 4;                            \
+#define CTX_CHECK(c)                      \
+    if ((c) == NULL) {                    \
+        return 4;                         \
+    }                                     \
+    if ((c) != NULL && (c)->state == 5) { \
+        return 7;                         \
+    }                                     \
+    if ((c) != NULL && CtxState() != 3) { \
+        return 4;                         \
     }
 
 static inline void OpDelete(void *p) {
@@ -317,13 +341,13 @@ static inline void TreeHdrCopy(TreeHdr *d, TreeHdr *s) {
     d->count = 0;
     d->root = NULL;
     d->leftmost = (Node *)&d->root;
-    t = (Tag){0};
+    t = (Tag) { 0 };
     ov45_02243BC0(d, s);
 }
 
 static inline void TagTemp(void) {
     Tag t;
-    t = (Tag){0};
+    t = (Tag) { 0 };
 }
 
 static inline void TreeHdrInit(TreeHdr *t) {
@@ -393,7 +417,7 @@ extern Str *ov45_022339F4(Str *out, Str *a, Str *b);
 extern char ov45_0225533C[];
 extern int printf(const char *fmt, ...);
 extern void abort(void);
-extern void ov45_02236EC4(Node *n,void *root);
+extern void ov45_02236EC4(Node *n, void *root);
 
 typedef struct NodeHolder {
     Node **hdr;
@@ -402,7 +426,7 @@ typedef struct NodeHolder {
 
 static inline void IterTemp(Node *n) {
     Iter it;
-    it = (Iter){n};
+    it = (Iter) { n };
 }
 
 static inline BOOL StrEqC(Str *a, const char *b) {
@@ -430,7 +454,11 @@ static inline BOOL CtxIsState3(void) {
 
 typedef void (*VoidFunc)(void);
 extern VoidFunc ov45_022577E4;
-extern struct { u8 *obj; void *buf; } ov45_022577E8;
+
+extern struct {
+    u8 *obj;
+    void *buf;
+} ov45_022577E8;
 
 void ov45_022423E0(void);
 void ov45_0224240C(void);
@@ -439,12 +467,9 @@ Node *ov45_0224317C(Tree *t, int *key, Node *node, Node *res);
 
 Node *ov45_02243250(Tree *t, int *key, Node *node, Node *res);
 
-
-
 BOOL ov45_0224246C(u8 *obj);
 BOOL ov45_02242510(Tree *t, u32 id);
 
-// @fn ov45_02242288
 int ov45_02242288(Str *s, const char *chars, u32 pos, u32 n) {
     const char *data;
     u32 len;
@@ -476,7 +501,6 @@ int ov45_02242288(Str *s, const char *chars, u32 pos, u32 n) {
     return -1;
 }
 
-// @fn ov45_02242320
 Node *ov45_02242320(Tree *t, Obj **key, Node **pos, u8 *a, u8 *b) {
     Node *parent;
     Node *n;
@@ -500,7 +524,6 @@ Node *ov45_02242320(Tree *t, Obj **key, Node **pos, u8 *a, u8 *b) {
     return parent;
 }
 
-// @fn ov45_02242394
 void *ov45_02242394(u32 size) {
     void *p;
     if (size == 0) {
@@ -522,13 +545,11 @@ void *ov45_02242394(u32 size) {
     return NULL;
 }
 
-// @fn ov45_022423E0
 void ov45_022423E0(void) {
     ov45_022504E0(*(void **)ov45_022577E8.obj);
     ov45_022577E4 = NULL;
 }
 
-// @fn ov45_0224240C
 void ov45_0224240C(void) {
     u8 *obj;
     if (ov45_022577E8.buf != NULL) {
@@ -541,7 +562,6 @@ void ov45_0224240C(void) {
     ov45_022577E4 = ov45_022423E0;
 }
 
-// @fn ov45_0224246C
 BOOL ov45_0224246C(u8 *obj) {
     void *buf;
     ov45_022577E8.obj = obj;
@@ -558,7 +578,6 @@ BOOL ov45_0224246C(u8 *obj) {
     return TRUE;
 }
 
-// @fn ov45_022424DC
 void ov45_022424DC(void) {
     if (ov45_022577E8.buf != NULL) {
         ov00_021EC2EC(0, ov45_022577E8.buf, 0);
@@ -566,7 +585,6 @@ void ov45_022424DC(void) {
     }
 }
 
-// @fn ov45_02242510
 BOOL ov45_02242510(Tree *t, u32 id) {
     ObjKey key;
     Iter tmp;
@@ -582,21 +600,20 @@ BOOL ov45_02242510(Tree *t, u32 id) {
     if (it.current == &t->head) {
         return FALSE;
     }
-    if (((Node*)it.current)->key.obj != NULL) {
-        ((VObj *)((Node*)it.current)->key.obj)->vt->dtor((VObj *)((Node*)it.current)->key.obj);
+    if (((Node *)it.current)->key.obj != NULL) {
+        ((VObj *)((Node *)it.current)->key.obj)->vt->dtor((VObj *)((Node *)it.current)->key.obj);
     }
     ov45_0224261C(&res, t, tmp);
     return TRUE;
 }
 
-// @fn ov45_022425A0
 void ov45_022425A0(Tree *t) {
     Iter it;
     Iter tmp;
     Iter res;
     it.current = t->head.right;
     while (it.current != &t->head) {
-        VObj *o = (VObj *)((Node*)it.current)->key.obj;
+        VObj *o = (VObj *)((Node *)it.current)->key.obj;
         if (o != NULL) {
             o->vt->dtor(o);
         }
@@ -606,7 +623,6 @@ void ov45_022425A0(Tree *t) {
     }
 }
 
-// @fn ov45_0224261C
 void ov45_0224261C(Iter *out, Tree *t, Iter pos) {
     Node *n = pos.current;
     if (n == t->head.right) {

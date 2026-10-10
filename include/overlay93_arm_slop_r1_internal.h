@@ -1,10 +1,10 @@
 #ifndef POKEHEARTGOLD_OVERLAY93_ARM_SLOP_R1_INTERNAL_H
 #define POKEHEARTGOLD_OVERLAY93_ARM_SLOP_R1_INTERNAL_H
 
-// clang-format off
 #include "global.h"
+
+// The headers below need the types from global.h.
 #include <nnsys/g3d/gecom.h>
-// clang-format on
 
 typedef struct Ov93SlopR1Vtx {
     s32 a;

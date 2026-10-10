@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef struct Ov13Pos2 {
     u16 x;
@@ -134,6 +134,7 @@ extern Ov13BannerState ov13_0224F5AC;
 extern void *ov13_0224F5B0[];
 extern Ov13ScanWork *ov13_0224F5B4;
 extern Ov13Select *ov13_0224F5B8;
+
 typedef struct Ov13MBWork {
     Ov13MBHead head;
     Ov13MBChild children[1];
@@ -142,6 +143,7 @@ typedef struct Ov13MBWork {
     void *p140;
     void *p144;
 } Ov13MBWork;
+
 extern Ov13MBWork *ov13_0224F5BC;
 extern void *ov13_0224F4F8;
 extern u8 ov13_022457EC[][5];
@@ -164,10 +166,10 @@ extern u8 ov13_0224592C[];
 extern u8 ov13_02245934[];
 extern void *ov13_02246854[];
 
-#define MBW_HEAD (ov13_0224F5BC->head)
+#define MBW_HEAD     (ov13_0224F5BC->head)
 #define MBW_CHILD(n) (ov13_0224F5BC->children[n])
-#define MBW_P140 (ov13_0224F5BC->p140)
-#define MBW_P144 (ov13_0224F5BC->p144)
+#define MBW_P140     (ov13_0224F5BC->p140)
+#define MBW_P144     (ov13_0224F5BC->p144)
 
 int ov13_0222BAF4(void *a, int b, int c, int d);
 void *ov13_022278C4(void *a);
@@ -274,13 +276,11 @@ static inline void ov13_MBKickChild(u16 aid) {
     MB_DisconnectChild(aid);
 }
 
-
 void ov13_0223BE6C(int a, int kind, u8 c, int d, int e);
 void ov13_0223C198(void);
 int ov13_0223C1DC(void);
 BOOL ov13_0223C1F0(void);
 
-// @fn ov13_0223BD30
 void ov13_0223BD30(void *task) {
     int j;
     BOOL a;
@@ -320,7 +320,6 @@ void ov13_0223BD30(void *task) {
     ov13_022425D0(0, task);
 }
 
-// @fn ov13_0223BE6C
 void ov13_0223BE6C(int a, int kind, u8 c, int d, int e) {
     int unk14;
     Ov13Bytes6 tbl = *(Ov13Bytes6 *)(ov13_02245878 + 4);
@@ -357,23 +356,19 @@ void ov13_0223BE6C(int a, int kind, u8 c, int d, int e) {
     }
 }
 
-// @fn ov13_0223C198
 void ov13_0223C198(void) {
     ov13_022425D0(0, ov13_0224F5B8->task);
     ov13_0224F5B8->task = ov13_02242528(1, ov13_0223C7FC, 0, 0x78);
 }
 
-// @fn ov13_0223C1DC
 int ov13_0223C1DC(void) {
     return ov13_0224F5B8->unk1B;
 }
 
-// @fn ov13_0223C1F0
 BOOL ov13_0223C1F0(void) {
     return ov13_0224F5B8 != NULL;
 }
 
-// @fn ov13_0223C20C
 void ov13_0223C20C(void *task) {
     ov13_0224F5B8->unk1A--;
     G2x_ChangeBlendBrightness_((u16 *)&reg_G2_BLDCNT, ov13_0224F5B8->unk1A);
@@ -383,7 +378,6 @@ void ov13_0223C20C(void *task) {
     ov13_022425C8(task, ov13_0223C26C);
 }
 
-// @fn ov13_0223C26C
 void ov13_0223C26C(void *task) {
     int x;
     int y;

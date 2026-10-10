@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef void (*Func)(void);
 typedef void (*TaskFunc)(void *, void *);
@@ -236,6 +236,7 @@ typedef struct {
     u8 state;
     u8 unkE8[7];
     u8 flags;
+
     union {
         struct {
             u8 mask[4];
@@ -244,6 +245,7 @@ typedef struct {
             u8 autoDns;
             u8 unkF7;
         } work;
+
         struct {
             u8 info[0xe];
             u16 crc;
@@ -260,6 +262,7 @@ typedef struct {
     u8 ssid[0x20];
     u8 unk60[0x20];
     u8 wep[4][0x10];
+
     union {
         struct {
             u8 ip[4];
@@ -267,8 +270,10 @@ typedef struct {
             u8 dns1[4];
             u8 dns2[4];
         };
+
         u8 addr[4][4];
     };
+
     u8 cidr;
     u8 unkD1[0x15];
     u8 mode : 2;
@@ -360,19 +365,16 @@ void ov13_0223AF10(void *, void *);
 void ov13_0223AFF4(void *, void *);
 extern void ov13_0223B0D8(void *, void *);
 
-
 void ov13_022392B4(void);
 void ov13_022392CC(u16 *src, int offset, int width, int rows);
 void ov13_02239378(u8 *src, int index, int palette);
 void ov13_022393E0(void *src);
 void ov13_0223943C(int kind, int range, int x, int y, int value);
 
-// @fn ov13_022392B4
 void ov13_022392B4(void) {
     ov13_0224F590.buf->dirty = 1;
 }
 
-// @fn ov13_022392CC
 void ov13_022392CC(u16 *src, int offset, int width, int rows) {
     u16 *dst = ov13_0224F590.buf->data + offset;
     int i;
@@ -383,7 +385,6 @@ void ov13_022392CC(u16 *src, int offset, int width, int rows) {
     }
 }
 
-// @fn ov13_02239324
 void ov13_02239324(void *task, void *arg) {
     if (ov13_0224F590.buf->dirty == 0) {
         return;
@@ -393,32 +394,27 @@ void ov13_02239324(void *task, void *arg) {
     ov13_0224F590.buf->dirty = 0;
 }
 
-// @fn ov13_02239378
 void ov13_02239378(u8 *src, int index, int palette) {
     ov13_0224F590.src = src + index * 32;
     ov13_0224F590.dst = (void *)(palette * 32 + 0x5000000);
     ov13_02242528(1, ov13_022393B4, NULL, 0x78);
 }
 
-// @fn ov13_022393B4
 void ov13_022393B4(void *task, void *arg) {
     MIi_CpuCopy16(ov13_0224F590.src, ov13_0224F590.dst, 0x20);
     ov13_022425D0(1, task);
 }
 
-// @fn ov13_022393E0
 void ov13_022393E0(void *src) {
     ov13_0224F590.src = src;
     ov13_02242528(1, ov13_0223940C, NULL, 0x78);
 }
 
-// @fn ov13_0223940C
 void ov13_0223940C(void *task, void *arg) {
     MIi_CpuCopy16(ov13_0224F590.src, (void *)0x5000000, 0x200);
     ov13_022425D0(1, task);
 }
 
-// @fn ov13_0223943C
 void ov13_0223943C(int kind, int range, int x, int y, int value) {
     ov13_0224F59C = ov13_0224128C(0x20, 4);
     ov13_0224F59C->kind = kind;

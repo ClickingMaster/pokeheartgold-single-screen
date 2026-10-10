@@ -1,11 +1,12 @@
 #pragma force_active on
-// clang-format off
 #include <nitro/types.h>
-#include <nitro/code32.h>
-// clang-format on
 
-#define W09_RAM_ROOT (*(u8 **)0x0380fff4)
+// The code below is compiled as ARM (32-bit) code.
+#include <nitro/code32.h>
+
+#define W09_RAM_ROOT        (*(u8 **)0x0380fff4)
 #define W09_MMIO16(address) (*(volatile u16 *)(u32)(address))
+
 typedef struct W09TxDescriptor {
     u8 opaque0[8];
     u8 *frame;
@@ -13,8 +14,8 @@ typedef struct W09TxDescriptor {
 } W09TxDescriptor;
 
 int WCheckTxBufIdBeforeFrame(void *descriptor);
-int WCheckTxBufIdBeforeFrame(void *descriptor)
-{
+
+int WCheckTxBufIdBeforeFrame(void *descriptor) {
     volatile u16 *prefix;
     u8 *frame = ((W09TxDescriptor *)descriptor)->frame;
     prefix = (volatile u16 *)((u32)frame - 4);

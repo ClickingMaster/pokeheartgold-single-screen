@@ -1,8 +1,85 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 #pragma force_active on
-typedef struct W{u8 p[0xd];u8 count;u8 pe[7];u8 mode;u8 p16[0xce];void*list;u8 pe8[12];int slots[1];}W;extern W*ov00_021F955C(void);extern const u8 ov00_02217AAC[],ov00_02217AD8[];extern const int ov00_02216040[];extern int ov00_022139C8(void*),ov00_02212DB4(void*,const void*,int);extern void*ov00_022139B8(void*,int);extern void ov00_0221390C(void*,void*),ov00_02212D10(void*,const void*,int),ov00_022139D8(void*,int,const void*,int);extern u32 ov00_021ED5E4(u32);int ov00_021F89D0(int);void ov00_021F8BA8(void);
-int ov00_021F89D0(int sort){int removed=0,matched,value,weight;W*w;void*arg;int i=removed;if(ov00_022139C8(ov00_021F955C()->list)>0)do{int j;void*item=ov00_022139B8(ov00_021F955C()->list,i);if(ov00_021F955C()->mode==0){value=ov00_02212DB4(item,ov00_02217AAC,0);matched=0;for(j=1;j<=ov00_021F955C()->count;j++){if(value==ov00_021F955C()->slots[j]){ov00_0221390C(ov00_021F955C()->list,item);i--;matched=1;break;}}if(matched)goto advance;}if(*(void**)((u8*)ov00_021F955C()+0x474)){w=ov00_021F955C();arg=*(void**)((u8*)ov00_021F955C()+0x478);weight=(*(int(**)(int,void*))((u8*)w+0x474))(i,arg);if(weight>0){if(weight>0x7fffff)weight=0x7fffff;ov00_02212D10(item,ov00_02217AD8,ov00_021ED5E4(256)|(weight<<8));}else{ov00_0221390C(ov00_021F955C()->list,item);i--;removed=1;}}else ov00_02212D10(item,ov00_02217AD8,ov00_021ED5E4(128));advance:i++;}while(i<ov00_022139C8(ov00_021F955C()->list));if(sort&&ov00_022139C8(ov00_021F955C()->list)!=0)ov00_022139D8(ov00_021F955C()->list,0,ov00_02217AD8,0);if(removed&&ov00_022139C8(ov00_021F955C()->list)==0)return 0;return 1;}
+
+typedef struct W {
+    u8 p[0xd];
+    u8 count;
+    u8 pe[7];
+    u8 mode;
+    u8 p16[0xce];
+    void *list;
+    u8 pe8[12];
+    int slots[1];
+} W;
+
+extern W *ov00_021F955C(void);
+extern const u8 ov00_02217AAC[];
+extern const u8 ov00_02217AD8[];
+extern const int ov00_02216040[];
+extern int ov00_022139C8(void *);
+extern int ov00_02212DB4(void *, const void *, int);
+extern void *ov00_022139B8(void *, int);
+extern void ov00_0221390C(void *, void *);
+extern void ov00_02212D10(void *, const void *, int);
+extern void ov00_022139D8(void *, int, const void *, int);
+extern u32 ov00_021ED5E4(u32);
+int ov00_021F89D0(int);
+void ov00_021F8BA8(void);
+
+int ov00_021F89D0(int sort) {
+    int removed = 0, matched, value, weight;
+    W *w;
+    void *arg;
+    int i = removed;
+    if (ov00_022139C8(ov00_021F955C()->list) > 0) {
+        do {
+            int j;
+            void *item = ov00_022139B8(ov00_021F955C()->list, i);
+            if (ov00_021F955C()->mode == 0) {
+                value = ov00_02212DB4(item, ov00_02217AAC, 0);
+                matched = 0;
+                for (j = 1; j <= ov00_021F955C()->count; j++) {
+                    if (value == ov00_021F955C()->slots[j]) {
+                        ov00_0221390C(ov00_021F955C()->list, item);
+                        i--;
+                        matched = 1;
+                        break;
+                    }
+                }
+                if (matched) {
+                    goto advance;
+                }
+            }
+            if (*(void **)((u8 *)ov00_021F955C() + 0x474)) {
+                w = ov00_021F955C();
+                arg = *(void **)((u8 *)ov00_021F955C() + 0x478);
+                weight = (*(int (**)(int, void *))((u8 *)w + 0x474))(i, arg);
+                if (weight > 0) {
+                    if (weight > 0x7fffff) {
+                        weight = 0x7fffff;
+                    }
+                    ov00_02212D10(item, ov00_02217AD8, ov00_021ED5E4(256) | (weight << 8));
+                } else {
+                    ov00_0221390C(ov00_021F955C()->list, item);
+                    i--;
+                    removed = 1;
+                }
+            } else {
+                ov00_02212D10(item, ov00_02217AD8, ov00_021ED5E4(128));
+            }
+advance:
+            i++;
+        } while (i < ov00_022139C8(ov00_021F955C()->list));
+    }
+    if (sort && ov00_022139C8(ov00_021F955C()->list) != 0) {
+        ov00_022139D8(ov00_021F955C()->list, 0, ov00_02217AD8, 0);
+    }
+    if (removed && ov00_022139C8(ov00_021F955C()->list) == 0) {
+        return 0;
+    }
+    return 1;
+}

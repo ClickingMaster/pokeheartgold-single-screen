@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef struct Node {
     struct Node *prev;
@@ -139,8 +139,10 @@ typedef struct Canvas {
     CanvasVT *vt;
     TextCanvas tc;
     void *buf;
+
     union {
         void *task;
+
         struct {
             u16 charNo;
             u8 w;
@@ -300,6 +302,7 @@ static inline void TextCanvasInit(TextCanvas *tc, void *cc, Font *font, int hSpa
     tc->hSpace = hSpace;
     tc->vSpace = vSpace;
 }
+
 extern char *ov13_02247430[];
 extern char *ov13_02247438[];
 extern u16 ov13_02245950[];
@@ -424,7 +427,6 @@ void ov13_02242430(void);
 void ov13_022425C8(Task13 *t, void (*func)(void *, void *));
 void ov13_02242640(int q, u8 enabled);
 
-// @fn ov13_0223FE98
 void ov13_0223FE98(OamBlk *blk, int idx, u32 mode, u32 pal) {
     Oam *o = blk->oam;
     int i;

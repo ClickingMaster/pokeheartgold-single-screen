@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef void (*Func)(void);
 typedef void (*TaskFunc)(void *, void *);
@@ -236,6 +236,7 @@ typedef struct {
     u8 state;
     u8 unkE8[7];
     u8 flags;
+
     union {
         struct {
             u8 mask[4];
@@ -244,6 +245,7 @@ typedef struct {
             u8 autoDns;
             u8 unkF7;
         } work;
+
         struct {
             u8 info[0xe];
             u16 crc;
@@ -260,6 +262,7 @@ typedef struct {
     u8 ssid[0x20];
     u8 unk60[0x20];
     u8 wep[4][0x10];
+
     union {
         struct {
             u8 ip[4];
@@ -267,8 +270,10 @@ typedef struct {
             u8 dns1[4];
             u8 dns2[4];
         };
+
         u8 addr[4][4];
     };
+
     u8 cidr;
     u8 unkD1[0x15];
     u8 mode : 2;
@@ -360,35 +365,28 @@ void ov13_0223AF10(void *, void *);
 void ov13_0223AFF4(void *, void *);
 extern void ov13_0223B0D8(void *, void *);
 
-
 void ov13_0223AC4C(int kind);
 
-// @fn ov13_0223ABB8
 void ov13_0223ABB8(int seq) {
     NNS_SndArcPlayerStartSeqArc(ov13_0224F5A8->handle, 0, seq);
 }
 
-// @fn ov13_0223ABDC
 void ov13_0223ABDC(int volume) {
     NNS_SndPlayerSetVolume(ov13_0224F5A8->handle, volume);
 }
 
-// @fn ov13_0223ABFC
 void ov13_0223ABFC(int mask, int pitch) {
     NNS_SndPlayerSetTrackPitch(ov13_0224F5A8->handle, mask, pitch);
 }
 
-// @fn ov13_0223AC20
 void ov13_0223AC20(void) {
     NNS_SndPlayerStopSeq(ov13_0224F5A8->handle, 0);
 }
 
-// @fn ov13_0223AC40
 void ov13_0223AC40(void *task, void *arg) {
     NNS_SndMain();
 }
 
-// @fn ov13_0223AC4C
 void ov13_0223AC4C(int kind) {
     const u8 *res;
     const u8 *anim;
@@ -408,7 +406,6 @@ void ov13_0223AC4C(int kind) {
     ov13_0223ABB8(0xd);
 }
 
-// @fn ov13_0223AD48
 void ov13_0223AD48(void *task, void *arg) {
     int x;
     int y;
@@ -428,7 +425,6 @@ void ov13_0223AD48(void *task, void *arg) {
     ov13_022425C8(task, ov13_0223AE2C);
 }
 
-// @fn ov13_0223AE2C
 void ov13_0223AE2C(void *task, void *arg) {
     int x;
     int y;
@@ -448,7 +444,6 @@ void ov13_0223AE2C(void *task, void *arg) {
     ov13_022425C8(task, ov13_0223AF10);
 }
 
-// @fn ov13_0223AF10
 void ov13_0223AF10(void *task, void *arg) {
     int x;
     int y;
@@ -468,7 +463,6 @@ void ov13_0223AF10(void *task, void *arg) {
     ov13_022425C8(task, ov13_0223AFF4);
 }
 
-// @fn ov13_0223AFF4
 void ov13_0223AFF4(void *task, void *arg) {
     int x;
     int y;

@@ -1,10 +1,8 @@
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
-
 #include <nnsys/g2d/g2d_Image.h>
-
 
 extern void GX_BeginLoadTexPltt(void);
 extern void GX_LoadTexPltt(const void *, u32, u32);

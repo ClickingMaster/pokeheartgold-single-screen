@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef void (*StateFunc)(void);
 
@@ -37,6 +37,7 @@ extern u8 ov13_0224F51C;
 extern u8 ov13_0224F520[];
 extern u8 ov13_0224F524[];
 extern u8 ov13_0224F528;
+
 struct UnkF52C {
     u8 flag;
     u16 counter;
@@ -44,11 +45,13 @@ struct UnkF52C {
 };
 extern struct UnkF52C ov13_0224F52C;
 extern u8 ov13_0224F534;
+
 struct UnkOam {
     u16 attr0;
     u16 attr1;
     u16 attr2;
 };
+
 struct UnkBig {
     u8 unk0[4];
     void *unk4;
@@ -66,15 +69,18 @@ struct UnkBig {
     u8 unk52;
     u8 unk53;
 };
+
 struct UnkF538 {
     u8 unk0;
     u16 unk2;
     struct UnkBig *big;
 };
 extern struct UnkF538 ov13_0224F538;
+
 struct Str25 {
     char s[25];
 };
+
 struct Str22 {
     char s[22];
 };
@@ -129,7 +135,6 @@ extern u8 ov13_0224629C[];
 extern u8 ov13_022462B0[];
 extern u8 ov13_022462C4[];
 
-
 struct UnkF4CC {
     u8 state;
     u8 flag1;
@@ -143,17 +148,20 @@ struct UnkF4CC {
     int unk1C;
 };
 extern struct UnkF4CC ov13_0224F4CC;
+
 struct UnkF4EC {
     u8 pad[0x60];
     void *unk60;
 };
 extern struct UnkF4EC *ov13_0224F4EC;
+
 struct UnkRes {
     u32 *offsets;
     u8 *base;
     void *data;
 };
 extern struct UnkRes *ov13_0224F4F8;
+
 struct UnkF4F0 {
     u8 pad[0x1E280];
     u8 unk1E280[0x18];
@@ -163,6 +171,7 @@ struct UnkF4F0 {
     u8 unk1E2A1;
 };
 extern struct UnkF4F0 *ov13_0224F4F0;
+
 struct Unk1C {
     int unk0;
     void *unk4;
@@ -173,18 +182,21 @@ struct Unk1C {
     u8 unk18;
 };
 extern struct Unk1C ov13_02245F8C;
+
 struct Unk0C {
     int state;
     int unk4;
     int unk8;
 };
 extern struct Unk0C *ov13_0224F4F4;
+
 struct UnkE8 {
     u8 pad[0x20];
     int unk20;
     int unk24;
     u8 pad28[0xC0];
 };
+
 extern void GX_DispOff(void);
 extern void ov13_0224230C(void);
 extern void ov13_022413AC(void);
@@ -247,12 +259,14 @@ extern u16 ov13_0224533E[];
 extern u16 ov13_02245340[];
 extern u16 ov13_02245342[];
 extern u16 ov13_02245344[];
+
 struct UnkF4FC {
     u8 sel;
     void *unk4;
 };
 extern struct UnkF4FC ov13_0224F4FC;
 extern struct Str22 ov13_0224534E;
+
 struct Unk8 {
     u8 data[8];
 };
@@ -260,6 +274,7 @@ extern struct Unk8 ov13_0224532E[];
 extern int ov13_022417DC(struct Unk8 *a);
 extern int ov13_022416D4(int a);
 extern void ov13_02227D18(void);
+
 struct Unk2 {
     u8 data[2];
 };
@@ -269,6 +284,7 @@ extern u8 ov13_0224F504;
 extern u8 ov13_02246190[];
 extern u8 ov13_022461A4[];
 extern u8 ov13_022461B8[];
+
 struct UnkF508 {
     u8 sel;
     u8 unk1;
@@ -283,6 +299,7 @@ extern u16 ov13_022453B8[];
 extern struct Unk8 ov13_0224539A[];
 extern u8 ov13_02245364[];
 extern struct Str22 ov13_0224536C;
+
 struct Str23 {
     char s[23];
 };
@@ -290,10 +307,12 @@ extern struct Str23 ov13_02245382;
 extern u8 ov13_02246258[];
 extern u8 ov13_02246270[];
 extern u8 ov13_02246288[];
+
 struct WiFiInfo {
     u64 id;
     u8 pad[0xC];
 };
+
 extern void DWCi_BM_GetWiFiInfo(struct WiFiInfo *info);
 extern void ov13_0222728C(int a);
 extern void ov13_02241D98(void *a);
@@ -416,11 +435,9 @@ void ov13_0222DB40();
 void ov13_0222DB6C();
 void ov13_0222DBA4();
 
-#define REG16(a) (*(vu16 *)(a))
+#define REG16(a)    (*(vu16 *)(a))
 #define SET_PRI3(a) REG16(a) = (u16)((REG16(a) & ~3) | 3)
 
-
-// @fn ov13_0222BB20
 void ov13_0222BB20(void (*callback)(int)) {
     struct Unk1C param;
     ov13_0224F4F0 = ov13_0224128C(0x1E2A4, 0x20);
@@ -438,12 +455,10 @@ void ov13_0222BB20(void (*callback)(int)) {
     ov13_0224F4F0->task = ov13_02242528(0, ov13_0222BCC0, 0, 0x78);
 }
 
-// @fn ov13_0222BC0C
 void ov13_0222BC0C(void) {
     ov13_02242528(0, ov13_0222BC2C, 0, 0x78);
 }
 
-// @fn ov13_0222BC2C
 void ov13_0222BC2C(void *task) {
     if (ov13_0223E8FC() == 0) {
         return;
@@ -452,22 +467,18 @@ void ov13_0222BC2C(void *task) {
     ov13_022425D0(0, task);
 }
 
-// @fn ov13_0222BC68
 BOOL ov13_0222BC68(void) {
     return ov13_0224F4F0 == NULL;
 }
 
-// @fn ov13_0222BC84
 void ov13_0222BC84(void (*callback)(int)) {
     ov13_0224F4F0->callback = callback;
 }
 
-// @fn ov13_0222BC9C
 void ov13_0222BC9C(void) {
     ov13_0223EAA0();
 }
 
-// @fn ov13_0222BCA8
 u8 *ov13_0222BCA8(void) {
     return ov13_0224F4F0->unk1E280;
 }

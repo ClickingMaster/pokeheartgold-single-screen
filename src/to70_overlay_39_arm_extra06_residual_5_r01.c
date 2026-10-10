@@ -1,7 +1,7 @@
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef struct {
     u8 bytes[301];
@@ -13,16 +13,21 @@ typedef struct {
     u8 remaining[2];
 } Request;
 
-extern u8 _0222AB84[], _0222AA58[];
-extern int ov00_021ECC6C(const char *, void *), ov00_021ECCE0(void), ov00_021EC11C(int *, int *);
-extern void ov39_022298FC(void), ov39_02229910(void), ov39_02229FC0(int);
+extern u8 _0222AB84[];
+extern u8 _0222AA58[];
+extern int ov00_021ECC6C(const char *, void *);
+extern int ov00_021ECCE0(void);
+extern int ov00_021EC11C(int *, int *);
+extern void ov39_022298FC(void);
+extern void ov39_02229910(void);
+extern void ov39_02229FC0(int);
 int ov39_02229FCC(void);
 
 // Native keeps the destination pointer in its own register for the 301-byte struct copy, so the copy's
 // destination is a local that copy propagation must not fold back into the assignment.
 #pragma push
 #pragma opt_propagation off
-// @fn ov39_02229FCC
+
 int ov39_02229FCC(void) {
     int c, a;
     Request payload;
@@ -60,4 +65,5 @@ int ov39_02229FCC(void) {
         ov39_02229FC0(1);
     }
 }
+
 #pragma pop

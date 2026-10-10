@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef struct Ov13Pos2 {
     u16 x;
@@ -134,6 +134,7 @@ extern Ov13BannerState ov13_0224F5AC;
 extern void *ov13_0224F5B0[];
 extern Ov13ScanWork *ov13_0224F5B4;
 extern Ov13Select *ov13_0224F5B8;
+
 typedef struct Ov13MBWork {
     Ov13MBHead head;
     Ov13MBChild children[1];
@@ -142,6 +143,7 @@ typedef struct Ov13MBWork {
     void *p140;
     void *p144;
 } Ov13MBWork;
+
 extern Ov13MBWork *ov13_0224F5BC;
 extern void *ov13_0224F4F8;
 extern u8 ov13_022457EC[][5];
@@ -164,10 +166,10 @@ extern u8 ov13_0224592C[];
 extern u8 ov13_02245934[];
 extern void *ov13_02246854[];
 
-#define MBW_HEAD (ov13_0224F5BC->head)
+#define MBW_HEAD     (ov13_0224F5BC->head)
 #define MBW_CHILD(n) (ov13_0224F5BC->children[n])
-#define MBW_P140 (ov13_0224F5BC->p140)
-#define MBW_P144 (ov13_0224F5BC->p144)
+#define MBW_P140     (ov13_0224F5BC->p140)
+#define MBW_P144     (ov13_0224F5BC->p144)
 
 int ov13_0222BAF4(void *a, int b, int c, int d);
 void *ov13_022278C4(void *a);
@@ -274,7 +276,6 @@ static inline void ov13_MBKickChild(u16 aid) {
     MB_DisconnectChild(aid);
 }
 
-
 void ov13_0223C9D4(void *buf);
 void ov13_0223CA14(u32 ggid, u32 tgid);
 void ov13_0223CB34(Ov13MBRegistry *reg, u32 channel);
@@ -283,7 +284,6 @@ BOOL ov13_0223CF80(void);
 void ov13_0223CFE8(void);
 void ov13_0223D0E0(void);
 
-// @fn ov13_0223C49C
 void ov13_0223C49C(void *task) {
     ov13_0224F5B8->unk1B = -1;
     ov13_0224F5B8->unk18++;
@@ -294,7 +294,6 @@ void ov13_0223C49C(void *task) {
     ov13_0224F5B8->task = ov13_02242528(1, ov13_0223C7FC, 0, 0x78);
 }
 
-// @fn ov13_0223C508
 void ov13_0223C508(int y) {
     int i;
     int k;
@@ -328,7 +327,6 @@ void ov13_0223C508(int y) {
     ov13_02240F58(0, 0, &win);
 }
 
-// @fn ov13_0223C6B0
 void ov13_0223C6B0(void *obj, int y) {
     int n = ov13_0223FDEC(obj);
     int i;
@@ -346,7 +344,6 @@ void ov13_0223C6B0(void *obj, int y) {
     }
 }
 
-// @fn ov13_0223C73C
 void ov13_0223C73C(int i) {
     int k;
     ov13_022400F0(0, ov13_0224589E[ov13_0224F5B8->kind][i] + 1, ov13_0223FDE0(ov13_0224F5B8->objs[i], 0));
@@ -355,7 +352,6 @@ void ov13_0223C73C(int i) {
     ov13_02240008(ov13_0224F5B8->objs[i], -1, 0);
 }
 
-// @fn ov13_0223C7FC
 void ov13_0223C7FC(void *task) {
     ov13_0224F5B8->unk1D++;
     if (ov13_0224F5B8->unk1D < 8) {
@@ -364,7 +360,6 @@ void ov13_0223C7FC(void *task) {
     ov13_022425C8(task, ov13_0223C838);
 }
 
-// @fn ov13_0223C838
 void ov13_0223C838(void *task) {
     int x;
     int y;
@@ -381,7 +376,6 @@ void ov13_0223C838(void *task) {
     }
 }
 
-// @fn ov13_0223C8C8
 void ov13_0223C8C8(void *task) {
     ov13_0224F5B8->unk1A++;
     G2x_ChangeBlendBrightness_((u16 *)&reg_G2_BLDCNT, ov13_0224F5B8->unk1A);
@@ -391,7 +385,6 @@ void ov13_0223C8C8(void *task) {
     ov13_022425C8(task, ov13_0223C924);
 }
 
-// @fn ov13_0223C924
 void ov13_0223C924(void *task) {
     int i;
     GX_SetVisibleWnd(0);
@@ -407,7 +400,6 @@ void ov13_0223C924(void *task) {
     ov13_022412B0(&ov13_0224F5B0[2]);
 }
 
-// @fn ov13_0223C9D4
 void ov13_0223C9D4(void *buf) {
     ov13_0224F5BC = buf;
     ov13_0223D66C((u8 *)buf + 0x1B160);
@@ -415,7 +407,6 @@ void ov13_0223C9D4(void *buf) {
     MBW_P144 = NULL;
 }
 
-// @fn ov13_0223CA14
 void ov13_0223CA14(u32 ggid, u32 tgid) {
     Ov13MBUser user;
     OSOwnerInfo info;
@@ -424,7 +415,7 @@ void ov13_0223CA14(u32 ggid, u32 tgid) {
     user.nameLength = info.nickNameLength;
     MI_CpuCopy8(info.nickName, user.name, info.nickNameLength * 2);
     user.player = 0;
-    MBW_HEAD = (Ov13MBHead){0, 0, 0, 0, 0, 0, 0};
+    MBW_HEAD = (Ov13MBHead) { 0, 0, 0, 0, 0, 0, 0 };
     MBW_P140 = ov13_0224F5BC->mbWork;
     if (MB_Init(MBW_P140, &user, ggid, tgid, 2) != 0) {
         OS_Terminate();
@@ -434,7 +425,6 @@ void ov13_0223CA14(u32 ggid, u32 tgid) {
     ov13_0223D448(1);
 }
 
-// @fn ov13_0223CB34
 void ov13_0223CB34(Ov13MBRegistry *reg, u32 channel) {
     ov13_0223D448(2);
     if (MB_StartParentFromIdle(channel) != 0) {
@@ -446,7 +436,6 @@ void ov13_0223CB34(Ov13MBRegistry *reg, u32 channel) {
     }
 }
 
-// @fn ov13_0223CB7C
 BOOL ov13_0223CB7C(Ov13MBRegistry *reg) {
     FSFile file;
     FSFile *fp;
@@ -474,7 +463,6 @@ BOOL ov13_0223CB7C(Ov13MBRegistry *reg) {
     return ok;
 }
 
-// @fn ov13_0223CC50
 void ov13_0223CC50(u16 aid) {
     if (MB_CommResponseRequest(aid, 1)) {
         return;
@@ -482,7 +470,6 @@ void ov13_0223CC50(u16 aid) {
     ov13_MBKickChild(aid);
 }
 
-// @fn ov13_0223CCF0
 void ov13_0223CCF0(u16 aid) {
     OSIntrMode e;
     if (!MB_CommResponseRequest(aid, 0)) {
@@ -495,7 +482,6 @@ void ov13_0223CCF0(u16 aid) {
     OS_RestoreInterrupts(e);
 }
 
-// @fn ov13_0223CDC8
 void ov13_0223CDC8(u16 aid) {
     OSIntrMode e;
     if (!MB_CommResponseRequest(aid, 2)) {
@@ -508,7 +494,6 @@ void ov13_0223CDC8(u16 aid) {
     OS_RestoreInterrupts(e);
 }
 
-// @fn ov13_0223CEA0
 void ov13_0223CEA0(void) {
     u16 i;
     ov13_0223D448(3);
@@ -523,7 +508,6 @@ void ov13_0223CEA0(void) {
     }
 }
 
-// @fn ov13_0223CF80
 BOOL ov13_0223CF80(void) {
     u16 i;
     if (MBW_HEAD.m2 == 0) {
@@ -539,7 +523,6 @@ BOOL ov13_0223CF80(void) {
     return TRUE;
 }
 
-// @fn ov13_0223CFE8
 void ov13_0223CFE8(void) {
     u16 i;
     u16 ok = 0;
@@ -559,20 +542,17 @@ void ov13_0223CFE8(void) {
     }
 }
 
-// @fn ov13_0223D0E0
 void ov13_0223D0E0(void) {
     ov13_0223D448(6);
     MB_End();
 }
 
-// @fn ov13_0223D0F4
 void ov13_0223D0F4(void) {
     if (MBW_HEAD.state == 4 && MBW_HEAD.m2 == MBW_HEAD.mC) {
         MB_End();
     }
 }
 
-// @fn ov13_0223D124
 void ov13_0223D124(u16 aid, u32 status, void *arg) {
     Ov13MBHead *w;
     OSIntrMode e;

@@ -1,33 +1,55 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 #pragma force_active on
-typedef void (*Fn)(void*);
-typedef struct {Fn fn[5];} Tab;
-typedef struct {void* bg;void* obj;u8 b[16];} A;
-typedef union {u8 bytes[72];void* words[18];} B;
-typedef struct {u8 a,b,c,d;u16 pos,pad;B*p;} C;
-extern void* ov13_0224128C(int,int);
-extern void* ov13_022408A0(int,int);
-extern void* ov13_02240184(int,int);
-extern void* ov13_02242528(int,void*,int,int);
-extern char ov13_02234B48[],ov13_022350A8[];
+typedef void (*Fn)(void *);
+
+typedef struct {
+    Fn fn[5];
+} Tab;
+
+typedef struct {
+    void *bg;
+    void *obj;
+    u8 b[16];
+} A;
+
+typedef union {
+    u8 bytes[72];
+    void *words[18];
+} B;
+
+typedef struct {
+    u8 a, b, c, d;
+    u16 pos, pad;
+    B *p;
+} C;
+
+extern void *ov13_0224128C(int, int);
+extern void *ov13_022408A0(int, int);
+extern void *ov13_02240184(int, int);
+extern void *ov13_02242528(int, void *, int, int);
+extern char ov13_02234B48[];
+extern char ov13_022350A8[];
 extern s8 ov13_022455D4[];
 extern u8 ov13_022455F4[];
-extern u8 ov13_02245480[],ov13_02245526[];
+extern u8 ov13_02245480[];
+extern u8 ov13_02245526[];
 extern void *ov13_0224F540[];
-extern int FX_DivS32(int,int);
-extern int swprintf(u16*,u32,const u16*,...);
-extern A*ov13_0224F544;
+extern int FX_DivS32(int, int);
+extern int swprintf(u16 *, u32, const u16 *, ...);
+extern A *ov13_0224F544;
 extern C ov13_0224F54C;
 extern int ov13_0224F548;
 extern Tab ov13_022454AC;
 extern u8 ov13_022454C0[];
-extern u16 ov13_02245536[],ov13_022464E4[];
-extern char ov13_02246440[],ov13_02246458[];
-extern u8*ov13_02239FF0(void);
+extern u16 ov13_02245536[];
+extern u16 ov13_022464E4[];
+extern char ov13_02246440[];
+extern char ov13_02246458[];
+extern u8 *ov13_02239FF0(void);
 extern int ov13_02227228();
 extern int ov13_02227258();
 extern int ov13_0222726C();
@@ -122,10 +144,41 @@ void ov13_022337D8(u32 x);
 void ov13_02233A6C(void);
 void ov13_02233A8C(void);
 void ov13_02233DCC(void);
-void ov13_02233E8C(int x,int y);
-void ov13_02234028(int x,int y);
+void ov13_02233E8C(int x, int y);
+void ov13_02234028(int x, int y);
 int ov13_0223417C(int x);
-void ov13_02234210(int x,int z,int y);
-void ov13_02234314(u8*p,int y);
-void ov13_02234468(u8*p,int x);
-int ov13_0223417C(int x) {u8*p=ov13_02239FF0();int ok=1;switch(x){case 7:if(!p[245])ok=0;break;case 0:case 1:if((u8)(p[231]+255)<=1)ok=0;break;case 4:case 5:case 6:if(p[245])ok=0;break;case 9:case 10:if(p[246])ok=0;break;}return ok;}
+void ov13_02234210(int x, int z, int y);
+void ov13_02234314(u8 *p, int y);
+void ov13_02234468(u8 *p, int x);
+
+int ov13_0223417C(int x) {
+    u8 *p = ov13_02239FF0();
+    int ok = 1;
+    switch (x) {
+    case 7:
+        if (!p[245]) {
+            ok = 0;
+        }
+        break;
+    case 0:
+    case 1:
+        if ((u8)(p[231] + 255) <= 1) {
+            ok = 0;
+        }
+        break;
+    case 4:
+    case 5:
+    case 6:
+        if (p[245]) {
+            ok = 0;
+        }
+        break;
+    case 9:
+    case 10:
+        if (p[246]) {
+            ok = 0;
+        }
+        break;
+    }
+    return ok;
+}

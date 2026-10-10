@@ -2,9 +2,7 @@
 
 // global.h selects Thumb by default. This include must remain after the project
 // header so this translation unit is compiled as the original ARM code.
-// clang-format off
 #include <nitro/code32.h>
-// clang-format on
 
 #define OV93_PACK_TEXCOORD(s, t) ((u16)(fx16)((s) >> (FX32_SHIFT - 4)) | ((u32)(u16)(fx16)((t) >> (FX32_SHIFT - 4)) << 16))
 #define OV93_PACK_VTX16_XY(x, y) ((u32)(u16)(x) | ((u32)(u16)(y) << 16))

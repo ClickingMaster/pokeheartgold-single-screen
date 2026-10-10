@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef void (*StateFunc)(void);
 
@@ -37,6 +37,7 @@ extern u8 ov13_0224F51C;
 extern u8 ov13_0224F520[];
 extern u8 ov13_0224F524[];
 extern u8 ov13_0224F528;
+
 struct UnkF52C {
     u8 flag;
     u16 counter;
@@ -44,11 +45,13 @@ struct UnkF52C {
 };
 extern struct UnkF52C ov13_0224F52C;
 extern u8 ov13_0224F534;
+
 struct UnkOam {
     u16 attr0;
     u16 attr1;
     u16 attr2;
 };
+
 struct UnkBig {
     u8 unk0[4];
     void *unk4;
@@ -66,15 +69,18 @@ struct UnkBig {
     u8 unk52;
     u8 unk53;
 };
+
 struct UnkF538 {
     u8 unk0;
     u16 unk2;
     struct UnkBig *big;
 };
 extern struct UnkF538 ov13_0224F538;
+
 struct Str25 {
     char s[25];
 };
+
 struct Str22 {
     char s[22];
 };
@@ -129,7 +135,6 @@ extern u8 ov13_0224629C[];
 extern u8 ov13_022462B0[];
 extern u8 ov13_022462C4[];
 
-
 struct UnkF4CC {
     u8 state;
     u8 flag1;
@@ -143,17 +148,20 @@ struct UnkF4CC {
     int unk1C;
 };
 extern struct UnkF4CC ov13_0224F4CC;
+
 struct UnkF4EC {
     u8 pad[0x60];
     void *unk60;
 };
 extern struct UnkF4EC *ov13_0224F4EC;
+
 struct UnkRes {
     u32 *offsets;
     u8 *base;
     void *data;
 };
 extern struct UnkRes *ov13_0224F4F8;
+
 struct UnkF4F0 {
     u8 pad[0x1E280];
     u8 unk1E280[0x18];
@@ -163,6 +171,7 @@ struct UnkF4F0 {
     u8 unk1E2A1;
 };
 extern struct UnkF4F0 *ov13_0224F4F0;
+
 struct Unk1C {
     int unk0;
     void *unk4;
@@ -173,18 +182,21 @@ struct Unk1C {
     u8 unk18;
 };
 extern struct Unk1C ov13_02245F8C;
+
 struct Unk0C {
     int state;
     int unk4;
     int unk8;
 };
 extern struct Unk0C *ov13_0224F4F4;
+
 struct UnkE8 {
     u8 pad[0x20];
     int unk20;
     int unk24;
     u8 pad28[0xC0];
 };
+
 extern void GX_DispOff(void);
 extern void ov13_0224230C(void);
 extern void ov13_022413AC(void);
@@ -247,12 +259,14 @@ extern u16 ov13_0224533E[];
 extern u16 ov13_02245340[];
 extern u16 ov13_02245342[];
 extern u16 ov13_02245344[];
+
 struct UnkF4FC {
     u8 sel;
     void *unk4;
 };
 extern struct UnkF4FC ov13_0224F4FC;
 extern struct Str22 ov13_0224534E;
+
 struct Unk8 {
     u8 data[8];
 };
@@ -260,6 +274,7 @@ extern struct Unk8 ov13_0224532E[];
 extern int ov13_022417DC(struct Unk8 *a);
 extern int ov13_022416D4(int a);
 extern void ov13_02227D18(void);
+
 struct Unk2 {
     u8 data[2];
 };
@@ -269,6 +284,7 @@ extern u8 ov13_0224F504;
 extern u8 ov13_02246190[];
 extern u8 ov13_022461A4[];
 extern u8 ov13_022461B8[];
+
 struct UnkF508 {
     u8 sel;
     u8 unk1;
@@ -283,6 +299,7 @@ extern u16 ov13_022453B8[];
 extern struct Unk8 ov13_0224539A[];
 extern u8 ov13_02245364[];
 extern struct Str22 ov13_0224536C;
+
 struct Str23 {
     char s[23];
 };
@@ -290,10 +307,12 @@ extern struct Str23 ov13_02245382;
 extern u8 ov13_02246258[];
 extern u8 ov13_02246270[];
 extern u8 ov13_02246288[];
+
 struct WiFiInfo {
     u64 id;
     u8 pad[0xC];
 };
+
 extern void DWCi_BM_GetWiFiInfo(struct WiFiInfo *info);
 extern void ov13_0222728C(int a);
 extern void ov13_02241D98(void *a);
@@ -416,11 +435,9 @@ void ov13_0222DB40();
 void ov13_0222DB6C();
 void ov13_0222DBA4();
 
-#define REG16(a) (*(vu16 *)(a))
+#define REG16(a)    (*(vu16 *)(a))
 #define SET_PRI3(a) REG16(a) = (u16)((REG16(a) & ~3) | 3)
 
-
-// @fn ov13_0222BF60
 void ov13_0222BF60(void) {
     ov13_0224F4F4 = ov13_0224128C(0xc, -4);
     if (ov13_02226D74(0xf, 0x40, ov13_0222C0D8, ov13_0222C0F0, ov13_0222C100, 0x800) != 1) {
@@ -429,7 +446,6 @@ void ov13_0222BF60(void) {
     OS_Sleep(10);
 }
 
-// @fn ov13_0222BFCC
 void ov13_0222BFCC(void) {
     if (ov13_02226E5C() != 1) {
         OS_Terminate();
@@ -437,7 +453,6 @@ void ov13_0222BFCC(void) {
     ov13_022412B0(&ov13_0224F4F4);
 }
 
-// @fn ov13_0222BFF0
 int ov13_0222BFF0(void) {
     struct UnkE8 buf;
     switch (ov13_0224F4F4->state) {
@@ -463,7 +478,6 @@ int ov13_0222BFF0(void) {
     }
 }
 
-// @fn ov13_0222C0AC
 void ov13_0222C0AC(void) {
     struct UnkE8 buf;
     if (ov13_02226F28(&buf) != 1) {
@@ -472,29 +486,24 @@ void ov13_0222C0AC(void) {
     ov13_0223A5D0(&buf);
 }
 
-// @fn ov13_0222C0D8
 void ov13_0222C0D8(struct Unk0C *src) {
     *ov13_0224F4F4 = *src;
 }
 
-// @fn ov13_0222C0F0
 void *ov13_0222C0F0(int size) {
     return ov13_0224128C(size, 0x20);
 }
 
-// @fn ov13_0222C100
 void ov13_0222C100(void *p) {
     ov13_022412F4(p);
 }
 
-// @fn ov13_0222C10C
 void ov13_0222C10C(void) {
     ov13_022403B8(3, 1, 0x3f, 0x14);
     ov13_022403B8(3, 0, 0x3f, 0x14);
     ov13_0222B8E8(ov13_0222C148);
 }
 
-// @fn ov13_0222C148
 void ov13_0222C148(void) {
     if (ov13_02240394(1) != 0) {
         return;
@@ -514,7 +523,6 @@ void ov13_0222C148(void) {
     ov13_0222B9B4();
 }
 
-// @fn ov13_0222C1BC
 void ov13_0222C1BC(void) {
     ov13_02239F98();
     ov13_0222BA08();
@@ -552,14 +560,12 @@ void ov13_0222C1BC(void) {
     ov13_0222B8E8(ov13_0222C39C);
 }
 
-// @fn ov13_0222C39C
 void ov13_0222C39C(void) {
     ov13_022403B8(2, 1, 2, 0x14);
     ov13_022403B8(2, 0, 2, 0x14);
     ov13_0222B8E8(ov13_0222C3D8);
 }
 
-// @fn ov13_0222C3D8
 void ov13_0222C3D8(void) {
     if (ov13_02240394(1) != 0) {
         return;
@@ -579,7 +585,6 @@ void ov13_0222C3D8(void) {
     }
 }
 
-// @fn ov13_0222C44C
 void ov13_0222C44C(void) {
     int i;
     ov13_0222C4C8();
@@ -591,7 +596,6 @@ void ov13_0222C44C(void) {
     ov13_0222B8E8(ov13_0222C5B4);
 }
 
-// @fn ov13_0222C4C8
 void ov13_0222C4C8(void) {
     struct Str22 name;
     name = ov13_0224534E;
@@ -605,7 +609,6 @@ void ov13_0222C4C8(void) {
     SET_PRI3(0x0400000C);
 }
 
-// @fn ov13_0222C5B4
 void ov13_0222C5B4(void) {
     ov13_022403B8(2, 1, 1, 8);
     ov13_022403B8(2, 0, 0x14, 8);
@@ -614,7 +617,6 @@ void ov13_0222C5B4(void) {
     ov13_0222B8E8(ov13_0222C608);
 }
 
-// @fn ov13_0222C608
 void ov13_0222C608(void) {
     if (ov13_02240394(1) != 0) {
         return;
@@ -626,7 +628,6 @@ void ov13_0222C608(void) {
     ov13_0222B8E8(ov13_0222C644);
 }
 
-// @fn ov13_0222C644
 void ov13_0222C644(void) {
     if (ov13_02227258() == -2) {
         return;
@@ -635,14 +636,12 @@ void ov13_0222C644(void) {
     ov13_0222B8E8(ov13_0222C66C);
 }
 
-// @fn ov13_0222C66C
 void ov13_0222C66C(void) {
     ov13_0222C680();
     ov13_0222C7AC();
     ov13_0222C7B0();
 }
 
-// @fn ov13_0222C680
 void ov13_0222C680(void) {
     u32 i;
     struct Unk8 *entry = ov13_0224532E;
@@ -681,11 +680,9 @@ void ov13_0222C680(void) {
     }
 }
 
-// @fn ov13_0222C7AC
 void ov13_0222C7AC(void) {
 }
 
-// @fn ov13_0222C7B0
 void ov13_0222C7B0(void) {
     switch (ov13_02227258()) {
     case 0:
@@ -700,14 +697,12 @@ void ov13_0222C7B0(void) {
     }
 }
 
-// @fn ov13_0222C800
 void ov13_0222C800(void) {
     ov13_022272E4();
     ov13_022405B8(8);
     ov13_0222B8E8(ov13_0222C820);
 }
 
-// @fn ov13_0222C820
 void ov13_0222C820(void) {
     if (ov13_02240394(1) != 0) {
         return;
@@ -717,7 +712,6 @@ void ov13_0222C820(void) {
     ov13_0222B8E8(ov13_0222C86C);
 }
 
-// @fn ov13_0222C86C
 void ov13_0222C86C(void) {
     if (ov13_02240394(1) != 0) {
         return;
@@ -742,7 +736,6 @@ void ov13_0222C86C(void) {
     }
 }
 
-// @fn ov13_0222C914
 void ov13_0222C914(int dir) {
     int idx;
     if (dir == 1 || dir == 3) {
@@ -754,13 +747,11 @@ void ov13_0222C914(int dir) {
     ov13_02227C28(ov13_0224533E[idx], ov13_02245342[idx], ov13_02245340[idx], ov13_02245344[idx]);
 }
 
-// @fn ov13_0222C984
 void ov13_0222C984(void) {
     struct Unk2 tbl = ov13_0224532C;
     ov13_02239378(ov13_0224F4FC.unk4, tbl.data[ov13_0224F4FC.sel], tbl.data[ov13_0224F4FC.sel]);
 }
 
-// @fn ov13_0222C9C4
 void ov13_0222C9C4(void) {
     ov13_0224F504 = 0;
     ov13_0222CA0C();
@@ -770,7 +761,6 @@ void ov13_0222C9C4(void) {
     ov13_0222B8E8(ov13_0222CA8C);
 }
 
-// @fn ov13_0222CA0C
 void ov13_0222CA0C(void) {
     ov13_02227924(ov13_02246190, GX_LoadBG2Scr);
     SET_PRI3(0x04001008);
@@ -780,7 +770,6 @@ void ov13_0222CA0C(void) {
     SET_PRI3(0x0400000C);
 }
 
-// @fn ov13_0222CA8C
 void ov13_0222CA8C(void) {
     ov13_022403B8(2, 1, 1, 8);
     ov13_022403B8(2, 0, 0x15, 8);
@@ -789,7 +778,6 @@ void ov13_0222CA8C(void) {
     ov13_0222B8E8(ov13_0222CAE0);
 }
 
-// @fn ov13_0222CAE0
 void ov13_0222CAE0(void) {
     if (ov13_02240394(1) != 0) {
         return;
@@ -801,7 +789,6 @@ void ov13_0222CAE0(void) {
     ov13_0222B8E8(ov13_0222CB1C);
 }
 
-// @fn ov13_0222CB1C
 void ov13_0222CB1C(void) {
     if (ov13_02227258() == -2) {
         return;
@@ -810,14 +797,12 @@ void ov13_0222CB1C(void) {
     ov13_0222B8E8(ov13_0222CB44);
 }
 
-// @fn ov13_0222CB44
 void ov13_0222CB44(void) {
     ov13_0222CB58();
     ov13_0222CB90();
     ov13_0222CB94();
 }
 
-// @fn ov13_0222CB58
 void ov13_0222CB58(void) {
     if (ov13_02241694(1) != 0) {
         ov13_0222726C(1);
@@ -827,11 +812,9 @@ void ov13_0222CB58(void) {
     }
 }
 
-// @fn ov13_0222CB90
 void ov13_0222CB90(void) {
 }
 
-// @fn ov13_0222CB94
 void ov13_0222CB94(void) {
     switch (ov13_02227258()) {
     case 0:
@@ -847,14 +830,12 @@ void ov13_0222CB94(void) {
     }
 }
 
-// @fn ov13_0222CBFC
 void ov13_0222CBFC(void) {
     ov13_022272E4();
     ov13_022405B8(8);
     ov13_0222B8E8(ov13_0222CC1C);
 }
 
-// @fn ov13_0222CC1C
 void ov13_0222CC1C(void) {
     if (ov13_02240394(1) != 0) {
         return;
@@ -867,7 +848,6 @@ void ov13_0222CC1C(void) {
     ov13_0222B8E8(ov13_0222CC80);
 }
 
-// @fn ov13_0222CC80
 void ov13_0222CC80(void) {
     if (ov13_02240394(0) != 0) {
         return;
@@ -895,7 +875,6 @@ void ov13_0222CC80(void) {
     }
 }
 
-// @fn ov13_0222CD38
 void ov13_0222CD38(void) {
     int r = ov13_0223C1DC();
     if (r != 0) {
@@ -911,7 +890,6 @@ void ov13_0222CD38(void) {
     ov13_0222B8E8(ov13_0222CD88);
 }
 
-// @fn ov13_0222CD88
 void ov13_0222CD88(void) {
     if (ov13_0223C1F0() != 0) {
         return;
@@ -919,7 +897,6 @@ void ov13_0222CD88(void) {
     ov13_0222B8E8(ov13_0222CBFC);
 }
 
-// @fn ov13_0222CDA8
 void ov13_0222CDA8(void) {
     ov13_0222CDCC();
     ov13_022279EC(0x19);
@@ -927,7 +904,6 @@ void ov13_0222CDA8(void) {
     ov13_0222B8E8(ov13_0222CE4C);
 }
 
-// @fn ov13_0222CDCC
 void ov13_0222CDCC(void) {
     ov13_02227924(ov13_022461A4, GX_LoadBG2Scr);
     SET_PRI3(0x04001008);
@@ -937,14 +913,12 @@ void ov13_0222CDCC(void) {
     SET_PRI3(0x0400000C);
 }
 
-// @fn ov13_0222CE4C
 void ov13_0222CE4C(void) {
     ov13_022403B8(2, 0, 0x15, 8);
     ov13_02240EA8(0, 0x15);
     ov13_0222B8E8(ov13_0222CE80);
 }
 
-// @fn ov13_0222CE80
 void ov13_0222CE80(void) {
     if (ov13_02240394(0) != 0) {
         return;
@@ -953,7 +927,6 @@ void ov13_0222CE80(void) {
     ov13_0222B8E8(ov13_0222CEAC);
 }
 
-// @fn ov13_0222CEAC
 void ov13_0222CEAC(void) {
     if (ov13_02227258() == -2) {
         return;
@@ -962,25 +935,21 @@ void ov13_0222CEAC(void) {
     ov13_0222B8E8(ov13_0222CED4);
 }
 
-// @fn ov13_0222CED4
 void ov13_0222CED4(void) {
     ov13_0222CEE8();
     ov13_0222CF08();
     ov13_0222CF0C();
 }
 
-// @fn ov13_0222CEE8
 void ov13_0222CEE8(void) {
     if (ov13_02241694(1) != 0) {
         ov13_0222726C(0);
     }
 }
 
-// @fn ov13_0222CF08
 void ov13_0222CF08(void) {
 }
 
-// @fn ov13_0222CF0C
 void ov13_0222CF0C(void) {
     if (ov13_02227258() != 0) {
         return;
@@ -989,14 +958,12 @@ void ov13_0222CF0C(void) {
     ov13_0222B8E8(ov13_0222CF34);
 }
 
-// @fn ov13_0222CF34
 void ov13_0222CF34(void) {
     ov13_022272E4();
     ov13_022405B8(8);
     ov13_0222B8E8(ov13_0222CF54);
 }
 
-// @fn ov13_0222CF54
 void ov13_0222CF54(void) {
     if (ov13_02240394(1) != 0) {
         return;
@@ -1006,7 +973,6 @@ void ov13_0222CF54(void) {
     ov13_0222B8E8(ov13_0222CFA0);
 }
 
-// @fn ov13_0222CFA0
 void ov13_0222CFA0(void) {
     if (ov13_02240394(1) != 0) {
         return;
@@ -1018,7 +984,6 @@ void ov13_0222CFA0(void) {
     PM_ForceToPowerOff();
 }
 
-// @fn ov13_0222CFD4
 void ov13_0222CFD4(void) {
     ov13_0222D008();
     ov13_02227DE4(0x11);
@@ -1027,7 +992,6 @@ void ov13_0222CFD4(void) {
     ov13_0222B8E8(ov13_0222D25C);
 }
 
-// @fn ov13_0222D008
 void ov13_0222D008(void) {
     ov13_02227924(ov13_022461B8, GX_LoadBG2Scr);
     SET_PRI3(0x04001008);
@@ -1037,7 +1001,6 @@ void ov13_0222D008(void) {
     SET_PRI3(0x0400000C);
 }
 
-// @fn ov13_0222D088
 void ov13_0222D088(void) {
     struct WiFiInfo info;
     u32 parts[4];
@@ -1066,7 +1029,6 @@ void ov13_0222D088(void) {
     ov13_02240E2C(win);
 }
 
-// @fn ov13_0222D25C
 void ov13_0222D25C(void) {
     ov13_022403B8(2, 1, 1, 8);
     ov13_022403B8(2, 0, 0x15, 8);
@@ -1075,7 +1037,6 @@ void ov13_0222D25C(void) {
     ov13_0222B8E8(ov13_0222D2B0);
 }
 
-// @fn ov13_0222D2B0
 void ov13_0222D2B0(void) {
     if (ov13_02240394(1) != 0) {
         return;
@@ -1087,7 +1048,6 @@ void ov13_0222D2B0(void) {
     ov13_0222B8E8(ov13_0222D2EC);
 }
 
-// @fn ov13_0222D2EC
 void ov13_0222D2EC(void) {
     if (ov13_02227258() == -2) {
         return;
@@ -1096,25 +1056,21 @@ void ov13_0222D2EC(void) {
     ov13_0222B8E8(ov13_0222D314);
 }
 
-// @fn ov13_0222D314
 void ov13_0222D314(void) {
     ov13_0222D328();
     ov13_0222D348();
     ov13_0222D34C();
 }
 
-// @fn ov13_0222D328
 void ov13_0222D328(void) {
     if (ov13_02241694(2) != 0) {
         ov13_0222726C(0);
     }
 }
 
-// @fn ov13_0222D348
 void ov13_0222D348(void) {
 }
 
-// @fn ov13_0222D34C
 void ov13_0222D34C(void) {
     if (ov13_02227258() != 0) {
         return;
@@ -1123,14 +1079,12 @@ void ov13_0222D34C(void) {
     ov13_0222B8E8(ov13_0222D374);
 }
 
-// @fn ov13_0222D374
 void ov13_0222D374(void) {
     ov13_022272E4();
     ov13_022405B8(8);
     ov13_0222B8E8(ov13_0222D394);
 }
 
-// @fn ov13_0222D394
 void ov13_0222D394(void) {
     if (ov13_02240394(1) != 0) {
         return;
@@ -1141,7 +1095,6 @@ void ov13_0222D394(void) {
     ov13_0222B8E8(ov13_0222D3E4);
 }
 
-// @fn ov13_0222D3E4
 void ov13_0222D3E4(void) {
     if (ov13_02240394(1) != 0) {
         return;
@@ -1160,7 +1113,6 @@ void ov13_0222D3E4(void) {
     ov13_0222B8E8(ov13_0222D454);
 }
 
-// @fn ov13_0222D454
 void ov13_0222D454(void) {
     int idx;
     ov13_0224F508.unk1 = 0;
@@ -1176,7 +1128,6 @@ void ov13_0222D454(void) {
     ov13_0222B8E8(ov13_0222D6B8);
 }
 
-// @fn ov13_0222D51C
 void ov13_0222D51C(void) {
     struct Str22 a;
     struct Str23 b;
@@ -1210,7 +1161,6 @@ void ov13_0222D51C(void) {
     SET_PRI3(0x0400000C);
 }
 
-// @fn ov13_0222D6B8
 void ov13_0222D6B8(void) {
     ov13_022403B8(2, 1, 1, 8);
     ov13_022403B8(2, 0, 0x14, 8);
@@ -1219,7 +1169,6 @@ void ov13_0222D6B8(void) {
     ov13_0222B8E8(ov13_0222D70C);
 }
 
-// @fn ov13_0222D70C
 void ov13_0222D70C(void) {
     if (ov13_02240394(1) != 0) {
         return;
@@ -1231,7 +1180,6 @@ void ov13_0222D70C(void) {
     ov13_0222B8E8(ov13_0222D748);
 }
 
-// @fn ov13_0222D748
 void ov13_0222D748(void) {
     if (ov13_02227258() == -2) {
         return;
@@ -1240,14 +1188,12 @@ void ov13_0222D748(void) {
     ov13_0222B8E8(ov13_0222D770);
 }
 
-// @fn ov13_0222D770
 void ov13_0222D770(void) {
     ov13_0222D784();
     ov13_0222D878();
     ov13_0222D87C();
 }
 
-// @fn ov13_0222D784
 void ov13_0222D784(void) {
     u32 i;
     struct Unk8 *entry = ov13_0224539A;
@@ -1278,11 +1224,9 @@ void ov13_0222D784(void) {
     }
 }
 
-// @fn ov13_0222D878
 void ov13_0222D878(void) {
 }
 
-// @fn ov13_0222D87C
 void ov13_0222D87C(void) {
     struct WiFiInfo info;
     switch (ov13_02227258()) {
@@ -1306,14 +1250,12 @@ void ov13_0222D87C(void) {
     ov13_0222B8E8(ov13_0222D920);
 }
 
-// @fn ov13_0222D920
 void ov13_0222D920(void) {
     ov13_022272E4();
     ov13_022405B8(8);
     ov13_0222B8E8(ov13_0222D940);
 }
 
-// @fn ov13_0222D940
 void ov13_0222D940(void) {
     if (ov13_02240394(1) != 0) {
         return;
@@ -1326,7 +1268,6 @@ void ov13_0222D940(void) {
     ov13_0222B8E8(ov13_0222D9A4);
 }
 
-// @fn ov13_0222D9A4
 void ov13_0222D9A4(void) {
     if (ov13_02240394(1) != 0) {
         return;
@@ -1364,7 +1305,6 @@ void ov13_0222D9A4(void) {
     }
 }
 
-// @fn ov13_0222DAB0
 void ov13_0222DAB0(int dir) {
     int idx;
     if (dir == 1) {
@@ -1377,12 +1317,10 @@ void ov13_0222DAB0(int dir) {
     ov13_02227C28(ov13_022453B2[idx], ov13_022453B6[idx], ov13_022453B4[idx], ov13_022453B8[idx]);
 }
 
-// @fn ov13_0222DB40
 void ov13_0222DB40(void) {
     ov13_02239378(ov13_0224F508.unk4, ov13_02245364[ov13_0224F508.sel], ov13_02245364[ov13_0224F508.sel]);
 }
 
-// @fn ov13_0222DB6C
 void ov13_0222DB6C(void) {
     ov13_0222DBA4();
     ov13_022279EC(0x1e);
@@ -1392,7 +1330,6 @@ void ov13_0222DB6C(void) {
     ov13_0222B8E8(ov13_0222DC24);
 }
 
-// @fn ov13_0222DBA4
 void ov13_0222DBA4(void) {
     ov13_02227924(ov13_02246288, GX_LoadBG2Scr);
     SET_PRI3(0x04001008);

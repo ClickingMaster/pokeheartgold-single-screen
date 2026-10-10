@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef struct Node {
     struct Node *prev;
@@ -139,8 +139,10 @@ typedef struct Canvas {
     CanvasVT *vt;
     TextCanvas tc;
     void *buf;
+
     union {
         void *task;
+
         struct {
             u16 charNo;
             u8 w;
@@ -300,6 +302,7 @@ static inline void TextCanvasInit(TextCanvas *tc, void *cc, Font *font, int hSpa
     tc->hSpace = hSpace;
     tc->vSpace = vSpace;
 }
+
 extern char *ov13_02247430[];
 extern char *ov13_02247438[];
 extern u16 ov13_02245950[];
@@ -424,7 +427,6 @@ void ov13_02242430(void);
 void ov13_022425C8(Task13 *t, void (*func)(void *, void *));
 void ov13_02242640(int q, u8 enabled);
 
-// @fn ov13_02240A18
 void ov13_02240A18(void *task, u8 *dirty) {
     if (*dirty == 0) {
         return;
@@ -439,7 +441,6 @@ void ov13_02240A18(void *task, u8 *dirty) {
     *dirty = 0;
 }
 
-// @fn ov13_02240AA0
 void ov13_02240AA0(Canvas *c) {
     ov13_022425F0(1, c->u.task);
     if (c == &ov13_0224F5E0->bg[0]) {
@@ -450,15 +451,13 @@ void ov13_02240AA0(Canvas *c) {
     ov13_022412B0(&c->buf);
 }
 
-// @fn ov13_02240B04
 void ov13_02240B04(int screen) {
     ov13_02240AA0(&ov13_0224F5E0->bg[screen]);
 }
 
-// @fn ov13_02240B28
 void ov13_02240B28(Canvas *c, int x, int y, int cl, u32 flags, const u16 *txt) {
     Font *font = c->tc.font;
-    Dir d = {0, 0};
+    Dir d = { 0, 0 };
     switch (font->res->inf->dir) {
     case 0:
     case 7:
@@ -480,12 +479,10 @@ void ov13_02240B28(Canvas *c, int x, int y, int cl, u32 flags, const u16 *txt) {
     NNSi_G2dTextCanvasDrawText(&c->tc, x, y, cl, flags, txt, d);
 }
 
-// @fn ov13_02240BD8
 void ov13_02240BD8(void *cc, int x, int y, int cl, u16 ch, int fontIdx) {
     NNS_G2dCharCanvasDrawChar(cc, &ov13_0224F5E0->fonts[fontIdx], x, y, cl, ch);
 }
 
-// @fn ov13_02240C14
 void ov13_02240C14(void *cc, int x, int y, int cl, int adv, const u16 *str, int fontIdx) {
     Font *font;
     u16 idx;
@@ -503,10 +500,9 @@ void ov13_02240C14(void *cc, int x, int y, int cl, int adv, const u16 *str, int 
     }
 }
 
-// @fn ov13_02240CC0
 void ov13_02240CC0(Canvas *c, int x, int y, int w, int h, int cl, u32 flags, const u16 *txt) {
     Font *font = c->tc.font;
-    Dir d = {0, 0};
+    Dir d = { 0, 0 };
     switch (font->res->inf->dir) {
     case 0:
     case 7:
@@ -528,12 +524,10 @@ void ov13_02240CC0(Canvas *c, int x, int y, int w, int h, int cl, u32 flags, con
     NNSi_G2dTextCanvasDrawTextRect(&c->tc, x, y, w, h, cl, flags, txt, d);
 }
 
-// @fn ov13_02240D80
 void ov13_02240D80(Canvas *c, int color) {
     c->vt->clear(c, color);
 }
 
-// @fn ov13_02240D94
 void ov13_02240D94(Canvas *c, int x, int y, OamBlk *blk, u32 prio) {
     Oam *o = ov13_0223FDE0(blk, 0);
     ov13_0223FDF4(blk, -1, 0, 0);
@@ -542,7 +536,6 @@ void ov13_02240D94(Canvas *c, int x, int y, OamBlk *blk, u32 prio) {
     NNS_G2dArrangeOBJ1D(o, c->u.obj.w, c->u.obj.h, x, y, 0, c->u.obj.charNo, 2);
 }
 
-// @fn ov13_02240E2C
 void ov13_02240E2C(Canvas *c) {
     if (c == &ov13_0224F5E0->bg[0]) {
         ov13_0224F5E0->dirty[0] = 1;
@@ -551,13 +544,11 @@ void ov13_02240E2C(Canvas *c) {
     }
 }
 
-// @fn ov13_02240E50
 void ov13_02240E50(u16 x, u16 y, Pos16 *p) {
     p->x = x;
     p->y = y;
 }
 
-// @fn ov13_02240E5C
 void ov13_02240E5C(u16 x1, u16 y1, u16 x2, u16 y2, Rect16 *r) {
     r->x1 = x1;
     r->y1 = y1;
@@ -565,7 +556,6 @@ void ov13_02240E5C(u16 x1, u16 y1, u16 x2, u16 y2, Rect16 *r) {
     r->y2 = y2;
 }
 
-// @fn ov13_02240E74
 void ov13_02240E74(Pos16 *pos, Pos16 *size, Rect16 *r) {
     r->x1 = pos->x;
     r->y1 = pos->y;
@@ -573,7 +563,6 @@ void ov13_02240E74(Pos16 *pos, Pos16 *size, Rect16 *r) {
     r->y2 = pos->y + size->y;
 }
 
-// @fn ov13_02240EA8
 void ov13_02240EA8(int screen, int plane) {
     if (screen == 1) {
         GXS_SetVisiblePlane(plane | GXS_GetVisiblePlane13());
@@ -582,7 +571,6 @@ void ov13_02240EA8(int screen, int plane) {
     }
 }
 
-// @fn ov13_02240EFC
 void ov13_02240EFC(int screen, int plane) {
     if (screen == 1) {
         GXS_SetVisiblePlane(~plane & GXS_GetVisiblePlane13());
@@ -591,7 +579,6 @@ void ov13_02240EFC(int screen, int plane) {
     }
 }
 
-// @fn ov13_02240F58
 void ov13_02240F58(int screen, int which, Rect16 *r) {
     if (screen == 1) {
         if (which == 0) {
@@ -608,7 +595,6 @@ void ov13_02240F58(int screen, int which, Rect16 *r) {
     }
 }
 
-// @fn ov13_02241070
 void ov13_02241070(int screen, int which, int planes, BOOL effect) {
     switch (which) {
     case 0:
@@ -649,7 +635,7 @@ void ov13_02241070(int screen, int which, int planes, BOOL effect) {
         break;
     }
 }
-// @fn ov13_022411DC
+
 void ov13_022411DC(void *mem) {
     MI_CpuFill8(mem, 0, 0x40000);
     ov13_0224F5E4 = NNS_FndCreateExpHeapEx(mem, 0x40000, 0);
@@ -658,13 +644,11 @@ void ov13_022411DC(void *mem) {
     }
 }
 
-// @fn ov13_0224121C
 void ov13_0224121C(void) {
     NNS_FndDestroyExpHeap(ov13_0224F5E4);
     ov13_0224F5E4 = NULL;
 }
 
-// @fn ov13_02241240
 void *ov13_02241240(u32 size, int align) {
     void *p;
     int irq;
@@ -677,14 +661,12 @@ void *ov13_02241240(u32 size, int align) {
     return p;
 }
 
-// @fn ov13_0224128C
 void *ov13_0224128C(u32 size, int align) {
     void *p = ov13_02241240(size, align);
     MI_CpuFill8(p, 0, size);
     return p;
 }
 
-// @fn ov13_022412B0
 void ov13_022412B0(void *pp) {
     int irq = OS_DisableIrqMask(1);
     if (*(void **)pp == NULL) {
@@ -695,7 +677,6 @@ void ov13_022412B0(void *pp) {
     *(void **)pp = NULL;
 }
 
-// @fn ov13_022412F4
 void ov13_022412F4(void *p) {
     int irq = OS_DisableIrqMask(1);
     if (p == NULL) {
@@ -705,7 +686,6 @@ void ov13_022412F4(void *p) {
     OS_EnableIrqMask(irq);
 }
 
-// @fn ov13_02241330
 void ov13_02241330(void) {
     TPCalibrateParam cp;
     ov13_0224F5E8.input = ov13_0224128C(0x3A, 4);
@@ -721,7 +701,6 @@ void ov13_02241330(void) {
     ov13_022413E4();
 }
 
-// @fn ov13_022413AC
 void ov13_022413AC(void) {
     do {
         TP_RequestAutoSamplingStopAsync();
@@ -730,13 +709,11 @@ void ov13_022413AC(void) {
     ov13_022412B0(&ov13_0224F5E8.input);
 }
 
-// @fn ov13_022413E4
 void ov13_022413E4(void) {
     ov13_022413F4();
     ov13_022414F8();
 }
 
-// @fn ov13_022413F4
 void ov13_022413F4(void) {
     int i;
     u8 *cnt;
@@ -763,7 +740,7 @@ void ov13_022413F4(void) {
         cnt++;
     }
 }
-// @fn ov13_022414F8
+
 void ov13_022414F8(void) {
     int n;
     int idx;
@@ -806,7 +783,6 @@ void ov13_022414F8(void) {
     }
 }
 
-// @fn ov13_02241694
 BOOL ov13_02241694(u16 mask) {
     if (PAD_DetectFold()) {
         return FALSE;
@@ -814,7 +790,6 @@ BOOL ov13_02241694(u16 mask) {
     return mask == (mask & ov13_0224F5E8.input->trig);
 }
 
-// @fn ov13_022416D4
 BOOL ov13_022416D4(u16 mask) {
     if (PAD_DetectFold()) {
         return FALSE;
@@ -822,7 +797,6 @@ BOOL ov13_022416D4(u16 mask) {
     return mask == (mask & ov13_0224F5E8.input->repeat);
 }
 
-// @fn ov13_02241714
 BOOL ov13_02241714(u16 mask) {
     if (PAD_DetectFold()) {
         return FALSE;
@@ -830,7 +804,6 @@ BOOL ov13_02241714(u16 mask) {
     return mask == (mask & ov13_0224F5E8.input->release);
 }
 
-// @fn ov13_02241754
 BOOL ov13_02241754(Rect16 *r) {
     Input13 *in;
     if (PAD_DetectFold()) {
@@ -852,7 +825,6 @@ BOOL ov13_02241754(Rect16 *r) {
     return r->y2 >= in->touch.y;
 }
 
-// @fn ov13_022417DC
 BOOL ov13_022417DC(Rect16 *r) {
     Input13 *in;
     if (PAD_DetectFold()) {
@@ -874,7 +846,6 @@ BOOL ov13_022417DC(Rect16 *r) {
     return r->y2 >= in->touch.y;
 }
 
-// @fn ov13_02241864
 BOOL ov13_02241864(Rect16 *r) {
     Input13 *in;
     if (PAD_DetectFold()) {
@@ -896,7 +867,6 @@ BOOL ov13_02241864(Rect16 *r) {
     return r->y2 >= in->touch.y;
 }
 
-// @fn ov13_022418EC
 BOOL ov13_022418EC(Rect16 *r) {
     Input13 *in;
     if (PAD_DetectFold()) {
@@ -918,7 +888,6 @@ BOOL ov13_022418EC(Rect16 *r) {
     return r->y2 >= in->touch.y;
 }
 
-// @fn ov13_02241974
 BOOL ov13_02241974(Rect16 *r) {
     Rect16 tmp;
     if (PAD_DetectFold()) {
@@ -931,7 +900,6 @@ BOOL ov13_02241974(Rect16 *r) {
     return ov13_022417DC(&tmp);
 }
 
-// @fn ov13_022419DC
 BOOL ov13_022419DC(Pos16 *out) {
     Input13 *in;
     if (PAD_DetectFold()) {
@@ -946,7 +914,6 @@ BOOL ov13_022419DC(Pos16 *out) {
     return TRUE;
 }
 
-// @fn ov13_02241A44
 void ov13_02241A44(void) {
     if (ov13_0224F5E8.lcdOff) {
         if (PAD_DetectFold()) {
@@ -966,7 +933,6 @@ void ov13_02241A44(void) {
     }
 }
 
-// @fn ov13_02241AC0
 void ov13_02241AC0(void) {
     ov13_0224F600.mask = reg_OS_IE;
     OS_SetIrqMask(0x40018);
@@ -978,7 +944,6 @@ void ov13_02241AC0(void) {
     OS_EnableInterrupts();
 }
 
-// @fn ov13_02241B34
 void ov13_02241B34(void) {
     OS_DisableIrq();
     OS_SetIrqMask(ov13_0224F600.mask);

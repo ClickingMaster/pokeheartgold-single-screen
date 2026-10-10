@@ -1,18 +1,58 @@
 #pragma force_active on
-// clang-format off
 #include <nitro/types.h>
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
-#define G (*(u8 **)0x0380fff4)
-#define H(p,o) (*(u16*)((u8*)(p)+(o)))
-#define P(p,o) (*(void**)((u8*)(p)+(o)))
-#define V(a) (*(volatile u16*)(a))
-extern void __VENEER_MIi_CpuClear16(u32,void*,u32),WStop(void),WInitCounter(void),WSetPowerMgtMode(u16),WSetForcePowerState(u16),WSetPowerState(u16),WSetStaState(u16),WClearAids(void);
-extern void CAM_SetPowerMgtMode(u16,u16),CAM_SetStaState(u16,u16),WSetMacAdrs1(void*,const void*),MoveHeapBuf(void*,void*,void*),DeleteHeapBuf(void*,void*),AddTask(u32,u32);
-extern int __VENEER_OS_SendMessage(void*,void*,u32),CheckEnableChannel(u16),FLASH_VerifyCheckSum(u32);extern u32 WL_ReadByte(const void*);
-extern void WSetBssid(const void*),WSetSsid(u16,const void*),WSetBeaconPeriod(u16),WSetChannel(u16,u16),WSetRateSet(const void*),WSetPreambleType(u16),WSetDTIMPeriod(u16),WInitGameInfo(u16,const void*),WStart(void);
-extern void MLME_AuthTask(void),MLME_AssTask(void),MLME_ReAssTask(void),MLME_MeasChannelTask(void);
-extern void *MakeDeAuthFrame(const void*,u16,u32),*MakeDisAssFrame(const void*,u16);extern void CAM_AddBcFrame(void*,void*),TxqPri(u32),DeleteTxFrameByAdrs(const void*),TxManCtrlFrame(void*);extern u8 BC_ADRS[];
+#define G       (*(u8 **)0x0380fff4)
+#define H(p, o) (*(u16 *)((u8 *)(p) + (o)))
+#define P(p, o) (*(void **)((u8 *)(p) + (o)))
+#define V(a)    (*(volatile u16 *)(a))
+extern void __VENEER_MIi_CpuClear16(u32, void *, u32);
+extern void WStop(void);
+extern void WInitCounter(void);
+extern void WSetPowerMgtMode(u16);
+extern void WSetForcePowerState(u16);
+extern void WSetPowerState(u16);
+extern void WSetStaState(u16);
+extern void WClearAids(void);
+extern void CAM_SetPowerMgtMode(u16, u16);
+extern void CAM_SetStaState(u16, u16);
+extern void WSetMacAdrs1(void *, const void *);
+extern void MoveHeapBuf(void *, void *, void *);
+extern void DeleteHeapBuf(void *, void *);
+extern void AddTask(u32, u32);
+extern int __VENEER_OS_SendMessage(void *, void *, u32);
+extern int CheckEnableChannel(u16);
+extern int FLASH_VerifyCheckSum(u32);
+extern u32 WL_ReadByte(const void *);
+extern void WSetBssid(const void *);
+extern void WSetSsid(u16, const void *);
+extern void WSetBeaconPeriod(u16);
+extern void WSetChannel(u16, u16);
+extern void WSetRateSet(const void *);
+extern void WSetPreambleType(u16);
+extern void WSetDTIMPeriod(u16);
+extern void WInitGameInfo(u16, const void *);
+extern void WStart(void);
+extern void MLME_AuthTask(void);
+extern void MLME_AssTask(void);
+extern void MLME_ReAssTask(void);
+extern void MLME_MeasChannelTask(void);
+extern void *MakeDeAuthFrame(const void *, u16, u32);
+extern void *MakeDisAssFrame(const void *, u16);
+extern void CAM_AddBcFrame(void *, void *);
+extern void TxqPri(u32);
+extern void DeleteTxFrameByAdrs(const void *);
+extern void TxManCtrlFrame(void *);
+extern u8 BC_ADRS[];
 int WaitLoop_RfAccess(void);
-// @fn WaitLoop_RfAccess
-int WaitLoop_RfAccess(void){u32 i;for(i=0;i<0x2800;i++)if(!(V(0x04808180)&1))return 0;return 1;}
+
+int WaitLoop_RfAccess(void) {
+    u32 i;
+    for (i = 0; i < 0x2800; i++) {
+        if (!(V(0x04808180) & 1)) {
+            return 0;
+        }
+    }
+    return 1;
+}

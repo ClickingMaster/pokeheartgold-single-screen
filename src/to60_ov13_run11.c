@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef void (*Func)(void);
 typedef void (*TaskFunc)(void *, void *);
@@ -236,6 +236,7 @@ typedef struct {
     u8 state;
     u8 unkE8[7];
     u8 flags;
+
     union {
         struct {
             u8 mask[4];
@@ -244,6 +245,7 @@ typedef struct {
             u8 autoDns;
             u8 unkF7;
         } work;
+
         struct {
             u8 info[0xe];
             u16 crc;
@@ -260,6 +262,7 @@ typedef struct {
     u8 ssid[0x20];
     u8 unk60[0x20];
     u8 wep[4][0x10];
+
     union {
         struct {
             u8 ip[4];
@@ -267,8 +270,10 @@ typedef struct {
             u8 dns1[4];
             u8 dns2[4];
         };
+
         u8 addr[4][4];
     };
+
     u8 cidr;
     u8 unkD1[0x15];
     u8 mode : 2;
@@ -360,7 +365,6 @@ void ov13_0223AF10(void *, void *);
 void ov13_0223AFF4(void *, void *);
 extern void ov13_0223B0D8(void *, void *);
 
-
 int ov13_02239B68(void);
 int ov13_02239C68(void);
 int ov13_02239D04(ScanEntry **out);
@@ -390,7 +394,6 @@ BackupData *ov13_0223A7F4(void);
 void ov13_0223A804(int idx);
 void ov13_0223A840(void);
 
-// @fn ov13_02239B68
 int ov13_02239B68(void) {
     WmWork *w;
     MIi_CpuClear16(0, (u16 *)ov13_0224F5A0->entries, sizeof(ov13_0224F5A0->entries));
@@ -407,12 +410,10 @@ int ov13_02239B68(void) {
     return ov13_02239C34() ? 1 : 0;
 }
 
-// @fn ov13_02239C34
 int ov13_02239C34(void) {
     return WM_StartScanEx(ov13_02239D60, &ov13_0224F5A0->param) == 2 ? 1 : 0;
 }
 
-// @fn ov13_02239C68
 int ov13_02239C68(void) {
     ov13_0224F5A0->ending = 1;
     WM_ReadStatus(&ov13_0224F5A0->status);
@@ -430,7 +431,6 @@ int ov13_02239C68(void) {
     return 1;
 }
 
-// @fn ov13_02239D04
 int ov13_02239D04(ScanEntry **out) {
     ScanEntry *e;
     int count = 0;
@@ -444,7 +444,6 @@ int ov13_02239D04(ScanEntry **out) {
     return count;
 }
 
-// @fn ov13_02239D60
 void ov13_02239D60(void *arg) {
     WmCallbackHead *cb = arg;
     if (cb->errcode != 0) {
@@ -467,7 +466,6 @@ void ov13_02239D60(void *arg) {
     }
 }
 
-// @fn ov13_02239DC4
 void ov13_02239DC4(ScanCallback *cb) {
     OtherElements elems;
     ScanEntry *entries;
@@ -524,7 +522,6 @@ void ov13_02239DC4(ScanCallback *cb) {
     }
 }
 
-// @fn ov13_02239F98
 void ov13_02239F98(void) {
     BackupData *d = ov13_0224128C(sizeof(BackupData), 0x20);
     ov13_0224F5A4 = d;
@@ -532,33 +529,27 @@ void ov13_02239F98(void) {
     DWCi_BACKUPlRead(ov13_0224F5A4);
 }
 
-// @fn ov13_02239FDC
 void ov13_02239FDC(void) {
     ov13_022412B0(&ov13_0224F5A4);
 }
 
-// @fn ov13_02239FF0
 BackupWork *ov13_02239FF0(void) {
     return &ov13_0224F5A4->work;
 }
 
-// @fn ov13_0223A004
 void ov13_0223A004(u8 v) {
     ov13_0224F5A4->work.useDhcp = v;
 }
 
-// @fn ov13_0223A018
 void ov13_0223A018(u8 v) {
     ov13_0224F5A4->work.autoDns = v;
 }
 
-// @fn ov13_0223A02C
 void ov13_0223A02C(const void *ssid) {
     MI_CpuCopy8(ssid, ov13_0224F5A4->work.ssid, 0x20);
     ov13_0224F5A4->work.state = 0;
 }
 
-// @fn ov13_0223A05C
 void ov13_0223A05C(const char *key) {
     int i;
     int len;
@@ -602,75 +593,62 @@ void ov13_0223A05C(const char *key) {
     }
 }
 
-// @fn ov13_0223A1F4
 void ov13_0223A1F4(const char *str) {
     ov13_0223AA58(str, ov13_0224F5A4->work.ip);
 }
 
-// @fn ov13_0223A210
 void ov13_0223A210(const char *str) {
     ov13_0223AA58(str, ov13_0224F5A4->work.mask);
 }
 
-// @fn ov13_0223A22C
 void ov13_0223A22C(const char *str) {
     ov13_0223AA58(str, ov13_0224F5A4->work.gateway);
 }
 
-// @fn ov13_0223A24C
 void ov13_0223A24C(const char *str) {
     ov13_0223AA58(str, ov13_0224F5A4->work.dns1);
 }
 
-// @fn ov13_0223A26C
 void ov13_0223A26C(const char *str) {
     ov13_0223AA58(str, ov13_0224F5A4->work.dns2);
 }
 
-// @fn ov13_0223A28C
 void ov13_0223A28C(void *dst) {
     MI_CpuCopy8(ov13_0224F5A4->work.ssid, dst, 0x20);
 }
 
-// @fn ov13_0223A2B0
 void ov13_0223A2B0(char *buf) {
     BackupData *d = ov13_0224F5A4;
     OS_SPrintf(buf, (char *)ov13_022467C8, d->work.ip[0], d->work.ip[1], d->work.ip[2], d->work.ip[3]);
 }
 
-// @fn ov13_0223A2F0
 void ov13_0223A2F0(char *buf) {
     BackupData *d = ov13_0224F5A4;
     OS_SPrintf(buf, (char *)ov13_022467C8, d->work.mask[0], d->work.mask[1], d->work.mask[2], d->work.mask[3]);
 }
 
-// @fn ov13_0223A330
 void ov13_0223A330(char *buf) {
     BackupData *d = ov13_0224F5A4;
     u8 *a = d->work.gateway;
     OS_SPrintf(buf, (char *)ov13_022467C8, a[0], a[1], a[2], a[3]);
 }
 
-// @fn ov13_0223A374
 void ov13_0223A374(char *buf) {
     BackupData *d = ov13_0224F5A4;
     u8 *a = d->work.dns1;
     OS_SPrintf(buf, (char *)ov13_022467C8, a[0], a[1], a[2], a[3]);
 }
 
-// @fn ov13_0223A3B8
 void ov13_0223A3B8(char *buf) {
     BackupData *d = ov13_0224F5A4;
     u8 *a = d->work.dns2;
     OS_SPrintf(buf, (char *)ov13_022467C8, a[0], a[1], a[2], a[3]);
 }
 
-// @fn ov13_0223A3FC
 u8 ov13_0223A3FC(int idx) {
     return ov13_0224F5A4->pages[idx].state;
 }
 
-// @fn ov13_0223A414
 void ov13_0223A414(int idx) {
     BackupData *d = ov13_0224F5A4;
     BackupPage *page = &d->pages[idx];
@@ -689,7 +667,6 @@ void ov13_0223A414(int idx) {
     DWCi_BACKUPlConvMaskAddr(page->cidr, ov13_0224F5A4->work.mask);
 }
 
-// @fn ov13_0223A4F4
 void ov13_0223A4F4(void) {
     BackupData *d = ov13_0224F5A4;
     BackupWork *work = &d->work;
@@ -714,7 +691,6 @@ void ov13_0223A4F4(void) {
     ov13_0223A8F0(work->index);
 }
 
-// @fn ov13_0223A5D0
 void ov13_0223A5D0(WepSetting *src) {
     BackupData *d = ov13_0224F5A4;
     BackupWork *w = &d->work;
@@ -751,7 +727,6 @@ void ov13_0223A5D0(WepSetting *src) {
     ov13_0223A4F4();
 }
 
-// @fn ov13_0223A6E4
 void ov13_0223A6E4(u8 *src) {
     BackupWork *work = &ov13_0224F5A4->work;
     MI_CpuFill8(work, 0, 0xef);
@@ -774,12 +749,10 @@ void ov13_0223A6E4(u8 *src) {
     ov13_0223A4F4();
 }
 
-// @fn ov13_0223A7F4
 BackupData *ov13_0223A7F4(void) {
     return ov13_0224F5A4;
 }
 
-// @fn ov13_0223A804
 void ov13_0223A804(int idx) {
     BackupPage *page = &ov13_0224F5A4->pages[idx];
     MI_CpuFill8(page, 0, 0xef);
@@ -787,7 +760,6 @@ void ov13_0223A804(int idx) {
     ov13_0223A8F0(idx);
 }
 
-// @fn ov13_0223A840
 void ov13_0223A840(void) {
     u8 info[0x14];
     void *conv;

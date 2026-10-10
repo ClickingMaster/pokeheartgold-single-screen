@@ -1,10 +1,10 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-#include <string.h>
 #include <stdarg.h>
-// clang-format on
+#include <string.h>
 
 int sprintf(char *, const char *, ...);
 int strncmp(const char *, const char *, size_t);
@@ -21,6 +21,7 @@ typedef struct GtVar {
     const char *name;
     int type;
     int count;
+
     union {
         int i;
         double d;
@@ -53,7 +54,6 @@ extern char ov00_02219788[];
 void *ov00_021FF0C0(void *table, void *key);
 void ov00_021FEF74(void *table, void *elem);
 
-
 extern char ov00_022196C4[];
 extern char ov00_022196C8[];
 extern char ov00_022196E0[];
@@ -74,7 +74,12 @@ extern char ov00_022197EC[];
 extern char ov00_02219868[];
 extern char ov00_02219754[];
 extern char ov00_02219878[];
-#define GP_PARSE_ERROR(c) { ov00_0220A86C(c, 1, ov00_02219878); ov00_02202990(c, 3, 1); return 3; }
+#define GP_PARSE_ERROR(c)                   \
+    {                                       \
+        ov00_0220A86C(c, 1, ov00_02219878); \
+        ov00_02202990(c, 3, 1);             \
+        return 3;                           \
+    }
 extern char ov00_02219800[];
 extern char ov00_02219838[];
 extern char ov00_02219850[];
@@ -312,7 +317,6 @@ void ov00_0220C0C4(DynBuf *b, int pos, int n);
 int ov00_0220C164(CbObj *o);
 int ov00_0220C200(CbObj *o, CbTarget *t, int a2, int a3, int a4, int a5, int a6);
 
-// @fn ov00_02209FCC
 int ov00_02209FCC(void **c) {
     GpInfo *info = *c;
     int n = 0;
@@ -328,55 +332,72 @@ int ov00_02209FCC(void **c) {
         }
         for (op = info->ops; op; op = op->next) {
             if (op->state == 3 && op->x14 != 5 && op->peer->busy == 0) {
-                if (!(n < info->opCount)) __msl_assertion_failed(ov00_022196A4, ov00_022193E4, ov00_022192BC, 0x563);
+                if (!(n < info->opCount)) {
+                    __msl_assertion_failed(ov00_022196A4, ov00_022193E4, ov00_022192BC, 0x563);
+                }
                 arr[n++] = op;
                 op->peer->busy = 1;
             }
         }
         for (i = 0; i < n; i++) {
             r = ov00_0220851C(c, arr[i]);
-            if (r) arr[i]->result = r;
+            if (r) {
+                arr[i]->result = r;
+            }
         }
         for (i = 0; i < n; i++) {
             GpPeer *peer = arr[i]->peer;
             peer->busy = 0;
-            if (peer->pending) ov00_022066D0(c, arr[i]);
+            if (peer->pending) {
+                ov00_022066D0(c, arr[i]);
+            }
         }
         ov00_021EC3D8(arr);
     }
     return 0;
 }
 
-// @fn ov00_0220A11C
 int ov00_0220A11C(void *c, int *v, void *a, int n, const char *s) {
     char buf[0x20];
     int err;
-    if (!s) s = ov00_022196C4;
+    if (!s) {
+        s = ov00_022196C4;
+    }
     err = ov00_0220792C(c, a, 0xc9, v);
-    if (err) return err;
+    if (err) {
+        return err;
+    }
     sprintf(buf, ov00_022196C8, 1, n);
     err = ov00_02202424(c, a, buf);
-    if (err) return err;
+    if (err) {
+        return err;
+    }
     err = ov00_022079A8(c, a, s, -1);
-    if (err) return err;
+    if (err) {
+        return err;
+    }
     return 0;
 }
 
-// @fn ov00_0220A1C0
 void ov00_0220A1C0(void *c, void *a, int unused, const char *str) {
     char buf[0x40];
     int v[3];
-    if (!ov00_0220A4A0(str, ov00_022196E0, buf, 0x40)) return;
-    if (sscanf(buf, ov00_022196E8, &v[0], &v[1], &v[2]) != 3) return;
+    if (!ov00_0220A4A0(str, ov00_022196E0, buf, 0x40)) {
+        return;
+    }
+    if (sscanf(buf, ov00_022196E8, &v[0], &v[1], &v[2]) != 3) {
+        return;
+    }
     ov00_0220A11C(c, v, a, 2, 0);
 }
 
-// @fn ov00_0220A244
 int ov00_0220A244(void *c, char *o, char *msg) {
     GpPair s;
     int *p;
     int err;
-    if (ov00_0220A3C8(c, msg, 1)) return 4;
+    if (ov00_0220A3C8(c, msg, 1)) {
+        return 4;
+    }
     if (strncmp(msg, ov00_022196F4, 4) != 0) {
         ov00_0220A86C(c, 1, ov00_022196FC);
         ov00_02202990(c, 3, 1);
@@ -391,57 +412,76 @@ int ov00_0220A244(void *c, char *o, char *msg) {
         }
         *p = 0;
         err = ov00_02202A84(c, s, p, o, 0);
-        if (err) return err;
+        if (err) {
+            return err;
+        }
     }
     ov00_022066D0(c, o);
     return 0;
 }
 
-// @fn ov00_0220A348
 void ov00_0220A348(char *dst, const char *src, int n) {
-    if (!dst) __msl_assertion_failed(ov00_02219768, ov00_02219778, ov00_0221973C, 0x2f);
-    if (!src) __msl_assertion_failed(ov00_02219788, ov00_02219778, ov00_0221973C, 0x30);
+    if (!dst) {
+        __msl_assertion_failed(ov00_02219768, ov00_02219778, ov00_0221973C, 0x2f);
+    }
+    if (!src) {
+        __msl_assertion_failed(ov00_02219788, ov00_02219778, ov00_0221973C, 0x30);
+    }
     strncpy(dst, src, n);
     *(dst + n - 1) = 0;
 }
 
-// @fn ov00_0220A3BC
 void ov00_0220A3BC(void *a, const char *fmt, ...) {
 }
 
-// @fn ov00_0220A3C8
 int ov00_0220A3C8(void *c, const char *msg, int flag) {
     char buf[0x10];
     char *info = *(char **)c;
     if (strncmp(msg, ov00_02219794, 7) == 0) {
-        if (ov00_0220A4A0(msg, ov00_0221979C, buf, 0x10)) *(int *)(info + 0x418) = atol(buf);
-        if (!ov00_0220A4A0(msg, ov00_022197A4, info, 0x100)) info[0] = 0;
-        if (flag) ov00_02202990(c, 4, (strstr(msg, ov00_022197B0) != NULL ? 1 : 0) ? 1 : 0);
+        if (ov00_0220A4A0(msg, ov00_0221979C, buf, 0x10)) {
+            *(int *)(info + 0x418) = atol(buf);
+        }
+        if (!ov00_0220A4A0(msg, ov00_022197A4, info, 0x100)) {
+            info[0] = 0;
+        }
+        if (flag) {
+            ov00_02202990(c, 4, (strstr(msg, ov00_022197B0) != NULL ? 1 : 0) ? 1 : 0);
+        }
         return 1;
     }
     return 0;
 }
 
-// @fn ov00_0220A4A0
 int ov00_0220A4A0(const char *str, const char *key, char *out, int size) {
     char term;
     const char *p;
     int i;
     char ch;
-    if (!str) __msl_assertion_failed(ov00_022197B8, ov00_02219778, ov00_02219744, 0x10d);
-    if (!key) __msl_assertion_failed(ov00_022197C8, ov00_02219778, ov00_02219744, 0x10e);
-    if (!out) __msl_assertion_failed(ov00_022197D4, ov00_02219778, ov00_02219744, 0x10f);
-    if (!(size > 0)) __msl_assertion_failed(ov00_022197E4, ov00_02219778, ov00_02219744, 0x110);
+    if (!str) {
+        __msl_assertion_failed(ov00_022197B8, ov00_02219778, ov00_02219744, 0x10d);
+    }
+    if (!key) {
+        __msl_assertion_failed(ov00_022197C8, ov00_02219778, ov00_02219744, 0x10e);
+    }
+    if (!out) {
+        __msl_assertion_failed(ov00_022197D4, ov00_02219778, ov00_02219744, 0x10f);
+    }
+    if (!(size > 0)) {
+        __msl_assertion_failed(ov00_022197E4, ov00_02219778, ov00_02219744, 0x110);
+    }
     term = key[0];
     p = strstr(str, key);
-    if (!p) return 0;
+    if (!p) {
+        return 0;
+    }
     p += strlen(key);
-    for (i = 0; i < size - 1 && (ch = p[i]) != 0 && ch != term; i++) out[i] = ch;
+    for (i = 0; i < size - 1 && (ch = p[i]) != 0 && ch != term; i++) {
+        out[i] = ch;
+    }
     out[i] = 0;
     return 1;
 }
 
-// @fn ov00_0220A5A8
 int ov00_0220A5A8(void *c, int a, int *out) {
     int x = 0;
     int y = 0;

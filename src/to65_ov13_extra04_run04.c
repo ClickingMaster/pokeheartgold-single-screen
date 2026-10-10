@@ -1,33 +1,55 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 #pragma force_active on
-typedef void (*Fn)(void*);
-typedef struct {Fn fn[5];} Tab;
-typedef struct {void* bg;void* obj;u8 b[16];} A;
-typedef union {u8 bytes[72];void* words[18];} B;
-typedef struct {u8 a,b,c,d;u16 pos,pad;B*p;} C;
-extern void* ov13_0224128C(int,int);
-extern void* ov13_022408A0(int,int);
-extern void* ov13_02240184(int,int);
-extern void* ov13_02242528(int,void*,int,int);
-extern char ov13_02234B48[],ov13_022350A8[];
+typedef void (*Fn)(void *);
+
+typedef struct {
+    Fn fn[5];
+} Tab;
+
+typedef struct {
+    void *bg;
+    void *obj;
+    u8 b[16];
+} A;
+
+typedef union {
+    u8 bytes[72];
+    void *words[18];
+} B;
+
+typedef struct {
+    u8 a, b, c, d;
+    u16 pos, pad;
+    B *p;
+} C;
+
+extern void *ov13_0224128C(int, int);
+extern void *ov13_022408A0(int, int);
+extern void *ov13_02240184(int, int);
+extern void *ov13_02242528(int, void *, int, int);
+extern char ov13_02234B48[];
+extern char ov13_022350A8[];
 extern s8 ov13_022455D4[];
 extern u8 ov13_022455F4[];
-extern u8 ov13_02245480[],ov13_02245526[];
+extern u8 ov13_02245480[];
+extern u8 ov13_02245526[];
 extern void *ov13_0224F540[];
-extern int FX_DivS32(int,int);
-extern int swprintf(u16*,u32,const u16*,...);
-extern A*ov13_0224F544;
+extern int FX_DivS32(int, int);
+extern int swprintf(u16 *, u32, const u16 *, ...);
+extern A *ov13_0224F544;
 extern C ov13_0224F54C;
 extern int ov13_0224F548;
 extern Tab ov13_022454AC;
 extern u8 ov13_022454C0[];
-extern u16 ov13_02245536[],ov13_022464E4[];
-extern char ov13_02246440[],ov13_02246458[];
-extern u8*ov13_02239FF0(void);
+extern u16 ov13_02245536[];
+extern u16 ov13_022464E4[];
+extern char ov13_02246440[];
+extern char ov13_02246458[];
+extern u8 *ov13_02239FF0(void);
 extern int ov13_02227228();
 extern int ov13_02227258();
 extern int ov13_0222726C();
@@ -122,30 +144,105 @@ void ov13_022337D8(u32 x);
 void ov13_02233A6C(void);
 void ov13_02233A8C(void);
 void ov13_02233DCC(void);
-void ov13_02233E8C(int x,int y);
-void ov13_02234028(int x,int y);
+void ov13_02233E8C(int x, int y);
+void ov13_02234028(int x, int y);
 int ov13_0223417C(int x);
-void ov13_02234210(int x,int z,int y);
-void ov13_02234314(u8*p,int y);
-void ov13_02234468(u8*p,int x);
-void ov13_02232BD8(void) {ov13_022403B8(2,0,21,8);ov13_02240EA8(0,21);ov13_0222B8E8(ov13_02232C0C);}
+void ov13_02234210(int x, int z, int y);
+void ov13_02234314(u8 *p, int y);
+void ov13_02234468(u8 *p, int x);
 
-void ov13_02232C0C(void) {if(ov13_02240394(1))return;if(ov13_02240394(0))return;ov13_022279B4(4);ov13_0222B8E8(ov13_02232C48);}
+void ov13_02232BD8(void) {
+    ov13_022403B8(2, 0, 21, 8);
+    ov13_02240EA8(0, 21);
+    ov13_0222B8E8(ov13_02232C0C);
+}
 
-void ov13_02232C48(void) {if(ov13_02227258()==-2)return;ov13_022272CC();ov13_0222B8E8(ov13_02232C70);}
+void ov13_02232C0C(void) {
+    if (ov13_02240394(1)) {
+        return;
+    }
+    if (ov13_02240394(0)) {
+        return;
+    }
+    ov13_022279B4(4);
+    ov13_0222B8E8(ov13_02232C48);
+}
 
-void ov13_02232C70(void) {ov13_02232C84();ov13_02232CA4();ov13_02232CA8();}
+void ov13_02232C48(void) {
+    if (ov13_02227258() == -2) {
+        return;
+    }
+    ov13_022272CC();
+    ov13_0222B8E8(ov13_02232C70);
+}
 
-void ov13_02232C84(void) {if(!ov13_02241694(1))return;ov13_0222726C(0);}
+void ov13_02232C70(void) {
+    ov13_02232C84();
+    ov13_02232CA4();
+    ov13_02232CA8();
+}
 
-void ov13_02232CA4(void) {}
+void ov13_02232C84(void) {
+    if (!ov13_02241694(1)) {
+        return;
+    }
+    ov13_0222726C(0);
+}
 
-void ov13_02232CA8(void) {if(ov13_02227258())return;ov13_0223ABB8(6);ov13_0222B8E8(ov13_02232CD0);}
+void ov13_02232CA4(void) {
+}
 
-void ov13_02232CD0(void) {ov13_022272E4();ov13_022405B8(8);ov13_0222B8E8(ov13_02232CF0);}
+void ov13_02232CA8(void) {
+    if (ov13_02227258()) {
+        return;
+    }
+    ov13_0223ABB8(6);
+    ov13_0222B8E8(ov13_02232CD0);
+}
 
-void ov13_02232CF0(void) {if(ov13_02240394(1))return;ov13_02227228();ov13_022403B8(3,1,1,8);ov13_022403B8(3,0,21,8);ov13_0222B8E8(ov13_02232D40);}
+void ov13_02232CD0(void) {
+    ov13_022272E4();
+    ov13_022405B8(8);
+    ov13_0222B8E8(ov13_02232CF0);
+}
 
-void ov13_02232D40(void) {int x;if(ov13_02240394(1))return;if(ov13_02240394(0))return;if(!ov13_022272A0())return;ov13_02240B04(0);ov13_0222788C();ov13_02240EFC(1,1);ov13_02240EFC(0,21);ov13_0222B948(0,&x);if(x){ov13_0222B8F8(2,1);ov13_0222B8E8(ov13_022368D8);}else{ov13_0222B8F8(2,0);ov13_0222B934(0,0);ov13_022352C0(0);ov13_0222B8E8(ov13_02232E04);}}
+void ov13_02232CF0(void) {
+    if (ov13_02240394(1)) {
+        return;
+    }
+    ov13_02227228();
+    ov13_022403B8(3, 1, 1, 8);
+    ov13_022403B8(3, 0, 21, 8);
+    ov13_0222B8E8(ov13_02232D40);
+}
 
-void ov13_02232DF4(int x) {ov13_0224F548=x;}
+void ov13_02232D40(void) {
+    int x;
+    if (ov13_02240394(1)) {
+        return;
+    }
+    if (ov13_02240394(0)) {
+        return;
+    }
+    if (!ov13_022272A0()) {
+        return;
+    }
+    ov13_02240B04(0);
+    ov13_0222788C();
+    ov13_02240EFC(1, 1);
+    ov13_02240EFC(0, 21);
+    ov13_0222B948(0, &x);
+    if (x) {
+        ov13_0222B8F8(2, 1);
+        ov13_0222B8E8(ov13_022368D8);
+    } else {
+        ov13_0222B8F8(2, 0);
+        ov13_0222B934(0, 0);
+        ov13_022352C0(0);
+        ov13_0222B8E8(ov13_02232E04);
+    }
+}
+
+void ov13_02232DF4(int x) {
+    ov13_0224F548 = x;
+}

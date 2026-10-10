@@ -1,9 +1,11 @@
 #pragma force_active on
 #include <nitro/types.h>
-// clang-format off
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 extern void WmspKickMPChild(void *);
 void WmspMPChildIntervalAlarmCallback(void *p);
-// @fn WmspMPChildIntervalAlarmCallback
-void WmspMPChildIntervalAlarmCallback(void *p){WmspKickMPChild(p);}
+
+void WmspMPChildIntervalAlarmCallback(void *p) {
+    WmspKickMPChild(p);
+}

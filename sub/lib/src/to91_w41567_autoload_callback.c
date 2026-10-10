@@ -1,8 +1,9 @@
 #include <nitro/types.h>
-// clang-format off
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 #pragma force_active on
 void _start_AutoloadDoneCallback(void);
-// @fn _start_AutoloadDoneCallback
-void _start_AutoloadDoneCallback(void){}
+
+void _start_AutoloadDoneCallback(void) {
+}

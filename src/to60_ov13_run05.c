@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef void (*StateFunc)(void);
 
@@ -44,6 +44,7 @@ extern u8 ov13_0224F51C;
 extern u8 ov13_0224F520[];
 extern u8 ov13_0224F524[];
 extern u8 ov13_0224F528;
+
 struct UnkF52C {
     u8 flag;
     u16 counter;
@@ -51,11 +52,13 @@ struct UnkF52C {
 };
 extern struct UnkF52C ov13_0224F52C;
 extern u8 ov13_0224F534;
+
 struct UnkOam {
     u16 attr0;
     u16 attr1;
     u16 attr2;
 };
+
 struct UnkBig {
     u8 unk0[4];
     void *unk4;
@@ -73,15 +76,18 @@ struct UnkBig {
     u8 unk52;
     u8 unk53;
 };
+
 struct UnkF538 {
     u8 unk0;
     u16 unk2;
     struct UnkBig *big;
 };
 extern struct UnkF538 ov13_0224F538;
+
 struct Str25 {
     char s[25];
 };
+
 struct Str22 {
     char s[22];
 };
@@ -269,10 +275,9 @@ void ov13_0222FF14();
 void ov13_0222FF3C();
 void ov13_0222FF50();
 
-#define REG16(a) (*(vu16 *)(a))
+#define REG16(a)    (*(vu16 *)(a))
 #define SET_PRI3(a) REG16(a) = (u16)((REG16(a) & ~3) | 3)
 
-// @fn ov13_0222FE84
 void ov13_0222FE84(void) {
     ov13_022403B8(2, 1, 1, 8);
     ov13_022403B8(2, 0, 0x1d, 8);
@@ -281,7 +286,6 @@ void ov13_0222FE84(void) {
     ov13_0222B8E8(ov13_0222FED8);
 }
 
-// @fn ov13_0222FED8
 void ov13_0222FED8(void) {
     if (ov13_02240394(1) != 0) {
         return;
@@ -293,7 +297,6 @@ void ov13_0222FED8(void) {
     ov13_0222B8E8(ov13_0222FF14);
 }
 
-// @fn ov13_0222FF14
 void ov13_0222FF14(void) {
     if (ov13_02227258() == -2) {
         return;
@@ -302,7 +305,6 @@ void ov13_0222FF14(void) {
     ov13_0222B8E8(ov13_0222FF3C);
 }
 
-// @fn ov13_0222FF3C
 void ov13_0222FF3C(void) {
     ov13_0222FF50();
     ov13_022301A4();

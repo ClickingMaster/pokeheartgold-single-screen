@@ -1,26 +1,26 @@
 #pragma force_active on
 #include <nitro/types.h>
-// clang-format off
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
-#define H(p,o) (*(u16 *)((u8 *)(p)+(o)))
-#define SH(p,o) (*(s16 *)((u8 *)(p)+(o)))
-#define U(p,o) (*(u32 *)((u8 *)(p)+(o)))
-#define P(p,o) (*(void **)((u8 *)(p)+(o)))
+#define H(p, o)  (*(u16 *)((u8 *)(p) + (o)))
+#define SH(p, o) (*(s16 *)((u8 *)(p) + (o)))
+#define U(p, o)  (*(u32 *)((u8 *)(p) + (o)))
+#define P(p, o)  (*(void **)((u8 *)(p) + (o)))
 extern u8 wmspW[];
 extern u8 wmspVAlarm[];
-#define STATE P(wmspW+0x1000,0x550)
+#define STATE P(wmspW + 0x1000, 0x550)
 extern u16 *__VENEER_WMSP_GetBuffer4Callback2Wm9(void);
 extern void __VENEER_WMSP_ReturnResult2Wm9(void *);
-extern void __VENEER_MI_CpuCopy8(const void *,void *,u32);
-extern void __VENEER_MI_CpuFill8(void *,u32,u32);
-extern void __VENEER_MIi_CpuCopy16(const void *,void *,u32);
+extern void __VENEER_MI_CpuCopy8(const void *, void *, u32);
+extern void __VENEER_MI_CpuFill8(void *, u32, u32);
+extern void __VENEER_MIi_CpuCopy16(const void *, void *, u32);
 extern u64 __VENEER_OS_GetTick(void);
 extern u32 __VENEER_OS_DisableInterrupts(void);
 extern void __VENEER_OS_RestoreInterrupts(u32);
-extern int __VENEER_OS_SendMessage(void *,void *,int);
+extern int __VENEER_OS_SendMessage(void *, void *, int);
 extern void __VENEER_OS_CancelVAlarm(void *);
-extern void __VENEER_OS_SetVAlarm(void *,s16,s16,void (*)(void *),void *);
+extern void __VENEER_OS_SetVAlarm(void *, s16, s16, void (*)(void *), void *);
 extern void OS_CreateVAlarm(void *);
 extern void OS_CancelVAlarm(void *);
 extern void WmspParentAdjustVSync(void *);
@@ -33,25 +33,60 @@ extern void *WMSP_GetInternalRequestBuf(void);
 extern void WMSP_SendMaMP(u16);
 extern void WMSP_ResumeMaMP(u16);
 extern void WMSP_SendMaKeyData(void);
-extern u16 *WMSP_WL_ParamSetWepKeyId(void *,u16);
-extern u16 *WMSP_WL_ParamSetBeaconSendRecvInd(void *,u16);
-extern u16 *WMSP_WL_ParamSetLifeTime(void *,u16,u16,u16);
-extern u16 *WMSP_WL_ParamSetGameInfo(void *,u16,void *);
-extern void WMSP_CopyParentParam(void *,void *);
+extern u16 *WMSP_WL_ParamSetWepKeyId(void *, u16);
+extern u16 *WMSP_WL_ParamSetBeaconSendRecvInd(void *, u16);
+extern u16 *WMSP_WL_ParamSetLifeTime(void *, u16, u16, u16);
+extern u16 *WMSP_WL_ParamSetGameInfo(void *, u16, void *);
+extern void WMSP_CopyParentParam(void *, void *);
 extern u16 *WMSP_WL_DevSetInitializeWirelessCounter(void *);
 extern u16 *WMSP_WL_DevGetWirelessCounter(void *);
 extern u16 *WMSP_WL_DevGetStationState(void *);
-extern int WMSP_SetAllParams(int,void *);
+extern int WMSP_SetAllParams(int, void *);
 extern u16 *WMSP_WL_DevClass1(void *);
 extern u16 *WMSP_WL_DevIdle(void *);
-extern u16 *WMSP_WL_MlmePowerManagement(void *,u16,u16,u16);
-extern u16 *WMSP_WL_MlmeMeasureChannel(void *,u16,u16,u16,void *);
-extern void WmspError_06005BB8(u16,u16);
+extern u16 *WMSP_WL_MlmePowerManagement(void *, u16, u16, u16);
+extern u16 *WMSP_WL_MlmeMeasureChannel(void *, u16, u16, u16, void *);
+extern void WmspError_06005BB8(u16, u16);
 extern void WMSP_AddRssiToList(u8);
 extern u16 WMSP_GetAverageLinkLevel(void);
 void WMSP_SetWEPKeyEx(void *req);
-// @fn WMSP_SetWEPKeyEx
-void WMSP_SetWEPKeyEx(void *req){u8 b[512];void *s=STATE; H(s,0x196)=U(req,4);
-switch(H(s,0x196)){case 0:U(s,0x198)=0;break;case 1:case 2:case 3:U(s,0x198)=1;break;default:U(s,0x198)=0;break;}
-if(U(s,0x198)==1)__VENEER_MI_CpuCopy8(P(req,8),(u8*)s+0x19c,0x50);else __VENEER_MI_CpuFill8((u8*)s+0x19c,0,0x50);
-u16 e;u16*c;H(s,0xc4)=U(req,12);e=WMSP_WL_ParamSetWepKeyId(b,H(s,0xc4))[2];if(e){c=__VENEER_WMSP_GetBuffer4Callback2Wm9();c[0]=20;c[1]=1;c[2]=0x207;c[3]=e;__VENEER_WMSP_ReturnResult2Wm9(c);}c=__VENEER_WMSP_GetBuffer4Callback2Wm9();c[0]=39;c[1]=0;__VENEER_WMSP_ReturnResult2Wm9(c);}
+
+void WMSP_SetWEPKeyEx(void *req) {
+    u8 b[512];
+    void *s = STATE;
+    H(s, 0x196) = U(req, 4);
+    switch (H(s, 0x196)) {
+    case 0:
+        U(s, 0x198) = 0;
+        break;
+    case 1:
+    case 2:
+    case 3:
+        U(s, 0x198) = 1;
+        break;
+    default:
+        U(s, 0x198) = 0;
+        break;
+    }
+    if (U(s, 0x198) == 1) {
+        __VENEER_MI_CpuCopy8(P(req, 8), (u8 *)s + 0x19c, 0x50);
+    } else {
+        __VENEER_MI_CpuFill8((u8 *)s + 0x19c, 0, 0x50);
+    }
+    u16 e;
+    u16 *c;
+    H(s, 0xc4) = U(req, 12);
+    e = WMSP_WL_ParamSetWepKeyId(b, H(s, 0xc4))[2];
+    if (e) {
+        c = __VENEER_WMSP_GetBuffer4Callback2Wm9();
+        c[0] = 20;
+        c[1] = 1;
+        c[2] = 0x207;
+        c[3] = e;
+        __VENEER_WMSP_ReturnResult2Wm9(c);
+    }
+    c = __VENEER_WMSP_GetBuffer4Callback2Wm9();
+    c[0] = 39;
+    c[1] = 0;
+    __VENEER_WMSP_ReturnResult2Wm9(c);
+}

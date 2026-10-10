@@ -1,7 +1,112 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
-typedef struct{u8 pad[4];u32*flags;u8 entries[12];u8 index,state;}Work;extern Work*ov13_0224F544;extern int ov13_0222A070(void),ov13_0223261C(void),ov13_02232168(int);extern void ov13_0223ABB8(int),ov13_0222A084(int),ov13_0222A098(int),ov13_0222A0AC(int),ov13_0222B8E8(void*),ov13_02232200(void),ov13_02232440(void),ov13_022325A4(void),ov13_0223237C(void);void ov13_02231E58(void);
-void ov13_02231E58(void){int key=ov13_0222A070();switch(key){case 0:return;case 16:if(ov13_0224F544->index!=0||ov13_0224F544->entries[2]!=0){ov13_0223ABB8(3);if(ov13_0224F544->entries[ov13_0224F544->index*3+2]==0)ov13_0224F544->index--;MI_CpuFill8(ov13_0224F544->entries+ov13_0224F544->index*3,0,3);if(ov13_0224F544->index==0&&ov13_0224F544->entries[2]==0)ov13_0222A084(0);ov13_0222A098(1);ov13_0222A0AC(0);}break;case 17:if(ov13_0224F544->index<3&&ov13_0224F544->entries[ov13_0224F544->index*3+2]!=0){ov13_0223ABB8(1);ov13_0224F544->index++;ov13_0222A0AC(0);}break;case 18:ov13_0224F544->state=0;ov13_0223ABB8(7);ov13_0222B8E8(ov13_02232200);return;case 19:if(ov13_0223261C()){ov13_0223ABB8(6);ov13_0224F544->state=1;}else{ov13_0224F544->state=2;ov13_0223ABB8(9);}ov13_0224F544->index=3;*ov13_0224F544->flags=(*ov13_0224F544->flags&0xc1fffcff)|0x200;ov13_02232440();ov13_022325A4();ov13_0222B8E8(ov13_02232200);return;default:if(ov13_0224F544->index==3&&ov13_02232168(26))break;ov13_0223ABB8(1);{u8*entry=ov13_0224F544->entries;int index=ov13_0224F544->index*3;if(entry[index+2]==0)entry[index+2]=key;else if(entry[index+1]==0){entry[index+1]=entry[index+2];entry[index+2]=key;if(ov13_02232168(26)&&ov13_0224F544->index<3)ov13_0224F544->index++;}else{entry[index]=entry[index+1];entry[index+1]=entry[index+2];entry[index+2]=key;if(ov13_0224F544->index<3)ov13_0224F544->index++;}}ov13_0222A084(1);if(ov13_0224F544->index<3)ov13_0222A0AC(1);else ov13_0222A0AC(0);if(ov13_0224F544->index==3&&ov13_02232168(26))ov13_0222A098(0);break;}ov13_0223237C();ov13_02232440();}
+
+typedef struct {
+    u8 pad[4];
+    u32 *flags;
+    u8 entries[12];
+    u8 index, state;
+} Work;
+
+extern Work *ov13_0224F544;
+extern int ov13_0222A070(void);
+extern int ov13_0223261C(void);
+extern int ov13_02232168(int);
+extern void ov13_0223ABB8(int);
+extern void ov13_0222A084(int);
+extern void ov13_0222A098(int);
+extern void ov13_0222A0AC(int);
+extern void ov13_0222B8E8(void *);
+extern void ov13_02232200(void);
+extern void ov13_02232440(void);
+extern void ov13_022325A4(void);
+extern void ov13_0223237C(void);
+void ov13_02231E58(void);
+
+void ov13_02231E58(void) {
+    int key = ov13_0222A070();
+    switch (key) {
+    case 0:
+        return;
+    case 16:
+        if (ov13_0224F544->index != 0 || ov13_0224F544->entries[2] != 0) {
+            ov13_0223ABB8(3);
+            if (ov13_0224F544->entries[ov13_0224F544->index * 3 + 2] == 0) {
+                ov13_0224F544->index--;
+            }
+            MI_CpuFill8(ov13_0224F544->entries + ov13_0224F544->index * 3, 0, 3);
+            if (ov13_0224F544->index == 0 && ov13_0224F544->entries[2] == 0) {
+                ov13_0222A084(0);
+            }
+            ov13_0222A098(1);
+            ov13_0222A0AC(0);
+        }
+        break;
+    case 17:
+        if (ov13_0224F544->index < 3 && ov13_0224F544->entries[ov13_0224F544->index * 3 + 2] != 0) {
+            ov13_0223ABB8(1);
+            ov13_0224F544->index++;
+            ov13_0222A0AC(0);
+        }
+        break;
+    case 18:
+        ov13_0224F544->state = 0;
+        ov13_0223ABB8(7);
+        ov13_0222B8E8(ov13_02232200);
+        return;
+    case 19:
+        if (ov13_0223261C()) {
+            ov13_0223ABB8(6);
+            ov13_0224F544->state = 1;
+        } else {
+            ov13_0224F544->state = 2;
+            ov13_0223ABB8(9);
+        }
+        ov13_0224F544->index = 3;
+        *ov13_0224F544->flags = (*ov13_0224F544->flags & 0xc1fffcff) | 0x200;
+        ov13_02232440();
+        ov13_022325A4();
+        ov13_0222B8E8(ov13_02232200);
+        return;
+    default:
+        if (ov13_0224F544->index == 3 && ov13_02232168(26)) {
+            break;
+        }
+        ov13_0223ABB8(1);
+        {
+            u8 *entry = ov13_0224F544->entries;
+            int index = ov13_0224F544->index * 3;
+            if (entry[index + 2] == 0) {
+                entry[index + 2] = key;
+            } else if (entry[index + 1] == 0) {
+                entry[index + 1] = entry[index + 2];
+                entry[index + 2] = key;
+                if (ov13_02232168(26) && ov13_0224F544->index < 3) {
+                    ov13_0224F544->index++;
+                }
+            } else {
+                entry[index] = entry[index + 1];
+                entry[index + 1] = entry[index + 2];
+                entry[index + 2] = key;
+                if (ov13_0224F544->index < 3) {
+                    ov13_0224F544->index++;
+                }
+            }
+        }
+        ov13_0222A084(1);
+        if (ov13_0224F544->index < 3) {
+            ov13_0222A0AC(1);
+        } else {
+            ov13_0222A0AC(0);
+        }
+        if (ov13_0224F544->index == 3 && ov13_02232168(26)) {
+            ov13_0222A098(0);
+        }
+        break;
+    }
+    ov13_0223237C();
+    ov13_02232440();
+}

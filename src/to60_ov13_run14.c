@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef struct Ov13Pos2 {
     u16 x;
@@ -134,6 +134,7 @@ extern Ov13BannerState ov13_0224F5AC;
 extern void *ov13_0224F5B0[];
 extern Ov13ScanWork *ov13_0224F5B4;
 extern Ov13Select *ov13_0224F5B8;
+
 typedef struct Ov13MBWork {
     Ov13MBHead head;
     Ov13MBChild children[1];
@@ -142,6 +143,7 @@ typedef struct Ov13MBWork {
     void *p140;
     void *p144;
 } Ov13MBWork;
+
 extern Ov13MBWork *ov13_0224F5BC;
 extern void *ov13_0224F4F8;
 extern u8 ov13_022457EC[][5];
@@ -164,10 +166,10 @@ extern u8 ov13_0224592C[];
 extern u8 ov13_02245934[];
 extern void *ov13_02246854[];
 
-#define MBW_HEAD (ov13_0224F5BC->head)
+#define MBW_HEAD     (ov13_0224F5BC->head)
 #define MBW_CHILD(n) (ov13_0224F5BC->children[n])
-#define MBW_P140 (ov13_0224F5BC->p140)
-#define MBW_P144 (ov13_0224F5BC->p144)
+#define MBW_P140     (ov13_0224F5BC->p140)
+#define MBW_P144     (ov13_0224F5BC->p144)
 
 int ov13_0222BAF4(void *a, int b, int c, int d);
 void *ov13_022278C4(void *a);
@@ -274,24 +276,20 @@ static inline void ov13_MBKickChild(u16 aid) {
     MB_DisconnectChild(aid);
 }
 
-
 void ov13_0223B1A0(void);
 void ov13_0223B1E0(int n);
 BOOL ov13_0223B2A8(void);
 
-// @fn ov13_0223B178
 void ov13_0223B178(void *task) {
     ov13_022425D0(0, task);
     ov13_0224F5AC.p->task = NULL;
 }
 
-// @fn ov13_0223B1A0
 void ov13_0223B1A0(void) {
     ov13_0224F5AC.p->unk18 = 1;
     ov13_0224F5AC.p->task = ov13_02242528(0, ov13_0223B2C8, 0, 0x78);
 }
 
-// @fn ov13_0223B1E0
 void ov13_0223B1E0(int n) {
     int i;
     for (i = 0; i < 5; i += 2) {
@@ -303,7 +301,6 @@ void ov13_0223B1E0(int n) {
     ov13_0223B6F4(n);
 }
 
-// @fn ov13_0223B2A8
 BOOL ov13_0223B2A8(void) {
     return ov13_0224F5AC.p->task != NULL;
 }

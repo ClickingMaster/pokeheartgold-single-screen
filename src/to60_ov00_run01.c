@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef void (*RecvCb)(int, void *, int);
 
@@ -269,7 +269,6 @@ int ov00_021FBFB8(Ap *ap);
 u8 ov00_021FC004(Work *w);
 u8 ov00_021FC064(Work *w);
 
-
 void ov00_021F9E28(int a, void *p, int len);
 void ov00_021F9EA8(int idx, void *p, int len);
 void ov00_021F9F70(int idx, void *p, int len);
@@ -291,7 +290,6 @@ void ov00_021FAC20(int idx, const void *src);
 void ov00_021FAF20(u8 x);
 void ov00_021FB62C(WcmEvent *ev);
 
-// @fn ov00_021F9E28
 void ov00_021F9E28(int a, void *p, int len) {
     int idx = ov00_021EE6B0(a);
     RecvWork *g = ov00_0221B0A0;
@@ -310,7 +308,6 @@ void ov00_021F9E28(int a, void *p, int len) {
     }
 }
 
-// @fn ov00_021F9EA8
 void ov00_021F9EA8(int idx, void *p, int len) {
     u32 hdr[2];
     RecvEntry *e = &ov00_0221B0A0->entries[idx];
@@ -340,7 +337,6 @@ void ov00_021F9EA8(int idx, void *p, int len) {
     e->type = type;
 }
 
-// @fn ov00_021F9F70
 void ov00_021F9F70(int idx, void *p, int len) {
     RecvEntry *e = &ov00_0221B0A0->entries[idx];
     if (ov00_021F9CF0(idx, p, len) == 2) {
@@ -366,7 +362,6 @@ void ov00_021F9F70(int idx, void *p, int len) {
     }
 }
 
-// @fn ov00_021FA054
 void ov00_021FA054(int a, int b) {
     RecvEntry *e = ov00_021F9CBC(a);
     e->state = e->saved;
@@ -378,7 +373,6 @@ void ov00_021FA054(int a, int b) {
     }
 }
 
-// @fn ov00_021FA090
 int ov00_021FA090(void) {
     int r = ov00_0220D284(ov00_021EE64C()) - 519;
     if (r <= 0) {
@@ -387,14 +381,12 @@ int ov00_021FA090(void) {
     return r;
 }
 
-// @fn ov00_021FA0B4
 int ov00_021FA0B4(void) {
     ov38_0221D7B4();
     ov00_0221B0A4.count++;
     return 1;
 }
 
-// @fn ov00_021FA0D8
 int ov00_021FA0D8(void) {
     if (ov00_0221B0A4.count <= 0) {
         return 1;
@@ -406,7 +398,6 @@ int ov00_021FA0D8(void) {
     return 1;
 }
 
-// @fn ov00_021FA118
 int ov00_021FA118(void) {
     if (ov00_021EC230()) {
         return 0;
@@ -415,7 +406,6 @@ int ov00_021FA118(void) {
     return 1;
 }
 
-// @fn ov00_021FA138
 int ov00_021FA138(void *r, int res, void *buf, int len, void *param) {
     HttpReq *req = param;
     HttpDoneCb cb = req->init.cb;
@@ -439,7 +429,6 @@ int ov00_021FA138(void *r, int res, void *buf, int len, void *param) {
     return flag ? 1 : 0;
 }
 
-// @fn ov00_021FA1D4
 void ov00_021FA1D4(void *r, int a, void *b, int c, int d, int e, HttpReq *req) {
     if (req->init.prog == NULL) {
         return;
@@ -447,7 +436,6 @@ void ov00_021FA1D4(void *r, int a, void *b, int c, int d, int e, HttpReq *req) {
     req->init.prog(a, b, c, d, e, req->init.param);
 }
 
-// @fn ov00_021FA21C
 int ov00_021FA21C(const char *url, HttpDoneCb cb, int param) {
     HttpInit init;
     int r;
@@ -475,7 +463,6 @@ int ov00_021FA21C(const char *url, HttpDoneCb cb, int param) {
     return r;
 }
 
-// @fn ov00_021FA2E4
 int ov00_021FA2E4(const char *url, int len, int flag, int *post, HttpProgCb prog, HttpDoneCb cb, int param) {
     HttpInit init;
     void *buf = NULL;
@@ -521,12 +508,10 @@ int ov00_021FA2E4(const char *url, int len, int flag, int *post, HttpProgCb prog
     return r;
 }
 
-// @fn ov00_021FA488
 int ov00_021FA488(const char *url, int len, int flag, HttpProgCb prog, HttpDoneCb cb, int param) {
     return ov00_021FA2E4(url, len, flag, NULL, prog, cb, param);
 }
 
-// @fn ov00_021FA4B0
 int ov00_021FA4B0(int err) {
     int type = 7;
     int code = -98000;
@@ -599,7 +584,6 @@ int ov00_021FA4B0(int err) {
     return err;
 }
 
-// @fn ov00_021FA60C
 HttpReq *ov00_021FA60C(HttpInit *init) {
     HttpReq *req = ov00_021EC2A8(4, sizeof(HttpReq));
     if (req == NULL) {
@@ -618,7 +602,6 @@ HttpReq *ov00_021FA60C(HttpInit *init) {
     }
 }
 
-// @fn ov00_021FA668
 void ov00_021FA668(HttpReq *req) {
     HttpReq *p = ov00_0221B0A4.head;
     HttpReq *q;
@@ -643,7 +626,6 @@ void ov00_021FA668(HttpReq *req) {
     }
 }
 
-// @fn ov00_021FA6EC
 void ov00_021FA6EC(void) {
     HttpReq *p = ov00_0221B0A4.head;
     while (p != NULL) {
@@ -657,7 +639,6 @@ void ov00_021FA6EC(void) {
     ov00_0221B0A4.head = NULL;
 }
 
-// @fn ov00_021FA75C
 int ov00_021FA75C(InitParam *param) {
     Ctx *ctx;
     Work *w;
@@ -697,7 +678,6 @@ int ov00_021FA75C(InitParam *param) {
     return 1;
 }
 
-// @fn ov00_021FA904
 int ov00_021FA904(void) {
     u8 st = ov00_021FAECC();
     int r;
@@ -730,7 +710,6 @@ int ov00_021FA904(void) {
     return -1;
 }
 
-// @fn ov00_021FA9D4
 int ov00_021FA9D4(void) {
     u8 st = ov00_021FAECC();
     if (st <= 1) {
@@ -760,7 +739,6 @@ int ov00_021FA9D4(void) {
     return ov00_021FBD5C();
 }
 
-// @fn ov00_021FAA40
 u8 ov00_021FAA40(void) {
     u8 r = 0xff;
     u8 st = ov00_021FAECC();
@@ -770,7 +748,6 @@ u8 ov00_021FAA40(void) {
     return r;
 }
 
-// @fn ov00_021FAA70
 int ov00_021FAA70(void *dst) {
     int r = 0;
     u8 st = ov00_021FAECC();
@@ -784,7 +761,6 @@ int ov00_021FAA70(void *dst) {
     return r;
 }
 
-// @fn ov00_021FAAC8
 int ov00_021FAAC8(void) {
     u8 st = ov00_021FAECC();
     if (st == 0 || st == 18) {
@@ -796,7 +772,6 @@ int ov00_021FAAC8(void) {
     return 0;
 }
 
-// @fn ov00_021FAB04
 void ov00_021FAB04(const u8 *ssid, const void *key, int type, const void *name, int x) {
     Ctx *ctx = ov00_021FAE14(1);
     if (name != NULL) {
@@ -808,7 +783,6 @@ void ov00_021FAB04(const u8 *ssid, const void *key, int type, const void *name, 
     ov00_021FAB68(ssid, key, type);
 }
 
-// @fn ov00_021FAB68
 void ov00_021FAB68(const u8 *ssid, const void *key, int type) {
     Work *w = ov00_021FAE14(0x10);
     int i;
@@ -837,13 +811,11 @@ void ov00_021FAB68(const u8 *ssid, const void *key, int type) {
     w->prof[0].keyType = (u8)type;
 }
 
-// @fn ov00_021FAC20
 void ov00_021FAC20(int idx, const void *src) {
     Work *w = ov00_021FAE14(0x10);
     MIi_CpuCopy32((const u32 *)src, (u32 *)&w->prof[idx], 0xf0);
 }
 
-// @fn ov00_021FAC4C
 void *ov00_021FAC4C(int kind, int size) {
     Ctx *ctx = ov00_021FAE14(1);
     if (ctx->flags & kind) {
@@ -853,7 +825,6 @@ void *ov00_021FAC4C(int kind, int size) {
     return ctx->alloc(kind, size);
 }
 
-// @fn ov00_021FAC8C
 void ov00_021FAC8C(int kind, void *p, int size) {
     Ctx *ctx = ov00_021FAE14(1);
     if (ctx == NULL) {
@@ -869,7 +840,6 @@ void ov00_021FAC8C(int kind, void *p, int size) {
     }
 }
 
-// @fn ov00_021FACF0
 void ov00_021FACF0(void) {
     Ctx *ctx = ov00_021FAE14(1);
     if (ctx == NULL) {
@@ -902,7 +872,6 @@ void ov00_021FACF0(void) {
     }
 }
 
-// @fn ov00_021FAE14
 void *ov00_021FAE14(int kind) {
     if (kind & 1) {
         return ov00_0221B0AC.ctx;
@@ -922,7 +891,6 @@ void *ov00_021FAE14(int kind) {
     return NULL;
 }
 
-// @fn ov00_021FAE6C
 void ov00_021FAE6C(u8 st) {
     Ctx *ctx = ov00_021FAE14(1);
     Work *w = ov00_021FAE14(0x10);
@@ -939,7 +907,6 @@ void ov00_021FAE6C(u8 st) {
     }
 }
 
-// @fn ov00_021FAECC
 u8 ov00_021FAECC(void) {
     Ctx *ctx = ov00_0221B0AC.ctx;
     if (ctx != NULL) {
@@ -948,19 +915,16 @@ u8 ov00_021FAECC(void) {
     return 0;
 }
 
-// @fn ov00_021FAEE8
 void ov00_021FAEE8(int v) {
     Ctx *ctx = ov00_021FAE14(1);
     ctx->unkC = v;
     ctx->prevState = ov00_021FAECC();
 }
 
-// @fn ov00_021FAF0C
 int ov00_021FAF0C(void) {
     return ov00_0221B0AC.ctx->unkC;
 }
 
-// @fn ov00_021FAF20
 void ov00_021FAF20(u8 x) {
     u8 v = ov00_0221B0AC.ctx->unk22;
     void *p;
@@ -982,7 +946,6 @@ void ov00_021FAF20(u8 x) {
     }
 }
 
-// @fn ov00_021FAFC8
 u8 ov00_021FAFC8(u8 x) {
     if (x > 2) {
         x -= 3;
@@ -990,13 +953,11 @@ u8 ov00_021FAFC8(u8 x) {
     return x;
 }
 
-// @fn ov00_021FAFD8
 void ov00_021FAFD8(void) {
     ov00_021FAC8C(8, ov00_0221B0AC.p8, 0xc);
     ov00_021FAC8C(0x10, ov00_0221B0AC.work, sizeof(Work));
 }
 
-// @fn ov00_021FB010
 int ov00_021FB010(void) {
     u8 i;
     u8 cur;
@@ -1020,7 +981,6 @@ int ov00_021FB010(void) {
     return 1;
 }
 
-// @fn ov00_021FB0B0
 void ov00_021FB0B0(Ap *bss) {
     int idx = -1;
     u8 y;
@@ -1061,7 +1021,6 @@ void ov00_021FB0B0(Ap *bss) {
     ov00_021FB53C(ov00_021FB3BC(idx, bss, y, w), w);
 }
 
-// @fn ov00_021FB21C
 int ov00_021FB21C(Ap *ap) {
     Work *w = ov00_021FAE14(0x10);
     if ((w->c0 == 0 || w->c0 == 4) && ((ap->cap >> 4) & 1) == 1 && ov00_021FD1C8(ap->ssid) == 1) {
@@ -1073,7 +1032,6 @@ int ov00_021FB21C(Ap *ap) {
     return -1;
 }
 
-// @fn ov00_021FB2B0
 int ov00_021FB2B0(Ap *ap, int n, Svc *s) {
     int i;
     u16 len;
@@ -1097,7 +1055,6 @@ int ov00_021FB2B0(Ap *ap, int n, Svc *s) {
     return -1;
 }
 
-// @fn ov00_021FB32C
 int ov00_021FB32C(Ap *ap, Work *w) {
     int i;
     u8 n;
@@ -1122,7 +1079,6 @@ int ov00_021FB32C(Ap *ap, Work *w) {
     return -1;
 }
 
-// @fn ov00_021FB3BC
 int ov00_021FB3BC(int x, Ap *bss, u8 y, Work *w) {
     u8 n;
     int idx;
@@ -1148,7 +1104,6 @@ int ov00_021FB3BC(int x, Ap *bss, u8 y, Work *w) {
     return idx;
 }
 
-// @fn ov00_021FB484
 void ov00_021FB484(u8 x, Ap *bss, u8 y, Work *w) {
     ApStat *st = &w->stat[10];
     st->idx = x;
@@ -1157,7 +1112,6 @@ void ov00_021FB484(u8 x, Ap *bss, u8 y, Work *w) {
     MIi_CpuCopy32((const u32 *)bss, (u32 *)&w->ap[10], sizeof(Ap));
 }
 
-// @fn ov00_021FB4D0
 void ov00_021FB4D0(int idx, Ap *bss, u8 y, Work *w) {
     ApStat *stats = w->stat;
     u8 *aps = (u8 *)w->ap;
@@ -1171,7 +1125,6 @@ void ov00_021FB4D0(int idx, Ap *bss, u8 y, Work *w) {
     MIi_CpuCopy32((const u32 *)bss, (u32 *)(aps + off), sizeof(Ap));
 }
 
-// @fn ov00_021FB53C
 void ov00_021FB53C(int i, Work *w) {
     ApStat tmp;
     Ap tmpAp;
@@ -1194,7 +1147,6 @@ void ov00_021FB53C(int i, Work *w) {
     MIi_CpuClear32(0, (u32 *)&ap[10], sizeof(Ap));
 }
 
-// @fn ov00_021FB62C
 void ov00_021FB62C(WcmEvent *ev) {
     Work *w = ov00_021FAE14(0x10);
     if (ev->notify == 5) {
@@ -1220,7 +1172,6 @@ void ov00_021FB62C(WcmEvent *ev) {
     }
 }
 
-// @fn ov00_021FB6B8
 u8 ov00_021FB6B8(void) {
     u8 st = ov00_021FAECC();
     Work *w = ov00_021FAE14(0x10);
@@ -1235,7 +1186,6 @@ u8 ov00_021FB6B8(void) {
     return st;
 }
 
-// @fn ov00_021FB6FC
 u8 ov00_021FB6FC(Work *w) {
     Ap *ap = &w->ap[w->unkD13];
     w->unkD0D = ov00_021FB930(w);
@@ -1262,7 +1212,6 @@ u8 ov00_021FB6FC(Work *w) {
     return 8;
 }
 
-// @fn ov00_021FB7F4
 u8 ov00_021FB7F4(Work *w) {
     int ph = WCM_GetPhase();
     int off;
@@ -1301,7 +1250,6 @@ u8 ov00_021FB7F4(Work *w) {
     return 8;
 }
 
-// @fn ov00_021FB930
 u8 ov00_021FB930(Work *w) {
     Ap *ap = &w->ap[w->unkD13];
     int res = 0;
@@ -1354,17 +1302,14 @@ u8 ov00_021FB930(Work *w) {
     return res;
 }
 
-// @fn ov00_021FBACC
 u32 ov00_021FBACC(Work *w) {
     return w->b0 == 1 ? 0x30000 : 0x20000;
 }
 
-// @fn ov00_021FBAE8
 u32 ov00_021FBAE8(Work *w) {
     return w->b2 == 1 ? 0xc0000 : 0x80000;
 }
 
-// @fn ov00_021FBB04
 BOOL ov00_021FBB04(Work *w, int kind, u8 *out) {
     u8 *p = (u8 *)w;
     switch (kind) {
@@ -1399,7 +1344,6 @@ BOOL ov00_021FBB04(Work *w, int kind, u8 *out) {
     return out[0] != 0 ? TRUE : FALSE;
 }
 
-// @fn ov00_021FBBF0
 int ov00_021FBBF0(u8 *st) {
     if (*st <= 10) {
         int r = ov00_021FBC78();
@@ -1423,7 +1367,6 @@ int ov00_021FBBF0(u8 *st) {
     return 0;
 }
 
-// @fn ov00_021FBC78
 int ov00_021FBC78(void) {
     switch (WCM_GetPhase()) {
     case 0:
@@ -1450,7 +1393,6 @@ int ov00_021FBC78(void) {
     return 0;
 }
 
-// @fn ov00_021FBD08
 int ov00_021FBD08(void) {
     int r;
     if (SOCL_CalmDown()) {
@@ -1460,7 +1402,6 @@ int ov00_021FBD08(void) {
     return (r == 0 || r == -39) ? 1 : 0;
 }
 
-// @fn ov00_021FBD38
 u8 ov00_021FBD38(void) {
     Ctx *ctx = ov00_021FAE14(1);
     if (ov00_021FBBF0(&ctx->prevState) == 1) {
@@ -1469,7 +1410,6 @@ u8 ov00_021FBD38(void) {
     return 17;
 }
 
-// @fn ov00_021FBD5C
 int ov00_021FBD5C(void) {
     Ctx *ctx = ov00_021FAE14(1);
     int v = ov00_021FAF0C();
@@ -1485,7 +1425,6 @@ int ov00_021FBD5C(void) {
     return ov00_021FBE14(ctx);
 }
 
-// @fn ov00_021FBDAC
 int ov00_021FBDAC(int v) {
     switch (v) {
     case 1:
@@ -1500,12 +1439,10 @@ int ov00_021FBDAC(int v) {
     return 0;
 }
 
-// @fn ov00_021FBDF0
 int ov00_021FBDF0(void) {
     return -6;
 }
 
-// @fn ov00_021FBDF8
 int ov00_021FBDF8(Ctx *c) {
     return c->unkB == 0 ? -50099 : -51099;
 }

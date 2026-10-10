@@ -1,12 +1,12 @@
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 #pragma force_active on
 extern void CPSi_sha1_block(void *, void *);
 void CPSi_sha1_calc(void *, void *, int);
 void s1(void *storage, void *input, int size);
-// @fn CPSi_sha1_calc
+
 void CPSi_sha1_calc(void *storage, void *input, int size) {
     u32 *words = storage;
     u8 *data = input;

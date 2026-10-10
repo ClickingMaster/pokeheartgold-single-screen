@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef void (*StateFunc)(void);
 
@@ -37,6 +37,7 @@ extern u8 ov13_0224F51C;
 extern u8 ov13_0224F520[];
 extern u8 ov13_0224F524[];
 extern u8 ov13_0224F528;
+
 struct UnkF52C {
     u8 flag;
     u16 counter;
@@ -44,11 +45,13 @@ struct UnkF52C {
 };
 extern struct UnkF52C ov13_0224F52C;
 extern u8 ov13_0224F534;
+
 struct UnkOam {
     u16 attr0;
     u16 attr1;
     u16 attr2;
 };
+
 struct UnkBig {
     u8 unk0[4];
     void *unk4;
@@ -66,15 +69,18 @@ struct UnkBig {
     u8 unk52;
     u8 unk53;
 };
+
 struct UnkF538 {
     u8 unk0;
     u16 unk2;
     struct UnkBig *big;
 };
 extern struct UnkF538 ov13_0224F538;
+
 struct Str25 {
     char s[25];
 };
+
 struct Str22 {
     char s[22];
 };
@@ -129,7 +135,6 @@ extern u8 ov13_0224629C[];
 extern u8 ov13_022462B0[];
 extern u8 ov13_022462C4[];
 
-
 struct UnkF4CC {
     u8 state;
     u8 flag1;
@@ -143,17 +148,20 @@ struct UnkF4CC {
     int unk1C;
 };
 extern struct UnkF4CC ov13_0224F4CC;
+
 struct UnkF4EC {
     u8 pad[0x60];
     void *unk60;
 };
 extern struct UnkF4EC *ov13_0224F4EC;
+
 struct UnkRes {
     u32 *offsets;
     u8 *base;
     void *data;
 };
 extern struct UnkRes *ov13_0224F4F8;
+
 struct UnkF4F0 {
     u8 pad[0x1E280];
     u8 unk1E280[0x18];
@@ -163,6 +171,7 @@ struct UnkF4F0 {
     u8 unk1E2A1;
 };
 extern struct UnkF4F0 *ov13_0224F4F0;
+
 struct Unk1C {
     int unk0;
     void *unk4;
@@ -173,18 +182,21 @@ struct Unk1C {
     u8 unk18;
 };
 extern struct Unk1C ov13_02245F8C;
+
 struct Unk0C {
     int state;
     int unk4;
     int unk8;
 };
 extern struct Unk0C *ov13_0224F4F4;
+
 struct UnkE8 {
     u8 pad[0x20];
     int unk20;
     int unk24;
     u8 pad28[0xC0];
 };
+
 extern void GX_DispOff(void);
 extern void ov13_0224230C(void);
 extern void ov13_022413AC(void);
@@ -247,12 +259,14 @@ extern u16 ov13_0224533E[];
 extern u16 ov13_02245340[];
 extern u16 ov13_02245342[];
 extern u16 ov13_02245344[];
+
 struct UnkF4FC {
     u8 sel;
     void *unk4;
 };
 extern struct UnkF4FC ov13_0224F4FC;
 extern struct Str22 ov13_0224534E;
+
 struct Unk8 {
     u8 data[8];
 };
@@ -260,6 +274,7 @@ extern struct Unk8 ov13_0224532E[];
 extern int ov13_022417DC(struct Unk8 *a);
 extern int ov13_022416D4(int a);
 extern void ov13_02227D18(void);
+
 struct Unk2 {
     u8 data[2];
 };
@@ -269,6 +284,7 @@ extern u8 ov13_0224F504;
 extern u8 ov13_02246190[];
 extern u8 ov13_022461A4[];
 extern u8 ov13_022461B8[];
+
 struct UnkF508 {
     u8 sel;
     u8 unk1;
@@ -283,6 +299,7 @@ extern u16 ov13_022453B8[];
 extern struct Unk8 ov13_0224539A[];
 extern u8 ov13_02245364[];
 extern struct Str22 ov13_0224536C;
+
 struct Str23 {
     char s[23];
 };
@@ -290,10 +307,12 @@ extern struct Str23 ov13_02245382;
 extern u8 ov13_02246258[];
 extern u8 ov13_02246270[];
 extern u8 ov13_02246288[];
+
 struct WiFiInfo {
     u64 id;
     u8 pad[0xC];
 };
+
 extern void DWCi_BM_GetWiFiInfo(struct WiFiInfo *info);
 extern void ov13_0222728C(int a);
 extern void ov13_02241D98(void *a);
@@ -416,11 +435,9 @@ void ov13_0222DB40();
 void ov13_0222DB6C();
 void ov13_0222DBA4();
 
-#define REG16(a) (*(vu16 *)(a))
+#define REG16(a)    (*(vu16 *)(a))
 #define SET_PRI3(a) REG16(a) = (u16)((REG16(a) & ~3) | 3)
 
-
-// @fn ov13_0222B898
 void ov13_0222B898(void) {
     GX_DispOff();
     *(vu32 *)0x04001000 &= ~0x10000;
@@ -438,18 +455,15 @@ void ov13_0222B898(void) {
     ov13_02242154();
 }
 
-// @fn ov13_0222B8E8
 void ov13_0222B8E8(void *func) {
     ov13_0224F4CC.func = func;
 }
 
-// @fn ov13_0222B8F8
 void ov13_0222B8F8(int a, int b) {
     ov13_0224F4CC.unk10 = a;
     ov13_0224F4CC.unk14 = b;
 }
 
-// @fn ov13_0222B90C
 void ov13_0222B90C(int *a, int *b) {
     if (a != NULL) {
         *a = ov13_0224F4CC.unk10;
@@ -459,13 +473,11 @@ void ov13_0222B90C(int *a, int *b) {
     }
 }
 
-// @fn ov13_0222B934
 void ov13_0222B934(int a, int b) {
     ov13_0224F4CC.unk18 = a;
     ov13_0224F4CC.unk1C = b;
 }
 
-// @fn ov13_0222B948
 void ov13_0222B948(int *a, int *b) {
     if (a != NULL) {
         *a = ov13_0224F4CC.unk18;
@@ -475,27 +487,22 @@ void ov13_0222B948(int *a, int *b) {
     }
 }
 
-// @fn ov13_0222B970
 u8 ov13_0222B970(void) {
     return ov13_0224F4CC.state;
 }
 
-// @fn ov13_0222B980
 u32 ov13_0222B980(void) {
     return ov13_0224F4CC.lo;
 }
 
-// @fn ov13_0222B998
 BOOL ov13_0222B998(u32 mask) {
     return (mask & ov13_0224F4CC.hi) ? TRUE : FALSE;
 }
 
-// @fn ov13_0222B9B4
 void ov13_0222B9B4(void) {
     ov13_0224F4CC.flag1 = 1;
 }
 
-// @fn ov13_0222B9C8
 u8 ov13_0222B9C8(void) {
     u8 state = ov13_0224F4CC.state;
     if (state == 6) {
@@ -507,18 +514,15 @@ u8 ov13_0222B9C8(void) {
     return state + 0x31;
 }
 
-// @fn ov13_0222BA08
 void ov13_0222BA08(void) {
     ov13_0224F4EC = ov13_0224128C(0x64, 4);
     ov13_0224F4EC->unk60 = ov13_0224022C(8, ov13_0224F4EC, 0xc);
 }
 
-// @fn ov13_0222BA44
 void ov13_0222BA44(void) {
     ov13_022412B0(&ov13_0224F4EC);
 }
 
-// @fn ov13_0222BA58
 struct UnkRes *ov13_0222BA58(void *src) {
     u32 size;
     struct UnkRes *res = ov13_022402E0(ov13_0224F4EC->unk60);
@@ -531,13 +535,11 @@ struct UnkRes *ov13_0222BA58(void *src) {
     return res;
 }
 
-// @fn ov13_0222BAB0
 void ov13_0222BAB0(struct UnkRes *res) {
     ov13_0223FA50(res->data);
     ov13_02240288(ov13_0224F4EC->unk60, res);
 }
 
-// @fn ov13_0222BADC
 u8 *ov13_0222BADC(struct UnkRes *res, int idx) {
     return res->base + res->offsets[(u16)idx];
 }

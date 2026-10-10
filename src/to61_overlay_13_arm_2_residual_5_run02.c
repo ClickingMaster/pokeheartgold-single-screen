@@ -1,28 +1,84 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 #pragma force_active on
 #pragma warn_unusedvar off
 #pragma warn_uninitializedvar off
-typedef struct { u8 *data; void *a,*b,*c; u32 *d[5],*e[5]; void *task,*other; u16 max,v42[3],v48[3]; u8 x4e[3],count,index,sel,flag,timer,dirty,flag57,flag58,flag59; } State;
-typedef struct { u8 sel,pad; u16 scroll; State *p; } Root;
-typedef struct { void *a; u32 *b; u8 text[33]; u8 count,flag; } Text;
-typedef struct { void *a; u32 *b; u8 text[12]; u8 count,flag; } Numeric;
+
+typedef struct {
+    u8 *data;
+    void *a, *b, *c;
+    u32 *d[5], *e[5];
+    void *task, *other;
+    u16 max, v42[3], v48[3];
+    u8 x4e[3], count, index, sel, flag, timer, dirty, flag57, flag58, flag59;
+} State;
+
+typedef struct {
+    u8 sel, pad;
+    u16 scroll;
+    State *p;
+} Root;
+
+typedef struct {
+    void *a;
+    u32 *b;
+    u8 text[33];
+    u8 count, flag;
+} Text;
+
+typedef struct {
+    void *a;
+    u32 *b;
+    u8 text[12];
+    u8 count, flag;
+} Numeric;
+
 extern Root ov13_0224F538;
 extern Text *ov13_0224F540;
 extern Numeric *ov13_0224F544;
-extern u8 ov13_022453CC[],ov13_0224546C[],ov13_02245470[];
-extern u16 ov13_02245424[],ov13_02245426[],ov13_02245428[];
+extern u8 ov13_022453CC[];
+extern u8 ov13_0224546C[];
+extern u8 ov13_02245470[];
+extern u16 ov13_02245424[];
+extern u16 ov13_02245426[];
+extern u16 ov13_02245428[];
 extern void ov13_0222B8E8(void (*)(void));
-extern void ov13_022403B8(int,int,int,int),ov13_02240EA8(int,int),ov13_0223ABB8(int),ov13_022405B8(int);
-extern int ov13_02240394(int),ov13_022283EC(void),ov13_0222A070(void),ov13_0223C1DC(void),ov13_0223C1F0(void),ov13_0222A0C0(void);
-extern void ov13_022272E4(void),ov13_02227228(void),ov13_022272CC(void),ov13_02239584(void),ov13_02228054(void),ov13_02228400(int),ov13_02228414(int),ov13_022283B8(void),ov13_0223C198(void),ov13_02229D00(void),ov13_0222A084(int),ov13_0222A098(int),ov13_0222A0AC(int),ov13_0222A03C(void);
-extern void ov13_0223BE6C(int,int,int,int,int);
-extern void *ov13_02242528(int,void (*)(void *),int,int);
-extern void ov13_022425D0(int,void *),ov13_02239578(int),ov13_0223959C(void),ov13_02227D18(void),ov13_02227B6C(int,int,int,int);
-extern void ov13_02240D80(void *,int),ov13_02240E2C(void *);
+extern void ov13_022403B8(int, int, int, int);
+extern void ov13_02240EA8(int, int);
+extern void ov13_0223ABB8(int);
+extern void ov13_022405B8(int);
+extern int ov13_02240394(int);
+extern int ov13_022283EC(void);
+extern int ov13_0222A070(void);
+extern int ov13_0223C1DC(void);
+extern int ov13_0223C1F0(void);
+extern int ov13_0222A0C0(void);
+extern void ov13_022272E4(void);
+extern void ov13_02227228(void);
+extern void ov13_022272CC(void);
+extern void ov13_02239584(void);
+extern void ov13_02228054(void);
+extern void ov13_02228400(int);
+extern void ov13_02228414(int);
+extern void ov13_022283B8(void);
+extern void ov13_0223C198(void);
+extern void ov13_02229D00(void);
+extern void ov13_0222A084(int);
+extern void ov13_0222A098(int);
+extern void ov13_0222A0AC(int);
+extern void ov13_0222A03C(void);
+extern void ov13_0223BE6C(int, int, int, int, int);
+extern void *ov13_02242528(int, void (*)(void *), int, int);
+extern void ov13_022425D0(int, void *);
+extern void ov13_02239578(int);
+extern void ov13_0223959C(void);
+extern void ov13_02227D18(void);
+extern void ov13_02227B6C(int, int, int, int);
+extern void ov13_02240D80(void *, int);
+extern void ov13_02240E2C(void *);
 extern int ov13_02232168(int);
 extern void ov13_0222FF3C(void);
 extern void ov13_02230540(void);
@@ -36,7 +92,6 @@ extern void ov13_022312B8(void);
 extern void ov13_022312C8(void);
 extern void ov13_02231488(void);
 extern void ov13_022314A8(void);
-
 
 extern void ov13_02231AD4(void);
 extern void ov13_02231D9C(void);
@@ -77,16 +132,17 @@ void ov13_022321FC(void);
 void ov13_02232200(void);
 void ov13_0223221C(void);
 void ov13_0223224C(void);
-extern void ov13_02230854(int,int),ov13_022309CC(int,int);
-extern void ov13_02239378(void *,int,int);
-extern void ov13_0222B948(int *,int *);
+extern void ov13_02230854(int, int);
+extern void ov13_022309CC(int, int);
+extern void ov13_02239378(void *, int, int);
+extern void ov13_0222B948(int *, int *);
 extern u32 ov13_02245454[];
 extern int ov13_02228428(void);
 extern long atol(const char *);
 
 void ov13_022307AC(void);
 
-void ov13_022309CC(int a,int b);
+void ov13_022309CC(int a, int b);
 
 void ov13_02230A58(void);
 
@@ -105,7 +161,7 @@ extern void ov13_022315B0(void);
 void ov13_02230520(void);
 void ov13_02230540(void);
 void ov13_022307AC(void);
-void ov13_022309CC(int a,int b);
+void ov13_022309CC(int a, int b);
 void ov13_02230A58(void);
 void ov13_02230B14(void *task);
 void ov13_02230BD0(void *task);
@@ -138,8 +194,8 @@ void ov13_022321FC(void);
 void ov13_02232200(void);
 void ov13_0223221C(void);
 void ov13_0223224C(void);
-extern int FX_DivS32(int,int);
-extern void ov13_02227924(const void *,void (*)(const void *,u32,u32));
+extern int FX_DivS32(int, int);
+extern void ov13_02227924(const void *, void (*)(const void *, u32, u32));
 void ov13_0223110C(void);
 extern u8 ov13_02246370[];
 extern u8 ov13_02246384[];
@@ -150,24 +206,114 @@ extern u8 ov13_022463E4[];
 extern u8 ov13_022463F8[];
 extern u8 ov13_02246410[];
 extern u8 ov13_02246428[];
-extern void ov13_0222788C(void),ov13_02241D98(void *),ov13_02240B04(int),ov13_02240EFC(int,int),ov13_0222B8F8(int,int),ov13_0222B934(int,int),ov13_022412B0(void *);
+extern void ov13_0222788C(void);
+extern void ov13_02241D98(void *);
+extern void ov13_02240B04(int);
+extern void ov13_02240EFC(int, int);
+extern void ov13_0222B8F8(int, int);
+extern void ov13_0222B934(int, int);
+extern void ov13_022412B0(void *);
 extern u8 ov13_022463C8[];
-extern void ov13_02232E04(void),ov13_0222FA3C(void),ov13_02238440(void);
+extern void ov13_02232E04(void);
+extern void ov13_0222FA3C(void);
+extern void ov13_02238440(void);
 void ov13_022315B0(void);
-extern int ov13_02242074(const void *,int),ov13_0223191C(void);
-extern void ov13_022316B4(void),ov13_022317A8(void);
-extern void ov13_022277B8(int,int,int);
+extern int ov13_02242074(const void *, int);
+extern int ov13_0223191C(void);
+extern void ov13_022316B4(void);
+extern void ov13_022317A8(void);
+extern void ov13_022277B8(int, int, int);
 int ov13_0223191C(void);
 void ov13_022312C8(void);
 extern u8 ov13_0224F53C[];
-void ov13_022309CC(int a,int b) { int off;u32 *p; if(a>=ov13_0224F538.p->count)return;off=a*42;p=ov13_0224F538.p->d[b]; ((u16 *)p)[2]=(((u16 *)p)[2]&~0x3ff)|ov13_0224F538.p->v42[(ov13_0224F538.p->data+off)[40]];p=ov13_0224F538.p->e[b];((u16 *)p)[2]=(((u16 *)p)[2]&~0x3ff)|ov13_0224F538.p->v48[*(u16 *)(ov13_0224F538.p->data+off+38)]; }
 
-void ov13_02230A58(void) { int y=54-FX_ModS32(ov13_0224F538.scroll,28),n=ov13_0224F538.p->count,i; if(n>5)n=5;for(i=0;i<n;i++,y+=28){u32 *p=ov13_0224F538.p->d[i];*p=(*p&0xfe00ff00)|((y-2)&255)|0xb30000;p=ov13_0224F538.p->e[i];*p=(*p&0xfe00ff00)|((y+1)&255)|0xd20000;}ov13_0224F538.p->dirty=1; }
+void ov13_022309CC(int a, int b) {
+    int off;
+    u32 *p;
+    if (a >= ov13_0224F538.p->count) {
+        return;
+    }
+    off = a * 42;
+    p = ov13_0224F538.p->d[b];
+    ((u16 *)p)[2] = (((u16 *)p)[2] & ~0x3ff) | ov13_0224F538.p->v42[(ov13_0224F538.p->data + off)[40]];
+    p = ov13_0224F538.p->e[b];
+    ((u16 *)p)[2] = (((u16 *)p)[2] & ~0x3ff) | ov13_0224F538.p->v48[*(u16 *)(ov13_0224F538.p->data + off + 38)];
+}
 
-void ov13_02230B14(void *task) { int rem;ov13_0223959C();ov13_02227D18();if(ov13_0224F538.scroll>4)ov13_0224F538.scroll-=4;else ov13_0224F538.scroll=0;rem=FX_ModS32(ov13_0224F538.scroll,28);if(rem==24){ov13_022307AC();return;}if(rem>24){ov13_0224F538.scroll+=28-rem;rem=0;}ov13_02230A58();if(rem)return;ov13_02239578(FX_DivS32(ov13_0224F538.scroll*ov13_0224F538.p->sel,ov13_0224F538.p->max));ov13_02239584();ov13_02230CC4();ov13_0224F538.p->task=0;ov13_022425D0(0,task); }
+void ov13_02230A58(void) {
+    int y = 54 - FX_ModS32(ov13_0224F538.scroll, 28), n = ov13_0224F538.p->count, i;
+    if (n > 5) {
+        n = 5;
+    }
+    for (i = 0; i < n; i++, y += 28) {
+        u32 *p = ov13_0224F538.p->d[i];
+        *p = (*p & 0xfe00ff00) | ((y - 2) & 255) | 0xb30000;
+        p = ov13_0224F538.p->e[i];
+        *p = (*p & 0xfe00ff00) | ((y + 1) & 255) | 0xd20000;
+    }
+    ov13_0224F538.p->dirty = 1;
+}
 
-void ov13_02230BD0(void *task) { int rem;ov13_0223959C();ov13_02227D18();ov13_0224F538.scroll+=4;rem=FX_ModS32(ov13_0224F538.scroll,28);if(rem>=4){ov13_02230A58();return;}ov13_0224F538.scroll-=rem;ov13_022307AC();ov13_02239578(FX_DivS32(ov13_0224F538.scroll*ov13_0224F538.p->sel,ov13_0224F538.p->max));ov13_02239584();ov13_02230CC4();ov13_0224F538.p->task=0;ov13_022425D0(0,task); }
+void ov13_02230B14(void *task) {
+    int rem;
+    ov13_0223959C();
+    ov13_02227D18();
+    if (ov13_0224F538.scroll > 4) {
+        ov13_0224F538.scroll -= 4;
+    } else {
+        ov13_0224F538.scroll = 0;
+    }
+    rem = FX_ModS32(ov13_0224F538.scroll, 28);
+    if (rem == 24) {
+        ov13_022307AC();
+        return;
+    }
+    if (rem > 24) {
+        ov13_0224F538.scroll += 28 - rem;
+        rem = 0;
+    }
+    ov13_02230A58();
+    if (rem) {
+        return;
+    }
+    ov13_02239578(FX_DivS32(ov13_0224F538.scroll * ov13_0224F538.p->sel, ov13_0224F538.p->max));
+    ov13_02239584();
+    ov13_02230CC4();
+    ov13_0224F538.p->task = 0;
+    ov13_022425D0(0, task);
+}
 
-void ov13_02230C68(void) { int x; if(!ov13_0224F538.p->dirty) return; x=((FX_ModS32(ov13_0224F538.scroll,28)-50)<<16)&0x01ff0000; *(vu32 *)0x04000010=x; *(vu32 *)0x04000018=x; ov13_0224F538.p->dirty=0; }
+void ov13_02230BD0(void *task) {
+    int rem;
+    ov13_0223959C();
+    ov13_02227D18();
+    ov13_0224F538.scroll += 4;
+    rem = FX_ModS32(ov13_0224F538.scroll, 28);
+    if (rem >= 4) {
+        ov13_02230A58();
+        return;
+    }
+    ov13_0224F538.scroll -= rem;
+    ov13_022307AC();
+    ov13_02239578(FX_DivS32(ov13_0224F538.scroll * ov13_0224F538.p->sel, ov13_0224F538.p->max));
+    ov13_02239584();
+    ov13_02230CC4();
+    ov13_0224F538.p->task = 0;
+    ov13_022425D0(0, task);
+}
 
-void ov13_02230CC4(void) { unsigned x=ov13_0224F538.sel; ov13_02227B6C(x<4?2:3,ov13_02245424[x*4],ov13_02245428[x*4],ov13_02245426[x*4]); }
+void ov13_02230C68(void) {
+    int x;
+    if (!ov13_0224F538.p->dirty) {
+        return;
+    }
+    x = ((FX_ModS32(ov13_0224F538.scroll, 28) - 50) << 16) & 0x01ff0000;
+    *(vu32 *)0x04000010 = x;
+    *(vu32 *)0x04000018 = x;
+    ov13_0224F538.p->dirty = 0;
+}
+
+void ov13_02230CC4(void) {
+    unsigned x = ov13_0224F538.sel;
+    ov13_02227B6C(x < 4 ? 2 : 3, ov13_02245424[x * 4], ov13_02245428[x * 4], ov13_02245426[x * 4]);
+}

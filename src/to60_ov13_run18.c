@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef struct Node {
     struct Node *prev;
@@ -139,8 +139,10 @@ typedef struct Canvas {
     CanvasVT *vt;
     TextCanvas tc;
     void *buf;
+
     union {
         void *task;
+
         struct {
             u16 charNo;
             u8 w;
@@ -300,6 +302,7 @@ static inline void TextCanvasInit(TextCanvas *tc, void *cc, Font *font, int hSpa
     tc->hSpace = hSpace;
     tc->vSpace = vSpace;
 }
+
 extern char *ov13_02247430[];
 extern char *ov13_02247438[];
 extern u16 ov13_02245950[];
@@ -424,7 +427,6 @@ void ov13_02242430(void);
 void ov13_022425C8(Task13 *t, void (*func)(void *, void *));
 void ov13_02242640(int q, u8 enabled);
 
-// @fn ov13_0223F814
 void ov13_0223F814(void) {
     FS_ChangeDir(ov13_02247424);
     FS_UnloadArchiveTables(&ov13_0224F5CC->arc);
@@ -437,7 +439,6 @@ void ov13_0223F814(void) {
     ov13_022412B0(STATIC_ADDR(0x0224F5CC));
 }
 
-// @fn ov13_0223F8A0
 int ov13_0223F8A0(FSArchive *arc, int cmd) {
     switch (cmd) {
     case 9:
@@ -453,23 +454,19 @@ int ov13_0223F8A0(FSArchive *arc, int cmd) {
     }
 }
 
-// @fn ov13_0223F904
 int ov13_0223F904(FSArchive *arc, void *dst, u32 pos, u32 len) {
     CARDi_ReadRom((u32)-1, (const void *)(pos + arc->base), dst, len, ov13_0223F944, arc, TRUE);
     return 6;
 }
 
-// @fn ov13_0223F944
 void ov13_0223F944(void *arg) {
     FS_NotifyArchiveAsyncEnd(arg, FS_RESULT_SUCCESS);
 }
 
-// @fn ov13_0223F954
 int ov13_0223F954(void) {
     return 1;
 }
 
-// @fn ov13_0223F95C
 void *ov13_0223F95C(const char *path, u32 *outSize, int align) {
     void *buf;
     FSFile file;
@@ -507,13 +504,11 @@ void *ov13_0223F95C(const char *path, u32 *outSize, int align) {
     return out;
 }
 
-// @fn ov13_0223FA50
 void ov13_0223FA50(void *p) {
     ov13_022412B0(&p);
     ov13_02240288(ov13_0224F5CC->pool, p);
 }
 
-// @fn ov13_0223FA84
 int ov13_0223FA84(const char *a, const char *b, int n) {
     int la = strlen(a);
     int lb = strlen(b);
@@ -523,7 +518,6 @@ int ov13_0223FA84(const char *a, const char *b, int n) {
     return memcmp(a + (la - n), b + (lb - n), n) == 0;
 }
 
-// @fn ov13_0223FADC
 void ov13_0223FADC(void) {
     int i;
     ov13_0224F5D0 = ov13_0224128C(0x450, 4);
@@ -537,7 +531,6 @@ void ov13_0223FADC(void) {
     }
 }
 
-// @fn ov13_0223FBB0
 void ov13_0223FBB0(void) {
     int i;
     for (i = 0; i < 2; i++) {
@@ -547,7 +540,6 @@ void ov13_0223FBB0(void) {
     ov13_022412B0(STATIC_ADDR(0x0224F5D0));
 }
 
-// @fn ov13_0223FC04
 OamBlk *ov13_0223FC04(int which, int count, int fromFront) {
     OamBlk *blk;
     OamBlk *cur;
@@ -591,7 +583,6 @@ OamBlk *ov13_0223FC04(int which, int count, int fromFront) {
     return blk;
 }
 
-// @fn ov13_0223FD60
 void ov13_0223FD60(OamBlk *blk) {
     int idx = 0;
     Oam *o = blk->oam;
@@ -607,12 +598,10 @@ void ov13_0223FD60(OamBlk *blk) {
     ov13_02240288(ov13_0224F5D0[idx].pool, blk);
 }
 
-// @fn ov13_0223FDE0
 Oam *ov13_0223FDE0(OamBlk *blk, int idx) {
     return &blk->oam[idx];
 }
 
-// @fn ov13_0223FDEC
 u8 ov13_0223FDEC(OamBlk *blk) {
     return blk->count;
 }

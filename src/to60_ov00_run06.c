@@ -1,11 +1,12 @@
 #pragma force_active on
 #pragma warn_unusedvar off
-// clang-format off
 #include "global.h"
-#include "dgt.h"
+
 #include "WIFI_stubsmd5_dummy.h"
+#include "dgt.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef void (*ArrayElementFreeFn)(void *);
 typedef int (*ArrayCompareFn)(const void *, const void *);
@@ -323,7 +324,6 @@ void ov00_021FE8D8(DArray *a, int n);
 void *ov00_021FECC0(const void *key, const void *base, int count, int size, ArrayCompareFn cmp, int *found);
 void *ov00_021FEC68(const void *key, const void *base, int count, int size, ArrayCompareFn cmp);
 
-
 void ov00_021FE514(DArray *a, int n);
 void ov00_021FE538(DArray *a);
 void ov00_021FE590(DArray *a, const void *elem, int n);
@@ -368,14 +368,12 @@ int ov00_021FF92C(int sock, void *buf, int len, int flags);
 int ov00_021FF940(int sock, void *buf, int len, int flags, SocSockAddr *addr, int *addrlen);
 int ov00_021FF970(int sock, const void *buf, int len, int flags);
 
-// @fn ov00_021FE514
 void ov00_021FE514(DArray *a, int n) {
     if (a->freeFn != NULL) {
         a->freeFn(ov00_021FE6EC(a, n));
     }
 }
 
-// @fn ov00_021FE538
 void ov00_021FE538(DArray *a) {
     a->capacity += a->growBy;
     a->list = ov00_021EC3BC(a->list, a->capacity * a->elemSize);
@@ -384,12 +382,10 @@ void ov00_021FE538(DArray *a) {
     }
 }
 
-// @fn ov00_021FE590
 void ov00_021FE590(DArray *a, const void *elem, int n) {
     memcpy(ov00_021FE6EC(a, n), elem, a->elemSize);
 }
 
-// @fn ov00_021FE5B4
 DArray *ov00_021FE5B4(int elemSize, int growBy, ArrayElementFreeFn freeFn) {
     DArray *a = ov00_021EC3A8(sizeof(DArray));
     if (!a) {
@@ -417,7 +413,6 @@ DArray *ov00_021FE5B4(int elemSize, int growBy, ArrayElementFreeFn freeFn) {
     return a;
 }
 
-// @fn ov00_021FE678
 void ov00_021FE678(DArray *a) {
     int i;
     if (!a) {
@@ -430,12 +425,10 @@ void ov00_021FE678(DArray *a) {
     ov00_021EC3D8(a);
 }
 
-// @fn ArrayLength
 int ArrayLength(const DArray *a) {
     return a->count;
 }
 
-// @fn ov00_021FE6EC
 void *ov00_021FE6EC(DArray *a, int n) {
     if (!(n >= 0 && n < a->count)) {
         __msl_assertion_failed(ov00_02217D3C, ov00_02217D1C, ov00_02217C58, 0x94);
@@ -446,7 +439,6 @@ void *ov00_021FE6EC(DArray *a, int n) {
     return (char *)a->list + a->elemSize * n;
 }
 
-// @fn ov00_021FE754
 void ov00_021FE754(DArray *a, const void *elem) {
     if (!a) {
         __msl_assertion_failed(ov00_02217D28, ov00_02217D1C, ov00_02217C88, 0xa0);
@@ -456,7 +448,6 @@ void ov00_021FE754(DArray *a, const void *elem) {
     }
 }
 
-// @fn ov00_021FE7A0
 void ov00_021FE7A0(DArray *a, const void *elem, int n) {
     int last;
     if (!(n >= 0 && n <= a->count)) {
@@ -472,7 +463,6 @@ void ov00_021FE7A0(DArray *a, const void *elem, int n) {
     ov00_021FE590(a, elem, n);
 }
 
-// @fn ov00_021FE858
 void ov00_021FE858(DArray *a, const void *elem, ArrayCompareFn cmp) {
     int found;
     void *p;
@@ -483,7 +473,6 @@ void ov00_021FE858(DArray *a, const void *elem, ArrayCompareFn cmp) {
     ov00_021FE7A0(a, elem, ((char *)p - (char *)a->list) / a->elemSize);
 }
 
-// @fn ov00_021FE8D8
 void ov00_021FE8D8(DArray *a, int n) {
     if (!(n >= 0 && n < a->count)) {
         __msl_assertion_failed(ov00_02217D3C, ov00_02217D1C, ov00_02217C94, 0xc0);
@@ -494,7 +483,6 @@ void ov00_021FE8D8(DArray *a, int n) {
     a->count--;
 }
 
-// @fn ov00_021FE968
 void ov00_021FE968(DArray *a, int n) {
     if (!(n >= 0 && n < a->count)) {
         __msl_assertion_failed(ov00_02217D3C, ov00_02217D1C, ov00_02217CA4, 0xca);
@@ -503,7 +491,6 @@ void ov00_021FE968(DArray *a, int n) {
     ov00_021FE8D8(a, n);
 }
 
-// @fn ov00_021FE9C0
 void ov00_021FE9C0(DArray *a, const void *elem, int n) {
     if (!(n >= 0 && n < a->count)) {
         __msl_assertion_failed(ov00_02217D3C, ov00_02217D1C, ov00_02217CC4, 0xd3);
@@ -512,12 +499,10 @@ void ov00_021FE9C0(DArray *a, const void *elem, int n) {
     ov00_021FE590(a, elem, n);
 }
 
-// @fn ov00_021FEA20
 void ov00_021FEA20(DArray *a, ArrayCompareFn cmp) {
     qsort(a->list, a->count, a->elemSize, cmp);
 }
 
-// @fn ov00_021FEA40
 int ov00_021FEA40(DArray *a, const void *key, ArrayCompareFn cmp, int from, int sorted) {
     int count;
     int found = 1;
@@ -536,7 +521,6 @@ int ov00_021FEA40(DArray *a, const void *key, ArrayCompareFn cmp, int from, int 
     return ((char *)p - (char *)a->list) / a->elemSize;
 }
 
-// @fn ov00_021FEAF8
 void ov00_021FEAF8(DArray *a, ArrayMapFn fn, void *arg) {
     int i;
     if (!fn) {
@@ -547,7 +531,6 @@ void ov00_021FEAF8(DArray *a, ArrayMapFn fn, void *arg) {
     }
 }
 
-// @fn ov00_021FEB64
 void ov00_021FEB64(DArray *a, ArrayMapFn fn, void *arg) {
     int i;
     if (!fn) {
@@ -558,7 +541,6 @@ void ov00_021FEB64(DArray *a, ArrayMapFn fn, void *arg) {
     }
 }
 
-// @fn ov00_021FEBC4
 void *ov00_021FEBC4(DArray *a, ArrayMapFn2 fn, void *arg) {
     int i;
     void *e;
@@ -574,7 +556,6 @@ void *ov00_021FEBC4(DArray *a, ArrayMapFn2 fn, void *arg) {
     return NULL;
 }
 
-// @fn ov00_021FEC3C
 void ov00_021FEC3C(DArray *a) {
     int i;
     for (i = ArrayLength(a) - 1; i >= 0; i--) {
@@ -582,7 +563,6 @@ void ov00_021FEC3C(DArray *a) {
     }
 }
 
-// @fn ov00_021FEC68
 void *ov00_021FEC68(const void *key, const void *base, int count, int size, ArrayCompareFn cmp) {
     int i;
     for (i = 0; i < count; i++) {
@@ -593,7 +573,6 @@ void *ov00_021FEC68(const void *key, const void *base, int count, int size, Arra
     return NULL;
 }
 
-// @fn ov00_021FECC0
 void *ov00_021FECC0(const void *key, const void *base, int count, int size, ArrayCompareFn cmp, int *found) {
     int lo = 0;
     int hi;
@@ -616,12 +595,10 @@ void *ov00_021FECC0(const void *key, const void *base, int count, int size, Arra
     return (char *)base + lo * size;
 }
 
-// @fn ov00_021FED24
 HashTable *ov00_021FED24(int elemSize, int nbuckets, TableHashFn hashFn, ArrayCompareFn cmpFn, ArrayElementFreeFn freeFn) {
     return ov00_021FED4C(elemSize, nbuckets, 4, hashFn, cmpFn, freeFn);
 }
 
-// @fn ov00_021FED4C
 HashTable *ov00_021FED4C(int elemSize, int nbuckets, int nchains, TableHashFn hashFn, ArrayCompareFn cmpFn, ArrayElementFreeFn freeFn) {
     HashTable *t;
     int i;
@@ -655,7 +632,6 @@ HashTable *ov00_021FED4C(int elemSize, int nbuckets, int nchains, TableHashFn ha
     return t;
 }
 
-// @fn ov00_021FEE8C
 void ov00_021FEE8C(HashTable *t) {
     int i;
     if (!t) {
@@ -671,7 +647,6 @@ void ov00_021FEE8C(HashTable *t) {
     ov00_021EC3D8(t);
 }
 
-// @fn ov00_021FEF00
 int ov00_021FEF00(HashTable *t) {
     int i;
     int count = 0;
@@ -687,7 +662,6 @@ int ov00_021FEF00(HashTable *t) {
     return count;
 }
 
-// @fn ov00_021FEF74
 void ov00_021FEF74(HashTable *t, const void *elem) {
     int hash;
     int idx;
@@ -706,7 +680,6 @@ void ov00_021FEF74(HashTable *t, const void *elem) {
     }
 }
 
-// @fn ov00_021FF01C
 int ov00_021FF01C(HashTable *t, const void *elem) {
     int hash;
     int idx;
@@ -725,7 +698,6 @@ int ov00_021FF01C(HashTable *t, const void *elem) {
     return 1;
 }
 
-// @fn ov00_021FF0C0
 void *ov00_021FF0C0(HashTable *t, const void *elem) {
     int hash;
     int idx;
@@ -743,7 +715,6 @@ void *ov00_021FF0C0(HashTable *t, const void *elem) {
     return ov00_021FE6EC(t->buckets[hash], idx);
 }
 
-// @fn ov00_021FF160
 void ov00_021FF160(HashTable *t, ArrayMapFn fn, void *arg) {
     int i;
     if (!t) {
@@ -760,7 +731,6 @@ void ov00_021FF160(HashTable *t, ArrayMapFn fn, void *arg) {
     }
 }
 
-// @fn ov00_021FF1F8
 void ov00_021FF1F8(HashTable *t, ArrayMapFn fn, void *arg) {
     int i;
     if (!fn) {
@@ -771,7 +741,6 @@ void ov00_021FF1F8(HashTable *t, ArrayMapFn fn, void *arg) {
     }
 }
 
-// @fn ov00_021FF264
 void *ov00_021FF264(HashTable *t, ArrayMapFn2 fn, void *arg) {
     int i;
     void *e;
@@ -787,7 +756,6 @@ void *ov00_021FF264(HashTable *t, ArrayMapFn2 fn, void *arg) {
     return NULL;
 }
 
-// @fn ov00_021FF2DC
 void ov00_021FF2DC(u8 *digest, char *out) {
     unsigned int i;
     for (i = 0; i < 16; i++) {
@@ -795,7 +763,6 @@ void ov00_021FF2DC(u8 *digest, char *out) {
     }
 }
 
-// @fn ov00_021FF31C
 void ov00_021FF31C(const void *data, u32 len, char *out) {
     u8 digest[16];
     Md5Ctx ctx;
@@ -805,7 +772,6 @@ void ov00_021FF31C(const void *data, u32 len, char *out) {
     ov00_021FF2DC(digest, out);
 }
 
-// @fn ov00_021FF368
 u32 ov00_021FF368(void) {
     if (OS_IsTickAvailable() != TRUE) {
         __msl_assertion_failed(ov00_02217E74, ov00_02217E94, ov00_02217E64, 0x109);
@@ -813,20 +779,16 @@ u32 ov00_021FF368(void) {
     return (u32)((OS_GetTick() * 64) / 33514);
 }
 
-// @fn ov00_021FF3C0
 void ov00_021FF3C0(u32 ms) {
     OS_Sleep(ms);
 }
 
-// @fn ov00_021FF3CC
 void ov00_021FF3CC(void) {
 }
 
-// @fn ov00_021FF3D0
 void ov00_021FF3D0(void) {
 }
 
-// @fn ov00_021FF3D4
 char *ov00_021FF3D4(const char *s) {
     char *p;
     if (!s) {
@@ -839,7 +801,6 @@ char *ov00_021FF3D4(const char *s) {
     return p;
 }
 
-// @fn ov00_021FF408
 char *ov00_021FF408(char *s) {
     char *p = s;
     while (*s) {
@@ -849,7 +810,6 @@ char *ov00_021FF408(char *s) {
     return p;
 }
 
-// @fn ov00_021FF44C
 int ov00_021FF44C(int sock, int blocking) {
     int flags = SOC_Fcntl(sock, 3, 0);
     if (blocking) {
@@ -860,17 +820,14 @@ int ov00_021FF44C(int sock, int blocking) {
     return SOC_Fcntl(sock, 4, flags) == 0;
 }
 
-// @fn ov00_021FF48C
 int ov00_021FF48C(int sock, int size) {
     return ov00_021FFA04(sock, 0xFFFF, 0x1002, &size, sizeof(size)) != -1;
 }
 
-// @fn ov00_021FF4D0
 int ov00_021FF4D0(int sock, int size) {
     return ov00_021FFA04(sock, 0xFFFF, 0x1001, &size, sizeof(size)) != -1;
 }
 
-// @fn ov00_021FF510
 int ov00_021FF510(int sock) {
     int size;
     int len;
@@ -881,7 +838,6 @@ int ov00_021FF510(int sock) {
     return size;
 }
 
-// @fn ov00_021FF558
 int ov00_021FF558(int sock) {
     int size;
     int len;
@@ -892,7 +848,6 @@ int ov00_021FF558(int sock) {
     return size;
 }
 
-// @fn ov00_021FF59C
 int ov00_021FF59C(int sock, int *readFlag, int *writeFlag, int *exceptFlag) {
     SocPollFd pfd;
     int rval;
@@ -933,7 +888,6 @@ int ov00_021FF59C(int sock, int *readFlag, int *writeFlag, int *exceptFlag) {
     return rval;
 }
 
-// @fn ov00_021FF694
 int ov00_021FF694(int sock) {
     int ready = 0;
     if (ov00_021FF59C(sock, &ready, NULL, NULL) == 1) {
@@ -942,7 +896,6 @@ int ov00_021FF694(int sock) {
     return 0;
 }
 
-// @fn ov00_021FF6BC
 int ov00_021FF6BC(int sock) {
     int ready = 0;
     if (ov00_021FF59C(sock, NULL, &ready, NULL) == 1) {
@@ -951,7 +904,6 @@ int ov00_021FF6BC(int sock) {
     return 0;
 }
 
-// @fn ov00_021FF6E4
 void *ov00_021FF6E4(void) {
     ov00_0221B1AC.hName = ov00_02217EA0;
     ov00_0221B1AC.hAliases = (char **)(ov00_0221B1B4 - 8);
@@ -969,7 +921,6 @@ void *ov00_021FF6E4(void) {
     return ov00_0221B1B4;
 }
 
-// @fn ov00_021FF770
 int ov00_021FF770(const u32 *in) {
     u32 x = *in;
     u32 ip = ((x >> 24) & 0xff) | ((x >> 8) & 0xff00) | ((x << 8) & 0xff0000) | ((x << 24) & 0xff000000);
@@ -984,7 +935,6 @@ int ov00_021FF770(const u32 *in) {
     return b1 == 192 && b2 == 168;
 }
 
-// @fn ov00_021FF7EC
 int ov00_021FF7EC(int ret, int err) {
     if (ret < 0) {
         ov00_0221B1AC.lastError = ret;
@@ -993,22 +943,18 @@ int ov00_021FF7EC(int ret, int err) {
     return ret;
 }
 
-// @fn ov00_021FF804
 int ov00_021FF804(int domain, int type, int proto) {
     return ov00_021FF7EC(SOC_Socket(domain, type, proto), -1);
 }
 
-// @fn ov00_021FF818
 int ov00_021FF818(int sock) {
     return ov00_021FF7EC(SOC_Close(sock), -1);
 }
 
-// @fn ov00_021FF82C
 int ov00_021FF82C(int sock, int how) {
     return ov00_021FF7EC(SOC_Shutdown(sock, how), -1);
 }
 
-// @fn ov00_021FF840
 int ov00_021FF840(int sock, const SocSockAddr *addr, int len) {
     SocSockAddr local;
     if (((const SockAddrIn *)addr)->port == 0) {
@@ -1019,7 +965,6 @@ int ov00_021FF840(int sock, const SocSockAddr *addr, int len) {
     return ov00_021FF7EC(SOC_Bind(sock, &local), -1);
 }
 
-// @fn ov00_021FF8A0
 int ov00_021FF8A0(int sock, const SocSockAddr *addr, int len) {
     SocSockAddr local;
     local = *addr;
@@ -1027,12 +972,10 @@ int ov00_021FF8A0(int sock, const SocSockAddr *addr, int len) {
     return ov00_021FF7EC(SOC_Connect(sock, &local), -1);
 }
 
-// @fn ov00_021FF8EC
 int ov00_021FF8EC(int sock, int backlog) {
     return ov00_021FF7EC(SOC_Listen(sock, backlog), -1);
 }
 
-// @fn ov00_021FF900
 int ov00_021FF900(int sock, SocSockAddr *addr, int *len) {
     int ret;
     addr->len = *len;
@@ -1041,12 +984,10 @@ int ov00_021FF900(int sock, SocSockAddr *addr, int *len) {
     return ov00_021FF7EC(ret, -1);
 }
 
-// @fn ov00_021FF92C
 int ov00_021FF92C(int sock, void *buf, int len, int flags) {
     return ov00_021FF7EC(SOC_Recv(sock, buf, len, flags), -1);
 }
 
-// @fn ov00_021FF940
 int ov00_021FF940(int sock, void *buf, int len, int flags, SocSockAddr *addr, int *addrlen) {
     int ret;
     addr->len = *addrlen;
@@ -1055,7 +996,6 @@ int ov00_021FF940(int sock, void *buf, int len, int flags, SocSockAddr *addr, in
     return ov00_021FF7EC(ret, -1);
 }
 
-// @fn ov00_021FF970
 int ov00_021FF970(int sock, const void *buf, int len, int flags) {
     return ov00_021FF7EC(SOC_Send(sock, buf, len, flags), -1);
 }

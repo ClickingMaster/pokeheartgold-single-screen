@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef NNSG2dRenderSurface Surface;
 typedef NNSG2dRendererInstance Renderer;
@@ -16,18 +16,22 @@ typedef struct RendererState {
     u8 gap[0xf94 - 0x10];
     BOOL cacheEnabled;
 } RendererState;
+
 typedef struct RendererContext {
     u16 transferIndex, reserved;
     u32 transferHandle;
     MtxFx32 matrix;
 } RendererContext;
+
 typedef struct IndexRecord {
     u16 cache, id, state, pad;
 } IndexRecord;
+
 typedef struct McmState {
     u8 pad[0x90];
     u16 index;
 } McmState;
+
 typedef struct McmTable {
     u16 index, pad;
     MtxCache *values[256];
@@ -42,7 +46,8 @@ extern McmTable _021DA068;
 extern IndexRecord _021D9568[32];
 extern MtxCache _021D9C68[32];
 extern MtxFx32 _021D9668[32];
-extern fx32 _021D9678[], _021D967C[];
+extern fx32 _021D9678[];
+extern fx32 _021D967C[];
 extern fx32 _021D94E8[32];
 
 void NNSi_G2dMCMStoreCurrentMtxToMtxCache(void);
@@ -61,9 +66,11 @@ static inline BOOL IsCacheUsable(void) {
     }
     return FALSE;
 }
+
 static inline BOOL IsValidHandle(u32 handle) {
     return handle != (u32)-1;
 }
+
 static inline void DrawCoreCell(const NNSG2dCellData *cell) {
     switch (IsValidHandle(_021109DC.transferHandle)) {
     default:
@@ -74,6 +81,7 @@ static inline void DrawCoreCell(const NNSG2dCellData *cell) {
         break;
     }
 }
+
 static inline MtxCache *GetCacheA(void) {
     MtxCache *cache = NULL;
     if (IsCacheUsable()) {
@@ -91,6 +99,7 @@ static inline MtxCache *GetCacheA(void) {
     }
     return cache;
 }
+
 static inline MtxCache *GetCacheB(void) {
     MtxCache *cache = NULL;
     if (IsCacheUsable()) {
@@ -108,6 +117,7 @@ static inline MtxCache *GetCacheB(void) {
     }
     return cache;
 }
+
 static inline const MtxFx32 *GetMtxA(void) {
     if (_021D94D8.translateOnly == 0) {
         return &_021D9668[_021D94D8.matrixIndex];
@@ -116,6 +126,7 @@ static inline const MtxFx32 *GetMtxA(void) {
     _021109DC.matrix._21 = *(fx32 *)((u8 *)_021D967C + _021D94D8.matrixIndex * sizeof(MtxFx32));
     return &_021109E4;
 }
+
 static inline const MtxFx32 *GetMtxB(void) {
     if (_021D94D8.translateOnly) {
         _021109DC.matrix._20 = _021D9668[_021D94D8.matrixIndex]._20;
@@ -130,21 +141,25 @@ static inline void Draw2DA(const NNSG2dCellData *cell) {
     NNS_G2dSetRndCoreCurrentMtx2D(GetMtxA(), cache);
     DrawCoreCell(cell);
 }
+
 static inline void Draw3DA(Renderer *renderer, const NNSG2dCellData *cell) {
     NNS_G2dSetRndCore3DSoftSpriteZvalue(&renderer->rendererCore, _021D94E8[_021D94D8.matrixIndex]);
     NNS_G2dSetRndCoreCurrentMtx3D(GetMtxA());
     DrawCoreCell(cell);
 }
+
 static inline void Draw2DB(const NNSG2dCellData *cell) {
     MtxCache *cache = GetCacheB();
     NNS_G2dSetRndCoreCurrentMtx2D(GetMtxB(), cache);
     DrawCoreCell(cell);
 }
+
 static inline void Draw3DB(Renderer *renderer, const NNSG2dCellData *cell) {
     NNS_G2dSetRndCore3DSoftSpriteZvalue(&renderer->rendererCore, _021D94E8[_021D94D8.matrixIndex]);
     NNS_G2dSetRndCoreCurrentMtx3D(GetMtxB());
     DrawCoreCell(cell);
 }
+
 static inline void EndSurface(void) {
     _021D94D8.renderer->pCurrentSurface = NULL;
     NNS_G2dRndCoreEndRendering();
@@ -152,7 +167,6 @@ static inline void EndSurface(void) {
 
 void DrawCellImpl_(const NNSG2dCellData *cell);
 
-// @fn DrawCellImpl_
 void DrawCellImpl_(const NNSG2dCellData *cell) {
     Renderer *renderer = _021D94D8.renderer;
     Surface *surface = renderer->pTargetSurfaceList;

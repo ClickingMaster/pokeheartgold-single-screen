@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef struct DequeBuf {
     u32 **ptr;
@@ -31,6 +31,7 @@ typedef union Str {
         u32 size;
         char *ptr;
     } l;
+
     struct {
         u8 isLong : 1;
         u8 len : 7;
@@ -39,10 +40,12 @@ typedef union Str {
 } Str;
 
 typedef struct VObj VObj;
+
 typedef struct VTable {
     void (*f0)(VObj *);
     void (*dtor)(VObj *);
 } VTable;
+
 struct VObj {
     VTable *vt;
 };
@@ -59,9 +62,11 @@ void ov45_0223BD0C(void);
 void _ZNSt15__vector_commonILb1EE18throw_length_errorEv(void);
 Str *ov45_02237DB4(Str *, u32, u32, void *);
 void ov45_0223DB08(Str *, u32, u32, const char *);
+
 typedef struct Tag {
     u8 c;
 } Tag;
+
 void ov45_02238104(Str *, u32, u32, const char *, const char *, Tag);
 int ov45_02238024(const u8 *, u32, u32, const void *, u32);
 
@@ -132,12 +137,12 @@ void ov45_0223DB8C(CharVec *, u32, const char *);
 u32 ov45_0223EA34(Vec *, u32);
 void ov45_0223EB00(Vec *, u32, u32 *);
 void ov45_02236E58(NodeIter *);
-Node *ov45_022370D0(Node *,void *);
+Node *ov45_022370D0(Node *, void *);
 
 extern char ov45_0225520C[];
 void printf(const char *, ...);
 void abort(void);
-void ov45_02236EC4(Node *,void *);
+void ov45_02236EC4(Node *, void *);
 
 typedef struct InsertResult {
     Node *current;
@@ -208,9 +213,9 @@ static inline BOOL CallPmf(PMF *p, int adj, void *o) {
     u8 *obj = (u8 *)o + (adj >> 1);
     BOOL (*fn)(void *);
     if (adj & 1) {
-        fn = *(BOOL (**)(void *))(*(u8 **)obj + p->fn);
+        fn = *(BOOL(**)(void *))(*(u8 **)obj + p->fn);
     } else {
-        fn = (BOOL (*)(void *))p->fn;
+        fn = (BOOL(*)(void *))p->fn;
     }
     return fn(obj);
 }
@@ -280,8 +285,6 @@ typedef struct SplitBuf {
 void ov45_0223EC80(SplitBuf *b, u32 cap, Tag unused);
 void ov45_0223EC64(SplitBuf *b);
 
-
-// @fn ov45_0223E648
 void ov45_0223E648(InsertResult *out, List *l, Session **key) {
     Node *parent;
     u8 left;
@@ -296,7 +299,6 @@ void ov45_0223E648(InsertResult *out, List *l, Session **key) {
     out->inserted = ov45_02255200[1];
 }
 
-// @fn ov45_0223E6E8
 void ov45_0223E6E8(NodeIter *out, List *l, NodeIter it) {
     Node *n = it.current;
     if (n == l->leftmost) {
@@ -310,18 +312,19 @@ void ov45_0223E6E8(NodeIter *out, List *l, NodeIter it) {
     l->count--;
 }
 
-// @fn ov45_0223E758
 Node *ov45_0223E758(List *l, Node *parent, u8 left, u8 flag, Session **key) {
     Node *n;
     Node *tmp;
     Session **pv;
     u32 *pp;
+
     volatile struct {
         Node *a;
         Node *b;
         void **c;
         Node *d;
     } h;
+
     if (l->count == (u32)-1) {
         printf(ov45_0225520C);
         abort();
@@ -362,7 +365,6 @@ Node *ov45_0223E758(List *l, Node *parent, u8 left, u8 flag, Session **key) {
     return n;
 }
 
-// @fn ov45_0223E830
 void ov45_0223E830(Vec *v, u32 n) {
     Vec b;
     u32 *first;
@@ -393,14 +395,12 @@ void ov45_0223E830(Vec *v, u32 n) {
     ov45_0223E9B4(&b);
 }
 
-// @fn ov45_0223E910
 void ov45_0223E910(Vec *v, u32 *x, Tag unused) {
     TouchTag();
     ov45_0223EA34(v, 1);
     ov45_0223EB00(v, 1, x);
 }
 
-// @fn ov45_0223E940
 Node *ov45_0223E940(List *l, Session **key, Node **parent, u8 *left, u8 *flag) {
     Node *y;
     Node *x;
@@ -424,7 +424,6 @@ Node *ov45_0223E940(List *l, Session **key, Node **parent, u8 *left, u8 *flag) {
     return y;
 }
 
-// @fn ov45_0223E9B4
 Vec *ov45_0223E9B4(Vec *v) {
     if (v->ptr != NULL) {
         u32 n = *(volatile u32 *)&v->size;
@@ -437,7 +436,6 @@ Vec *ov45_0223E9B4(Vec *v) {
     return v;
 }
 
-// @fn ov45_0223EA04
 void ov45_0223EA04(Vec *v, u32 n, Tag unused) {
     if (n > 0x3FFFFFFF) {
         _ZNSt15__vector_commonILb1EE18throw_length_errorEv();
@@ -446,7 +444,6 @@ void ov45_0223EA04(Vec *v, u32 n, Tag unused) {
     v->cap = n;
 }
 
-// @fn ov45_0223EA34
 u32 ov45_0223EA34(Vec *v, u32 n) {
     u32 cap = v->cap;
     u32 g1;
@@ -465,7 +462,6 @@ u32 ov45_0223EA34(Vec *v, u32 n) {
     return 0x3FFFFFFF;
 }
 
-// @fn ov45_0223EB00
 void ov45_0223EB00(Vec *v, u32 n, u32 *x) {
     volatile Tag t4;
     SplitBuf b;

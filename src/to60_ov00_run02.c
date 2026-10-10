@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef void (*RecvCb)(int, void *, int);
 
@@ -269,10 +269,8 @@ int ov00_021FBFB8(Ap *ap);
 u8 ov00_021FC004(Work *w);
 u8 ov00_021FC064(Work *w);
 
-
 u8 ov00_021FBF24(int kind);
 
-// @fn ov00_021FBF24
 u8 ov00_021FBF24(int kind) {
     Work *w = ov00_021FAE14(0x10);
     switch (kind) {
@@ -293,7 +291,6 @@ u8 ov00_021FBF24(int kind) {
     return w->unkD10;
 }
 
-// @fn ov00_021FBFB8
 int ov00_021FBFB8(Ap *ap) {
     Work *w = ov00_021FAE14(0x10);
     if ((w->c0 == 0 || w->c0 == 6) && strncmp((char *)ap->ssid, ov00_02216060, 8) == 0) {
@@ -302,7 +299,6 @@ int ov00_021FBFB8(Ap *ap) {
     return 0;
 }
 
-// @fn ov00_021FC004
 u8 ov00_021FC004(Work *w) {
     Svc *s = w->svc;
     u8 n = ov00_021FC150(w);
@@ -316,7 +312,6 @@ u8 ov00_021FC004(Work *w) {
     return n;
 }
 
-// @fn ov00_021FC064
 u8 ov00_021FC064(Work *w) {
     u8 n;
     Svc *s = w->svc;

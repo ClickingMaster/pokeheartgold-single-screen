@@ -1,11 +1,110 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 #pragma force_active on
-typedef struct{u32 flags;u16 attr;} Obj;typedef struct{void*grid[3][4];Obj*first[47];Obj*second[4];void*third[2];void*handles[4];void*last;void*timer;u8 flag,state;u8 pad[3];u8 a,pad2,b,c;u8 rest[3];} G;typedef struct{u16 x,y,w,h;} Dims;
-extern G *ov13_0224F4BC;extern u8 ov13_02244F5C[],ov13_02244F54[];extern u16 *ov13_02245D74[];
-extern void *ov13_0224128C(int,int),*ov13_022401B0(int,int,int),*ov13_02240798(int,int,int,int,void**,int),*ov13_0223FC04(int,void*,int),*ov13_02242528(int,void(*)(void),int,int);extern Obj*ov13_02240184(int,int);extern void ov13_0223FDF4(void*,int,int,int),ov13_02240008(void*,int,int),ov13_02240CC0(void*,int,int,int,int,int,int,u16*),ov13_02228444(void),ov13_022290F0(int,int,int);
+
+typedef struct {
+    u32 flags;
+    u16 attr;
+} Obj;
+
+typedef struct {
+    void *grid[3][4];
+    Obj *first[47];
+    Obj *second[4];
+    void *third[2];
+    void *handles[4];
+    void *last;
+    void *timer;
+    u8 flag, state;
+    u8 pad[3];
+    u8 a, pad2, b, c;
+    u8 rest[3];
+} G;
+
+typedef struct {
+    u16 x, y, w, h;
+} Dims;
+
+extern G *ov13_0224F4BC;
+extern u8 ov13_02244F5C[];
+extern u8 ov13_02244F54[];
+extern u16 *ov13_02245D74[];
+extern void *ov13_0224128C(int, int), *ov13_022401B0(int, int, int), *ov13_02240798(int, int, int, int, void **, int), *ov13_0223FC04(int, void *, int), *ov13_02242528(int, void (*)(void), int, int);
+extern Obj *ov13_02240184(int, int);
+extern void ov13_0223FDF4(void *, int, int, int);
+extern void ov13_02240008(void *, int, int);
+extern void ov13_02240CC0(void *, int, int, int, int, int, int, u16 *);
+extern void ov13_02228444(void);
+extern void ov13_022290F0(int, int, int);
 void ov13_02228054(void);
-void ov13_02228054(void){Dims dims={0,0,0,0};void*handle;struct{int offset;u16 code;volatile u16 unused;} pre;u8*p;int i,j,k;dims.w=17;dims.h=18;ov13_0224F4BC=ov13_0224128C(296,4);ov13_0224F4BC->flag=255;ov13_0224F4BC->a=0;ov13_0224F4BC->b=1;ov13_0224F4BC->c=1;for(i=0;i<47;i++){ov13_0224F4BC->first[i]=ov13_02240184(0,52);ov13_0224F4BC->first[i]->flags=(ov13_0224F4BC->first[i]->flags&0xc1fffcff)|512;ov13_0224F4BC->first[i]->attr=(ov13_0224F4BC->first[i]->attr&~0xc00)|0xc00;}p=ov13_02244F5C;for(i=0;i<4;i++){ov13_0224F4BC->second[i]=ov13_02240184(0,*p++);ov13_0224F4BC->second[i]->flags=(ov13_0224F4BC->second[i]->flags&0xc1fffcff)|512;ov13_0224F4BC->second[i]->attr=(ov13_0224F4BC->second[i]->attr&~0xc00)|0xc00;}{u8 *names=ov13_02244F54;for(i=0;i<2;i++){ov13_0224F4BC->third[i]=ov13_022401B0(0,*names++,1);ov13_0223FDF4(ov13_0224F4BC->third[i],-1,512,0);ov13_02240008(ov13_0224F4BC->third[i],-1,3);}}i=0;pre.unused=i;for(;i<3;i++){pre.offset=0;for(j=0;j<4;j++){ov13_0224F4BC->grid[i][j]=ov13_02240798(0,28,2,0,&handle,0);dims.x=0;{int index=0;for(k=pre.offset;index<12;){pre.code=ov13_02245D74[i][k];ov13_02240CC0(ov13_0224F4BC->grid[i][j],dims.x,dims.y,dims.w,dims.h,2,1152,&pre.code);index++;dims.x+=18;k++;}}if(i==0)ov13_0224F4BC->handles[j]=ov13_0223FC04(0,handle,1);pre.offset+=12;}}ov13_0224F4BC->last=ov13_022401B0(0,64,1);ov13_0223FDF4(ov13_0224F4BC->last,-1,512,0);ov13_02240008(ov13_0224F4BC->last,-1,2);ov13_0224F4BC->timer=ov13_02242528(0,ov13_02228444,0,120);ov13_022290F0(ov13_0224F4BC->state,0,192);}
+
+void ov13_02228054(void) {
+    Dims dims = { 0, 0, 0, 0 };
+    void *handle;
+
+    struct {
+        int offset;
+        u16 code;
+        volatile u16 unused;
+    } pre;
+
+    u8 *p;
+    int i, j, k;
+    dims.w = 17;
+    dims.h = 18;
+    ov13_0224F4BC = ov13_0224128C(296, 4);
+    ov13_0224F4BC->flag = 255;
+    ov13_0224F4BC->a = 0;
+    ov13_0224F4BC->b = 1;
+    ov13_0224F4BC->c = 1;
+    for (i = 0; i < 47; i++) {
+        ov13_0224F4BC->first[i] = ov13_02240184(0, 52);
+        ov13_0224F4BC->first[i]->flags = (ov13_0224F4BC->first[i]->flags & 0xc1fffcff) | 512;
+        ov13_0224F4BC->first[i]->attr = (ov13_0224F4BC->first[i]->attr & ~0xc00) | 0xc00;
+    }
+    p = ov13_02244F5C;
+    for (i = 0; i < 4; i++) {
+        ov13_0224F4BC->second[i] = ov13_02240184(0, *p++);
+        ov13_0224F4BC->second[i]->flags = (ov13_0224F4BC->second[i]->flags & 0xc1fffcff) | 512;
+        ov13_0224F4BC->second[i]->attr = (ov13_0224F4BC->second[i]->attr & ~0xc00) | 0xc00;
+    }
+    {
+        u8 *names = ov13_02244F54;
+        for (i = 0; i < 2; i++) {
+            ov13_0224F4BC->third[i] = ov13_022401B0(0, *names++, 1);
+            ov13_0223FDF4(ov13_0224F4BC->third[i], -1, 512, 0);
+            ov13_02240008(ov13_0224F4BC->third[i], -1, 3);
+        }
+    }
+    i = 0;
+    pre.unused = i;
+    for (; i < 3; i++) {
+        pre.offset = 0;
+        for (j = 0; j < 4; j++) {
+            ov13_0224F4BC->grid[i][j] = ov13_02240798(0, 28, 2, 0, &handle, 0);
+            dims.x = 0;
+            {
+                int index = 0;
+                for (k = pre.offset; index < 12;) {
+                    pre.code = ov13_02245D74[i][k];
+                    ov13_02240CC0(ov13_0224F4BC->grid[i][j], dims.x, dims.y, dims.w, dims.h, 2, 1152, &pre.code);
+                    index++;
+                    dims.x += 18;
+                    k++;
+                }
+            }
+            if (i == 0) {
+                ov13_0224F4BC->handles[j] = ov13_0223FC04(0, handle, 1);
+            }
+            pre.offset += 12;
+        }
+    }
+    ov13_0224F4BC->last = ov13_022401B0(0, 64, 1);
+    ov13_0223FDF4(ov13_0224F4BC->last, -1, 512, 0);
+    ov13_02240008(ov13_0224F4BC->last, -1, 2);
+    ov13_0224F4BC->timer = ov13_02242528(0, ov13_02228444, 0, 120);
+    ov13_022290F0(ov13_0224F4BC->state, 0, 192);
+}

@@ -1,7 +1,8 @@
 #include "global.h"
-// clang-format off
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
+
 #include "renderer_joint_family_private.h"
 
 void NNS_G3dMdlSetMdlDiff(void *model, u32 index, u32 value);
@@ -53,6 +54,7 @@ MAKE_ALL(PolygonMode)
 MAKE_ALL(CullMode)
 MAKE_ALL(PolygonID)
 MAKE_ALL(Alpha)
+
 void NNS_G3dMdlSetMdlFogEnableFlagAll(NNSG3dResMdl *model, BOOL value) {
     u8 *bytes = (u8 *)model;
     u32 i;

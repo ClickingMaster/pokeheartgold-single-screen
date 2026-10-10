@@ -1,13 +1,115 @@
 #pragma force_active on
 #include "global.h"
-// clang-format off
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 #pragma force_active on
-extern int sprintf(char*,const char*,...);
-#define W(p,o) (*(int*)((u8*)(p)+(o)))
-#define S(p,o) ((char*)(p)+(o))
-typedef struct{int a,b;}Pair;
-extern char ov00_022188D0[],ov00_022188D8[],ov00_022188E8[],ov00_0221891C[],ov00_02218924[],ov00_02218930[],ov00_0221893C[],ov00_0221894C[],ov00_02218954[],ov00_02218958[],ov00_02218964[],ov00_02218970[],ov00_0221897C[],ov00_02218988[],ov00_02218990[],ov00_0221899C[],ov00_0221B16C[],ov00_022189A8[],ov00_022189B8[],ov00_022189C0[];
-extern void ov00_02202E08(char*,int),ov00_021FF31C(char*,int,char*),ov00_022020EC(void*,void*,char*),ov00_0220211C(void*,void*,int);extern int ov00_02207EB4(void*,char*,char*,Pair**);int ov00_02203428(void*,void*);
-int ov00_02203428(void*ctx,void*req){void*c=*(void**)ctx;char*password;char*user;Pair*pair;struct{char hash[33],auth[82],text[512];}tmp;ov00_02202E08(S(req,0x80),32);password=*S(req,0x1c2)?S(req,0x1c2):S(c,0x177);ov00_021FF31C(password,strlen(password),S(req,0xa1));if(*S(req,0xc2))user=S(req,0xc2);else if(*S(c,0x12f))user=S(c,0x12f);else{sprintf(tmp.auth,ov00_022188D0,S(c,0x110),S(c,0x144));user=tmp.auth;}sprintf(tmp.text,ov00_022188D8,S(req,0xa1),ov00_022188E8,user,S(req,0x80),req,S(req,0xa1));ov00_021FF31C(tmp.text,strlen(tmp.text),tmp.hash);if(W(c,0x100)){ov00_02207EB4(ctx,S(c,0x110),S(c,0x144),&pair);if(pair){W(c,0x19c)=pair->b;W(c,0x1a0)=pair->a;}}ov00_022020EC(ctx,S(c,0x1f4),ov00_0221891C);ov00_022020EC(ctx,S(c,0x1f4),ov00_02218924);ov00_022020EC(ctx,S(c,0x1f4),S(req,0x80));if(*S(req,0xc2)){ov00_022020EC(ctx,S(c,0x1f4),ov00_02218930);ov00_022020EC(ctx,S(c,0x1f4),S(req,0xc2));}else if(*S(c,0x12f)){ov00_022020EC(ctx,S(c,0x1f4),ov00_0221893C);ov00_022020EC(ctx,S(c,0x1f4),S(c,0x12f));}else{ov00_022020EC(ctx,S(c,0x1f4),ov00_0221894C);ov00_022020EC(ctx,S(c,0x1f4),S(c,0x110));ov00_022020EC(ctx,S(c,0x1f4),ov00_02218954);ov00_022020EC(ctx,S(c,0x1f4),S(c,0x144));}if(W(c,0x19c)){ov00_022020EC(ctx,S(c,0x1f4),ov00_02218958);ov00_0220211C(ctx,S(c,0x1f4),W(c,0x19c));}if(W(c,0x1a0)){ov00_022020EC(ctx,S(c,0x1f4),ov00_02218964);ov00_0220211C(ctx,S(c,0x1f4),W(c,0x1a0));}ov00_022020EC(ctx,S(c,0x1f4),ov00_02218970);ov00_022020EC(ctx,S(c,0x1f4),tmp.hash);if(W(c,0x10c)==1)ov00_022020EC(ctx,S(c,0x1f4),ov00_0221897C);ov00_022020EC(ctx,S(c,0x1f4),ov00_02218988);{u16 port=W(c,0x208);port=((port>>8)&255)|((port<<8)&0xff00);ov00_0220211C(ctx,S(c,0x1f4),(s16)port);}ov00_022020EC(ctx,S(c,0x1f4),ov00_02218990);ov00_0220211C(ctx,S(c,0x1f4),W(c,0x46c));ov00_022020EC(ctx,S(c,0x1f4),ov00_0221899C);ov00_022020EC(ctx,S(c,0x1f4),ov00_0221B16C);ov00_022020EC(ctx,S(c,0x1f4),ov00_022189A8);ov00_0220211C(ctx,S(c,0x1f4),W(c,0x470));ov00_022020EC(ctx,S(c,0x1f4),ov00_022189B8);ov00_022020EC(ctx,S(c,0x1f4),ov00_022189C0);return 0;}
+extern int sprintf(char *, const char *, ...);
+#define W(p, o) (*(int *)((u8 *)(p) + (o)))
+#define S(p, o) ((char *)(p) + (o))
+
+typedef struct {
+    int a, b;
+} Pair;
+
+extern char ov00_022188D0[];
+extern char ov00_022188D8[];
+extern char ov00_022188E8[];
+extern char ov00_0221891C[];
+extern char ov00_02218924[];
+extern char ov00_02218930[];
+extern char ov00_0221893C[];
+extern char ov00_0221894C[];
+extern char ov00_02218954[];
+extern char ov00_02218958[];
+extern char ov00_02218964[];
+extern char ov00_02218970[];
+extern char ov00_0221897C[];
+extern char ov00_02218988[];
+extern char ov00_02218990[];
+extern char ov00_0221899C[];
+extern char ov00_0221B16C[];
+extern char ov00_022189A8[];
+extern char ov00_022189B8[];
+extern char ov00_022189C0[];
+extern void ov00_02202E08(char *, int);
+extern void ov00_021FF31C(char *, int, char *);
+extern void ov00_022020EC(void *, void *, char *);
+extern void ov00_0220211C(void *, void *, int);
+extern int ov00_02207EB4(void *, char *, char *, Pair **);
+int ov00_02203428(void *, void *);
+
+int ov00_02203428(void *ctx, void *req) {
+    void *c = *(void **)ctx;
+    char *password;
+    char *user;
+    Pair *pair;
+
+    struct {
+        char hash[33], auth[82], text[512];
+    } tmp;
+
+    ov00_02202E08(S(req, 0x80), 32);
+    password = *S(req, 0x1c2) ? S(req, 0x1c2) : S(c, 0x177);
+    ov00_021FF31C(password, strlen(password), S(req, 0xa1));
+    if (*S(req, 0xc2)) {
+        user = S(req, 0xc2);
+    } else if (*S(c, 0x12f)) {
+        user = S(c, 0x12f);
+    } else {
+        sprintf(tmp.auth, ov00_022188D0, S(c, 0x110), S(c, 0x144));
+        user = tmp.auth;
+    }
+    sprintf(tmp.text, ov00_022188D8, S(req, 0xa1), ov00_022188E8, user, S(req, 0x80), req, S(req, 0xa1));
+    ov00_021FF31C(tmp.text, strlen(tmp.text), tmp.hash);
+    if (W(c, 0x100)) {
+        ov00_02207EB4(ctx, S(c, 0x110), S(c, 0x144), &pair);
+        if (pair) {
+            W(c, 0x19c) = pair->b;
+            W(c, 0x1a0) = pair->a;
+        }
+    }
+    ov00_022020EC(ctx, S(c, 0x1f4), ov00_0221891C);
+    ov00_022020EC(ctx, S(c, 0x1f4), ov00_02218924);
+    ov00_022020EC(ctx, S(c, 0x1f4), S(req, 0x80));
+    if (*S(req, 0xc2)) {
+        ov00_022020EC(ctx, S(c, 0x1f4), ov00_02218930);
+        ov00_022020EC(ctx, S(c, 0x1f4), S(req, 0xc2));
+    } else if (*S(c, 0x12f)) {
+        ov00_022020EC(ctx, S(c, 0x1f4), ov00_0221893C);
+        ov00_022020EC(ctx, S(c, 0x1f4), S(c, 0x12f));
+    } else {
+        ov00_022020EC(ctx, S(c, 0x1f4), ov00_0221894C);
+        ov00_022020EC(ctx, S(c, 0x1f4), S(c, 0x110));
+        ov00_022020EC(ctx, S(c, 0x1f4), ov00_02218954);
+        ov00_022020EC(ctx, S(c, 0x1f4), S(c, 0x144));
+    }
+    if (W(c, 0x19c)) {
+        ov00_022020EC(ctx, S(c, 0x1f4), ov00_02218958);
+        ov00_0220211C(ctx, S(c, 0x1f4), W(c, 0x19c));
+    }
+    if (W(c, 0x1a0)) {
+        ov00_022020EC(ctx, S(c, 0x1f4), ov00_02218964);
+        ov00_0220211C(ctx, S(c, 0x1f4), W(c, 0x1a0));
+    }
+    ov00_022020EC(ctx, S(c, 0x1f4), ov00_02218970);
+    ov00_022020EC(ctx, S(c, 0x1f4), tmp.hash);
+    if (W(c, 0x10c) == 1) {
+        ov00_022020EC(ctx, S(c, 0x1f4), ov00_0221897C);
+    }
+    ov00_022020EC(ctx, S(c, 0x1f4), ov00_02218988);
+    {
+        u16 port = W(c, 0x208);
+        port = ((port >> 8) & 255) | ((port << 8) & 0xff00);
+        ov00_0220211C(ctx, S(c, 0x1f4), (s16)port);
+    }
+    ov00_022020EC(ctx, S(c, 0x1f4), ov00_02218990);
+    ov00_0220211C(ctx, S(c, 0x1f4), W(c, 0x46c));
+    ov00_022020EC(ctx, S(c, 0x1f4), ov00_0221899C);
+    ov00_022020EC(ctx, S(c, 0x1f4), ov00_0221B16C);
+    ov00_022020EC(ctx, S(c, 0x1f4), ov00_022189A8);
+    ov00_0220211C(ctx, S(c, 0x1f4), W(c, 0x470));
+    ov00_022020EC(ctx, S(c, 0x1f4), ov00_022189B8);
+    ov00_022020EC(ctx, S(c, 0x1f4), ov00_022189C0);
+    return 0;
+}

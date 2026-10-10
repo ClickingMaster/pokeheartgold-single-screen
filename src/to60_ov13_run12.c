@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef void (*Func)(void);
 typedef void (*TaskFunc)(void *, void *);
@@ -236,6 +236,7 @@ typedef struct {
     u8 state;
     u8 unkE8[7];
     u8 flags;
+
     union {
         struct {
             u8 mask[4];
@@ -244,6 +245,7 @@ typedef struct {
             u8 autoDns;
             u8 unkF7;
         } work;
+
         struct {
             u8 info[0xe];
             u16 crc;
@@ -260,6 +262,7 @@ typedef struct {
     u8 ssid[0x20];
     u8 unk60[0x20];
     u8 wep[4][0x10];
+
     union {
         struct {
             u8 ip[4];
@@ -267,8 +270,10 @@ typedef struct {
             u8 dns1[4];
             u8 dns2[4];
         };
+
         u8 addr[4][4];
     };
+
     u8 cidr;
     u8 unkD1[0x15];
     u8 mode : 2;
@@ -360,10 +365,8 @@ void ov13_0223AF10(void *, void *);
 void ov13_0223AFF4(void *, void *);
 extern void ov13_0223B0D8(void *, void *);
 
-
 void ov13_0223AAFC(void);
 
-// @fn ov13_0223AA58
 void ov13_0223AA58(const char *str, u8 *out) {
     u8 buf[4];
     int i;
@@ -382,7 +385,6 @@ void ov13_0223AA58(const char *str, u8 *out) {
     }
 }
 
-// @fn ov13_0223AAE0
 int ov13_0223AAE0(u8 c) {
     if (c <= '9') {
         return c - '0';
@@ -393,7 +395,6 @@ int ov13_0223AAE0(u8 c) {
     return c - 0x57;
 }
 
-// @fn ov13_0223AAFC
 void ov13_0223AAFC(void) {
     u32 size;
     ov13_0224F5A8 = ov13_0224128C(0xa0, 4);

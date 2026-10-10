@@ -1,8 +1,8 @@
 #pragma force_active on
-// clang-format off
 #include "global.h"
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
 
 typedef struct Node {
     struct Node *prev;
@@ -139,8 +139,10 @@ typedef struct Canvas {
     CanvasVT *vt;
     TextCanvas tc;
     void *buf;
+
     union {
         void *task;
+
         struct {
             u16 charNo;
             u8 w;
@@ -300,6 +302,7 @@ static inline void TextCanvasInit(TextCanvas *tc, void *cc, Font *font, int hSpa
     tc->hSpace = hSpace;
     tc->vSpace = vSpace;
 }
+
 extern char *ov13_02247430[];
 extern char *ov13_02247438[];
 extern u16 ov13_02245950[];
@@ -424,7 +427,6 @@ void ov13_02242430(void);
 void ov13_022425C8(Task13 *t, void (*func)(void *, void *));
 void ov13_02242640(int q, u8 enabled);
 
-// @fn ov13_02241B98
 List *ov13_02241B98(void) {
     List *l = ov13_0224128C(sizeof(List), 4);
     l->head.prev = NULL;
@@ -434,12 +436,10 @@ List *ov13_02241B98(void) {
     return l;
 }
 
-// @fn ov13_02241BC4
 void ov13_02241BC4(List *list) {
     ov13_022412B0(&list);
 }
 
-// @fn ov13_02241BE0
 void ov13_02241BE0(void *node) {
     Node *n = node;
     int irq = OS_DisableIrqMask(1);
@@ -450,7 +450,6 @@ void ov13_02241BE0(void *node) {
     OS_EnableIrqMask(irq);
 }
 
-// @fn ov13_02241C18
 void ov13_02241C18(void *pos, void *node) {
     Node *p = pos;
     Node *n = node;
@@ -462,16 +461,14 @@ void ov13_02241C18(void *pos, void *node) {
     OS_EnableIrqMask(irq);
 }
 
-// @fn ov13_02241C48
 void ov13_02241C48(List *list, void *node) {
     ov13_02241C18(&list->tail, node);
 }
 
-// @fn ov13_02241C58
 void ov13_02241C58(List *list, void *node) {
     ov13_02241C18(list->head.next, node);
 }
-// @fn ov13_02241C68
+
 void ov13_02241C68(void) {
     OamBuf13 *m;
     int i;
@@ -483,25 +480,21 @@ void ov13_02241C68(void) {
     ov13_0224F608->task = ov13_02242528(1, (void (*)(void *, void *))ov13_02241D04, NULL, 0xC8);
 }
 
-// @fn ov13_02241D04
 void ov13_02241D04(void) {
     DC_FlushRange(ov13_0224F608, 0x800);
     GX_LoadOAM(ov13_0224F608->oam[0], 0, 0x400);
     GXS_LoadOAM(ov13_0224F608->oam[1], 0, 0x400);
 }
 
-// @fn ov13_02241D4C
 void ov13_02241D4C(void) {
     ov13_022425F0(1, ov13_0224F608->task);
     ov13_022412B0(STATIC_ADDR(0x0224F608));
 }
 
-// @fn ov13_02241D78
 Oam *ov13_02241D78(int a) {
     return ov13_022402E0(ov13_0224F608->pools[a]);
 }
 
-// @fn ov13_02241D98
 void ov13_02241D98(Oam *o) {
     int idx;
     o->attr01 = (o->attr01 & 0xC1FFFCFF) | 0x200;
@@ -512,12 +505,10 @@ void ov13_02241D98(Oam *o) {
     ov13_02240288(ov13_0224F608->pools[idx], o);
 }
 
-// @fn ov13_02241DE4
 Oam *ov13_02241DE4(int a, int b) {
     return &ov13_0224F608->oam[a][b];
 }
 
-// @fn ov13_02241DFC
 void ov13_02241DFC(void) {
     int i;
     ov13_0224F60C = ov13_0224128C(0x340, 4);
@@ -531,7 +522,6 @@ void ov13_02241DFC(void) {
     }
 }
 
-// @fn ov13_02241EBC
 void *ov13_02241EBC(int which, int size, int fromFront, u32 *out) {
     ChrBlk *blk;
     ChrBlk *cur;
@@ -578,7 +568,6 @@ void *ov13_02241EBC(int which, int size, int fromFront, u32 *out) {
     return blk;
 }
 
-// @fn ov13_02242034
 void ov13_02242034(void *blk) {
     int idx = 0;
     ov13_02241BE0(blk);
@@ -588,7 +577,6 @@ void ov13_02242034(void *blk) {
     ov13_02240288(ov13_0224F60C[idx].pool, blk);
 }
 
-// @fn ov13_02242074
 int ov13_02242074(const u8 *s, int max) {
     int i;
     for (i = 0; i < max; i++) {
@@ -599,7 +587,6 @@ int ov13_02242074(const u8 *s, int max) {
     return i;
 }
 
-// @fn ov13_022420A0
 void ov13_022420A0(void) {
     ov13_0224F610.bg = GX_DisableBankForBG();
     ov13_0224F610.obj = GX_DisableBankForOBJ();
@@ -618,7 +605,6 @@ void ov13_022420A0(void) {
     ov13_0224225C();
 }
 
-// @fn ov13_02242154
 void ov13_02242154(void) {
     OSIntrMode irq;
     GX_DisableBankForBG();
@@ -653,7 +639,6 @@ void ov13_02242154(void) {
     OS_RestoreInterrupts(irq);
 }
 
-// @fn ov13_0224225C
 void ov13_0224225C(void) {
     GX_SetBankForLCDC((GXVRamLCDC)0x1F3);
     MIi_CpuClearFast(0, (void *)0x06800000, 0x40000);
@@ -665,7 +650,6 @@ void ov13_0224225C(void) {
     MIi_CpuClearFast(0, (void *)0x05000400, 0x400);
 }
 
-// @fn ov13_022422E0
 void ov13_022422E0(void) {
     u32 pat;
     if (PM_GetLEDPattern(&pat) != 0) {
@@ -677,12 +661,10 @@ void ov13_022422E0(void) {
     PMi_SendLEDPatternCommand(0xF);
 }
 
-// @fn ov13_0224230C
 void ov13_0224230C(void) {
     PMi_SendLEDPatternCommand(1);
 }
 
-// @fn ov13_0224231C
 void ov13_0224231C(void) {
     int i;
     u8 *cnt;
@@ -702,7 +684,6 @@ void ov13_0224231C(void) {
     }
 }
 
-// @fn ov13_02242430
 void ov13_02242430(void) {
     int i;
     for (i = 0; i < 2; i++) {
@@ -712,7 +693,6 @@ void ov13_02242430(void) {
     ov13_022412B0(STATIC_ADDR(0x0224F644));
 }
 
-// @fn ov13_02242478
 void ov13_02242478(int q) {
     Task13 *t;
     int i;
@@ -731,12 +711,10 @@ void ov13_02242478(int q) {
     }
 }
 
-// @fn ov13_02242528
 void *ov13_02242528(int q, void (*func)(void *, void *), void *arg, u32 prio) {
     return ov13_0224253C(q, func, arg, prio, 0);
 }
 
-// @fn ov13_0224253C
 Task13 *ov13_0224253C(int q, void (*func)(void *, void *), void *arg, u32 prio, u8 owned) {
     Task13 *t;
     Task13 *cur;
@@ -757,22 +735,18 @@ Task13 *ov13_0224253C(int q, void (*func)(void *, void *), void *arg, u32 prio, 
     return t;
 }
 
-// @fn ov13_022425C8
 void ov13_022425C8(Task13 *t, void (*func)(void *, void *)) {
     t->func = func;
 }
 
-// @fn ov13_022425D0
 void ov13_022425D0(int q, void *t) {
     ov13_02240288(ov13_0224F644[q].queue, t);
 }
 
-// @fn ov13_022425F0
 void ov13_022425F0(int q, void *t) {
     ov13_022425FC(q, t);
 }
 
-// @fn ov13_022425FC
 void ov13_022425FC(int q, Task13 *t) {
     if (t->owned) {
         ov13_022412B0(&t->arg);
@@ -781,7 +755,6 @@ void ov13_022425FC(int q, Task13 *t) {
     ov13_02240288(ov13_0224F644[q].taskPool, t);
 }
 
-// @fn ov13_02242640
 void ov13_02242640(int q, u8 enabled) {
     ov13_0224F644[q].enabled = enabled;
 }

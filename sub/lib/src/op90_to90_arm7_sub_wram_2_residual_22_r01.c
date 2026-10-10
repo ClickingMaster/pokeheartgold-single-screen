@@ -1,8 +1,9 @@
 #pragma force_active on
 #include <nitro/types.h>
-// clang-format off
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-// clang-format on
+
 typedef struct {
     void *buf;
     void *stack;
@@ -18,15 +19,17 @@ typedef struct {
     void *staElement;
     u32 unk30;
 } WvrInitParam;
+
 typedef struct {
     u32 prio[7];
 } WvrPriority;
+
 extern u8 wvrWlWork[];
 extern u8 wvrWlStack[0x600];
 extern u8 wvrWlStaElement[];
 void __VENEER_WMSP_Init(WvrInitParam *param, WvrPriority *prio);
 void WvrBegin(void *callback);
-// @fn WvrBegin
+
 void WvrBegin(void *callback) {
     WvrInitParam param;
     WvrPriority prio;
