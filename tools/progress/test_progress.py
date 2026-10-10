@@ -1,9 +1,12 @@
+import json
+import re
 import tempfile
 from pathlib import Path
 import unittest
 import xml.etree.ElementTree as ET
 
-from progress import CODE, classify, code_family, generate, layout, parse_map, svg, union_size, source_coverage
+from progress import (CODE, ORIGINAL_ASM, classify, code_family, generate, layout, load_original_asm, parse_map, svg,
+                      union_size, source_coverage)
 
 
 class ProgressTests(unittest.TestCase):
@@ -326,6 +329,178 @@ class CppCoverageTests(unittest.TestCase):
             (root / 'lib/x/src/b.c').write_text('#include "missing.h"\nint g;\n')
             self.assertEqual(classify(root, {'lib/x/src/a.c'})[0], 'mixed')
             self.assertEqual(classify(root, {'lib/x/src/b.c'})[0], 'c')
+
+
+class OriginalAssemblyTests(unittest.TestCase):
+    MAP = ('# .main\n'
+           '  02000000 00000020 .text f (unit.o)\n'
+           '  02000000 00000000 .text $a (unit.o)\n'
+           '  02000020 00000010 .text g (unit.o)\n'
+           '  02000030 00000008 .text h (unit.o)\n')
+
+    def rows(self, source, entries, cpu='ARM9', path='src/unit.c'):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root / path).parent.mkdir(parents=True)
+            (root / path).write_text(source)
+            (root / 'main.lsf').write_text(f'Object {Path(path).with_suffix(".o").as_posix()}\n')
+            (root / 'test.xMAP').write_text(self.MAP)
+            original = {(cpu, path): entries}
+            return [(r['status'], r['bytes'], r.get('functions')) for r in parse_map(root / 'test.xMAP', root, 'ARM9', original)]
+
+    def test_listed_asm_function_is_split_and_the_c_rest_is_c(self):
+        source = 'asm void g(void);\nvoid f(void) { g(); }\nasm void g(void) { bx lr }\nvoid h(void) {}\n'
+        self.assertEqual(self.rows(source, {'g': 'asm'}),
+                         [('c', 0x28, None), ('original_asm', 0x10, ['g'])])
+        self.assertEqual(self.rows(source, {}), [('mixed', 0x38, None)])
+
+    def test_listed_function_without_map_bytes_does_not_clear_the_rest(self):
+        source = 'void f(void) {}\nasm void g(void) { bx lr }\nasm void gone(void) { bx lr }\n'
+        self.assertEqual(self.rows(source, {'g': 'asm', 'gone': 'asm'}),
+                         [('mixed', 0x28, None), ('original_asm', 0x10, ['g'])])
+
+    def test_unlisted_assembly_keeps_the_rest_mixed(self):
+        source = 'void f(void) {}\nasm void g(void) { bx lr }\nasm void h(void) { bx lr }\n'
+        self.assertEqual(self.rows(source, {'g': 'asm'}),
+                         [('mixed', 0x28, None), ('original_asm', 0x10, ['g'])])
+        self.assertEqual(self.rows(source, {'g': 'asm', 'h': 'asm'}),
+                         [('c', 0x20, None), ('original_asm', 0x18, ['g', 'h'])])
+
+    def test_entry_must_match_source_form_cpu_and_path(self):
+        source = 'void f(void) {}\nvoid g(void) {}\nasm void h(void) { bx lr }\n'
+        # g is C in this source: listing it as original assembly changes nothing.
+        self.assertEqual(self.rows(source, {'g': 'asm'}), [('mixed', 0x38, None)])
+        self.assertEqual(self.rows(source, {'h': 'inline-asm'}), [('mixed', 0x38, None)])
+        self.assertEqual(self.rows(source, {'h': 'asm'}, cpu='ARM7'), [('mixed', 0x38, None)])
+
+    def test_conditional_definitions_must_all_be_asm(self):
+        source = ('void f(void) {}\n#ifdef SDK_ARM9\nasm void g(void) { bx lr }\n#else\n'
+                  'asm void g(void) { mov pc, lr }\n#endif\nvoid h(void) {}\n')
+        self.assertEqual(self.rows(source, {'g': 'asm'}), [('c', 0x28, None), ('original_asm', 0x10, ['g'])])
+        source = source.replace('asm void g(void) { mov pc, lr }', 'void g(void) {}')
+        self.assertEqual(self.rows(source, {'g': 'asm'}), [('mixed', 0x38, None)])
+
+    def test_inline_asm_helper_counts_only_through_listed_functions(self):
+        helper = 'static inline u32 Clz(u32 x) { asm { clz x, x } return x; }\n#define SHIFT(n) (31 - Clz(n))\n'
+        source = helper + 'u32 f(u32 x) { return SHIFT(x); }\nu32 g(u32 x) { return x; }\nu32 h(u32 x) { return x; }\n'
+        self.assertEqual(self.rows(source, {'f': 'inline-asm'}),
+                         [('c', 0x18, None), ('inline_asm', 0x20, ['f'])])
+        # g still inlines the helper, so the rest is not clean C.
+        source = helper + 'u32 f(u32 x) { return SHIFT(x); }\nu32 g(u32 x) { return Clz(x); }\nu32 h(u32 x) { return x; }\n'
+        self.assertEqual(self.rows(source, {'f': 'inline-asm'}),
+                         [('mixed', 0x18, None), ('inline_asm', 0x20, ['f'])])
+        # A function without any assembly is not C with inline asm.
+        self.assertEqual(self.rows(source, {'h': 'inline-asm'}), [('mixed', 0x38, None)])
+
+    def test_veneer_entries_must_be_single_literal_jumps(self):
+        source = ('void f(void) {}\nasm void g(void) {\n    ldr pc, =f\n}\n'
+                  'asm void h(void) {\n    ldr ip, =f\n    bx ip\n}\n')
+        self.assertEqual(self.rows(source, {'g': 'veneer', 'h': 'veneer'}),
+                         [('c', 0x20, None), ('veneer', 0x18, ['g', 'h'])])
+        source = 'void f(void) {}\nasm void g(void) {\n    mov r0, #0\n    ldr pc, =f\n}\nvoid h(void) {}\n'
+        self.assertEqual(self.rows(source, {'g': 'veneer'}), [('mixed', 0x38, None)])
+        self.assertEqual(self.rows(source, {'g': 'asm'}), [('c', 0x28, None), ('original_asm', 0x10, ['g'])])
+
+    def test_generated_entries_may_come_from_macros(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root / 'lib/x/src').mkdir(parents=True)
+            (root / 'lib/x/include').mkdir(parents=True)
+            (root / 'lib/x/include/stub.h').write_text('#define STUB(n) asm void n(void) { bx lr }\n')
+            (root / 'lib/x/src/s.c').write_text('#include "stub.h"\nSTUB(f)\nSTUB(g)\nasm void h(void) { bx lr }\n')
+            (root / 'main.lsf').write_text('Object lib/x/src/s.o\n')
+            (root / 'test.xMAP').write_text(self.MAP.replace('unit.o', 's.o'))
+            def rows(entries):
+                return [(r['status'], r['bytes'], r.get('functions'))
+                        for r in parse_map(root / 'test.xMAP', root, 'ARM9', {('ARM9', 'lib/x/src/s.c'): entries})]
+            self.assertEqual(rows({'f': 'generated', 'g': 'generated', 'h': 'generated'}),
+                             [('generated', 0x38, ['f', 'g', 'h'])])
+            # Whatever is left keeps the macro's assembly, so it stays mixed.
+            self.assertEqual(rows({'f': 'generated', 'h': 'generated'}),
+                             [('mixed', 0x10, None), ('generated', 0x28, ['f', 'h'])])
+            self.assertEqual(rows({'missing': 'generated'}), [('mixed', 0x38, None)])
+
+    def test_demangled_cpp_symbol_matches_its_source_definition(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root / 'src').mkdir()
+            (root / 'src/unit.cpp').write_text('struct T;\nasm void Jump(T *t, char *p) { bx lr }\nvoid f(void) {}\n')
+            (root / 'main.lsf').write_text('Object src/unit.o\n')
+            (root / 'test.xMAP').write_text('# .main\n  02000000 00000030 .text Jump(T*, char*)\t(unit.o)\n'
+                                            '  02000030 00000010 .text f()\t(unit.o)\n')
+            rows = parse_map(root / 'test.xMAP', root, 'ARM9', {('ARM9', 'src/unit.cpp'): {'Jump(T*, char*)': 'asm'}})
+            self.assertEqual([(r['status'], r['bytes']) for r in rows], [('cpp', 0x10), ('original_asm', 0x30)])
+
+    def test_compiled_code_excludes_hand_written_generated_and_veneer_code(self):
+        cov = source_coverage({'c': 60, 'cpp': 10, 'inline_asm': 5, 'mixed': 5, 'original_asm': 20})
+        self.assertEqual(cov['denominator_bytes'], 100)
+        self.assertAlmostEqual(cov['combined']['percent'], 70.0)
+        self.assertAlmostEqual(cov['with_asm_functions']['percent'], 100.0)
+        self.assertEqual(cov['original_asm']['bytes'], 20)
+        self.assertEqual((cov['compiled_code_in_c']['bytes'], cov['compiled_code_in_c']['of']), (75, 80))
+        self.assertAlmostEqual(cov['compiled_code_in_c']['percent'], 93.75)
+        self.assertEqual(source_coverage({'c': 32})['compiled_code_in_c']['percent'], 100.0)
+        cov = source_coverage({'c': 70, 'mixed': 5, 'original_asm': 10, 'generated': 10, 'veneer': 5})
+        self.assertEqual((cov['compiled_code_in_c']['bytes'], cov['compiled_code_in_c']['of']), (70, 75))
+        self.assertEqual((cov['source_files_in_c']['bytes'], cov['source_files_in_c']['of']), (90, 90))
+        self.assertEqual((cov['veneer']['bytes'], cov['generated']['bytes']), (5, 10))
+
+    def test_svg_headline_legend_and_hover_for_original_assembly(self):
+        objects = [dict(cpu='ARM9', module='main', object='os.o', bytes=20, status='original_asm',
+                        source='src/os.c', functions=['OS_A', 'OS_B'])]
+        rendered = svg(dict(game='heartgold.us', commit='abc', objects=objects,
+                            totals={'c': 60, 'cpp': 10, 'inline_asm': 5, 'mixed': 5, 'original_asm': 20}))
+        ET.fromstring(rendered)
+        self.assertIn('>100% of source in C/C++', rendered)
+        self.assertIn('93.75% compiled code in C/C++ · 70.00% C + C++ source', rendered)
+        self.assertIn('Original hand-written assembly 20.0%', rendered)
+        self.assertIn('C with original inline asm 5.0%', rendered)
+        self.assertIn('OS_A, OS_B', rendered)
+        done = svg(dict(game='heartgold.us', commit='abc', objects=[], totals={'c': 80, 'original_asm': 20}))
+        self.assertIn('>100% compiled code in C/C++', done)
+        tiny = svg(dict(game='heartgold.us', commit='abc', objects=[], totals={'c': 9999, 'inline_asm': 1}))
+        self.assertIn('C with original inline asm &lt;0.1%', tiny)
+        nearly = svg(dict(game='heartgold.us', commit='abc', objects=[], totals={'c': 999999, 'mixed': 1}))
+        self.assertIn('>99.99% compiled code in C/C++', nearly)
+        self.assertIn('>100% of source in C/C++', nearly)
+        partial = svg(dict(game='heartgold.us', commit='abc', objects=[], totals={'c': 999998, 'mixed': 1, 'asm': 1}))
+        self.assertIn('>99.99% of source in C/C++', partial)
+
+    def test_legend_lists_non_zero_categories_and_wraps(self):
+        totals = {'c': 50, 'cpp': 10, 'inline_asm': 5, 'original_asm': 10, 'generated': 10, 'veneer': 5, 'mixed': 10}
+        rendered = svg(dict(game='heartgold.us', commit='abc', objects=[], totals=totals))
+        ET.fromstring(rendered)
+        self.assertIn('Linker-style veneers 5.0%', rendered)
+        self.assertIn('Build-tool generated 10.0%', rendered)
+        self.assertNotIn('>Assembly ', rendered)
+        self.assertNotIn('Unresolved source', rendered)
+        self.assertIn('y="113" width="12"', rendered)  # second legend row
+        for x, text in re.findall(r'<text x="(\d+)" y="1(?:02|24)" font-size="14">([^<]*)<', rendered):
+            self.assertLess(int(x) + len(text) * 7.7, 1172)
+        single = svg(dict(game='heartgold.us', commit='abc', objects=[], totals={'c': 90, 'mixed': 10}))
+        self.assertNotIn('y="113" width="12"', single)
+
+    def test_tracked_original_assembly_list_is_valid(self):
+        data = json.loads(ORIGINAL_ASM.read_text())
+        entries = load_original_asm()
+        self.assertEqual(sum(len(v) for v in entries.values()), len(data['functions']))
+        for entry in data['functions']:
+            self.assertTrue(entry['reason'].strip())
+            self.assertIn(entry.get('kind', 'asm'), ('asm', 'inline-asm', 'generated', 'veneer'))
+        # Compiler output that is not yet matched is unfinished work, not original assembly.
+        names = {entry['function'] for entry in data['functions']}
+        self.assertFalse(names & {'ov00_021FD094', 'ov13_02223EE0'})
+
+    def test_invalid_original_assembly_list_is_rejected(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / 'original_asm.json'
+            entry = dict(function='f', cpu='ARM9', source='src/a.c', reason='swp')
+            path.write_text(json.dumps({'functions': [entry, entry]}))
+            with self.assertRaisesRegex(ValueError, 'duplicate'):
+                load_original_asm(path)
+            path.write_text(json.dumps({'functions': [dict(entry, reason=' ')]}))
+            with self.assertRaisesRegex(ValueError, 'invalid'):
+                load_original_asm(path)
 
 
 if __name__ == '__main__':
