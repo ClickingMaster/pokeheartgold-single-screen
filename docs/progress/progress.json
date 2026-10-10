@@ -1,18 +1,18 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "f0802a43f1895568b1b7c8997a8c7ca8ba591743",
+  "commit": "990b0289c675b6c509af66edbea1eb38938fd31b",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "06602d8248df04981ed7414cefab62b9b40ddca7dc4b34bfefb81b236e2dbf7d",
+    "ARM9": "310165d4b4103744f5b9c4974f27bc3a7353b9f4f80e21117da303366646e150",
     "ARM7": "5b54b6e4cbfa1ad199f64db732d0d9291759022aabef84d1c51bb3b24052df71"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
   "totals": {
-    "c": 3989692,
+    "c": 3989856,
     "original_asm": 26078,
-    "mixed": 300,
+    "mixed": 136,
     "cpp": 54972,
     "generated": 2264,
     "inline_asm": 1536,
@@ -21,16 +21,16 @@
   "coverage": {
     "denominator_bytes": 4075354,
     "c": {
-      "bytes": 3989692,
-      "percent": 97.89804762972739
+      "bytes": 3989856,
+      "percent": 97.90207182001858
     },
     "cpp": {
       "bytes": 54972,
       "percent": 1.3488889554134438
     },
     "combined": {
-      "bytes": 4044664,
-      "percent": 99.24693658514083
+      "bytes": 4044828,
+      "percent": 99.25096077543202
     },
     "original_asm": {
       "bytes": 26078,
@@ -58,9 +58,9 @@
       "percent": 100.0
     },
     "compiled_code_in_c": {
-      "bytes": 4046200,
+      "bytes": 4046364,
       "of": 4046500,
-      "percent": 99.99258618559249
+      "percent": 99.99663907080193
     }
   },
   "objects": [
@@ -10031,7 +10031,7 @@
       "module": "OVY_13",
       "object": "op90_to56_w16_residual01_r01.o",
       "bytes": 164,
-      "status": "mixed",
+      "status": "c",
       "source": "src/op90_to56_w16_residual01_r01.c"
     },
     {
