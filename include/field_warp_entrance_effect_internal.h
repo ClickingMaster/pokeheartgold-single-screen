@@ -16,7 +16,7 @@
 
 // ---- not declared in any tracked header (see report.md) ----
 void sub_020699AC(void *a0, VecFx32 *pos, VecFx32 *scale, MtxFx33 *mtx);
-void sub_02020DA4(MtxFx33 *mtx, u16 x, u16 y, u16 z);
+void Math_CalcRotationMatrixXYZDeg(MtxFx33 *mtx, u16 x, u16 y, u16 z);
 void sub_02068DA8(void *a0, VecFx32 *a1);
 
 // The 0x6c module object allocated by ov01_02200858 and recovered from the

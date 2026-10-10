@@ -9,7 +9,7 @@
 #include "palette.h"
 #include "sprite.h"
 #include "sprite_system.h"
-#include "unk_02020B8C.h"
+#include "geometry_math.h"
 #define PTR(p,o) (*(void **)((u8 *)(p)+(o)))
 #define U8(p,o) (*(u8 *)((u8 *)(p)+(o)))
 #define U16(p,o) (*(u16 *)((u8 *)(p)+(o)))

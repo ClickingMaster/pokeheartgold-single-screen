@@ -49,7 +49,7 @@ extern s32 MapObject_GetPriorityPlusValue(void *, s32);
 extern void ov01_021F1620(void *, const void *, Vec3 *, u32, SpawnSmall *, s32);
 extern const u8 ov01_022090FC[];
 extern const Vec3 ov01_022090F0;
-extern void sub_02020DA4(Rot9 *, u16, u16, u16);
+extern void Math_CalcRotationMatrixXYZDeg(Rot9 *, u16, u16, u16);
 extern void sub_020699AC(void *, Vec3 *, Vec3 *, Rot9 *);
 extern void sub_02068DB8(void *, Vec3 *);
 void *ov01_021FEA0C(u32);

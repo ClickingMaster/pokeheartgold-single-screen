@@ -46,7 +46,7 @@ void ov89_02259B00(u8 *work) {
     Camera_Init_FromTargetDistanceAndAngle(&target, 0x7c000, &ov89_0225C9B8, 0xfa4, 0, FALSE, PTR(work, 0xcc));
     Camera_SetPerspectiveClippingPlane(FX32_ONE, 0x384000, PTR(work, 0xcc));
     Camera_SetStaticPtr(PTR(work, 0xcc));
-    sub_02020E10(Camera_GetPerspectiveAngle(PTR(work, 0xcc)), Camera_GetDistance(PTR(work, 0xcc)), 0x1555, &dx, &dy);
+    Math_CalcPerspectiveViewSize(Camera_GetPerspectiveAngle(PTR(work, 0xcc)), Camera_GetDistance(PTR(work, 0xcc)), 0x1555, &dx, &dy);
     *(fx32 *)(work + 0xd0) = dx;
     *(fx32 *)(work + 0xd4) = dy;
 }

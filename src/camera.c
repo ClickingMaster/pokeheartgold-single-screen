@@ -5,7 +5,7 @@
 
 #include "global.h"
 
-#include "unk_02020B8C.h"
+#include "geometry_math.h"
 
 static void Camera_CalcLookAtPosFromTargetAndAngle(Camera *camera);
 static void Camera_CalcLookAtTargetFromPosAndAngle(Camera *camera);

@@ -231,10 +231,7 @@ Static main
     Object src/texture_animation.o
     Object src/unk_02020A0C.o
     Object src/ascii_util.o
-    Object src/geometry_math_1.o
-    Object src/r40_unk_02020B8C_run1.o
-    Object src/geometry_math_2.o
-    Object src/slop_r1_geometry_intersection_m12.o
+    Object src/geometry_math.o
     Object src/touch_sampling.o
     Object asm/unk_020210A0_residual.o
     Object src/touch_sampling_copy.o
@@ -1527,18 +1524,7 @@ Static main
     Object src/to90_rssi41434_run01.o
     Object src/to65_wifi_residual_11_run60.o
     Object lib/asm/to70_libVCT_extra08_anchor.o
-    Object src/to70_libVCT_extra08_run01.o
-    Object lib/asm/to80_extra1861_anchor.o
-    Object lib/asm/op90_to80_extra1861_residual_1_anchor.o
-    Object lib/asm/op90_op90_to80_extra1861_residual_1_residual_1_anchor.o
-    Object src/op90_op90_to80_extra1861_residual_1_residual_1_r01.o
-    Object src/op90_to80_extra1861_residual_1_r01.o
-    Object lib/asm/op90_op90_to80_extra1861_residual_1_residual_2_anchor.o
-    Object src/op90_op90_to80_extra1861_residual_1_residual_2_r01.o
-    Object src/to80_extra1861_run01.o
-    Object lib/asm/op90_to80_extra1861_residual_2_anchor.o
-    Object src/op90_to80_extra1861_residual_2_r01.o
-    Object src/to70_libVCT_extra08_run02.o
+    Object lib/libVCT/src/vct_adpcm.o
     Object src/op90_to70_libVCT_extra08_residual_2_r01.o
     Object lib/asm/to70_libVCT_extra08_anchor_tail.o
     Object lib/asm/to80_extra1474_anchor.o

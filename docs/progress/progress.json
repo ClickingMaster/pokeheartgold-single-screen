@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "74569b0e0b30ed4472b1202803707165e7c9e8d3",
+  "commit": "9bb3961d3b1d967fbddedd6d255ae527a3f2b2c3",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "861924681470be8d9f9fc0a62c9ac0fe7236cae4b5ac78bd850cb23b86a41ecd",
+    "ARM9": "8a0179cbb1282e9fde88063f88b0c7a3daf3f9a54d458ea74ce910af0c5bbfb9",
     "ARM7": "5b54b6e4cbfa1ad199f64db732d0d9291759022aabef84d1c51bb3b24052df71"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -70411,18 +70411,10 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "geometry_math_1.o",
-      "bytes": 642,
+      "object": "geometry_math.o",
+      "bytes": 1296,
       "status": "c",
-      "source": "src/geometry_math_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "geometry_math_2.o",
-      "bytes": 68,
-      "status": "c",
-      "source": "src/geometry_math_2.c"
+      "source": "src/geometry_math.c"
     },
     {
       "cpu": "ARM9",
@@ -71996,22 +71988,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "op90_op90_to80_extra1861_residual_1_residual_1_r01.o",
-      "bytes": 396,
-      "status": "c",
-      "source": "src/op90_op90_to80_extra1861_residual_1_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_op90_to80_extra1861_residual_1_residual_2_r01.o",
-      "bytes": 1292,
-      "status": "c",
-      "source": "src/op90_op90_to80_extra1861_residual_1_residual_2_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "op90_op90_to80_extra1920_residual_1_residual_1_r01.o",
       "bytes": 216,
       "status": "c",
@@ -72997,22 +72973,6 @@
       "bytes": 244,
       "status": "c",
       "source": "src/op90_to80_extra1853_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to80_extra1861_residual_1_r01.o",
-      "bytes": 1172,
-      "status": "c",
-      "source": "src/op90_to80_extra1861_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to80_extra1861_residual_2_r01.o",
-      "bytes": 560,
-      "status": "c",
-      "source": "src/op90_to80_extra1861_residual_2_r01.c"
     },
     {
       "cpu": "ARM9",
@@ -74728,14 +74688,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "r40_unk_02020B8C_run1.o",
-      "bytes": 158,
-      "status": "c",
-      "source": "src/r40_unk_02020B8C_run1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "r40_unk_0202B614_run1.o",
       "bytes": 178,
       "status": "c",
@@ -76028,14 +75980,6 @@
       "bytes": 182,
       "status": "c",
       "source": "src/slop_r1_field_prop_collect_m08.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "slop_r1_geometry_intersection_m12.o",
-      "bytes": 428,
-      "status": "c",
-      "source": "src/slop_r1_geometry_intersection_m12.c"
     },
     {
       "cpu": "ARM9",
@@ -79176,22 +79120,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to70_libVCT_extra08_run01.o",
-      "bytes": 340,
-      "status": "c",
-      "source": "src/to70_libVCT_extra08_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_libVCT_extra08_run02.o",
-      "bytes": 204,
-      "status": "c",
-      "source": "src/to70_libVCT_extra08_run02.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to70_libVCT_extra08_run06.o",
       "bytes": 64,
       "status": "c",
@@ -81172,14 +81100,6 @@
       "bytes": 312,
       "status": "c",
       "source": "src/to80_extra1860_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to80_extra1861_run01.o",
-      "bytes": 536,
-      "status": "c",
-      "source": "src/to80_extra1861_run01.c"
     },
     {
       "cpu": "ARM9",
@@ -83762,6 +83682,14 @@
       "bytes": 3820,
       "status": "c",
       "source": "src/use_item_on_mon.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "vct_adpcm.o",
+      "bytes": 4500,
+      "status": "c",
+      "source": "lib/libVCT/src/vct_adpcm.c"
     },
     {
       "cpu": "ARM9",

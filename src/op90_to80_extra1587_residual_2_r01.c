@@ -19,7 +19,7 @@ typedef struct Bounds {
 extern const Table ov96_0221C5FC;
 extern const Table ov96_0221C60C;
 
-BOOL sub_02020F4C(Point *p0, Point *p1, Point *a, Point *b, Point *hit);
+BOOL Point2D_CalcSegmentIntersection(Point *p0, Point *p1, Point *a, Point *b, Point *hit);
 fx32 ov96_021FF67C(const VecFx32 *a, const VecFx32 *b, const VecFx32 *c, fx32 r);
 int ov96_021FF2A0(VecFx32 *start, VecFx32 *end, int radius, Bounds *w, VecFx32 *out);
 
@@ -47,7 +47,7 @@ int ov96_021FF2A0(VecFx32 *start, VecFx32 *end, int radius, Bounds *w, VecFx32 *
     b.y = end->y / FX32_ONE;
     for (i = 0; i < 4; i++) {
         cur1 = ov96_0221C5FC;
-        if (sub_02020F4C(&w->edges[i][0], &w->edges[i][1], &a, &b, &hit)) {
+        if (Point2D_CalcSegmentIntersection(&w->edges[i][0], &w->edges[i][1], &a, &b, &hit)) {
             out->x = hit.x << FX32_SHIFT;
             out->y = hit.y << FX32_SHIFT;
             out->z = 0;

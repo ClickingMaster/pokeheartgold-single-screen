@@ -2,7 +2,7 @@
 
 #include "global.h"
 
-#include "unk_02020B8C.h"
+#include "geometry_math.h"
 
 #define U8_AT(p, o)  (*(u8 *)((u8 *)(p) + (o)))
 #define S8_AT(p, o)  (*(s8 *)((u8 *)(p) + (o)))

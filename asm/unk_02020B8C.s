@@ -5,14 +5,14 @@
 	.text
 	.public CalcAngleBetweenVecs
 	.public GetDistanceFromPointToLine
-	.public sub_02020B8C
-	.public sub_02020B94
-	.public sub_02020D2C
-	.public sub_02020DA4
-	.public sub_02020EB0
+	.public Math_Min
+	.public Math_Max
+	.public Math_CalcRotationMatrixXYZ
+	.public Math_CalcRotationMatrixXYZDeg
+	.public Point2D_SegmentsIntersect
 
-	thumb_func_start sub_02020E10
-sub_02020E10: ; 0x02020E10
+	thumb_func_start Math_CalcPerspectiveViewSize
+Math_CalcPerspectiveViewSize: ; 0x02020E10
 	push {r3, r4, r5, r6, r7, lr}
 	asr r0, r0, #4
 	add r7, r2, #0
@@ -66,11 +66,11 @@ sub_02020E10: ; 0x02020E10
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
 _02020E7C: .word FX_SinCosTable_
-	thumb_func_end sub_02020E10
+	thumb_func_end Math_CalcPerspectiveViewSize
 
 
-	thumb_func_start sub_02020E80
-sub_02020E80: ; 0x02020E80
+	thumb_func_start Point2D_IsLeftOfLine
+Point2D_IsLeftOfLine: ; 0x02020E80
 	push {r4, r5, r6, r7}
 	ldr r6, [r2, #4]
 	ldr r7, [r1]
@@ -96,4 +96,4 @@ _02020EA8:
 	pop {r4, r5, r6, r7}
 	bx lr
 	.balign 4, 0
-	thumb_func_end sub_02020E80
+	thumb_func_end Point2D_IsLeftOfLine

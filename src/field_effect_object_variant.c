@@ -155,7 +155,7 @@ void ov01_021FE970(void *a0, Ov01FE780Work *work) {
         angle = 90;
         break;
     }
-    sub_02020DA4(&mtx, 0, angle, 0);
+    Math_CalcRotationMatrixXYZDeg(&mtx, 0, angle, 0);
     sub_02068DB8(a0, &pos);
     sub_020699AC(renderObj, &pos, &scale, &mtx);
 }

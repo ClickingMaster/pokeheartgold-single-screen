@@ -1,5 +1,5 @@
 #include "overlay96_task_helpers_private.h"
-#include "unk_02020B8C.h"
+#include "geometry_math.h"
 extern void SysTask_Destroy(void*); extern void *SysTask_CreateOnMainQueue(void (*)(void*,void*),void*,u32);
 extern const s32 ov96_0221DB70[]; extern const s32 ov96_0221DB5C[];
 extern void *Heap_Alloc(u32,u32); extern void MI_CpuFill8(void*,u8,u32);

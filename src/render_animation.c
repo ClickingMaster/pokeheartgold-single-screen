@@ -5,7 +5,7 @@
 #include "gf_3d_render.h"
 #include "gf_gfx_loader.h"
 #include "heap.h"
-#include "unk_02020B8C.h"
+#include "geometry_math.h"
 #include "unk_0206979C.h"
 typedef struct RenderAnimation {
     u32 flags;
@@ -176,6 +176,6 @@ void sub_020699BC(int object, VecFx32 *position) {
 }
 void sub_020699D0(NNSG3dRenderObj *object, const VecFx32 *position, const VecFx32 *scale, const u16 *angles) {
     MtxFx33 rotation;
-    sub_02020DA4(&rotation, angles[0], angles[1], angles[2]);
+    Math_CalcRotationMatrixXYZDeg(&rotation, angles[0], angles[1], angles[2]);
     sub_020699AC(object, position, scale, &rotation);
 }

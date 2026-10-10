@@ -29,7 +29,7 @@
 #include "system.h"
 #include "text.h"
 #include "unk_02005D10.h"
-#include "unk_02020B8C.h"
+#include "geometry_math.h"
 #include "unk_02026E30.h"
 
 #ifdef HEARTGOLD
@@ -403,7 +403,7 @@ static void TitleScreenAnimObjs_Run(TitleScreenAnimObject *animObj) {
     case TITLESCREEN_MODEL_RUN:
         Thunk_G3X_Reset();
         Camera_PushLookAtToNNSGlb();
-        sub_02020D2C(&mtx, &animObj->rotationVec);
+        Math_CalcRotationMatrixXYZ(&mtx, &animObj->rotationVec);
         GF3dRender_DrawModel(&animObj->renderObj, &animObj->translation, &mtx, &animObj->scale);
         switch (animObj->subState) {
         case TITLESCREEN_MODELSUB_STOP:

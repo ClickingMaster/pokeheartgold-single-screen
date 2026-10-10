@@ -24,7 +24,7 @@ typedef struct Codes {
 extern const Codes ov96_0221CB00;
 extern const Codes ov96_0221CAE0;
 
-BOOL sub_02020F4C(Pt *a0, Pt *a1, Pt *b0, Pt *b1, Pt *hit);
+BOOL Point2D_CalcSegmentIntersection(Pt *a0, Pt *a1, Pt *b0, Pt *b1, Pt *hit);
 fx32 ov96_02207390(VecFx32 *a, VecFx32 *b, VecFx32 *pt, fx32 radius);
 int ov96_0220703C(VecFx32 *a, VecFx32 *b, int radius, Rect *rect, VecFx32 *out);
 
@@ -54,7 +54,7 @@ int ov96_0220703C(VecFx32 *a, VecFx32 *b, int radius, Rect *rect, VecFx32 *out)
     for (i = 0; i < 4; ++i)
     {
         Codes c = ov96_0221CB00;
-        if (sub_02020F4C(&rect->edges[i].p0, &rect->edges[i].p1, &ai, &bi, &hit))
+        if (Point2D_CalcSegmentIntersection(&rect->edges[i].p0, &rect->edges[i].p1, &ai, &bi, &hit))
         {
             result->x = hit.x << 12;
             result->y = hit.y << 12;

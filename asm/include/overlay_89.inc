@@ -134,7 +134,7 @@
 .public GF_CreateVramTransferManager
 .public GF_DestroyVramTransferManager
 .public GF_RunVramTransferTasks
-.public sub_02020E10
+.public Math_CalcPerspectiveViewSize
 .public sub_020210BC
 .public sub_02021148
 .public sub_02021238

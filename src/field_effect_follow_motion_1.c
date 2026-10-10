@@ -117,7 +117,7 @@ void ov01_021FEBC0(void *task, EffectWork *work) {
         angle = 90;
         break;
     }
-    sub_02020DA4(&rot, 0, angle, 0);
+    Math_CalcRotationMatrixXYZDeg(&rot, 0, angle, 0);
     sub_02068DB8(task, &pos);
     sub_020699AC(obj, &pos, &scale, &rot);
 }

@@ -19,7 +19,7 @@
 #include "systask_environment.h"
 #include "touchscreen.h"
 #include "unk_0200A090.h"
-#include "unk_02020B8C.h"
+#include "geometry_math.h"
 #include "unk_0203DB6C.h"
 
 typedef struct DowsingMchnAngle {

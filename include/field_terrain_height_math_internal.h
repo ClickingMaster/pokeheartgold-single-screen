@@ -43,7 +43,7 @@ typedef struct Ov01Thm {
     u32 numBuckets;      // 0x1c (ldr + lsl#16/lsr#16 => u32 field, (u16) cast at use)
 } Ov01Thm;
 
-fx32 sub_02020B8C(fx32 a, fx32 b); // min
-fx32 sub_02020B94(fx32 a, fx32 b); // max
+fx32 Math_Min(fx32 a, fx32 b); // min
+fx32 Math_Max(fx32 a, fx32 b); // max
 
 #endif

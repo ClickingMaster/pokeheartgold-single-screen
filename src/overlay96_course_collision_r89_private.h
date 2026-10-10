@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-#include "unk_02020B8C.h"
+#include "geometry_math.h"
 
 typedef struct Ov96R89Slot {
     u32 active;

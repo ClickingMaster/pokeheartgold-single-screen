@@ -28,7 +28,7 @@
 #include "unk_02009D48.h"
 #include "unk_0200B150.h"
 #include "unk_02013FDC.h"
-#include "unk_02020B8C.h"
+#include "geometry_math.h"
 #include "unk_02026E30.h"
 
 enum ChooseStarterInput {

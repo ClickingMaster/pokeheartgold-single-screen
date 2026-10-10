@@ -169,9 +169,9 @@ int ov01_021FAE50(int mode, fx32 refY, fx32 x, fx32 z, void *a4, fx32 *outY) {
             break;
         case 0:
         default:
-            bestVal = sub_02020B94(refY, hits[0].y) - sub_02020B8C(refY, hits[0].y);
+            bestVal = Math_Max(refY, hits[0].y) - Math_Min(refY, hits[0].y);
             for (j = 1; j < n; j++) {
-                cur = sub_02020B94(refY, hits[j].y) - sub_02020B8C(refY, hits[j].y);
+                cur = Math_Max(refY, hits[j].y) - Math_Min(refY, hits[j].y);
                 if (bestVal > cur) {
                     bestVal = cur;
                     best = j;

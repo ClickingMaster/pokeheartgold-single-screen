@@ -215,9 +215,9 @@
 .public thunk_UpdateCellTransferStateManager
 .public sub_0202067C
 .public CalcAngleBetweenVecs
-.public sub_02020E80
-.public sub_02020EB0
-.public sub_02020F4C
+.public Point2D_IsLeftOfLine
+.public Point2D_SegmentsIntersect
+.public Point2D_CalcSegmentIntersection
 .public ObjCharTransfer_InitEx
 .public ObjCharTransfer_Destroy
 .public ObjCharTransfer_ClearBuffers

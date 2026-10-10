@@ -1,6 +1,6 @@
 #include <nitro/fs/overlay.h>
 #pragma once
-.public sub_02020DA4
+.public Math_CalcRotationMatrixXYZDeg
 .public GF_AssertFail
 .public MapObject_GetPriorityPlusValue
 .public MapObject_GetFieldSystem
