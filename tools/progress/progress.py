@@ -88,11 +88,27 @@ def classify(root, paths):
     path = next(iter(paths))
     if path.endswith('.s'):
         return ('generated' if path.startswith(GENERATED_PREFIXES) else 'asm'), path
-    text = (root / path).read_text()
-    text = re.sub(r'/\*.*?\*/|//[^\n]*', '', text, flags=re.S)
-    # Conservatively mark the entire object mixed, including conditional ASM.
-    mixed = re.search(r'\b(?:asm|__asm|__asm__|GLOBAL_ASM)\b', text)
+    # Conservatively mark the entire object mixed, including conditional ASM and
+    # assembly hidden in macros from the file's own quoted (#include "...") headers.
+    mixed = _has_asm(root / path, set())
     return ('mixed' if mixed else SOURCE_LANGUAGES[Path(path).suffix]), path
+
+
+ASM_TOKEN = re.compile(r'\b(?:asm|__asm|__asm__|GLOBAL_ASM)\b')
+
+
+def _has_asm(path, seen):
+    if path in seen or not path.is_file():
+        return False
+    seen.add(path)
+    text = re.sub(r'/\*.*?\*/|//[^\n]*', '', path.read_text(errors='replace'), flags=re.S)
+    if ASM_TOKEN.search(text):
+        return True
+    for name in re.findall(r'^\s*#\s*include\s+"([^"]+)"', text, re.M):
+        for base in (path.parent, path.parent.parent / 'include'):
+            if _has_asm(base / name, seen):
+                return True
+    return False
 
 
 def source_coverage(totals):

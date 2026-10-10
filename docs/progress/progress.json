@@ -1,32 +1,32 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "8017a217f915644f357076243b13e79564e00788",
+  "commit": "5f27a76473e90a7a1884242117e9dc60bdd3c45a",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "ce7215c4bd52ae8b74539d40c9f5c90d02f98403b21394d626a8eea49fe9946a",
+    "ARM9": "f23c5b4a69f65739b65230fa15325209e65b44a21711a994489246e8d2011218",
     "ARM7": "01aa6d6bb263b5752b0d787a82f224dafc986f80c6649dc28738b84fe5ebc992"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
   "totals": {
-    "c": 3991452,
-    "mixed": 28930,
+    "c": 3989532,
+    "mixed": 30850,
     "cpp": 54972
   },
   "coverage": {
     "denominator_bytes": 4075354,
     "c": {
-      "bytes": 3991452,
-      "percent": 97.94123406212074
+      "bytes": 3989532,
+      "percent": 97.89412159041889
     },
     "cpp": {
       "bytes": 54972,
       "percent": 1.3488889554134438
     },
     "combined": {
-      "bytes": 4046424,
-      "percent": 99.29012301753419
+      "bytes": 4044504,
+      "percent": 99.24301054583233
     },
     "with_asm_functions": {
       "bytes": 4075354,
@@ -65396,7 +65396,7 @@
       "module": "ds_protect",
       "object": "dsprot_main_decrypter_encoded.o",
       "bytes": 720,
-      "status": "c",
+      "status": "mixed",
       "source": "lib/dsprot/src/dsprot_main_decrypter.c"
     },
     {
@@ -65436,7 +65436,7 @@
       "module": "ds_protect",
       "object": "integrity_decrypter_encoded.o",
       "bytes": 480,
-      "status": "c",
+      "status": "mixed",
       "source": "lib/dsprot/src/integrity_decrypter.c"
     },
     {
@@ -65452,7 +65452,7 @@
       "module": "ds_protect",
       "object": "mac_owner_decrypter_encoded.o",
       "bytes": 240,
-      "status": "c",
+      "status": "mixed",
       "source": "lib/dsprot/src/mac_owner_decrypter.c"
     },
     {
@@ -65484,7 +65484,7 @@
       "module": "ds_protect",
       "object": "rom_test_decrypter_encoded.o",
       "bytes": 240,
-      "status": "c",
+      "status": "mixed",
       "source": "lib/dsprot/src/rom_test_decrypter.c"
     },
     {
@@ -65500,7 +65500,7 @@
       "module": "ds_protect",
       "object": "rom_util_decrypter_encoded.o",
       "bytes": 240,
-      "status": "c",
+      "status": "mixed",
       "source": "lib/dsprot/src/rom_util_decrypter.c"
     },
     {

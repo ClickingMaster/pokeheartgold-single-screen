@@ -316,6 +316,17 @@ class CppCoverageTests(unittest.TestCase):
         self.assertIn('100% of source in C/C++', rendered)
         self.assertIn('Build-tool generated 10.0%', rendered)
 
+    def test_asm_from_local_header_macro_marks_mixed(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / 'lib/x/src').mkdir(parents=True)
+            (root / 'lib/x/include').mkdir(parents=True)
+            (root / 'lib/x/include/m.h').write_text('#define F(n) asm void n(void) { bx lr }\n')
+            (root / 'lib/x/src/a.c').write_text('#include "m.h"\nF(f)\n')
+            (root / 'lib/x/src/b.c').write_text('#include "missing.h"\nint g;\n')
+            self.assertEqual(classify(root, {'lib/x/src/a.c'})[0], 'mixed')
+            self.assertEqual(classify(root, {'lib/x/src/b.c'})[0], 'c')
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -4,15 +4,15 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 8017a217f · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 5f27a7647 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
-<text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">99.29% C + C++ source · 100.00% incl. asm functions</text>
+<text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">99.24% C + C++ source · 100.00% incl. asm functions</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
 <text x="47" y="102" font-size="14">C-only source 97.9%</text>
 <rect x="409" y="91" width="12" height="12" rx="2" fill="#35a9b8"/>
 <text x="428" y="102" font-size="14">C++-only source 1.3%</text>
 <rect x="790" y="91" width="12" height="12" rx="2" fill="#e4ad42"/>
-<text x="809" y="102" font-size="14">C/C++ with assembly 0.7%</text>
+<text x="809" y="102" font-size="14">C/C++ with assembly 0.8%</text>
 <rect x="28.000" y="125.000" width="82.112" height="61.108" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_c.o
 30,194 bytes · C-only source
 src/scrcmd_c.c</title></rect>
@@ -33038,14 +33038,14 @@ lib/dsprot/src/integrity.c</title></rect>
 <rect x="902.651" y="670.606" width="11.425" height="13.614" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / rc4_encoded.o
 936 bytes · C-only source
 lib/dsprot/src/rc4.c</title></rect>
-<rect x="902.651" y="684.221" width="11.425" height="10.473" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / dsprot_main_decrypter_encoded.o
-720 bytes · C-only source
+<rect x="902.651" y="684.221" width="11.425" height="10.473" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / dsprot_main_decrypter_encoded.o
+720 bytes · C/C++ with assembly
 lib/dsprot/src/dsprot_main_decrypter.c</title></rect>
 <rect x="888.687" y="694.693" width="11.920" height="8.978" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / encryptor_encoded.o
 644 bytes · C-only source
 lib/dsprot/src/encryptor.c</title></rect>
-<rect x="888.687" y="703.672" width="11.920" height="6.692" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / integrity_decrypter_encoded.o
-480 bytes · C-only source
+<rect x="888.687" y="703.672" width="11.920" height="6.692" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / integrity_decrypter_encoded.o
+480 bytes · C/C++ with assembly
 lib/dsprot/src/integrity_decrypter.c</title></rect>
 <rect x="888.687" y="710.364" width="11.920" height="6.636" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / rom_util_encrypted.o
 476 bytes · C-only source
@@ -33056,14 +33056,14 @@ lib/dsprot/src/rom_test.c</title></rect>
 <rect x="905.973" y="694.693" width="8.103" height="7.219" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / mac_owner_encrypted.o
 352 bytes · C-only source
 lib/dsprot/src/mac_owner.c</title></rect>
-<rect x="905.973" y="701.912" width="8.103" height="4.922" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / mac_owner_decrypter_encoded.o
-240 bytes · C-only source
+<rect x="905.973" y="701.912" width="8.103" height="4.922" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / mac_owner_decrypter_encoded.o
+240 bytes · C/C++ with assembly
 lib/dsprot/src/mac_owner_decrypter.c</title></rect>
-<rect x="900.607" y="706.834" width="7.846" height="5.083" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / rom_test_decrypter_encoded.o
-240 bytes · C-only source
+<rect x="900.607" y="706.834" width="7.846" height="5.083" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / rom_test_decrypter_encoded.o
+240 bytes · C/C++ with assembly
 lib/dsprot/src/rom_test_decrypter.c</title></rect>
-<rect x="900.607" y="711.917" width="7.846" height="5.083" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / rom_util_decrypter_encoded.o
-240 bytes · C-only source
+<rect x="900.607" y="711.917" width="7.846" height="5.083" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / rom_util_decrypter_encoded.o
+240 bytes · C/C++ with assembly
 lib/dsprot/src/rom_util_decrypter.c</title></rect>
 <rect x="908.453" y="706.834" width="2.880" height="4.847" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM9 / ds_protect / rc4_decoder.o
 84 bytes · C/C++ with assembly
