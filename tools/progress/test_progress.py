@@ -373,12 +373,16 @@ class OriginalAssemblyTests(unittest.TestCase):
         self.assertEqual(self.rows(source, {'h': 'inline-asm'}), [('mixed', 0x38, None)])
         self.assertEqual(self.rows(source, {'h': 'asm'}, cpu='ARM7'), [('mixed', 0x38, None)])
 
-    def test_conditional_definitions_must_all_be_asm(self):
+    def test_conditional_definitions_compiled_for_this_cpu_must_be_asm(self):
         source = ('void f(void) {}\n#ifdef SDK_ARM9\nasm void g(void) { bx lr }\n#else\n'
                   'asm void g(void) { mov pc, lr }\n#endif\nvoid h(void) {}\n')
         self.assertEqual(self.rows(source, {'g': 'asm'}), [('c', 0x28, None), ('original_asm', 0x10, ['g'])])
-        source = source.replace('asm void g(void) { mov pc, lr }', 'void g(void) {}')
-        self.assertEqual(self.rows(source, {'g': 'asm'}), [('mixed', 0x38, None)])
+        # Only the branch compiled for this CPU counts: an ARM7-only C definition doesn't block ARM9.
+        arm7_c = source.replace('asm void g(void) { mov pc, lr }', 'void g(void) {}')
+        self.assertEqual(self.rows(arm7_c, {'g': 'asm'}), [('c', 0x28, None), ('original_asm', 0x10, ['g'])])
+        # A C definition in the branch this CPU compiles still blocks the entry.
+        arm9_c = source.replace('asm void g(void) { bx lr }', 'void g(void) {}')
+        self.assertEqual(self.rows(arm9_c, {'g': 'asm'}), [('mixed', 0x38, None)])
 
     def test_inline_asm_helper_counts_only_through_listed_functions(self):
         helper = 'static inline u32 Clz(u32 x) { asm { clz x, x } return x; }\n#define SHIFT(n) (31 - Clz(n))\n'
@@ -501,6 +505,14 @@ class OriginalAssemblyTests(unittest.TestCase):
             path.write_text(json.dumps({'functions': [dict(entry, reason=' ')]}))
             with self.assertRaisesRegex(ValueError, 'invalid'):
                 load_original_asm(path)
+
+    def test_original_asm_only_checks_the_branch_compiled_for_this_cpu(self):
+        with tempfile.TemporaryDirectory() as d:
+            src = Path(d) / 'a.c'
+            src.write_text('#ifdef SDK_ARM9\nasm void f(void) {\n    bx lr\n}\n#else\nvoid f(void) {\n}\n#endif\n')
+            from progress import split_original_asm
+            self.assertEqual(split_original_asm(src, {'f': 'asm'}, 'ARM9')[0], {'f': 'asm'})
+            self.assertEqual(split_original_asm(src, {'f': 'asm'}, 'ARM7')[0], {})
 
 
 if __name__ == '__main__':

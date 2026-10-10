@@ -1,18 +1,18 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "e11d88fe2db26dad9db6d22feabc405f04308973",
+  "commit": "f0802a43f1895568b1b7c8997a8c7ca8ba591743",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "972492a95ff3775513d870640b30da2e2f5431278f9e7ea35c3e1adc714c2334",
+    "ARM9": "06602d8248df04981ed7414cefab62b9b40ddca7dc4b34bfefb81b236e2dbf7d",
     "ARM7": "5b54b6e4cbfa1ad199f64db732d0d9291759022aabef84d1c51bb3b24052df71"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
   "totals": {
-    "c": 3989640,
-    "original_asm": 25354,
-    "mixed": 1076,
+    "c": 3989692,
+    "original_asm": 26078,
+    "mixed": 300,
     "cpp": 54972,
     "generated": 2264,
     "inline_asm": 1536,
@@ -21,20 +21,20 @@
   "coverage": {
     "denominator_bytes": 4075354,
     "c": {
-      "bytes": 3989640,
-      "percent": 97.89677166695212
+      "bytes": 3989692,
+      "percent": 97.89804762972739
     },
     "cpp": {
       "bytes": 54972,
       "percent": 1.3488889554134438
     },
     "combined": {
-      "bytes": 4044612,
-      "percent": 99.24566062236556
+      "bytes": 4044664,
+      "percent": 99.24693658514083
     },
     "original_asm": {
-      "bytes": 25354,
-      "percent": 0.6221300039211317
+      "bytes": 26078,
+      "percent": 0.6398953317920357
     },
     "inline_asm": {
       "bytes": 1536,
@@ -58,9 +58,9 @@
       "percent": 100.0
     },
     "compiled_code_in_c": {
-      "bytes": 4046148,
-      "of": 4047224,
-      "percent": 99.97341387578251
+      "bytes": 4046200,
+      "of": 4046500,
+      "percent": 99.99258618559249
     }
   },
   "objects": [
@@ -72298,16 +72298,22 @@
       "module": "main",
       "object": "op90_to65_to65_nitro_unified_residual_23_extra21_residual_11_r01.o",
       "bytes": 24,
-      "status": "mixed",
-      "source": "src/op90_to65_to65_nitro_unified_residual_23_extra21_residual_11_r01.c"
+      "status": "original_asm",
+      "source": "src/op90_to65_to65_nitro_unified_residual_23_extra21_residual_11_r01.c",
+      "functions": [
+        "RtcWaitBusy"
+      ]
     },
     {
       "cpu": "ARM9",
       "module": "main",
       "object": "op90_to65_to65_nitro_unified_residual_23_extra21_residual_5_r01.o",
       "bytes": 24,
-      "status": "mixed",
-      "source": "src/op90_to65_to65_nitro_unified_residual_23_extra21_residual_5_r01.c"
+      "status": "original_asm",
+      "source": "src/op90_to65_to65_nitro_unified_residual_23_extra21_residual_5_r01.c",
+      "functions": [
+        "MicWaitBusy"
+      ]
     },
     {
       "cpu": "ARM9",
@@ -73214,8 +73220,12 @@
       "module": "main",
       "object": "op90_to90_extra2338_residual_1_r01.o",
       "bytes": 52,
-      "status": "mixed",
-      "source": "src/op90_to90_extra2338_residual_1_r01.c"
+      "status": "original_asm",
+      "source": "src/op90_to90_extra2338_residual_1_r01.c",
+      "functions": [
+        "MTX_RotY33_",
+        "MTX_RotZ33_"
+      ]
     },
     {
       "cpu": "ARM9",
@@ -73671,18 +73681,11 @@
       "cpu": "ARM9",
       "module": "main",
       "object": "os_context.o",
-      "bytes": 108,
-      "status": "mixed",
-      "source": "lib/NitroSDK/src/os/os_context.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "os_context.o",
-      "bytes": 144,
+      "bytes": 252,
       "status": "original_asm",
       "source": "lib/NitroSDK/src/os/os_context.c",
       "functions": [
+        "OS_InitContext",
         "OS_LoadContext",
         "OS_SaveContext"
       ]
@@ -73708,8 +73711,11 @@
       "module": "main",
       "object": "os_init.o",
       "bytes": 32,
-      "status": "mixed",
-      "source": "lib/NitroSDK/src/os/os_init.c"
+      "status": "original_asm",
+      "source": "lib/NitroSDK/src/os/os_init.c",
+      "functions": [
+        "OSi_WaitVCount0"
+      ]
     },
     {
       "cpu": "ARM9",
@@ -73796,15 +73802,7 @@
       "cpu": "ARM9",
       "module": "main",
       "object": "os_system.o",
-      "bytes": 12,
-      "status": "mixed",
-      "source": "lib/NitroSDK/src/os/os_system.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "os_system.o",
-      "bytes": 132,
+      "bytes": 144,
       "status": "original_asm",
       "source": "lib/NitroSDK/src/os/os_system.c",
       "functions": [
@@ -73814,7 +73812,8 @@
         "OS_GetCpsrIrq",
         "OS_GetProcMode",
         "OS_RestoreInterrupts",
-        "OS_RestoreInterrupts_IrqAndFiq"
+        "OS_RestoreInterrupts_IrqAndFiq",
+        "OS_SpinWait"
       ]
     },
     {
@@ -89309,18 +89308,11 @@
       "cpu": "ARM7",
       "module": "WRAM",
       "object": "OS_context.o",
-      "bytes": 108,
-      "status": "mixed",
-      "source": "sub/lib/src/OS_context.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "WRAM",
-      "object": "OS_context.o",
-      "bytes": 96,
+      "bytes": 204,
       "status": "original_asm",
       "source": "sub/lib/src/OS_context.c",
       "functions": [
+        "OS_InitContext",
         "OS_LoadContext",
         "OS_SaveContext"
       ]
@@ -89456,18 +89448,19 @@
       "cpu": "ARM7",
       "module": "WRAM",
       "object": "op90_MI_memory_r01.o",
-      "bytes": 356,
-      "status": "mixed",
+      "bytes": 52,
+      "status": "c",
       "source": "sub/lib/src/op90_MI_memory_r01.c"
     },
     {
       "cpu": "ARM7",
       "module": "WRAM",
       "object": "op90_MI_memory_r01.o",
-      "bytes": 324,
+      "bytes": 628,
       "status": "original_asm",
       "source": "sub/lib/src/op90_MI_memory_r01.c",
       "functions": [
+        "MI_CpuCopy8",
         "MI_CpuFill8",
         "MIi_CpuClear32",
         "MIi_CpuClearFast",
@@ -91837,8 +91830,11 @@
       "module": "ichneumon_sub",
       "object": "op90_to91_w41567_startup_suffix_r01.o",
       "bytes": 60,
-      "status": "mixed",
-      "source": "sub/lib/src/op90_to91_w41567_startup_suffix_r01.c"
+      "status": "original_asm",
+      "source": "sub/lib/src/op90_to91_w41567_startup_suffix_r01.c",
+      "functions": [
+        "detect_main_memory_size"
+      ]
     },
     {
       "cpu": "ARM7",

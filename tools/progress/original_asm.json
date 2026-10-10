@@ -1,1685 +1,1755 @@
 {
-  "description": "Code in C/C++ source files that is not compiler output we still have to match. Kinds: \"asm\" = written by hand in assembly in the original program; \"inline-asm\" = C function whose original source used an instruction C cannot express; \"generated\" = emitted by a build tool (dsprot stubs from the protection tool's encoding); \"veneer\" = linker-style literal-jump trampoline. Each reason names the instructions or origin. tools/progress/progress.py reports their linker-map bytes in their own categories; all but \"inline-asm\" (compiled C) are excluded from the compiled-code denominator. An entry applies only while its source still defines the function in that form; compiler output that is not yet matched does not belong here.",
-  "functions": [
-    {
-      "function": "CP_SaveContext",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/cp/CP_context.c",
-      "kind": "asm",
-      "reason": "ARM push of callee-saved regs without lr (non-MWCC prologue; 0 occurrences in MWCC 2.0 ARM code)"
-    },
-    {
-      "function": "CPi_RestoreContext",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/cp/CP_context.c",
-      "kind": "asm",
-      "reason": "ARM push of callee-saved regs without lr (non-MWCC prologue; 0 occurrences in MWCC 2.0 ARM code)"
-    },
-    {
-      "function": "INITi_CpuClear32",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/crt0.c",
-      "kind": "asm",
-      "reason": "ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode); b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output)"
-    },
-    {
-      "function": "MIi_UncompressBackward",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/crt0.c",
-      "kind": "asm",
-      "reason": "ARM push of callee-saved regs without lr (non-MWCC prologue; 0 occurrences in MWCC 2.0 ARM code); ldmdb (0 occurrences); mcr/mrc cp15"
-    },
-    {
-      "function": "_start",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/crt0.c",
-      "kind": "asm",
-      "reason": "b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output); explicit sp manipulation (mov/ldr/sub sp,reg); mcr/mrc cp15; mrs/msr (cpsr/spsr)"
-    },
-    {
-      "function": "do_autoload",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/crt0.c",
-      "kind": "asm",
-      "reason": "b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output); mcr/mrc cp15"
-    },
-    {
-      "function": "init_cp15",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/crt0.c",
-      "kind": "asm",
-      "reason": "mcr/mrc cp15"
-    },
-    {
-      "function": "MTX_Identity22_",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/fx/fx_mtx22.c",
-      "kind": "asm",
-      "reason": "store-merged stm of separately materialised constant registers; MWCC CSEs constant zeros into one register, and its store merge never writes back"
-    },
-    {
-      "function": "DC_FlushAll",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_cache.c",
-      "kind": "asm",
-      "reason": "mcr/mrc cp15"
-    },
-    {
-      "function": "DC_FlushRange",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_cache.c",
-      "kind": "asm",
-      "reason": "mcr/mrc cp15"
-    },
-    {
-      "function": "DC_InvalidateAll",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_cache.c",
-      "kind": "asm",
-      "reason": "mcr/mrc cp15"
-    },
-    {
-      "function": "DC_InvalidateRange",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_cache.c",
-      "kind": "asm",
-      "reason": "mcr/mrc cp15"
-    },
-    {
-      "function": "DC_StoreAll",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_cache.c",
-      "kind": "asm",
-      "reason": "mcr/mrc cp15"
-    },
-    {
-      "function": "DC_StoreRange",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_cache.c",
-      "kind": "asm",
-      "reason": "mcr/mrc cp15"
-    },
-    {
-      "function": "DC_WaitWriteBufferEmpty",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_cache.c",
-      "kind": "asm",
-      "reason": "mcr/mrc cp15"
-    },
-    {
-      "function": "IC_InvalidateAll",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_cache.c",
-      "kind": "asm",
-      "reason": "mcr/mrc cp15"
-    },
-    {
-      "function": "IC_InvalidateRange",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_cache.c",
-      "kind": "asm",
-      "reason": "mcr/mrc cp15"
-    },
-    {
-      "function": "OS_LoadContext",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_context.c",
-      "kind": "asm",
-      "reason": "15-register ldm/stm (context save); ldm/stm with ^ (user-bank regs); mrs/msr (cpsr/spsr); sp in ldm/stm register list; subs pc,lr exception return"
-    },
-    {
-      "function": "OS_SaveContext",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_context.c",
-      "kind": "asm",
-      "reason": "15-register ldm/stm (context save); mrs/msr (cpsr/spsr); sp in ldm/stm register list"
-    },
-    {
-      "function": "OSi_DisplayExContext",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_exception.c",
-      "kind": "inline-asm",
-      "reason": "inline asm block reads and writes cpsr with mrs/msr and switches sp; MWCC never emits mrs/msr and C cannot address sp"
-    },
-    {
-      "function": "OSi_ExceptionHandler",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_exception.c",
-      "kind": "asm",
-      "reason": "6-register ldm/stm with writeback; explicit sp manipulation (mov/ldr/sub sp,reg); mrs/msr (cpsr/spsr); sp in ldm/stm register list; stmdb on non-sp base"
-    },
-    {
-      "function": "OSi_GetAndDisplayContext",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_exception.c",
-      "kind": "asm",
-      "reason": "ARM9 `pop {..,lr}; bx lr` epilogue (MWCC 2.0 ARM9 always pops pc; 0 occurrences)"
-    },
-    {
-      "function": "OSi_SetExContext",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_exception.c",
-      "kind": "asm",
-      "reason": "8-register ldm/stm block copy; mrs/msr (cpsr/spsr)"
-    },
-    {
-      "function": "OS_IrqHandler",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_irqHandler.c",
-      "kind": "asm",
-      "reason": "clz (inline-asm only)"
-    },
-    {
-      "function": "OS_IrqHandler_ThreadSwitch",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_irqHandler.c",
-      "kind": "asm",
-      "reason": "13-register ldm/stm; 15-register ldm/stm (context save); ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode); ip saved in prologue (non-AAPCS; MWCC never saves ip: 0 occurrences); ldm/stm with ^ (user-bank regs); mrs/msr (cpsr/spsr); sp in ldm/stm register list; stmda"
-    },
-    {
-      "function": "OS_SetDPermissionsForProtectionRegion",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_protectionRegion.c",
-      "kind": "asm",
-      "reason": "mcr/mrc cp15"
-    },
-    {
-      "function": "OS_SetProtectionRegion1",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_protectionRegion.c",
-      "kind": "asm",
-      "reason": "mcr/mrc cp15"
-    },
-    {
-      "function": "OS_SetProtectionRegion2",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_protectionRegion.c",
-      "kind": "asm",
-      "reason": "mcr/mrc cp15"
-    },
-    {
-      "function": "OS_DisableProtectionUnit",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_protectionUnit.c",
-      "kind": "asm",
-      "reason": "mcr/mrc cp15"
-    },
-    {
-      "function": "OS_EnableProtectionUnit",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_protectionUnit.c",
-      "kind": "asm",
-      "reason": "mcr/mrc cp15"
-    },
-    {
-      "function": "OS_DisableInterrupts",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_system.c",
-      "kind": "asm",
-      "reason": "mrs/msr (cpsr/spsr)"
-    },
-    {
-      "function": "OS_DisableInterrupts_IrqAndFiq",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_system.c",
-      "kind": "asm",
-      "reason": "mrs/msr (cpsr/spsr)"
-    },
-    {
-      "function": "OS_EnableInterrupts",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_system.c",
-      "kind": "asm",
-      "reason": "mrs/msr (cpsr/spsr)"
-    },
-    {
-      "function": "OS_GetCpsrIrq",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_system.c",
-      "kind": "asm",
-      "reason": "mrs/msr (cpsr/spsr)"
-    },
-    {
-      "function": "OS_GetProcMode",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_system.c",
-      "kind": "asm",
-      "reason": "mrs/msr (cpsr/spsr)"
-    },
-    {
-      "function": "OS_RestoreInterrupts",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_system.c",
-      "kind": "asm",
-      "reason": "mrs/msr (cpsr/spsr)"
-    },
-    {
-      "function": "OS_RestoreInterrupts_IrqAndFiq",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_system.c",
-      "kind": "asm",
-      "reason": "mrs/msr (cpsr/spsr)"
-    },
-    {
-      "function": "OS_GetDTCMAddress",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_tcm.c",
-      "kind": "asm",
-      "reason": "mcr/mrc cp15"
-    },
-    {
-      "function": "OS_Halt",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/os_terminate_proc.c",
-      "kind": "asm",
-      "reason": "mcr/mrc cp15"
-    },
-    {
-      "function": "OS_GetLockID",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/to91_w41407_spin_retained.c",
-      "kind": "asm",
-      "reason": "clz (inline-asm only)"
-    },
-    {
-      "function": "OS_ReleaseLockID",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/to91_w41407_spin_retained.c",
-      "kind": "asm",
-      "reason": "mov rX,#0x80000000; mov rX,rX,lsr rN kept unfolded with pl/mi predicates; MWCC always folds a single-use shift into the orr operand and hoists the load"
-    },
-    {
-      "function": "OS_UnLockCard",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/to91_w41407_spin_retained.c",
-      "kind": "asm",
-      "reason": "tail jump via bx r1 (see OS_UnLockCartridge)"
-    },
-    {
-      "function": "OS_UnLockCartridge",
-      "cpu": "ARM9",
-      "source": "lib/NitroSDK/src/os/to91_w41407_spin_retained.c",
-      "kind": "asm",
-      "reason": "tail jump via `ldr r1,=f; bx r1`: MWCC tail calls always go through ip (bx r1 occurs 0x in MWCC 2.0 ARM9 code)"
-    },
-    {
-      "function": "NitroStaticInit",
-      "cpu": "ARM9",
-      "source": "lib/dsprot/src/coretests_decrypter_decoder.c",
-      "kind": "generated",
-      "reason": "dsprot static-init decoder emitted from the protection tool's encoding (function-table decode of encrypted routines); checked against the tool listing"
-    },
-    {
-      "function": "NitroStaticInit_",
-      "cpu": "ARM9",
-      "source": "lib/dsprot/src/coretests_decrypter_decoder.c",
-      "kind": "generated",
-      "reason": ".sinit registration word of the generated dsprot decoder object"
-    },
-    {
-      "function": "DSProt_DetectDummy",
-      "cpu": "ARM9",
-      "source": "lib/dsprot/src/dsprot_main_decrypter.c",
-      "kind": "generated",
-      "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
-    },
-    {
-      "function": "DSProt_DetectEmulator",
-      "cpu": "ARM9",
-      "source": "lib/dsprot/src/dsprot_main_decrypter.c",
-      "kind": "generated",
-      "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
-    },
-    {
-      "function": "DSProt_DetectFlashcart",
-      "cpu": "ARM9",
-      "source": "lib/dsprot/src/dsprot_main_decrypter.c",
-      "kind": "generated",
-      "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
-    },
-    {
-      "function": "DSProt_DetectNotDummy",
-      "cpu": "ARM9",
-      "source": "lib/dsprot/src/dsprot_main_decrypter.c",
-      "kind": "generated",
-      "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
-    },
-    {
-      "function": "DSProt_DetectNotEmulator",
-      "cpu": "ARM9",
-      "source": "lib/dsprot/src/dsprot_main_decrypter.c",
-      "kind": "generated",
-      "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
-    },
-    {
-      "function": "DSProt_DetectNotFlashcart",
-      "cpu": "ARM9",
-      "source": "lib/dsprot/src/dsprot_main_decrypter.c",
-      "kind": "generated",
-      "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
-    },
-    {
-      "function": "NitroStaticInit",
-      "cpu": "ARM9",
-      "source": "lib/dsprot/src/dsprot_main_decrypter_decoder.c",
-      "kind": "generated",
-      "reason": "dsprot static-init decoder emitted from the protection tool's encoding (function-table decode of encrypted routines); checked against the tool listing"
-    },
-    {
-      "function": "NitroStaticInit_",
-      "cpu": "ARM9",
-      "source": "lib/dsprot/src/dsprot_main_decrypter_decoder.c",
-      "kind": "generated",
-      "reason": ".sinit registration word of the generated dsprot decoder object"
-    },
-    {
-      "function": "NitroStaticInit",
-      "cpu": "ARM9",
-      "source": "lib/dsprot/src/encryptor_decoder.c",
-      "kind": "generated",
-      "reason": "dsprot static-init decoder emitted from the protection tool's encoding (function-table decode of encrypted routines); checked against the tool listing"
-    },
-    {
-      "function": "NitroStaticInit_",
-      "cpu": "ARM9",
-      "source": "lib/dsprot/src/encryptor_decoder.c",
-      "kind": "generated",
-      "reason": ".sinit registration word of the generated dsprot decoder object"
-    },
-    {
-      "function": "RunEncrypted_Integrity_MACOwner_IsBad",
-      "cpu": "ARM9",
-      "source": "lib/dsprot/src/integrity_decrypter.c",
-      "kind": "generated",
-      "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
-    },
-    {
-      "function": "RunEncrypted_Integrity_MACOwner_IsGood",
-      "cpu": "ARM9",
-      "source": "lib/dsprot/src/integrity_decrypter.c",
-      "kind": "generated",
-      "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
-    },
-    {
-      "function": "RunEncrypted_Integrity_ROMTest_IsBad",
-      "cpu": "ARM9",
-      "source": "lib/dsprot/src/integrity_decrypter.c",
-      "kind": "generated",
-      "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
-    },
-    {
-      "function": "RunEncrypted_Integrity_ROMTest_IsGood",
-      "cpu": "ARM9",
-      "source": "lib/dsprot/src/integrity_decrypter.c",
-      "kind": "generated",
-      "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
-    },
-    {
-      "function": "NitroStaticInit",
-      "cpu": "ARM9",
-      "source": "lib/dsprot/src/integrity_decrypter_decoder.c",
-      "kind": "generated",
-      "reason": "dsprot static-init decoder emitted from the protection tool's encoding (function-table decode of encrypted routines); checked against the tool listing"
-    },
-    {
-      "function": "NitroStaticInit_",
-      "cpu": "ARM9",
-      "source": "lib/dsprot/src/integrity_decrypter_decoder.c",
-      "kind": "generated",
-      "reason": ".sinit registration word of the generated dsprot decoder object"
-    },
-    {
-      "function": "RunEncrypted_MACOwner_IsBad",
-      "cpu": "ARM9",
-      "source": "lib/dsprot/src/mac_owner_decrypter.c",
-      "kind": "generated",
-      "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
-    },
-    {
-      "function": "RunEncrypted_MACOwner_IsGood",
-      "cpu": "ARM9",
-      "source": "lib/dsprot/src/mac_owner_decrypter.c",
-      "kind": "generated",
-      "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
-    },
-    {
-      "function": "NitroStaticInit",
-      "cpu": "ARM9",
-      "source": "lib/dsprot/src/rc4_decoder.c",
-      "kind": "generated",
-      "reason": "dsprot static-init decoder emitted from the protection tool's encoding (function-table decode of encrypted routines); checked against the tool listing"
-    },
-    {
-      "function": "NitroStaticInit_",
-      "cpu": "ARM9",
-      "source": "lib/dsprot/src/rc4_decoder.c",
-      "kind": "generated",
-      "reason": ".sinit registration word of the generated dsprot decoder object"
-    },
-    {
-      "function": "RunEncrypted_ROMTest_IsBad",
-      "cpu": "ARM9",
-      "source": "lib/dsprot/src/rom_test_decrypter.c",
-      "kind": "generated",
-      "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
-    },
-    {
-      "function": "RunEncrypted_ROMTest_IsGood",
-      "cpu": "ARM9",
-      "source": "lib/dsprot/src/rom_test_decrypter.c",
-      "kind": "generated",
-      "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
-    },
-    {
-      "function": "RunEncrypted_ROMUtil_CRC32",
-      "cpu": "ARM9",
-      "source": "lib/dsprot/src/rom_util_decrypter.c",
-      "kind": "generated",
-      "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
-    },
-    {
-      "function": "RunEncrypted_ROMUtil_Read",
-      "cpu": "ARM9",
-      "source": "lib/dsprot/src/rom_util_decrypter.c",
-      "kind": "generated",
-      "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
-    },
-    {
-      "function": "_secure",
-      "cpu": "ARM9",
-      "source": "lib/syscall/src/_secure_IPGE.c",
-      "kind": "asm",
-      "reason": "system-call library secure area: Thumb svc/swi stubs at 2-byte-aligned entry points interleaved with opaque secure-area data words that are not literal pools"
-    },
-    {
-      "function": "_secure",
-      "cpu": "ARM9",
-      "source": "lib/syscall/src/_secure_IPKE.c",
-      "kind": "asm",
-      "reason": "system-call library secure area: Thumb svc/swi stubs at 2-byte-aligned entry points interleaved with opaque secure-area data words that are not literal pools"
-    },
-    {
-      "function": "MTX_Identity33_",
-      "cpu": "ARM9",
-      "source": "src/op90_fx_mtx33_identity_residual_r01.c",
-      "kind": "asm",
-      "reason": "store-merged stm of separately materialised constant registers; MWCC CSEs constant zeros into one register, and its store merge never writes back"
-    },
-    {
-      "function": "MTX_RotX43_",
-      "cpu": "ARM9",
-      "source": "src/op90_fx_mtx43_residual_1_r01.c",
-      "kind": "asm",
-      "reason": "Thumb multi-register stmia of separately computed values; MWCC never merges Thumb stores (stmia only comes from struct copies, memset, or a single-register *p++)"
-    },
-    {
-      "function": "MTX_RotY43_",
-      "cpu": "ARM9",
-      "source": "src/op90_fx_mtx43_residual_1_r01.c",
-      "kind": "asm",
-      "reason": "Thumb multi-register stmia of separately computed values; MWCC never merges Thumb stores (stmia only comes from struct copies, memset, or a single-register *p++)"
-    },
-    {
-      "function": "MTX_Copy44To43_",
-      "cpu": "ARM9",
-      "source": "src/op90_fx_mtx44_residual_head_r01.c",
-      "kind": "asm",
-      "reason": "3-register ldmia/stmia with writeback; MWCC struct copies use 4-register chunks (last chunk without writeback) or 3 registers without writeback, and it never merges loads"
-    },
-    {
-      "function": "MTX_Identity44_",
-      "cpu": "ARM9",
-      "source": "src/op90_fx_mtx44_residual_head_r01.c",
-      "kind": "asm",
-      "reason": "store-merged stm of separately materialised constant registers; MWCC CSEs constant zeros into one register, and its store merge never writes back; 3-register ldmia/stmia with writeback; MWCC struct copies use 4-register chunks (last chunk without writeback) or 3 registers without writeback, and it never merges loads"
-    },
-    {
-      "function": "MTX_RotX44_",
-      "cpu": "ARM9",
-      "source": "src/op90_fx_mtx44_residual_rot_r01.c",
-      "kind": "asm",
-      "reason": "Thumb multi-register stmia of separately computed values; MWCC never merges Thumb stores (stmia only comes from struct copies, memset, or a single-register *p++)"
-    },
-    {
-      "function": "MTX_RotY44_",
-      "cpu": "ARM9",
-      "source": "src/op90_fx_mtx44_residual_rot_r01.c",
-      "kind": "asm",
-      "reason": "Thumb multi-register stmia of separately computed values; MWCC never merges Thumb stores (stmia only comes from struct copies, memset, or a single-register *p++)"
-    },
-    {
-      "function": "MTX_RotZ44_",
-      "cpu": "ARM9",
-      "source": "src/op90_fx_mtx44_residual_rot_r01.c",
-      "kind": "asm",
-      "reason": "Thumb multi-register stmia of separately computed values; MWCC never merges Thumb stores (stmia only comes from struct copies, memset, or a single-register *p++)"
-    },
-    {
-      "function": "GXi_NopClearFifo128_",
-      "cpu": "ARM9",
-      "source": "src/op90_g3x_nop_fifo_residual_r01.c",
-      "kind": "asm",
-      "reason": "32 stm of four separately zeroed registers to the geometry FIFO; MWCC CSEs the zeros into one register and never merges volatile stores"
-    },
-    {
-      "function": "GX_SendFifo48B",
-      "cpu": "ARM9",
-      "source": "src/op90_gxasm_r01.c",
-      "kind": "asm",
-      "reason": "3-register ldmia/stmia with writeback; MWCC struct copies use 4-register chunks (last chunk without writeback) or 3 registers without writeback, and it never merges loads"
-    },
-    {
-      "function": "GX_SendFifo64B",
-      "cpu": "ARM9",
-      "source": "src/op90_gxasm_r01.c",
-      "kind": "asm",
-      "reason": "8-register ldm/stm block copy; ARM push of callee-saved regs without lr (non-MWCC prologue; 0 occurrences in MWCC 2.0 ARM code)"
-    },
-    {
-      "function": "MI_Copy32B",
-      "cpu": "ARM9",
-      "source": "src/op90_mi_memory_r01.c",
-      "kind": "asm",
-      "reason": "3-register ldmia/stmia with writeback; MWCC struct copies use 4-register chunks (last chunk without writeback) or 3 registers without writeback, and it never merges loads"
-    },
-    {
-      "function": "MI_Copy36B",
-      "cpu": "ARM9",
-      "source": "src/op90_mi_memory_r01.c",
-      "kind": "asm",
-      "reason": "3-register ldmia/stmia with writeback; MWCC struct copies use 4-register chunks (last chunk without writeback) or 3 registers without writeback, and it never merges loads"
-    },
-    {
-      "function": "MI_Copy48B",
-      "cpu": "ARM9",
-      "source": "src/op90_mi_memory_r01.c",
-      "kind": "asm",
-      "reason": "3-register ldmia/stmia with writeback; MWCC struct copies use 4-register chunks (last chunk without writeback) or 3 registers without writeback, and it never merges loads"
-    },
-    {
-      "function": "MI_Copy64B",
-      "cpu": "ARM9",
-      "source": "src/op90_mi_memory_r01.c",
-      "kind": "asm",
-      "reason": "3-register ldmia/stmia with writeback; MWCC struct copies use 4-register chunks (last chunk without writeback) or 3 registers without writeback, and it never merges loads"
-    },
-    {
-      "function": "MI_CpuCopy8",
-      "cpu": "ARM9",
-      "source": "src/op90_mi_memory_r01.c",
-      "kind": "asm",
-      "reason": "b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output)"
-    },
-    {
-      "function": "MI_CpuFill8",
-      "cpu": "ARM9",
-      "source": "src/op90_mi_memory_r01.c",
-      "kind": "asm",
-      "reason": "b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output)"
-    },
-    {
-      "function": "MI_Zero36B",
-      "cpu": "ARM9",
-      "source": "src/op90_mi_memory_r01.c",
-      "kind": "asm",
-      "reason": "Thumb multi-register stmia of separately computed values; MWCC never merges Thumb stores (stmia only comes from struct copies, memset, or a single-register *p++)"
-    },
-    {
-      "function": "MIi_CpuClear16",
-      "cpu": "ARM9",
-      "source": "src/op90_mi_memory_r01.c",
-      "kind": "asm",
-      "reason": "b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output)"
-    },
-    {
-      "function": "MIi_CpuClear32",
-      "cpu": "ARM9",
-      "source": "src/op90_mi_memory_r01.c",
-      "kind": "asm",
-      "reason": "ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode); b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output)"
-    },
-    {
-      "function": "MIi_CpuClearFast",
-      "cpu": "ARM9",
-      "source": "src/op90_mi_memory_r01.c",
-      "kind": "asm",
-      "reason": "8-register ldm/stm block copy; ARM push of callee-saved regs without lr (non-MWCC prologue; 0 occurrences in MWCC 2.0 ARM code); ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode); b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output)"
-    },
-    {
-      "function": "MIi_CpuCopy16",
-      "cpu": "ARM9",
-      "source": "src/op90_mi_memory_r01.c",
-      "kind": "asm",
-      "reason": "b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output)"
-    },
-    {
-      "function": "MIi_CpuCopy32",
-      "cpu": "ARM9",
-      "source": "src/op90_mi_memory_r01.c",
-      "kind": "asm",
-      "reason": "ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode); b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output)"
-    },
-    {
-      "function": "MIi_CpuCopyFast",
-      "cpu": "ARM9",
-      "source": "src/op90_mi_memory_r01.c",
-      "kind": "asm",
-      "reason": "8-register ldm/stm block copy; ARM push of callee-saved regs without lr (non-MWCC prologue; 0 occurrences in MWCC 2.0 ARM code); ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode); b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output)"
-    },
-    {
-      "function": "MIi_CpuSend32",
-      "cpu": "ARM9",
-      "source": "src/op90_mi_memory_r01.c",
-      "kind": "asm",
-      "reason": "ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output)"
-    },
-    {
-      "function": "MI_SwapWord",
-      "cpu": "ARM9",
-      "source": "src/op90_mi_swap_r01.c",
-      "kind": "asm",
-      "reason": "swp/swpb"
-    },
-    {
-      "function": "MI_UncompressLZ8",
-      "cpu": "ARM9",
-      "source": "src/op90_mi_uncompress_r01.c",
-      "kind": "asm",
-      "reason": "ARM9 `pop {..,lr}; bx lr` epilogue (MWCC 2.0 ARM9 always pops pc; 0 occurrences); b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output); swp/swpb"
-    },
-    {
-      "function": "CRYPTO_RC4Encrypt",
-      "cpu": "ARM9",
-      "source": "src/op90_nitrocrypto_residual00_r01.c",
-      "kind": "asm",
-      "reason": "push {r4-r9,lr} without the 8-byte frame padding MWCC always adds; S[i] load software-pipelined across iterations; ldrb [r0,rX,lsr #24] state indexing"
-    },
-    {
-      "function": "NNS_G2dArrangeOBJ1D",
-      "cpu": "ARM9",
-      "source": "src/op90_op90_op90_to80_extra1922_residual_1_residual_1_residual_1_r01.c",
-      "kind": "inline-asm",
-      "reason": "inlines a clz helper written as inline asm; MWCC 2.0 has no clz intrinsic and never emits clz from C"
-    },
-    {
-      "function": "CRYPTO_RC4FastEncrypt",
-      "cpu": "ARM9",
-      "source": "src/op90_op90_to59_dwcaccount_residual_3_residual_1_r01.c",
-      "kind": "asm",
-      "reason": "push {r4-r9,lr} without the 8-byte frame padding MWCC always adds; 8x hand-unrolled, software-pipelined RC4 loop with ldr/str [r0,rX,lsr #22] indexing"
-    },
-    {
-      "function": "WcmCountBits",
-      "cpu": "ARM9",
-      "source": "src/op90_op90_to65_wifi_residual_11_residual_49_residual_1_r01.c",
-      "kind": "asm",
-      "reason": "b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output); clz (inline-asm only)"
-    },
-    {
-      "function": "__TransferControl(ThrowContext*, ExceptionInfo*, char*)",
-      "cpu": "ARM9",
-      "source": "src/op90_op90_to91_w41419_ExitProcess_prefix_residual_1_r01.cpp",
-      "kind": "asm",
-      "reason": "MSL C++ exception-runtime routine: explicit sp manipulation (mov/ldr/sub sp,reg) to transfer control to a handler frame"
-    },
-    {
-      "function": "WcmCountLeadingZero",
-      "cpu": "ARM9",
-      "source": "src/op90_to65_wifi_residual_11_residual_49_r01.c",
-      "kind": "asm",
-      "reason": "clz (inline-asm only)"
-    },
-    {
-      "function": "GetCharIndex1D",
-      "cpu": "ARM9",
-      "source": "src/op90_to70_to65_nnsys_residual_34_residual_2_extra231_residual_1_r01.c",
-      "kind": "inline-asm",
-      "reason": "inlines a clz helper written as inline asm; MWCC 2.0 has no clz intrinsic and never emits clz from C"
-    },
-    {
-      "function": "vct_flush_send_buffer",
-      "cpu": "ARM9",
-      "source": "src/op90_to80_extra1474_residual_2_r01.c",
-      "kind": "inline-asm",
-      "reason": "inlines a clz helper written as inline asm; MWCC 2.0 has no clz intrinsic and never emits clz from C"
-    },
-    {
-      "function": "NNS_G2dCharCanvasInitForOBJ1D",
-      "cpu": "ARM9",
-      "source": "src/op90_to80_extra1759_residual_1_r01.c",
-      "kind": "inline-asm",
-      "reason": "inlines a clz helper written as inline asm; MWCC 2.0 has no clz intrinsic and never emits clz from C"
-    },
-    {
-      "function": "MATH_QSort",
-      "cpu": "ARM9",
-      "source": "src/op90_to90_extra2154_residual_1_r01.c",
-      "kind": "asm",
-      "reason": "ARM9 `pop {..,lr}; bx lr` epilogue (MWCC 2.0 ARM9 always pops pc; 0 occurrences); b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output); clz (inline-asm only); explicit sp manipulation (mov/ldr/sub sp,reg); swp/swpb"
-    },
-    {
-      "function": "get48bits_2",
-      "cpu": "ARM9",
-      "source": "src/op90_to90_extra2156_residual_1_r01.c",
-      "kind": "asm",
-      "reason": "u64 composed from halfword loads without the orr rX,rY,#0 that MWCC emits for every u64 composition form"
-    },
-    {
-      "function": "get48bits_3",
-      "cpu": "ARM9",
-      "source": "src/op90_to90_extra2156_residual_1_r01.c",
-      "kind": "asm",
-      "reason": "u64 composed from halfword loads without the orr rX,rY,#0 that MWCC emits for every u64 composition form"
-    },
-    {
-      "function": "get64bits",
-      "cpu": "ARM9",
-      "source": "src/op90_to90_extra2156_residual_1_r01.c",
-      "kind": "asm",
-      "reason": "u64 composed from halfword loads without the orr rX,rY,#0 that MWCC emits for every u64 composition form"
-    },
-    {
-      "function": "MTX_Copy43To44_",
-      "cpu": "ARM9",
-      "source": "src/op90_to90_extra2544_residual_1_r01.c",
-      "kind": "asm",
-      "reason": "ARM push of callee-saved regs without lr (non-MWCC prologue; 0 occurrences in MWCC 2.0 ARM code)"
-    },
-    {
-      "function": "MTX_Identity43_",
-      "cpu": "ARM9",
-      "source": "src/op90_to90_extra2544_residual_1_r01.c",
-      "kind": "asm",
-      "reason": "store-merged stm of separately materialised constant registers; MWCC CSEs constant zeros into one register, and its store merge never writes back"
-    },
-    {
-      "function": "MTX_Scale43_",
-      "cpu": "ARM9",
-      "source": "src/op90_to90_extra2544_residual_2_r01.c",
-      "kind": "asm",
-      "reason": "Thumb multi-register stmia of separately computed values; MWCC never merges Thumb stores (stmia only comes from struct copies, memset, or a single-register *p++)"
-    },
-    {
-      "function": "_020D9960",
-      "cpu": "ARM9",
-      "source": "src/op90_to90_extra2545_residual_2_r01.c",
-      "kind": "asm",
-      "reason": "SHA-1 round constants in .text read by negative pc-relative loads from DGTi_hash2_arm4_small, which saves ip in its prologue (non-AAPCS) and keeps hash state in 5-register ldm/stm with ror"
-    },
-    {
-      "function": "OSi_AlarmHandler",
-      "cpu": "ARM9",
-      "source": "src/op90_to90_os_alarm_handler_r01.c",
-      "kind": "asm",
-      "reason": "ARM9 `pop {..,lr}; bx lr` epilogue (MWCC 2.0 ARM9 always pops pc; 0 occurrences); push {r0,lr}; bl; pop {r0,lr}; bx lr: preserves r0 for the caller (non-AAPCS) and ARM9 pop-lr/bx epilogue"
-    },
-    {
-      "function": "OsCountZeroBits",
-      "cpu": "ARM9",
-      "source": "src/op90_to90_os_vramExclusive_clz_r01.c",
-      "kind": "asm",
-      "reason": "clz (inline-asm only)"
-    },
-    {
-      "function": "OSi_DoBoot",
-      "cpu": "ARM9",
-      "source": "src/op90_to90_reset_boot_r01.c",
-      "kind": "asm",
-      "reason": "11-register ldm/stm"
-    },
-    {
-      "function": "OSi_CpuClear32",
-      "cpu": "ARM9",
-      "source": "src/op90_to90_reset_clear32_r01.c",
-      "kind": "asm",
-      "reason": "ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode)"
-    },
-    {
-      "function": "OS_ResetSystem",
-      "cpu": "ARM9",
-      "source": "src/op90_to90_reset_reset_system_r01.c",
-      "kind": "asm",
-      "reason": "explicit sp manipulation (mov/ldr/sub sp,reg)"
-    },
-    {
-      "function": "_dadd",
-      "cpu": "ARM9",
-      "source": "src/op90_to90_w41415_fp_init4_prefix_r01.c",
-      "kind": "asm",
-      "reason": "floating-point and long-long runtime library assembled as one module with 84 entry points: ARM9 pop {..,lr}; bx lr epilogues, rrx, clz, mrs/msr flag results, computed add pc into unrolled division, entries that fall through into the next routine, 64 non-pool data words; the remaining entries rely on cmn and subs-fused branches that MWCC never emits"
-    },
-    {
-      "function": "sys_exit",
-      "cpu": "ARM9",
-      "source": "src/op90_to90_w41415_fp_init4_suffix_r01.c",
-      "kind": "asm",
-      "reason": "mov pc,lr return; svc/swi"
-    },
-    {
-      "function": "sys_readc",
-      "cpu": "ARM9",
-      "source": "src/op90_to90_w41415_fp_init4_suffix_r01.c",
-      "kind": "asm",
-      "reason": "svc/swi"
-    },
-    {
-      "function": "sys_writec",
-      "cpu": "ARM9",
-      "source": "src/op90_to90_w41415_fp_init4_suffix_r01.c",
-      "kind": "asm",
-      "reason": "svc/swi"
-    },
-    {
-      "function": "__rethrow",
-      "cpu": "ARM9",
-      "source": "src/op90_to91_w41419_ExitProcess_prefix_r01.c",
-      "kind": "asm",
-      "reason": "same register-capture frame as __throw"
-    },
-    {
-      "function": "__throw",
-      "cpu": "ARM9",
-      "source": "src/op90_to91_w41419_ExitProcess_prefix_r01.c",
-      "kind": "asm",
-      "reason": "mov ip,sp + manual str of r4-fp/sp/lr into a frame and b to handler: reads callee-saved regs as data, non-MWCC prologue, never returns"
-    },
-    {
-      "function": "OS_LoadContext",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/OS_context.c",
-      "kind": "asm",
-      "reason": "15-register ldm/stm (context save); explicit sp manipulation (mov/ldr/sub sp,reg); ldm/stm with ^ (user-bank regs); mrs/msr (cpsr/spsr); sp in ldm/stm register list; subs pc,lr exception return"
-    },
-    {
-      "function": "OS_SaveContext",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/OS_context.c",
-      "kind": "asm",
-      "reason": "15-register ldm/stm (context save); mrs/msr (cpsr/spsr); sp in ldm/stm register list"
-    },
-    {
-      "function": "OS_IrqHandler",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/OS_irqHandler.c",
-      "kind": "asm",
-      "reason": "ARM7 pop/ldm {..,pc} (MWCC v4T always pops lr + bx lr; 0 occurrences); conditional ldmfd sp!,{pc} early return (ARM7)"
-    },
-    {
-      "function": "OS_IrqHandler_ThreadSwitch",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/OS_irqHandler.c",
-      "kind": "asm",
-      "reason": "13-register ldm/stm; 15-register ldm/stm (context save); ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode); ARM7 pop/ldm {..,pc} (MWCC v4T always pops lr + bx lr; 0 occurrences); explicit sp manipulation (mov/ldr/sub sp,reg); ip saved in prologue (non-AAPCS; MWCC never saves ip: 0 occurrences); ldm/stm with ^ (user-bank regs); mrs/msr (cpsr/spsr); sp in ldm/stm register list; stmda"
-    },
-    {
-      "function": "OSi_DoBoot",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/OS_reset.c",
-      "kind": "asm",
-      "reason": "mov lr,ip then bx ip: forges the return address to the jump target, clears r0-r3; not expressible in C"
-    },
-    {
-      "function": "OS_DisableInterrupts",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/OS_system.c",
-      "kind": "asm",
-      "reason": "mrs/msr (cpsr/spsr)"
-    },
-    {
-      "function": "OS_DisableInterrupts_IrqAndFiq",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/OS_system.c",
-      "kind": "asm",
-      "reason": "mrs/msr (cpsr/spsr)"
-    },
-    {
-      "function": "OS_EnableInterrupts",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/OS_system.c",
-      "kind": "asm",
-      "reason": "mrs/msr (cpsr/spsr)"
-    },
-    {
-      "function": "OS_GetProcMode",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/OS_system.c",
-      "kind": "asm",
-      "reason": "mrs/msr (cpsr/spsr)"
-    },
-    {
-      "function": "OS_RestoreInterrupts",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/OS_system.c",
-      "kind": "asm",
-      "reason": "mrs/msr (cpsr/spsr)"
-    },
-    {
-      "function": "OS_RestoreInterrupts_IrqAndFiq",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/OS_system.c",
-      "kind": "asm",
-      "reason": "mrs/msr (cpsr/spsr)"
-    },
-    {
-      "function": "_start",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/crt0.c",
-      "kind": "asm",
-      "reason": "ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode); explicit sp manipulation (mov/ldr/sub sp,reg); mrs/msr (cpsr/spsr)"
-    },
-    {
-      "function": "do_autoload",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/crt0.c",
-      "kind": "asm",
-      "reason": "clobbers callee-saved r4-r7 without saving them (non-AAPCS) and tail-branches with b"
-    },
-    {
-      "function": "MI_CpuFill8",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_MI_memory_r01.c",
-      "kind": "asm",
-      "reason": "unscheduled source-order code (subs not moved into the load delay slot, orr before tst) combined with post-index and subs peepholes; MWCC schedules at every optimisation level that emits those peepholes"
-    },
-    {
-      "function": "MIi_CpuClear32",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_MI_memory_r01.c",
-      "kind": "asm",
-      "reason": "ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode)"
-    },
-    {
-      "function": "MIi_CpuClearFast",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_MI_memory_r01.c",
-      "kind": "asm",
-      "reason": "8-register ldm/stm block copy; ARM push of callee-saved regs without lr (non-MWCC prologue; 0 occurrences in MWCC 2.0 ARM code); ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode)"
-    },
-    {
-      "function": "MIi_CpuCopy32",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_MI_memory_r01.c",
-      "kind": "asm",
-      "reason": "ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode)"
-    },
-    {
-      "function": "MIi_CpuCopyFast",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_MI_memory_r01.c",
-      "kind": "asm",
-      "reason": "8-register ldm/stm block copy; ARM push of callee-saved regs without lr (non-MWCC prologue; 0 occurrences in MWCC 2.0 ARM code); ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode)"
-    },
-    {
-      "function": "MI_SwapWord",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_MI_swap_r01.c",
-      "kind": "asm",
-      "reason": "swp/swpb"
-    },
-    {
-      "function": "SVC_SoftReset",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_libsyscall_r01.c",
-      "kind": "asm",
-      "reason": "svc/swi"
-    },
-    {
-      "function": "SVC_WaitByLoop",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_libsyscall_r01.c",
-      "kind": "asm",
-      "reason": "svc/swi"
-    },
-    {
-      "function": "SVC_WaitIntr",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_libsyscall_r01.c",
-      "kind": "asm",
-      "reason": "svc/swi"
-    },
-    {
-      "function": "IsMmemExpanded",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_libsyscall_r02.c",
-      "kind": "asm",
-      "reason": "svc/swi"
-    },
-    {
-      "function": "SVC_CpuSet",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_libsyscall_r02.c",
-      "kind": "asm",
-      "reason": "svc/swi"
-    },
-    {
-      "function": "SVC_CpuSetFast",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_libsyscall_r02.c",
-      "kind": "asm",
-      "reason": "svc/swi"
-    },
-    {
-      "function": "SVC_GetCRC16",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_libsyscall_r02.c",
-      "kind": "asm",
-      "reason": "svc/swi"
-    },
-    {
-      "function": "SVC_GetPitchTable",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_libsyscall_r02.c",
-      "kind": "asm",
-      "reason": "svc/swi"
-    },
-    {
-      "function": "SVC_GetSinTable",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_libsyscall_r02.c",
-      "kind": "asm",
-      "reason": "svc/swi"
-    },
-    {
-      "function": "SVC_GetVolumeTable",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_libsyscall_r02.c",
-      "kind": "asm",
-      "reason": "svc/swi"
-    },
-    {
-      "function": "SVC_Sqrt",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_libsyscall_r02.c",
-      "kind": "asm",
-      "reason": "svc/swi"
-    },
-    {
-      "function": "SVC_UncompressHuffmanFromDevice",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_libsyscall_r02.c",
-      "kind": "asm",
-      "reason": "svc/swi"
-    },
-    {
-      "function": "SVC_UncompressLZ16FromDevice",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_libsyscall_r02.c",
-      "kind": "asm",
-      "reason": "svc/swi"
-    },
-    {
-      "function": "SVC_UncompressLZ8",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_libsyscall_r02.c",
-      "kind": "asm",
-      "reason": "svc/swi"
-    },
-    {
-      "function": "SVC_UncompressRL16FromDevice",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_libsyscall_r02.c",
-      "kind": "asm",
-      "reason": "svc/swi"
-    },
-    {
-      "function": "SVC_UncompressRL8",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_libsyscall_r02.c",
-      "kind": "asm",
-      "reason": "svc/swi"
-    },
-    {
-      "function": "SVC_UnpackBits",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_libsyscall_r02.c",
-      "kind": "asm",
-      "reason": "svc/swi"
-    },
-    {
-      "function": "SVC_WaitVBlankIntr",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_op90_libsyscall_residual_1_r01.c",
-      "kind": "asm",
-      "reason": "Thumb svc/swi system-call stubs (SVC_WaitVBlankIntr, SVC_Halt, SVC_Sleep, SVC_ChangeSoundBias, SVC_SetSoundBias, SVC_ResetSoundBias, SVC_Div, SVC_DivRem) at 2-byte-aligned entry points"
-    },
-    {
-      "function": "__VENEER_MATH_CountPopulation",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_op90_op90_to90_arm7_sub_ext_wram_residual_20_residual_2_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to MATH_CountPopulation: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_MI_WaitDma",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_op90_op90_to90_arm7_sub_ext_wram_residual_63_residual_1_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to MI_WaitDma: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER__u32_div_f",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_14_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to _u32_div_f: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER__s32_div_f",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_15_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to _s32_div_f: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_CancelVAlarm",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_19_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_CancelVAlarm: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_SetVAlarm",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_19_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_SetVAlarm: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_MI_CpuFill8",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_1_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to MI_CpuFill8: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_MIi_CpuCopy16",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_1_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to MIi_CpuCopy16: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_CancelAlarm",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_1_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_CancelAlarm: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_ExitThread",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_1_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_ExitThread: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_GetTick",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_1_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_GetTick: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_SetAlarm",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_1_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_SetAlarm: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_LockMutex",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_20_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_LockMutex: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_UnlockMutex",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_20_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_UnlockMutex: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_Sleep",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_21_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_Sleep: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_IsThreadTerminated",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_26_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_IsThreadTerminated: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_JoinThread",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_26_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_JoinThread: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER__ll_udiv",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_32_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to _ll_udiv: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_SetPeriodicAlarm",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_36_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_SetPeriodicAlarm: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_WMSP_Init",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_op90_to90_arm7_sub_wram_2_residual_22_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to WMSP_Init: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_CreateThread",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_CreateThread: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_InitMessageQueue",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_InitMessageQueue: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_InitMutex",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_InitMutex: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_InitVAlarm",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_InitVAlarm: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_IsVAlarmAvailable",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_IsVAlarmAvailable: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_WakeupThreadDirect",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_WakeupThreadDirect: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_PXI_Init",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to PXI_Init: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_PXI_SetFifoRecvCallback",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to PXI_SetFifoRecvCallback: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_ReceiveMessage",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_2_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_ReceiveMessage: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_SendMessage",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_2_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_SendMessage: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_Terminate",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_2_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_Terminate: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_SND_BeginSleep",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_2_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to SND_BeginSleep: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_WMSP_GetBuffer4Callback2Wm9",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_2_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to WMSP_GetBuffer4Callback2Wm9: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_WMSP_ReturnResult2Wm9",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_2_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to WMSP_ReturnResult2Wm9: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_MI_CpuCopy8",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_3_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to MI_CpuCopy8: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_MIi_CpuClear16",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_4_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to MIi_CpuClear16: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "OSi_AlarmHandler",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_alarm_handler_r01.c",
-      "kind": "asm",
-      "reason": "push {r0,lr} ... pop {r0,lr}: preserves r0 for the interrupt dispatcher (non-AAPCS; MWCC pads with r3)"
-    },
-    {
-      "function": "__VENEER_OS_DisableInterrupts",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_current1_wm_helpers_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_DisableInterrupts: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_DisableScheduler",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_current1_wm_helpers_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_DisableScheduler: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_EnableScheduler",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_current1_wm_helpers_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_EnableScheduler: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_RestoreInterrupts",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_current1_wm_helpers_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_RestoreInterrupts: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_SetThreadPriority",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_current1_wm_helpers_residual_1_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_SetThreadPriority: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "OS_UnLockCartridge",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_spinlock_alias_cartridge_r01.c",
-      "kind": "asm",
-      "reason": "tail jump via bx r1; the 5 ARM7 bx r1 hits in MWCC code are mov lr,pc indirect calls, never tail jumps"
-    },
-    {
-      "function": "OS_GetLockID",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_spinlock_bitmap_get_r01.c",
-      "kind": "asm",
-      "reason": "loads -3 from the literal pool (ldr r0,=0xfffffffd) where MWCC emits mvn r0,#2; mask shifts kept unfolded"
-    },
-    {
-      "function": "OS_ReleaseLockID",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_spinlock_bitmap_release_r01.c",
-      "kind": "asm",
-      "reason": "mov rX,#0x80000000; mov rX,rX,lsr rN kept unfolded with pl/mi predicates; MWCC always folds a single-use shift into the orr operand and hoists the load"
-    },
-    {
-      "function": "__VENEER_WMSP_GetAllowedChannel",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_23_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to WMSP_GetAllowedChannel: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_MIi_CpuClearFast",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_25_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to MIi_CpuClearFast: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_GetLockID",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_25_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_GetLockID: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_DisableIrqMask",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_27_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_DisableIrqMask: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_EnableIrqMask",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_27_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_EnableIrqMask: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_FreeToHeap",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_2_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_FreeToHeap: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_MIi_CpuClear32",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_30_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to MIi_CpuClear32: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_IsAlarmAvailable",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_35_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_IsAlarmAvailable: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_AllocFromHeap",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_3_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_AllocFromHeap: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_SetIrqFunction",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_44_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_SetIrqFunction: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_OS_CreateAlarm",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_4_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to OS_CreateAlarm: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_MIi_CpuCopy32",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_52_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to MIi_CpuCopy32: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_NVRAM_ReadDataBytes",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_66_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to NVRAM_ReadDataBytes: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_SPI_Lock",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_66_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to SPI_Lock: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_SPI_Unlock",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_66_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to SPI_Unlock: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "MIC_IrqHandler",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_10_r01.c",
-      "kind": "asm",
-      "reason": "ARM7 pop/ldm {..,pc} (MWCC v4T always pops lr + bx lr; 0 occurrences); explicit sp manipulation (mov/ldr/sub sp,reg); ldm/stm with ^ (user-bank regs); mrs/msr (cpsr/spsr); sp in ldm/stm register list"
-    },
-    {
-      "function": "RTCi_GpioEnd",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_21_r01.c",
-      "kind": "asm",
-      "reason": "orr r0,r0,#0 no-op (macro-expanded asm; MWCC folds x|0)"
-    },
-    {
-      "function": "RTCi_GpioReceiveData",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_21_r01.c",
-      "kind": "asm",
-      "reason": "push {r0,r1} mid-function scratch save + orr r0,r0,#0"
-    },
-    {
-      "function": "RTCi_GpioSendCommand",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_21_r01.c",
-      "kind": "asm",
-      "reason": "orr r0,r0,#0 no-op (macro-expanded asm)"
-    },
-    {
-      "function": "RTCi_GpioSendData",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_21_r01.c",
-      "kind": "asm",
-      "reason": "push {r0,r1}/pop {r0,r1} mid-function as scratch save (push without lr; only {r0-r3} varargs pushes exist in MWCC ARM7 code) + orr r0,r0,#0"
-    },
-    {
-      "function": "RTCi_GpioStart",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_21_r01.c",
-      "kind": "asm",
-      "reason": "bic #4 followed by orr #4 of the same bit and register-only mov/subs/bne delay loops (macro-expanded assembly; MWCC folds (x & ~4) | 4)"
-    },
-    {
-      "function": "__VENEER_WL_Terminate",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_23_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to WL_Terminate: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_WMSP_CancelAllAlarms",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_23_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to WMSP_CancelAllAlarms: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_WMSP_CancelVAlarm",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_23_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to WMSP_CancelVAlarm: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_WMSP_GetIndicateThread",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_23_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to WMSP_GetIndicateThread: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_WMSP_GetRequestThread",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_23_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to WMSP_GetRequestThread: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "_ll_mod",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_24_r01.c",
-      "kind": "asm",
-      "reason": "long-long and 32-bit division runtime assembled as one module: ip saved in the prologue (non-AAPCS), entry stubs branching into shared bodies, fall-through entry points, computed add pc into unrolled division"
-    },
-    {
-      "function": "MicTimerHandler",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_8_r02.c",
-      "kind": "asm",
-      "reason": "push {r4-r7,lr} with no sub sp: a 20-byte frame; every MWCC version keeps ARM7 frames 8-byte aligned (odd pushes are padded with r3 or sub sp)"
-    },
-    {
-      "function": "__VENEER_NVRAM_ReadStatusRegister",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to91_w41425_flashwait_suffix_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to NVRAM_ReadStatusRegister: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_NVRAM_SoftwareReset",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to91_w41425_flashwait_suffix_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to NVRAM_SoftwareReset: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "__VENEER_PM_SetLEDPattern",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to91_w41430_WMSP_SetParentParam_prefix_r01.c",
-      "kind": "veneer",
-      "reason": "interworking/long-branch trampoline to PM_SetLEDPattern: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
-    },
-    {
-      "function": "_start_ModuleParams",
-      "cpu": "ARM7",
-      "source": "sub/lib/src/op90_to91_w41567_startup_suffix_residual_1_r01.c",
-      "kind": "asm",
-      "reason": "pure data (module-params struct) in .text; pure data in .text (not code)"
-    }
-  ]
+ "description": "Code in C/C++ source files that is not compiler output we still have to match. Kinds: \"asm\" = written by hand in assembly in the original program; \"inline-asm\" = C function whose original source used an instruction C cannot express; \"generated\" = emitted by a build tool (dsprot stubs from the protection tool's encoding); \"veneer\" = linker-style literal-jump trampoline. Each reason names the instructions or origin. tools/progress/progress.py reports their linker-map bytes in their own categories; all but \"inline-asm\" (compiled C) are excluded from the compiled-code denominator. An entry applies only while its source still defines the function in that form; compiler output that is not yet matched does not belong here.",
+ "functions": [
+  {
+   "function": "CP_SaveContext",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/cp/CP_context.c",
+   "kind": "asm",
+   "reason": "ARM push of callee-saved regs without lr (non-MWCC prologue; 0 occurrences in MWCC 2.0 ARM code)"
+  },
+  {
+   "function": "CPi_RestoreContext",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/cp/CP_context.c",
+   "kind": "asm",
+   "reason": "ARM push of callee-saved regs without lr (non-MWCC prologue; 0 occurrences in MWCC 2.0 ARM code)"
+  },
+  {
+   "function": "INITi_CpuClear32",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/crt0.c",
+   "kind": "asm",
+   "reason": "ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode); b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output)"
+  },
+  {
+   "function": "MIi_UncompressBackward",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/crt0.c",
+   "kind": "asm",
+   "reason": "ARM push of callee-saved regs without lr (non-MWCC prologue; 0 occurrences in MWCC 2.0 ARM code); ldmdb (0 occurrences); mcr/mrc cp15"
+  },
+  {
+   "function": "_start",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/crt0.c",
+   "kind": "asm",
+   "reason": "b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output); explicit sp manipulation (mov/ldr/sub sp,reg); mcr/mrc cp15; mrs/msr (cpsr/spsr)"
+  },
+  {
+   "function": "do_autoload",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/crt0.c",
+   "kind": "asm",
+   "reason": "b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output); mcr/mrc cp15"
+  },
+  {
+   "function": "init_cp15",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/crt0.c",
+   "kind": "asm",
+   "reason": "mcr/mrc cp15"
+  },
+  {
+   "function": "MTX_Identity22_",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/fx/fx_mtx22.c",
+   "kind": "asm",
+   "reason": "store-merged stm of separately materialised constant registers; MWCC CSEs constant zeros into one register, and its store merge never writes back"
+  },
+  {
+   "function": "DC_FlushAll",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_cache.c",
+   "kind": "asm",
+   "reason": "mcr/mrc cp15"
+  },
+  {
+   "function": "DC_FlushRange",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_cache.c",
+   "kind": "asm",
+   "reason": "mcr/mrc cp15"
+  },
+  {
+   "function": "DC_InvalidateAll",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_cache.c",
+   "kind": "asm",
+   "reason": "mcr/mrc cp15"
+  },
+  {
+   "function": "DC_InvalidateRange",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_cache.c",
+   "kind": "asm",
+   "reason": "mcr/mrc cp15"
+  },
+  {
+   "function": "DC_StoreAll",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_cache.c",
+   "kind": "asm",
+   "reason": "mcr/mrc cp15"
+  },
+  {
+   "function": "DC_StoreRange",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_cache.c",
+   "kind": "asm",
+   "reason": "mcr/mrc cp15"
+  },
+  {
+   "function": "DC_WaitWriteBufferEmpty",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_cache.c",
+   "kind": "asm",
+   "reason": "mcr/mrc cp15"
+  },
+  {
+   "function": "IC_InvalidateAll",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_cache.c",
+   "kind": "asm",
+   "reason": "mcr/mrc cp15"
+  },
+  {
+   "function": "IC_InvalidateRange",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_cache.c",
+   "kind": "asm",
+   "reason": "mcr/mrc cp15"
+  },
+  {
+   "function": "OS_LoadContext",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_context.c",
+   "kind": "asm",
+   "reason": "15-register ldm/stm (context save); ldm/stm with ^ (user-bank regs); mrs/msr (cpsr/spsr); sp in ldm/stm register list; subs pc,lr exception return"
+  },
+  {
+   "function": "OS_SaveContext",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_context.c",
+   "kind": "asm",
+   "reason": "15-register ldm/stm (context save); mrs/msr (cpsr/spsr); sp in ldm/stm register list"
+  },
+  {
+   "function": "OSi_DisplayExContext",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_exception.c",
+   "kind": "inline-asm",
+   "reason": "inline asm block reads and writes cpsr with mrs/msr and switches sp; MWCC never emits mrs/msr and C cannot address sp"
+  },
+  {
+   "function": "OSi_ExceptionHandler",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_exception.c",
+   "kind": "asm",
+   "reason": "6-register ldm/stm with writeback; explicit sp manipulation (mov/ldr/sub sp,reg); mrs/msr (cpsr/spsr); sp in ldm/stm register list; stmdb on non-sp base"
+  },
+  {
+   "function": "OSi_GetAndDisplayContext",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_exception.c",
+   "kind": "asm",
+   "reason": "ARM9 `pop {..,lr}; bx lr` epilogue (MWCC 2.0 ARM9 always pops pc; 0 occurrences)"
+  },
+  {
+   "function": "OSi_SetExContext",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_exception.c",
+   "kind": "asm",
+   "reason": "8-register ldm/stm block copy; mrs/msr (cpsr/spsr)"
+  },
+  {
+   "function": "OS_IrqHandler",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_irqHandler.c",
+   "kind": "asm",
+   "reason": "clz (inline-asm only)"
+  },
+  {
+   "function": "OS_IrqHandler_ThreadSwitch",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_irqHandler.c",
+   "kind": "asm",
+   "reason": "13-register ldm/stm; 15-register ldm/stm (context save); ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode); ip saved in prologue (non-AAPCS; MWCC never saves ip: 0 occurrences); ldm/stm with ^ (user-bank regs); mrs/msr (cpsr/spsr); sp in ldm/stm register list; stmda"
+  },
+  {
+   "function": "OS_SetDPermissionsForProtectionRegion",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_protectionRegion.c",
+   "kind": "asm",
+   "reason": "mcr/mrc cp15"
+  },
+  {
+   "function": "OS_SetProtectionRegion1",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_protectionRegion.c",
+   "kind": "asm",
+   "reason": "mcr/mrc cp15"
+  },
+  {
+   "function": "OS_SetProtectionRegion2",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_protectionRegion.c",
+   "kind": "asm",
+   "reason": "mcr/mrc cp15"
+  },
+  {
+   "function": "OS_DisableProtectionUnit",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_protectionUnit.c",
+   "kind": "asm",
+   "reason": "mcr/mrc cp15"
+  },
+  {
+   "function": "OS_EnableProtectionUnit",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_protectionUnit.c",
+   "kind": "asm",
+   "reason": "mcr/mrc cp15"
+  },
+  {
+   "function": "OS_DisableInterrupts",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_system.c",
+   "kind": "asm",
+   "reason": "mrs/msr (cpsr/spsr)"
+  },
+  {
+   "function": "OS_DisableInterrupts_IrqAndFiq",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_system.c",
+   "kind": "asm",
+   "reason": "mrs/msr (cpsr/spsr)"
+  },
+  {
+   "function": "OS_EnableInterrupts",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_system.c",
+   "kind": "asm",
+   "reason": "mrs/msr (cpsr/spsr)"
+  },
+  {
+   "function": "OS_GetCpsrIrq",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_system.c",
+   "kind": "asm",
+   "reason": "mrs/msr (cpsr/spsr)"
+  },
+  {
+   "function": "OS_GetProcMode",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_system.c",
+   "kind": "asm",
+   "reason": "mrs/msr (cpsr/spsr)"
+  },
+  {
+   "function": "OS_RestoreInterrupts",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_system.c",
+   "kind": "asm",
+   "reason": "mrs/msr (cpsr/spsr)"
+  },
+  {
+   "function": "OS_RestoreInterrupts_IrqAndFiq",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_system.c",
+   "kind": "asm",
+   "reason": "mrs/msr (cpsr/spsr)"
+  },
+  {
+   "function": "OS_GetDTCMAddress",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_tcm.c",
+   "kind": "asm",
+   "reason": "mcr/mrc cp15"
+  },
+  {
+   "function": "OS_Halt",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_terminate_proc.c",
+   "kind": "asm",
+   "reason": "mcr/mrc cp15"
+  },
+  {
+   "function": "OS_GetLockID",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/to91_w41407_spin_retained.c",
+   "kind": "asm",
+   "reason": "clz (inline-asm only)"
+  },
+  {
+   "function": "OS_ReleaseLockID",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/to91_w41407_spin_retained.c",
+   "kind": "asm",
+   "reason": "mov rX,#0x80000000; mov rX,rX,lsr rN kept unfolded with pl/mi predicates; MWCC always folds a single-use shift into the orr operand and hoists the load"
+  },
+  {
+   "function": "OS_UnLockCard",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/to91_w41407_spin_retained.c",
+   "kind": "asm",
+   "reason": "tail jump via bx r1 (see OS_UnLockCartridge)"
+  },
+  {
+   "function": "OS_UnLockCartridge",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/to91_w41407_spin_retained.c",
+   "kind": "asm",
+   "reason": "tail jump via `ldr r1,=f; bx r1`: MWCC tail calls always go through ip (bx r1 occurs 0x in MWCC 2.0 ARM9 code)"
+  },
+  {
+   "function": "NitroStaticInit",
+   "cpu": "ARM9",
+   "source": "lib/dsprot/src/coretests_decrypter_decoder.c",
+   "kind": "generated",
+   "reason": "dsprot static-init decoder emitted from the protection tool's encoding (function-table decode of encrypted routines); checked against the tool listing"
+  },
+  {
+   "function": "NitroStaticInit_",
+   "cpu": "ARM9",
+   "source": "lib/dsprot/src/coretests_decrypter_decoder.c",
+   "kind": "generated",
+   "reason": ".sinit registration word of the generated dsprot decoder object"
+  },
+  {
+   "function": "DSProt_DetectDummy",
+   "cpu": "ARM9",
+   "source": "lib/dsprot/src/dsprot_main_decrypter.c",
+   "kind": "generated",
+   "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
+  },
+  {
+   "function": "DSProt_DetectEmulator",
+   "cpu": "ARM9",
+   "source": "lib/dsprot/src/dsprot_main_decrypter.c",
+   "kind": "generated",
+   "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
+  },
+  {
+   "function": "DSProt_DetectFlashcart",
+   "cpu": "ARM9",
+   "source": "lib/dsprot/src/dsprot_main_decrypter.c",
+   "kind": "generated",
+   "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
+  },
+  {
+   "function": "DSProt_DetectNotDummy",
+   "cpu": "ARM9",
+   "source": "lib/dsprot/src/dsprot_main_decrypter.c",
+   "kind": "generated",
+   "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
+  },
+  {
+   "function": "DSProt_DetectNotEmulator",
+   "cpu": "ARM9",
+   "source": "lib/dsprot/src/dsprot_main_decrypter.c",
+   "kind": "generated",
+   "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
+  },
+  {
+   "function": "DSProt_DetectNotFlashcart",
+   "cpu": "ARM9",
+   "source": "lib/dsprot/src/dsprot_main_decrypter.c",
+   "kind": "generated",
+   "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
+  },
+  {
+   "function": "NitroStaticInit",
+   "cpu": "ARM9",
+   "source": "lib/dsprot/src/dsprot_main_decrypter_decoder.c",
+   "kind": "generated",
+   "reason": "dsprot static-init decoder emitted from the protection tool's encoding (function-table decode of encrypted routines); checked against the tool listing"
+  },
+  {
+   "function": "NitroStaticInit_",
+   "cpu": "ARM9",
+   "source": "lib/dsprot/src/dsprot_main_decrypter_decoder.c",
+   "kind": "generated",
+   "reason": ".sinit registration word of the generated dsprot decoder object"
+  },
+  {
+   "function": "NitroStaticInit",
+   "cpu": "ARM9",
+   "source": "lib/dsprot/src/encryptor_decoder.c",
+   "kind": "generated",
+   "reason": "dsprot static-init decoder emitted from the protection tool's encoding (function-table decode of encrypted routines); checked against the tool listing"
+  },
+  {
+   "function": "NitroStaticInit_",
+   "cpu": "ARM9",
+   "source": "lib/dsprot/src/encryptor_decoder.c",
+   "kind": "generated",
+   "reason": ".sinit registration word of the generated dsprot decoder object"
+  },
+  {
+   "function": "RunEncrypted_Integrity_MACOwner_IsBad",
+   "cpu": "ARM9",
+   "source": "lib/dsprot/src/integrity_decrypter.c",
+   "kind": "generated",
+   "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
+  },
+  {
+   "function": "RunEncrypted_Integrity_MACOwner_IsGood",
+   "cpu": "ARM9",
+   "source": "lib/dsprot/src/integrity_decrypter.c",
+   "kind": "generated",
+   "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
+  },
+  {
+   "function": "RunEncrypted_Integrity_ROMTest_IsBad",
+   "cpu": "ARM9",
+   "source": "lib/dsprot/src/integrity_decrypter.c",
+   "kind": "generated",
+   "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
+  },
+  {
+   "function": "RunEncrypted_Integrity_ROMTest_IsGood",
+   "cpu": "ARM9",
+   "source": "lib/dsprot/src/integrity_decrypter.c",
+   "kind": "generated",
+   "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
+  },
+  {
+   "function": "NitroStaticInit",
+   "cpu": "ARM9",
+   "source": "lib/dsprot/src/integrity_decrypter_decoder.c",
+   "kind": "generated",
+   "reason": "dsprot static-init decoder emitted from the protection tool's encoding (function-table decode of encrypted routines); checked against the tool listing"
+  },
+  {
+   "function": "NitroStaticInit_",
+   "cpu": "ARM9",
+   "source": "lib/dsprot/src/integrity_decrypter_decoder.c",
+   "kind": "generated",
+   "reason": ".sinit registration word of the generated dsprot decoder object"
+  },
+  {
+   "function": "RunEncrypted_MACOwner_IsBad",
+   "cpu": "ARM9",
+   "source": "lib/dsprot/src/mac_owner_decrypter.c",
+   "kind": "generated",
+   "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
+  },
+  {
+   "function": "RunEncrypted_MACOwner_IsGood",
+   "cpu": "ARM9",
+   "source": "lib/dsprot/src/mac_owner_decrypter.c",
+   "kind": "generated",
+   "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
+  },
+  {
+   "function": "NitroStaticInit",
+   "cpu": "ARM9",
+   "source": "lib/dsprot/src/rc4_decoder.c",
+   "kind": "generated",
+   "reason": "dsprot static-init decoder emitted from the protection tool's encoding (function-table decode of encrypted routines); checked against the tool listing"
+  },
+  {
+   "function": "NitroStaticInit_",
+   "cpu": "ARM9",
+   "source": "lib/dsprot/src/rc4_decoder.c",
+   "kind": "generated",
+   "reason": ".sinit registration word of the generated dsprot decoder object"
+  },
+  {
+   "function": "RunEncrypted_ROMTest_IsBad",
+   "cpu": "ARM9",
+   "source": "lib/dsprot/src/rom_test_decrypter.c",
+   "kind": "generated",
+   "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
+  },
+  {
+   "function": "RunEncrypted_ROMTest_IsGood",
+   "cpu": "ARM9",
+   "source": "lib/dsprot/src/rom_test_decrypter.c",
+   "kind": "generated",
+   "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
+  },
+  {
+   "function": "RunEncrypted_ROMUtil_CRC32",
+   "cpu": "ARM9",
+   "source": "lib/dsprot/src/rom_util_decrypter.c",
+   "kind": "generated",
+   "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
+  },
+  {
+   "function": "RunEncrypted_ROMUtil_Read",
+   "cpu": "ARM9",
+   "source": "lib/dsprot/src/rom_util_decrypter.c",
+   "kind": "generated",
+   "reason": "dsprot RUN_ENCRYPTED_FUNC stub emitted from the protection tool's encoding (decrypts, calls and re-encrypts its target); checked against the tool listing"
+  },
+  {
+   "function": "_secure",
+   "cpu": "ARM9",
+   "source": "lib/syscall/src/_secure_IPGE.c",
+   "kind": "asm",
+   "reason": "system-call library secure area: Thumb svc/swi stubs at 2-byte-aligned entry points interleaved with opaque secure-area data words that are not literal pools"
+  },
+  {
+   "function": "_secure",
+   "cpu": "ARM9",
+   "source": "lib/syscall/src/_secure_IPKE.c",
+   "kind": "asm",
+   "reason": "system-call library secure area: Thumb svc/swi stubs at 2-byte-aligned entry points interleaved with opaque secure-area data words that are not literal pools"
+  },
+  {
+   "function": "MTX_Identity33_",
+   "cpu": "ARM9",
+   "source": "src/op90_fx_mtx33_identity_residual_r01.c",
+   "kind": "asm",
+   "reason": "store-merged stm of separately materialised constant registers; MWCC CSEs constant zeros into one register, and its store merge never writes back"
+  },
+  {
+   "function": "MTX_RotX43_",
+   "cpu": "ARM9",
+   "source": "src/op90_fx_mtx43_residual_1_r01.c",
+   "kind": "asm",
+   "reason": "Thumb multi-register stmia of separately computed values; MWCC never merges Thumb stores (stmia only comes from struct copies, memset, or a single-register *p++)"
+  },
+  {
+   "function": "MTX_RotY43_",
+   "cpu": "ARM9",
+   "source": "src/op90_fx_mtx43_residual_1_r01.c",
+   "kind": "asm",
+   "reason": "Thumb multi-register stmia of separately computed values; MWCC never merges Thumb stores (stmia only comes from struct copies, memset, or a single-register *p++)"
+  },
+  {
+   "function": "MTX_Copy44To43_",
+   "cpu": "ARM9",
+   "source": "src/op90_fx_mtx44_residual_head_r01.c",
+   "kind": "asm",
+   "reason": "3-register ldmia/stmia with writeback; MWCC struct copies use 4-register chunks (last chunk without writeback) or 3 registers without writeback, and it never merges loads"
+  },
+  {
+   "function": "MTX_Identity44_",
+   "cpu": "ARM9",
+   "source": "src/op90_fx_mtx44_residual_head_r01.c",
+   "kind": "asm",
+   "reason": "store-merged stm of separately materialised constant registers; MWCC CSEs constant zeros into one register, and its store merge never writes back; 3-register ldmia/stmia with writeback; MWCC struct copies use 4-register chunks (last chunk without writeback) or 3 registers without writeback, and it never merges loads"
+  },
+  {
+   "function": "MTX_RotX44_",
+   "cpu": "ARM9",
+   "source": "src/op90_fx_mtx44_residual_rot_r01.c",
+   "kind": "asm",
+   "reason": "Thumb multi-register stmia of separately computed values; MWCC never merges Thumb stores (stmia only comes from struct copies, memset, or a single-register *p++)"
+  },
+  {
+   "function": "MTX_RotY44_",
+   "cpu": "ARM9",
+   "source": "src/op90_fx_mtx44_residual_rot_r01.c",
+   "kind": "asm",
+   "reason": "Thumb multi-register stmia of separately computed values; MWCC never merges Thumb stores (stmia only comes from struct copies, memset, or a single-register *p++)"
+  },
+  {
+   "function": "MTX_RotZ44_",
+   "cpu": "ARM9",
+   "source": "src/op90_fx_mtx44_residual_rot_r01.c",
+   "kind": "asm",
+   "reason": "Thumb multi-register stmia of separately computed values; MWCC never merges Thumb stores (stmia only comes from struct copies, memset, or a single-register *p++)"
+  },
+  {
+   "function": "GXi_NopClearFifo128_",
+   "cpu": "ARM9",
+   "source": "src/op90_g3x_nop_fifo_residual_r01.c",
+   "kind": "asm",
+   "reason": "32 stm of four separately zeroed registers to the geometry FIFO; MWCC CSEs the zeros into one register and never merges volatile stores"
+  },
+  {
+   "function": "GX_SendFifo48B",
+   "cpu": "ARM9",
+   "source": "src/op90_gxasm_r01.c",
+   "kind": "asm",
+   "reason": "3-register ldmia/stmia with writeback; MWCC struct copies use 4-register chunks (last chunk without writeback) or 3 registers without writeback, and it never merges loads"
+  },
+  {
+   "function": "GX_SendFifo64B",
+   "cpu": "ARM9",
+   "source": "src/op90_gxasm_r01.c",
+   "kind": "asm",
+   "reason": "8-register ldm/stm block copy; ARM push of callee-saved regs without lr (non-MWCC prologue; 0 occurrences in MWCC 2.0 ARM code)"
+  },
+  {
+   "function": "MI_Copy32B",
+   "cpu": "ARM9",
+   "source": "src/op90_mi_memory_r01.c",
+   "kind": "asm",
+   "reason": "3-register ldmia/stmia with writeback; MWCC struct copies use 4-register chunks (last chunk without writeback) or 3 registers without writeback, and it never merges loads"
+  },
+  {
+   "function": "MI_Copy36B",
+   "cpu": "ARM9",
+   "source": "src/op90_mi_memory_r01.c",
+   "kind": "asm",
+   "reason": "3-register ldmia/stmia with writeback; MWCC struct copies use 4-register chunks (last chunk without writeback) or 3 registers without writeback, and it never merges loads"
+  },
+  {
+   "function": "MI_Copy48B",
+   "cpu": "ARM9",
+   "source": "src/op90_mi_memory_r01.c",
+   "kind": "asm",
+   "reason": "3-register ldmia/stmia with writeback; MWCC struct copies use 4-register chunks (last chunk without writeback) or 3 registers without writeback, and it never merges loads"
+  },
+  {
+   "function": "MI_Copy64B",
+   "cpu": "ARM9",
+   "source": "src/op90_mi_memory_r01.c",
+   "kind": "asm",
+   "reason": "3-register ldmia/stmia with writeback; MWCC struct copies use 4-register chunks (last chunk without writeback) or 3 registers without writeback, and it never merges loads"
+  },
+  {
+   "function": "MI_CpuCopy8",
+   "cpu": "ARM9",
+   "source": "src/op90_mi_memory_r01.c",
+   "kind": "asm",
+   "reason": "b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output)"
+  },
+  {
+   "function": "MI_CpuFill8",
+   "cpu": "ARM9",
+   "source": "src/op90_mi_memory_r01.c",
+   "kind": "asm",
+   "reason": "b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output)"
+  },
+  {
+   "function": "MI_Zero36B",
+   "cpu": "ARM9",
+   "source": "src/op90_mi_memory_r01.c",
+   "kind": "asm",
+   "reason": "Thumb multi-register stmia of separately computed values; MWCC never merges Thumb stores (stmia only comes from struct copies, memset, or a single-register *p++)"
+  },
+  {
+   "function": "MIi_CpuClear16",
+   "cpu": "ARM9",
+   "source": "src/op90_mi_memory_r01.c",
+   "kind": "asm",
+   "reason": "b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output)"
+  },
+  {
+   "function": "MIi_CpuClear32",
+   "cpu": "ARM9",
+   "source": "src/op90_mi_memory_r01.c",
+   "kind": "asm",
+   "reason": "ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode); b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output)"
+  },
+  {
+   "function": "MIi_CpuClearFast",
+   "cpu": "ARM9",
+   "source": "src/op90_mi_memory_r01.c",
+   "kind": "asm",
+   "reason": "8-register ldm/stm block copy; ARM push of callee-saved regs without lr (non-MWCC prologue; 0 occurrences in MWCC 2.0 ARM code); ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode); b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output)"
+  },
+  {
+   "function": "MIi_CpuCopy16",
+   "cpu": "ARM9",
+   "source": "src/op90_mi_memory_r01.c",
+   "kind": "asm",
+   "reason": "b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output)"
+  },
+  {
+   "function": "MIi_CpuCopy32",
+   "cpu": "ARM9",
+   "source": "src/op90_mi_memory_r01.c",
+   "kind": "asm",
+   "reason": "ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode); b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output)"
+  },
+  {
+   "function": "MIi_CpuCopyFast",
+   "cpu": "ARM9",
+   "source": "src/op90_mi_memory_r01.c",
+   "kind": "asm",
+   "reason": "8-register ldm/stm block copy; ARM push of callee-saved regs without lr (non-MWCC prologue; 0 occurrences in MWCC 2.0 ARM code); ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode); b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output)"
+  },
+  {
+   "function": "MIi_CpuSend32",
+   "cpu": "ARM9",
+   "source": "src/op90_mi_memory_r01.c",
+   "kind": "asm",
+   "reason": "ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output)"
+  },
+  {
+   "function": "MI_SwapWord",
+   "cpu": "ARM9",
+   "source": "src/op90_mi_swap_r01.c",
+   "kind": "asm",
+   "reason": "swp/swpb"
+  },
+  {
+   "function": "MI_UncompressLZ8",
+   "cpu": "ARM9",
+   "source": "src/op90_mi_uncompress_r01.c",
+   "kind": "asm",
+   "reason": "ARM9 `pop {..,lr}; bx lr` epilogue (MWCC 2.0 ARM9 always pops pc; 0 occurrences); b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output); swp/swpb"
+  },
+  {
+   "function": "CRYPTO_RC4Encrypt",
+   "cpu": "ARM9",
+   "source": "src/op90_nitrocrypto_residual00_r01.c",
+   "kind": "asm",
+   "reason": "push {r4-r9,lr} without the 8-byte frame padding MWCC always adds; S[i] load software-pipelined across iterations; ldrb [r0,rX,lsr #24] state indexing"
+  },
+  {
+   "function": "NNS_G2dArrangeOBJ1D",
+   "cpu": "ARM9",
+   "source": "src/op90_op90_op90_to80_extra1922_residual_1_residual_1_residual_1_r01.c",
+   "kind": "inline-asm",
+   "reason": "inlines a clz helper written as inline asm; MWCC 2.0 has no clz intrinsic and never emits clz from C"
+  },
+  {
+   "function": "CRYPTO_RC4FastEncrypt",
+   "cpu": "ARM9",
+   "source": "src/op90_op90_to59_dwcaccount_residual_3_residual_1_r01.c",
+   "kind": "asm",
+   "reason": "push {r4-r9,lr} without the 8-byte frame padding MWCC always adds; 8x hand-unrolled, software-pipelined RC4 loop with ldr/str [r0,rX,lsr #22] indexing"
+  },
+  {
+   "function": "WcmCountBits",
+   "cpu": "ARM9",
+   "source": "src/op90_op90_to65_wifi_residual_11_residual_49_residual_1_r01.c",
+   "kind": "asm",
+   "reason": "b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output); clz (inline-asm only)"
+  },
+  {
+   "function": "__TransferControl(ThrowContext*, ExceptionInfo*, char*)",
+   "cpu": "ARM9",
+   "source": "src/op90_op90_to91_w41419_ExitProcess_prefix_residual_1_r01.cpp",
+   "kind": "asm",
+   "reason": "MSL C++ exception-runtime routine: explicit sp manipulation (mov/ldr/sub sp,reg) to transfer control to a handler frame"
+  },
+  {
+   "function": "WcmCountLeadingZero",
+   "cpu": "ARM9",
+   "source": "src/op90_to65_wifi_residual_11_residual_49_r01.c",
+   "kind": "asm",
+   "reason": "clz (inline-asm only)"
+  },
+  {
+   "function": "GetCharIndex1D",
+   "cpu": "ARM9",
+   "source": "src/op90_to70_to65_nnsys_residual_34_residual_2_extra231_residual_1_r01.c",
+   "kind": "inline-asm",
+   "reason": "inlines a clz helper written as inline asm; MWCC 2.0 has no clz intrinsic and never emits clz from C"
+  },
+  {
+   "function": "vct_flush_send_buffer",
+   "cpu": "ARM9",
+   "source": "src/op90_to80_extra1474_residual_2_r01.c",
+   "kind": "inline-asm",
+   "reason": "inlines a clz helper written as inline asm; MWCC 2.0 has no clz intrinsic and never emits clz from C"
+  },
+  {
+   "function": "NNS_G2dCharCanvasInitForOBJ1D",
+   "cpu": "ARM9",
+   "source": "src/op90_to80_extra1759_residual_1_r01.c",
+   "kind": "inline-asm",
+   "reason": "inlines a clz helper written as inline asm; MWCC 2.0 has no clz intrinsic and never emits clz from C"
+  },
+  {
+   "function": "MATH_QSort",
+   "cpu": "ARM9",
+   "source": "src/op90_to90_extra2154_residual_1_r01.c",
+   "kind": "asm",
+   "reason": "ARM9 `pop {..,lr}; bx lr` epilogue (MWCC 2.0 ARM9 always pops pc; 0 occurrences); b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output); clz (inline-asm only); explicit sp manipulation (mov/ldr/sub sp,reg); swp/swpb"
+  },
+  {
+   "function": "get48bits_2",
+   "cpu": "ARM9",
+   "source": "src/op90_to90_extra2156_residual_1_r01.c",
+   "kind": "asm",
+   "reason": "u64 composed from halfword loads without the orr rX,rY,#0 that MWCC emits for every u64 composition form"
+  },
+  {
+   "function": "get48bits_3",
+   "cpu": "ARM9",
+   "source": "src/op90_to90_extra2156_residual_1_r01.c",
+   "kind": "asm",
+   "reason": "u64 composed from halfword loads without the orr rX,rY,#0 that MWCC emits for every u64 composition form"
+  },
+  {
+   "function": "get64bits",
+   "cpu": "ARM9",
+   "source": "src/op90_to90_extra2156_residual_1_r01.c",
+   "kind": "asm",
+   "reason": "u64 composed from halfword loads without the orr rX,rY,#0 that MWCC emits for every u64 composition form"
+  },
+  {
+   "function": "MTX_Copy43To44_",
+   "cpu": "ARM9",
+   "source": "src/op90_to90_extra2544_residual_1_r01.c",
+   "kind": "asm",
+   "reason": "ARM push of callee-saved regs without lr (non-MWCC prologue; 0 occurrences in MWCC 2.0 ARM code)"
+  },
+  {
+   "function": "MTX_Identity43_",
+   "cpu": "ARM9",
+   "source": "src/op90_to90_extra2544_residual_1_r01.c",
+   "kind": "asm",
+   "reason": "store-merged stm of separately materialised constant registers; MWCC CSEs constant zeros into one register, and its store merge never writes back"
+  },
+  {
+   "function": "MTX_Scale43_",
+   "cpu": "ARM9",
+   "source": "src/op90_to90_extra2544_residual_2_r01.c",
+   "kind": "asm",
+   "reason": "Thumb multi-register stmia of separately computed values; MWCC never merges Thumb stores (stmia only comes from struct copies, memset, or a single-register *p++)"
+  },
+  {
+   "function": "_020D9960",
+   "cpu": "ARM9",
+   "source": "src/op90_to90_extra2545_residual_2_r01.c",
+   "kind": "asm",
+   "reason": "SHA-1 round constants in .text read by negative pc-relative loads from DGTi_hash2_arm4_small, which saves ip in its prologue (non-AAPCS) and keeps hash state in 5-register ldm/stm with ror"
+  },
+  {
+   "function": "OSi_AlarmHandler",
+   "cpu": "ARM9",
+   "source": "src/op90_to90_os_alarm_handler_r01.c",
+   "kind": "asm",
+   "reason": "ARM9 `pop {..,lr}; bx lr` epilogue (MWCC 2.0 ARM9 always pops pc; 0 occurrences); push {r0,lr}; bl; pop {r0,lr}; bx lr: preserves r0 for the caller (non-AAPCS) and ARM9 pop-lr/bx epilogue"
+  },
+  {
+   "function": "OsCountZeroBits",
+   "cpu": "ARM9",
+   "source": "src/op90_to90_os_vramExclusive_clz_r01.c",
+   "kind": "asm",
+   "reason": "clz (inline-asm only)"
+  },
+  {
+   "function": "OSi_DoBoot",
+   "cpu": "ARM9",
+   "source": "src/op90_to90_reset_boot_r01.c",
+   "kind": "asm",
+   "reason": "11-register ldm/stm"
+  },
+  {
+   "function": "OSi_CpuClear32",
+   "cpu": "ARM9",
+   "source": "src/op90_to90_reset_clear32_r01.c",
+   "kind": "asm",
+   "reason": "ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode)"
+  },
+  {
+   "function": "OS_ResetSystem",
+   "cpu": "ARM9",
+   "source": "src/op90_to90_reset_reset_system_r01.c",
+   "kind": "asm",
+   "reason": "explicit sp manipulation (mov/ldr/sub sp,reg)"
+  },
+  {
+   "function": "_dadd",
+   "cpu": "ARM9",
+   "source": "src/op90_to90_w41415_fp_init4_prefix_r01.c",
+   "kind": "asm",
+   "reason": "floating-point and long-long runtime library assembled as one module with 84 entry points: ARM9 pop {..,lr}; bx lr epilogues, rrx, clz, mrs/msr flag results, computed add pc into unrolled division, entries that fall through into the next routine, 64 non-pool data words; the remaining entries rely on cmn and subs-fused branches that MWCC never emits"
+  },
+  {
+   "function": "sys_exit",
+   "cpu": "ARM9",
+   "source": "src/op90_to90_w41415_fp_init4_suffix_r01.c",
+   "kind": "asm",
+   "reason": "mov pc,lr return; svc/swi"
+  },
+  {
+   "function": "sys_readc",
+   "cpu": "ARM9",
+   "source": "src/op90_to90_w41415_fp_init4_suffix_r01.c",
+   "kind": "asm",
+   "reason": "svc/swi"
+  },
+  {
+   "function": "sys_writec",
+   "cpu": "ARM9",
+   "source": "src/op90_to90_w41415_fp_init4_suffix_r01.c",
+   "kind": "asm",
+   "reason": "svc/swi"
+  },
+  {
+   "function": "__rethrow",
+   "cpu": "ARM9",
+   "source": "src/op90_to91_w41419_ExitProcess_prefix_r01.c",
+   "kind": "asm",
+   "reason": "same register-capture frame as __throw"
+  },
+  {
+   "function": "__throw",
+   "cpu": "ARM9",
+   "source": "src/op90_to91_w41419_ExitProcess_prefix_r01.c",
+   "kind": "asm",
+   "reason": "mov ip,sp + manual str of r4-fp/sp/lr into a frame and b to handler: reads callee-saved regs as data, non-MWCC prologue, never returns"
+  },
+  {
+   "function": "OS_LoadContext",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/OS_context.c",
+   "kind": "asm",
+   "reason": "15-register ldm/stm (context save); explicit sp manipulation (mov/ldr/sub sp,reg); ldm/stm with ^ (user-bank regs); mrs/msr (cpsr/spsr); sp in ldm/stm register list; subs pc,lr exception return"
+  },
+  {
+   "function": "OS_SaveContext",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/OS_context.c",
+   "kind": "asm",
+   "reason": "15-register ldm/stm (context save); mrs/msr (cpsr/spsr); sp in ldm/stm register list"
+  },
+  {
+   "function": "OS_IrqHandler",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/OS_irqHandler.c",
+   "kind": "asm",
+   "reason": "ARM7 pop/ldm {..,pc} (MWCC v4T always pops lr + bx lr; 0 occurrences); conditional ldmfd sp!,{pc} early return (ARM7)"
+  },
+  {
+   "function": "OS_IrqHandler_ThreadSwitch",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/OS_irqHandler.c",
+   "kind": "asm",
+   "reason": "13-register ldm/stm; 15-register ldm/stm (context save); ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode); ARM7 pop/ldm {..,pc} (MWCC v4T always pops lr + bx lr; 0 occurrences); explicit sp manipulation (mov/ldr/sub sp,reg); ip saved in prologue (non-AAPCS; MWCC never saves ip: 0 occurrences); ldm/stm with ^ (user-bank regs); mrs/msr (cpsr/spsr); sp in ldm/stm register list; stmda"
+  },
+  {
+   "function": "OSi_DoBoot",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/OS_reset.c",
+   "kind": "asm",
+   "reason": "mov lr,ip then bx ip: forges the return address to the jump target, clears r0-r3; not expressible in C"
+  },
+  {
+   "function": "OS_DisableInterrupts",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/OS_system.c",
+   "kind": "asm",
+   "reason": "mrs/msr (cpsr/spsr)"
+  },
+  {
+   "function": "OS_DisableInterrupts_IrqAndFiq",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/OS_system.c",
+   "kind": "asm",
+   "reason": "mrs/msr (cpsr/spsr)"
+  },
+  {
+   "function": "OS_EnableInterrupts",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/OS_system.c",
+   "kind": "asm",
+   "reason": "mrs/msr (cpsr/spsr)"
+  },
+  {
+   "function": "OS_GetProcMode",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/OS_system.c",
+   "kind": "asm",
+   "reason": "mrs/msr (cpsr/spsr)"
+  },
+  {
+   "function": "OS_RestoreInterrupts",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/OS_system.c",
+   "kind": "asm",
+   "reason": "mrs/msr (cpsr/spsr)"
+  },
+  {
+   "function": "OS_RestoreInterrupts_IrqAndFiq",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/OS_system.c",
+   "kind": "asm",
+   "reason": "mrs/msr (cpsr/spsr)"
+  },
+  {
+   "function": "_start",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/crt0.c",
+   "kind": "asm",
+   "reason": "ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode); explicit sp manipulation (mov/ldr/sub sp,reg); mrs/msr (cpsr/spsr)"
+  },
+  {
+   "function": "do_autoload",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/crt0.c",
+   "kind": "asm",
+   "reason": "clobbers callee-saved r4-r7 without saving them (non-AAPCS) and tail-branches with b"
+  },
+  {
+   "function": "MI_CpuFill8",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_MI_memory_r01.c",
+   "kind": "asm",
+   "reason": "unscheduled source-order code (subs not moved into the load delay slot, orr before tst) combined with post-index and subs peepholes; MWCC schedules at every optimisation level that emits those peepholes"
+  },
+  {
+   "function": "MIi_CpuClear32",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_MI_memory_r01.c",
+   "kind": "asm",
+   "reason": "ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode)"
+  },
+  {
+   "function": "MIi_CpuClearFast",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_MI_memory_r01.c",
+   "kind": "asm",
+   "reason": "8-register ldm/stm block copy; ARM push of callee-saved regs without lr (non-MWCC prologue; 0 occurrences in MWCC 2.0 ARM code); ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode)"
+  },
+  {
+   "function": "MIi_CpuCopy32",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_MI_memory_r01.c",
+   "kind": "asm",
+   "reason": "ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode)"
+  },
+  {
+   "function": "MIi_CpuCopyFast",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_MI_memory_r01.c",
+   "kind": "asm",
+   "reason": "8-register ldm/stm block copy; ARM push of callee-saved regs without lr (non-MWCC prologue; 0 occurrences in MWCC 2.0 ARM code); ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode)"
+  },
+  {
+   "function": "MI_SwapWord",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_MI_swap_r01.c",
+   "kind": "asm",
+   "reason": "swp/swpb"
+  },
+  {
+   "function": "SVC_SoftReset",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_libsyscall_r01.c",
+   "kind": "asm",
+   "reason": "svc/swi"
+  },
+  {
+   "function": "SVC_WaitByLoop",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_libsyscall_r01.c",
+   "kind": "asm",
+   "reason": "svc/swi"
+  },
+  {
+   "function": "SVC_WaitIntr",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_libsyscall_r01.c",
+   "kind": "asm",
+   "reason": "svc/swi"
+  },
+  {
+   "function": "IsMmemExpanded",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "kind": "asm",
+   "reason": "svc/swi"
+  },
+  {
+   "function": "SVC_CpuSet",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "kind": "asm",
+   "reason": "svc/swi"
+  },
+  {
+   "function": "SVC_CpuSetFast",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "kind": "asm",
+   "reason": "svc/swi"
+  },
+  {
+   "function": "SVC_GetCRC16",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "kind": "asm",
+   "reason": "svc/swi"
+  },
+  {
+   "function": "SVC_GetPitchTable",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "kind": "asm",
+   "reason": "svc/swi"
+  },
+  {
+   "function": "SVC_GetSinTable",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "kind": "asm",
+   "reason": "svc/swi"
+  },
+  {
+   "function": "SVC_GetVolumeTable",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "kind": "asm",
+   "reason": "svc/swi"
+  },
+  {
+   "function": "SVC_Sqrt",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "kind": "asm",
+   "reason": "svc/swi"
+  },
+  {
+   "function": "SVC_UncompressHuffmanFromDevice",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "kind": "asm",
+   "reason": "svc/swi"
+  },
+  {
+   "function": "SVC_UncompressLZ16FromDevice",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "kind": "asm",
+   "reason": "svc/swi"
+  },
+  {
+   "function": "SVC_UncompressLZ8",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "kind": "asm",
+   "reason": "svc/swi"
+  },
+  {
+   "function": "SVC_UncompressRL16FromDevice",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "kind": "asm",
+   "reason": "svc/swi"
+  },
+  {
+   "function": "SVC_UncompressRL8",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "kind": "asm",
+   "reason": "svc/swi"
+  },
+  {
+   "function": "SVC_UnpackBits",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "kind": "asm",
+   "reason": "svc/swi"
+  },
+  {
+   "function": "SVC_WaitVBlankIntr",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_op90_libsyscall_residual_1_r01.c",
+   "kind": "asm",
+   "reason": "Thumb svc/swi system-call stubs (SVC_WaitVBlankIntr, SVC_Halt, SVC_Sleep, SVC_ChangeSoundBias, SVC_SetSoundBias, SVC_ResetSoundBias, SVC_Div, SVC_DivRem) at 2-byte-aligned entry points"
+  },
+  {
+   "function": "__VENEER_MATH_CountPopulation",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_op90_op90_to90_arm7_sub_ext_wram_residual_20_residual_2_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to MATH_CountPopulation: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_MI_WaitDma",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_op90_op90_to90_arm7_sub_ext_wram_residual_63_residual_1_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to MI_WaitDma: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER__u32_div_f",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_14_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to _u32_div_f: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER__s32_div_f",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_15_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to _s32_div_f: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_CancelVAlarm",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_19_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_CancelVAlarm: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_SetVAlarm",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_19_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_SetVAlarm: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_MI_CpuFill8",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_1_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to MI_CpuFill8: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_MIi_CpuCopy16",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_1_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to MIi_CpuCopy16: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_CancelAlarm",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_1_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_CancelAlarm: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_ExitThread",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_1_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_ExitThread: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_GetTick",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_1_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_GetTick: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_SetAlarm",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_1_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_SetAlarm: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_LockMutex",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_20_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_LockMutex: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_UnlockMutex",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_20_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_UnlockMutex: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_Sleep",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_21_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_Sleep: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_IsThreadTerminated",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_26_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_IsThreadTerminated: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_JoinThread",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_26_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_JoinThread: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER__ll_udiv",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_32_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to _ll_udiv: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_SetPeriodicAlarm",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_36_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_SetPeriodicAlarm: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_WMSP_Init",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_op90_to90_arm7_sub_wram_2_residual_22_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to WMSP_Init: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_CreateThread",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_CreateThread: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_InitMessageQueue",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_InitMessageQueue: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_InitMutex",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_InitMutex: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_InitVAlarm",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_InitVAlarm: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_IsVAlarmAvailable",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_IsVAlarmAvailable: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_WakeupThreadDirect",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_WakeupThreadDirect: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_PXI_Init",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to PXI_Init: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_PXI_SetFifoRecvCallback",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to PXI_SetFifoRecvCallback: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_ReceiveMessage",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_2_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_ReceiveMessage: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_SendMessage",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_2_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_SendMessage: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_Terminate",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_2_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_Terminate: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_SND_BeginSleep",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_2_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to SND_BeginSleep: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_WMSP_GetBuffer4Callback2Wm9",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_2_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to WMSP_GetBuffer4Callback2Wm9: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_WMSP_ReturnResult2Wm9",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_2_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to WMSP_ReturnResult2Wm9: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_MI_CpuCopy8",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_3_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to MI_CpuCopy8: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_MIi_CpuClear16",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_WM_sp_residual_4_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to MIi_CpuClear16: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "OSi_AlarmHandler",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_alarm_handler_r01.c",
+   "kind": "asm",
+   "reason": "push {r0,lr} ... pop {r0,lr}: preserves r0 for the interrupt dispatcher (non-AAPCS; MWCC pads with r3)"
+  },
+  {
+   "function": "__VENEER_OS_DisableInterrupts",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_current1_wm_helpers_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_DisableInterrupts: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_DisableScheduler",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_current1_wm_helpers_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_DisableScheduler: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_EnableScheduler",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_current1_wm_helpers_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_EnableScheduler: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_RestoreInterrupts",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_current1_wm_helpers_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_RestoreInterrupts: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_SetThreadPriority",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_current1_wm_helpers_residual_1_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_SetThreadPriority: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "OS_UnLockCartridge",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_spinlock_alias_cartridge_r01.c",
+   "kind": "asm",
+   "reason": "tail jump via bx r1; the 5 ARM7 bx r1 hits in MWCC code are mov lr,pc indirect calls, never tail jumps"
+  },
+  {
+   "function": "OS_GetLockID",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_spinlock_bitmap_get_r01.c",
+   "kind": "asm",
+   "reason": "loads -3 from the literal pool (ldr r0,=0xfffffffd) where MWCC emits mvn r0,#2; mask shifts kept unfolded"
+  },
+  {
+   "function": "OS_ReleaseLockID",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_spinlock_bitmap_release_r01.c",
+   "kind": "asm",
+   "reason": "mov rX,#0x80000000; mov rX,rX,lsr rN kept unfolded with pl/mi predicates; MWCC always folds a single-use shift into the orr operand and hoists the load"
+  },
+  {
+   "function": "__VENEER_WMSP_GetAllowedChannel",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_23_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to WMSP_GetAllowedChannel: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_MIi_CpuClearFast",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_25_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to MIi_CpuClearFast: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_GetLockID",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_25_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_GetLockID: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_DisableIrqMask",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_27_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_DisableIrqMask: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_EnableIrqMask",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_27_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_EnableIrqMask: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_FreeToHeap",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_2_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_FreeToHeap: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_MIi_CpuClear32",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_30_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to MIi_CpuClear32: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_IsAlarmAvailable",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_35_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_IsAlarmAvailable: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_AllocFromHeap",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_3_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_AllocFromHeap: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_SetIrqFunction",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_44_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_SetIrqFunction: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_OS_CreateAlarm",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_4_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to OS_CreateAlarm: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_MIi_CpuCopy32",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_52_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to MIi_CpuCopy32: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_NVRAM_ReadDataBytes",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_66_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to NVRAM_ReadDataBytes: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_SPI_Lock",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_66_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to SPI_Lock: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_SPI_Unlock",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_66_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to SPI_Unlock: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "MIC_IrqHandler",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_10_r01.c",
+   "kind": "asm",
+   "reason": "ARM7 pop/ldm {..,pc} (MWCC v4T always pops lr + bx lr; 0 occurrences); explicit sp manipulation (mov/ldr/sub sp,reg); ldm/stm with ^ (user-bank regs); mrs/msr (cpsr/spsr); sp in ldm/stm register list"
+  },
+  {
+   "function": "RTCi_GpioEnd",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_21_r01.c",
+   "kind": "asm",
+   "reason": "orr r0,r0,#0 no-op (macro-expanded asm; MWCC folds x|0)"
+  },
+  {
+   "function": "RTCi_GpioReceiveData",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_21_r01.c",
+   "kind": "asm",
+   "reason": "push {r0,r1} mid-function scratch save + orr r0,r0,#0"
+  },
+  {
+   "function": "RTCi_GpioSendCommand",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_21_r01.c",
+   "kind": "asm",
+   "reason": "orr r0,r0,#0 no-op (macro-expanded asm)"
+  },
+  {
+   "function": "RTCi_GpioSendData",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_21_r01.c",
+   "kind": "asm",
+   "reason": "push {r0,r1}/pop {r0,r1} mid-function as scratch save (push without lr; only {r0-r3} varargs pushes exist in MWCC ARM7 code) + orr r0,r0,#0"
+  },
+  {
+   "function": "RTCi_GpioStart",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_21_r01.c",
+   "kind": "asm",
+   "reason": "bic #4 followed by orr #4 of the same bit and register-only mov/subs/bne delay loops (macro-expanded assembly; MWCC folds (x & ~4) | 4)"
+  },
+  {
+   "function": "__VENEER_WL_Terminate",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_23_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to WL_Terminate: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_WMSP_CancelAllAlarms",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_23_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to WMSP_CancelAllAlarms: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_WMSP_CancelVAlarm",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_23_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to WMSP_CancelVAlarm: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_WMSP_GetIndicateThread",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_23_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to WMSP_GetIndicateThread: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_WMSP_GetRequestThread",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_23_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to WMSP_GetRequestThread: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "_ll_mod",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_24_r01.c",
+   "kind": "asm",
+   "reason": "long-long and 32-bit division runtime assembled as one module: ip saved in the prologue (non-AAPCS), entry stubs branching into shared bodies, fall-through entry points, computed add pc into unrolled division"
+  },
+  {
+   "function": "MicTimerHandler",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_8_r02.c",
+   "kind": "asm",
+   "reason": "push {r4-r7,lr} with no sub sp: a 20-byte frame; every MWCC version keeps ARM7 frames 8-byte aligned (odd pushes are padded with r3 or sub sp)"
+  },
+  {
+   "function": "__VENEER_NVRAM_ReadStatusRegister",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to91_w41425_flashwait_suffix_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to NVRAM_ReadStatusRegister: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_NVRAM_SoftwareReset",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to91_w41425_flashwait_suffix_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to NVRAM_SoftwareReset: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "__VENEER_PM_SetLEDPattern",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to91_w41430_WMSP_SetParentParam_prefix_r01.c",
+   "kind": "veneer",
+   "reason": "interworking/long-branch trampoline to PM_SetLEDPattern: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
+  },
+  {
+   "function": "_start_ModuleParams",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to91_w41567_startup_suffix_residual_1_r01.c",
+   "kind": "asm",
+   "reason": "pure data (module-params struct) in .text; pure data in .text (not code)"
+  },
+  {
+   "function": "RtcWaitBusy",
+   "cpu": "ARM9",
+   "source": "src/op90_to65_to65_nitro_unified_residual_23_extra21_residual_11_r01.c",
+   "kind": "asm",
+   "reason": "address held in ip while r1-r3 are free; MWCC gives each value the lowest free register (ip only once r0-r3 are taken), read from the compiler and traced (p02, q02b)"
+  },
+  {
+   "function": "MicWaitBusy",
+   "cpu": "ARM9",
+   "source": "src/op90_to65_to65_nitro_unified_residual_23_extra21_residual_5_r01.c",
+   "kind": "asm",
+   "reason": "address held in ip while r1-r3 are free; MWCC gives each value the lowest free register (ip only once r0-r3 are taken), read from the compiler and traced (p02, q02b)"
+  },
+  {
+   "function": "OS_SpinWait",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_system.c",
+   "kind": "asm",
+   "reason": "subs followed by a carry branch (bcs); MWCC only folds sub into compare-with-zero for eq/ne/mi/pl/lt/ge, 0 occurrences in 34,138 clean C functions (p05, q05b)"
+  },
+  {
+   "function": "OSi_WaitVCount0",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_init.c",
+   "kind": "asm",
+   "reason": "ip used as the register base with r2/r3 free and the base address stored as the IME value; never produced by MWCC's lowest-free-register allocation (p05, q05b)"
+  },
+  {
+   "function": "MI_CpuCopy8",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_MI_memory_r01.c",
+   "kind": "asm",
+   "reason": "subs followed by blo/bhs carry branches and ip temporaries while r3 is free; byte-identical to the hand-written ARM9 MI_CpuCopy8 once its branch sequences are collapsed (p06, q06b)"
+  },
+  {
+   "function": "detect_main_memory_size",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/op90_to91_w41567_startup_suffix_r01.c",
+   "kind": "asm",
+   "reason": "unscheduled source-order code with the loaded value in ip ahead of named variables; MWCC always numbers the load last and schedules at the levels that emit movne/bne (q03b); crt0 neighbour of hand-written _start/do_autoload"
+  },
+  {
+   "function": "OS_InitContext",
+   "cpu": "ARM9",
+   "source": "lib/NitroSDK/src/os/os_context.c",
+   "kind": "asm",
+   "reason": "ands with a dead destination: MWCC's peephole always rewrites it to tst, traced in the compiler; the only dead ands in the build are hand-written (q01b, p01)"
+  },
+  {
+   "function": "OS_InitContext",
+   "cpu": "ARM7",
+   "source": "sub/lib/src/OS_context.c",
+   "kind": "asm",
+   "reason": "ands with a dead destination: MWCC's peephole always rewrites it to tst, traced in the compiler; the only dead ands in the build are hand-written (q01b, p01)"
+  },
+  {
+   "function": "MTX_RotZ33_",
+   "cpu": "ARM9",
+   "source": "src/op90_to90_extra2338_residual_1_r01.c",
+   "kind": "asm",
+   "reason": "Thumb stmia of computed values (sin/0, -sin/cos) with no preceding load; MWCC Thumb only emits multi-register stmia for struct copies, inline memset zeros or single-register post-increment (p04, q04b)"
+  },
+  {
+   "function": "MTX_RotY33_",
+   "cpu": "ARM9",
+   "source": "src/op90_to90_extra2338_residual_1_r01.c",
+   "kind": "asm",
+   "reason": "Thumb post-RA scheduler keeps all stores in one aliasing chain, so the sin store always precedes lsls; every source order that changes this swaps r2/r3 (2 workers, ~2,750 variants, traced); hand-written sibling of MTX_RotZ33_ with register parameters"
+  }
+ ]
 }

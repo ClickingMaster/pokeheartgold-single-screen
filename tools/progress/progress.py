@@ -213,7 +213,7 @@ def source_name(symbol):
     return symbol.split('(', 1)[0].split('::')[-1].strip()
 
 
-def split_original_asm(path, entries):
+def split_original_asm(path, entries, cpu=None):
     """Apply original-assembly entries to one source file.
 
     Returns ({map symbol: kind} for entries the source confirms, whether any
@@ -225,7 +225,7 @@ def split_original_asm(path, entries):
     unused after removing the listed functions are dropped; any other assembly keeps
     the remainder mixed.
     """
-    text = _strip_comments(path)
+    text = _select_cpu(_strip_comments(path), cpu)
     local_headers = []
     for name in re.findall(r'^\s*#\s*include\s+"([^"]+)"', text, re.M):
         for base in (path.parent, path.parent.parent / 'include'):
@@ -294,6 +294,40 @@ def split_original_asm(path, entries):
     return applied, other
 
 
+CPU_MACROS = {'ARM9': 'SDK_ARM9', 'ARM7': 'SDK_ARM7'}
+
+
+def _select_cpu(text, cpu):
+    """Blank the branches of top-level #ifdef/#ifndef SDK_ARM9 / SDK_ARM7 blocks that this
+    CPU does not compile, keeping offsets. Other conditionals are left untouched."""
+    if cpu not in CPU_MACROS:
+        return text
+    lines = text.split('\n')
+    stack = []  # per open #if: (is_cpu_block, active_now)
+    out = []
+    for line in lines:
+        m = re.match(r'\s*#\s*(ifdef|ifndef|if|else|elif|endif)\b\s*(\w*)', line)
+        if m:
+            kw, arg = m.group(1), m.group(2)
+            if kw in ('ifdef', 'ifndef'):
+                cpu_block = arg in CPU_MACROS.values()
+                active = (arg == CPU_MACROS[cpu]) == (kw == 'ifdef') if cpu_block else True
+                stack.append([cpu_block, active])
+            elif kw == 'if':
+                stack.append([False, True])
+            elif kw == 'else' and stack and stack[-1][0]:
+                stack[-1][1] = not stack[-1][1]
+            elif kw == 'elif' and stack and stack[-1][0]:
+                stack[-1] = [False, True]  # unknown form: stop selecting
+            elif kw == 'endif' and stack:
+                stack.pop()
+            out.append(line)
+            continue
+        live = all(active for cpu_block, active in stack if cpu_block)
+        out.append(line if live else re.sub(r'\S', ' ', line))
+    return '\n'.join(out)
+
+
 def split_mixed(root, row, symbols, entries):
     """Split a mixed object row by original-assembly functions and the remainder."""
     if not entries:
@@ -301,7 +335,8 @@ def split_mixed(root, row, symbols, entries):
     # An entry counts only when the object really has bytes for that symbol.
     present = {name for name, _, _, _ in symbols}
     applied, other_asm = split_original_asm(root / row['source'],
-                                            {name: kind for name, kind in entries.items() if name in present})
+                                            {name: kind for name, kind in entries.items() if name in present},
+                                            row.get('cpu'))
     spans = defaultdict(lambda: defaultdict(list))
     names = defaultdict(set)
     for name, family, start, stop in symbols:
