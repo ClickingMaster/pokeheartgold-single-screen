@@ -16,8 +16,11 @@ import subprocess
 CODE = {'.text', '.init', '.itcm', '.sinit', '.wram'}
 ROW = re.compile(r'\s+([0-9A-Fa-f]{8}) ([0-9A-Fa-f]{8}) (\.\S+)\s+(.+?)\s+\(([^)]+)\)')
 SOURCE_LANGUAGES = {'.c': 'c', '.cpp': 'cpp', '.s': 'asm'}
-COLORS = {'c': '#35b85a', 'cpp': '#35a9b8', 'mixed': '#e4ad42', 'asm': '#455268', 'unknown': '#b875ae'}
-LABELS = {'c': 'C-only source', 'cpp': 'C++-only source', 'mixed': 'C/C++ with assembly', 'asm': 'Assembly', 'unknown': 'Unresolved source'}
+COLORS = {'c': '#35b85a', 'cpp': '#35a9b8', 'mixed': '#e4ad42', 'asm': '#455268', 'generated': '#8d7bb0', 'unknown': '#b875ae'}
+LABELS = {'c': 'C-only source', 'cpp': 'C++-only source', 'mixed': 'C/C++ with assembly', 'asm': 'Assembly',
+          'generated': 'Build-tool generated', 'unknown': 'Unresolved source'}
+# Assembly written into the build directory by a build tool (dsprot's elfcoder), not source.
+GENERATED_PREFIXES = ('lib/dsprot/build/',)
 
 
 def code_family(section):
@@ -83,7 +86,7 @@ def classify(root, paths):
         return 'unknown', None
     path = next(iter(paths))
     if path.endswith('.s'):
-        return 'asm', path
+        return ('generated' if path.startswith(GENERATED_PREFIXES) else 'asm'), path
     text = (root / path).read_text()
     text = re.sub(r'/\*.*?\*/|//[^\n]*', '', text, flags=re.S)
     # Conservatively mark the entire object mixed, including conditional ASM.
@@ -97,8 +100,13 @@ def source_coverage(totals):
     c_bytes, cpp_bytes = totals.get('c', 0), totals.get('cpp', 0)
     def portion(size):
         return dict(bytes=size, percent=100 * size / denominator if denominator else 0)
+    source_bytes = denominator - totals.get('generated', 0)
+    with_asm = c_bytes + cpp_bytes + totals.get('mixed', 0)
     return dict(denominator_bytes=denominator, c=portion(c_bytes),
-                cpp=portion(cpp_bytes), combined=portion(c_bytes + cpp_bytes))
+                cpp=portion(cpp_bytes), combined=portion(c_bytes + cpp_bytes),
+                with_asm_functions=portion(with_asm),
+                source_files_in_c=dict(bytes=with_asm, of=source_bytes,
+                                       percent=100 * with_asm / source_bytes if source_bytes else 0))
 
 
 def parse_map(path, root, cpu):
@@ -157,23 +165,30 @@ def layout(items, x, y, width, height):
 
 def svg(report):
     total = sum(report['totals'].values())
-    pct = source_coverage(report['totals'])['combined']['percent']
+    coverage = source_coverage(report['totals'])
+    pct = coverage['combined']['percent']
     game_title = 'HeartGold' if report['game'] == 'heartgold.us' else 'SoulSilver'
     esc = html.escape
     out = ['<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="780" viewBox="0 0 1200 780" role="img">',
            f'<title>{game_title} decompilation source-language treemap</title>',
-           '<desc>Rectangle area represents mapped code bytes. Green is C-only source, teal is C++-only source, amber is mixed source and assembly, slate is assembly, purple is unresolved. Hover for file details.</desc>',
+           '<desc>Rectangle area represents mapped code bytes. Green is C-only source, teal is C++-only source, amber is mixed source and assembly, slate is assembly, lilac is build-tool generated, purple is unresolved. Hover for file details.</desc>',
            '<rect width="1200" height="780" rx="16" fill="#101722"/>',
            '<g font-family="system-ui, sans-serif" fill="#edf2fa">',
            f'<text x="28" y="42" font-size="25" font-weight="700">{game_title} · decompilation</text>',
            f'<text x="1172" y="42" text-anchor="end" font-size="22">{pct:.2f}% C + C++ source</text>',
            f'<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · {esc(report["commit"][:9])} · ARM9 + ARM7 · {total:,} mapped code bytes</text>']
+    if report['totals'].get('mixed') or report['totals'].get('generated'):
+        files = coverage['source_files_in_c']['percent']
+        out += [f'<text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">'
+                f'{coverage["with_asm_functions"]["percent"]:.2f}% incl. asm functions · {files:.2f}% of source files in C/C++</text>']
+    statuses = [s for s in COLORS if report['totals'].get(s, 0)]
+    step = 1144 // max(len(statuses), 1)
     x = 28
-    for status, color in COLORS.items():
-        percent = report['totals'].get(status, 0) / total * 100
-        out += [f'<rect x="{x}" y="91" width="12" height="12" rx="2" fill="{color}"/>',
+    for status in statuses:
+        percent = report['totals'][status] / total * 100
+        out += [f'<rect x="{x}" y="91" width="12" height="12" rx="2" fill="{COLORS[status]}"/>',
                 f'<text x="{x+19}" y="102" font-size="14">{LABELS[status]} {percent:.1f}%</text>']
-        x += 228
+        x += step
     groups = defaultdict(list)
     for item in report['objects']:
         groups[item['cpu'], item['module']].append(item)

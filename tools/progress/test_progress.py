@@ -207,7 +207,7 @@ class DerivedObjectTests(unittest.TestCase):
                             '  02000020 00000010 .text g (unit_decrypter_encoded.o)\n')
             rows = {r['object']: (r['status'], r['source']) for r in parse_map(path, root, 'ARM9')}
             self.assertEqual(rows['unit_encrypted.o'], ('c', 'lib/dsprot/src/unit.c'))
-            self.assertEqual(rows['unit_decrypter_encoded.o'], ('asm', 'lib/dsprot/build/unit_decrypter.s'))
+            self.assertEqual(rows['unit_decrypter_encoded.o'], ('generated', 'lib/dsprot/build/unit_decrypter.s'))
 
 
 class CppCoverageTests(unittest.TestCase):
@@ -273,6 +273,25 @@ class CppCoverageTests(unittest.TestCase):
         self.assertIn('C++-only source 30.0%', rendered)
         self.assertIn('C-only source 20.0%', rendered)
         self.assertIn('Mixed objects are excluded', rendered)
+
+    def test_build_generated_assembly_is_its_own_status_and_not_source(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            (root / 'lib/dsprot/build').mkdir(parents=True)
+            (root / 'lib/dsprot/build/x_decoder.s').write_text('.text\n')
+            (root / 'asm').mkdir()
+            (root / 'asm/y.s').write_text('.text\n')
+            self.assertEqual(classify(root, {'lib/dsprot/build/x_decoder.s'})[0], 'generated')
+            self.assertEqual(classify(root, {'asm/y.s'})[0], 'asm')
+        cov = source_coverage({'c': 60, 'cpp': 20, 'mixed': 10, 'generated': 10})
+        self.assertAlmostEqual(cov['combined']['percent'], 80.0)
+        self.assertAlmostEqual(cov['with_asm_functions']['percent'], 90.0)
+        self.assertAlmostEqual(cov['source_files_in_c']['percent'], 100.0)
+        rendered = svg(dict(game='heartgold.us', commit='abc', totals={'c': 80, 'mixed': 10, 'generated': 10}, objects=[]))
+        ET.fromstring(rendered)
+        self.assertIn('80.00% C + C++ source', rendered)
+        self.assertIn('100.00% of source files in C/C++', rendered)
+        self.assertIn('Build-tool generated 10.0%', rendered)
 
 
 if __name__ == '__main__':

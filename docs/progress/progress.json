@@ -1,11 +1,11 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "2c6cd567fee2026a791eeba9a10a73e009328ce6",
+  "commit": "236b000116c4b27fc79f5380c266aa2b388e3643",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "863e6c8f033402df6c02f17d5af8e9174144187f41931ae56845aeae15c9fc94",
+    "ARM9": "312ef6428232ecdca8991dfcc102f1f3dcd3c3c32722305ea08b2875c1a2626b",
     "ARM7": "01aa6d6bb263b5752b0d787a82f224dafc986f80c6649dc28738b84fe5ebc992"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
@@ -13,7 +13,7 @@
     "c": 3989532,
     "mixed": 28586,
     "cpp": 54972,
-    "asm": 2264
+    "generated": 2264
   },
   "coverage": {
     "denominator_bytes": 4075354,
@@ -28,6 +28,15 @@
     "combined": {
       "bytes": 4044504,
       "percent": 99.24301054583233
+    },
+    "with_asm_functions": {
+      "bytes": 4073090,
+      "percent": 99.9444465437849
+    },
+    "source_files_in_c": {
+      "bytes": 4073090,
+      "of": 4073090,
+      "percent": 100.0
     }
   },
   "objects": [
@@ -65372,7 +65381,7 @@
       "module": "ds_protect",
       "object": "coretests_decrypter_decoder.o",
       "bytes": 76,
-      "status": "asm",
+      "status": "generated",
       "source": "lib/dsprot/build/coretests_decrypter_decoder.s"
     },
     {
@@ -65380,7 +65389,7 @@
       "module": "ds_protect",
       "object": "dsprot_main_decrypter_decoder.o",
       "bytes": 80,
-      "status": "asm",
+      "status": "generated",
       "source": "lib/dsprot/build/dsprot_main_decrypter_decoder.s"
     },
     {
@@ -65388,7 +65397,7 @@
       "module": "ds_protect",
       "object": "dsprot_main_decrypter_encoded.o",
       "bytes": 720,
-      "status": "asm",
+      "status": "generated",
       "source": "lib/dsprot/build/dsprot_main_decrypter.s"
     },
     {
@@ -65404,7 +65413,7 @@
       "module": "ds_protect",
       "object": "encryptor_decoder.o",
       "bytes": 44,
-      "status": "asm",
+      "status": "generated",
       "source": "lib/dsprot/build/encryptor_decoder.s"
     },
     {
@@ -65420,7 +65429,7 @@
       "module": "ds_protect",
       "object": "integrity_decrypter_decoder.o",
       "bytes": 60,
-      "status": "asm",
+      "status": "generated",
       "source": "lib/dsprot/build/integrity_decrypter_decoder.s"
     },
     {
@@ -65428,7 +65437,7 @@
       "module": "ds_protect",
       "object": "integrity_decrypter_encoded.o",
       "bytes": 480,
-      "status": "asm",
+      "status": "generated",
       "source": "lib/dsprot/build/integrity_decrypter.s"
     },
     {
@@ -65444,7 +65453,7 @@
       "module": "ds_protect",
       "object": "mac_owner_decrypter_encoded.o",
       "bytes": 240,
-      "status": "asm",
+      "status": "generated",
       "source": "lib/dsprot/build/mac_owner_decrypter.s"
     },
     {
@@ -65460,7 +65469,7 @@
       "module": "ds_protect",
       "object": "rc4_decoder.o",
       "bytes": 84,
-      "status": "asm",
+      "status": "generated",
       "source": "lib/dsprot/build/rc4_decoder.s"
     },
     {
@@ -65476,7 +65485,7 @@
       "module": "ds_protect",
       "object": "rom_test_decrypter_encoded.o",
       "bytes": 240,
-      "status": "asm",
+      "status": "generated",
       "source": "lib/dsprot/build/rom_test_decrypter.s"
     },
     {
@@ -65492,7 +65501,7 @@
       "module": "ds_protect",
       "object": "rom_util_decrypter_encoded.o",
       "bytes": 240,
-      "status": "asm",
+      "status": "generated",
       "source": "lib/dsprot/build/rom_util_decrypter.s"
     },
     {
