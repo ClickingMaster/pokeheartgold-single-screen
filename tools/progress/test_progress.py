@@ -290,7 +290,7 @@ class CppCoverageTests(unittest.TestCase):
         rendered = svg(dict(game='heartgold.us', commit='abc', totals={'c': 80, 'mixed': 10, 'generated': 10}, objects=[]))
         ET.fromstring(rendered)
         self.assertIn('80.00% C + C++ source', rendered)
-        self.assertIn('100.00% of source files in C/C++', rendered)
+        self.assertIn('100% of source in C/C++', rendered)
         self.assertIn('Build-tool generated 10.0%', rendered)
 
 

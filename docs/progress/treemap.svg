@@ -4,9 +4,9 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="1172" y="42" text-anchor="end" font-size="22">99.24% C + C++ source</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 236b00011 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
-<text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">99.94% incl. asm functions · 100.00% of source files in C/C++</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 739258c4c · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
+<text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">99.24% C + C++ source · 99.94% incl. asm functions</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
 <text x="47" y="102" font-size="14">C-only source 97.9%</text>
 <rect x="314" y="91" width="12" height="12" rx="2" fill="#35a9b8"/>

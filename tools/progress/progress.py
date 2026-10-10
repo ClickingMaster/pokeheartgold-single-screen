@@ -175,12 +175,15 @@ def svg(report):
            '<rect width="1200" height="780" rx="16" fill="#101722"/>',
            '<g font-family="system-ui, sans-serif" fill="#edf2fa">',
            f'<text x="28" y="42" font-size="25" font-weight="700">{game_title} · decompilation</text>',
-           f'<text x="1172" y="42" text-anchor="end" font-size="22">{pct:.2f}% C + C++ source</text>',
            f'<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · {esc(report["commit"][:9])} · ARM9 + ARM7 · {total:,} mapped code bytes</text>']
+    files = coverage['source_files_in_c']['percent']
     if report['totals'].get('mixed') or report['totals'].get('generated'):
-        files = coverage['source_files_in_c']['percent']
-        out += [f'<text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">'
-                f'{coverage["with_asm_functions"]["percent"]:.2f}% incl. asm functions · {files:.2f}% of source files in C/C++</text>']
+        out += [f'<text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">{files:.0f}% of source in C/C++</text>' if files >= 99.995 else
+                f'<text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">{files:.2f}% of source in C/C++</text>',
+                f'<text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">{pct:.2f}% C + C++ source · '
+                f'{coverage["with_asm_functions"]["percent"]:.2f}% incl. asm functions</text>']
+    else:
+        out += [f'<text x="1172" y="42" text-anchor="end" font-size="22">{pct:.2f}% C + C++ source</text>']
     statuses = [s for s in COLORS if report['totals'].get(s, 0)]
     step = 1144 // max(len(statuses), 1)
     x = 28
