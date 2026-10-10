@@ -66,17 +66,18 @@ def source_index(root, arm7=False):
             p = (base / derived.get(obj, obj)).with_suffix(ext)
             if p.is_file():
                 linked[Path(obj).name].add(p.relative_to(root).as_posix())
-        # dsprot links encrypted/encoded copies of objects compiled from its C sources.
+        # dsprot links encrypted/encoded copies of objects compiled from its C sources
+        # (the decrypter stubs from src/*_decrypter.c).
         m = re.fullmatch(r'lib/dsprot/(\w+?)_(?:encrypted|encoded)\.o', obj)
-        if m and not m[1].endswith('_decrypter'):
+        if m:
             p = base / 'lib/dsprot/src' / (m[1] + '.c')
             if p.is_file():
                 linked[Path(obj).name].add(p.relative_to(root).as_posix())
-        # Encoded decrypter stubs are assembled from elfcoder-generated assembly.
-        if m and m[1].endswith('_decrypter'):
-            p = base / 'lib/dsprot/build' / (m[1] + '.s')
-            if p.is_file():
-                linked[Path(obj).name].add(p.relative_to(root).as_posix())
+            # Without a stub source, the stubs are assembled from elfcoder-generated assembly.
+            elif m[1].endswith('_decrypter'):
+                p = base / 'lib/dsprot/build' / (m[1] + '.s')
+                if p.is_file():
+                    linked[Path(obj).name].add(p.relative_to(root).as_posix())
     candidates.update(linked)
     return candidates
 

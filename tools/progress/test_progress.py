@@ -209,6 +209,29 @@ class DerivedObjectTests(unittest.TestCase):
             self.assertEqual(rows['unit_encrypted.o'], ('c', 'lib/dsprot/src/unit.c'))
             self.assertEqual(rows['unit_decrypter_encoded.o'], ('generated', 'lib/dsprot/build/unit_decrypter.s'))
 
+    def test_dsprot_stub_sources_are_asm_functions_in_c(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root / 'lib/dsprot/src').mkdir(parents=True)
+            (root / 'lib/dsprot/build').mkdir()
+            (root / 'lib/dsprot/src/unit.c').write_text('void f(void) {}')
+            (root / 'lib/dsprot/src/unit_decrypter.c').write_text('asm void g(void) { bx lr }')
+            (root / 'lib/dsprot/src/unit_decoder.c').write_text('static asm void h(void) { bx lr }')
+            (root / 'lib/dsprot/build/unit_decrypter.ref.s').write_text('')
+            (root / 'lib/dsprot/build/unit_decoder.ref.s').write_text('')
+            (root / 'main.lsf').write_text('Object lib/dsprot/unit_encrypted.o\n'
+                                           'Object lib/dsprot/unit_decrypter_encoded.o\n'
+                                           'Object lib/dsprot/unit_decoder.o\n')
+            path = root / 'test.xMAP'
+            path.write_text('# .main\n'
+                            '  02000000 00000020 .text f (unit_encrypted.o)\n'
+                            '  02000020 00000010 .text g (unit_decrypter_encoded.o)\n'
+                            '  02000030 00000010 .text h (unit_decoder.o)\n')
+            rows = {r['object']: (r['status'], r['source']) for r in parse_map(path, root, 'ARM9')}
+            self.assertEqual(rows['unit_encrypted.o'], ('c', 'lib/dsprot/src/unit.c'))
+            self.assertEqual(rows['unit_decrypter_encoded.o'], ('mixed', 'lib/dsprot/src/unit_decrypter.c'))
+            self.assertEqual(rows['unit_decoder.o'], ('mixed', 'lib/dsprot/src/unit_decoder.c'))
+
 
 class CppCoverageTests(unittest.TestCase):
     def test_plain_cpp_is_explicit_and_assembly_cpp_is_mixed(self):
