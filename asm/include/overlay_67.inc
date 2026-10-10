@@ -102,6 +102,6 @@
 .public MI_CpuCopy8
 .public memset
 .public gSystem
-.public ov67_021E5900
-.public ov67_021E5968
-.public ov67_021E5984
+.public BattleRoomResults_Init
+.public BattleRoomResults_Exit
+.public BattleRoomResults_Main

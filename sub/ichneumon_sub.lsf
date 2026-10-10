@@ -61,57 +61,9 @@ Autoload WRAM
 	Object lib/src/op90_to90_a7_next1668_o03_residual_2_r01.o
 	Object lib/src/to90_a7_next1668_o03_run03.o
 	Object asm/to90_arm7_sub_wram_1_anchor.o
-	Object lib/src/to90_arm7_current1_snd_channels_v8_run01.o
-	Object lib/src/op90_to90_arm7_current1_snd_channels_v8_residual_1_r01.o
-	Object lib/src/to90_arm7_current1_snd_channels_v8_run02.o
-	Object lib/src/to90_a7_next1668_o04_run01.o
-	Object lib/src/to90_arm7_sub_wram_1_run01.o
-	Object lib/src/to90_arm7_sub_wram_1_run97.o
-	Object lib/src/to90_arm7_sub_wram_1_run02.o
-	Object lib/src/to90_arm7_sub_wram_1_run98.o
-	Object lib/src/to90_arm7_sub_wram_1_run03.o
-	Object lib/src/to90_a7_next1668_o05_run01.o
-	Object lib/src/to90_arm7_sub_wram_1_run04.o
-	Object lib/src/to91_arm7_timer41486_run01.o
-	Object lib/src/op90_to91_arm7_timer41486_veneer_r01.o
-	Object lib/src/to90_arm7_sub_wram_1_run05.o
-	Object lib/src/op90_to90_arm7_sub_wram_1_residual_4_r01.o
-	Object lib/src/to90_arm7_sub_wram_1_run99.o
-	Object lib/src/to90_a7_next1668_o06_run01.o
-	Object lib/src/to90_arm7_sub_wram_1_run06.o
-	Object lib/src/to90_arm7_sub_wram_1_run07.o
-	Object lib/src/to90_arm7_sub_wram_1_run08.o
-	Object lib/src/to90_arm7_sub_wram_1_run09.o
-	Object lib/src/to90_arm7_sub_wram_1_run10.o
-	Object lib/src/to90_arm7_sub_wram_1_run11.o
-	Object lib/src/to90_arm7_sub_wram_1_run106.o
-	Object lib/src/op90_to90_arm7_sub_wram_1_residual_6_r01.o
-	Object lib/src/to90_arm7_sub_wram_1_run12.o
-	Object lib/src/to90_arm7_sub_wram_1_run13.o
-	Object lib/src/to90_arm7_sub_wram_1_run14.o
-	Object lib/src/to90_arm7_sub_wram_1_run101.o
-	Object lib/src/to90_arm7_sub_wram_1_run15.o
-	Object lib/src/to90_arm7_sub_wram_1_run16.o
-	Object lib/src/to90_arm7_sub_wram_1_run17.o
-	Object lib/src/to90_arm7_sub_wram_1_run100.o
-	Object lib/src/to91_arm7_attack41459_run01.o
-	Object lib/src/to90_arm7_sub_wram_1_run18.o
-	Object lib/src/to90_arm7_sub_wram_1_run19.o
-	Object lib/src/to90_arm7_sub_wram_1_run20.o
-	Object lib/src/to90_arm7_sub_wram_1_run21.o
-	Object lib/src/to90_arm7_sub_wram_1_run22.o
-	Object lib/src/op90_to90_arm7_sub_wram_1_residual_8_r01.o
-	Object lib/src/to90_arm7_sub_wram_1_run23.o
-	Object lib/src/to90_arm7_sub_wram_1_run24.o
-	Object lib/src/to90_arm7_sub_wram_1_run25.o
-	Object lib/src/to90_arm7_sub_wram_1_run26.o
-	Object lib/src/to90_arm7_sub_wram_1_run27.o
-	Object lib/src/to90_arm7_sub_wram_1_run28.o
-	Object lib/src/to90_arm7_sub_wram_1_run29.o
-	Object lib/src/to90_arm7_sub_wram_1_run30.o
-	Object lib/src/to91_w41494_lfo.o
-	Object lib/src/to90_arm7_sub_wram_1_run31.o
-	Object lib/src/to90_arm7_sub_wram_1_run32.o
+	Object lib/src/sound_channel.o
+	Object lib/src/sound_main.o
+	Object lib/src/sound_ex_channel.o
 	Object lib/src/to90_arm7_sub_wram_1_run33.o
 	Object lib/src/op90_to90_a7_next1668_o07_residual_1_r01.o
 	Object lib/src/to90_a7_next1668_o07_run01.o
@@ -143,20 +95,10 @@ Autoload WRAM
 	Object lib/src/to91_arm7_variable41458_run01.o
 	Object lib/src/to90_arm7_sub_wram_1_run55.o
 	Object lib/src/to90_arm7_sub_wram_1_run56.o
-	Object lib/src/to91_w41545_read_inst_data.o
-	Object lib/src/to90_arm7_sub_wram_1_run57.o
-	Object lib/src/to90_arm7_sub_wram_1_run58.o
-	Object lib/src/to90_arm7_sub_wram_1_run59.o
-	Object lib/src/to90_arm7_sub_wram_1_run60.o
-	Object lib/src/to90_arm7_sub_wram_1_run61.o
-	Object lib/src/to90_arm7_sub_wram_1_run62.o
-	Object lib/src/to90_arm7_sub_wram_1_run63.o
-	Object lib/src/to90_arm7_sub_wram_1_run64.o
-	Object lib/src/to90_arm7_sub_wram_1_run65.o
-	Object lib/src/to90_arm7_sub_wram_1_run66.o
-	Object lib/src/to90_arm7_sub_wram_1_run67.o
-	Object lib/src/to90_extra2572_run01.o
-	Object lib/src/to90_arm7_sub_wram_1_run68.o
+	Object lib/src/sound_bank.o
+	Object lib/src/sound_shared_work.o
+	Object lib/src/sound_alarm.o
+	Object lib/src/sound_command.o
 	Object lib/src/to90_arm7_sub_wram_1_run69.o
 	Object lib/src/op90_to90_arm7_sub_wram_1_residual_16_r01.o
 	Object lib/src/to90_arm7_sub_wram_1_run70.o
@@ -204,36 +146,11 @@ Autoload WRAM
 	Object lib/src/touch_panel_process.o
 	Object asm/to90_arm7_wram160_r8_anchor_own1.o
 	Object lib/src/touch_panel_sampling.o
-	Object lib/src/to90_arm7_sub_wram_2_run80.o
-	Object lib/src/op90_to90_arm7_sub_wram_2_residual_4_r01.o
-	Object lib/src/to90_arm7_sub_wram_2_run98.o
-	Object lib/src/to90_arm7_sub_wram_2_run05.o
-	Object lib/src/to90_arm7_sub_wram_2_run06.o
-	Object lib/src/to90_arm7_sub_wram_2_run07.o
-	Object lib/src/to90_arm7_sub_wram_2_run08.o
-	Object lib/src/to90_arm7_sub_wram_2_run09.o
-	Object lib/src/to90_arm7_sub_wram_2_run10.o
-	Object lib/src/to90_arm7_sub_wram_2_run11.o
-	Object lib/src/to90_arm7_sub_wram_2_run81.o
-	Object lib/src/op90_op90_to90_arm7_sub_wram_2_residual_5_residual_1_r01.o
-	Object lib/src/op90_op90_op90_to90_arm7_sub_wram_2_residual_5_residual_1_residual_1_r01.o
-	Object lib/src/op90_to90_arm7_sub_wram_2_residual_5_r01.o
-	Object lib/src/to90_arm7_sub_wram_2_run82.o
-	Object lib/src/to90_arm7_sub_wram_2_run83.o
-	Object lib/src/op90_to90_arm7_sub_wram_2_residual_6_r01.o
+	Object lib/src/power_manager_driver.o
+	Object lib/src/mic_command.o
 	Object asm/op90_to90_arm7_sub_wram_2_residual_6_own1.o
 	Object asm/to90_arm7_wram160_r8_anchor_own2.o
-	Object lib/src/to90_arm7_sub_wram_2_run84.o
-	Object lib/src/op90_to90_arm7_sub_wram_2_residual_7_r01.o
-	Object lib/src/to90_arm7_sub_wram_2_run12.o
-	Object lib/src/op90_to90_arm7_sub_wram_2_residual_8_r02.o
-	Object lib/src/op90_to90_arm7_sub_wram_2_residual_8_r01.o
-	Object lib/src/to90_arm7_sub_wram_2_run13.o
-	Object lib/src/op90_to90_arm7_sub_wram_2_residual_9_r01.o
-	Object lib/src/to90_arm7_sub_wram_2_run14.o
-	Object lib/src/to90_arm7_sub_wram_2_run85.o
-	Object lib/src/to90_arm7_sub_wram_2_run86.o
-	Object lib/src/op90_to90_arm7_sub_wram_2_residual_10_r01.o
+	Object lib/src/mic_driver.o
 	Object lib/src/to90_arm7_sub_wram_2_run87.o
 	Object lib/src/op90_to90_arm7_sub_wram_2_residual_11_r01.o
 	Object lib/src/to90_arm7_sub_wram_2_run15.o

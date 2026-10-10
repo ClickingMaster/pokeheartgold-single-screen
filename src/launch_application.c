@@ -45,7 +45,7 @@
 #include "overlay_58.h"
 #include "hall_of_fame_showcase.h"
 #include "overlay_65.h"
-#include "overlay_67.h"
+#include "battle_room_results.h"
 #include "overlay_68.h"
 #include "overlay_69.h"
 #include "overlay_70.h"
@@ -789,8 +789,8 @@ UnkStruct_0203F074 *sub_0203F074(FieldSystem *fieldSystem, enum HeapID heapID) {
     return args;
 }
 
-void sub_0203F0A8(FieldSystem *fieldSystem, UnkOv67Args *args) {
-    static const OverlayManagerTemplate _020FA2E4 = { ov67_021E5900, ov67_021E5984, ov67_021E5968, FS_OVERLAY_ID(OVY_67) };
+void sub_0203F0A8(FieldSystem *fieldSystem, BattleRoomResultsArgs *args) {
+    static const OverlayManagerTemplate _020FA2E4 = { BattleRoomResults_Init, BattleRoomResults_Main, BattleRoomResults_Exit, FS_OVERLAY_ID(OVY_67) };
     OverlayManagerTemplate template = _020FA2E4;
     FieldSystem_LaunchApplication(fieldSystem, &template, args);
 }

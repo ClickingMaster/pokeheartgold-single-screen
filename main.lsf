@@ -1291,46 +1291,22 @@ Static main
     Object src/to70_to70_libVCT_extra08_residual_10_extra22_run08.o
     Object src/op90_to70_to70_libVCT_extra08_residual_10_extra22_residual_8_r01.o
     Object lib/asm/to59_nnsys_anchor.o
-    Object src/to59_nnsys_run01.o
-    Object src/to70_nnsys_residual_1_run01.o
-    Object src/to59_nnsys_run02.o
-    Object src/to59_nnsys_run03.o
-    Object src/to70_nnsys_residual_2_run01.o
-    Object src/to59_nnsys_run04.o
-    Object src/to70_nnsys_residual_3_run01.o
-    Object src/to59_nnsys_run05.o
-    Object src/to70_nnsys_residual_4_run01.o
-    Object src/op90_to70_nnsys_residual_4_residual_1_r01.o
-    Object src/to70_nnsys_residual_4_run02.o
-    Object src/op90_to70_nnsys_residual_4_residual_2_r01.o
-    Object src/to70_nnsys_residual_4_run03.o
-    Object src/to59_nnsys_run06.o
-    Object src/to80_extra1862_run01.o
-    Object src/to70_nnsys_residual_5_run01.o
-    Object src/to59_nnsys_run07.o
-    Object src/op90_to59_nnsys_residual_6_r01.o
-    Object src/to59_nnsys_run08.o
-    Object src/to59_nnsys_run09.o
-    Object src/to70_nnsys_residual_7_run01.o
-    Object src/op90_to70_nnsys_residual_7_residual_1_r01.o
-    Object src/to59_nnsys_run10.o
-    Object src/to59_nnsys_run11.o
-    Object src/op90_to59_nnsys_residual_8_r01.o
-    Object src/to59_nnsys_run12.o
-    Object src/to59_nnsys_run13.o
-    Object src/op90_to59_nnsys_residual_9_r01.o
-    Object src/to59_nnsys_run14.o
-    Object src/to70_nnsys_residual_10_run01.o
-    Object src/to59_nnsys_run15.o
-    Object src/to70_nnsys_residual_11_run01.o
-    Object src/to59_nnsys_run16.o
-    Object src/op90_to70_nnsys_residual_12_residual_1_r01.o
-    Object src/to70_nnsys_residual_12_run01.o
-    Object src/to59_nnsys_run17.o
-    Object src/to70_nnsys_residual_13_run01.o
-    Object src/op90_to70_nnsys_residual_13_residual_1_r01.o
-    Object src/to59_nnsys_run18.o
-    Object src/op90_to59_nnsys_residual_14_r01.o
+    Object lib/NitroSystem/src/fnd_list.o
+    Object lib/NitroSystem/src/fnd_heapcommon.o
+    Object lib/NitroSystem/src/fnd_expheap.o
+    Object lib/NitroSystem/src/fnd_frameheap.o
+    Object lib/NitroSystem/src/fnd_unitheap.o
+    Object lib/NitroSystem/src/fnd_allocator.o
+    Object lib/NitroSystem/src/gfd_tex_vram_man.o
+    Object lib/NitroSystem/src/gfd_pltt_vram_man.o
+    Object lib/NitroSystem/src/gfd_frame_tex_vram_man.o
+    Object lib/NitroSystem/src/gfd_frame_pltt_vram_man.o
+    Object lib/NitroSystem/src/gfd_vram_transfer_manager.o
+    Object lib/NitroSystem/src/gfd_linked_list_vram_man.o
+    Object lib/NitroSystem/src/gfd_linked_list_tex_vram_man.o
+    Object lib/NitroSystem/src/gfd_linked_list_tex_vram_man_reset.o
+    Object lib/NitroSystem/src/gfd_linked_list_pltt_vram_man.o
+    Object lib/NitroSystem/src/gfd_linked_list_pltt_vram_man_reset.o
     Object lib/asm/to59_nnsys_anchor_own2.o
     Object src/to59_nnsys_run19.o
     Object src/op90_to59_nnsys_residual_15_r01.o
@@ -7119,30 +7095,7 @@ Overlay OVY_66
 Overlay OVY_67
 {
     After main
-    Object src/overlay67_helpers_1.o
-    Object src/overlay67_flow.o
-    Object src/overlay67_helpers_2.o
-    Object src/to80_extra1790_run01.o
-    Object src/overlay67_helpers_3.o
-    Object src/op90_to58_bank_ov67_5c44_residual_r01.o
-    Object src/to58_bank_ov67_5da0.o
-    Object src/overlay67_helpers_4.o
-    Object src/ov67_wave32_loader_1.o
-    Object src/overlay67_helpers_5.o
-    Object src/r40_overlay_67_residual_5_run1.o
-    Object src/overlay67_helpers_6.o
-    Object src/to80_extra1541_run01.o
-    Object src/to91_w41504_names_run01.o
-    Object src/overlay67_helpers_7.o
-    Object src/to47_overlay67_mail_windows_r7.o
-    Object src/overlay67_helpers_8.o
-    Object src/to90_extra2029_run01.o
-    Object src/overlay67_helpers_9.o
-    Object src/to70_to70_overlay_67_residual_9_extra212_residual_1_extra1290_run01.o
-    Object src/to70_overlay_67_residual_9_extra212_run01.o
-    Object src/overlay67_helpers_10.o
-    Object src/to70_overlay_67_residual_10_extra615_run01.o
-    Object src/overlay67_helpers_11.o
+    Object src/battle_room_results.o
     Object asm/overlay_67_residual_11.o
 }
 Overlay OVY_68
@@ -8912,54 +8865,8 @@ Overlay OVY_85
 Overlay OVY_86
 {
     After main
-    Object src/opus_overlay86_1.o
-    Object src/overlay86_helpers_1.o
-    Object src/to70_overlay_86_residual_2_extra280_run01.o
-    Object src/overlay86_helpers_2.o
-    Object src/overlay86_graphics_loaders.o
-    Object src/overlay86_helpers_3.o
-    Object src/overlay86_screen_helpers_1.o
-    Object src/to53_overlay86_screen_builders_w10.o
-    Object src/overlay86_screen_helpers_2.o
-    Object src/r40_overlay_86_residual_4_residual_2_run1.o
-    Object src/overlay86_helpers_4.o
-    Object src/overlay86_results_display.o
-    Object src/op90_overlay_86_results_menu_residual_r01.o
-    Object src/overlay86_results_title.o
-    Object src/to70_overlay_86_results_sprite_setup_residual_extra227_run01.o
-    Object src/overlay86_results_sprites.o
-    Object src/overlay86_helpers_5.o
-    Object src/to70_to70_overlay_86_residual_6_extra242_residual_1_extra1313_run01.o
-    Object src/to70_overlay_86_residual_6_extra242_run01.o
-    Object src/overlay86_helpers_6.o
-    Object src/to70_to70_overlay_86_residual_7_extra217_residual_1_extra1314_run01.o
-    Object src/to70_overlay_86_residual_7_extra217_run01.o
-    Object src/overlay86_helpers_7.o
-    Object src/to70_overlay_86_residual_8_extra453_run01.o
-    Object src/overlay86_helpers_8.o
-    Object src/to70_overlay_86_residual_9_extra1016_run01.o
-    Object src/overlay86_helpers_9.o
-    Object src/to70_overlay_86_residual_10_extra1012_run01.o
-    Object src/overlay86_helpers_10.o
-    Object src/to70_overlay_86_residual_11_extra1013_run01.o
-    Object src/overlay86_helpers_11.o
-    Object src/to80_extra1888_run01.o
-    Object src/overlay86_menu_select_12.o
-    Object src/overlay86_helpers_12.o
-    Object src/to70_overlay_86_residual_13_extra1014_run01.o
-    Object src/overlay86_helpers_13.o
-    Object src/to55_old_ov86_01_c01.o
-    Object src/to90_extra2083_run01.o
-    Object src/overlay86_helpers_14.o
-    Object src/op90_overlay_86_residual_15_r01.o
-    Object src/overlay86_helpers_15.o
-    Object src/to70_overlay_86_residual_16_extra441_run01.o
-    Object src/overlay86_helpers_16.o
-    Object src/to80_extra1569_run01.o
-    Object src/overlay86_helpers_17.o
-    Object src/to70_overlay_86_residual_18_extra1015_run01.o
-    Object src/overlay86_helpers_18.o
-    Object asm/overlay_86_residual_19.o
+    Object src/frontier/frontier_records_app.o
+    Object asm/frontier_records_app_data.o
 }
 Overlay OVY_87
 {

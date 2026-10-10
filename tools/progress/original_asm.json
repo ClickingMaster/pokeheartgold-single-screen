@@ -1565,7 +1565,7 @@
   {
    "function": "MIC_IrqHandler",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_10_r01.c",
+   "source": "sub/lib/src/mic_driver.c",
    "kind": "asm",
    "reason": "ARM7 pop/ldm {..,pc} (MWCC v4T always pops lr + bx lr; 0 occurrences); explicit sp manipulation (mov/ldr/sub sp,reg); ldm/stm with ^ (user-bank regs); mrs/msr (cpsr/spsr); sp in ldm/stm register list"
   },
@@ -1649,7 +1649,7 @@
   {
    "function": "MicTimerHandler",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_8_r02.c",
+   "source": "sub/lib/src/mic_driver.c",
    "kind": "asm",
    "reason": "push {r4-r7,lr} with no sub sp: a 20-byte frame; every MWCC version keeps ARM7 frames 8-byte aligned (odd pushes are padded with r3 or sub sp)"
   },

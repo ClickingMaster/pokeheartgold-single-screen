@@ -27,7 +27,7 @@
 #include "overlay_43.h"
 #include "overlay_54.h"
 #include "overlay_58.h"
-#include "overlay_67.h"
+#include "battle_room_results.h"
 #include "overlay_72.h"
 #include "overlay_73.h"
 #include "overlay_86.h"
@@ -87,8 +87,8 @@ typedef struct UnkStruct_0203E8C8 {
     u16 unk2;
 } UnkStruct_0203E8C8;
 
-static inline void InitUnkStructScrCmd408(UnkOv67Args *data, u16 a1, u16 a2, ScriptContext *ctx) {
-    MI_CpuClear8(data, sizeof(UnkOv67Args));
+static inline void InitUnkStructScrCmd408(BattleRoomResultsArgs *data, u16 a1, u16 a2, ScriptContext *ctx) {
+    MI_CpuClear8(data, sizeof(BattleRoomResultsArgs));
     data->unk_4 = a1;
     data->unk_6 = a2;
     data->saveData = ctx->fieldSystem->saveData;
@@ -125,7 +125,7 @@ BugContestSwapMonArgs *BugContestSwapMon_LaunchApp(FieldSystem *fieldSystem, Pok
 PokemonSummaryArgs *PokemonSummary_LaunchApp(enum HeapID heapID, FieldSystem *fieldSystem, u16 partySlot, u16 moveToLearn);
 void sub_0203F198(TaskManager *taskManager, u16 *ret, SaveData *saveData, u16 a3, u16 a4);
 BOOL AccessoryPortrait_LaunchApp(FieldSystem *fieldSystem, FashionAppData *fashionData);
-void sub_0203F0A8(FieldSystem *fieldSystem, UnkOv67Args *unk);
+void sub_0203F0A8(FieldSystem *fieldSystem, BattleRoomResultsArgs *unk);
 void PCBox_LaunchApp(FieldSystem *fieldSystem, PCBoxArgs *pcBoxData);
 void CallTask_WirelessTrade(TaskManager *taskManager);
 void sub_0203F4C8(FieldSystem *fieldSystem);

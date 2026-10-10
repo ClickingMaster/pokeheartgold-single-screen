@@ -3,83 +3,83 @@
 	.public ov86_021E5900
 	.public ov86_021E5A40
 	.public ov86_021E5AA4
-	.public ov86_021E5B38
-	.public ov86_021E5BA0
-	.public ov86_021E5C94
-	.public ov86_021E5CDC
-	.public ov86_021E5D10
-	.public ov86_021E5D30
-	.public ov86_021E5E0C
-	.public ov86_021E5E54
-	.public ov86_021E5E90
-	.public ov86_021E5E98
-	.public ov86_021E5ECC
-	.public ov86_021E5F58
-	.public ov86_021E5FBC
-	.public ov86_021E5FD8
-	.public ov86_021E6024
-	.public ov86_021E6064
-	.public ov86_021E60B8
-	.public ov86_021E6114
-	.public ov86_021E62F4
-	.public ov86_021E6484
-	.public ov86_021E64E0
-	.public ov86_021E668C
-	.public ov86_021E66D0
-	.public ov86_021E68B8
-	.public ov86_021E690C
-	.public ov86_021E6A34
-	.public ov86_021E6A88
-	.public ov86_021E6BA8
-	.public ov86_021E6DD8
-	.public ov86_021E6E30
-	.public ov86_021E6E98
-	.public ov86_021E6FF4
-	.public ov86_021E703C
-	.public ov86_021E705C
-	.public ov86_021E707C
-	.public ov86_021E7094
-	.public ov86_021E71C0
-	.public ov86_021E71FC
-	.public ov86_021E720C
-	.public ov86_021E723C
-	.public ov86_021E7258
-	.public ov86_021E7344
-	.public ov86_021E73CC
-	.public ov86_021E73E8
-	.public ov86_021E73EC
-	.public ov86_021E7418
-	.public ov86_021E74D0
-	.public ov86_021E74F0
-	.public ov86_021E752C
-	.public ov86_021E757C
-	.public ov86_021E7598
-	.public ov86_021E75EC
-	.public ov86_021E7630
-	.public ov86_021E7678
-	.public ov86_021E7680
-	.public ov86_021E7688
-	.public ov86_021E7710
-	.public ov86_021E77BC
-	.public ov86_021E781C
-	.public ov86_021E7860
-	.public ov86_021E78A8
-	.public ov86_021E78B0
-	.public ov86_021E78B8
-	.public ov86_021E792C
-	.public ov86_021E7984
-	.public ov86_021E7B54
-	.public ov86_021E7B68
-	.public ov86_021E7C70
-	.public ov86_021E7CA0
-	.public ov86_021E7CF8
-	.public ov86_021E7D8C
-	.public ov86_021E7DA8
-	.public ov86_021E7DD4
-	.public ov86_021E7DF8
-	.public ov86_021E7E40
-	.public ov86_021E7E68
-	.public ov86_021E7E90
+	.public FrontierRecordsApp_FadeIn
+	.public FrontierRecordsApp_Run
+	.public FrontierRecordsApp_FadeOut
+	.public FrontierRecordsApp_VBlankCallback
+	.public FrontierRecordsApp_SetGraphicsBanks
+	.public FrontierRecordsApp_InitBgLayers
+	.public FrontierRecordsApp_InitGraphics
+	.public FrontierRecordsApp_FreeBgLayers
+	.public FrontierRecordsApp_SetMainState
+	.public FrontierRecordsApp_GetWindowSet
+	.public FrontierRecordsApp_LoadMainBgGraphics
+	.public FrontierRecordsApp_LoadSubBgGraphics
+	.public FrontierRecordsApp_BufferNumber
+	.public FrontierRecordsApp_PrintStringAligned
+	.public FrontierRecordsApp_PrintMessage
+	.public FrontierRecordsApp_PrintFormattedMessage
+	.public FrontierRecordsApp_PrintRecords
+	.public FrontierRecordsApp_PrintFactoryLevel50Records
+	.public FrontierRecordsApp_PrintFactoryOpenLevelRecords
+	.public FrontierRecordsApp_GetFactoryStreakLabel
+	.public FrontierRecordsApp_PrintHallRecords
+	.public FrontierRecordsApp_BufferSpeciesName
+	.public FrontierRecordsApp_PrintCastleRecords
+	.public FrontierRecordsApp_GetCastleStreakLabel
+	.public FrontierRecordsApp_PrintArcadeRecords
+	.public FrontierRecordsApp_GetArcadeStreakLabel
+	.public FrontierRecordsApp_PrintTowerRecords
+	.public FrontierRecordsApp_PrintTowerMultiRecords
+	.public FrontierRecordsApp_GetTowerStreakLabel
+	.public FrontierRecordsApp_PrintReturnButton
+	.public FrontierRecordsApp_CreateSprites
+	.public FrontierRecordsApp_FreeSprites
+	.public FrontierRecordsApp_TickSprites
+	.public FrontierRecordsApp_SetSpriteAnim
+	.public FrontierRecordsApp_SetSpritePosition
+	.public FrontierRecordsApp_RunButtonFlash
+	.public FrontierRecordsApp_StartReturnButtonFlash
+	.public FrontierRecordsApp_IsHall
+	.public FrontierRecordsApp_InitHallPicker
+	.public FrontierRecordsApp_FreeHallPicker
+	.public FrontierRecordsApp_ShowHallPage
+	.public FrontierRecordsApp_DrawPageArrows
+	.public FrontierRecordsApp_FreeGridInput
+	.public FrontierRecordsApp_GridCallback_Nop
+	.public FrontierRecordsApp_LoadSortedSpecies
+	.public FrontierRecordsApp_InitSpeciesGroups
+	.public FrontierRecordsApp_FreeSpeciesGroups
+	.public FrontierRecordsApp_LoadWindowFrame
+	.public FrontierRecordsApp_ShowPrompt
+	.public FrontierRecordsApp_ClearPrompt
+	.public FrontierRecordsApp_PrintLetters
+	.public FrontierRecordsApp_MoveLetterCursor
+	.public FrontierRecordsApp_CreateLetterGrid
+	.public FrontierRecordsApp_LetterGrid_OnKeyMove
+	.public FrontierRecordsApp_LetterGrid_OnTouch
+	.public FrontierRecordsApp_StartLetterFlash
+	.public FrontierRecordsApp_HandleLetterInput
+	.public FrontierRecordsApp_GrayOutEmptyLetters
+	.public FrontierRecordsApp_MoveSpeciesCursor
+	.public FrontierRecordsApp_CreateSpeciesGrid
+	.public FrontierRecordsApp_SpeciesGrid_OnKeyMove
+	.public FrontierRecordsApp_SpeciesGrid_OnTouch
+	.public FrontierRecordsApp_StartSpeciesFlash
+	.public FrontierRecordsApp_StartArrowFlash
+	.public FrontierRecordsApp_HandleSpeciesInput
+	.public FrontierRecordsApp_FlipSpeciesPage
+	.public FrontierRecordsApp_PrintSpeciesPage
+	.public FrontierRecordsApp_ClearSpeciesWindows
+	.public FrontierRecordsApp_PrintLetterTitle
+	.public FrontierRecordsApp_PrintPageNumber
+	.public FrontierRecordsApp_ResetCursor
+	.public FrontierRecordsApp_SelectSpecies
+	.public FrontierRecordsApp_ClearRecordWindows
+	.public FrontierRecordsApp_AddWindows
+	.public FrontierRecordsApp_RemoveWindows
+	.public FrontierRecordsApp_AddReturnButtonWindow
+	.public FrontierRecordsApp_RemoveReturnButtonWindow
 	.public ov86_021E7E9C
 	.public ov86_021E7EA8
 	.public ov86_021E7EB8
@@ -108,35 +108,35 @@
 	.include "global.inc"
 
 	.text
-	.public ov86_021E5D10
-	.public ov86_021E5E54
-	.public ov86_021E5E90
-	.public ov86_021E5FBC
-	.public ov86_021E668C
-	.public ov86_021E703C
-	.public ov86_021E705C
-	.public ov86_021E707C
-	.public ov86_021E71FC
-	.public ov86_021E720C
-	.public ov86_021E723C
-	.public ov86_021E73CC
-	.public ov86_021E73E8
-	.public ov86_021E74D0
-	.public ov86_021E74F0
-	.public ov86_021E757C
-	.public ov86_021E75EC
-	.public ov86_021E7678
-	.public ov86_021E7680
-	.public ov86_021E781C
-	.public ov86_021E78A8
-	.public ov86_021E78B0
-	.public ov86_021E7B54
-	.public ov86_021E7C70
-	.public ov86_021E7D8C
-	.public ov86_021E7DD4
-	.public ov86_021E7E40
-	.public ov86_021E7E68
-	.public ov86_021E7E90
+	.public FrontierRecordsApp_SetGraphicsBanks
+	.public FrontierRecordsApp_FreeBgLayers
+	.public FrontierRecordsApp_SetMainState
+	.public FrontierRecordsApp_BufferNumber
+	.public FrontierRecordsApp_BufferSpeciesName
+	.public FrontierRecordsApp_TickSprites
+	.public FrontierRecordsApp_SetSpriteAnim
+	.public FrontierRecordsApp_SetSpritePosition
+	.public FrontierRecordsApp_IsHall
+	.public FrontierRecordsApp_InitHallPicker
+	.public FrontierRecordsApp_FreeHallPicker
+	.public FrontierRecordsApp_FreeGridInput
+	.public FrontierRecordsApp_GridCallback_Nop
+	.public FrontierRecordsApp_FreeSpeciesGroups
+	.public FrontierRecordsApp_LoadWindowFrame
+	.public FrontierRecordsApp_ClearPrompt
+	.public FrontierRecordsApp_MoveLetterCursor
+	.public FrontierRecordsApp_LetterGrid_OnKeyMove
+	.public FrontierRecordsApp_LetterGrid_OnTouch
+	.public FrontierRecordsApp_MoveSpeciesCursor
+	.public FrontierRecordsApp_SpeciesGrid_OnKeyMove
+	.public FrontierRecordsApp_SpeciesGrid_OnTouch
+	.public FrontierRecordsApp_FlipSpeciesPage
+	.public FrontierRecordsApp_ClearSpeciesWindows
+	.public FrontierRecordsApp_ResetCursor
+	.public FrontierRecordsApp_ClearRecordWindows
+	.public FrontierRecordsApp_RemoveWindows
+	.public FrontierRecordsApp_AddReturnButtonWindow
+	.public FrontierRecordsApp_RemoveReturnButtonWindow
 
 	thumb_func_start ov86_021E5900
 ov86_021E5900: ; 0x021E5900
@@ -212,7 +212,7 @@ ov86_021E5900: ; 0x021E5900
 	mov r1, #0x79
 	bl FontID_Alloc
 	add r0, r5, #0
-	bl ov86_021E5E0C
+	bl FrontierRecordsApp_InitGraphics
 	mov r0, #1
 	mov r1, #0x1b
 	mov r2, #0x13
@@ -243,22 +243,22 @@ ov86_021E5900: ; 0x021E5900
 	mov r2, #0x79
 	bl LoadFontPal1
 	ldrb r0, [r5, #7]
-	bl ov86_021E5E98
+	bl FrontierRecordsApp_GetWindowSet
 	add r2, r0, #0
 	add r1, r5, #0
 	ldr r0, [r5, #0xc]
 	add r1, #0x10
-	bl ov86_021E7DF8
+	bl FrontierRecordsApp_AddWindows
 	mov r1, #0x8f
 	lsl r1, r1, #2
 	ldr r0, [r5, #0xc]
 	add r1, r5, r1
-	bl ov86_021E7E68
+	bl FrontierRecordsApp_AddReturnButtonWindow
 	add r0, r5, #0
-	bl ov86_021E6E30
+	bl FrontierRecordsApp_PrintReturnButton
 	add r0, r5, #0
-	bl ov86_021E6E98
-	ldr r0, _021E5A3C ; =ov86_021E5CDC
+	bl FrontierRecordsApp_CreateSprites
+	ldr r0, _021E5A3C ; =FrontierRecordsApp_VBlankCallback
 	add r1, r5, #0
 	bl Main_SetVBlankIntrCB
 	mov r0, #0
@@ -270,7 +270,7 @@ _021E5A2C: .word 0xFFFFE0FF
 _021E5A30: .word 0x04001000
 _021E5A34: .word 0x04000304
 _021E5A38: .word 0xFFFF7FFF
-_021E5A3C: .word ov86_021E5CDC
+_021E5A3C: .word FrontierRecordsApp_VBlankCallback
 	thumb_func_end ov86_021E5900
 
 
@@ -289,32 +289,32 @@ ov86_021E5A40: ; 0x021E5A40
 	beq _021E5A82
 	b _021E5A8E
 _021E5A5A:
-	bl ov86_021E5B38
+	bl FrontierRecordsApp_FadeIn
 	cmp r0, #1
 	bne _021E5A8E
 	add r0, r4, #0
 	add r1, r5, #0
 	mov r2, #1
-	bl ov86_021E5E90
+	bl FrontierRecordsApp_SetMainState
 	b _021E5A8E
 _021E5A6E:
-	bl ov86_021E5BA0
+	bl FrontierRecordsApp_Run
 	cmp r0, #1
 	bne _021E5A8E
 	add r0, r4, #0
 	add r1, r5, #0
 	mov r2, #2
-	bl ov86_021E5E90
+	bl FrontierRecordsApp_SetMainState
 	b _021E5A8E
 _021E5A82:
-	bl ov86_021E5C94
+	bl FrontierRecordsApp_FadeOut
 	cmp r0, #1
 	bne _021E5A8E
 	mov r0, #1
 	pop {r3, r4, r5, pc}
 _021E5A8E:
 	add r0, r4, #0
-	bl ov86_021E703C
+	bl FrontierRecordsApp_TickSprites
 	mov r0, #0x23
 	lsl r0, r0, #4
 	ldr r0, [r4, r0]
@@ -331,7 +331,7 @@ ov86_021E5AA4: ; 0x021E5AA4
 	add r5, r0, #0
 	bl OverlayManager_GetData
 	add r4, r0, #0
-	bl ov86_021E6FF4
+	bl FrontierRecordsApp_FreeSprites
 	mov r0, #0x87
 	lsl r0, r0, #2
 	ldr r0, [r4, r0]
@@ -364,15 +364,15 @@ ov86_021E5AA4: ; 0x021E5AA4
 	mov r0, #0x8f
 	lsl r0, r0, #2
 	add r0, r4, r0
-	bl ov86_021E7E90
+	bl FrontierRecordsApp_RemoveReturnButtonWindow
 	ldrb r0, [r4, #7]
-	bl ov86_021E5E98
+	bl FrontierRecordsApp_GetWindowSet
 	add r1, r0, #0
 	add r0, r4, #0
 	add r0, #0x10
-	bl ov86_021E7E40
+	bl FrontierRecordsApp_RemoveWindows
 	ldr r0, [r4, #0xc]
-	bl ov86_021E5E54
+	bl FrontierRecordsApp_FreeBgLayers
 	mov r0, #4
 	bl FontID_Release
 	add r0, r5, #0
@@ -388,8 +388,8 @@ ov86_021E5AA4: ; 0x021E5AA4
 	thumb_func_end ov86_021E5AA4
 
 
-	thumb_func_start ov86_021E5B38
-ov86_021E5B38: ; 0x021E5B38
+	thumb_func_start FrontierRecordsApp_FadeIn
+FrontierRecordsApp_FadeIn: ; 0x021E5B38
 	push {r3, r4, lr}
 	sub sp, #0xc
 	add r4, r0, #0
@@ -402,15 +402,15 @@ ov86_021E5B38: ; 0x021E5B38
 	beq _021E5B8C
 	b _021E5B9A
 _021E5B4E:
-	bl ov86_021E71FC
+	bl FrontierRecordsApp_IsHall
 	cmp r0, #1
 	bne _021E5B5E
 	add r0, r4, #0
-	bl ov86_021E720C
+	bl FrontierRecordsApp_InitHallPicker
 	b _021E5B64
 _021E5B5E:
 	add r0, r4, #0
-	bl ov86_021E60B8
+	bl FrontierRecordsApp_PrintRecords
 _021E5B64:
 	ldrb r0, [r4, #4]
 	add r0, r0, #1
@@ -443,11 +443,11 @@ _021E5B9A:
 	mov r0, #0
 	add sp, #0xc
 	pop {r3, r4, pc}
-	thumb_func_end ov86_021E5B38
+	thumb_func_end FrontierRecordsApp_FadeIn
 
 
-	thumb_func_start ov86_021E5BA0
-ov86_021E5BA0: ; 0x021E5BA0
+	thumb_func_start FrontierRecordsApp_Run
+FrontierRecordsApp_Run: ; 0x021E5BA0
 	push {r4, lr}
 	add r4, r0, #0
 	ldrb r1, [r4, #4]
@@ -472,7 +472,7 @@ _021E5BB6: ; jump table
 	.short _021E5C70 - _021E5BB6 - 2 ; case 9
 	.short _021E5C7E - _021E5BB6 - 2 ; case 10
 _021E5BCC:
-	bl ov86_021E71FC
+	bl FrontierRecordsApp_IsHall
 	cmp r0, #1
 	bne _021E5BDA
 	mov r0, #3
@@ -496,7 +496,7 @@ _021E5BF4:
 	ldr r0, _021E5C90 ; =0x000005DD
 	bl PlaySE
 	add r0, r4, #0
-	bl ov86_021E71C0
+	bl FrontierRecordsApp_StartReturnButtonFlash
 	mov r0, #0xa
 	strb r0, [r4, #5]
 	mov r0, #9
@@ -504,31 +504,31 @@ _021E5BF4:
 	b _021E5C82
 _021E5C0A:
 	mov r1, #1
-	bl ov86_021E7258
+	bl FrontierRecordsApp_ShowHallPage
 	mov r0, #3
 	strb r0, [r4, #4]
 	b _021E5C82
 _021E5C16:
-	bl ov86_021E7710
+	bl FrontierRecordsApp_HandleLetterInput
 	strb r0, [r4, #4]
 	b _021E5C82
 _021E5C1E:
 	mov r1, #2
-	bl ov86_021E7258
+	bl FrontierRecordsApp_ShowHallPage
 	mov r0, #5
 	strb r0, [r4, #4]
 	b _021E5C82
 _021E5C2A:
-	bl ov86_021E7984
+	bl FrontierRecordsApp_HandleSpeciesInput
 	strb r0, [r4, #4]
 	b _021E5C82
 _021E5C32:
-	bl ov86_021E7B54
+	bl FrontierRecordsApp_FlipSpeciesPage
 	strb r0, [r4, #4]
 	b _021E5C82
 _021E5C3A:
 	mov r1, #0
-	bl ov86_021E7258
+	bl FrontierRecordsApp_ShowHallPage
 	mov r0, #8
 	strb r0, [r4, #4]
 	b _021E5C82
@@ -546,14 +546,14 @@ _021E5C5A:
 	ldr r0, _021E5C90 ; =0x000005DD
 	bl PlaySE
 	add r0, r4, #0
-	bl ov86_021E71C0
+	bl FrontierRecordsApp_StartReturnButtonFlash
 	mov r0, #4
 	strb r0, [r4, #5]
 	mov r0, #9
 	strb r0, [r4, #4]
 	b _021E5C82
 _021E5C70:
-	bl ov86_021E7094
+	bl FrontierRecordsApp_RunButtonFlash
 	cmp r0, #0
 	bne _021E5C82
 	ldrb r0, [r4, #5]
@@ -569,11 +569,11 @@ _021E5C82:
 _021E5C88: .word _021E7E98
 _021E5C8C: .word gSystem
 _021E5C90: .word 0x000005DD
-	thumb_func_end ov86_021E5BA0
+	thumb_func_end FrontierRecordsApp_Run
 
 
-	thumb_func_start ov86_021E5C94
-ov86_021E5C94: ; 0x021E5C94
+	thumb_func_start FrontierRecordsApp_FadeOut
+FrontierRecordsApp_FadeOut: ; 0x021E5C94
 	push {r3, r4, lr}
 	sub sp, #0xc
 	add r4, r0, #0
@@ -611,11 +611,11 @@ _021E5CD4:
 	add sp, #0xc
 	pop {r3, r4, pc}
 	.balign 4, 0
-	thumb_func_end ov86_021E5C94
+	thumb_func_end FrontierRecordsApp_FadeOut
 
 
-	thumb_func_start ov86_021E5CDC
-ov86_021E5CDC: ; 0x021E5CDC
+	thumb_func_start FrontierRecordsApp_VBlankCallback
+FrontierRecordsApp_VBlankCallback: ; 0x021E5CDC
 	push {r4, lr}
 	add r4, r0, #0
 	mov r0, #0x87
@@ -638,4 +638,4 @@ _021E5CEE:
 	nop
 _021E5D08: .word 0x027E0000
 _021E5D0C: .word 0x00003FF8
-	thumb_func_end ov86_021E5CDC
+	thumb_func_end FrontierRecordsApp_VBlankCallback

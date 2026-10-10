@@ -48,7 +48,7 @@
 #include "overlay_04.h"
 #include "overlay_103.h"
 #include "overlay_26.h"
-#include "overlay_67.h"
+#include "battle_room_results.h"
 #include "overlay_87.h"
 #include "party_menu.h"
 #include "player_avatar.h"
@@ -1979,8 +1979,8 @@ BOOL ScrCmd_TownMap(ScriptContext *ctx) {
 BOOL ScrCmd_408(ScriptContext *ctx) {
     u16 r7 = ScriptGetVar(ctx);
     u16 sp0 = ScriptGetVar(ctx);
-    UnkOv67Args **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
-    *p_work = Heap_Alloc(HEAP_ID_FIELD2, sizeof(struct UnkOv67Args));
+    BattleRoomResultsArgs **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
+    *p_work = Heap_Alloc(HEAP_ID_FIELD2, sizeof(struct BattleRoomResultsArgs));
     InitUnkStructScrCmd408(*p_work, r7, sp0, ctx);
     sub_0203F0A8(ctx->fieldSystem, *p_work);
     SetupNativeScript(ctx, ScrNative_WaitApplication_DestroyTaskData);

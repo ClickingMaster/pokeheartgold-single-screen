@@ -70,7 +70,7 @@ $(BUILD_DIR)/lib/src/op90_to91_w41430_WMSP_SetParentParam_suffix_r01.o: private 
 $(BUILD_DIR)/lib/src/op90_to91_w41574_txq_prefix_r01.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/src/op90_to91_w41480_tx_end_suffix_r01.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/src/op90_to90_arm7_sub_wram_2_residual_15_r01.o: private MWCCVER := 2.0/sp1
-$(BUILD_DIR)/lib/src/op90_to90_arm7_sub_wram_2_residual_6_r01.o: private MWCCVER := 2.0/sp1
+$(BUILD_DIR)/lib/src/mic_command.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/src/op90_op90_to91_w41568_rx_suffix_residual_1_r01.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/src/op90_to90_arm7_sub_ext_wram_residual_43_r01.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/src/op90_op90_op90_to90_arm7_sub_ext_wram_residual_21_residual_2_residual_2_r01.o: private OPTFLAGS := -O4,p

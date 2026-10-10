@@ -2,71 +2,71 @@
 	.include "overlay_67.inc"
 	.include "global.inc"
 
-	.public ov67_021E6D50
-	.public ov67_021E6D5C
-	.public ov67_021E6D6C
-	.public ov67_021E6D7C
-	.public ov67_021E6D90
-	.public ov67_021E6DA8
-	.public ov67_021E6DC4
-	.public ov67_021E6DE0
-	.public ov67_021E6DFC
-	.public ov67_021E6E18
-	.public ov67_021E6E38
-	.public ov67_021E6E60
-	.public ov67_021E6E98
-	.public ov67_021E6EE8
-	.public ov67_021E6F50
-	.public ov67_021E7020
+	.public sBattleRoomResultsPageHitboxes
+	.public sBattleRoomResultsGraphicsModes
+	.public sBattleRoomResultsGridCallbacks
+	.public sBattleRoomResultsOamCharTransferParam
+	.public sBattleRoomResultsSpriteResourceCounts
+	.public sBattleRoomResultsBgTemplate_Main0
+	.public sBattleRoomResultsBgTemplate_Sub0
+	.public sBattleRoomResultsBgTemplate_Sub1
+	.public sBattleRoomResultsBgTemplate_Main1
+	.public sBattleRoomResultsOamManagerParam
+	.public sBattleRoomResultsGraphicsBanks
+	.public sBattleRoomResultsGridHitboxes
+	.public sBattleRoomResultsWindowTemplates
+	.public sBattleRoomResultsGridDpadBoxes
+	.public sBattleRoomResultsSpriteTemplates
+	.public sBattleRoomResultsLeaderWindowTemplates
 
 	.public _021E6D4C
 
 	.text
-	.public ov67_021E5900
-	.public ov67_021E5968
-	.public ov67_021E5984
-	.public ov67_021E5A6C
-	.public ov67_021E5B44
-	.public ov67_021E5BC0
-	.public ov67_021E5BE0
-	.public ov67_021E5C04
-	.public ov67_021E5C44
-	.public ov67_021E5DA0
-	.public ov67_021E5E84
-	.public ov67_021E5EB0
-	.public ov67_021E6008
-	.public ov67_021E6080
-	.public ov67_021E60B4
-	.public ov67_021E60F4
-	.public ov67_021E6118
-	.public ov67_021E6164
-	.public ov67_021E61A0
-	.public ov67_021E61E8
-	.public ov67_021E6220
-	.public ov67_021E63E8
-	.public ov67_021E6474
-	.public ov67_021E6490
-	.public ov67_021E6530
-	.public ov67_021E65C0
-	.public ov67_021E6688
+	.public BattleRoomResults_Init
+	.public BattleRoomResults_Exit
+	.public BattleRoomResults_Main
+	.public BattleRoomResults_SetupScreens
+	.public BattleRoomResults_TeardownScreens
+	.public BattleRoomResults_SetGfxBanks
+	.public BattleRoomResults_VBlankCB
+	.public BattleRoomResults_HandleResultsInput
+	.public BattleRoomResults_HandleLeadersInput
+	.public BattleRoomResults_InitBgs
+	.public BattleRoomResults_FreeBgs
+	.public BattleRoomResults_LoadBgGraphics
+	.public BattleRoomResults_AddWindows
+	.public BattleRoomResults_RemoveWindows
+	.public BattleRoomResults_InitStrings
+	.public BattleRoomResults_FreeStrings
+	.public BattleRoomResults_PrintString
+	.public BattleRoomResults_PrintMessage
+	.public BattleRoomResults_PrintFormattedMessage
+	.public BattleRoomResults_PrintTitle
+	.public BattleRoomResults_PrintResults
+	.public BattleRoomResults_LoadLeaders
+	.public BattleRoomResults_FreeLeaderNames
+	.public BattleRoomResults_PrintLeaderNames
+	.public BattleRoomResults_PrintPageNumber
+	.public BattleRoomResults_PrintLeadersScreen
+	.public BattleRoomResults_PrintLeaderInfo
 	.public ov67_021E681C
-	.public ov67_021E6820
-	.public ov67_021E6990
-	.public ov67_021E69D8
-	.public ov67_021E6A00
-	.public ov67_021E6A08
-	.public ov67_021E6A28
-	.public ov67_021E6A40
-	.public ov67_021E6B6C
-	.public ov67_021E6BB8
-	.public ov67_021E6BC4
-	.public ov67_021E6C04
-	.public ov67_021E6C14
-	.public ov67_021E6C5C
-	.public ov67_021E6C60
-	.public ov67_021E6D20
-	thumb_func_start ov67_021E5EB0
-ov67_021E5EB0: ; 0x021E5EB0
+	.public BattleRoomResults_InitSprites
+	.public BattleRoomResults_FreeSprites
+	.public BattleRoomResults_UpdateSprites
+	.public BattleRoomResults_TransferOam
+	.public BattleRoomResults_SetSpriteAnim
+	.public BattleRoomResults_SetSpritePosition
+	.public BattleRoomResults_UpdateButtonFlash
+	.public BattleRoomResults_StartSpriteFlash
+	.public BattleRoomResults_StartExitButtonFlash
+	.public BattleRoomResults_CreateGridInput
+	.public BattleRoomResults_FreeGridInput
+	.public BattleRoomResults_MoveCursor
+	.public BattleRoomResults_GridNoop
+	.public BattleRoomResults_GridOnKeyMove
+	.public BattleRoomResults_GridOnTouch
+	thumb_func_start BattleRoomResults_LoadBgGraphics
+BattleRoomResults_LoadBgGraphics: ; 0x021E5EB0
 	push {r3, r4, r5, lr}
 	sub sp, #0x10
 	add r4, r0, #0
@@ -222,18 +222,18 @@ _021E5F68:
 	add sp, #0x10
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov67_021E5EB0
+	thumb_func_end BattleRoomResults_LoadBgGraphics
 
 
-	thumb_func_start ov67_021E6008
-ov67_021E6008: ; 0x021E6008
+	thumb_func_start BattleRoomResults_AddWindows
+BattleRoomResults_AddWindows: ; 0x021E6008
 	push {r3, r4, r5, r6, r7, lr}
 	add r6, r0, #0
 	ldrh r0, [r6, #8]
 	cmp r0, #0
 	bne _021E6030
 	add r5, r6, #0
-	ldr r4, _021E6078 ; =ov67_021E6E98
+	ldr r4, _021E6078 ; =sBattleRoomResultsWindowTemplates
 	mov r7, #0
 	add r5, #0x6c
 _021E601A:
@@ -249,7 +249,7 @@ _021E601A:
 	b _021E6054
 _021E6030:
 	add r5, r6, #0
-	ldr r4, _021E607C ; =ov67_021E7020
+	ldr r4, _021E607C ; =sBattleRoomResultsLeaderWindowTemplates
 	mov r7, #0
 	add r5, #0x6c
 _021E6038:
@@ -281,6 +281,6 @@ _021E6054:
 	bl LoadFontPal0
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
-_021E6078: .word ov67_021E6E98
-_021E607C: .word ov67_021E7020
-	thumb_func_end ov67_021E6008
+_021E6078: .word sBattleRoomResultsWindowTemplates
+_021E607C: .word sBattleRoomResultsLeaderWindowTemplates
+	thumb_func_end BattleRoomResults_AddWindows

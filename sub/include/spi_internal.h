@@ -59,10 +59,34 @@ typedef struct TpRequest {
 extern TpWork tpw;
 extern u16 last_touch_flg;
 
+#define REG_TM3CNT_L (*(volatile u16 *)0x0400010C)
+#define REG_TM3CNT_H (*(volatile u16 *)0x0400010E)
+
+// Last microphone sample and a pointer to it, read by the ARM9.
+#define MIC_SAMPLE_ADDR         0x027FFF94
+#define MIC_SAMPLE_POINTER_ADDR 0x027FFF90
+
+typedef struct MicWork {
+    u16 command[16]; // PXI command words collected by MIC_AnalyzeCommand
+    u32 state;
+    u16 flags;
+    u16 mode;
+    u8 *buffer;
+    u32 offset;
+    u32 size;
+    u16 timer;
+    u16 clock;
+    u16 partial;
+    u16 last;
+} MicWork;
+
+extern MicWork micw;
+
 BOOL SPIi_CheckException(u32 owner);
 void SPIi_GetException(u32 owner);
 void SPIi_ReleaseException(u32 owner);
 BOOL SPIi_SetEntry(u32 module, u32 command, u16 count, ...);
+BOOL SPIi_CheckEntry(void);
 // SPIi_ReturnResult is declared by each file: the drivers' callers were compiled against different
 // parameter widths (u16 / u32), which changes their code.
 
