@@ -10,27 +10,24 @@ void MIi_CpuCopyFast(const void *src, void *dest, u32 size);
 void MI_CpuFill8(void *dest, u8 data, u32 size);
 void MI_CpuCopy8(const void *src, void *dest, u32 size);
 // @fn MIi_CpuClear16
-asm void MIi_CpuClear16(u16 data, void *dest, u32 size)
+void MIi_CpuClear16(u16 data, void *dest, u32 size)
 {
-    mov r3, #0
-@loop:
-    cmp r3, r2
-    strlth r0, [r1, r3]
-    addlt r3, r3, #2
-    blt @loop
-    bx lr
+    int i = 0;
+    for (;;) {
+        if (i >= (int)size) break;
+        *(u16 *)((u8 *)dest + i) = data;
+        i += 2;
+    }
 }
 // @fn MIi_CpuCopy16
-asm void MIi_CpuCopy16(const void *src, void *dest, u32 size)
+void MIi_CpuCopy16(const void *src, void *dest, u32 size)
 {
-    mov r12, #0
-@loop:
-    cmp r12, r2
-    ldrlth r3, [r0, r12]
-    strlth r3, [r1, r12]
-    addlt r12, r12, #2
-    blt @loop
-    bx lr
+    int i = 0;
+    for (;;) {
+        if (i >= (int)size) break;
+        *(u16 *)((u8 *)dest + i) = *(const u16 *)((const u8 *)src + i);
+        i += 2;
+    }
 }
 // @fn MIi_CpuClear32
 asm void MIi_CpuClear32(u32 data, void *dest, u32 size)
