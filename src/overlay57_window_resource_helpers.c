@@ -33,15 +33,15 @@ void ov57_022395B8(BgConfig *bgConfig, PaletteData *paletteData) {
     Heap_Free(allocation);
     PaletteData_LoadFromNarc(paletteData, (NarcId)87, 2, (enum HeapID)52, (PaletteBufferId)0, 0x20, 0xC0, 0x20);
     LoadUserFrameGfx1(bgConfig, (GFBgLayer)1, 0x1F, 13, 0, (enum HeapID)52);
-    PaletteData_LoadNarc(paletteData, (NarcId)38, sub_0200E3D8(), (enum HeapID)52, (PaletteBufferId)0, 0x20, 0xD0);
+    PaletteData_LoadNarc(paletteData, (NarcId)38, GetUserFrameGfx1PaletteMember(), (enum HeapID)52, (PaletteBufferId)0, 0x20, 0xD0);
     PaletteData_LoadNarc(paletteData, (NarcId)16, 8, (enum HeapID)52, (PaletteBufferId)0, 0x20, 0xE0);
 }
 
 void ov57_02239670(BgConfig *bgConfig, PaletteData *paletteData, int frame) {
     LoadUserFrameGfx2(bgConfig, (GFBgLayer)4, 1, 15, frame, (enum HeapID)52);
-    PaletteData_LoadNarc(paletteData, (NarcId)38, sub_0200E640(frame), (enum HeapID)52, (PaletteBufferId)1, 0x20, 0xC0);
+    PaletteData_LoadNarc(paletteData, (NarcId)38, GetUserFrameGfx2PaletteMember(frame), (enum HeapID)52, (PaletteBufferId)1, 0x20, 0xC0);
     LoadUserFrameGfx1(bgConfig, (GFBgLayer)4, 0x1F, 13, 0, (enum HeapID)52);
-    PaletteData_LoadNarc(paletteData, (NarcId)38, sub_0200E3D8(), (enum HeapID)52, (PaletteBufferId)1, 0x20, 0xD0);
+    PaletteData_LoadNarc(paletteData, (NarcId)38, GetUserFrameGfx1PaletteMember(), (enum HeapID)52, (PaletteBufferId)1, 0x20, 0xD0);
     PaletteData_LoadNarc(paletteData, (NarcId)16, 8, (enum HeapID)52, (PaletteBufferId)1, 0x20, 0xE0);
     PaletteData_LoadNarc(paletteData, (NarcId)16, 8, (enum HeapID)52, (PaletteBufferId)1, 0x20, 0x30);
     PaletteData_LoadNarc(paletteData, (NarcId)87, 0, (enum HeapID)52, (PaletteBufferId)1, 0x20, 0xB0);

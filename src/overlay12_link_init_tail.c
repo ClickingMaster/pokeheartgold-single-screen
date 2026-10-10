@@ -240,7 +240,7 @@ common:
     case 33:
         if (PaletteData_GetSelectedBuffersBitmask(work->palette) == 0) {
             done = TRUE;
-            sub_0200F450(work->waiting);
+            WaitingIcon_Delete(work->waiting);
             sub_02037930(0);
         }
         break;

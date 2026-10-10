@@ -22,12 +22,12 @@ extern u8 AddTextPrinterParameterized(void *, int, void *, int, int, int, int);
 extern void DrawFrameAndWindow1(void *, int, int, int);
 extern void DrawFrameAndWindow2(void *, int, int, int);
 extern void ScheduleWindowCopyToVram(void *);
-extern void sub_0200E5D4(void *, int);
+extern void EraseFrameAndWindow1(void *, int);
 extern void ClearWindowTilemapAndScheduleTransfer(void *);
 extern void ClearFrameAndWindow2(void *, int);
 extern void GF_AssertFail(void);
 extern void *WaitingIcon_New(void *, int);
-extern void sub_0200F450(void *);
+extern void WaitingIcon_Delete(void *);
 extern void RemoveWindow(void *);
 extern void String_Delete(void *);
 extern void DestroyMsgData(void *);
@@ -118,7 +118,7 @@ void ov46_022593F8(TextBox *p) {
         RemoveTextPrinter((u8)p->printer);
     }
     if (p->frameType == 0) {
-        sub_0200E5D4(p->window, 1);
+        EraseFrameAndWindow1(p->window, 1);
         ClearWindowTilemapAndScheduleTransfer(p->window);
         return;
     }
@@ -143,7 +143,7 @@ void ov46_02259474(TextBox *p) {
         if (p->icon == NULL) {
             GF_AssertFail();
         }
-        sub_0200F450(p->icon);
+        WaitingIcon_Delete(p->icon);
         p->icon = NULL;
     }
 }

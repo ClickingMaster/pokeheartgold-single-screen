@@ -22,7 +22,7 @@ s32 ov15_021FD10C(void *work) {
     case 2:
         ov15_021FF058(work);
         U32(work, 0x684) = 0;
-        sub_0200E5D4((u8 *)work + 0x214, 1);
+        EraseFrameAndWindow1((u8 *)work + 0x214, 1);
         ClearFrameAndWindow2((u8 *)work + 0x34, 1);
         ClearWindowTilemapAndScheduleTransfer((u8 *)work + 0x34);
         ScheduleWindowCopyToVram((u8 *)work + 4);

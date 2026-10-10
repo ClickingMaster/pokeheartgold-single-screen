@@ -20,6 +20,6 @@ void ov01_021EE754(MoveTutorMenu *menu, u32 msgId, u32 x, u32 y);
 void ov01_021EE7B8(SysTask *task, MoveTutorMenu *menu);
 
 void MoneyBoxSys_Delete(Window *moneybox) {
-    sub_0200E5D4(moneybox, 0);
+    EraseFrameAndWindow1(moneybox, 0);
     WindowArray_Delete(moneybox, 1);
 }

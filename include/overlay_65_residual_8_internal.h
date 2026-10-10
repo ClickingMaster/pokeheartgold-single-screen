@@ -41,7 +41,7 @@ extern int sub_0202C2F8(void *);
 extern BOOL sub_0202C2DC(void *, int);
 extern void *sub_0202C254(void *, int);
 extern void CopyU16ArrayToString(String *, const u16 *);
-extern void sub_0200E5D4(void *, int);
+extern void EraseFrameAndWindow1(void *, int);
 extern void *ov65_0221FCA0(void *, int, void *, void *);
 extern void PlaySE(u32);
 

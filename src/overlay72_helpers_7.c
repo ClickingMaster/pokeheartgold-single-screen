@@ -12,7 +12,7 @@ void ov00_021ECD04(void);
 void ov72_02237CB0(void *);
 void ov00_021EC8D8(void);
 void sub_0203A880(void);
-void *sub_0200F450(void *);
+void *WaitingIcon_Delete(void *);
 int IsPaletteFadeFinished(void);
 int ov72_0223A8A0(void *);
 int ov72_0223AE6C(void *);

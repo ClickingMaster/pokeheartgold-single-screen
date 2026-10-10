@@ -38,7 +38,7 @@ typedef struct {
 
 extern int LocationGmmDatIndexGetByCountryMsgNo(int country);
 extern void PlaySE(u16 seqNo);
-extern void sub_0200E5D4(void *window, int fillValue);
+extern void EraseFrameAndWindow1(void *window, int fillValue);
 extern void RemoveWindow(void *window);
 extern void Heap_Free(void *ptr);
 extern void DestroyListMenu(void *menu, int *selection, int *cursor);
@@ -67,7 +67,7 @@ void ov69_021E706C(Ov69Light *data);
 BOOL GeonetGlobe_Exit(OverlayManager *man, int *state);
 
 void ov69_021E6A54(Ov69Ui *data) {
-    sub_0200E5D4(data->window24, 0);
+    EraseFrameAndWindow1(data->window24, 0);
     RemoveWindow(data->window24);
     DestroyListMenu(data->listMenu, 0, 0);
     ListMenuItems_Delete(data->listMenuItems);

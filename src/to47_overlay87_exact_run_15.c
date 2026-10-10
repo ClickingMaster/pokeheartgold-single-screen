@@ -67,7 +67,7 @@ void ov87_021E80F0(void *w) {
     } while (i < 16);
 }
 void ov87_021E810C(void *bg, void *w) {
-    sub_0200E398(bg, 2, 0x3f7, 0, 0x7a);
+    LoadUserFrameGfx1Tiles(bg, 2, 0x3f7, 0, 0x7a);
     DrawFrameAndWindow1(w, 1, 0x3f7, 0xb);
 }
 void ov87_021E8134(void *w, int frame) {

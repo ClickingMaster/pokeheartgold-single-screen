@@ -63,11 +63,11 @@
 .public SysTask_CreateOnMainQueue
 .public SysTask_Destroy
 .public DrawFrameAndWindow1
-.public sub_0200E5D4
+.public EraseFrameAndWindow1
 .public DrawFrameAndWindow2
 .public ClearFrameAndWindow2
 .public WaitingIcon_New
-.public sub_0200F450
+.public WaitingIcon_Delete
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
 .public ResetVisibleHardwareWindows

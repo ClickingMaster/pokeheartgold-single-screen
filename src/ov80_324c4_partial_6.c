@@ -31,7 +31,7 @@ void ov80_022333F0(void *data, const void *ctx) {
     if (ov80_02237D8C(((const u8 *)ctx)[0x10]) == 0) {
         GF_ASSERT(*(void **)(p + 0xA8) != NULL);
         first = *(void **)(p + 0xA8);
-        sub_0200E5D4(first, 0);
+        EraseFrameAndWindow1(first, 0);
         WindowArray_Delete(first, 1);
     } else {
         GF_ASSERT(*(void **)(p + 0xA8) != NULL);
@@ -43,9 +43,9 @@ void ov80_022333F0(void *data, const void *ctx) {
             first = *(void **)(p + 0xAC);
             second = *(void **)(p + 0xA8);
         }
-        sub_0200E5D4(first, 0);
+        EraseFrameAndWindow1(first, 0);
         WindowArray_Delete(first, 1);
-        sub_0200E5D4(second, 0);
+        EraseFrameAndWindow1(second, 0);
         WindowArray_Delete(second, 1);
     }
     *(void **)(p + 0xA8) = NULL;

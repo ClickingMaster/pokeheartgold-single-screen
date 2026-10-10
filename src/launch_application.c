@@ -43,7 +43,7 @@
 #include "overlay_54.h"
 #include "overlay_55.h"
 #include "overlay_58.h"
-#include "overlay_64.h"
+#include "hall_of_fame_showcase.h"
 #include "overlay_65.h"
 #include "overlay_67.h"
 #include "overlay_68.h"

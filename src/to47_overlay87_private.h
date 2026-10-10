@@ -107,7 +107,7 @@ extern void ObjPlttTransfer_Init(int, int);
 extern void ObjCharTransfer_ClearBuffers(void);
 extern void ObjPlttTransfer_Reset(void);
 extern void *GfGfxLoader_GetPlttData(int, int, void **, int);
-extern void sub_0200E398(void *, int, int, int, int);
+extern void LoadUserFrameGfx1Tiles(void *, int, int, int, int);
 extern void DrawFrameAndWindow1(void *, int, int, int);
 extern void DrawFrameAndWindow2(void *, int, int, int);
 extern int GetWindowBgId(void *);

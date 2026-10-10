@@ -36,7 +36,7 @@ typedef struct Ov57R7SpriteWork {
     Ov57R7SpriteSlot slots[12];
 } Ov57R7SpriteWork;
 extern const u32 ov57_0223BDF4[];
-u32 sub_0200E640(u32);
+u32 GetUserFrameGfx2PaletteMember(u32);
 void ov57_02239558(Ov57R7SpriteWork *);
 void ov57_02239588(Ov57R7SpriteWork *);
 void ov57_022395B8(BgConfig *, PaletteData *);

@@ -42,7 +42,7 @@
 .public SysTask_CreateOnVBlankQueue
 .public SysTask_Destroy
 .public LoadUserFrameGfx2
-.public sub_0200E948
+.public DrawFrame2AroundWindow
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
 .public FontSystem_NewInit

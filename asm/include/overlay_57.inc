@@ -76,11 +76,11 @@
 .public SpriteManager_GetSpriteList
 .public SysTask_CreateOnMainQueue
 .public SysTask_Destroy
-.public sub_0200E3D8
+.public GetUserFrameGfx1PaletteMember
 .public LoadUserFrameGfx1
 .public DrawFrameAndWindow1
-.public sub_0200E5D4
-.public sub_0200E640
+.public EraseFrameAndWindow1
+.public GetUserFrameGfx2PaletteMember
 .public LoadUserFrameGfx2
 .public DrawFrameAndWindow2
 .public ClearFrameAndWindow2

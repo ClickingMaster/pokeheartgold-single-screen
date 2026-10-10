@@ -7,7 +7,7 @@ extern void sub_0203A914(void *);
 extern void sub_0203946C(void);
 extern void BeginNormalPaletteFade(int, int, int, int, int, int, int);
 extern int ov72_02238668(void *);
-extern void sub_0200E5D4(void *, int);
+extern void EraseFrameAndWindow1(void *, int);
 extern BOOL TextPrinterCheckActive(u8);
 extern void *NewString_ReadMsgData(void *, int);
 extern void StringExpandPlaceholders(void *, void *, const void *);

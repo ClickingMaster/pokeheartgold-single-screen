@@ -19,7 +19,7 @@ extern void SpriteSystem_TransferOam(void);
 extern void PaletteData_PushTransparentBuffers(void *);
 extern void DoScheduledBgGpuUpdates(void *);
 extern int WindowIsInUse(const void *);
-extern void sub_0200E5D4(void *, int);
+extern void EraseFrameAndWindow1(void *, int);
 extern void ClearWindowTilemapAndCopyToVram(void *);
 extern void RemoveWindow(void *);
 extern void ov92_0225DD48(void *, int);
@@ -98,7 +98,7 @@ int ov92_0225D8E4(void *);
 void ov92_0225E100(void *p) {
     Ov92E100 *s = p;
     if (WindowIsInUse(&s->window) == 1) {
-        sub_0200E5D4(&s->window, 1);
+        EraseFrameAndWindow1(&s->window, 1);
         ClearWindowTilemapAndCopyToVram(&s->window);
         RemoveWindow(&s->window);
     }

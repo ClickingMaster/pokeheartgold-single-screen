@@ -81,7 +81,7 @@ extern void ov12_0226430C(void *battleSystem, u8 battler, u8 result);
 extern void Heap_Free(void *ptr);
 extern void SysTask_Destroy(void *task);
 extern void *ov12_0223BB78(void *battleSystem);
-extern void sub_0200F450(void *object);
+extern void WaitingIcon_Delete(void *object);
 extern void ov12_0223BB80(void *battleSystem, int value);
 extern int TextPrinterCheckActive(u8 printerId);
 extern void ov12_02263A00(void *battleSystem, u8 battler);
@@ -205,7 +205,7 @@ void ov12_02260584(void *task, SmallTaskData *data)
 void ov12_022605D0(void *task, TextTaskData *data)
 {
     if (ov12_0223BB78(data->battleSystem) != NULL) {
-        sub_0200F450(ov12_0223BB78(data->battleSystem));
+        WaitingIcon_Delete(ov12_0223BB78(data->battleSystem));
         ov12_0223BB80(data->battleSystem, 0);
     }
     if (!TextPrinterCheckActive(data->printer)) {

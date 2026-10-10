@@ -24,7 +24,7 @@ void ov80_0222E8FC(void *);
 void ov80_0222EE14(void *, u16, u32);
 void PlaySE(u32);
 void Delete2dMenu(void *, u32);
-void sub_0200E5D4(void *, u32);
+void EraseFrameAndWindow1(void *, u32);
 void RemoveWindow(void *);
 void DestroyMsgData(void *);
 void SysTask_Destroy(SysTask *);

@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-void sub_0200F450(void *);
+void WaitingIcon_Delete(void *);
 void ManagedSprite_SetDrawFlag(void *, int);
 void ManagedSprite_SetAnim(void *, int);
 int ManagedSprite_GetActiveAnim(void *);

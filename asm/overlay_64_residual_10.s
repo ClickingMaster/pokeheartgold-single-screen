@@ -4,68 +4,68 @@
 	.public HallOfFameShowcase_Init
 	.public HallOfFameShowcase_Main
 	.public _021E6E7C
-	.public ov64_021E5B10
-	.public ov64_021E5CD0
-	.public ov64_021E607C
-	.public ov64_021E6170
-	.public ov64_021E62C8
-	.public ov64_021E652C
-	.public ov64_021E677C
-	.public ov64_021E6B84
-	.public ov64_021E6C1C
-	.public ov64_021E6E88
-	.public ov64_021E6E98
-	.public ov64_021E6EA8
-	.public ov64_021E6EB8
-	.public ov64_021E6ECC
-	.public ov64_021E6ECE
-	.public ov64_021E6EE4
-	.public ov64_021E6EFC
-	.public ov64_021E6F18
-	.public ov64_021E6F34
-	.public ov64_021E6F50
-	.public ov64_021E6F6C
-	.public ov64_021E6F8C
-	.public ov64_021E6FAC
-	.public ov64_021E6FD4
-	.public ov64_021E7008
-	.public ov64_021E7040
-	.public ov64_021E70C8
-	.public ov64_021E70FC
-	.public ov64_021E73A0
-	.public ov64_021E73D4
-	.public ov64_021E7408
-	.public ov64_021E743C
+	.public HallOfFameShowcase_InitBgs
+	.public HallOfFameShowcase_InitSprites
+	.public HallOfFameShowcase_InitStrings
+	.public HallOfFameShowcase_InitWindows
+	.public HallOfFameShowcase_HandleInput
+	.public HallOfFameShowcase_ChangeRecord
+	.public HallOfFameShowcase_ShowMonDetail
+	.public HallOfFameShowcase_AnimateButtonPress
+	.public HallOfFameShowcase_CreatePartyIcon
+	.public sShowcaseGraphicsModes
+	.public sShowcaseMonPicRect
+	.public sShowcaseGridCallbacks
+	.public sShowcaseOamCharTransferParam
+	.public sShowcaseIconPositions
+	.public sShowcaseIconPositionsY
+	.public sShowcaseSpriteResourceCounts
+	.public sShowcaseBgTemplate_Main1
+	.public sShowcaseBgTemplate_Sub0
+	.public sShowcaseBgTemplate_Sub1
+	.public sShowcaseBgTemplate_Main0
+	.public sShowcaseGridHitboxes
+	.public sShowcaseOamManagerParam
+	.public sShowcaseGraphicsBanks
+	.public sShowcasePartyIconSpriteTemplate
+	.public sShowcaseGridDpadBoxes
+	.public sShowcaseWindowTemplates
+	.public sShowcaseMonPicSpriteTemplate1
+	.public sShowcaseMonPicSpriteTemplate2
+	.public sShowcaseCursorSpriteTemplate
+	.public sShowcasePrevPageSpriteTemplate
+	.public sShowcaseNextPageSpriteTemplate
+	.public sShowcaseExitSpriteTemplate
 
 
 	.text
 	.public HallOfFameShowcase_Exit
-	.public ov64_021E5A88
-	.public ov64_021E5AAC
-	.public ov64_021E5AC8
-	.public ov64_021E5AE4
-	.public ov64_021E5B00
-	.public ov64_021E5CA4
-	.public ov64_021E6010
-	.public ov64_021E602C
-	.public ov64_021E605C
-	.public ov64_021E6118
-	.public ov64_021E620C
-	.public ov64_021E622C
-	.public ov64_021E6260
-	.public ov64_021E6270
-	.public ov64_021E6274
-	.public ov64_021E6278
-	.public ov64_021E6280
-	.public ov64_021E6288
-	.public ov64_021E62A8
-	.public ov64_021E64F8
-	.public ov64_021E6754
-	.public ov64_021E6BD8
-	.public ov64_021E6E30
+	.public HallOfFameShowcase_VBlankCB
+	.public HallOfFameShowcase_LoadMainObjChar
+	.public HallOfFameShowcase_LoadSubObjChar
+	.public HallOfFameShowcase_LoadMainObjPltt
+	.public HallOfFameShowcase_SetGfxBanks
+	.public HallOfFameShowcase_FreeBgs
+	.public HallOfFameShowcase_DeleteSprite
+	.public HallOfFameShowcase_FreeSprites
+	.public HallOfFameShowcase_TickSprites
+	.public HallOfFameShowcase_FreeStrings
+	.public HallOfFameShowcase_FreeWindows
+	.public HallOfFameShowcase_CreateGridInput
+	.public HallOfFameShowcase_FreeGridInput
+	.public HallOfFameShowcase_GridOnButton
+	.public HallOfFameShowcase_GridOnSwitchToTouchMode
+	.public HallOfFameShowcase_GridOnTouch
+	.public HallOfFameShowcase_GridOnKeyMove
+	.public HallOfFameShowcase_BeginFadeIn
+	.public HallOfFameShowcase_BeginFadeOut
+	.public HallOfFameShowcase_DeletePartyIcons
+	.public HallOfFameShowcase_HideMonDetail
+	.public HallOfFameShowcase_MoveCursor
+	.public HallOfFameShowcase_GetOverworldModelFileId
 
-	thumb_func_start ov64_021E6C1C
-ov64_021E6C1C: ; 0x021E6C1C
+	thumb_func_start HallOfFameShowcase_CreatePartyIcon
+HallOfFameShowcase_CreatePartyIcon: ; 0x021E6C1C
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x68
 	add r5, r0, #0
@@ -112,7 +112,7 @@ _021E6C60:
 	bl SpriteSystem_LoadCharResObjFromOpenNarc
 	add r0, r4, #0
 	bl NARC_Delete
-	ldr r4, _021E6E20 ; =ov64_021E6FD4
+	ldr r4, _021E6E20 ; =sShowcasePartyIconSpriteTemplate
 	add r3, sp, #0x34
 	mov r2, #6
 _021E6C84:
@@ -130,11 +130,11 @@ _021E6C84:
 	str r0, [sp, #0x54]
 	ldr r0, [sp, #0x10]
 	lsl r2, r0, #2
-	ldr r0, _021E6E24 ; =ov64_021E6ECC
+	ldr r0, _021E6E24 ; =sShowcaseIconPositions
 	ldrsh r1, [r0, r2]
 	add r0, sp, #0x30
 	strh r1, [r0, #4]
-	ldr r1, _021E6E28 ; =ov64_021E6ECE
+	ldr r1, _021E6E28 ; =sShowcaseIconPositionsY
 	ldrsh r1, [r1, r2]
 	add r2, sp, #0x34
 	strh r1, [r0, #6]
@@ -177,7 +177,7 @@ _021E6C84:
 	ldrh r0, [r5, r1]
 	add r1, r1, #3
 	ldrb r1, [r5, r1]
-	bl ov64_021E6E30
+	bl HallOfFameShowcase_GetOverworldModelFileId
 	lsl r0, r0, #0x10
 	lsr r1, r0, #0x10
 	mov r0, #0x51
@@ -217,7 +217,7 @@ _021E6C84:
 	ldr r1, [sp, #0x2c]
 	add r0, r7, #0
 	add r2, r4, #0
-	bl ov64_021E5AAC
+	bl HallOfFameShowcase_LoadMainObjChar
 	str r6, [sp]
 	mov r2, #0
 	str r6, [sp, #4]
@@ -234,7 +234,7 @@ _021E6C84:
 	add r0, r7, #0
 	add r1, r1, r4
 	add r2, r4, #0
-	bl ov64_021E5AAC
+	bl HallOfFameShowcase_LoadMainObjChar
 	b _021E6DCE
 _021E6D8C:
 	ldr r0, [sp, #0x14]
@@ -249,7 +249,7 @@ _021E6D8C:
 	ldr r1, [sp, #0x2c]
 	add r0, r7, #0
 	add r2, r4, #0
-	bl ov64_021E5AAC
+	bl HallOfFameShowcase_LoadMainObjChar
 	lsl r0, r4, #1
 	add r1, r4, r0
 	ldr r0, [sp, #0x14]
@@ -265,7 +265,7 @@ _021E6D8C:
 	add r0, r7, #0
 	add r1, r1, r4
 	add r2, r4, #0
-	bl ov64_021E5AAC
+	bl HallOfFameShowcase_LoadMainObjChar
 _021E6DCE:
 	add r0, r7, #0
 	bl Heap_Free
@@ -293,7 +293,7 @@ _021E6E02:
 	add r0, r4, #0
 	add r1, r6, #0
 	mov r2, #0x20
-	bl ov64_021E5AE4
+	bl HallOfFameShowcase_LoadMainObjPltt
 	ldr r0, [sp, #0x1c]
 	bl Heap_Free
 	add sp, #0x68
@@ -301,8 +301,8 @@ _021E6E02:
 	nop
 _021E6E18: .word 0x0000DCC2
 _021E6E1C: .word 0x0000DCC1
-_021E6E20: .word ov64_021E6FD4
-_021E6E24: .word ov64_021E6ECC
-_021E6E28: .word ov64_021E6ECE
+_021E6E20: .word sShowcasePartyIconSpriteTemplate
+_021E6E24: .word sShowcaseIconPositions
+_021E6E28: .word sShowcaseIconPositionsY
 _021E6E2C: .word 0x0000FF9E
-	thumb_func_end ov64_021E6C1C
+	thumb_func_end HallOfFameShowcase_CreatePartyIcon

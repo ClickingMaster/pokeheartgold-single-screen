@@ -10,7 +10,7 @@ extern u8 ov74_0223C2F0[];
 extern u8 gSystem[];
 
 extern int WindowIsInUse(void *);
-extern void sub_0200E5D4(void *, int);
+extern void EraseFrameAndWindow1(void *, int);
 extern void ClearFrameAndWindow2(void *, int);
 extern void Sprite_Delete(void *);
 extern void ov74_022359BC(void);

@@ -282,11 +282,11 @@ void ov12_02237D00(BattleSystem *battleSystem) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
 
     frame = BattleSystem_GetFrame(battleSystem);
-    sub_0200EB80(battleSystem->bgConfig, GF_BG_LYR_MAIN_1, 1, 10, frame, HEAP_ID_BATTLE);
+    LoadUserFrameGfx2WithFill(battleSystem->bgConfig, GF_BG_LYR_MAIN_1, 1, 10, frame, HEAP_ID_BATTLE);
 
     GfGfxLoader_LoadCharData(NARC_a_0_0_7, battleSystem->backgroundId + 3, battleSystem->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, TRUE, HEAP_ID_BATTLE);
     PaletteData_LoadNarc(battleSystem->palette, NARC_a_0_0_7, battleSystem->backgroundId * 3 + 0xB0 + ov12_0223B52C(battleSystem), HEAP_ID_BATTLE, (PaletteBufferId)0, 0, 0);
-    PaletteData_LoadNarc(battleSystem->palette, NARC_a_0_3_8, sub_0200E640(frame), HEAP_ID_BATTLE, (PaletteBufferId)0, 0x20, 0xA0);
+    PaletteData_LoadNarc(battleSystem->palette, NARC_a_0_3_8, GetUserFrameGfx2PaletteMember(frame), HEAP_ID_BATTLE, (PaletteBufferId)0, 0x20, 0xA0);
     PaletteData_LoadNarc(battleSystem->palette, NARC_graphic_font, 8, HEAP_ID_BATTLE, (PaletteBufferId)0, 0x20, 0xB0);
     GfGfxLoader_LoadScrnData(NARC_a_0_0_7, 2, battleSystem->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, TRUE, HEAP_ID_BATTLE);
 

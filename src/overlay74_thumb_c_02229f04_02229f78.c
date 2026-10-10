@@ -14,7 +14,7 @@ void ov74_02229F28(void *p, int value) {
 }
 void ov74_02229F60(void *window, int arg) {
     if (WindowIsInUse(window) == 1) {
-        sub_0200E5D4(window, arg);
+        EraseFrameAndWindow1(window, arg);
     }
 }
 void ov74_02229F78(void *window, int arg) {

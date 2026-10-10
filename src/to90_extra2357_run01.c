@@ -15,7 +15,7 @@ void *YesNoPrompt_Create(u32);
 void GfGfxLoader_GXLoadPal(u32, s32, u32, u32, u32, u32);
 u32 ov102_021E9084(void *);
 void LoadUserFrameGfx2(void *, u32, u16, u32, u8, u32);
-void sub_0200E948(void *, u32, u32);
+void DrawFrame2AroundWindow(void *, u32, u32);
 void PutWindowTilemap(void *);
 void ov102_021EA8C0(void *);
 void ov102_021EAA3C(void *);
@@ -58,7 +58,7 @@ void ov102_021EA41C(u8 *work, NARC *narc) {
     U16(work, 0x1EC) = (u16)(n + 0xE7);
     LoadUserFrameGfx2(bg, 0, (u16)(n + 0xE7), 0x0F, (u8)ov102_021E9084(PTR(work, 4)), 0x23);
     PTR(work, 0x5C) = work + 0x2C;
-    sub_0200E948(work + 0x2C, n + 0xE7, 0x0F);
+    DrawFrame2AroundWindow(work + 0x2C, n + 0xE7, 0x0F);
     PutWindowTilemap(work + 0x0C);
     PutWindowTilemap(work + 0x1C);
     PutWindowTilemap(work + 0x2C);

@@ -17,7 +17,7 @@ BOOL ov57_0223A504(void *w) {
         break;
     case 2:
         ov57_0223B828(w, 0, 0xff, 0);
-        sub_0200E5D4((u8 *)w + 0xec, 1);
+        EraseFrameAndWindow1((u8 *)w + 0xec, 1);
         ClearWindowTilemapAndScheduleTransfer((u8 *)w + 0xec);
         ov57_0223866C(w, 1);
         ov57_02239728((u8 *)w + 0x11c, 3, 7, 0);

@@ -8,7 +8,7 @@ void DrawFrameAndWindow1(void *, int, int, int);
 void FillWindowPixelBuffer(void *, int);
 void ScheduleWindowCopyToVram(void *);
 int WindowIsInUse(void *);
-void sub_0200E5D4(void *, int);
+void EraseFrameAndWindow1(void *, int);
 void ClearWindowTilemapAndScheduleTransfer(void *);
 void RemoveWindow(void *);
 void AddTextPrinterParameterizedWithColor(void *, int, void *, int, int, int, u32, void *);

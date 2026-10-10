@@ -95,7 +95,7 @@ u32 ov48_02259E5C(void *p, s32 sel) {
 }
 
 void ov48_02259E78(void *p) {
-    sub_0200E5D4(ADD(p, 0x1C), 1);
+    EraseFrameAndWindow1(ADD(p, 0x1C), 1);
     ClearWindowTilemapAndScheduleTransfer(ADD(p, 0x1C));
 }
 

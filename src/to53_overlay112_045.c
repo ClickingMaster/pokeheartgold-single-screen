@@ -9,5 +9,5 @@ void ov112_021EA17C(void *p) {
 }
 
 void ov112_021EA19C(void *p) {
-    sub_0200F450(*(void **)((u8 *)p + 0x1EC4C));
+    WaitingIcon_Delete(*(void **)((u8 *)p + 0x1EC4C));
 }

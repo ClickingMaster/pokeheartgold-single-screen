@@ -21,7 +21,7 @@ void ov89_02259264(Ov89WorkHead *work, NARC *narc) {
     MI_CpuCopy16(tilemap, (u8 *)work + 0x9c0, 0x800);
     MIi_CpuClear16(0, tilemap, 0x800);
     frame = Options_GetFrame(Save_PlayerData_GetOptionsAddr(work->save));
-    PaletteData_LoadNarc(work->palette, (NarcId)0x26, sub_0200E640(frame), (enum HeapID)0x7d, (PaletteBufferId)0, 0x20, 0xe0);
+    PaletteData_LoadNarc(work->palette, (NarcId)0x26, GetUserFrameGfx2PaletteMember(frame), (enum HeapID)0x7d, (PaletteBufferId)0, 0x20, 0xe0);
     LoadUserFrameGfx2(work->bg, (GFBgLayer)1, 1, 0xe, frame, (enum HeapID)0x7d);
     PaletteData_LoadNarc(work->palette, (NarcId)0x10, 7, (enum HeapID)0x7d, (PaletteBufferId)0, 0x20, 0xd0);
     if (((u8 *)work->args)[4] == 0) {

@@ -57,7 +57,7 @@ int ov72_0223A2E8(void *p) {
 
 int ov72_0223A314(void *p) {
     if ((gSystem.newKeys & PAD_BUTTON_A) || (gSystem.newKeys & PAD_BUTTON_B) || gSystem.touchNew) {
-        sub_0200E5D4((u8 *)p + 0xE58, 0);
+        EraseFrameAndWindow1((u8 *)p + 0xE58, 0);
         U32(p, 0x1C) = 0;
     }
     return 3;

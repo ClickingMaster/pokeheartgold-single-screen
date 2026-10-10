@@ -7,7 +7,7 @@ void ov80_0222E88C(void *work) {
 
     PlaySE(0x5DC);
     Delete2dMenu(PTR_AT(work, 0xB0), 0);
-    sub_0200E5D4(PTR_AT(work, 0xA8), 0);
+    EraseFrameAndWindow1(PTR_AT(work, 0xA8), 0);
     RemoveWindow(PTR_AT(work, 0xA8));
     i = 0;
     cursor = work;

@@ -761,9 +761,9 @@ ov45_02254B64: ; 0x02254B64
 	.word FS_OVERLAY_ID(OVY_46)
 
 ov45_02254B74: ; 0x02254B74
-	.word ov88_02258800
-	.word ov88_022588C4
-	.word ov88_022589FC
+	.word PlazaNews_Init
+	.word PlazaNews_Main
+	.word PlazaNews_Exit
 	.word FS_OVERLAY_ID(OVY_88)
 
 ov45_02254B84: ; 0x02254B84

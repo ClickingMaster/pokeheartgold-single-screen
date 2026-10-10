@@ -8,7 +8,7 @@
 s32 ov15_021FCFC8(void *work) {
     void *str;
     s32 n;
-    sub_0200E5D4((u8 *)work + 0x44, TRUE);
+    EraseFrameAndWindow1((u8 *)work + 0x44, TRUE);
     ov15_021FF834(work);
     FillWindowPixelBuffer((u8 *)work + 0x34, 15);
     str = NewString_ReadMsgData(PTR(work, 0x2f0), 78);
@@ -26,8 +26,8 @@ s32 ov15_021FCFC8(void *work) {
 s32 ov15_021FD058(void *work) {
     void *state;
     U32(work, 0x684) = 0;
-    sub_0200E5D4((u8 *)work + 0x214, TRUE);
-    sub_0200E5D4((u8 *)work + 0x44, TRUE);
+    EraseFrameAndWindow1((u8 *)work + 0x214, TRUE);
+    EraseFrameAndWindow1((u8 *)work + 0x44, TRUE);
     ClearFrameAndWindow2((u8 *)work + 0x34, TRUE);
     ClearWindowTilemapAndScheduleTransfer((u8 *)work + 0x34);
     ScheduleWindowCopyToVram((u8 *)work + 4);

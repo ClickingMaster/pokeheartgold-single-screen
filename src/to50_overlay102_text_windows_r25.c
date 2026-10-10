@@ -8,7 +8,7 @@ void ov102_021EADF8(u8 *work, u32 index) {
     ClearWindowTilemapAndCopyToVram(PTR(work, 0x5C));
     window = work + 0x2C + index * 0x10;
     PTR(work, 0x5C) = window;
-    sub_0200E948(window, U16(work, 0x1EC), 0x0F);
+    DrawFrame2AroundWindow(window, U16(work, 0x1EC), 0x0F);
 }
 void ov102_021EAE40(u8 *work, u32 mode) {
     void *fmt;

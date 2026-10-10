@@ -2,7 +2,7 @@
 #include "to57_overlay74_large_prototypes.h"
 
 extern BOOL WindowIsInUse(void *);
-extern void sub_0200E5D4(void *, u32);
+extern void EraseFrameAndWindow1(void *, u32);
 extern void ClearFrameAndWindow2(void *, u32);
 extern void Sprite_Delete(void *);
 extern void BG_SetMaskColor(u32, u32);

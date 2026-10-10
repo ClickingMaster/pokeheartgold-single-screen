@@ -54,7 +54,7 @@ void ov80_0222EDA0(void *work, int playSound) {
         PlaySE(0x5dc);
     }
     DestroyListMenu(PTR_AT(work, 0x1b4), NULL, NULL);
-    sub_0200E5D4(PTR_AT(work, 0x1a0), 0);
+    EraseFrameAndWindow1(PTR_AT(work, 0x1a0), 0);
     RemoveWindow((Window *)((u8 *)work + 8));
     i = 0;
     walker = work;

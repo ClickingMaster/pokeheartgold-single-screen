@@ -27,7 +27,7 @@ extern void ObjPlttTransfer_Destroy(void);
 extern void OamManager_Free(void);
 extern void MessageFormat_Delete(void *);
 extern void DestroyMsgData(void *);
-extern void sub_0200F478(void *);
+extern void WaitingIcon_DeleteWithoutRestore(void *);
 extern void Sprite_Delete(void *);
 extern void sub_02014A8C(void *);
 extern void sub_02014A78(void *, int);

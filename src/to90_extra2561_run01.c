@@ -57,7 +57,7 @@ BOOL ov57_0223A7DC(void *parent) {
         ov57_0223A034(w, FALSE);
         ov57_02239240((u8 *)w, FALSE);
         ov57_022387C0((u8 *)w, FALSE);
-        sub_0200E5D4(&w->window0, TRUE);
+        EraseFrameAndWindow1(&w->window0, TRUE);
         ov57_02239728(&w->window1, 3, 7, FALSE);
         CopyWindowToVram(&w->window1);
         ov57_0223866C(w, TRUE);

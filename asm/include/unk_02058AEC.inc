@@ -13,7 +13,7 @@
 .public SysTask_Destroy
 .public LoadUserFrameGfx1
 .public DrawFrameAndWindow1
-.public sub_0200E5D4
+.public EraseFrameAndWindow1
 .public ClearFrameAndWindow2
 .public IsPaletteFadeFinished
 .public ListMenuCursorNew

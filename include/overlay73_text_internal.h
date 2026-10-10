@@ -5,7 +5,7 @@
 #include "system.h"
 extern void *ov73_021E6A70(int, int);
 extern void ov73_021EA218(void *, void *, int);
-extern void sub_0200E5D4(void *, int);
+extern void EraseFrameAndWindow1(void *, int);
 extern int FontID_String_GetWidth(int, const void *, int);
 extern void *NewString_ReadMsgData(void *, int);
 extern void StringExpandPlaceholders(void *, void *, const void *);

@@ -77,11 +77,11 @@
 .public ManagedSprite_SetPositionXY
 .public SysTask_CreateOnMainQueue
 .public SysTask_Destroy
-.public sub_0200E398
-.public sub_0200E3D8
-.public sub_0200E640
+.public LoadUserFrameGfx1Tiles
+.public GetUserFrameGfx1PaletteMember
+.public GetUserFrameGfx2PaletteMember
 .public DrawFrameAndWindow2
-.public sub_0200EB80
+.public LoadUserFrameGfx2WithFill
 .public SetMasterBrightnessNeutral
 .public sub_0200FBF4
 .public sub_020163E0

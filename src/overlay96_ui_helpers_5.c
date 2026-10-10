@@ -24,7 +24,7 @@ void ov96_021EE994(u8 *p) {
 void ov96_021EE9BC(u8 *p) {
     if (p == NULL) GF_AssertFail();
     if (*(void **)(p + 0x30) == NULL) GF_AssertFail();
-    sub_0200F450(*(void **)(p + 0x30));
+    WaitingIcon_Delete(*(void **)(p + 0x30));
 }
 
 void ov96_021EE9D8(void *bg, int palette, enum HeapID heapId) {

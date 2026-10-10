@@ -10,7 +10,7 @@ typedef struct MailMessageScratch {
 } MailMessageScratch;
 
 extern void *TaskManager_GetEnvironment(TaskManager *);
-extern int sub_0200E5D4(void *, int);
+extern int EraseFrameAndWindow1(void *, int);
 extern u32 sub_02070D90(void);
 extern BOOL sub_02037FCC(void);
 extern void SysTask_Destroy(void *);

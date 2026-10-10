@@ -2,9 +2,9 @@
 
 void ov95_021E5BBC(void *bg, void *palette, int frame) {
     LoadUserFrameGfx2(bg, 1, 0x14, 0xF, (u8)frame, 0x46);
-    PaletteData_LoadNarc(palette, 0x26, sub_0200E640(frame), 0x46, 0, 0x20, 0xC0);
+    PaletteData_LoadNarc(palette, 0x26, GetUserFrameGfx2PaletteMember(frame), 0x46, 0, 0x20, 0xC0);
     LoadUserFrameGfx1(bg, 1, 0x32, 0xD, 0, 0x46);
-    PaletteData_LoadNarc(palette, 0x26, sub_0200E3D8(), 0x46, 0, 0x20, 0xD0);
+    PaletteData_LoadNarc(palette, 0x26, GetUserFrameGfx1PaletteMember(), 0x46, 0, 0x20, 0xD0);
     PaletteData_LoadNarc(palette, 0x10, 8, 0x46, 0, 0x20, 0xE0);
 }
 

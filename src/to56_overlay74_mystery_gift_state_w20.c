@@ -203,7 +203,7 @@ int ov74_0222E1F4(OverlayManager *arg0, int *arg1) {
             sub_020398D4(0, 0);
             ov74_02236128();
             ov74_0222D9E0(temp_r4, temp_r4->window2BD0, 0x12, 0x280);
-            sub_0200F450(temp_r4->waitingIcon);
+            WaitingIcon_Delete(temp_r4->waitingIcon);
             ov74_0222EB28(temp_r4, arg1, 0x1A);
         }
         break;

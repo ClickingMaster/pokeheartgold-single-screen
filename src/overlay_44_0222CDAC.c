@@ -1355,7 +1355,7 @@ void ov44_0222B0A4(UnkStruct_ov44_022319EC *arg0) {
 
 void ov44_0222B0B0(UnkStruct_ov44_022319EC *arg0) {
     if (WindowIsInUse(&arg0->unk2F0) != 0) {
-        sub_0200E5D4(&arg0->unk2F0, 0);
+        EraseFrameAndWindow1(&arg0->unk2F0, 0);
         RemoveWindow(&arg0->unk2F0);
     }
     AddWindowParameterized(arg0->unk15C, &arg0->unk2F0, 3, 5, 1, 22, 2, 13, 458);
@@ -1803,7 +1803,7 @@ s32 ov44_0222BC78(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
             ov44_0222FA28(arg0);
         }
         if (WindowIsInUse(&arg0->unk2F0) != 0) {
-            sub_0200E5D4(&arg0->unk2F0, 0);
+            EraseFrameAndWindow1(&arg0->unk2F0, 0);
             RemoveWindow(&arg0->unk2F0);
         }
         if (WindowIsInUse(&arg0->unk2E0) != 0) {
@@ -2014,7 +2014,7 @@ void ov44_0222C29C(UnkStruct_ov44_022319EC *arg0) {
         RemoveWindow(&arg0->unk2E0);
     }
     if (WindowIsInUse(&arg0->unk2F0) != 0) {
-        sub_0200E5D4(&arg0->unk2F0, 0);
+        EraseFrameAndWindow1(&arg0->unk2F0, 0);
         RemoveWindow(&arg0->unk2F0);
     }
     AddWindowParameterized(arg0->unk15C, &arg0->unk2E0, 3, 1, 1, 28, 2, 13, 402);
@@ -2686,7 +2686,7 @@ s32 ov44_0222D3DC(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         ListMenuItems_AppendFromMsgData(arg0->unk154, arg0->unk168, listMenuItems[i].strno, listMenuItems[i].value);
     }
     if (WindowIsInUse(&arg0->unk320) != 0) {
-        sub_0200E5D4(&arg0->unk320, 0);
+        EraseFrameAndWindow1(&arg0->unk320, 0);
         RemoveWindow(&arg0->unk320);
     }
     s32 height = (listLen + 1) * 2;
@@ -2707,7 +2707,7 @@ s32 ov44_0222D594(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     s32 temp_r6 = ov44_0222E02C(arg0);
     ov44_02232018(&arg0->unk38C);
     if (sub_020393C8() != 0) {
-        sub_0200E5D4(&arg0->unk320, 0);
+        EraseFrameAndWindow1(&arg0->unk320, 0);
         RemoveWindow(&arg0->unk320);
         DestroyListMenu(arg0->unk158, NULL, &arg0->unk374);
         ListMenuItems_Delete(arg0->unk154);
@@ -2718,7 +2718,7 @@ s32 ov44_0222D594(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (TextPrinterCheckActive(arg0->unk180) != 0) {
         if (ov44_0222C500(arg0) != 0) {
             arg0->unk348 = 19;
-            sub_0200E5D4(&arg0->unk320, 0);
+            EraseFrameAndWindow1(&arg0->unk320, 0);
             RemoveWindow(&arg0->unk320);
             DestroyListMenu(arg0->unk158, NULL, &arg0->unk374);
             ListMenuItems_Delete(arg0->unk154);
@@ -2756,7 +2756,7 @@ s32 ov44_0222D594(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
             ov44_0222F510(arg0, 103, 0);
             arg0->unk348 = 29;
         } else if ((var_r4 == 0) || (var_r4 == 1) || (var_r4 == 29)) {
-            sub_0200E5D4(&arg0->unk320, 0);
+            EraseFrameAndWindow1(&arg0->unk320, 0);
             RemoveWindow(&arg0->unk320);
             DestroyListMenu(arg0->unk158, NULL, &arg0->unk374);
             ListMenuItems_Delete(arg0->unk154);
@@ -2785,7 +2785,7 @@ s32 ov44_0222D594(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         }
     }
 
-    sub_0200E5D4(&arg0->unk320, 0);
+    EraseFrameAndWindow1(&arg0->unk320, 0);
     RemoveWindow(&arg0->unk320);
     DestroyListMenu(arg0->unk158, NULL, &arg0->unk374);
     ListMenuItems_Delete(arg0->unk154);
@@ -2850,7 +2850,7 @@ s32 ov44_0222D8B0(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         }
     }
     if (WindowIsInUse(&arg0->unk320) != 0) {
-        sub_0200E5D4(&arg0->unk320, 0);
+        EraseFrameAndWindow1(&arg0->unk320, 0);
         RemoveWindow(&arg0->unk320);
     }
     u32 temp_r0 = listLen * 2;
@@ -2866,7 +2866,7 @@ s32 ov44_0222D8B0(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
 s32 ov44_0222DA64(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     ov44_02232018(&arg0->unk38C);
     if (sub_020393C8() != 0) {
-        sub_0200E5D4(&arg0->unk320, 0);
+        EraseFrameAndWindow1(&arg0->unk320, 0);
         RemoveWindow(&arg0->unk320);
         DestroyListMenu(arg0->unk158, 0, &arg0->unk376 + arg0->unk37C);
         ListMenuItems_Delete(arg0->unk154);
@@ -2876,7 +2876,7 @@ s32 ov44_0222DA64(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     }
     if (ov44_0222C500(arg0) != 0) {
         arg0->unk348 = 19;
-        sub_0200E5D4(&arg0->unk320, 0);
+        EraseFrameAndWindow1(&arg0->unk320, 0);
         RemoveWindow(&arg0->unk320);
         DestroyListMenu(arg0->unk158, 0, &arg0->unk376 + arg0->unk37C);
         ListMenuItems_Delete(arg0->unk154);
@@ -2915,7 +2915,7 @@ s32 ov44_0222DA64(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         }
         ov44_022319BC(arg0, var_r7);
     }
-    sub_0200E5D4(&arg0->unk320, 0);
+    EraseFrameAndWindow1(&arg0->unk320, 0);
     RemoveWindow(&arg0->unk320);
     DestroyListMenu(arg0->unk158, 0, &arg0->unk376 + arg0->unk37C);
     ListMenuItems_Delete(arg0->unk154);
@@ -3105,7 +3105,7 @@ s32 ov44_0222E090(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     s32 temp_r0 = ov44_02231C70(&arg0->unk38C);
     UnkStruct_ov44_02232B74 *sp14 = ov44_0222AAEC(arg0, temp_r0);
     if (sub_020393C8() != 0) {
-        sub_0200E5D4(&arg0->unk320, 0);
+        EraseFrameAndWindow1(&arg0->unk320, 0);
         RemoveWindow(&arg0->unk320);
         DestroyListMenu(arg0->unk158, 0, NULL);
         ListMenuItems_Delete(arg0->unk154);
@@ -3236,7 +3236,7 @@ s32 ov44_0222E090(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     if (var_r6 == 0) {
         ov44_0222F7BC(arg0);
     }
-    sub_0200E5D4(&arg0->unk320, 0);
+    EraseFrameAndWindow1(&arg0->unk320, 0);
     RemoveWindow(&arg0->unk320);
     DestroyListMenu(arg0->unk158, 0, NULL);
     ListMenuItems_Delete(arg0->unk154);
@@ -4032,7 +4032,7 @@ u8 ov44_0222F8F0(UnkStruct_ov44_022319EC *arg0) {
 
 void ov44_0222F910(UnkStruct_ov44_022319EC *arg0) {
     if (arg0->unk18C != 0) {
-        sub_0200F478();
+        WaitingIcon_DeleteWithoutRestore();
         arg0->unk18C = 0;
         if (WindowIsInUse(&arg0->unk2D0) != 0) {
             ClearFrameAndWindow2(&arg0->unk2D0, 0);

@@ -11,7 +11,7 @@ typedef struct Ov65StateR13 {
     u8 pad222C[0x1488];
     void *field36B4;
 } Ov65StateR13;
-extern void sub_0200F450(void *);
+extern void WaitingIcon_Delete(void *);
 extern s32 Party_GetCount(void *);
 extern void *Party_GetMonByIndex(void *, u32);
 extern u32 GetMonData(void *, u32, void *);

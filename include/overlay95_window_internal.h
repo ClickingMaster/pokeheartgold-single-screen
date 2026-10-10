@@ -3,8 +3,8 @@
 #include "global.h"
 extern void LoadUserFrameGfx2(void *, int, int, int, int, int);
 extern void LoadUserFrameGfx1(void *, int, int, int, int, int);
-extern int sub_0200E640(int);
-extern int sub_0200E3D8(void);
+extern int GetUserFrameGfx2PaletteMember(int);
+extern int GetUserFrameGfx1PaletteMember(void);
 extern void PaletteData_LoadNarc(void *, int, int, int, int, int, int);
 extern void InitWindow(void *);
 extern void AddWindowParameterized(void *, void *, int, int, int, int, int, int, int);

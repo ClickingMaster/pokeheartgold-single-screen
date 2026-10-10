@@ -64,7 +64,7 @@ void ov74_02228E98(void *);
 void ov74_02235414(void *, void *, int, int, int, int);
 void ov74_02235464(void *, int, int, void *);
 void ov74_02235568(void *, void *, int, int, int);
-void sub_0200E5D4(void *, int);
+void EraseFrameAndWindow1(void *, int);
 int ov74_02228F14(void *);
 
 void ov74_02229190(void *mgr) {

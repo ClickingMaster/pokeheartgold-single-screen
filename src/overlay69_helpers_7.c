@@ -38,7 +38,7 @@ typedef struct {
 
 extern int LocationGmmDatIndexGetByCountryMsgNo(int country);
 extern void PlaySE(u16 seqNo);
-extern void sub_0200E5D4(void *window, int fillValue);
+extern void EraseFrameAndWindow1(void *window, int fillValue);
 extern void RemoveWindow(void *window);
 extern void Heap_Free(void *ptr);
 extern void DestroyListMenu(void *menu, int *selection, int *cursor);

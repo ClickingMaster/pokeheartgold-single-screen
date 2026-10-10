@@ -106,6 +106,6 @@
 .public ov45_0222DD5C
 .public ov45_0222DD78
 .public ov45_0222DDE4
-.public ov88_02258800
-.public ov88_022588C4
-.public ov88_022589FC
+.public PlazaNews_Init
+.public PlazaNews_Main
+.public PlazaNews_Exit

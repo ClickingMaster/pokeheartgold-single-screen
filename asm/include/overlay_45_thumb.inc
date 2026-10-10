@@ -416,9 +416,9 @@
 .public ov49_02259AA4
 .public ov49_02259C90
 .public ov49_02259EF8
-.public ov88_02258800
-.public ov88_022588C4
-.public ov88_022589FC
+.public PlazaNews_Init
+.public PlazaNews_Main
+.public PlazaNews_Exit
 .public ov89_02258800
 .public ov89_02258B04
 .public ov89_02258F00

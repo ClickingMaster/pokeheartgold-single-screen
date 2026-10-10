@@ -60,11 +60,11 @@
 .public SysTask_CreateOnMainQueue
 .public SysTask_CreateOnVBlankQueue
 .public SysTask_Destroy
-.public sub_0200E640
+.public GetUserFrameGfx2PaletteMember
 .public DrawFrameAndWindow2
-.public sub_0200EB80
+.public LoadUserFrameGfx2WithFill
 .public WaitingIcon_New
-.public sub_0200F450
+.public WaitingIcon_Delete
 .public SetMasterBrightnessNeutral
 .public sub_0200FBF4
 .public sub_02014DA0

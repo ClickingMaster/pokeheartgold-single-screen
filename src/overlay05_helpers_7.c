@@ -37,7 +37,7 @@ extern void FillWindowPixelRect(void *, int, int, int, int, int);
 extern void DrawFrameAndWindow2(void *, int, int, int);
 extern int sub_0202FC48(void *);
 extern void *WaitingIcon_New(void *, int);
-extern void sub_0200F450(void *);
+extern void WaitingIcon_Delete(void *);
 extern const u8 ov05_0221ECE4[];
 extern int IsPaletteFadeFinished(void);
 typedef struct Banks40 {

@@ -44,7 +44,7 @@
 .public MessageFormat_Delete
 .public LoadUserFrameGfx1
 .public DrawFrameAndWindow1
-.public sub_0200E5D4
+.public EraseFrameAndWindow1
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
 .public sub_0200FB70

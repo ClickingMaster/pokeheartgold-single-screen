@@ -90,6 +90,6 @@ int FrtCmd_119(void *c) {
 }
 
 int FrtCmd_120(void *c) {
-    sub_0200F450(PTR(FSYS(c), 0x7c));
+    WaitingIcon_Delete(PTR(FSYS(c), 0x7c));
     return 0;
 }

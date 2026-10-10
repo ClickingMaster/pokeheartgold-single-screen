@@ -35,7 +35,7 @@ extern void sub_0202FC24(void *);
 extern void SaveGameNormal(void *);
 extern void Save_WipeExtraChunks(void *);
 extern void *WaitingIcon_New(void *, u32);
-extern void sub_0200F450(void *);
+extern void WaitingIcon_Delete(void *);
 extern void BufferItemName(void *, u8, u16);
 extern void BufferMoveName(void *, u8, u16);
 extern void BufferTypeName(void *, u8, u16);

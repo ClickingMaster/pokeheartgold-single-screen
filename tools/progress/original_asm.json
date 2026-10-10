@@ -1572,35 +1572,35 @@
   {
    "function": "RTCi_GpioEnd",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_21_r01.c",
+   "source": "sub/lib/src/rtc_driver.c",
    "kind": "asm",
    "reason": "orr r0,r0,#0 no-op (macro-expanded asm; MWCC folds x|0)"
   },
   {
    "function": "RTCi_GpioReceiveData",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_21_r01.c",
+   "source": "sub/lib/src/rtc_driver.c",
    "kind": "asm",
    "reason": "push {r0,r1} mid-function scratch save + orr r0,r0,#0"
   },
   {
    "function": "RTCi_GpioSendCommand",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_21_r01.c",
+   "source": "sub/lib/src/rtc_driver.c",
    "kind": "asm",
    "reason": "orr r0,r0,#0 no-op (macro-expanded asm)"
   },
   {
    "function": "RTCi_GpioSendData",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_21_r01.c",
+   "source": "sub/lib/src/rtc_driver.c",
    "kind": "asm",
    "reason": "push {r0,r1}/pop {r0,r1} mid-function as scratch save (push without lr; only {r0-r3} varargs pushes exist in MWCC ARM7 code) + orr r0,r0,#0"
   },
   {
    "function": "RTCi_GpioStart",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_21_r01.c",
+   "source": "sub/lib/src/rtc_driver.c",
    "kind": "asm",
    "reason": "bic #4 followed by orr #4 of the same bit and register-only mov/subs/bne delay loops (macro-expanded assembly; MWCC folds (x & ~4) | 4)"
   },

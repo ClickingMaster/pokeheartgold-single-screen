@@ -4,7 +4,7 @@ extern void *ListMenu_ProcessInput(void *);
 extern void ov49_0225B070(void *);
 extern void PlaySE(int);
 extern void DestroyListMenu(void *);
-extern void sub_0200E5D4(void *, int);
+extern void EraseFrameAndWindow1(void *, int);
 extern void ClearWindowTilemapAndScheduleTransfer(void *);
 extern void RemoveWindow(void *);
 extern void Sprite_SetDrawFlag(void *, int);
@@ -102,7 +102,7 @@ void ov49_0225B014(MenuState *state, int unused1, int unused2)
     if (state->menu != NULL) {
         DestroyListMenu(state->menu);
         state->menu = NULL;
-        sub_0200E5D4(state->window, 1);
+        EraseFrameAndWindow1(state->window, 1);
         ClearWindowTilemapAndScheduleTransfer(state->window);
         RemoveWindow(state->window);
         state->field3C = 0;

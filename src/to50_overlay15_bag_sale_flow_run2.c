@@ -4,7 +4,7 @@ s32 ov15_021FD2FC(void *work) {
 
     if (!TextPrinterCheckActive(U8(work, 0x616)) && ((U32(gSystem, 0x48) & 3) || U16(gSystem, 0x64))) {
         U32(work, 0x684) = 0;
-        sub_0200E5D4((u8 *)work + 0x214, 1);
+        EraseFrameAndWindow1((u8 *)work + 0x214, 1);
         ClearFrameAndWindow2((u8 *)work + 0x34, 1);
         ClearWindowTilemapAndScheduleTransfer((u8 *)work + 0x34);
         ScheduleWindowCopyToVram((u8 *)work + 4);

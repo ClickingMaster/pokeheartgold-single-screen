@@ -34,9 +34,9 @@ void ov12_022399D4(OverlayManager *man, BattleSetup *setup) {
     InitBgFromTemplate(work->bg, 1, &bgTemplate, 0);
     BgClearTilemapBufferAndCommit(work->bg, 1);
     frame = Options_GetFrame(setup->options);
-    sub_0200EB80(work->bg, 1, 1, 10, (u8)frame, (enum HeapID)5);
+    LoadUserFrameGfx2WithFill(work->bg, 1, 1, 10, (u8)frame, (enum HeapID)5);
     PaletteData_LoadNarc(work->palette, (NarcId)0x10, 8, (enum HeapID)5, (PaletteBufferId)0, 0x20, 0xB0);
-    PaletteData_LoadNarc(work->palette, (NarcId)0x26, sub_0200E640(frame), (enum HeapID)5, (PaletteBufferId)0, 0x20, 0xA0);
+    PaletteData_LoadNarc(work->palette, (NarcId)0x26, GetUserFrameGfx2PaletteMember(frame), (enum HeapID)5, (PaletteBufferId)0, 0x20, 0xA0);
     PaletteData_FillPaletteInBuffer(work->palette, (PaletteBufferId)0, (PaletteSelector)0, 0, 0, 0x100);
     GfGfx_BothDispOn();
     GfGfx_EngineATogglePlanes(0x10, TRUE);

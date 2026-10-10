@@ -24,7 +24,7 @@ void ov01_021EE568(MoveTutorMenu *menu) {
 
     PlaySE(SEQ_SE_DP_SELECT);
     DestroyListMenu(menu->listMenu, NULL, NULL);
-    sub_0200E5D4(menu->listTemplate.window, 0);
+    EraseFrameAndWindow1(menu->listTemplate.window, 0);
     RemoveWindow(&menu->window);
     for (i = 0; i < 28; i++) {
         String_Delete(menu->strbufs[i]);

@@ -90,7 +90,7 @@ void sub_020398D4(int, int);
 int ov74_0222E898(void);
 int sub_02037B38(int);
 void ov74_02236128(void);
-void sub_0200F450(void *);
+void WaitingIcon_Delete(void *);
 void ov74_0222EB28(void *, int *, int);
 void ov74_022358BC(void);
 void ov74_0222D414(void);

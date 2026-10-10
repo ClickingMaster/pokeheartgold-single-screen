@@ -4,65 +4,65 @@
 	.public HallOfFameShowcase_Init
 	.public HallOfFameShowcase_Main
 	.public _021E6E7C
-	.public ov64_021E5B10
-	.public ov64_021E5CD0
-	.public ov64_021E607C
-	.public ov64_021E6170
-	.public ov64_021E62C8
-	.public ov64_021E652C
-	.public ov64_021E677C
-	.public ov64_021E6B84
-	.public ov64_021E6C1C
-	.public ov64_021E6E88
-	.public ov64_021E6E98
-	.public ov64_021E6EA8
-	.public ov64_021E6EB8
-	.public ov64_021E6ECC
-	.public ov64_021E6ECE
-	.public ov64_021E6EE4
-	.public ov64_021E6EFC
-	.public ov64_021E6F18
-	.public ov64_021E6F34
-	.public ov64_021E6F50
-	.public ov64_021E6F6C
-	.public ov64_021E6F8C
-	.public ov64_021E6FAC
-	.public ov64_021E6FD4
-	.public ov64_021E7008
-	.public ov64_021E7040
-	.public ov64_021E70C8
-	.public ov64_021E70FC
-	.public ov64_021E73A0
-	.public ov64_021E73D4
-	.public ov64_021E7408
-	.public ov64_021E743C
+	.public HallOfFameShowcase_InitBgs
+	.public HallOfFameShowcase_InitSprites
+	.public HallOfFameShowcase_InitStrings
+	.public HallOfFameShowcase_InitWindows
+	.public HallOfFameShowcase_HandleInput
+	.public HallOfFameShowcase_ChangeRecord
+	.public HallOfFameShowcase_ShowMonDetail
+	.public HallOfFameShowcase_AnimateButtonPress
+	.public HallOfFameShowcase_CreatePartyIcon
+	.public sShowcaseGraphicsModes
+	.public sShowcaseMonPicRect
+	.public sShowcaseGridCallbacks
+	.public sShowcaseOamCharTransferParam
+	.public sShowcaseIconPositions
+	.public sShowcaseIconPositionsY
+	.public sShowcaseSpriteResourceCounts
+	.public sShowcaseBgTemplate_Main1
+	.public sShowcaseBgTemplate_Sub0
+	.public sShowcaseBgTemplate_Sub1
+	.public sShowcaseBgTemplate_Main0
+	.public sShowcaseGridHitboxes
+	.public sShowcaseOamManagerParam
+	.public sShowcaseGraphicsBanks
+	.public sShowcasePartyIconSpriteTemplate
+	.public sShowcaseGridDpadBoxes
+	.public sShowcaseWindowTemplates
+	.public sShowcaseMonPicSpriteTemplate1
+	.public sShowcaseMonPicSpriteTemplate2
+	.public sShowcaseCursorSpriteTemplate
+	.public sShowcasePrevPageSpriteTemplate
+	.public sShowcaseNextPageSpriteTemplate
+	.public sShowcaseExitSpriteTemplate
 
 
 	.text
 	.public HallOfFameShowcase_Exit
-	.public ov64_021E5A88
-	.public ov64_021E5AAC
-	.public ov64_021E5AC8
-	.public ov64_021E5AE4
-	.public ov64_021E5B00
-	.public ov64_021E5CA4
-	.public ov64_021E6010
-	.public ov64_021E602C
-	.public ov64_021E605C
-	.public ov64_021E6118
-	.public ov64_021E620C
-	.public ov64_021E622C
-	.public ov64_021E6260
-	.public ov64_021E6270
-	.public ov64_021E6274
-	.public ov64_021E6278
-	.public ov64_021E6280
-	.public ov64_021E6288
-	.public ov64_021E62A8
-	.public ov64_021E64F8
-	.public ov64_021E6754
-	.public ov64_021E6BD8
-	.public ov64_021E6E30
+	.public HallOfFameShowcase_VBlankCB
+	.public HallOfFameShowcase_LoadMainObjChar
+	.public HallOfFameShowcase_LoadSubObjChar
+	.public HallOfFameShowcase_LoadMainObjPltt
+	.public HallOfFameShowcase_SetGfxBanks
+	.public HallOfFameShowcase_FreeBgs
+	.public HallOfFameShowcase_DeleteSprite
+	.public HallOfFameShowcase_FreeSprites
+	.public HallOfFameShowcase_TickSprites
+	.public HallOfFameShowcase_FreeStrings
+	.public HallOfFameShowcase_FreeWindows
+	.public HallOfFameShowcase_CreateGridInput
+	.public HallOfFameShowcase_FreeGridInput
+	.public HallOfFameShowcase_GridOnButton
+	.public HallOfFameShowcase_GridOnSwitchToTouchMode
+	.public HallOfFameShowcase_GridOnTouch
+	.public HallOfFameShowcase_GridOnKeyMove
+	.public HallOfFameShowcase_BeginFadeIn
+	.public HallOfFameShowcase_BeginFadeOut
+	.public HallOfFameShowcase_DeletePartyIcons
+	.public HallOfFameShowcase_HideMonDetail
+	.public HallOfFameShowcase_MoveCursor
+	.public HallOfFameShowcase_GetOverworldModelFileId
 
 	thumb_func_start HallOfFameShowcase_Init
 HallOfFameShowcase_Init: ; 0x021E5900
@@ -117,21 +117,21 @@ HallOfFameShowcase_Init: ; 0x021E5900
 	mov r1, #0x61
 	lsl r1, r1, #2
 	str r0, [r4, r1]
-	bl ov64_021E5B00
+	bl HallOfFameShowcase_SetGfxBanks
 	add r0, r4, #0
-	bl ov64_021E5B10
+	bl HallOfFameShowcase_InitBgs
 	add r0, r4, #0
-	bl ov64_021E5CD0
+	bl HallOfFameShowcase_InitSprites
 	add r0, r4, #0
-	bl ov64_021E607C
+	bl HallOfFameShowcase_InitStrings
 	add r0, r4, #0
-	bl ov64_021E6170
+	bl HallOfFameShowcase_InitWindows
 	add r0, r4, #0
-	bl ov64_021E622C
+	bl HallOfFameShowcase_CreateGridInput
 	add r0, r4, #0
 	mov r1, #0
-	bl ov64_021E652C
-	ldr r0, _021E59C4 ; =ov64_021E5A88
+	bl HallOfFameShowcase_ChangeRecord
+	ldr r0, _021E59C4 ; =HallOfFameShowcase_VBlankCB
 	add r1, r4, #0
 	bl Main_SetVBlankIntrCB
 	mov r0, #1
@@ -141,5 +141,5 @@ _021E59B4: .word 0x04000050
 _021E59B8: .word 0x04001050
 _021E59BC: .word 0x04000304
 _021E59C0: .word 0xFFFF7FFF
-_021E59C4: .word ov64_021E5A88
+_021E59C4: .word HallOfFameShowcase_VBlankCB
 	thumb_func_end HallOfFameShowcase_Init

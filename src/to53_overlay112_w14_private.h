@@ -15,7 +15,7 @@ void GF_AssertFail(void);
 u32 Boxmon_GetIconNaix(void *boxmon);
 u32 GetMonIconNaixEx(void *mon, u32, u32);
 void ToggleBgLayer(u32 layer, u8 enabled);
-void sub_0200F450(void *ptr);
+void WaitingIcon_Delete(void *ptr);
 void sub_02093594(void *ptr);
 void PCStorage_GetBoxName(void *storage, u32 box, void *dest);
 void SpriteList_RenderAndAnimateSprites(void *list);

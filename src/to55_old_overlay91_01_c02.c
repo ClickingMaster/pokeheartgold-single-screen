@@ -137,7 +137,7 @@ extern void String_Delete(void *s);
 extern void DestroyMsgData(void *s);
 extern void MessageFormat_Delete(void *s);
 extern void sub_02018124(void *a, u32 b);
-extern void sub_0200E5D4(void *w, int n);
+extern void EraseFrameAndWindow1(void *w, int n);
 extern void ClearWindowTilemapAndScheduleTransfer(void *w);
 extern void GfGfx_EngineATogglePlanes(int planes, int on);
 extern struct {

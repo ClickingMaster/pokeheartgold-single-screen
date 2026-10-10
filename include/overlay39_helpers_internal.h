@@ -93,7 +93,7 @@ void ov00_021EC8D8(void);
 void ov00_021ECD04(void *app);
 int ov00_021E6A70(int a0, int a1);
 void sub_0203946C(void);
-void sub_0200F450(void *p);
+void WaitingIcon_Delete(void *p);
 
 u16 SaveArray_CalcCRC16(void *saveData, const void *data, u32 size);
 void FreeBgTilemapBuffer(void *bgConfig, u32 layer);

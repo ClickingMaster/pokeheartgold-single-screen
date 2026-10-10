@@ -3,7 +3,7 @@
 void ov65_0221F780(void *p) {
     Ov65StateR13 *state = p;
     if (state->field36B4 != NULL) {
-        sub_0200F450(state->field36B4);
+        WaitingIcon_Delete(state->field36B4);
         state->field36B4 = NULL;
     }
 }

@@ -29,8 +29,8 @@ void ov12_022621C4(BattleSystem *battleSystem, int a1);
 void ov12_0223A7A0(void);
 void ov12_022387AC(BattleSystem *battleSystem, BgConfig *bgConfig);
 void BgConfig_InitBattleMenuBackgrounds(BgConfig *bgConfig);
-void sub_0200EB80(BgConfig *bgConfig, u8 bgId, u16 baseTile, u8 color, u8 type, enum HeapID heapId);
-u32 sub_0200E640(u32 frame);
+void LoadUserFrameGfx2WithFill(BgConfig *bgConfig, u8 bgId, u16 baseTile, u8 color, u8 type, enum HeapID heapId);
+u32 GetUserFrameGfx2PaletteMember(u32 frame);
 void ov12_022389B8(BattleSystem *battleSystem);
 
 #endif

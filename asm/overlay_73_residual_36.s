@@ -342,7 +342,7 @@ _021E9FDC:
 	ldr r0, _021E9FF4 ; =0x00000E18
 	mov r1, #0
 	add r0, r4, r0
-	bl sub_0200E5D4
+	bl EraseFrameAndWindow1
 	mov r0, #0
 	str r0, [r4, #0x1c]
 _021E9FEA:

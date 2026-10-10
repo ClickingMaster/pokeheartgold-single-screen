@@ -68,7 +68,7 @@ struct UnkStruct_ov01_021EDC28 {
 
 typedef struct UnkStruct_ov01_021EDC28 MoveTutorMenu;
 
-void sub_0200E5D4(Window *window, int a1);
+void EraseFrameAndWindow1(Window *window, int a1);
 void PlaySE(u16 seq);
 void AddTextPrinterParameterized(Window *window, u32 fontId, String *str, u32 x, u32 y, u32 speed, u32 colors);
 ListMenuItem *ov01_021EEF58(MoveTutorMenu *menu);

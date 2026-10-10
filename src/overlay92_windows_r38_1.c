@@ -1,7 +1,7 @@
 #include "overlay92_r38_private.h"
 
 extern BOOL WindowIsInUse(const void *window);
-extern void sub_0200E5D4(void *window, int mode);
+extern void EraseFrameAndWindow1(void *window, int mode);
 extern void ClearWindowTilemapAndCopyToVram(void *window);
 extern void RemoveWindow(void *window);
 extern void GfGfxLoader_LoadScrnDataFromOpenNarc(void *narc, int member, void *bgConfig, int layer, int offset, int size, int compressed, int heapId);
@@ -16,7 +16,7 @@ void ov92_0225E360(void *work) {
         do {
             if (i != (int)U32AT(work, 0)) {
                 if (WindowIsInUse(window) == TRUE) {
-                    sub_0200E5D4(window, 1);
+                    EraseFrameAndWindow1(window, 1);
                     ClearWindowTilemapAndCopyToVram(window);
                     RemoveWindow(window);
                 }

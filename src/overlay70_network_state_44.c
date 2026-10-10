@@ -218,7 +218,7 @@ int ov70_02244CA8(Ov70Work *work) {
 
 int ov70_02244CCC(Ov70Work *work) {
     if ((U32(gSystem, 0x48) & 1) || (U32(gSystem, 0x48) & 2) || *(u16 *)(gSystem + 0x64) != 0) {
-        sub_0200E5D4(work + 0xf48, 0);
+        EraseFrameAndWindow1(work + 0xf48, 0);
         U32(work, 0x2c) = 0;
     }
     return 3;

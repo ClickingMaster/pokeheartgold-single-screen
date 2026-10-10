@@ -985,7 +985,7 @@ BOOL ScrCmd_AddWaitingIcon(ScriptContext *ctx) {
 
 BOOL ScrCmd_RemoveWaitingIcon(ScriptContext *ctx) {
     WaitingIcon **waitingIcon = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_WAITING_ICON);
-    sub_0200F450(*waitingIcon);
+    WaitingIcon_Delete(*waitingIcon);
     return FALSE;
 }
 

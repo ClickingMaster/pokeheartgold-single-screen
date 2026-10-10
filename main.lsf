@@ -54,32 +54,10 @@ Static main
     Object src/unk_0200CE7C.o
     Object src/sprite_system.o
     Object src/sys_task_api.o
-    Object src/render_window_helpers_1.o
-    Object asm/to70_render_window_residual_e5d4_prefix_extra128_anchor.o
-    Object src/to70_render_window_residual_e5d4_prefix_extra128_run01.o
-    Object src/render_window_clear_frame1_w11.o
-    Object src/render_window_helpers_2.o
-    Object src/render_window_message_box_frame_r2.o
-    Object src/render_window_frame2_call_w11.o
-    Object src/render_window_helpers_3.o
-    Object src/render_window_clear_frame2_w11.o
-    Object src/to70_render_window_residual_3_after_clear_extra283_run01.o
-    Object src/to90_extra2289_run01.o
-    Object src/render_window_helpers_4.o
-    Object src/render_window_runtime_r4_run1.o
-    Object src/render_window_signpost_load.o
-    Object src/op90_to80_extra1592_residual_1_r01.o
-    Object src/to80_extra1592_run01.o
-    Object src/render_window_signpost_draw.o
-    Object src/to80_extra1705_run01.o
-    Object src/op90_to80_extra1705_residual_1_r01.o
-    Object src/render_window_runtime_r4_run2.o
-    Object src/render_window_helpers_5.o
-    Object src/render_window_pokemon_pic_r1.o
-    Object src/render_window_helpers_6.o
-    Object src/render_window_sprite_setup.o
-    Object src/render_window_helpers_7.o
-    Object src/to52_r4_render_window_tail.o
+    Object asm/render_window_data.o
+    Object src/render_window.o
+    Object src/render_window_frame_icon.o
+    Object src/render_window_icons.o
     Object asm/unk_0200FA24_head.o
     Object src/palette_fade_reset.o
     Object src/palette_fade_state_2.o
@@ -7069,27 +7047,7 @@ Overlay OVY_63
 Overlay OVY_64
 {
     After main
-    Object src/overlay64_showcase_init_1.o
-    Object src/overlay64_helpers_1.o
-    Object src/to70_overlay_64_residual_2_extra816_run01.o
-    Object src/overlay64_helpers_2.o
-    Object src/r40_overlay_64_residual_3_run1.o
-    Object src/overlay64_helpers_3.o
-    Object src/to70_overlay_64_residual_4_extra1214_run01.o
-    Object src/overlay64_helpers_4.o
-    Object src/to70_overlay_64_residual_5_extra613_run01.o
-    Object src/overlay64_helpers_5.o
-    Object src/to70_overlay_64_residual_6_extra614_run01.o
-    Object src/overlay64_helpers_6.o
-    Object src/to80_extra1697_run01.o
-    Object src/overlay64_helpers_7.o
-    Object src/to80_extra1698_run01.o
-    Object src/overlay64_helpers_8.o
-    Object src/op90_overlay_64_residual_9_head_r01.o
-    Object src/to46_overlay64_r9.o
-    Object src/overlay64_helpers_9.o
-    Object src/r40_overlay_64_residual_10_run1.o
-    Object src/overlay64_helpers_10.o
+    Object src/hall_of_fame_showcase.o
     Object asm/overlay_64_residual_11.o
 }
 Overlay OVY_65
@@ -9054,37 +9012,8 @@ Overlay OVY_87
 Overlay OVY_88
 {
     After OVY_45
-    Object src/to50_overlay88_lifecycle.o
-    Object src/overlay88_partial_1.o
-    Object src/r40_overlay_88_residual_2_run1.o
-    Object src/overlay88_partial_2.o
-    Object src/overlay88_graphics_lifecycle.o
-    Object src/overlay88_partial_3.o
-    Object src/to52_r6_overlay88_tilemap_helpers_r4.o
-    Object src/overlay88_partial_4.o
-    Object src/to70_overlay_88_residual_5_extra857_run01.o
-    Object src/overlay88_partial_5.o
-    Object src/to70_to70_overlay_88_residual_6_extra268_residual_1_extra1315_run01.o
-    Object src/to70_overlay_88_residual_6_extra268_run01.o
-    Object src/overlay88_partial_6.o
-    Object src/overlay88_window_1.o
-    Object src/to90_extra2392_run01.o
-    Object src/overlay88_window_2.o
-    Object src/to90_extra2393_run01.o
-    Object src/overlay88_window_3.o
-    Object src/to70_overlay_88_residual_7_residual_3_extra325_run01.o
-    Object src/to70_to70_overlay_88_residual_7_residual_3_extra325_residual_1_extra1316_run01.o
-    Object src/overlay88_window_4.o
-    Object src/to70_overlay_88_residual_7_residual_4_extra646_run01.o
-    Object src/overlay88_window_5.o
-    Object src/overlay88_partial_7.o
-    Object src/to70_overlay_88_residual_8_extra858_run01.o
-    Object src/overlay88_partial_8.o
-    Object src/to70_overlay_88_residual_9_head_extra859_run01.o
-    Object src/to46_overlay88_r9.o
-    Object src/overlay88_partial_9.o
-    Object asm/to70_overlay_88_residual_10_extra856_anchor.o
-    Object src/to70_overlay_88_residual_10_extra856_run01.o
+    Object src/application/plaza_news.o
+    Object asm/plaza_news_data.o
 }
 Overlay OVY_89
 {

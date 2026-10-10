@@ -45,8 +45,8 @@ extern u32 ov42_02227FDC(void *);
 extern void ov45_0223093C(void *, u32);
 extern void ov45_02230968(void *, u32);
 extern void GF_AssertFail(void);
-extern void sub_0200F450(void *);
-extern void sub_0200F478(void *);
+extern void WaitingIcon_Delete(void *);
+extern void WaitingIcon_DeleteWithoutRestore(void *);
 extern void ListMenuItems_Delete(void *);
 extern void PlaySE(u32);
 extern void ov49_0225BF80(void *);
@@ -57,7 +57,7 @@ extern void Camera_Delete(void *);
 void ov49_0225AC24(void *p) {
     void *q = (void *)U32_AT(p, 0x1C);
     if (q != NULL) {
-        sub_0200F450(q);
+        WaitingIcon_Delete(q);
         U32_AT(p, 0x1C) = 0;
     }
 }
@@ -65,7 +65,7 @@ void ov49_0225AC24(void *p) {
 void ov49_0225AC38(void *p) {
     void *q = (void *)U32_AT(p, 0x1C);
     if (q != NULL) {
-        sub_0200F478(q);
+        WaitingIcon_DeleteWithoutRestore(q);
         U32_AT(p, 0x1C) = 0;
     }
 }

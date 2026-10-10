@@ -120,7 +120,7 @@ void ov73_021EA15C(void *p) {
 
 void ov73_021EA180(void *p) {
     if (PTR(p, 0xf0c)) {
-        sub_0200F450(PTR(p, 0xf0c));
+        WaitingIcon_Delete(PTR(p, 0xf0c));
         PTR(p, 0xf0c) = 0;
     }
 }

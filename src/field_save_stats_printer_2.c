@@ -10,7 +10,7 @@ void Field_SaveStatsPrinter_Print(struct SaveStatsPrinter *printer) {
 }
 
 void Field_SaveStatsPrinter_RemoveFromScreen(struct SaveStatsPrinter *printer) {
-    sub_0200E5D4(printer->window, FALSE);
+    EraseFrameAndWindow1(printer->window, FALSE);
     RemoveWindow(printer->window);
     Heap_Free(printer->window);
 }

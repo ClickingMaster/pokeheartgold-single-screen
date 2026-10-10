@@ -21,7 +21,7 @@ extern u32 sub_0203186C(void *, void *);
 extern void ov75_02249780(void *, void *, int);
 extern void RemoveWindow(void *);
 extern void *WaitingIcon_New(void *, int);
-extern void sub_0200F450(void *);
+extern void WaitingIcon_Delete(void *);
 extern void sub_0203957C(void);
 extern void ov00_021EC8D8(void);
 extern void sub_0203A914(void);
@@ -106,7 +106,7 @@ void ov75_0224785C(State *p) {
 
 void ov75_02247878(State *p) {
     if (*(void **)((u8 *)p + 0x8c)) {
-        sub_0200F450(*(void **)((u8 *)p + 0x8c));
+        WaitingIcon_Delete(*(void **)((u8 *)p + 0x8c));
         *(void **)((u8 *)p + 0x8c) = 0;
     }
 }

@@ -38,7 +38,7 @@ s32 Party_GetCount(void *party);
 void *Party_GetMonByIndex(void *party, s32 slot);
 u32 GetMonData(void *mon, u32 field, void *dst);
 void ov80_02237D9C(void *party);
-void sub_0200E5D4(void *windows, u32 index);
+void EraseFrameAndWindow1(void *windows, u32 index);
 void WindowArray_Delete(void *windows, u32 count);
 void *String_New(u32 size, u32 heapId);
 void String_Delete(void *string);

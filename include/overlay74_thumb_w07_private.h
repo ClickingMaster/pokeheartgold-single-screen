@@ -10,7 +10,7 @@ void *sub_02034818(int);
 void ov74_02229DF8(void);
 void sub_0203A914(void);
 BOOL WindowIsInUse(void *);
-void sub_0200E5D4(void *, int);
+void EraseFrameAndWindow1(void *, int);
 void ClearFrameAndWindow2(void *, int);
 void BeginNormalPaletteFade(int, int, int, int, int, int, int);
 void sub_02014AA0(void);

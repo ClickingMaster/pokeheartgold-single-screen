@@ -9,7 +9,7 @@ void ov49_0225B0E0(void *window, void **bgConfig, int unused, int x, u8 y, u8 wi
 
 void ov49_0225B124(void *window) {
     if (WindowIsInUse(window) == 1) {
-        sub_0200E5D4(window, 1);
+        EraseFrameAndWindow1(window, 1);
         ClearWindowTilemapAndScheduleTransfer(window);
         RemoveWindow(window);
     }

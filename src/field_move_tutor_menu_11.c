@@ -34,7 +34,7 @@ Window *ov01_021EEF68(FieldSystem *fieldSystem, u16 a1) {
 }
 
 void ov01_021EEF88(Window *window) {
-    sub_0200E5D4(window, 0);
+    EraseFrameAndWindow1(window, 0);
     WindowArray_Delete(window, 1);
 }
 

@@ -36,7 +36,7 @@ extern int YesNoPrompt_HandleInput(void *prompt);
 extern void YesNoPrompt_Destroy(void *prompt);
 extern s32 ov00_021E6A70(s32, u32);
 extern void ov75_0224971C(Ov75Task *task, s32, s32);
-extern void sub_0200E5D4(void *window, u32 fill);
+extern void EraseFrameAndWindow1(void *window, u32 fill);
 extern int SaveGameNormal(void *saveData);
 extern void *Save_PlayerData_GetProfile(void *saveData);
 extern void BufferPlayersName(void *format, u32 idx, void *profile);
@@ -185,7 +185,7 @@ int ov75_022491F0(Ov75Task *task) {
     u32 keys = *(u32 *)(gSystem + 0x48);
 
     if ((keys & 1) || (keys & 2)) {
-        sub_0200E5D4(task->window, 0);
+        EraseFrameAndWindow1(task->window, 0);
         task->next = 0;
     }
     return 0;

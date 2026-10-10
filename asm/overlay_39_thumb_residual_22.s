@@ -130,7 +130,7 @@ _02228EE4:
 	add r0, r4, #0
 	add r0, #0x64
 	mov r1, #0
-	bl sub_0200E5D4
+	bl EraseFrameAndWindow1
 	add r0, r4, #0
 	mov r1, #0
 	add r0, #0x94

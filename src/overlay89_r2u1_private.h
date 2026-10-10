@@ -44,7 +44,7 @@ extern const ManagedSpriteTemplate ov89_0225CB70;
 
 void ov89_0225A260(void *, void *, String *, int, u32, u32, u32, u32, u32, u32);
 void ov89_0225A354(void *);
-int sub_0200E640(int);
+int GetUserFrameGfx2PaletteMember(int);
 void ov89_02259264(Ov89WorkHead *, NARC *);
 void ov89_02259408(Ov89WorkHead *, NARC *);
 void ov89_02259588(Ov89WorkHead *);

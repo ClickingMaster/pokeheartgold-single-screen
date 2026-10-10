@@ -2,7 +2,7 @@
 #include "system.h"
 
 extern BOOL System_GetTouchNew(void);
-extern void sub_0200E5D4(void *window, BOOL copyToVram);
+extern void EraseFrameAndWindow1(void *window, BOOL copyToVram);
 extern BOOL ov39_02228B74(int a0, int a1);
 extern void sub_0203946C(void);
 extern void sub_0203A914(void);
@@ -15,7 +15,7 @@ extern void ov00_021EC8D8(void);
 
 BOOL ov39_02228EC8(Ov39Residual22App *app) {
     if ((gSystem.newKeys & 1) || (gSystem.newKeys & 2) || System_GetTouchNew() == TRUE) {
-        sub_0200E5D4(app->unk64, FALSE);
+        EraseFrameAndWindow1(app->unk64, FALSE);
         app->unk94 = 0;
         if (ov39_02228B74(-app->unk18, app->unk1C) == TRUE) {
             app->unk08 = 0;

@@ -14,7 +14,7 @@ void *YesNoPrompt_Create(u32);
 void GfGfxLoader_GXLoadPal(u32, s32, u32, u32, u32, u32);
 u32 ov102_021E9084(void *);
 void LoadUserFrameGfx2(void *, u32, u16, u32, u8, u32);
-void sub_0200E948(void *, u32, u32);
+void DrawFrame2AroundWindow(void *, u32, u32);
 void PutWindowTilemap(void *);
 void ov102_021EA8C0(void *);
 void ov102_021EAA3C(void *);

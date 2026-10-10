@@ -15,7 +15,7 @@ void ov39_02228A8C(Ov39App *app) {
 
 void ov39_02228AA8(Ov39App *app) {
     if (app->unk88 != NULL) {
-        sub_0200F450(app->unk88);
+        WaitingIcon_Delete(app->unk88);
         app->unk88 = NULL;
     }
 }

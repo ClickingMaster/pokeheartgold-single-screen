@@ -34,7 +34,7 @@ void ov01_021EDF00(MoveTutorMenu *menu) {
 void ov01_021EDF38(MoveTutorMenu *menu) {
     PlaySE(SEQ_SE_DP_SELECT);
     Delete2dMenu(menu->menu2dPtr, NULL);
-    sub_0200E5D4(menu->menu2d.window, 0);
+    EraseFrameAndWindow1(menu->menu2d.window, 0);
     RemoveWindow(menu->menu2d.window);
     SysTask_Destroy(menu->task);
     ov01_021EDF00(menu);

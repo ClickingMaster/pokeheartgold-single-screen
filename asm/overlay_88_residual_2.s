@@ -110,39 +110,39 @@
 	.public _02259900
 	.public _02259904
 	.public _02259A60
-	.public ov88_02258800
-	.public ov88_022588C4
-	.public ov88_022589FC
-	.public ov88_02258A70
-	.public ov88_02258ABC
-	.public ov88_02258B34
-	.public ov88_02258C60
-	.public ov88_02258C98
-	.public ov88_02258D38
-	.public ov88_02258D90
-	.public ov88_02258DE8
-	.public ov88_02258EA8
-	.public ov88_02258EFC
-	.public ov88_02258F88
-	.public ov88_022590C0
-	.public ov88_022590D8
-	.public ov88_02259104
-	.public ov88_0225918C
+	.public PlazaNews_Init
+	.public PlazaNews_Main
+	.public PlazaNews_Exit
+	.public PlazaNews_Update
+	.public PlazaNewsGraphics_Init
+	.public PlazaNewsGraphics_InitBgs
+	.public PlazaNewsGraphics_FreeBgs
+	.public PlazaNewsGraphics_InitSprites
+	.public PlazaNewsGraphics_FreeSprites
+	.public PlazaNewsClock_DrawCell
+	.public PlazaNewsPeople_DrawIcon
+	.public PlazaNewsClock_Init
+	.public PlazaNewsClock_UpdateTime
+	.public PlazaNewsClock_DrawGauge
+	.public PlazaNewsPeople_Init
+	.public PlazaNewsPeople_UpdateState
+	.public PlazaNewsPeople_Draw
+	.public PlazaNewsPeople_DrawGrid
 	.public ov88_02259244
 	.public ov88_02259264
-	.public ov88_02259280
-	.public ov88_022592B8
-	.public ov88_022592EC
-	.public ov88_022593D0
-	.public ov88_02259404
-	.public ov88_022594E0
-	.public ov88_02259508
-	.public ov88_02259560
-	.public ov88_022595F8
-	.public ov88_0225967C
-	.public ov88_022597DC
-	.public ov88_02259800
-	.public ov88_02259884
+	.public PlazaNewsHeadlines_GetNameColors
+	.public PlazaNewsHeadlines_LoadNameColors
+	.public PlazaNewsHeadlines_Init
+	.public PlazaNewsHeadlines_Free
+	.public PlazaNewsHeadlines_Update
+	.public PlazaNewsHeadlines_Draw
+	.public PlazaNewsTicker_Init
+	.public PlazaNewsTicker_SetText
+	.public PlazaNewsTicker_Draw
+	.public PlazaNewsTitles_Init
+	.public PlazaNewsTitles_Free
+	.public PlazaNewsTitles_Update
+	.public PlazaNewsFlash_Update
 	.public ov88_02259910
 	.public ov88_02259914
 	.public ov88_02259924
@@ -154,80 +154,80 @@
 	.public ov88_02259A68
 	.public _02259904
 	.public _02259A60
-	.public ov88_02258800
-	.public ov88_022588C4
-	.public ov88_022589FC
-	.public ov88_02258A64
-	.public ov88_02258A70
-	.public ov88_02258ABC
-	.public ov88_02258AF4
-	.public ov88_02258B14
-	.public ov88_02258B20
-	.public ov88_02258B34
-	.public ov88_02258C60
-	.public ov88_02258C98
-	.public ov88_02258D38
-	.public ov88_02258D64
-	.public ov88_02258D84
-	.public ov88_02258D90
-	.public ov88_02258DE8
-	.public ov88_02258EA8
-	.public ov88_02258EF8
-	.public ov88_02258EFC
-	.public ov88_02258F60
-	.public ov88_02258F74
-	.public ov88_02258F88
-	.public ov88_022590C0
-	.public ov88_022590D4
-	.public ov88_022590D8
-	.public ov88_02259104
-	.public ov88_0225918C
+	.public PlazaNews_Init
+	.public PlazaNews_Main
+	.public PlazaNews_Exit
+	.public PlazaNews_VBlankCallback
+	.public PlazaNews_Update
+	.public PlazaNewsGraphics_Init
+	.public PlazaNewsGraphics_Exit
+	.public PlazaNewsGraphics_DrawSprites
+	.public PlazaNewsGraphics_VBlank
+	.public PlazaNewsGraphics_InitBgs
+	.public PlazaNewsGraphics_FreeBgs
+	.public PlazaNewsGraphics_InitSprites
+	.public PlazaNewsGraphics_FreeSprites
+	.public PlazaNewsTileset_Load
+	.public PlazaNewsTileset_Free
+	.public PlazaNewsClock_DrawCell
+	.public PlazaNewsPeople_DrawIcon
+	.public PlazaNewsClock_Init
+	.public PlazaNewsClock_Free
+	.public PlazaNewsClock_UpdateTime
+	.public PlazaNewsClock_Draw
+	.public PlazaNewsClock_DrawWaiting
+	.public PlazaNewsClock_DrawGauge
+	.public PlazaNewsPeople_Init
+	.public PlazaNewsPeople_Free
+	.public PlazaNewsPeople_UpdateState
+	.public PlazaNewsPeople_Draw
+	.public PlazaNewsPeople_DrawGrid
 	.public ov88_02259244
 	.public ov88_02259264
-	.public ov88_02259280
-	.public ov88_022592B8
-	.public ov88_022592EC
-	.public ov88_022593D0
-	.public ov88_02259404
-	.public ov88_022594E0
-	.public ov88_02259508
-	.public ov88_0225954C
-	.public ov88_02259560
-	.public ov88_022595DC
-	.public ov88_022595E4
-	.public ov88_022595F8
-	.public ov88_0225967C
-	.public ov88_022597DC
-	.public ov88_02259800
-	.public ov88_02259818
-	.public ov88_0225983C
-	.public ov88_0225985C
-	.public ov88_02259878
-	.public ov88_02259884
+	.public PlazaNewsHeadlines_GetNameColors
+	.public PlazaNewsHeadlines_LoadNameColors
+	.public PlazaNewsHeadlines_Init
+	.public PlazaNewsHeadlines_Free
+	.public PlazaNewsHeadlines_Update
+	.public PlazaNewsHeadlines_Draw
+	.public PlazaNewsTicker_Init
+	.public PlazaNewsTicker_Free
+	.public PlazaNewsTicker_SetText
+	.public PlazaNewsTicker_Stop
+	.public PlazaNewsTicker_Advance
+	.public PlazaNewsTicker_Draw
+	.public PlazaNewsTitles_Init
+	.public PlazaNewsTitles_Free
+	.public PlazaNewsTitles_Update
+	.public PlazaNewsTitles_StartFlash
+	.public PlazaNewsFlash_Init
+	.public PlazaNewsFlash_Clear
+	.public PlazaNewsFlash_Start
+	.public PlazaNewsFlash_Update
 	.include "overlay_88.inc"
 	.include "global.inc"
 
 	.text
-	.public ov88_02258A64
-	.public ov88_02258AF4
-	.public ov88_02258B14
-	.public ov88_02258B20
-	.public ov88_02258D64
-	.public ov88_02258D84
-	.public ov88_02258EF8
-	.public ov88_02258F60
-	.public ov88_02258F74
-	.public ov88_022590D4
-	.public ov88_0225954C
-	.public ov88_022595DC
-	.public ov88_022595E4
-	.public ov88_02259818
-	.public ov88_0225983C
-	.public ov88_0225985C
-	.public ov88_02259878
+	.public PlazaNews_VBlankCallback
+	.public PlazaNewsGraphics_Exit
+	.public PlazaNewsGraphics_DrawSprites
+	.public PlazaNewsGraphics_VBlank
+	.public PlazaNewsTileset_Load
+	.public PlazaNewsTileset_Free
+	.public PlazaNewsClock_Free
+	.public PlazaNewsClock_Draw
+	.public PlazaNewsClock_DrawWaiting
+	.public PlazaNewsPeople_Free
+	.public PlazaNewsTicker_Free
+	.public PlazaNewsTicker_Stop
+	.public PlazaNewsTicker_Advance
+	.public PlazaNewsTitles_StartFlash
+	.public PlazaNewsFlash_Init
+	.public PlazaNewsFlash_Clear
+	.public PlazaNewsFlash_Start
 
-	thumb_func_start ov88_02258A70
-ov88_02258A70: ; 0x02258A70
+	thumb_func_start PlazaNews_Update
+PlazaNews_Update: ; 0x02258A70
 	push {r3, r4, r5, lr}
 	add r4, r1, #0
 	mov r1, #0x55
@@ -238,7 +238,7 @@ ov88_02258A70: ; 0x02258A70
 	add r2, r5, #0
 	add r1, r5, r1
 	add r2, #8
-	bl ov88_02258F60
+	bl PlazaNewsClock_Draw
 	mov r1, #0x16
 	str r4, [sp]
 	lsl r1, r1, #4
@@ -248,24 +248,24 @@ ov88_02258A70: ; 0x02258A70
 	ldr r3, [r5]
 	add r1, r5, r1
 	add r2, #8
-	bl ov88_02259104
+	bl PlazaNewsPeople_Draw
 	mov r0, #0x59
 	lsl r0, r0, #2
 	add r0, r5, r0
-	bl ov88_022594E0
+	bl PlazaNewsHeadlines_Draw
 	mov r0, #2
 	lsl r0, r0, #8
 	add r0, r5, r0
-	bl ov88_02259800
+	bl PlazaNewsTitles_Update
 	add r5, #8
 	add r0, r5, #0
-	bl ov88_02258B14
+	bl PlazaNewsGraphics_DrawSprites
 	pop {r3, r4, r5, pc}
-	thumb_func_end ov88_02258A70
+	thumb_func_end PlazaNews_Update
 
 
-	thumb_func_start ov88_02258ABC
-ov88_02258ABC: ; 0x02258ABC
+	thumb_func_start PlazaNewsGraphics_Init
+PlazaNewsGraphics_Init: ; 0x02258ABC
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	mov r0, #0xc6
@@ -281,11 +281,11 @@ ov88_02258ABC: ; 0x02258ABC
 	bl GfGfx_SetBanks
 	add r0, r5, #0
 	add r1, r4, #0
-	bl ov88_02258B34
+	bl PlazaNewsGraphics_InitBgs
 	add r0, r5, #0
 	add r1, r4, #0
-	bl ov88_02258C98
+	bl PlazaNewsGraphics_InitSprites
 	pop {r3, r4, r5, pc}
 	nop
 _02258AF0: .word ov88_02259958
-	thumb_func_end ov88_02258ABC
+	thumb_func_end PlazaNewsGraphics_Init

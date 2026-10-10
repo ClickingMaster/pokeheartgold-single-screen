@@ -36,10 +36,10 @@
 .public SpriteSystem_LoadCharResObjAtEndWithHardwareMappingType
 .public SpriteManager_GetSpriteList
 .public SysTask_Destroy
-.public sub_0200E398
-.public sub_0200E3D8
+.public LoadUserFrameGfx1Tiles
+.public GetUserFrameGfx1PaletteMember
 .public DrawFrameAndWindow1
-.public sub_0200E5D4
+.public EraseFrameAndWindow1
 .public sub_0200FBF4
 .public FontSystem_NewInit
 .public sub_020135AC

@@ -20,6 +20,6 @@ void ov01_021EE754(MoveTutorMenu *menu, u32 msgId, u32 x, u32 y);
 void ov01_021EE7B8(SysTask *task, MoveTutorMenu *menu);
 
 void ov01_021EEC68(Window *window) {
-    sub_0200E5D4(window, 0);
+    EraseFrameAndWindow1(window, 0);
     WindowArray_Delete(window, 1);
 }

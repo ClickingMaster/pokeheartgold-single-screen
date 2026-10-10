@@ -19,7 +19,7 @@ void ov70_02238F64(u8 *work) {
 void ov70_02238F80(u8 *work) {
     WaitingIcon *icon = *(WaitingIcon **)(work + 0x11BC);
     if (icon != NULL) {
-        sub_0200F450(icon);
+        WaitingIcon_Delete(icon);
         *(WaitingIcon **)(work + 0x11BC) = NULL;
     }
 }

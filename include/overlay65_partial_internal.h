@@ -15,7 +15,7 @@ extern void Sprite_SetMatrix(void *, void *);
 extern int ov65_0221DFB8(void *);
 extern void ov65_0221DF1C(void *);
 extern void ov65_0221DC34(void *);
-extern void sub_0200F450(void *);
+extern void WaitingIcon_Delete(void *);
 extern void *WaitingIcon_New(void *, u32);
 extern void *GetBgTilemapBuffer(void *, u32);
 extern void BgCopyOrUncompressTilemapBufferRangeToVram(void *, u32, void *, u32, u32);

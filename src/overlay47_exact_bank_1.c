@@ -43,7 +43,7 @@ extern void ov47_022593A0(State *);
 extern void RemoveWindow(void *);
 extern void ov47_02259448(State *, int);
 extern void *WaitingIcon_New(void *, int);
-extern void sub_0200F450(void *);
+extern void WaitingIcon_Delete(void *);
 extern void ClearFrameAndWindow2(void *, int);
 extern void ClearWindowTilemapAndScheduleTransfer(void *);
 extern int Handle2dMenuInput_DeleteOnFinish(void *);

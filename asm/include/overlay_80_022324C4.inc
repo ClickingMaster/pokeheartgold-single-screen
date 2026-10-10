@@ -7,7 +7,7 @@
 .public BufferIntegerAsString
 .public StringExpandPlaceholders
 .public DrawFrameAndWindow1
-.public sub_0200E5D4
+.public EraseFrameAndWindow1
 .public Heap_Alloc
 .public Heap_Free
 .public AllocWindows

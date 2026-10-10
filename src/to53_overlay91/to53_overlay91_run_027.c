@@ -137,7 +137,7 @@ extern void String_Delete(void *s);
 extern void DestroyMsgData(void *s);
 extern void MessageFormat_Delete(void *s);
 extern void sub_02018124(void *a, u32 b);
-extern void sub_0200E5D4(void *w, int n);
+extern void EraseFrameAndWindow1(void *w, int n);
 extern void ClearWindowTilemapAndScheduleTransfer(void *w);
 extern void GfGfx_EngineATogglePlanes(int planes, int on);
 extern struct { u8 pad[0x60]; u16 touchX; u16 touchY; u16 touchNew; u16 touchHeld; } gSystem;
@@ -233,7 +233,7 @@ BOOL ov91_0225DB44(void *unused, void *b) {
 
 void ov91_0225DB5C(void *p) {
     u8 *q = (u8 *)p;
-    sub_0200E5D4(q + 0x0C, 1);
+    EraseFrameAndWindow1(q + 0x0C, 1);
     ClearWindowTilemapAndScheduleTransfer(q + 0x0C);
     GfGfx_EngineATogglePlanes(4, 0);
 }

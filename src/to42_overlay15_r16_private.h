@@ -9,7 +9,7 @@ BOOL TextPrinterCheckActive(u8);
 void ClearFrameAndWindow2(void *, BOOL);
 void ClearWindowTilemapAndScheduleTransfer(void *);
 void FillWindowPixelBuffer(void *, u32);
-void sub_0200E5D4(void *, BOOL);
+void EraseFrameAndWindow1(void *, BOOL);
 void *NewString_ReadMsgData(void *, u32);
 void BufferIntegerAsString(void *, u32, s32, u32, u32, BOOL);
 void StringExpandPlaceholders(void *, void *, void *);

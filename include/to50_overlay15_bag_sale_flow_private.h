@@ -22,7 +22,7 @@ extern void BufferIntegerAsString(void *, u32, s32, u32, u32, u32);
 extern void StringExpandPlaceholders(void *, void *, void *);
 extern void String_Delete(void *);
 extern s32 ov15_021FEF48(void *, s32);
-extern void sub_0200E5D4(void *, s32);
+extern void EraseFrameAndWindow1(void *, s32);
 extern void ClearFrameAndWindow2(void *, BOOL);
 extern void ClearWindowTilemapAndScheduleTransfer(void *);
 extern void ScheduleWindowCopyToVram(void *);

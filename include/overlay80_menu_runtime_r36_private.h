@@ -22,7 +22,7 @@ s32 ListMenuGetValueByArrayId(ListMenu *, u16);
 BOOL System_GetTouchNew(void);
 void PlaySE(u32);
 void DestroyListMenu(ListMenu *, void *, void *);
-void sub_0200E5D4(void *, u32);
+void EraseFrameAndWindow1(void *, u32);
 void RemoveWindow(Window *);
 void String_Delete(String *);
 void DestroyMsgData(void *);

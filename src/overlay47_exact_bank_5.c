@@ -43,7 +43,7 @@ extern void ov47_022593A0(State *);
 extern void RemoveWindow(void *);
 extern void ov47_02259448(State *, int);
 extern void *WaitingIcon_New(void *, int);
-extern void sub_0200F450(void *);
+extern void WaitingIcon_Delete(void *);
 extern void ClearFrameAndWindow2(void *, int);
 extern void ClearWindowTilemapAndScheduleTransfer(void *);
 extern int Handle2dMenuInput_DeleteOnFinish(void *);
@@ -198,7 +198,7 @@ void ov47_02259384(State *p) {
 
 void ov47_022593A0(State *p) {
     if (*(void **)((u8 *)p + 0x1C)) {
-        sub_0200F450(*(void **)((u8 *)p + 0x1C));
+        WaitingIcon_Delete(*(void **)((u8 *)p + 0x1C));
         *(void **)((u8 *)p + 0x1C) = NULL;
     }
 }

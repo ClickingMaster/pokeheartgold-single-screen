@@ -18,7 +18,7 @@ extern void ov57_0223B12C(void);
 extern u8 gSystem[];
 extern BOOL System_GetTouchNew(void);
 extern void ov57_0223B828(void *, int, int, int);
-extern void sub_0200E5D4(void *, int);
+extern void EraseFrameAndWindow1(void *, int);
 extern void ClearWindowTilemapAndScheduleTransfer(void *);
 extern void ov57_0223866C(void *, int);
 extern void ov57_02238FC4(void *);

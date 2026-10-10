@@ -26,7 +26,7 @@ int ov85_021E6610(u8 *ctx) {
     void *p = *(void **)(ctx + 0xcc);
     if (sub_02039EB4(*(void **)((u8 *)p + 0x1c), 2, ctx + 4)) {
         gSystem[0x6c] = 0;
-        sub_0200F450(*(void **)(ctx + 0xdc8));
+        WaitingIcon_Delete(*(void **)(ctx + 0xdc8));
         *(int *)ctx = 0x30;
     }
     return 0;

@@ -22,7 +22,7 @@ extern void Sprite_SetOamMode(void *, int);
 extern void ov81_0224276C(void *);
 extern void sub_020195C0(void *);
 extern void ov81_02241A38(void *);
-extern void sub_0200E5D4(void *, int);
+extern void EraseFrameAndWindow1(void *, int);
 extern void ClearWindowTilemapAndScheduleTransfer(void *);
 extern void Sprite_Delete(void *);
 extern void Heap_Free(void *);

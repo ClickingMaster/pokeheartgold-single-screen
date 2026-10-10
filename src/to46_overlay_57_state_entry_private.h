@@ -25,7 +25,7 @@ void ManagedSprite_SetAnimationFrame(void *, u16);
 void ManagedSprite_SetDrawFlag(void *, BOOL);
 void ClearWindowTilemapAndCopyToVram(void *);
 void CopyWindowToVram(void *);
-void sub_0200E5D4(void *, BOOL);
+void EraseFrameAndWindow1(void *, BOOL);
 void ov57_0223A034(void *, BOOL);
 void ov57_02239240(void *, BOOL);
 void ov57_022387C0(void *, BOOL);

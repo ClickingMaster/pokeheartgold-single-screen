@@ -20,7 +20,7 @@ int ov73_021E9F9C(void *p) {
 
 int ov73_021E9FC8(void *p) {
     if ((gSystem.newKeys & PAD_BUTTON_A) || (gSystem.newKeys & PAD_BUTTON_B)) {
-        sub_0200E5D4((u8 *)p + 0xE18, 0);
+        EraseFrameAndWindow1((u8 *)p + 0xE18, 0);
         U32(p, 0x1C) = 0;
     }
     return 3;

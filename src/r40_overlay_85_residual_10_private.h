@@ -10,7 +10,7 @@ void ov85_021E86CC(void *, void *);
 void sub_02039EAC(void *);
 void *WaitingIcon_New(void *, int);
 int sub_02039EB4(void *, int, void *);
-void sub_0200F450(void *);
+void WaitingIcon_Delete(void *);
 extern u8 gSystem[];
 int ov85_021E6594(u8 *);
 int ov85_021E65D4(u8 *);

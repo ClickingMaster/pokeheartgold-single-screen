@@ -25,7 +25,7 @@ void ov01_021EE7B8(SysTask *task, MoveTutorMenu *menu) {
     if (*menu->ret_p != 0xFFFF) {
         return;
     }
-    sub_0200E5D4(menu->menu2d.window, 0);
+    EraseFrameAndWindow1(menu->menu2d.window, 0);
     RemoveWindow(menu->menu2d.window);
     for (i = 0; i < 28; i++) {
         String_Delete(menu->strbufs[i]);

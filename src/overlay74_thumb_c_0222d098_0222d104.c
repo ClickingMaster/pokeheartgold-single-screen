@@ -10,7 +10,7 @@ extern u8 ov74_0223C2F0[];
 extern u8 gSystem[];
 
 extern int WindowIsInUse(void *);
-extern void sub_0200E5D4(void *, int);
+extern void EraseFrameAndWindow1(void *, int);
 extern void ClearFrameAndWindow2(void *, int);
 extern void Sprite_Delete(void *);
 extern void ov74_022359BC(void);
@@ -112,7 +112,7 @@ void ov74_0222D098(void *p) {
     Sprite_SetPriority(PTR(p, 0x2dc8), 2);
 }
 void ov74_0222D0EC(void *p, int x) {
-    if (WindowIsInUse(p) == 1) sub_0200E5D4(p, x);
+    if (WindowIsInUse(p) == 1) EraseFrameAndWindow1(p, x);
 }
 void ov74_0222D104(void *p, int x) {
     if (WindowIsInUse(p) == 1) ClearFrameAndWindow2(p, x);

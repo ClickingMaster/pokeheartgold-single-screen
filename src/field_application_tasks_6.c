@@ -1,7 +1,7 @@
 #include "field_application_tasks_internal.h"
 
 int sub_02059AD8(const void *p) {
-    return sub_0200E5D4(*(void **)((const u8 *)p + 0x7C), 1);
+    return EraseFrameAndWindow1(*(void **)((const u8 *)p + 0x7C), 1);
 }
 
 void sub_02059AE4(int id, int unused1, int unused2, void *context) {

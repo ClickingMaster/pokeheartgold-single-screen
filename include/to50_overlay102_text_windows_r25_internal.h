@@ -4,7 +4,7 @@
 void *ov102_021EA268(void *);
 void FillBgTilemapRect(void *,u32,u32,u32,u32,u32,u32,u32);
 void ClearWindowTilemapAndCopyToVram(void *);
-void sub_0200E948(void *,u32,u32);
+void DrawFrame2AroundWindow(void *,u32,u32);
 void FillWindowPixelBuffer(void *,u32);
 void *MessageFormat_New_Custom(u32,u32,u32);
 void *String_New(u32,u32);

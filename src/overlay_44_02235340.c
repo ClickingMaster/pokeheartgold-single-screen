@@ -451,12 +451,12 @@ void FreeWindowList(UnkStruct_ov44_02232F64 *arg0, enum HeapID heapID) {
     ov44_02233954(arg0);
     ClearFrameAndWindow2(&arg0->windowList[0], 0);
     RemoveWindow(&arg0->windowList[0]);
-    sub_0200E5D4(&arg0->windowList[1], 0);
+    EraseFrameAndWindow1(&arg0->windowList[1], 0);
     RemoveWindow(&arg0->windowList[1]);
     RemoveWindow(&arg0->windowList[2]);
-    sub_0200E5D4(&arg0->windowList[3], 0);
+    EraseFrameAndWindow1(&arg0->windowList[3], 0);
     RemoveWindow(&arg0->windowList[3]);
-    sub_0200E5D4(&arg0->windowList[4], 0);
+    EraseFrameAndWindow1(&arg0->windowList[4], 0);
     RemoveWindow(&arg0->windowList[4]);
 
     if (arg0->listMenu2D != NULL) {
@@ -613,7 +613,7 @@ void ov44_0223398C(UnkStruct_ov44_02232F64 *arg0, UnkStruct_ov44_args *arg1, s32
 }
 
 void ov44_02233A34(UnkStruct_ov44_02232F64 *arg0) {
-    sub_0200E5D4(&arg0->windowList[4], 1);
+    EraseFrameAndWindow1(&arg0->windowList[4], 1);
     ClearWindowTilemapAndScheduleTransfer(&arg0->windowList[4]);
 }
 
@@ -1003,7 +1003,7 @@ void ov44_022342B8(UnkStruct_ov44_02235340 *arg0) {
 
 void ov44_022342E0(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
     if (arg0->unk30.waitingIcon != 0) {
-        sub_0200F450(arg0->unk30.waitingIcon);
+        WaitingIcon_Delete(arg0->unk30.waitingIcon);
         arg0->unk30.waitingIcon = 0;
         Options *options = Save_PlayerData_GetOptionsAddr(arg1->unk8);
         LoadUserFrameGfx2(arg0->unk30.bgConfig, GF_BG_LYR_MAIN_1, 1, 2, Options_GetFrame(options), heapID);

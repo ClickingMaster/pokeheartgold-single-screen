@@ -21,7 +21,7 @@ extern void String_Delete(void *);
 extern void RemoveTextPrinter(u8);
 extern void ClearFrameAndWindow2(void *, int);
 extern void *WaitingIcon_New(void *, int);
-extern void sub_0200F450(void *);
+extern void WaitingIcon_Delete(void *);
 extern void LoadFontPal0(int, int, enum HeapID);
 extern void LoadUserFrameGfx2(void *, int, int, int, int, enum HeapID);
 int ov96_021EE264(const u32 *, u32);
