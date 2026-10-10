@@ -4,9 +4,9 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 990b0289c · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 74569b0e0 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
-<text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">99.99% compiled code in C/C++ · 99.25% C + C++ source</text>
+<text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
 <text x="47" y="102" font-size="14">C-only source 97.9%</text>
 <rect x="205" y="91" width="12" height="12" rx="2" fill="#35a9b8"/>
@@ -19,8 +19,6 @@
 <text x="47" y="124" font-size="14">Build-tool generated 0.1%</text>
 <rect x="252" y="113" width="12" height="12" rx="2" fill="#9aa5b1"/>
 <text x="270" y="124" font-size="14">Linker-style veneers &lt;0.1%</text>
-<rect x="483" y="113" width="12" height="12" rx="2" fill="#e4ad42"/>
-<text x="502" y="124" font-size="14">C/C++ with assembly &lt;0.1%</text>
 <rect x="28.000" y="147.000" width="60.643" height="79.667" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / scrcmd_c.o
 30,194 bytes · C-only source
 src/scrcmd_c.c</title></rect>
@@ -9847,8 +9845,8 @@ src/to61_overlay_00_arm_residual_1_run25.c</title></rect>
 <rect x="578.633" y="447.404" width="3.329" height="6.921" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_0 / to65_ov00_extra16_run04.o
 144 bytes · C-only source
 src/to65_ov00_extra16_run04.c</title></rect>
-<rect x="581.962" y="447.404" width="6.288" height="3.461" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_0 / op90_to60_overlay_00_arm_residual_3_r01.o
-136 bytes · C/C++ with assembly
+<rect x="581.962" y="447.404" width="6.288" height="3.461" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_0 / op90_to60_overlay_00_arm_residual_3_r01.o
+136 bytes · C-only source
 src/op90_to60_overlay_00_arm_residual_3_r01.c</title></rect>
 <rect x="581.962" y="450.864" width="6.288" height="3.461" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_0 / to65_ov00_extra16_run02.o
 136 bytes · C-only source

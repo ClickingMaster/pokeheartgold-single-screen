@@ -1,47 +1,52 @@
 #pragma force_active on
 #include <nitro/types.h>
 
-int ov00_021FAFC8(void);
-u32 ov00_021FCFEC(void *p);
-int SOC_SetResolver(void *dns1, void *dns2);
-void ov00_021FD094(register void *ctx);
+typedef struct WProfile {
+    u8 unk00[0xc0];
+    u8 ip[4];
+    u8 gateway[4];
+    u8 dns1[4];
+    u8 dns2[4];
+    u8 prefix;
+    u8 unkD1[0x16];
+    u8 wepMode;
+    u8 unkE8[0x18];
+} WProfile;
+
+typedef struct WCtx {
+    WProfile profiles[3];
+    u8 unk300[0xd0d - 0x300];
+    u8 profileIdx;
+    u8 unkD0E[0xa];
+} WCtx;
+
+int ov00_021FAFC8(int idx);
+u32 ov00_021FCFEC(u8 *addr);
+void SOC_SetResolver(u32 *dns1, u32 *dns2);
+void ov00_021FD094(WCtx *ctx);
 
 #include <nitro/code32.h>
 
 // @fn ov00_021FD094
-asm void ov00_021FD094(register void *ctx) {
-    stmdb sp!, {r4, lr}
-    sub sp, sp, #8
-    mov r4, r0
-    ldrb r0, [r4, #0xd0d]
-    cmp r0, #6
-    addhs sp, sp, #8
-    ldmhsia sp!, {r4, pc}
-    bl ov00_021FAFC8
-    add r4, r4, r0, lsl #8
-    ldrb r0, [r4, #0xc0]
-    ldrb r2, [r4, #0xc8]
-    ldrb r1, [r4, #0xc9]
-    cmp r0, #0
-    ldrb r3, [r4, #0xca]
-    add r1, r2, r1
-    ldrb r2, [r4, #0xcb]
-    add r1, r3, r1
-    addne sp, sp, #8
-    add r0, r2, r1
-    ldmneia sp!, {r4, pc}
-    cmp r0, #0
-    addeq sp, sp, #8
-    ldmeqia sp!, {r4, pc}
-    add r0, r4, #0xc8
-    bl ov00_021FCFEC
-    str r0, [sp, #4]
-    add r0, r4, #0xcc
-    bl ov00_021FCFEC
-    str r0, [sp]
-    add r0, sp, #4
-    add r1, sp, #0
-    bl SOC_SetResolver
-    add sp, sp, #8
-    ldmia sp!, {r4, pc}
+void ov00_021FD094(WCtx *ctx) {
+    u32 dns1;
+    u32 dns2;
+    WProfile *p;
+    int sum;
+    u16 first;
+    if (ctx->profileIdx >= 6) {
+        return;
+    }
+    p = &ctx->profiles[ov00_021FAFC8(ctx->profileIdx)];
+    first = (u32)p->dns1[0];
+    sum = (u8)first + p->dns1[1] + p->dns1[2] + p->dns1[3];
+    if (p->ip[0] != 0) {
+        return;
+    }
+    if (sum == 0) {
+        return;
+    }
+    dns1 = ov00_021FCFEC(p->dns1);
+    dns2 = ov00_021FCFEC(p->dns2);
+    SOC_SetResolver(&dns1, &dns2);
 }

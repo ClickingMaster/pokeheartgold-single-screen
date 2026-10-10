@@ -1,18 +1,17 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "990b0289c675b6c509af66edbea1eb38938fd31b",
+  "commit": "74569b0e0b30ed4472b1202803707165e7c9e8d3",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "310165d4b4103744f5b9c4974f27bc3a7353b9f4f80e21117da303366646e150",
+    "ARM9": "861924681470be8d9f9fc0a62c9ac0fe7236cae4b5ac78bd850cb23b86a41ecd",
     "ARM7": "5b54b6e4cbfa1ad199f64db732d0d9291759022aabef84d1c51bb3b24052df71"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
   "totals": {
-    "c": 3989856,
+    "c": 3989992,
     "original_asm": 26078,
-    "mixed": 136,
     "cpp": 54972,
     "generated": 2264,
     "inline_asm": 1536,
@@ -21,16 +20,16 @@
   "coverage": {
     "denominator_bytes": 4075354,
     "c": {
-      "bytes": 3989856,
-      "percent": 97.90207182001858
+      "bytes": 3989992,
+      "percent": 97.9054089534308
     },
     "cpp": {
       "bytes": 54972,
       "percent": 1.3488889554134438
     },
     "combined": {
-      "bytes": 4044828,
-      "percent": 99.25096077543202
+      "bytes": 4044964,
+      "percent": 99.25429790884424
     },
     "original_asm": {
       "bytes": 26078,
@@ -58,9 +57,9 @@
       "percent": 100.0
     },
     "compiled_code_in_c": {
-      "bytes": 4046364,
+      "bytes": 4046500,
       "of": 4046500,
-      "percent": 99.99663907080193
+      "percent": 100.0
     }
   },
   "objects": [
@@ -175,7 +174,7 @@
       "module": "OVY_0",
       "object": "op90_to60_overlay_00_arm_residual_3_r01.o",
       "bytes": 136,
-      "status": "mixed",
+      "status": "c",
       "source": "src/op90_to60_overlay_00_arm_residual_3_r01.c"
     },
     {
