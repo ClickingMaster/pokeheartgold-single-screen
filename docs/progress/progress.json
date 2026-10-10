@@ -1,19 +1,19 @@
 {
   "schema_version": 2,
   "game": "heartgold.us",
-  "commit": "b8765ceecf4a43041f7c77ecc01c57141c729e65",
+  "commit": "2c6cd567fee2026a791eeba9a10a73e009328ce6",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "9767ca4f2b8e4806cdce7a6f7d1496c2e658083ff963b6fcda7ed190115894c8",
+    "ARM9": "863e6c8f033402df6c02f17d5af8e9174144187f41931ae56845aeae15c9fc94",
     "ARM7": "01aa6d6bb263b5752b0d787a82f224dafc986f80c6649dc28738b84fe5ebc992"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage.",
   "totals": {
     "c": 3989532,
-    "mixed": 28286,
-    "asm": 2564,
-    "cpp": 54972
+    "mixed": 28586,
+    "cpp": 54972,
+    "asm": 2264
   },
   "coverage": {
     "denominator_bytes": 4075354,
@@ -126,6 +126,14 @@
       "bytes": 56,
       "status": "c",
       "source": "src/op90_to60_overlay_00_arm_residual_12_r01.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_0",
+      "object": "op90_to60_overlay_00_arm_residual_3_r01.o",
+      "bytes": 136,
+      "status": "mixed",
+      "source": "src/op90_to60_overlay_00_arm_residual_3_r01.c"
     },
     {
       "cpu": "ARM9",
@@ -766,14 +774,6 @@
       "bytes": 1432,
       "status": "c",
       "source": "src/to60_ov00_run14.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_0",
-      "object": "to60_overlay_00_arm_residual_3.o",
-      "bytes": 136,
-      "status": "asm",
-      "source": "lib/NitroDWC/asm/to60_overlay_00_arm_residual_3.s"
     },
     {
       "cpu": "ARM9",
@@ -9986,6 +9986,14 @@
     {
       "cpu": "ARM9",
       "module": "OVY_13",
+      "object": "op90_to56_w16_residual01_r01.o",
+      "bytes": 164,
+      "status": "mixed",
+      "source": "src/op90_to56_w16_residual01_r01.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_13",
       "object": "op90_to56_w16_residual03_r01.o",
       "bytes": 460,
       "status": "c",
@@ -10678,14 +10686,6 @@
       "bytes": 88,
       "status": "c",
       "source": "src/to56_w16_f84.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_13",
-      "object": "to56_w16_residual01.o",
-      "bytes": 164,
-      "status": "asm",
-      "source": "asm/to56_w16_residual01.s"
     },
     {
       "cpu": "ARM9",

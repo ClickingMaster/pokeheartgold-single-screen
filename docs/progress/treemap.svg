@@ -5,7 +5,7 @@
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
 <text x="1172" y="42" text-anchor="end" font-size="22">99.24% C + C++ source</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · b8765ceec · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 2c6cd567f · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
 <text x="47" y="102" font-size="14">C-only source 97.9%</text>
 <rect x="256" y="91" width="12" height="12" rx="2" fill="#35a9b8"/>
@@ -9788,9 +9788,9 @@ src/to61_overlay_00_arm_residual_1_run25.c</title></rect>
 <rect x="337.622" y="679.859" width="7.134" height="3.355" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_0 / to65_ov00_extra16_run04.o
 144 bytes · C-only source
 src/to65_ov00_extra16_run04.c</title></rect>
-<rect x="337.622" y="683.214" width="3.567" height="6.336" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_0 / to60_overlay_00_arm_residual_3.o
-136 bytes · Assembly
-lib/NitroDWC/asm/to60_overlay_00_arm_residual_3.s</title></rect>
+<rect x="337.622" y="683.214" width="3.567" height="6.336" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_0 / op90_to60_overlay_00_arm_residual_3_r01.o
+136 bytes · C/C++ with assembly
+src/op90_to60_overlay_00_arm_residual_3_r01.c</title></rect>
 <rect x="341.189" y="683.214" width="3.567" height="6.336" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_0 / to65_ov00_extra16_run02.o
 136 bytes · C-only source
 src/to65_ov00_extra16_run02.c</title></rect>
@@ -11924,9 +11924,9 @@ src/to80_extra1402_run01.c</title></rect>
 <rect x="454.838" y="704.360" width="4.365" height="6.396" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_13 / to80_extra1917_run01.o
 168 bytes · C-only source
 src/to80_extra1917_run01.c</title></rect>
-<rect x="450.473" y="710.756" width="4.365" height="6.244" fill="#455268" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_13 / to56_w16_residual01.o
-164 bytes · Assembly
-asm/to56_w16_residual01.s</title></rect>
+<rect x="450.473" y="710.756" width="4.365" height="6.244" fill="#e4ad42" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_13 / op90_to56_w16_residual01_r01.o
+164 bytes · C/C++ with assembly
+src/op90_to56_w16_residual01_r01.c</title></rect>
 <rect x="454.838" y="710.756" width="4.365" height="6.244" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_13 / to61_overlay_13_arm_2_residual_1_run05.o
 164 bytes · C-only source
 src/to61_overlay_13_arm_2_residual_1_run05.c</title></rect>

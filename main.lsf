@@ -2979,7 +2979,8 @@ Object src/op90_to91_w41563_friend_callback_suffix_r01.o
     Object src/to90_extra1943_run01.o
     Object src/to60_ov00_run02.o
     Object src/to60_ov00_run03.o
-    Object lib/NitroDWC/asm/to60_overlay_00_arm_residual_3.o
+    Object lib/NitroDWC/asm/op90_to60_overlay_00_arm_residual_3_anchor.o
+    Object src/op90_to60_overlay_00_arm_residual_3_r01.o
     Object src/to60_ov00_run04.o
     Object lib/NitroDWC/asm/op90_to60_overlay_00_arm_residual_4_anchor.o
     Object src/op90_to60_overlay_00_arm_residual_4_r01.o
@@ -5206,7 +5207,8 @@ Overlay OVY_13
     Object src/to70_to53_overlay13_r16_extra284_run01.o
     Object src/to53_overlay13/to53_overlay13_c17_w11.o
     Object src/to55_overlay13_r17_run01.o
-    Object asm/to56_w16_residual01.o
+    Object asm/op90_to56_w16_residual01_anchor.o
+    Object src/op90_to56_w16_residual01_r01.o
     Object src/to56_w16_f84.o
     Object asm/to90_extra2416_anchor.o
     Object src/to90_extra2416_run01.o
