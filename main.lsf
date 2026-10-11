@@ -1229,49 +1229,10 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object src/op90_to90_extra2545_residual_2_r01.o
     Object lib/asm/to65_to65_nitro_unified_residual_23_extra21_anchor.o
     Object lib/asm/to90_extra2130_anchor.o
-    Object src/to90_extra2130_run01.o
-    Object src/to65_to65_nitro_unified_residual_23_extra21_run01.o
-    Object lib/asm/to90_extra2132_anchor.o
-    Object src/to90_extra2132_run01.o
-    Object src/to90_extra2132_run02.o
-    Object src/to90_extra2132_run03.o
-    Object src/to90_extra2132_run04.o
-    Object src/to90_extra2132_run05.o
-    Object src/to90_extra2132_run06.o
-    Object src/to90_extra2132_run07.o
-    Object src/to65_to65_nitro_unified_residual_23_extra21_run02.o
-    Object lib/asm/to90_extra2133_anchor.o
-    Object lib/asm/op90_to90_extra2133_residual_1_anchor.o
-    Object src/op90_to90_extra2133_residual_1_r01.o
-    Object src/to90_extra2133_run01.o
-    Object src/to65_to65_nitro_unified_residual_23_extra21_run03.o
-    Object lib/asm/to90_extra2134_anchor.o
-    Object src/to90_extra2134_run01.o
-    Object src/to65_to65_nitro_unified_residual_23_extra21_run04.o
-    Object lib/asm/op90_to65_to65_nitro_unified_residual_23_extra21_residual_5_anchor.o
-    Object src/op90_to65_to65_nitro_unified_residual_23_extra21_residual_5_r01.o
-    Object src/to65_to65_nitro_unified_residual_23_extra21_run05.o
-    Object lib/asm/to90_extra2135_anchor.o
-    Object src/to90_extra2135_run01.o
-    Object src/to65_to65_nitro_unified_residual_23_extra21_run06.o
-    Object lib/asm/to90_extra2136_anchor.o
-    Object src/to90_extra2136_run01.o
-    Object lib/asm/op90_to90_extra2136_residual_1_anchor.o
-    Object src/op90_to90_extra2136_residual_1_r01.o
-    Object src/to65_to65_nitro_unified_residual_23_extra21_run07.o
-    Object lib/asm/op90_to65_to65_nitro_unified_residual_23_extra21_residual_8_anchor.o
-    Object src/op90_to65_to65_nitro_unified_residual_23_extra21_residual_8_r01.o
-    Object src/to65_to65_nitro_unified_residual_23_extra21_run08.o
-    Object lib/asm/op90_to65_to65_nitro_unified_residual_23_extra21_residual_9_anchor.o
-    Object src/op90_to65_to65_nitro_unified_residual_23_extra21_residual_9_r01.o
-    Object src/to65_to65_nitro_unified_residual_23_extra21_run09.o
-    Object lib/asm/to90_extra2131_anchor.o
-    Object lib/asm/op90_to90_extra2131_residual_1_anchor.o
-    Object src/op90_to90_extra2131_residual_1_r01.o
-    Object src/to90_extra2131_run01.o
-    Object src/to65_to65_nitro_unified_residual_23_extra21_run10.o
-    Object lib/asm/op90_to65_to65_nitro_unified_residual_23_extra21_residual_11_anchor.o
-    Object src/op90_to65_to65_nitro_unified_residual_23_extra21_residual_11_r01.o
+    Object lib/NitroSDK/src/tp.o
+    Object lib/NitroSDK/src/mic.o
+    Object lib/NitroSDK/src/pm.o
+    Object lib/NitroSDK/src/rtc/rtc_api.o
     Object lib/asm/op90_to65_nitro_unified_residual_26_anchor.o
     Object src/op90_to65_nitro_unified_residual_26_r01.o
     Object lib/asm/to90_extra2127_anchor.o

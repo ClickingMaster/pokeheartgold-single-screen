@@ -1684,14 +1684,14 @@
   {
    "function": "RtcWaitBusy",
    "cpu": "ARM9",
-   "source": "src/op90_to65_to65_nitro_unified_residual_23_extra21_residual_11_r01.c",
+   "source": "lib/NitroSDK/src/rtc/rtc_api.c",
    "kind": "asm",
    "reason": "address held in ip while r1-r3 are free; MWCC gives each value the lowest free register (ip only once r0-r3 are taken), read from the compiler and traced (p02, q02b)"
   },
   {
    "function": "MicWaitBusy",
    "cpu": "ARM9",
-   "source": "src/op90_to65_to65_nitro_unified_residual_23_extra21_residual_5_r01.c",
+   "source": "lib/NitroSDK/src/mic.c",
    "kind": "asm",
    "reason": "address held in ip while r1-r3 are free; MWCC gives each value the lowest free register (ip only once r0-r3 are taken), read from the compiler and traced (p02, q02b)"
   },

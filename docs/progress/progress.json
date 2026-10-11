@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "52cd0c8583dfd6220f48b75b4325572269c4aaff",
+  "commit": "2c3db7cfc2fa97dcaa5e0efa64bf0327460005eb",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "4852cee48ef29cb8fa151a6cac53793f1480d2d1e1da34760dbacd35b73f39fb",
+    "ARM9": "ca2cf603d90f54b24f3716187f4f2f7180aff6ff6b9c505f23aaa238c3b0f257",
     "ARM7": "9c5e95fc87a7ed277b340afcbcf5ab95f37fa6b9d0ec613dccd875e86c2e707b"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -30311,6 +30311,25 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "mic.o",
+      "bytes": 1244,
+      "status": "c",
+      "source": "lib/NitroSDK/src/mic.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "mic.o",
+      "bytes": 24,
+      "status": "original_asm",
+      "source": "lib/NitroSDK/src/mic.c",
+      "functions": [
+        "MicWaitBusy"
+      ]
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "model_animation.o",
       "bytes": 834,
       "status": "c",
@@ -31045,44 +31064,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "op90_to65_to65_nitro_unified_residual_23_extra21_residual_11_r01.o",
-      "bytes": 24,
-      "status": "original_asm",
-      "source": "src/op90_to65_to65_nitro_unified_residual_23_extra21_residual_11_r01.c",
-      "functions": [
-        "RtcWaitBusy"
-      ]
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to65_to65_nitro_unified_residual_23_extra21_residual_5_r01.o",
-      "bytes": 24,
-      "status": "original_asm",
-      "source": "src/op90_to65_to65_nitro_unified_residual_23_extra21_residual_5_r01.c",
-      "functions": [
-        "MicWaitBusy"
-      ]
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to65_to65_nitro_unified_residual_23_extra21_residual_8_r01.o",
-      "bytes": 108,
-      "status": "c",
-      "source": "src/op90_to65_to65_nitro_unified_residual_23_extra21_residual_8_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to65_to65_nitro_unified_residual_23_extra21_residual_9_r01.o",
-      "bytes": 576,
-      "status": "c",
-      "source": "src/op90_to65_to65_nitro_unified_residual_23_extra21_residual_9_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "op90_to65_to65_nitro_unified_residual_40_extra24_residual_1_r01.o",
       "bytes": 500,
       "status": "c",
@@ -31183,30 +31164,6 @@
       "bytes": 396,
       "status": "c",
       "source": "src/op90_to90_extra2128_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to90_extra2131_residual_1_r01.o",
-      "bytes": 1360,
-      "status": "c",
-      "source": "src/op90_to90_extra2131_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to90_extra2133_residual_1_r01.o",
-      "bytes": 492,
-      "status": "c",
-      "source": "src/op90_to90_extra2133_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to90_extra2136_residual_1_r01.o",
-      "bytes": 200,
-      "status": "c",
-      "source": "src/op90_to90_extra2136_residual_1_r01.c"
     },
     {
       "cpu": "ARM9",
@@ -32247,6 +32204,14 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "pm.o",
+      "bytes": 3228,
+      "status": "c",
+      "source": "lib/NitroSDK/src/pm.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "pm_string.o",
       "bytes": 2288,
       "status": "c",
@@ -33067,6 +33032,25 @@
       "bytes": 444,
       "status": "c",
       "source": "src/roamer.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "rtc_api.o",
+      "bytes": 2116,
+      "status": "c",
+      "source": "lib/NitroSDK/src/rtc/rtc_api.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "rtc_api.o",
+      "bytes": 24,
+      "status": "original_asm",
+      "source": "lib/NitroSDK/src/rtc/rtc_api.c",
+      "functions": [
+        "RtcWaitBusy"
+      ]
     },
     {
       "cpu": "ARM9",
@@ -34527,86 +34511,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to65_to65_nitro_unified_residual_23_extra21_run01.o",
-      "bytes": 120,
-      "status": "c",
-      "source": "src/to65_to65_nitro_unified_residual_23_extra21_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_to65_nitro_unified_residual_23_extra21_run02.o",
-      "bytes": 16,
-      "status": "c",
-      "source": "src/to65_to65_nitro_unified_residual_23_extra21_run02.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_to65_nitro_unified_residual_23_extra21_run03.o",
-      "bytes": 676,
-      "status": "c",
-      "source": "src/to65_to65_nitro_unified_residual_23_extra21_run03.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_to65_nitro_unified_residual_23_extra21_run04.o",
-      "bytes": 316,
-      "status": "c",
-      "source": "src/to65_to65_nitro_unified_residual_23_extra21_run04.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_to65_nitro_unified_residual_23_extra21_run05.o",
-      "bytes": 60,
-      "status": "c",
-      "source": "src/to65_to65_nitro_unified_residual_23_extra21_run05.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_to65_nitro_unified_residual_23_extra21_run06.o",
-      "bytes": 72,
-      "status": "c",
-      "source": "src/to65_to65_nitro_unified_residual_23_extra21_run06.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_to65_nitro_unified_residual_23_extra21_run07.o",
-      "bytes": 244,
-      "status": "c",
-      "source": "src/to65_to65_nitro_unified_residual_23_extra21_run07.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_to65_nitro_unified_residual_23_extra21_run08.o",
-      "bytes": 904,
-      "status": "c",
-      "source": "src/to65_to65_nitro_unified_residual_23_extra21_run08.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_to65_nitro_unified_residual_23_extra21_run09.o",
-      "bytes": 1464,
-      "status": "c",
-      "source": "src/to65_to65_nitro_unified_residual_23_extra21_run09.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_to65_nitro_unified_residual_23_extra21_run10.o",
-      "bytes": 16,
-      "status": "c",
-      "source": "src/to65_to65_nitro_unified_residual_23_extra21_run10.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to65_to65_nitro_unified_residual_36_extra22_run01.o",
       "bytes": 140,
       "status": "c",
@@ -35447,110 +35351,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to90_extra2130_run01.o",
-      "bytes": 640,
-      "status": "c",
-      "source": "src/to90_extra2130_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_extra2131_run01.o",
-      "bytes": 112,
-      "status": "c",
-      "source": "src/to90_extra2131_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_extra2132_run01.o",
-      "bytes": 148,
-      "status": "c",
-      "source": "src/to90_extra2132_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_extra2132_run02.o",
-      "bytes": 296,
-      "status": "c",
-      "source": "src/to90_extra2132_run02.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_extra2132_run03.o",
-      "bytes": 148,
-      "status": "c",
-      "source": "src/to90_extra2132_run03.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_extra2132_run04.o",
-      "bytes": 80,
-      "status": "c",
-      "source": "src/to90_extra2132_run04.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_extra2132_run05.o",
-      "bytes": 256,
-      "status": "c",
-      "source": "src/to90_extra2132_run05.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_extra2132_run06.o",
-      "bytes": 152,
-      "status": "c",
-      "source": "src/to90_extra2132_run06.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_extra2132_run07.o",
-      "bytes": 324,
-      "status": "c",
-      "source": "src/to90_extra2132_run07.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_extra2133_run01.o",
-      "bytes": 292,
-      "status": "c",
-      "source": "src/to90_extra2133_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_extra2134_run01.o",
-      "bytes": 296,
-      "status": "c",
-      "source": "src/to90_extra2134_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_extra2135_run01.o",
-      "bytes": 64,
-      "status": "c",
-      "source": "src/to90_extra2135_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_extra2136_run01.o",
-      "bytes": 164,
-      "status": "c",
-      "source": "src/to90_extra2136_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to90_extra2148_run01.o",
       "bytes": 268,
       "status": "c",
@@ -36249,6 +36049,14 @@
       "bytes": 3040,
       "status": "c",
       "source": "src/touchscreen_list_menu.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "tp.o",
+      "bytes": 3008,
+      "status": "c",
+      "source": "lib/NitroSDK/src/tp.c"
     },
     {
       "cpu": "ARM9",
