@@ -15,7 +15,7 @@
 #include "system.h"
 #include "timer_3.h"
 #include "unk_02018380.h"
-#include "unk_020210A0.h"
+#include "touchpad.h"
 #include "unk_02026E30.h"
 #include "unk_02035900.h"
 #include "unk_02037C94.h"

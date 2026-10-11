@@ -12,7 +12,7 @@ BOOL Bag_Exit(OverlayManager *manager, int *state) {
     ov15_021F9EA8(work);
     ov15_021FE154(work);
     ov15_021F9A8C(*(void **)work);
-    sub_02021238();
+    GF_TouchpadStopSampling();
     GF_DestroyVramTransferManager();
     ov15_021FEB64(work);
     ov15_021FE504(work);

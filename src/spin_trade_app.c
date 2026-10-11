@@ -36,7 +36,7 @@
 #include "sound_playback.h"
 #include "unk_02009D48.h"
 #include "unk_0200FA24.h"
-#include "unk_020210A0.h"
+#include "touchpad.h"
 #include "unk_02026E30.h"
 #include "unk_02034354.h"
 #include "unk_02035900.h"
@@ -433,7 +433,7 @@ BOOL sub_02036FD8(int command, void *data, int size);
 void sub_02038C1C(int count);
 void sub_02039EAC(s32 *state);
 BOOL sub_02039EB4(SaveData *saveData, int a1, s32 *state);
-int sub_02021280(SpinTradeTouchSamples *out, int mode, u32 threshold);
+int GF_TouchpadUpdate(SpinTradeTouchSamples *out, int mode, u32 threshold);
 void *sub_0203A4AC(enum HeapID heapId);
 BOOL sub_02096D4C(SpinTradeLinkMenu *menu, int command, void *data, int size);
 Party *sub_02097018(SpinTradeLinkMenu *menu, int netId);
@@ -651,8 +651,8 @@ BOOL SpinTradeApp_Init(OverlayManager *man, int *state) {
     app->party = SaveArray_Party_Get(app->args->input.saveData);
     app->narc = NARC_New(NARC_a_1_8_7, HEAP_ID_102);
     GF_CreateVramTransferManager(8, HEAP_ID_102);
-    sub_020210BC();
-    sub_02021148(4);
+    GF_TouchpadResetSampling();
+    GF_TouchpadStartSampling(4);
     SpinTrade_InitGraphics(app);
     Main_SetVBlankIntrCB(SpinTrade_VBlankCallback, app);
     SpinTrade_InitMachine(app);
@@ -687,7 +687,7 @@ BOOL SpinTradeApp_Init(OverlayManager *man, int *state) {
 BOOL SpinTradeApp_Exit(OverlayManager *man, int *state) {
     SpinTradeApp *app = OverlayManager_GetData(man);
 
-    GF_ASSERT(sub_02021238() == 1);
+    GF_ASSERT(GF_TouchpadStopSampling() == 1);
     SpinTrade_StopBounceTask(app);
     SpinTrade_StopSpinTask(app);
     SpinTrade_StopWobbleTask(app);
@@ -1927,7 +1927,7 @@ void SpinTrade_UpdateTouch(SpinTradeApp *app) {
     u32 held = 0;
     SpinTradeTouch *touch = &app->touch;
 
-    sub_02021280(&touch->samples, 2, 0);
+    GF_TouchpadUpdate(&touch->samples, 2, 0);
     do {
         if (touch->samples.samples[i].touch == 1) {
             touch->x = touch->samples.samples[i].x;

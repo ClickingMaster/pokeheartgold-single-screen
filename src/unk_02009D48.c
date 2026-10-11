@@ -7,7 +7,7 @@
 #include "sprite.h"
 #include "sprite_transfer.h"
 #include "oam_manager.h"
-#include "unk_02025C44.h"
+#include "gf_g2d_renderer.h"
 
 void CreateSpriteResourcesHeader(struct SpriteResourcesHeader *hdr, int charId, int plttId, int cellId, int cellAnmId, int multiCellId, int multiCellAnmId, int transfer, int priority, GF_2DGfxResMan *charMan, GF_2DGfxResMan *plttMan, GF_2DGfxResMan *cellMan, GF_2DGfxResMan *cellAnmMan, GF_2DGfxResMan *multiCellMan, GF_2DGfxResMan *multiCellAnmMan) {
     SpriteResource *charObj;

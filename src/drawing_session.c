@@ -28,7 +28,7 @@
 #include "text.h"
 #include "touchscreen.h"
 #include "oam_manager.h"
-#include "unk_020210A0.h"
+#include "touchpad.h"
 #include "unk_02032844.h"
 #include "unk_02034354.h"
 #include "unk_02035900.h"
@@ -157,8 +157,8 @@ BOOL DrawingSession_Init(OverlayManager *man, int *state) {
         work->args = OverlayManager_GetArgs(man);
         narc = NARC_New(NARC_a_0_7_8, HEAP_ID_39);
         DrawingSession_LoadBgGraphics(work, narc);
-        sub_020210BC();
-        sub_02021148(2);
+        GF_TouchpadResetSampling();
+        GF_TouchpadStartSampling(2);
         Main_SetVBlankIntrCB(DrawingSession_VBlankCB, work->bgConfig);
         DrawingSession_InitWork(work);
         DrawingSession_InitObjTransfer();
@@ -262,7 +262,7 @@ BOOL DrawingSession_Exit(OverlayManager *man, int *state) {
         ObjPlttTransfer_Destroy();
         DrawingSession_RemoveWindows(work);
         DrawingSession_FreeBgs(work->bgConfig);
-        sub_02021238();
+        GF_TouchpadStopSampling();
         DestroyMsgData(work->msgData);
         MessageFormat_Delete(work->msgFormat);
         (*state)++;
@@ -638,7 +638,7 @@ void DrawingSession_HandleTouch(DrawingSessionWork *work) {
         DrawingSession_SetPenCursorPos(work->penCursors[Comm_GetLocalNetId()], gSystem.touchX, gSystem.touchY);
         Sprite_SetDrawFlag(work->penCursors[Comm_GetLocalNetId()], TRUE);
     }
-    if (sub_02021280(&touch, 4, 64) == 1) {
+    if (GF_TouchpadUpdate(&touch, 4, 64) == 1) {
         DrawingSession_BuildStroke(&work->ownStroke, &touch, work->penColor, work->penSize);
         if (changed == 1) {
             work->ownStroke.count = 0;

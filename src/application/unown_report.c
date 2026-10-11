@@ -29,7 +29,7 @@
 #include "touchscreen.h"
 #include "sound_playback.h"
 #include "oam_manager.h"
-#include "unk_020210A0.h"
+#include "touchpad.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 
@@ -327,8 +327,8 @@ BOOL UnownReport_SetupGraphics(UnownReportApp *app) {
         break;
     case 1:
         UnownReport_DrawFirstPage(app);
-        sub_020210BC();
-        sub_02021148(1);
+        GF_TouchpadResetSampling();
+        GF_TouchpadStartSampling(1);
         Sound_SetSceneAndPlayBGM(69, 0, 0);
         app->subState = 0;
         return TRUE;
@@ -337,7 +337,7 @@ BOOL UnownReport_SetupGraphics(UnownReportApp *app) {
 }
 
 BOOL UnownReport_Teardown(UnownReportApp *app) {
-    sub_02021238();
+    GF_TouchpadStopSampling();
     UnownReport_DestroyGraphics(app);
     return TRUE;
 }

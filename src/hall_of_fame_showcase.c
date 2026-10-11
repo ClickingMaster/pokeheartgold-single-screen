@@ -29,7 +29,7 @@
 #include "unk_02009D48.h"
 #include "unk_02013FDC.h"
 #include "unk_02019BA4.h"
-#include "unk_020210A0.h"
+#include "touchpad.h"
 
 #define HOF_SHOWCASE_NUM_WINDOWS 17
 #define HOF_SHOWCASE_NUM_SPRITES 18
@@ -137,8 +137,8 @@ BOOL HallOfFameShowcase_Init(OverlayManager *man, int *state) {
     GfGfx_EngineBSetPlanes(0);
     *(volatile u16 *)0x04000050 = 0;
     *(volatile u16 *)0x04001050 = 0;
-    sub_020210BC();
-    sub_02021148(4);
+    GF_TouchpadResetSampling();
+    GF_TouchpadStartSampling(4);
     *(volatile u16 *)0x04000304 &= 0xFFFF7FFF;
     Heap_Create(HEAP_ID_3, HEAP_ID_59, 0x40000);
     showcase = OverlayManager_CreateAndGetData(man, sizeof(HallOfFameShowcase), HEAP_ID_59);
@@ -167,7 +167,7 @@ BOOL HallOfFameShowcase_Exit(OverlayManager *man, int *state) {
     HallOfFameShowcase_FreeSprites(showcase);
     HallOfFameShowcase_FreeBgs(showcase);
     NARC_Delete(showcase->pokegraNarc);
-    sub_02021238();
+    GF_TouchpadStopSampling();
     OverlayManager_FreeData(man);
     Heap_Destroy(HEAP_ID_59);
     return TRUE;

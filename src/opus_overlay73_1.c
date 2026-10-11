@@ -29,8 +29,8 @@ int ov73_021E5900(OverlayManager *mgr, u32 *state) {
         SetMasterBrightnessNeutral(1);
         BeginNormalPaletteFade(0, 0x11, 0x11, 0, 0x10, 1, 0x32);
         ov73_021E5F38(work, narc);
-        sub_020210BC();
-        sub_02021148(2);
+        GF_TouchpadResetSampling();
+        GF_TouchpadStartSampling(2);
         Main_SetVBlankIntrCB((void (*)(void *))ov73_021E5CD8, work);
         ov73_021E5E0C(work, narc);
         ov73_021E6060();

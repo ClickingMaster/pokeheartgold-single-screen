@@ -13,7 +13,7 @@
 #include "sound_playback.h"
 #include "oam_manager.h"
 #include "unk_0200FA24.h"
-#include "unk_02025C44.h"
+#include "gf_g2d_renderer.h"
 
 static void WeatherTask_ChangeWeather(SysTask *task, void *data);
 static void ov01_021EB3F0(SysTask *task, void *data);

@@ -24,7 +24,7 @@
 #include "sound_system.h"
 #include "system.h"
 #include "sound_playback.h"
-#include "unk_020210A0.h"
+#include "touchpad.h"
 #include "unk_0203A3B0.h"
 #include "unk_02066EDC.h"
 #include "unk_0208805C.h"
@@ -241,8 +241,8 @@ static BOOL PartyMenuApp_Init(OverlayManager *manager, int *pState) {
     sub_02079700();
     sub_02079758(partyMenu->bgConfig);
     sub_02079A14(partyMenu, narc);
-    sub_020210BC();
-    sub_02021148(4);
+    GF_TouchpadResetSampling();
+    GF_TouchpadStartSampling(4);
     Sound_SetSceneAndPlayBGM(57, SEQ_NONE, 0);
     PartyMenu_SetContextMenuStaticStrings(partyMenu);
     PartyMenu_AddAllWindows(partyMenu);
@@ -614,7 +614,7 @@ static BOOL PartyMenuApp_Exit(OverlayManager *manager, int *pState) {
     PartyMenu_RemoveSpriteRenderer(partyMenu);
     PartyMenu_RemoveAllWindows(partyMenu);
     sub_020798C4(partyMenu->bgConfig);
-    sub_02021238();
+    GF_TouchpadStopSampling();
     GF_DestroyVramTransferManager();
     for (i = 0; i < PARTY_SIZE; ++i) {
         String_Delete(partyMenu->monsDrawState[i].nickname);

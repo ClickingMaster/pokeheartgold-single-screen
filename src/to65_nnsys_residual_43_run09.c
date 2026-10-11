@@ -21,7 +21,7 @@ typedef struct {
 
 #define IH(p, i)  (((IndexMap *)(p))->ids[i])
 #define MUL(a, b) ((s32)(((s64)(a) * (b)) >> 12))
-extern void *_02110A08;
+extern void *gAnmCalcFuncNsBca;
 extern void *_02110A04;
 
 extern void FX_DivAsync(fx32, fx32);

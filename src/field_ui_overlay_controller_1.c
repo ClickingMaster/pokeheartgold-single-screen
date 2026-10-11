@@ -24,8 +24,8 @@ int sub_020850F4(void *overlayManager) {
     sub_0208545C(data->bgConfig);
     sub_020863F4(data);
     sub_02085688(data);
-    sub_020210BC();
-    sub_02021148(4);
+    GF_TouchpadResetSampling();
+    GF_TouchpadStartSampling(4);
     sub_020860B8(data);
     if (data->args.words[12] != 0) {
         WirelessStatusIcon_Create((void *)data->args.words[12]);
@@ -79,7 +79,7 @@ int sub_0208527C(void *overlayManager) {
     PaletteData_FreeBuffers(data->paletteData, 3);
     PaletteData_Free(data->paletteData);
     NARC_Delete(data->narc);
-    sub_02021238();
+    GF_TouchpadStopSampling();
     SpriteSystem_FreeResourcesAndManager(data->spriteSystem, data->spriteManager);
     SpriteSystem_Free(data->spriteSystem);
     TouchHitboxController_Destroy(data->touchController);

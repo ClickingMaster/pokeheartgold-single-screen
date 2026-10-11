@@ -53,7 +53,7 @@ BOOL ov39_02228370(OverlayManager *manager) {
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
     GF_DestroyVramTransferManager();
-    sub_02021238();
+    GF_TouchpadStopSampling();
     TextFlags_SetCanABSpeedUpPrint(FALSE);
     TextFlags_SetAutoScrollParam(0);
     TextFlags_SetCanTouchSpeedUpPrint(FALSE);

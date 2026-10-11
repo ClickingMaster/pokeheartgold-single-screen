@@ -17,8 +17,8 @@ extern void TextFlags_SetCanTouchSpeedUpPrint(BOOL);
 extern void ToggleBgLayer(u32, u32);
 extern void Sound_SetSceneAndPlayBGM(int, int, int);
 extern void SpriteSystem_DrawSprites(void *);
-extern void sub_020210BC(void);
-extern void sub_02021148(int);
+extern void GF_TouchpadResetSampling(void);
+extern void GF_TouchpadStartSampling(int);
 extern void sub_0203A964(void);
 extern void sub_020880CC(u32, u32);
 
@@ -125,8 +125,8 @@ BOOL Bag_Init(OverlayManager *man, int *state) {
     ov15_021F9984();
     ov15_021F99A4(*(void **)work);
     ov15_021F9AE4(work);
-    sub_020210BC();
-    sub_02021148(4);
+    GF_TouchpadResetSampling();
+    GF_TouchpadStartSampling(4);
     ov15_021FE020(work);
     TextFlags_SetCanTouchSpeedUpPrint(TRUE);
     ov15_021FE4C8(work);

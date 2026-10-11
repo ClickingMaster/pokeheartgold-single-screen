@@ -1,7 +1,7 @@
 #pragma force_active on
 #include "global.h"
 #include <nitro/code32.h>
-extern const u8 _021094B8[];
+extern const u8 gJntAnmPivotMtxIndices[];
 BOOL getRotDataByIdx_(s32 *m, const s16 *pivotData, const s16 *basisData, u32 info);
 #pragma push
 #pragma opt_common_subs off
@@ -30,19 +30,19 @@ BOOL getRotDataByIdx_(s32 *restrict m, const s16 *pivotData, const s16 *basisDat
         info = p[2];
         if (mode & 0x10) pv = -0x1000; else pv = 0x1000;
         mode &= 0xf;
-        int i = _021094B8[mode * 4];
+        int i = gJntAnmPivotMtxIndices[mode * 4];
         m[mode] = pv;
-        j = (_021094B8 + 1)[mode * 4];
+        j = (gJntAnmPivotMtxIndices + 1)[mode * 4];
         m[i] = a;
         m[j] = info;
         if (p[0] & 0x20) {
             info = -info;
         }
-        m[(_021094B8 + 2)[mode * 4]] = info;
+        m[(gJntAnmPivotMtxIndices + 2)[mode * 4]] = info;
         if (p[0] & 0x40) {
             a = -a;
         }
-        m[(_021094B8 + 3)[mode * 4]] = a;
+        m[(gJntAnmPivotMtxIndices + 3)[mode * 4]] = a;
         return FALSE;
     } else {
         s32 x0, x1, x2, x3, x4;

@@ -28,7 +28,7 @@
 #include "touchscreen.h"
 #include "sound_playback.h"
 #include "oam_manager.h"
-#include "unk_020210A0.h"
+#include "touchpad.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 
@@ -682,8 +682,8 @@ static BOOL AlphPuzzle_OverlayEnterStep(AlphPuzzleData *data) {
         break;
     case 1:
         AlphPuzzle_DrawHintTextAndHideCursor(data);
-        sub_020210BC();
-        sub_02021148(1);
+        GF_TouchpadResetSampling();
+        GF_TouchpadStartSampling(1);
         data->unkState = 0;
         return TRUE;
     }
@@ -691,7 +691,7 @@ static BOOL AlphPuzzle_OverlayEnterStep(AlphPuzzleData *data) {
 }
 
 static BOOL AlphPuzzle_OverlayExitStep(AlphPuzzleData *data) {
-    sub_02021238();
+    GF_TouchpadStopSampling();
     AlphPuzzle_TeardownGraphics(data);
     return TRUE;
 }

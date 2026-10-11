@@ -95,10 +95,10 @@
 .public GF_CreateVramTransferManager
 .public GF_DestroyVramTransferManager
 .public GF_RunVramTransferTasks
-.public sub_020210BC
-.public sub_02021148
-.public sub_02021238
-.public sub_02021280
+.public GF_TouchpadResetSampling
+.public GF_TouchpadStartSampling
+.public GF_TouchpadStopSampling
+.public GF_TouchpadUpdate
 .public ObjCharTransfer_InitEx
 .public ObjCharTransfer_Destroy
 .public ObjCharTransfer_ClearBuffers

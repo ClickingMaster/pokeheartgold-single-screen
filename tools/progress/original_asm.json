@@ -1250,14 +1250,14 @@
   {
    "function": "__VENEER_OS_IsThreadTerminated",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_26_residual_1_r01.c",
+   "source": "sub/lib/src/wl_task.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_IsThreadTerminated: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_OS_JoinThread",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_26_residual_1_r01.c",
+   "source": "sub/lib/src/wl_task.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_JoinThread: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
@@ -1467,28 +1467,28 @@
   {
    "function": "__VENEER_MIi_CpuClearFast",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_25_r01.c",
+   "source": "sub/lib/src/wl_task.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to MIi_CpuClearFast: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_OS_GetLockID",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_25_r01.c",
+   "source": "sub/lib/src/wl_task.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_GetLockID: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_OS_DisableIrqMask",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_27_r01.c",
+   "source": "sub/lib/src/wl_task.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_DisableIrqMask: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_OS_EnableIrqMask",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_27_r01.c",
+   "source": "sub/lib/src/wl_task.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_EnableIrqMask: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },

@@ -32,7 +32,7 @@ extern void SysTask_Destroy(void *);
 extern void SpriteSystem_FreeResourcesAndManager(void *, void *);
 extern void SpriteSystem_Free(void *);
 extern void WirelessStatusIcon_Destroy(void);
-extern void sub_02021238(void);
+extern void GF_TouchpadStopSampling(void);
 extern void TouchHitboxController_Destroy(void *);
 extern void TextFlags_SetCanTouchSpeedUpPrint(BOOL);
 extern void sub_020135AC(void *);

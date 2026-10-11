@@ -39,7 +39,7 @@ u32 ov14_021EB0E4(void *p) {
     ov14_021E5C00(p);
     NARC_Delete(PTR_AT(PTR_AT(p, 0x34), 0x454));
     NARC_Delete(PTR_AT(PTR_AT(p, 0x34), 0x450));
-    sub_02021238();
+    GF_TouchpadStopSampling();
     *(volatile u16 *)0x04000050 = 0;
     *(volatile u16 *)0x04001050 = 0;
     GfGfx_EngineASetPlanes(0);

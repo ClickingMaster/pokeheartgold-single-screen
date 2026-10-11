@@ -24,13 +24,13 @@
 #include "string_util.h"
 #include "system.h"
 #include "text.h"
-#include "touch_sampling_internal.h"
+#include "touchpad_internal.h"
 #include "touchscreen.h"
 #include "sound_playback.h"
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
 #include "oam_manager.h"
-#include "unk_020210A0.h"
+#include "touchpad.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 
@@ -367,7 +367,7 @@ BOOL ScratchOffCards_Main(OverlayManager *man, int *state) {
 
 BOOL ScratchOffCards_Exit(OverlayManager *man, int *state) {
     ScratchOffCardsWork *work = OverlayManager_GetData(man);
-    sub_02021238();
+    GF_TouchpadStopSampling();
     *work->resultOut = work->result;
     GF_DestroyVramTransferManager();
     ScratchOffCards_FreeResources(work);
@@ -669,7 +669,7 @@ int ScratchOffCards_PlayCard(ScratchOffCardsWork *work) {
         }
         break;
     case 3:
-        sub_02021280(&work->touch, 4, 2);
+        GF_TouchpadUpdate(&work->touch, 4, 2);
         hit = TouchscreenHitbox_FindRectAtTouchHeld(ov87_021E8308);
         if (hit != -1) {
             if (ScratchOffCards_CountTouchedCells(work) < 3) {
@@ -1045,8 +1045,8 @@ void ScratchOffCards_InitResources(ScratchOffCardsWork *work) {
     work->winSprite = ScratchOffCardsSprite_New(&work->spriteGfx, 4, 0, 0x26, 0x38, FALSE, 0, 10);
     ScratchOffCardsSprite_SetVisible(work->winSprite, FALSE);
     reg_GX_POWCNT &= ~0x8000;
-    sub_020210BC();
-    sub_02021148(1);
+    GF_TouchpadResetSampling();
+    GF_TouchpadStartSampling(1);
     Main_SetVBlankIntrCB((GFIntrCB)ScratchOffCards_VBlank, work);
 }
 #pragma force_active reset

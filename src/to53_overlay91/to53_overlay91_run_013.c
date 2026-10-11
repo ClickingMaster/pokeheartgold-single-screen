@@ -93,7 +93,7 @@ void ov91_0225D4D4(int i, int j, int k, u32 *outA, u32 *outB);
 void ov91_0225F1E8(void *a, void *b);
 void ov91_0225F66C(void *p);
 void ov91_02260334(void *p, int n);
-extern BOOL sub_02021238(void);
+extern BOOL GF_TouchpadStopSampling(void);
 extern void GF_AssertFail(void);
 extern void ModelAnimation_SetFrame(void *p, u32 v);
 extern BOOL ModelAnimation_Advance(void *p, u32 v);
@@ -168,7 +168,7 @@ void *ov91_0225CDF4(u32 heap, void *a, void *b, void *c, void *d);
 void ov91_0225DC3C(void *p, void *q);
 void ov91_0225F508(void *p, u32 heap);
 void ov91_0225F0C0(void *p, void *q, u32 heap);
-extern BOOL sub_020210D8(void *p, u32 count, u32 mode);
+extern BOOL GF_TouchpadStartRecording(void *p, u32 count, u32 mode);
 extern const u8 ov91_022627C0[];
 u32 ov91_0225CDD4(Ov91Work *work);
 void ov91_0225D67C(void *p);
@@ -287,7 +287,7 @@ void *ov91_0225CDF4(u32 heap, void *a, void *b, void *c, void *d) {
     ov91_0225F508(p, heap);
     ov91_0225F0C0(p + 0x878C, p + 0x1AB4, heap);
     ov91_0225F388((Ov91F3D4 *)(p + 0x87CC));
-    if (sub_020210D8((void *)ov91_022627C0, 8, 4) != 1) {
+    if (GF_TouchpadStartRecording((void *)ov91_022627C0, 8, 4) != 1) {
         GF_AssertFail();
     }
     return p;
@@ -296,7 +296,7 @@ void *ov91_0225CDF4(u32 heap, void *a, void *b, void *c, void *d) {
 
 void ov91_0225CE80(void *p) {
     u8 *q = (u8 *)p;
-    if (sub_02021238() != TRUE) {
+    if (GF_TouchpadStopSampling() != TRUE) {
         GF_AssertFail();
     }
     ov91_0225F1E8(q + 0x878C, q + 0x1AB4);

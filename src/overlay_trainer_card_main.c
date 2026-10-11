@@ -31,7 +31,7 @@
 #include "sound_playback.h"
 #include "unk_0200A090.h"
 #include "oam_manager.h"
-#include "unk_020210A0.h"
+#include "touchpad.h"
 #include "unk_02035900.h"
 #include "unk_0203A3B0.h"
 #include "vram_transfer_manager.h"
@@ -199,8 +199,8 @@ int TrainerCardMainApp_Init(OverlayManager *manager, int *state) {
     TrainerCardMain_SetGfxBanks();
     TrainerCardMain_InitBgLayers(cardMain->bgConfig);
     TrainerCardMain_LoadBgGraphics(cardMain);
-    sub_020210BC();
-    sub_02021148(4);
+    GF_TouchpadResetSampling();
+    GF_TouchpadStartSampling(4);
     TextFlags_SetCanTouchSpeedUpPrint(TRUE);
     TextFlags_SetCanABSpeedUpPrint(TRUE);
     Sound_SetSceneAndPlayBGM(0x38, 0, 0);
@@ -308,7 +308,7 @@ int TrainerCardMainApp_Exit(OverlayManager *manager, int *state) {
     Heap_Free(cardMain->frontScreenFile);
     TrainerCardMain_DestroyWindows(cardMain);
     TrainerCardMain_FreeBgLayers(cardMain->bgConfig);
-    sub_02021238();
+    GF_TouchpadStopSampling();
     TextFlags_SetCanTouchSpeedUpPrint(FALSE);
     TextFlags_SetCanABSpeedUpPrint(FALSE);
     MenuInputStateMgr_SetState(cardMain->args->unk66C.menuInputStatePtr, (MenuInputState)cardMain->inTouchMode);

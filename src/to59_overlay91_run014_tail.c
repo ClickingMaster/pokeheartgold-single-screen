@@ -22,7 +22,7 @@ typedef struct {
 
 extern const u32 ov91_02261C44[];
 void ov91_022619E8(void *);
-void sub_02021280(void *, int, int);
+void GF_TouchpadUpdate(void *, int, int);
 void ov91_0225EA7C(void *);
 int ov91_0225EF70(void *);
 void ov91_0225F008(void *, void *);
@@ -46,7 +46,7 @@ int ov91_0225D1DC(Work *w) {
             ov91_022619E8(&w->f87E4);
         }
     }
-    sub_02021280(&w->f86EC, 1, 0);
+    GF_TouchpadUpdate(&w->f86EC, 1, 0);
     ov91_0225EA7C(w);
     if (!ov91_0225EF70(&w->f8730)) {
         ov91_0225F008(w, &w->f8730);

@@ -8,7 +8,7 @@ void ov92_0225D1FC(void *state) {
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
     GF_DestroyVramTransferManager();
-    sub_02021238();
+    GF_TouchpadStopSampling();
     SetLCRNGSeed(U32AT(state, 0x80));
     ov92_0225E03C(PAT(state, 4));
     ov92_0225DEF0(PAT(state, 4));

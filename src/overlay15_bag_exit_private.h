@@ -21,7 +21,7 @@ void ov15_021FEB64(void *work);
 void ov15_021FE504(void *work);
 void ov15_021FE8A4(void *work);
 void ov15_021FA028(void *work);
-void sub_02021238(void);
+void GF_TouchpadStopSampling(void);
 void GF_DestroyVramTransferManager(void);
 void sub_02004B10(void);
 

@@ -8,7 +8,7 @@
 #include "player_data.h"
 #include "pm_string.h"
 #include "sprite.h"
-#include "touch_sampling_internal.h"
+#include "touchpad_internal.h"
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
 #include "yes_no_prompt.h"

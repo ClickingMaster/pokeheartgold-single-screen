@@ -620,383 +620,383 @@
 	.public _0223C574
 	.public _0223C57C
 	.public _0223C580
-	.public _0223CB80
-	.public ov59_02237D40
-	.public ov59_02237DA8
-	.public ov59_02237E68
-	.public ov59_02237E94
-	.public ov59_02237F28
-	.public ov59_02237F3C
-	.public ov59_02237F74
-	.public ov59_02237FA4
-	.public ov59_0223801C
-	.public ov59_02238068
-	.public ov59_022380EC
-	.public ov59_02238124
-	.public ov59_02238218
-	.public ov59_022382F4
-	.public ov59_0223834C
-	.public ov59_022383B4
-	.public ov59_022384E4
-	.public ov59_0223858C
-	.public ov59_022385AC
-	.public ov59_02238624
-	.public ov59_02238674
-	.public ov59_022386A8
-	.public ov59_022386D0
-	.public ov59_02238768
-	.public ov59_022387D0
-	.public ov59_02238834
-	.public ov59_022388C4
-	.public ov59_0223891C
-	.public ov59_0223892C
-	.public ov59_02238A04
-	.public ov59_02238AB0
-	.public ov59_02238C40
-	.public ov59_02238C7C
-	.public ov59_02238CFC
-	.public ov59_02238D90
-	.public ov59_02238E98
-	.public ov59_02238F24
-	.public ov59_02238F58
-	.public ov59_02238FB4
-	.public ov59_02238FF4
-	.public ov59_022390A8
-	.public ov59_0223919C
-	.public ov59_022393D4
-	.public ov59_02239408
-	.public ov59_02239428
-	.public ov59_022395B8
-	.public ov59_02239604
-	.public ov59_022396E4
-	.public ov59_02239704
-	.public ov59_0223978C
-	.public ov59_022397E4
-	.public ov59_022398A0
-	.public ov59_022398CC
-	.public ov59_02239938
-	.public ov59_022399B4
-	.public ov59_02239A24
-	.public ov59_02239C70
-	.public ov59_02239C90
-	.public ov59_02239D08
-	.public ov59_02239E0C
-	.public ov59_02239EA8
-	.public ov59_02239EF8
-	.public ov59_02239F18
-	.public ov59_02239F38
-	.public ov59_0223A03C
-	.public ov59_0223A05C
-	.public ov59_0223A07C
-	.public ov59_0223A0B8
-	.public ov59_0223A120
-	.public ov59_0223A194
-	.public ov59_0223A268
-	.public ov59_0223A2D0
-	.public ov59_0223A350
-	.public ov59_0223A3B0
-	.public ov59_0223A418
-	.public ov59_0223A48C
-	.public ov59_0223A564
-	.public ov59_0223A58C
-	.public ov59_0223A614
-	.public ov59_0223A678
-	.public ov59_0223A7FC
-	.public ov59_0223A8E0
-	.public ov59_0223A948
-	.public ov59_0223A9B8
-	.public ov59_0223A9E4
-	.public ov59_0223AA6C
-	.public ov59_0223AABC
-	.public ov59_0223AB00
-	.public ov59_0223AB3C
-	.public ov59_0223AB90
-	.public ov59_0223ABEC
-	.public ov59_0223AC48
-	.public ov59_0223ACD0
-	.public ov59_0223AD20
-	.public ov59_0223AD84
-	.public ov59_0223AE20
-	.public ov59_0223AE88
-	.public ov59_0223AEB0
-	.public ov59_0223AF7C
-	.public ov59_0223AF9C
-	.public ov59_0223B11C
-	.public ov59_0223B164
-	.public ov59_0223B2B4
-	.public ov59_0223B358
-	.public ov59_0223B3B0
-	.public ov59_0223B3DC
-	.public ov59_0223B414
-	.public ov59_0223B434
-	.public ov59_0223B554
-	.public ov59_0223B590
-	.public ov59_0223B66C
-	.public ov59_0223B68C
-	.public ov59_0223B6FC
-	.public ov59_0223B740
-	.public ov59_0223B7D8
-	.public ov59_0223B804
-	.public ov59_0223B878
-	.public ov59_0223B8E4
-	.public ov59_0223BA44
-	.public ov59_0223BA64
-	.public ov59_0223BAE8
-	.public ov59_0223BBD4
-	.public ov59_0223BC88
-	.public ov59_0223BD4C
-	.public ov59_0223BE18
-	.public ov59_0223BE44
-	.public ov59_0223BE70
-	.public ov59_0223BFC8
-	.public ov59_0223C054
-	.public ov59_0223C09C
-	.public ov59_0223C138
-	.public ov59_0223C16C
-	.public ov59_0223C298
-	.public ov59_0223C304
-	.public ov59_0223C374
-	.public ov59_0223C380
-	.public ov59_0223C3C0
-	.public ov59_0223C3F0
-	.public ov59_0223C474
-	.public ov59_0223C4B4
-	.public ov59_0223C4D0
-	.public ov59_0223C4EC
-	.public ov59_0223C53C
-	.public ov59_0223C584
-	.public ov59_0223C5C4
-	.public ov59_0223C624
+	.public sApricornBoxConfirmButtonColors
+	.public ApricornBoxScreen_Init
+	.public ApricornBoxScreen_Main
+	.public ApricornBoxScreen_Exit
+	.public ApricornBoxScreen_InitFromArgs
+	.public ApricornBoxScreen_RestoreMenuInputState
+	.public ApricornBoxScreen_Setup
+	.public ApricornBoxScreen_Teardown
+	.public ApricornBoxScreen_FadeIn
+	.public ApricornBoxScreen_FadeOut
+	.public ApricornBoxScreen_ShowBlenderNews
+	.public ApricornBoxScreen_BlenderState
+	.public ApricornBoxScreen_KurtQuantityState
+	.public ApricornBoxScreen_LiftApricornState
+	.public ApricornBoxScreen_DragApricornState
+	.public ApricornBoxScreen_PutBackApricornState
+	.public ApricornBoxScreen_BlendApricornState
+	.public ApricornBoxScreen_JuiceMenuState
+	.public ApricornBoxScreen_WaitJuiceTasteState
+	.public ApricornBoxScreen_IsMessageDone
+	.public ApricornBoxScreen_ResetDisplay
+	.public ApricornBoxScreen_InitGraphics
+	.public ApricornBoxScreen_FreeGraphics
+	.public ApricornBoxScreen_DrawScreen
+	.public ApricornBoxScreen_LoadBoxState
+	.public ApricornBoxScreen_DrawCloseButton
+	.public ApricornBoxScreen_DrawConfirmButton
+	.public ApricornBoxScreen_UpdateCursor
+	.public ApricornBoxScreen_SetCursorAnimActive
+	.public ApricornBoxScreen_DrawApricornCount
+	.public ApricornBoxScreen_PrintQuantity
+	.public ApricornBoxScreen_ShowQuantityPanel
+	.public ApricornBoxScreen_PrintHeader
+	.public ApricornBoxScreen_PrintDescription
+	.public ApricornBoxScreen_PrintMessage
+	.public ApricornBoxScreen_PrintJuiceTaste
+	.public ApricornBoxScreen_CreateJuiceMenu
+	.public ApricornBoxScreen_HandleJuiceMenu
+	.public ApricornBoxScreen_ShowYesNo
+	.public ApricornBoxScreen_HandleYesNo
+	.public ApricornBoxScreen_SetApricornsFocus
+	.public ApricornBoxScreen_AnimateHand
+	.public ApricornBoxScreen_StartMoveTask
+	.public ApricornBoxScreen_VBlankCB
+	.public ApricornBoxScreen_SetGfxBanks
+	.public ApricornBoxScreen_InitBgs
+	.public ApricornBoxScreen_FreeBgs
+	.public ApricornBoxScreen_LoadBgGraphics
+	.public ApricornBoxScreen_FreeBgGraphics
+	.public ApricornBoxScreen_InitStrings
+	.public ApricornBoxScreen_FreeStrings
+	.public ApricornBoxScreen_AddWindows
+	.public ApricornBoxScreen_RemoveWindows
+	.public ApricornBoxScreen_CreateListMenuItems
+	.public ApricornBoxScreen_InitSpriteSystem
+	.public ApricornBoxScreen_FreeSpriteSystem
+	.public ApricornBoxScreen_CreateSprites
+	.public ApricornBoxScreen_DeleteSprites
+	.public ApricornBoxScreen_MoveTask
+	.public ApricornBoxScreen_ReadMessage
+	.public ApricornBoxScreen_GetJuiceTasteMsg
+	.public ApricornBoxScreen_GetCursorTarget
+	.public ApricornBoxScreen_HandleViewInput
+	.public ApricornBoxScreen_HandleBlenderInput
+	.public ApricornBoxScreen_HandleDrag
+	.public ApricornBoxScreen_HandleKurtInput
+	.public ApricornBoxScreen_HandleQuantityInput
+	.public ApricornBoxScreen_ViewSelect
+	.public ApricornBoxScreen_ViewKeys
+	.public ApricornBoxScreen_ViewTouch
+	.public ApricornBoxScreen_BlenderSelect
+	.public ApricornBoxScreen_BlenderKeys
+	.public ApricornBoxScreen_BlenderTouch
+	.public ApricornBoxScreen_KurtSelect
+	.public ApricornBoxScreen_KurtKeys
+	.public ApricornBoxScreen_KurtTouch
+	.public ApricornBoxScreen_QuantitySelect
+	.public ApricornBoxScreen_StepQuantity
+	.public ApricornBoxScreen_QuantityKeys
+	.public ApricornBoxScreen_QuantityTouch
+	.public ApricornBoxScreen_MoveCursor
+	.public ApricornBoxScreen_SwitchColumn
+	.public AprijuiceScreen_Init
+	.public AprijuiceScreen_Main
+	.public AprijuiceScreen_Exit
+	.public AprijuiceScreen_InitFromArgs
+	.public AprijuiceScreen_WriteResult
+	.public AprijuiceScreen_Setup
+	.public AprijuiceScreen_Teardown
+	.public AprijuiceScreen_FadeIn
+	.public AprijuiceScreen_FadeOut
+	.public AprijuiceScreen_DrinkState
+	.public AprijuiceScreen_StatChangesState
+	.public AprijuiceScreen_ResetDisplay
+	.public AprijuiceScreen_InitGraphics
+	.public AprijuiceScreen_DrawScreen
+	.public AprijuiceScreen_LoadParty
+	.public AprijuiceScreen_FreeParty
+	.public AprijuiceScreen_DrawButtons
+	.public AprijuiceScreen_HandleInput
+	.public AprijuiceScreen_PlayDrinkAnim
+	.public AprijuiceScreen_PrintNothingChanged
+	.public AprijuiceScreen_ShowStatChange
+	.public AprijuiceScreen_Select
+	.public AprijuiceScreen_HandleKeys
+	.public AprijuiceScreen_HandleTouch
+	.public AprijuiceScreen_VBlankCB
+	.public AprijuiceScreen_SetGfxBanks
+	.public AprijuiceScreen_InitBgs
+	.public AprijuiceScreen_FreeBgs
+	.public AprijuiceScreen_LoadBgGraphics
+	.public AprijuiceScreen_FreeBgGraphics
+	.public AprijuiceScreen_InitStrings
+	.public AprijuiceScreen_FreeStrings
+	.public AprijuiceScreen_AddWindows
+	.public AprijuiceScreen_RemoveWindows
+	.public AprijuiceScreen_InitSpriteSystem
+	.public AprijuiceScreen_FreeSpriteSystem
+	.public AprijuiceScreen_CreateSprites
+	.public AprijuiceScreen_DeleteSprites
+	.public AprijuiceMon_Init
+	.public AprijuiceScreen_UseJuice
+	.public AprijuiceScreen_PrintMessage
+	.public AprijuiceScreen_ShowMon
+	.public AprijuiceScreen_DrawStatStars
+	.public AprijuiceScreen_DrawAllStars
+	.public AprijuiceScreen_SetStarSprite
+	.public AprijuiceScreen_StartStarTask
+	.public AprijuiceScreen_StarTask
+	.public AprijuiceScreen_StartShakeTask
+	.public AprijuiceScreen_ShakeTask
+	.public AprijuiceScreen_StartFadeTask
+	.public AprijuiceScreen_FadeTask
+	.public AprijuiceScene_New
+	.public AprijuiceScene_Draw
+	.public AprijuiceScene_TransferPokepicGfx
+	.public AprijuiceScene_CreatePokepic
+	.public AprijuiceScene_StartParticles
+	.public AprijuiceScene_Init3D
+	.public AprijuiceScene_ReserveVram
+	.public AprijuiceScene_AllocTexVram
+	.public AprijuiceScene_AllocPlttVram
+	.public AprijuiceScene_SetEmitterPosition
+	.public AprijuiceScene_CreateParticleSystem
+	.public AprijuiceScene_InitParticles
+	.public AprijuiceScene_InitCamera
+	.public sApricornBoxQuantityDigitX
 	.public ov59_0223C628
 	.public ov59_0223C62C
-	.public ov59_0223C630
-	.public ov59_0223C648
-	.public ov59_0223C658
-	.public ov59_0223C668
-	.public ov59_0223C66A
-	.public ov59_0223C66B
-	.public ov59_0223C678
-	.public ov59_0223C68C
-	.public ov59_0223C6A8
-	.public ov59_0223C6C4
-	.public ov59_0223C6C6
-	.public ov59_0223C6E0
-	.public ov59_0223C6FC
-	.public ov59_0223C718
-	.public ov59_0223C734
-	.public ov59_0223C750
-	.public ov59_0223C770
-	.public ov59_0223C798
-	.public ov59_0223C7F0
-	.public ov59_0223C840
-	.public ov59_0223C8B8
-	.public ov59_0223C8E0
-	.public ov59_0223C908
-	.public ov59_0223C924
-	.public ov59_0223C940
-	.public ov59_0223C94C
-	.public ov59_0223C954
-	.public ov59_0223C95C
-	.public ov59_0223C968
-	.public ov59_0223C978
-	.public ov59_0223C988
-	.public ov59_0223C99C
-	.public ov59_0223C9B0
-	.public ov59_0223C9CC
-	.public ov59_0223C9E8
-	.public ov59_0223CA04
-	.public ov59_0223CA20
-	.public ov59_0223CA40
-	.public ov59_0223CA68
-	.public ov59_0223CA90
-	.public ov59_0223CB08
-	.public ov59_0223CB30
+	.public sApricornBoxListMenuTemplates
+	.public sApricornBoxSpriteResources
+	.public sApricornBoxGraphicsModes
+	.public sApricornBoxListMenus
+	.public sApricornBoxListMenuX
+	.public sApricornBoxListMenuY
+	.public sApricornBoxOamCharTransferParam
+	.public sApricornBoxBgTemplate_Sub3
+	.public sApricornBoxBgTemplate_Main0
+	.public sApricornBoxApricornPositions
+	.public sApricornBoxApricornPositionsY
+	.public sApricornBoxBgTemplate_Main3
+	.public sApricornBoxBgTemplate_Main1
+	.public sApricornBoxBgTemplate_Sub0
+	.public sApricornBoxBgTemplate_Main2
+	.public sApricornBoxOamManagerParam
+	.public sApricornBoxGraphicsBanks
+	.public sApricornBoxWindowTemplates
+	.public sApricornBoxSpriteTemplates
+	.public sApricornBoxApricornSpriteTemplate
+	.public sApricornBoxConfirmButtonSpriteTemplate
+	.public sApricornBoxQuantityArrowSpriteTemplate
+	.public sApricornBoxQuantityHitboxes
+	.public sApricornBoxHitboxes
+	.public sApricornBoxBlenderHitbox
+	.public sAprijuiceGenderColors
+	.public sAprijuiceButtonColors
+	.public sAprijuiceHitboxes
+	.public sAprijuiceSpriteResources
+	.public sAprijuiceGraphicsModes
+	.public sAprijuiceOamCharTransferParam
+	.public sAprijuiceStatOrder
+	.public sAprijuiceBgTemplate_Sub3
+	.public sAprijuiceBgTemplate_Main1
+	.public sAprijuiceBgTemplate_Main2
+	.public sAprijuiceBgTemplate_Main3
+	.public sAprijuiceOamManagerParam
+	.public sAprijuiceWindowTemplates
+	.public sAprijuiceGraphicsBanks
+	.public sAprijuiceSpriteTemplates
+	.public sAprijuiceModifierSpriteTemplate
+	.public sAprijuiceStarSpriteTemplate
 	.public ov59_0223CB58
-	.public _0223CB80
-	.public ov59_02237D40
-	.public ov59_02237DA8
-	.public ov59_02237E68
-	.public ov59_02237E94
-	.public ov59_02237F28
-	.public ov59_02237F3C
-	.public ov59_02237F74
-	.public ov59_02237FA4
-	.public ov59_0223801C
-	.public ov59_02238068
-	.public ov59_022380E4
-	.public ov59_022380EC
-	.public ov59_0223811C
-	.public ov59_02238124
-	.public ov59_02238218
-	.public ov59_022382F4
-	.public ov59_0223834C
-	.public ov59_022383B4
-	.public ov59_022384E4
-	.public ov59_02238578
-	.public ov59_0223858C
-	.public ov59_022385AC
-	.public ov59_02238624
-	.public ov59_02238674
-	.public ov59_022386A8
-	.public ov59_022386D0
-	.public ov59_02238768
-	.public ov59_022387D0
-	.public ov59_02238834
-	.public ov59_022388C4
-	.public ov59_0223891C
-	.public ov59_0223892C
-	.public ov59_02238A04
-	.public ov59_02238AB0
-	.public ov59_02238C24
-	.public ov59_02238C40
-	.public ov59_02238C7C
-	.public ov59_02238CFC
-	.public ov59_02238D74
-	.public ov59_02238D90
-	.public ov59_02238E98
-	.public ov59_02238F24
-	.public ov59_02238F58
-	.public ov59_02238FB4
-	.public ov59_02238FF4
-	.public ov59_022390A8
-	.public ov59_0223919C
-	.public ov59_022393D4
-	.public ov59_02239408
-	.public ov59_02239428
-	.public ov59_022395B8
-	.public ov59_02239604
-	.public ov59_022396E4
-	.public ov59_02239704
-	.public ov59_0223978C
-	.public ov59_022397E4
-	.public ov59_022398A0
-	.public ov59_022398CC
-	.public ov59_02239918
-	.public ov59_02239938
-	.public ov59_022399B4
-	.public ov59_022399F0
-	.public ov59_02239A08
-	.public ov59_02239A24
-	.public ov59_02239C70
-	.public ov59_02239C90
-	.public ov59_02239D08
-	.public ov59_02239E0C
-	.public ov59_02239EA8
-	.public ov59_02239EF8
-	.public ov59_02239F18
-	.public ov59_02239F38
-	.public ov59_0223A03C
-	.public ov59_0223A05C
-	.public ov59_0223A07C
-	.public ov59_0223A0B8
-	.public ov59_0223A120
-	.public ov59_0223A194
-	.public ov59_0223A268
-	.public ov59_0223A2D0
-	.public ov59_0223A350
-	.public ov59_0223A3B0
-	.public ov59_0223A418
-	.public ov59_0223A48C
-	.public ov59_0223A564
-	.public ov59_0223A58C
-	.public ov59_0223A614
-	.public ov59_0223A678
-	.public ov59_0223A7FC
-	.public ov59_0223A8E0
-	.public ov59_0223A948
-	.public ov59_0223A9B8
-	.public ov59_0223A9E4
-	.public ov59_0223AA6C
-	.public ov59_0223AABC
-	.public ov59_0223AB00
-	.public ov59_0223AB3C
-	.public ov59_0223AB90
-	.public ov59_0223ABE4
-	.public ov59_0223ABEC
-	.public ov59_0223AC48
-	.public ov59_0223ACD0
-	.public ov59_0223AD20
-	.public ov59_0223AD58
-	.public ov59_0223AD84
-	.public ov59_0223AE20
-	.public ov59_0223AE88
-	.public ov59_0223AEB0
-	.public ov59_0223AF7C
-	.public ov59_0223AF9C
-	.public ov59_0223B11C
-	.public ov59_0223B164
-	.public ov59_0223B2B4
-	.public ov59_0223B358
-	.public ov59_0223B3B0
-	.public ov59_0223B3DC
-	.public ov59_0223B414
-	.public ov59_0223B434
-	.public ov59_0223B554
-	.public ov59_0223B590
-	.public ov59_0223B66C
-	.public ov59_0223B68C
-	.public ov59_0223B6FC
-	.public ov59_0223B740
-	.public ov59_0223B7D8
-	.public ov59_0223B804
-	.public ov59_0223B878
-	.public ov59_0223B8B0
-	.public ov59_0223B8C8
-	.public ov59_0223B8E4
-	.public ov59_0223BA44
-	.public ov59_0223BA64
-	.public ov59_0223BADC
-	.public ov59_0223BAE8
-	.public ov59_0223BBB0
-	.public ov59_0223BBD4
-	.public ov59_0223BC88
-	.public ov59_0223BD4C
-	.public ov59_0223BE18
-	.public ov59_0223BE44
-	.public ov59_0223BE70
-	.public ov59_0223BFC8
-	.public ov59_0223C054
-	.public ov59_0223C09C
-	.public ov59_0223C138
-	.public ov59_0223C16C
-	.public ov59_0223C298
-	.public ov59_0223C304
-	.public ov59_0223C350
-	.public ov59_0223C374
-	.public ov59_0223C380
-	.public ov59_0223C3AC
-	.public ov59_0223C3C0
-	.public ov59_0223C3DC
-	.public ov59_0223C3F0
-	.public ov59_0223C474
-	.public ov59_0223C4B4
-	.public ov59_0223C4D0
-	.public ov59_0223C4EC
-	.public ov59_0223C53C
-	.public ov59_0223C584
-	.public ov59_0223C5B0
-	.public ov59_0223C5C4
-	.public ov59_0223C624
+	.public sApricornBoxConfirmButtonColors
+	.public ApricornBoxScreen_Init
+	.public ApricornBoxScreen_Main
+	.public ApricornBoxScreen_Exit
+	.public ApricornBoxScreen_InitFromArgs
+	.public ApricornBoxScreen_RestoreMenuInputState
+	.public ApricornBoxScreen_Setup
+	.public ApricornBoxScreen_Teardown
+	.public ApricornBoxScreen_FadeIn
+	.public ApricornBoxScreen_FadeOut
+	.public ApricornBoxScreen_ShowBlenderNews
+	.public ApricornBoxScreen_ViewState
+	.public ApricornBoxScreen_BlenderState
+	.public ApricornBoxScreen_KurtState
+	.public ApricornBoxScreen_KurtQuantityState
+	.public ApricornBoxScreen_LiftApricornState
+	.public ApricornBoxScreen_DragApricornState
+	.public ApricornBoxScreen_PutBackApricornState
+	.public ApricornBoxScreen_BlendApricornState
+	.public ApricornBoxScreen_JuiceMenuState
+	.public ApricornBoxScreen_WaitMessageState
+	.public ApricornBoxScreen_WaitJuiceTasteState
+	.public ApricornBoxScreen_IsMessageDone
+	.public ApricornBoxScreen_ResetDisplay
+	.public ApricornBoxScreen_InitGraphics
+	.public ApricornBoxScreen_FreeGraphics
+	.public ApricornBoxScreen_DrawScreen
+	.public ApricornBoxScreen_LoadBoxState
+	.public ApricornBoxScreen_DrawCloseButton
+	.public ApricornBoxScreen_DrawConfirmButton
+	.public ApricornBoxScreen_UpdateCursor
+	.public ApricornBoxScreen_SetCursorAnimActive
+	.public ApricornBoxScreen_DrawApricornCount
+	.public ApricornBoxScreen_PrintQuantity
+	.public ApricornBoxScreen_ShowQuantityPanel
+	.public ApricornBoxScreen_PrintBlenderStatus
+	.public ApricornBoxScreen_PrintHeader
+	.public ApricornBoxScreen_PrintDescription
+	.public ApricornBoxScreen_PrintMessage
+	.public ApricornBoxScreen_ClearMessage
+	.public ApricornBoxScreen_PrintJuiceTaste
+	.public ApricornBoxScreen_CreateJuiceMenu
+	.public ApricornBoxScreen_HandleJuiceMenu
+	.public ApricornBoxScreen_ShowYesNo
+	.public ApricornBoxScreen_HandleYesNo
+	.public ApricornBoxScreen_SetApricornsFocus
+	.public ApricornBoxScreen_AnimateHand
+	.public ApricornBoxScreen_StartMoveTask
+	.public ApricornBoxScreen_VBlankCB
+	.public ApricornBoxScreen_SetGfxBanks
+	.public ApricornBoxScreen_InitBgs
+	.public ApricornBoxScreen_FreeBgs
+	.public ApricornBoxScreen_LoadBgGraphics
+	.public ApricornBoxScreen_FreeBgGraphics
+	.public ApricornBoxScreen_InitStrings
+	.public ApricornBoxScreen_FreeStrings
+	.public ApricornBoxScreen_AddWindows
+	.public ApricornBoxScreen_RemoveWindows
+	.public ApricornBoxScreen_CreateListMenuItems
+	.public ApricornBoxScreen_FreeListMenuItems
+	.public ApricornBoxScreen_InitSpriteSystem
+	.public ApricornBoxScreen_FreeSpriteSystem
+	.public ApricornBoxScreen_InitSprites
+	.public ApricornBoxScreen_FreeSprites
+	.public ApricornBoxScreen_CreateSprites
+	.public ApricornBoxScreen_DeleteSprites
+	.public ApricornBoxScreen_MoveTask
+	.public ApricornBoxScreen_ReadMessage
+	.public ApricornBoxScreen_GetJuiceTasteMsg
+	.public ApricornBoxScreen_GetCursorTarget
+	.public ApricornBoxScreen_HandleViewInput
+	.public ApricornBoxScreen_HandleBlenderInput
+	.public ApricornBoxScreen_HandleDrag
+	.public ApricornBoxScreen_HandleKurtInput
+	.public ApricornBoxScreen_HandleQuantityInput
+	.public ApricornBoxScreen_ViewSelect
+	.public ApricornBoxScreen_ViewKeys
+	.public ApricornBoxScreen_ViewTouch
+	.public ApricornBoxScreen_BlenderSelect
+	.public ApricornBoxScreen_BlenderKeys
+	.public ApricornBoxScreen_BlenderTouch
+	.public ApricornBoxScreen_KurtSelect
+	.public ApricornBoxScreen_KurtKeys
+	.public ApricornBoxScreen_KurtTouch
+	.public ApricornBoxScreen_QuantitySelect
+	.public ApricornBoxScreen_StepQuantity
+	.public ApricornBoxScreen_QuantityKeys
+	.public ApricornBoxScreen_QuantityTouch
+	.public ApricornBoxScreen_MoveCursor
+	.public ApricornBoxScreen_SwitchColumn
+	.public AprijuiceScreen_Init
+	.public AprijuiceScreen_Main
+	.public AprijuiceScreen_Exit
+	.public AprijuiceScreen_InitFromArgs
+	.public AprijuiceScreen_WriteResult
+	.public AprijuiceScreen_Setup
+	.public AprijuiceScreen_Teardown
+	.public AprijuiceScreen_FadeIn
+	.public AprijuiceScreen_FadeOut
+	.public AprijuiceScreen_InputState
+	.public AprijuiceScreen_DrinkState
+	.public AprijuiceScreen_StatChangesState
+	.public AprijuiceScreen_ResetDisplay
+	.public AprijuiceScreen_InitGraphics
+	.public AprijuiceScreen_FreeGraphics
+	.public AprijuiceScreen_DrawScreen
+	.public AprijuiceScreen_LoadParty
+	.public AprijuiceScreen_FreeParty
+	.public AprijuiceScreen_DrawButtons
+	.public AprijuiceScreen_HandleInput
+	.public AprijuiceScreen_PlayDrinkAnim
+	.public AprijuiceScreen_PrintNothingChanged
+	.public AprijuiceScreen_ShowStatChange
+	.public AprijuiceScreen_Select
+	.public AprijuiceScreen_HandleKeys
+	.public AprijuiceScreen_HandleTouch
+	.public AprijuiceScreen_VBlankCB
+	.public AprijuiceScreen_SetGfxBanks
+	.public AprijuiceScreen_InitBgs
+	.public AprijuiceScreen_FreeBgs
+	.public AprijuiceScreen_LoadBgGraphics
+	.public AprijuiceScreen_FreeBgGraphics
+	.public AprijuiceScreen_InitStrings
+	.public AprijuiceScreen_FreeStrings
+	.public AprijuiceScreen_AddWindows
+	.public AprijuiceScreen_RemoveWindows
+	.public AprijuiceScreen_InitSpriteSystem
+	.public AprijuiceScreen_FreeSpriteSystem
+	.public AprijuiceScreen_InitSprites
+	.public AprijuiceScreen_FreeSprites
+	.public AprijuiceScreen_CreateSprites
+	.public AprijuiceScreen_DeleteSprites
+	.public AprijuiceMon_Init
+	.public AprijuiceMon_Free
+	.public AprijuiceScreen_UseJuice
+	.public AprijuiceScreen_DrawMessageBox
+	.public AprijuiceScreen_PrintMessage
+	.public AprijuiceScreen_ShowMon
+	.public AprijuiceScreen_DrawStatStars
+	.public AprijuiceScreen_DrawAllStars
+	.public AprijuiceScreen_SetStarSprite
+	.public AprijuiceScreen_StartStarTask
+	.public AprijuiceScreen_StarTask
+	.public AprijuiceScreen_StartShakeTask
+	.public AprijuiceScreen_ShakeTask
+	.public AprijuiceScreen_StartFadeTask
+	.public AprijuiceScreen_FadeTask
+	.public AprijuiceScene_New
+	.public AprijuiceScene_Draw
+	.public AprijuiceScene_Delete
+	.public AprijuiceScene_TransferPokepicGfx
+	.public AprijuiceScene_CreatePokepic
+	.public AprijuiceScene_DeletePokepic
+	.public AprijuiceScene_StartParticles
+	.public AprijuiceScene_AreParticlesActive
+	.public AprijuiceScene_Init3D
+	.public AprijuiceScene_ReserveVram
+	.public AprijuiceScene_AllocTexVram
+	.public AprijuiceScene_AllocPlttVram
+	.public AprijuiceScene_SetEmitterPosition
+	.public AprijuiceScene_CreateParticleSystem
+	.public AprijuiceScene_InitParticles
+	.public AprijuiceScene_FreeParticles
+	.public AprijuiceScene_InitCamera
+	.public sApricornBoxQuantityDigitX
 	.public ov59_0223C628
 	.public ov59_0223C62C
-	.public ov59_022380E4
-	.public ov59_0223811C
-	.public ov59_02238578
-	.public ov59_02238C24
-	.public ov59_02238D74
-	.public ov59_02239918
-	.public ov59_022399F0
-	.public ov59_02239A08
-	.public ov59_0223ABE4
-	.public ov59_0223AD58
-	.public ov59_0223B8B0
-	.public ov59_0223B8C8
-	.public ov59_0223BADC
-	.public ov59_0223BBB0
-	.public ov59_0223C350
-	.public ov59_0223C3AC
-	.public ov59_0223C3DC
-	.public ov59_0223C5B0
+	.public ApricornBoxScreen_ViewState
+	.public ApricornBoxScreen_KurtState
+	.public ApricornBoxScreen_WaitMessageState
+	.public ApricornBoxScreen_PrintBlenderStatus
+	.public ApricornBoxScreen_ClearMessage
+	.public ApricornBoxScreen_FreeListMenuItems
+	.public ApricornBoxScreen_InitSprites
+	.public ApricornBoxScreen_FreeSprites
+	.public AprijuiceScreen_InputState
+	.public AprijuiceScreen_FreeGraphics
+	.public AprijuiceScreen_InitSprites
+	.public AprijuiceScreen_FreeSprites
+	.public AprijuiceMon_Free
+	.public AprijuiceScreen_DrawMessageBox
+	.public AprijuiceScene_Delete
+	.public AprijuiceScene_DeletePokepic
+	.public AprijuiceScene_AreParticlesActive
+	.public AprijuiceScene_FreeParticles
 	.include "asm/macros.inc"
 	.include "overlay_59.inc"
 	.include "global.inc"
@@ -1004,7 +1004,7 @@
 .text
 	.rodata
 
-ov59_0223C624:
+sApricornBoxQuantityDigitX:
 	.byte 0x02, 0x08, 0x00, 0x00
 
 ov59_0223C628:
@@ -1013,79 +1013,79 @@ ov59_0223C628:
 ov59_0223C62C:
 	.byte 0x02, 0x03, 0x04, 0x00
 
-ov59_0223C630: ; 0x0223C630
+sApricornBoxListMenuTemplates: ; 0x0223C630
 	.byte 0x00, 0x02, 0x01, 0x00, 0x00, 0x04, 0x03, 0x00, 0x00, 0x06, 0x05, 0x00, 0x03, 0x04, 0x00, 0x0B
 	.byte 0x00, 0x00, 0x3A, 0x00, 0x1F, 0x00, 0x30, 0x00
 
-ov59_0223C648: ; 0x0223C648
+sApricornBoxSpriteResources: ; 0x0223C648
 	.byte 0x12, 0x00, 0x13, 0x00, 0x11, 0x00, 0x10, 0x00
 	.byte 0xFF, 0xFF, 0xFF, 0xFF, 0x4C, 0x00, 0x00, 0x00
 
-ov59_0223C658: ; 0x0223C658
+sApricornBoxGraphicsModes: ; 0x0223C658
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov59_0223C668: ; 0x0223C668
+sApricornBoxListMenus: ; 0x0223C668
 	.byte 0x03, 0x00
 
-ov59_0223C66A: ; 0x0223C66A
+sApricornBoxListMenuX: ; 0x0223C66A
 	.byte 0x16
 
-ov59_0223C66B: ; 0x0223C66B
+sApricornBoxListMenuY: ; 0x0223C66B
 	.byte 0x0E
 	.word ov59_0223C62C
 	.byte 0x02, 0x00, 0x11, 0x0C
 	.word ov59_0223C628
 
-ov59_0223C678: ; 0x0223C678
+sApricornBoxOamCharTransferParam: ; 0x0223C678
 	.byte 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00
 	.byte 0x00, 0x40, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00
 
-ov59_0223C68C: ; 0x0223C68C
+sApricornBoxBgTemplate_Sub3: ; 0x0223C68C
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1E, 0x00
 	.byte 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov59_0223C6A8: ; 0x0223C6A8
+sApricornBoxBgTemplate_Main0: ; 0x0223C6A8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1F, 0x04, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov59_0223C6C4: ; 0x0223C6C4
+sApricornBoxApricornPositions: ; 0x0223C6C4
 	.byte 0x1B, 0x00
 
-ov59_0223C6C6: ; 0x0223C6C6
+sApricornBoxApricornPositionsY: ; 0x0223C6C6
 	.byte 0x31, 0x00, 0x4B, 0x00, 0x41, 0x00, 0x1B, 0x00, 0x51, 0x00
 	.byte 0x4B, 0x00, 0x61, 0x00, 0x1B, 0x00, 0x71, 0x00, 0x4B, 0x00, 0x81, 0x00, 0x1B, 0x00, 0x91, 0x00
 
-ov59_0223C6E0: ; 0x0223C6E0
+sApricornBoxBgTemplate_Main3: ; 0x0223C6E0
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x1C, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov59_0223C6FC: ; 0x0223C6FC
+sApricornBoxBgTemplate_Main1: ; 0x0223C6FC
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1E, 0x00
 	.byte 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov59_0223C718: ; 0x0223C718
+sApricornBoxBgTemplate_Sub0: ; 0x0223C718
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1F, 0x04, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov59_0223C734: ; 0x0223C734
+sApricornBoxBgTemplate_Main2: ; 0x0223C734
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1D, 0x04, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov59_0223C750: ; 0x0223C750
+sApricornBoxOamManagerParam: ; 0x0223C750
 	.byte 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00
 
-ov59_0223C770: ; 0x0223C770
+sApricornBoxGraphicsBanks: ; 0x0223C770
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov59_0223C798: ; 0x0223C798
+sApricornBoxWindowTemplates: ; 0x0223C798
 	.byte 0x00, 0x05, 0x09, 0x16, 0x06, 0x0C, 0xA6, 0x00
 	.byte 0x02, 0x03, 0x01, 0x1C, 0x02, 0x0C, 0x2A, 0x01, 0x02, 0x19, 0x15, 0x06, 0x02, 0x09, 0x62, 0x01
 	.byte 0x02, 0x02, 0x15, 0x0A, 0x02, 0x0C, 0x6E, 0x01, 0x07, 0x02, 0x11, 0x1C, 0x06, 0x0C, 0x58, 0x03
@@ -1093,14 +1093,14 @@ ov59_0223C798: ; 0x0223C798
 	.byte 0x00, 0x11, 0x10, 0x06, 0x02, 0x0C, 0xA0, 0x01, 0x00, 0x0C, 0x0D, 0x02, 0x03, 0x0C, 0xAC, 0x01
 	.byte 0x00, 0x09, 0x0D, 0x02, 0x03, 0x0C, 0xB2, 0x01, 0x00, 0x0E, 0x0E, 0x02, 0x02, 0x0C, 0xB8, 0x01
 
-ov59_0223C7F0: ; 0x0223C7F0
+sApricornBoxSpriteTemplates: ; 0x0223C7F0
 	.byte 0x00, 0x00, 0x00, 0x00, 0xE0, 0x00, 0xB0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1B, 0x00, 0x60, 0x00
 	.byte 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov59_0223C840: ; 0x0223C840
+sApricornBoxApricornSpriteTemplate: ; 0x0223C840
 	.byte 0x00, 0x00, 0x00, 0x00, 0x1B, 0x00, 0x31, 0x00, 0x00, 0x00, 0x09, 0x00, 0x03, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x00, 0x98, 0x00
@@ -1110,88 +1110,88 @@ ov59_0223C840: ; 0x0223C840
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov59_0223C8B8: ; 0x0223C8B8
+sApricornBoxConfirmButtonSpriteTemplate: ; 0x0223C8B8
 	.byte 0x00, 0x00, 0x00, 0x00, 0xA0, 0x00, 0x70, 0x00
 	.byte 0x00, 0x00, 0x1C, 0x00, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov59_0223C8E0: ; 0x0223C8E0
+sApricornBoxQuantityArrowSpriteTemplate: ; 0x0223C8E0
 	.byte 0x00, 0x00, 0x00, 0x00, 0x67, 0x00, 0x60, 0x00, 0x00, 0x00, 0x18, 0x00, 0x08, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov59_0223C908: ; 0x0223C908
+sApricornBoxQuantityHitboxes: ; 0x0223C908
 	.byte 0x68, 0x78, 0x88, 0xB8, 0x80, 0x90, 0x88, 0xB8
 	.byte 0x58, 0x68, 0x5E, 0x6C, 0x80, 0x90, 0x5E, 0x6C, 0x58, 0x68, 0x4A, 0x58, 0x80, 0x90, 0x4A, 0x58
 	.byte 0xFF, 0x00, 0x00, 0x00
 
-ov59_0223C924: ; 0x0223C924
+sApricornBoxHitboxes: ; 0x0223C924
 	.byte 0xFE, 0x1A, 0x30, 0x18, 0xFE, 0x4A, 0x40, 0x18, 0xFE, 0x1A, 0x50, 0x18
 	.byte 0xFE, 0x4A, 0x60, 0x18, 0xFE, 0x1A, 0x70, 0x18, 0xFE, 0x4A, 0x80, 0x18, 0xFE, 0x1A, 0x90, 0x18
 
-ov59_0223C940: ; 0x0223C940
+sApricornBoxBlenderHitbox: ; 0x0223C940
 	.byte 0x48, 0xA0, 0x98, 0xE8, 0xA0, 0xC0, 0xC0, 0x00, 0xFF, 0x00, 0x00, 0x00
 
-ov59_0223C94C: ; 0x0223C94C
+sAprijuiceGenderColors: ; 0x0223C94C
 	.byte 0x00, 0x06, 0x05, 0x00
 	.byte 0x00, 0x04, 0x03, 0x00
 
-ov59_0223C954: ; 0x0223C954
+sAprijuiceButtonColors: ; 0x0223C954
 	.byte 0x00, 0x0F, 0x03, 0x00, 0x00, 0x0F, 0x07, 0x00
 
-ov59_0223C95C: ; 0x0223C95C
+sAprijuiceHitboxes: ; 0x0223C95C
 	.byte 0x90, 0xA8, 0xC0, 0x00
 	.byte 0xA8, 0xC0, 0xC0, 0x00, 0xFF, 0x00, 0x00, 0x00
 
-ov59_0223C968: ; 0x0223C968
+sAprijuiceSpriteResources: ; 0x0223C968
 	.byte 0x0E, 0x00, 0x0F, 0x00, 0x0D, 0x00, 0x0C, 0x00
 	.byte 0xFF, 0xFF, 0xFF, 0xFF, 0x4B, 0x00, 0x00, 0x00
 
-ov59_0223C978: ; 0x0223C978
+sAprijuiceGraphicsModes: ; 0x0223C978
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 
-ov59_0223C988: ; 0x0223C988
+sAprijuiceOamCharTransferParam: ; 0x0223C988
 	.byte 0x03, 0x00, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00
 	.byte 0x00, 0x40, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00
 
-ov59_0223C99C: ; 0x0223C99C
+sAprijuiceStatOrder: ; 0x0223C99C
 	.byte 0x04, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 
-ov59_0223C9B0: ; 0x0223C9B0
+sAprijuiceBgTemplate_Sub3: ; 0x0223C9B0
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x0F, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov59_0223C9CC: ; 0x0223C9CC
+sAprijuiceBgTemplate_Main1: ; 0x0223C9CC
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1F, 0x04
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov59_0223C9E8: ; 0x0223C9E8
+sAprijuiceBgTemplate_Main2: ; 0x0223C9E8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1E, 0x04, 0x00, 0x02, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov59_0223CA04: ; 0x0223CA04
+sAprijuiceBgTemplate_Main3: ; 0x0223CA04
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1D, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov59_0223CA20: ; 0x0223CA20
+sAprijuiceOamManagerParam: ; 0x0223CA20
 	.byte 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00
 
-ov59_0223CA40: ; 0x0223CA40
+sAprijuiceWindowTemplates: ; 0x0223CA40
 	.byte 0x01, 0x02, 0x01, 0x1B, 0x02, 0x0C, 0x1F, 0x00, 0x01, 0x19, 0x12, 0x06, 0x06, 0x0C, 0x55, 0x00
 	.byte 0x01, 0x19, 0x15, 0x06, 0x02, 0x0C, 0x79, 0x00, 0x02, 0x14, 0x01, 0x0A, 0x02, 0x0C, 0x85, 0x00
 	.byte 0x02, 0x14, 0x04, 0x0A, 0x04, 0x0C, 0x99, 0x00
 
-ov59_0223CA68: ; 0x0223CA68
+sAprijuiceGraphicsBanks: ; 0x0223CA68
 	.byte 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00
 
-ov59_0223CA90: ; 0x0223CA90
+sAprijuiceSpriteTemplates: ; 0x0223CA90
 	.byte 0x00, 0x00, 0x00, 0x00, 0xE0, 0x00, 0xA0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xE0, 0x00, 0xB8, 0x00
@@ -1201,12 +1201,12 @@ ov59_0223CA90: ; 0x0223CA90
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov59_0223CB08: ; 0x0223CB08
+sAprijuiceModifierSpriteTemplate: ; 0x0223CB08
 	.byte 0x00, 0x00, 0x00, 0x00, 0x50, 0x00, 0x28, 0x00
 	.byte 0x00, 0x00, 0x08, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov59_0223CB30: ; 0x0223CB30
+sAprijuiceStarSpriteTemplate: ; 0x0223CB30
 	.byte 0x00, 0x00, 0x00, 0x00, 0x40, 0x00, 0x38, 0x00, 0x00, 0x00, 0x04, 0x00, 0x04, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -1217,7 +1217,7 @@ ov59_0223CB58: ; 0x0223CB58
 
 	.data
 
-_0223CB80:
+sApricornBoxConfirmButtonColors:
 	.byte 0x00, 0x03, 0x0F, 0x00, 0x00, 0x05, 0x0F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	; 0x0223CBA0

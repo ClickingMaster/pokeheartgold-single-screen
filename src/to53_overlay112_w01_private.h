@@ -51,7 +51,7 @@ void ov112_021E79D0(void);
 void ov112_021EA1F8(void *state);
 void ov112_021E9C10(void *state, int which);
 void ov112_021E7AC8(void *bg);
-void sub_02021238(void);
+void GF_TouchpadStopSampling(void);
 void GF_DestroyVramTransferManager(void);
 void ov112_021E9E30(void *state);
 void FontID_Release(int fontId);

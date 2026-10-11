@@ -40,7 +40,7 @@ extern void ov89_02259C0C(void *);
 extern void ov89_0225A5EC(void *);
 extern void ov89_0225A760(void *, void *);
 extern void sub_020135AC(void *);
-extern void sub_02021238(void);
+extern void GF_TouchpadStopSampling(void);
 extern void WirelessStatusIcon_Destroy(void);
 extern const GraphicsBanks ov89_0225CA78;
 extern const GraphicsModes ov89_0225C9DC;
@@ -83,7 +83,7 @@ BOOL ov89_02258F00(void *manager) {
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
     GF_DestroyVramTransferManager();
-    sub_02021238();
+    GF_TouchpadStopSampling();
     TextFlags_SetCanABSpeedUpPrint(0);
     TextFlags_SetAutoScrollParam(0);
     TextFlags_SetCanTouchSpeedUpPrint(0);

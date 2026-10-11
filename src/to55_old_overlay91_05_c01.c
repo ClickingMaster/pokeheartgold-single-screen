@@ -93,7 +93,7 @@ void ov91_0225D4D4(int i, int j, int k, u32 *outA, u32 *outB);
 void ov91_0225F1E8(void *a, void *b);
 void ov91_0225F66C(void *p);
 void ov91_02260334(void *p, int n);
-extern BOOL sub_02021238(void);
+extern BOOL GF_TouchpadStopSampling(void);
 extern void GF_AssertFail(void);
 extern void ModelAnimation_SetFrame(void *p, u32 v);
 extern BOOL ModelAnimation_Advance(void *p, u32 v);

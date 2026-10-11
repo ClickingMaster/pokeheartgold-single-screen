@@ -37,9 +37,9 @@
 .public ApricornBox_Main
 .public ApricornBox_Exit
 .public ov58_022379C0
-.public ov59_02237D40
-.public ov59_02237DA8
-.public ov59_02237E68
-.public ov59_0223A8E0
-.public ov59_0223A948
-.public ov59_0223A9B8
+.public ApricornBoxScreen_Init
+.public ApricornBoxScreen_Main
+.public ApricornBoxScreen_Exit
+.public AprijuiceScreen_Init
+.public AprijuiceScreen_Main
+.public AprijuiceScreen_Exit

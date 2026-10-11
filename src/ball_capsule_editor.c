@@ -38,7 +38,7 @@
 #include "touchscreen_list_menu.h"
 #include "unk_02013534.h"
 #include "particle_system.h"
-#include "unk_020210A0.h"
+#include "touchpad.h"
 #include "unk_02026E30.h"
 #include "unk_02091054.h"
 #include "vram_transfer_manager.h"
@@ -476,8 +476,8 @@ BOOL BallCapsuleEditor_Init(OverlayManager *manager, int *state) {
     BallCapsuleEditor_LoadMainBgGraphics(editor->display.bgConfig, editor->display.paletteData, i);
     BallCapsuleEditor_LoadSubBgGraphics(editor->display.bgConfig, editor->display.paletteData, i);
     BallCapsuleEditor_InitSpriteSystem(&editor->display);
-    sub_020210BC();
-    sub_02021148(4);
+    GF_TouchpadResetSampling();
+    GF_TouchpadStartSampling(4);
     BallCapsuleEditor_InitHitboxes(editor);
     Main_SetVBlankIntrCB(BallCapsuleEditor_VBlankCB, editor);
     BallCapsuleEditor_InitFonts(editor);
@@ -534,7 +534,7 @@ BOOL BallCapsuleEditor_Exit(OverlayManager *manager, int *state) {
     NARC_Delete(editor->pokepicAnimNarc);
     MenuInputStateMgr_SetState(editor->args->menuInputStatePtr, editor->menuInputState);
     OverlayManager_FreeData(manager);
-    sub_02021238();
+    GF_TouchpadStopSampling();
     Heap_Destroy(HEAP_ID_52);
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_6));
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_7));

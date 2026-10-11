@@ -27,8 +27,8 @@ BOOL PokemonSummary_Init(void *manager, u32 *state) {
     *(void **)(data + 0x2cc) = sub_02016EDC(0x13, 1, 1);
     *(void **)(data + 0x7b8) = NARC_New(0xb4, 0x13);
     FontID_SetAccessDirect(0, 0x13);
-    sub_020210BC();
-    sub_02021148(4);
+    GF_TouchpadResetSampling();
+    GF_TouchpadStartSampling(4);
     sub_02088610();
     sub_02088630(*(void **)data);
     sub_020887C4(data, narc27, narcA2);
@@ -150,7 +150,7 @@ BOOL PokemonSummary_Exit(void *manager, u32 *state) {
     sub_0208B258(data);
     sub_0208C560(data);
     sub_0208877C(*(void **)data);
-    sub_02021238();
+    GF_TouchpadStopSampling();
     GF_DestroyVramTransferManager();
     sub_02088AF8(data);
     sub_0208895C(data);

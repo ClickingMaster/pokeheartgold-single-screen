@@ -47,7 +47,7 @@
 #include "unk_0200FA24.h"
 #include "particle_system.h"
 #include "palette_blink.h"
-#include "unk_020210A0.h"
+#include "touchpad.h"
 #include "unk_02026E30.h"
 #include "unk_02026E84.h"
 #include "unk_02035900.h"
@@ -194,8 +194,8 @@ void Battle_BattleInit(OverlayManager *manager) {
     Battle_ReserveTexAndPlttVram();
     battleSystem->unk8C = ov07_0221BEDC(HEAP_ID_BATTLE);
     ov12_022389B8(battleSystem);
-    sub_020210BC();
-    sub_02021148(4);
+    GF_TouchpadResetSampling();
+    GF_TouchpadStartSampling(4);
     battleSystem->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 197, HEAP_ID_BATTLE);
     battleSystem->unk10 = (void *)NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 3, HEAP_ID_BATTLE);
     battleSystem->msgFormat = MessageFormat_New(HEAP_ID_BATTLE);
@@ -350,7 +350,7 @@ void Battle_BattleExit(OverlayManager *man) {
     MessagePrinter_Delete((MessagePrinter *)battleSystem->hpNumPrinter);
     SysTask_Destroy((SysTask *)battleSystem->unk1C);
     SysTask_Destroy((SysTask *)battleSystem->unk20);
-    sub_02021238();
+    GF_TouchpadStopSampling();
     Battle_Delete3DVramMan((GF3DVramMan *)battleSystem->unk0);
     SetLCRNGSeed(battleSystem->unk2434);
     if (BattleSystem_GetCriticalHpMusicFlag(battleSystem)) {

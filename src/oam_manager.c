@@ -24,8 +24,8 @@ BOOL NNS_G2dEntryOamManagerOamWithAffineIdx(OamInstance *, const GXOamAttr *, u1
 u16 NNS_G2dEntryOamManagerAffine(OamInstance *, const MtxFx22 *);
 
 // G2d renderer setup (unk_02025C44 group)
-void sub_02025C54(NNSG2dRenderSurface *, NNSG2dViewRect *, NNSG2dOamRegisterFunction, NNSG2dAffineRegisterFunction, NNSG2dRndCellCullingFunction, NNS_G2D_VRAM_TYPE, NNSG2dRendererInstance *);
-BOOL sub_02025C98(const NNSG2dCellData *, const MtxFx32 *, const NNSG2dViewRect *);
+void GF_InitG2dRenderSurface(NNSG2dRenderSurface *, NNSG2dViewRect *, NNSG2dOamRegisterFunction, NNSG2dAffineRegisterFunction, NNSG2dRndCellCullingFunction, NNS_G2D_VRAM_TYPE, NNSG2dRendererInstance *);
+BOOL GF_G2dIsCellVisible(const NNSG2dCellData *, const MtxFx32 *, const NNSG2dViewRect *);
 
 void OamManager_CreateExact(int first, int count, int affineFirst, int affineCount, int subFirst, int subCount, int subAffineFirst, int subAffineCount, enum HeapID heapID);
 BOOL OamManager_EntryMainOam(const GXOamAttr *oam, u16 affine, BOOL doubleAffine);
@@ -86,9 +86,9 @@ void OamManager_Free(void) {
 void OamManager_InitRenderSurface(NNSG2dRenderSurface *surface, NNSG2dViewRect *rect, NNS_G2D_VRAM_TYPE type, NNSG2dRendererInstance *instance) {
     GF_ASSERT(gOamManager != NULL);
     if (type == NNS_G2D_VRAM_TYPE_2DMAIN) {
-        sub_02025C54(surface, rect, OamManager_EntryMainOam, OamManager_EntryMainAffine, sub_02025C98, type, instance);
+        GF_InitG2dRenderSurface(surface, rect, OamManager_EntryMainOam, OamManager_EntryMainAffine, GF_G2dIsCellVisible, type, instance);
     } else {
-        sub_02025C54(surface, rect, OamManager_EntrySubOam, OamManager_EntrySubAffine, sub_02025C98, type, instance);
+        GF_InitG2dRenderSurface(surface, rect, OamManager_EntrySubOam, OamManager_EntrySubAffine, GF_G2dIsCellVisible, type, instance);
     }
 }
 

@@ -8,7 +8,7 @@
 #include "palette.h"
 #include "gf_3d_vramman.h"
 #include "pokepic.h"
-#include "unk_020210A0.h"
+#include "touchpad.h"
 #include "render_text.h"
 #include "unk_02009D48.h"
 #include "unk_0203A3B0.h"
@@ -90,8 +90,8 @@ void ov40_0222B6E0(Ov40Work *work) {
     PaletteData_AllocBuffers(work->plttData, PLTTBUF_SUB_OBJ, 0x200, HEAP_ID_109);
     ov40_0222BA90(work->bgConfig);
     ov40_0222BC68(work);
-    sub_020210BC();
-    sub_02021148(4);
+    GF_TouchpadResetSampling();
+    GF_TouchpadStartSampling(4);
     work->unk44 = 1;
     ov40_0222C360(work);
     TextFlags_SetCanTouchSpeedUpPrint(TRUE);

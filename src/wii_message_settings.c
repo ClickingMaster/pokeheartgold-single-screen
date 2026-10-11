@@ -41,7 +41,7 @@
 #include "text.h"
 #include "title_screen.h"
 #include "oam_manager.h"
-#include "unk_020210A0.h"
+#include "touchpad.h"
 #include "unk_0202C034.h"
 #include "unk_0203170C.h"
 #include "unk_02034B0C.h"
@@ -712,8 +712,8 @@ BOOL WiiMessageSettingsScreen_Init(OverlayManager *man, int *state) {
     GF_CreateVramTransferManager(64, HEAP_ID_116);
     SetKeyRepeatTimers(4, 8);
     WiiMessageSettingsScreen_InitBgs(screen->bgConfig);
-    sub_020210BC();
-    sub_02021148(4);
+    GF_TouchpadResetSampling();
+    GF_TouchpadStartSampling(4);
     screen->msgFormat = MessageFormat_New_Custom(11, 64, HEAP_ID_116);
     screen->gtsMsgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0775_bin, HEAP_ID_116);
     screen->wfcMsgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0778_bin, HEAP_ID_116);
@@ -823,7 +823,7 @@ BOOL WiiMessageSettingsScreen_Exit(OverlayManager *man, int *state) {
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
     GF_DestroyVramTransferManager();
-    sub_02021238();
+    GF_TouchpadStopSampling();
     TextFlags_SetCanABSpeedUpPrint(FALSE);
     TextFlags_SetAutoScrollParam(0);
     TextFlags_SetCanTouchSpeedUpPrint(FALSE);

@@ -14,8 +14,8 @@ BOOL ov108_021E929C(void *p) {
     case 1:
         ov108_021EA50C(p);
         Main_SetVBlankIntrCB(ov108_021E979C, p);
-        sub_020210BC();
-        sub_02021148(4);
+        GF_TouchpadResetSampling();
+        GF_TouchpadStartSampling(4);
         U32(p, 8) = 0;
         return TRUE;
     }
@@ -38,7 +38,7 @@ BOOL ov108_021E9304(void *p) {
         ov108_021E9A08(p);
         break;
     case 2:
-        sub_02021238();
+        GF_TouchpadStopSampling();
         *(volatile u32 *)0x04000000 &= 0xffffe0ff;
         *(volatile u32 *)0x04001000 &= 0xffffe0ff;
         GfGfx_DisableEngineAPlanes();

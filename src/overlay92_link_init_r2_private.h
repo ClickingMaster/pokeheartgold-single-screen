@@ -15,7 +15,7 @@ u32 ov92_0225CAB4(void *manager);
 void Main_SetVBlankIntrCB(void *callback, void *arg);
 void HBlankInterruptDisable(void);
 void GF_DestroyVramTransferManager(void);
-void sub_02021238(void);
+void GF_TouchpadStopSampling(void);
 void SetLCRNGSeed(u32 seed);
 void ov92_0225E03C(void *work);
 void ov92_0225DEF0(void *work);

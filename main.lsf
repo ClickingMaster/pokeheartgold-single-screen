@@ -162,8 +162,7 @@ Static main
     Object src/unk_02020A0C.o
     Object src/ascii_util.o
     Object src/geometry_math.o
-    Object src/touch_sampling.o
-    Object src/touch_sampling_copy.o
+    Object src/touchpad.o
     Object src/obj_char_transfer.o
     Object src/obj_pltt_transfer.o
     Object src/gf_gfx_planes.o
@@ -177,8 +176,8 @@ Static main
     Object src/timer3.o
     Object src/error_handling.o
     Object src/unk_02025534.o
-    Object src/g2d_renderer_setup_1.o
-    Object src/op90_unk_02025C44_r01.o
+    Object src/gf_g2d_renderer.o
+    Object src/g2d_cell_culling.o
     Object src/font_data.o
     Object src/pm_string.o
     Object src/touch_hitbox_controller.o
@@ -1272,11 +1271,7 @@ Static main
     Object lib/NitroSystem/src/g3d_model.o
     Object lib/NitroSystem/src/g3d_res_struct_accessor.o
     Object lib/NitroSystem/src/g3d_res_struct_accessor_anm.o
-    Object src/to65_nnsys_residual_43_run01.o
-    Object src/to70_to65_nnsys_residual_43_residual_1_extra256_run01.o
-    Object src/to80_extra2569_run01.o
-    Object src/op90_to80_extra2569_residual_1_r01.o
-    Object src/to80_extra1754_run01.o
+    Object lib/NitroSystem/src/g3d_anm_bca.o
     Object src/op90_to80_extra1754_residual_2_r01.o
     Object src/to80_extra1754_run02.o
     Object src/op90_to80_extra1754_residual_3_r01.o
@@ -5099,106 +5094,13 @@ Overlay OVY_42
 Overlay OVY_43
 {
     After OVY_42
-    Object src/to52_extra_overlay43_palpad_lifecycle.o
-    Object src/overlay43_partial_1.o
-    Object src/r40_overlay_43_residual_2_run1.o
-    Object src/overlay43_partial_2.o
-    Object src/to80_extra1778_run01.o
-    Object src/overlay43_partial_3.o
-    Object src/to70_overlay_43_residual_4_extra595_run01.o
-    Object src/overlay43_partial_4.o
-    Object src/to70_overlay_43_residual_5_extra489_run01.o
-    Object src/overlay43_partial_5.o
-    Object src/overlay43_gfx_setup.o
-    Object src/overlay43_partial_6.o
-    Object src/to70_overlay_43_residual_7_extra596_run01.o
-    Object src/overlay43_profile_helpers_1.o
-    Object src/to91_w41520_screen_run01.o
-    Object src/overlay43_profile_helpers_2.o
-    Object src/to70_overlay_43_residual_7_residual_3_extra793_run01.o
-    Object src/overlay43_profile_helpers_3.o
-    Object src/to70_overlay_43_residual_7_residual_4_extra794_run01.o
-    Object src/overlay43_profile_helpers_4.o
-    Object src/to70_overlay_43_residual_7_residual_5_extra795_run01.o
-    Object src/overlay43_partial_7.o
-    Object src/to90_extra2213_run01.o
-    Object src/r40_overlay_43_residual_8_run1.o
-    Object src/overlay43_partial_8.o
-    Object src/to70_overlay_43_residual_9_extra597_run01.o
-    Object src/overlay43_partial_9.o
-    Object src/to70_overlay_43_residual_10_extra97_run01.o
-    Object src/to90_extra2562_run01.o
-    Object src/overlay43_partial_10.o
-    Object src/to90_extra2376_run01.o
-    Object src/overlay43_partial_11.o
-    Object src/overlay43_scene_helpers_1.o
-    Object src/to90_extra2212_run01.o
-    Object src/overlay43_scene_helpers_2.o
-    Object src/overlay43_partial_12.o
-    Object src/to80_extra1521_run01.o
-    Object src/overlay43_partial_13.o
-    Object src/to70_overlay_43_residual_14_extra1206_run01.o
-    Object src/overlay43_partial_14.o
-    Object src/op90_overlay_43_residual_15_gap_1_head_r01.o
-    Object src/overlay43_gap15_tail.o
-    Object src/overlay43_touch_menu_r15_run1.o
-    Object src/to91_w41478_menu_run01.o
-    Object src/overlay43_touch_menu_r15_run2.o
-    Object src/to80_extra1522_run01.o
-    Object src/overlay43_touch_menu_r15_run3.o
-    Object src/to90_extra2019_run01.o
-    Object src/to91_w41489_menu_run01.o
-    Object src/overlay43_touch_menu_r15_run4.o
-    Object src/overlay43_partial_15.o
-    Object src/overlay43_palpad_list_render/overlay43_palpad_list_render.o
-    Object src/overlay43_partial_16.o
-    Object src/to70_overlay_43_residual_17_extra487_run01.o
-    Object src/overlay43_partial_17.o
-    Object src/r40_overlay_43_residual_18_run1.o
-    Object src/overlay43_partial_18.o
-    Object src/to70_overlay_43_residual_19_extra593_run01.o
-    Object src/overlay43_partial_19.o
-    Object src/r40_overlay_43_residual_20_run1.o
-    Object src/overlay43_partial_20.o
-    Object src/to91_w41497_friend_run01.o
-    Object src/overlay43_palpad_list/overlay43_palpad_list.o
-    Object src/to52_overlay43_r21_tail.o
-    Object src/overlay43_partial_21.o
-    Object src/overlay43_palpad_naming/overlay43_palpad_naming.o
-    Object src/overlay43_partial_22.o
-    Object src/r40_overlay_43_residual_23_run1.o
-    Object src/to90_extra2020_run01.o
-    Object src/overlay43_partial_23.o
-    Object src/overlay43_palpad_windows/overlay43_palpad_windows.o
-    Object src/op90_overlay43_palpad_windows_residual_r01.o
-    Object src/overlay43_partial_24.o
-    Object src/to70_overlay_43_residual_25_extra488_run01.o
-    Object src/overlay43_partial_25.o
-    Object src/to70_overlay_43_residual_26_part1_extra103_run01.o
-    Object src/overlay43_plaza_menu_r26_run1.o
-    Object src/to70_overlay_43_residual_26_part2_extra316_run01.o
-    Object src/to70_to70_overlay_43_residual_26_part2_extra316_residual_1_extra1279_run01.o
-    Object src/overlay43_plaza_menu_r26_run2.o
-    Object src/to70_overlay_43_residual_26_part3_extra104_run01.o
-    Object src/overlay43_plaza_menu_r26_run3.o
-    Object src/to90_extra2021_run01.o
-    Object src/overlay43_plaza_menu_r26_run4.o
-    Object src/to70_overlay_43_residual_26_part5_extra962_run01.o
-    Object src/overlay43_plaza_menu_r26_run5.o
-    Object src/overlay43_partial_26.o
-    Object src/op90_overlay_43_residual_27_r01.o
-    Object src/r40_overlay_43_residual_27_run1.o
-    Object src/overlay43_partial_27.o
-    Object src/r40_overlay_43_residual_28_run1.o
-    Object src/overlay43_partial_28.o
-    Object src/overlay43_window_bank.o
-    Object src/overlay43_window_clear_all.o
-    Object src/to41_overlay_43_residual_29_middle_run1.o
-    Object src/overlay43_stats_middle_29.o
-    Object src/to41_overlay_43_residual_29_middle_run2.o
-    Object asm/to70_overlay_43_residual_29_middle_to41_residual_2_extra594_anchor.o
-    Object src/to70_overlay_43_residual_29_middle_to41_residual_2_extra594_run01.o
-    Object src/overlay43_window_text_helpers.o
+    Object src/application/palpad/palpad.o
+    Object src/application/palpad/palpad_menu.o
+    Object src/application/palpad/palpad_roster.o
+    Object src/application/palpad/palpad_friend_code.o
+    Object src/application/palpad/palpad_details.o
+    Object asm/palpad_data.o
+    Object src/application/palpad/palpad_details_text.o
 }
 Overlay OVY_44
 {
@@ -6012,93 +5914,7 @@ Overlay OVY_58
 Overlay OVY_59
 {
     After OVY_58
-    Object src/overlay59_entry_state.o
-    Object src/overlay59_partial_1.o
-    Object src/to80_extra1539_run01.o
-    Object src/overlay59_partial_2.o
-    Object src/overlay59_apricorn_state_r3.o
-    Object src/overlay59_partial_3.o
-    Object src/overlay59_apricorn_ui_r18_run1.o
-    Object src/op90_overlay_59_r18_gap_1_r01.o
-    Object src/overlay59_apricorn_ui_r18_run2.o
-    Object src/overlay59_partial_4.o
-    Object src/to52_r7_overlay59_r5.o
-    Object src/overlay59_partial_5.o
-    Object src/to90_extra2028_run01.o
-    Object src/to90_extra2297_run01.o
-    Object src/overlay59_remaining_bank_1.o
-    Object src/to70_overlay_59_residual_6_residual_2_extra54_run01.o
-    Object src/to70_to70_overlay_59_residual_6_residual_2_extra54_residual_1_extra1289_run01.o
-    Object src/overlay59_remaining_bank_2.o
-    Object src/r40_overlay_59_residual_6_residual_3_run1.o
-    Object src/overlay59_remaining_bank_3.o
-    Object src/to70_overlay_59_residual_6_residual_4_extra611_run01.o
-    Object src/overlay59_remaining_bank_4.o
-    Object src/to80_extra1883_run01.o
-    Object src/overlay59_remaining_bank_5.o
-    Object src/to70_overlay_59_residual_6_residual_6_extra612_run01.o
-    Object src/overlay59_remaining_bank_6.o
-    Object src/overlay59_partial_6.o
-    Object src/to70_overlay_59_residual_7_extra465_run01.o
-    Object src/overlay59_partial_7.o
-    Object src/to80_extra1789_run01.o
-    Object src/overlay59_apricorn_ui_r8_run1.o
-    Object src/to70_to50_overlay59_gap2_residual_head_extra891_run01.o
-    Object src/to50_overlay59_gap2_exact.o
-    Object src/to70_to50_overlay59_gap2_residual_tail_extra443_run01.o
-    Object src/overlay59_apricorn_ui_r8_run2.o
-    Object src/overlay59_touch_drag_gap3.o
-    Object src/overlay59_apricorn_ui_r8_run3.o
-    Object src/overlay59_input_gap4.o
-    Object src/overlay59_apricorn_ui_r8_run4.o
-    Object src/overlay59_quantity_input_gap5.o
-    Object src/overlay59_apricorn_ui_r8_run5.o
-    Object src/overlay59_touch_quantity_gap6.o
-    Object src/overlay59_apricorn_ui_r8_run6.o
-    Object src/overlay59_grid_direction_gap7.o
-    Object src/overlay59_apricorn_ui_r8_run7.o
-    Object src/overlay59_lifecycle_gap8.o
-    Object src/overlay59_apricorn_ui_r8_run8.o
-    Object src/overlay59_partial_8.o
-    Object src/overlay59_apricorn_lifecycle.o
-    Object src/overlay59_partial_9.o
-    Object src/to70_overlay_59_gap_ae88_head_extra347_run01.o
-    Object src/to80_extra1904_run01.o
-    Object src/overlay_59_gap_ae88.o
-    Object src/to70_overlay_59_gap_ae88_tail_residual_extra432_run01.o
-    Object src/overlay59_apricorn_ui_tail_ae88.o
-    Object src/overlay59_apricorn_ui_r10_run1.o
-    Object src/overlay59_apricorn_animation_gap2.o
-    Object src/overlay59_apricorn_ui_r10_run2.o
-    Object src/overlay59_input_dispatch_gap3.o
-    Object src/overlay59_apricorn_ui_r10_run3.o
-    Object src/overlay59_bg_setup_gap4.o
-    Object src/overlay59_apricorn_ui_r10_run4.o
-    Object src/overlay59_window_setup_gap5.o
-    Object src/overlay59_apricorn_ui_r10_run5.o
-    Object src/overlay59_partial_10.o
-    Object src/overlay59_apricorn_result_sprites.o
-    Object src/r40_overlay_59_residual_11_run1.o
-    Object src/overlay59_partial_11.o
-    Object src/overlay59_apricorn_result_apply.o
-    Object src/overlay59_partial_12.o
-    Object src/to45_overlay59_apricorn_results_gap1.o
-    Object src/to91_w41572_apricorn_results.o
-    Object src/overlay59_apricorn_results_stars.o
-    Object src/to46_overlay59_move_gap2.o
-    Object src/overlay59_apricorn_results_effects.o
-    Object src/overlay59_result_fade_task_gap3.o
-    Object src/overlay59_apricorn_results_manager.o
-    Object src/r40_overlay_59_residual_13_gap_4_run1.o
-    Object src/overlay59_partial_13.o
-    Object src/to80_extra1832_run01.o
-    Object src/to80_extra1538_run01.o
-    Object src/overlay59_partial_14.o
-    Object src/to80_extra1788_run01.o
-    Object src/overlay59_partial_15.o
-    Object src/to70_overlay_59_residual_16_extra814_run01.o
-    Object src/r40_overlay_59_residual_16_run1.o
-    Object src/overlay59_partial_16.o
+    Object src/apricorn_box_screens.o
     Object asm/to70_overlay_59_residual_17_extra815_anchor.o
     Object src/to70_overlay_59_residual_17_extra815_run01.o
 }

@@ -1,11 +1,11 @@
 #include <nitro/fs/overlay.h>
 #pragma once
 .public GF_TouchpadInit
-.public sub_020210BC
-.public sub_020210D8
-.public sub_02021148
-.public sub_02021238
-.public sub_02021280
+.public GF_TouchpadResetSampling
+.public GF_TouchpadStartRecording
+.public GF_TouchpadStartSampling
+.public GF_TouchpadStopSampling
+.public GF_TouchpadUpdate
 .public GF_TouchpadResumeOnLidOpen
 .public GF_TouchpadPauseOnLidClose
 .public GF_AssertFail
@@ -18,15 +18,15 @@
 .public _u32_div_f
 .public gSystem
 
-	.public _021D2198
-	.public sub_020211AC
-	.public sub_020211E0
+	.public gTouchpadState
+	.public GF_TouchpadSetSamplingState
+	.public TouchSamples_Clear
 	.public GF_TouchpadStopAutoSampling
-	.public sub_020212EC
+	.public TouchSamples_Calibrate
 	.public GF_TouchpadStartAutoSampling
-	.public sub_020213C8
-	.public sub_02021528
+	.public GF_TouchpadRecordSamples
+	.public TouchOutput_Clear
 
-	.public sub_020213F8
-	.public sub_020214B0
-	.public sub_02021540
+	.public GF_TouchpadRecordMoves
+	.public GF_TouchpadRecordAll
+	.public TouchOutput_CollectValid

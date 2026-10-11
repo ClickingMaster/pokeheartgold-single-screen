@@ -475,258 +475,258 @@
 	.public _0222ED40
 	.public _0222ED58
 	.public _0222ED5C
-	.public _0222F0E0
-	.public ov43_0222A148
-	.public ov43_0222A154
-	.public ov43_0222A1DC
-	.public ov43_0222A24C
-	.public ov43_0222A290
-	.public ov43_0222A2F0
-	.public ov43_0222A318
-	.public ov43_0222A320
-	.public ov43_0222A338
-	.public ov43_0222A358
-	.public ov43_0222A414
-	.public ov43_0222A41C
-	.public ov43_0222A420
-	.public ov43_0222A48C
-	.public ov43_0222A500
-	.public ov43_0222A50C
-	.public ov43_0222A520
-	.public ov43_0222A550
-	.public ov43_0222A570
-	.public ov43_0222A66C
-	.public ov43_0222A690
-	.public ov43_0222A81C
-	.public ov43_0222A87C
-	.public ov43_0222A8A8
-	.public ov43_0222A8C0
-	.public ov43_0222A960
-	.public ov43_0222A998
-	.public ov43_0222A9D8
-	.public ov43_0222A9F4
-	.public ov43_0222AA70
-	.public ov43_0222AAA4
-	.public ov43_0222AB20
+	.public sPalPadDetailsPagePrinters
+	.public PalPad_VBlankCallback
+	.public PalPad_SetupScreens
+	.public PalPad_TeardownScreens
+	.public PalPad_AddWindow
+	.public PalPadShared_Init
+	.public PalPadShared_Free
+	.public PalPadShared_SetNextScreen
+	.public PalPadShared_ResetInputStateOnKey
+	.public PalPadShared_SetNameAndCode
+	.public PalPadShared_RegisterFriendCode
+	.public PalPadShared_SetInitialName
+	.public PalPadShared_SetSelectedFriend
+	.public PalPadShared_ReadFriendList
+	.public PalPadGfx_Init
+	.public PalPadGfx_RenderSprites
+	.public PalPadGfx_VBlank
+	.public PalPadGfx_Free
+	.public PalPadGfx_SetVramBanks
+	.public PalPadGfx_InitBgs
+	.public PalPadGfx_FreeBgs
+	.public PalPadGfx_InitSpriteSystem
+	.public PalPadGfx_FreeSpriteSystem
+	.public PalPadGfx_InitMsg
+	.public PalPadGfx_FreeMsg
+	.public PalPadGfx_InitWindows
+	.public PalPadGfx_FreeWindows
+	.public PalPadGfx_LoadScreens
+	.public PalPadGfx_FreeScreens
+	.public PalPadGfx_PrintTitle
+	.public PalPadGfx_ClearTitle
+	.public PalPadGfx_BufferFriendCode
+	.public PalPadGfx_BufferFriendName
 	.public ov43_0222AB5C
-	.public ov43_0222AB94
-	.public ov43_0222ABFC
-	.public ov43_0222AC18
-	.public ov43_0222AC28
-	.public ov43_0222ACDC
-	.public ov43_0222AD00
-	.public ov43_0222AD20
-	.public ov43_0222AD40
-	.public ov43_0222AD74
-	.public ov43_0222AD98
-	.public ov43_0222ADB8
-	.public ov43_0222AE2C
-	.public ov43_0222AE5C
-	.public ov43_0222AE64
-	.public ov43_0222B098
-	.public ov43_0222B0A0
-	.public ov43_0222B1D8
-	.public ov43_0222B1FC
-	.public ov43_0222B278
-	.public ov43_0222B324
-	.public ov43_0222B374
-	.public ov43_0222B3A4
-	.public ov43_0222B3C4
-	.public ov43_0222B408
-	.public ov43_0222B440
-	.public ov43_0222B458
-	.public ov43_0222B4BC
-	.public ov43_0222B534
-	.public ov43_0222B55C
-	.public ov43_0222B574
-	.public ov43_0222B5A8
-	.public ov43_0222B5D0
-	.public ov43_0222B93C
-	.public ov43_0222B944
-	.public ov43_0222BAB8
-	.public ov43_0222BB20
-	.public ov43_0222BBB8
-	.public ov43_0222BC78
-	.public ov43_0222BD18
-	.public ov43_0222BEEC
-	.public ov43_0222BFA4
-	.public ov43_0222BFD4
-	.public ov43_0222C024
-	.public ov43_0222C148
-	.public ov43_0222C228
-	.public ov43_0222C2B0
-	.public ov43_0222C32C
-	.public ov43_0222C358
-	.public ov43_0222C378
-	.public ov43_0222C3E8
-	.public ov43_0222C46C
-	.public ov43_0222C4B8
-	.public ov43_0222C53C
-	.public ov43_0222C550
-	.public ov43_0222C5D8
-	.public ov43_0222C600
-	.public ov43_0222C620
-	.public ov43_0222C630
-	.public ov43_0222C65C
-	.public ov43_0222C714
-	.public ov43_0222C750
-	.public ov43_0222C788
-	.public ov43_0222C7EC
-	.public ov43_0222C7F8
-	.public ov43_0222C844
-	.public ov43_0222C890
-	.public ov43_0222C918
-	.public ov43_0222C9A4
-	.public ov43_0222CA30
-	.public ov43_0222CA50
-	.public ov43_0222CB34
-	.public ov43_0222CBAC
-	.public ov43_0222CBB4
-	.public ov43_0222CD34
-	.public ov43_0222CD3C
-	.public ov43_0222CD40
-	.public ov43_0222CD44
-	.public ov43_0222CD90
-	.public ov43_0222CD98
-	.public ov43_0222CE0C
-	.public ov43_0222CE14
-	.public ov43_0222CE48
-	.public ov43_0222D008
-	.public ov43_0222D028
-	.public ov43_0222D090
-	.public ov43_0222D0F8
-	.public ov43_0222D134
-	.public ov43_0222D15C
-	.public ov43_0222D228
-	.public ov43_0222D230
-	.public ov43_0222D24C
-	.public ov43_0222D2FC
-	.public ov43_0222D3B8
-	.public ov43_0222D47C
-	.public ov43_0222D4C4
-	.public ov43_0222D508
-	.public ov43_0222D584
-	.public ov43_0222D610
-	.public ov43_0222D654
-	.public ov43_0222D778
-	.public ov43_0222D87C
-	.public ov43_0222D8B8
-	.public ov43_0222DACC
-	.public ov43_0222DAE8
-	.public ov43_0222DB28
-	.public ov43_0222DB84
-	.public ov43_0222DB94
-	.public ov43_0222DC7C
-	.public ov43_0222DCC4
-	.public ov43_0222DD40
-	.public ov43_0222DD88
-	.public ov43_0222DDA0
-	.public ov43_0222DDD0
-	.public ov43_0222DDF0
-	.public ov43_0222DE10
-	.public ov43_0222DE14
-	.public ov43_0222DED0
-	.public ov43_0222DEF8
-	.public ov43_0222DF1C
-	.public ov43_0222DF4C
-	.public ov43_0222DF90
+	.public PalPadGfx_BufferLastDate
+	.public PalPadGfx_BufferNumber
+	.public PalPadGfx_BufferActivityName
+	.public PalPadGfx_CreateSprites
+	.public PalPadGfx_DeleteSprites
+	.public PalPadGfx_SetArrowsVisible
+	.public PalPadGfx_SetArrowsAnimActive
+	.public PalPadGfx_AnimateArrow
+	.public PalPadGfx_SetCursor
+	.public PalPadGfx_SetCursorPriority
+	.public PalPadGfx_StartYesNo
+	.public PalPadGfx_HandleYesNo
+	.public PalPadMenu_Init
+	.public PalPadMenu_Main
+	.public PalPadMenu_Exit
+	.public PalPadMenu_Setup
+	.public PalPadMenu_Teardown
+	.public PalPadMenu_Show
+	.public PalPadMenu_HandleKeys
+	.public PalPadMenu_HandleTouch
+	.public PalPadMenu_HandleInput
+	.public PalPadMenu_MoveCursor
+	.public PalPadMenu_HighlightSelection
+	.public PalPadMenu_ClearHighlight
+	.public PalPadMenu_SetNextScreen
+	.public PalPadMenu_Hide
+	.public PalPadMenu_PrintMessage
+	.public PalPadMenu_IsMessageDone
+	.public PalPadMenu_ClearMessage
+	.public PalPadMenu_CanSelect
+	.public PalPadRoster_Init
+	.public PalPadRoster_Main
+	.public PalPadRoster_Exit
+	.public PalPadRoster_Setup
+	.public PalPadRoster_Teardown
+	.public PalPadRoster_Show
+	.public PalPadRoster_Hide
+	.public PalPadRoster_HandleAction
+	.public PalPadRoster_HandleKeys
+	.public PalPadRoster_HandleTouch
+	.public PalPadRoster_HandleInput
+	.public PalPadRoster_StartPageScroll
+	.public PalPadRoster_UpdatePageScroll
+	.public PalPadRoster_OpenFriendMenu
+	.public PalPadRoster_HandleFriendMenu
+	.public PalPadRoster_ShowFriendCode
+	.public PalPadRoster_ConfirmDelete
+	.public PalPadRoster_StartDeletePrompt
+	.public PalPadRoster_DrawPage
+	.public PalPadRoster_DrawTabs
+	.public PalPadRoster_DeselectTab
+	.public PalPadRoster_DrawTabsOnScroll
+	.public PalPadRoster_StartScroll
+	.public PalPadRoster_PrintMessage
+	.public PalPadRoster_IsMessageDone
+	.public PalPadRoster_ClearMessage
+	.public PalPadRoster_GetSelectedIndex
+	.public PalPadRoster_MenuCallback
+	.public PalPadRoster_StartDeleteEffect
+	.public PalPadRoster_UpdateDeleteEffect
+	.public PalPadRoster_EndDeleteEffect
+	.public PalPadRosterPage_Init
+	.public PalPadRosterPage_Free
+	.public PalPadRosterPage_DrawFrame
+	.public PalPadRoster_SetCursor
+	.public PalPadRosterPage_HighlightSlot
+	.public PalPadRosterPage_Draw
+	.public PalPadRosterPage_Clear
+	.public PalPadRosterPage_DeleteIcons
+	.public PalPadRosterPage_DrawFriend
+	.public PalPadRosterPage_DrawEmptySlot
+	.public PalPadNaming_Init
+	.public PalPadNaming_Main
+	.public PalPadNaming_Exit
+	.public PalPadNaming_Setup
+	.public PalPadNaming_Teardown
+	.public PalPadNaming_CreateNamingArgs
+	.public PalPadFriendCode_Init
+	.public PalPadFriendCode_Main
+	.public PalPadFriendCode_Exit
+	.public PalPadFriendCode_HandleInput
+	.public PalPadFriendCode_Setup
+	.public PalPadFriendCode_Teardown
+	.public PalPadFriendCode_Show
+	.public PalPadFriendCode_Hide
+	.public PalPadFriendCode_HighlightReturn
+	.public PalPadDetails_Init
+	.public PalPadDetails_Main
+	.public PalPadDetails_Exit
+	.public PalPadDetails_IsLastPage
+	.public PalPadDetails_HandleAction
+	.public PalPadDetails_HandleKeys
+	.public PalPadDetails_HandleTouch
+	.public PalPadDetails_HandleInput
+	.public PalPadDetails_StartPageScroll
+	.public PalPadDetails_UpdatePageScroll
+	.public PalPadDetails_Setup
+	.public PalPadDetails_Teardown
+	.public PalPadDetails_Show
+	.public PalPadDetails_Hide
+	.public PalPadDetails_HideForFriendChange
+	.public PalPadDetails_DrawProfile
+	.public PalPadDetails_ClearProfile
+	.public PalPadDetails_DrawPage
+	.public PalPadDetails_SetCursor
+	.public PalPadDetails_HideCursor
+	.public PalPadDetails_DrawTabs
+	.public PalPadDetails_ClearTabs
+	.public PalPadDetails_SelectNextFriend
+	.public PalPadDetails_LoadScreens
+	.public PalPadDetails_FreeScreens
+	.public PalPadDetails_AddProfileWindows
+	.public PalPadDetails_RemoveProfileWindows
+	.public PalPadDetailsSlot_Init
+	.public PalPadDetailsSlot_Free
+	.public PalPadDetailsSlot_AddWindows
+	.public PalPadDetailsSlot_RemoveWindows
+	.public PalPadDetailsSlot_CopyWindowsToVram
+	.public PalPadDetailsSlot_ClearWindows
+	.public PalPadDetailsSlot_DrawPage
+	.public PalPadDetailsSlot_Clear
 	.public ov43_0222DFB0
 	.public ov43_0222E0E8
 	.public ov43_0222E220
 	.public ov43_0222E5B4
 	.public ov43_0222E78C
 	.public ov43_0222E904
-	.public ov43_0222EA40
+	.public PalPadDetails_PrintWiFiPlazaPage
 	.public ov43_0222EBD8
-	.public ov43_0222EC14
-	.public ov43_0222EC58
-	.public ov43_0222ECD4
-	.public ov43_0222ED18
+	.public PalPadDetailsSlot_ClearBg
+	.public PalPadDetailsSlot_Print
+	.public PalPadDetails_PrintProfileText
+	.public PalPadDetails_MovePage
 	.public ov43_0222ED5F
 	.public ov43_0222ED63
 	.public ov43_0222ED67
 	.public ov43_0222ED6B
 	.public ov43_0222ED6F
-	.public ov43_0222ED74
-	.public ov43_0222ED7A
+	.public sPalPadRosterPageBaseTiles
+	.public sPalPadFriendCodeHitboxes
 	.public ov43_0222ED82
-	.public ov43_0222ED94
-	.public ov43_0222ED9C
-	.public ov43_0222EDAC
-	.public ov43_0222EDB8
-	.public ov43_0222EDC8
-	.public ov43_0222EDD8
+	.public sPalPadRosterNameColors
+	.public sPalPadRosterFriendMenuTemplate
+	.public sPalPadDetailsSlotBaseTiles
+	.public sPalPadDetailsTabX
+	.public sPalPadGraphicsModes
+	.public sPalPadObjCharTransferTemplate
 	.public ov43_0222EDE8
-	.public ov43_0222EDF8
-	.public ov43_0222EE08
-	.public ov43_0222EE1A
+	.public sPalPadDetailsTabWidths
+	.public sPalPadPanelLayouts
+	.public sPalPadMenuHitboxes
 	.public ov43_0222EE2E
-	.public ov43_0222EE42
-	.public ov43_0222EE5C
-	.public ov43_0222EE84
-	.public ov43_0222EEB0
-	.public ov43_0222EEE0
-	.public ov43_0222EF20
-	.public ov43_0222EF60
-	.public ov43_0222EFA0
-	.public ov43_0222EFA2
-	.public ov43_0222EFFC
-	.public ov43_0222F0C0
-	.public ov43_0222F0C4
-	.public ov43_0222F0C8
-	.public ov43_0222F0CC
-	.public ov43_0222F0D0
-	.public ov43_0222F0EC
-	.public ov43_0222F0FC
-	.public ov43_0222F10C
-	.public ov43_0222F12C
-	.public ov43_0222F14C
+	.public sPalPadDetailsHitboxes
+	.public sPalPadGraphicsBanks
+	.public sPalPadDetailsFrontierHitboxes
+	.public sPalPadDeleteEffectSpriteTemplate
+	.public sPalPadRosterFriendMenus
+	.public sPalPadDetailsProfileWindowTemplates
+	.public sPalPadRosterHitboxes
+	.public sPalPadRosterSlotRects
+	.public sPalPadRosterSlotY
+	.public sPalPadBgTemplates
+	.public sPalPadScreenFileIds
+	.public sPalPadDetailsTabSrcY
+	.public sPalPadMenuRegisterErrorMsgIds
+	.public sPalPadMenuItemScreens
+	.public sPalPadDetailsPageWindowCounts
+	.public sPalPadRosterScrollCallbacks
+	.public sPalPadRenderSurfaceRect
+	.public sPalPadDetailsPageWindowSpecs
+	.public sPalPadDetailsFrontierPagePrinters
+	.public sPalPadArrowSpriteTemplates
 	.public ov43_0222F160
-	.public ov43_0222F1AC
+	.public sPalPadCursorSpriteTemplate
 	.include "overlay_43.inc"
 	.include "global.inc"
 
 	.text
-	.public ov43_0222A148
-	.public ov43_0222A2F0
-	.public ov43_0222A318
-	.public ov43_0222A338
-	.public ov43_0222A414
-	.public ov43_0222A41C
-	.public ov43_0222A500
-	.public ov43_0222A50C
-	.public ov43_0222A520
-	.public ov43_0222A87C
-	.public ov43_0222A8A8
-	.public ov43_0222ABFC
-	.public ov43_0222AC18
-	.public ov43_0222AD74
-	.public ov43_0222AE2C
-	.public ov43_0222B098
-	.public ov43_0222B1D8
-	.public ov43_0222B55C
-	.public ov43_0222B5A8
-	.public ov43_0222B93C
-	.public ov43_0222C358
-	.public ov43_0222C53C
-	.public ov43_0222C600
-	.public ov43_0222C714
-	.public ov43_0222C7EC
-	.public ov43_0222CA30
-	.public ov43_0222CD34
-	.public ov43_0222CD3C
-	.public ov43_0222CD40
-	.public ov43_0222CE0C
-	.public ov43_0222D008
-	.public ov43_0222D134
-	.public ov43_0222D228
-	.public ov43_0222D230
-	.public ov43_0222DB84
-	.public ov43_0222DD88
-	.public ov43_0222DE10
+	.public PalPad_VBlankCallback
+	.public PalPadShared_Free
+	.public PalPadShared_SetNextScreen
+	.public PalPadShared_SetNameAndCode
+	.public PalPadShared_SetInitialName
+	.public PalPadShared_SetSelectedFriend
+	.public PalPadGfx_RenderSprites
+	.public PalPadGfx_VBlank
+	.public PalPadGfx_Free
+	.public PalPadGfx_InitMsg
+	.public PalPadGfx_FreeMsg
+	.public PalPadGfx_BufferNumber
+	.public PalPadGfx_BufferActivityName
+	.public PalPadGfx_SetCursor
+	.public PalPadGfx_HandleYesNo
+	.public PalPadMenu_Exit
+	.public PalPadMenu_Teardown
+	.public PalPadMenu_ClearMessage
+	.public PalPadRoster_Init
+	.public PalPadRoster_Exit
+	.public PalPadRoster_StartDeletePrompt
+	.public PalPadRoster_StartScroll
+	.public PalPadRoster_ClearMessage
+	.public PalPadRoster_UpdateDeleteEffect
+	.public PalPadRosterPage_Free
+	.public PalPadRosterPage_DeleteIcons
+	.public PalPadNaming_Exit
+	.public PalPadNaming_Setup
+	.public PalPadNaming_Teardown
+	.public PalPadFriendCode_Exit
+	.public PalPadFriendCode_Teardown
+	.public PalPadDetails_Init
+	.public PalPadDetails_Exit
+	.public PalPadDetails_IsLastPage
+	.public PalPadDetails_HideCursor
+	.public PalPadDetails_FreeScreens
+	.public PalPadDetailsSlot_Free
 
-	thumb_func_start ov43_0222CA50
-ov43_0222CA50: ; 0x0222CA50
+	thumb_func_start PalPadRosterPage_DrawFriend
+PalPadRosterPage_DrawFriend: ; 0x0222CA50
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x28
 	add r5, r0, #0
@@ -752,13 +752,13 @@ ov43_0222CA50: ; 0x0222CA50
 	add r0, r5, #0
 	add r1, r6, #0
 	add r3, r4, #0
-	bl ov43_0222CB34
+	bl PalPadRosterPage_DrawEmptySlot
 	b _0222CAD0
 _0222CA8C:
 	mov r0, #0xa
 	add r6, r4, #0
 	mul r6, r0
-	ldr r2, _0222CB28 ; =ov43_0222EFA0
+	ldr r2, _0222CB28 ; =sPalPadRosterSlotRects
 	mov r1, #0
 	ldrsh r1, [r5, r1]
 	ldrsh r2, [r2, r6]
@@ -770,7 +770,7 @@ _0222CA8C:
 	strh r2, [r1]
 	mov r2, #2
 	ldrsh r3, [r5, r2]
-	ldr r2, _0222CB2C ; =ov43_0222EFA2
+	ldr r2, _0222CB2C ; =sPalPadRosterSlotY
 	ldrsh r2, [r2, r6]
 	add r2, r3, r2
 	lsl r2, r2, #3
@@ -802,8 +802,8 @@ _0222CAD0:
 	add r3, r4, #0
 	mov r0, #0xa
 	mul r3, r0
-	ldr r0, _0222CB2C ; =ov43_0222EFA2
-	ldr r4, _0222CB28 ; =ov43_0222EFA0
+	ldr r0, _0222CB2C ; =sPalPadRosterSlotY
+	ldr r4, _0222CB28 ; =sPalPadRosterSlotRects
 	ldrsh r0, [r0, r3]
 	ldrsh r3, [r4, r3]
 	lsl r1, r7, #2
@@ -812,7 +812,7 @@ _0222CAD0:
 	str r0, [sp]
 	mov r0, #0xff
 	str r0, [sp, #4]
-	ldr r0, _0222CB30 ; =ov43_0222ED94
+	ldr r0, _0222CB30 ; =sPalPadRosterNameColors
 	add r5, #8
 	ldr r0, [r0, r1]
 	mov r1, #4
@@ -828,14 +828,14 @@ _0222CAD0:
 	add sp, #0x28
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
-_0222CB28: .word ov43_0222EFA0
-_0222CB2C: .word ov43_0222EFA2
-_0222CB30: .word ov43_0222ED94
-	thumb_func_end ov43_0222CA50
+_0222CB28: .word sPalPadRosterSlotRects
+_0222CB2C: .word sPalPadRosterSlotY
+_0222CB30: .word sPalPadRosterNameColors
+	thumb_func_end PalPadRosterPage_DrawFriend
 
 
-	thumb_func_start ov43_0222CB34
-ov43_0222CB34: ; 0x0222CB34
+	thumb_func_start PalPadRosterPage_DrawEmptySlot
+PalPadRosterPage_DrawEmptySlot: ; 0x0222CB34
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0x1c
 	add r4, r1, #0
@@ -867,13 +867,13 @@ _0222CB50:
 	mul r3, r2
 	str r1, [sp, #0x10]
 	ldrh r1, [r0]
-	ldr r2, _0222CBA4 ; =ov43_0222EFA0
+	ldr r2, _0222CBA4 ; =sPalPadRosterSlotRects
 	ldrsh r2, [r2, r3]
 	lsl r1, r1, #0x15
 	lsr r1, r1, #0x18
 	str r1, [sp, #0x14]
 	add r2, r2, r6
-	ldr r6, _0222CBA8 ; =ov43_0222EFA2
+	ldr r6, _0222CBA8 ; =sPalPadRosterSlotY
 	ldrh r0, [r0, #2]
 	ldrsh r3, [r6, r3]
 	lsl r2, r2, #0x18
@@ -893,14 +893,14 @@ _0222CB50:
 	add sp, #0x1c
 	pop {r3, r4, r5, r6, pc}
 	.balign 4, 0
-_0222CBA4: .word ov43_0222EFA0
-_0222CBA8: .word ov43_0222EFA2
-	thumb_func_end ov43_0222CB34
+_0222CBA4: .word sPalPadRosterSlotRects
+_0222CBA8: .word sPalPadRosterSlotY
+	thumb_func_end PalPadRosterPage_DrawEmptySlot
 
 
-	thumb_func_start ov43_0222CBAC
-ov43_0222CBAC: ; 0x0222CBAC
+	thumb_func_start PalPadNaming_Init
+PalPadNaming_Init: ; 0x0222CBAC
 	push {r3, lr}
-	bl ov43_0222CD3C
+	bl PalPadNaming_Setup
 	pop {r3, pc}
-	thumb_func_end ov43_0222CBAC
+	thumb_func_end PalPadNaming_Init

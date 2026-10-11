@@ -81,9 +81,9 @@ HallOfFameShowcase_Init: ; 0x021E5900
 	strh r1, [r0]
 	ldr r0, _021E59B8 ; =0x04001050
 	strh r1, [r0]
-	bl sub_020210BC
+	bl GF_TouchpadResetSampling
 	mov r0, #4
-	bl sub_02021148
+	bl GF_TouchpadStartSampling
 	ldr r2, _021E59BC ; =0x04000304
 	ldr r0, _021E59C0 ; =0xFFFF7FFF
 	ldrh r1, [r2]

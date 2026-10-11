@@ -49,7 +49,7 @@ extern void ov14_021E5DB8(void *);
 extern void ov14_021E5E94(void *);
 extern void ov14_021E5C00(void *);
 extern void NARC_Delete(void *);
-extern void sub_02021238(void);
+extern void GF_TouchpadStopSampling(void);
 extern void GfGfx_EngineASetPlanes(u32);
 extern void GfGfx_EngineBSetPlanes(u32);
 extern void Heap_Free(void *);

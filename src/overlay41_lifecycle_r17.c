@@ -67,8 +67,8 @@ BOOL ov41_02246DE0(void *manager, int *state) {
     } else {
         U32_AT(work, 0x6EC) = 0;
     }
-    sub_020210BC();
-    sub_02021148(4);
+    GF_TouchpadResetSampling();
+    GF_TouchpadStartSampling(4);
     ov41_02248E84(PTR_AT(args, 8), (u8 *)work + 0x184);
     ov41_02247240(work);
     ov41_022499B4((u8 *)work + 0x35C, 0x35C - 0x8D, 13);
@@ -224,7 +224,7 @@ BOOL ov41_02247150(void *manager, int *state) {
     ov41_02247274(work);
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
-    if (sub_02021238() != 1) {
+    if (GF_TouchpadStopSampling() != 1) {
         GF_AssertFail();
     }
     OverlayManager_FreeData(manager);

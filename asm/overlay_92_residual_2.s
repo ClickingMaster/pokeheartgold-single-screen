@@ -1199,9 +1199,9 @@ _0225C64E:
 	ldr r2, [r5, #4]
 	sub r0, r1, #4
 	str r3, [r2, r0]
-	bl sub_020210BC
+	bl GF_TouchpadResetSampling
 	mov r0, #4
-	bl sub_02021148
+	bl GF_TouchpadStartSampling
 	add r0, r5, #0
 	bl ov92_0225E9B4
 	add r0, r5, #0
@@ -2596,7 +2596,7 @@ ov92_0225D1FC: ; 0x0225D1FC
 	bl Main_SetVBlankIntrCB
 	bl HBlankInterruptDisable
 	bl GF_DestroyVramTransferManager
-	bl sub_02021238
+	bl GF_TouchpadStopSampling
 	add r0, r5, #0
 	add r0, #0x80
 	ldr r0, [r0]

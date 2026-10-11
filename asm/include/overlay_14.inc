@@ -182,9 +182,9 @@
 .public ScheduleSetBgPosText
 .public AddTextPrinterParameterizedWithColor
 .public DpadMenuBox_GetPosition
-.public sub_020210BC
-.public sub_02021148
-.public sub_02021238
+.public GF_TouchpadResetSampling
+.public GF_TouchpadStartSampling
+.public GF_TouchpadStopSampling
 .public sub_02021AC8
 .public sub_02021B5C
 .public GfGfx_SetBanks

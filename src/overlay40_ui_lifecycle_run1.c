@@ -32,7 +32,7 @@ void ov40_0222B934(BattleAppWorkRaw *work) {
     SpriteSystem_FreeResourcesAndManager(OV40_PTR(work, 0x18), OV40_PTR(work, 0x1c));
     SpriteSystem_Free(OV40_PTR(work, 0x18));
     WirelessStatusIcon_Destroy();
-    sub_02021238();
+    GF_TouchpadStopSampling();
     TouchHitboxController_Destroy(OV40_PTR(work, 0x2c));
     TextFlags_SetCanTouchSpeedUpPrint(FALSE);
     {

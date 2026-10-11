@@ -139,9 +139,9 @@
 .public MTRandom
 .public TextPrinterCheckActive
 .public AddTextPrinterParameterizedWithColor
-.public sub_020210BC
-.public sub_02021148
-.public sub_02021238
+.public GF_TouchpadResetSampling
+.public GF_TouchpadStartSampling
+.public GF_TouchpadStopSampling
 .public ObjCharTransfer_InitEx
 .public ObjCharTransfer_Destroy
 .public ObjCharTransfer_ClearBuffers

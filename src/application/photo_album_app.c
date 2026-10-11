@@ -33,7 +33,7 @@
 #include "touchscreen_list_menu.h"
 #include "sound_playback.h"
 #include "oam_manager.h"
-#include "unk_020210A0.h"
+#include "touchpad.h"
 #include "unk_02068F84.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
@@ -329,8 +329,8 @@ BOOL PhotoAlbumApp_Setup(PhotoAlbumApp *app) {
         break;
     case 1:
         PhotoAlbumApp_DrawInitialScreen(app);
-        sub_020210BC();
-        sub_02021148(4);
+        GF_TouchpadResetSampling();
+        GF_TouchpadStartSampling(4);
         app->state = 0;
         return TRUE;
     }
@@ -338,7 +338,7 @@ BOOL PhotoAlbumApp_Setup(PhotoAlbumApp *app) {
 }
 
 BOOL PhotoAlbumApp_Teardown(PhotoAlbumApp *app) {
-    sub_02021238();
+    GF_TouchpadStopSampling();
     PhotoAlbumApp_FreeGraphics(app);
     return TRUE;
 }

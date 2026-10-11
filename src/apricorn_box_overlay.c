@@ -4,12 +4,12 @@
 
 FS_EXTERN_OVERLAY(OVY_59);
 
-BOOL ov59_02237D40(OverlayManager *man, int *state);
-BOOL ov59_02237DA8(OverlayManager *man, int *state);
-BOOL ov59_02237E68(OverlayManager *man, int *state);
-BOOL ov59_0223A8E0(OverlayManager *man, int *state);
-BOOL ov59_0223A948(OverlayManager *man, int *state);
-BOOL ov59_0223A9B8(OverlayManager *man, int *state);
+BOOL ApricornBoxScreen_Init(OverlayManager *man, int *state);
+BOOL ApricornBoxScreen_Main(OverlayManager *man, int *state);
+BOOL ApricornBoxScreen_Exit(OverlayManager *man, int *state);
+BOOL AprijuiceScreen_Init(OverlayManager *man, int *state);
+BOOL AprijuiceScreen_Main(OverlayManager *man, int *state);
+BOOL AprijuiceScreen_Exit(OverlayManager *man, int *state);
 
 BOOL ov58_022378C0(OverlayManager **pMan);
 BOOL ApricornBox_Init(OverlayManager *man, int *state);
@@ -27,16 +27,16 @@ int ov58_02237CA0(ApricornBoxApp *app);
 void ov58_02237CCC(void);
 
 static const OverlayManagerTemplate _02237D1C = {
-    ov59_02237D40,
-    ov59_02237DA8,
-    ov59_02237E68,
+    ApricornBoxScreen_Init,
+    ApricornBoxScreen_Main,
+    ApricornBoxScreen_Exit,
     FS_OVERLAY_ID(OVY_59),
 };
 
 static const OverlayManagerTemplate ov58_02237D2C = {
-    ov59_0223A8E0,
-    ov59_0223A948,
-    ov59_0223A9B8,
+    AprijuiceScreen_Init,
+    AprijuiceScreen_Main,
+    AprijuiceScreen_Exit,
     FS_OVERLAY_ID(OVY_59),
 };
 

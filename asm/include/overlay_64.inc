@@ -81,9 +81,9 @@
 .public FillWindowPixelBuffer
 .public DoScheduledBgGpuUpdates
 .public AddTextPrinterParameterizedWithColor
-.public sub_020210BC
-.public sub_02021148
-.public sub_02021238
+.public GF_TouchpadResetSampling
+.public GF_TouchpadStartSampling
+.public GF_TouchpadStopSampling
 .public GfGfx_SetBanks
 .public GfGfx_EngineATogglePlanes
 .public GfGfx_EngineASetPlanes

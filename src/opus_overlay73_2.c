@@ -19,7 +19,7 @@ int ov73_021E5BAC(OverlayManager *mgr, u32 *state) {
     sub_02038C1C(2);
     sub_02037FF0();
     sub_0205AD24(*(void **)((u8 *)work->args + 4));
-    sub_02021238();
+    GF_TouchpadStopSampling();
     FontID_Release(4);
     DestroyMsgData(work->msgData);
     MessageFormat_Delete(work->msgFmt);

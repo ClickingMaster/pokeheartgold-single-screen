@@ -44,7 +44,7 @@ void ov39_022285A8(void *bgConfig);
 void Main_SetVBlankIntrCB(void (*callback)(void *), void *arg);
 void HBlankInterruptDisable(void);
 void GF_DestroyVramTransferManager(void);
-void sub_02021238(void);
+void GF_TouchpadStopSampling(void);
 void TextFlags_SetCanABSpeedUpPrint(BOOL enable);
 void TextFlags_SetAutoScrollParam(int param);
 void TextFlags_SetCanTouchSpeedUpPrint(BOOL enable);

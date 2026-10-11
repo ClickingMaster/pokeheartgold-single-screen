@@ -6,7 +6,7 @@
 typedef struct BagWorkRaw {
     u8 raw[0x900];
 } BagWorkRaw;
-typedef struct TouchState {
+typedef struct TouchpadState {
     u8 pocket;
     u8 direction;
     u8 stage;
@@ -14,7 +14,7 @@ typedef struct TouchState {
     u8 unk4;
     u8 pad5[2];
     u8 flags;
-} TouchState;
+} TouchpadState;
 
 extern s32 ov15_021FAC40(BagWorkRaw *);
 extern BOOL ov15_021FAA18(BagWorkRaw *);
@@ -36,7 +36,7 @@ BOOL ov15_021FAA18(BagWorkRaw *);
 BOOL ov15_021FAB34(BagWorkRaw *);
 
 s32 ov15_021FA93C(BagWorkRaw *work) {
-    TouchState *state = (TouchState *)&work->raw[0x619];
+    TouchpadState *state = (TouchpadState *)&work->raw[0x619];
     s32 pocket;
 
     if (!System_GetTouchHeld()) {
@@ -73,7 +73,7 @@ s32 ov15_021FA93C(BagWorkRaw *work) {
 }
 
 BOOL ov15_021FAA18(BagWorkRaw *work) {
-    TouchState *state = (TouchState *)&work->raw[0x619];
+    TouchpadState *state = (TouchpadState *)&work->raw[0x619];
 
     if (gSystem.newKeys & PAD_KEY_LEFT) {
         if (work->raw[0x614] == 1) {

@@ -21,14 +21,14 @@
 #define P(p,o) (*(void**)((u8*)(p)+(o)))
 void Main_SetVBlankIntrCB(void(*)(void*),void*);void HBlankInterruptDisable(void);void GfGfx_DisableEngineAPlanes(void);void GfGfx_DisableEngineBPlanes(void);
 
-void ov39_02228440(void*);void sub_020210BC(void);void sub_02021148(int);void ov39_022285CC(void*);void ov39_022288A0(void*);void GfGfx_SwapDisplay(void);void ov39_02228418(void*);
+void ov39_02228440(void*);void GF_TouchpadResetSampling(void);void GF_TouchpadStartSampling(int);void ov39_022285CC(void*);void ov39_022288A0(void*);void GfGfx_SwapDisplay(void);void ov39_02228418(void*);
 typedef struct{void*args;BgConfig*bg;u32 mode,nextMode;u8 gap[16];MessageFormat*format;struct{MsgData*one,*two,*three;}messages;u8 unmodeled30[4];String*string1,*string2,*string3;u8 rest[0x50];u32 textSpeed;u8 ownerRemainder[0x3d8-0x94];} Scene;
 int ov39_02228140(OverlayManager*manager,int*state);
 // @fn ov39_02228140
 int ov39_02228140(OverlayManager*manager,int*state){Scene*w;
  Main_SetVBlankIntrCB(NULL,NULL);HBlankInterruptDisable();GfGfx_DisableEngineAPlanes();GfGfx_DisableEngineBPlanes();
  GX_SetVisiblePlane(0);GXS_SetVisiblePlane(0);GX_SetVisibleWnd(0);GXS_SetVisibleWnd(0);G2_BlendNone();G2S_BlendNone();
- Heap_Create((enum HeapID)3,(enum HeapID)124,5<<16);w=OverlayManager_CreateAndGetData(manager,0x3d8,(enum HeapID)124);MI_CpuFill8(w,0,0x3d8);w->args=OverlayManager_GetArgs(manager);w->bg=BgConfig_Alloc((enum HeapID)124);GF_CreateVramTransferManager(64,(enum HeapID)124);SetKeyRepeatTimers(4,8);ov39_02228440(w->bg);sub_020210BC();sub_02021148(4);
+ Heap_Create((enum HeapID)3,(enum HeapID)124,5<<16);w=OverlayManager_CreateAndGetData(manager,0x3d8,(enum HeapID)124);MI_CpuFill8(w,0,0x3d8);w->args=OverlayManager_GetArgs(manager);w->bg=BgConfig_Alloc((enum HeapID)124);GF_CreateVramTransferManager(64,(enum HeapID)124);SetKeyRepeatTimers(4,8);ov39_02228440(w->bg);GF_TouchpadResetSampling();GF_TouchpadStartSampling(4);
  {MessageFormat *format=MessageFormat_New_Custom(11,64,(enum HeapID)124);w->format=format;}w->messages.one=NewMsgDataFromNarc((MsgDataLoadType)0,(NarcId)27,0x307,(enum HeapID)124);w->messages.two=NewMsgDataFromNarc((MsgDataLoadType)0,(NarcId)27,0x30a,(enum HeapID)124);w->messages.three=NewMsgDataFromNarc((MsgDataLoadType)0,(NarcId)27,0x320,(enum HeapID)124);
  w->string1=String_New(180,(enum HeapID)124);w->string3=String_New(256,(enum HeapID)124);w->string2=NewString_ReadMsgData(w->messages.one,31);ov39_022285CC(w);ov39_022288A0(w);BeginNormalPaletteFade(FADE_BOTH_SCREENS,FADE_TYPE_BRIGHTNESS_IN,FADE_TYPE_BRIGHTNESS_IN,0,6,1,(enum HeapID)124);
  GfGfx_EngineATogglePlanes(16,1);GfGfx_EngineATogglePlanes(1,1);GfGfx_EngineATogglePlanes(2,1);GfGfx_EngineBTogglePlanes(1,1);GfGfx_EngineBTogglePlanes(2,1);B((u8*)&gSystem+0x60,9)=1;GfGfx_SwapDisplay();TextFlags_SetCanABSpeedUpPrint(1);TextFlags_SetAutoScrollParam(0);TextFlags_SetCanTouchSpeedUpPrint(1);Main_SetVBlankIntrCB(ov39_02228418,w);

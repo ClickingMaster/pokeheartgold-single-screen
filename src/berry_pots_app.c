@@ -29,7 +29,7 @@
 #include "touchscreen.h"
 #include "sound_playback.h"
 #include "oam_manager.h"
-#include "unk_020210A0.h"
+#include "touchpad.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 
@@ -385,8 +385,8 @@ static BOOL ov17_02201DF0(BerryPotsAppData *data) {
         break;
     case 1:
         ov17_02202528(data);
-        sub_020210BC();
-        sub_02021148(1);
+        GF_TouchpadResetSampling();
+        GF_TouchpadStartSampling(1);
         Sound_SetSceneAndPlayBGM(0x45, 0, 0);
 
         data->state70 = 0;
@@ -397,7 +397,7 @@ static BOOL ov17_02201DF0(BerryPotsAppData *data) {
 }
 
 static BOOL ov17_02201E3C(BerryPotsAppData *data) {
-    sub_02021238();
+    GF_TouchpadStopSampling();
     BerryPotsApp_FreeResources(data);
     return TRUE;
 }

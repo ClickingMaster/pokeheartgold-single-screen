@@ -30,12 +30,12 @@
 #include "sprite_transfer.h"
 #include "system.h"
 #include "text.h"
-#include "touch_sampling_internal.h"
+#include "touchpad_internal.h"
 #include "touchscreen.h"
 #include "sound_playback.h"
 #include "oam_manager.h"
 #include "unk_02013534.h"
-#include "unk_020210A0.h"
+#include "touchpad.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 
@@ -126,8 +126,8 @@ int TrainerCardSignature_Init(OverlayManager *manager, int *state) {
         signature->gameStats = Save_GameStats_Get(OverlayManager_GetArgs(manager));
         signature->options = Save_PlayerData_GetOptionsAddr(OverlayManager_GetArgs(manager));
         TrainerCardSignature_LoadBgGraphics(signature, narc);
-        sub_020210BC();
-        sub_02021148(1);
+        GF_TouchpadResetSampling();
+        GF_TouchpadStartSampling(1);
         Main_SetVBlankIntrCB((GFIntrCB)TrainerCardSignature_VBlankCB, signature->bgConfig);
         FontID_Alloc(2, HEAP_ID_39);
         TrainerCardSignature_InitStrings(signature);
@@ -196,7 +196,7 @@ int TrainerCardSignature_Exit(OverlayManager *manager, int *state) {
     TrainerCardSignature_RemoveWindows(signature);
     FontID_Release(2);
     TrainerCardSignature_FreeBgLayers(signature->bgConfig);
-    sub_02021238();
+    GF_TouchpadStopSampling();
     TextFlags_SetCanTouchSpeedUpPrint(FALSE);
     TextFlags_SetCanABSpeedUpPrint(FALSE);
     DestroyMsgData(signature->msgData);
@@ -473,7 +473,7 @@ void TrainerCardSignature_HandleTouch(TrainerCardSignature *signature) {
     if (TouchscreenHitbox_FindRectAtTouchHeld(sTrainerCardSignatureCanvasHitbox) != -1) {
         TrainerCardSignature_UpdatePenSound(signature);
     }
-    if (sub_02021280(&touches, 4, 1) == 1) {
+    if (GF_TouchpadUpdate(&touches, 4, 1) == 1) {
         for (i = 0; i < touches.count; i++) {
             signature->newStroke.x[i] = touches.samples[i].x;
             signature->newStroke.y[i] = touches.samples[i].y;

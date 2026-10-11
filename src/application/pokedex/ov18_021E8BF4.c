@@ -10,7 +10,7 @@
 #include "sound_system.h"
 #include "sound_chatot.h"
 #include "sound_playback.h"
-#include "unk_020210A0.h"
+#include "touchpad.h"
 #include "unk_0208805C.h"
 
 #define PLTTBUF_EXCEPT_MAIN_BG_F (PLTTBUF_SUB_BG_F | PLTTBUF_MAIN_OBJ_F | PLTTBUF_SUB_OBJ_F)
@@ -259,8 +259,8 @@ static int PokedexApp_MainSeq_00(PokedexAppData *pokedexApp) {
     GfGfx_EngineBSetPlanes(GX_PLANEMASK_NONE);
     G2_BlendNone();
     G2S_BlendNone();
-    sub_020210BC();
-    sub_02021148(4);
+    GF_TouchpadResetSampling();
+    GF_TouchpadStartSampling(4);
     GX_SetDispSelect(GX_DISP_SELECT_SUB_MAIN);
     SetKeyRepeatTimers(4, 8);
     ov18_021E62A8(pokedexApp);
@@ -296,7 +296,7 @@ static int PokedexApp_MainSeq_01(PokedexAppData *pokedexApp) {
     FontID_Release(4);
     ov18_021E84EC(pokedexApp);
     ov18_021E62E8(pokedexApp);
-    sub_02021238();
+    GF_TouchpadStopSampling();
     G2_BlendNone();
     G2S_BlendNone();
     GfGfx_EngineASetPlanes(GX_PLANEMASK_NONE);

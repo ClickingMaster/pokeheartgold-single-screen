@@ -32,7 +32,7 @@
 #include "unk_0200A090.h"
 #include "oam_manager.h"
 #include "unk_02013534.h"
-#include "unk_020210A0.h"
+#include "touchpad.h"
 #include "unk_0202C034.h"
 #include "unk_02030A98.h"
 #include "unk_0203170C.h"
@@ -892,7 +892,7 @@ s32 ov44_0222A4B4(OverlayManager *overlayMananger, s32 *arg1) {
             LoadDwcOverlay();
             sub_02039FD8(HEAP_ID_53);
         }
-        GF_ASSERT(sub_02021148(4) == 1);
+        GF_ASSERT(GF_TouchpadStartSampling(4) == 1);
         *arg1 += 1;
         break;
     case 1:
@@ -978,7 +978,7 @@ s32 ov44_0222A758(OverlayManager *overlayManager) {
     }
     ov44_0222AE44(data);
     OverlayManager_FreeData(overlayManager);
-    sub_02021238();
+    GF_TouchpadStopSampling();
     GF_DestroyVramTransferManager();
     Heap_Destroy(HEAP_ID_53);
     switch (data->unk34C) {

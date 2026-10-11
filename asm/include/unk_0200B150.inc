@@ -11,8 +11,8 @@
 .public ClearMainOAM
 .public ClearSubOAM
 .public GF_AssertFail
-.public sub_02025C54
-.public sub_02025C98
+.public GF_InitG2dRenderSurface
+.public GF_G2dIsCellVisible
 .public NNS_G2dGetNewOamManagerInstance
 .public NNS_G2dEntryOamManagerOamWithAffineIdx
 .public NNS_G2dEntryOamManagerAffine

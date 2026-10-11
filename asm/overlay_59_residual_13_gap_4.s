@@ -8,8 +8,8 @@
 	.public ParticleSystem_CalcAll
 	.text
 
-	thumb_func_start ov59_0223C304
-ov59_0223C304: ; 0x0223C304
+	thumb_func_start AprijuiceScene_Draw
+AprijuiceScene_Draw: ; 0x0223C304
 	push {r4, lr}
 	add r4, r0, #0
 	bl Thunk_G3X_Reset
@@ -38,4 +38,4 @@ ov59_0223C304: ; 0x0223C304
 	.balign 4, 0
 _0223C348: .word 0x04000440
 _0223C34C: .word 0x04000540
-	thumb_func_end ov59_0223C304
+	thumb_func_end AprijuiceScene_Draw

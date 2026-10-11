@@ -97,9 +97,9 @@ PokemonSummary_Init: ; 0x02088298
 	mov r0, #0
 	mov r1, #0x13
 	bl FontID_SetAccessDirect
-	bl sub_020210BC
+	bl GF_TouchpadResetSampling
 	mov r0, #4
-	bl sub_02021148
+	bl GF_TouchpadStartSampling
 	bl sub_02088610
 	ldr r0, [r4]
 	bl sub_02088630
@@ -348,7 +348,7 @@ PokemonSummary_Exit: ; 0x0208856C
 	bl sub_0208C560
 	ldr r0, [r4]
 	bl sub_0208877C
-	bl sub_02021238
+	bl GF_TouchpadStopSampling
 	bl GF_DestroyVramTransferManager
 	add r0, r4, #0
 	bl sub_02088AF8

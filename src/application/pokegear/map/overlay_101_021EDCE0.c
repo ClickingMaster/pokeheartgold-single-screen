@@ -7,7 +7,7 @@
 #include "gf_gfx_loader.h"
 #include "screen_fade.h"
 #include "text.h"
-#include "unk_020210A0.h"
+#include "touchpad.h"
 #include "unk_0208805C.h"
 
 static void FlyMap_InitBGs(PokegearMapAppData *mapApp);
@@ -266,8 +266,8 @@ BOOL FlyMap_LoadGFX(PokegearMapAppData *mapApp) {
         SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
         ResetVisibleHardwareWindows(PM_LCD_TOP);
         ResetVisibleHardwareWindows(PM_LCD_BOTTOM);
-        sub_020210BC();
-        sub_02021148(2);
+        GF_TouchpadResetSampling();
+        GF_TouchpadStartSampling(2);
         break;
     case 1:
         break;
@@ -303,7 +303,7 @@ BOOL FlyMap_UnloadGFX(PokegearMapAppData *mapApp) {
     FlyMap_RemoveWindows(mapApp);
     FlyMap_UnloadBGGraphics(mapApp);
     FlyMap_DeinitBGs(mapApp);
-    sub_02021238();
+    GF_TouchpadStopSampling();
     Main_SetVBlankIntrCB(NULL, NULL);
     return TRUE;
 }
