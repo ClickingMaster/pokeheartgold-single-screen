@@ -14,8 +14,8 @@ int ov08_0221CD90(void *task, Ov08W04State *work) {
     ov08_02220A50(work);
     ov08_0221DD40(work);
     ov08_0221CF08(work->bgConfig);
-    *(u8 *)((u8 *)*(void **)work + 0x32) = ov08_02224B8C(work->smallState);
-    ov08_02224B7C(work->smallState);
+    *(u8 *)((u8 *)*(void **)work + 0x32) = BattleDpadCursor_IsActive(work->smallState);
+    BattleDpadCursor_Free(work->smallState);
     FontID_Release(4);
     *(u8 *)((u8 *)*(void **)work + 0x36) = 1;
     DestroySysTaskAndEnvironment(task);

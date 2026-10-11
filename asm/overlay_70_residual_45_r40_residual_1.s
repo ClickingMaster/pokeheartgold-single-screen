@@ -2206,35 +2206,35 @@
 	.public GtsMainMenu_PrintMessage
 	.public GtsMainMenu_PrintPrompt
 	.public GtsMainMenu_PrintButtonLabel
-	.public ov70_02239C6C
-	.public ov70_02239CF8
-	.public ov70_02239D44
-	.public ov70_02239D8C
-	.public ov70_02239E68
-	.public ov70_02239E7C
-	.public ov70_02239EAC
-	.public ov70_02239F78
-	.public ov70_02239FA4
-	.public ov70_0223A06C
-	.public ov70_0223A0C4
-	.public ov70_0223A0D4
-	.public ov70_0223A1A0
-	.public ov70_0223A1E4
-	.public ov70_0223A224
-	.public ov70_0223A258
-	.public ov70_0223A260
-	.public ov70_0223A2D0
-	.public ov70_0223A2F8
-	.public ov70_0223A324
-	.public ov70_0223A384
-	.public ov70_0223A3DC
-	.public ov70_0223A4A0
-	.public ov70_0223A4C0
-	.public ov70_0223A4F4
-	.public ov70_0223A578
-	.public ov70_0223A72C
-	.public ov70_0223A7E4
-	.public ov70_0223A874
+	.public Gts_LoadSubScreenBg
+	.public Gts_ShowSubScreenPanel
+	.public Gts_CreatePanelWindow
+	.public GtsSummary_Init
+	.public GtsSummary_Main
+	.public GtsSummary_Exit
+	.public GtsSummary_InitBgs
+	.public GtsSummary_FreeBgs
+	.public GtsSummary_LoadGraphics
+	.public GtsSummary_CreateMonSprite
+	.public GtsSummary_DeleteMonSprite
+	.public GtsSummary_CreateWindows
+	.public GtsSummary_RemoveWindows
+	.public GtsSummary_CreateStrings
+	.public GtsSummary_DeleteStrings
+	.public GtsSummary_Start
+	.public GtsSummary_HandleInput
+	.public GtsSummary_FadeOut
+	.public GtsSummary_ShowTakeBackPrompt
+	.public GtsSummary_HandleTakeBackPrompt
+	.public GtsSummary_ShowMenu
+	.public GtsSummary_HandleMenu
+	.public GtsSummary_WaitText
+	.public GtsSummary_WaitTextAndPause
+	.public GtsSummary_PrintMonMessage
+	.public Gts_DrawMonSummary
+	.public Gts_DrawTrainerInfo
+	.public Gts_LoadMonPicture
+	.public GtsSummary_DrawWanted
 	.public ov70_0223A8BC
 	.public ov70_0223AA90
 	.public ov70_0223AB00
@@ -2650,11 +2650,11 @@
 	.public sGtsMainMenuBg0Template
 	.public sGtsMainMenuBg2Template
 	.public sGtsSubBg3Template
-	.public ov70_02245348
-	.public ov70_02245364
-	.public ov70_02245380
-	.public ov70_0224539C
-	.public ov70_022453B8
+	.public sGtsSummaryBg3Template
+	.public sGtsSummaryBg2Template
+	.public sGtsSummaryBg1Template
+	.public sGtsSummaryBg0Template
+	.public sGtsSummaryInfoWindowRects
 	.public ov70_02245498
 	.public ov70_022454A4
 	.public ov70_022454A5
@@ -2681,7 +2681,7 @@
 	.public ov70_02245804
 	.public ov70_02245884
 	.public ov70_0224590C
-	.public ov70_02245910
+	.public sGtsGenderSymbolMsgs
 	.public ov70_02245920
 	.public ov70_02245938
 	.public ov70_02245954
@@ -2763,8 +2763,8 @@
 	.public sGtsSetProfileUrl
 	.public sGtsScreens
 	.public sGtsMainMenuStates
-	.public ov70_0224649C
-	.public ov70_022464A8
+	.public sGtsGenderSymbolColors
+	.public sGtsSummaryStates
 	.public ov70_022464CC
 	.public ov70_022464F0
 	.public ov70_022464F1
@@ -2809,8 +2809,8 @@
 	.public GtsMainMenu_WaitFadeIn2
 	.public GtsMainMenu_StartExitAnim
 	.public GtsMainMenu_WaitExitAnim
-	.public ov70_0223A0C4
-	.public ov70_0223A258
+	.public GtsSummary_DeleteMonSprite
+	.public GtsSummary_Start
 	.public ov70_0223ABD8
 	.public ov70_0223ACE4
 	.public ov70_0223C928
@@ -2917,25 +2917,25 @@ sGtsSubBg3Template: ; 0x0224532C
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1B, 0x04
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov70_02245348: ; 0x02245348
+sGtsSummaryBg3Template: ; 0x02245348
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1C, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov70_02245364: ; 0x02245364
+sGtsSummaryBg2Template: ; 0x02245364
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1D, 0x02, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov70_02245380: ; 0x02245380
+sGtsSummaryBg1Template: ; 0x02245380
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x1E, 0x02, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov70_0224539C: ; 0x0224539C
+sGtsSummaryBg0Template: ; 0x0224539C
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1F, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov70_022453B8: ; 0x022453B8
+sGtsSummaryInfoWindowRects: ; 0x022453B8
 	.byte 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x09, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00
 	.byte 0x08, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x0B, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
@@ -3095,7 +3095,7 @@ ov70_02245884: ; 0x02245884
 ov70_0224590C: ; 0x0224590C
 	.byte 0x82, 0x00, 0x00, 0x00
 
-ov70_02245910: ; 0x02245910
+sGtsGenderSymbolMsgs: ; 0x02245910
 	.byte 0x7C, 0x00, 0x00, 0x00, 0x7D, 0x00, 0x00, 0x00, 0x7E, 0x00, 0x00, 0x00, 0x7C, 0x00, 0x00, 0x00
 
 ov70_02245920: ; 0x02245920
@@ -3456,7 +3456,7 @@ sGtsSetProfileUrl: ; 0x022463A4
 sGtsScreens: ; 0x022463EC
 	.word ov70_02244038, ov70_02244124, ov70_02244154
 	.word GtsMainMenu_Init, GtsMainMenu_Main, GtsMainMenu_Exit
-	.word ov70_02239D8C, ov70_02239E68, ov70_02239E7C
+	.word GtsSummary_Init, GtsSummary_Main, GtsSummary_Exit
 	.word ov70_0223A8BC, ov70_0223AA90, ov70_0223AB00
 	.word ov70_0223B55C, ov70_0223B6EC, ov70_0223B788
 	.word ov70_0223CD44, ov70_0223CDD8, ov70_0223CDF8
@@ -3481,20 +3481,20 @@ sGtsMainMenuStates: ; 0x02246464
 	.word GtsMainMenu_ShowExitPrompt
 	.word GtsMainMenu_HandleExitPrompt
 
-ov70_0224649C: ; 0x0224649C
+sGtsGenderSymbolColors: ; 0x0224649C
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x06, 0x05, 0x00, 0x00, 0x04, 0x03, 0x00
 
-ov70_022464A8: ; 0x022464A8
-	.word ov70_0223A258
-	.word ov70_0223A260
-	.word ov70_0223A2D0
-	.word ov70_0223A4A0
-	.word ov70_0223A4C0
-	.word ov70_0223A2F8
-	.word ov70_0223A324
-	.word ov70_0223A384
-	.word ov70_0223A3DC
+sGtsSummaryStates: ; 0x022464A8
+	.word GtsSummary_Start
+	.word GtsSummary_HandleInput
+	.word GtsSummary_FadeOut
+	.word GtsSummary_WaitText
+	.word GtsSummary_WaitTextAndPause
+	.word GtsSummary_ShowTakeBackPrompt
+	.word GtsSummary_HandleTakeBackPrompt
+	.word GtsSummary_ShowMenu
+	.word GtsSummary_HandleMenu
 
 ov70_022464CC: ; 0x022464CC
 	.word ov70_0223AF5C

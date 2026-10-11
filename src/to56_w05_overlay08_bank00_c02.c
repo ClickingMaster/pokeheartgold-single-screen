@@ -55,12 +55,12 @@ extern void ov08_022205E0(Ov08Ctx *);
 extern void ov08_02220C5C(Ov08Ctx *, int);
 extern void ov08_0221DC00(Ov08Ctx *);
 extern void ov08_0221DD70(Ov08Ctx *, int);
-extern void ov08_02224B90(void *, int);
+extern void BattleDpadCursor_SetActive(void *, int);
 extern int ov08_0221DB24(void *, u32);
 extern void ov08_0222171C(Ov08Ctx *, int);
 extern void ov08_0221D6CC(Ov08Ctx *, int);
 extern u8 PaletteData_BeginPaletteFade(void *, u16, u16, s8, u8, u8, u16);
-extern void *ov08_02224B64(int);
+extern void *BattleDpadCursor_New(int);
 int ov08_0221C048(Ov08Ctx *);
 int ov08_0221C048(Ov08Ctx *work_) {
     typedef struct Owner048 {
@@ -93,7 +93,7 @@ int ov08_0221C048(Ov08Ctx *work_) {
         work->variant = 0;
         ret = 1;
     }
-    work->small = ov08_02224B64(work->owner->heap);
+    work->small = BattleDpadCursor_New(work->owner->heap);
     ov08_0221D184(work_);
     ov08_0221CDF8(work_);
     ov08_0221CF38(work_);
@@ -107,7 +107,7 @@ int ov08_0221C048(Ov08Ctx *work_) {
     ov08_0221DC00(work_);
     ov08_0221DD70(work_, work->variant);
     if (work->owner->flag != 0) {
-        ov08_02224B90(work->small, 1);
+        BattleDpadCursor_SetActive(work->small, 1);
     }
     if (work->variant == 0 && ov08_0221DB24(work_, 0) == 1) {
         work->owner->battler = 1;

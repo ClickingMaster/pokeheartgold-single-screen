@@ -78,8 +78,8 @@ void UnloadOVY38(void);
 void sub_02034DE0(void);
 
 // Other GTS screens.
-void ov70_02239C6C(GtsApp *app);
-void ov70_02239CF8(GtsApp *app);
+void Gts_LoadSubScreenBg(GtsApp *app);
+void Gts_ShowSubScreenPanel(GtsApp *app);
 void ov70_02240D74(GtsApp *app, u32 gender);
 void ov70_02241184(GtsApp *app, u32 arg1, int arg2);
 void ov70_02241308(GtsApp *app);
@@ -453,8 +453,8 @@ BOOL Gts_Main(OverlayManager *man, int *state) {
                 Gts_InitGraphics(app);
                 ov70_02240D74(app, PlayerProfile_GetTrainerGender(app->args->profile));
                 ov70_02241184(app, app->unk_0128, 0);
-                ov70_02239C6C(app);
-                ov70_02239CF8(app);
+                Gts_LoadSubScreenBg(app);
+                Gts_ShowSubScreenPanel(app);
                 app->reloadGraphics = FALSE;
             }
             *state = sGtsScreens[app->screen].exit(app, *state);

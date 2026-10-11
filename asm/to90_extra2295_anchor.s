@@ -6,9 +6,9 @@
 	.extern ov08_0222417C
 	.extern ov08_02224938
 	.extern ov08_02224A50
-	.extern ov08_02224B88
-	.extern ov08_02224B8C
-	.extern ov08_02224C94
+	.extern BattleDpadCursor_GetPosition
+	.extern BattleDpadCursor_IsActive
+	.extern BattleDpadCursor_HandleInput
 	.extern ov08_02225B68
 #include "constants/moves.h"
 	.include "asm/macros.inc"
@@ -22,9 +22,9 @@
 	.extern ov08_0222417C
 	.extern ov08_02224938
 	.extern ov08_02224A50
-	.extern ov08_02224B88
-	.extern ov08_02224B8C
-	.extern ov08_02224C94
+	.extern BattleDpadCursor_GetPosition
+	.extern BattleDpadCursor_IsActive
+	.extern BattleDpadCursor_HandleInput
 	.extern ov08_02225B68
 
 .text

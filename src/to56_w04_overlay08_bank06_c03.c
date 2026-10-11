@@ -5,7 +5,7 @@
 BOOL ov08_0221D438(void *work) {
     int result = ov08_0221D5D0(work, ov08_02224F1C);
     if (result == -1) {
-        result = ov08_02224C94(*(void **)((u8 *)work + 0x2088));
+        result = BattleDpadCursor_HandleInput(*(void **)((u8 *)work + 0x2088));
         if (result == -2) {
             result = 6;
         } else if (result == -1) {
@@ -31,7 +31,7 @@ fail:
     u8 name(void *work) {                                            \
         int result = ov08_0221D5D0(work, table);                     \
         if (result == -1) {                                          \
-            result = ov08_02224C94(*(void **)((u8 *)work + 0x2088)); \
+            result = BattleDpadCursor_HandleInput(*(void **)((u8 *)work + 0x2088)); \
             if (result == -2) {                                      \
                 result = fallback;                                   \
             } else if (result == -1) {                               \

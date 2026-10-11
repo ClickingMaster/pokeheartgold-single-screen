@@ -7,8 +7,8 @@
 	.extern ov08_02223CD4
 	.extern ov08_02223F34
 	.extern ov08_02224938
-	.extern ov08_02224B7C
-	.extern ov08_02224B8C
+	.extern BattleDpadCursor_Free
+	.extern BattleDpadCursor_IsActive
 #include "constants/moves.h"
 	.include "asm/macros.inc"
 	.include "overlay_08.inc"
@@ -22,8 +22,8 @@
 	.extern ov08_02223CD4
 	.extern ov08_02223F34
 	.extern ov08_02224938
-	.extern ov08_02224B7C
-	.extern ov08_02224B8C
+	.extern BattleDpadCursor_Free
+	.extern BattleDpadCursor_IsActive
 
 .text
 	.force_active on

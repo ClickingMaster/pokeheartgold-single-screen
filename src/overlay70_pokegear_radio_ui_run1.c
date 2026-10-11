@@ -81,8 +81,8 @@ void ov70_0223FB60(Ov70Work *work) {
         GfGfx_EngineBTogglePlanes(0x10, 0);
     }
     if (work->unk20 == 9) {
-        ov70_02239C6C(work);
-        ov70_02239CF8(work);
+        Gts_LoadSubScreenBg(work);
+        Gts_ShowSubScreenPanel(work);
     }
 }
 

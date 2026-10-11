@@ -5,7 +5,7 @@ extern u32 GetBoxMonData(void *,int,void *);extern u32 CalcBoxMonLevel(void *);
 extern void *NewString_ReadMsgData(void *,int),*ReadMsgData_ExpandPlaceholders(void *,void *,int,int);
 extern void BufferIntegerAsString(void *,int,int,int,int,int),ReadMsgDataIntoString(void *,int,void *),FillWindowPixelBuffer(void *,int);
 extern void ov70_02245084(void *,void *,int,int,int,u32);
-extern u32 ov70_02245910[],ov70_022465EC[];
+extern u32 sGtsGenderSymbolMsgs[],ov70_022465EC[];
 typedef struct {u32 words[4];} Window;
 typedef struct {u16 species;u8 gender,level;} Result;
 void ov70_0223F508(void *,void *,u8 *,void *,Result *);
@@ -15,7 +15,7 @@ void ov70_0223F508(void *msg,void *fmt,u8 *windows,void *mon,Result *out) {
  GetBoxMonData(mon,119,name);g=GetBoxMonData(mon,111,0)+1;level=CalcBoxMonLevel(mon);
  label=NewString_ReadMsgData(msg,104);BufferIntegerAsString(fmt,3,level,3,0,1);
  lv=ReadMsgData_ExpandPlaceholders(fmt,msg,108,61);
- if(g!=3)ReadMsgDataIntoString(msg,ov70_02245910[g],gender);
+ if(g!=3)ReadMsgDataIntoString(msg,sGtsGenderSymbolMsgs[g],gender);
  for(i=0,win=(Window*)windows;i<3;i++,win++)FillWindowPixelBuffer(win,0);
  ov70_02245084(windows,label,0,0,0,0xf0200);
  ov70_02245084(windows+16,name,0,0,0,0x10200);

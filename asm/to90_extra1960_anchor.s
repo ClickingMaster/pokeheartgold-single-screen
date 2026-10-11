@@ -1431,34 +1431,34 @@
 	.public _02224B38
 	.public _02224B46
 	.public _02224B60
-	.public ov08_02224B64
+	.public BattleDpadCursor_New
 	.public _02224B72
-	.public ov08_02224B7C
+	.public BattleDpadCursor_Free
 	.public _02224B80
-	.public ov08_02224B84
-	.public ov08_02224B88
-	.public ov08_02224B8C
-	.public ov08_02224B90
-	.public ov08_02224B94
-	.public ov08_02224B98
+	.public BattleDpadCursor_GetBattleCursor
+	.public BattleDpadCursor_GetPosition
+	.public BattleDpadCursor_IsActive
+	.public BattleDpadCursor_SetActive
+	.public BattleDpadCursor_SetBattleCursor
+	.public BattleDpadCursor_SetPosition
 	.public _02224BBC
-	.public ov08_02224BC0
-	.public ov08_02224BCC
+	.public BattleDpadCursor_ResetPosition
+	.public BattleDpadCursor_SetBoxes
 	.public _02224BF6
-	.public ov08_02224BF8
-	.public ov08_02224BFC
+	.public BattleDpadCursor_SetEnabledMask
+	.public BattleDpadCursor_TryActivate
 	.public _02224C0C
 	.public _02224C38
 	.public _02224C40
 	.public _02224C44
-	.public ov08_02224C48
+	.public BattleDpadCursor_HasReturnLink
 	.public _02224C58
 	.public _02224C60
 	.public _02224C6C
 	.public _02224C78
 	.public _02224C84
 	.public _02224C90
-	.public ov08_02224C94
+	.public BattleDpadCursor_HandleInput
 	.public _02224CAA
 	.public _02224CCE
 	.public _02224CF0

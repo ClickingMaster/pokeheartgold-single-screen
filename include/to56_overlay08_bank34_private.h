@@ -11,9 +11,9 @@ extern void ov08_02223E74(void *, u32, u32, u32);
 extern u32 ov08_02223CD4(void *, u32);
 extern const s32 ov08_02225D74[][2];
 extern const u32 ov08_02225CF8[];
-extern void *ov08_02224B84(void *);
-extern void ov08_02224BCC(void *, u32);
-extern void ov08_02224B98(void *, u32);
+extern void *BattleDpadCursor_GetBattleCursor(void *);
+extern void BattleDpadCursor_SetBoxes(void *, u32);
+extern void BattleDpadCursor_SetPosition(void *, u32);
 extern void ov08_02223FD8(u8 *);
 extern void ov08_0222400C(u8 *);
 extern void ov08_02224064(u8 *);
@@ -25,6 +25,6 @@ extern void BattleCursor_LoadResources(void *, void *, void *, u32, u32, u32, u3
 extern void *BattleCursor_New(void *, void *, u32, u32, u32, u32, u32, u32, u32);
 extern void BattleCursor_Delete(void *);
 extern void BattleCursor_FreeResources(void *, u32, u32, u32, u32);
-extern void ov08_02224B94(void *, void *);
+extern void BattleDpadCursor_SetBattleCursor(void *, void *);
 void ov08_02224134(u8 *, u32);
 #endif

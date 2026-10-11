@@ -3,15 +3,7 @@
 
 #include "global.h"
 
-typedef struct Ov08SmallState {
-    void *owner;
-    const u8 *entries;
-    u8 state;
-    u8 index;
-    u8 selection;
-    u8 padding;
-    s32 result;
-} Ov08SmallState;
+#include "battle/battle_dpad_cursor.h"
 
 typedef struct Ov08WorkMode {
     u8 padding[0x2077];
@@ -23,8 +15,6 @@ extern int TouchscreenHitbox_FindRectAtTouchNew(const void *hitboxes);
 extern void ClearFrameAndWindow2(void *window, BOOL dontCopy);
 extern u8 TextPrinterCheckActive(u8 printerId);
 extern void WindowArray_Delete(void *windows, s32 count);
-extern void *Heap_Alloc(u32 heapId, u32 size);
-extern void Heap_Free(void *ptr);
 
 extern void ov08_0221D840(void *work, int state);
 extern void ov08_02223300(void *work, int state);
@@ -78,14 +68,5 @@ void ov08_02223454(u8 *work);
 void ov08_022239B4(void *work);
 void ov08_02223F74(void *sprite, int x, int y);
 void ov08_0222417C(u8 *work);
-Ov08SmallState *ov08_02224B64(u32 heapId);
-void ov08_02224B7C(Ov08SmallState *state);
-void *ov08_02224B84(const Ov08SmallState *state);
-u8 ov08_02224B88(const Ov08SmallState *state);
-u8 ov08_02224B8C(const Ov08SmallState *state);
-void ov08_02224B90(Ov08SmallState *state, u8 value);
-void ov08_02224B94(Ov08SmallState *state, void *owner);
-void ov08_02224BC0(Ov08SmallState *state);
-void ov08_02224BF8(Ov08SmallState *state, s32 value);
 
 #endif

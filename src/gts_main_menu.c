@@ -217,9 +217,9 @@ void GtsMainMenu_LoadGraphics(GtsApp *app) {
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 16, bgConfig, GF_BG_LYR_MAIN_1, 0, 0xC00, TRUE, HEAP_ID_61);
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 39, bgConfig, GF_BG_LYR_MAIN_1, 0, 0x600, TRUE, HEAP_ID_61);
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 38, bgConfig, GF_BG_LYR_MAIN_2, 0, 0x600, TRUE, HEAP_ID_61);
-    ov70_02239C6C(app);
+    Gts_LoadSubScreenBg(app);
     if (app->mainMenuShown) {
-        ov70_02239CF8(app);
+        Gts_ShowSubScreenPanel(app);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
     } else {
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
@@ -270,7 +270,7 @@ void GtsMainMenu_CreateWindows(GtsApp *app) {
     FillWindowPixelBuffer(&app->waitingIconWindow, 15);
     AddWindowParameterized(app->bgConfig, &app->promptWindow, GF_BG_LYR_MAIN_0, 2, 19, 27, 4, 13, 0x96);
     FillWindowPixelBuffer(&app->promptWindow, 15);
-    ov70_02239D44(app, 0);
+    Gts_CreatePanelWindow(app, 0);
 }
 
 void GtsMainMenu_RemoveWindows(GtsApp *app) {

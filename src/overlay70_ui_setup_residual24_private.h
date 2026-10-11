@@ -83,8 +83,8 @@ void ov70_0223ED24(Ov70Work24 *);
 void Gts_SwitchScreen(Ov70Work24 *);
 void Gts_FreeSubScreenBgs(void *);
 void Gts_InitSubScreenBgs(void *, int, int);
-void ov70_02239CF8(Ov70Work24 *);
-void ov70_02239D44(Ov70Work24 *, int);
+void Gts_ShowSubScreenPanel(Ov70Work24 *);
+void Gts_CreatePanelWindow(Ov70Work24 *, int);
 void Gts_InitSpriteTemplate(Ov70SpriteTemplate24 *, Ov70Work24 *, void *, int);
 
 void *NARC_New(int, int);

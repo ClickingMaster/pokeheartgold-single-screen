@@ -8,8 +8,8 @@
 
 extern void ov08_022213E4(void *, u8);
 extern void ov08_02220A8C(void *, s32, s32);
-extern void ov08_02224B94(void *, BattleCursor *);
-extern BattleCursor *ov08_02224B84(void *);
+extern void BattleDpadCursor_SetBattleCursor(void *, BattleCursor *);
+extern BattleCursor *BattleDpadCursor_GetBattleCursor(void *);
 extern SpriteSystem *BattleSystem_GetSpriteSystem(void *);
 
 int ov08_02221404(u8 *entry);

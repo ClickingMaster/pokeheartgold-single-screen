@@ -48,9 +48,9 @@ void ov70_0223D26C(Ov70Work *work) {
     FillWindowPixelBuffer(work->windowF68, 6);
     ov70_02245084(work->windowF68, work->strBB8, 0, 1, 1, 0x10306);
     if (work->field24 == 5) {
-        ov70_02239D44(work, 3);
+        Gts_CreatePanelWindow(work, 3);
     } else {
-        ov70_02239D44(work, 1);
+        Gts_CreatePanelWindow(work, 1);
     }
 }
 

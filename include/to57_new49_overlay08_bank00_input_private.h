@@ -43,7 +43,7 @@ extern const u8 ov08_02224F3C[];
 extern const u8 ov08_02224E44[];
 extern const u8 ov08_02224E94[];
 int ov08_0221D5D0(void *, const void *);
-int ov08_02224C94(void *);
+int BattleDpadCursor_HandleInput(void *);
 void ov08_022217C8(void *);
 void ov08_022220AC(void *, int);
 void PlaySE(int);

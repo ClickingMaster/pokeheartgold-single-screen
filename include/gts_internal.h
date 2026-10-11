@@ -28,9 +28,26 @@
 // GtsApp.offeredBox of a Pokemon offered from the party.
 #define GTS_BOX_PARTY 18
 
+// What a record says about its Pokemon. gender: 1 male, 2 female, 3 genderless.
+typedef struct GtsMonSummary {
+    s16 species;
+    s8 gender;
+    s8 level;
+} GtsMonSummary;
+
+// The Pokemon the depositor wants in exchange.
+typedef struct GtsWantedMon {
+    s16 species;
+    s8 gender;
+    s8 minLevel;
+    s8 maxLevel;
+} GtsWantedMon;
+
 typedef struct GtsRecord {
     Pokemon mon;                             // 0x000
-    u8 unk_0EC[0x20];                        // 0x0EC
+    GtsMonSummary summary;                   // 0x0EC
+    GtsWantedMon wanted;                     // 0x0F0
+    u8 unk_0F6[0x16];                        // 0x0F6
     u16 trainerName[PLAYER_NAME_LENGTH + 1]; // 0x10C
     u8 unk_11C[6];                           // 0x11C
     u8 version;                              // 0x122
@@ -170,7 +187,8 @@ struct GtsApp {
     u8 filler_0BB4[8];                       // 0x0BB4
     String *msgBuffer;                       // 0x0BBC
     String *titleString;                     // 0x0BC0
-    u8 filler_0BC4[0x2C];                    // 0x0BC4
+    String *unk_0BC4[10];                    // 0x0BC4
+    u8 filler_0BEC[4];                       // 0x0BEC
     int textPrinterId;                       // 0x0BF0
     SpriteList *spriteList;                  // 0x0BF4
     G2dRenderer renderer;                    // 0x0BF8
@@ -180,7 +198,9 @@ struct GtsApp {
     SpriteResourcesHeader headers[2];        // 0x0D60
     u8 filler_0DA8[0x24];                    // 0x0DA8
     Sprite *cursorSprite;                    // 0x0DCC
-    u8 filler_0DD0[0x140];                   // 0x0DD0
+    u8 filler_0DD0[0x110];                   // 0x0DD0
+    Sprite *monSprite;                       // 0x0EE0
+    u8 filler_0EE4[0x2C];                    // 0x0EE4
     Sprite *panelSprite;                     // 0x0F10, of the sub screen panel
     u8 filler_0F14[4];                       // 0x0F14
     Window waitingIconWindow;                // 0x0F18, also the message window
@@ -188,7 +208,8 @@ struct GtsApp {
     Window titleWindow;                      // 0x0F38
     u8 filler_0F48[0x10];                    // 0x0F48
     Window windows[16];                      // 0x0F58, each screen's own windows
-    u8 filler_1058[0x100];                   // 0x1058
+    Window infoWindows[14];                  // 0x1058, a Pokemon's summary, trainer and wanted Pokemon
+    u8 filler_1138[0x20];                    // 0x1138
     Window promptWindow;                     // 0x1158, the message window of a Yes/No prompt
     u8 filler_1168[0x30];                    // 0x1168
     Window panelWindow;                      // 0x1198, the caption of the sub screen panel
@@ -251,10 +272,20 @@ void Gts_ClearDim(void);
 void Gts_InitSubScreenBgs(BgConfig *bgConfig, int bg1Y, BOOL keepBg2Tilemap);
 void Gts_FreeSubScreenBgs(BgConfig *bgConfig);
 
+// The sub screen panel and the Pokemon summary windows (gts_summary.c).
+void Gts_LoadSubScreenBg(GtsApp *app);
+void Gts_ShowSubScreenPanel(GtsApp *app);
+void Gts_CreatePanelWindow(GtsApp *app, int caption);
+void Gts_DrawMonSummary(MsgData *msgData, MsgData *speciesNames, MessageFormat *msgFormat, Window *windows, BoxPokemon *boxMon, GtsMonSummary *summary);
+void Gts_DrawTrainerInfo(MsgData *msgData, Window *trainerWindows, const u16 *trainerName, Pokemon *mon, Window *otWindows);
+void Gts_LoadMonPicture(Pokemon *mon);
+
 // Defined in pieces not merged yet.
-void ov70_02239C6C(GtsApp *app);
-void ov70_02239CF8(GtsApp *app);
-void ov70_02239D44(GtsApp *app, int msgId);
+BOOL ov70_0223E76C(Pokemon *mon);
+void ov70_0223F470(MsgData *msgData, MsgData *speciesNames, MessageFormat *msgFormat, Window *windows, int species, int gender, int levelRange);
+int ov70_0223F864(int minLevel, int maxLevel, int kind);
+void ov70_02245084(Window *window, String *string, int x, int y, int align, u32 color);
+void ov70_022450EC(Window *window, MsgData *msgData, int caption);
 void ov70_02240EF4(GtsApp *app, int gender);
 void ov70_02241004(GtsApp *app, int gender);
 void ov70_02241358(GtsApp *app);

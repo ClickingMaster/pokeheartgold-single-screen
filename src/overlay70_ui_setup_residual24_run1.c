@@ -68,6 +68,6 @@ void ov70_0223EA6C(Ov70Work24 *work) {
     GfGfxLoader_LoadCharData(0x64, 0xC, bgConfig, 1, 0, 0xA00, 1, 0x3D);
     GfGfxLoader_LoadScrnData(0x64, 0x1A, bgConfig, 1, 0, 0x600, 1, 0x3D);
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 0xF, bgConfig, 2, 0, 0x600, 1, 0x3D);
-    ov70_02239CF8(work);
+    Gts_ShowSubScreenPanel(work);
     NARC_Delete(narc);
 }

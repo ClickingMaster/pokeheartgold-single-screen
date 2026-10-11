@@ -7,7 +7,7 @@
 #include "string_util.h"
 #include "text.h"
 extern void *ov70_022465EC[];
-extern const u32 ov70_02245910[];
+extern const u32 sGtsGenderSymbolMsgs[];
 extern const u16 ov70_02245B5C[];
 extern const u8 ov70_022459C8[];
 int ov70_0223EDE4(u8 *state, u32 value);

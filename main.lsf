@@ -3097,16 +3097,9 @@ Overlay OVY_8
     Object asm/to90_extra2304_anchor.o
     Object src/to90_extra2304_run01.o
     Object src/to90_extra2091_run01.o
-    Object src/overlay08_bank_37_c.o
-    Object asm/to90_extra2164_anchor.o
-    Object src/to90_extra2164_run01.o
-    Object src/overlay08_bank_39_c.o
-    Object asm/to90_extra2165_anchor.o
-    Object src/to90_extra2165_run01.o
-    Object src/overlay08_bank_41_c.o
-    Object src/to56_overlay08_bank42.o
+    Object src/battle/battle_dpad_cursor.o
     Object asm/op90_to56_overlay08_bank42_residual_anchor.o
-    Object src/op90_to56_overlay08_bank42_residual_r01.o
+    Object src/battle/battle_dpad_cursor_input.o
 }
 Overlay OVY_9
 {
@@ -5314,20 +5307,7 @@ Overlay OVY_70
     Object asm/overlay_70_to52_publics_only.o
     Object src/gts.o
     Object src/gts_main_menu.o
-    Object src/to52_overlay70_r14r2.o
-    Object src/ov70_wave36_3.o
-    Object src/to70_overlay_70_residual_14_residual_3_extra618_run01.o
-    Object src/ov70_wave36_4.o
-    Object src/to90_extra2433_run01.o
-    Object src/to90_extra2215_run01.o
-    Object src/overlay70_sol_partial_14.o
-    Object src/overlay70_storage_window_setup.o
-    Object src/r40_overlay_70_residual_15_run1.o
-    Object src/to80_extra1542_run01.o
-    Object src/overlay70_sol_partial_15.o
-    Object src/overlay70_storage_ui_residual16_run1.o
-    Object src/op90_overlay_70_residual_16_unmatched_1_r01.o
-    Object src/overlay70_storage_ui_residual16_run2.o
+    Object src/gts_summary.o
     Object src/to90_extra2030_run01.o
     Object src/overlay70_storage_ui_residual16_run3.o
     Object src/overlay70_sol_partial_16.o

@@ -1,5 +1,5 @@
 #include "global.h"
-extern void *ov08_02224B64(u32);
+extern void *BattleDpadCursor_New(u32);
 extern void ov08_02223000(void *);
 extern void ov08_022230F4(void *);
 extern void ov08_022231E8(void *);
@@ -12,14 +12,14 @@ extern void ov08_022233B8(void *);
 extern void ov08_02223480(void *, int);
 extern void ov08_02223D08(void *);
 extern void ov08_02223F94(void *, int);
-extern void ov08_02224B90(void *, int);
+extern void BattleDpadCursor_SetActive(void *, int);
 extern void ov08_02224134(void *, int);
 extern void ov08_0222421C(void *, int);
 extern u8 PaletteData_BeginPaletteFade(void *, u16, u16, s8, u8, u8, u16);
 int ov08_0222276C(u8 *work);
 int ov08_0222276C(u8 *work) {
     *(volatile u16 *)0x04001050 = 0;
-    *(void **)(work + 0x34) = ov08_02224B64(*(u32 *)(*(u8 **)work + 0xC));
+    *(void **)(work + 0x34) = BattleDpadCursor_New(*(u32 *)(*(u8 **)work + 0xC));
     ov08_02223000(work);
     ov08_022230F4(work);
     ov08_022231E8(work);
@@ -31,7 +31,7 @@ int ov08_0222276C(u8 *work) {
     ov08_02223480(work, work[0x114C]);
     ov08_02223D08(work);
     ov08_02223F94(work, work[0x114C]);
-    if ((*(u8 **)work)[0x25]) ov08_02224B90(*(void **)(work + 0x34), 1);
+    if ((*(u8 **)work)[0x25]) BattleDpadCursor_SetActive(*(void **)(work + 0x34), 1);
     ov08_02224134(work, work[0x114C]);
     ov08_0222421C(work, work[0x114C]);
     PaletteData_BeginPaletteFade(*(void **)(work + 8), 10, 0xFFFF, -8, 16, 0, 0);
@@ -42,7 +42,7 @@ int ov08_0222276C(u8 *work) {
 extern void *ov08_02225B4C;
 extern int PaletteData_GetSelectedBuffersBitmask(void *);
 extern int ov08_02223368(void *, void *);
-extern int ov08_02224C94(void *);
+extern int BattleDpadCursor_HandleInput(void *);
 extern void ov08_0222417C(void *);
 extern void PlaySE(int);
 extern void ov08_02224938(void *, int, int);
@@ -54,7 +54,7 @@ int ov08_02222840(u8 *work) {
     if (PaletteData_GetSelectedBuffersBitmask(*(void **)(work + 8))) return 1;
     choice = ov08_02223368(work, &ov08_02225B4C);
     if (choice == -1) {
-        choice = ov08_02224C94(*(void **)(work + 0x34));
+        choice = BattleDpadCursor_HandleInput(*(void **)(work + 0x34));
         if (choice == -2) choice = 5;
     } else {
         ov08_0222417C(work);

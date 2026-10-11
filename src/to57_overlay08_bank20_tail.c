@@ -8,8 +8,8 @@
 
 extern void ov08_022213E4(void *, u8);
 extern void ov08_02220A8C(void *, s32, s32);
-extern void ov08_02224B94(void *, BattleCursor *);
-extern BattleCursor *ov08_02224B84(void *);
+extern void BattleDpadCursor_SetBattleCursor(void *, BattleCursor *);
+extern BattleCursor *BattleDpadCursor_GetBattleCursor(void *);
 extern SpriteSystem *BattleSystem_GetSpriteSystem(void *);
 
 int ov08_02221404(u8 *entry);
@@ -74,10 +74,10 @@ void ov08_0222162C(u8 *work) {
     BattleCursor *cursor;
     BattleCursor_LoadResources(spriteSystem, PTR(work, 0x1FB4), PTR(work, 0x1E8), (enum HeapID) * (u32 *)((u8 *)PTR(work, 0) + 0xC), 0xB018, 0xB00C, 0xB00C, 0xB00C);
     cursor = BattleCursor_New(spriteSystem, PTR(work, 0x1FB4), (enum HeapID) * (u32 *)((u8 *)PTR(work, 0) + 0xC), 0xB018, 0xB00C, 0xB00C, 0xB00C, 0, 1);
-    ov08_02224B94(PTR(work, 0x2088), cursor);
+    BattleDpadCursor_SetBattleCursor(PTR(work, 0x2088), cursor);
 }
 
 void ov08_02221698(u8 *work) {
-    BattleCursor_Delete(ov08_02224B84(PTR(work, 0x2088)));
+    BattleCursor_Delete(BattleDpadCursor_GetBattleCursor(PTR(work, 0x2088)));
     BattleCursor_FreeResources(PTR(work, 0x1FB4), 0xB018, 0xB00C, 0xB00C, 0xB00C);
 }

@@ -1,7 +1,7 @@
 #include "global.h"
 extern void *ov08_02225ADC;
 extern int ov08_02223368(void *, void *);
-extern int ov08_02224C94(void *);
+extern int BattleDpadCursor_HandleInput(void *);
 extern void ov08_0222417C(void *);
 extern void PlaySE(int);
 extern int ov08_02223CD4(void *, int);
@@ -11,7 +11,7 @@ int ov08_02222AF0(u8 *work);
 int ov08_02222AF0(u8 *work) {
     int choice = ov08_02223368(work, &ov08_02225ADC);
     if (choice == -1) {
-        choice = ov08_02224C94(*(void **)(work + 0x34));
+        choice = BattleDpadCursor_HandleInput(*(void **)(work + 0x34));
         if (choice == -2) choice = 1;
     } else {
         ov08_0222417C(work);

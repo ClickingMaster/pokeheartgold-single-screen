@@ -2206,35 +2206,35 @@
 	.public GtsMainMenu_PrintMessage
 	.public GtsMainMenu_PrintPrompt
 	.public GtsMainMenu_PrintButtonLabel
-	.public ov70_02239C6C
-	.public ov70_02239CF8
-	.public ov70_02239D44
-	.public ov70_02239D8C
-	.public ov70_02239E68
-	.public ov70_02239E7C
-	.public ov70_02239EAC
-	.public ov70_02239F78
-	.public ov70_02239FA4
-	.public ov70_0223A06C
-	.public ov70_0223A0C4
-	.public ov70_0223A0D4
-	.public ov70_0223A1A0
-	.public ov70_0223A1E4
-	.public ov70_0223A224
-	.public ov70_0223A258
-	.public ov70_0223A260
-	.public ov70_0223A2D0
-	.public ov70_0223A2F8
-	.public ov70_0223A324
-	.public ov70_0223A384
-	.public ov70_0223A3DC
-	.public ov70_0223A4A0
-	.public ov70_0223A4C0
-	.public ov70_0223A4F4
-	.public ov70_0223A578
-	.public ov70_0223A72C
-	.public ov70_0223A7E4
-	.public ov70_0223A874
+	.public Gts_LoadSubScreenBg
+	.public Gts_ShowSubScreenPanel
+	.public Gts_CreatePanelWindow
+	.public GtsSummary_Init
+	.public GtsSummary_Main
+	.public GtsSummary_Exit
+	.public GtsSummary_InitBgs
+	.public GtsSummary_FreeBgs
+	.public GtsSummary_LoadGraphics
+	.public GtsSummary_CreateMonSprite
+	.public GtsSummary_DeleteMonSprite
+	.public GtsSummary_CreateWindows
+	.public GtsSummary_RemoveWindows
+	.public GtsSummary_CreateStrings
+	.public GtsSummary_DeleteStrings
+	.public GtsSummary_Start
+	.public GtsSummary_HandleInput
+	.public GtsSummary_FadeOut
+	.public GtsSummary_ShowTakeBackPrompt
+	.public GtsSummary_HandleTakeBackPrompt
+	.public GtsSummary_ShowMenu
+	.public GtsSummary_HandleMenu
+	.public GtsSummary_WaitText
+	.public GtsSummary_WaitTextAndPause
+	.public GtsSummary_PrintMonMessage
+	.public Gts_DrawMonSummary
+	.public Gts_DrawTrainerInfo
+	.public Gts_LoadMonPicture
+	.public GtsSummary_DrawWanted
 	.public ov70_0223A8BC
 	.public ov70_0223AA90
 	.public ov70_0223AB00
@@ -2650,11 +2650,11 @@
 	.public sGtsMainMenuBg0Template
 	.public sGtsMainMenuBg2Template
 	.public sGtsSubBg3Template
-	.public ov70_02245348
-	.public ov70_02245364
-	.public ov70_02245380
-	.public ov70_0224539C
-	.public ov70_022453B8
+	.public sGtsSummaryBg3Template
+	.public sGtsSummaryBg2Template
+	.public sGtsSummaryBg1Template
+	.public sGtsSummaryBg0Template
+	.public sGtsSummaryInfoWindowRects
 	.public ov70_02245498
 	.public ov70_022454A4
 	.public ov70_022454A5
@@ -2681,7 +2681,7 @@
 	.public ov70_02245804
 	.public ov70_02245884
 	.public ov70_0224590C
-	.public ov70_02245910
+	.public sGtsGenderSymbolMsgs
 	.public ov70_02245920
 	.public ov70_02245938
 	.public ov70_02245954
@@ -2763,8 +2763,8 @@
 	.public sGtsSetProfileUrl
 	.public sGtsScreens
 	.public sGtsMainMenuStates
-	.public ov70_0224649C
-	.public ov70_022464A8
+	.public sGtsGenderSymbolColors
+	.public sGtsSummaryStates
 	.public ov70_022464CC
 	.public ov70_022464F0
 	.public ov70_022464F1
@@ -2809,8 +2809,8 @@
 	.public GtsMainMenu_WaitFadeIn2
 	.public GtsMainMenu_StartExitAnim
 	.public GtsMainMenu_WaitExitAnim
-	.public ov70_0223A0C4
-	.public ov70_0223A258
+	.public GtsSummary_DeleteMonSprite
+	.public GtsSummary_Start
 	.public ov70_0223ABD8
 	.public ov70_0223ACE4
 	.public ov70_0223C928

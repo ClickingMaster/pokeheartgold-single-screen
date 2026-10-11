@@ -3,7 +3,7 @@
 int ov08_0221C604(Ov08N49Work *work) {
     int result = ov08_0221D5D0(work, ov08_02224F3C);
     if (result == -1) {
-        result = ov08_02224C94(work->smallState);
+        result = BattleDpadCursor_HandleInput(work->smallState);
         if (result == -2) {
             result = 6;
         }
@@ -45,7 +45,7 @@ int ov08_0221C604(Ov08N49Work *work) {
 int ov08_0221C6F8(Ov08N49Work *work) {
     int result = ov08_0221D5D0(work, ov08_02224E44);
     if (result == -1) {
-        result = ov08_02224C94(work->smallState);
+        result = BattleDpadCursor_HandleInput(work->smallState);
         if (result == -2) {
             result = 2;
         }
@@ -96,7 +96,7 @@ int ov08_0221C814(Ov08N49Work *work) {
     Ov08N49Root *root = work->root;
     int result = ov08_0221D5D0(work, ov08_02224E94);
     if (result == -1) {
-        result = ov08_02224C94(work->smallState);
+        result = BattleDpadCursor_HandleInput(work->smallState);
         if (result == -2) {
             result = 4;
         }

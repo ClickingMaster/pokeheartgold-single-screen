@@ -243,7 +243,7 @@ void ov70_0223CF74(Ov70Work *work) {
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 0xd, bgConfig, 1, 0, 0xa00, 1, 0x3d);
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 0x1b, bgConfig, 1, 0, 0x600, 1, 0x3d);
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 0x26, bgConfig, 2, 0, 0x600, 1, 0x3d);
-    ov70_02239C6C(work);
-    ov70_02239CF8(work);
+    Gts_LoadSubScreenBg(work);
+    Gts_ShowSubScreenPanel(work);
     NARC_Delete(narc);
 }

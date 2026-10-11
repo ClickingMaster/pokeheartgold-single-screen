@@ -52,10 +52,10 @@ void DestroySysTaskAndEnvironment(void *);
 void ov08_02220A50(void *);
 void ov08_0221DD40(void *);
 void ov08_0221D14C(Ov08W04State *);
-u8 ov08_02224B8C(void *);
-void ov08_02224B7C(void *);
+u8 BattleDpadCursor_IsActive(void *);
+void BattleDpadCursor_Free(void *);
 int ov08_0221D5D0(void *, const void *);
-int ov08_02224C94(void *);
+int BattleDpadCursor_HandleInput(void *);
 BOOL ov08_0221D5DC(void *, int);
 void ov08_022217C8(void *);
 
