@@ -1244,10 +1244,7 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object src/to90_extra2126_run01.o
     Object lib/asm/to90_extra2545_anchor.o
     Object lib/asm/to80_extra2570_anchor.o
-    Object src/to80_extra2570_run01.o
-    Object lib/asm/op90_to80_extra2570_residual_1_anchor.o
-    Object src/op90_to80_extra2570_residual_1_r01.o
-    Object src/to90_extra2545_run01.o
+    Object lib/NitroSDK/src/dgt_hash.o
     Object lib/asm/op90_to90_extra2545_residual_2_anchor.o
     Object src/op90_to90_extra2545_residual_2_r01.o
     Object lib/asm/to65_to65_nitro_unified_residual_23_extra21_anchor.o
@@ -1368,14 +1365,11 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object lib/asm/to65_to65_nitro_unified_residual_46_extra27_anchor.o
     Object lib/asm/to90_extra2154_anchor.o
     Object lib/asm/op90_to90_extra2154_residual_1_anchor.o
-    Object src/op90_to90_extra2154_residual_1_r01.o
-    Object src/to90_extra2154_run01.o
-    Object src/to65_to65_nitro_unified_residual_46_extra27_run01.o
-    Object lib/asm/to90_extra2155_anchor.o
-    Object src/to90_extra2155_run01.o
-    Object src/to90_extra2155_run02.o
+    Object lib/NitroSDK/src/math/math_qsort.o
+    Object lib/NitroSDK/src/std_string.o
+    Object lib/NitroSDK/src/std_sprintf_writer.o
     Object lib/asm/op90_to90_extra2155_residual_1_anchor.o
-    Object src/op90_to90_extra2155_residual_1_r01.o
+    Object lib/NitroSDK/src/std_sprintf.o
     Object lib/NitroSDK/src/snd/SND_main.o
     Object lib/NitroSDK/src/snd/SND_command.o
     Object lib/NitroSDK/src/snd/SND_alarm.o
@@ -4368,21 +4362,9 @@ Overlay OVY_80
     Object src/frontier/frontier_script_ui.o
     Object asm/frontier_script_commands_data.o
     Object src/frontier/frontier_script_tasks.o
-    Object src/overlay80_frontier_commands_1.o
-    Object src/to47r5_ov80_frontier_command_103.o
-    Object src/overlay80_frontier_commands_2.o
-    Object src/to90_extra2042_run01.o
-    Object src/ov80_2fd08_partial_1.o
-    Object src/to80_extra1833_run01.o
-    Object src/to80_extra1700_run01.o
-    Object src/ov80_fd08_party_build.o
-    Object src/ov80_2fd08_partial_2.o
-    Object src/to70_overlay_80_0222FD08_residual_3_extra1223_run01.o
-    Object src/ov80_2fd08_partial_3.o
-    Object src/to70_overlay_80_0222FD08_residual_4_extra126_run01.o
-    Object src/op90_to70_overlay_80_0222FD08_residual_4_extra126_residual_1_r01.o
-    Object src/ov80_2fd08_partial_4.o
-    Object asm/overlay_80_0222FD08_residual_5.o
+    Object src/frontier/frontier_cmd_factory.o
+    Object src/frontier/battle_factory_data.o
+    Object asm/battle_factory_data_bss.o
     Object src/ov80_2230b8c_partial_1.o
     Object src/op90_overlay_80_022310C4_r01.o
     Object src/overlay_80_022310C4_opus_partial_1.o

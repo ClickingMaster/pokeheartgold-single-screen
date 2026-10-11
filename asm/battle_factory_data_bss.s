@@ -120,47 +120,47 @@
 	.public _02230B7E
 	.public _02230B84
 	.public _02230B88
-	.public _0223DD40
-	.public ov80_0222FD08
-	.public ov80_0222FEEC
-	.public ov80_0222FF00
-	.public ov80_022300D4
-	.public ov80_02230270
-	.public ov80_02230424
-	.public ov80_02230460
-	.public ov80_02230484
-	.public ov80_0223049C
-	.public ov80_02230784
-	.public ov80_02230790
+	.public gBattleFactoryData
+	.public BattleFactoryData_Alloc
+	.public BattleFactoryData_Init
+	.public BattleFactoryData_InitNew
+	.public BattleFactory_SwapRentalWithRandom
+	.public BattleFactoryData_InitResume
+	.public BattleFactoryData_Free
+	.public BattleFactory_StoreAppResult
+	.public BattleFactory_GetAppResult
+	.public BattleFactoryData_SaveRecord
+	.public BattleFactory_IncBattleNo
+	.public BattleFactory_GetBattleNo
 	.public ov80_02230794
 	.public ov80_022307C8
-	.public ov80_022307D4
-	.public ov80_022307F0
-	.public ov80_022308C4
-	.public ov80_022309F8
-	.public ov80_02230A60
-	.public ov80_02230AE4
-	.public ov80_02230AF8
-	.public ov80_02230B4C
+	.public BattleFactory_CompleteRound
+	.public BattleFactory_SetRentalParty
+	.public BattleFactory_GenerateOpponentMons
+	.public BattleFactory_TradeMon
+	.public BattleFactory_SetOpponentParty
+	.public BattleFactory_IncTradeCount
+	.public BattleFactory_SendBuffer
+	.public BattleFactory_GetWonBattlePoints
 	.include "overlay_80_0222FD08.inc"
 	.include "global.inc"
 
     .text
-	.public ov80_0222FEEC
-	.public ov80_02230424
-	.public ov80_02230460
-	.public ov80_02230484
-	.public ov80_02230784
-	.public ov80_02230790
+	.public BattleFactoryData_Init
+	.public BattleFactoryData_Free
+	.public BattleFactory_StoreAppResult
+	.public BattleFactory_GetAppResult
+	.public BattleFactory_IncBattleNo
+	.public BattleFactory_GetBattleNo
 	.public ov80_02230794
 	.public ov80_022307C8
-	.public ov80_022307D4
-	.public ov80_022309F8
-	.public ov80_02230A60
-	.public ov80_02230AE4
-	.public ov80_02230AF8
-	.public ov80_02230B4C
+	.public BattleFactory_CompleteRound
+	.public BattleFactory_TradeMon
+	.public BattleFactory_SetOpponentParty
+	.public BattleFactory_IncTradeCount
+	.public BattleFactory_SendBuffer
+	.public BattleFactory_GetWonBattlePoints
 	.bss
 
-_0223DD40:
+gBattleFactoryData:
 	.space 0x4

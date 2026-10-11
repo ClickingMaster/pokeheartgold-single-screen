@@ -753,7 +753,7 @@
   {
    "function": "MATH_QSort",
    "cpu": "ARM9",
-   "source": "src/op90_to90_extra2154_residual_1_r01.c",
+   "source": "lib/NitroSDK/src/math/math_qsort.c",
    "kind": "asm",
    "reason": "ARM9 `pop {..,lr}; bx lr` epilogue (MWCC 2.0 ARM9 always pops pc; 0 occurrences); b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output); clz (inline-asm only); explicit sp manipulation (mov/ldr/sub sp,reg); swp/swpb"
   },

@@ -25,10 +25,7 @@
     "src/to90_extra2126_run01.o",
     "lib/asm/to90_extra2545_anchor.o",
     "lib/asm/to80_extra2570_anchor.o",
-    "src/to80_extra2570_run01.o",
-    "lib/asm/op90_to80_extra2570_residual_1_anchor.o",
-    "src/op90_to80_extra2570_residual_1_r01.o",
-    "src/to90_extra2545_run01.o",
+    "lib/NitroSDK/src/dgt_hash.o",
     "lib/asm/op90_to90_extra2545_residual_2_anchor.o",
     "src/op90_to90_extra2545_residual_2_r01.o",
     "lib/asm/to65_to65_nitro_unified_residual_23_extra21_anchor.o",
@@ -149,14 +146,11 @@
     "lib/asm/to65_to65_nitro_unified_residual_46_extra27_anchor.o",
     "lib/asm/to90_extra2154_anchor.o",
     "lib/asm/op90_to90_extra2154_residual_1_anchor.o",
-    "src/op90_to90_extra2154_residual_1_r01.o",
-    "src/to90_extra2154_run01.o",
-    "src/to65_to65_nitro_unified_residual_46_extra27_run01.o",
-    "lib/asm/to90_extra2155_anchor.o",
-    "src/to90_extra2155_run01.o",
-    "src/to90_extra2155_run02.o",
+    "lib/NitroSDK/src/math/math_qsort.o",
+    "lib/NitroSDK/src/std_string.o",
+    "lib/NitroSDK/src/std_sprintf_writer.o",
     "lib/asm/op90_to90_extra2155_residual_1_anchor.o",
-    "src/op90_to90_extra2155_residual_1_r01.o",
+    "lib/NitroSDK/src/std_sprintf.o",
     "lib/NitroSDK/src/snd/SND_main.o",
     "lib/NitroSDK/src/snd/SND_command.o",
     "lib/NitroSDK/src/snd/SND_alarm.o",
@@ -375,19 +369,7 @@
         "selector": ".text"
       },
       {
-        "path": "src/to80_extra2570_run01.o",
-        "selector": ".text"
-      },
-      {
-        "path": "lib/asm/op90_to80_extra2570_residual_1_anchor.o",
-        "selector": ".text"
-      },
-      {
-        "path": "src/op90_to80_extra2570_residual_1_r01.o",
-        "selector": ".text"
-      },
-      {
-        "path": "src/to90_extra2545_run01.o",
+        "path": "lib/NitroSDK/src/dgt_hash.o",
         "selector": ".text"
       },
       {
@@ -939,27 +921,15 @@
         "selector": ".text"
       },
       {
-        "path": "src/op90_to90_extra2154_residual_1_r01.o",
+        "path": "lib/NitroSDK/src/math/math_qsort.o",
         "selector": ".text"
       },
       {
-        "path": "src/to90_extra2154_run01.o",
+        "path": "lib/NitroSDK/src/std_string.o",
         "selector": ".text"
       },
       {
-        "path": "src/to65_to65_nitro_unified_residual_46_extra27_run01.o",
-        "selector": ".text"
-      },
-      {
-        "path": "lib/asm/to90_extra2155_anchor.o",
-        "selector": ".text"
-      },
-      {
-        "path": "src/to90_extra2155_run01.o",
-        "selector": ".text"
-      },
-      {
-        "path": "src/to90_extra2155_run02.o",
+        "path": "lib/NitroSDK/src/std_sprintf_writer.o",
         "selector": ".text"
       },
       {
@@ -967,7 +937,7 @@
         "selector": ".text"
       },
       {
-        "path": "src/op90_to90_extra2155_residual_1_r01.o",
+        "path": "lib/NitroSDK/src/std_sprintf.o",
         "selector": ".text"
       }
     ],

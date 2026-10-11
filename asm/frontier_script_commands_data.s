@@ -610,22 +610,22 @@ gFrontierCommandTable: ; 0x0223BA04
 	.word FrtCmd_089
 	.word FrtCmd_090
 	.word FrtCmd_091
-	.word FrtCmd_092
-	.word FrtCmd_093
-	.word FrtCmd_094
-	.word FrtCmd_095
-	.word FrtCmd_096
-	.word FrtCmd_097
-	.word FrtCmd_098
-	.word FrtCmd_099
-	.word FrtCmd_100
-	.word FrtCmd_101
-	.word FrtCmd_102
-	.word FrtCmd_103
-	.word FrtCmd_104
-	.word FrtCmd_105
-	.word FrtCmd_106
-	.word FrtCmd_107
+	.word FrtCmd_FactoryAlloc
+	.word FrtCmd_FactoryInit
+	.word FrtCmd_FactoryFree
+	.word FrtCmd_FactoryLaunchRentalApp
+	.word FrtCmd_FactoryEndBattle
+	.word FrtCmd_FactoryStartBattle
+	.word FrtCmd_FactoryLaunchTradeApp
+	.word FrtCmd_FactorySetRentalParty
+	.word FrtCmd_FactoryGenerateOpponent
+	.word FrtCmd_FactoryTradeMon
+	.word FrtCmd_FactorySetOpponentParty
+	.word FrtCmd_FactoryAction
+	.word FrtCmd_FactoryGetBattleResult
+	.word FrtCmd_FactorySendBuffer
+	.word FrtCmd_FactoryReceiveBuffer
+	.word FrtCmd_FactoryPrintMsg
 	.word FrtCmd_108
 	.word FrtCmd_109
 	.word FrtCmd_110

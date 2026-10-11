@@ -1,11 +1,11 @@
 #ifndef POKEHEARTGOLD_FRONTIER_FRONTIER_LINK_MESSAGES_H
 #define POKEHEARTGOLD_FRONTIER_FRONTIER_LINK_MESSAGES_H
 
+#include "frontier/battle_factory_data.h"
 #include "frontier/overlay_80_022340E8.h"
 
-// Link messages of the facilities' script side (frontier_link_messages.c). The work structs are views of the
-// facilities' script work, defined in frontier_link_messages.c.
-typedef struct FactoryLinkWork FactoryLinkWork;
+// Link messages of the facilities' script side (frontier_link_messages.c). The Hall and Castle work structs are
+// views of the facilities' script work, defined in frontier_link_messages.c.
 typedef struct HallLinkWork HallLinkWork;
 typedef struct CastleLinkWork CastleLinkWork;
 typedef struct ArcadeMonsMessage ArcadeMonsMessage;
@@ -22,20 +22,20 @@ void ov80_0222B048(int netId, int size, const u16 *data, HallLinkWork *work);
 BOOL ov80_0222B070(HallLinkWork *work);
 void BattleHallLink_ReceivePartnerMon(int netId, int size, const void *data, HallLinkWork *work);
 void *BattleHallLink_GetRecvMonBuffer(int netId, HallLinkWork *work, int size);
-BOOL ov80_0222B108(FactoryLinkWork *work);
-void ov80_0222B140(int netId, int size, const u16 *data, FactoryLinkWork *work);
-BOOL BattleFactoryLink_SendTrainerIds(FactoryLinkWork *work);
-void BattleFactoryLink_ReceiveTrainerIds(int netId, int size, const u16 *data, FactoryLinkWork *work);
-BOOL BattleFactoryLink_SendRentalMons(FactoryLinkWork *work);
-void BattleFactoryLink_ReceiveRentalMons(int netId, int size, const u16 *data, FactoryLinkWork *work);
-BOOL BattleFactoryLink_SendOpponentMons(FactoryLinkWork *work);
-void BattleFactoryLink_ReceiveOpponentMons(int netId, int size, const u16 *data, FactoryLinkWork *work);
-BOOL ov80_0222B3B0(FactoryLinkWork *work, u16 value);
-void ov80_0222B3D4(int netId, int size, const u16 *data, FactoryLinkWork *work);
-BOOL ov80_0222B3FC(FactoryLinkWork *work, u16 value);
-void ov80_0222B420(int netId, int size, const u16 *data, FactoryLinkWork *work);
-BOOL BattleFactoryLink_SendPartyMons(FactoryLinkWork *work);
-void BattleFactoryLink_ReceivePartyMons(int netId, int size, u16 *data, FactoryLinkWork *work);
+BOOL ov80_0222B108(BattleFactoryData *work);
+void ov80_0222B140(int netId, int size, const u16 *data, BattleFactoryData *work);
+BOOL BattleFactoryLink_SendTrainerIds(BattleFactoryData *work);
+void BattleFactoryLink_ReceiveTrainerIds(int netId, int size, const u16 *data, BattleFactoryData *work);
+BOOL BattleFactoryLink_SendRentalMons(BattleFactoryData *work);
+void BattleFactoryLink_ReceiveRentalMons(int netId, int size, const u16 *data, BattleFactoryData *work);
+BOOL BattleFactoryLink_SendOpponentMons(BattleFactoryData *work);
+void BattleFactoryLink_ReceiveOpponentMons(int netId, int size, const u16 *data, BattleFactoryData *work);
+BOOL ov80_0222B3B0(BattleFactoryData *work, u16 value);
+void ov80_0222B3D4(int netId, int size, const u16 *data, BattleFactoryData *work);
+BOOL ov80_0222B3FC(BattleFactoryData *work, u16 value);
+void ov80_0222B420(int netId, int size, const u16 *data, BattleFactoryData *work);
+BOOL BattleFactoryLink_SendPartyMons(BattleFactoryData *work);
+void BattleFactoryLink_ReceivePartyMons(int netId, int size, u16 *data, BattleFactoryData *work);
 BOOL ov80_0222B5C8(CastleLinkWork *work);
 void ov80_0222B628(int netId, int size, const u16 *data, CastleLinkWork *work);
 BOOL BattleCastleLink_SendTrainerIds(CastleLinkWork *work);

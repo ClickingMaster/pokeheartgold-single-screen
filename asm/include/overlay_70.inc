@@ -341,7 +341,7 @@
 .public Gts_Init
 .public Gts_Main
 .public Gts_Exit
-.public _0223DD40
+.public gBattleFactoryData
 .public TradeSequence_Init
 .public TradeSequence_Exit
 .public TradeSequence_Main

@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "778006063a41edb1f3f9437b259345319f779f35",
+  "commit": "d579c134201754c3c3490f85dff77fa938454f0d",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "b3701705f0b735d496b9dbfbf30f564e161dc44951ac1e9a3b1ab9a5bae59bd9",
+    "ARM9": "2677cf91695e53089291a3b9028be4fd5404be7c0e5672ac9c7b42cba470826e",
     "ARM7": "be22cb9746a7577a1db9d8a3882c5a5041b7624254e1c01c0ed9dc2e73b0fd16"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -17247,6 +17247,14 @@
     {
       "cpu": "ARM9",
       "module": "OVY_80",
+      "object": "battle_factory_data.o",
+      "bytes": 3708,
+      "status": "c",
+      "source": "src/frontier/battle_factory_data.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_80",
       "object": "frontier_brain_intro.o",
       "bytes": 3084,
       "status": "c",
@@ -17267,6 +17275,14 @@
       "bytes": 156,
       "status": "c",
       "source": "src/frontier/frontier_cmd_create_sprites.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_80",
+      "object": "frontier_cmd_factory.o",
+      "bytes": 1778,
+      "status": "c",
+      "source": "src/frontier/frontier_cmd_factory.c"
     },
     {
       "cpu": "ARM9",
@@ -17487,14 +17503,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_80",
-      "object": "op90_to70_overlay_80_0222FD08_residual_4_extra126_residual_1_r01.o",
-      "bytes": 308,
-      "status": "c",
-      "source": "src/op90_to70_overlay_80_0222FD08_residual_4_extra126_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
       "object": "op90_to80_extra1552_residual_1_r01.o",
       "bytes": 148,
       "status": "c",
@@ -17579,38 +17587,6 @@
       "bytes": 168,
       "status": "c",
       "source": "src/ov80_2238034_partial_4.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
-      "object": "ov80_2fd08_partial_1.o",
-      "bytes": 18,
-      "status": "c",
-      "source": "src/ov80_2fd08_partial_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
-      "object": "ov80_2fd08_partial_2.o",
-      "bytes": 118,
-      "status": "c",
-      "source": "src/ov80_2fd08_partial_2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
-      "object": "ov80_2fd08_partial_3.o",
-      "bytes": 106,
-      "status": "c",
-      "source": "src/ov80_2fd08_partial_3.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
-      "object": "ov80_2fd08_partial_4.o",
-      "bytes": 402,
-      "status": "c",
-      "source": "src/ov80_2fd08_partial_4.c"
     },
     {
       "cpu": "ARM9",
@@ -17711,14 +17687,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_80",
-      "object": "ov80_fd08_party_build.o",
-      "bytes": 436,
-      "status": "c",
-      "source": "src/ov80_fd08_party_build.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
       "object": "ov80_frontier_state_prepare.o",
       "bytes": 96,
       "status": "c",
@@ -17731,22 +17699,6 @@
       "bytes": 1092,
       "status": "c",
       "source": "src/overlay80_arcade_commands.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
-      "object": "overlay80_frontier_commands_1.o",
-      "bytes": 542,
-      "status": "c",
-      "source": "src/overlay80_frontier_commands_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
-      "object": "overlay80_frontier_commands_2.o",
-      "bytes": 252,
-      "status": "c",
-      "source": "src/overlay80_frontier_commands_2.c"
     },
     {
       "cpu": "ARM9",
@@ -17887,14 +17839,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_80",
-      "object": "to47r5_ov80_frontier_command_103.o",
-      "bytes": 984,
-      "status": "c",
-      "source": "src/to47r5_ov80_frontier_command_103.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
       "object": "to52_r2_w08_overlay80_r5_matched.o",
       "bytes": 280,
       "status": "c",
@@ -17915,22 +17859,6 @@
       "bytes": 276,
       "status": "c",
       "source": "src/to56_r2_w03_overlay80_37334.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
-      "object": "to70_overlay_80_0222FD08_residual_3_extra1223_run01.o",
-      "bytes": 744,
-      "status": "c",
-      "source": "src/to70_overlay_80_0222FD08_residual_3_extra1223_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
-      "object": "to70_overlay_80_0222FD08_residual_4_extra126_run01.o",
-      "bytes": 212,
-      "status": "c",
-      "source": "src/to70_overlay_80_0222FD08_residual_4_extra126_run01.c"
     },
     {
       "cpu": "ARM9",
@@ -18023,34 +17951,10 @@
     {
       "cpu": "ARM9",
       "module": "OVY_80",
-      "object": "to80_extra1700_run01.o",
-      "bytes": 412,
-      "status": "c",
-      "source": "src/to80_extra1700_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
       "object": "to80_extra1701_run01.o",
       "bytes": 580,
       "status": "c",
       "source": "src/to80_extra1701_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
-      "object": "to80_extra1833_run01.o",
-      "bytes": 468,
-      "status": "c",
-      "source": "src/to80_extra1833_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
-      "object": "to90_extra2042_run01.o",
-      "bytes": 484,
-      "status": "c",
-      "source": "src/to90_extra2042_run01.c"
     },
     {
       "cpu": "ARM9",
@@ -28093,6 +27997,14 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "dgt_hash.o",
+      "bytes": 2912,
+      "status": "c",
+      "source": "lib/NitroSDK/src/dgt_hash.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "dialog_box.o",
       "bytes": 502,
       "status": "c",
@@ -30926,6 +30838,17 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "math_qsort.o",
+      "bytes": 752,
+      "status": "original_asm",
+      "source": "lib/NitroSDK/src/math/math_qsort.c",
+      "functions": [
+        "MATH_QSort"
+      ]
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "math_util.o",
       "bytes": 1062,
       "status": "c",
@@ -32120,14 +32043,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "op90_to80_extra2570_residual_1_r01.o",
-      "bytes": 948,
-      "status": "c",
-      "source": "src/op90_to80_extra2570_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "op90_to90_extra2123_residual_1_r01.o",
       "bytes": 268,
       "status": "c",
@@ -32188,25 +32103,6 @@
       "bytes": 384,
       "status": "c",
       "source": "src/op90_to90_extra2137_residual_2_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to90_extra2154_residual_1_r01.o",
-      "bytes": 752,
-      "status": "original_asm",
-      "source": "src/op90_to90_extra2154_residual_1_r01.c",
-      "functions": [
-        "MATH_QSort"
-      ]
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to90_extra2155_residual_1_r01.o",
-      "bytes": 2172,
-      "status": "c",
-      "source": "src/op90_to90_extra2155_residual_1_r01.c"
     },
     {
       "cpu": "ARM9",
@@ -34983,6 +34879,30 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "std_sprintf.o",
+      "bytes": 2172,
+      "status": "c",
+      "source": "lib/NitroSDK/src/std_sprintf.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "std_sprintf_writer.o",
+      "bytes": 220,
+      "status": "c",
+      "source": "lib/NitroSDK/src/std_sprintf_writer.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "std_string.o",
+      "bytes": 244,
+      "status": "c",
+      "source": "lib/NitroSDK/src/std_string.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "string_control_code.o",
       "bytes": 156,
       "status": "c",
@@ -35723,14 +35643,6 @@
       "bytes": 268,
       "status": "c",
       "source": "src/to65_to65_nitro_unified_residual_44_extra26_run06.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_to65_nitro_unified_residual_46_extra27_run01.o",
-      "bytes": 196,
-      "status": "c",
-      "source": "src/to65_to65_nitro_unified_residual_46_extra27_run01.c"
     },
     {
       "cpu": "ARM9",
@@ -36567,14 +36479,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to80_extra2570_run01.o",
-      "bytes": 448,
-      "status": "c",
-      "source": "src/to80_extra2570_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to90_extra2102_run01.o",
       "bytes": 268,
       "status": "c",
@@ -36911,30 +36815,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to90_extra2154_run01.o",
-      "bytes": 96,
-      "status": "c",
-      "source": "src/to90_extra2154_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_extra2155_run01.o",
-      "bytes": 84,
-      "status": "c",
-      "source": "src/to90_extra2155_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_extra2155_run02.o",
-      "bytes": 88,
-      "status": "c",
-      "source": "src/to90_extra2155_run02.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to90_extra2157_run01.o",
       "bytes": 504,
       "status": "c",
@@ -37027,14 +36907,6 @@
       "bytes": 1264,
       "status": "c",
       "source": "src/to90_extra2533_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_extra2545_run01.o",
-      "bytes": 1516,
-      "status": "c",
-      "source": "src/to90_extra2545_run01.c"
     },
     {
       "cpu": "ARM9",

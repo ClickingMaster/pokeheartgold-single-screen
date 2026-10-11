@@ -19,8 +19,8 @@
 // messages it got, also its own echo, and ignores its own data; most only take the partner's data when the local
 // player is not the parent (net id 0), whose data wins.
 //   Battle Factory 0x16-0x1C, Battle Hall 0x21-0x26, Battle Castle 0x2A-0x30, Battle Arcade 0x41-0x46.
-// The facilities' script work structs are defined by their own modules; the views below only name the fields the
-// messages use.
+// The facilities' script work structs are defined by their own modules; the Hall and Castle views below only name
+// the fields the messages use (the Battle Factory uses BattleFactoryData).
 
 #define LINK_MON_BUFFER_SIZE 0x200
 
@@ -28,48 +28,6 @@
 BOOL sub_02036FD8(int command, void *data, int size);
 u32 ov80_02237B24(u8 type, int a1);
 u32 ov80_02236DD4(u8 type);
-
-// Battle Factory script work (view).
-struct FactoryLinkWork {
-    u8 filler_000[4];
-    u8 type;                     // 0x004
-    u8 filler_005[3];
-    u16 unk_008;                 // 0x008
-    u8 filler_00A[2];
-    u16 unk_00C;                 // 0x00C
-    u16 unk_00E;                 // 0x00E
-    u8 filler_010[8];
-    u16 trainerIds[14];          // 0x018
-    u8 filler_034[0x220];
-    u16 rentalSetIds[6];            // 0x254
-    u8 rentalIVs[6];                // 0x260
-    u8 filler_266[2];
-    u32 rentalPersonalities[6];     // 0x268
-    u8 filler_280[0x152];
-    u16 opponentSetIds[4];       // 0x3D2
-    u8 opponentIVs[4];           // 0x3DA
-    u8 filler_3DE[2];
-    u32 opponentPersonalities[4]; // 0x3E0
-    u8 filler_3F0[0xE4];
-    Party *party;                // 0x4D4
-    u8 filler_4D8[0x10];
-    u16 partySetIds[4];          // 0x4E8
-    u8 filler_4F0[8];
-    SaveData *saveData;          // 0x4F8
-    u8 filler_4FC[8];
-    u16 linkBuffer[30];          // 0x504
-    u8 filler_540[0x3C];
-    u8 unk_57C;                  // 0x57C
-    u8 unk_57D;                  // 0x57D
-    u16 unk_57E;                 // 0x57E
-    u16 unk_580;                 // 0x580
-    u16 unk_582;                 // 0x582
-    u16 partnerSetIds[6];        // 0x584
-    u8 partnerIVs[8];            // 0x590
-    u32 partnerPersonalities[6]; // 0x598
-    u8 filler_5B0[0x152];
-    u8 linkMessageCount;         // 0x702
-};
 
 // Battle Hall script work (view).
 struct HallLinkWork {
@@ -231,57 +189,57 @@ void *BattleHallLink_GetRecvMonBuffer(int netId, HallLinkWork *work, int size) {
 
 // Battle Factory
 
-BOOL ov80_0222B108(FactoryLinkWork *work) {
+BOOL ov80_0222B108(BattleFactoryData *work) {
     u16 *buffer = work->linkBuffer;
     Save_PlayerData_GetProfile(work->saveData);
-    buffer[1] = work->unk_008;
-    buffer[2] = work->unk_00C;
-    buffer[3] = work->unk_00E;
+    buffer[1] = work->tradeCount;
+    buffer[2] = work->winStreak;
+    buffer[3] = work->round;
     return Comm_SendCommand(0x16, buffer, 0x3C) == TRUE;
 }
 
-void ov80_0222B140(int netId, int size, const u16 *data, FactoryLinkWork *work) {
+void ov80_0222B140(int netId, int size, const u16 *data, BattleFactoryData *work) {
     work->linkMessageCount++;
     if (netId != Comm_GetLocalNetId()) {
-        work->unk_580 = data[1];
-        work->unk_582 = data[2];
-        work->unk_57E = data[3];
+        work->partnerTradeCount = data[1];
+        work->partnerWinStreak = data[2];
+        work->partnerRound = data[3];
     }
 }
 
-BOOL BattleFactoryLink_SendTrainerIds(FactoryLinkWork *work) {
+BOOL BattleFactoryLink_SendTrainerIds(BattleFactoryData *work) {
     u8 *p = (u8 *)work;
     u16 *buffer = work->linkBuffer;
     u16 *dst = buffer;
     int i;
     for (i = 0; i < 14; i++) {
-        *dst++ = ((FactoryLinkWork *)p)->trainerIds[0];
+        *dst++ = ((BattleFactoryData *)p)->trainerIds[0];
         p += 2;
     }
     return Comm_SendCommand(0x17, buffer, 0x3C) == TRUE;
 }
 
-void BattleFactoryLink_ReceiveTrainerIds(int netId, int size, const u16 *data, FactoryLinkWork *work) {
+void BattleFactoryLink_ReceiveTrainerIds(int netId, int size, const u16 *data, BattleFactoryData *work) {
     u8 *p = (u8 *)work;
     int i;
     work->linkMessageCount++;
     if (netId != Comm_GetLocalNetId() && Comm_GetLocalNetId() != 0) {
         for (i = 0; i < 14; i++) {
-            ((FactoryLinkWork *)p)->trainerIds[0] = *data++;
+            ((BattleFactoryData *)p)->trainerIds[0] = *data++;
             p += 2;
         }
     }
 }
 
 // The message carries {setIds[6], ivs[6], personalities low halves[6], high halves[6]}.
-BOOL BattleFactoryLink_SendRentalMons(FactoryLinkWork *work) {
+BOOL BattleFactoryLink_SendRentalMons(BattleFactoryData *work) {
     u8 *buffer = (u8 *)work->linkBuffer;
     {
         int i = 0;
         u8 *src = (u8 *)work;
         u8 *dst = buffer;
         for (; i < 6; i++) {
-            *(u16 *)dst = ((FactoryLinkWork *)src)->partnerSetIds[0];
+            *(u16 *)dst = ((BattleFactoryData *)src)->partnerRentals.setIds[0];
             src += 2;
             dst += 2;
         }
@@ -291,7 +249,7 @@ BOOL BattleFactoryLink_SendRentalMons(FactoryLinkWork *work) {
         int i = 0;
         dst = buffer;
         for (; i < 6; i++) {
-            *(u16 *)(dst + 12) = work->partnerIVs[i];
+            *(u16 *)(dst + 12) = work->partnerRentals.ivs[i];
             dst += 2;
         }
     }
@@ -303,8 +261,8 @@ BOOL BattleFactoryLink_SendRentalMons(FactoryLinkWork *work) {
         i = 0;
         dst += 24;
         for (; i < 6; i++) {
-            *(u16 *)dst = ((FactoryLinkWork *)src)->partnerPersonalities[0];
-            *(u16 *)(dst + 12) = ((FactoryLinkWork *)src)->partnerPersonalities[0] >> 16;
+            *(u16 *)dst = ((BattleFactoryData *)src)->partnerRentals.personalities[0];
+            *(u16 *)(dst + 12) = ((BattleFactoryData *)src)->partnerRentals.personalities[0] >> 16;
             src += 4;
             dst += 2;
         }
@@ -319,7 +277,7 @@ typedef struct FactoryMonsMessage6 {
     u16 personalityHigh[6];
 } FactoryMonsMessage6;
 
-void BattleFactoryLink_ReceiveRentalMons(int netId, int size, const u16 *data, FactoryLinkWork *work) {
+void BattleFactoryLink_ReceiveRentalMons(int netId, int size, const u16 *data, BattleFactoryData *work) {
     const FactoryMonsMessage6 *msg = (const FactoryMonsMessage6 *)data;
     int i;
     work->linkMessageCount++;
@@ -327,30 +285,30 @@ void BattleFactoryLink_ReceiveRentalMons(int netId, int size, const u16 *data, F
         return;
     }
     for (i = 0; i < 6; i++) {
-        work->rentalSetIds[i] = msg->setIds[i];
+        work->rentals.setIds[i] = msg->setIds[i];
     }
     for (i = 0; i < 6; i++) {
-        work->rentalIVs[i] = msg->ivs[i];
+        work->rentals.ivs[i] = msg->ivs[i];
     }
     i = 0;
     data += 12;
     for (; i < 6; i++) {
-        work->rentalPersonalities[0] = data[0];
-        work->rentalPersonalities[0] |= data[6] << 16;
+        work->rentals.personalities[0] = data[0];
+        work->rentals.personalities[0] |= data[6] << 16;
         data++;
-        work = (FactoryLinkWork *)((u8 *)work + 4);
+        work = (BattleFactoryData *)((u8 *)work + 4);
     }
 }
 
 // The message carries {setIds[4], ivs[4], personalities low halves[4], high halves[4]}.
-BOOL BattleFactoryLink_SendOpponentMons(FactoryLinkWork *work) {
+BOOL BattleFactoryLink_SendOpponentMons(BattleFactoryData *work) {
     u8 *buffer = (u8 *)work->linkBuffer;
     {
         int i = 0;
         u8 *src = (u8 *)work;
         u8 *dst = buffer;
         for (; i < 4; i++) {
-            *(u16 *)dst = ((FactoryLinkWork *)src)->opponentSetIds[0];
+            *(u16 *)dst = ((BattleFactoryData *)src)->opponentSetIds[0];
             src += 2;
             dst += 2;
         }
@@ -372,8 +330,8 @@ BOOL BattleFactoryLink_SendOpponentMons(FactoryLinkWork *work) {
         i = 0;
         dst += 16;
         for (; i < 4; i++) {
-            *(u16 *)dst = ((FactoryLinkWork *)src)->opponentPersonalities[0];
-            *(u16 *)(dst + 8) = ((FactoryLinkWork *)src)->opponentPersonalities[0] >> 16;
+            *(u16 *)dst = ((BattleFactoryData *)src)->opponentPersonalities[0];
+            *(u16 *)(dst + 8) = ((BattleFactoryData *)src)->opponentPersonalities[0] >> 16;
             src += 4;
             dst += 2;
         }
@@ -388,7 +346,7 @@ typedef struct FactoryMonsMessage4 {
     u16 personalityHigh[4];
 } FactoryMonsMessage4;
 
-void BattleFactoryLink_ReceiveOpponentMons(int netId, int size, const u16 *data, FactoryLinkWork *work) {
+void BattleFactoryLink_ReceiveOpponentMons(int netId, int size, const u16 *data, BattleFactoryData *work) {
     const FactoryMonsMessage4 *msg = (const FactoryMonsMessage4 *)data;
     int i;
     work->linkMessageCount++;
@@ -407,28 +365,28 @@ void BattleFactoryLink_ReceiveOpponentMons(int netId, int size, const u16 *data,
         work->opponentPersonalities[0] = data[0];
         work->opponentPersonalities[0] |= data[4] << 16;
         data++;
-        work = (FactoryLinkWork *)((u8 *)work + 4);
+        work = (BattleFactoryData *)((u8 *)work + 4);
     }
 }
 
-BOOL ov80_0222B3B0(FactoryLinkWork *work, u16 value) {
+BOOL ov80_0222B3B0(BattleFactoryData *work, u16 value) {
     work->linkBuffer[0] = value;
     return Comm_SendCommand(0x1A, work->linkBuffer, 0x3C) == TRUE;
 }
 
-void ov80_0222B3D4(int netId, int size, const u16 *data, FactoryLinkWork *work) {
+void ov80_0222B3D4(int netId, int size, const u16 *data, BattleFactoryData *work) {
     work->linkMessageCount++;
     if (netId != Comm_GetLocalNetId()) {
         work->unk_57C = *data;
     }
 }
 
-BOOL ov80_0222B3FC(FactoryLinkWork *work, u16 value) {
+BOOL ov80_0222B3FC(BattleFactoryData *work, u16 value) {
     work->linkBuffer[0] = value;
     return Comm_SendCommand(0x1B, work->linkBuffer, 0x3C) == TRUE;
 }
 
-void ov80_0222B420(int netId, int size, const u16 *data, FactoryLinkWork *work) {
+void ov80_0222B420(int netId, int size, const u16 *data, BattleFactoryData *work) {
     work->linkMessageCount++;
     if (netId != Comm_GetLocalNetId()) {
         work->unk_57D = *data;
@@ -439,7 +397,7 @@ void ov80_0222B420(int netId, int size, const u16 *data, FactoryLinkWork *work) 
 
 // Sends the set ids, attack IVs and personalities of the player's party: {setIds[n], ivs[n], low halves[n],
 // high halves[n]} with n = the facility type's Pokemon count.
-BOOL BattleFactoryLink_SendPartyMons(FactoryLinkWork *work) {
+BOOL BattleFactoryLink_SendPartyMons(BattleFactoryData *work) {
     u32 personalities[2];
     u8 ivs[4];
     int i;
@@ -453,7 +411,7 @@ BOOL BattleFactoryLink_SendPartyMons(FactoryLinkWork *work) {
 
     count = ov80_02236DD4(work->type);
     for (i = 0; i < count; i++) {
-        mon = Party_GetMonByIndex(work->party, i);
+        mon = Party_GetMonByIndex(work->playerParty, i);
         ivs[i] = GetMonData(mon, MON_DATA_ATK_IV, NULL);
         personalities[i] = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
     }
@@ -475,7 +433,7 @@ BOOL BattleFactoryLink_SendPartyMons(FactoryLinkWork *work) {
     return FALSE;
 }
 
-void BattleFactoryLink_ReceivePartyMons(int netId, int size, u16 *data, FactoryLinkWork *work) {
+void BattleFactoryLink_ReceivePartyMons(int netId, int size, u16 *data, BattleFactoryData *work) {
     int i;
     int count;
     int pos = 0;
@@ -486,16 +444,16 @@ void BattleFactoryLink_ReceivePartyMons(int netId, int size, u16 *data, FactoryL
     }
     count = ov80_02236DD4(work->type);
     for (i = 0; i < count; i++) {
-        work->partnerSetIds[i] = data[i];
+        work->partnerRentals.setIds[i] = data[i];
     }
     pos += count;
     for (i = 0; i < count; i++) {
-        work->partnerIVs[i] = data[pos + i];
+        work->partnerRentals.ivs[i] = data[pos + i];
     }
     pos += count;
     for (i = 0; i < count; i++) {
-        work->partnerPersonalities[i] = data[pos + i];
-        work->partnerPersonalities[i] |= data[count + pos + i] << 16;
+        work->partnerRentals.personalities[i] = data[pos + i];
+        work->partnerRentals.personalities[i] |= data[count + pos + i] << 16;
     }
 }
 

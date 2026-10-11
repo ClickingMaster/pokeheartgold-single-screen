@@ -988,7 +988,7 @@
 	.public _0223DD04
 	.public _0223DD08
 	.public _0223DD20
-	.public _0223DD40
+	.public gBattleFactoryData
 	.public _0223DD58
 	.public _0223DD64
 	.public _0223DD8C
