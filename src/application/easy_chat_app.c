@@ -897,7 +897,7 @@ int EasyChatApp_GetInitialGridTouch(EasyChatApp *app) {
 
     result = -1;
     if (hit != result) {
-        result = ov102_021EC5A0((s16)(gSystem.touchX - 20), (s16)(gSystem.touchY - 64));
+        result = EasyChatInitialGrid_FindCellAt((s16)(gSystem.touchX - 20), (s16)(gSystem.touchY - 64));
     }
     return result;
 }
@@ -1028,13 +1028,13 @@ BOOL EasyChatApp_MoveInitialGridCursor(EasyChatApp *app) {
         u16 next = 0xFF;
 
         if (app->repeatedKeys & PAD_KEY_UP) {
-            next = ov102_021EC4F8(category);
+            next = EasyChatInitialGrid_GetUp(category);
         } else if (app->repeatedKeys & PAD_KEY_DOWN) {
-            next = ov102_021EC514(category);
+            next = EasyChatInitialGrid_GetDown(category);
         } else if (app->repeatedKeys & PAD_KEY_RIGHT) {
-            next = ov102_021EC54C(category);
+            next = EasyChatInitialGrid_GetRight(category);
         } else if (app->repeatedKeys & PAD_KEY_LEFT) {
-            next = ov102_021EC530(category);
+            next = EasyChatInitialGrid_GetLeft(category);
         }
         if (next != 0xFF) {
             app->prevCategory = app->category;
@@ -1043,11 +1043,11 @@ BOOL EasyChatApp_MoveInitialGridCursor(EasyChatApp *app) {
         }
     } else {
         if (app->repeatedKeys & PAD_KEY_UP) {
-            app->category = ov102_021EC584(app->prevCategory);
+            app->category = EasyChatInitialGrid_GetAboveButton(app->prevCategory);
             return TRUE;
         }
         if (app->repeatedKeys & PAD_KEY_DOWN) {
-            app->category = ov102_021EC568(app->prevCategory);
+            app->category = EasyChatInitialGrid_GetBelowButton(app->prevCategory);
             return TRUE;
         }
     }

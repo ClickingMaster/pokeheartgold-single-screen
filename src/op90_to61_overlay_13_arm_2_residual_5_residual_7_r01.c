@@ -15,11 +15,11 @@ typedef struct {
     u8 data[12];
     u8 result;
 } Work1B18;
-void ov13_0223A2B0(char *buf);
-void ov13_0223A2F0(char *buf);
-void ov13_0223A330(char *buf);
-void ov13_0223A374(char *buf);
-void ov13_0223A3B8(char *buf);
+void WifiSetupConnections_FormatIpAddress(char *buf);
+void WifiSetupConnections_FormatSubnetMask(char *buf);
+void WifiSetupConnections_FormatGateway(char *buf);
+void WifiSetupConnections_FormatPrimaryDns(char *buf);
+void WifiSetupConnections_FormatSecondaryDns(char *buf);
 extern Work1B18 *gWifiSetupAddressEntry;
 extern const u8 ov13_022463E0[];
 void *WifiSetupHeap_AllocZeroed(u32 size, u32 align);
@@ -66,4 +66,4 @@ void ov13_02231B18(void) {
 }
 
 const struct S80 ov13_02245480 = {{0x32,0x35,0x35,0,0xb,0,0x10,0},{{0x3F,0x40,0x41,0x42,0x43}},{0,0,0,0x29}};
-const InitTable ov13_02245498 = {{ov13_0223A2B0, ov13_0223A2F0, ov13_0223A330, ov13_0223A374, ov13_0223A3B8}};
+const InitTable ov13_02245498 = {{WifiSetupConnections_FormatIpAddress, WifiSetupConnections_FormatSubnetMask, WifiSetupConnections_FormatGateway, WifiSetupConnections_FormatPrimaryDns, WifiSetupConnections_FormatSecondaryDns}};

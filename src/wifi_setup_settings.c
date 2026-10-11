@@ -16,7 +16,7 @@
 // Connection settings screen (0x02232E04-0x022347E4). The item handlers, the scroll tasks and the
 // drawing tasks follow in src/to60_ov13_run06.c.
 
-// Setup record of the access point being edited (ov13_02239FF0); only the members used here.
+// Setup record of the access point being edited (WifiSetupConnections_GetEdit); only the members used here.
 typedef struct WifiSetupSettingsRecord {
     u8 unk_00[0x40];
     u8 ssid[0xA6];    // 0x40
@@ -71,7 +71,7 @@ extern void WifiSetup_LoadGraphics(const void *path, void *load);
 extern void *WifiSetup_LocalizePath(const void *path);
 extern void WifiSetupCursor_Hide(void);
 
-extern u8 *ov13_02239FF0(); // also called with arguments
+extern u8 *WifiSetupConnections_GetEdit(); // also called with arguments
 extern void ov13_02239228(void *);
 extern void ov13_022392B4(void);
 extern void ov13_022392CC(void *, int, int, int);
@@ -81,9 +81,9 @@ extern void ov13_02239514(void);
 extern int ov13_02239550(void);
 extern int ov13_02239564(void);
 extern int ov13_0223959C();
-extern int ov13_0223A004();
-extern int ov13_0223A018();
-extern void ov13_0223A414(int);
+extern int WifiSetupConnections_SetAutoAddress();
+extern int WifiSetupConnections_SetAutoDns();
+extern void WifiSetupConnections_Edit(int);
 extern int ov13_0223BE6C();
 extern int DWCi_BACKUPlConvMaskCidr(void *);
 extern int swprintf(u16 *, u32, const u16 *, ...);
@@ -111,7 +111,7 @@ extern void ov13_02237DD0(void);
 extern void ov13_02231B18(void);
 
 void WifiSetupSettings_Init(void) {
-    u8 *record = ov13_02239FF0();
+    u8 *record = WifiSetupConnections_GetEdit();
     int i;
     gWifiSetupSettings.work = WifiSetupHeap_AllocZeroed(sizeof(WifiSetupSettingsWork), 4);
     gWifiSetupSettings.work->autoDns = record[0xF6];
@@ -188,7 +188,7 @@ void WifiSetupSettings_LoadGraphics(void) {
 
 void WifiSetupSettings_ResetPosition(void) {
     int returning;
-    ov13_02239FF0();
+    WifiSetupConnections_GetEdit();
     ov13_0222B948(0, &returning);
     if (returning) {
         return;
@@ -299,7 +299,7 @@ void WifiSetupSettings_HandleKeys(void) {
 
 int WifiSetupSettings_HandleTouch(void) {
     int item;
-    ov13_02239FF0();
+    WifiSetupConnections_GetEdit();
     item = WifiSetupSettings_GetTouchedItem();
     if (item == WIFI_SETUP_SETTINGS_ITEM_NONE) {
         return 0;
@@ -366,7 +366,7 @@ void WifiSetupSettings_SelectItem(int item) {
 
 void WifiSetupSettings_SetAutoAddress(u32 on) {
     int autoDns;
-    u8 *record = ov13_02239FF0();
+    u8 *record = WifiSetupConnections_GetEdit();
     if (record[0xF5] == on) {
         return;
     }
@@ -376,18 +376,18 @@ void WifiSetupSettings_SetAutoAddress(u32 on) {
         gWifiSetupSettings.work->autoDns = record[0xF6];
         autoDns = 0;
     }
-    ov13_0223A004(on);
-    ov13_0223A018(autoDns);
+    WifiSetupConnections_SetAutoAddress(on);
+    WifiSetupConnections_SetAutoDns(autoDns);
     WifiSetupSettings_DrawRows();
 }
 
 void WifiSetupSettings_SetAutoDns(int on) {
-    u32 old = ov13_02239FF0()[0xF6];
+    u32 old = WifiSetupConnections_GetEdit()[0xF6];
     if (old == (u32)on) {
         return;
     }
     gWifiSetupSettings.work->autoDns = on;
-    ov13_0223A018(on);
+    WifiSetupConnections_SetAutoDns(on);
     WifiSetupSettings_DrawRows();
 }
 
@@ -537,7 +537,7 @@ void WifiSetupSettings_Exit(void) {
         break;
     }
     case 11: {
-        u8 *record = ov13_02239FF0();
+        u8 *record = WifiSetupConnections_GetEdit();
         record[0xd0] = DWCi_BACKUPlConvMaskCidr(record + 0xf0);
         if (record[0xf5]) {
             MI_CpuFill8(record + 0xc0, 0, 4);
@@ -562,7 +562,7 @@ void WifiSetupSettings_Exit(void) {
             ov13_0222B8F8(2, 1);
             WifiSetupApp_SetStateFunc(ov13_022368D8);
         } else {
-            ov13_0223A414(ov13_02239FF0()[0xf4]);
+            WifiSetupConnections_Edit(WifiSetupConnections_GetEdit()[0xf4]);
             ov13_0222B8F8(0, 1);
             WifiSetupApp_SetStateFunc(ov13_02237618);
         }
@@ -590,7 +590,7 @@ void WifiSetupSettings_DrawRows(void) {
 }
 
 void WifiSetupSettings_DrawValue(u32 item, void *row) {
-    WifiSetupSettingsRecord *record = (WifiSetupSettingsRecord *)ov13_02239FF0(item, row);
+    WifiSetupSettingsRecord *record = (WifiSetupSettingsRecord *)WifiSetupConnections_GetEdit(item, row);
     switch (item) {
     case 0:
         WifiSetupSettings_DrawText((u8 *)record + 0x40, (int)row);
@@ -654,7 +654,7 @@ void WifiSetupSettings_DrawValue(u32 item, void *row) {
 #pragma opt_propagation off
 
 void WifiSetupSettings_DrawButtons(u32 item, void *row) {
-    WifiSetupSettingsRecord *record = (WifiSetupSettingsRecord *)ov13_02239FF0(item, row);
+    WifiSetupSettingsRecord *record = (WifiSetupSettingsRecord *)WifiSetupConnections_GetEdit(item, row);
     int type, option;
     switch (item) {
     case 0:
@@ -734,7 +734,7 @@ void WifiSetupSettings_DrawButtons(u32 item, void *row) {
 #pragma opt_propagation reset
 
 int WifiSetupSettings_IsItemEnabled(int item) {
-    u8 *record = ov13_02239FF0();
+    u8 *record = WifiSetupConnections_GetEdit();
     int enabled = 1;
     switch (item) {
     case WIFI_SETUP_SETTINGS_ITEM_AUTO_DNS_ON:

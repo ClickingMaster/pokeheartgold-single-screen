@@ -43,7 +43,7 @@ extern u8 ov13_02246410[];
 extern u8 ov13_02246428[];
 extern char ov13_02246440[];
 
-extern void ov13_0223AA58(const char *text, u8 *address);
+extern void WifiSetup_ParseAddress(const char *text, u8 *address);
 extern int DWC_BACKUPlCheckAddress(void *address);
 extern void ov13_0223BE6C(int, int, int, int, int);
 extern int ov13_0223C1DC(void);
@@ -382,7 +382,7 @@ int WifiSetupAddressEntry_IsValid(void) {
             }
         }
     }
-    ov13_0223AA58((const char *)gWifiSetupAddressEntry->digits, address);
+    WifiSetup_ParseAddress((const char *)gWifiSetupAddressEntry->digits, address);
     ov13_0222B948(&kind, 0);
     if (kind == 1) {
         zero = 0;

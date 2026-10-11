@@ -23391,8 +23391,8 @@ ov07_02226C4C: ; 0x02226C4C
 _02226C8C: .word ov07_02226B2C
 	thumb_func_end ov07_02226C4C
 
-	thumb_func_start ov07_02226C90
-ov07_02226C90: ; 0x02226C90
+	thumb_func_start BattleAnimFunc_SetBgPaletteGrayscale
+BattleAnimFunc_SetBgPaletteGrayscale: ; 0x02226C90
 	push {r4, lr}
 	mov r1, #0
 	add r4, r0, #0
@@ -23407,10 +23407,10 @@ _02226CA6:
 	bl BattleAnimSystem_RestoreFromGrayscale
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02226C90
+	thumb_func_end BattleAnimFunc_SetBgPaletteGrayscale
 
-	thumb_func_start ov07_02226CB0
-ov07_02226CB0: ; 0x02226CB0
+	thumb_func_start BattleAnimTask_DropSpriteStepwiseUpdate
+BattleAnimTask_DropSpriteStepwiseUpdate: ; 0x02226CB0
 	push {r3, r4, r5, r6, lr}
 	sub sp, #4
 	add r4, r0, #0
@@ -23705,10 +23705,10 @@ _02226EF4:
 _02226EF8: .word 0xFFFF1FFF
 _02226EFC: .word 0x0000A0C0
 _02226F00: .word 0x000056C0
-	thumb_func_end ov07_02226CB0
+	thumb_func_end BattleAnimTask_DropSpriteStepwiseUpdate
 
-	thumb_func_start ov07_02226F04
-ov07_02226F04: ; 0x02226F04
+	thumb_func_start BattleAnimTask_DropSpriteStepwise
+BattleAnimTask_DropSpriteStepwise: ; 0x02226F04
 	push {r3, r4, r5, lr}
 	add r4, r1, #0
 	add r5, r0, #0
@@ -23716,7 +23716,7 @@ ov07_02226F04: ; 0x02226F04
 	cmp r0, #0
 	beq _02226F16
 	add r0, r4, #0
-	bl ov07_02226CB0
+	bl BattleAnimTask_DropSpriteStepwiseUpdate
 _02226F16:
 	ldrb r0, [r4]
 	add r0, r0, #1
@@ -23766,10 +23766,10 @@ _02226F6E:
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 _02226F7C: .word 0xFFFF1FFF
-	thumb_func_end ov07_02226F04
+	thumb_func_end BattleAnimTask_DropSpriteStepwise
 
-	thumb_func_start ov07_02226F80
-ov07_02226F80: ; 0x02226F80
+	thumb_func_start BattleAnimFunc_DropSpriteStepwise
+BattleAnimFunc_DropSpriteStepwise: ; 0x02226F80
 	push {r3, r4, r5, r6, r7, lr}
 	mov r1, #0x40
 	add r5, r0, #0
@@ -24026,16 +24026,16 @@ _02227182:
 	bl ManagedSprite_SetDrawPriority
 _0222718A:
 	ldr r0, [r4, #4]
-	ldr r1, _02227198 ; =ov07_02226F04
+	ldr r1, _02227198 ; =BattleAnimTask_DropSpriteStepwise
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
-_02227198: .word ov07_02226F04
-	thumb_func_end ov07_02226F80
+_02227198: .word BattleAnimTask_DropSpriteStepwise
+	thumb_func_end BattleAnimFunc_DropSpriteStepwise
 
-	thumb_func_start ov07_0222719C
-ov07_0222719C: ; 0x0222719C
+	thumb_func_start BattleAnimTask_AnimateSprites
+BattleAnimTask_AnimateSprites: ; 0x0222719C
 	push {r4, r5, r6, lr}
 	add r6, r1, #0
 	add r2, r0, #0
@@ -24067,10 +24067,10 @@ _022271CA:
 	bl SpriteSystem_DrawSprites
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
-	thumb_func_end ov07_0222719C
+	thumb_func_end BattleAnimTask_AnimateSprites
 
-	thumb_func_start ov07_022271DC
-ov07_022271DC: ; 0x022271DC
+	thumb_func_start BattleAnimFunc_AnimateSprites
+BattleAnimFunc_AnimateSprites: ; 0x022271DC
 	push {r3, r4, r5, r6, r7, lr}
 	mov r1, #0x34
 	add r4, r0, #0
@@ -24111,19 +24111,19 @@ _02227224:
 	cmp r6, #4
 	blt _02227210
 	ldr r0, [r7, #4]
-	ldr r1, _02227244 ; =ov07_0222719C
+	ldr r1, _02227244 ; =BattleAnimTask_AnimateSprites
 	add r2, r7, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	add r1, r7, #0
-	bl ov07_0222719C
+	bl BattleAnimTask_AnimateSprites
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
 _02227240: .word ov07_022378B0
-_02227244: .word ov07_0222719C
-	thumb_func_end ov07_022271DC
+_02227244: .word BattleAnimTask_AnimateSprites
+	thumb_func_end BattleAnimFunc_AnimateSprites
 
-	thumb_func_start ov07_02227248
-ov07_02227248: ; 0x02227248
+	thumb_func_start BattleAnimTask_BattleBgWave
+BattleAnimTask_BattleBgWave: ; 0x02227248
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0x14
 	add r5, r1, #0
@@ -24189,10 +24189,10 @@ _022272CA:
 	add sp, #0x14
 	pop {r3, r4, r5, r6, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02227248
+	thumb_func_end BattleAnimTask_BattleBgWave
 
-	thumb_func_start ov07_022272D0
-ov07_022272D0: ; 0x022272D0
+	thumb_func_start BattleAnimFunc_BattleBgWave
+BattleAnimFunc_BattleBgWave: ; 0x022272D0
 	push {r3, r4, r5, lr}
 	mov r1, #0x28
 	add r5, r0, #0
@@ -24207,16 +24207,16 @@ ov07_022272D0: ; 0x022272D0
 	bl BattleAnimSystem_GetArg
 	str r0, [r4, #4]
 	ldr r0, [r4, #0xc]
-	ldr r1, _022272FC ; =ov07_02227248
+	ldr r1, _022272FC ; =BattleAnimTask_BattleBgWave
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-_022272FC: .word ov07_02227248
-	thumb_func_end ov07_022272D0
+_022272FC: .word BattleAnimTask_BattleBgWave
+	thumb_func_end BattleAnimFunc_BattleBgWave
 
-	thumb_func_start ov07_02227300
-ov07_02227300: ; 0x02227300
+	thumb_func_start BattleAnimTask_BlinkScaleFadeSprites
+BattleAnimTask_BlinkScaleFadeSprites: ; 0x02227300
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x1c
 	add r4, r1, #0
@@ -24468,10 +24468,10 @@ _022274E6:
 	.balign 4, 0
 _022274F0: .word ov07_022366D2
 _022274F4: .word 0x04000052
-	thumb_func_end ov07_02227300
+	thumb_func_end BattleAnimTask_BlinkScaleFadeSprites
 
-	thumb_func_start ov07_022274F8
-ov07_022274F8: ; 0x022274F8
+	thumb_func_start BattleAnimSpriteFunc_BlinkScaleFadeSprites
+BattleAnimSpriteFunc_BlinkScaleFadeSprites: ; 0x022274F8
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x3c
 	str r0, [sp]
@@ -24603,7 +24603,7 @@ _022275DE:
 _02227616:
 	mov r3, #1
 	ldr r0, [sp]
-	ldr r1, _0222762C ; =ov07_02227300
+	ldr r1, _0222762C ; =BattleAnimTask_BlinkScaleFadeSprites
 	add r2, r4, #0
 	lsl r3, r3, #0xc
 	bl BattleAnimSystem_CreateTask
@@ -24611,11 +24611,11 @@ _02227616:
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
 _02227628: .word 0x04000052
-_0222762C: .word ov07_02227300
-	thumb_func_end ov07_022274F8
+_0222762C: .word BattleAnimTask_BlinkScaleFadeSprites
+	thumb_func_end BattleAnimSpriteFunc_BlinkScaleFadeSprites
 
-	thumb_func_start ov07_02227630
-ov07_02227630: ; 0x02227630
+	thumb_func_start BattleAnimTask_AttackerGrowFlashRed
+BattleAnimTask_AttackerGrowFlashRed: ; 0x02227630
 	push {r3, r4, r5, r6, lr}
 	sub sp, #4
 	add r4, r1, #0
@@ -24852,10 +24852,10 @@ _0222781E:
 	add sp, #4
 	pop {r3, r4, r5, r6, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02227630
+	thumb_func_end BattleAnimTask_AttackerGrowFlashRed
 
-	thumb_func_start ov07_02227824
-ov07_02227824: ; 0x02227824
+	thumb_func_start BattleAnimFunc_AttackerGrowFlashRed
+BattleAnimFunc_AttackerGrowFlashRed: ; 0x02227824
 	push {r3, r4, r5, r6, lr}
 	sub sp, #4
 	add r5, r0, #0
@@ -24906,17 +24906,17 @@ ov07_02227824: ; 0x02227824
 	add r3, r2, #0
 	bl BattleAnimUtil_InitShake
 	ldr r0, [r4, #0xc]
-	ldr r1, _022278AC ; =ov07_02227630
+	ldr r1, _022278AC ; =BattleAnimTask_AttackerGrowFlashRed
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	add sp, #4
 	pop {r3, r4, r5, r6, pc}
 	nop
-_022278AC: .word ov07_02227630
-	thumb_func_end ov07_02227824
+_022278AC: .word BattleAnimTask_AttackerGrowFlashRed
+	thumb_func_end BattleAnimFunc_AttackerGrowFlashRed
 
-	thumb_func_start ov07_022278B0
-ov07_022278B0: ; 0x022278B0
+	thumb_func_start BattleAnimTask_AttackerSquashStretch
+BattleAnimTask_AttackerSquashStretch: ; 0x022278B0
 	push {r3, r4, lr}
 	sub sp, #0xc
 	add r4, r1, #0
@@ -25182,10 +25182,10 @@ _02227AD8:
 	add sp, #0xc
 	pop {r3, r4, pc}
 	.balign 4, 0
-	thumb_func_end ov07_022278B0
+	thumb_func_end BattleAnimTask_AttackerSquashStretch
 
-	thumb_func_start ov07_02227AEC
-ov07_02227AEC: ; 0x02227AEC
+	thumb_func_start BattleAnimFunc_AttackerSquashStretch
+BattleAnimFunc_AttackerSquashStretch: ; 0x02227AEC
 	push {r4, r5, lr}
 	sub sp, #0xc
 	add r5, r0, #0
@@ -25223,17 +25223,17 @@ ov07_02227AEC: ; 0x02227AEC
 	add r3, r1, #0
 	bl BattleAnimUtil_InitScaleMotionXY
 	ldr r0, [r4, #8]
-	ldr r1, _02227B54 ; =ov07_022278B0
+	ldr r1, _02227B54 ; =BattleAnimTask_AttackerSquashStretch
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	add sp, #0xc
 	pop {r4, r5, pc}
 	nop
-_02227B54: .word ov07_022278B0
-	thumb_func_end ov07_02227AEC
+_02227B54: .word BattleAnimTask_AttackerSquashStretch
+	thumb_func_end BattleAnimFunc_AttackerSquashStretch
 
-	thumb_func_start ov07_02227B58
-ov07_02227B58: ; 0x02227B58
+	thumb_func_start BattleAnimTask_AttackerAfterimages
+BattleAnimTask_AttackerAfterimages: ; 0x02227B58
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x18
 	add r5, r1, #0
@@ -25459,10 +25459,10 @@ _02227D0C: .word ov07_02236736
 _02227D10: .word ov07_02236734
 _02227D14: .word ov07_02236732
 _02227D18: .word 0x04000052
-	thumb_func_end ov07_02227B58
+	thumb_func_end BattleAnimTask_AttackerAfterimages
 
-	thumb_func_start ov07_02227D1C
-ov07_02227D1C: ; 0x02227D1C
+	thumb_func_start BattleAnimFunc_AttackerAfterimages
+BattleAnimFunc_AttackerAfterimages: ; 0x02227D1C
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x24
 	str r0, [sp, #0x18]
@@ -25721,18 +25721,18 @@ _02227EAA:
 	bl PaletteData_LoadNarc_CustomTint
 _02227F8C:
 	ldr r0, [r4, #0xc]
-	ldr r1, _02227FA0 ; =ov07_02227B58
+	ldr r1, _02227FA0 ; =BattleAnimTask_AttackerAfterimages
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	add sp, #0x24
 	pop {r4, r5, r6, r7, pc}
 	nop
 _02227F9C: .word 0x04000052
-_02227FA0: .word ov07_02227B58
-	thumb_func_end ov07_02227D1C
+_02227FA0: .word BattleAnimTask_AttackerAfterimages
+	thumb_func_end BattleAnimFunc_AttackerAfterimages
 
-	thumb_func_start ov07_02227FA4
-ov07_02227FA4: ; 0x02227FA4
+	thumb_func_start BattleAnimTask_AttackerPulseWhite
+BattleAnimTask_AttackerPulseWhite: ; 0x02227FA4
 	push {r3, r4, r5, lr}
 	add r4, r1, #0
 	add r2, r0, #0
@@ -25830,10 +25830,10 @@ _02228060: .word ov07_022366CD
 _02228064: .word ov07_022366CE
 _02228068: .word ov07_022366CC
 _0222806C: .word 0x00007FFF
-	thumb_func_end ov07_02227FA4
+	thumb_func_end BattleAnimTask_AttackerPulseWhite
 
-	thumb_func_start ov07_02228070
-ov07_02228070: ; 0x02228070
+	thumb_func_start BattleAnimFunc_AttackerPulseWhite
+BattleAnimFunc_AttackerPulseWhite: ; 0x02228070
 	push {r3, r4, r5, lr}
 	mov r1, #0x30
 	add r5, r0, #0
@@ -25851,16 +25851,16 @@ ov07_02228070: ; 0x02228070
 	bl BattleAnimSystem_GetBattlerPokepic
 	str r0, [r4, #8]
 	ldr r0, [r4, #4]
-	ldr r1, _022280A4 ; =ov07_02227FA4
+	ldr r1, _022280A4 ; =BattleAnimTask_AttackerPulseWhite
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	pop {r3, r4, r5, pc}
 	nop
-_022280A4: .word ov07_02227FA4
-	thumb_func_end ov07_02228070
+_022280A4: .word BattleAnimTask_AttackerPulseWhite
+	thumb_func_end BattleAnimFunc_AttackerPulseWhite
 
-	thumb_func_start ov07_022280A8
-ov07_022280A8: ; 0x022280A8
+	thumb_func_start BattleAnimTask_AttackerStretchSteps
+BattleAnimTask_AttackerStretchSteps: ; 0x022280A8
 	push {r4, r5, lr}
 	sub sp, #0xc
 	add r4, r1, #0
@@ -25956,10 +25956,10 @@ _02228164: .word ov07_02236715
 _02228168: .word ov07_02236716
 _0222816C: .word ov07_02236713
 _02228170: .word ov07_02236717
-	thumb_func_end ov07_022280A8
+	thumb_func_end BattleAnimTask_AttackerStretchSteps
 
-	thumb_func_start ov07_02228174
-ov07_02228174: ; 0x02228174
+	thumb_func_start BattleAnimFunc_AttackerStretchSteps
+BattleAnimFunc_AttackerStretchSteps: ; 0x02228174
 	push {r3, r4, r5, lr}
 	mov r1, #0x34
 	add r5, r0, #0
@@ -25985,16 +25985,16 @@ ov07_02228174: ; 0x02228174
 	bl ov07_0221FAA0
 	strh r0, [r4, #4]
 	ldr r0, [r4, #8]
-	ldr r1, _022281BC ; =ov07_022280A8
+	ldr r1, _022281BC ; =BattleAnimTask_AttackerStretchSteps
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-_022281BC: .word ov07_022280A8
-	thumb_func_end ov07_02228174
+_022281BC: .word BattleAnimTask_AttackerStretchSteps
+	thumb_func_end BattleAnimFunc_AttackerStretchSteps
 
-	thumb_func_start ov07_022281C0
-ov07_022281C0: ; 0x022281C0
+	thumb_func_start BattleAnimTask_AttackerLeapOffscreen
+BattleAnimTask_AttackerLeapOffscreen: ; 0x022281C0
 	push {r4, r5, lr}
 	sub sp, #0xc
 	add r4, r1, #0
@@ -26208,10 +26208,10 @@ _02228374: .word ov07_022366ED
 _02228378: .word ov07_022366EE
 _0222837C: .word ov07_022366EB
 _02228380: .word ov07_022366EF
-	thumb_func_end ov07_022281C0
+	thumb_func_end BattleAnimTask_AttackerLeapOffscreen
 
-	thumb_func_start ov07_02228384
-ov07_02228384: ; 0x02228384
+	thumb_func_start BattleAnimFunc_AttackerLeapOffscreen
+BattleAnimFunc_AttackerLeapOffscreen: ; 0x02228384
 	push {r3, r4, r5, lr}
 	mov r1, #0x34
 	add r5, r0, #0
@@ -26240,16 +26240,16 @@ ov07_02228384: ; 0x02228384
 	bl ov07_0221FAA0
 	strh r0, [r4, #6]
 	ldr r0, [r4, #8]
-	ldr r1, _022283D4 ; =ov07_022281C0
+	ldr r1, _022283D4 ; =BattleAnimTask_AttackerLeapOffscreen
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	pop {r3, r4, r5, pc}
 	nop
-_022283D4: .word ov07_022281C0
-	thumb_func_end ov07_02228384
+_022283D4: .word BattleAnimTask_AttackerLeapOffscreen
+	thumb_func_end BattleAnimFunc_AttackerLeapOffscreen
 
-	thumb_func_start ov07_022283D8
-ov07_022283D8: ; 0x022283D8
+	thumb_func_start BattleAnimTask_AttackerSilhouette
+BattleAnimTask_AttackerSilhouette: ; 0x022283D8
 	push {r3, r4, lr}
 	sub sp, #0xc
 	add r4, r1, #0
@@ -26374,10 +26374,10 @@ _022284D0:
 	pop {r3, r4, pc}
 	.balign 4, 0
 _022284D4: .word 0x00007FFF
-	thumb_func_end ov07_022283D8
+	thumb_func_end BattleAnimTask_AttackerSilhouette
 
-	thumb_func_start ov07_022284D8
-ov07_022284D8: ; 0x022284D8
+	thumb_func_start BattleAnimFunc_AttackerSilhouette
+BattleAnimFunc_AttackerSilhouette: ; 0x022284D8
 	push {r3, r4, r5, lr}
 	mov r1, #0x14
 	add r5, r0, #0
@@ -26394,16 +26394,16 @@ ov07_022284D8: ; 0x022284D8
 	bl BattleAnimSystem_GetBattlerPokepic
 	str r0, [r4, #0x10]
 	ldr r0, [r4, #8]
-	ldr r1, _0222850C ; =ov07_022283D8
+	ldr r1, _0222850C ; =BattleAnimTask_AttackerSilhouette
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	pop {r3, r4, r5, pc}
 	nop
-_0222850C: .word ov07_022283D8
-	thumb_func_end ov07_022284D8
+_0222850C: .word BattleAnimTask_AttackerSilhouette
+	thumb_func_end BattleAnimFunc_AttackerSilhouette
 
-	thumb_func_start ov07_02228510
-ov07_02228510: ; 0x02228510
+	thumb_func_start BattleAnimTask_AttackerHop
+BattleAnimTask_AttackerHop: ; 0x02228510
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0xc
 	add r4, r1, #0
@@ -26542,10 +26542,10 @@ _02228628: .word ov07_022366F9
 _0222862C: .word ov07_022366D8
 _02228630: .word ov07_022366D9
 _02228634: .word ov07_022366DA
-	thumb_func_end ov07_02228510
+	thumb_func_end BattleAnimTask_AttackerHop
 
-	thumb_func_start ov07_02228638
-ov07_02228638: ; 0x02228638
+	thumb_func_start BattleAnimFunc_AttackerHop
+BattleAnimFunc_AttackerHop: ; 0x02228638
 	push {r3, r4, r5, lr}
 	mov r1, #0x58
 	add r5, r0, #0
@@ -26571,16 +26571,16 @@ ov07_02228638: ; 0x02228638
 	bl ov07_0221FAA0
 	strh r0, [r4, #6]
 	ldr r0, [r4, #8]
-	ldr r1, _02228680 ; =ov07_02228510
+	ldr r1, _02228680 ; =BattleAnimTask_AttackerHop
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-_02228680: .word ov07_02228510
-	thumb_func_end ov07_02228638
+_02228680: .word BattleAnimTask_AttackerHop
+	thumb_func_end BattleAnimFunc_AttackerHop
 
-	thumb_func_start ov07_02228684
-ov07_02228684: ; 0x02228684
+	thumb_func_start BattleAnimTask_ShowAttackerObjWindowSprites
+BattleAnimTask_ShowAttackerObjWindowSprites: ; 0x02228684
 	push {r4, lr}
 	add r4, r1, #0
 	add r2, r0, #0
@@ -26676,10 +26676,10 @@ _02228730:
 _02228744: .word 0x0400004A
 _02228748: .word 0xFFFFC0FF
 _0222874C: .word 0xFFFF1FFF
-	thumb_func_end ov07_02228684
+	thumb_func_end BattleAnimTask_ShowAttackerObjWindowSprites
 
-	thumb_func_start ov07_02228750
-ov07_02228750: ; 0x02228750
+	thumb_func_start BattleAnimFunc_ShowAttackerObjWindowSprites
+BattleAnimFunc_ShowAttackerObjWindowSprites: ; 0x02228750
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x20
 	mov r1, #0x14
@@ -26766,7 +26766,7 @@ ov07_02228750: ; 0x02228750
 	mov r1, #0
 	bl ManagedSprite_SetDrawFlag
 	ldr r0, [r4, #4]
-	ldr r1, _02228830 ; =ov07_02228684
+	ldr r1, _02228830 ; =BattleAnimTask_ShowAttackerObjWindowSprites
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	add sp, #0x20
@@ -26774,11 +26774,11 @@ ov07_02228750: ; 0x02228750
 	nop
 _02228828: .word 0xFFFF1FFF
 _0222882C: .word 0xFFFFC0FF
-_02228830: .word ov07_02228684
-	thumb_func_end ov07_02228750
+_02228830: .word BattleAnimTask_ShowAttackerObjWindowSprites
+	thumb_func_end BattleAnimFunc_ShowAttackerObjWindowSprites
 
-	thumb_func_start ov07_02228834
-ov07_02228834: ; 0x02228834
+	thumb_func_start BattleAnimTask_AttackerSquashAfterimages
+BattleAnimTask_AttackerSquashAfterimages: ; 0x02228834
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x2c
 	add r4, r1, #0
@@ -27045,10 +27045,10 @@ _02228A42:
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
 _02228A4C: .word ov07_022366C8
-	thumb_func_end ov07_02228834
+	thumb_func_end BattleAnimTask_AttackerSquashAfterimages
 
-	thumb_func_start ov07_02228A50
-ov07_02228A50: ; 0x02228A50
+	thumb_func_start BattleAnimFunc_AttackerSquashAfterimages
+BattleAnimFunc_AttackerSquashAfterimages: ; 0x02228A50
 	push {r3, r4, r5, r6, r7, lr}
 	mov r1, #0x9c
 	str r0, [sp]
@@ -27141,18 +27141,18 @@ _02228B04:
 	cmp r6, #3
 	blt _02228B04
 	ldr r0, [r4, #0x10]
-	ldr r1, _02228B34 ; =ov07_02228834
+	ldr r1, _02228B34 ; =BattleAnimTask_AttackerSquashAfterimages
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
 _02228B2C: .word 0x0000060C
 _02228B30: .word 0x04000052
-_02228B34: .word ov07_02228834
-	thumb_func_end ov07_02228A50
+_02228B34: .word BattleAnimTask_AttackerSquashAfterimages
+	thumb_func_end BattleAnimFunc_AttackerSquashAfterimages
 
-	thumb_func_start ov07_02228B38
-ov07_02228B38: ; 0x02228B38
+	thumb_func_start BattleAnimTask_ShakeBattlefieldFlashing
+BattleAnimTask_ShakeBattlefieldFlashing: ; 0x02228B38
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0xc
 	add r4, r1, #0
@@ -27320,10 +27320,10 @@ _02228C80:
 	.balign 4, 0
 _02228C84: .word ov07_02236722
 _02228C88: .word 0x00007FFF
-	thumb_func_end ov07_02228B38
+	thumb_func_end BattleAnimTask_ShakeBattlefieldFlashing
 
-	thumb_func_start ov07_02228C8C
-ov07_02228C8C: ; 0x02228C8C
+	thumb_func_start BattleAnimFunc_ShakeBattlefieldFlashing
+BattleAnimFunc_ShakeBattlefieldFlashing: ; 0x02228C8C
 	push {r3, r4, r5, r6, r7, lr}
 	mov r1, #0xd8
 	add r5, r0, #0
@@ -27375,16 +27375,16 @@ _02228CD8:
 	blt _02228CD8
 _02228CF6:
 	ldr r0, [r4, #0xc]
-	ldr r1, _02228D04 ; =ov07_02228B38
+	ldr r1, _02228D04 ; =BattleAnimTask_ShakeBattlefieldFlashing
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
-_02228D04: .word ov07_02228B38
-	thumb_func_end ov07_02228C8C
+_02228D04: .word BattleAnimTask_ShakeBattlefieldFlashing
+	thumb_func_end BattleAnimFunc_ShakeBattlefieldFlashing
 
-	thumb_func_start ov07_02228D08
-ov07_02228D08: ; 0x02228D08
+	thumb_func_start BattleAnimTask_SpriteDriftFade
+BattleAnimTask_SpriteDriftFade: ; 0x02228D08
 	push {r4, lr}
 	add r4, r1, #0
 	add r2, r0, #0
@@ -27425,10 +27425,10 @@ _02228D52:
 	bl Heap_Free
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02228D08
+	thumb_func_end BattleAnimTask_SpriteDriftFade
 
-	thumb_func_start ov07_02228D64
-ov07_02228D64: ; 0x02228D64
+	thumb_func_start BattleAnimFunc_SpriteDriftFade
+BattleAnimFunc_SpriteDriftFade: ; 0x02228D64
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #8
 	mov r1, #0x8c
@@ -27538,17 +27538,17 @@ _02228DAC:
 	add r1, r5, #0
 	bl ManagedSprite_SetOamMode
 	ldr r0, [r4, #0xc]
-	ldr r1, _02228E6C ; =ov07_02228D08
+	ldr r1, _02228E6C ; =BattleAnimTask_SpriteDriftFade
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	add sp, #8
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
-_02228E6C: .word ov07_02228D08
-	thumb_func_end ov07_02228D64
+_02228E6C: .word BattleAnimTask_SpriteDriftFade
+	thumb_func_end BattleAnimFunc_SpriteDriftFade
 
-	thumb_func_start ov07_02228E70
-ov07_02228E70: ; 0x02228E70
+	thumb_func_start BattleAnimTask_RockAttacker
+BattleAnimTask_RockAttacker: ; 0x02228E70
 	push {r3, r4, r5, lr}
 	add r4, r1, #0
 	add r5, r0, #0
@@ -27632,10 +27632,10 @@ _02228EF2:
 	.balign 4, 0
 _02228F0C: .word ov07_0223674C
 _02228F10: .word ov07_02236750
-	thumb_func_end ov07_02228E70
+	thumb_func_end BattleAnimTask_RockAttacker
 
-	thumb_func_start ov07_02228F14
-ov07_02228F14: ; 0x02228F14
+	thumb_func_start BattleAnimTask_ShakePic
+BattleAnimTask_ShakePic: ; 0x02228F14
 	push {r4, lr}
 	sub sp, #8
 	add r4, r1, #0
@@ -27693,10 +27693,10 @@ _02228F76:
 _02228F84:
 	add sp, #8
 	pop {r4, pc}
-	thumb_func_end ov07_02228F14
+	thumb_func_end BattleAnimTask_ShakePic
 
-	thumb_func_start ov07_02228F88
-ov07_02228F88: ; 0x02228F88
+	thumb_func_start BattleAnimFunc_RockOrShakeAttacker
+BattleAnimFunc_RockOrShakeAttacker: ; 0x02228F88
 	push {r4, r5, r6, lr}
 	mov r1, #0x70
 	add r5, r0, #0
@@ -27748,22 +27748,22 @@ ov07_02228F88: ; 0x02228F88
 	cmp r6, #0
 	ldr r0, [r4, #4]
 	bne _02229012
-	ldr r1, _0222901C ; =ov07_02228E70
+	ldr r1, _0222901C ; =BattleAnimTask_RockAttacker
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	pop {r4, r5, r6, pc}
 _02229012:
-	ldr r1, _02229020 ; =ov07_02228F14
+	ldr r1, _02229020 ; =BattleAnimTask_ShakePic
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
-_0222901C: .word ov07_02228E70
-_02229020: .word ov07_02228F14
-	thumb_func_end ov07_02228F88
+_0222901C: .word BattleAnimTask_RockAttacker
+_02229020: .word BattleAnimTask_ShakePic
+	thumb_func_end BattleAnimFunc_RockOrShakeAttacker
 
-	thumb_func_start ov07_02229024
-ov07_02229024: ; 0x02229024
+	thumb_func_start BattleAnimTask_ShakeBattlefieldByPower
+BattleAnimTask_ShakeBattlefieldByPower: ; 0x02229024
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r1, #0
 	add r2, r0, #0
@@ -27839,10 +27839,10 @@ _022290AC:
 	add r0, r5, #0
 	bl Heap_Free
 	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end ov07_02229024
+	thumb_func_end BattleAnimTask_ShakeBattlefieldByPower
 
-	thumb_func_start ov07_022290BC
-ov07_022290BC: ; 0x022290BC
+	thumb_func_start BattleAnimFunc_ShakeBattlefieldByPower
+BattleAnimFunc_ShakeBattlefieldByPower: ; 0x022290BC
 	push {r3, r4, r5, r6, r7, lr}
 	mov r1, #0x70
 	add r4, r0, #0
@@ -27922,16 +27922,16 @@ _02229140:
 	cmp r6, #4
 	blt _0222912C
 	ldr r0, [r7, #4]
-	ldr r1, _02229158 ; =ov07_02229024
+	ldr r1, _02229158 ; =BattleAnimTask_ShakeBattlefieldByPower
 	add r2, r7, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
-_02229158: .word ov07_02229024
-	thumb_func_end ov07_022290BC
+_02229158: .word BattleAnimTask_ShakeBattlefieldByPower
+	thumb_func_end BattleAnimFunc_ShakeBattlefieldByPower
 
-	thumb_func_start ov07_0222915C
-ov07_0222915C: ; 0x0222915C
+	thumb_func_start BattleAnimTask_ShakeSpritePair
+BattleAnimTask_ShakeSpritePair: ; 0x0222915C
 	push {r3, r4, lr}
 	sub sp, #4
 	add r4, r1, #0
@@ -28025,10 +28025,10 @@ _0222920C:
 	add sp, #4
 	pop {r3, r4, pc}
 	.balign 4, 0
-	thumb_func_end ov07_0222915C
+	thumb_func_end BattleAnimTask_ShakeSpritePair
 
-	thumb_func_start ov07_02229220
-ov07_02229220: ; 0x02229220
+	thumb_func_start BattleAnimFunc_ShakeSpritePair
+BattleAnimFunc_ShakeSpritePair: ; 0x02229220
 	push {r3, r4, r5, lr}
 	mov r1, #0x88
 	add r5, r0, #0
@@ -28066,16 +28066,16 @@ ov07_02229220: ; 0x02229220
 	add r1, #0x2c
 	bl BattleAnimUtil_GetPicPosition
 	ldr r0, [r4, #4]
-	ldr r1, _02229288 ; =ov07_0222915C
+	ldr r1, _02229288 ; =BattleAnimTask_ShakeSpritePair
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-_02229288: .word ov07_0222915C
-	thumb_func_end ov07_02229220
+_02229288: .word BattleAnimTask_ShakeSpritePair
+	thumb_func_end BattleAnimFunc_ShakeSpritePair
 
-	thumb_func_start ov07_0222928C
-ov07_0222928C: ; 0x0222928C
+	thumb_func_start BattleAnimTask_ThrowSpriteArc
+BattleAnimTask_ThrowSpriteArc: ; 0x0222928C
 	push {r3, r4, r5, lr}
 	add r4, r1, #0
 	add r5, r0, #0
@@ -28114,10 +28114,10 @@ _022292D4:
 	bl SpriteSystem_DrawSprites
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov07_0222928C
+	thumb_func_end BattleAnimTask_ThrowSpriteArc
 
-	thumb_func_start ov07_022292E4
-ov07_022292E4: ; 0x022292E4
+	thumb_func_start BattleAnimSpriteFunc_ThrowSpriteArc
+BattleAnimSpriteFunc_ThrowSpriteArc: ; 0x022292E4
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x10
 	mov r1, #0xe8
@@ -28285,7 +28285,7 @@ _0222943E:
 	ldr r0, [r4, #0x38]
 	bl ManagedSprite_TickFrame
 	ldr r0, [r4, #0x14]
-	ldr r1, _0222947C ; =ov07_0222928C
+	ldr r1, _0222947C ; =BattleAnimTask_ThrowSpriteArc
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	add sp, #0x10
@@ -28294,11 +28294,11 @@ _0222943E:
 _02229470: .word 0x00005C71
 _02229474: .word 0x00000E38
 _02229478: .word 0x00003FFF
-_0222947C: .word ov07_0222928C
-	thumb_func_end ov07_022292E4
+_0222947C: .word BattleAnimTask_ThrowSpriteArc
+	thumb_func_end BattleAnimSpriteFunc_ThrowSpriteArc
 
-	thumb_func_start ov07_02229480
-ov07_02229480: ; 0x02229480
+	thumb_func_start BattleAnimTask_StretchFadeSprite
+BattleAnimTask_StretchFadeSprite: ; 0x02229480
 	push {r4, r5, lr}
 	sub sp, #0x1c
 	add r4, r1, #0
@@ -28510,10 +28510,10 @@ _0222961A:
 	pop {r4, r5, pc}
 	nop
 _0222962C: .word 0x04000052
-	thumb_func_end ov07_02229480
+	thumb_func_end BattleAnimTask_StretchFadeSprite
 
-	thumb_func_start ov07_02229630
-ov07_02229630: ; 0x02229630
+	thumb_func_start BattleAnimFunc_StretchFadeSprite
+BattleAnimFunc_StretchFadeSprite: ; 0x02229630
 	push {r4, r5, lr}
 	sub sp, #0x14
 	mov r1, #0xd4
@@ -28677,14 +28677,14 @@ _02229720:
 	asr r2, r2, #0x10
 	bl ManagedSprite_SetPositionXY
 	ldr r0, [r4, #0x1c]
-	ldr r1, _022297B4 ; =ov07_02229480
+	ldr r1, _022297B4 ; =BattleAnimTask_StretchFadeSprite
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	add sp, #0x14
 	pop {r4, r5, pc}
 	nop
-_022297B4: .word ov07_02229480
-	thumb_func_end ov07_02229630
+_022297B4: .word BattleAnimTask_StretchFadeSprite
+	thumb_func_end BattleAnimFunc_StretchFadeSprite
 
 	thumb_func_start ov07_022297B8
 ov07_022297B8: ; 0x022297B8
@@ -29366,8 +29366,8 @@ _02229D38: .word 0x04000052
 _02229D3C: .word ov07_022297B8
 	thumb_func_end ov07_02229BFC
 
-	thumb_func_start ov07_02229D40
-ov07_02229D40: ; 0x02229D40
+	thumb_func_start BattleAnimTask_BlinkSpritesCenter
+BattleAnimTask_BlinkSpritesCenter: ; 0x02229D40
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r1, #0
 	add r7, r0, #0
@@ -29513,10 +29513,10 @@ _02229E40:
 	.balign 4, 0
 _02229E48: .word 0x04000052
 _02229E4C: .word ov07_02236778
-	thumb_func_end ov07_02229D40
+	thumb_func_end BattleAnimTask_BlinkSpritesCenter
 
-	thumb_func_start ov07_02229E50
-ov07_02229E50: ; 0x02229E50
+	thumb_func_start BattleAnimSpriteFunc_BlinkSpritesCenter
+BattleAnimSpriteFunc_BlinkSpritesCenter: ; 0x02229E50
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x38
 	add r7, r0, #0
@@ -29672,7 +29672,7 @@ _02229F9A:
 	cmp r6, r0
 	blt _02229F6E
 _02229FA4:
-	ldr r1, _02229FBC ; =ov07_02229D40
+	ldr r1, _02229FBC ; =BattleAnimTask_BlinkSpritesCenter
 	ldr r3, _02229FC0 ; =0x0000044C
 	add r0, r7, #0
 	add r2, r4, #0
@@ -29682,12 +29682,12 @@ _02229FA4:
 	.balign 4, 0
 _02229FB4: .word 0x04000052
 _02229FB8: .word 0xBF800000
-_02229FBC: .word ov07_02229D40
+_02229FBC: .word BattleAnimTask_BlinkSpritesCenter
 _02229FC0: .word 0x0000044C
-	thumb_func_end ov07_02229E50
+	thumb_func_end BattleAnimSpriteFunc_BlinkSpritesCenter
 
-	thumb_func_start ov07_02229FC4
-ov07_02229FC4: ; 0x02229FC4
+	thumb_func_start BattleAnimTask_SlidingSpritePairs
+BattleAnimTask_SlidingSpritePairs: ; 0x02229FC4
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0xc
 	add r4, r1, #0
@@ -29969,10 +29969,10 @@ _0222A1E0: .word ov07_022367AE
 _0222A1E4: .word ov07_02236774
 _0222A1E8: .word ov07_022367B4
 _0222A1EC: .word ov07_022367B2
-	thumb_func_end ov07_02229FC4
+	thumb_func_end BattleAnimTask_SlidingSpritePairs
 
-	thumb_func_start ov07_0222A1F0
-ov07_0222A1F0: ; 0x0222A1F0
+	thumb_func_start BattleAnimSpriteFunc_SlidingSpritePairs
+BattleAnimSpriteFunc_SlidingSpritePairs: ; 0x0222A1F0
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x38
 	str r0, [sp]
@@ -30097,7 +30097,7 @@ _0222A2E8:
 	mov r1, #0
 	bl ManagedSprite_SetDrawFlag
 	ldr r0, [sp]
-	ldr r1, _0222A320 ; =ov07_02229FC4
+	ldr r1, _0222A320 ; =BattleAnimTask_SlidingSpritePairs
 	ldr r3, _0222A324 ; =0x0000044C
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTask
@@ -30106,12 +30106,12 @@ _0222A2E8:
 	.balign 4, 0
 _0222A318: .word 0x04000052
 _0222A31C: .word ov07_02236796
-_0222A320: .word ov07_02229FC4
+_0222A320: .word BattleAnimTask_SlidingSpritePairs
 _0222A324: .word 0x0000044C
-	thumb_func_end ov07_0222A1F0
+	thumb_func_end BattleAnimSpriteFunc_SlidingSpritePairs
 
-	thumb_func_start ov07_0222A328
-ov07_0222A328: ; 0x0222A328
+	thumb_func_start BattleAnimTask_PopAndScatterSprite
+BattleAnimTask_PopAndScatterSprite: ; 0x0222A328
 	push {r4, r5, lr}
 	sub sp, #0xc
 	add r4, r1, #0
@@ -30312,10 +30312,10 @@ _0222A49E:
 _0222A4A8: .word 0x3DCCCCCD
 _0222A4AC: .word ov07_02236780
 _0222A4B0: .word ov07_0223677E
-	thumb_func_end ov07_0222A328
+	thumb_func_end BattleAnimTask_PopAndScatterSprite
 
-	thumb_func_start ov07_0222A4B4
-ov07_0222A4B4: ; 0x0222A4B4
+	thumb_func_start BattleAnimTask_PopAndScatterSprites
+BattleAnimTask_PopAndScatterSprites: ; 0x0222A4B4
 	push {r4, r5, r6, lr}
 	add r4, r1, #0
 	add r2, r0, #0
@@ -30437,10 +30437,10 @@ _0222A580:
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
 _0222A588: .word 0x00000514
-	thumb_func_end ov07_0222A4B4
+	thumb_func_end BattleAnimTask_PopAndScatterSprites
 
-	thumb_func_start ov07_0222A58C
-ov07_0222A58C: ; 0x0222A58C
+	thumb_func_start BattleAnimSpriteFunc_PopAndScatterSprites
+BattleAnimSpriteFunc_PopAndScatterSprites: ; 0x0222A58C
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x50
 	str r0, [sp]
@@ -30574,7 +30574,7 @@ _0222A606:
 	mov r1, #0
 	bl ManagedSprite_SetDrawFlag
 	ldr r0, [sp]
-	ldr r1, _0222A700 ; =ov07_0222A328
+	ldr r1, _0222A700 ; =BattleAnimTask_PopAndScatterSprite
 	ldr r2, [sp, #0xc]
 	ldr r3, _0222A704 ; =0x0000044B
 	bl BattleAnimSystem_CreateTask
@@ -30596,7 +30596,7 @@ _0222A606:
 	blt _0222A5F6
 _0222A6E2:
 	ldr r0, [sp]
-	ldr r1, _0222A708 ; =ov07_0222A4B4
+	ldr r1, _0222A708 ; =BattleAnimTask_PopAndScatterSprites
 	ldr r3, _0222A70C ; =0x0000044D
 	add r2, r6, #0
 	bl BattleAnimSystem_CreateTask
@@ -30606,14 +30606,14 @@ _0222A6E2:
 _0222A6F4: .word 0x00000564
 _0222A6F8: .word 0x00000514
 _0222A6FC: .word ov07_022367CE
-_0222A700: .word ov07_0222A328
+_0222A700: .word BattleAnimTask_PopAndScatterSprite
 _0222A704: .word 0x0000044B
-_0222A708: .word ov07_0222A4B4
+_0222A708: .word BattleAnimTask_PopAndScatterSprites
 _0222A70C: .word 0x0000044D
-	thumb_func_end ov07_0222A58C
+	thumb_func_end BattleAnimSpriteFunc_PopAndScatterSprites
 
-	thumb_func_start ov07_0222A710
-ov07_0222A710: ; 0x0222A710
+	thumb_func_start BattleAnimTask_WaveAttackerOnBg
+BattleAnimTask_WaveAttackerOnBg: ; 0x0222A710
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0x14
 	add r4, r1, #0
@@ -30748,10 +30748,10 @@ _0222A81C:
 	pop {r3, r4, r5, r6, pc}
 	nop
 _0222A834: .word 0xFFFF1FFF
-	thumb_func_end ov07_0222A710
+	thumb_func_end BattleAnimTask_WaveAttackerOnBg
 
-	thumb_func_start ov07_0222A838
-ov07_0222A838: ; 0x0222A838
+	thumb_func_start BattleAnimFunc_WaveAttackerOnBg
+BattleAnimFunc_WaveAttackerOnBg: ; 0x0222A838
 	push {r3, r4, r5, lr}
 	sub sp, #8
 	mov r1, #0x54
@@ -30810,7 +30810,7 @@ ov07_0222A838: ; 0x0222A838
 	mov r1, #1
 	bl ToggleBgLayer
 	ldr r0, [r4, #8]
-	ldr r1, _0222A8D4 ; =ov07_0222A710
+	ldr r1, _0222A8D4 ; =BattleAnimTask_WaveAttackerOnBg
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	add sp, #8
@@ -30818,11 +30818,11 @@ ov07_0222A838: ; 0x0222A838
 	nop
 _0222A8CC: .word 0xFFFF1FFF
 _0222A8D0: .word 0xFFFFC0FF
-_0222A8D4: .word ov07_0222A710
-	thumb_func_end ov07_0222A838
+_0222A8D4: .word BattleAnimTask_WaveAttackerOnBg
+	thumb_func_end BattleAnimFunc_WaveAttackerOnBg
 
-	thumb_func_start ov07_0222A8D8
-ov07_0222A8D8: ; 0x0222A8D8
+	thumb_func_start BattleAnimUtil_TickSpriteIfVisible
+BattleAnimUtil_TickSpriteIfVisible: ; 0x0222A8D8
 	push {r4, lr}
 	add r4, r0, #0
 	bl ManagedSprite_GetDrawFlag
@@ -30832,10 +30832,10 @@ ov07_0222A8D8: ; 0x0222A8D8
 	bl ManagedSprite_TickFrame
 _0222A8EA:
 	pop {r4, pc}
-	thumb_func_end ov07_0222A8D8
+	thumb_func_end BattleAnimUtil_TickSpriteIfVisible
 
-	thumb_func_start ov07_0222A8EC
-ov07_0222A8EC: ; 0x0222A8EC
+	thumb_func_start BattleAnimTask_SpriteQuad
+BattleAnimTask_SpriteQuad: ; 0x0222A8EC
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #8
 	str r1, [sp, #4]
@@ -30847,10 +30847,10 @@ ov07_0222A8EC: ; 0x0222A8EC
 	bgt _0222A910
 	ldr r0, [sp, #4]
 	ldr r0, [r0, #0x30]
-	bl ov07_0222A8D8
+	bl BattleAnimUtil_TickSpriteIfVisible
 	ldr r0, [sp, #4]
 	ldr r0, [r0, #0x34]
-	bl ov07_0222A8D8
+	bl BattleAnimUtil_TickSpriteIfVisible
 	b _0222A916
 _0222A910:
 	sub r1, r0, #1
@@ -30859,10 +30859,10 @@ _0222A910:
 _0222A916:
 	ldr r0, [sp, #4]
 	ldr r0, [r0, #0x28]
-	bl ov07_0222A8D8
+	bl BattleAnimUtil_TickSpriteIfVisible
 	ldr r0, [sp, #4]
 	ldr r0, [r0, #0x2c]
-	bl ov07_0222A8D8
+	bl BattleAnimUtil_TickSpriteIfVisible
 	ldr r4, [sp, #4]
 	mov r6, #0
 	add r7, r6, #0
@@ -30911,10 +30911,10 @@ _0222A97C:
 	bl SpriteSystem_DrawSprites
 	add sp, #8
 	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end ov07_0222A8EC
+	thumb_func_end BattleAnimTask_SpriteQuad
 
-	thumb_func_start ov07_0222A988
-ov07_0222A988: ; 0x0222A988
+	thumb_func_start BattleAnimSpriteFunc_SpriteQuad
+BattleAnimSpriteFunc_SpriteQuad: ; 0x0222A988
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x34
 	mov r1, #0x38
@@ -30974,17 +30974,17 @@ _0222A9B8:
 	add r2, r1, #0
 	bl ManagedSprite_OffsetPositionXY
 	ldr r0, [r6, #4]
-	ldr r1, _0222AA1C ; =ov07_0222A8EC
+	ldr r1, _0222AA1C ; =BattleAnimTask_SpriteQuad
 	add r2, r6, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	add sp, #0x34
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
-_0222AA1C: .word ov07_0222A8EC
-	thumb_func_end ov07_0222A988
+_0222AA1C: .word BattleAnimTask_SpriteQuad
+	thumb_func_end BattleAnimSpriteFunc_SpriteQuad
 
-	thumb_func_start ov07_0222AA20
-ov07_0222AA20: ; 0x0222AA20
+	thumb_func_start BattleAnimTask_FlashingSpritesAroundAttacker
+BattleAnimTask_FlashingSpritesAroundAttacker: ; 0x0222AA20
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x24
 	add r5, r1, #0
@@ -31003,7 +31003,7 @@ _0222AA30:
 	cmp r0, #0x14
 	blt _0222AA82
 	ldr r0, [r7, #0x2c]
-	bl ov07_0222A8D8
+	bl BattleAnimUtil_TickSpriteIfVisible
 	mov r0, #0x22
 	ldrsh r0, [r5, r0]
 	cmp r0, #0x6e
@@ -31296,10 +31296,10 @@ _0222AC96:
 _0222ACA0: .word 0x0000FFFF
 _0222ACA4: .word 0x000003EA
 _0222ACA8: .word 0x04000052
-	thumb_func_end ov07_0222AA20
+	thumb_func_end BattleAnimTask_FlashingSpritesAroundAttacker
 
-	thumb_func_start ov07_0222ACAC
-ov07_0222ACAC: ; 0x0222ACAC
+	thumb_func_start BattleAnimSpriteFunc_FlashingSpritesAroundAttacker
+BattleAnimSpriteFunc_FlashingSpritesAroundAttacker: ; 0x0222ACAC
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x40
 	mov r1, #0x5c
@@ -31447,17 +31447,17 @@ _0222ADCC:
 	bl ManagedSprite_GetPaletteOverrideOffset
 	str r0, [r4, #0x1c]
 	ldr r0, [r4, #4]
-	ldr r1, _0222AE10 ; =ov07_0222AA20
+	ldr r1, _0222AE10 ; =BattleAnimTask_FlashingSpritesAroundAttacker
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	add sp, #0x40
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
-_0222AE10: .word ov07_0222AA20
-	thumb_func_end ov07_0222ACAC
+_0222AE10: .word BattleAnimTask_FlashingSpritesAroundAttacker
+	thumb_func_end BattleAnimSpriteFunc_FlashingSpritesAroundAttacker
 
-	thumb_func_start ov07_0222AE14
-ov07_0222AE14: ; 0x0222AE14
+	thumb_func_start BattleAnimTask_ShrinkSpriteOnDefender
+BattleAnimTask_ShrinkSpriteOnDefender: ; 0x0222AE14
 	push {r4, r5, lr}
 	sub sp, #0xc
 	add r4, r1, #0
@@ -31517,10 +31517,10 @@ _0222AE9A:
 	add sp, #0xc
 	pop {r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov07_0222AE14
+	thumb_func_end BattleAnimTask_ShrinkSpriteOnDefender
 
-	thumb_func_start ov07_0222AEA0
-ov07_0222AEA0: ; 0x0222AEA0
+	thumb_func_start BattleAnimFunc_ShrinkSpriteOnDefender
+BattleAnimFunc_ShrinkSpriteOnDefender: ; 0x0222AEA0
 	push {r4, r5, lr}
 	sub sp, #0xc
 	mov r1, #0x84
@@ -31623,17 +31623,17 @@ _0222AF84:
 	add r3, r1, #0
 	bl BattleAnimUtil_InitScaleMotionXY
 	ldr r0, [r4, #4]
-	ldr r1, _0222AFA8 ; =ov07_0222AE14
+	ldr r1, _0222AFA8 ; =BattleAnimTask_ShrinkSpriteOnDefender
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	add sp, #0xc
 	pop {r4, r5, pc}
 	.balign 4, 0
-_0222AFA8: .word ov07_0222AE14
-	thumb_func_end ov07_0222AEA0
+_0222AFA8: .word BattleAnimTask_ShrinkSpriteOnDefender
+	thumb_func_end BattleAnimFunc_ShrinkSpriteOnDefender
 
-	thumb_func_start ov07_0222AFAC
-ov07_0222AFAC: ; 0x0222AFAC
+	thumb_func_start BattleAnimTask_AttackerDashAfterimages
+BattleAnimTask_AttackerDashAfterimages: ; 0x0222AFAC
 	push {r3, r4, r5, lr}
 	sub sp, #8
 	add r4, r1, #0
@@ -31825,10 +31825,10 @@ _0222B11E:
 	add sp, #8
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov07_0222AFAC
+	thumb_func_end BattleAnimTask_AttackerDashAfterimages
 
-	thumb_func_start ov07_0222B130
-ov07_0222B130: ; 0x0222B130
+	thumb_func_start BattleAnimFunc_AttackerDashAfterimages
+BattleAnimFunc_AttackerDashAfterimages: ; 0x0222B130
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x24
 	mov r1, #0xa8
@@ -31976,18 +31976,18 @@ ov07_0222B130: ; 0x0222B130
 	mov r1, #1
 	bl ManagedSprite_SetOamMode
 	ldr r0, [r4, #4]
-	ldr r1, _0222B2A4 ; =ov07_0222AFAC
+	ldr r1, _0222B2A4 ; =BattleAnimTask_AttackerDashAfterimages
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	add sp, #0x24
 	pop {r4, r5, r6, r7, pc}
 	nop
 _0222B2A0: .word 0x04000052
-_0222B2A4: .word ov07_0222AFAC
-	thumb_func_end ov07_0222B130
+_0222B2A4: .word BattleAnimTask_AttackerDashAfterimages
+	thumb_func_end BattleAnimFunc_AttackerDashAfterimages
 
-	thumb_func_start ov07_0222B2A8
-ov07_0222B2A8: ; 0x0222B2A8
+	thumb_func_start BattleAnimTask_SpriteTrailToDefender
+BattleAnimTask_SpriteTrailToDefender: ; 0x0222B2A8
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #8
 	mov r6, #0
@@ -32006,7 +32006,7 @@ _0222B2B8:
 	cmp r0, #0x20
 	blt _0222B2E0
 	ldr r0, [r5, #0x30]
-	bl ov07_0222A8D8
+	bl BattleAnimUtil_TickSpriteIfVisible
 	mov r0, #0x1e
 	ldrsh r0, [r4, r0]
 	cmp r0, #0xa0
@@ -32046,10 +32046,10 @@ _0222B314:
 	bl SpriteSystem_DrawSprites
 	add sp, #8
 	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end ov07_0222B2A8
+	thumb_func_end BattleAnimTask_SpriteTrailToDefender
 
-	thumb_func_start ov07_0222B320
-ov07_0222B320: ; 0x0222B320
+	thumb_func_start BattleAnimSpriteFunc_SpriteTrailToDefender
+BattleAnimSpriteFunc_SpriteTrailToDefender: ; 0x0222B320
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x58
 	mov r1, #0x74
@@ -32249,14 +32249,14 @@ _0222B4C0:
 	cmp r6, #8
 	blt _0222B454
 	ldr r0, [r4, #4]
-	ldr r1, _0222B4DC ; =ov07_0222B2A8
+	ldr r1, _0222B4DC ; =BattleAnimTask_SpriteTrailToDefender
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	add sp, #0x58
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-_0222B4DC: .word ov07_0222B2A8
-	thumb_func_end ov07_0222B320
+_0222B4DC: .word BattleAnimTask_SpriteTrailToDefender
+	thumb_func_end BattleAnimSpriteFunc_SpriteTrailToDefender
 
 	thumb_func_start ov07_0222B4E0
 ov07_0222B4E0: ; 0x0222B4E0
@@ -32675,8 +32675,8 @@ _0222B890: .word 0x04000052
 _0222B894: .word ov07_0222B4E0
 	thumb_func_end ov07_0222B640
 
-	thumb_func_start ov07_0222B898
-ov07_0222B898: ; 0x0222B898
+	thumb_func_start BattleAnimTask_SlideOutAndTransform
+BattleAnimTask_SlideOutAndTransform: ; 0x0222B898
 	push {r3, r4, r5, lr}
 	sub sp, #0x58
 	add r4, r1, #0
@@ -32790,10 +32790,10 @@ _0222B96C:
 	bl Heap_Free
 	add sp, #0x58
 	pop {r3, r4, r5, pc}
-	thumb_func_end ov07_0222B898
+	thumb_func_end BattleAnimTask_SlideOutAndTransform
 
-	thumb_func_start ov07_0222B988
-ov07_0222B988: ; 0x0222B988
+	thumb_func_start BattleAnimFunc_SlideOutAndTransform
+BattleAnimFunc_SlideOutAndTransform: ; 0x0222B988
 	push {r3, r4, r5, r6, lr}
 	sub sp, #4
 	mov r1, #0x90
@@ -32942,18 +32942,18 @@ _0222BABE:
 	add r1, #0x8c
 	str r0, [r1]
 	ldr r0, [r4, #4]
-	ldr r1, _0222BAD8 ; =ov07_0222B898
+	ldr r1, _0222BAD8 ; =BattleAnimTask_SlideOutAndTransform
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	add sp, #4
 	pop {r3, r4, r5, r6, pc}
 	nop
 _0222BAD4: .word 0xFFFFFD76
-_0222BAD8: .word ov07_0222B898
-	thumb_func_end ov07_0222B988
+_0222BAD8: .word BattleAnimTask_SlideOutAndTransform
+	thumb_func_end BattleAnimFunc_SlideOutAndTransform
 
-	thumb_func_start ov07_0222BADC
-ov07_0222BADC: ; 0x0222BADC
+	thumb_func_start BattleAnimUtil_SetPicVisibleRect
+BattleAnimUtil_SetPicVisibleRect: ; 0x0222BADC
 	push {r3, r4, lr}
 	sub sp, #4
 	add r4, r2, #0
@@ -32965,10 +32965,10 @@ ov07_0222BADC: ; 0x0222BADC
 	bl Pokepic_SetVisible
 	add sp, #4
 	pop {r3, r4, pc}
-	thumb_func_end ov07_0222BADC
+	thumb_func_end BattleAnimUtil_SetPicVisibleRect
 
-	thumb_func_start ov07_0222BAF4
-ov07_0222BAF4: ; 0x0222BAF4
+	thumb_func_start BattleAnimTask_WipeOutDefender
+BattleAnimTask_WipeOutDefender: ; 0x0222BAF4
 	push {r3, r4, r5, r6, lr}
 	sub sp, #4
 	add r4, r1, #0
@@ -33023,7 +33023,7 @@ _0222BB44:
 	add r3, r3, #2
 	mov r1, #0
 	lsl r3, r3, #1
-	bl ov07_0222BADC
+	bl BattleAnimUtil_SetPicVisibleRect
 	add sp, #4
 	pop {r3, r4, r5, r6, pc}
 _0222BB60:
@@ -33035,7 +33035,7 @@ _0222BB60:
 	ldr r0, [r4, #0x1c]
 	sub r1, r1, r2
 	lsl r3, r3, #1
-	bl ov07_0222BADC
+	bl BattleAnimUtil_SetPicVisibleRect
 	add sp, #4
 	pop {r3, r4, r5, r6, pc}
 _0222BB78:
@@ -33168,10 +33168,10 @@ _0222BC2A:
 	.balign 4, 0
 _0222BC74: .word 0x04000040
 _0222BC78: .word 0xFFFF1FFF
-	thumb_func_end ov07_0222BAF4
+	thumb_func_end BattleAnimTask_WipeOutDefender
 
-	thumb_func_start ov07_0222BC7C
-ov07_0222BC7C: ; 0x0222BC7C
+	thumb_func_start BattleAnimFunc_WipeOutDefender
+BattleAnimFunc_WipeOutDefender: ; 0x0222BC7C
 	push {r4, r5, r6, lr}
 	mov r1, #0x50
 	add r5, r0, #0
@@ -33289,14 +33289,14 @@ _0222BCD0:
 	add r6, #0x44
 	strh r0, [r6]
 	ldr r0, [r4, #0x24]
-	ldr r1, _0222BD8C ; =ov07_0222BAF4
+	ldr r1, _0222BD8C ; =BattleAnimTask_WipeOutDefender
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	pop {r4, r5, r6, pc}
 	nop
 _0222BD88: .word 0xFFFF1FFF
-_0222BD8C: .word ov07_0222BAF4
-	thumb_func_end ov07_0222BC7C
+_0222BD8C: .word BattleAnimTask_WipeOutDefender
+	thumb_func_end BattleAnimFunc_WipeOutDefender
 
 	thumb_func_start ov07_0222BD90
 ov07_0222BD90: ; 0x0222BD90
@@ -33478,8 +33478,8 @@ _0222BF10: .word BattleAnimUtil_UpdateSinMotion
 _0222BF14: .word ov07_0222BD90
 	thumb_func_end ov07_0222BE00
 
-	thumb_func_start ov07_0222BF18
-ov07_0222BF18: ; 0x0222BF18
+	thumb_func_start BattleAnimTask_AttackerRecoilTilt
+BattleAnimTask_AttackerRecoilTilt: ; 0x0222BF18
 	push {r3, r4, r5, lr}
 	sub sp, #8
 	add r4, r1, #0
@@ -33653,10 +33653,10 @@ _0222C06E:
 	add sp, #8
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov07_0222BF18
+	thumb_func_end BattleAnimTask_AttackerRecoilTilt
 
-	thumb_func_start ov07_0222C074
-ov07_0222C074: ; 0x0222C074
+	thumb_func_start BattleAnimFunc_AttackerRecoilTilt
+BattleAnimFunc_AttackerRecoilTilt: ; 0x0222C074
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #8
 	add r5, r0, #0
@@ -33768,18 +33768,18 @@ _0222C160:
 	bl Pokepic_SetAttr
 _0222C176:
 	ldr r0, [r4]
-	ldr r1, _0222C188 ; =ov07_0222BF18
+	ldr r1, _0222C188 ; =BattleAnimTask_AttackerRecoilTilt
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	add sp, #8
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
 _0222C184: .word 0x00000E38
-_0222C188: .word ov07_0222BF18
-	thumb_func_end ov07_0222C074
+_0222C188: .word BattleAnimTask_AttackerRecoilTilt
+	thumb_func_end BattleAnimFunc_AttackerRecoilTilt
 
-	thumb_func_start ov07_0222C18C
-ov07_0222C18C: ; 0x0222C18C
+	thumb_func_start BattleAnimMotionSprite_Init
+BattleAnimMotionSprite_Init: ; 0x0222C18C
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
 	add r0, r1, #0
@@ -33833,28 +33833,28 @@ _0222C1A4:
 	bl ManagedSprite_SetPriority
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
-	thumb_func_end ov07_0222C18C
+	thumb_func_end BattleAnimMotionSprite_Init
 
-	thumb_func_start ov07_0222C1FC
-ov07_0222C1FC: ; 0x0222C1FC
+	thumb_func_start BattleAnimMotionSprite_Delete
+BattleAnimMotionSprite_Delete: ; 0x0222C1FC
 	ldr r3, _0222C204 ; =Sprite_DeleteAndFreeResources
 	ldr r0, [r0]
 	bx r3
 	nop
 _0222C204: .word Sprite_DeleteAndFreeResources
-	thumb_func_end ov07_0222C1FC
+	thumb_func_end BattleAnimMotionSprite_Delete
 
-	thumb_func_start ov07_0222C208
-ov07_0222C208: ; 0x0222C208
+	thumb_func_start BattleAnimMotionSprite_SetDrawFlag
+BattleAnimMotionSprite_SetDrawFlag: ; 0x0222C208
 	ldr r3, _0222C210 ; =ManagedSprite_SetDrawFlag
 	ldr r0, [r0]
 	bx r3
 	nop
 _0222C210: .word ManagedSprite_SetDrawFlag
-	thumb_func_end ov07_0222C208
+	thumb_func_end BattleAnimMotionSprite_SetDrawFlag
 
-	thumb_func_start ov07_0222C214
-ov07_0222C214: ; 0x0222C214
+	thumb_func_start BattleAnimMotionSprite_Update
+BattleAnimMotionSprite_Update: ; 0x0222C214
 	push {r4, lr}
 	sub sp, #0x10
 	add r4, r0, #0
@@ -33950,10 +33950,10 @@ _0222C2C4: .word 0x00007FFF
 _0222C2C8: .word 0x0000071C
 _0222C2CC: .word 0x0000FFFF
 _0222C2D0: .word 0xFFFFF000
-	thumb_func_end ov07_0222C214
+	thumb_func_end BattleAnimMotionSprite_Update
 
-	thumb_func_start ov07_0222C2D4
-ov07_0222C2D4: ; 0x0222C2D4
+	thumb_func_start BattleAnimTask_OrbitingSpriteTrail
+BattleAnimTask_OrbitingSpriteTrail: ; 0x0222C2D4
 	push {r3, r4, r5, r6, r7, lr}
 	add r4, r1, #0
 	add r7, r0, #0
@@ -33979,7 +33979,7 @@ _0222C2F0: ; jump table
 _0222C2FE:
 	add r0, r4, #0
 	add r0, #0xc
-	bl ov07_0222C214
+	bl BattleAnimMotionSprite_Update
 	add r0, r4, #0
 	add r0, #0xf0
 	ldr r0, [r0]
@@ -34089,20 +34089,20 @@ _0222C3BC:
 _0222C3D4:
 	add r0, r4, #0
 	add r0, #0xc
-	bl ov07_0222C214
+	bl BattleAnimMotionSprite_Update
 	add r5, r4, #0
 	add r6, r0, #0
 	mov r7, #0
 	add r5, #0x58
 _0222C3E4:
 	add r0, r5, #0
-	bl ov07_0222C214
+	bl BattleAnimMotionSprite_Update
 	str r0, [sp]
 	cmp r0, #0
 	bne _0222C3F8
 	add r0, r5, #0
 	mov r1, #0
-	bl ov07_0222C208
+	bl BattleAnimMotionSprite_SetDrawFlag
 _0222C3F8:
 	ldr r0, [sp]
 	add r7, r7, #1
@@ -34177,7 +34177,7 @@ _0222C482:
 	add r5, #0x58
 _0222C488:
 	add r0, r5, #0
-	bl ov07_0222C1FC
+	bl BattleAnimMotionSprite_Delete
 	add r6, r6, #1
 	add r5, #0x4c
 	cmp r6, #2
@@ -34198,10 +34198,10 @@ _0222C4AC:
 _0222C4B4: .word 0x04000052
 _0222C4B8: .word 0x00000136
 _0222C4BC: .word 0x0000FFFF
-	thumb_func_end ov07_0222C2D4
+	thumb_func_end BattleAnimTask_OrbitingSpriteTrail
 
-	thumb_func_start ov07_0222C4C0
-ov07_0222C4C0: ; 0x0222C4C0
+	thumb_func_start BattleAnimSpriteFunc_OrbitingSpriteTrail
+BattleAnimSpriteFunc_OrbitingSpriteTrail: ; 0x0222C4C0
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x48
 	add r5, r0, #0
@@ -34311,7 +34311,7 @@ _0222C5A6:
 	ldr r2, [r4, #8]
 	add r0, r5, #0
 	add r3, sp, #0x14
-	bl ov07_0222C18C
+	bl BattleAnimMotionSprite_Init
 	add r6, r6, #1
 	add r5, #0x4c
 	cmp r6, #2
@@ -34338,7 +34338,7 @@ _0222C5DA:
 	cmp r6, #2
 	blt _0222C5DA
 	ldr r0, [r4]
-	ldr r1, _0222C60C ; =ov07_0222C2D4
+	ldr r1, _0222C60C ; =BattleAnimTask_OrbitingSpriteTrail
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	add sp, #0x48
@@ -34349,11 +34349,11 @@ _0222C5FC: .word 0xFFFF8000
 _0222C600: .word 0x0000071C
 _0222C604: .word 0x0000FFFF
 _0222C608: .word 0xFFFFF000
-_0222C60C: .word ov07_0222C2D4
-	thumb_func_end ov07_0222C4C0
+_0222C60C: .word BattleAnimTask_OrbitingSpriteTrail
+	thumb_func_end BattleAnimSpriteFunc_OrbitingSpriteTrail
 
-	thumb_func_start ov07_0222C610
-ov07_0222C610: ; 0x0222C610
+	thumb_func_start BattleAnimTask_ShakeDefenderWithOverlayApply
+BattleAnimTask_ShakeDefenderWithOverlayApply: ; 0x0222C610
 	push {r4, lr}
 	sub sp, #8
 	add r4, r0, #0
@@ -34421,10 +34421,10 @@ ov07_0222C610: ; 0x0222C610
 	pop {r4, pc}
 	nop
 _0222C6A4: .word 0x3DCCCCCD
-	thumb_func_end ov07_0222C610
+	thumb_func_end BattleAnimTask_ShakeDefenderWithOverlayApply
 
-	thumb_func_start ov07_0222C6A8
-ov07_0222C6A8: ; 0x0222C6A8
+	thumb_func_start BattleAnimTask_ShakeDefenderWithOverlay
+BattleAnimTask_ShakeDefenderWithOverlay: ; 0x0222C6A8
 	push {r4, r5, lr}
 	sub sp, #0xc
 	add r4, r1, #0
@@ -34446,7 +34446,7 @@ _0222C6C0:
 	bl BattleAnimUtil_UpdateScaleMotionXY
 	add r5, r0, #0
 	add r0, r4, #0
-	bl ov07_0222C610
+	bl BattleAnimTask_ShakeDefenderWithOverlayApply
 	cmp r5, #0
 	bne _0222C774
 	mov r2, #0xa
@@ -34472,7 +34472,7 @@ _0222C6FA:
 	bl BattleAnimUtil_UpdateScaleMotionXY
 	add r5, r0, #0
 	add r0, r4, #0
-	bl ov07_0222C610
+	bl BattleAnimTask_ShakeDefenderWithOverlayApply
 	cmp r5, #0
 	bne _0222C774
 	mov r2, #0x60
@@ -34522,10 +34522,10 @@ _0222C774:
 	add sp, #0xc
 	pop {r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov07_0222C6A8
+	thumb_func_end BattleAnimTask_ShakeDefenderWithOverlay
 
-	thumb_func_start ov07_0222C780
-ov07_0222C780: ; 0x0222C780
+	thumb_func_start BattleAnimFunc_ShakeDefenderWithOverlay
+BattleAnimFunc_ShakeDefenderWithOverlay: ; 0x0222C780
 	push {r4, r5, lr}
 	sub sp, #0xc
 	add r5, r0, #0
@@ -34606,14 +34606,14 @@ ov07_0222C780: ; 0x0222C780
 	mov r2, #0xf
 	bl BattleAnimUtil_SetBlendWithBattleBg
 	ldr r0, [r4]
-	ldr r1, _0222C84C ; =ov07_0222C6A8
+	ldr r1, _0222C84C ; =BattleAnimTask_ShakeDefenderWithOverlay
 	add r2, r4, #0
 	bl BattleAnimSystem_CreateTaskDefaultPriority
 	add sp, #0xc
 	pop {r4, r5, pc}
 	.balign 4, 0
-_0222C84C: .word ov07_0222C6A8
-	thumb_func_end ov07_0222C780
+_0222C84C: .word BattleAnimTask_ShakeDefenderWithOverlay
+	thumb_func_end BattleAnimFunc_ShakeDefenderWithOverlay
 
 	thumb_func_start BattleAnimTask_SkewSlideAttackerBgResetScroll
 BattleAnimTask_SkewSlideAttackerBgResetScroll: ; 0x0222C850

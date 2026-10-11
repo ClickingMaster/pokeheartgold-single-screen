@@ -60,7 +60,7 @@ extern void MB_End(void);
 extern void ov13_0223C9D4(void *);
 extern void ov13_0223CEA0(void);
 extern void ov13_0223CA14(u32, u16);
-extern void *ov13_0223A7F4(u32, u32);
+extern void *WifiSetupConnections_Get(u32, u32);
 extern void DWCi_BACKUPlRead(void *);
 void ov13_0223D6A8(u32);
 void ov13_0223D724(u32);
@@ -391,6 +391,6 @@ void ov13_0223E80C(u8 *a, u32 *config) {
     DWCi_BACKUPlRead(B + 0x64c);
     {
         u64 tick = OS_GetTick();
-        B32(0xaa4) = (u32)ov13_0223A7F4((u32)tick, (u32)(tick >> 32));
+        B32(0xaa4) = (u32)WifiSetupConnections_Get((u32)tick, (u32)(tick >> 32));
     }
 }

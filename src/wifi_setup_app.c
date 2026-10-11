@@ -18,9 +18,9 @@ typedef struct WifiSetupRequestKey {
     u8 data[256];
 } WifiSetupRequestKey;
 
-extern void ov13_0223A6E4(u8 *result);
-extern void ov13_0223AAFC(void);
-extern void ov13_0223AB8C(void);
+extern void WifiSetupConnections_SetFromInfo(u8 *result);
+extern void WifiSetupSound_Init(void);
+extern void WifiSetupSound_Free(void);
 extern void ov13_0222C1BC(void);
 extern void ov13_0223F664(void);
 extern void ov13_0223E80C(WifiSetupSession *session, WifiSetupSessionParams *params);
@@ -77,7 +77,7 @@ void WifiSetupApp_StartClient(void) {
 void WifiSetupApp_StopClient(BOOL apply) {
     ov13_02222CE0();
     if (apply && gWifiSetupClient.request->error == 0 && gWifiSetupClient.done == TRUE) {
-        ov13_0223A6E4(gWifiSetupClient.request->result);
+        WifiSetupConnections_SetFromInfo(gWifiSetupClient.request->result);
     }
     WifiSetupHeap_FreeAndClear(&ov13_0224F4C8);
 }
@@ -112,7 +112,7 @@ int WifiSetupApp_Run(void *heap, s32 language, s32 flags) {
     gWifiSetupApp.exit = FALSE;
     WifiSetupApp_InitSystem();
     WifiSetupApp_InitDisplay();
-    ov13_0223AAFC();
+    WifiSetupSound_Init();
     WifiSetupApp_SetStateFunc(ov13_0222C1BC);
     do {
         WifiSetupInput_Update();
@@ -247,7 +247,7 @@ void WifiSetupApp_Shutdown(void) {
     ov13_0224230C();
     WifiSetupInput_Free();
     WifiSetup_RestoreVBlankIntr();
-    ov13_0223AB8C();
+    WifiSetupSound_Free();
     WifiSetupOamBlock_FreeManager();
     WifiSetupOam_Free();
     WifiSetupText_Free();

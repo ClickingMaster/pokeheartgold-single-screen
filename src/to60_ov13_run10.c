@@ -202,7 +202,7 @@ typedef struct {
     OtherElement element[16];
 } OtherElements;
 
-extern WmWork *ov13_0224F5A0;
+extern WmWork *gWifiSetupApScan;
 extern ScanParam ov13_022457A4;
 extern u8 ov13_0224579C[];
 extern u8 ov13_02245798[];
@@ -216,9 +216,9 @@ extern void WM_GetOtherElements(OtherElements *, BssDesc *);
 extern int memcmp(const void *, const void *, u32);
 extern void DC_InvalidateRange(void *, u32);
 
-int ov13_02239C34(void);
-void ov13_02239D60(void *);
-void ov13_02239DC4(ScanCallback *);
+int WifiSetupApScan_Continue(void);
+void WifiSetupApScan_Callback(void *);
+void WifiSetupApScan_StoreResults(ScanCallback *);
 
 typedef struct {
     u8 unk0[0x40];
@@ -301,7 +301,7 @@ typedef struct {
     u8 keys[4][0x20];
 } WepSetting;
 
-extern BackupData *ov13_0224F5A4;
+extern BackupData *gWifiSetupConnections;
 extern u8 ov13_022467C8[];
 extern u8 ov13_022457E8[];
 extern void DWCi_BACKUPlRead(BackupData *);
@@ -314,10 +314,10 @@ extern u16 MATH_CalcCRC16(const MATHCRC16Table *, const void *, u32);
 extern int WifiSetup_StrNLen(const char *, int);
 extern long atol(const char *);
 
-void ov13_0223A4F4(void);
-void ov13_0223A8F0(int);
-void ov13_0223AA58(const char *, u8 *);
-int ov13_0223AAE0(u8);
+void WifiSetupConnections_SaveEdit(void);
+void WifiSetupConnections_WritePage(int);
+void WifiSetup_ParseAddress(const char *, u8 *);
+int WifiSetup_HexDigitValue(u8);
 
 typedef struct {
     u8 arc[0x94];
@@ -341,7 +341,7 @@ typedef struct {
     u16 y;
 } TitlePos;
 
-extern SoundWork *ov13_0224F5A8;
+extern SoundWork *gWifiSetupSound;
 extern TitleWork ov13_0224F5AC;
 extern u8 ov13_022467D8[];
 extern u8 ov13_022457EC[];
@@ -594,8 +594,8 @@ void ov13_02239AC4(int v) {
 }
 
 void ov13_02239B00(void) {
-    if (ov13_0224F5A0 != NULL) {
+    if (gWifiSetupApScan != NULL) {
         return;
     }
-    ov13_0224F5A0 = WifiSetupHeap_AllocZeroed(0x1E60, 0x20);
+    gWifiSetupApScan = WifiSetupHeap_AllocZeroed(0x1E60, 0x20);
 }

@@ -139,123 +139,123 @@
 	.public EasyChatAppView_GetSpriteList
 	.public EasyChatAppView_InitSpriteHeader
 	.public EasyChatAppView_CreateSprite
-	.public ov102_021EA314
-	.public ov102_021EA380
-	.public ov102_021EA41C
-	.public ov102_021EA644
-	.public ov102_021EA678
-	.public ov102_021EA71C
-	.public ov102_021EA754
-	.public ov102_021EA80C
-	.public ov102_021EA874
-	.public ov102_021EA8C0
-	.public ov102_021EA920
-	.public ov102_021EAA3C
-	.public ov102_021EAB10
-	.public ov102_021EAB30
-	.public ov102_021EAC20
-	.public ov102_021EAC44
-	.public ov102_021EAC70
-	.public ov102_021EAC7C
-	.public ov102_021EAD48
-	.public ov102_021EAD5C
-	.public ov102_021EAD70
-	.public ov102_021EAD98
-	.public ov102_021EADF0
-	.public ov102_021EADF8
-	.public ov102_021EAE40
-	.public ov102_021EAF44
-	.public ov102_021EAF50
-	.public ov102_021EAF5C
-	.public ov102_021EAF7C
-	.public ov102_021EAFAC
-	.public ov102_021EAFEC
-	.public ov102_021EAFF0
-	.public ov102_021EB088
-	.public ov102_021EB0C0
-	.public ov102_021EB130
-	.public ov102_021EB170
-	.public ov102_021EB1A4
-	.public ov102_021EB1E0
-	.public ov102_021EB1F8
-	.public ov102_021EB29C
-	.public ov102_021EB2EC
-	.public ov102_021EB3B4
-	.public ov102_021EB46C
-	.public ov102_021EB4D0
-	.public ov102_021EB50C
-	.public ov102_021EB518
-	.public ov102_021EB524
-	.public ov102_021EB530
-	.public ov102_021EB570
-	.public ov102_021EB5B8
-	.public ov102_021EB624
-	.public ov102_021EB654
-	.public ov102_021EB664
-	.public ov102_021EB67C
-	.public ov102_021EB694
-	.public ov102_021EB6C8
-	.public ov102_021EB6E0
-	.public ov102_021EB77C
-	.public ov102_021EB880
+	.public EasyChatSentenceView_Create
+	.public EasyChatSentenceView_Delete
+	.public EasyChatSentenceView_Load
+	.public EasyChatSentenceView_HBlankCallback
+	.public EasyChatSentenceView_ToggleScrollWindows
+	.public EasyChatSentenceView_StartScroll
+	.public EasyChatSentenceView_UpdateScroll
+	.public EasyChatSentenceView_LoadPalettes
+	.public EasyChatSentenceView_ApplyPalette
+	.public EasyChatSentenceView_InitSlotPositions
+	.public EasyChatSentenceView_CreateSprites
+	.public EasyChatSentenceView_DrawSentence
+	.public EasyChatSentenceView_GetSlotHitbox
+	.public EasyChatSentenceView_DrawMessage
+	.public EasyChatSentenceView_UpdateSliderThumb
+	.public EasyChatMessageParser_Init
+	.public EasyChatMessageParser_Free
+	.public EasyChatMessageParser_Next
+	.public EasyChatSentenceView_GetSlotTextPos
+	.public EasyChatSentenceView_GetSlotCursorPos
+	.public EasyChatSentenceView_ClearSlot
+	.public EasyChatSentenceView_DrawWord
+	.public EasyChatSentenceView_GetNumSlots
+	.public EasyChatSentenceView_SelectMessageWindow
+	.public EasyChatSentenceView_PrintMessage
+	.public EasyChatSentenceView_DeactivateCursor
+	.public EasyChatSentenceView_ActivateCursor
+	.public EasyChatSentenceView_SetCursorVisible
+	.public EasyChatSentenceView_HideSlider
+	.public EasyChatSentenceView_ShowSlider
+	.public EasyChatSentenceView_GetSliderThumb
+	.public EasyChatSentenceView_MoveCursorToSlot
+	.public EasyChatSentenceView_SetCursorActive
+	.public EasyChatSentenceView_StartYesNo
+	.public EasyChatSentenceView_HandleYesNo
+	.public EasyChatSentenceView_DrawYesNoCursor
+	.public EasyChatMenuView_Create
+	.public EasyChatMenuView_Delete
+	.public EasyChatMenuView_Load
+	.public EasyChatMenuView_Unload
+	.public EasyChatMenuView_DrawMainButtons
+	.public EasyChatMenuView_DrawListButton
+	.public EasyChatMenuView_AddWindows
+	.public EasyChatMenuView_CreateCursor
+	.public EasyChatMenuView_DeactivateCursor
+	.public EasyChatMenuView_ActivateCursor
+	.public EasyChatMenuView_SetCursorVisible
+	.public EasyChatMenuView_MoveCursor
+	.public EasyChatMenuView_DrawModeButton
+	.public EasyChatMenuView_ModeSwitchTask
+	.public EasyChatMenuView_StartModeSwitch
+	.public EasyChatMenuView_IsModeSwitchDone
+	.public EasyChatMenuView_ShowListButton
+	.public EasyChatMenuView_ShowMainButtons
+	.public EasyChatCategoryView_Create
+	.public EasyChatCategoryView_Delete
+	.public EasyChatCategoryView_Load
+	.public EasyChatCategoryView_DrawCategories
+	.public EasyChatCategoryView_DrawInitials
 	.public ov102_021EB94C
-	.public ov102_021EB950
-	.public ov102_021EB98C
-	.public ov102_021EB9C0
-	.public ov102_021EBA44
-	.public ov102_021EBA5C
-	.public ov102_021EBAAC
-	.public ov102_021EBAD0
-	.public ov102_021EBB1C
-	.public ov102_021EBB2C
-	.public ov102_021EBB44
-	.public ov102_021EBB50
-	.public ov102_021EBB6C
-	.public ov102_021EBB88
-	.public ov102_021EBBC4
-	.public ov102_021EBBD0
-	.public ov102_021EBBF4
-	.public ov102_021EBC28
-	.public ov102_021EBC34
-	.public ov102_021EBCBC
-	.public ov102_021EBD00
-	.public ov102_021EBD68
-	.public ov102_021EBDEC
-	.public ov102_021EBE3C
-	.public ov102_021EBE80
-	.public ov102_021EBEA4
-	.public ov102_021EBEC8
-	.public ov102_021EBEF4
-	.public ov102_021EBF38
-	.public ov102_021EBFA0
-	.public ov102_021EC05C
-	.public ov102_021EC090
-	.public ov102_021EC11C
-	.public ov102_021EC13C
-	.public ov102_021EC20C
-	.public ov102_021EC240
-	.public ov102_021EC248
-	.public ov102_021EC290
-	.public ov102_021EC294
-	.public ov102_021EC298
-	.public ov102_021EC2EC
-	.public ov102_021EC338
-	.public ov102_021EC37C
-	.public ov102_021EC3AC
-	.public ov102_021EC3D4
-	.public ov102_021EC410
-	.public ov102_021EC450
-	.public ov102_021EC478
-	.public ov102_021EC4A4
-	.public ov102_021EC4A8
-	.public ov102_021EC4CC
-	.public ov102_021EC4F8
-	.public ov102_021EC514
-	.public ov102_021EC530
-	.public ov102_021EC54C
-	.public ov102_021EC568
-	.public ov102_021EC584
-	.public ov102_021EC5A0
+	.public EasyChatCategoryView_CreateCursor
+	.public EasyChatCategoryView_SetCursorVisible
+	.public EasyChatCategoryView_MoveCursor
+	.public EasyChatCategoryView_StartOpen
+	.public EasyChatCategoryView_UpdateOpen
+	.public EasyChatCategoryView_StartClose
+	.public EasyChatCategoryView_UpdateClose
+	.public EasyChatCategoryView_ResetScrollY
+	.public EasyChatCategoryView_StartDim
+	.public EasyChatCategoryView_UpdateDim
+	.public EasyChatCategoryView_StartFadeOut
+	.public EasyChatCategoryView_UpdateFadeOut
+	.public EasyChatCategoryView_StartFadeIn
+	.public EasyChatCategoryView_UpdateFadeIn
+	.public EasyChatCategoryView_ResetScrollX
+	.public EasyChatCategoryView_StartModeScroll
+	.public EasyChatCategoryView_UpdateModeScroll
+	.public EasyChatWordListView_Create
+	.public EasyChatWordListView_Delete
+	.public EasyChatWordListView_Load
+	.public EasyChatWordListView_CreateSprites
+	.public EasyChatWordListView_DrawWords
+	.public EasyChatWordListView_StartFadeIn
+	.public EasyChatWordListView_UpdateFadeIn
+	.public EasyChatWordListView_StartFadeOut
+	.public EasyChatWordListView_UpdateFadeOut
+	.public EasyChatWordListView_SetCursorVisible
+	.public EasyChatWordListView_MoveCursor
+	.public EasyChatWordListView_StartScroll
+	.public EasyChatWordListView_UpdateScroll
+	.public EasyChatWordListView_ClearRows
+	.public EasyChatWordListView_ResetScroll
+	.public EasyChatWordListView_DrawWord
+	.public EasyChatPageButtonsView_Create
+	.public EasyChatPageButtonsView_Delete
+	.public EasyChatPageButtonsView_Load
+	.public EasyChatPageButtonsView_SetEnabled
+	.public EasyChatPageButtonsView_SetPressed
+	.public EasyChatBgScroll_Start
+	.public EasyChatBgScroll_Update
+	.public EasyChatBgScroll_Task
+	.public EasyChatBlendFade_StartAlpha
+	.public EasyChatBlendFade_IsAlphaDone
+	.public EasyChatBlendFade_AlphaTask
+	.public EasyChatBlendFade_StartBrightness
+	.public EasyChatBlendFade_IsBrightnessDone
+	.public EasyChatBlendFade_BrightnessTask
+	.public EasyChatInitialGrid_GetCount
+	.public EasyChatInitialGrid_GetLetter
+	.public EasyChatInitialGrid_GetPosition
+	.public EasyChatInitialGrid_GetUp
+	.public EasyChatInitialGrid_GetDown
+	.public EasyChatInitialGrid_GetLeft
+	.public EasyChatInitialGrid_GetRight
+	.public EasyChatInitialGrid_GetBelowButton
+	.public EasyChatInitialGrid_GetAboveButton
+	.public EasyChatInitialGrid_FindCellAt
 	.public ov102_021EC5E0
 	.public ov102_021EC5E8
 	.public ov102_021EC5F4
@@ -350,59 +350,59 @@
 	.public EasyChatAppView_GetYesNoResult
 	.public EasyChatAppView_GetBgConfig
 	.public EasyChatAppView_GetSpriteList
-	.public ov102_021EAB10
-	.public ov102_021EAC20
-	.public ov102_021EAC70
-	.public ov102_021EAD48
-	.public ov102_021EAD5C
-	.public ov102_021EAD70
-	.public ov102_021EADF0
-	.public ov102_021EAF44
-	.public ov102_021EAF50
-	.public ov102_021EAF5C
-	.public ov102_021EAF7C
-	.public ov102_021EAFEC
-	.public ov102_021EB1A4
-	.public ov102_021EB1E0
-	.public ov102_021EB50C
-	.public ov102_021EB518
-	.public ov102_021EB524
-	.public ov102_021EB624
-	.public ov102_021EB654
-	.public ov102_021EB664
-	.public ov102_021EB67C
-	.public ov102_021EB694
-	.public ov102_021EB6C8
+	.public EasyChatSentenceView_GetSlotHitbox
+	.public EasyChatSentenceView_UpdateSliderThumb
+	.public EasyChatMessageParser_Free
+	.public EasyChatSentenceView_GetSlotTextPos
+	.public EasyChatSentenceView_GetSlotCursorPos
+	.public EasyChatSentenceView_ClearSlot
+	.public EasyChatSentenceView_GetNumSlots
+	.public EasyChatSentenceView_DeactivateCursor
+	.public EasyChatSentenceView_ActivateCursor
+	.public EasyChatSentenceView_SetCursorVisible
+	.public EasyChatSentenceView_HideSlider
+	.public EasyChatSentenceView_GetSliderThumb
+	.public EasyChatMenuView_Create
+	.public EasyChatMenuView_Delete
+	.public EasyChatMenuView_DeactivateCursor
+	.public EasyChatMenuView_ActivateCursor
+	.public EasyChatMenuView_SetCursorVisible
+	.public EasyChatMenuView_StartModeSwitch
+	.public EasyChatMenuView_IsModeSwitchDone
+	.public EasyChatMenuView_ShowListButton
+	.public EasyChatMenuView_ShowMainButtons
+	.public EasyChatCategoryView_Create
+	.public EasyChatCategoryView_Delete
 	.public ov102_021EB94C
-	.public ov102_021EBA44
-	.public ov102_021EBAAC
-	.public ov102_021EBB1C
-	.public ov102_021EBB2C
-	.public ov102_021EBB44
-	.public ov102_021EBB50
-	.public ov102_021EBB6C
-	.public ov102_021EBBC4
-	.public ov102_021EBBD0
-	.public ov102_021EBC28
-	.public ov102_021EBE80
-	.public ov102_021EBEA4
-	.public ov102_021EC11C
-	.public ov102_021EC20C
-	.public ov102_021EC240
-	.public ov102_021EC290
-	.public ov102_021EC294
-	.public ov102_021EC4A4
-	.public ov102_021EC4A8
-	.public ov102_021EC4CC
-	.public ov102_021EC4F8
-	.public ov102_021EC514
-	.public ov102_021EC530
-	.public ov102_021EC54C
-	.public ov102_021EC568
-	.public ov102_021EC584
+	.public EasyChatCategoryView_StartOpen
+	.public EasyChatCategoryView_StartClose
+	.public EasyChatCategoryView_ResetScrollY
+	.public EasyChatCategoryView_StartDim
+	.public EasyChatCategoryView_UpdateDim
+	.public EasyChatCategoryView_StartFadeOut
+	.public EasyChatCategoryView_UpdateFadeOut
+	.public EasyChatCategoryView_UpdateFadeIn
+	.public EasyChatCategoryView_ResetScrollX
+	.public EasyChatCategoryView_UpdateModeScroll
+	.public EasyChatWordListView_UpdateFadeIn
+	.public EasyChatWordListView_StartFadeOut
+	.public EasyChatWordListView_ResetScroll
+	.public EasyChatPageButtonsView_Create
+	.public EasyChatPageButtonsView_Delete
+	.public EasyChatPageButtonsView_SetEnabled
+	.public EasyChatPageButtonsView_SetPressed
+	.public EasyChatInitialGrid_GetCount
+	.public EasyChatInitialGrid_GetLetter
+	.public EasyChatInitialGrid_GetPosition
+	.public EasyChatInitialGrid_GetUp
+	.public EasyChatInitialGrid_GetDown
+	.public EasyChatInitialGrid_GetLeft
+	.public EasyChatInitialGrid_GetRight
+	.public EasyChatInitialGrid_GetBelowButton
+	.public EasyChatInitialGrid_GetAboveButton
 
-	thumb_func_start ov102_021EBC34
-ov102_021EBC34: ; 0x021EBC34
+	thumb_func_start EasyChatWordListView_Create
+EasyChatWordListView_Create: ; 0x021EBC34
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x14
 	add r5, r0, #0
@@ -465,11 +465,11 @@ ov102_021EBC34: ; 0x021EBC34
 	add sp, #0x14
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov102_021EBC34
+	thumb_func_end EasyChatWordListView_Create
 
 
-	thumb_func_start ov102_021EBCBC
-ov102_021EBCBC: ; 0x021EBCBC
+	thumb_func_start EasyChatWordListView_Delete
+EasyChatWordListView_Delete: ; 0x021EBCBC
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, [r4, #0x30]
@@ -501,11 +501,11 @@ _021EBCE8:
 	add r0, r4, #0
 	bl Heap_Free
 	pop {r4, pc}
-	thumb_func_end ov102_021EBCBC
+	thumb_func_end EasyChatWordListView_Delete
 
 
-	thumb_func_start ov102_021EBD00
-ov102_021EBD00: ; 0x021EBD00
+	thumb_func_start EasyChatWordListView_Load
+EasyChatWordListView_Load: ; 0x021EBD00
 	push {r3, r4, r5, lr}
 	sub sp, #0x10
 	add r5, r0, #0
@@ -542,18 +542,18 @@ ov102_021EBD00: ; 0x021EBD00
 	mov r1, #2
 	bl BgCommitTilemapBufferToVram
 	add r0, r5, #0
-	bl ov102_021EBD68
+	bl EasyChatWordListView_CreateSprites
 	mov r0, #2
 	mov r1, #0
 	bl ToggleBgLayer
 	add sp, #0x10
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov102_021EBD00
+	thumb_func_end EasyChatWordListView_Load
 
 
-	thumb_func_start ov102_021EBD68
-ov102_021EBD68: ; 0x021EBD68
+	thumb_func_start EasyChatWordListView_CreateSprites
+EasyChatWordListView_CreateSprites: ; 0x021EBD68
 	push {r3, r4, lr}
 	sub sp, #0x2c
 	add r4, r0, #0
@@ -610,18 +610,18 @@ ov102_021EBD68: ; 0x021EBD68
 	add sp, #0x2c
 	pop {r3, r4, pc}
 	.balign 4, 0
-	thumb_func_end ov102_021EBD68
+	thumb_func_end EasyChatWordListView_CreateSprites
 
 
-	thumb_func_start ov102_021EBDEC
-ov102_021EBDEC: ; 0x021EBDEC
+	thumb_func_start EasyChatWordListView_DrawWords
+EasyChatWordListView_DrawWords: ; 0x021EBDEC
 	push {r3, r4, r5, r6, r7, lr}
 	add r6, r0, #0
 	add r0, #0x10
 	mov r1, #0
 	bl FillWindowPixelBuffer
 	add r0, r6, #0
-	bl ov102_021EC11C
+	bl EasyChatWordListView_ResetScroll
 	ldr r0, [r6, #4]
 	bl EasyChatApp_GetCategoryWordCount
 	add r7, r0, #0
@@ -639,7 +639,7 @@ _021EBE18:
 	add r0, r6, #0
 	add r1, r5, #0
 	add r2, r4, #0
-	bl ov102_021EC13C
+	bl EasyChatWordListView_DrawWord
 	mov r0, #1
 	tst r0, r5
 	beq _021EBE2A
@@ -654,11 +654,11 @@ _021EBE30:
 	bl CopyWindowPixelsToVram_TextMode
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov102_021EBDEC
+	thumb_func_end EasyChatWordListView_DrawWords
 
 
-	thumb_func_start ov102_021EBE3C
-ov102_021EBE3C: ; 0x021EBE3C
+	thumb_func_start EasyChatWordListView_StartFadeIn
+EasyChatWordListView_StartFadeIn: ; 0x021EBE3C
 	push {r4, lr}
 	sub sp, #8
 	add r4, r0, #0
@@ -684,9 +684,9 @@ ov102_021EBE3C: ; 0x021EBE3C
 	add r0, r4, #0
 	mov r1, #4
 	mov r2, #0x3f
-	bl ov102_021EC37C
+	bl EasyChatBlendFade_StartAlpha
 	add sp, #8
 	pop {r4, pc}
 	nop
 _021EBE7C: .word 0x04000050
-	thumb_func_end ov102_021EBE3C
+	thumb_func_end EasyChatWordListView_StartFadeIn

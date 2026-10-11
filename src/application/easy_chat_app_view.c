@@ -82,74 +82,74 @@ extern const BgTemplate ov102_021EC744;
 extern const GraphicsBanks ov102_021EC760;
 extern const EasyChatViewCommandFunc ov102_021EC788[];
 
-EasyChatSentenceView *ov102_021EA314(EasyChatAppView *view, EasyChatApp *app, ECMenu *menu);
-void ov102_021EA380(EasyChatSentenceView *sentence);
-void ov102_021EA41C(EasyChatSentenceView *sentence, NARC *narc);
-void ov102_021EA71C(EasyChatSentenceView *sentence, int a1);
-BOOL ov102_021EA754(EasyChatSentenceView *sentence);
-void ov102_021EAA3C(EasyChatSentenceView *sentence);
-void ov102_021EAB10(EasyChatSentenceView *sentence, TouchscreenHitbox *hitbox, u8 slot);
-u32 ov102_021EADF0(EasyChatSentenceView *sentence);
-void ov102_021EADF8(EasyChatSentenceView *sentence, int a1);
-void ov102_021EAE40(EasyChatSentenceView *sentence, int a1);
-void ov102_021EAF44(EasyChatSentenceView *sentence);
-void ov102_021EAF50(EasyChatSentenceView *sentence);
-void ov102_021EAF5C(EasyChatSentenceView *sentence, int a1);
-void ov102_021EAF7C(EasyChatSentenceView *sentence);
-void ov102_021EAFAC(EasyChatSentenceView *sentence);
-Sprite *ov102_021EAFEC(EasyChatSentenceView *sentence);
-void ov102_021EAFF0(EasyChatSentenceView *sentence, u16 slot);
-void ov102_021EB0C0(EasyChatSentenceView *sentence, u32 a1);
-int ov102_021EB130(EasyChatSentenceView *sentence);
-void ov102_021EB170(EasyChatSentenceView *sentence, u8 a1);
-EasyChatMenuView *ov102_021EB1A4(EasyChatAppView *view, EasyChatApp *app, ECMenu *menu);
-void ov102_021EB1E0(EasyChatMenuView *menuView);
-void ov102_021EB1F8(EasyChatMenuView *menuView, NARC *narc);
-void ov102_021EB2EC(EasyChatMenuView *menuView, int a1, int a2);
-void ov102_021EB50C(EasyChatMenuView *menuView);
-void ov102_021EB518(EasyChatMenuView *menuView);
-void ov102_021EB524(EasyChatMenuView *menuView, int a1);
-void ov102_021EB530(EasyChatMenuView *menuView, u16 cursor);
-void ov102_021EB624(EasyChatMenuView *menuView);
-BOOL ov102_021EB654(EasyChatMenuView *menuView);
-void ov102_021EB664(EasyChatMenuView *menuView);
-void ov102_021EB67C(EasyChatMenuView *menuView);
-EasyChatCategoryView *ov102_021EB694(EasyChatAppView *view, EasyChatApp *app, ECMenu *menu);
-void ov102_021EB6C8(EasyChatCategoryView *categories);
-void ov102_021EB6E0(EasyChatCategoryView *categories, NARC *narc);
-void ov102_021EB98C(EasyChatCategoryView *categories, int a1);
-void ov102_021EB9C0(EasyChatCategoryView *categories, u16 category);
-void ov102_021EBA44(EasyChatCategoryView *categories);
-BOOL ov102_021EBA5C(EasyChatCategoryView *categories);
-void ov102_021EBAAC(EasyChatCategoryView *categories);
-BOOL ov102_021EBAD0(EasyChatCategoryView *categories);
-void ov102_021EBB1C(EasyChatCategoryView *categories);
-void ov102_021EBB2C(EasyChatCategoryView *categories);
-BOOL ov102_021EBB44(EasyChatCategoryView *categories);
-void ov102_021EBB50(EasyChatCategoryView *categories);
-BOOL ov102_021EBB6C(EasyChatCategoryView *categories);
-void ov102_021EBB88(EasyChatCategoryView *categories);
-BOOL ov102_021EBBC4(EasyChatCategoryView *categories);
-void ov102_021EBBD0(EasyChatCategoryView *categories);
-void ov102_021EBBF4(EasyChatCategoryView *categories);
-BOOL ov102_021EBC28(EasyChatCategoryView *categories);
-EasyChatWordListView *ov102_021EBC34(EasyChatAppView *view, EasyChatApp *app, ECMenu *menu);
-void ov102_021EBCBC(EasyChatWordListView *wordList);
-void ov102_021EBD00(EasyChatWordListView *wordList);
-void ov102_021EBDEC(EasyChatWordListView *wordList);
-BOOL ov102_021EBE3C(EasyChatWordListView *wordList);
-BOOL ov102_021EBE80(EasyChatWordListView *wordList);
-void ov102_021EBEA4(EasyChatWordListView *wordList);
-BOOL ov102_021EBEC8(EasyChatWordListView *wordList);
-void ov102_021EBEF4(EasyChatWordListView *wordList, int a1);
-void ov102_021EBF38(EasyChatWordListView *wordList, int cursor);
-void ov102_021EBFA0(EasyChatWordListView *wordList, int scroll);
-BOOL ov102_021EC05C(EasyChatWordListView *wordList);
-EasyChatPageButtonsView *ov102_021EC20C(EasyChatAppView *view, EasyChatApp *app, ECMenu *menu);
-void ov102_021EC240(EasyChatPageButtonsView *pageButtons);
-void ov102_021EC248(EasyChatPageButtonsView *pageButtons, NARC *narc);
-void ov102_021EC290(EasyChatPageButtonsView *pageButtons, int a1);
-void ov102_021EC294(EasyChatPageButtonsView *pageButtons, int a1, int a2);
+EasyChatSentenceView *EasyChatSentenceView_Create(EasyChatAppView *view, EasyChatApp *app, ECMenu *menu);
+void EasyChatSentenceView_Delete(EasyChatSentenceView *sentence);
+void EasyChatSentenceView_Load(EasyChatSentenceView *sentence, NARC *narc);
+void EasyChatSentenceView_StartScroll(EasyChatSentenceView *sentence, int a1);
+BOOL EasyChatSentenceView_UpdateScroll(EasyChatSentenceView *sentence);
+void EasyChatSentenceView_DrawSentence(EasyChatSentenceView *sentence);
+void EasyChatSentenceView_GetSlotHitbox(EasyChatSentenceView *sentence, TouchscreenHitbox *hitbox, u8 slot);
+u32 EasyChatSentenceView_GetNumSlots(EasyChatSentenceView *sentence);
+void EasyChatSentenceView_SelectMessageWindow(EasyChatSentenceView *sentence, int a1);
+void EasyChatSentenceView_PrintMessage(EasyChatSentenceView *sentence, int a1);
+void EasyChatSentenceView_DeactivateCursor(EasyChatSentenceView *sentence);
+void EasyChatSentenceView_ActivateCursor(EasyChatSentenceView *sentence);
+void EasyChatSentenceView_SetCursorVisible(EasyChatSentenceView *sentence, int a1);
+void EasyChatSentenceView_HideSlider(EasyChatSentenceView *sentence);
+void EasyChatSentenceView_ShowSlider(EasyChatSentenceView *sentence);
+Sprite *EasyChatSentenceView_GetSliderThumb(EasyChatSentenceView *sentence);
+void EasyChatSentenceView_MoveCursorToSlot(EasyChatSentenceView *sentence, u16 slot);
+void EasyChatSentenceView_StartYesNo(EasyChatSentenceView *sentence, u32 a1);
+int EasyChatSentenceView_HandleYesNo(EasyChatSentenceView *sentence);
+void EasyChatSentenceView_DrawYesNoCursor(EasyChatSentenceView *sentence, u8 a1);
+EasyChatMenuView *EasyChatMenuView_Create(EasyChatAppView *view, EasyChatApp *app, ECMenu *menu);
+void EasyChatMenuView_Delete(EasyChatMenuView *menuView);
+void EasyChatMenuView_Load(EasyChatMenuView *menuView, NARC *narc);
+void EasyChatMenuView_DrawMainButtons(EasyChatMenuView *menuView, int a1, int a2);
+void EasyChatMenuView_DeactivateCursor(EasyChatMenuView *menuView);
+void EasyChatMenuView_ActivateCursor(EasyChatMenuView *menuView);
+void EasyChatMenuView_SetCursorVisible(EasyChatMenuView *menuView, int a1);
+void EasyChatMenuView_MoveCursor(EasyChatMenuView *menuView, u16 cursor);
+void EasyChatMenuView_StartModeSwitch(EasyChatMenuView *menuView);
+BOOL EasyChatMenuView_IsModeSwitchDone(EasyChatMenuView *menuView);
+void EasyChatMenuView_ShowListButton(EasyChatMenuView *menuView);
+void EasyChatMenuView_ShowMainButtons(EasyChatMenuView *menuView);
+EasyChatCategoryView *EasyChatCategoryView_Create(EasyChatAppView *view, EasyChatApp *app, ECMenu *menu);
+void EasyChatCategoryView_Delete(EasyChatCategoryView *categories);
+void EasyChatCategoryView_Load(EasyChatCategoryView *categories, NARC *narc);
+void EasyChatCategoryView_SetCursorVisible(EasyChatCategoryView *categories, int a1);
+void EasyChatCategoryView_MoveCursor(EasyChatCategoryView *categories, u16 category);
+void EasyChatCategoryView_StartOpen(EasyChatCategoryView *categories);
+BOOL EasyChatCategoryView_UpdateOpen(EasyChatCategoryView *categories);
+void EasyChatCategoryView_StartClose(EasyChatCategoryView *categories);
+BOOL EasyChatCategoryView_UpdateClose(EasyChatCategoryView *categories);
+void EasyChatCategoryView_ResetScrollY(EasyChatCategoryView *categories);
+void EasyChatCategoryView_StartDim(EasyChatCategoryView *categories);
+BOOL EasyChatCategoryView_UpdateDim(EasyChatCategoryView *categories);
+void EasyChatCategoryView_StartFadeOut(EasyChatCategoryView *categories);
+BOOL EasyChatCategoryView_UpdateFadeOut(EasyChatCategoryView *categories);
+void EasyChatCategoryView_StartFadeIn(EasyChatCategoryView *categories);
+BOOL EasyChatCategoryView_UpdateFadeIn(EasyChatCategoryView *categories);
+void EasyChatCategoryView_ResetScrollX(EasyChatCategoryView *categories);
+void EasyChatCategoryView_StartModeScroll(EasyChatCategoryView *categories);
+BOOL EasyChatCategoryView_UpdateModeScroll(EasyChatCategoryView *categories);
+EasyChatWordListView *EasyChatWordListView_Create(EasyChatAppView *view, EasyChatApp *app, ECMenu *menu);
+void EasyChatWordListView_Delete(EasyChatWordListView *wordList);
+void EasyChatWordListView_Load(EasyChatWordListView *wordList);
+void EasyChatWordListView_DrawWords(EasyChatWordListView *wordList);
+BOOL EasyChatWordListView_StartFadeIn(EasyChatWordListView *wordList);
+BOOL EasyChatWordListView_UpdateFadeIn(EasyChatWordListView *wordList);
+void EasyChatWordListView_StartFadeOut(EasyChatWordListView *wordList);
+BOOL EasyChatWordListView_UpdateFadeOut(EasyChatWordListView *wordList);
+void EasyChatWordListView_SetCursorVisible(EasyChatWordListView *wordList, int a1);
+void EasyChatWordListView_MoveCursor(EasyChatWordListView *wordList, int cursor);
+void EasyChatWordListView_StartScroll(EasyChatWordListView *wordList, int scroll);
+BOOL EasyChatWordListView_UpdateScroll(EasyChatWordListView *wordList);
+EasyChatPageButtonsView *EasyChatPageButtonsView_Create(EasyChatAppView *view, EasyChatApp *app, ECMenu *menu);
+void EasyChatPageButtonsView_Delete(EasyChatPageButtonsView *pageButtons);
+void EasyChatPageButtonsView_Load(EasyChatPageButtonsView *pageButtons, NARC *narc);
+void EasyChatPageButtonsView_SetEnabled(EasyChatPageButtonsView *pageButtons, int a1);
+void EasyChatPageButtonsView_SetPressed(EasyChatPageButtonsView *pageButtons, int a1, int a2);
 
 void EasyChatAppView_Delete(EasyChatAppView *view);
 void EasyChatAppView_InitCharTransfer(EasyChatAppView *view);
@@ -426,16 +426,16 @@ void EasyChatAppView_Cmd_Load(SysTask *task, EasyChatViewCommand *command) {
     EasyChatAppView_InitBgs(command);
     EasyChatAppView_LoadSpriteGraphics(command, narc);
     EasyChatAppView_CreateButtonTexts(command->view);
-    command->view->sentence = ov102_021EA314(command->view, command->app, command->menu);
-    ov102_021EA41C(command->view->sentence, narc);
-    command->view->menuView = ov102_021EB1A4(command->view, command->app, command->menu);
-    ov102_021EB1F8(command->view->menuView, narc);
-    command->view->categories = ov102_021EB694(command->view, command->app, command->menu);
-    ov102_021EB6E0(command->view->categories, narc);
-    command->view->wordList = ov102_021EBC34(command->view, command->app, command->menu);
-    ov102_021EBD00(command->view->wordList);
-    command->view->pageButtons = ov102_021EC20C(command->view, command->app, command->menu);
-    ov102_021EC248(command->view->pageButtons, narc);
+    command->view->sentence = EasyChatSentenceView_Create(command->view, command->app, command->menu);
+    EasyChatSentenceView_Load(command->view->sentence, narc);
+    command->view->menuView = EasyChatMenuView_Create(command->view, command->app, command->menu);
+    EasyChatMenuView_Load(command->view->menuView, narc);
+    command->view->categories = EasyChatCategoryView_Create(command->view, command->app, command->menu);
+    EasyChatCategoryView_Load(command->view->categories, narc);
+    command->view->wordList = EasyChatWordListView_Create(command->view, command->app, command->menu);
+    EasyChatWordListView_Load(command->view->wordList);
+    command->view->pageButtons = EasyChatPageButtonsView_Create(command->view, command->app, command->menu);
+    EasyChatPageButtonsView_Load(command->view->pageButtons, narc);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     GX_DispOn();
@@ -471,11 +471,11 @@ void EasyChatAppView_Cmd_Unload(SysTask *task, EasyChatViewCommand *command) {
         if (!IsPaletteFadeFinished()) {
             return;
         }
-        ov102_021EA380(command->view->sentence);
-        ov102_021EB1E0(command->view->menuView);
-        ov102_021EB6C8(command->view->categories);
-        ov102_021EBCBC(command->view->wordList);
-        ov102_021EC240(command->view->pageButtons);
+        EasyChatSentenceView_Delete(command->view->sentence);
+        EasyChatMenuView_Delete(command->view->menuView);
+        EasyChatCategoryView_Delete(command->view->categories);
+        EasyChatWordListView_Delete(command->view->wordList);
+        EasyChatPageButtonsView_Delete(command->view->pageButtons);
         EasyChatAppView_DeleteButtonTexts(command->view);
         for (i = 0; i < 2; i++) {
             if (view->cellFiles[i] != NULL) {
@@ -538,8 +538,8 @@ void EasyChatAppView_Cmd_FadeIn(SysTask *task, EasyChatViewCommand *command) {
 void EasyChatAppView_Cmd_RedrawSentence(SysTask *task, EasyChatViewCommand *command) {
     EasyChatAppView *view = command->view;
 
-    ov102_021EAA3C(view->sentence);
-    ov102_021EAFF0(view->sentence, EasyChatApp_GetWordSlot(command->app));
+    EasyChatSentenceView_DrawSentence(view->sentence);
+    EasyChatSentenceView_MoveCursorToSlot(view->sentence, EasyChatApp_GetWordSlot(command->app));
     EasyChatAppView_EndCommand(command);
 }
 
@@ -548,12 +548,12 @@ void EasyChatAppView_Cmd_Nop(SysTask *task, EasyChatViewCommand *command) {
 }
 
 void EasyChatAppView_Cmd_ShowCategoryCursor(SysTask *task, EasyChatViewCommand *command) {
-    ov102_021EB98C(command->view->categories, 1);
+    EasyChatCategoryView_SetCursorVisible(command->view->categories, 1);
     EasyChatAppView_EndCommand(command);
 }
 
 void EasyChatAppView_Cmd_ShowWordListCursor(SysTask *task, EasyChatViewCommand *command) {
-    ov102_021EBEF4(command->view->wordList, 1);
+    EasyChatWordListView_SetCursorVisible(command->view->wordList, 1);
     EasyChatAppView_EndCommand(command);
 }
 
@@ -563,10 +563,10 @@ void EasyChatAppView_Cmd_FocusMenu(SysTask *task, EasyChatViewCommand *command) 
     EasyChatAppView *view = command->view;
 
     view->onMenu = TRUE;
-    ov102_021EAF5C(view->sentence, 0);
-    ov102_021EAF7C(view->sentence);
-    ov102_021EB524(view->menuView, 1);
-    ov102_021EB530(view->menuView, EasyChatApp_GetMenuCursor(view->app));
+    EasyChatSentenceView_SetCursorVisible(view->sentence, 0);
+    EasyChatSentenceView_HideSlider(view->sentence);
+    EasyChatMenuView_SetCursorVisible(view->menuView, 1);
+    EasyChatMenuView_MoveCursor(view->menuView, EasyChatApp_GetMenuCursor(view->app));
     EasyChatAppView_EndCommand(command);
 }
 
@@ -576,9 +576,9 @@ void EasyChatAppView_Cmd_FocusSentence(SysTask *task, EasyChatViewCommand *comma
     EasyChatAppView *view = command->view;
 
     view->onMenu = FALSE;
-    ov102_021EB524(view->menuView, 0);
-    ov102_021EAFAC(view->sentence);
-    ov102_021EAF5C(view->sentence, 1);
+    EasyChatMenuView_SetCursorVisible(view->menuView, 0);
+    EasyChatSentenceView_ShowSlider(view->sentence);
+    EasyChatSentenceView_SetCursorVisible(view->sentence, 1);
     EasyChatAppView_EndCommand(command);
 }
 
@@ -587,22 +587,22 @@ void EasyChatAppView_Cmd_OpenCategories(SysTask *task, EasyChatViewCommand *comm
 
     switch (command->state) {
     case 0:
-        ov102_021EAF44(view->sentence);
-        ov102_021EAF7C(view->sentence);
-        ov102_021EADF8(view->sentence, 1);
-        ov102_021EAE40(view->sentence, 0);
-        ov102_021EB664(view->menuView);
-        ov102_021EBA44(view->categories);
-        ov102_021EA71C(view->sentence, 0);
+        EasyChatSentenceView_DeactivateCursor(view->sentence);
+        EasyChatSentenceView_HideSlider(view->sentence);
+        EasyChatSentenceView_SelectMessageWindow(view->sentence, 1);
+        EasyChatSentenceView_PrintMessage(view->sentence, 0);
+        EasyChatMenuView_ShowListButton(view->menuView);
+        EasyChatCategoryView_StartOpen(view->categories);
+        EasyChatSentenceView_StartScroll(view->sentence, 0);
         command->state++;
         break;
     case 1: {
-        BOOL categoriesDone = ov102_021EBA5C(view->categories);
-        BOOL sentenceDone = ov102_021EA754(view->sentence);
+        BOOL categoriesDone = EasyChatCategoryView_UpdateOpen(view->categories);
+        BOOL sentenceDone = EasyChatSentenceView_UpdateScroll(view->sentence);
 
         if (categoriesDone && sentenceDone) {
-            ov102_021EB9C0(view->categories, EasyChatApp_GetCategory(view->app));
-            ov102_021EB98C(view->categories, 1);
+            EasyChatCategoryView_MoveCursor(view->categories, EasyChatApp_GetCategory(view->app));
+            EasyChatCategoryView_SetCursorVisible(view->categories, 1);
             EasyChatAppView_EndCommand(command);
         }
         break;
@@ -615,16 +615,16 @@ void ov102_021E9A24(SysTask *task, EasyChatViewCommand *command) {
 
     switch (command->state) {
     case 0:
-        ov102_021EB624(view->menuView);
+        EasyChatMenuView_StartModeSwitch(view->menuView);
         command->state++;
         break;
     case 1:
-        ov102_021EBBF4(view->categories);
+        EasyChatCategoryView_StartModeScroll(view->categories);
         command->state++;
         break;
     case 2:
-        if (ov102_021EBC28(view->categories) && ov102_021EB654(view->menuView)) {
-            ov102_021EBBD0(view->categories);
+        if (EasyChatCategoryView_UpdateModeScroll(view->categories) && EasyChatMenuView_IsModeSwitchDone(view->menuView)) {
+            EasyChatCategoryView_ResetScrollX(view->categories);
             EasyChatAppView_EndCommand(command);
         }
         break;
@@ -636,24 +636,24 @@ void EasyChatAppView_Cmd_SwitchListMode(SysTask *task, EasyChatViewCommand *comm
 
     switch (command->state) {
     case 0:
-        ov102_021EB624(view->menuView);
+        EasyChatMenuView_StartModeSwitch(view->menuView);
         command->state++;
         break;
     case 1:
-        ov102_021EB98C(view->categories, 0);
-        ov102_021EBBF4(view->categories);
+        EasyChatCategoryView_SetCursorVisible(view->categories, 0);
+        EasyChatCategoryView_StartModeScroll(view->categories);
         command->state++;
         break;
     case 2:
-        if (ov102_021EBC28(view->categories)) {
-            ov102_021EBBD0(view->categories);
+        if (EasyChatCategoryView_UpdateModeScroll(view->categories)) {
+            EasyChatCategoryView_ResetScrollX(view->categories);
             command->state++;
         }
         break;
     case 3:
-        if (ov102_021EB654(view->menuView)) {
-            ov102_021EB9C0(view->categories, EasyChatApp_GetCategory(view->app));
-            ov102_021EB98C(view->categories, 1);
+        if (EasyChatMenuView_IsModeSwitchDone(view->menuView)) {
+            EasyChatCategoryView_MoveCursor(view->categories, EasyChatApp_GetCategory(view->app));
+            EasyChatCategoryView_SetCursorVisible(view->categories, 1);
             EasyChatAppView_EndCommand(command);
         }
         break;
@@ -665,21 +665,21 @@ void EasyChatAppView_Cmd_CloseCategories(SysTask *task, EasyChatViewCommand *com
 
     switch (command->state) {
     case 0:
-        ov102_021EB67C(view->menuView);
-        ov102_021EB98C(view->categories, 0);
-        ov102_021EBAAC(view->categories);
-        ov102_021EADF8(view->sentence, 0);
-        ov102_021EAE40(view->sentence, 0);
-        ov102_021EA71C(view->sentence, 1);
+        EasyChatMenuView_ShowMainButtons(view->menuView);
+        EasyChatCategoryView_SetCursorVisible(view->categories, 0);
+        EasyChatCategoryView_StartClose(view->categories);
+        EasyChatSentenceView_SelectMessageWindow(view->sentence, 0);
+        EasyChatSentenceView_PrintMessage(view->sentence, 0);
+        EasyChatSentenceView_StartScroll(view->sentence, 1);
         command->state++;
         break;
     case 1: {
-        BOOL categoriesDone = ov102_021EBAD0(view->categories);
-        BOOL sentenceDone = ov102_021EA754(view->sentence);
+        BOOL categoriesDone = EasyChatCategoryView_UpdateClose(view->categories);
+        BOOL sentenceDone = EasyChatSentenceView_UpdateScroll(view->sentence);
 
         if (categoriesDone && sentenceDone) {
-            ov102_021EAFAC(view->sentence);
-            ov102_021EAF50(view->sentence);
+            EasyChatSentenceView_ShowSlider(view->sentence);
+            EasyChatSentenceView_ActivateCursor(view->sentence);
             view->onMenu = FALSE;
             EasyChatAppView_EndCommand(command);
         }
@@ -693,22 +693,22 @@ void EasyChatAppView_Cmd_OpenWordList(SysTask *task, EasyChatViewCommand *comman
 
     switch (command->state) {
     case 0:
-        ov102_021EBDEC(view->wordList);
-        ov102_021EB98C(view->categories, 0);
-        ov102_021EBB50(view->categories);
+        EasyChatWordListView_DrawWords(view->wordList);
+        EasyChatCategoryView_SetCursorVisible(view->categories, 0);
+        EasyChatCategoryView_StartFadeOut(view->categories);
         command->state++;
         break;
     case 1:
-        if (ov102_021EBB6C(view->categories)) {
-            ov102_021EBE3C(view->wordList);
+        if (EasyChatCategoryView_UpdateFadeOut(view->categories)) {
+            EasyChatWordListView_StartFadeIn(view->wordList);
             command->state++;
         }
         break;
     case 2:
-        if (ov102_021EBE80(view->wordList)) {
-            ov102_021EBF38(view->wordList, EasyChatApp_GetWordListCursor(view->app));
-            ov102_021EBEF4(view->wordList, 1);
-            ov102_021EC290(view->pageButtons, 1);
+        if (EasyChatWordListView_UpdateFadeIn(view->wordList)) {
+            EasyChatWordListView_MoveCursor(view->wordList, EasyChatApp_GetWordListCursor(view->app));
+            EasyChatWordListView_SetCursorVisible(view->wordList, 1);
+            EasyChatPageButtonsView_SetEnabled(view->pageButtons, 1);
             EasyChatAppView_EndCommand(command);
         }
         break;
@@ -720,29 +720,29 @@ void EasyChatAppView_Cmd_WordListToCategories(SysTask *task, EasyChatViewCommand
 
     switch (command->state) {
     case 0:
-        ov102_021EB624(view->menuView);
+        EasyChatMenuView_StartModeSwitch(view->menuView);
         command->state++;
         break;
     case 1:
-        ov102_021EBEF4(view->wordList, 0);
-        ov102_021EC290(view->pageButtons, 0);
-        ov102_021EBEA4(view->wordList);
+        EasyChatWordListView_SetCursorVisible(view->wordList, 0);
+        EasyChatPageButtonsView_SetEnabled(view->pageButtons, 0);
+        EasyChatWordListView_StartFadeOut(view->wordList);
         command->state++;
         break;
     case 2:
-        if (ov102_021EBEC8(view->wordList)) {
-            ov102_021EBBD0(view->categories);
+        if (EasyChatWordListView_UpdateFadeOut(view->wordList)) {
+            EasyChatCategoryView_ResetScrollX(view->categories);
             command->state++;
         }
         break;
     case 3:
-        ov102_021EBB88(view->categories);
+        EasyChatCategoryView_StartFadeIn(view->categories);
         command->state++;
         break;
     case 4:
-        if (ov102_021EBBC4(view->categories) && ov102_021EB654(view->menuView)) {
-            ov102_021EB9C0(view->categories, EasyChatApp_GetCategory(view->app));
-            ov102_021EB98C(view->categories, 1);
+        if (EasyChatCategoryView_UpdateFadeIn(view->categories) && EasyChatMenuView_IsModeSwitchDone(view->menuView)) {
+            EasyChatCategoryView_MoveCursor(view->categories, EasyChatApp_GetCategory(view->app));
+            EasyChatCategoryView_SetCursorVisible(view->categories, 1);
             EasyChatAppView_EndCommand(command);
         }
         break;
@@ -754,38 +754,38 @@ void EasyChatAppView_Cmd_CloseWordList(SysTask *task, EasyChatViewCommand *comma
 
     switch (command->state) {
     case 0:
-        ov102_021EB67C(view->menuView);
-        ov102_021EBEF4(view->wordList, 0);
-        ov102_021EC290(view->pageButtons, 0);
-        ov102_021EBEA4(view->wordList);
-        ov102_021EADF8(view->sentence, 0);
-        ov102_021EAE40(view->sentence, 0);
-        ov102_021EA71C(view->sentence, 1);
+        EasyChatMenuView_ShowMainButtons(view->menuView);
+        EasyChatWordListView_SetCursorVisible(view->wordList, 0);
+        EasyChatPageButtonsView_SetEnabled(view->pageButtons, 0);
+        EasyChatWordListView_StartFadeOut(view->wordList);
+        EasyChatSentenceView_SelectMessageWindow(view->sentence, 0);
+        EasyChatSentenceView_PrintMessage(view->sentence, 0);
+        EasyChatSentenceView_StartScroll(view->sentence, 1);
         command->state++;
         break;
     case 1: {
-        BOOL wordListDone = ov102_021EBEC8(view->wordList);
-        BOOL sentenceDone = ov102_021EA754(view->sentence);
+        BOOL wordListDone = EasyChatWordListView_UpdateFadeOut(view->wordList);
+        BOOL sentenceDone = EasyChatSentenceView_UpdateScroll(view->sentence);
 
         if (wordListDone && sentenceDone) {
-            ov102_021EBB1C(view->categories);
-            ov102_021EBB88(view->categories);
+            EasyChatCategoryView_ResetScrollY(view->categories);
+            EasyChatCategoryView_StartFadeIn(view->categories);
             command->state++;
         }
         break;
     }
     case 2:
-        if (ov102_021EBBC4(view->categories)) {
-            ov102_021EBB2C(view->categories);
+        if (EasyChatCategoryView_UpdateFadeIn(view->categories)) {
+            EasyChatCategoryView_StartDim(view->categories);
             command->state++;
         }
         break;
     case 3:
-        if (ov102_021EBB44(view->categories)) {
-            ov102_021EAA3C(view->sentence);
-            ov102_021EAF5C(view->sentence, 1);
-            ov102_021EAFAC(view->sentence);
-            ov102_021EAF50(view->sentence);
+        if (EasyChatCategoryView_UpdateDim(view->categories)) {
+            EasyChatSentenceView_DrawSentence(view->sentence);
+            EasyChatSentenceView_SetCursorVisible(view->sentence, 1);
+            EasyChatSentenceView_ShowSlider(view->sentence);
+            EasyChatSentenceView_ActivateCursor(view->sentence);
             view->onMenu = FALSE;
             EasyChatAppView_EndCommand(command);
         }
@@ -798,30 +798,30 @@ void EasyChatAppView_Cmd_WordListToMenu(SysTask *task, EasyChatViewCommand *comm
 
     switch (command->state) {
     case 0:
-        ov102_021EB67C(view->menuView);
-        ov102_021EBEF4(view->wordList, 0);
-        ov102_021EC290(view->pageButtons, 0);
-        ov102_021EBEA4(view->wordList);
+        EasyChatMenuView_ShowMainButtons(view->menuView);
+        EasyChatWordListView_SetCursorVisible(view->wordList, 0);
+        EasyChatPageButtonsView_SetEnabled(view->pageButtons, 0);
+        EasyChatWordListView_StartFadeOut(view->wordList);
         command->state++;
         break;
     case 1:
-        if (ov102_021EBEC8(view->wordList)) {
-            ov102_021EBB1C(view->categories);
-            ov102_021EBB88(view->categories);
+        if (EasyChatWordListView_UpdateFadeOut(view->wordList)) {
+            EasyChatCategoryView_ResetScrollY(view->categories);
+            EasyChatCategoryView_StartFadeIn(view->categories);
             command->state++;
         }
         break;
     case 2:
-        if (ov102_021EBBC4(view->categories)) {
-            ov102_021EBB2C(view->categories);
+        if (EasyChatCategoryView_UpdateFadeIn(view->categories)) {
+            EasyChatCategoryView_StartDim(view->categories);
             command->state++;
         }
         break;
     case 3:
-        if (ov102_021EBB44(view->categories)) {
-            ov102_021EAA3C(view->sentence);
-            ov102_021EAF5C(view->sentence, 0);
-            ov102_021EB524(view->menuView, 1);
+        if (EasyChatCategoryView_UpdateDim(view->categories)) {
+            EasyChatSentenceView_DrawSentence(view->sentence);
+            EasyChatSentenceView_SetCursorVisible(view->sentence, 0);
+            EasyChatMenuView_SetCursorVisible(view->menuView, 1);
             EasyChatAppView_EndCommand(command);
         }
         break;
@@ -835,14 +835,14 @@ void EasyChatAppView_Cmd_MoveMenuCursor(SysTask *task, EasyChatViewCommand *comm
     if (cursor == 0) {
         view->onMenu = FALSE;
         // called without its second argument
-        ((void (*)(EasyChatMenuView *))ov102_021EB524)(view->menuView);
-        ov102_021EAF5C(view->sentence, 1);
-        ov102_021EAFF0(view->sentence, EasyChatApp_GetWordSlot(view->app));
+        ((void (*)(EasyChatMenuView *))EasyChatMenuView_SetCursorVisible)(view->menuView);
+        EasyChatSentenceView_SetCursorVisible(view->sentence, 1);
+        EasyChatSentenceView_MoveCursorToSlot(view->sentence, EasyChatApp_GetWordSlot(view->app));
     } else {
         view->onMenu = TRUE;
-        ov102_021EAF5C(view->sentence, 0);
-        ov102_021EB524(view->menuView, 1);
-        ov102_021EB530(view->menuView, cursor);
+        EasyChatSentenceView_SetCursorVisible(view->sentence, 0);
+        EasyChatMenuView_SetCursorVisible(view->menuView, 1);
+        EasyChatMenuView_MoveCursor(view->menuView, cursor);
     }
     EasyChatAppView_EndCommand(command);
 }
@@ -850,21 +850,21 @@ void EasyChatAppView_Cmd_MoveMenuCursor(SysTask *task, EasyChatViewCommand *comm
 void EasyChatAppView_Cmd_SetMenuCursor(SysTask *task, EasyChatViewCommand *command) {
     EasyChatAppView *view = command->view;
 
-    ov102_021EB530(view->menuView, EasyChatApp_GetMenuCursor(view->app));
+    EasyChatMenuView_MoveCursor(view->menuView, EasyChatApp_GetMenuCursor(view->app));
     EasyChatAppView_EndCommand(command);
 }
 
 void EasyChatAppView_Cmd_SetCategoryCursor(SysTask *task, EasyChatViewCommand *command) {
     EasyChatAppView *view = command->view;
 
-    ov102_021EB9C0(view->categories, EasyChatApp_GetCategory(view->app));
+    EasyChatCategoryView_MoveCursor(view->categories, EasyChatApp_GetCategory(view->app));
     EasyChatAppView_EndCommand(command);
 }
 
 void EasyChatAppView_Cmd_SetWordListCursor(SysTask *task, EasyChatViewCommand *command) {
     EasyChatAppView *view = command->view;
 
-    ov102_021EBF38(view->wordList, EasyChatApp_GetWordListCursor(view->app));
+    EasyChatWordListView_MoveCursor(view->wordList, EasyChatApp_GetWordListCursor(view->app));
     EasyChatAppView_EndCommand(command);
 }
 
@@ -875,12 +875,12 @@ void EasyChatAppView_Cmd_ScrollWordList(SysTask *task, EasyChatViewCommand *comm
 
     switch (command->state) {
     case 0:
-        ov102_021EBFA0(view->wordList, EasyChatApp_GetWordListScroll(view->app));
+        EasyChatWordListView_StartScroll(view->wordList, EasyChatApp_GetWordListScroll(view->app));
         command->state++;
         break;
     case 1:
-        if (ov102_021EC05C(view->wordList)) {
-            ov102_021EC290(view->pageButtons, 1);
+        if (EasyChatWordListView_UpdateScroll(view->wordList)) {
+            EasyChatPageButtonsView_SetEnabled(view->pageButtons, 1);
             EasyChatAppView_EndCommand(command);
         }
         break;
@@ -890,47 +890,47 @@ void EasyChatAppView_Cmd_ScrollWordList(SysTask *task, EasyChatViewCommand *comm
 #pragma force_active reset
 
 void EasyChatAppView_Cmd_HideMessage(SysTask *task, EasyChatViewCommand *command) {
-    ov102_021EAE40(command->view->sentence, 0);
+    EasyChatSentenceView_PrintMessage(command->view->sentence, 0);
     EasyChatAppView_EndCommand(command);
 }
 
 void EasyChatAppView_Cmd_ConfirmFinish(SysTask *task, EasyChatViewCommand *command) {
     EasyChatAppView *view = command->view;
 
-    ov102_021EAE40(view->sentence, 2);
-    ov102_021EB2EC(command->view->menuView, 0, 0);
+    EasyChatSentenceView_PrintMessage(view->sentence, 2);
+    EasyChatMenuView_DrawMainButtons(command->view->menuView, 0, 0);
     if (view->onMenu == TRUE) {
-        ov102_021EB50C(view->menuView);
+        EasyChatMenuView_DeactivateCursor(view->menuView);
     } else {
-        ov102_021EAF44(view->sentence);
+        EasyChatSentenceView_DeactivateCursor(view->sentence);
     }
-    ov102_021EB0C0(view->sentence, ov102_021E9090(command->app));
+    EasyChatSentenceView_StartYesNo(view->sentence, ov102_021E9090(command->app));
     EasyChatAppView_EndCommand(command);
 }
 
 void EasyChatAppView_Cmd_ConfirmQuit(SysTask *task, EasyChatViewCommand *command) {
     EasyChatAppView *view = command->view;
 
-    ov102_021EAE40(view->sentence, 3);
-    ov102_021EB2EC(command->view->menuView, 0, 0);
+    EasyChatSentenceView_PrintMessage(view->sentence, 3);
+    EasyChatMenuView_DrawMainButtons(command->view->menuView, 0, 0);
     if (view->onMenu == TRUE) {
-        ov102_021EB50C(view->menuView);
+        EasyChatMenuView_DeactivateCursor(view->menuView);
     } else {
-        ov102_021EAF44(view->sentence);
+        EasyChatSentenceView_DeactivateCursor(view->sentence);
     }
-    ov102_021EB0C0(view->sentence, ov102_021E9090(command->app));
+    EasyChatSentenceView_StartYesNo(view->sentence, ov102_021E9090(command->app));
     EasyChatAppView_EndCommand(command);
 }
 
 void EasyChatAppView_Cmd_ShowIncompleteMessage(SysTask *task, EasyChatViewCommand *command) {
-    ov102_021EAE40(command->view->sentence, 1);
+    EasyChatSentenceView_PrintMessage(command->view->sentence, 1);
     EasyChatAppView_EndCommand(command);
 }
 
 void ov102_021EA144(SysTask *task, EasyChatViewCommand *command) {
     EasyChatAppView *view = command->view;
 
-    ov102_021EB170(view->sentence, ov102_021E9090(command->app));
+    EasyChatSentenceView_DrawYesNoCursor(view->sentence, ov102_021E9090(command->app));
     EasyChatAppView_EndCommand(command);
 }
 
@@ -939,13 +939,13 @@ void ov102_021EA144(SysTask *task, EasyChatViewCommand *command) {
 void EasyChatAppView_Cmd_CloseYesNo(SysTask *task, EasyChatViewCommand *command) {
     EasyChatAppView *view = command->view;
 
-    ov102_021EAE40(view->sentence, 0);
+    EasyChatSentenceView_PrintMessage(view->sentence, 0);
     if (view->onMenu == TRUE) {
-        ov102_021EB2EC(view->menuView, 1, 1);
-        ov102_021EB518(view->menuView);
+        EasyChatMenuView_DrawMainButtons(view->menuView, 1, 1);
+        EasyChatMenuView_ActivateCursor(view->menuView);
     } else {
-        ov102_021EB2EC(view->menuView, 1, 0);
-        ov102_021EAF50(view->sentence);
+        EasyChatMenuView_DrawMainButtons(view->menuView, 1, 0);
+        EasyChatSentenceView_ActivateCursor(view->sentence);
     }
     EasyChatAppView_EndCommand(command);
 }
@@ -953,39 +953,39 @@ void EasyChatAppView_Cmd_CloseYesNo(SysTask *task, EasyChatViewCommand *command)
 #pragma force_active reset
 
 void EasyChatAppView_Cmd_PressPageUp(SysTask *task, EasyChatViewCommand *command) {
-    ov102_021EC294(command->view->pageButtons, 0, 1);
+    EasyChatPageButtonsView_SetPressed(command->view->pageButtons, 0, 1);
     EasyChatAppView_EndCommand(command);
 }
 
 void EasyChatAppView_Cmd_PressPageDown(SysTask *task, EasyChatViewCommand *command) {
-    ov102_021EC294(command->view->pageButtons, 1, 1);
+    EasyChatPageButtonsView_SetPressed(command->view->pageButtons, 1, 1);
     EasyChatAppView_EndCommand(command);
 }
 
 void EasyChatAppView_Cmd_ReleasePageUp(SysTask *task, EasyChatViewCommand *command) {
-    ov102_021EC294(command->view->pageButtons, 0, 0);
+    EasyChatPageButtonsView_SetPressed(command->view->pageButtons, 0, 0);
     EasyChatAppView_EndCommand(command);
 }
 
 void EasyChatAppView_Cmd_ReleasePageDown(SysTask *task, EasyChatViewCommand *command) {
-    ov102_021EC294(command->view->pageButtons, 1, 0);
+    EasyChatPageButtonsView_SetPressed(command->view->pageButtons, 1, 0);
     EasyChatAppView_EndCommand(command);
 }
 
 Sprite *EasyChatAppView_GetSliderSprite(EasyChatAppView *view) {
-    return ov102_021EAFEC(view->sentence);
+    return EasyChatSentenceView_GetSliderThumb(view->sentence);
 }
 
 u32 EasyChatAppView_GetNumWordSlots(EasyChatAppView *view) {
-    return ov102_021EADF0(view->sentence);
+    return EasyChatSentenceView_GetNumSlots(view->sentence);
 }
 
 void EasyChatAppView_GetWordSlotHitbox(EasyChatAppView *view, TouchscreenHitbox *hitbox, u8 slot) {
-    ov102_021EAB10(view->sentence, hitbox, slot);
+    EasyChatSentenceView_GetSlotHitbox(view->sentence, hitbox, slot);
 }
 
 int EasyChatAppView_GetYesNoResult(EasyChatAppView *view) {
-    return ov102_021EB130(view->sentence);
+    return EasyChatSentenceView_HandleYesNo(view->sentence);
 }
 
 BgConfig *EasyChatAppView_GetBgConfig(EasyChatAppView *view) {

@@ -330,45 +330,45 @@
 	.extern BattleAnimSpriteFunc_SpriteOrbit
 	.extern ov07_02226A9C
 	.extern ov07_02226C4C
-	.extern ov07_02226C90
-	.extern ov07_02226F80
-	.extern ov07_022271DC
-	.extern ov07_022272D0
-	.extern ov07_022274F8
-	.extern ov07_02227824
-	.extern ov07_02227AEC
-	.extern ov07_02227D1C
-	.extern ov07_02228070
-	.extern ov07_02228174
-	.extern ov07_02228384
-	.extern ov07_022284D8
-	.extern ov07_02228638
-	.extern ov07_02228750
-	.extern ov07_02228A50
-	.extern ov07_02228C8C
-	.extern ov07_02228D64
-	.extern ov07_02228F88
-	.extern ov07_022290BC
-	.extern ov07_02229220
-	.extern ov07_022292E4
-	.extern ov07_02229630
+	.extern BattleAnimFunc_SetBgPaletteGrayscale
+	.extern BattleAnimFunc_DropSpriteStepwise
+	.extern BattleAnimFunc_AnimateSprites
+	.extern BattleAnimFunc_BattleBgWave
+	.extern BattleAnimSpriteFunc_BlinkScaleFadeSprites
+	.extern BattleAnimFunc_AttackerGrowFlashRed
+	.extern BattleAnimFunc_AttackerSquashStretch
+	.extern BattleAnimFunc_AttackerAfterimages
+	.extern BattleAnimFunc_AttackerPulseWhite
+	.extern BattleAnimFunc_AttackerStretchSteps
+	.extern BattleAnimFunc_AttackerLeapOffscreen
+	.extern BattleAnimFunc_AttackerSilhouette
+	.extern BattleAnimFunc_AttackerHop
+	.extern BattleAnimFunc_ShowAttackerObjWindowSprites
+	.extern BattleAnimFunc_AttackerSquashAfterimages
+	.extern BattleAnimFunc_ShakeBattlefieldFlashing
+	.extern BattleAnimFunc_SpriteDriftFade
+	.extern BattleAnimFunc_RockOrShakeAttacker
+	.extern BattleAnimFunc_ShakeBattlefieldByPower
+	.extern BattleAnimFunc_ShakeSpritePair
+	.extern BattleAnimSpriteFunc_ThrowSpriteArc
+	.extern BattleAnimFunc_StretchFadeSprite
 	.extern ov07_02229BFC
-	.extern ov07_02229E50
-	.extern ov07_0222A1F0
-	.extern ov07_0222A58C
-	.extern ov07_0222A838
-	.extern ov07_0222A988
-	.extern ov07_0222ACAC
-	.extern ov07_0222AEA0
-	.extern ov07_0222B130
-	.extern ov07_0222B320
+	.extern BattleAnimSpriteFunc_BlinkSpritesCenter
+	.extern BattleAnimSpriteFunc_SlidingSpritePairs
+	.extern BattleAnimSpriteFunc_PopAndScatterSprites
+	.extern BattleAnimFunc_WaveAttackerOnBg
+	.extern BattleAnimSpriteFunc_SpriteQuad
+	.extern BattleAnimSpriteFunc_FlashingSpritesAroundAttacker
+	.extern BattleAnimFunc_ShrinkSpriteOnDefender
+	.extern BattleAnimFunc_AttackerDashAfterimages
+	.extern BattleAnimSpriteFunc_SpriteTrailToDefender
 	.extern ov07_0222B640
-	.extern ov07_0222B988
-	.extern ov07_0222BC7C
+	.extern BattleAnimFunc_SlideOutAndTransform
+	.extern BattleAnimFunc_WipeOutDefender
 	.extern ov07_0222BE00
-	.extern ov07_0222C074
-	.extern ov07_0222C4C0
-	.extern ov07_0222C780
+	.extern BattleAnimFunc_AttackerRecoilTilt
+	.extern BattleAnimSpriteFunc_OrbitingSpriteTrail
+	.extern BattleAnimFunc_ShakeDefenderWithOverlay
 	.extern BattleAnimFunc_SkewSlideAttackerBg
 	.extern BattleAnimFunc_FadeInShrinkSprite
 	.extern BattleAnimFunc_ShakeDefenderBlackFlash
@@ -1143,8 +1143,8 @@ ov07_0223646A: ; 0x0223646A
 
 sBattleAnimSpriteFuncTable: ; 0x0223649C
 	.word ov07_022231BC
-	.word ov07_022274F8
-	.word ov07_0222C4C0
+	.word BattleAnimSpriteFunc_BlinkScaleFadeSprites
+	.word BattleAnimSpriteFunc_OrbitingSpriteTrail
 	.word ov07_02229BFC
 	.word BattleAnimSpriteFunc_GrowRockShrinkSprite
 	.word BattleAnimSpriteFunc_StackedSpritesOnDefender
@@ -1159,14 +1159,14 @@ sBattleAnimSpriteFuncTable: ; 0x0223649C
 	.word BattleAnimSpriteFunc_ScaleSpritesOverDefender
 	.word BattleAnimSpriteFunc_SpritesOrbitAttackerBobbing
 	.word BattleAnimSpriteFunc_FloatingSpriteStream
-	.word ov07_022292E4
+	.word BattleAnimSpriteFunc_ThrowSpriteArc
 	.word BattleAnimSpriteFunc_FadeSpriteAnim
-	.word ov07_02229E50
-	.word ov07_0222A1F0
-	.word ov07_0222A58C
-	.word ov07_0222A988
-	.word ov07_0222ACAC
-	.word ov07_0222B320
+	.word BattleAnimSpriteFunc_BlinkSpritesCenter
+	.word BattleAnimSpriteFunc_SlidingSpritePairs
+	.word BattleAnimSpriteFunc_PopAndScatterSprites
+	.word BattleAnimSpriteFunc_SpriteQuad
+	.word BattleAnimSpriteFunc_FlashingSpritesAroundAttacker
+	.word BattleAnimSpriteFunc_SpriteTrailToDefender
 	.word ov07_02226838
 	.word BattleAnimSpriteFunc_SpriteOrbit
 	.word ov07_02226A9C
@@ -1182,30 +1182,30 @@ sBattleAnimFuncTable: ; 0x02236520
 	.word BattleAnimFunc_OneFrameSoundTask
 	.word BattleAnimFunc_OneFrameUncountedTask
 	.word BattleAnimFunc_RotateBattler
-	.word ov07_02227824
-	.word ov07_02227AEC
-	.word ov07_02227D1C
+	.word BattleAnimFunc_AttackerGrowFlashRed
+	.word BattleAnimFunc_AttackerSquashStretch
+	.word BattleAnimFunc_AttackerAfterimages
 	.word ov07_0222BE00
-	.word ov07_0222C074
+	.word BattleAnimFunc_AttackerRecoilTilt
 	.word BattleAnimFunc_CircleBattler
-	.word ov07_0222C780
+	.word BattleAnimFunc_ShakeDefenderWithOverlay
 	.word BattleAnimFunc_SkewSlideAttackerBg
-	.word ov07_02228070
-	.word ov07_02228174
-	.word ov07_02228384
-	.word ov07_022284D8
+	.word BattleAnimFunc_AttackerPulseWhite
+	.word BattleAnimFunc_AttackerStretchSteps
+	.word BattleAnimFunc_AttackerLeapOffscreen
+	.word BattleAnimFunc_AttackerSilhouette
 	.word BattleAnimFunc_FadeInShrinkSprite
 	.word BattleAnimFunc_ShakeDefenderBlackFlash
-	.word ov07_02228638
+	.word BattleAnimFunc_AttackerHop
 	.word BattleAnimFunc_WaveDefenderOnBg
-	.word ov07_02228750
-	.word ov07_02228A50
+	.word BattleAnimFunc_ShowAttackerObjWindowSprites
+	.word BattleAnimFunc_AttackerSquashAfterimages
 	.word ov07_0222DB14
-	.word ov07_02228C8C
+	.word BattleAnimFunc_ShakeBattlefieldFlashing
 	.word BattleAnimFunc_WaddlePic
-	.word ov07_02228D64
-	.word ov07_02228F88
-	.word ov07_022290BC
+	.word BattleAnimFunc_SpriteDriftFade
+	.word BattleAnimFunc_RockOrShakeAttacker
+	.word BattleAnimFunc_ShakeBattlefieldByPower
 	.word BattleAnimFunc_AttackerDip
 	.word BattleAnimFunc_AttackerLungeKnockback
 	.word BattleAnimFunc_AttackerStretchUp
@@ -1216,7 +1216,7 @@ sBattleAnimFuncTable: ; 0x02236520
 	.word BattleAnimFunc_ShakeTargets
 	.word BattleAnimFunc_WobbleDefenderOnBg
 	.word BattleAnimFunc_BlendBattlerSprites
-	.word ov07_02229220
+	.word BattleAnimFunc_ShakeSpritePair
 	.word BattleAnimFunc_SetBattlerVanished
 	.word BattleAnimFunc_WindowSweepFlashWhite
 	.word BattleAnimFunc_StretchBattler
@@ -1226,17 +1226,17 @@ sBattleAnimFuncTable: ; 0x02236520
 	.word BattleAnimFunc_ShootSpriteFromAttacker
 	.word BattleAnimFunc_AttackerShakeLunge
 	.word BattleAnimFunc_DefenderKnockback
-	.word ov07_02229630
+	.word BattleAnimFunc_StretchFadeSprite
 	.word BattleAnimFunc_BlinkBattler
 	.word BattleAnimFunc_SlideBattler
 	.word BattleAnimFunc_SlideBattler2
 	.word BattleAnimFunc_ShakeAndScaleBattler
 	.word BattleAnimFunc_ShakeAndScaleBattlerXY
-	.word ov07_0222A838
+	.word BattleAnimFunc_WaveAttackerOnBg
 	.word ov07_022251CC
 	.word BattleAnimFunc_MoveBattlerBy
-	.word ov07_0222AEA0
-	.word ov07_0222B130
+	.word BattleAnimFunc_ShrinkSpriteOnDefender
+	.word BattleAnimFunc_AttackerDashAfterimages
 	.word BattleAnimFunc_MoveBattlerSin
 	.word BattleAnimFunc_MoveBattlerLinear
 	.word BattleAnimFunc_ResetBattlerPosition
@@ -1248,15 +1248,15 @@ sBattleAnimFuncTable: ; 0x02236520
 	.word BattleAnimFunc_ShakeBg
 	.word BattleAnimFunc_SpriteMosaic
 	.word ov07_0222B640
-	.word ov07_0222B988
+	.word BattleAnimFunc_SlideOutAndTransform
 	.word BattleAnimFunc_EmitterSinMotion
 	.word ov07_022262E8
-	.word ov07_02226C90
-	.word ov07_02226F80
-	.word ov07_022272D0
+	.word BattleAnimFunc_SetBgPaletteGrayscale
+	.word BattleAnimFunc_DropSpriteStepwise
+	.word BattleAnimFunc_BattleBgWave
 	.word ov07_02225640
-	.word ov07_022271DC
-	.word ov07_0222BC7C
+	.word BattleAnimFunc_AnimateSprites
+	.word BattleAnimFunc_WipeOutDefender
 	.word BattleAnimFunc_ObjWindowBgScrollUp
 	.word BattleAnimFunc_ObjWindowBgScrollDown
 	.word BattleAnimFunc_ObjWindowBgScrollUpAlt

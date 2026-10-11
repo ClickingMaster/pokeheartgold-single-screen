@@ -60,7 +60,7 @@ extern void MB_End(void);
 extern void ov13_0223C9D4(void *);
 extern void ov13_0223CEA0(void);
 extern void ov13_0223CA14(u32, u16);
-extern void *ov13_0223A7F4(u32, u32);
+extern void *WifiSetupConnections_Get(u32, u32);
 extern void DWCi_BACKUPlRead(void *);
 void ov13_0223D6A8(u32);
 void ov13_0223D724(u32);

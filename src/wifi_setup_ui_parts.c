@@ -53,7 +53,7 @@ extern void *WifiSetupText_GetString(void *, int);
 extern void *WifiSetupText_GetStringWithDigit(void *, int, int, int);
 extern void ov13_0223AC4C(int);
 extern void ov13_0223B1E0(int);
-extern u8 *ov13_02239FF0(void);
+extern u8 *WifiSetupConnections_GetEdit(void);
 
 void WifiSetupBusyIcon_Task(void *task) {
     GXOamAttr *oam;
@@ -413,11 +413,11 @@ void WifiSetupBackground_LoadHeader(int n) {
 }
 
 void ov13_02227E40(void) {
-    WifiSetupBackground_LoadHeader(ov13_02239FF0()[244] + 5);
+    WifiSetupBackground_LoadHeader(WifiSetupConnections_GetEdit()[244] + 5);
 }
 
 void ov13_02227E58(void) {
-    WifiSetupBackground_LoadHeader(ov13_02239FF0()[244] + 2);
+    WifiSetupBackground_LoadHeader(WifiSetupConnections_GetEdit()[244] + 2);
 }
 
 void WifiSetupBackground_TransferTask(void *task) {
