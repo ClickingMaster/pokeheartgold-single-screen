@@ -9,5 +9,5 @@ typedef struct Ov73Loader {
     void (*finish)(void *);
 } Ov73Loader;
 extern const Ov73Loader ov73_021EA744[10];
-void ov73_021EA374(void *ctx, void *dest);
+void RecordMixing_BuildSendBuffer(void *ctx, void *dest);
 #endif

@@ -18,7 +18,7 @@ void sub_0208FB98(int sender, int unused, void *data, Room *room) {
     room->count = 0;
     room->active = 1;
     sub_0208FD3C(room, Comm_GetLocalNetId());
-    ov73_021E6B98(room);
+    RecordMixing_StartFlash(room);
     ov73_021E705C(room, 25, (u8)sender);
     sub_020398D4(1, 1);
     PlaySE(0x657);

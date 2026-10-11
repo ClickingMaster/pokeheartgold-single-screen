@@ -68,10 +68,8 @@ Autoload WRAM
 	Object lib/src/op90_libsyscall_r02.o
 	Object asm/to90_arm7_wram160_r8_anchor.o
 	Object lib/src/spi_server.o
-	Object lib/src/touch_panel_server.o
-	Object lib/src/touch_panel_process.o
+	Object lib/src/touch_panel_driver.o
 	Object asm/to90_arm7_wram160_r8_anchor_own1.o
-	Object lib/src/touch_panel_sampling.o
 	Object lib/src/power_manager_driver.o
 	Object lib/src/mic_command.o
 	Object asm/op90_to90_arm7_sub_wram_2_residual_6_own1.o
@@ -146,35 +144,9 @@ Autoload EXT_WRAM
 	Object lib/src/wl_task.o
 	Object lib/src/wl_heap_buf.o
 	Object lib/src/wl_param.o
-	Object lib/src/op90_to91_w41462_default_suffix_r01.o
-	Object lib/src/to90_arm7_sub_ext_wram_run138.o
-	Object lib/src/to90_arm7_sub_ext_wram_run139.o
-	Object lib/src/to90_arm7_sub_ext_wram_run140.o
-	Object lib/src/to90_arm7_sub_ext_wram_run141.o
-	Object lib/src/to90_arm7_sub_ext_wram_run142.o
-	Object lib/src/to90_arm7_sub_ext_wram_run143.o
-	Object lib/src/to90_arm7_sub_ext_wram_run398.o
-	Object lib/src/to90_arm7_sub_ext_wram_run144.o
-	Object lib/src/to90_arm7_sub_ext_wram_run145.o
-	Object lib/src/to90_arm7_sub_ext_wram_run146.o
-	Object lib/src/to90_arm7_sub_ext_wram_run147.o
-	Object lib/src/to90_arm7_sub_ext_wram_run148.o
-	Object lib/src/to90_arm7_sub_ext_wram_run149.o
-	Object lib/src/to90_arm7_sub_ext_wram_run150.o
-	Object lib/src/to90_arm7_sub_ext_wram_run386.o
-	Object lib/src/to90_arm7_sub_ext_wram_run387.o
-	Object lib/src/to90_arm7_sub_ext_wram_run151.o
-	Object lib/src/to90_arm7_sub_ext_wram_run152.o
-	Object lib/src/to90_arm7_sub_ext_wram_run153.o
-	Object lib/src/to90_arm7_sub_ext_wram_run154.o
-	Object lib/src/to90_arm7_sub_ext_wram_run155.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_30_r01.o
-	Object lib/src/to90_arm7_sub_ext_wram_run156.o
-	Object lib/src/to90_arm7_sub_ext_wram_run405.o
-	Object lib/src/to90_arm7_sub_ext_wram_run157.o
-	Object lib/src/to90_arm7_sub_ext_wram_run158.o
-	Object lib/src/to91_w41531_element_rates.o
-	Object lib/src/to90_arm7_sub_ext_wram_run159.o
+	Object lib/src/wl_set_channel.o
+	Object lib/src/wl_state.o
+	Object lib/src/wl_util.o
 	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_32_r01.o
 	Object lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_32_residual_1_r01.o
 	Object lib/src/to90_arm7_sub_ext_wram_run160.o

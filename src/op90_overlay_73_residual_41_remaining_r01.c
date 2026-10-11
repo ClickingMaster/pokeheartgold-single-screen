@@ -20,9 +20,9 @@ BOOL sub_02034818(int idx);
 void *sub_020270C4(SaveData *saveData);
 void sub_0202E43C(void *p);
 void sub_0202E474(void *p);
-void ov73_021EA3D0(SaveData *saveData, u8 (*buffer)[0xBC0]);
-// @fn ov73_021EA3D0
-void ov73_021EA3D0(SaveData *saveData, u8 (*buffer)[0xBC0]) {
+void RecordMixing_MergeReceivedRecords(SaveData *saveData, u8 (*buffer)[0xBC0]);
+// @fn RecordMixing_MergeReceivedRecords
+void RecordMixing_MergeReceivedRecords(SaveData *saveData, u8 (*buffer)[0xBC0]) {
     Args73 args;
     void *records[5];
     void *records2[5];

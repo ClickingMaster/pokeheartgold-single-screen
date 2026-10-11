@@ -16,7 +16,7 @@
 .public MATH_CountPopulation
 .public gOverlayTemplate_Battle
 .public gNatureStatMods
-.public ov73_021E6B98
+.public RecordMixing_StartFlash
 .public ov73_021E705C
 .public ov73_021E7120
 .public ov73_021E7488

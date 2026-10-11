@@ -245,10 +245,10 @@
 .public NintendoWfcHttp_RequestUpload
 .public NintendoWfcHttp_RequestInfo
 .public NintendoWfcHttp_RequestSetProfile
-.public ov73_021E5900
-.public ov73_021E5AB8
-.public ov73_021E5BAC
-.public ov73_021E6B98
+.public RecordMixing_Init
+.public RecordMixing_Main
+.public RecordMixing_Exit
+.public RecordMixing_StartFlash
 .public ov73_021E705C
 .public ov73_021E7120
 .public ov73_021E7488

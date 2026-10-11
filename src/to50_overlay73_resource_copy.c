@@ -1,6 +1,6 @@
 #include "to50_overlay73_resource_copy_private.h"
 
-void ov73_021EA374(void *ctx, void *dest) {
+void RecordMixing_BuildSendBuffer(void *ctx, void *dest) {
     u32 remaining = 3000;
     int i;
 

@@ -4,33 +4,33 @@
 	.include "global.inc"
 
 	.text
-	.public _021EA51C
-	.public _021EA7C0
+	.public sRecordMixingButtonX
+	.public sRecordMixingStateFuncs
 	.public _021EA940
-	.public ov73_021E5900
-	.public ov73_021E5AB8
-	.public ov73_021E5BAC
-	.public ov73_021E5C74
-	.public ov73_021E5CD8
-	.public ov73_021E5D00
-	.public ov73_021E5D20
-	.public ov73_021E5E0C
-	.public ov73_021E5ED4
-	.public ov73_021E5F38
-	.public ov73_021E6060
-	.public ov73_021E6090
-	.public ov73_021E6184
-	.public ov73_021E629C
-	.public ov73_021E63BC
+	.public RecordMixing_Init
+	.public RecordMixing_Main
+	.public RecordMixing_Exit
+	.public RecordMixing_VBlankTask
+	.public RecordMixing_VBlankCB
+	.public RecordMixing_SetGfxBanks
+	.public RecordMixing_InitBgs
+	.public RecordMixing_InitResources
+	.public RecordMixing_FreeResources
+	.public RecordMixing_LoadBgGraphics
+	.public RecordMixing_InitObjTransfer
+	.public RecordMixing_InitSpriteGraphics
+	.public RecordMixing_CreateSprites
+	.public RecordMixing_AddWindows
+	.public RecordMixing_PrintCenteredString
 	.public ov73_021E6444
 	.public ov73_021E6484
-	.public ov73_021E64B0
-	.public ov73_021E6508
+	.public RecordMixing_UpdateMenuInputState
+	.public RecordMixing_HandleInput
 	.public ov73_021E66F4
-	.public ov73_021E671C
+	.public RecordMixing_State_WaitText
 	.public ov73_021E6778
-	.public ov73_021E67A8
-	.public ov73_021E6830
+	.public RecordMixing_ShowYesNo
+	.public RecordMixing_HideYesNo
 	.public ov73_021E6890
 	.public ov73_021E68AC
 	.public ov73_021E69E8
@@ -56,15 +56,15 @@
 	.public ov73_021E6FE8
 	.public ov73_021E705C
 	.public ov73_021E7120
-	.public ov73_021E71E4
-	.public ov73_021E7230
-	.public ov73_021E72F4
-	.public ov73_021E735C
-	.public ov73_021E7490
-	.public ov73_021E756C
-	.public ov73_021E762C
-	.public ov73_021E7740
-	.public ov73_021E77A4
+	.public RecordMixing_SetButtonState
+	.public RecordMixing_PrintButtons
+	.public RecordMixing_PulsePalette
+	.public RecordMixing_PrintMemberList
+	.public RecordMixing_UpdateMembers
+	.public RecordMixing_PrintMessage
+	.public RecordMixing_UpdateMemberSprites
+	.public RecordMixing_LoadAvatarGraphics
+	.public RecordMixing_LoadAvatar
 	.public ov73_021E781C
 	.public ov73_021E7870
 	.public ov73_021E7964
@@ -137,20 +137,20 @@
 	.public ov73_021EA2B4
 	.public ov73_021EA2E0
 	.public ov73_021EA324
-	.public ov73_021EA374
-	.public ov73_021EA3D0
-	.public ov73_021EA520
-	.public ov73_021EA52A
-	.public ov73_021EA52B
-	.public ov73_021EA534
-	.public ov73_021EA540
-	.public ov73_021EA550
-	.public ov73_021EA560
-	.public ov73_021EA578
-	.public ov73_021EA594
-	.public ov73_021EA5B0
-	.public ov73_021EA5CC
-	.public ov73_021EA5E8
+	.public RecordMixing_BuildSendBuffer
+	.public RecordMixing_MergeReceivedRecords
+	.public sRecordMixingAvatarVramOffsets
+	.public sRecordMixingFlashDurations
+	.public sRecordMixingFlashPalettes
+	.public sRecordMixingButtonHitboxes
+	.public sRecordMixingGraphicsModes
+	.public sRecordMixingObjCharTransferTemplate
+	.public sRecordMixingSpritePositions
+	.public sRecordMixingBgTemplate_Main0
+	.public sRecordMixingBgTemplate_Main1
+	.public sRecordMixingBgTemplate_Sub0
+	.public sRecordMixingBgTemplate_Sub1
+	.public sRecordMixingGraphicsBanks
 	.public ov73_021EA610
 	.public ov73_021EA618
 	.public ov73_021EA624
@@ -172,23 +172,23 @@
 	.public ov73_021EA844
 	.public ov73_021EA848
 
-	.public ov73_021E5F0C
-	.public ov73_021E6048
-	.public ov73_021E6400
+	.public RecordMixing_FreeBgs
+	.public RecordMixing_FreeButtonScreen
+	.public RecordMixing_RemoveWindows
 	.public ov73_021E66F0
-	.public ov73_021E670C
+	.public RecordMixing_SetStateAfterText
 	.public ov73_021E69D0
-	.public ov73_021E6B98
+	.public RecordMixing_StartFlash
 	.public ov73_021E6BF8
 	.public ov73_021E6C20
 	.public ov73_021E7340
 	.public ov73_021E7468
-	.public ov73_021E746C
+	.public RecordMixing_CountMembers
 	.public ov73_021E7488
-	.public ov73_021E75FC
-	.public ov73_021E761C
-	.public ov73_021E77E8
-	.public ov73_021E7818
+	.public RecordMixing_IsPrinterDone
+	.public RecordMixing_ClearMessageWindow
+	.public RecordMixing_FreeAvatarGraphics
+	.public RecordMixing_GetTextSpeed
 	.public ov73_021E795C
 	.public ov73_021E7960
 	.public ov73_021E7A74
@@ -251,13 +251,13 @@
 	.public ov73_021EA348
 	.public ov73_021EA370
 
-	thumb_func_start ov73_021E671C
-ov73_021E671C: ; 0x021E671C
+	thumb_func_start RecordMixing_State_WaitText
+RecordMixing_State_WaitText: ; 0x021E671C
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	ldr r0, [r5, #0x4c]
 	add r4, r1, #0
-	bl ov73_021E75FC
+	bl RecordMixing_IsPrinterDone
 	cmp r0, #0
 	beq _021E6768
 	mov r1, #0xc7
@@ -274,7 +274,7 @@ ov73_021E671C: ; 0x021E671C
 	mov r1, #0
 	add r0, r5, #0
 	add r2, r1, #0
-	bl ov73_021E71E4
+	bl RecordMixing_SetButtonState
 _021E674E:
 	mov r1, #0
 	ldr r0, _021E6774 ; =0x00004A38
@@ -283,7 +283,7 @@ _021E674E:
 	add r0, r5, #0
 	mov r1, #1
 	mov r2, #0
-	bl ov73_021E71E4
+	bl RecordMixing_SetButtonState
 	ldr r0, [r5]
 	mov r1, #1
 	bl ScheduleBgTilemapBufferTransfer
@@ -294,7 +294,7 @@ _021E6768:
 	pop {r3, r4, r5, pc}
 	nop
 _021E6774: .word 0x00004A38
-	thumb_func_end ov73_021E671C
+	thumb_func_end RecordMixing_State_WaitText
 
 
 	thumb_func_start ov73_021E6778
@@ -324,8 +324,8 @@ _021E6794:
 	thumb_func_end ov73_021E6778
 
 
-	thumb_func_start ov73_021E67A8
-ov73_021E67A8: ; 0x021E67A8
+	thumb_func_start RecordMixing_ShowYesNo
+RecordMixing_ShowYesNo: ; 0x021E67A8
 	push {r4, r5, lr}
 	sub sp, #0x14
 	add r4, r0, #0
@@ -375,12 +375,12 @@ ov73_021E67A8: ; 0x021E67A8
 	add r0, r4, #0
 	mov r1, #0
 	mov r2, #2
-	bl ov73_021E71E4
+	bl RecordMixing_SetButtonState
 _021E6814:
 	add r0, r4, #0
 	mov r1, #1
 	mov r2, #2
-	bl ov73_021E71E4
+	bl RecordMixing_SetButtonState
 	ldr r0, [r4]
 	mov r1, #1
 	bl ScheduleBgTilemapBufferTransfer
@@ -388,11 +388,11 @@ _021E6814:
 	pop {r4, r5, pc}
 	nop
 _021E682C: .word 0x00004A15
-	thumb_func_end ov73_021E67A8
+	thumb_func_end RecordMixing_ShowYesNo
 
 
-	thumb_func_start ov73_021E6830
-ov73_021E6830: ; 0x021E6830
+	thumb_func_start RecordMixing_HideYesNo
+RecordMixing_HideYesNo: ; 0x021E6830
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, _021E6888 ; =0x00004A15
@@ -418,7 +418,7 @@ ov73_021E6830: ; 0x021E6830
 	mov r1, #0
 	add r0, r4, #0
 	add r2, r1, #0
-	bl ov73_021E71E4
+	bl RecordMixing_SetButtonState
 _021E686C:
 	mov r1, #0
 	ldr r0, _021E688C ; =0x00004A38
@@ -427,7 +427,7 @@ _021E686C:
 	add r0, r4, #0
 	mov r1, #1
 	mov r2, #0
-	bl ov73_021E71E4
+	bl RecordMixing_SetButtonState
 	ldr r0, [r4]
 	mov r1, #1
 	bl ScheduleBgTilemapBufferTransfer
@@ -436,7 +436,7 @@ _021E6886:
 	.balign 4, 0
 _021E6888: .word 0x00004A15
 _021E688C: .word 0x00004A38
-	thumb_func_end ov73_021E6830
+	thumb_func_end RecordMixing_HideYesNo
 
 
 	thumb_func_start ov73_021E6890
@@ -444,7 +444,7 @@ ov73_021E6890: ; 0x021E6890
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	add r4, r1, #0
-	bl ov73_021E67A8
+	bl RecordMixing_ShowYesNo
 	mov r0, #0xc6
 	mov r1, #5
 	lsl r0, r0, #2
@@ -501,7 +501,7 @@ _021E68F8:
 	add r0, r6, #0
 	pop {r4, r5, r6, pc}
 _021E6904:
-	bl ov73_021E746C
+	bl RecordMixing_CountMembers
 	add r4, r0, #0
 	bl Comm_CountConnected
 	cmp r4, r0
@@ -535,7 +535,7 @@ _021E691E:
 _021E694E:
 	add r0, r5, #0
 	mov r1, #0
-	bl ov73_021E670C
+	bl RecordMixing_SetStateAfterText
 	b _021E69AA
 _021E6958:
 	bl Comm_GetLocalNetId
@@ -543,11 +543,11 @@ _021E6958:
 	bne _021E6974
 	add r0, r5, #0
 	mov r1, #0xb
-	bl ov73_021E670C
+	bl RecordMixing_SetStateAfterText
 	add r0, r5, #0
 	mov r1, #0xe
 	mov r2, #0
-	bl ov73_021E756C
+	bl RecordMixing_PrintMessage
 	b _021E69AA
 _021E6974:
 	add r0, sp, #0
@@ -576,7 +576,7 @@ _021E6974:
 	bl Comm_SendCommand
 _021E69AA:
 	add r0, r5, #0
-	bl ov73_021E6830
+	bl RecordMixing_HideYesNo
 _021E69B0:
 	add r0, r5, #0
 	bl ov73_021E66F0

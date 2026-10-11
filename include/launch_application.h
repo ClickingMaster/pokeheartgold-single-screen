@@ -29,7 +29,7 @@
 #include "overlay_58.h"
 #include "battle_room_results.h"
 #include "nintendo_wfc_connect.h"
-#include "overlay_73.h"
+#include "record_mixing.h"
 #include "overlay_86.h"
 #include "overlay_87.h"
 #include "overlay_99.h"
@@ -129,7 +129,7 @@ void sub_0203F0A8(FieldSystem *fieldSystem, BattleRoomResultsArgs *unk);
 void PCBox_LaunchApp(FieldSystem *fieldSystem, PCBoxArgs *pcBoxData);
 void CallTask_WirelessTrade(TaskManager *taskManager);
 void sub_0203F4C8(FieldSystem *fieldSystem);
-UnkStruct_0203F4F8 *sub_0203F4F8(FieldSystem *fieldSystem);
+RecordMixingArgs *sub_0203F4F8(FieldSystem *fieldSystem);
 HallOfFame *HallOfFameShowcase_LaunchApp(FieldSystem *fieldSystem);
 void sub_0203F844(FieldSystem *fieldSystem, u16 a1);
 BagView *Bag_LaunchApp_WithPocket(FieldSystem *fieldSystem, u8 pocketType);

@@ -1,7 +1,0 @@
-#pragma force_active on
-#include "global.h"
-#pragma force_active on
-typedef struct{void*list,*header;int x,y,z,sx,sy,sz;u16 rotation;u16 pad;int priority,vram,heap;}Affine;
-extern const u16 ov73_021EA560[][2];extern void CreateSpriteResourcesHeader(void*,int,int,int,int,int,int,int,int,void*,void*,void*,void*,int,int);extern void*Sprite_CreateAffine(Affine*);extern void Sprite_SetAnimActiveFlag(void*,int),Sprite_SetDrawFlag(void*,int),Sprite_SetDrawPriority(void*,int),Sprite_SetAnimCtrlSeq(void*,int),GfGfx_EngineATogglePlanes(int,int),GfGfx_EngineBTogglePlanes(int,int);
-void ov73_021E6184(void*);
-void ov73_021E6184(void*s){Affine t;int i;const u16*p;CreateSpriteResourcesHeader((u8*)s+0x204,2,2,2,2,-1,-1,0,1,*(void**)((u8*)s+0x17c),*(void**)((u8*)s+0x180),*(void**)((u8*)s+0x184),*(void**)((u8*)s+0x188),0,0);t.list=*(void**)((u8*)s+0x50);t.header=(u8*)s+0x204;t.z=0;t.sx=4096;t.sy=4096;t.sz=4096;t.rotation=0;t.priority=1;t.vram=1;t.heap=50;t.x=344064;t.y=425984;*(void**)((u8*)s+0x228)=Sprite_CreateAffine(&t);Sprite_SetAnimActiveFlag(*(void**)((u8*)s+0x228),1);Sprite_SetDrawFlag(*(void**)((u8*)s+0x228),1);Sprite_SetDrawPriority(*(void**)((u8*)s+0x228),100);for(i=0,p=&ov73_021EA560[0][0];i<5;i++,p+=2,s=(u8*)s+4){t.x=p[2]<<12;t.y=p[3]<<12;*(void**)((u8*)s+0x22c)=Sprite_CreateAffine(&t);Sprite_SetAnimActiveFlag(*(void**)((u8*)s+0x22c),1);Sprite_SetAnimCtrlSeq(*(void**)((u8*)s+0x22c),(i-1)*2+27);Sprite_SetDrawFlag(*(void**)((u8*)s+0x22c),0);}t.x=98304;t.y=1703936;GfGfx_EngineATogglePlanes(16,1);GfGfx_EngineBTogglePlanes(16,1);}

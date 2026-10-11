@@ -419,9 +419,9 @@
 .public PlazaNews_Init
 .public PlazaNews_Main
 .public PlazaNews_Exit
-.public ov89_02258800
-.public ov89_02258B04
-.public ov89_02258F00
+.public FootprintStamp_Init
+.public FootprintStamp_Main
+.public FootprintStamp_Exit
 .public ov91_0225C540
 .public ov91_0225C58C
 .public ov91_0225C9EC

@@ -580,109 +580,109 @@
 	.public _0225C986
 	.public _0225C9AC
 	.public _0225C9B0
-	.public ov89_02258800
-	.public ov89_02258B04
-	.public ov89_02258F00
-	.public ov89_02258FF4
-	.public ov89_0225901C
-	.public ov89_0225905C
-	.public ov89_02259264
-	.public ov89_02259408
-	.public ov89_02259588
-	.public ov89_022596DC
-	.public ov89_02259734
-	.public ov89_022597FC
-	.public ov89_022598A8
-	.public ov89_022598D0
-	.public ov89_02259A3C
-	.public ov89_02259B00
-	.public ov89_02259BAC
-	.public ov89_02259C0C
-	.public ov89_02259CD0
-	.public ov89_02259D50
-	.public ov89_02259D70
-	.public ov89_02259D8C
-	.public ov89_02259E50
-	.public ov89_02259EC4
-	.public ov89_02259F9C
-	.public ov89_0225A148
-	.public ov89_0225A16C
-	.public ov89_0225A1D8
-	.public ov89_0225A21C
-	.public ov89_0225A260
-	.public ov89_0225A368
-	.public ov89_0225A398
-	.public ov89_0225A41C
-	.public ov89_0225A49C
-	.public ov89_0225A4F4
-	.public ov89_0225A5A4
-	.public ov89_0225A5EC
-	.public ov89_0225A760
-	.public ov89_0225A7BC
-	.public ov89_0225A878
-	.public ov89_0225A958
-	.public ov89_0225A988
-	.public ov89_0225A9B4
-	.public ov89_0225AA24
-	.public ov89_0225AB64
-	.public ov89_0225AC24
-	.public ov89_0225AC68
-	.public ov89_0225AD00
-	.public ov89_0225AD64
-	.public ov89_0225ADA4
-	.public ov89_0225AEA8
-	.public ov89_0225AED0
-	.public ov89_0225AF10
-	.public ov89_0225AF7C
-	.public ov89_0225AFC0
-	.public ov89_0225AFFC
-	.public ov89_0225B010
-	.public ov89_0225B07C
-	.public ov89_0225B100
-	.public ov89_0225B148
-	.public ov89_0225B164
-	.public ov89_0225B298
-	.public ov89_0225B2BC
-	.public ov89_0225B2E8
-	.public ov89_0225B450
-	.public ov89_0225B46C
-	.public ov89_0225B604
-	.public ov89_0225B620
-	.public ov89_0225B784
-	.public ov89_0225B810
-	.public ov89_0225B82C
-	.public ov89_0225B900
-	.public ov89_0225B91C
-	.public ov89_0225B978
-	.public ov89_0225B994
-	.public ov89_0225BB28
-	.public ov89_0225BB88
-	.public ov89_0225BBB4
-	.public ov89_0225BD48
-	.public ov89_0225BDA8
-	.public ov89_0225BDD4
-	.public ov89_0225BE68
-	.public ov89_0225BE84
-	.public ov89_0225BF34
-	.public ov89_0225BFE4
-	.public ov89_0225C090
-	.public ov89_0225C168
-	.public ov89_0225C240
-	.public ov89_0225C31C
-	.public ov89_0225C3E8
-	.public ov89_0225C498
-	.public ov89_0225C570
-	.public ov89_0225C648
-	.public ov89_0225C724
-	.public ov89_0225C830
-	.public ov89_0225C84C
-	.public ov89_0225C88C
-	.public ov89_0225C8BC
-	.public ov89_0225C8DC
-	.public ov89_0225C8F0
-	.public ov89_0225C93C
-	.public ov89_0225C960
-	.public ov89_0225C988
+	.public FootprintStamp_Init
+	.public FootprintStamp_Main
+	.public FootprintStamp_Exit
+	.public FootprintStamp_MainTask
+	.public FootprintStamp_VBlank
+	.public FootprintStamp_InitBgs
+	.public FootprintStamp_LoadBgGfx
+	.public FootprintStamp_LoadPartySpriteGfx
+	.public FootprintStamp_CreatePartySprites
+	.public FootprintStamp_FreePartySprites
+	.public FootprintStamp_LoadPlayerSpriteGfx
+	.public FootprintStamp_CreatePlayerSprites
+	.public FootprintStamp_FreePlayerSprites
+	.public FootprintStamp_ShowParty
+	.public FootprintStamp_LoadFootprintIcon
+	.public FootprintStamp_CreateCamera
+	.public FootprintStamp_LoadBoardModel
+	.public FootprintStamp_Draw3D
+	.public FootprintStamp_CreateWindows
+	.public FootprintStamp_FreeWindows
+	.public FootprintStamp_Create3DVramMan
+	.public FootprintStamp_Setup3D
+	.public FootprintStamp_LoadParty
+	.public FootprintStamp_PlaceStamp
+	.public FootprintStamp_UpdatePlayers
+	.public FootprintStamp_ShowPlayerName
+	.public FootprintStamp_StartSelectEffect
+	.public FootprintStamp_HighlightPartySlot
+	.public FootprintStamp_UpdateSelectEffects
+	.public FootprintStamp_CreateTextSprite
+	.public FootprintStamp_GetTextSize
+	.public FootprintStamp_UpdateInkGauge
+	.public FootprintStamp_UseInk
+	.public FootprintStampBoard_AddStamp
+	.public FootprintStampBoard_Update
+	.public FootprintStampBoard_Draw
+	.public FootprintStampBoard_ResolveChains
+	.public FootprintStampBoard_VBlank
+	.public FootprintStampBoard_CreateStamp
+	.public FootprintStamp_LoadStampModel
+	.public FootprintStampBoard_QueueTexture
+	.public FootprintStampBoard_UnqueueTexture
+	.public FootprintStamp_AllocTextureVram
+	.public FootprintStamp_DrawFootprintTexture
+	.public FootprintStamp_RotateFootprintTexture
+	.public FootprintStampBoard_RemoveStamp
+	.public FootprintStamp_TouchToBoardPos
+	.public FootprintStampBoard_AllocPolygonId
+	.public FootprintStampBoard_FreePolygonId
+	.public FootprintStamp_GetBounds
+	.public FootprintStamp_BoundsOverlap
+	.public FootprintStampBoard_NewChain
+	.public FootprintStampBoard_AddToChain
+	.public FootprintStampBoard_ReleaseChain
+	.public FootprintStamp_SetEffect
+	.public FootprintStamp_GetNatureEffect
+	.public FootprintStamp_UpdateIdle
+	.public FootprintStamp_UpdateVanish
+	.public FootprintStamp_DrawVanish
+	.public FootprintStamp_HitVanish
+	.public FootprintStamp_UpdateSplit
+	.public FootprintStamp_DrawSplit
+	.public FootprintStamp_HitSplit
+	.public FootprintStamp_UpdateZigzag
+	.public FootprintStamp_HitZigzag
+	.public FootprintStamp_UpdateWave
+	.public FootprintStamp_HitWave
+	.public FootprintStamp_UpdateRise
+	.public FootprintStamp_DrawRise
+	.public FootprintStamp_HitRise
+	.public FootprintStamp_UpdateFall
+	.public FootprintStamp_HitFall
+	.public FootprintStamp_UpdateGrow
+	.public FootprintStamp_HitGrow
+	.public FootprintStamp_UpdateSpreadX
+	.public FootprintStamp_DrawSpreadX
+	.public FootprintStamp_HitSpreadX
+	.public FootprintStamp_UpdateSpreadY
+	.public FootprintStamp_DrawSpreadY
+	.public FootprintStamp_HitSpreadY
+	.public FootprintStamp_UpdateStretch
+	.public FootprintStamp_HitStretch
+	.public FootprintStampBoard_Flash
+	.public FootprintStampCamera_ZoomIn
+	.public FootprintStampCamera_Roll
+	.public FootprintStampCamera_TurnLeft
+	.public FootprintStampCamera_TurnRight
+	.public FootprintStampCamera_PitchUp
+	.public FootprintStampCamera_Sway
+	.public FootprintStampCamera_ZoomOut
+	.public FootprintStampCamera_ShakeX
+	.public FootprintStampCamera_ShakeY
+	.public FootprintStampCamera_PitchDown
+	.public FootprintStamp_PrintPlayerName
+	.public FootprintStamp_GetInkColor
+	.public FootprintStamp_GetTouchedPartySlot
+	.public FootprintStamp_GetFootprintType
+	.public FootprintStamp_GetFootprintSize
+	.public FootprintStamp_RegisterLinkCommands
+	.public FootprintStamp_IsFromOtherPlayer
+	.public FootprintStamp_HandlePlayerJoined
+	.public FootprintStamp_HandlePlayerLeft
+	.public FootprintStamp_HandleStampReceived
 	.public ov89_0225C9B8
 	.public ov89_0225C9C0
 	.public ov89_0225C9CC
@@ -718,212 +718,212 @@
 	.public ov89_0225CE95
 	.public ov89_0225D64C
 	.public _0225C9B0
-	.public ov89_02258800
-	.public ov89_02258B04
-	.public ov89_02258F00
-	.public ov89_02258FF4
-	.public ov89_0225901C
-	.public ov89_0225905C
-	.public ov89_02259230
-	.public ov89_02259264
-	.public ov89_02259408
-	.public ov89_02259588
-	.public ov89_022596DC
-	.public ov89_02259734
-	.public ov89_022597FC
-	.public ov89_022598A8
-	.public ov89_022598D0
-	.public ov89_02259A3C
-	.public ov89_02259B00
-	.public ov89_02259BA0
-	.public ov89_02259BAC
-	.public ov89_02259C00
-	.public ov89_02259C0C
-	.public ov89_02259CD0
-	.public ov89_02259D50
-	.public ov89_02259D70
-	.public ov89_02259D8C
-	.public ov89_02259E10
-	.public ov89_02259E18
-	.public ov89_02259E28
-	.public ov89_02259E48
-	.public ov89_02259E50
-	.public ov89_02259EC4
-	.public ov89_02259F9C
-	.public ov89_0225A148
-	.public ov89_0225A160
-	.public ov89_0225A16C
-	.public ov89_0225A1D8
-	.public ov89_0225A21C
-	.public ov89_0225A260
-	.public ov89_0225A354
-	.public ov89_0225A368
-	.public ov89_0225A398
-	.public ov89_0225A41C
+	.public FootprintStamp_Init
+	.public FootprintStamp_Main
+	.public FootprintStamp_Exit
+	.public FootprintStamp_MainTask
+	.public FootprintStamp_VBlank
+	.public FootprintStamp_InitBgs
+	.public FootprintStamp_FreeBgs
+	.public FootprintStamp_LoadBgGfx
+	.public FootprintStamp_LoadPartySpriteGfx
+	.public FootprintStamp_CreatePartySprites
+	.public FootprintStamp_FreePartySprites
+	.public FootprintStamp_LoadPlayerSpriteGfx
+	.public FootprintStamp_CreatePlayerSprites
+	.public FootprintStamp_FreePlayerSprites
+	.public FootprintStamp_ShowParty
+	.public FootprintStamp_LoadFootprintIcon
+	.public FootprintStamp_CreateCamera
+	.public FootprintStamp_FreeCamera
+	.public FootprintStamp_LoadBoardModel
+	.public FootprintStamp_FreeBoardModel
+	.public FootprintStamp_Draw3D
+	.public FootprintStamp_CreateWindows
+	.public FootprintStamp_FreeWindows
+	.public FootprintStamp_Create3DVramMan
+	.public FootprintStamp_Setup3D
+	.public FootprintStamp_Free3DVramMan
+	.public FootprintStamp_InitLinkFilter
+	.public FootprintStampMon_InitDummy
+	.public FootprintStamp_GetLinkFilter
+	.public FootprintStamp_LoadParty
+	.public FootprintStamp_PlaceStamp
+	.public FootprintStamp_UpdatePlayers
+	.public FootprintStamp_ShowPlayerName
+	.public FootprintStamp_ClearPlayerName
+	.public FootprintStamp_StartSelectEffect
+	.public FootprintStamp_HighlightPartySlot
+	.public FootprintStamp_UpdateSelectEffects
+	.public FootprintStamp_CreateTextSprite
+	.public FootprintStamp_FreeTextSprite
+	.public FootprintStamp_GetTextSize
+	.public FootprintStamp_UpdateInkGauge
+	.public FootprintStamp_UseInk
 	.public ov89_0225A468
-	.public ov89_0225A46C
-	.public ov89_0225A47C
-	.public ov89_0225A49C
-	.public ov89_0225A4F4
-	.public ov89_0225A5A4
-	.public ov89_0225A5EC
-	.public ov89_0225A760
-	.public ov89_0225A7BC
-	.public ov89_0225A878
-	.public ov89_0225A958
-	.public ov89_0225A988
-	.public ov89_0225A9B4
-	.public ov89_0225AA24
-	.public ov89_0225AB64
-	.public ov89_0225AC10
-	.public ov89_0225AC24
-	.public ov89_0225AC68
-	.public ov89_0225AD00
-	.public ov89_0225AD64
-	.public ov89_0225ADA4
-	.public ov89_0225AEA8
-	.public ov89_0225AED0
-	.public ov89_0225AF10
-	.public ov89_0225AF7C
-	.public ov89_0225AF9C
-	.public ov89_0225AFC0
-	.public ov89_0225AFFC
-	.public ov89_0225B010
-	.public ov89_0225B078
-	.public ov89_0225B07C
-	.public ov89_0225B100
-	.public ov89_0225B148
-	.public ov89_0225B164
-	.public ov89_0225B298
-	.public ov89_0225B2BC
-	.public ov89_0225B2E8
-	.public ov89_0225B450
-	.public ov89_0225B46C
-	.public ov89_0225B604
-	.public ov89_0225B620
-	.public ov89_0225B784
-	.public ov89_0225B810
-	.public ov89_0225B82C
-	.public ov89_0225B900
-	.public ov89_0225B91C
-	.public ov89_0225B978
-	.public ov89_0225B994
-	.public ov89_0225BB28
-	.public ov89_0225BB88
-	.public ov89_0225BBB4
-	.public ov89_0225BD48
-	.public ov89_0225BDA8
-	.public ov89_0225BDD4
-	.public ov89_0225BE68
-	.public ov89_0225BE84
-	.public ov89_0225BF34
-	.public ov89_0225BFE4
-	.public ov89_0225C090
-	.public ov89_0225C168
-	.public ov89_0225C240
-	.public ov89_0225C31C
-	.public ov89_0225C3E8
-	.public ov89_0225C498
-	.public ov89_0225C570
-	.public ov89_0225C648
-	.public ov89_0225C724
-	.public ov89_0225C818
-	.public ov89_0225C830
-	.public ov89_0225C84C
-	.public ov89_0225C88C
-	.public ov89_0225C8BC
-	.public ov89_0225C8DC
-	.public ov89_0225C8F0
-	.public ov89_0225C91C
-	.public ov89_0225C93C
-	.public ov89_0225C960
-	.public ov89_0225C988
+	.public FootprintStampBoard_Init
+	.public FootprintStampBoard_Free
+	.public FootprintStampBoard_AddStamp
+	.public FootprintStampBoard_Update
+	.public FootprintStampBoard_Draw
+	.public FootprintStampBoard_ResolveChains
+	.public FootprintStampBoard_VBlank
+	.public FootprintStampBoard_CreateStamp
+	.public FootprintStamp_LoadStampModel
+	.public FootprintStampBoard_QueueTexture
+	.public FootprintStampBoard_UnqueueTexture
+	.public FootprintStamp_AllocTextureVram
+	.public FootprintStamp_DrawFootprintTexture
+	.public FootprintStamp_RotateFootprintTexture
+	.public FootprintStamp_DeleteStamp
+	.public FootprintStampBoard_RemoveStamp
+	.public FootprintStamp_TouchToBoardPos
+	.public FootprintStampBoard_AllocPolygonId
+	.public FootprintStampBoard_FreePolygonId
+	.public FootprintStamp_GetBounds
+	.public FootprintStamp_BoundsOverlap
+	.public FootprintStampBoard_NewChain
+	.public FootprintStampBoard_AddToChain
+	.public FootprintStampBoard_ReleaseChain
+	.public FootprintStampBoard_StartCameraEffect
+	.public FootprintStamp_SetEffect
+	.public FootprintStamp_GetNatureEffect
+	.public FootprintStamp_UpdateIdle
+	.public FootprintStamp_HitIdle
+	.public FootprintStamp_UpdateVanish
+	.public FootprintStamp_DrawVanish
+	.public FootprintStamp_HitVanish
+	.public FootprintStamp_UpdateSplit
+	.public FootprintStamp_DrawSplit
+	.public FootprintStamp_HitSplit
+	.public FootprintStamp_UpdateZigzag
+	.public FootprintStamp_HitZigzag
+	.public FootprintStamp_UpdateWave
+	.public FootprintStamp_HitWave
+	.public FootprintStamp_UpdateRise
+	.public FootprintStamp_DrawRise
+	.public FootprintStamp_HitRise
+	.public FootprintStamp_UpdateFall
+	.public FootprintStamp_HitFall
+	.public FootprintStamp_UpdateGrow
+	.public FootprintStamp_HitGrow
+	.public FootprintStamp_UpdateSpreadX
+	.public FootprintStamp_DrawSpreadX
+	.public FootprintStamp_HitSpreadX
+	.public FootprintStamp_UpdateSpreadY
+	.public FootprintStamp_DrawSpreadY
+	.public FootprintStamp_HitSpreadY
+	.public FootprintStamp_UpdateStretch
+	.public FootprintStamp_HitStretch
+	.public FootprintStampBoard_Flash
+	.public FootprintStampCamera_ZoomIn
+	.public FootprintStampCamera_Roll
+	.public FootprintStampCamera_TurnLeft
+	.public FootprintStampCamera_TurnRight
+	.public FootprintStampCamera_PitchUp
+	.public FootprintStampCamera_Sway
+	.public FootprintStampCamera_ZoomOut
+	.public FootprintStampCamera_ShakeX
+	.public FootprintStampCamera_ShakeY
+	.public FootprintStampCamera_PitchDown
+	.public FootprintStamp_PrintPlayerName
+	.public FootprintStamp_ClearPlayerNameWindow
+	.public FootprintStamp_GetInkColor
+	.public FootprintStamp_GetTouchedPartySlot
+	.public FootprintStamp_GetFootprintType
+	.public FootprintStamp_GetFootprintSize
+	.public FootprintStamp_RegisterLinkCommands
+	.public FootprintStamp_IsFromOtherPlayer
+	.public FootprintStamp_SendStamp
+	.public FootprintStamp_HandlePlayerJoined
+	.public FootprintStamp_HandlePlayerLeft
+	.public FootprintStamp_HandleStampReceived
 	.include "overlay_89.inc"
 	.include "global.inc"
 
 	.text
-	.public ov89_02259230
-	.public ov89_02259BA0
-	.public ov89_02259C00
-	.public ov89_02259E10
-	.public ov89_02259E18
-	.public ov89_02259E28
-	.public ov89_02259E48
-	.public ov89_0225A160
-	.public ov89_0225A354
+	.public FootprintStamp_FreeBgs
+	.public FootprintStamp_FreeCamera
+	.public FootprintStamp_FreeBoardModel
+	.public FootprintStamp_Free3DVramMan
+	.public FootprintStamp_InitLinkFilter
+	.public FootprintStampMon_InitDummy
+	.public FootprintStamp_GetLinkFilter
+	.public FootprintStamp_ClearPlayerName
+	.public FootprintStamp_FreeTextSprite
 	.public ov89_0225A468
-	.public ov89_0225A46C
-	.public ov89_0225A47C
-	.public ov89_0225AC10
-	.public ov89_0225AF9C
-	.public ov89_0225B078
-	.public ov89_0225C818
-	.public ov89_0225C91C
+	.public FootprintStampBoard_Init
+	.public FootprintStampBoard_Free
+	.public FootprintStamp_DeleteStamp
+	.public FootprintStampBoard_StartCameraEffect
+	.public FootprintStamp_HitIdle
+	.public FootprintStamp_ClearPlayerNameWindow
+	.public FootprintStamp_SendStamp
 
-	thumb_func_start ov89_0225C93C
-ov89_0225C93C: ; 0x0225C93C
+	thumb_func_start FootprintStamp_HandlePlayerJoined
+FootprintStamp_HandlePlayerJoined: ; 0x0225C93C
 	push {r3, r4, r5, lr}
 	add r4, r3, #0
 	add r5, r0, #0
 	add r0, r4, #0
-	bl ov89_02259E48
+	bl FootprintStamp_GetLinkFilter
 	add r1, r0, #0
 	add r0, r5, #0
-	bl ov89_0225C8F0
+	bl FootprintStamp_IsFromOtherPlayer
 	cmp r0, #0
 	beq _0225C95C
 	add r0, r4, #0
 	add r1, r5, #0
-	bl ov89_0225A148
+	bl FootprintStamp_ShowPlayerName
 _0225C95C:
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov89_0225C93C
+	thumb_func_end FootprintStamp_HandlePlayerJoined
 
 
-	thumb_func_start ov89_0225C960
-ov89_0225C960: ; 0x0225C960
+	thumb_func_start FootprintStamp_HandlePlayerLeft
+FootprintStamp_HandlePlayerLeft: ; 0x0225C960
 	push {r3, r4, r5, lr}
 	add r4, r3, #0
 	add r5, r0, #0
 	add r0, r4, #0
-	bl ov89_02259E48
+	bl FootprintStamp_GetLinkFilter
 	add r1, r0, #0
 	add r0, r5, #0
-	bl ov89_0225C8F0
+	bl FootprintStamp_IsFromOtherPlayer
 	cmp r0, #0
 	beq _0225C986
 	add r0, r5, #0
 	bl ov45_0222EC7C
 	add r1, r0, #0
 	add r0, r4, #0
-	bl ov89_0225A160
+	bl FootprintStamp_ClearPlayerName
 _0225C986:
 	pop {r3, r4, r5, pc}
-	thumb_func_end ov89_0225C960
+	thumb_func_end FootprintStamp_HandlePlayerLeft
 
 
-	thumb_func_start ov89_0225C988
-ov89_0225C988: ; 0x0225C988
+	thumb_func_start FootprintStamp_HandleStampReceived
+FootprintStamp_HandleStampReceived: ; 0x0225C988
 	push {r4, r5, r6, lr}
 	add r6, r3, #0
 	add r5, r0, #0
 	add r0, r6, #0
 	add r4, r1, #0
-	bl ov89_02259E48
+	bl FootprintStamp_GetLinkFilter
 	add r1, r0, #0
 	add r0, r5, #0
-	bl ov89_0225C8F0
+	bl FootprintStamp_IsFromOtherPlayer
 	cmp r0, #0
 	beq _0225C9AC
 	add r0, r6, #0
 	add r1, r4, #0
 	add r2, r5, #0
-	bl ov89_02259EC4
+	bl FootprintStamp_PlaceStamp
 _0225C9AC:
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
-	thumb_func_end ov89_0225C988
+	thumb_func_end FootprintStamp_HandleStampReceived
 
 	.rodata
 
@@ -1043,16 +1043,16 @@ ov89_0225CCE4: ; 0x0225CCE4
 
 ov89_0225CD10: ; 0x0225CD10
 	.word 0
-	.word ov89_0225BF34
-	.word ov89_0225BFE4
-	.word ov89_0225C090
-	.word ov89_0225C168
-	.word ov89_0225C240
-	.word ov89_0225C31C
-	.word ov89_0225C3E8
-	.word ov89_0225C498
-	.word ov89_0225C570
-	.word ov89_0225C648
+	.word FootprintStampCamera_ZoomIn
+	.word FootprintStampCamera_Roll
+	.word FootprintStampCamera_TurnLeft
+	.word FootprintStampCamera_TurnRight
+	.word FootprintStampCamera_PitchUp
+	.word FootprintStampCamera_Sway
+	.word FootprintStampCamera_ZoomOut
+	.word FootprintStampCamera_ShakeX
+	.word FootprintStampCamera_ShakeY
+	.word FootprintStampCamera_PitchDown
 
 ov89_0225CD3C: ; 0x0225CD3C
 	.byte 0x56, 0xD5, 0xFF, 0xFF
@@ -1076,39 +1076,39 @@ ov89_0225CD6C: ; 0x0225CD6C
 	.byte 0x04, 0x40, 0x02, 0x00, 0x04, 0xB0, 0x02, 0x00, 0x04, 0x28, 0x03, 0x00, 0x04, 0x98, 0x03, 0x00
 
 ov89_0225CDB0: ; 0x0225CDB0
-	.word ov89_0225B010
+	.word FootprintStamp_UpdateIdle
 	.word 0
-	.word ov89_0225B078
-	.word ov89_0225B07C
-	.word ov89_0225B100
-	.word ov89_0225B148
-	.word ov89_0225B164
-	.word ov89_0225B298
-	.word ov89_0225B2BC
-	.word ov89_0225B2E8
+	.word FootprintStamp_HitIdle
+	.word FootprintStamp_UpdateVanish
+	.word FootprintStamp_DrawVanish
+	.word FootprintStamp_HitVanish
+	.word FootprintStamp_UpdateSplit
+	.word FootprintStamp_DrawSplit
+	.word FootprintStamp_HitSplit
+	.word FootprintStamp_UpdateZigzag
 	.word 0
-	.word ov89_0225B450
-	.word ov89_0225B46C
+	.word FootprintStamp_HitZigzag
+	.word FootprintStamp_UpdateWave
 	.word 0
-	.word ov89_0225B604
-	.word ov89_0225B620
-	.word ov89_0225B784
-	.word ov89_0225B810
-	.word ov89_0225B82C
+	.word FootprintStamp_HitWave
+	.word FootprintStamp_UpdateRise
+	.word FootprintStamp_DrawRise
+	.word FootprintStamp_HitRise
+	.word FootprintStamp_UpdateFall
 	.word 0
-	.word ov89_0225B900
-	.word ov89_0225B91C
+	.word FootprintStamp_HitFall
+	.word FootprintStamp_UpdateGrow
 	.word 0
-	.word ov89_0225B978
-	.word ov89_0225B994
-	.word ov89_0225BB28
-	.word ov89_0225BB88
-	.word ov89_0225BBB4
-	.word ov89_0225BD48
-	.word ov89_0225BDA8
-	.word ov89_0225BDD4
+	.word FootprintStamp_HitGrow
+	.word FootprintStamp_UpdateSpreadX
+	.word FootprintStamp_DrawSpreadX
+	.word FootprintStamp_HitSpreadX
+	.word FootprintStamp_UpdateSpreadY
+	.word FootprintStamp_DrawSpreadY
+	.word FootprintStamp_HitSpreadY
+	.word FootprintStamp_UpdateStretch
 	.word 0
-	.word ov89_0225BE68
+	.word FootprintStamp_HitStretch
 
 ov89_0225CE34: ; 0x0225CE34
 	.byte 0x05, 0x01, 0x05, 0x06, 0x06, 0x04, 0x03, 0x09, 0x07, 0x08, 0x01, 0x05
@@ -1253,7 +1253,7 @@ ov89_0225CE95: ; 0x0225CE95
 	.byte 0x01, 0x00, 0x00, 0x00, 0x01, 0x01, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 
 ov89_0225D64C: ; 0x0225D64C
-	.word ov89_0225C93C, 0x0000000C
-	.word ov89_0225C960, 0x00000000
-	.word ov89_0225C988, 0x0000000C
+	.word FootprintStamp_HandlePlayerJoined, 0x0000000C
+	.word FootprintStamp_HandlePlayerLeft, 0x00000000
+	.word FootprintStamp_HandleStampReceived, 0x0000000C
 	; 0x0225D664

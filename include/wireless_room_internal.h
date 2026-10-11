@@ -26,7 +26,7 @@ typedef struct RoomHandshake {
     u8 sender, count, command, accepted;
 } RoomHandshake;
 extern const u32 _021059DC[];
-void ov73_021E6B98(Room *);
+void RecordMixing_StartFlash(Room *);
 void ov73_021E705C(Room *, int, int);
 void ov73_021E7120(Room *, int, int);
 int ov73_021E7488(void);

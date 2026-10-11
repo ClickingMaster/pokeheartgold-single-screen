@@ -725,15 +725,15 @@ ov45_02254B04: ; 0x02254B04
 	.word FS_OVERLAY_ID(OVY_46)
 
 ov45_02254B14: ; 0x02254B14
-	.word ov89_02258800
-	.word ov89_02258B04
-	.word ov89_02258F00
+	.word FootprintStamp_Init
+	.word FootprintStamp_Main
+	.word FootprintStamp_Exit
 	.word FS_OVERLAY_ID(OVY_89)
 
 ov45_02254B24: ; 0x02254B24
-	.word ov89_02258800
-	.word ov89_02258B04
-	.word ov89_02258F00
+	.word FootprintStamp_Init
+	.word FootprintStamp_Main
+	.word FootprintStamp_Exit
 	.word FS_OVERLAY_ID(OVY_89)
 
 ov45_02254B34: ; 0x02254B34

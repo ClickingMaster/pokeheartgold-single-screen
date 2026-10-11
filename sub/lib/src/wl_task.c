@@ -25,7 +25,7 @@ void WlessLibReboot(void) {
     ReleaseAllWlHeapBuf();
     InitializeTask();
     w = wlWork;
-    InitializeParam(w->camTable, w->camTableSize);
+    InitializeParam(w->param.camTable, w->param.camTableSize);
     InitializeCmdIf();
     InitializeMLME();
     InitializeCAM();
@@ -33,7 +33,7 @@ void WlessLibReboot(void) {
 }
 
 // Sets up the driver in param->work, checks the hardware and starts the driver thread; returns the
-// error flags (WlWork.errors).
+// error flags (WlParam.errors).
 u16 WL_InitDriver(WlInitParam *param) {
     u32 checksum;
     WlWork *initial = param->work;
@@ -68,7 +68,7 @@ u16 WL_InitDriver(WlInitParam *param) {
     InitializeAlarm();
     if (FLASH_VerifyCheckSum(&checksum)) {
         WlWork *w = wlWork;
-        w->errors |= 0x80;
+        w->param.errors |= 0x80;
     } else {
         WConfigDevice();
         DiagMacRegister();
@@ -84,7 +84,7 @@ u16 WL_InitDriver(WlInitParam *param) {
     __VENEER_OS_CreateThread(&wlWork->thread, MainTaskRoutine, NULL, param->stack, param->stackSize, param->priority);
     __VENEER_OS_WakeupThreadDirect(&wlWork->thread);
     InitializeIntr();
-    return wlWork->errors;
+    return wlWork->param.errors;
 }
 
 // clang-format off

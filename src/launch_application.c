@@ -51,7 +51,7 @@
 #include "overlay_70.h"
 #include "overlay_71.h"
 #include "nintendo_wfc_connect.h"
-#include "overlay_73.h"
+#include "record_mixing.h"
 #include "overlay_86.h"
 #include "overlay_87.h"
 #include "overlay_99.h"
@@ -992,7 +992,7 @@ void CallTask_WirelessTrade(TaskManager *taskman) {
 }
 
 static const OverlayManagerTemplate _020FA2C4 = { DrawingSession_Init, DrawingSession_Main, DrawingSession_Exit, FS_OVERLAY_ID(OVY_37) };
-static const OverlayManagerTemplate _020FA2B4 = { ov73_021E5900, ov73_021E5AB8, ov73_021E5BAC, FS_OVERLAY_ID(OVY_73) };
+static const OverlayManagerTemplate _020FA2B4 = { RecordMixing_Init, RecordMixing_Main, RecordMixing_Exit, FS_OVERLAY_ID(OVY_73) };
 
 void sub_0203F4C8(FieldSystem *fieldSystem) {
     UnkStruct_0203F4C8 *args = Heap_Alloc(HEAP_ID_FIELD3, sizeof(UnkStruct_0203F4C8));
@@ -1001,8 +1001,8 @@ void sub_0203F4C8(FieldSystem *fieldSystem) {
     FieldSystem_LaunchApplication(fieldSystem, &_020FA2C4, args);
 }
 
-UnkStruct_0203F4F8 *sub_0203F4F8(FieldSystem *fieldSystem) {
-    UnkStruct_0203F4F8 *args = Heap_Alloc(HEAP_ID_FIELD2, sizeof(UnkStruct_0203F4F8));
+RecordMixingArgs *sub_0203F4F8(FieldSystem *fieldSystem) {
+    RecordMixingArgs *args = Heap_Alloc(HEAP_ID_FIELD2, sizeof(RecordMixingArgs));
     args->saveData = fieldSystem->saveData;
     args->unk4 = fieldSystem->unk84;
     args->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);

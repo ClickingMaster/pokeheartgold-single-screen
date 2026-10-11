@@ -1502,7 +1502,7 @@
   {
    "function": "__VENEER_MIi_CpuClear32",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_30_r01.c",
+   "source": "sub/lib/src/wl_util.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to MIi_CpuClear32: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },

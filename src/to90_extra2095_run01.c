@@ -1,7 +1,0 @@
-#pragma force_active on
-#include "global.h"
-#pragma force_active on
-typedef struct{u8 objects[3][120];u16 timer;u8 index,exitFlag,result,step;u8 pad[2];u32 tail;}Effect;typedef struct{u8 pad[0x94];Effect effect;}State;
-extern int ov89_0225AD00(void*);extern void ov89_0225AD64(void*,int),ModelInstance_GetPosition(void*,int*,int*,int*),ModelInstance_Init(void*,void*),ModelInstance_SetPosition(void*,int,int,int),ModelInstance_SetVisible(void*,int),ov89_0225ADA4(void*,State*,void*,int);
-int ov89_0225B620(void*,State*);
-int ov89_0225B620(void*ctx,State*s){Effect*e=&s->effect;int x,y,z,i;u8*obj;switch(e->step){case 0:e->result=(u8)ov89_0225AD00(ctx);ModelInstance_GetPosition((u8*)s+0x1c,&x,&y,&z);for(i=0,obj=e->objects[0];i<3;i++,obj+=120){ModelInstance_Init(obj,(u8*)s+0xc);ModelInstance_SetPosition(obj,x,y,z);ModelInstance_SetVisible(obj,0);}e->step++;case 1:ModelInstance_GetPosition((u8*)s+0x1c,&x,&y,&z);if(x<-327680||x>327680||y>196608||y<-196608||e->exitFlag==1){for(i=0,obj=e->objects[0];i<3;i++,obj+=120)ModelInstance_SetVisible(obj,0);ModelInstance_SetVisible((u8*)s+0x1c,0);e->step++;}else{ModelInstance_SetPosition((u8*)s+0x1c,x,y+10240,z);if(e->timer%3==0){ModelInstance_SetPosition(e->objects[e->index],x,y+10240,z);ModelInstance_SetVisible(e->objects[e->index],1);e->index++;if(e->index>=3)e->index=0;}e->timer++;}break;default:ov89_0225AD64(ctx,e->result);return 1;}ov89_0225ADA4((u8*)s+0x1c,s,&e->tail,0);return 0;}

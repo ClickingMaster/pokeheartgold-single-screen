@@ -6,10 +6,14 @@
 #include <nitro/types.h>
 // The SDK headers below expect <nitro/types.h> to be included first.
 #include <nitro/mi/memory.h>
+#include <nitro/os/alarm.h>
 #include <nitro/os/interrupt.h>
 #include <nitro/os/message.h>
 #include <nitro/os/spinLock.h>
 #include <nitro/os/thread.h>
+
+// Wireless hardware register at 0x04808000 + offset.
+#define WL_REG(offset) (*(vu16 *)(0x04808000 + (offset)))
 
 // Driver task (see pTaskFunc); queued tasks are linked through `next` (0xFFFF: end).
 typedef struct WlTask {
@@ -86,43 +90,86 @@ typedef union WlParamFlags {
     } bits;
 } WlParamFlags;
 
+// Basic and supported rates, one bit per rate (bit 15: a rate without a bit).
+typedef struct WlRateSet {
+    u16 basic;
+    u16 supported;
+} WlRateSet;
+
+// Driver parameters (the WSet* setters), cleared by InitializeParam.
+typedef struct WlParam {
+    void *camTable;
+    u16 camTableSize; // stations
+    u16 maxSta;
+    u16 macAddress[3];
+    u16 retryLimit;
+    u16 enableChannel;
+    u16 mode;
+    u16 rate;
+    u16 authAlgo;
+    u16 wepMode;
+    u16 wepKeyId;
+    u16 frameLifeTime;
+    WlParamFlags flags;
+    u16 activeZoneTime;
+    u16 errors;  // DiagMacRegister errors; bit 7: bad flash checksum
+    u32 unk_340; // bits set by WSetMacAdrs (1), WSetEnableChannel (2), WSetMode (3)
+} WlParam;
+
 // BSS state, cleared by InitializeParam.
 typedef struct WlBss {
     u8 unk_00[8];
     u16 state; // 0x40: own BSS started
     u16 unk_0a;
-    u16 mode; // copy of WlWork.mode
+    u16 mode; // copy of WlParam.mode
     u16 powerMgtMode;
-    u8 unk_10[4];
+    u16 powerState; // WSetPowerState: hardware power state >> 1
+    u16 unk_12;
     u16 unk_14;
     u8 unk_16[8];
     u16 ssidLength;
     u8 ssid[32];
     u16 ssidMask[16];
-    u8 unk_60[4];
+    WlRateSet rateSet;
     u16 bssid[3];
-    u8 unk_6a[4];
+    u16 aid; // own association id (WSetAids / WClearAids)
+    u16 unk_6c;
     u16 beaconPeriod;
     u16 listenInterval;
     u16 unk_72;
     u16 dtimPeriod;
-    u8 unk_76[6];
+    u8 unk_76[4];
+    u16 channel;    // WSetChannel
     u16 capability; // capability information of the own beacon
     u16 beaconLostThreshold;
     u16 beaconLostCount;
-    u8 unk_82[8];
+    u8 unk_82[6];
+    u16 unk_88; // station whose frames and CAM state WClearAids drops
     u16 unk_8a; // bit 14 set while WEP is on
-    u8 unk_8c[6];
+    u16 unk_8c; // WSetFrameLifeTime: life time * beaconPeriod / 100 (0xFFFF: none)
+    u8 unk_8e[4];
     u16 ssidOffset; // offset of the SSID in the beacon frame
     u8 unk_94[2];
     u16 timOffset; // offset of the TIM in the beacon frame
     u8 unk_98[4];
-    u8 *unk_9c;
-    u16 unk_a0;
-    u16 unk_a2;
-    u16 unk_a4;
-    u8 unk_a6[0xc0 - 0xa6];
+    u8 *gameInfo; // 129-byte buffer (InitializeHeapBuf)
+    u16 gameInfoLength;
+    u16 unk_a2;            // bit 0: WSetGameInfo writes gameInfo byte by byte (WL_WriteByte)
+    u16 unk_a4;            // set by WSetGameInfo
+    u16 tmpttPowerSaveOff; // WDisableTmpttPowerSave / WEnableTmpttPowerSave
+    u8 unk_a8[0xc0 - 0xa8];
 } WlBss;
+
+// RF chip description from the flash (WConfigDevice: flash bytes 0x40..0x43), used by InitRF and WSetChannel.
+typedef struct WlRf {
+    u16 type;            // 2, 3 or 5
+    u16 bits;            // bits per RF register write (low 7 bits)
+    u16 initCount;       // RF init entries at flash 0xCE; the channel tables follow (type 3)
+    u16 rfChannelCount;  // type 3: RF entries per channel
+    u16 bbpChannelCount; // type 3: BBP entries per channel (InitRF reads the byte from the flash)
+    u16 unk_0a;
+    u32 unk_0c; // type 2: an RF register value kept by InitRF; types 2/5: bit 16 set: WSetChannel writes it with the channel's flash value
+} WlRf;
 
 // The driver's work area (WL_InitDriver stores its address at WL_WORK_ADDR).
 typedef struct WlWork {
@@ -143,29 +190,22 @@ typedef struct WlWork {
     u32 unk_310;
     u32 lockId;
     u32 unk_318;
-    // parameters (InitializeParam clears camTable .. unk_340)
-    void *camTable;
-    u16 camTableSize; // stations
-    u16 maxSta;
-    u16 macAddress[3];
-    u16 retryLimit;
-    u16 enableChannel;
-    u16 mode;
-    u16 rate;
-    u16 authAlgo;
-    u16 wepMode;
-    u16 wepKeyId;
-    u16 frameLifeTime;
-    WlParamFlags flags;
-    u16 activeZoneTime;
-    u16 errors;  // DiagMacRegister errors; bit 7: bad flash checksum
-    u32 unk_340; // bits set by WSetMacAdrs (1), WSetEnableChannel (2), WSetMode (3)
+    WlParam param;
     WlBss bss;
-    u8 unk_404[0x4a4 - 0x404];
+    u16 unk_404; // 0x13: WCheckSSID accepts an SSID that starts with the own one
+    u8 unk_406[0x468 - 0x406];
+    u16 unk_468; // WDisableTmpttPowerSave leaves the hardware alone while set
+    u8 unk_46a[0x4a4 - 0x46a];
     u16 beaconActive;
     u8 unk_4a6[6];
     u8 *beaconFrame;
-    u8 unk_4b0[0x68c - 0x4b0];
+    u8 unk_4b0[0x53c - 0x4b0];
+    u32 counter[45]; // statistics: WUpdateCounter adds the hardware counters, WInitCounter clears
+    u8 unk_5f0[8];
+    WlRf rf;
+    OSAlarm periodicTimeOutAlarm; // SetupPeriodicTimeOut
+    OSAlarm timeOutAlarm;         // SetupTimeOut
+    OSAlarm ksidAlarm;            // runs WClearKSID
     u32 unk_68c;
     u16 unk_690; // flash 0x3e
     u16 unk_692; // flash 0x3c
@@ -173,6 +213,8 @@ typedef struct WlWork {
 
 #define WL_WORK_ADDR 0x0380FFF4
 #define wlWork       (*(WlWork *volatile *)WL_WORK_ADDR)
+// The same pointer as a plain variable: the compiler may keep a loaded value until the next store.
+#define wlWorkPlain (*(WlWork **)WL_WORK_ADDR)
 
 // wl_task.c
 void WlessLibReboot(void);
@@ -234,7 +276,43 @@ int WSetDTIMPeriod(u16 period);
 int WSetListenInterval(u32 interval);
 void WSetDefaultParameters(void);
 
+// wl_state.c
+int WSetRateSet(const u16 *rates);
+void WSetTxTimeStampOffset(void);
+int WSetPowerMgtMode(u32 mode);
+int WSetPowerState(u32 state);
+int WSetForcePowerState(u32 state);
+void WShutdown(void);
+void WWakeUp(void);
+int WSetFrameLifeTime(u32 time);
+void WDisableTmpttPowerSave(void);
+void WEnableTmpttPowerSave(void);
+int WInitGameInfo(u32 length, const void *data);
+int WSetGameInfo(u32 length, const u8 *data);
+void WSetAids(u16 aid);
+void WClearAids(void);
+void WSetKSID(u32 unused);
+void WClearKSID(u32 unused);
+void WSetStaState(u32 state);
+void WSetMacAdrs1(u16 *dest, const u16 *addr);
+void WSetMacAdrs2(u16 *dest, const u16 *addr1, const u16 *addr2);
+void WSetMacAdrs3(u16 *dest, const u16 *addr1, const u16 *addr2, const u16 *addr3);
+
+// wl_util.c
+void WInitCounter(void);
+void __VENEER_MIi_CpuClear32(u32 data, void *dest, u32 size);
+void WUpdateCounter(void);
+int WCheckSSID(u32 length, const u8 *ssid);
+int MatchMacAdrs(const u16 *addr1, const u16 *addr2);
+u32 CheckEnableChannel(u32 channel);
+void WElement2RateSet(const u8 *element, WlRateSet *rateSet);
+u32 WCalcManRate(void);
+
+// wl_set_channel.c
+int WSetChannel(u16 channel, int direct);
+
 // veneers defined in other ARM7 files
+void __VENEER_OS_CancelAlarm(OSAlarm *alarm);
 u32 __VENEER__u32_div_f(u32 dividend, u32 divisor);
 void __VENEER_OS_CreateThread(OSThread *thread, void (*func)(void *), void *arg, void *stack, u32 stackSize, u32 prio);
 void __VENEER_OS_WakeupThreadDirect(OSThread *thread);
@@ -247,7 +325,17 @@ void __VENEER_OS_FreeToHeap(u32 id, u32 heap, void *ptr);
 
 // defined in the later WL files
 void ClearTimeOut(void);
-void WShutdown(void);
+void WStop(void);
+void WIntervalTimer(void);
+void SetupPeriodicTimeOut(u32 ms, OSAlarmHandler handler);
+void TimeoutDummy(void *arg);
+void WaitLoop_Waitus(u32 us, OSAlarmHandler handler);
+int WaitLoop_BbpAccess(void);
+void WaitLoop_ClrAid(void);
+void DeleteTxFrames(u32 station);
+void CAM_SetStaState(u16 aid, u16 state);
+int RF_Write(u32 value);
+void FLASH_DirectRead(u32 addr, u32 size, void *dest);
 void InitMac(void);
 void InitializeCmdIf(void);
 void InitializeMLME(void);
@@ -258,17 +346,11 @@ void WConfigDevice(void);
 void DiagMacRegister(void);
 void DiagMacMemory(void);
 void DiagBaseBand(void);
-void WWakeUp(void);
 void InitRF(void);
 void InitBaseBand(void);
 void FLASH_MakeImage(void);
 void FLASH_Read(u32 addr, u32 size, void *dest);
 u32 FLASH_VerifyCheckSum(u32 *checksum);
-void WSetMacAdrs1(u16 *dest, const u16 *addr);
-int WSetPowerMgtMode(u32 mode);
-void WSetTxTimeStampOffset(void);
-int WSetFrameLifeTime(u32 time);
-int WSetRateSet(const u16 *rates);
 void WL_WriteByte(void *dest, u32 value);
 u8 WL_ReadByte(const void *src);
 int BBP_Write(u32 reg, u32 value);

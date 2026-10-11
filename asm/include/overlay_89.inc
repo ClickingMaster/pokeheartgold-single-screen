@@ -246,6 +246,6 @@
 .public ov45_0222EE50
 .public ov45_0222EEB8
 .public ov45_0222EFAC
-.public ov89_02258800
-.public ov89_02258B04
-.public ov89_02258F00
+.public FootprintStamp_Init
+.public FootprintStamp_Main
+.public FootprintStamp_Exit

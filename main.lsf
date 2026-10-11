@@ -1296,54 +1296,15 @@ Static main
     Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_sr.o
 Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object lib/NitroSystem/src/g3d_cgtool_xsi.o
-    Object src/to65_nnsys_residual_43_run09.o
-    Object src/to59_nnsys_run55.o
-    Object src/to70_nnsys_residual_44_run01.o
-    Object src/to59_nnsys_run56.o
-    Object src/to70_nnsys_residual_45_run01.o
-    Object src/to59_nnsys_run57.o
-    Object src/to70_nnsys_residual_46_run01.o
-    Object src/to59_nnsys_run58.o
-    Object src/to70_nnsys_residual_47_run01.o
-    Object src/to59_nnsys_run59.o
-    Object src/to70_nnsys_residual_48_run01.o
-    Object src/to59_nnsys_run60.o
-    Object src/to70_nnsys_residual_49_run01.o
-    Object src/to59_nnsys_run61.o
-    Object src/to59_nnsys_run62.o
-    Object src/to70_nnsys_residual_50_run01.o
-    Object src/to59_nnsys_run63.o
-    Object src/to70_nnsys_residual_51_run01.o
-    Object src/to90_extra2532_run01.o
-    Object src/to70_nnsys_residual_51_run02.o
-    Object src/to59_nnsys_run64.o
-    Object src/to70_nnsys_residual_52_run01.o
-    Object src/to59_nnsys_run65.o
-    Object src/to70_nnsys_residual_53_run01.o
-    Object src/to59_nnsys_run66.o
-    Object src/to70_nnsys_residual_54_run01.o
-    Object src/to59_nnsys_run67.o
-    Object src/to80_extra1683_run01.o
-    Object src/to70_nnsys_residual_55_run01.o
-    Object src/to59_nnsys_run68.o
-    Object src/to70_nnsys_residual_56_run01.o
-    Object src/to59_nnsys_run69.o
-    Object src/to70_nnsys_residual_57_run01.o
-    Object src/to59_nnsys_run70.o
-    Object src/to90_extra2341_run01.o
-    Object src/to59_nnsys_run71.o
-    Object src/to90_extra2342_run01.o
-    Object src/to59_nnsys_run72.o
-    Object src/to90_extra2461_run01.o
-    Object src/to59_nnsys_run73.o
-    Object src/to91_w41546_sound_heap_load_state.o
-    Object src/to59_nnsys_run74.o
-    Object src/to90_extra2343_run01.o
-    Object src/to59_nnsys_run75.o
-    Object src/to70_nnsys_residual_63_run01.o
-    Object src/to59_nnsys_run76.o
-    Object src/to59_nnsys_run77.o
-    Object src/op90_to59_nnsys_residual_64_r01.o
+    Object lib/NitroSystem/src/snd_system.o
+    Object lib/NitroSystem/src/snd_resource_mgr.o
+    Object lib/NitroSystem/src/snd_waveout.o
+    Object lib/NitroSystem/src/snd_player.o
+    Object lib/NitroSystem/src/snd_stream.o
+    Object lib/NitroSystem/src/snd_capture.o
+    Object lib/NitroSystem/src/snd_arc.o
+    Object lib/NitroSystem/src/snd_heap.o
+    Object lib/NitroSystem/src/snd_arc_loader.o
     Object lib/asm/to59_nnsys_anchor_own4.o
     Object src/to59_nnsys_run78.o
     Object src/to90_extra2346_run01.o
@@ -6310,49 +6271,7 @@ Overlay OVY_72
 Overlay OVY_73
 {
     After main
-    Object src/opus_overlay73_1.o
-    Object src/to70_overlay_73_extra401_run01.o
-    Object src/opus_overlay73_2.o
-    Object src/overlay73_helpers_1.o
-    Object src/to70_overlay_73_residual_2_extra310_run01.o
-    Object src/overlay73_helpers_2.o
-    Object src/r40_overlay_73_residual_3_run1.o
-    Object src/to90_extra2037_run01.o
-    Object src/r40_overlay_73_residual_3_run2.o
-    Object src/to58_r3_ov73_3_r40_residual_2.o
-    Object src/overlay73_helpers_3.o
-    Object src/r40_overlay_73_residual_4_run1.o
-    Object src/to90_extra2038_run01.o
-    Object src/overlay73_helpers_4.o
-    Object src/to58_r3_ov73_5.o
-    Object src/overlay73_helpers_5.o
-    Object src/r40_overlay_73_residual_6_run1.o
-    Object src/overlay73_helpers_6.o
-    Object src/to70_overlay_73_residual_7_extra631_run01.o
-    Object src/r40_overlay_73_residual_7_run1.o
-    Object src/overlay73_helpers_7.o
-    Object src/to58_r3_ov73_8.o
-    Object src/overlay73_helpers_8.o
-    Object src/to58_r3b_ov73_9.o
-    Object src/overlay73_sync_helpers_1.o
-    Object src/to70_overlay_73_residual_9_residual_2_extra632_run01.o
-    Object src/overlay73_sync_helpers_2.o
-    Object src/to58_r3b_ov73_9_residual_3.o
-    Object src/overlay73_sync_helpers_3.o
-    Object src/r40_overlay_73_residual_9_residual_4_run1.o
-    Object src/to70_to70_overlay_73_residual_9_residual_4_extra311_residual_1_extra1302_run01.o
-    Object src/to70_overlay_73_residual_9_residual_4_extra311_run01.o
-    Object src/overlay73_helpers_9.o
-    Object src/to90_extra2385_run01.o
-    Object src/overlay73_helpers_10.o
-    Object src/op90_to70_overlay_73_residual_11_extra239_residual_1_r01.o
-    Object src/to70_overlay_73_residual_11_extra239_run01.o
-    Object src/overlay73_helpers_11.o
-    Object src/op90_to52_r2_w09_overlay73_r12_residual_r01.o
-    Object src/to52_r2_w09_overlay73_sprite_resources.o
-    Object src/overlay73_helpers_12.o
-    Object src/to58_r3b_ov73_13.o
-    Object src/to70_to58_r3b_ov73_13.residual_extra444_run01.o
+    Object src/record_mixing.o
     Object src/overlay73_helpers_13.o
     Object src/to58_r3b_ov73_14.o
     Object src/overlay73_helpers_14.o
@@ -7149,89 +7068,11 @@ Overlay OVY_88
 Overlay OVY_89
 {
     After OVY_45
-    Object src/to47_overlay89_init_r0.o
-    Object src/to91_w41524_ov89_prompt.o
-    Object src/overlay89_cleanup_r38_1.o
-    Object src/overlay89_partial_1.o
-    Object src/overlay89_r2u1_run1.o
-    Object src/op90_overlay89_r2u1_residual_1_r01.o
-    Object src/overlay89_r2u1_run2.o
-    Object src/op90_overlay89_r2u1_residual_2_r01.o
-    Object src/overlay89_sprite_cleanup_r2.o
-    Object src/to91_w41498_icon_run01.o
-    Object src/to52_r4_overlay89_palette_camera.o
-    Object src/overlay89_partial_2.o
-    Object src/to70_overlay_89_residual_3_extra1019_run01.o
-    Object src/overlay89_partial_3.o
-    Object src/to70_overlay89_r4_residual_prefix_extra273_run01.o
-    Object src/op90_to70_overlay89_r4_residual_prefix_extra273_residual_1_r01.o
-    Object src/overlay89_r4_windows.o
-    Object src/overlay89_partial_4.o
-    Object src/to52_overlay89_r5_head.o
-    Object src/op90_overlay_89_residual_5_unmatched_r01.o
-    Object src/to52_overlay89_r5_tail.o
-    Object src/overlay89_partial_5.o
-    Object src/to70_overlay_89_residual_6_extra861_run01.o
-    Object src/r40_overlay_89_residual_6_run1.o
-    Object src/to70_overlay_89_residual_6_r40_residual_2_extra403_run01.o
-    Object src/overlay89_partial_6.o
-    Object src/overlay89_score_display/overlay89_text_measure.o
-    Object src/to80_extra1866_run01.o
-    Object src/overlay89_score_display/overlay89_scroll_debit.o
-    Object src/overlay89_partial_7.o
-    Object src/overlay89_r8_c_a49c.o
-    Object src/to70_overlay89_r8_residual_00_extra475_run01.o
-    Object src/overlay89_r8_c_a5a4.o
-    Object src/op90_overlay89_r8_residual_01_r01.o
-    Object src/overlay89_r8_c_a760.o
-    Object src/to90_extra2171_run01.o
-    Object src/to90_extra2171_run02.o
-    Object src/overlay89_r8_c_texture_slots.o
-    Object src/op90_op90_overlay89_r8_residual_03_residual_1_r01.o
-    Object src/op90_overlay89_r8_residual_03_r01.o
-    Object src/overlay89_partial_8.o
-    Object src/overlay89_r23_object_pool_1.o
-    Object src/to90_extra1978_run01.o
-    Object src/overlay89_r23_object_pool_2.o
-    Object src/op90_overlay89_r23_residual_9_gap_2_r01.o
-    Object src/overlay89_r23_object_pool_3.o
-    Object src/overlay89_partial_9.o
-    Object src/to70_overlay_89_residual_10_extra1018_run01.o
-    Object src/r40_overlay_89_residual_10_run1.o
-    Object src/to70_overlay_89_residual_10_r40_residual_2_extra860_run01.o
-    Object src/overlay89_partial_10.o
-    Object src/to70_overlay89_r11_residual_00_extra540_run01.o
-    Object src/overlay89_r11_c_b148.o
-    Object src/to91_w41536_model_run01.o
-    Object src/overlay89_r11_c_b298.o
-    Object src/to70_overlay89_r11_residual_02_extra202_run01.o
-    Object src/to70_to70_overlay89_r11_residual_02_extra202_residual_1_extra1254_run01.o
-    Object src/overlay89_r11_c_b450.o
-    Object src/to90_extra1975_run01.o
-    Object src/overlay89_r11_c_b604.o
-    Object src/to90_extra2095_run01.o
-    Object src/to58_bank_ov89_finish.o
-    Object src/overlay89_r11_c_b810.o
-    Object src/to70_overlay89_r11_residual_05_extra445_run01.o
-    Object src/overlay89_r11_c_b900.o
-    Object src/to70_overlay89_r11_residual_06_extra733_run01.o
-    Object src/overlay89_r11_c_b978.o
-    Object src/to90_extra1976_run01.o
-    Object src/to45_overlay89_r11_bb28.o
-    Object src/to45_overlay89_r11_bb88.o
-    Object src/to90_extra1977_run01.o
-    Object src/to45_overlay89_r11_bd48.o
-    Object src/to45_overlay89_r11_bda8.o
-    Object src/to45_overlay89_r11_bdd4.o
-    Object src/overlay89_r11_c_be68.o
-    Object src/overlay89_camera_transitions_r08_run1.o
-    Object src/to50_overlay89_camera_gap.o
-    Object src/overlay89_camera_transitions_r08_run2.o
-    Object src/overlay89_camera_tail_r4.o
-    Object src/overlay89_partial_11.o
-    Object src/overlay89_lookup_r14c.o
-    Object src/overlay89_partial_12.o
-    Object src/r40_overlay_89_residual_13_run1.o
+    Object src/application/footprint_stamp.o
+    Object src/application/footprint_stamp_sprites.o
+    Object src/application/footprint_stamp_board.o
+    Object src/application/footprint_stamp_texture.o
+    Object src/application/footprint_stamp_effects.o
     Object asm/overlay_89_residual_13_r40_residual_1.o
 }
 Overlay OVY_90

@@ -181,8 +181,8 @@ void InitializeHeapBuf(WlHeapParam *param) {
     InitHeapBufMan(&w->heapBufMan[8], 10);
     InitHeapBufMan(&w->heapBufMan[9], 11);
     InitHeapBufMan(&w->heapBufMan[10], 12);
-    bss->unk_9c = (u8 *)AllocateHeapBuf(&w->heapBufMan[0], 129) + sizeof(WlHeapBuf);
-    bss->unk_a0 = 0;
+    bss->gameInfo = (u8 *)AllocateHeapBuf(&w->heapBufMan[0], 129) + sizeof(WlHeapBuf);
+    bss->gameInfoLength = 0;
     bss->unk_a4 = 0;
 }
 
