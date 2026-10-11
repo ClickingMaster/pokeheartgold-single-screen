@@ -28,8 +28,8 @@ typedef struct Flash07 {
 extern const Tri07 ov07_02236732[];
 extern const Tri07 ov07_02236734[];
 extern const Tri07 ov07_02236736[];
-void ov07_02222268(Move07 *move, s16 startX, s16 endX, s16 startY, s16 endY, u16 frames);
-BOOL ov07_022222B4(Move07 *move);
+void BattleAnimUtil_InitLinearMotion(Move07 *move, s16 startX, s16 endX, s16 startY, s16 endY, u16 frames);
+BOOL BattleAnimUtil_UpdateLinearMotion(Move07 *move);
 void BattleAnimSystem_DestroyTask(void *ctx, void *task);
 void ov07_02227B58(void *task, Flash07 *flash);
 // @fn ov07_02227B58
@@ -45,17 +45,17 @@ void ov07_02227B58(void *task, Flash07 *flash) {
         k = (flash->count % 2) * 2;
         step = (flash->count + 1) / 2;
         c = ov07_02236736[k].v[0] - step;
-        ov07_02222268(&flash->moves[0], flash->x + ov07_02236732[k].v[0], flash->x + ov07_02236734[k].v[0], flash->y, flash->y, c);
-        ov07_02222268(&flash->moves[1], flash->x - ov07_02236732[k].v[0], flash->x - ov07_02236734[k].v[0], flash->y, flash->y, c);
+        BattleAnimUtil_InitLinearMotion(&flash->moves[0], flash->x + ov07_02236732[k].v[0], flash->x + ov07_02236734[k].v[0], flash->y, flash->y, c);
+        BattleAnimUtil_InitLinearMotion(&flash->moves[1], flash->x - ov07_02236732[k].v[0], flash->x - ov07_02236734[k].v[0], flash->y, flash->y, c);
         c2 = ov07_02236736[k + 1].v[0] - step;
-        ov07_02222268(&flash->moves[2], flash->x + ov07_02236732[k + 1].v[0], flash->x + ov07_02236734[k + 1].v[0], flash->y, flash->y, c2);
-        ov07_02222268(&flash->moves[3], flash->x - ov07_02236732[k + 1].v[0], flash->x - ov07_02236734[k + 1].v[0], flash->y, flash->y, c2);
+        BattleAnimUtil_InitLinearMotion(&flash->moves[2], flash->x + ov07_02236732[k + 1].v[0], flash->x + ov07_02236734[k + 1].v[0], flash->y, flash->y, c2);
+        BattleAnimUtil_InitLinearMotion(&flash->moves[3], flash->x - ov07_02236732[k + 1].v[0], flash->x - ov07_02236734[k + 1].v[0], flash->y, flash->y, c2);
         flash->count++;
         flash->state++;
     case 1:
         done = 0;
         for (i = 0; i < 4; i++) {
-            if (ov07_022222B4(&flash->moves[i]) == FALSE) {
+            if (BattleAnimUtil_UpdateLinearMotion(&flash->moves[i]) == FALSE) {
                 done++;
             } else {
                 ManagedSprite_SetPositionXY(flash->sprites[i], flash->moves[i].x, flash->moves[i].y);

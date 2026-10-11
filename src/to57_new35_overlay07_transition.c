@@ -4,7 +4,7 @@ void ov07_0222CBFC(int task, W35 *w) {
     f32 x, y;
     switch (w->state) {
     case 0: {
-        BOOL active = ov07_02222468(&w->scalar);
+        BOOL active = BattleAnimUtil_UpdateValueMotionFx(&w->scalar);
         *(vu16 *)0x04000052 = w->scalar.value | ((31 - w->scalar.value) << 8);
         if (active == 0) {
             w->state++;
@@ -18,8 +18,8 @@ void ov07_0222CBFC(int task, W35 *w) {
         }
         break;
     case 2: {
-        BOOL active = ov07_02222558(&w->anim);
-        ov07_02222644(&w->anim, &x, &y);
+        BOOL active = BattleAnimUtil_UpdateScaleMotion(&w->anim);
+        BattleAnimUtil_GetScaleFloat(&w->anim, &x, &y);
         if (w->mirror == 1) {
             x = 0.0f - x;
         }
@@ -41,7 +41,7 @@ void ov07_0222CBFC(int task, W35 *w) {
 void ov07_0222CCBC(int task, W35Fade *w) {
     switch (w->state) {
     case 0:
-        ov07_022227D8(&w->motion);
+        BattleAnimUtil_UpdateShake(&w->motion);
         ov07_022220B8(&w->motion, w->pic, w->x, w->y);
         if (w->special == 1) {
             ov07_0222207C(&w->motion, w->sprite, w->x, (s16)(w->y - w->delta));
@@ -56,7 +56,7 @@ void ov07_0222CCBC(int task, W35Fade *w) {
         }
         break;
     case 1:
-        ov07_022227D8(&w->motion);
+        BattleAnimUtil_UpdateShake(&w->motion);
         ov07_022220B8(&w->motion, w->pic, w->x, w->y);
         if (w->special == 1) {
             ov07_0222207C(&w->motion, w->sprite, w->x, (s16)(w->y - w->delta));
@@ -88,8 +88,8 @@ void ov07_0222CE10(void *owner) {
     w->spriteSystem = BattleAnimSystem_GetBattlerSpriteManager(owner);
     w->mirror = ov07_0221BFC0(owner);
     w->sprite = BattleAnimSystem_GetBattlerSprite(w->owner, 0);
-    ov07_02222508(&w->anim, 14, 10, 10, 8);
-    ov07_02222418(&w->scalar, 0, 16, 8);
+    BattleAnimUtil_InitScaleMotion(&w->anim, 14, 10, 10, 8);
+    BattleAnimUtil_InitValueMotionFx(&w->scalar, 0, 16, 8);
     ManagedSprite_SetOamMode(w->sprite, 1);
     BattleAnimUtil_SetBlendWithBattleBg(w->owner, 0, 31);
     ManagedSprite_SetAffineOverwriteMode(w->sprite, 2);

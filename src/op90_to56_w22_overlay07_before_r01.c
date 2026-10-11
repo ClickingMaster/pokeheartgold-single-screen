@@ -39,9 +39,9 @@ void BattleAnimSystem_GetSpriteTemplate(ManagedSpriteTemplate *template, void *o
 u32 BattleAnimSystem_GetAttacker(void *owner);
 u32 BattleAnimSystem_GetDefender(void *owner);
 Pokepic *BattleAnimSystem_GetBattlerPokepic(void *owner, u32 battler);
-void ov07_02222268(Motion *motion, s16 x0, s16 x1, s16 y0, s16 y1, int frames);
+void BattleAnimUtil_InitLinearMotion(Motion *motion, s16 x0, s16 x1, s16 y0, s16 y1, int frames);
 u32 BattleAnimUtil_GetBattlerSide(void *owner, u32 battler);
-BOOL ov07_022222B4(Motion *motion);
+BOOL BattleAnimUtil_UpdateLinearMotion(Motion *motion);
 int BattleAnimSystem_GetBgPriority(void *owner, int a1);
 int ov07_0221BFC0(void *owner);
 void BattleAnimSystem_CreateTaskDefaultPriority(void *owner, void *func, void *data);
@@ -80,7 +80,7 @@ void ov07_0222B320(void *owner, int a1, int a2, ManagedSprite *sprite) {
     pic2 = BattleAnimSystem_GetBattlerPokepic(work->owner, BattleAnimSystem_GetDefender(work->owner));
     x1 = Pokepic_GetAttr(pic2, 0);
     y1 = Pokepic_GetAttr(pic2, 1);
-    ov07_02222268(&work->motion, x0, x1, y0, y1, 20);
+    BattleAnimUtil_InitLinearMotion(&work->motion, x0, x1, y0, y1, 20);
 
     frame = 0;
     count = 0;
@@ -89,7 +89,7 @@ void ov07_0222B320(void *owner, int a1, int a2, ManagedSprite *sprite) {
         skip = TRUE;
     }
     do {
-        running = ov07_022222B4(&work->motion);
+        running = BattleAnimUtil_UpdateLinearMotion(&work->motion);
         if (frame % 2) {
             if (skip == FALSE) {
                 if (count < 8) {

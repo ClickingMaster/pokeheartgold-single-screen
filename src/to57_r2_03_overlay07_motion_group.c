@@ -49,7 +49,7 @@ void ov07_022312A8(void *p, int mul) {
 void ov07_02231300(R203Work *work) {
     int i;
     for (i = 0; i < 6; i++) {
-        ov07_02222180(&work->motions[i]);
+        BattleAnimUtil_UpdateSinMotion(&work->motions[i]);
         ManagedSprite_SetPositionXY(work->sprites[i], work->x + work->motions[i].x, work->y);
         if (work->motions[i].angleX >= 0x3fff && work->motions[i].angleX <= 0xbf49) {
             ManagedSprite_SetPriority(work->sprites[i], 1);
@@ -67,14 +67,14 @@ void ov07_02231378(void *taskOwner, R203Work *work) {
     switch (work->state) {
     case 0:
         BattleAnimUtil_SetBlendWithBattleBg(work->owner, 1, 15);
-        ov07_02222AC4((u8 *)work + 0x108, 1, 16, 15, 0, 10);
+        BattleAnimUtil_StartBlendAlphaMotion((u8 *)work + 0x108, 1, 16, 15, 0, 10);
         ov07_022312A8(work, work->unk14);
         ov07_02231300(work);
         work->state++;
         break;
     case 1:
         ov07_02231300(work);
-        if (ov07_02222AF4((u8 *)work + 0x108)) {
+        if (BattleAnimUtil_IsBlendAlphaMotionDone((u8 *)work + 0x108)) {
             work->state++;
             work->timer = 28;
         }
@@ -84,12 +84,12 @@ void ov07_02231378(void *taskOwner, R203Work *work) {
         work->timer--;
         if (work->timer < 0) {
             work->state++;
-            ov07_02222AC4((u8 *)work + 0x108, 16, 1, 0, 15, 10);
+            BattleAnimUtil_StartBlendAlphaMotion((u8 *)work + 0x108, 16, 1, 0, 15, 10);
         }
         break;
     case 3:
         ov07_02231300(work);
-        if (ov07_02222AF4((u8 *)work + 0x108)) {
+        if (BattleAnimUtil_IsBlendAlphaMotionDone((u8 *)work + 0x108)) {
             work->state++;
         }
         break;

@@ -13,8 +13,8 @@ void ManagedSprite_SetAnimateFlag(void *, int);
 int ov07_02222004(void *, int);
 void BattleAnimSystem_CreateTaskDefaultPriority(void *, void *, void *);
 void BattleAnimUtil_SetBlendWithBattleBg(void *, int, int);
-void ov07_02222AC4(void *, int, int, int, int, int);
-int ov07_02222AF4(void *);
+void BattleAnimUtil_StartBlendAlphaMotion(void *, int, int, int, int, int);
+int BattleAnimUtil_IsBlendAlphaMotionDone(void *);
 void Sprite_DeleteAndFreeResources(void *);
 void Heap_Free(void *);
 void BattleAnimSystem_DestroyTask(void *, void *);
@@ -23,5 +23,5 @@ void ManagedSprite_SetPositionXY(void *, s16, s16);
 void ManagedSprite_SetPriority(void *, int);
 int ov07_0221FAE8(void *);
 void ov07_022220FC(void *, int, int, int, int, int, int, int);
-int ov07_02222180(void *);
+int BattleAnimUtil_UpdateSinMotion(void *);
 #endif

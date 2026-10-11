@@ -55,15 +55,15 @@ extern void ManagedSprite_SetPriority(void *, int);
 extern void ManagedSprite_SetDrawFlag(void *, int);
 extern void ManagedSprite_SetOamMode(void *, int);
 extern void BattleAnimSystem_CreateTaskDefaultPriority(void *, void (*)(void *, void *), void *);
-extern void ov07_022222F0(void *, void *);
-extern int ov07_02222748(void *, void *);
+extern void BattleAnimUtil_UpdateLinearMotionSprite(void *, void *);
+extern int BattleAnimUtil_UpdateScaleMotionSprite(void *, void *);
 extern void ManagedSprite_GetPositionXY(void *, s16 *, s16 *);
 extern void ManagedSprite_SetPositionXY(void *, s16, s16);
 extern void ManagedSprite_SetAnim(void *, int);
 extern int ManagedSprite_GetPaletteOverrideOffset(void *);
 extern void ManagedSprite_SetAffineOverwriteMode(void *, int);
-extern void ov07_02222268(void *, s16, s16, int, int);
-extern void ov07_02222508(void *, int, int, int, int);
+extern void BattleAnimUtil_InitLinearMotion(void *, s16, s16, int, int);
+extern void BattleAnimUtil_InitScaleMotion(void *, int, int, int, int);
 extern void ov07_02230FE8(void *, void *);
 extern void Sprite_DeleteAndFreeResources(void *);
 extern void SpriteSystem_DrawSprites(void *);
@@ -84,8 +84,8 @@ void ov07_022318A0(void *);
 void ov07_022318CC(void *);
 void ov07_022318F8(void *);
 
-extern void ov07_02222AC4(void *, int, int, int, int, int);
-extern BOOL ov07_02222AF4(void *);
+extern void BattleAnimUtil_StartBlendAlphaMotion(void *, int, int, int, int, int);
+extern BOOL BattleAnimUtil_IsBlendAlphaMotionDone(void *);
 extern void ManagedSprite_SetAnimateFlag(void *, int);
 extern void ManagedSprite_SetAnimSpeed(void *, int);
 extern u16 ManagedSprite_GetAnimationFrame(void *);
@@ -104,13 +104,13 @@ void ov07_02230FE8(void *task, void *work_) {
     Work30F98 *work = work_;
     switch (work->state) {
     case 0:
-        ov07_02222AC4(work->motion, 0, 16, 20, 4, 10);
+        BattleAnimUtil_StartBlendAlphaMotion(work->motion, 0, 16, 20, 4, 10);
         ManagedSprite_SetDrawFlag(work->sprite, 1);
         BattleAnimUtil_SetBlendWithBattleBg(work->owner, 0, 20);
         work->state++;
         break;
     case 1:
-        if (ov07_02222AF4(work->motion)) {
+        if (BattleAnimUtil_IsBlendAlphaMotionDone(work->motion)) {
             work->state++;
             ManagedSprite_SetAnimateFlag(work->sprite, 1);
             ManagedSprite_SetAnimSpeed(work->sprite, 1 << 12);
@@ -120,11 +120,11 @@ void ov07_02230FE8(void *task, void *work_) {
         ManagedSprite_SetPaletteOverrideOffset(work->sprite, work->palette + ManagedSprite_GetAnimationFrame(work->sprite) % 3);
         if (!ManagedSprite_IsAnimated(work->sprite)) {
             work->state++;
-            ov07_02222AC4(work->motion, 16, 0, 4, 20, 8);
+            BattleAnimUtil_StartBlendAlphaMotion(work->motion, 16, 0, 4, 20, 8);
         }
         break;
     case 3:
-        if (ov07_02222AF4(work->motion)) {
+        if (BattleAnimUtil_IsBlendAlphaMotionDone(work->motion)) {
             work->state++;
             ManagedSprite_SetDrawFlag(work->sprite, 0);
         }

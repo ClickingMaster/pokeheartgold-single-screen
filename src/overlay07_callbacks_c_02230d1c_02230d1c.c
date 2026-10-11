@@ -4,8 +4,8 @@
 typedef struct Obj { u8 x[0x200]; } Obj;
 typedef int (*Fn)(Obj *);
 extern void ManagedSprite_SetDrawFlag(void *, int);
-extern int ov07_022222F0(void *, void *);
-extern int ov07_02222748(void *, void *);
+extern int BattleAnimUtil_UpdateLinearMotionSprite(void *, void *);
+extern int BattleAnimUtil_UpdateScaleMotionSprite(void *, void *);
 extern int BattleAnimSystem_GetBattlerType(void *, int);
 extern int ov07_0221BFC0(void *);
 extern int BattleAnimSystem_GetCurrentParticleSystem(void *);

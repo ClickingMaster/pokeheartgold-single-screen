@@ -252,6 +252,6 @@
 .public ov73_021E705C
 .public ov73_021E7120
 .public ov73_021E7488
-.public ov73_021E7E4C
-.public ov73_021E7FB8
-.public ov73_021E808C
+.public NintendoWfcUnused_Init
+.public NintendoWfcUnused_Main
+.public NintendoWfcUnused_Exit

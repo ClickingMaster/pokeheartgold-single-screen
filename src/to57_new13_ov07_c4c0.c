@@ -26,8 +26,8 @@ void ov07_0222C4C0(void *owner, void *a, void *b, void *sprite) {
     v = ov07_02222004(owner, idx);
     w->sprite = sprite;
     w->unk50 = 0;
-    ov07_0222212C(&w->sin, 0x3fff, 0xbfff, 0x3fff, 0xbfff, -(v << 17), 0xffff8000, 0x71c);
-    ov07_02222494(&w->linear, 0, 0xffff, 0xfffff000, w->sin.duration);
+    BattleAnimUtil_InitSinMotionFromStep(&w->sin, 0x3fff, 0xbfff, 0x3fff, 0xbfff, -(v << 17), 0xffff8000, 0x71c);
+    BattleAnimUtil_InitCosMotion(&w->linear, 0, 0xffff, 0xfffff000, w->sin.duration);
     w->baseX = w->sin.stepX;
     w->unk54 = 1;
     w->x = ov07_02221F80(owner, idx, 0);

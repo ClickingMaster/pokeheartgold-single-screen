@@ -38,14 +38,14 @@ typedef struct X08Work2 {
 } X08Work2;
 void ManagedSprite_SetAnimateFlag(void *, BOOL);
 BOOL ManagedSprite_IsAnimated(void *);
-void ov07_02222508(void *, int, int, int, int);
+void BattleAnimUtil_InitScaleMotion(void *, int, int, int, int);
 int Pokepic_GetAttr(void *, int);
-void ov07_02222268(void *, s16, s16, s16, s16, int);
-void ov07_02222314(void *, void *);
-BOOL ov07_02222768(void *, void *);
+void BattleAnimUtil_InitLinearMotion(void *, s16, s16, s16, s16, int);
+void BattleAnimUtil_UpdateLinearMotionPokepic(void *, void *);
+BOOL BattleAnimUtil_UpdateScaleMotionPokepic(void *, void *);
 void Pokepic_SetAttr(void *, int, int);
 void ManagedSprite_SetAnimSpeed(void *, fx32);
-BOOL ov07_022222B4(void *);
+BOOL BattleAnimUtil_UpdateLinearMotion(void *);
 void ManagedSprite_SetPositionXY(void *, s16, s16);
 void ov07_0222F210(void *, X08Work2 *);
 #endif

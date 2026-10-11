@@ -5,7 +5,7 @@ void ov07_0223049C(void *owner, Ov07FadeWork *work) {
 
     switch (work->state) {
     case 0:
-        ov07_02222268(&work->transition, 0x7F, 0, 0, 0, 8);
+        BattleAnimUtil_InitLinearMotion(&work->transition, 0x7F, 0, 0, 0, 8);
         *(vu32 *)0x04000000 = (*(vu32 *)0x04000000 & 0xFFFF1FFF) | 0x2000;
         BattleAnimUtil_SetWindowInsidePlanes(work->owner, 0, 0);
         *(vu16 *)0x04000040 = 0xFF;
@@ -21,7 +21,7 @@ void ov07_0223049C(void *owner, Ov07FadeWork *work) {
         }
         break;
     case 2:
-        if (ov07_022222B4(&work->transition)) {
+        if (BattleAnimUtil_UpdateLinearMotion(&work->transition)) {
             s16 value = work->transition;
             *(vu16 *)0x04000040 = ((0x7F - value) << 8 & 0xFF00) | (u8)(value + 0x80);
             *(vu16 *)0x04000044 = 0xBF;

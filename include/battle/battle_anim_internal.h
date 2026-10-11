@@ -382,8 +382,8 @@ int BattleAnimSystem_GetSideSign(BattleAnimSystem *system, int battlerA, int bat
 void ov07_0221FF74(void);
 
 // overlay 7 functions defined in sources not merged yet
-BattleAnimFunc ov07_02223038(u32 id);
-BattleAnimSpriteFunc ov07_0222304C(u32 id);
+BattleAnimFunc BattleAnimSystem_GetFunc(u32 id);
+BattleAnimSpriteFunc BattleAnimSystem_GetSpriteFunc(u32 id);
 int BattleAnimUtil_GetBattlerType(BattleAnimSystem *system, int battler);
 int BattleAnimUtil_GetBattlerSide(BattleAnimSystem *system, int battler);
 int BattleAnimUtil_GetPartnerBattler(BattleAnimSystem *system, int battler);
@@ -392,11 +392,11 @@ void ov07_02234A20(BattleAnimBattlerPicParams *params, enum HeapID heapId);
 void BattleAnimUtil_LoadMonIntoPicSameFacing(BattleAnimBattlerPicParams *params, enum HeapID heapId);
 void BattleAnimUtil_LoadMonIntoPicOppositeFacing(BattleAnimBattlerPicParams *params, enum HeapID heapId);
 void BattleAnimUtil_RestorePic(BattleAnimBattlerPicParams *params, enum HeapID heapId);
-void *ov07_02222BE4(void *data, u32 value, enum HeapID heapId);
-void *ov07_02222D90(u32 bgLayer);
-u32 ov07_02222D88(u16 x, u16 y);
-void ov07_02222C60(void *scanline);
-u32 *ov07_02222C84(void *scanline);
+void *BattleAnimScanline_New(void *data, u32 value, enum HeapID heapId);
+void *BattleAnimUtil_GetBgOffsetRegister(u32 bgLayer);
+u32 BattleAnimUtil_PackXY(u16 x, u16 y);
+void BattleAnimScanline_Free(void *scanline);
+u32 *BattleAnimScanline_GetWriteBuffer(void *scanline);
 
 // src/sound_se.c (missing from sound_playback.h)
 void SetSeqTrackPan(u16 seqNo, u32 trackMask, int pan);

@@ -48,22 +48,22 @@ void ov07_0222B4E0(void *task, B4Work *work) {
         }
         break;
     case 1:
-        if (ov07_02222EE8(work->effect2)) {
+        if (BattleAnimUtil_IsPaletteBlendActive(work->effect2)) {
             break;
         }
-        ov07_02222EF8(work->effect1);
-        ov07_02222EF8(work->effect2);
+        BattleAnimUtil_FreePaletteBlend(work->effect1);
+        BattleAnimUtil_FreePaletteBlend(work->effect2);
         paletteOffset = ObjPlttTransfer_GetPaletteVramOffset(Sprite_GetPaletteProxy(*(void **)work->sprite3), 1);
-        work->effect2 = ov07_02222F10(work->effectManager, BattleAnimSystem_GetHeapID(work->owner), 2, (u16)(paletteOffset << 4), 16, 0, 1, 15, 0, 0xffff, 0x44c);
+        work->effect2 = BattleAnimUtil_StartPaletteBlend(work->effectManager, BattleAnimSystem_GetHeapID(work->owner), 2, (u16)(paletteOffset << 4), 16, 0, 1, 15, 0, 0xffff, 0x44c);
         work->state++;
         break;
     case 2:
     default:
-        if (ov07_02222EE8(work->effect2)) {
+        if (BattleAnimUtil_IsPaletteBlendActive(work->effect2)) {
             break;
         }
         ManagedSprite_TickFrame(work->sprite2);
-        ov07_02222EF8(work->effect2);
+        BattleAnimUtil_FreePaletteBlend(work->effect2);
         BattleAnimSystem_DestroyTask(work->owner, task);
         Heap_Free(work);
         return;

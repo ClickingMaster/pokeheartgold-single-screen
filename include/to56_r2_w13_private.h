@@ -53,8 +53,8 @@ void ManagedSprite_SetPriority(void *, int);
 void ManagedSprite_SetAffineTranslation(void *, s16, s16);
 int BattleAnimUtil_GetBattlerSide(void *, int);
 void ManagedSprite_SetAnim(void *, int);
-void ov07_02222508(void *, int, int, int, int);
-void ov07_022223F0(void *, int, int, int);
+void BattleAnimUtil_InitScaleMotion(void *, int, int, int, int);
+void BattleAnimUtil_InitValueMotion(void *, int, int, int);
 void BattleAnimSystem_CreateTaskDefaultPriority(void *, void *, void *);
 void ov07_0222D2B0(void *, R2W13Spin *);
 #endif

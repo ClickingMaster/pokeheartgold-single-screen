@@ -53,15 +53,15 @@ extern void ManagedSprite_SetPriority(void *, int);
 extern void ManagedSprite_SetDrawFlag(void *, int);
 extern void ManagedSprite_SetOamMode(void *, int);
 extern void BattleAnimSystem_CreateTaskDefaultPriority(void *, void (*)(void *, void *), void *);
-extern void ov07_022222F0(void *, void *);
-extern int ov07_02222748(void *, void *);
+extern void BattleAnimUtil_UpdateLinearMotionSprite(void *, void *);
+extern int BattleAnimUtil_UpdateScaleMotionSprite(void *, void *);
 extern void ManagedSprite_GetPositionXY(void *, s16 *, s16 *);
 extern void ManagedSprite_SetPositionXY(void *, s16, s16);
 extern void ManagedSprite_SetAnim(void *, int);
 extern int ManagedSprite_GetPaletteOverrideOffset(void *);
 extern void ManagedSprite_SetAffineOverwriteMode(void *, int);
-extern void ov07_02222268(void *, s16, s16, int, int);
-extern void ov07_02222508(void *, int, int, int, int);
+extern void BattleAnimUtil_InitLinearMotion(void *, s16, s16, int, int);
+extern void BattleAnimUtil_InitScaleMotion(void *, int, int, int, int);
 extern void ov07_02230FE8(void *, void *);
 extern void Sprite_DeleteAndFreeResources(void *);
 extern void SpriteSystem_DrawSprites(void *);
@@ -83,8 +83,8 @@ void ov07_022318CC(void *);
 void ov07_022318F8(void *);
 
 int ov07_02230F6C(void *sprite, void *a, void *b) {
-    ov07_022222F0(a, sprite);
-    if (ov07_02222748(b, sprite) != 0) {
+    BattleAnimUtil_UpdateLinearMotionSprite(a, sprite);
+    if (BattleAnimUtil_UpdateScaleMotionSprite(b, sprite) != 0) {
         return 0;
     }
     ManagedSprite_SetDrawFlag(sprite, 0);

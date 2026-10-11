@@ -8,9 +8,9 @@ BOOL ov07_0222C870(To56W01Work *work) {
     s16 y;
     int index;
 
-    table = ov07_02222D60(work->handle);
+    table = BattleAnimScanline_GetWaveBuffer(work->handle);
     ov07_0222C850(work, table);
-    result = ov07_022222B4(&work->movement);
+    result = BattleAnimUtil_UpdateLinearMotion(&work->movement);
     for (i = work->start; i <= work->end; i++) {
         x = (s16)table[i];
         y = (s16)(table[i] >> 16);
@@ -20,7 +20,7 @@ BOOL ov07_0222C870(To56W01Work *work) {
         if (index < 0) {
             index += 192;
         }
-        table[index] = ov07_02222D88((u16)x, (u16)y);
+        table[index] = BattleAnimUtil_PackXY((u16)x, (u16)y);
     }
     return result;
 }

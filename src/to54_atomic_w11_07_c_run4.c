@@ -68,12 +68,12 @@ void ov07_0222B898(SysTask *task, void *data) {
     u8 temp[0x50];
     switch (work->prefix.state[0]) {
     case 0:
-        ov07_02222268(&work->animation.motion, work->slot.xy[0], (s16)work->yStart[work->index], (s16)work->yEnd[work->index], (s16)work->yEnd[work->index], 15);
+        BattleAnimUtil_InitLinearMotion(&work->animation.motion, work->slot.xy[0], (s16)work->yStart[work->index], (s16)work->yEnd[work->index], (s16)work->yEnd[work->index], 15);
         Pokepic_SetAttr(work->slot.pokepic, 2, work->attr[work->index]);
         Pokepic_SetAttr(work->slot.pokepic, 44, 1);
         work->prefix.state[0]++;
     case 1:
-        if (!ov07_022222B4(&work->animation.motion)) {
+        if (!BattleAnimUtil_UpdateLinearMotion(&work->animation.motion)) {
             work->index++;
             if (work->index > 2) {
                 work->prefix.state[0]++;

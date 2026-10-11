@@ -6,16 +6,16 @@
 void ov07_0222E07C(void *p) {
     switch (W(p, 0x50)) {
     case 0:
-        ov07_02222268((u8 *)p + 0x28, 0, 0x50, 0, 0x50, 4);
+        BattleAnimUtil_InitLinearMotion((u8 *)p + 0x28, 0, 0x50, 0, 0x50, 4);
         break;
     case 1:
-        ov07_02222268((u8 *)p + 0x28, 0, 0, 0, -0x50, 4);
+        BattleAnimUtil_InitLinearMotion((u8 *)p + 0x28, 0, 0, 0, -0x50, 4);
         break;
     case 2:
-        ov07_02222268((u8 *)p + 0x28, 0, -0x50, 0, 0x50, 4);
+        BattleAnimUtil_InitLinearMotion((u8 *)p + 0x28, 0, -0x50, 0, 0x50, 4);
         break;
     case 3:
-        ov07_02222268((u8 *)p + 0x28, 0, 0x28, 0, -0x28, 4);
+        BattleAnimUtil_InitLinearMotion((u8 *)p + 0x28, 0, 0x28, 0, -0x28, 4);
         break;
     default:
         GF_AssertFail();

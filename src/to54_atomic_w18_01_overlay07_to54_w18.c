@@ -78,7 +78,7 @@ void ov07_0222E6F4(void *owner) {
     WorkA *work = BattleAnimUtil_AllocWork(owner, sizeof(WorkA));
     work->owner = owner;
     work->pic = BattleAnimSystem_GetBattlerPokepic(work->owner, BattleAnimSystem_GetAttacker(owner));
-    ov07_02222508(work->movement, 10, 10, 15, 8);
+    BattleAnimUtil_InitScaleMotion(work->movement, 10, 10, 15, 8);
     work->count = 4;
     work->other = ov07_0221FAA0(work->owner, BattleAnimSystem_GetAttacker(work->owner));
     work->attr = Pokepic_GetAttr(work->pic, 1);
@@ -86,9 +86,9 @@ void ov07_0222E6F4(void *owner) {
 }
 
 void ov07_0222E754(WorkB *work) {
-    ov07_02222508(work->move0, work->x / 100, 10, work->y / 100, work->duration / 100);
+    BattleAnimUtil_InitScaleMotion(work->move0, work->x / 100, 10, work->y / 100, work->duration / 100);
     BattleAnimUtil_SetBlendWithBattleBg(work->owner, 16, 0);
-    ov07_02222AC4(work->move1, 16, 10, 0, 6, (work->duration / 100) * 2);
+    BattleAnimUtil_StartBlendAlphaMotion(work->move1, 16, 10, 0, 6, (work->duration / 100) * 2);
     work->animState = 0;
     work->animCount = 0;
 }
@@ -97,24 +97,24 @@ BOOL ov07_0222E7BC(WorkB *work) {
     BOOL done = FALSE;
     switch (work->animState) {
     case 0:
-        if (!ov07_02222748(work->move0, work->sprite)) {
-            ov07_02222508(work->move0, work->y / 100, 10, work->x / 100, work->duration / 100);
+        if (!BattleAnimUtil_UpdateScaleMotionSprite(work->move0, work->sprite)) {
+            BattleAnimUtil_InitScaleMotion(work->move0, work->y / 100, 10, work->x / 100, work->duration / 100);
             work->animState++;
         }
         break;
     case 1:
-        if (!ov07_02222748(work->move0, work->sprite)) {
+        if (!BattleAnimUtil_UpdateScaleMotionSprite(work->move0, work->sprite)) {
             work->animCount++;
             if (work->animCount < 2) {
                 work->animState = 0;
-                ov07_02222508(work->move0, work->x / 100, 10, work->y / 100, work->duration / 100);
+                BattleAnimUtil_InitScaleMotion(work->move0, work->x / 100, 10, work->y / 100, work->duration / 100);
             } else {
                 work->animState++;
             }
         }
         break;
     case 2:
-        if (ov07_02222AF4(work->move1)) {
+        if (BattleAnimUtil_IsBlendAlphaMotionDone(work->move1)) {
             done = TRUE;
             work->animState++;
         }
@@ -165,7 +165,7 @@ static void ov07_0222E90C(void *task, void *data) {
             ManagedSprite_SetAnim(work->sprite, 0);
             ManagedSprite_SetAnimateFlag(work->sprite, TRUE);
             ManagedSprite_SetAffineScale(work->sprite, 1.0f, 1.0f);
-            ov07_02222AC4(work->move1, 0, 16, 16, 0, 4);
+            BattleAnimUtil_StartBlendAlphaMotion(work->move1, 0, 16, 16, 0, 4);
         }
         break;
     case 1:
@@ -187,11 +187,11 @@ static void ov07_0222E90C(void *task, void *data) {
         if (IsBrightnessTransitionActive(1)) {
             work->state++;
             BattleAnimUtil_SetBlendWithBattleBg(work->owner, 16, 0);
-            ov07_02222AC4(work->move1, 16, 0, 0, 16, 8);
+            BattleAnimUtil_StartBlendAlphaMotion(work->move1, 16, 0, 0, 16, 8);
         }
         break;
     case 3:
-        if (ov07_02222AF4(work->move1)) {
+        if (BattleAnimUtil_IsBlendAlphaMotionDone(work->move1)) {
             ManagedSprite_SetDrawFlag(work->sprite, FALSE);
             work->state++;
         }
@@ -227,11 +227,11 @@ void ov07_0222EAB4(WorkC *work) {
     switch (work->count) {
     case 0:
     case 2:
-        ov07_02222268(work->movement, 0, 0, 0, 32, 6);
+        BattleAnimUtil_InitLinearMotion(work->movement, 0, 0, 0, 32, 6);
         break;
     case 1:
     case 3:
-        ov07_02222268(work->movement, 0, 0, 32, 0, 6);
+        BattleAnimUtil_InitLinearMotion(work->movement, 0, 0, 32, 0, 6);
         break;
     }
 }
@@ -244,7 +244,7 @@ static void ov07_0222EB00(void *task, void *data) {
         work->state++;
         break;
     case 1:
-        if (ov07_022222B4(work->movement)) {
+        if (BattleAnimUtil_UpdateLinearMotion(work->movement)) {
             ov07_022220B8(work->movement, work->pic, work->x, work->y);
             break;
         }
@@ -281,44 +281,44 @@ static void ov07_0222EBB0(void *task, void *data) {
         work->state++;
         break;
     case 1:
-        if (ov07_02222240(&work->movement1, work->x1, work->y1 + 8, work->pic1)) {
+        if (BattleAnimUtil_UpdateSinMotionPokepic(&work->movement1, work->x1, work->y1 + 8, work->pic1)) {
             break;
         }
         Pokepic_SetAttr(work->pic1, 0, work->x1);
         Pokepic_SetAttr(work->pic1, 1, work->y1);
-        ov07_02222268(&work->movement1, work->x1, work->x1 + 32, 0, 0, 2);
+        BattleAnimUtil_InitLinearMotion(&work->movement1, work->x1, work->x1 + 32, 0, 0, 2);
         work->movement1.speed *= work->multiplier;
         work->state++;
-        ov07_022222B4(&work->movement1);
+        BattleAnimUtil_UpdateLinearMotion(&work->movement1);
         Pokepic_SetAttr(work->pic1, 0, work->movement1.value);
         break;
     case 2:
-        if (ov07_022222B4(&work->movement1)) {
+        if (BattleAnimUtil_UpdateLinearMotion(&work->movement1)) {
             Pokepic_SetAttr(work->pic1, 0, work->movement1.value);
             break;
         }
-        ov07_02222268(&work->movement2, work->x2, work->x2 + (work->multiplier << 5), 0, 0, 2);
+        BattleAnimUtil_InitLinearMotion(&work->movement2, work->x2, work->x2 + (work->multiplier << 5), 0, 0, 2);
         work->state++;
         break;
     case 3:
-        if (ov07_022222B4(&work->movement2)) {
+        if (BattleAnimUtil_UpdateLinearMotion(&work->movement2)) {
             Pokepic_SetAttr(work->pic2, 0, work->movement2.value);
             break;
         }
-        ov07_02222268(&work->movement1, work->movement1.value, work->x1, 0, 0, 8);
+        BattleAnimUtil_InitLinearMotion(&work->movement1, work->movement1.value, work->x1, 0, 0, 8);
         work->state++;
         break;
     case 4:
-        if (ov07_022222B4(&work->movement1)) {
+        if (BattleAnimUtil_UpdateLinearMotion(&work->movement1)) {
             Pokepic_SetAttr(work->pic1, 0, work->movement1.value);
             break;
         }
         Pokepic_SetAttr(work->pic1, 0, work->x1);
-        ov07_02222268(&work->movement2, work->movement2.value, work->x2, 0, 0, 8);
+        BattleAnimUtil_InitLinearMotion(&work->movement2, work->movement2.value, work->x2, 0, 0, 8);
         work->state++;
         break;
     case 5:
-        if (ov07_022222B4(&work->movement2)) {
+        if (BattleAnimUtil_UpdateLinearMotion(&work->movement2)) {
             Pokepic_SetAttr(work->pic2, 0, work->movement2.value);
             break;
         }

@@ -9,15 +9,15 @@ BOOL ov07_0222DBD8(X07PicPulse *work) {
     BOOL done = FALSE;
     switch (work->state) {
     case 0:
-        if (ov07_02222558(work->anim)) {
+        if (BattleAnimUtil_UpdateScaleMotion(work->anim)) {
             Pokepic_SetAttr(work->pokepic, 13, work->value);
         } else {
             work->state++;
-            ov07_02222508(work->anim, 15, 10, 10, 12);
+            BattleAnimUtil_InitScaleMotion(work->anim, 15, 10, 10, 12);
         }
         break;
     case 1:
-        if (ov07_02222558(work->anim)) {
+        if (BattleAnimUtil_UpdateScaleMotion(work->anim)) {
             Pokepic_SetAttr(work->pokepic, 13, work->value);
         } else {
             Pokepic_SetAttr(work->pokepic, 13, 0x100);
@@ -35,16 +35,16 @@ BOOL ov07_0222DC54(X07SpritePulse *work) {
     BOOL done = FALSE;
     switch (work->state) {
     case 0:
-        ov07_02222748(work->anim0, work->sprite);
-        if (ov07_022222B4(work->anim1)) {
+        BattleAnimUtil_UpdateScaleMotionSprite(work->anim0, work->sprite);
+        if (BattleAnimUtil_UpdateLinearMotion(work->anim1)) {
             ov07_0222207C(work->anim1, work->sprite, work->x, work->y);
         } else {
             work->state++;
-            ov07_02222AC4(work->anim2, 16, 0, 14, 16, 8);
+            BattleAnimUtil_StartBlendAlphaMotion(work->anim2, 16, 0, 14, 16, 8);
         }
         break;
     case 1:
-        if (ov07_02222AF4(work->anim2)) {
+        if (BattleAnimUtil_IsBlendAlphaMotionDone(work->anim2)) {
             ManagedSprite_SetDrawFlag(work->sprite, FALSE);
             work->state++;
         }

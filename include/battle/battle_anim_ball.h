@@ -166,15 +166,15 @@ SPLEmitter *BattleAnimSystem_NewParticleSystemFromNarc(enum HeapID heapId, NarcI
 SPLEmitter *BattleAnimSystem_NewParticleSystemFromOpenNarc(NARC *narc, enum HeapID heapId, int member, BOOL loadNow);
 void BattleAnimSystem_FreeParticleSystem(SPLEmitter *particleSystem);
 void ov07_02221F04(int a0, int battlerType, s16 *x, s16 *y);
-void ov07_02222268(void *motion, s16 startX, s16 endX, s16 startY, s16 endY, int duration);
-BOOL ov07_022222F0(void *motion, ManagedSprite *sprite);
-void ov07_02222338(void *motion, void *motion2, s16 startX, s16 endX, s16 startY, s16 endY, u16 duration, fx32 height);
-BOOL ov07_022223CC(void *motion, void *motion2, ManagedSprite *sprite);
-void ov07_022223F0(s32 *motion, int start, int end, int duration);
-BOOL ov07_02222440(s32 *motion);
-void *ov07_02222F10(PaletteData *paletteData, enum HeapID heapId, int bufferId, u16 offset, u16 count, s8 a5, s8 a6, u8 start, u8 end, u16 color, u32 priority);
-BOOL ov07_02222EE8(void *blend);
-void ov07_02222EF8(void *blend);
+void BattleAnimUtil_InitLinearMotion(void *motion, s16 startX, s16 endX, s16 startY, s16 endY, int duration);
+BOOL BattleAnimUtil_UpdateLinearMotionSprite(void *motion, ManagedSprite *sprite);
+void BattleAnimUtil_InitLinearSinMotion(void *motion, void *motion2, s16 startX, s16 endX, s16 startY, s16 endY, u16 duration, fx32 height);
+BOOL BattleAnimUtil_UpdateLinearSinMotionSprite(void *motion, void *motion2, ManagedSprite *sprite);
+void BattleAnimUtil_InitValueMotion(s32 *motion, int start, int end, int duration);
+BOOL BattleAnimUtil_UpdateValueMotion(s32 *motion);
+void *BattleAnimUtil_StartPaletteBlend(PaletteData *paletteData, enum HeapID heapId, int bufferId, u16 offset, u16 count, s8 a5, s8 a6, u8 start, u8 end, u16 color, u32 priority);
+BOOL BattleAnimUtil_IsPaletteBlendActive(void *blend);
+void BattleAnimUtil_FreePaletteBlend(void *blend);
 void ov07_02231DE0(int battlerType, VecFx32 *pos, int unused, int perspective);
 
 #endif // POKEHEARTGOLD_BATTLE_BATTLE_ANIM_BALL_H

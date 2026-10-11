@@ -48,11 +48,11 @@ extern s32 ov07_02222004(void *, int);
 extern s32 ov07_0222202C(void *, int);
 extern s32 ov07_02221F80(void *, int, int);
 extern void ManagedSprite_SetPositionXY(void *, s16, s16);
-extern void ov07_02222268(void *, s16, s16, s16, s16, int);
+extern void BattleAnimUtil_InitLinearMotion(void *, s16, s16, s16, s16, int);
 extern void BattleAnimSystem_CreateTaskDefaultPriority(void *, void *, void *);
-extern void ov07_022227A8(void *, int, int, int, int);
-extern BOOL ov07_0222283C(void *, int, int, void *);
-extern BOOL ov07_02222314(void *, void *);
+extern void BattleAnimUtil_InitShake(void *, int, int, int, int);
+extern BOOL BattleAnimUtil_UpdateShakePokepic(void *, int, int, void *);
+extern BOOL BattleAnimUtil_UpdateLinearMotionPokepic(void *, void *);
 extern void Pokepic_SetAttr(void *, int, int);
 extern int Pokepic_GetAttr(void *, int);
 extern void Heap_Free(void *);
@@ -86,7 +86,7 @@ void ov07_02230994(void *owner) {
         int deltaY = -(column * 0x10);
         int y = yBase + deltaY;
         ManagedSprite_SetPositionXY(work->sprite, x, y);
-        ov07_02222268(&work->motion, x, x + row * 0x30, y, y + deltaY, 6);
+        BattleAnimUtil_InitLinearMotion(&work->motion, x, x + row * 0x30, y, y + deltaY, 6);
     }
     BattleAnimSystem_CreateTaskDefaultPriority(work->owner, ov07_02230960, work);
 }
@@ -94,18 +94,18 @@ void ov07_02230994(void *owner) {
 void ov07_02230A70(void *task, Ov07PicTaskA *work) {
     switch (work->state) {
     case 0:
-        ov07_022227A8(&work->motion2, 4, 0, 1, 4);
+        BattleAnimUtil_InitShake(&work->motion2, 4, 0, 1, 4);
         work->state++;
         break;
     case 1:
-        if (!ov07_0222283C(&work->motion2, work->x, work->y, work->pic)) {
+        if (!BattleAnimUtil_UpdateShakePokepic(&work->motion2, work->x, work->y, work->pic)) {
             int delta = 0x18;
             work->state++;
-            ov07_02222268(&work->motion, work->x, work->x + work->column * 0x28, work->y, work->y + work->row * (delta - 0x1F), 4);
+            BattleAnimUtil_InitLinearMotion(&work->motion, work->x, work->x + work->column * 0x28, work->y, work->y + work->row * (delta - 0x1F), 4);
         }
         break;
     case 2:
-        if (!ov07_02222314(&work->motion, work->pic)) {
+        if (!BattleAnimUtil_UpdateLinearMotionPokepic(&work->motion, work->pic)) {
             work->state++;
             work->timer = 8;
         }
@@ -114,11 +114,11 @@ void ov07_02230A70(void *task, Ov07PicTaskA *work) {
         if (--work->timer < 0) {
             int delta = 0x28;
             work->state++;
-            ov07_02222268(&work->motion, work->x + work->column * delta, work->x, work->y + work->row * (delta - 0x2F), work->y, 4);
+            BattleAnimUtil_InitLinearMotion(&work->motion, work->x + work->column * delta, work->x, work->y + work->row * (delta - 0x2F), work->y, 4);
         }
         break;
     case 4:
-        if (!ov07_02222314(&work->motion, work->pic)) {
+        if (!BattleAnimUtil_UpdateLinearMotionPokepic(&work->motion, work->pic)) {
             work->state++;
         }
         break;
@@ -149,28 +149,28 @@ void ov07_02230BF8(void *task, Ov07PicTaskB *work) {
     switch (work->state) {
     case 0: {
         int duration = 4;
-        ov07_02222268(&work->motion, work->x, work->x + work->column * (duration - 44), work->y, work->y + work->row * 0x10, duration);
+        BattleAnimUtil_InitLinearMotion(&work->motion, work->x, work->x + work->column * (duration - 44), work->y, work->y + work->row * 0x10, duration);
         work->state++;
         break;
     }
     case 1:
-        if (!ov07_02222314(&work->motion, work->pic)) {
+        if (!BattleAnimUtil_UpdateLinearMotionPokepic(&work->motion, work->pic)) {
             work->state++;
-            ov07_022227A8(&work->motion2, 4, 0, 1, 4);
+            BattleAnimUtil_InitShake(&work->motion2, 4, 0, 1, 4);
         }
         break;
     case 2: {
         s16 x = Pokepic_GetAttr(work->pic, 0);
         s16 y = Pokepic_GetAttr(work->pic, 1);
-        if (!ov07_0222283C(&work->motion2, x, y, work->pic)) {
+        if (!BattleAnimUtil_UpdateShakePokepic(&work->motion2, x, y, work->pic)) {
             int duration = 4;
             work->state++;
-            ov07_02222268(&work->motion, work->x + work->column * (duration - 44), work->x, work->y + work->row * 0x10, work->y, duration);
+            BattleAnimUtil_InitLinearMotion(&work->motion, work->x + work->column * (duration - 44), work->x, work->y + work->row * 0x10, work->y, duration);
         }
         break;
     }
     case 3:
-        if (!ov07_02222314(&work->motion, work->pic)) {
+        if (!BattleAnimUtil_UpdateLinearMotionPokepic(&work->motion, work->pic)) {
             work->state++;
         }
         break;

@@ -31,12 +31,12 @@ void ov07_0222D3BC(void *owner, void *arg1, int direction, void *sprite) {
     } else {
         ManagedSprite_SetAnim(w->sprite, 0);
     }
-    ov07_02222508(w->scaleAnim, 1, 10, 10, 8);
+    BattleAnimUtil_InitScaleMotion(w->scaleAnim, 1, 10, 10, 8);
     if (signedDelta >= 0) {
-        ov07_022223F0(w->translationAnim, 0xFF48, 0xE38D, 4);
+        BattleAnimUtil_InitValueMotion(w->translationAnim, 0xFF48, 0xE38D, 4);
         w->x = 0xFF48;
     } else {
-        ov07_022223F0(w->translationAnim, 0, 0x1C71, 4);
+        BattleAnimUtil_InitValueMotion(w->translationAnim, 0, 0x1C71, 4);
         w->x = 0;
     }
     BattleAnimSystem_CreateTaskDefaultPriority(w->owner, ov07_0222D2B0, w);

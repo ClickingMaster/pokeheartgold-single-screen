@@ -3,32 +3,32 @@ void ov07_02230714(void *task, Ov07W10Large *work) {
     BOOL done;
     switch (work->state) {
     case 0:
-        ov07_02222590(work->motion, (s16)work->field5C, (s16)work->field60, (s16)work->field64, (s16)work->field68, (s16)work->field6C, work->field74 >> 16);
-        ov07_0222283C(work->anim, work->y, work->x, work->pokepic);
-        ov07_02222788(work->motion, work->pokepic);
-        ov07_022226C4(work->pokepic, work->x, work->field0C, *(int *)((u8 *)work + 0x28), 0);
+        BattleAnimUtil_InitScaleMotionXY(work->motion, (s16)work->field5C, (s16)work->field60, (s16)work->field64, (s16)work->field68, (s16)work->field6C, work->field74 >> 16);
+        BattleAnimUtil_UpdateShakePokepic(work->anim, work->y, work->x, work->pokepic);
+        BattleAnimUtil_UpdateScaleMotionXYPokepic(work->motion, work->pokepic);
+        BattleAnimUtil_AlignPokepicToScale(work->pokepic, work->x, work->field0C, *(int *)((u8 *)work + 0x28), 0);
         work->state++;
         return;
     case 1:
-        ov07_0222283C(work->anim, work->y, work->x, work->pokepic);
-        done = ov07_02222788(work->motion, work->pokepic);
-        ov07_022226C4(work->pokepic, work->x, work->field0C, *(int *)((u8 *)work + 0x28), 0);
+        BattleAnimUtil_UpdateShakePokepic(work->anim, work->y, work->x, work->pokepic);
+        done = BattleAnimUtil_UpdateScaleMotionXYPokepic(work->motion, work->pokepic);
+        BattleAnimUtil_AlignPokepicToScale(work->pokepic, work->x, work->field0C, *(int *)((u8 *)work + 0x28), 0);
         if (!done) {
             work->state++;
             return;
         }
         break;
     case 2:
-        ov07_02222590(work->motion, (s16)work->field60, (s16)work->field5C, (s16)work->field68, (s16)work->field64, (s16)work->field6C, (u16)work->field74);
-        ov07_0222283C(work->anim, work->y, work->x, work->pokepic);
-        ov07_02222788(work->motion, work->pokepic);
-        ov07_022226C4(work->pokepic, work->x, work->field0C, *(int *)((u8 *)work + 0x28), 0);
+        BattleAnimUtil_InitScaleMotionXY(work->motion, (s16)work->field60, (s16)work->field5C, (s16)work->field68, (s16)work->field64, (s16)work->field6C, (u16)work->field74);
+        BattleAnimUtil_UpdateShakePokepic(work->anim, work->y, work->x, work->pokepic);
+        BattleAnimUtil_UpdateScaleMotionXYPokepic(work->motion, work->pokepic);
+        BattleAnimUtil_AlignPokepicToScale(work->pokepic, work->x, work->field0C, *(int *)((u8 *)work + 0x28), 0);
         work->state++;
         return;
     case 3:
-        ov07_0222283C(work->anim, work->y, work->x, work->pokepic);
-        done = ov07_02222788(work->motion, work->pokepic);
-        ov07_022226C4(work->pokepic, work->x, work->field0C, *(int *)((u8 *)work + 0x28), 0);
+        BattleAnimUtil_UpdateShakePokepic(work->anim, work->y, work->x, work->pokepic);
+        done = BattleAnimUtil_UpdateScaleMotionXYPokepic(work->motion, work->pokepic);
+        BattleAnimUtil_AlignPokepicToScale(work->pokepic, work->x, work->field0C, *(int *)((u8 *)work + 0x28), 0);
         if (!done) {
             if (--work->timer <= 0) {
                 work->state++;
@@ -63,6 +63,6 @@ void ov07_022308E4(void *owner) {
     work->field6C = 10;
     work->timer = 1;
     work->field74 = 0x40003;
-    ov07_022227A8(work->anim, 2, 0, 1, 2);
+    BattleAnimUtil_InitShake(work->anim, 2, 0, 1, 2);
     BattleAnimSystem_CreateTaskDefaultPriority(work->owner, ov07_02230714, work);
 }

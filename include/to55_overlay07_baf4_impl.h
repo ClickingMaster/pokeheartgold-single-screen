@@ -97,17 +97,17 @@ extern int BattleAnimUtil_GetBattlerType(void *, void *);
 extern int ov07_0221FAE8(void *);
 extern void BattleAnimSystem_CreateTaskDefaultPriority(void *, void *, void *);
 extern void BattleAnimSystem_DestroyTask(void *, void *);
-extern int ov07_02222240(void *, s16, s16, void *);
-extern int ov07_02222914(void *);
-extern int ov07_022222B4(void *);
+extern int BattleAnimUtil_UpdateSinMotionPokepic(void *, s16, s16, void *);
+extern int BattleAnimUtil_UpdateSpriteSequence(void *);
+extern int BattleAnimUtil_UpdateLinearMotion(void *);
 extern void ov07_022220B8(void *, void *, s16, s16);
-extern void ov07_02222268(void *, s16, s16, int, int, int);
-extern int ov07_02222440(void *);
-extern void ov07_022223F0(void *, int, int, int);
+extern void BattleAnimUtil_InitLinearMotion(void *, s16, s16, int, int, int);
+extern int BattleAnimUtil_UpdateValueMotion(void *);
+extern void BattleAnimUtil_InitValueMotion(void *, int, int, int);
 extern void ov07_02222A44(void *, int, int);
-extern void ov07_02222864(void *, void *, void *, int, int, int, int, int, void *, void *, int, int);
+extern void BattleAnimUtil_InitSpriteSequence(void *, void *, void *, int, int, int, int, int, void *, void *, int, int);
 extern void BattleAnimUtil_SetBlendWithBattleBg(void *, int, int);
-extern void ov07_02222180(void);
+extern void BattleAnimUtil_UpdateSinMotion(void);
 extern void *Heap_Alloc(int, int);
 extern void *SpriteSystem_NewSprite(void *, void *, void *);
 extern void SpriteSystem_DrawSprites(void *);
@@ -220,8 +220,8 @@ void ov07_0222BD90(void *task, Ov07LargeWork *work) {
     int results[3];
     int i;
 
-    results[0] = ov07_02222240(&work->move0, work->x, work->y, work->pic);
-    results[1] = ov07_02222914(work->move1);
+    results[0] = BattleAnimUtil_UpdateSinMotionPokepic(&work->move0, work->x, work->y, work->pic);
+    results[1] = BattleAnimUtil_UpdateSpriteSequence(work->move1);
     results[2] = 0;
     SpriteSystem_DrawSprites(work->spriteSystem);
     for (i = 0; i < 3; i++) {
@@ -266,7 +266,7 @@ void ov07_0222BE00(void *owner) {
         ManagedSprite_SetPriority(work->sprites[i], 1);
         ManagedSprite_SetOamMode(work->sprites[i], 1);
     }
-    ov07_02222864(work->move1, &localMove, ov07_02222180, work->x, (s16)(work->y - work->valueEC), 2, 2, 0, work->sprites[0], work->sprites[1], 0, 0);
+    BattleAnimUtil_InitSpriteSequence(work->move1, &localMove, BattleAnimUtil_UpdateSinMotion, work->x, (s16)(work->y - work->valueEC), 2, 2, 0, work->sprites[0], work->sprites[1], 0, 0);
     BattleAnimUtil_SetBlendWithBattleBg(work->owner, -1, -1);
     BattleAnimSystem_CreateTaskDefaultPriority(work->owner, ov07_0222BD90, work);
 }
@@ -276,19 +276,19 @@ void ov07_0222BE00(void *owner) {
 void ov07_0222BF18(void *task, Ov07MoveWork *work) {
     switch (work->state) {
     case 0:
-        if (ov07_022222B4(work->movement)) {
+        if (BattleAnimUtil_UpdateLinearMotion(work->movement)) {
             ov07_022220B8(work->movement, work->pic, work->x, work->y);
             return;
         }
-        ov07_02222268(work->movement, *(s16 *)work->movement, 0, 0, 0, 2);
+        BattleAnimUtil_InitLinearMotion(work->movement, *(s16 *)work->movement, 0, 0, 0, 2);
         work->state++;
         return;
     case 1:
-        if (ov07_02222440(&work->motion.value)) {
+        if (BattleAnimUtil_UpdateValueMotion(&work->motion.value)) {
             Pokepic_SetAttr(work->pic, 9, work->motion.value);
             return;
         }
-        ov07_022223F0(&work->motion.value, work->motion.value, 0, 4);
+        BattleAnimUtil_InitValueMotion(&work->motion.value, work->motion.value, 0, 4);
         work->state++;
         work->timer = 2;
         return;
@@ -298,7 +298,7 @@ void ov07_0222BF18(void *task, Ov07MoveWork *work) {
         }
         return;
     case 3:
-        if (ov07_022222B4(work->movement)) {
+        if (BattleAnimUtil_UpdateLinearMotion(work->movement)) {
             ov07_022220B8(work->movement, work->pic, work->x, work->y);
             return;
         }
@@ -311,7 +311,7 @@ void ov07_0222BF18(void *task, Ov07MoveWork *work) {
         }
         return;
     case 5:
-        if (ov07_02222440(&work->motion.value)) {
+        if (BattleAnimUtil_UpdateValueMotion(&work->motion.value)) {
             Pokepic_SetAttr(work->pic, 9, work->motion.value);
             return;
         }
@@ -341,8 +341,8 @@ void ov07_0222C074(void *owner) {
     work->pic = BattleAnimSystem_GetBattlerPokepic(work->owner, BattleAnimSystem_GetAttacker(work->owner));
     work->x = Pokepic_GetAttr(work->pic, 0);
     work->y = Pokepic_GetAttr(work->pic, 1);
-    ov07_02222268(work->movement, 0, -32, 0, 0, 3);
-    ov07_022223F0(&work->motion.value, 0, 0xE38, 8);
+    BattleAnimUtil_InitLinearMotion(work->movement, 0, -32, 0, 0, 3);
+    BattleAnimUtil_InitValueMotion(&work->motion.value, 0, 0xE38, 8);
     multiplier = ov07_02222004(work->owner, BattleAnimSystem_GetAttacker(work->owner));
     *(int *)(work->movement + 8) *= multiplier;
     work->motion.scale *= multiplier;

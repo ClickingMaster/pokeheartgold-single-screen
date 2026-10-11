@@ -57,8 +57,8 @@
 	.public ov07_02236444
 	.public ov07_02236468
 	.public ov07_0223646A
-	.public ov07_0223649C
-	.public ov07_02236520
+	.public sBattleAnimSpriteFuncTable
+	.public sBattleAnimFuncTable
 	.public sBattleAnimSpriteOrbitStepX
 	.public ov07_022366C8
 	.public ov07_022366CC
@@ -289,7 +289,7 @@
 	.extern ov07_02221E9C
 	.extern ov07_02221EC4
 	.extern ov07_02221F04
-	.extern ov07_02223060
+	.extern BattleAnimFunc_None
 	.extern BattleAnimFunc_OneFrameTask
 	.extern BattleAnimFunc_OneFrameSoundTask
 	.extern BattleAnimFunc_OneFrameUncountedTask
@@ -1141,7 +1141,7 @@ ov07_0223646A: ; 0x0223646A
 	.byte 0x40, 0x00, 0x70, 0x00, 0xC0, 0x00, 0x30, 0x00, 0x28, 0x00, 0x70, 0x00, 0xD8, 0x00, 0x32, 0x00
 	.byte 0x50, 0x00, 0x78, 0x00, 0xB0, 0x00, 0x2A, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov07_0223649C: ; 0x0223649C
+sBattleAnimSpriteFuncTable: ; 0x0223649C
 	.word ov07_022231BC
 	.word ov07_022274F8
 	.word ov07_0222C4C0
@@ -1176,8 +1176,8 @@ ov07_0223649C: ; 0x0223649C
 	.word ov07_02230F98
 	.word ov07_02231468
 
-ov07_02236520: ; 0x02236520
-	.word ov07_02223060
+sBattleAnimFuncTable: ; 0x02236520
+	.word BattleAnimFunc_None
 	.word BattleAnimFunc_OneFrameTask
 	.word BattleAnimFunc_OneFrameSoundTask
 	.word BattleAnimFunc_OneFrameUncountedTask

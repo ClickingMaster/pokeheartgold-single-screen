@@ -7,8 +7,8 @@ BOOL ov07_0222DC54(X07SpritePulse *work);
 
 BOOL ov07_0222D590(X07ScaleSprite *work) {
     f32 x, y;
-    if (ov07_02222558(work->scaleAnim) == TRUE) {
-        ov07_02222644(work->scaleAnim, &x, &y);
+    if (BattleAnimUtil_UpdateScaleMotion(work->scaleAnim) == TRUE) {
+        BattleAnimUtil_GetScaleFloat(work->scaleAnim, &x, &y);
         if (work->flip != 0) {
             ManagedSprite_SetAffineScale(work->sprite, _fsub(0, x), 1.0f);
         } else {
@@ -16,7 +16,7 @@ BOOL ov07_0222D590(X07ScaleSprite *work) {
         }
     } else if (work->delay > 0) {
         work->delay--;
-        ov07_02222508(work->scaleAnim, (s16)work->start, 10, (s16)work->end, 8);
+        BattleAnimUtil_InitScaleMotion(work->scaleAnim, (s16)work->start, 10, (s16)work->end, 8);
         {
             int tmp = work->start;
             work->start = work->end;
@@ -43,7 +43,7 @@ void ov07_0222D60C(void *task, X07Group *work) {
         work->timer++;
         break;
     case 1:
-        if (ov07_0222283C(work->motion, work->x, work->y, work->pokepic) == FALSE) {
+        if (BattleAnimUtil_UpdateShakePokepic(work->motion, work->x, work->y, work->pokepic) == FALSE) {
             work->state++;
         }
         break;

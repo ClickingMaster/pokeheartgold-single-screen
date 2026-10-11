@@ -21,8 +21,8 @@ BOOL RecordMixing_Main(OverlayManager *man, int *state);
 BOOL RecordMixing_Exit(OverlayManager *man, int *state);
 
 // The other app of this overlay: a Nintendo WFC friend lobby, run with OVY_72 loaded.
-BOOL ov73_021E7E4C(OverlayManager *man, int *state);
-BOOL ov73_021E7FB8(OverlayManager *man, int *state);
-BOOL ov73_021E808C(OverlayManager *man, int *state);
+BOOL NintendoWfcUnused_Init(OverlayManager *man, int *state);
+BOOL NintendoWfcUnused_Main(OverlayManager *man, int *state);
+BOOL NintendoWfcUnused_Exit(OverlayManager *man, int *state);
 
 #endif // POKEHEARTGOLD_RECORD_MIXING_H

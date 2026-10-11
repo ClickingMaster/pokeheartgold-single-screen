@@ -46,16 +46,16 @@ s32 ov07_0221FA80(s32, s32);                                                    
 s32 ov07_0221FA90(s32, s32);                                                               /* extern */
 s32 ov07_0221FAA0(s32, s32);                                                               /* extern */
 s32 ov07_0221FAE8(s32);                                                                    /* extern */
-M2C_UNK ov07_02222268(void *, s16, s16, s32, s32);                                         /* extern */
-s32 ov07_022222B4(void *);                                                                 /* extern */
-M2C_UNK ov07_02222508(void *, s16, s32, s16, s32);                                         /* extern */
-s32 ov07_02222558(void *);                                                                 /* extern */
-M2C_UNK ov07_02222590(void *, s32, s32, s32, s32, s32, s32);                               /* extern */
-s32 ov07_0222260C(void *);                                                                 /* extern */
-M2C_UNK ov07_02222644(void *, s32 *, s32 *);                                               /* extern */
-s32 ov07_02222674(s16, s32, s32);                                                          /* extern */
-M2C_UNK ov07_022227A8(void *, s32, s32, s32, s32);                                         /* extern */
-M2C_UNK ov07_022227D8(void *);                                                             /* extern */
+M2C_UNK BattleAnimUtil_InitLinearMotion(void *, s16, s16, s32, s32);                                         /* extern */
+s32 BattleAnimUtil_UpdateLinearMotion(void *);                                                                 /* extern */
+M2C_UNK BattleAnimUtil_InitScaleMotion(void *, s16, s32, s16, s32);                                         /* extern */
+s32 BattleAnimUtil_UpdateScaleMotion(void *);                                                                 /* extern */
+M2C_UNK BattleAnimUtil_InitScaleMotionXY(void *, s32, s32, s32, s32, s32, s32);                               /* extern */
+s32 BattleAnimUtil_UpdateScaleMotionXY(void *);                                                                 /* extern */
+M2C_UNK BattleAnimUtil_GetScaleFloat(void *, s32 *, s32 *);                                               /* extern */
+s32 BattleAnimUtil_CalcScaleYOffset(s16, s32, s32);                                                          /* extern */
+M2C_UNK BattleAnimUtil_InitShake(void *, s32, s32, s32, s32);                                         /* extern */
+M2C_UNK BattleAnimUtil_UpdateShake(void *);                                                             /* extern */
 s32 BattleAnimUtil_GetBattlerSide(s32, s32);                                                               /* extern */
 M2C_UNK BattleAnimUtil_GetBattlerTypePosition(s32, s32, M2C_UNK *);                                                /* extern */
 M2C_UNK BattleAnimUtil_SetBlendWithBattleBg(s32, s32, s32);                                                      /* extern */
@@ -87,6 +87,6 @@ void ov07_02227AEC(s32 arg0) {
     M2C_FIELD(temp_r0, s32 *, 0xC) = temp_r0_2;
     M2C_FIELD(temp_r0, s16 *, 2) = Pokepic_GetAttr(temp_r0_2, 1);
     M2C_FIELD(temp_r0, s32 *, 4) = ov07_0221FAA0(M2C_FIELD(temp_r0, s32 *, 8), BattleAnimSystem_GetAttacker(M2C_FIELD(temp_r0, s32 *, 8)));
-    ov07_02222590(temp_r0 + 0x10, 0x64, 0x96, 0x64, 0x32, 0x64, 0xA);
+    BattleAnimUtil_InitScaleMotionXY(temp_r0 + 0x10, 0x64, 0x96, 0x64, 0x32, 0x64, 0xA);
     BattleAnimSystem_CreateTaskDefaultPriority(M2C_FIELD(temp_r0, s32 *, 8), ov07_022278B0, temp_r0);
 }

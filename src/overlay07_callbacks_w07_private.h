@@ -14,7 +14,7 @@ void Heap_Free(void *);
 BOOL ov07_0222E3E8(void *);
 void ov07_0222E3A4(void *, u32);
 BOOL ov07_0222E5E8(void *);
-void ov07_02222590(void *, s32, s32, s32, s32, s32, s32);
+void BattleAnimUtil_InitScaleMotionXY(void *, s32, s32, s32, s32, s32, s32);
 void ManagedSprite_SetDrawPriority(void *, u32);
 void ManagedSprite_SetPriority(void *, u32);
 void ManagedSprite_SetDrawFlag(void *, BOOL);
@@ -30,7 +30,7 @@ void PaletteData_BlendPalettes(void *, u32, u32, u32, u32);
 BOOL ov07_0222FFD0(void *);
 BOOL ov07_0223049C(void *, void *);
 BOOL ov07_0223061C(void *, void *);
-BOOL ov07_022222F0(void *, void *);
+BOOL BattleAnimUtil_UpdateLinearMotionSprite(void *, void *);
 
 void ov07_0222DCD8(void *, void *);
 void ov07_0222E4F8(void *, void *);

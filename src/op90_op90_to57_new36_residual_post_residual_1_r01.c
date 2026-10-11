@@ -1,7 +1,7 @@
 #pragma force_active on
 #include "global.h"
 #include "sprite_system.h"
-BOOL ov07_022222F0(void *state, ManagedSprite *sprite);
+BOOL BattleAnimUtil_UpdateLinearMotionSprite(void *state, ManagedSprite *sprite);
 BOOL ov07_0222FF04(ManagedSprite *sprite, void *state);
 // @fn ov07_0222FF04
 BOOL ov07_0222FF04(ManagedSprite *sprite, void *state) {
@@ -10,7 +10,7 @@ BOOL ov07_0222FF04(ManagedSprite *sprite, void *state) {
     s16 angle;
     fx32 sin;
     f32 scale;
-    if (ov07_022222F0(state, sprite)) {
+    if (BattleAnimUtil_UpdateLinearMotionSprite(state, sprite)) {
         ManagedSprite_GetPositionXY(sprite, &x, &y);
         angle = x;
         sin = FX_SinIdx((u16)(angle * 364));

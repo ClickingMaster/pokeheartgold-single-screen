@@ -47,7 +47,7 @@ void ov07_0222AE14(void *task, AEWork *work) {
     s32 x;
     s32 y;
     if (work->state == 0) {
-        if (!ov07_0222260C(work->anim)) {
+        if (!BattleAnimUtil_UpdateScaleMotionXY(work->anim)) {
             ManagedSprite_SetDrawFlag(work->sprite0, FALSE);
             ManagedSprite_SetDrawFlag(work->sprite1, FALSE);
             ManagedSprite_SetDrawFlag(work->sprite1, FALSE);
@@ -55,9 +55,9 @@ void ov07_0222AE14(void *task, AEWork *work) {
             BattleAnimUtil_FreeWork(work);
             return;
         }
-        ov07_02222644(work->anim, &x, &y);
+        BattleAnimUtil_GetScaleFloat(work->anim, &x, &y);
         ManagedSprite_SetAffineScale(work->sprite0, x, y);
-        ov07_022226FC(work->sprite0, work->attr, work->species, work->field74, 0);
+        BattleAnimUtil_AlignSpriteToScale(work->sprite0, work->attr, work->species, work->field74, 0);
         ManagedSprite_TickFrame(work->sprite0);
         ManagedSprite_TickFrame(work->sprite1);
         ManagedSprite_TickFrame(work->sprite2);
@@ -90,7 +90,7 @@ void ov07_0222AEA0(void *owner) {
         ManagedSprite_SetDrawPriority(work->sprite1, 70);
         ManagedSprite_SetDrawPriority(work->sprite2, 50);
     }
-    ov07_02222590(work->anim, 100, 20, 100, 20, 100, 10);
+    BattleAnimUtil_InitScaleMotionXY(work->anim, 100, 20, 100, 20, 100, 10);
     BattleAnimSystem_CreateTaskDefaultPriority(work->owner, (void *)ov07_0222AE14, work);
 }
 

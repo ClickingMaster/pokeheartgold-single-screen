@@ -15,8 +15,8 @@ typedef struct WFA4 {
 extern const u8 ov07_022366CC[];
 extern const u8 ov07_022366CD[];
 extern const u8 ov07_022366CE[];
-void ov07_02222508(void *, s16, int, s16, int);
-int ov07_02222558(void *);
+void BattleAnimUtil_InitScaleMotion(void *, s16, int, s16, int);
+int BattleAnimUtil_UpdateScaleMotion(void *);
 void Pokepic_StartPaletteFade(void *, int, int, int, int);
 int Pokepic_ResumePaletteFade(void *);
 void Pokepic_SetAttr(void *, int, int);
@@ -28,7 +28,7 @@ void ov07_02227FA4(int task, WFA4 *work) {
     switch (work->state) {
     case 0: {
         int i = work->toggle * 3;
-        ov07_02222508(&work->animX, ov07_022366CC[i], 100, ov07_022366CD[i], ov07_022366CE[i]);
+        BattleAnimUtil_InitScaleMotion(&work->animX, ov07_022366CC[i], 100, ov07_022366CD[i], ov07_022366CE[i]);
         if (work->toggle == 0) {
             Pokepic_StartPaletteFade(work->pokepic, 0, 6, 0, 0x7FFF);
         } else {
@@ -40,7 +40,7 @@ void ov07_02227FA4(int task, WFA4 *work) {
         break;
     }
     case 1:
-        if (ov07_02222558(&work->animX) == 0 && Pokepic_ResumePaletteFade(work->pokepic) == 0) {
+        if (BattleAnimUtil_UpdateScaleMotion(&work->animX) == 0 && Pokepic_ResumePaletteFade(work->pokepic) == 0) {
             if (work->count < 4) {
                 work->state--;
             } else {

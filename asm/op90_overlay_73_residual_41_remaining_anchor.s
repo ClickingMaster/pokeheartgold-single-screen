@@ -20,19 +20,19 @@
 	.public ov73_021EA640
 	.public ov73_021EA650
 	.public ov73_021EA664
-	.public ov73_021EA684
-	.public ov73_021EA68C
-	.public ov73_021EA69C
-	.public ov73_021EA6AC
-	.public ov73_021EA6D4
-	.public ov73_021EA6F0
-	.public ov73_021EA70C
-	.public ov73_021EA728
+	.public sNintendoWfcUnusedArrowPositions
+	.public sNintendoWfcUnusedGraphicsModes
+	.public sNintendoWfcUnusedObjCharTransferTemplate
+	.public sNintendoWfcUnusedGraphicsBanks
+	.public sNintendoWfcUnusedBgTemplate_Sub1
+	.public sNintendoWfcUnusedBgTemplate_Main1
+	.public sNintendoWfcUnusedBgTemplate_Main0
+	.public sNintendoWfcUnusedBgTemplate_Sub0
 	.public sRecordMixingHandlers
-	.public ov73_021EA83C
-	.public ov73_021EA840
-	.public ov73_021EA844
-	.public ov73_021EA848
+	.public sNintendoWfcUnusedModeInit
+	.public sNintendoWfcUnusedModeMain
+	.public sNintendoWfcUnusedModeExit
+	.public sNintendoWfcUnusedStates
 	.extern ov73_021E6444
 	.extern ov73_021E6484
 	.extern ov73_021E66F4
@@ -73,9 +73,9 @@
 	.extern ov73_021E7C0C
 	.extern ov73_021E7C50
 	.extern ov73_021E7C94
-	.extern ov73_021E84D0
-	.extern ov73_021E85AC
-	.extern ov73_021E85DC
+	.extern NintendoWfcUnused_SessionInit
+	.extern NintendoWfcUnused_SessionMain
+	.extern NintendoWfcUnused_SessionExit
 	.extern ov73_021E8BFC
 	.extern ov73_021E8C2C
 	.extern ov73_021E8C8C
@@ -114,8 +114,8 @@
 	.extern ov73_021E9A6C
 	.extern ov73_021E9B58
 	.extern ov73_021E9B94
-	.extern ov73_021E9B9C
-	.extern ov73_021E9BB4
+	.extern NintendoWfcUnused_StartSave
+	.extern NintendoWfcUnused_Save
 	.extern ov73_021E9BD4
 	.extern ov73_021E9C04
 	.extern ov73_021E9C30
@@ -124,15 +124,15 @@
 	.extern ov73_021E9CBC
 	.extern ov73_021E9CD8
 	.extern ov73_021E9D10
-	.extern ov73_021E9D14
+	.extern NintendoWfcUnused_StartExit
 	.extern ov73_021E9D44
-	.extern ov73_021E9D6C
-	.extern ov73_021E9DE0
-	.extern ov73_021E9EAC
-	.extern ov73_021E9ECC
-	.extern ov73_021E9F00
-	.extern ov73_021E9F9C
-	.extern ov73_021E9FC8
+	.extern NintendoWfcUnused_ShowHttpError
+	.extern NintendoWfcUnused_Disconnect
+	.extern NintendoWfcUnused_WaitMessage
+	.extern NintendoWfcUnused_WaitMessageAndDelay
+	.extern NintendoWfcUnused_OpenYesNoPrompt
+	.extern NintendoWfcUnused_ShowDwcError
+	.extern NintendoWfcUnused_WaitErrorDismiss
 	.extern RecordMixing_FriendGroup_GetSize
 	.extern RecordMixing_FriendGroup_Load
 	.extern RecordMixing_FriendGroup_Merge
@@ -229,37 +229,37 @@ ov73_021EA664: ; 0x021EA664
 	.byte 0x00, 0x17, 0x0D, 0x07
 	.byte 0x04, 0x0D, 0x00, 0x00
 
-ov73_021EA684: ; 0x021EA684
+sNintendoWfcUnusedArrowPositions: ; 0x021EA684
 	.byte 0xE0, 0x00, 0x6F, 0x00, 0xE0, 0x00, 0x81, 0x00
 
-ov73_021EA68C: ; 0x021EA68C
+sNintendoWfcUnusedGraphicsModes: ; 0x021EA68C
 	.byte 0x01, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov73_021EA69C: ; 0x021EA69C
+sNintendoWfcUnusedObjCharTransferTemplate: ; 0x021EA69C
 	.byte 0x14, 0x00, 0x00, 0x00
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x96, 0x00, 0x00, 0x00
 
-ov73_021EA6AC: ; 0x021EA6AC
+sNintendoWfcUnusedGraphicsBanks: ; 0x021EA6AC
 	.byte 0x01, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 	.byte 0x60, 0x00, 0x00, 0x00
 
-ov73_021EA6D4: ; 0x021EA6D4
+sNintendoWfcUnusedBgTemplate_Sub1: ; 0x021EA6D4
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1B, 0x02, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov73_021EA6F0: ; 0x021EA6F0
+sNintendoWfcUnusedBgTemplate_Main1: ; 0x021EA6F0
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x1E, 0x02, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov73_021EA70C: ; 0x021EA70C
+sNintendoWfcUnusedBgTemplate_Main0: ; 0x021EA70C
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1F, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov73_021EA728: ; 0x021EA728
+sNintendoWfcUnusedBgTemplate_Sub0: ; 0x021EA728
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1E, 0x04, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
@@ -311,16 +311,16 @@ sRecordMixingStateFuncs:
 	.word ov73_021E6CC0
 	.word RecordMixing_State_WaitText
 
-ov73_021EA83C: ; 0x021EA83C
-	.word ov73_021E84D0
+sNintendoWfcUnusedModeInit: ; 0x021EA83C
+	.word NintendoWfcUnused_SessionInit
 
-ov73_021EA840: ; 0x021EA840
-	.word ov73_021E85AC
+sNintendoWfcUnusedModeMain: ; 0x021EA840
+	.word NintendoWfcUnused_SessionMain
 
-ov73_021EA844: ; 0x021EA844
-	.word ov73_021E85DC
+sNintendoWfcUnusedModeExit: ; 0x021EA844
+	.word NintendoWfcUnused_SessionExit
 
-ov73_021EA848: ; 0x021EA848
+sNintendoWfcUnusedStates: ; 0x021EA848
 	.word ov73_021E8BFC
 	.word ov73_021E8C2C
 	.word ov73_021E8D0C
@@ -360,24 +360,24 @@ ov73_021EA848: ; 0x021EA848
 	.word ov73_021E9A3C
 	.word ov73_021E9A6C
 	.word ov73_021E9B58
-	.word ov73_021E9B9C
-	.word ov73_021E9BB4
+	.word NintendoWfcUnused_StartSave
+	.word NintendoWfcUnused_Save
 	.word ov73_021E9C8C
 	.word ov73_021E9CBC
 	.word ov73_021E9CD8
 	.word ov73_021E9D10
 	.word ov73_021E9B94
-	.word ov73_021E9D14
-	.word ov73_021E9EAC
-	.word ov73_021E9F00
-	.word ov73_021E9ECC
+	.word NintendoWfcUnused_StartExit
+	.word NintendoWfcUnused_WaitMessage
+	.word NintendoWfcUnused_OpenYesNoPrompt
+	.word NintendoWfcUnused_WaitMessageAndDelay
 	.word ov73_021E9D44
 	.word ov73_021E8C8C
 	.word ov73_021E8CBC
-	.word ov73_021E9D6C
-	.word ov73_021E9DE0
-	.word ov73_021E9F9C
-	.word ov73_021E9FC8
+	.word NintendoWfcUnused_ShowHttpError
+	.word NintendoWfcUnused_Disconnect
+	.word NintendoWfcUnused_ShowDwcError
+	.word NintendoWfcUnused_WaitErrorDismiss
 
 	.bss
 

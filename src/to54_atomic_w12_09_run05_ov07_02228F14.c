@@ -43,19 +43,19 @@ s32 ov07_0221FAF8(s32, s32);                                                    
 s32 ov07_0221FB78(s32, s32);                                                               /* extern */
 s32 ov07_02222004(s32, s32);                                                               /* extern */
 s32 ov07_0222202C(s32, s32);                                                               /* extern */
-M2C_UNK ov07_02222268(void *, s16, s16, s32, s32);                                         /* extern */
-s32 ov07_022222B4(void *);                                                                 /* extern */
-M2C_UNK ov07_022223F0(void *, s32, s32, s32);                                              /* extern */
-s32 ov07_02222440(void *);                                                                 /* extern */
-M2C_UNK ov07_02222590(void *, s32, s32, s32, s32, s32, s32);                               /* extern */
-s32 ov07_0222260C(void *);                                                                 /* extern */
-M2C_UNK ov07_02222644(void *, f32 *, s32 *);                                               /* extern */
-M2C_UNK ov07_022226FC(s32 *, s16, s16, s32, s32);                                          /* extern */
-M2C_UNK ov07_022227A8(void *, s16, s16, s16, s32);                                         /* extern */
-s32 ov07_022227D8(void *);                                                                 /* extern */
-s32 ov07_0222283C(void *, s16, s16, s32);                                                  /* extern */
-M2C_UNK ov07_02222AC4(void *, s32, s32, s32, s32, s32);                                    /* extern */
-M2C_UNK ov07_02222AF4(void *);                                                             /* extern */
+M2C_UNK BattleAnimUtil_InitLinearMotion(void *, s16, s16, s32, s32);                                         /* extern */
+s32 BattleAnimUtil_UpdateLinearMotion(void *);                                                                 /* extern */
+M2C_UNK BattleAnimUtil_InitValueMotion(void *, s32, s32, s32);                                              /* extern */
+s32 BattleAnimUtil_UpdateValueMotion(void *);                                                                 /* extern */
+M2C_UNK BattleAnimUtil_InitScaleMotionXY(void *, s32, s32, s32, s32, s32, s32);                               /* extern */
+s32 BattleAnimUtil_UpdateScaleMotionXY(void *);                                                                 /* extern */
+M2C_UNK BattleAnimUtil_GetScaleFloat(void *, f32 *, s32 *);                                               /* extern */
+M2C_UNK BattleAnimUtil_AlignSpriteToScale(s32 *, s16, s16, s32, s32);                                          /* extern */
+M2C_UNK BattleAnimUtil_InitShake(void *, s16, s16, s16, s32);                                         /* extern */
+s32 BattleAnimUtil_UpdateShake(void *);                                                                 /* extern */
+s32 BattleAnimUtil_UpdateShakePokepic(void *, s16, s16, s32);                                                  /* extern */
+M2C_UNK BattleAnimUtil_StartBlendAlphaMotion(void *, s32, s32, s32, s32, s32);                                    /* extern */
+M2C_UNK BattleAnimUtil_IsBlendAlphaMotionDone(void *);                                                             /* extern */
 M2C_UNK BattleAnimUtil_SetBlendWithBattleBg(s32, s32, s32);                                                      /* extern */
 M2C_UNK BattleAnimUtil_SetBlendWithMask(s32, s32, s32, s32);                                                 /* extern */
 M2C_UNK BattleAnimUtil_GetPicPosition(s32, M2C_UNK *);                                                     /* extern */
@@ -88,12 +88,12 @@ void ov07_02228F14(s32 arg0, void *arg1) {
     temp_r0 = M2C_FIELD(arg1, u8 *, 0);
     switch (temp_r0) { /* irregular */
     case 0:
-        ov07_022227A8(arg1 + 0x38, M2C_FIELD(arg1, s16 *, 0x1C), M2C_FIELD(arg1, s16 *, 0x1E), M2C_FIELD(arg1, s16 *, 0x20), (s32)M2C_FIELD(arg1, s16 *, 0x22));
+        BattleAnimUtil_InitShake(arg1 + 0x38, M2C_FIELD(arg1, s16 *, 0x1C), M2C_FIELD(arg1, s16 *, 0x1E), M2C_FIELD(arg1, s16 *, 0x20), (s32)M2C_FIELD(arg1, s16 *, 0x22));
         M2C_FIELD(arg1, u8 *, 0) = (u8)(M2C_FIELD(arg1, u8 *, 0) + 1);
         return;
     case 1:
         BattleAnimUtil_GetPicPosition(M2C_FIELD(arg1, s32 *, 0x2C), &sp4);
-        if (ov07_0222283C(arg1 + 0x38, M2C_FIELD(&sp4, s16 *, 0), M2C_FIELD(&sp4, s16 *, 2), M2C_FIELD(arg1, s32 *, 0x2C)) == 0) {
+        if (BattleAnimUtil_UpdateShakePokepic(arg1 + 0x38, M2C_FIELD(&sp4, s16 *, 0), M2C_FIELD(&sp4, s16 *, 2), M2C_FIELD(arg1, s32 *, 0x2C)) == 0) {
             M2C_FIELD(arg1, u8 *, 0) = (u8)(M2C_FIELD(arg1, u8 *, 0) + 1);
             return;
         }

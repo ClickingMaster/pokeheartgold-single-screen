@@ -513,11 +513,11 @@ void BattleAnimTask_ShakeTargets(SysTask *task, void *data) {
     int i;
     switch (work->common.state[0]) {
     case 0:
-        ov07_022227A8(&work->shake, work->ampX, work->ampY, work->interval, work->count);
+        BattleAnimUtil_InitShake(&work->shake, work->ampX, work->ampY, work->interval, work->count);
         work->common.state[0]++;
         return;
     case 1:
-        if (ov07_022227D8(&work->shake) == FALSE) {
+        if (BattleAnimUtil_UpdateShake(&work->shake) == FALSE) {
             work->common.state[0]++;
             return;
         }
@@ -832,11 +832,11 @@ void BattleAnimTask_RotateBattler(SysTask *task, void *data) {
     switch (work->state) {
     case 0:
     case 1:
-        if (ov07_02222440(&work->rotation) == TRUE) {
+        if (BattleAnimUtil_UpdateValueMotion(&work->rotation) == TRUE) {
             Pokepic_SetAttr(work->pokepic, POKEPIC_ZROT, (u16)work->rotation.value);
             return;
         }
-        ov07_022223F0(&work->rotation, work->rotation.value, work->startAngle, work->duration);
+        BattleAnimUtil_InitValueMotion(&work->rotation, work->rotation.value, work->startAngle, work->duration);
         work->state++;
         return;
     case 2:
@@ -867,7 +867,7 @@ void BattleAnimFunc_RotateBattler(BattleAnimSystem *system) {
     } else {
         battler = BattleAnimSystem_GetAttacker(work->system);
     }
-    ov07_022223F0(&work->rotation, work->startAngle, BattleAnimSystem_GetArg(system, 1), work->duration);
+    BattleAnimUtil_InitValueMotion(&work->rotation, work->startAngle, BattleAnimSystem_GetArg(system, 1), work->duration);
     sign = ov07_02222004(system, battler);
     work->rotation.step *= sign;
     if (mode == 2) {
@@ -892,7 +892,7 @@ void BattleAnimFunc_RotateBattler(BattleAnimSystem *system) {
 // Moves a battler around an ellipse
 void BattleAnimTask_CircleBattler(SysTask *task, void *data) {
     BattleAnimCircleBattlerWork *work = data;
-    if (ov07_02222240(&work->motion, work->x, work->y, work->pokepic) == FALSE) {
+    if (BattleAnimUtil_UpdateSinMotionPokepic(&work->motion, work->x, work->y, work->pokepic) == FALSE) {
         Pokepic_SetAttr(work->pokepic, POKEPIC_X, work->x);
         Pokepic_SetAttr(work->pokepic, POKEPIC_Y, work->y - 8);
         Pokepic_SetAttr(work->pokepic, POKEPIC_ZROT, 0);
@@ -941,18 +941,18 @@ void BattleAnimSpritePop_Start(void *data, s16 x, s16 y) {
     ManagedSprite_SetDrawFlag(work->sprite, TRUE);
     ManagedSprite_SetPositionXY(work->sprite, x, y);
     work->shrinking = FALSE;
-    ov07_02222508(&work->scale, 10, 10, 14, 4);
+    BattleAnimUtil_InitScaleMotion(&work->scale, 10, 10, 14, 4);
 }
 
 BOOL BattleAnimSpritePop_Update(void *data) {
     BattleAnimSpritePopWork *work = data;
-    if (ov07_02222748(&work->scale, work->sprite) == FALSE) {
+    if (BattleAnimUtil_UpdateScaleMotionSprite(&work->scale, work->sprite) == FALSE) {
         if (work->shrinking) {
             ManagedSprite_SetDrawFlag(work->sprite, FALSE);
             return TRUE;
         }
         work->shrinking = TRUE;
-        ov07_02222508(&work->scale, 14, 10, 12, 2);
+        BattleAnimUtil_InitScaleMotion(&work->scale, 14, 10, 12, 2);
     }
     return FALSE;
 }
@@ -1203,8 +1203,8 @@ void BattleAnimTask_PulseBattlerSprite(SysTask *task, void *data) {
     BOOL active;
     switch (work->state) {
     case 0:
-        ov07_02222508(&work->scale, (s16)work->start, (s16)work->divisor, (s16)work->end, work->durations >> 16);
-        ov07_02222644(&work->scale, &scaleX, &scaleY);
+        BattleAnimUtil_InitScaleMotion(&work->scale, (s16)work->start, (s16)work->divisor, (s16)work->end, work->durations >> 16);
+        BattleAnimUtil_GetScaleFloat(&work->scale, &scaleX, &scaleY);
         if (work->flipX == TRUE) {
             scaleX = 0.0f - scaleX;
         }
@@ -1212,31 +1212,31 @@ void BattleAnimTask_PulseBattlerSprite(SysTask *task, void *data) {
         work->state++;
         break;
     case 1:
-        active = ov07_02222558(&work->scale);
-        ov07_02222644(&work->scale, &scaleX, &scaleY);
+        active = BattleAnimUtil_UpdateScaleMotion(&work->scale);
+        BattleAnimUtil_GetScaleFloat(&work->scale, &scaleX, &scaleY);
         if (work->flipX == TRUE) {
             scaleX = 0.0f - scaleX;
         }
         ManagedSprite_SetAffineScale(work->sprite, scaleX, scaleY);
         if (active) {
-            ov07_022226FC(work->sprite, work->y, work->height, work->scale.curY, 0);
+            BattleAnimUtil_AlignSpriteToScale(work->sprite, work->y, work->height, work->scale.curY, 0);
         } else {
             work->state++;
         }
         break;
     case 2:
-        ov07_02222508(&work->scale, (s16)work->end, (s16)work->divisor, (s16)work->start, (u16)work->durations);
+        BattleAnimUtil_InitScaleMotion(&work->scale, (s16)work->end, (s16)work->divisor, (s16)work->start, (u16)work->durations);
         work->state++;
         break;
     case 3:
-        active = ov07_02222558(&work->scale);
-        ov07_02222644(&work->scale, &scaleX, &scaleY);
+        active = BattleAnimUtil_UpdateScaleMotion(&work->scale);
+        BattleAnimUtil_GetScaleFloat(&work->scale, &scaleX, &scaleY);
         if (work->flipX == TRUE) {
             scaleX = 0.0f - scaleX;
         }
         ManagedSprite_SetAffineScale(work->sprite, scaleX, scaleY);
         if (active) {
-            ov07_022226FC(work->sprite, work->y, work->height, work->scale.curY, 0);
+            BattleAnimUtil_AlignSpriteToScale(work->sprite, work->y, work->height, work->scale.curY, 0);
         } else if (--work->count <= 0) {
             work->state++;
         } else {
@@ -1289,13 +1289,13 @@ void BattleAnimTask_StretchBattler(SysTask *task, void *data) {
     BattleAnimStretchBattlerWork *work = data;
     switch (work->state) {
     case 0:
-        ov07_02222590(&work->scale, (s16)work->startX, (s16)work->endX, (s16)work->startY, (s16)work->endY, (s16)work->divisor, work->durations >> 16);
-        ov07_02222768(&work->scale, work->pokepic);
+        BattleAnimUtil_InitScaleMotionXY(&work->scale, (s16)work->startX, (s16)work->endX, (s16)work->startY, (s16)work->endY, (s16)work->divisor, work->durations >> 16);
+        BattleAnimUtil_UpdateScaleMotionPokepic(&work->scale, work->pokepic);
         work->state++;
         break;
     case 1:
-        if (ov07_02222788(&work->scale, work->pokepic)) {
-            ov07_022226C4(work->pokepic, work->y, work->height, work->scale.curY, 0);
+        if (BattleAnimUtil_UpdateScaleMotionXYPokepic(&work->scale, work->pokepic)) {
+            BattleAnimUtil_AlignPokepicToScale(work->pokepic, work->y, work->height, work->scale.curY, 0);
         } else {
             work->state++;
         }
@@ -1308,13 +1308,13 @@ void BattleAnimTask_StretchBattler(SysTask *task, void *data) {
             break;
         }
     case 3:
-        ov07_02222590(&work->scale, (s16)work->endX, (s16)work->startX, (s16)work->endY, (s16)work->startY, (s16)work->divisor, (u16)work->durations);
-        ov07_02222788(&work->scale, work->pokepic);
+        BattleAnimUtil_InitScaleMotionXY(&work->scale, (s16)work->endX, (s16)work->startX, (s16)work->endY, (s16)work->startY, (s16)work->divisor, (u16)work->durations);
+        BattleAnimUtil_UpdateScaleMotionXYPokepic(&work->scale, work->pokepic);
         work->state++;
         break;
     case 4:
-        if (ov07_02222788(&work->scale, work->pokepic)) {
-            ov07_022226C4(work->pokepic, work->y, work->height, work->scale.curY, 0);
+        if (BattleAnimUtil_UpdateScaleMotionXYPokepic(&work->scale, work->pokepic)) {
+            BattleAnimUtil_AlignPokepicToScale(work->pokepic, work->y, work->height, work->scale.curY, 0);
         } else if (--work->count <= 0) {
             work->state++;
         } else {
@@ -1428,7 +1428,7 @@ void BattleAnimFunc_StretchBattler(BattleAnimSystem *system) {
 
 void BattleAnimTask_BlendBattlerSprites(SysTask *task, void *data) {
     BattleAnimBlendBattlerSpritesWork *work = data;
-    if (ov07_02222AF4(&work->blend)) {
+    if (BattleAnimUtil_IsBlendAlphaMotionDone(&work->blend)) {
         Heap_Free(work);
         BattleAnimSystem_DestroyTask(work->system, task); // reads the freed work
     } else {
@@ -1455,7 +1455,7 @@ void BattleAnimFunc_BlendBattlerSprites(BattleAnimSystem *system) {
     endEva = BattleAnimSystem_GetArg(system, 2);
     endEvb = BattleAnimSystem_GetArg(system, 4);
     duration = BattleAnimSystem_GetArg(system, 5);
-    ov07_02222AC4(&work->blend, (s16)startEva, (s16)endEva, (s16)startEvb, (s16)endEvb, duration);
+    BattleAnimUtil_StartBlendAlphaMotion(&work->blend, (s16)startEva, (s16)endEva, (s16)startEvb, (s16)endEvb, duration);
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_BlendBattlerSprites, work);
 }
 
@@ -1506,11 +1506,11 @@ void BattleAnimTask_SlideBattler(SysTask *task, void *data) {
     BattleAnimSlideBattlerWork *work = data;
     switch (work->common.state[0]) {
     case 0:
-        ov07_02222268(&work->motion, work->target.pos[0], work->target.pos[0] + work->dx, work->target.pos[1], work->target.pos[1], (u16)work->duration);
+        BattleAnimUtil_InitLinearMotion(&work->motion, work->target.pos[0], work->target.pos[0] + work->dx, work->target.pos[1], work->target.pos[1], (u16)work->duration);
         work->common.state[0]++;
         break;
     case 1:
-        if (ov07_022222B4(&work->motion) == FALSE) {
+        if (BattleAnimUtil_UpdateLinearMotion(&work->motion) == FALSE) {
             work->common.state[0]++;
         }
         Pokepic_SetAttr(work->target.pokepic, POKEPIC_X, work->motion.x);
@@ -1573,10 +1573,10 @@ void BattleAnimTask_SlideBattler2(SysTask *task, void *data) {
             work->common.state[0] = 0xFF;
             return;
         }
-        ov07_02222268(&work->motion, work->target.pos[0], work->target.pos[0] + work->dx, work->target.pos[1], work->target.pos[1], (u16)work->duration);
+        BattleAnimUtil_InitLinearMotion(&work->motion, work->target.pos[0], work->target.pos[0] + work->dx, work->target.pos[1], work->target.pos[1], (u16)work->duration);
         work->common.state[0]++;
     case 1:
-        if (ov07_022222B4(&work->motion) == FALSE) {
+        if (BattleAnimUtil_UpdateLinearMotion(&work->motion) == FALSE) {
             work->common.state[0]++;
         }
         Pokepic_SetAttr(work->target.pokepic, POKEPIC_X, work->motion.x);
@@ -1637,12 +1637,12 @@ void BattleAnimTask_ShakeAndScaleBattler(SysTask *task, void *data) {
     int start, end, duration;
     switch (work->state) {
     case 0:
-        if (ov07_02222558(&work->scale) == TRUE) {
-            ov07_022227D8(&work->shake);
+        if (BattleAnimUtil_UpdateScaleMotion(&work->scale) == TRUE) {
+            BattleAnimUtil_UpdateShake(&work->shake);
             Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEW, work->scale.x);
             Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEH, work->scale.y);
             Pokepic_AddAttr(work->pokepic, POKEPIC_X, work->shake.x);
-            Pokepic_SetAttr(work->pokepic, POKEPIC_Y, work->baseY + ov07_02222674(work->baseY, work->height, work->scale.curY));
+            Pokepic_SetAttr(work->pokepic, POKEPIC_Y, work->baseY + BattleAnimUtil_CalcScaleYOffset(work->baseY, work->height, work->scale.curY));
             return;
         }
         work->state++;
@@ -1654,23 +1654,23 @@ void BattleAnimTask_ShakeAndScaleBattler(SysTask *task, void *data) {
         start = BattleAnimSystem_GetArg(work->system, 0);
         end = BattleAnimSystem_GetArg(work->system, 1);
         duration = BattleAnimSystem_GetArg(work->system, 3);
-        ov07_02222508(&work->scale, (s16)start, 100, (s16)end, duration);
+        BattleAnimUtil_InitScaleMotion(&work->scale, (s16)start, 100, (s16)end, duration);
         work->state++;
         return;
     case 2:
-        if (ov07_02222558(&work->scale) == TRUE) {
+        if (BattleAnimUtil_UpdateScaleMotion(&work->scale) == TRUE) {
             Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEW, work->scale.x);
             Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEH, work->scale.y);
-            Pokepic_SetAttr(work->pokepic, POKEPIC_Y, work->baseY + ov07_02222674(work->baseY, work->height, work->scale.curY));
+            Pokepic_SetAttr(work->pokepic, POKEPIC_Y, work->baseY + BattleAnimUtil_CalcScaleYOffset(work->baseY, work->height, work->scale.curY));
             return;
         }
         work->state++;
         return;
     case 3:
-        if (ov07_02222558(&work->scale) == TRUE) {
+        if (BattleAnimUtil_UpdateScaleMotion(&work->scale) == TRUE) {
             Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEW, work->scale.x);
             Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEH, work->scale.y);
-            Pokepic_SetAttr(work->pokepic, POKEPIC_Y, work->baseY + ov07_02222674(work->baseY, work->height, work->scale.curY));
+            Pokepic_SetAttr(work->pokepic, POKEPIC_Y, work->baseY + BattleAnimUtil_CalcScaleYOffset(work->baseY, work->height, work->scale.curY));
             return;
         }
         Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEW, 256);
@@ -1699,8 +1699,8 @@ void BattleAnimFunc_ShakeAndScaleBattler(BattleAnimSystem *system) {
     work->baseY = Pokepic_GetAttr(work->pokepic, POKEPIC_Y);
     work->height = ov07_0221FAA0(work->system, BattleAnimSystem_GetAttacker(work->system));
     end = BattleAnimSystem_GetArg(system, 0);
-    ov07_02222508(&work->scale, 100, 100, (s16)end, BattleAnimSystem_GetArg(system, 2));
-    ov07_022227A8(&work->shake, 2, 0, 0, 10);
+    BattleAnimUtil_InitScaleMotion(&work->scale, 100, 100, (s16)end, BattleAnimSystem_GetArg(system, 2));
+    BattleAnimUtil_InitShake(&work->shake, 2, 0, 0, 10);
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_ShakeAndScaleBattler, work);
 }
 
@@ -1710,12 +1710,12 @@ void BattleAnimTask_ShakeAndScaleBattlerXY(SysTask *task, void *data) {
     BattleAnimShakeAndScaleXYWork *work = data;
     switch (work->state) {
     case 0:
-        if (ov07_0222260C(&work->scale) == TRUE) {
-            ov07_022227D8(&work->shake);
+        if (BattleAnimUtil_UpdateScaleMotionXY(&work->scale) == TRUE) {
+            BattleAnimUtil_UpdateShake(&work->shake);
             Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEW, work->scale.x);
             Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEH, work->scale.y);
             Pokepic_AddAttr(work->pokepic, POKEPIC_X, work->shake.x);
-            Pokepic_SetAttr(work->pokepic, POKEPIC_Y, work->baseY + ov07_02222674(work->baseY, work->height, work->scale.curY));
+            Pokepic_SetAttr(work->pokepic, POKEPIC_Y, work->baseY + BattleAnimUtil_CalcScaleYOffset(work->baseY, work->height, work->scale.curY));
         } else {
             work->state++;
         }
@@ -1723,24 +1723,24 @@ void BattleAnimTask_ShakeAndScaleBattlerXY(SysTask *task, void *data) {
     case 1:
         work->timer++;
         if (work->timer > work->delay) {
-            ov07_02222590(&work->scale, (s16)((work->scaleX >> 16) & 0xFFFF), (s16)(work->scaleX & 0xFF), (s16)((work->scaleY >> 16) & 0xFFFF), (s16)(work->scaleY & 0xFF), 100, work->duration);
+            BattleAnimUtil_InitScaleMotionXY(&work->scale, (s16)((work->scaleX >> 16) & 0xFFFF), (s16)(work->scaleX & 0xFF), (s16)((work->scaleY >> 16) & 0xFFFF), (s16)(work->scaleY & 0xFF), 100, work->duration);
             work->state++;
         }
         break;
     case 2:
-        if (ov07_0222260C(&work->scale) == TRUE) {
+        if (BattleAnimUtil_UpdateScaleMotionXY(&work->scale) == TRUE) {
             Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEW, work->scale.x);
             Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEH, work->scale.y);
-            Pokepic_SetAttr(work->pokepic, POKEPIC_Y, work->baseY + ov07_02222674(work->baseY, work->height, work->scale.curY));
+            Pokepic_SetAttr(work->pokepic, POKEPIC_Y, work->baseY + BattleAnimUtil_CalcScaleYOffset(work->baseY, work->height, work->scale.curY));
         } else {
             work->state++;
         }
         break;
     case 3:
-        if (ov07_0222260C(&work->scale) == TRUE) {
+        if (BattleAnimUtil_UpdateScaleMotionXY(&work->scale) == TRUE) {
             Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEW, work->scale.x);
             Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEH, work->scale.y);
-            Pokepic_SetAttr(work->pokepic, POKEPIC_Y, work->baseY + ov07_02222674(work->baseY, work->height, work->scale.curY));
+            Pokepic_SetAttr(work->pokepic, POKEPIC_Y, work->baseY + BattleAnimUtil_CalcScaleYOffset(work->baseY, work->height, work->scale.curY));
         } else {
             Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEW, 256);
             Pokepic_SetAttr(work->pokepic, POKEPIC_AFFINEH, 256);
@@ -1776,8 +1776,8 @@ void BattleAnimFunc_ShakeAndScaleBattlerXY(BattleAnimSystem *system) {
     endX = BattleAnimSystem_GetArg(system, 0) & 0xFF;
     startY = (s32)BattleAnimSystem_GetArg(system, 1) >> 16;
     endY = BattleAnimSystem_GetArg(system, 1) & 0xFF;
-    ov07_02222590(&work->scale, startX, endX, startY, endY, 100, BattleAnimSystem_GetArg(system, 2));
-    ov07_022227A8(&work->shake, 2, 0, 0, 10);
+    BattleAnimUtil_InitScaleMotionXY(&work->scale, startX, endX, startY, endY, 100, BattleAnimSystem_GetArg(system, 2));
+    BattleAnimUtil_InitShake(&work->shake, 2, 0, 0, 10);
     BattleAnimSystem_CreateTaskDefaultPriority(work->system, BattleAnimTask_ShakeAndScaleBattlerXY, work);
 }
 
@@ -1813,10 +1813,10 @@ void BattleAnimTask_MoveBattlerBy(SysTask *task, void *data) {
     BattleAnimMoveBattlerWork *work = data;
     switch (work->common.state[0]) {
     case 0:
-        ov07_02222268(&work->motion, work->target.pos[0], (s16)(work->target.pos[0] + work->dx), work->target.pos[1], (s16)(work->target.pos[1] + work->dy), (u16)work->duration);
+        BattleAnimUtil_InitLinearMotion(&work->motion, work->target.pos[0], (s16)(work->target.pos[0] + work->dx), work->target.pos[1], (s16)(work->target.pos[1] + work->dy), (u16)work->duration);
         work->common.state[0]++;
     case 1:
-        if (!ov07_022222B4(&work->motion)) {
+        if (!BattleAnimUtil_UpdateLinearMotion(&work->motion)) {
             work->common.state[0]++;
         }
         Pokepic_SetAttr(work->target.pokepic, POKEPIC_X, work->motion.x);
@@ -1885,7 +1885,7 @@ void BattleAnimFunc_MoveBattlerBy(BattleAnimSystem *system) {
 
 void BattleAnimTask_MoveBattlerSin(SysTask *task, void *data) {
     BattleAnimMoveBattlerSinWork *work = data;
-    if (ov07_02222240(&work->motion, work->target.pos[0], work->target.pos[1], work->target.pokepic) == FALSE) {
+    if (BattleAnimUtil_UpdateSinMotionPokepic(&work->motion, work->target.pos[0], work->target.pos[1], work->target.pokepic) == FALSE) {
         Pokepic_SetAttr(work->target.pokepic, POKEPIC_X, work->target.pos[0]);
         Pokepic_SetAttr(work->target.pokepic, POKEPIC_Y, work->target.pos[1] - 8);
         BattleAnimSystem_DestroyTask(work->common.system, task);
@@ -1915,7 +1915,7 @@ void BattleAnimFunc_MoveBattlerSin(BattleAnimSystem *system) {
 void BattleAnimTask_MoveBattlerLinear(SysTask *task, void *data) {
     BattleAnimMoveBattlerLinearWork *work = data;
     if (work->common.state[0] == 0) {
-        if (ov07_022222B4(&work->motion) == FALSE) {
+        if (BattleAnimUtil_UpdateLinearMotion(&work->motion) == FALSE) {
             work->common.state[0]++;
         }
         Pokepic_SetAttr(work->target.pokepic, POKEPIC_X, work->motion.x);
@@ -1960,7 +1960,7 @@ void BattleAnimFunc_MoveBattlerLinear(BattleAnimSystem *system) {
     work->offscreenX = 0;
     work->unk_5A = 0;
     work->offscreenX = BattleAnimUtil_GetBattlerSide(work->common.system, battler) == BATTLE_ANIM_SIDE_PLAYER ? -80 : 336;
-    ov07_02222268(&work->motion, work->target.pos[0], work->offscreenX, work->target.pos[1], work->target.pos[1], (u16)duration);
+    BattleAnimUtil_InitLinearMotion(&work->motion, work->target.pos[0], work->offscreenX, work->target.pos[1], work->target.pos[1], (u16)duration);
     BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, BattleAnimTask_MoveBattlerLinear, work);
 }
 
@@ -2001,10 +2001,10 @@ void ov07_02225640(BattleAnimSystem *system) {
     work->unk_5A = 0;
     work->offscreenX = BattleAnimUtil_GetBattlerSide(work->common.system, battler) == BATTLE_ANIM_SIDE_PLAYER ? -80 : 336;
     if (toHome == 0) {
-        ov07_02222268(&work->motion, work->target.pos[0], work->offscreenX, work->target.pos[1], work->target.pos[1], (u16)duration);
+        BattleAnimUtil_InitLinearMotion(&work->motion, work->target.pos[0], work->offscreenX, work->target.pos[1], work->target.pos[1], (u16)duration);
     } else {
         s16 homeX = ov07_02221F80(system, battler, 0);
-        ov07_02222268(&work->motion, work->offscreenX, homeX, work->target.pos[1], work->target.pos[1], (u16)duration);
+        BattleAnimUtil_InitLinearMotion(&work->motion, work->offscreenX, homeX, work->target.pos[1], work->target.pos[1], (u16)duration);
     }
     BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, BattleAnimTask_MoveBattlerLinear, work);
 }
@@ -2043,8 +2043,8 @@ void BattleAnimFunc_ResetBattlerPosition(BattleAnimSystem *system) {
 
 void BattleAnimTask_WaitPaletteBlend(SysTask *task, void *data) {
     BattleAnimBlendSpritePaletteWork *work = data;
-    if (ov07_02222EE8(work->blend) == FALSE) {
-        ov07_02222EF8(work->blend);
+    if (BattleAnimUtil_IsPaletteBlendActive(work->blend) == FALSE) {
+        BattleAnimUtil_FreePaletteBlend(work->blend);
         BattleAnimSystem_DestroyTask(work->common.system, task);
         Heap_Free(work);
     }
@@ -2067,7 +2067,7 @@ void BattleAnimFunc_BlendSpritePalette(BattleAnimSystem *system) {
     BattleAnimUtil_CollectSpritesByFlags(system, flags, &work->target, &count);
     u32 palette = ObjPlttTransfer_GetPaletteVramOffset(Sprite_GetPaletteProxy(work->target.sprite->sprite), NNS_G2D_VRAM_TYPE_2DMAIN);
     enum HeapID heapId = BattleAnimSystem_GetHeapID(system);
-    work->blend = ov07_02222F10(work->common.paletteData, heapId, PLTTBUF_MAIN_OBJ, (u16)(palette << 4), 16, (s8)delay, (s8)step, (u8)start, (u8)end, (u16)color, 1100);
+    work->blend = BattleAnimUtil_StartPaletteBlend(work->common.paletteData, heapId, PLTTBUF_MAIN_OBJ, (u16)(palette << 4), 16, (s8)delay, (s8)step, (u8)start, (u8)end, (u16)color, 1100);
     BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, BattleAnimTask_WaitPaletteBlend, work);
 }
 
@@ -2299,10 +2299,10 @@ void BattleAnimTask_ShakeBg(SysTask *task, void *data) {
     BattleAnimShakeBgWork *work = data;
     switch (work->state) {
     case 0:
-        ov07_022227A8(&work->shake, (s16)work->ampX, (s16)work->ampY, work->interval, work->shakeCount);
+        BattleAnimUtil_InitShake(&work->shake, (s16)work->ampX, (s16)work->ampY, work->interval, work->shakeCount);
         work->state++;
     case 1:
-        if (!ov07_022227D8(&work->shake)) {
+        if (!BattleAnimUtil_UpdateShake(&work->shake)) {
             if (work->count >= work->repeatCount) {
                 work->state++;
             } else {
@@ -2468,7 +2468,7 @@ void BattleAnimTask_MoveEmitter(SysTask *task, void *data) {
         work->counter++;
         return;
     }
-    if (!ov07_022222B4(&work->linear) && !active) {
+    if (!BattleAnimUtil_UpdateLinearMotion(&work->linear) && !active) {
         ParticleSystem_DeleteEmitter(work->particleSystem, work->emitter);
         BattleAnimSystem_DestroyTask(work->common.system, task);
         BattleAnimUtil_FreeWork(work);
@@ -2507,14 +2507,14 @@ void BattleAnimFunc_MoveEmitter(BattleAnimSystem *system) {
     toX = to.x / BATTLE_ANIM_EMITTER_PIXEL;
     fromY = from.y / BATTLE_ANIM_EMITTER_PIXEL;
     toY = to.y / BATTLE_ANIM_EMITTER_PIXEL;
-    ov07_02222268(&work->linear, (s16)fromX, (s16)(toX + work->offsetX * side), (s16)fromY, (s16)(toY + work->offsetY * side), work->duration);
+    BattleAnimUtil_InitLinearMotion(&work->linear, (s16)fromX, (s16)(toX + work->offsetX * side), (s16)fromY, (s16)(toY + work->offsetY * side), work->duration);
     if (side > 0) {
-        ov07_022223F0(&work->value, 0xE38 * side, 0x5C71 * side, 10);
+        BattleAnimUtil_InitValueMotion(&work->value, 0xE38 * side, 0x5C71 * side, 10);
     } else {
-        ov07_022223F0(&work->value, 0x3FFF * side, 0x5C71 * side, 10);
+        BattleAnimUtil_InitValueMotion(&work->value, 0x3FFF * side, 0x5C71 * side, 10);
     }
     for (i = 0; i < work->startFrame; i++) {
-        ov07_022222B4(&work->linear);
+        BattleAnimUtil_UpdateLinearMotion(&work->linear);
     }
     if (work->endFrame != 255) {
         work->frame = work->endFrame + 1;
@@ -2578,9 +2578,9 @@ void ov07_022262E8(BattleAnimSystem *system) {
     toX = to.x / BATTLE_ANIM_EMITTER_PIXEL;
     fromY = from.y / BATTLE_ANIM_EMITTER_PIXEL;
     toY = to.y / BATTLE_ANIM_EMITTER_PIXEL;
-    ov07_02222268(&work->linear, (s16)fromX, (s16)toX, (s16)fromY, (s16)toY, work->duration);
+    BattleAnimUtil_InitLinearMotion(&work->linear, (s16)fromX, (s16)toX, (s16)fromY, (s16)toY, work->duration);
     for (i = 0; i < work->startFrame; i++) {
-        ov07_022222B4(&work->linear);
+        BattleAnimUtil_UpdateLinearMotion(&work->linear);
     }
     if (work->endFrame != 255) {
         work->frame = work->endFrame + 1;
@@ -2594,7 +2594,7 @@ void BattleAnimTask_MoveEmitterArc(SysTask *task, void *data) {
     BattleAnimEmitterMotionWork *work = data;
     BOOL active = BattleAnimUtil_IsEmitterActive(work->emitter);
 
-    if (!ov07_02222384(&work->linear, &work->sin) && !active) {
+    if (!BattleAnimUtil_UpdateLinearSinMotion(&work->linear, &work->sin) && !active) {
         ParticleSystem_DeleteEmitter(work->particleSystem, work->emitter);
         BattleAnimSystem_DestroyTask(work->common.system, task);
         BattleAnimUtil_FreeWork(work);
@@ -2625,14 +2625,14 @@ void BattleAnimFunc_MoveEmitterArc(BattleAnimSystem *system) {
     toX = to.x / BATTLE_ANIM_EMITTER_PIXEL;
     fromY = from.y / BATTLE_ANIM_EMITTER_PIXEL;
     toY = to.y / BATTLE_ANIM_EMITTER_PIXEL;
-    ov07_02222338(&work->linear, &work->sin, (s16)fromX, (s16)(toX + work->offsetX * side), (s16)fromY, (s16)(toY + work->offsetY * side), work->duration, -(work->amplitude << FX32_SHIFT));
+    BattleAnimUtil_InitLinearSinMotion(&work->linear, &work->sin, (s16)fromX, (s16)(toX + work->offsetX * side), (s16)fromY, (s16)(toY + work->offsetY * side), work->duration, -(work->amplitude << FX32_SHIFT));
     if (side > 0) {
-        ov07_022223F0(&work->value, 0xE38 * side, 0x5C71 * side, 10);
+        BattleAnimUtil_InitValueMotion(&work->value, 0xE38 * side, 0x5C71 * side, 10);
     } else {
-        ov07_022223F0(&work->value, 0x3FFF * side, 0x5C71 * side, 10);
+        BattleAnimUtil_InitValueMotion(&work->value, 0x3FFF * side, 0x5C71 * side, 10);
     }
     for (i = 0; i < work->startFrame; i++) {
-        ov07_02222384(&work->linear, &work->sin);
+        BattleAnimUtil_UpdateLinearSinMotion(&work->linear, &work->sin);
     }
     if (work->endFrame != 255) {
         work->frame = work->endFrame + 1;
@@ -2646,7 +2646,7 @@ void BattleAnimTask_EmitterSinMotion(SysTask *task, void *data) {
     BattleAnimEmitterSinWork *work = data;
     BOOL active = BattleAnimUtil_IsEmitterActive(work->emitter);
 
-    if (!ov07_02222180(&work->motion) && !active) {
+    if (!BattleAnimUtil_UpdateSinMotion(&work->motion) && !active) {
         ParticleSystem_DeleteEmitter(work->particleSystem, work->emitter);
         BattleAnimSystem_DestroyTask(work->common.system, task);
         Heap_Free(work);
@@ -2691,7 +2691,7 @@ void BattleAnimFunc_EmitterSinMotion(BattleAnimSystem *system) {
     startAngleY = work->startAngleY * 0xFFFF / 360;
     endAngleY = work->endAngleY * 0xFFFF / 360;
     ov07_022220FC(&work->motion, (u16)startAngleX, (u16)endAngleX, (u16)startAngleY, (u16)endAngleY, work->ampX << FX32_SHIFT, work->ampY << FX32_SHIFT, work->duration);
-    ov07_02222180(&work->motion);
+    BattleAnimUtil_UpdateSinMotion(&work->motion);
     {
         s32 y = work->base.y + work->motion.y * BATTLE_ANIM_EMITTER_PIXEL;
         s32 x = work->base.x + work->motion.x * BATTLE_ANIM_EMITTER_PIXEL;
@@ -2745,7 +2745,7 @@ void BattleAnimTask_SpriteOrbit(SysTask *task, void *data) {
             ManagedSprite_OffsetPositionXY(work->sprite, dx, 0);
         } else {
             ManagedSprite_SetAffineOverwriteMode(work->sprite, 2);
-            ov07_022223F0(&work->angle, 0, 0xE38, 4);
+            BattleAnimUtil_InitValueMotion(&work->angle, 0, 0xE38, 4);
             ManagedSprite_SetAffineTranslation(work->sprite, -8, 16);
             work->step = 0;
             work->common.state[0]++;
@@ -2753,26 +2753,26 @@ void BattleAnimTask_SpriteOrbit(SysTask *task, void *data) {
         break;
     }
     case 1:
-        if (ov07_02222440(&work->angle) == TRUE) {
+        if (BattleAnimUtil_UpdateValueMotion(&work->angle) == TRUE) {
             ManagedSprite_SetAffineZRotation(work->sprite, (u16)work->angle.value);
         } else if (work->step > 5) {
             work->common.state[0]++;
         } else {
             switch (++work->step) {
             case 1:
-                ov07_022223F0(&work->angle, 0xE38, -0xE38, 4);
+                BattleAnimUtil_InitValueMotion(&work->angle, 0xE38, -0xE38, 4);
                 break;
             case 2:
-                ov07_022223F0(&work->angle, -0xE38, 0xE38, 4);
+                BattleAnimUtil_InitValueMotion(&work->angle, -0xE38, 0xE38, 4);
                 break;
             case 3:
-                ov07_022223F0(&work->angle, 0xE38, -0xE38, 4);
+                BattleAnimUtil_InitValueMotion(&work->angle, 0xE38, -0xE38, 4);
                 break;
             case 4:
-                ov07_022223F0(&work->angle, -0xE38, 0xE38, 4);
+                BattleAnimUtil_InitValueMotion(&work->angle, -0xE38, 0xE38, 4);
                 break;
             case 5:
-                ov07_022223F0(&work->angle, 0xE38, 0, 2);
+                BattleAnimUtil_InitValueMotion(&work->angle, 0xE38, 0, 2);
                 break;
             }
         }
@@ -2862,11 +2862,11 @@ void ov07_02226B2C(SysTask *task, void *data) {
     BattleAnimSpriteArcWork *work = data;
     switch (work->common.state[0]) {
     case 0:
-        ov07_02222338(&work->linear, &work->sin, -30, 112, 160, 112, 21, 64 * FX32_ONE);
+        BattleAnimUtil_InitLinearSinMotion(&work->linear, &work->sin, -30, 112, 160, 112, 21, 64 * FX32_ONE);
         work->common.state[0]++;
         break;
     case 1:
-        if (!ov07_022223CC(&work->linear, &work->sin, work->sprite)) {
+        if (!BattleAnimUtil_UpdateLinearSinMotionSprite(&work->linear, &work->sin, work->sprite)) {
             work->common.state[0]++;
         }
         break;

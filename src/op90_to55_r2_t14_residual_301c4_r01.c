@@ -13,8 +13,8 @@ typedef struct W {
     u8 gap2[8];
     u32 xy;
 } W;
-extern u32 *ov07_02222C84(void *);
-extern u32 ov07_02222D88(u16, u16);
+extern u32 *BattleAnimScanline_GetWriteBuffer(void *);
+extern u32 BattleAnimUtil_PackXY(u16, u16);
 void ov07_022301C4(W *w);
 // @fn ov07_022301C4
 void ov07_022301C4(W *w) {
@@ -28,7 +28,7 @@ void ov07_022301C4(W *w) {
     s16 x;
     s16 y;
     u32 xy;
-    buffer = ov07_02222C84(w->ctx);
+    buffer = BattleAnimScanline_GetWriteBuffer(w->ctx);
     end = start = w->top;
     start -= 8;
     end += 88;
@@ -54,6 +54,6 @@ void ov07_022301C4(W *w) {
         if (dest < 0) {
             dest += 192;
         }
-        buffer[dest] = ov07_02222D88(x + wave, y);
+        buffer[dest] = BattleAnimUtil_PackXY(x + wave, y);
     }
 }

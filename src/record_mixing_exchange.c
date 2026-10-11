@@ -1,3 +1,5 @@
+#include "record_mixing_exchange.h"
+
 #include "global.h"
 
 #include "assert.h"
@@ -9,26 +11,6 @@
 #include "save_rankings.h"
 #include "unk_0202E41C.h"
 #include "unk_02069528.h"
-
-#define RECORD_MIXING_SEND_SIZE    3000
-#define RECORD_MIXING_NUM_HANDLERS 10
-
-// What the merge function of a record type gets: the received records of every member.
-typedef struct RecordMixingMergeArgs {
-    enum HeapID heapID;
-    SaveData *saveData;
-    int numPlayers;
-    int localId;
-    void **records;
-    void **records2;
-} RecordMixingMergeArgs;
-
-// One record type: size and copy of the local data to send, merge of the received data.
-typedef struct RecordMixingHandler {
-    u32 (*getSize)(SaveData *saveData);
-    void *(*load)(SaveData *saveData, enum HeapID heapID, u32 size);
-    void (*merge)(RecordMixingMergeArgs *args);
-} RecordMixingHandler;
 
 // record_mixing_records.c
 u32 RecordMixing_GetGroupRecordSize(SAV_FRIEND_GRP *friendGroup);
@@ -52,8 +34,6 @@ void RecordMixing_Rankings_Merge(RecordMixingMergeArgs *args);
 void *ov73_021EA348(SaveData *saveData, enum HeapID heapID, u32 size);
 void ov73_021EA370(RecordMixingMergeArgs *args);
 void RecordMixing_BuildSendBuffer(SaveData *saveData, void *dest);
-
-extern const RecordMixingHandler sRecordMixingHandlers[RECORD_MIXING_NUM_HANDLERS];
 
 u32 RecordMixing_FriendGroup_GetSize(SaveData *saveData) {
     return RecordMixing_GetGroupRecordSize(Save_FriendGroup_Get(saveData));

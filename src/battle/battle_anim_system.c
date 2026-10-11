@@ -1062,7 +1062,7 @@ void BattleAnimScriptCmd_CallFunc(BattleAnimSystem *system) {
     system->scriptPtr++;
     funcId = *system->scriptPtr;
     system->scriptPtr++;
-    func = ov07_02223038(funcId);
+    func = BattleAnimSystem_GetFunc(funcId);
     count = *system->scriptPtr;
     system->scriptPtr++;
     for (i = 0; i < count; i++) {
@@ -2105,13 +2105,13 @@ BOOL BattleAnimBackground_StartWave(BattleAnimBgSwitchWork *work) {
     BattleAnimSystem_RegisterBgEffect(system->bgEffects, wave, 2);
     work->stopWave = TRUE;
     wave->stop = FALSE;
-    wave->bands->scanline = ov07_02222BE4(ov07_02222D90(ov07_0221FAF8(system, 2)), ov07_02222D88(0, 0), system->heapId);
+    wave->bands->scanline = BattleAnimScanline_New(BattleAnimUtil_GetBgOffsetRegister(ov07_0221FAF8(system, 2)), BattleAnimUtil_PackXY(0, 0), system->heapId);
     for (i = 0; i < 16; i++) {
         wave->bands->bands[i].start = i * 8;
         wave->bands->bands[i].end = wave->bands->bands[i].start + 8;
         wave->bands->bands[i].step = sBattleAnimBgWaveSteps[i];
         wave->bands->bands[i].offset = 0;
-        wave->bands->bands[i].scroll = ov07_02222D88(0, 0);
+        wave->bands->bands[i].scroll = BattleAnimUtil_PackXY(0, 0);
         if (ov07_0221DDB0(work, work->system, 6) == TRUE) {
             wave->bands->bands[i].step *= -1;
         }
@@ -2136,18 +2136,18 @@ void BattleAnimTask_BgWave(SysTask *task, void *data) {
     u32 *buffer;
 
     if (wave->stop == TRUE) {
-        ov07_02222C60(bands->scanline);
+        BattleAnimScanline_Free(bands->scanline);
         Heap_Free(wave->bands);
         Heap_Free(wave);
         SysTask_Destroy(task);
         return;
     }
-    buffer = ov07_02222C84(bands->scanline);
+    buffer = BattleAnimScanline_GetWriteBuffer(bands->scanline);
     for (i = 0; i < 16; i++) {
         BattleAnimBgWaveBand *band = &bands->bands[i];
         band->offset += band->step;
         for (j = band->start; j < band->end; j++) {
-            buffer[j] = ov07_02222D88((s16)band->scroll + band->offset, (s16)(band->scroll >> 16));
+            buffer[j] = BattleAnimUtil_PackXY((s16)band->scroll + band->offset, (s16)(band->scroll >> 16));
         }
     }
 }
@@ -2784,7 +2784,7 @@ void BattleAnimScriptCmd_CreateSpriteWithFunc(BattleAnimSystem *system) {
     for (; i < 10; i++) {
         system->args[i] = 0;
     }
-    func = ov07_0222304C(funcId);
+    func = BattleAnimSystem_GetSpriteFunc(funcId);
     func(system, system->context->spriteSystem, system->spriteManagers[managerIndex], sprite);
 }
 

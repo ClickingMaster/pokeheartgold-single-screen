@@ -64,8 +64,8 @@
 	.extern ov07_02236444
 	.extern ov07_02236468
 	.extern ov07_0223646A
-	.extern ov07_0223649C
-	.extern ov07_02236520
+	.extern sBattleAnimSpriteFuncTable
+	.extern sBattleAnimFuncTable
 	.extern sBattleAnimSpriteOrbitStepX
 	.extern ov07_022366C8
 	.extern ov07_022366CC
@@ -2800,7 +2800,7 @@ BattleAnimScriptCmd_CallFunc: ; 0x0221D0E8
 	ldr r0, [r1]
 	add r1, r1, #4
 	str r1, [r4, #0x18]
-	bl ov07_02223038
+	bl BattleAnimSystem_GetFunc
 	add r7, r0, #0
 	ldr r0, [r4, #0x18]
 	add r2, r4, #0
@@ -5858,15 +5858,15 @@ BattleAnimBackground_StartWave: ; 0x0221E788
 	str r0, [r6, #0x18]
 	add r0, r4, #0
 	bl ov07_0221FAF8
-	bl ov07_02222D90
+	bl BattleAnimUtil_GetBgOffsetRegister
 	add r5, r0, #0
 	mov r0, #0
 	add r1, r0, #0
-	bl ov07_02222D88
+	bl BattleAnimUtil_PackXY
 	add r1, r0, #0
 	ldr r2, [r4]
 	add r0, r5, #0
-	bl ov07_02222BE4
+	bl BattleAnimScanline_New
 	mov r4, #0
 	ldr r1, [r6, #0x20]
 	ldr r7, _0221E860 ; =sBattleAnimBgWaveSteps
@@ -5892,7 +5892,7 @@ _0221E7F4:
 	mov r0, #0
 	strh r0, [r1, #6]
 	add r1, r0, #0
-	bl ov07_02222D88
+	bl BattleAnimUtil_PackXY
 	ldr r1, [r6, #0x20]
 	mov r2, #6
 	add r1, r1, r5
@@ -5958,7 +5958,7 @@ BattleAnimTask_BgWave: ; 0x0221E87C
 	bne _0221E8AA
 	add r4, #0xc0
 	ldr r0, [r4]
-	bl ov07_02222C60
+	bl BattleAnimScanline_Free
 	ldr r0, [r5, #0x20]
 	bl Heap_Free
 	add r0, r5, #0
@@ -5971,7 +5971,7 @@ _0221E8AA:
 	add r0, r4, #0
 	add r0, #0xc0
 	ldr r0, [r0]
-	bl ov07_02222C84
+	bl BattleAnimScanline_GetWriteBuffer
 	str r0, [sp]
 	mov r0, #0
 	str r0, [sp, #4]
@@ -6006,7 +6006,7 @@ _0221E8DA:
 	add r0, r0, r2
 	lsl r0, r0, #0x10
 	lsr r0, r0, #0x10
-	bl ov07_02222D88
+	bl BattleAnimUtil_PackXY
 	stmia r5!, {r0}
 	ldrsh r0, [r4, r7]
 	add r6, r6, #1
@@ -7898,7 +7898,7 @@ _0221F6DE:
 	blt _0221F6DE
 _0221F6EC:
 	ldr r0, [sp]
-	bl ov07_0222304C
+	bl BattleAnimSystem_GetSpriteFunc
 	add r5, r0, #0
 	add r0, r4, #0
 	add r4, #0xc0
@@ -13631,7 +13631,7 @@ ov07_0222209C: ; 0x0222209C
 	add r4, r1, #0
 	add r1, sp, #4
 	add r2, sp, #0
-	bl ov07_02222644
+	bl BattleAnimUtil_GetScaleFloat
 	ldr r1, [sp, #4]
 	ldr r2, [sp]
 	add r0, r4, #0
@@ -13704,8 +13704,8 @@ ov07_022220FC: ; 0x022220FC
 	pop {r3, r4, r5, pc}
 	thumb_func_end ov07_022220FC
 
-	thumb_func_start ov07_0222212C
-ov07_0222212C: ; 0x0222212C
+	thumb_func_start BattleAnimUtil_InitSinMotionFromStep
+BattleAnimUtil_InitSinMotionFromStep: ; 0x0222212C
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	add r4, r1, #0
@@ -13747,10 +13747,10 @@ _0222214A:
 	str r0, [r5, #0x1c]
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov07_0222212C
+	thumb_func_end BattleAnimUtil_InitSinMotionFromStep
 
-	thumb_func_start ov07_02222180
-ov07_02222180: ; 0x02222180
+	thumb_func_start BattleAnimUtil_UpdateSinMotion
+BattleAnimUtil_UpdateSinMotion: ; 0x02222180
 	push {r4, lr}
 	add r4, r0, #0
 	bne _0222218A
@@ -13825,16 +13825,16 @@ _0222220E:
 	pop {r4, pc}
 	nop
 _02222214: .word FX_SinCosTable_
-	thumb_func_end ov07_02222180
+	thumb_func_end BattleAnimUtil_UpdateSinMotion
 
-	thumb_func_start ov07_02222218
-ov07_02222218: ; 0x02222218
+	thumb_func_start BattleAnimUtil_UpdateSinMotionSprite
+BattleAnimUtil_UpdateSinMotionSprite: ; 0x02222218
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	add r4, r1, #0
 	add r6, r2, #0
 	add r7, r3, #0
-	bl ov07_02222180
+	bl BattleAnimUtil_UpdateSinMotion
 	cmp r0, #0
 	beq _0222223A
 	add r0, r5, #0
@@ -13848,16 +13848,16 @@ _0222223A:
 	mov r0, #0
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02222218
+	thumb_func_end BattleAnimUtil_UpdateSinMotionSprite
 
-	thumb_func_start ov07_02222240
-ov07_02222240: ; 0x02222240
+	thumb_func_start BattleAnimUtil_UpdateSinMotionPokepic
+BattleAnimUtil_UpdateSinMotionPokepic: ; 0x02222240
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	add r4, r1, #0
 	add r6, r2, #0
 	add r7, r3, #0
-	bl ov07_02222180
+	bl BattleAnimUtil_UpdateSinMotion
 	cmp r0, #0
 	beq _02222262
 	add r0, r5, #0
@@ -13871,10 +13871,10 @@ _02222262:
 	mov r0, #0
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02222240
+	thumb_func_end BattleAnimUtil_UpdateSinMotionPokepic
 
-	thumb_func_start ov07_02222268
-ov07_02222268: ; 0x02222268
+	thumb_func_start BattleAnimUtil_InitLinearMotion
+BattleAnimUtil_InitLinearMotion: ; 0x02222268
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #8
 	add r5, r0, #0
@@ -13911,10 +13911,10 @@ _0222227C:
 	str r4, [r5, #0x14]
 	add sp, #8
 	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end ov07_02222268
+	thumb_func_end BattleAnimUtil_InitLinearMotion
 
-	thumb_func_start ov07_022222B4
-ov07_022222B4: ; 0x022222B4
+	thumb_func_start BattleAnimUtil_UpdateLinearMotion
+BattleAnimUtil_UpdateLinearMotion: ; 0x022222B4
 	push {r4, lr}
 	add r4, r0, #0
 	bne _022222BE
@@ -13946,14 +13946,14 @@ _022222EA:
 	mov r0, #0
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov07_022222B4
+	thumb_func_end BattleAnimUtil_UpdateLinearMotion
 
-	thumb_func_start ov07_022222F0
-ov07_022222F0: ; 0x022222F0
+	thumb_func_start BattleAnimUtil_UpdateLinearMotionSprite
+BattleAnimUtil_UpdateLinearMotionSprite: ; 0x022222F0
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	add r4, r1, #0
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	beq _0222230E
 	mov r2, #0
@@ -13967,14 +13967,14 @@ _0222230E:
 	mov r0, #0
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov07_022222F0
+	thumb_func_end BattleAnimUtil_UpdateLinearMotionSprite
 
-	thumb_func_start ov07_02222314
-ov07_02222314: ; 0x02222314
+	thumb_func_start BattleAnimUtil_UpdateLinearMotionPokepic
+BattleAnimUtil_UpdateLinearMotionPokepic: ; 0x02222314
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	add r4, r1, #0
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	beq _02222332
 	mov r2, #0
@@ -13988,10 +13988,10 @@ _02222332:
 	mov r0, #0
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02222314
+	thumb_func_end BattleAnimUtil_UpdateLinearMotionPokepic
 
-	thumb_func_start ov07_02222338
-ov07_02222338: ; 0x02222338
+	thumb_func_start BattleAnimUtil_InitLinearSinMotion
+BattleAnimUtil_InitLinearSinMotion: ; 0x02222338
 	push {r3, r4, r5, lr}
 	sub sp, #0x10
 	add r5, r1, #0
@@ -14005,7 +14005,7 @@ ov07_02222338: ; 0x02222338
 	add r2, r3, #0
 	mov r3, #0x10
 	ldrsh r3, [r4, r3]
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	mov r1, #0
 	strh r1, [r5]
 	ldr r0, _0222237C ; =0x0000BFFF
@@ -14026,10 +14026,10 @@ ov07_02222338: ; 0x02222338
 	nop
 _0222237C: .word 0x0000BFFF
 _02222380: .word 0x00003FFF
-	thumb_func_end ov07_02222338
+	thumb_func_end BattleAnimUtil_InitLinearSinMotion
 
-	thumb_func_start ov07_02222384
-ov07_02222384: ; 0x02222384
+	thumb_func_start BattleAnimUtil_UpdateLinearSinMotion
+BattleAnimUtil_UpdateLinearSinMotion: ; 0x02222384
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
 	add r4, r1, #0
@@ -14042,10 +14042,10 @@ _02222392:
 	bl GF_AssertFail
 _0222239A:
 	add r0, r5, #0
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	add r6, r0, #0
 	add r0, r4, #0
-	bl ov07_02222180
+	bl BattleAnimUtil_UpdateSinMotion
 	mov r2, #0
 	ldrsh r3, [r5, r2]
 	ldrsh r1, [r4, r2]
@@ -14065,14 +14065,14 @@ _0222239A:
 _022223C8:
 	mov r0, #1
 	pop {r4, r5, r6, pc}
-	thumb_func_end ov07_02222384
+	thumb_func_end BattleAnimUtil_UpdateLinearSinMotion
 
-	thumb_func_start ov07_022223CC
-ov07_022223CC: ; 0x022223CC
+	thumb_func_start BattleAnimUtil_UpdateLinearSinMotionSprite
+BattleAnimUtil_UpdateLinearSinMotionSprite: ; 0x022223CC
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	add r4, r2, #0
-	bl ov07_02222384
+	bl BattleAnimUtil_UpdateLinearSinMotion
 	cmp r0, #0
 	beq _022223EA
 	mov r2, #0
@@ -14086,10 +14086,10 @@ _022223EA:
 	mov r0, #0
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov07_022223CC
+	thumb_func_end BattleAnimUtil_UpdateLinearSinMotionSprite
 
-	thumb_func_start ov07_022223F0
-ov07_022223F0: ; 0x022223F0
+	thumb_func_start BattleAnimUtil_InitValueMotion
+BattleAnimUtil_InitValueMotion: ; 0x022223F0
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	add r6, r1, #0
@@ -14109,10 +14109,10 @@ _02222402:
 	str r0, [r5, #8]
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov07_022223F0
+	thumb_func_end BattleAnimUtil_InitValueMotion
 
-	thumb_func_start ov07_02222418
-ov07_02222418: ; 0x02222418
+	thumb_func_start BattleAnimUtil_InitValueMotionFx
+BattleAnimUtil_InitValueMotionFx: ; 0x02222418
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	add r6, r1, #0
@@ -14132,10 +14132,10 @@ _0222242A:
 	str r0, [r5, #8]
 	str r6, [r5, #0xc]
 	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end ov07_02222418
+	thumb_func_end BattleAnimUtil_InitValueMotionFx
 
-	thumb_func_start ov07_02222440
-ov07_02222440: ; 0x02222440
+	thumb_func_start BattleAnimUtil_UpdateValueMotion
+BattleAnimUtil_UpdateValueMotion: ; 0x02222440
 	push {r4, lr}
 	add r4, r0, #0
 	bne _0222244A
@@ -14157,10 +14157,10 @@ _02222462:
 	mov r0, #0
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02222440
+	thumb_func_end BattleAnimUtil_UpdateValueMotion
 
-	thumb_func_start ov07_02222468
-ov07_02222468: ; 0x02222468
+	thumb_func_start BattleAnimUtil_UpdateValueMotionFx
+BattleAnimUtil_UpdateValueMotionFx: ; 0x02222468
 	push {r4, lr}
 	add r4, r0, #0
 	bne _02222472
@@ -14184,10 +14184,10 @@ _0222248E:
 	mov r0, #0
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02222468
+	thumb_func_end BattleAnimUtil_UpdateValueMotionFx
 
-	thumb_func_start ov07_02222494
-ov07_02222494: ; 0x02222494
+	thumb_func_start BattleAnimUtil_InitCosMotion
+BattleAnimUtil_InitCosMotion: ; 0x02222494
 	push {r3, r4, r5, lr}
 	ldr r4, [sp, #0x10]
 	add r5, r0, #0
@@ -14199,10 +14199,10 @@ ov07_02222494: ; 0x02222494
 	bl _u32_div_f
 	str r0, [r5, #0x10]
 	pop {r3, r4, r5, pc}
-	thumb_func_end ov07_02222494
+	thumb_func_end BattleAnimUtil_InitCosMotion
 
-	thumb_func_start ov07_022224AC
-ov07_022224AC: ; 0x022224AC
+	thumb_func_start BattleAnimUtil_UpdateCosMotion
+BattleAnimUtil_UpdateCosMotion: ; 0x022224AC
 	push {r4, lr}
 	add r4, r0, #0
 	bne _022224B6
@@ -14248,10 +14248,10 @@ _022224FE:
 	pop {r4, pc}
 	nop
 _02222504: .word FX_SinCosTable_
-	thumb_func_end ov07_022224AC
+	thumb_func_end BattleAnimUtil_UpdateCosMotion
 
-	thumb_func_start ov07_02222508
-ov07_02222508: ; 0x02222508
+	thumb_func_start BattleAnimUtil_InitScaleMotion
+BattleAnimUtil_InitScaleMotion: ; 0x02222508
 	push {r3, r4, r5, r6, r7, lr}
 	add r4, r0, #0
 	add r5, r1, #0
@@ -14289,10 +14289,10 @@ _0222251A:
 	lsl r0, r0, #0xc
 	str r0, [r4, #0x14]
 	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end ov07_02222508
+	thumb_func_end BattleAnimUtil_InitScaleMotion
 
-	thumb_func_start ov07_02222558
-ov07_02222558: ; 0x02222558
+	thumb_func_start BattleAnimUtil_UpdateScaleMotion
+BattleAnimUtil_UpdateScaleMotion: ; 0x02222558
 	push {r4, lr}
 	add r4, r0, #0
 	bne _02222562
@@ -14322,10 +14322,10 @@ _02222562:
 _0222258C:
 	mov r0, #0
 	pop {r4, pc}
-	thumb_func_end ov07_02222558
+	thumb_func_end BattleAnimUtil_UpdateScaleMotion
 
-	thumb_func_start ov07_02222590
-ov07_02222590: ; 0x02222590
+	thumb_func_start BattleAnimUtil_InitScaleMotionXY
+BattleAnimUtil_InitScaleMotionXY: ; 0x02222590
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	add r6, r1, #0
@@ -14382,10 +14382,10 @@ _022225A2:
 	str r0, [r5, #0x14]
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02222590
+	thumb_func_end BattleAnimUtil_InitScaleMotionXY
 
-	thumb_func_start ov07_0222260C
-ov07_0222260C: ; 0x0222260C
+	thumb_func_start BattleAnimUtil_UpdateScaleMotionXY
+BattleAnimUtil_UpdateScaleMotionXY: ; 0x0222260C
 	push {r4, lr}
 	add r4, r0, #0
 	bne _02222616
@@ -14415,10 +14415,10 @@ _02222616:
 _02222640:
 	mov r0, #0
 	pop {r4, pc}
-	thumb_func_end ov07_0222260C
+	thumb_func_end BattleAnimUtil_UpdateScaleMotionXY
 
-	thumb_func_start ov07_02222644
-ov07_02222644: ; 0x02222644
+	thumb_func_start BattleAnimUtil_GetScaleFloat
+BattleAnimUtil_GetScaleFloat: ; 0x02222644
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
 	mov r0, #0
@@ -14438,10 +14438,10 @@ ov07_02222644: ; 0x02222644
 	pop {r4, r5, r6, pc}
 	nop
 _02222670: .word 0x43800000
-	thumb_func_end ov07_02222644
+	thumb_func_end BattleAnimUtil_GetScaleFloat
 
-	thumb_func_start ov07_02222674
-ov07_02222674: ; 0x02222674
+	thumb_func_start BattleAnimUtil_CalcScaleYOffset
+BattleAnimUtil_CalcScaleYOffset: ; 0x02222674
 	push {r3, r4, lr}
 	sub sp, #4
 	lsl r1, r1, #1
@@ -14480,10 +14480,10 @@ _022226B2:
 	asr r0, r0, #0x10
 	add sp, #4
 	pop {r3, r4, pc}
-	thumb_func_end ov07_02222674
+	thumb_func_end BattleAnimUtil_CalcScaleYOffset
 
-	thumb_func_start ov07_022226C4
-ov07_022226C4: ; 0x022226C4
+	thumb_func_start BattleAnimUtil_AlignPokepicToScale
+BattleAnimUtil_AlignPokepicToScale: ; 0x022226C4
 	push {r4, r5, r6, lr}
 	add r6, r2, #0
 	add r4, r1, #0
@@ -14491,7 +14491,7 @@ ov07_022226C4: ; 0x022226C4
 	add r0, r4, #0
 	add r1, r6, #0
 	add r2, r3, #0
-	bl ov07_02222674
+	bl BattleAnimUtil_CalcScaleYOffset
 	add r2, r0, #0
 	ldr r0, [sp, #0x10]
 	cmp r0, #1
@@ -14511,10 +14511,10 @@ _022226EE:
 	bl Pokepic_SetAttr
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
-	thumb_func_end ov07_022226C4
+	thumb_func_end BattleAnimUtil_AlignPokepicToScale
 
-	thumb_func_start ov07_022226FC
-ov07_022226FC: ; 0x022226FC
+	thumb_func_start BattleAnimUtil_AlignSpriteToScale
+BattleAnimUtil_AlignSpriteToScale: ; 0x022226FC
 	push {r3, r4, r5, r6, r7, lr}
 	add r7, r2, #0
 	add r5, r1, #0
@@ -14522,7 +14522,7 @@ ov07_022226FC: ; 0x022226FC
 	add r0, r5, #0
 	add r1, r7, #0
 	add r2, r3, #0
-	bl ov07_02222674
+	bl BattleAnimUtil_CalcScaleYOffset
 	add r4, r0, #0
 	ldr r0, [sp, #0x18]
 	cmp r0, #1
@@ -14551,14 +14551,14 @@ _02222726:
 	bl ManagedSprite_SetPositionXY
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov07_022226FC
+	thumb_func_end BattleAnimUtil_AlignSpriteToScale
 
-	thumb_func_start ov07_02222748
-ov07_02222748: ; 0x02222748
+	thumb_func_start BattleAnimUtil_UpdateScaleMotionSprite
+BattleAnimUtil_UpdateScaleMotionSprite: ; 0x02222748
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	add r4, r1, #0
-	bl ov07_02222558
+	bl BattleAnimUtil_UpdateScaleMotion
 	cmp r0, #0
 	beq _02222762
 	add r0, r5, #0
@@ -14570,14 +14570,14 @@ _02222762:
 	mov r0, #0
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02222748
+	thumb_func_end BattleAnimUtil_UpdateScaleMotionSprite
 
-	thumb_func_start ov07_02222768
-ov07_02222768: ; 0x02222768
+	thumb_func_start BattleAnimUtil_UpdateScaleMotionPokepic
+BattleAnimUtil_UpdateScaleMotionPokepic: ; 0x02222768
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	add r4, r1, #0
-	bl ov07_02222558
+	bl BattleAnimUtil_UpdateScaleMotion
 	cmp r0, #0
 	beq _02222782
 	add r0, r5, #0
@@ -14589,14 +14589,14 @@ _02222782:
 	mov r0, #0
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02222768
+	thumb_func_end BattleAnimUtil_UpdateScaleMotionPokepic
 
-	thumb_func_start ov07_02222788
-ov07_02222788: ; 0x02222788
+	thumb_func_start BattleAnimUtil_UpdateScaleMotionXYPokepic
+BattleAnimUtil_UpdateScaleMotionXYPokepic: ; 0x02222788
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	add r4, r1, #0
-	bl ov07_0222260C
+	bl BattleAnimUtil_UpdateScaleMotionXY
 	cmp r0, #0
 	beq _022227A2
 	add r0, r5, #0
@@ -14608,10 +14608,10 @@ _022227A2:
 	mov r0, #0
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02222788
+	thumb_func_end BattleAnimUtil_UpdateScaleMotionXYPokepic
 
-	thumb_func_start ov07_022227A8
-ov07_022227A8: ; 0x022227A8
+	thumb_func_start BattleAnimUtil_InitShake
+BattleAnimUtil_InitShake: ; 0x022227A8
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	add r6, r1, #0
@@ -14636,10 +14636,10 @@ _022227BA:
 	strh r1, [r5]
 	strh r1, [r5, #2]
 	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end ov07_022227A8
+	thumb_func_end BattleAnimUtil_InitShake
 
-	thumb_func_start ov07_022227D8
-ov07_022227D8: ; 0x022227D8
+	thumb_func_start BattleAnimUtil_UpdateShake
+BattleAnimUtil_UpdateShake: ; 0x022227D8
 	push {r4, lr}
 	add r4, r0, #0
 	bne _022227E2
@@ -14696,16 +14696,16 @@ _02222836:
 	mov r0, #0
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov07_022227D8
+	thumb_func_end BattleAnimUtil_UpdateShake
 
-	thumb_func_start ov07_0222283C
-ov07_0222283C: ; 0x0222283C
+	thumb_func_start BattleAnimUtil_UpdateShakePokepic
+BattleAnimUtil_UpdateShakePokepic: ; 0x0222283C
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	add r4, r1, #0
 	add r6, r2, #0
 	add r7, r3, #0
-	bl ov07_022227D8
+	bl BattleAnimUtil_UpdateShake
 	cmp r0, #0
 	beq _0222285E
 	add r0, r5, #0
@@ -14719,10 +14719,10 @@ _0222285E:
 	mov r0, #0
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov07_0222283C
+	thumb_func_end BattleAnimUtil_UpdateShakePokepic
 
-	thumb_func_start ov07_02222864
-ov07_02222864: ; 0x02222864
+	thumb_func_start BattleAnimUtil_InitSpriteSequence
+BattleAnimUtil_InitSpriteSequence: ; 0x02222864
 	push {r3, r4, r5, r6, r7, lr}
 	add r7, r0, #0
 	str r1, [sp]
@@ -14815,10 +14815,10 @@ _022228F6:
 _02222910:
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02222864
+	thumb_func_end BattleAnimUtil_InitSpriteSequence
 
-	thumb_func_start ov07_02222914
-ov07_02222914: ; 0x02222914
+	thumb_func_start BattleAnimUtil_UpdateSpriteSequence
+BattleAnimUtil_UpdateSpriteSequence: ; 0x02222914
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x20
 	add r5, r0, #0
@@ -14924,7 +14924,7 @@ _022229DA:
 	add r0, r7, #0
 	add r1, sp, #0xc
 	add r2, sp, #8
-	bl ov07_02222644
+	bl BattleAnimUtil_GetScaleFloat
 	add r0, r4, #0
 	add r0, #0x98
 	ldr r0, [r0]
@@ -14977,7 +14977,7 @@ _02222A3E:
 	mov r0, #0
 	add sp, #0x20
 	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end ov07_02222914
+	thumb_func_end BattleAnimUtil_UpdateSpriteSequence
 
 	thumb_func_start ov07_02222A44
 ov07_02222A44: ; 0x02222A44
@@ -15008,13 +15008,13 @@ _02222A74: .word 0x0000FFFF
 _02222A78: .word 0xFFFF8000
 	thumb_func_end ov07_02222A44
 
-	thumb_func_start ov07_02222A7C
-ov07_02222A7C: ; 0x02222A7C
+	thumb_func_start BattleAnimTask_BlendAlphaMotion
+BattleAnimTask_BlendAlphaMotion: ; 0x02222A7C
 	push {r3, r4, r5, lr}
 	add r4, r1, #0
 	add r5, r0, #0
 	add r0, r4, #0
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	bne _02222A98
 	mov r0, #1
@@ -15047,10 +15047,10 @@ _02222AAE:
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 _02222AC0: .word 0x04000052
-	thumb_func_end ov07_02222A7C
+	thumb_func_end BattleAnimTask_BlendAlphaMotion
 
-	thumb_func_start ov07_02222AC4
-ov07_02222AC4: ; 0x02222AC4
+	thumb_func_start BattleAnimUtil_StartBlendAlphaMotion
+BattleAnimUtil_StartBlendAlphaMotion: ; 0x02222AC4
 	push {r4, r5, r6, lr}
 	sub sp, #8
 	add r6, sp, #8
@@ -15062,26 +15062,26 @@ ov07_02222AC4: ; 0x02222AC4
 	lsl r5, r5, #0x10
 	lsr r5, r5, #0x10
 	str r5, [sp, #4]
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	mov r2, #0
-	ldr r0, _02222AF0 ; =ov07_02222A7C
+	ldr r0, _02222AF0 ; =BattleAnimTask_BlendAlphaMotion
 	add r1, r4, #0
 	str r2, [r4, #0x24]
 	bl SysTask_CreateOnMainQueue
 	add sp, #8
 	pop {r4, r5, r6, pc}
 	nop
-_02222AF0: .word ov07_02222A7C
-	thumb_func_end ov07_02222AC4
+_02222AF0: .word BattleAnimTask_BlendAlphaMotion
+	thumb_func_end BattleAnimUtil_StartBlendAlphaMotion
 
-	thumb_func_start ov07_02222AF4
-ov07_02222AF4: ; 0x02222AF4
+	thumb_func_start BattleAnimUtil_IsBlendAlphaMotionDone
+BattleAnimUtil_IsBlendAlphaMotionDone: ; 0x02222AF4
 	ldr r0, [r0, #0x24]
 	bx lr
-	thumb_func_end ov07_02222AF4
+	thumb_func_end BattleAnimUtil_IsBlendAlphaMotionDone
 
-	thumb_func_start ov07_02222AF8
-ov07_02222AF8: ; 0x02222AF8
+	thumb_func_start BattleAnimScanline_VWaitTask
+BattleAnimScanline_VWaitTask: ; 0x02222AF8
 	push {r3, lr}
 	ldr r0, [r1, #8]
 	cmp r0, #0
@@ -15096,10 +15096,10 @@ _02222B0C:
 	bl HBlankDma_Stop
 	pop {r3, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02222AF8
+	thumb_func_end BattleAnimScanline_VWaitTask
 
-	thumb_func_start ov07_02222B14
-ov07_02222B14: ; 0x02222B14
+	thumb_func_start BattleAnimScanline_VBlankTask
+BattleAnimScanline_VBlankTask: ; 0x02222B14
 	push {r4, lr}
 	add r4, r1, #0
 	ldr r0, [r4, #8]
@@ -15115,10 +15115,10 @@ ov07_02222B14: ; 0x02222B14
 	str r0, [r4, #0xc]
 _02222B2E:
 	pop {r4, pc}
-	thumb_func_end ov07_02222B14
+	thumb_func_end BattleAnimScanline_VBlankTask
 
-	thumb_func_start ov07_02222B30
-ov07_02222B30: ; 0x02222B30
+	thumb_func_start BattleAnimScanline_StartTasks
+BattleAnimScanline_StartTasks: ; 0x02222B30
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	add r4, r1, #0
@@ -15134,24 +15134,24 @@ _02222B42:
 	str r2, [r5, #0xc]
 	str r4, [r5, #0x18]
 	str r6, [r5, #0x10]
-	ldr r0, _02222B68 ; =ov07_02222AF8
+	ldr r0, _02222B68 ; =BattleAnimScanline_VWaitTask
 	str r7, [r5, #0x14]
 	add r1, r5, #0
 	bl SysTask_CreateOnVWaitQueue
 	str r0, [r5, #4]
-	ldr r0, _02222B6C ; =ov07_02222B14
+	ldr r0, _02222B6C ; =BattleAnimScanline_VBlankTask
 	add r1, r5, #0
 	mov r2, #0
 	bl SysTask_CreateOnVBlankQueue
 	str r0, [r5]
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-_02222B68: .word ov07_02222AF8
-_02222B6C: .word ov07_02222B14
-	thumb_func_end ov07_02222B30
+_02222B68: .word BattleAnimScanline_VWaitTask
+_02222B6C: .word BattleAnimScanline_VBlankTask
+	thumb_func_end BattleAnimScanline_StartTasks
 
-	thumb_func_start ov07_02222B70
-ov07_02222B70: ; 0x02222B70
+	thumb_func_start BattleAnimScanline_StopTasks
+BattleAnimScanline_StopTasks: ; 0x02222B70
 	push {r4, lr}
 	add r4, r0, #0
 	bne _02222B7A
@@ -15169,10 +15169,10 @@ _02222B84:
 _02222B8E:
 	bl HBlankDma_Stop
 	pop {r4, pc}
-	thumb_func_end ov07_02222B70
+	thumb_func_end BattleAnimScanline_StopTasks
 
-	thumb_func_start ov07_02222B94
-ov07_02222B94: ; 0x02222B94
+	thumb_func_start BattleAnimScanline_Deactivate
+BattleAnimScanline_Deactivate: ; 0x02222B94
 	push {r4, lr}
 	add r4, r0, #0
 	bne _02222B9E
@@ -15181,10 +15181,10 @@ _02222B9E:
 	mov r0, #0
 	str r0, [r4, #8]
 	pop {r4, pc}
-	thumb_func_end ov07_02222B94
+	thumb_func_end BattleAnimScanline_Deactivate
 
-	thumb_func_start ov07_02222BA4
-ov07_02222BA4: ; 0x02222BA4
+	thumb_func_start BattleAnimScanline_StartHBlankDma
+BattleAnimScanline_StartHBlankDma: ; 0x02222BA4
 	push {r3, r4, r5, lr}
 	add r4, r0, #0
 	ldr r0, [r4, #0x1c]
@@ -15200,30 +15200,30 @@ ov07_02222BA4: ; 0x02222BA4
 	bl HBlankDma_Start
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02222BA4
+	thumb_func_end BattleAnimScanline_StartHBlankDma
 
-	thumb_func_start ov07_02222BC8
-ov07_02222BC8: ; 0x02222BC8
+	thumb_func_start BattleAnimScanline_SwapAndStartDma
+BattleAnimScanline_SwapAndStartDma: ; 0x02222BC8
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, [r4, #0x1c]
 	bl DoubleBuffer_Swap
 	add r0, r4, #0
-	bl ov07_02222BA4
+	bl BattleAnimScanline_StartHBlankDma
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02222BC8
+	thumb_func_end BattleAnimScanline_SwapAndStartDma
 
-	thumb_func_start ov07_02222BDC
-ov07_02222BDC: ; 0x02222BDC
-	ldr r3, _02222BE0 ; =ov07_02222BA4
+	thumb_func_start BattleAnimScanline_VBlankCallback
+BattleAnimScanline_VBlankCallback: ; 0x02222BDC
+	ldr r3, _02222BE0 ; =BattleAnimScanline_StartHBlankDma
 	bx r3
 	.balign 4, 0
-_02222BE0: .word ov07_02222BA4
-	thumb_func_end ov07_02222BDC
+_02222BE0: .word BattleAnimScanline_StartHBlankDma
+	thumb_func_end BattleAnimScanline_VBlankCallback
 
-	thumb_func_start ov07_02222BE4
-ov07_02222BE4: ; 0x02222BE4
+	thumb_func_start BattleAnimScanline_New
+BattleAnimScanline_New: ; 0x02222BE4
 	push {r3, r4, r5, r6, r7, lr}
 	add r6, r1, #0
 	add r7, r2, #0
@@ -15266,28 +15266,28 @@ _02222C20:
 	add r0, r6, #0
 	sub r2, #0x20
 	bl MIi_CpuClear32
-	ldr r2, _02222C58 ; =ov07_02222BC8
-	ldr r3, _02222C5C ; =ov07_02222BDC
+	ldr r2, _02222C58 ; =BattleAnimScanline_SwapAndStartDma
+	ldr r3, _02222C5C ; =BattleAnimScanline_VBlankCallback
 	add r0, r4, #0
 	add r1, r4, #0
-	bl ov07_02222B30
+	bl BattleAnimScanline_StartTasks
 	add r0, r4, #0
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
 _02222C54: .word 0x00000624
-_02222C58: .word ov07_02222BC8
-_02222C5C: .word ov07_02222BDC
-	thumb_func_end ov07_02222BE4
+_02222C58: .word BattleAnimScanline_SwapAndStartDma
+_02222C5C: .word BattleAnimScanline_VBlankCallback
+	thumb_func_end BattleAnimScanline_New
 
-	thumb_func_start ov07_02222C60
-ov07_02222C60: ; 0x02222C60
+	thumb_func_start BattleAnimScanline_Free
+BattleAnimScanline_Free: ; 0x02222C60
 	push {r4, lr}
 	add r4, r0, #0
 	bne _02222C6A
 	bl GF_AssertFail
 _02222C6A:
 	add r0, r4, #0
-	bl ov07_02222B70
+	bl BattleAnimScanline_StopTasks
 	ldr r0, [r4, #0x1c]
 	cmp r0, #0
 	beq _02222C7A
@@ -15297,10 +15297,10 @@ _02222C7A:
 	bl Heap_Free
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02222C60
+	thumb_func_end BattleAnimScanline_Free
 
-	thumb_func_start ov07_02222C84
-ov07_02222C84: ; 0x02222C84
+	thumb_func_start BattleAnimScanline_GetWriteBuffer
+BattleAnimScanline_GetWriteBuffer: ; 0x02222C84
 	push {r4, lr}
 	add r4, r0, #0
 	bne _02222C8E
@@ -15310,23 +15310,23 @@ _02222C8E:
 	bl DoubleBuffer_GetCurrent
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02222C84
+	thumb_func_end BattleAnimScanline_GetWriteBuffer
 
-	thumb_func_start ov07_02222C98
-ov07_02222C98: ; 0x02222C98
+	thumb_func_start BattleAnimScanline_Disable
+BattleAnimScanline_Disable: ; 0x02222C98
 	push {r4, lr}
 	add r4, r0, #0
 	bne _02222CA2
 	bl GF_AssertFail
 _02222CA2:
 	add r0, r4, #0
-	bl ov07_02222B94
+	bl BattleAnimScanline_Deactivate
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02222C98
+	thumb_func_end BattleAnimScanline_Disable
 
-	thumb_func_start ov07_02222CAC
-ov07_02222CAC: ; 0x02222CAC
+	thumb_func_start BattleAnimScanline_WaveVWaitCallback
+BattleAnimScanline_WaveVWaitCallback: ; 0x02222CAC
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, [r4, #0x1c]
@@ -15335,19 +15335,19 @@ ov07_02222CAC: ; 0x02222CAC
 	bl ScanlineEffect_RestartDma
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02222CAC
+	thumb_func_end BattleAnimScanline_WaveVWaitCallback
 
-	thumb_func_start ov07_02222CC0
-ov07_02222CC0: ; 0x02222CC0
+	thumb_func_start BattleAnimScanline_WaveVBlankCallback
+BattleAnimScanline_WaveVBlankCallback: ; 0x02222CC0
 	ldr r3, _02222CC8 ; =ScanlineEffect_RestartDma
 	ldr r0, [r0, #0x1c]
 	bx r3
 	nop
 _02222CC8: .word ScanlineEffect_RestartDma
-	thumb_func_end ov07_02222CC0
+	thumb_func_end BattleAnimScanline_WaveVBlankCallback
 
-	thumb_func_start ov07_02222CCC
-ov07_02222CCC: ; 0x02222CCC
+	thumb_func_start BattleAnimScanline_NewWave
+BattleAnimScanline_NewWave: ; 0x02222CCC
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x1c
 	add r7, r0, #0
@@ -15366,7 +15366,7 @@ _02222CE8:
 	mov r2, #0x20
 	bl memset
 	ldr r0, [sp, #0x34]
-	bl ov07_02222D90
+	bl BattleAnimUtil_GetBgOffsetRegister
 	add r6, r0, #0
 	ldr r0, [sp, #0x40]
 	bl ScanlineEffect_New
@@ -15386,28 +15386,28 @@ _02222CE8:
 	ldr r2, [sp, #0x14]
 	ldr r3, [sp, #0x18]
 	bl ScanlineEffect_StartWave
-	ldr r2, _02222D34 ; =ov07_02222CAC
-	ldr r3, _02222D38 ; =ov07_02222CC0
+	ldr r2, _02222D34 ; =BattleAnimScanline_WaveVWaitCallback
+	ldr r3, _02222D38 ; =BattleAnimScanline_WaveVBlankCallback
 	add r0, r4, #0
 	add r1, r4, #0
-	bl ov07_02222B30
+	bl BattleAnimScanline_StartTasks
 	add r0, r4, #0
 	add sp, #0x1c
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
-_02222D34: .word ov07_02222CAC
-_02222D38: .word ov07_02222CC0
-	thumb_func_end ov07_02222CCC
+_02222D34: .word BattleAnimScanline_WaveVWaitCallback
+_02222D38: .word BattleAnimScanline_WaveVBlankCallback
+	thumb_func_end BattleAnimScanline_NewWave
 
-	thumb_func_start ov07_02222D3C
-ov07_02222D3C: ; 0x02222D3C
+	thumb_func_start BattleAnimScanline_FreeWave
+BattleAnimScanline_FreeWave: ; 0x02222D3C
 	push {r4, lr}
 	add r4, r0, #0
 	bne _02222D46
 	bl GF_AssertFail
 _02222D46:
 	add r0, r4, #0
-	bl ov07_02222B70
+	bl BattleAnimScanline_StopTasks
 	ldr r0, [r4, #0x1c]
 	cmp r0, #0
 	beq _02222D56
@@ -15417,10 +15417,10 @@ _02222D56:
 	bl Heap_Free
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02222D3C
+	thumb_func_end BattleAnimScanline_FreeWave
 
-	thumb_func_start ov07_02222D60
-ov07_02222D60: ; 0x02222D60
+	thumb_func_start BattleAnimScanline_GetWaveBuffer
+BattleAnimScanline_GetWaveBuffer: ; 0x02222D60
 	push {r4, lr}
 	add r4, r0, #0
 	bne _02222D6A
@@ -15430,31 +15430,31 @@ _02222D6A:
 	bl ScanlineEffect_GetBuffer
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02222D60
+	thumb_func_end BattleAnimScanline_GetWaveBuffer
 
-	thumb_func_start ov07_02222D74
-ov07_02222D74: ; 0x02222D74
+	thumb_func_start BattleAnimScanline_DisableWave
+BattleAnimScanline_DisableWave: ; 0x02222D74
 	push {r4, lr}
 	add r4, r0, #0
 	bne _02222D7E
 	bl GF_AssertFail
 _02222D7E:
 	add r0, r4, #0
-	bl ov07_02222B94
+	bl BattleAnimScanline_Deactivate
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02222D74
+	thumb_func_end BattleAnimScanline_DisableWave
 
-	thumb_func_start ov07_02222D88
-ov07_02222D88: ; 0x02222D88
+	thumb_func_start BattleAnimUtil_PackXY
+BattleAnimUtil_PackXY: ; 0x02222D88
 	lsl r1, r1, #0x10
 	orr r0, r1
 	bx lr
 	.balign 4, 0
-	thumb_func_end ov07_02222D88
+	thumb_func_end BattleAnimUtil_PackXY
 
-	thumb_func_start ov07_02222D90
-ov07_02222D90: ; 0x02222D90
+	thumb_func_start BattleAnimUtil_GetBgOffsetRegister
+BattleAnimUtil_GetBgOffsetRegister: ; 0x02222D90
 	cmp r0, #3
 	bhi _02222DB6
 	add r1, r0, r0
@@ -15486,10 +15486,10 @@ _02222DB8: .word 0x04000010
 _02222DBC: .word 0x04000014
 _02222DC0: .word 0x04000018
 _02222DC4: .word 0x0400001C
-	thumb_func_end ov07_02222D90
+	thumb_func_end BattleAnimUtil_GetBgOffsetRegister
 
-	thumb_func_start ov07_02222DC8
-ov07_02222DC8: ; 0x02222DC8
+	thumb_func_start BattleAnimUtil_CalcMidpoint
+BattleAnimUtil_CalcMidpoint: ; 0x02222DC8
 	add r2, r0, r2
 	lsr r0, r2, #0x1f
 	add r0, r2, r0
@@ -15504,10 +15504,10 @@ ov07_02222DC8: ; 0x02222DC8
 	strh r1, [r0]
 	bx lr
 	.balign 4, 0
-	thumb_func_end ov07_02222DC8
+	thumb_func_end BattleAnimUtil_CalcMidpoint
 
-	thumb_func_start ov07_02222DE4
-ov07_02222DE4: ; 0x02222DE4
+	thumb_func_start BattleAnimUtil_CalcDistance
+BattleAnimUtil_CalcDistance: ; 0x02222DE4
 	push {r3, lr}
 	sub r1, r1, r3
 	neg r1, r1
@@ -15527,10 +15527,10 @@ ov07_02222DE4: ; 0x02222DE4
 	str r0, [r1]
 	pop {r3, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02222DE4
+	thumb_func_end BattleAnimUtil_CalcDistance
 
-	thumb_func_start ov07_02222E0C
-ov07_02222E0C: ; 0x02222E0C
+	thumb_func_start BattleAnimUtil_CalcAngle
+BattleAnimUtil_CalcAngle: ; 0x02222E0C
 	push {r4, r5, r6, lr}
 	add r6, r0, #0
 	sub r0, r1, r3
@@ -15559,10 +15559,10 @@ _02222E3C:
 	nop
 _02222E40: .word 0x00007FFF
 _02222E44: .word 0x0000FFFF
-	thumb_func_end ov07_02222E0C
+	thumb_func_end BattleAnimUtil_CalcAngle
 
-	thumb_func_start ov07_02222E48
-ov07_02222E48: ; 0x02222E48
+	thumb_func_start BattleAnimUtil_StepTowards
+BattleAnimUtil_StepTowards: ; 0x02222E48
 	cmp r2, #0
 	ldr r3, [r0]
 	bge _02222E60
@@ -15588,10 +15588,10 @@ _02222E6C:
 	mov r0, #1
 	bx lr
 	.balign 4, 0
-	thumb_func_end ov07_02222E48
+	thumb_func_end BattleAnimUtil_StepTowards
 
-	thumb_func_start ov07_02222E74
-ov07_02222E74: ; 0x02222E74
+	thumb_func_start BattleAnimTask_PaletteBlend
+BattleAnimTask_PaletteBlend: ; 0x02222E74
 	push {r4, lr}
 	sub sp, #8
 	add r4, r1, #0
@@ -15654,10 +15654,10 @@ _02222EE2:
 _02222EE4:
 	add sp, #8
 	pop {r4, pc}
-	thumb_func_end ov07_02222E74
+	thumb_func_end BattleAnimTask_PaletteBlend
 
-	thumb_func_start ov07_02222EE8
-ov07_02222EE8: ; 0x02222EE8
+	thumb_func_start BattleAnimUtil_IsPaletteBlendActive
+BattleAnimUtil_IsPaletteBlendActive: ; 0x02222EE8
 	push {r4, lr}
 	add r4, r0, #0
 	bne _02222EF2
@@ -15666,10 +15666,10 @@ _02222EF2:
 	ldr r0, [r4]
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02222EE8
+	thumb_func_end BattleAnimUtil_IsPaletteBlendActive
 
-	thumb_func_start ov07_02222EF8
-ov07_02222EF8: ; 0x02222EF8
+	thumb_func_start BattleAnimUtil_FreePaletteBlend
+BattleAnimUtil_FreePaletteBlend: ; 0x02222EF8
 	push {r4, lr}
 	add r4, r0, #0
 	bne _02222F02
@@ -15680,10 +15680,10 @@ _02222F02:
 	add r0, r4, #0
 	bl Heap_Free
 	pop {r4, pc}
-	thumb_func_end ov07_02222EF8
+	thumb_func_end BattleAnimUtil_FreePaletteBlend
 
-	thumb_func_start ov07_02222F10
-ov07_02222F10: ; 0x02222F10
+	thumb_func_start BattleAnimUtil_StartPaletteBlend
+BattleAnimUtil_StartPaletteBlend: ; 0x02222F10
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	add r0, r1, #0
@@ -15728,7 +15728,7 @@ _02222F60:
 	strb r0, [r4, #0x15]
 	mov r0, #1
 	str r0, [r4]
-	ldr r0, _02222F78 ; =ov07_02222E74
+	ldr r0, _02222F78 ; =BattleAnimTask_PaletteBlend
 	ldr r2, [sp, #0x30]
 	add r1, r4, #0
 	bl SysTask_CreateOnMainQueue
@@ -15736,11 +15736,11 @@ _02222F60:
 	add r0, r4, #0
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
-_02222F78: .word ov07_02222E74
-	thumb_func_end ov07_02222F10
+_02222F78: .word BattleAnimTask_PaletteBlend
+	thumb_func_end BattleAnimUtil_StartPaletteBlend
 
-	thumb_func_start ov07_02222F7C
-ov07_02222F7C: ; 0x02222F7C
+	thumb_func_start BattleAnimUtil_PaletteToGrayscale
+BattleAnimUtil_PaletteToGrayscale: ; 0x02222F7C
 	push {r4, r5, r6, r7}
 	mov r7, #0
 	cmp r1, #0
@@ -15779,10 +15779,10 @@ _02222FBE:
 	pop {r4, r5, r6, r7}
 	bx lr
 	.balign 4, 0
-	thumb_func_end ov07_02222F7C
+	thumb_func_end BattleAnimUtil_PaletteToGrayscale
 
-	thumb_func_start ov07_02222FC4
-ov07_02222FC4: ; 0x02222FC4
+	thumb_func_start BattleAnimSystem_ApplyGrayscale
+BattleAnimSystem_ApplyGrayscale: ; 0x02222FC4
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	bl BattleAnimSystem_GetPaletteData
@@ -15795,18 +15795,18 @@ ov07_02222FC4: ; 0x02222FC4
 	bne _02222FE8
 	add r0, r4, #0
 	mov r1, #0x30
-	bl ov07_02222F7C
+	bl BattleAnimUtil_PaletteToGrayscale
 	pop {r3, r4, r5, pc}
 _02222FE8:
 	add r0, r4, #0
 	mov r1, #0x80
-	bl ov07_02222F7C
+	bl BattleAnimUtil_PaletteToGrayscale
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02222FC4
+	thumb_func_end BattleAnimSystem_ApplyGrayscale
 
-	thumb_func_start ov07_02222FF4
-ov07_02222FF4: ; 0x02222FF4
+	thumb_func_start BattleAnimSystem_RestoreFromGrayscale
+BattleAnimSystem_RestoreFromGrayscale: ; 0x02222FF4
 	push {r3, r4, r5, lr}
 	sub sp, #8
 	add r5, r0, #0
@@ -15838,43 +15838,43 @@ _02223020:
 	bl PaletteData_CopyPalette
 	add sp, #8
 	pop {r3, r4, r5, pc}
-	thumb_func_end ov07_02222FF4
+	thumb_func_end BattleAnimSystem_RestoreFromGrayscale
 
-	thumb_func_start ov07_02223038
-ov07_02223038: ; 0x02223038
+	thumb_func_start BattleAnimSystem_GetFunc
+BattleAnimSystem_GetFunc: ; 0x02223038
 	cmp r0, #0x54
 	blo _02223040
 	mov r0, #0
 	bx lr
 _02223040:
 	lsl r1, r0, #2
-	ldr r0, _02223048 ; =ov07_02236520
+	ldr r0, _02223048 ; =sBattleAnimFuncTable
 	ldr r0, [r0, r1]
 	bx lr
 	.balign 4, 0
-_02223048: .word ov07_02236520
-	thumb_func_end ov07_02223038
+_02223048: .word sBattleAnimFuncTable
+	thumb_func_end BattleAnimSystem_GetFunc
 
-	thumb_func_start ov07_0222304C
-ov07_0222304C: ; 0x0222304C
+	thumb_func_start BattleAnimSystem_GetSpriteFunc
+BattleAnimSystem_GetSpriteFunc: ; 0x0222304C
 	cmp r0, #0x21
 	blo _02223054
 	mov r0, #0
 	bx lr
 _02223054:
 	lsl r1, r0, #2
-	ldr r0, _0222305C ; =ov07_0223649C
+	ldr r0, _0222305C ; =sBattleAnimSpriteFuncTable
 	ldr r0, [r0, r1]
 	bx lr
 	.balign 4, 0
-_0222305C: .word ov07_0223649C
-	thumb_func_end ov07_0222304C
+_0222305C: .word sBattleAnimSpriteFuncTable
+	thumb_func_end BattleAnimSystem_GetSpriteFunc
 
-	thumb_func_start ov07_02223060
-ov07_02223060: ; 0x02223060
+	thumb_func_start BattleAnimFunc_None
+BattleAnimFunc_None: ; 0x02223060
 	bx lr
 	.balign 4, 0
-	thumb_func_end ov07_02223060
+	thumb_func_end BattleAnimFunc_None
 
 	thumb_func_start BattleAnimTask_OneFrame
 BattleAnimTask_OneFrame: ; 0x02223064
@@ -16151,7 +16151,7 @@ _02223252:
 	ldrsh r2, [r5, r2]
 	ldrsh r3, [r5, r3]
 	add r0, #0x7c
-	bl ov07_022227A8
+	bl BattleAnimUtil_InitShake
 	ldrb r0, [r5, #4]
 	add r0, r0, #1
 	strb r0, [r5, #4]
@@ -16159,7 +16159,7 @@ _02223252:
 _02223274:
 	add r0, r5, #0
 	add r0, #0x7c
-	bl ov07_022227D8
+	bl BattleAnimUtil_UpdateShake
 	cmp r0, #0
 	bne _02223288
 	ldrb r0, [r5, #4]
@@ -17150,7 +17150,7 @@ BattleAnimTask_RotateBattler: ; 0x02223A1C
 _02223A32:
 	add r0, r4, #0
 	add r0, #0xc
-	bl ov07_02222440
+	bl BattleAnimUtil_UpdateValueMotion
 	cmp r0, #1
 	bne _02223A4E
 	ldr r2, [r4, #0xc]
@@ -17166,7 +17166,7 @@ _02223A4E:
 	ldr r2, [r4, #0x20]
 	ldr r3, [r4, #0x24]
 	add r0, #0xc
-	bl ov07_022223F0
+	bl BattleAnimUtil_InitValueMotion
 	ldrb r0, [r4]
 	add r0, r0, #1
 	strb r0, [r4]
@@ -17237,7 +17237,7 @@ _02223AE0:
 	ldr r1, [r4, #0x20]
 	ldr r3, [r4, #0x24]
 	add r0, #0xc
-	bl ov07_022223F0
+	bl BattleAnimUtil_InitValueMotion
 	ldr r1, [sp]
 	add r0, r5, #0
 	bl ov07_02222004
@@ -17306,7 +17306,7 @@ BattleAnimTask_CircleBattler: ; 0x02223B70
 	ldrsh r2, [r4, r2]
 	ldr r3, [r4, #0x28]
 	add r0, r4, #4
-	bl ov07_02222240
+	bl BattleAnimUtil_UpdateSinMotionPokepic
 	cmp r0, #0
 	bne _02223BBC
 	mov r2, #0x2c
@@ -17466,7 +17466,7 @@ BattleAnimSpritePop_Start: ; 0x02223CAC
 	add r0, r5, #0
 	add r2, r1, #0
 	mov r3, #0xe
-	bl ov07_02222508
+	bl BattleAnimUtil_InitScaleMotion
 	add sp, #4
 	pop {r3, r4, r5, r6, pc}
 	.balign 4, 0
@@ -17479,7 +17479,7 @@ BattleAnimSpritePop_Update: ; 0x02223CE4
 	add r4, r0, #0
 	ldr r1, [r4, #0x14]
 	add r0, #0x18
-	bl ov07_02222748
+	bl BattleAnimUtil_UpdateScaleMotionSprite
 	cmp r0, #0
 	bne _02223D20
 	ldr r0, [r4, #0x40]
@@ -17501,7 +17501,7 @@ _02223D0A:
 	mov r1, #0xe
 	mov r2, #0xa
 	mov r3, #0xc
-	bl ov07_02222508
+	bl BattleAnimUtil_InitScaleMotion
 _02223D20:
 	mov r0, #0
 	add sp, #4
@@ -18161,12 +18161,12 @@ _022241FE:
 	asr r1, r1, #0x10
 	asr r2, r2, #0x10
 	asr r3, r3, #0x10
-	bl ov07_02222508
+	bl BattleAnimUtil_InitScaleMotion
 	add r0, r4, #0
 	add r0, #0x14
 	add r1, sp, #8
 	add r2, sp, #4
-	bl ov07_02222644
+	bl BattleAnimUtil_GetScaleFloat
 	ldr r0, [r4, #0x50]
 	cmp r0, #1
 	bne _0222423A
@@ -18186,13 +18186,13 @@ _0222423A:
 _0222424C:
 	add r0, r4, #0
 	add r0, #0x14
-	bl ov07_02222558
+	bl BattleAnimUtil_UpdateScaleMotion
 	add r5, r0, #0
 	add r0, r4, #0
 	add r0, #0x14
 	add r1, sp, #8
 	add r2, sp, #4
-	bl ov07_02222644
+	bl BattleAnimUtil_GetScaleFloat
 	ldr r0, [r4, #0x50]
 	cmp r0, #1
 	bne _02224272
@@ -18215,7 +18215,7 @@ _02224272:
 	ldrsh r2, [r4, r2]
 	ldr r0, [r4, #0x10]
 	ldr r3, [r4, #0x28]
-	bl ov07_022226FC
+	bl BattleAnimUtil_AlignSpriteToScale
 	b _0222433C
 _02224296:
 	ldr r0, [r4, #8]
@@ -18238,7 +18238,7 @@ _0222429E:
 	asr r1, r1, #0x10
 	asr r2, r2, #0x10
 	asr r3, r3, #0x10
-	bl ov07_02222508
+	bl BattleAnimUtil_InitScaleMotion
 	ldr r0, [r4, #8]
 	add r0, r0, #1
 	str r0, [r4, #8]
@@ -18246,13 +18246,13 @@ _0222429E:
 _022242C8:
 	add r0, r4, #0
 	add r0, #0x14
-	bl ov07_02222558
+	bl BattleAnimUtil_UpdateScaleMotion
 	add r5, r0, #0
 	add r0, r4, #0
 	add r0, #0x14
 	add r1, sp, #8
 	add r2, sp, #4
-	bl ov07_02222644
+	bl BattleAnimUtil_GetScaleFloat
 	ldr r0, [r4, #0x50]
 	cmp r0, #1
 	bne _022242EE
@@ -18275,7 +18275,7 @@ _022242EE:
 	ldrsh r2, [r4, r2]
 	ldr r0, [r4, #0x10]
 	ldr r3, [r4, #0x28]
-	bl ov07_022226FC
+	bl BattleAnimUtil_AlignSpriteToScale
 	b _0222433C
 _02224312:
 	ldr r0, [r4, #0x48]
@@ -18480,11 +18480,11 @@ _02224494:
 	asr r1, r1, #0x10
 	asr r2, r2, #0x10
 	asr r3, r3, #0x10
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	add r0, r4, #0
 	ldr r1, [r4, #0xc]
 	add r0, #0x10
-	bl ov07_02222768
+	bl BattleAnimUtil_UpdateScaleMotionPokepic
 	ldr r0, [r4, #4]
 	add sp, #0xc
 	add r0, r0, #1
@@ -18494,7 +18494,7 @@ _022244D8:
 	add r0, r4, #0
 	ldr r1, [r4, #0xc]
 	add r0, #0x10
-	bl ov07_02222788
+	bl BattleAnimUtil_UpdateScaleMotionXYPokepic
 	cmp r0, #0
 	beq _022244FE
 	mov r0, #0
@@ -18505,7 +18505,7 @@ _022244D8:
 	ldrsh r2, [r4, r2]
 	ldr r0, [r4, #0xc]
 	ldr r3, [r4, #0x24]
-	bl ov07_022226C4
+	bl BattleAnimUtil_AlignPokepicToScale
 	add sp, #0xc
 	pop {r4, r5, pc}
 _022244FE:
@@ -18550,11 +18550,11 @@ _0222451C:
 	asr r1, r1, #0x10
 	asr r2, r2, #0x10
 	asr r3, r3, #0x10
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	add r0, r4, #0
 	ldr r1, [r4, #0xc]
 	add r0, #0x10
-	bl ov07_02222788
+	bl BattleAnimUtil_UpdateScaleMotionXYPokepic
 	ldr r0, [r4, #4]
 	add sp, #0xc
 	add r0, r0, #1
@@ -18564,7 +18564,7 @@ _02224562:
 	add r0, r4, #0
 	ldr r1, [r4, #0xc]
 	add r0, #0x10
-	bl ov07_02222788
+	bl BattleAnimUtil_UpdateScaleMotionXYPokepic
 	cmp r0, #0
 	beq _02224588
 	mov r0, #0
@@ -18575,7 +18575,7 @@ _02224562:
 	ldrsh r2, [r4, r2]
 	ldr r0, [r4, #0xc]
 	ldr r3, [r4, #0x24]
-	bl ov07_022226C4
+	bl BattleAnimUtil_AlignPokepicToScale
 	add sp, #0xc
 	pop {r4, r5, pc}
 _02224588:
@@ -18877,7 +18877,7 @@ BattleAnimTask_BlendBattlerSprites: ; 0x022247C8
 	add r5, r0, #0
 	add r0, r4, #0
 	add r0, #8
-	bl ov07_02222AF4
+	bl BattleAnimUtil_IsBlendAlphaMotionDone
 	cmp r0, #0
 	beq _022247EA
 	add r0, r4, #0
@@ -18961,7 +18961,7 @@ _0222482E:
 	asr r1, r1, #0x10
 	asr r2, r2, #0x10
 	asr r3, r3, #0x10
-	bl ov07_02222AC4
+	bl BattleAnimUtil_StartBlendAlphaMotion
 	ldr r0, [r4]
 	ldr r1, _0222489C ; =BattleAnimTask_BlendBattlerSprites
 	add r2, r4, #0
@@ -19127,7 +19127,7 @@ _022249B0:
 	add r2, r1, r2
 	lsl r2, r2, #0x10
 	asr r2, r2, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	add r0, r4, #0
 	add r0, #0x24
 	ldrb r0, [r0]
@@ -19139,7 +19139,7 @@ _022249B0:
 _022249E4:
 	add r0, r4, #0
 	add r0, #0x40
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	bne _022249FE
 	add r0, r4, #0
@@ -19323,7 +19323,7 @@ _02224B3C:
 	add r2, r1, r2
 	lsl r2, r2, #0x10
 	asr r2, r2, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	add r0, r4, #0
 	add r0, #0x20
 	ldrb r0, [r0]
@@ -19334,7 +19334,7 @@ _02224B3C:
 _02224B6E:
 	add r0, r4, #0
 	add r0, #0x3c
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	bne _02224B88
 	add r0, r4, #0
@@ -19514,12 +19514,12 @@ _02224CD4: ; jump table
 _02224CDC:
 	add r0, r4, #0
 	add r0, #0x14
-	bl ov07_02222558
+	bl BattleAnimUtil_UpdateScaleMotion
 	cmp r0, #1
 	bne _02224D34
 	add r0, r4, #0
 	add r0, #0x38
-	bl ov07_022227D8
+	bl BattleAnimUtil_UpdateShake
 	mov r2, #0x14
 	ldrsh r2, [r4, r2]
 	ldr r0, [r4, #0x10]
@@ -19539,7 +19539,7 @@ _02224CDC:
 	ldrsh r0, [r4, r0]
 	ldr r1, [r4, #4]
 	ldr r2, [r4, #0x28]
-	bl ov07_02222674
+	bl BattleAnimUtil_CalcScaleYOffset
 	mov r2, #2
 	add r3, r0, #0
 	ldrsh r2, [r4, r2]
@@ -19584,7 +19584,7 @@ _02224D4E:
 	asr r1, r1, #0x10
 	mov r2, #0x64
 	asr r3, r3, #0x10
-	bl ov07_02222508
+	bl BattleAnimUtil_InitScaleMotion
 	ldrb r0, [r4]
 	add sp, #4
 	add r0, r0, #1
@@ -19593,7 +19593,7 @@ _02224D4E:
 _02224D88:
 	add r0, r4, #0
 	add r0, #0x14
-	bl ov07_02222558
+	bl BattleAnimUtil_UpdateScaleMotion
 	cmp r0, #1
 	bne _02224DCC
 	mov r2, #0x14
@@ -19610,7 +19610,7 @@ _02224D88:
 	ldrsh r0, [r4, r0]
 	ldr r1, [r4, #4]
 	ldr r2, [r4, #0x28]
-	bl ov07_02222674
+	bl BattleAnimUtil_CalcScaleYOffset
 	mov r2, #2
 	add r3, r0, #0
 	ldrsh r2, [r4, r2]
@@ -19629,7 +19629,7 @@ _02224DCC:
 _02224DD6:
 	add r0, r4, #0
 	add r0, #0x14
-	bl ov07_02222558
+	bl BattleAnimUtil_UpdateScaleMotion
 	cmp r0, #1
 	ldr r0, [r4, #0x10]
 	bne _02224E1A
@@ -19646,7 +19646,7 @@ _02224DD6:
 	ldrsh r0, [r4, r0]
 	ldr r1, [r4, #4]
 	ldr r2, [r4, #0x28]
-	bl ov07_02222674
+	bl BattleAnimUtil_CalcScaleYOffset
 	mov r2, #2
 	add r3, r0, #0
 	ldrsh r2, [r4, r2]
@@ -19736,7 +19736,7 @@ BattleAnimFunc_ShakeAndScaleBattler: ; 0x02224E58
 	add r0, #0x14
 	add r2, r1, #0
 	asr r3, r3, #0x10
-	bl ov07_02222508
+	bl BattleAnimUtil_InitScaleMotion
 	mov r0, #0xa
 	str r0, [sp]
 	add r0, r4, #0
@@ -19744,7 +19744,7 @@ BattleAnimFunc_ShakeAndScaleBattler: ; 0x02224E58
 	add r0, #0x38
 	mov r1, #2
 	add r3, r2, #0
-	bl ov07_022227A8
+	bl BattleAnimUtil_InitShake
 	ldr r0, [r4, #0xc]
 	ldr r1, _02224EF0 ; =BattleAnimTask_ShakeAndScaleBattler
 	add r2, r4, #0
@@ -19780,12 +19780,12 @@ _02224F10: ; jump table
 _02224F18:
 	add r0, r4, #0
 	add r0, #0x20
-	bl ov07_0222260C
+	bl BattleAnimUtil_UpdateScaleMotionXY
 	cmp r0, #1
 	bne _02224F70
 	add r0, r4, #0
 	add r0, #0x44
-	bl ov07_022227D8
+	bl BattleAnimUtil_UpdateShake
 	mov r2, #0x20
 	ldrsh r2, [r4, r2]
 	ldr r0, [r4, #0x1c]
@@ -19805,7 +19805,7 @@ _02224F18:
 	ldrsh r0, [r4, r0]
 	ldr r1, [r4, #4]
 	ldr r2, [r4, #0x34]
-	bl ov07_02222674
+	bl BattleAnimUtil_CalcScaleYOffset
 	mov r2, #2
 	add r3, r0, #0
 	ldrsh r2, [r4, r2]
@@ -19854,7 +19854,7 @@ _02224F8A:
 	asr r1, r1, #0x10
 	asr r2, r2, #0x10
 	asr r3, r3, #0x10
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	ldrb r0, [r4]
 	add sp, #0xc
 	add r0, r0, #1
@@ -19863,7 +19863,7 @@ _02224F8A:
 _02224FC6:
 	add r0, r4, #0
 	add r0, #0x20
-	bl ov07_0222260C
+	bl BattleAnimUtil_UpdateScaleMotionXY
 	cmp r0, #1
 	bne _0222500A
 	mov r2, #0x20
@@ -19880,7 +19880,7 @@ _02224FC6:
 	ldrsh r0, [r4, r0]
 	ldr r1, [r4, #4]
 	ldr r2, [r4, #0x34]
-	bl ov07_02222674
+	bl BattleAnimUtil_CalcScaleYOffset
 	mov r2, #2
 	add r3, r0, #0
 	ldrsh r2, [r4, r2]
@@ -19899,7 +19899,7 @@ _0222500A:
 _02225014:
 	add r0, r4, #0
 	add r0, #0x20
-	bl ov07_0222260C
+	bl BattleAnimUtil_UpdateScaleMotionXY
 	cmp r0, #1
 	ldr r0, [r4, #0x1c]
 	bne _02225058
@@ -19916,7 +19916,7 @@ _02225014:
 	ldrsh r0, [r4, r0]
 	ldr r1, [r4, #4]
 	ldr r2, [r4, #0x34]
-	bl ov07_02222674
+	bl BattleAnimUtil_CalcScaleYOffset
 	mov r2, #2
 	add r3, r0, #0
 	ldrsh r2, [r4, r2]
@@ -20052,7 +20052,7 @@ BattleAnimFunc_ShakeAndScaleBattlerXY: ; 0x02225098
 	ldr r3, [sp, #0xc]
 	add r0, #0x20
 	add r2, r7, #0
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	mov r0, #0xa
 	str r0, [sp]
 	add r0, r4, #0
@@ -20060,7 +20060,7 @@ BattleAnimFunc_ShakeAndScaleBattlerXY: ; 0x02225098
 	add r0, #0x44
 	mov r1, #2
 	add r3, r2, #0
-	bl ov07_022227A8
+	bl BattleAnimUtil_InitShake
 	ldr r0, [r4, #0x18]
 	ldr r1, _02225198 ; =BattleAnimTask_ShakeAndScaleBattlerXY
 	add r2, r4, #0
@@ -20194,7 +20194,7 @@ _02225274:
 	add r2, r1, r2
 	lsl r2, r2, #0x10
 	asr r2, r2, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	add r0, r4, #0
 	add r0, #0x20
 	ldrb r0, [r0]
@@ -20205,7 +20205,7 @@ _02225274:
 _022252B0:
 	add r0, r4, #0
 	add r0, #0x3c
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	bne _022252CA
 	add r0, r4, #0
@@ -20407,7 +20407,7 @@ BattleAnimTask_MoveBattlerSin: ; 0x02225444
 	ldrsh r2, [r4, r2]
 	ldr r3, [r4, #0x24]
 	add r0, #0x30
-	bl ov07_02222240
+	bl BattleAnimUtil_UpdateSinMotionPokepic
 	cmp r0, #0
 	bne _02225488
 	mov r2, #0x20
@@ -20497,7 +20497,7 @@ BattleAnimTask_MoveBattlerLinear: ; 0x02225504
 	bne _0222553C
 	add r0, r4, #0
 	add r0, #0x30
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	bne _02225522
 	ldrb r0, [r4]
@@ -20631,7 +20631,7 @@ _0222560A:
 	ldrsh r1, [r5, r1]
 	ldrsh r2, [r5, r2]
 	add r0, #0x30
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	ldr r0, [r5, #4]
 	ldr r1, _0222563C ; =BattleAnimTask_MoveBattlerLinear
 	add r2, r5, #0
@@ -20756,7 +20756,7 @@ _02225708:
 	ldrsh r1, [r4, r1]
 	ldrsh r2, [r4, r2]
 	add r0, #0x30
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	b _02225756
 _02225732:
 	ldr r1, [sp, #8]
@@ -20774,7 +20774,7 @@ _02225732:
 	add r0, r4, #0
 	ldrsh r1, [r4, r1]
 	add r0, #0x30
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 _02225756:
 	ldr r0, [r4, #4]
 	ldr r1, _02225764 ; =BattleAnimTask_MoveBattlerLinear
@@ -20874,11 +20874,11 @@ BattleAnimTask_WaitPaletteBlend: ; 0x02225810
 	add r4, r1, #0
 	add r5, r0, #0
 	ldr r0, [r4, #0x30]
-	bl ov07_02222EE8
+	bl BattleAnimUtil_IsPaletteBlendActive
 	cmp r0, #0
 	bne _02225834
 	ldr r0, [r4, #0x30]
-	bl ov07_02222EF8
+	bl BattleAnimUtil_FreePaletteBlend
 	ldr r0, [r4, #4]
 	add r1, r5, #0
 	bl BattleAnimSystem_DestroyTask
@@ -20966,7 +20966,7 @@ BattleAnimFunc_BlendSpritePalette: ; 0x02225838
 	ldr r0, _022258FC ; =0x0000044C
 	str r0, [sp, #0x18]
 	ldr r0, [r4, #0x18]
-	bl ov07_02222F10
+	bl BattleAnimUtil_StartPaletteBlend
 	str r0, [r4, #0x30]
 	ldr r0, [r4, #4]
 	ldr r1, _02225900 ; =BattleAnimTask_WaitPaletteBlend
@@ -21597,14 +21597,14 @@ _02225DD8:
 	add r0, #0xd4
 	asr r1, r1, #0x10
 	asr r2, r2, #0x10
-	bl ov07_022227A8
+	bl BattleAnimUtil_InitShake
 	ldrb r0, [r4]
 	add r0, r0, #1
 	strb r0, [r4]
 _02225DF8:
 	add r0, r4, #0
 	add r0, #0xd4
-	bl ov07_022227D8
+	bl BattleAnimUtil_UpdateShake
 	cmp r0, #0
 	bne _02225E4C
 	ldrb r1, [r4, #1]
@@ -22003,7 +22003,7 @@ BattleAnimTask_MoveEmitter: ; 0x022260F8
 _02226116:
 	add r0, r5, #0
 	add r0, #0xa8
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	bne _0222613E
 	cmp r4, #0
@@ -22149,7 +22149,7 @@ BattleAnimFunc_MoveEmitter: ; 0x022261B4
 	asr r1, r1, #0x10
 	asr r2, r2, #0x10
 	asr r3, r3, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	cmp r5, #0
 	ldr r2, _022262D8 ; =0x00005C71
 	ble _0222626C
@@ -22159,7 +22159,7 @@ BattleAnimFunc_MoveEmitter: ; 0x022261B4
 	mul r1, r5
 	mul r2, r5
 	mov r3, #0xa
-	bl ov07_022223F0
+	bl BattleAnimUtil_InitValueMotion
 	b _0222627C
 _0222626C:
 	ldr r1, _022262E0 ; =0x00003FFF
@@ -22168,7 +22168,7 @@ _0222626C:
 	mul r1, r5
 	mul r2, r5
 	mov r3, #0xa
-	bl ov07_022223F0
+	bl BattleAnimUtil_InitValueMotion
 _0222627C:
 	ldr r0, [r4, #0x20]
 	mov r5, #0
@@ -22178,7 +22178,7 @@ _0222627C:
 	add r6, #0xa8
 _02226288:
 	add r0, r6, #0
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	ldr r0, [r4, #0x20]
 	add r5, r5, #1
 	cmp r5, r0
@@ -22359,7 +22359,7 @@ _022263D4:
 	asr r1, r1, #0x10
 	asr r2, r2, #0x10
 	asr r3, r3, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	ldr r0, [r4, #0x20]
 	mov r5, #0
 	cmp r0, #0
@@ -22368,7 +22368,7 @@ _022263D4:
 	add r6, #0xa8
 _02226424:
 	add r0, r6, #0
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	ldr r0, [r4, #0x20]
 	add r5, r5, #1
 	cmp r5, r0
@@ -22423,7 +22423,7 @@ BattleAnimTask_MoveEmitterArc: ; 0x0222647C
 	add r1, r5, #0
 	add r0, #0xa8
 	add r1, #0xcc
-	bl ov07_02222384
+	bl BattleAnimUtil_UpdateLinearSinMotion
 	cmp r0, #0
 	bne _022264B6
 	cmp r4, #0
@@ -22537,7 +22537,7 @@ BattleAnimFunc_MoveEmitterArc: ; 0x022264E0
 	lsl r3, r3, #0x10
 	asr r2, r2, #0x10
 	asr r3, r3, #0x10
-	bl ov07_02222338
+	bl BattleAnimUtil_InitLinearSinMotion
 	cmp r5, #0
 	ldr r2, _02226618 ; =0x00005C71
 	ble _022265A6
@@ -22547,7 +22547,7 @@ BattleAnimFunc_MoveEmitterArc: ; 0x022264E0
 	mul r1, r5
 	mul r2, r5
 	mov r3, #0xa
-	bl ov07_022223F0
+	bl BattleAnimUtil_InitValueMotion
 	b _022265B6
 _022265A6:
 	ldr r1, _02226620 ; =0x00003FFF
@@ -22556,7 +22556,7 @@ _022265A6:
 	mul r1, r5
 	mul r2, r5
 	mov r3, #0xa
-	bl ov07_022223F0
+	bl BattleAnimUtil_InitValueMotion
 _022265B6:
 	ldr r0, [r4, #0x20]
 	mov r5, #0
@@ -22569,7 +22569,7 @@ _022265B6:
 _022265C6:
 	add r0, r6, #0
 	add r1, r7, #0
-	bl ov07_02222384
+	bl BattleAnimUtil_UpdateLinearSinMotion
 	ldr r0, [r4, #0x20]
 	add r5, r5, #1
 	cmp r5, r0
@@ -22624,7 +22624,7 @@ BattleAnimTask_EmitterSinMotion: ; 0x02226628
 	add r4, r0, #0
 	add r0, r5, #0
 	add r0, #0x58
-	bl ov07_02222180
+	bl BattleAnimUtil_UpdateSinMotion
 	cmp r0, #0
 	bne _0222665E
 	cmp r4, #0
@@ -22793,7 +22793,7 @@ _0222671C:
 	bl ov07_022220FC
 	add r0, r5, #0
 	add r0, #0x58
-	bl ov07_02222180
+	bl BattleAnimUtil_UpdateSinMotion
 	add r0, r5, #0
 	add r0, #0x8c
 	ldr r2, [r0]
@@ -22948,7 +22948,7 @@ _022268E2:
 	add r0, #0x20
 	mov r1, #0
 	mov r3, #4
-	bl ov07_022223F0
+	bl BattleAnimUtil_InitValueMotion
 	mov r1, #7
 	ldr r0, [r4, #0x1c]
 	mvn r1, r1
@@ -22963,7 +22963,7 @@ _022268E2:
 _02226910:
 	add r0, r4, #0
 	add r0, #0x20
-	bl ov07_02222440
+	bl BattleAnimUtil_UpdateValueMotion
 	cmp r0, #1
 	bne _0222692A
 	ldr r1, [r4, #0x20]
@@ -23004,7 +23004,7 @@ _02226958:
 	ldr r2, _022269D4 ; =0xFFFFF1C8
 	add r0, #0x20
 	mov r3, #4
-	bl ov07_022223F0
+	bl BattleAnimUtil_InitValueMotion
 	b _022269BE
 _02226968:
 	add r0, r4, #0
@@ -23012,7 +23012,7 @@ _02226968:
 	ldr r2, _022269D0 ; =0x00000E38
 	add r0, #0x20
 	mov r3, #4
-	bl ov07_022223F0
+	bl BattleAnimUtil_InitValueMotion
 	b _022269BE
 _02226978:
 	add r0, r4, #0
@@ -23020,7 +23020,7 @@ _02226978:
 	ldr r2, _022269D4 ; =0xFFFFF1C8
 	add r0, #0x20
 	mov r3, #4
-	bl ov07_022223F0
+	bl BattleAnimUtil_InitValueMotion
 	b _022269BE
 _02226988:
 	add r0, r4, #0
@@ -23028,7 +23028,7 @@ _02226988:
 	ldr r2, _022269D0 ; =0x00000E38
 	add r0, #0x20
 	mov r3, #4
-	bl ov07_022223F0
+	bl BattleAnimUtil_InitValueMotion
 	b _022269BE
 _02226998:
 	add r0, r4, #0
@@ -23036,7 +23036,7 @@ _02226998:
 	add r0, #0x20
 	mov r2, #0
 	mov r3, #2
-	bl ov07_022223F0
+	bl BattleAnimUtil_InitValueMotion
 	b _022269BE
 _022269A8:
 	ldr r0, [r4, #0x1c]
@@ -23247,7 +23247,7 @@ _02226B4E:
 	add r0, #0x24
 	add r1, #0x48
 	sub r2, #0x33
-	bl ov07_02222338
+	bl BattleAnimUtil_InitLinearSinMotion
 	ldrb r0, [r4]
 	add r0, r0, #1
 	strb r0, [r4]
@@ -23257,7 +23257,7 @@ _02226B74:
 	ldr r2, [r4, #0x1c]
 	add r0, #0x24
 	add r1, #0x48
-	bl ov07_022223CC
+	bl BattleAnimUtil_UpdateLinearSinMotionSprite
 	cmp r0, #0
 	bne _02226C36
 	ldrb r0, [r4]
@@ -23400,11 +23400,11 @@ ov07_02226C90: ; 0x02226C90
 	cmp r0, #0
 	beq _02226CA6
 	add r0, r4, #0
-	bl ov07_02222FC4
+	bl BattleAnimSystem_ApplyGrayscale
 	pop {r4, pc}
 _02226CA6:
 	add r0, r4, #0
-	bl ov07_02222FF4
+	bl BattleAnimSystem_RestoreFromGrayscale
 	pop {r4, pc}
 	.balign 4, 0
 	thumb_func_end ov07_02226C90
@@ -24143,7 +24143,7 @@ _0222725C:
 	add r4, r0, #0
 	mov r0, #0
 	add r1, r0, #0
-	bl ov07_02222D88
+	bl BattleAnimUtil_PackXY
 	add r6, r0, #0
 	ldr r0, [r5, #0xc]
 	bl BattleAnimSystem_GetHeapID
@@ -24160,7 +24160,7 @@ _0222725C:
 	add r2, r1, #0
 	add r2, #0xb5
 	lsl r3, r3, #0x10
-	bl ov07_02222CCC
+	bl BattleAnimScanline_NewWave
 	str r0, [r5, #0x24]
 	ldrb r0, [r5, #8]
 	add sp, #0x14
@@ -24175,7 +24175,7 @@ _022272A4:
 	cmp r1, r0
 	blt _022272CA
 	ldr r0, [r5, #0x24]
-	bl ov07_02222D3C
+	bl BattleAnimScanline_FreeWave
 	ldrb r0, [r5, #8]
 	add r0, r0, #1
 	strb r0, [r5, #8]
@@ -24334,7 +24334,7 @@ _022273D6:
 	add r0, #0x20
 	mov r2, #0x3c
 	add r3, r1, #0
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	ldrb r0, [r4]
 	add r0, r0, #1
 	strb r0, [r4]
@@ -24342,7 +24342,7 @@ _022273D6:
 _022273F4:
 	add r0, r4, #0
 	add r0, #0x20
-	bl ov07_0222260C
+	bl BattleAnimUtil_UpdateScaleMotionXY
 	cmp r0, #1
 	bne _0222743A
 	mov r5, #0
@@ -24358,7 +24358,7 @@ _02227414:
 	add r0, r7, #0
 	add r1, sp, #0x18
 	add r2, sp, #0x14
-	bl ov07_02222644
+	bl BattleAnimUtil_GetScaleFloat
 	ldr r0, [r6, #0x14]
 	ldr r1, [sp, #0x18]
 	ldr r2, [sp, #0x14]
@@ -24641,12 +24641,12 @@ _0222764C: ; jump table
 _02227658:
 	add r0, r4, #0
 	add r0, #0x14
-	bl ov07_02222558
+	bl BattleAnimUtil_UpdateScaleMotion
 	cmp r0, #1
 	bne _022276B0
 	add r0, r4, #0
 	add r0, #0x38
-	bl ov07_022227D8
+	bl BattleAnimUtil_UpdateShake
 	mov r2, #0x14
 	ldrsh r2, [r4, r2]
 	ldr r0, [r4, #0x10]
@@ -24666,7 +24666,7 @@ _02227658:
 	ldrsh r0, [r4, r0]
 	ldr r1, [r4, #4]
 	ldr r2, [r4, #0x28]
-	bl ov07_02222674
+	bl BattleAnimUtil_CalcScaleYOffset
 	mov r2, #2
 	add r3, r0, #0
 	ldrsh r2, [r4, r2]
@@ -24745,7 +24745,7 @@ _02227704:
 	asr r1, r1, #0x10
 	mov r2, #0x64
 	asr r3, r3, #0x10
-	bl ov07_02222508
+	bl BattleAnimUtil_InitScaleMotion
 	ldrb r0, [r4]
 	add sp, #4
 	add r0, r0, #1
@@ -24759,7 +24759,7 @@ _0222774A:
 _02227752:
 	add r0, r4, #0
 	add r0, #0x14
-	bl ov07_02222558
+	bl BattleAnimUtil_UpdateScaleMotion
 	cmp r0, #1
 	bne _02227796
 	mov r2, #0x14
@@ -24776,7 +24776,7 @@ _02227752:
 	ldrsh r0, [r4, r0]
 	ldr r1, [r4, #4]
 	ldr r2, [r4, #0x28]
-	bl ov07_02222674
+	bl BattleAnimUtil_CalcScaleYOffset
 	mov r2, #2
 	add r3, r0, #0
 	ldrsh r2, [r4, r2]
@@ -24795,7 +24795,7 @@ _02227796:
 _022277A0:
 	add r0, r4, #0
 	add r0, #0x14
-	bl ov07_02222558
+	bl BattleAnimUtil_UpdateScaleMotion
 	cmp r0, #1
 	ldr r0, [r4, #0x10]
 	bne _022277E4
@@ -24812,7 +24812,7 @@ _022277A0:
 	ldrsh r0, [r4, r0]
 	ldr r1, [r4, #4]
 	ldr r2, [r4, #0x28]
-	bl ov07_02222674
+	bl BattleAnimUtil_CalcScaleYOffset
 	mov r2, #2
 	add r3, r0, #0
 	ldrsh r2, [r4, r2]
@@ -24896,7 +24896,7 @@ ov07_02227824: ; 0x02227824
 	add r0, #0x14
 	add r2, r1, #0
 	asr r3, r3, #0x10
-	bl ov07_02222508
+	bl BattleAnimUtil_InitScaleMotion
 	mov r0, #0xa
 	str r0, [sp]
 	add r0, r4, #0
@@ -24904,7 +24904,7 @@ ov07_02227824: ; 0x02227824
 	add r0, #0x38
 	mov r1, #2
 	add r3, r2, #0
-	bl ov07_022227A8
+	bl BattleAnimUtil_InitShake
 	ldr r0, [r4, #0xc]
 	ldr r1, _022278AC ; =ov07_02227630
 	add r2, r4, #0
@@ -24941,7 +24941,7 @@ _022278CC: ; jump table
 _022278D6:
 	add r0, r4, #0
 	add r0, #0x10
-	bl ov07_0222260C
+	bl BattleAnimUtil_UpdateScaleMotionXY
 	cmp r0, #1
 	bne _0222791A
 	mov r2, #0x10
@@ -24958,7 +24958,7 @@ _022278D6:
 	ldrsh r0, [r4, r0]
 	ldr r1, [r4, #4]
 	ldr r2, [r4, #0x24]
-	bl ov07_02222674
+	bl BattleAnimUtil_CalcScaleYOffset
 	mov r2, #2
 	add r3, r0, #0
 	ldrsh r2, [r4, r2]
@@ -24979,7 +24979,7 @@ _0222791A:
 	mov r2, #0x32
 	add r0, #0x10
 	add r3, r2, #0
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	ldrb r0, [r4]
 	add sp, #0xc
 	add r0, r0, #1
@@ -24988,7 +24988,7 @@ _0222791A:
 _0222793C:
 	add r0, r4, #0
 	add r0, #0x10
-	bl ov07_0222260C
+	bl BattleAnimUtil_UpdateScaleMotionXY
 	cmp r0, #1
 	bne _02227980
 	mov r2, #0x10
@@ -25005,7 +25005,7 @@ _0222793C:
 	ldrsh r0, [r4, r0]
 	ldr r1, [r4, #4]
 	ldr r2, [r4, #0x24]
-	bl ov07_02222674
+	bl BattleAnimUtil_CalcScaleYOffset
 	mov r2, #2
 	add r3, r0, #0
 	ldrsh r2, [r4, r2]
@@ -25025,7 +25025,7 @@ _02227980:
 	add r0, #0x10
 	mov r1, #0x32
 	mov r3, #0x96
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	ldrb r0, [r4]
 	add sp, #0xc
 	add r0, r0, #1
@@ -25034,7 +25034,7 @@ _02227980:
 _022279A0:
 	add r0, r4, #0
 	add r0, #0x10
-	bl ov07_0222260C
+	bl BattleAnimUtil_UpdateScaleMotionXY
 	cmp r0, #1
 	bne _022279E4
 	mov r2, #0x10
@@ -25051,7 +25051,7 @@ _022279A0:
 	ldrsh r0, [r4, r0]
 	ldr r1, [r4, #4]
 	ldr r2, [r4, #0x24]
-	bl ov07_02222674
+	bl BattleAnimUtil_CalcScaleYOffset
 	mov r2, #2
 	add r3, r0, #0
 	ldrsh r2, [r4, r2]
@@ -25071,7 +25071,7 @@ _022279E4:
 	add r0, r4, #0
 	add r0, #0x10
 	add r3, r1, #0
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	ldrb r0, [r4]
 	add sp, #0xc
 	add r0, r0, #1
@@ -25080,7 +25080,7 @@ _022279E4:
 _02227A04:
 	add r0, r4, #0
 	add r0, #0x10
-	bl ov07_0222260C
+	bl BattleAnimUtil_UpdateScaleMotionXY
 	cmp r0, #1
 	bne _02227A48
 	mov r2, #0x10
@@ -25097,7 +25097,7 @@ _02227A04:
 	ldrsh r0, [r4, r0]
 	ldr r1, [r4, #4]
 	ldr r2, [r4, #0x24]
-	bl ov07_02222674
+	bl BattleAnimUtil_CalcScaleYOffset
 	mov r2, #2
 	add r3, r0, #0
 	ldrsh r2, [r4, r2]
@@ -25117,7 +25117,7 @@ _02227A48:
 	mov r1, #0x96
 	add r0, #0x10
 	add r3, r1, #0
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	ldrb r0, [r4]
 	add sp, #0xc
 	add r0, r0, #1
@@ -25126,7 +25126,7 @@ _02227A48:
 _02227A68:
 	add r0, r4, #0
 	add r0, #0x10
-	bl ov07_0222260C
+	bl BattleAnimUtil_UpdateScaleMotionXY
 	cmp r0, #1
 	ldr r0, [r4, #0xc]
 	bne _02227AAC
@@ -25143,7 +25143,7 @@ _02227A68:
 	ldrsh r0, [r4, r0]
 	ldr r1, [r4, #4]
 	ldr r2, [r4, #0x24]
-	bl ov07_02222674
+	bl BattleAnimUtil_CalcScaleYOffset
 	mov r2, #2
 	add r3, r0, #0
 	ldrsh r2, [r4, r2]
@@ -25221,7 +25221,7 @@ ov07_02227AEC: ; 0x02227AEC
 	add r0, #0x10
 	mov r2, #0x96
 	add r3, r1, #0
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	ldr r0, [r4, #8]
 	ldr r1, _02227B54 ; =ov07_022278B0
 	add r2, r4, #0
@@ -25290,7 +25290,7 @@ _02227B72:
 	add r0, #0x28
 	asr r1, r1, #0x10
 	asr r2, r2, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	mov r0, #0xa
 	ldrsh r3, [r5, r0]
 	mov r0, #8
@@ -25307,7 +25307,7 @@ _02227B72:
 	add r0, #0x4c
 	asr r1, r1, #0x10
 	asr r2, r2, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	ldr r0, [sp, #0xc]
 	add r1, r0, #1
 	mov r0, #6
@@ -25336,7 +25336,7 @@ _02227B72:
 	add r0, #0x70
 	asr r1, r1, #0x10
 	asr r2, r2, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	mov r0, #0xa
 	ldrsh r3, [r5, r0]
 	mov r0, #8
@@ -25353,7 +25353,7 @@ _02227B72:
 	add r0, #0x94
 	asr r1, r1, #0x10
 	asr r2, r2, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	ldrb r0, [r5]
 	add r0, r0, #1
 	strb r0, [r5]
@@ -25370,7 +25370,7 @@ _02227C58:
 	add r4, r5, #0
 _02227C66:
 	add r0, r7, #0
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	bne _02227C7C
 	ldr r0, [sp, #0x10]
@@ -25756,7 +25756,7 @@ _02227FB6:
 	str r0, [sp]
 	add r0, r4, #0
 	add r0, #0xc
-	bl ov07_02222508
+	bl BattleAnimUtil_InitScaleMotion
 	ldrb r0, [r4, #2]
 	cmp r0, #0
 	ldr r0, _0222806C ; =0x00007FFF
@@ -25790,7 +25790,7 @@ _02227FFA:
 _02228010:
 	add r0, r4, #0
 	add r0, #0xc
-	bl ov07_02222558
+	bl BattleAnimUtil_UpdateScaleMotion
 	cmp r0, #0
 	bne _02228038
 	ldr r0, [r4, #8]
@@ -25891,7 +25891,7 @@ _022280BC:
 	str r0, [sp, #8]
 	add r0, r4, #0
 	add r0, #0x10
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	ldrb r0, [r4, #1]
 	add sp, #0xc
 	add r0, r0, #1
@@ -25903,7 +25903,7 @@ _022280BC:
 _022280F6:
 	add r0, r4, #0
 	add r0, #0x10
-	bl ov07_0222260C
+	bl BattleAnimUtil_UpdateScaleMotionXY
 	cmp r0, #0
 	bne _02228114
 	ldrb r0, [r4, #1]
@@ -25932,7 +25932,7 @@ _02228114:
 	ldrsh r0, [r4, r0]
 	ldrsh r1, [r4, r1]
 	ldr r2, [r4, #0x24]
-	bl ov07_02222674
+	bl BattleAnimUtil_CalcScaleYOffset
 	mov r2, #2
 	add r3, r0, #0
 	ldrsh r2, [r4, r2]
@@ -26037,7 +26037,7 @@ _022281E8:
 	str r0, [sp, #8]
 	add r0, r4, #0
 	add r0, #0x10
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	ldrb r0, [r4, #1]
 	add sp, #0xc
 	add r0, r0, #1
@@ -26049,7 +26049,7 @@ _022281E8:
 _02228222:
 	add r0, r4, #0
 	add r0, #0x10
-	bl ov07_0222260C
+	bl BattleAnimUtil_UpdateScaleMotionXY
 	cmp r0, #0
 	bne _02228234
 	ldrb r0, [r4]
@@ -26074,7 +26074,7 @@ _02228234:
 	ldrsh r2, [r4, r2]
 	ldr r0, [r4, #0xc]
 	ldr r3, [r4, #0x24]
-	bl ov07_022226C4
+	bl BattleAnimUtil_AlignPokepicToScale
 	add sp, #0xc
 	pop {r4, r5, pc}
 _02228264:
@@ -26091,7 +26091,7 @@ _02228264:
 	add r0, #0x10
 	add r2, r1, #0
 	asr r3, r3, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	ldrb r0, [r4]
 	add sp, #0xc
 	add r0, r0, #1
@@ -26100,7 +26100,7 @@ _02228264:
 _0222828E:
 	add r0, r4, #0
 	add r0, #0x10
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	bne _022282A0
 	ldrb r0, [r4]
@@ -26134,7 +26134,7 @@ _022282B0:
 	str r0, [sp, #8]
 	add r0, r4, #0
 	add r0, #0x10
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	ldr r0, [r4, #0xc]
 	mov r1, #1
 	bl Pokepic_GetAttr
@@ -26147,7 +26147,7 @@ _022282B0:
 _022282EE:
 	add r0, r4, #0
 	add r0, #0x10
-	bl ov07_0222260C
+	bl BattleAnimUtil_UpdateScaleMotionXY
 	cmp r0, #0
 	bne _02228300
 	ldrb r0, [r4]
@@ -26172,7 +26172,7 @@ _02228300:
 	ldrsh r2, [r4, r2]
 	ldr r0, [r4, #0xc]
 	ldr r3, [r4, #0x24]
-	bl ov07_022226C4
+	bl BattleAnimUtil_AlignPokepicToScale
 	add sp, #0xc
 	pop {r4, r5, pc}
 _02228330:
@@ -26434,7 +26434,7 @@ _02228524:
 	str r0, [sp, #8]
 	add r0, r4, #0
 	add r0, #0x10
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	ldrb r1, [r4, #1]
 	ldr r6, _0222862C ; =ov07_022366D8
 	lsl r0, r1, #1
@@ -26458,7 +26458,7 @@ _02228524:
 	lsl r3, r3, #0x10
 	add r0, #0x34
 	asr r3, r3, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	ldrb r0, [r4, #1]
 	add sp, #0xc
 	add r0, r0, #1
@@ -26471,14 +26471,14 @@ _02228590:
 	add r0, r4, #0
 	add r0, #0x10
 	mov r5, #0
-	bl ov07_0222260C
+	bl BattleAnimUtil_UpdateScaleMotionXY
 	cmp r0, #0
 	bne _022285A0
 	add r5, r5, #1
 _022285A0:
 	add r0, r4, #0
 	add r0, #0x34
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	bne _022285AE
 	add r5, r5, #1
@@ -26522,7 +26522,7 @@ _022285D4:
 	ldrsh r2, [r4, r2]
 	ldr r0, [r4, #0xc]
 	ldr r3, [r4, #0x24]
-	bl ov07_022226C4
+	bl BattleAnimUtil_AlignPokepicToScale
 	add sp, #0xc
 	pop {r3, r4, r5, r6, pc}
 _02228604:
@@ -26841,14 +26841,14 @@ _02228884:
 	add r0, r6, #0
 	mov r2, #5
 	add r3, r1, #0
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	ldrb r0, [r5, #0x18]
 	add r0, r0, #1
 	strb r0, [r5, #0x18]
 	b _02228906
 _022288B2:
 	add r0, r6, #0
-	bl ov07_0222260C
+	bl BattleAnimUtil_UpdateScaleMotionXY
 	cmp r0, #0
 	bne _022288C4
 	ldrb r0, [r5, #0x18]
@@ -26859,7 +26859,7 @@ _022288C4:
 	add r0, r6, #0
 	add r1, sp, #0x28
 	add r2, sp, #0x24
-	bl ov07_02222644
+	bl BattleAnimUtil_GetScaleFloat
 	mov r0, #8
 	ldrsb r0, [r4, r0]
 	bl _fflt
@@ -26879,7 +26879,7 @@ _022288C4:
 	ldr r0, [r5, #0x1c]
 	ldr r3, [r5, #0x34]
 	asr r2, r2, #0x10
-	bl ov07_022226FC
+	bl BattleAnimUtil_AlignSpriteToScale
 	b _02228906
 _02228900:
 	ldr r0, [sp, #0x10]
@@ -26964,7 +26964,7 @@ _0222898A:
 	add r0, r5, #0
 	mov r2, #0x64
 	add r3, r1, #0
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	add r7, r7, #1
 	add r6, #0x2c
 	add r5, #0x2c
@@ -26982,7 +26982,7 @@ _022289BA:
 	add r5, r4, #0
 _022289C4:
 	add r0, r6, #0
-	bl ov07_0222260C
+	bl BattleAnimUtil_UpdateScaleMotionXY
 	cmp r0, #0
 	bne _022289D2
 	add r7, r7, #1
@@ -26991,7 +26991,7 @@ _022289D2:
 	add r0, r6, #0
 	add r1, sp, #0x20
 	add r2, sp, #0x1c
-	bl ov07_02222644
+	bl BattleAnimUtil_GetScaleFloat
 	mov r0, #8
 	ldrsb r0, [r4, r0]
 	bl _fflt
@@ -27011,7 +27011,7 @@ _022289D2:
 	ldr r0, [r5, #0x1c]
 	ldr r3, [r5, #0x34]
 	asr r2, r2, #0x10
-	bl ov07_022226FC
+	bl BattleAnimUtil_AlignSpriteToScale
 _02228A0C:
 	ldr r0, [sp, #0xc]
 	add r6, #0x2c
@@ -27216,7 +27216,7 @@ _02228BA2:
 	ldrsh r1, [r1, r2]
 	mov r2, #0
 	add r3, r2, #0
-	bl ov07_022227A8
+	bl BattleAnimUtil_InitShake
 	ldrb r0, [r4, #2]
 	cmp r0, #0
 	ldr r0, [r4, #0xc]
@@ -27252,7 +27252,7 @@ _02228BE6:
 _02228BFE:
 	add r0, r4, #0
 	add r0, #0xb4
-	bl ov07_022227D8
+	bl BattleAnimUtil_UpdateShake
 	cmp r0, #0
 	bne _02228C1C
 	ldrb r0, [r4, #1]
@@ -27393,7 +27393,7 @@ ov07_02228D08: ; 0x02228D08
 	bne _02228D52
 	add r0, r4, #0
 	add r0, #0x40
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	bne _02228D26
 	ldrb r0, [r4]
@@ -27402,10 +27402,10 @@ ov07_02228D08: ; 0x02228D08
 _02228D26:
 	add r0, r4, #0
 	add r0, #0x1c
-	bl ov07_022227D8
+	bl BattleAnimUtil_UpdateShake
 	add r0, r4, #0
 	add r0, #0x64
-	bl ov07_02222AF4
+	bl BattleAnimUtil_IsBlendAlphaMotionDone
 	mov r1, #0x40
 	mov r2, #0x42
 	ldrsh r1, [r4, r1]
@@ -27501,7 +27501,7 @@ _02228DAC:
 	lsl r2, r2, #0x10
 	add r0, #0x40
 	asr r2, r2, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	add r0, r5, #0
 	mov r1, #2
 	bl ov07_0221FAF8
@@ -27533,7 +27533,7 @@ _02228DAC:
 	add r0, r4, #0
 	add r0, #0x64
 	add r3, r2, #0
-	bl ov07_02222AC4
+	bl BattleAnimUtil_StartBlendAlphaMotion
 	ldr r0, [r4, #0x18]
 	add r1, r5, #0
 	bl ManagedSprite_SetOamMode
@@ -27578,7 +27578,7 @@ _02228E9C:
 	add r0, r4, #0
 	ldr r3, [r5, r3]
 	add r0, #0x5c
-	bl ov07_022223F0
+	bl BattleAnimUtil_InitValueMotion
 	ldrb r0, [r4, #1]
 	cmp r0, #1
 	bne _02228EB4
@@ -27596,7 +27596,7 @@ _02228EB4:
 _02228EC2:
 	add r0, r4, #0
 	add r0, #0x5c
-	bl ov07_02222440
+	bl BattleAnimUtil_UpdateValueMotion
 	cmp r0, #1
 	bne _02228EDE
 	ldr r2, [r4, #0x5c]
@@ -27658,7 +27658,7 @@ _02228F28:
 	ldrsh r2, [r4, r2]
 	ldrsh r3, [r4, r3]
 	add r0, #0x38
-	bl ov07_022227A8
+	bl BattleAnimUtil_InitShake
 	ldrb r0, [r4]
 	add sp, #8
 	add r0, r0, #1
@@ -27676,7 +27676,7 @@ _02228F4C:
 	ldrsh r2, [r3, r2]
 	ldr r3, [r4, #0x2c]
 	add r0, #0x38
-	bl ov07_0222283C
+	bl BattleAnimUtil_UpdateShakePokepic
 	cmp r0, #0
 	bne _02228F84
 	ldrb r0, [r4]
@@ -27785,7 +27785,7 @@ _02229036:
 	asr r1, r1, #0x10
 	asr r2, r2, #0x10
 	mov r3, #0
-	bl ov07_022227A8
+	bl BattleAnimUtil_InitShake
 	ldrb r0, [r5]
 	add r0, r0, #1
 	strb r0, [r5]
@@ -27793,7 +27793,7 @@ _02229036:
 _02229058:
 	add r0, r5, #0
 	add r0, #0x4c
-	bl ov07_022227D8
+	bl BattleAnimUtil_UpdateShake
 	cmp r0, #0
 	bne _0222906C
 	ldrb r0, [r5]
@@ -27950,7 +27950,7 @@ _02229170:
 	add r0, #0x40
 	mov r1, #0x14
 	add r3, r2, #0
-	bl ov07_022227A8
+	bl BattleAnimUtil_InitShake
 	mov r0, #0xa
 	str r0, [sp]
 	add r0, r4, #0
@@ -27958,7 +27958,7 @@ _02229170:
 	add r0, #0x64
 	mov r1, #2
 	add r3, r2, #0
-	bl ov07_022227A8
+	bl BattleAnimUtil_InitShake
 	ldrb r0, [r4]
 	add sp, #4
 	add r0, r0, #1
@@ -27967,7 +27967,7 @@ _02229170:
 _0222919E:
 	add r0, r4, #0
 	add r0, #0x40
-	bl ov07_022227D8
+	bl BattleAnimUtil_UpdateShake
 	cmp r0, #0
 	bne _022291B2
 	ldrb r0, [r4]
@@ -28083,7 +28083,7 @@ ov07_0222928C: ; 0x0222928C
 	ldr r2, [r4, #0x38]
 	add r0, #0x8c
 	add r1, #0xb0
-	bl ov07_022223CC
+	bl BattleAnimUtil_UpdateLinearSinMotionSprite
 	cmp r0, #0
 	bne _022292B8
 	ldr r0, [r4, #0x38]
@@ -28097,7 +28097,7 @@ ov07_0222928C: ; 0x0222928C
 _022292B8:
 	add r0, r4, #0
 	add r0, #0xd4
-	bl ov07_02222440
+	bl BattleAnimUtil_UpdateValueMotion
 	cmp r0, #1
 	bne _022292D4
 	add r1, r4, #0
@@ -28212,7 +28212,7 @@ ov07_022292E4: ; 0x022292E4
 	add r3, r3, r7
 	lsl r3, r3, #0x10
 	asr r3, r3, #0x10
-	bl ov07_02222338
+	bl BattleAnimUtil_InitLinearSinMotion
 	add r0, r6, #0
 	bl BattleAnimSystem_GetAttacker
 	add r1, r0, #0
@@ -28258,7 +28258,7 @@ _02229416:
 	mul r1, r5
 	mul r2, r5
 	mov r3, #0xa
-	bl ov07_022223F0
+	bl BattleAnimUtil_InitValueMotion
 	b _0222943E
 _0222942E:
 	ldr r1, _02229478 ; =0x00003FFF
@@ -28267,7 +28267,7 @@ _0222942E:
 	mul r1, r5
 	mul r2, r5
 	mov r3, #0xa
-	bl ov07_022223F0
+	bl BattleAnimUtil_InitValueMotion
 _0222943E:
 	add r1, r4, #0
 	add r1, #0xd4
@@ -28281,7 +28281,7 @@ _0222943E:
 	ldr r2, [r4, #0x38]
 	add r0, #0x8c
 	add r1, #0xb0
-	bl ov07_022223CC
+	bl BattleAnimUtil_UpdateLinearSinMotionSprite
 	ldr r0, [r4, #0x38]
 	bl ManagedSprite_TickFrame
 	ldr r0, [r4, #0x14]
@@ -28338,7 +28338,7 @@ _022294A4:
 	asr r1, r1, #0x10
 	asr r2, r2, #0x10
 	mov r3, #5
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	ldrb r0, [r4, #0x18]
 	add r0, r0, #1
 	strb r0, [r4, #0x18]
@@ -28346,7 +28346,7 @@ _022294A4:
 _022294D4:
 	add r0, r4, #0
 	add r0, #0x9c
-	bl ov07_0222260C
+	bl BattleAnimUtil_UpdateScaleMotionXY
 	cmp r0, #0
 	bne _02229512
 	mov r0, #0x12
@@ -28368,7 +28368,7 @@ _022294D4:
 	add r0, #0x9c
 	asr r1, r1, #0x10
 	asr r2, r2, #0x10
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	ldrb r0, [r4, #0x18]
 	add r0, r0, #1
 	strb r0, [r4, #0x18]
@@ -28378,7 +28378,7 @@ _02229512:
 	add r0, #0x9c
 	add r1, sp, #0x18
 	add r2, sp, #0x14
-	bl ov07_02222644
+	bl BattleAnimUtil_GetScaleFloat
 	ldr r0, [r4, #0x40]
 	ldr r1, [sp, #0x18]
 	ldr r2, [sp, #0x14]
@@ -28389,7 +28389,7 @@ _02229512:
 	ldrsh r0, [r4, r0]
 	ldr r2, [r2]
 	mov r1, #0x10
-	bl ov07_02222674
+	bl BattleAnimUtil_CalcScaleYOffset
 	mov r2, #0x16
 	add r3, r0, #0
 	ldrsh r2, [r4, r2]
@@ -28434,7 +28434,7 @@ _02229574:
 _02229586:
 	add r0, r4, #0
 	add r0, #0x9c
-	bl ov07_0222260C
+	bl BattleAnimUtil_UpdateScaleMotionXY
 	cmp r0, #0
 	bne _0222959A
 	ldrb r0, [r4, #0x18]
@@ -28446,7 +28446,7 @@ _0222959A:
 	add r0, #0x9c
 	add r1, sp, #0x10
 	add r2, sp, #0xc
-	bl ov07_02222644
+	bl BattleAnimUtil_GetScaleFloat
 	ldr r0, [r4, #0x40]
 	ldr r1, [sp, #0x10]
 	ldr r2, [sp, #0xc]
@@ -28457,7 +28457,7 @@ _0222959A:
 	ldrsh r0, [r4, r0]
 	ldr r2, [r2]
 	mov r1, #0x10
-	bl ov07_02222674
+	bl BattleAnimUtil_CalcScaleYOffset
 	mov r2, #0x16
 	add r3, r0, #0
 	ldrsh r2, [r4, r2]
@@ -28646,15 +28646,15 @@ _02229720:
 	add r0, r4, #0
 	add r0, #0x9c
 	add r2, r1, #0
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	add r0, r4, #0
 	add r0, #0x9c
-	bl ov07_0222260C
+	bl BattleAnimUtil_UpdateScaleMotionXY
 	add r0, r4, #0
 	add r0, #0x9c
 	add r1, sp, #0x10
 	add r2, sp, #0xc
-	bl ov07_02222644
+	bl BattleAnimUtil_GetScaleFloat
 	ldr r0, [r4, #0x40]
 	ldr r1, [sp, #0x10]
 	ldr r2, [sp, #0xc]
@@ -28665,7 +28665,7 @@ _02229720:
 	ldrsh r0, [r4, r0]
 	ldr r2, [r2]
 	mov r1, #0x10
-	bl ov07_02222674
+	bl BattleAnimUtil_CalcScaleYOffset
 	mov r2, #0x16
 	add r3, r0, #0
 	ldrsh r2, [r4, r2]
@@ -28733,7 +28733,7 @@ _022297E6:
 	str r0, [sp, #8]
 	add r0, r4, #0
 	add r0, #0xcc
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	ldrb r0, [r4, #0xc]
 	add r0, r0, #1
 	strb r0, [r4, #0xc]
@@ -28744,7 +28744,7 @@ _022297E6:
 _0222981E:
 	add r0, r4, #0
 	add r0, #0xcc
-	bl ov07_0222260C
+	bl BattleAnimUtil_UpdateScaleMotionXY
 	cmp r0, #1
 	bne _02229864
 	mov r2, #0xcc
@@ -28763,7 +28763,7 @@ _0222981E:
 	ldrsh r0, [r4, r0]
 	ldr r1, [r4, #0x24]
 	ldr r2, [r2]
-	bl ov07_02222674
+	bl BattleAnimUtil_CalcScaleYOffset
 	mov r2, #0x20
 	add r3, r0, #0
 	ldrsh r2, [r4, r2]
@@ -28857,13 +28857,13 @@ _022298FE:
 	add r0, r0, #1
 	strb r0, [r4, #1]
 	add r0, r4, #4
-	bl ov07_02222E48
+	bl BattleAnimUtil_StepTowards
 	mov r1, #0
 	add r0, r4, #0
 	add r2, r1, #0
 	add r0, #8
 	sub r2, #0x10
-	bl ov07_02222E48
+	bl BattleAnimUtil_StepTowards
 	ldr r0, [r4, #8]
 	ldr r1, [r4, #4]
 	lsl r0, r0, #8
@@ -28923,7 +28923,7 @@ _02229958:
 	ldrsh r1, [r3, r1]
 	ldrsh r2, [r3, r2]
 	ldrsh r3, [r3, r5]
-	bl ov07_02222DC8
+	bl BattleAnimUtil_CalcMidpoint
 	add r0, r4, #0
 	add r0, #0x2c
 	str r0, [sp]
@@ -28936,7 +28936,7 @@ _02229958:
 	mov r2, #0xc8
 	ldrsh r2, [r4, r2]
 	ldrsh r3, [r4, r3]
-	bl ov07_02222DE4
+	bl BattleAnimUtil_CalcDistance
 	add r0, r4, #0
 	add r0, #0x28
 	str r0, [sp]
@@ -28949,7 +28949,7 @@ _02229958:
 	mov r2, #0xc8
 	ldrsh r2, [r4, r2]
 	ldrsh r3, [r4, r3]
-	bl ov07_02222E0C
+	bl BattleAnimUtil_CalcAngle
 	mov r0, #0xa
 	lsl r0, r0, #0xe
 	str r0, [r4, #0x2c]
@@ -29001,7 +29001,7 @@ _022299E2:
 	ldrsh r3, [r3, r5]
 	add r0, #0x34
 	add r1, #0x58
-	bl ov07_02222338
+	bl BattleAnimUtil_InitLinearSinMotion
 	add r3, sp, #0x14
 	mov r0, #4
 	ldrsh r0, [r3, r0]
@@ -29026,7 +29026,7 @@ _022299E2:
 	ldrsh r3, [r3, r5]
 	add r0, #0x80
 	add r1, #0xa4
-	bl ov07_02222338
+	bl BattleAnimUtil_InitLinearSinMotion
 	ldrb r0, [r4, #0xc]
 	add r0, r0, #1
 	strb r0, [r4, #0xc]
@@ -29040,7 +29040,7 @@ _02229A7A:
 	add r0, #0x34
 	add r1, #0x58
 	mov r5, #0
-	bl ov07_022223CC
+	bl BattleAnimUtil_UpdateLinearSinMotionSprite
 	cmp r0, #0
 	bne _02229A92
 	add r0, r5, #1
@@ -29052,7 +29052,7 @@ _02229A92:
 	ldr r2, [r4, #0x7c]
 	add r0, #0x80
 	add r1, #0xa4
-	bl ov07_022223CC
+	bl BattleAnimUtil_UpdateLinearSinMotionSprite
 	cmp r0, #0
 	bne _02229AAA
 	add r0, r5, #1
@@ -29077,7 +29077,7 @@ _02229AC2:
 	add r0, r4, #4
 	add r1, r5, #0
 	sub r2, r5, #2
-	bl ov07_02222E48
+	bl BattleAnimUtil_StepTowards
 	cmp r0, #1
 	bne _02229AD4
 	add r5, r5, #1
@@ -29086,7 +29086,7 @@ _02229AD4:
 	add r0, #8
 	mov r1, #0x10
 	mov r2, #2
-	bl ov07_02222E48
+	bl BattleAnimUtil_StepTowards
 	cmp r0, #1
 	bne _02229AE6
 	add r5, r5, #1
@@ -29812,7 +29812,7 @@ _0222A084:
 	add r0, r4, #0
 	ldrsh r3, [r3, r5]
 	add r0, #0x3c
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	add r1, sp, #8
 	ldr r0, [r4, #0x38]
 	add r1, #2
@@ -29835,7 +29835,7 @@ _0222A084:
 	add r0, r4, #0
 	ldrsh r3, [r3, r5]
 	add r0, #0x60
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	ldr r0, [r4, #0x30]
 	add r0, r0, #1
 	str r0, [r4, #0x30]
@@ -29848,7 +29848,7 @@ _0222A0F6:
 	ldr r1, [r4, #0x34]
 	add r0, #0x3c
 	add r5, r6, #0
-	bl ov07_022222F0
+	bl BattleAnimUtil_UpdateLinearMotionSprite
 	cmp r0, #0
 	bne _0222A108
 	add r5, r5, #1
@@ -29856,7 +29856,7 @@ _0222A108:
 	add r0, r4, #0
 	ldr r1, [r4, #0x38]
 	add r0, #0x60
-	bl ov07_022222F0
+	bl BattleAnimUtil_UpdateLinearMotionSprite
 	cmp r0, #0
 	bne _0222A118
 	add r5, r5, #1
@@ -30278,7 +30278,7 @@ _0222A42C:
 	ldrsh r1, [r3, r1]
 	ldrsh r3, [r3, r5]
 	add r0, #0x14
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	ldrb r0, [r4, #0xc]
 	add r0, r0, #1
 	strb r0, [r4, #0xc]
@@ -30287,7 +30287,7 @@ _0222A474:
 	add r0, r4, #0
 	ldr r1, [r4, #0x10]
 	add r0, #0x14
-	bl ov07_022222F0
+	bl BattleAnimUtil_UpdateLinearMotionSprite
 	cmp r0, #0
 	bne _0222A49E
 	ldr r0, [r4, #0x10]
@@ -30648,7 +30648,7 @@ _0222A732:
 _0222A750:
 	add r0, r4, #0
 	add r0, #0x2c
-	bl ov07_02222AF4
+	bl BattleAnimUtil_IsBlendAlphaMotionDone
 	cmp r0, #0
 	beq _0222A81C
 	mov r0, #0
@@ -30659,7 +30659,7 @@ _0222A750:
 	add r5, r0, #0
 	mov r0, #0
 	add r1, r0, #0
-	bl ov07_02222D88
+	bl BattleAnimUtil_PackXY
 	add r6, r0, #0
 	ldr r0, [r4, #8]
 	bl BattleAnimSystem_GetHeapID
@@ -30676,7 +30676,7 @@ _0222A750:
 	add r2, r1, #0
 	add r2, #0xcc
 	lsl r3, r3, #0xe
-	bl ov07_02222CCC
+	bl BattleAnimScanline_NewWave
 	str r0, [r4, #0x28]
 	ldrb r0, [r4, #4]
 	add r0, r0, #1
@@ -30689,7 +30689,7 @@ _0222A7A2:
 	cmp r0, #0x78
 	blt _0222A81C
 	ldr r0, [r4, #0x28]
-	bl ov07_02222D3C
+	bl BattleAnimScanline_FreeWave
 	mov r1, #2
 	mov r2, #0x10
 	str r1, [sp]
@@ -30697,7 +30697,7 @@ _0222A7A2:
 	str r2, [sp, #4]
 	add r0, #0x2c
 	add r3, r2, #0
-	bl ov07_02222AC4
+	bl BattleAnimUtil_StartBlendAlphaMotion
 	ldrb r0, [r4, #4]
 	add r0, r0, #1
 	strb r0, [r4, #4]
@@ -30705,7 +30705,7 @@ _0222A7A2:
 _0222A7CC:
 	add r0, r4, #0
 	add r0, #0x2c
-	bl ov07_02222AF4
+	bl BattleAnimUtil_IsBlendAlphaMotionDone
 	cmp r0, #0
 	beq _0222A81C
 	ldr r0, [r4, #8]
@@ -30802,7 +30802,7 @@ ov07_0222A838: ; 0x0222A838
 	str r1, [sp, #4]
 	add r0, #0x2c
 	add r3, r2, #0
-	bl ov07_02222AC4
+	bl BattleAnimUtil_StartBlendAlphaMotion
 	ldr r0, [r4, #8]
 	mov r1, #2
 	bl BattleAnimBackground_LoadBattleBgToLayerDefault
@@ -31060,7 +31060,7 @@ _0222AA82:
 	ldr r0, [r5, #0x18]
 	lsl r3, r3, #0x14
 	lsr r3, r3, #0x10
-	bl ov07_02222F10
+	bl BattleAnimUtil_StartPaletteBlend
 	str r0, [r5, #0x3c]
 _0222AAC6:
 	mov r0, #0x22
@@ -31088,7 +31088,7 @@ _0222AAC6:
 	ldr r0, [r5, #0x18]
 	lsl r3, r3, #0x14
 	lsr r3, r3, #0x10
-	bl ov07_02222F10
+	bl BattleAnimUtil_StartPaletteBlend
 	str r0, [r5, #0x40]
 _0222AB00:
 	mov r0, #0x22
@@ -31116,7 +31116,7 @@ _0222AB00:
 	ldr r0, [r5, #0x18]
 	lsl r3, r3, #0x14
 	lsr r3, r3, #0x10
-	bl ov07_02222F10
+	bl BattleAnimUtil_StartPaletteBlend
 	str r0, [r5, #0x44]
 _0222AB3A:
 	mov r0, #0x22
@@ -31144,7 +31144,7 @@ _0222AB3A:
 	ldr r0, [r5, #0x18]
 	lsl r3, r3, #0x14
 	lsr r3, r3, #0x10
-	bl ov07_02222F10
+	bl BattleAnimUtil_StartPaletteBlend
 	str r0, [r5, #0x48]
 _0222AB74:
 	mov r0, #0x22
@@ -31172,7 +31172,7 @@ _0222AB74:
 	ldr r0, [r5, #0x18]
 	lsl r3, r3, #0x14
 	lsr r3, r3, #0x10
-	bl ov07_02222F10
+	bl BattleAnimUtil_StartPaletteBlend
 	str r0, [r5, #0x4c]
 _0222ABAE:
 	mov r0, #0x22
@@ -31200,7 +31200,7 @@ _0222ABAE:
 	ldr r0, [r5, #0x18]
 	lsl r3, r3, #0x14
 	lsr r3, r3, #0x10
-	bl ov07_02222F10
+	bl BattleAnimUtil_StartPaletteBlend
 	str r0, [r5, #0x50]
 _0222ABE8:
 	mov r1, #0x22
@@ -31275,7 +31275,7 @@ _0222AC64:
 	add r4, r5, #0
 _0222AC76:
 	ldr r0, [r4, #0x3c]
-	bl ov07_02222EF8
+	bl BattleAnimUtil_FreePaletteBlend
 	add r6, r6, #1
 	add r4, r4, #4
 	cmp r6, #6
@@ -31467,7 +31467,7 @@ ov07_0222AE14: ; 0x0222AE14
 	bne _0222AE9A
 	add r0, r4, #0
 	add r0, #0x60
-	bl ov07_0222260C
+	bl BattleAnimUtil_UpdateScaleMotionXY
 	cmp r0, #0
 	bne _0222AE58
 	ldr r0, [r4, #0x28]
@@ -31491,7 +31491,7 @@ _0222AE58:
 	add r0, #0x60
 	add r1, sp, #8
 	add r2, sp, #4
-	bl ov07_02222644
+	bl BattleAnimUtil_GetScaleFloat
 	ldr r0, [r4, #0x28]
 	ldr r1, [sp, #8]
 	ldr r2, [sp, #4]
@@ -31504,7 +31504,7 @@ _0222AE58:
 	ldrsh r2, [r4, r2]
 	ldr r0, [r4, #0x28]
 	ldr r3, [r4, #0x74]
-	bl ov07_022226FC
+	bl BattleAnimUtil_AlignSpriteToScale
 	ldr r0, [r4, #0x28]
 	bl ManagedSprite_TickFrame
 	ldr r0, [r4, #0x3c]
@@ -31621,7 +31621,7 @@ _0222AF84:
 	add r0, r4, #0
 	add r0, #0x60
 	add r3, r1, #0
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	ldr r0, [r4, #4]
 	ldr r1, _0222AFA8 ; =ov07_0222AE14
 	add r2, r4, #0
@@ -31663,7 +31663,7 @@ _0222AFC0:
 	lsl r2, r2, #0x10
 	add r0, #0x34
 	asr r2, r2, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	mov r0, #0x22
 	ldrsh r1, [r4, r0]
 	mov r0, #0xa4
@@ -31682,7 +31682,7 @@ _0222AFC0:
 	add r0, r4, #0
 	add r0, #0x58
 	asr r2, r2, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	mov r0, #0x22
 	ldrsh r1, [r4, r0]
 	mov r0, #0xa4
@@ -31701,7 +31701,7 @@ _0222AFC0:
 	add r0, r4, #0
 	add r0, #0x7c
 	asr r2, r2, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	b _0222B0A8
 _0222B03A:
 	mov r0, #0x22
@@ -31717,7 +31717,7 @@ _0222B03A:
 	lsl r1, r1, #0x10
 	add r0, #0x34
 	asr r1, r1, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	mov r0, #0x22
 	ldrsh r1, [r4, r0]
 	mov r0, #0xa4
@@ -31736,7 +31736,7 @@ _0222B03A:
 	add r0, r4, #0
 	add r0, #0x58
 	asr r1, r1, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	mov r0, #0x22
 	ldrsh r1, [r4, r0]
 	mov r0, #0xa4
@@ -31755,7 +31755,7 @@ _0222B03A:
 	add r0, r4, #0
 	add r0, #0x7c
 	asr r1, r1, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 _0222B0A8:
 	add r0, r4, #0
 	add r0, #0xa0
@@ -31773,7 +31773,7 @@ _0222B0BE:
 	ldr r1, [r4, #0x28]
 	add r0, #0x58
 	mov r5, #0
-	bl ov07_022222F0
+	bl BattleAnimUtil_UpdateLinearMotionSprite
 	cmp r0, #0
 	bne _0222B0D0
 	add r5, r5, #1
@@ -31781,7 +31781,7 @@ _0222B0D0:
 	add r0, r4, #0
 	ldr r1, [r4, #0x24]
 	add r0, #0x34
-	bl ov07_02222314
+	bl BattleAnimUtil_UpdateLinearMotionPokepic
 	cmp r0, #0
 	bne _0222B0E0
 	add r5, r5, #1
@@ -31789,7 +31789,7 @@ _0222B0E0:
 	add r0, r4, #0
 	ldr r1, [r4, #0x30]
 	add r0, #0x7c
-	bl ov07_022222F0
+	bl BattleAnimUtil_UpdateLinearMotionSprite
 	cmp r0, #0
 	bne _0222B0F0
 	add r5, r5, #1
@@ -32127,7 +32127,7 @@ _0222B36C:
 	add r1, r7, #0
 	add r2, r6, #0
 	add r3, r5, #0
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	mov r7, #0
 	ldr r0, [r4, #4]
 	add r6, r7, #0
@@ -32148,7 +32148,7 @@ _0222B3F0:
 	str r0, [sp, #0x20]
 _0222B3FA:
 	ldr r0, [sp, #0x20]
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	str r0, [sp, #0x18]
 	lsr r2, r7, #0x1f
 	lsl r1, r7, #0x1f
@@ -32339,13 +32339,13 @@ _0222B54C:
 	b _0222B60A
 _0222B584:
 	ldr r0, [r5, #0x3c]
-	bl ov07_02222EE8
+	bl BattleAnimUtil_IsPaletteBlendActive
 	cmp r0, #0
 	bne _0222B60A
 	ldr r0, [r5, #0x38]
-	bl ov07_02222EF8
+	bl BattleAnimUtil_FreePaletteBlend
 	ldr r0, [r5, #0x3c]
-	bl ov07_02222EF8
+	bl BattleAnimUtil_FreePaletteBlend
 	ldr r0, [r5, #0x24]
 	ldr r0, [r0]
 	bl Sprite_GetPaletteProxy
@@ -32372,7 +32372,7 @@ _0222B584:
 	lsr r3, r3, #0x10
 	str r0, [sp, #0x18]
 	ldr r0, [r5, #0x18]
-	bl ov07_02222F10
+	bl BattleAnimUtil_StartPaletteBlend
 	str r0, [r5, #0x3c]
 	ldrb r0, [r5]
 	add r0, r0, #1
@@ -32380,13 +32380,13 @@ _0222B584:
 	b _0222B60A
 _0222B5E2:
 	ldr r0, [r5, #0x3c]
-	bl ov07_02222EE8
+	bl BattleAnimUtil_IsPaletteBlendActive
 	cmp r0, #0
 	bne _0222B60A
 	ldr r0, [r5, #0x20]
 	bl ManagedSprite_TickFrame
 	ldr r0, [r5, #0x3c]
-	bl ov07_02222EF8
+	bl BattleAnimUtil_FreePaletteBlend
 	ldr r0, [r5, #4]
 	add r1, r4, #0
 	bl BattleAnimSystem_DestroyTask
@@ -32521,7 +32521,7 @@ _0222B6AC:
 	lsr r3, r3, #0x10
 	str r0, [sp, #0x18]
 	ldr r0, [r4, #0x18]
-	bl ov07_02222F10
+	bl BattleAnimUtil_StartPaletteBlend
 	str r0, [r4, #0x38]
 	ldr r0, [r4, #0x24]
 	ldr r0, [r0]
@@ -32549,7 +32549,7 @@ _0222B6AC:
 	lsr r3, r3, #0x10
 	str r0, [sp, #0x18]
 	ldr r0, [r4, #0x18]
-	bl ov07_02222F10
+	bl BattleAnimUtil_StartPaletteBlend
 	str r0, [r4, #0x3c]
 	ldr r0, [r4, #4]
 	bl BattleAnimSystem_GetAttacker
@@ -32704,7 +32704,7 @@ _0222B8AC:
 	ldrsh r1, [r4, r1]
 	add r0, #0x30
 	asr r2, r2, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	ldr r2, [r4, #0x68]
 	ldr r0, [r4, #0x24]
 	lsl r2, r2, #2
@@ -32723,7 +32723,7 @@ _0222B8AC:
 _0222B8F2:
 	add r0, r4, #0
 	add r0, #0x30
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	bne _0222B950
 	ldr r0, [r4, #0x68]
@@ -33311,11 +33311,11 @@ ov07_0222BD90: ; 0x0222BD90
 	ldrsh r2, [r4, r2]
 	ldr r3, [r4, #8]
 	add r0, #0xc
-	bl ov07_02222240
+	bl BattleAnimUtil_UpdateSinMotionPokepic
 	str r0, [sp]
 	add r0, r4, #0
 	add r0, #0x38
-	bl ov07_02222914
+	bl BattleAnimUtil_UpdateSpriteSequence
 	str r0, [sp, #4]
 	mov r0, #0
 	str r0, [sp, #8]
@@ -33441,7 +33441,7 @@ _0222BE98:
 	mov r0, #0xec
 	ldrsh r0, [r4, r0]
 	mov r3, #0xe8
-	ldr r2, _0222BF10 ; =ov07_02222180
+	ldr r2, _0222BF10 ; =BattleAnimUtil_UpdateSinMotion
 	sub r0, r1, r0
 	lsl r0, r0, #0x10
 	asr r0, r0, #0x10
@@ -33461,7 +33461,7 @@ _0222BE98:
 	ldrsh r3, [r4, r3]
 	add r0, #0x38
 	add r1, sp, #0x20
-	bl ov07_02222864
+	bl BattleAnimUtil_InitSpriteSequence
 	mov r1, #0
 	mvn r1, r1
 	ldr r0, [r4]
@@ -33474,7 +33474,7 @@ _0222BE98:
 	add sp, #0x44
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
-_0222BF10: .word ov07_02222180
+_0222BF10: .word BattleAnimUtil_UpdateSinMotion
 _0222BF14: .word ov07_0222BD90
 	thumb_func_end ov07_0222BE00
 
@@ -33506,7 +33506,7 @@ _0222BF34: ; jump table
 _0222BF42:
 	add r0, r4, #0
 	add r0, #0x10
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	beq _0222BF64
 	mov r2, #0x48
@@ -33529,7 +33529,7 @@ _0222BF64:
 	ldrsh r1, [r4, r1]
 	add r0, #0x10
 	add r3, r2, #0
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	ldr r0, [r4, #4]
 	add sp, #8
 	add r0, r0, #1
@@ -33538,7 +33538,7 @@ _0222BF64:
 _0222BF84:
 	add r0, r4, #0
 	add r0, #0x34
-	bl ov07_02222440
+	bl BattleAnimUtil_UpdateValueMotion
 	cmp r0, #0
 	beq _0222BF9E
 	ldr r0, [r4, #0xc]
@@ -33553,7 +33553,7 @@ _0222BF9E:
 	add r0, #0x34
 	mov r2, #0
 	mov r3, #4
-	bl ov07_022223F0
+	bl BattleAnimUtil_InitValueMotion
 	ldr r0, [r4, #4]
 	add sp, #8
 	add r0, r0, #1
@@ -33577,7 +33577,7 @@ _0222BFBA:
 _0222BFD2:
 	add r0, r4, #0
 	add r0, #0x10
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	beq _0222BFF4
 	mov r2, #0x48
@@ -33614,7 +33614,7 @@ _0222C002:
 _0222C01A:
 	add r0, r4, #0
 	add r0, #0x34
-	bl ov07_02222440
+	bl BattleAnimUtil_UpdateValueMotion
 	cmp r0, #0
 	beq _0222C034
 	ldr r0, [r4, #0xc]
@@ -33692,13 +33692,13 @@ ov07_0222C074: ; 0x0222C074
 	add r0, #0x10
 	sub r2, #0x23
 	add r3, r1, #0
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	add r0, r4, #0
 	ldr r2, _0222C184 ; =0x00000E38
 	add r0, #0x34
 	mov r1, #0
 	mov r3, #8
-	bl ov07_022223F0
+	bl BattleAnimUtil_InitValueMotion
 	ldr r0, [r4]
 	bl BattleAnimSystem_GetAttacker
 	add r1, r0, #0
@@ -33875,12 +33875,12 @@ _0222C226:
 	b _0222C2BE
 _0222C236:
 	add r0, r4, #4
-	bl ov07_02222180
+	bl BattleAnimUtil_UpdateSinMotion
 	cmp r0, #0
 	beq _0222C276
 	add r0, r4, #0
 	add r0, #0x28
-	bl ov07_022224AC
+	bl BattleAnimUtil_UpdateCosMotion
 	mov r0, #0x3c
 	ldrsh r1, [r4, r0]
 	ldr r0, [r4, #0x28]
@@ -33922,7 +33922,7 @@ _0222C276:
 	ldr r0, _0222C2C8 ; =0x0000071C
 	str r0, [sp, #0xc]
 	add r0, r4, #4
-	bl ov07_0222212C
+	bl BattleAnimUtil_InitSinMotionFromStep
 _0222C29E:
 	ldr r0, [r4, #8]
 	ldr r2, _0222C2CC ; =0x0000FFFF
@@ -33931,7 +33931,7 @@ _0222C29E:
 	ldr r3, _0222C2D0 ; =0xFFFFF000
 	add r0, #0x28
 	mov r1, #0
-	bl ov07_02222494
+	bl BattleAnimUtil_InitCosMotion
 _0222C2B0:
 	ldr r0, [r4, #0x44]
 	add r0, r0, #1
@@ -34249,7 +34249,7 @@ ov07_0222C4C0: ; 0x0222C4C0
 	lsr r1, r1, #0x12
 	add r0, #0x10
 	add r3, r1, #0
-	bl ov07_0222212C
+	bl BattleAnimUtil_InitSinMotionFromStep
 	ldr r0, [r4, #0x14]
 	ldr r2, _0222C604 ; =0x0000FFFF
 	str r0, [sp]
@@ -34257,7 +34257,7 @@ ov07_0222C4C0: ; 0x0222C4C0
 	ldr r3, _0222C608 ; =0xFFFFF000
 	add r0, #0x34
 	mov r1, #0
-	bl ov07_02222494
+	bl BattleAnimUtil_InitCosMotion
 	add r0, r4, #0
 	ldr r1, [r4, #0x28]
 	add r0, #0x48
@@ -34396,7 +34396,7 @@ ov07_0222C610: ; 0x0222C610
 	add r0, #0x34
 	add r1, sp, #4
 	add r2, sp, #0
-	bl ov07_02222644
+	bl BattleAnimUtil_GetScaleFloat
 	mov r0, #0x64
 	ldrsh r0, [r4, r0]
 	bl _fflt
@@ -34440,10 +34440,10 @@ ov07_0222C6A8: ; 0x0222C6A8
 _0222C6C0:
 	add r0, r4, #0
 	add r0, #0x10
-	bl ov07_022227D8
+	bl BattleAnimUtil_UpdateShake
 	add r0, r4, #0
 	add r0, #0x34
-	bl ov07_0222260C
+	bl BattleAnimUtil_UpdateScaleMotionXY
 	add r5, r0, #0
 	add r0, r4, #0
 	bl ov07_0222C610
@@ -34458,7 +34458,7 @@ _0222C6C0:
 	add r0, #0x34
 	mov r1, #0xc
 	mov r3, #0xf
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	ldr r0, [r4, #8]
 	add r0, r0, #1
 	str r0, [r4, #8]
@@ -34466,10 +34466,10 @@ _0222C6C0:
 _0222C6FA:
 	add r0, r4, #0
 	add r0, #0x10
-	bl ov07_022227D8
+	bl BattleAnimUtil_UpdateShake
 	add r0, r4, #0
 	add r0, #0x34
-	bl ov07_0222260C
+	bl BattleAnimUtil_UpdateScaleMotionXY
 	add r5, r0, #0
 	add r0, r4, #0
 	bl ov07_0222C610
@@ -34570,7 +34570,7 @@ ov07_0222C780: ; 0x0222C780
 	mov r1, #2
 	mov r2, #0
 	mov r3, #1
-	bl ov07_022227A8
+	bl BattleAnimUtil_InitShake
 	ldr r0, [r4]
 	mov r1, #0
 	bl BattleAnimSystem_GetBattlerSprite
@@ -34596,7 +34596,7 @@ ov07_0222C780: ; 0x0222C780
 	add r0, #0x34
 	mov r2, #0xc
 	add r3, r1, #0
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	add r0, r4, #0
 	mov r1, #1
 	add r0, #0x64
@@ -34641,14 +34641,14 @@ ov07_0222C870: ; 0x0222C870
 	sub sp, #0x10
 	add r5, r0, #0
 	ldr r0, [r5, #0x18]
-	bl ov07_02222D60
+	bl BattleAnimScanline_GetWaveBuffer
 	str r0, [sp, #0xc]
 	ldr r1, [sp, #0xc]
 	add r0, r5, #0
 	bl ov07_0222C850
 	add r0, r5, #0
 	add r0, #0x1c
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	str r0, [sp, #8]
 	mov r0, #0x14
 	ldrsh r4, [r5, r0]
@@ -34701,7 +34701,7 @@ _0222C8EC:
 	lsl r0, r0, #0x10
 	lsr r0, r0, #0x10
 	lsr r1, r1, #0x10
-	bl ov07_02222D88
+	bl BattleAnimUtil_PackXY
 	ldr r1, [sp, #0xc]
 	lsl r2, r6, #2
 	str r0, [r1, r2]
@@ -34761,7 +34761,7 @@ _0222C93C:
 	str r0, [sp, #4]
 	add r0, r4, #0
 	add r3, r2, #0
-	bl ov07_02222AC4
+	bl BattleAnimUtil_StartBlendAlphaMotion
 	add sp, #8
 	pop {r4, r5, r6, pc}
 _0222C96E:
@@ -34769,7 +34769,7 @@ _0222C96E:
 	bl ov07_0222C870
 	add r0, r4, #0
 	add r0, #0x40
-	bl ov07_02222AF4
+	bl BattleAnimUtil_IsBlendAlphaMotionDone
 	cmp r0, #0
 	bne _0222C982
 _0222C980:
@@ -34779,7 +34779,7 @@ _0222C982:
 	add r0, r0, #1
 	str r0, [r4, #4]
 	ldr r0, [r4, #0x18]
-	bl ov07_02222D74
+	bl BattleAnimScanline_DisableWave
 	mov r0, #0
 	add sp, #8
 	str r0, [r4, #8]
@@ -34814,7 +34814,7 @@ _0222C996:
 	mov r2, #0x1f
 	add r0, #0x40
 	add r3, r2, #0
-	bl ov07_02222AC4
+	bl BattleAnimUtil_StartBlendAlphaMotion
 	ldr r0, [r4, #4]
 	add sp, #8
 	add r0, r0, #1
@@ -34823,7 +34823,7 @@ _0222C996:
 _0222C9E6:
 	add r0, r4, #0
 	add r0, #0x40
-	bl ov07_02222AF4
+	bl BattleAnimUtil_IsBlendAlphaMotionDone
 	cmp r0, #0
 	beq _0222CA88
 	ldr r0, [r4, #0xc]
@@ -34837,7 +34837,7 @@ _0222C9E6:
 	pop {r4, r5, r6, pc}
 _0222CA06:
 	ldr r0, [r4, #0x18]
-	bl ov07_02222D3C
+	bl BattleAnimScanline_FreeWave
 	ldr r0, [r4]
 	mov r1, #1
 	bl BattleAnimSystem_GetBgLayer
@@ -34977,7 +34977,7 @@ _0222CB34:
 	str r0, [sp, #0x18]
 	ldrh r0, [r4, #0x10]
 	ldrh r1, [r4, #0x12]
-	bl ov07_02222D88
+	bl BattleAnimUtil_PackXY
 	str r0, [sp, #0x1c]
 	add r0, r5, #0
 	bl BattleAnimSystem_GetHeapID
@@ -35000,7 +35000,7 @@ _0222CB34:
 	lsl r1, r1, #0x18
 	lsr r0, r0, #0x18
 	lsr r1, r1, #0x18
-	bl ov07_02222CCC
+	bl BattleAnimScanline_NewWave
 	str r0, [r4, #0x18]
 	mov r0, #0x28
 	str r0, [sp]
@@ -35011,7 +35011,7 @@ _0222CB34:
 	add r0, #0x1c
 	mov r2, #0x50
 	add r3, r1, #0
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	ldr r0, [r4, #0x24]
 	add r1, r0, #0
 	mul r1, r6
@@ -35078,7 +35078,7 @@ _0222CC16: ; jump table
 _0222CC1E:
 	add r0, r4, #0
 	add r0, #0x38
-	bl ov07_02222468
+	bl BattleAnimUtil_UpdateValueMotionFx
 	ldr r2, [r4, #0x38]
 	mov r1, #0x1f
 	sub r1, r1, r2
@@ -35107,13 +35107,13 @@ _0222CC44:
 _0222CC56:
 	add r0, r4, #0
 	add r0, #0x14
-	bl ov07_02222558
+	bl BattleAnimUtil_UpdateScaleMotion
 	add r5, r0, #0
 	add r0, r4, #0
 	add r0, #0x14
 	add r1, sp, #4
 	add r2, sp, #0
-	bl ov07_02222644
+	bl BattleAnimUtil_GetScaleFloat
 	ldr r0, [r4, #0x4c]
 	cmp r0, #1
 	bne _0222CC7C
@@ -35172,7 +35172,7 @@ _0222CCD4:
 _0222CCD8:
 	add r0, r5, #0
 	add r0, #0x14
-	bl ov07_022227D8
+	bl BattleAnimUtil_UpdateShake
 	mov r2, #0x38
 	mov r3, #0x3a
 	add r0, r5, #0
@@ -35235,7 +35235,7 @@ _0222CD56:
 _0222CD60:
 	add r0, r5, #0
 	add r0, #0x14
-	bl ov07_022227D8
+	bl BattleAnimUtil_UpdateShake
 	mov r2, #0x38
 	mov r3, #0x3a
 	add r0, r5, #0
@@ -35345,13 +35345,13 @@ ov07_0222CE10: ; 0x0222CE10
 	add r0, #0x14
 	mov r1, #0xe
 	add r3, r2, #0
-	bl ov07_02222508
+	bl BattleAnimUtil_InitScaleMotion
 	add r0, r4, #0
 	add r0, #0x38
 	mov r1, #0
 	mov r2, #0x10
 	mov r3, #8
-	bl ov07_02222418
+	bl BattleAnimUtil_InitValueMotionFx
 	ldr r0, [r4, #0x10]
 	mov r1, #1
 	bl ManagedSprite_SetOamMode
@@ -35428,7 +35428,7 @@ ov07_0222CEC0: ; 0x0222CEC0
 	add r0, #0x14
 	mov r2, #0
 	mov r3, #1
-	bl ov07_022227A8
+	bl BattleAnimUtil_InitShake
 	ldr r0, [r4]
 	bl BattleAnimSystem_GetDefender
 	add r1, r0, #0
@@ -35532,7 +35532,7 @@ _0222CFE6: ; jump table
 _0222CFEE:
 	add r0, r4, #0
 	add r0, #0x1c
-	bl ov07_02222AF4
+	bl BattleAnimUtil_IsBlendAlphaMotionDone
 	cmp r0, #1
 	bne _0222D048
 	ldr r0, [r4, #8]
@@ -35558,19 +35558,19 @@ _0222D006:
 	add r0, r4, #0
 	add r2, r5, #0
 	add r3, r1, #0
-	bl ov07_02222AC4
+	bl BattleAnimUtil_StartBlendAlphaMotion
 	b _0222D048
 _0222D02C:
 	add r0, r4, #0
 	add r0, #0x1c
-	bl ov07_02222AF4
+	bl BattleAnimUtil_IsBlendAlphaMotionDone
 	cmp r0, #1
 	bne _0222D048
 	ldr r0, [r4, #8]
 	add r0, r0, #1
 	str r0, [r4, #8]
 	ldr r0, [r4, #0x14]
-	bl ov07_02222D3C
+	bl BattleAnimScanline_FreeWave
 	b _0222D048
 _0222D046:
 	mov r5, #1
@@ -35717,7 +35717,7 @@ ov07_0222D148: ; 0x0222D148
 	add r0, #0x1c
 	mov r1, #0
 	mov r3, #0x10
-	bl ov07_02222AC4
+	bl BattleAnimUtil_StartBlendAlphaMotion
 	ldr r0, [r4]
 	bl BattleAnimSystem_GetDefender
 	add r1, r0, #0
@@ -35815,7 +35815,7 @@ _0222D23A:
 	lsl r1, r1, #0x10
 	lsr r0, r0, #0x10
 	lsr r1, r1, #0x10
-	bl ov07_02222D88
+	bl BattleAnimUtil_PackXY
 	add r7, r0, #0
 	ldr r0, [sp, #0x14]
 	bl BattleAnimSystem_GetHeapID
@@ -35834,7 +35834,7 @@ _0222D23A:
 	lsr r0, r0, #0x18
 	lsr r1, r1, #0x18
 	lsl r3, r3, #0xc
-	bl ov07_02222CCC
+	bl BattleAnimScanline_NewWave
 	mov r2, #1
 	str r0, [r4, #0x14]
 	mov r1, #0
@@ -35877,14 +35877,14 @@ _0222D2CA: ; jump table
 _0222D2D2:
 	add r0, r4, #0
 	add r0, #0x14
-	bl ov07_02222558
+	bl BattleAnimUtil_UpdateScaleMotion
 	cmp r0, #1
 	bne _0222D304
 	add r0, r4, #0
 	add r0, #0x14
 	add r1, sp, #8
 	add r2, sp, #4
-	bl ov07_02222644
+	bl BattleAnimUtil_GetScaleFloat
 	ldr r0, [r4, #0x54]
 	bl _fflt
 	add r1, r0, #0
@@ -35908,12 +35908,12 @@ _0222D304:
 	add r0, #0x14
 	add r2, r1, #0
 	mov r3, #1
-	bl ov07_02222508
+	bl BattleAnimUtil_InitScaleMotion
 	b _0222D3B2
 _0222D322:
 	add r0, r4, #0
 	add r0, #0x38
-	bl ov07_02222440
+	bl BattleAnimUtil_UpdateValueMotion
 	ldr r1, [r4, #0x38]
 	add r5, r0, #0
 	lsl r1, r1, #0x10
@@ -35933,7 +35933,7 @@ _0222D322:
 	add r0, #0x38
 	mov r3, #4
 	str r1, [r4, #0x50]
-	bl ov07_022223F0
+	bl BattleAnimUtil_InitValueMotion
 	b _0222D3B2
 _0222D358:
 	ldr r0, [r4, #0xc]
@@ -35943,14 +35943,14 @@ _0222D358:
 _0222D360:
 	add r0, r4, #0
 	add r0, #0x14
-	bl ov07_02222558
+	bl BattleAnimUtil_UpdateScaleMotion
 	cmp r0, #1
 	bne _0222D392
 	add r0, r4, #0
 	add r0, #0x14
 	add r1, sp, #8
 	add r2, sp, #4
-	bl ov07_02222644
+	bl BattleAnimUtil_GetScaleFloat
 	ldr r0, [r4, #0x54]
 	bl _fflt
 	add r1, r0, #0
@@ -36088,7 +36088,7 @@ _0222D49A:
 	add r0, #0x14
 	mov r1, #1
 	add r3, r2, #0
-	bl ov07_02222508
+	bl BattleAnimUtil_InitScaleMotion
 	cmp r6, #0
 	blt _0222D4C2
 	add r0, r4, #0
@@ -36096,7 +36096,7 @@ _0222D49A:
 	ldr r2, _0222D4E8 ; =0x0000E38D
 	add r0, #0x38
 	mov r3, #4
-	bl ov07_022223F0
+	bl BattleAnimUtil_InitValueMotion
 	ldr r0, _0222D4E4 ; =0x0000FF48
 	b _0222D4D2
 _0222D4C2:
@@ -36105,7 +36105,7 @@ _0222D4C2:
 	add r0, #0x38
 	mov r1, #0
 	mov r3, #4
-	bl ov07_022223F0
+	bl BattleAnimUtil_InitValueMotion
 	mov r0, #0
 _0222D4D2:
 	str r0, [r4, #0x50]
@@ -36135,7 +36135,7 @@ ov07_0222D4F4: ; 0x0222D4F4
 	add r0, r5, #4
 	add r2, r1, #0
 	str r3, [sp]
-	bl ov07_02222508
+	bl BattleAnimUtil_InitScaleMotion
 	mov r0, #3
 	str r0, [r5, #0x2c]
 	mov r0, #8
@@ -36208,13 +36208,13 @@ ov07_0222D590: ; 0x0222D590
 	sub sp, #0xc
 	add r4, r0, #0
 	add r0, r4, #4
-	bl ov07_02222558
+	bl BattleAnimUtil_UpdateScaleMotion
 	cmp r0, #1
 	bne _0222D5D4
 	add r0, r4, #4
 	add r1, sp, #8
 	add r2, sp, #4
-	bl ov07_02222644
+	bl BattleAnimUtil_GetScaleFloat
 	ldr r0, [r4, #0x28]
 	cmp r0, #0
 	beq _0222D5C6
@@ -36250,7 +36250,7 @@ _0222D5D4:
 	asr r1, r1, #0x10
 	mov r2, #0xa
 	asr r3, r3, #0x10
-	bl ov07_02222508
+	bl BattleAnimUtil_InitScaleMotion
 	ldr r1, [r4, #0x30]
 	ldr r0, [r4, #0x34]
 	str r0, [r4, #0x30]
@@ -36319,7 +36319,7 @@ _0222D65E:
 	ldrsh r2, [r4, r2]
 	ldr r3, [r4, #0x18]
 	add r0, #0x20
-	bl ov07_0222283C
+	bl BattleAnimUtil_UpdateShakePokepic
 	cmp r0, #0
 	bne _0222D6D8
 	ldr r0, [r4, #0xc]
@@ -36412,7 +36412,7 @@ ov07_0222D6E0: ; 0x0222D6E0
 	mov r1, #4
 	mov r2, #0
 	str r3, [sp]
-	bl ov07_022227A8
+	bl BattleAnimUtil_InitShake
 	mov r0, #0x1e
 	ldrsh r4, [r7, r0]
 	ldr r1, [r7]
@@ -36498,7 +36498,7 @@ _0222D7C0: ; jump table
 _0222D7CE:
 	add r0, r4, #0
 	add r0, #0x18
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	beq _0222D7F0
 	mov r2, #0x14
@@ -36521,7 +36521,7 @@ _0222D7F0:
 	ldrsh r1, [r4, r1]
 	add r0, #0x18
 	add r3, r2, #0
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	ldr r0, [r4, #0xc]
 	add sp, #0x10
 	add r0, r0, #1
@@ -36530,7 +36530,7 @@ _0222D7F0:
 _0222D810:
 	add r0, r4, #0
 	add r0, #0x18
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	beq _0222D832
 	mov r2, #0x14
@@ -36566,7 +36566,7 @@ _0222D832:
 	add r0, #0x18
 	asr r2, r2, #0x10
 	add r3, r1, #0
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	ldr r0, [r4, #0xc]
 	add sp, #0x10
 	add r0, r0, #1
@@ -36577,7 +36577,7 @@ _0222D870:
 	ldr r2, [r4, #0x48]
 	add r0, #0x4c
 	add r1, #0x70
-	bl ov07_022223CC
+	bl BattleAnimUtil_UpdateLinearSinMotionSprite
 	cmp r0, #0
 	bne _0222D966
 	mov r0, #0x46
@@ -36598,7 +36598,7 @@ _0222D870:
 	ldrsh r2, [r4, r2]
 	ldrsh r3, [r4, r3]
 	add r0, #0x4c
-	bl ov07_02222338
+	bl BattleAnimUtil_InitLinearSinMotion
 	ldr r0, [r4, #0xc]
 	add r0, r0, #1
 	str r0, [r4, #0xc]
@@ -36608,7 +36608,7 @@ _0222D8B0:
 	ldr r2, [r4, #0x48]
 	add r0, #0x4c
 	add r1, #0x70
-	bl ov07_022223CC
+	bl BattleAnimUtil_UpdateLinearSinMotionSprite
 	cmp r0, #0
 	bne _0222D966
 	ldr r0, [r4, #0x48]
@@ -36621,7 +36621,7 @@ _0222D8B0:
 _0222D8D0:
 	add r0, r4, #0
 	add r0, #0x18
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	beq _0222D8F0
 	mov r2, #0x14
@@ -36643,7 +36643,7 @@ _0222D8F0:
 	ldrsh r1, [r4, r1]
 	add r0, #0x18
 	add r3, r2, #0
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	ldr r0, [r4, #0xc]
 	add r0, r0, #1
 	str r0, [r4, #0xc]
@@ -36651,7 +36651,7 @@ _0222D8F0:
 _0222D90E:
 	add r0, r4, #0
 	add r0, #0x18
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	beq _0222D92E
 	mov r2, #0x14
@@ -36743,7 +36743,7 @@ ov07_0222D974: ; 0x0222D974
 	add r0, #0x18
 	asr r2, r2, #0x10
 	add r3, r1, #0
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	add r0, r5, #0
 	bl BattleAnimSystem_GetDefender
 	add r1, r0, #0
@@ -36790,7 +36790,7 @@ ov07_0222D974: ; 0x0222D974
 	ldrsh r2, [r4, r2]
 	ldrsh r3, [r4, r3]
 	add r0, #0x4c
-	bl ov07_02222338
+	bl BattleAnimUtil_InitLinearSinMotion
 	ldr r0, [r4]
 	ldr r1, _0222DA5C ; =ov07_0222D7A4
 	add r2, r4, #0
@@ -36834,7 +36834,7 @@ _0222DA82:
 	ldr r3, [r4, #0x14]
 	add r0, #0x1c
 	asr r2, r2, #0x10
-	bl ov07_02222218
+	bl BattleAnimUtil_UpdateSinMotionSprite
 	cmp r0, #0
 	bne _0222DB0A
 	ldr r0, [r4, #8]
@@ -36859,12 +36859,12 @@ _0222DAAE:
 	add r0, r4, #0
 	add r0, #0x40
 	add r3, r2, #0
-	bl ov07_02222AC4
+	bl BattleAnimUtil_StartBlendAlphaMotion
 	b _0222DB0A
 _0222DAD2:
 	add r0, r4, #0
 	add r0, #0x40
-	bl ov07_02222AF4
+	bl BattleAnimUtil_IsBlendAlphaMotionDone
 	cmp r0, #0
 	beq _0222DB0A
 	ldr r0, [r4, #0x14]
@@ -36961,7 +36961,7 @@ ov07_0222DB14: ; 0x0222DB14
 	mov r2, #0
 	add r0, #0x40
 	add r3, r2, #0
-	bl ov07_02222AC4
+	bl BattleAnimUtil_StartBlendAlphaMotion
 	ldr r0, [r4, #0x28]
 	add r2, r4, #0
 	add r1, r0, #0
@@ -36994,7 +36994,7 @@ ov07_0222DBD8: ; 0x0222DBD8
 _0222DBEE:
 	add r0, r5, #0
 	add r0, #0x14
-	bl ov07_02222558
+	bl BattleAnimUtil_UpdateScaleMotion
 	cmp r0, #0
 	beq _0222DC08
 	mov r2, #0x16
@@ -37014,12 +37014,12 @@ _0222DC08:
 	add r0, r5, #0
 	mov r1, #0xf
 	add r3, r2, #0
-	bl ov07_02222508
+	bl BattleAnimUtil_InitScaleMotion
 	b _0222DC50
 _0222DC22:
 	add r0, r5, #0
 	add r0, #0x14
-	bl ov07_02222558
+	bl BattleAnimUtil_UpdateScaleMotion
 	cmp r0, #0
 	ldr r0, [r5, #0x10]
 	beq _0222DC3C
@@ -37062,10 +37062,10 @@ _0222DC6C:
 	add r0, r5, #0
 	ldr r1, [r5, #0x3c]
 	add r0, #0x44
-	bl ov07_02222748
+	bl BattleAnimUtil_UpdateScaleMotionSprite
 	add r0, r5, #0
 	add r0, #0x68
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	beq _0222DC96
 	mov r2, #0xb4
@@ -37089,12 +37089,12 @@ _0222DC96:
 	add r0, r5, #0
 	add r2, r4, #0
 	mov r3, #0xe
-	bl ov07_02222AC4
+	bl BattleAnimUtil_StartBlendAlphaMotion
 	b _0222DCD0
 _0222DCB2:
 	add r0, r5, #0
 	add r0, #0x8c
-	bl ov07_02222AF4
+	bl BattleAnimUtil_IsBlendAlphaMotionDone
 	cmp r0, #0
 	beq _0222DCD0
 	ldr r0, [r5, #0x3c]
@@ -37198,7 +37198,7 @@ ov07_0222DD20: ; 0x0222DD20
 	add r0, #0x14
 	add r2, r1, #0
 	mov r3, #0xf
-	bl ov07_02222508
+	bl BattleAnimUtil_InitScaleMotion
 	ldr r0, [sp, #8]
 	mov r1, #1
 	str r0, [r4, #0x3c]
@@ -37244,7 +37244,7 @@ _0222DDD8:
 	add r0, #0x68
 	add r2, r1, #0
 	add r3, r1, #0
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	mov r0, #0x20
 	str r0, [sp]
 	add r0, r4, #0
@@ -37252,7 +37252,7 @@ _0222DDD8:
 	mov r1, #5
 	mov r2, #0xa
 	mov r3, #0xc
-	bl ov07_02222508
+	bl BattleAnimUtil_InitScaleMotion
 	mov r0, #0x1a
 	str r0, [sp]
 	ldr r0, _0222DE28 ; =0x04000050
@@ -37299,7 +37299,7 @@ _0222DE52:
 	mov r1, #0
 	add r0, #0x18
 	add r3, r1, #0
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	add sp, #8
 	pop {r3, pc}
 _0222DE68:
@@ -37312,7 +37312,7 @@ _0222DE68:
 	add r0, #0x18
 	add r2, r1, #0
 	add r3, r1, #0
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	add sp, #8
 	pop {r3, pc}
 _0222DE82:
@@ -37325,7 +37325,7 @@ _0222DE82:
 	add r0, #0x18
 	sub r2, #0x50
 	add r3, r1, #0
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	add sp, #8
 	pop {r3, pc}
 _0222DE9C:
@@ -37338,7 +37338,7 @@ _0222DE9C:
 	add r0, #0x18
 	add r2, r1, #0
 	add r3, r1, #0
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	add sp, #8
 	pop {r3, pc}
 _0222DEB6:
@@ -37349,7 +37349,7 @@ _0222DEB6:
 	mov r1, #0
 	add r0, #0x18
 	add r3, r1, #0
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	add sp, #8
 	pop {r3, pc}
 _0222DECC:
@@ -37361,7 +37361,7 @@ _0222DECC:
 	mov r1, #0
 	add r0, #0x18
 	add r3, r1, #0
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	add sp, #8
 	pop {r3, pc}
 _0222DEE4:
@@ -37410,7 +37410,7 @@ _0222DF12:
 _0222DF2E:
 	add r0, r4, #0
 	add r0, #0x18
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	beq _0222DF4E
 	mov r2, #0x64
@@ -37461,7 +37461,7 @@ _0222DF7E:
 	add r0, #0x3c
 	add r3, r2, #0
 	str r1, [sp, #4]
-	bl ov07_02222AC4
+	bl BattleAnimUtil_StartBlendAlphaMotion
 	ldr r0, _0222E01C ; =0x00007FFF
 	mov r1, #0
 	str r0, [sp]
@@ -37473,7 +37473,7 @@ _0222DF7E:
 _0222DFB0:
 	add r0, r4, #0
 	add r0, #0x3c
-	bl ov07_02222AF4
+	bl BattleAnimUtil_IsBlendAlphaMotionDone
 	cmp r0, #0
 	beq _0222DFC4
 	ldr r0, [r4, #0x14]
@@ -37591,7 +37591,7 @@ _0222E09A:
 	mov r1, #0
 	add r0, #0x28
 	add r3, r1, #0
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	add sp, #8
 	pop {r3, pc}
 _0222E0B0:
@@ -37604,7 +37604,7 @@ _0222E0B0:
 	add r0, #0x28
 	add r2, r1, #0
 	add r3, r1, #0
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	add sp, #8
 	pop {r3, pc}
 _0222E0CA:
@@ -37617,7 +37617,7 @@ _0222E0CA:
 	add r0, #0x28
 	sub r2, #0x50
 	add r3, r1, #0
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	add sp, #8
 	pop {r3, pc}
 _0222E0E4:
@@ -37630,7 +37630,7 @@ _0222E0E4:
 	add r0, #0x28
 	mov r2, #0x28
 	add r3, r1, #0
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	add sp, #8
 	pop {r3, pc}
 _0222E0FE:
@@ -37680,7 +37680,7 @@ _0222E130:
 _0222E14C:
 	add r0, r4, #0
 	add r0, #0x28
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	beq _0222E16C
 	mov r2, #0x4c
@@ -37974,7 +37974,7 @@ ov07_0222E3A4: ; 0x0222E3A4
 	add r0, #0x10
 	mov r1, #0
 	mov r3, #3
-	bl ov07_02222418
+	bl BattleAnimUtil_InitValueMotionFx
 	cmp r5, #0
 	beq _0222E3D0
 	mov r0, #0
@@ -38025,7 +38025,7 @@ _0222E402: ; jump table
 _0222E40A:
 	add r0, r4, #0
 	add r0, #0x10
-	bl ov07_02222468
+	bl BattleAnimUtil_UpdateValueMotionFx
 	ldr r0, [r4, #8]
 	ldr r2, [r4, #0x10]
 	mov r1, #9
@@ -38050,12 +38050,12 @@ _0222E40A:
 	str r0, [sp, #4]
 	add r0, r4, #0
 	add r2, r1, #0
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	b _0222E4F2
 _0222E44A:
 	add r0, r4, #0
 	add r0, #0x10
-	bl ov07_02222468
+	bl BattleAnimUtil_UpdateValueMotionFx
 	cmp r0, #0
 	beq _0222E460
 	ldr r0, [r4, #8]
@@ -38066,7 +38066,7 @@ _0222E460:
 	add r0, r4, #0
 	ldr r1, [r4, #8]
 	add r0, #0x24
-	bl ov07_02222314
+	bl BattleAnimUtil_UpdateLinearMotionPokepic
 	cmp r0, #0
 	bne _0222E4F2
 	ldr r0, [r4, #0x4c]
@@ -38079,7 +38079,7 @@ _0222E460:
 	add r0, #0x10
 	asr r1, r1, #0x10
 	mov r3, #3
-	bl ov07_02222418
+	bl BattleAnimUtil_InitValueMotionFx
 	mov r0, #0xe
 	ldrsh r3, [r4, r0]
 	mov r0, #0xc
@@ -38093,16 +38093,16 @@ _0222E460:
 	add r0, r4, #0
 	add r2, r1, #0
 	asr r3, r3, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	b _0222E4F2
 _0222E4A6:
 	add r0, r4, #0
 	ldr r1, [r4, #8]
 	add r0, #0x24
-	bl ov07_02222314
+	bl BattleAnimUtil_UpdateLinearMotionPokepic
 	add r0, r4, #0
 	add r0, #0x10
-	bl ov07_02222468
+	bl BattleAnimUtil_UpdateValueMotionFx
 	cmp r0, #0
 	ldr r0, [r4, #8]
 	beq _0222E4C8
@@ -38275,7 +38275,7 @@ _0222E608:
 	add r0, r4, #0
 	ldr r1, [r4, #0xc]
 	add r0, #0x10
-	bl ov07_02222768
+	bl BattleAnimUtil_UpdateScaleMotionPokepic
 	cmp r0, #0
 	beq _0222E630
 	add r0, r5, #0
@@ -38288,7 +38288,7 @@ _0222E608:
 	ldr r3, [r4, #0x24]
 	asr r1, r1, #0x10
 	asr r2, r2, #0x10
-	bl ov07_022226C4
+	bl BattleAnimUtil_AlignPokepicToScale
 	b _0222E6A4
 _0222E630:
 	ldr r0, [r4, #0x38]
@@ -38310,13 +38310,13 @@ _0222E638:
 	add r0, r4, #0
 	mov r1, #0xf
 	add r3, r2, #0
-	bl ov07_02222508
+	bl BattleAnimUtil_InitScaleMotion
 	b _0222E6A4
 _0222E65A:
 	add r0, r4, #0
 	ldr r1, [r4, #0xc]
 	add r0, #0x10
-	bl ov07_02222768
+	bl BattleAnimUtil_UpdateScaleMotionPokepic
 	cmp r0, #0
 	beq _0222E682
 	add r0, r5, #0
@@ -38329,7 +38329,7 @@ _0222E65A:
 	ldr r3, [r4, #0x24]
 	asr r1, r1, #0x10
 	asr r2, r2, #0x10
-	bl ov07_022226C4
+	bl BattleAnimUtil_AlignPokepicToScale
 	b _0222E6A4
 _0222E682:
 	ldr r0, [r4, #0x38]
@@ -38417,7 +38417,7 @@ ov07_0222E6F4: ; 0x0222E6F4
 	add r0, #0x10
 	add r2, r1, #0
 	mov r3, #0xf
-	bl ov07_02222508
+	bl BattleAnimUtil_InitScaleMotion
 	mov r0, #4
 	str r0, [r4, #0x34]
 	ldr r0, [r4]
@@ -38463,7 +38463,7 @@ ov07_0222E754: ; 0x0222E754
 	asr r1, r1, #0x10
 	mov r2, #0xa
 	asr r3, r3, #0x10
-	bl ov07_02222508
+	bl BattleAnimUtil_InitScaleMotion
 	ldr r0, [r5]
 	mov r1, #0x10
 	mov r2, #0
@@ -38480,7 +38480,7 @@ ov07_0222E754: ; 0x0222E754
 	mov r1, #0x10
 	mov r2, #0xa
 	mov r3, #0
-	bl ov07_02222AC4
+	bl BattleAnimUtil_StartBlendAlphaMotion
 	mov r0, #0
 	str r0, [r5, #0x64]
 	str r0, [r5, #0x68]
@@ -38511,7 +38511,7 @@ _0222E7DC:
 	add r0, r4, #0
 	ldr r1, [r4, #0x14]
 	add r0, #0x18
-	bl ov07_02222748
+	bl BattleAnimUtil_UpdateScaleMotionSprite
 	cmp r0, #0
 	bne _0222E890
 	ldr r0, [r4, #0x78]
@@ -38533,7 +38533,7 @@ _0222E7DC:
 	asr r1, r1, #0x10
 	mov r2, #0xa
 	asr r3, r3, #0x10
-	bl ov07_02222508
+	bl BattleAnimUtil_InitScaleMotion
 	ldr r0, [r4, #0x64]
 	add r0, r0, #1
 	str r0, [r4, #0x64]
@@ -38542,7 +38542,7 @@ _0222E822:
 	add r0, r4, #0
 	ldr r1, [r4, #0x14]
 	add r0, #0x18
-	bl ov07_02222748
+	bl BattleAnimUtil_UpdateScaleMotionSprite
 	cmp r0, #0
 	bne _0222E890
 	ldr r0, [r4, #0x68]
@@ -38571,7 +38571,7 @@ _0222E822:
 	asr r1, r1, #0x10
 	mov r2, #0xa
 	asr r3, r3, #0x10
-	bl ov07_02222508
+	bl BattleAnimUtil_InitScaleMotion
 	b _0222E890
 _0222E870:
 	ldr r0, [r4, #0x64]
@@ -38581,7 +38581,7 @@ _0222E870:
 _0222E878:
 	add r0, r4, #0
 	add r0, #0x3c
-	bl ov07_02222AF4
+	bl BattleAnimUtil_IsBlendAlphaMotionDone
 	cmp r0, #0
 	beq _0222E890
 	ldr r0, [r4, #0x64]
@@ -38711,7 +38711,7 @@ _0222E932:
 	add r0, r4, #0
 	add r0, #0x3c
 	add r3, r2, #0
-	bl ov07_02222AC4
+	bl BattleAnimUtil_StartBlendAlphaMotion
 	b _0222EA3C
 _0222E978:
 	ldr r0, [r4, #0x10]
@@ -38781,12 +38781,12 @@ _0222E9D8:
 	add r0, r4, #0
 	add r0, #0x3c
 	add r3, r2, #0
-	bl ov07_02222AC4
+	bl BattleAnimUtil_StartBlendAlphaMotion
 	b _0222EA3C
 _0222EA08:
 	add r0, r4, #0
 	add r0, #0x3c
-	bl ov07_02222AF4
+	bl BattleAnimUtil_IsBlendAlphaMotionDone
 	cmp r0, #0
 	beq _0222EA3C
 	ldr r0, [r4, #0x14]
@@ -38891,7 +38891,7 @@ _0222EAD2:
 	add r0, #0x10
 	add r2, r1, #0
 	add r3, r1, #0
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	add sp, #8
 	pop {r3, pc}
 _0222EAEA:
@@ -38902,7 +38902,7 @@ _0222EAEA:
 	add r0, #0x10
 	add r2, r1, #0
 	mov r3, #0x20
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 _0222EAFC:
 	add sp, #8
 	pop {r3, pc}
@@ -38931,7 +38931,7 @@ _0222EB16:
 _0222EB24:
 	add r0, r4, #0
 	add r0, #0x10
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	beq _0222EB44
 	mov r2, #0xc
@@ -39047,7 +39047,7 @@ _0222EBF6:
 	ldr r3, [r4, #0xc]
 	add r0, #0x14
 	asr r2, r2, #0x10
-	bl ov07_02222240
+	bl BattleAnimUtil_UpdateSinMotionPokepic
 	cmp r0, #0
 	beq _0222EC14
 _0222EC12:
@@ -39075,7 +39075,7 @@ _0222EC14:
 	lsl r2, r2, #0x10
 	add r0, #0x14
 	asr r2, r2, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	ldr r1, [r4, #0x1c]
 	ldr r0, [r4, #8]
 	mul r0, r1
@@ -39085,7 +39085,7 @@ _0222EC14:
 	str r0, [r4]
 	add r0, r4, #0
 	add r0, #0x14
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	mov r2, #0x14
 	ldrsh r2, [r4, r2]
 	ldr r0, [r4, #0xc]
@@ -39096,7 +39096,7 @@ _0222EC14:
 _0222EC6E:
 	add r0, r4, #0
 	add r0, #0x14
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	beq _0222EC8A
 	mov r2, #0x14
@@ -39120,7 +39120,7 @@ _0222EC8A:
 	lsl r2, r2, #0x10
 	add r0, #0x40
 	asr r2, r2, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	ldr r0, [r4]
 	add sp, #8
 	add r0, r0, #1
@@ -39129,7 +39129,7 @@ _0222EC8A:
 _0222ECB2:
 	add r0, r4, #0
 	add r0, #0x40
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	beq _0222ECCE
 	mov r2, #0x40
@@ -39150,7 +39150,7 @@ _0222ECCE:
 	ldrsh r1, [r4, r1]
 	ldrsh r2, [r4, r2]
 	add r0, #0x14
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	ldr r0, [r4]
 	add sp, #8
 	add r0, r0, #1
@@ -39159,7 +39159,7 @@ _0222ECCE:
 _0222ECF0:
 	add r0, r4, #0
 	add r0, #0x14
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	ldr r0, [r4, #0xc]
 	beq _0222ED0C
@@ -39184,7 +39184,7 @@ _0222ED0C:
 	ldrsh r1, [r4, r1]
 	ldrsh r2, [r4, r2]
 	add r0, #0x40
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	ldr r0, [r4]
 	add sp, #8
 	add r0, r0, #1
@@ -39193,7 +39193,7 @@ _0222ED0C:
 _0222ED38:
 	add r0, r4, #0
 	add r0, #0x40
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	ldr r0, [r4, #0x38]
 	beq _0222ED54
@@ -39289,7 +39289,7 @@ ov07_0222EDF0: ; 0x0222EDF0
 	add r0, #0x1c
 	mov r2, #9
 	add r3, r1, #0
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	add sp, #0xc
 	pop {pc}
 	.balign 4, 0
@@ -39319,7 +39319,7 @@ _0222EE36:
 	add r0, r4, #0
 	ldr r1, [r4, #0x18]
 	add r0, #0x1c
-	bl ov07_02222788
+	bl BattleAnimUtil_UpdateScaleMotionXYPokepic
 	cmp r0, #0
 	beq _0222EE5A
 	add r0, r5, #0
@@ -39330,7 +39330,7 @@ _0222EE36:
 	ldrsh r2, [r4, r2]
 	ldr r0, [r4, #0x18]
 	ldr r3, [r4, #0x30]
-	bl ov07_022226C4
+	bl BattleAnimUtil_AlignPokepicToScale
 	b _0222EF06
 _0222EE5A:
 	ldr r0, [r4, #0x40]
@@ -39347,13 +39347,13 @@ _0222EE5A:
 	add r0, r4, #0
 	mov r2, #0xb
 	mov r3, #8
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	b _0222EF06
 _0222EE7C:
 	add r0, r4, #0
 	ldr r1, [r4, #0x18]
 	add r0, #0x1c
-	bl ov07_02222788
+	bl BattleAnimUtil_UpdateScaleMotionXYPokepic
 	cmp r0, #0
 	beq _0222EEA0
 	add r0, r5, #0
@@ -39364,7 +39364,7 @@ _0222EE7C:
 	ldrsh r2, [r4, r2]
 	ldr r0, [r4, #0x18]
 	ldr r3, [r4, #0x30]
-	bl ov07_022226C4
+	bl BattleAnimUtil_AlignPokepicToScale
 	b _0222EF06
 _0222EEA0:
 	ldr r0, [r4, #0x40]
@@ -39379,13 +39379,13 @@ _0222EEA0:
 	add r0, r4, #0
 	mov r1, #0xb
 	mov r3, #0xf
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	b _0222EF06
 _0222EEBE:
 	add r0, r4, #0
 	ldr r1, [r4, #0x18]
 	add r0, #0x1c
-	bl ov07_02222788
+	bl BattleAnimUtil_UpdateScaleMotionXYPokepic
 	cmp r0, #0
 	beq _0222EEE2
 	add r0, r5, #0
@@ -39396,7 +39396,7 @@ _0222EEBE:
 	ldrsh r2, [r4, r2]
 	ldr r0, [r4, #0x18]
 	ldr r3, [r4, #0x30]
-	bl ov07_022226C4
+	bl BattleAnimUtil_AlignPokepicToScale
 	b _0222EF06
 _0222EEE2:
 	mov r1, #0xc
@@ -39860,7 +39860,7 @@ _0222F252:
 	add r0, #0x14
 	add r2, r1, #0
 	mov r3, #0
-	bl ov07_02222508
+	bl BattleAnimUtil_InitScaleMotion
 	ldr r0, [r4, #0x10]
 	mov r1, #0
 	bl Pokepic_GetAttr
@@ -39882,17 +39882,17 @@ _0222F252:
 	add r0, #0x38
 	asr r1, r1, #0x10
 	asr r3, r3, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	b _0222F36E
 _0222F2A6:
 	add r0, r4, #0
 	ldr r1, [r4, #0x10]
 	add r0, #0x38
-	bl ov07_02222314
+	bl BattleAnimUtil_UpdateLinearMotionPokepic
 	add r0, r4, #0
 	ldr r1, [r4, #0x10]
 	add r0, #0x14
-	bl ov07_02222768
+	bl BattleAnimUtil_UpdateScaleMotionPokepic
 	cmp r0, #0
 	bne _0222F36E
 	ldr r0, [r4, #0x10]
@@ -39943,12 +39943,12 @@ _0222F302:
 	ldrsh r3, [r4, r3]
 	add r0, #0x60
 	add r2, r1, #0
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	b _0222F36E
 _0222F332:
 	add r0, r4, #0
 	add r0, #0x60
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	beq _0222F34E
 	mov r1, #0x88
@@ -40082,7 +40082,7 @@ ov07_0222F434: ; 0x0222F434
 	add r0, #0x28
 	add r2, r1, #0
 	add r3, r1, #0
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	mov r0, #4
 	str r0, [sp]
 	add r0, r4, #0
@@ -40090,7 +40090,7 @@ ov07_0222F434: ; 0x0222F434
 	add r0, #0x4c
 	add r2, r1, #0
 	mov r3, #1
-	bl ov07_02222508
+	bl BattleAnimUtil_InitScaleMotion
 	add r0, r4, #0
 	mov r1, #0
 	add r0, #0x94
@@ -40117,7 +40117,7 @@ ov07_0222F434: ; 0x0222F434
 	add r0, #0x28
 	add r1, sp, #0x10
 	add r2, sp, #0xc
-	bl ov07_02222644
+	bl BattleAnimUtil_GetScaleFloat
 	add r0, r4, #0
 	add r0, #0xc8
 	ldr r0, [r0]
@@ -40161,12 +40161,12 @@ _0222F4EE:
 _0222F4F0:
 	add r0, r5, #0
 	add r0, #0x28
-	bl ov07_0222260C
+	bl BattleAnimUtil_UpdateScaleMotionXY
 	add r0, r5, #0
 	add r0, #0x28
 	add r1, sp, #0x10
 	add r2, sp, #0xc
-	bl ov07_02222644
+	bl BattleAnimUtil_GetScaleFloat
 	add r0, r5, #0
 	add r0, #0xc8
 	ldr r0, [r0]
@@ -40191,7 +40191,7 @@ _0222F518:
 	ldr r3, [r5, #0x3c]
 	asr r1, r1, #0x10
 	asr r2, r2, #0x10
-	bl ov07_022226FC
+	bl BattleAnimUtil_AlignSpriteToScale
 	add r0, r5, #0
 	add r0, #0x98
 	ldr r0, [r0]
@@ -40220,15 +40220,15 @@ _0222F518:
 	str r0, [sp, #8]
 	add r0, r5, #0
 	mov r2, #1
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	b _0222F5FA
 _0222F578:
 	add r0, r5, #0
 	add r0, #0x28
-	bl ov07_0222260C
+	bl BattleAnimUtil_UpdateScaleMotionXY
 	add r0, r5, #0
 	add r0, #0x4c
-	bl ov07_02222558
+	bl BattleAnimUtil_UpdateScaleMotion
 	cmp r0, #0
 	beq _0222F5D6
 	mov r0, #0x4c
@@ -40238,7 +40238,7 @@ _0222F578:
 	strh r0, [r5, #0x28]
 	add r0, r5, #0
 	add r0, #0x28
-	bl ov07_02222644
+	bl BattleAnimUtil_GetScaleFloat
 	add r0, r5, #0
 	add r0, #0xc8
 	ldr r0, [r0]
@@ -40263,7 +40263,7 @@ _0222F5B2:
 	ldr r3, [r5, #0x3c]
 	asr r1, r1, #0x10
 	asr r2, r2, #0x10
-	bl ov07_022226FC
+	bl BattleAnimUtil_AlignSpriteToScale
 	b _0222F5FA
 _0222F5D6:
 	add r0, r5, #0
@@ -40313,7 +40313,7 @@ ov07_0222F600: ; 0x0222F600
 	add r0, #0x70
 	add r2, r1, #0
 	asr r3, r3, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	mov r2, #0xa
 	str r2, [sp]
 	str r2, [sp, #4]
@@ -40323,12 +40323,12 @@ ov07_0222F600: ; 0x0222F600
 	add r0, #0x28
 	mov r1, #2
 	mov r3, #0x14
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	add r0, r4, #0
 	add r0, #0x28
 	add r1, sp, #0x14
 	add r2, sp, #0x10
-	bl ov07_02222644
+	bl BattleAnimUtil_GetScaleFloat
 	add r0, r4, #0
 	add r0, #0xcc
 	ldr r0, [r0]
@@ -40346,7 +40346,7 @@ _0222F668:
 	add r0, r4, #0
 	ldr r1, [r4, #0x1c]
 	add r0, #0x70
-	bl ov07_022222F0
+	bl BattleAnimUtil_UpdateLinearMotionSprite
 	add r0, r4, #0
 	mov r1, #0
 	add r0, #0x94
@@ -40404,7 +40404,7 @@ _0222F6DA:
 	add r0, r5, #0
 	ldr r1, [r5, #0x1c]
 	add r0, #0x70
-	bl ov07_022222F0
+	bl BattleAnimUtil_UpdateLinearMotionSprite
 	add r0, r5, #0
 	add r0, #0x98
 	ldr r0, [r0]
@@ -40421,16 +40421,16 @@ _0222F70A:
 	add r0, r5, #0
 	ldr r1, [r5, #0x1c]
 	add r0, #0x70
-	bl ov07_022222F0
+	bl BattleAnimUtil_UpdateLinearMotionSprite
 	add r0, r5, #0
 	add r0, #0x28
-	bl ov07_0222260C
+	bl BattleAnimUtil_UpdateScaleMotionXY
 	add r6, r0, #0
 	add r0, r5, #0
 	add r0, #0x28
 	add r1, sp, #4
 	add r2, sp, #0
-	bl ov07_02222644
+	bl BattleAnimUtil_GetScaleFloat
 	add r0, r5, #0
 	add r0, #0xcc
 	ldr r0, [r0]
@@ -40498,7 +40498,7 @@ _0222F78C:
 	add r0, #0x9c
 	mov r1, #0
 	mov r3, #0x10
-	bl ov07_02222AC4
+	bl BattleAnimUtil_StartBlendAlphaMotion
 	ldr r0, [r4, #8]
 	add r0, r0, #1
 	str r0, [r4, #8]
@@ -40506,7 +40506,7 @@ _0222F78C:
 _0222F7B0:
 	add r0, r4, #0
 	add r0, #0x9c
-	bl ov07_02222AF4
+	bl BattleAnimUtil_IsBlendAlphaMotionDone
 	cmp r0, #0
 	beq _0222F83E
 	ldr r0, [r4, #8]
@@ -40553,12 +40553,12 @@ _0222F7F6:
 	mov r2, #0
 	add r3, r1, #0
 	str r1, [sp, #4]
-	bl ov07_02222AC4
+	bl BattleAnimUtil_StartBlendAlphaMotion
 	b _0222F83E
 _0222F81C:
 	add r0, r4, #0
 	add r0, #0x9c
-	bl ov07_02222AF4
+	bl BattleAnimUtil_IsBlendAlphaMotionDone
 	cmp r0, #0
 	beq _0222F83E
 	ldr r0, [r4, #8]
@@ -40739,7 +40739,7 @@ ov07_0222F9B8: ; 0x0222F9B8
 	mov r1, #0x19
 	add r3, r2, #0
 	str r2, [sp]
-	bl ov07_02222508
+	bl BattleAnimUtil_InitScaleMotion
 	mov r0, #0x3a
 	ldrsh r0, [r4, r0]
 	add r1, r4, #0
@@ -40752,7 +40752,7 @@ ov07_0222F9B8: ; 0x0222F9B8
 	mov r0, #1
 	str r0, [sp, #0xc]
 	ldr r0, [r4, #0x44]
-	ldr r2, _0222FA04 ; =ov07_02222558
+	ldr r2, _0222FA04 ; =BattleAnimUtil_UpdateScaleMotion
 	str r0, [sp, #0x10]
 	ldr r0, [r4, #0x40]
 	add r1, #0xf8
@@ -40764,11 +40764,11 @@ ov07_0222F9B8: ; 0x0222F9B8
 	add r0, r4, #0
 	ldrsh r3, [r4, r3]
 	add r0, #0x48
-	bl ov07_02222864
+	bl BattleAnimUtil_InitSpriteSequence
 	add sp, #0x20
 	pop {r4, pc}
 	.balign 4, 0
-_0222FA04: .word ov07_02222558
+_0222FA04: .word BattleAnimUtil_UpdateScaleMotion
 	thumb_func_end ov07_0222F9B8
 
 	thumb_func_start ov07_0222FA08
@@ -40783,7 +40783,7 @@ ov07_0222FA08: ; 0x0222FA08
 	add r0, #0xf8
 	add r2, r1, #0
 	mov r3, #0x19
-	bl ov07_02222508
+	bl BattleAnimUtil_InitScaleMotion
 	mov r0, #0x3a
 	ldrsh r0, [r4, r0]
 	add r1, r4, #0
@@ -40796,7 +40796,7 @@ ov07_0222FA08: ; 0x0222FA08
 	mov r0, #1
 	str r0, [sp, #0xc]
 	ldr r0, [r4, #0x3c]
-	ldr r2, _0222FA60 ; =ov07_02222558
+	ldr r2, _0222FA60 ; =BattleAnimUtil_UpdateScaleMotion
 	str r0, [sp, #0x10]
 	ldr r0, [r4, #0x40]
 	add r1, #0xf8
@@ -40808,14 +40808,14 @@ ov07_0222FA08: ; 0x0222FA08
 	add r0, r4, #0
 	ldrsh r3, [r4, r3]
 	add r0, #0x48
-	bl ov07_02222864
+	bl BattleAnimUtil_InitSpriteSequence
 	ldr r0, [r4, #0x3c]
 	mov r1, #1
 	bl ManagedSprite_SetDrawFlag
 	add sp, #0x20
 	pop {r4, pc}
 	.balign 4, 0
-_0222FA60: .word ov07_02222558
+_0222FA60: .word BattleAnimUtil_UpdateScaleMotion
 	thumb_func_end ov07_0222FA08
 
 	thumb_func_start ov07_0222FA64
@@ -40848,7 +40848,7 @@ _0222FA86:
 _0222FA94:
 	add r0, r4, #0
 	add r0, #0x48
-	bl ov07_02222914
+	bl BattleAnimUtil_UpdateSpriteSequence
 	cmp r0, #0
 	bne _0222FB1C
 	ldr r0, [r4, #0x3c]
@@ -40864,7 +40864,7 @@ _0222FA94:
 	add r0, #0x14
 	mov r2, #0
 	mov r3, #1
-	bl ov07_022227A8
+	bl BattleAnimUtil_InitShake
 	b _0222FB1C
 _0222FAC2:
 	mov r1, #0x38
@@ -40874,7 +40874,7 @@ _0222FAC2:
 	ldrsh r2, [r4, r2]
 	ldr r3, [r4, #0x10]
 	add r0, #0x14
-	bl ov07_0222283C
+	bl BattleAnimUtil_UpdateShakePokepic
 	cmp r0, #0
 	bne _0222FB1C
 	ldr r0, [r4, #0xc]
@@ -40886,7 +40886,7 @@ _0222FAC2:
 _0222FAE6:
 	add r0, r4, #0
 	add r0, #0x48
-	bl ov07_02222914
+	bl BattleAnimUtil_UpdateSpriteSequence
 	cmp r0, #0
 	bne _0222FB1C
 	ldr r0, [r4, #0xc]
@@ -41066,7 +41066,7 @@ ov07_0222FC44: ; 0x0222FC44
 	add r4, r6, #0
 _0222FC5A:
 	ldr r0, [sp]
-	bl ov07_02222180
+	bl BattleAnimUtil_UpdateSinMotion
 	ldr r1, [r5, #0x38]
 	mov r2, #0xa
 	lsl r0, r1, #2
@@ -41186,7 +41186,7 @@ _0222FD38:
 	mov r1, #1
 	mov r2, #0x10
 	mov r3, #0xf
-	bl ov07_02222AC4
+	bl BattleAnimUtil_StartBlendAlphaMotion
 	ldr r1, [r4, #0x14]
 	add r0, r4, #0
 	bl ov07_0222FBEC
@@ -41202,7 +41202,7 @@ _0222FD6E:
 	mov r0, #0x42
 	lsl r0, r0, #2
 	add r0, r4, r0
-	bl ov07_02222AF4
+	bl BattleAnimUtil_IsBlendAlphaMotionDone
 	cmp r0, #0
 	beq _0222FDFA
 	ldr r0, [r4, #0xc]
@@ -41230,7 +41230,7 @@ _0222FD8E:
 	add r0, r4, r0
 	mov r2, #1
 	mov r3, #0
-	bl ov07_02222AC4
+	bl BattleAnimUtil_StartBlendAlphaMotion
 	b _0222FDFA
 _0222FDBA:
 	add r0, r4, #0
@@ -41238,7 +41238,7 @@ _0222FDBA:
 	mov r0, #0x42
 	lsl r0, r0, #2
 	add r0, r4, r0
-	bl ov07_02222AF4
+	bl BattleAnimUtil_IsBlendAlphaMotionDone
 	cmp r0, #0
 	beq _0222FDFA
 	ldr r0, [r4, #0xc]
@@ -41382,7 +41382,7 @@ ov07_0222FEB0: ; 0x0222FEB0
 	asr r1, r1, #0x10
 	asr r2, r2, #0x10
 	asr r3, r3, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	add r0, r6, #0
 	mov r1, #1
 	bl ManagedSprite_SetDrawFlag
@@ -41398,7 +41398,7 @@ ov07_0222FF04: ; 0x0222FF04
 	add r4, r0, #0
 	add r0, r1, #0
 	add r1, r4, #0
-	bl ov07_022222F0
+	bl BattleAnimUtil_UpdateLinearMotionSprite
 	cmp r0, #0
 	beq _0222FFBE
 	add r1, sp, #8
@@ -41742,7 +41742,7 @@ ov07_022301C4: ; 0x022301C4
 	sub sp, #0xc
 	add r5, r0, #0
 	ldr r0, [r5, #4]
-	bl ov07_02222C84
+	bl BattleAnimScanline_GetWriteBuffer
 	str r0, [sp, #8]
 	ldr r0, [r5, #0x10]
 	str r0, [sp]
@@ -41837,7 +41837,7 @@ _0223027A:
 	lsl r1, r1, #0x10
 	lsr r0, r0, #0x10
 	lsr r1, r1, #0x10
-	bl ov07_02222D88
+	bl BattleAnimUtil_PackXY
 	ldr r1, [sp, #8]
 	lsl r2, r6, #2
 	str r0, [r1, r2]
@@ -41912,9 +41912,9 @@ _022302FC:
 	bl Pokepic_SetAttr
 _02230318:
 	ldr r0, [r4, #4]
-	bl ov07_02222C98
+	bl BattleAnimScanline_Disable
 	ldr r0, [r4, #4]
-	bl ov07_02222C60
+	bl BattleAnimScanline_Free
 	ldr r0, [r4]
 	mov r1, #1
 	bl BattleAnimSystem_GetBgLayer
@@ -42022,19 +42022,19 @@ _02230402:
 	str r5, [r4, #0x10]
 	lsr r0, r0, #0x10
 	lsr r1, r1, #0x10
-	bl ov07_02222D88
+	bl BattleAnimUtil_PackXY
 	str r0, [r4, #0x30]
 	ldr r0, [r4]
 	mov r1, #1
 	bl ov07_0221FAF8
-	bl ov07_02222D90
+	bl BattleAnimUtil_GetBgOffsetRegister
 	add r5, r0, #0
 	ldr r0, [r4]
 	bl BattleAnimSystem_GetHeapID
 	add r2, r0, #0
 	ldr r1, [r4, #0x30]
 	add r0, r5, #0
-	bl ov07_02222BE4
+	bl BattleAnimScanline_New
 	str r0, [r4, #4]
 	mov r0, #1
 	str r0, [r4, #0x20]
@@ -42109,7 +42109,7 @@ _022304C4:
 	add r0, #0xc
 	mov r1, #0x7f
 	add r3, r2, #0
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	mov r2, #1
 	lsl r2, r2, #0x1a
 	ldr r1, [r2]
@@ -42164,7 +42164,7 @@ _0223050A:
 _02230544:
 	add r0, r4, #0
 	add r0, #0xc
-	bl ov07_022222B4
+	bl BattleAnimUtil_UpdateLinearMotion
 	cmp r0, #0
 	beq _02230574
 	mov r0, #0xc
@@ -42301,7 +42301,7 @@ _02230640:
 	add r0, r4, #0
 	add r0, #0x14
 	add r3, r2, #0
-	bl ov07_02222AC4
+	bl BattleAnimUtil_StartBlendAlphaMotion
 	ldr r0, [r4, #0xc]
 	add r0, r0, #1
 	str r0, [r4, #0xc]
@@ -42309,7 +42309,7 @@ _02230640:
 _02230666:
 	add r0, r4, #0
 	add r0, #0x14
-	bl ov07_02222AF4
+	bl BattleAnimUtil_IsBlendAlphaMotionDone
 	cmp r0, #0
 	beq _022306CC
 	ldr r0, [r4, #0xc]
@@ -42332,12 +42332,12 @@ _0223067A:
 	add r0, r4, #0
 	add r0, #0x14
 	add r3, r2, #0
-	bl ov07_02222AC4
+	bl BattleAnimUtil_StartBlendAlphaMotion
 	b _022306CC
 _022306A0:
 	add r0, r4, #0
 	add r0, #0x14
-	bl ov07_02222AF4
+	bl BattleAnimUtil_IsBlendAlphaMotionDone
 	cmp r0, #0
 	beq _022306CC
 	ldr r0, [r4, #0xc]
@@ -42436,7 +42436,7 @@ _02230738:
 	asr r1, r1, #0x10
 	asr r2, r2, #0x10
 	asr r3, r3, #0x10
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	mov r1, #0xa
 	mov r2, #8
 	add r0, r4, #0
@@ -42444,11 +42444,11 @@ _02230738:
 	ldrsh r2, [r4, r2]
 	ldr r3, [r4, #0x10]
 	add r0, #0x38
-	bl ov07_0222283C
+	bl BattleAnimUtil_UpdateShakePokepic
 	add r0, r4, #0
 	ldr r1, [r4, #0x10]
 	add r0, #0x14
-	bl ov07_02222788
+	bl BattleAnimUtil_UpdateScaleMotionXYPokepic
 	mov r0, #0
 	str r0, [sp]
 	mov r1, #8
@@ -42457,7 +42457,7 @@ _02230738:
 	ldrsh r2, [r4, r2]
 	ldr r0, [r4, #0x10]
 	ldr r3, [r4, #0x28]
-	bl ov07_022226C4
+	bl BattleAnimUtil_AlignPokepicToScale
 	ldr r0, [r4, #4]
 	add sp, #0xc
 	add r0, r0, #1
@@ -42471,11 +42471,11 @@ _022307A2:
 	ldrsh r2, [r4, r2]
 	ldr r3, [r4, #0x10]
 	add r0, #0x38
-	bl ov07_0222283C
+	bl BattleAnimUtil_UpdateShakePokepic
 	add r0, r4, #0
 	ldr r1, [r4, #0x10]
 	add r0, #0x14
-	bl ov07_02222788
+	bl BattleAnimUtil_UpdateScaleMotionXYPokepic
 	add r5, r0, #0
 	mov r0, #0
 	str r0, [sp]
@@ -42485,7 +42485,7 @@ _022307A2:
 	ldrsh r2, [r4, r2]
 	ldr r0, [r4, #0x10]
 	ldr r3, [r4, #0x28]
-	bl ov07_022226C4
+	bl BattleAnimUtil_AlignPokepicToScale
 	cmp r5, #0
 	beq _022307DA
 _022307D8:
@@ -42520,7 +42520,7 @@ _022307E4:
 	asr r1, r1, #0x10
 	asr r2, r2, #0x10
 	asr r3, r3, #0x10
-	bl ov07_02222590
+	bl BattleAnimUtil_InitScaleMotionXY
 	mov r1, #0xa
 	mov r2, #8
 	add r0, r4, #0
@@ -42528,11 +42528,11 @@ _022307E4:
 	ldrsh r2, [r4, r2]
 	ldr r3, [r4, #0x10]
 	add r0, #0x38
-	bl ov07_0222283C
+	bl BattleAnimUtil_UpdateShakePokepic
 	add r0, r4, #0
 	ldr r1, [r4, #0x10]
 	add r0, #0x14
-	bl ov07_02222788
+	bl BattleAnimUtil_UpdateScaleMotionXYPokepic
 	mov r0, #0
 	str r0, [sp]
 	mov r1, #8
@@ -42541,7 +42541,7 @@ _022307E4:
 	ldrsh r2, [r4, r2]
 	ldr r0, [r4, #0x10]
 	ldr r3, [r4, #0x28]
-	bl ov07_022226C4
+	bl BattleAnimUtil_AlignPokepicToScale
 	ldr r0, [r4, #4]
 	add sp, #0xc
 	add r0, r0, #1
@@ -42555,11 +42555,11 @@ _02230850:
 	ldrsh r2, [r4, r2]
 	ldr r3, [r4, #0x10]
 	add r0, #0x38
-	bl ov07_0222283C
+	bl BattleAnimUtil_UpdateShakePokepic
 	add r0, r4, #0
 	ldr r1, [r4, #0x10]
 	add r0, #0x14
-	bl ov07_02222788
+	bl BattleAnimUtil_UpdateScaleMotionXYPokepic
 	add r5, r0, #0
 	mov r0, #0
 	str r0, [sp]
@@ -42569,7 +42569,7 @@ _02230850:
 	ldrsh r2, [r4, r2]
 	ldr r0, [r4, #0x10]
 	ldr r3, [r4, #0x28]
-	bl ov07_022226C4
+	bl BattleAnimUtil_AlignPokepicToScale
 	cmp r5, #0
 	bne _022308E0
 	ldr r0, [r4, #0x70]
@@ -42662,7 +42662,7 @@ ov07_022308E4: ; 0x022308E4
 	str r1, [sp]
 	add r0, #0x38
 	mov r2, #0
-	bl ov07_022227A8
+	bl BattleAnimUtil_InitShake
 	ldr r0, [r4]
 	ldr r1, _0223095C ; =ov07_02230714
 	add r2, r4, #0
@@ -42681,7 +42681,7 @@ ov07_02230960: ; 0x02230960
 	add r0, r4, #0
 	ldr r1, [r4, #0x2c]
 	add r0, #8
-	bl ov07_022222F0
+	bl BattleAnimUtil_UpdateLinearMotionSprite
 	cmp r0, #0
 	bne _0223098A
 	ldr r0, [r4, #0x2c]
@@ -42787,7 +42787,7 @@ _022309EE:
 	asr r1, r1, #0x10
 	asr r2, r2, #0x10
 	asr r3, r3, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	ldr r0, [r4]
 	ldr r1, _02230A6C ; =ov07_02230960
 	add r2, r4, #0
@@ -42829,7 +42829,7 @@ _02230A98:
 	add r0, #0x40
 	mov r2, #0
 	mov r3, #1
-	bl ov07_022227A8
+	bl BattleAnimUtil_InitShake
 	ldr r0, [r4, #4]
 	add sp, #8
 	add r0, r0, #1
@@ -42843,7 +42843,7 @@ _02230AB2:
 	ldrsh r2, [r4, r2]
 	ldr r3, [r4, #0x14]
 	add r0, #0x40
-	bl ov07_0222283C
+	bl BattleAnimUtil_UpdateShakePokepic
 	cmp r0, #0
 	bne _02230B9C
 	ldr r0, [r4, #4]
@@ -42870,14 +42870,14 @@ _02230AB2:
 	lsl r2, r2, #0x10
 	add r0, #0x1c
 	asr r2, r2, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	add sp, #8
 	pop {r4, r5, r6, pc}
 _02230B00:
 	add r0, r4, #0
 	ldr r1, [r4, #0x14]
 	add r0, #0x1c
-	bl ov07_02222314
+	bl BattleAnimUtil_UpdateLinearMotionPokepic
 	cmp r0, #0
 	bne _02230B9C
 	ldr r0, [r4, #4]
@@ -42917,14 +42917,14 @@ _02230B1C:
 	add r0, #0x1c
 	asr r1, r1, #0x10
 	asr r3, r3, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	add sp, #8
 	pop {r4, r5, r6, pc}
 _02230B5E:
 	add r0, r4, #0
 	ldr r1, [r4, #0x14]
 	add r0, #0x1c
-	bl ov07_02222314
+	bl BattleAnimUtil_UpdateLinearMotionPokepic
 	cmp r0, #0
 	bne _02230B9C
 	ldr r0, [r4, #4]
@@ -43036,7 +43036,7 @@ _02230C1E:
 	lsl r2, r2, #0x10
 	add r0, #0x18
 	asr r2, r2, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	ldr r0, [r4, #4]
 	add sp, #8
 	add r0, r0, #1
@@ -43046,7 +43046,7 @@ _02230C54:
 	add r0, r4, #0
 	ldr r1, [r4, #0x10]
 	add r0, #0x18
-	bl ov07_02222314
+	bl BattleAnimUtil_UpdateLinearMotionPokepic
 	cmp r0, #0
 	bne _02230D18
 	ldr r0, [r4, #4]
@@ -43058,7 +43058,7 @@ _02230C54:
 	mov r2, #0
 	mov r3, #1
 	str r1, [sp]
-	bl ov07_022227A8
+	bl BattleAnimUtil_InitShake
 	add sp, #8
 	pop {r3, r4, r5, pc}
 _02230C7C:
@@ -43076,7 +43076,7 @@ _02230C7C:
 	ldr r3, [r4, #0x10]
 	add r0, #0x3c
 	add r1, r5, #0
-	bl ov07_0222283C
+	bl BattleAnimUtil_UpdateShakePokepic
 	cmp r0, #0
 	bne _02230D18
 	ldr r0, [r4, #4]
@@ -43102,14 +43102,14 @@ _02230C7C:
 	lsl r3, r3, #0x10
 	asr r1, r1, #0x10
 	asr r3, r3, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	add sp, #8
 	pop {r3, r4, r5, pc}
 _02230CDA:
 	add r0, r4, #0
 	ldr r1, [r4, #0x10]
 	add r0, #0x18
-	bl ov07_02222314
+	bl BattleAnimUtil_UpdateLinearMotionPokepic
 	cmp r0, #0
 	bne _02230D18
 	ldr r0, [r4, #4]
@@ -43411,14 +43411,14 @@ ov07_02230F0C: ; 0x02230F0C
 	str r0, [sp, #4]
 	add r0, r6, #0
 	asr r2, r2, #0x10
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	mov r0, #0x20
 	mov r2, #0xa
 	str r0, [sp]
 	add r0, r7, #0
 	mov r1, #2
 	add r3, r2, #0
-	bl ov07_02222508
+	bl BattleAnimUtil_InitScaleMotion
 	add sp, #0xc
 	pop {r4, r5, r6, r7, pc}
 	thumb_func_end ov07_02230F0C
@@ -43430,10 +43430,10 @@ ov07_02230F6C: ; 0x02230F6C
 	add r0, r1, #0
 	add r4, r2, #0
 	add r1, r5, #0
-	bl ov07_022222F0
+	bl BattleAnimUtil_UpdateLinearMotionSprite
 	add r0, r4, #0
 	add r1, r5, #0
-	bl ov07_02222748
+	bl BattleAnimUtil_UpdateScaleMotionSprite
 	cmp r0, #0
 	beq _02230F8A
 	mov r0, #0
@@ -43514,7 +43514,7 @@ _0223100C:
 	mov r1, #0
 	mov r2, #0x10
 	mov r3, #0x14
-	bl ov07_02222AC4
+	bl BattleAnimUtil_StartBlendAlphaMotion
 	ldr r0, [r4, #0x10]
 	mov r1, #1
 	bl ManagedSprite_SetDrawFlag
@@ -43529,7 +43529,7 @@ _0223100C:
 _0223103C:
 	add r0, r4, #0
 	add r0, #0x14
-	bl ov07_02222AF4
+	bl BattleAnimUtil_IsBlendAlphaMotionDone
 	cmp r0, #0
 	beq _022310D4
 	ldr r0, [r4, #4]
@@ -43568,12 +43568,12 @@ _02231062:
 	add r0, #0x14
 	mov r2, #0
 	mov r3, #4
-	bl ov07_02222AC4
+	bl BattleAnimUtil_StartBlendAlphaMotion
 	b _022310D4
 _022310A0:
 	add r0, r4, #0
 	add r0, #0x14
-	bl ov07_02222AF4
+	bl BattleAnimUtil_IsBlendAlphaMotionDone
 	cmp r0, #0
 	beq _022310D4
 	ldr r0, [r4, #4]
@@ -43890,7 +43890,7 @@ ov07_02231300: ; 0x02231300
 	add r5, r6, #0
 _02231310:
 	add r0, r7, #0
-	bl ov07_02222180
+	bl BattleAnimUtil_UpdateSinMotion
 	mov r1, #0x13
 	lsl r1, r1, #4
 	mov r2, #0x30
@@ -43972,7 +43972,7 @@ _0223139C:
 	mov r1, #1
 	mov r2, #0x10
 	mov r3, #0xf
-	bl ov07_02222AC4
+	bl BattleAnimUtil_StartBlendAlphaMotion
 	ldr r1, [r4, #0x14]
 	add r0, r4, #0
 	bl ov07_022312A8
@@ -43988,7 +43988,7 @@ _022313D2:
 	mov r0, #0x42
 	lsl r0, r0, #2
 	add r0, r4, r0
-	bl ov07_02222AF4
+	bl BattleAnimUtil_IsBlendAlphaMotionDone
 	cmp r0, #0
 	beq _0223145E
 	ldr r0, [r4, #0xc]
@@ -44016,7 +44016,7 @@ _022313F2:
 	add r0, r4, r0
 	mov r2, #1
 	mov r3, #0
-	bl ov07_02222AC4
+	bl BattleAnimUtil_StartBlendAlphaMotion
 	b _0223145E
 _0223141E:
 	add r0, r4, #0
@@ -44024,7 +44024,7 @@ _0223141E:
 	mov r0, #0x42
 	lsl r0, r0, #2
 	add r0, r4, r0
-	bl ov07_02222AF4
+	bl BattleAnimUtil_IsBlendAlphaMotionDone
 	cmp r0, #0
 	beq _0223145E
 	ldr r0, [r4, #0xc]
@@ -48051,7 +48051,7 @@ _022331C2:
 	add r0, r4, #0
 	add r0, #0x48
 	add r2, r1, #0
-	bl ov07_02222268
+	bl BattleAnimUtil_InitLinearMotion
 	ldr r0, [r4, #8]
 	add r0, r0, #1
 	str r0, [r4, #8]
@@ -48060,7 +48060,7 @@ _02233202:
 	add r0, r4, #0
 	ldr r1, [r4, #0x30]
 	add r0, #0x48
-	bl ov07_022222F0
+	bl BattleAnimUtil_UpdateLinearMotionSprite
 	cmp r0, #0
 	bne _0223321E
 	ldr r0, [r4, #8]
@@ -48636,7 +48636,7 @@ _022335D6:
 	ldrsh r2, [r4, r2]
 	ldrsh r3, [r4, r3]
 	add r0, #0x48
-	bl ov07_02222338
+	bl BattleAnimUtil_InitLinearSinMotion
 	add r0, r4, #0
 	mov r1, #0
 	add r0, #0xc4
@@ -48732,7 +48732,7 @@ _0223367E:
 	add r0, #0xb0
 	ldr r0, [r0]
 	ldr r1, [r1]
-	bl ov07_02222F10
+	bl BattleAnimUtil_StartPaletteBlend
 	add r1, r4, #0
 	add r1, #0xd4
 	str r0, [r1]
@@ -48771,7 +48771,7 @@ _0223371A:
 	ldr r2, [r4, #0x30]
 	add r0, #0x48
 	add r1, #0x6c
-	bl ov07_022223CC
+	bl BattleAnimUtil_UpdateLinearSinMotionSprite
 	cmp r0, #0
 	beq _0223372E
 _0223372C:
@@ -48796,13 +48796,13 @@ _0223373E:
 	ldr r0, [r0]
 	cmp r0, #0
 	beq _02233772
-	bl ov07_02222EE8
+	bl BattleAnimUtil_IsPaletteBlendActive
 	cmp r0, #1
 	beq _0223385E
 	add r0, r4, #0
 	add r0, #0xd4
 	ldr r0, [r0]
-	bl ov07_02222EF8
+	bl BattleAnimUtil_FreePaletteBlend
 	mov r0, #1
 	str r0, [r4, #0x28]
 	add sp, #0x1c
@@ -48887,7 +48887,7 @@ _022337C2:
 	add r0, #0xb0
 	ldr r0, [r0]
 	ldr r1, [r1]
-	bl ov07_02222F10
+	bl BattleAnimUtil_StartPaletteBlend
 	add r1, r4, #0
 	add r1, #0xd4
 	str r0, [r1]
@@ -48917,12 +48917,12 @@ _0223381C:
 	add r0, r4, #0
 	add r0, #0xd4
 	ldr r0, [r0]
-	bl ov07_02222EE8
+	bl BattleAnimUtil_IsPaletteBlendActive
 	cmp r0, #1
 	beq _0223385E
 	add r4, #0xd4
 	ldr r0, [r4]
-	bl ov07_02222EF8
+	bl BattleAnimUtil_FreePaletteBlend
 _02233858:
 	add sp, #0x1c
 	mov r0, #0
@@ -48985,7 +48985,7 @@ _02233896:
 	ldrsh r2, [r4, r2]
 	ldrsh r3, [r4, r3]
 	add r0, #0x48
-	bl ov07_02222338
+	bl BattleAnimUtil_InitLinearSinMotion
 	add r0, r4, #0
 	mov r1, #0
 	add r0, #0xc4
@@ -49081,7 +49081,7 @@ _0223393E:
 	add r0, #0xb0
 	ldr r0, [r0]
 	ldr r1, [r1]
-	bl ov07_02222F10
+	bl BattleAnimUtil_StartPaletteBlend
 	add r1, r4, #0
 	add r1, #0xd4
 	str r0, [r1]
@@ -49120,7 +49120,7 @@ _022339DA:
 	ldr r2, [r4, #0x30]
 	add r0, #0x48
 	add r1, #0x6c
-	bl ov07_022223CC
+	bl BattleAnimUtil_UpdateLinearSinMotionSprite
 	cmp r0, #0
 	beq _022339EE
 _022339EC:
@@ -49145,13 +49145,13 @@ _022339FE:
 	ldr r0, [r0]
 	cmp r0, #0
 	beq _02233A32
-	bl ov07_02222EE8
+	bl BattleAnimUtil_IsPaletteBlendActive
 	cmp r0, #1
 	beq _02233AF6
 	add r0, r4, #0
 	add r0, #0xd4
 	ldr r0, [r0]
-	bl ov07_02222EF8
+	bl BattleAnimUtil_FreePaletteBlend
 	mov r0, #1
 	str r0, [r4, #0x28]
 	add sp, #0x1c
@@ -49222,7 +49222,7 @@ _02233A6E:
 	add r0, #0xb0
 	ldr r0, [r0]
 	ldr r1, [r1]
-	bl ov07_02222F10
+	bl BattleAnimUtil_StartPaletteBlend
 	add r1, r4, #0
 	add r1, #0xd4
 	str r0, [r1]
@@ -49244,12 +49244,12 @@ _02233AC2:
 	add r0, r4, #0
 	add r0, #0xd4
 	ldr r0, [r0]
-	bl ov07_02222EE8
+	bl BattleAnimUtil_IsPaletteBlendActive
 	cmp r0, #1
 	beq _02233AF6
 	add r4, #0xd4
 	ldr r0, [r4]
-	bl ov07_02222EF8
+	bl BattleAnimUtil_FreePaletteBlend
 	add sp, #0x1c
 	mov r0, #0
 	pop {r3, r4, pc}
@@ -49489,7 +49489,7 @@ _02233CA8:
 	add r0, #0x34
 	lsr r2, r1, #0x13
 	mov r3, #0xa
-	bl ov07_022223F0
+	bl BattleAnimUtil_InitValueMotion
 	b _02233CCC
 _02233CBE:
 	add r0, r4, #0
@@ -49497,7 +49497,7 @@ _02233CBE:
 	ldr r2, _02233D1C ; =0xFFFFE001
 	add r0, #0x34
 	mov r3, #0xa
-	bl ov07_022223F0
+	bl BattleAnimUtil_InitValueMotion
 _02233CCC:
 	ldr r1, [r4, #0x10]
 	mov r0, #1
@@ -49515,7 +49515,7 @@ _02233CDC:
 	bl ManagedSprite_SetAffineZRotation
 	add r0, r4, #0
 	add r0, #0x34
-	bl ov07_02222440
+	bl BattleAnimUtil_UpdateValueMotion
 	cmp r0, #0
 	bne _02233D16
 	ldr r0, [r4, #0xc]

@@ -34,8 +34,8 @@ void BattleAnimSystem_GetSpriteTemplate(struct T *, struct Context *);
 void BattleAnimUtil_SetBlendWithBattleBg(void *, int, int);
 void BattleAnimSystem_CreateTask(void *, void *, void *, u32);
 void BattleAnimSystem_DestroyTask(void *, void *);
-void ov07_02222268(W02LinearMotion *, s16, s16, s16, s16, u16);
-BOOL ov07_022222F0(W02LinearMotion *, void *);
+void BattleAnimUtil_InitLinearMotion(W02LinearMotion *, s16, s16, s16, s16, u16);
+BOOL BattleAnimUtil_UpdateLinearMotionSprite(W02LinearMotion *, void *);
 void ov07_02229FC4(SysTask *, void *);
 void ov07_0222A1F0(H04Work *, void *, void *, void *);
 #endif

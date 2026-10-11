@@ -43,10 +43,10 @@ typedef struct Work2719C {
 
 
 extern u32 BattleAnimSystem_GetArg(void *p, int i);
-extern void ov07_02222FC4(void *);
-extern void ov07_02222FF4(void *);
-extern int ov07_02222EE8(void *);
-extern void ov07_02222EF8(void *);
+extern void BattleAnimSystem_ApplyGrayscale(void *);
+extern void BattleAnimSystem_RestoreFromGrayscale(void *);
+extern int BattleAnimUtil_IsPaletteBlendActive(void *);
+extern void BattleAnimUtil_FreePaletteBlend(void *);
 extern void BattleAnimSystem_DestroyTask(void *, void *);
 extern void Heap_Free(void *);
 extern int ManagedSprite_IsAnimated(void *);
@@ -57,8 +57,8 @@ extern void *BattleAnimUtil_AllocWork(void *, int);
 extern void BattleAnimUtil_InitCommonWork(void *, void *);
 extern void BattleAnimSystem_CreateTaskDefaultPriority(void *, void *, void *);
 extern void ov07_02227248(void *, void *);
-extern int ov07_02222240(void *, s16, s16, void *);
-extern int ov07_022222B4(void *);
+extern int BattleAnimUtil_UpdateSinMotionPokepic(void *, s16, s16, void *);
+extern int BattleAnimUtil_UpdateLinearMotion(void *);
 extern void Pokepic_SetAttr(void *, int, int);
 extern void *BattleAnimSystem_GetAttacker(void *);
 extern void *BattleAnimSystem_GetDefender(void *);

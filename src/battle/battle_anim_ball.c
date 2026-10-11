@@ -882,12 +882,12 @@ BOOL UnkBallData_CaptureStateDrop(UnkBallData *data) {
         if (data->unkC >= 1) {
             s16 x, y;
             ManagedSprite_GetPositionXY(data->managedSprite, &x, &y);
-            ov07_02222268(BALL_ARC_MOTION(data), x, x, y, (s16)(y + 32), 10);
+            BattleAnimUtil_InitLinearMotion(BALL_ARC_MOTION(data), x, x, y, (s16)(y + 32), 10);
             data->unk8++;
         }
         break;
     case 1:
-        if (ov07_022222F0(BALL_ARC_MOTION(data), data->managedSprite) == FALSE) {
+        if (BattleAnimUtil_UpdateLinearMotionSprite(BALL_ARC_MOTION(data), data->managedSprite) == FALSE) {
             data->unk8++;
             UnkBallData_GoToCaptureState(data, 13);
         }
@@ -1110,7 +1110,7 @@ BOOL UnkBallData_RunCaptureState(UnkBallData *data) {
 BOOL UnkBallData_RunThrowArc(UnkBallData *data) {
     switch (data->unk8) {
     case 0:
-        ov07_02222338(BALL_ARC_MOTION(data), BALL_ARC_MOTION2(data), BALL_X(data), BALL_TARGET_X(data), BALL_Y(data), BALL_TARGET_Y(data), BALL_ARC_DURATION(data), data->unkC8 << FX32_SHIFT);
+        BattleAnimUtil_InitLinearSinMotion(BALL_ARC_MOTION(data), BALL_ARC_MOTION2(data), BALL_X(data), BALL_TARGET_X(data), BALL_Y(data), BALL_TARGET_Y(data), BALL_ARC_DURATION(data), data->unkC8 << FX32_SHIFT);
         data->unkC4 = 0;
         data->unk8++;
         data->unkD4 = 0;
@@ -1125,12 +1125,12 @@ BOOL UnkBallData_RunThrowArc(UnkBallData *data) {
                 ManagedSprite_OffsetAffineZRotation(data->managedSprite, 2 << 12);
             }
             if (UnkBallData_IsFlashingKind(data->unk90.unk0) == TRUE && data->unkC4 == BALL_ARC_DURATION(data) / 2 + 10) {
-                data->unkD4 = (int)ov07_02222F10(data->unk90.paletteData, data->unk90.heapID, 2, (u16)(ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4), 16, -2, 2, 0, 14, 0xFFFF, 1002);
+                data->unkD4 = (int)BattleAnimUtil_StartPaletteBlend(data->unk90.paletteData, data->unk90.heapID, 2, (u16)(ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4), 16, -2, 2, 0, 14, 0xFFFF, 1002);
             }
         }
         data->unkC4++;
         if (data->unk90.unk0 < 6 || data->unk90.unk0 > 8 || data->unkC4 <= BALL_ARC_DURATION(data) / 2 || data->unkC4 >= BALL_ARC_DURATION(data) / 2 + 5) {
-            if (ov07_022223CC(BALL_ARC_MOTION(data), BALL_ARC_MOTION2(data), data->managedSprite) == FALSE) {
+            if (BattleAnimUtil_UpdateLinearSinMotionSprite(BALL_ARC_MOTION(data), BALL_ARC_MOTION2(data), data->managedSprite) == FALSE) {
                 UnkBallData_SetRotation(data, 0);
                 data->unk8++;
             }
@@ -1138,10 +1138,10 @@ BOOL UnkBallData_RunThrowArc(UnkBallData *data) {
         break;
     case 2:
         if (UnkBallData_IsFlashingKind(data->unk90.unk0) == TRUE && data->unkD4 != 0) {
-            if (ov07_02222EE8((void *)data->unkD4) == TRUE) {
+            if (BattleAnimUtil_IsPaletteBlendActive((void *)data->unkD4) == TRUE) {
                 break;
             }
-            ov07_02222EF8((void *)data->unkD4);
+            BattleAnimUtil_FreePaletteBlend((void *)data->unkD4);
             data->unk28 = TRUE;
             return FALSE;
         }
@@ -1163,17 +1163,17 @@ BOOL UnkBallData_RunThrowArc(UnkBallData *data) {
     default:
         if (data->unkC4 == 5) {
             if (data->unk90.unk0 != 12 && data->unk90.unk0 != 13) {
-                data->unkD4 = (int)ov07_02222F10(data->unk90.paletteData, data->unk90.heapID, 2, (u16)(ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4), 16, -2, 2, 0, 14, 0xFFFF, 1002);
+                data->unkD4 = (int)BattleAnimUtil_StartPaletteBlend(data->unk90.paletteData, data->unk90.heapID, 2, (u16)(ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4), 16, -2, 2, 0, 14, 0xFFFF, 1002);
             }
             data->unk28 = TRUE;
         }
         data->unkC4++;
         if (data->unkC4 > 15) {
             if (data->unk90.unk0 != 12 && data->unk90.unk0 != 13) {
-                if (ov07_02222EE8((void *)data->unkD4) == TRUE) {
+                if (BattleAnimUtil_IsPaletteBlendActive((void *)data->unkD4) == TRUE) {
                     break;
                 }
-                ov07_02222EF8((void *)data->unkD4);
+                BattleAnimUtil_FreePaletteBlend((void *)data->unkD4);
             }
             return FALSE;
         }
@@ -1185,7 +1185,7 @@ BOOL UnkBallData_RunThrowArc(UnkBallData *data) {
 BOOL ov07_02233874(UnkBallData *data) {
     switch (data->unk8) {
     case 0:
-        ov07_02222338(BALL_ARC_MOTION(data), BALL_ARC_MOTION2(data), BALL_X(data), BALL_TARGET_X(data), BALL_Y(data), BALL_TARGET_Y(data), BALL_ARC_DURATION(data), data->unkC8 << FX32_SHIFT);
+        BattleAnimUtil_InitLinearSinMotion(BALL_ARC_MOTION(data), BALL_ARC_MOTION2(data), BALL_X(data), BALL_TARGET_X(data), BALL_Y(data), BALL_TARGET_Y(data), BALL_ARC_DURATION(data), data->unkC8 << FX32_SHIFT);
         data->unkC4 = 0;
         data->unk8++;
         data->unkD4 = 0;
@@ -1200,12 +1200,12 @@ BOOL ov07_02233874(UnkBallData *data) {
                 ManagedSprite_OffsetAffineZRotation(data->managedSprite, 2 << 12);
             }
             if (UnkBallData_IsFlashingKind(data->unk90.unk0) == TRUE && data->unkC4 == BALL_ARC_DURATION(data) / 2 + 10) {
-                data->unkD4 = (int)ov07_02222F10(data->unk90.paletteData, data->unk90.heapID, 2, (u16)(ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4), 16, -2, 2, 0, 14, 0xFFFF, 1002);
+                data->unkD4 = (int)BattleAnimUtil_StartPaletteBlend(data->unk90.paletteData, data->unk90.heapID, 2, (u16)(ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4), 16, -2, 2, 0, 14, 0xFFFF, 1002);
             }
         }
         data->unkC4++;
         if (data->unk90.unk0 < 6 || data->unk90.unk0 > 8 || data->unkC4 <= BALL_ARC_DURATION(data) / 2 || data->unkC4 >= BALL_ARC_DURATION(data) / 2 + 5) {
-            if (ov07_022223CC(BALL_ARC_MOTION(data), BALL_ARC_MOTION2(data), data->managedSprite) == FALSE) {
+            if (BattleAnimUtil_UpdateLinearSinMotionSprite(BALL_ARC_MOTION(data), BALL_ARC_MOTION2(data), data->managedSprite) == FALSE) {
                 UnkBallData_SetRotation(data, 0);
                 data->unk8++;
             }
@@ -1213,10 +1213,10 @@ BOOL ov07_02233874(UnkBallData *data) {
         break;
     case 2:
         if (UnkBallData_IsFlashingKind(data->unk90.unk0) == TRUE && data->unkD4 != 0) {
-            if (ov07_02222EE8((void *)data->unkD4) == TRUE) {
+            if (BattleAnimUtil_IsPaletteBlendActive((void *)data->unkD4) == TRUE) {
                 break;
             }
-            ov07_02222EF8((void *)data->unkD4);
+            BattleAnimUtil_FreePaletteBlend((void *)data->unkD4);
             data->unk28 = TRUE;
             return FALSE;
         }
@@ -1235,13 +1235,13 @@ BOOL ov07_02233874(UnkBallData *data) {
     default:
         if (data->unkC4 == 5) {
             ManagedSprite_SetAnimationFrame(data->managedSprite, 2);
-            data->unkD4 = (int)ov07_02222F10(data->unk90.paletteData, data->unk90.heapID, 2, (u16)(ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4), 16, -2, 2, 0, 14, 0xFFFF, 1002);
+            data->unkD4 = (int)BattleAnimUtil_StartPaletteBlend(data->unk90.paletteData, data->unk90.heapID, 2, (u16)(ManagedSprite_GetPaletteOverrideOffset(data->managedSprite) << 4), 16, -2, 2, 0, 14, 0xFFFF, 1002);
             data->unk28 = TRUE;
         }
         data->unkC4++;
         if (data->unkC4 > 15) {
-            if (ov07_02222EE8((void *)data->unkD4) != TRUE) {
-                ov07_02222EF8((void *)data->unkD4);
+            if (BattleAnimUtil_IsPaletteBlendActive((void *)data->unkD4) != TRUE) {
+                BattleAnimUtil_FreePaletteBlend((void *)data->unkD4);
                 return FALSE;
             }
         }
@@ -1325,16 +1325,16 @@ BOOL UnkBallData_Wobble(UnkBallData *data) {
     switch (data->unk8) {
     case 0:
         if (data->unk10 == 0) {
-            ov07_022223F0(BALL_ROTATION(data), -0x1FFF, 0x1FFF, 10);
+            BattleAnimUtil_InitValueMotion(BALL_ROTATION(data), -0x1FFF, 0x1FFF, 10);
         } else {
-            ov07_022223F0(BALL_ROTATION(data), 0x1FFF, -0x1FFF, 10);
+            BattleAnimUtil_InitValueMotion(BALL_ROTATION(data), 0x1FFF, -0x1FFF, 10);
         }
         data->unk10 ^= 1;
         data->unk8++;
         break;
     case 1:
         ManagedSprite_SetAffineZRotation(data->managedSprite, *BALL_ROTATION(data));
-        if (!ov07_02222440(BALL_ROTATION(data))) {
+        if (!BattleAnimUtil_UpdateValueMotion(BALL_ROTATION(data))) {
             if (data->unkC >= 1) {
                 data->unk8++;
             } else {

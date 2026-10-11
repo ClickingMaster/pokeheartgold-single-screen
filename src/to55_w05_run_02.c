@@ -11,16 +11,16 @@ int ov07_0222F6C0(void *p) {
     case 0:
         W(p, 0x98)
         --;
-        ov07_022222F0((u8 *)p + 0x70, P(p, 0x1c));
+        BattleAnimUtil_UpdateLinearMotionSprite((u8 *)p + 0x70, P(p, 0x1c));
         if (SW(p, 0x98) < 0) {
             W(p, 0x94)
             ++;
         }
         break;
     case 1:
-        ov07_022222F0((u8 *)p + 0x70, P(p, 0x1c));
-        done = ov07_0222260C((u8 *)p + 0x28);
-        ov07_02222644((u8 *)p + 0x28, &x, &y);
+        BattleAnimUtil_UpdateLinearMotionSprite((u8 *)p + 0x70, P(p, 0x1c));
+        done = BattleAnimUtil_UpdateScaleMotionXY((u8 *)p + 0x28);
+        BattleAnimUtil_GetScaleFloat((u8 *)p + 0x28, &x, &y);
         if (W(p, 0xcc) == 1) {
             x = 0.0f - x;
         }

@@ -2796,39 +2796,7 @@ Object src/to54_atomic_w02_05_to54_ov07_w02_run3.o
 Object src/to90_extra2264_run01.o
 Object src/to90_extra2264_run02.o
 Object src/to54_atomic_w02_07_to54_ov07_w02_run4.o
-Object src/to70_to54_atomic_w02_08_to54_ov07_w02_residual_4_extra261_run01.o
-Object src/to54_atomic_w02_09_to54_ov07_w02_run5.o
-Object src/to70_to54_atomic_w02_10_to54_ov07_w02_residual_5_extra1055_run01.o
-Object src/to54_atomic_w02_11_to54_ov07_w02_run6.o
-    Object src/overlay07_callbacks_c_02222494_02222494.o
-    Object src/to70_to58_w03d_ov07_022224ac_02222508_asm_extra910_run01.o
-    Object src/to58_w03d_ov07_022224ac_02222508_c_suffix.o
-    Object src/overlay07_callbacks_c_02222558_02222558.o
-    Object src/to58_w03d_ov07_02222590_02222590_c.o
-    Object src/overlay07_callbacks_c_0222260c_0222260c.o
-    Object src/to58_r2_ov07_mid0_02222644.o
-    Object src/to90_extra1942_run01.o
-    Object src/to80_extra1902_run01.o
-    Object src/overlay07_callbacks_c_02222748_02222788.o
-    Object src/to58_r2_ov07_mid0_022227a8.o
-    Object src/overlay07_callbacks_c_0222283c_0222283c.o
-    Object src/to57_r3_04_overlay07_motion.o
-    Object src/overlay07_callbacks_c_02222af4_02222b14.o
-    Object src/to58_r2_ov07_mid0_02222b30.o
-    Object src/overlay07_callbacks_c_02222b70_02222bdc.o
-    Object src/to58_r2_ov07_mid0_02222be4.o
-    Object src/overlay07_callbacks_c_02222c60_02222cc0.o
-    Object src/op90_overlay07_callbacks_residual_02222ccc_02222ccc_r01.o
-    Object src/overlay07_callbacks_c_02222d3c_02222d88.o
-    Object src/to58_r2_ov07_mid0_02222d90.o
-    Object src/overlay07_callbacks_c_02222dc8_02222dc8.o
-    Object src/to70_overlay07_callbacks_residual_02222de4_02222e0c_extra723_run01.o
-    Object src/overlay07_callbacks_c_02222e48_02222e48.o
-    Object src/to70_overlay07_callbacks_residual_02222e74_02222e74_extra724_run01.o
-    Object src/overlay07_callbacks_c_02222ee8_02222ef8.o
-    Object src/to70_to58_r2_ov07_02222f10_02222ff4_asm_extra456_run01.o
-    Object src/to58_r2_ov07_02222f10_02222ff4_c_ff4.o
-    Object src/overlay07_callbacks_c_02223038_02223060.o
+Object src/battle/battle_anim_util.o
     Object src/battle/battle_anim_funcs.o
     Object src/overlay07_callbacks_c_02226c90_02226c90.o
     Object src/to91_ov07_41514_run01.o
@@ -5604,62 +5572,10 @@ Overlay OVY_73
     After main
     Object src/record_mixing.o
     Object src/record_mixing_records.o
-    Object src/to52_r2_w02/to52_r2_w02_overlay73_r16_exact.o
-    Object src/to70_to52_r2_w02_overlay73_r16_residual_extra446_run01.o
-    Object src/r40_overlay_73_residual_16_run2.o
-    Object src/overlay73_helpers_16.o
-    Object src/to58_r3b_ov73_17.o
-    Object src/to90_extra2418_run01.o
-    Object src/overlay73_helpers_17.o
-    Object src/to70_to58_r3b_ov73_18.residual_extra705_run01.o
-    Object src/to58_r3b_ov73_18.o
-    Object src/overlay73_helpers_18.o
-    Object src/r40_overlay_73_residual_19_run1.o
-    Object src/overlay73_helpers_19.o
-    Object src/op90_overlay_73_residual_20_residual_r01.o
-    Object src/to45_overlay73_r20_exact.o
-    Object src/overlay73_helpers_20.o
-    Object src/to58_r3_ov73_21.o
-    Object src/overlay73_helpers_21.o
-    Object src/to70_overlay_73_residual_22_extra630_run01.o
-    Object src/overlay73_helpers_22.o
-    Object src/to70_to58_r3b_ov73_23.residual_extra706_run01.o
-    Object src/to58_r3b_ov73_23.o
-    Object src/overlay73_helpers_23.o
-    Object src/to70_overlay_73_residual_24_extra358_run01.o
-    Object src/overlay73_helpers_24.o
-    Object src/to90_extra2386_run01.o
-    Object src/overlay73_helpers_25.o
-    Object src/to70_overlay_73_residual_26_extra505_run01.o
-    Object src/overlay73_helpers_26.o
-    Object src/to52_r2_w19/to52_r2_w19_overlay73_r27_exact.o
-    Object src/overlay73_helpers_27.o
-    Object src/to90_extra2387_run01.o
-    Object src/overlay73_helpers_28.o
-    Object src/to58_r3b_ov73_29.o
-    Object src/to70_to58_r3b_ov73_29.residual_extra459_run01.o
-    Object src/overlay73_helpers_29.o
-    Object src/to58_r3b_ov73_30.o
-    Object src/to70_to58_r3b_ov73_30.residual_extra427_run01.o
-    Object src/overlay73_helpers_30.o
-    Object src/to58_r3b_ov73_31.o
-    Object src/to70_to58_r3b_ov73_31.residual_extra363_run01.o
-    Object src/overlay73_helpers_31.o
-    Object src/to70_overlay_73_residual_32_extra437_run01.o
-    Object src/overlay73_helpers_32.o
-    Object src/to58_r3_ov73_33.o
-    Object src/overlay73_helpers_33.o
-    Object src/to50_overlay73_scene_states_r34.o
-    Object src/overlay73_helpers_34.o
-    Object src/to58_r3_ov73_35.o
-    Object src/overlay73_helpers_35.o
-    Object src/overlay73_text_1.o
-    Object src/overlay73_helpers_36.o
-    Object src/to70_to58_r3_ov73_37_prefix_extra908_run01.o
-    Object src/to58_r3_ov73_37.o
+    Object src/nintendo_wfc_connect_unused.o
     Object src/record_mixing_exchange.o
     Object asm/op90_overlay_73_residual_41_remaining_anchor.o
-    Object src/op90_overlay_73_residual_41_remaining_r01.o
+    Object src/record_mixing_merge.o
 }
 Overlay OVY_74
 {

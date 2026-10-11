@@ -52,13 +52,13 @@ void ManagedSprite_SetPriority(void *sprite, int priority);
 void ManagedSprite_SetAffineScale(void *sprite, f32 x, f32 y);
 void Pokepic_SetVisible(void *pokepic, int arg1, int arg2, int arg3, int arg4);
 void Pokepic_SetAttr(void *pokepic, int attr, int value);
-void ov07_02222508(void *anim, int start, int end, int duration, int mode);
-BOOL ov07_02222558(void *anim);
-void ov07_02222748(void *anim, void *sprite);
-BOOL ov07_022222B4(void *anim);
+void BattleAnimUtil_InitScaleMotion(void *anim, int start, int end, int duration, int mode);
+BOOL BattleAnimUtil_UpdateScaleMotion(void *anim);
+void BattleAnimUtil_UpdateScaleMotionSprite(void *anim, void *sprite);
+BOOL BattleAnimUtil_UpdateLinearMotion(void *anim);
 void ov07_0222207C(void *anim, void *sprite, s16 x, s16 y);
-void ov07_02222AC4(void *anim, int start, int end, int duration, int mode, int extra);
-BOOL ov07_02222AF4(void *anim);
+void BattleAnimUtil_StartBlendAlphaMotion(void *anim, int start, int end, int duration, int mode, int extra);
+BOOL BattleAnimUtil_IsBlendAlphaMotionDone(void *anim);
 
 void ov07_0222BADC(void *pokepic, int arg1, int arg2, int arg3, int arg4);
 void ov07_0222C1FC(W06Sprite *work);
@@ -80,8 +80,8 @@ typedef struct W15Transition {
     u8 pad40[4];
     int timer;
 } W15Transition;
-BOOL ov07_02222AF4(void *);
-void ov07_02222D3C(void *);
+BOOL BattleAnimUtil_IsBlendAlphaMotionDone(void *);
+void BattleAnimScanline_FreeWave(void *);
 BOOL ov07_0222CFCC(W15Transition *);
 
 typedef struct W15SpinSprite {
@@ -96,10 +96,10 @@ typedef struct W15SpinSprite {
     int previousRotation;
     int direction;
 } W15SpinSprite;
-BOOL ov07_02222558(void *);
-void ov07_02222644(void *, f32 *, f32 *);
-BOOL ov07_02222440(void *);
-void ov07_022223F0(void *, int, int, int);
+BOOL BattleAnimUtil_UpdateScaleMotion(void *);
+void BattleAnimUtil_GetScaleFloat(void *, f32 *, f32 *);
+BOOL BattleAnimUtil_UpdateValueMotion(void *);
+void BattleAnimUtil_InitValueMotion(void *, int, int, int);
 void ManagedSprite_SetAffineZRotation(void *, u16);
 void Sprite_DeleteAndFreeResources(void *);
 void BattleAnimSystem_DestroyTask(void *, void *);
@@ -118,8 +118,8 @@ typedef struct W15Wave {
     s16 offsetX;
     s16 offsetY;
 } W15Wave;
-u32 *ov07_02222D60(void *);
-BOOL ov07_022222B4(void *);
-u32 ov07_02222D88(u16, u16);
+u32 *BattleAnimScanline_GetWaveBuffer(void *);
+BOOL BattleAnimUtil_UpdateLinearMotion(void *);
+u32 BattleAnimUtil_PackXY(u16, u16);
 BOOL ov07_0222C870(W15Wave *);
 #endif

@@ -26,8 +26,8 @@ void ov07_022302A8(void *owner, Ov07CallbackWork *work) {
         if (BattleAnimSystem_IsBattlerSemiInvulnerable(work->owner, BattleAnimSystem_GetDefender(work->owner)) == 0) {
             Pokepic_SetAttr(work->picture, 6, 0);
         }
-        ov07_02222C98(work->resource);
-        ov07_02222C60(work->resource);
+        BattleAnimScanline_Disable(work->resource);
+        BattleAnimScanline_Free(work->resource);
         bg = BattleAnimSystem_GetBgLayer(work->owner, 1);
         SetBgPriority(bg, BattleAnimSystem_GetBgPriority(work->owner, 1));
         SetBgPriority(0, ov07_0221FAE8(work->owner));

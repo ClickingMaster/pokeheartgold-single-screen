@@ -8,14 +8,14 @@ void ov07_0222FD14(void *taskOwner, W36 *work) {
     switch (work->state) {
     case 0:
         BattleAnimUtil_SetBlendWithBattleBg(work->owner, 1, 15);
-        ov07_02222AC4((u8 *)work + 0x108, 1, 16, 15, 0, 10);
+        BattleAnimUtil_StartBlendAlphaMotion((u8 *)work + 0x108, 1, 16, 15, 0, 10);
         ov07_0222FBEC(work, work->amplitude);
         ov07_0222FC44(work);
         work->state++;
         break;
     case 1:
         ov07_0222FC44(work);
-        if (ov07_02222AF4((u8 *)work + 0x108)) {
+        if (BattleAnimUtil_IsBlendAlphaMotionDone((u8 *)work + 0x108)) {
             work->state++;
             work->timer = 28;
         }
@@ -25,12 +25,12 @@ void ov07_0222FD14(void *taskOwner, W36 *work) {
         work->timer--;
         if (work->timer < 0) {
             work->state++;
-            ov07_02222AC4((u8 *)work + 0x108, 16, 1, 0, 15, 10);
+            BattleAnimUtil_StartBlendAlphaMotion((u8 *)work + 0x108, 16, 1, 0, 15, 10);
         }
         break;
     case 3:
         ov07_0222FC44(work);
-        if (ov07_02222AF4((u8 *)work + 0x108)) {
+        if (BattleAnimUtil_IsBlendAlphaMotionDone((u8 *)work + 0x108)) {
             work->state++;
         }
         break;

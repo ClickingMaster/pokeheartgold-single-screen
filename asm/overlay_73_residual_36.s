@@ -81,26 +81,26 @@
 	.public ov73_021E7CD8
 	.public ov73_021E7D74
 	.public ov73_021E7E24
-	.public ov73_021E7E4C
-	.public ov73_021E7FB8
-	.public ov73_021E808C
-	.public ov73_021E8100
-	.public ov73_021E8128
-	.public ov73_021E8168
-	.public ov73_021E8198
-	.public ov73_021E82D4
-	.public ov73_021E8390
-	.public ov73_021E847C
-	.public ov73_021E84D0
-	.public ov73_021E85AC
-	.public ov73_021E85DC
-	.public ov73_021E8628
-	.public ov73_021E8730
-	.public ov73_021E8960
-	.public ov73_021E8A08
-	.public ov73_021E8B20
-	.public ov73_021E8B64
-	.public ov73_021E8BBC
+	.public NintendoWfcUnused_Init
+	.public NintendoWfcUnused_Main
+	.public NintendoWfcUnused_Exit
+	.public NintendoWfcUnused_VBlankCB
+	.public NintendoWfcUnused_SetGfxBanks
+	.public NintendoWfcUnused_InitObjTransfer
+	.public NintendoWfcUnused_InitSpriteResources
+	.public NintendoWfcUnused_CreateSprites
+	.public NintendoWfcUnused_CreateYesNoPrompt
+	.public NintendoWfcUnused_FreeGraphics
+	.public NintendoWfcUnused_SessionInit
+	.public NintendoWfcUnused_SessionMain
+	.public NintendoWfcUnused_SessionExit
+	.public NintendoWfcUnused_InitBgs
+	.public NintendoWfcUnused_LoadBgGraphics
+	.public NintendoWfcUnused_PaletteCycleTask
+	.public NintendoWfcUnused_AddWindows
+	.public NintendoWfcUnused_RemoveWindows
+	.public NintendoWfcUnused_InitStrings
+	.public NintendoWfcUnused_FreeStrings
 	.public ov73_021E8CBC
 	.public ov73_021E8D2C
 	.public ov73_021E8DC8
@@ -119,20 +119,20 @@
 	.public ov73_021E98AC
 	.public ov73_021E98FC
 	.public ov73_021E9A6C
-	.public ov73_021E9D14
-	.public ov73_021E9D6C
-	.public ov73_021E9DE0
-	.public ov73_021E9ECC
-	.public ov73_021E9F34
-	.public ov73_021E9F9C
-	.public ov73_021E9FC8
-	.public ov73_021E9FF8
-	.public ov73_021EA050
-	.public ov73_021EA088
-	.public ov73_021EA0BC
-	.public ov73_021EA0F0
-	.public ov73_021EA19C
-	.public ov73_021EA218
+	.public NintendoWfcUnused_StartExit
+	.public NintendoWfcUnused_ShowHttpError
+	.public NintendoWfcUnused_Disconnect
+	.public NintendoWfcUnused_WaitMessageAndDelay
+	.public NintendoWfcUnused_PrintFormattedMessage
+	.public NintendoWfcUnused_ShowDwcError
+	.public NintendoWfcUnused_WaitErrorDismiss
+	.public NintendoWfcUnused_PrintMessage
+	.public NintendoWfcUnused_GetAlignedTextX
+	.public NintendoWfcUnused_PrintAlignedText
+	.public NintendoWfcUnused_PrintAlignedTextSmall
+	.public NintendoWfcUnused_PrintNumber
+	.public NintendoWfcUnused_PrintErrorMessage
+	.public NintendoWfcUnused_ShowErrorMessage
 	.public RecordMixing_FriendGroup_Load
 	.public RecordMixing_Fashion_Load
 	.public RecordMixing_Fashion_Merge
@@ -158,19 +158,19 @@
 	.public ov73_021EA640
 	.public ov73_021EA650
 	.public ov73_021EA664
-	.public ov73_021EA684
-	.public ov73_021EA68C
-	.public ov73_021EA69C
-	.public ov73_021EA6AC
-	.public ov73_021EA6D4
-	.public ov73_021EA6F0
-	.public ov73_021EA70C
-	.public ov73_021EA728
+	.public sNintendoWfcUnusedArrowPositions
+	.public sNintendoWfcUnusedGraphicsModes
+	.public sNintendoWfcUnusedObjCharTransferTemplate
+	.public sNintendoWfcUnusedGraphicsBanks
+	.public sNintendoWfcUnusedBgTemplate_Sub1
+	.public sNintendoWfcUnusedBgTemplate_Main1
+	.public sNintendoWfcUnusedBgTemplate_Main0
+	.public sNintendoWfcUnusedBgTemplate_Sub0
 	.public sRecordMixingHandlers
-	.public ov73_021EA83C
-	.public ov73_021EA840
-	.public ov73_021EA844
-	.public ov73_021EA848
+	.public sNintendoWfcUnusedModeInit
+	.public sNintendoWfcUnusedModeMain
+	.public sNintendoWfcUnusedModeExit
+	.public sNintendoWfcUnusedStates
 
 	.public RecordMixing_FreeBgs
 	.public RecordMixing_FreeButtonScreen
@@ -195,17 +195,17 @@
 	.public ov73_021E7A7C
 	.public ov73_021E7A84
 	.public ov73_021E7D54
-	.public ov73_021E8148
+	.public NintendoWfcUnused_InitArgs
 	.public ov73_021E8164
-	.public ov73_021E82A8
-	.public ov73_021E83D4
-	.public ov73_021E83EC
-	.public ov73_021E83F4
-	.public ov73_021E841C
-	.public ov73_021E8440
-	.public ov73_021E844C
-	.public ov73_021E8454
-	.public ov73_021E870C
+	.public NintendoWfcUnused_InitSpriteTemplate
+	.public NintendoWfcUnused_HandleYesNoPrompt
+	.public NintendoWfcUnused_SetState
+	.public NintendoWfcUnused_Alloc
+	.public NintendoWfcUnused_Free
+	.public NintendoWfcUnused_GetWifiIconLevel
+	.public NintendoWfcUnused_SetNextMode
+	.public NintendoWfcUnused_InitGraphics
+	.public NintendoWfcUnused_FreeBgs
 	.public ov73_021E8BFC
 	.public ov73_021E8C2C
 	.public ov73_021E8C8C
@@ -226,8 +226,8 @@
 	.public ov73_021E9A3C
 	.public ov73_021E9B58
 	.public ov73_021E9B94
-	.public ov73_021E9B9C
-	.public ov73_021E9BB4
+	.public NintendoWfcUnused_StartSave
+	.public NintendoWfcUnused_Save
 	.public ov73_021E9BD4
 	.public ov73_021E9C04
 	.public ov73_021E9C30
@@ -237,12 +237,12 @@
 	.public ov73_021E9CD8
 	.public ov73_021E9D10
 	.public ov73_021E9D44
-	.public ov73_021E9EAC
-	.public ov73_021E9F00
-	.public ov73_021EA12C
-	.public ov73_021EA134
-	.public ov73_021EA15C
-	.public ov73_021EA180
+	.public NintendoWfcUnused_WaitMessage
+	.public NintendoWfcUnused_OpenYesNoPrompt
+	.public NintendoWfcUnused_CreateWirelessIcon
+	.public NintendoWfcUnused_SetArrowsVisible
+	.public NintendoWfcUnused_ShowWaitingIcon
+	.public NintendoWfcUnused_HideWaitingIcon
 	.public RecordMixing_FriendGroup_GetSize
 	.public RecordMixing_FriendGroup_Merge
 	.public RecordMixing_Fashion_GetSize
@@ -251,8 +251,8 @@
 	.public ov73_021EA348
 	.public ov73_021EA370
 
-	thumb_func_start ov73_021E9F34
-ov73_021E9F34: ; 0x021E9F34
+	thumb_func_start NintendoWfcUnused_PrintFormattedMessage
+NintendoWfcUnused_PrintFormattedMessage: ; 0x021E9F34
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0xc
 	add r5, r0, #0
@@ -298,11 +298,11 @@ ov73_021E9F34: ; 0x021E9F34
 	.balign 4, 0
 _021E9F94: .word 0x00000DD8
 _021E9F98: .word 0x00000BF4
-	thumb_func_end ov73_021E9F34
+	thumb_func_end NintendoWfcUnused_PrintFormattedMessage
 
 
-	thumb_func_start ov73_021E9F9C
-ov73_021E9F9C: ; 0x021E9F9C
+	thumb_func_start NintendoWfcUnused_ShowDwcError
+NintendoWfcUnused_ShowDwcError: ; 0x021E9F9C
 	push {r4, lr}
 	ldr r1, _021E9FC4 ; =0x00000F14
 	add r4, r0, #0
@@ -316,18 +316,18 @@ ov73_021E9F9C: ; 0x021E9F9C
 	ldr r2, [r4, r2]
 	add r0, r4, #0
 	neg r2, r2
-	bl ov73_021EA218
+	bl NintendoWfcUnused_ShowErrorMessage
 	mov r0, #0x38
 	str r0, [r4, #0x1c]
 	mov r0, #3
 	pop {r4, pc}
 	.balign 4, 0
 _021E9FC4: .word 0x00000F14
-	thumb_func_end ov73_021E9F9C
+	thumb_func_end NintendoWfcUnused_ShowDwcError
 
 
-	thumb_func_start ov73_021E9FC8
-ov73_021E9FC8: ; 0x021E9FC8
+	thumb_func_start NintendoWfcUnused_WaitErrorDismiss
+NintendoWfcUnused_WaitErrorDismiss: ; 0x021E9FC8
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, _021E9FF0 ; =gSystem
@@ -351,11 +351,11 @@ _021E9FEA:
 	nop
 _021E9FF0: .word gSystem
 _021E9FF4: .word 0x00000E18
-	thumb_func_end ov73_021E9FC8
+	thumb_func_end NintendoWfcUnused_WaitErrorDismiss
 
 
-	thumb_func_start ov73_021E9FF8
-ov73_021E9FF8: ; 0x021E9FF8
+	thumb_func_start NintendoWfcUnused_PrintMessage
+NintendoWfcUnused_PrintMessage: ; 0x021E9FF8
 	push {r4, r5, lr}
 	sub sp, #0xc
 	add r5, r0, #0
@@ -394,11 +394,11 @@ ov73_021E9FF8: ; 0x021E9FF8
 	nop
 _021EA048: .word 0x00000DD8
 _021EA04C: .word 0x00000BF4
-	thumb_func_end ov73_021E9FF8
+	thumb_func_end NintendoWfcUnused_PrintMessage
 
 
-	thumb_func_start ov73_021EA050
-ov73_021EA050: ; 0x021EA050
+	thumb_func_start NintendoWfcUnused_GetAlignedTextX
+NintendoWfcUnused_GetAlignedTextX: ; 0x021EA050
 	push {r4, lr}
 	add r4, r0, #0
 	cmp r3, #1
@@ -428,11 +428,11 @@ _021EA082:
 	add r0, r2, #0
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov73_021EA050
+	thumb_func_end NintendoWfcUnused_GetAlignedTextX
 
 
-	thumb_func_start ov73_021EA088
-ov73_021EA088: ; 0x021EA088
+	thumb_func_start NintendoWfcUnused_PrintAlignedText
+NintendoWfcUnused_PrintAlignedText: ; 0x021EA088
 	push {r4, r5, r6, lr}
 	sub sp, #0x10
 	add r4, r3, #0
@@ -443,7 +443,7 @@ ov73_021EA088: ; 0x021EA088
 	str r3, [sp, #4]
 	ldr r3, [sp, #0x20]
 	add r6, r1, #0
-	bl ov73_021EA050
+	bl NintendoWfcUnused_GetAlignedTextX
 	add r3, r0, #0
 	str r4, [sp]
 	mov r1, #0
@@ -457,11 +457,11 @@ ov73_021EA088: ; 0x021EA088
 	bl AddTextPrinterParameterizedWithColor
 	add sp, #0x10
 	pop {r4, r5, r6, pc}
-	thumb_func_end ov73_021EA088
+	thumb_func_end NintendoWfcUnused_PrintAlignedText
 
 
-	thumb_func_start ov73_021EA0BC
-ov73_021EA0BC: ; 0x021EA0BC
+	thumb_func_start NintendoWfcUnused_PrintAlignedTextSmall
+NintendoWfcUnused_PrintAlignedTextSmall: ; 0x021EA0BC
 	push {r4, r5, r6, lr}
 	sub sp, #0x10
 	add r4, r3, #0
@@ -472,7 +472,7 @@ ov73_021EA0BC: ; 0x021EA0BC
 	str r3, [sp, #4]
 	ldr r3, [sp, #0x20]
 	add r6, r1, #0
-	bl ov73_021EA050
+	bl NintendoWfcUnused_GetAlignedTextX
 	add r3, r0, #0
 	str r4, [sp]
 	mov r1, #0
@@ -486,11 +486,11 @@ ov73_021EA0BC: ; 0x021EA0BC
 	add sp, #0x10
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
-	thumb_func_end ov73_021EA0BC
+	thumb_func_end NintendoWfcUnused_PrintAlignedTextSmall
 
 
-	thumb_func_start ov73_021EA0F0
-ov73_021EA0F0: ; 0x021EA0F0
+	thumb_func_start NintendoWfcUnused_PrintNumber
+NintendoWfcUnused_PrintNumber: ; 0x021EA0F0
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #8
 	add r4, r1, #0
@@ -513,9 +513,9 @@ ov73_021EA0F0: ; 0x021EA0F0
 	add r0, r5, #0
 	add r1, r4, #0
 	mov r2, #0
-	bl ov73_021EA0BC
+	bl NintendoWfcUnused_PrintAlignedTextSmall
 	add sp, #8
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
 _021EA128: .word 0x00010200
-	thumb_func_end ov73_021EA0F0
+	thumb_func_end NintendoWfcUnused_PrintNumber

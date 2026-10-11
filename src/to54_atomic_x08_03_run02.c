@@ -10,15 +10,15 @@ void ov07_0222F210(void *task, X08Work2 *work) {
         if (!ManagedSprite_IsAnimated(work->sprite)) {
             ManagedSprite_SetAnimateFlag(work->sprite, FALSE);
             work->state++;
-            ov07_02222508(work->anim0, 10, 10, 0, 8);
+            BattleAnimUtil_InitScaleMotion(work->anim0, 10, 10, 0, 8);
             int x = Pokepic_GetAttr(work->pokepic, 0);
             int y = Pokepic_GetAttr(work->pokepic, 1);
-            ov07_02222268(work->anim1, x, work->x, y, work->y, 8);
+            BattleAnimUtil_InitLinearMotion(work->anim1, x, work->x, y, work->y, 8);
         }
         break;
     case 2:
-        ov07_02222314(work->anim1, work->pokepic);
-        if (!ov07_02222768(work->anim0, work->pokepic)) {
+        BattleAnimUtil_UpdateLinearMotionPokepic(work->anim1, work->pokepic);
+        if (!BattleAnimUtil_UpdateScaleMotionPokepic(work->anim0, work->pokepic)) {
             Pokepic_SetAttr(work->pokepic, 6, 1);
             Pokepic_SetAttr(work->pokepic, 12, 256);
             Pokepic_SetAttr(work->pokepic, 13, 256);
@@ -32,11 +32,11 @@ void ov07_0222F210(void *task, X08Work2 *work) {
         if (!ManagedSprite_IsAnimated(work->sprite)) {
             ManagedSprite_SetAnimateFlag(work->sprite, FALSE);
             work->state++;
-            ov07_02222268(work->movement, 0, 0, work->y, 0, 8);
+            BattleAnimUtil_InitLinearMotion(work->movement, 0, 0, work->y, 0, 8);
         }
         break;
     case 4:
-        if (ov07_022222B4(work->movement)) {
+        if (BattleAnimUtil_UpdateLinearMotion(work->movement)) {
             ManagedSprite_SetPositionXY(work->sprite, work->x, *(s16 *)&work->movement[2]);
         } else {
             work->state++;

@@ -15,8 +15,8 @@ typedef struct W10Work {
     s32 rotationD4;
 } W10Work;
 
-BOOL ov07_022223CC(void *a, void *b, ManagedSprite *sprite);
-BOOL ov07_02222440(void *a);
+BOOL BattleAnimUtil_UpdateLinearSinMotionSprite(void *a, void *b, ManagedSprite *sprite);
+BOOL BattleAnimUtil_UpdateValueMotion(void *a);
 void BattleAnimSystem_DestroyTask(void *owner, int arg);
 void BattleAnimUtil_FreeWork(void *work);
 void ov07_0222928C(int arg0, W10Work *work);
@@ -33,7 +33,7 @@ typedef struct W10EndWork {
 void *BattleAnimUtil_AllocWork(void *owner, u32 size);
 void BattleAnimUtil_InitCommonWork(void *owner, void *work);
 ManagedSprite *BattleAnimSystem_GetBattlerSprite(void *owner, int index);
-void ov07_02222AC4(void *work, int a, int b, int c, int d, int e);
+void BattleAnimUtil_StartBlendAlphaMotion(void *work, int a, int b, int c, int d, int e);
 void BattleAnimBackground_LoadBattleBgToLayerDefault(void *owner, int arg);
 void BattleAnimSystem_CreateTaskDefaultPriority(void *owner, void (*callback)(int, void *), void *work);
 void ov07_0222A710(int arg0, void *work);
@@ -49,7 +49,7 @@ void ov07_0222A838(void *owner) {
     *(volatile u16 *)0x0400004A = (*(volatile u16 *)0x0400004A & ~0x3F00) | 0x1700;
     work->sprite24 = BattleAnimSystem_GetBattlerSprite(work->owner08, 1);
     ManagedSprite_SetOamMode(work->sprite24, GX_OAM_MODE_XLU);
-    ov07_02222AC4((u8 *)work + 0x2C, 0x10, 2, 2, 0x10, 0x10);
+    BattleAnimUtil_StartBlendAlphaMotion((u8 *)work + 0x2C, 0x10, 2, 2, 0x10, 0x10);
     BattleAnimBackground_LoadBattleBgToLayerDefault(work->owner08, 2);
     ToggleBgLayer(2, 1);
     BattleAnimSystem_CreateTaskDefaultPriority(work->owner08, ov07_0222A710, work);
@@ -59,11 +59,11 @@ void ov07_0222A4B4(int arg0, void *arg1);
 
 Pokepic *BattleAnimSystem_GetBattlerPokepic(void *owner, int index);
 int BattleAnimSystem_GetAttacker(void *owner);
-BOOL ov07_02222AF4(void *work);
+BOOL BattleAnimUtil_IsBlendAlphaMotionDone(void *work);
 int ov07_0221FAF8(void *owner, int index);
-int ov07_02222D88(int a, int b);
+int BattleAnimUtil_PackXY(int a, int b);
 int BattleAnimSystem_GetHeapID(void *owner);
-void *ov07_02222CCC(int a, int b, int c, int d, int e, int f, int g, int h, int i);
-void ov07_02222D3C(void *arg);
+void *BattleAnimScanline_NewWave(int a, int b, int c, int d, int e, int f, int g, int h, int i);
+void BattleAnimScanline_FreeWave(void *arg);
 void BattleAnimBackground_ResetLayer(void *owner, int arg);
 void ov07_0222A710(int arg0, void *arg1);

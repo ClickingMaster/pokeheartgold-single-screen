@@ -6,5 +6,5 @@
 
 void ov07_0222EDF0(void *data) {
     WORD(data, 0x40) = 0;
-    ov07_02222590((u8 *)data + 0x1C, 10, 9, 10, 8, 10, 2);
+    BattleAnimUtil_InitScaleMotionXY((u8 *)data + 0x1C, 10, 9, 10, 8, 10, 2);
 }

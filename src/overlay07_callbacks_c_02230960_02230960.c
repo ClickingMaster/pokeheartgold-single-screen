@@ -5,7 +5,7 @@
 #define PTR(p, o) (*(void **)((u8 *)(p) + (o)))
 
 void ov07_02230960(void *owner, void *data) {
-    if (!ov07_022222F0((u8 *)data + 8, PTR(data, 0x2C))) {
+    if (!BattleAnimUtil_UpdateLinearMotionSprite((u8 *)data + 8, PTR(data, 0x2C))) {
         Sprite_DeleteAndFreeResources(PTR(data, 0x2C));
         Heap_Free(data);
         BattleAnimSystem_DestroyTask(PTR(data, 0), owner);

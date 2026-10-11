@@ -2,7 +2,7 @@
 
 void ov07_0222D4F4(W06ScaleSprite *work, void *sprite, s16 x, s16 y, BOOL flip) {
     work->sprite = sprite;
-    ov07_02222508(work->scaleAnim, 10, 10, 8, 8);
+    BattleAnimUtil_InitScaleMotion(work->scaleAnim, 10, 10, 8, 8);
     work->delay = 3;
     work->start = 8;
     work->end = 10;

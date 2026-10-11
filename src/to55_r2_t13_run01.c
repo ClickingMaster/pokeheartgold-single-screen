@@ -7,16 +7,16 @@ BOOL ov07_0222C214(Child *w) {
     switch (w->state) {
     case 0:
     case 1:
-        if (ov07_02222180(&w->sin)) {
-            ov07_022224AC(&w->linear);
+        if (BattleAnimUtil_UpdateSinMotion(&w->sin)) {
+            BattleAnimUtil_UpdateCosMotion(&w->linear);
             w->sin.stepX = w->offX + w->linear.value;
             ManagedSprite_SetPositionXY(w->sprite, w->offY + w->sin.x, w->offZ + w->sin.y);
         } else {
             if (w->state < 1) {
                 if (w->state == 0) {
-                    ov07_0222212C(&w->sin, w->sin.angleX, 0x7fff, (u16)w->sin.angleX, 0x7fff, w->sin.ampX, w->sin.ampY, 0x71c);
+                    BattleAnimUtil_InitSinMotionFromStep(&w->sin, w->sin.angleX, 0x7fff, (u16)w->sin.angleX, 0x7fff, w->sin.ampX, w->sin.ampY, 0x71c);
                 }
-                ov07_02222494(&w->linear, 0, 0xffff, 0xfffff000, w->sin.duration);
+                BattleAnimUtil_InitCosMotion(&w->linear, 0, 0xffff, 0xfffff000, w->sin.duration);
             }
             w->state++;
         }

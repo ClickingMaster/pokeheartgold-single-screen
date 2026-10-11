@@ -15,13 +15,13 @@ void Sprite_TickFrame(void *);
 void BattleAnimSystem_DestroyTask(void *, int);
 
 extern u32 BattleAnimSystem_GetArg(void *p, int i);
-void ov07_02222508(void *, s16, int, s16, int);
-int ov07_02222558(void *);
-void ov07_02222590(void *, int, int, int, int, int, int);
-int ov07_0222260C(void *);
-void ov07_02222644(void *, int *, int *);
-int ov07_02222674(s16, int, int);
-void ov07_022227D8(void *);
+void BattleAnimUtil_InitScaleMotion(void *, s16, int, s16, int);
+int BattleAnimUtil_UpdateScaleMotion(void *);
+void BattleAnimUtil_InitScaleMotionXY(void *, int, int, int, int, int, int);
+int BattleAnimUtil_UpdateScaleMotionXY(void *);
+void BattleAnimUtil_GetScaleFloat(void *, int *, int *);
+int BattleAnimUtil_CalcScaleYOffset(s16, int, int);
+void BattleAnimUtil_UpdateShake(void *);
 
 extern const u8 ov07_022366D2[][2];
 
@@ -73,13 +73,13 @@ void ov07_02227300(int task, W23A *work) {
         }
         break;
     case 1:
-        ov07_02222590(work->anim, 100, 60, 100, 100, 100, 10);
+        BattleAnimUtil_InitScaleMotionXY(work->anim, 100, 60, 100, 100, 100, 10);
         work->state++;
         break;
     case 2:
-        if (ov07_0222260C(work->anim) == 1) {
+        if (BattleAnimUtil_UpdateScaleMotionXY(work->anim) == 1) {
             for (i = 0; i < ((s32)BattleAnimSystem_GetArg(work->ctx, 0)); i++) {
-                ov07_02222644(work->anim, &sx, &sy);
+                BattleAnimUtil_GetScaleFloat(work->anim, &sx, &sy);
                 ManagedSprite_SetAffineScale(work->sprites[i], sx, sy);
             }
         } else {

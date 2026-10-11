@@ -1212,7 +1212,7 @@ NintendoWifiConnectArgs *NintendoWifiConnection_LaunchApp(FieldSystem *fieldSyst
 }
 
 void LaunchApplication_DeadstrippedFunction(FieldSystem *fieldSystem) {
-    static const OverlayManagerTemplate _020FA444 = { ov73_021E7E4C, ov73_021E7FB8, ov73_021E808C, FS_OVERLAY_ID(OVY_72) };
+    static const OverlayManagerTemplate _020FA444 = { NintendoWfcUnused_Init, NintendoWfcUnused_Main, NintendoWfcUnused_Exit, FS_OVERLAY_ID(OVY_72) };
     FieldSystem_LaunchApplication(fieldSystem, &_020FA444, NULL);
 }
 
