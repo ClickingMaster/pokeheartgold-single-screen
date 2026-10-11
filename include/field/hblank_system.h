@@ -1,6 +1,8 @@
 #ifndef POKEHEARTGOLD_FIELD_HBLANK_SYSTEM_H
 #define POKEHEARTGOLD_FIELD_HBLANK_SYSTEM_H
 
+#include "constants/heap.h"
+
 typedef struct HBlankSystem HBlankSystem;
 
 HBlankSystem *HBlankSystem_New(enum HeapID heapID);

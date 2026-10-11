@@ -85,26 +85,26 @@
 	.public _0223ABFE
 	.public _0223AC1C
 	.public _0223AC20
-	.public ov80_0223A00C
-	.public ov80_0223A0C0
-	.public ov80_0223A0EC
-	.public ov80_0223A144
-	.public ov80_0223A174
-	.public ov80_0223A62C
-	.public ov80_0223A748
-	.public ov80_0223A75C
-	.public ov80_0223A78C
-	.public ov80_0223A81C
-	.public ov80_0223A834
-	.public ov80_0223A8C4
-	.public ov80_0223A8D4
-	.public ov80_0223A91C
-	.public ov80_0223A938
-	.public ov80_0223AA4C
-	.public ov80_0223AA80
-	.public ov80_0223AAD0
-	.public ov80_0223AB34
-	.public ov80_0223AB94
+	.public FrontierBrainIntro_Start
+	.public FrontierBrainIntro_Finish
+	.public FrontierBrainIntro_UpdateWindows
+	.public FrontierBrainIntro_MainTask
+	.public FrontierBrainIntro_Run
+	.public FrontierBrainIntro_CreateText
+	.public FrontierBrainIntro_DeleteText
+	.public FrontierBrainIntro_GetTextSize
+	.public FrontierBrainIntro_CreateBurst
+	.public FrontierBrainIntro_DeleteBurst
+	.public FrontierBrainIntro_UpdateBurst
+	.public FrontierBrainIntroLerp_Init
+	.public FrontierBrainIntroLerp_Step
+	.public FrontierBrainIntro_SetVec
+	.public FrontierBrainIntro_LoadBackground
+	.public FrontierBrainIntro_CyclePaletteTask
+	.public FrontierBrainIntro_StartWindowAnim
+	.public FrontierBrainIntro_OpenWindowTask
+	.public FrontierBrainIntro_CloseWindowTask
+	.public FrontierBrainIntro_SlideInBrain
 	.public ov80_0223DB30
 	.public ov80_0223DB64
 	.public ov80_0223DB98
@@ -112,21 +112,21 @@
 	.include "global.inc"
 
     .text
-	.public ov80_0223A00C
-	.public ov80_0223A0C0
-	.public ov80_0223A144
-	.public ov80_0223A748
-	.public ov80_0223A75C
-	.public ov80_0223A78C
-	.public ov80_0223A81C
-	.public ov80_0223A8C4
-	.public ov80_0223A8D4
-	.public ov80_0223A91C
-	.public ov80_0223AA4C
-	.public ov80_0223AA80
-	.public ov80_0223AAD0
-	.public ov80_0223AB34
-	.public ov80_0223AB94
+	.public FrontierBrainIntro_Start
+	.public FrontierBrainIntro_Finish
+	.public FrontierBrainIntro_MainTask
+	.public FrontierBrainIntro_DeleteText
+	.public FrontierBrainIntro_GetTextSize
+	.public FrontierBrainIntro_CreateBurst
+	.public FrontierBrainIntro_DeleteBurst
+	.public FrontierBrainIntroLerp_Init
+	.public FrontierBrainIntroLerp_Step
+	.public FrontierBrainIntro_SetVec
+	.public FrontierBrainIntro_CyclePaletteTask
+	.public FrontierBrainIntro_StartWindowAnim
+	.public FrontierBrainIntro_OpenWindowTask
+	.public FrontierBrainIntro_CloseWindowTask
+	.public FrontierBrainIntro_SlideInBrain
     .rodata
 
 ov80_0223DB30: ; 0x0223DB30

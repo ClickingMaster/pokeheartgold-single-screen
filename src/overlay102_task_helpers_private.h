@@ -28,7 +28,7 @@ typedef struct BlendTask102 {
 s32 Bg_GetXpos(void *, u32);
 s32 Bg_GetYpos(void *, u32);
 void BgSetPosTextAndCommit(void *, u8, u8, s32);
-void *ov102_021E93D4(void (*)(void *, void *), void *, u32);
+void *EasyChatAppView_CreateVBlankTask(void (*)(void *, void *), void *, u32);
 void SysTask_Destroy(void *);
 s32 _s32_div_f(s32, s32);
 

@@ -6,7 +6,7 @@
 BOOL ov102_021EC2EC(ScrollTask102 *work) {
     switch (work->state) {
     case 0:
-        work->task = ov102_021E93D4((void (*)(void *, void *))ov102_021EC338, work, 0);
+        work->task = EasyChatAppView_CreateVBlankTask((void (*)(void *, void *))ov102_021EC338, work, 0);
         work->state++;
         break;
     case 1:
@@ -40,7 +40,7 @@ void ov102_021EC37C(BlendTask102 *work, u32 plane1, u32 plane2, s32 start, s32 t
     work->step = _s32_div_f(target - start, frames);
     work->target = target;
     work->done = 0;
-    work->task = ov102_021E93D4((void (*)(void *, void *))ov102_021EC3D4, work, 0);
+    work->task = EasyChatAppView_CreateVBlankTask((void (*)(void *, void *))ov102_021EC3D4, work, 0);
 }
 
 BOOL ov102_021EC3AC(BlendTask102 *work) {
@@ -77,7 +77,7 @@ void ov102_021EC410(BlendTask102 *work, u32 plane, s32 start, s32 target, s32 fr
     work->target = target << 12;
     work->step = _s32_div_f(work->target - work->value, frames);
     work->done = 0;
-    work->task = ov102_021E93D4((void (*)(void *, void *))ov102_021EC478, work, 0);
+    work->task = EasyChatAppView_CreateVBlankTask((void (*)(void *, void *))ov102_021EC478, work, 0);
 }
 
 BOOL ov102_021EC450(BlendTask102 *work) {

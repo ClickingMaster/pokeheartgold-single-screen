@@ -1,7 +1,7 @@
 #pragma force_active on
 #include "global.h"
 #pragma force_active on
-void *ov102_021EA268(void *);
+void *EasyChatAppView_GetBgConfig(void *);
 void ov102_021EA874(void *);
 void FillWindowPixelBuffer(void *,u8);
 int EasyChatApp_GetType(void *),EasyChatApp_GetWord(void *,int);
@@ -14,7 +14,7 @@ void ov102_021EAA3C(u8 *);
 #define P(p,o) (*(void **)((p)+(o)))
 void ov102_021EAA3C(u8 *w){
  int i;
- void *bg=ov102_021EA268(P(w,0));
+ void *bg=EasyChatAppView_GetBgConfig(P(w,0));
  u8 *win,*a,*b;
  ov102_021EA874(w);
  for(i=0,win=w+12,a=w+0x84,b=w+0x88;i<2;i++,win+=16){

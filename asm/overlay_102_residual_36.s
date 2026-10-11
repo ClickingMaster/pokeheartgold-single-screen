@@ -84,61 +84,61 @@
 	.public EasyChatApp_CanScrollWordListDown
 	.public ov102_021E9084
 	.public ov102_021E9090
-	.public ov102_021E909C
-	.public ov102_021E9144
-	.public ov102_021E9198
-	.public ov102_021E91BC
-	.public ov102_021E91C4
-	.public ov102_021E937C
-	.public ov102_021E93D4
-	.public ov102_021E93DC
-	.public ov102_021E93E0
-	.public ov102_021E940C
-	.public ov102_021E9464
-	.public ov102_021E947C
-	.public ov102_021E94A4
-	.public ov102_021E94CC
-	.public ov102_021E95E0
-	.public ov102_021E9694
-	.public ov102_021E978C
-	.public ov102_021E983C
-	.public ov102_021E988C
-	.public ov102_021E98B8
-	.public ov102_021E98C4
-	.public ov102_021E98E0
-	.public ov102_021E98FC
-	.public ov102_021E9944
-	.public ov102_021E9978
+	.public EasyChatAppView_Create
+	.public EasyChatAppView_Delete
+	.public EasyChatAppView_InitCharTransfer
+	.public EasyChatAppView_FreeCharTransfer
+	.public EasyChatAppView_CreateButtonTexts
+	.public EasyChatAppView_DeleteButtonTexts
+	.public EasyChatAppView_CreateVBlankTask
+	.public EasyChatAppView_MainTask
+	.public EasyChatAppView_VBlankTask
+	.public EasyChatAppView_StartCommand
+	.public EasyChatAppView_AreCommandsDone
+	.public EasyChatAppView_IsCommandDone
+	.public EasyChatAppView_EndCommand
+	.public EasyChatAppView_Cmd_Load
+	.public EasyChatAppView_LoadSpriteGraphics
+	.public EasyChatAppView_Cmd_Unload
+	.public EasyChatAppView_InitBgs
+	.public EasyChatAppView_Cmd_FadeIn
+	.public EasyChatAppView_Cmd_RedrawSentence
+	.public EasyChatAppView_Cmd_Nop
+	.public EasyChatAppView_Cmd_ShowCategoryCursor
+	.public EasyChatAppView_Cmd_ShowWordListCursor
+	.public EasyChatAppView_Cmd_FocusMenu
+	.public EasyChatAppView_Cmd_FocusSentence
+	.public EasyChatAppView_Cmd_OpenCategories
 	.public ov102_021E9A24
-	.public ov102_021E9A8C
-	.public ov102_021E9B30
-	.public ov102_021E9BD0
-	.public ov102_021E9C70
-	.public ov102_021E9D44
-	.public ov102_021E9E60
-	.public ov102_021E9F38
-	.public ov102_021E9FAC
-	.public ov102_021E9FCC
-	.public ov102_021E9FEC
-	.public ov102_021EA00C
-	.public ov102_021EA05C
-	.public ov102_021EA078
-	.public ov102_021EA0D0
-	.public ov102_021EA128
+	.public EasyChatAppView_Cmd_SwitchListMode
+	.public EasyChatAppView_Cmd_CloseCategories
+	.public EasyChatAppView_Cmd_OpenWordList
+	.public EasyChatAppView_Cmd_WordListToCategories
+	.public EasyChatAppView_Cmd_CloseWordList
+	.public EasyChatAppView_Cmd_WordListToMenu
+	.public EasyChatAppView_Cmd_MoveMenuCursor
+	.public EasyChatAppView_Cmd_SetMenuCursor
+	.public EasyChatAppView_Cmd_SetCategoryCursor
+	.public EasyChatAppView_Cmd_SetWordListCursor
+	.public EasyChatAppView_Cmd_ScrollWordList
+	.public EasyChatAppView_Cmd_HideMessage
+	.public EasyChatAppView_Cmd_ConfirmFinish
+	.public EasyChatAppView_Cmd_ConfirmQuit
+	.public EasyChatAppView_Cmd_ShowIncompleteMessage
 	.public ov102_021EA144
-	.public ov102_021EA164
-	.public ov102_021EA1B8
-	.public ov102_021EA1D4
-	.public ov102_021EA1F0
-	.public ov102_021EA20C
-	.public ov102_021EA228
-	.public ov102_021EA238
-	.public ov102_021EA248
-	.public ov102_021EA258
-	.public ov102_021EA268
-	.public ov102_021EA26C
-	.public ov102_021EA270
-	.public ov102_021EA2B4
+	.public EasyChatAppView_Cmd_CloseYesNo
+	.public EasyChatAppView_Cmd_PressPageUp
+	.public EasyChatAppView_Cmd_PressPageDown
+	.public EasyChatAppView_Cmd_ReleasePageUp
+	.public EasyChatAppView_Cmd_ReleasePageDown
+	.public EasyChatAppView_GetSliderSprite
+	.public EasyChatAppView_GetNumWordSlots
+	.public EasyChatAppView_GetWordSlotHitbox
+	.public EasyChatAppView_GetYesNoResult
+	.public EasyChatAppView_GetBgConfig
+	.public EasyChatAppView_GetSpriteList
+	.public EasyChatAppView_InitSpriteHeader
+	.public EasyChatAppView_CreateSprite
 	.public ov102_021EA314
 	.public ov102_021EA380
 	.public ov102_021EA41C
@@ -324,32 +324,32 @@
 	.public EasyChatApp_CanScrollWordListDown
 	.public ov102_021E9084
 	.public ov102_021E9090
-	.public ov102_021E91BC
-	.public ov102_021E93D4
-	.public ov102_021E93DC
-	.public ov102_021E9464
-	.public ov102_021E947C
-	.public ov102_021E988C
-	.public ov102_021E98B8
-	.public ov102_021E98C4
-	.public ov102_021E98E0
-	.public ov102_021E9944
-	.public ov102_021E9FAC
-	.public ov102_021E9FCC
-	.public ov102_021E9FEC
-	.public ov102_021EA05C
-	.public ov102_021EA128
+	.public EasyChatAppView_FreeCharTransfer
+	.public EasyChatAppView_CreateVBlankTask
+	.public EasyChatAppView_MainTask
+	.public EasyChatAppView_AreCommandsDone
+	.public EasyChatAppView_IsCommandDone
+	.public EasyChatAppView_Cmd_RedrawSentence
+	.public EasyChatAppView_Cmd_Nop
+	.public EasyChatAppView_Cmd_ShowCategoryCursor
+	.public EasyChatAppView_Cmd_ShowWordListCursor
+	.public EasyChatAppView_Cmd_FocusSentence
+	.public EasyChatAppView_Cmd_SetMenuCursor
+	.public EasyChatAppView_Cmd_SetCategoryCursor
+	.public EasyChatAppView_Cmd_SetWordListCursor
+	.public EasyChatAppView_Cmd_HideMessage
+	.public EasyChatAppView_Cmd_ShowIncompleteMessage
 	.public ov102_021EA144
-	.public ov102_021EA1B8
-	.public ov102_021EA1D4
-	.public ov102_021EA1F0
-	.public ov102_021EA20C
-	.public ov102_021EA228
-	.public ov102_021EA238
-	.public ov102_021EA248
-	.public ov102_021EA258
-	.public ov102_021EA268
-	.public ov102_021EA26C
+	.public EasyChatAppView_Cmd_PressPageUp
+	.public EasyChatAppView_Cmd_PressPageDown
+	.public EasyChatAppView_Cmd_ReleasePageUp
+	.public EasyChatAppView_Cmd_ReleasePageDown
+	.public EasyChatAppView_GetSliderSprite
+	.public EasyChatAppView_GetNumWordSlots
+	.public EasyChatAppView_GetWordSlotHitbox
+	.public EasyChatAppView_GetYesNoResult
+	.public EasyChatAppView_GetBgConfig
+	.public EasyChatAppView_GetSpriteList
 	.public ov102_021EAB10
 	.public ov102_021EAC20
 	.public ov102_021EAC70
@@ -416,7 +416,7 @@ ov102_021EBC34: ; 0x021EBC34
 	str r6, [r4, #4]
 	str r7, [r4, #8]
 	add r0, r5, #0
-	bl ov102_021EA268
+	bl EasyChatAppView_GetBgConfig
 	str r0, [r4, #0xc]
 	mov r0, #0x20
 	mov r1, #0x23
@@ -510,7 +510,7 @@ ov102_021EBD00: ; 0x021EBD00
 	sub sp, #0x10
 	add r5, r0, #0
 	ldr r0, [r5]
-	bl ov102_021EA268
+	bl EasyChatAppView_GetBgConfig
 	add r4, r0, #0
 	mov r0, #2
 	mov r1, #0x20
@@ -561,7 +561,7 @@ ov102_021EBD68: ; 0x021EBD68
 	ldr r0, [r4]
 	add r1, sp, #8
 	add r3, r2, #0
-	bl ov102_021EA270
+	bl EasyChatAppView_InitSpriteHeader
 	mov r0, #3
 	str r0, [sp]
 	mov r0, #1
@@ -570,7 +570,7 @@ ov102_021EBD68: ; 0x021EBD68
 	add r1, sp, #8
 	mov r2, #0x48
 	mov r3, #0x38
-	bl ov102_021EA2B4
+	bl EasyChatAppView_CreateSprite
 	str r0, [r4, #0x30]
 	mov r1, #8
 	bl Sprite_SetAnimCtrlSeq
@@ -585,7 +585,7 @@ ov102_021EBD68: ; 0x021EBD68
 	add r1, sp, #8
 	mov r2, #0xf0
 	mov r3, #0x50
-	bl ov102_021EA2B4
+	bl EasyChatAppView_CreateSprite
 	str r0, [r4, #0x34]
 	mov r1, #0x18
 	bl Sprite_SetAnimCtrlSeq
@@ -600,7 +600,7 @@ ov102_021EBD68: ; 0x021EBD68
 	add r1, sp, #8
 	mov r2, #0xf0
 	mov r3, #0x80
-	bl ov102_021EA2B4
+	bl EasyChatAppView_CreateSprite
 	str r0, [r4, #0x38]
 	mov r1, #0x1a
 	bl Sprite_SetAnimCtrlSeq

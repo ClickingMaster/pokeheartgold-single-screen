@@ -1,8 +1,8 @@
 #include "global.h"
 
-u32 ov102_021EA268(u8 *p);
-void ov102_021EA270(u8 *p, void *dst, int a, int b);
-void *ov102_021EA2B4(u8 *p, void *args, int x, int y, int a, int b);
+u32 EasyChatAppView_GetBgConfig(u8 *p);
+void EasyChatAppView_InitSpriteHeader(u8 *p, void *dst, int a, int b);
+void *EasyChatAppView_CreateSprite(u8 *p, void *args, int x, int y, int a, int b);
 void ov102_021EB1F8(u8 *p, void *narc);
 void ov102_021EB29C(u8 *p);
 void ov102_021EB2EC(u8 *p, int draw, int enabled);
@@ -36,7 +36,7 @@ void AddTextPrinterParameterizedWithColor(void *window, int fontId, void *string
 extern const u8 ov102_021EC808[];
 
 void ov102_021EB1F8(u8 *p, void *narc) {
-    void *bgConfig = (void *)ov102_021EA268(*(u8 **)p);
+    void *bgConfig = (void *)EasyChatAppView_GetBgConfig(*(u8 **)p);
 
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 4, bgConfig, 3, 0, 0, 1, 0x23);
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 5, bgConfig, 3, 0, 0, 1, 0x23);
@@ -51,7 +51,7 @@ void ov102_021EB1F8(u8 *p, void *narc) {
 }
 
 void ov102_021EB29C(u8 *p) {
-    void *bgConfig = (void *)ov102_021EA268(*(u8 **)p);
+    void *bgConfig = (void *)EasyChatAppView_GetBgConfig(*(u8 **)p);
     u8 *window;
     u8 *strings;
     int i;
@@ -76,7 +76,7 @@ void ov102_021EB29C(u8 *p) {
 }
 
 void ov102_021EB2EC(u8 *p, int draw, int enabled) {
-    void *bgConfig = (void *)ov102_021EA268(*(u8 **)p);
+    void *bgConfig = (void *)EasyChatAppView_GetBgConfig(*(u8 **)p);
     u8 *window;
     int i;
 
@@ -103,7 +103,7 @@ void ov102_021EB2EC(u8 *p, int draw, int enabled) {
 }
 
 void ov102_021EB3B4(u8 *p, int draw) {
-    void *bgConfig = (void *)ov102_021EA268(*(u8 **)p);
+    void *bgConfig = (void *)EasyChatAppView_GetBgConfig(*(u8 **)p);
     int x;
 
     if (draw == 0) {
@@ -146,8 +146,8 @@ void ov102_021EB46C(u8 *p, void *bgConfig) {
 void ov102_021EB4D0(u8 *p) {
     u8 args[0x24];
 
-    ov102_021EA270(*(u8 **)p, args, 0, 0);
-    *(void **)(p + 0xc) = ov102_021EA2B4(*(u8 **)p, args, 0xdc, 0x78, 5, 1);
+    EasyChatAppView_InitSpriteHeader(*(u8 **)p, args, 0, 0);
+    *(void **)(p + 0xc) = EasyChatAppView_CreateSprite(*(u8 **)p, args, 0xdc, 0x78, 5, 1);
     Sprite_SetAnimCtrlSeq(*(void **)(p + 0xc), 2);
     Sprite_SetDrawFlag(*(void **)(p + 0xc), 0);
 }

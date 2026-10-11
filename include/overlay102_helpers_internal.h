@@ -27,7 +27,7 @@ u16 EasyChatWordPage_GetTopRow(u8 *p);
 u16 EasyChatWordPage_GetMaxTopRow(u8 *p);
 int EasyChatWordPage_GetCursorPos(u8 *p);
 u8 ov102_021E8F64(u8 *p);
-void ov102_021E94A4(void *p);
+void EasyChatAppView_EndCommand(void *p);
 void ov102_021EB088(u8 *p, int a);
 u32 ov102_021EC2EC(u8 *p);
 void ov102_021EC450(u8 *p);
@@ -98,7 +98,7 @@ void OverlayManager_FreeData(void *ovy);
 void *OverlayManager_GetData(void *ovy);
 void sub_02090E5C(void *a, u32 b);
 void TouchHitboxController_Destroy(void *p);
-void ov102_021E9144(void *p);
+void EasyChatAppView_Delete(void *p);
 void sub_020918C0(void *p);
 void Heap_Destroy(u32 heapId);
 void *Heap_Alloc(u32 heapId, u32 size);
@@ -109,8 +109,8 @@ void SpriteList_RenderAndAnimateSprites(void *list);
 void OamManager_ApplyAndResetBuffers(void);
 
 /* --- batch 5 callees --- */
-void ov102_021E940C(void *p, u32 mode);
-BOOL ov102_021E9464(u8 *p);
+void EasyChatAppView_StartCommand(void *p, u32 mode);
+BOOL EasyChatAppView_AreCommandsDone(u8 *p);
 void ov102_021EAFAC(u8 *p);
 void ov102_021EAF5C(u8 *p, int flag);
 void *NewMsgDataFromNarc(u32 type, u32 narc, u32 fileId, u32 heapId);

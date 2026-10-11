@@ -7,7 +7,7 @@
 #include "yes_no_prompt.h"
 
 void ov102_021EAD5C(void *entry, s16 *out);
-void *ov102_021EA268(void *p);
+void *EasyChatAppView_GetBgConfig(void *p);
 
 void ov102_021EAFF0(u8 *p, u16 index);
 void ov102_021EB088(u8 *p, int enabled);

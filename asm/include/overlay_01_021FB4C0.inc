@@ -8,5 +8,5 @@
 .public HBlankSystem_Delete
 .public HBlankSystem_Start
 .public HBlankSystem_Stop
-.public ov01_021FB530
-.public ov01_021FB554
+.public HBlankSystem_StartTask
+.public HBlankTask_Delete

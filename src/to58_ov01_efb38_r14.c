@@ -1,10 +1,10 @@
 #include "field_overlay_effects_internal.h"
-void ov01_021FB554(void *);
+void HBlankTask_Delete(void *);
 void ov01_021F0CDC(void *arg) {
     u8 *p = arg;
     *(volatile u32 *)0x04000000 &= 0xFFFF1FFF;
     **(u32 **)(p + 0xE4) = 1;
-    ov01_021FB554(*(void **)(p + 0xDC));
+    HBlankTask_Delete(*(void **)(p + 0xDC));
     *(void **)(p + 0xDC) = NULL;
     SysTask_Destroy(*(SysTask **)(p + 0xE0));
     *(void **)(p + 0xE0) = NULL;

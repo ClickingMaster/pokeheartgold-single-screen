@@ -2,7 +2,7 @@
 
 void ov01_021F0C40(SysTask *task, void *v) {
     u8 *p = v;
-    *(void **)(p + 0xDC) = ov01_021FB530(*(void **)(p + 0xD8), ov01_021F0CA8, p);
+    *(void **)(p + 0xDC) = HBlankSystem_StartTask(*(void **)(p + 0xD8), ov01_021F0CA8, p);
     *(void **)(p + 0xE0) = SysTask_CreateOnVWaitQueue((void (*)(SysTask *, Interp *))ov01_021F0C7C, p, 1 << 10);
     SysTask_Destroy(task);
 }

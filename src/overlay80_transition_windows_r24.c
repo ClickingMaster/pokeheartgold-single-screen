@@ -3,7 +3,7 @@
 BOOL ov80_0222D390(void *work) {
     switch (U32_AT(work, 4)) {
     case 0:
-        ov80_0223AC24(1, 0x10, -0x10, (u8 *)work + 0xc, 2);
+        FrontierTransition_StartFlash(1, 0x10, -0x10, (u8 *)work + 0xc, 2);
         U32_AT(work, 4)
         ++;
         break;
@@ -29,7 +29,7 @@ BOOL ov80_0222D404(void *work) {
     BOOL done;
     switch (U32_AT(work, 4)) {
     case 0:
-        ov80_0223AC24(1, 0x10, -0x10, (u8 *)work + 0xc, 2);
+        FrontierTransition_StartFlash(1, 0x10, -0x10, (u8 *)work + 0xc, 2);
         U32_AT(work, 4)
         ++;
         break;
@@ -42,16 +42,16 @@ BOOL ov80_0222D404(void *work) {
         PaletteData_FillPaletteInBuffer(PTR_AT(PTR_AT(work, 0), 4), 0, 2, 0, 0, 0x10);
         FillWindowPixelBuffer(PTR_AT(work, 0x28), 0);
         ScheduleWindowCopyToVram(PTR_AT(work, 0x28));
-        PTR_AT(work, 0x2c) = ov80_0223AF30(0xb);
+        PTR_AT(work, 0x2c) = FrontierWipe_New(0xb);
         U32_AT(work, 4)
         ++;
     case 2:
-        ov80_0223AF80(PTR_AT(work, 0x2c), 1, 1, PTR_AT(work, 0x28), 0xf);
+        FrontierWipe_Start(PTR_AT(work, 0x2c), 1, 1, PTR_AT(work, 0x28), 0xf);
         U32_AT(work, 4)
         ++;
         break;
     case 3:
-        done = ov80_0223AFC4(PTR_AT(work, 0x2c));
+        done = FrontierWipe_UpdateHorizontal(PTR_AT(work, 0x2c));
         ScheduleWindowCopyToVram(PTR_AT(work, 0x28));
         if (done != 0) {
             U32_AT(work, 4)
@@ -60,7 +60,7 @@ BOOL ov80_0222D404(void *work) {
         break;
     default:
         if (IsPaletteFadeFinished() == 1) {
-            ov80_0223AF60(PTR_AT(work, 0x2c));
+            FrontierWipe_Free(PTR_AT(work, 0x2c));
             ClearWindowTilemapAndCopyToVram(PTR_AT(work, 0x28));
             RemoveWindow(PTR_AT(work, 0x28));
             WindowArray_Delete(PTR_AT(work, 0x28), 1);
@@ -79,7 +79,7 @@ BOOL ov80_0222D520(void *work) {
     BOOL done;
     switch (U32_AT(work, 4)) {
     case 0:
-        ov80_0223AC24(1, 0x10, -0x10, (u8 *)work + 0xc, 2);
+        FrontierTransition_StartFlash(1, 0x10, -0x10, (u8 *)work + 0xc, 2);
         U32_AT(work, 4)
         ++;
         break;
@@ -92,16 +92,16 @@ BOOL ov80_0222D520(void *work) {
         PaletteData_FillPaletteInBuffer(PTR_AT(PTR_AT(work, 0), 4), 0, 2, 0, 0, 0x10);
         FillWindowPixelBuffer(PTR_AT(work, 0x28), 0);
         ScheduleWindowCopyToVram(PTR_AT(work, 0x28));
-        PTR_AT(work, 0x2c) = ov80_0223AF30(0xb);
+        PTR_AT(work, 0x2c) = FrontierWipe_New(0xb);
         U32_AT(work, 4)
         ++;
     case 2:
-        ov80_0223AF80(PTR_AT(work, 0x2c), 1, 1, PTR_AT(work, 0x28), 0xf);
+        FrontierWipe_Start(PTR_AT(work, 0x2c), 1, 1, PTR_AT(work, 0x28), 0xf);
         U32_AT(work, 4)
         ++;
         break;
     case 3:
-        done = ov80_0223B1D4(PTR_AT(work, 0x2c));
+        done = FrontierWipe_UpdateVertical(PTR_AT(work, 0x2c));
         ScheduleWindowCopyToVram(PTR_AT(work, 0x28));
         if (done != 0) {
             U32_AT(work, 4)
@@ -110,7 +110,7 @@ BOOL ov80_0222D520(void *work) {
         break;
     default:
         if (IsPaletteFadeFinished() == 1) {
-            ov80_0223AF60(PTR_AT(work, 0x2c));
+            FrontierWipe_Free(PTR_AT(work, 0x2c));
             ClearWindowTilemapAndCopyToVram(PTR_AT(work, 0x28));
             RemoveWindow(PTR_AT(work, 0x28));
             WindowArray_Delete(PTR_AT(work, 0x28), 1);

@@ -36,7 +36,7 @@ extern void *G2dRenderer_Init(void *, void *, int);
 extern void SpriteTransfer_DeleteCharTransferTask(void *);
 extern void SpriteTransfer_DeletePlttTransferTask(void *);
 extern void DestroySingle2DGfxResObj(void *, void *);
-extern void *ov01_021FB530(void *, void (*)(SysTask *, void *), void *);
+extern void *HBlankSystem_StartTask(void *, void (*)(SysTask *, void *), void *);
 extern void ov01_021F010C(SysTask *, void *);
 extern void ov01_021F01D0(SysTask *, void *);
 extern void ov01_021F0360(SysTask *, void *);

@@ -15,8 +15,8 @@
 
 // Defined in hblank_system_1.c; no header declares them yet.
 typedef void (*HBlankTaskFunc)(void *, void *);
-void *ov01_021FB530(HBlankSystem *hBlankSystem, HBlankTaskFunc func, void *data);
-void ov01_021FB554(void *task);
+void *HBlankSystem_StartTask(HBlankSystem *hBlankSystem, HBlankTaskFunc func, void *data);
+void HBlankTask_Delete(void *task);
 
 // SDK function without a prototype in lib/include.
 void G3X_SetHOffset(int offset);
@@ -68,7 +68,7 @@ void PoisonEffect_Delete(void *data) {
 void FieldSystem_DoPoisonEffect(void *data) {
     PoisonEffect *effect = data;
     GF_ASSERT(effect->state == 0);
-    effect->hblankTask = ov01_021FB530(effect->hBlankSystem, PoisonEffect_HBlankCallback, effect);
+    effect->hblankTask = HBlankSystem_StartTask(effect->hBlankSystem, PoisonEffect_HBlankCallback, effect);
     effect->mainTask = SysTask_CreateOnMainQueue(PoisonEffect_Task, effect, 1024);
     effect->vblankTask = SysTask_CreateOnVBlankQueue(PoisonEffect_VBlankResetTask, effect, 1024);
     effect->swapTask = SysTask_CreateOnVBlankQueue(PoisonEffect_SwapBuffersTask, effect, 1024);
@@ -166,7 +166,7 @@ void PoisonEffect_SwapBuffers(PoisonEffect *effect) {
 }
 
 void PoisonEffect_Stop(PoisonEffect *effect) {
-    ov01_021FB554(effect->hblankTask);
+    HBlankTask_Delete(effect->hblankTask);
     effect->hblankTask = NULL;
     SysTask_Destroy(effect->mainTask);
     effect->mainTask = NULL;

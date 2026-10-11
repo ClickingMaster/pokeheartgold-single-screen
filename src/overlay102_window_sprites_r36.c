@@ -11,7 +11,7 @@ void *ov102_021EBC34(void *work, void *args, void *fieldSystem) {
     PTR(state, 0) = work;
     PTR(state, 4) = args;
     PTR(state, 8) = fieldSystem;
-    PTR(state, 0xC) = ov102_021EA268(work);
+    PTR(state, 0xC) = EasyChatAppView_GetBgConfig(work);
     PTR(state, 0x3C) = String_New(0x20, 0x23);
     AddWindowParameterized(PTR(state, 0xC), state + 0x10, 2, 4, 0, 0x1A, 0x20, 0xC, 1);
     AddWindowParameterized(PTR(state, 0xC), state + 0x20, 2, 0, 0, 0xC, 4, 0xC, 1);
@@ -44,7 +44,7 @@ void ov102_021EBCBC(void *arg) {
 
 void ov102_021EBD00(void *arg) {
     u8 *state = arg;
-    void *bg = ov102_021EA268(PTR(state, 0));
+    void *bg = EasyChatAppView_GetBgConfig(PTR(state, 0));
 
     BG_ClearCharDataRange(2, 0x20, 0, 0x23);
     FillBgTilemapRect(bg, 2, 0, 0, 0, 0x20, 0x20, 0xC);
@@ -60,14 +60,14 @@ void ov102_021EBD68(void *arg) {
     u8 resource[0x24];
     u8 *state = arg;
 
-    ov102_021EA270(PTR(state, 0), resource, 0, 0);
-    PTR(state, 0x30) = ov102_021EA2B4(PTR(state, 0), resource, 0x48, 0x38, 3, 1);
+    EasyChatAppView_InitSpriteHeader(PTR(state, 0), resource, 0, 0);
+    PTR(state, 0x30) = EasyChatAppView_CreateSprite(PTR(state, 0), resource, 0x48, 0x38, 3, 1);
     Sprite_SetAnimCtrlSeq(PTR(state, 0x30), 8);
     Sprite_SetDrawFlag(PTR(state, 0x30), 0);
-    PTR(state, 0x34) = ov102_021EA2B4(PTR(state, 0), resource, 0xF0, 0x50, 4, 1);
+    PTR(state, 0x34) = EasyChatAppView_CreateSprite(PTR(state, 0), resource, 0xF0, 0x50, 4, 1);
     Sprite_SetAnimCtrlSeq(PTR(state, 0x34), 0x18);
     Sprite_SetDrawFlag(PTR(state, 0x34), 0);
-    PTR(state, 0x38) = ov102_021EA2B4(PTR(state, 0), resource, 0xF0, 0x80, 4, 1);
+    PTR(state, 0x38) = EasyChatAppView_CreateSprite(PTR(state, 0), resource, 0xF0, 0x80, 4, 1);
     Sprite_SetAnimCtrlSeq(PTR(state, 0x38), 0x1A);
     Sprite_SetDrawFlag(PTR(state, 0x38), 0);
 }

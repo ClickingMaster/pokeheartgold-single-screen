@@ -175,13 +175,13 @@ BOOL EasyChat_Init(OverlayManager *man, int *state) {
         Heap_Create(HEAP_ID_3, HEAP_ID_34, 0x8000);
         Heap_Create(HEAP_ID_3, HEAP_ID_35, 0x28000);
         app = EasyChatApp_Create(man);
-        ov102_021E940C(app->view, 0);
+        EasyChatAppView_StartCommand(app->view, 0);
         (*state)++;
         break;
     case 1:
         app = OverlayManager_GetData(man);
-        if (ov102_021E9464(app->view)) {
-            app->numSlots = app->type == 2 ? ov102_021EA238(app->view) : 0;
+        if (EasyChatAppView_AreCommandsDone(app->view)) {
+            app->numSlots = app->type == 2 ? EasyChatAppView_GetNumWordSlots(app->view) : 0;
             return TRUE;
         }
         break;
@@ -211,10 +211,10 @@ void EasyChatApp_OnTouchButton(u32 index, u32 event, void *arg) {
         app->touchButton = index;
         switch (index) {
         case 2:
-            ov102_021E940C(app->view, 28);
+            EasyChatAppView_StartCommand(app->view, 28);
             break;
         case 3:
-            ov102_021E940C(app->view, 29);
+            EasyChatAppView_StartCommand(app->view, 29);
             break;
         }
         return;
@@ -222,10 +222,10 @@ void EasyChatApp_OnTouchButton(u32 index, u32 event, void *arg) {
     case 3:
         switch (index) {
         case 2:
-            ov102_021E940C(app->view, 30);
+            EasyChatAppView_StartCommand(app->view, 30);
             break;
         case 3:
-            ov102_021E940C(app->view, 31);
+            EasyChatAppView_StartCommand(app->view, 31);
             break;
         }
         app->touchButton = 4;
@@ -265,7 +265,7 @@ EasyChatApp *EasyChatApp_Create(OverlayManager *man) {
         EasyChatMessageCursor_Init(&app->messageCursor, &app->message);
     }
     app->menu = sub_02091880(HEAP_ID_34, app->args);
-    app->view = ov102_021E909C(app, app->menu);
+    app->view = EasyChatAppView_Create(app, app->menu);
     app->touchHitboxes = TouchHitboxController_Create(ov102_021EC648, 5, EasyChatApp_OnTouchButton, app, HEAP_ID_34);
     app->unk_44 = 0;
     app->unk_48 = 0;
@@ -328,7 +328,7 @@ u8 EasyChatMessageCursor_GetIndex(EasyChatMessageCursor *cursor) {
 void EasyChatApp_Delete(EasyChatApp *app, OverlayManager *man) {
     sub_02090E5C(app->args, app->menuInputState);
     TouchHitboxController_Destroy(app->touchHitboxes);
-    ov102_021E9144(app->view);
+    EasyChatAppView_Delete(app->view);
     sub_020918C0(app->menu);
     OverlayManager_FreeData(man);
 }
@@ -377,11 +377,11 @@ int EasyChatApp_WordMenuAction(EasyChatApp *app, int action) {
     case 0:
         PlaySE(SEQ_SE_DP_SELECT);
         app->category = 0;
-        ov102_021E940C(app->view, 9);
+        EasyChatAppView_StartCommand(app->view, 9);
         return 4;
     case 3:
         PlaySE(SEQ_SE_DP_SELECT);
-        ov102_021E940C(app->view, 15);
+        EasyChatAppView_StartCommand(app->view, 15);
         break;
     }
     return 0;
@@ -392,7 +392,7 @@ int EasyChatApp_WordMenuHandleKeys(EasyChatApp *app) {
 
     if (keys & PAD_BUTTON_B) {
         app->menuCursor = 2;
-        ov102_021E940C(app->view, 15);
+        EasyChatAppView_StartCommand(app->view, 15);
         return EasyChatApp_WordMenuAction(app, 2);
     }
     if (keys & PAD_BUTTON_A) {
@@ -447,18 +447,18 @@ int EasyChatApp_WordMenuHandleTouch(EasyChatApp *app) {
     switch (result) {
     case 0:
         app->menuCursor = 1;
-        ov102_021E940C(app->view, 15);
+        EasyChatAppView_StartCommand(app->view, 15);
         return EasyChatApp_WordMenuAction(app, 1);
     case 1:
         app->menuCursor = 2;
-        ov102_021E940C(app->view, 15);
+        EasyChatAppView_StartCommand(app->view, 15);
         return EasyChatApp_WordMenuAction(app, 2);
     case 2:
     case 3:
         app->category = 0;
         app->wordSlot = result - 2;
         app->menuCursor = 0;
-        ov102_021E940C(app->view, 15);
+        EasyChatAppView_StartCommand(app->view, 15);
         return EasyChatApp_WordMenuAction(app, 0);
     }
     return 0;
@@ -467,7 +467,7 @@ int EasyChatApp_WordMenuHandleTouch(EasyChatApp *app) {
 int EasyChatApp_WordMenuRun(EasyChatApp *app, u32 *state) {
     switch (*state) {
     case 0:
-        if (ov102_021E9464(app->view)) {
+        if (EasyChatAppView_AreCommandsDone(app->view)) {
             if (app->menuInputState == MENU_INPUT_STATE_BUTTONS) {
                 *state = EasyChatApp_WordMenuHandleKeys(app);
             } else {
@@ -487,7 +487,7 @@ int EasyChatApp_WordMenuRun(EasyChatApp *app, u32 *state) {
         *state = 0;
         break;
     case 4:
-        if (ov102_021E9464(app->view)) {
+        if (EasyChatAppView_AreCommandsDone(app->view)) {
             EasyChatApp_SetHandler(app, EasyChatApp_Handler_CategoryMenu);
         }
         break;
@@ -511,21 +511,21 @@ int EasyChatApp_MessageMenuAction(EasyChatApp *app, int action) {
         PlaySE(SEQ_SE_DP_SELECT);
         return 3;
     case 0:
-        if (ov102_021EA238(app->view) == 0) {
+        if (EasyChatAppView_GetNumWordSlots(app->view) == 0) {
             return 1;
         }
         PlaySE(SEQ_SE_DP_SELECT);
         app->category = 0;
-        ov102_021E940C(app->view, 9);
+        EasyChatAppView_StartCommand(app->view, 9);
         return 6;
     case 3:
         PlaySE(SEQ_SE_DP_SELECT);
-        ov102_021E940C(app->view, 15);
+        EasyChatAppView_StartCommand(app->view, 15);
         break;
     case 4:
         PlaySE(SEQ_SE_DP_SELECT);
         app->wordSlot = 0;
-        ov102_021E940C(app->view, 3);
+        EasyChatAppView_StartCommand(app->view, 3);
         return 2;
     }
     return 1;
@@ -536,7 +536,7 @@ int EasyChatApp_MessageMenuAction(EasyChatApp *app, int action) {
 int EasyChatApp_MessageMenuHandleKeys(EasyChatApp *app) {
     if (app->newKeys & PAD_BUTTON_B) {
         app->menuCursor = 2;
-        ov102_021E940C(app->view, 15);
+        EasyChatAppView_StartCommand(app->view, 15);
         return EasyChatApp_MessageMenuAction(app, 2);
     }
     if (app->newKeys & PAD_BUTTON_A) {
@@ -623,7 +623,7 @@ int EasyChatApp_GetMessageMenuTouch(EasyChatApp *app) {
         s16 x;
         TouchscreenHitbox hitbox;
     } local;
-    Sprite *sprite = ov102_021EA228(app->view);
+    Sprite *sprite = EasyChatAppView_GetSliderSprite(app->view);
 
     Sprite_GetPositionXY(sprite, &local.x, &local.y);
     if (app->dragging) {
@@ -652,7 +652,7 @@ int EasyChatApp_GetMessageMenuTouch(EasyChatApp *app) {
         app->wordSlot = 0;
         EasyChatMessageCursor_SetIndex(&app->messageCursor, &app->message, (x - 28) / 2);
         PlaySE(SEQ_SE_DP_SELECT);
-        ov102_021E940C(app->view, 3);
+        EasyChatAppView_StartCommand(app->view, 3);
         return -1;
     } else {
         int result;
@@ -670,9 +670,9 @@ int EasyChatApp_GetMessageMenuTouch(EasyChatApp *app) {
         }
         result = TouchscreenHitbox_FindRectAtTouchNew(ov102_021EC634);
         if (result == -1) {
-            count = ov102_021EA238(app->view);
+            count = EasyChatAppView_GetNumWordSlots(app->view);
             for (i = 0; i < count; i++) {
-                ov102_021EA248(app->view, &local.hitbox, i);
+                EasyChatAppView_GetWordSlotHitbox(app->view, &local.hitbox, i);
                 if (TouchscreenHitbox_PointIsIn(&local.hitbox, gSystem.touchX, gSystem.touchY)) {
                     return i + 4;
                 }
@@ -693,12 +693,12 @@ int EasyChatApp_MessageMenuHandleTouch(EasyChatApp *app) {
     case 1:
         PlaySE(SEQ_SE_DP_SELECT);
         app->menuCursor = choice + 1;
-        ov102_021E940C(app->view, 15);
+        EasyChatAppView_StartCommand(app->view, 15);
         return EasyChatApp_MessageMenuAction(app, app->menuCursor);
     case 2:
     case 3:
         app->menuCursor = 0;
-        ov102_021E940C(app->view, 15);
+        EasyChatAppView_StartCommand(app->view, 15);
         if (choice == 2) {
             EasyChatMessageCursor_Prev(&app->messageCursor, &app->message);
         } else {
@@ -709,11 +709,11 @@ int EasyChatApp_MessageMenuHandleTouch(EasyChatApp *app) {
     case 5:
         app->menuCursor = 0;
         app->wordSlot = choice - 4;
-        ov102_021E940C(app->view, 15);
+        EasyChatAppView_StartCommand(app->view, 15);
         return EasyChatApp_MessageMenuAction(app, 0);
     case 6:
         app->menuCursor = 0;
-        ov102_021E940C(app->view, 15);
+        EasyChatAppView_StartCommand(app->view, 15);
         break;
     }
     return 1;
@@ -722,7 +722,7 @@ int EasyChatApp_MessageMenuHandleTouch(EasyChatApp *app) {
 int EasyChatApp_MessageMenuRun(EasyChatApp *app, u32 *state) {
     switch (*state) {
     case 0:
-        app->numSlots = ov102_021EA238(app->view);
+        app->numSlots = EasyChatAppView_GetNumWordSlots(app->view);
         *state = 1;
     case 1:
         if (app->menuInputState == MENU_INPUT_STATE_BUTTONS) {
@@ -732,7 +732,7 @@ int EasyChatApp_MessageMenuRun(EasyChatApp *app, u32 *state) {
         }
         break;
     case 2:
-        if (ov102_021E947C(app->view, 3)) {
+        if (EasyChatAppView_IsCommandDone(app->view, 3)) {
             *state = 0;
         }
         break;
@@ -748,7 +748,7 @@ int EasyChatApp_MessageMenuRun(EasyChatApp *app, u32 *state) {
         *state = 1;
         break;
     case 6:
-        if (ov102_021E9464(app->view)) {
+        if (EasyChatAppView_AreCommandsDone(app->view)) {
             EasyChatApp_SetHandler(app, EasyChatApp_Handler_CategoryMenu);
         }
         break;
@@ -766,17 +766,17 @@ int EasyChatApp_Handler_MessageMenu(EasyChatApp *app, u32 *state) {
 int EasyChatApp_Handler_CategoryMenu(EasyChatApp *app, u32 *state) {
     switch (*state) {
     case 0:
-        if (ov102_021E947C(app->view, 18)) {
+        if (EasyChatAppView_IsCommandDone(app->view, 18)) {
             EasyChatApp_CategoryMenuHandleInput(app, state);
         }
         break;
     case 1:
-        if (ov102_021E9464(app->view)) {
+        if (EasyChatAppView_AreCommandsDone(app->view)) {
             EasyChatApp_SetHandler(app, app->nextHandler);
         }
         break;
     case 2:
-        if (ov102_021E947C(app->view, 27)) {
+        if (EasyChatAppView_IsCommandDone(app->view, 27)) {
             *state = 0;
         }
         break;
@@ -793,14 +793,14 @@ void EasyChatApp_CategoryMenuHandleKeys(EasyChatApp *app, u32 *state) {
         app->touchButton = 4;
         app->listMode ^= 1;
         app->category = 0;
-        ov102_021E940C(app->view, 27);
+        EasyChatAppView_StartCommand(app->view, 27);
         *state = 2;
         return;
     }
     keys = app->newKeys;
     if (keys & PAD_BUTTON_B) {
         PlaySE(SEQ_SE_DP_SELECT);
-        ov102_021E940C(app->view, 10);
+        EasyChatAppView_StartCommand(app->view, 10);
         app->nextHandler = EasyChatApp_Handler_Main;
         *state = 1;
         return;
@@ -810,7 +810,7 @@ void EasyChatApp_CategoryMenuHandleKeys(EasyChatApp *app, u32 *state) {
 
         if (category == 0xFE) {
             PlaySE(SEQ_SE_DP_SELECT);
-            ov102_021E940C(app->view, 10);
+            EasyChatAppView_StartCommand(app->view, 10);
             app->nextHandler = EasyChatApp_Handler_Main;
             *state = 1;
             return;
@@ -819,7 +819,7 @@ void EasyChatApp_CategoryMenuHandleKeys(EasyChatApp *app, u32 *state) {
             PlaySE(SEQ_SE_DP_SELECT);
             EasyChatWordPage_Init(&app->wordPage, app);
             app->nextHandler = EasyChatApp_Handler_WordList;
-            ov102_021E940C(app->view, 11);
+            EasyChatAppView_StartCommand(app->view, 11);
             *state = 1;
             return;
         }
@@ -828,7 +828,7 @@ void EasyChatApp_CategoryMenuHandleKeys(EasyChatApp *app, u32 *state) {
     }
     if (EasyChatApp_MoveCategoryCursor(app)) {
         PlaySE(SEQ_SE_DP_SELECT);
-        ov102_021E940C(app->view, 17);
+        EasyChatAppView_StartCommand(app->view, 17);
     }
 }
 
@@ -908,7 +908,7 @@ void EasyChatApp_CategoryMenuHandleTouch(EasyChatApp *app, u32 *state) {
     switch (input) {
     case 1:
         PlaySE(SEQ_SE_DP_SELECT);
-        ov102_021E940C(app->view, 10);
+        EasyChatAppView_StartCommand(app->view, 10);
         app->nextHandler = EasyChatApp_Handler_Main;
         *state = 1;
         return;
@@ -916,7 +916,7 @@ void EasyChatApp_CategoryMenuHandleTouch(EasyChatApp *app, u32 *state) {
         PlaySE(SEQ_SE_DP_BUTTON9);
         app->listMode ^= 1;
         app->category = 0;
-        ov102_021E940C(app->view, 27);
+        EasyChatAppView_StartCommand(app->view, 27);
         *state = 2;
         return;
     }
@@ -944,7 +944,7 @@ void EasyChatApp_CategoryMenuHandleTouch(EasyChatApp *app, u32 *state) {
     PlaySE(SEQ_SE_DP_SELECT);
     EasyChatWordPage_Init(&app->wordPage, app);
     app->nextHandler = EasyChatApp_Handler_WordList;
-    ov102_021E940C(app->view, 11);
+    EasyChatAppView_StartCommand(app->view, 11);
     *state = 1;
 }
 
@@ -1095,18 +1095,18 @@ int EasyChatApp_Handler_WordList(EasyChatApp *app, u32 *state) {
         EasyChatApp_WordListHandleInput(app, state);
         break;
     case 1:
-        if (ov102_021E947C(app->view, 19)) {
+        if (EasyChatAppView_IsCommandDone(app->view, 19)) {
             *state = 0;
         }
         break;
     case 2:
-        if (ov102_021E947C(app->view, 19)) {
-            ov102_021E940C(app->view, 18);
+        if (EasyChatAppView_IsCommandDone(app->view, 19)) {
+            EasyChatAppView_StartCommand(app->view, 18);
             *state = 0;
         }
         break;
     case 3:
-        if (ov102_021E9464(app->view)) {
+        if (EasyChatAppView_AreCommandsDone(app->view)) {
             EasyChatApp_SetHandler(app, app->nextHandler);
             *state = 0;
         }
@@ -1123,7 +1123,7 @@ void EasyChatApp_WordListHandleKeys(EasyChatApp *app, u32 *state) {
         app->touchButton = 4;
         app->category = 0;
         app->listMode ^= 1;
-        ov102_021E940C(app->view, 12);
+        EasyChatAppView_StartCommand(app->view, 12);
         app->nextHandler = EasyChatApp_Handler_CategoryMenu;
         *state = 3;
         return;
@@ -1138,22 +1138,22 @@ void EasyChatApp_WordListHandleKeys(EasyChatApp *app, u32 *state) {
     switch (input) {
     case 1:
         PlaySE(SEQ_SE_DP_SELECT);
-        ov102_021E940C(app->view, 18);
+        EasyChatAppView_StartCommand(app->view, 18);
         return;
     case 2:
         PlaySE(SEQ_SE_DP_SELECT);
-        ov102_021E940C(app->view, 19);
+        EasyChatAppView_StartCommand(app->view, 19);
         *state = 1;
         return;
     case 3:
         PlaySE(SEQ_SE_DP_SELECT);
-        ov102_021E940C(app->view, 19);
+        EasyChatAppView_StartCommand(app->view, 19);
         *state = 2;
         return;
     }
     if (app->newKeys & PAD_BUTTON_B) {
         PlaySE(SEQ_SE_DP_SELECT);
-        ov102_021E940C(app->view, 12);
+        EasyChatAppView_StartCommand(app->view, 12);
         app->nextHandler = EasyChatApp_Handler_CategoryMenu;
         *state = 3;
         return;
@@ -1161,7 +1161,7 @@ void EasyChatApp_WordListHandleKeys(EasyChatApp *app, u32 *state) {
     if (app->newKeys & PAD_BUTTON_A) {
         if (app->wordPage.onCancel) {
             PlaySE(SEQ_SE_DP_SELECT);
-            ov102_021E940C(app->view, 12);
+            EasyChatAppView_StartCommand(app->view, 12);
             app->nextHandler = EasyChatApp_Handler_CategoryMenu;
             *state = 3;
             return;
@@ -1170,7 +1170,7 @@ void EasyChatApp_WordListHandleKeys(EasyChatApp *app, u32 *state) {
         app->wordPage.touchedWord = 0xFFFF;
         EasyChatApp_SetSelectedWord(app);
         app->nextHandler = EasyChatApp_Handler_Main;
-        ov102_021E940C(app->view, 13);
+        EasyChatAppView_StartCommand(app->view, 13);
         *state = 3;
     }
 }
@@ -1235,7 +1235,7 @@ void EasyChatApp_WordListHandleTouch(EasyChatApp *app, u32 *state) {
     switch (input) {
     case 1:
         PlaySE(SEQ_SE_DP_SELECT);
-        ov102_021E940C(app->view, 12);
+        EasyChatAppView_StartCommand(app->view, 12);
         app->nextHandler = EasyChatApp_Handler_CategoryMenu;
         *state = 3;
         return;
@@ -1243,7 +1243,7 @@ void EasyChatApp_WordListHandleTouch(EasyChatApp *app, u32 *state) {
         PlaySE(SEQ_SE_DP_BUTTON9);
         app->category = 0;
         app->listMode ^= 1;
-        ov102_021E940C(app->view, 12);
+        EasyChatAppView_StartCommand(app->view, 12);
         app->nextHandler = EasyChatApp_Handler_CategoryMenu;
         *state = 3;
         return;
@@ -1254,21 +1254,21 @@ void EasyChatApp_WordListHandleTouch(EasyChatApp *app, u32 *state) {
         PlaySE(SEQ_SE_DP_SELECT);
         EasyChatApp_SetSelectedWord(app);
         app->nextHandler = EasyChatApp_Handler_Main;
-        ov102_021E940C(app->view, 13);
+        EasyChatAppView_StartCommand(app->view, 13);
         *state = 3;
         return;
     case 1:
         PlaySE(SEQ_SE_DP_SELECT);
-        ov102_021E940C(app->view, 18);
+        EasyChatAppView_StartCommand(app->view, 18);
         return;
     case 2:
         PlaySE(SEQ_SE_DP_SELECT);
-        ov102_021E940C(app->view, 19);
+        EasyChatAppView_StartCommand(app->view, 19);
         *state = 1;
         return;
     case 3:
         PlaySE(SEQ_SE_DP_SELECT);
-        ov102_021E940C(app->view, 19);
+        EasyChatAppView_StartCommand(app->view, 19);
         *state = 2;
         return;
     }
@@ -1419,11 +1419,11 @@ void EasyChatApp_SetSelectedWord(EasyChatApp *app) {
 BOOL EasyChatApp_Handler_Exit(EasyChatApp *app, u32 *state) {
     switch (*state) {
     case 0:
-        ov102_021E940C(app->view, 1);
+        EasyChatAppView_StartCommand(app->view, 1);
         (*state)++;
         break;
     case 1:
-        if (ov102_021E9464(app->view)) {
+        if (EasyChatAppView_AreCommandsDone(app->view)) {
             return TRUE;
         }
         break;
@@ -1443,11 +1443,11 @@ void EasyChatApp_EndSubHandler(EasyChatApp *app) {
 void EasyChatApp_SubHandler_Start(EasyChatApp *app, u32 *state) {
     switch (*state) {
     case 0:
-        ov102_021E940C(app->view, 2);
+        EasyChatAppView_StartCommand(app->view, 2);
         (*state)++;
         break;
     case 1:
-        if (ov102_021E9464(app->view)) {
+        if (EasyChatAppView_AreCommandsDone(app->view)) {
             EasyChatApp_EndSubHandler(app);
         }
         break;
@@ -1462,10 +1462,10 @@ void EasyChatApp_SubHandler_ConfirmFinish(EasyChatApp *app, u32 *state) {
         if (EasyChatApp_HasChanged(app) || sub_02090D88(app->args)) {
             if (EasyChatApp_IsComplete(app)) {
                 ov102_021E8F5C(app->unk_70, 1, 0);
-                ov102_021E940C(app->view, 21);
+                EasyChatAppView_StartCommand(app->view, 21);
                 *state = 1;
             } else {
-                ov102_021E940C(app->view, 23);
+                EasyChatAppView_StartCommand(app->view, 23);
                 *state = 2;
             }
         } else {
@@ -1473,9 +1473,9 @@ void EasyChatApp_SubHandler_ConfirmFinish(EasyChatApp *app, u32 *state) {
         }
         break;
     case 1:
-        switch (ov102_021EA258(app->view)) {
+        switch (EasyChatAppView_GetYesNoResult(app->view)) {
         case 0:
-            ov102_021E940C(app->view, 25);
+            EasyChatAppView_StartCommand(app->view, 25);
             *state = 3;
             break;
         case 1:
@@ -1490,12 +1490,12 @@ void EasyChatApp_SubHandler_ConfirmFinish(EasyChatApp *app, u32 *state) {
         break;
     case 2:
         if ((app->newKeys & (PAD_BUTTON_A | PAD_BUTTON_B | PAD_KEY_UP | PAD_KEY_DOWN | PAD_KEY_LEFT | PAD_KEY_RIGHT)) || System_GetTouchNew()) {
-            ov102_021E940C(app->view, 20);
+            EasyChatAppView_StartCommand(app->view, 20);
             *state = 3;
         }
         break;
     case 3:
-        if (ov102_021E9464(app->view)) {
+        if (EasyChatAppView_AreCommandsDone(app->view)) {
             EasyChatApp_EndSubHandler(app);
         }
         break;
@@ -1508,13 +1508,13 @@ void EasyChatApp_SubHandler_ConfirmQuit(EasyChatApp *app, u32 *state) {
     switch (*state) {
     case 0:
         ov102_021E8F5C(app->unk_70, 1, 1);
-        ov102_021E940C(app->view, 22);
+        EasyChatAppView_StartCommand(app->view, 22);
         *state = 1;
         break;
     case 1:
-        switch (ov102_021EA258(app->view)) {
+        switch (EasyChatAppView_GetYesNoResult(app->view)) {
         case 0:
-            ov102_021E940C(app->view, 25);
+            EasyChatAppView_StartCommand(app->view, 25);
             *state = 2;
             break;
         case 1:
@@ -1524,7 +1524,7 @@ void EasyChatApp_SubHandler_ConfirmQuit(EasyChatApp *app, u32 *state) {
         }
         break;
     case 2:
-        if (ov102_021E9464(app->view)) {
+        if (EasyChatAppView_AreCommandsDone(app->view)) {
             EasyChatApp_EndSubHandler(app);
         }
         break;

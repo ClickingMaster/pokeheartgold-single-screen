@@ -1,7 +1,7 @@
 #ifndef TO50_OV102_R25_PRIVATE_H
 #define TO50_OV102_R25_PRIVATE_H
 #include "global.h"
-void *ov102_021EA268(void *);
+void *EasyChatAppView_GetBgConfig(void *);
 void FillBgTilemapRect(void *,u32,u32,u32,u32,u32,u32,u32);
 void ClearWindowTilemapAndCopyToVram(void *);
 void DrawFrame2AroundWindow(void *,u32,u32);

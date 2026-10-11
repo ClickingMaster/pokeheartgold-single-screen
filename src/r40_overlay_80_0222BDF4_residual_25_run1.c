@@ -5,7 +5,7 @@ BOOL ov80_0222D968(void *raw) {
 
     switch (work->state) {
     case 0:
-        ov80_0223AC24(1, 0x10, -0x10, &work->ready, 2);
+        FrontierTransition_StartFlash(1, 0x10, -0x10, &work->ready, 2);
         work->state++;
         break;
     case 1:
@@ -19,7 +19,7 @@ BOOL ov80_0222D968(void *raw) {
             work->finished = 0;
             work->data = Heap_Alloc(0x65, sizeof(Ov80R40EffectData));
             work->data->mode = 1;
-            work->data->allocation = ov80_0223B544(0x04000020, template, 0x65);
+            work->data->allocation = FrontierHBlankDma_New(0x04000020, template, 0x65);
             i = 0;
             value = 0;
             offset = 0;
@@ -62,7 +62,7 @@ BOOL ov80_0222DAAC(void *raw) {
 
     switch (work->state) {
     case 0:
-        ov80_0223AC24(1, 0x10, -0x10, &work->ready, 2);
+        FrontierTransition_StartFlash(1, 0x10, -0x10, &work->ready, 2);
         work->state++;
         break;
     case 1:
@@ -76,7 +76,7 @@ BOOL ov80_0222DAAC(void *raw) {
             work->finished = 0;
             work->data = Heap_Alloc(0x65, sizeof(Ov80R40EffectData));
             work->data->mode = 2;
-            work->data->allocation = ov80_0223B544(0x04000020, template, 0x65);
+            work->data->allocation = FrontierHBlankDma_New(0x04000020, template, 0x65);
             i = 0;
             value = 0;
             offset = 0;
@@ -128,12 +128,12 @@ BOOL ov80_0222DC14(void *raw) {
 
     switch (U32_AT(work, 4)) {
     case 0:
-        ov80_0223B424(work + 0x18, 0x65);
+        FrontierScanline_Init(work + 0x18, 0x65);
         U32_AT(work, 4)
         ++;
         break;
     case 1:
-        ov80_0223B440(work + 0x18, 0, 0xbf, 0x2aa, 0x12000, 0x190, 0x0400001c, 0, 4);
+        FrontierScanline_StartWave(work + 0x18, 0, 0xbf, 0x2aa, 0x12000, 0x190, 0x0400001c, 0, 4);
         U32_AT(work, 4)
         ++;
         break;

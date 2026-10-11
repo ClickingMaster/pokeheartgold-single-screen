@@ -24,7 +24,7 @@ void ov01_021F0360(void *unused, Ov01R8Work *work);
 void ov01_021F0454(NARC *narc, int screenMember, int characterMember, int paletteMember, int palette, int paletteSize, BgConfig *bgConfig, int bgId);
 void SysTask_Destroy(SysTask *task);
 BOOL ov01_021EFF28(void *interp);
-void ov01_021FB554(void *task);
+void HBlankTask_Delete(void *task);
 
 void ov01_021F0360(void *unused, Ov01R8Work *work) {
     s32 first;
@@ -71,7 +71,7 @@ void ov01_021F03F8(Ov01R8Work *work) {
     *(vu16 *)0x04000044 = 0;
     *(vu32 *)0x04000000 = (*(vu32 *)0x04000000 & 0xFFFF1FFF) | 0x2000;
     *work->finished = 1;
-    ov01_021FB554(work->hblankTask);
+    HBlankTask_Delete(work->hblankTask);
     work->hblankTask = NULL;
     SysTask_Destroy(work->vblankTask);
     work->vblankTask = NULL;

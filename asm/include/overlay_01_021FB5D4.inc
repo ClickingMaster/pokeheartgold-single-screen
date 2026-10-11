@@ -15,8 +15,8 @@
 .public G3X_SetHOffset
 .public memset
 .public _s32_div_f
-.public ov01_021FB530
-.public ov01_021FB554
+.public HBlankSystem_StartTask
+.public HBlankTask_Delete
 .public PoisonEffect_New
 .public PoisonEffect_Delete
 .public FieldSystem_DoPoisonEffect

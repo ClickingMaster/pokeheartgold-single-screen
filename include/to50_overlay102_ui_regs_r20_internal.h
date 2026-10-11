@@ -3,7 +3,7 @@
 #include "global.h"
 #include "filesystem.h"
 typedef struct BgConfig BgConfig;
-void *ov102_021EA268(void *);
+void *EasyChatAppView_GetBgConfig(void *);
 void ov102_021EA80C(void *, NARC *);
 void GfGfxLoader_LoadScrnDataFromOpenNarc(NARC *, s32, void *, u32, u32, u32, BOOL, u32);
 u32 GfGfxLoader_LoadCharDataFromOpenNarc(NARC *, s32, void *, u32, u32, u32, BOOL, u32);

@@ -142,8 +142,8 @@
 .public ov01_021F12D0
 .public ov01_021F12E8
 .public ov01_021F1310
-.public ov01_021FB530
-.public ov01_021FB554
+.public HBlankSystem_StartTask
+.public HBlankTask_Delete
 .public ov114_0225F020
 .public ov114_0225F280
 .public EncounterEffect_LeaderFalkner

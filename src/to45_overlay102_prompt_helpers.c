@@ -49,7 +49,7 @@ void ov102_021EB0C0(u8 *p, int initialCursorPos) {
     void *bgConfig;
     u8 value;
 
-    bgConfig = ov102_021EA268(*(void **)p);
+    bgConfig = EasyChatAppView_GetBgConfig(*(void **)p);
     MI_CpuFill8(&template, 0, sizeof(template));
     template.bgId = 0;
     template.bgConfig = bgConfig;

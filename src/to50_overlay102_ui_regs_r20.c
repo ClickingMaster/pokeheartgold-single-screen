@@ -6,7 +6,7 @@
 #define S16(p,o) (*(s16 *)((u8 *)(p)+(o)))
 
 void ov102_021EA644(u8 *work) {
-    void *bg = ov102_021EA268(PTR(work, 0));
+    void *bg = EasyChatAppView_GetBgConfig(PTR(work, 0));
     if (GX_GetVCount() < 0x30) {
         BgSetPosTextAndCommit(bg, 0, 3, S16(work, 0x1E0));
     } else {

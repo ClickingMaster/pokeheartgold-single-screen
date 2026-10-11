@@ -9,7 +9,7 @@ typedef struct Ov102Work30 {
     void *menu;
 } Ov102Work30;
 
-BgConfig *ov102_021EA268(BgConfig *bgConfig);
+BgConfig *EasyChatAppView_GetBgConfig(BgConfig *bgConfig);
 u32 ov102_021EB77C(Ov102Work30 *work, BgConfig *bgConfig, u32 tile);
 u32 ov102_021EB880(Ov102Work30 *work, BgConfig *bgConfig, u32 tile);
 void ov102_021EB94C(Ov102Work30 *work, BgConfig *bgConfig, u32 tile);
@@ -17,7 +17,7 @@ void ov102_021EB950(Ov102Work30 *work);
 void ov102_021EB6E0(Ov102Work30 *work, NARC *narc);
 
 void ov102_021EB6E0(Ov102Work30 *work, NARC *narc) {
-    BgConfig *bgConfig = ov102_021EA268(work->bgConfig);
+    BgConfig *bgConfig = EasyChatAppView_GetBgConfig(work->bgConfig);
     u32 size;
     u32 tile;
     int zero = 0;

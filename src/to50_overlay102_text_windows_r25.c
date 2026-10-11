@@ -2,7 +2,7 @@
 #define PTR(p,o) (*(void **)((u8 *)(p)+(o)))
 #define U16(p,o) (*(u16 *)((u8 *)(p)+(o)))
 void ov102_021EADF8(u8 *work, u32 index) {
-    void *bg = ov102_021EA268(PTR(work, 0));
+    void *bg = EasyChatAppView_GetBgConfig(PTR(work, 0));
     void *window;
     FillBgTilemapRect(bg, 0, 0, 0, 0x14, 0x18, 4, 0x11);
     ClearWindowTilemapAndCopyToVram(PTR(work, 0x5C));

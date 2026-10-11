@@ -5,8 +5,8 @@
 void ov102_021EB950(u8 *work) {
     u32 resource[9];
 
-    ov102_021EA270(PTR(work, 0), (u8 *)resource, 0, 0);
-    PTR(work, 0x5c) = ov102_021EA2B4(PTR(work, 0), resource, 0x30, 0x40, 2, 1);
+    EasyChatAppView_InitSpriteHeader(PTR(work, 0), (u8 *)resource, 0, 0);
+    PTR(work, 0x5c) = EasyChatAppView_CreateSprite(PTR(work, 0), resource, 0x30, 0x40, 2, 1);
     Sprite_SetAnimCtrlSeq(PTR(work, 0x5c), 4);
     Sprite_SetDrawFlag(PTR(work, 0x5c), 0);
 }

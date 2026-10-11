@@ -34,7 +34,7 @@ void ov01_021F0174(Ov01WindowEffect *effect) {
     G2_SetWnd0Position(0, 0, 0, 0);
     GX_SetVisibleWnd(GX_WNDMASK_W0);
     *effect->done = 1;
-    ov01_021FB554(effect->hblankTask);
+    HBlankTask_Delete(effect->hblankTask);
     effect->hblankTask = NULL;
     SysTask_Destroy(effect->task);
     effect->task = NULL;

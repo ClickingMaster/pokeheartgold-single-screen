@@ -2395,7 +2395,7 @@ Overlay field
     Object src/field_terrain_height_math.o
     Object src/field_resource_stream.o
     Object src/dynamic_terrain_height_manager_1.o
-    Object src/hblank_system_1.o
+    Object src/field/hblank_system.o
     Object src/field/field_poison_effect.o
     Object src/area_data_manager_1.o
     Object src/to80_extra1686_run01.o
@@ -6018,22 +6018,10 @@ Overlay OVY_80
     Object asm/frontier_map_object_movement_data.o
     Object src/frontier/frontier_map_bg_animation.o
     Object asm/frontier_map_bg_animation_data.o
-    Object src/ov80_3a00c_partial_1.o
-    Object src/to70_overlay_80_0223A00C_extra993_run01.o
-    Object src/ov80_3a00c_partial_2.o
-    Object src/to70_to46_overlay80_a00c_r2_residual_extra1228_run01.o
-    Object src/to46_overlay80_a00c_r2.o
-    Object src/ov80_3a00c_partial_3.o
-    Object src/op90_overlay_80_0223A00C_residual_3_r01.o
-    Object src/ov80_3a00c_partial_4.o
-    Object src/to91_w41521_ui276_run01.o
-    Object src/ov80_3a00c_partial_5.o
-    Object asm/overlay_80_0223A00C_residual_5.o
-    Object src/ov80_3ac24_partial_1.o
-    Object src/op90_to80_extra1553_residual_1_r01.o
-    Object src/to80_extra1553_run01.o
-    Object src/ov80_3ac24_partial_2.o
-    Object asm/overlay_80_0223AC24_residual_2.o
+    Object src/frontier/frontier_brain_intro.o
+    Object asm/frontier_brain_intro_data.o
+    Object src/frontier/frontier_transition.o
+    Object asm/frontier_transition_data.o
 }
 Overlay OVY_81
 {
@@ -7409,29 +7397,7 @@ Overlay OVY_102
 {
     After pokegear
     Object src/application/easy_chat_app.o
-    Object src/to45_overlay102_r11_lifecycle_exact.o
-    Object src/overlay102_helpers_11.o
-    Object src/to90_extra1986_run01.o
-    Object src/to50_overlay102_text_cleanup_r12.o
-    Object src/overlay102_helpers_12.o
-    Object src/r40_overlay_102_residual_13_run1.o
-    Object src/to70_overlay_102_residual_13_extra924_run01.o
-    Object src/overlay102_helpers_13.o
-    Object src/overlay102_graphics_setup_r14.o
-    Object src/to50_overlay102_graphics_teardown_r14.o
-    Object src/overlay102_graphics_fade_r14.o
-    Object src/overlay102_helpers_14.o
-    Object src/to70_overlay_102_residual_15_extra925_run01.o
-    Object src/overlay102_helpers_15.o
-    Object src/overlay102_state_handlers_9978.o
-    Object src/overlay102_helpers_16.o
-    Object src/to70_overlay_102_residual_17_extra926_run01.o
-    Object src/overlay102_helpers_17.o
-    Object src/to50_overlay102_cleanup_callbacks_r18.o
-    Object src/overlay102_helpers_18.o
-    Object src/to70_overlay_102_residual_19_extra927_run01.o
-    Object src/overlay102_helpers_19.o
-    Object src/overlay102_ui_layout_r20_run1.o
+    Object src/application/easy_chat_app_view.o
     Object src/to70_overlay_102_residual_20_gap1_extra755_run01.o
     Object src/overlay102_ui_layout_r20_run2.o
     Object src/to90_extra2357_run01.o

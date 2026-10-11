@@ -17,8 +17,8 @@ u32 PlayerProfile_GetTrainerGender(void *);
 void *Heap_Alloc(u32, u32);
 void Heap_Free(void *);
 void SetMasterBrightnessByColor(int, int);
-void ov80_0223B424(void *, u32);
-void ov80_0223B440(void *, int, int, int, int, int, int, int, int);
+void FrontierScanline_Init(void *, u32);
+void FrontierScanline_StartWave(void *, int, int, int, int, int, int, int, int);
 void Sound_SetSceneAndPlayBGM(int, int, int);
 void FrontierScriptContext_Pause(void *, BOOL (*)(void *));
 void PaletteData_FillPaletteInBuffer(void *, int, int, int, int, int);
@@ -52,8 +52,8 @@ typedef struct Ov80R40EffectWork {
 } Ov80R40EffectWork;
 
 void MI_CpuFill8(void *, u8, u32);
-void ov80_0223AC24(int, int, int, void *, int);
-void *ov80_0223B544(u32, const void *, u32);
+void FrontierTransition_StartFlash(int, int, int, void *, int);
+void *FrontierHBlankDma_New(u32, const void *, u32);
 void *ov80_0222D63C(int, int);
 void StartBrightnessTransition(int, int, int, int, int);
 void *SysTask_CreateOnMainQueue(void (*)(void *, void *), void *, u32);

@@ -4,7 +4,7 @@
 #include "global.h"
 #include "filesystem.h"
 typedef struct BgConfig BgConfig;
-void *ov102_021EA268(void *);
+void *EasyChatAppView_GetBgConfig(void *);
 void ov102_021EA80C(void *, NARC *);
 void GfGfxLoader_LoadScrnDataFromOpenNarc(NARC *, s32, void *, u32, u32, u32, BOOL, u32);
 u32 GfGfxLoader_LoadCharDataFromOpenNarc(NARC *, s32, void *, u32, u32, u32, BOOL, u32);
@@ -35,7 +35,7 @@ void ov102_021EA678(void *, BOOL);
 
 #pragma force_active on
 void ov102_021EA41C(u8 *work, NARC *narc) {
-    void *bg = ov102_021EA268(PTR(work, 0));
+    void *bg = EasyChatAppView_GetBgConfig(PTR(work, 0));
     u32 n;
     ov102_021EA80C(work, narc);
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 0, bg, 0, 0, 0, TRUE, 0x23);

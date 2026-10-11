@@ -72,4 +72,4 @@
 .public _fflt
 .public _fsub
 .public _ll_mul
-.public ov80_0223A00C
+.public FrontierBrainIntro_Start
