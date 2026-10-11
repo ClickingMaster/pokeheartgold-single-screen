@@ -11,6 +11,14 @@ include config.mk
 ALL_BUILDDIRS  := $(BUILD_DIR)/lib
 include common.mk
 
+# The toolchain is console-only. Without an X/Wayland display, Wine's display drivers retry for ~8 s in
+# every process start ("Failed to read display config"), which dominates each compile and assemble.
+# Disabling them changes no output. Exported, so sub/, lib/dsprot, lib/syscall and the Python producers
+# get it too; a WINEDLLOVERRIDES already in the environment wins.
+ifneq ($(WINE),)
+export WINEDLLOVERRIDES ?= winex11.drv,winewayland.drv=d
+endif
+
 # crt0 is now C (asm functions); keep basename crt0.o for the lcf.
 CRT0_OBJ := lib/NitroSDK/src/crt0.o
 include filesystem.mk
