@@ -248,7 +248,7 @@ BOOL PokedexApp_RunMainSeq(PokedexAppData *pokedexApp, int *pState) {
 
     BgCellManager_Update(pokedexApp->unk_0008);
     PokedexApp_TickSprites(pokedexApp);
-    SpriteSystem_DrawSprites(pokedexApp->unk_066C);
+    SpriteSystem_DrawSprites(pokedexApp->spriteManager);
     return TRUE;
 }
 

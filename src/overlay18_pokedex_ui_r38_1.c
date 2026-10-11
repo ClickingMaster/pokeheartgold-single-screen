@@ -4,14 +4,7 @@
 
 #include "sprite_system.h"
 
-void PokedexApp_SetSpriteAnim(PokedexAppData *pokedexApp, int index, int animation);
-void PokedexApp_SetSpriteVisible(PokedexAppData *pokedexApp, int index, int draw);
-void PokedexApp_DrawHeightDigits(PokedexAppData *pokedexApp, int index, u16 value);
-void PokedexApp_DrawWeightDigits(PokedexAppData *pokedexApp, int index, u16 value);
-void PokedexApp_UpdateSliderLimitSprites(PokedexAppData *pokedexApp, u32 value, int index);
-u32 PokedexApp_GetSliderValue(PokedexAppData *pokedexApp, int index);
 void PokedexApp_UpdateSliderSprites(PokedexAppData *pokedexApp, u32 first, u32 second, int weight);
-void PokedexApp_UpdateSearchSprites(PokedexAppData *pokedexApp, int state);
 void ov18_021F34C4(PokedexAppData *pokedexApp, int state);
 void ov18_021F34EC(PokedexAppData *pokedexApp, int state);
 void PokedexApp_SetSliderSpritesVisible(PokedexAppData *pokedexApp, int draw);
