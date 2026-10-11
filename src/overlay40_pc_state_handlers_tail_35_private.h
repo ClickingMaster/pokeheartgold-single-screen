@@ -223,8 +223,8 @@ void *NewMsgDataFromNarc(u32 kind, u32 narcId, u32 msgId, u32 heapId);
 void ManagedSprite_SetPositionXY(void *sprite, int x, int y);
 BOOL ov40_0223D5CC(void *p);
 void *ov40_0223D540(void *p);
-int ov39_02227590(void *a0, u32 a1, u8 a2, u32 a3, u32 a4);
-u32 ov39_02227D44(void *work, void **out);
+int GlobalTerminalNet_RequestVideoSearch(void *a0, u32 a1, u8 a2, u32 a3, u32 a4);
+u32 GlobalTerminalNet_GetError(void *work, void **out);
 void ov40_022309DC(void *p, int a1, u32 a2, u32 a3);
 
 void ov40_0223D618(void *p);

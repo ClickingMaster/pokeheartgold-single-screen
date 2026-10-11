@@ -51,7 +51,7 @@ void *sub_020307F8(void);
 u64 sub_0203088C(void *p, int a, int b);
 void *ov40_0223D540(void *p);
 BOOL ov39_0222774C(void *p, u64 value);
-BOOL ov39_02227D44(void *p, u32 *value);
+BOOL GlobalTerminalNet_GetError(void *p, u32 *value);
 BOOL System_GetTouchNew(void);
 void ov40_0222DEAC(void *p);
 void ov40_0223B44C(void *p);
@@ -164,7 +164,7 @@ int ov40_0223A924(void *p) {
         if (!ov40_0223D5CC()) {
             return 0;
         }
-        if (ov39_02227D44(ov40_0223D540(p), &value) == TRUE) {
+        if (GlobalTerminalNet_GetError(ov40_0223D540(p), &value) == TRUE) {
             StopSE(0x57D, 0);
         } else {
             StopSE(0x57D, 0);

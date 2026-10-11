@@ -40,14 +40,14 @@ int ov40_02237D94(void *p) {
         ++;
         break;
     case 3:
-        if (ov39_0222748C(ov40_0223D540(p), PTR(inner, 0x380)) == 1) {
+        if (GlobalTerminalNet_RequestBoxDownload(ov40_0223D540(p), PTR(inner, 0x380)) == 1) {
             WORD(p, 8)
             ++;
         }
         break;
     case 4:
         ov40_0222DFB0(p);
-        if (ov39_02227D44(ov40_0223D540(p), &selected) == 1) {
+        if (GlobalTerminalNet_GetError(ov40_0223D540(p), &selected) == 1) {
             StopSE(0x57D, 0);
             ov40_02230CDC(p, 3, WORD(selected, 0xC), WORD(selected, 4));
             WORD(inner, 0x388) = 0;

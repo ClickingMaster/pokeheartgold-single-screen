@@ -84,9 +84,9 @@
 .public ov00_021EC294
 .public ov00_021EC9D4
 .public ov00_021ECB40
-.public ov39_02228140
-.public ov39_02228308
-.public ov39_02228370
+.public GlobalTerminalConnect_Init
+.public GlobalTerminalConnect_Main
+.public GlobalTerminalConnect_Exit
 
 	.public BgCellManager_NoTransfer
 	.public sBgCellTransferFuncs

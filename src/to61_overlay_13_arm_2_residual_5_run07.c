@@ -52,10 +52,10 @@ extern void WifiSetupSound_Play(int);
 extern void WifiSetupFade_StartDelay(int);
 extern int WifiSetupFade_IsActive(int);
 extern int WifiSetupKeyboard_GetInput(void);
-extern int ov13_0222A070(void);
+extern int WifiSetupKeypad_GetInput(void);
 extern int ov13_0223C1DC(void);
 extern int ov13_0223C1F0(void);
-extern int ov13_0222A0C0(void);
+extern int WifiSetupKeypad_Exists(void);
 extern void WifiSetupButtonBar_Lock(void);
 extern void WifiSetupButtonBar_Close(void);
 extern void WifiSetupButtonBar_Unlock(void);
@@ -65,11 +65,11 @@ extern void WifiSetupKeyboard_SetCanDelete(int);
 extern void WifiSetupKeyboard_SetCanType(int);
 extern void WifiSetupKeyboard_Close(void);
 extern void ov13_0223C198(void);
-extern void ov13_02229D00(void);
-extern void ov13_0222A084(int);
-extern void ov13_0222A098(int);
-extern void ov13_0222A0AC(int);
-extern void ov13_0222A03C(void);
+extern void WifiSetupKeypad_Create(void);
+extern void WifiSetupKeypad_SetCanDelete(int);
+extern void WifiSetupKeypad_SetCanType(int);
+extern void WifiSetupKeypad_SetCanAdvance(int);
+extern void WifiSetupKeypad_Close(void);
 extern void ov13_0223BE6C(int, int, int, int, int);
 extern void *WifiSetupTask_Create(int, void (*)(void *), int, int);
 extern void WifiSetupTask_DestroyLater(int, void *);
@@ -254,22 +254,22 @@ void ov13_02231D9C(void) {
     if (WifiSetupFade_IsActive(0)) {
         return;
     }
-    ov13_02229D00();
+    WifiSetupKeypad_Create();
     WifiSetupSound_Play(20);
     if (ov13_0224F544->count == 0) {
-        ov13_0222A084(0);
-        ov13_0222A0AC(0);
+        WifiSetupKeypad_SetCanDelete(0);
+        WifiSetupKeypad_SetCanAdvance(0);
     } else {
         if (ov13_02232168(26)) {
-            ov13_0222A098(0);
+            WifiSetupKeypad_SetCanType(0);
         }
-        ov13_0222A0AC(0);
+        WifiSetupKeypad_SetCanAdvance(0);
     }
     ov13_0222B8E8(ov13_02231E28);
 }
 
 void ov13_02231E28(void) {
-    if (ov13_0222A070() == 31) {
+    if (WifiSetupKeypad_GetInput() == 31) {
         return;
     }
     ov13_0222B8E8(ov13_02231E48);

@@ -4194,7 +4194,7 @@ _0223FE7A:
 	add r2, #0xdc
 	ldr r1, [r1]
 	ldr r2, [r2]
-	bl ov39_02227720
+	bl GlobalTerminalNet_RequestVideoDownload
 	cmp r0, #1
 	bne _0223FF68
 	ldr r0, [r4, #8]
@@ -4205,7 +4205,7 @@ _0223FEA6:
 	add r0, r4, #0
 	bl ov40_0223D540
 	add r1, sp, #4
-	bl ov39_02227D44
+	bl GlobalTerminalNet_GetError
 	cmp r0, #1
 	ldr r0, _0223FF7C ; =0x0000057D
 	bne _0223FEE0
@@ -5262,7 +5262,7 @@ _02240744:
 	ldr r1, [r6, r2]
 	add r2, r2, #4
 	ldr r2, [r6, r2]
-	bl ov39_02227720
+	bl GlobalTerminalNet_RequestVideoDownload
 	cmp r0, #1
 	bne _02240834
 	ldr r0, [r4, #8]
@@ -5282,7 +5282,7 @@ _02240772:
 	add r0, r4, #0
 	bl ov40_0223D540
 	add r1, sp, #0
-	bl ov39_02227D44
+	bl GlobalTerminalNet_GetError
 	cmp r0, #1
 	ldr r0, _02240844 ; =0x0000057D
 	bne _022407BA
@@ -5400,7 +5400,7 @@ ov40_0224085C: ; 0x0224085C
 	add r1, #0x80
 	ldr r0, [r4, r0]
 	ldr r1, [r1]
-	bl ov39_022271C0
+	bl GlobalTerminalNet_CopyRequestHeader
 	add r0, r4, #0
 	add r0, #0x80
 	ldr r1, [r0]
@@ -5447,7 +5447,7 @@ ov40_022408AC: ; 0x022408AC
 	add r1, r4, #0
 	add r1, #0x80
 	ldr r1, [r1]
-	bl ov39_022271C0
+	bl GlobalTerminalNet_CopyRequestHeader
 	add r0, r4, #0
 	add r0, #0x80
 	ldr r1, [r0]

@@ -20,7 +20,7 @@ void MI_CpuCopy8(const void *src, void *dest, u32 size);
 void ManagedSprite_SetDrawFlag(void *sprite, BOOL draw);
 void ManagedSprite_SetDrawPriority(void *sprite, int priority);
 BOOL SpriteManager_UnloadCharObjById(void *manager, u32 id);
-void ov39_022271C0(const void *src, void *dst);
+void GlobalTerminalNet_CopyRequestHeader(const void *src, void *dst);
 void ov40_0222BF80(void *p, int state);
 void ov40_0222DEAC(void *p);
 void *ov40_0222FEA0(void *p, void *a1, void *a2, u32 a3, u32 a4, int a5);
@@ -129,7 +129,7 @@ void ov40_0223CFA8(void *p) {
     void *inner = PTR(p, 0x860);
 
     PTR(inner, 0x194) = sub_020314A4(0x6d);
-    ov39_022271C0(PTR((u8 *)p + WORD(p, 0x4d4) * 4, 0x2608), PTR(inner, 0x194));
+    GlobalTerminalNet_CopyRequestHeader(PTR((u8 *)p + WORD(p, 0x4d4) * 4, 0x2608), PTR(inner, 0x194));
     PTR(inner, 0x220) = PTR(inner, 0x194);
     PTR(inner, 0x224) = sub_02030920(0x6d);
     MI_CpuCopy8((u8 *)PTR((u8 *)p + WORD(p, 0x4d4) * 4, 0x2608) + 0x80, PTR(inner, 0x224), 0x64);

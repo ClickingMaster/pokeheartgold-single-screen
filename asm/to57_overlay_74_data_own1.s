@@ -33,33 +33,33 @@
 	.extern MysteryGiftApp_Init
 	.extern MysteryGiftApp_Main
 	.extern MysteryGiftApp_Exit
-	.extern ov74_0222D2D4
-	.extern ov74_0222D308
-	.extern ov74_0222D358
-	.extern ov74_0222D414
-	.extern ov74_0222D490
-	.extern ov74_0222D494
-	.extern ov74_0222D4E4
-	.extern ov74_0222D55C
-	.extern ov74_0222D5C4
-	.extern ov74_0222D614
-	.extern ov74_0222D690
-	.extern ov74_0222D774
-	.extern ov74_0222D78C
+	.extern WonderCardAlbum_SelectShare
+	.extern WonderCardAlbum_SelectTrash
+	.extern WonderCardAlbum_ConfirmTrash
+	.extern WonderCardAlbum_ReturnToCardMenu
+	.extern WonderCardAlbum_PrintMessageOnly
+	.extern WonderCardAlbum_PrintCardTitle
+	.extern WonderCardAlbum_PrintGiftStatus
+	.extern WonderCardAlbum_BufferReceiveDate
+	.extern WonderCardAlbum_PrintCardText
+	.extern WonderCardAlbum_PrintSharesLeft
+	.extern WonderCardAlbum_ShowCardMenu
+	.extern WonderCardAlbum_ShowTrashYesNo
+	.extern WonderCardAlbum_ShowShareYesNo
 	.extern ov74_0222D7D0
-	.extern ov74_0222DDFC
-	.extern ov74_0222E1F4
-	.extern ov74_0222EB44
-	.extern ov74_0222EE08
-	.extern ov74_0222EE0C
-	.extern ov74_0222EE58
-	.extern ov74_0222EEB0
-	.extern ov74_0222EF18
-	.extern ov74_0222EF64
-	.extern ov74_0222EF68
-	.extern ov74_0222F598
-	.extern ov74_0222F7D4
-	.extern ov74_0222FB8C
+	.extern WonderCardAlbum_Init
+	.extern WonderCardAlbum_Main
+	.extern WonderCardAlbum_Exit
+	.extern LockCapsuleCard_PrintMessageOnly
+	.extern LockCapsuleCard_PrintCardTitle
+	.extern LockCapsuleCard_PrintStatus
+	.extern LockCapsuleCard_BufferReceiveDate
+	.extern LockCapsuleCard_PrintCardText
+	.extern LockCapsuleCard_PrintNothing
+	.extern LockCapsuleCard_ShowCardMenu
+	.extern LockCapsuleCard_Init
+	.extern LockCapsuleCard_Main
+	.extern LockCapsuleCard_Exit
 	.extern ov74_02230018
 	.extern ov74_02230030
 	.extern ov74_02230070

@@ -137,7 +137,7 @@ void ov74_022360A0(SaveData *saveData);
 int ov74_022360B0(void);
 void ov74_02236128(void);
 int ov74_0223615C(void);
-void ov74_0222EC08(BgConfig *bgConfig, WonderCard *wonderCard, enum HeapID heapID);
+void WonderCardAlbum_DrawCardOnBg(BgConfig *bgConfig, WonderCard *wonderCard, enum HeapID heapID);
 void ov74_02235DC4(BgConfig *bgConfig, WonderCard *wonderCard);
 
 u16 ConnectToRanger_ConvertCharToRanger(u16 c) {
@@ -379,7 +379,7 @@ BOOL ConnectToRanger_Main(OverlayManager *manager, int *state) {
         ConnectToRanger_LoadSubScreenBg(app);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
-        ov74_0222EC08(app->bgConfig, &app->wonderCard, HEAP_ID_83);
+        WonderCardAlbum_DrawCardOnBg(app->bgConfig, &app->wonderCard, HEAP_ID_83);
         ov74_0223539C(1, 6, state, 13);
         app->wonderCard.unk104.unk8E_2 = FALSE;
         break;

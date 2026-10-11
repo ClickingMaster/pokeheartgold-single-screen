@@ -12,13 +12,13 @@ typedef struct {
 } Work;
 
 extern Work *ov13_0224F544;
-extern int ov13_0222A070(void);
+extern int WifiSetupKeypad_GetInput(void);
 extern int ov13_0223261C(void);
 extern int ov13_02232168(int);
 extern void WifiSetupSound_Play(int);
-extern void ov13_0222A084(int);
-extern void ov13_0222A098(int);
-extern void ov13_0222A0AC(int);
+extern void WifiSetupKeypad_SetCanDelete(int);
+extern void WifiSetupKeypad_SetCanType(int);
+extern void WifiSetupKeypad_SetCanAdvance(int);
 extern void ov13_0222B8E8(void *);
 extern void ov13_02232200(void);
 extern void ov13_02232440(void);
@@ -27,7 +27,7 @@ extern void ov13_0223237C(void);
 void ov13_02231E58(void);
 
 void ov13_02231E58(void) {
-    int key = ov13_0222A070();
+    int key = WifiSetupKeypad_GetInput();
     switch (key) {
     case 0:
         return;
@@ -39,17 +39,17 @@ void ov13_02231E58(void) {
             }
             MI_CpuFill8(ov13_0224F544->entries + ov13_0224F544->index * 3, 0, 3);
             if (ov13_0224F544->index == 0 && ov13_0224F544->entries[2] == 0) {
-                ov13_0222A084(0);
+                WifiSetupKeypad_SetCanDelete(0);
             }
-            ov13_0222A098(1);
-            ov13_0222A0AC(0);
+            WifiSetupKeypad_SetCanType(1);
+            WifiSetupKeypad_SetCanAdvance(0);
         }
         break;
     case 17:
         if (ov13_0224F544->index < 3 && ov13_0224F544->entries[ov13_0224F544->index * 3 + 2] != 0) {
             WifiSetupSound_Play(1);
             ov13_0224F544->index++;
-            ov13_0222A0AC(0);
+            WifiSetupKeypad_SetCanAdvance(0);
         }
         break;
     case 18:
@@ -96,14 +96,14 @@ void ov13_02231E58(void) {
                 }
             }
         }
-        ov13_0222A084(1);
+        WifiSetupKeypad_SetCanDelete(1);
         if (ov13_0224F544->index < 3) {
-            ov13_0222A0AC(1);
+            WifiSetupKeypad_SetCanAdvance(1);
         } else {
-            ov13_0222A0AC(0);
+            WifiSetupKeypad_SetCanAdvance(0);
         }
         if (ov13_0224F544->index == 3 && ov13_02232168(26)) {
-            ov13_0222A098(0);
+            WifiSetupKeypad_SetCanType(0);
         }
         break;
     }

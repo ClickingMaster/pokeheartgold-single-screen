@@ -14,7 +14,7 @@ void ManagedSprite_SetDrawFlag(void *sprite, BOOL draw);
 void ov40_0222FF48(void *p, void *a1, void *a2);
 void *ov40_0223D540(void *p);
 void ov39_02227F74(void *p, void *dest);
-void ov39_02227FA8(void *p, void *dest1, void *dest2);
+void GlobalTerminalNet_GetRankings(void *p, void *dest1, void *dest2);
 void MI_CpuCopy8(const void *src, void *dest, u32 size);
 void FillWindowPixelBuffer(void *window, u8 fillValue);
 void *NewString_ReadMsgData(void *msgData, int msgId);

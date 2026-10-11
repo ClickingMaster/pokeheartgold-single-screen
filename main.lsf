@@ -3557,25 +3557,10 @@ Overlay OVY_13
     Object src/wifi_setup_keyboard_layout.o
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own5.o
     Object src/wifi_setup_keyboard_view.o
-    Object src/to90_extra1968_run01.o
-    Object src/to65_ov13_extra03_run02.o
-    Object src/to80_extra1912_run01.o
-    Object src/to80_extra1912_run02.o
-    Object src/to80_extra1912_run03.o
-    Object src/to80_extra1912_run04.o
-    Object src/to65_ov13_extra03_run03.o
-    Object src/to90_extra2455_run01.o
-    Object src/to90_extra2115_run01.o
-    Object src/op90_to90_extra2115_residual_2_r01.o
-    Object src/to65_ov13_extra03_run04.o
-    Object src/to90_extra2530_run01.o
-    Object src/op90_to90_extra2552_residual_1_r01.o
+    Object src/wifi_setup_keypad.o
+    Object src/wifi_setup_keypad_layout.o
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own6.o
-    Object src/to90_extra2552_run01.o
-    Object src/to65_ov13_extra03_run05.o
-    Object src/to90_extra2335_run01.o
-    Object src/op90_to90_extra2335_residual_1_r01.o
-    Object src/op90_op90_to90_extra2335_residual_1_residual_1_r01.o
+    Object src/wifi_setup_keypad_view.o
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own2.o
     Object src/to90_extra2116_run01.o
     Object src/to65_ov13_extra03_run06.o
@@ -4390,58 +4375,9 @@ Overlay OVY_38
 Overlay OVY_39
 {
     After OVY_38
-    Object src/overlay39_helpers_1.o
-    Object src/to70_overlay_39_thumb_extra370_run01.o
-    Object src/overlay39_helpers_2.o
-    Object src/to70_overlay_39_thumb_residual_2_extra234_run01.o
-    Object src/op90_to70_overlay_39_thumb_residual_2_extra234_residual_1_r01.o
-    Object src/to70_overlay_39_thumb_residual_2_extra234_run02.o
-    Object src/overlay39_helpers_3.o
-    Object src/to70_overlay_39_thumb_residual_3_extra956_run01.o
-    Object src/overlay39_helpers_4.o
-    Object src/to70_overlay_39_thumb_residual_4_extra781_run01.o
-    Object src/overlay39_helpers_5.o
-    Object src/r40_overlay_39_thumb_residual_5_run1.o
-    Object src/overlay39_helpers_6.o
-    Object src/to47_overlay39_state_control_r6.o
-    Object src/overlay39_helpers_7.o
-    Object src/to80_extra1518_run01.o
-    Object src/overlay39_helpers_8.o
-    Object src/to90_extra2014_run01.o
-    Object src/overlay39_helpers_9.o
-    Object src/to70_overlay_39_thumb_residual_9_extra782_run01.o
-    Object src/overlay39_helpers_10.o
-    Object src/to46_overlay39_heap_arena.o
-    Object src/overlay39_helpers_11.o
-    Object src/to70_overlay_39_thumb_residual_11_extra954_run01.o
-    Object src/overlay39_helpers_12.o
-    Object src/to70_overlay_39_thumb_residual_12_extra955_run01.o
-    Object src/overlay39_helpers_13.o
-    Object src/to80_extra1775_run01.o
-    Object src/overlay39_helpers_14.o
-    Object src/op90_overlay_39_thumb_residual_14_r01.o
-    Object src/overlay39_helpers_15.o
-    Object src/to90_extra1926_run01.o
-    Object src/overlay39_helpers_16.o
-    Object src/to91_ov39_scene_init456.o
-    Object src/overlay39_lifecycle_r16.o
-    Object src/overlay39_helpers_17.o
-    Object src/to54_atomic_h03_01_to54_overlay39_palette.o
-    Object src/to53_overlay39_palette_task.o
-    Object src/overlay39_helpers_18.o
-    Object src/overlay39_text_1.o
-    Object src/overlay39_helpers_19.o
-    Object src/to70_overlay_39_thumb_residual_19_extra780_run01.o
-    Object src/overlay39_helpers_20.o
-    Object src/r40_overlay_39_thumb_residual_20_run1.o
-    Object src/overlay39_helpers_21.o
-    Object src/to70_to70_overlay_39_thumb_residual_21_extra313_residual_1_extra1269_run01.o
-    Object src/to70_overlay_39_thumb_residual_21_extra313_run01.o
-    Object src/overlay39_helpers_22.o
-    Object src/r40_overlay_39_thumb_residual_22_run1.o
-    Object src/overlay39_helpers_23.o
-    Object src/overlay39_record_state_r23.o
-    Object asm/overlay_39_thumb_residual_23_data.o
+    Object src/global_terminal_net.o
+    Object src/global_terminal_connect.o
+    Object asm/global_terminal_data.o
     Object lib/NitroDWC/asm/to70_overlay_39_arm_extra06_anchor.o
     Object src/to90_extra2531_run01.o
     Object src/to70_overlay_39_arm_extra06_run01.o
@@ -6240,64 +6176,8 @@ Overlay OVY_74
     Object src/application/main_menu/connect_to_ranger.o
 Object src/application/main_menu/mystery_gift_wireless.o
     Object src/application/main_menu/mystery_gift_app.o
-    Object src/overlay74_thumb_c_0222cffc_0222cffc.o
-    Object src/to70_overlay74_thumb_residual_0222d024_0222d024_extra727_run01.o
-    Object src/overlay74_thumb_c_0222d098_0222d104.o
-    Object src/to80_extra1685_run01.o
-    Object src/overlay74_thumb_c_0222d1d4_0222d1d4.o
-    Object src/to70_overlay74_thumb_residual_0222d248_0222d248_extra538_run01.o
-    Object src/overlay74_thumb_c_0222d2d4_0222d308.o
-    Object src/to70_overlay74_thumb_residual_0222d358_0222d358_extra539_run01.o
-    Object src/overlay74_thumb_c_0222d414_0222d414.o
-    Object src/to70_overlay74_thumb_residual_0222d448_0222d448_extra917_run01.o
-    Object src/overlay74_thumb_c_0222d490_0222d494.o
-    Object src/to90_extra2471_run01.o
-    Object src/overlay74_thumb_c_0222d55c_0222d614.o
-    Object src/op90_overlay74_thumb_residual_0222d690_0222d690_r01.o
-    Object src/overlay74_thumb_c_0222d774_0222d7d0.o
-    Object src/to70_overlay74_thumb_residual_0222d7f0_0222d9e0_extra72_run01.o
-    Object src/op90_to70_to70_overlay74_thumb_residual_0222d7f0_0222d9e0_extra72_residual_1_extra1250_residual_1_r01.o
-    Object src/to70_to70_overlay74_thumb_residual_0222d7f0_0222d9e0_extra72_residual_1_extra1250_run01.o
-    Object src/overlay74_thumb_c_0222daf8_0222daf8.o
-    Object src/to58_bank_ov74_db30_dc60.o
-    Object src/op90_to58_bank_ov74_dcd4_residual_r01.o
-    Object src/overlay74_thumb_c_0222ddfc_0222de68.o
-    Object src/to70_overlay74_thumb_residual_0222de8c_0222de8c_extra728_run01.o
-    Object src/overlay74_thumb_c_0222def0_0222def0.o
-    Object src/op90_overlay74_thumb_residual_0222df2c_0222df2c_r01.o
-    Object src/overlay74_thumb_c_0222e03c_0222e03c.o
-    Object src/overlay74_thumb_e060_run1.o
-    Object src/to56_overlay74_mystery_gift_state_w20.o
-    Object src/overlay74_thumb_e060_run2.o
-    Object src/overlay74_thumb_c_0222e85c_0222e898.o
-    Object src/to70_to70_overlay74_thumb_residual_0222e8b4_0222ea88_extra73_residual_1_extra1251_run01.o
-    Object src/to70_overlay74_thumb_residual_0222e8b4_0222ea88_extra73_run01.o
-    Object src/overlay74_thumb_c_0222eb28_0222eb28.o
-    Object src/to70_to70_overlay74_thumb_residual_0222eb44_0222ec60_extra201_residual_1_extra1252_run01.o
-    Object src/to90_extra2523_run01.o
-    Object src/to70_overlay74_thumb_residual_0222eb44_0222ec60_extra201_run01.o
-    Object src/overlay74_thumb_c_0222ecd4_0222ecec.o
-    Object src/to70_overlay74_thumb_residual_0222ed04_0222edc0_extra344_run01.o
-    Object src/overlay74_thumb_c_0222ee08_0222ee58.o
-    Object src/to70_overlay74_thumb_residual_0222eeb0_0222eeb0_extra729_run01.o
-    Object src/overlay74_thumb_c_0222ef18_0222ef64.o
-    Object src/to90_extra2170_run01.o
-    Object src/overlay74_thumb_c_0222eff0_0222eff0.o
-    Object src/op90_to70_overlay74_thumb_residual_0222f024_0222f1bc_extra87_residual_1_r01.o
-    Object src/to70_overlay74_thumb_residual_0222f024_0222f1bc_extra87_run01.o
-    Object src/overlay74_thumb_c_0222f2d4_0222f2d4.o
-    Object src/to70_to70_overlay74_thumb_residual_0222f314_0222f478_extra88_residual_1_extra1253_run01.o
-    Object src/to70_overlay74_thumb_residual_0222f314_0222f478_extra88_run01.o
-    Object src/op90_to70_overlay74_thumb_residual_0222f314_0222f478_extra88_residual_2_r01.o
-    Object src/overlay74_thumb_c_0222f598_0222f600.o
-    Object src/to70_overlay74_thumb_residual_0222f624_0222f624_extra730_run01.o
-    Object src/overlay74_thumb_c_0222f688_0222f688.o
-    Object src/op90_to90_extra1961_residual_1_r01.o
-    Object src/to90_extra1961_run01.o
-    Object src/to56_w14_overlay74_exit.o
-    Object src/to90_extra2281_run01.o
-    Object src/to56_w14_overlay74_graphics.o
-    Object src/to91_gift180_run01.o
+    Object src/application/main_menu/wonder_card_album.o
+    Object src/application/main_menu/lock_capsule_card.o
     Object src/overlay74_thumb_c_0222fe4c_0222fe4c.o
     Object src/to80_extra1763_run01.o
     Object src/to80_extra1763_run02.o

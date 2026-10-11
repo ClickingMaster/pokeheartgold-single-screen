@@ -23,17 +23,17 @@ BOOL ov40_0223D5CC(void *p) {
     if (PTR(p, 0x420) == NULL) {
         return FALSE;
     }
-    return ov39_02227DB8(ov40_0223D540(p));
+    return GlobalTerminalNet_IsIdle(ov40_0223D540(p));
 }
 
 void ov40_0223D5E8(void *p) {
     if (PTR(p, 0x420) != NULL) {
-        ov39_02227778(ov40_0223D540(p));
+        GlobalTerminalNet_Update(ov40_0223D540(p));
     }
 }
 
 void ov40_0223D600(void *p) {
     if (PTR(p, 0x420) != NULL) {
-        ov39_022272EC(ov40_0223D540(p));
+        GlobalTerminalNet_Free(ov40_0223D540(p));
     }
 }

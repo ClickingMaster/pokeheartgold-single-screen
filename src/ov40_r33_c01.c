@@ -14,7 +14,7 @@ void ManagedSprite_SetDrawFlag(void *sprite, BOOL draw);
 void ov40_0222FF48(void *p, void *a1, void *a2);
 void *ov40_0223D540(void *p);
 void ov39_02227F74(void *p, void *dest);
-void ov39_02227FA8(void *p, void *dest1, void *dest2);
+void GlobalTerminalNet_GetRankings(void *p, void *dest1, void *dest2);
 void MI_CpuCopy8(const void *src, void *dest, u32 size);
 void FillWindowPixelBuffer(void *window, u8 fillValue);
 void *NewString_ReadMsgData(void *msgData, int msgId);
@@ -60,7 +60,7 @@ void ov40_0223A360(void *p, int *mode) {
         PTR(inner, 0x718) = inner + 0x638;
     } else {
         void *src = ov40_0223D540(p);
-        ov39_02227FA8(src, inner + 0x714, inner + 0x718);
+        GlobalTerminalNet_GetRankings(src, inner + 0x714, inner + 0x718);
         MI_CpuCopy8(PTR(inner, 0x714), inner + 0xe0, 0x558);
         MI_CpuCopy8(PTR(inner, 0x718), inner + 0x638, 0xd8);
     }

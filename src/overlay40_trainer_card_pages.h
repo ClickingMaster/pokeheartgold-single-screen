@@ -36,9 +36,9 @@ void sub_02087A08(void *p, int a, int b);
 void sub_02087A84(void *p, int a, int b);
 
 int ov39_0222774C(void *p, u32 lo, u32 hi);
-int ov39_02227D44(void *p, u32 *out);
-u64 ov39_02227FEC(void *p);
-void ov39_022280D4(void *p, void *out);
+int GlobalTerminalNet_GetError(void *p, u32 *out);
+u64 GlobalTerminalNet_GetUploadedVideoNumber(void *p);
+void GlobalTerminalNet_GetDownloadedVideo(void *p, void *out);
 
 void ov40_0222BF64(void *p, u32 value, BOOL valid, u32 *out);
 void ov40_0222BF80(void *p, int value);
@@ -120,7 +120,7 @@ void ov40_0222DFB0(void *p);
 void ov40_0222FB28(void *p, int a);
 void ov40_02230CDC(void *p, int a, u32 b, u32 c);
 void ov40_02242E4C(void *w, void *p);
-int ov39_02227534(void *a, void *b);
+int GlobalTerminalNet_RequestVideoUpload(void *a, void *b);
 BOOL sub_0202FC90(void *a, int b, int *c, void *d, int e);
 void *sub_020314A4(int a);
 void sub_020314BC(void *a);

@@ -159,7 +159,7 @@ void ov40_0223655C(void *w) {
 
 void ov40_02236578(void *a, void *b, u32 c, void *d) {
     memset(d, 0, 0x19C);
-    ov39_02227088(a, b, c, d, 0x6D);
+    GlobalTerminalNet_PackBoxData(a, b, c, d, 0x6D);
 }
 
 int ov40_022365A0(void *p) {

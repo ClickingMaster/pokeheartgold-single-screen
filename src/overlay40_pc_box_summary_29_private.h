@@ -24,7 +24,7 @@ BOOL sub_020878B8(void *p, s16 x, s16 y);
 void sub_020879E0(void *p, int a);
 void sub_02087A08(void *p, int a, int b);
 
-void ov39_02227088(void *a, void *b, u32 c, void *d, int heapId);
+void GlobalTerminalNet_PackBoxData(void *a, void *b, u32 c, void *d, int heapId);
 
 void ov40_0222BF80(void *p, int value);
 void ov40_0222D73C(void *p, int a);

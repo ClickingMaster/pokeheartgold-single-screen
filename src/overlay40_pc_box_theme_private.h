@@ -78,7 +78,7 @@ u32 GameStats_GetCapped(void *gameStats, int statIdx);
 int sub_02087E1C(void *p);
 BOOL sub_020879E0(void *p, int flag);
 
-void *ov39_02227F14(void *a, void *b, int c);
+void *GlobalTerminalNet_GetBoxList(void *a, void *b, int c);
 
 void ov40_0222BF64(void *p, u32 value, BOOL valid, u32 *out);
 void ov40_0222BF80(void *p, int value);

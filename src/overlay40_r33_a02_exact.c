@@ -106,7 +106,7 @@ int ov40_0223A640(void *p) {
 
         void *result = ov40_0223D540(p);
         entry = PTR((u8 *)p + WORD(p, 0x4D4) * 4, 0x2608);
-        if (ov39_02227720(result, PTR(entry, 0xD8), PTR(entry, 0xDC)) == TRUE) {
+        if (GlobalTerminalNet_RequestVideoDownload(result, PTR(entry, 0xD8), PTR(entry, 0xDC)) == TRUE) {
             WORD(p, 8)
             ++;
         }
@@ -118,7 +118,7 @@ int ov40_0223A640(void *p) {
 
         ov40_0222DFB0(p);
         ctx = ov40_0223D540(p);
-        if (ov39_02227D44(ctx, &result) == TRUE) {
+        if (GlobalTerminalNet_GetError(ctx, &result) == TRUE) {
             StopSE(0x57D, 0);
             ov40_02230CDC(p, 8, WORD(result, 0xC), WORD(result, 4));
             WORD(p, 8)

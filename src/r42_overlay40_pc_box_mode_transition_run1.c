@@ -8,7 +8,7 @@ int ov40_0223512C(void *work) {
         S32(inner, 0xC) = 0;
         {
             void *resource = PTR(inner, 0x23C + S32(inner, 0x234) * 4);
-            ov39_02227080((u8 *)resource + 0x80, PTR(inner, 0x238));
+            GlobalTerminalNet_UnpackDressUpPhoto((u8 *)resource + 0x80, PTR(inner, 0x238));
             PTR(inner, 0x228) = ov41_0224B530((u8 *)inner + 0x218, PTR(inner, 0x238));
         }
         ov41_0224B5D0(PTR(inner, 0x228), 0);

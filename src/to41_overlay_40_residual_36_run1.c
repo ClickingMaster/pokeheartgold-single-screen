@@ -45,7 +45,7 @@ int ov40_0223FD8C(void *p) {
         break;
     case 3: {
         void *session = ov40_0223D540(p);
-        if (ov39_02227720(session,
+        if (GlobalTerminalNet_RequestVideoDownload(session,
                 PTR(PTR(p, 0x2608 + WORD(p, 0x4d4) * 4), 0xd8),
                 PTR(PTR(p, 0x2608 + WORD(p, 0x4d4) * 4), 0xdc))
             == 1) {
@@ -55,7 +55,7 @@ int ov40_0223FD8C(void *p) {
         break;
     }
     case 4:
-        if (ov39_02227D44(ov40_0223D540(p), &result) == 1) {
+        if (GlobalTerminalNet_GetError(ov40_0223D540(p), &result) == 1) {
             StopSE(0x57d, 0);
             ov40_0222DFB0(p);
             ov40_02230CDC(p, 8, PTR(result, 0xc), PTR(result, 4));
@@ -388,7 +388,7 @@ int ov40_022406C8(void *p) {
         if (!ov40_0223D5CC(p)) {
             return 0;
         }
-        if (ov39_02227720(ov40_0223D540(p), PTR(obj, 0x2cc), PTR(obj, 0x2d0)) == 1) {
+        if (GlobalTerminalNet_RequestVideoDownload(ov40_0223D540(p), PTR(obj, 0x2cc), PTR(obj, 0x2d0)) == 1) {
             WORD(p, 8)
             ++;
         }
@@ -398,7 +398,7 @@ int ov40_022406C8(void *p) {
             return 0;
         }
         ov40_0222DE40(p);
-        if (ov39_02227D44(ov40_0223D540(p), &result) == 1) {
+        if (GlobalTerminalNet_GetError(ov40_0223D540(p), &result) == 1) {
             StopSE(0x57d, 0);
             *(vu16 *)0x04000050 = 0;
             ov40_02230CDC(p, 8, PTR(result, 0xc), PTR(result, 4));
@@ -442,7 +442,7 @@ void ov40_0224085C(void *p) {
     void *w = PTR(p, 0x860);
 
     PTR(w, 0x80) = sub_020314A4(0x6d);
-    ov39_022271C0(PTR(w, 0x4bc), PTR(w, 0x80));
+    GlobalTerminalNet_CopyRequestHeader(PTR(w, 0x4bc), PTR(w, 0x80));
     PTR(w, 0x10c) = PTR(w, 0x80);
     PTR(w, 0x110) = sub_02030920(0x6d);
     MI_CpuCopy8((u8 *)PTR(w, 0x4bc) + 0x80, PTR(w, 0x110), 0x64);
@@ -452,7 +452,7 @@ void ov40_022408AC(void *p) {
     void *w = PTR(p, 0x860);
 
     PTR(w, 0x80) = sub_020314A4(0x6d);
-    ov39_022271C0(PTR(p, 0x2608 + WORD(p, 0x4d4) * 4), PTR(w, 0x80));
+    GlobalTerminalNet_CopyRequestHeader(PTR(p, 0x2608 + WORD(p, 0x4d4) * 4), PTR(w, 0x80));
     PTR(w, 0x10c) = PTR(w, 0x80);
     PTR(w, 0x110) = sub_02030920(0x6d);
     MI_CpuCopy8((u8 *)PTR(p, 0x2608 + WORD(p, 0x4d4) * 4) + 0x80, PTR(w, 0x110), 0x64);

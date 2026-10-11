@@ -783,7 +783,7 @@ int ov40_0223F028(void *p) {
                 v = 0xFE;
             }
         }
-        if (ov39_02227590(ov40_0223D540(p), HALF(inner, 0x4C0), v, BYTE(inner, 0x4C3), BYTE(inner, 0x4C4)) == 1) {
+        if (GlobalTerminalNet_RequestVideoSearch(ov40_0223D540(p), HALF(inner, 0x4C0), v, BYTE(inner, 0x4C3), BYTE(inner, 0x4C4)) == 1) {
             WORD(p, 8)
             ++;
         }
@@ -791,7 +791,7 @@ int ov40_0223F028(void *p) {
     }
     case 2: {
         void *q;
-        if (ov39_02227D44(ov40_0223D540(p), &q) == 1) {
+        if (GlobalTerminalNet_GetError(ov40_0223D540(p), &q) == 1) {
             StopSE(0x57D, 0);
             ov40_022309DC(p, 7, WORD(q, 0xC), WORD(q, 4));
             WORD(p, 0x4138) = 0;

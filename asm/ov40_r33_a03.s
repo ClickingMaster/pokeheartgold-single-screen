@@ -14,7 +14,7 @@
 	.public System_GetTouchNew
 	.public TouchHitboxController_Destroy
 	.public ov39_0222774C
-	.public ov39_02227D44
+	.public GlobalTerminalNet_GetError
 	.public ov40_0222BF64
 	.public ov40_0222BF80
 	.public ov40_0222D66C
@@ -304,7 +304,7 @@ _0223AA5C:
 	add r0, r4, #0
 	bl ov40_0223D540
 	add r1, sp, #4
-	bl ov39_02227D44
+	bl GlobalTerminalNet_GetError
 	cmp r0, #1
 	ldr r0, _0223AC14 ; =0x0000057D
 	bne _0223AA76

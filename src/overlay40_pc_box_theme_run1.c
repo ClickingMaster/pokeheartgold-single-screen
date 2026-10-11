@@ -23,7 +23,7 @@ void ov40_02238EBC(void *p, u32 *a) {
         WORD(w, 0x388) = 0;
         return;
     }
-    PTR(w, 0x388) = ov39_02227F14(ov40_0223D540(p), (u8 *)w + 0x38C, 0x14);
+    PTR(w, 0x388) = GlobalTerminalNet_GetBoxList(ov40_0223D540(p), (u8 *)w + 0x38C, 0x14);
     MI_CpuCopy8((u8 *)w + 0x38C, (u8 *)w + 0x3DC, 0x2A30);
 }
 

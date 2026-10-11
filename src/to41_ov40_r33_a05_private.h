@@ -62,7 +62,7 @@ BOOL ov39_022276A4(void *);
 BOOL ov39_022276E0(void *);
 BOOL ov39_02227648(void *);
 BOOL ov39_022275E8(void *);
-BOOL ov39_02227D44(void *, void **);
+BOOL GlobalTerminalNet_GetError(void *, void **);
 void ov40_0222DFB0(void *);
 void ov40_02230CDC(void *, int, int, int);
 void ov40_0222D88C(void *);

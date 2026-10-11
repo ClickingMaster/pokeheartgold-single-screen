@@ -1,5 +1,0 @@
-#pragma force_active on
-#include "global.h"
-#pragma force_active on
-void *String_New(int,int);void String_Delete(void *),PCStorage_GetBoxName(void *,int,void *),CopyStringToU16Array(void *,void *,int),ov39_02227088(void *,void *,int,u8 *,int);u32 PCStorage_GetMonDataByIndexPair(void *,int,int,int,void *);int PCStorage_GetBoxWallpaper(void *,int);u16 SaveArray_CalcCRC16(void *,void *,u32);
-void ov39_02227088(void *save,void *storage,int box,u8 *out,int heap){void *name;int i;u8 *p16,*p32;MI_CpuFill8(out,0,412);name=String_New(60,heap);PCStorage_GetBoxName(storage,box,name);CopyStringToU16Array(name,out,20);String_Delete(name);for(i=0,p16=out,p32=out;i<30;i++,p16+=2,p32+=4){*(u16 *)(p16+40)=PCStorage_GetMonDataByIndexPair(storage,box,i,5,NULL);*(u32 *)(p32+100)=PCStorage_GetMonDataByIndexPair(storage,box,i,0,NULL);*(u32 *)(p32+220)=PCStorage_GetMonDataByIndexPair(storage,box,i,7,NULL);if(PCStorage_GetMonDataByIndexPair(storage,box,i,174,NULL)==494)*(u32 *)(out+340)|=1<<i;out[344+i]=PCStorage_GetMonDataByIndexPair(storage,box,i,112,NULL);}out[374]=PCStorage_GetBoxWallpaper(storage,box);out[375]=0;*(u16 *)(out+408)=SaveArray_CalcCRC16(save,out,408);}

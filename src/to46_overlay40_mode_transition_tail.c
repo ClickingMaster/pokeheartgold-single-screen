@@ -2,7 +2,7 @@
 
 void ov40_0222E79C(void *, void *);
 void ov40_0222E7DC(void *, int);
-void ov39_022271C0(void *, void *);
+void GlobalTerminalNet_CopyRequestHeader(void *, void *);
 void ov40_02235868(void *, u32);
 int ov40_02235434(void *);
 int ov40_02235644(void *);
@@ -44,13 +44,13 @@ int ov40_02235434(void *p) {
     case 2:
         if (S32(w, 0xC) == 0) {
             ov40_02230964(p, 1);
-            ov39_022271C0(PTR((u8 *)w + S32(w, 0x234) * 4, 0x23C), PTR(w, 0x250));
+            GlobalTerminalNet_CopyRequestHeader(PTR((u8 *)w + S32(w, 0x234) * 4, 0x23C), PTR(w, 0x250));
             ov40_0222E79C((u8 *)w + 0x250, p);
             ov40_0222E7DC((u8 *)w + 0x250, 0);
             ov40_02230964(p, 0);
             ov40_022307DC(p, 0x50, 3);
         } else {
-            ov39_02227080((u8 *)PTR((u8 *)w + S32(w, 0x234) * 4, 0x23C) + 0x80, PTR(w, 0x238));
+            GlobalTerminalNet_UnpackDressUpPhoto((u8 *)PTR((u8 *)w + S32(w, 0x234) * 4, 0x23C) + 0x80, PTR(w, 0x238));
             PTR(w, 0x228) = ov41_0224B530((u8 *)w + 0x218, PTR(w, 0x238));
             ov41_0224B5D0(PTR(w, 0x228), 0);
             ov40_02235940();
@@ -131,7 +131,7 @@ int ov40_02235644(void *p) {
     case 2:
         ov40_02230964(p, 1);
         if (S32(w, 0xC) == 0) {
-            ov39_02227080((u8 *)PTR((u8 *)w + S32(w, 0x234) * 4, 0x23C) + 0x80, PTR(w, 0x238));
+            GlobalTerminalNet_UnpackDressUpPhoto((u8 *)PTR((u8 *)w + S32(w, 0x234) * 4, 0x23C) + 0x80, PTR(w, 0x238));
             PTR(w, 0x228) = ov41_0224B530((u8 *)w + 0x218, PTR(w, 0x238));
             ov41_0224B5D0(PTR(w, 0x228), 0);
             ov40_02235940();
@@ -141,7 +141,7 @@ int ov40_02235644(void *p) {
             GfGfx_EngineATogglePlanes(4, 0);
             GfGfx_EngineATogglePlanes(1, 0);
         } else {
-            ov39_022271C0(PTR((u8 *)w + S32(w, 0x234) * 4, 0x23C), PTR(w, 0x250));
+            GlobalTerminalNet_CopyRequestHeader(PTR((u8 *)w + S32(w, 0x234) * 4, 0x23C), PTR(w, 0x250));
             ov40_0222E79C((u8 *)w + 0x250, p);
             ov40_0222E7DC((u8 *)w + 0x250, 0);
             ov40_022307DC(p, 0x50, 3);

@@ -125,7 +125,7 @@ int ov40_022417DC(void *p) {
         sub_0202FC90(PTR(p, 0x830), 0x6D, &a, 0, 0);
         PTR(w, 0x1D0) = sub_020314A4(0x6D);
         sub_020314C4(PTR(w, 0x1D0), PTR(p, 0x830));
-        if (ov39_02227534(ov40_0223D540(p), PTR(w, 0x1D0)) == 1) {
+        if (GlobalTerminalNet_RequestVideoUpload(ov40_0223D540(p), PTR(w, 0x1D0)) == 1) {
             sub_020314BC(PTR(w, 0x1D0));
             WORD(p, 8)
             ++;
@@ -137,7 +137,7 @@ int ov40_022417DC(void *p) {
         }
         sub_0202FC24();
         ov40_0222DFB0(p);
-        if (ov39_02227D44(ov40_0223D540(p), (u32 *)&q) == 1) {
+        if (GlobalTerminalNet_GetError(ov40_0223D540(p), (u32 *)&q) == 1) {
             StopSE(0x57D, 0);
             ov40_02230CDC(p, 6, WORD(q, 0xC), WORD(q, 4));
             sub_020879E0(PTR(p, 0x6F0), 0);
@@ -759,7 +759,7 @@ int ov40_022425E8(void *p) {
         if (!ov40_0223D5CC(p)) {
             return 0;
         }
-        if (ov39_02227D44(ov40_0223D540(p), &tmp) == 1) {
+        if (GlobalTerminalNet_GetError(ov40_0223D540(p), &tmp) == 1) {
             StopSE(0x57D, 0);
         } else {
             StopSE(0x57D, 0);
@@ -1004,7 +1004,7 @@ BOOL ov40_02242CFC(void *p) {
 void ov40_02242DF0(void *p, u32 *flag) {
     void *w = PTR(p, 0x860);
     if (*flag != 1) {
-        u64 v = ov39_02227FEC(ov40_0223D540(p));
+        u64 v = GlobalTerminalNet_GetUploadedVideoNumber(ov40_0223D540(p));
         WORD(w, 0x4B0) = (u32)v;
         WORD(w, 0x4B4) = (u32)(v >> 32);
     }
@@ -1012,7 +1012,7 @@ void ov40_02242DF0(void *p, u32 *flag) {
 
 void ov40_02242E14(void *p, u32 *flag) {
     if (*flag != 1) {
-        ov39_022280D4(ov40_0223D540(p), (u8 *)p + 0x8B4);
+        GlobalTerminalNet_GetDownloadedVideo(ov40_0223D540(p), (u8 *)p + 0x8B4);
         ov40_0222FB40(p);
         BYTE(p, 0x2604) = BYTE(PTR(p, 0x8B4), 0xA7);
     }

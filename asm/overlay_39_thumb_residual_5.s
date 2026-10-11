@@ -4,120 +4,120 @@
 	.include "global.inc"
 
 	.text
-	.public _0222AB80
-	.public ov39_02227088
+	.public sGlobalTerminalNetOsHeap
+	.public GlobalTerminalNet_PackBoxData
 	.public ov39_022271CC
-	.public ov39_02227208
-	.public ov39_022272EC
-	.public ov39_022273B0
-	.public ov39_02227420
-	.public ov39_022274D4
-	.public ov39_02227534
-	.public ov39_02227590
+	.public GlobalTerminalNet_Init
+	.public GlobalTerminalNet_Free
+	.public GlobalTerminalNet_RequestDressUpUpload
+	.public GlobalTerminalNet_RequestBoxUpload
+	.public GlobalTerminalNet_RequestRankings
+	.public GlobalTerminalNet_RequestVideoUpload
+	.public GlobalTerminalNet_RequestVideoSearch
 	.public ov39_022275E8
 	.public ov39_02227648
-	.public ov39_02227778
-	.public ov39_022278D4
-	.public ov39_02227A5C
-	.public ov39_02227B24
-	.public ov39_02227B5C
-	.public ov39_02227D5C
-	.public ov39_02227DE4
-	.public ov39_02227DEC
-	.public ov39_02227E8C
-	.public ov39_02227F14
-	.public ov39_02227FEC
-	.public ov39_0222801C
-	.public ov39_022280D4
-	.public ov39_02228140
-	.public ov39_02228308
-	.public ov39_02228370
-	.public ov39_02228418
-	.public ov39_02228440
-	.public ov39_022285CC
-	.public ov39_022287F8
-	.public ov39_022288A0
-	.public ov39_02228964
-	.public ov39_0222899C
-	.public ov39_022289D0
-	.public ov39_02228A34
-	.public ov39_02228AC0
-	.public ov39_02228B04
-	.public ov39_02228BAC
-	.public ov39_02228C78
-	.public ov39_02228D0C
+	.public GlobalTerminalNet_Update
+	.public GlobalTerminalNet_SendPendingRequest
+	.public GlobalTerminalNet_PollStatus
+	.public GlobalTerminalNet_SaveUploadedVideoNumber
+	.public GlobalTerminalNet_HandleResponse
+	.public GlobalTerminalNet_ShowErrorMessage
+	.public GlobalTerminalNet_GetSequence
+	.public GlobalTerminalNet_CreateOsHeap
+	.public GlobalTerminalNet_GetDressUpList
+	.public GlobalTerminalNet_GetBoxList
+	.public GlobalTerminalNet_GetUploadedVideoNumber
+	.public GlobalTerminalNet_GetVideoList
+	.public GlobalTerminalNet_GetDownloadedVideo
+	.public GlobalTerminalConnect_Init
+	.public GlobalTerminalConnect_Main
+	.public GlobalTerminalConnect_Exit
+	.public GlobalTerminalConnect_VBlankCB
+	.public GlobalTerminalConnect_InitBgs
+	.public GlobalTerminalConnect_LoadGraphics
+	.public GlobalTerminalConnect_PaletteCycleTask
+	.public GlobalTerminalConnect_CreateWindows
+	.public GlobalTerminalConnect_GetAlignedX
+	.public GlobalTerminalConnect_PrintAligned
+	.public GlobalTerminalConnect_ShowErrorWindow
+	.public GlobalTerminalConnect_ShowErrorCode
+	.public GlobalTerminalConnect_CreateYesNoPrompt
+	.public GlobalTerminalConnect_PrintMessage
+	.public GlobalTerminalConnect_StateAskConnect
+	.public GlobalTerminalConnect_StateStartConnect
+	.public GlobalTerminalConnect_StateWaitConnect
 	.public ov39_02228DA0
-	.public ov39_02228E54
-	.public ov39_02228EC8
-	.public ov39_02228F18
-	.public ov39_02228F54
-	.public ov39_02228FC8
-	.public ov39_022290A4
-	.public ov39_0222915C
-	.public ov39_02229224
-	.public ov39_0222A8B0
-	.public ov39_0222A8B4
-	.public ov39_0222A8C0
-	.public ov39_0222A8D4
-	.public ov39_0222A8E4
-	.public ov39_0222A90C
-	.public ov39_0222A944
-	.public ov39_0222AA20
-	.public ov39_02227060
-	.public ov39_02227080
-	.public ov39_02227188
-	.public ov39_022271A4
-	.public ov39_022271C0
-	.public ov39_02227334
-	.public ov39_02227348
-	.public ov39_02227364
-	.public ov39_0222738C
-	.public ov39_022273F8
-	.public ov39_0222748C
+	.public GlobalTerminalConnect_StateSaveProfileId
+	.public GlobalTerminalConnect_StateWaitErrorAck
+	.public GlobalTerminalConnect_StateExit
+	.public GlobalTerminalConnect_StateShowServerError
+	.public GlobalTerminalConnect_StateServerErrorDisconnect
+	.public GlobalTerminalConnect_StateDisconnect
+	.public GlobalTerminalNet_DressUpToUploadForm
+	.public GlobalTerminalNet_UploadFormToDressUp
+	.public sGlobalTerminalNetNoSequence
+	.public sGlobalTerminalNetSequences
+	.public sGlobalTerminalNetErrorSequence
+	.public sGlobalTerminalConnectGraphicsModes
+	.public sGlobalTerminalConnectGraphicsBanks
+	.public sGlobalTerminalConnectMainBgTemplates
+	.public sGlobalTerminalConnectSubBgTemplates
+	.public sGlobalTerminalConnectStates
+	.public GlobalTerminalNet_PackDressUpPhoto
+	.public GlobalTerminalNet_UnpackDressUpPhoto
+	.public GlobalTerminalNet_SealBoxData
+	.public GlobalTerminalNet_SetRequestHeader
+	.public GlobalTerminalNet_CopyRequestHeader
+	.public GlobalTerminalNet_SeqStopClient
+	.public GlobalTerminalNet_SeqDisconnect
+	.public GlobalTerminalNet_SeqShowError
+	.public GlobalTerminalNet_SeqWaitButton
+	.public GlobalTerminalNet_RequestDressUpDownload
+	.public GlobalTerminalNet_RequestBoxDownload
 	.public ov39_022274B4
 	.public ov39_022276A4
 	.public ov39_022276E0
-	.public ov39_02227720
+	.public GlobalTerminalNet_RequestVideoDownload
 	.public ov39_0222774C
 	.public ov39_02227B1C
 	.public ov39_02227B20
 	.public ov39_02227B50
 	.public ov39_02227B54
 	.public ov39_02227B58
-	.public ov39_02227D44
-	.public ov39_02227D50
-	.public ov39_02227DB8
-	.public ov39_02227E3C
-	.public ov39_02227E48
-	.public ov39_02227E6C
-	.public ov39_02227ECC
-	.public ov39_02227EF4
-	.public ov39_02227F60
+	.public GlobalTerminalNet_GetError
+	.public GlobalTerminalNet_PrintMessage
+	.public GlobalTerminalNet_IsIdle
+	.public GlobalTerminalNet_ClearOsHeap
+	.public GlobalTerminalNet_CheckDressUpUploadResult
+	.public GlobalTerminalNet_CheckDressUpDownloadResult
+	.public GlobalTerminalNet_CheckBoxUploadResult
+	.public GlobalTerminalNet_CheckBoxDownloadResult
+	.public GlobalTerminalNet_Check22000Result
 	.public ov39_02227F74
-	.public ov39_02227F84
-	.public ov39_02227FA8
-	.public ov39_02227FC4
-	.public ov39_02227FFC
-	.public ov39_022280B4
-	.public ov39_02228120
-	.public ov39_022285A8
-	.public ov39_02228948
-	.public ov39_02228A70
-	.public ov39_02228A8C
-	.public ov39_02228AA8
-	.public ov39_02228B6C
-	.public ov39_02228B74
+	.public GlobalTerminalNet_CheckRankingsResult
+	.public GlobalTerminalNet_GetRankings
+	.public GlobalTerminalNet_CheckVideoUploadResult
+	.public GlobalTerminalNet_CheckVideoSearchResult
+	.public GlobalTerminalNet_CheckVideoDownloadResult
+	.public GlobalTerminalNet_Check23003Result
+	.public GlobalTerminalConnect_FreeBgs
+	.public GlobalTerminalConnect_RemoveWindows
+	.public GlobalTerminalConnect_IsPrinting
+	.public GlobalTerminalConnect_ShowWaitingIcon
+	.public GlobalTerminalConnect_HideWaitingIcon
+	.public GlobalTerminalConnect_SetStateAndNext
+	.public GlobalTerminalConnect_ErrorAllowsRetry
 	.public ov39_02228D90
-	.public ov39_02228EA4
-	.public ov39_0222908C
+	.public GlobalTerminalConnect_StateShowError
+	.public GlobalTerminalConnect_StateWaitMessage
 
-	thumb_func_start ov39_022274D4
-ov39_022274D4: ; 0x022274D4
+	thumb_func_start GlobalTerminalNet_RequestRankings
+GlobalTerminalNet_RequestRankings: ; 0x022274D4
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	add r6, r1, #0
 	add r4, r2, #0
-	bl ov39_02227DB8
+	bl GlobalTerminalNet_IsIdle
 	cmp r0, #0
 	bne _022274E8
 	mov r0, #0
@@ -159,15 +159,15 @@ _02227512:
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
 _02227530: .word 0x000055F1
-	thumb_func_end ov39_022274D4
+	thumb_func_end GlobalTerminalNet_RequestRankings
 
 
-	thumb_func_start ov39_02227534
-ov39_02227534: ; 0x02227534
+	thumb_func_start GlobalTerminalNet_RequestVideoUpload
+GlobalTerminalNet_RequestVideoUpload: ; 0x02227534
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	add r4, r1, #0
-	bl ov39_02227DB8
+	bl GlobalTerminalNet_IsIdle
 	cmp r0, #0
 	bne _02227546
 	mov r0, #0
@@ -203,17 +203,17 @@ _02227556:
 _02227584: .word 0x00001D4C
 _02227588: .word 0x00000411
 _0222758C: .word 0x000059D8
-	thumb_func_end ov39_02227534
+	thumb_func_end GlobalTerminalNet_RequestVideoUpload
 
 
-	thumb_func_start ov39_02227590
-ov39_02227590: ; 0x02227590
+	thumb_func_start GlobalTerminalNet_RequestVideoSearch
+GlobalTerminalNet_RequestVideoSearch: ; 0x02227590
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	add r4, r1, #0
 	add r6, r2, #0
 	add r7, r3, #0
-	bl ov39_02227DB8
+	bl GlobalTerminalNet_IsIdle
 	cmp r0, #0
 	bne _022275A6
 	mov r0, #0
@@ -251,14 +251,14 @@ _022275A6:
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
 _022275E4: .word 0x000059D9
-	thumb_func_end ov39_02227590
+	thumb_func_end GlobalTerminalNet_RequestVideoSearch
 
 
 	thumb_func_start ov39_022275E8
 ov39_022275E8: ; 0x022275E8
 	push {r4, lr}
 	add r4, r0, #0
-	bl ov39_02227DB8
+	bl GlobalTerminalNet_IsIdle
 	cmp r0, #0
 	bne _022275F8
 	mov r0, #0
@@ -308,7 +308,7 @@ _02227644: .word 0x000059D9
 ov39_02227648: ; 0x02227648
 	push {r4, lr}
 	add r4, r0, #0
-	bl ov39_02227DB8
+	bl GlobalTerminalNet_IsIdle
 	cmp r0, #0
 	bne _02227658
 	mov r0, #0

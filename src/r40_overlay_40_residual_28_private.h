@@ -4,8 +4,8 @@
 #include "global.h"
 
 void *ov40_0223D540(void *p);
-void *ov39_02227E8C(void *p, void *dst, int value);
-void ov39_022271C0(const void *src, void *dst);
+void *GlobalTerminalNet_GetDressUpList(void *p, void *dst, int value);
+void GlobalTerminalNet_CopyRequestHeader(const void *src, void *dst);
 void *sub_020314A4(int heapId);
 void sub_020314BC(void *p);
 

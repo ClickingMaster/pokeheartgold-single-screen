@@ -6,7 +6,7 @@
 
 	.public _020F6288
 _020F6288:
-	.word ov39_02228140, ov39_02228308, ov39_02228370, 0xFFFFFFFF
+	.word GlobalTerminalConnect_Init, GlobalTerminalConnect_Main, GlobalTerminalConnect_Exit, 0xFFFFFFFF
 
 	.bss
 

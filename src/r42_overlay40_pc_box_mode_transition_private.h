@@ -25,7 +25,7 @@ void ov40_0222BC54(void *work);
 void SetBgPriority(int bgId, int priority);
 void ov40_02235994(void);
 void PaletteData_BlendPalettes(void *palette, int mask, int coeff, int color, int selector);
-void *ov39_02227080(void *p, void *q);
+void *GlobalTerminalNet_UnpackDressUpPhoto(void *p, void *q);
 void *ov41_0224B530(void *p, void *q);
 void ov41_0224B5D0(void *p, int value);
 void ov40_02235940(void);

@@ -69,7 +69,7 @@ struct MysteryGiftAppData {
     int stateAfterMessage;                             // 0x0074
     struct ListMenu *listMenu;                         // 0x0078
     ListMenuItem *listMenuItems;                       // 0x007C
-    int giftCheckResult;                               // 0x0080, ov74_0222FD98: 0 ok, 1..5 why the gift cannot be received
+    int giftCheckResult;                               // 0x0080, MysteryGift_CheckCanReceive: 0 ok, 1..5 why the gift cannot be received
     int unk_0084;                                      // 0x0084
     u32 unk_0088;                                      // 0x0088
     UnkWonderCardSubstruct_104 receivedHeader;         // 0x008C
@@ -131,11 +131,11 @@ int ov74_022360B0(void);
 u32 ov74_02235230(void);
 void ov74_02236034(BOOL a0);
 void ov74_0223512C(enum HeapID heapID);
-void ov74_0222FCA4(void);
+void WonderCard_SetGraphicsBanks(void);
 int ov74_022365FC(void);
 int ov74_02236AE0(OverlayManager *manager, int *state);
 void ov74_022358C8(int animStatus);
-int ov74_0222FD98(SaveData *saveData, UnkWonderCardSubstruct_104 *header);
+int MysteryGift_CheckCanReceive(SaveData *saveData, UnkWonderCardSubstruct_104 *header);
 BOOL ov74_02235258(void *data, int size);
 void *ov74_02235708(void);
 u32 ov74_0223615C(void);
@@ -146,8 +146,8 @@ const u16 *ov74_02236988(void);
 BOOL ov74_022368D4(void);
 u32 ov74_02236980(void);
 void ov74_02236680(void *buffer, void (*callback)(int), void *work);
-void ov74_0222FC50(BgConfig *bgConfig, WonderCard *card, enum HeapID heapID);
-void ov74_0222EC08(BgConfig *bgConfig, WonderCard *card, enum HeapID heapID);
+void LockCapsuleCard_DrawCardOnBg(BgConfig *bgConfig, WonderCard *card, enum HeapID heapID);
+void WonderCardAlbum_DrawCardOnBg(BgConfig *bgConfig, WonderCard *card, enum HeapID heapID);
 
 // Other modules (not in a header yet).
 extern BOOL CTRDG_IsExisting();
@@ -974,7 +974,7 @@ BOOL MysteryGiftApp_Init(OverlayManager *manager, int *state) {
     data->bgConfig = BgConfig_Alloc(HEAP_ID_84);
     GfGfx_DisableEngineAPlanes();
     GfGfx_DisableEngineBPlanes();
-    ov74_0222FCA4();
+    WonderCard_SetGraphicsBanks();
     MysteryGiftApp_InitBgLayers(data->bgConfig);
     SetMasterBrightnessByColor(PM_LCD_TOP, RGB_BLACK);
     SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
@@ -1844,7 +1844,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
         if (ov74_0223D0A8.state == 45) {
             MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
             MysteryGiftApp_GetReceivedCard(manager);
-            data->giftCheckResult = ov74_0222FD98(data->saveData, &data->receivedHeader);
+            data->giftCheckResult = MysteryGift_CheckCanReceive(data->saveData, &data->receivedHeader);
             if (data->giftCheckResult == 1) {
                 MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
                 *state = 49;
@@ -1935,7 +1935,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
         data->channel = ov74_02229D6C(data);
         if (data->channel != -1) {
             MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
-            data->giftCheckResult = ov74_0222FD98(data->saveData, &data->receivedHeader);
+            data->giftCheckResult = MysteryGift_CheckCanReceive(data->saveData, &data->receivedHeader);
             if (!WindowIsInUse(&data->titleWindow)) {
                 AddWindowParameterized(data->bgConfig, &data->titleWindow, GF_BG_LYR_MAIN_0, 3, 2, 26, 4, 0, 452);
             }
@@ -2080,7 +2080,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
             if (data->unk_0084 != 27) {
                 ov74_02235258(&data->receivedHeader, sizeof(UnkWonderCardSubstruct_104) + sizeof(WonderCard));
             }
-            data->giftCheckResult = ov74_0222FD98(data->saveData, &data->receivedHeader);
+            data->giftCheckResult = MysteryGift_CheckCanReceive(data->saveData, &data->receivedHeader);
             if (data->giftCheckResult == 1) {
                 MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
                 *state = 49;
@@ -2187,9 +2187,9 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_ON);
         if (data->receivedHeader.unk8E_2 == 1 && data->receivedCard.tag == MG_TAG_ITEM && data->receivedCard.data.item == ITEM_LOCK_CAPSULE) {
-            ov74_0222FC50(data->bgConfig, &data->receivedCard, HEAP_ID_84);
+            LockCapsuleCard_DrawCardOnBg(data->bgConfig, &data->receivedCard, HEAP_ID_84);
         } else {
-            ov74_0222EC08(data->bgConfig, &data->receivedCard, HEAP_ID_84);
+            WonderCardAlbum_DrawCardOnBg(data->bgConfig, &data->receivedCard, HEAP_ID_84);
         }
         ov74_0223539C(1, 56, data->mainState, 2);
         data->receivedHeader.unk8E_2 = 0;

@@ -4077,7 +4077,7 @@ ov40_0223615C: ; 0x0223615C
 	lsl r1, r1, #2
 	add r1, r4, r1
 	mov r2, #5
-	bl ov39_02227E8C
+	bl GlobalTerminalNet_GetDressUpList
 	mov r1, #0xb9
 	lsl r1, r1, #2
 	str r0, [r4, r1]
@@ -4104,7 +4104,7 @@ ov40_02236184: ; 0x02236184
 	lsl r0, r0, #2
 	ldr r0, [r2, r0]
 	ldr r1, [r4, r1]
-	bl ov39_022271C0
+	bl GlobalTerminalNet_CopyRequestHeader
 	pop {r3, r4, r5, pc}
 	nop
 _022361AC: .word 0x00002ED8
