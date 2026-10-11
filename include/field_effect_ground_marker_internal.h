@@ -13,7 +13,7 @@
 #include "map_object.h"
 #include "overlay_01_021F1348.h"
 #include "task.h"
-#include "unk_02023694.h"
+#include "billboard_lists.h"
 #include "unk_020689C8.h"
 #include "vram_transfer_manager.h"
 
@@ -32,8 +32,8 @@ void *ov01_021F1740(FieldSystem *fieldSystem, u32 id, const VecFx32 *position);
 void *ov01_021F14B4(FieldSystem *fieldSystem, u32 fileId, int atEnd);
 NNSG3dResTex *ov01_021F1AD4(FieldSystem *fieldSystem, int id);
 
-void *sub_02023DA4(void *a0);
-void sub_02023E50(void *a0, const VecFx32 *a1);
+void *BillboardObject_Delete(void *a0);
+void BillboardObject_SetPosition(void *a0, const VecFx32 *a1);
 void BillboardGfxSequence_Init(void *a0, void *a1);
 void *sub_02068D90(void *a0);
 void sub_02068DA8(void *a0, VecFx32 *a1);

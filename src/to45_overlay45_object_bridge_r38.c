@@ -13,17 +13,17 @@ void ov45_022308C0(Overlay45R38Object *object, const s16 *source) {
 }
 
 void ov45_022308E4(Overlay45R38Object *object, const Overlay45R38Vec *position) {
-    sub_02023E50(object->handle, position);
+    BillboardObject_SetPosition(object->handle, position);
     ModelInstance_SetPosition(object->model, position->x, 0x2000, position->z - 0x8000);
 }
 
 void ov45_02230908(Overlay45R38Object *object, Overlay45R38Vec *position) {
-    *position = *sub_02023E68(object->handle);
+    *position = *BillboardObject_GetPosition(object->handle);
 }
 
 void ov45_02230920(Overlay45R38Object *object) {
-    sub_02023EE0(object->handle, ov45_022309C4(1));
-    sub_02023F40(object->handle, 0);
+    BillboardObject_SetSequence(object->handle, ov45_022309C4(1));
+    BillboardObject_SetSequenceFrame(object->handle, 0);
 }
 
 void ov45_0223093C(Overlay45R38Object *object, u32 value) {

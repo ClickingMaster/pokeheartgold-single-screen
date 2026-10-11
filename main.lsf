@@ -152,10 +152,8 @@ Static main
     Object src/obj_pltt_transfer.o
     Object src/gf_gfx_planes.o
     Object src/camera.o
-    Object src/billboard.o
-    Object src/billboard_resources.o
-    Object src/billboard_properties.o
-    Object asm/unk_02023694.o
+    Object src/billboard_lists.o
+    Object asm/billboard_lists_data.o
     Object src/sprite.o
     Object src/touchscreen.o
     Object src/timer3.o
@@ -902,41 +900,12 @@ Static main
     Object lib/src/spl_manager.o
     Object lib/src/spl_draw.o
     Object lib/src/spl_emitter.o
-    Object src/to70_jn_spl_extra07_run14.o
-    Object src/op90_to80_extra1680_residual_1_r01.o
-    Object src/to80_extra1680_run01.o
-    Object src/to80_extra1680_run02.o
-    Object src/to80_extra1680_run03.o
-    Object src/to80_extra1680_run04.o
-    Object src/op90_op90_to80_extra1680_residual_2_residual_1_r01.o
-    Object src/op90_op90_to80_extra1680_residual_2_residual_1_r02.o
-    Object src/op90_to80_extra1680_residual_2_r01.o
-    Object src/op90_to80_extra1680_residual_2_r02.o
-    Object src/to70_jn_spl_extra07_run15.o
-    Object src/op90_to90_extra2469_residual_1_r01.o
-    Object src/op90_to90_extra2469_residual_1_r02.o
-    Object src/op90_to90_extra2469_residual_1_r03.o
-    Object src/to90_extra2469_run01.o
-    Object src/to80_extra1681_run01.o
-    Object src/to70_jn_spl_extra07_run16.o
-    Object src/to80_extra1682_run01.o
-    Object src/to70_jn_spl_extra07_run17.o
-    Object src/to70_jn_spl_extra07_run18.o
-    Object src/op90_to80_extra1471_residual_1_r01.o
-    Object src/to80_extra1471_run01.o
-    Object src/op90_to80_extra1471_residual_2_r01.o
-    Object src/to70_jn_spl_extra07_run19.o
-    Object src/to70_jn_spl_extra07_run20.o
-    Object src/to80_extra1472_run01.o
-    Object src/to70_jn_spl_extra07_run21.o
-    Object src/to70_jn_spl_extra07_run22.o
-    Object src/to70_jn_spl_extra07_run23.o
-    Object src/to70_jn_spl_extra07_run24.o
-    Object src/to70_jn_spl_extra07_run25.o
-    Object src/to70_jn_spl_extra07_run26.o
-    Object src/to70_jn_spl_extra07_run27.o
-    Object src/to70_jn_spl_extra07_run28.o
-    Object src/to70_jn_spl_extra07_run29.o
+    Object lib/src/spl_draw_ptcl.o
+    Object lib/src/spl_generate.o
+    Object lib/src/spl_anim.o
+    Object lib/src/spl_field.o
+    Object lib/src/spl_list.o
+    Object lib/src/spl_random.o
     Object lib/NitroSDK/asm/to70_wvr_extra02_anchor.o
     Object src/to70_wvr_extra02_run01.o
     Object lib/NitroDWC/asm/to59_dwcbm_anchor.o
@@ -8369,41 +8338,7 @@ Overlay OVY_108
     After main
     Object src/application/safari_area_customizer.o
     Object asm/to70_overlay_108_residual_18_extra382_anchor.o
-    Object src/overlay108_safari_decor_r2_run01.o
-    Object src/to90_extra2359_run01.o
-    Object src/overlay108_safari_decor_r2_run02.o
-    Object src/to90_extra2360_run01.o
-    Object src/overlay108_safari_decor_r2_run03.o
-    Object src/op90_overlay_108_021E8850_r2_gap03_retained_r01.o
-    Object src/overlay108_model_resource_cleanup.o
-    Object src/overlay108_safari_decor_r2_run04.o
-    Object src/to58_r3_ov108_gap04.o
-    Object src/overlay108_safari_decor_r2_run05.o
-    Object src/to58_r3_ov108_gap05.o
-    Object src/overlay108_safari_decor_r2_run06.o
-    Object src/to46_overlay108_gap06_run1.o
-    Object src/to90_extra2408_run01.o
-    Object src/to46_overlay108_gap06_run2.o
-    Object src/overlay108_safari_decor_r2_run07.o
-    Object src/to90_extra1989_run01.o
-    Object src/overlay108_safari_decor_r2_run08.o
-    Object src/to90_extra1990_run01.o
-    Object src/overlay108_safari_decor_r2_run09.o
-    Object src/to70_overlay_108_021E8850_r2_gap09_extra560_run01.o
-    Object src/overlay108_safari_decor_r2_run10.o
-    Object src/to70_overlay_108_021E8850_r2_gap10_extra479_run01.o
-    Object src/overlay108_safari_decor_r2_run11.o
-    Object src/to47_overlay108_gap11_run1.o
-    Object src/to80_extra1689_run01.o
-    Object src/to47_overlay108_gap11_run2.o
-    Object src/overlay108_safari_decor_r2_run12.o
-    Object src/to52_r5_overlay108_message_windows_gap12.o
-    Object src/overlay108_safari_decor_r2_run13.o
-    Object src/op90_op90_overlay_108_021E8850_r2_gap13_residual_1_r01.o
-    Object src/op90_overlay_108_021E8850_r2_gap13_r01.o
-    Object src/overlay108_safari_decor_r2_run14.o
-    Object src/op90_overlay_108_021E8850_r2_gap14_r01.o
-    Object src/overlay108_safari_decor_r2_run15.o
+    Object src/application/safari_decoration.o
     Object asm/overlay_108_021E8850_r2_data.o
 }
 Overlay OVY_109

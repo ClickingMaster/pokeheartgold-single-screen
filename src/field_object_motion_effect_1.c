@@ -45,17 +45,17 @@ BOOL ov01_021FFCA8(void *task, LocalState *s) {
     sub_02068DA8(task, &pos);
     s->effect = ov01_021F1740(s->resource, 0xa, &pos);
     if (MapObject_TestFlagsBits(s->mapObject, 2 << 8) == TRUE) {
-        sub_02023EA4(s->effect, FALSE);
+        BillboardObject_SetVisible(s->effect, FALSE);
     }
     if (sub_02068D90(task) == 0) {
-        sub_02023F1C(s->effect, 2 << 12);
+        BillboardObject_SetFrame(s->effect, 2 << 12);
         s->stage = 2;
     }
     return TRUE;
 }
 
 void ov01_021FFD64(void *task, LocalState *s) {
-    sub_02023DA4(s->effect);
+    BillboardObject_Delete(s->effect);
 }
 
 void ov01_021FFD70(void *task, LocalState *s) {
@@ -69,9 +69,9 @@ void ov01_021FFD70(void *task, LocalState *s) {
         return;
     }
     if (MapObject_TestFlagsBits(obj, 2 << 8) == TRUE) {
-        sub_02023EA4(s->effect, FALSE);
+        BillboardObject_SetVisible(s->effect, FALSE);
     } else {
-        sub_02023EA4(s->effect, TRUE);
+        BillboardObject_SetVisible(s->effect, TRUE);
     }
     if (s->onFloor == 0) {
         sub_02068DB8(task, &local.current);
@@ -86,14 +86,14 @@ void ov01_021FFD70(void *task, LocalState *s) {
     }
     switch (s->stage) {
     case 0:
-        sub_02023F04(s->effect, FX32_ONE);
-        if (sub_02023F70(s->effect) / FX32_ONE >= 2) {
+        BillboardObject_AdvanceFrame(s->effect, FX32_ONE);
+        if (BillboardObject_GetSequenceFrame(s->effect) / FX32_ONE >= 2) {
             s->stage = 1;
         }
         break;
     case 1:
-        sub_02023F1C(s->effect, 2 * FX32_ONE);
-        sub_02023F04(s->effect, 0);
+        BillboardObject_SetFrame(s->effect, 2 * FX32_ONE);
+        BillboardObject_AdvanceFrame(s->effect, 0);
         s->stage = 2;
     case 2:
         if (!sub_0205F0F8(obj, s->sprite, s->id, s->mapId)) {
@@ -120,5 +120,5 @@ void ov01_021FFE98(void *task, LocalState *s) {
         return;
     }
     sub_02068DB8(task, &pos);
-    sub_02023E50(s->effect, &pos);
+    BillboardObject_SetPosition(s->effect, &pos);
 }

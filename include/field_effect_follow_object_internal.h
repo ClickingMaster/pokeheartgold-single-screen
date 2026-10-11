@@ -81,12 +81,12 @@ void sub_02068DA8(void *a0, VecFx32 *a1);
 void sub_02068DB8(void *a0, VecFx32 *a1);
 int sub_0206121C(TaskManager *taskman, VecFx32 *pos);
 BOOL sub_0205F0F8(LocalMapObject *object, u32 spriteId, u32 objId, u32 mapId);
-BOOL sub_02023DA4(void *sprite);
-void sub_02023EA4(void *sprite, int a1);
-BOOL sub_02023F04(void *sprite, fx32 a1);
-void sub_02023F1C(void *sprite, fx32 a1);
-void sub_02023E50(void *sprite, VecFx32 *pos);
-fx32 sub_02023F70(void *sprite);
+BOOL BillboardObject_Delete(void *sprite);
+void BillboardObject_SetVisible(void *sprite, int a1);
+BOOL BillboardObject_AdvanceFrame(void *sprite, fx32 a1);
+void BillboardObject_SetFrame(void *sprite, fx32 a1);
+void BillboardObject_SetPosition(void *sprite, VecFx32 *pos);
+fx32 BillboardObject_GetSequenceFrame(void *sprite);
 
 extern const UnkOv01_02209280 ov01_02209138;
 extern const UnkOv01_02209280 ov01_0220914C;

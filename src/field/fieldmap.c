@@ -59,7 +59,7 @@
 #include "task.h"
 #include "terrain_attributes.h"
 #include "oam_manager.h"
-#include "unk_02023694.h"
+#include "billboard_lists.h"
 #include "unk_02026E30.h"
 #include "unk_02055418.h"
 #include "unk_02056D7C.h"

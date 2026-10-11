@@ -2,7 +2,7 @@
 	.include "overlay_108.inc"
 	.include "global.inc"
 
-	.extern ov108_021EA700
+	.extern SafariDecoration_GetSizeClass
 .public ov108_021EA9C4
 .public ov108_021EA9D8
 .public ov108_021EA9E4

@@ -103,10 +103,10 @@ _022036C4:
 	ldr r0, [r0, #0x3c]
 	bl ov01_021F771C
 	add r7, r0, #0
-	bl sub_02023FB0
+	bl BillboardObject_GetPlttKey
 	add r4, r0, #0
 	add r0, r7, #0
-	bl sub_02023FB0
+	bl BillboardObject_GetPlttKey
 	add r1, r0, #0
 	ldr r3, _022037DC ; =0xFFFF0000
 	lsl r1, r1, #0x10
@@ -172,7 +172,7 @@ _0220373E:
 	ldr r0, [r0, #0x3c]
 	bl ov01_021F771C
 	add r1, sp, #4
-	bl sub_02023E78
+	bl BillboardObject_SetScale
 	ldr r0, [r5, #0x3c]
 	cmp r0, #0
 	beq _022037A2

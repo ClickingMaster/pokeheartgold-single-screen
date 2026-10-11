@@ -128,7 +128,7 @@
 .public Camera_GetCurrentTarget
 .public Camera_SetLookAtCamTarget
 .public Camera_SetLookAtCamPos
-.public sub_02023E78
+.public BillboardObject_SetScale
 .public SpriteList_Delete
 .public SpriteList_DeleteAllSprites
 .public SpriteList_RenderAndAnimateSprites

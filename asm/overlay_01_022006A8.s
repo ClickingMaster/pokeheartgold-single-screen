@@ -177,11 +177,11 @@ ov01_02200780: ; 0x02200780
 
 	thumb_func_start ov01_022007D0
 ov01_022007D0: ; 0x022007D0
-	ldr r3, _022007D8 ; =sub_02023DA4
+	ldr r3, _022007D8 ; =BillboardObject_Delete
 	ldr r0, [r1, #0x20]
 	bx r3
 	nop
-_022007D8: .word sub_02023DA4
+_022007D8: .word BillboardObject_Delete
 	thumb_func_end ov01_022007D0
 
 	thumb_func_start ov01_022007DC
@@ -243,7 +243,7 @@ _0220081A:
 	str r0, [sp, #0x14]
 	ldr r0, [r5, #0x20]
 	add r1, sp, #0xc
-	bl sub_02023E50
+	bl BillboardObject_SetPosition
 	add sp, #0x18
 	pop {r4, r5, r6, pc}
 	.balign 4, 0

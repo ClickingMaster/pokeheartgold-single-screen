@@ -17,7 +17,7 @@
 .public Camera_GetPerspectiveAngle
 .public Camera_GetDistance
 .public Camera_GetAngle
-.public sub_02023F90
+.public BillboardObject_GetModel
 .public GF_AssertFail
 .public Save_GetGymmickPtr
 .public Save_Gymmick_AssertMagic_GetData

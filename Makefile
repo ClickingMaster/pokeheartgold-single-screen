@@ -145,38 +145,18 @@ $(BUILD_DIR)/lib/src/spl_emitter.o: private MWCCVER := 1.2/sp2p3
 $(BUILD_DIR)/lib/src/spl_manager.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/lib/src/spl_draw.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/lib/src/spl_emitter.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run14.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run14.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run15.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run15.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run16.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run16.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run17.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run17.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run18.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run18.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run19.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run19.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run20.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run20.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run21.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run21.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run22.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run22.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run23.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run23.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run24.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run24.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run25.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run25.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run26.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run26.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run27.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run27.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run28.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run28.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run29.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to70_jn_spl_extra07_run29.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/lib/src/spl_draw_ptcl.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/lib/src/spl_draw_ptcl.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/lib/src/spl_generate.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/lib/src/spl_anim.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/lib/src/spl_field.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/lib/src/spl_list.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/lib/src/spl_random.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/lib/src/spl_generate.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/lib/src/spl_anim.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/lib/src/spl_field.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/lib/src/spl_list.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/lib/src/spl_random.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 
 $(BUILD_DIR)/src/to70_MSL_Common_mem_funcs_extra79_run01.o: private MWCCVER := 2.0/sp2p3
 
@@ -249,11 +229,7 @@ $(BUILD_DIR)/src/to80_extra1381_run01.o: private MWCCVER := 2.0/sp2p3
 
 
 
-$(BUILD_DIR)/src/to80_extra1471_run01.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to80_extra1471_run01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 
-$(BUILD_DIR)/src/to80_extra1472_run01.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to80_extra1472_run01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 
 $(BUILD_DIR)/src/to80_extra1486_run01.o: private MWCCVER := 1.2/sp2p3
 $(BUILD_DIR)/src/to80_extra1486_run01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
@@ -271,20 +247,8 @@ $(BUILD_DIR)/src/to80_extra1616_run01.o: private MWCCVER := 2.0/sp2p3
 
 $(BUILD_DIR)/src/to80_extra1617_run01.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/src/to80_extra1680_run01.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to80_extra1680_run01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/to80_extra1680_run02.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to80_extra1680_run02.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/to80_extra1680_run03.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to80_extra1680_run03.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/to80_extra1680_run04.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to80_extra1680_run04.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 
-$(BUILD_DIR)/src/to80_extra1681_run01.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to80_extra1681_run01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 
-$(BUILD_DIR)/src/to80_extra1682_run01.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to80_extra1682_run01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 
 $(BUILD_DIR)/src/to80_extra1718_run01.o: private MWCCVER := 2.0/sp2p3
 
@@ -309,8 +273,6 @@ $(BUILD_DIR)/src/to90_extra2309_run01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/to90_extra2310_run01.o: private MWCCVER := 2.0/sp2p3
 
 
-$(BUILD_DIR)/src/to90_extra2469_run01.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to90_extra2469_run01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 
 $(BUILD_DIR)/src/to90_scanf_interval_v5_run01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/to90_scanf_interval_v5_run02.o: private MWCCVER := 2.0/sp2p3
@@ -334,30 +296,10 @@ $(BUILD_DIR)/src/op90_to59_dwcaccount_residual_3_r01.o: private MWCFLAGS := $(fi
 $(BUILD_DIR)/src/op90_to59_dwcaccount_residual_3_r02.o: private MWCCVER := 1.2/sp2p3
 $(BUILD_DIR)/src/op90_to59_dwcaccount_residual_3_r02.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/lib/NitroSDK/src/mb/mb_disconnect.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_to80_extra1471_residual_1_r01.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/op90_to80_extra1471_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/op90_to80_extra1471_residual_2_r01.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/op90_to80_extra1471_residual_2_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/op90_to80_extra1680_residual_1_r01.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/op90_to80_extra1680_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/lib/NitroSDK/src/mb/mb_parent_calc_block.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_to90_extra2469_residual_1_r01.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/op90_to90_extra2469_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/op90_to90_extra2469_residual_1_r02.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/op90_to90_extra2469_residual_1_r02.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/op90_to90_extra2469_residual_1_r03.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/op90_to90_extra2469_residual_1_r03.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/op90_to70_fx_trig_extra207_residual_1_r01.o: private MWCCVER := 2.0/sp2
 $(BUILD_DIR)/src/op90_to80_extra1853_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_to80_extra1680_residual_2_r01.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/op90_to80_extra1680_residual_2_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/op90_to80_extra1680_residual_2_r02.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/op90_to80_extra1680_residual_2_r02.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/op90_fx_vec_normalize_residual_r01.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_op90_to80_extra1680_residual_2_residual_1_r01.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/op90_op90_to80_extra1680_residual_2_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/op90_op90_to80_extra1680_residual_2_residual_1_r02.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/op90_op90_to80_extra1680_residual_2_residual_1_r02.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/op90_to80_extra1442_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_MSL_Common_string_residual0_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to57_nitrocrypto_residual04_residual_r01.o: private MWCCVER := 1.2/sp2p3

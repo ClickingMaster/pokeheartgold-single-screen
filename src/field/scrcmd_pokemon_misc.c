@@ -39,7 +39,7 @@
 #include "sys_vars.h"
 #include "system.h"
 #include "sound_playback.h"
-#include "unk_02023694.h"
+#include "billboard_lists.h"
 #include "unk_02030A98.h"
 #include "unk_02031B0C.h"
 #include "unk_02037C94.h"
@@ -653,7 +653,7 @@ BOOL ScrCmd_699(ScriptContext *ctx) {
         sprite = ov01_021F72DC(curObj);
         if (sprite) {
             ov01_021FA3E8(curObj, sprite);
-            sub_02023EA4(sprite, 1);
+            BillboardObject_SetVisible(sprite, 1);
         }
     }
     return FALSE;

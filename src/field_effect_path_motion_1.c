@@ -55,15 +55,15 @@ BOOL ov01_021FF7B0(void *object, void *data) {
 }
 
 void ov01_021FF7F4(void *unused, void *data) {
-    sub_02023DA4(*(void **)((u8 *)data + 0x20));
+    BillboardObject_Delete(*(void **)((u8 *)data + 0x20));
 }
 
 void ov01_021FF800(void *task, void *data) {
     u8 *p = data;
     if (*(u32 *)p == 0) {
         s32 height;
-        sub_02023F04(*(void **)(p + 0x20), 0x1000);
-        height = sub_02023F70(*(void **)(p + 0x20));
+        BillboardObject_AdvanceFrame(*(void **)(p + 0x20), 0x1000);
+        height = BillboardObject_GetSequenceFrame(*(void **)(p + 0x20));
         if (height / 0x1000 >= 9) {
             ov01_021F1640(task);
         }
@@ -74,5 +74,5 @@ void ov01_021FF830(void *object, void *data) {
     VecFx32Private position;
     sub_02068DB8(object, &position);
     position.z += 0x8000;
-    sub_02023E50(*(void **)((u8 *)data + 0x20), &position);
+    BillboardObject_SetPosition(*(void **)((u8 *)data + 0x20), &position);
 }

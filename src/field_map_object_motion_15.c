@@ -11,9 +11,9 @@ void ov01_021F8BE0(void *obj) {
 }
 
 void ov01_021F8C00(void *obj, int divisor) {
-    s32 value = sub_02023F70(obj) / FX32_ONE;
-    sub_02023F40(obj, (value - value % divisor) * FX32_ONE);
-    sub_02023F04(obj, 0);
+    s32 value = BillboardObject_GetSequenceFrame(obj) / FX32_ONE;
+    BillboardObject_SetSequenceFrame(obj, (value - value % divisor) * FX32_ONE);
+    BillboardObject_AdvanceFrame(obj, 0);
 }
 
 void ov01_021F8C30(void *obj) {
@@ -23,17 +23,17 @@ void ov01_021F8C30(void *obj) {
 void ov01_021F8C3C(void *obj, u32 value, int divisor) {
     fx32 old;
     ov01_021F8C00(obj, divisor);
-    old = sub_02023F70(obj);
-    sub_02023EE0(obj, value);
-    sub_02023F40(obj, old);
+    old = BillboardObject_GetSequenceFrame(obj);
+    BillboardObject_SetSequence(obj, value);
+    BillboardObject_SetSequenceFrame(obj, old);
 }
 
 void ov01_021F8C64(void *obj, u32 value) {
     fx32 old;
     ov01_021F8C30(obj);
-    old = sub_02023F70(obj);
-    sub_02023EE0(obj, value);
-    sub_02023F40(obj, old);
+    old = BillboardObject_GetSequenceFrame(obj);
+    BillboardObject_SetSequence(obj, value);
+    BillboardObject_SetSequenceFrame(obj, old);
 }
 
 void ov01_021F8C88(void *obj, void *state) {
@@ -44,7 +44,7 @@ void ov01_021F8C88(void *obj, void *state) {
     if (MapObject_TestFlagsBits(obj, 1 << 12) == TRUE && MapObject_TestFlagsBits(obj, 2 << 12) == FALSE) {
         enabled = FALSE;
     }
-    sub_02023EA4(state, enabled);
+    BillboardObject_SetVisible(state, enabled);
 }
 
 void ov01_021F8CC8(u32 id, LocalConfig *out) {

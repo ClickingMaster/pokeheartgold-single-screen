@@ -11,9 +11,9 @@ void ov01_02205808(BOOL select, void *obj, void *model) {
             return;
         }
         ov01_02205870(select, obj, model, info);
-        sub_02023EC8(model, info);
-        sub_02023EE0(model, ov01_021FA44C(MapObject_GetFacingDirection(obj)));
-        sub_02023F40(model, 0);
+        BillboardObject_SetResource(model, info);
+        BillboardObject_SetSequence(model, ov01_021FA44C(MapObject_GetFacingDirection(obj)));
+        BillboardObject_SetSequenceFrame(model, 0);
     }
 }
 

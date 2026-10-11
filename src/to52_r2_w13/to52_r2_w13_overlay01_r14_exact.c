@@ -8,7 +8,7 @@ void ov01_021FAB9C(void *task, W13Work *work) {
             if (work->reflection != NULL) {
                 sub_02068B48();
             }
-            sub_02023DA4(work->unk24);
+            BillboardObject_Delete(work->unk24);
             Heap_Free(work->mdl1);
             Heap_Free(work->mdl2);
             Heap_Free(work->mdl3);
@@ -25,7 +25,7 @@ void ov01_021FAB9C(void *task, W13Work *work) {
             if (work->reflection != NULL) {
                 sub_02068B48();
             }
-            sub_02023DA4(work->unk24);
+            BillboardObject_Delete(work->unk24);
             Heap_Free(work->mdl1);
             Heap_Free(work->mdl2);
             Heap_Free(work->mdl3);

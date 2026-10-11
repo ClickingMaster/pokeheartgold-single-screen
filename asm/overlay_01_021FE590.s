@@ -218,7 +218,7 @@ ov01_021FE6F4: ; 0x021FE6F4
 	push {r4, lr}
 	add r4, r1, #0
 	ldr r0, [r4, #0x18]
-	bl sub_02023DA4
+	bl BillboardObject_Delete
 	ldr r0, [r4, #0x10]
 	bl ov01_021FE5BC
 	ldr r0, [r4, #0x10]
@@ -256,14 +256,14 @@ ov01_021FE70C: ; 0x021FE70C
 	pop {r4, r5, pc}
 _021FE742:
 	ldr r0, [r4, #0x18]
-	bl sub_02023F1C
+	bl BillboardObject_SetFrame
 _021FE748:
 	ldr r1, [r4, #4]
 	ldr r0, [r4, #0x18]
 	lsl r2, r1, #2
 	add r1, sp, #0
 	ldr r1, [r1, r2]
-	bl sub_02023F04
+	bl BillboardObject_AdvanceFrame
 	cmp r0, #1
 	bne _021FE75E
 	mov r0, #1
@@ -284,7 +284,7 @@ ov01_021FE768: ; 0x021FE768
 	bl sub_02068DB8
 	ldr r0, [r4, #0x18]
 	add r1, sp, #0
-	bl sub_02023E50
+	bl BillboardObject_SetPosition
 	add sp, #0xc
 	pop {r3, r4, pc}
 	thumb_func_end ov01_021FE768

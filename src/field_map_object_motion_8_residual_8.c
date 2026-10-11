@@ -20,8 +20,8 @@ extern const MotionSequence8 ov01_02208AA0;
 
 void ov01_021F80C4(void *owner, void *obj, s8 *state, int index) {
     if (index != state[0]) {
-        sub_02023EE0(obj, ov01_021FA44C(index));
-        sub_02023F40(obj, 0);
+        BillboardObject_SetSequence(obj, ov01_021FA44C(index));
+        BillboardObject_SetSequenceFrame(obj, 0);
         state[1] = 0;
     } else if (state[2] == 9) {
         ov01_021F8C64(obj, ov01_021FA44C(index));
@@ -31,7 +31,7 @@ void ov01_021F80C4(void *owner, void *obj, s8 *state, int index) {
     }
     if (!ov01_021F9344(owner)) {
         MotionSequence7 sequence = ov01_02208A48;
-        sub_02023F04(obj, sequence.values[state[1]]);
+        BillboardObject_AdvanceFrame(obj, sequence.values[state[1]]);
         state[1]++;
         if (sequence.values[state[1]] == 0) {
             state[1] = 0;
@@ -41,8 +41,8 @@ void ov01_021F80C4(void *owner, void *obj, s8 *state, int index) {
 
 void ov01_021F8164(void *owner, void *obj, s8 *state, int index) {
     if (index != state[0]) {
-        sub_02023EE0(obj, ov01_021FA44C(index));
-        sub_02023F40(obj, 0);
+        BillboardObject_SetSequence(obj, ov01_021FA44C(index));
+        BillboardObject_SetSequenceFrame(obj, 0);
         state[1] = 0;
     } else if (state[2] == 9) {
         ov01_021F8C64(obj, ov01_021FA44C(index));
@@ -52,7 +52,7 @@ void ov01_021F8164(void *owner, void *obj, s8 *state, int index) {
     }
     if (!ov01_021F9344(owner)) {
         MotionSequence4 sequence = ov01_022089D8;
-        sub_02023F04(obj, sequence.values[state[1]]);
+        BillboardObject_AdvanceFrame(obj, sequence.values[state[1]]);
         state[1]++;
         if (sequence.values[state[1]] == 0) {
             state[1] = 0;
@@ -62,8 +62,8 @@ void ov01_021F8164(void *owner, void *obj, s8 *state, int index) {
 
 void ov01_021F81FC(void *owner, void *obj, s8 *state, int index) {
     if (index != state[0]) {
-        sub_02023EE0(obj, ov01_021FA44C(index));
-        sub_02023F40(obj, 0);
+        BillboardObject_SetSequence(obj, ov01_021FA44C(index));
+        BillboardObject_SetSequenceFrame(obj, 0);
         state[1] = 0;
     } else if (state[2] == 9) {
         ov01_021F8C64(obj, ov01_021FA44C(index));
@@ -73,7 +73,7 @@ void ov01_021F81FC(void *owner, void *obj, s8 *state, int index) {
     }
     if (!ov01_021F9344(owner)) {
         MotionSequence8 sequence = ov01_02208AA0;
-        sub_02023F04(obj, sequence.values[state[1]]);
+        BillboardObject_AdvanceFrame(obj, sequence.values[state[1]]);
         state[1]++;
         if (sequence.values[state[1]] == 0) {
             state[1] = 0;

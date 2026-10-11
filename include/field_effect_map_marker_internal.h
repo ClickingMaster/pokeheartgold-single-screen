@@ -5,7 +5,7 @@
 
 #include "map_object.h"
 #include "overlay_01_021F1348.h"
-#include "unk_02023694.h"
+#include "billboard_lists.h"
 #include "unk_020689C8.h"
 
 // The 0x24-byte argument block handed to ov01_021F1620 as a4 and recovered
@@ -47,11 +47,11 @@ Sprite *ov01_021F1740(FieldSystem *a0, int a1, VecFx32 *a2);
 
 // sub_02068D98 comes from the tracked include/unk_020689C8.h (returns UnkOv01_021FFFCC *)
 void *sub_02068D90(void *a0);
-void *sub_02023DA4(Sprite *a0);
-void sub_02023F1C(Sprite *a0, fx32 a1);
-fx32 sub_02023F70(Sprite *a0);
-void sub_02023E50(Sprite *a0, VecFx32 *a1);
-void sub_02023F04(Sprite *a0, fx32 a1);
+void *BillboardObject_Delete(Sprite *a0);
+void BillboardObject_SetFrame(Sprite *a0, fx32 a1);
+fx32 BillboardObject_GetSequenceFrame(Sprite *a0);
+void BillboardObject_SetPosition(Sprite *a0, VecFx32 *a1);
+void BillboardObject_AdvanceFrame(Sprite *a0, fx32 a1);
 void sub_02068DA8(void *a0, VecFx32 *a1);
 BOOL sub_0206121C(void *a0, VecFx32 *a1);
 

@@ -2,8 +2,8 @@
 #pragma once
 .public HeapExp_FndInitAllocator
 .public GF_CreateNewVramTransferTask
-.public sub_02023E78
-.public sub_02023FB0
+.public BillboardObject_SetScale
+.public BillboardObject_GetPlttKey
 .public GF_AssertFail
 .public MapObject_GetPriorityPlusValue
 .public sub_0205F0F8

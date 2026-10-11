@@ -220,7 +220,7 @@ typedef struct ov02_BF58Cfg {
     int unk4;
 } ov02_BF58Cfg;
 extern void *ov01_021F771C(void *a0);            // no header included here
-extern void sub_02023E78(void *a0, VecFx32 *a1); // no header included here
+extern void BillboardObject_SetScale(void *a0, VecFx32 *a1); // no header included here
 WIP_LOCAL BOOL ov02_022508D8(TaskManager *taskManager);
 
 typedef struct ov02_FieldList5 {

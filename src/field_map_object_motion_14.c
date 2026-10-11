@@ -7,10 +7,10 @@ void ov01_021F8A4C(void *obj) {
     if (ov01_021FA2D4(obj) != TRUE && other != NULL) {
         facing = MapObject_GetFacingDirection(obj);
         if (facing != work[0]) {
-            sub_02023EE0(other, ov01_021FA44C(facing));
-            sub_02023F40(other, 0);
+            BillboardObject_SetSequence(other, ov01_021FA44C(facing));
+            BillboardObject_SetSequenceFrame(other, 0);
         }
-        sub_02023F04(other, FX32_ONE);
+        BillboardObject_AdvanceFrame(other, FX32_ONE);
         ov01_021FA3E8(obj, other);
         ov01_021F8C88(obj, other);
         work[0] = facing;

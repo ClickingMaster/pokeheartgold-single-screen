@@ -18,12 +18,12 @@ extern void *MapObject_GetFacingVector(void *object);
 extern void ov01_021FA3E8(void *object, void *model);
 extern void ov01_021F8C88(void *object, void *model);
 extern u32 ov01_021FA44C(int facing);
-extern void sub_02023EE0(void *model, u32 value);
-extern void sub_02023F40(void *model, fx32 value);
+extern void BillboardObject_SetSequence(void *model, u32 value);
+extern void BillboardObject_SetSequenceFrame(void *model, fx32 value);
 extern void ov01_021F8C64(void *model, u32 value);
 extern void ov01_021F8C30(void *model);
 extern BOOL ov01_021F9344(void *object);
-extern void sub_02023F04(void *model, fx32 value);
+extern void BillboardObject_AdvanceFrame(void *model, fx32 value);
 extern const Ov01MotionCallback ov01_02208B34[];
 
 void ov01_021F7E6C(void *object);
@@ -54,8 +54,8 @@ void ov01_021F7E6C(void *object) {
 void ov01_021F7EE4(void *unused, void *model, Ov01MotionState *state, int facing) {
 #pragma unused(unused)
     if (facing != state->facing) {
-        sub_02023EE0(model, ov01_021FA44C(facing));
-        sub_02023F40(model, 0);
+        BillboardObject_SetSequence(model, ov01_021FA44C(facing));
+        BillboardObject_SetSequenceFrame(model, 0);
         state->flag = 0;
         return;
     }
@@ -73,8 +73,8 @@ void ov01_021F7EE4(void *unused, void *model, Ov01MotionState *state, int facing
 
 void ov01_021F7F54(void *object, void *model, Ov01MotionState *state, int facing) {
     if (facing != state->facing) {
-        sub_02023EE0(model, ov01_021FA44C(facing));
-        sub_02023F40(model, 0);
+        BillboardObject_SetSequence(model, ov01_021FA44C(facing));
+        BillboardObject_SetSequenceFrame(model, 0);
     } else if (state->type == 9) {
         state->flag = 1;
         return;
@@ -83,6 +83,6 @@ void ov01_021F7F54(void *object, void *model, Ov01MotionState *state, int facing
         state->flag = 0;
     }
     if (!ov01_021F9344(object)) {
-        sub_02023F04(model, 2 << 10);
+        BillboardObject_AdvanceFrame(model, 2 << 10);
     }
 }

@@ -43,32 +43,32 @@ void sub_02063E70(LMO *obj) {
     if (ov01_021F9344(obj) == 0) {
         switch (sub_0205F330(obj)) {
         case 0:
-            if (sub_02023EF4(state->unk8) != 0) {
-                sub_02023EE0(state->unk8, 0);
-                sub_02023F40(state->unk8, 0);
+            if (BillboardObject_GetSequence(state->unk8) != 0) {
+                BillboardObject_SetSequence(state->unk8, 0);
+                BillboardObject_SetSequenceFrame(state->unk8, 0);
             }
             break;
         case 1:
-            if (sub_02023EF4(state->unk8) != 1) {
-                sub_02023EE0(state->unk8, 1);
-                sub_02023F40(state->unk8, 0);
+            if (BillboardObject_GetSequence(state->unk8) != 1) {
+                BillboardObject_SetSequence(state->unk8, 1);
+                BillboardObject_SetSequenceFrame(state->unk8, 0);
             }
             break;
         case 2:
-            if (sub_02023EF4(state->unk8) != 2) {
-                sub_02023EE0(state->unk8, 2);
-                sub_02023F40(state->unk8, 0);
+            if (BillboardObject_GetSequence(state->unk8) != 2) {
+                BillboardObject_SetSequence(state->unk8, 2);
+                BillboardObject_SetSequenceFrame(state->unk8, 0);
             }
             break;
         default:
             GF_AssertFail();
-            if (sub_02023EF4(state->unk8) != 0) {
-                sub_02023EE0(state->unk8, 0);
-                sub_02023F40(state->unk8, 0);
+            if (BillboardObject_GetSequence(state->unk8) != 0) {
+                BillboardObject_SetSequence(state->unk8, 0);
+                BillboardObject_SetSequenceFrame(state->unk8, 0);
             }
             break;
         }
-        sub_02023F04(state->unk8, 1 << 12);
+        BillboardObject_AdvanceFrame(state->unk8, 1 << 12);
     }
     ov01_021FA40C(obj, state->unk8);
 }

@@ -32,10 +32,10 @@ void ov01_021FA2EC(void *p, void *v) {
     u32 args[2];
     args[1] = 4;
     args[0] = (u32)v;
-    ov01_021FA1C8(p, sub_020237EC(args));
+    ov01_021FA1C8(p, Billboard_Create(args));
     ov01_021FA1D8(p, v);
 }
 
 void *ov01_021FA314(void *p) {
-    return sub_02023874(p);
+    return Billboard_Delete(p);
 }

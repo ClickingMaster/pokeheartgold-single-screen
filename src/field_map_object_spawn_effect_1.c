@@ -78,7 +78,7 @@ BOOL ov01_021FDAC0(void *task, LocalEffectState *state) {
 }
 void ov01_021FDB34(void *task, LocalEffectState *state) {
     if (state->active == 1) {
-        sub_02023DA4(state->effect);
+        BillboardObject_Delete(state->effect);
     }
 }
 void ov01_021FDB44(void *task, LocalEffectState *state) {
@@ -125,16 +125,16 @@ void ov01_021FDBCC(void *task, LocalEffectState *state) {
         hidden = TRUE;
     }
     if (hidden) {
-        sub_02023EA4(state->effect, FALSE);
+        BillboardObject_SetVisible(state->effect, FALSE);
     } else {
-        sub_02023EA4(state->effect, TRUE);
+        BillboardObject_SetVisible(state->effect, TRUE);
     }
     sub_02068DB8(task, &local.pos);
-    sub_02023E50(state->effect, &local.pos);
-    sub_02023E78(state->effect, &state->scaleX);
+    BillboardObject_SetPosition(state->effect, &local.pos);
+    BillboardObject_SetScale(state->effect, &state->scaleX);
     source = ov01_021F72DC(state->mapObject);
-    sub_02023EE0(state->effect, sub_02023EF4(source));
-    sub_02023F1C(state->effect, sub_02023F30(source));
+    BillboardObject_SetSequence(state->effect, BillboardObject_GetSequence(source));
+    BillboardObject_SetFrame(state->effect, BillboardObject_GetFrame(source));
 }
 void ov01_021FDC7C(LocalEffectState *state, void *obj, VecFx32 *out) {
     const LocalSixWords init = {
@@ -203,11 +203,11 @@ void ov01_021FDD94(void *task, LocalExtendedEffectState *state) {
     sub_02068DB8(task, &local.pos);
     state->effect = ov01_021F16EC((void *)state->data04[1], local.args, &local.pos);
     oldEffect = *(void **)((u8 *)state + 0x38);
-    sub_02023EE0(state->effect, sub_02023EF4(oldEffect));
-    sub_02023F40(state->effect, sub_02023F70(oldEffect));
-    sub_02023F1C(state->effect, sub_02023F30(oldEffect));
-    sub_02023F04(state->effect, 0);
-    sub_02023FC0(state->effect);
+    BillboardObject_SetSequence(state->effect, BillboardObject_GetSequence(oldEffect));
+    BillboardObject_SetSequenceFrame(state->effect, BillboardObject_GetSequenceFrame(oldEffect));
+    BillboardObject_SetFrame(state->effect, BillboardObject_GetFrame(oldEffect));
+    BillboardObject_AdvanceFrame(state->effect, 0);
+    BillboardObject_UpdateTextureAnimation(state->effect);
 }
 void ov01_021FDE08(LocalExtendedEffectState *state, VecFx32 *out) {
     LocalSixWords heights = sSpawnHeights;
@@ -255,7 +255,7 @@ BOOL ov01_021FDEAC(void *task, LocalExtendedEffectState *state) {
     return TRUE;
 }
 void ov01_021FDF14(void *task, LocalExtendedEffectState *state) {
-    sub_02023DA4(state->effect);
+    BillboardObject_Delete(state->effect);
 }
 void ov01_021FDF20(void *task, LocalExtendedEffectState *state) {
     VecFx32 pos;
@@ -273,8 +273,8 @@ void ov01_021FDF20(void *task, LocalExtendedEffectState *state) {
 void ov01_021FDF64(void *task, LocalExtendedEffectState *state) {
     VecFx32 pos;
     sub_02068DB8(task, &pos);
-    sub_02023E50(state->effect, &pos);
-    sub_02023E78(state->effect, &state->scaleX);
+    BillboardObject_SetPosition(state->effect, &pos);
+    BillboardObject_SetScale(state->effect, &state->scaleX);
 }
 void ov01_021FDF88(void *obj, void *arg) {
     LocalSpawn(obj, arg, ov01_02208F74);
@@ -333,17 +333,17 @@ void ov01_021FE0EC(void *task, LocalEffectState *state) {
         return;
     }
     if (MapObject_CheckVisible(obj) == TRUE) {
-        sub_02023EA4(state->effect, FALSE);
+        BillboardObject_SetVisible(state->effect, FALSE);
     } else {
-        sub_02023EA4(state->effect, TRUE);
+        BillboardObject_SetVisible(state->effect, TRUE);
     }
     sub_02068DB8(task, &pos);
     pos.z -= FX32_ONE;
-    sub_02023E50(state->effect, &pos);
-    sub_02023E78(state->effect, &state->scaleX);
+    BillboardObject_SetPosition(state->effect, &pos);
+    BillboardObject_SetScale(state->effect, &state->scaleX);
     source = ov01_021F72DC(state->mapObject);
-    sub_02023EE0(state->effect, sub_02023EF4(source));
-    sub_02023F1C(state->effect, sub_02023F30(source));
+    BillboardObject_SetSequence(state->effect, BillboardObject_GetSequence(source));
+    BillboardObject_SetFrame(state->effect, BillboardObject_GetFrame(source));
 }
 void ov01_021FE190(void *task, LocalEffectState *state) {
     struct {

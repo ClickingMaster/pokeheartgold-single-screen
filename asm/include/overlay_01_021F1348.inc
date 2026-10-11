@@ -11,10 +11,10 @@
 .public Heap_AllocAtEnd
 .public Heap_Free
 .public GF3dRender_ResTexIsLoaded
-.public sub_020237EC
-.public sub_02023874
-.public sub_02023D44
-.public sub_02023F90
+.public Billboard_Create
+.public Billboard_Delete
+.public BillboardObject_Create
+.public BillboardObject_GetModel
 .public GF_AssertFail
 .public GF3dGfxRawResMan_Create
 .public GF3dGfxRawResMan_Destroy

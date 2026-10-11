@@ -72,12 +72,12 @@ void ov01_021F8D80(LocalMapObject *object, Sprite *sprite, UnkObjExtra *extra, u
         vec.y += ov01_022054E0(object);
     }
     if (direction != extra->unk10) {
-        sub_02023EE0(sprite, ov01_021FA44C(direction));
-        sub_02023F40(sprite, 0);
+        BillboardObject_SetSequence(sprite, ov01_021FA44C(direction));
+        BillboardObject_SetSequenceFrame(sprite, 0);
         extra->unk15 = 0;
     }
     if (paused == 0 && flag4 == 0) {
-        sub_02023F04(sprite, 1 << 12);
+        BillboardObject_AdvanceFrame(sprite, 1 << 12);
         if (ov01_021F8FC0((u8)direction, object, sprite)) {
             vec.y -= 2 << 12;
             extra->unk15 = 1;
@@ -86,7 +86,7 @@ void ov01_021F8D80(LocalMapObject *object, Sprite *sprite, UnkObjExtra *extra, u
         }
     }
     if (flag4) {
-        sub_02023F04(sprite, 1 << 12);
+        BillboardObject_AdvanceFrame(sprite, 1 << 12);
     }
     MapObject_SetFacingVector(object, &vec);
 }
@@ -169,7 +169,7 @@ void ov01_021F8FA0(LocalMapObject *object, VecFx32 *vec) {
 }
 
 BOOL ov01_021F8FC0(u8 direction, LocalMapObject *object, Sprite *sprite) {
-    int v = sub_02023F30(sprite) / (1 << 12);
+    int v = BillboardObject_GetFrame(sprite) / (1 << 12);
 
     switch (direction) {
     case 0:
@@ -271,18 +271,18 @@ void ov01_021F9140(LocalMapObject *object) {
 
 void ov01_021F9154(LocalMapObject *object, Sprite *sprite, UnkObjExtra *extra) {
     if (*(u32 *)&extra->unk10 != 0) {
-        sub_02023EE0(sprite, 0);
-        sub_02023F40(sprite, 0);
+        BillboardObject_SetSequence(sprite, 0);
+        BillboardObject_SetSequenceFrame(sprite, 0);
     }
-    sub_02023F04(sprite, 1 << 12);
+    BillboardObject_AdvanceFrame(sprite, 1 << 12);
 }
 
 void ov01_021F917C(LocalMapObject *object, Sprite *sprite, UnkObjExtra *extra) {
     if (*(u32 *)&extra->unk10 != 1) {
-        sub_02023EE0(sprite, 1);
-        sub_02023F40(sprite, 0);
+        BillboardObject_SetSequence(sprite, 1);
+        BillboardObject_SetSequenceFrame(sprite, 0);
     }
-    sub_02023F04(sprite, 1 << 12);
+    BillboardObject_AdvanceFrame(sprite, 1 << 12);
 }
 
 void ov01_021F91A4(LocalMapObject *object, Sprite *sprite) {
@@ -294,7 +294,7 @@ void ov01_021F91A4(LocalMapObject *object, Sprite *sprite) {
     if (MapObject_TestFlagsBits(object, (MapObjectFlagBits)(1 << 12)) == TRUE && MapObject_TestFlagsBits(object, (MapObjectFlagBits)(2 << 12)) == 0) {
         v = 0;
     }
-    sub_02023EA4(sprite, v);
+    BillboardObject_SetVisible(sprite, v);
 }
 
 void ov01_021F91E4(LocalMapObject *object) {

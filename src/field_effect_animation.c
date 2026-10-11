@@ -139,7 +139,7 @@ void ov01_022003B0(Work *w, int which) {
 void *ov01_022003C4(void *manager, int which, Vec3 *pos) {
     int ids[2] = { 1, 12 };
     void *obj = ov01_021F1740(manager, ids[which], pos);
-    void *mdl = sub_02023F90(obj);
+    void *mdl = BillboardObject_GetModel(obj);
     NNS_G3dMdlSetMdlFogEnableFlagAll(mdl, 0);
     return obj;
 }
@@ -150,7 +150,7 @@ void ov01_02200400(void) {
     u8 *p = sub_02068D74();
     *(int *)(p + 0x10) = 1;
     if (*(void **)(p + 0x40) != NULL) {
-        sub_02023EA4(*(void **)(p + 0x40), 0);
+        BillboardObject_SetVisible(*(void **)(p + 0x40), 0);
     }
 }
 
@@ -162,7 +162,7 @@ int ov01_02200418(void *task, AnimWork *w) {
     sub_02068DB8(task, &pos);
     w->renderObj = ov01_022003C4((void *)w->model, w->which, &pos);
     ov01_02200238(w->effects, w->which);
-    sub_02023EA4(w->renderObj, 0);
+    BillboardObject_SetVisible(w->renderObj, 0);
     if (sub_02068D90(task) == 1) {
         PlaySE(SEQ_SE_DP_DECIDE);
     }
@@ -173,7 +173,7 @@ void ov01_02200480(void *task, AnimWork *w) {
     sub_02068DB8(task, &pos);
     switch (w->state) {
     case 0:
-        sub_02023EA4(w->renderObj, 1);
+        BillboardObject_SetVisible(w->renderObj, 1);
         w->offY += w->velocity;
         if (w->offY != 0) {
             w->velocity -= 0x2000;
@@ -196,7 +196,7 @@ void ov01_02200480(void *task, AnimWork *w) {
     sub_02068DA8(task, &pos);
 }
 void ov01_022004EC(void *task, AnimWork *w) {
-    sub_02023DA4(w->renderObj);
+    BillboardObject_Delete(w->renderObj);
     ov01_0220024C(w->effects, w->which);
     ov01_022003B0(w->effects, w->which);
 }
@@ -207,7 +207,7 @@ void ov01_02200508(void *task, AnimWork *w) {
         pos.x += w->offX;
         pos.y += w->offY;
         pos.z += w->offZ;
-        sub_02023E50(w->renderObj, &pos);
+        BillboardObject_SetPosition(w->renderObj, &pos);
     }
 }
 int ov01_02200540(void *obj, int a1, int a2) {
@@ -236,7 +236,7 @@ int ov01_0220059C(void *task, AnimWork *w) {
     sub_02068DB8(task, &pos);
     w->renderObj = ov01_022003C4((void *)w->model, w->which, &pos);
     ov01_02200238(w->effects, w->which);
-    sub_02023EA4(w->renderObj, 0);
+    BillboardObject_SetVisible(w->renderObj, 0);
     if (sub_02068D90(task) == 1) {
         PlaySE(SEQ_SE_DP_DECIDE);
     }
@@ -253,7 +253,7 @@ void ov01_02200614(void *task, AnimWork *w) {
     pos.z += 0x1000;
     switch (w->state) {
     case 0:
-        sub_02023EA4(w->renderObj, 1);
+        BillboardObject_SetVisible(w->renderObj, 1);
         w->offY += w->velocity;
         if (w->offY != 0) {
             w->velocity -= 0x2000;

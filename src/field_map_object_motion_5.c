@@ -2,8 +2,8 @@
 
 void ov01_021F7CBC(void *unused, void *obj, const s8 *state, int index) {
     if (state[3] != 9) {
-        sub_02023EE0(obj, 4);
-        sub_02023F40(obj, 0);
+        BillboardObject_SetSequence(obj, 4);
+        BillboardObject_SetSequenceFrame(obj, 0);
     }
-    sub_02023F04(obj, FX32_ONE);
+    BillboardObject_AdvanceFrame(obj, FX32_ONE);
 }

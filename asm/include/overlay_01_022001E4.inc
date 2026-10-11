@@ -1,10 +1,10 @@
 #include <nitro/fs/overlay.h>
 #pragma once
 .public PlaySE
-.public sub_02023DA4
-.public sub_02023E50
-.public sub_02023EA4
-.public sub_02023F90
+.public BillboardObject_Delete
+.public BillboardObject_SetPosition
+.public BillboardObject_SetVisible
+.public BillboardObject_GetModel
 .public GF_AssertFail
 .public sub_0205F0A8
 .public MapObject_GetID

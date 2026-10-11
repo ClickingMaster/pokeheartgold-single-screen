@@ -16,17 +16,17 @@ BOOL ov01_021FF174(void *a0, FieldEffectFollowWork *work) {
     sub_02068DA8(a0, &pos);
     work->sprite = ov01_021F1740(work->args.fieldSys, 0, &pos);
     if (MapObject_TestFlagsBits(work->args.object, MAPOBJECTFLAG_VISIBLE) == 1) {
-        sub_02023EA4(work->sprite, 0);
+        BillboardObject_SetVisible(work->sprite, 0);
     }
     if (sub_02068D90(a0) == 0) {
-        sub_02023F1C(work->sprite, 3 << 14);
+        BillboardObject_SetFrame(work->sprite, 3 << 14);
         work->state = 2;
     }
     return TRUE;
 }
 
 BOOL ov01_021FF228(void *a0, FieldEffectFollowWork *work) {
-    return sub_02023DA4(work->sprite);
+    return BillboardObject_Delete(work->sprite);
 }
 
 void ov01_021FF234(void *a0, FieldEffectFollowWork *work) {
@@ -41,9 +41,9 @@ void ov01_021FF234(void *a0, FieldEffectFollowWork *work) {
         return;
     }
     if (MapObject_TestFlagsBits(object, MAPOBJECTFLAG_VISIBLE) == 1) {
-        sub_02023EA4(work->sprite, 0);
+        BillboardObject_SetVisible(work->sprite, 0);
     } else {
-        sub_02023EA4(work->sprite, 1);
+        BillboardObject_SetVisible(work->sprite, 1);
     }
     if (work->unk14 == 0) {
         sub_02068DB8(a0, &cur);
@@ -58,14 +58,14 @@ void ov01_021FF234(void *a0, FieldEffectFollowWork *work) {
     }
     switch (work->state) {
     case 0:
-        if (sub_02023F04(work->sprite, 1 << 12) == 1) {
+        if (BillboardObject_AdvanceFrame(work->sprite, 1 << 12) == 1) {
         }
-        if (sub_02023F70(work->sprite) / FX32_ONE >= 0xc) {
+        if (BillboardObject_GetSequenceFrame(work->sprite) / FX32_ONE >= 0xc) {
             work->state = 1;
         }
         return;
     case 1:
-        sub_02023F1C(work->sprite, 3 << 14);
+        BillboardObject_SetFrame(work->sprite, 3 << 14);
         work->state = 2;
     case 2:
         if (!sub_0205F0F8(object, work->spriteId, work->objId, work->mapId)) {
@@ -97,5 +97,5 @@ void ov01_021FF35C(void *a0, FieldEffectFollowWork *work) {
         return;
     }
     sub_02068DB8(a0, &pos);
-    sub_02023E50(work->sprite, &pos);
+    BillboardObject_SetPosition(work->sprite, &pos);
 }

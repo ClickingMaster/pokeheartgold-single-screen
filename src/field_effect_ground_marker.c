@@ -119,7 +119,7 @@ void ov01_02203B70(Ov01_02203A18_Work *work) {
 
 void *ov01_02203B98(FieldSystem *fieldSystem, const VecFx32 *position) {
     void *ret = ov01_021F1740(fieldSystem, 0xe, position);
-    NNS_G3dMdlSetMdlFogEnableFlagAll(sub_02023F90(ret), FALSE);
+    NNS_G3dMdlSetMdlFogEnableFlagAll(BillboardObject_GetModel(ret), FALSE);
     return ret;
 }
 
@@ -145,13 +145,13 @@ BOOL ov01_02203BB4(void *a0, Ov01_02203A18_Inst *inst) {
     GF_CreateNewVramTransferTask((NNS_GFD_DST_TYPE)1, plttAddr, Texture_GetPaletteData(inst->unk40.unk10, 0), 0x20);
     sub_02068DB8(a0, &position);
     inst->unk3C = ov01_02203B98(inst->unk30.unk0, &position);
-    sub_02023EA4(inst->unk3C, 0);
+    BillboardObject_SetVisible(inst->unk3C, 0);
     PlaySE(SEQ_SE_DP_DECIDE);
     return TRUE;
 }
 
 void ov01_02203CA0(void *a0, Ov01_02203A18_Inst *inst) {
-    sub_02023DA4(inst->unk3C);
+    BillboardObject_Delete(inst->unk3C);
     Heap_Free(inst->unk40.unk14);
     Heap_Free(inst->unk40.unk18);
 }
@@ -178,7 +178,7 @@ void ov01_02203CB8(void *a0, Ov01_02203A18_Inst *inst) {
     result.z += FX32_ONE;
     switch (inst->unk0) {
     case 0:
-        sub_02023EA4(inst->unk3C, 1);
+        BillboardObject_SetVisible(inst->unk3C, 1);
         inst->unk18.y += inst->unk28;
         if (inst->unk18.y > 0) {
             inst->unk28 -= FX32_CONST(2);
@@ -216,7 +216,7 @@ void ov01_02203DC0(void *a0, Ov01_02203A18_Inst *inst) {
         position.x += inst->unk18.x;
         position.y += inst->unk18.y;
         position.z += inst->unk18.z;
-        sub_02023E50(inst->unk3C, &position);
+        BillboardObject_SetPosition(inst->unk3C, &position);
     }
 }
 

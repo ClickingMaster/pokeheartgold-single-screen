@@ -48,12 +48,12 @@ BOOL ov01_021FF54C(void *task, LocalState *s) {
     sub_02068DA8(task, &pos);
     s->effect = ov01_021F1740(s->resource, 3, &pos);
     if (MapObject_TestFlagsBits(s->mapObject, 2 << 8) == TRUE) {
-        sub_02023EA4(s->effect, FALSE);
+        BillboardObject_SetVisible(s->effect, FALSE);
     }
     return TRUE;
 }
 void ov01_021FF5B8(void *task, LocalState *s) {
-    sub_02023DA4(s->effect);
+    BillboardObject_Delete(s->effect);
 }
 void ov01_021FF5C4(void *task, LocalState *s) {
     int mode;
@@ -68,18 +68,18 @@ void ov01_021FF5C4(void *task, LocalState *s) {
         return;
     }
     if (MapObject_TestFlagsBits(obj, 2 << 8) == TRUE) {
-        sub_02023EA4(s->effect, FALSE);
+        BillboardObject_SetVisible(s->effect, FALSE);
     } else {
-        sub_02023EA4(s->effect, TRUE);
+        BillboardObject_SetVisible(s->effect, TRUE);
     }
     if (s->stage == 0) {
-        sub_02023F04(s->effect, FX32_ONE);
-        if (sub_02023F70(s->effect) / FX32_ONE >= 12) {
+        BillboardObject_AdvanceFrame(s->effect, FX32_ONE);
+        if (BillboardObject_GetSequenceFrame(s->effect) / FX32_ONE >= 12) {
             if (mode == 0) {
                 ov01_021F1640(task);
                 return;
             }
-            sub_02023F1C(s->effect, 0);
+            BillboardObject_SetFrame(s->effect, 0);
         }
     }
 }
@@ -97,5 +97,5 @@ void ov01_021FF658(void *task, LocalState *s) {
     local.pos.x += local.facing.x;
     local.pos.z += local.facing.z;
     local.pos.z += 2 << 14;
-    sub_02023E50(s->effect, &local.pos);
+    BillboardObject_SetPosition(s->effect, &local.pos);
 }

@@ -11,10 +11,10 @@ void sub_020689F8(void *manager);
 void sub_02068BAC(void *manager);
 void *sub_02068B0C(void *manager, const void *tmpl, void *pos, int param, void *userData, u32 priority);
 void sub_02068B48(int a0);
-void *sub_020237EC(const FieldEffectAnimReq *req);
-void sub_02023874(void *a0);
-void *sub_02023D44(const FieldEffectModelReq *req);
-NNSG3dResMdl *sub_02023F90(void *a0);
+void *Billboard_Create(const FieldEffectAnimReq *req);
+void Billboard_Delete(void *a0);
+void *BillboardObject_Create(const FieldEffectModelReq *req);
+NNSG3dResMdl *BillboardObject_GetModel(void *a0);
 void BillboardGfxSequence_Init(void *a0, FieldEffectMtx *out);
 void *ov01_021FC4C4(enum HeapID heapID, int a1, int a2, int a3);
 void ov01_021FC520(void *a0);
@@ -348,13 +348,13 @@ void ov01_021F1648(FieldEffectManager *manager, enum HeapID heapID, u32 a2, u32 
     ov01_021F17BC(manager, gfx, a2);
     req.count = a2;
     req.heapID = ov01_021F1478(manager);
-    gfx->unkC = sub_020237EC(&req);
+    gfx->unkC = Billboard_Create(&req);
 }
 
 void ov01_021F16B8(FieldEffectManager *manager) {
     FieldEffectGfx *gfx = manager->gfx;
     if (gfx != NULL) {
-        sub_02023874(gfx->unkC);
+        Billboard_Delete(gfx->unkC);
         ov01_021F17F0(gfx);
         ov01_021FC520(gfx->unk10);
         ov01_021FC520(gfx->unk14);
@@ -371,11 +371,11 @@ void *ov01_021F16EC(FieldEffectManager *manager, void *a1, const VecFx32 *positi
     req.unk4 = a1;
     req.position = *position;
     req.scale = ov01_02206988;
-    model = sub_02023D44(&req);
+    model = BillboardObject_Create(&req);
     GF_ASSERT(model != NULL);
     if (model != NULL) {
-        NNS_G3dMdlSetMdlFogEnableFlagAll(sub_02023F90(model), 1);
-        ov01_021EA3B0(sub_02023F90(model));
+        NNS_G3dMdlSetMdlFogEnableFlagAll(BillboardObject_GetModel(model), 1);
+        ov01_021EA3B0(BillboardObject_GetModel(model));
     }
     return model;
 }

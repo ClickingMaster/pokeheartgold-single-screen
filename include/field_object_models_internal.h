@@ -37,11 +37,11 @@ extern u16 ov01_02206D00[];
 BOOL ov01_021FA2D4(LocalMapObject *object);
 void ov01_021FA3E8(LocalMapObject *object, Sprite *sprite);
 
-void sub_02023EA4(Sprite *sprite, u8 a1);
-void sub_02023EE0(Sprite *sprite, int a1);
-void sub_02023F04(Sprite *sprite, fx32 a1);
-fx32 sub_02023F30(Sprite *sprite);
-void sub_02023F40(Sprite *sprite, int a1);
+void BillboardObject_SetVisible(Sprite *sprite, u8 a1);
+void BillboardObject_SetSequence(Sprite *sprite, int a1);
+void BillboardObject_AdvanceFrame(Sprite *sprite, fx32 a1);
+fx32 BillboardObject_GetFrame(Sprite *sprite);
+void BillboardObject_SetSequenceFrame(Sprite *sprite, int a1);
 
 int ov01_02205564(LocalMapObject *object);
 fx32 ov01_022054E0(LocalMapObject *object);

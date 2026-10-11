@@ -23,11 +23,11 @@ typedef struct Overlay45R38Object {
 } Overlay45R38Object;
 
 void ov49_02258800(const s16 *source, s32 *destination);
-void sub_02023E50(void *handle, const Overlay45R38Vec *position);
+void BillboardObject_SetPosition(void *handle, const Overlay45R38Vec *position);
 void ModelInstance_SetPosition(void *model, u32 x, u32 y, u32 z);
-const Overlay45R38Vec *sub_02023E68(void *handle);
-void sub_02023EE0(void *handle, u32 value);
-void sub_02023F40(void *handle, s32 value);
+const Overlay45R38Vec *BillboardObject_GetPosition(void *handle);
+void BillboardObject_SetSequence(void *handle, u32 value);
+void BillboardObject_SetSequenceFrame(void *handle, s32 value);
 u32 ov45_022309C4(u32 value);
 
 u32 ov45_022308B8(Overlay45R38Object *object);

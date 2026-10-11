@@ -76,7 +76,7 @@ BOOL ov01_021FE6B4(void *task, LocalState *s) {
     return TRUE;
 }
 void ov01_021FE6F4(void *task, LocalState *s) {
-    sub_02023DA4(s->effect);
+    BillboardObject_Delete(s->effect);
     ov01_021FE5BC(s->manager);
     ov01_021FE65C(s->manager);
 }
@@ -92,14 +92,14 @@ void ov01_021FE70C(void *task, LocalState *s) {
             ov01_021F1640(task);
             return;
         }
-        sub_02023F1C(s->effect, 0);
+        BillboardObject_SetFrame(s->effect, 0);
     }
-    if (sub_02023F04(s->effect, values.v[s->index]) == TRUE) {
+    if (BillboardObject_AdvanceFrame(s->effect, values.v[s->index]) == TRUE) {
         s->finished = 1;
     }
 }
 void ov01_021FE768(void *task, LocalState *s) {
     VecFx32 pos;
     sub_02068DB8(task, &pos);
-    sub_02023E50(s->effect, &pos);
+    BillboardObject_SetPosition(s->effect, &pos);
 }

@@ -3,19 +3,19 @@
 void ov45_02230D20(Overlay45RenderEntry *entry) {
     if (entry->timer == 0) {
         ov42_02228188(entry->ctx, 6);
-        sub_02023EE0(entry->sprite, ov45_022309C4(1, ov42_02228188(entry->ctx, 6)));
-        sub_02023F40(entry->sprite, 0x4000);
+        BillboardObject_SetSequence(entry->sprite, ov45_022309C4(1, ov42_02228188(entry->ctx, 6)));
+        BillboardObject_SetSequenceFrame(entry->sprite, 0x4000);
         entry->timer++;
     }
 }
 
 void ov45_02230D5C(Overlay45RenderEntry *entry) {
     if (entry->timer == 0) {
-        sub_02023EE0(entry->sprite, ov45_022309C4(1, ov42_02228188(entry->ctx, 6)));
-        sub_02023F40(entry->sprite, 0x4000);
+        BillboardObject_SetSequence(entry->sprite, ov45_022309C4(1, ov42_02228188(entry->ctx, 6)));
+        BillboardObject_SetSequenceFrame(entry->sprite, 0x4000);
     } else if (entry->timer == 4) {
-        sub_02023EE0(entry->sprite, ov45_022309C4(1, ov42_02228188(entry->ctx, 6)));
-        sub_02023F40(entry->sprite, 0xC000);
+        BillboardObject_SetSequence(entry->sprite, ov45_022309C4(1, ov42_02228188(entry->ctx, 6)));
+        BillboardObject_SetSequenceFrame(entry->sprite, 0xC000);
     }
     entry->timer = (entry->timer + 1) % 8;
 }
@@ -47,15 +47,15 @@ void ov45_02230DF4(Overlay45RenderEntry *entry) {
 
 void ov45_02230E28(Overlay45RenderEntry *entry) {
     if (entry->type == 0 && entry->top == 1) {
-        sub_02023EA4(entry->sprite, TRUE);
+        BillboardObject_SetVisible(entry->sprite, TRUE);
         ModelInstance_SetVisible(entry->render, TRUE);
     } else {
-        sub_02023EA4(entry->sprite, FALSE);
+        BillboardObject_SetVisible(entry->sprite, FALSE);
         ModelInstance_SetVisible(entry->render, FALSE);
     }
 }
 
 void ov45_02230E64(void *sprite, Overlay45RenderEntry *entry) {
-    void *model = sub_02023FDC(sprite);
+    void *model = BillboardObject_GetModelNoCast(sprite);
     NNS_G3dMdlSetMdlLightEnableFlagAll(model, entry->lightFlags);
 }

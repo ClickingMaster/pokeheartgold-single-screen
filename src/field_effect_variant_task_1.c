@@ -49,7 +49,7 @@ BOOL ov01_02200780(void *task, Ov01ObjectState *state) {
 }
 
 void ov01_022007D0(void *unused, Ov01ObjectState *state) {
-    sub_02023DA4(state->effect);
+    BillboardObject_Delete(state->effect);
 }
 
 void ov01_022007DC(void *task, Ov01ObjectState *state) {
@@ -73,5 +73,5 @@ void ov01_022007F8(void *task, Ov01ObjectState *state) {
     position.y += facing.y;
     position.z += facing.z;
     position.z += 3 << 14;
-    sub_02023E50(state->effect, &position);
+    BillboardObject_SetPosition(state->effect, &position);
 }

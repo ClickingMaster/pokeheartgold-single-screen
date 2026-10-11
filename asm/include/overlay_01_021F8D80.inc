@@ -6,11 +6,11 @@
 .public NARC_GetMemberSize
 .public Heap_Alloc
 .public Heap_AllocAtEnd
-.public sub_02023EA4
-.public sub_02023EE0
-.public sub_02023F04
-.public sub_02023F30
-.public sub_02023F40
+.public BillboardObject_SetVisible
+.public BillboardObject_SetSequence
+.public BillboardObject_AdvanceFrame
+.public BillboardObject_GetFrame
+.public BillboardObject_SetSequenceFrame
 .public GF_AssertFail
 .public MapObjectManager_GetObjectCount
 .public MapObjectManager_SetFlagsBits

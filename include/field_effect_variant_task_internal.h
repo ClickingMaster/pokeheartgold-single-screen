@@ -47,12 +47,12 @@ extern void sub_02068DA8(void *, Ov01Vec3 *);
 extern s32 MapObject_GetID(void *);
 extern s32 MapObject_GetMapID(void *);
 extern void *ov01_021F1740(void *, u32, const Ov01Vec3 *);
-extern void sub_02023DA4(void *);
+extern void BillboardObject_Delete(void *);
 extern BOOL sub_0205F0A8(void *, s32, s32);
 extern void ov01_021F1640(void *);
 extern void MapObject_CopyPositionVector(void *, Ov01Vec3 *);
 extern void MapObject_CopyFacingVector(void *, Ov01Vec3 *);
-extern void sub_02023E50(void *, const Ov01Vec3 *);
+extern void BillboardObject_SetPosition(void *, const Ov01Vec3 *);
 extern const u8 ov01_02209308[];
 extern const u8 ov01_0220931C[];
 

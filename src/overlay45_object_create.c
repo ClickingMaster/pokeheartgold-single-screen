@@ -73,17 +73,17 @@ extern u32 GF3dGfxRawResObj_GetTexKey(void *);
 extern u32 GF3dGfxRawResObj_GetTex4x4Key(void *);
 extern u32 GF3dGfxRawResObj_GetPlttKey(void *);
 extern void BillboardGfxSequence_Init(void *, ResourceData *);
-extern void sub_02023E2C(BillboardResource *, void *, void *, const void *, ResourceData *);
-extern void sub_02023E04(BillboardResource *, void *, void *, const void *, ResourceData *, u32, u32, u32);
+extern void BillboardResource_Init(BillboardResource *, void *, void *, const void *, ResourceData *);
+extern void BillboardResource_InitWithKeys(BillboardResource *, void *, void *, const void *, ResourceData *, u32, u32, u32);
 extern Coord ov42_022282DC(void *);
 extern void ov49_02258800(const Coord *, Vec3 *);
-extern void *sub_02023D44(CreateParams *);
-extern void sub_02023FE4(void *, void (*)(void *, Obj *), Obj *);
+extern void *BillboardObject_Create(CreateParams *);
+extern void BillboardObject_SetCallback(void *, void (*)(void *, Obj *), Obj *);
 extern void ov45_02230E64(void *, Obj *);
 extern void ov45_02230A5C(void *, void *);
 extern void ModelInstance_SetPosition(void *, s32, s32, s32);
 extern void ov45_02230A4C(void *);
-extern void sub_02023DA4(void *);
+extern void BillboardObject_Delete(void *);
 
 Obj *ov45_0223070C(Manager *, void *);
 void ov45_02230700(Obj *);
@@ -121,11 +121,11 @@ Obj *ov45_0223070C(Manager *manager, void *ctx) {
     }
     BillboardGfxSequence_Init(GF2dGfxRawResObj_GetData(GF2dGfxRawResMan_GetObjById(manager->animation2d, texKey)), &data);
     if (config->embeddedTexture == 1) {
-        sub_02023E2C(&resource, file0, texture, &ov45_02254C98, &data);
+        BillboardResource_Init(&resource, file0, texture, &ov45_02254C98, &data);
     } else {
         texKey = GF3dGfxRawResObj_GetTexKey(raw3d);
         tex4x4Key = GF3dGfxRawResObj_GetTex4x4Key(raw3d);
-        sub_02023E04(&resource, file0, texture, &ov45_02254C98, &data, texKey, tex4x4Key, GF3dGfxRawResObj_GetPlttKey(raw3d));
+        BillboardResource_InitWithKeys(&resource, file0, texture, &ov45_02254C98, &data, texKey, tex4x4Key, GF3dGfxRawResObj_GetPlttKey(raw3d));
     }
     coord = ov42_022282DC(ctx);
     ov49_02258800(&coord, &position);
@@ -134,8 +134,8 @@ Obj *ov45_0223070C(Manager *manager, void *ctx) {
     create.resource = &resource;
     create.position = position;
     create.scale = scale;
-    object->handle = sub_02023D44(&create);
-    sub_02023FE4(object->handle, ov45_02230E64, object);
+    object->handle = BillboardObject_Create(&create);
+    BillboardObject_SetCallback(object->handle, ov45_02230E64, object);
     ov45_02230A5C(manager->modelResource, object->model);
     ModelInstance_SetPosition(object->model, position.x, 0x2000, position.z - 0x8000);
     object->state = 1;
@@ -146,7 +146,7 @@ Obj *ov45_0223070C(Manager *manager, void *ctx) {
 }
 
 void ov45_02230884(Obj *o) {
-    sub_02023DA4(o->handle);
+    BillboardObject_Delete(o->handle);
     memset(o, 0, 0x90);
 }
 

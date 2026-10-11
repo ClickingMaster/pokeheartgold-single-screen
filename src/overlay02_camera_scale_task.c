@@ -12,7 +12,7 @@ WIP_LOCAL BOOL ov02_022508D8(TaskManager *taskManager) {
         (*(u16 *)((u8 *)env + 2))++;
         v.x = (s32)((double)*(u16 *)((u8 *)env + 2) * 2048.0 / 10.0 + 4096.0);
         v.y = (s32)((double)*(u16 *)((u8 *)env + 2) * 2048.0 / 10.0 + 4096.0);
-        sub_02023E78(ov01_021F771C(*(void **)((u8 *)fieldSystem + 0x3c)), &v);
+        BillboardObject_SetScale(ov01_021F771C(*(void **)((u8 *)fieldSystem + 0x3c)), &v);
         if (*(u16 *)((u8 *)env + 2) >= 10) {
             *(u16 *)((u8 *)env + 2) = 0;
             *(u16 *)env = 0;
@@ -36,7 +36,7 @@ WIP_LOCAL BOOL ov02_022508D8(TaskManager *taskManager) {
             v.x = (s32)((double)(10 - *(u16 *)((u8 *)env + 2)) * 2048.0 / 10.0 + 4096.0);
             v.y = (s32)((double)(10 - *(u16 *)((u8 *)env + 2)) * 2048.0 / 10.0 + 4096.0);
         }
-        sub_02023E78(ov01_021F771C(*(void **)((u8 *)fieldSystem + 0x3c)), &v);
+        BillboardObject_SetScale(ov01_021F771C(*(void **)((u8 *)fieldSystem + 0x3c)), &v);
         break;
     }
     case 3:

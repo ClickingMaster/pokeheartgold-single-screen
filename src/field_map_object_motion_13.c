@@ -8,9 +8,9 @@ void ov01_021F88F0(void *obj) {
         facing = MapObject_GetFacingDirection(obj);
         work[0] = facing;
         work[2] = sub_0205F330(obj);
-        sub_02023EE0(other, ov01_021FA44C(facing));
-        sub_02023F40(other, 0);
-        sub_02023F04(other, 0);
+        BillboardObject_SetSequence(other, ov01_021FA44C(facing));
+        BillboardObject_SetSequenceFrame(other, 0);
+        BillboardObject_AdvanceFrame(other, 0);
         ov01_021FA3E8(obj, other);
         ov01_021F8C88(obj, other);
     }
@@ -22,11 +22,11 @@ void ov01_021F894C(void *obj) {
     if (ov01_021FA2D4(obj) != TRUE && other != NULL) {
         work[0] = MapObject_GetFacingDirection(obj);
         work[2] = sub_0205F330(obj);
-        if (sub_02023EF4(other) != FALSE) {
-            sub_02023EE0(other, 0);
-            sub_02023F40(other, 0);
+        if (BillboardObject_GetSequence(other) != FALSE) {
+            BillboardObject_SetSequence(other, 0);
+            BillboardObject_SetSequenceFrame(other, 0);
         }
-        sub_02023F04(other, FX32_ONE);
+        BillboardObject_AdvanceFrame(other, FX32_ONE);
         ((VecFx32 *)MapObject_GetFacingVector(obj))->z = 2 << 10;
         ov01_021FA3E8(obj, other);
         ov01_021F8C88(obj, other);

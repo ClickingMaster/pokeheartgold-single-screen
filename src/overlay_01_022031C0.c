@@ -23,8 +23,8 @@ void ov01_02203654(void *task, void *v) {
     case 0:
         mapObj = FollowMon_GetMapObject(*(void **)(p + 0x24));
         model = ov01_021F771C(*(void **)((u8 *)*(void **)(p + 0x24) + 0x3c));
-        a = sub_02023FB0(model);
-        b = sub_02023FB0(model);
+        a = BillboardObject_GetPlttKey(model);
+        b = BillboardObject_GetPlttKey(model);
         GF_CreateNewVramTransferTask(1, (u16)b << 3, ov01_02209B18, ((a & 0xFFFF0000) >> 16) << 3);
         if (ov01_022055DC(mapObj)) {
             dir = (u8)MapObject_GetFacingDirection(mapObj);
@@ -41,7 +41,7 @@ void ov01_02203654(void *task, void *v) {
         ++*(s32 *)(p + 0x10);
         scale.x = (1 << 12) / *(s32 *)(p + 0x10);
         scale.y = (1 << 12) / *(s32 *)(p + 0x10);
-        sub_02023E78(ov01_021F771C(*(void **)((u8 *)*(void **)(p + 0x24) + 0x3c)), &scale);
+        BillboardObject_SetScale(ov01_021F771C(*(void **)((u8 *)*(void **)(p + 0x24) + 0x3c)), &scale);
         if (*(s32 **)(p + 0x3c)) {
             mapObj = FollowMon_GetMapObject(*(void **)(p + 0x24));
             {

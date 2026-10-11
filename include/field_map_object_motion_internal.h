@@ -5,12 +5,12 @@ typedef struct LocalConfig {
     u32 a, b, c;
 } LocalConfig;
 void MapObject_SetFacingVector(void *, const VecFx32 *);
-fx32 sub_02023F70(void *);
-void sub_02023F40(void *, fx32);
-void sub_02023F04(void *, fx32);
-void sub_02023EE0(void *, u32);
+fx32 BillboardObject_GetSequenceFrame(void *);
+void BillboardObject_SetSequenceFrame(void *, fx32);
+void BillboardObject_AdvanceFrame(void *, fx32);
+void BillboardObject_SetSequence(void *, u32);
 BOOL MapObject_TestFlagsBits(void *, u32);
-void sub_02023EA4(void *, u8);
+void BillboardObject_SetVisible(void *, u8);
 void *sub_0205F3E8(void *, int);
 void *sub_0205F40C(void *);
 u32 MapObject_GetSpriteID(void *);
@@ -71,13 +71,13 @@ void ov01_021F7C80(void *, void *, const s8 *, int);
 void ov01_021F7E28(void *);
 void ov01_021F856C(void *, void *, const s8 *, int);
 void ov01_021F86B8(void *, void *, const s8 *, int);
-fx32 sub_02023F30(void *);
+fx32 BillboardObject_GetFrame(void *);
 void ov01_021F8708(void *, void *, u32);
 void ov01_021F8874(void *, void *, u32);
 int MapObject_GetFacingDirection(void *);
 int sub_0205F330(void *);
 void ov01_021F88F0(void *);
-BOOL sub_02023EF4(void *);
+BOOL BillboardObject_GetSequence(void *);
 void ov01_021F894C(void *);
 void ov01_021F8A4C(void *);
 void ov01_021F8AB0(void *);
@@ -106,35 +106,35 @@ extern const u32 ov01_02208A28[];
 extern const u32 ov01_022073D8[];
 static inline void LocalMotion(void *obj, const s8 *state, int index, int expected, const u32 *table) {
     if (index != state[0] || state[2] != expected) {
-        sub_02023EE0(obj, table[index]);
-        sub_02023F40(obj, 0);
+        BillboardObject_SetSequence(obj, table[index]);
+        BillboardObject_SetSequenceFrame(obj, 0);
     }
-    sub_02023F04(obj, FX32_ONE);
+    BillboardObject_AdvanceFrame(obj, FX32_ONE);
 }
 
 static inline void LocalFalling(void *obj, const s8 *state, int index, int expected) {
     fx32 value;
     if (index != state[0] || state[2] != expected) {
-        sub_02023EE0(obj, ov01_022089F8[index]);
-        sub_02023F40(obj, 15 * FX32_ONE);
+        BillboardObject_SetSequence(obj, ov01_022089F8[index]);
+        BillboardObject_SetSequenceFrame(obj, 15 * FX32_ONE);
     }
-    value = sub_02023F70(obj) - FX32_ONE;
+    value = BillboardObject_GetSequenceFrame(obj) - FX32_ONE;
     if (value < 0) {
         value = 0;
     }
-    sub_02023F40(obj, value);
-    sub_02023F04(obj, 0);
+    BillboardObject_SetSequenceFrame(obj, value);
+    BillboardObject_AdvanceFrame(obj, 0);
 }
 
 static inline void LocalTrackedMotion(void *owner, void *obj, const s8 *s, int i, fx32 speed) {
     if (i != s[0]) {
-        sub_02023EE0(obj, ov01_021FA44C(i));
-        sub_02023F40(obj, 0);
+        BillboardObject_SetSequence(obj, ov01_021FA44C(i));
+        BillboardObject_SetSequenceFrame(obj, 0);
     } else if (s[2] == 9) {
         ov01_021F8C64(obj, ov01_021FA44C(i));
     }
     if (!ov01_021F9344(owner)) {
-        sub_02023F04(obj, speed);
+        BillboardObject_AdvanceFrame(obj, speed);
     }
 }
 

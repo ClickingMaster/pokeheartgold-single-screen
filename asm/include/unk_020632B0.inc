@@ -8,10 +8,10 @@
 .public Heap_FreeExplicit
 .public SysTask_GetData
 .public GF_SinDegNoWrap
-.public sub_02023EE0
-.public sub_02023EF4
-.public sub_02023F04
-.public sub_02023F40
+.public BillboardObject_SetSequence
+.public BillboardObject_GetSequence
+.public BillboardObject_AdvanceFrame
+.public BillboardObject_SetSequenceFrame
 .public GF_AssertFail
 .public StartMapSceneScript
 .public FieldSystem_SetEngagedTrainer

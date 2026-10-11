@@ -103,18 +103,18 @@ BOOL ov01_021FF9F4(void *a0, UnkOv01_02209218_Work *work) {
     sub_02068DA8(a0, &position);
     work->unk3C = ov01_021F1740(work->unk18.unk10, 9, &position);
     if (MapObject_TestFlagsBits(work->unk18.unk18, MAPOBJECTFLAG_VISIBLE) == TRUE) {
-        sub_02023EA4(work->unk3C, 0);
+        BillboardObject_SetVisible(work->unk3C, 0);
     }
     if (sub_02068D90(a0) == NULL) {
-        sub_02023F1C(work->unk3C, 3 << 14);
-        sub_02023F04(work->unk3C, 0);
+        BillboardObject_SetFrame(work->unk3C, 3 << 14);
+        BillboardObject_AdvanceFrame(work->unk3C, 0);
         work->unk00 = 2;
     }
     return TRUE;
 }
 
 void ov01_021FFAB0(void *a0, UnkOv01_02209218_Work *work) {
-    sub_02023DA4(work->unk3C);
+    BillboardObject_Delete(work->unk3C);
 }
 
 void ov01_021FFABC(void *a0, UnkOv01_02209218_Work *work) {
@@ -127,9 +127,9 @@ void ov01_021FFABC(void *a0, UnkOv01_02209218_Work *work) {
         return;
     }
     if (MapObject_TestFlagsBits(mapObject, MAPOBJECTFLAG_VISIBLE) == TRUE) {
-        sub_02023EA4(work->unk3C, 0);
+        BillboardObject_SetVisible(work->unk3C, 0);
     } else {
-        sub_02023EA4(work->unk3C, 1);
+        BillboardObject_SetVisible(work->unk3C, 1);
     }
     if (work->unk14 == 0) {
         sub_02068DB8(a0, &sp0C);
@@ -144,15 +144,15 @@ void ov01_021FFABC(void *a0, UnkOv01_02209218_Work *work) {
     }
     switch (work->unk00) {
     case 0:
-        sub_02023F04(work->unk3C, 1 << 12);
-        if (sub_02023F70(work->unk3C) / FX32_ONE < 12) {
+        BillboardObject_AdvanceFrame(work->unk3C, 1 << 12);
+        if (BillboardObject_GetSequenceFrame(work->unk3C) / FX32_ONE < 12) {
             return;
         }
         work->unk00 = 1;
         return;
     case 1:
-        sub_02023F1C(work->unk3C, 3 << 14);
-        sub_02023F04(work->unk3C, 0);
+        BillboardObject_SetFrame(work->unk3C, 3 << 14);
+        BillboardObject_AdvanceFrame(work->unk3C, 0);
         work->unk00 = 2;
         // fallthrough
     case 2: {
@@ -178,5 +178,5 @@ void ov01_021FFBD4(void *a0, UnkOv01_02209218_Work *work) {
         return;
     }
     sub_02068DB8(a0, &position);
-    sub_02023E50(work->unk3C, &position);
+    BillboardObject_SetPosition(work->unk3C, &position);
 }

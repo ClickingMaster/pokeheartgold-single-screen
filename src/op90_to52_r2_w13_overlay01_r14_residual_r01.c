@@ -37,7 +37,7 @@ System *ov01_021FA3DC(void *object);
 void *ov01_021FA1D0(System *system);
 void *ov01_021F72DC(void *object);
 void *FldObjSys_ReadMModelFromNarc(System *system, u32 id, u32 a2);
-NNSG3dResMdl *sub_02023F90(void *obj);
+NNSG3dResMdl *BillboardObject_GetModel(void *obj);
 int NNS_G3dMdlGetMdlFogEnableFlag(NNSG3dResMdl *mdl, int idx);
 int MapObject_GetID(void *object);
 u32 MapObject_GetSpriteID(void *object);
@@ -46,18 +46,18 @@ u8 ov01_021FA2A0(u32 sprite);
 u32 ov01_021FA2AC(u32 sprite);
 void BillboardGfxSequence_Init(void *model, void *anim);
 int GetMoveModelNoBySpriteId(u32 sprite);
-void sub_02023E2C(void *resource, void *model, NNSG3dResTex *tex, u32 a3, void *anim);
-VecFx32 *sub_02023E68(void *obj);
+void BillboardResource_Init(void *resource, void *model, NNSG3dResTex *tex, u32 a3, void *anim);
+VecFx32 *BillboardObject_GetPosition(void *obj);
 void *ov01_021FA31C(void *ctx, void *resource, VecFx32 *pos);
-u32 sub_02023EF4(void *obj);
-void sub_02023EE0(void *obj, u32 v);
-fx32 sub_02023F70(void *obj);
-void sub_02023F40(void *obj, fx32 v);
-fx32 sub_02023F30(void *obj);
-void sub_02023F1C(void *obj, fx32 v);
-void sub_02023F04(void *obj, fx32 v);
-void sub_02023EA4(void *obj, int v);
-void sub_02023FC0(void *obj);
+u32 BillboardObject_GetSequence(void *obj);
+void BillboardObject_SetSequence(void *obj, u32 v);
+fx32 BillboardObject_GetSequenceFrame(void *obj);
+void BillboardObject_SetSequenceFrame(void *obj, fx32 v);
+fx32 BillboardObject_GetFrame(void *obj);
+void BillboardObject_SetFrame(void *obj, fx32 v);
+void BillboardObject_AdvanceFrame(void *obj, fx32 v);
+void BillboardObject_SetVisible(void *obj, int v);
+void BillboardObject_UpdateTextureAnimation(void *obj);
 BOOL MapObject_CheckFlag24(void *object);
 s32 MapObject_GetPriorityPlusValue(void *object, s32 v);
 u32 sub_02060FA8(void *object, int v);
@@ -101,7 +101,7 @@ void ov01_021FA97C(void *object, int mode) {
     w->owner = object;
     switch (MapObject_GetID(object)) {
     case 0xff:
-        fog = NNS_G3dMdlGetMdlFogEnableFlag(sub_02023F90(ov01_021F72DC(object)), 0);
+        fog = NNS_G3dMdlGetMdlFogEnableFlag(BillboardObject_GetModel(ov01_021F72DC(object)), 0);
         break;
     default:
         fog = 0;
@@ -136,19 +136,19 @@ void ov01_021FA97C(void *object, int mode) {
     }
     w->texture = FldObjSys_ReadMModelFromNarc(system, id, 0);
     tex = NNS_G3dGetTex(w->texture);
-    sub_02023E2C(w->resource, w->modelA, tex, ov01_021FA2AC(sprite), w->anim);
-    copy = *sub_02023E68(old);
+    BillboardResource_Init(w->resource, w->modelA, tex, ov01_021FA2AC(sprite), w->anim);
+    copy = *BillboardObject_GetPosition(old);
     w->obj = ov01_021FA31C(ctx, w->resource, &copy);
     GF_ASSERT(w->obj != NULL);
     if (fog == 0) {
-        NNS_G3dMdlSetMdlFogEnableFlagAll(sub_02023F90(w->obj), 0);
+        NNS_G3dMdlSetMdlFogEnableFlagAll(BillboardObject_GetModel(w->obj), 0);
     }
-    sub_02023EE0(w->obj, sub_02023EF4(old));
-    sub_02023F40(w->obj, sub_02023F70(old));
-    sub_02023F1C(w->obj, sub_02023F30(old));
-    sub_02023F04(w->obj, 0);
-    sub_02023EA4(w->obj, 1);
-    sub_02023FC0(w->obj);
+    BillboardObject_SetSequence(w->obj, BillboardObject_GetSequence(old));
+    BillboardObject_SetSequenceFrame(w->obj, BillboardObject_GetSequenceFrame(old));
+    BillboardObject_SetFrame(w->obj, BillboardObject_GetFrame(old));
+    BillboardObject_AdvanceFrame(w->obj, 0);
+    BillboardObject_SetVisible(w->obj, 1);
+    BillboardObject_UpdateTextureAnimation(w->obj);
     if (MapObject_CheckFlag24(object) == TRUE) {
         priority = MapObject_GetPriorityPlusValue(object, 2);
         behavior = sub_02060FA8(object, 1);

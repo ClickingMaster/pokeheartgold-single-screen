@@ -190,11 +190,11 @@ ov01_021FF7B0: ; 0x021FF7B0
 
 	thumb_func_start ov01_021FF7F4
 ov01_021FF7F4: ; 0x021FF7F4
-	ldr r3, _021FF7FC ; =sub_02023DA4
+	ldr r3, _021FF7FC ; =BillboardObject_Delete
 	ldr r0, [r1, #0x20]
 	bx r3
 	nop
-_021FF7FC: .word sub_02023DA4
+_021FF7FC: .word BillboardObject_Delete
 	thumb_func_end ov01_021FF7F4
 
 	thumb_func_start ov01_021FF800
@@ -208,9 +208,9 @@ ov01_021FF800: ; 0x021FF800
 	mov r1, #1
 	ldr r0, [r4, #0x20]
 	lsl r1, r1, #0xc
-	bl sub_02023F04
+	bl BillboardObject_AdvanceFrame
 	ldr r0, [r4, #0x20]
-	bl sub_02023F70
+	bl BillboardObject_GetSequenceFrame
 	asr r1, r0, #0xb
 	lsr r1, r1, #0x14
 	add r1, r0, r1
@@ -237,7 +237,7 @@ ov01_021FF830: ; 0x021FF830
 	str r0, [sp, #8]
 	ldr r0, [r4, #0x20]
 	add r1, sp, #0
-	bl sub_02023E50
+	bl BillboardObject_SetPosition
 	add sp, #0xc
 	pop {r3, r4, pc}
 	.balign 4, 0

@@ -15,7 +15,7 @@ extern Bytes8 ov01_022096F0;
 extern VecFx32 ov01_02209704;
 extern u32 ov01_02205CF0(void *,void *);
 extern void *ov01_021F771C(void *);
-extern void sub_02023E78(void *,VecFx32 *);
+extern void BillboardObject_SetScale(void *,VecFx32 *);
 BOOL ov01_02205B14(TaskManager *);
 #pragma force_active on
 // @fn ov01_02205B14
@@ -49,7 +49,7 @@ BOOL ov01_02205B14(TaskManager *task){
  case 6: {
 
   env->timer++;if(env->timer<20)break;
-  ov01_02205790(field,0);reset=ov01_02209704;sub_02023E78(ov01_021F771C(field->mapObjectManager),&reset);sub_02069E84(field->followMon.mapObject,1);env->state++;break; }
+  ov01_02205790(field,0);reset=ov01_02209704;BillboardObject_SetScale(ov01_021F771C(field->mapObjectManager),&reset);sub_02069E84(field->followMon.mapObject,1);env->state++;break; }
  case 7:Heap_Free(env);return 1;
  }
  return 0;

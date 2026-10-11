@@ -59,7 +59,7 @@ void *ov01_021F9528(void *obj, u32 id) {
 
 void ov01_021F9574(void *obj, void *out, u32 id) {
     void *manager;
-    sub_02023DA4(*(void **)out);
+    BillboardObject_Delete(*(void **)out);
     *(void **)out = NULL;
     manager = MapObject_GetManager(obj);
     if (!ov01_021F97BC(manager, obj, id)) {
@@ -77,7 +77,7 @@ void ov01_021F95A8(void *obj, void *arg) {
 void ov01_021F95CC(void *obj, void *out, u32 id) {
     ov01_021F9688(obj);
     if (*(void **)out != NULL) {
-        sub_02023DA4(*(void **)out);
+        BillboardObject_Delete(*(void **)out);
         *(void **)out = NULL;
     }
     if (id != 0xffff && !ov01_021F97BC(MapObject_GetManager(obj), obj, id)) {
@@ -86,15 +86,15 @@ void ov01_021F95CC(void *obj, void *out, u32 id) {
 }
 
 void ov01_021F9610(void *src, ObjRecord *dst) {
-    dst->id = sub_02023EB8(src);
-    dst->unk6 = sub_02023EF4(src);
-    dst->unk8 = sub_02023F30(src);
+    dst->id = BillboardObject_IsVisible(src);
+    dst->unk6 = BillboardObject_GetSequence(src);
+    dst->unk8 = BillboardObject_GetFrame(src);
 }
 
 void ov01_021F9630(void *dst, ObjRecord *src) {
-    sub_02023EA4(dst, (u8)src->id);
-    sub_02023EE0(dst, src->unk6);
-    sub_02023F1C(dst, src->unk8);
+    BillboardObject_SetVisible(dst, (u8)src->id);
+    BillboardObject_SetSequence(dst, src->unk6);
+    BillboardObject_SetFrame(dst, src->unk8);
 }
 
 void ov01_021F9654(void *obj, void *out, u32 id) {

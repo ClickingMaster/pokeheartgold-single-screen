@@ -17,7 +17,7 @@ void ov01_021F77D0(void *obj) {
         void *other = *(void **)(work + 4);
         if (other != NULL) {
             if (!ov01_021F9344(obj)) {
-                sub_02023F04(other, FX32_ONE);
+                BillboardObject_AdvanceFrame(other, FX32_ONE);
             }
             ov01_021FA3E8(obj, other);
             ov01_021F8C88(obj, other);

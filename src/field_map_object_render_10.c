@@ -8,7 +8,7 @@ int ov01_021FA3E8(void *a, void *b) {
     int v[3];
     ov01_021F93AC(a, v);
     v[2] += 0x6000;
-    sub_02023E50(b, v);
+    BillboardObject_SetPosition(b, v);
     return 0;
 }
 
@@ -20,7 +20,7 @@ void ov01_021FA40C(void *obj, void *dst) {
     if (MapObject_TestFlagsBits(obj, 1 << 12) == TRUE && MapObject_TestFlagsBits(obj, 2 << 12) == FALSE) {
         visible = FALSE;
     }
-    sub_02023EA4(dst, (u8)visible);
+    BillboardObject_SetVisible(dst, (u8)visible);
 }
 
 u32 ov01_021FA44C(u32 i) {

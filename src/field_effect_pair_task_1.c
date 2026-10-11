@@ -62,13 +62,13 @@ BOOL ov01_02200140(void *task, LocalState *state) {
 }
 
 void ov01_02200184(void *task, LocalState *state) {
-    sub_02023DA4(state->effect);
+    BillboardObject_Delete(state->effect);
 }
 
 void ov01_02200190(void *task, LocalState *state) {
     if (state->stage == 0) {
-        sub_02023F04(state->effect, FX32_ONE);
-        if (sub_02023F70(state->effect) / FX32_ONE >= 7) {
+        BillboardObject_AdvanceFrame(state->effect, FX32_ONE);
+        if (BillboardObject_GetSequenceFrame(state->effect) / FX32_ONE >= 7) {
             ov01_021F1640(task);
         }
     }
@@ -78,7 +78,7 @@ void ov01_022001C0(void *task, LocalState *state) {
     VecFx32 position;
     sub_02068DB8(task, &position);
     position.z += 8 * FX32_ONE;
-    sub_02023E50(state->effect, &position);
+    BillboardObject_SetPosition(state->effect, &position);
 }
 
 static const u32 ov01_02209294[] = {

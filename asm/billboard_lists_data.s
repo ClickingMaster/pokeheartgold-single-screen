@@ -4,8 +4,8 @@
 
 	.bss
 
-	.public _021D2208
-_021D2208:
+	.public gBillboardLists
+gBillboardLists:
 	.space 0x8
 
 	.text

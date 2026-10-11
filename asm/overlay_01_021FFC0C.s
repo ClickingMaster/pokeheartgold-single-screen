@@ -175,7 +175,7 @@ _021FFCBC:
 	bne _021FFD46
 	ldr r0, [r4, #0x3c]
 	mov r1, #0
-	bl sub_02023EA4
+	bl BillboardObject_SetVisible
 _021FFD46:
 	add r0, r5, #0
 	bl sub_02068D90
@@ -184,7 +184,7 @@ _021FFD46:
 	mov r1, #2
 	ldr r0, [r4, #0x3c]
 	lsl r1, r1, #0xc
-	bl sub_02023F1C
+	bl BillboardObject_SetFrame
 	mov r0, #2
 	str r0, [r4]
 _021FFD5E:
@@ -195,11 +195,11 @@ _021FFD5E:
 
 	thumb_func_start ov01_021FFD64
 ov01_021FFD64: ; 0x021FFD64
-	ldr r3, _021FFD6C ; =sub_02023DA4
+	ldr r3, _021FFD6C ; =BillboardObject_Delete
 	ldr r0, [r1, #0x3c]
 	bx r3
 	nop
-_021FFD6C: .word sub_02023DA4
+_021FFD6C: .word BillboardObject_Delete
 	thumb_func_end ov01_021FFD64
 
 	thumb_func_start ov01_021FFD70
@@ -229,11 +229,11 @@ _021FFD94:
 	ldr r0, [r5, #0x3c]
 	bne _021FFDAC
 	mov r1, #0
-	bl sub_02023EA4
+	bl BillboardObject_SetVisible
 	b _021FFDB2
 _021FFDAC:
 	mov r1, #1
-	bl sub_02023EA4
+	bl BillboardObject_SetVisible
 _021FFDB2:
 	ldr r0, [r5, #0x14]
 	cmp r0, #0
@@ -274,9 +274,9 @@ _021FFDFC:
 	mov r1, #1
 	ldr r0, [r5, #0x3c]
 	lsl r1, r1, #0xc
-	bl sub_02023F04
+	bl BillboardObject_AdvanceFrame
 	ldr r0, [r5, #0x3c]
-	bl sub_02023F70
+	bl BillboardObject_GetSequenceFrame
 	asr r1, r0, #0xb
 	lsr r1, r1, #0x14
 	add r1, r0, r1
@@ -291,10 +291,10 @@ _021FFE20:
 	mov r1, #2
 	ldr r0, [r5, #0x3c]
 	lsl r1, r1, #0xc
-	bl sub_02023F1C
+	bl BillboardObject_SetFrame
 	ldr r0, [r5, #0x3c]
 	mov r1, #0
-	bl sub_02023F04
+	bl BillboardObject_AdvanceFrame
 	mov r0, #2
 	str r0, [r5]
 _021FFE36:
@@ -368,7 +368,7 @@ _021FFEB8:
 	bl sub_02068DB8
 	ldr r0, [r4, #0x3c]
 	add r1, sp, #0
-	bl sub_02023E50
+	bl BillboardObject_SetPosition
 	add sp, #0xc
 	pop {r4, r5, pc}
 	thumb_func_end ov01_021FFE98

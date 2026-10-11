@@ -48,7 +48,7 @@ extern ResourceConfig ov45_02254C48[];
 extern void ov45_02230AB4(void *);
 extern void ov45_0222D740(void *);
 extern void ov45_022309E8(void *, void *, u32, u32);
-extern void *sub_020237EC(void *);
+extern void *Billboard_Create(void *);
 extern void *Heap_Alloc(u32, u32);
 extern void Heap_Free(void *);
 extern void *GF2dGfxRawResMan_Create(int, u32);
@@ -181,7 +181,7 @@ Manager *ov45_02230498(u32 count, BOOL mode, u32 heapId, u32 loadHeapId) {
     BillboardLists_Create(1, heapId);
     params.count = count;
     params.heapId = heapId;
-    manager->rC = sub_020237EC(&params);
+    manager->rC = Billboard_Create(&params);
 
     narc1 = NARC_New(0x51, heapId);
     narc2 = NARC_New(0xd1, heapId);
@@ -228,7 +228,7 @@ void ov45_02230638(Manager *m) {
     extern void ov45_02230A44(void *);
     extern void GF3dGfxRawResMan_FreeAllObjs(void *);
     extern void GF2dGfxRawResMan_FreeAllObjs(void *);
-    extern void sub_02023874(void *);
+    extern void Billboard_Delete(void *);
     extern void BillboardLists_Delete(void);
     extern void GF3dGfxRawResMan_Destroy(void *);
     extern void GF2dGfxRawResObj_Destroy(void *);
@@ -236,7 +236,7 @@ void ov45_02230638(Manager *m) {
     GF3dGfxRawResMan_FreeAllObjs(m->r8);
     GF2dGfxRawResMan_FreeAllObjs(m->r0);
     GF2dGfxRawResMan_FreeAllObjs(m->r4);
-    sub_02023874(m->rC);
+    Billboard_Delete(m->rC);
     BillboardLists_Delete();
     GF3dGfxRawResMan_Destroy(m->r8);
     GF2dGfxRawResObj_Destroy(m->r0);

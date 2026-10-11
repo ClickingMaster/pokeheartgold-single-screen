@@ -1,9 +1,9 @@
 #include <nitro/fs/overlay.h>
 #pragma once
-.public sub_02023DA4
-.public sub_02023E50
-.public sub_02023F04
-.public sub_02023F70
+.public BillboardObject_Delete
+.public BillboardObject_SetPosition
+.public BillboardObject_AdvanceFrame
+.public BillboardObject_GetSequenceFrame
 .public MapObject_GetPriorityPlusValue
 .public MapObject_GetID
 .public MapObject_GetMapID
