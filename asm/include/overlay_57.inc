@@ -228,6 +228,6 @@
 .public ov07_02233EA0
 .public ov07_02233ECC
 .public ov07_022344E4
-.public ov57_022378DC
-.public ov57_02237AF8
-.public ov57_02237B20
+.public BallCapsuleEditor_Init
+.public BallCapsuleEditor_Main
+.public BallCapsuleEditor_Exit

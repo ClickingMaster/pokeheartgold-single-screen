@@ -238,82 +238,82 @@
 	.public _021E786E
 	.public _021E7880
 	.public _021E7884
-	.public ov109_021E5A20
-	.public ov109_021E5A70
-	.public ov109_021E5B40
-	.public ov109_021E5B60
-	.public ov109_021E5B98
-	.public ov109_021E5BAC
-	.public ov109_021E5BF4
-	.public ov109_021E5C40
-	.public ov109_021E5C48
-	.public ov109_021E5C68
-	.public ov109_021E5C88
-	.public ov109_021E5C90
-	.public ov109_021E5C98
-	.public ov109_021E5CAC
-	.public ov109_021E5CB4
-	.public ov109_021E5CE4
-	.public ov109_021E5D08
-	.public ov109_021E5D5C
-	.public ov109_021E5DB8
-	.public ov109_021E5DEC
-	.public ov109_021E5EC8
-	.public ov109_021E5F10
-	.public ov109_021E5F40
-	.public ov109_021E5FFC
-	.public ov109_021E6058
-	.public ov109_021E61BC
-	.public ov109_021E61DC
-	.public ov109_021E628C
-	.public ov109_021E638C
-	.public ov109_021E63E8
-	.public ov109_021E656C
-	.public ov109_021E66C4
-	.public ov109_021E681C
-	.public ov109_021E682C
-	.public ov109_021E685C
-	.public ov109_021E6898
-	.public ov109_021E68B8
-	.public ov109_021E68D4
-	.public ov109_021E691C
-	.public ov109_021E692C
-	.public ov109_021E694C
-	.public ov109_021E6AFC
-	.public ov109_021E6B5C
-	.public ov109_021E6C7C
-	.public ov109_021E6C9C
-	.public ov109_021E6D2C
-	.public ov109_021E6D84
-	.public ov109_021E6DBC
-	.public ov109_021E6DE4
-	.public ov109_021E6E64
-	.public ov109_021E6E9C
-	.public ov109_021E6EC0
-	.public ov109_021E6EE4
-	.public ov109_021E6F60
+	.public PhotoAlbumApp_ResetDisplay
+	.public PhotoAlbumApp_InitState
+	.public PhotoAlbumApp_Finish
+	.public PhotoAlbumApp_Setup
+	.public PhotoAlbumApp_Teardown
+	.public PhotoAlbumApp_State_FadeIn
+	.public PhotoAlbumApp_State_FadeOut
+	.public PhotoAlbumApp_State_Grid
+	.public PhotoAlbumApp_State_FlipToPrevPage
+	.public PhotoAlbumApp_State_FlipToNextPage
+	.public PhotoAlbumApp_State_ContextMenu
+	.public PhotoAlbumApp_State_MovePhoto
+	.public PhotoAlbumApp_State_MovePhotoDone
+	.public PhotoAlbumApp_State_DeletePrompt
+	.public PhotoAlbumApp_InitGraphics
+	.public PhotoAlbumApp_FreeGraphics
+	.public PhotoAlbumApp_InitEntries
+	.public PhotoAlbumApp_WritePhotosToSave
+	.public PhotoAlbumApp_SwapEntries
+	.public PhotoAlbumApp_RemoveEntry
+	.public PhotoAlbumApp_DrawInitialScreen
+	.public PhotoAlbumApp_HandleGridInput
+	.public PhotoAlbumApp_HandleGridSelection
+	.public PhotoAlbumApp_HandleGridTouch
+	.public PhotoAlbumApp_HandleGridKeys
+	.public PhotoAlbumApp_HandleMoveInput
+	.public PhotoAlbumApp_RunMoveDone
+	.public PhotoAlbumApp_HandleMoveSelection
+	.public PhotoAlbumApp_HandleMoveTouch
+	.public PhotoAlbumApp_HandleMoveKeys
+	.public PhotoAlbumApp_FlipToPrevPage
+	.public PhotoAlbumApp_FlipToNextPage
+	.public PhotoAlbumApp_RunContextMenu
+	.public PhotoAlbumApp_RunDeletePrompt
+	.public PhotoAlbumApp_VBlankCB
+	.public PhotoAlbumApp_ApplyBgToggle
+	.public PhotoAlbumApp_RequestBgToggle
+	.public PhotoAlbumApp_ApplyZoom
+	.public PhotoAlbumApp_SetZoom
+	.public PhotoAlbumApp_SetBanks
+	.public PhotoAlbumApp_InitBgs
+	.public PhotoAlbumApp_FreeBgs
+	.public PhotoAlbumApp_LoadBgGfx
+	.public PhotoAlbumApp_FreeScreenData
+	.public PhotoAlbumApp_LoadStrings
+	.public PhotoAlbumApp_FreeStrings
+	.public PhotoAlbumApp_CreateWindows
+	.public PhotoAlbumApp_RemoveWindows
+	.public PhotoAlbumApp_InitSpriteSystem
+	.public PhotoAlbumApp_FreeSpriteSystem
+	.public PhotoAlbumApp_InitSpritesAndMenus
+	.public PhotoAlbumApp_FreeSpritesAndMenus
+	.public PhotoAlbumApp_CreateSprites
+	.public PhotoAlbumApp_DeleteSprites
 	.public ov109_021E6F7C
 	.public ov109_021E6FD4
-	.public ov109_021E7030
-	.public ov109_021E70C4
-	.public ov109_021E7114
-	.public ov109_021E7178
-	.public ov109_021E71BC
-	.public ov109_021E7248
-	.public ov109_021E7388
-	.public ov109_021E73F8
-	.public ov109_021E7474
-	.public ov109_021E74D4
-	.public ov109_021E7524
-	.public ov109_021E7584
-	.public ov109_021E75B4
-	.public ov109_021E75C8
-	.public ov109_021E7640
-	.public ov109_021E76F0
-	.public ov109_021E7748
-	.public ov109_021E77D4
-	.public ov109_021E7810
-	.public ov109_021E7850
+	.public PhotoAlbumApp_DrawGridColumns
+	.public PhotoAlbumApp_DrawPage
+	.public PhotoAlbumApp_DrawPhotoIcon
+	.public PhotoAlbumApp_DrawGridIcon
+	.public PhotoAlbumApp_RedrawSwappedIcons
+	.public PhotoAlbumApp_PrintPhotoDetails
+	.public PhotoAlbumApp_PrintCloseButton
+	.public PhotoAlbumApp_PrintMessage
+	.public PhotoAlbumApp_SetCursorPos
+	.public PhotoAlbumApp_UpdateSelectionSprite
+	.public PhotoAlbumApp_UpdatePageArrows
+	.public PhotoAlbumApp_AnimatePageArrow
+	.public PhotoAlbumApp_ToggleMenuInputState
+	.public PhotoAlbumApp_OpenContextMenu
+	.public PhotoAlbumApp_HandleContextMenu
+	.public PhotoAlbumApp_OpenDeletePrompt
+	.public PhotoAlbumApp_HandleDeletePrompt
+	.public PhotoAlbumApp_StartCloseButtonAnim
+	.public Task_PhotoAlbumApp_WaitCloseButtonAnim
+	.public Photo_CountPartyMons
 	.public ov109_021E7890
 	.public ov109_021E789C
 	.public ov109_021E78A8
@@ -339,56 +339,56 @@
 	.public PhotoAlbum_Exit
 	.public PhotoAlbum_Init
 	.public PhotoAlbum_Main
-	.public ov109_021E5A20
-	.public ov109_021E5B40
-	.public ov109_021E5B60
-	.public ov109_021E5B98
-	.public ov109_021E5BAC
-	.public ov109_021E5BF4
-	.public ov109_021E5C40
-	.public ov109_021E5C48
-	.public ov109_021E5C68
-	.public ov109_021E5C88
-	.public ov109_021E5C90
-	.public ov109_021E5C98
-	.public ov109_021E5CAC
-	.public ov109_021E5CB4
-	.public ov109_021E5CE4
-	.public ov109_021E5D5C
-	.public ov109_021E5DB8
-	.public ov109_021E5EC8
-	.public ov109_021E5F10
-	.public ov109_021E5FFC
-	.public ov109_021E61BC
-	.public ov109_021E638C
-	.public ov109_021E681C
-	.public ov109_021E682C
-	.public ov109_021E685C
-	.public ov109_021E6898
-	.public ov109_021E68B8
-	.public ov109_021E68D4
-	.public ov109_021E691C
-	.public ov109_021E692C
-	.public ov109_021E6C7C
-	.public ov109_021E6D2C
-	.public ov109_021E6D84
-	.public ov109_021E6DBC
-	.public ov109_021E6E64
-	.public ov109_021E6E9C
-	.public ov109_021E6EC0
-	.public ov109_021E6F60
-	.public ov109_021E7388
-	.public ov109_021E7474
-	.public ov109_021E74D4
-	.public ov109_021E7524
-	.public ov109_021E7584
-	.public ov109_021E75B4
-	.public ov109_021E77D4
-	.public ov109_021E7810
-	.public ov109_021E7850
+	.public PhotoAlbumApp_ResetDisplay
+	.public PhotoAlbumApp_Finish
+	.public PhotoAlbumApp_Setup
+	.public PhotoAlbumApp_Teardown
+	.public PhotoAlbumApp_State_FadeIn
+	.public PhotoAlbumApp_State_FadeOut
+	.public PhotoAlbumApp_State_Grid
+	.public PhotoAlbumApp_State_FlipToPrevPage
+	.public PhotoAlbumApp_State_FlipToNextPage
+	.public PhotoAlbumApp_State_ContextMenu
+	.public PhotoAlbumApp_State_MovePhoto
+	.public PhotoAlbumApp_State_MovePhotoDone
+	.public PhotoAlbumApp_State_DeletePrompt
+	.public PhotoAlbumApp_InitGraphics
+	.public PhotoAlbumApp_FreeGraphics
+	.public PhotoAlbumApp_WritePhotosToSave
+	.public PhotoAlbumApp_SwapEntries
+	.public PhotoAlbumApp_DrawInitialScreen
+	.public PhotoAlbumApp_HandleGridInput
+	.public PhotoAlbumApp_HandleGridTouch
+	.public PhotoAlbumApp_HandleMoveInput
+	.public PhotoAlbumApp_HandleMoveTouch
+	.public PhotoAlbumApp_RunContextMenu
+	.public PhotoAlbumApp_RunDeletePrompt
+	.public PhotoAlbumApp_VBlankCB
+	.public PhotoAlbumApp_ApplyBgToggle
+	.public PhotoAlbumApp_RequestBgToggle
+	.public PhotoAlbumApp_ApplyZoom
+	.public PhotoAlbumApp_SetZoom
+	.public PhotoAlbumApp_SetBanks
+	.public PhotoAlbumApp_FreeScreenData
+	.public PhotoAlbumApp_FreeStrings
+	.public PhotoAlbumApp_CreateWindows
+	.public PhotoAlbumApp_RemoveWindows
+	.public PhotoAlbumApp_FreeSpriteSystem
+	.public PhotoAlbumApp_InitSpritesAndMenus
+	.public PhotoAlbumApp_FreeSpritesAndMenus
+	.public PhotoAlbumApp_DeleteSprites
+	.public PhotoAlbumApp_PrintCloseButton
+	.public PhotoAlbumApp_SetCursorPos
+	.public PhotoAlbumApp_UpdateSelectionSprite
+	.public PhotoAlbumApp_UpdatePageArrows
+	.public PhotoAlbumApp_AnimatePageArrow
+	.public PhotoAlbumApp_ToggleMenuInputState
+	.public PhotoAlbumApp_StartCloseButtonAnim
+	.public Task_PhotoAlbumApp_WaitCloseButtonAnim
+	.public Photo_CountPartyMons
 
-	thumb_func_start ov109_021E61DC
-ov109_021E61DC: ; 0x021E61DC
+	thumb_func_start PhotoAlbumApp_RunMoveDone
+PhotoAlbumApp_RunMoveDone: ; 0x021E61DC
 	push {r4, lr}
 	add r4, r0, #0
 	ldrh r1, [r4, #8]
@@ -409,14 +409,14 @@ _021E61FA:
 	ldrb r3, [r4, #0x19]
 	mov r1, #3
 	add r2, r1, #0
-	bl ov109_021E70C4
+	bl PhotoAlbumApp_DrawPage
 	add r3, r4, #0
 	add r3, #0x22
 	ldrb r3, [r3]
 	add r0, r4, #0
 	mov r1, #3
 	mov r2, #0
-	bl ov109_021E73F8
+	bl PhotoAlbumApp_PrintMessage
 	mov r0, #0
 	strh r0, [r4, #0xa]
 	ldrh r0, [r4, #8]
@@ -457,12 +457,12 @@ _021E624C:
 	ldrb r2, [r4, #0x1c]
 	add r0, r4, #0
 	mov r3, #1
-	bl ov109_021E7474
+	bl PhotoAlbumApp_SetCursorPos
 	mov r1, #0
 	add r0, r4, #0
 	add r2, r1, #0
 	add r3, r1, #0
-	bl ov109_021E73F8
+	bl PhotoAlbumApp_PrintMessage
 	ldr r0, [r4, #0x14]
 	mov r1, #3
 	bl ScheduleBgTilemapBufferTransfer
@@ -476,11 +476,11 @@ _021E6282:
 	pop {r4, pc}
 	nop
 _021E6288: .word 0x000005DC
-	thumb_func_end ov109_021E61DC
+	thumb_func_end PhotoAlbumApp_RunMoveDone
 
 
-	thumb_func_start ov109_021E628C
-ov109_021E628C: ; 0x021E628C
+	thumb_func_start PhotoAlbumApp_HandleMoveSelection
+PhotoAlbumApp_HandleMoveSelection: ; 0x021E628C
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	cmp r1, #0xc
@@ -495,17 +495,17 @@ _021E629E:
 	bl PlaySE
 	add r0, r5, #0
 	mov r1, #0
-	bl ov109_021E7248
+	bl PhotoAlbumApp_PrintPhotoDetails
 	add r0, r5, #0
 	mov r1, #0
-	bl ov109_021E74D4
+	bl PhotoAlbumApp_UpdateSelectionSprite
 	add r0, r5, #0
-	bl ov109_021E77D4
+	bl PhotoAlbumApp_StartCloseButtonAnim
 	mov r1, #0
 	add r0, r5, #0
 	add r2, r1, #0
 	add r3, r1, #0
-	bl ov109_021E73F8
+	bl PhotoAlbumApp_PrintMessage
 	mov r0, #0
 	add r5, #0x20
 	strb r0, [r5]
@@ -519,7 +519,7 @@ _021E62D0:
 	pop {r3, r4, r5, pc}
 _021E62DA:
 	mov r1, #2
-	bl ov109_021E7584
+	bl PhotoAlbumApp_AnimatePageArrow
 	mov r0, #0x92
 	lsl r0, r0, #4
 	bl PlaySE
@@ -535,7 +535,7 @@ _021E62EC:
 	pop {r3, r4, r5, pc}
 _021E62FA:
 	mov r1, #3
-	bl ov109_021E7584
+	bl PhotoAlbumApp_AnimatePageArrow
 	mov r0, #0x92
 	lsl r0, r0, #4
 	bl PlaySE
@@ -562,25 +562,25 @@ _021E632A:
 	bl PlaySE
 	add r0, r5, #0
 	mov r1, #0
-	bl ov109_021E74D4
+	bl PhotoAlbumApp_UpdateSelectionSprite
 	add r0, r5, #0
 	mov r1, #0
-	bl ov109_021E7248
+	bl PhotoAlbumApp_PrintPhotoDetails
 	ldrb r1, [r5, #0x1f]
 	cmp r4, r1
 	beq _021E636C
 	add r0, r5, #0
 	add r2, r4, #0
-	bl ov109_021E5DB8
+	bl PhotoAlbumApp_SwapEntries
 	ldrb r1, [r5, #0x1f]
 	add r0, r5, #0
 	add r2, r4, #0
-	bl ov109_021E71BC
+	bl PhotoAlbumApp_RedrawSwappedIcons
 	ldrb r1, [r5, #0x1b]
 	ldrb r2, [r5, #0x1c]
 	add r0, r5, #0
 	mov r3, #0
-	bl ov109_021E7474
+	bl PhotoAlbumApp_SetCursorPos
 	mov r0, #0
 	strh r0, [r5, #0xa]
 	mov r0, #6
@@ -593,10 +593,10 @@ _021E636C:
 	add r0, r5, #0
 	add r2, r1, #0
 	add r3, r1, #0
-	bl ov109_021E73F8
+	bl PhotoAlbumApp_PrintMessage
 	mov r0, #1
 	pop {r3, r4, r5, pc}
 	nop
 _021E6384: .word 0x000005DC
 _021E6388: .word _021E7884
-	thumb_func_end ov109_021E628C
+	thumb_func_end PhotoAlbumApp_HandleMoveSelection

@@ -498,7 +498,7 @@
 	.public _0223B324
 	.public _0223B34E
 	.public _0223B354
-	.public _0223B368
+	.public sMysteryGiftCommCommands
 	.public _0223B37C
 	.public _0223B38A
 	.public _0223B396

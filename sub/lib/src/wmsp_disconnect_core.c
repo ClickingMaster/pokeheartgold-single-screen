@@ -1,92 +1,41 @@
 #pragma force_active on
-#include <nitro/types.h>
-
+#include "wmsp_internal.h"
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-typedef struct W40889State {
-    u16 state;
-    u8 reserved02[10];
-    u32 active, field10, field14;
-    u8 reserved18[4];
-    u32 field1c;
-    u8 reserved20[16];
-    u16 field30, field32;
-    u8 reserved34[0x52];
-    u16 field86;
-    u8 reserved88[0x3a];
-    u16 fieldc2;
-    u8 reservedc4[0x64];
-    u8 children[15][6];
-    u16 connected;
-    u8 reserved184[4];
-    u16 parentAid;
-    u8 parent[6];
-    u8 reserved190[6];
-    u16 field196;
-    u32 field198;
-    u8 area[80];
-    u8 reserved1ec[0x738 - 0x1ec];
+// An OSTick cleared as two words.
+typedef struct TickWords {
+    u32 low, high;
+} TickWords;
 
-    struct {
-        u32 low, high;
-    } ticks[16];
-} W40889State;
+// Disconnect callbacks to the ARM9 (indication 12 on a child, 8 on the parent).
+typedef struct ParentLostCallback {
+    u16 command, result, unk_04[2], state, aid, reason;
+    u8 unk_0e[2], macAddress[6];
+    u16 parentSize, childSize;
+} ParentLostCallback;
 
-typedef struct W40889Owner {
-    u8 pad[0x550];
-    W40889State *status;
-} W40889Owner;
-
-typedef struct W40889Request {
-    u32 command, mask, reason;
-} W40889Request;
-
-typedef struct W40889ParentCallback {
-    u16 api, error, reserved[2], event, aid, reason;
-    u8 pad[2], mac[6];
-    u16 size30, size32;
-} W40889ParentCallback;
-
-typedef struct W40889ChildCallback {
-    u16 api, error, reserved[2], event;
-    u8 mac[6];
+typedef struct ChildLostCallback {
+    u16 command, result, unk_04[2], state;
+    u8 macAddress[6];
     u16 aid, reason;
-    u8 pad[24];
-    u16 size30, size32;
-} W40889ChildCallback;
+    u8 unk_14[24];
+    u16 parentSize, childSize;
+} ChildLostCallback;
 
-extern u8 wmspW[];
-extern u16 *__VENEER_WMSP_GetBuffer4Callback2Wm9(void);
-extern void __VENEER_WMSP_ReturnResult2Wm9(void *);
-extern void __VENEER_MI_CpuCopy8(const void *, void *, u32);
-extern void __VENEER_MI_CpuFill8(void *, u8, u32);
-extern u32 __VENEER_OS_DisableInterrupts(void);
-extern u32 __VENEER_OS_RestoreInterrupts(u32);
-extern void WMSP_CancelVAlarm(void);
-extern void WMSP_SetThreadPriorityLow(void);
-extern void WMSP_ResetSizeVars(void);
-extern void WMSP_CleanSendQueue(u16);
-extern void WMSP_IndicateDisconnectionFromMyself(u16, u16, const void *);
-extern void WmspIndError(u16, u16, u16, u16);
-extern void WmspError_06004CB4(u16, u16, u16, u16);
-extern u16 *WMSP_WL_MlmeDeAuthenticate(u16 *, const void *, u16);
-extern u16 *WMSP_WL_MlmeReset(u16 *, u16);
-extern u16 *WMSP_WL_DevIdle(void *);
-int WMSP_DisconnectCore(W40889Request *, int, u16 *);
-
-int WMSP_DisconnectCore(W40889Request *req, int indication, u16 *disconnected) {
-    struct W40889Frame {
+// request[1]: aid bitmap to disconnect (parent), request[2]: reason (indications only). A child
+// disconnects from its parent. `indication`: called for a disconnect indication, not an ARM9 request.
+// Returns FALSE when a WL command failed or there was nothing to disconnect.
+BOOL WMSP_DisconnectCore(u32 *request, BOOL indication, u16 *disconnected) {
+    struct {
         u8 childMac[6], parentMac[6];
         u16 output[256];
     } frame;
 
-#define parentMac frame.parentMac
-#define childMac  frame.childMac
     int cleanup, child;
     u16 *output = frame.output;
-    W40889State *status = ((W40889Owner *)(wmspW + 0x1000))->status;
-    u16 mask = req->mask, reason = indication ? req->reason : 0;
+    WmspStatus *status = wmspW.status;
+    u16 mask = request[1], reason = indication ? request[2] : 0;
     int retries;
     u16 done = 0;
     cleanup = done;
@@ -97,13 +46,13 @@ int WMSP_DisconnectCore(W40889Request *req, int indication, u16 *disconnected) {
     u8 *mac;
     int offset;
     if (status->state == 9 || status->state == 7) {
-        if (status->active == 1) {
+        if (status->mpActive == 1) {
             cleanup = 1;
         }
     } else if (status->state == 10 || status->state == 8) {
         irq = __VENEER_OS_DisableInterrupts();
-        if (!status->connected) {
-            __VENEER_OS_RestoreInterrupts(irq);
+        if (!status->childBitmap) {
+            __VENEER_OS_RestoreInterrupts((OSIntrMode)irq);
             if (!indication) {
                 callback = __VENEER_WMSP_GetBuffer4Callback2Wm9();
                 callback[0] = 13;
@@ -114,10 +63,10 @@ int WMSP_DisconnectCore(W40889Request *req, int indication, u16 *disconnected) {
                 callback[5] = 0;
                 __VENEER_WMSP_ReturnResult2Wm9(callback);
             }
-            return 0;
+            return FALSE;
         }
-        if (status->active == 1) {
-            status->active = 0;
+        if (status->mpActive == 1) {
+            status->mpActive = 0;
             cleanup = 1;
             WMSP_CancelVAlarm();
             WMSP_SetThreadPriorityLow();
@@ -125,12 +74,12 @@ int WMSP_DisconnectCore(W40889Request *req, int indication, u16 *disconnected) {
                 status->state = 8;
             }
         }
-        status->connected = 0;
-        status->field86 = 0;
-        status->field14 = 0;
-        status->field10 = 0;
-        status->field1c = 0;
-        __VENEER_OS_RestoreInterrupts(irq);
+        status->childBitmap = 0;
+        status->unk_86 = 0;
+        status->unk_14 = 0;
+        status->dcfActive = 0;
+        status->unk_1c = 0;
+        __VENEER_OS_RestoreInterrupts((OSIntrMode)irq);
     } else {
         if (!indication) {
             callback = __VENEER_WMSP_GetBuffer4Callback2Wm9();
@@ -142,13 +91,13 @@ int WMSP_DisconnectCore(W40889Request *req, int indication, u16 *disconnected) {
             callback[5] = 0;
             __VENEER_WMSP_ReturnResult2Wm9(callback);
         }
-        return 0;
+        return FALSE;
     }
     if (status->state == 10 || status->state == 8) {
 
-        __VENEER_MI_CpuCopy8(status->parent, parentMac, 6);
+        __VENEER_MI_CpuCopy8(status->bssid, frame.parentMac, 6);
         for (bit = 0; bit < 2;) {
-            result = WMSP_WL_MlmeDeAuthenticate(output, parentMac, 3);
+            result = WMSP_WL_MlmeDeAuthenticate(output, frame.parentMac, 3);
             switch (result[2]) {
             case 0:
             case 1:
@@ -166,11 +115,11 @@ int WMSP_DisconnectCore(W40889Request *req, int indication, u16 *disconnected) {
                 if (cleanup) {
                     WMSP_CleanSendQueue(1);
                 }
-                return 0;
+                return FALSE;
             }
         }
 deauthenticated:
-        status->fieldc2 = 0;
+        status->unk_c2 = 0;
         status->state = 3;
         done = 1;
         result = WMSP_WL_MlmeReset(output, 1);
@@ -183,7 +132,7 @@ deauthenticated:
             if (cleanup) {
                 WMSP_CleanSendQueue(1);
             }
-            return 0;
+            return FALSE;
         }
         result = WMSP_WL_DevIdle(output);
         if (result[2]) {
@@ -195,26 +144,26 @@ deauthenticated:
             if (cleanup) {
                 WMSP_CleanSendQueue(1);
             }
-            return 0;
+            return FALSE;
         }
         status->state = 2;
-        status->field198 = 0;
-        status->field196 = 0;
-        __VENEER_MI_CpuFill8(status->area, 0, 80);
+        status->wepEnabled = 0;
+        status->wepMode = 0;
+        __VENEER_MI_CpuFill8(status->wepKey, 0, sizeof(status->wepKey));
         WMSP_ResetSizeVars();
         if (indication == 1) {
-            W40889ParentCallback *reply = (W40889ParentCallback *)__VENEER_WMSP_GetBuffer4Callback2Wm9();
-            reply->api = 12;
-            reply->error = 0;
-            reply->event = 9;
+            ParentLostCallback *reply = (ParentLostCallback *)__VENEER_WMSP_GetBuffer4Callback2Wm9();
+            reply->command = 12;
+            reply->result = 0;
+            reply->state = 9;
             reply->reason = reason;
-            reply->aid = status->parentAid;
-            __VENEER_MI_CpuCopy8(parentMac, reply->mac, 6);
-            reply->size30 = status->field30;
-            reply->size32 = status->field32;
+            reply->aid = status->aid;
+            __VENEER_MI_CpuCopy8(frame.parentMac, reply->macAddress, 6);
+            reply->parentSize = status->parentSize;
+            reply->childSize = status->childSize;
             __VENEER_WMSP_ReturnResult2Wm9(reply);
         } else {
-            WMSP_IndicateDisconnectionFromMyself(0, 0, parentMac);
+            WMSP_IndicateDisconnectionFromMyself(0, 0, frame.parentMac);
         }
         if (cleanup) {
             WMSP_CleanSendQueue(1);
@@ -222,15 +171,15 @@ deauthenticated:
     } else {
         for (child = 1; child < 16; child++) {
             bit = 1u << child;
-            if (!(bit & (status->connected & mask))) {
+            if (!(bit & (status->childBitmap & mask))) {
                 continue;
             }
             offset = (child - 1) * 6;
-            mac = &status->children[0][0];
+            mac = &status->childMacAddress[0][0];
             aid = child;
-            __VENEER_MI_CpuCopy8(mac + offset, childMac, 6);
+            __VENEER_MI_CpuCopy8(mac + offset, frame.childMac, 6);
             for (retries = 0; retries < 2;) {
-                result = WMSP_WL_MlmeDeAuthenticate(output, childMac, 3);
+                result = WMSP_WL_MlmeDeAuthenticate(output, frame.childMac, 3);
                 switch (result[2]) {
                 case 0:
                     goto deauthed;
@@ -247,43 +196,43 @@ deauthenticated:
                     if (cleanup) {
                         WMSP_CleanSendQueue(1);
                     }
-                    return 0;
+                    return FALSE;
                 }
             }
 deauthed:
             irq = __VENEER_OS_DisableInterrupts();
-            if (status->connected & bit) {
+            if (status->childBitmap & bit) {
                 done |= 1u << aid;
-                status->connected &= ~bit;
-                status->field86 &= ~bit;
-                status->ticks[aid].low = 0;
-                status->ticks[aid].high = 0;
+                status->childBitmap &= ~bit;
+                status->unk_86 &= ~bit;
+                ((TickWords *)status->lastRecvTick)[aid].low = 0;
+                ((TickWords *)status->lastRecvTick)[aid].high = 0;
                 __VENEER_MI_CpuFill8(mac + offset, 0, 6);
-                __VENEER_OS_RestoreInterrupts(irq);
+                __VENEER_OS_RestoreInterrupts((OSIntrMode)irq);
                 if (indication == 1) {
-                    W40889ChildCallback *reply = (W40889ChildCallback *)__VENEER_WMSP_GetBuffer4Callback2Wm9();
-                    reply->api = 8;
-                    reply->error = 0;
-                    reply->event = 9;
+                    ChildLostCallback *reply = (ChildLostCallback *)__VENEER_WMSP_GetBuffer4Callback2Wm9();
+                    reply->command = 8;
+                    reply->result = 0;
+                    reply->state = 9;
                     reply->reason = reason;
                     reply->aid = aid;
-                    __VENEER_MI_CpuCopy8(childMac, reply->mac, 6);
-                    reply->size30 = status->field30;
-                    reply->size32 = status->field32;
+                    __VENEER_MI_CpuCopy8(frame.childMac, reply->macAddress, 6);
+                    reply->parentSize = status->parentSize;
+                    reply->childSize = status->childSize;
                     __VENEER_WMSP_ReturnResult2Wm9(reply);
                 } else {
-                    WMSP_IndicateDisconnectionFromMyself(1, child, childMac);
+                    WMSP_IndicateDisconnectionFromMyself(1, child, frame.childMac);
                 }
                 if (cleanup) {
                     WMSP_CleanSendQueue(bit);
                 }
             } else {
-                __VENEER_OS_RestoreInterrupts(irq);
+                __VENEER_OS_RestoreInterrupts((OSIntrMode)irq);
             }
         }
     }
     if (disconnected) {
         *disconnected = done;
     }
-    return 1;
+    return TRUE;
 }

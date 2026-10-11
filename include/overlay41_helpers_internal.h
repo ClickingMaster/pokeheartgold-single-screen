@@ -23,13 +23,13 @@ void Heap_Free(void *ptr);
 void GF_AssertFail(void);
 void *memset(void *, int, u32);
 
-void sub_02015FC4(void *);
-void sub_02015FB0(void *);
-void sub_02015FF4(void *);
-void sub_02015EF4(void *);
-void sub_02015F64(void *);
-void sub_02015E20(void *);
-void sub_02015E64(void *);
+void GraphicsObject_SetPosition(void *);
+void GraphicsObject_SetVisible(void *);
+void GraphicsObject_SetDepth(void *);
+void GraphicsManager_FreeImages(void *);
+void GraphicsManager_FreePalettes(void *);
+void GraphicsManager_Delete(void *);
+void GraphicsManager_DrawObjects(void *);
 
 void *SpriteResourceCollection_Find(void *mgr, int id);
 void DestroySingle2DGfxResObj(void *mgr, void *res);

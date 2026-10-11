@@ -3,8 +3,8 @@
 	.include "global.inc"
 
 	.text
-	thumb_func_start sub_02016118
-sub_02016118: ; 0x02016118
+	thumb_func_start GraphicsManager_FindFreeImage
+GraphicsManager_FindFreeImage: ; 0x02016118
 	push {r3, r4}
 	ldr r4, [r0, #4]
 	mov r1, #0
@@ -30,9 +30,9 @@ _0201613E:
 	mov r0, #0
 	pop {r3, r4}
 	bx lr
-	thumb_func_end sub_02016118
-	thumb_func_start sub_02016144
-sub_02016144: ; 0x02016144
+	thumb_func_end GraphicsManager_FindFreeImage
+	thumb_func_start GraphicsManager_FindFreePalette
+GraphicsManager_FindFreePalette: ; 0x02016144
 	push {r3, r4}
 	ldr r4, [r0, #4]
 	mov r1, #0
@@ -58,4 +58,4 @@ _0201616A:
 	mov r0, #0
 	pop {r3, r4}
 	bx lr
-	thumb_func_end sub_02016144
+	thumb_func_end GraphicsManager_FindFreePalette

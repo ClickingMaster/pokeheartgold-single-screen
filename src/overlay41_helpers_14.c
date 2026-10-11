@@ -99,10 +99,10 @@ void ov41_02249888(void *src, void *dst);
 /* ---- bodies ---- */
 
 void ov41_02246820(Ov41Work *w) {
-    sub_02015E20((void *)W(w, 0));
+    GraphicsManager_Delete((void *)W(w, 0));
     W(w, 0) = 0;
 }
 
 void ov41_02246830(Ov41Work *w) {
-    sub_02015E64((void *)W(w, 0));
+    GraphicsManager_DrawObjects((void *)W(w, 0));
 }

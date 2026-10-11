@@ -23,9 +23,9 @@ typedef struct RawPoint {
     u16 y;
 } RawPoint;
 
-extern GraphicsObject *sub_02015F8C(GraphicsResourceTemplate *template);
-extern RawPoint sub_02015FCC(GraphicsObject *object);
-extern RawPoint sub_02015FE8(GraphicsObject *object);
+extern GraphicsObject *GraphicsManager_AddObject(GraphicsResourceTemplate *template);
+extern RawPoint GraphicsObject_GetPosition(GraphicsObject *object);
+extern RawPoint GraphicsObject_GetSize(GraphicsObject *object);
 
 typedef struct Ov41Slot {
     u32 unk0;
@@ -107,5 +107,5 @@ GraphicsObject *ov41_022460A8(const Ov41ResourceArgs *args) {
     template.depth = 0x1F;
     template.rotation = 0;
     template.resourceId = args->resourceId;
-    return sub_02015F8C(&template);
+    return GraphicsManager_AddObject(&template);
 }

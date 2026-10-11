@@ -104,6 +104,6 @@ void ov41_02246250(Ov41Work *w, u32 *src) {
 }
 
 void ov41_0224626C(Ov41Work *w) {
-    sub_02015EF4((void *)W(w, 0));
-    sub_02015F64((void *)W(w, 0));
+    GraphicsManager_FreeImages((void *)W(w, 0));
+    GraphicsManager_FreePalettes((void *)W(w, 0));
 }

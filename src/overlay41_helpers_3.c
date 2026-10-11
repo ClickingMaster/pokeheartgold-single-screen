@@ -99,5 +99,5 @@ void ov41_02249888(void *src, void *dst);
 /* ---- bodies ---- */
 
 void ov41_02245F9C(Ov41Work *w) {
-    sub_02015FC4((void *)W(w, 4));
+    GraphicsObject_SetPosition((void *)W(w, 4));
 }

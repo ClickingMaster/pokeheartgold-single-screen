@@ -57,7 +57,7 @@ extern void *ReadMsgData_ExpandPlaceholders(void *, void *, int, int);
 extern void MessageFormat_Delete(void *);
 extern void DestroyMsgData(void *);
 extern int TextPrinterCheckActive(u8);
-extern void ov74_02229DF8(void);
+extern void MysteryGiftComm_Free(void);
 extern void WirelessStatusIcon_Destroy(void);
 extern void *Sprite_CreateAffine(const RawSpriteTemplate *);
 extern void Sprite_SetAnimActiveFlag(void *, int);
@@ -134,7 +134,7 @@ int ov74_0222ADBC(void *manager, void *window, int msg, int result) {
 void ov74_0222AE3C(void *data) {
     switch (U32(data, 0x15d4)) {
     case 1:
-        ov74_02229DF8();
+        MysteryGiftComm_Free();
         WirelessStatusIcon_Destroy();
         break;
     case 0:

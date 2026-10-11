@@ -23,9 +23,9 @@
 	.public ConnectToRanger_Init
 	.public ConnectToRanger_Main
 	.public ConnectToRanger_Exit
-	.public ov74_02229DA0
-	.public ov74_02229DCC
-	.public ov74_02229DD4
+	.public MysteryGiftComm_HandleReceived
+	.public MysteryGiftComm_GetRecvBufferSize
+	.public MysteryGiftComm_GetRecvBuffer
 	.public ov74_02229DE0
 	.public ov74_02229E60
 	.public ov74_02229F90
@@ -93,7 +93,7 @@
 	.public ov74_022309F0
 	.extern _0223B330
 	.extern _0223B340
-	.extern _0223B368
+	.extern sMysteryGiftCommCommands
 	.extern _0223B390
 	.extern _0223B3A0
 	.extern _0223B3BC
@@ -224,7 +224,7 @@
 	.extern ov74_0223C700
 	.extern gConnectToRanger_PlayerName
 	.extern gConnectToRanger_TrainerId
-	.extern ov74_0223D0A4
+	.extern sMysteryGiftCommWork
 	.extern ov74_0223D0A8
 	.extern ov74_0223D0BC
 	.extern ov74_0223D0C0
@@ -245,8 +245,8 @@
 	.extern ConnectToRanger_SetTimeout
 	.extern ConnectToRanger_CheckTimeoutOrCancel
 	.extern ConnectToRanger_RunTransfer
-	.extern ov74_02229B68
-	.extern ov74_02229BC0
+	.extern MysteryGiftComm_Start
+	.extern MysteryGiftComm_SetState
 	.extern ov74_02229BD0
 	.extern ov74_02229C0C
 	.extern ov74_02229C44
@@ -254,19 +254,19 @@
 	.extern ov74_02229C60
 	.extern ov74_02229C80
 	.extern ov74_02229CB4
-	.extern ov74_02229CB8
+	.extern MysteryGiftComm_Task
 	.extern ov74_02229CE0
 	.extern ov74_02229D0C
 	.extern ov74_02229D1C
 	.extern ov74_02229D50
 	.extern ov74_02229D6C
-	.extern ov74_02229DA0
-	.extern ov74_02229DBC
-	.extern ov74_02229DCC
-	.extern ov74_02229DD4
+	.extern MysteryGiftComm_HandleReceived
+	.extern MysteryGiftComm_IsReceived
+	.extern MysteryGiftComm_GetRecvBufferSize
+	.extern MysteryGiftComm_GetRecvBuffer
 	.extern ov74_02229DE0
-	.extern ov74_02229DF8
-	.extern ov74_02229E14
+	.extern MysteryGiftComm_Free
+	.extern MysteryGiftComm_RegisterCommands
 	.extern ov74_02229E28
 	.extern ov74_02229E60
 	.extern ov74_02229E68
@@ -1330,7 +1330,7 @@ _0222C706:
 	add r0, r4, #0
 	mov r1, #0
 	bl ov74_02229E28
-	bl ov74_02229DF8
+	bl MysteryGiftComm_Free
 	bl WirelessStatusIcon_Destroy
 	mov r0, #0x11
 	str r0, [r5]
@@ -1386,7 +1386,7 @@ _0222C780:
 	bl Comm_IsNetIdConnected
 	cmp r0, #0
 	bne _0222C7B0
-	bl ov74_02229DF8
+	bl MysteryGiftComm_Free
 	bl WirelessStatusIcon_Destroy
 	mov r1, #0
 	add r0, r4, #0
@@ -1412,7 +1412,7 @@ _0222C7B0:
 	cmp r0, #0
 	bne _0222C8B8
 _0222C7C8:
-	bl ov74_02229DF8
+	bl MysteryGiftComm_Free
 	bl WirelessStatusIcon_Destroy
 	mov r1, #0
 	add r0, r4, #0
@@ -1425,7 +1425,7 @@ _0222C7C8:
 	str r0, [r5]
 	b _0222CD3A
 _0222C7E8:
-	bl ov74_02229DBC
+	bl MysteryGiftComm_IsReceived
 	cmp r0, #0
 	beq _0222C7F4
 	mov r0, #0xb
@@ -1455,7 +1455,7 @@ _0222C820:
 	add r0, r4, #0
 	mov r1, #0
 	bl ov74_02229E28
-	bl ov74_02229DF8
+	bl MysteryGiftComm_Free
 	bl WirelessStatusIcon_Destroy
 	mov r0, #0x11
 	str r0, [r5]
@@ -1483,7 +1483,7 @@ _0222C858:
 	bl Comm_IsNetIdConnected
 	cmp r0, #0
 	bne _0222C896
-	bl ov74_02229DF8
+	bl MysteryGiftComm_Free
 	ldr r0, _0222CA20 ; =0x000029EC
 	mov r1, #1
 	str r1, [r4, r0]
@@ -1610,7 +1610,7 @@ _0222C96A:
 	add r0, r4, #0
 	mov r1, #0
 	bl ov74_02229E28
-	bl ov74_02229DF8
+	bl MysteryGiftComm_Free
 	bl WirelessStatusIcon_Destroy
 	ldr r0, _0222CA28 ; =SEQ_SE_DP_UG_020
 	bl PlaySE

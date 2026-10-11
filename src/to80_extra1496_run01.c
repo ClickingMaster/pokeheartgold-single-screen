@@ -20,13 +20,13 @@ extern void ov74_0222AAAC(void *,void *,void *),ov74_0222AA18(void *,void *,int)
 extern void *Heap_Alloc(int,u32),*ov74_02235708(void);
 extern void ov74_0222C04C(void *,void *);
 extern void *SysTask_CreateOnMainQueue(void (*)(void *,void *),void *,u32);
-extern int ov74_0222ADBC(void *,void *,int,...),ov74_0223615C(void),ov74_02229D6C(State *),ov74_02229DBC(void);
-extern void ov74_02236128(void),ov74_02236140(void),PlaySE(int),GfGfx_EngineATogglePlanes(int,int),GfGfx_EngineBTogglePlanes(int,int),ov74_02229DF8(void),WirelessStatusIcon_Destroy(void),sub_020398D4(int,int),sub_02037AC0(int),ov74_0222A240(void *,int),ov74_0222A94C(void *,int,int),ov74_02235258(void *,int),ov74_0222AE3C(State *),ov74_02229E68(struct OverlayManager *),ov74_02235390(int),ov74_0222A7A0(void *),ov74_0222FC50(void *,void *,int),ov74_0222EC08(void *,void *,int),ov74_022358C8(int);
+extern int ov74_0222ADBC(void *,void *,int,...),ov74_0223615C(void),ov74_02229D6C(State *),MysteryGiftComm_IsReceived(void);
+extern void ov74_02236128(void),ov74_02236140(void),PlaySE(int),GfGfx_EngineATogglePlanes(int,int),GfGfx_EngineBTogglePlanes(int,int),MysteryGiftComm_Free(void),WirelessStatusIcon_Destroy(void),sub_020398D4(int,int),sub_02037AC0(int),ov74_0222A240(void *,int),ov74_0222A94C(void *,int,int),ov74_02235258(void *,int),ov74_0222AE3C(State *),ov74_02229E68(struct OverlayManager *),ov74_02235390(int),ov74_0222A7A0(void *),ov74_0222FC50(void *,void *,int),ov74_0222EC08(void *,void *,int),ov74_022358C8(int);
 extern int Comm_GetLocalNetId(void),Comm_IsNetIdConnected(u16),sub_02037B38(int);
 extern u32 gSystem[];
 int ov74_0222C2EC(void *,int *);
 #define ADDWINDOW() AddWindowParameterized(s->bg,s->w58,0,3,2,26,4,0,452)
-#define CANCEL() do{ov74_02229DF8();WirelessStatusIcon_Destroy();ov74_02229F28(s,-1);ov74_02229E28(s,0);}while(0)
+#define CANCEL() do{MysteryGiftComm_Free();WirelessStatusIcon_Destroy();ov74_02229F28(s,-1);ov74_02229E28(s,0);}while(0)
 #define CLEAR() do{ov74_02236140();s->flags&=~4;ov74_02229E28(s,0);*state=ov74_0222ADBC(manager,s->w18,27,56);}while(0)
 int ov74_0222C2EC(void *manager,int *state){State *s=OverlayManager_GetData(manager);void *p;int n;CTRDG_IsExisting();if(s->error!=29)ov74_0222CE10(s);
  switch(*state){
@@ -43,15 +43,15 @@ int ov74_0222C2EC(void *manager,int *state){State *s=OverlayManager_GetData(mana
  case 35:if(!s->busy){*state=ov74_0222ADBC(manager,s->w18,8,56);GfGfx_EngineATogglePlanes(1,1);}break;
  case 34:n=ov74_0223615C();if(n==4)ov74_02236128();if(n==2){ov74_02229E28(s,0);ov74_02229F28(s,-1);ov74_02229F78(s->w18,0);BgClearTilemapBufferAndCommit(s->bg,0);GfGfx_EngineATogglePlanes(1,0);p=&s->payload;if(ov74_0222A0E4(p)==1){ov74_02235DC4(s->bg,p);s->busy=2;}else PlaySE(1571);*state=35;}else if(n==3){ov74_02229E28(s,0);ov74_02229F28(s,-1);s->flags&=~4;*state=ov74_0222ADBC(manager,s->w18,27,56);}break;
  case 36:ov74_0222CEE0(s);n=ov74_0223D0A8[4];if((u32)(n-45)<=2){if(n==47)ov74_0222CEC0();*state=ov74_0222A494(manager);}break;
- case 7:s->selection=ov74_02229D6C(s);if(s->selection!=-1){ov74_02229E28(s,0);s->choice=ov74_0222FD98(s->strings,s->message);if(!WindowIsInUse(s->w58))ADDWINDOW();ov74_0222AAAC(manager,s->w58,s->message);ov74_0222AA18(manager,s->w18,4);ov74_0222A240(manager,0);*state=8;}if((gSystem[18]&2)||--s->counter==0){ov74_02229E28(s,0);ov74_02229DF8();WirelessStatusIcon_Destroy();*state=17;}break;
+ case 7:s->selection=ov74_02229D6C(s);if(s->selection!=-1){ov74_02229E28(s,0);s->choice=ov74_0222FD98(s->strings,s->message);if(!WindowIsInUse(s->w58))ADDWINDOW();ov74_0222AAAC(manager,s->w58,s->message);ov74_0222AA18(manager,s->w18,4);ov74_0222A240(manager,0);*state=8;}if((gSystem[18]&2)||--s->counter==0){ov74_02229E28(s,0);MysteryGiftComm_Free();WirelessStatusIcon_Destroy();*state=17;}break;
  case 8:ov74_0222AB0C(manager,state,ov74_0222A494);break;
  case 9:n=Comm_GetLocalNetId();if(n&&Comm_IsNetIdConnected((u16)n)){if(sub_02037B38(171)==1){ov74_02229E28(s,0);sub_020398D4(1,1);ov74_0222AA18(manager,s->w18,7);ov74_02229F28(s,1);ov74_02229E28(s,1);s->counter=600;*state=10;}}else if(n&&!Comm_IsNetIdConnected((u16)n)){CANCEL();*state=16;break;}if((gSystem[18]&2)||--s->counter==0){CANCEL();*state=17;}break;
- case 10:if(ov74_02229DBC())*state=11;n=Comm_GetLocalNetId();if((gSystem[18]&2)||--s->counter==0||(n&&!Comm_IsNetIdConnected((u16)n))){ov74_02229E28(s,0);ov74_02229DF8();WirelessStatusIcon_Destroy();*state=17;}break;
+ case 10:if(MysteryGiftComm_IsReceived())*state=11;n=Comm_GetLocalNetId();if((gSystem[18]&2)||--s->counter==0||(n&&!Comm_IsNetIdConnected((u16)n))){ov74_02229E28(s,0);MysteryGiftComm_Free();WirelessStatusIcon_Destroy();*state=17;}break;
  case 11:p=ov74_0222A078(manager);ov74_02235DC4(s->bg,p);sub_020398D4(0,0);ov74_0222A174(manager);*state=12;break;
- case 12:n=Comm_GetLocalNetId();if(n&&!Comm_IsNetIdConnected((u16)n)){ov74_02229DF8();s->flag=1;ov74_02236140();ov74_02229E28(s,0);WirelessStatusIcon_Destroy();ov74_02229F28(s,-1);*state=14;}else if(ov74_0223615C()==4){sub_02037AC0(147);*state=13;s->timer=120;}else if(ov74_0223615C()==3){CLEAR();}break;
+ case 12:n=Comm_GetLocalNetId();if(n&&!Comm_IsNetIdConnected((u16)n)){MysteryGiftComm_Free();s->flag=1;ov74_02236140();ov74_02229E28(s,0);WirelessStatusIcon_Destroy();ov74_02229F28(s,-1);*state=14;}else if(ov74_0223615C()==4){sub_02037AC0(147);*state=13;s->timer=120;}else if(ov74_0223615C()==3){CLEAR();}break;
  case 13:if(sub_02037B38(147)==1){ov74_02236128();s->timer=10;*state=15;}else if(--s->timer==0){CLEAR();}break;
  case 14:ov74_02229F60(s->w58,0);s->flags&=~4;*state=ov74_0222ADBC(manager,s->w18,29,56);break;
- case 15:if(--s->timer==0){ov74_02229E28(s,0);ov74_02229DF8();WirelessStatusIcon_Destroy();PlaySE(1571);ov74_02229F28(s,-1);*state=ov74_0222ADBC(manager,s->w18,8,56);}break;
+ case 15:if(--s->timer==0){ov74_02229E28(s,0);MysteryGiftComm_Free();WirelessStatusIcon_Destroy();PlaySE(1571);ov74_02229F28(s,-1);*state=ov74_0222ADBC(manager,s->w18,8,56);}break;
  case 16:PlaySE(1500);ov74_0222AA18(manager,s->w18,25);ov74_02229F60(s->w58,0);*state=18;break;
  case 17:if(s->ticks)s->ticks--;else{ov74_02229E28(s,0);PlaySE(1500);ov74_0222AA18(manager,s->w18,24);ov74_02229F60(s->w58,0);*state=18;}break;
  case 18:if(gSystem[18]){PlaySE(1500);ov74_0222A94C(manager,196,0);*state=3;}break;

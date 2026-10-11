@@ -4,11 +4,11 @@
 
 #include "assert.h"
 #include "bag.h"
+#include "ball_capsule_editor.h"
 #include "heap.h"
 #include "launch_application.h"
 #include "mail.h"
 #include "map_header.h"
-#include "overlay_57.h"
 #include "party.h"
 #include "party_menu.h"
 #include "player_avatar.h"
@@ -28,21 +28,9 @@
 
 FS_EXTERN_OVERLAY(OVY_57);
 
-typedef struct UnkStruct_0206B984 {
-    u32 partyCount;
-    Pokemon *mons[PARTY_SIZE];
-    Party *party;
-    SealCase *sealCase;
-    Options *options;
-    SaveData *saveData;
-    void *menuInputStatePtr;
-    u8 unk30;
-    u8 unk31;
-} UnkStruct_0206B984;
-
 typedef struct UnkStruct_0206B910 {
     u8 filler00[4];
-    UnkStruct_0206B984 *unk04;
+    BallCapsuleEditorArgs *unk04;
     PartyMenuArgs *partyMenu;
     SaveData *saveData;
     u32 state;
@@ -63,9 +51,9 @@ typedef struct UnkStruct_0206BCD4 {
 } UnkStruct_0206BCD4;
 
 static const OverlayManagerTemplate _020FF480 = {
-    .init = ov57_022378DC,
-    .exec = ov57_02237AF8,
-    .exit = ov57_02237B20,
+    .init = BallCapsuleEditor_Init,
+    .exec = BallCapsuleEditor_Main,
+    .exit = BallCapsuleEditor_Exit,
     .ovy_id = FS_OVERLAY_ID(OVY_57),
 };
 
@@ -82,8 +70,8 @@ void sub_0206B910(TaskManager *taskManager, SaveData *saveData) {
     UnkStruct_0206B910 *r4 = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(UnkStruct_0206B910));
     memset(r4, 0, sizeof(UnkStruct_0206B910));
     r4->saveData = saveData;
-    r4->unk04 = Heap_Alloc(HEAP_ID_FIELD2, sizeof(UnkStruct_0206B984));
-    memset(r4->unk04, 0, sizeof(UnkStruct_0206B984));
+    r4->unk04 = Heap_Alloc(HEAP_ID_FIELD2, sizeof(BallCapsuleEditorArgs));
+    memset(r4->unk04, 0, sizeof(BallCapsuleEditorArgs));
     r4->unk04->options = Save_PlayerData_GetOptionsAddr(saveData);
     r4->unk04->saveData = saveData;
     r4->unk04->menuInputStatePtr = &fieldSystem->menuInputState;
@@ -94,14 +82,14 @@ void sub_0206B910(TaskManager *taskManager, SaveData *saveData) {
 
 static BOOL sub_0206B984(TaskManager *taskManager) {
     UnkStruct_0206B910 *r7 = TaskManager_GetEnvironment(taskManager);
-    UnkStruct_0206B984 *r6 = r7->unk04;
+    BallCapsuleEditorArgs *r6 = r7->unk04;
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     switch (r7->state) {
     case 0:
         CallTask_LeaveOverworld(taskManager);
         SealCase *sealCase = Save_SealCase_Get(r7->saveData);
         r6->sealCase = sealCase;
-        r6->unk31 = 0;
+        r6->setCapsuleOnMon = 0;
         r6->menuInputStatePtr = &fieldSystem->menuInputState;
         Party *party = SaveArray_Party_Get(r7->saveData);
         r6->party = party;
@@ -121,7 +109,7 @@ static BOOL sub_0206B984(TaskManager *taskManager) {
         r7->state = 2;
         break;
     case 2:
-        switch (r7->unk04->unk31) {
+        switch (r7->unk04->setCapsuleOnMon) {
         default:
             GF_ASSERT(FALSE);
         case 0:
@@ -148,7 +136,7 @@ static BOOL sub_0206B984(TaskManager *taskManager) {
         break;
     case 4: {
         PartyMenuArgs *partyMenu = r7->partyMenu;
-        u32 index = r7->unk04->unk30 + 1;
+        u32 index = r7->unk04->capsuleIndex + 1;
         if (partyMenu->partySlot != 7) {
             Pokemon *mon = r7->unk04->mons[partyMenu->partySlot];
             SetMonData(mon, MON_DATA_BALL_CAPSULE_ID, &index);

@@ -23,9 +23,9 @@
 	.public ConnectToRanger_Init
 	.public ConnectToRanger_Main
 	.public ConnectToRanger_Exit
-	.public ov74_02229DA0
-	.public ov74_02229DCC
-	.public ov74_02229DD4
+	.public MysteryGiftComm_HandleReceived
+	.public MysteryGiftComm_GetRecvBufferSize
+	.public MysteryGiftComm_GetRecvBuffer
 	.public ov74_02229DE0
 	.public ov74_02229E60
 	.public ov74_02229F90
@@ -93,7 +93,7 @@
 	.public ov74_022309F0
 	.extern _0223B330
 	.extern _0223B340
-	.extern _0223B368
+	.extern sMysteryGiftCommCommands
 	.extern _0223B390
 	.extern _0223B3A0
 	.extern _0223B3BC
@@ -224,7 +224,7 @@
 	.extern ov74_0223C700
 	.extern gConnectToRanger_PlayerName
 	.extern gConnectToRanger_TrainerId
-	.extern ov74_0223D0A4
+	.extern sMysteryGiftCommWork
 	.extern ov74_0223D0A8
 	.extern ov74_0223D0BC
 	.extern ov74_0223D0C0
@@ -245,8 +245,8 @@
 	.extern ConnectToRanger_SetTimeout
 	.extern ConnectToRanger_CheckTimeoutOrCancel
 	.extern ConnectToRanger_RunTransfer
-	.extern ov74_02229B68
-	.extern ov74_02229BC0
+	.extern MysteryGiftComm_Start
+	.extern MysteryGiftComm_SetState
 	.extern ov74_02229BD0
 	.extern ov74_02229C0C
 	.extern ov74_02229C44
@@ -254,19 +254,19 @@
 	.extern ov74_02229C60
 	.extern ov74_02229C80
 	.extern ov74_02229CB4
-	.extern ov74_02229CB8
+	.extern MysteryGiftComm_Task
 	.extern ov74_02229CE0
 	.extern ov74_02229D0C
 	.extern ov74_02229D1C
 	.extern ov74_02229D50
 	.extern ov74_02229D6C
-	.extern ov74_02229DA0
-	.extern ov74_02229DBC
-	.extern ov74_02229DCC
-	.extern ov74_02229DD4
+	.extern MysteryGiftComm_HandleReceived
+	.extern MysteryGiftComm_IsReceived
+	.extern MysteryGiftComm_GetRecvBufferSize
+	.extern MysteryGiftComm_GetRecvBuffer
 	.extern ov74_02229DE0
-	.extern ov74_02229DF8
-	.extern ov74_02229E14
+	.extern MysteryGiftComm_Free
+	.extern MysteryGiftComm_RegisterCommands
 	.extern ov74_02229E28
 	.extern ov74_02229E60
 	.extern ov74_02229E68

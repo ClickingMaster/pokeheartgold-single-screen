@@ -1,204 +1,204 @@
 	.include "asm/macros.inc"
-	.public _0223BC80
-	.public ov57_022378C0
-	.public ov57_022378DC
-	.public ov57_02237AF8
-	.public ov57_02237B20
-	.public ov57_02237CA8
-	.public ov57_02237CDC
-	.public ov57_02237CEC
-	.public ov57_02237E38
-	.public ov57_02237E78
-	.public ov57_02237E80
-	.public ov57_02237E88
-	.public ov57_02237E90
-	.public ov57_02237EA8
-	.public ov57_02237EB8
-	.public ov57_02237F14
-	.public ov57_02237F3C
-	.public ov57_02237FAC
-	.public ov57_02238028
-	.public ov57_02238044
-	.public ov57_0223809C
-	.public ov57_02238134
-	.public ov57_02238260
-	.public ov57_022382F8
-	.public ov57_022383AC
-	.public ov57_022383D0
-	.public ov57_022383F8
-	.public ov57_02238438
-	.public ov57_0223848C
-	.public ov57_022384C0
-	.public ov57_02238508
-	.public ov57_0223853C
-	.public ov57_0223857C
-	.public ov57_022385A4
-	.public ov57_022385DC
-	.public ov57_0223864C
-	.public ov57_0223866C
-	.public ov57_022386F0
-	.public ov57_02238714
-	.public ov57_02238758
-	.public ov57_02238794
-	.public ov57_022387C0
-	.public ov57_022387E0
-	.public ov57_022388E4
-	.public ov57_02238958
-	.public ov57_02238A00
-	.public ov57_02238AC0
-	.public ov57_02238AF0
-	.public ov57_02238B28
-	.public ov57_02238B48
-	.public ov57_02238BCC
-	.public ov57_02238C0C
-	.public ov57_02238C30
-	.public ov57_02238D80
-	.public ov57_02238DAC
-	.public ov57_02238DD0
-	.public ov57_02238E48
-	.public ov57_02238F48
-	.public ov57_02238FC4
-	.public ov57_02238FEC
-	.public ov57_02239014
-	.public ov57_02239058
-	.public ov57_022390F4
-	.public ov57_02239114
-	.public ov57_02239184
-	.public ov57_0223921C
-	.public ov57_02239240
-	.public ov57_02239260
-	.public ov57_0223927C
-	.public ov57_022392F4
-	.public ov57_022394AC
-	.public ov57_022394D8
-	.public ov57_02239558
-	.public ov57_02239588
-	.public ov57_022395B8
-	.public ov57_02239670
-	.public ov57_02239728
-	.public ov57_022397B0
-	.public ov57_02239814
-	.public ov57_02239868
-	.public ov57_022398C4
-	.public ov57_022399F8
-	.public ov57_02239A8C
-	.public ov57_02239B0C
-	.public ov57_02239B2C
-	.public ov57_02239B94
-	.public ov57_02239BAC
-	.public ov57_02239BCC
-	.public ov57_02239BEC
-	.public ov57_02239C88
-	.public ov57_02239CE8
-	.public ov57_02239D48
-	.public ov57_02239EB4
-	.public ov57_0223A034
-	.public ov57_0223A058
-	.public ov57_0223A05C
-	.public ov57_0223A07C
-	.public ov57_0223A0A8
-	.public ov57_0223A0E0
-	.public ov57_0223A104
-	.public ov57_0223A31C
-	.public ov57_0223A504
-	.public ov57_0223A5AC
-	.public ov57_0223A6B4
-	.public ov57_0223A6B8
-	.public ov57_0223A7DC
-	.public ov57_0223A8FC
-	.public ov57_0223AB58
-	.public ov57_0223AEA8
-	.public ov57_0223B12C
-	.public ov57_0223B180
-	.public ov57_0223B1A4
-	.public ov57_0223B288
-	.public ov57_0223B2EC
-	.public ov57_0223B308
-	.public ov57_0223B32C
-	.public ov57_0223B3A4
-	.public ov57_0223B3F8
-	.public ov57_0223B45C
-	.public ov57_0223B478
-	.public ov57_0223B504
-	.public ov57_0223B578
-	.public ov57_0223B620
-	.public ov57_0223B6F0
-	.public ov57_0223B700
-	.public ov57_0223B714
-	.public ov57_0223B73C
-	.public ov57_0223B74C
-	.public ov57_0223B75C
-	.public ov57_0223B774
-	.public ov57_0223B78C
-	.public ov57_0223B7A8
-	.public ov57_0223B7C4
-	.public ov57_0223B828
-	.public ov57_0223B858
-	.public ov57_0223B890
-	.public ov57_0223B8B8
-	.public ov57_0223B90C
+	.public sBallCapsuleEditorGraphicsModes
+	.public BallCapsuleEditor_LoadBattleOverlays
+	.public BallCapsuleEditor_Init
+	.public BallCapsuleEditor_Main
+	.public BallCapsuleEditor_Exit
+	.public BallCapsuleEditor_ResetDisplay
+	.public BallCapsuleEditor_DisableInterrupts
+	.public BallCapsuleEditor_InitBgs
+	.public BallCapsuleEditor_VBlankCB
+	.public BallCapsuleEditor_GetArgsCapsuleIndex
+	.public BallCapsuleEditor_SetArgsCapsuleIndex
+	.public BallCapsuleEditor_SetArgsSetCapsuleOnMon
+	.public BallCapsuleEditor_SetSealHitbox
+	.public BallCapsuleEditor_SetDragHitbox
+	.public BallCapsuleEditor_UpdateSealHitbox
+	.public BallCapsuleEditor_ShiftSealsToCapsule
+	.public BallCapsuleEditor_LoadSeals
+	.public BallCapsuleEditor_AddSeal
+	.public BallCapsuleEditor_HasFreeSealSlot
+	.public BallCapsuleEditor_BringSealToFront
+	.public BallCapsuleEditor_LoadSealSpriteResources
+	.public BallCapsuleEditor_SortSeals
+	.public BallCapsuleEditor_CreateSealSprite
+	.public BallCapsuleEditor_HandleSealTouch
+	.public BallCapsuleEditor_RemoveAllSeals
+	.public BallCapsuleEditor_SetSealsDrawFlag
+	.public BallCapsuleEditor_IsSealOnCapsule
+	.public BallCapsuleEditor_RemoveSeal
+	.public BallCapsuleEditor_UpdateSealOamMode
+	.public BallCapsuleEditor_IsCapsuleChanged
+	.public BallCapsuleEditor_StoreSealPosition
+	.public BallCapsuleEditor_SaveCapsule
+	.public BallCapsuleEditor_GetSealData
+	.public BallCapsuleEditor_SetSpriteHitbox
+	.public BallCapsuleEditor_AddMessageWindows
+	.public BallCapsuleEditor_RemoveMessageWindows
+	.public BallCapsuleEditor_PrintExitLabel
+	.public BallCapsuleEditor_InitFonts
+	.public BallCapsuleEditor_FreeFonts
+	.public BallCapsuleEditor_LoadButtonLabelPalette
+	.public BallCapsuleEditor_CreateButtonLabels
+	.public BallCapsuleEditor_SetButtonLabelsDrawFlag
+	.public BallCapsuleEditor_CreateButtonLabel
+	.public BallCapsuleEditor_FillPageSeals
+	.public BallCapsuleEditor_LoadCaseSealSpriteResources
+	.public BallCapsuleEditor_CreateCaseSealSprites
+	.public BallCapsuleEditor_DeleteCaseSealSprites
+	.public BallCapsuleEditor_MoveSeals
+	.public BallCapsuleEditor_Create3DVramMan
+	.public BallCapsuleEditor_Init3D
+	.public BallCapsuleEditor_Alloc3DVram
+	.public BallCapsuleEditor_End3DFrame
+	.public BallCapsuleEditor_CreateMenu
+	.public BallCapsuleEditor_DestroyMenu
+	.public BallCapsuleEditor_GetCapsulePosition
+	.public BallCapsuleEditor_LoadMonIconResources
+	.public BallCapsuleEditor_CreateMonIcons
+	.public BallCapsuleEditor_PlaceMonIcons
+	.public BallCapsuleEditor_TickMonIcons
+	.public BallCapsuleEditor_DeleteMonIcons
+	.public BallCapsuleEditor_UpdateCapsuleIconStates
+	.public BallCapsuleEditor_InitSpriteSystem
+	.public BallCapsuleEditor_FreeSpriteSystem
+	.public BallCapsuleEditor_LoadArrowResources
+	.public BallCapsuleEditor_CreateArrows
+	.public BallCapsuleEditor_TickArrows
+	.public BallCapsuleEditor_SetArrowsDrawFlag
+	.public BallCapsuleEditor_DeleteArrows
+	.public BallCapsuleEditor_LoadSpriteResources
+	.public BallCapsuleEditor_CreateCapsuleIcons
+	.public BallCapsuleEditor_RefreshCapsuleIcons
+	.public BallCapsuleEditor_SwitchCapsules
+	.public BallCapsuleEditor_TickCapsuleIcons
+	.public BallCapsuleEditor_DeleteCapsuleIcons
+	.public BallCapsuleEditor_LoadMainBgGraphics
+	.public BallCapsuleEditor_LoadSubBgGraphics
+	.public BallCapsuleEditor_PrintMessage
+	.public BallCapsuleEditor_AddFramedWindow
+	.public BallCapsuleEditor_AddWindow
+	.public BallCapsuleEditor_AddWindowWithPalette
+	.public BallCapsuleEditor_AddSealCountWindows
+	.public BallCapsuleEditor_PrintSealCounts
+	.public BallCapsuleEditor_PrintSealCount
+	.public BallCapsuleEditor_RemoveSealCountWindows
+	.public BallCapsuleEditor_PrintSealName
+	.public BallCapsuleEditor_ShowScreens
+	.public BallCapsuleEditor_FadeIn
+	.public BallCapsuleEditor_FadeOut
+	.public BallCapsuleEditor_LoadCaseBgGraphics
+	.public BallCapsuleEditor_LoadSubBgCapsuleGraphics
+	.public BallCapsuleEditor_LoadSubBgFrameGraphics
+	.public BallCapsuleEditor_LoadCaseButtonResources
+	.public BallCapsuleEditor_CreateCaseButtons
+	.public BallCapsuleEditor_SetCaseSpritesDrawFlag
+	.public BallCapsuleEditor_Noop
+	.public BallCapsuleEditor_DeleteCaseButtons
+	.public BallCapsuleEditor_CapsuleHasSeals
+	.public BallCapsuleEditor_GetMenuKind
+	.public BallCapsuleEditor_RunMode
+	.public BallCapsuleEditor_ModeSelect
+	.public BallCapsuleEditor_ModeEdit
+	.public BallCapsuleEditor_ModeRemove
+	.public BallCapsuleEditor_ModeSwitch
+	.public BallCapsuleEditor_ModeNone
+	.public BallCapsuleEditor_EnterEdit
+	.public BallCapsuleEditor_LeaveEdit
+	.public BallCapsuleEditor_ConfirmQuitEdit
+	.public BallCapsuleEditor_PreviewCapsule
+	.public BallCapsuleEditor_HitboxCallback
+	.public BallCapsuleEditor_UpdateMenuInputState
+	.public BallCapsuleEditor_HandleSelectInput
+	.public BallCapsuleEditor_HandleSelection
+	.public BallCapsuleEditor_HandleSelectKeys
+	.public BallCapsuleEditor_HandleSelectTouch
+	.public BallCapsuleEditor_HandleSwitchInput
+	.public BallCapsuleEditor_FinishSwitch
+	.public BallCapsuleEditor_HandleSwitchSelection
+	.public BallCapsuleEditor_HandleSwitchKeys
+	.public BallCapsuleEditor_HandleSwitchTouch
+	.public BallCapsuleEditor_MoveCapsuleCursor
+	.public BallCapsuleEditor_UpdateCursors
+	.public BallCapsuleEditor_GetTouchedCapsule
+	.public BallCapsuleEditor_HandleEditKeys
+	.public BallCapsuleEditor_MenuEdit
+	.public BallCapsuleEditor_MenuQuit
+	.public BallCapsuleEditor_MenuSet
+	.public BallCapsuleEditor_MenuRemove
+	.public BallCapsuleEditor_MenuSwitch
+	.public BallCapsuleEditor_SaveEditedCapsule
+	.public BallCapsuleEditor_RestoreEditedCapsule
+	.public BallCapsuleEditor_SaveSealCounts
+	.public BallCapsuleEditor_RestoreSealCounts
+	.public BallCapsuleEditor_CopyPreviewMon
+	.public BallCapsuleEditor_SetMode
+	.public BallCapsuleEditor_SetButtonFrame
+	.public BallCapsuleEditor_MoveButtonLabel
+	.public BallCapsuleEditor_Task_ButtonPress
+	.public BallCapsuleEditor_StartButtonPress
 	.public ov57_0223B940
-	.public ov57_0223B948
-	.public ov57_0223B950
-	.public ov57_0223B9C8
-	.public ov57_0223BA1C
-	.public ov57_0223BA40
-	.public ov57_0223BABC
-	.public ov57_0223BB38
-	.public ov57_0223BB4C
-	.public ov57_0223BB5C
-	.public ov57_0223BB84
-	.public ov57_0223BC4C
-	.public ov57_0223BC90
-	.public ov57_0223BCB8
-	.public ov57_0223BD0C
-	.public ov57_0223BD7C
-	.public ov57_0223BD88
-	.public ov57_0223BD9C
-	.public ov57_0223BDB4
-	.public ov57_0223BDD4
-	.public ov57_0223BDF4
-	.public ov57_0223BE18
-	.public ov57_0223BE48
-	.public ov57_0223BE7C
-	.public ov57_0223BEB0
-	.public ov57_0223BEB8
-	.public ov57_0223BECC
-	.public ov57_0223BEF4
+	.public BallCapsuleEditor_SetInputEnabled
+	.public BallCapsuleEditor_CreatePreviewPokepic
+	.public BallCapsuleEditor_StartPreviewPokepicAnim
+	.public BallCapsuleEditor_ClearPreviewPokepicScale
+	.public BallCapsuleEditor_GrowPreviewPokepic
+	.public BallCapsuleEditor_ShrinkPreviewPokepic
+	.public BallCapsuleEditor_SetPreviewPokepicHidden
+	.public BallCapsuleEditor_DeletePreviewPokepic
+	.public BallCapsuleEditor_ResetBlend
+	.public BallCapsuleEditor_InitHitboxes
+	.public BallCapsuleEditor_ClearCapsuleMon
+	.public sBallCapsuleEditorGraphicsBanks
+	.public sBallCapsuleEditorMainBgTemplates
+	.public sBallCapsuleEditorSubBgTemplates
+	.public sBallCapsuleEditorMenuTemplate
+	.public sBallCapsuleEditorOamCharTransferParam
+	.public sBallCapsuleEditorSpriteResourceCounts
+	.public sBallCapsuleEditorOamManagerParam
+	.public sBallCapsuleEditorCaseSealPositions
+	.public sBallCapsuleEditorWindowFrameTiles
+	.public sBallCapsuleEditorArrows
+	.public sBallCapsuleEditorCaseButtonPositions
+	.public sBallCapsuleEditorCaseButtonHitboxSizes
+	.public sBallCapsuleEditorExitButtonHitboxes
+	.public sBallCapsuleEditorModes
+	.public sBallCapsuleEditorMenuItems
+	.public sBallCapsuleEditorHitboxes
 	.include "overlay_57.inc"
 	.include "global.inc"
 
 	.text
-	.public ov57_022378C0
-	.public ov57_02237CDC
-	.public ov57_02237E78
-	.public ov57_02237E80
-	.public ov57_02237E88
-	.public ov57_02237E90
-	.public ov57_02237EA8
-	.public ov57_02238028
-	.public ov57_0223864C
-	.public ov57_022387C0
-	.public ov57_02239240
-	.public ov57_02239260
-	.public ov57_02239B94
-	.public ov57_02239BAC
-	.public ov57_02239BCC
-	.public ov57_0223A058
-	.public ov57_0223A6B4
-	.public ov57_0223B6F0
-	.public ov57_0223B700
-	.public ov57_0223B73C
-	.public ov57_0223B74C
-	.public ov57_0223B75C
-	.public ov57_0223B774
+	.public BallCapsuleEditor_LoadBattleOverlays
+	.public BallCapsuleEditor_DisableInterrupts
+	.public BallCapsuleEditor_GetArgsCapsuleIndex
+	.public BallCapsuleEditor_SetArgsCapsuleIndex
+	.public BallCapsuleEditor_SetArgsSetCapsuleOnMon
+	.public BallCapsuleEditor_SetSealHitbox
+	.public BallCapsuleEditor_SetDragHitbox
+	.public BallCapsuleEditor_HasFreeSealSlot
+	.public BallCapsuleEditor_RemoveMessageWindows
+	.public BallCapsuleEditor_SetButtonLabelsDrawFlag
+	.public BallCapsuleEditor_SetArrowsDrawFlag
+	.public BallCapsuleEditor_DeleteArrows
+	.public BallCapsuleEditor_ShowScreens
+	.public BallCapsuleEditor_FadeIn
+	.public BallCapsuleEditor_FadeOut
+	.public BallCapsuleEditor_Noop
+	.public BallCapsuleEditor_ModeNone
+	.public BallCapsuleEditor_MenuEdit
+	.public BallCapsuleEditor_MenuQuit
+	.public BallCapsuleEditor_MenuRemove
+	.public BallCapsuleEditor_MenuSwitch
+	.public BallCapsuleEditor_SaveEditedCapsule
+	.public BallCapsuleEditor_RestoreEditedCapsule
 	.public ov57_0223B940
-	.public ov57_0223B948
-	.public ov57_0223BB38
-	.public ov57_0223BB4C
+	.public BallCapsuleEditor_SetInputEnabled
+	.public BallCapsuleEditor_SetPreviewPokepicHidden
+	.public BallCapsuleEditor_DeletePreviewPokepic
 
-thumb_func_start ov57_0223AB58
-ov57_0223AB58: ; 0x0223AB58
+thumb_func_start BallCapsuleEditor_PreviewCapsule
+BallCapsuleEditor_PreviewCapsule: ; 0x0223AB58
 	push {r4, r5, lr}
 	sub sp, #0x84
 	ldr r1, _0223AE90 ; =0x00000404
@@ -251,23 +251,23 @@ _0223AB84:
 	bl PaletteData_BeginPaletteFade
 	add r0, r4, #0
 	mov r1, #0
-	bl ov57_0223B948
+	bl BallCapsuleEditor_SetInputEnabled
 	ldr r0, _0223AE9C ; =0x00000408
 	mov r1, #0
 	str r1, [r4, r0]
 	add r0, r4, #0
-	bl ov57_0223B7C4
+	bl BallCapsuleEditor_CopyPreviewMon
 	add r0, r4, #0
-	bl ov57_0223B950
+	bl BallCapsuleEditor_CreatePreviewPokepic
 	add r0, r4, #0
 	mov r1, #1
-	bl ov57_0223BB38
+	bl BallCapsuleEditor_SetPreviewPokepicHidden
 	add r0, r4, #0
 	mov r1, #0
 	add r0, #0xec
 	mov r2, #0xd
 	add r3, r1, #0
-	bl ov57_02239728
+	bl BallCapsuleEditor_PrintMessage
 	ldr r0, _0223AE90 ; =0x00000404
 	ldr r1, [r4, r0]
 	add r1, r1, #1
@@ -332,7 +332,7 @@ _0223AC4A:
 	add r0, r0, #1
 	str r0, [sp, #0xc]
 	add r0, sp, #0x44
-	bl ov57_0223857C
+	bl BallCapsuleEditor_GetSealData
 	ldr r0, _0223AEA0 ; =0x00000458
 	mov r1, #0xa2
 	ldr r0, [r4, r0]
@@ -373,16 +373,16 @@ _0223ACAC:
 	cmp r0, #1
 	bne _0223AD64
 	add r0, r4, #0
-	bl ov57_0223BA40
+	bl BallCapsuleEditor_GrowPreviewPokepic
 	mov r0, #0x25
 	lsl r0, r0, #4
 	ldr r0, [r4, r0]
 	bl ov07_02232A44
 	add r0, r4, #0
 	mov r1, #0
-	bl ov57_0223BB38
+	bl BallCapsuleEditor_SetPreviewPokepicHidden
 	add r0, r4, #0
-	bl ov57_0223BA1C
+	bl BallCapsuleEditor_ClearPreviewPokepicScale
 	ldr r0, _0223AEA4 ; =0x000006C5
 	bl PlaySE
 	ldr r0, _0223AE90 ; =0x00000404
@@ -391,7 +391,7 @@ _0223ACAC:
 	str r1, [r4, r0]
 	b _0223AE88
 _0223ACF6:
-	bl ov57_0223BA40
+	bl BallCapsuleEditor_GrowPreviewPokepic
 	add r5, r0, #0
 	mov r0, #0x95
 	lsl r0, r0, #2
@@ -409,7 +409,7 @@ _0223ACF6:
 	mov r1, #0
 	bl GfGfx_EngineATogglePlanes
 	add r0, r4, #0
-	bl ov57_0223B9C8
+	bl BallCapsuleEditor_StartPreviewPokepicAnim
 	ldr r0, _0223AE9C ; =0x00000408
 	mov r1, #0
 	str r1, [r4, r0]
@@ -491,7 +491,7 @@ _0223AD7A:
 	mov r1, #0x95
 	lsl r1, r1, #2
 	str r0, [r4, r1]
-	bl ov57_0223BB5C
+	bl BallCapsuleEditor_ResetBlend
 	mov r0, #0x10
 	mov r1, #1
 	bl GfGfx_EngineATogglePlanes
@@ -501,7 +501,7 @@ _0223AD7A:
 	str r1, [r4, r0]
 	b _0223AE88
 _0223ADE2:
-	bl ov57_0223BABC
+	bl BallCapsuleEditor_ShrinkPreviewPokepic
 	add r5, r0, #0
 	mov r0, #0x95
 	lsl r0, r0, #2
@@ -535,9 +535,9 @@ _0223ADE2:
 	bl PaletteData_BeginPaletteFade
 	add r0, r4, #0
 	mov r1, #1
-	bl ov57_0223BB38
+	bl BallCapsuleEditor_SetPreviewPokepicHidden
 	add r0, r4, #0
-	bl ov57_0223BB4C
+	bl BallCapsuleEditor_DeletePreviewPokepic
 	mov r0, #0x95
 	lsl r0, r0, #2
 	ldr r0, [r4, r0]
@@ -559,7 +559,7 @@ _0223AE4C:
 	bl GfGfx_EngineATogglePlanes
 	add r0, r4, #0
 	mov r1, #1
-	bl ov57_0223B948
+	bl BallCapsuleEditor_SetInputEnabled
 	mov r1, #0
 	ldr r0, _0223AE90 ; =0x00000404
 	mov r2, #4
@@ -570,7 +570,7 @@ _0223AE4C:
 	ldr r2, _0223AE98 ; =0x0000FFFF
 	add r0, r4, #0
 	add r3, r1, #0
-	bl ov57_02239728
+	bl BallCapsuleEditor_PrintMessage
 	add sp, #0x84
 	mov r0, #4
 	pop {r4, r5, pc}
@@ -585,11 +585,11 @@ _0223AE98: .word 0x0000FFFF
 _0223AE9C: .word 0x00000408
 _0223AEA0: .word 0x00000458
 _0223AEA4: .word 0x000006C5
-	thumb_func_end ov57_0223AB58
+	thumb_func_end BallCapsuleEditor_PreviewCapsule
 
 
-	thumb_func_start ov57_0223AEA8
-ov57_0223AEA8: ; 0x0223AEA8
+	thumb_func_start BallCapsuleEditor_HitboxCallback
+BallCapsuleEditor_HitboxCallback: ; 0x0223AEA8
 	push {r4, r5, r6, lr}
 	add r4, r2, #0
 	add r5, r0, #0
@@ -648,24 +648,24 @@ _0223AF0A:
 	sub r0, r0, #1
 	str r0, [r4, r1]
 	add r0, r4, #0
-	bl ov57_02238AC0
+	bl BallCapsuleEditor_DeleteCaseSealSprites
 	ldr r1, _0223B104 ; =0x00000448
 	add r0, r4, #0
 	ldr r1, [r4, r1]
-	bl ov57_022388E4
+	bl BallCapsuleEditor_FillPageSeals
 	add r0, r4, #0
-	bl ov57_02238958
+	bl BallCapsuleEditor_LoadCaseSealSpriteResources
 	add r0, r4, #0
-	bl ov57_02238A00
+	bl BallCapsuleEditor_CreateCaseSealSprites
 	add r0, r4, #0
-	bl ov57_022399F8
+	bl BallCapsuleEditor_PrintSealCounts
 	ldr r0, _0223B108 ; =0x000006C4
 	bl PlaySE
 _0223AF36:
 	ldr r0, _0223B10C ; =0x00000434
 	add r1, r6, #0
 	ldr r0, [r4, r0]
-	bl ov57_0223B858
+	bl BallCapsuleEditor_SetButtonFrame
 	pop {r4, r5, r6, pc}
 _0223AF42:
 	cmp r6, #0
@@ -681,24 +681,24 @@ _0223AF42:
 	ldr r0, _0223B104 ; =0x00000448
 	str r1, [r4, r0]
 	add r0, r4, #0
-	bl ov57_02238AC0
+	bl BallCapsuleEditor_DeleteCaseSealSprites
 	ldr r1, _0223B104 ; =0x00000448
 	add r0, r4, #0
 	ldr r1, [r4, r1]
-	bl ov57_022388E4
+	bl BallCapsuleEditor_FillPageSeals
 	add r0, r4, #0
-	bl ov57_02238958
+	bl BallCapsuleEditor_LoadCaseSealSpriteResources
 	add r0, r4, #0
-	bl ov57_02238A00
+	bl BallCapsuleEditor_CreateCaseSealSprites
 	add r0, r4, #0
-	bl ov57_022399F8
+	bl BallCapsuleEditor_PrintSealCounts
 	ldr r0, _0223B108 ; =0x000006C4
 	bl PlaySE
 _0223AF84:
 	ldr r0, _0223B110 ; =0x00000438
 	add r1, r6, #0
 	ldr r0, [r4, r0]
-	bl ov57_0223B858
+	bl BallCapsuleEditor_SetButtonFrame
 	pop {r4, r5, r6, pc}
 _0223AF90:
 	cmp r6, #0
@@ -716,12 +716,12 @@ _0223AFA8:
 	ldr r0, _0223B118 ; =0x0000043C
 	mov r1, #0
 	ldr r0, [r4, r0]
-	bl ov57_0223B90C
+	bl BallCapsuleEditor_StartButtonPress
 _0223AFB2:
 	ldr r0, _0223B118 ; =0x0000043C
 	add r1, r6, #0
 	ldr r0, [r4, r0]
-	bl ov57_0223B858
+	bl BallCapsuleEditor_SetButtonFrame
 	pop {r4, r5, r6, pc}
 _0223AFBE:
 	cmp r6, #0
@@ -735,7 +735,7 @@ _0223AFBE:
 	str r1, [r4, r0]
 	add r0, r4, #0
 	mov r1, #0
-	bl ov57_0223B948
+	bl BallCapsuleEditor_SetInputEnabled
 	ldr r0, _0223B11C ; =0x000005E2
 	bl PlaySE
 _0223AFDE:
@@ -745,13 +745,13 @@ _0223AFDE:
 	lsl r1, r1, #4
 	ldr r0, [r4, r0]
 	ldr r1, [r4, r1]
-	bl ov57_0223B90C
+	bl BallCapsuleEditor_StartButtonPress
 _0223AFEE:
 	mov r0, #0x11
 	lsl r0, r0, #6
 	ldr r0, [r4, r0]
 	add r1, r6, #0
-	bl ov57_0223B858
+	bl BallCapsuleEditor_SetButtonFrame
 	pop {r4, r5, r6, pc}
 _0223AFFC:
 	cmp r6, #0
@@ -765,7 +765,7 @@ _0223AFFC:
 	str r1, [r4, r0]
 	add r0, r4, #0
 	mov r1, #0
-	bl ov57_0223B948
+	bl BallCapsuleEditor_SetInputEnabled
 	ldr r0, _0223B114 ; =0x000005DD
 	bl PlaySE
 _0223B01C:
@@ -774,18 +774,18 @@ _0223B01C:
 	lsl r1, r1, #2
 	ldr r0, [r4, r0]
 	ldr r1, [r4, r1]
-	bl ov57_0223B90C
+	bl BallCapsuleEditor_StartButtonPress
 _0223B02A:
 	ldr r0, _0223B120 ; =0x00000444
 	add r1, r6, #0
 	ldr r0, [r4, r0]
-	bl ov57_0223B858
+	bl BallCapsuleEditor_SetButtonFrame
 	pop {r4, r5, r6, pc}
 _0223B036:
 	cmp r6, #0
 	bne _0223B100
 	add r0, r4, #0
-	bl ov57_02238028
+	bl BallCapsuleEditor_HasFreeSealSlot
 	cmp r0, #0
 	bne _0223B05A
 	ldr r0, _0223B124 ; =0x000005F2
@@ -795,7 +795,7 @@ _0223B036:
 	add r0, r4, #0
 	mov r2, #0xf
 	add r3, r1, #0
-	bl ov57_02239728
+	bl BallCapsuleEditor_PrintMessage
 	pop {r4, r5, r6, pc}
 _0223B05A:
 	mov r0, #0x45
@@ -812,7 +812,7 @@ _0223B05A:
 	lsl r1, r5, #0x18
 	add r0, r4, #0
 	lsr r1, r1, #0x18
-	bl ov57_02237FAC
+	bl BallCapsuleEditor_AddSeal
 	add r1, r4, #0
 	add r1, #0xd4
 	str r0, [r1]
@@ -821,7 +821,7 @@ _0223B05A:
 	add r1, r0, #0
 	add r0, r4, #0
 	add r0, #0xec
-	bl ov57_02239B2C
+	bl BallCapsuleEditor_PrintSealName
 	ldr r0, [r4]
 	mov r2, #0
 	ldrb r1, [r6, r5]
@@ -830,7 +830,7 @@ _0223B05A:
 	bl GiveOrTakeSeal
 	add r0, r4, #0
 	add r1, r5, #0
-	bl ov57_02239A8C
+	bl BallCapsuleEditor_PrintSealCount
 	ldr r0, _0223B128 ; =0x000005EB
 	bl PlaySE
 	pop {r4, r5, r6, pc}
@@ -845,7 +845,7 @@ _0223B0B0:
 	add r0, r4, #0
 	mov r2, #0x10
 	add r3, r1, #0
-	bl ov57_02239728
+	bl BallCapsuleEditor_PrintMessage
 	pop {r4, r5, r6, pc}
 _0223B0CC:
 	cmp r6, #0
@@ -854,7 +854,7 @@ _0223B0CC:
 	lsl r2, r5, #0x18
 	add r0, r4, #0
 	lsr r2, r2, #0x18
-	bl ov57_022382F8
+	bl BallCapsuleEditor_HandleSealTouch
 	lsl r0, r5, #4
 	add r1, r4, r0
 	mov r0, #0x35
@@ -864,7 +864,7 @@ _0223B0CC:
 	add r4, #0xec
 	add r1, r0, #0
 	add r0, r4, #0
-	bl ov57_02239B2C
+	bl BallCapsuleEditor_PrintSealName
 	ldr r0, _0223B128 ; =0x000005EB
 	bl PlaySE
 	pop {r4, r5, r6, pc}
@@ -883,4 +883,4 @@ _0223B11C: .word 0x000005E2
 _0223B120: .word 0x00000444
 _0223B124: .word 0x000005F2
 _0223B128: .word 0x000005EB
-	thumb_func_end ov57_0223AEA8
+	thumb_func_end BallCapsuleEditor_HitboxCallback

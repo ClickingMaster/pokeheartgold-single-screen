@@ -1,19 +1,19 @@
 #include <nitro/fs/overlay.h>
 #pragma once
-.public sub_02015DDC
-.public sub_02015E20
-.public sub_02015E64
-.public sub_02015EA0
-.public sub_02015EF4
-.public sub_02015F1C
-.public sub_02015F64
-.public sub_02015F8C
-.public sub_02015FB0
-.public sub_02015FC4
-.public sub_02015FCC
-.public sub_02015FE8
-.public sub_02015FF4
-.public sub_02015FF8
+.public GraphicsManager_New
+.public GraphicsManager_Delete
+.public GraphicsManager_DrawObjects
+.public GraphicsManager_LoadImage
+.public GraphicsManager_FreeImages
+.public GraphicsManager_LoadPalette
+.public GraphicsManager_FreePalettes
+.public GraphicsManager_AddObject
+.public GraphicsObject_SetVisible
+.public GraphicsObject_SetPosition
+.public GraphicsObject_GetPosition
+.public GraphicsObject_GetSize
+.public GraphicsObject_SetDepth
+.public GraphicsObject_GetDepth
 .public Heap_Alloc
 .public Heap_Free
 .public GF_AssertFail
@@ -32,30 +32,30 @@
 .public NNS_GfdDefaultFuncAllocPlttVram
 .public NNS_GfdDefaultFuncFreePlttVram
 
-	.public sub_02015EDC
-	.public sub_02015F4C
-	.public sub_02015FD8
-	.public sub_02015FE0
-	.public sub_02015FFC
-	.public sub_02016004
-	.public sub_02016008
-	.public sub_0201600C
-	.public sub_02016010
-	.public sub_02016014
-	.public sub_02016020
-	.public sub_02016024
-	.public sub_02016044
-	.public sub_02016050
-	.public sub_0201605C
-	.public sub_0201608C
-	.public sub_020160BC
-	.public sub_020160EC
-	.public sub_02016118
-	.public sub_02016144
-	.public sub_02016170
-	.public sub_02016184
-	.public sub_02016198
-	.public sub_020161A8
-	.public sub_0201630C
+	.public GraphicsImage_Free
+	.public GraphicsPalette_Free
+	.public GraphicsObject_SetCenter
+	.public GraphicsObject_SetSize
+	.public GraphicsObject_SetAlpha
+	.public GraphicsObject_SetImageAttr
+	.public GraphicsObject_SetImageAddr
+	.public GraphicsObject_SetPaletteAddr
+	.public GraphicsObject_SetPaletteSlot
+	.public GraphicsObject_SetFlip
+	.public GraphicsObject_SetRotation
+	.public GraphicsObject_Init
+	.public GraphicsImage_Init
+	.public GraphicsPalette_Init
+	.public GraphicsObjects_New
+	.public GraphicsImages_New
+	.public GraphicsPalettes_New
+	.public GraphicsManager_FindFreeObject
+	.public GraphicsManager_FindFreeImage
+	.public GraphicsManager_FindFreePalette
+	.public GraphicsImage_AllocVram
+	.public GraphicsPalette_AllocVram
+	.public GraphicsImage_LoadToVram
+	.public GraphicsPalette_LoadToVram
+	.public GraphicsObject_InitFromTemplate
 
-	.public sub_020161CC
+	.public GraphicsObject_Draw

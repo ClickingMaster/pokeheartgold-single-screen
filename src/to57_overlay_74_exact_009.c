@@ -28,7 +28,7 @@ extern void ov74_0222BEF0(void *);
 extern Ov74WmState *ov74_0223105C(void);
 extern void *ov74_02231054(void);
 
-extern void *ov74_0223D0A4;
+extern void *sMysteryGiftCommWork;
 extern void *ov74_0223D0A8;
 extern u8 ov74_0223C920[];
 extern u8 ov74_0223D0C4[];
@@ -39,7 +39,7 @@ extern void *ov74_0223E2FC;
 extern u32 ov74_0223E304[];
 
 void *ov74_0222CD7C(void);
-void *ov74_02229DD4(void);
+void *MysteryGiftComm_GetRecvBuffer(void);
 void *ov74_02231148(void);
 void *ov74_02231184(void);
 void *ov74_022311DC(void);

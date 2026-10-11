@@ -85,18 +85,22 @@ typedef struct WmspStatus {
     u16 childInterval;
     OSTick parentIntervalTick;
     OSTick childIntervalTick;
-    u8 unk_58[0x5e - 0x58];
+    u16 unk_58;
+    u16 unk_5a;
+    u16 unk_5c;
     u16 unk_5e;
     u16 unk_60;
     s16 unk_62;
     s16 unk_64;
     u16 resumePending; // set once WMSP_RequestResumeMP queued its request
     u16 unk_68;
-    u8 unk_6a[0x70 - 0x6a];
+    u16 unk_6a;
+    u8 unk_6c[0x70 - 0x6c];
     u16 mpBufIndex;
     u16 mpBufSize;
     u8 *mpBuf[2];
-    u8 unk_7c[0x82 - 0x7c];
+    u8 *sendBuf; // WMSP_StartMP: ARM9 buffer of the MP send data
+    u16 sendBufSize;
     u16 unk_82;
     u16 mpAckAlarmSet; // 1 while wmspMPAckAlarm is set
     u16 unk_86;
@@ -105,7 +109,12 @@ typedef struct WmspStatus {
     u16 unk_8c;
     u16 unk_8e;
     u16 unk_90;
-    u8 unk_92[0x9e - 0x92];
+    u16 unk_92;
+    u16 unk_94;
+    u16 unk_96;
+    u16 unk_98;
+    u16 unk_9a;
+    u16 unk_9c; // non-zero: WMSP_StartMP does not check the buffer sizes
     u16 unk_9e;
     u16 unk_a0;
     u8 dcfDestAddress[6]; // WMSP_SetDCFData: destination of the DCF frame
@@ -142,8 +151,8 @@ typedef struct WmspStatus {
     u16 wepMode; // WMSP_SetWEPKey: 0 none, 1-3 enabled
     u32 wepEnabled;
     u8 wepKey[0x50];
-    u16 unk_1ec;
-    u16 unk_1ee;
+    u16 unk_1ec; // 1: 1 Mbps, 2: 2 Mbps (from the parent's basic rate set)
+    u16 unk_1ee; // preamble type last set with WMSP_WL_ParamSetPreambleType
     u8 unk_1f0[0x1f4 - 0x1f0];
     u16 enableChannel;  // bit n: channel n usable (WMSP_SetParentParam)
     u16 allowedChannel; // bit n-1: channel n allowed (WMSP_StartParent)
@@ -156,18 +165,51 @@ typedef struct WmspStatus {
     u32 unk_734;
     OSTick lastRecvTick[16]; // per aid; 0: not tracked
     OSTick recvTimeout;
-    u8 unk_7c0[2];
+    u16 unk_7c0;
     s16 unk_7c2;
     u16 unk_7c4;
     u16 unk_7c6;
-    u8 unk_7c8[0x7cc - 0x7c8];
+    u16 unk_7c8;
+    u16 unk_7ca;
     u16 unk_7cc;
 } WmspStatus;
 
+// BSS description of a parent, as reported by a scan.
+typedef struct WmspBssDesc {
+    u16 length; // in half-words
+    u16 rssi;
+    u16 bssid[3];
+    u16 ssidLength;
+    u8 ssid[32];
+    u16 capaInfo; // bit 5: short preamble
+
+    struct {
+        u16 basic; // bit 0: 1 Mbps, bit 1: 2 Mbps
+        u16 support;
+    } rateSet;
+
+    u16 beaconPeriod;
+    u16 dtimPeriod;
+    u16 channel;
+    u16 cfpPeriod;
+    u16 cfpMaxDuration;
+    u16 gameInfoLength;
+    u16 unk_3e;
+} WmspBssDesc;
+
 // Buffer set up by the ARM9; 0xD0: pool of 32 16-byte request buffers (bit 15 of the first word: free).
 typedef struct WmspArm9Buf {
-    u8 unk_00[0x53];
+    u8 unk_00[0x10];
+    WmspBssDesc bssDesc; // parent to connect to, followed by its game info (WMSP_StartConnectEx)
+    u8 unk_50[3];
     u8 unk_53; // 8: use the higher RSSI thresholds in WMSP_GetLinkLevel
+    u32 ggid;
+    u16 tgid;
+    u8 unk_5a;
+    u8 attribute; // bit 0: entry allowed, bit 2: entry flag (adds the entry header to the MP sizes)
+    u16 parentMaxSize;
+    u16 childMaxSize;
+    u8 unk_60[0xd0 - 0x60];
 } WmspArm9Buf;
 
 // Thread priorities passed to WMSP_Init (config[1..6]).
@@ -209,6 +251,80 @@ typedef struct WlRequestHeader {
     u16 command;
     u16 paramLength;
 } WlRequestHeader;
+
+// ARM9 request of WMSP_StartScanEx.
+typedef struct WmspStartScanExRequest {
+    u16 command;
+    u16 channels; // bit n-1: scan channel n
+    void *output; // buffer for the BSS descriptions (4-byte aligned, at least 64 bytes)
+    u16 capacity;
+    u16 duration; // maximum scan time per channel
+    u8 bssid[6];
+    u16 mode; // 0/1: scan type, 2/3: the same with the SSID match mask
+    u16 length;
+    u8 ssid[32];
+    u16 matchlen; // leading SSID bytes to match (mode 2/3)
+} WmspStartScanExRequest;
+
+// ARM9 request of WMSP_StartConnectEx.
+typedef struct WmspStartConnectExRequest {
+    u32 command;
+    const void *parent; // 0xC0 bytes: WmspBssDesc and game info, copied to arm9Buf->bssDesc
+    u8 ssid[24];        // user part of the SSID
+    u32 powerSave;
+    u16 unk_24;
+    u16 authMode;
+} WmspStartConnectExRequest;
+
+// ARM9 request of WMSP_StartMP.
+typedef struct WmspStartMPRequest {
+    u32 command;
+    u8 *recvBuf; // two halves of recvBufSize bytes
+    u32 recvBufSize;
+    u8 *sendBuf;
+    u32 sendBufSize;
+    u8 param[0x1c]; // given to WMSP_SetMPParameterCore
+    u32 flags;      // bit n: take the matching field below instead of the status default
+    u16 unk_34;
+    u16 unk_36;
+    u16 unk_38;
+    u16 unk_3a;
+    u8 unk_3c;
+    u8 unk_3d;
+    u8 unk_3e;
+} WmspStartMPRequest;
+
+// ARM9 request of WMSP_SetMPData: the WMSP_PutSendQueue arguments.
+typedef struct WmspSetMPDataRequest {
+    u32 command;
+    u16 *data;
+    u32 size;
+    u32 destBitmap;
+    u32 port;
+    u32 priority;
+    void *callback;
+    void *arg;
+} WmspSetMPDataRequest;
+
+// Callback of a port send (indication 129, api 20) to the ARM9.
+typedef struct WmspPortSendCallback {
+    u16 command;
+    u16 result;
+    u16 unk_04[2];
+    u16 api;
+    u16 port;
+    u16 destBitmap;
+    u16 failedBitmap; // the connected destinations when the send queue was full (result 10)
+    u16 unk_10;
+    u16 unk_12;
+    u16 *data;
+    u16 size;
+    u16 unk_1a;
+    void *callback;
+    void *arg;
+    u16 sendSize; // own MP size: parentSize on the parent, childSize on a child
+    u16 recvSize; // the other side's
+} WmspPortSendCallback;
 
 extern WmspWork wmspW;
 extern OSThread wmspIndicateThread;
@@ -354,15 +470,15 @@ u32 WMSP_GetRssi8_06003988(int rssi);
 void WMSP_AddRssiToRandomPool(u32 rssi);
 
 // wmsp_end_scan.c
-void __VENEER__u32_div_f(void);
-void _u32_div_f(void);
+u32 __VENEER__u32_div_f(u32 dividend, u32 divisor);
+u32 _u32_div_f(u32 dividend, u32 divisor);
 void WmspError_06003ED4(u16 command, u16 result, BOOL scanEx);
 void WMSP_EndScan(void *request);
 void WmspError_06003FF0(u16 command, u16 result);
 
 // wmsp_disconnect.c
-void __VENEER__s32_div_f(void);
-void _s32_div_f(void);
+s32 __VENEER__s32_div_f(s32 dividend, s32 divisor);
+s32 _s32_div_f(s32 dividend, s32 divisor);
 void WmspError_060045D0(u16 command, u16 result, u16 detail);
 void WMSP_Disconnect(u32 *request);
 
@@ -407,11 +523,33 @@ void WMSP_KickNextMP_Resume(u32 *request);
 // wmsp_send_queue_init.c
 void WMSP_InitSendQueue(void);
 
+// wmsp_reset.c
+void WMSP_Reset(void);
+
+// wmsp_start_parent.c
+void WMSP_StartParent(u32 *request);
+
+// wmsp_start_scan_ex.c
+void WMSP_StartScanEx(WmspStartScanExRequest *request);
+
+// wmsp_start_connect_ex.c
+void WMSP_StartConnectEx(WmspStartConnectExRequest *request);
+
+// wmsp_disconnect_core.c
+BOOL WMSP_DisconnectCore(u32 *request, BOOL indication, u16 *disconnected);
+
+// wmsp_start_mp.c
+void WMSP_StartMP(WmspStartMPRequest *request);
+
+// wmsp_set_mp_data.c
+void WMSP_SetMPData(WmspSetMPDataRequest *request);
+
 // defined in the later WMSP files
+u32 WMSP_SetMPParameterCore(void *param, void *result);
+u32 WMSP_PutSendQueue(u32 childBitmap, u32 priority, u32 port, u32 destBitmap, u16 *data, u16 size, void *callback, void *arg);
 void WMSP_SendMaMP(u16 bitmap);
 void WMSP_ResumeMaMP(u16 bitmap);
 void WMSP_SendMaKeyData(void);
-BOOL WMSP_DisconnectCore(u32 *request, BOOL unk, u16 *result);
 u16 *WMSP_GetBuffer4Callback2Wm9(void);
 void WMSP_ReturnResult2Wm9(void *result);
 void WMSP_CleanSendQueue(u16 aidBitmap);

@@ -22,7 +22,7 @@
 	.text
 	.public _0223B330
 	.public _0223B340
-	.public _0223B368
+	.public sMysteryGiftCommCommands
 	.public _0223B390
 	.public _0223B3A0
 	.public _0223B3BC
@@ -119,16 +119,16 @@
 	.public ov74_0223C700
 	.public gConnectToRanger_PlayerName
 	.public gConnectToRanger_TrainerId
-	.public ov74_0223D0A4
+	.public sMysteryGiftCommWork
 	.public ov74_0223D0A8
 	.public ov74_0223D0BC
 	.public ov74_0223D0C0
 	.extern ConnectToRanger_Init
 	.extern ConnectToRanger_Main
 	.extern ConnectToRanger_Exit
-	.extern ov74_02229DA0
-	.extern ov74_02229DCC
-	.extern ov74_02229DD4
+	.extern MysteryGiftComm_HandleReceived
+	.extern MysteryGiftComm_GetRecvBufferSize
+	.extern MysteryGiftComm_GetRecvBuffer
 	.extern ov74_02229DE0
 	.extern ov74_02229E60
 	.extern ov74_02229F90
@@ -221,7 +221,7 @@
 	.public TranslateAgbSpecies
 	.public _0223B330
 	.public _0223B340
-	.public _0223B368
+	.public sMysteryGiftCommCommands
 	.public _0223B390
 	.public _0223B3A0
 	.public _0223B3BC
@@ -487,7 +487,7 @@
 	.public ov74_0223D054
 	.public gConnectToRanger_PlayerName
 	.public gConnectToRanger_TrainerId
-	.public ov74_0223D0A4
+	.public sMysteryGiftCommWork
 	.public ov74_0223D0A8
 	.public ov74_0223D0BC
 	.public ov74_0223D0C0
@@ -522,10 +522,10 @@ _0223B340:
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0x60, 0x00, 0x00, 0x00
-_0223B368:
-	.word ov74_02229DA0
-	.word ov74_02229DCC
-	.word ov74_02229DD4
+sMysteryGiftCommCommands:
+	.word MysteryGiftComm_HandleReceived
+	.word MysteryGiftComm_GetRecvBufferSize
+	.word MysteryGiftComm_GetRecvBuffer
 	.word ov74_02229DE0
 	.word sub_020342C0
 	.word 0

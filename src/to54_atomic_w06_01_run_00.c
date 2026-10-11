@@ -57,7 +57,7 @@ extern void *ReadMsgData_ExpandPlaceholders(void *, void *, int, int);
 extern void MessageFormat_Delete(void *);
 extern void DestroyMsgData(void *);
 extern int TextPrinterCheckActive(u8);
-extern void ov74_02229DF8(void);
+extern void MysteryGiftComm_Free(void);
 extern void WirelessStatusIcon_Destroy(void);
 extern void *Sprite_CreateAffine(const RawSpriteTemplate *);
 extern void Sprite_SetAnimActiveFlag(void *, int);

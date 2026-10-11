@@ -1,6 +1,6 @@
 #include "global.h"
 
-void *sub_02015DDC(void *);
+void *GraphicsManager_New(void *);
 void *Heap_Alloc(int, int);
 
 typedef struct {
@@ -18,7 +18,7 @@ void ov41_022467E4(Ov41R13 *out, void *source);
 
 void ov41_022467E4(Ov41R13 *out, void *source)
 {
-    out->a = sub_02015DDC(source);
+    out->a = GraphicsManager_New(source);
     out->b = Heap_Alloc(*(int *)((u8 *)source + 0xc), 0x1d8);
     out->c = 0x76;
     out->d = 0;

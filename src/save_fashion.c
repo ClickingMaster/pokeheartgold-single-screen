@@ -55,8 +55,8 @@ typedef struct FashionItemCoords {
 
 extern void ov41_02249780(int, int *, int *);
 extern int ov41_02249710(int);
-u32 sub_02015FCC(void *object);
-int sub_02015FF8(void *object);
+u32 GraphicsObject_GetPosition(void *object);
+int GraphicsObject_GetDepth(void *object);
 void MATHi_CRC32InitTableRev(u32 *table, u32 polynomial);
 u32 MATH_CalcCRC32(const u32 *table, const void *data, u32 size);
 void *SaveArray_Get(SaveData *saveData, int id);
@@ -442,12 +442,12 @@ void FashionEntry_PlaceItem(SaveFashionDataSub *entry_, FashionSource *source, i
     int y;
     u32 mask;
 
-    packed = sub_02015FCC(source->object);
+    packed = GraphicsObject_GetPosition(source->object);
     coords.x = packed;
     coords.y = packed >> 16;
     coords.xCopy = coords.x;
     coords.yCopy = coords.y;
-    z = sub_02015FF8(source->object);
+    z = GraphicsObject_GetDepth(source->object);
     if (index >= 10) {
         GF_AssertFail();
     }

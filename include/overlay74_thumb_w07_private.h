@@ -7,7 +7,7 @@
 #define U32AT(p, o) (*(u32 *)((u8 *)(p) + (o)))
 
 void *sub_02034818(int);
-void ov74_02229DF8(void);
+void MysteryGiftComm_Free(void);
 void WirelessStatusIcon_Destroy(void);
 BOOL WindowIsInUse(void *);
 void EraseFrameAndWindow1(void *, int);

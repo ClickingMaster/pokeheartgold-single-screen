@@ -29,7 +29,7 @@ extern void ov74_02229E28(void *, int);
 extern void ov74_02229D50(int);
 extern void ov74_02229F28(void *, int);
 extern void sub_02037AC0(int);
-extern void *ov74_02229DD4(int, int, int);
+extern void *MysteryGiftComm_GetRecvBuffer(int, int, int);
 extern void *memcpy(void *, const void *, u32);
 extern void ov74_02235F58(void *, void *, int);
 extern int GetMonData(void *, int, void *);

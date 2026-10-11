@@ -4,7 +4,7 @@
 #include "global.h"
 
 #include "field_types_def.h"
-#include "overlay_109.h"
+#include "photo_album_app.h"
 #include "photo_album.h"
 
 typedef enum ViewPhotoInputResponse {

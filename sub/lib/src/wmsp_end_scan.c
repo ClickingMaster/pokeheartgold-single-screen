@@ -7,7 +7,7 @@
 #pragma dont_inline on
 
 // clang-format off
-asm void __VENEER__u32_div_f(void) {
+asm u32 __VENEER__u32_div_f(u32 dividend, u32 divisor) {
     ldr pc, =_u32_div_f
 }
 // clang-format on

@@ -99,9 +99,9 @@ void ov41_02249888(void *src, void *dst);
 /* ---- bodies ---- */
 
 void ov41_02246008(Ov41Work *w) {
-    sub_02015FB0((void *)W(w, 4));
+    GraphicsObject_SetVisible((void *)W(w, 4));
 }
 
 void ov41_02246014(Ov41Work *w) {
-    sub_02015FF4((void *)W(w, 4));
+    GraphicsObject_SetDepth((void *)W(w, 4));
 }

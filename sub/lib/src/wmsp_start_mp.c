@@ -1,93 +1,56 @@
 #pragma force_active on
-#include <nitro/types.h>
-
+#include "wmsp_internal.h"
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-#define H(p, o)  (*(u16 *)((u8 *)(p) + (o)))
-#define SH(p, o) (*(s16 *)((u8 *)(p) + (o)))
-#define U(p, o)  (*(u32 *)((u8 *)(p) + (o)))
-#define P(p, o)  (*(u8 **)((u8 *)(p) + (o)))
-extern u8 wmspW[];
 
-typedef struct {
-    u32 operation;
-    u8 *rx;
-    u32 rxSize;
-    u8 *tx;
-    u32 txSize;
-    u8 parameters[0x1c];
-    u32 flags;
-    u16 minimum, maximum, limit, extra;
-    u8 first, second, third, pad;
-} W40745Request;
-
-typedef struct {
-    u8 pad[0x54c];
-    u8 *config;
-    u8 *status;
-} w37012_Context;
-
-#define CTX ((w37012_Context *)(wmspW + 0x1000))
-
-extern void *__VENEER_WMSP_GetBuffer4Callback2Wm9(void);
-extern void *WMSP_WL_ParamSetNullKeyResponseMode(void *, u32);
-extern void __VENEER_WMSP_ReturnResult2Wm9(void *);
-extern void WMSP_CleanSendQueue(u32);
-extern void WMSP_InitSendQueue(void);
-extern void WMSP_SetThreadPriorityHigh(void);
-extern void WMSP_SetVAlarm(void);
-extern u32 WMSP_SetMPParameterCore(void *, void *);
-extern u32 __VENEER_OS_DisableInterrupts(void);
-extern void __VENEER_OS_RestoreInterrupts(u32);
-extern u64 __VENEER_OS_GetTick(void);
-void WMSP_StartMP(W40745Request *request);
-
-void WMSP_StartMP(W40745Request *request) {
-    u8 *base = wmspW;
-    u8 *rx = request->rx;
-    u32 rxSize = request->rxSize;
-    u8 *tx = request->tx;
-    u32 txSize = request->txSize;
+// Checks the ARM9's MP buffers, sets the MP parameters and starts MP (state 7 -> 9 on the parent,
+// 8 -> 10 on a child) with the VAlarm timing.
+void WMSP_StartMP(WmspStartMPRequest *request) {
+    WmspWork *work = &wmspW;
+    u8 *recvBuf = request->recvBuf;
+    u32 recvBufSize = request->recvBufSize;
+    u8 *sendBuf = request->sendBuf;
+    u32 sendBufSize = request->sendBufSize;
     u32 error = 0;
     u32 flags;
-    u8 *state = *(u8 **)(wmspW + 0x1550);
-    u8 *settings;
+    WmspStatus *status = wmspW.status;
+    WmspStatus *settings;
     u32 irq;
     u32 buffer[128];
-    void *cb;
-    void *result;
-    if (!H(state, 0x9c)) {
-        u32 needed = (H(state, 0x3c) + 31) & ~31u;
-        if (txSize < needed) {
+    u16 *cb;
+    u16 *result;
+    if (!status->unk_9c) {
+        u32 needed = (status->sendMaxSize + 31) & ~31u;
+        if (sendBufSize < needed) {
             error = 6;
         }
-        if (H(state, 0x188) == 0) {
-            needed = (H(state, 0x3e) + 12) * H(state, 0xf8) + 0x29;
+        if (status->aid == 0) {
+            needed = (status->recvMaxSize + 12) * status->parentParam.maxEntry + 0x29;
         } else {
-            needed = H(state, 0x3e) + 0x51;
+            needed = status->recvMaxSize + 0x51;
         }
         needed &= ~31u;
-        if (rxSize < needed) {
+        if (recvBufSize < needed) {
             error = 6;
         }
     }
-    if (H(state, 0xe6) == 2) {
-        if (!(H(state, 0x1f6) & ((1 << H(*(u8 **)(base + 0x154c), 0x46)) >> 1))) {
+    if (status->unk_e6 == 2) {
+        if (!(status->allowedChannel & ((1 << work->arm9Buf->bssDesc.channel) >> 1))) {
             error = 6;
         }
     }
     if (error) {
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
-        H(cb, 0) = 14;
-        H(cb, 2) = error;
-        H(cb, 4) = 10;
+        cb[0] = 14;
+        cb[1] = error;
+        cb[2] = 10;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
         return;
     }
     {
         u32 clean = 0;
-        if (U(state, 12)) {
-            U(state, 12) = 0;
+        if (status->mpActive) {
+            status->mpActive = 0;
             clean = 1;
         }
         if (clean) {
@@ -96,106 +59,108 @@ void WMSP_StartMP(W40745Request *request) {
     }
     WMSP_InitSendQueue();
     irq = __VENEER_OS_DisableInterrupts();
-    WMSP_SetMPParameterCore((u8 *)request + 20, 0);
+    WMSP_SetMPParameterCore(request->param, NULL);
     {
         flags = request->flags;
-        settings = CTX->status;
-        if (H(settings, 0) != 9 && H(settings, 0) != 10) {
+        settings = wmspW.status;
+        if (settings->state != 9 && settings->state != 10) {
             u32 old = __VENEER_OS_DisableInterrupts();
-            u8 *mp = settings + 0x700;
-            u32 max = (flags & 4) ? request->limit : H(settings, 0x5c);
+            // the original addresses these three fields from settings + 0x700
+            u8 *mp = (u8 *)settings + 0x700;
+            u32 max = (flags & 4) ? request->unk_38 : settings->unk_5c;
             u32 a, b;
             if (!max) {
                 max = 16;
             }
-            a = (flags & 1) ? request->minimum : H(settings, 0x58);
+            a = (flags & 1) ? request->unk_34 : settings->unk_58;
             if (!a) {
                 a = 16;
             }
             if (a > max) {
                 a = max;
             }
-            b = (flags & 2) ? request->maximum : H(settings, 0x5a);
-            H(mp, 0xc4) = max;
+            b = (flags & 2) ? request->unk_36 : settings->unk_5a;
+            ((WmspStatus *)(mp - 0x700))->unk_7c4 = max;
             if (!b) {
                 b = 16;
             }
-            H(mp, 0xc0) = a;
+            ((WmspStatus *)(mp - 0x700))->unk_7c0 = a;
             if (b > max) {
                 b = max;
             }
-            H(mp, 0xc2) = b;
-            if (SH(settings, 0x62) > (s32)max) {
-                H(settings, 0x62) = max;
+            ((WmspStatus *)(mp - 0x700))->unk_7c2 = b;
+            if (settings->unk_62 > (s32)max) {
+                settings->unk_62 = max;
             }
-            H(settings, 0x7ca) = (flags & 0x200) ? request->extra : H(settings, 0x98);
-            H(settings, 0x7c6) = (flags & 0x400) ? request->first : H(settings, 0x92);
-            H(settings, 0x7c8) = (flags & 0x800) ? request->second : H(settings, 0x94);
-            H(settings, 0x7cc) = (flags & 0x1000) ? request->third : H(settings, 0x9a);
-            __VENEER_OS_RestoreInterrupts(old);
+            settings->unk_7ca = (flags & 0x200) ? request->unk_3a : settings->unk_98;
+            settings->unk_7c6 = (flags & 0x400) ? request->unk_3c : settings->unk_92;
+            settings->unk_7c8 = (flags & 0x800) ? request->unk_3d : settings->unk_94;
+            settings->unk_7cc = (flags & 0x1000) ? request->unk_3e : settings->unk_9a;
+            __VENEER_OS_RestoreInterrupts((OSIntrMode)old);
         }
     }
-    if ((u16)(H(state, 0) + 0xfff9) <= 1) {
-        u64 tick;
+    // 7: parent, 8: child
+    if ((u16)(status->state + 0xfff9) <= 1) {
+        OSTick tick;
         int i;
-        H(state, 0x84) = 0;
-        H(state, 0x5e) = 0;
-        H(state, 0x60) = 1;
-        H(state, 0x88) = 0;
-        H(state, 0x9e) = 0;
-        H(state, 0xa0) = 60;
-        U(state, 0x734) = 0;
-        H(state, 0x8a) = 0;
-        H(state, 0x8c) = 0;
-        H(state, 0x8e) = 0;
-        H(state, 0x90) = 0;
-        H(state, 0x66) = 0;
-        P(state, 0x74) = rx;
-        H(state, 0x72) = rxSize;
-        P(state, 0x78) = rx + rxSize;
-        H(state, 0x70) = 0;
-        P(state, 0x7c) = tx;
-        H(state, 0x80) = txSize;
-        H(state, 0x62) = 0;
-        H(state, 0x64) = 0;
-        H(state, 0x68) = 0;
-        H(state, 0x6a) = 0;
-        H(state, 0xbe) = 0xffff;
-        H(state, 0xc0) = 1;
+        status->mpAckAlarmSet = 0;
+        status->unk_5e = 0;
+        status->unk_60 = 1;
+        status->unk_88 = 0;
+        status->unk_9e = 0;
+        status->unk_a0 = 60;
+        status->unk_734 = 0;
+        status->unk_8a = 0;
+        status->unk_8c = 0;
+        status->unk_8e = 0;
+        status->unk_90 = 0;
+        status->resumePending = 0;
+        status->mpBuf[0] = recvBuf;
+        status->mpBufSize = recvBufSize;
+        status->mpBuf[1] = recvBuf + recvBufSize;
+        status->mpBufIndex = 0;
+        status->sendBuf = sendBuf;
+        status->sendBufSize = sendBufSize;
+        status->unk_62 = 0;
+        status->unk_64 = 0;
+        status->unk_68 = 0;
+        status->unk_6a = 0;
+        status->minRssi = 0xffff;
+        status->linkLevelCountdown = 1;
         tick = __VENEER_OS_GetTick() | 1;
         for (i = 0; i < 16; i++) {
-            *(u64 *)(state + 0x738 + i * 8) = tick;
+            status->lastRecvTick[i] = tick;
         }
         WMSP_SetThreadPriorityHigh();
-        H(state, 0xce) = 0;
+        status->vAlarmRequestQueued = 0;
         WMSP_SetVAlarm();
-        if (H(state, 0) == 8) {
-            H(state, 0) = 10;
-        } else if (H(state, 0) == 7) {
-            H(state, 0) = 9;
+        if (status->state == 8) {
+            status->state = 10;
+        } else if (status->state == 7) {
+            status->state = 9;
         }
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
-        H(cb, 0) = 14;
-        H(cb, 2) = 0;
-        H(cb, 4) = 10;
+        cb[0] = 14;
+        cb[1] = 0;
+        cb[2] = 10;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
-        U(state, 12) = 1;
-        __VENEER_OS_RestoreInterrupts(irq);
+        status->mpActive = 1;
+        __VENEER_OS_RestoreInterrupts((OSIntrMode)irq);
         result = WMSP_WL_ParamSetNullKeyResponseMode(buffer, 1);
-        if (H(result, 4)) {
+        if (result[2]) {
             cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
-            H(cb, 0) = 14;
-            H(cb, 2) = 1;
-            H(cb, 4) = 0x216;
-            H(cb, 6) = H(result, 4);
+            cb[0] = 14;
+            cb[1] = 1;
+            cb[2] = 0x216;
+            cb[3] = result[2];
             __VENEER_WMSP_ReturnResult2Wm9(cb);
         }
     } else {
-        __VENEER_OS_RestoreInterrupts(irq);
+        __VENEER_OS_RestoreInterrupts((OSIntrMode)irq);
         cb = __VENEER_WMSP_GetBuffer4Callback2Wm9();
-        H(cb, 0) = 14;
-        H(cb, 2) = 3;
-        H(cb, 4) = 10;
+        cb[0] = 14;
+        cb[1] = 3;
+        cb[2] = 10;
         __VENEER_WMSP_ReturnResult2Wm9(cb);
     }
 }

@@ -30,7 +30,7 @@
 #include "overlay_104.h"
 #include "ship_departure_cutscene.h"
 #include "overlay_108.h"
-#include "overlay_109.h"
+#include "photo_album_app.h"
 #include "bug_contest_swap_mon.h"
 #include "unown_report.h"
 #include "overlay_14.h"

@@ -1,56 +1,19 @@
 #pragma force_active on
-#include <nitro/types.h>
-
+#include "wmsp_internal.h"
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
+
 #define H(p, o) (*(u16 *)((u8 *)(p) + (o)))
-#define U(p, o) (*(u32 *)((u8 *)(p) + (o)))
-#define P(p, o) (*(void **)((u8 *)(p) + (o)))
-extern u8 wmspW[];
-#define STATE P(wmspW + 0x1000, 0x550)
-extern u16 *__VENEER_WMSP_GetBuffer4Callback2Wm9(void);
-extern void __VENEER_WMSP_ReturnResult2Wm9(void *);
-extern void __VENEER_MI_CpuCopy8(const void *, void *, u32);
-extern void __VENEER_MIi_CpuCopy16(const void *, void *, u32);
-extern void __VENEER_MI_CpuFill8(void *, u32, u32);
-extern void __VENEER_MIi_CpuClear16(u32, void *, u32);
-extern u16 *WMSP_WL_DevGetStationState(void *);
-extern u16 *WMSP_WL_DevClass1(void *);
-extern u16 *WMSP_WL_MlmePowerManagement(void *, u16, u16, u16);
-extern u16 *WMSP_WL_MlmeScan(void *, u32, void *, u16, void *, u16, void *, u16);
-extern int WMSP_SetAllParams(u16, void *);
-extern void WmspError_06003ED4(u16, u16, int);
-extern u32 WMSP_GetRssi8_06003988(u32);
-extern u32 WMSP_GetLinkLevel(u32);
-extern void WMSP_AddRssiToRandomPool(u32);
-extern u16 *WMSP_WL_ParamSetPreambleType(void *, u16);
-extern u32 __VENEER__u32_div_f(u32, u32);
-extern u16 *WMSP_WL_ParamSetSsidMask(void *, void *);
 
-typedef struct {
-    u16 prefix[8];
-    void *list[16];
-    u16 levels[16];
-} w37009_Callback;
+// Callback of WMSP_StartScanEx: header words, then the BSS descriptions found and their link levels.
+typedef struct WmspScanExCallback {
+    u16 header[8]; // command, result, -, -, 4 (none found) / 5, channel bits, -, count
+    void *bssDesc[16];
+    u16 linkLevel[16];
+} WmspScanExCallback;
 
-typedef struct {
-    u16 state;
-    u8 a[0xc4];
-    u16 power;
-    u32 roles;
-    u8 b[0x1a];
-    u16 role;
-    u8 c[0x9c];
-    void *output;
-    u8 d[8];
-    u16 channel;
-    u8 e[0x5c];
-    u16 preamble;
-    u8 f[4];
-    u16 allowed;
-} w37009_Status;
-
-static inline int w37009_HasSsid(void *p) {
+// TRUE if the BSS description has a non-empty SSID (length at +10, SSID bytes at +12).
+static inline int BssDescHasSsid(void *p) {
     u16 len = H(p, 10);
     int i;
     if (len == 0) {
@@ -67,27 +30,18 @@ static inline int w37009_HasSsid(void *p) {
     return 0;
 }
 
-typedef struct {
-    u16 command, channels;
-    void *output;
-    u16 capacity, duration;
-    u8 bssid[6];
-    u16 mode, length;
-    u8 ssid[32];
-    u16 matchlen;
-} ScanRequest;
-
-void WMSP_StartScanEx(ScanRequest *req);
 #pragma opt_lifetimes off
 
-void WMSP_StartScanEx(ScanRequest *req) {
+// Scans the requested channels (mode 2/3: with an SSID match mask) and replies the BSS
+// descriptions found, copied into the ARM9's buffer.
+void WMSP_StartScanEx(WmspStartScanExRequest *req) {
     u32 bufArr[278];
     u8 ssid[32];
     u8 mask[32];
     u8 channels[16];
     u16 bssid[3];
     u32 *buffer = bufArr;
-    w37009_Status *s = STATE;
+    WmspStatus *s = wmspW.status;
     int bits;
 
     struct {
@@ -108,9 +62,9 @@ void WMSP_StartScanEx(ScanRequest *req) {
         __VENEER_WMSP_ReturnResult2Wm9(c);
         return;
     }
-    s->output = req->output;
+    s->scanBuf = req->output;
     bits = req->channels;
-    s->channel = bits;
+    s->scanChannel = bits;
     maxduration = req->duration;
     __VENEER_MI_CpuCopy8(req->bssid, bssid, 6);
     mode = req->mode;
@@ -134,8 +88,8 @@ void WMSP_StartScanEx(ScanRequest *req) {
     if (bssid[0] != 65535 && (bssid[0] & 1)) {
         bssid[0] &= ~1;
     }
-    bits = s->allowed & (u16)(bits << 1);
-    if (bits && (!(s->roles & 1) || mode == 1) && req->output && !((u32)req->output & 3) && req->capacity >= 64) {
+    bits = s->enableChannel & (u16)(bits << 1);
+    if (bits && (!(s->unk_c8 & 1) || mode == 1) && req->output && !((u32)req->output & 3) && req->capacity >= 64) {
         goto valid_scan;
     }
     {
@@ -149,7 +103,7 @@ void WMSP_StartScanEx(ScanRequest *req) {
 
 valid_scan: {
     u16 role = 2;
-    s->role = role;
+    s->unk_e6 = role;
 }
     r = WMSP_WL_DevGetStationState(buffer);
     if (!r[2]) {
@@ -159,7 +113,7 @@ valid_scan: {
     return;
 station_ready:;
     if (r[3] == 16) {
-        if (!WMSP_SetAllParams(38, buffer)) {
+        if (!WMSP_SetAllParams(38, (u8 *)buffer)) {
             return;
         }
         r = WMSP_WL_DevClass1(buffer);
@@ -173,24 +127,24 @@ station_ready:;
             WmspError_06003ED4(1, r[2], 1);
             return;
         }
-        s->power = 1;
+        s->pwrMgtMode = 1;
     }
     if (mode == 0) {
-        if (s->preamble == 1) {
+        if (s->unk_1ee == 1) {
             r = WMSP_WL_ParamSetPreambleType(buffer, 0);
             if (r[2]) {
                 WmspError_06003ED4(0x20e, r[2], 1);
                 return;
             }
-            s->preamble = 0;
+            s->unk_1ee = 0;
         }
-    } else if (s->preamble == 0) {
+    } else if (s->unk_1ee == 0) {
         r = WMSP_WL_ParamSetPreambleType(buffer, 1);
         if (r[2]) {
             WmspError_06003ED4(0x20e, r[2], 1);
             return;
         }
-        s->preamble = 1;
+        s->unk_1ee = 1;
     }
     if (options.custom != 1) {
         goto mask_ready;
@@ -228,19 +182,19 @@ mask_ready:
         c[7] = 0;
         c[5] = bits >> 1;
     } else {
-        dest = s->output;
+        dest = s->scanBuf;
         entry = (u8 *)r + 10;
         __VENEER_MIi_CpuClear16(0, dest, capacity);
         for (i = 0; i < r[4]; i++) {
             bytes = (u16)(H(entry, 0) * 2);
             __VENEER_MI_CpuCopy8(entry, dest, bytes);
-            if (ssidlen != 0 && !w37009_HasSsid(dest)) {
+            if (ssidlen != 0 && !BssDescHasSsid(dest)) {
                 H(dest, 10) = ssidlen;
                 __VENEER_MI_CpuCopy8(ssid, dest + 12, 32);
             }
-            ((w37009_Callback *)c)->list[i] = dest;
+            ((WmspScanExCallback *)c)->bssDesc[i] = dest;
             rssi = WMSP_GetRssi8_06003988(H(entry, 2) & 255);
-            ((w37009_Callback *)c)->levels[i] = WMSP_GetLinkLevel(rssi);
+            ((WmspScanExCallback *)c)->linkLevel[i] = WMSP_GetLinkLevel(rssi);
             WMSP_AddRssiToRandomPool(rssi);
             dest += bytes;
             entry += bytes;

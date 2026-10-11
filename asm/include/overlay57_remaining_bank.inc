@@ -1,8 +1,8 @@
-	.public ov57_0223B78C
-	.public ov57_0223B7A8
-	.public ov57_0223B7C4
-	.public ov57_0223B828
-	.public ov57_0223B858
-	.public ov57_0223B890
-	.public ov57_0223B8B8
-	.public ov57_0223B90C
+	.public BallCapsuleEditor_SaveSealCounts
+	.public BallCapsuleEditor_RestoreSealCounts
+	.public BallCapsuleEditor_CopyPreviewMon
+	.public BallCapsuleEditor_SetMode
+	.public BallCapsuleEditor_SetButtonFrame
+	.public BallCapsuleEditor_MoveButtonLabel
+	.public BallCapsuleEditor_Task_ButtonPress
+	.public BallCapsuleEditor_StartButtonPress

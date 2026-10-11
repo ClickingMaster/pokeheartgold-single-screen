@@ -1,14 +1,14 @@
 #ifndef TO30_OV74_PROTOTYPES_H
 #define TO30_OV74_PROTOTYPES_H
 void ConnectToRanger_SetTimeout(void *p, u32 value);
-void ov74_02229BC0(void *func, u16 value);
+void MysteryGiftComm_SetState(void *func, u16 value);
 void ov74_02229C5C(void);
 void ov74_02229CB4(void);
-u32 ov74_02229DCC(void);
+u32 MysteryGiftComm_GetRecvBufferSize(void);
 void ov74_02229D50(u8 value);
-u8 ov74_02229DBC(void);
+u8 MysteryGiftComm_IsReceived(void);
 void ov74_02229DE0(u32 index);
-void ov74_02229DF8(void);
+void MysteryGiftComm_Free(void);
 void ov74_02229E60(void);
 void ov74_02229F60(void *window, u32 copy);
 void ov74_02229F78(void *window, u32 copy);

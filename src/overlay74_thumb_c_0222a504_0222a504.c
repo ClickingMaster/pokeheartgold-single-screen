@@ -6,7 +6,7 @@
 extern void *OverlayManager_GetData(void *);
 extern void ov74_02229F60(void *, u32);
 extern void ov74_02229E28(void *, u32);
-extern void ov74_02229DF8(void);
+extern void MysteryGiftComm_Free(void);
 extern void ov74_0222A5CC(void *);
 extern void ov74_0222AA18(void *, void *, u32);
 extern void ov74_0222A94C(void *, u32, u32);

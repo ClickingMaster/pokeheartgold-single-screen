@@ -3,8 +3,8 @@
 .public MailMsg_Init
 .public MailMsg_GetFieldI
 .public MailMsg_SetFieldI
-.public sub_02015FCC
-.public sub_02015FF8
+.public GraphicsObject_GetPosition
+.public GraphicsObject_GetDepth
 .public Heap_Alloc
 .public GF_AssertFail
 .public CopyU16ArrayToString

@@ -8,9 +8,9 @@
 	.extern ConnectToRanger_Init
 	.extern ConnectToRanger_Main
 	.extern ConnectToRanger_Exit
-	.extern ov74_02229DA0
-	.extern ov74_02229DCC
-	.extern ov74_02229DD4
+	.extern MysteryGiftComm_HandleReceived
+	.extern MysteryGiftComm_GetRecvBufferSize
+	.extern MysteryGiftComm_GetRecvBuffer
 	.extern ov74_02229DE0
 	.extern ov74_02229E60
 	.extern ov74_02229F90
@@ -90,7 +90,7 @@
 	.extern ov74_022311DC
 	.extern ov74_022311E8
 	.extern ov74_02231260
-	.public ov74_0223D0A4
+	.public sMysteryGiftCommWork
 	.public ov74_0223D0A8
 	.public ov74_0223D0BC
 	.public ov74_0223D0C0
@@ -101,7 +101,7 @@
 	.public sPmAgbRomHeader
 	.public ov74_0223D450
 	.bss
-ov74_0223D0A4: ; 0x0223D0A4
+sMysteryGiftCommWork: ; 0x0223D0A4
 	.space 0x4
 
 ov74_0223D0A8: ; 0x0223D0A8

@@ -13,7 +13,7 @@ FashionEntry_PlaceItem: ; 0x0202BCAC
 	add r5, r0, #0
 	ldr r0, [r4, #4]
 	add r6, r2, #0
-	bl sub_02015FCC
+	bl GraphicsObject_GetPosition
 	add r1, sp, #0xc
 	strh r0, [r1]
 	lsr r0, r0, #0x10
@@ -23,7 +23,7 @@ FashionEntry_PlaceItem: ; 0x0202BCAC
 	ldrh r0, [r1, #2]
 	strh r0, [r1, #6]
 	ldr r0, [r4, #4]
-	bl sub_02015FF8
+	bl GraphicsObject_GetDepth
 	add r7, r0, #0
 	cmp r6, #0xa
 	blt _0202BCDC
