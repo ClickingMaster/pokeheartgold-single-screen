@@ -95,9 +95,9 @@
 	.public ov74_0223D0BC
 	.public ov74_0223D0C0
 	.public gRangerLinkWork
-	.public ov74_0223D338
-	.public ov74_0223D33C
-	.public ov74_0223D34C
+	.public sMigrateFromAgbIcons
+	.public sPmAgbSave
+	.public sPmAgbSaveCounter
 	.public sPmAgbRomHeader
 	.public ov74_0223D450
 	.bss
@@ -117,13 +117,13 @@ ov74_0223D0C0: ; 0x0223D0C0
 gRangerLinkWork: ; 0x0223D0C4
 	.space 0x274
 
-ov74_0223D338: ; 0x0223D338
+sMigrateFromAgbIcons: ; 0x0223D338
 	.space 0x4
 
-ov74_0223D33C: ; 0x0223D33C
+sPmAgbSave: ; 0x0223D33C
 	.space 0x10
 
-ov74_0223D34C: ; 0x0223D34C
+sPmAgbSaveCounter: ; 0x0223D34C
 	.space 0x8
 
 sPmAgbRomHeader: ; 0x0223D354

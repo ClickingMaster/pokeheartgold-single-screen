@@ -8,33 +8,34 @@
 #include "save.h"
 
 typedef struct ArcadeContext {
-    u32 unk0[2];
-    u32 unk8;
+    u32 heapId;
+    SaveData *saveData;
+    u32 unk8; // challenge record (sub_02030E88)
     BattleSetup *battleSetup;
     u8 type;
-    u8 unk11;
+    u8 unk11; // battle number in the current round (0-6)
     u8 randomFlag;
-    u8 unk13;
+    u8 eventId; // game board event to apply, 0x20 = none
     u32 weather;
     u16 winStreak;
-    u16 unk1A;
+    u16 unk1A; // round, winStreak / 7 capped at 8
     u8 cursorSpeed;
     u8 bpGain;
     u8 unk1E;
-    u8 unk1F;
+    u8 unk1F; // set when the event affected no Pokemon
     u16 unk20;
     u16 unk22;
     u32 unk24;
     BOOL battleWon;
-    u8 unk2C[0x3];
-    u8 unkF;
-    ManagedSprite *unk30[4];
-    ManagedSprite *unk40[4];
-    ManagedSprite *unk50[4];
-    ManagedSprite *unk60[4];
+    u8 partySlots[3]; // party indices of the entered Pokemon
+    u8 unk2F;
+    ManagedSprite *playerMonSprites[4];
+    ManagedSprite *opponentMonSprites[4];
+    ManagedSprite *playerItemIcons[4];
+    ManagedSprite *opponentItemIcons[4];
     Party *playerParty;
     Party *opponentParty;
-    u16 unk74[14];
+    u16 trainerIds[14]; // 7 per round, second half for the partner in multi battles
     u32 savedHp[4];
     u32 savedAtk[4];
     u32 savedDef[4];
@@ -47,8 +48,9 @@ typedef struct ArcadeContext {
     u32 unk320[4];
     void *unk330[1];
     u8 unk334[0xDE];
-    u16 unk412[0x3];
-    u16 unk418[0x32D];
+    u16 heldItems[3]; // held items of the entered Pokemon, restored afterwards
+    u16 unk418[6];
+    u8 filler_424[0x64E];
     u8 unkA72;
     u8 unkA73;
     u8 unkA74;
@@ -61,34 +63,33 @@ typedef struct ArcadeContext {
     u8 unkA7C;
 } ArcadeContext;
 
-u32 BattleArcadeData_Alloc(SaveData *saveData, u32 a1, u8 a2, u32 a3, u32 a4, u32 a5, u16 *a6);
-void BattleArcadeData_Init(void *a0, u32 a1);
-void BattleArcadeData_Free(void *a0);
-u8 BattleArcade_GetWonBattlePoints(ArcadeContext *ctx, Party *playerParty, Party *opponentParty, int a3);
-void ov80_02235364(Party *party, Party *playerParty, int a2, int a3);
+void BattleArcadeData_Init(ArcadeContext *ctx, u32 resume);
+void BattleArcadeData_Free(ArcadeContext *ctx);
+u32 BattleArcade_GetWonBattlePoints(ArcadeContext *ctx, Party *playerParty, Party *opponentParty, int rank);
+void BattleArcade_CopyMonHeldItem(Party *srcParty, Party *dstParty, int srcSlot, int dstSlot);
 int ov80_02237D8C(u8 a0);
-void ov80_02234550(void *a0, GAME_BOARD_ARGS *args);
+void ov80_02234550(ArcadeContext *ctx, GAME_BOARD_ARGS *args);
 void BattleArcade_SetPartyBeforeBattle(ArcadeContext *ctx);
 void BattleArcade_SetPartyAfterBattle(ArcadeContext *ctx);
-void ov80_02234588(ArcadeContext *ctx, u32 a1);
-u32 ov80_02234764(ArcadeContext *ctx);
-u32 ov80_02234774(ArcadeContext *ctx, u8 a0);
+void BattleArcadeData_SaveRecord(ArcadeContext *ctx, u32 mode);
+u32 BattleArcade_IncBattleNo(ArcadeContext *ctx);
+u32 ov80_02234774(ArcadeContext *ctx, u8 partner);
 void ov80_022347B8(ArcadeContext *ctx);
 void ov80_022347C4(ArcadeContext *ctx);
-u32 ov80_02234770(ArcadeContext *ctx);
-void ov80_02234A74(ArcadeContext *ctx, FrontierMap *map, u32 a2);
-void ov80_02234B24(ArcadeContext *ctx, FrontierMap *map, u32 a2);
-void ov80_02234BEC(ArcadeContext *ctx, FrontierMap *map, u32 a2);
-void ov80_02234CB0(ArcadeContext *ctx, FrontierMap *map, u32 a2);
+u32 BattleArcade_GetBattleNo(ArcadeContext *ctx);
+void BattleArcade_CreateMonSprites(ArcadeContext *ctx, FrontierMap *map, u32 opponent);
+void BattleArcade_DeleteMonSprites(ArcadeContext *ctx, FrontierMap *map, u32 opponent);
+void BattleArcade_CreateItemIcons(ArcadeContext *ctx, FrontierMap *map, u32 opponent);
+void BattleArcade_DeleteItemIcons(ArcadeContext *ctx, FrontierMap *map, u32 opponent);
 void ov80_02234968(ArcadeContext *ctx, FrontierMap *map);
 void ov80_02234A38(ArcadeContext *ctx, FrontierMap *map);
-u32 ov80_022347A8(ArcadeContext *ctx, u32 a1);
-void ov80_02234B7C(ArcadeContext *ctx, FrontierMap *map, u32 a2, u32 a3);
-void ov80_02234BB4(ArcadeContext *ctx, FrontierMap *map, u32 a2, u32 a3);
-void ov80_02234DC4(u32 a0, u32 a1);
+u32 BattleArcade_GetTrainerIndex(ArcadeContext *ctx, u32 partner);
+void BattleArcade_SetPlayerMonSpriteVisible(ArcadeContext *ctx, FrontierMap *map, u32 visible, u32 slot);
+void BattleArcade_SetOpponentMonSpriteVisible(ArcadeContext *ctx, FrontierMap *map, u32 visible, u32 slot);
+void ov80_02234DC4(u32 color, u32 mode);
 u32 ov80_02235324(ArcadeContext *ctx);
-u16 ov80_02234E50(ArcadeContext *ctx, u32 a1, u32 a2);
-void ov80_02234E98(ArcadeContext *ctx, u8 a1);
-void ov80_02234D04(ArcadeContext *ctx, FrontierMap *map, u32 a0, u32 a1, u32 a2);
+u16 BattleArcade_SendBuffer(ArcadeContext *ctx, u32 cmd, u32 value);
+void BattleArcade_ApplyEvent(ArcadeContext *ctx, u8 event);
+void BattleArcade_SetItemIconVisible(ArcadeContext *ctx, FrontierMap *map, u32 opponent, u32 slot, u32 visible);
 
 #endif

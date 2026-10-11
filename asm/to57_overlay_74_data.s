@@ -275,82 +275,82 @@
 	.public RangerLink_WmPowerOff
 	.public RangerLink_WmReset
 	.public RangerLink_WmEnd
-	.public ov74_02231764
-	.public ov74_02231790
-	.public ov74_022317D8
-	.public ov74_02231930
-	.public ov74_0223195C
-	.public ov74_022319F8
-	.public ov74_02231A1C
-	.public ov74_02231BC0
-	.public ov74_02231BF0
-	.public ov74_02231CFC
-	.public ov74_02231D48
-	.public ov74_02231D70
-	.public ov74_02231D94
-	.public ov74_02231DB8
-	.public ov74_02231DDC
-	.public ov74_02231E00
-	.public ov74_02231E38
-	.public ov74_02231E54
-	.public ov74_02231EC4
-	.public ov74_02231F30
-	.public ov74_02231FB0
-	.public ov74_02231FF4
-	.public ov74_02232154
-	.public ov74_02232284
-	.public ov74_022322D8
-	.public ov74_02232398
-	.public ov74_022323D0
-	.public ov74_02232424
-	.public ov74_02232474
-	.public ov74_022324A0
-	.public ov74_0223262C
-	.public ov74_02232678
-	.public ov74_02232700
-	.public ov74_02232758
-	.public ov74_02232910
-	.public ov74_02232940
-	.public ov74_02232974
-	.public ov74_02232A48
-	.public ov74_02232AC8
-	.public ov74_02232B18
-	.public ov74_02232BD4
-	.public ov74_02232DA4
-	.public ov74_02232DC4
-	.public ov74_02232E3C
-	.public ov74_02232F5C
-	.public ov74_02232F9C
-	.public ov74_02233024
-	.public ov74_02233060
-	.public ov74_022330D0
-	.public ov74_02233134
-	.public ov74_0223319C
-	.public ov74_02233230
-	.public ov74_022332F4
-	.public ov74_022338D4
-	.public ov74_02233A88
-	.public ov74_02233AB8
-	.public ov74_02233ACC
-	.public ov74_02233B04
-	.public ov74_02233B58
-	.public ov74_02233C08
-	.public ov74_02233CE4
-	.public ov74_02233DBC
-	.public ov74_02233E50
-	.public ov74_02233E8C
-	.public ov74_02233ED4
-	.public ov74_02233F14
-	.public ov74_02233F4C
-	.public ov74_02233F5C
-	.public ov74_02233F68
-	.public ov74_02233F84
-	.public ov74_02233F8C
-	.public ov74_02234468
-	.public ov74_02234488
-	.public ov74_022344A8
-	.public ov74_022348B0
-	.public ov74_02234A0C
+	.public MigrateFromAgb_IsSpeciesUnavailable
+	.public MigrateFromAgb_GetAgbVersion
+	.public MigrateFromAgb_RunTransfer
+	.public MigrateFromAgb_SaveMigrationRecord
+	.public MigrateFromAgb_MovePicksToPalPark
+	.public MigrateFromAgb_GetTextX
+	.public MigrateFromAgb_PrintText
+	.public MigrateFromAgb_InitObjTransfer
+	.public MigrateFromAgb_InitSpriteResources
+	.public MigrateFromAgb_InitSpriteHeader
+	.public MigrateFromAgb_InitSpriteTemplate
+	.public MigrateFromAgb_GetBoxMonSpecies
+	.public MigrateFromAgb_GetBoxMonIsEgg
+	.public MigrateFromAgb_GetBoxMonPersonality
+	.public MigrateFromAgb_SetHitbox
+	.public MigrateFromAgb_LoadCharData
+	.public MigrateFromAgb_ReadCharData
+	.public MigrateFromAgb_GetMonForm
+	.public MigrateFromAgb_LoadMonIcon
+	.public MigrateFromAgb_PrepareBoxIcon
+	.public MigrateFromAgb_UploadBoxIcons
+	.public MigrateFromAgb_ShowBox
+	.public MigrateFromAgb_CreateBoxSprites
+	.public MigrateFromAgb_CreateSprite
+	.public MigrateFromAgb_CreateButtons
+	.public MigrateFromAgb_IsEgg
+	.public MigrateFromAgb_KnowsHM
+	.public MigrateFromAgb_HoldsBlockedItem
+	.public MigrateFromAgb_IsBoxMonSpeciesUnavailable
+	.public MigrateFromAgb_TogglePick
+	.public MigrateFromAgb_ShowBoxPicks
+	.public MigrateFromAgb_PrintBoxName
+	.public MigrateFromAgb_ShowMarkings
+	.public MigrateFromAgb_PrintMonInfo
+	.public MigrateFromAgb_StartFadeBlack
+	.public MigrateFromAgb_StartFadeWhite
+	.public MigrateFromAgb_InitBgs
+	.public MigrateFromAgb_InitGraphics
+	.public MigrateFromAgb_LoadBoxBg
+	.public MigrateFromAgb_InitMsgBox
+	.public MigrateFromAgb_ShowConfirmScreen
+	.public MigrateFromAgb_RemoveWindow
+	.public MigrateFromAgb_CloseConfirmScreen
+	.public MigrateFromAgb_FreeGraphics
+	.public MigrateFromAgb_ShowYesNo
+	.public MigrateFromAgb_PrintIntro
+	.public MigrateFromAgb_VBlankCB
+	.public MigrateFromAgb_CheckCanMigrate
+	.public MigrateFromAgb_PrintResultMsg
+	.public MigrateFromAgb_PrintResultMsgWithYesNo
+	.public MigrateFromAgb_PrintPendingMsg
+	.public MigrateFromAgb_Init
+	.public MigrateFromAgb_Main
+	.public MigrateFromAgb_Exit
+	.public PmAgbCartridge_CalcSectorChecksum
+	.public PmAgbCartridge_ReadSector
+	.public PmAgbCartridge_GetSectorDataSize
+	.public PmAgbCartridge_GetSectorData
+	.public PmAgbCartridge_CheckSaveSlot
+	.public PmAgbCartridge_FindLatestSaveSlot
+	.public PmAgbCartridge_LoadSave
+	.public PmAgbCartridge_WriteSectorAsync
+	.public PmAgbCartridge_WriteSectorCallback
+	.public PmAgbCartridge_StartSave
+	.public PmAgbCartridge_ContinueSave
+	.public PmAgbCartridge_GetSaveStatus
+	.public PmAgbCartridge_GetPCStorage
+	.public PmAgbCartridge_GetTrainerInfo
+	.public PmAgbCartridge_GetTrainerId
+	.public PmAgbCartridge_GetPlayerName
+	.public AGB_GetBoxMonSubstruct
+	.public AGB_DecryptBoxMon
+	.public AGB_EncryptBoxMon
+	.public AGB_CalcBoxMonChecksum
+	.public AGB_SetBoxMonData
+	.public AGB_GetBoxMonLevel
 	.public ov74_0223512C
 	.public ov74_02235138
 	.public ov74_0223514C
@@ -460,11 +460,11 @@
 	.public ov74_0223C960
 	.public ov74_0223C968
 	.public ov74_0223C980
-	.public ov74_0223C998
+	.public sMigrateFromAgbHMMoves
 	.public ov74_0223C9A8
 	.public ov74_0223C9B8
-	.public ov74_0223C9D8
-	.public ov74_0223CBA0
+	.public sMigrateFromAgbBlockedItems
+	.public sAgbKeepFirstAbilitySpecies
 	.public ov74_0223CC5C
 	.public ov74_0223CC5E
 	.public ov74_0223CE9C
@@ -492,9 +492,9 @@
 	.public ov74_0223D0BC
 	.public ov74_0223D0C0
 	.public gRangerLinkWork
-	.public ov74_0223D338
-	.public ov74_0223D33C
-	.public ov74_0223D34C
+	.public sMigrateFromAgbIcons
+	.public sPmAgbSave
+	.public sPmAgbSaveCounter
 	.public ov74_0223D450
 	.public ov74_0223D454
 	.public ov74_0223D488
@@ -568,7 +568,7 @@ _0223B4B0:
 	.byte 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0x60, 0x00, 0x00, 0x00
 gApp_MainMenu_SelectOption_MigrateFromAgb:
-	.word ov74_02233230, ov74_022332F4, ov74_022338D4, 0xFFFFFFFF
+	.word MigrateFromAgb_Init, MigrateFromAgb_Main, MigrateFromAgb_Exit, 0xFFFFFFFF
 _0223B4E8:
 	.byte 0x14, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
 	.byte 0x00, 0x08, 0x00, 0x00, 0x4C, 0x00, 0x00, 0x00
@@ -1138,7 +1138,7 @@ ov74_0223C980: ; 0x0223C980
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 	.byte 0x03, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00
 
-ov74_0223C998: ; 0x0223C998
+sMigrateFromAgbHMMoves: ; 0x0223C998
 	.byte 0x0F, 0x00, 0x00, 0x00, 0x13, 0x00, 0x00, 0x00
 	.byte 0x39, 0x00, 0x00, 0x00, 0x46, 0x00, 0x00, 0x00
 
@@ -1151,7 +1151,7 @@ ov74_0223C9B8: ; 0x0223C9B8
 	.byte 0x1F, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00
 	.byte 0x07, 0x00, 0x00, 0x00, 0x21, 0x00, 0x00, 0x00
 
-ov74_0223C9D8: ; 0x0223C9D8
+sMigrateFromAgbBlockedItems: ; 0x0223C9D8
 	.byte 0x05, 0x00, 0x34, 0x00, 0x35, 0x00, 0x36, 0x00
 	.byte 0x37, 0x00, 0x38, 0x00, 0x39, 0x00, 0x3A, 0x00, 0x3B, 0x00, 0x3C, 0x00, 0x3D, 0x00, 0x3E, 0x00
 	.byte 0x48, 0x00, 0x52, 0x00, 0x57, 0x00, 0x58, 0x00, 0x59, 0x00, 0x5A, 0x00, 0x5B, 0x00, 0x5C, 0x00
@@ -1188,7 +1188,7 @@ sAgbCartNintendoLogo: ; 0x0223CB04
 	.byte 0xBB, 0x3E, 0x03, 0x44, 0x78, 0x00, 0x90, 0xCB, 0x88, 0x11, 0x3A, 0x94, 0x65, 0xC0, 0x7C, 0x63
 	.byte 0x87, 0xF0, 0x3C, 0xAF, 0xD6, 0x25, 0xE4, 0x8B, 0x38, 0x0A, 0xAC, 0x72, 0x21, 0xD4, 0xF8, 0x07
 
-ov74_0223CBA0: ; 0x0223CBA0
+sAgbKeepFirstAbilitySpecies: ; 0x0223CBA0
 	.byte 0x10, 0x00, 0x11, 0x00, 0x12, 0x00, 0x1D, 0x00, 0x1E, 0x00, 0x1F, 0x00, 0x20, 0x00, 0x21, 0x00
 	.byte 0x22, 0x00, 0x23, 0x00, 0x24, 0x00, 0x2E, 0x00, 0x2F, 0x00, 0x30, 0x00, 0x31, 0x00, 0x34, 0x00
 	.byte 0x35, 0x00, 0x38, 0x00, 0x39, 0x00, 0x42, 0x00, 0x43, 0x00, 0x44, 0x00, 0x56, 0x00, 0x57, 0x00
