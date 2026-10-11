@@ -25,7 +25,7 @@ void ManagedSprite_SetAnim(void *, u32);
 void ManagedSprite_SetAnimationFrame(void *, u32);
 void ManagedSprite_TickNFrames(void *, fx32);
 BOOL ManagedSprite_IsAnimated(void *);
-u32 ov07_02221FF0(void *);
+u32 BattleAnimUtil_GetSpritePaletteSlot(void *);
 void PaletteData_BlendPalettes(void *, u32, u32, u32, u32);
 BOOL ov07_0222FFD0(void *);
 BOOL ov07_0223049C(void *, void *);

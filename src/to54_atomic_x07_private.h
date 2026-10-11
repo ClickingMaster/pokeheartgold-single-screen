@@ -60,7 +60,7 @@ void Pokepic_SetAttr(void *, int, int);
 void BattleAnimUtil_UpdateScaleMotionSprite(void *, void *);
 BOOL BattleAnimUtil_UpdateLinearMotion(void *);
 BOOL BattleAnimUtil_UpdateSinMotionSprite(void *, s16, s16, void *);
-void ov07_0222207C(void *, void *, s16, s16);
+void BattleAnimUtil_SetSpritePosWithOffset(void *, void *, s16, s16);
 void BattleAnimUtil_StartBlendAlphaMotion(void *, int, int, int, int, int);
 BOOL BattleAnimUtil_IsBlendAlphaMotionDone(void *);
 void ManagedSprite_SetDrawFlag(void *, BOOL);

@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "5aef25c9891e21ef3fffda891e84d9b4b323abe0",
+  "commit": "1674d1b0262ee7eff31eab741bada6bf19d6f41f",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "db203cf9ad007bf898ff0d655bcc430d83cfd38d801a09ef80905c559b9474cc",
+    "ARM9": "7e70858d54cecc3f1ef2d83eaaaccf21bb1f72ac19ed2929c74403a3cf4536ec",
     "ARM7": "041cd831059a607c3024fb52a1c23ac0386deeb07d13d5249a72069997cfeb7d"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -22428,6 +22428,14 @@
     {
       "cpu": "ARM9",
       "module": "OVY_7",
+      "object": "battle_anim_emitter.o",
+      "bytes": 8586,
+      "status": "c",
+      "source": "src/battle/battle_anim_emitter.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_7",
       "object": "battle_anim_funcs.o",
       "bytes": 15360,
       "status": "c",
@@ -22480,14 +22488,6 @@
       "bytes": 540,
       "status": "c",
       "source": "src/op90_to54_atomic_w12_03_residual02_ov07_02228834_ov07_02228834_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "op90_to54_atomic_w13_02_res1_r01.o",
-      "bytes": 168,
-      "status": "c",
-      "source": "src/op90_to54_atomic_w13_02_res1_r01.c"
     },
     {
       "cpu": "ARM9",
@@ -22584,62 +22584,6 @@
       "bytes": 92,
       "status": "c",
       "source": "src/op90_to90_extra2082_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "op90_to91_w41561_particle_residual_1_r01.o",
-      "bytes": 176,
-      "status": "c",
-      "source": "src/op90_to91_w41561_particle_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "overlay07_callbacks_c_02220800_02220878.o",
-      "bytes": 132,
-      "status": "c",
-      "source": "src/overlay07_callbacks_c_02220800_02220878.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "overlay07_callbacks_c_022217a4_022217b0.o",
-      "bytes": 16,
-      "status": "c",
-      "source": "src/overlay07_callbacks_c_022217a4_022217b0.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "overlay07_callbacks_c_02221898_0222189c.o",
-      "bytes": 8,
-      "status": "c",
-      "source": "src/overlay07_callbacks_c_02221898_0222189c.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "overlay07_callbacks_c_02221ad4_02221ae0.o",
-      "bytes": 16,
-      "status": "c",
-      "source": "src/overlay07_callbacks_c_02221ad4_02221ae0.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "overlay07_callbacks_c_02221c74_02221c74.o",
-      "bytes": 24,
-      "status": "c",
-      "source": "src/overlay07_callbacks_c_02221c74_02221c74.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "overlay07_callbacks_c_02221ce0_02221ce0.o",
-      "bytes": 12,
-      "status": "c",
-      "source": "src/overlay07_callbacks_c_02221ce0_02221ce0.c"
     },
     {
       "cpu": "ARM9",
@@ -22836,38 +22780,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_7",
-      "object": "to54_atomic_w02_01_to54_ov07_w02_run1.o",
-      "bytes": 36,
-      "status": "c",
-      "source": "src/to54_atomic_w02_01_to54_ov07_w02_run1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "to54_atomic_w02_03_to54_ov07_w02_run2.o",
-      "bytes": 60,
-      "status": "c",
-      "source": "src/to54_atomic_w02_03_to54_ov07_w02_run2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "to54_atomic_w02_05_to54_ov07_w02_run3.o",
-      "bytes": 96,
-      "status": "c",
-      "source": "src/to54_atomic_w02_05_to54_ov07_w02_run3.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "to54_atomic_w02_07_to54_ov07_w02_run4.o",
-      "bytes": 646,
-      "status": "c",
-      "source": "src/to54_atomic_w02_07_to54_ov07_w02_run4.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
       "object": "to54_atomic_w03_02_run01.o",
       "bytes": 42,
       "status": "c",
@@ -23012,30 +22924,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_7",
-      "object": "to54_atomic_w13_01_run1.o",
-      "bytes": 688,
-      "status": "c",
-      "source": "src/to54_atomic_w13_01_run1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "to54_atomic_w13_03_run2.o",
-      "bytes": 148,
-      "status": "c",
-      "source": "src/to54_atomic_w13_03_run2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "to54_atomic_w13_05_run3.o",
-      "bytes": 48,
-      "status": "c",
-      "source": "src/to54_atomic_w13_05_run3.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
       "object": "to54_atomic_w18_01_overlay07_to54_w18.o",
       "bytes": 1784,
       "status": "c",
@@ -23136,30 +23024,6 @@
       "bytes": 120,
       "status": "c",
       "source": "src/to55_bank_w15_run_02.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "to55_bank_w16_run_01.o",
-      "bytes": 238,
-      "status": "c",
-      "source": "src/to55_bank_w16_run_01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "to55_bank_w16_run_02.o",
-      "bytes": 50,
-      "status": "c",
-      "source": "src/to55_bank_w16_run_02.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "to55_bank_w16_run_03.o",
-      "bytes": 316,
-      "status": "c",
-      "source": "src/to55_bank_w16_run_03.c"
     },
     {
       "cpu": "ARM9",
@@ -23436,14 +23300,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_7",
-      "object": "to57_overlay07_callbacks_218a0.o",
-      "bytes": 560,
-      "status": "c",
-      "source": "src/to57_overlay07_callbacks_218a0.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
       "object": "to57_r2_03_overlay07_motion_group.o",
       "bytes": 620,
       "status": "c",
@@ -23460,30 +23316,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_7",
-      "object": "to58_r2_ov07_mid0_02221c8c.o",
-      "bytes": 40,
-      "status": "c",
-      "source": "src/to58_r2_ov07_mid0_02221c8c.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "to58_w03d_ov07_02221c8c_02221cb4_c_suffix.o",
-      "bytes": 44,
-      "status": "c",
-      "source": "src/to58_w03d_ov07_02221c8c_02221cb4_c_suffix.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "to59_bank_w16_20978.o",
-      "bytes": 820,
-      "status": "c",
-      "source": "src/to59_bank_w16_20978.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
       "object": "to59_overlay07_callback_29d40.o",
       "bytes": 272,
       "status": "c",
@@ -23496,14 +23328,6 @@
       "bytes": 324,
       "status": "c",
       "source": "src/to70_overlay07_callback_prefix_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "to70_overlay07_callbacks_residual_022217b4_022217b4_extra447_run01.o",
-      "bytes": 228,
-      "status": "c",
-      "source": "src/to70_overlay07_callbacks_residual_022217b4_022217b4_extra447_run01.c"
     },
     {
       "cpu": "ARM9",
@@ -23536,14 +23360,6 @@
       "bytes": 248,
       "status": "c",
       "source": "src/to70_overlay07_callbacks_residual_0222ee14_0222ee14_extra394_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "to70_to54_atomic_w02_02_to54_ov07_w02_residual_1_extra1054_run01.o",
-      "bytes": 60,
-      "status": "c",
-      "source": "src/to70_to54_atomic_w02_02_to54_ov07_w02_residual_1_extra1054_run01.c"
     },
     {
       "cpu": "ARM9",
@@ -23608,14 +23424,6 @@
       "bytes": 196,
       "status": "c",
       "source": "src/to70_to54_atomic_x07_04_to54_ov07_x07_residual_2_extra696_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "to70_to55_bank_w16_residual_02_extra303_run01.o",
-      "bytes": 16,
-      "status": "c",
-      "source": "src/to70_to55_bank_w16_residual_02_extra303_run01.c"
     },
     {
       "cpu": "ARM9",
@@ -23764,26 +23572,10 @@
     {
       "cpu": "ARM9",
       "module": "OVY_7",
-      "object": "to80_extra1598_run01.o",
-      "bytes": 706,
-      "status": "c",
-      "source": "src/to80_extra1598_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
       "object": "to80_extra1599_run01.o",
       "bytes": 484,
       "status": "c",
       "source": "src/to80_extra1599_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "to80_extra1607_run01.o",
-      "bytes": 2144,
-      "status": "c",
-      "source": "src/to80_extra1607_run01.c"
     },
     {
       "cpu": "ARM9",
@@ -23836,14 +23628,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_7",
-      "object": "to90_extra1971_run01.o",
-      "bytes": 268,
-      "status": "c",
-      "source": "src/to90_extra1971_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
       "object": "to90_extra1972_run01.o",
       "bytes": 452,
       "status": "c",
@@ -23880,54 +23664,6 @@
       "bytes": 368,
       "status": "c",
       "source": "src/to90_extra2093_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "to90_extra2263_run01.o",
-      "bytes": 60,
-      "status": "c",
-      "source": "src/to90_extra2263_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "to90_extra2264_run01.o",
-      "bytes": 60,
-      "status": "c",
-      "source": "src/to90_extra2264_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "to90_extra2264_run02.o",
-      "bytes": 60,
-      "status": "c",
-      "source": "src/to90_extra2264_run02.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "to90_extra2293_run01.o",
-      "bytes": 206,
-      "status": "c",
-      "source": "src/to90_extra2293_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "to90_extra2293_run02.o",
-      "bytes": 206,
-      "status": "c",
-      "source": "src/to90_extra2293_run02.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "to90_extra2294_run01.o",
-      "bytes": 130,
-      "status": "c",
-      "source": "src/to90_extra2294_run01.c"
     },
     {
       "cpu": "ARM9",
@@ -24003,19 +23739,19 @@
     },
     {
       "cpu": "ARM9",
-      "module": "OVY_7",
-      "object": "to91_w41561_particle_run01.o",
-      "bytes": 100,
-      "status": "c",
-      "source": "src/to91_w41561_particle_run01.c"
-    },
-    {
-      "cpu": "ARM9",
       "module": "OVY_70",
       "object": "gts.o",
       "bytes": 4282,
       "status": "c",
       "source": "src/gts.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_70",
+      "object": "gts_main_menu.o",
+      "bytes": 3182,
+      "status": "c",
+      "source": "src/gts_main_menu.c"
     },
     {
       "cpu": "ARM9",
@@ -24104,22 +23840,6 @@
       "bytes": 656,
       "status": "c",
       "source": "src/ov70_wave34_tasks_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "ov70_wave36_1.o",
-      "bytes": 364,
-      "status": "c",
-      "source": "src/ov70_wave36_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "ov70_wave36_2.o",
-      "bytes": 232,
-      "status": "c",
-      "source": "src/ov70_wave36_2.c"
     },
     {
       "cpu": "ARM9",
@@ -24236,14 +23956,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_70",
-      "object": "overlay70_graphics_lifecycle.o",
-      "bytes": 710,
-      "status": "c",
-      "source": "src/overlay70_graphics_lifecycle.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
       "object": "overlay70_menu_and_icon_helpers.o",
       "bytes": 2012,
       "status": "c",
@@ -24256,14 +23968,6 @@
       "bytes": 420,
       "status": "c",
       "source": "src/overlay70_menu_grid_input.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "overlay70_menu_input_r13.o",
-      "bytes": 288,
-      "status": "c",
-      "source": "src/overlay70_menu_input_r13.c"
     },
     {
       "cpu": "ARM9",
@@ -24360,38 +24064,6 @@
       "bytes": 80,
       "status": "c",
       "source": "src/overlay70_selection_helpers_4.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "overlay70_sol_partial_10.o",
-      "bytes": 28,
-      "status": "c",
-      "source": "src/overlay70_sol_partial_10.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "overlay70_sol_partial_11.o",
-      "bytes": 14,
-      "status": "c",
-      "source": "src/overlay70_sol_partial_11.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "overlay70_sol_partial_12.o",
-      "bytes": 40,
-      "status": "c",
-      "source": "src/overlay70_sol_partial_12.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "overlay70_sol_partial_13.o",
-      "bytes": 60,
-      "status": "c",
-      "source": "src/overlay70_sol_partial_13.c"
     },
     {
       "cpu": "ARM9",
@@ -24644,22 +24316,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_70",
-      "object": "overlay70_sol_partial_8.o",
-      "bytes": 70,
-      "status": "c",
-      "source": "src/overlay70_sol_partial_8.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "overlay70_sol_partial_9.o",
-      "bytes": 16,
-      "status": "c",
-      "source": "src/overlay70_sol_partial_9.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
       "object": "overlay70_state_helpers_1.o",
       "bytes": 502,
       "status": "c",
@@ -24824,14 +24480,6 @@
       "bytes": 238,
       "status": "c",
       "source": "src/overlay70_wireless_session/overlay70_wireless_session.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "r40_overlay_70_residual_13_run1.o",
-      "bytes": 320,
-      "status": "c",
-      "source": "src/r40_overlay_70_residual_13_run1.c"
     },
     {
       "cpu": "ARM9",
@@ -25004,14 +24652,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_70",
-      "object": "to47_overlay70_window_rows_r14.o",
-      "bytes": 132,
-      "status": "c",
-      "source": "src/to47_overlay70_window_rows_r14.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
       "object": "to50_overlay70_r38r1_exact.o",
       "bytes": 88,
       "status": "c",
@@ -25072,30 +24712,6 @@
       "bytes": 324,
       "status": "c",
       "source": "src/to52_r5_overlay70_r40_r4_head.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "to52_r5_overlay70_ui_setup_r9.o",
-      "bytes": 420,
-      "status": "c",
-      "source": "src/to52_r5_overlay70_ui_setup_r9.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "to52_r5_overlay70_window_lifecycle_r10.o",
-      "bytes": 388,
-      "status": "c",
-      "source": "src/to52_r5_overlay70_window_lifecycle_r10.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "to70_overlay_70_residual_11_extra977_run01.o",
-      "bytes": 64,
-      "status": "c",
-      "source": "src/to70_overlay_70_residual_11_extra977_run01.c"
     },
     {
       "cpu": "ARM9",
@@ -25412,14 +25028,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_70",
-      "object": "to80_extra1793_run01.o",
-      "bytes": 36,
-      "status": "c",
-      "source": "src/to80_extra1793_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
       "object": "to80_extra1794_run01.o",
       "bytes": 32,
       "status": "c",
@@ -25708,77 +25316,109 @@
     {
       "cpu": "ARM9",
       "module": "OVY_74",
-      "object": "nitrocrypto_run01.o",
-      "bytes": 68,
-      "status": "c",
-      "source": "src/nitrocrypto_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "nitrocrypto_run02.o",
-      "bytes": 336,
-      "status": "c",
-      "source": "src/nitrocrypto_run02.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "nitrocrypto_run03.o",
-      "bytes": 144,
-      "status": "c",
-      "source": "src/nitrocrypto_run03.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "nitrocrypto_run04.o",
-      "bytes": 112,
-      "status": "c",
-      "source": "src/nitrocrypto_run04.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "nitrocrypto_run05.o",
-      "bytes": 56,
-      "status": "c",
-      "source": "src/nitrocrypto_run05.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "nitrocrypto_run06.o",
-      "bytes": 260,
-      "status": "c",
-      "source": "src/nitrocrypto_run06.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "nitrocrypto_run07.o",
-      "bytes": 124,
-      "status": "c",
-      "source": "src/nitrocrypto_run07.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "nitrocrypto_run08.o",
+      "object": "nitrocrypto_alloc.o",
       "bytes": 172,
       "status": "c",
-      "source": "src/nitrocrypto_run08.c"
+      "source": "lib/src/nitrocrypto_alloc.c"
     },
     {
       "cpu": "ARM9",
       "module": "OVY_74",
-      "object": "op90_nitrocrypto_residual00_r01.o",
+      "object": "nitrocrypto_bn_arith.o",
+      "bytes": 6212,
+      "status": "c",
+      "source": "lib/src/nitrocrypto_bn_arith.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_74",
+      "object": "nitrocrypto_bn_bin2bn.o",
+      "bytes": 276,
+      "status": "c",
+      "source": "lib/src/nitrocrypto_bn_bin2bn.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_74",
+      "object": "nitrocrypto_bn_bits.o",
+      "bytes": 476,
+      "status": "c",
+      "source": "lib/src/nitrocrypto_bn_bits.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_74",
+      "object": "nitrocrypto_bn_ctx.o",
+      "bytes": 260,
+      "status": "c",
+      "source": "lib/src/nitrocrypto_bn_ctx.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_74",
+      "object": "nitrocrypto_bn_exp.o",
+      "bytes": 7040,
+      "status": "c",
+      "source": "lib/src/nitrocrypto_bn_exp.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_74",
+      "object": "nitrocrypto_bn_expand.o",
+      "bytes": 280,
+      "status": "c",
+      "source": "lib/src/nitrocrypto_bn_expand.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_74",
+      "object": "nitrocrypto_bn_fix_top.o",
+      "bytes": 204,
+      "status": "c",
+      "source": "lib/src/nitrocrypto_bn_fix_top.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_74",
+      "object": "nitrocrypto_bn_free.o",
+      "bytes": 124,
+      "status": "c",
+      "source": "lib/src/nitrocrypto_bn_free.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_74",
+      "object": "nitrocrypto_bn_num_bits.o",
+      "bytes": 148,
+      "status": "c",
+      "source": "lib/src/nitrocrypto_bn_num_bits.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_74",
+      "object": "nitrocrypto_bn_word.o",
+      "bytes": 168,
+      "status": "c",
+      "source": "lib/src/nitrocrypto_bn_word.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_74",
+      "object": "nitrocrypto_rc4.o",
       "bytes": 120,
       "status": "original_asm",
-      "source": "src/op90_nitrocrypto_residual00_r01.c",
+      "source": "lib/src/nitrocrypto_rc4.c",
       "functions": [
         "CRYPTO_RC4Encrypt"
       ]
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_74",
+      "object": "nitrocrypto_sign.o",
+      "bytes": 1500,
+      "status": "c",
+      "source": "lib/src/nitrocrypto_sign.c"
     },
     {
       "cpu": "ARM9",
@@ -25787,14 +25427,6 @@
       "bytes": 440,
       "status": "c",
       "source": "src/op90_op90_to70_ov74_010r3_residual3_residual_1_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "op90_to57_nitrocrypto_residual04_residual_r01.o",
-      "bytes": 276,
-      "status": "c",
-      "source": "src/op90_to57_nitrocrypto_residual04_residual_r01.c"
     },
     {
       "cpu": "ARM9",
@@ -25919,14 +25551,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_74",
-      "object": "op90_to90_extra2160_residual_1_r01.o",
-      "bytes": 96,
-      "status": "c",
-      "source": "src/op90_to90_extra2160_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
       "object": "op90_to90_extra2283_residual_1_r01.o",
       "bytes": 236,
       "status": "c",
@@ -25947,174 +25571,6 @@
       "bytes": 6320,
       "status": "c",
       "source": "src/application/main_menu/ranger_link.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "to54_atomic_w17_01_nitrocrypto_residual03_run01.o",
-      "bytes": 1440,
-      "status": "c",
-      "source": "src/to54_atomic_w17_01_nitrocrypto_residual03_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "to54_atomic_w17_02_nitrocrypto_residual03_run02.o",
-      "bytes": 292,
-      "status": "c",
-      "source": "src/to54_atomic_w17_02_nitrocrypto_residual03_run02.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "to54_atomic_w17_03_nitrocrypto_residual03_run03.o",
-      "bytes": 256,
-      "status": "c",
-      "source": "src/to54_atomic_w17_03_nitrocrypto_residual03_run03.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "to54_atomic_w17_04_nitrocrypto_residual03_run04.o",
-      "bytes": 324,
-      "status": "c",
-      "source": "src/to54_atomic_w17_04_nitrocrypto_residual03_run04.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "to54_atomic_w17_05_nitrocrypto_residual03_run05.o",
-      "bytes": 356,
-      "status": "c",
-      "source": "src/to54_atomic_w17_05_nitrocrypto_residual03_run05.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "to54_atomic_w17_06_nitrocrypto_residual03_run06.o",
-      "bytes": 284,
-      "status": "c",
-      "source": "src/to54_atomic_w17_06_nitrocrypto_residual03_run06.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "to54_atomic_w17_07_nitrocrypto_residual03_run07.o",
-      "bytes": 220,
-      "status": "c",
-      "source": "src/to54_atomic_w17_07_nitrocrypto_residual03_run07.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "to54_atomic_w17_08_nitrocrypto_residual03_run08.o",
-      "bytes": 352,
-      "status": "c",
-      "source": "src/to54_atomic_w17_08_nitrocrypto_residual03_run08.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "to54_atomic_w17_09_nitrocrypto_residual03_run09.o",
-      "bytes": 296,
-      "status": "c",
-      "source": "src/to54_atomic_w17_09_nitrocrypto_residual03_run09.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "to54_atomic_w17_10_nitrocrypto_residual03_run10.o",
-      "bytes": 284,
-      "status": "c",
-      "source": "src/to54_atomic_w17_10_nitrocrypto_residual03_run10.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "to54_atomic_w17_11_nitrocrypto_residual03_run11.o",
-      "bytes": 260,
-      "status": "c",
-      "source": "src/to54_atomic_w17_11_nitrocrypto_residual03_run11.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "to54_atomic_w17_12_nitrocrypto_residual03_run12.o",
-      "bytes": 276,
-      "status": "c",
-      "source": "src/to54_atomic_w17_12_nitrocrypto_residual03_run12.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "to54_atomic_w17_13_nitrocrypto_residual03_run13.o",
-      "bytes": 336,
-      "status": "c",
-      "source": "src/to54_atomic_w17_13_nitrocrypto_residual03_run13.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "to54_atomic_w17_14_nitrocrypto_residual03_run14.o",
-      "bytes": 340,
-      "status": "c",
-      "source": "src/to54_atomic_w17_14_nitrocrypto_residual03_run14.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "to54_atomic_w17_15_nitrocrypto_residual03_run15.o",
-      "bytes": 416,
-      "status": "c",
-      "source": "src/to54_atomic_w17_15_nitrocrypto_residual03_run15.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "to54_atomic_w17_16_nitrocrypto_residual03_run16.o",
-      "bytes": 480,
-      "status": "c",
-      "source": "src/to54_atomic_w17_16_nitrocrypto_residual03_run16.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "to55_nitrocrypto_residual01_bignum.o",
-      "bytes": 4220,
-      "status": "c",
-      "source": "src/to55_nitrocrypto_residual01_bignum.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "to55_nitrocrypto_residual01_sign.o",
-      "bytes": 1432,
-      "status": "c",
-      "source": "src/to55_nitrocrypto_residual01_sign.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "to55_nitrocrypto_residual02.o",
-      "bytes": 2340,
-      "status": "c",
-      "source": "src/to55_nitrocrypto_residual02.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "to57_nitrocrypto_residual04_prefix.o",
-      "bytes": 364,
-      "status": "c",
-      "source": "src/to57_nitrocrypto_residual04_prefix.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "to57_nitrocrypto_residual04_suffix.o",
-      "bytes": 112,
-      "status": "c",
-      "source": "src/to57_nitrocrypto_residual04_suffix.c"
     },
     {
       "cpu": "ARM9",
@@ -26743,38 +26199,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_74",
-      "object": "to80_extra1486_run01.o",
-      "bytes": 152,
-      "status": "c",
-      "source": "src/to80_extra1486_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "to80_extra1486_run02.o",
-      "bytes": 128,
-      "status": "c",
-      "source": "src/to80_extra1486_run02.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "to80_extra1487_run01.o",
-      "bytes": 76,
-      "status": "c",
-      "source": "src/to80_extra1487_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "to80_extra1487_run02.o",
-      "bytes": 128,
-      "status": "c",
-      "source": "src/to80_extra1487_run02.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
       "object": "to80_extra1603_run01.o",
       "bytes": 44,
       "status": "c",
@@ -26795,14 +26219,6 @@
       "bytes": 288,
       "status": "c",
       "source": "src/to90_extra2100_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_74",
-      "object": "to90_extra2160_run01.o",
-      "bytes": 52,
-      "status": "c",
-      "source": "src/to90_extra2160_run01.c"
     },
     {
       "cpu": "ARM9",
@@ -43192,6 +42608,14 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "dwc_account.o",
+      "bytes": 2588,
+      "status": "c",
+      "source": "lib/NitroDWC/src/dwc_account.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "easy_chat.o",
       "bytes": 820,
       "status": "c",
@@ -46103,6 +45527,25 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "nitrocrypto_rc4_fast.o",
+      "bytes": 476,
+      "status": "original_asm",
+      "source": "lib/src/nitrocrypto_rc4_fast.c",
+      "functions": [
+        "CRYPTO_RC4FastEncrypt"
+      ]
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "nitrocrypto_rc4_init.o",
+      "bytes": 296,
+      "status": "c",
+      "source": "lib/src/nitrocrypto_rc4_init.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "npc_trade_task.o",
       "bytes": 292,
       "status": "c",
@@ -46316,17 +45759,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "op90_op90_to59_dwcaccount_residual_3_residual_1_r01.o",
-      "bytes": 476,
-      "status": "original_asm",
-      "source": "src/op90_op90_to59_dwcaccount_residual_3_residual_1_r01.c",
-      "functions": [
-        "CRYPTO_RC4FastEncrypt"
-      ]
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "op90_op90_to59_dwcbm_residual_5_residual_1_r01.o",
       "bytes": 388,
       "status": "c",
@@ -46417,22 +45849,6 @@
       "bytes": 424,
       "status": "c",
       "source": "src/op90_to53_unk_02085604_tail_2_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to59_dwcaccount_residual_3_r01.o",
-      "bytes": 152,
-      "status": "c",
-      "source": "src/op90_to59_dwcaccount_residual_3_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to59_dwcaccount_residual_3_r02.o",
-      "bytes": 144,
-      "status": "c",
-      "source": "src/op90_to59_dwcaccount_residual_3_r02.c"
     },
     {
       "cpu": "ARM9",
@@ -50328,30 +49744,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to59_dwcaccount_run01.o",
-      "bytes": 440,
-      "status": "c",
-      "source": "src/to59_dwcaccount_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to59_dwcaccount_run02.o",
-      "bytes": 96,
-      "status": "c",
-      "source": "src/to59_dwcaccount_run02.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to59_dwcaccount_run03.o",
-      "bytes": 1752,
-      "status": "c",
-      "source": "src/to59_dwcaccount_run03.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to59_dwcbm_run01.o",
       "bytes": 44,
       "status": "c",
@@ -51576,22 +50968,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to70_dwcaccount_residual_1_run01.o",
-      "bytes": 44,
-      "status": "c",
-      "source": "src/to70_dwcaccount_residual_1_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_dwcaccount_residual_2_run01.o",
-      "bytes": 32,
-      "status": "c",
-      "source": "src/to70_dwcaccount_residual_2_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to70_dwcbm_residual_1_run01.o",
       "bytes": 436,
       "status": "c",
@@ -52552,14 +51928,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to80_extra1652_run01.o",
-      "bytes": 112,
-      "status": "c",
-      "source": "src/to80_extra1652_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to80_extra1653_run01.o",
       "bytes": 144,
       "status": "c",
@@ -53468,14 +52836,6 @@
       "bytes": 148,
       "status": "c",
       "source": "src/to90_extra2350_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_extra2449_run01.o",
-      "bytes": 112,
-      "status": "c",
-      "source": "src/to90_extra2449_run01.c"
     },
     {
       "cpu": "ARM9",

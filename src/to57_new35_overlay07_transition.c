@@ -42,14 +42,14 @@ void ov07_0222CCBC(int task, W35Fade *w) {
     switch (w->state) {
     case 0:
         BattleAnimUtil_UpdateShake(&w->motion);
-        ov07_022220B8(&w->motion, w->pic, w->x, w->y);
+        BattleAnimUtil_SetPokepicPosWithOffset(&w->motion, w->pic, w->x, w->y);
         if (w->special == 1) {
-            ov07_0222207C(&w->motion, w->sprite, w->x, (s16)(w->y - w->delta));
+            BattleAnimUtil_SetSpritePosWithOffset(&w->motion, w->sprite, w->x, (s16)(w->y - w->delta));
         }
         if (Pokepic_ResumePaletteFade(w->pic) == 0) {
             Pokepic_StartPaletteFade(w->pic, 16, 0, 0, 0);
             if (w->special == 1) {
-                u32 mask = 1 << ov07_02221FF0(w->sprite);
+                u32 mask = 1 << BattleAnimUtil_GetSpritePaletteSlot(w->sprite);
                 PaletteData_BeginPaletteFade(BattleAnimSystem_GetPaletteData(w->owner), 4, (u16)mask, 0, 16, 0, 0);
             }
             w->state++;
@@ -57,9 +57,9 @@ void ov07_0222CCBC(int task, W35Fade *w) {
         break;
     case 1:
         BattleAnimUtil_UpdateShake(&w->motion);
-        ov07_022220B8(&w->motion, w->pic, w->x, w->y);
+        BattleAnimUtil_SetPokepicPosWithOffset(&w->motion, w->pic, w->x, w->y);
         if (w->special == 1) {
-            ov07_0222207C(&w->motion, w->sprite, w->x, (s16)(w->y - w->delta));
+            BattleAnimUtil_SetSpritePosWithOffset(&w->motion, w->sprite, w->x, (s16)(w->y - w->delta));
         }
         if (Pokepic_ResumePaletteFade(w->pic) == 0) {
             Pokepic_SetAttr(w->pic, 0, w->x);

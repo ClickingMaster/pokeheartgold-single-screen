@@ -17,7 +17,7 @@ void SpriteSystem_DrawSprites(void *);
 void Heap_Free(void *);
 void BattleAnimSystem_DestroyTask(void *, void *);
 int ov07_0222FFD0(void *);
-void ov07_022220FC(void *, int, int, int, int, int, int, int);
+void BattleAnimUtil_InitSinMotion(void *, int, int, int, int, int, int, int);
 void BattleAnimUtil_UpdateSinMotion(void *);
 void ov07_0222F434(void *);
 void ov07_0222F9B8(void *);

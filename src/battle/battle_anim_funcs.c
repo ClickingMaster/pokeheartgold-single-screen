@@ -1769,7 +1769,7 @@ void BattleAnimFunc_ShakeAndScaleBattlerXY(BattleAnimSystem *system) {
     work->scaleX = BattleAnimSystem_GetArg(work->system, 3);
     work->scaleY = BattleAnimSystem_GetArg(work->system, 4);
     work->duration = BattleAnimSystem_GetArg(work->system, 5);
-    ov07_02221F38(system, BattleAnimSystem_GetAttacker(work->system), NULL, &work->baseY);
+    BattleAnimSystem_GetBattlerScreenPos(system, BattleAnimSystem_GetAttacker(work->system), NULL, &work->baseY);
     work->height = ov07_0221FAA0(work->system, BattleAnimSystem_GetAttacker(work->system));
     work->baseY += work->height;
     startX = (s32)BattleAnimSystem_GetArg(system, 0) >> 16;
@@ -2003,7 +2003,7 @@ void ov07_02225640(BattleAnimSystem *system) {
     if (toHome == 0) {
         BattleAnimUtil_InitLinearMotion(&work->motion, work->target.pos[0], work->offscreenX, work->target.pos[1], work->target.pos[1], (u16)duration);
     } else {
-        s16 homeX = ov07_02221F80(system, battler, 0);
+        s16 homeX = BattleAnimSystem_GetBattlerScreenCoord(system, battler, 0);
         BattleAnimUtil_InitLinearMotion(&work->motion, work->offscreenX, homeX, work->target.pos[1], work->target.pos[1], (u16)duration);
     }
     BattleAnimSystem_CreateTaskDefaultPriority(work->common.system, BattleAnimTask_MoveBattlerLinear, work);
@@ -2690,7 +2690,7 @@ void BattleAnimFunc_EmitterSinMotion(BattleAnimSystem *system) {
     endAngleX = work->endAngleX * 0xFFFF / 360;
     startAngleY = work->startAngleY * 0xFFFF / 360;
     endAngleY = work->endAngleY * 0xFFFF / 360;
-    ov07_022220FC(&work->motion, (u16)startAngleX, (u16)endAngleX, (u16)startAngleY, (u16)endAngleY, work->ampX << FX32_SHIFT, work->ampY << FX32_SHIFT, work->duration);
+    BattleAnimUtil_InitSinMotion(&work->motion, (u16)startAngleX, (u16)endAngleX, (u16)startAngleY, (u16)endAngleY, work->ampX << FX32_SHIFT, work->ampY << FX32_SHIFT, work->duration);
     BattleAnimUtil_UpdateSinMotion(&work->motion);
     {
         s32 y = work->base.y + work->motion.y * BATTLE_ANIM_EMITTER_PIXEL;
@@ -2799,8 +2799,8 @@ void BattleAnimSpriteFunc_SpriteOrbit(BattleAnimSystem *system, SpriteSystem *sp
     work->sprite = sprite;
     work->step = 0;
     battler = BattleAnimSystem_GetDefender(system);
-    x = ov07_02221F80(system, battler, 0);
-    y = ov07_02221F80(system, battler, 1);
+    x = BattleAnimSystem_GetBattlerScreenCoord(system, battler, 0);
+    y = BattleAnimSystem_GetBattlerScreenCoord(system, battler, 1);
     ManagedSprite_SetPositionXY(work->sprite, x, y);
     if (BattleAnimUtil_GetBattlerSide(system, BattleAnimSystem_GetAttacker(system)) == BATTLE_ANIM_SIDE_ENEMY) {
         ManagedSprite_SetAnim(work->sprite, 1);
@@ -2833,8 +2833,8 @@ void ov07_02226A9C(BattleAnimSystem *system, SpriteSystem *spriteSystem, SpriteM
     BattleAnimUtil_InitCommonWork(system, &work->common);
     work->sprite = sprite;
     int battler = BattleAnimSystem_GetDefender(system);
-    s16 x = ov07_02221F80(system, battler, 0);
-    ov07_02221F80(system, battler, 1);
+    s16 x = BattleAnimSystem_GetBattlerScreenCoord(system, battler, 0);
+    BattleAnimSystem_GetBattlerScreenCoord(system, battler, 1);
     int anim;
     s16 y;
     if (ov07_0221BFC0(system) == 1) {

@@ -2157,7 +2157,7 @@
 	.public Gts_SetSpritePositionRounded
 	.public Gts_Alloc
 	.public Gts_Free
-	.public ov70_02238E44
+	.public Gts_GetWifiIconLevel
 	.public Gts_SetNextScreen
 	.public Gts_SwitchScreen
 	.public Gts_GetTextFrameDelay
@@ -2171,41 +2171,41 @@
 	.public Gts_SetSpritePosition
 	.public Gts_DimScreen
 	.public Gts_ClearDim
-	.public ov70_02238FF4
-	.public ov70_022390DC
-	.public ov70_022390FC
-	.public ov70_02239134
-	.public ov70_022391F0
-	.public ov70_022392BC
-	.public ov70_022392E0
-	.public ov70_02239304
-	.public ov70_02239330
-	.public ov70_02239414
-	.public ov70_022394A8
-	.public ov70_022394B8
-	.public ov70_022395C4
-	.public ov70_02239614
-	.public ov70_0223963C
-	.public ov70_02239658
+	.public GtsMainMenu_Init
+	.public GtsMainMenu_Main
+	.public GtsMainMenu_Exit
+	.public GtsMainMenu_InitBgs
+	.public Gts_InitSubScreenBgs
+	.public Gts_FreeSubScreenBgs
+	.public GtsMainMenu_FreeBgs
+	.public GtsMainMenu_HideMainScreen
+	.public GtsMainMenu_LoadGraphics
+	.public GtsMainMenu_CreateCursor
+	.public GtsMainMenu_DeleteCursor
+	.public GtsMainMenu_CreateWindows
+	.public GtsMainMenu_RemoveWindows
+	.public GtsMainMenu_CreateStrings
+	.public GtsMainMenu_DeleteStrings
+	.public GtsMainMenu_WaitEnterAnim
 	.public ov70_02239698
 	.public ov70_022396A8
-	.public ov70_022396CC
-	.public ov70_022396E0
-	.public ov70_022396F4
-	.public ov70_02239730
-	.public ov70_02239740
-	.public ov70_02239834
-	.public ov70_02239954
-	.public ov70_0223997C
-	.public ov70_02239990
-	.public ov70_022399D8
-	.public ov70_02239A10
-	.public ov70_02239AAC
-	.public ov70_02239ACC
-	.public ov70_02239B00
-	.public ov70_02239B84
-	.public ov70_02239BDC
-	.public ov70_02239C34
+	.public GtsMainMenu_WaitFadeIn
+	.public GtsMainMenu_WaitFadeIn2
+	.public GtsMainMenu_ShowPrompt
+	.public GtsMainMenu_GetTouchedButton
+	.public GtsMainMenu_SelectButton
+	.public GtsMainMenu_HandleInput
+	.public GtsMainMenu_StartExitAnim
+	.public GtsMainMenu_WaitExitAnim
+	.public GtsMainMenu_FadeOut
+	.public GtsMainMenu_ShowExitPrompt
+	.public GtsMainMenu_HandleExitPrompt
+	.public GtsMainMenu_WaitText
+	.public GtsMainMenu_WaitTextAndPause
+	.public GtsMainMenu_DrawButtons
+	.public GtsMainMenu_PrintMessage
+	.public GtsMainMenu_PrintPrompt
+	.public GtsMainMenu_PrintButtonLabel
 	.public ov70_02239C6C
 	.public ov70_02239CF8
 	.public ov70_02239D44
@@ -2638,18 +2638,18 @@
 	.public sGtsGraphicsModes
 	.public sGtsObjCharTransferTemplate
 	.public sGtsGraphicsBanks
-	.public ov70_02245240
-	.public ov70_02245242
-	.public ov70_0224524C
-	.public ov70_0224525C
-	.public ov70_0224526C
-	.public ov70_02245284
-	.public ov70_022452A0
-	.public ov70_022452BC
-	.public ov70_022452D8
-	.public ov70_022452F4
-	.public ov70_02245310
-	.public ov70_0224532C
+	.public sGtsMainMenuCursorX
+	.public sGtsMainMenuCursorY
+	.public sGtsMainMenuButtonHitboxes
+	.public sGtsMainMenuGraphicsModes
+	.public sGtsMainMenuButtonMsgs
+	.public sGtsSubBg2Template
+	.public sGtsSubBg0Template
+	.public sGtsSubBg1Template
+	.public sGtsMainMenuBg1Template
+	.public sGtsMainMenuBg0Template
+	.public sGtsMainMenuBg2Template
+	.public sGtsSubBg3Template
 	.public ov70_02245348
 	.public ov70_02245364
 	.public ov70_02245380
@@ -2762,7 +2762,7 @@
 	.public sGtsInfoUrl
 	.public sGtsSetProfileUrl
 	.public sGtsScreens
-	.public ov70_02246464
+	.public sGtsMainMenuStates
 	.public ov70_0224649C
 	.public ov70_022464A8
 	.public ov70_022464CC
@@ -2793,22 +2793,22 @@
 	.public ov70_0223887C
 	.public Gts_DestroyListMenu
 	.public Gts_SetState
-	.public ov70_02238E44
+	.public Gts_GetWifiIconLevel
 	.public Gts_SetNextScreen
 	.public Gts_SwitchScreen
 	.public Gts_GetTextFrameDelay
 	.public Gts_DecrementTimer
 	.public Gts_StartCountingBoxMons
 	.public Gts_ClearDim
-	.public ov70_022392BC
-	.public ov70_022392E0
-	.public ov70_022394A8
-	.public ov70_0223963C
+	.public Gts_FreeSubScreenBgs
+	.public GtsMainMenu_FreeBgs
+	.public GtsMainMenu_DeleteCursor
+	.public GtsMainMenu_DeleteStrings
 	.public ov70_02239698
-	.public ov70_022396CC
-	.public ov70_022396E0
-	.public ov70_02239954
-	.public ov70_0223997C
+	.public GtsMainMenu_WaitFadeIn
+	.public GtsMainMenu_WaitFadeIn2
+	.public GtsMainMenu_StartExitAnim
+	.public GtsMainMenu_WaitExitAnim
 	.public ov70_0223A0C4
 	.public ov70_0223A258
 	.public ov70_0223ABD8
@@ -2867,52 +2867,52 @@ sGtsGraphicsBanks: ; 0x02245218
 	.byte 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x60, 0x00, 0x00, 0x00
 
-ov70_02245240: ; 0x02245240
+sGtsMainMenuCursorX: ; 0x02245240
 	.byte 0x80, 0x00
 
-ov70_02245242: ; 0x02245242
+sGtsMainMenuCursorY: ; 0x02245242
 	.byte 0x38, 0x00, 0x80, 0x00, 0x60, 0x00, 0x80, 0x00, 0x88, 0x00
 
-ov70_0224524C: ; 0x0224524C
+sGtsMainMenuButtonHitboxes: ; 0x0224524C
 	.byte 0x28, 0x47, 0x18, 0xE7
 	.byte 0x50, 0x6F, 0x18, 0xE7, 0x78, 0x97, 0x18, 0xE7, 0xFF, 0x00, 0x00, 0x00
 
-ov70_0224525C: ; 0x0224525C
+sGtsMainMenuGraphicsModes: ; 0x0224525C
 	.byte 0x01, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov70_0224526C: ; 0x0224526C
+sGtsMainMenuButtonMsgs: ; 0x0224526C
 	.byte 0x29, 0x00, 0x00, 0x00
 	.byte 0x2A, 0x00, 0x00, 0x00, 0x2B, 0x00, 0x00, 0x00, 0x28, 0x00, 0x00, 0x00, 0x2A, 0x00, 0x00, 0x00
 	.byte 0x2B, 0x00, 0x00, 0x00
 
-ov70_02245284: ; 0x02245284
+sGtsSubBg2Template: ; 0x02245284
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1F, 0x05, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov70_022452A0: ; 0x022452A0
+sGtsSubBg0Template: ; 0x022452A0
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x1E, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov70_022452BC: ; 0x022452BC
+sGtsSubBg1Template: ; 0x022452BC
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x1C, 0x00
 	.byte 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov70_022452D8: ; 0x022452D8
+sGtsMainMenuBg1Template: ; 0x022452D8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1E, 0x02, 0x00, 0x01, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov70_022452F4: ; 0x022452F4
+sGtsMainMenuBg0Template: ; 0x022452F4
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov70_02245310: ; 0x02245310
+sGtsMainMenuBg2Template: ; 0x02245310
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x1D, 0x02, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov70_0224532C: ; 0x0224532C
+sGtsSubBg3Template: ; 0x0224532C
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1B, 0x04
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -3455,7 +3455,7 @@ sGtsSetProfileUrl: ; 0x022463A4
 	.balign 4, 0
 sGtsScreens: ; 0x022463EC
 	.word ov70_02244038, ov70_02244124, ov70_02244154
-	.word ov70_02238FF4, ov70_022390DC, ov70_022390FC
+	.word GtsMainMenu_Init, GtsMainMenu_Main, GtsMainMenu_Exit
 	.word ov70_02239D8C, ov70_02239E68, ov70_02239E7C
 	.word ov70_0223A8BC, ov70_0223AA90, ov70_0223AB00
 	.word ov70_0223B55C, ov70_0223B6EC, ov70_0223B788
@@ -3465,21 +3465,21 @@ sGtsScreens: ; 0x022463EC
 	.word ov70_022413AC, ov70_02241468, ov70_02241494
 	.word GtsTrade_Init, GtsTrade_Main, GtsTrade_Exit
 
-ov70_02246464: ; 0x02246464
-	.word ov70_02239658
+sGtsMainMenuStates: ; 0x02246464
+	.word GtsMainMenu_WaitEnterAnim
 	.word ov70_02239698
 	.word ov70_022396A8
-	.word ov70_022396CC
-	.word ov70_022396E0
-	.word ov70_022396F4
-	.word ov70_02239834
-	.word ov70_02239954
-	.word ov70_0223997C
-	.word ov70_02239990
-	.word ov70_02239AAC
-	.word ov70_02239ACC
-	.word ov70_022399D8
-	.word ov70_02239A10
+	.word GtsMainMenu_WaitFadeIn
+	.word GtsMainMenu_WaitFadeIn2
+	.word GtsMainMenu_ShowPrompt
+	.word GtsMainMenu_HandleInput
+	.word GtsMainMenu_StartExitAnim
+	.word GtsMainMenu_WaitExitAnim
+	.word GtsMainMenu_FadeOut
+	.word GtsMainMenu_WaitText
+	.word GtsMainMenu_WaitTextAndPause
+	.word GtsMainMenu_ShowExitPrompt
+	.word GtsMainMenu_HandleExitPrompt
 
 ov70_0224649C: ; 0x0224649C
 	.byte 0x00, 0x00, 0x00, 0x00

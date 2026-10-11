@@ -245,7 +245,7 @@ static void ov07_0222EB00(void *task, void *data) {
         break;
     case 1:
         if (BattleAnimUtil_UpdateLinearMotion(work->movement)) {
-            ov07_022220B8(work->movement, work->pic, work->x, work->y);
+            BattleAnimUtil_SetPokepicPosWithOffset(work->movement, work->pic, work->x, work->y);
             break;
         }
         work->count++;

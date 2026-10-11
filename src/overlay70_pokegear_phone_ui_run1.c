@@ -176,7 +176,7 @@ int ov70_0223CD44(Ov70Work *work) {
 }
 
 void ov70_0223CDD8(Ov70Work *work) {
-    ov70_02238E44(work);
+    Gts_GetWifiIconLevel(work);
     sub_0203A930();
     ov70_022465A8[work->state2c](work);
 }
@@ -216,7 +216,7 @@ void ov70_0223CE44(void *bgConfig) {
     template3 = ov70_02245714;
     InitBgFromTemplate(bgConfig, 3, &template3, 0);
     BgClearTilemapBufferAndCommit(bgConfig, 3);
-    ov70_022391F0(bgConfig, 0, 0);
+    Gts_InitSubScreenBgs(bgConfig, 0, 0);
     BG_ClearCharDataRange(0, 0x20, 0, 0x3d);
     BG_ClearCharDataRange(3, 0x20, 0, 0x3d);
     GfGfx_EngineATogglePlanes(0x10, 1);
@@ -224,7 +224,7 @@ void ov70_0223CE44(void *bgConfig) {
 }
 
 void ov70_0223CF48(void *bgConfig) {
-    ov70_022392BC(bgConfig);
+    Gts_FreeSubScreenBgs(bgConfig);
     FreeBgTilemapBuffer(bgConfig, 2);
     FreeBgTilemapBuffer(bgConfig, 1);
     FreeBgTilemapBuffer(bgConfig, 0);

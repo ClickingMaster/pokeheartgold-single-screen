@@ -531,13 +531,13 @@ void Gts_InitData(GtsApp *app, OverlayManager *man) {
     app->args = OverlayManager_GetArgs(man);
     app->screen = 0;
     Gts_SetNextScreen(app, 0, 0);
-    app->unk_011C = 0;
+    app->menuCursor = 0;
     app->unk_0B8A = 0;
     app->unk_0B8C = 3;
     app->unk_0B8D = 0;
     app->unk_0B8E = 0;
     app->unk_0B90 = 0;
-    app->unk_11DC = 0;
+    app->playerAnimDone = 0;
     app->unk_0120 = 18;
     app->boxMonCount = 0;
     app->countingBox = 0;
@@ -757,7 +757,7 @@ void Gts_Free(void *unused, void *ptr) {
 
 #pragma force_active reset
 
-int ov70_02238E44(void) {
+int Gts_GetWifiIconLevel(void) {
     return 3 - ov00_021EC9D4();
 }
 

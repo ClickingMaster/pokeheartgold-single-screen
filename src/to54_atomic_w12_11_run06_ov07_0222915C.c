@@ -42,7 +42,7 @@ s32 BattleAnimSystem_IsDoubleBattle(s32);                                       
 s32 ov07_0221FAF8(s32, s32);                                                               /* extern */
 s32 ov07_0221FB78(s32, s32);                                                               /* extern */
 s32 ov07_02222004(s32, s32);                                                               /* extern */
-s32 ov07_0222202C(s32, s32);                                                               /* extern */
+s32 BattleAnimUtil_GetBattlerSideSign(s32, s32);                                                               /* extern */
 M2C_UNK BattleAnimUtil_InitLinearMotion(void *, s16, s16, s32, s32);                                         /* extern */
 s32 BattleAnimUtil_UpdateLinearMotion(void *);                                                                 /* extern */
 M2C_UNK BattleAnimUtil_InitValueMotion(void *, s32, s32, s32);                                              /* extern */

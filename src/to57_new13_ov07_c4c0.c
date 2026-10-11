@@ -30,8 +30,8 @@ void ov07_0222C4C0(void *owner, void *a, void *b, void *sprite) {
     BattleAnimUtil_InitCosMotion(&w->linear, 0, 0xffff, 0xfffff000, w->sin.duration);
     w->baseX = w->sin.stepX;
     w->unk54 = 1;
-    w->x = ov07_02221F80(owner, idx, 0);
-    w->y = ov07_02221F80(owner, idx, 1);
+    w->x = BattleAnimSystem_GetBattlerScreenCoord(owner, idx, 0);
+    w->y = BattleAnimSystem_GetBattlerScreenCoord(owner, idx, 1);
     ManagedSprite_SetPositionXY(w->sprite, w->x, w->y);
     ManagedSprite_SetDrawPriority(w->sprite, 100);
     ManagedSprite_SetPriority(w->sprite, 1);

@@ -932,16 +932,9 @@ Static main
     Object src/to59_dwcbm_run07.o
     Object src/to90_extra2312_run01.o
     Object lib/NitroDWC/asm/to59_dwcaccount_anchor.o
-    Object src/to59_dwcaccount_run01.o
-    Object src/to70_dwcaccount_residual_1_run01.o
-    Object src/to59_dwcaccount_run02.o
-    Object src/to80_extra1652_run01.o
-    Object src/to70_dwcaccount_residual_2_run01.o
-    Object src/to90_extra2449_run01.o
-    Object src/to59_dwcaccount_run03.o
-    Object src/op90_to59_dwcaccount_residual_3_r01.o
-    Object src/op90_to59_dwcaccount_residual_3_r02.o
-    Object src/op90_op90_to59_dwcaccount_residual_3_residual_1_r01.o
+    Object lib/NitroDWC/src/dwc_account.o
+    Object lib/src/nitrocrypto_rc4_init.o
+    Object lib/src/nitrocrypto_rc4_fast.o
     Object lib/asm/to59_wifi_anchor.o
     Object src/to70_wifi_residual_1_run01.o
     Object src/op90_to70_wifi_residual_1_residual_1_r01.o
@@ -2761,41 +2754,7 @@ Overlay OVY_7
 {
     After OVY_6
     Object src/battle/battle_anim_system.o
-    Object src/to54_atomic_w13_01_run1.o
-Object src/op90_to54_atomic_w13_02_res1_r01.o
-Object src/to54_atomic_w13_03_run2.o
-Object src/to90_extra2293_run01.o
-Object src/to90_extra2293_run02.o
-Object src/to80_extra1598_run01.o
-Object src/to54_atomic_w13_05_run3.o
-    Object src/overlay07_callbacks_c_02220800_02220878.o
-    Object src/to55_bank_w16_run_01.o
-    Object src/to59_bank_w16_20978.o
-    Object src/to80_extra1607_run01.o
-    Object src/to55_bank_w16_run_02.o
-    Object src/to70_to55_bank_w16_residual_02_extra303_run01.o
-    Object src/to91_w41561_particle_run01.o
-    Object src/op90_to91_w41561_particle_residual_1_r01.o
-    Object src/to55_bank_w16_run_03.o
-    Object src/overlay07_callbacks_c_022217a4_022217b0.o
-    Object src/to70_overlay07_callbacks_residual_022217b4_022217b4_extra447_run01.o
-    Object src/overlay07_callbacks_c_02221898_0222189c.o
-    Object src/to57_overlay07_callbacks_218a0.o
-    Object src/overlay07_callbacks_c_02221ad4_02221ae0.o
-    Object src/to90_extra1971_run01.o
-    Object src/to90_extra2294_run01.o
-    Object src/overlay07_callbacks_c_02221c74_02221c74.o
-    Object src/to58_r2_ov07_mid0_02221c8c.o
-    Object src/to58_w03d_ov07_02221c8c_02221cb4_c_suffix.o
-    Object src/overlay07_callbacks_c_02221ce0_02221ce0.o
-    Object src/to54_atomic_w02_01_to54_ov07_w02_run1.o
-Object src/to70_to54_atomic_w02_02_to54_ov07_w02_residual_1_extra1054_run01.o
-Object src/to54_atomic_w02_03_to54_ov07_w02_run2.o
-Object src/to90_extra2263_run01.o
-Object src/to54_atomic_w02_05_to54_ov07_w02_run3.o
-Object src/to90_extra2264_run01.o
-Object src/to90_extra2264_run02.o
-Object src/to54_atomic_w02_07_to54_ov07_w02_run4.o
+    Object src/battle/battle_anim_emitter.o
 Object src/battle/battle_anim_util.o
     Object src/battle/battle_anim_funcs.o
     Object src/overlay07_callbacks_c_02226c90_02226c90.o
@@ -5354,22 +5313,7 @@ Overlay OVY_70
     Object src/gts_server.o
     Object asm/overlay_70_to52_publics_only.o
     Object src/gts.o
-    Object src/overlay70_graphics_lifecycle.o
-    Object src/overlay70_sol_partial_8.o
-    Object src/to52_r5_overlay70_ui_setup_r9.o
-    Object src/overlay70_sol_partial_9.o
-    Object src/to52_r5_overlay70_window_lifecycle_r10.o
-    Object src/overlay70_sol_partial_10.o
-    Object src/to70_overlay_70_residual_11_extra977_run01.o
-    Object src/overlay70_sol_partial_11.o
-    Object src/to80_extra1793_run01.o
-    Object src/overlay70_sol_partial_12.o
-    Object src/r40_overlay_70_residual_13_run1.o
-    Object src/overlay70_menu_input_r13.o
-    Object src/overlay70_sol_partial_13.o
-    Object src/ov70_wave36_1.o
-    Object src/to47_overlay70_window_rows_r14.o
-    Object src/ov70_wave36_2.o
+    Object src/gts_main_menu.o
     Object src/to52_overlay70_r14r2.o
     Object src/ov70_wave36_3.o
     Object src/to70_overlay_70_residual_14_residual_3_extra618_run01.o
@@ -5697,43 +5641,19 @@ Object src/application/main_menu/mystery_gift_wireless.o
     Object src/to57_overlay_74_exact_055.o
     Object asm/to57_overlay_74_data.o
     Object asm/op90_nitrocrypto_residual00_anchor.o
-    Object src/op90_nitrocrypto_residual00_r01.o
-    Object src/nitrocrypto_run01.o
-    Object src/to55_nitrocrypto_residual01_sign.o
-    Object src/to55_nitrocrypto_residual01_bignum.o
-    Object src/nitrocrypto_run02.o
-    Object src/to55_nitrocrypto_residual02.o
-    Object src/nitrocrypto_run03.o
-    Object src/to54_atomic_w17_01_nitrocrypto_residual03_run01.o
-Object src/to54_atomic_w17_02_nitrocrypto_residual03_run02.o
-Object src/to54_atomic_w17_03_nitrocrypto_residual03_run03.o
-Object src/to54_atomic_w17_04_nitrocrypto_residual03_run04.o
-Object src/to54_atomic_w17_05_nitrocrypto_residual03_run05.o
-Object src/to54_atomic_w17_06_nitrocrypto_residual03_run06.o
-Object src/to54_atomic_w17_07_nitrocrypto_residual03_run07.o
-Object src/to54_atomic_w17_08_nitrocrypto_residual03_run08.o
-Object src/to54_atomic_w17_09_nitrocrypto_residual03_run09.o
-Object src/to54_atomic_w17_10_nitrocrypto_residual03_run10.o
-Object src/to54_atomic_w17_11_nitrocrypto_residual03_run11.o
-Object src/to54_atomic_w17_12_nitrocrypto_residual03_run12.o
-Object src/to54_atomic_w17_13_nitrocrypto_residual03_run13.o
-Object src/to54_atomic_w17_14_nitrocrypto_residual03_run14.o
-Object src/to54_atomic_w17_15_nitrocrypto_residual03_run15.o
-Object src/to54_atomic_w17_16_nitrocrypto_residual03_run16.o
-    Object src/nitrocrypto_run04.o
-    Object src/to57_nitrocrypto_residual04_prefix.o
-    Object src/op90_to57_nitrocrypto_residual04_residual_r01.o
-    Object src/to57_nitrocrypto_residual04_suffix.o
-    Object src/nitrocrypto_run05.o
-    Object src/to80_extra1486_run01.o
-    Object src/to80_extra1486_run02.o
-    Object src/nitrocrypto_run06.o
-    Object src/to80_extra1487_run01.o
-    Object src/to80_extra1487_run02.o
-    Object src/nitrocrypto_run07.o
-    Object src/to90_extra2160_run01.o
-    Object src/op90_to90_extra2160_residual_1_r01.o
-    Object src/nitrocrypto_run08.o
+    Object lib/src/nitrocrypto_rc4.o
+    Object lib/src/nitrocrypto_sign.o
+    Object lib/src/nitrocrypto_bn_exp.o
+    Object lib/src/nitrocrypto_bn_arith.o
+    Object lib/src/nitrocrypto_bn_bits.o
+    Object lib/src/nitrocrypto_bn_bin2bn.o
+    Object lib/src/nitrocrypto_bn_word.o
+    Object lib/src/nitrocrypto_bn_expand.o
+    Object lib/src/nitrocrypto_bn_ctx.o
+    Object lib/src/nitrocrypto_bn_fix_top.o
+    Object lib/src/nitrocrypto_bn_free.o
+    Object lib/src/nitrocrypto_bn_num_bits.o
+    Object lib/src/nitrocrypto_alloc.o
     Object asm/nitrocrypto_residual08.o
 }
 Overlay OVY_75

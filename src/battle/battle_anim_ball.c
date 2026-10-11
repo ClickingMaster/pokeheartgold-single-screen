@@ -1479,44 +1479,44 @@ void UnkBallData_InitThrowTarget(UnkBallData *data) {
         BALL_ARC_DURATION(data) = 12;
         return;
     case 6:
-        ov07_02221F04(0, 0, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
+        BattleAnimUtil_LookupScreenPos(0, 0, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
         data->unkC8 = 48;
         BALL_TARGET_Y(data) = BALL_TARGET_Y(data) + 32;
         break;
     case 7:
         ManagedSprite_GetPositionXY(data->managedSprite, &BALL_X(data), &BALL_Y(data));
-        ov07_02221F04(1, 4, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
+        BattleAnimUtil_LookupScreenPos(1, 4, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
         data->unkC8 = 48;
         BALL_TARGET_Y(data) = BALL_TARGET_Y(data) + 32;
         break;
     case 8:
-        ov07_02221F04(1, 2, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
+        BattleAnimUtil_LookupScreenPos(1, 2, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
         data->unkC8 = 48;
         BALL_TARGET_Y(data) = BALL_TARGET_Y(data) + 32;
         break;
     case 9:
-        ov07_02221F04(0, 1, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
+        BattleAnimUtil_LookupScreenPos(0, 1, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
         data->unkC8 = 48;
         BALL_TARGET_Y(data) = BALL_TARGET_Y(data) + 32;
         break;
     case 10:
-        ov07_02221F04(1, 3, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
+        BattleAnimUtil_LookupScreenPos(1, 3, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
         data->unkC8 = 48;
         BALL_TARGET_Y(data) = BALL_TARGET_Y(data) + 32;
         break;
     case 11:
-        ov07_02221F04(1, 5, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
+        BattleAnimUtil_LookupScreenPos(1, 5, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
         data->unkC8 = 48;
         BALL_TARGET_Y(data) = BALL_TARGET_Y(data) + 32;
         break;
     case 12:
-        ov07_02221F04(0, 1, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
+        BattleAnimUtil_LookupScreenPos(0, 1, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
         data->unkC8 = 16;
         BALL_TARGET_Y(data) = BALL_TARGET_Y(data) + 16;
         BALL_ARC_DURATION(data) = 12;
         return;
     case 13:
-        ov07_02221F04(0, 1, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
+        BattleAnimUtil_LookupScreenPos(0, 1, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
         data->unkC8 = 32;
         BALL_TARGET_X(data) = BALL_TARGET_X(data) - 20;
         BALL_TARGET_Y(data) = BALL_TARGET_Y(data) + 38;
@@ -1529,19 +1529,19 @@ void UnkBallData_InitThrowTarget(UnkBallData *data) {
         BALL_TARGET_Y(data) = BALL_TARGET_Y(data) + 32;
         break;
     case 15:
-        ov07_02221F04(0, 1, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
+        BattleAnimUtil_LookupScreenPos(0, 1, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
         data->unkC8 = 64;
         BALL_TARGET_Y(data) = BALL_TARGET_Y(data) + 8;
         BALL_ARC_DURATION(data) = 16;
         return;
     case 16:
-        ov07_02221F04(1, 3, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
+        BattleAnimUtil_LookupScreenPos(1, 3, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
         data->unkC8 = 64;
         BALL_TARGET_Y(data) = BALL_TARGET_Y(data) + 8;
         BALL_ARC_DURATION(data) = 16;
         return;
     case 17:
-        ov07_02221F04(1, 5, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
+        BattleAnimUtil_LookupScreenPos(1, 5, &BALL_TARGET_X(data), &BALL_TARGET_Y(data));
         data->unkC8 = 64;
         BALL_TARGET_Y(data) = BALL_TARGET_Y(data) + 8;
         BALL_ARC_DURATION(data) = 16;
@@ -1553,27 +1553,27 @@ void UnkBallData_InitThrowTarget(UnkBallData *data) {
 void UnkBallData_GetStartPosition(UnkBallData *data, s16 *x, s16 *y) {
     switch (data->unk90.unk0) {
     case 0:
-        ov07_02221F04(0, 0, x, y);
+        BattleAnimUtil_LookupScreenPos(0, 0, x, y);
         *y = *y + 40;
         break;
     case 1:
-        ov07_02221F04(0, 1, x, y);
+        BattleAnimUtil_LookupScreenPos(0, 1, x, y);
         *y = *y + 38;
         break;
     case 2:
-        ov07_02221F04(1, 2, x, y);
+        BattleAnimUtil_LookupScreenPos(1, 2, x, y);
         *y = *y + 40;
         break;
     case 4:
-        ov07_02221F04(1, 4, x, y);
+        BattleAnimUtil_LookupScreenPos(1, 4, x, y);
         *y = *y + 40;
         break;
     case 3:
-        ov07_02221F04(1, 3, x, y);
+        BattleAnimUtil_LookupScreenPos(1, 3, x, y);
         *y = *y + 38;
         break;
     case 5:
-        ov07_02221F04(1, 5, x, y);
+        BattleAnimUtil_LookupScreenPos(1, 5, x, y);
         *y = *y + 38;
         break;
     case 6:
@@ -1589,19 +1589,19 @@ void UnkBallData_GetStartPosition(UnkBallData *data, s16 *x, s16 *y) {
         *y = 100;
         break;
     case 9:
-        ov07_02221F04(0, 0, x, y);
+        BattleAnimUtil_LookupScreenPos(0, 0, x, y);
         break;
     case 10:
-        ov07_02221F04(0, 0, x, y);
+        BattleAnimUtil_LookupScreenPos(0, 0, x, y);
         break;
     case 11:
-        ov07_02221F04(0, 0, x, y);
+        BattleAnimUtil_LookupScreenPos(0, 0, x, y);
         break;
     case 12:
-        ov07_02221F04(0, 0, x, y);
+        BattleAnimUtil_LookupScreenPos(0, 0, x, y);
         break;
     case 13:
-        ov07_02221F04(0, 0, x, y);
+        BattleAnimUtil_LookupScreenPos(0, 0, x, y);
         break;
     case 14:
         *x = 230;

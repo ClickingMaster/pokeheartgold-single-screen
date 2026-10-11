@@ -26,7 +26,7 @@ typedef struct R2TaskWork {
 
 void GF_AssertFail(void);
 int _s32_div_f(int,int);
-int ov07_02222040(int,int,int);
+int BattleAnimUtil_CalcStep(int,int,int);
 void *Heap_Alloc(int,int);
 void *SysTask_CreateOnVWaitQueue(void (*)(void *,void *),void *,int);
 void *SysTask_CreateOnVBlankQueue(void (*)(void *,void *),void *,int);

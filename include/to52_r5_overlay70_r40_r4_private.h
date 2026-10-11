@@ -26,7 +26,7 @@ void ov70_02244FA4(void *, void *, int, int, int);
 void Gts_SetState(void *, int, int);
 void Gts_CreateWaitingIcon(void *);
 void ov70_02245124(void *);
-void ov70_02238E44(void *);
+void Gts_GetWifiIconLevel(void *);
 void sub_0203A930(void);
 
 struct Ov70W20;

@@ -4,6 +4,7 @@
 // Overlay 7: the battle move animation system (script interpreter and effect library).
 
 #include "battle/battle.h"
+#include "battle/battle_anim_util.h"
 
 #include "bg_window.h"
 #include "filesystem.h"
@@ -16,8 +17,6 @@
 
 typedef void (*BattleAnimRunner)(BattleAnimSystem *system);
 typedef void (*BattleAnimScriptCmd)(BattleAnimSystem *system);
-typedef void (*BattleAnimFunc)(BattleAnimSystem *system);
-typedef void (*BattleAnimSpriteFunc)(BattleAnimSystem *system, SpriteSystem *spriteSystem, SpriteManager *spriteManager, ManagedSprite *sprite);
 
 typedef struct BattleAnimSoundTaskData BattleAnimSoundTaskData;
 typedef struct BattleAnimBrightnessFlashWork BattleAnimBrightnessFlashWork;
@@ -133,38 +132,6 @@ struct BattleAnimSystem {
     u8 bgPriorities[4];               // 0x1AC
     NARC *narcs[6];                   // 0x1B0
 }; // size: 0x1C8
-
-typedef struct BattleAnimLinearMotion {
-    s16 x;
-    s16 y;
-    int duration;
-    fx32 stepX;
-    fx32 stepY;
-    fx32 curX;
-    fx32 curY;
-    u8 unk_18[0xC];
-} BattleAnimLinearMotion; // size: 0x24
-
-typedef struct BattleAnimSinMotion {
-    s16 x;
-    s16 y;
-    int duration;
-    int angleX;
-    int ampX;
-    int angleY;
-    int ampY;
-    int stepX;
-    int stepY;
-    int unk_20;
-} BattleAnimSinMotion; // size: 0x24
-
-typedef struct BattleAnimValueMotion {
-    int value;
-    int duration;
-    int step;
-    int current;
-    int unk_10;
-} BattleAnimValueMotion; // size: 0x14
 
 // Battler picture data handed to the pic swap helpers (BattleAnimSystem_BuildBattlerPicParams)
 typedef struct BattleAnimBattlerPicParams {
@@ -382,21 +349,11 @@ int BattleAnimSystem_GetSideSign(BattleAnimSystem *system, int battlerA, int bat
 void ov07_0221FF74(void);
 
 // overlay 7 functions defined in sources not merged yet
-BattleAnimFunc BattleAnimSystem_GetFunc(u32 id);
-BattleAnimSpriteFunc BattleAnimSystem_GetSpriteFunc(u32 id);
-int BattleAnimUtil_GetBattlerType(BattleAnimSystem *system, int battler);
-int BattleAnimUtil_GetBattlerSide(BattleAnimSystem *system, int battler);
-int BattleAnimUtil_GetPartnerBattler(BattleAnimSystem *system, int battler);
-s16 ov07_02221F80(BattleAnimSystem *system, int battler, u32 coord);
+s16 BattleAnimSystem_GetBattlerScreenCoord(BattleAnimSystem *system, int battler, u32 coord);
 void ov07_02234A20(BattleAnimBattlerPicParams *params, enum HeapID heapId);
 void BattleAnimUtil_LoadMonIntoPicSameFacing(BattleAnimBattlerPicParams *params, enum HeapID heapId);
 void BattleAnimUtil_LoadMonIntoPicOppositeFacing(BattleAnimBattlerPicParams *params, enum HeapID heapId);
 void BattleAnimUtil_RestorePic(BattleAnimBattlerPicParams *params, enum HeapID heapId);
-void *BattleAnimScanline_New(void *data, u32 value, enum HeapID heapId);
-void *BattleAnimUtil_GetBgOffsetRegister(u32 bgLayer);
-u32 BattleAnimUtil_PackXY(u16 x, u16 y);
-void BattleAnimScanline_Free(void *scanline);
-u32 *BattleAnimScanline_GetWriteBuffer(void *scanline);
 
 // src/sound_se.c (missing from sound_playback.h)
 void SetSeqTrackPan(u16 seqNo, u32 trackMask, int pan);

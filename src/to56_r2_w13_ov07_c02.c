@@ -16,8 +16,8 @@ void ov07_0222D3BC(void *owner, void *arg1, int direction, void *sprite) {
         w->sign = 1;
         signedDelta = delta;
     }
-    int x = ov07_02221F80(owner, BattleAnimSystem_GetAttacker(w->owner), 0);
-    int y = ov07_02221F80(owner, BattleAnimSystem_GetAttacker(w->owner), 1);
+    int x = BattleAnimSystem_GetBattlerScreenCoord(owner, BattleAnimSystem_GetAttacker(w->owner), 0);
+    int y = BattleAnimSystem_GetBattlerScreenCoord(owner, BattleAnimSystem_GetAttacker(w->owner), 1);
     w->sprite = sprite;
     ManagedSprite_SetAffineOverwriteMode(sprite, 2);
     ManagedSprite_SetAffineScale(w->sprite, 1.0f, 1.0f);

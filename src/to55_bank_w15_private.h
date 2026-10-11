@@ -56,7 +56,7 @@ void BattleAnimUtil_InitScaleMotion(void *anim, int start, int end, int duration
 BOOL BattleAnimUtil_UpdateScaleMotion(void *anim);
 void BattleAnimUtil_UpdateScaleMotionSprite(void *anim, void *sprite);
 BOOL BattleAnimUtil_UpdateLinearMotion(void *anim);
-void ov07_0222207C(void *anim, void *sprite, s16 x, s16 y);
+void BattleAnimUtil_SetSpritePosWithOffset(void *anim, void *sprite, s16 x, s16 y);
 void BattleAnimUtil_StartBlendAlphaMotion(void *anim, int start, int end, int duration, int mode, int extra);
 BOOL BattleAnimUtil_IsBlendAlphaMotionDone(void *anim);
 

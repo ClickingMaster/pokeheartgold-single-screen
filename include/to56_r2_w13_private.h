@@ -43,7 +43,7 @@ void *BattleAnimUtil_AllocWork(void *, int);
 int BattleAnimSystem_GetAttacker(void *);
 int ov07_02222004(void *, int);
 int ov07_0221FB78(void *, int);
-int ov07_02221F80(void *, int, int);
+int BattleAnimSystem_GetBattlerScreenCoord(void *, int, int);
 void ManagedSprite_SetAffineOverwriteMode(void *, int);
 void ManagedSprite_SetAffineScale(void *, f32, f32);
 void ManagedSprite_SetPositionXY(void *, int, int);

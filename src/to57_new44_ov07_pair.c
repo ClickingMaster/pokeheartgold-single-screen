@@ -35,7 +35,7 @@ void ov07_0222D7A4(void *task, X07PairWork *work) {
     switch (work->state) {
     case 0:
         if (BattleAnimUtil_UpdateLinearMotion(work->movement)) {
-            ov07_022220B8(work->movement, work->pic1, work->x1, work->y1);
+            BattleAnimUtil_SetPokepicPosWithOffset(work->movement, work->pic1, work->x1, work->y1);
             return;
         }
         BattleAnimUtil_InitLinearMotion(work->movement, *(s16 *)work->movement, 0, 0, 0, 2);
@@ -43,7 +43,7 @@ void ov07_0222D7A4(void *task, X07PairWork *work) {
         return;
     case 1:
         if (BattleAnimUtil_UpdateLinearMotion(work->movement)) {
-            ov07_022220B8(work->movement, work->pic1, work->x1, work->y1);
+            BattleAnimUtil_SetPokepicPosWithOffset(work->movement, work->pic1, work->x1, work->y1);
             return;
         }
         Pokepic_SetAttr(work->pic1, 0, work->x1);
@@ -65,7 +65,7 @@ void ov07_0222D7A4(void *task, X07PairWork *work) {
         break;
     case 4:
         if (BattleAnimUtil_UpdateLinearMotion(work->movement)) {
-            ov07_022220B8(work->movement, work->pic1, work->x1, work->y1);
+            BattleAnimUtil_SetPokepicPosWithOffset(work->movement, work->pic1, work->x1, work->y1);
         } else {
             BattleAnimUtil_InitLinearMotion(work->movement, *(s16 *)work->movement, 0, 0, 0, 4);
             work->state++;
@@ -73,7 +73,7 @@ void ov07_0222D7A4(void *task, X07PairWork *work) {
         break;
     case 5:
         if (BattleAnimUtil_UpdateLinearMotion(work->movement)) {
-            ov07_022220B8(work->movement, work->pic1, work->x1, work->y1);
+            BattleAnimUtil_SetPokepicPosWithOffset(work->movement, work->pic1, work->x1, work->y1);
         } else {
             Pokepic_SetAttr(work->pic1, 0, work->x1);
             Pokepic_SetAttr(work->pic1, 1, work->y1);

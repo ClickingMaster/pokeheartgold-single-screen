@@ -55,14 +55,16 @@
  * [including the GNU Public Licence.]
  */
 
-#ifndef HEADER_BN_H
-#define HEADER_BN_H
+#ifndef POKEHEARTGOLD_NITROCRYPTO_BN_H
+#define POKEHEARTGOLD_NITROCRYPTO_BN_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+// Big-number arithmetic, RSA signature check and RC4 of the nitrocrypto library (OVY_74).
 
-#include <nitro/types.h>
+// <nitro.h> trips -W error under MWCC 1.2 (most of these modules are built with it)
+#pragma push
+#pragma warn_resultnotused off
+#include <nitro.h>
+#pragma pop
 
 #define BN_BITS     64
 #define BN_BYTES    4
@@ -92,10 +94,10 @@ extern "C" {
 #define BN_get_flags(b, n) ((b)->flags & (n))
 
 typedef struct bignum_st {
-    u32 *d; /* Pointer to an array of 'BN_BITS2' bit chunks. */
+    u32 *d;  /* Pointer to an array of 'BN_BITS2' bit chunks. */
     int top; /* Index of last used d +1. */
     /* The next are internal book keeping for bn_expand. */
-    int max; /* Size of the d array. */
+    int max;  /* Size of the d array. */
     BOOL neg; /* one if the number is negative */
     int flags;
 } BIGNUM;
@@ -103,6 +105,7 @@ typedef struct bignum_st {
 typedef int (*UnusedFunc)(void *, u8, int);
 /* Used for temp variables */
 #define BN_CTX_NUM 12
+
 typedef struct bignum_ctx {
     int tos;
     BIGNUM bn[BN_CTX_NUM + 1];
@@ -121,12 +124,12 @@ typedef struct bn_blinding_st {
 typedef struct bn_mont_ctx_st {
     int use_word; /* 0 for word form, 1 for bignum form */
     char padding[4];
-    int ri; /* number of bits in R */
+    int ri;    /* number of bits in R */
     BIGNUM RR; /* used to convert to montgomery form */
-    BIGNUM N; /* The modulus */
+    BIGNUM N;  /* The modulus */
     BIGNUM Ni; /* R*(1/R mod N) - N*Ni = 1
                 * (Ni is only stored for bignum algorithm) */
-    u32 n0; /* least significant word of Ni */
+    u32 n0;    /* least significant word of Ni */
     int flags;
 } BN_MONT_CTX;
 
@@ -134,7 +137,7 @@ typedef struct bn_mont_ctx_st {
  * It cannot be shared between threads
  */
 typedef struct bn_recp_ctx_st {
-    BIGNUM N; /* the divisor */
+    BIGNUM N;  /* the divisor */
     BIGNUM Nr; /* the reciprocal */
     int num_bits;
     int shift;
@@ -154,7 +157,7 @@ typedef struct bn_recp_ctx_st {
 #define bn_wexpand(n, b) (((b) <= (n)->max) ? (n) : bn_expand2((n), (b)))
 
 void bn_fix_top(BIGNUM *a);
-void bn_zexpand(BIGNUM *bn, int bits);
+void bn_zexpand(BIGNUM *a, int words);
 
 BN_CTX *BN_CTX_new(void);
 void BN_CTX_init(BN_CTX *c);
@@ -186,7 +189,7 @@ BOOL BN_mod_exp_mont(BIGNUM *r, BIGNUM *a, const BIGNUM *p, const BIGNUM *m, BN_
 int BN_reciprocal(BIGNUM *r, BIGNUM *m, int len, BN_CTX *ctx);
 BOOL BN_rshift(BIGNUM *r, BIGNUM *a, int n);
 void BN_clear(BIGNUM *a);
-BIGNUM *bn_expand2(BIGNUM *b, int bits);
+BIGNUM *bn_expand2(BIGNUM *b, int words);
 int BN_ucmp(const BIGNUM *a, const BIGNUM *b);
 BOOL BN_set_bit(BIGNUM *a, int n);
 u32 BN_mod_inverse_word(u32 word);
@@ -300,22 +303,32 @@ int BN_gen_exp_string(u8 *param0, const BIGNUM *param1, int param2);
 void bn_mul_normal(u32 *r, u32 *a, int na, u32 *b, int nb);
 void bn_sqr_normal(u32 *r, u32 *a, int n, u32 *tmp);
 
+// allocator (nitrocrypto_alloc.c)
+typedef void *(*CryptoAlloc)(u32 size);
+typedef void (*CryptoFree)(void *ptr);
 
-void MI_CpuFill8(void *, u8, u32);
-void MI_CpuCopy8(const void *, void *, u32);
-void MATH_CalcSHA1(void *, const void *, u32);
-
-u32 CRYPTOi_RSA(u8 *, int, const u8 *, int, const u8 *, int, int);
-BOOL ASN1Skip(u8 **, u32 *, int, u32 *);
-BOOL SkipPadding(u8 *, u32, u8 **, u32 *);
-BOOL ParseSignHash(u8 *, u32, u8 **, int *, u8 **, int *);
-BOOL CRYPTO_VerifySignatureWithHash(u8 *, const u8 *, const u8 *);
-#ifdef __cplusplus
-}
-#endif
-#endif
-
-#include <nitro/types.h>
+extern CryptoAlloc CRYPTOi_MyAllocFunc;
+extern CryptoFree CRYPTOi_MyFreeFunc;
 
 void *CRYPTOi_MyAlloc(u32 size);
 void CRYPTOi_MyFree(void *ptr);
+void CRYPTO_SetAllocator(CryptoAlloc alloc, CryptoFree free);
+
+// RSA signature check (nitrocrypto_sign.c)
+u32 CRYPTOi_RSA(u8 *out, int outSize, const u8 *in, int inSize, const u8 *modulus, int modulusSize, int exponent);
+BOOL ASN1Skip(u8 **cursor, u32 *remaining, int tag, u32 *length);
+BOOL SkipPadding(u8 *block, u32 size, u8 **payload, u32 *payloadSize);
+BOOL ParseSignHash(u8 *data, u32 size, u8 **oid, int *oidSize, u8 **hash, int *hashSize);
+BOOL CRYPTO_VerifySignatureWithHash(u8 *hash, const u8 *sign, const u8 *pubkey);
+BOOL CRYPTO_VerifySignature(const void *data, u32 dataLength, const u8 *sign, const u8 *pubkey);
+
+// RC4 (nitrocrypto_rc4.c)
+void CRYPTO_RC4Encrypt(void *context, const void *in, u32 length, void *out);
+
+// tables in asm/op90_nitrocrypto_residual00_anchor.s
+extern const u8 gNitroCryptoExpP16[];
+extern const u8 gNitroCryptoExpP2[];
+extern const u8 gNitroCryptoExpP4[];
+extern const u8 *gNitroCryptoShiftVal[];
+
+#endif // POKEHEARTGOLD_NITROCRYPTO_BN_H

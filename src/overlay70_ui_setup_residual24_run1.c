@@ -1,7 +1,7 @@
 #include "overlay70_ui_setup_residual24_private.h"
 
 int ov70_0223E884(Ov70Work24 *work) {
-    ov70_02238E44();
+    Gts_GetWifiIconLevel();
     sub_0203A930();
     return ov70_02246614[work->state](work);
 }
@@ -47,11 +47,11 @@ void ov70_0223E954(void *bgConfig) {
     BgClearTilemapBufferAndCommit(bgConfig, 3);
     BG_ClearCharDataRange(0, 0x20, 0, 0x3D);
     BG_ClearCharDataRange(3, 0x20, 0, 0x3D);
-    ov70_022391F0(bgConfig, 0, 0);
+    Gts_InitSubScreenBgs(bgConfig, 0, 0);
 }
 
 void ov70_0223EA40(void *bgConfig) {
-    ov70_022392BC(bgConfig);
+    Gts_FreeSubScreenBgs(bgConfig);
     FreeBgTilemapBuffer(bgConfig, 2);
     FreeBgTilemapBuffer(bgConfig, 1);
     FreeBgTilemapBuffer(bgConfig, 0);

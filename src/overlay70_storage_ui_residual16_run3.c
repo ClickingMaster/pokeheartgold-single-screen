@@ -37,9 +37,9 @@ void ov70_0223AB3C(void *bgConfig, int value) {
     InitBgFromTemplate(bgConfig, 1, &low, 0);
     BG_ClearCharDataRange(0, 0x20, 0, 0x3D);
     if (GXx_GetMasterBrightness_((volatile u16 *)0x0400106C) == 0) {
-        ov70_022391F0(bgConfig, value, 1);
+        Gts_InitSubScreenBgs(bgConfig, value, 1);
     } else {
-        ov70_022391F0(bgConfig, value, 0);
+        Gts_InitSubScreenBgs(bgConfig, value, 0);
     }
     GfGfx_EngineATogglePlanes(4, 0);
     GfGfx_EngineATogglePlanes(8, 0);

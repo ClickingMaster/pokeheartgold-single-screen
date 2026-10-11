@@ -100,7 +100,7 @@ extern void BattleAnimSystem_DestroyTask(void *, void *);
 extern int BattleAnimUtil_UpdateSinMotionPokepic(void *, s16, s16, void *);
 extern int BattleAnimUtil_UpdateSpriteSequence(void *);
 extern int BattleAnimUtil_UpdateLinearMotion(void *);
-extern void ov07_022220B8(void *, void *, s16, s16);
+extern void BattleAnimUtil_SetPokepicPosWithOffset(void *, void *, s16, s16);
 extern void BattleAnimUtil_InitLinearMotion(void *, s16, s16, int, int, int);
 extern int BattleAnimUtil_UpdateValueMotion(void *);
 extern void BattleAnimUtil_InitValueMotion(void *, int, int, int);
@@ -277,7 +277,7 @@ void ov07_0222BF18(void *task, Ov07MoveWork *work) {
     switch (work->state) {
     case 0:
         if (BattleAnimUtil_UpdateLinearMotion(work->movement)) {
-            ov07_022220B8(work->movement, work->pic, work->x, work->y);
+            BattleAnimUtil_SetPokepicPosWithOffset(work->movement, work->pic, work->x, work->y);
             return;
         }
         BattleAnimUtil_InitLinearMotion(work->movement, *(s16 *)work->movement, 0, 0, 0, 2);
@@ -299,7 +299,7 @@ void ov07_0222BF18(void *task, Ov07MoveWork *work) {
         return;
     case 3:
         if (BattleAnimUtil_UpdateLinearMotion(work->movement)) {
-            ov07_022220B8(work->movement, work->pic, work->x, work->y);
+            BattleAnimUtil_SetPokepicPosWithOffset(work->movement, work->pic, work->x, work->y);
             return;
         }
         work->state++;

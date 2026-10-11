@@ -159,7 +159,7 @@ void ov70_0223ACE4(Ov70Work *);
 void ov70_0223AF30(Ov70Work *);
 void ov70_0223AE40(Ov70Work *);
 void ov70_0223ABD8(void *);
-void ov70_022391F0(void *, int, int);
+void Gts_InitSubScreenBgs(void *, int, int);
 
 int ov70_0223A260(Ov70Work *);
 int ov70_0223A2D0(Ov70Work *);

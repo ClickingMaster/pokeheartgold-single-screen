@@ -122,14 +122,16 @@ struct GtsApp {
     u8 filler_0008[0xC];                     // 0x0008
     int screen;                              // 0x0014, index into sGtsScreens
     int nextScreen;                          // 0x0018
-    u8 filler_001C[4];                       // 0x001C
+    int unk_001C;                            // 0x001C
     int prevScreen;                          // 0x0020
     int nextScreenArg;                       // 0x0024
     u8 filler_0028[4];                       // 0x0028
     int state;                               // 0x002C, of the current screen
     int nextState;                           // 0x0030
-    u8 filler_0034[6];                       // 0x0034
-    u16 timer;                               // 0x003A
+    u16 mainMenuShown;                       // 0x0034, the main menu was entered before
+    u16 hasDepositedMon;                     // 0x0036, the player has a Pokemon on the GTS
+    u8 filler_0038[2];                       // 0x0038
+    u16 timer;                               // 0x003A, frames until the GTS may be checked again
     u8 filler_003C[0x10];                    // 0x003C
     void *heapMemory;                        // 0x004C
     NNSFndHeapHandle heap;                   // 0x0050, in heapMemory
@@ -140,7 +142,7 @@ struct GtsApp {
     EvolutionTaskData *evolutionTask;        // 0x0110
     u32 reloadGraphics;                      // 0x0114, the screen asks Gts_Main to rebuild the graphics
     u8 filler_0118[4];                       // 0x0118
-    u16 unk_011C;                            // 0x011C
+    u16 menuCursor;                          // 0x011C
     u8 filler_011E[2];                       // 0x011E
     u16 unk_0120;                            // 0x0120
     u8 filler_0122[6];                       // 0x0122
@@ -165,32 +167,50 @@ struct GtsApp {
     MsgData *wifiMsgData;                    // 0x0BA8, message bank 778
     MsgData *wifiErrorMsgData;               // 0x0BAC, message bank 800
     MsgData *countryNames;                   // 0x0BB0
-    u8 filler_0BB4[0x40];                    // 0x0BB4
+    u8 filler_0BB4[8];                       // 0x0BB4
+    String *msgBuffer;                       // 0x0BBC
+    String *titleString;                     // 0x0BC0
+    u8 filler_0BC4[0x2C];                    // 0x0BC4
+    int textPrinterId;                       // 0x0BF0
     SpriteList *spriteList;                  // 0x0BF4
     G2dRenderer renderer;                    // 0x0BF8
     GF_2DGfxResMan *resourceManagers[4];     // 0x0D20, char/pltt/cell/anim
     SpriteResource *resources[8];            // 0x0D30, [main/sub screen][char/pltt/cell/anim]
     u8 filler_0D50[0x10];                    // 0x0D50
     SpriteResourcesHeader headers[2];        // 0x0D60
-    u8 filler_0DA8[0x170];                   // 0x0DA8
-    Window waitingIconWindow;                // 0x0F18
-    u8 filler_0F28[0x284];                   // 0x0F28
+    u8 filler_0DA8[0x24];                    // 0x0DA8
+    Sprite *cursorSprite;                    // 0x0DCC
+    u8 filler_0DD0[0x140];                   // 0x0DD0
+    Sprite *panelSprite;                     // 0x0F10, of the sub screen panel
+    u8 filler_0F14[4];                       // 0x0F14
+    Window waitingIconWindow;                // 0x0F18, also the message window
+    u8 filler_0F28[0x10];                    // 0x0F28
+    Window titleWindow;                      // 0x0F38
+    u8 filler_0F48[0x10];                    // 0x0F48
+    Window windows[16];                      // 0x0F58, each screen's own windows
+    u8 filler_1058[0x100];                   // 0x1058
+    Window promptWindow;                     // 0x1158, the message window of a Yes/No prompt
+    u8 filler_1168[0x30];                    // 0x1168
+    Window panelWindow;                      // 0x1198, the caption of the sub screen panel
+    u8 filler_11A8[4];                       // 0x11A8
     ListMenuItem *listItems;                 // 0x11AC
     u8 filler_11B0[0xC];                     // 0x11B0
     WaitingIcon *waitingIcon;                // 0x11BC
-    u8 filler_11C0[8];                       // 0x11C0
+    int waitFrames;                          // 0x11C0
+    u8 filler_11C4[4];                       // 0x11C4
     YesNoPrompt *yesNoPrompt;                // 0x11C8
     TouchscreenListMenuSpawner *menuSpawner; // 0x11CC
     TouchscreenListMenu *menu;               // 0x11D0
     u8 filler_11D4[8];                       // 0x11D4
-    u16 unk_11DC;                            // 0x11DC
+    u16 playerAnimDone;                      // 0x11DC, set by the player's walk in/out task
     u16 unk_11DE;                            // 0x11DE
     u8 filler_11E0[0x10];                    // 0x11E0
     Pokemon *depositedMon;                   // 0x11F0, copy of the deposited Pokemon (GtsTrade)
     u8 filler_11F4[4];                       // 0x11F4
     u16 boxMonCount;                         // 0x11F8, Pokemon and Eggs in the PC, counted one box per frame
     u16 countingBox;                         // 0x11FA, 1-based box being counted, 0 when done
-    u8 filler_11FC[8];                       // 0x11FC
+    int unk_11FC;                            // 0x11FC
+    u8 filler_1200[4];                       // 0x1200
     GtsVBlankFunc vblankTask;                // 0x1204, run once
     GtsVBlankFunc vblankFunc;                // 0x1208, run every frame
     u8 filler_120C[0xC0];                    // 0x120C
@@ -214,7 +234,7 @@ TouchscreenListMenu *Gts_CreateListMenu(GtsApp *app, u8 numWindows, int y);
 void Gts_DestroyListMenu(GtsApp *app);
 void Gts_SetState(GtsApp *app, int state, int nextState);
 void Gts_SetSpritePositionRounded(Sprite *sprite, int x, int y);
-int ov70_02238E44(void);
+int Gts_GetWifiIconLevel(void);
 void Gts_SetNextScreen(GtsApp *app, int screen, int arg);
 void Gts_SwitchScreen(GtsApp *app);
 int Gts_GetTextFrameDelay(GtsApp *app);
@@ -226,5 +246,18 @@ void Gts_DeleteWaitingIcon(GtsApp *app);
 void Gts_SetSpritePosition(Sprite *sprite, int x, int y);
 void Gts_DimScreen(BOOL mainScreen);
 void Gts_ClearDim(void);
+
+// The GTS main menu (gts_main_menu.c).
+void Gts_InitSubScreenBgs(BgConfig *bgConfig, int bg1Y, BOOL keepBg2Tilemap);
+void Gts_FreeSubScreenBgs(BgConfig *bgConfig);
+
+// Defined in pieces not merged yet.
+void ov70_02239C6C(GtsApp *app);
+void ov70_02239CF8(GtsApp *app);
+void ov70_02239D44(GtsApp *app, int msgId);
+void ov70_02240EF4(GtsApp *app, int gender);
+void ov70_02241004(GtsApp *app, int gender);
+void ov70_02241358(GtsApp *app);
+int ov70_02245124(GtsApp *app);
 
 #endif // POKEHEARTGOLD_GTS_INTERNAL_H

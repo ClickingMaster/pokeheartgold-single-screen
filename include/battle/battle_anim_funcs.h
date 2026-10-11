@@ -4,7 +4,7 @@
 // Overlay 7: effect functions of the battle move animation scripts (sBattleAnimFuncTable / sprite function table
 // entries) and the tasks they start, 0x02223064-0x02226C4C.
 
-#include "battle/battle_anim_battler_util.h"
+#include "battle/battle_anim_util.h"
 
 #include "bg_window.h"
 #include "palette.h"
@@ -12,63 +12,6 @@
 #include "spl.h"
 #include "sprite_system.h"
 #include "sys_task.h"
-
-// Shared overlay-7 types; the same definitions live in battle/battle_anim_internal.h once it lands (switch to it
-// then).
-
-typedef struct BattleAnimLinearMotion {
-    s16 x;
-    s16 y;
-    int duration;
-    fx32 stepX;
-    fx32 stepY;
-    fx32 curX;
-    fx32 curY;
-    u8 unk_18[0xC];
-} BattleAnimLinearMotion; // size: 0x24
-
-typedef struct BattleAnimSinMotion {
-    s16 x;
-    s16 y;
-    int duration;
-    int angleX;
-    int ampX;
-    int angleY;
-    int ampY;
-    int stepX;
-    int stepY;
-    int unk_20;
-} BattleAnimSinMotion; // size: 0x24
-
-typedef struct BattleAnimValueMotion {
-    int value;
-    int duration;
-    int step;
-    int current;
-    int unk_10;
-} BattleAnimValueMotion; // size: 0x14
-
-// Offset (x, y) that alternates +amp, 0, -amp, 0 every interval frames, count cycles
-typedef struct BattleAnimShake {
-    s16 x;
-    s16 y;
-    int timer;
-    int interval;
-    int count;
-    int phase;
-    int ampX;
-    int ampY;
-    int prevX;
-    int prevY;
-} BattleAnimShake; // size: 0x24
-
-// BLDALPHA EVA (x) and EVB (y) moved linearly by BattleAnimTask_BlendAlphaMotion
-typedef struct BattleAnimBlendAlphaMotion {
-    BattleAnimLinearMotion motion;
-    BOOL done;
-} BattleAnimBlendAlphaMotion; // size: 0x28
-
-typedef struct BattleAnimPaletteBlend BattleAnimPaletteBlend;
 
 // src/battle/battle_anim_funcs.c
 void BattleAnimTask_OneFrame(SysTask *task, void *data);
@@ -157,8 +100,7 @@ void ov07_02226A9C(BattleAnimSystem *system, SpriteSystem *spriteSystem, SpriteM
 void ov07_02226B2C(SysTask *task, void *data);
 void ov07_02226C4C(BattleAnimSystem *system, SpriteSystem *spriteSystem, SpriteManager *spriteManager, ManagedSprite *sprite);
 
-// Overlay 7 functions defined in sources not merged yet (same types as their packages' headers; switch to
-// battle/battle_anim_internal.h when it lands; battle_anim_battler_util.h declares the rest)
+// Overlay 7 functions of src/battle/battle_anim_system.c and of sources not merged yet
 void BattleAnimSystem_CreateTask(BattleAnimSystem *system, SysTaskFunc func, void *data, u32 priority);
 void BattleAnimSystem_CreateTaskDefaultPriority(BattleAnimSystem *system, SysTaskFunc func, void *data);
 void BattleAnimSystem_CreateSoundTask(BattleAnimSystem *system, SysTaskFunc func, void *data, u32 priority);
@@ -177,37 +119,8 @@ int ov07_0221FAE8(BattleAnimSystem *system);
 int BattleAnimSystem_GetBgPriority(BattleAnimSystem *system, int kind);
 BOOL ov07_0221FB78(BattleAnimSystem *system, int side);
 u32 BattleAnimSystem_GetBackgroundFile(u32 bgId, int kind);
-void ov07_02221F38(BattleAnimSystem *system, int battler, s16 *x, s16 *y);
-s16 ov07_02221F80(BattleAnimSystem *system, int battler, u32 coord);
+void BattleAnimSystem_GetBattlerScreenPos(BattleAnimSystem *system, int battler, s16 *x, s16 *y);
+s16 BattleAnimSystem_GetBattlerScreenCoord(BattleAnimSystem *system, int battler, u32 coord);
 int ov07_02222004(BattleAnimSystem *system, int battler);
-void ov07_022220FC(BattleAnimSinMotion *motion, int startX, int endX, int startY, u16 endY, fx32 ampX, fx32 ampY, int duration);
-BOOL BattleAnimUtil_UpdateSinMotion(BattleAnimSinMotion *motion);
-BOOL BattleAnimUtil_UpdateSinMotionPokepic(BattleAnimSinMotion *motion, int x, int y, Pokepic *pokepic);
-void BattleAnimUtil_InitLinearMotion(BattleAnimLinearMotion *motion, s16 startX, s16 endX, s16 startY, s16 endY, u16 duration);
-BOOL BattleAnimUtil_UpdateLinearMotion(BattleAnimLinearMotion *motion);
-void BattleAnimUtil_InitLinearSinMotion(BattleAnimLinearMotion *linear, BattleAnimSinMotion *sin, s16 startX, s16 endX, s16 startY, s16 endY, u16 duration, fx32 amplitude);
-BOOL BattleAnimUtil_UpdateLinearSinMotion(BattleAnimLinearMotion *linear, BattleAnimSinMotion *sin);
-BOOL BattleAnimUtil_UpdateLinearSinMotionSprite(BattleAnimLinearMotion *linear, BattleAnimSinMotion *sin, ManagedSprite *sprite);
-void BattleAnimUtil_InitValueMotion(BattleAnimValueMotion *motion, int start, int end, int duration);
-BOOL BattleAnimUtil_UpdateValueMotion(BattleAnimValueMotion *motion);
-void BattleAnimUtil_InitScaleMotion(BattleAnimLinearMotion *motion, int start, int divisor, int end, int duration);
-BOOL BattleAnimUtil_UpdateScaleMotion(BattleAnimLinearMotion *motion);
-void BattleAnimUtil_InitScaleMotionXY(BattleAnimLinearMotion *motion, int startX, int endX, int startY, s16 endY, s16 divisor, int duration);
-BOOL BattleAnimUtil_UpdateScaleMotionXY(BattleAnimLinearMotion *motion);
-void BattleAnimUtil_GetScaleFloat(BattleAnimLinearMotion *motion, f32 *x, f32 *y);
-s16 BattleAnimUtil_CalcScaleYOffset(int y, int height, fx32 scale);
-void BattleAnimUtil_AlignPokepicToScale(Pokepic *pokepic, int y, int height, fx32 scale, int mode);
-void BattleAnimUtil_AlignSpriteToScale(ManagedSprite *sprite, int y, int height, fx32 scale, int mode);
-BOOL BattleAnimUtil_UpdateScaleMotionSprite(BattleAnimLinearMotion *motion, ManagedSprite *sprite);
-BOOL BattleAnimUtil_UpdateScaleMotionPokepic(BattleAnimLinearMotion *motion, Pokepic *pokepic);
-BOOL BattleAnimUtil_UpdateScaleMotionXYPokepic(BattleAnimLinearMotion *motion, Pokepic *pokepic);
-void BattleAnimUtil_InitShake(BattleAnimShake *shake, int ampX, int ampY, int interval, int count);
-BOOL BattleAnimUtil_UpdateShake(BattleAnimShake *shake);
-void ov07_02222A44(BattleAnimSinMotion *motion, int multiplier, int duration);
-void BattleAnimUtil_StartBlendAlphaMotion(BattleAnimBlendAlphaMotion *blend, s16 startEva, s16 endEva, s16 startEvb, s16 endEvb, int duration);
-BOOL BattleAnimUtil_IsBlendAlphaMotionDone(BattleAnimBlendAlphaMotion *blend);
-BOOL BattleAnimUtil_IsPaletteBlendActive(BattleAnimPaletteBlend *blend);
-void BattleAnimUtil_FreePaletteBlend(BattleAnimPaletteBlend *blend);
-BattleAnimPaletteBlend *BattleAnimUtil_StartPaletteBlend(PaletteData *paletteData, enum HeapID heapId, PaletteBufferId bufferId, u16 offset, u16 size, s8 delay, s8 step, u8 start, u8 end, u16 color, u32 priority);
 
 #endif // POKEHEARTGOLD_BATTLE_BATTLE_ANIM_FUNCS_H

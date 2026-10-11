@@ -17,7 +17,7 @@ typedef struct Work {
 void *BattleAnimUtil_AllocWork(void *owner, u32 size);
 u32 BattleAnimSystem_GetAttacker(void *owner);
 Pokepic *BattleAnimSystem_GetBattlerPokepic(void *owner, u32 battler);
-s16 ov07_02221F80(void *owner, u32 battler, int coord);
+s16 BattleAnimSystem_GetBattlerScreenCoord(void *owner, u32 battler, int coord);
 void BattleAnimSystem_CreateTaskDefaultPriority(void *owner, void *func, void *data);
 void ov07_0222F210(void *task, Work *work);
 void ov07_0222F378(void *owner, int a, int b, ManagedSprite *sprite);
@@ -30,8 +30,8 @@ void ov07_0222F378(void *owner, int a, int b, ManagedSprite *sprite) {
     work->b = b;
     work->pic = BattleAnimSystem_GetBattlerPokepic(work->owner, BattleAnimSystem_GetAttacker(owner));
     Pokepic_SetAttr(work->pic, 6, 0);
-    work->x = ov07_02221F80(owner, BattleAnimSystem_GetAttacker(owner), 0);
-    work->y = ov07_02221F80(owner, BattleAnimSystem_GetAttacker(owner), 1);
+    work->x = BattleAnimSystem_GetBattlerScreenCoord(owner, BattleAnimSystem_GetAttacker(owner), 0);
+    work->y = BattleAnimSystem_GetBattlerScreenCoord(owner, BattleAnimSystem_GetAttacker(owner), 1);
     work->sprite = sprite;
     ManagedSprite_SetDrawPriority(work->sprite, 100);
     ManagedSprite_SetPriority(work->sprite, 1);

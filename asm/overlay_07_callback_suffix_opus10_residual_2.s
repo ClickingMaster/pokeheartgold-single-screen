@@ -51,10 +51,10 @@
 	.public ov07_022361F0
 	.public ov07_022361F4
 	.public ov07_022361F8
-	.public ov07_022363A0
-	.public ov07_022363D8
-	.public ov07_02236414
-	.public ov07_02236444
+	.public sBattleAnimEmitterFlagCallbacks
+	.public sBattleAnimEmitterFlagMasks
+	.public sBattleAnimEmitterCameraAngles
+	.public sBattleAnimEmitterCameraCallbacks
 	.public ov07_02236468
 	.public ov07_0223646A
 	.public sBattleAnimSpriteFuncTable
@@ -244,51 +244,51 @@
 	.extern BattleAnimSystem_NewParticleSystem
 	.extern BattleAnimSystem_FreeParticleSystem
 	.extern ov07_0221FF74
-	.extern ov07_0221FF78
-	.extern ov07_02220030
-	.extern ov07_0222008C
-	.extern ov07_022200D0
-	.extern ov07_02220114
-	.extern ov07_02220160
-	.extern ov07_022201C8
-	.extern ov07_02220230
-	.extern ov07_02220800
-	.extern ov07_0222080C
-	.extern ov07_02220818
-	.extern ov07_02220824
-	.extern ov07_02220830
-	.extern ov07_0222083C
-	.extern ov07_02220848
-	.extern ov07_02220854
-	.extern ov07_02220860
-	.extern ov07_0222086C
-	.extern ov07_02220878
-	.extern ov07_02220884
-	.extern ov07_022215B4
-	.extern ov07_022217B0
-	.extern ov07_022217B4
-	.extern ov07_02221898
-	.extern ov07_0222189C
-	.extern ov07_022218A0
-	.extern ov07_02221968
-	.extern ov07_022219EC
-	.extern ov07_02221A6C
-	.extern ov07_02221AD4
-	.extern ov07_02221AD8
-	.extern ov07_02221ADC
-	.extern ov07_02221AE0
-	.extern ov07_02221AE4
-	.extern ov07_02221BF0
-	.extern ov07_02221CEC
-	.extern ov07_02221D10
-	.extern ov07_02221D4C
-	.extern ov07_02221D88
+	.extern BattleAnimEmitterCb_SetPositionAtFirstOpponent
+	.extern BattleAnimEmitterCb_SetPositionAtBattler0
+	.extern BattleAnimEmitterCb_SetPositionAtDefender
+	.extern BattleAnimEmitterCb_SetPositionAtAttacker
+	.extern BattleAnimEmitterCb_SetPositionAtAttacker2
+	.extern BattleAnimEmitterCb_SetPositionAtAttackerSide
+	.extern BattleAnimEmitterCb_SetPositionAtDefenderSide
+	.extern BattleAnimEmitterCb_SetPositionByBattlerTypes
+	.extern BattleAnimEmitterCb_AttackerToDefender
+	.extern BattleAnimEmitterCb_ConvergeBySide
+	.extern BattleAnimEmitterCb_ConvergeUp
+	.extern BattleAnimEmitterCb_ConvergeToDefender
+	.extern BattleAnimEmitterCb_ConvergeToAttacker
+	.extern BattleAnimEmitterCb_ConvergeFromScript
+	.extern BattleAnimEmitterCb_MagnetBySide
+	.extern BattleAnimEmitterCb_MagnetUp
+	.extern BattleAnimEmitterCb_MagnetToDefender
+	.extern BattleAnimEmitterCb_MagnetToAttacker
+	.extern BattleAnimEmitterCb_MagnetFromScript
+	.extern BattleAnimEmitterCb_DefenderToAttacker
+	.extern BattleAnimEmitterCb_ConfigureFromScript
+	.extern BattleAnimEmitterFlagCb_Nop0
+	.extern BattleAnimEmitterFlagCb_SetGravity
+	.extern BattleAnimEmitterFlagCb_Nop2
+	.extern BattleAnimEmitterFlagCb_Nop3
+	.extern BattleAnimEmitterFlagCb_SetMagnetPos
+	.extern BattleAnimEmitterFlagCb_SetMagnetForce
+	.extern BattleAnimEmitterFlagCb_SetSpinAngle
+	.extern BattleAnimEmitterFlagCb_SetSpinAxis
+	.extern BattleAnimEmitterFlagCb_Nop8
+	.extern BattleAnimEmitterFlagCb_Nop9
+	.extern BattleAnimEmitterFlagCb_Nop10
+	.extern BattleAnimEmitterFlagCb_Nop11
+	.extern BattleAnimEmitterFlagCb_SetConvergencePos
+	.extern BattleAnimEmitterFlagCb_SetConvergenceForce
+	.extern BattleAnimEmitterCameraCb_ResetAngle
+	.extern BattleAnimEmitterCameraCb_SetPresetAngle4
+	.extern BattleAnimEmitterCameraCb_SetAngleFromScript
+	.extern BattleAnimEmitterCameraCb_SetPresetAngle3
 	.extern ov07_02221DC4
-	.extern ov07_02221E24
-	.extern ov07_02221E60
-	.extern ov07_02221E9C
-	.extern ov07_02221EC4
-	.extern ov07_02221F04
+	.extern BattleAnimEmitterCameraCb_SetPresetAngle0
+	.extern BattleAnimEmitterCameraCb_SetPresetAngle1
+	.extern BattleAnimEmitterCameraCb_LookAtBattlerA
+	.extern BattleAnimEmitterCameraCb_LookAtBattlerB
+	.extern BattleAnimUtil_LookupScreenPos
 	.extern BattleAnimFunc_None
 	.extern BattleAnimFunc_OneFrameTask
 	.extern BattleAnimFunc_OneFrameSoundTask
@@ -747,27 +747,27 @@ sBattleAnimBackgroundFiles: ; 0x02234F48
 
 sBattleAnimEmitterCallbackTable: ; 0x022353E4
 	.word BattleAnimEmitterCb_None
-	.word ov07_0221FF78
-	.word ov07_02220030
-	.word ov07_022200D0
-	.word ov07_0222008C
-	.word ov07_02220800
-	.word ov07_02220884
-	.word ov07_0222080C
-	.word ov07_02220818
-	.word ov07_02220824
-	.word ov07_02220830
-	.word ov07_0222083C
-	.word ov07_02220848
-	.word ov07_02220854
-	.word ov07_02220860
-	.word ov07_0222086C
-	.word ov07_02220878
-	.word ov07_022215B4
-	.word ov07_02220230
-	.word ov07_02220160
-	.word ov07_022201C8
-	.word ov07_02220114
+	.word BattleAnimEmitterCb_SetPositionAtFirstOpponent
+	.word BattleAnimEmitterCb_SetPositionAtBattler0
+	.word BattleAnimEmitterCb_SetPositionAtAttacker
+	.word BattleAnimEmitterCb_SetPositionAtDefender
+	.word BattleAnimEmitterCb_AttackerToDefender
+	.word BattleAnimEmitterCb_DefenderToAttacker
+	.word BattleAnimEmitterCb_ConvergeBySide
+	.word BattleAnimEmitterCb_ConvergeUp
+	.word BattleAnimEmitterCb_ConvergeToDefender
+	.word BattleAnimEmitterCb_ConvergeToAttacker
+	.word BattleAnimEmitterCb_ConvergeFromScript
+	.word BattleAnimEmitterCb_MagnetBySide
+	.word BattleAnimEmitterCb_MagnetUp
+	.word BattleAnimEmitterCb_MagnetToDefender
+	.word BattleAnimEmitterCb_MagnetToAttacker
+	.word BattleAnimEmitterCb_MagnetFromScript
+	.word BattleAnimEmitterCb_ConfigureFromScript
+	.word BattleAnimEmitterCb_SetPositionByBattlerTypes
+	.word BattleAnimEmitterCb_SetPositionAtAttackerSide
+	.word BattleAnimEmitterCb_SetPositionAtDefenderSide
+	.word BattleAnimEmitterCb_SetPositionAtAttacker2
 	.word ov07_0221FF74
 
 ov07_02235440: ; 0x02235440
@@ -1092,45 +1092,45 @@ ov07_022361F8: ; 0x022361F8
 	.byte 0xF0, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x58, 0xF3, 0xFF, 0xFF, 0x48, 0xF5, 0xFF, 0xFF
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov07_022363A0: ; 0x022363A0
-	.word ov07_022217B0
-	.word ov07_022217B4
-	.word ov07_02221898
-	.word ov07_0222189C
-	.word ov07_022218A0
-	.word ov07_02221968
-	.word ov07_022219EC
-	.word ov07_02221A6C
-	.word ov07_02221AD4
-	.word ov07_02221AD8
-	.word ov07_02221ADC
-	.word ov07_02221AE0
-	.word ov07_02221AE4
-	.word ov07_02221BF0
+sBattleAnimEmitterFlagCallbacks: ; 0x022363A0
+	.word BattleAnimEmitterFlagCb_Nop0
+	.word BattleAnimEmitterFlagCb_SetGravity
+	.word BattleAnimEmitterFlagCb_Nop2
+	.word BattleAnimEmitterFlagCb_Nop3
+	.word BattleAnimEmitterFlagCb_SetMagnetPos
+	.word BattleAnimEmitterFlagCb_SetMagnetForce
+	.word BattleAnimEmitterFlagCb_SetSpinAngle
+	.word BattleAnimEmitterFlagCb_SetSpinAxis
+	.word BattleAnimEmitterFlagCb_Nop8
+	.word BattleAnimEmitterFlagCb_Nop9
+	.word BattleAnimEmitterFlagCb_Nop10
+	.word BattleAnimEmitterFlagCb_Nop11
+	.word BattleAnimEmitterFlagCb_SetConvergencePos
+	.word BattleAnimEmitterFlagCb_SetConvergenceForce
 
-ov07_022363D8: ; 0x022363D8
+sBattleAnimEmitterFlagMasks: ; 0x022363D8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 	.byte 0x04, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00
 	.byte 0x40, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00
 	.byte 0x00, 0x04, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00
 	.byte 0xFE, 0xFE, 0x00, 0x00
 
-ov07_02236414: ; 0x02236414
+sBattleAnimEmitterCameraAngles: ; 0x02236414
 	.byte 0x00, 0xC2, 0x40, 0x17, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x90, 0xE8, 0x00, 0x00, 0x00, 0xC2, 0x40, 0x17, 0x00, 0x10, 0x00, 0x00, 0x00, 0xD0, 0x00, 0x20
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x20, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x20, 0x24, 0xA0, 0x0E
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov07_02236444: ; 0x02236444
-	.word ov07_02221CEC
-	.word ov07_02221D10
-	.word ov07_02221D4C
-	.word ov07_02221D88
+sBattleAnimEmitterCameraCallbacks: ; 0x02236444
+	.word BattleAnimEmitterCameraCb_ResetAngle
+	.word BattleAnimEmitterCameraCb_SetPresetAngle4
+	.word BattleAnimEmitterCameraCb_SetAngleFromScript
+	.word BattleAnimEmitterCameraCb_SetPresetAngle3
 	.word ov07_02221DC4
-	.word ov07_02221E24
-	.word ov07_02221E60
-	.word ov07_02221E9C
-	.word ov07_02221EC4
+	.word BattleAnimEmitterCameraCb_SetPresetAngle0
+	.word BattleAnimEmitterCameraCb_SetPresetAngle1
+	.word BattleAnimEmitterCameraCb_LookAtBattlerA
+	.word BattleAnimEmitterCameraCb_LookAtBattlerB
 
 ov07_02236468: ; 0x02236468
 	.byte 0x40, 0x00

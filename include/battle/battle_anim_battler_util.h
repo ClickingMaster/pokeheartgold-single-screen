@@ -5,12 +5,11 @@
 // positions, blend/window setup, target collection, work allocation).
 
 #include "bg_window.h"
+#include "overlay_07.h"
 #include "palette.h"
 #include "pokepic.h"
 #include "spl.h"
 #include "sprite_system.h"
-
-typedef struct BattleAnimSystem BattleAnimSystem;
 
 // BattleAnimUtil_GetBattlerSide
 #define BATTLE_ANIM_SIDE_PLAYER 3

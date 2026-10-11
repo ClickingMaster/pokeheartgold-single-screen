@@ -4,7 +4,7 @@
 typedef struct {void *parent;u32 pad4;void *sprites;int state;void *picture,*sprite;u8 motion[0x24];u8 fade[0x28];s16 x,y;int repeat,tick;} Work;
 void ov07_0222DE30(Work*);
 BOOL BattleAnimUtil_UpdateLinearMotion(void*);
-void ov07_0222207C(void*,void*,s16,s16);
+void BattleAnimUtil_SetSpritePosWithOffset(void*,void*,s16,s16);
 void BattleAnimUtil_StartBlendAlphaMotion(void*,int,int,int,int,int);
 BOOL BattleAnimUtil_IsBlendAlphaMotionDone(void*);
 void ManagedSprite_SetOamMode(void*,int);
@@ -20,7 +20,7 @@ void ov07_0222DEEC(void *task,Work *w){
  switch(w->state){
  case 0:if(++w->tick>4){ov07_0222DE30(w);w->state++;w->tick=0;}break;
  case 1:
-  if(BattleAnimUtil_UpdateLinearMotion(w->motion))ov07_0222207C(w->motion,w->sprite,w->x,w->y);
+  if(BattleAnimUtil_UpdateLinearMotion(w->motion))BattleAnimUtil_SetSpritePosWithOffset(w->motion,w->sprite,w->x,w->y);
   else if(++w->repeat<6){w->state=0;w->x+=*(s16*)w->motion;w->y+=*(s16*)(w->motion+2);}
   else {w->state++;ManagedSprite_SetOamMode(w->sprite,1);BattleAnimUtil_StartBlendAlphaMotion(w->fade,16,0,0,16,16);Pokepic_StartPaletteFade(w->picture,0,10,0,0x7fff);}break;
  case 2:

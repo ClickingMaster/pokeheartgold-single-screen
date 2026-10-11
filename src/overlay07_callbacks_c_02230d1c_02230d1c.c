@@ -24,7 +24,7 @@ extern void UnkBallData_SetCaptureState(void *, int);
 extern int UnkBallData_IsCaptureState(void *, int);
 extern int UnkBallData_RunThrowArc(void *);
 extern void *BattleAnimSystem_GetDefender(void *); extern void *BattleAnimSystem_GetBattlerPokepic(void*,void*); extern int Pokepic_GetAttr(void*,int);
-extern int ov07_02222004(void*,void*); extern int ov07_0222202C(void*,void*); extern void BattleAnimSystem_CreateTaskDefaultPriority(void*,void*,void*);
+extern int ov07_02222004(void*,void*); extern int BattleAnimUtil_GetBattlerSideSign(void*,void*); extern void BattleAnimSystem_CreateTaskDefaultPriority(void*,void*,void*);
 extern void ManagedSprite_SetOamMode(void*,int); extern void ManagedSprite_SetDrawPriority(void*,int); extern void ManagedSprite_SetPriority(void*,int);
 extern int ManagedSprite_GetPaletteOverrideOffset(void*); extern int ov07_0221FAF8(void*,int); extern int Pokepic_IsActive(void*);
 extern int BattleAnimSystem_GetSpriteSystem(void*); extern int BattleAnimSystem_GetBattlerSpriteManager(void*); extern int ov07_0221C528(void*); extern int BattleAnimSystem_GetBgConfig(void*); extern int BattleAnimSystem_GetPaletteData(void*);
@@ -45,4 +45,4 @@ extern Fn sUnkBallDataBallAnimFuncs[]; extern Fn sUnkBallDataCaptureStateFuncs[]
 #define RET1(n) int n(void){return 1;}
 #define SETRET(n,v) int n(u8*p){UnkBallData_GoToCaptureState(p,v);return 1;}
 
-void ov07_02230D1C(u8 *p){u8 *q=BattleAnimUtil_AllocWork(p,0x60);void *x;*(void**)q=p;x=BattleAnimSystem_GetDefender(p);*(void**)(q+0x10)=BattleAnimSystem_GetBattlerPokepic(p,x);*(u16*)(q+0x14)=Pokepic_GetAttr(*(void**)(q+0x10),0);*(u16*)(q+0x16)=Pokepic_GetAttr(*(void**)(q+0x10),1);*(int*)(q+8)=ov07_02222004(p,x);*(int*)(q+0xc)=ov07_0222202C(p,x);BattleAnimSystem_CreateTaskDefaultPriority(*(void**)q,ov07_02230BF8,q);}
+void ov07_02230D1C(u8 *p){u8 *q=BattleAnimUtil_AllocWork(p,0x60);void *x;*(void**)q=p;x=BattleAnimSystem_GetDefender(p);*(void**)(q+0x10)=BattleAnimSystem_GetBattlerPokepic(p,x);*(u16*)(q+0x14)=Pokepic_GetAttr(*(void**)(q+0x10),0);*(u16*)(q+0x16)=Pokepic_GetAttr(*(void**)(q+0x10),1);*(int*)(q+8)=ov07_02222004(p,x);*(int*)(q+0xc)=BattleAnimUtil_GetBattlerSideSign(p,x);BattleAnimSystem_CreateTaskDefaultPriority(*(void**)q,ov07_02230BF8,q);}

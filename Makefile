@@ -26,12 +26,30 @@ include filesystem.mk
 $(ASM_OBJS): private MWASFLAGS += -DPM_ASM
 
 $(BUILD_DIR)/asm/nitrocrypto.o:  private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/nitrocrypto_run01.o $(BUILD_DIR)/src/nitrocrypto_run02.o $(BUILD_DIR)/src/nitrocrypto_run03.o $(BUILD_DIR)/src/nitrocrypto_run04.o $(BUILD_DIR)/src/nitrocrypto_run05.o $(BUILD_DIR)/src/nitrocrypto_run06.o $(BUILD_DIR)/src/nitrocrypto_run07.o $(BUILD_DIR)/src/nitrocrypto_run08.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/nitrocrypto_run01.o $(BUILD_DIR)/src/nitrocrypto_run02.o $(BUILD_DIR)/src/nitrocrypto_run03.o $(BUILD_DIR)/src/nitrocrypto_run04.o $(BUILD_DIR)/src/nitrocrypto_run05.o $(BUILD_DIR)/src/nitrocrypto_run06.o $(BUILD_DIR)/src/nitrocrypto_run07.o $(BUILD_DIR)/src/nitrocrypto_run08.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/to55_nitrocrypto_residual01_sign.o $(BUILD_DIR)/src/to55_nitrocrypto_residual01_bignum.o $(BUILD_DIR)/src/to55_nitrocrypto_residual02.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to55_nitrocrypto_residual01_sign.o $(BUILD_DIR)/src/to55_nitrocrypto_residual01_bignum.o $(BUILD_DIR)/src/to55_nitrocrypto_residual02.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/to57_nitrocrypto_residual04_prefix.o $(BUILD_DIR)/src/to57_nitrocrypto_residual04_suffix.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to57_nitrocrypto_residual04_prefix.o $(BUILD_DIR)/src/to57_nitrocrypto_residual04_suffix.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/lib/src/nitrocrypto_sign.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/lib/src/nitrocrypto_bn_exp.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/lib/src/nitrocrypto_bn_arith.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/lib/src/nitrocrypto_bn_bits.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/lib/src/nitrocrypto_bn_bin2bn.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/lib/src/nitrocrypto_bn_word.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/lib/src/nitrocrypto_bn_expand.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/lib/src/nitrocrypto_bn_ctx.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/lib/src/nitrocrypto_bn_fix_top.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/lib/src/nitrocrypto_bn_free.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/lib/src/nitrocrypto_bn_num_bits.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/lib/src/nitrocrypto_alloc.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/lib/src/nitrocrypto_sign.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/lib/src/nitrocrypto_bn_exp.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/lib/src/nitrocrypto_bn_arith.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/lib/src/nitrocrypto_bn_bits.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/lib/src/nitrocrypto_bn_bin2bn.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/lib/src/nitrocrypto_bn_word.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/lib/src/nitrocrypto_bn_expand.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/lib/src/nitrocrypto_bn_ctx.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/lib/src/nitrocrypto_bn_fix_top.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/lib/src/nitrocrypto_bn_free.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/lib/src/nitrocrypto_bn_num_bits.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/lib/src/nitrocrypto_alloc.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/lib/msl/src/*.o:    private EXCCFLAGS := -Cpp_exceptions on
 
 $(ASM_OBJS): $(WORK_DIR)/include/config.h
@@ -136,8 +154,6 @@ progress:
 	python3 tools/progress/progress.py --game $(buildname)
 
 # to54 atomic NitroCrypto compiler override
-$(BUILD_DIR)/src/to54_atomic_w17_01_nitrocrypto_residual03_run01.o $(BUILD_DIR)/src/to54_atomic_w17_02_nitrocrypto_residual03_run02.o $(BUILD_DIR)/src/to54_atomic_w17_03_nitrocrypto_residual03_run03.o $(BUILD_DIR)/src/to54_atomic_w17_04_nitrocrypto_residual03_run04.o $(BUILD_DIR)/src/to54_atomic_w17_05_nitrocrypto_residual03_run05.o $(BUILD_DIR)/src/to54_atomic_w17_06_nitrocrypto_residual03_run06.o $(BUILD_DIR)/src/to54_atomic_w17_07_nitrocrypto_residual03_run07.o $(BUILD_DIR)/src/to54_atomic_w17_08_nitrocrypto_residual03_run08.o $(BUILD_DIR)/src/to54_atomic_w17_09_nitrocrypto_residual03_run09.o $(BUILD_DIR)/src/to54_atomic_w17_10_nitrocrypto_residual03_run10.o $(BUILD_DIR)/src/to54_atomic_w17_11_nitrocrypto_residual03_run11.o $(BUILD_DIR)/src/to54_atomic_w17_12_nitrocrypto_residual03_run12.o $(BUILD_DIR)/src/to54_atomic_w17_13_nitrocrypto_residual03_run13.o $(BUILD_DIR)/src/to54_atomic_w17_14_nitrocrypto_residual03_run14.o $(BUILD_DIR)/src/to54_atomic_w17_15_nitrocrypto_residual03_run15.o $(BUILD_DIR)/src/to54_atomic_w17_16_nitrocrypto_residual03_run16.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to54_atomic_w17_01_nitrocrypto_residual03_run01.o $(BUILD_DIR)/src/to54_atomic_w17_02_nitrocrypto_residual03_run02.o $(BUILD_DIR)/src/to54_atomic_w17_03_nitrocrypto_residual03_run03.o $(BUILD_DIR)/src/to54_atomic_w17_04_nitrocrypto_residual03_run04.o $(BUILD_DIR)/src/to54_atomic_w17_05_nitrocrypto_residual03_run05.o $(BUILD_DIR)/src/to54_atomic_w17_06_nitrocrypto_residual03_run06.o $(BUILD_DIR)/src/to54_atomic_w17_07_nitrocrypto_residual03_run07.o $(BUILD_DIR)/src/to54_atomic_w17_08_nitrocrypto_residual03_run08.o $(BUILD_DIR)/src/to54_atomic_w17_09_nitrocrypto_residual03_run09.o $(BUILD_DIR)/src/to54_atomic_w17_10_nitrocrypto_residual03_run10.o $(BUILD_DIR)/src/to54_atomic_w17_11_nitrocrypto_residual03_run11.o $(BUILD_DIR)/src/to54_atomic_w17_12_nitrocrypto_residual03_run12.o $(BUILD_DIR)/src/to54_atomic_w17_13_nitrocrypto_residual03_run13.o $(BUILD_DIR)/src/to54_atomic_w17_14_nitrocrypto_residual03_run14.o $(BUILD_DIR)/src/to54_atomic_w17_15_nitrocrypto_residual03_run15.o $(BUILD_DIR)/src/to54_atomic_w17_16_nitrocrypto_residual03_run16.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 
 $(BUILD_DIR)/lib/src/spl_manager.o: private MWCCVER := 1.2/sp2p3
 $(BUILD_DIR)/lib/src/spl_draw.o: private MWCCVER := 1.2/sp2p3
@@ -231,15 +247,7 @@ $(BUILD_DIR)/src/to80_extra1381_run01.o: private MWCCVER := 2.0/sp2p3
 
 
 
-$(BUILD_DIR)/src/to80_extra1486_run01.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to80_extra1486_run01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/to80_extra1486_run02.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to80_extra1486_run02.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 
-$(BUILD_DIR)/src/to80_extra1487_run01.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to80_extra1487_run01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/to80_extra1487_run02.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to80_extra1487_run02.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 
 $(BUILD_DIR)/src/to80_extra1615_run01.o: private MWCCVER := 2.0/sp2p3
 
@@ -265,8 +273,6 @@ $(BUILD_DIR)/src/to90_extra1964_run01.o: private MWCCVER := 2.0/sp2p3
 
 $(BUILD_DIR)/src/to90_extra2110_run01.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/src/to90_extra2160_run01.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/to90_extra2160_run01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 
 $(BUILD_DIR)/src/to90_extra2309_run01.o: private MWCCVER := 2.0/sp2p3
 
@@ -291,10 +297,8 @@ $(BUILD_DIR)/src/to90_w41411_palette10_run01.o: private MWCFLAGS := $(filter-out
 $(BUILD_DIR)/src/to91_w41418_StringRead_run01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSDK/src/mb/mb_task_thread.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_MSL_Common_wchar_io_r01.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_to59_dwcaccount_residual_3_r01.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/op90_to59_dwcaccount_residual_3_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/op90_to59_dwcaccount_residual_3_r02.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/op90_to59_dwcaccount_residual_3_r02.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/lib/src/nitrocrypto_rc4_init.o: private MWCCVER := 1.2/sp2p3
+$(BUILD_DIR)/lib/src/nitrocrypto_rc4_init.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/lib/NitroSDK/src/mb/mb_disconnect.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSDK/src/mb/mb_parent_calc_block.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to70_fx_trig_extra207_residual_1_r01.o: private MWCCVER := 2.0/sp2
@@ -302,8 +306,6 @@ $(BUILD_DIR)/src/op90_to80_extra1853_residual_1_r01.o: private MWCCVER := 2.0/sp
 $(BUILD_DIR)/src/op90_fx_vec_normalize_residual_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to80_extra1442_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_MSL_Common_string_residual0_r01.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_to57_nitrocrypto_residual04_residual_r01.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/op90_to57_nitrocrypto_residual04_residual_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/op90_to80_extra1378_residual_2_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSDK/src/mb/mb_read_segment.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSystem/src/g3d_cgtool_maya_texmtx.o: private MWCCVER := 2.0/sp2p3
@@ -362,8 +364,6 @@ $(BUILD_DIR)/src/op90_to65_wifi_residual_11_residual_2_r01.o: private MWCCVER :=
 $(BUILD_DIR)/lib/NitroSystem/src/gfd_linked_list_tex_vram_man_reset.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to70_overlay_93_thumb_1_to41_residual_6_extra219_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/wifi_plaza_survey_answer.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/op90_to90_extra2160_residual_1_r01.o: private MWCCVER := 1.2/sp2p3
-$(BUILD_DIR)/src/op90_to90_extra2160_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/op90_MSL_DPMath_e_pow_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_MSL_DPMath_e_pow_r01.o: private EXCCFLAGS := -Cpp_exceptions on
 $(BUILD_DIR)/src/op90_overlay_40_residual_5_gap_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
@@ -397,7 +397,7 @@ $(BUILD_DIR)/src/op90_to90_reset_boot_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to90_reset_clear32_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_op90_to91_w41419_ExitProcess_prefix_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to90_extra2154_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_nitrocrypto_residual00_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/src/nitrocrypto_rc4.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/wifi_setup_worker.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/src/op90_overlay_96_residual_70_tail_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/wifi_setup_connect.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))

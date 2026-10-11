@@ -13,7 +13,7 @@ int ov70_0223F96C(Ov70Work *work) {
 }
 
 void ov70_0223F9B4(Ov70Work *work) {
-    ov70_02238E44(work);
+    Gts_GetWifiIconLevel(work);
     sub_0203A930();
     ov70_02246658[work->state2c](work);
 }

@@ -37,7 +37,7 @@ BOOL ov07_0222DC54(X07SpritePulse *work) {
     case 0:
         BattleAnimUtil_UpdateScaleMotionSprite(work->anim0, work->sprite);
         if (BattleAnimUtil_UpdateLinearMotion(work->anim1)) {
-            ov07_0222207C(work->anim1, work->sprite, work->x, work->y);
+            BattleAnimUtil_SetSpritePosWithOffset(work->anim1, work->sprite, work->x, work->y);
         } else {
             work->state++;
             BattleAnimUtil_StartBlendAlphaMotion(work->anim2, 16, 0, 14, 16, 8);

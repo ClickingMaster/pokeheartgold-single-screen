@@ -68,7 +68,7 @@ void *BattleAnimSystem_GetBattlerSprite(void *, int);
 void *BattleAnimSystem_GetBattlerSpriteManager(void *);
 void *BattleAnimSystem_GetBattlerPokepic(void *, void *);
 int ov07_02222004(void *, int);
-s16 ov07_02221F80(void *, int, int);
+s16 BattleAnimSystem_GetBattlerScreenCoord(void *, int, int);
 void BattleAnimUtil_InitSinMotionFromStep(SinMotion *, u16, u16, int, int, int, int, s16);
 BOOL BattleAnimUtil_UpdateSinMotion(SinMotion *);
 void BattleAnimUtil_InitCosMotion(Linear1 *, u32, u32, u32, u32);

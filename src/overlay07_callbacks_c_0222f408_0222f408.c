@@ -5,6 +5,6 @@
 #define PTR(p, o) (*(void **)((u8 *)(p) + (o)))
 
 void ov07_0222F408(void *data, void *arg) {
-    u32 mask = 1 << ov07_02221FF0(arg);
+    u32 mask = 1 << BattleAnimUtil_GetSpritePaletteSlot(arg);
     PaletteData_BlendPalettes(PTR(data, 0xC4), 2, (u16)mask, 8, 0);
 }

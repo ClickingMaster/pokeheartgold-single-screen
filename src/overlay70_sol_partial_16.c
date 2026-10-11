@@ -10,7 +10,7 @@
     }
 
 void ov70_0223ABD8(void *bg) {
-    ov70_022392BC(bg);
+    Gts_FreeSubScreenBgs(bg);
     FreeBgTilemapBuffer(bg, 1);
     FreeBgTilemapBuffer(bg, 0);
 }

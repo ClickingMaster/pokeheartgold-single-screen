@@ -84,7 +84,7 @@ extern void Sprite_Delete(void *);
 extern void FreeBgTilemapBuffer(void *, int);
 extern void *Heap_Alloc(u32, u32);
 extern void Heap_Free(void *);
-extern void ov70_022392BC(void *);
+extern void Gts_FreeSubScreenBgs(void *);
 extern void Gts_SwitchScreen(R14Work *);
 extern void *Gts_CreateYesNoPrompt(void *, int, int, int, int);
 extern void ov70_0224212C(void *);

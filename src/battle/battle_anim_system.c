@@ -2760,8 +2760,8 @@ void BattleAnimScriptCmd_CreateSpriteWithFunc(BattleAnimSystem *system) {
 
     system->scriptPtr++;
     defender = BattleAnimSystem_GetDefender(system);
-    template.x = ov07_02221F80(system, defender, 0);
-    template.y = ov07_02221F80(system, defender, 1);
+    template.x = BattleAnimSystem_GetBattlerScreenCoord(system, defender, 0);
+    template.y = BattleAnimSystem_GetBattlerScreenCoord(system, defender, 1);
     template.z = 0;
     template.animation = 0;
     template.drawPriority = 100;
@@ -2798,8 +2798,8 @@ void BattleAnimScriptCmd_CreateSprite(BattleAnimSystem *system) {
 
     system->scriptPtr++;
     defender = BattleAnimSystem_GetDefender(system);
-    template.x = ov07_02221F80(system, defender, 0);
-    template.y = ov07_02221F80(system, defender, 1);
+    template.x = BattleAnimSystem_GetBattlerScreenCoord(system, defender, 0);
+    template.y = BattleAnimSystem_GetBattlerScreenCoord(system, defender, 1);
     template.z = 0;
     template.animation = 0;
     template.drawPriority = 100;

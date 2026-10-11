@@ -22,6 +22,6 @@ void SpriteSystem_DrawSprites(void *);
 void ManagedSprite_SetPositionXY(void *, s16, s16);
 void ManagedSprite_SetPriority(void *, int);
 int ov07_0221FAE8(void *);
-void ov07_022220FC(void *, int, int, int, int, int, int, int);
+void BattleAnimUtil_InitSinMotion(void *, int, int, int, int, int, int, int);
 int BattleAnimUtil_UpdateSinMotion(void *);
 #endif

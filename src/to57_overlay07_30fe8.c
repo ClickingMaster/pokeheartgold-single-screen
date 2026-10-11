@@ -97,7 +97,7 @@ void ov07_022310E0(void *, void *, void *, void *);
 extern void *BattleAnimSystem_GetAttacker(void *);
 extern int ov07_02222004(void *, void *);
 extern void BattleAnimSystem_GetSpriteTemplate(void *, void *);
-extern int ov07_02221F80(void *, void *, int);
+extern int BattleAnimSystem_GetBattlerScreenCoord(void *, void *, int);
 extern void *SpriteSystem_NewSprite(void *, void *, const void *);
 
 void ov07_02230FE8(void *task, void *work_) {
@@ -149,8 +149,8 @@ void ov07_022310E0(void *owner, void *spriteSystem, void *spriteManager, void *f
     object = BattleAnimSystem_GetAttacker(work->owner);
     multiplier = ov07_02222004(owner, object);
     BattleAnimSystem_GetSpriteTemplate(&template, work->owner);
-    *(s16 *)&template[0] = ov07_02221F80(owner, object, 0);
-    *(s16 *)&template[2] = ov07_02221F80(owner, object, 1);
+    *(s16 *)&template[0] = BattleAnimSystem_GetBattlerScreenCoord(owner, object, 0);
+    *(s16 *)&template[2] = BattleAnimSystem_GetBattlerScreenCoord(owner, object, 1);
     for (i = 5; i >= 0; i--) {
         if (i == 5) {
             work->sprites[i] = firstSprite;

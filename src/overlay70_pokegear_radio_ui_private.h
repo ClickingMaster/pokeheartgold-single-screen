@@ -117,7 +117,7 @@ void GtsServer_RequestReturn(Ov70Work *);
 void GtsServer_RequestExchange(u32, void *, void *);
 void GtsServer_RequestExchangeFinish(Ov70Work *);
 void Gts_SetState(Ov70Work *, int, int);
-void ov70_02238E44(Ov70Work *);
+void Gts_GetWifiIconLevel(Ov70Work *);
 void Gts_SetNextScreen(Ov70Work *, int, int);
 void Gts_SwitchScreen(Ov70Work *);
 void Gts_CreateWaitingIcon(Ov70Work *);

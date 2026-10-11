@@ -2157,7 +2157,7 @@
 	.public Gts_SetSpritePositionRounded
 	.public Gts_Alloc
 	.public Gts_Free
-	.public ov70_02238E44
+	.public Gts_GetWifiIconLevel
 	.public Gts_SetNextScreen
 	.public Gts_SwitchScreen
 	.public Gts_GetTextFrameDelay
@@ -2171,41 +2171,41 @@
 	.public Gts_SetSpritePosition
 	.public Gts_DimScreen
 	.public Gts_ClearDim
-	.public ov70_02238FF4
-	.public ov70_022390DC
-	.public ov70_022390FC
-	.public ov70_02239134
-	.public ov70_022391F0
-	.public ov70_022392BC
-	.public ov70_022392E0
-	.public ov70_02239304
-	.public ov70_02239330
-	.public ov70_02239414
-	.public ov70_022394A8
-	.public ov70_022394B8
-	.public ov70_022395C4
-	.public ov70_02239614
-	.public ov70_0223963C
-	.public ov70_02239658
+	.public GtsMainMenu_Init
+	.public GtsMainMenu_Main
+	.public GtsMainMenu_Exit
+	.public GtsMainMenu_InitBgs
+	.public Gts_InitSubScreenBgs
+	.public Gts_FreeSubScreenBgs
+	.public GtsMainMenu_FreeBgs
+	.public GtsMainMenu_HideMainScreen
+	.public GtsMainMenu_LoadGraphics
+	.public GtsMainMenu_CreateCursor
+	.public GtsMainMenu_DeleteCursor
+	.public GtsMainMenu_CreateWindows
+	.public GtsMainMenu_RemoveWindows
+	.public GtsMainMenu_CreateStrings
+	.public GtsMainMenu_DeleteStrings
+	.public GtsMainMenu_WaitEnterAnim
 	.public ov70_02239698
 	.public ov70_022396A8
-	.public ov70_022396CC
-	.public ov70_022396E0
-	.public ov70_022396F4
-	.public ov70_02239730
-	.public ov70_02239740
-	.public ov70_02239834
-	.public ov70_02239954
-	.public ov70_0223997C
-	.public ov70_02239990
-	.public ov70_022399D8
-	.public ov70_02239A10
-	.public ov70_02239AAC
-	.public ov70_02239ACC
-	.public ov70_02239B00
-	.public ov70_02239B84
-	.public ov70_02239BDC
-	.public ov70_02239C34
+	.public GtsMainMenu_WaitFadeIn
+	.public GtsMainMenu_WaitFadeIn2
+	.public GtsMainMenu_ShowPrompt
+	.public GtsMainMenu_GetTouchedButton
+	.public GtsMainMenu_SelectButton
+	.public GtsMainMenu_HandleInput
+	.public GtsMainMenu_StartExitAnim
+	.public GtsMainMenu_WaitExitAnim
+	.public GtsMainMenu_FadeOut
+	.public GtsMainMenu_ShowExitPrompt
+	.public GtsMainMenu_HandleExitPrompt
+	.public GtsMainMenu_WaitText
+	.public GtsMainMenu_WaitTextAndPause
+	.public GtsMainMenu_DrawButtons
+	.public GtsMainMenu_PrintMessage
+	.public GtsMainMenu_PrintPrompt
+	.public GtsMainMenu_PrintButtonLabel
 	.public ov70_02239C6C
 	.public ov70_02239CF8
 	.public ov70_02239D44
@@ -2638,18 +2638,18 @@
 	.public sGtsGraphicsModes
 	.public sGtsObjCharTransferTemplate
 	.public sGtsGraphicsBanks
-	.public ov70_02245240
-	.public ov70_02245242
-	.public ov70_0224524C
-	.public ov70_0224525C
-	.public ov70_0224526C
-	.public ov70_02245284
-	.public ov70_022452A0
-	.public ov70_022452BC
-	.public ov70_022452D8
-	.public ov70_022452F4
-	.public ov70_02245310
-	.public ov70_0224532C
+	.public sGtsMainMenuCursorX
+	.public sGtsMainMenuCursorY
+	.public sGtsMainMenuButtonHitboxes
+	.public sGtsMainMenuGraphicsModes
+	.public sGtsMainMenuButtonMsgs
+	.public sGtsSubBg2Template
+	.public sGtsSubBg0Template
+	.public sGtsSubBg1Template
+	.public sGtsMainMenuBg1Template
+	.public sGtsMainMenuBg0Template
+	.public sGtsMainMenuBg2Template
+	.public sGtsSubBg3Template
 	.public ov70_02245348
 	.public ov70_02245364
 	.public ov70_02245380
@@ -2762,7 +2762,7 @@
 	.public sGtsInfoUrl
 	.public sGtsSetProfileUrl
 	.public sGtsScreens
-	.public ov70_02246464
+	.public sGtsMainMenuStates
 	.public ov70_0224649C
 	.public ov70_022464A8
 	.public ov70_022464CC
@@ -2793,22 +2793,22 @@
 	.public ov70_0223887C
 	.public Gts_DestroyListMenu
 	.public Gts_SetState
-	.public ov70_02238E44
+	.public Gts_GetWifiIconLevel
 	.public Gts_SetNextScreen
 	.public Gts_SwitchScreen
 	.public Gts_GetTextFrameDelay
 	.public Gts_DecrementTimer
 	.public Gts_StartCountingBoxMons
 	.public Gts_ClearDim
-	.public ov70_022392BC
-	.public ov70_022392E0
-	.public ov70_022394A8
-	.public ov70_0223963C
+	.public Gts_FreeSubScreenBgs
+	.public GtsMainMenu_FreeBgs
+	.public GtsMainMenu_DeleteCursor
+	.public GtsMainMenu_DeleteStrings
 	.public ov70_02239698
-	.public ov70_022396CC
-	.public ov70_022396E0
-	.public ov70_02239954
-	.public ov70_0223997C
+	.public GtsMainMenu_WaitFadeIn
+	.public GtsMainMenu_WaitFadeIn2
+	.public GtsMainMenu_StartExitAnim
+	.public GtsMainMenu_WaitExitAnim
 	.public ov70_0223A0C4
 	.public ov70_0223A258
 	.public ov70_0223ABD8

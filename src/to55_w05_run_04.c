@@ -11,7 +11,7 @@ void ov07_0222FBEC(void *p, int mul) {
     q += 0x30;
     angle = i;
     do {
-        ov07_022220FC(q, 0, 0x7fff, 0, 0, 0x32000, 0, 0x30);
+        BattleAnimUtil_InitSinMotion(q, 0, 0x7fff, 0, 0, 0x32000, 0, 0x30);
         W(p, 0x38) += angle;
         i++;
         W(p, 0x48) *= mul;

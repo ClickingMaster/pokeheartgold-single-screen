@@ -690,7 +690,7 @@
   {
    "function": "CRYPTO_RC4Encrypt",
    "cpu": "ARM9",
-   "source": "src/op90_nitrocrypto_residual00_r01.c",
+   "source": "lib/src/nitrocrypto_rc4.c",
    "kind": "asm",
    "reason": "push {r4-r9,lr} without the 8-byte frame padding MWCC always adds; S[i] load software-pipelined across iterations; ldrb [r0,rX,lsr #24] state indexing"
   },
@@ -704,7 +704,7 @@
   {
    "function": "CRYPTO_RC4FastEncrypt",
    "cpu": "ARM9",
-   "source": "src/op90_op90_to59_dwcaccount_residual_3_residual_1_r01.c",
+   "source": "lib/src/nitrocrypto_rc4_fast.c",
    "kind": "asm",
    "reason": "push {r4-r9,lr} without the 8-byte frame padding MWCC always adds; 8x hand-unrolled, software-pipelined RC4 loop with ldr/str [r0,rX,lsr #22] indexing"
   },

@@ -24,7 +24,7 @@ void BattleAnimUtil_InitSinMotionFromStep(BattleAnimSinMotion *motion, u32 start
         step = -step;
     }
     signedStep = (s16)step;
-    motion->duration = ov07_0222204C(startX << FX32_SHIFT, endX << FX32_SHIFT, signedStep << FX32_SHIFT);
+    motion->duration = BattleAnimUtil_CalcStepCount(startX << FX32_SHIFT, endX << FX32_SHIFT, signedStep << FX32_SHIFT);
     motion->angleX = startX;
     motion->ampX = ampX;
     motion->angleY = startY;
@@ -50,7 +50,7 @@ BOOL BattleAnimUtil_UpdateSinMotion(BattleAnimSinMotion *motion) {
 
 BOOL BattleAnimUtil_UpdateSinMotionSprite(BattleAnimSinMotion *motion, s16 x, s16 y, ManagedSprite *sprite) {
     if (BattleAnimUtil_UpdateSinMotion(motion)) {
-        ov07_0222207C(motion, sprite, x, y);
+        BattleAnimUtil_SetSpritePosWithOffset(motion, sprite, x, y);
         return TRUE;
     }
     return FALSE;
@@ -58,7 +58,7 @@ BOOL BattleAnimUtil_UpdateSinMotionSprite(BattleAnimSinMotion *motion, s16 x, s1
 
 BOOL BattleAnimUtil_UpdateSinMotionPokepic(BattleAnimSinMotion *motion, int x, int y, Pokepic *pokepic) {
     if (BattleAnimUtil_UpdateSinMotion(motion)) {
-        ov07_022220B8(motion, pokepic, x, y);
+        BattleAnimUtil_SetPokepicPosWithOffset(motion, pokepic, x, y);
         return TRUE;
     }
     return FALSE;
@@ -71,8 +71,8 @@ void BattleAnimUtil_InitLinearMotion(BattleAnimLinearMotion *motion, s16 startX,
     motion->x = startX;
     motion->y = startY;
     motion->duration = duration;
-    motion->stepX = ov07_02222040(startX << FX32_SHIFT, endX << FX32_SHIFT, duration);
-    motion->stepY = ov07_02222040(startY << FX32_SHIFT, endY << FX32_SHIFT, duration);
+    motion->stepX = BattleAnimUtil_CalcStep(startX << FX32_SHIFT, endX << FX32_SHIFT, duration);
+    motion->stepY = BattleAnimUtil_CalcStep(startY << FX32_SHIFT, endY << FX32_SHIFT, duration);
     motion->curX = startX << FX32_SHIFT;
     motion->curY = startY << FX32_SHIFT;
 }
@@ -92,7 +92,7 @@ BOOL BattleAnimUtil_UpdateLinearMotion(BattleAnimLinearMotion *motion) {
 
 BOOL BattleAnimUtil_UpdateLinearMotionSprite(BattleAnimLinearMotion *motion, ManagedSprite *sprite) {
     if (BattleAnimUtil_UpdateLinearMotion(motion)) {
-        ov07_0222207C(motion, sprite, 0, 0);
+        BattleAnimUtil_SetSpritePosWithOffset(motion, sprite, 0, 0);
         return TRUE;
     }
     return FALSE;
@@ -100,7 +100,7 @@ BOOL BattleAnimUtil_UpdateLinearMotionSprite(BattleAnimLinearMotion *motion, Man
 
 BOOL BattleAnimUtil_UpdateLinearMotionPokepic(BattleAnimLinearMotion *motion, Pokepic *pokepic) {
     if (BattleAnimUtil_UpdateLinearMotion(motion)) {
-        ov07_022220B8(motion, pokepic, 0, 0);
+        BattleAnimUtil_SetPokepicPosWithOffset(motion, pokepic, 0, 0);
         return TRUE;
     }
     return FALSE;
@@ -113,7 +113,7 @@ void BattleAnimUtil_InitLinearSinMotion(BattleAnimLinearMotion *linear, BattleAn
     BattleAnimUtil_InitLinearMotion(linear, startX, endX, startY, endY, duration);
     sin->x = 0;
     sin->y = 0;
-    ov07_022220FC(sin, 0, 0, 0x3FFF, 0xBFFF, 0, amplitude, duration);
+    BattleAnimUtil_InitSinMotion(sin, 0, 0, 0x3FFF, 0xBFFF, 0, amplitude, duration);
 }
 
 #pragma force_active reset
@@ -138,7 +138,7 @@ BOOL BattleAnimUtil_UpdateLinearSinMotion(BattleAnimLinearMotion *linear, Battle
 
 BOOL BattleAnimUtil_UpdateLinearSinMotionSprite(BattleAnimLinearMotion *linear, BattleAnimSinMotion *sin, ManagedSprite *sprite) {
     if (BattleAnimUtil_UpdateLinearSinMotion(linear, sin)) {
-        ov07_0222207C(linear, sprite, 0, 0);
+        BattleAnimUtil_SetSpritePosWithOffset(linear, sprite, 0, 0);
         return TRUE;
     }
     return FALSE;
@@ -148,14 +148,14 @@ void BattleAnimUtil_InitValueMotion(BattleAnimValueMotion *motion, int start, in
     GF_ASSERT(motion != NULL);
     motion->value = start;
     motion->duration = duration;
-    motion->step = ov07_02222040(start << FX32_SHIFT, end << FX32_SHIFT, duration) >> FX32_SHIFT;
+    motion->step = BattleAnimUtil_CalcStep(start << FX32_SHIFT, end << FX32_SHIFT, duration) >> FX32_SHIFT;
 }
 
 void BattleAnimUtil_InitValueMotionFx(BattleAnimValueMotion *motion, int start, int end, int duration) {
     GF_ASSERT(motion != NULL);
     motion->value = start;
     motion->duration = duration;
-    motion->step = ov07_02222040(start << FX32_SHIFT, end << FX32_SHIFT, duration);
+    motion->step = BattleAnimUtil_CalcStep(start << FX32_SHIFT, end << FX32_SHIFT, duration);
     motion->current = start << FX32_SHIFT;
 }
 
@@ -208,7 +208,7 @@ void BattleAnimUtil_InitScaleMotion(BattleAnimLinearMotion *motion, int start, i
     motion->duration = duration;
     int startScale = (start << 8) / divisor;
     int endScale = (end << 8) / divisor;
-    motion->stepX = ov07_02222040(startScale << FX32_SHIFT, endScale << FX32_SHIFT, duration);
+    motion->stepX = BattleAnimUtil_CalcStep(startScale << FX32_SHIFT, endScale << FX32_SHIFT, duration);
     motion->x = startScale;
     motion->y = startScale;
     motion->curX = motion->x << FX32_SHIFT;
@@ -233,10 +233,10 @@ void BattleAnimUtil_InitScaleMotionXY(BattleAnimLinearMotion *motion, int startX
     motion->duration = duration;
     int startScaleX = (startX << 8) / divisor;
     int endScaleX = (endX << 8) / divisor;
-    motion->stepX = ov07_02222040(startScaleX << FX32_SHIFT, endScaleX << FX32_SHIFT, duration);
+    motion->stepX = BattleAnimUtil_CalcStep(startScaleX << FX32_SHIFT, endScaleX << FX32_SHIFT, duration);
     int startScaleY = (startY << 8) / divisor;
     int endScaleY = (endY << 8) / divisor;
-    motion->stepY = ov07_02222040(startScaleY << FX32_SHIFT, endScaleY << FX32_SHIFT, duration);
+    motion->stepY = BattleAnimUtil_CalcStep(startScaleY << FX32_SHIFT, endScaleY << FX32_SHIFT, duration);
     motion->x = startScaleX;
     motion->y = startScaleY;
     motion->curX = motion->x << FX32_SHIFT;
@@ -302,7 +302,7 @@ void BattleAnimUtil_AlignSpriteToScale(ManagedSprite *sprite, int y, int inset, 
 
 BOOL BattleAnimUtil_UpdateScaleMotionSprite(BattleAnimLinearMotion *motion, ManagedSprite *sprite) {
     if (BattleAnimUtil_UpdateScaleMotion(motion)) {
-        ov07_0222209C(motion, sprite);
+        BattleAnimUtil_SetSpriteScale(motion, sprite);
         return TRUE;
     }
     return FALSE;
@@ -310,7 +310,7 @@ BOOL BattleAnimUtil_UpdateScaleMotionSprite(BattleAnimLinearMotion *motion, Mana
 
 BOOL BattleAnimUtil_UpdateScaleMotionPokepic(BattleAnimLinearMotion *motion, Pokepic *pokepic) {
     if (BattleAnimUtil_UpdateScaleMotion(motion)) {
-        ov07_022220DC(motion, pokepic);
+        BattleAnimUtil_SetPokepicScale(motion, pokepic);
         return TRUE;
     }
     return FALSE;
@@ -318,7 +318,7 @@ BOOL BattleAnimUtil_UpdateScaleMotionPokepic(BattleAnimLinearMotion *motion, Pok
 
 BOOL BattleAnimUtil_UpdateScaleMotionXYPokepic(BattleAnimLinearMotion *motion, Pokepic *pokepic) {
     if (BattleAnimUtil_UpdateScaleMotionXY(motion)) {
-        ov07_022220DC(motion, pokepic);
+        BattleAnimUtil_SetPokepicScale(motion, pokepic);
         return TRUE;
     }
     return FALSE;
@@ -371,7 +371,7 @@ BOOL BattleAnimUtil_UpdateShake(BattleAnimShake *shake) {
 
 BOOL BattleAnimUtil_UpdateShakePokepic(BattleAnimShake *shake, int x, int y, Pokepic *pokepic) {
     if (BattleAnimUtil_UpdateShake(shake)) {
-        ov07_022220B8(shake, pokepic, x, y);
+        BattleAnimUtil_SetPokepicPosWithOffset(shake, pokepic, x, y);
         return TRUE;
     }
     return FALSE;
@@ -440,7 +440,7 @@ BOOL BattleAnimUtil_UpdateSpriteSequence(BattleAnimSpriteSequence *sequence) {
 }
 
 void ov07_02222A44(BattleAnimSinMotion *motion, int multiplier, int duration) {
-    ov07_022220FC(motion, 0, 0xFFFF, 0, 0xFFFF, 2 << 16, -0x8000, duration);
+    BattleAnimUtil_InitSinMotion(motion, 0, 0xFFFF, 0, 0xFFFF, 2 << 16, -0x8000, duration);
     motion->duration *= multiplier;
 }
 

@@ -45,8 +45,8 @@ extern int BattleAnimUtil_GetBattlerSide(void *, int);
 extern void *BattleAnimSystem_GetSprite(void *, int);
 extern void Sprite_DeleteAndFreeResources(void *);
 extern s32 ov07_02222004(void *, int);
-extern s32 ov07_0222202C(void *, int);
-extern s32 ov07_02221F80(void *, int, int);
+extern s32 BattleAnimUtil_GetBattlerSideSign(void *, int);
+extern s32 BattleAnimSystem_GetBattlerScreenCoord(void *, int, int);
 extern void ManagedSprite_SetPositionXY(void *, s16, s16);
 extern void BattleAnimUtil_InitLinearMotion(void *, s16, s16, s16, s16, int);
 extern void BattleAnimSystem_CreateTaskDefaultPriority(void *, void *, void *);
@@ -79,9 +79,9 @@ void ov07_02230994(void *owner) {
     }
     {
         int row = ov07_02222004(owner, context);
-        int column = ov07_0222202C(owner, context);
-        int xBase = ov07_02221F80(owner, context, 0);
-        int yBase = ov07_02221F80(owner, context, 1);
+        int column = BattleAnimUtil_GetBattlerSideSign(owner, context);
+        int xBase = BattleAnimSystem_GetBattlerScreenCoord(owner, context, 0);
+        int yBase = BattleAnimSystem_GetBattlerScreenCoord(owner, context, 1);
         int x = xBase + row * 0x40;
         int deltaY = -(column * 0x10);
         int y = yBase + deltaY;
@@ -141,7 +141,7 @@ void ov07_02230BA0(void *owner) {
     work->x = Pokepic_GetAttr(work->pic, 0);
     work->y = Pokepic_GetAttr(work->pic, 1);
     work->column = ov07_02222004(owner, context);
-    work->row = ov07_0222202C(owner, context);
+    work->row = BattleAnimUtil_GetBattlerSideSign(owner, context);
     BattleAnimSystem_CreateTaskDefaultPriority(work->owner, ov07_02230A70, work);
 }
 

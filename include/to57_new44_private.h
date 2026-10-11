@@ -66,7 +66,7 @@ void ManagedSprite_SetDrawPriority(void *, int);
 void ManagedSprite_SetPriority(void *, int);
 void BattleAnimUtil_InitLinearSinMotion(void *, void *, s16, s16, s16, s16, int, int);
 BOOL BattleAnimUtil_UpdateLinearMotion(void *);
-void ov07_022220B8(void *, void *, s16, s16);
+void BattleAnimUtil_SetPokepicPosWithOffset(void *, void *, s16, s16);
 BOOL BattleAnimUtil_UpdateLinearSinMotionSprite(void *, void *, void *);
 void ManagedSprite_SetDrawFlag(void *, BOOL);
 void Sprite_DeleteAndFreeResources(void *);

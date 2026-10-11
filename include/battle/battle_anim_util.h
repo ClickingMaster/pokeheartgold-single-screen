@@ -13,7 +13,7 @@
 #include "sprite_system.h"
 #include "sys_task.h"
 
-// The shared motion types, as in include/battle/battle_anim_internal.h (not on master yet)
+// Effect function types and the motion structs shared by the overlay 7 effect modules
 typedef void (*BattleAnimFunc)(BattleAnimSystem *system);
 typedef void (*BattleAnimSpriteFunc)(BattleAnimSystem *system, SpriteSystem *spriteSystem, SpriteManager *spriteManager, ManagedSprite *sprite);
 
@@ -215,13 +215,13 @@ void BattleAnimFunc_None(BattleAnimSystem *system);
 // overlay 7 functions defined in sources not merged yet; position: any motion (s16 x, y first)
 int ov07_0221BFC0(BattleAnimSystem *system);
 PaletteData *BattleAnimSystem_GetPaletteData(BattleAnimSystem *system);
-fx32 ov07_02222040(fx32 start, fx32 end, int duration);
-int ov07_0222204C(fx32 start, fx32 end, fx32 step);
-void ov07_0222207C(void *position, ManagedSprite *sprite, s16 x, s16 y);
-void ov07_0222209C(BattleAnimLinearMotion *scale, ManagedSprite *sprite);
-void ov07_022220B8(void *position, Pokepic *pokepic, int x, int y);
-void ov07_022220DC(BattleAnimLinearMotion *scale, Pokepic *pokepic);
-void ov07_022220FC(BattleAnimSinMotion *motion, int startX, int endX, int startY, u16 endY, fx32 ampX, fx32 ampY, int duration);
+fx32 BattleAnimUtil_CalcStep(fx32 start, fx32 end, int duration);
+int BattleAnimUtil_CalcStepCount(fx32 start, fx32 end, fx32 step);
+void BattleAnimUtil_SetSpritePosWithOffset(void *position, ManagedSprite *sprite, s16 x, s16 y);
+void BattleAnimUtil_SetSpriteScale(BattleAnimLinearMotion *scale, ManagedSprite *sprite);
+void BattleAnimUtil_SetPokepicPosWithOffset(void *position, Pokepic *pokepic, int x, int y);
+void BattleAnimUtil_SetPokepicScale(BattleAnimLinearMotion *scale, Pokepic *pokepic);
+void BattleAnimUtil_InitSinMotion(BattleAnimSinMotion *motion, int startX, int endX, int startY, u16 endY, fx32 ampX, fx32 ampY, int duration);
 
 // NitroSDK, not declared by lib/include
 fx32 FX_Sqrt(fx32 x);
