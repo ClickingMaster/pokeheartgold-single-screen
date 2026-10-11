@@ -14,12 +14,12 @@
 .public MI_CpuFill8
 .public FrontierSystem_Create
 .public FrontierSystem_Main
-.public ov80_0222A920
+.public FrontierSystem_Delete
 .public FrontierSystem_AddTask
-.public ov80_0222AA7C
-.public ov80_0222AAD8
-.public ov80_0222AAF8
-.public ov80_0222AB2C
+.public FrontierSystem_ChangeMsgBank
+.public FrontierSystem_SaveVars
+.public FrontierSystem_RestoreVars
+.public FrontierSystem_GetVarPtr
 .public FrontierSystem_GetFrontierMap
 .public FrontierScriptContext_Init
 .public FrontierScriptContext_Start

@@ -28,7 +28,7 @@ extern void ov96_021EF05C(void *ptr);
 extern void ov96_021ED1D0(void);
 extern int ov96_021ED47C(void *course);
 extern void ov96_021ED48C(void);
-extern void ov96_021F4484(void);
+extern void PokeathlonCirclePushDisplay_LoadMonPics(void);
 extern void ov96_022107D4(void);
 extern void ov96_022186CC(void);
 extern void ov96_021E9290(void *ptr);

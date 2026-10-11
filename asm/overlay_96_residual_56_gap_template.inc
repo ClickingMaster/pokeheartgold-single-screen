@@ -150,8 +150,8 @@
 	.public ov96_021F30BC
 	.public ov96_021F3424
 	.public ov96_021F3E58
-	.public ov96_021F46B4
-	.public ov96_021F54C0
+	.public PokeathlonCirclePushDisplay_GetScore
+	.public PokeathlonLampJump_Draw
 	.public ov96_021F74C8
 	.public ov96_021F75D4
 	.public ov96_021F75E0
@@ -1343,7 +1343,7 @@ ov96_021F3BF0: ; 0x021F3BF0
 	str r6, [r4, #8]
 	add r0, r4, #0
 	str r7, [r4, #4]
-	bl ov96_021F4558
+	bl PokeathlonCirclePushDisplay_CreateWindows
 	ldr r2, _021F3C34 ; =0x00000135
 	mov r0, #1
 	mov r1, #0x1b
@@ -1563,27 +1563,27 @@ ov96_021F3CBC: ; 0x021F3CBC
 	add r1, r0, #0
 	add r1, #0x8c
 	ldr r1, [r5, r1]
-	bl ov96_021F4FD8
+	bl PokeathlonCirclePushDisplay_OffsetScreenTiles
 	mov r0, #0x80
 	add r1, r0, #0
 	add r1, #0x90
 	ldr r1, [r5, r1]
-	bl ov96_021F4FD8
+	bl PokeathlonCirclePushDisplay_OffsetScreenTiles
 	mov r0, #0x80
 	add r1, r0, #0
 	add r1, #0x94
 	ldr r1, [r5, r1]
-	bl ov96_021F4FD8
+	bl PokeathlonCirclePushDisplay_OffsetScreenTiles
 	mov r0, #0x80
 	add r1, r0, #0
 	add r1, #0x88
 	ldr r1, [r5, r1]
-	bl ov96_021F4FD8
+	bl PokeathlonCirclePushDisplay_OffsetScreenTiles
 	mov r0, #0x80
 	add r1, r0, #0
 	add r1, #0x98
 	ldr r1, [r5, r1]
-	bl ov96_021F4FD8
+	bl PokeathlonCirclePushDisplay_OffsetScreenTiles
 	mov r0, #0x43
 	lsl r0, r0, #2
 	ldr r3, [r5, r0]
@@ -1596,7 +1596,7 @@ ov96_021F3CBC: ; 0x021F3CBC
 	add r0, r5, #0
 	ldr r1, [r5, #8]
 	add r0, #0x68
-	bl ov96_021F4EF8
+	bl PokeathlonCirclePushDisplayAnim_PrintScore
 	mov r0, #0x20
 	str r0, [sp]
 	mov r0, #0x18

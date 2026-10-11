@@ -20,7 +20,7 @@ void ov01_021FEA48(void *v) {
     u8 *p = v;
     if (*(u32 *)(p + 4) == 0) {
         ov01_021F19F4(*(void **)(p + 0x10), p + 0x14, 0, 0x57, 1);
-        sub_02069978(p + 0x28, p + 0x14);
+        RenderObj_InitFromModel(p + 0x28, p + 0x14);
         *(u32 *)(p + 4) = 1;
     }
 }
@@ -28,7 +28,7 @@ void ov01_021FEA7C(void *v) {
     u8 *p = v;
     if (*(u32 *)(p + 4) == 1) {
         *(u32 *)(p + 4) = 0;
-        sub_02069784(p + 0x14);
+        RenderModel_Free(p + 0x14);
     }
 }
 void ov01_021FEA90(void *p) {
@@ -119,5 +119,5 @@ void ov01_021FEBC0(void *task, EffectWork *work) {
     }
     Math_CalcRotationMatrixXYZDeg(&rot, 0, angle, 0);
     sub_02068DB8(task, &pos);
-    sub_020699AC(obj, &pos, &scale, &rot);
+    RenderObj_Draw(obj, &pos, &scale, &rot);
 }

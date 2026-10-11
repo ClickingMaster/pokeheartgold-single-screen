@@ -2431,67 +2431,67 @@
 	.public Gts_CreateCountryListItems
 	.public ov70_0223F948
 	.public ov70_0223F960
-	.public ov70_0223F96C
-	.public ov70_0223F9B4
-	.public ov70_0223F9D4
-	.public ov70_0223FA08
-	.public ov70_0223FB34
-	.public ov70_0223FB60
-	.public ov70_0223FBF4
-	.public ov70_0223FC30
-	.public ov70_0223FC40
-	.public ov70_0223FC58
-	.public ov70_0223FC68
-	.public ov70_0223FD64
-	.public ov70_0223FD98
-	.public ov70_0223FE40
-	.public ov70_0223FE60
-	.public ov70_0223FEE4
-	.public ov70_0223FF10
-	.public ov70_0223FFCC
-	.public ov70_0223FFE8
-	.public ov70_0224006C
-	.public ov70_022400BC
-	.public ov70_02240180
-	.public ov70_0224019C
-	.public ov70_02240220
-	.public ov70_02240240
-	.public ov70_022403FC
-	.public ov70_02240410
-	.public ov70_02240430
-	.public ov70_022404D4
-	.public ov70_02240500
-	.public ov70_02240540
-	.public ov70_02240598
-	.public ov70_022405B4
-	.public ov70_0224063C
-	.public ov70_02240640
-	.public ov70_02240658
-	.public ov70_02240670
-	.public ov70_02240684
-	.public ov70_0224069C
-	.public ov70_022406B8
-	.public ov70_02240748
-	.public ov70_0224078C
-	.public ov70_022407E4
-	.public ov70_0224080C
-	.public ov70_02240838
-	.public ov70_02240854
-	.public ov70_02240884
-	.public ov70_0224089C
-	.public ov70_022408BC
-	.public ov70_022408E0
-	.public ov70_022408FC
-	.public ov70_02240948
-	.public ov70_022409A0
-	.public ov70_022409C0
-	.public ov70_02240A7C
-	.public ov70_02240B9C
-	.public ov70_02240CA0
-	.public ov70_02240CE4
-	.public ov70_02240D00
-	.public ov70_02240D44
-	.public ov70_02240D54
+	.public GtsTransaction_Init
+	.public GtsTransaction_Main
+	.public GtsTransaction_Exit
+	.public GtsTransaction_InitBgs
+	.public GtsTransaction_FreeBgs
+	.public GtsTransaction_LoadGraphics
+	.public GtsTransaction_CreateWindows
+	.public GtsTransaction_RemoveWindows
+	.public GtsTransaction_CreateStrings
+	.public GtsTransaction_DeleteStrings
+	.public GtsTransaction_Start
+	.public GtsTransaction_SendPost
+	.public GtsTransaction_WaitPost
+	.public GtsTransaction_SendPostFinish
+	.public GtsTransaction_WaitPostFinish
+	.public GtsTransaction_SendGet
+	.public GtsTransaction_WaitGet
+	.public GtsTransaction_SendReturn
+	.public GtsTransaction_WaitReturn
+	.public GtsTransaction_SendExchange
+	.public GtsTransaction_WaitExchange
+	.public GtsTransaction_SendExchangeFinish
+	.public GtsTransaction_WaitExchangeFinish
+	.public GtsTransaction_SendResult
+	.public GtsTransaction_WaitResult
+	.public GtsTransaction_ExitToMainMenu
+	.public GtsTransaction_SendStatusGet
+	.public GtsTransaction_WaitStatusGet
+	.public GtsTransaction_ReturnToCaller
+	.public GtsTransaction_RecordTradeStats
+	.public GtsTransaction_ReceiveTradedMon
+	.public GtsTransaction_SendDelete
+	.public GtsTransaction_WaitDelete
+	.public GtsTransaction_Idle
+	.public GtsTransaction_DepositDone
+	.public GtsTransaction_ReceiveDone
+	.public GtsTransaction_ExchangeDone
+	.public GtsTransaction_TradedDone
+	.public GtsTransaction_SendUnsavedReturn
+	.public GtsTransaction_WaitUnsavedReturn
+	.public GtsTransaction_AlreadyTraded
+	.public GtsTransaction_PrintServerError
+	.public GtsTransaction_ServerErrorExit
+	.public GtsTransaction_ServerError
+	.public GtsTransaction_SaveAndExit
+	.public GtsTransaction_StartSave
+	.public GtsTransaction_WaitSaveDelay
+	.public GtsTransaction_SaveFirstPart
+	.public GtsTransaction_SaveRest
+	.public GtsTransaction_StartSaveWithMessage
+	.public GtsTransaction_SaveWithMessage
+	.public GtsTransaction_FadeOut
+	.public GtsTransaction_WaitText
+	.public GtsTransaction_StoreSelectedMon
+	.public GtsTransaction_ReceiveMon
+	.public GtsTransaction_ReceiveExchangedMon
+	.public GtsTransaction_SaveTradeDate
+	.public GtsTransaction_AddPartnerToWifiHistory
+	.public GtsTransaction_CheckCanReceive
+	.public GtsTransaction_SetSaveStates
+	.public GtsTransaction_IsDepositMissingFromSave
 	.public Gts_CreateAvatars
 	.public Gts_StartPlayerEnterAnim
 	.public Gts_SetPlayerAnim
@@ -2692,12 +2692,12 @@
 	.public sGtsWantedLevelRanges
 	.public sGtsSpeciesLetterFiles
 	.public sGtsCountries
-	.public ov70_02245C60
-	.public ov70_02245C70
-	.public ov70_02245C8C
-	.public ov70_02245CA8
-	.public ov70_02245CC4
-	.public ov70_02245CE0
+	.public sGtsTransactionGraphicsModes
+	.public sGtsTransactionSubBg1Template
+	.public sGtsTransactionBg1Template
+	.public sGtsTransactionBg0Template
+	.public sGtsTransactionSubBg0Template
+	.public sGtsTransactionBg2Template
 	.public sGtsAvatarCharOffsets
 	.public sGtsAvatarPositions
 	.public sGtsAvatarY
@@ -2775,7 +2775,7 @@
 	.public sGtsSelectMonStates
 	.public sGtsGenderColors
 	.public sGtsWantedStates
-	.public ov70_02246658
+	.public sGtsTransactionStates
 	.public ov70_022466F8
 	.public ov70_02246780
 	.public gGtsServerFriendKey
@@ -2824,13 +2824,13 @@
 	.public ov70_0223EDD8
 	.public ov70_0223F948
 	.public ov70_0223F960
-	.public ov70_0224063C
-	.public ov70_02240838
-	.public ov70_02240884
-	.public ov70_022408BC
-	.public ov70_022408E0
-	.public ov70_02240D44
-	.public ov70_02240D54
+	.public GtsTransaction_Idle
+	.public GtsTransaction_SaveAndExit
+	.public GtsTransaction_WaitSaveDelay
+	.public GtsTransaction_SaveRest
+	.public GtsTransaction_StartSaveWithMessage
+	.public GtsTransaction_SetSaveStates
+	.public GtsTransaction_IsDepositMissingFromSave
 	.public Gts_GetAvatarAnimSeq
 	.public GtsViewMon_Exit
 	.public ov70_02242508
@@ -3269,28 +3269,28 @@ sGtsCountries: ; 0x02245B5C
 	.byte 0xC8, 0x00, 0xCA, 0x00, 0xCD, 0x00, 0xCF, 0x00, 0xD3, 0x00, 0xD4, 0x00, 0xD8, 0x00, 0xDA, 0x00
 	.byte 0xDB, 0x00, 0xCC, 0x00, 0xDD, 0x00, 0xDC, 0x00, 0xDE, 0x00, 0xE0, 0x00, 0xE2, 0x00, 0xE3, 0x00
 
-ov70_02245C60: ; 0x02245C60
+sGtsTransactionGraphicsModes: ; 0x02245C60
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov70_02245C70: ; 0x02245C70
+sGtsTransactionSubBg1Template: ; 0x02245C70
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x01, 0x1C, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov70_02245C8C: ; 0x02245C8C
+sGtsTransactionBg1Template: ; 0x02245C8C
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1E, 0x02
 	.byte 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov70_02245CA8: ; 0x02245CA8
+sGtsTransactionBg0Template: ; 0x02245CA8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1F, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov70_02245CC4: ; 0x02245CC4
+sGtsTransactionSubBg0Template: ; 0x02245CC4
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1E, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov70_02245CE0: ; 0x02245CE0
+sGtsTransactionBg2Template: ; 0x02245CE0
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x1D, 0x02, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
@@ -3552,7 +3552,7 @@ sGtsScreens: ; 0x022463EC
 	.word GtsSearch_Init, GtsSearch_Main, GtsSearch_Exit
 	.word GtsSelectMon_Init, GtsSelectMon_Main, GtsSelectMon_Exit
 	.word GtsWanted_Init, GtsWanted_Main, GtsWanted_Exit
-	.word ov70_0223F96C, ov70_0223F9B4, ov70_0223F9D4
+	.word GtsTransaction_Init, GtsTransaction_Main, GtsTransaction_Exit
 	.word GtsViewMon_Init, GtsViewMon_Main, GtsViewMon_Exit
 	.word GtsTrade_Init, GtsTrade_Main, GtsTrade_Exit
 
@@ -3693,47 +3693,47 @@ sGtsWantedStates: ; 0x02246614
 	.word GtsWanted_HandleConfirmPrompt
 	.word GtsWanted_WaitText
 
-ov70_02246658: ; 0x02246658
-	.word ov70_0223FC68
-	.word ov70_0224063C
-	.word ov70_0223FD64
-	.word ov70_0223FD98
-	.word ov70_0223FE40
-	.word ov70_0223FE60
-	.word ov70_02240640
-	.word ov70_0223FEE4
-	.word ov70_0223FF10
-	.word ov70_0223FFCC
-	.word ov70_0223FFE8
-	.word ov70_02240658
-	.word ov70_0224006C
-	.word ov70_022400BC
-	.word ov70_02240180
-	.word ov70_0224019C
-	.word ov70_02240670
-	.word ov70_02240748
-	.word ov70_02240540
-	.word ov70_02240598
-	.word ov70_022405B4
-	.word ov70_02240684
-	.word ov70_0224069C
-	.word ov70_022406B8
-	.word ov70_02240220
-	.word ov70_02240240
-	.word ov70_02240410
-	.word ov70_02240430
-	.word ov70_022403FC
-	.word ov70_02240838
-	.word ov70_02240854
-	.word ov70_02240884
-	.word ov70_0224089C
-	.word ov70_022408BC
-	.word ov70_022408E0
-	.word ov70_022408FC
-	.word ov70_02240948
-	.word ov70_022409A0
-	.word ov70_022407E4
-	.word ov70_0224080C
+sGtsTransactionStates: ; 0x02246658
+	.word GtsTransaction_Start
+	.word GtsTransaction_Idle
+	.word GtsTransaction_SendPost
+	.word GtsTransaction_WaitPost
+	.word GtsTransaction_SendPostFinish
+	.word GtsTransaction_WaitPostFinish
+	.word GtsTransaction_DepositDone
+	.word GtsTransaction_SendGet
+	.word GtsTransaction_WaitGet
+	.word GtsTransaction_SendReturn
+	.word GtsTransaction_WaitReturn
+	.word GtsTransaction_ReceiveDone
+	.word GtsTransaction_SendExchange
+	.word GtsTransaction_WaitExchange
+	.word GtsTransaction_SendExchangeFinish
+	.word GtsTransaction_WaitExchangeFinish
+	.word GtsTransaction_ExchangeDone
+	.word GtsTransaction_AlreadyTraded
+	.word GtsTransaction_ReceiveTradedMon
+	.word GtsTransaction_SendDelete
+	.word GtsTransaction_WaitDelete
+	.word GtsTransaction_TradedDone
+	.word GtsTransaction_SendUnsavedReturn
+	.word GtsTransaction_WaitUnsavedReturn
+	.word GtsTransaction_SendResult
+	.word GtsTransaction_WaitResult
+	.word GtsTransaction_SendStatusGet
+	.word GtsTransaction_WaitStatusGet
+	.word GtsTransaction_ExitToMainMenu
+	.word GtsTransaction_SaveAndExit
+	.word GtsTransaction_StartSave
+	.word GtsTransaction_WaitSaveDelay
+	.word GtsTransaction_SaveFirstPart
+	.word GtsTransaction_SaveRest
+	.word GtsTransaction_StartSaveWithMessage
+	.word GtsTransaction_SaveWithMessage
+	.word GtsTransaction_FadeOut
+	.word GtsTransaction_WaitText
+	.word GtsTransaction_ServerErrorExit
+	.word GtsTransaction_ServerError
 
 ov70_022466F8: ; 0x022466F8
 	.word ov70_02242FF4

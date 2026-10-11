@@ -191,7 +191,7 @@
 .public ov42_02229200
 .public ov42_022299C0
 .public ov80_0222A7EC
-.public ov80_0222AB2C
+.public FrontierSystem_GetVarPtr
 .public FrontierSystem_GetFrontierMap
 .public FrontierScriptContext_Pause
 .public FrontierScriptContext_Stop

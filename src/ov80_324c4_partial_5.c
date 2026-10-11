@@ -47,13 +47,13 @@ void ov80_02233280(void *ctx, u32 state, u16 value) {
         ov80_0222B5C8(ctx);
         break;
     case 1:
-        ov80_0222B65C(ctx);
+        BattleCastleLink_SendTrainerIds(ctx);
         break;
     case 2:
         ov80_0222B6C8(ctx);
         break;
     case 3:
-        ov80_0222B7E4(ctx);
+        BattleCastleLink_SendOpponentMons(ctx);
         break;
     case 4:
         ov80_0222B8D8(ctx, value);
@@ -62,7 +62,7 @@ void ov80_02233280(void *ctx, u32 state, u16 value) {
         ov80_0222B920(ctx, value);
         break;
     case 6:
-        ov80_0222B968(ctx);
+        BattleCastleLink_SendPartyMons(ctx);
         break;
     }
 }

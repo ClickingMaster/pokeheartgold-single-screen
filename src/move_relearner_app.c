@@ -36,7 +36,7 @@
 #include "touchscreen.h"
 #include "unk_02019BA4.h"
 #include "unk_02026E30.h"
-#include "unk_02077678.h"
+#include "type_icon_resources.h"
 #include "unk_0208805C.h"
 #include "unk_02088288.h"
 #include "vram_transfer_manager.h"
@@ -138,12 +138,12 @@ typedef struct MoveRelearnerYesNoAction {
 } MoveRelearnerYesNoAction;
 
 // Defined in type_icon_resources.c; not declared in unk_02077678.h.
-void sub_020776EC(SpriteSystem *spriteSystem, SpriteManager *spriteManager, int vram, int resId);
-u32 sub_0207769C(u32 type);
-int sub_02077800(u32 category);
-u32 sub_02077818(u32 category);
-NarcId sub_02077830(u32 category); // the definition takes no argument; the call passes one
-void sub_02077834(SpriteSystem *spriteSystem, SpriteManager *spriteManager, int vram, int category, int resId);
+void TypeIcon_LoadPltt(SpriteSystem *spriteSystem, SpriteManager *spriteManager, int vram, int resId);
+u32 TypeIcon_GetPalette(u32 type);
+int MoveCategoryIcon_GetCharFile(u32 category);
+u32 MoveCategoryIcon_GetPalette(u32 category);
+NarcId MoveCategoryIcon_GetNarc(u32 category); // the definition takes no argument; the call passes one
+void MoveCategoryIcon_LoadChar(SpriteSystem *spriteSystem, SpriteManager *spriteManager, int vram, int category, int resId);
 
 extern const u8 sMoveRelearnerSummaryPages[2];
 extern const VecFx32 sMoveRelearnerCameraPos;
@@ -1105,20 +1105,20 @@ void MoveRelearner_LoadSpriteResources(MoveRelearner *relearner, NARC *narc) {
     SpriteSystem_LoadCharResObjFromOpenNarc(relearner->spriteSystem, relearner->spriteManager, narc, 11, FALSE, NNS_G2D_VRAM_TYPE_2DSUB, 0xB8A9);
     for (i = 0xB8AB; i <= 0xB8B2; i++) {
         if (i < 0xB8AF) {
-            sub_020776B8(relearner->spriteSystem, relearner->spriteManager, NNS_G2D_VRAM_TYPE_2DSUB, 0, i);
+            TypeIcon_LoadChar(relearner->spriteSystem, relearner->spriteManager, NNS_G2D_VRAM_TYPE_2DSUB, 0, i);
         } else {
-            sub_020776B8(relearner->spriteSystem, relearner->spriteManager, NNS_G2D_VRAM_TYPE_2DMAIN, 0, i);
+            TypeIcon_LoadChar(relearner->spriteSystem, relearner->spriteManager, NNS_G2D_VRAM_TYPE_2DMAIN, 0, i);
         }
     }
-    sub_02077834(relearner->spriteSystem, relearner->spriteManager, NNS_G2D_VRAM_TYPE_2DSUB, 0, 0xB8AA);
+    MoveCategoryIcon_LoadChar(relearner->spriteSystem, relearner->spriteManager, NNS_G2D_VRAM_TYPE_2DSUB, 0, 0xB8AA);
     SpriteSystem_LoadPlttResObjFromOpenNarc(relearner->spriteSystem, relearner->spriteManager, narc, 5, FALSE, 4, NNS_G2D_VRAM_TYPE_2DSUB, 0xB8A8);
-    sub_020776EC(relearner->spriteSystem, relearner->spriteManager, NNS_G2D_VRAM_TYPE_2DSUB, 0xB8A9);
-    sub_020776EC(relearner->spriteSystem, relearner->spriteManager, NNS_G2D_VRAM_TYPE_2DMAIN, 0xB8AA);
+    TypeIcon_LoadPltt(relearner->spriteSystem, relearner->spriteManager, NNS_G2D_VRAM_TYPE_2DSUB, 0xB8A9);
+    TypeIcon_LoadPltt(relearner->spriteSystem, relearner->spriteManager, NNS_G2D_VRAM_TYPE_2DMAIN, 0xB8AA);
     SpriteSystem_LoadCellResObjFromOpenNarc(relearner->spriteSystem, relearner->spriteManager, narc, 7, FALSE, 0xB8A8);
     SpriteSystem_LoadCellResObjFromOpenNarc(relearner->spriteSystem, relearner->spriteManager, narc, 10, FALSE, 0xB8A9);
     SpriteSystem_LoadAnimResObjFromOpenNarc(relearner->spriteSystem, relearner->spriteManager, narc, 8, FALSE, 0xB8A8);
     SpriteSystem_LoadAnimResObjFromOpenNarc(relearner->spriteSystem, relearner->spriteManager, narc, 9, FALSE, 0xB8A9);
-    sub_0207775C(relearner->spriteSystem, relearner->spriteManager, 0xB8AA, 0xB8AA);
+    TypeIcon_LoadCellAnim(relearner->spriteSystem, relearner->spriteManager, 0xB8AA, 0xB8AA);
 }
 
 // index 0-3: the type icon of a list row, 4-7: of one of the Pokemon's current moves.
@@ -1132,13 +1132,13 @@ void MoveRelearner_SetTypeIcon(MoveRelearner *relearner, u16 move, u16 index) {
     } else {
         type = GetMoveAttr(move, MOVEATTR_CONTEST_TYPE) + 18;
     }
-    narc = sub_020776B4();
-    file = sub_02077678(type);
+    narc = TypeIcon_GetNarc();
+    file = TypeIcon_GetCharFile(type);
     SpriteSystem_ReplaceCharResObj(relearner->spriteSystem, relearner->spriteManager, narc, file, TRUE, 0xB8AB + index);
     if (index < 4) {
-        ManagedSprite_SetPaletteOverride(relearner->sprites[index + 4], sub_0207769C(type) + 4);
+        ManagedSprite_SetPaletteOverride(relearner->sprites[index + 4], TypeIcon_GetPalette(type) + 4);
     } else {
-        ManagedSprite_SetPaletteOverride(relearner->sprites[index + 4], sub_0207769C(type));
+        ManagedSprite_SetPaletteOverride(relearner->sprites[index + 4], TypeIcon_GetPalette(type));
     }
 }
 
@@ -1163,11 +1163,11 @@ void MoveRelearner_UpdateListTypeIcons(MoveRelearner *relearner) {
 
 void MoveRelearner_SetCategoryIcon(MoveRelearner *relearner, int move) {
     int category = ((u32(*)(u32, MoveAttr))GetMoveAttr)(move, MOVEATTR_CLASS); // no truncation of move to u16, as in the original
-    NarcId narc = sub_02077830(category);
-    int file = sub_02077800(category);
+    NarcId narc = MoveCategoryIcon_GetNarc(category);
+    int file = MoveCategoryIcon_GetCharFile(category);
 
     SpriteSystem_ReplaceCharResObj(relearner->spriteSystem, relearner->spriteManager, narc, file, TRUE, 0xB8AA);
-    ManagedSprite_SetPaletteOverride(relearner->sprites[3], sub_02077818(category) + 4);
+    ManagedSprite_SetPaletteOverride(relearner->sprites[3], MoveCategoryIcon_GetPalette(category) + 4);
 }
 
 // Sprites: 0/1 scroll arrows (down/up), 2 cursor, 3 category icon of the selected move,

@@ -27,11 +27,11 @@
 .public gOverlayTemplate_Frontier
 .public FrontierSystem_Create
 .public FrontierSystem_Main
-.public ov80_0222A920
+.public FrontierSystem_Delete
 .public FrontierSystem_AddTask
-.public ov80_0222AA7C
-.public ov80_0222AAD8
-.public ov80_0222AAF8
+.public FrontierSystem_ChangeMsgBank
+.public FrontierSystem_SaveVars
+.public FrontierSystem_RestoreVars
 .public FrontierMap_Init
 .public FrontierMap_Free
 .public FrontierMap_SaveObjects

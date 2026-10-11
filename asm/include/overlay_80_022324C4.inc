@@ -66,12 +66,12 @@
 .public ov80_0222A840
 .public FrontierSystem_GetFrontierMap
 .public ov80_0222B5C8
-.public ov80_0222B65C
+.public BattleCastleLink_SendTrainerIds
 .public ov80_0222B6C8
-.public ov80_0222B7E4
+.public BattleCastleLink_SendOpponentMons
 .public ov80_0222B8D8
 .public ov80_0222B920
-.public ov80_0222B968
+.public BattleCastleLink_SendPartyMons
 .public ov80_022324C4
 .public ov80_02232824
 .public ov80_02232ABC

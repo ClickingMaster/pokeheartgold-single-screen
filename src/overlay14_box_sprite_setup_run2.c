@@ -43,8 +43,8 @@ void PCBox_CreateTypeIconSprites(void *p) {
 void PCBox_LoadTypeIcon(void *p, u32 a1, u32 index, u32 resourceId) {
     void *charData;
     void *data;
-    data = sub_020776B4(p);
-    data = GfGfxLoader_GetCharData(data, sub_02077678((void *)a1), TRUE, &charData, 0xa);
+    data = TypeIcon_GetNarc(p);
+    data = GfGfxLoader_GetCharData(data, TypeIcon_GetCharFile((void *)a1), TRUE, &charData, 0xa);
     PCBox_LoadSpriteCharsSub(p, index, PTR_AT(charData, 0x14), 0x100);
     Heap_Free(data);
     {
@@ -52,7 +52,7 @@ void PCBox_LoadTypeIcon(void *p, u32 a1, u32 index, u32 resourceId) {
         p = (u8 *)p + 0x2fc;
         index *= 4;
         palette = ManagedSprite_GetPaletteOverrideOffset(PTR_AT(p, index));
-        ManagedSprite_SetPaletteOverride(PTR_AT(p, index), palette + sub_0207769C((void *)a1));
+        ManagedSprite_SetPaletteOverride(PTR_AT(p, index), palette + TypeIcon_GetPalette((void *)a1));
     }
 }
 

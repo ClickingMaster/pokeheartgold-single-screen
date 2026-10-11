@@ -55,12 +55,12 @@ void ov01_021FD1CC(FieldEffectRendererList *list) {
 void ov01_021FD1E8(FieldEffectRenderer *renderer, u32 id, int modelId, void *a3) {
     renderer->unk0 = id;
     ov01_021F19F4(a3, &renderer->unk4, 0, modelId, 0);
-    sub_02069978(&renderer->unk18, &renderer->unk4);
+    RenderObj_InitFromModel(&renderer->unk18, &renderer->unk4);
 }
 
 void ov01_021FD20C(FieldEffectRenderer *renderer) {
     renderer->unk0 = FIELD_EFFECT_RENDERER_SLOT_EMPTY;
-    sub_02069784(&renderer->unk4);
+    RenderModel_Free(&renderer->unk4);
 }
 
 void ov01_021FD21C(FieldEffectRendererList *list) {
@@ -167,7 +167,7 @@ void ov01_021FD3E0(void *a0, FieldEffectRendererWork *work) {
     VecFx32 position;
 
     sub_02068DB8(a0, &position);
-    sub_020699BC((int)work->unk18, &position);
+    RenderObj_DrawAt((int)work->unk18, &position);
 }
 
 void FieldEffect_InitRenderObject(FieldEffectManager *fieldEffectManager) {

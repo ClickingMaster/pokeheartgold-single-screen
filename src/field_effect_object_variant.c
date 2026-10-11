@@ -36,11 +36,11 @@ void ov01_021FE79C(Ov01FE780Ctx *ctx) {
 
 void ov01_021FE7AC(Ov01FE780Ctx *ctx) {
     ov01_021F19F4(ctx->manager, &ctx->unk4, 0, 0x56, 0);
-    sub_02069978(&ctx->unk18, &ctx->unk4);
+    RenderObj_InitFromModel(&ctx->unk18, &ctx->unk4);
 }
 
 void ov01_021FE7D0(Ov01FE780Ctx *ctx) {
-    sub_02069784(&ctx->unk4);
+    RenderModel_Free(&ctx->unk4);
 }
 
 u32 ov01_021FE7DC(LocalMapObject *obj, u32 x, u32 y, u32 dir, u32 a4) {
@@ -157,7 +157,7 @@ void ov01_021FE970(void *a0, Ov01FE780Work *work) {
     }
     Math_CalcRotationMatrixXYZDeg(&mtx, 0, angle, 0);
     sub_02068DB8(a0, &pos);
-    sub_020699AC(renderObj, &pos, &scale, &mtx);
+    RenderObj_Draw(renderObj, &pos, &scale, &mtx);
 }
 
 void ov01_021FE9F4(void *a0, void *a1) {

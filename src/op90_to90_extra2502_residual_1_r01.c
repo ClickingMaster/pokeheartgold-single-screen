@@ -87,7 +87,7 @@ void ov96_021F2B68(Batch *batch, u8 oldGroup, u8 group, void *course);
 BOOL PlaySE(u16 seq);
 BOOL IsSEPlaying(u16 seq);
 void ov96_021F295C(int time, BgConfig *bg);
-void ov96_021F4364(void *ui, int level);
+void PokeathlonCirclePushDisplay_SetRound(void *ui, int level);
 void *ov96_021EAA20(void *obj);
 Sprite *ov96_021E8BAC(void *obj);
 void ov96_021EB06C(void *obj, int x, int y, int *outX, int *outY);
@@ -104,14 +104,14 @@ void ov96_021EAC0C(void *obj, int anim);
 u8 *ov96_021E60D8(void *course, int row, int col);
 void ov96_021EAED4(void *obj, int a, int pitch, int anim, int b);
 void ov96_021F2E80(void *course, Batch *batch, void *obj, u8 index, int anim);
-void ov96_021F4390(void *ui, u8 row, int effect);
+void PokeathlonCirclePushDisplay_ShowPlayerEvent(void *ui, u8 row, int effect);
 void ov96_021F2E2C(Batch *batch, u8 index);
 BOOL ov96_021F3180(u8 group, u16 x, u16 y, u8 *result);
 void ov96_021E658C(void *course, u8 col, int flag);
 void ov96_021F2FEC(CourseWork *work, Packet *packet);
 void ov96_021F2D98(Batch *batch);
-void ov96_021F4688(void *ui, int arg, int mode);
-void ov96_021F45F4(void *ui, int active, u8 *flags);
+void PokeathlonCirclePushDisplay_SetScore(void *ui, int arg, int mode);
+void PokeathlonCirclePushDisplay_Update(void *ui, int active, u8 *flags);
 
 
 static inline void UpdateActorAnim(void *course, CourseWork *work, Actor *actor, int index, int row, u8 player, int anim, int x, int y, VecFx32 *pos, u8 active, Sprite *sprite) {
@@ -227,7 +227,7 @@ void ov96_021F1614(void *course) {
     if (sound) {
         PlaySE(0x8CF);
     }
-    ov96_021F4364(work->ui, level);
+    PokeathlonCirclePushDisplay_SetRound(work->ui, level);
 
     for (i = 0; i < 12; i++) {
         Actor *actor;
@@ -316,7 +316,7 @@ void ov96_021F1614(void *course) {
                     } else {
                         PlaySE(0x88F);
                     }
-                    ov96_021F4390(work->ui, (i / 3), effect);
+                    PokeathlonCirclePushDisplay_ShowPlayerEvent(work->ui, (i / 3), effect);
                     ov96_021F2E2C(&work->batch, i);
                 } else {
                     GF_AssertFail();
@@ -338,6 +338,6 @@ void ov96_021F1614(void *course) {
     if (work->batch.active && !active) {
         ov96_021F2D98(&work->batch);
     }
-    ov96_021F4688(work->ui, arg, mode);
-    ov96_021F45F4(work->ui, active, flags);
+    PokeathlonCirclePushDisplay_SetScore(work->ui, arg, mode);
+    PokeathlonCirclePushDisplay_Update(work->ui, active, flags);
 }

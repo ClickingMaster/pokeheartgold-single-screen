@@ -73,7 +73,7 @@
 	.extern ov96_021EEEC0
 	.extern ov96_021EF18C
 	.extern ov96_021F08E4
-	.extern ov96_021F54C0
+	.extern PokeathlonLampJump_Draw
 	.extern ov96_021F9234
 	.extern ov96_021FCD74
 	.extern ov96_02204DE8
@@ -301,10 +301,10 @@ ov96_0221A90C:
 	.word 1
 
 ov96_0221A920:
-	.word ov96_021F5018
-	.word ov96_021F54C0
+	.word PokeathlonLampJump_Init
+	.word PokeathlonLampJump_Draw
 	.word ov96_021F54D4
-	.word ov96_021F553C
+	.word PokeathlonLampJump_Exit
 	.word 1
 
 	.global ov96_0221A934

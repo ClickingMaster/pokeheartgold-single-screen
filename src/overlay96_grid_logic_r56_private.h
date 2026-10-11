@@ -44,7 +44,7 @@ fx32 VEC_Mag(VecFx32 *);
 void *Heap_Alloc(int, u32);
 void Heap_Free(void *);
 void MI_CpuFill8(void *, u8, u32);
-void ov96_021F4558(void *);
+void PokeathlonCirclePushDisplay_CreateWindows(void *);
 void *NewMsgDataFromNarc(int, int, int, int);
 void *MessageFormat_New(int);
 void MessageFormat_Delete(void *);

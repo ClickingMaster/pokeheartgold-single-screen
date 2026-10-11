@@ -5,7 +5,7 @@
 
 #include "bg_window.h"
 #include "gf_gfx_loader.h"
-#include "unk_02077678.h"
+#include "type_icon_resources.h"
 
 #pragma require_prototypes off
 

@@ -188,8 +188,8 @@
 	.public ov96_021F30BC
 	.public ov96_021F3424
 	.public ov96_021F3E58
-	.public ov96_021F46B4
-	.public ov96_021F54C0
+	.public PokeathlonCirclePushDisplay_GetScore
+	.public PokeathlonLampJump_Draw
 	.public ov96_021F74C8
 	.public ov96_021F75D4
 	.public ov96_021F75E0

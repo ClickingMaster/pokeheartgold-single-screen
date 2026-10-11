@@ -19,10 +19,10 @@
 .public sub_02068D98
 .public sub_02068DA8
 .public sub_02068DB8
-.public sub_02069784
-.public sub_02069978
-.public sub_020699AC
-.public sub_020699BC
+.public RenderModel_Free
+.public RenderObj_InitFromModel
+.public RenderObj_Draw
+.public RenderObj_DrawAt
 .public NNSi_G3dModifyPolygonAttrMask
 .public NNS_G3dMdlSetMdlAlphaAll
 .public ov01_021F1430

@@ -233,10 +233,10 @@
 .public sub_02039B38
 .public WirelessStatusIcon_Create
 .public sub_02070D84
-.public sub_02077678
-.public sub_02077690
-.public sub_0207769C
-.public sub_020776B4
+.public TypeIcon_GetCharFile
+.public TypeIcon_GetPlttFile
+.public TypeIcon_GetPalette
+.public TypeIcon_GetNarc
 .public NNS_G2dGetUnpackedCharacterData
 .public NNS_G2dInitOamManagerModule
 .public NNS_G3dAnmObjDisableID

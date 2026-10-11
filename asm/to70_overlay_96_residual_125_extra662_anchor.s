@@ -152,7 +152,7 @@
 	.extern ov96_021EEEC0
 	.extern ov96_021EF18C
 	.extern ov96_021F08E4
-	.extern ov96_021F54C0
+	.extern PokeathlonLampJump_Draw
 	.extern ov96_021F9234
 	.extern ov96_021FCD74
 	.extern ov96_02204DE8
@@ -359,8 +359,8 @@
 	.public ov96_021F30BC
 	.public ov96_021F3424
 	.public ov96_021F3E58
-	.public ov96_021F46B4
-	.public ov96_021F54C0
+	.public PokeathlonCirclePushDisplay_GetScore
+	.public PokeathlonLampJump_Draw
 	.public ov96_021F74C8
 	.public ov96_021F75D4
 	.public ov96_021F75E0
@@ -1056,8 +1056,8 @@ ov96_0221DC18: ; 0x0221DC18
 	.byte 0x03, 0x04, 0x05, 0x06
 
 ov96_0221DC1C:
-	.word ov96_021F5650
-	.word ov96_021F5730
+	.word PokeathlonLampJump_Play
+	.word PokeathlonLampJump_CalcScores
 
 ov96_0221DC24: ; 0x0221DC24
 	.word ov96_021F7E74

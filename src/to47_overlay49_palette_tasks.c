@@ -14,8 +14,8 @@ void ov49_0225BA5C(SysTask *task, void *data) {
 
     GfGfxLoader_GXLoadPalFromOpenNarc(PTR_AT(data, 0x14c), U16_AT(data, 0x154), GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0, (enum HeapID)U16_AT(data, 0x156));
     LoadFontPal0(GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_5_OFFSET, (enum HeapID)U16_AT(data, 0x156));
-    narcId = sub_020776B4();
-    memberNo = sub_02077690();
+    narcId = TypeIcon_GetNarc();
+    memberNo = TypeIcon_GetPlttFile();
     GfGfxLoader_GXLoadPal(narcId, memberNo, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_11_OFFSET, 0x60, (enum HeapID)U16_AT(data, 0x156));
     SysTask_Destroy(task);
 }

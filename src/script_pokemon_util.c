@@ -8,7 +8,7 @@
 #include "get_egg.h"
 #include "party.h"
 #include "pokemon_mood.h"
-#include "unk_0206979C.h"
+#include "render_animation.h"
 #include "update_dex_received.h"
 
 static BOOL MonNotFaintedOrEgg(Pokemon *mon) {

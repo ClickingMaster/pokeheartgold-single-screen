@@ -6,8 +6,8 @@
 #include "unk_0205FD20.h"
 #include "unk_020658D4.h"
 #include "unk_020689C8.h"
-#include "unk_02069660.h"
-#include "unk_0206979C.h"
+#include "render_model.h"
+#include "render_animation.h"
 
 static void ov01_021FFEF8(UnkOv01_021FFECC *a0);
 static void ov01_021FFF38(UnkOv01_021FFECC *a0);
@@ -36,13 +36,13 @@ void ov01_021FFEE8(UnkOv01_021FFECC *a0) {
 static void ov01_021FFEF8(UnkOv01_021FFECC *a0) {
     for (int i = 0; i < 4; i++) {
         ov01_021F19F4(a0->unk0, &a0->unk4[i], 0, ov01_02209270[i], 0);
-        sub_02069978(&a0->unk54[i], &a0->unk4[i]);
+        RenderObj_InitFromModel(&a0->unk54[i], &a0->unk4[i]);
     }
 }
 
 static void ov01_021FFF38(UnkOv01_021FFECC *a0) {
     for (int i = 0; i < 4; i++) {
-        sub_02069784(&a0->unk4[i]);
+        RenderModel_Free(&a0->unk4[i]);
     }
 }
 
@@ -103,6 +103,6 @@ static void ov01_02200020(void *a0, UnkOv01_021FFFCD *a1) {
 
     if (a1->unk4 != TRUE) {
         sub_02068DB8(a0, &translation);
-        sub_020699BC(a1->unk10.unk10, &translation);
+        RenderObj_DrawAt(a1->unk10.unk10, &translation);
     }
 }

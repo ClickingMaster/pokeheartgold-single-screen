@@ -42,12 +42,12 @@
 .public FrontierMon_GenerateList
 .public ov80_0222A840
 .public ov80_0222B108
-.public ov80_0222B174
-.public ov80_0222B1DC
-.public ov80_0222B2C4
+.public BattleFactoryLink_SendTrainerIds
+.public BattleFactoryLink_SendRentalMons
+.public BattleFactoryLink_SendOpponentMons
 .public ov80_0222B3B0
 .public ov80_0222B3FC
-.public ov80_0222B448
+.public BattleFactoryLink_SendPartyMons
 .public ov80_0222FD08
 .public ov80_0222FEEC
 .public ov80_02230424

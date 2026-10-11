@@ -57,12 +57,12 @@
 .public FrontierMon_GenerateList
 .public FrontierTrainer_GenerateMons
 .public ov80_0222A840
-.public ov80_0222BA7C
-.public ov80_0222BAE0
-.public ov80_0222BB54
+.public BattleArcadeLink_SendWinStreak
+.public BattleArcadeLink_SendTrainerIds
+.public BattleArcadeLink_SendOpponentMons
 .public ov80_0222BC48
 .public ov80_0222BC94
-.public ov80_0222BCE0
+.public BattleArcadeLink_SendPartyMons
 .public ov80_0222F29C
 .public ov80_0222F324
 .public ov80_0222F3FC

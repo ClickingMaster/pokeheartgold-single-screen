@@ -51,13 +51,13 @@ void ov80_02230AF8(void *work, u32 command, int value) {
         ov80_0222B108(work);
         break;
     case 1:
-        ov80_0222B174(work);
+        BattleFactoryLink_SendTrainerIds(work);
         break;
     case 2:
-        ov80_0222B1DC(work);
+        BattleFactoryLink_SendRentalMons(work);
         break;
     case 3:
-        ov80_0222B2C4(work);
+        BattleFactoryLink_SendOpponentMons(work);
         break;
     case 4:
         ov80_0222B3B0(work, (u8)value);
@@ -66,7 +66,7 @@ void ov80_02230AF8(void *work, u32 command, int value) {
         ov80_0222B3FC(work, (u8)value);
         break;
     case 6:
-        ov80_0222B448(work);
+        BattleFactoryLink_SendPartyMons(work);
         break;
     }
 }

@@ -43,8 +43,8 @@
 #include "link_synchronization.h"
 #include "unk_02037C94.h"
 #include "unk_0203A3B0.h"
-#include "unk_02069660.h"
-#include "unk_0206979C.h"
+#include "render_model.h"
+#include "render_animation.h"
 #include "vram_transfer_manager.h"
 
 // Main loop states (index into ov85_021EA800)
@@ -132,7 +132,7 @@ typedef struct SpinTradeLinkMenu {
     u16 confirmMask;       // 0x4A
 } SpinTradeLinkMenu;
 
-// 0x24-byte animation object handled by render_animation.c (sub_020697DC ...)
+// 0x24-byte animation object handled by render_animation.c (RenderAnimation_LoadFromNarc ...)
 typedef struct SpinTradeRenderAnim {
     u8 unk_00[0x24];
 } SpinTradeRenderAnim;
@@ -437,15 +437,15 @@ int GF_TouchpadUpdate(SpinTradeTouchSamples *out, int mode, u32 threshold);
 void *sub_0203A4AC(enum HeapID heapId);
 BOOL sub_02096D4C(SpinTradeLinkMenu *menu, int command, void *data, int size);
 Party *sub_02097018(SpinTradeLinkMenu *menu, int netId);
-void sub_020696C4(UnkOv01_021FFECC_sub *model, int index, NARC *narc, int fileId, enum HeapID heapId, BOOL atEnd);
-void sub_02069714(UnkOv01_021FFECC_sub *model);
-void sub_020697DC(SpinTradeRenderAnim *anim, int unused, NARC *narc, int fileId, enum HeapID heapId, BOOL atEnd);
-void sub_02069818(SpinTradeRenderAnim *anim);
-void sub_02069864(SpinTradeRenderAnim *anim, UnkOv01_021FFECC_sub *model, enum HeapID heapId);
-void sub_02069884(SpinTradeRenderAnim *anim, UnkOv01_021FFECC_sub *model);
-BOOL sub_020698E8(SpinTradeRenderAnim *anim, fx32 step, BOOL loop);
-void sub_02069998(NNSG3dRenderObj *obj, UnkOv01_021FFECC_sub *model, SpinTradeRenderAnim *anim);
-void sub_020699D0(NNSG3dRenderObj *obj, const VecFx32 *position, const VecFx32 *scale, const u16 *angles);
+void RenderModel_LoadFromNarc(UnkOv01_021FFECC_sub *model, int index, NARC *narc, int fileId, enum HeapID heapId, BOOL atEnd);
+void RenderModel_BindTexturesOnVBlank(UnkOv01_021FFECC_sub *model);
+void RenderAnimation_LoadFromNarc(SpinTradeRenderAnim *anim, int unused, NARC *narc, int fileId, enum HeapID heapId, BOOL atEnd);
+void RenderAnimation_FreeFile(SpinTradeRenderAnim *anim);
+void RenderAnimation_AllocObjectForModel(SpinTradeRenderAnim *anim, UnkOv01_021FFECC_sub *model, enum HeapID heapId);
+void RenderAnimation_InitObjectForModel(SpinTradeRenderAnim *anim, UnkOv01_021FFECC_sub *model);
+BOOL RenderAnimation_Advance(SpinTradeRenderAnim *anim, fx32 step, BOOL loop);
+void RenderObj_InitWithAnimation(NNSG3dRenderObj *obj, UnkOv01_021FFECC_sub *model, SpinTradeRenderAnim *anim);
+void RenderObj_DrawRotated(NNSG3dRenderObj *obj, const VecFx32 *position, const VecFx32 *scale, const u16 *angles);
 
 BOOL SpinTradeApp_Init(OverlayManager *man, int *state);
 BOOL SpinTradeApp_Exit(OverlayManager *man, int *state);
@@ -1963,9 +1963,9 @@ void SpinTrade_InitMachine(SpinTradeApp *app) {
     SpinTradeMachine *machine = &app->machine;
     int playerCount = app->args->unk0[2];
 
-    sub_020696C4(&machine->model, 0, app->narc, ov85_021EA5C4[playerCount], HEAP_ID_102, FALSE);
-    sub_02069714(&machine->model);
-    sub_02069978(&machine->renderObj, &machine->model);
+    RenderModel_LoadFromNarc(&machine->model, 0, app->narc, ov85_021EA5C4[playerCount], HEAP_ID_102, FALSE);
+    RenderModel_BindTexturesOnVBlank(&machine->model);
+    RenderObj_InitFromModel(&machine->renderObj, &machine->model);
     machine->angle = 0;
     machine->angleOffset = ov85_021EA5DC[playerCount];
     machine->scale.x = FX32_ONE;
@@ -1982,7 +1982,7 @@ void SpinTrade_InitMachine(SpinTradeApp *app) {
 #pragma force_active reset
 
 void SpinTrade_FreeMachine(SpinTradeApp *app) {
-    sub_02069784(&app->machine.model);
+    RenderModel_Free(&app->machine.model);
 }
 
 #pragma force_active on
@@ -2001,7 +2001,7 @@ void SpinTrade_UpdateMachinePosition(SpinTradeApp *app) {
 
 void SpinTrade_DrawMachine(SpinTradeApp *app) {
     SpinTradeMachine *machine = &app->machine;
-    sub_020699D0(&machine->renderObj, &machine->drawPosition, &machine->scale, machine->rotation);
+    RenderObj_DrawRotated(&machine->renderObj, &machine->drawPosition, &machine->scale, machine->rotation);
 }
 
 void SpinTradeMachine_Rotate(SpinTradeMachine *machine, fx32 delta) {
@@ -2026,10 +2026,10 @@ void SpinTrade_LoadObjectModels(SpinTradeApp *app) {
     UnkOv01_021FFECC_sub *animModel;
     SpinTradeObjects *objects = &app->objects;
 
-    sub_020696C4(&objects->eggModel, 0, app->narc, 0, HEAP_ID_102, FALSE);
-    sub_02069714(&objects->eggModel);
-    sub_020696C4(&objects->shadowModel, 0, app->narc, 5, HEAP_ID_102, FALSE);
-    sub_02069714(&objects->shadowModel);
+    RenderModel_LoadFromNarc(&objects->eggModel, 0, app->narc, 0, HEAP_ID_102, FALSE);
+    RenderModel_BindTexturesOnVBlank(&objects->eggModel);
+    RenderModel_LoadFromNarc(&objects->shadowModel, 0, app->narc, 5, HEAP_ID_102, FALSE);
+    RenderModel_BindTexturesOnVBlank(&objects->shadowModel);
     model = objects->markerModels;
     modelIds = ov85_021EA558;
     animIds = ov85_021EA580;
@@ -2038,11 +2038,11 @@ void SpinTrade_LoadObjectModels(SpinTradeApp *app) {
     animModel = model;
     do {
         int next;
-        sub_020696C4(model, 0, app->narc, *modelIds, HEAP_ID_102, FALSE);
-        sub_02069714(model);
-        sub_020697DC(anim, 0, app->narc, *animIds, HEAP_ID_102, FALSE);
-        sub_02069864(anim, animModel, HEAP_ID_102);
-        sub_02069884(anim, animModel);
+        RenderModel_LoadFromNarc(model, 0, app->narc, *modelIds, HEAP_ID_102, FALSE);
+        RenderModel_BindTexturesOnVBlank(model);
+        RenderAnimation_LoadFromNarc(anim, 0, app->narc, *animIds, HEAP_ID_102, FALSE);
+        RenderAnimation_AllocObjectForModel(anim, animModel, HEAP_ID_102);
+        RenderAnimation_InitObjectForModel(anim, animModel);
         next = i + 1;
         model++;
         i = next;
@@ -2057,17 +2057,17 @@ void SpinTrade_FreeObjectModels(SpinTradeApp *app) {
     int i;
     SpinTradeObjects *objects = &app->objects;
 
-    sub_02069784(&objects->eggModel);
-    sub_02069784(&objects->shadowModel);
+    RenderModel_Free(&objects->eggModel);
+    RenderModel_Free(&objects->shadowModel);
     for (i = 0; i < 5; i++) {
-        sub_02069784(&objects->markerModels[i]);
-        sub_02069818(&objects->markerAnims[i]);
+        RenderModel_Free(&objects->markerModels[i]);
+        RenderAnimation_FreeFile(&objects->markerAnims[i]);
     }
 }
 #pragma force_active reset
 
 void SpinTrade_ShowEgg(SpinTradeApp *app, SpinTradeEgg *egg) {
-    sub_02069978(&egg->renderObj, &app->objects.eggModel);
+    RenderObj_InitFromModel(&egg->renderObj, &app->objects.eggModel);
     egg->visible = TRUE;
     SpinTrade_ShowShadow(app, egg);
     SpinTrade_ShowMarker(app, egg);
@@ -2104,13 +2104,13 @@ void SpinTrade_DrawEggs(SpinTradeApp *app) {
     if (count > 0) {
         do {
             if (egg->visible) {
-                sub_020699D0(&egg->renderObj, &egg->position, &egg->scale, egg->rotation);
+                RenderObj_DrawRotated(&egg->renderObj, &egg->position, &egg->scale, egg->rotation);
             }
             if (shadow->active) {
-                sub_020699D0(&shadow->renderObj, &shadow->position, &shadow->scale, shadow->rotation);
+                RenderObj_DrawRotated(&shadow->renderObj, &shadow->position, &shadow->scale, shadow->rotation);
             }
             if (marker->active) {
-                sub_020699BC((int)&marker->renderObj, &marker->position);
+                RenderObj_DrawAt((int)&marker->renderObj, &marker->position);
             }
             i++;
             egg++;
@@ -2196,7 +2196,7 @@ void SpinTrade_ShowShadow(SpinTradeApp *app, SpinTradeEgg *egg) {
 
     shadow->active = TRUE;
     shadow->egg = egg;
-    sub_02069978(&shadow->renderObj, &objects->shadowModel);
+    RenderObj_InitFromModel(&shadow->renderObj, &objects->shadowModel);
     SpinTradeShadow_Update(app, shadow);
 }
 
@@ -2230,13 +2230,13 @@ void SpinTrade_ShowMarker(SpinTradeApp *app, SpinTradeEgg *egg) {
 
     marker->active = TRUE;
     marker->egg = egg;
-    sub_02069998(&marker->renderObj, &objects->markerModels[egg->slot], &objects->markerAnims[egg->slot]);
+    RenderObj_InitWithAnimation(&marker->renderObj, &objects->markerModels[egg->slot], &objects->markerAnims[egg->slot]);
 }
 
 void SpinTradeMarker_Update(SpinTradeApp *app, SpinTradeMarker *marker) {
     marker->position = marker->egg->position;
     marker->position.y += FX32_CONST(20);
-    sub_020698E8(&app->objects.markerAnims[marker->egg->slot], FX32_ONE, TRUE);
+    RenderAnimation_Advance(&app->objects.markerAnims[marker->egg->slot], FX32_ONE, TRUE);
 }
 
 void SpinTrade_StartEggDrop(SpinTradeApp *app, u32 netId, int slot, int order, int angle, u32 angleOffset, SpinTradeEgg *egg) {

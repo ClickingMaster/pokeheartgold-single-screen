@@ -43,12 +43,12 @@ typedef struct Ov08RecBB4 {
 extern u32 GetMonIconPaletteEx(u32, u32, u32);
 extern void ManagedSprite_SetPaletteOverride(ManagedSprite *, int);
 extern SpriteSystem *BattleSystem_GetSpriteSystem(void *);
-extern int sub_020776B4(void);
-extern int sub_02077678(u32);
-extern int sub_0207769C(u32);
-extern int sub_02077830(void);
-extern int sub_02077800(u32);
-extern int sub_02077818(u32);
+extern int TypeIcon_GetNarc(void);
+extern int TypeIcon_GetCharFile(u32);
+extern int TypeIcon_GetPalette(u32);
+extern int MoveCategoryIcon_GetNarc(void);
+extern int MoveCategoryIcon_GetCharFile(u32);
+extern int MoveCategoryIcon_GetPalette(u32);
 extern void SpriteSystem_ReplaceCharResObj(SpriteSystem *, SpriteManager *, int, int, BOOL, int);
 extern void ManagedSprite_SetAnim(ManagedSprite *, u32);
 extern void BattlePartyMenu_ShowSpriteAt(ManagedSprite *, int, int);

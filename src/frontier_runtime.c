@@ -74,13 +74,13 @@ int Frontier_Main(void *manager, int *state) {
     case 6:
         Frontier_CreateMap(work);
         if (work->taskId == 0xffff) {
-            ov80_0222AA7C(work->system, ((FrontierLaunchArgsInternal *)work->launchArgs)->mode, 11);
+            FrontierSystem_ChangeMsgBank(work->system, ((FrontierLaunchArgsInternal *)work->launchArgs)->mode, 11);
         } else {
-            void *saved = ov80_0222AAD8(work->system, 11);
-            ov80_0222A920(work->system);
+            void *saved = FrontierSystem_SaveVars(work->system, 11);
+            FrontierSystem_Delete(work->system);
             work->system = FrontierSystem_Create(work, 11, ((FrontierLaunchArgsInternal *)work->launchArgs)->mode);
             FrontierSystem_AddTask(work->system, ((FrontierLaunchArgsInternal *)work->launchArgs)->mode, work->taskId);
-            ov80_0222AAF8(work->system, saved);
+            FrontierSystem_RestoreVars(work->system, saved);
         }
         work->rebuildPending = 0;
         *state = 1;
@@ -91,7 +91,7 @@ int Frontier_Main(void *manager, int *state) {
 
 int Frontier_Exit(void *manager) {
     FrontierWork *work = OverlayManager_GetData(manager);
-    ov80_0222A920(work->system);
+    FrontierSystem_Delete(work->system);
     Frontier_FreeMap(work);
     OverlayManager_FreeData(manager);
     Frontier_UnloadOverlays();

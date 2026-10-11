@@ -19,7 +19,7 @@
 #include "touchscreen.h"
 #include "sound_playback.h"
 #include "font_sprite.h"
-#include "unk_02077678.h"
+#include "type_icon_resources.h"
 #include "unk_0208805C.h"
 
 static void BattleInput_FreeDefaultResources(BattleInput *battleInput);
@@ -1420,12 +1420,12 @@ void BattleInput_LoadDefaultResources(BattleInput *battleInput) {
 
     GfGfxLoader_LoadCharData(NARC_a_0_0_7, bottomScreenBgTilesId, bgConfig, GF_BG_LYR_SUB_0, 0, 0x6000, 1, HEAP_ID_BATTLE);
 
-    sub_0207775C(spriteSystem, spriteManager, 20017, 20017);
+    TypeIcon_LoadCellAnim(spriteSystem, spriteManager, 20017, 20017);
 
-    sub_02077720(BattleSystem_GetPaletteData(battleInput->battleSystem), 3, spriteSystem, spriteManager, 2, 20020);
+    TypeIcon_LoadPaletteBuffer(BattleSystem_GetPaletteData(battleInput->battleSystem), 3, spriteSystem, spriteManager, 2, 20020);
 
     for (int i = 0; i < 4; i++) {
-        sub_020776B8(spriteSystem, spriteManager, NNS_G2D_VRAM_TYPE_2DSUB, TYPE_NORMAL, 20025 + i);
+        TypeIcon_LoadChar(spriteSystem, spriteManager, NNS_G2D_VRAM_TYPE_2DSUB, TYPE_NORMAL, 20025 + i);
     }
 
     if (BattleSystem_GetBattleType(battleInput->battleSystem) & BATTLE_TYPE_TUTORIAL) {
@@ -1440,11 +1440,11 @@ static void BattleInput_FreeDefaultResources(BattleInput *battleInput) {
     SpriteManager *spriteManager = BattleSystem_GetSpriteManager(battleInput->battleSystem);
 
     for (i = 0; i < 4; i++) {
-        sub_020777A4(spriteManager, 20025 + i);
+        TypeIcon_UnloadChar(spriteManager, 20025 + i);
     }
 
-    sub_020777AC(spriteManager, 20020);
-    sub_020777B4(spriteManager, 20017, 20017);
+    TypeIcon_UnloadPltt(spriteManager, 20020);
+    TypeIcon_UnloadCellAnim(spriteManager, 20017, 20017);
 
     if (BattleSystem_GetBattleType(battleInput->battleSystem) & BATTLE_TYPE_TUTORIAL) {
         BattleFinger_Delete(battleInput->tutorial.finger);
@@ -2907,7 +2907,7 @@ void BattleInput_LoadFightMenuText(BattleInput *battleInput, int battlerId, cons
     for (i = 0; i < MAX_MON_MOVES; i++) {
         if ((moveMemory->moveNo[i] != moveDisplayObj->move.moveNo[i]) && (moveMemory->moveNo[i] != 0)) {
             moveType = GetMoveAttr(moveMemory->moveNo[i], MOVEATTR_TYPE);
-            charData = GfGfxLoader_GetCharData(sub_020776B4(), sub_02077678(moveType), 1, &charDataNNS, HEAP_ID_BATTLE);
+            charData = GfGfxLoader_GetCharData(TypeIcon_GetNarc(), TypeIcon_GetCharFile(moveType), 1, &charDataNNS, HEAP_ID_BATTLE);
             MI_CpuCopy32(charDataNNS->pRawData, moveDisplayObj->typeIcon[i], size);
             Heap_Free(charData);
         }
@@ -2983,7 +2983,7 @@ static void BattleInput_CreateMoveTypeIcons(BattleInput *battleInput) {
             typeIconTemplate.x = sTypeIconPositions[i][0];
             typeIconTemplate.y = sTypeIconPositions[i][1];
 
-            battleInput->spriteTypeIcons[i] = sub_020777C8(renderer, spriteManager, type, &typeIconTemplate);
+            battleInput->spriteTypeIcons[i] = TypeIcon_NewSprite(renderer, spriteManager, type, &typeIconTemplate);
 
             ManagedSprite_SetPositionXYWithSubscreenOffset(battleInput->spriteTypeIcons[i], typeIconTemplate.x, typeIconTemplate.y, FX32_CONST(272));
 
@@ -3017,8 +3017,8 @@ static void BattleInput_DeleteAndFreeCategoryIconGraphics(BattleInput *battleInp
 
     for (i = 0; i < 4; i++) {
         if (battleInput->spriteCategoryIcons[i] != NULL) {
-            sub_02077870(battleInput->spriteCategoryIcons[i]);
-            sub_02077868(spriteManager, 20029 + i);
+            MoveCategoryIcon_DeleteSprite(battleInput->spriteCategoryIcons[i]);
+            MoveCategoryIcon_UnloadChar(spriteManager, 20029 + i);
             battleInput->spriteCategoryIcons[i] = NULL;
         }
     }

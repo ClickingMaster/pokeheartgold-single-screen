@@ -21,7 +21,7 @@ BOOL FrtCmd_044(FrontierScriptContext *ctx) {
     const u8 *saved;
     u32 id;
     ManagedSprite *sprite;
-    FrontierMap *map = sub_0209680C(ctx->frontierSystem->unk0);
+    FrontierMap *map = sub_0209680C(ctx->frontierSystem->frontierWork);
     u32 offset = FrontierScriptContext_ReadWord(ctx);
 
     saved = ctx->scriptPtr;

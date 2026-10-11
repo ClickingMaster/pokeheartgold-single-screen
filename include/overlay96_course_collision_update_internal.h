@@ -21,7 +21,7 @@ extern void ov96_021EB0A4(void *object, s32 x, s32 y, s32 *outY, s32 *outX);
 extern void ov96_021EAF78(void *object, s32 y, s32 x, s32 *outX, s32 *outY, s32 *outRadius);
 extern void *ov96_021F75E0(void *manager, u8 index);
 extern void *ov96_021F75D4(void *manager, u8 index);
-extern BOOL ov96_021F6060(const VecFx32 *position, fx32 radius, const VecFx32 *other, fx32 otherRadius);
+extern BOOL PokeathlonLampJump_CheckCollision(const VecFx32 *position, fx32 radius, const VecFx32 *other, fx32 otherRadius);
 extern void ov96_021F75BC(void *manager, u8 index);
 extern u8 ov96_021F65D8(Ov96CourseCollisionCounter *counter);
 extern void ov96_021F75E8(void *manager, u8 index, u8 value);

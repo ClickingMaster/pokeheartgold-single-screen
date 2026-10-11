@@ -43,9 +43,9 @@ extern void *Sprite_GetImageProxy(void *);
 extern void Sprite_SetImageProxy(void *, void *);
 
 extern void BgCellManager_GetCellPosition(void *, u32, s8 *, s8 *);
-extern void *sub_020776B4(void *);
-extern u32 sub_02077678(void *);
-extern u32 sub_0207769C(void *);
+extern void *TypeIcon_GetNarc(void *);
+extern u32 TypeIcon_GetCharFile(void *);
+extern u32 TypeIcon_GetPalette(void *);
 extern void *GfGfxLoader_GetCharData(void *, u32, u32, void **, u32);
 extern void Heap_Free(void *);
 

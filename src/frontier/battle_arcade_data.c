@@ -81,12 +81,12 @@ ManagedSprite *ov80_0222F29C(FrontierMap *map, Pokemon *mon, int index, int x, i
 void ov80_0222F324(FrontierMap *map, ManagedSprite *sprite, int index);
 ManagedSprite *ov80_0222F3FC(FrontierMap *map, int x, int y);
 void ov80_0222F440(FrontierMap *map, ManagedSprite *sprite);
-void ov80_0222BA7C(ArcadeContext *ctx);
-void ov80_0222BAE0(ArcadeContext *ctx);
-void ov80_0222BB54(ArcadeContext *ctx);
+void BattleArcadeLink_SendWinStreak(ArcadeContext *ctx);
+void BattleArcadeLink_SendTrainerIds(ArcadeContext *ctx);
+void BattleArcadeLink_SendOpponentMons(ArcadeContext *ctx);
 void ov80_0222BC48(ArcadeContext *ctx, u32 value);
 void ov80_0222BC94(ArcadeContext *ctx, u32 value);
-void ov80_0222BCE0(ArcadeContext *ctx);
+void BattleArcadeLink_SendPartyMons(ArcadeContext *ctx);
 
 void BattleArcadeData_InitNew(ArcadeContext *ctx);
 void BattleArcadeData_InitResume(ArcadeContext *ctx);
@@ -705,13 +705,13 @@ void ov80_02234DC4(u32 color, u32 mode) {
 u16 BattleArcade_SendBuffer(ArcadeContext *ctx, u32 cmd, u32 value) {
     switch (cmd) {
     case 0:
-        ov80_0222BA7C(ctx);
+        BattleArcadeLink_SendWinStreak(ctx);
         break;
     case 1:
-        ov80_0222BAE0(ctx);
+        BattleArcadeLink_SendTrainerIds(ctx);
         break;
     case 2:
-        ov80_0222BB54(ctx);
+        BattleArcadeLink_SendOpponentMons(ctx);
         break;
     case 3:
         ov80_0222BC48(ctx, value);
@@ -720,7 +720,7 @@ u16 BattleArcade_SendBuffer(ArcadeContext *ctx, u32 cmd, u32 value) {
         ov80_0222BC94(ctx, value);
         break;
     case 5:
-        ov80_0222BCE0(ctx);
+        BattleArcadeLink_SendPartyMons(ctx);
         break;
     }
 }

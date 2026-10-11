@@ -26,7 +26,7 @@ u8 *ov96_021E8A20(void *ptr);
 void ov96_021EB63C(void *ptr, int value);
 void ov96_021EB144(void *ptr, int value);
 void ov96_021E65A4(void *course);
-void *ov96_021F46B4(void *ptr);
+void *PokeathlonCirclePushDisplay_GetScore(void *ptr);
 void ov96_021E8318(void *course, void *ptr);
 void ov96_021F2EFC(void *work, void *ptr);
 u8 ov96_021F30F8(u8 value, int kind);

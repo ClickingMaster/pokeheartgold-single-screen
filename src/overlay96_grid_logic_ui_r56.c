@@ -6,7 +6,7 @@ void *ov96_021F3BF0(s32 heapId, void *arg1, void *arg2) {
     R17_S32(work, 0) = heapId;
     R17_PTR(work, 8) = arg1;
     R17_PTR(work, 4) = arg2;
-    ov96_021F4558(work);
+    PokeathlonCirclePushDisplay_CreateWindows(work);
     R17_PTR(work, 0x5C) = NewMsgDataFromNarc(1, 0x1B, 0x135, heapId);
     R17_PTR(work, 0x60) = MessageFormat_New(heapId);
     return work;

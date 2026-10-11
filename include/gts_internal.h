@@ -50,13 +50,14 @@ typedef struct GtsRecord {
     GtsMonSummary summary;                   // 0x0EC
     GtsWantedMon wanted;                     // 0x0F0
     u8 trainerGender;                        // 0x0F6
-    u8 unk_0F7[0x15];                        // 0x0F7
+    u8 unk_0F7[0x11];                        // 0x0F7
+    u32 exchangeId;                          // 0x108, exchange.asp is sent it after the offered record to pick this one
     u16 trainerName[PLAYER_NAME_LENGTH + 1]; // 0x10C
     u16 trainerId;                           // 0x11C
     u8 country;                              // 0x11E
     u8 city;                                 // 0x11F
     u8 trainerClass;                         // 0x120
-    u8 unk_121;                              // 0x121
+    s8 unk_121;                              // 0x121, nonzero once the Pokemon was traded (get.asp)
     u8 version;                              // 0x122
     u8 language;                             // 0x123
 } GtsRecord;                                 // size: GTS_RECORD_SIZE
@@ -189,14 +190,15 @@ struct GtsApp {
     int unk_001C;                            // 0x001C
     int prevScreen;                          // 0x0020
     int nextScreenArg;                       // 0x0024
-    u8 filler_0028[4];                       // 0x0028
+    int afterSaveMsgId;                      // 0x0028, printed once the save of screen 7 is written
     int state;                               // 0x002C, of the current screen
     int nextState;                           // 0x0030
     u16 mainMenuShown;                       // 0x0034, the main menu was entered before
     u16 hasDepositedMon;                     // 0x0036, the player has a Pokemon on the GTS
     u8 filler_0038[2];                       // 0x0038
     u16 timer;                               // 0x003A, frames until the GTS may be checked again
-    u8 filler_003C[0x10];                    // 0x003C
+    int serverResult;                        // 0x003C, of the failed request (screen 7 picks the error message from it)
+    u8 filler_0040[0xC];                     // 0x0040
     void *heapMemory;                        // 0x004C
     NNSFndHeapHandle heap;                   // 0x0050, in heapMemory
     u8 filler_0054[0x64];                    // 0x0054
@@ -218,7 +220,7 @@ struct GtsApp {
     u32 offeredBox;                          // 0x0134, GTS_BOX_PARTY for the party
     u32 offeredSlot;                         // 0x0138
     GtsRecord record;                        // 0x013C
-    GtsRecord searchResults[8];              // 0x0260
+    GtsRecord searchResults[8];              // 0x0260, [7] also receives the record of an exchange (screen 7)
     GtsMonSummary depositSummary;            // 0x0B80, of the Pokemon to deposit
     GtsWantedMon depositWanted;              // 0x0B84, what the player wants for it
     GtsWantedMon searchCriteria;             // 0x0B8A, of SEEK POKEMON
@@ -276,7 +278,8 @@ struct GtsApp {
     YesNoPrompt *yesNoPrompt;                // 0x11C8
     TouchscreenListMenuSpawner *menuSpawner; // 0x11CC
     TouchscreenListMenu *menu;               // 0x11D0
-    u8 filler_11D4[4];                       // 0x11D4
+    u16 saveMidState;                        // 0x11D4, screen 7's state once the first part of the save is written
+    u16 saveDoneState;                       // 0x11D6, and once the save is complete
     SysTask *playerAnimTask;                 // 0x11D8
     u16 playerAnimDone;                      // 0x11DC, set by the player's walk in/out task (Gts_StartPlayer*Anim)
     u16 hasSearchResults;                    // 0x11DE
@@ -395,6 +398,7 @@ void ov70_0223F948(GtsUnk1234 *arg);
 void ov70_0223F960(GtsUnk1234 *arg, int index, u16 value1, u16 value2);
 
 // Defined in pieces not merged yet.
+void ov70_02244FA4(GtsApp *app, MsgData *msgData, int msgId, int textSpeed, u32 unused4);
 void *ov70_02242014(GtsSelectorArgs *args, int arg1, int arg2);
 void ov70_022420C4(void *selector, int mode);
 void ov70_0224212C(void *selector);

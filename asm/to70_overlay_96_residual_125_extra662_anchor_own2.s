@@ -73,7 +73,7 @@
 	.extern ov96_021EEEC0
 	.extern ov96_021EF18C
 	.extern ov96_021F08E4
-	.extern ov96_021F54C0
+	.extern PokeathlonLampJump_Draw
 	.extern ov96_021F9234
 	.extern ov96_021FCD74
 	.extern ov96_02204DE8

@@ -32,5 +32,5 @@ void ov01_021FD838(void *a0, FollowShadowWork *work) {
         pos.y -= 0x4000;
         pos.z += 0x1000;
     }
-    sub_020699AC(renderObj, &pos, &scale, &mtx);
+    RenderObj_Draw(renderObj, &pos, &scale, &mtx);
 }

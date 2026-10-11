@@ -10,11 +10,11 @@
 #include "map_object.h"
 #include "overlay_01_021F1348.h"
 #include "unk_020689C8.h"
-#include "unk_02069660.h"
-#include "unk_0206979C.h"
+#include "render_model.h"
+#include "render_animation.h"
 
 // ---- not declared in any tracked header (see report.md) ----
-void sub_020699AC(void *a0, VecFx32 *pos, VecFx32 *scale, MtxFx33 *mtx);
+void RenderObj_Draw(void *a0, VecFx32 *pos, VecFx32 *scale, MtxFx33 *mtx);
 BOOL ov01_021F8F88(LocalMapObject *object);
 void ov01_021F8FA0(LocalMapObject *object, VecFx32 *a1);
 

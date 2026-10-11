@@ -17,8 +17,8 @@
 #define PTR_AT(p, o) (*(void **)((u8 *)(p) + (o)))
 #define U16_AT(p, o) (*(u16 *)((u8 *)(p) + (o)))
 
-NarcId sub_020776B4(void);
-int sub_02077690(void);
+NarcId TypeIcon_GetNarc(void);
+int TypeIcon_GetPlttFile(void);
 
 SysTask *ov49_0225BA40(void *data, u32 unused, u16 memberNo, u16 heapId);
 void ov49_0225BA5C(SysTask *task, void *data);

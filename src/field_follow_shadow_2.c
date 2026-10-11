@@ -78,14 +78,14 @@ void ov01_021FD5CC(FollowShadow *work) {
     int i;
     for (i = 0; i < 4; i++) {
         ov01_021F19F4(work->unk20, &work->unk28[i], 0, ov01_02208E90[i], 0);
-        sub_02069978(&work->unk78[i], &work->unk28[i]);
+        RenderObj_InitFromModel(&work->unk78[i], &work->unk28[i]);
     }
 }
 
 void ov01_021FD60C(FollowShadow *work) {
     int i;
     for (i = 0; i < 4; i++) {
-        sub_02069784(&work->unk28[i]);
+        RenderModel_Free(&work->unk28[i]);
     }
 }
 
@@ -181,5 +181,5 @@ void ov01_021FD7D4(void *a0, FollowShadowWork *work) {
     pos.x -= 0x800;
     pos.y -= 0x4000;
     pos.z += 0x1000;
-    sub_020699AC(&shadow->unk78[0], &pos, &scale, &mtx);
+    RenderObj_Draw(&shadow->unk78[0], &pos, &scale, &mtx);
 }

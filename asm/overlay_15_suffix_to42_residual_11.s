@@ -285,10 +285,10 @@ BagApp_ShowTMHMTypeIcons: ; 0x021FF97C
 	bl GetMoveAttr
 	lsl r0, r0, #0x10
 	lsr r4, r0, #0x10
-	bl sub_020776B4
+	bl TypeIcon_GetNarc
 	add r7, r0, #0
 	add r0, r6, #0
-	bl sub_02077678
+	bl TypeIcon_GetCharFile
 	add r3, r0, #0
 	mov r0, #1
 	str r0, [sp]
@@ -302,17 +302,17 @@ BagApp_ShowTMHMTypeIcons: ; 0x021FF97C
 	add r2, r7, #0
 	bl SpriteSystem_ReplaceCharResObj
 	add r0, r6, #0
-	bl sub_0207769C
+	bl TypeIcon_GetPalette
 	add r1, r0, #0
 	mov r0, #0x9b
 	lsl r0, r0, #2
 	ldr r0, [r5, r0]
 	add r1, r1, #4
 	bl ManagedSprite_SetPaletteOverride
-	bl sub_02077830
+	bl MoveCategoryIcon_GetNarc
 	add r6, r0, #0
 	add r0, r4, #0
-	bl sub_02077800
+	bl MoveCategoryIcon_GetCharFile
 	add r3, r0, #0
 	mov r0, #1
 	str r0, [sp]
@@ -326,7 +326,7 @@ BagApp_ShowTMHMTypeIcons: ; 0x021FF97C
 	add r2, r6, #0
 	bl SpriteSystem_ReplaceCharResObj
 	add r0, r4, #0
-	bl sub_02077818
+	bl MoveCategoryIcon_GetPalette
 	add r1, r0, #0
 	mov r0, #0x27
 	lsl r0, r0, #4
@@ -503,7 +503,7 @@ _021FFB54:
 	ldr r1, [r5, r1]
 	mov r2, #1
 	mov r3, #0
-	bl sub_020776B8
+	bl TypeIcon_LoadChar
 	ldr r0, _021FFDC4 ; =0x0000C104
 	mov r1, #0x92
 	lsl r1, r1, #2
@@ -513,7 +513,7 @@ _021FFB54:
 	ldr r1, [r5, r1]
 	mov r2, #1
 	mov r3, #0
-	bl sub_02077834
+	bl MoveCategoryIcon_LoadChar
 	mov r0, #0
 	str r0, [sp]
 	mov r0, #2
@@ -553,7 +553,7 @@ _021FFB54:
 	ldr r1, [r5, r1]
 	ldr r3, _021FFDB8 ; =0x0000C102
 	mov r2, #1
-	bl sub_020776EC
+	bl TypeIcon_LoadPltt
 	mov r0, #0
 	str r0, [sp]
 	mov r0, #0xa
@@ -737,7 +737,7 @@ _021FFC2A:
 	ldr r2, _021FFDD0 ; =0x0000C0FE
 	ldr r1, [r5, r1]
 	add r3, r2, #1
-	bl sub_0207775C
+	bl TypeIcon_LoadCellAnim
 	mov r2, #0x6a
 	lsl r2, r2, #4
 	mov r0, #0xf

@@ -12,12 +12,12 @@
 	.public _02108594
 _02108594:
 	.word ov80_0222B140, sub_020342B8, 0
-	.word ov80_0222B1A4, sub_020342B8, 0
-	.word ov80_0222B24C, sub_020342B8, 0
-	.word ov80_0222B334, sub_020342B8, 0
+	.word BattleFactoryLink_ReceiveTrainerIds, sub_020342B8, 0
+	.word BattleFactoryLink_ReceiveRentalMons, sub_020342B8, 0
+	.word BattleFactoryLink_ReceiveOpponentMons, sub_020342B8, 0
 	.word ov80_0222B3D4, sub_020342B8, 0
 	.word ov80_0222B420, sub_020342B8, 0
-	.word ov80_0222B52C, sub_020342B8, 0
+	.word BattleFactoryLink_ReceivePartyMons, sub_020342B8, 0
 	.word BattleFactory_ReceivePing, sub_020342B8, 0
 	.word BattleFactory_ReceiveRentals, sub_020342B8, 0
 	.word BattleFactory_ReceiveUnused, sub_020342B8, 0
@@ -27,17 +27,17 @@ _02108594:
 	.word ov80_0222AF84, sub_020342B8, 0
 	.word ov80_0222AFEC, sub_020342B8, 0
 	.word ov80_0222B048, sub_020342B8, 0
-	.word ov80_0222B0B8, sub_020342B8, ov80_0222B0E8
+	.word BattleHallLink_ReceivePartnerMon, sub_020342B8, BattleHallLink_GetRecvMonBuffer
 	.word BattleHall_ReceivePing, sub_020342B8, 0
 	.word BattleHall_ReceiveChoice, sub_020342B8, 0
 	.word BattleHall_ReceiveAnswer, sub_020342B8, 0
 	.word ov80_0222B628, sub_020342B8, 0
-	.word ov80_0222B690, sub_020342B8, 0
+	.word BattleCastleLink_ReceiveTrainerIds, sub_020342B8, 0
 	.word ov80_0222B740, sub_020342B8, 0
-	.word ov80_0222B860, sub_020342B8, 0
+	.word BattleCastleLink_ReceiveOpponentMons, sub_020342B8, 0
 	.word ov80_0222B8F8, sub_020342B8, 0
 	.word ov80_0222B940, sub_020342B8, 0
-	.word ov80_0222B9CC, sub_020342B8, ov80_0222BA5C
+	.word BattleCastleLink_ReceivePartyMons, sub_020342B8, BattleCastleLink_GetRecvMonBuffer
 	.word BattleCastlePartyApp_ReceiveRanks, sub_020342B8, 0
 	.word BattleCastlePartyApp_ReceiveAction, sub_020342B8, 0
 	.word BattleCastlePartyApp_ReceiveCursor, sub_020342B8, 0
@@ -54,12 +54,12 @@ _02108594:
 	.word sub_02096924, sub_020342B8, 0
 	.word sub_020969C4, sub_020342B8, 0
 	.word sub_020969F8, sub_020342B8, 0
-	.word ov80_0222BAB0, sub_020342B8, 0
-	.word ov80_0222BB18, sub_020342B8, 0
-	.word ov80_0222BBD0, sub_020342B8, 0
+	.word BattleArcadeLink_ReceiveWinStreak, sub_020342B8, 0
+	.word BattleArcadeLink_ReceiveTrainerIds, sub_020342B8, 0
+	.word BattleArcadeLink_ReceiveOpponentMons, sub_020342B8, 0
 	.word ov80_0222BC6C, sub_020342B8, 0
 	.word ov80_0222BCB8, sub_020342B8, 0
-	.word ov80_0222BD44, sub_020342B8, ov80_0222BDD4
+	.word BattleArcadeLink_ReceivePartyMons, sub_020342B8, BattleArcadeLink_GetRecvMonBuffer
 	.word ov84_0223ED34, sub_020342B8, 0
 	.word ov84_0223EDA8, sub_020342B8, 0
 	.word ov84_0223EE08, sub_020342B8, 0

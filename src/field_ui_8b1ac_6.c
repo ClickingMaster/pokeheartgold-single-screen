@@ -6,10 +6,10 @@ void sub_0208BA60(u8 *work) {
 }
 
 void sub_0208BA88(u8 *work, u8 index, u8 slot, u8 attr) {
-    int charId = sub_020776B4();
-    int charValue = sub_02077678(attr);
+    int charId = TypeIcon_GetNarc();
+    int charValue = TypeIcon_GetCharFile(attr);
     SpriteSystem_ReplaceCharResObj(*(void **)(work + 0x3FC), *(void **)(work + 0x400), charId, charValue, 1, slot);
-    thunk_Sprite_SetPaletteOverride(*(void **)(work + 0x404 + index * 4), sub_0207769C(attr) + 3);
+    thunk_Sprite_SetPaletteOverride(*(void **)(work + 0x404 + index * 4), TypeIcon_GetPalette(attr) + 3);
 }
 
 void sub_0208BAD8(u8 *work, u8 *index, s16 *a, s16 *b) {
@@ -38,8 +38,8 @@ void sub_0208BB24(u8 *work, u8 firstIndex, u8 secondIndex, int unused) {
 
 void sub_0208BB8C(u8 *work, u16 move) {
     int attr = GetMoveAttr(move, 1);
-    int charId = sub_02077830(attr);
-    int charValue = sub_02077800(attr);
+    int charId = MoveCategoryIcon_GetNarc(attr);
+    int charValue = MoveCategoryIcon_GetCharFile(attr);
     SpriteSystem_ReplaceCharResObj(*(void **)(work + 0x3FC), *(void **)(work + 0x400), charId, charValue, 1, 10);
-    thunk_Sprite_SetPaletteOverride(*(void **)(work + 0x44C), sub_02077818(attr) + 3);
+    thunk_Sprite_SetPaletteOverride(*(void **)(work + 0x44C), MoveCategoryIcon_GetPalette(attr) + 3);
 }

@@ -93,7 +93,7 @@ ov01_021FEA48: ; 0x021FEA48
 	add r1, r4, #0
 	add r0, #0x28
 	add r1, #0x14
-	bl sub_02069978
+	bl RenderObj_InitFromModel
 	mov r0, #1
 	str r0, [r4, #4]
 _021FEA76:
@@ -111,7 +111,7 @@ ov01_021FEA7C: ; 0x021FEA7C
 	mov r1, #0
 	str r1, [r0, #4]
 	add r0, #0x14
-	bl sub_02069784
+	bl RenderModel_Free
 _021FEA8E:
 	pop {r3, pc}
 	thumb_func_end ov01_021FEA7C
@@ -339,7 +339,7 @@ _021FEC0A:
 	add r1, sp, #0xc
 	add r2, sp, #0
 	add r3, sp, #0x18
-	bl sub_020699AC
+	bl RenderObj_Draw
 _021FEC2C:
 	add sp, #0x3c
 	pop {r3, r4, r5, r6, pc}

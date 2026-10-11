@@ -16,13 +16,13 @@ typedef struct R57Vec {
 } R57Vec;
 
 extern void GF_AssertFail(void);
-extern void ov96_021F459C(void *, u32);
-extern void ov96_021F4724(void *);
-extern u32 ov96_021F46BC(void *, u32);
-extern u32 ov96_021F47F0(void *, u32);
-extern void ov96_021F480C(void *, void *);
-extern void ov96_021F48A8(void *, void *, u32);
-extern void ov96_021F4A60(void *, void *);
+extern void PokeathlonCirclePushDisplay_PrintRound(void *, u32);
+extern void PokeathlonCirclePushDisplayAnim_Stop(void *);
+extern u32 PokeathlonCirclePushDisplayAnim_TakeNewMon(void *, u32);
+extern u32 PokeathlonCirclePushDisplayAnim_TryStart(void *, u32);
+extern void PokeathlonCirclePushDisplayAnim_StartScoreboard(void *, void *);
+extern void PokeathlonCirclePushDisplayAnim_StartMonPic(void *, void *, u32);
+extern void PokeathlonCirclePushDisplayAnim_StartIdle(void *, void *);
 extern void ov96_021EB52C(void *, u32, u32);
 extern void ov96_021EB2BC(void *, u32, u32, u32, u32);
 extern void ov96_021EB2F4(void *, u32, u32, u32, u32, u32);
@@ -58,16 +58,16 @@ typedef struct R57ParticipantView {
 
 extern void ov96_021E6168(void *, u32, u32, R57ParticipantView *);
 
-void ov96_021F4364(void *, u32);
+void PokeathlonCirclePushDisplay_SetRound(void *, u32);
 void ov96_021F3E60(void *);
 void ov96_021F3EC0(void *, void *);
-void ov96_021F4390(void *, u32, u32);
-void ov96_021F43EC(void *);
-void ov96_021F440C(void *, void *);
-void ov96_021F4484(void *);
-void ov96_021F4504(void *, u32, u32);
-void ov96_021F4558(void *);
-void ov96_021F45F4(void *, u32, u32);
-void ov96_021F4688(void *, u32, u32);
+void PokeathlonCirclePushDisplay_ShowPlayerEvent(void *, u32, u32);
+void PokeathlonCirclePushDisplay_ResetAnim(void *);
+void PokeathlonCirclePushDisplay_GetPicVramLocations(void *, void *);
+void PokeathlonCirclePushDisplay_LoadMonPics(void *);
+void PokeathlonCirclePushDisplayAnim_LoadMonPic(void *, u32, u32);
+void PokeathlonCirclePushDisplay_CreateWindows(void *);
+void PokeathlonCirclePushDisplay_Update(void *, u32, u32);
+void PokeathlonCirclePushDisplay_SetScore(void *, u32, u32);
 
 #endif // POKEHEARTGOLD_OVERLAY96_UI_RESOURCES_57_PRIVATE_H

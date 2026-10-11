@@ -23,10 +23,10 @@ void *ov01_021FC588(void *a0, int a1);
 void ov01_021FC5CC(void *a0, int a1, void *narc, int a3, int a4);
 void ov01_021EA3B0(NNSG3dResMdl *mdl);
 void NNS_G3dMdlSetMdlFogEnableFlagAll(NNSG3dResMdl *mdl, int flag);
-void sub_020696C4(void *a0, int a1, void *resMan, int a2, enum HeapID heapID, int a3);
-void sub_02069714(void *a0);
-void sub_020697DC(void *a0, int a1, void *resMan, int a2, enum HeapID heapID, int a3);
-void sub_02069894(void *a0, int a1, int a2, int a3, enum HeapID heapID);
+void RenderModel_LoadFromNarc(void *a0, int a1, void *resMan, int a2, enum HeapID heapID, int a3);
+void RenderModel_BindTexturesOnVBlank(void *a0);
+void RenderAnimation_LoadFromNarc(void *a0, int a1, void *resMan, int a2, enum HeapID heapID, int a3);
+void RenderAnimation_InitForModel(void *a0, int a1, int a2, int a3, enum HeapID heapID);
 void *GF3dGfxRawResMan_Create(int num, enum HeapID heapID);
 void GF3dGfxRawResMan_Destroy(void *man);
 void *GF3dGfxRawResMan_AllocObjAndKeys(void *man, void *res, int id, BOOL copyWithoutTex, enum HeapID heapID);
@@ -182,14 +182,14 @@ void ov01_021F19D0(struct SysTask *sysTask, void *data) {
 }
 
 void ov01_021F19F4(FieldEffectGfx *gfx, void *a1, int a2, int a3, int a4) {
-    sub_020696C4(a1, a2, gfx->resMan, a3, gfx->heapID, a4);
-    sub_02069714(a1);
+    RenderModel_LoadFromNarc(a1, a2, gfx->resMan, a3, gfx->heapID, a4);
+    RenderModel_BindTexturesOnVBlank(a1);
 }
 
 void ov01_021F1A18(FieldEffectGfx *gfx, void *a1, int a2, int a3, int a4) {
-    sub_020697DC(a1, a2, gfx->resMan, a3, gfx->heapID, a4);
+    RenderAnimation_LoadFromNarc(a1, a2, gfx->resMan, a3, gfx->heapID, a4);
 }
 
 void ov01_021F1A34(FieldEffectGfx *gfx, void *a1, int a2, int a3, int a4) {
-    sub_02069894(a1, a2, a3, a4, gfx->heapID);
+    RenderAnimation_InitForModel(a1, a2, a3, a4, gfx->heapID);
 }

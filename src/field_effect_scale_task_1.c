@@ -20,8 +20,8 @@ void ov01_021FEDC8(void *work) {
 
 void ov01_021FEDF0(void *work) {
     u8 *p = work;
-    sub_02069784(p + 4);
-    sub_020698D0(p + 0x18);
+    RenderModel_Free(p + 4);
+    RenderAnimation_Free(p + 0x18);
 }
 
 void ov01_021FEE04(void *mapObject, s32 x, s32 offset, s32 z) {
@@ -40,24 +40,24 @@ BOOL ov01_021FEE64(void *object, void *data) {
     TwoWordsPrivate *source = sub_02068D98(object);
     p->source = *source;
     ov01_021F1A34(p->source.word0, p, p->source.word4 + 4, p->source.word4 + 0x18, 0);
-    sub_02069998(p->fields + 0x24, p->source.word4 + 4, p);
+    RenderObj_InitWithAnimation(p->fields + 0x24, p->source.word4 + 4, p);
     return TRUE;
 }
 
 void ov01_021FEE9C(void *unused, void *data) {
-    sub_020698D0(data);
+    RenderAnimation_Free(data);
 }
 
 void ov01_021FEEA8(void *task, void *data) {
-    if (sub_02069948(data) == 1) {
+    if (RenderAnimation_IsDone(data) == 1) {
         ov01_021F1640(task);
     } else {
-        sub_020698E8(data, 0x1000, 0);
+        RenderAnimation_Advance(data, 0x1000, 0);
     }
 }
 
 void ov01_021FEED0(void *object, void *data) {
     VecFx32Private position;
     sub_02068DB8(object, &position);
-    sub_020699BC((u8 *)data + 0x24, &position);
+    RenderObj_DrawAt((u8 *)data + 0x24, &position);
 }

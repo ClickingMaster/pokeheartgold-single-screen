@@ -50,17 +50,19 @@ typedef struct ArcadeContext {
     u8 unk334[0xDE];
     u16 heldItems[3]; // held items of the entered Pokemon, restored afterwards
     u16 unk418[6];
-    u8 filler_424[0x64E];
+    u16 linkBuffer[20];      // 0x424, outgoing link message
+    u8 filler_44C[0x28];
+    u8 linkMonBuffer[0x200]; // 0x474, outgoing Pokemon
+    u8 linkRecvMon[0x3FE];   // 0x674, received Pokemon, 0x200 per net id (the second one overlaps unkA72)
     u8 unkA72;
     u8 unkA73;
     u8 unkA74;
     u8 unkA75;
-    u8 unkA76;
-    u8 unkA77;
+    u16 unkA76; // partner's unk1A
     u16 multiWinStreak;
     u8 unkA7A;
     u8 unkA7B;
-    u8 unkA7C;
+    u8 linkMessageCount;
 } ArcadeContext;
 
 void BattleArcadeData_Init(ArcadeContext *ctx, u32 resume);

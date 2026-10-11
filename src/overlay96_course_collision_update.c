@@ -33,7 +33,7 @@ void ov96_021F6600(void *course, void *work) {
         for (inner = 0; inner < 29; inner++) {
             if (ov96_021F75E0(PTR_AT(work, 0x8c), (u8)inner) != NULL) {
                 void *item = ov96_021F75D4(PTR_AT(work, 0x8c), (u8)inner);
-                if (ov96_021F6060(&local.pos, local.radius << 12, item, 0x8000)) {
+                if (PokeathlonLampJump_CheckCollision(&local.pos, local.radius << 12, item, 0x8000)) {
                     u8 value;
                     ov96_021F75BC(PTR_AT(work, 0x8c), (u8)inner);
                     value = ov96_021F65D8((Ov96CourseCollisionCounter *)counter);

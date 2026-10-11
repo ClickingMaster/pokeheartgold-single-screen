@@ -2431,67 +2431,67 @@
 	.public Gts_CreateCountryListItems
 	.public ov70_0223F948
 	.public ov70_0223F960
-	.public ov70_0223F96C
-	.public ov70_0223F9B4
-	.public ov70_0223F9D4
-	.public ov70_0223FA08
-	.public ov70_0223FB34
-	.public ov70_0223FB60
-	.public ov70_0223FBF4
-	.public ov70_0223FC30
-	.public ov70_0223FC40
-	.public ov70_0223FC58
-	.public ov70_0223FC68
-	.public ov70_0223FD64
-	.public ov70_0223FD98
-	.public ov70_0223FE40
-	.public ov70_0223FE60
-	.public ov70_0223FEE4
-	.public ov70_0223FF10
-	.public ov70_0223FFCC
-	.public ov70_0223FFE8
-	.public ov70_0224006C
-	.public ov70_022400BC
-	.public ov70_02240180
-	.public ov70_0224019C
-	.public ov70_02240220
-	.public ov70_02240240
-	.public ov70_022403FC
-	.public ov70_02240410
-	.public ov70_02240430
-	.public ov70_022404D4
-	.public ov70_02240500
-	.public ov70_02240540
-	.public ov70_02240598
-	.public ov70_022405B4
-	.public ov70_0224063C
-	.public ov70_02240640
-	.public ov70_02240658
-	.public ov70_02240670
-	.public ov70_02240684
-	.public ov70_0224069C
-	.public ov70_022406B8
-	.public ov70_02240748
-	.public ov70_0224078C
-	.public ov70_022407E4
-	.public ov70_0224080C
-	.public ov70_02240838
-	.public ov70_02240854
-	.public ov70_02240884
-	.public ov70_0224089C
-	.public ov70_022408BC
-	.public ov70_022408E0
-	.public ov70_022408FC
-	.public ov70_02240948
-	.public ov70_022409A0
-	.public ov70_022409C0
-	.public ov70_02240A7C
-	.public ov70_02240B9C
-	.public ov70_02240CA0
-	.public ov70_02240CE4
-	.public ov70_02240D00
-	.public ov70_02240D44
-	.public ov70_02240D54
+	.public GtsTransaction_Init
+	.public GtsTransaction_Main
+	.public GtsTransaction_Exit
+	.public GtsTransaction_InitBgs
+	.public GtsTransaction_FreeBgs
+	.public GtsTransaction_LoadGraphics
+	.public GtsTransaction_CreateWindows
+	.public GtsTransaction_RemoveWindows
+	.public GtsTransaction_CreateStrings
+	.public GtsTransaction_DeleteStrings
+	.public GtsTransaction_Start
+	.public GtsTransaction_SendPost
+	.public GtsTransaction_WaitPost
+	.public GtsTransaction_SendPostFinish
+	.public GtsTransaction_WaitPostFinish
+	.public GtsTransaction_SendGet
+	.public GtsTransaction_WaitGet
+	.public GtsTransaction_SendReturn
+	.public GtsTransaction_WaitReturn
+	.public GtsTransaction_SendExchange
+	.public GtsTransaction_WaitExchange
+	.public GtsTransaction_SendExchangeFinish
+	.public GtsTransaction_WaitExchangeFinish
+	.public GtsTransaction_SendResult
+	.public GtsTransaction_WaitResult
+	.public GtsTransaction_ExitToMainMenu
+	.public GtsTransaction_SendStatusGet
+	.public GtsTransaction_WaitStatusGet
+	.public GtsTransaction_ReturnToCaller
+	.public GtsTransaction_RecordTradeStats
+	.public GtsTransaction_ReceiveTradedMon
+	.public GtsTransaction_SendDelete
+	.public GtsTransaction_WaitDelete
+	.public GtsTransaction_Idle
+	.public GtsTransaction_DepositDone
+	.public GtsTransaction_ReceiveDone
+	.public GtsTransaction_ExchangeDone
+	.public GtsTransaction_TradedDone
+	.public GtsTransaction_SendUnsavedReturn
+	.public GtsTransaction_WaitUnsavedReturn
+	.public GtsTransaction_AlreadyTraded
+	.public GtsTransaction_PrintServerError
+	.public GtsTransaction_ServerErrorExit
+	.public GtsTransaction_ServerError
+	.public GtsTransaction_SaveAndExit
+	.public GtsTransaction_StartSave
+	.public GtsTransaction_WaitSaveDelay
+	.public GtsTransaction_SaveFirstPart
+	.public GtsTransaction_SaveRest
+	.public GtsTransaction_StartSaveWithMessage
+	.public GtsTransaction_SaveWithMessage
+	.public GtsTransaction_FadeOut
+	.public GtsTransaction_WaitText
+	.public GtsTransaction_StoreSelectedMon
+	.public GtsTransaction_ReceiveMon
+	.public GtsTransaction_ReceiveExchangedMon
+	.public GtsTransaction_SaveTradeDate
+	.public GtsTransaction_AddPartnerToWifiHistory
+	.public GtsTransaction_CheckCanReceive
+	.public GtsTransaction_SetSaveStates
+	.public GtsTransaction_IsDepositMissingFromSave
 	.public Gts_CreateAvatars
 	.public Gts_StartPlayerEnterAnim
 	.public Gts_SetPlayerAnim
@@ -2692,12 +2692,12 @@
 	.public sGtsWantedLevelRanges
 	.public sGtsSpeciesLetterFiles
 	.public sGtsCountries
-	.public ov70_02245C60
-	.public ov70_02245C70
-	.public ov70_02245C8C
-	.public ov70_02245CA8
-	.public ov70_02245CC4
-	.public ov70_02245CE0
+	.public sGtsTransactionGraphicsModes
+	.public sGtsTransactionSubBg1Template
+	.public sGtsTransactionBg1Template
+	.public sGtsTransactionBg0Template
+	.public sGtsTransactionSubBg0Template
+	.public sGtsTransactionBg2Template
 	.public sGtsAvatarCharOffsets
 	.public sGtsAvatarPositions
 	.public sGtsAvatarY
@@ -2775,7 +2775,7 @@
 	.public sGtsSelectMonStates
 	.public sGtsGenderColors
 	.public sGtsWantedStates
-	.public ov70_02246658
+	.public sGtsTransactionStates
 	.public ov70_022466F8
 	.public ov70_02246780
 	.public gGtsServerFriendKey
@@ -2824,13 +2824,13 @@
 	.public ov70_0223EDD8
 	.public ov70_0223F948
 	.public ov70_0223F960
-	.public ov70_0224063C
-	.public ov70_02240838
-	.public ov70_02240884
-	.public ov70_022408BC
-	.public ov70_022408E0
-	.public ov70_02240D44
-	.public ov70_02240D54
+	.public GtsTransaction_Idle
+	.public GtsTransaction_SaveAndExit
+	.public GtsTransaction_WaitSaveDelay
+	.public GtsTransaction_SaveRest
+	.public GtsTransaction_StartSaveWithMessage
+	.public GtsTransaction_SetSaveStates
+	.public GtsTransaction_IsDepositMissingFromSave
 	.public Gts_GetAvatarAnimSeq
 	.public GtsViewMon_Exit
 	.public ov70_02242508
@@ -2847,8 +2847,8 @@
 	.public ov70_02244944
 	.public ov70_02245124
 
-	thumb_func_start ov70_02240640
-ov70_02240640: ; 0x02240640
+	thumb_func_start GtsTransaction_DepositDone
+GtsTransaction_DepositDone: ; 0x02240640
 	push {r4, lr}
 	add r4, r0, #0
 	mov r1, #1
@@ -2860,11 +2860,11 @@ ov70_02240640: ; 0x02240640
 	str r0, [r4, #0x2c]
 	mov r0, #3
 	pop {r4, pc}
-	thumb_func_end ov70_02240640
+	thumb_func_end GtsTransaction_DepositDone
 
 
-	thumb_func_start ov70_02240658
-ov70_02240658: ; 0x02240658
+	thumb_func_start GtsTransaction_ReceiveDone
+GtsTransaction_ReceiveDone: ; 0x02240658
 	push {r4, lr}
 	add r4, r0, #0
 	mov r1, #0
@@ -2876,11 +2876,11 @@ ov70_02240658: ; 0x02240658
 	str r0, [r4, #0x2c]
 	mov r0, #3
 	pop {r4, pc}
-	thumb_func_end ov70_02240658
+	thumb_func_end GtsTransaction_ReceiveDone
 
 
-	thumb_func_start ov70_02240670
-ov70_02240670: ; 0x02240670
+	thumb_func_start GtsTransaction_ExchangeDone
+GtsTransaction_ExchangeDone: ; 0x02240670
 	push {r4, lr}
 	mov r1, #9
 	add r2, r1, #0
@@ -2890,11 +2890,11 @@ ov70_02240670: ; 0x02240670
 	str r0, [r4, #0x2c]
 	mov r0, #3
 	pop {r4, pc}
-	thumb_func_end ov70_02240670
+	thumb_func_end GtsTransaction_ExchangeDone
 
 
-	thumb_func_start ov70_02240684
-ov70_02240684: ; 0x02240684
+	thumb_func_start GtsTransaction_TradedDone
+GtsTransaction_TradedDone: ; 0x02240684
 	push {r4, lr}
 	add r4, r0, #0
 	mov r1, #0
@@ -2906,11 +2906,11 @@ ov70_02240684: ; 0x02240684
 	str r0, [r4, #0x2c]
 	mov r0, #3
 	pop {r4, pc}
-	thumb_func_end ov70_02240684
+	thumb_func_end GtsTransaction_TradedDone
 
 
-	thumb_func_start ov70_0224069C
-ov70_0224069C: ; 0x0224069C
+	thumb_func_start GtsTransaction_SendUnsavedReturn
+GtsTransaction_SendUnsavedReturn: ; 0x0224069C
 	push {r4, lr}
 	add r4, r0, #0
 	bl GtsServer_RequestReturn
@@ -2923,11 +2923,11 @@ ov70_0224069C: ; 0x0224069C
 	pop {r4, pc}
 	nop
 _022406B4: .word 0x00001604
-	thumb_func_end ov70_0224069C
+	thumb_func_end GtsTransaction_SendUnsavedReturn
 
 
-	thumb_func_start ov70_022406B8
-ov70_022406B8: ; 0x022406B8
+	thumb_func_start GtsTransaction_WaitUnsavedReturn
+GtsTransaction_WaitUnsavedReturn: ; 0x022406B8
 	push {r4, lr}
 	add r4, r0, #0
 	bl GtsServer_IsRequestDone
@@ -2965,14 +2965,14 @@ _022406E0: ; jump table
 	.short _02240700 - _022406E0 - 2 ; case 15
 _02240700:
 	add r0, r4, #0
-	bl ov70_022404D4
+	bl GtsTransaction_ReturnToCaller
 	b _02240740
 _02240708:
 	add r0, r4, #0
-	bl ov70_022404D4
+	bl GtsTransaction_ReturnToCaller
 _0224070E:
 	add r0, r4, #0
-	bl ov70_022404D4
+	bl GtsTransaction_ReturnToCaller
 _02240714:
 	mov r0, #3
 	bl sub_02039AD8
@@ -3000,11 +3000,11 @@ _02240740:
 	pop {r4, pc}
 	.balign 4, 0
 _02240744: .word 0x00001604
-	thumb_func_end ov70_022406B8
+	thumb_func_end GtsTransaction_WaitUnsavedReturn
 
 
-	thumb_func_start ov70_02240748
-ov70_02240748: ; 0x02240748
+	thumb_func_start GtsTransaction_AlreadyTraded
+GtsTransaction_AlreadyTraded: ; 0x02240748
 	push {r3, r4, lr}
 	sub sp, #4
 	ldr r1, _02240788 ; =0x00000F0F
@@ -3033,11 +3033,11 @@ ov70_02240748: ; 0x02240748
 	pop {r3, r4, pc}
 	nop
 _02240788: .word 0x00000F0F
-	thumb_func_end ov70_02240748
+	thumb_func_end GtsTransaction_AlreadyTraded
 
 
-	thumb_func_start ov70_0224078C
-ov70_0224078C: ; 0x0224078C
+	thumb_func_start GtsTransaction_PrintServerError
+GtsTransaction_PrintServerError: ; 0x0224078C
 	push {r3, lr}
 	ldr r1, [r0, #0x3c]
 	mov r2, #0x9a
@@ -3085,14 +3085,14 @@ _022407CC:
 	pop {r3, pc}
 	nop
 _022407E0: .word 0x00000F0F
-	thumb_func_end ov70_0224078C
+	thumb_func_end GtsTransaction_PrintServerError
 
 
-	thumb_func_start ov70_022407E4
-ov70_022407E4: ; 0x022407E4
+	thumb_func_start GtsTransaction_ServerErrorExit
+GtsTransaction_ServerErrorExit: ; 0x022407E4
 	push {r4, lr}
 	add r4, r0, #0
-	bl ov70_0224078C
+	bl GtsTransaction_PrintServerError
 	add r0, r4, #0
 	mov r1, #0x25
 	mov r2, #0x24
@@ -3106,14 +3106,14 @@ ov70_022407E4: ; 0x022407E4
 	mov r0, #3
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov70_022407E4
+	thumb_func_end GtsTransaction_ServerErrorExit
 
 
-	thumb_func_start ov70_0224080C
-ov70_0224080C: ; 0x0224080C
+	thumb_func_start GtsTransaction_ServerError
+GtsTransaction_ServerError: ; 0x0224080C
 	push {r4, lr}
 	add r4, r0, #0
-	bl ov70_0224078C
+	bl GtsTransaction_PrintServerError
 	add r0, r4, #0
 	mov r1, #0x25
 	mov r2, #0x24
@@ -3128,4 +3128,4 @@ ov70_0224080C: ; 0x0224080C
 	bl Gts_StopAvatarAnims
 	mov r0, #3
 	pop {r4, pc}
-	thumb_func_end ov70_0224080C
+	thumb_func_end GtsTransaction_ServerError

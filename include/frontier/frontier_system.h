@@ -4,13 +4,44 @@
 #include "frontier/frontier_map.h"
 
 #include "message_format.h"
+#include "msgdata.h"
+#include "pm_string.h"
 
+struct FrontierScriptContext;
+
+// Runs the frontier map's scripts: up to 8 script contexts (tasks) at a time, which share the map's script data
+// (narc 182 member) and message bank unless a task is started for another map.
 typedef struct FrontierSystem {
-    void *unk0;
-    u8 unk4[0x40];
-    MessageFormat *unk44;
-} FrontierSystem;
+    void *frontierWork;                     // 0x00, the frontier app (Frontier_GetLaunchArgs / Frontier_GetData)
+    struct FrontierScriptContext *tasks[8]; // 0x04
+    u16 vars[8];                            // 0x24, script variables 0x8008-0x800F
+    enum HeapID heapId;                     // 0x34
+    u8 unk_38;                              // 0x38, tasks only run while 0
+    u8 filler_39[3];
+    MsgData *msgData;                       // 0x3C
+    u8 *scripts;                            // 0x40
+    MessageFormat *msgFormat;               // 0x44
+    String *unk_48;                         // 0x48
+    String *unk_4C;                         // 0x4C
+    u8 unk_50;                              // 0x50
+    s8 taskCount;                           // 0x51
+    u16 mapId;                              // 0x52
+    u8 unk_54[0x68];
+} FrontierSystem; // size 0xBC
 
-FrontierMap *FrontierSystem_GetFrontierMap(FrontierSystem *frontierSystem);
+FrontierSystem *FrontierSystem_Create(void *frontierWork, enum HeapID heapId, u32 mapId);
+BOOL FrontierSystem_Main(FrontierSystem *system);
+void FrontierSystem_Delete(FrontierSystem *system);
+void FrontierSystem_AddTask(FrontierSystem *system, u16 mapId, u32 scriptIndex);
+BOOL FrontierSystem_InsertTask(FrontierSystem *system, struct FrontierScriptContext *task);
+void FrontierSystem_FreeTask(FrontierSystem *system, struct FrontierScriptContext *task);
+void FrontierSystem_deadstripped_0222AA3C(FrontierSystem *system, u16 mapId, u32 a2, u32 a3);
+void FrontierSystem_LoadMapScripts(u8 **scripts, MsgData **msgData, u32 mapId, enum HeapID heapId);
+void FrontierSystem_ChangeMsgBank(FrontierSystem *system, u16 mapId, enum HeapID heapId);
+u16 *FrontierSystem_SaveVars(FrontierSystem *system, enum HeapID heapId);
+void FrontierSystem_RestoreVars(FrontierSystem *system, u16 *saved);
+void FrontierScriptContext_GoToScript(struct FrontierScriptContext *ctx, u32 scriptIndex);
+u16 *FrontierSystem_GetVarPtr(FrontierSystem *system, u32 index);
+FrontierMap *FrontierSystem_GetFrontierMap(FrontierSystem *system);
 
 #endif

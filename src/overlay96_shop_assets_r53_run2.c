@@ -21,7 +21,7 @@ BOOL ov96_021F107C(void *course) {
             ov96_021EB63C(PTR_AT(work, 0x18), 1);
             ov96_021EB144(PTR_AT(work, 0x76C), 1);
             ov96_021E65A4(course);
-            touch = ov96_021F46B4(PTR_AT(work, 0x774));
+            touch = PokeathlonCirclePushDisplay_GetScore(PTR_AT(work, 0x774));
             ov96_021E8318(course, touch);
             ov96_021F2EFC(work, touch);
             return TRUE;

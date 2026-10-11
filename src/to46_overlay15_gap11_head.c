@@ -12,12 +12,12 @@ void BagApp_ShowTMHMTypeIcons(BagWorkRaw *work, u16 item, BOOL draw) {
         move = TMHMGetMove(item);
         type = GetMoveAttr(move, MOVEATTR_TYPE);
         category = GetMoveAttr(move, MOVEATTR_CLASS);
-        narc = sub_020776B4();
-        SpriteSystem_ReplaceCharResObj(*(SpriteSystem **)&work->raw[0x248], *(SpriteManager **)&work->raw[0x24C], narc, sub_02077678(type), TRUE, 0xC103);
-        ManagedSprite_SetPaletteOverride(*(ManagedSprite **)&work->raw[0x26C], sub_0207769C(type) + 4);
-        narc = sub_02077830();
-        SpriteSystem_ReplaceCharResObj(*(SpriteSystem **)&work->raw[0x248], *(SpriteManager **)&work->raw[0x24C], narc, sub_02077800(category), TRUE, 0xC104);
-        ManagedSprite_SetPaletteOverride(*(ManagedSprite **)&work->raw[0x270], sub_02077818(category) + 4);
+        narc = TypeIcon_GetNarc();
+        SpriteSystem_ReplaceCharResObj(*(SpriteSystem **)&work->raw[0x248], *(SpriteManager **)&work->raw[0x24C], narc, TypeIcon_GetCharFile(type), TRUE, 0xC103);
+        ManagedSprite_SetPaletteOverride(*(ManagedSprite **)&work->raw[0x26C], TypeIcon_GetPalette(type) + 4);
+        narc = MoveCategoryIcon_GetNarc();
+        SpriteSystem_ReplaceCharResObj(*(SpriteSystem **)&work->raw[0x248], *(SpriteManager **)&work->raw[0x24C], narc, MoveCategoryIcon_GetCharFile(category), TRUE, 0xC104);
+        ManagedSprite_SetPaletteOverride(*(ManagedSprite **)&work->raw[0x270], MoveCategoryIcon_GetPalette(category) + 4);
     }
 }
 

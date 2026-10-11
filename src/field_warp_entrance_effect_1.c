@@ -27,11 +27,11 @@ void ov01_02200874(Ov01_02200858_Work *work) {
 
 void ov01_02200884(Ov01_02200858_Work *work) {
     ov01_021F19F4(work->unk0, &work->unk4, 0, 0x55, 0);
-    sub_02069978(&work->unk18, &work->unk4);
+    RenderObj_InitFromModel(&work->unk18, &work->unk4);
 }
 
 void ov01_022008A8(Ov01_02200858_Work *work) {
-    sub_02069784(&work->unk4);
+    RenderModel_Free(&work->unk4);
 }
 
 void ov01_022008B4(PlayerAvatar *a0) {

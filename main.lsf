@@ -614,7 +614,7 @@ Static main
     Object src/unk_02069528.o
     Object src/render_model.o
     Object src/render_animation.o
-    Object asm/unk_0206979C.o
+    Object asm/render_animation_data.o
     Object src/follow_mon.o
     Object src/map_preview_graphic.o
     Object src/field_take_photo.o
@@ -647,7 +647,7 @@ Static main
     Object src/overlay_resource_actor_4.o
     Object src/particle_scene.o
     Object src/type_icon_resources.o
-    Object asm/unk_02077678.o
+    Object asm/type_icon_resources_data.o
     Object src/bag_view.o
     Object src/item.o
     Object src/bag.o
@@ -4944,18 +4944,7 @@ Overlay OVY_70
     Object src/gts_search.o
     Object src/gts_select_mon.o
     Object src/gts_wanted.o
-    Object src/overlay70_pokegear_radio_ui_run1.o
-    Object src/to80_extra2575_run01.o
-    Object src/overlay70_pokegear_radio_ui_run2.o
-    Object src/overlay70_sol_partial_27.o
-    Object src/overlay70_state_helpers_1.o
-    Object src/overlay70_sol_partial_28.o
-    Object src/to80_extra1543_run01.o
-    Object src/overlay70_sol_partial_29.o
-    Object src/to80_extra1794_run01.o
-    Object src/overlay70_sol_partial_30.o
-    Object src/overlay70_storage_transfer_helpers.o
-    Object src/overlay70_sol_partial_31.o
+    Object src/gts_transaction.o
     Object src/gts_avatars.o
     Object src/gts_trade.o
     Object src/to50_overlay70_window_setup_modes.o
@@ -5138,25 +5127,11 @@ Overlay OVY_80
     After OVY_42
     Object src/frontier/frontier_trainers.o
     Object asm/frontier_trainers_data.o
-    Object src/frontier_system_helpers_1.o
+    Object src/frontier/frontier_system.o
     Object src/frontier/frontier_script_context.o
     Object src/frontier/frontier_map_params.o
     Object asm/frontier_map_params_data.o
-    Object src/ov80_2aef8_partial_1.o
-    Object src/overlay_80_0222AEF8.o
-    Object src/ov80_2aef8_partial_2.o
-    Object src/op90_overlay_80_0222AEF8_residual_2_r01.o
-    Object src/op90_overlay_80_0222AEF8_residual_2_r02.o
-    Object src/ov80_2aef8_partial_3.o
-    Object src/to52_overlay80_castle_opponent_sync.o
-    Object src/ov80_2aef8_partial_4.o
-    Object src/op90_overlay_80_0222AEF8_residual_4_r01.o
-    Object src/ov80_2aef8_partial_5.o
-    Object src/to90_extra2220_run01.o
-    Object src/to90_extra2524_run01.o
-    Object src/ov80_2aef8_partial_6.o
-    Object src/op90_overlay_80_0222AEF8_residual_6_r01.o
-    Object src/ov80_2aef8_partial_7.o
+    Object src/frontier/frontier_link_messages.o
     Object src/overlay80_command_helpers_1.o
     Object src/to58_w18b_overlay_80_0222BDF4.o
     Object src/overlay80_command_helpers_2.o
@@ -5846,38 +5821,8 @@ Overlay OVY_96
     Object asm/to70_overlay_96_residual_125_extra662_anchor_own1.o
     Object src/op90_to80_extra1591_residual_1_r01.o
     Object asm/to70_overlay_96_residual_125_extra662_anchor_own2.o
-    Object src/to80_extra1591_run01.o
-    Object src/to46_overlay96_ui_resources_r57.o
-    Object src/overlay96_ui_resources_tail_57.o
-    Object src/overlay96_exact_bank_57.o
-    Object src/overlay96_course_display_r58_run1.o
-    Object src/to70_overlay_96_residual_58_gap_1_extra879_run01.o
-    Object src/overlay96_course_display_r58_run2.o
-    Object src/to45_overlay96_r58_gap2.o
-    Object src/to70_overlay_96_residual_58_gap_2_holdout_extra668_run01.o
-    Object src/overlay96_course_display_r58_run3.o
-    Object src/overlay96_course_anim_gap3.o
-    Object src/op90_overlay_96_residual_58_gap_3_tail_r01.o
-    Object src/overlay96_course_display_r58_run4.o
-    Object src/to90_extra2503_run01.o
-    Object src/overlay96_score_digits_r58.o
-    Object src/op90_overlay_96_residual_58_gap_4_tail_r01.o
-    Object src/overlay96_exact_bank_58.o
-    Object src/to41_overlay_96_residual_59_run1.o
-    Object src/to70_overlay_96_residual_59_extra419_run01.o
-    Object src/to41_overlay_96_residual_59_run2.o
-    Object src/to45_overlay96_r59b_state.o
-    Object src/to90_extra2251_run01.o
-    Object src/to45_overlay96_r59b_gfx.o
-    Object src/to70_to45_overlay96_r59b_tail_extra359_run01.o
-    Object src/to41_overlay_96_residual_59_run3.o
-    Object src/to80_extra1707_run01.o
-    Object src/to90_extra2425_run01.o
-    Object src/to53_overlay96_course_setup.o
-    Object src/to41_overlay_96_residual_59_run4.o
-    Object src/op90_overlay_96_residual_59_to41_residual_4_r01.o
-    Object src/to41_overlay_96_residual_59_run5.o
-    Object src/overlay96_course_render_setup_r11.o
+    Object src/pokeathlon/pokeathlon_circle_push_display.o
+    Object src/pokeathlon/pokeathlon_lamp_jump.o
     Object asm/to70_overlay_96_residual_125_extra662_anchor_own4.o
     Object src/op90_overlay_96_r59_r11_render_residual_r01.o
     Object src/to41_overlay_96_residual_59_run6.o

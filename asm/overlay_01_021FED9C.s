@@ -80,10 +80,10 @@ ov01_021FEDF0: ; 0x021FEDF0
 	push {r4, lr}
 	add r4, r0, #0
 	add r0, r4, #4
-	bl sub_02069784
+	bl RenderModel_Free
 	add r4, #0x18
 	add r0, r4, #0
-	bl sub_020698D0
+	bl RenderAnimation_Free
 	pop {r4, pc}
 	thumb_func_end ov01_021FEDF0
 
@@ -154,7 +154,7 @@ ov01_021FEE64: ; 0x021FEE64
 	add r0, #0x24
 	add r1, r1, #4
 	add r2, r4, #0
-	bl sub_02069998
+	bl RenderObj_InitWithAnimation
 	mov r0, #1
 	add sp, #4
 	pop {r3, r4, pc}
@@ -163,11 +163,11 @@ ov01_021FEE64: ; 0x021FEE64
 
 	thumb_func_start ov01_021FEE9C
 ov01_021FEE9C: ; 0x021FEE9C
-	ldr r3, _021FEEA4 ; =sub_020698D0
+	ldr r3, _021FEEA4 ; =RenderAnimation_Free
 	add r0, r1, #0
 	bx r3
 	nop
-_021FEEA4: .word sub_020698D0
+_021FEEA4: .word RenderAnimation_Free
 	thumb_func_end ov01_021FEE9C
 
 	thumb_func_start ov01_021FEEA8
@@ -176,7 +176,7 @@ ov01_021FEEA8: ; 0x021FEEA8
 	add r4, r1, #0
 	add r5, r0, #0
 	add r0, r4, #0
-	bl sub_02069948
+	bl RenderAnimation_IsDone
 	cmp r0, #1
 	bne _021FEEC0
 	add r0, r5, #0
@@ -187,7 +187,7 @@ _021FEEC0:
 	add r0, r4, #0
 	lsl r1, r1, #0xc
 	mov r2, #0
-	bl sub_020698E8
+	bl RenderAnimation_Advance
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 	thumb_func_end ov01_021FEEA8
@@ -202,7 +202,7 @@ ov01_021FEED0: ; 0x021FEED0
 	add r4, #0x24
 	add r0, r4, #0
 	add r1, sp, #0
-	bl sub_020699BC
+	bl RenderObj_DrawAt
 	add sp, #0xc
 	pop {r3, r4, pc}
 	.balign 4, 0

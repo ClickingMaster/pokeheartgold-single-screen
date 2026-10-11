@@ -21,7 +21,7 @@ void ov96_021EB408(void *a0, u8 a, u8 b, u8 c, u8 d);
 void *ov96_021EB4F4(void *a0, u8 a, u8 b);
 Sprite *ov96_021EB5B8(void *x);
 void ov96_021EB52C(void *x, int a, int b);
-void ov96_021F440C(void *a0, Work *work);
+void PokeathlonCirclePushDisplay_GetPicVramLocations(void *a0, Work *work);
 void ov96_021F3EC0(void *a0, Work *work);
 // @fn ov96_021F3EC0
 void ov96_021F3EC0(void *a0, Work *work) {
@@ -43,5 +43,5 @@ void ov96_021F3EC0(void *a0, Work *work) {
         Sprite_SetMatrix(sprite, &pos);
         ov96_021EB52C(work->xf8[i], 1, 0);
     }
-    ov96_021F440C(a0, work);
+    PokeathlonCirclePushDisplay_GetPicVramLocations(a0, work);
 }

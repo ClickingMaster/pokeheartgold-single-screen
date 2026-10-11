@@ -34,10 +34,10 @@
 .public sub_02068B0C
 .public sub_02068B48
 .public sub_02068BAC
-.public sub_020696C4
-.public sub_02069714
-.public sub_020697DC
-.public sub_02069894
+.public RenderModel_LoadFromNarc
+.public RenderModel_BindTexturesOnVBlank
+.public RenderAnimation_LoadFromNarc
+.public RenderAnimation_InitForModel
 .public NNS_G3dRenderObjInit
 .public NNS_G3dResDefaultSetup
 .public NNS_G3dMdlSetMdlFogEnableFlagAll

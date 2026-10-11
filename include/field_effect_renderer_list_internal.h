@@ -9,8 +9,8 @@
 #include "map_object.h"
 #include "overlay_01_021F1348.h"
 #include "unk_020689C8.h"
-#include "unk_02069660.h"
-#include "unk_0206979C.h"
+#include "render_model.h"
+#include "render_animation.h"
 
 // Not declared in any tracked header.
 void sub_02068DA8(void *a0, VecFx32 *a1);

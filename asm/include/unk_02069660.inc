@@ -6,9 +6,9 @@
 .public Heap_Free
 .public GF3dRender_AllocAndLoadTexResources
 .public GF_AssertFail
-.public sub_020696C4
-.public sub_02069714
-.public sub_02069784
+.public RenderModel_LoadFromNarc
+.public RenderModel_BindTexturesOnVBlank
+.public RenderModel_Free
 .public NNS_G3dTexReleaseTexKey
 .public NNS_G3dPlttReleasePlttKey
 .public NNS_G3dBindMdlSet

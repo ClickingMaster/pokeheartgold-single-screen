@@ -22,18 +22,18 @@ void BattlePartyMenu_SetMonIconPalettes(Ov08Work16 *work) {
 
 void BattlePartyMenu_SetTypeIcon(Ov08Work16 *work, ManagedSprite *sprite, int resId, u32 type) {
     SpriteSystem *sys = BattleSystem_GetSpriteSystem(work->root->battleSystem);
-    int narc = sub_020776B4();
-    int file = sub_02077678(type);
+    int narc = TypeIcon_GetNarc();
+    int file = TypeIcon_GetCharFile(type);
     SpriteSystem_ReplaceCharResObj(sys, work->spriteManager, narc, file, TRUE, resId);
-    ManagedSprite_SetPaletteOverride(sprite, sub_0207769C(type) + 4);
+    ManagedSprite_SetPaletteOverride(sprite, TypeIcon_GetPalette(type) + 4);
 }
 
 void BattlePartyMenu_SetMoveCategoryIcon(Ov08Work16 *work, ManagedSprite *sprite, u32 value) {
     SpriteSystem *sys = BattleSystem_GetSpriteSystem(work->root->battleSystem);
-    int narc = sub_02077830();
-    int file = sub_02077800(value);
+    int narc = MoveCategoryIcon_GetNarc();
+    int file = MoveCategoryIcon_GetCharFile(value);
     SpriteSystem_ReplaceCharResObj(sys, work->spriteManager, narc, file, TRUE, 0xB015);
-    ManagedSprite_SetPaletteOverride(sprite, sub_02077818(value) + 4);
+    ManagedSprite_SetPaletteOverride(sprite, MoveCategoryIcon_GetPalette(value) + 4);
 }
 
 void BattlePartyMenu_ShowStatusIcon(int anim, ManagedSprite *sprite, int x, int y) {

@@ -7,11 +7,11 @@
 #include "map_object.h"
 #include "overlay_01_021F1348.h"
 #include "unk_020689C8.h"
-#include "unk_02069660.h"
-#include "unk_0206979C.h"
+#include "render_model.h"
+#include "render_animation.h"
 
 // ---- not declared in any tracked header (private proposals; see report.md) ----
-void sub_020699AC(void *a0, VecFx32 *pos, VecFx32 *scale, MtxFx33 *mtx);
+void RenderObj_Draw(void *a0, VecFx32 *pos, VecFx32 *scale, MtxFx33 *mtx);
 void Math_CalcRotationMatrixXYZDeg(MtxFx33 *mtx, u16 x, u16 y, u16 z);
 void *sub_02068D74(void *a0);
 void *sub_02068D90(void *a0);

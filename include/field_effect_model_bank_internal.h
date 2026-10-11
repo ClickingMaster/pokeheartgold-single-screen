@@ -7,8 +7,8 @@
 #include "map_object.h"
 #include "overlay_01_021F1348.h"
 #include "unk_020689C8.h"
-#include "unk_02069660.h"
-#include "unk_0206979C.h"
+#include "render_model.h"
+#include "render_animation.h"
 
 // Per-module renderer bank. The tracked UnkOv01_021FFECC in
 // overlay_01_021F1348.h is the 4-renderer instantiation (0x1a4); this module

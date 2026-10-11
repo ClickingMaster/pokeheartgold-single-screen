@@ -47,10 +47,10 @@ extern int SpriteSystem_LoadPaletteBuffer(void *, int, void *, void *, int, int,
 extern int SpriteSystem_LoadCellResObj(void *, void *, int, int, int, int);
 extern int SpriteSystem_LoadAnimResObj(void *, void *, int, int, int, int);
 extern int SpriteSystem_LoadCharResObj(void *, void *, int, int, int, int, int);
-extern void sub_02077720(void *, int, void *, void *, int, int);
-extern void sub_0207775C(void *, void *, int, int);
-extern void sub_020776B8(void *, void *, int, int, int);
-extern void sub_02077834(void *, void *, int, int, int);
+extern void TypeIcon_LoadPaletteBuffer(void *, int, void *, void *, int, int);
+extern void TypeIcon_LoadCellAnim(void *, void *, int, int);
+extern void TypeIcon_LoadChar(void *, void *, int, int, int);
+extern void MoveCategoryIcon_LoadChar(void *, void *, int, int, int);
 extern void *SpriteSystem_NewSprite(void *, void *, const SpriteTemplate *);
 
 #define ROOT(w) (*(void **)(w))
@@ -107,13 +107,13 @@ void BattlePartyMenu_LoadTypeIconResources(void *work) {
     void *system = BattleSystem_GetSpriteSystem(AT(ROOT(work), 8));
     u32 id;
     u32 end;
-    sub_02077720(AT(work, 0x1E8), 3, system, ((WorkWithManager *)work)->manager, 2, 0xB009);
-    sub_0207775C(system, ((WorkWithManager *)work)->manager, 0xB009, 0xB009);
+    TypeIcon_LoadPaletteBuffer(AT(work, 0x1E8), 3, system, ((WorkWithManager *)work)->manager, 2, 0xB009);
+    TypeIcon_LoadCellAnim(system, ((WorkWithManager *)work)->manager, 0xB009, 0xB009);
     end = 0xB00E;
     id = end;
     end += 6;
-    do { sub_020776B8(system, ((WorkWithManager *)work)->manager, 2, 0, id); id++; } while (id <= end);
-    sub_02077834(system, ((WorkWithManager *)work)->manager, 2, 0, 0xB015);
+    do { TypeIcon_LoadChar(system, ((WorkWithManager *)work)->manager, 2, 0, id); id++; } while (id <= end);
+    MoveCategoryIcon_LoadChar(system, ((WorkWithManager *)work)->manager, 2, 0, 0xB015);
 }
 
 void BattlePartyMenu_LoadHeldItemIconResources(void *work) {

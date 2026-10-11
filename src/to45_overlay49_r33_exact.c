@@ -10,8 +10,8 @@ void ov49_0225BEA0(void *unused0, void *unused1, void *ctx_, enum HeapID heapId,
     for (; i < 2; i++) {
         if ((u16)ov45_0222AAEC(session, i) != 0) {
             u16 type = ov45_0222D7C0();
-            NarcId narcId = sub_020776B4();
-            u32 member = sub_02077678(type);
+            NarcId narcId = TypeIcon_GetNarc();
+            u32 member = TypeIcon_GetCharFile(type);
             void *buf = GfGfxLoader_LoadFromNarc(narcId, member, 1, heapId, 1);
             NNSG2dCharacterData *charData;
 
@@ -19,7 +19,7 @@ void ov49_0225BEA0(void *unused0, void *unused1, void *ctx_, enum HeapID heapId,
             BG_LoadCharTilesData(*ctx, 6, charData->pRawData, 0x100, *tileBase);
             Heap_Free(buf);
             CopyToBgTilemapRect(*ctx, 6, 0x1a, y, 4, 2, *tiles, 0, 0, 4, 2);
-            BgTilemapRectChangePalette(*ctx, 6, 0x1a, y, 4, 2, (u8)(sub_0207769C(type) + 0xb));
+            BgTilemapRectChangePalette(*ctx, 6, 0x1a, y, 4, 2, (u8)(TypeIcon_GetPalette(type) + 0xb));
             ScheduleBgTilemapBufferTransfer(*ctx, 6);
         }
         tiles++;

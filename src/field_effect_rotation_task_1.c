@@ -18,8 +18,8 @@ void ov01_021FEC64(Ov01EffectManager *manager) {
 }
 
 void ov01_021FEC8C(Ov01EffectManager *manager) {
-    sub_02069784(manager->primary);
-    sub_020698D0(manager->secondary);
+    RenderModel_Free(manager->primary);
+    RenderAnimation_Free(manager->secondary);
 }
 
 void ov01_021FECA0(void *mapObject, void *arg, u32 variant, u32 direction) {
@@ -41,24 +41,24 @@ BOOL ov01_021FED14(void *task, Ov01EffectState *state) {
     Ov01TaskArgs *args = sub_02068D98(task);
     state->args = *args;
     ov01_021F1A34(state->args.context, state, (u8 *)state->args.resource + 4, (u8 *)state->args.resource + 0x18, 0);
-    sub_02069998((u8 *)state + 0x24, (u8 *)state->args.resource + 4, state);
+    RenderObj_InitWithAnimation((u8 *)state + 0x24, (u8 *)state->args.resource + 4, state);
     return TRUE;
 }
 
 void ov01_021FED4C(void *unused, void *state) {
-    sub_020698D0(state);
+    RenderAnimation_Free(state);
 }
 
 void ov01_021FED58(void *task, void *state) {
-    if (sub_02069948(state) == TRUE) {
+    if (RenderAnimation_IsDone(state) == TRUE) {
         ov01_021F1640(task);
         return;
     }
-    sub_020698E8(state, 0x1000, 0);
+    RenderAnimation_Advance(state, 0x1000, 0);
 }
 
 void ov01_021FED80(void *task, void *state) {
     Ov01Vec3 position;
     sub_02068DB8(task, &position);
-    sub_020699BC((u8 *)state + 0x24, &position);
+    RenderObj_DrawAt((u8 *)state + 0x24, &position);
 }

@@ -75,9 +75,9 @@ void ov01_021FE230(UnkOv01_021FE200 *a0) {
 
     for (i = 0; i < OV01_021FE200_COUNT; i++) {
         ov01_021F19F4(a0->unk0, &a0->unk4[i], 0, ov01_0220901C[i], 0);
-        sub_02069978(&a0->unk194[i], &a0->unk4[i]);
+        RenderObj_InitFromModel(&a0->unk194[i], &a0->unk4[i]);
         ov01_021F19F4(a0->unk0, &a0->unkCC[i], 0, ov01_02208FF4[i], 0);
-        sub_02069978(&a0->unk4DC[i], &a0->unkCC[i]);
+        RenderObj_InitFromModel(&a0->unk4DC[i], &a0->unkCC[i]);
     }
 }
 
@@ -85,8 +85,8 @@ void ov01_021FE2B8(UnkOv01_021FE200 *a0) {
     int i;
 
     for (i = 0; i < OV01_021FE200_COUNT; i++) {
-        sub_02069784(&a0->unk4[i]);
-        sub_02069784(&a0->unkCC[i]);
+        RenderModel_Free(&a0->unk4[i]);
+        RenderModel_Free(&a0->unkCC[i]);
     }
 }
 
@@ -255,6 +255,6 @@ void ov01_021FE558(void *a0, UnkOv01_021FE200_Work *a1) {
         sub_02068DB8(a0, &position);
         NNSi_G3dModifyPolygonAttrMask(a1->unk14->unkC, TRUE, 0x1F << 16);
         NNS_G3dMdlSetMdlAlphaAll(a1->unk14->unkC, a1->unkC);
-        sub_020699BC(a1->unk18, &position);
+        RenderObj_DrawAt(a1->unk18, &position);
     }
 }
