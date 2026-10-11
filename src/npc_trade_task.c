@@ -1,17 +1,17 @@
 #include "npc_trade_task_private.h"
 
-const OverlayManagerTemplate _020FE79C = {
+const OverlayManagerTemplate gNPCTradeSequenceAppTemplate = {
     TradeSequence_Init,
     TradeSequence_Main,
     TradeSequence_Exit,
     FS_OVERLAY_ID(OVY_71),
 };
 
-void sub_0206793C(TaskManager *taskManager) {
+void NPCTrade_CallTradeSequenceApp(TaskManager *taskManager) {
     NPCTradeTaskEnv *env;
     TaskManager_GetFieldSystem(taskManager);
     env = TaskManager_GetEnvironment(taskManager);
-    CallApplicationAsTask(taskManager, &_020FE79C, &env->animWork);
+    CallApplicationAsTask(taskManager, &gNPCTradeSequenceAppTemplate, &env->animWork);
 }
 
 BOOL Task_NPCTrade(TaskManager *taskManager) {
@@ -33,7 +33,7 @@ BOOL Task_NPCTrade(TaskManager *taskManager) {
         env->state++;
         break;
     case 3:
-        sub_0206793C(taskManager);
+        NPCTrade_CallTradeSequenceApp(taskManager);
         env->state++;
         break;
     case 4:

@@ -71,7 +71,7 @@ extern u8 ov13_0224F57C;
 extern u8 ov13_0224F580;
 extern u8 ov13_0224F584;
 extern u8 ov13_0224F588;
-extern u8 ov13_0224F58C;
+extern u8 gWifiSetupUsbConnectorExit;
 extern u8 ov13_02245600[];
 extern Ov13Bytes4 ov13_02245604[2];
 extern Ov13Pos2 ov13_02245622[];
@@ -144,10 +144,10 @@ void ov13_022352C0(int a);
 void ov13_02235F80(void);
 void ov13_022363F4(void);
 void ov13_022368D8(void);
-void ov13_02238D88(void);
-void ov13_0223902C(void);
-void ov13_02239378(void *a, int b, int c);
-void ov13_02239B34(void);
+void WifiSetupUsbConnector_Start(void);
+void WifiSetupUsbConnector_ScanCallback(void);
+void WifiSetupPalette_LoadRow(void *a, int b, int c);
+void WifiSetupApScan_FreeWork(void);
 Ov13Profile *WifiSetupConnections_GetEdit(void);
 int WifiSetupConnections_GetSetupMethod(int a);
 void WifiSetupConnections_Edit(void);
@@ -655,7 +655,7 @@ void ov13_02237548(void) {
     if (ov13_0224F56C.sel > 3) {
         return;
     }
-    ov13_02239378(ov13_0224F56C.p->unk0, a.v[ov13_0224F56C.sel], a.v[ov13_0224F56C.sel]);
+    WifiSetupPalette_LoadRow(ov13_0224F56C.p->unk0, a.v[ov13_0224F56C.sel], a.v[ov13_0224F56C.sel]);
     if (ov13_0224F56C.sel == 3) {
         return;
     }
@@ -872,7 +872,7 @@ void ov13_02237C84(int dir) {
 
 void ov13_02237D78(void) {
     Ov13Bytes4 t = ov13_022456B4;
-    ov13_02239378(ov13_0224F574.p, t.v[ov13_0224F574.b], t.v[ov13_0224F574.b]);
+    WifiSetupPalette_LoadRow(ov13_0224F574.p, t.v[ov13_0224F574.b], t.v[ov13_0224F574.b]);
 }
 
 void ov13_02237DD0(void) {
@@ -1114,7 +1114,7 @@ void ov13_022383D0(void) {
 
 void ov13_02238440(void) {
     int mode;
-    ov13_02239B34();
+    WifiSetupApScan_FreeWork();
     ov13_0222B948(0, &mode);
     ov13_02238498();
     WifiSetupMessage_Show(0x31, -1, 0);
@@ -1391,7 +1391,7 @@ BOOL ov13_02238C2C(void) {
 void ov13_02238C4C(void) {
     u16 name[11];
     OSOwnerInfo info;
-    ov13_0224F58C = 0;
+    gWifiSetupUsbConnectorExit = 0;
     ov13_02238CE0();
     WifiSetupBackground_LoadHeader(8);
     ov13_02227964(2);
@@ -1400,9 +1400,9 @@ void ov13_02238C4C(void) {
     MIi_CpuCopy16(info.nickName, name, info.nickNameLength * 2);
     WifiSetup_PrintMessageWithText(name, 0x28);
     WifiSetupBusyIcon_Create(0);
-    WifiSetupUsbScan_Start(ov13_0223902C);
+    WifiSetupUsbScan_Start(WifiSetupUsbConnector_ScanCallback);
     WifiSetupSound_Play(0xB);
-    WifiSetupApp_SetStateFunc(ov13_02238D88);
+    WifiSetupApp_SetStateFunc(WifiSetupUsbConnector_Start);
 }
 
 void ov13_02238CE0(void) {

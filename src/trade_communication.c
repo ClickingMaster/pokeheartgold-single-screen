@@ -1,10 +1,10 @@
 #include "trade_communication_internal.h"
 
-void sub_0208F658(TradeContext *context) {
-    Comm_RegisterCommandTable(_02105430, 11, context);
+void WirelessTrade_RegisterCommands(TradeContext *context) {
+    Comm_RegisterCommandTable(gWirelessTradeCommands, 11, context);
 }
 
-u32 sub_0208F66C(u32 slot) {
+u32 WirelessTrade_GetPartnerSlot(u32 slot) {
     if (slot == 12) {
         return 12;
     }
@@ -14,7 +14,7 @@ u32 sub_0208F66C(u32 slot) {
     return slot - 6;
 }
 
-void sub_0208F680(int sender, int unused, void *data, TradeContext *context) {
+void WirelessTrade_RecvPartyChunk(int sender, int unused, void *data, TradeContext *context) {
     TradeWork *work = context->work;
     if (sender != Comm_GetLocalNetId()) {
         memcpy(work->receive, data, 0x590);
@@ -32,14 +32,14 @@ void sub_0208F680(int sender, int unused, void *data, TradeContext *context) {
     }
 }
 
-void sub_0208F6F4(int sender, int unused, u8 *data, TradeContext *context) {
+void WirelessTrade_RecvPartnerSelection(int sender, int unused, u8 *data, TradeContext *context) {
     TradeWork *work = context->work;
     if (sender != Comm_GetLocalNetId()) {
-        work->selection = sub_0208F66C(*data);
+        work->selection = WirelessTrade_GetPartnerSlot(*data);
     }
 }
 
-void sub_0208F714(int sender, int unused, u8 *data, TradeContext *context) {
+void WirelessTrade_RecvSlot(int sender, int unused, u8 *data, TradeContext *context) {
     context->work->slots[sender] = *data;
 }
 
@@ -56,11 +56,11 @@ void sub_0208F72C(int sender, int unused, void *data, TradeContext *context) {
 void sub_0208F738(int sender, int unused, void *data, TradeContext *context) {
 }
 
-void sub_0208F73C(int sender, int unused, u8 *data, TradeContext *context) {
+void WirelessTrade_RecvRemoteState(int sender, int unused, u8 *data, TradeContext *context) {
     context->work->remoteState = *data;
 }
 
-void sub_0208F74C(int sender, int unused, u8 *data, TradeContext *context) {
+void WirelessTrade_RecvSpecialRibbons(int sender, int unused, u8 *data, TradeContext *context) {
     u8 *ribbons = Save_SpecialRibbons_Get(context->saveData)->ribbons;
     int i;
     if (sender != Comm_GetLocalNetId()) {
@@ -72,7 +72,7 @@ void sub_0208F74C(int sender, int unused, u8 *data, TradeContext *context) {
     }
 }
 
-void sub_0208F77C(int sender, int unused, SavePalPad *data, TradeContext *context) {
+void WirelessTrade_RecvPalPad(int sender, int unused, SavePalPad *data, TradeContext *context) {
     TradeWork *work = context->work;
     if (sender != Comm_GetLocalNetId()) {
         SavePalPad_Merge(work->palPad, data, 1, (enum HeapID)26);
@@ -80,7 +80,7 @@ void sub_0208F77C(int sender, int unused, SavePalPad *data, TradeContext *contex
     }
 }
 
-void sub_0208F7A8(int sender, int unused, void *data, TradeContext *context) {
+void WirelessTrade_RecvPacket(int sender, int unused, void *data, TradeContext *context) {
     TradeWork *work = context->work;
     if (sender != Comm_GetLocalNetId()) {
         MIi_CpuCopyFast(data, work->packets[sender].data, 0x3e8);
@@ -89,26 +89,26 @@ void sub_0208F7A8(int sender, int unused, void *data, TradeContext *context) {
     }
 }
 
-void sub_0208F7E0(TradeContext *context, TradeWork *work) {
+void WirelessTrade_SetWork(TradeContext *context, TradeWork *work) {
     context->work = work;
 }
 
-u32 sub_0208F7E8(void) {
+u32 WirelessTrade_GetPacketSize(void) {
     return sizeof(TradePacket);
 }
 
-u32 sub_0208F7F0(void) {
+u32 WirelessTrade_GetSpecialRibbonsSize(void) {
     return 14;
 }
 
-u32 sub_0208F7F4(void) {
+u32 WirelessTrade_GetPalPadSize(void) {
     return sizeof(SavePalPad);
 }
 
-u32 sub_0208F7F8(void) {
+u32 WirelessTrade_GetPartyChunkSize(void) {
     return 0x590;
 }
 
-void *sub_0208F800(int sender, TradeContext *context) {
+void *WirelessTrade_GetRecvBuffer(int sender, TradeContext *context) {
     return context->work->buffers[sender];
 }

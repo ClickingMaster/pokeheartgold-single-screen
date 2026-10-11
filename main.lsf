@@ -792,7 +792,7 @@ Static main
     Object src/ribbon.o
     Object src/trainer_memo.o
     Object src/trade_communication.o
-    Object asm/unk_0208F658.o
+    Object asm/trade_communication_data.o
     Object src/wireless_room_packets.o
     Object asm/unk_0208F814.o
     Object src/wireless_room.o
@@ -1806,23 +1806,9 @@ Overlay OVY_0
     Object src/to61_overlay_00_arm_residual_1_run24.o
     Object src/to80_extra1394_run01.o
     Object src/to61_overlay_00_arm_residual_1_run25.o
-    Object src/to65_ov00_extra02_run01.o
-    Object src/to80_extra1411_run01.o
-    Object src/to65_ov00_extra02_run02.o
-    Object src/op90_to65_ov00_extra02_residual_2_r01.o
-    Object src/to65_ov00_extra02_run03.o
-    Object lib/NitroDWC/src/to91_w41563_friend_callback.o
-Object src/op90_to91_w41563_friend_callback_suffix_r01.o
-    Object src/to90_extra2113_run01.o
-    Object src/to65_ov00_extra02_run04.o
-    Object src/op90_to70_to65_ov00_extra02_residual_4_extra1107_residual_1_r01.o
-    Object src/to70_to65_ov00_extra02_residual_4_extra1107_run01.o
-    Object src/to65_ov00_extra02_run05.o
-    Object src/to70_to65_ov00_extra02_residual_5_extra1108_run01.o
-    Object src/to65_ov00_extra02_run06.o
-    Object src/to70_to65_ov00_extra02_residual_6_extra1109_run01.o
-    Object src/to65_ov00_extra02_run07.o
-    Object src/to80_extra1733_run01.o
+    Object lib/NitroDWC/src/friend_list.o
+    Object lib/NitroDWC/src/friend_callback.o
+    Object lib/NitroDWC/src/match_setup.o
     Object src/to90_extra2331_run01.o
     Object src/to70_to65_ov00_extra16_residual_1_extra1111_run01.o
     Object src/op90_to70_to65_ov00_extra16_residual_1_extra1111_residual_2_r01.o
@@ -2915,12 +2901,12 @@ Overlay OVY_13
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own7_own1.o
     Object src/to60_ov13_run06.o
     Object src/to60_ov13_run07.o
-    Object src/to60_ov13_run08.o
-    Object src/op90_to60_overlay_13_arm_2_residual_6_r01.o
-    Object src/to60_ov13_run09.o
-    Object src/op90_to60_overlay_13_arm_2_residual_7_r01.o
-    Object src/to60_ov13_run10.o
-    Object src/op90_to60_overlay_13_arm_2_residual_8_r01.o
+    Object src/wifi_setup_usb_connector_screen.o
+    Object src/wifi_setup_bg_screen_state.o
+    Object src/wifi_setup_bg_screen.o
+    Object src/wifi_setup_scroll_bar_state.o
+    Object src/wifi_setup_scroll_bar.o
+    Object src/wifi_setup_ap_scan_state.o
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own3.o
     Object src/wifi_setup_access_points.o
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own4.o

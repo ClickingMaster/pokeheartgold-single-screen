@@ -215,8 +215,8 @@
 .public sub_02089D40
 .public sub_0208AD34
 .public MonSetTrainerMemo
-.public sub_0208F658
-.public sub_0208F7E0
+.public WirelessTrade_RegisterCommands
+.public WirelessTrade_SetWork
 .public NNS_G2dGetUnpackedScreenData
 .public NNS_G2dInitOamManagerModule
 .public G2x_SetBlendBrightness_

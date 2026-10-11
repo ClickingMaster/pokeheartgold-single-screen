@@ -20,6 +20,6 @@ typedef struct NPCTradeTaskEnv {
 } NPCTradeTaskEnv;
 void CallTask_RestoreOverworld(TaskManager *);
 BOOL Task_NPCTrade(TaskManager *);
-void sub_0206793C(TaskManager *);
+void NPCTrade_CallTradeSequenceApp(TaskManager *);
 void CallTask_NPCTrade(TaskManager *, NPCTradeAppData *, u16, enum HeapID);
 #endif

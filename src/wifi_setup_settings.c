@@ -72,15 +72,15 @@ extern void *WifiSetup_LocalizePath(const void *path);
 extern void WifiSetupCursor_Hide(void);
 
 extern u8 *WifiSetupConnections_GetEdit(); // also called with arguments
-extern void ov13_02239228(void *);
-extern void ov13_022392B4(void);
-extern void ov13_022392CC(void *, int, int, int);
-extern void ov13_0223943C(int, int, int, int, int);
-extern void ov13_02239288(void);
-extern void ov13_02239514(void);
-extern int ov13_02239550(void);
-extern int ov13_02239564(void);
-extern int ov13_0223959C();
+extern void WifiSetupBgScreen_Create(void *);
+extern void WifiSetupBgScreen_MarkDirty(void);
+extern void WifiSetupBgScreen_CopyRect(void *, int, int, int);
+extern void WifiSetupScrollBar_Create(int, int, int, int, int);
+extern void WifiSetupBgScreen_Destroy(void);
+extern void WifiSetupScrollBar_Destroy(void);
+extern int WifiSetupScrollBar_GetValue(void);
+extern int WifiSetupScrollBar_GetEvent(void);
+extern int WifiSetupScrollBar_Disable();
 extern int WifiSetupConnections_SetAutoAddress();
 extern int WifiSetupConnections_SetAutoDns();
 extern void WifiSetupConnections_Edit(int);
@@ -125,7 +125,7 @@ void WifiSetupSettings_Init(void) {
     }
     ov13_02227964(1);
     ov13_02227E58();
-    ov13_0223943C(2, 85, 241, 65, (gWifiSetupSettings.scroll * 55) / WIFI_SETUP_SETTINGS_MAX_SCROLL);
+    WifiSetupScrollBar_Create(2, 85, 241, 65, (gWifiSetupSettings.scroll * 55) / WIFI_SETUP_SETTINGS_MAX_SCROLL);
     gWifiSetupSettings.work->canvas = WifiSetupText_InitBgCanvas(0, 1);
     for (i = 0; i < 7; i++) { // rows and the two switches
         gWifiSetupSettings.work->rows[i] = WifiSetupOamTemplate_AllocOam(0, 41);
@@ -169,8 +169,8 @@ void WifiSetupSettings_LoadGraphics(void) {
         path = WifiSetup_LocalizePath(&scrName);
         data = WifiSetupFile_Load(path, 0, 4);
         gWifiSetupSettings.work->screenData = data;
-        ov13_02239228(gWifiSetupSettings.work->screenData);
-        ov13_022392B4();
+        WifiSetupBgScreen_Create(gWifiSetupSettings.work->screenData);
+        WifiSetupBgScreen_MarkDirty();
         path = WifiSetup_LocalizePath(&plttName);
         data = WifiSetupFile_Load(path, 0, 4);
         gWifiSetupSettings.work->paletteData = data;
@@ -360,7 +360,7 @@ void WifiSetupSettings_SelectItem(int item) {
         WifiSetupSettings_SetButtonOam(0, 1, ov13_02234974(ov13_022455F4[item]));
         WifiSetupSettings_UpdateObjects();
     }
-    ov13_0223959C();
+    WifiSetupScrollBar_Disable();
     WifiSetupApp_SetStateFunc(WifiSetupSettings_StartClose);
 }
 
@@ -399,7 +399,7 @@ void WifiSetupSettings_HandleScrollBar(void) {
     if (gWifiSetupSettings.work->scrollBarTimer) {
         gWifiSetupSettings.work->scrollBarTimer--;
     }
-    switch (ov13_02239564()) {
+    switch (WifiSetupScrollBar_GetEvent()) {
     case 0:
         goto end;
     case 1:
@@ -410,13 +410,13 @@ void WifiSetupSettings_HandleScrollBar(void) {
             return;
         }
         WifiSetupCursor_Hide();
-        gWifiSetupSettings.scroll = (WIFI_SETUP_SETTINGS_MAX_SCROLL * ov13_02239550()) / 55;
+        gWifiSetupSettings.scroll = (WIFI_SETUP_SETTINGS_MAX_SCROLL * WifiSetupScrollBar_GetValue()) / 55;
         WifiSetupSettings_DrawRows();
         gWifiSetupSettings.work->scrollBarTimer = 4;
         return;
     case 3:
         gWifiSetupSettings.work->scrollBarHeld = 0;
-        gWifiSetupSettings.scroll = (WIFI_SETUP_SETTINGS_MAX_SCROLL * ov13_02239550()) / 55;
+        gWifiSetupSettings.scroll = (WIFI_SETUP_SETTINGS_MAX_SCROLL * WifiSetupScrollBar_GetValue()) / 55;
         WifiSetupSound_Play(19);
         WifiSetupSettings_DrawRows();
         rem = FX_ModS32(gWifiSetupSettings.scroll, WIFI_SETUP_SETTINGS_ROW_HEIGHT);
@@ -467,7 +467,7 @@ end:
 }
 
 void WifiSetupSettings_StartClose(void) {
-    ov13_0223959C();
+    WifiSetupScrollBar_Disable();
     WifiSetupFade_StartDelay(8);
     WifiSetupApp_SetStateFunc(WifiSetupSettings_FadeOut);
 }
@@ -497,13 +497,13 @@ void WifiSetupSettings_Exit(void) {
     if (gWifiSetupSettings.work->ssidIcon) {
         WifiSetupOam_Release(gWifiSetupSettings.work->ssidIcon);
     }
-    ov13_02239514();
+    WifiSetupScrollBar_Destroy();
     WifiSetupText_FreeBgCanvas(0);
     WifiSetupCursor_Hide();
     if (gWifiSetupSettings.work->selection != 12) {
         WifiSetupMessage_Hide(gWifiSetupSettings.work->selection);
     }
-    ov13_02239288();
+    WifiSetupBgScreen_Destroy();
     WifiSetupFile_Free(gWifiSetupSettings.work->screenData);
     for (i = 0; i < 2; i++) {
         WifiSetupFile_Free((&gWifiSetupSettings.work->paletteData)[i]);
@@ -580,11 +580,11 @@ void WifiSetupSettings_DrawRows(void) {
     for (; row < 5; row++, item++) {
         WifiSetupSettings_DrawValue(item, (void *)row);
     }
-    ov13_022392CC(gWifiSetupSettings.work->screenData + ov13_02245536[first], 0, 30, 19);
+    WifiSetupBgScreen_CopyRect(gWifiSetupSettings.work->screenData + ov13_02245536[first], 0, 30, 19);
     for (item = 0; item < 5; item++, first++) {
         WifiSetupSettings_DrawButtons(first, (void *)item);
     }
-    ov13_022392B4();
+    WifiSetupBgScreen_MarkDirty();
     WifiSetupText_MarkDirty(gWifiSetupSettings.work->canvas);
     WifiSetupSettings_UpdateObjects();
 }

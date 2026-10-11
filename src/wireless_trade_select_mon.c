@@ -247,8 +247,8 @@ typedef struct WirelessTradeWindowTemplate {
 } WirelessTradeWindowTemplate;
 
 // Defined in trade_communication.c, whose internal header declares them with its own view of the work.
-void sub_0208F658(FieldSystem *fieldSystem);
-void sub_0208F7E0(FieldSystem *fieldSystem, WirelessTradeSelectMon *work);
+void WirelessTrade_RegisterCommands(FieldSystem *fieldSystem);
+void WirelessTrade_SetWork(FieldSystem *fieldSystem, WirelessTradeSelectMon *work);
 
 // Defined in friend_roster.c, frontier_save.c, communication_player_state.c, communication_manager_9.c and
 // network_communication_state_full.c; not declared in their public headers.
@@ -430,10 +430,10 @@ BOOL WirelessTradeSelectMon_Init(OverlayManager *man, int *state) {
     {
         FieldSystem *fieldSystem = work->args->fieldSystem;
         work->fieldSystem = fieldSystem;
-        sub_0208F7E0(fieldSystem, work);
+        WirelessTrade_SetWork(fieldSystem, work);
     }
     WirelessTradeSelectMon_PrintMessage(&work->windows[23], 20, 1, work->msgData, work->msgFormat); // "Communicating. Please stand by..."
-    sub_0208F658(work->fieldSystem);
+    WirelessTrade_RegisterCommands(work->fieldSystem);
     ToggleBgLayer(GF_BG_LYR_MAIN_0, GF_PLANE_TOGGLE_ON);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     sub_020399FC(HEAP_ID_26, work->bgConfig);

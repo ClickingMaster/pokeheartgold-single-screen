@@ -7,8 +7,8 @@
 .public sub_020342C4
 .public Comm_GetLocalNetId
 .public sub_020378E4
-.public sub_0208F658
-.public sub_0208F7E0
+.public WirelessTrade_RegisterCommands
+.public WirelessTrade_SetWork
 .public MIi_CpuCopyFast
 .public memcpy
 .public gOverlayTemplate_Battle
@@ -16,21 +16,21 @@
 .public WirelessTradeSelectMon_SendCommandIfChanged
 .public WirelessTradeSelectMon_SendPartyChunk
 
-	.public sub_0208F66C
-	.public sub_0208F680
-	.public sub_0208F6F4
-	.public sub_0208F714
+	.public WirelessTrade_GetPartnerSlot
+	.public WirelessTrade_RecvPartyChunk
+	.public WirelessTrade_RecvPartnerSelection
+	.public WirelessTrade_RecvSlot
 	.public sub_0208F724
 	.public sub_0208F728
 	.public sub_0208F72C
 	.public sub_0208F738
-	.public sub_0208F73C
-	.public sub_0208F74C
-	.public sub_0208F77C
-	.public sub_0208F7A8
-	.public sub_0208F7E8
-	.public sub_0208F7F0
-	.public sub_0208F7F4
-	.public sub_0208F7F8
-	.public sub_0208F800
-	.public _02105430
+	.public WirelessTrade_RecvRemoteState
+	.public WirelessTrade_RecvSpecialRibbons
+	.public WirelessTrade_RecvPalPad
+	.public WirelessTrade_RecvPacket
+	.public WirelessTrade_GetPacketSize
+	.public WirelessTrade_GetSpecialRibbonsSize
+	.public WirelessTrade_GetPalPadSize
+	.public WirelessTrade_GetPartyChunkSize
+	.public WirelessTrade_GetRecvBuffer
+	.public gWirelessTradeCommands
