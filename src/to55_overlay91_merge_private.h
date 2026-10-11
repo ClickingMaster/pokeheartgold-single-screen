@@ -3,18 +3,18 @@
 #include "global.h"
 
 #include "math_util.h"
-void sub_02018068(void *);
-void sub_020180F8(void *, void *);
-void sub_02018124(void *, u32);
-void sub_02018198(void *, u32);
-void sub_020181D4(void *, void *);
-void sub_020181E0(void *, void *);
-void sub_020181EC(void *);
-void sub_020182A0(void *, int);
-void sub_020182A8(void *, u32, u32, u32);
-void sub_020182C4(void *, u32, u32, u32);
-void sub_020182E0(void *, u16, int);
-u32 sub_0201815C(void *, u32, u32, u32);
+void ModelResource_Free(void *);
+void ModelAnimation_Free(void *, void *);
+void ModelAnimation_AdvanceLooped(void *, u32);
+void ModelAnimation_SetFrame(void *, u32);
+void ModelInstance_AddAnimation(void *, void *);
+void ModelInstance_RemoveAnimation(void *, void *);
+void ModelInstance_Draw(void *);
+void ModelInstance_SetVisible(void *, int);
+void ModelInstance_SetPosition(void *, u32, u32, u32);
+void ModelInstance_SetScale(void *, u32, u32, u32);
+void ModelInstance_SetRotation(void *, u16, int);
+u32 ModelAnimation_Advance(void *, u32, u32, u32);
 void ov91_02260378(void *);
 void GF_AssertFail(void);
 u32 _u32_div_f(u32, u32);

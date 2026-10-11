@@ -10,7 +10,7 @@
 #include "pokemon_storage_system.h"
 #include "save_arrays.h"
 #include "screen_fade.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 
 typedef struct Ov112BoxMon {
     u32 species;

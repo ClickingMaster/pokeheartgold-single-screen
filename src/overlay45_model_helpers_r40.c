@@ -4,7 +4,7 @@
 #include "overlay45_model_helpers_r40_private.h"
 
 extern void ov49_02258830(NNSG3dResFileHeader **file, void *narc, int fileId, u32 heapId);
-extern void sub_02018068(Ov45R40Model *model);
+extern void ModelResource_Free(Ov45R40Model *model);
 extern void NNS_G3dMdlSetMdlPolygonIDAll(NNSG3dResMdl *model, int polygonId);
 extern void NNS_G3dMdlSetMdlAlphaAll(NNSG3dResMdl *model, int alpha);
 
@@ -25,7 +25,7 @@ void ov45_022309E8(Ov45R40Model *model, void *narc, int fileId, u32 heapId) {
 }
 
 void ov45_02230A44(Ov45R40Model *model) {
-    sub_02018068(model);
+    ModelResource_Free(model);
 }
 
 void ov45_02230A4C(Ov45R40Model *model, int alpha) {

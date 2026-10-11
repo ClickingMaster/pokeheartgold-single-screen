@@ -7,7 +7,7 @@
 #include "bg_window.h"
 #include "obj_char_transfer.h"
 #include "font.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 
 typedef struct Member {u8 p0[8];float factor,other;u8 p1[7];u8 tag,mode;u8 p2[3];} Member;
 typedef struct Actor {void *sprites[3];u8 p0[12];Member members[3];void *sprite6c;u8 p1[8];void *sprite78;fx32 x,y;u8 p2[7];u8 current;VecFx32 velocity;u8 collision[4];u8 p3;u8 blocked;u8 p4[6];u8 tag;u8 p5[4];u8 cooldown;u8 p6[0x26];u8 participant;u8 p7[3];} Actor;

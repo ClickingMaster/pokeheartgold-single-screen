@@ -33,7 +33,7 @@ extern const u8 ov49_0226A450[];
 
 void ov49_02259154(void *a0, VecFx32 *pos);
 void ov49_0226540C(Ov49Obj2 *obj, fx32 x0, fx32 x1, fx32 y0, fx32 y1, fx32 z0, fx32 z1, int a7);
-void sub_020182B0(Ov49Obj *obj, fx32 *x, fx32 *y, fx32 *z);
+void ModelInstance_GetPosition(Ov49Obj *obj, fx32 *x, fx32 *y, fx32 *z);
 void ov49_022655F4(Ov49Anim *anim, int rot, int a2, int a3);
 void ov49_0226786C(void *a0, Ov49Unk *data, int index, int a3);
 void ov49_02266F14(void *a0, Ov49Unk *data);
@@ -49,7 +49,7 @@ void ov49_02266F14(void *a0, Ov49Unk *data) {
     data->unk956 = 0;
     data->unk954 = 0;
     for (i = 0; i < data->count; i++) {
-        sub_020182B0(&data->objs[i], &pos.x, &pos.y, &pos.z);
+        ModelInstance_GetPosition(&data->objs[i], &pos.x, &pos.y, &pos.z);
         switch (data->dirs[i]) {
         case 0:
             x = pos.x;

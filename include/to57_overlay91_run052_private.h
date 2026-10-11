@@ -8,7 +8,7 @@
 #include "sprite_transfer.h"
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 #include "unk_02013534.h"
 
 #define PTR_AT(p, o) (*(void **)((u8 *)(p) + (o)))

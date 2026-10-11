@@ -26,7 +26,7 @@
 #include "touchscreen.h"
 #include "sound_playback.h"
 #include "unk_02009D48.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 #include "unk_02013FDC.h"
 #include "geometry_math.h"
 #include "unk_02026E30.h"

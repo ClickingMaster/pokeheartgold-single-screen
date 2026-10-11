@@ -17,8 +17,8 @@ typedef struct Ov49R72State {
     s8 count;
     s8 phase;
 } Ov49R72State;
-int sub_020182A4(void *);
-void sub_020182A0(void *, int);
+int ModelInstance_IsVisible(void *);
+void ModelInstance_SetVisible(void *, int);
 int ov49_02265B28(void *, Ov49R72State *, int, int);
 void ov49_02265BE8(void *, Ov49R72State *, int, int, int);
 #define DECL(n) void n(void *, u8 *)

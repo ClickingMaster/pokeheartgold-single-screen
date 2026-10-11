@@ -7,7 +7,7 @@ void ov49_02267D00(void *ctx, void *state) {
     U16_AT(state, 0xD0C) = 1;
     U16_AT(state, 0xD0E) = 0;
     for (i = 0; i < 2; i++) {
-        sub_020182A0(&OV49_ENTRIES(state)[i + 0x10], 1);
+        ModelInstance_SetVisible(&OV49_ENTRIES(state)[i + 0x10], 1);
     }
 }
 
@@ -24,7 +24,7 @@ void ov49_02267D34(void *ctx, void *state) {
             if (U16_AT(state, 0xD0E) < 13) {
                 ov49_02265B14(ctx, state, i + 0x10, 0);
             } else {
-                sub_020182A0(&OV49_ENTRIES(state)[i + 0x10], 0);
+                ModelInstance_SetVisible(&OV49_ENTRIES(state)[i + 0x10], 0);
             }
         }
     }

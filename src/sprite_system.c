@@ -11,7 +11,7 @@
 #include "sprite.h"
 #include "sprite_transfer.h"
 #include "unk_02009D48.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 #include "vram_transfer_manager.h"
 
 static void SpriteSystem_DeleteSpriteList(SpriteManager *spriteManager);

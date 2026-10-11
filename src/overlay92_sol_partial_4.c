@@ -6,8 +6,8 @@ extern void *Heap_Alloc(u32 heapId, u32 size);
 extern void ManagedSprite_TickTwoFrames(void *sprite);
 extern void ManagedSprite_SetDrawFlag(void *sprite, int flag);
 extern void Sprite_DeleteAndFreeResources(void *sprite);
-extern void sub_02018030(void *p, int a, int b, int heapId);
-extern void sub_02018068(void *p);
+extern void ModelResource_LoadFromNarc(void *p, int a, int b, int heapId);
+extern void ModelResource_Free(void *p);
 extern int FontID_String_GetWidth(int fontId, const void *str, int letterSpacing);
 extern int GetWindowWidth(const void *window);
 extern void BeginNormalPaletteFade(int a, int b, int c, int d, int e, int f, int heapId);
@@ -106,5 +106,5 @@ void ov92_0225D970(void *p, void *a, void *b) {
 }
 
 void ov92_0225D9A8(void *p, int a, int b) {
-    sub_02018030((u8 *)p + 0x78, a, b, 0x71);
+    ModelResource_LoadFromNarc((u8 *)p + 0x78, a, b, 0x71);
 }

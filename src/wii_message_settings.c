@@ -40,7 +40,7 @@
 #include "system.h"
 #include "text.h"
 #include "title_screen.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 #include "unk_020210A0.h"
 #include "unk_0202C034.h"
 #include "unk_0203170C.h"

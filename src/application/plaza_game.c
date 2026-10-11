@@ -27,7 +27,7 @@
 #include "sprite_transfer.h"
 #include "system.h"
 #include "text.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 #include "unk_0202C034.h"
 #include "unk_02033AE0.h"
 #include "unk_02034354.h"

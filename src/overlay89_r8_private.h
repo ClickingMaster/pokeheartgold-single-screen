@@ -58,7 +58,7 @@ typedef struct Ov89Dispatch {
 } Ov89Dispatch;
 
 extern const Ov89Dispatch ov89_0225CDB0[];
-void sub_020181EC(ModelInstance *);
+void ModelInstance_Draw(ModelInstance *);
 Ov89Object *ov89_0225A7BC(void *, Ov89Work *, const Ov89Object *, int, void *, int);
 BOOL ov89_0225A49C(void *, Ov89Work *, const Ov89Object *, int, void *, int);
 void ov89_0225A5A4(Ov89Work *);

@@ -142,22 +142,7 @@ Autoload EXT_WRAM
 	Object lib/src/wmsp_send_queue.o
 	Object lib/src/wmsp_send_queue_flush.o
 	Object lib/src/wmsp_get_tmptt.o
-	Object lib/src/to90_arm7_sub_ext_wram_run83.o
-	Object lib/src/to90_arm7_sub_ext_wram_run84.o
-	Object lib/src/to91_w41544_enable.o
-	Object lib/src/to90_arm7_sub_ext_wram_run85.o
-	Object lib/src/to90_arm7_sub_ext_wram_run86.o
-	Object lib/src/to90_arm7_sub_ext_wram_run87.o
-	Object lib/src/to90_arm7_sub_ext_wram_run88.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_23_r01.o
-	Object lib/src/to90_arm7_sub_ext_wram_run89.o
-	Object lib/src/to90_arm7_sub_ext_wram_run90.o
-	Object lib/src/to90_arm7_sub_ext_wram_run374.o
-	Object lib/src/to90_arm7_sub_ext_wram_run91.o
-	Object lib/src/to90_arm7_sub_ext_wram_run92.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_24_r01.o
-	Object lib/src/to90_arm7_sub_ext_wram_run93.o
-	Object lib/src/to90_arm7_sub_ext_wram_run94.o
+	Object lib/src/wmsp_control.o
 	Object lib/src/to90_arm7_sub_ext_wram_run95.o
 	Object lib/src/to90_arm7_sub_ext_wram_run400.o
 	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_25_r01.o

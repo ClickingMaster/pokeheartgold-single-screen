@@ -12,7 +12,7 @@ void ov49_0225D224(Ov49DParent *p, Ov49DState *s, s32 i, s32 type, u32 value) {
     }
     if (p->available[s->index][i] != 0) {
         if (s->active[i] == 0) {
-            sub_020181D4(s->object, s->slots[i]);
+            ModelInstance_AddAnimation(s->object, s->slots[i]);
         }
         s->active[i] = 1;
         s->type[i] = type;
@@ -26,7 +26,7 @@ void ov49_0225D224(Ov49DParent *p, Ov49DState *s, s32 i, s32 type, u32 value) {
             break;
         case 3:
         case 4:
-            s->resource[i] = sub_020181A4(s->slots[i]);
+            s->resource[i] = ModelAnimation_GetFrameCount(s->slots[i]);
             break;
         case 5:
             s->resource[i] = 0;
@@ -37,7 +37,7 @@ void ov49_0225D224(Ov49DParent *p, Ov49DState *s, s32 i, s32 type, u32 value) {
             s->random[i] = MTRandom() % s->modulus;
             break;
         }
-        sub_02018198(s->slots[i], s->resource[i]);
+        ModelAnimation_SetFrame(s->slots[i], s->resource[i]);
     }
 }
 void ov49_0225D328(Ov49DParent *p, Ov49DState *s, s32 i) {
@@ -53,7 +53,7 @@ void ov49_0225D328(Ov49DParent *p, Ov49DState *s, s32 i) {
     if (p->available[s->index][i] != 0) {
         active = (u8 *)s + 0xb8;
         if (active[i] == 1) {
-            sub_020181E0((u8 *)s + 4, (u8 *)s + 0x7c + 0x14 * i);
+            ModelInstance_RemoveAnimation((u8 *)s + 4, (u8 *)s + 0x7c + 0x14 * i);
             u8 *indexed;
             offset = i << 2;
             zero = 0;

@@ -10,7 +10,7 @@ BOOL ov49_02265B28(void *ctx, Ov49AnimationState *state, u32 index, u32 animatio
 
 void ov49_02265B3C(void *ctx, Ov49AnimationState *state, u32 index, u32 animation, s32 step) {
     const u8 *desc = state->descs[index];
-    s32 duration = sub_020181A4((u8 *)ctx + 0x106DC + desc[2 + animation] * 0x14);
+    s32 duration = ModelAnimation_GetFrameCount((u8 *)ctx + 0x106DC + desc[2 + animation] * 0x14);
     s32 next = state->frames[index][animation] + step;
 
     if (next < duration) {

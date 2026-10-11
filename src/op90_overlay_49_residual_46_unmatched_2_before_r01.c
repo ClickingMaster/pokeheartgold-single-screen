@@ -28,7 +28,7 @@ typedef struct Data49 {
     u32 skip[2][3];
 } Data49;
 void ov49_02258830(void **dest, NARC *narc, int fileId, enum HeapID heapId);
-void sub_020180BC(Anim49 *anim, Model49 *model, NARC *narc, int fileId, enum HeapID heapId, enum HeapID heapId2);
+void ModelAnimation_LoadFromNarc(Anim49 *anim, Model49 *model, NARC *narc, int fileId, enum HeapID heapId, enum HeapID heapId2);
 void NNS_G3dAnmObjDisableID(void *anmObj, int id);
 void ov49_0225D854(Obj49 *obj, NARC *narc, enum HeapID heapId2, Data49 *data, enum HeapID heapId);
 // @fn ov49_0225D854
@@ -50,7 +50,7 @@ void ov49_0225D854(Obj49 *obj, NARC *narc, enum HeapID heapId2, Data49 *data, en
     for (i = 0; i < 2; i++) {
         for (j = 0; j < 4; j++) {
             if (data->animIds[i][j] != data->mdlIds[0]) {
-                sub_020180BC(&obj->anims[i][j], &obj->models[i], narc, data->animIds[i][j], heapId, heapId2);
+                ModelAnimation_LoadFromNarc(&obj->anims[i][j], &obj->models[i], narc, data->animIds[i][j], heapId, heapId2);
                 if (j >= 1) {
                     for (k = 0; k < data->animCounts[i]; k++) {
                         if (k != data->skip[i][j - 1]) {

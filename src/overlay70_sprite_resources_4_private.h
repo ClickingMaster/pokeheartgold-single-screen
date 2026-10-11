@@ -16,7 +16,7 @@
 #include "sound_playback.h"
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 #include "yes_no_prompt.h"
 
 typedef struct Ov70WorkR4 {

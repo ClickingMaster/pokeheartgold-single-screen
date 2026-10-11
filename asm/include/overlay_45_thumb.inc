@@ -36,11 +36,11 @@
 .public WallpaperPasswordBank_Delete
 .public WallpaperPasswordBank_GetCount
 .public WallpaperPasswordBank_GetWordAtIndex
-.public sub_02018068
-.public sub_020181B0
-.public sub_020181EC
-.public sub_020182A0
-.public sub_020182A8
+.public ModelResource_Free
+.public ModelInstance_Init
+.public ModelInstance_Draw
+.public ModelInstance_SetVisible
+.public ModelInstance_SetPosition
 .public Main_SetVBlankIntrCB
 .public HBlankInterruptDisable
 .public Heap_Create

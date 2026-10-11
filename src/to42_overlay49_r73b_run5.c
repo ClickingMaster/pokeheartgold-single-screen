@@ -29,7 +29,7 @@ void ov49_022683FC(Ov49Ctl *ctl, u32 index, VecFx32 *v, fx32 a, fx32 b, fx32 c, 
         break;
     }
     ov49_0226540C(&ctl->emitters[index], v->x, x, v->y, y, v->z, z, kind);
-    sub_020182A8(ctl->objects[index], v->x, v->y, v->z);
+    ModelInstance_SetPosition(ctl->objects[index], v->x, v->y, v->z);
 }
 
 void *ov49_02268490(u32 heapId, u32 a, u32 b) {

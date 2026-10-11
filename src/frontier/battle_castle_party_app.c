@@ -41,7 +41,7 @@
 #include "touchscreen_list_menu.h"
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 #include "unk_0200CE7C.h"
 #include "unk_0200FA24.h"
 #include "unk_02019BA4.h"

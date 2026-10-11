@@ -4,7 +4,7 @@
 void ov49_02265858(void *p) {
     int i; u8 *cur=(u8 *)p+0x106dc; u8 *other=(u8 *)p+0x1081c;
     for(i=0;i<16;i++,p=(u8 *)p+0x14,cur+=0x14) {
-        if(*(void **)((u8 *)p+0x106dc)!=0) { sub_020180F8(cur,other); *(void **)((u8 *)p+0x106dc)=0; }
+        if(*(void **)((u8 *)p+0x106dc)!=0) { ModelAnimation_Free(cur,other); *(void **)((u8 *)p+0x106dc)=0; }
     }
 }
 

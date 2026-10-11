@@ -13,8 +13,8 @@ typedef struct {
     u8 anims[1][0x14];
 } Ov92Work;
 extern const VecFx32 ov92_02263B5C;
-void sub_020181E0(void *, void *);
-void sub_020181D4(void *, void *);
+void ModelInstance_RemoveAnimation(void *, void *);
+void ModelInstance_AddAnimation(void *, void *);
 void ov92_0225DD48(void *, int);
 void ov92_0225DD88(void *);
 #endif

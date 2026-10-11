@@ -32,7 +32,7 @@
 #include "touchscreen.h"
 #include "touchscreen_list_menu.h"
 #include "sound_playback.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 #include "unk_020210A0.h"
 #include "unk_02068F84.h"
 #include "vram_transfer_manager.h"

@@ -26,9 +26,9 @@ typedef struct Ov49Resource {
     UnkStruct_ov42_02227F68 *resource;
 } Ov49Resource;
 
-extern void sub_020182B0(ModelInstance *instance, fx32 *x, fx32 *y, fx32 *z);
-extern void sub_020182CC(ModelInstance *instance, fx32 *x, fx32 *y, fx32 *z);
-extern u16 sub_020182EC(ModelInstance *instance, int axis);
+extern void ModelInstance_GetPosition(ModelInstance *instance, fx32 *x, fx32 *y, fx32 *z);
+extern void ModelInstance_GetScale(ModelInstance *instance, fx32 *x, fx32 *y, fx32 *z);
+extern u16 ModelInstance_GetRotation(ModelInstance *instance, int axis);
 void ov49_02258830(NNSG3dResFileHeader **dest, NARC *narc, int fileId, enum HeapID heapId);
 BOOL ov49_022588A0(Ov49Model *model, ModelInstance *instance);
 Ov49Resource *ov49_02258958(enum HeapID heapId);
@@ -65,11 +65,11 @@ BOOL ov49_022588A0(Ov49Model *model, ModelInstance *instance) {
     u16 y;
     u16 z;
 
-    sub_020182B0(instance, &position.x, &position.y, &position.z);
-    sub_020182CC(instance, &scale.x, &scale.y, &scale.z);
-    x = sub_020182EC(instance, 0);
-    y = sub_020182EC(instance, 1);
-    z = sub_020182EC(instance, 2);
+    ModelInstance_GetPosition(instance, &position.x, &position.y, &position.z);
+    ModelInstance_GetScale(instance, &scale.x, &scale.y, &scale.z);
+    x = ModelInstance_GetRotation(instance, 0);
+    y = ModelInstance_GetRotation(instance, 1);
+    z = ModelInstance_GetRotation(instance, 2);
     MTX_Identity33_(&rotation);
     MTX_RotX33_(&part, FX_SinIdx(x), FX_CosIdx(x));
     MTX_Concat33(&part, &rotation, &rotation);

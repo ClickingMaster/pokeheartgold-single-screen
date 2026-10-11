@@ -27,7 +27,7 @@
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 #include "unk_020210A0.h"
 #include "unk_02032844.h"
 #include "unk_02034354.h"

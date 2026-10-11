@@ -1,7 +1,7 @@
 #include "to55_overlay91_run062_private.h"
 
 extern const u8 ov91_02261BF0[];
-void sub_02018030(void *, NARC *, int, enum HeapID);
+void ModelResource_LoadFromNarc(void *, NARC *, int, enum HeapID);
 void ov91_022604F4(void *, NARC *, enum HeapID);
 
 typedef struct T11InitWork {
@@ -19,9 +19,9 @@ void ov91_022604F4(void *work, NARC *narc, enum HeapID heapId) {
     T11Work *state = work;
 
     for (i = 0; i < 5; i++) {
-        sub_02018030(init->modelResources[i], narc, ov91_02261BF0[i], heapId);
+        ModelResource_LoadFromNarc(init->modelResources[i], narc, ov91_02261BF0[i], heapId);
     }
-    sub_02018030((u8 *)work + 0x74c, narc, 0x2e, heapId);
+    ModelResource_LoadFromNarc((u8 *)work + 0x74c, narc, 0x2e, heapId);
     NNSi_G3dModifyPolygonAttrMask(PTR_AT(work, 0x754), 0, 0x1f << 16);
 
     PTR_AT(work, 0x75c) = AddCharResObjFromOpenNarc(PTR_AT(work, 0x148), narc, 7, FALSE, 0x64, 2, heapId);

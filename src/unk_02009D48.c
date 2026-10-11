@@ -6,7 +6,7 @@
 #include "obj_pltt_transfer.h"
 #include "sprite.h"
 #include "sprite_transfer.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 #include "unk_02025C44.h"
 
 void CreateSpriteResourcesHeader(struct SpriteResourcesHeader *hdr, int charId, int plttId, int cellId, int cellAnmId, int multiCellId, int multiCellAnmId, int transfer, int priority, GF_2DGfxResMan *charMan, GF_2DGfxResMan *plttMan, GF_2DGfxResMan *cellMan, GF_2DGfxResMan *cellAnmMan, GF_2DGfxResMan *multiCellMan, GF_2DGfxResMan *multiCellAnmMan) {
@@ -107,12 +107,12 @@ SpriteList *G2dRenderer_Init(int numSprites, G2dRenderer *renderer, enum HeapID 
     rect.posTopLeft.y = 0;
     rect.sizeView.x = 255 * FX32_ONE;
     rect.sizeView.y = 192 * FX32_ONE;
-    sub_0200B27C(&renderer->renderSurface[0], &rect, NNS_G2D_VRAM_TYPE_2DMAIN, &renderer->rendererInstance);
+    OamManager_InitRenderSurface(&renderer->renderSurface[0], &rect, NNS_G2D_VRAM_TYPE_2DMAIN, &renderer->rendererInstance);
     rect.posTopLeft.x = 0;
     rect.posTopLeft.y = 192 * FX32_ONE;
     rect.sizeView.x = 255 * FX32_ONE;
     rect.sizeView.y = 192 * FX32_ONE;
-    sub_0200B27C(&renderer->renderSurface[1], &rect, NNS_G2D_VRAM_TYPE_2DSUB, &renderer->rendererInstance);
+    OamManager_InitRenderSurface(&renderer->renderSurface[1], &rect, NNS_G2D_VRAM_TYPE_2DSUB, &renderer->rendererInstance);
     param.num = numSprites;
     param.rendererInstance = &renderer->rendererInstance;
     param.heapID = heapID;

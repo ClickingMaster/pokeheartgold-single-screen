@@ -13,8 +13,8 @@ void ov49_02267A84(void *ctx, void *state, u32 count) {
         ov49_02259154((void *)U32_AT(state, 8), &v);
         v.y += 0x8000;
         v.z += 0x6000;
-        sub_020182A8(&OV49_ENTRIES(state)[i], v.x, v.y, v.z);
-        sub_020182A0(&OV49_ENTRIES(state)[i], 0);
+        ModelInstance_SetPosition(&OV49_ENTRIES(state)[i], v.x, v.y, v.z);
+        ModelInstance_SetVisible(&OV49_ENTRIES(state)[i], 0);
     }
     U8_AT(state, 0x954) = count;
 }

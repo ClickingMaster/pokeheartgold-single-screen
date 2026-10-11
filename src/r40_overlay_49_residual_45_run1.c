@@ -1,7 +1,7 @@
 #include "r40_overlay_49_residual_45_private.h"
 
 void ov49_0225D57C(s32 *value, void *angle, s32 amount) {
-    s32 limit = sub_020181A4(angle);
+    s32 limit = ModelAnimation_GetFrameCount(angle);
     s32 next = *value + amount;
 
     if (next < limit) {
@@ -12,7 +12,7 @@ void ov49_0225D57C(s32 *value, void *angle, s32 amount) {
 }
 
 BOOL ov49_0225D5A0(s32 *value, void *angle, s32 amount) {
-    s32 limit = sub_020181A4(angle);
+    s32 limit = ModelAnimation_GetFrameCount(angle);
     s32 next = *value + amount;
 
     if (next < limit) {
@@ -24,7 +24,7 @@ BOOL ov49_0225D5A0(s32 *value, void *angle, s32 amount) {
 }
 
 void ov49_0225D5C8(s32 *value, void *angle, s32 amount) {
-    s32 limit = sub_020181A4(angle);
+    s32 limit = ModelAnimation_GetFrameCount(angle);
     s32 next = *value - amount;
 
     if (next >= 0) {

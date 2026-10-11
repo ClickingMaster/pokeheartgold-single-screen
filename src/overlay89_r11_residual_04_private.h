@@ -3,6 +3,6 @@
 #include "global.h"
 #define U8_AT(p,o) (*(u8 *)((u8 *)(p)+(o)))
 #define PTR_AT(p,o) (*(void **)((u8 *)(p)+(o)))
-void sub_020181EC(void *);
+void ModelInstance_Draw(void *);
 void ov89_0225B784(void *, void *);
 #endif

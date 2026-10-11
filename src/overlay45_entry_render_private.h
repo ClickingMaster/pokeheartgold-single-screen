@@ -30,7 +30,7 @@ extern void sub_02023F04(void *, s32);
 extern BOOL ov45_02230AA4(Overlay45RenderEntry *);
 extern BOOL ov45_02230E78(void *);
 extern void sub_02023EA4(void *, BOOL);
-extern void sub_020182A0(void *, BOOL);
+extern void ModelInstance_SetVisible(void *, BOOL);
 extern void *sub_02023FDC(void *);
 extern void NNS_G3dMdlSetMdlLightEnableFlagAll(void *, u32);
 extern const u8 ov45_02254C34[4];

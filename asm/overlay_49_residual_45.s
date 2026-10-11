@@ -3434,7 +3434,7 @@ ov49_0225D57C: ; 0x0225D57C
 	add r5, r0, #0
 	add r0, r1, #0
 	add r4, r2, #0
-	bl sub_020181A4
+	bl ModelAnimation_GetFrameCount
 	add r1, r0, #0
 	ldr r0, [r5]
 	add r0, r0, r4
@@ -3456,7 +3456,7 @@ ov49_0225D5A0: ; 0x0225D5A0
 	add r5, r0, #0
 	add r0, r1, #0
 	add r4, r2, #0
-	bl sub_020181A4
+	bl ModelAnimation_GetFrameCount
 	ldr r1, [r5]
 	add r1, r1, r4
 	cmp r1, r0
@@ -3481,7 +3481,7 @@ ov49_0225D5C8: ; 0x0225D5C8
 	add r5, r0, #0
 	add r0, r1, #0
 	add r4, r2, #0
-	bl sub_020181A4
+	bl ModelAnimation_GetFrameCount
 	ldr r1, [r5]
 	sub r1, r1, r4
 	bmi _0225D5DE

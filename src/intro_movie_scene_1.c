@@ -9,7 +9,7 @@
 #include "screen_fade.h"
 #include "sprite_transfer.h"
 #include "system.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 
 enum IntroScene1State {
     INTRO_SCENE1_APPEAR_COPYRIGHT,

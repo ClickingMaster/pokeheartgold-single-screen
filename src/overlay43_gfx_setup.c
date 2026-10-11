@@ -7,7 +7,7 @@
 #include "obj_pltt_transfer.h"
 #include "sprite_transfer.h"
 #include "unk_02009D48.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 #include "vram_transfer_manager.h"
 
 typedef struct Ov43Work {
@@ -87,7 +87,7 @@ void ov43_0222A690(Ov43Work *work, enum HeapID heapId) {
     ObjCharTransfer_ClearBuffers();
     ObjPlttTransfer_Reset();
     work->spriteList = G2dRenderer_Init(0x40, &work->renderer, heapId);
-    sub_0200B27C((NNSG2dRenderSurface *)work->renderSurface, &ov43_0222F0FC, NNS_G2D_VRAM_TYPE_2DMAIN, &work->renderer.rendererInstance);
+    OamManager_InitRenderSurface((NNSG2dRenderSurface *)work->renderSurface, &ov43_0222F0FC, NNS_G2D_VRAM_TYPE_2DMAIN, &work->renderer.rendererInstance);
     for (i = 0; i < 4; i++) {
         work->resourceManagers[i] = Create2DGfxResObjMan(0x40, (GfGfxResType)i, heapId);
     }

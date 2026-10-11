@@ -20,7 +20,7 @@
 #include "sound_playback.h"
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 #include "unk_0203A3B0.h"
 #include "vram_transfer_manager.h"
 

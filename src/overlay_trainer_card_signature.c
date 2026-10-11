@@ -33,7 +33,7 @@
 #include "touch_sampling_internal.h"
 #include "touchscreen.h"
 #include "sound_playback.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 #include "unk_02013534.h"
 #include "unk_020210A0.h"
 #include "vram_transfer_manager.h"

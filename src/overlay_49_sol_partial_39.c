@@ -36,10 +36,10 @@ extern void ov49_02267AF0(void *, u32, u32);
 extern void ov49_02268640(void *);
 extern void ov49_02269154(void *);
 extern void ov49_0225E82C(void *, u32, u32);
-extern void sub_020182A0();
-extern void sub_020182C4(void *);
-extern void sub_020182E0(void *, u32, u32);
-extern void sub_02018068(void *);
+extern void ModelInstance_SetVisible();
+extern void ModelInstance_SetScale(void *);
+extern void ModelInstance_SetRotation(void *, u32, u32);
+extern void ModelResource_Free(void *);
 extern void ov42_02227F28(void *);
 extern u32 ov42_02227FDC(void *);
 extern void ov45_0223093C(void *, u32);
@@ -55,7 +55,7 @@ extern void Camera_UnsetStaticPtr(void *);
 extern void Camera_Delete(void *);
 
 void ov49_0225CF94(void *p) {
-    sub_020182A0((u8 *)p + 4, 0);
+    ModelInstance_SetVisible((u8 *)p + 4, 0);
     U8_AT(p, 0) = 0;
 }
 
@@ -65,12 +65,12 @@ typedef struct Ov49Residual39Work {
     VecFx32 second;
 } Ov49Residual39Work;
 
-extern void sub_020182A8(void *, fx32, fx32, fx32);
-extern void sub_020182B0(void *, void *, void *, void *);
+extern void ModelInstance_SetPosition(void *, fx32, fx32, fx32);
+extern void ModelInstance_GetPosition(void *, void *, void *, void *);
 
 void ov49_0225CFA8(Ov49Residual39Work *work, const VecFx32 *value) {
     work->first = *value;
-    sub_020182A8((u8 *)work + 4,
+    ModelInstance_SetPosition((u8 *)work + 4,
         work->first.x + work->second.x,
         work->first.y + work->second.y,
         work->first.z + work->second.z);
@@ -78,12 +78,12 @@ void ov49_0225CFA8(Ov49Residual39Work *work, const VecFx32 *value) {
 
 void ov49_0225CFEC(Ov49Residual39Work *work, const VecFx32 *value) {
     work->second = *value;
-    sub_020182A8((u8 *)work + 4,
+    ModelInstance_SetPosition((u8 *)work + 4,
         work->first.x + work->second.x,
         work->first.y + work->second.y,
         work->first.z + work->second.z);
 }
 
 void ov49_0225D030(void *work, void *parts) {
-    sub_020182B0((u8 *)work + 4, parts, (u8 *)parts + 4, (u8 *)parts + 8);
+    ModelInstance_GetPosition((u8 *)work + 4, parts, (u8 *)parts + 4, (u8 *)parts + 8);
 }

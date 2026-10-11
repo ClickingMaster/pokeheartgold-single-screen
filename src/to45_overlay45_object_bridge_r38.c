@@ -14,7 +14,7 @@ void ov45_022308C0(Overlay45R38Object *object, const s16 *source) {
 
 void ov45_022308E4(Overlay45R38Object *object, const Overlay45R38Vec *position) {
     sub_02023E50(object->handle, position);
-    sub_020182A8(object->model, position->x, 0x2000, position->z - 0x8000);
+    ModelInstance_SetPosition(object->model, position->x, 0x2000, position->z - 0x8000);
 }
 
 void ov45_02230908(Overlay45R38Object *object, Overlay45R38Vec *position) {

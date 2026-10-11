@@ -21,12 +21,12 @@ typedef struct T57Work {
     u16 state;
 } T57Work;
 
-void sub_02018198(void *, u32);
-void sub_020181D4(void *, void *);
-void sub_020181E0(void *, void *);
-void sub_020182A0(void *, int);
-void sub_020182E0(void *, u16, int);
-u32 sub_0201815C(void *, u32);
+void ModelAnimation_SetFrame(void *, u32);
+void ModelInstance_AddAnimation(void *, void *);
+void ModelInstance_RemoveAnimation(void *, void *);
+void ModelInstance_SetVisible(void *, int);
+void ModelInstance_SetRotation(void *, u16, int);
+u32 ModelAnimation_Advance(void *, u32);
 void GF_AssertFail(void);
 u32 _u32_div_f(u32, u32);
 s32 _s32_div_f(s32, s32);

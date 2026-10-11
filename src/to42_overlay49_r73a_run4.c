@@ -24,7 +24,7 @@ void ov49_0226789C(void *ctx, void *state, u32 idx) {
         } else if (kind != 4) {
             value = kind << 13;
         } else {
-            sub_020182A0(&OV49_ENTRIES(state)[idx], 0);
+            ModelInstance_SetVisible(&OV49_ENTRIES(state)[idx], 0);
         }
         ov49_02265BE8(ctx, state, idx, 0, value);
         timer[idx] = 8;
@@ -51,8 +51,8 @@ void ov49_02267908(void *ctx, void *state, u32 count) {
             ov49_02265980(ctx, state, idx, &ov49_0226A70C[tableIdx]);
             VEC_Add(&base, &ov49_0226A4D8[j], &a);
             VEC_Add(&a, &ov49_0226A508[j], &b);
-            sub_020182A8(&OV49_ENTRIES(state)[idx], a.x, a.y, a.z);
-            sub_020182A0(&OV49_ENTRIES(state)[idx], 0);
+            ModelInstance_SetPosition(&OV49_ENTRIES(state)[idx], a.x, a.y, a.z);
+            ModelInstance_SetVisible(&OV49_ENTRIES(state)[idx], 0);
             U8_AT((u8 *)state + 0x958, idx) = 0;
             ov49_0226540C((u8 *)state + 0x968 + idx * 0x28, a.x, b.x, a.y, b.y, a.z, b.z, 14);
         }

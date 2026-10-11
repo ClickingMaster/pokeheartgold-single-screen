@@ -79,8 +79,8 @@ void ov92_0226135C(Ov92AnimState *work) {
             for (i = 0; i < 8; i++) {
                 sprite = work->sprites[i];
                 angle = i * 20;
-                sub_02018198((u8 *)sprite + 0x88, angle % 40);
-                sub_020182A0(sprite, 1);
+                ModelAnimation_SetFrame((u8 *)sprite + 0x88, angle % 40);
+                ModelInstance_SetVisible(sprite, 1);
             }
             work->unk4C = 0;
             work->state++;
@@ -92,7 +92,7 @@ void ov92_0226135C(Ov92AnimState *work) {
             break;
         default:
             for (i = 0; i < 8; i++) {
-                sub_020182A0(work->sprites[i], 0);
+                ModelInstance_SetVisible(work->sprites[i], 0);
             }
             work->unk50 = 0;
             work->active = 0;

@@ -48,10 +48,10 @@ void ov45_02230DF4(Overlay45RenderEntry *entry) {
 void ov45_02230E28(Overlay45RenderEntry *entry) {
     if (entry->type == 0 && entry->top == 1) {
         sub_02023EA4(entry->sprite, TRUE);
-        sub_020182A0(entry->render, TRUE);
+        ModelInstance_SetVisible(entry->render, TRUE);
     } else {
         sub_02023EA4(entry->sprite, FALSE);
-        sub_020182A0(entry->render, FALSE);
+        ModelInstance_SetVisible(entry->render, FALSE);
     }
 }
 

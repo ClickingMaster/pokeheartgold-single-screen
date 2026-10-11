@@ -27,7 +27,7 @@ void ov92_0225F338(SysTask *, void *);
 void ov92_0225F530(SysTask *, void *);
 void ov92_0225EF4C(SysTask *, void *);
 void ov92_0225DD48(void *, int);
-void sub_02018198(void *, int);
+void ModelAnimation_SetFrame(void *, int);
 int ov92_0225F968(Ov92Work14 *, int, u32 *);
 void ov92_0225FAB8(void *);
 void ov92_0225F9C4(void *);

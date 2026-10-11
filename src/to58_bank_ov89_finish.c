@@ -14,7 +14,7 @@ void ov89_0225B784(void *unused, void *work)
         NNSi_G3dModifyPolygonAttrMask((NNSG3dResMdl *)PTR_AT(work, 0x14), 0, 0x001F0000);
     }
     for (i = 0, object = base; i < 3; i++, object += 0x78) {
-        sub_020181EC(object);
+        ModelInstance_Draw(object);
     }
     alpha = U8_AT(base, 0x16C);
     if (alpha != 0xFF) {
@@ -22,5 +22,5 @@ void ov89_0225B784(void *unused, void *work)
         NNSi_G3dModifyPolygonAttrMask((NNSG3dResMdl *)PTR_AT(work, 0x14), 0, 0x3F000000);
         NNSi_G3dModifyPolygonAttrMask((NNSG3dResMdl *)PTR_AT(work, 0x14), 0, 0x001F0000);
     }
-    sub_020181EC((u8 *)work + 0x1C);
+    ModelInstance_Draw((u8 *)work + 0x1C);
 }

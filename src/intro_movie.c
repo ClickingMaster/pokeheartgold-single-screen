@@ -18,7 +18,7 @@
 #include "sys_task_api.h"
 #include "system.h"
 #include "title_screen.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 
 enum IntroMovieOverlayState {
     INTRO_MOVIE_INIT,

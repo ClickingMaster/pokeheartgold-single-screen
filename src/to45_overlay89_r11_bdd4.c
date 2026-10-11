@@ -8,9 +8,9 @@ typedef struct To45State {
     u8 params[0x10];
 } To45State;
 
-void sub_020182C4(void *, fx32, fx32, fx32);
-void sub_020182B0(void *, fx32 *, fx32 *, fx32 *);
-void sub_020182A8(void *, fx32, fx32, fx32);
+void ModelInstance_SetScale(void *, fx32, fx32, fx32);
+void ModelInstance_GetPosition(void *, fx32 *, fx32 *, fx32 *);
+void ModelInstance_SetPosition(void *, fx32, fx32, fx32);
 void ov89_0225ADA4(void *, void *, void *, int);
 BOOL ov89_0225BDD4(void *, u8 *);
 
@@ -32,10 +32,10 @@ BOOL ov89_0225BDD4(void *unused, u8 *work) {
             return TRUE;
         }
         state->value += 384;
-        sub_020182C4(work + 0x1C, FX32_ONE, state->value, FX32_ONE);
+        ModelInstance_SetScale(work + 0x1C, FX32_ONE, state->value, FX32_ONE);
         offset = -(((state->value - FX32_ONE) << FX32_SHIFT) / FX32_ONE);
-        sub_020182B0(work + 0x1C, &x, &y, &z);
-        sub_020182A8(work + 0x1C, x, y + offset, z);
+        ModelInstance_GetPosition(work + 0x1C, &x, &y, &z);
+        ModelInstance_SetPosition(work + 0x1C, x, y + offset, z);
         break;
     }
     ov89_0225ADA4(work + 0x1C, work, state->params, 1);

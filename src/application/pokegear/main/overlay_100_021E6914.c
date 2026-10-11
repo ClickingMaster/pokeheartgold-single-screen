@@ -4,7 +4,7 @@
 
 #include "math_util.h"
 #include "sprite_transfer.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 #include "vram_transfer_manager.h"
 
 typedef struct PokegearObjResSpec {

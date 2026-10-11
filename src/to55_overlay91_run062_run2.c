@@ -18,9 +18,9 @@ void ov91_0226066C(void *work) {
 
     entry = (u8 *)work + 0x6fc;
     for (i = 0; i < 5; i++, entry += 0x10) {
-        sub_02018068(entry);
+        ModelResource_Free(entry);
     }
-    sub_02018068((u8 *)work + 0x74c);
+    ModelResource_Free((u8 *)work + 0x74c);
     memset((u8 *)work + 0x6fc, 0, 0x94);
     memset((u8 *)work + 0x790, 0, 0x6300);
 }
@@ -77,6 +77,6 @@ void ov91_022607C4(void *work, void *entry, enum HeapID heapId) {
     sprite = Sprite_CreateAffine(&template);
     PTR_AT(entry, 0) = sprite;
     Sprite_SetDrawFlag(sprite, FALSE);
-    sub_020181B0((u8 *)entry + 0x7c, (u8 *)work + 0x74c);
-    sub_020182A0((u8 *)entry + 0x7c, 0);
+    ModelInstance_Init((u8 *)entry + 0x7c, (u8 *)work + 0x74c);
+    ModelInstance_SetVisible((u8 *)entry + 0x7c, 0);
 }

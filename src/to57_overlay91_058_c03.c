@@ -7,6 +7,6 @@ void ov91_022601F4(u8 *p, u8 *b) {
     q = p;
     v = *(u16 *)(b + 2);
     for (i = 0; i < 3; i++, q += 0x78) {
-        sub_020182E0(q, (u16)v, 1);
+        ModelInstance_SetRotation(q, (u16)v, 1);
     }
 }

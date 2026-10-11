@@ -12,9 +12,9 @@ void ov89_0225BB28(void *unused, u8 *work) {
     }
     i = 0;
     do {
-        sub_020181EC(p);
+        ModelInstance_Draw(p);
         i++;
         p += 0x78;
     } while (i < 2);
-    sub_020181EC(work + 0x1C);
+    ModelInstance_Draw(work + 0x1C);
 }

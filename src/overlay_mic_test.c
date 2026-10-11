@@ -15,7 +15,7 @@
 #include "title_screen.h"
 #include "touchscreen.h"
 #include "sound_playback.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 #include "vram_transfer_manager.h"
 
 typedef struct MicTestData MicTestData;

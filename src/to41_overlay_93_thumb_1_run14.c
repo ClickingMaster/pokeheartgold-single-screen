@@ -29,11 +29,11 @@ extern void ParticleSystem_Free(void *);
 extern void ParticleSystem_RegisterTexKey(u32);
 extern void ParticleSystem_RegisterPlttKey(u32);
 extern void ParticleSystem_CreateEmitterWithParam(void *, u32, u32);
-extern void sub_020181E0(void *, void *);
-extern void sub_020181EC(void *);
-extern void sub_02018068(void *);
-extern void sub_020180F8(void *, void *);
-extern u32 sub_0201815C(void *, u32);
+extern void ModelInstance_RemoveAnimation(void *, void *);
+extern void ModelInstance_Draw(void *);
+extern void ModelResource_Free(void *);
+extern void ModelAnimation_Free(void *, void *);
+extern u32 ModelAnimation_Advance(void *, u32);
 extern u32 Comm_GetLocalNetId(void);
 extern u32 sub_02034818(u32);
 extern u32 sub_02037B38(u32);
@@ -151,7 +151,7 @@ void ov93_0225ED60(void *p, s32 n);
 void ov93_0225E008(void *p, s32 a, s32 b) {
     u8 *base = (u8 *)p + 0xd8;
     u8 *q;
-    sub_020181E0(base + 0xcc + a * 0x240 + b * 0x90, base + 0x144 + a * 0x240 + b * 0x90);
+    ModelInstance_RemoveAnimation(base + 0xcc + a * 0x240 + b * 0x90, base + 0x144 + a * 0x240 + b * 0x90);
     q = base + a * 0x240;
     q += b * 0x90;
     U32AT(q, 0xc8) = 0;
@@ -169,7 +169,7 @@ void ov93_0225E03C(void *p) {
         u8 *work = workRow;
         u8 *object = objectRow;
         for (j = 0; j < 4; j++) {
-            if (*(u32 *)(work + 0xc8) == 1 && sub_0201815C(object, 0x1000) == 1) {
+            if (*(u32 *)(work + 0xc8) == 1 && ModelAnimation_Advance(object, 0x1000) == 1) {
                 ov93_0225E008(p, i, j);
             }
             work += 0x90;
@@ -198,7 +198,7 @@ void ov93_0225E0A4(void *p) {
         object = objectRow;
         for (; j < 4; j++) {
             if (*(u32 *)(work + 0xc8) == 1) {
-                sub_020181EC(object);
+                ModelInstance_Draw(object);
             }
             work += 0x90;
             object += 0x90;

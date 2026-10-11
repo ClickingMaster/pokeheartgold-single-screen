@@ -6,7 +6,7 @@
 #include "intro_movie_internal.h"
 #include "screen_fade.h"
 #include "system.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 
 enum IntroScene5State {
     INTRO_SCENE5_WIPE_IN,

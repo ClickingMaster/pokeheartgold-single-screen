@@ -58,7 +58,7 @@ void ov45_0222DF58(void *);
 void ov45_02233204(void);
 void sub_02023910(void *);
 void ov45_02230A4C(void *, int);
-void sub_020181EC(void *);
+void ModelInstance_Draw(void *);
 void ov45_0222A404(u8 *);
 int ov45_0222A414(u8 *);
 void ov45_0222A498(u8 *, const void *);
@@ -97,5 +97,5 @@ void *ov45_022309C4(int, void *);
 u32 ov45_02230A58(u8 *);
 
 void ov45_02230AC0(u8 *p) {
-    sub_020181EC(p + 0xc);
+    ModelInstance_Draw(p + 0xc);
 }

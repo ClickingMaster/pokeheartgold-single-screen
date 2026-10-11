@@ -3832,7 +3832,7 @@ _022666A8:
 	mul r0, r1
 	add r0, r7, r0
 	mov r1, #1
-	bl sub_020182A0
+	bl ModelInstance_SetVisible
 _022666C4:
 	add r4, r4, #1
 	cmp r4, r6
@@ -3852,7 +3852,7 @@ _022666CA:
 	add r6, r7, #0
 _022666E2:
 	add r0, r7, #0
-	bl sub_020182A4
+	bl ModelInstance_IsVisible
 	cmp r0, #1
 	bne _02266716
 	ldr r0, [sp, #4]
@@ -3865,7 +3865,7 @@ _022666E2:
 	beq _02266716
 	add r0, r6, #0
 	mov r1, #0
-	bl sub_020182A0
+	bl ModelInstance_SetVisible
 	mov r0, #0
 	str r0, [sp]
 	ldr r0, [sp, #4]

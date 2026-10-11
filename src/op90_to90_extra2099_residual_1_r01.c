@@ -2,7 +2,7 @@
 #include "global.h"
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 
 typedef struct Ov74GfxWork {
     u32 unk00, unk04;

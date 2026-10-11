@@ -13,5 +13,5 @@ void ov49_02265980(void *ctx, Ov49AnimationState *state, u32 index, const u8 *de
         GF_AssertFail();
     }
     *(void **)((u8 *)slot + offset) = (void *)desc;
-    sub_020181B0((u8 *)state + 0xC + index * 0x78, (u8 *)ctx + 0x10550 + desc[0] * 0x10);
+    ModelInstance_Init((u8 *)state + 0xC + index * 0x78, (u8 *)ctx + 0x10550 + desc[0] * 0x10);
 }

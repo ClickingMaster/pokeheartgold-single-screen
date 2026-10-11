@@ -28,7 +28,7 @@
 #include "system.h"
 #include "text.h"
 #include "sound_playback.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 #include "unk_02013534.h"
 #include "palette_blink.h"
 #include "vram_transfer_manager.h"

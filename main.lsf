@@ -35,7 +35,7 @@ Static main
     Object src/unk_0200A090.o
     Object src/sprite_transfer.o
     Object src/oam_manager.o
-    Object asm/unk_0200B150.o
+    Object asm/oam_manager_data.o
     Object src/brightness.o
     Object src/msgdata.o
     Object src/message_format.o
@@ -1267,20 +1267,11 @@ Static main
     Object lib/NitroSystem/src/g3d_draw.o
     Object lib/NitroSystem/src/g3d_sbc.o
     Object lib/NitroSystem/src/g3d_1mat1shp.o
-    Object src/to70_nnsys_residual_39_run01.o
-    Object src/to80_extra1478_run01.o
-    Object src/op90_to80_extra1478_residual_1_r01.o
-    Object src/to70_nnsys_residual_39_run02.o
-    Object src/to90_extra2466_run01.o
-    Object src/to90_extra2466_run02.o
-    Object src/to70_to70_nnsys_residual_39_residual_3_extra1184_run01.o
-    Object src/to59_nnsys_run51.o
-    Object src/to70_nnsys_residual_40_run01.o
-    Object src/to59_nnsys_run52.o
-    Object src/to70_nnsys_residual_41_run01.o
-    Object src/to59_nnsys_run53.o
-    Object src/to90_extra2460_run01.o
-    Object src/to59_nnsys_run54.o
+    Object lib/NitroSystem/src/g3d_gecom.o
+    Object lib/NitroSystem/src/g3d_util.o
+    Object lib/NitroSystem/src/g3d_model.o
+    Object lib/NitroSystem/src/g3d_res_struct_accessor.o
+    Object lib/NitroSystem/src/g3d_res_struct_accessor_anm.o
     Object src/to65_nnsys_residual_43_run01.o
     Object src/to70_to65_nnsys_residual_43_residual_1_extra256_run01.o
     Object src/to80_extra2569_run01.o
@@ -1942,10 +1933,7 @@ Overlay OVY_0
     Object asm/to70_overlay_00_thumb_residual_19_extra734_anchor.o
     Object src/voice_chat_conference.o
     Object lib/NitroDWC/asm/to60_overlay_00_arm_anchor.o
-    Object src/to65_ov00_extra14_run01.o
-    Object src/to80_extra1412_run01.o
-    Object src/to65_ov00_extra14_run02.o
-    Object src/op90_to91_w41491_residual_1_r01.o
+    Object lib/NitroDWC/src/auth_client.o
     Object lib/NitroDWC/asm/to60_overlay_00_arm_anchor_own2.o
     Object src/to91_w41491_auth692.o
     Object src/to90_extra2114_run01.o

@@ -11,7 +11,7 @@
 #include "sprite_transfer.h"
 #include "sys_task_api.h"
 #include "system.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 #include "unk_02026E30.h"
 
 enum IntroScene4State {

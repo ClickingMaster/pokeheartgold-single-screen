@@ -46,9 +46,9 @@ extern void ov49_02265980(void *, void *, u32, const void *);
 extern void ov49_02265B14(void *, void *, int, int);
 extern void ov49_02265BE8(void *, void *, u32, int, u32);
 extern u32 ov49_02265C40(void *, void *, u32, u32);
-extern void sub_020182A0(void *, int);
-extern void sub_020182A8(void *, fx32, fx32, fx32);
-extern void sub_020182B0(void *, fx32 *, fx32 *, fx32 *);
+extern void ModelInstance_SetVisible(void *, int);
+extern void ModelInstance_SetPosition(void *, fx32, fx32, fx32);
+extern void ModelInstance_GetPosition(void *, fx32 *, fx32 *, fx32 *);
 extern void ov49_0225CC40(void *, void *);
 
 extern const VecFx32 ov49_0226A4D8[];

@@ -4,6 +4,6 @@
 
 	.bss
 
-	.public _021D0EB0
-_021D0EB0:
+	.public gOamManager
+gOamManager:
 	.space 4

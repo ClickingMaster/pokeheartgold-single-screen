@@ -22,7 +22,7 @@ void ov49_02265628(Rot49 *rot);
 void ov49_02265434(Pos49 *pos, int state);
 void ov49_02265660(Rot49 *rot, fx32 *y);
 void ov49_022655E0(Pos49 *pos, fx32 *x, fx32 *y, fx32 *z);
-void sub_020182A8(void *render, fx32 x, fx32 y, fx32 z);
+void ModelInstance_SetPosition(void *render, fx32 x, fx32 y, fx32 z);
 BOOL ov49_02268230(Scene49 *scene);
 // @fn ov49_02268230
 BOOL ov49_02268230(Scene49 *scene) {
@@ -47,7 +47,7 @@ BOOL ov49_02268230(Scene49 *scene) {
             ov49_02265660(&scene->rots[i], &dy);
             ov49_022655E0(&scene->pos[i], &x, &y, &z);
             y += dy;
-            sub_020182A8(scene->renders[i], x, y, z);
+            ModelInstance_SetPosition(scene->renders[i], x, y, z);
             rot++;
             pos++;
         } while (++i < scene->count);

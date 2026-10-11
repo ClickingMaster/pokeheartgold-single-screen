@@ -42,7 +42,7 @@
 .public OamManager_Create
 .public OamManager_ApplyAndResetBuffers
 .public OamManager_Free
-.public sub_0200B27C
+.public OamManager_InitRenderSurface
 .public StartBrightnessTransition
 .public SetBlendBrightness
 .public NewMsgDataFromNarc

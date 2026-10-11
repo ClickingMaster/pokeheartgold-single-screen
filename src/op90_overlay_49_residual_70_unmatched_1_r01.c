@@ -37,14 +37,14 @@ typedef struct Ov49Local {
     void *animObjs[18][2];
 } Ov49Local;
 
-BOOL sub_020182A4(Ov49Render *render);
+BOOL ModelInstance_IsVisible(Ov49Render *render);
 BOOL NNS_G3dForceBindMdlTex(void *mdl, NNSG3dResTex *tex, u32 a, u32 b);
 BOOL NNS_G3dForceBindMdlPltt(void *mdl, NNSG3dResTex *tex, u32 a, u32 b);
-void sub_020181D4(Ov49Render *render, Ov49Anim *anim);
-void sub_02018198(Ov49Anim *anim, void *obj);
+void ModelInstance_AddAnimation(Ov49Render *render, Ov49Anim *anim);
+void ModelAnimation_SetFrame(Ov49Anim *anim, void *obj);
 void NNS_G3dMdlSetMdlPolygonIDAll(void *mdl, u32 id);
-void sub_020181EC(Ov49Render *render);
-void sub_020181E0(Ov49Render *render, Ov49Anim *anim);
+void ModelInstance_Draw(Ov49Render *render);
+void ModelInstance_RemoveAnimation(Ov49Render *render, Ov49Anim *anim);
 void NNS_G3dReleaseMdlTex(void *mdl);
 void NNS_G3dReleaseMdlPltt(void *mdl);
 void ov49_022659D0(Ov49Global *global, Ov49Local *local, u32 index);
@@ -56,7 +56,7 @@ void ov49_022659D0(Ov49Global *global, Ov49Local *local, u32 index) {
     u8 n;
 
     GF_ASSERT(local->defs[index] != NULL);
-    if (sub_020182A4(&local->renders[index])) {
+    if (ModelInstance_IsVisible(&local->renders[index])) {
         model = &global->models[local->defs[index]->model];
         model->tex = NNS_G3dGetTex(global->texRes[local->defs[index]->tex]);
         GF_ASSERT(NNS_G3dForceBindMdlTex(model->mdl, model->tex, 0, 0));
@@ -66,17 +66,17 @@ void ov49_022659D0(Ov49Global *global, Ov49Local *local, u32 index) {
             if (n == 17) {
                 break;
             }
-            sub_020181D4((Ov49Render *)((u8 *)local + 0xC + index * 0x78), &global->anims[n]);
-            sub_02018198(&global->anims[n], local->animObjs[index][i]);
+            ModelInstance_AddAnimation((Ov49Render *)((u8 *)local + 0xC + index * 0x78), &global->anims[n]);
+            ModelAnimation_SetFrame(&global->anims[n], local->animObjs[index][i]);
         }
         NNS_G3dMdlSetMdlPolygonIDAll(model->mdl, local->polygonId);
-        sub_020181EC((Ov49Render *)((u8 *)local + 0xC + index * 0x78));
+        ModelInstance_Draw((Ov49Render *)((u8 *)local + 0xC + index * 0x78));
         for (i = 0; i < 2; i++) {
             n = local->defs[index]->anims[i];
             if (n == 17) {
                 break;
             }
-            sub_020181E0((Ov49Render *)((u8 *)local + 0xC + index * 0x78), &global->anims[n]);
+            ModelInstance_RemoveAnimation((Ov49Render *)((u8 *)local + 0xC + index * 0x78), &global->anims[n]);
         }
         NNS_G3dReleaseMdlTex(model->mdl);
         NNS_G3dReleaseMdlPltt(model->mdl);

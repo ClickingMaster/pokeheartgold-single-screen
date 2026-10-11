@@ -26,8 +26,8 @@ extern const Ov92DoneFlags ov92_02263E3C;
 void ManagedSprite_GetPositionXY(ManagedSprite *, s16 *, s16 *);
 void ManagedSprite_SetPositionXY(ManagedSprite *, s16, s16);
 void ManagedSprite_TickTwoFrames(ManagedSprite *);
-void sub_02018198(void *, s32);
-void sub_020182A0(ManagedSprite *, int);
+void ModelAnimation_SetFrame(void *, s32);
+void ModelInstance_SetVisible(ManagedSprite *, int);
 
 void ov92_02261208(Ov92AnimState *);
 void ov92_0226135C(Ov92AnimState *);

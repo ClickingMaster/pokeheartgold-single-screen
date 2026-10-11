@@ -36,10 +36,10 @@ extern void ov49_02267AF0(void *, u32, u32);
 extern void ov49_02268640(void *);
 extern void ov49_02269154(void *);
 extern void ov49_0225E82C(void *, u32, u32);
-extern void sub_020182A0();
-extern void sub_020182C4(void *);
-extern void sub_020182E0(void *, u32, u32);
-extern void sub_02018068(void *);
+extern void ModelInstance_SetVisible();
+extern void ModelInstance_SetScale(void *);
+extern void ModelInstance_SetRotation(void *, u32, u32);
+extern void ModelResource_Free(void *);
 extern void ov42_02227F28(void *);
 extern u32 ov42_02227FDC(void *);
 extern void ov45_0223093C(void *, u32);
@@ -55,7 +55,7 @@ extern void Camera_UnsetStaticPtr(void *);
 extern void Camera_Delete(void *);
 
 void ov49_0225D040(void *p) {
-    sub_020182A0((u8 *)p + 4);
+    ModelInstance_SetVisible((u8 *)p + 4);
 }
 
 BOOL ov49_0225D04C(void *p) {
@@ -75,7 +75,7 @@ BOOL ov49_0225D064(void *p) {
 }
 
 void ov49_0225D07C(void *p, u32 a) {
-    sub_020182E0((u8 *)p + 4, a, 0);
+    ModelInstance_SetRotation((u8 *)p + 4, a, 0);
 }
 
 u32 ov49_0225D088(void *p) {

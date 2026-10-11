@@ -23,7 +23,7 @@ typedef struct Ov45R41Pool {
     u32 count;
 } Ov45R41Pool;
 
-void sub_020181B0(Ov45R41ModelInstance *instance, Ov45R41ModelResource *resource);
+void ModelInstance_Init(Ov45R41ModelInstance *instance, Ov45R41ModelResource *resource);
 void ov45_02230A5C(Ov45R41ModelResource *resource, Ov45R41ModelInstance *instance);
 Ov45R41Entry *ov45_02230A6C(Ov45R41Pool *pool);
 BOOL ov45_02230AA4(Ov45R41Entry *entry);

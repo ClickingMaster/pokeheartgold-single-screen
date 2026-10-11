@@ -68,9 +68,13 @@ typedef struct WmspStatus {
     u32 mpActive;
     u32 dcfActive; // 1 from WMSP_StartDCF until WMSP_EndDCF
     u32 unk_14;
-    u32 unk_18; // cleared by WMSP_StartDCF, set by WMSP_SetDCFData
-    u32 unk_1c; // child: 1 once the VSync adjustment is done (WmspChildAdjustVSync1/2)
-    u8 unk_20[0x30 - 0x20];
+    u32 unk_18;      // cleared by WMSP_StartDCF, set by WMSP_SetDCFData
+    u32 unk_1c;      // child: 1 once the VSync adjustment is done (WmspChildAdjustVSync1/2)
+    u8 wlVersion[8]; // WMSP_WL_DevGetVersion reply (WMSPi_CommonWlIdle)
+    u16 unk_28;
+    u16 unk_2a;
+    u16 unk_2c;
+    u16 unk_2e;
     u16 parentSize;
     u16 childSize;
     u16 parentMaxSize;
@@ -113,7 +117,7 @@ typedef struct WmspStatus {
     u16 unk_92;
     u16 unk_94;
     u16 unk_96;
-    u16 unk_98;
+    u16 defaultRetryCount; // MP parameter; copied to sendRetryCount
     u16 unk_9a;
     u16 unk_9c; // non-zero: WMSP_StartMP does not check the buffer sizes
     u16 unk_9e;
@@ -200,7 +204,10 @@ typedef struct WmspBssDesc {
 
 // Buffer set up by the ARM9; 0xD0: pool of 32 16-byte request buffers (bit 15 of the first word: free).
 typedef struct WmspArm9Buf {
-    u8 unk_00[0x10];
+    WmspStatus *status; // WMSP_Enable
+    u32 unk_04;
+    u32 unk_08;
+    u32 unk_0c;
     WmspBssDesc bssDesc; // parent to connect to, followed by its game info (WMSP_StartConnectEx)
     u8 unk_50[3];
     u8 unk_53; // 8: use the higher RSSI thresholds in WMSP_GetLinkLevel
@@ -211,6 +218,7 @@ typedef struct WmspArm9Buf {
     u16 parentMaxSize;
     u16 childMaxSize;
     u8 unk_60[0xd0 - 0x60];
+    u32 requestBuf[32][4]; // word 0 bit 15: free
 } WmspArm9Buf;
 
 // Thread priorities passed to WMSP_Init (config[1..6]).
@@ -253,6 +261,48 @@ typedef struct WlRequestHeader {
     u16 paramLength;
 } WlRequestHeader;
 
+// ARM9 request of WMSP_Enable.
+typedef struct WmspEnableRequest {
+    u32 command;
+    WmspArm9Buf *arm9Buf;
+    WmspStatus *status;
+    u32 unk_0c; // stored in arm9Buf->unk_08
+    u32 flags;  // argument of WMSPi_CommonInit
+} WmspEnableRequest;
+
+// MP parameters (WMSP_SetMPParameterCore): `mask` bit n selects field n after it.
+typedef struct WmspMPParam {
+    u32 mask;
+    u16 unk_04; // 0: 16
+    u16 unk_06; // 0: 16
+    u16 unk_08; // 0: 16
+    u16 parentSize;
+    u16 childSize;
+    u16 parentInterval; // microseconds, at most 10000
+    u16 childInterval;
+    u16 parentVAlarmLine; // 0-190 or 220-262
+    u16 childVAlarmLine;
+    u16 retryCount; // defaultRetryCount
+    u8 unk_18;
+    u8 unk_19;
+    u8 unk_1a;
+    u8 unk_1b; // non-zero: WMSP_StartMP does not check the buffer sizes
+} WmspMPParam;
+
+// MA data frame given to WMSP_WL_MaData.
+typedef struct WlMaDataFrame {
+    u16 unk_00;
+    u16 unk_02[2];
+    u16 length;
+    u8 unk_08[6];
+    u8 rate; // 10: 1 Mbps, 20: 2 Mbps
+    u8 unk_0f[0x18 - 0x0f];
+    u8 destAddress[6];
+    u8 srcAddress[6];
+    u8 unk_24[0x2c - 0x24];
+    u16 *data;
+} WlMaDataFrame;
+
 // ARM9 request of WMSP_StartScanEx.
 typedef struct WmspStartScanExRequest {
     u16 command;
@@ -284,8 +334,8 @@ typedef struct WmspStartMPRequest {
     u32 recvBufSize;
     u8 *sendBuf;
     u32 sendBufSize;
-    u8 param[0x1c]; // given to WMSP_SetMPParameterCore
-    u32 flags;      // bit n: take the matching field below instead of the status default
+    WmspMPParam param; // given to WMSP_SetMPParameterCore
+    u32 flags;         // bit n: take the matching field below instead of the status default
     u16 unk_34;
     u16 unk_36;
     u16 unk_38;
@@ -583,11 +633,27 @@ void WMSP_ParsePortPacket(u16 srcAid, u16 header, void *data, s32 size, void *co
 // wmsp_get_tmptt.c
 u16 WmspGetTmptt(u32 headerSize, u32 size, u32 bitmap, u32 line);
 
+// wmsp_control.c
+void WMSP_SetEntry(u32 *request);
+void WMSP_AutoDeAuth(void *request);
+void WMSP_Enable(void *request);
+void WMSPi_CommonInit(u32 flags);
+void WMSP_Disable(void *request);
+void WMSP_PowerOn(void *request);
+BOOL WMSPi_CommonWlIdle(u16 *command, u16 *wlResult);
+u16 __VENEER_WMSP_GetAllowedChannel(u16 channels);
+u16 WMSP_GetAllowedChannel(u16 channels);
+void WMSP_PowerOff(void *request);
+void WMSP_SetMPParameter(u32 *request);
+u32 WMSP_SetMPParameterCore(WmspMPParam *input, WmspMPParam *old);
+void WMSP_SetBeaconPeriod(u32 *request);
+void WMSP_AutoDisconnect(void *request);
+void WMSP_SetPowerSaveMode(void *request);
+void WMSP_StartTestRxMode(void);
+void WMSP_StopTestRxMode(void);
+
 // defined in the later WMSP files
-u32 WMSP_SetMPParameterCore(void *param, void *result);
 u16 *WMSP_GetBuffer4Callback2Wm9(void);
 void WMSP_ReturnResult2Wm9(void *result);
-void WMSPi_CommonInit(u32 arg);
-BOOL WMSPi_CommonWlIdle(u16 *result, u16 *wlResult);
 
 #endif // WMSP_INTERNAL_H

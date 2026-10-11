@@ -8,7 +8,7 @@
 #include "sys_task_api.h"
 #include "system.h"
 #include "unk_02009D48.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 
 #define PTR(base, offset) (*(void **)((u8 *)(base) + (offset)))
 

@@ -29,11 +29,11 @@ extern void ParticleSystem_Free(void *);
 extern void ParticleSystem_RegisterTexKey(u32);
 extern void ParticleSystem_RegisterPlttKey(u32);
 extern void ParticleSystem_CreateEmitterWithParam(void *, u32, u32);
-extern void sub_020181E0(void *, void *);
-extern void sub_020181EC(void *);
-extern void sub_02018068(void *);
-extern void sub_020180F8(void *, void *);
-extern u32 sub_0201815C(void *, u32);
+extern void ModelInstance_RemoveAnimation(void *, void *);
+extern void ModelInstance_Draw(void *);
+extern void ModelResource_Free(void *);
+extern void ModelAnimation_Free(void *, void *);
+extern u32 ModelAnimation_Advance(void *, u32);
 extern u32 Comm_GetLocalNetId(void);
 extern u32 sub_02034818(u32);
 extern u32 sub_02037B38(u32);
@@ -154,12 +154,12 @@ void ov93_0225DED0(void *p) {
     u8 *base = (u8 *)p + 0xd8;
     u8 *item;
 
-    sub_02018068(base);
+    ModelResource_Free(base);
     item = base;
     i = 0;
     item += 0x88;
     for (; i < 4; i++) {
-        sub_02018068(item);
+        ModelResource_Free(item);
         item += 0x10;
     }
     i = 0;
@@ -169,10 +169,10 @@ void ov93_0225DED0(void *p) {
         j = 0;
         cur = item;
         for (; j < 4; j++) {
-            sub_020180F8(cur, (u8 *)p + 0xa8);
+            ModelAnimation_Free(cur, (u8 *)p + 0xa8);
             cur += 0x90;
         }
         item += 0x240;
     }
-    sub_02018068((u8 *)p + 0x13a0);
+    ModelResource_Free((u8 *)p + 0x13a0);
 }

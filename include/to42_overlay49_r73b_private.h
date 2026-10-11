@@ -23,7 +23,7 @@ extern const u32 ov49_0226A70C[];
 extern void (*const ov49_0226A4CC[])(void *, u32);
 extern u32 (*const ov49_0226A484[])(void *);
 
-extern void sub_020182A0(void *, int);
+extern void ModelInstance_SetVisible(void *, int);
 
 extern u32 ov49_02258F70(void *);
 extern void ov49_02259154(void *, VecFx32 *);

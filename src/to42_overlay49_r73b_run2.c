@@ -15,7 +15,7 @@ void ov49_02267EBC(Ov49Ctl *ctl, void *a, void *b, void *c, void *d, void *arg, 
 void ov49_02267EF8(Ov49Ctl *ctl, u32 count) {
     int i;
     for (i = 0; i < count; i++) {
-        sub_020182A0(ctl->objects[i], 1);
+        ModelInstance_SetVisible(ctl->objects[i], 1);
     }
     ctl->state = 0;
     ctl->active = 1;
@@ -33,7 +33,7 @@ u32 ov49_02267F40(Ov49Ctl *ctl) {
     ctl->state++;
     if (result == 1) {
         for (i = 0; i < ctl->count; i++) {
-            sub_020182A0(ctl->objects[i], 0);
+            ModelInstance_SetVisible(ctl->objects[i], 0);
         }
         ctl->active = 0;
     }

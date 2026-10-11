@@ -55,7 +55,7 @@
 #include "trainer_memo.h"
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 #include "unk_0200FA24.h"
 #include "unk_02013FDC.h"
 #include "unk_0202C034.h"

@@ -30,7 +30,7 @@
 #include "touchscreen.h"
 #include "sound_playback.h"
 #include "unk_0200A090.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 #include "unk_020210A0.h"
 #include "unk_02035900.h"
 #include "unk_0203A3B0.h"

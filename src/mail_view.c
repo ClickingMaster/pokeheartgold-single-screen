@@ -26,7 +26,7 @@
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 #include "unk_0203A3B0.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"

@@ -24,32 +24,32 @@ typedef struct ModelInstance {
     BOOL visible;
     u16 rotation[3];
 } ModelInstance;
-void sub_02018030(ModelResource *model, NARC *narc, int fileId, enum HeapID heapID);
-void sub_0201804C(SysTask *task, void *data);
-void sub_02018068(ModelResource *model);
-void sub_020180BC(ModelAnimation *animation, ModelResource *model, NARC *narc, int fileId, enum HeapID heapID, NNSFndAllocator *allocator);
-void sub_020180E8(ModelAnimation *animation, ModelResource *model, void *file, NNSFndAllocator *allocator);
-void sub_020180F8(ModelAnimation *animation, NNSFndAllocator *allocator);
-void sub_02018124(ModelAnimation *animation, fx32 step);
-BOOL sub_0201815C(ModelAnimation *animation, fx32 step);
-void sub_02018198(ModelAnimation *animation, fx32 frame);
-fx32 sub_020181A0(ModelAnimation *animation);
-fx32 sub_020181A4(ModelAnimation *animation);
-void sub_020181B0(ModelInstance *instance, ModelResource *model);
-void sub_020181D4(ModelInstance *instance, ModelAnimation *animation);
-void sub_020181E0(ModelInstance *instance, ModelAnimation *animation);
-void sub_020181EC(ModelInstance *instance);
-void sub_02018288(ModelInstance *instance, const MtxFx33 *rotation);
-void sub_020182A0(ModelInstance *instance, BOOL visible);
-BOOL sub_020182A4(ModelInstance *instance);
-void sub_020182A8(ModelInstance *instance, fx32 x, fx32 y, fx32 z);
-void sub_020182B0(ModelInstance *instance, fx32 *x, fx32 *y, fx32 *z);
-void sub_020182C4(ModelInstance *instance, fx32 x, fx32 y, fx32 z);
-void sub_020182CC(ModelInstance *instance, fx32 *x, fx32 *y, fx32 *z);
-void sub_020182E0(ModelInstance *instance, u16 rotation, int axis);
-u16 sub_020182EC(ModelInstance *instance, int axis);
-void sub_020182F8(ModelAnimation *animation, ModelResource *model, void *file, NNSFndAllocator *allocator);
-void sub_02018324(ModelResource *model);
+void ModelResource_LoadFromNarc(ModelResource *model, NARC *narc, int fileId, enum HeapID heapID);
+void ModelResource_LoadTexturesTask(SysTask *task, void *data);
+void ModelResource_Free(ModelResource *model);
+void ModelAnimation_LoadFromNarc(ModelAnimation *animation, ModelResource *model, NARC *narc, int fileId, enum HeapID heapID, NNSFndAllocator *allocator);
+void ModelAnimation_InitFromFile(ModelAnimation *animation, ModelResource *model, void *file, NNSFndAllocator *allocator);
+void ModelAnimation_Free(ModelAnimation *animation, NNSFndAllocator *allocator);
+void ModelAnimation_AdvanceLooped(ModelAnimation *animation, fx32 step);
+BOOL ModelAnimation_Advance(ModelAnimation *animation, fx32 step);
+void ModelAnimation_SetFrame(ModelAnimation *animation, fx32 frame);
+fx32 ModelAnimation_GetFrame(ModelAnimation *animation);
+fx32 ModelAnimation_GetFrameCount(ModelAnimation *animation);
+void ModelInstance_Init(ModelInstance *instance, ModelResource *model);
+void ModelInstance_AddAnimation(ModelInstance *instance, ModelAnimation *animation);
+void ModelInstance_RemoveAnimation(ModelInstance *instance, ModelAnimation *animation);
+void ModelInstance_Draw(ModelInstance *instance);
+void ModelInstance_DrawWithRotation(ModelInstance *instance, const MtxFx33 *rotation);
+void ModelInstance_SetVisible(ModelInstance *instance, BOOL visible);
+BOOL ModelInstance_IsVisible(ModelInstance *instance);
+void ModelInstance_SetPosition(ModelInstance *instance, fx32 x, fx32 y, fx32 z);
+void ModelInstance_GetPosition(ModelInstance *instance, fx32 *x, fx32 *y, fx32 *z);
+void ModelInstance_SetScale(ModelInstance *instance, fx32 x, fx32 y, fx32 z);
+void ModelInstance_GetScale(ModelInstance *instance, fx32 *x, fx32 *y, fx32 *z);
+void ModelInstance_SetRotation(ModelInstance *instance, u16 rotation, int axis);
+u16 ModelInstance_GetRotation(ModelInstance *instance, int axis);
+void ModelAnimation_Init(ModelAnimation *animation, ModelResource *model, void *file, NNSFndAllocator *allocator);
+void ModelResource_Init(ModelResource *model);
 
 typedef struct {
     u32 active;
@@ -94,30 +94,30 @@ void ov93_0225DD2C(Ov93Work *work, NARC *narc) {
     shared = NULL;
     idx = ov93_0225E45C(work, Comm_GetLocalNetId());
 
-    sub_02018030(&bank->resource, narc, ov93_02262AF0[idx].file[0], HEAP_ID_117);
-    sub_020181B0(&bank->instance, &bank->resource);
-    sub_020182A8(&bank->instance, 0, -102400, 0);
-    sub_020182C4(&bank->instance, FX32_ONE, FX32_ONE, FX32_ONE);
-    sub_020182A0(&bank->instance, TRUE);
-    sub_02018030(&bank->templates[0], narc, ov93_02262AF4[idx].file[0], HEAP_ID_117);
-    sub_02018030(&bank->templates[1], narc, ov93_02262AF8[idx].file[0], HEAP_ID_117);
-    sub_02018030(&bank->templates[2], narc, ov93_02262AFC[idx].file[0], HEAP_ID_117);
-    sub_02018030(&bank->templates[3], narc, ov93_02262B00[idx].file[0], HEAP_ID_117);
+    ModelResource_LoadFromNarc(&bank->resource, narc, ov93_02262AF0[idx].file[0], HEAP_ID_117);
+    ModelInstance_Init(&bank->instance, &bank->resource);
+    ModelInstance_SetPosition(&bank->instance, 0, -102400, 0);
+    ModelInstance_SetScale(&bank->instance, FX32_ONE, FX32_ONE, FX32_ONE);
+    ModelInstance_SetVisible(&bank->instance, TRUE);
+    ModelResource_LoadFromNarc(&bank->templates[0], narc, ov93_02262AF4[idx].file[0], HEAP_ID_117);
+    ModelResource_LoadFromNarc(&bank->templates[1], narc, ov93_02262AF8[idx].file[0], HEAP_ID_117);
+    ModelResource_LoadFromNarc(&bank->templates[2], narc, ov93_02262AFC[idx].file[0], HEAP_ID_117);
+    ModelResource_LoadFromNarc(&bank->templates[3], narc, ov93_02262B00[idx].file[0], HEAP_ID_117);
     row = 0;
     for (; row < 8; row++) {
         for (col = 0; col < 4; col++) {
             if (shared == NULL) {
-                sub_020180BC(&bank->cells[row][col].animation, &bank->templates[col], narc, col + 35, HEAP_ID_117, &work->allocator);
+                ModelAnimation_LoadFromNarc(&bank->cells[row][col].animation, &bank->templates[col], narc, col + 35, HEAP_ID_117, &work->allocator);
                 shared = bank->cells[row][col].animation.file;
             } else {
-                sub_020180E8(&bank->cells[row][col].animation, &bank->templates[col], shared, &work->allocator);
+                ModelAnimation_InitFromFile(&bank->cells[row][col].animation, &bank->templates[col], shared, &work->allocator);
             }
-            sub_02018198(&bank->cells[row][col].animation, 0);
+            ModelAnimation_SetFrame(&bank->cells[row][col].animation, 0);
         }
     }
-    sub_02018030(&footer->resource, narc, 30, HEAP_ID_117);
-    sub_020181B0(&footer->instance, &footer->resource);
-    sub_020182A8(&footer->instance, 0, -102400, 0);
-    sub_020182C4(&footer->instance, FX32_ONE, FX32_ONE, FX32_ONE);
-    sub_020182A0(&footer->instance, TRUE);
+    ModelResource_LoadFromNarc(&footer->resource, narc, 30, HEAP_ID_117);
+    ModelInstance_Init(&footer->instance, &footer->resource);
+    ModelInstance_SetPosition(&footer->instance, 0, -102400, 0);
+    ModelInstance_SetScale(&footer->instance, FX32_ONE, FX32_ONE, FX32_ONE);
+    ModelInstance_SetVisible(&footer->instance, TRUE);
 }

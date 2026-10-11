@@ -6,7 +6,7 @@
 #include "gf_gfx_planes.h"
 #include "filesystem.h"
 #include "sprite.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 #include "unk_0200FA24.h"
 #include "unk_0203A3B0.h"
 #include "obj_char_transfer.h"

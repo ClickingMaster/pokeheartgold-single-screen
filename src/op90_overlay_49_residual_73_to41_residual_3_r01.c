@@ -22,7 +22,7 @@ typedef struct Ov49Unk {
 extern const Ov49FramePair ov49_0226A678[][12];
 extern const Ov49FramePair ov49_0226A67C[][12];
 
-void sub_020182A0(Ov49Obj *obj, int a1);
+void ModelInstance_SetVisible(Ov49Obj *obj, int a1);
 void ov49_02265BE8(void *a0, Ov49Unk *data, u32 index, int axis, fx32 value);
 BOOL ov49_02267AF0(void *a0, Ov49Unk *data, int type);
 
@@ -36,15 +36,15 @@ BOOL ov49_02267AF0(void *a0, Ov49Unk *data, int type) {
         data->lastFrame = frame;
         if (frame != 0) {
             prev = ov49_0226A678[type][frame];
-            sub_020182A0(&data->objs[prev.objIndex], 0);
+            ModelInstance_SetVisible(&data->objs[prev.objIndex], 0);
         }
         cur = ov49_0226A67C[type][frame];
         if (cur.value != 0) {
             ov49_02265BE8(a0, data, cur.objIndex, 0, FX32_CONST(cur.value));
             ov49_02265BE8(a0, data, cur.objIndex, 1, FX32_CONST(cur.value));
-            sub_020182A0(&data->objs[cur.objIndex], 1);
+            ModelInstance_SetVisible(&data->objs[cur.objIndex], 1);
         } else {
-            sub_020182A0(&data->objs[cur.objIndex], 0);
+            ModelInstance_SetVisible(&data->objs[cur.objIndex], 0);
         }
     }
     if (data->counter < 48) {

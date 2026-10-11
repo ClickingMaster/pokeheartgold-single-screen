@@ -13,8 +13,8 @@
 extern u32 ov49_02258F70(void *);
 extern u32 ov49_02265968(void *, int);
 extern void ov49_022659D0(void *, void *, int);
-extern BOOL sub_020182A4(void *);
-extern void sub_020182A0(void *, int);
+extern BOOL ModelInstance_IsVisible(void *);
+extern void ModelInstance_SetVisible(void *, int);
 extern u32 ov49_02265B28(void *, void *, int, int);
 extern void ov49_02265B14(void *, void *, int, int);
 extern u32 ov49_02266D60(void *, void *);

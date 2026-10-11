@@ -30,7 +30,7 @@ typedef struct Ov49AnimDef {
 
 extern const Ov49AnimDef ov49_0226A70C[];
 
-void sub_020180BC(Ov49Anim *animation, Ov49Tex *model, void *narc, int fileId, enum HeapID heapID, NNSFndAllocator *allocator);
+void ModelAnimation_LoadFromNarc(Ov49Anim *animation, Ov49Tex *model, void *narc, int fileId, enum HeapID heapID, NNSFndAllocator *allocator);
 void ov49_022657B4(Ov49Unk *data, void *narc, enum HeapID heapID);
 
 // @fn ov49_022657B4
@@ -46,7 +46,7 @@ void ov49_022657B4(Ov49Unk *data, void *narc, enum HeapID heapID) {
                 continue;
             }
             data->texs[def->texIndex].tex = NNS_G3dGetTex(data->files[def->fileIndex]);
-            sub_020180BC(&data->anims[def->animIds[j]], &data->texs[def->texIndex], narc, def->animIds[j] + 183, heapID, &data->allocator);
+            ModelAnimation_LoadFromNarc(&data->anims[def->animIds[j]], &data->texs[def->texIndex], narc, def->animIds[j] + 183, heapID, &data->allocator);
         }
         def++;
     }

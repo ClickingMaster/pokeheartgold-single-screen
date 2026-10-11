@@ -30,9 +30,9 @@ void ov91_02260884(void *, void *, void *);
 void ov91_02260A2C(void *);
 void ov91_022608A8(void *, void *, void *);
 void GF_AssertFail(void);
-void sub_02018068(void *);
-void sub_020181B0(void *, void *);
-void sub_020182A0(void *, int);
+void ModelResource_Free(void *);
+void ModelInstance_Init(void *, void *);
+void ModelInstance_SetVisible(void *, int);
 
 void ov91_0226042C(const VecFx32 *, u16 *);
 void ov91_0226045C(const VecFx32 *, VecFx32 *, int, int);

@@ -24,12 +24,12 @@ typedef struct Ov49DParent {
 } Ov49DParent;
 extern void ov49_02258800();
 extern void ov49_02258814();
-extern void sub_020182A8();
-extern void sub_020182B0();
-extern void sub_020181D4();
-extern void sub_020181E0();
-extern u32 sub_020181A4();
-extern void sub_02018198();
+extern void ModelInstance_SetPosition();
+extern void ModelInstance_GetPosition();
+extern void ModelInstance_AddAnimation();
+extern void ModelInstance_RemoveAnimation();
+extern u32 ModelAnimation_GetFrameCount();
+extern void ModelAnimation_SetFrame();
 extern u32 MTRandom();
 extern u32 _u32_div_f();
 extern void GF_AssertFail();

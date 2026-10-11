@@ -59,7 +59,7 @@ void WMSP_StartMP(WmspStartMPRequest *request) {
     }
     WMSP_InitSendQueue();
     irq = __VENEER_OS_DisableInterrupts();
-    WMSP_SetMPParameterCore(request->param, NULL);
+    WMSP_SetMPParameterCore(&request->param, NULL);
     {
         flags = request->flags;
         settings = wmspW.status;
@@ -92,7 +92,7 @@ void WMSP_StartMP(WmspStartMPRequest *request) {
             if (settings->unk_62 > (s32)max) {
                 settings->unk_62 = max;
             }
-            settings->sendRetryCount = (flags & 0x200) ? request->unk_3a : settings->unk_98;
+            settings->sendRetryCount = (flags & 0x200) ? request->unk_3a : settings->defaultRetryCount;
             settings->unk_7c6 = (flags & 0x400) ? request->unk_3c : settings->unk_92;
             settings->unk_7c8 = (flags & 0x800) ? request->unk_3d : settings->unk_94;
             settings->unk_7cc = (flags & 0x1000) ? request->unk_3e : settings->unk_9a;

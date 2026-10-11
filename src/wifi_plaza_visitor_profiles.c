@@ -35,7 +35,7 @@
 #include "text.h"
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 #include "unk_02026E30.h"
 #include "unk_0203A3B0.h"
 #include "vram_transfer_manager.h"
@@ -129,12 +129,12 @@ typedef struct ModelInstance {
     u16 rotation[3];
 } ModelInstance;
 
-void sub_02018030(ModelResource *model, NARC *narc, int fileId, enum HeapID heapID);
-void sub_02018068(ModelResource *model);
-void sub_020181B0(ModelInstance *instance, ModelResource *model);
-void sub_02018288(ModelInstance *instance, const MtxFx33 *rotation);
-void sub_020182A8(ModelInstance *instance, fx32 x, fx32 y, fx32 z);
-void sub_020182C4(ModelInstance *instance, fx32 x, fx32 y, fx32 z);
+void ModelResource_LoadFromNarc(ModelResource *model, NARC *narc, int fileId, enum HeapID heapID);
+void ModelResource_Free(ModelResource *model);
+void ModelInstance_Init(ModelInstance *instance, ModelResource *model);
+void ModelInstance_DrawWithRotation(ModelInstance *instance, const MtxFx33 *rotation);
+void ModelInstance_SetPosition(ModelInstance *instance, fx32 x, fx32 y, fx32 z);
+void ModelInstance_SetScale(ModelInstance *instance, fx32 x, fx32 y, fx32 z);
 
 typedef struct VisitorProfilesGlobe {
     VecFx32 position;
@@ -1239,20 +1239,20 @@ void VisitorProfilesGlobe_Init(VisitorProfilesGlobe *globe, VisitorProfilesGraph
     globe->rotation.x = 0x69 << 6;
     globe->rotation.y = 0x1F << 10;
     globe->rotation.z = 0;
-    sub_02018030(&globe->resource, gfx->narc, 3, heapID);
-    sub_020181B0(&globe->model, &globe->resource);
+    ModelResource_LoadFromNarc(&globe->resource, gfx->narc, 3, heapID);
+    ModelInstance_Init(&globe->model, &globe->resource);
 }
 
 void VisitorProfilesGlobe_Free(VisitorProfilesGlobe *globe) {
-    sub_02018068(&globe->resource);
+    ModelResource_Free(&globe->resource);
 }
 
 void VisitorProfilesGlobe_Draw(VisitorProfilesGlobe *globe) {
     MtxFx33 mtx;
     VisitorProfilesGlobe_GetMatrix(globe, &mtx);
-    sub_020182A8(&globe->model, globe->position.x, globe->position.y, globe->position.z);
-    sub_020182C4(&globe->model, globe->scale.x, globe->scale.y, globe->scale.z);
-    sub_02018288(&globe->model, &mtx);
+    ModelInstance_SetPosition(&globe->model, globe->position.x, globe->position.y, globe->position.z);
+    ModelInstance_SetScale(&globe->model, globe->scale.x, globe->scale.y, globe->scale.z);
+    ModelInstance_DrawWithRotation(&globe->model, &mtx);
 }
 
 void VisitorProfilesGlobe_GetPosition(VisitorProfilesGlobe *globe, VecFx32 *dst) {
@@ -1281,8 +1281,8 @@ void VisitorProfilesPlaces_Init(VisitorProfilesPlaces *places, void *visitors, V
     heapID = heap;
     VisitorProfilesPlaces_Load(places, visitors, heap);
     for (i = 0; i < VISITOR_PROFILES_NUM_MARKER_MODELS; i++) {
-        sub_02018030(&places->markerResources[i], gfx->narc, sVisitorProfilesMarkerModelFiles[i], heapID);
-        sub_020181B0(&places->markers[i], &places->markerResources[i]);
+        ModelResource_LoadFromNarc(&places->markerResources[i], gfx->narc, sVisitorProfilesMarkerModelFiles[i], heapID);
+        ModelInstance_Init(&places->markers[i], &places->markerResources[i]);
     }
     if (settings.fullGlobe == 0) {
         places->markerScale.x = 768;
@@ -1300,7 +1300,7 @@ void VisitorProfilesPlaces_Init(VisitorProfilesPlaces *places, void *visitors, V
 void VisitorProfilesPlaces_Free(VisitorProfilesPlaces *places) {
     s32 i;
     for (i = 0; i < VISITOR_PROFILES_NUM_MARKER_MODELS; i++) {
-        sub_02018068(&places->markerResources[i]);
+        ModelResource_Free(&places->markerResources[i]);
     }
 }
 
@@ -1319,21 +1319,21 @@ void VisitorProfilesPlaces_Draw(VisitorProfilesPlaces *places, VisitorProfilesGl
     VisitorProfilesGlobe_GetMatrix(globe, &globeMtx);
     for (i = 0; i < VISITOR_PROFILES_NUM_MARKER_MODELS; i++) {
         marker = &places->markers[i];
-        sub_020182A8(marker, position.x, position.y, position.z);
+        ModelInstance_SetPosition(marker, position.x, position.y, position.z);
         if (i == 2) {
-            sub_020182C4(marker, places->markerScale.x, places->markerScale.y, places->markerScale.z + 410);
+            ModelInstance_SetScale(marker, places->markerScale.x, places->markerScale.y, places->markerScale.z + 410);
         } else {
-            sub_020182C4(marker, places->markerScale.x, places->markerScale.y, places->markerScale.z);
+            ModelInstance_SetScale(marker, places->markerScale.x, places->markerScale.y, places->markerScale.z);
         }
     }
     MTX_Identity33(&result);
-    sub_02018288(&places->markers[2], &result);
+    ModelInstance_DrawWithRotation(&places->markers[2], &result);
     j = 0;
     if (j < places->count) {
         do {
             MTX_Concat33(&places->places[j].rotation, &globeMtx, &result);
             if ((u16)places->places[j].marker != VISITOR_PROFILES_NO_MARKER) {
-                sub_02018288(&places->markers[(u16)places->places[j].marker], &result);
+                ModelInstance_DrawWithRotation(&places->markers[(u16)places->places[j].marker], &result);
             }
             j++;
         } while (j < places->count);

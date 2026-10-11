@@ -1273,7 +1273,7 @@ _0225C6D8:
 	ldr r3, [r3, #4]
 	add r0, r0, r4
 	add r1, r1, r4
-	bl sub_020180BC
+	bl ModelAnimation_LoadFromNarc
 	mov r0, #0xb5
 	ldr r1, [r5, #4]
 	lsl r0, r0, #4
@@ -1282,20 +1282,20 @@ _0225C6D8:
 	add r0, r0, r4
 	add r1, r1, r2
 	add r1, r1, r4
-	bl sub_020181D4
+	bl ModelInstance_AddAnimation
 	ldr r1, [r5, #4]
 	ldr r0, _0225C948 ; =0x00000BD8
 	add r0, r1, r0
 	add r0, r0, r4
 	mov r1, #0
-	bl sub_02018198
+	bl ModelAnimation_SetFrame
 	mov r0, #0xb5
 	ldr r1, [r5, #4]
 	lsl r0, r0, #4
 	add r0, r1, r0
 	add r0, r0, r4
 	mov r1, #0
-	bl sub_020182A0
+	bl ModelInstance_SetVisible
 	ldrb r0, [r5, #0x14]
 	ldr r1, [sp, #0xc]
 	cmp r0, #0
@@ -1463,7 +1463,7 @@ _0225C88C:
 	ldr r0, _0225C950 ; =0x00000944
 	add r0, r1, r0
 	mov r1, #0
-	bl sub_020182A0
+	bl ModelInstance_SetVisible
 	ldr r3, _0225C954 ; =ov92_022638A0
 	add r2, sp, #0x28
 	ldmia r3!, {r0, r1}
@@ -1551,15 +1551,15 @@ _0225C960:
 	add r0, #0x88
 	add r1, #0x78
 	mov r3, #0x35
-	bl sub_020180BC
+	bl ModelAnimation_LoadFromNarc
 	add r0, r4, r6
 	add r1, r0, #0
 	add r1, #0x88
-	bl sub_020181D4
+	bl ModelInstance_AddAnimation
 	add r0, r4, r6
 	add r0, #0x88
 	mov r1, #0
-	bl sub_02018198
+	bl ModelAnimation_SetFrame
 	mov r0, #0x71
 	str r0, [sp]
 	add r0, r5, #0
@@ -1571,11 +1571,11 @@ _0225C960:
 	add r0, #0x9c
 	add r1, #0x78
 	mov r3, #0x34
-	bl sub_020180BC
+	bl ModelAnimation_LoadFromNarc
 	add r0, r4, r6
 	add r0, #0x9c
 	mov r1, #0
-	bl sub_02018198
+	bl ModelAnimation_SetFrame
 	mov r0, #0x71
 	str r0, [sp]
 	add r0, r5, #0
@@ -1587,11 +1587,11 @@ _0225C960:
 	add r0, #0xb0
 	add r1, #0x78
 	mov r3, #0x3a
-	bl sub_020180BC
+	bl ModelAnimation_LoadFromNarc
 	add r0, r4, r6
 	add r0, #0xb0
 	mov r1, #0
-	bl sub_02018198
+	bl ModelAnimation_SetFrame
 	ldr r4, [r5, #4]
 	mov r0, #0x71
 	str r0, [sp]
@@ -1605,15 +1605,15 @@ _0225C960:
 	add r0, #0x88
 	add r1, #0x78
 	mov r3, #0x38
-	bl sub_020180BC
+	bl ModelAnimation_LoadFromNarc
 	add r0, r4, r6
 	add r1, r0, #0
 	add r1, #0x88
-	bl sub_020181D4
+	bl ModelInstance_AddAnimation
 	add r0, r4, r6
 	add r0, #0x88
 	mov r1, #0
-	bl sub_02018198
+	bl ModelAnimation_SetFrame
 	ldr r4, [r5, #4]
 	mov r0, #0x71
 	str r0, [sp]
@@ -1627,15 +1627,15 @@ _0225C960:
 	add r0, #0x88
 	add r1, #0x78
 	mov r3, #0x36
-	bl sub_020180BC
+	bl ModelAnimation_LoadFromNarc
 	add r0, r4, r6
 	add r1, r0, #0
 	add r1, #0x88
-	bl sub_020181D4
+	bl ModelInstance_AddAnimation
 	add r0, r4, r6
 	add r0, #0x88
 	mov r1, #0
-	bl sub_02018198
+	bl ModelAnimation_SetFrame
 	ldrb r0, [r5, #0x14]
 	cmp r0, #0
 	beq _0225CA6C
@@ -2639,34 +2639,34 @@ ov92_0225D1FC: ; 0x0225D1FC
 	add r0, r1, r0
 	add r1, r5, #0
 	add r1, #0x6c
-	bl sub_020180F8
+	bl ModelAnimation_Free
 	mov r0, #0xef
 	ldr r1, [r5, #4]
 	lsl r0, r0, #2
 	add r0, r1, r0
 	add r1, r5, #0
 	add r1, #0x6c
-	bl sub_020180F8
+	bl ModelAnimation_Free
 	mov r0, #0x3d
 	ldr r1, [r5, #4]
 	lsl r0, r0, #4
 	add r0, r1, r0
 	add r1, r5, #0
 	add r1, #0x6c
-	bl sub_020180F8
+	bl ModelAnimation_Free
 	ldr r1, [r5, #4]
 	ldr r0, _0225D338 ; =0x000005B4
 	add r0, r1, r0
 	add r1, r5, #0
 	add r1, #0x6c
-	bl sub_020180F8
+	bl ModelAnimation_Free
 	mov r0, #0x1f
 	ldr r1, [r5, #4]
 	lsl r0, r0, #6
 	add r0, r1, r0
 	add r1, r5, #0
 	add r1, #0x6c
-	bl sub_020180F8
+	bl ModelAnimation_Free
 	mov r7, #0
 	add r6, r5, #0
 	add r4, r7, #0
@@ -2683,13 +2683,13 @@ _0225D2C8:
 	add r0, r1, r0
 	add r0, r0, r4
 	add r1, r6, #0
-	bl sub_020180F8
+	bl ModelAnimation_Free
 	ldr r1, [r5, #4]
 	ldr r0, _0225D340 ; =0x00000BEC
 	add r0, r1, r0
 	add r0, r0, r4
 	add r1, r6, #0
-	bl sub_020180F8
+	bl ModelAnimation_Free
 	mov r0, #0x83
 	lsl r0, r0, #2
 	add r7, r7, #1

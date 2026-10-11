@@ -15,7 +15,7 @@
 #include "sound.h"
 #include "system.h"
 #include "text.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 #include "unk_0203BA5C.h"
 #include "unk_020552A4.h"
 #include "unk_0206793C.h"

@@ -22,7 +22,7 @@
 #include "text.h"
 #include "sound_playback.h"
 #include "unk_0200A090.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 #include "unk_02034354.h"
 #include "unk_02035900.h"
 #include "unk_020379A0.h"

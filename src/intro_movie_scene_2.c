@@ -11,7 +11,7 @@
 #include "sprite_transfer.h"
 #include "sys_task_api.h"
 #include "system.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 
 enum IntroScene2State {
     INTRO_SCENE2_START_FLYIN,

@@ -20,11 +20,11 @@ void ov92_0225D1FC(void *state) {
     ov92_0225DA2C((u8 *)PAT(state, 4) + 0x52c);
     ov92_0225DA2C((u8 *)PAT(state, 4) + 0x738);
     ov92_0225DA2C((u8 *)PAT(state, 4) + 0x944);
-    sub_020180F8((u8 *)PAT(state, 4) + 0x3a8, (u8 *)state + 0x6c);
-    sub_020180F8((u8 *)PAT(state, 4) + 0x3bc, (u8 *)state + 0x6c);
-    sub_020180F8((u8 *)PAT(state, 4) + 0x3d0, (u8 *)state + 0x6c);
-    sub_020180F8((u8 *)PAT(state, 4) + 0x5b4, (u8 *)state + 0x6c);
-    sub_020180F8((u8 *)PAT(state, 4) + 0x7c0, (u8 *)state + 0x6c);
+    ModelAnimation_Free((u8 *)PAT(state, 4) + 0x3a8, (u8 *)state + 0x6c);
+    ModelAnimation_Free((u8 *)PAT(state, 4) + 0x3bc, (u8 *)state + 0x6c);
+    ModelAnimation_Free((u8 *)PAT(state, 4) + 0x3d0, (u8 *)state + 0x6c);
+    ModelAnimation_Free((u8 *)PAT(state, 4) + 0x5b4, (u8 *)state + 0x6c);
+    ModelAnimation_Free((u8 *)PAT(state, 4) + 0x7c0, (u8 *)state + 0x6c);
 
     i = 0;
     resource = state;
@@ -32,8 +32,8 @@ void ov92_0225D1FC(void *state) {
     resource += 0x6c;
     for (; i < 8; i++) {
         ov92_0225DA2C((u8 *)PAT(state, 4) + 0xb50 + offset);
-        sub_020180F8((u8 *)PAT(state, 4) + 0xbd8 + offset, resource);
-        sub_020180F8((u8 *)PAT(state, 4) + 0xbec + offset, resource);
+        ModelAnimation_Free((u8 *)PAT(state, 4) + 0xbd8 + offset, resource);
+        ModelAnimation_Free((u8 *)PAT(state, 4) + 0xbec + offset, resource);
         offset += 0x20c;
     }
 

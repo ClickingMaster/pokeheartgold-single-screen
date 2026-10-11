@@ -8,5 +8,5 @@ void ov91_02260A2C(u8 *p) {
     *(u32 *)(p + 0xf8) = 0;
     *(u32 *)(p + 0xf4) = 0;
     Sprite_SetDrawFlag(*(void **)p, FALSE);
-    sub_020182A0(p + 0x7c, 0);
+    ModelInstance_SetVisible(p + 0x7c, 0);
 }

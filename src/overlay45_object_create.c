@@ -81,7 +81,7 @@ extern void *sub_02023D44(CreateParams *);
 extern void sub_02023FE4(void *, void (*)(void *, Obj *), Obj *);
 extern void ov45_02230E64(void *, Obj *);
 extern void ov45_02230A5C(void *, void *);
-extern void sub_020182A8(void *, s32, s32, s32);
+extern void ModelInstance_SetPosition(void *, s32, s32, s32);
 extern void ov45_02230A4C(void *);
 extern void sub_02023DA4(void *);
 
@@ -137,7 +137,7 @@ Obj *ov45_0223070C(Manager *manager, void *ctx) {
     object->handle = sub_02023D44(&create);
     sub_02023FE4(object->handle, ov45_02230E64, object);
     ov45_02230A5C(manager->modelResource, object->model);
-    sub_020182A8(object->model, position.x, 0x2000, position.z - 0x8000);
+    ModelInstance_SetPosition(object->model, position.x, 0x2000, position.z - 0x8000);
     object->state = 1;
     object->top = 1;
     object->type = 0;

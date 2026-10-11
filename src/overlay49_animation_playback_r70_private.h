@@ -16,14 +16,14 @@ typedef struct Ov49AnimationState {
 } Ov49AnimationState;
 
 void GF_AssertFail(void);
-void sub_02018198(void *, s32);
-s32 sub_020181A0(void *);
-s32 sub_020181A4(void *);
-void sub_020181B0(void *, void *);
-void sub_020181D4(void *, void *);
-void sub_020181E0(void *, void *);
-void sub_020181EC(void *);
-BOOL sub_020182A4(void *);
+void ModelAnimation_SetFrame(void *, s32);
+s32 ModelAnimation_GetFrame(void *);
+s32 ModelAnimation_GetFrameCount(void *);
+void ModelInstance_Init(void *, void *);
+void ModelInstance_AddAnimation(void *, void *);
+void ModelInstance_RemoveAnimation(void *, void *);
+void ModelInstance_Draw(void *);
+BOOL ModelInstance_IsVisible(void *);
 
 void ov49_02265B3C(void *, Ov49AnimationState *, u32, u32, s32);
 BOOL ov49_02265B94(void *, Ov49AnimationState *, u32, u32, s32);

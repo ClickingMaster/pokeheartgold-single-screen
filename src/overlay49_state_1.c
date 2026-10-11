@@ -7,14 +7,14 @@ u32 ov49_0225D450(Ov49DState *, s32);
 void ov49_0225D1C4(void *p, VecS16Sol v) {
     VecFx32 out;
     ov49_02258800(&v, &out);
-    sub_020182A8((u8 *)p + 4, out.x, out.y, out.z);
+    ModelInstance_SetPosition((u8 *)p + 4, out.x, out.y, out.z);
 }
 
 u32 ov49_0225D1EC(void *p) {
     VecFx32 in;
     u16 out[2];
     u32 result;
-    sub_020182B0((u8 *)p + 4, &in.x, &in.y, &in.z);
+    ModelInstance_GetPosition((u8 *)p + 4, &in.x, &in.y, &in.z);
     ov49_02258814(&in, out);
     result = out[1];
     result <<= 16;

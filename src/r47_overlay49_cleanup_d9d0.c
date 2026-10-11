@@ -17,7 +17,7 @@ void ov49_0225D9D0(Ov49State *state, int heapId) {
         j = 0;
         cursor = outer;
         do {
-            sub_020180F8(cursor, heapId);
+            ModelAnimation_Free(cursor, heapId);
             j++;
             cursor += 0x14;
         } while (j < 4);

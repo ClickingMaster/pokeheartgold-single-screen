@@ -29,13 +29,13 @@ void ov49_0225CE88(void *state) {
 void ov49_0225CED0(void *state) {
     if (U32_AT(state, 0x1C0) == 1 && U32_AT(state, 0x104) == 0) {
         U32_AT(state, 0x104) = 1;
-        sub_020181D4((u8 *)state + 4, (u8 *)state + 0x19C);
+        ModelInstance_AddAnimation((u8 *)state + 4, (u8 *)state + 0x19C);
     }
 }
 
 void ov49_0225CEFC(void *state) {
     if (U32_AT(state, 0x1C0) == 1 && U32_AT(state, 0x104) == 1) {
-        sub_020181E0((u8 *)state + 4, (u8 *)state + 0x19C);
+        ModelInstance_RemoveAnimation((u8 *)state + 4, (u8 *)state + 0x19C);
         U32_AT(state, 0x104) = 0;
     }
 }
@@ -50,8 +50,8 @@ void *ov49_0225CF28(void *state, s32 index, s32 selection, const void *value) {
         GF_AssertFail();
     }
     cursor = ov49_0225D820(state);
-    sub_020181B0((u8 *)cursor + 4, (u8 *)state + 0x1C4 + index * 0x10);
-    sub_020182A0((u8 *)cursor + 4, 1);
+    ModelInstance_Init((u8 *)cursor + 4, (u8 *)state + 0x1C4 + index * 0x10);
+    ModelInstance_SetVisible((u8 *)cursor + 4, 1);
     ov49_0225CFA8(cursor, value);
     {
         u32 zeroes[3] = { 0, 0, 0 };

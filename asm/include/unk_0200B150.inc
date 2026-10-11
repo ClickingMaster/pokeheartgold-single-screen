@@ -3,7 +3,7 @@
 .public OamManager_Create
 .public OamManager_ApplyAndResetBuffers
 .public OamManager_Free
-.public sub_0200B27C
+.public OamManager_InitRenderSurface
 .public thunk_ClearMainOAM
 .public thunk_ClearSubOAM
 .public Heap_Alloc

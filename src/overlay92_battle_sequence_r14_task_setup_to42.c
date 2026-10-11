@@ -14,8 +14,8 @@ void ov92_0225EEBC(void *work) {
     PTR_AT(task, 0x74) = PTR_AT(work, 0x2bb4);
     PTR_AT(task, 0x78) = PTR_AT(work, 0x14);
     ov92_0225DD48(work, 0);
-    sub_02018198(PTRTac(work, 0x3a8), 0);
-    sub_02018198(PTRTac(work, 0x5b4), 0);
-    sub_02018198(PTRTac(work, 0x7c0), 0);
+    ModelAnimation_SetFrame(PTRTac(work, 0x3a8), 0);
+    ModelAnimation_SetFrame(PTRTac(work, 0x5b4), 0);
+    ModelAnimation_SetFrame(PTRTac(work, 0x7c0), 0);
     SysTask_CreateOnMainQueue(ov92_0225EF4C, task, 1 << 12);
 }

@@ -38,7 +38,7 @@ typedef struct ModelInstance {
 
 extern BOOL ov49_02265434(Ov49Interpolation *,s32);
 extern void ov49_022655E0(void *,u32 *,u32 *,u32 *);
-extern void sub_020182A8(ModelInstance *,fx32,fx32,fx32);
+extern void ModelInstance_SetPosition(ModelInstance *,fx32,fx32,fx32);
 extern void ov49_022683FC(Ov49Ctl *,u32,VecFx32 *,fx32,fx32,fx32,u32,u32);
 u32 ov49_02268334(void *);
 #pragma opt_propagation off
@@ -53,7 +53,7 @@ u32 ov49_02268334(void *data){
   do {
    output.completed=ov49_02265434(interpolation,ctl->state);
    ov49_022655E0(positionBytes,(u32*)&output.position.x,(u32*)&output.position.y,(u32*)&output.position.z);
-   sub_020182A8(*(void**)(objectBytes+0xd8),output.position.x,output.position.y,output.position.z);
+   ModelInstance_SetPosition(*(void**)(objectBytes+0xd8),output.position.x,output.position.y,output.position.z);
    if(output.completed==1){
     if(ctl->phase==0)ov49_022683FC(ctl,i,&output.position,-0x3000,0x4000,-0x3000,0x3000,3);
     else ov49_022683FC(ctl,i,&output.position,0xa000,0x5000,0x6000,0xa000,4);

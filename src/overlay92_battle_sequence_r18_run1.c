@@ -20,7 +20,7 @@ void ov92_02261118(Ov92AnimState *work) {
             PaletteData_BlendPalettes(pltt, 1, 1, (u8)(*level + *base), 0);
             break;
         case 1:
-            sub_020182A0(unused, 1);
+            ModelInstance_SetVisible(unused, 1);
             work->unk28 = 0;
             work->state++;
             break;
@@ -43,7 +43,7 @@ void ov92_02261118(Ov92AnimState *work) {
             work->unk50 = 0;
             work->active = 0;
             work->state = 0;
-            sub_020182A0(unused, 0);
+            ModelInstance_SetVisible(unused, 0);
             break;
         }
     }

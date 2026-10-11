@@ -86,20 +86,6 @@ void WMSP_StartDCF(u32 *request) {
     __VENEER_OS_RestoreInterrupts(irq);
 }
 
-// MA data frame given to WMSP_WL_MaData.
-typedef struct WlMaDataFrame {
-    u16 unk_00;
-    u16 unk_02[2];
-    u16 length;
-    u8 unk_08[6];
-    u8 rate; // 10: 1 Mbps, 20: 2 Mbps
-    u8 unk_0f[0x18 - 0x0f];
-    u8 destAddress[6];
-    u8 srcAddress[6];
-    u8 unk_24[0x2c - 0x24];
-    u16 *data;
-} WlMaDataFrame;
-
 // request[1..2]: destination MAC address, request[3]: data, request[4]: its size.
 void WMSP_SetDCFData(u32 *request) {
     WlMaDataFrame frame;

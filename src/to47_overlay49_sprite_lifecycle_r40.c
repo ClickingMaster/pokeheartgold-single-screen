@@ -12,17 +12,17 @@ void *ov49_0225D098(void *state, u32 index, u32 x, u32 y) {
     Ov49PositionR40 position;
 
     cursor = ov49_0225DBF8(base);
-    sub_020181B0((u8 *)cursor + 4, (u8 *)base + 0x29C + index * 0x10);
+    ModelInstance_Init((u8 *)cursor + 4, (u8 *)base + 0x29C + index * 0x10);
     for (i = 0; i < 3; i++) {
         void *resource = ((Ov49ResourceRowsR40 *)base)->rows[index][i];
         if (resource != NULL) {
-            sub_020180E8((u8 *)cursor + 0x7C + i * 0x14,
+            ModelAnimation_InitFromFile((u8 *)cursor + 0x7C + i * 0x14,
                 (u8 *)base + 0x29C + (index << 4),
                 resource,
                 (u8 *)base + 0x494);
         }
     }
-    sub_020182A0((u8 *)cursor + 4, 1);
+    ModelInstance_SetVisible((u8 *)cursor + 4, 1);
     position.x = x << 4;
     position.y = y << 4;
     ov49_0225D1C4(cursor, position);
@@ -39,12 +39,12 @@ void *ov49_0225D098(void *state, u32 index, u32 x, u32 y) {
 void ov49_0225D160(void *state, void *cursor) {
     s32 i;
 
-    sub_020182A0((u8 *)cursor + 4, 0);
+    ModelInstance_SetVisible((u8 *)cursor + 4, 0);
     for (i = 0; i < 3; i++) {
         u32 index = U16_AT(cursor, 2);
         void *resource = ((Ov49ResourceRowsR40 *)state)->rows[index][i];
         if (resource != NULL) {
-            sub_020180E8((u8 *)cursor + 0x7C + i * 0x14,
+            ModelAnimation_InitFromFile((u8 *)cursor + 0x7C + i * 0x14,
                 (u8 *)state + 0x29C + index * 0x10,
                 resource,
                 (u8 *)state + 0x494);

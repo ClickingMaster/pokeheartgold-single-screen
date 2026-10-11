@@ -33,7 +33,7 @@ int ov49_02266678(void *ctx, Ov49R72State *state)
     for (phase = state->phase; (u32)phase < (u32)limit; phase++) {
         int row = phase % 3;
         if ((u32)row < (u32)state->count) {
-            sub_020182A0(&state->entries[row], 1);
+            ModelInstance_SetVisible(&state->entries[row], 1);
         }
     }
     state->phase = limit;
@@ -43,10 +43,10 @@ int ov49_02266678(void *ctx, Ov49R72State *state)
         Ov49R72Entry *entry = state->entries;
         Ov49R72Entry *entry2 = state->entries;
         do {
-        if (sub_020182A4(entry) == 1) {
+        if (ModelInstance_IsVisible(entry) == 1) {
             result = ov49_02265B28(ctx, state, i, 0);
             if (result != 0) {
-                sub_020182A0(entry2, 0);
+                ModelInstance_SetVisible(entry2, 0);
                 ov49_02265BE8(ctx, state, i, 0, 0);
             }
         }

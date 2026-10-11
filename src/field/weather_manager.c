@@ -11,7 +11,7 @@
 #include "overlay_01_02203E40.h"
 #include "sprite_transfer.h"
 #include "sound_playback.h"
-#include "unk_0200B150.h"
+#include "oam_manager.h"
 #include "unk_0200FA24.h"
 #include "unk_02025C44.h"
 
@@ -317,7 +317,7 @@ static void WeatherDraw_Init(WeatherDraw *weatherDraw) {
     rect.sizeView.x = 0xFF000;
     rect.sizeView.y = 0xC0000;
 
-    sub_0200B27C(&weatherDraw->surface, &rect, NNS_G2D_VRAM_TYPE_2DMAIN, &weatherDraw->instance);
+    OamManager_InitRenderSurface(&weatherDraw->surface, &rect, NNS_G2D_VRAM_TYPE_2DMAIN, &weatherDraw->instance);
 
     for (int i = 0; i < 4; i++) {
         weatherDraw->resMan[i] = Create2DGfxResObjMan(14, (GfGfxResType)i, HEAP_ID_FIELD1);

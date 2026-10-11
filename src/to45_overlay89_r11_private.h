@@ -4,7 +4,7 @@
 #include "global.h"
 
 BOOL ov89_0225AEA8(void *, void *);
-void sub_020181EC(void *);
+void ModelInstance_Draw(void *);
 void ov89_0225BB28(void *, u8 *);
 BOOL ov89_0225BB88(void *, u8 *, u8 *);
 void ov89_0225BD48(void *, u8 *);

@@ -61,7 +61,7 @@ void ov92_02261A18(SysTask *, void *);
 void ov92_02261B18(void *);
 
 void PaletteData_BlendPalettes(PaletteData *, int, u16, u8, u16);
-void sub_020182A0(ManagedSprite *, int);
+void ModelInstance_SetVisible(ManagedSprite *, int);
 void SysTask_Destroy(SysTask *);
 SysTask *SysTask_CreateOnMainQueue(void (*)(SysTask *, void *), void *, u32);
 BOOL IsPaletteFadeFinished(void);

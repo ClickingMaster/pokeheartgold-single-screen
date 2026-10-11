@@ -2,7 +2,7 @@
 
 extern void GF_3DVramMan_Delete(void *);
 extern void Camera_Delete(void *);
-extern void sub_02018068(void *);
+extern void ModelResource_Free(void *);
 extern void *ov45_0222E9E0(void *);
 extern void FontOAM_Delete(void *);
 extern void sub_02021B5C(void *);
@@ -45,5 +45,5 @@ void ov89_0225A988(u8 *, void *);
 void ov89_02259230(void *);
 
 void ov89_02259C00(u8 *p) {
-    sub_02018068(p + 0xD8);
+    ModelResource_Free(p + 0xD8);
 }

@@ -10,7 +10,7 @@ void ov89_0225A5A4(Ov89Work *work) {
             if (ov89_0225CDB0[kind].tick != NULL) {
                 ov89_0225CDB0[kind].tick(work, object);
             } else {
-                sub_020181EC(&object->instance);
+                ModelInstance_Draw(&object->instance);
             }
         }
     }

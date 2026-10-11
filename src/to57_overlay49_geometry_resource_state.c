@@ -10,13 +10,13 @@ extern void ov49_0225D528(void *p, void *a, u32 b, void *c);
 extern void ov45_0222D740(void *p);
 extern void ov49_0225D574(void *p);
 extern void ov49_0225D57C(void *p, void *a, fx32 b);
-extern void sub_020180BC(void *p, void *a, void *b, u32 c, void *d, void *e);
-extern void sub_020180F8(void *p, void *a);
-extern void sub_020181B0(void *p, void *a);
-extern void sub_020182A0(void *p, u32 a);
-extern void sub_020181D4(void *p, void *a);
-extern void sub_020181E0(void *p, void *a);
-extern void sub_02018198(void *p, u32 a);
+extern void ModelAnimation_LoadFromNarc(void *p, void *a, void *b, u32 c, void *d, void *e);
+extern void ModelAnimation_Free(void *p, void *a);
+extern void ModelInstance_Init(void *p, void *a);
+extern void ModelInstance_SetVisible(void *p, u32 a);
+extern void ModelInstance_AddAnimation(void *p, void *a);
+extern void ModelInstance_RemoveAnimation(void *p, void *a);
+extern void ModelAnimation_SetFrame(void *p, u32 a);
 
 typedef struct X49 {
     Ov49S10 obj[2];
@@ -43,9 +43,9 @@ void ov49_0225D5FC(X49 *p, void *a, R49 *r, void *c, void *e) {
         } else {
             p->flags[i] = 1;
             if (i != 3) {
-                sub_020180BC(p->anim[i], &p->obj[0], a, r->ids[i], c, e);
+                ModelAnimation_LoadFromNarc(p->anim[i], &p->obj[0], a, r->ids[i], c, e);
             } else {
-                sub_020180BC(p->anim[i], &p->obj[1], a, r->ids[i], c, e);
+                ModelAnimation_LoadFromNarc(p->anim[i], &p->obj[1], a, r->ids[i], c, e);
             }
         }
     }
@@ -55,7 +55,7 @@ void ov49_0225D6AC(X49 *p, void *a) {
     int i;
     for (i = 0; i < 5; i++) {
         if (p->flags[i]) {
-            sub_020180F8(p->anim[i], a);
+            ModelAnimation_Free(p->anim[i], a);
             p->flags[i] = 0;
         }
     }
@@ -75,16 +75,16 @@ void ov49_0225D6F0(Y49 *p, X49 *a) {
     int i;
     p->enabled = 1;
     for (i = 0; i < 2; i++) {
-        sub_020181B0(p->object[i], &a->obj[i]);
-        sub_020182A0(p->object[i], 1);
+        ModelInstance_Init(p->object[i], &a->obj[i]);
+        ModelInstance_SetVisible(p->object[i], 1);
     }
     for (i = 0; i < 4; i++) {
         if (a->flags[i] == 1) {
             p->active[i] = 1;
             if (i != 3) {
-                sub_020181D4(p->object[0], a->anim[i]);
+                ModelInstance_AddAnimation(p->object[0], a->anim[i]);
             } else {
-                sub_020181D4(p->object[1], a->anim[i]);
+                ModelInstance_AddAnimation(p->object[1], a->anim[i]);
             }
         }
     }
@@ -96,9 +96,9 @@ void ov49_0225D76C(Y49 *p, X49 *a) {
         if (p->active[i] == 1) {
             p->active[i] = 0;
             if (i != 3) {
-                sub_020181E0(p->object[0], a->anim[i]);
+                ModelInstance_RemoveAnimation(p->object[0], a->anim[i]);
             } else {
-                sub_020181E0(p->object[1], a->anim[i]);
+                ModelInstance_RemoveAnimation(p->object[1], a->anim[i]);
             }
         }
     }
@@ -120,7 +120,7 @@ void ov49_0225D7B8(void *p, void *a) {
     do {
         if (U32_AT(A, 0xF4)) {
             ov49_0225D57C(C, B, 0x1000);
-            sub_02018198(D, U32_AT(A, 0x108));
+            ModelAnimation_SetFrame(D, U32_AT(A, 0x108));
         }
         next = i + 1;
         A = (u8 *)A + 4;

@@ -23,7 +23,7 @@ extern void SpriteSystem_UpdateTransfer(void);
 extern void FillWindowPixelBuffer(Window *window, u8 fillValue);
 extern s32 ParticleSystem_DrawAll(void);
 extern void ParticleSystem_CalcAll(void);
-extern void sub_020181EC(void *);
+extern void ModelInstance_Draw(void *);
 extern void sub_020399FC(u32 a, void *b);
 
 /* Defined in sibling objects of overlay 93. */

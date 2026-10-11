@@ -21,12 +21,12 @@ extern void ov49_0225D574(void *p);
 extern void ov49_0225D57C(void *p, void *a, fx32 b);
 extern u32 ov49_0225D5A0(void *p, void *a, fx32 b);
 extern u32 ov49_022588A0(void *p, void *a);
-extern void sub_020180BC(void *p, void *a, void *b, u32 c, void *d, void *e);
-extern void sub_020180F8(void *p, void *a);
-extern void sub_020181D4(void *p, void *a);
-extern void sub_020181E0(void *p, void *a);
-extern void sub_020181EC(void *p);
-extern void sub_02018198(void *p, u32 a);
+extern void ModelAnimation_LoadFromNarc(void *p, void *a, void *b, u32 c, void *d, void *e);
+extern void ModelAnimation_Free(void *p, void *a);
+extern void ModelInstance_AddAnimation(void *p, void *a);
+extern void ModelInstance_RemoveAnimation(void *p, void *a);
+extern void ModelInstance_Draw(void *p);
+extern void ModelAnimation_SetFrame(void *p, u32 a);
 extern void ov49_0225EB08(void *p, void *a);
 extern void ov49_0225ECF0(void *p, void *a);
 extern void ov49_0225ED98(void *p, void *a);
@@ -35,8 +35,8 @@ extern void ov49_0225CF94(void *p);
 extern void ov49_0225D160(void *p, void *a);
 extern void ov49_0225CE88(void *p);
 extern void ov49_0225CCC0(void *p);
-extern void sub_020181B0(void *p, void *a);
-extern void sub_020182A0(void *p, u32 a);
+extern void ModelInstance_Init(void *p, void *a);
+extern void ModelInstance_SetVisible(void *p, u32 a);
 extern void NNS_G3dMdlSetMdlAlphaAll(void *p, u32 a);
 extern void GfGfxLoader_LoadFromOpenNarc(void *p, u32 a, u32 b, void *c, u32 d);
 
@@ -56,7 +56,7 @@ void ov49_0225D804(void *p) {
     void *q;
     if (U32_AT(p, 0)) {
         for (i = 0, q = (u8 *)p + 4; i < 2; i++, q = (u8 *)q + 0x78) {
-            sub_020181EC(q);
+            ModelInstance_Draw(q);
         }
     }
 }

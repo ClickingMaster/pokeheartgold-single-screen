@@ -3487,23 +3487,23 @@ ov49_022588A0: ; 0x022588A0
 	add r1, sp, #0x54
 	add r2, sp, #0x58
 	add r3, sp, #0x5c
-	bl sub_020182B0
+	bl ModelInstance_GetPosition
 	add r0, r5, #0
 	add r1, sp, #0x48
 	add r2, sp, #0x4c
 	add r3, sp, #0x50
-	bl sub_020182CC
+	bl ModelInstance_GetScale
 	add r0, r5, #0
 	mov r1, #0
-	bl sub_020182EC
+	bl ModelInstance_GetRotation
 	add r6, r0, #0
 	add r0, r5, #0
 	mov r1, #1
-	bl sub_020182EC
+	bl ModelInstance_GetRotation
 	add r7, r0, #0
 	add r0, r5, #0
 	mov r1, #2
-	bl sub_020182EC
+	bl ModelInstance_GetRotation
 	add r5, r0, #0
 	add r0, sp, #0x24
 	bl MTX_Identity33_

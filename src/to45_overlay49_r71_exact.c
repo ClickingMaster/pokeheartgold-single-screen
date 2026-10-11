@@ -11,8 +11,8 @@ void ov49_02265CB0(void *ctx, void *state) {
         ov49_02265980(ctx, state, i, &ov49_0226A70C[i + 3]);
         ov49_02259154(PTR(state, 8), &pos);
         pos.y += 0x8000;
-        sub_020182A8(entry, pos.x, pos.y, pos.z);
-        sub_020182A0(entry, 0);
+        ModelInstance_SetPosition(entry, pos.x, pos.y, pos.z);
+        ModelInstance_SetVisible(entry, 0);
     }
     WORD(state, 0x954) = 0xFF;
 }
@@ -23,7 +23,7 @@ void ov49_02265D10(void *ctx, void *state) {
 
     ov49_02265980(ctx, state, 1, ov49_0226A730);
     ov49_02265980(ctx, state, 0, ov49_0226A73C);
-    sub_020182A0((u8 *)state + 0x84, 0);
+    ModelInstance_SetVisible((u8 *)state + 0x84, 0);
     ov49_02259154(PTR(state, 8), &a);
     a.y += 0x10000;
     a.x += 0x8000;
@@ -35,28 +35,28 @@ void ov49_02265D10(void *ctx, void *state) {
     case 0:
         a.z -= 0x1C000;
         b.z -= 0xE000;
-        sub_020182E0((u8 *)state + 0x84, 0xBFFF, 1);
+        ModelInstance_SetRotation((u8 *)state + 0x84, 0xBFFF, 1);
         break;
     case 1:
         a.z += 0x18000;
         b.z += 0xB000;
-        sub_020182E0((u8 *)state + 0x84, 0x3FFF, 1);
+        ModelInstance_SetRotation((u8 *)state + 0x84, 0x3FFF, 1);
         break;
     case 2:
         a.x -= 0x17000;
         b.x -= 0x7000;
         b.z += 0x8000;
-        sub_020182E0((u8 *)state + 0x84, 0, 1);
+        ModelInstance_SetRotation((u8 *)state + 0x84, 0, 1);
         break;
     case 3:
         a.x += 0x17000;
         b.x += 0x7000;
         b.z += 0x8000;
-        sub_020182E0((u8 *)state + 0x84, 0x7FFF, 1);
+        ModelInstance_SetRotation((u8 *)state + 0x84, 0x7FFF, 1);
         break;
     }
-    sub_020182A8((u8 *)state + 0x84, a.x, a.y, a.z);
-    sub_020182A8((u8 *)state + 0xC, b.x, b.y, b.z);
+    ModelInstance_SetPosition((u8 *)state + 0x84, a.x, a.y, a.z);
+    ModelInstance_SetPosition((u8 *)state + 0xC, b.x, b.y, b.z);
 }
 
 void ov49_02265E54(void *ctx, void *state) {
@@ -66,7 +66,7 @@ void ov49_02265E54(void *ctx, void *state) {
     ov49_02265980(ctx, state, 1, ov49_0226A730);
     ov49_02265980(ctx, state, 0, ov49_0226A73C);
     ov49_02265980(ctx, state, 2, ov49_0226A734);
-    sub_020182A0((u8 *)state + 0x84, 0);
+    ModelInstance_SetVisible((u8 *)state + 0x84, 0);
     ov49_02259154(PTR(state, 8), &a);
     a.y += 0x10000;
     a.x += 0x8000;
@@ -79,39 +79,39 @@ void ov49_02265E54(void *ctx, void *state) {
     case 0:
         a.z -= 0x1C000;
         b.z -= 0xE000;
-        sub_020182E0((u8 *)state + 0x84, 0xA38D, 1);
-        sub_020182E0((u8 *)state + 0xFC, 0xDC70, 1);
-        sub_020182A8((u8 *)state + 0x84, a.x + 0x8000, a.y, a.z);
-        sub_020182A8((u8 *)state + 0xFC, a.x - 0x8000, a.y, a.z);
+        ModelInstance_SetRotation((u8 *)state + 0x84, 0xA38D, 1);
+        ModelInstance_SetRotation((u8 *)state + 0xFC, 0xDC70, 1);
+        ModelInstance_SetPosition((u8 *)state + 0x84, a.x + 0x8000, a.y, a.z);
+        ModelInstance_SetPosition((u8 *)state + 0xFC, a.x - 0x8000, a.y, a.z);
         break;
     case 1:
         a.z += 0x18000;
         b.z += 0xB000;
-        sub_020182E0((u8 *)state + 0x84, 0x238E, 1);
-        sub_020182E0((u8 *)state + 0xFC, 0x5C71, 1);
-        sub_020182A8((u8 *)state + 0x84, a.x - 0x8000, a.y, a.z);
-        sub_020182A8((u8 *)state + 0xFC, a.x + 0x8000, a.y, a.z);
+        ModelInstance_SetRotation((u8 *)state + 0x84, 0x238E, 1);
+        ModelInstance_SetRotation((u8 *)state + 0xFC, 0x5C71, 1);
+        ModelInstance_SetPosition((u8 *)state + 0x84, a.x - 0x8000, a.y, a.z);
+        ModelInstance_SetPosition((u8 *)state + 0xFC, a.x + 0x8000, a.y, a.z);
         break;
     case 2:
         a.x -= 0x17000;
         b.x -= 0x7000;
         b.z += 0x8000;
-        sub_020182E0((u8 *)state + 0x84, 0xE38F, 1);
-        sub_020182E0((u8 *)state + 0xFC, 0x1C71, 1);
-        sub_020182A8((u8 *)state + 0x84, a.x, a.y, a.z - 0x8000);
-        sub_020182A8((u8 *)state + 0xFC, a.x, a.y, a.z + 0x8000);
+        ModelInstance_SetRotation((u8 *)state + 0x84, 0xE38F, 1);
+        ModelInstance_SetRotation((u8 *)state + 0xFC, 0x1C71, 1);
+        ModelInstance_SetPosition((u8 *)state + 0x84, a.x, a.y, a.z - 0x8000);
+        ModelInstance_SetPosition((u8 *)state + 0xFC, a.x, a.y, a.z + 0x8000);
         break;
     case 3:
         a.x += 0x17000;
         b.x += 0x7000;
         b.z += 0x8000;
-        sub_020182E0((u8 *)state + 0x84, 0x638D, 1);
-        sub_020182E0((u8 *)state + 0xFC, 0x9C71, 1);
-        sub_020182A8((u8 *)state + 0x84, a.x, a.y, a.z + 0x8000);
-        sub_020182A8((u8 *)state + 0xFC, a.x, a.y, a.z - 0x8000);
+        ModelInstance_SetRotation((u8 *)state + 0x84, 0x638D, 1);
+        ModelInstance_SetRotation((u8 *)state + 0xFC, 0x9C71, 1);
+        ModelInstance_SetPosition((u8 *)state + 0x84, a.x, a.y, a.z + 0x8000);
+        ModelInstance_SetPosition((u8 *)state + 0xFC, a.x, a.y, a.z - 0x8000);
         break;
     }
-    sub_020182A8((u8 *)state + 0xC, b.x, b.y, b.z);
+    ModelInstance_SetPosition((u8 *)state + 0xC, b.x, b.y, b.z);
 }
 
 void ov49_02266088(void *ctx, void *state) {
@@ -122,7 +122,7 @@ void ov49_02266088(void *ctx, void *state) {
     ov49_02265980(ctx, state, 0, ov49_0226A73C);
     ov49_02265980(ctx, state, 2, ov49_0226A734);
     ov49_02265980(ctx, state, 3, ov49_0226A738);
-    sub_020182A0((u8 *)state + 0x84, 0);
+    ModelInstance_SetVisible((u8 *)state + 0x84, 0);
     WORD(state, 0x958) = 8;
     WORD(state, 0x95C) = 8;
     WORD(state, 0x960) = 8;
@@ -136,45 +136,45 @@ void ov49_02266088(void *ctx, void *state) {
     case 0:
         a.z -= 0x1C000;
         b.z -= 0xE000;
-        sub_020182E0((u8 *)state + 0x84, 0xA38D, 1);
-        sub_020182E0((u8 *)state + 0xFC, 0xDC70, 1);
-        sub_020182E0((u8 *)state + 0x174, 0xBFFF, 1);
-        sub_020182A8((u8 *)state + 0x84, a.x + 0x8000, a.y, a.z);
-        sub_020182A8((u8 *)state + 0xFC, a.x - 0x8000, a.y, a.z);
-        sub_020182A8((u8 *)state + 0x174, a.x, a.y, a.z);
+        ModelInstance_SetRotation((u8 *)state + 0x84, 0xA38D, 1);
+        ModelInstance_SetRotation((u8 *)state + 0xFC, 0xDC70, 1);
+        ModelInstance_SetRotation((u8 *)state + 0x174, 0xBFFF, 1);
+        ModelInstance_SetPosition((u8 *)state + 0x84, a.x + 0x8000, a.y, a.z);
+        ModelInstance_SetPosition((u8 *)state + 0xFC, a.x - 0x8000, a.y, a.z);
+        ModelInstance_SetPosition((u8 *)state + 0x174, a.x, a.y, a.z);
         break;
     case 1:
         a.z += 0x18000;
         b.z += 0xB000;
-        sub_020182E0((u8 *)state + 0x84, 0x238E, 1);
-        sub_020182E0((u8 *)state + 0xFC, 0x5C71, 1);
-        sub_020182E0((u8 *)state + 0x174, 0x3FFF, 1);
-        sub_020182A8((u8 *)state + 0x84, a.x - 0x8000, a.y, a.z);
-        sub_020182A8((u8 *)state + 0xFC, a.x + 0x8000, a.y, a.z);
-        sub_020182A8((u8 *)state + 0x174, a.x, a.y, a.z);
+        ModelInstance_SetRotation((u8 *)state + 0x84, 0x238E, 1);
+        ModelInstance_SetRotation((u8 *)state + 0xFC, 0x5C71, 1);
+        ModelInstance_SetRotation((u8 *)state + 0x174, 0x3FFF, 1);
+        ModelInstance_SetPosition((u8 *)state + 0x84, a.x - 0x8000, a.y, a.z);
+        ModelInstance_SetPosition((u8 *)state + 0xFC, a.x + 0x8000, a.y, a.z);
+        ModelInstance_SetPosition((u8 *)state + 0x174, a.x, a.y, a.z);
         break;
     case 2:
         a.x -= 0x17000;
         b.x -= 0x7000;
         b.z += 0x8000;
-        sub_020182E0((u8 *)state + 0x84, 0xE38F, 1);
-        sub_020182E0((u8 *)state + 0xFC, 0x1C71, 1);
-        sub_020182E0((u8 *)state + 0x174, 0, 1);
-        sub_020182A8((u8 *)state + 0x84, a.x, a.y, a.z - 0x8000);
-        sub_020182A8((u8 *)state + 0xFC, a.x, a.y, a.z + 0x8000);
-        sub_020182A8((u8 *)state + 0x174, a.x, a.y, a.z);
+        ModelInstance_SetRotation((u8 *)state + 0x84, 0xE38F, 1);
+        ModelInstance_SetRotation((u8 *)state + 0xFC, 0x1C71, 1);
+        ModelInstance_SetRotation((u8 *)state + 0x174, 0, 1);
+        ModelInstance_SetPosition((u8 *)state + 0x84, a.x, a.y, a.z - 0x8000);
+        ModelInstance_SetPosition((u8 *)state + 0xFC, a.x, a.y, a.z + 0x8000);
+        ModelInstance_SetPosition((u8 *)state + 0x174, a.x, a.y, a.z);
         break;
     case 3:
         a.x += 0x17000;
         b.x += 0x7000;
         b.z += 0x8000;
-        sub_020182E0((u8 *)state + 0x84, 0x638D, 1);
-        sub_020182E0((u8 *)state + 0xFC, 0x9C71, 1);
-        sub_020182E0((u8 *)state + 0x174, 0x7FFF, 1);
-        sub_020182A8((u8 *)state + 0x84, a.x, a.y, a.z + 0x8000);
-        sub_020182A8((u8 *)state + 0xFC, a.x, a.y, a.z - 0x8000);
-        sub_020182A8((u8 *)state + 0x174, a.x, a.y, a.z);
+        ModelInstance_SetRotation((u8 *)state + 0x84, 0x638D, 1);
+        ModelInstance_SetRotation((u8 *)state + 0xFC, 0x9C71, 1);
+        ModelInstance_SetRotation((u8 *)state + 0x174, 0x7FFF, 1);
+        ModelInstance_SetPosition((u8 *)state + 0x84, a.x, a.y, a.z + 0x8000);
+        ModelInstance_SetPosition((u8 *)state + 0xFC, a.x, a.y, a.z - 0x8000);
+        ModelInstance_SetPosition((u8 *)state + 0x174, a.x, a.y, a.z);
         break;
     }
-    sub_020182A8((u8 *)state + 0xC, b.x, b.y, b.z);
+    ModelInstance_SetPosition((u8 *)state + 0xC, b.x, b.y, b.z);
 }

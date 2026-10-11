@@ -45,8 +45,8 @@ void ov49_02265668(RootMotion *root, Motion *s, int se);
 void *ov49_02258DAC(void *context);
 void ov49_0225CC40(void *ui, void *main);
 void ov49_02265628(VecFx32 *pos);
-void sub_020182B0(Obj120 *obj, fx32 *x, fx32 *y, fx32 *z);
-void sub_020182A8(Obj120 *obj, fx32 x, fx32 y, fx32 z);
+void ModelInstance_GetPosition(Obj120 *obj, fx32 *x, fx32 *y, fx32 *z);
+void ModelInstance_SetPosition(Obj120 *obj, fx32 x, fx32 y, fx32 z);
 void ov49_02265660(VecFx32 *pos, fx32 *offset);
 int ov49_0226786C(RootMotion *root, Motion *s, int index, int a3);
 void ov49_0226789C(RootMotion *root, Motion *s, int index);
@@ -128,11 +128,11 @@ int ov49_022670D4(RootMotion *root, Motion *s) {
         do {
             if (ov49_02265434(curve, s->tick) == 0) {
                 ov49_02265628(position);
-                sub_020182B0(object, &peripheral.x, &peripheral.y, &peripheral.z);
+                ModelInstance_GetPosition(object, &peripheral.x, &peripheral.y, &peripheral.z);
                 ov49_022655E0(&s->curves[i], &peripheral.x, &peripheral.y, &peripheral.z);
                 ov49_02265660(&s->positions[i], &offset);
                 peripheral.x += offset;
-                sub_020182A8(&s->objs[i], peripheral.x, peripheral.y, peripheral.z);
+                ModelInstance_SetPosition(&s->objs[i], peripheral.x, peripheral.y, peripheral.z);
             } else if (ov49_0226786C(root, s, i, 4) == 1) {
                 ov49_02265668(root, s, 0x5A8);
             }

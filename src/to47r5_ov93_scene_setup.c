@@ -36,8 +36,8 @@ void ov93_0225D07C(void *unused, void *p) {
     NNS_G3dGlbFlushP();
     ov93_0225E898(p, PAT(p, 0xD4));
     NNS_G3dGeBufferOP_N(0x11, NULL, 0);
-    sub_020181EC(BAT(p, 0x13B0));
-    sub_020181EC(BAT(p, 0xE8));
+    ModelInstance_Draw(BAT(p, 0x13B0));
+    ModelInstance_Draw(BAT(p, 0xE8));
     ov93_0225E0A4(p);
     one = 1;
     NNS_G3dGeBufferOP_N(0x12, &one, 1);
