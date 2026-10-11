@@ -30,7 +30,7 @@
 #define FRONTIER_ID_PLAYER    0xEEEE
 #define FRONTIER_ID_LINK_MONS 0xEEEF
 
-// Text options of a message (FrontierSystem_PrintMessage reads the first three).
+// Text options of a message (speed, auto scroll, font).
 typedef struct FrontierMessageParams {
     u8 speed;
     u8 autoScroll;
@@ -58,16 +58,16 @@ void *Frontier_GetMap(void *frontierWork);
 void Frontier_RequestExit(void *frontierWork);
 void Frontier_ChangeMode(void *frontierWork, u16 mode, u16 taskId);
 u16 ov80_0222A7EC(PlayerProfile *profile);
-void ov80_0222E268(FrontierSystem *system, MsgData *msgData, u16 msgId, u16 canABSpeedUp, const FrontierMessageParams *params);
-void ov80_0222E38C(FrontierSystem *system);
-void *ov80_0222E558(FrontierSystem *system, u8 x, u8 y, u8 initialSelection, u8 canCancel, u16 *result, MessageFormat *msgFormat, MsgData *msgData);
-void ov80_0222E5A8(void *menu, u16 msgId, u16 unk2, u16 value);
-void ov80_0222E5B0(void *menu);
-void *ov80_0222E920(FrontierSystem *system, u8 x, u8 y, u8 initialSelection, u8 canCancel, u16 *result, MessageFormat *msgFormat, MsgData *msgData);
-void ov80_0222E940(void *menu, u16 msgId, u16 unk2, u16 value);
-void ov80_0222E948(void *menu);
-void ov80_0222EEAC(void *menu);
-void ov80_0222EEC8(SysTask *task, FrontierMovementTask *data);
+void FrontierSystem_PrintMessage(FrontierSystem *system, MsgData *msgData, u16 msgId, u16 canABSpeedUp, const FrontierMessageParams *params);
+void FrontierSystem_CloseMessageWindow(FrontierSystem *system);
+void *FrontierMenu_New(FrontierSystem *system, u8 x, u8 y, u8 initialSelection, u8 canCancel, u16 *result, MessageFormat *msgFormat, MsgData *msgData);
+void FrontierMenu_AddItem(void *menu, u16 msgId, u16 unk2, u16 value);
+void FrontierMenu_Show(void *menu);
+void *FrontierListMenu_New(FrontierSystem *system, u8 x, u8 y, u8 initialSelection, u8 canCancel, u16 *result, MessageFormat *msgFormat, MsgData *msgData);
+void FrontierListMenu_AddItem(void *menu, u16 msgId, u16 unk2, u16 value);
+void FrontierListMenu_Show(void *menu);
+void FrontierListMenu_Cancel(void *menu);
+void FrontierScript_MovementTask(SysTask *task, FrontierMovementTask *data);
 
 u16 *FrontierScript_ReadVarPtr(FrontierScriptContext *ctx);
 u16 FrontierScript_ReadVar(FrontierScriptContext *ctx);
@@ -326,21 +326,21 @@ BOOL FrtCmd_015(FrontierScriptContext *ctx) {
     params.autoScroll = 0;
     params.font = 1;
     params.unk_03 = 0;
-    ov80_0222E268(ctx->frontierSystem, ctx->msgLoader, msgId, FALSE, &params);
+    FrontierSystem_PrintMessage(ctx->frontierSystem, ctx->msgLoader, msgId, FALSE, &params);
     return FALSE;
 }
 #pragma force_active reset
 
 BOOL FrtCmd_016(FrontierScriptContext *ctx) {
     u16 msgId = FrontierScriptContext_ReadHalfWord(ctx);
-    ov80_0222E268(ctx->frontierSystem, ctx->msgLoader, msgId, FALSE, NULL);
+    FrontierSystem_PrintMessage(ctx->frontierSystem, ctx->msgLoader, msgId, FALSE, NULL);
     FrontierScriptContext_Pause(ctx, FrontierScriptNative_WaitMessage);
     return TRUE;
 }
 
 BOOL FrtCmd_017(FrontierScriptContext *ctx) {
     u16 msgId = FrontierScriptContext_ReadHalfWord(ctx);
-    ov80_0222E268(ctx->frontierSystem, ctx->msgLoader, msgId, TRUE, NULL);
+    FrontierSystem_PrintMessage(ctx->frontierSystem, ctx->msgLoader, msgId, TRUE, NULL);
     FrontierScriptContext_Pause(ctx, FrontierScriptNative_WaitMessage);
     return TRUE;
 }
@@ -354,7 +354,7 @@ BOOL FrontierScriptNative_WaitMessage(FrontierScriptContext *ctx) {
 }
 
 BOOL FrtCmd_018(FrontierScriptContext *ctx) {
-    ov80_0222E38C(ctx->frontierSystem);
+    FrontierSystem_CloseMessageWindow(ctx->frontierSystem);
     return FALSE;
 }
 
@@ -387,7 +387,7 @@ BOOL FrtCmd_021(FrontierScriptContext *ctx) {
     int canCancel = ReadScriptByte(ctx);
     u16 varId = FrontierScriptContext_ReadHalfWord(ctx);
     u16 *result = FrontierScript_GetVarPtr(ctx, varId);
-    system->menu = ov80_0222E558(system, x, y, initialSelection, canCancel, result, system->msgFormat, NULL);
+    system->menu = FrontierMenu_New(system, x, y, initialSelection, canCancel, result, system->msgFormat, NULL);
     ctx->data[0] = varId;
     return TRUE;
 }
@@ -404,7 +404,7 @@ BOOL FrtCmd_022(FrontierScriptContext *ctx) {
     canCancel = ReadScriptByte(ctx);
     varId = FrontierScriptContext_ReadHalfWord(ctx);
     result = FrontierScript_GetVarPtr(ctx, varId);
-    system->menu = ov80_0222E558(system, x, y, initialSelection, canCancel, result, system->msgFormat, ctx->msgLoader);
+    system->menu = FrontierMenu_New(system, x, y, initialSelection, canCancel, result, system->msgFormat, ctx->msgLoader);
     ctx->data[0] = varId;
     return TRUE;
 }
@@ -414,7 +414,7 @@ BOOL FrtCmd_023(FrontierScriptContext *ctx) {
     FrontierSystem *system = ctx->frontierSystem;
     u16 msgId = FrontierScriptContext_ReadHalfWord(ctx);
     u16 value = FrontierScriptContext_ReadHalfWord(ctx);
-    ov80_0222E5A8(system->menu, msgId, 0xFF, value);
+    FrontierMenu_AddItem(system->menu, msgId, 0xFF, value);
     return FALSE;
 }
 
@@ -423,12 +423,12 @@ BOOL FrtCmd_024(FrontierScriptContext *ctx) {
     u16 msgId = FrontierScriptContext_ReadHalfWord(ctx);
     u16 unk2 = FrontierScriptContext_ReadHalfWord(ctx);
     u16 value = FrontierScriptContext_ReadHalfWord(ctx);
-    ov80_0222E5A8(system->menu, msgId, unk2, value);
+    FrontierMenu_AddItem(system->menu, msgId, unk2, value);
     return FALSE;
 }
 
 BOOL FrtCmd_025(FrontierScriptContext *ctx) {
-    ov80_0222E5B0(ctx->frontierSystem->menu);
+    FrontierMenu_Show(ctx->frontierSystem->menu);
     FrontierScriptContext_Pause(ctx, FrontierScriptNative_WaitMenu);
     return TRUE;
 }
@@ -455,7 +455,7 @@ BOOL FrtCmd_026(FrontierScriptContext *ctx) {
     u16 varId = FrontierScriptContext_ReadHalfWord(ctx);
     u16 *result = FrontierScript_GetVarPtr(ctx, varId);
 
-    system->menu = ov80_0222E920(system, x, y, initialSelection, canCancel, result, system->msgFormat, NULL);
+    system->menu = FrontierListMenu_New(system, x, y, initialSelection, canCancel, result, system->msgFormat, NULL);
     ctx->data[0] = varId;
     return TRUE;
 }
@@ -469,7 +469,7 @@ BOOL FrtCmd_027(FrontierScriptContext *ctx) {
     u16 varId = FrontierScriptContext_ReadHalfWord(ctx);
     u16 *result = FrontierScript_GetVarPtr(ctx, varId);
 
-    system->menu = ov80_0222E920(system, x, y, initialSelection, canCancel, result, system->msgFormat, ctx->msgLoader);
+    system->menu = FrontierListMenu_New(system, x, y, initialSelection, canCancel, result, system->msgFormat, ctx->msgLoader);
     ctx->data[0] = varId;
     return TRUE;
 }
@@ -479,18 +479,18 @@ BOOL FrtCmd_028(FrontierScriptContext *ctx) {
     u16 msgId = FrontierScriptContext_ReadHalfWord(ctx);
     u16 unk2 = FrontierScriptContext_ReadHalfWord(ctx);
     u16 value = FrontierScriptContext_ReadHalfWord(ctx);
-    ov80_0222E940(system->menu, msgId, unk2, value);
+    FrontierListMenu_AddItem(system->menu, msgId, unk2, value);
     return FALSE;
 }
 
 BOOL FrtCmd_029(FrontierScriptContext *ctx) {
-    ov80_0222E948(ctx->frontierSystem->menu);
+    FrontierListMenu_Show(ctx->frontierSystem->menu);
     FrontierScriptContext_Pause(ctx, FrontierScriptNative_WaitMenu);
     return TRUE;
 }
 
 BOOL FrtCmd_030(FrontierScriptContext *ctx) {
-    ov80_0222EEAC(ctx->frontierSystem->menu);
+    FrontierListMenu_Cancel(ctx->frontierSystem->menu);
     return TRUE;
 }
 
@@ -659,7 +659,7 @@ void FrontierScript_StartMovement(int id, FrontierMapObject *object, const u8 *s
     if (object->unk_38 != NULL) {
         GF_AssertFail();
     }
-    object->unk_38 = SysTask_CreateOnMainQueue((SysTaskFunc)ov80_0222EEC8, data, 60100);
+    object->unk_38 = SysTask_CreateOnMainQueue((SysTaskFunc)FrontierScript_MovementTask, data, 60100);
 }
 
 BOOL FrtCmd_041(FrontierScriptContext *ctx) {

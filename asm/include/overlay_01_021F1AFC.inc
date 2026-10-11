@@ -113,8 +113,8 @@
 .public ov01_021FA930
 .public ov01_021FE7DC
 .public ov01_021FE9F4
-.public ov01_021FEAB0
-.public ov01_021FEB30
+.public RockClimbEffect_Create
+.public RockClimbEffect_SetFollow
 .public ov01_02205790
 .public ov01_02205D68
 .public ov01_02205EE0

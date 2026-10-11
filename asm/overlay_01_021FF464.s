@@ -9,24 +9,24 @@
 #include "msgdata/msg/msg_0096_D31R0201.h"
 #include "msgdata/msg/msg_0066_D23R0102.h"
 	.include "asm/macros.inc"
-	.public ov01_021FF464
-	.public ov01_021FF480
-	.public ov01_021FF490
-	.public ov01_021FF4D4
-	.public ov01_021FF4FC
-	.public ov01_021FF54C
-	.public ov01_021FF5B8
-	.public ov01_021FF5C4
-	.public ov01_021FF658
-	.public ov01_022091C0
-	.public ov01_022091D4
+	.public ShallowWaterRipple_New
+	.public ShallowWaterRipple_Free
+	.public ShallowWaterRipple_LoadGfx
+	.public ShallowWaterRipple_FreeGfx
+	.public ShallowWaterRipple_Spawn
+	.public ShallowWaterRippleEffect_Init
+	.public ShallowWaterRippleEffect_Destroy
+	.public ShallowWaterRippleEffect_Update
+	.public ShallowWaterRippleEffect_Draw
+	.public sShallowWaterRippleEffectTemplate
+	.public sShallowWaterRippleRecordParams
 	.include "overlay_01_021FF464.inc"
 	.include "global.inc"
 
 	.text
 
-	thumb_func_start ov01_021FF464
-ov01_021FF464: ; 0x021FF464
+	thumb_func_start ShallowWaterRipple_New
+ShallowWaterRipple_New: ; 0x021FF464
 	push {r3, r4, r5, lr}
 	mov r2, #0
 	mov r1, #4
@@ -35,24 +35,24 @@ ov01_021FF464: ; 0x021FF464
 	bl FieldEffectManager_HeapAllocAndFill
 	add r4, r0, #0
 	str r5, [r4]
-	bl ov01_021FF490
+	bl ShallowWaterRipple_LoadGfx
 	add r0, r4, #0
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FF464
+	thumb_func_end ShallowWaterRipple_New
 
-	thumb_func_start ov01_021FF480
-ov01_021FF480: ; 0x021FF480
+	thumb_func_start ShallowWaterRipple_Free
+ShallowWaterRipple_Free: ; 0x021FF480
 	push {r4, lr}
 	add r4, r0, #0
-	bl ov01_021FF4D4
+	bl ShallowWaterRipple_FreeGfx
 	add r0, r4, #0
 	bl FieldEffectManager_HeapFree
 	pop {r4, pc}
-	thumb_func_end ov01_021FF480
+	thumb_func_end ShallowWaterRipple_Free
 
-	thumb_func_start ov01_021FF490
-ov01_021FF490: ; 0x021FF490
+	thumb_func_start ShallowWaterRipple_LoadGfx
+ShallowWaterRipple_LoadGfx: ; 0x021FF490
 	push {r3, r4, lr}
 	sub sp, #0xc
 	add r4, r0, #0
@@ -74,7 +74,7 @@ ov01_021FF490: ; 0x021FF490
 	str r3, [sp]
 	mov r0, #0
 	str r0, [sp, #4]
-	ldr r0, _021FF4D0 ; =ov01_022091D4
+	ldr r0, _021FF4D0 ; =sShallowWaterRippleRecordParams
 	add r2, r1, #0
 	str r0, [sp, #8]
 	ldr r0, [r4]
@@ -82,11 +82,11 @@ ov01_021FF490: ; 0x021FF490
 	add sp, #0xc
 	pop {r3, r4, pc}
 	.balign 4, 0
-_021FF4D0: .word ov01_022091D4
-	thumb_func_end ov01_021FF490
+_021FF4D0: .word sShallowWaterRippleRecordParams
+	thumb_func_end ShallowWaterRipple_LoadGfx
 
-	thumb_func_start ov01_021FF4D4
-ov01_021FF4D4: ; 0x021FF4D4
+	thumb_func_start ShallowWaterRipple_FreeGfx
+ShallowWaterRipple_FreeGfx: ; 0x021FF4D4
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, [r4]
@@ -103,10 +103,10 @@ ov01_021FF4D4: ; 0x021FF4D4
 	bl FieldEffectManager_ReleaseRecord
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FF4D4
+	thumb_func_end ShallowWaterRipple_FreeGfx
 
-	thumb_func_start ov01_021FF4FC
-ov01_021FF4FC: ; 0x021FF4FC
+	thumb_func_start ShallowWaterRipple_Spawn
+ShallowWaterRipple_Spawn: ; 0x021FF4FC
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0x24
 	add r5, r0, #0
@@ -133,7 +133,7 @@ ov01_021FF4FC: ; 0x021FF4FC
 	add r1, sp, #0x14
 	str r1, [sp]
 	str r0, [sp, #4]
-	ldr r1, _021FF548 ; =ov01_022091C0
+	ldr r1, _021FF548 ; =sShallowWaterRippleEffectTemplate
 	add r0, r4, #0
 	add r2, sp, #8
 	add r3, r6, #0
@@ -141,11 +141,11 @@ ov01_021FF4FC: ; 0x021FF4FC
 	add sp, #0x24
 	pop {r3, r4, r5, r6, pc}
 	.balign 4, 0
-_021FF548: .word ov01_022091C0
-	thumb_func_end ov01_021FF4FC
+_021FF548: .word sShallowWaterRippleEffectTemplate
+	thumb_func_end ShallowWaterRipple_Spawn
 
-	thumb_func_start ov01_021FF54C
-ov01_021FF54C: ; 0x021FF54C
+	thumb_func_start ShallowWaterRippleEffect_Init
+ShallowWaterRippleEffect_Init: ; 0x021FF54C
 	push {r4, r5, lr}
 	sub sp, #0xc
 	add r4, r1, #0
@@ -193,19 +193,19 @@ _021FF5B2:
 	mov r0, #1
 	add sp, #0xc
 	pop {r4, r5, pc}
-	thumb_func_end ov01_021FF54C
+	thumb_func_end ShallowWaterRippleEffect_Init
 
-	thumb_func_start ov01_021FF5B8
-ov01_021FF5B8: ; 0x021FF5B8
+	thumb_func_start ShallowWaterRippleEffect_Destroy
+ShallowWaterRippleEffect_Destroy: ; 0x021FF5B8
 	ldr r3, _021FF5C0 ; =BillboardObject_Delete
 	ldr r0, [r1, #0x24]
 	bx r3
 	nop
 _021FF5C0: .word BillboardObject_Delete
-	thumb_func_end ov01_021FF5B8
+	thumb_func_end ShallowWaterRippleEffect_Destroy
 
-	thumb_func_start ov01_021FF5C4
-ov01_021FF5C4: ; 0x021FF5C4
+	thumb_func_start ShallowWaterRippleEffect_Update
+ShallowWaterRippleEffect_Update: ; 0x021FF5C4
 	push {r3, r4, r5, r6, r7, lr}
 	add r4, r1, #0
 	ldr r6, [r4, #0x20]
@@ -274,10 +274,10 @@ _021FF64E:
 	bl BillboardObject_SetFrame
 _021FF656:
 	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end ov01_021FF5C4
+	thumb_func_end ShallowWaterRippleEffect_Update
 
-	thumb_func_start ov01_021FF658
-ov01_021FF658: ; 0x021FF658
+	thumb_func_start ShallowWaterRippleEffect_Draw
+ShallowWaterRippleEffect_Draw: ; 0x021FF658
 	push {r4, r5, r6, lr}
 	sub sp, #0x18
 	add r5, r1, #0
@@ -318,17 +318,17 @@ _021FF67C:
 	bl BillboardObject_SetPosition
 	add sp, #0x18
 	pop {r4, r5, r6, pc}
-	thumb_func_end ov01_021FF658
+	thumb_func_end ShallowWaterRippleEffect_Draw
 
 	.rodata
 
-ov01_022091C0: ; 0x022091C0
+sShallowWaterRippleEffectTemplate: ; 0x022091C0
 	.word 0x00000028
-	.word ov01_021FF54C
-	.word ov01_021FF5B8
-	.word ov01_021FF5C4
-	.word ov01_021FF658
+	.word ShallowWaterRippleEffect_Init
+	.word ShallowWaterRippleEffect_Destroy
+	.word ShallowWaterRippleEffect_Update
+	.word ShallowWaterRippleEffect_Draw
 
-ov01_022091D4: ; 0x022091D4
+sShallowWaterRippleRecordParams: ; 0x022091D4
 	.byte 0x00, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00

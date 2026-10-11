@@ -117,7 +117,7 @@ sub_020664D8: ; 0x020664D8
 	bne _02066516
 	add r0, r5, #0
 	mov r1, #0
-	bl ov01_021FF070
+	bl TallGrass_Spawn
 	b _0206652A
 _02066516:
 	lsl r0, r6, #0x18
@@ -127,7 +127,7 @@ _02066516:
 	bne _0206652A
 	add r0, r5, #0
 	mov r1, #0
-	bl ov01_021FF8F0
+	bl VeryTallGrass_Spawn
 _0206652A:
 	add r0, r5, #0
 	bl ov01_022055DC
@@ -161,7 +161,7 @@ _0206652A:
 	ldr r2, [sp, #8]
 	ldr r3, [sp, #4]
 	add r0, r5, #0
-	bl ov01_021FF0E4
+	bl TallGrass_SpawnAt
 	add sp, #0xc
 	pop {r3, r4, r5, r6, pc}
 _0206657C:
@@ -175,7 +175,7 @@ _0206657C:
 	ldr r2, [sp, #8]
 	ldr r3, [sp, #4]
 	add r0, r5, #0
-	bl ov01_021FF964
+	bl VeryTallGrass_SpawnAt
 _02066596:
 	add sp, #0xc
 	pop {r3, r4, r5, r6, pc}

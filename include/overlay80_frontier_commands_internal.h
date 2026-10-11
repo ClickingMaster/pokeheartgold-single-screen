@@ -26,7 +26,7 @@ extern void ScheduleSetBgPosText(void *, int, int, int);
 extern u32 ov80_02230AF8(void *, u32, u32);
 extern void FrontierScriptContext_Pause(void *, BOOL (*)(void *));
 extern void FrontierScript_GetVar(void *, u16);
-extern void ov80_0222F44C(void *, void *);
+extern void FrontierScript_PrintMessageEntry(void *, void *);
 extern void *ov80_02236F24(void *, void *);
 extern void Frontier_LaunchApplication(void *, const void *, void *, int, void *);
 extern const u8 gOverlayTemplate_Battle[];

@@ -85,10 +85,10 @@
 .public sub_02069EC0
 .public sub_02069ED4
 .public FieldEffectManager_DestroyEffect
-.public ov01_021FF070
-.public ov01_021FF0E4
-.public ov01_021FF8F0
-.public ov01_021FF964
+.public TallGrass_Spawn
+.public TallGrass_SpawnAt
+.public VeryTallGrass_Spawn
+.public VeryTallGrass_SpawnAt
 .public ov01_021FFF5C
 .public ov01_0220329C
 .public ov01_0220542C

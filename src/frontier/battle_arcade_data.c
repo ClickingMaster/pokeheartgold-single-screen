@@ -77,8 +77,8 @@ void FrontierMon_ToPokemon(ArcadeFrontierMon *frontierMon, Pokemon *mon, int lev
 void ov80_022383A8(ArcadeContext *ctx, Party *party, Pokemon *mon);
 void *FrontierTrainer_Load(void *trainer, u16 trainerId, u32 heapId, u32 a3);
 void ov80_0222A30C(u8 a0);
-ManagedSprite *ov80_0222F29C(FrontierMap *map, Pokemon *mon, int index, int x, int y);
-void ov80_0222F324(FrontierMap *map, ManagedSprite *sprite, int index);
+ManagedSprite *FrontierMap_CreateMonIcon(FrontierMap *map, Pokemon *mon, int index, int x, int y);
+void FrontierMap_DeleteMonIcon(FrontierMap *map, ManagedSprite *sprite, int index);
 ManagedSprite *ov80_0222F3FC(FrontierMap *map, int x, int y);
 void ov80_0222F440(FrontierMap *map, ManagedSprite *sprite);
 void BattleArcadeLink_SendWinStreak(ArcadeContext *ctx);
@@ -548,12 +548,12 @@ void BattleArcade_CreateMonSprites(ArcadeContext *ctx, FrontierMap *map, u32 opp
 
     if (opponent == FALSE) {
         for (i = 0; i < count; i++) {
-            ctx->playerMonSprites[i] = ov80_0222F29C(map, Party_GetMonByIndex(ctx->playerParty, i), i, ov80_0223BEB8[i].x, ov80_0223BEB8[i].y);
+            ctx->playerMonSprites[i] = FrontierMap_CreateMonIcon(map, Party_GetMonByIndex(ctx->playerParty, i), i, ov80_0223BEB8[i].x, ov80_0223BEB8[i].y);
             Sprite_SetAnimActiveFlag(ctx->playerMonSprites[i]->sprite, FALSE);
         }
     } else {
         for (i = 0; i < opponentCount; i++) {
-            ctx->opponentMonSprites[i] = ov80_0222F29C(map, Party_GetMonByIndex(ctx->opponentParty, i), count + i, ov80_0223BEC8[i].x, ov80_0223BEC8[i].y);
+            ctx->opponentMonSprites[i] = FrontierMap_CreateMonIcon(map, Party_GetMonByIndex(ctx->opponentParty, i), count + i, ov80_0223BEC8[i].x, ov80_0223BEC8[i].y);
             Sprite_SetAnimActiveFlag(ctx->opponentMonSprites[i]->sprite, FALSE);
         }
     }
@@ -567,11 +567,11 @@ void BattleArcade_DeleteMonSprites(ArcadeContext *ctx, FrontierMap *map, u32 opp
 
     if (opponent == FALSE) {
         for (i = 0; i < count; i++) {
-            ov80_0222F324(map, ctx->playerMonSprites[i], i);
+            FrontierMap_DeleteMonIcon(map, ctx->playerMonSprites[i], i);
         }
     } else {
         for (i = 0; i < opponentCount; i++) {
-            ov80_0222F324(map, ctx->opponentMonSprites[i], count);
+            FrontierMap_DeleteMonIcon(map, ctx->opponentMonSprites[i], count);
             count++;
         }
     }

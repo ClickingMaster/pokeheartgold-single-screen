@@ -93,9 +93,9 @@ void ov02_0224FE70(void *env, void *object, u8 oldDirection) {
     ov02_0224FF04(object, U8(env, 0x87c), &x, &z);
     behavior = GetMetatileBehavior(fieldSystem, x, z);
     if (MetatileBehavior_IsTallGrass((u8)behavior) == 1) {
-        ov01_021FF0E4(object, 0, x, z, 1);
+        TallGrass_SpawnAt(object, 0, x, z, 1);
     } else if (MetatileBehavior_IsVeryTallGrass((u8)behavior) == 1) {
-        ov01_021FF964(object, 0, x, z, 1);
+        VeryTallGrass_SpawnAt(object, 0, x, z, 1);
     }
 }
 

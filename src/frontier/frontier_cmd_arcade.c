@@ -311,10 +311,10 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
         *out = arcadeCtx->type;
         break;
     case 29:
-        ov80_0222F210(frontierMap);
+        FrontierMap_LoadMonIconResources(frontierMap);
         break;
     case 30:
-        ov80_0222F278(frontierMap);
+        FrontierMap_UnloadMonIconResources(frontierMap);
         break;
     case 31:
         BattleArcade_CreateMonSprites(arcadeCtx, frontierMap, var0);
@@ -498,7 +498,7 @@ BOOL FrtCmd_ArcadePrintMsg(FrontierScriptContext *ctx) {
     }
 
     u16 *msg = arcadeCtx->unkF4[index].unk18;
-    ov80_0222F44C(ctx, msg);
+    FrontierScript_PrintMessageEntry(ctx, msg);
 
     return TRUE;
 }

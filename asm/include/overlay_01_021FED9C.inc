@@ -20,6 +20,6 @@
 .public FieldEffectManager_LoadRenderModel
 .public FieldEffectManager_LoadRenderAnimation
 .public FieldEffectManager_InitRenderAnimation
-.public ov01_021FED9C
-.public ov01_021FEDB8
-.public ov01_021FEE04
+.public MudSplash_New
+.public MudSplash_Free
+.public MudSplash_Spawn

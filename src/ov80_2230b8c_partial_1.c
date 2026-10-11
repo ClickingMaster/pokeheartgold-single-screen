@@ -267,7 +267,7 @@ int FrtCmd_149(void *c) {
         if (!data) {
             return 0;
         }
-        ov80_0222F44C(c, (u8 *)data + 0x58 + n * 0x110);
+        FrontierScript_PrintMessageEntry(c, (u8 *)data + 0x58 + n * 0x110);
     }
     return 1;
 }

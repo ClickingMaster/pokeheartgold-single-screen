@@ -153,7 +153,7 @@ void ov01_02205EE0(TaskManager *taskManager);
 void MapObject_SetHeldMovement(LocalMapObject *obj, u32 movement);
 BOOL MapObject_IsMovementPaused(LocalMapObject *obj);
 void MapObject_ClearHeldMovementIfActive(LocalMapObject *obj);
-void ov01_021FEB30(u32 a0, int a1);
+void RockClimbEffect_SetFollow(u32 a0, int a1);
 
 typedef int (*StepFunc)(void *work, TaskManager *taskManager);
 typedef int (*StepFunc1)(void *work);

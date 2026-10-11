@@ -37,7 +37,7 @@ extern void ov80_022314DC(void *, void *);
 extern void *ov80_022375D0(void *, void *);
 extern u32 ov80_02231844(void *, u32, u32);
 extern void FrontierScript_GetVar(void *, u16);
-extern void ov80_0222F44C(void *, void *);
+extern void FrontierScript_PrintMessageEntry(void *, void *);
 extern void ov80_0223151C(void *, u16 *);
 extern void OS_ResetSystem(u32);
 extern u32 HallChallenge_GetSaved(void *);

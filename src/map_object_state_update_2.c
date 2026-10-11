@@ -15,5 +15,5 @@ void sub_0206064C(LocalMapObject *object, int behavior) {
         || MapObject_CheckVisible(object) != FALSE) {
         return;
     }
-    ov01_021FF74C(object);
+    GroundDust_Spawn(object);
 }

@@ -48,14 +48,14 @@ gFieldEffectRenderers: ; 0x02208C5C
 	.word 0x00000002, ov01_021FE200, ov01_021FE220
 	.word 0x00000003, ov01_02200858, ov01_02200874
 	.word 0x00000004, ov01_021FE780, ov01_021FE79C
-	.word 0x00000005, ov01_021FEA0C, ov01_021FEA20
-	.word 0x00000006, ov01_021FEC38, ov01_021FEC54
-	.word 0x00000007, ov01_021FED9C, ov01_021FEDB8
-	.word 0x00000008, ov01_021FEEEC, ov01_021FEF08
+	.word 0x00000005, RockClimb_New, RockClimb_Free
+	.word 0x00000006, PuddleSplash_New, PuddleSplash_Free
+	.word 0x00000007, MudSplash_New, MudSplash_Free
+	.word 0x00000008, TallGrass_New, TallGrass_Free
 	.word 0x00000009, ov01_022001E4, ov01_022001F8
-	.word 0x0000000A, ov01_021FF464, ov01_021FF480
-	.word 0x0000000B, ov01_021FF6B0, ov01_021FF6CC
-	.word 0x0000000C, ov01_021FF854, ov01_021FF870
+	.word 0x0000000A, ShallowWaterRipple_New, ShallowWaterRipple_Free
+	.word 0x0000000B, GroundDust_New, GroundDust_Free
+	.word 0x0000000C, VeryTallGrass_New, VeryTallGrass_Free
 	.word 0x0000000D, ov01_021FFC0C, ov01_021FFC28
 	.word 0x0000000E, ov01_021FFECC, ov01_021FFEE8
 	.word 0x0000000F, ov01_02200040, ov01_0220005C

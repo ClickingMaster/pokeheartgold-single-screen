@@ -1,13 +1,13 @@
-	.public ov01_021FEEEC
-	.public ov01_021FEF08
-	.public ov01_021FEF18
-	.public ov01_021FEFF8
-	.public ov01_021FF070
-	.public ov01_021FF0E4
-	.public ov01_021FF174
-	.public ov01_021FF228
-	.public ov01_021FF234
-	.public ov01_021FF35C
+	.public TallGrass_New
+	.public TallGrass_Free
+	.public TallGrass_LoadGfx
+	.public TallGrass_FreeGfx
+	.public TallGrass_Spawn
+	.public TallGrass_SpawnAt
+	.public TallGrassEffect_Init
+	.public TallGrassEffect_Destroy
+	.public TallGrassEffect_Update
+	.public TallGrassEffect_Draw
 	.public ov01_021FF394
 	.public ov01_021FF418
 	.public ov01_021FF424
@@ -32,10 +32,10 @@
 
 ov01_02209138: ; 0x02209138
 	.word 0x00000040
-	.word ov01_021FF174
-	.word ov01_021FF228
-	.word ov01_021FF234
-	.word ov01_021FF35C
+	.word TallGrassEffect_Init
+	.word TallGrassEffect_Destroy
+	.word TallGrassEffect_Update
+	.word TallGrassEffect_Draw
 
 ov01_0220914C:
 	.word 0x00000028

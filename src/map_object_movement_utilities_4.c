@@ -3,7 +3,7 @@
 void sub_0206039C(LocalMapObject *object, u8 behavior) {
     if (MetatileBehavior_IsShallowWater(behavior) == 1) {
         if (MapObject_CheckFlag26(object) == 0) {
-            ov01_021FF4FC(object, 1);
+            ShallowWaterRipple_Spawn(object, 1);
             MapObject_SetFlag26(object, 1);
         }
     } else {

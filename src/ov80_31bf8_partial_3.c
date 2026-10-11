@@ -95,6 +95,6 @@ BOOL FrtCmd_169(FrontierScriptContextPrivate *ctx) {
     if (data == NULL) {
         return FALSE;
     }
-    ov80_0222F44C(ctx, (u8 *)data + 0x64 + value * 0x110);
+    FrontierScript_PrintMessageEntry(ctx, (u8 *)data + 0x64 + value * 0x110);
     return TRUE;
 }

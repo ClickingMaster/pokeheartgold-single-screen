@@ -1,7 +1,7 @@
-	.public ov01_021FF9F4
-	.public ov01_021FFAB0
-	.public ov01_021FFABC
-	.public ov01_021FFBD4
+	.public VeryTallGrassEffect_Init
+	.public VeryTallGrassEffect_Destroy
+	.public VeryTallGrassEffect_Update
+	.public VeryTallGrassEffect_Draw
 	.public ov01_021FFCA8
 	.public ov01_021FFD64
 	.public ov01_021FFD70
@@ -13,10 +13,10 @@
 
 ov01_02209218:
 	.word 0x00000040
-	.word ov01_021FF9F4
-	.word ov01_021FFAB0
-	.word ov01_021FFABC
-	.word ov01_021FFBD4
+	.word VeryTallGrassEffect_Init
+	.word VeryTallGrassEffect_Destroy
+	.word VeryTallGrassEffect_Update
+	.word VeryTallGrassEffect_Draw
 
 ov01_0220922C:
 	.byte 0x00, 0x00, 0x00, 0x00

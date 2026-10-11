@@ -13,11 +13,11 @@ typedef BOOL (*FrontierFunction)(FrontierScriptContext *);
 
 u16 *FrontierScript_ReadVarPtr(FrontierScriptContext *ctx);
 u32 FrontierScript_ReadVar(FrontierScriptContext *ctx);
-void ov80_0222F210(FrontierMap *map);
-void ov80_0222F278(FrontierMap *map);
+void FrontierMap_LoadMonIconResources(FrontierMap *map);
+void FrontierMap_UnloadMonIconResources(FrontierMap *map);
 void ov80_0222F33C(FrontierMap *map);
 void ov80_0222F3CC(FrontierMap *map);
 void FrontierScript_GetVar(FrontierScriptContext *ctx, u16 a1);
-void ov80_0222F44C(FrontierScriptContext *ctx, u16 *a1);
+void FrontierScript_PrintMessageEntry(FrontierScriptContext *ctx, u16 *a1);
 
 #endif

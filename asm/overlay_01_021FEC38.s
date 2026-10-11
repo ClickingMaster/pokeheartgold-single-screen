@@ -9,23 +9,23 @@
 #include "msgdata/msg/msg_0096_D31R0201.h"
 #include "msgdata/msg/msg_0066_D23R0102.h"
 	.include "asm/macros.inc"
-	.public ov01_021FEC38
-	.public ov01_021FEC54
-	.public ov01_021FEC64
-	.public ov01_021FEC8C
-	.public ov01_021FECA0
-	.public ov01_021FED14
-	.public ov01_021FED4C
-	.public ov01_021FED58
-	.public ov01_021FED80
-	.public ov01_02209110
+	.public PuddleSplash_New
+	.public PuddleSplash_Free
+	.public PuddleSplash_LoadGfx
+	.public PuddleSplash_FreeGfx
+	.public PuddleSplash_Spawn
+	.public PuddleSplashEffect_Init
+	.public PuddleSplashEffect_Destroy
+	.public PuddleSplashEffect_Update
+	.public PuddleSplashEffect_Draw
+	.public sPuddleSplashEffectTemplate
 	.include "overlay_01_021FEC38.inc"
 	.include "global.inc"
 
 	.text
 
-	thumb_func_start ov01_021FEC38
-ov01_021FEC38: ; 0x021FEC38
+	thumb_func_start PuddleSplash_New
+PuddleSplash_New: ; 0x021FEC38
 	push {r3, r4, r5, lr}
 	mov r2, #0
 	mov r1, #0x3c
@@ -34,24 +34,24 @@ ov01_021FEC38: ; 0x021FEC38
 	bl FieldEffectManager_HeapAllocAndFill
 	add r4, r0, #0
 	str r5, [r4]
-	bl ov01_021FEC64
+	bl PuddleSplash_LoadGfx
 	add r0, r4, #0
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FEC38
+	thumb_func_end PuddleSplash_New
 
-	thumb_func_start ov01_021FEC54
-ov01_021FEC54: ; 0x021FEC54
+	thumb_func_start PuddleSplash_Free
+PuddleSplash_Free: ; 0x021FEC54
 	push {r4, lr}
 	add r4, r0, #0
-	bl ov01_021FEC8C
+	bl PuddleSplash_FreeGfx
 	add r0, r4, #0
 	bl FieldEffectManager_HeapFree
 	pop {r4, pc}
-	thumb_func_end ov01_021FEC54
+	thumb_func_end PuddleSplash_Free
 
-	thumb_func_start ov01_021FEC64
-ov01_021FEC64: ; 0x021FEC64
+	thumb_func_start PuddleSplash_LoadGfx
+PuddleSplash_LoadGfx: ; 0x021FEC64
 	push {r3, r4, lr}
 	sub sp, #4
 	mov r2, #0
@@ -70,10 +70,10 @@ ov01_021FEC64: ; 0x021FEC64
 	bl FieldEffectManager_LoadRenderAnimation
 	add sp, #4
 	pop {r3, r4, pc}
-	thumb_func_end ov01_021FEC64
+	thumb_func_end PuddleSplash_LoadGfx
 
-	thumb_func_start ov01_021FEC8C
-ov01_021FEC8C: ; 0x021FEC8C
+	thumb_func_start PuddleSplash_FreeGfx
+PuddleSplash_FreeGfx: ; 0x021FEC8C
 	push {r4, lr}
 	add r4, r0, #0
 	add r0, r4, #4
@@ -82,10 +82,10 @@ ov01_021FEC8C: ; 0x021FEC8C
 	add r0, r4, #0
 	bl RenderAnimation_Free
 	pop {r4, pc}
-	thumb_func_end ov01_021FEC8C
+	thumb_func_end PuddleSplash_FreeGfx
 
-	thumb_func_start ov01_021FECA0
-ov01_021FECA0: ; 0x021FECA0
+	thumb_func_start PuddleSplash_Spawn
+PuddleSplash_Spawn: ; 0x021FECA0
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x1c
 	add r6, r1, #0
@@ -128,7 +128,7 @@ ov01_021FECA0: ; 0x021FECA0
 	str r1, [sp]
 	str r0, [sp, #4]
 	ldr r0, [sp, #8]
-	ldr r1, _021FED10 ; =ov01_02209110
+	ldr r1, _021FED10 ; =sPuddleSplashEffectTemplate
 	add r2, sp, #0x10
 	mov r3, #0
 	bl FieldEffectManager_CreateEffect
@@ -136,11 +136,11 @@ _021FED0A:
 	add sp, #0x1c
 	pop {r4, r5, r6, r7, pc}
 	nop
-_021FED10: .word ov01_02209110
-	thumb_func_end ov01_021FECA0
+_021FED10: .word sPuddleSplashEffectTemplate
+	thumb_func_end PuddleSplash_Spawn
 
-	thumb_func_start ov01_021FED14
-ov01_021FED14: ; 0x021FED14
+	thumb_func_start PuddleSplashEffect_Init
+PuddleSplashEffect_Init: ; 0x021FED14
 	push {r3, r4, lr}
 	sub sp, #4
 	add r4, r1, #0
@@ -166,19 +166,19 @@ ov01_021FED14: ; 0x021FED14
 	add sp, #4
 	pop {r3, r4, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FED14
+	thumb_func_end PuddleSplashEffect_Init
 
-	thumb_func_start ov01_021FED4C
-ov01_021FED4C: ; 0x021FED4C
+	thumb_func_start PuddleSplashEffect_Destroy
+PuddleSplashEffect_Destroy: ; 0x021FED4C
 	ldr r3, _021FED54 ; =RenderAnimation_Free
 	add r0, r1, #0
 	bx r3
 	nop
 _021FED54: .word RenderAnimation_Free
-	thumb_func_end ov01_021FED4C
+	thumb_func_end PuddleSplashEffect_Destroy
 
-	thumb_func_start ov01_021FED58
-ov01_021FED58: ; 0x021FED58
+	thumb_func_start PuddleSplashEffect_Update
+PuddleSplashEffect_Update: ; 0x021FED58
 	push {r3, r4, r5, lr}
 	add r4, r1, #0
 	add r5, r0, #0
@@ -197,10 +197,10 @@ _021FED70:
 	bl RenderAnimation_Advance
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FED58
+	thumb_func_end PuddleSplashEffect_Update
 
-	thumb_func_start ov01_021FED80
-ov01_021FED80: ; 0x021FED80
+	thumb_func_start PuddleSplashEffect_Draw
+PuddleSplashEffect_Draw: ; 0x021FED80
 	push {r3, r4, lr}
 	sub sp, #0xc
 	add r4, r1, #0
@@ -213,13 +213,13 @@ ov01_021FED80: ; 0x021FED80
 	add sp, #0xc
 	pop {r3, r4, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FED80
+	thumb_func_end PuddleSplashEffect_Draw
 
 	.rodata
 
-ov01_02209110: ; 0x02209110
+sPuddleSplashEffectTemplate: ; 0x02209110
 	.word 0x00000080
-	.word ov01_021FED14
-	.word ov01_021FED4C
-	.word ov01_021FED58
-	.word ov01_021FED80
+	.word PuddleSplashEffect_Init
+	.word PuddleSplashEffect_Destroy
+	.word PuddleSplashEffect_Update
+	.word PuddleSplashEffect_Draw

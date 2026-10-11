@@ -25,7 +25,7 @@ int ov01_021F27C0(struct RockClimbWork *work, TaskManager *taskManager) {
 int ov01_021F27E8(struct RockClimbWork *work, TaskManager *taskManager) {
     if (MapObject_IsMovementPaused(work->obj) == TRUE) {
         work->state++;
-        ov01_021FEB30(work->unk18, 1);
+        RockClimbEffect_SetFollow(work->unk18, 1);
     }
     return 0;
 }

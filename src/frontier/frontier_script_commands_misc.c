@@ -108,7 +108,7 @@ BOOL FrtCmd_133(void *ctx) {
     if (data == NULL) {
         return FALSE;
     }
-    ov80_0222F458(ctx, data + 0x90 + arg * 0x110, ov80_02236B18(data[0xF]));
+    FrontierScript_PrintMessageEntryFromBank(ctx, data + 0x90 + arg * 0x110, ov80_02236B18(data[0xF]));
     return TRUE;
 }
 

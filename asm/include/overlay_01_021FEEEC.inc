@@ -39,7 +39,7 @@
 .public FieldEffectManager_FreeBillboardSequence
 .public FieldEffectManager_LoadTexResource
 .public FieldEffectManager_FreeTexResource
-.public ov01_021FEEEC
-.public ov01_021FEF08
-.public ov01_021FF070
-.public ov01_021FF0E4
+.public TallGrass_New
+.public TallGrass_Free
+.public TallGrass_Spawn
+.public TallGrass_SpawnAt

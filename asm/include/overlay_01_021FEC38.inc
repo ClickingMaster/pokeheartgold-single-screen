@@ -21,6 +21,6 @@
 .public FieldEffectManager_LoadRenderModel
 .public FieldEffectManager_LoadRenderAnimation
 .public FieldEffectManager_InitRenderAnimation
-.public ov01_021FEC38
-.public ov01_021FEC54
-.public ov01_021FECA0
+.public PuddleSplash_New
+.public PuddleSplash_Free
+.public PuddleSplash_Spawn

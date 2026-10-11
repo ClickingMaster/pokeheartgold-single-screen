@@ -13,7 +13,7 @@ u32 GF_GetCurrentPlayingBGM(void);
 void StopBGM(u32 sequence, u32 fade);
 void FrontierFieldSystem_Free(void *data);
 u32 ov80_02236B18(u32 mode);
-void ov80_0222F458(void *ctx, void *data, u32 value);
+void FrontierScript_PrintMessageEntryFromBank(void *ctx, void *data, u32 value);
 void *ov80_0223690C(void *data, void *args);
 void Sound_SetSceneAndPlayBGM(u32 scene, u32 sequence, u32 arg);
 void Frontier_LaunchApplication(void *ctx, const void *template, void *args, u32 arg, u32 arg2);

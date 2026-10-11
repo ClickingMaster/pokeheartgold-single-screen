@@ -34,6 +34,6 @@
 .public FieldEffectManager_FreeBillboardSequence
 .public FieldEffectManager_LoadTexResource
 .public FieldEffectManager_FreeTexResource
-.public ov01_021FF464
-.public ov01_021FF480
-.public ov01_021FF4FC
+.public ShallowWaterRipple_New
+.public ShallowWaterRipple_Free
+.public ShallowWaterRipple_Spawn

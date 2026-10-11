@@ -180,7 +180,7 @@ void FieldBGM_SetOverride(FieldSystem *fieldSystem, u16 seqNo);
 BOOL ov02_02250780(FieldSystem *fieldSystem, int a1);
 void ov02_022507B4(FieldSystem *fieldSystem, int a1);
 void FieldSystem_UnkSub108_AddMonMood(void *unk108, int amount);
-void ov01_021FEB30(u32 a0, int a1);
+void RockClimbEffect_SetFollow(u32 a0, int a1);
 
 typedef int (*StepFunc)(void *work, TaskManager *taskManager);
 typedef int (*StepFunc1)(void *work);

@@ -7,12 +7,12 @@
 
 BOOL MetatileBehavior_IsTallGrass(u8 behavior);
 BOOL MetatileBehavior_IsVeryTallGrass(u8 behavior);
-void ov01_021FF070(LocalMapObject *object, int mode);
+void TallGrass_Spawn(LocalMapObject *object, int mode);
 BOOL ov01_022055DC(LocalMapObject *object);
 void ov01_02205604(LocalMapObject *object, int *x, int *z);
 int GetMetatileBehavior(FieldSystem *fieldSystem, int x, int z);
-void ov01_021FF0E4(LocalMapObject *object, int mode, int x, int z, int one);
-void ov01_021FF964(LocalMapObject *object, int mode, int x, int z, int one);
+void TallGrass_SpawnAt(LocalMapObject *object, int mode, int x, int z, int one);
+void VeryTallGrass_SpawnAt(LocalMapObject *object, int mode, int x, int z, int one);
 BOOL sub_0205BA94(u32 value);
 BOOL sub_02060EA4(LocalMapObject *object, u32 value);
 BOOL sub_02060ED4(LocalMapObject *object, u32 value);

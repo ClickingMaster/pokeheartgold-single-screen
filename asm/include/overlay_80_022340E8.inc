@@ -63,8 +63,8 @@
 .public ov80_0222BC48
 .public ov80_0222BC94
 .public BattleArcadeLink_SendPartyMons
-.public ov80_0222F29C
-.public ov80_0222F324
+.public FrontierMap_CreateMonIcon
+.public FrontierMap_DeleteMonIcon
 .public ov80_0222F3FC
 .public ov80_0222F440
 .public BattleArcadeData_Alloc

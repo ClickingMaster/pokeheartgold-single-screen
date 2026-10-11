@@ -439,8 +439,8 @@
 .public ov01_021FCD6C
 .public ov01_021FCD78
 .public ov01_021FCD8C
-.public ov01_021FF0E4
-.public ov01_021FF964
+.public TallGrass_SpawnAt
+.public VeryTallGrass_SpawnAt
 .public FieldSystem_ShowEmoteBubble
 .public Field3dObjectList_GetRenderObjectByID
 .public ov01_022052C4

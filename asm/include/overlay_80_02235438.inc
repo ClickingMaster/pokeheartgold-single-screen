@@ -30,7 +30,7 @@
 .public FrontierScript_ReadVarPtr
 .public FrontierScript_ReadVar
 .public FrontierScript_GetVarPtr
-.public ov80_0222F458
+.public FrontierScript_PrintMessageEntryFromBank
 .public FrtCmd_091
 .public FrtCmd_132
 .public FrtCmd_133

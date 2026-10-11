@@ -10,7 +10,7 @@ void sub_020601BC(LocalMapObject *object, u8 behavior) {
 
     if (MetatileBehavior_IsTallGrass(behavior) == TRUE) {
         if (id != 0xFD || MapObject_TestFlagsBits(object, (MapObjectFlagBits)0x200) != TRUE) {
-            ov01_021FF070(object, 0);
+            TallGrass_Spawn(object, 0);
         } else {
             return;
         }
@@ -26,11 +26,11 @@ void sub_020601BC(LocalMapObject *object, u8 behavior) {
     ov01_02205604(object, &x, &z);
     nextBehavior = GetMetatileBehavior(fieldSystem, x, z);
     if (MetatileBehavior_IsTallGrass((u8)nextBehavior) == TRUE) {
-        ov01_021FF0E4(object, 0, x, z, 1);
+        TallGrass_SpawnAt(object, 0, x, z, 1);
         return;
     }
     if (MetatileBehavior_IsVeryTallGrass((u8)nextBehavior) == TRUE) {
-        ov01_021FF964(object, 0, x, z, 1);
+        VeryTallGrass_SpawnAt(object, 0, x, z, 1);
     }
 }
 
@@ -44,7 +44,7 @@ void sub_02060274(LocalMapObject *object, u8 behavior) {
 
     if (MetatileBehavior_IsTallGrass(behavior) == TRUE) {
         if (id != 0xFD || MapObject_TestFlagsBits(object, (MapObjectFlagBits)0x200) != TRUE) {
-            ov01_021FF070(object, 1);
+            TallGrass_Spawn(object, 1);
         } else {
             return;
         }
@@ -60,11 +60,11 @@ void sub_02060274(LocalMapObject *object, u8 behavior) {
     ov01_02205604(object, &x, &z);
     nextBehavior = GetMetatileBehavior(fieldSystem, x, z);
     if (MetatileBehavior_IsTallGrass((u8)nextBehavior) == TRUE) {
-        ov01_021FF0E4(object, 1, x, z, 1);
+        TallGrass_SpawnAt(object, 1, x, z, 1);
         return;
     }
     if (MetatileBehavior_IsVeryTallGrass((u8)nextBehavior) == TRUE) {
-        ov01_021FF964(object, 1, x, z, 1);
+        VeryTallGrass_SpawnAt(object, 1, x, z, 1);
     }
 }
 

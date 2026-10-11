@@ -293,8 +293,8 @@ extern fx32 GF_SinDeg(u16 deg);                                                 
 extern fx32 GF_CosDeg(u16 deg);                                                                                      // math_util.h, not included
 extern void ov01_021F8F74(LocalMapObject *mapObject, int a1);                                                        // no header included here
 extern BOOL ov01_022055DC(LocalMapObject *mapObject);                                                                // no header included here
-extern void ov01_021FF0E4(LocalMapObject *mapObject, int a1, u32 x, u32 z, int a4);                                  // no header included here
-extern void ov01_021FF964(LocalMapObject *mapObject, int a1, u32 x, u32 z, int a4);                                  // no header included here
+extern void TallGrass_SpawnAt(LocalMapObject *mapObject, int a1, u32 x, u32 z, int a4);                                  // no header included here
+extern void VeryTallGrass_SpawnAt(LocalMapObject *mapObject, int a1, u32 x, u32 z, int a4);                                  // no header included here
 extern BOOL MetatileBehavior_IsVeryTallGrass(u8 tile);                                                               // no header included here
 WIP_LOCAL void ov02_0224A9D8(void *work, int a1);                                                                    // still in asm; forward decl for callers
 

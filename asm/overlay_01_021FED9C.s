@@ -12,23 +12,23 @@
 	.public _021FEE60
 	.public _021FEEA4
 	.public _021FEEC0
-	.public ov01_021FED9C
-	.public ov01_021FEDB8
-	.public ov01_021FEDC8
-	.public ov01_021FEDF0
-	.public ov01_021FEE04
-	.public ov01_021FEE64
-	.public ov01_021FEE9C
-	.public ov01_021FEEA8
-	.public ov01_021FEED0
-	.public ov01_02209124
+	.public MudSplash_New
+	.public MudSplash_Free
+	.public MudSplash_LoadGfx
+	.public MudSplash_FreeGfx
+	.public MudSplash_Spawn
+	.public MudSplashEffect_Init
+	.public MudSplashEffect_Destroy
+	.public MudSplashEffect_Update
+	.public MudSplashEffect_Draw
+	.public sMudSplashEffectTemplate
 	.include "overlay_01_021FED9C.inc"
 	.include "global.inc"
 
 	.text
 
-	thumb_func_start ov01_021FED9C
-ov01_021FED9C: ; 0x021FED9C
+	thumb_func_start MudSplash_New
+MudSplash_New: ; 0x021FED9C
 	push {r3, r4, r5, lr}
 	mov r2, #0
 	mov r1, #0x3c
@@ -37,24 +37,24 @@ ov01_021FED9C: ; 0x021FED9C
 	bl FieldEffectManager_HeapAllocAndFill
 	add r4, r0, #0
 	str r5, [r4]
-	bl ov01_021FEDC8
+	bl MudSplash_LoadGfx
 	add r0, r4, #0
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FED9C
+	thumb_func_end MudSplash_New
 
-	thumb_func_start ov01_021FEDB8
-ov01_021FEDB8: ; 0x021FEDB8
+	thumb_func_start MudSplash_Free
+MudSplash_Free: ; 0x021FEDB8
 	push {r4, lr}
 	add r4, r0, #0
-	bl ov01_021FEDF0
+	bl MudSplash_FreeGfx
 	add r0, r4, #0
 	bl FieldEffectManager_HeapFree
 	pop {r4, pc}
-	thumb_func_end ov01_021FEDB8
+	thumb_func_end MudSplash_Free
 
-	thumb_func_start ov01_021FEDC8
-ov01_021FEDC8: ; 0x021FEDC8
+	thumb_func_start MudSplash_LoadGfx
+MudSplash_LoadGfx: ; 0x021FEDC8
 	push {r3, r4, lr}
 	sub sp, #4
 	mov r2, #0
@@ -73,10 +73,10 @@ ov01_021FEDC8: ; 0x021FEDC8
 	bl FieldEffectManager_LoadRenderAnimation
 	add sp, #4
 	pop {r3, r4, pc}
-	thumb_func_end ov01_021FEDC8
+	thumb_func_end MudSplash_LoadGfx
 
-	thumb_func_start ov01_021FEDF0
-ov01_021FEDF0: ; 0x021FEDF0
+	thumb_func_start MudSplash_FreeGfx
+MudSplash_FreeGfx: ; 0x021FEDF0
 	push {r4, lr}
 	add r4, r0, #0
 	add r0, r4, #4
@@ -85,10 +85,10 @@ ov01_021FEDF0: ; 0x021FEDF0
 	add r0, r4, #0
 	bl RenderAnimation_Free
 	pop {r4, pc}
-	thumb_func_end ov01_021FEDF0
+	thumb_func_end MudSplash_FreeGfx
 
-	thumb_func_start ov01_021FEE04
-ov01_021FEE04: ; 0x021FEE04
+	thumb_func_start MudSplash_Spawn
+MudSplash_Spawn: ; 0x021FEE04
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x1c
 	add r5, r0, #0
@@ -122,18 +122,18 @@ ov01_021FEE04: ; 0x021FEE04
 	str r1, [sp]
 	str r0, [sp, #4]
 	ldr r0, [sp, #8]
-	ldr r1, _021FEE60 ; =ov01_02209124
+	ldr r1, _021FEE60 ; =sMudSplashEffectTemplate
 	add r2, sp, #0x10
 	mov r3, #0
 	bl FieldEffectManager_CreateEffect
 	add sp, #0x1c
 	pop {r4, r5, r6, r7, pc}
 	nop
-_021FEE60: .word ov01_02209124
-	thumb_func_end ov01_021FEE04
+_021FEE60: .word sMudSplashEffectTemplate
+	thumb_func_end MudSplash_Spawn
 
-	thumb_func_start ov01_021FEE64
-ov01_021FEE64: ; 0x021FEE64
+	thumb_func_start MudSplashEffect_Init
+MudSplashEffect_Init: ; 0x021FEE64
 	push {r3, r4, lr}
 	sub sp, #4
 	add r4, r1, #0
@@ -159,19 +159,19 @@ ov01_021FEE64: ; 0x021FEE64
 	add sp, #4
 	pop {r3, r4, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FEE64
+	thumb_func_end MudSplashEffect_Init
 
-	thumb_func_start ov01_021FEE9C
-ov01_021FEE9C: ; 0x021FEE9C
+	thumb_func_start MudSplashEffect_Destroy
+MudSplashEffect_Destroy: ; 0x021FEE9C
 	ldr r3, _021FEEA4 ; =RenderAnimation_Free
 	add r0, r1, #0
 	bx r3
 	nop
 _021FEEA4: .word RenderAnimation_Free
-	thumb_func_end ov01_021FEE9C
+	thumb_func_end MudSplashEffect_Destroy
 
-	thumb_func_start ov01_021FEEA8
-ov01_021FEEA8: ; 0x021FEEA8
+	thumb_func_start MudSplashEffect_Update
+MudSplashEffect_Update: ; 0x021FEEA8
 	push {r3, r4, r5, lr}
 	add r4, r1, #0
 	add r5, r0, #0
@@ -190,10 +190,10 @@ _021FEEC0:
 	bl RenderAnimation_Advance
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FEEA8
+	thumb_func_end MudSplashEffect_Update
 
-	thumb_func_start ov01_021FEED0
-ov01_021FEED0: ; 0x021FEED0
+	thumb_func_start MudSplashEffect_Draw
+MudSplashEffect_Draw: ; 0x021FEED0
 	push {r3, r4, lr}
 	sub sp, #0xc
 	add r4, r1, #0
@@ -206,13 +206,13 @@ ov01_021FEED0: ; 0x021FEED0
 	add sp, #0xc
 	pop {r3, r4, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FEED0
+	thumb_func_end MudSplashEffect_Draw
 
 	.rodata
 
-ov01_02209124: ; 0x02209124
+sMudSplashEffectTemplate: ; 0x02209124
 	.word 0x00000080
-	.word ov01_021FEE64
-	.word ov01_021FEE9C
-	.word ov01_021FEEA8
-	.word ov01_021FEED0
+	.word MudSplashEffect_Init
+	.word MudSplashEffect_Destroy
+	.word MudSplashEffect_Update
+	.word MudSplashEffect_Draw

@@ -720,7 +720,7 @@ _02231090:
 	lsl r1, r1, #4
 	add r0, r5, #0
 	add r1, r2, r1
-	bl ov80_0222F44C
+	bl FrontierScript_PrintMessageEntry
 	mov r0, #1
 	pop {r3, r4, r5, pc}
 	thumb_func_end FrtCmd_149

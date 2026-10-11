@@ -144,25 +144,25 @@ void ov45_0222E810(int value, int mode) {
     void (*callbacks[17])(void);
     void *userData;
     GF_ASSERT(_022577C0 != NULL);
-    callbacks[0] = ov45_0222FC44;
-    callbacks[1] = ov45_0222FCE0;
-    callbacks[2] = ov45_0222FD50;
-    callbacks[3] = ov45_0222FDD4;
-    callbacks[4] = ov45_0222FDD8;
-    callbacks[5] = ov45_0222FE84;
-    callbacks[6] = ov45_0222FEC4;
-    callbacks[7] = ov45_0222FF40;
-    callbacks[8] = ov45_0222FF7C;
-    callbacks[9] = ov45_02230008;
-    callbacks[10] = ov45_02230050;
-    callbacks[11] = ov45_02230064;
-    callbacks[12] = ov45_02230090;
-    callbacks[13] = ov45_022300B0;
-    callbacks[14] = ov45_022300DC;
-    callbacks[15] = ov45_02230108;
-    callbacks[16] = ov45_02230130;
+    callbacks[0] = (void (*)(void))ov45_0222FC44;
+    callbacks[1] = (void (*)(void))ov45_0222FCE0;
+    callbacks[2] = (void (*)(void))ov45_0222FD50;
+    callbacks[3] = (void (*)(void))ov45_0222FDD4;
+    callbacks[4] = (void (*)(void))ov45_0222FDD8;
+    callbacks[5] = (void (*)(void))ov45_0222FE84;
+    callbacks[6] = (void (*)(void))ov45_0222FEC4;
+    callbacks[7] = (void (*)(void))ov45_0222FF40;
+    callbacks[8] = (void (*)(void))ov45_0222FF7C;
+    callbacks[9] = (void (*)(void))ov45_02230008;
+    callbacks[10] = (void (*)(void))ov45_02230050;
+    callbacks[11] = (void (*)(void))ov45_02230064;
+    callbacks[12] = (void (*)(void))ov45_02230090;
+    callbacks[13] = (void (*)(void))ov45_022300B0;
+    callbacks[14] = (void (*)(void))ov45_022300DC;
+    callbacks[15] = (void (*)(void))ov45_02230108;
+    callbacks[16] = (void (*)(void))ov45_02230130;
     userData = FriendRoster_GetUserData(_022577C0->friendRoster);
-    _022577C0->initResult = ov45_022310C0(ov45_02254F04, ov45_02254F14, mode, callbacks, userData, value, _022577C0->unk_28);
+    _022577C0->initResult = ov45_022310C0(ov45_02254F04, ov45_02254F14, mode, callbacks, userData, value, _022577C0->playerDataSize);
     WiFiPlazaLobbyClient_CheckResult(_022577C0->initResult);
 }
 
@@ -219,7 +219,7 @@ void ov45_0222E9F8(WiFiPlazaPlayer *player) {
     GF_ASSERT(_022577C0 != NULL);
     ownId = ov45_02232580();
     ov45_0222F88C(_022577C0, ownId, player);
-    ov45_022325B0(player, _022577C0->unk_28, 0);
+    ov45_022325B0(player, _022577C0->playerDataSize, 0);
 }
 
 WiFiPlazaPlayer *ov45_0222EA2C(int id) {
@@ -233,7 +233,7 @@ WiFiPlazaPlayer *ov45_0222EA2C(int id) {
 void ov45_0222EA4C(int id, s64 *time) {
     WiFiPlazaLobbyEntryTime *entered;
     GF_ASSERT(_022577C0 != NULL);
-    entered = ov45_0222F954(_022577C0, id);
+    entered = &ov45_0222F954(_022577C0, id)->entryTime;
     *(WiFiPlazaLobbyEntryTime *)time = *entered;
 }
 
@@ -332,14 +332,14 @@ BOOL ov45_0222EBF0(int channel) {
 
 void ov45_0222EC10(WiFiPlazaPlayerList *list) {
     GF_ASSERT(_022577C0 != NULL);
-    list->unk_00 = _022577C0->unk_11c;
-    list->ids = _022577C0->unk_120;
+    list->unk_00 = _022577C0->idLists[0].count;
+    list->ids = _022577C0->idLists[0].ids;
 }
 
 void ov45_0222EC3C(u32 *out) {
     GF_ASSERT(_022577C0 != NULL);
-    out[0] = _022577C0->unk_124;
-    out[1] = _022577C0->unk_128;
+    out[0] = _022577C0->idLists[1].count;
+    out[1] = (u32)_022577C0->idLists[1].ids;
 }
 
 // Lobby player id <-> lobby slot.
@@ -442,24 +442,24 @@ u8 ov45_0222EDF0(u8 slot) {
 // The message types sent with WiFiPlazaLobbyClient_SendToLobby / SendToPlayer (each with the size of its data).
 void WiFiPlazaLobbyClient_SetLobbyCommands(const void *commands, u32 count, void *arg) {
     GF_ASSERT(_022577C0 != NULL);
-    _022577C0->lobbyCommands.commands = commands;
-    _022577C0->lobbyCommands.count = count;
-    _022577C0->lobbyCommands.arg = arg;
+    _022577C0->commandTables[0].commands = commands;
+    _022577C0->commandTables[0].count = count;
+    _022577C0->commandTables[0].arg = arg;
 }
 
 // The message types sent with WiFiPlazaLobbyClient_SendToChannel.
 void WiFiPlazaLobbyClient_SetChannelCommands(const void *commands, u32 count, void *arg) {
     GF_ASSERT(_022577C0 != NULL);
-    _022577C0->channelCommands.commands = commands;
-    _022577C0->channelCommands.count = count;
-    _022577C0->channelCommands.arg = arg;
+    _022577C0->commandTables[1].commands = commands;
+    _022577C0->commandTables[1].count = count;
+    _022577C0->commandTables[1].arg = arg;
 }
 
 // Clears the 12 bytes one at a time.
 void WiFiPlazaLobbyClient_ClearLobbyCommands(void) {
     u8 *bytes;
     GF_ASSERT(_022577C0 != NULL);
-    bytes = (u8 *)&_022577C0->lobbyCommands;
+    bytes = (u8 *)&_022577C0->commandTables[0];
     bytes[0] = 0;
     bytes[1] = 0;
     bytes[2] = 0;
@@ -477,7 +477,7 @@ void WiFiPlazaLobbyClient_ClearLobbyCommands(void) {
 void WiFiPlazaLobbyClient_ClearChannelCommands(void) {
     u8 *bytes;
     GF_ASSERT(_022577C0 != NULL);
-    bytes = (u8 *)&_022577C0->channelCommands;
+    bytes = (u8 *)&_022577C0->commandTables[1];
     bytes[0] = 0;
     bytes[1] = 0;
     bytes[2] = 0;
@@ -495,8 +495,8 @@ void WiFiPlazaLobbyClient_ClearChannelCommands(void) {
 void WiFiPlazaLobbyClient_SendToLobby(int type, const void *data, int size) {
     const WiFiPlazaLobbyCommand *command;
     GF_ASSERT(_022577C0 != NULL);
-    GF_ASSERT(_022577C0->lobbyCommands.count > (u32)type);
-    command = &_022577C0->lobbyCommands.commands[type];
+    GF_ASSERT(_022577C0->commandTables[0].count > (u32)type);
+    command = &_022577C0->commandTables[0].commands[type];
     GF_ASSERT(size == command->size);
     GF_ASSERT(WiFiPlazaLobbyClient_CheckResult(ov45_0223247C(0, type, data, size)) == TRUE);
 }
@@ -504,8 +504,8 @@ void WiFiPlazaLobbyClient_SendToLobby(int type, const void *data, int size) {
 void WiFiPlazaLobbyClient_SendToPlayer(int type, int id, const void *data, int size) {
     const WiFiPlazaLobbyCommand *command;
     GF_ASSERT(_022577C0 != NULL);
-    GF_ASSERT(_022577C0->lobbyCommands.count > (u32)type);
-    command = &_022577C0->lobbyCommands.commands[type];
+    GF_ASSERT(_022577C0->commandTables[0].count > (u32)type);
+    command = &_022577C0->commandTables[0].commands[type];
     GF_ASSERT(size == command->size);
     GF_ASSERT(WiFiPlazaLobbyClient_CheckResult(ov45_02232500(id, type, data, size)) == TRUE);
 }
@@ -513,8 +513,8 @@ void WiFiPlazaLobbyClient_SendToPlayer(int type, int id, const void *data, int s
 void WiFiPlazaLobbyClient_SendToChannel(int type, const void *data, int size) {
     const WiFiPlazaLobbyCommand *command;
     GF_ASSERT(_022577C0 != NULL);
-    GF_ASSERT(_022577C0->channelCommands.count > (u32)type);
-    command = &_022577C0->channelCommands.commands[type];
+    GF_ASSERT(_022577C0->commandTables[1].count > (u32)type);
+    command = &_022577C0->commandTables[1].commands[type];
     GF_ASSERT(size == command->size);
     GF_ASSERT(_022577C0->channel != 4);
     GF_ASSERT(WiFiPlazaLobbyClient_CheckResult(ov45_0223247C(ov45_0222F7B0(_022577C0->channel), type, data, size)) == TRUE);
@@ -532,11 +532,11 @@ BOOL ov45_0222F028(int index, int maxPlayers) {
     if (_022577C0->currentMatch != 3) {
         return FALSE;
     }
-    _022577C0->matches[index].index = index;
-    _022577C0->matches[index].maxPlayers = maxPlayers;
-    _022577C0->matches[index].playerCount = 1;
-    _022577C0->matches[index].state = 0;
-    ov45_02230378(&_022577C0->matches[index], &_022577C0->time);
+    _022577C0->matches[index].info.index = index;
+    _022577C0->matches[index].info.maxPlayers = maxPlayers;
+    _022577C0->matches[index].info.playerCount = 1;
+    _022577C0->matches[index].info.state = 0;
+    ov45_02230378(&_022577C0->matches[index].info, &_022577C0->time);
     GF_ASSERT(WiFiPlazaLobbyClient_CheckResult(ov45_0223285C(&_022577C0->matches[index])));
     _022577C0->matches[index].active = 1;
     _022577C0->matches[index].hostId = ov45_02232580();
@@ -544,7 +544,7 @@ BOOL ov45_0222F028(int index, int maxPlayers) {
     _022577C0->currentMatch = index;
     _022577C0->unk_69e = 1;
     _022577C0->unk_69f = 0;
-    ov00_021E5CEC(_022577C0->matches[index].name, maxPlayers, 1, _022577C0->matches[index].timer / 30);
+    ov00_021E5CEC(_022577C0->matches[index].info.name, maxPlayers, 1, _022577C0->matches[index].timer / 30);
     ov00_021E5CD0(ov45_02230390, _022577C0);
     WifiConnection_SetDisconnectCallback(ov45_02230394, _022577C0);
     return TRUE;
@@ -571,7 +571,7 @@ void ov45_0222F154(void) {
 void ov45_0222F1BC(void) {
     GF_ASSERT(_022577C0 != NULL);
     if (_022577C0->unk_69e) {
-        _022577C0->matches[_022577C0->currentMatch].state = 1;
+        _022577C0->matches[_022577C0->currentMatch].info.state = 1;
         GF_ASSERT(WiFiPlazaLobbyClient_CheckResult(ov45_02232BB0(&_022577C0->matches[_022577C0->currentMatch])));
     }
 }
@@ -585,7 +585,7 @@ BOOL ov45_0222F218(void) {
     if (index == 3) {
         return FALSE;
     }
-    return _022577C0->matches[index].state == 1;
+    return _022577C0->matches[index].info.state == 1;
 }
 
 u8 ov45_0222F254(void) {
@@ -603,7 +603,7 @@ BOOL ov45_0222F294(int index) {
     if (!ov45_0222F274(index)) {
         return FALSE;
     }
-    return _022577C0->matches[index].state == 0;
+    return _022577C0->matches[index].info.state == 0;
 }
 
 // Free places of matchmaking session `index`.
@@ -615,7 +615,7 @@ int ov45_0222F2D4(int index) {
         return 0;
     }
     match = ov45_022302B0(_022577C0, index);
-    return match->maxPlayers - match->playerCount;
+    return match->info.maxPlayers - match->info.playerCount;
 }
 
 u32 ov45_0222F314(int index) {
@@ -626,7 +626,7 @@ u32 ov45_0222F314(int index) {
         return 0;
     }
     match = ov45_022302B0(_022577C0, index);
-    return match->playerCount;
+    return match->info.playerCount;
 }
 
 #pragma force_active on
@@ -643,12 +643,12 @@ BOOL ov45_0222F350(int index) {
         return FALSE;
     }
     match = &_022577C0->matches[index];
-    if (match->state == 1) {
+    if (match->info.state == 1) {
         return FALSE;
     }
     _022577C0->currentMatch = index;
     client = _022577C0;
-    ov00_021E5CEC(client->matches[index].name, client->matches[index].maxPlayers, 0, client->matches[index].timer / 30);
+    ov00_021E5CEC(client->matches[index].info.name, client->matches[index].info.maxPlayers, 0, client->matches[index].timer / 30);
     ov00_021E5CD0(ov45_02230390, _022577C0);
     WifiConnection_SetDisconnectCallback(ov45_02230394, _022577C0);
     return TRUE;

@@ -79,8 +79,8 @@ extern void *FollowMon_GetMapObject(void *);
 
 extern void ov01_021F8F74(void *, s8);
 extern int ov01_022055DC(void *);
-extern void ov01_021FF0E4(void *, int, int, int, int);
-extern void ov01_021FF964(void *, int, int, int, int);
+extern void TallGrass_SpawnAt(void *, int, int, int, int);
+extern void VeryTallGrass_SpawnAt(void *, int, int, int, int);
 extern void ov01_021F8F68(void *, int);
 extern void ov01_021F8F08(void *, int);
 extern int GetMetatileBehavior(void *, int, int);

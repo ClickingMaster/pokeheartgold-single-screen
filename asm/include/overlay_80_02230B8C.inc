@@ -29,7 +29,7 @@
 .public FrontierScript_ReadVarPtr
 .public FrontierScript_ReadVar
 .public FrontierScript_GetVar
-.public ov80_0222F44C
+.public FrontierScript_PrintMessageEntry
 .public FrtCmd_139
 .public FrtCmd_140
 .public FrtCmd_141

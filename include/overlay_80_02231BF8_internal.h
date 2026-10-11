@@ -92,7 +92,7 @@ u32 sub_0205C268(u32);
 u32 FrontierSave_GetStat(void *, u32, u32);
 void ov80_02237FA4(void *, u8, u32);
 void ov80_022331E8(void *, u8, u32);
-void ov80_0222F44C(FrontierScriptContextPrivate *, void *);
+void FrontierScript_PrintMessageEntry(FrontierScriptContextPrivate *, void *);
 
 void ov80_02231E4C(AppArgsPrivate *, FrontierDataPrivate *);
 void ov80_02231E94(AppArgsPrivate *);

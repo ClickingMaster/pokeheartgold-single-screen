@@ -8,7 +8,7 @@ typedef BOOL (*FrontierMapMovementFunc)(void *frontier, FrontierMapObject *objec
 
 FrontierMap *Frontier_GetMap(void *frontier);
 FrontierMapObject *Frontier_GetMapObjects(void *frontier);
-void ov80_0222EFD0(UnkStruct_ov44_02232031 *command, UnkStruct_ov42_02228110 *object, u16 id, s32 direction);
+void FrontierScript_GetMovementStep(UnkStruct_ov44_02232031 *command, UnkStruct_ov42_02228110 *object, u16 id, s32 direction);
 
 extern const FrontierMapMovementFunc ov80_0223DB24[];
 
@@ -87,7 +87,7 @@ BOOL FrontierMapMovement_LookAround(void *frontier, FrontierMapObject *object) {
     case 1:
     case 2:
     case 3:
-        ov80_0222EFD0(&command, object->object, object->template.id, movement->data[movement->state + 2]);
+        FrontierScript_GetMovementStep(&command, object->object, object->template.id, movement->data[movement->state + 2]);
         ov42_022299C0(map->unk30, &command);
         if (movement->data[0] == movement->data[movement->state + 2]) {
             movement->data[2] = 45;

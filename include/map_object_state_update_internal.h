@@ -29,7 +29,7 @@ BOOL MetatileBehavior_IsIce(int behavior);
 
 void FieldShadow_CreateMapObjectShadow(LocalMapObject *object);
 void ov01_021FD684(LocalMapObject *object);
-void ov01_021FF74C(LocalMapObject *object);
+void GroundDust_Spawn(LocalMapObject *object);
 
 void sub_020603F8(LocalMapObject *object, int previous, u8 current, int effect);
 void sub_02060530(LocalMapObject *object, int behavior, int unused, int effect);

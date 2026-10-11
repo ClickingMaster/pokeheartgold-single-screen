@@ -9,29 +9,29 @@
 #include "msgdata/msg/msg_0096_D31R0201.h"
 #include "msgdata/msg/msg_0066_D23R0102.h"
 	.include "asm/macros.inc"
-	.public ov01_021FEA0C
-	.public ov01_021FEA20
-	.public ov01_021FEA30
-	.public ov01_021FEA38
-	.public ov01_021FEA48
-	.public ov01_021FEA7C
-	.public ov01_021FEA90
-	.public ov01_021FEAA0
-	.public ov01_021FEAB0
-	.public ov01_021FEB30
-	.public ov01_021FEB3C
-	.public ov01_021FEB78
-	.public ov01_021FEB8C
-	.public ov01_021FEBC0
-	.public ov01_022090F0
-	.public ov01_022090FC
+	.public RockClimb_New
+	.public RockClimb_Free
+	.public RockClimb_Retain
+	.public RockClimb_Release
+	.public RockClimb_LoadGfx
+	.public RockClimb_FreeGfx
+	.public RockClimb_LoadGfxIfUnused
+	.public RockClimb_FreeGfxIfUnused
+	.public RockClimbEffect_Create
+	.public RockClimbEffect_SetFollow
+	.public RockClimbEffect_Init
+	.public RockClimbEffect_Destroy
+	.public RockClimbEffect_Update
+	.public RockClimbEffect_Draw
+	.public sRockClimbScale
+	.public sRockClimbEffectTemplate
 	.include "overlay_01_021FEA0C.inc"
 	.include "global.inc"
 
 	.text
 
-	thumb_func_start ov01_021FEA0C
-ov01_021FEA0C: ; 0x021FEA0C
+	thumb_func_start RockClimb_New
+RockClimb_New: ; 0x021FEA0C
 	push {r4, lr}
 	mov r2, #0
 	mov r1, #0x7c
@@ -41,28 +41,28 @@ ov01_021FEA0C: ; 0x021FEA0C
 	str r4, [r0, #0x10]
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FEA0C
+	thumb_func_end RockClimb_New
 
-	thumb_func_start ov01_021FEA20
-ov01_021FEA20: ; 0x021FEA20
+	thumb_func_start RockClimb_Free
+RockClimb_Free: ; 0x021FEA20
 	push {r4, lr}
 	add r4, r0, #0
-	bl ov01_021FEA7C
+	bl RockClimb_FreeGfx
 	add r0, r4, #0
 	bl FieldEffectManager_HeapFree
 	pop {r4, pc}
-	thumb_func_end ov01_021FEA20
+	thumb_func_end RockClimb_Free
 
-	thumb_func_start ov01_021FEA30
-ov01_021FEA30: ; 0x021FEA30
+	thumb_func_start RockClimb_Retain
+RockClimb_Retain: ; 0x021FEA30
 	ldr r1, [r0]
 	add r1, r1, #1
 	str r1, [r0]
 	bx lr
-	thumb_func_end ov01_021FEA30
+	thumb_func_end RockClimb_Retain
 
-	thumb_func_start ov01_021FEA38
-ov01_021FEA38: ; 0x021FEA38
+	thumb_func_start RockClimb_Release
+RockClimb_Release: ; 0x021FEA38
 	push {r3, lr}
 	ldr r1, [r0]
 	sub r1, r1, #1
@@ -71,10 +71,10 @@ ov01_021FEA38: ; 0x021FEA38
 	bl GF_AssertFail
 _021FEA46:
 	pop {r3, pc}
-	thumb_func_end ov01_021FEA38
+	thumb_func_end RockClimb_Release
 
-	thumb_func_start ov01_021FEA48
-ov01_021FEA48: ; 0x021FEA48
+	thumb_func_start RockClimb_LoadGfx
+RockClimb_LoadGfx: ; 0x021FEA48
 	push {r3, r4, lr}
 	sub sp, #4
 	add r4, r0, #0
@@ -100,10 +100,10 @@ _021FEA76:
 	add sp, #4
 	pop {r3, r4, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FEA48
+	thumb_func_end RockClimb_LoadGfx
 
-	thumb_func_start ov01_021FEA7C
-ov01_021FEA7C: ; 0x021FEA7C
+	thumb_func_start RockClimb_FreeGfx
+RockClimb_FreeGfx: ; 0x021FEA7C
 	push {r3, lr}
 	ldr r1, [r0, #4]
 	cmp r1, #1
@@ -114,34 +114,34 @@ ov01_021FEA7C: ; 0x021FEA7C
 	bl RenderModel_Free
 _021FEA8E:
 	pop {r3, pc}
-	thumb_func_end ov01_021FEA7C
+	thumb_func_end RockClimb_FreeGfx
 
-	thumb_func_start ov01_021FEA90
-ov01_021FEA90: ; 0x021FEA90
+	thumb_func_start RockClimb_LoadGfxIfUnused
+RockClimb_LoadGfxIfUnused: ; 0x021FEA90
 	push {r3, lr}
 	ldr r1, [r0]
 	cmp r1, #0
 	bne _021FEA9C
-	bl ov01_021FEA48
+	bl RockClimb_LoadGfx
 _021FEA9C:
 	pop {r3, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FEA90
+	thumb_func_end RockClimb_LoadGfxIfUnused
 
-	thumb_func_start ov01_021FEAA0
-ov01_021FEAA0: ; 0x021FEAA0
+	thumb_func_start RockClimb_FreeGfxIfUnused
+RockClimb_FreeGfxIfUnused: ; 0x021FEAA0
 	push {r3, lr}
 	ldr r1, [r0]
 	cmp r1, #0
 	bne _021FEAAC
-	bl ov01_021FEA7C
+	bl RockClimb_FreeGfx
 _021FEAAC:
 	pop {r3, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FEAA0
+	thumb_func_end RockClimb_FreeGfxIfUnused
 
-	thumb_func_start ov01_021FEAB0
-ov01_021FEAB0: ; 0x021FEAB0
+	thumb_func_start RockClimbEffect_Create
+RockClimbEffect_Create: ; 0x021FEAB0
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x2c
 	add r6, r1, #0
@@ -192,7 +192,7 @@ _021FEB0E:
 	add r1, sp, #0x18
 	str r1, [sp]
 	str r0, [sp, #4]
-	ldr r1, _021FEB2C ; =ov01_022090FC
+	ldr r1, _021FEB2C ; =sRockClimbEffectTemplate
 	ldr r3, [sp, #0x40]
 	add r0, r4, #0
 	add r2, sp, #0xc
@@ -200,20 +200,20 @@ _021FEB0E:
 	add sp, #0x2c
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
-_021FEB2C: .word ov01_022090FC
-	thumb_func_end ov01_021FEAB0
+_021FEB2C: .word sRockClimbEffectTemplate
+	thumb_func_end RockClimbEffect_Create
 
-	thumb_func_start ov01_021FEB30
-ov01_021FEB30: ; 0x021FEB30
+	thumb_func_start RockClimbEffect_SetFollow
+RockClimbEffect_SetFollow: ; 0x021FEB30
 	push {r4, lr}
 	add r4, r1, #0
 	bl FieldEffect_GetState
 	str r4, [r0, #0xc]
 	pop {r4, pc}
-	thumb_func_end ov01_021FEB30
+	thumb_func_end RockClimbEffect_SetFollow
 
-	thumb_func_start ov01_021FEB3C
-ov01_021FEB3C: ; 0x021FEB3C
+	thumb_func_start RockClimbEffect_Init
+RockClimbEffect_Init: ; 0x021FEB3C
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
 	add r4, r1, #0
@@ -234,28 +234,28 @@ ov01_021FEB3C: ; 0x021FEB3C
 	bl FieldEffect_GetParam
 	str r0, [r4, #0xc]
 	ldr r0, [r4, #0x1c]
-	bl ov01_021FEA90
+	bl RockClimb_LoadGfxIfUnused
 	ldr r0, [r4, #0x1c]
-	bl ov01_021FEA30
+	bl RockClimb_Retain
 	mov r0, #1
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FEB3C
+	thumb_func_end RockClimbEffect_Init
 
-	thumb_func_start ov01_021FEB78
-ov01_021FEB78: ; 0x021FEB78
+	thumb_func_start RockClimbEffect_Destroy
+RockClimbEffect_Destroy: ; 0x021FEB78
 	push {r4, lr}
 	add r4, r1, #0
 	ldr r0, [r4, #0x1c]
-	bl ov01_021FEA38
+	bl RockClimb_Release
 	ldr r0, [r4, #0x1c]
-	bl ov01_021FEAA0
+	bl RockClimb_FreeGfxIfUnused
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FEB78
+	thumb_func_end RockClimbEffect_Destroy
 
-	thumb_func_start ov01_021FEB8C
-ov01_021FEB8C: ; 0x021FEB8C
+	thumb_func_start RockClimbEffect_Update
+RockClimbEffect_Update: ; 0x021FEB8C
 	push {r3, r4, r5, lr}
 	sub sp, #0x18
 	add r5, r0, #0
@@ -280,10 +280,10 @@ _021FEBBA:
 	add sp, #0x18
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FEB8C
+	thumb_func_end RockClimbEffect_Update
 
-	thumb_func_start ov01_021FEBC0
-ov01_021FEBC0: ; 0x021FEBC0
+	thumb_func_start RockClimbEffect_Draw
+RockClimbEffect_Draw: ; 0x021FEBC0
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0x3c
 	add r3, r1, #0
@@ -292,7 +292,7 @@ ov01_021FEBC0: ; 0x021FEBC0
 	cmp r0, #1
 	beq _021FEC2C
 	ldr r0, [r3, #8]
-	ldr r5, _021FEC30 ; =ov01_022090F0
+	ldr r5, _021FEC30 ; =sRockClimbScale
 	add r0, r0, #1
 	str r0, [r3, #8]
 	ldmia r5!, {r0, r1}
@@ -344,18 +344,18 @@ _021FEC2C:
 	add sp, #0x3c
 	pop {r3, r4, r5, r6, pc}
 	.balign 4, 0
-_021FEC30: .word ov01_022090F0
+_021FEC30: .word sRockClimbScale
 _021FEC34: .word 0x0000010E
-	thumb_func_end ov01_021FEBC0
+	thumb_func_end RockClimbEffect_Draw
 
 	.rodata
 
-ov01_022090F0: ; 0x022090F0
+sRockClimbScale: ; 0x022090F0
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00
 
-ov01_022090FC: ; 0x022090FC
+sRockClimbEffectTemplate: ; 0x022090FC
 	.word 0x00000024
-	.word ov01_021FEB3C
-	.word ov01_021FEB78
-	.word ov01_021FEB8C
-	.word ov01_021FEBC0
+	.word RockClimbEffect_Init
+	.word RockClimbEffect_Destroy
+	.word RockClimbEffect_Update
+	.word RockClimbEffect_Draw

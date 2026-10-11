@@ -1795,14 +1795,8 @@ Overlay OVY_0
     Object src/to60_ov00_run09.o
     Object src/to90_extra2313_run01.o
     Object src/to60_ov00_run10.o
-    Object src/op90_to60_overlay_00_arm_residual_10_r01.o
-    Object src/op90_op90_to60_overlay_00_arm_residual_10_residual_1_r01.o
-    Object src/to60_ov00_run11.o
-    Object src/to60_ov00_run12.o
-    Object src/op90_to60_overlay_00_arm_residual_11_r01.o
-    Object src/to60_ov00_run13.o
-    Object src/op90_to60_overlay_00_arm_residual_12_r01.o
-    Object src/to60_ov00_run14.o
+    Object lib/NitroDWC/src/gt_buffer.o
+    Object lib/NitroDWC/src/gt_socket.o
     Object src/to65_ov00_extra01_run01.o
     Object src/to80_extra1410_run01.o
     Object src/to65_ov00_extra01_run02.o
@@ -2181,26 +2175,16 @@ Overlay field
     Object src/field_effect_speed_sequence_1.o
     Object asm/overlay_01_021FE590_residual_2.o
     Object src/field_effect_object_variant.o
-    Object src/field_effect_follow_motion_1.o
-    Object asm/overlay_01_021FEA0C_residual_1.o
-    Object src/field_effect_rotation_task_1.o
-    Object asm/overlay_01_021FEC38_residual_1.o
-    Object src/field_effect_scale_task_1.o
-    Object asm/overlay_01_021FED9C_residual_1.o
+    Object src/field/field_rock_climb_effect.o
+    Object src/field/field_puddle_splash.o
+    Object src/field/field_mud_splash.o
     Object asm/overlay_01_021FEEEC_data_local.o
-    Object src/field_effect_follow_object_1.o
-    Object src/to70_overlay_01_021FEEEC_extra553_run01.o
-    Object src/field_effect_follow_object_2.o
-    Object src/to70_overlay_01_021FEEEC_residual_2_extra749_run01.o
-    Object src/field_effect_follow_object_3.o
-    Object src/field_map_object_effect_1.o
-    Object asm/overlay_01_021FF464_residual_1.o
-    Object src/field_effect_path_motion_1.o
-    Object asm/overlay_01_021FF6B0_residual_1.o
+    Object src/field/field_tall_grass.o
+    Object src/field/field_shallow_water_ripple.o
+    Object src/field/field_ground_dust.o
     Object asm/overlay_01_021FF854_data_local.o
-    Object src/field_effect_map_marker.o
-    Object src/field_object_motion_effect_1.o
-    Object asm/overlay_01_021FFC0C_residual_1.o
+    Object src/field/field_very_tall_grass.o
+    Object src/field/field_unused_billboard_effect.o
     Object src/field/overlay_01_021FFECC.o
     Object src/field_effect_pair_task_1.o
     Object src/field_effect_animation.o
@@ -3659,25 +3643,9 @@ Overlay OVY_45
     Object src/wifi_plaza_news.o
     Object src/wifi_plaza_news_events.o
     Object src/wifi_plaza_lobby_client.o
-    Object src/to70_overlay_45_thumb_residual_34_to42_prefix_extra599_run01.o
-    Object src/to42_overlay_45_thumb_residual_34_run1.o
-    Object src/to46_overlay45_index_slots.o
-    Object src/to42_overlay_45_thumb_residual_34_run2.o
-    Object src/overlay45_session_callbacks_tail_r12.o
-    Object src/overlay45_helpers_34.o
-    Object src/op90_overlay_45_thumb_residual_35_to42_residual_1_r01.o
-    Object src/to42_overlay_45_thumb_residual_35_run1.o
-    Object src/to70_overlay_45_thumb_residual_35_to42_residual_2_extra798_run01.o
-    Object src/to42_overlay_45_thumb_residual_35_run2.o
-    Object src/to80_extra1878_run01.o
-    Object src/to42_overlay_45_thumb_residual_35_run3.o
-    Object src/to70_overlay_45_thumb_residual_35_to42_residual_4_extra966_run01.o
-    Object src/to42_overlay_45_thumb_residual_35_run4.o
-    Object src/to70_overlay_45_thumb_residual_35_to42_residual_5_extra799_run01.o
-    Object src/to42_overlay_45_thumb_residual_35_run5.o
-    Object src/to70_overlay_45_thumb_residual_35_to42_residual_6_extra600_run01.o
-    Object src/to42_overlay_45_thumb_residual_35_run6.o
-    Object src/overlay45_helpers_35.o
+    Object src/wifi_plaza_lobby_players.o
+    Object src/wifi_plaza_lobby_events.o
+    Object src/wifi_plaza_lobby_matches.o
     Object src/to45_overlay45_resource_manager_36.o
     Object src/overlay45_helpers_36.o
     Object src/overlay45_object_create.o
@@ -4530,40 +4498,9 @@ Overlay OVY_80
     Object src/frontier/frontier_script_commands.o
     Object src/frontier/frontier_cmd_create_sprites.o
     Object src/frontier/frontier_script_commands_ext.o
-    Object src/op90_overlay80_frontier_messages_residual_r01.o
-    Object src/overlay80_frontier_messages/overlay80_message_window.o
-    Object src/overlay80_command_helpers_32.o
-    Object src/to70_overlay_80_0222BDF4_residual_32_extra988_run01.o
-    Object src/r40_overlay_80_0222BDF4_residual_32_run1.o
-    Object src/to90_extra2495_run01.o
-    Object src/to91_w15_frontier_create80.o
-    Object src/overlay80_command_helpers_33.o
-    Object src/to50_overlay80_menu_build_e5b0.o
-    Object src/overlay80_menu_build_e5b0_run1.o
-    Object src/to90_extra2436_run01.o
-    Object src/to90_extra2221_run01.o
-    Object src/overlay80_menu_build_e5b0_run2.o
-    Object src/overlay80_command_helpers_34.o
-    Object src/to58_r3_ov80_34.o
-    Object src/overlay80_command_helpers_35.o
-    Object src/to50_overlay80_menu_build_e948.o
-    Object src/to45_overlay80_menu_entries_r35.o
-    Object src/to50_overlay80_menu_template_eb54.o
-    Object src/overlay80_command_helpers_36.o
-    Object src/overlay80_menu_runtime_r36.o
-    Object src/overlay80_command_helpers_37.o
-    Object src/overlay80_object_updates_r37.o
-    Object src/to90_extra2041_run01.o
-    Object src/overlay80_frontier_sprite_helpers_r37.o
-    Object src/overlay80_command_helpers_38.o
-    Object src/to52_r6_w18_overlay80_r38.o
-    Object src/overlay80_command_helpers_39.o
-    Object src/to50_overlay80_command_helper_r39.o
-    Object src/overlay80_command_helpers_40.o
-    Object asm/to70_overlay_80_0222BDF4_residual_40_extra321_anchor.o
-    Object src/to70_overlay_80_0222BDF4_residual_40_extra321_run01.o
-    Object src/to70_to70_overlay_80_0222BDF4_residual_40_extra321_residual_1_extra1308_run01.o
-    Object src/to70_overlay_80_0222BDF4_residual_40_extra321_run02.o
+    Object src/frontier/frontier_script_ui.o
+    Object asm/frontier_script_commands_data.o
+    Object src/frontier/frontier_script_tasks.o
     Object src/overlay80_frontier_commands_1.o
     Object src/to47r5_ov80_frontier_command_103.o
     Object src/overlay80_frontier_commands_2.o

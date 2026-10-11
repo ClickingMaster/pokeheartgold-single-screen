@@ -13,24 +13,24 @@
 	.public _021FF7AC
 	.public _021FF7FC
 	.public _021FF82E
-	.public ov01_021FF6B0
-	.public ov01_021FF6CC
-	.public ov01_021FF6DC
-	.public ov01_021FF724
-	.public ov01_021FF74C
-	.public ov01_021FF7B0
-	.public ov01_021FF7F4
-	.public ov01_021FF800
-	.public ov01_021FF830
-	.public ov01_022091EC
-	.public ov01_02209200
+	.public GroundDust_New
+	.public GroundDust_Free
+	.public GroundDust_LoadGfx
+	.public GroundDust_FreeGfx
+	.public GroundDust_Spawn
+	.public GroundDustEffect_Init
+	.public GroundDustEffect_Destroy
+	.public GroundDustEffect_Update
+	.public GroundDustEffect_Draw
+	.public sGroundDustEffectTemplate
+	.public sGroundDustRecordParams
 	.include "overlay_01_021FF6B0.inc"
 	.include "global.inc"
 
 	.text
 
-	thumb_func_start ov01_021FF6B0
-ov01_021FF6B0: ; 0x021FF6B0
+	thumb_func_start GroundDust_New
+GroundDust_New: ; 0x021FF6B0
 	push {r3, r4, r5, lr}
 	mov r2, #0
 	mov r1, #4
@@ -39,24 +39,24 @@ ov01_021FF6B0: ; 0x021FF6B0
 	bl FieldEffectManager_HeapAllocAndFill
 	add r4, r0, #0
 	str r5, [r4]
-	bl ov01_021FF6DC
+	bl GroundDust_LoadGfx
 	add r0, r4, #0
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FF6B0
+	thumb_func_end GroundDust_New
 
-	thumb_func_start ov01_021FF6CC
-ov01_021FF6CC: ; 0x021FF6CC
+	thumb_func_start GroundDust_Free
+GroundDust_Free: ; 0x021FF6CC
 	push {r4, lr}
 	add r4, r0, #0
-	bl ov01_021FF724
+	bl GroundDust_FreeGfx
 	add r0, r4, #0
 	bl FieldEffectManager_HeapFree
 	pop {r4, pc}
-	thumb_func_end ov01_021FF6CC
+	thumb_func_end GroundDust_Free
 
-	thumb_func_start ov01_021FF6DC
-ov01_021FF6DC: ; 0x021FF6DC
+	thumb_func_start GroundDust_LoadGfx
+GroundDust_LoadGfx: ; 0x021FF6DC
 	push {r3, r4, lr}
 	sub sp, #0xc
 	add r4, r0, #0
@@ -77,7 +77,7 @@ ov01_021FF6DC: ; 0x021FF6DC
 	str r0, [sp]
 	mov r0, #0
 	str r0, [sp, #4]
-	ldr r0, _021FF720 ; =ov01_02209200
+	ldr r0, _021FF720 ; =sGroundDustRecordParams
 	mov r2, #6
 	str r0, [sp, #8]
 	ldr r0, [r4]
@@ -87,11 +87,11 @@ ov01_021FF6DC: ; 0x021FF6DC
 	add sp, #0xc
 	pop {r3, r4, pc}
 	nop
-_021FF720: .word ov01_02209200
-	thumb_func_end ov01_021FF6DC
+_021FF720: .word sGroundDustRecordParams
+	thumb_func_end GroundDust_LoadGfx
 
-	thumb_func_start ov01_021FF724
-ov01_021FF724: ; 0x021FF724
+	thumb_func_start GroundDust_FreeGfx
+GroundDust_FreeGfx: ; 0x021FF724
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, [r4]
@@ -108,10 +108,10 @@ ov01_021FF724: ; 0x021FF724
 	bl FieldEffectManager_ReleaseRecord
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FF724
+	thumb_func_end GroundDust_FreeGfx
 
-	thumb_func_start ov01_021FF74C
-ov01_021FF74C: ; 0x021FF74C
+	thumb_func_start GroundDust_Spawn
+GroundDust_Spawn: ; 0x021FF74C
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0x24
 	add r5, r0, #0
@@ -144,7 +144,7 @@ ov01_021FF74C: ; 0x021FF74C
 	add r1, sp, #0x14
 	str r1, [sp]
 	str r0, [sp, #4]
-	ldr r1, _021FF7AC ; =ov01_022091EC
+	ldr r1, _021FF7AC ; =sGroundDustEffectTemplate
 	add r0, r4, #0
 	add r2, sp, #8
 	mov r3, #0
@@ -152,11 +152,11 @@ ov01_021FF74C: ; 0x021FF74C
 	add sp, #0x24
 	pop {r3, r4, r5, r6, pc}
 	.balign 4, 0
-_021FF7AC: .word ov01_022091EC
-	thumb_func_end ov01_021FF74C
+_021FF7AC: .word sGroundDustEffectTemplate
+	thumb_func_end GroundDust_Spawn
 
-	thumb_func_start ov01_021FF7B0
-ov01_021FF7B0: ; 0x021FF7B0
+	thumb_func_start GroundDustEffect_Init
+GroundDustEffect_Init: ; 0x021FF7B0
 	push {r4, r5, lr}
 	sub sp, #0xc
 	add r4, r1, #0
@@ -186,19 +186,19 @@ ov01_021FF7B0: ; 0x021FF7B0
 	mov r0, #1
 	add sp, #0xc
 	pop {r4, r5, pc}
-	thumb_func_end ov01_021FF7B0
+	thumb_func_end GroundDustEffect_Init
 
-	thumb_func_start ov01_021FF7F4
-ov01_021FF7F4: ; 0x021FF7F4
+	thumb_func_start GroundDustEffect_Destroy
+GroundDustEffect_Destroy: ; 0x021FF7F4
 	ldr r3, _021FF7FC ; =BillboardObject_Delete
 	ldr r0, [r1, #0x20]
 	bx r3
 	nop
 _021FF7FC: .word BillboardObject_Delete
-	thumb_func_end ov01_021FF7F4
+	thumb_func_end GroundDustEffect_Destroy
 
-	thumb_func_start ov01_021FF800
-ov01_021FF800: ; 0x021FF800
+	thumb_func_start GroundDustEffect_Update
+GroundDustEffect_Update: ; 0x021FF800
 	push {r3, r4, r5, lr}
 	add r4, r1, #0
 	add r5, r0, #0
@@ -221,10 +221,10 @@ ov01_021FF800: ; 0x021FF800
 	bl FieldEffectManager_DestroyEffect
 _021FF82E:
 	pop {r3, r4, r5, pc}
-	thumb_func_end ov01_021FF800
+	thumb_func_end GroundDustEffect_Update
 
-	thumb_func_start ov01_021FF830
-ov01_021FF830: ; 0x021FF830
+	thumb_func_start GroundDustEffect_Draw
+GroundDustEffect_Draw: ; 0x021FF830
 	push {r3, r4, lr}
 	sub sp, #0xc
 	add r4, r1, #0
@@ -241,17 +241,17 @@ ov01_021FF830: ; 0x021FF830
 	add sp, #0xc
 	pop {r3, r4, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FF830
+	thumb_func_end GroundDustEffect_Draw
 
 	.rodata
 
-ov01_022091EC: ; 0x022091EC
+sGroundDustEffectTemplate: ; 0x022091EC
 	.word 0x00000024
-	.word ov01_021FF7B0
-	.word ov01_021FF7F4
-	.word ov01_021FF800
-	.word ov01_021FF830
+	.word GroundDustEffect_Init
+	.word GroundDustEffect_Destroy
+	.word GroundDustEffect_Update
+	.word GroundDustEffect_Draw
 
-ov01_02209200: ; 0x02209200
+sGroundDustRecordParams: ; 0x02209200
 	.byte 0x00, 0x00, 0x00, 0x00, 0x09, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00

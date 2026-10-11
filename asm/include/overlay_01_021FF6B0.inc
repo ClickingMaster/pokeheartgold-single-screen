@@ -29,6 +29,6 @@
 .public FieldEffectManager_FreeBillboardSequence
 .public FieldEffectManager_LoadTexResource
 .public FieldEffectManager_FreeTexResource
-.public ov01_021FF6B0
-.public ov01_021FF6CC
-.public ov01_021FF74C
+.public GroundDust_New
+.public GroundDust_Free
+.public GroundDust_Spawn

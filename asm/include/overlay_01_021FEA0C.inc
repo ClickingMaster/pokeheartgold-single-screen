@@ -21,7 +21,7 @@
 .public FieldEffectManager_GetFromMapObject
 .public FieldEffectManager_CreateEffect
 .public FieldEffectManager_LoadRenderModel
-.public ov01_021FEA0C
-.public ov01_021FEA20
-.public ov01_021FEAB0
-.public ov01_021FEB30
+.public RockClimb_New
+.public RockClimb_Free
+.public RockClimbEffect_Create
+.public RockClimbEffect_SetFollow

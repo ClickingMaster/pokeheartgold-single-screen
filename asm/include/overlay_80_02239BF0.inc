@@ -5,7 +5,7 @@
 .public Frontier_GetMapObjects
 .public MI_CpuFill8
 .public ov42_022299C0
-.public ov80_0222EFD0
+.public FrontierScript_GetMovementStep
 .public FrontierMap_FindObject
 .public FrontierMap_SetObjectMovement
 .public FrontierMap_RunObjectMovements

@@ -1495,9 +1495,9 @@ BOOL ScrCmd_FacePlayer(ScriptContext *ctx) {
             metatile = GetMetatileBehavior(fieldSystem, x, y);
             if (rvsDir == 2 || rvsDir == 3) {
                 if (MetatileBehavior_IsTallGrass(metatile) == TRUE) {
-                    ov01_021FF0E4(*p_lastInteracted, 0, x, y, 1);
+                    TallGrass_SpawnAt(*p_lastInteracted, 0, x, y, 1);
                 } else if (MetatileBehavior_IsVeryTallGrass(metatile) == TRUE) {
-                    ov01_021FF964(*p_lastInteracted, 0, x, y, 1);
+                    VeryTallGrass_SpawnAt(*p_lastInteracted, 0, x, y, 1);
                 }
             }
             if (MetatileBehavior_IsTallGrass(metatile) == FALSE
