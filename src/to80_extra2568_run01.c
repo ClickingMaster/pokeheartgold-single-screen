@@ -82,6 +82,6 @@ extern void *ov49_022593C0(void*);
 extern Obj *ov45_0223070C(Manager*,void*);
 #pragma force_active on
 void ov49_022591D8(void*opaque){Ov49ManagerR4*w=opaque;const Entry*e=ov49_02269678;u32 i;u16 n;Frame f;Ov49EntryR4*o;UnkStruct_ov42_02228110 *context;Obj *graphics;
-for(i=0;i<4;i++,e++){n=0;while(ov49_022589D8(w->arg,e->id,&f.location.x,&f.location.y,n)==1){o=ov49_022593C0(w);f.create.unk0=f.location.x<<4;f.create.unk2=f.location.y<<4;f.create.unk4=e->unk4;f.create.unk6=0;f.create.unk8=e->unk1;f.create.unkA=e->unk2;
+for(i=0;i<4;i++,e++){n=0;while(WiFiPlazaMap_FindTileTag(w->arg,e->id,&f.location.x,&f.location.y,n)==1){o=ov49_022593C0(w);f.create.unk0=f.location.x<<4;f.create.unk2=f.location.y<<4;f.create.unk4=e->unk4;f.create.unk6=0;f.create.unk8=e->unk1;f.create.unkA=e->unk2;
 context=ov42_022280B8(w->object0,&f.create);o->storage.fields.first=context;graphics=ov45_0223070C(w->object4,context);o->storage.fields.second=graphics;
 ov49_02258EEC(w,o,0);if(e->id==97)w->sub18.fields.special=o;n++;}}}

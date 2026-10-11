@@ -7,7 +7,7 @@ u32 ov45_022308B8(Overlay45R38Object *object) {
 void ov45_022308C0(Overlay45R38Object *object, const s16 *source) {
     Overlay45R38Vec position;
 
-    ov49_02258800(source, (s32 *)&position);
+    WiFiPlazaMap_PosToVecFx32(source, (s32 *)&position);
     position.z += 0x10000;
     ov45_022308E4(object, &position);
 }

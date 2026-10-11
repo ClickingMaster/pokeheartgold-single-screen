@@ -155,7 +155,7 @@ void *ov49_02268FAC(void *ctx, u32 heapId) {
     PTR_AT(work, 4) = (void *)ov49_02259FE8(ctx);
     PTR_AT(work, 8) = (void *)ov49_02259FF8(ctx);
     PTR_AT(work, 0xC) = (void *)ov49_0225A000(ctx);
-    U32_AT(work, 0xBC) = ov49_022589A8() + 6;
+    U32_AT(work, 0xBC) = WiFiPlazaMap_GetWidth() + 6;
     U32_AT(work, 0xC0) = -8 - U32_AT(work, 0xBC);
     U32_AT(work, 0xBC) <<= 16;
     U32_AT(work, 0xC0) <<= 16;
@@ -164,7 +164,7 @@ void *ov49_02268FAC(void *ctx, u32 heapId) {
     i = 0;
     record = work;
     for (; i < 3; i++, src++, record += 4) {
-        ov49_022589D8(PTR_AT(work, 0xC), *src, &values[1], &values[0], 0);
+        WiFiPlazaMap_FindTileTag(PTR_AT(work, 0xC), *src, &values[1], &values[0], 0);
         U16_AT(record, 0xAA) = values[1] << 4;
         U16_AT(record, 0xAC) = values[0] << 4;
     }

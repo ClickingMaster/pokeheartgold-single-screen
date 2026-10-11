@@ -411,8 +411,8 @@
 .public VisitorProfiles_Init
 .public VisitorProfiles_Main
 .public VisitorProfiles_Exit
-.public ov49_02258800
-.public ov49_02258830
+.public WiFiPlazaMap_PosToVecFx32
+.public WiFiPlazaMap_LoadModelFile
 .public ov49_02259AA4
 .public ov49_02259C90
 .public ov49_02259EF8

@@ -2,7 +2,7 @@
 
 void ov49_02258C28(void *p, int value) {
     u16 coords[2];
-    if (!ov49_022589D8(PTR(p, 0x14), 3, &coords[1], &coords[0], 0)) {
+    if (!WiFiPlazaMap_FindTileTag(PTR(p, 0x14), 3, &coords[1], &coords[0], 0)) {
         GF_AssertFail();
     }
     ov49_02258C5C(p, value, coords[1], coords[0]);
@@ -40,7 +40,7 @@ void *ov49_02258CB8(void *p, int id, int value) {
     found = FALSE;
     i = 0;
     do {
-        if (!ov49_022589D8(PTR(p, 0x14), id + 4, &coords[1], &coords[0], i)) {
+        if (!WiFiPlazaMap_FindTileTag(PTR(p, 0x14), id + 4, &coords[1], &coords[0], i)) {
             return NULL;
         }
         check = ov49_02258DAC(p);

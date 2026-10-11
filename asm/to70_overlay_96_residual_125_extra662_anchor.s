@@ -1083,9 +1083,9 @@ ov96_0221DC48:
 	.word ov96_022021D4
 
 ov96_0221DC50:
-	.word ov96_022052B0
-	.word ov96_0220549C
-	.word ov96_02205520
+	.word PokeathlonPennantCapture_State_Setup
+	.word PokeathlonPennantCapture_State_Play
+	.word PokeathlonPennantCapture_State_End
 
 ov96_0221DC5C:
 	.word ov96_02209130

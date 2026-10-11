@@ -20,7 +20,7 @@ extern void ov45_0222D740(void *p);
 extern void ov49_0225D574(void *p);
 extern void ov49_0225D57C(void *p, void *a, fx32 b);
 extern u32 ov49_0225D5A0(void *p, void *a, fx32 b);
-extern u32 ov49_022588A0(void *p, void *a);
+extern u32 WiFiPlazaMap_IsModelInstanceInView(void *p, void *a);
 extern void ModelAnimation_LoadFromNarc(void *p, void *a, void *b, u32 c, void *d, void *e);
 extern void ModelAnimation_Free(void *p, void *a);
 extern void ModelInstance_AddAnimation(void *p, void *a);

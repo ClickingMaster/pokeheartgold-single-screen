@@ -21,7 +21,7 @@ void ov49_0225A2F8(void *);
 void ov49_0225A0EC(void *);
 void ov49_0225A018(void *, u32);
 void *ov49_0225A008(void *);
-void ov49_0225CC44(void *);
+void WiFiPlazaCamera_ClearFollowObject(void *);
 u32 ov49_02258F38(void *);
 void ov49_0225A034(void *, u32);
 void ov49_0225A038(void *, u32);

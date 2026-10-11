@@ -3923,14 +3923,7 @@ Overlay OVY_48
 Overlay OVY_49
 {
     After OVY_45
-    Object src/overlay_49_sol_partial_1.o
-    Object src/overlay49_model_resources/overlay49_model_resources.o
-    Object src/overlay_49_sol_partial_2.o
-    Object src/to80_extra1785_run01.o
-    Object src/overlay_49_sol_partial_3.o
-    Object asm/to47_overlay49_aliases_r3.o
-    Object src/to47_overlay49_grid_search_r3.o
-    Object src/overlay_49_sol_partial_4.o
+    Object src/wifi_plaza_map.o
     Object src/to47_overlay49_manager_r4.o
     Object src/overlay_49_sol_partial_5.o
     Object src/r47_overlay49_residual_5.o
@@ -4021,10 +4014,7 @@ Overlay OVY_49
     Object src/ov49_wave34_windows_4.o
     Object src/to70_overlay_49_residual_34_residual_5_extra807_run01.o
     Object src/overlay_49_sol_partial_35.o
-    Object src/to47_overlay49_camera_create_r35.o
-    Object src/overlay_49_sol_partial_36.o
-    Object src/overlay49_camera_lookat.o
-    Object src/overlay_49_sol_partial_37.o
+    Object src/wifi_plaza_camera.o
     Object src/overlay49_object_state.o
     Object src/overlay_49_sol_partial_38.o
     Object src/to47_overlay49_resource_cursor.o
@@ -5148,18 +5138,7 @@ Overlay OVY_96
     Object src/overlay96_exact_bank_85.o
     Object src/overlay96_course_scene_start_r86.o
     Object asm/to90_extra1935_anchor.o
-    Object src/to90_extra1935_run01.o
-    Object src/to90_extra1935_run02.o
-    Object src/overlay96_course_scene_resources_r86.o
-    Object src/overlay96_sprite_pool/overlay96_sprite_pool.o
-    Object asm/op90_overlay96_sprite_pool_residual_anchor.o
-    Object src/op90_overlay96_sprite_pool_residual_r01.o
-    Object src/overlay96_course_scene_state_r86.o
-    Object src/to51_ov96_r86_gap3_exact.o
-    Object src/op90_to90_extra2067_residual_1_r01.o
-    Object src/to90_extra2067_run01.o
-    Object src/to52_ov96_r86_gap3_tail.o
-    Object src/overlay96_course_scene_update_r86.o
+    Object src/pokeathlon/pokeathlon_pennant_capture_play.o
     Object src/pokeathlon/pokeathlon_pennant_capture_field.o
     Object src/pokeathlon/pokeathlon_pennant_capture_display.o
     Object src/op90_to70_to52_r5_overlay96_r90_gap4_tail_extra260_residual_1_r01.o
@@ -5674,18 +5653,7 @@ Object src/to53_overlay112_121.o
 Object src/to57_overlay112_122.o
 Object src/to53_overlay112_123.o
 Object src/to58_ov112_124.o
-Object src/to53_overlay112_125.o
-Object src/to58_w16b_ov112_126_full.o
-Object src/to53_overlay112_127.o
-Object src/to58_w16b_ov112_128_0.o
-Object src/to53_overlay112_129.o
-Object src/to58_w16b_ov112_130_0.o
-Object src/to53_overlay112_131.o
-Object src/to54_atomic_w20_01_run1.o
-Object src/to90_extra2516_run01.o
-Object src/to54_atomic_w20_03_run2.o
-Object src/op90_to54_atomic_w20_04_res2_r01.o
-Object src/to53_overlay112_133.o
+Object src/application/pokewalker/pokewalker_stroll.o
 Object src/application/pokewalker/pokewalker_app_modes.o
 Object src/to53_overlay112_145.o
 Object src/to70_to53_overlay112_146_extra250_run01.o

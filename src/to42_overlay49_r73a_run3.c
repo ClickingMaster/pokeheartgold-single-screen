@@ -47,7 +47,7 @@ u32 ov49_02267328(void *ctx, void *state) {
             ov49_02265668(ctx, state, 0x5C2);
             ov49_02259130((void *)U32_AT(state, 8), 1);
             if ((void *)U32_AT(state, 8) == ov49_02258DAC((void *)U32_AT(ctx, 4))) {
-                ov49_0225CC40((void *)U32_AT(ctx, 8), (void *)U32_AT(state, 8));
+                WiFiPlazaCamera_SetFollowObject((void *)U32_AT(ctx, 8), (void *)U32_AT(state, 8));
             }
             return 1;
         }

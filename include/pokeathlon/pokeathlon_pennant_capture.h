@@ -43,9 +43,9 @@ typedef struct PokeathlonPennantCapturePlayer {
     u8 shownPennants;                                 // 0x73
     s32 wallSide;                                     // 0x74: side of the obstacle hit last (0 = none)
     u16 nextPointSprite;                              // 0x78
-    u8 unk7A[2];                                      // 0x7A
-    VecFx32 cpuFrom;                                  // 0x7C: CPU: where the current path starts
-    VecFx32 cpuTarget;                                // 0x88: CPU: where it leads
+    u16 holdTime;                                     // 0x7A: frames the touch was held (human players)
+    VecFx32 cpuFrom;                                  // 0x7C: CPU: where the current path starts; human: where the touch drag started
+    VecFx32 cpuTarget;                                // 0x88: CPU: where it leads; human: where the touch drag is now
     u8 contacts[4];                                   // 0x94: touching the other participants' Pokemon
     u32 participant;                                  // 0x98
     u8 unk9C;                                         // 0x9C: set once a deposit finished
@@ -57,7 +57,7 @@ typedef struct PokeathlonPennantCapturePlayer {
     u8 knockdownTimer;                                // 0xA2
     u8 active;                                        // 0xA3
     u8 freezeTimer;                                   // 0xA4: frames without movement after a collision
-    u8 cpuHasTarget;                                  // 0xA5
+    u8 cpuHasTarget;                                  // 0xA5: CPU: a path is chosen; human: a flick is pending
     u8 knockedDown;                                   // 0xA6
     u8 pointsToAdd;                                   // 0xA7: deposited pennants still to be counted
     u8 depositDelay;                                  // 0xA8
@@ -112,42 +112,56 @@ typedef struct PokeathlonPennantCapturePennants {
 } PokeathlonPennantCapturePennants;
 
 // The event's work (PokeathlonCourse_GetHeapAllocPtr4).
+typedef struct PokeathlonPennantCaptureTouch {
+    BOOL pressed; // touched this frame
+    BOOL held;
+    u32 unk8;
+} PokeathlonPennantCaptureTouch;
+
 typedef struct PokeathlonPennantCapture {
-    BgConfig *bgConfig;                                  // 0x000
-    Window scoreWindow;                                  // 0x004
-    enum HeapID heapId;                                  // 0x014
-    u32 unk018;                                          // 0x018
-    NNSG2dCharacterData *bgChars;                        // 0x01C: the animated BG0 tiles (6 frames)
-    u32 unk020;                                          // 0x020
-    PokeathlonPennantCapturePlayer players[4];           // 0x024
-    u8 unk304[0x48];                                     // 0x304
-    void *pickupEffects[4];                              // 0x34C: SEQ_SE_GS_THLON06, used in turn
-    void *dropEffects[4];                                // 0x35C: SEQ_SE_GS_SAA, used in turn
-    struct PokeathlonPennantCaptureCpu *cpu;             // 0x36C
-    struct PokeathlonPennantCaptureDisplay *display;     // 0x370
-    u8 unk374[8];                                        // 0x374
-    PokeathlonPennantCaptureObstacle obstacles[20];      // 0x37C
-    PokeathlonPennantCaptureFieldItem fieldItems[10];    // 0x46C
-    u8 unk50C[4];                                        // 0x50C
-    u8 unk510;                                           // 0x510: stronger friction while set
-    u8 bgAnimFrame;                                      // 0x511
-    u8 bgAnimTimer;                                      // 0x512
-    u8 shownPennantSpots[5];                             // 0x513
-    u8 nextPickupEffect;                                 // 0x518
-    u8 hitReported;                                      // 0x519
-    u8 nextDropEffect;                                   // 0x51A
-    u8 unk51B;                                           // 0x51B
-    u16 hitY;                                            // 0x51C
-    u16 hitX;                                            // 0x51E
-    u8 unk520[4];                                        // 0x520
-    u32 pickupEffectX[4];                                // 0x524
-    u32 pickupEffectY[4];                                // 0x534
-    u32 dropEffectX[4];                                  // 0x544
-    u32 dropEffectY[4];                                  // 0x554
-    PokeathlonPennantCapturePennants pennants;           // 0x564
-    PokeathlonPennantCapturePoint obstaclePositions[20]; // 0x61C
-    u8 unk66C[0x50];                                     // 0x66C
-    u8 pennantsFull[4];                                  // 0x6BC: touched a pennant while carrying 9
+    BgConfig *bgConfig;                                   // 0x000
+    Window scoreWindow;                                   // 0x004
+    enum HeapID heapId;                                   // 0x014
+    void *bgCharsFile;                                    // 0x018: the file bgChars points into
+    NNSG2dCharacterData *bgChars;                         // 0x01C: the animated BG0 tiles (6 frames)
+    void *unk020;                                         // 0x020
+    PokeathlonPennantCapturePlayer players[4];            // 0x024
+    PokeathlonPennantCaptureTouch touches[4];             // 0x304: host: the participants' touch state
+    BOOL dragging[4];                                     // 0x334: the touch started on the own Pokemon
+    u32 unk344;                                           // 0x344
+    void *unk348;                                         // 0x348
+    void *pickupEffects[4];                               // 0x34C: SEQ_SE_GS_THLON06, used in turn
+    void *dropEffects[4];                                 // 0x35C: SEQ_SE_GS_SAA, used in turn
+    struct PokeathlonPennantCaptureCpu *cpu;              // 0x36C
+    struct PokeathlonPennantCaptureDisplay *display;      // 0x370
+    u32 unk374;                                           // 0x374
+    u32 layoutFileId;                                     // 0x378: field layout member in NARC 227
+    PokeathlonPennantCaptureObstacle obstacles[20];       // 0x37C
+    PokeathlonPennantCaptureFieldItem fieldItems[10];     // 0x46C
+    u16 timeLeft;                                         // 0x50C: frames until the event ends
+    u8 finished;                                          // 0x50E
+    u8 unk50F;                                            // 0x50F
+    u8 unk510;                                            // 0x510: stronger friction while set
+    u8 bgAnimFrame;                                       // 0x511
+    u8 bgAnimTimer;                                       // 0x512
+    u8 shownPennantSpots[5];                              // 0x513
+    u8 nextPickupEffect;                                  // 0x518
+    u8 hitReported;                                       // 0x519
+    u8 nextDropEffect;                                    // 0x51A
+    u8 flicked;                                           // 0x51B: a flick was made this frame
+    u16 hitY;                                             // 0x51C
+    u16 hitX;                                             // 0x51E
+    u16 flickY;                                           // 0x520: field position of the last flick
+    u16 flickX;                                           // 0x522
+    u32 pickupEffectX[4];                                 // 0x524
+    u32 pickupEffectY[4];                                 // 0x534
+    u32 dropEffectX[4];                                   // 0x544
+    u32 dropEffectY[4];                                   // 0x554
+    PokeathlonPennantCapturePennants pennants;            // 0x564
+    PokeathlonPennantCapturePoint obstaclePositions[20];  // 0x61C
+    PokeathlonPennantCapturePoint fieldItemPositions[10]; // 0x66C
+    u8 unk694[0x28];                                      // 0x694
+    u8 pennantsFull[4];                                   // 0x6BC: touched a pennant while carrying 9
 } PokeathlonPennantCapture;
 
 // The frame state the host sends to all participants (link data block at +0xF0, 0x28 bytes).
@@ -160,6 +174,7 @@ typedef struct PokeathlonPennantCapture {
 typedef struct PokeathlonPennantCaptureFrame {
     u32 words[6];
     u16 spots[5];
+    u16 timeLeft; // 0x22
 } PokeathlonPennantCaptureFrame;
 
 // Link data as seen by the frame update: own block, the other participants' blocks, the frame.

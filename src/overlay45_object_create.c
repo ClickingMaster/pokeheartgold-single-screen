@@ -76,7 +76,7 @@ extern void BillboardGfxSequence_Init(void *, ResourceData *);
 extern void BillboardResource_Init(BillboardResource *, void *, void *, const void *, ResourceData *);
 extern void BillboardResource_InitWithKeys(BillboardResource *, void *, void *, const void *, ResourceData *, u32, u32, u32);
 extern Coord ov42_022282DC(void *);
-extern void ov49_02258800(const Coord *, Vec3 *);
+extern void WiFiPlazaMap_PosToVecFx32(const Coord *, Vec3 *);
 extern void *BillboardObject_Create(CreateParams *);
 extern void BillboardObject_SetCallback(void *, void (*)(void *, Obj *), Obj *);
 extern void ov45_02230E64(void *, Obj *);
@@ -128,7 +128,7 @@ Obj *ov45_0223070C(Manager *manager, void *ctx) {
         BillboardResource_InitWithKeys(&resource, file0, texture, &ov45_02254C98, &data, texKey, tex4x4Key, GF3dGfxRawResObj_GetPlttKey(raw3d));
     }
     coord = ov42_022282DC(ctx);
-    ov49_02258800(&coord, &position);
+    WiFiPlazaMap_PosToVecFx32(&coord, &position);
     position.z += 0x10000;
     create.billboard = manager->billboard;
     create.resource = &resource;

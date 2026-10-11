@@ -50,7 +50,7 @@ void ov49_02258B5C(Ov49ManagerR4 *manager) {
             offset += sizeof(Ov49EntryR4);
         } while (i < manager->count);
     }
-    value = ov49_02258AB0(manager->arg);
+    value = WiFiPlazaMap_GetGrid(manager->arg);
     if (ov42_02229AC8(manager->iterator, &b) == 1) {
         do {
             if (ov42_02228C80(value, manager->object0, &b, &a) == 1) {

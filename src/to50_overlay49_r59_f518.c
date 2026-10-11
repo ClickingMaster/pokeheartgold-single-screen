@@ -27,7 +27,7 @@ BOOL ov49_0225F518(void *controller, void *ctx, u32 arg) {
     case 1:
         if (ov49_0225A030(ctx) == 0 && ov49_02258F38(entry) == 1) {
             ov49_02258EEC(object, entry, 0);
-            ov49_0225CC40(ov49_0225A008(ctx), entry);
+            WiFiPlazaCamera_SetFollowObject(ov49_0225A008(ctx), entry);
             U32_AT(work, 4) = 0x10;
             ov49_0225EF90(controller);
         }

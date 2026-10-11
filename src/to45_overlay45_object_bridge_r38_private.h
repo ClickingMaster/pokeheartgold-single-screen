@@ -22,7 +22,7 @@ typedef struct Overlay45R38Object {
     u8 model[0x84];
 } Overlay45R38Object;
 
-void ov49_02258800(const s16 *source, s32 *destination);
+void WiFiPlazaMap_PosToVecFx32(const s16 *source, s32 *destination);
 void BillboardObject_SetPosition(void *handle, const Overlay45R38Vec *position);
 void ModelInstance_SetPosition(void *model, u32 x, u32 y, u32 z);
 const Overlay45R38Vec *BillboardObject_GetPosition(void *handle);

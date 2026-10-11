@@ -316,29 +316,29 @@
 	.extern ov112_021EE570
 	.extern ov112_021EE594
 	.extern ov112_021EE5B8
-	.extern ov112_021EE604
-	.extern ov112_021EE608
-	.extern ov112_021EE624
-	.extern ov112_021EE628
-	.extern ov112_021EE688
-	.extern ov112_021EE6AC
-	.extern ov112_021EE6B0
-	.extern ov112_021EE6D0
-	.extern ov112_021EE6F8
-	.extern ov112_021EE70C
-	.extern ov112_021EE718
-	.extern ov112_021EE73C
-	.extern ov112_021EE754
-	.extern ov112_021EE778
-	.extern ov112_021EE7A8
-	.extern ov112_021EE8BC
-	.extern ov112_021EE920
-	.extern ov112_021EE970
-	.extern ov112_021EE9A4
-	.extern ov112_021EE9E4
-	.extern ov112_021EEA7C
-	.extern ov112_021EEAF0
-	.extern ov112_021EECF0
+	.extern PokewalkerApp_Mode4_Enter
+	.extern PokewalkerApp_Mode4_Update
+	.extern PokewalkerApp_Mode4_Exit
+	.extern PokewalkerApp_StartStroll_Enter
+	.extern PokewalkerApp_StartStroll_Update
+	.extern PokewalkerApp_StartStroll_Exit
+	.extern PokewalkerApp_StartStroll_PrintSaving
+	.extern PokewalkerApp_StartStroll_WaitSaving
+	.extern PokewalkerApp_StartStroll_Save
+	.extern PokewalkerApp_StartStroll_EndSave
+	.extern PokewalkerApp_StartStroll_CheckFirstStroll
+	.extern PokewalkerApp_StartStroll_PrintRegistered
+	.extern PokewalkerApp_StartStroll_WaitRegistered
+	.extern PokewalkerApp_StartStroll_End
+	.extern PokewalkerApp_ReturnStrollMon
+	.extern PokewalkerApp_AddStrollExp
+	.extern PokewalkerApp_GiveStarfBerry
+	.extern PokewalkerApp_AddStrollFriendship
+	.extern PokewalkerApp_CreateWalkerMonWithOT
+	.extern PokewalkerApp_CreateWalkerMon
+	.extern PokewalkerApp_ReceiveItems
+	.extern PokewalkerApp_ReceiveMons
+	.extern PokewalkerApp_ReceiveGifts
 	.extern PokewalkerApp_LinkSave_Enter
 	.extern PokewalkerApp_LinkSave_Update
 	.extern PokewalkerApp_LinkSave_Exit
@@ -850,7 +850,7 @@
 	.extern sMode1States
 	.extern sEraseRecordsStates
 	.extern ov112_021FF7CC
-	.extern ov112_021FF8D8
+	.extern sStartStrollStates
 	.extern sLinkSaveStates
 	.extern sStrollReportStates
 	.extern ov112_021FF9B8

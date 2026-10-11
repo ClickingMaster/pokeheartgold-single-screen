@@ -76,7 +76,7 @@ void ov49_0225A06C(void *, u32, u32);
 void ov49_0225A04C(void *, u32, u32);
 void ov49_02259130(void *, u32);
 void ov49_0225EFC4(void *, u32, const void *, void *);
-BOOL ov49_022589D8(void *, void *, u16 *, u16 *, u32);
+BOOL WiFiPlazaMap_FindTileTag(void *, void *, u16 *, u16 *, u32);
 BOOL ov49_02258F7C(void *, u16, u16);
 
 #endif

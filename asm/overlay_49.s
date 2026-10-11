@@ -2470,22 +2470,22 @@
 	.public _02269612
 	.public _0226961A
 	.public _02269624
-	.public ov49_02258800
-	.public ov49_02258814
-	.public ov49_02258830
-	.public ov49_022588A0
-	.public ov49_02258958
-	.public ov49_02258994
-	.public ov49_022589A8
-	.public ov49_022589AC
-	.public ov49_022589B8
-	.public ov49_022589C4
-	.public ov49_022589D8
+	.public WiFiPlazaMap_PosToVecFx32
+	.public WiFiPlazaMap_VecFx32ToPos
+	.public WiFiPlazaMap_LoadModelFile
+	.public WiFiPlazaMap_IsModelInstanceInView
+	.public WiFiPlazaMap_Create
+	.public WiFiPlazaMap_Delete
+	.public WiFiPlazaMap_GetWidth
+	.public WiFiPlazaMap_GetCollision
+	.public WiFiPlazaMap_GetTileTag
+	.public WiFiPlazaMap_GetTileAttr
+	.public WiFiPlazaMap_FindTileTag
 	.public ov49_02258A30
 	.public ov49_02258A50
 	.public ov49_02258A70
 	.public ov49_02258A90
-	.public ov49_02258AB0
+	.public WiFiPlazaMap_GetGrid
 	.public ov49_02258AB4
 	.public ov49_02258B20
 	.public ov49_02258B44
@@ -2747,13 +2747,13 @@
 	.public ov49_0225CB50
 	.public ov49_0225CB68
 	.public ov49_0225CB70
-	.public ov49_0225CB78
-	.public ov49_0225CBDC
-	.public ov49_0225CBF4
-	.public ov49_0225CC20
-	.public ov49_0225CC28
-	.public ov49_0225CC40
-	.public ov49_0225CC44
+	.public WiFiPlazaCamera_Create
+	.public WiFiPlazaCamera_Delete
+	.public WiFiPlazaCamera_Update
+	.public WiFiPlazaCamera_SetTarget
+	.public WiFiPlazaCamera_SetTargetWithOffset
+	.public WiFiPlazaCamera_SetFollowObject
+	.public WiFiPlazaCamera_ClearFollowObject
 	.public ov49_0225CC4C
 	.public ov49_0225CCC0
 	.public ov49_0225CCF0
@@ -3168,7 +3168,7 @@
 	.public ov49_0226988C
 	.public ov49_0226991C
 	.public ov49_022699AC
-	.public ov49_02269A6C
+	.public sWiFiPlazaCameraAngle
 	.public ov49_02269A74
 	.public ov49_02269A7C
 	.public ov49_02269A7E
@@ -3259,13 +3259,13 @@
 	.include "global.inc"
 
 	.text
-	.public ov49_02258800
-	.public ov49_02258814
-	.public ov49_02258994
-	.public ov49_022589A8
-	.public ov49_022589AC
-	.public ov49_022589C4
-	.public ov49_02258AB0
+	.public WiFiPlazaMap_PosToVecFx32
+	.public WiFiPlazaMap_VecFx32ToPos
+	.public WiFiPlazaMap_Delete
+	.public WiFiPlazaMap_GetWidth
+	.public WiFiPlazaMap_GetCollision
+	.public WiFiPlazaMap_GetTileAttr
+	.public WiFiPlazaMap_GetGrid
 	.public ov49_02258BD4
 	.public ov49_02258BE0
 	.public ov49_02258C1C
@@ -3342,11 +3342,11 @@
 	.public ov49_0225CB50
 	.public ov49_0225CB68
 	.public ov49_0225CB70
-	.public ov49_0225CBDC
-	.public ov49_0225CC20
-	.public ov49_0225CC28
-	.public ov49_0225CC40
-	.public ov49_0225CC44
+	.public WiFiPlazaCamera_Delete
+	.public WiFiPlazaCamera_SetTarget
+	.public WiFiPlazaCamera_SetTargetWithOffset
+	.public WiFiPlazaCamera_SetFollowObject
+	.public WiFiPlazaCamera_ClearFollowObject
 	.public ov49_0225CDE8
 	.public ov49_0225CF94
 	.public ov49_0225D040
@@ -3428,8 +3428,8 @@
 	.public ov49_02268CDC
 	.public ov49_02269090
 
-	thumb_func_start ov49_02258830
-ov49_02258830: ; 0x02258830
+	thumb_func_start WiFiPlazaMap_LoadModelFile
+WiFiPlazaMap_LoadModelFile: ; 0x02258830
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x10
 	add r5, r0, #0
@@ -3474,11 +3474,11 @@ ov49_02258830: ; 0x02258830
 	bl Heap_Free
 	add sp, #0x10
 	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end ov49_02258830
+	thumb_func_end WiFiPlazaMap_LoadModelFile
 
 
-	thumb_func_start ov49_022588A0
-ov49_022588A0: ; 0x022588A0
+	thumb_func_start WiFiPlazaMap_IsModelInstanceInView
+WiFiPlazaMap_IsModelInstanceInView: ; 0x022588A0
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x60
 	add r5, r1, #0
@@ -3558,11 +3558,11 @@ ov49_022588A0: ; 0x022588A0
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
 _02258954: .word FX_SinCosTable_
-	thumb_func_end ov49_022588A0
+	thumb_func_end WiFiPlazaMap_IsModelInstanceInView
 
 
-	thumb_func_start ov49_02258958
-ov49_02258958: ; 0x02258958
+	thumb_func_start WiFiPlazaMap_Create
+WiFiPlazaMap_Create: ; 0x02258958
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	mov r1, #4
@@ -3588,4 +3588,4 @@ ov49_02258958: ; 0x02258958
 	bl Heap_Free
 	add r0, r4, #0
 	pop {r3, r4, r5, pc}
-	thumb_func_end ov49_02258958
+	thumb_func_end WiFiPlazaMap_Create

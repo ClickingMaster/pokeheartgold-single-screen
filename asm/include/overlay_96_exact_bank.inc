@@ -884,18 +884,18 @@
 	.public ov96_02204DF8
 	.public ov96_02204E58
 	.public ov96_02204F20
-	.public ov96_02204F40
-	.public ov96_02205048
-	.public ov96_022050B4
-	.public ov96_022050F8
-	.public ov96_022052B0
-	.public ov96_0220549C
-	.public ov96_02205520
-	.public ov96_022055AC
-	.public ov96_02205AFC
-	.public ov96_02205C94
-	.public ov96_02205D30
-	.public ov96_02205DD4
+	.public PokeathlonPennantCapture_InitBgs
+	.public PokeathlonPennantCapture_LoadBgGfx
+	.public PokeathlonPennantCapture_LoadSpriteResources
+	.public PokeathlonPennantCapture_CreateSprites
+	.public PokeathlonPennantCapture_State_Setup
+	.public PokeathlonPennantCapture_State_Play
+	.public PokeathlonPennantCapture_State_End
+	.public PokeathlonPennantCapture_HostStep
+	.public PokeathlonPennantCapture_PackFrame
+	.public PokeathlonPennantCapture_SendInput
+	.public PokeathlonPennantCapture_ShowFrame
+	.public PokeathlonPennantCapture_IsTouchOnOwnMon
 	.public PokeathlonPennantCapture_UpdatePlayers
 	.public PokeathlonPennantCapture_TickFreezeTimer
 	.public PokeathlonPennantCapture_ApplyFrame

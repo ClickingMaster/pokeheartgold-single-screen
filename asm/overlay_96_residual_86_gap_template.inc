@@ -388,8 +388,8 @@ _02204F3C: .word ov96_0221CB9C
 
 	.if R86_GAP == 1
 
-	thumb_func_start ov96_02204F40
-ov96_02204F40: ; 0x02204F40
+	thumb_func_start PokeathlonPennantCapture_InitBgs
+PokeathlonPennantCapture_InitBgs: ; 0x02204F40
 	push {r4, r5, lr}
 	sub sp, #0x9c
 	ldr r5, _02205030 ; =ov96_0221CAF0
@@ -504,11 +504,11 @@ _02205038: .word ov96_0221CB80
 _0220503C: .word ov96_0221CB10
 _02205040: .word ov96_0221CB2C
 _02205044: .word ov96_0221CB48
-	thumb_func_end ov96_02204F40
+	thumb_func_end PokeathlonPennantCapture_InitBgs
 
 
-	thumb_func_start ov96_02205048
-ov96_02205048: ; 0x02205048
+	thumb_func_start PokeathlonPennantCapture_LoadBgGfx
+PokeathlonPennantCapture_LoadBgGfx: ; 0x02205048
 	push {r4, lr}
 	sub sp, #0x10
 	mov r3, #0
@@ -557,13 +557,13 @@ ov96_02205048: ; 0x02205048
 	bl PokeathlonPennantCaptureDisplay_LoadBgGfx
 	add sp, #0x10
 	pop {r4, pc}
-	thumb_func_end ov96_02205048
+	thumb_func_end PokeathlonPennantCapture_LoadBgGfx
 	.endif
 
 
 	.if 0
-	thumb_func_start ov96_022050B4
-ov96_022050B4: ; 0x022050B4
+	thumb_func_start PokeathlonPennantCapture_LoadSpriteResources
+PokeathlonPennantCapture_LoadSpriteResources: ; 0x022050B4
 	push {r4, lr}
 	sub sp, #8
 	mov r1, #1
@@ -594,13 +594,13 @@ ov96_022050B4: ; 0x022050B4
 	bl ov96_021EB36C
 	add sp, #8
 	pop {r4, pc}
-	thumb_func_end ov96_022050B4
+	thumb_func_end PokeathlonPennantCapture_LoadSpriteResources
 	.endif
 
 	.if R86_GAP == 2
 
-	thumb_func_start ov96_022050F8
-ov96_022050F8: ; 0x022050F8
+	thumb_func_start PokeathlonPennantCapture_CreateSprites
+PokeathlonPennantCapture_CreateSprites: ; 0x022050F8
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0xc
 	str r0, [sp, #4]
@@ -803,11 +803,11 @@ _02205252:
 _022052A4: .word 0x00000474
 _022052A8: .word 0x0000056C
 _022052AC: .word 0x00000568
-	thumb_func_end ov96_022050F8
+	thumb_func_end PokeathlonPennantCapture_CreateSprites
 
 
-	thumb_func_start ov96_022052B0
-ov96_022052B0: ; 0x022052B0
+	thumb_func_start PokeathlonPennantCapture_State_Setup
+PokeathlonPennantCapture_State_Setup: ; 0x022052B0
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x84
 	str r1, [sp, #0x10]
@@ -1022,7 +1022,7 @@ _02205456:
 	bl PokeathlonCourse_SetStateField07
 _02205466:
 	ldr r0, [sp, #0xc]
-	bl ov96_02205D30
+	bl PokeathlonPennantCapture_ShowFrame
 	mov r0, #0
 	add sp, #0x84
 	pop {r4, r5, r6, r7, pc}
@@ -1037,13 +1037,13 @@ _0220548C: .word 0x0000047A
 _02205490: .word 0x00000474
 _02205494: .word 0x000005C8
 _02205498: .word 0x00000564
-	thumb_func_end ov96_022052B0
+	thumb_func_end PokeathlonPennantCapture_State_Setup
 	.endif
 
 
 	.if 0
-	thumb_func_start ov96_0220549C
-ov96_0220549C: ; 0x0220549C
+	thumb_func_start PokeathlonPennantCapture_State_Play
+PokeathlonPennantCapture_State_Play: ; 0x0220549C
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0xc
 	add r4, r1, #0
@@ -1060,7 +1060,7 @@ ov96_0220549C: ; 0x0220549C
 	b _0220551A
 _022054BA:
 	add r0, r5, #0
-	bl ov96_02205D30
+	bl PokeathlonPennantCapture_ShowFrame
 	add r0, r5, #0
 	bl ov96_021E637C
 	cmp r0, #0
@@ -1071,9 +1071,9 @@ _022054BA:
 	b _0220551A
 _022054D2:
 	add r0, r5, #0
-	bl ov96_022055AC
+	bl PokeathlonPennantCapture_HostStep
 	add r0, r5, #0
-	bl ov96_02205C94
+	bl PokeathlonPennantCapture_SendInput
 	cmp r0, #0
 	beq _0220551A
 	ldrb r0, [r4]
@@ -1082,7 +1082,7 @@ _022054D2:
 	b _0220551A
 _022054EA:
 	add r0, r5, #0
-	bl ov96_022055AC
+	bl PokeathlonPennantCapture_HostStep
 	add r0, r5, #0
 	bl ov96_021E667C
 	cmp r0, #0
@@ -1105,13 +1105,13 @@ _0220551A:
 	mov r0, #0
 	add sp, #0xc
 	pop {r3, r4, r5, r6, pc}
-	thumb_func_end ov96_0220549C
+	thumb_func_end PokeathlonPennantCapture_State_Play
 	.endif
 
 	.if R86_GAP == 3
 
-	thumb_func_start ov96_02205520
-ov96_02205520: ; 0x02205520
+	thumb_func_start PokeathlonPennantCapture_State_End
+PokeathlonPennantCapture_State_End: ; 0x02205520
 	push {r3, r4, r5, r6, r7, lr}
 	add r7, r0, #0
 	add r4, r1, #0
@@ -1179,11 +1179,11 @@ _0220558A:
 	nop
 _022055A4: .word 0x000003FF
 _022055A8: .word 0x000003E7
-	thumb_func_end ov96_02205520
+	thumb_func_end PokeathlonPennantCapture_State_End
 
 
-	thumb_func_start ov96_022055AC
-ov96_022055AC: ; 0x022055AC
+	thumb_func_start PokeathlonPennantCapture_HostStep
+PokeathlonPennantCapture_HostStep: ; 0x022055AC
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x78
 	str r0, [sp]
@@ -1209,7 +1209,7 @@ _022055CC:
 	bl ov96_021E8A20
 	add r1, r0, #0
 	ldr r0, [sp, #0x2c]
-	bl ov96_02205AFC
+	bl PokeathlonPennantCapture_PackFrame
 	add sp, #0x78
 	pop {r3, r4, r5, r6, r7, pc}
 _022055EC:
@@ -1504,7 +1504,7 @@ _0220580A:
 	ldrb r3, [r7, #5]
 	ldr r0, [sp, #0x2c]
 	lsr r1, r1, #0x18
-	bl ov96_02205DD4
+	bl PokeathlonPennantCapture_IsTouchOnOwnMon
 	cmp r0, #0
 	beq _022058F2
 	mov r0, #0xcd
@@ -1837,7 +1837,7 @@ _02205ACC:
 	bl ov96_021E8A20
 	add r1, r0, #0
 	ldr r0, [sp, #0x2c]
-	bl ov96_02205AFC
+	bl PokeathlonPennantCapture_PackFrame
 _02205AE0:
 	add sp, #0x78
 	pop {r3, r4, r5, r6, r7, pc}
@@ -1848,11 +1848,11 @@ _02205AEC: .word 0x45800000
 _02205AF0: .word 0x0000051B
 _02205AF4: .word 0x00000522
 _02205AF8: .word 0x0000050C
-	thumb_func_end ov96_022055AC
+	thumb_func_end PokeathlonPennantCapture_HostStep
 
 
-	thumb_func_start ov96_02205AFC
-ov96_02205AFC: ; 0x02205AFC
+	thumb_func_start PokeathlonPennantCapture_PackFrame
+PokeathlonPennantCapture_PackFrame: ; 0x02205AFC
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x18
 	str r0, [sp, #0x14]
@@ -2058,11 +2058,11 @@ _02205B32:
 	.balign 4, 0
 _02205C8C: .word 0x000006BC
 _02205C90: .word 0x0000051E
-	thumb_func_end ov96_02205AFC
+	thumb_func_end PokeathlonPennantCapture_PackFrame
 
 
-	thumb_func_start ov96_02205C94
-ov96_02205C94: ; 0x02205C94
+	thumb_func_start PokeathlonPennantCapture_SendInput
+PokeathlonPennantCapture_SendInput: ; 0x02205C94
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	bl PokeathlonCourse_GetHeapAllocPtr4
@@ -2124,19 +2124,19 @@ _02205D06:
 	str r0, [r4]
 _02205D1C:
 	add r0, r5, #0
-	bl ov96_02205D30
+	bl PokeathlonPennantCapture_ShowFrame
 	mov r0, #0
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
 _02205D28: .word PokeathlonPennantCapture_UpdateOwnScore
 _02205D2C: .word gSystem + 0x40
-	thumb_func_end ov96_02205C94
+	thumb_func_end PokeathlonPennantCapture_SendInput
 	.endif
 
 
 	.if 0
-	thumb_func_start ov96_02205D30
-ov96_02205D30: ; 0x02205D30
+	thumb_func_start PokeathlonPennantCapture_ShowFrame
+PokeathlonPennantCapture_ShowFrame: ; 0x02205D30
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0xc
 	str r0, [sp]
@@ -2206,11 +2206,11 @@ ov96_02205D30: ; 0x02205D30
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
 _02205DD0: .word 0x000001FF
-	thumb_func_end ov96_02205D30
+	thumb_func_end PokeathlonPennantCapture_ShowFrame
 
 
-	thumb_func_start ov96_02205DD4
-ov96_02205DD4: ; 0x02205DD4
+	thumb_func_start PokeathlonPennantCapture_IsTouchOnOwnMon
+PokeathlonPennantCapture_IsTouchOnOwnMon: ; 0x02205DD4
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0xc
 	add r6, r2, #0
@@ -2256,7 +2256,7 @@ _02205E28:
 	add sp, #0xc
 	pop {r3, r4, r5, r6, pc}
 	.balign 4, 0
-	thumb_func_end ov96_02205DD4
+	thumb_func_end PokeathlonPennantCapture_IsTouchOnOwnMon
 	.endif
 
 	.if R86_GAP == 4

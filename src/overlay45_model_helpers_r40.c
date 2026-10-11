@@ -3,7 +3,7 @@
 #include "gf_3d_render.h"
 #include "overlay45_model_helpers_r40_private.h"
 
-extern void ov49_02258830(NNSG3dResFileHeader **file, void *narc, int fileId, u32 heapId);
+extern void WiFiPlazaMap_LoadModelFile(NNSG3dResFileHeader **file, void *narc, int fileId, u32 heapId);
 extern void ModelResource_Free(Ov45R40Model *model);
 extern void NNS_G3dMdlSetMdlPolygonIDAll(NNSG3dResMdl *model, int polygonId);
 extern void NNS_G3dMdlSetMdlAlphaAll(NNSG3dResMdl *model, int alpha);
@@ -15,7 +15,7 @@ u32 ov45_022309D0(u32 divisor, u16 value, u32 factor) {
 void ov45_022309E8(Ov45R40Model *model, void *narc, int fileId, u32 heapId) {
     NNSG3dResFileHeader *file;
 
-    ov49_02258830(&file, narc, fileId, heapId);
+    WiFiPlazaMap_LoadModelFile(&file, narc, fileId, heapId);
     model->file = file;
     model->set = NNS_G3dGetMdlSet(model->file);
     model->model = NNS_G3dGetMdlByIdx(model->set, 0);

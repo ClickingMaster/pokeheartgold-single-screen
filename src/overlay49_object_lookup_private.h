@@ -20,8 +20,8 @@ typedef struct Ov49Residual9Context {
 } Ov49Residual9Context;
 
 extern const u8 ov49_02269654[4];
-int ov49_022589AC(void *map, u16 x, u16 y);
-int ov49_022589C4(void *map, u16 x, u16 y);
+int WiFiPlazaMap_GetCollision(void *map, u16 x, u16 y);
+int WiFiPlazaMap_GetTileAttr(void *map, u16 x, u16 y);
 
 Ov49Residual9Entry *ov49_02258F7C(Ov49Residual9Context *ctx, s32 x, s32 y);
 BOOL ov49_02258FDC(Ov49Residual9Context *ctx, s32 x, s32 y);

@@ -56,7 +56,7 @@ BOOL ov49_02260254(void *controller, void *work, u32 arg) {
         ov49_0225A018(work, 0);
         object = ov49_02259FF0(work);
         entry = ov49_02258DAC(object);
-        ov49_0225CC44(ov49_0225A008(work));
+        WiFiPlazaCamera_ClearFollowObject(ov49_0225A008(work));
         ov49_02258EEC(object, (void*)(entry), 3);
         ov49_0225EF8C(controller, 7);
         break;

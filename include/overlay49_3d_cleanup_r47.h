@@ -11,7 +11,7 @@ void Heap_Free(void *);
 void ov49_0225D57C(void *, void *, int);
 int ov49_0225D5A0(void *, void *, int);
 void GF_AssertFail(void);
-int ov49_022588A0(void *, void *);
+int WiFiPlazaMap_IsModelInstanceInView(void *, void *);
 void ModelInstance_AddAnimation(void *, void *);
 void ModelAnimation_SetFrame(void *, void *);
 void ModelInstance_Draw(void *);

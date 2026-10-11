@@ -10,7 +10,7 @@ extern u32 ov49_02258E60(void *p, u32 a);
 extern void ov49_0225A53C(void *p, u32 a);
 extern void ov49_02259154(void *p, VecFx32 *v);
 extern void ov49_02259148(void *p, const VecFx32 *v);
-extern void ov49_0225CC20(void *p, u32 a, u32 b, u32 c);
+extern void WiFiPlazaCamera_SetTarget(void *p, u32 a, u32 b, u32 c);
 extern void ov45_0222AE08(void *p, fx32 *a, fx32 *b);
 extern void ov49_0225E420(void *p, fx32 a, fx32 b, VecFx32 *v);
 extern u32 ov49_0225EF88(void *p);
@@ -38,7 +38,7 @@ extern const Ov49Blk ov49_02269C00;
 void ov49_022611D4(Ov49Hud *p, void *a) {
     VecFx32 v;
     ov49_02259154(p->unk0C, &v);
-    ov49_0225CC20(a, v.x, v.y, v.z);
+    WiFiPlazaCamera_SetTarget(a, v.x, v.y, v.z);
 }
 
 BOOL ov49_022611F4(Ov49Hud *p, void *a) {

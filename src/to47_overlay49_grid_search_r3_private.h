@@ -8,8 +8,8 @@ extern const u8 ov49_02269628[];
 extern const u8 ov49_0226962C[];
 extern const u8 ov49_02269634[];
 
-int ov49_022589B8(void *ctx, u16 x, u16 y);
-BOOL ov49_022589D8(void *ctx, u16 target, u16 *outX, u16 *outY, u32 ordinal);
+int WiFiPlazaMap_GetTileTag(void *ctx, u16 x, u16 y);
+BOOL WiFiPlazaMap_FindTileTag(void *ctx, u16 target, u16 *outX, u16 *outY, u32 ordinal);
 BOOL ov49_02258A30(u8 value);
 BOOL ov49_02258A50(u8 value);
 BOOL ov49_02258A70(u8 value);

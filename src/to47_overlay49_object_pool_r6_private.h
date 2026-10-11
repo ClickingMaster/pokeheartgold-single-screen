@@ -15,7 +15,7 @@ typedef struct SolCfg6 {
     u16 id, a, b, c;
 } SolCfg6;
 
-int ov49_022589D8(void *, int, u16 *, u16 *, int);
+int WiFiPlazaMap_FindTileTag(void *, int, u16 *, u16 *, int);
 void GF_AssertFail(void);
 void *ov49_02258C5C(void *, int, int, int);
 void *ov49_022593C0(void *);

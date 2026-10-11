@@ -51,8 +51,8 @@ BOOL ov49_0225904C(Ov49Residual9Context *ctx, Ov49Residual9Entry *entry, s32 *di
         int y = next.unk2 / 16;
         int x = next.unk0 / 16;
 
-        if (ov49_022589AC(ctx->map, x, y) != 1) {
-            int tile = ov49_022589C4(ctx->map, x, y);
+        if (WiFiPlazaMap_GetCollision(ctx->map, x, y) != 1) {
+            int tile = WiFiPlazaMap_GetTileAttr(ctx->map, x, y);
             if ((tile == 0 || tile == 0x2A) && ov42_022284A4(ctx->objects, next) == NULL) {
                 *direction = ov49_02269654[i];
                 *position = next;

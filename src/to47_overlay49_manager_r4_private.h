@@ -23,7 +23,7 @@ void ov49_022591D8(void *);
 void ov45_02230638(void *);
 void ov49_02259A54(void *, void *);
 BOOL ov49_022593FC(void *);
-void *ov49_02258AB0(void *);
+void *WiFiPlazaMap_GetGrid(void *);
 void ov45_02230680(void *);
 Ov49ManagerR4 *ov49_02258AB4(u32, u32, void *, enum HeapID, u32);
 void ov49_02258B20(Ov49ManagerR4 *);

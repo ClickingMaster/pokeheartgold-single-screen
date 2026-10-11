@@ -8,7 +8,7 @@ void ov49_0226571C(void *p) {
 
 void ov49_02265738(void *p, void *narc, u32 heap) {
     int i = 0; u8 *dst=(u8 *)p+0x10640;
-    for(;i<39;i++,dst+=4) ov49_02258830(dst,narc,i+0x90,heap);
+    for(;i<39;i++,dst+=4) WiFiPlazaMap_LoadModelFile(dst,narc,i+0x90,heap);
 }
 
 void ov49_02265760(void *p) {

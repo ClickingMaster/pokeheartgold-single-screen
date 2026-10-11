@@ -6,7 +6,7 @@ u32 ov49_0225D450(Ov49DState *, s32);
 
 void ov49_0225D1C4(void *p, VecS16Sol v) {
     VecFx32 out;
-    ov49_02258800(&v, &out);
+    WiFiPlazaMap_PosToVecFx32(&v, &out);
     ModelInstance_SetPosition((u8 *)p + 4, out.x, out.y, out.z);
 }
 
@@ -15,7 +15,7 @@ u32 ov49_0225D1EC(void *p) {
     u16 out[2];
     u32 result;
     ModelInstance_GetPosition((u8 *)p + 4, &in.x, &in.y, &in.z);
-    ov49_02258814(&in, out);
+    WiFiPlazaMap_VecFx32ToPos(&in, out);
     result = out[1];
     result <<= 16;
     result |= out[0];

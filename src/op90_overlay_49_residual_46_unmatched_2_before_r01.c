@@ -27,7 +27,7 @@ typedef struct Data49 {
     u32 animCounts[2];
     u32 skip[2][3];
 } Data49;
-void ov49_02258830(void **dest, NARC *narc, int fileId, enum HeapID heapId);
+void WiFiPlazaMap_LoadModelFile(void **dest, NARC *narc, int fileId, enum HeapID heapId);
 void ModelAnimation_LoadFromNarc(Anim49 *anim, Model49 *model, NARC *narc, int fileId, enum HeapID heapId, enum HeapID heapId2);
 void NNS_G3dAnmObjDisableID(void *anmObj, int id);
 void ov49_0225D854(Obj49 *obj, NARC *narc, enum HeapID heapId2, Data49 *data, enum HeapID heapId);
@@ -38,7 +38,7 @@ void ov49_0225D854(Obj49 *obj, NARC *narc, enum HeapID heapId2, Data49 *data, en
     u32 k;
     for (i = 0; i < 2; i++) {
         for (j = 0; j < 3; j++) {
-            ov49_02258830(&obj->texRes[i][j], narc, data->texIds[i][j], heapId);
+            WiFiPlazaMap_LoadModelFile(&obj->texRes[i][j], narc, data->texIds[i][j], heapId);
         }
     }
     for (i = 0; i < 2; i++) {

@@ -2470,22 +2470,22 @@
 	.public _02269612
 	.public _0226961A
 	.public _02269624
-	.public ov49_02258800
-	.public ov49_02258814
-	.public ov49_02258830
-	.public ov49_022588A0
-	.public ov49_02258958
-	.public ov49_02258994
-	.public ov49_022589A8
-	.public ov49_022589AC
-	.public ov49_022589B8
-	.public ov49_022589C4
-	.public ov49_022589D8
+	.public WiFiPlazaMap_PosToVecFx32
+	.public WiFiPlazaMap_VecFx32ToPos
+	.public WiFiPlazaMap_LoadModelFile
+	.public WiFiPlazaMap_IsModelInstanceInView
+	.public WiFiPlazaMap_Create
+	.public WiFiPlazaMap_Delete
+	.public WiFiPlazaMap_GetWidth
+	.public WiFiPlazaMap_GetCollision
+	.public WiFiPlazaMap_GetTileTag
+	.public WiFiPlazaMap_GetTileAttr
+	.public WiFiPlazaMap_FindTileTag
 	.public ov49_02258A30
 	.public ov49_02258A50
 	.public ov49_02258A70
 	.public ov49_02258A90
-	.public ov49_02258AB0
+	.public WiFiPlazaMap_GetGrid
 	.public ov49_02258AB4
 	.public ov49_02258B20
 	.public ov49_02258B44
@@ -2747,13 +2747,13 @@
 	.public ov49_0225CB50
 	.public ov49_0225CB68
 	.public ov49_0225CB70
-	.public ov49_0225CB78
-	.public ov49_0225CBDC
-	.public ov49_0225CBF4
-	.public ov49_0225CC20
-	.public ov49_0225CC28
-	.public ov49_0225CC40
-	.public ov49_0225CC44
+	.public WiFiPlazaCamera_Create
+	.public WiFiPlazaCamera_Delete
+	.public WiFiPlazaCamera_Update
+	.public WiFiPlazaCamera_SetTarget
+	.public WiFiPlazaCamera_SetTargetWithOffset
+	.public WiFiPlazaCamera_SetFollowObject
+	.public WiFiPlazaCamera_ClearFollowObject
 	.public ov49_0225CC4C
 	.public ov49_0225CCC0
 	.public ov49_0225CCF0
@@ -3168,7 +3168,7 @@
 	.public ov49_0226988C
 	.public ov49_0226991C
 	.public ov49_022699AC
-	.public ov49_02269A6C
+	.public sWiFiPlazaCameraAngle
 	.public ov49_02269A74
 	.public ov49_02269A7C
 	.public ov49_02269A7E
@@ -3259,13 +3259,13 @@
 	.include "global.inc"
 
 	.text
-	.public ov49_02258800
-	.public ov49_02258814
-	.public ov49_02258994
-	.public ov49_022589A8
-	.public ov49_022589AC
-	.public ov49_022589C4
-	.public ov49_02258AB0
+	.public WiFiPlazaMap_PosToVecFx32
+	.public WiFiPlazaMap_VecFx32ToPos
+	.public WiFiPlazaMap_Delete
+	.public WiFiPlazaMap_GetWidth
+	.public WiFiPlazaMap_GetCollision
+	.public WiFiPlazaMap_GetTileAttr
+	.public WiFiPlazaMap_GetGrid
 	.public ov49_02258BD4
 	.public ov49_02258BE0
 	.public ov49_02258C1C
@@ -3342,11 +3342,11 @@
 	.public ov49_0225CB50
 	.public ov49_0225CB68
 	.public ov49_0225CB70
-	.public ov49_0225CBDC
-	.public ov49_0225CC20
-	.public ov49_0225CC28
-	.public ov49_0225CC40
-	.public ov49_0225CC44
+	.public WiFiPlazaCamera_Delete
+	.public WiFiPlazaCamera_SetTarget
+	.public WiFiPlazaCamera_SetTargetWithOffset
+	.public WiFiPlazaCamera_SetFollowObject
+	.public WiFiPlazaCamera_ClearFollowObject
 	.public ov49_0225CDE8
 	.public ov49_0225CF94
 	.public ov49_0225D040
@@ -3790,7 +3790,7 @@ ov49_022699AC: ; 0x022699AC
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x70, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x79, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x7C, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov49_02269A6C: ; 0x02269A6C
+sWiFiPlazaCameraAngle: ; 0x02269A6C
 	.byte 0x02, 0xD6, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 

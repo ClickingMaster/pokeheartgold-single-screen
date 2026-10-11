@@ -35,10 +35,10 @@ extern const GraphicsModes sSelectMonGraphicsModes;
 extern const ObjCharTransferTemplate sSelectMonObjCharTransferTemplate;
 extern const OverlayManagerTemplate sEventLogAppTemplate;
 
-void ov112_021EE7A8(PokewalkerApp *app);
-void ov112_021EE920(PokewalkerApp *app);
-void ov112_021EEA7C(PokewalkerApp *app);
-void ov112_021EEAF0(PokewalkerApp *app, int a1);
+void PokewalkerApp_ReturnStrollMon(PokewalkerApp *app);
+void PokewalkerApp_GiveStarfBerry(PokewalkerApp *app);
+void PokewalkerApp_ReceiveItems(PokewalkerApp *app);
+void PokewalkerApp_ReceiveMons(PokewalkerApp *app, int a1);
 void ov112_021ED0C8(PokewalkerApp *app);
 BOOL sub_02006B84(void);
 void NNS_G2dInitOamManagerModule(void);
@@ -47,10 +47,10 @@ void NNS_G2dInitOamManagerModule(void);
 int PokewalkerApp_LinkSave_Enter(PokewalkerApp *app) {
     app->strollMon = NULL;
     if (app->unk_10 == 1) {
-        ov112_021EE7A8(app);
-        ov112_021EEAF0(app, 1);
-        ov112_021EEA7C(app);
-        ov112_021EE920(app);
+        PokewalkerApp_ReturnStrollMon(app);
+        PokewalkerApp_ReceiveMons(app, 1);
+        PokewalkerApp_ReceiveItems(app);
+        PokewalkerApp_GiveStarfBerry(app);
         if (app->peerIdentity.unk_5B_2 == 0) {
             sub_020326A4(app->pokewalker, 1, 0);
         }
@@ -67,11 +67,11 @@ int PokewalkerApp_LinkSave_Enter(PokewalkerApp *app) {
         PokewalkerApp_UnlockNextCourse(app);
         app->state = 0;
     } else if (app->unk_10 == 2) {
-        ov112_021EEA7C(app);
-        ov112_021EEAF0(app, 0);
+        PokewalkerApp_ReceiveItems(app);
+        PokewalkerApp_ReceiveMons(app, 0);
         app->state = 5;
     } else if (app->unk_10 == 4) {
-        ov112_021EE7A8(app);
+        PokewalkerApp_ReturnStrollMon(app);
         PokewalkerApp_LoadMonPicture(app->strollMon, app->monSpriteBuffer, &app->monPicTemplate, 0);
         ov112_021ED0C8(app);
         app->state = 0;

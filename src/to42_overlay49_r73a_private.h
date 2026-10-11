@@ -49,7 +49,7 @@ extern u32 ov49_02265C40(void *, void *, u32, u32);
 extern void ModelInstance_SetVisible(void *, int);
 extern void ModelInstance_SetPosition(void *, fx32, fx32, fx32);
 extern void ModelInstance_GetPosition(void *, fx32 *, fx32 *, fx32 *);
-extern void ov49_0225CC40(void *, void *);
+extern void WiFiPlazaCamera_SetFollowObject(void *, void *);
 
 extern const VecFx32 ov49_0226A4D8[];
 extern const VecFx32 ov49_0226A508[];

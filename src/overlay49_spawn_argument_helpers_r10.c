@@ -19,7 +19,7 @@ BOOL ov49_022592A8(Ov49R10Context *ctx, UnkStruct_ov42_02228110 **object, s32 di
     u32 result;
 
     position = ov42_02228270(position, direction);
-    result = ov49_022589B8(ctx->unk14, position.unk0 / 16, position.unk2 / 16);
+    result = WiFiPlazaMap_GetTileTag(ctx->unk14, position.unk0 / 16, position.unk2 / 16);
     if (result == value) {
         return TRUE;
     }

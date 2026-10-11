@@ -10,7 +10,7 @@ typedef struct Record{char bytes[12];} Record;
 typedef struct Entry{u16 id,type;} Entry;
 extern Entry ov49_02269AAC[],ov49_02269A88[];
 void*Heap_Alloc(int,int);void*ov49_0225CC4C(int,int,int,u32);void ov49_0225CDEC(void*,u32,u32,u32,u32);
-int ov49_022589D8(void*,int,u16*,u16*,int);void*ov49_0225D098(void*,int,u16,u16);
+int WiFiPlazaMap_FindTileTag(void*,int,u16*,u16*,int);void*ov49_0225D098(void*,int,u16,u16);
 void ov49_0225D214(void*,void*,int,int);void ov49_0225EB00(Record*,void*);void ov49_0225D494(void*,int);void ov49_0225EE4C(void*,int);
 u32 ov49_0225D1EC(void*);void ov49_0225D1C4(void*,Pair);void*ov49_0225CF28(void*,s32,s32,const void*);void ov49_0225D040(void*,int);
 void*ov49_0225DF18(int,int,void*,int,u32);
@@ -27,7 +27,7 @@ void*ov49_0225DF18(int a,int b,void*input,int heap,u32 extra){void*d=Heap_Alloc(
  memset(d,0,0x614);W(d,0)=input;B(d,0x610)=a;B(d,0x611)=b;W(d,4)=ov49_0225CC4C(9,128,heap,extra);ov49_0225CDEC(W(d,4),b,a,heap,extra);
  for(i=0,entry=ov49_02269AAC;i<35;i++,entry++){
  n=0;
- if(ov49_022589D8(W(d,0),entry->id,&scratch.coords.x,&scratch.coords.y,0)==1){groupA=(Record*)P(d,0x248);groupB=(Record*)P(d,0x368);groupD=(Record*)P(d,0x4e8);
+ if(WiFiPlazaMap_FindTileTag(W(d,0),entry->id,&scratch.coords.x,&scratch.coords.y,0)==1){groupA=(Record*)P(d,0x248);groupB=(Record*)P(d,0x368);groupD=(Record*)P(d,0x4e8);
  do{
  W(P(d,B(d,0x612)*4),8)=ov49_0225D098(W(d,4),entry->type,scratch.coords.x,scratch.coords.y);
  switch(entry->type){
@@ -43,7 +43,7 @@ void*ov49_0225DF18(int a,int b,void*input,int heap,u32 extra){void*d=Heap_Alloc(
  default:break;
  }
  B(d,0x612)++;n++;
- }while(ov49_022589D8(W(d,0),entry->id,&scratch.coords.x,&scratch.coords.y,n)==1);
+ }while(WiFiPlazaMap_FindTileTag(W(d,0),entry->id,&scratch.coords.x,&scratch.coords.y,n)==1);
  }
  }
  CreateSpecials(d,&scratch.vector);

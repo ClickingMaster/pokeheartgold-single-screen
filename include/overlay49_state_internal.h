@@ -22,8 +22,8 @@ typedef struct Ov49DParent {
     u8 pad[0x3bc];
     void *available[18][3];
 } Ov49DParent;
-extern void ov49_02258800();
-extern void ov49_02258814();
+extern void WiFiPlazaMap_PosToVecFx32();
+extern void WiFiPlazaMap_VecFx32ToPos();
 extern void ModelInstance_SetPosition();
 extern void ModelInstance_GetPosition();
 extern void ModelInstance_AddAnimation();

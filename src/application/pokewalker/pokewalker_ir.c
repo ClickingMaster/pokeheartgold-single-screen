@@ -557,7 +557,7 @@ void PokewalkerIr_RequestChunk(void) {
         break;                                                                                                        \
     case 2:                                                                                                           \
         ov112_021FFB24.step = 180;                                                                                    \
-        PokewalkerIr_BeginTransfer((void *)(ov112_021FFAA4.blocks->block2), (u32)((void *)0xBD40), 392);              \
+        PokewalkerIr_BeginTransfer((void *)(&ov112_021FFAA4.blocks->giftItem), (u32)((void *)0xBD40), 392);           \
         break;                                                                                                        \
     case 3:                                                                                                           \
         ov112_021FFB24.step = 182;                                                                                    \
@@ -565,32 +565,32 @@ void PokewalkerIr_RequestChunk(void) {
         break;                                                                                                        \
     }
 
-#define CHECK_BLOCK_LOCKED()                        \
-    switch (ov112_021FFAA4.blockIndex) {            \
-    case 0:                                         \
-        if (ov112_021FFAA4.blocks->flags.locked0) { \
-            PokewalkerIr_Send(0, 0, 156, 1);        \
-            return;                                 \
-        }                                           \
-        break;                                      \
-    case 1:                                         \
-        if (ov112_021FFAA4.blocks->flags.locked1) { \
-            PokewalkerIr_Send(0, 0, 156, 1);        \
-            return;                                 \
-        }                                           \
-        break;                                      \
-    case 2:                                         \
-        if (ov112_021FFAA4.blocks->flags.locked2) { \
-            PokewalkerIr_Send(0, 0, 156, 1);        \
-            return;                                 \
-        }                                           \
-        break;                                      \
-    case 3:                                         \
-        if (ov112_021FFAA4.blocks->flags.locked3) { \
-            PokewalkerIr_Send(0, 0, 156, 1);        \
-            return;                                 \
-        }                                           \
-        break;                                      \
+#define CHECK_BLOCK_LOCKED()                            \
+    switch (ov112_021FFAA4.blockIndex) {                \
+    case 0:                                             \
+        if (ov112_021FFAA4.blocks->flags.hasData0) {    \
+            PokewalkerIr_Send(0, 0, 156, 1);            \
+            return;                                     \
+        }                                               \
+        break;                                          \
+    case 1:                                             \
+        if (ov112_021FFAA4.blocks->flags.hasGiftMon) {  \
+            PokewalkerIr_Send(0, 0, 156, 1);            \
+            return;                                     \
+        }                                               \
+        break;                                          \
+    case 2:                                             \
+        if (ov112_021FFAA4.blocks->flags.hasGiftItem) { \
+            PokewalkerIr_Send(0, 0, 156, 1);            \
+            return;                                     \
+        }                                               \
+        break;                                          \
+    case 3:                                             \
+        if (ov112_021FFAA4.blocks->flags.hasData3) {    \
+            PokewalkerIr_Send(0, 0, 156, 1);            \
+            return;                                     \
+        }                                               \
+        break;                                          \
     }
 
 #define HANDSHAKE(bit, mask)                                \
@@ -675,7 +675,7 @@ void PokewalkerIr_OnReceiveComplete(void) {
             PokewalkerIr_RequestChunk();
             return;
         case 176:
-            if (ov112_021FFAA4.blocks->flags.locked0) {
+            if (ov112_021FFAA4.blocks->flags.hasData0) {
                 PokewalkerIr_Send(0, 0, 156, 1);
                 return;
             }
@@ -684,7 +684,7 @@ void PokewalkerIr_OnReceiveComplete(void) {
             PokewalkerIr_SendChunk();
             return;
         case 178:
-            if (ov112_021FFAA4.blocks->flags.locked1) {
+            if (ov112_021FFAA4.blocks->flags.hasGiftMon) {
                 PokewalkerIr_Send(0, 0, 156, 1);
                 return;
             }
@@ -693,16 +693,16 @@ void PokewalkerIr_OnReceiveComplete(void) {
             PokewalkerIr_SendChunk();
             return;
         case 180:
-            if (ov112_021FFAA4.blocks->flags.locked2) {
+            if (ov112_021FFAA4.blocks->flags.hasGiftItem) {
                 PokewalkerIr_Send(0, 0, 156, 1);
                 return;
             }
             ov112_021FFB24.step = 180;
-            PokewalkerIr_BeginTransfer((void *)(ov112_021FFAA4.blocks->block2), (u32)((void *)0xBD40), 392);
+            PokewalkerIr_BeginTransfer((void *)(&ov112_021FFAA4.blocks->giftItem), (u32)((void *)0xBD40), 392);
             PokewalkerIr_SendChunk();
             return;
         case 182:
-            if (ov112_021FFAA4.blocks->flags.locked3) {
+            if (ov112_021FFAA4.blocks->flags.hasData3) {
                 PokewalkerIr_Send(0, 0, 156, 1);
                 return;
             }

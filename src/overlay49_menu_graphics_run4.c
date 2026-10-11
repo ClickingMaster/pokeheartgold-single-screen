@@ -30,7 +30,7 @@ void ov49_0225A98C(void *work) {
 
 void ov49_0225AA2C(void *work) {
     Thunk_G3X_Reset();
-    ov49_0225CBF4(PTR_AT(work, 0x3EC));
+    WiFiPlazaCamera_Update(PTR_AT(work, 0x3EC));
     ov49_0225E3A0(PTR_AT(work, 0x3E4));
     ov49_02258BD4(PTR_AT(work, 0x3E0));
     ov49_02265398(PTR_AT(work, 0x3D4));

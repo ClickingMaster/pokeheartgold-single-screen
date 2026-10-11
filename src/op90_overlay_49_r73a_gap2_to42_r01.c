@@ -43,7 +43,7 @@ int ov49_02265434(Curve *curve, int frame);
 void ov49_022655E0(Curve *curve, fx32 *x, fx32 *y, fx32 *z);
 void ov49_02265668(RootMotion *root, Motion *s, int se);
 void *ov49_02258DAC(void *context);
-void ov49_0225CC40(void *ui, void *main);
+void WiFiPlazaCamera_SetFollowObject(void *ui, void *main);
 void ov49_02265628(VecFx32 *pos);
 void ModelInstance_GetPosition(Obj120 *obj, fx32 *x, fx32 *y, fx32 *z);
 void ModelInstance_SetPosition(Obj120 *obj, fx32 x, fx32 y, fx32 z);
@@ -111,7 +111,7 @@ int ov49_022670D4(RootMotion *root, Motion *s) {
             ov49_02259130(s->main, 1);
             main = s->main;
             if (main == ov49_02258DAC(root->context)) {
-                ov49_0225CC40(root->ui, main);
+                WiFiPlazaCamera_SetFollowObject(root->ui, main);
             }
             return 1;
         }

@@ -64,12 +64,12 @@ BOOL ov96_021EB0CC(void *, int, int, int, int);
 int ov96_02204DF8(void *);
 int ov96_02204E58(void *);
 void ov96_02204F20(void);
-void ov96_022050B4(void *);
-int ov96_0220549C(void *, u8 *);
-int ov96_02205520(void *, u8 *);
-void ov96_02205D30(void *);
-BOOL ov96_02205DD4(u8 *, int, int, int);
-void ov96_022055AC(void *);
-BOOL ov96_02205C94(void *);
+void PokeathlonPennantCapture_LoadSpriteResources(void *);
+int PokeathlonPennantCapture_State_Play(void *, u8 *);
+int PokeathlonPennantCapture_State_End(void *, u8 *);
+void PokeathlonPennantCapture_ShowFrame(void *);
+BOOL PokeathlonPennantCapture_IsTouchOnOwnMon(u8 *, int, int, int);
+void PokeathlonPennantCapture_HostStep(void *);
+BOOL PokeathlonPennantCapture_SendInput(void *);
 
 #endif
