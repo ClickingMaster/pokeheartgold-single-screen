@@ -82,7 +82,7 @@ int ov96_02204DE8(void *);
 float ov96_022073F0(u8 *, int);
 int ov96_02209738(void *);
 void ov96_0220FBDC(u32 *);
-int ov96_02211650(void *);
+int PokeathlonGoalRoll_Draw(void *);
 void ov96_0221A56C(void *, int);
 void ov96_0221A670(int);
 void ov96_0221A680(int);

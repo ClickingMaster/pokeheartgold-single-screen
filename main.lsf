@@ -4595,65 +4595,10 @@ Overlay OVY_96
     Object src/to90_extra2232_run01.o
     Object src/overlay96_particle_update_r107.o
     Object src/overlay96_particle_r107_gap2_run1.o
-    Object src/op90_overlay_96_residual_107_gap_2_tail_r01.o
-    Object src/overlay96_exact_bank_107.o
-    Object src/overlay96_course_setup_head_108.o
-    Object src/overlay96_course_ui_r108_setup.o
-    Object src/overlay96_course_touch_state_r108.o
-    Object src/to80_extra1711_run01.o
-    Object src/op90_op90_to80_extra1711_residual_1_residual_1_r01.o
-    Object src/op90_to80_extra1711_residual_1_r01.o
-    Object src/op90_op90_to80_extra1711_residual_1_residual_2_r01.o
-    Object src/to70_overlay_96_residual_108_middle_gap_1_residual_extra40_run01.o
-    Object src/op90_op90_to80_extra1905_residual_1_residual_1_r01.o
-    Object src/op90_to80_extra1905_residual_1_r01.o
-    Object src/to80_extra1905_run01.o
-    Object src/overlay96_course_ui_r108_entity_copy.o
-    Object src/to80_extra1803_run01.o
-    Object src/to80_extra1803_run02.o
-    Object src/overlay96_course_setup_tail_108.o
-    Object src/overlay96_exact_bank_108.o
-    Object src/op90_overlay_96_residual_109_r01.o
-    Object src/ov96_wave38_misc_1.o
-    Object src/to90_extra2233_run01.o
-    Object src/to90_extra2233_run02.o
-    Object src/ov96_wave38_misc_2.o
-    Object src/ov96_r109_r3_run1.o
-    Object src/op90_overlay_96_residual_109_residual_3_gap1_r01.o
-    Object src/ov96_r109_r3_run2.o
-    Object src/to91_w41565_segment_intersection.o
-    Object src/ov96_r109_r3_run3.o
-    Object src/op90_overlay_96_residual_109_residual_3_gap3_r01.o
-    Object src/ov96_r109_r3_run4.o
-    Object src/ov96_wave38_misc_3.o
-    Object src/to70_to52_overlay96_palette_index_before_extra259_run01.o
-    Object src/to90_extra2422_run01.o
-    Object src/to52_overlay96_palette_index.o
-    Object src/to80_extra1818_run01.o
-    Object src/ov96_wave38_misc_4.o
-    Object src/to70_overlay_96_residual_109_residual_5_extra870_run01.o
-    Object src/ov96_wave38_misc_5.o
-    Object src/to70_overlay_96_residual_109_residual_6_extra659_run01.o
-    Object src/ov96_wave38_misc_6.o
-    Object src/to70_overlay_96_residual_109_residual_7_extra660_run01.o
-    Object src/ov96_wave38_misc_7.o
-    Object src/to70_overlay_96_residual_109_residual_8_extra1031_run01.o
-    Object src/ov96_wave38_misc_8.o
-    Object src/ov96_wave40_b.o
-    Object src/ov96_wave38_misc_9.o
-    Object src/overlay96_exact_bank_109.o
-    Object src/r40_overlay_96_residual_110_run1.o
-    Object src/overlay96_exact_bank_110.o
-    Object src/overlay96_course_opponent_tick_r111.o
-    Object src/to91_w41555_opponent_capture_run01.o
-    Object src/overlay96_course_opponent_prefix_r111_run1.o
-    Object src/to91_w41551_opponent_run01.o
-    Object src/overlay96_course_opponent_prefix_r111_run2.o
-    Object src/op90_overlay_96_residual_111_prefix_gap3_r01.o
-    Object src/overlay96_course_opponent_dispatch_r111.o
-    Object src/op90_to70_overlay_96_residual_111_middle_extra181_residual_1_r01.o
-    Object src/to70_overlay_96_residual_111_middle_extra181_run01.o
-    Object src/overlay96_course_opponent_helpers_r111.o
+    Object src/pokeathlon/pokeathlon_goal_roll.o
+    Object src/pokeathlon/pokeathlon_goal_roll_field.o
+    Object src/pokeathlon/pokeathlon_goal_roll_display.o
+    Object src/pokeathlon/pokeathlon_goal_roll_cpu.o
     Object src/overlay96_exact_bank_111.o
     Object src/to70_overlay_96_residual_112_extra1032_run01.o
     Object src/overlay96_exact_bank_112.o
@@ -4920,28 +4865,7 @@ Object src/application/pokewalker/pokewalker_ui.o
 Object src/application/pokewalker/pokewalker_main_menu.o
 Object src/application/pokewalker/pokewalker_erase.o
 Object src/application/pokewalker/pokewalker_link.o
-Object src/to90_extra1940_run01.o
-Object src/to70_to58_overlay112_mid_108_remaining_extra907_run01.o
-    Object src/to58_overlay112_mid_108.o
-Object src/to53_overlay112_109.o
-Object src/to57_overlay112_110.o
-Object src/to70_to57_overlay112_110_residual_extra377_run01.o
-Object src/to53_overlay112_111.o
-Object src/to90_extra2070_run01.o
-Object src/to90_extra2300_run01.o
-Object src/to53_overlay112_113.o
-Object src/to90_extra2071_run01.o
-Object src/op90_to90_extra2071_residual_1_r01.o
-Object src/to53_overlay112_115.o
-Object src/to58_w16b_ov112_116_0.o
-Object src/to53_overlay112_117.o
-Object src/to57_overlay112_118.o
-Object src/to53_overlay112_119.o
-Object src/to70_to53_overlay112_120_extra529_run01.o
-Object src/to53_overlay112_121.o
-Object src/to57_overlay112_122.o
-Object src/to53_overlay112_123.o
-Object src/to58_ov112_124.o
+Object src/application/pokewalker/pokewalker_link_results.o
 Object src/application/pokewalker/pokewalker_stroll.o
 Object src/application/pokewalker/pokewalker_app_modes.o
 Object src/to56_w22_overlay112_before.o

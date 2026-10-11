@@ -2,7 +2,7 @@
  * overlay96_course_particle_r107_gap2.c
  *
  * asm/overlay_96_residual_107_gap_2.s, functions 0x0221090C .. 0x02210C48.
- * ov96_02210C98 (0x9B8 bytes, 6-case state machine) remains in assembly.
+ * PokeathlonGoalRoll_Init (0x9B8 bytes, 6-case state machine) remains in assembly.
  */
 #include "global.h"
 

@@ -588,15 +588,15 @@ int PokewalkerApp_Link_UpdateUpload(PokewalkerApp *app) {
     }
     ov112_021EA60C(app);
     PokewalkerApp_PlayTransferSE(progress);
-    ov112_021EDAF4(app, progress);
+    PokewalkerApp_SetWalkerIconFrame(app, progress);
     if (progress > 200) {
-        if (app->unk_1F2D4 == 0) {
+        if (app->motionStarted == 0) {
             ov112_021EAA98(app, LINK_MOTION(app), 2);
-            app->unk_1F2D4 = 1;
+            app->motionStarted = 1;
         }
     } else {
         ov112_021EAA10(app);
-        app->unk_1F2D4 = 0;
+        app->motionStarted = 0;
     }
     error = PokewalkerIr_GetAndClearError();
     switch (error) {
@@ -650,7 +650,7 @@ int PokewalkerApp_Link_UpdateUpload(PokewalkerApp *app) {
 // Request 0x40: reads the Pokewalker's Pokemon, status and blocks.
 int PokewalkerApp_Link_StartReceive(PokewalkerApp *app) {
     MIi_CpuClearFast(0, (u32 *)app->irStatus.records, sizeof(app->irStatus.records));
-    ov112_021E7548((u8 *)&app->walkerMon, (u8 *)&app->irStatus, (u8 *)&app->irBlocks, app->unk_B184);
+    ov112_021E7548((u8 *)&app->walkerMon, (u8 *)&app->irStatus, (u8 *)&app->irBlocks, (u8 *)app->peerRecords);
     PokewalkerApp_StartLink(app);
     PokewalkerApp_ResetLinkError(app);
     ov112_021EA5A4(app, 2);

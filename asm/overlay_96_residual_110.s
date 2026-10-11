@@ -215,11 +215,11 @@
 	.public ov96_0221031C
 	.public ov96_022104C4
 	.public ov96_02210850
-	.public ov96_02211650
-	.public ov96_02213354
-	.public ov96_02214904
-	.public ov96_02214B74
-	.public ov96_02214B7C
+	.public PokeathlonGoalRoll_Draw
+	.public PokeathlonGoalRoll_SetTouchTarget
+	.public PokeathlonGoalRollDisplay_GetScore
+	.public PokeathlonGoalRollCpu_SetBalls
+	.public PokeathlonGoalRollCpu_Free
 	.public ov96_02215864
 	.public ov96_0221587C
 	.public ov96_022158D4
@@ -239,8 +239,8 @@
 	.public ov96_0221A69C
 	.public ov96_0221A720
 
-	thumb_func_start ov96_0221490C
-ov96_0221490C: ; 0x0221490C
+	thumb_func_start PokeathlonGoalRollDisplay_UpdateTimer
+PokeathlonGoalRollDisplay_UpdateTimer: ; 0x0221490C
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	mov r0, #0xe1
@@ -261,7 +261,7 @@ ov96_0221490C: ; 0x0221490C
 	cmp r0, #0
 	bne _0221497A
 	add r0, r5, #0
-	bl ov96_02214854
+	bl PokeathlonGoalRollDisplay_PrintSecondWind
 	mov r0, #1
 	str r0, [r5, #0x48]
 	pop {r3, r4, r5, pc}
@@ -290,11 +290,11 @@ _02214944:
 	bl Sprite_SetAnimCtrlSeq
 _0221497A:
 	pop {r3, r4, r5, pc}
-	thumb_func_end ov96_0221490C
+	thumb_func_end PokeathlonGoalRollDisplay_UpdateTimer
 
 
-	thumb_func_start ov96_0221497C
-ov96_0221497C: ; 0x0221497C
+	thumb_func_start PokeathlonGoalRollDisplay_DrawScore
+PokeathlonGoalRollDisplay_DrawScore: ; 0x0221497C
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x20
 	add r6, r1, #0
@@ -372,11 +372,11 @@ _022149DA:
 	add sp, #0x20
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov96_0221497C
+	thumb_func_end PokeathlonGoalRollDisplay_DrawScore
 
 
-	thumb_func_start ov96_02214A24
-ov96_02214A24: ; 0x02214A24
+	thumb_func_start PokeathlonGoalRollCpu_New
+PokeathlonGoalRollCpu_New: ; 0x02214A24
 	push {r3, r4, r5, lr}
 	add r5, r1, #0
 	mov r1, #0xa0
@@ -411,11 +411,11 @@ ov96_02214A24: ; 0x02214A24
 	strb r1, [r0]
 	add r0, r4, #0
 	pop {r3, r4, r5, pc}
-	thumb_func_end ov96_02214A24
+	thumb_func_end PokeathlonGoalRollCpu_New
 
 
-	thumb_func_start ov96_02214A6C
-ov96_02214A6C: ; 0x02214A6C
+	thumb_func_start PokeathlonGoalRollCpu_SetMon
+PokeathlonGoalRollCpu_SetMon: ; 0x02214A6C
 	push {r3, r4, r5, r6, r7, lr}
 	add r4, r1, #0
 	add r5, r0, #0
@@ -438,11 +438,11 @@ ov96_02214A6C: ; 0x02214A6C
 	str r6, [r0, #0x18]
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov96_02214A6C
+	thumb_func_end PokeathlonGoalRollCpu_SetMon
 
 
-	thumb_func_start ov96_02214A9C
-ov96_02214A9C: ; 0x02214A9C
+	thumb_func_start PokeathlonGoalRollCpu_ChooseAllRoles
+PokeathlonGoalRollCpu_ChooseAllRoles: ; 0x02214A9C
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
 	mov r4, #0
@@ -451,7 +451,7 @@ _02214AA4:
 	add r0, r4, #0
 	mul r0, r6
 	add r0, r5, r0
-	bl ov96_02214ABC
+	bl PokeathlonGoalRollCpu_ChooseRoles
 	add r0, r4, #1
 	lsl r0, r0, #0x18
 	lsr r4, r0, #0x18
@@ -459,11 +459,11 @@ _02214AA4:
 	blo _02214AA4
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
-	thumb_func_end ov96_02214A9C
+	thumb_func_end PokeathlonGoalRollCpu_ChooseAllRoles
 
 
-	thumb_func_start ov96_02214ABC
-ov96_02214ABC: ; 0x02214ABC
+	thumb_func_start PokeathlonGoalRollCpu_ChooseRoles
+PokeathlonGoalRollCpu_ChooseRoles: ; 0x02214ABC
 	push {r3, r4, r5, r6}
 	sub sp, #8
 	add r1, sp, #0
@@ -565,4 +565,4 @@ _02214B56:
 	add sp, #8
 	pop {r3, r4, r5, r6}
 	bx lr
-	thumb_func_end ov96_02214ABC
+	thumb_func_end PokeathlonGoalRollCpu_ChooseRoles

@@ -78,7 +78,7 @@
 	.extern ov96_021FCD74
 	.extern ov96_02204DE8
 	.extern ov96_02209738
-	.extern ov96_02211650
+	.extern PokeathlonGoalRoll_Draw
 	.extern ov96_0221A670
 	.extern ov96_0221A680
 	.extern ov96_0221A690

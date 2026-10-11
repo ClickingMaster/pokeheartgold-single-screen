@@ -2,6 +2,7 @@
 #define POKEHEARTGOLD_APPLICATION_POKEWALKER_POKEWALKER_APP_H
 
 #include "application/pokewalker/pokewalker_ir.h"
+#include "application/pokewalker/pokewalker_trainer_house.h"
 
 #include "bag.h"
 #include "bg_window.h"
@@ -73,6 +74,31 @@ typedef struct PokewalkerStrollData {
     u8 routeItemNameImages[10 * 0x180];
 } PokewalkerStrollData; // size=0x28BE
 
+// Record of another game at Pokewalker address 0xDE24 (10 of them, after one more of the same size); the same layout as
+// the game's own record (0xF1D0, sent to address 0xD480).
+typedef struct PokewalkerPeerRecord {
+    u32 unk_00;
+    u16 version; // GAME_VERSION of that game
+    u16 unk_06;
+    PokewalkerIrClock clock;                     // 0x08
+    PokewalkerTrainerHouseData trainerHouseData; // 0x30
+} PokewalkerPeerRecord;                          // size=0x224
+
+// Pokemon data added to the event log (ov112_021F30BC / ov112_021F3140).
+typedef struct PokewalkerEventLogMon {
+    u16 species;
+    u8 form : 5;
+    u8 gender : 2;
+    u8 isShiny : 1;
+    u8 padding_03;
+} PokewalkerEventLogMon;
+
+typedef struct PokewalkerEventLogParams {
+    u16 *nickname;
+    u32 steps;
+    PokewalkerEventLogMon mon;
+} PokewalkerEventLogParams;
+
 // Particle of the effect shown while data is transferred (sprites 17-116 on the main screen, 117-216 on the sub screen).
 typedef struct PokewalkerAppParticle {
     u8 active;
@@ -119,10 +145,10 @@ typedef struct PokewalkerApp {
     PokewalkerMon walkerMon;                        // 0x9D44, the Pokemon on the Pokewalker
     u16 walkerMonNickname[POKEMON_NAME_LENGTH + 1]; // 0x9D54
     u8 unk_9D6A[6];
-    PokewalkerIrStatus irStatus; // 0x9D70, read from the Pokewalker
-    PokewalkerIrBlocks irBlocks; // 0xAABC, read from the Pokewalker
-    u8 unk_B184[0x178C];
-    PokewalkerStrollData strollData; // 0xC910
+    PokewalkerIrStatus irStatus;          // 0x9D70, read from the Pokewalker
+    PokewalkerIrBlocks irBlocks;          // 0xAABC, read from the Pokewalker
+    PokewalkerPeerRecord peerRecords[11]; // 0xB184, IR buffer; 1-10 read from Pokewalker address 0xDE24
+    PokewalkerStrollData strollData;      // 0xC910
     u32 unk_F1D0;
     u16 unk_F1D4;
     u8 unk_F1D6[2];
@@ -210,8 +236,8 @@ typedef struct PokewalkerApp {
     u8 unk_1F2C0[2];
     u8 unk_1F2C2; // mode 6: cleared before the fanfare
     u8 unk_1F2C3[0xD];
-    volatile int timer; // 0x1F2D0
-    u16 unk_1F2D4;
+    volatile int timer;       // 0x1F2D0
+    u16 motionStarted;        // 0x1F2D4, the motion object at 0x1F2C0 was started (transfer progress > 200)
     u16 unk_1F2D6;            // alpha of the Pokemon picture fading in, 31 = done
     SysTask *monFadeTask;     // 0x1F2D8
     SysTask *subBgScrollTask; // 0x1F2DC
@@ -467,7 +493,58 @@ void PokewalkerApp_PlayTransferSE(int progress);
 int PokewalkerApp_UpdateLinkProgress(PokewalkerApp *app, int progress);
 int PokewalkerApp_Link_UpdateUpload(PokewalkerApp *app);
 int PokewalkerApp_Link_StartReceive(PokewalkerApp *app);
-void ov112_021EDAF4(PokewalkerApp *app, int frame);
+void PokewalkerApp_AddPeerTrainerHouseSets(PokewalkerApp *app);
+void PokewalkerApp_UpdateSavedSteps(PokewalkerApp *app);
+void PokewalkerApp_AddSavedTotal(PokewalkerApp *app);
+BOOL PokewalkerApp_IsWalkerMonValid(PokewalkerApp *app);
+BOOL PokewalkerApp_IsGiftMonValid(PokewalkerApp *app);
+int PokewalkerApp_Link_UpdateReceive(PokewalkerApp *app);
+int PokewalkerApp_Link_StartReceiveGifts(PokewalkerApp *app);
+int PokewalkerApp_Link_UpdateReceiveGifts(PokewalkerApp *app);
+int PokewalkerApp_Link_StartSendStroll(PokewalkerApp *app);
+void PokewalkerApp_SetWalkerIconFrame(PokewalkerApp *app, int progress);
+int PokewalkerApp_Link_UpdateSendStroll(PokewalkerApp *app);
+int PokewalkerApp_GetLinkErrorMessage(int error);
+int PokewalkerApp_Link_PrintError(PokewalkerApp *app);
+int PokewalkerApp_Link_PrintCanceled(PokewalkerApp *app);
+int PokewalkerApp_Link_RetryInstructions(PokewalkerApp *app);
+int PokewalkerApp_Link_RetryPointAtCardForStroll(PokewalkerApp *app);
+int PokewalkerApp_Link_RetryPointAtCard(PokewalkerApp *app);
+int PokewalkerApp_Link_RetryPointAtCardForGifts(PokewalkerApp *app);
+int PokewalkerApp_Link_WaitError(PokewalkerApp *app);
+int PokewalkerApp_Link_PrintWentToWalker(PokewalkerApp *app);
+int PokewalkerApp_Link_WaitWentToWalker(PokewalkerApp *app);
+int PokewalkerApp_Link_PrintReturned(PokewalkerApp *app);
+BOOL PokewalkerApp_IsWalkerMonInSave(PokewalkerApp *app);
+int PokewalkerApp_Link_WaitReturned(PokewalkerApp *app);
+int PokewalkerApp_Link_PrintReleased(PokewalkerApp *app);
+int PokewalkerApp_Link_WaitReleased(PokewalkerApp *app);
+int PokewalkerApp_Link_PrintReceivedGifts(PokewalkerApp *app);
+int PokewalkerApp_Link_WaitReceivedGifts(PokewalkerApp *app);
+int PokewalkerApp_Link_PrintSendBackCaution(PokewalkerApp *app);
+int PokewalkerApp_Link_WaitSendBackCaution(PokewalkerApp *app);
+int PokewalkerApp_Link_ShowSendBackYesNo(PokewalkerApp *app);
+int PokewalkerApp_Link_HandleSendBackYesNo(PokewalkerApp *app);
+int PokewalkerApp_Link_PrintWillSendBack(PokewalkerApp *app);
+int PokewalkerApp_Link_WaitWillSendBack(PokewalkerApp *app);
+int PokewalkerApp_Link_ShowSendBackMenu(PokewalkerApp *app);
+int PokewalkerApp_Link_HandleSendBackMenu(PokewalkerApp *app);
+int PokewalkerApp_Link_EndSendBackMenu(PokewalkerApp *app);
+int PokewalkerApp_Link_PrintComeBack(PokewalkerApp *app);
+int PokewalkerApp_Link_StartReturnAnimation(PokewalkerApp *app);
+int PokewalkerApp_Link_AnimateReturn(PokewalkerApp *app);
+int PokewalkerApp_Link_AfterReturnAnimation(PokewalkerApp *app);
+int PokewalkerApp_Link_PrintArrived(PokewalkerApp *app);
+int PokewalkerApp_Link_EndSendBack(PokewalkerApp *app);
+int PokewalkerApp_Link_FadeOut(PokewalkerApp *app);
+int PokewalkerApp_Link_WaitFadeOut(PokewalkerApp *app);
+int PokewalkerApp_Link_WaitMessage(PokewalkerApp *app);
+int PokewalkerApp_Link_WaitCursor(PokewalkerApp *app);
+int PokewalkerApp_Link_End(PokewalkerApp *app);
+void ov112_021ED7DC(PokewalkerApp *app);
+void ov112_021F30BC(PokewalkerIrRecord *record, PokewalkerEventLogParams *params);
+void ov112_021F3140(PokewalkerIrRecord *records, PokewalkerEventLogMon *mon);
+BOOL ov112_021F31BC(PokewalkerIrRecord *records);
 void PokewalkerApp_SetMonIconGraphics(NNSG2dCharacterData *charData, int species, int form, int isEgg, int slot, ManagedSprite *sprite);
 void PokewalkerApp_BuildTrainerHouseData(SaveData *saveData, void *dst);
 

@@ -1199,81 +1199,81 @@
 	.public ov96_02210AE0
 	.public ov96_02210BD0
 	.public ov96_02210C48
-	.public ov96_02210C98
-	.public ov96_02211650
+	.public PokeathlonGoalRoll_Init
+	.public PokeathlonGoalRoll_Draw
 	.public ov96_02211660
-	.public ov96_022116C8
-	.public ov96_022117CC
-	.public ov96_022117EC
-	.public ov96_02211870
-	.public ov96_022118C4
-	.public ov96_02211A24
-	.public ov96_02211AF0
-	.public ov96_02211B94
-	.public ov96_02211DE4
-	.public ov96_02211F38
-	.public ov96_0221236C
-	.public ov96_022123B0
-	.public ov96_022124F8
-	.public ov96_022127F4
-	.public ov96_02212B94
-	.public ov96_02212F0C
-	.public ov96_02212F94
-	.public ov96_022130EC
-	.public ov96_022132FC
-	.public ov96_02213354
-	.public ov96_02213364
-	.public ov96_0221341C
-	.public ov96_02213444
-	.public ov96_022134D4
-	.public ov96_02213514
-	.public ov96_02213534
-	.public ov96_02213558
-	.public ov96_0221359C
-	.public ov96_0221362C
-	.public ov96_022136A4
-	.public ov96_02213728
+	.public PokeathlonGoalRoll_Exit
+	.public PokeathlonGoalRoll_SetGfxBanks
+	.public PokeathlonGoalRoll_State_Play
+	.public PokeathlonGoalRoll_State_Finish
+	.public PokeathlonGoalRoll_InitBgs
+	.public PokeathlonGoalRoll_LoadBgGfx
+	.public PokeathlonGoalRoll_HandleInput
+	.public PokeathlonGoalRoll_HostUpdate
+	.public PokeathlonGoalRoll_PackFrame
+	.public PokeathlonGoalRoll_ApplyFrame
+	.public PokeathlonGoalRoll_ApplyFrameScore
+	.public PokeathlonGoalRoll_ShowGoal
+	.public PokeathlonGoalRoll_MoveMons
+	.public PokeathlonGoalRoll_CollideBalls
+	.public PokeathlonGoalRoll_MoveBalls
+	.public PokeathlonGoalRoll_CollideBallPair
+	.public PokeathlonGoalRoll_BounceBallOff
+	.public PokeathlonGoalRoll_CheckGoals
+	.public PokeathlonGoalRoll_UpdateTiredMons
+	.public PokeathlonGoalRoll_SetTouchTarget
+	.public PokeathlonGoalRoll_GetTouchedMon
+	.public PokeathlonGoalRoll_CirclesOverlap
+	.public PokeathlonGoalRoll_ResetBall
+	.public PokeathlonGoalRoll_SetBallDirection
+	.public PokeathlonGoalRoll_CalcNormalizedDot
+	.public PokeathlonGoalRoll_IsWithinAngle
+	.public PokeathlonGoalRoll_RecoverPower
+	.public PokeathlonGoalRoll_InitMonStats
+	.public PokeathlonGoalRoll_InitWindows
+	.public PokeathlonGoalRoll_PrintTotalPoints
+	.public PokeathlonGoalRoll_CollideWithWalls
 	.public ov96_02213D00
-	.public ov96_02213D2C
-	.public ov96_02213E60
-	.public ov96_02213EC4
-	.public ov96_02213F5C
-	.public ov96_02213FB4
-	.public ov96_02213FF4
-	.public ov96_02214044
-	.public ov96_022140F4
-	.public ov96_022141B0
-	.public ov96_022141F8
-	.public ov96_02214234
-	.public ov96_02214258
-	.public ov96_02214278
-	.public ov96_02214394
-	.public ov96_022143DC
-	.public ov96_022143FC
-	.public ov96_02214418
-	.public ov96_02214490
-	.public ov96_022144C0
-	.public ov96_0221454C
-	.public ov96_0221457C
-	.public ov96_02214618
-	.public ov96_0221464C
-	.public ov96_02214690
-	.public ov96_022146C0
-	.public ov96_02214718
-	.public ov96_022147FC
-	.public ov96_02214854
-	.public ov96_022148A4
-	.public ov96_022148E8
-	.public ov96_02214904
-	.public ov96_0221490C
-	.public ov96_0221497C
-	.public ov96_02214A24
-	.public ov96_02214A6C
-	.public ov96_02214A9C
-	.public ov96_02214ABC
-	.public ov96_02214B74
-	.public ov96_02214B7C
-	.public ov96_02214B84
+	.public PokeathlonGoalRoll_IntersectWall
+	.public PokeathlonGoalRoll_PickBallSpawn
+	.public PokeathlonGoalRoll_EncodeBallY
+	.public PokeathlonGoalRoll_DecodeBallY
+	.public PokeathlonGoalRoll_NextFacing
+	.public PokeathlonGoalRoll_PlayGoalAreaSE
+	.public PokeathlonGoalRoll_PrintPlate
+	.public PokeathlonGoalRoll_LoadStrings
+	.public PokeathlonGoalRoll_FreeStrings
+	.public PokeathlonGoalRoll_CreatePlateTasks
+	.public PokeathlonGoalRoll_DestroyPlateTasks
+	.public PokeathlonGoalRoll_StartPlateFlash
+	.public PokeathlonGoalRoll_PlateTask
+	.public PokeathlonGoalRoll_GetGoalCode
+	.public PokeathlonGoalRoll_GetBallQuadrant
+	.public PokeathlonGoalRoll_GetQuadrant
+	.public PokeathlonGoalRoll_UpdateLeaders
+	.public PokeathlonGoalRoll_RefreshPlates
+	.public PokeathlonGoalRoll_SortOwnTeamOrder
+	.public PokeathlonGoalRoll_CompareMonY
+	.public PokeathlonGoalRoll_SortOtherMonsOrder
+	.public PokeathlonGoalRoll_OnTimeUp
+	.public PokeathlonGoalRollDisplay_New
+	.public PokeathlonGoalRollDisplay_Free
+	.public PokeathlonGoalRollDisplay_LoadBgGfx
+	.public PokeathlonGoalRollDisplay_CreateSprites
+	.public PokeathlonGoalRollDisplay_PrintName
+	.public PokeathlonGoalRollDisplay_PrintSecondWind
+	.public PokeathlonGoalRollDisplay_InitWindows
+	.public PokeathlonGoalRollDisplay_SetScore
+	.public PokeathlonGoalRollDisplay_GetScore
+	.public PokeathlonGoalRollDisplay_UpdateTimer
+	.public PokeathlonGoalRollDisplay_DrawScore
+	.public PokeathlonGoalRollCpu_New
+	.public PokeathlonGoalRollCpu_SetMon
+	.public PokeathlonGoalRollCpu_ChooseAllRoles
+	.public PokeathlonGoalRollCpu_ChooseRoles
+	.public PokeathlonGoalRollCpu_SetBalls
+	.public PokeathlonGoalRollCpu_Free
+	.public PokeathlonGoalRollCpu_Update
 	.public ov96_02214C3C
 	.public ov96_02214DBC
 	.public ov96_02214EB4
@@ -1281,12 +1281,12 @@
 	.public ov96_02215184
 	.public ov96_02215460
 	.public ov96_02215478
-	.public ov96_022155A0
-	.public ov96_02215614
+	.public PokeathlonGoalRollCpu_Think
+	.public PokeathlonGoalRollCpu_GetQuadrant
 	.public ov96_02215650
 	.public ov96_0221567C
-	.public ov96_022156A8
-	.public ov96_022156E8
+	.public PokeathlonGoalRollCpu_IsNearPoint
+	.public PokeathlonGoalRollCpu_CirclesTouch
 	.public ov96_02215710
 	.public ov96_02215864
 	.public ov96_0221587C

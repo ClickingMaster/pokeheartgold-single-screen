@@ -216,11 +216,11 @@
 	.public ov96_0221031C
 	.public ov96_022104C4
 	.public ov96_02210850
-	.public ov96_02211650
-	.public ov96_02213354
-	.public ov96_02214904
-	.public ov96_02214B74
-	.public ov96_02214B7C
+	.public PokeathlonGoalRoll_Draw
+	.public PokeathlonGoalRoll_SetTouchTarget
+	.public PokeathlonGoalRollDisplay_GetScore
+	.public PokeathlonGoalRollCpu_SetBalls
+	.public PokeathlonGoalRollCpu_Free
 	.public ov96_02215864
 	.public ov96_0221587C
 	.public ov96_022158D4

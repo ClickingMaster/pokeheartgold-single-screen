@@ -3,8 +3,8 @@
 extern void ov96_0220E22C(void);
 extern void ov96_0220E2DC(void);
 extern void ov96_0220E394(void);
-extern void ov96_022117EC(void);
-extern void ov96_02211870(void);
+extern void PokeathlonGoalRoll_State_Play(void);
+extern void PokeathlonGoalRoll_State_Finish(void);
 extern void ov96_02215984(void);
 extern void ov96_022159F0(void);
 extern void ov96_02215A70(void);
@@ -12,8 +12,8 @@ extern void ov96_02215A70(void);
 u8 ov96_0221DC80[] = { 0x00, 0x04, 0x02, 0x01, 0x00, 0x01, 0x00, 0x01 };
 
 void *ov96_0221DC88[] = {
-    ov96_022117EC,
-    ov96_02211870
+    PokeathlonGoalRoll_State_Play,
+    PokeathlonGoalRoll_State_Finish
 };
 
 void *ov96_0221DC90[] = {

@@ -78,7 +78,7 @@
 	.extern ov96_021FCD74
 	.extern ov96_02204DE8
 	.extern ov96_02209738
-	.extern ov96_02211650
+	.extern PokeathlonGoalRoll_Draw
 	.extern ov96_0221A670
 	.extern ov96_0221A680
 	.extern ov96_0221A690
@@ -213,10 +213,10 @@ ov96_0221A808: ; 0x0221A808
 	.word 0
 
 ov96_0221A81C:
-	.word ov96_02210C98
-	.word ov96_02211650
+	.word PokeathlonGoalRoll_Init
+	.word PokeathlonGoalRoll_Draw
 	.word ov96_02211660
-	.word ov96_022116C8
+	.word PokeathlonGoalRoll_Exit
 	.word 0
 
 ov96_0221A830:
