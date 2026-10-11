@@ -139,7 +139,7 @@ int GtsWanted_Init(GtsApp *app, int state) {
     GtsWanted_CreateWindows(app);
     GtsWanted_CreateSprites(app);
     BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_61);
-    ov70_02245124(app);
+    Gts_CreateWirelessStatusIcon(app);
     Gts_DrawWantedMon(app->gtsMsgData, app->speciesNames, app->msgFormat, &app->infoWindows[0], SPECIES_NONE, GTS_GENDER_ANY, -1);
     GtsWanted_DrawOfferedMon(app->gtsMsgData, app->msgFormat, &app->infoWindows[3], app->selectedMon, &app->depositSummary);
     args.bgConfig = app->bgConfig;
@@ -536,7 +536,7 @@ void Gts_PrintSpeciesName(Window *window, MsgData *speciesNames, int species, in
     String *string;
     if (species != SPECIES_NONE) {
         string = NewString_ReadMsgData(speciesNames, species);
-        ov70_02245084(window, string, 0, y, align, color);
+        Gts_PrintAlignedFont0(window, string, 0, y, align, color);
         String_Delete(string);
     }
 }
@@ -557,11 +557,11 @@ void Gts_PrintCountryName(Window *window, MsgData *countryNames, MsgData *msgDat
     String *string;
     if (country) {
         string = NewString_ReadMsgData(countryNames, country);
-        ov70_02245084(window, string, 0, y, align, color);
+        Gts_PrintAlignedFont0(window, string, 0, y, align, color);
         String_Delete(string);
     } else {
         string = NewString_ReadMsgData(msgData, 173); // ANY
-        ov70_02245084(window, string, 0, y, align, color);
+        Gts_PrintAlignedFont0(window, string, 0, y, align, color);
         String_Delete(string);
     }
 }
@@ -587,9 +587,9 @@ void Gts_PrintGender(Window *window, MsgData *msgData, int gender, BOOL showAny,
     if (showAny || gender != GTS_GENDER_ANY) {
         string = NewString_ReadMsgData(msgData, sGtsGenderSymbolMsgs[gender]);
         if (xOrAlign > 3) {
-            ov70_02245084(window, string, xOrAlign, y, 0, Gts_GetGenderColor(gender, color));
+            Gts_PrintAlignedFont0(window, string, xOrAlign, y, 0, Gts_GetGenderColor(gender, color));
         } else {
-            ov70_02245084(window, string, 0, y, xOrAlign, Gts_GetGenderColor(gender, color));
+            Gts_PrintAlignedFont0(window, string, 0, y, xOrAlign, Gts_GetGenderColor(gender, color));
         }
         String_Delete(string);
     }
@@ -617,7 +617,7 @@ void Gts_PrintLevelRangeAt(Window *window, MsgData *msgData, int levelRange, int
     if (levelRange != -1) {
         ranges = kind == 0 ? sGtsWantedLevelRanges : sGtsSearchLevelRanges;
         string = NewString_ReadMsgData(msgData, ranges[levelRange].msgId);
-        ov70_02245084(window, string, x, y, align, color);
+        Gts_PrintAlignedFont0(window, string, x, y, align, color);
         String_Delete(string);
     }
 }
@@ -629,7 +629,7 @@ void Gts_DrawWantedMon(MsgData *msgData, MsgData *speciesNames, MessageFormat *m
     Window *window;
 
     title = NewString_ReadMsgData(msgData, 101); // WANTED
-    ov70_02245084(windows, title, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
+    Gts_PrintAlignedFont0(windows, title, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
     window = windows;
     i = 1;
     window++;
@@ -653,7 +653,7 @@ void Gts_DrawWantedMonLevelLeft(MsgData *msgData, MsgData *speciesNames, Message
     Window *window;
 
     title = NewString_ReadMsgData(msgData, 101); // WANTED
-    ov70_02245084(windows, title, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
+    Gts_PrintAlignedFont0(windows, title, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
     window = windows;
     i = 1;
     window++;
@@ -697,11 +697,11 @@ void GtsWanted_DrawOfferedMon(MsgData *msgData, MessageFormat *msgFormat, Window
     for (i = 0, window = windows; i < 3; i++, window++) {
         FillWindowPixelBuffer(window, 0);
     }
-    ov70_02245084(&windows[0], title, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
-    ov70_02245084(&windows[1], nickname, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
-    ov70_02245084(&windows[2], levelString, 0, 0, 2, MAKE_TEXT_COLOR(1, 2, 0));
+    Gts_PrintAlignedFont0(&windows[0], title, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
+    Gts_PrintAlignedFont0(&windows[1], nickname, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
+    Gts_PrintAlignedFont0(&windows[2], levelString, 0, 0, 2, MAKE_TEXT_COLOR(1, 2, 0));
     if (gender != GTS_GENDER_ANY) {
-        ov70_02245084(&windows[1], genderSymbol, 70, 0, 0, sGtsGenderColors[gender - 1]);
+        Gts_PrintAlignedFont0(&windows[1], genderSymbol, 70, 0, 0, sGtsGenderColors[gender - 1]);
     }
     summary->species = GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL);
     summary->gender = gender;

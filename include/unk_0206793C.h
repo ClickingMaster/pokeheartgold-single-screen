@@ -7,12 +7,12 @@
 typedef struct UnkStruct_0206793C UnkStruct_0206793C;
 
 void FieldSystem_ClearFollowingTrainer(FieldSystem *fieldSystem);
-void sub_02067AE4(FieldSystem *fieldSystem);
-void sub_02067A88(FieldSystem *fieldSystem);
-void sub_02067B88(FieldSystem *fieldSystem);
+void FieldSystem_ResetStateOnWarp(FieldSystem *fieldSystem);
+void FieldSystem_ResetStateOnMapConnection(FieldSystem *fieldSystem);
+void FieldSystem_ResetStateOnFlyWarp(FieldSystem *fieldSystem);
 void sub_02067BA4(FieldSystem *fieldSystem);
-void sub_02067BC0(FieldSystem *fieldSystem);
-void sub_02067BE8(FieldSystem *fieldSystem);
+void FieldSystem_ClearSafariSysFlag(FieldSystem *fieldSystem);
+void FieldSystem_RandomizeRoamers(FieldSystem *fieldSystem);
 BOOL FieldEffect_IsActive(UnkStruct_0206793C *unk);
 void CallTask_NPCTrade(TaskManager *taskManager, NPCTradeAppData *tradeWork, u16 arg, enum HeapID heapID);
 

@@ -99,7 +99,7 @@
 #include "unk_02078834.h"
 #include "unk_02091564.h"
 #include "unk_02092BE8.h"
-#include "unk_020932A4.h"
+#include "phone_rematch.h"
 #include "unk_02095DF4.h"
 #include "battle_greeting_task.h"
 #include "unk_02097024.h"
@@ -4145,7 +4145,7 @@ BOOL ScrCmd_HideSaveStats(ScriptContext *ctx) {
 
 BOOL ScrCmd_595(ScriptContext *ctx) {
     u8 r1 = ScriptReadByte(ctx);
-    sub_02067A80(ctx->fieldSystem, r1);
+    FieldSystem_SetWarpResetSuppressed(ctx->fieldSystem, r1);
     return FALSE;
 }
 

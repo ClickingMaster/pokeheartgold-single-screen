@@ -14,7 +14,7 @@
 #include "gf_gfx_loader.h"
 #include "overlay_01.h" // FIXME: This is included for FieldSystem_DrawMapNameAnimation, is there a way to do this properly without causing dependency issues with field_system?
 #include "text.h"
-#include "unk_02068F84.h"
+#include "map_landmark_name.h"
 
 #define POSITION_STATE_INVALID    0
 #define POSITION_STATE_DESCENDING 1

@@ -280,22 +280,22 @@ void GtsSearch_DrawFieldLabels(Window *fieldWindows, Window *lineWindow, MsgData
     String *string;
 
     string = NewString_ReadMsgData(msgData, 61); // POKEMON
-    ov70_02245084(&fieldWindows[0], string, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
+    Gts_PrintAlignedFont0(&fieldWindows[0], string, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
     String_Delete(string);
     string = NewString_ReadMsgData(msgData, 63); // GENDER
-    ov70_02245084(&fieldWindows[2], string, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
+    Gts_PrintAlignedFont0(&fieldWindows[2], string, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
     String_Delete(string);
     string = NewString_ReadMsgData(msgData, 65); // LEVEL
-    ov70_02245084(&fieldWindows[4], string, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
+    Gts_PrintAlignedFont0(&fieldWindows[4], string, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
     String_Delete(string);
     string = NewString_ReadMsgData(msgData, 171); // LOCATION
-    ov70_02245084(lineWindow, string, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
+    Gts_PrintAlignedFont0(lineWindow, string, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
     String_Delete(string);
     string = NewString_ReadMsgData(msgData, 67); // SEARCH
-    ov70_022450B8(&fieldWindows[6], string, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
+    Gts_PrintAlignedFont4(&fieldWindows[6], string, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
     String_Delete(string);
     string = NewString_ReadMsgData(msgData, 238); // CANCEL
-    ov70_022450B8(&fieldWindows[7], string, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
+    Gts_PrintAlignedFont4(&fieldWindows[7], string, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
     String_Delete(string);
 }
 
@@ -314,7 +314,7 @@ void GtsSearch_DrawResultsButton(BgConfig *bgConfig, Window *window, MsgData *ms
     BgTilemapRectChangePalette(bgConfig, GF_BG_LYR_MAIN_1, 18, 2, 14, 4, palette);
     BgCommitTilemapBufferToVram(bgConfig, GF_BG_LYR_MAIN_1);
     string = NewString_ReadMsgData(msgData, 69); // SELECT
-    ov70_022450B8(window, string, 0, 0, 0, color);
+    Gts_PrintAlignedFont4(window, string, 0, 0, 0, color);
     String_Delete(string);
 }
 
@@ -362,7 +362,7 @@ int GtsSelectMon_Init(GtsApp *app, int state) {
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_61);
     }
     GtsSelectMon_ShowBox(app, app->selectedBox);
-    ov70_02245124(app);
+    Gts_CreateWirelessStatusIcon(app);
     app->state = GTS_SELECT_MON_STATE_START;
     return 2;
 }
@@ -521,7 +521,7 @@ void GtsSelectMon_CreateWindows(GtsApp *app) {
     FillWindowPixelBuffer(&app->promptWindow, 0);
     AddWindowParameterized(app->bgConfig, &app->windows[1], GF_BG_LYR_MAIN_1, 24, 16, 6, 2, 0, 0x165);
     FillWindowPixelBuffer(&app->windows[1], 6);
-    ov70_02245084(&app->windows[1], app->cancelText, 0, 1, 1, MAKE_TEXT_COLOR(1, 3, 6));
+    Gts_PrintAlignedFont0(&app->windows[1], app->cancelText, 0, 1, 1, MAKE_TEXT_COLOR(1, 3, 6));
     if (app->nextScreenArg == GTS_SELECT_MON_MODE_DEPOSIT) {
         Gts_CreatePanelWindow(app, 3);
     } else {
@@ -1171,7 +1171,7 @@ void GtsSelectMon_ShowBox(GtsApp *app, int box) {
     }
     NARC_Delete(narc);
     FillWindowPixelBuffer(&app->boxNameWindow, 0);
-    ov70_02245084(&app->boxNameWindow, app->boxName, 0, 5, 1, MAKE_TEXT_COLOR(1, 2, 0));
+    Gts_PrintAlignedFont0(&app->boxNameWindow, app->boxName, 0, 5, 1, MAKE_TEXT_COLOR(1, 2, 0));
     if (app->nextScreenArg == GTS_SELECT_MON_MODE_TRADE) {
         GtsSelectMon_DimUnwantedIcons(app->boxSummaries, app->monIconSprites, &app->searchResults[app->selectedResult].wanted, icons);
     }

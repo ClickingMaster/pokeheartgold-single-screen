@@ -2589,52 +2589,52 @@
 	.public GtsSelector_CountSeenSpeciesOfLetter
 	.public GtsSelector_GroupHasSeenSpecies
 	.public GtsSelector_CountCountriesOfLetter
-	.public ov70_02243FE0
-	.public ov70_02244038
-	.public ov70_02244124
-	.public ov70_02244154
-	.public ov70_022441A4
-	.public ov70_02244290
-	.public ov70_022442B4
-	.public ov70_022444E4
-	.public ov70_0224458C
-	.public ov70_02244644
-	.public ov70_02244670
-	.public ov70_022446A8
-	.public ov70_022446D0
-	.public ov70_02244708
-	.public ov70_02244774
-	.public ov70_022447A0
-	.public ov70_02244804
-	.public ov70_02244834
-	.public ov70_02244854
-	.public ov70_02244888
-	.public ov70_022448C0
-	.public ov70_02244944
-	.public ov70_02244954
-	.public ov70_02244A04
-	.public ov70_02244A4C
-	.public ov70_02244A68
-	.public ov70_02244B20
-	.public ov70_02244B54
-	.public ov70_02244CA8
-	.public ov70_02244CCC
-	.public ov70_02244D08
-	.public ov70_02244D44
-	.public ov70_02244D80
-	.public ov70_02244E44
-	.public ov70_02244F14
-	.public ov70_02244F34
-	.public ov70_02244F68
-	.public ov70_02244FA4
-	.public ov70_02245018
-	.public ov70_02245050
-	.public ov70_02245084
-	.public ov70_022450B8
-	.public ov70_022450EC
-	.public ov70_02245124
-	.public ov70_0224512C
-	.public ov70_022451A8
+	.public GtsSelector_HasCountriesInGroup
+	.public GtsConnection_Init
+	.public GtsConnection_Main
+	.public GtsConnection_Exit
+	.public GtsConnection_InitBgs
+	.public GtsConnection_FreeBgs
+	.public GtsConnection_LoadGraphics
+	.public GtsConnection_AnimatePaletteTask
+	.public GtsConnection_CreateWindows
+	.public GtsConnection_RemoveWindows
+	.public GtsConnection_CreateStrings
+	.public GtsConnection_DeleteStrings
+	.public GtsConnection_AskConnect
+	.public GtsConnection_HandleConnectPrompt
+	.public GtsConnection_AskDisconnect
+	.public GtsConnection_HandleDisconnectMenu
+	.public GtsConnection_PrintDisconnecting
+	.public GtsConnection_Disconnect
+	.public GtsConnection_PrintDisconnected
+	.public GtsConnection_StartConnect
+	.public GtsConnection_WaitConnect
+	.public GtsConnection_StartAuth
+	.public GtsConnection_WaitAuth
+	.public GtsConnection_InitServer
+	.public GtsConnection_SendInfo
+	.public GtsConnection_WaitInfo
+	.public GtsConnection_SendSetProfile
+	.public GtsConnection_WaitSetProfile
+	.public GtsConnection_ShowConnectionError
+	.public GtsConnection_WaitCloseError
+	.public GtsConnection_FadeOut
+	.public GtsConnection_HandleExitPrompt
+	.public GtsConnection_PrintServerError
+	.public GtsConnection_DisconnectAfterError
+	.public GtsConnection_WaitText
+	.public GtsConnection_WaitTextAndDelay
+	.public GtsConnection_WaitTextAndShowYesNo
+	.public Gts_PrintMessage
+	.public Gts_GetAlignedX
+	.public Gts_PrintAlignedFont1
+	.public Gts_PrintAlignedFont0
+	.public Gts_PrintAlignedFont4
+	.public Gts_PrintPanelCaption
+	.public Gts_CreateWirelessStatusIcon
+	.public GtsConnection_PrintError
+	.public GtsConnection_PrintErrorCode
 	.public sGtsGraphicsModes
 	.public sGtsObjCharTransferTemplate
 	.public sGtsGraphicsBanks
@@ -2745,11 +2745,11 @@
 	.public ov70_02245F58
 	.public ov70_02245F5C
 	.public sGtsSelectorLetterMsgs
-	.public ov70_0224600C
-	.public ov70_02246020
-	.public ov70_0224603C
-	.public ov70_02246058
-	.public ov70_02246074
+	.public sGtsPanelCaptionMsgIds
+	.public sGtsConnectionSubBg0Template
+	.public sGtsConnectionBg1Template
+	.public sGtsConnectionBg0Template
+	.public sGtsConnectionSubBg1Template
 	.public sGtsPostUrl
 	.public sGtsPostFinishUrl
 	.public sGtsGetUrl
@@ -2777,7 +2777,7 @@
 	.public sGtsWantedStates
 	.public sGtsTransactionStates
 	.public sGtsSelectorStates
-	.public ov70_02246780
+	.public sGtsConnectionStates
 	.public gGtsServerFriendKey
 	.public gGtsServerRequest
 	.public ov70_02246900
@@ -2841,11 +2841,11 @@
 	.public GtsSelector_CloseSpeciesLetters
 	.public GtsSelector_BackToSpeciesLetters
 	.public GtsSelector_BackToCountryLetters
-	.public ov70_02244290
-	.public ov70_022446A8
-	.public ov70_02244834
-	.public ov70_02244944
-	.public ov70_02245124
+	.public GtsConnection_FreeBgs
+	.public GtsConnection_DeleteStrings
+	.public GtsConnection_Disconnect
+	.public GtsConnection_StartAuth
+	.public Gts_CreateWirelessStatusIcon
 
 	thumb_func_start GtsTransaction_DepositDone
 GtsTransaction_DepositDone: ; 0x02240640
@@ -3015,7 +3015,7 @@ GtsTransaction_AlreadyTraded: ; 0x02240748
 	ldr r1, [r4, r1]
 	mov r2, #0x93
 	mov r3, #1
-	bl ov70_02244FA4
+	bl Gts_PrintMessage
 	add r0, r4, #0
 	mov r1, #0x25
 	mov r2, #0x24
@@ -3081,7 +3081,7 @@ _022407CC:
 	mov r1, #0xba
 	lsl r1, r1, #4
 	ldr r1, [r0, r1]
-	bl ov70_02244FA4
+	bl Gts_PrintMessage
 	pop {r3, pc}
 	nop
 _022407E0: .word 0x00000F0F

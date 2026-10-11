@@ -34,7 +34,7 @@
 #include "sound_playback.h"
 #include "oam_manager.h"
 #include "touchpad.h"
-#include "unk_02068F84.h"
+#include "map_landmark_name.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 

@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "156b02574ef5d70ff2362079e20d59e28997168a",
+  "commit": "d074b75b1d1ede198aa94bc70397c4b1d35fe8df",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "a58556df0c100478ab2a322e3a700addde4b3d299bd13ee01779f8d791ed865a",
+    "ARM9": "6d6dac04d9ff39f1c391dff929711a0c06861d71ff9d84f47b7446bbd7685768",
     "ARM7": "cab231956266dacbb49cbbd94c9dd04b46e0b03a5c3d949380b269ecefe6aec9"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -20060,6 +20060,14 @@
     {
       "cpu": "ARM9",
       "module": "OVY_70",
+      "object": "gts_connection.o",
+      "bytes": 4606,
+      "status": "c",
+      "source": "src/gts_connection.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_70",
       "object": "gts_main_menu.o",
       "bytes": 3182,
       "status": "c",
@@ -20136,126 +20144,6 @@
       "bytes": 4556,
       "status": "c",
       "source": "src/gts_wanted.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "op90_overlay_70_residual_41_residual_1_r01.o",
-      "bytes": 560,
-      "status": "c",
-      "source": "src/op90_overlay_70_residual_41_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "ov70_wave41_palette_1.o",
-      "bytes": 452,
-      "status": "c",
-      "source": "src/ov70_wave41_palette_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "ov70_wave42_prompt.o",
-      "bytes": 356,
-      "status": "c",
-      "source": "src/ov70_wave42_prompt.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "overlay70_network_state_44.o",
-      "bytes": 1990,
-      "status": "c",
-      "source": "src/overlay70_network_state_44.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "overlay70_selection_helpers_4.o",
-      "bytes": 80,
-      "status": "c",
-      "source": "src/overlay70_selection_helpers_4.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "overlay70_sol_partial_40.o",
-      "bytes": 36,
-      "status": "c",
-      "source": "src/overlay70_sol_partial_40.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "overlay70_sol_partial_41.o",
-      "bytes": 40,
-      "status": "c",
-      "source": "src/overlay70_sol_partial_41.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "overlay70_sol_partial_42.o",
-      "bytes": 30,
-      "status": "c",
-      "source": "src/overlay70_sol_partial_42.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "overlay70_sol_partial_43.o",
-      "bytes": 16,
-      "status": "c",
-      "source": "src/overlay70_sol_partial_43.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "overlay70_sol_partial_44.o",
-      "bytes": 8,
-      "status": "c",
-      "source": "src/overlay70_sol_partial_44.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "overlay70_wireless_session.o",
-      "bytes": 238,
-      "status": "c",
-      "source": "src/overlay70_wireless_session/overlay70_wireless_session.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "r40_overlay_70_residual_45_run1.o",
-      "bytes": 192,
-      "status": "c",
-      "source": "src/r40_overlay_70_residual_45_run1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "to52_r5_overlay70_r40_r4_head.o",
-      "bytes": 324,
-      "status": "c",
-      "source": "src/to52_r5_overlay70_r40_r4_head.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "to70_overlay_70_residual_40_residual_5_extra436_run01.o",
-      "bytes": 236,
-      "status": "c",
-      "source": "src/to70_overlay_70_residual_40_residual_5_extra436_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_70",
-      "object": "to80_extra1596_run01.o",
-      "bytes": 48,
-      "status": "c",
-      "source": "src/to80_extra1596_run01.c"
     },
     {
       "cpu": "ARM9",
@@ -34648,14 +34536,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "field_following_trainer.o",
-      "bytes": 900,
-      "status": "c",
-      "source": "src/field_following_trainer.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "field_interaction.o",
       "bytes": 770,
       "status": "c",
@@ -35188,6 +35068,14 @@
       "bytes": 3912,
       "status": "c",
       "source": "src/field_use_item.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "field_warp_state.o",
+      "bytes": 900,
+      "status": "c",
+      "source": "src/field_warp_state.c"
     },
     {
       "cpu": "ARM9",
@@ -36749,6 +36637,14 @@
       "bytes": 924,
       "status": "c",
       "source": "src/map_header.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "map_landmark_name.o",
+      "bytes": 66,
+      "status": "c",
+      "source": "src/map_landmark_name.c"
     },
     {
       "cpu": "ARM9",
@@ -39553,6 +39449,14 @@
       "bytes": 2304,
       "status": "c",
       "source": "src/party_menu_sprites.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "phone_rematch.o",
+      "bytes": 60,
+      "status": "c",
+      "source": "src/phone_rematch.c"
     },
     {
       "cpu": "ARM9",
@@ -45539,14 +45443,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "unk_02068F84.o",
-      "bytes": 66,
-      "status": "c",
-      "source": "src/unk_02068F84.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "unk_02069528.o",
       "bytes": 312,
       "status": "c",
@@ -45647,14 +45543,6 @@
       "bytes": 1494,
       "status": "c",
       "source": "src/unk_02092BE8.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "unk_020932A4.o",
-      "bytes": 60,
-      "status": "c",
-      "source": "src/unk_020932A4.c"
     },
     {
       "cpu": "ARM9",

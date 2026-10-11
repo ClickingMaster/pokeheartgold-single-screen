@@ -16,7 +16,7 @@
 #include "save_palpad.h"
 #include "save_wifi_history.h"
 #include "trainer_data.h"
-#include "unk_02067A60.h"
+#include "field_warp_state.h"
 #include "unk_020755E8.h"
 
 struct BattleSetupSub_138 {

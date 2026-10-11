@@ -13,7 +13,7 @@
 #include "sys_vars.h"
 #include "unk_0205B3DC.h"
 #include "unk_0205BB1C.h"
-#include "unk_02068F84.h"
+#include "map_landmark_name.h"
 
 static String *_get_species_name(u16 species, enum HeapID heapID);
 

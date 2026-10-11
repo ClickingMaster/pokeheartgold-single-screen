@@ -1,7 +1,7 @@
-#ifndef POKEHEARTGOLD_FIELD_FOLLOWING_TRAINER_INTERNAL_H
-#define POKEHEARTGOLD_FIELD_FOLLOWING_TRAINER_INTERNAL_H
+#ifndef POKEHEARTGOLD_FIELD_WARP_STATE_INTERNAL_H
+#define POKEHEARTGOLD_FIELD_WARP_STATE_INTERNAL_H
 #include "global.h"
-typedef struct FollowTaskEnv {
+typedef struct FlyTaskEnv {
     void *fieldSystem;
     u16 state;
     u16 flag;
@@ -12,7 +12,7 @@ typedef struct FollowTaskEnv {
     void *mon;
     void *effect;
     void *movement;
-} FollowTaskEnv;
+} FlyTaskEnv;
 extern void *Heap_Alloc();
 extern void *Heap_AllocAtEnd();
 extern void Heap_Free();
@@ -38,16 +38,16 @@ extern void Save_VarsFlags_ClearHaveFollowerFlag();
 extern void Save_VarsFlags_SetFollowerTrainerNum();
 void *sub_02067A60(int);
 void sub_02067A78(void *);
-void sub_02067A80(void *, void *);
-void sub_02067A88(u8 *);
-void sub_02067AE4(u8 *);
-void sub_02067B88(u8 *);
+void FieldSystem_SetWarpResetSuppressed(void *, void *);
+void FieldSystem_ResetStateOnMapConnection(u8 *);
+void FieldSystem_ResetStateOnWarp(u8 *);
+void FieldSystem_ResetStateOnFlyWarp(u8 *);
 void sub_02067BA4(u8 *);
-void sub_02067BC0(u8 *);
+void FieldSystem_ClearSafariSysFlag(u8 *);
 void FieldSystem_ClearFollowingTrainer(u8 *);
-void sub_02067BE8(u8 *);
-void *sub_02067BF8(int, void *, void *, int, u16, s16, s16);
-BOOL sub_02067C30(void *);
+void FieldSystem_RandomizeRoamers(u8 *);
+void *FlyTaskEnv_New(int, void *, void *, int, u16, s16, s16);
+BOOL FieldTask_Fly(void *);
 typedef struct WarpData {
     s32 map;
     s32 x;
@@ -56,7 +56,7 @@ typedef struct WarpData {
     s32 warp;
 } WarpData;
 extern u8 *TaskManager_GetFieldSystem();
-extern FollowTaskEnv *TaskManager_GetEnvironment();
+extern FlyTaskEnv *TaskManager_GetEnvironment();
 extern void TaskManager_Call();
 extern void ov01_02205A60();
 extern int PlayerAvatar_GetState();

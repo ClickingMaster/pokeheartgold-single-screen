@@ -102,7 +102,7 @@ int GtsMainMenu_Init(GtsApp *app, int state) {
     GtsMainMenu_LoadGraphics(app);
     GtsMainMenu_CreateWindows(app);
     GtsMainMenu_CreateCursor(app);
-    ov70_02245124(app);
+    Gts_CreateWirelessStatusIcon(app);
     GtsMainMenu_DrawButtons(app);
     Sound_SetSceneAndPlayBGM(0x17, SEQ_GS_BLD_GTC, 1);
     if (app->mainMenuShown == FALSE) {

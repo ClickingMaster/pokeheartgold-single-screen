@@ -108,7 +108,7 @@ void Gts_ShowSubScreenPanel(GtsApp *app) {
 void Gts_CreatePanelWindow(GtsApp *app, int caption) {
     AddWindowParameterized(app->bgConfig, &app->panelWindow, GF_BG_LYR_SUB_0, 13, 19, 16, 4, 1, 1);
     FillWindowPixelBuffer(&app->panelWindow, 0);
-    ov70_022450EC(&app->panelWindow, app->gtsMsgData, caption);
+    Gts_PrintPanelCaption(&app->panelWindow, app->gtsMsgData, caption);
 }
 
 int GtsSummary_Init(GtsApp *app, int state) {
@@ -412,16 +412,16 @@ void Gts_DrawMonSummary(MsgData *msgData, MsgData *speciesNames, MessageFormat *
     for (i = 0; i < 6; i++) {
         FillWindowPixelBuffer(&windows[i], 0);
     }
-    ov70_02245084(&windows[0], nickname, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
+    Gts_PrintAlignedFont0(&windows[0], nickname, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
     if (gender != 3) {
-        ov70_02245084(&windows[0], genderSymbol, 64, 0, 0, sGtsGenderSymbolColors[gender]);
+        Gts_PrintAlignedFont0(&windows[0], genderSymbol, 64, 0, 0, sGtsGenderSymbolColors[gender]);
     }
-    ov70_02245084(&windows[1], speciesName, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
-    ov70_02245084(&windows[2], levelLabel, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
-    ov70_02245084(&windows[3], level, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
-    ov70_02245084(&windows[4], itemLabel, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
-    ov70_02245084(&windows[5], itemName, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
-    ov70_02245084(&windows[6], nameLabel, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
+    Gts_PrintAlignedFont0(&windows[1], speciesName, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
+    Gts_PrintAlignedFont0(&windows[2], levelLabel, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
+    Gts_PrintAlignedFont0(&windows[3], level, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
+    Gts_PrintAlignedFont0(&windows[4], itemLabel, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
+    Gts_PrintAlignedFont0(&windows[5], itemName, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
+    Gts_PrintAlignedFont0(&windows[6], nameLabel, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
     String_Delete(itemLabel);
     String_Delete(itemName);
     String_Delete(levelLabel);
@@ -444,10 +444,10 @@ void Gts_DrawTrainerInfo(MsgData *msgData, Window *trainerWindows, const u16 *tr
     CopyU16ArrayToString(name, trainerName);
     otLabel = NewString_ReadMsgData(msgData, 180);
     GetMonData(mon, MON_DATA_OT_NAME_STRING, otName);
-    ov70_02245084(&trainerWindows[0], trainerLabel, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
-    ov70_02245084(&trainerWindows[1], name, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
-    ov70_02245084(&otWindows[0], otLabel, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
-    ov70_02245084(&otWindows[1], otName, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
+    Gts_PrintAlignedFont0(&trainerWindows[0], trainerLabel, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
+    Gts_PrintAlignedFont0(&trainerWindows[1], name, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
+    Gts_PrintAlignedFont0(&otWindows[0], otLabel, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
+    Gts_PrintAlignedFont0(&otWindows[1], otName, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
     String_Delete(trainerLabel);
     String_Delete(name);
     String_Delete(otLabel);

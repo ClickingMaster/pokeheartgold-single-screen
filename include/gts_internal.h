@@ -18,6 +18,7 @@
 #include "trade_anim.h"
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
+#include "unk_0203170C.h"
 #include "unk_020755E8.h"
 #include "unk_02088288.h"
 #include "yes_no_prompt.h"
@@ -184,6 +185,18 @@ extern GtsGlobals gGtsGlobals;
 
 typedef void (*GtsVBlankFunc)(GtsApp *app);
 
+// The background palette cycle of screen 0, run as a VBlank task (gts_connection.c).
+typedef struct GtsPaletteAnim {
+    SysTask *task;         // 0x000
+    BOOL active;           // 0x004
+    u16 basePltt[4 * 16];  // 0x008
+    u16 fadePltt[21 * 16]; // 0x088, palette 0 blended in 7 steps towards each of palettes 1, 2 and 3
+    s16 frame;             // 0x328, in fadePltt
+    s8 reverse;            // 0x32A
+    u8 skipFrame;          // 0x32B, the palette changes every other frame
+    u32 screens;           // 0x32C, 0: both, 1: main, 2: sub
+} GtsPaletteAnim;          // size: 0x330
+
 struct GtsApp {
     GtsArgs *args;                           // 0x0000
     BgConfig *bgConfig;                      // 0x0004
@@ -201,10 +214,12 @@ struct GtsApp {
     u8 filler_0038[2];                       // 0x0038
     u16 timer;                               // 0x003A, frames until the GTS may be checked again
     int serverResult;                        // 0x003C, of the failed request (screen 7 picks the error message from it)
-    u8 filler_0040[0xC];                     // 0x0040
+    int connectionResult;                    // 0x0040, of a failed Wi-Fi connection (ov00_021EC11C)
+    int connectionErrorCode;                 // 0x0044
+    int connectionErrorType;                 // 0x0048
     void *heapMemory;                        // 0x004C
     NNSFndHeapHandle heap;                   // 0x0050, in heapMemory
-    u8 filler_0054[0x64];                    // 0x0054
+    u8 wifiConnection[0x64];                 // 0x0054, passed to ov00_021EC3F0 when connecting (screen 0)
     OverlayManager *tradeSequence;           // 0x00B8
     PokemonSummaryArgs summaryArgs;          // 0x00BC, of screen 8
     TRADE_ANIM_WORK tradeAnim;               // 0x00F8, args of the trade sequence (OVY_71)
@@ -241,7 +256,7 @@ struct GtsApp {
     String *msgBuffer;                       // 0x0BBC
     String *titleString;                     // 0x0BC0
     String *unk_0BC4[10];                    // 0x0BC4
-    u8 filler_0BEC[4];                       // 0x0BEC
+    String *errorBuffer;                     // 0x0BEC, the Wi-Fi error message of screen 0
     int textPrinterId;                       // 0x0BF0
     SpriteList *spriteList;                  // 0x0BF4
     G2dRenderer renderer;                    // 0x0BF8
@@ -265,7 +280,7 @@ struct GtsApp {
     Window waitingIconWindow;                // 0x0F18, also the message window
     u8 filler_0F28[0x10];                    // 0x0F28
     Window titleWindow;                      // 0x0F38
-    Window boxNameWindow;                    // 0x0F48, of screen 5
+    Window boxNameWindow;                    // 0x0F48, of screen 5; screen 0's Wi-Fi error window
     Window windows[16];                      // 0x0F58, each screen's own windows
     Window infoWindows[16];                  // 0x1058, a Pokemon's summary, trainer and wanted Pokemon
     Window promptWindow;                     // 0x1158, the message window of a Yes/No prompt
@@ -274,7 +289,8 @@ struct GtsApp {
     Window panelWindow;                      // 0x1198, the caption of the sub screen panel
     GtsSelector *selector;                   // 0x11A8, the species/gender/level/country selector
     ListMenuItem *listItems;                 // 0x11AC
-    u8 filler_11B0[0xC];                     // 0x11B0
+    struct ListMenu2D *unk_11B0;             // 0x11B0, only read by screen 0 (GtsConnection_HandleDisconnectMenu)
+    u8 filler_11B4[8];                       // 0x11B4
     WaitingIcon *waitingIcon;                // 0x11BC
     int waitFrames;                          // 0x11C0
     GtsSearchCursor *searchCursor;           // 0x11C4
@@ -301,9 +317,12 @@ struct GtsApp {
     s16 avatarPositions[8][2];               // 0x120C, {x, y} of avatarSprites
     u8 filler_122C[8];                       // 0x122C
     GtsUnk1234 unk_1234;                     // 0x1234
-    u8 filler_1260[0x6C];                    // 0x1260
+    Unk020317F4 profile;                     // 0x1260, sent by GtsServer_RequestSetProfile (screen 0)
+    u32 profileResponse[2];                  // 0x12C4, its answer
     u32 searchCountry;                       // 0x12CC, of SEEK POKEMON, 0 for any
-    u8 filler_12D0[0x334];                   // 0x12D0
+    GtsPaletteAnim paletteAnim;              // 0x12D0, of screen 0
+    s16 subState;                            // 0x1600, of screen 0's state, reset when the state changes
+    s16 subTimer;                            // 0x1602, likewise
     u32 requestFrames;                       // 0x1604, frames the request in flight took
 }; // size: 0x1608
 
@@ -409,12 +428,15 @@ int GtsSelector_Main(GtsSelector *selector);
 // The count of the countries starting with the letter (index A = 0); unused is not read.
 int GtsSelector_CountCountriesOfLetter(void *unused, u32 letter);
 
-// Defined in pieces not merged yet.
-void ov70_02244FA4(GtsApp *app, MsgData *msgData, int msgId, int textSpeed, u32 unused4);
-BOOL ov70_02243FE0(GtsSelector *selector, int group);
-void ov70_02245084(Window *window, String *string, int x, int y, int align, u32 color);
-void ov70_022450B8(Window *window, String *string, int x, int y, int align, u32 color);
-void ov70_022450EC(Window *window, MsgData *msgData, int caption);
-int ov70_02245124(GtsApp *app);
+// Connecting to and disconnecting from Nintendo Wi-Fi Connection (screen 0, gts_connection.c), and the text helpers
+// every screen uses. Gts_PrintMessage prints in waitingIconWindow (the message window); align: 0 left at x,
+// 1 centered, 2 right in the window.
+// The last function of the selector (it links with screen 0): whether a letter group has a letter with countries.
+BOOL GtsSelector_HasCountriesInGroup(GtsSelector *selector, int group);
+void Gts_PrintMessage(GtsApp *app, MsgData *msgData, int msgId, int textSpeed, u32 unused4);
+void Gts_PrintAlignedFont0(Window *window, String *string, int x, int y, int align, u32 color);
+void Gts_PrintAlignedFont4(Window *window, String *string, int x, int y, int align, u32 color);
+void Gts_PrintPanelCaption(Window *window, MsgData *msgData, int caption);
+void Gts_CreateWirelessStatusIcon(GtsApp *app);
 
 #endif // POKEHEARTGOLD_GTS_INTERNAL_H

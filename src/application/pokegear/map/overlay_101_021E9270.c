@@ -9,8 +9,8 @@
 #include "sys_flags.h"
 #include "text.h"
 #include "touchscreen_list_menu.h"
-#include "unk_02068F84.h"
-#include "unk_020932A4.h"
+#include "map_landmark_name.h"
+#include "phone_rematch.h"
 
 static void PokegearMap_LoadState(PokegearMapAppData *mapApp);
 static void ov101_021E9848(PokegearMapAppData *mapApp, u16 xIn, u16 yIn, s16 a3, s16 a4, int *xOut, int *yOut);

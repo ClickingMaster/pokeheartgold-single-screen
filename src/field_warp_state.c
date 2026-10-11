@@ -1,4 +1,4 @@
-#include "field_following_trainer_internal.h"
+#include "field_warp_state_internal.h"
 
 static const u16 sFollowMovement[] = { 73, 1, 33, 1, 74, 1, 254, 0 };
 
@@ -7,13 +7,16 @@ void *sub_02067A60(int heapId) {
     MIi_CpuClearFast(0, p, 0x24);
     return p;
 }
+
 void sub_02067A78(void *p) {
     Heap_Free(p);
 }
-void sub_02067A80(void *fs, void *value) {
+
+void FieldSystem_SetWarpResetSuppressed(void *fs, void *value) {
     *(void **)((u8 *)fs + 0xAC) = value;
 }
-void sub_02067A88(u8 *fs) {
+
+void FieldSystem_ResetStateOnMapConnection(u8 *fs) {
     void *flags;
     void *roamers;
     flags = Save_VarsFlags_Get(*(void **)(fs + 0xC));
@@ -30,7 +33,8 @@ void sub_02067A88(u8 *fs) {
         Save_UpdateRoamersLocation(roamers);
     }
 }
-void sub_02067AE4(u8 *fs) {
+
+void FieldSystem_ResetStateOnWarp(u8 *fs) {
     void *flags;
     void *roamers;
     u8 *player;
@@ -60,28 +64,34 @@ void sub_02067AE4(u8 *fs) {
         *(u32 *)(player + 4) = 0;
     }
 }
-void sub_02067B88(u8 *fs) {
+
+void FieldSystem_ResetStateOnFlyWarp(u8 *fs) {
     Save_VarsFlags_ClearSafariSysFlag(Save_VarsFlags_Get(*(void **)(fs + 0xC)));
     Save_RandomizeRoamersLocation(Save_Roamers_Get(*(void **)(fs + 0xC)));
 }
+
 void sub_02067BA4(u8 *fs) {
     Save_VarsFlags_ClearSafariSysFlag(Save_VarsFlags_Get(*(void **)(fs + 0xC)));
     Save_RandomizeRoamersLocation(Save_Roamers_Get(*(void **)(fs + 0xC)));
 }
-void sub_02067BC0(u8 *fs) {
+
+void FieldSystem_ClearSafariSysFlag(u8 *fs) {
     Save_VarsFlags_ClearSafariSysFlag(Save_VarsFlags_Get(*(void **)(fs + 0xC)));
 }
+
 void FieldSystem_ClearFollowingTrainer(u8 *fs) {
     void *f = Save_VarsFlags_Get(*(void **)(fs + 0xC));
     Save_VarsFlags_ClearHaveFollowerFlag(f);
     Save_VarsFlags_SetFollowerTrainerNum(f, 0);
 }
-void sub_02067BE8(u8 *fs) {
+
+void FieldSystem_RandomizeRoamers(u8 *fs) {
     Save_RandomizeRoamersLocation(Save_Roamers_Get(*(void **)(fs + 0xC)));
 }
-void *sub_02067BF8(int heapId, void *fs, void *mon, int value, u16 mapNo, s16 x, s16 y) {
-    FollowTaskEnv *p = Heap_AllocAtEnd(heapId, sizeof(FollowTaskEnv));
-    memset(p, 0, sizeof(FollowTaskEnv));
+
+void *FlyTaskEnv_New(int heapId, void *fs, void *mon, int value, u16 mapNo, s16 x, s16 y) {
+    FlyTaskEnv *p = Heap_AllocAtEnd(heapId, sizeof(FlyTaskEnv));
+    memset(p, 0, sizeof(FlyTaskEnv));
     p->fieldSystem = fs;
     p->mon = mon;
     p->mapNo = mapNo;
@@ -91,11 +101,11 @@ void *sub_02067BF8(int heapId, void *fs, void *mon, int value, u16 mapNo, s16 x,
     return p;
 }
 
-BOOL sub_02067C30(void *task) {
+BOOL FieldTask_Fly(void *task) {
     WarpData warp;
     int kind;
     u8 *fs = TaskManager_GetFieldSystem(task);
-    FollowTaskEnv *env = TaskManager_GetEnvironment(task);
+    FlyTaskEnv *env = TaskManager_GetEnvironment(task);
     switch (env->state) {
     case 0:
         TaskManager_Call(task, ov01_02205A60, 0);

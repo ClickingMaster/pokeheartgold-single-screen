@@ -1,5 +1,5 @@
-#ifndef POKEHEARTGOLD_UNK_020932A4_H
-#define POKEHEARTGOLD_UNK_020932A4_H
+#ifndef POKEHEARTGOLD_PHONE_REMATCH_H
+#define POKEHEARTGOLD_PHONE_REMATCH_H
 
 #include "gf_rtc.h"
 #include "phonebook_dat.h"
@@ -7,4 +7,4 @@
 
 u16 PhoneBookTrainerGetRematchInfo(u8 idx, SaveData *saveData, struct PhoneBook *phoneBook, u8 timeOfDay);
 
-#endif // POKEHEARTGOLD_UNK_020932A4_H
+#endif // POKEHEARTGOLD_PHONE_REMATCH_H

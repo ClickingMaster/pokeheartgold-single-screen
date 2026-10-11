@@ -434,13 +434,13 @@ void GtsSearchResult_PrintMessage(GtsApp *app, int msgId, int textSpeed, int unu
 
 void GtsSearchResult_PrintLabel(MsgData *msgData, Window *window, int msgId) {
     String *string = NewString_ReadMsgData(msgData, msgId);
-    ov70_02245084(window, string, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
+    Gts_PrintAlignedFont0(window, string, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0));
     String_Delete(string);
 }
 
 void GtsSearchResult_PrintButtonLabel(MsgData *msgData, Window *window, int msgId) {
     String *string = NewString_ReadMsgData(msgData, msgId);
-    ov70_022450B8(window, string, 0, 0, 1, MAKE_TEXT_COLOR(15, 2, 0));
+    Gts_PrintAlignedFont4(window, string, 0, 0, 1, MAKE_TEXT_COLOR(15, 2, 0));
     String_Delete(string);
 }
 
@@ -458,10 +458,10 @@ void GtsSearchResult_DrawLocation(Window *windows, String *country, String *city
     FillWindowPixelBuffer(&windows[0], 0);
     FillWindowPixelBuffer(&windows[1], 0);
     if (country != NULL) {
-        ov70_02245084(&windows[0], country, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
+        Gts_PrintAlignedFont0(&windows[0], country, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
     }
     if (city != NULL) {
-        ov70_02245084(&windows[1], city, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
+        Gts_PrintAlignedFont0(&windows[1], city, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
     }
 }
 

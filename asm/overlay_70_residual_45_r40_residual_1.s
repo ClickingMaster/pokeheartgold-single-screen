@@ -2589,52 +2589,52 @@
 	.public GtsSelector_CountSeenSpeciesOfLetter
 	.public GtsSelector_GroupHasSeenSpecies
 	.public GtsSelector_CountCountriesOfLetter
-	.public ov70_02243FE0
-	.public ov70_02244038
-	.public ov70_02244124
-	.public ov70_02244154
-	.public ov70_022441A4
-	.public ov70_02244290
-	.public ov70_022442B4
-	.public ov70_022444E4
-	.public ov70_0224458C
-	.public ov70_02244644
-	.public ov70_02244670
-	.public ov70_022446A8
-	.public ov70_022446D0
-	.public ov70_02244708
-	.public ov70_02244774
-	.public ov70_022447A0
-	.public ov70_02244804
-	.public ov70_02244834
-	.public ov70_02244854
-	.public ov70_02244888
-	.public ov70_022448C0
-	.public ov70_02244944
-	.public ov70_02244954
-	.public ov70_02244A04
-	.public ov70_02244A4C
-	.public ov70_02244A68
-	.public ov70_02244B20
-	.public ov70_02244B54
-	.public ov70_02244CA8
-	.public ov70_02244CCC
-	.public ov70_02244D08
-	.public ov70_02244D44
-	.public ov70_02244D80
-	.public ov70_02244E44
-	.public ov70_02244F14
-	.public ov70_02244F34
-	.public ov70_02244F68
-	.public ov70_02244FA4
-	.public ov70_02245018
-	.public ov70_02245050
-	.public ov70_02245084
-	.public ov70_022450B8
-	.public ov70_022450EC
-	.public ov70_02245124
-	.public ov70_0224512C
-	.public ov70_022451A8
+	.public GtsSelector_HasCountriesInGroup
+	.public GtsConnection_Init
+	.public GtsConnection_Main
+	.public GtsConnection_Exit
+	.public GtsConnection_InitBgs
+	.public GtsConnection_FreeBgs
+	.public GtsConnection_LoadGraphics
+	.public GtsConnection_AnimatePaletteTask
+	.public GtsConnection_CreateWindows
+	.public GtsConnection_RemoveWindows
+	.public GtsConnection_CreateStrings
+	.public GtsConnection_DeleteStrings
+	.public GtsConnection_AskConnect
+	.public GtsConnection_HandleConnectPrompt
+	.public GtsConnection_AskDisconnect
+	.public GtsConnection_HandleDisconnectMenu
+	.public GtsConnection_PrintDisconnecting
+	.public GtsConnection_Disconnect
+	.public GtsConnection_PrintDisconnected
+	.public GtsConnection_StartConnect
+	.public GtsConnection_WaitConnect
+	.public GtsConnection_StartAuth
+	.public GtsConnection_WaitAuth
+	.public GtsConnection_InitServer
+	.public GtsConnection_SendInfo
+	.public GtsConnection_WaitInfo
+	.public GtsConnection_SendSetProfile
+	.public GtsConnection_WaitSetProfile
+	.public GtsConnection_ShowConnectionError
+	.public GtsConnection_WaitCloseError
+	.public GtsConnection_FadeOut
+	.public GtsConnection_HandleExitPrompt
+	.public GtsConnection_PrintServerError
+	.public GtsConnection_DisconnectAfterError
+	.public GtsConnection_WaitText
+	.public GtsConnection_WaitTextAndDelay
+	.public GtsConnection_WaitTextAndShowYesNo
+	.public Gts_PrintMessage
+	.public Gts_GetAlignedX
+	.public Gts_PrintAlignedFont1
+	.public Gts_PrintAlignedFont0
+	.public Gts_PrintAlignedFont4
+	.public Gts_PrintPanelCaption
+	.public Gts_CreateWirelessStatusIcon
+	.public GtsConnection_PrintError
+	.public GtsConnection_PrintErrorCode
 	.public sGtsGraphicsModes
 	.public sGtsObjCharTransferTemplate
 	.public sGtsGraphicsBanks
@@ -2745,11 +2745,11 @@
 	.public ov70_02245F58
 	.public ov70_02245F5C
 	.public sGtsSelectorLetterMsgs
-	.public ov70_0224600C
-	.public ov70_02246020
-	.public ov70_0224603C
-	.public ov70_02246058
-	.public ov70_02246074
+	.public sGtsPanelCaptionMsgIds
+	.public sGtsConnectionSubBg0Template
+	.public sGtsConnectionBg1Template
+	.public sGtsConnectionBg0Template
+	.public sGtsConnectionSubBg1Template
 	.public sGtsPostUrl
 	.public sGtsPostFinishUrl
 	.public sGtsGetUrl
@@ -2777,7 +2777,7 @@
 	.public sGtsWantedStates
 	.public sGtsTransactionStates
 	.public sGtsSelectorStates
-	.public ov70_02246780
+	.public sGtsConnectionStates
 	.public gGtsServerFriendKey
 	.public gGtsServerRequest
 	.public ov70_02246900
@@ -2841,13 +2841,13 @@
 	.public GtsSelector_CloseSpeciesLetters
 	.public GtsSelector_BackToSpeciesLetters
 	.public GtsSelector_BackToCountryLetters
-	.public ov70_02244290
-	.public ov70_022446A8
-	.public ov70_02244834
-	.public ov70_02244944
-	.public ov70_02245124
-	.public ov70_0224512C
-	.public ov70_022451A8
+	.public GtsConnection_FreeBgs
+	.public GtsConnection_DeleteStrings
+	.public GtsConnection_Disconnect
+	.public GtsConnection_StartAuth
+	.public Gts_CreateWirelessStatusIcon
+	.public GtsConnection_PrintError
+	.public GtsConnection_PrintErrorCode
 	.rodata
 
 sGtsListMenuTemplate:
@@ -3384,25 +3384,25 @@ sGtsSelectorLetterMsgs: ; 0x02245FA0
 	.byte 0xD0, 0x00, 0x00, 0x00, 0xD1, 0x00, 0x00, 0x00, 0xD2, 0x00, 0x00, 0x00, 0xD3, 0x00, 0x00, 0x00
 	.byte 0xD4, 0x00, 0x00, 0x00, 0xD5, 0x00, 0x00, 0x00, 0xE8, 0x00, 0x00, 0x00
 
-ov70_0224600C: ; 0x0224600C
+sGtsPanelCaptionMsgIds: ; 0x0224600C
 	.byte 0xE9, 0x00, 0x00, 0x00
 	.byte 0xEA, 0x00, 0x00, 0x00, 0xEB, 0x00, 0x00, 0x00, 0xEC, 0x00, 0x00, 0x00, 0xED, 0x00, 0x00, 0x00
 
-ov70_02246020: ; 0x02246020
+sGtsConnectionSubBg0Template: ; 0x02246020
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x1E, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov70_0224603C: ; 0x0224603C
+sGtsConnectionBg1Template: ; 0x0224603C
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1E, 0x02
 	.byte 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov70_02246058: ; 0x02246058
+sGtsConnectionBg0Template: ; 0x02246058
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1F, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov70_02246074: ; 0x02246074
+sGtsConnectionSubBg1Template: ; 0x02246074
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1B, 0x02, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
@@ -3454,7 +3454,7 @@ sGtsSetProfileUrl: ; 0x022463A4
 
 	.balign 4, 0
 sGtsScreens: ; 0x022463EC
-	.word ov70_02244038, ov70_02244124, ov70_02244154
+	.word GtsConnection_Init, GtsConnection_Main, GtsConnection_Exit
 	.word GtsMainMenu_Init, GtsMainMenu_Main, GtsMainMenu_Exit
 	.word GtsSummary_Init, GtsSummary_Main, GtsSummary_Exit
 	.word GtsSearchResult_Init, GtsSearchResult_Main, GtsSearchResult_Exit
@@ -3680,32 +3680,32 @@ sGtsSelectorStates: ; 0x022466F8
 	.word GtsSelector_HandleLevels
 	.word GtsSelector_FinishLevel
 
-ov70_02246780: ; 0x02246780
-	.word ov70_022446D0
-	.word ov70_02244708
-	.word ov70_02244888
-	.word ov70_022448C0
-	.word ov70_02244944
-	.word ov70_02244954
-	.word ov70_02244A04
-	.word ov70_02244A4C
-	.word ov70_02244A68
-	.word ov70_02244B20
-	.word ov70_02244B54
-	.word ov70_02244D08
-	.word ov70_02244F14
-	.word ov70_02244F68
-	.word ov70_02244D44
-	.word ov70_02244774
-	.word ov70_022447A0
-	.word ov70_02244804
-	.word ov70_02244834
-	.word ov70_02244854
-	.word ov70_02244F34
-	.word ov70_02244D80
-	.word ov70_02244E44
-	.word ov70_02244CA8
-	.word ov70_02244CCC
+sGtsConnectionStates: ; 0x02246780
+	.word GtsConnection_AskConnect
+	.word GtsConnection_HandleConnectPrompt
+	.word GtsConnection_StartConnect
+	.word GtsConnection_WaitConnect
+	.word GtsConnection_StartAuth
+	.word GtsConnection_WaitAuth
+	.word GtsConnection_InitServer
+	.word GtsConnection_SendInfo
+	.word GtsConnection_WaitInfo
+	.word GtsConnection_SendSetProfile
+	.word GtsConnection_WaitSetProfile
+	.word GtsConnection_FadeOut
+	.word GtsConnection_WaitText
+	.word GtsConnection_WaitTextAndShowYesNo
+	.word GtsConnection_HandleExitPrompt
+	.word GtsConnection_AskDisconnect
+	.word GtsConnection_HandleDisconnectMenu
+	.word GtsConnection_PrintDisconnecting
+	.word GtsConnection_Disconnect
+	.word GtsConnection_PrintDisconnected
+	.word GtsConnection_WaitTextAndDelay
+	.word GtsConnection_PrintServerError
+	.word GtsConnection_DisconnectAfterError
+	.word GtsConnection_ShowConnectionError
+	.word GtsConnection_WaitCloseError
 
 	.bss
 

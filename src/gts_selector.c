@@ -1165,7 +1165,7 @@ void GtsSelector_ShowGroups(GtsSelector *selector, int page, int y) {
                 selector->enabled[i] = FALSE;
             }
         } else {
-            if (ov70_02243FE0(selector, i) == TRUE) {
+            if (GtsSelector_HasCountriesInGroup(selector, i) == TRUE) {
                 color = MAKE_TEXT_COLOR(15, 14, 2);
                 selector->enabled[i] = TRUE;
             } else {

@@ -15,7 +15,7 @@
 #include "text.h"
 #include "touchscreen.h"
 #include "sound_playback.h"
-#include "unk_02068F84.h"
+#include "map_landmark_name.h"
 
 #define VIEW_PHOTO_NUM_SPRITES 3
 

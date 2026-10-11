@@ -41,7 +41,7 @@
 #include "unk_0205AC88.h"
 #include "unk_0205CB48.h"
 #include "unk_02066EDC.h"
-#include "unk_02067A60.h"
+#include "field_warp_state.h"
 #include "unk_02068FC8.h"
 #include "unk_020755E8.h"
 #include "unk_02092BE8.h"
@@ -1379,10 +1379,10 @@ BOOL Task_UseFlyInField(TaskManager *taskManager) {
         StartMenu_SetExitTaskFunc(startMenu, Task_StartMenu_HandleReturn_Pokemon);
     } else {
         Pokemon *pokemon = Party_GetMonByIndex(SaveArray_Party_Get(fieldSystem->saveData), partySlot);
-        struct UnkStruct_02067BF8 *r5 = sub_02067BF8(HEAP_ID_FIELD2, fieldSystem, pokemon, partySlot, pokegearArgs->selectedFlyDest, pokegearArgs->mapCursorX * 32 + 16, pokegearArgs->mapCursorY * 32 + 16);
+        struct FlyTaskEnv *r5 = FlyTaskEnv_New(HEAP_ID_FIELD2, fieldSystem, pokemon, partySlot, pokegearArgs->selectedFlyDest, pokegearArgs->mapCursorX * 32 + 16, pokegearArgs->mapCursorY * 32 + 16);
         Heap_FreeExplicit(HEAP_ID_FIELD2, startMenu->exitTaskEnvironment);
         FieldSystem_LoadFieldOverlay(fieldSystem);
-        startMenu->exitTaskFunc = sub_02067C30;
+        startMenu->exitTaskFunc = FieldTask_Fly;
         startMenu->exitTaskEnvironment = r5;
         startMenu->state = START_MENU_STATE_12;
     }

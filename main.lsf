@@ -601,12 +601,12 @@ Static main
     Object src/slop_small_unk_0206759C.o
     Object src/field_roamer.o
     Object src/npc_trade_task.o
-    Object src/field_following_trainer.o
+    Object src/field_warp_state.o
     Object src/field_move.o
     Object src/field_move_environment.o
     Object src/field_effects.o
     Object src/gymmick_init.o
-    Object src/unk_02068F84.o
+    Object src/map_landmark_name.o
     Object src/op90_unk_02068FC8_r01.o
     Object src/field_context_access_1.o
     Object src/r40_unk_02068FC8_residual_2_run1.o
@@ -821,7 +821,7 @@ Static main
     Object src/unk_02092BB8.o
     Object src/unk_02092BE8.o
     Object src/mom_gift.o
-    Object src/unk_020932A4.o
+    Object src/phone_rematch.o
     Object src/to70_unk_020932E0_extra95_run01.o
     Object src/to80_extra1367_run01.o
     Object src/unk020932e0_opus_partial_1.o
@@ -4900,21 +4900,7 @@ Overlay OVY_70
     Object src/gts_avatars.o
     Object src/gts_trade.o
     Object src/gts_selector.o
-    Object src/to52_r5_overlay70_r40_r4_head.o
-    Object src/to80_extra1596_run01.o
-    Object src/overlay70_selection_helpers_4.o
-    Object src/to70_overlay_70_residual_40_residual_5_extra436_run01.o
-    Object src/overlay70_sol_partial_40.o
-    Object src/op90_overlay_70_residual_41_residual_1_r01.o
-    Object src/ov70_wave41_palette_1.o
-    Object src/overlay70_sol_partial_41.o
-    Object src/ov70_wave42_prompt.o
-    Object src/overlay70_sol_partial_42.o
-    Object src/overlay70_wireless_session/overlay70_wireless_session.o
-    Object src/overlay70_sol_partial_43.o
-    Object src/overlay70_network_state_44.o
-    Object src/overlay70_sol_partial_44.o
-    Object src/r40_overlay_70_residual_45_run1.o
+    Object src/gts_connection.o
     Object asm/overlay_70_residual_45_r40_residual_1.o
 }
 Overlay OVY_71

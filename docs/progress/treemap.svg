@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 156b02574 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · d074b75b1 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -779,9 +779,9 @@ src/to65_to65_nitro_unified_residual_23_extra21_run08.c</title></rect>
 <rect x="255.659" y="431.595" width="16.473" height="8.781" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to90_msl_interval_demo_run09.o
 904 bytes · C-only source
 src/to90_msl_interval_demo_run09.c</title></rect>
-<rect x="255.659" y="440.376" width="16.473" height="8.742" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / field_following_trainer.o
+<rect x="255.659" y="440.376" width="16.473" height="8.742" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / field_warp_state.o
 900 bytes · C-only source
-src/field_following_trainer.c</title></rect>
+src/field_warp_state.c</title></rect>
 <rect x="239.131" y="449.118" width="16.574" height="8.689" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / msl_fp_ansi_two_exp.o
 900 bytes · C-only source
 lib/MSL_C/src/msl_fp_ansi_two_exp.c</title></rect>
@@ -3950,21 +3950,21 @@ src/unk020932e0_opus_partial_3.c</title></rect>
 <rect x="270.308" y="708.328" width="2.878" height="3.780" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / unk_02091564.o
 68 bytes · C-only source
 src/unk_02091564.c</title></rect>
-<rect x="264.552" y="712.108" width="4.318" height="2.446" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / player_avatar_movement_control_6.o
+<rect x="264.552" y="712.108" width="4.318" height="2.446" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / map_landmark_name.o
+66 bytes · C-only source
+src/map_landmark_name.c</title></rect>
+<rect x="264.552" y="714.554" width="4.318" height="2.446" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / player_avatar_movement_control_6.o
 66 bytes · C-only source
 src/player_avatar_movement_control_6.c</title></rect>
-<rect x="264.552" y="714.554" width="4.318" height="2.446" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / r40_unk_02011080_run1.o
+<rect x="268.869" y="712.108" width="4.318" height="2.446" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / r40_unk_02011080_run1.o
 66 bytes · C-only source
 src/r40_unk_02011080_run1.c</title></rect>
-<rect x="268.869" y="712.108" width="4.318" height="2.446" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / r40_unk_0205D450_run1.o
+<rect x="268.869" y="714.554" width="4.318" height="2.446" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / r40_unk_0205D450_run1.o
 66 bytes · C-only source
 src/r40_unk_0205D450_run1.c</title></rect>
-<rect x="268.869" y="714.554" width="4.318" height="2.446" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to70_unk_02010AB0_extra78_run01.o
+<rect x="273.187" y="681.386" width="2.771" height="3.812" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to70_unk_02010AB0_extra78_run01.o
 66 bytes · C-only source
 src/to70_unk_02010AB0_extra78_run01.c</title></rect>
-<rect x="273.187" y="681.386" width="2.771" height="3.812" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / unk_02068F84.o
-66 bytes · C-only source
-src/unk_02068F84.c</title></rect>
 <rect x="275.957" y="681.386" width="2.687" height="3.812" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / field_application_tasks_12.o
 64 bytes · C-only source
 src/field_application_tasks_12.c</title></rect>
@@ -4033,24 +4033,24 @@ src/field_link_messages_5.c</title></rect>
 <rect x="279.850" y="694.839" width="2.221" height="4.323" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / msl_assert.o
 60 bytes · C-only source
 lib/MSL_C/src/msl_assert.c</title></rect>
-<rect x="282.071" y="690.228" width="4.263" height="2.252" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / player_avatar_movement_control_15.o
+<rect x="282.071" y="690.228" width="4.263" height="2.252" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / phone_rematch.o
+60 bytes · C-only source
+src/phone_rematch.c</title></rect>
+<rect x="282.071" y="692.480" width="4.263" height="2.252" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / player_avatar_movement_control_15.o
 60 bytes · C-only source
 src/player_avatar_movement_control_15.c</title></rect>
-<rect x="282.071" y="692.480" width="4.263" height="2.252" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to59_wifi_run09.o
+<rect x="286.333" y="690.228" width="4.263" height="2.252" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to59_wifi_run09.o
 60 bytes · C-only source
 src/to59_wifi_run09.c</title></rect>
-<rect x="286.333" y="690.228" width="4.263" height="2.252" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to65_to65_nitro_unified_residual_23_extra21_run05.o
+<rect x="286.333" y="692.480" width="4.263" height="2.252" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to65_to65_nitro_unified_residual_23_extra21_run05.o
 60 bytes · C-only source
 src/to65_to65_nitro_unified_residual_23_extra21_run05.c</title></rect>
-<rect x="286.333" y="692.480" width="4.263" height="2.252" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to65_wifi_residual_11_run18.o
+<rect x="282.071" y="694.732" width="4.335" height="2.215" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to65_wifi_residual_11_run18.o
 60 bytes · C-only source
 src/to65_wifi_residual_11_run18.c</title></rect>
-<rect x="282.071" y="694.732" width="4.335" height="2.215" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to80_extra1365_run01.o
+<rect x="282.071" y="696.947" width="4.335" height="2.215" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / to80_extra1365_run01.o
 60 bytes · C-only source
 src/to80_extra1365_run01.c</title></rect>
-<rect x="282.071" y="696.947" width="4.335" height="2.215" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / unk_020932A4.o
-60 bytes · C-only source
-src/unk_020932A4.c</title></rect>
 <rect x="286.406" y="694.732" width="4.191" height="2.215" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / main / map_object_movement_utilities_6.o
 58 bytes · C-only source
 src/map_object_movement_utilities_6.c</title></rect>
@@ -15383,75 +15383,33 @@ src/gts_transaction.c</title></rect>
 <rect x="1075.143" y="333.740" width="32.382" height="25.062" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_search.o
 5,072 bytes · C-only source
 src/gts_search.c</title></rect>
-<rect x="1107.525" y="290.323" width="37.376" height="19.504" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_wanted.o
+<rect x="1107.525" y="290.323" width="22.090" height="33.363" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_connection.o
+4,606 bytes · C-only source
+src/gts_connection.c</title></rect>
+<rect x="1129.614" y="290.323" width="21.850" height="33.363" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_wanted.o
 4,556 bytes · C-only source
 src/gts_wanted.c</title></rect>
-<rect x="1107.525" y="309.827" width="37.376" height="18.331" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts.o
+<rect x="1151.464" y="290.323" width="20.536" height="33.363" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts.o
 4,282 bytes · C-only source
 src/gts.c</title></rect>
-<rect x="1144.901" y="290.323" width="27.099" height="19.048" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_search_result.o
+<rect x="1107.525" y="323.686" width="29.198" height="17.678" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_search_result.o
 3,226 bytes · C-only source
 src/gts_search_result.c</title></rect>
-<rect x="1144.901" y="309.370" width="27.099" height="18.788" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_main_menu.o
+<rect x="1107.525" y="341.364" width="29.198" height="17.437" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_main_menu.o
 3,182 bytes · C-only source
 src/gts_main_menu.c</title></rect>
-<rect x="1107.525" y="328.158" width="16.385" height="30.644" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_summary.o
+<rect x="1136.723" y="323.686" width="14.298" height="35.116" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_summary.o
 3,138 bytes · C-only source
 src/gts_summary.c</title></rect>
-<rect x="1123.910" y="328.158" width="19.957" height="15.955" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / overlay70_network_state_44.o
-1,990 bytes · C-only source
-src/overlay70_network_state_44.c</title></rect>
-<rect x="1123.910" y="344.113" width="19.957" height="14.688" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_avatars.o
+<rect x="1151.022" y="323.686" width="20.978" height="13.973" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_avatars.o
 1,832 bytes · C-only source
 src/gts_avatars.c</title></rect>
-<rect x="1143.867" y="328.158" width="16.685" height="15.765" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_server.o
+<rect x="1151.022" y="337.659" width="20.978" height="12.539" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_server.o
 1,644 bytes · C-only source
 src/gts_server.c</title></rect>
-<rect x="1160.552" y="328.158" width="11.448" height="15.765" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_trade.o
+<rect x="1151.022" y="350.198" width="20.978" height="8.603" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / gts_trade.o
 1,128 bytes · C-only source
 src/gts_trade.c</title></rect>
-<rect x="1143.867" y="343.924" width="14.712" height="6.090" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / op90_overlay_70_residual_41_residual_1_r01.o
-560 bytes · C-only source
-src/op90_overlay_70_residual_41_residual_1_r01.c</title></rect>
-<rect x="1143.867" y="350.014" width="8.230" height="8.788" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / ov70_wave41_palette_1.o
-452 bytes · C-only source
-src/ov70_wave41_palette_1.c</title></rect>
-<rect x="1152.096" y="350.014" width="6.482" height="8.788" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / ov70_wave42_prompt.o
-356 bytes · C-only source
-src/ov70_wave42_prompt.c</title></rect>
-<rect x="1158.579" y="343.924" width="7.738" height="6.700" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / to52_r5_overlay70_r40_r4_head.o
-324 bytes · C-only source
-src/to52_r5_overlay70_r40_r4_head.c</title></rect>
-<rect x="1166.316" y="343.924" width="5.684" height="6.700" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / overlay70_wireless_session.o
-238 bytes · C-only source
-src/overlay70_wireless_session/overlay70_wireless_session.c</title></rect>
-<rect x="1158.579" y="350.623" width="4.617" height="8.178" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / to70_overlay_70_residual_40_residual_5_extra436_run01.o
-236 bytes · C-only source
-src/to70_overlay_70_residual_40_residual_5_extra436_run01.c</title></rect>
-<rect x="1163.196" y="350.623" width="3.756" height="8.178" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / r40_overlay_70_residual_45_run1.o
-192 bytes · C-only source
-src/r40_overlay_70_residual_45_run1.c</title></rect>
-<rect x="1166.952" y="350.623" width="3.155" height="4.057" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / overlay70_selection_helpers_4.o
-80 bytes · C-only source
-src/overlay70_selection_helpers_4.c</title></rect>
-<rect x="1170.107" y="350.623" width="1.893" height="4.057" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / to80_extra1596_run01.o
-48 bytes · C-only source
-src/to80_extra1596_run01.c</title></rect>
-<rect x="1166.952" y="354.681" width="2.951" height="2.169" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / overlay70_sol_partial_41.o
-40 bytes · C-only source
-src/overlay70_sol_partial_41.c</title></rect>
-<rect x="1166.952" y="356.850" width="2.951" height="1.952" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / overlay70_sol_partial_40.o
-36 bytes · C-only source
-src/overlay70_sol_partial_40.c</title></rect>
-<rect x="1169.903" y="354.681" width="2.097" height="2.289" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / overlay70_sol_partial_42.o
-30 bytes · C-only source
-src/overlay70_sol_partial_42.c</title></rect>
-<rect x="1169.903" y="356.970" width="1.398" height="1.831" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / overlay70_sol_partial_43.o
-16 bytes · C-only source
-src/overlay70_sol_partial_43.c</title></rect>
-<rect x="1171.301" y="356.970" width="0.699" height="1.831" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_70 / overlay70_sol_partial_44.o
-8 bytes · C-only source
-src/overlay70_sol_partial_44.c</title></rect>
 <rect x="1042.480" y="290.323" width="129.520" height="68.479" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="1042.480" y="358.802" width="32.805" height="35.537" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_2 / encounter_check.o
 7,286 bytes · C-only source
