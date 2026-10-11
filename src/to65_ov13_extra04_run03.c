@@ -37,7 +37,7 @@ extern s8 ov13_022455D4[];
 extern u8 ov13_022455F4[];
 extern u8 ov13_02245480[];
 extern u8 ov13_02245526[];
-extern void *ov13_0224F540[];
+extern void *gWifiSetupTextEntry[];
 extern int FX_DivS32(int, int);
 extern int swprintf(u16 *, u32, const u16 *, ...);
 extern A *ov13_0224F544;

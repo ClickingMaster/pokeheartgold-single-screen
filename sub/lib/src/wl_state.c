@@ -110,7 +110,7 @@ int WSetFrameLifeTime(u32 time) {
 
 void WDisableTmpttPowerSave(void) {
     wlWorkPlain->bss.tmpttPowerSaveOff = TRUE;
-    if (wlWorkPlain->txDesc[3].active == 0) {
+    if (wlWorkPlain->txCtrl.txq[3].active == 0) {
         WL_REG(0x038) &= ~2;
         WL_REG(0x048) = 0;
     }

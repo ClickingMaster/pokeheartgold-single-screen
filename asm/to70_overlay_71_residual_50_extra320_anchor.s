@@ -14,16 +14,16 @@
 	.extern TradeSequenceDepart_WaitBgZoom
 	.extern TradeSequenceDepart_FlyOffTopScreen
 	.extern TradeSequenceDepart_FlyThroughBottomScreen
-	.extern ov71_022494A0
-	.extern ov71_022494D0
-	.extern ov71_02249500
-	.extern ov71_02249558
-	.extern ov71_022495A0
-	.extern ov71_02249CF0
-	.extern ov71_02249D14
-	.extern ov71_02249D28
-	.extern ov71_02249D58
-	.extern ov71_02249D80
+	.extern TradeSequenceRecede_Init
+	.extern TradeSequenceRecede_Exit
+	.extern TradeSequenceRecede_Main
+	.extern TradeSequenceRecede_SetupScreens
+	.extern TradeSequenceRecede_Run
+	.extern TradeSequenceExchange_Init
+	.extern TradeSequenceExchange_Exit
+	.extern TradeSequenceExchange_Main
+	.extern TradeSequenceExchange_SetupScreens
+	.extern TradeSequenceExchange_Slide
 	.extern ov71_0224A0F0
 	.extern ov71_0224A12C
 	.extern ov71_0224A15C
@@ -748,36 +748,36 @@
 	.public TradeSequenceDepart_FlightTask_Sink
 	.public TradeSequenceDepart_FlightTask_Pause
 	.public TradeSequenceDepart_FlightTask_Leave
-	.public ov71_022494A0
-	.public ov71_022494D0
-	.public ov71_02249500
-	.public ov71_02249538
-	.public ov71_02249558
-	.public ov71_022495A0
-	.public ov71_02249670
-	.public ov71_022497C8
-	.public ov71_022497E0
-	.public ov71_022498E0
-	.public ov71_022498F0
-	.public ov71_02249970
-	.public ov71_02249988
-	.public ov71_02249990
-	.public ov71_022499A4
-	.public ov71_02249A50
-	.public ov71_02249A60
-	.public ov71_02249A98
-	.public ov71_02249B64
-	.public ov71_02249C90
-	.public ov71_02249C98
-	.public ov71_02249CF0
-	.public ov71_02249D14
-	.public ov71_02249D28
-	.public ov71_02249D58
-	.public ov71_02249D80
-	.public ov71_02249E24
-	.public ov71_02249E6C
-	.public ov71_0224A080
-	.public ov71_0224A0B8
+	.public TradeSequenceRecede_Init
+	.public TradeSequenceRecede_Exit
+	.public TradeSequenceRecede_Main
+	.public TradeSequenceRecede_Draw
+	.public TradeSequenceRecede_SetupScreens
+	.public TradeSequenceRecede_Run
+	.public TradeSequenceRecede_InitBgs
+	.public TradeSequenceRecede_FreeBgs
+	.public TradeSequenceRecede_Init3D
+	.public TradeSequenceRecede_Free3D
+	.public TradeSequenceRecede_CreateSprite
+	.public TradeSequenceRecede_DeleteSprite
+	.public TradeSequenceRecede_InitFlight
+	.public TradeSequenceRecede_StopFlight
+	.public TradeSequenceRecede_StartFlight
+	.public TradeSequenceRecede_IsFlightDone
+	.public TradeSequenceRecede_SetFlightTargets
+	.public TradeSequenceRecede_UpdateFlight
+	.public TradeSequenceRecede_FlightTask
+	.public TradeSequenceRecede_RequestScreenSwap
+	.public TradeSequenceRecede_ScreenSwapTask
+	.public TradeSequenceExchange_Init
+	.public TradeSequenceExchange_Exit
+	.public TradeSequenceExchange_Main
+	.public TradeSequenceExchange_SetupScreens
+	.public TradeSequenceExchange_Slide
+	.public TradeSequenceExchange_SlideTask
+	.public TradeSequenceExchange_InitBgs
+	.public TradeSequenceExchange_FreeBgs
+	.public TradeSequenceExchange_SetMonPicPositions
 	.public ov71_0224A0F0
 	.public ov71_0224A12C
 	.public ov71_0224A15C
@@ -858,17 +858,17 @@
 	.public sTradeSequenceDepartBgTemplate_Layer2
 	.public sTradeSequenceDepartBgTemplate_Layer3
 	.public sTradeSequenceDepartGraphicsBanks
-	.public ov71_0224BD7C
-	.public ov71_0224BD84
-	.public ov71_0224BD94
-	.public ov71_0224BDA4
-	.public ov71_0224BDC0
-	.public ov71_0224BDE8
-	.public ov71_0224BDF0
-	.public ov71_0224BE00
-	.public ov71_0224BE1C
-	.public ov71_0224BE38
-	.public ov71_0224BE54
+	.public sTradeSequenceRecedeStates
+	.public sTradeSequenceRecedeGraphicsModes
+	.public sTradeSequenceRecedeEdgeColors
+	.public sTradeSequenceRecedeBgTemplate
+	.public sTradeSequenceRecedeGraphicsBanks
+	.public sTradeSequenceExchangeStates
+	.public sTradeSequenceExchangeGraphicsModes
+	.public sTradeSequenceExchangeBgTemplate_SentMon
+	.public sTradeSequenceExchangeBgTemplate_ReceivedMon
+	.public sTradeSequenceExchangeBgTemplate_Background
+	.public sTradeSequenceExchangeGraphicsBanks
 	.public ov71_0224BE7C
 	.public ov71_0224BE84
 	.public ov71_0224BE94
@@ -941,23 +941,23 @@
 	.public TradeSequenceDepart_StopScroll
 	.public TradeSequenceDepart_IsFlightOutOfView
 	.public TradeSequenceDepart_IsFlightFlyingAway
-	.public ov71_022494A0
-	.public ov71_022494D0
-	.public ov71_02249500
-	.public ov71_02249538
-	.public ov71_022497C8
-	.public ov71_022498E0
-	.public ov71_02249970
-	.public ov71_02249988
-	.public ov71_02249990
-	.public ov71_02249A50
-	.public ov71_02249C90
-	.public ov71_02249CF0
-	.public ov71_02249D14
-	.public ov71_02249D28
-	.public ov71_02249D58
-	.public ov71_0224A080
-	.public ov71_0224A0B8
+	.public TradeSequenceRecede_Init
+	.public TradeSequenceRecede_Exit
+	.public TradeSequenceRecede_Main
+	.public TradeSequenceRecede_Draw
+	.public TradeSequenceRecede_FreeBgs
+	.public TradeSequenceRecede_Free3D
+	.public TradeSequenceRecede_DeleteSprite
+	.public TradeSequenceRecede_InitFlight
+	.public TradeSequenceRecede_StopFlight
+	.public TradeSequenceRecede_IsFlightDone
+	.public TradeSequenceRecede_RequestScreenSwap
+	.public TradeSequenceExchange_Init
+	.public TradeSequenceExchange_Exit
+	.public TradeSequenceExchange_Main
+	.public TradeSequenceExchange_SetupScreens
+	.public TradeSequenceExchange_FreeBgs
+	.public TradeSequenceExchange_SetMonPicPositions
 	.public ov71_0224A12C
 	.public ov71_0224A15C
 	.public ov71_0224A3D8
@@ -1014,13 +1014,13 @@ sTradeSequenceSceneModes: ; 0x0224BBF8
 	.word TradeSequenceDepart_Main
 	.word TradeSequenceDepart_Exit
 	.byte 0x03, 0x00, 0x00, 0x00
-	.word ov71_022494A0
-	.word ov71_02249500
-	.word ov71_022494D0
+	.word TradeSequenceRecede_Init
+	.word TradeSequenceRecede_Main
+	.word TradeSequenceRecede_Exit
 	.byte 0x03, 0x00, 0x00, 0x00
-	.word ov71_02249CF0
-	.word ov71_02249D28
-	.word ov71_02249D14
+	.word TradeSequenceExchange_Init
+	.word TradeSequenceExchange_Main
+	.word TradeSequenceExchange_Exit
 	.byte 0x01, 0x00, 0x00, 0x00
 	.word ov71_0224A0F0
 	.word ov71_0224A15C
@@ -1095,49 +1095,49 @@ sTradeSequenceDepartGraphicsBanks: ; 0x0224BD54
 	.byte 0x80, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00
 
-ov71_0224BD7C: ; 0x0224BD7C
-	.word ov71_02249558
-	.word ov71_022495A0
+sTradeSequenceRecedeStates: ; 0x0224BD7C
+	.word TradeSequenceRecede_SetupScreens
+	.word TradeSequenceRecede_Run
 
-ov71_0224BD84: ; 0x0224BD84
+sTradeSequenceRecedeGraphicsModes: ; 0x0224BD84
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00
 
-ov71_0224BD94: ; 0x0224BD94
+sTradeSequenceRecedeEdgeColors: ; 0x0224BD94
 	.byte 0x84, 0x10, 0x84, 0x10, 0x84, 0x10, 0x84, 0x10, 0x84, 0x10, 0x84, 0x10
 	.byte 0x84, 0x10, 0x84, 0x10
 
-ov71_0224BDA4: ; 0x0224BDA4
+sTradeSequenceRecedeBgTemplate: ; 0x0224BDA4
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x1E, 0x00, 0x00, 0x03, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov71_0224BDC0: ; 0x0224BDC0
+sTradeSequenceRecedeGraphicsBanks: ; 0x0224BDC0
 	.byte 0x02, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00
 	.byte 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00
 
-ov71_0224BDE8: ; 0x0224BDE8
-	.word ov71_02249D58
-	.word ov71_02249D80
+sTradeSequenceExchangeStates: ; 0x0224BDE8
+	.word TradeSequenceExchange_SetupScreens
+	.word TradeSequenceExchange_Slide
 
-ov71_0224BDF0: ; 0x0224BDF0
+sTradeSequenceExchangeGraphicsModes: ; 0x0224BDF0
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 
-ov71_0224BE00: ; 0x0224BE00
+sTradeSequenceExchangeBgTemplate_SentMon: ; 0x0224BE00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x1A, 0x00, 0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov71_0224BE1C: ; 0x0224BE1C
+sTradeSequenceExchangeBgTemplate_ReceivedMon: ; 0x0224BE1C
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x1C, 0x04
 	.byte 0x00, 0x02, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov71_0224BE38: ; 0x0224BE38
+sTradeSequenceExchangeBgTemplate_Background: ; 0x0224BE38
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1E, 0x01, 0x00, 0x03, 0x01, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov71_0224BE54: ; 0x0224BE54
+sTradeSequenceExchangeGraphicsBanks: ; 0x0224BE54
 	.byte 0x02, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00
 	.byte 0x80, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00

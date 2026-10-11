@@ -22,7 +22,7 @@ extern int WifiSetupFade_IsActive(int);
 extern int DWCi_BACKUPlConvMaskCidr(void *);
 extern u8 *ov13_02239FF0(void);
 extern void WifiSetupTask_Destroy(int, void *), WifiSetupOam_Release(void *), ov13_02239514(void), WifiSetupText_FreeBgCanvas(int), WifiSetupCursor_Hide(void), WifiSetupMessage_Hide(int), ov13_02239288(void), WifiSetupFile_Free(void *), WifiSetup_LoadGraphics(void *, void (*)(const void *, u32, u32)), WifiSetupDisplay_HidePlanes(int, int), ov13_0222B934(int, int), ov13_0222B8F8(int, int), WifiSetupApp_SetStateFunc(void (*)(void)), ov13_0223A414(int), WifiSetupHeap_FreeAndClear(void *);
-extern void ov13_02230FD8(void);
+extern void WifiSetupTextEntry_Init(void);
 extern void ov13_02231B18(void);
 extern void ov13_02237DD0(void);
 extern void ov13_022352D0(void);
@@ -69,7 +69,7 @@ void ov13_02233AD8(void) {
     case 1:
         ov13_0222B934(mode, 0);
         ov13_0222B8F8(2, 0);
-        WifiSetupApp_SetStateFunc(ov13_02230FD8);
+        WifiSetupApp_SetStateFunc(WifiSetupTextEntry_Init);
         break;
     case 4:
     case 5:

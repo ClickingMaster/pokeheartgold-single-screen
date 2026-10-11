@@ -2835,55 +2835,7 @@ Object src/to54_atomic_w02_11_to54_ov07_w02_run6.o
     Object src/to70_to58_r2_ov07_02222f10_02222ff4_asm_extra456_run01.o
     Object src/to58_r2_ov07_02222f10_02222ff4_c_ff4.o
     Object src/overlay07_callbacks_c_02223038_02223060.o
-    Object src/to55_r2_t01_01_run01.o
-    Object src/to70_to55_r2_t01_02_residual01_extra360_run01.o
-    Object src/to55_r2_t01_03_run02.o
-    Object src/to57_overlay07_23240.o
-    Object src/to56_w03_overlay07_23a1c.o
-    Object src/to70_to56_w03_overlay07_23240_middle_extra702_run01.o
-    Object src/to56_w03_overlay07_23b70_tail.o
-    Object src/op90_to56_w03_overlay07_23240_suffix_r01.o
-    Object src/to55_r2_t01_05_run03.o
-    Object src/to56_w10_overlay07_02223eb4_0222446c.o
-    Object src/to90_extra2092_run01.o
-    Object src/to55_r2_t01_07_run04.o
-    Object src/to70_to56_w08_residual00_extra376_run01.o
-    Object src/to56_w08_run01.o
-    Object src/to57_overlay07_slide_callbacks.o
-    Object src/to56_w08_run02.o
-    Object src/to56_w08_run03.o
-    Object src/to80_extra1602_run01.o
-    Object src/op90_to80_extra1602_residual_1_r01.o
-    Object src/to55_r2_t01_09_run05.o
-    Object src/to70_to55_r2_t01_10_residual05_extra92_run01.o
-    Object src/to80_extra1351_run01.o
-    Object src/overlay07_callbacks_c_02225444_02225444.o
-    Object src/to70_overlay07_callbacks_residual_0222548c_0222548c_extra725_run01.o
-    Object src/overlay07_callbacks_c_02225504_02225504.o
-    Object src/to57_overlay07_callbacks_0222554c.o
-    Object src/overlay07_callbacks_c_02225810_02225810.o
-    Object src/to70_to70_overlay07_callbacks_residual_02225838_02225990_extra71_residual_1_extra94_run01.o
-    Object src/to70_overlay07_callbacks_residual_02225838_02225990_extra71_run01.o
-    Object src/to70_to70_overlay07_callbacks_residual_02225838_02225990_extra71_residual_2_extra1246_run01.o
-    Object src/overlay07_callbacks_c_02225ae0_02225ae0.o
-    Object src/to54_atomic_w07_01_run01.o
-Object src/to90_extra2076_run01.o
-Object src/to90_extra2301_run01.o
-Object src/to54_atomic_w07_03_run02.o
-Object src/to70_to54_atomic_w07_04_residual02_extra898_run01.o
-Object src/to54_atomic_w07_05_run03.o
-Object src/to70_to54_atomic_w07_06_residual03_extra694_run01.o
-Object src/to54_atomic_w07_07_run04.o
-Object src/to91_w41455_particle_motion_run01.o
-Object src/to56_w15_overlay07_motion_tail.o
-    Object src/overlay07_callbacks_c_02226804_02226804.o
-    Object src/to58_r2_ov07_02226838_022269d8_c_prefix.o
-    Object src/to80_extra1358_run01.o
-    Object src/to70_to58_r2_ov07_02226838_022269d8_asm_extra167_run01.o
-    Object src/overlay07_callbacks_c_02226a68_02226a68.o
-    Object src/to58_r2_ov07_02226a9c_02226c4c_c_prefix.o
-    Object src/to90_extra2098_run01.o
-    Object src/op90_to90_extra2098_residual_1_r01.o
+    Object src/battle/battle_anim_funcs.o
     Object src/overlay07_callbacks_c_02226c90_02226c90.o
     Object src/to91_ov07_41514_run01.o
     Object src/to70_to56_r2_w06_a01_extra65_run01.o
@@ -3344,26 +3296,7 @@ Overlay OVY_13
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own2.o
     Object src/wifi_setup_app.o
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own2_own1.o
-    Object src/to60_ov13_run03.o
-    Object src/to60_ov13_run04.o
-    Object src/to70_overlay_13_arm_2_residual_4_run01.o
-    Object src/to60_ov13_run05.o
-    Object src/to70_to61_overlay_13_arm_2_residual_5_residual_1_extra1098_run01.o
-    Object src/to80_extra1730_run01.o
-    Object src/to70_to61_overlay_13_arm_2_residual_5_residual_1_extra1098_run02.o
-    Object src/to61_overlay_13_arm_2_residual_5_run01.o
-    Object src/to70_to61_overlay_13_arm_2_residual_5_residual_2_extra1099_run01.o
-    Object src/to80_extra1917_run01.o
-    Object src/to70_to61_overlay_13_arm_2_residual_5_residual_2_extra1099_run02.o
-    Object src/to61_overlay_13_arm_2_residual_5_run02.o
-    Object src/to70_to61_overlay_13_arm_2_residual_5_residual_3_extra1100_run01.o
-    Object src/to61_overlay_13_arm_2_residual_5_run03.o
-    Object src/to80_extra1405_run01.o
-    Object src/to61_overlay_13_arm_2_residual_5_run04.o
-    Object src/to90_extra2548_run01.o
-    Object src/to61_overlay_13_arm_2_residual_5_run05.o
-    Object src/to70_to61_overlay_13_arm_2_residual_5_residual_6_extra1101_run01.o
-    Object src/to61_overlay_13_arm_2_residual_5_run06.o
+    Object src/wifi_setup_screens.o
     Object src/op90_to61_overlay_13_arm_2_residual_5_residual_7_r01.o
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own7.o
     Object src/to61_overlay_13_arm_2_residual_5_run07.o
@@ -5656,23 +5589,8 @@ Overlay OVY_71
     Object src/trade_sequence_models.o
     Object src/trade_sequence_send.o
     Object src/trade_sequence_depart.o
-    Object src/overlay71_opus_partial_23.o
-    Object src/to52_r4_overlay71_trade_scene_tail.o
-    Object src/overlay71_opus_partial_24.o
-    Object src/to70_overlay_71_residual_25_extra371_run01.o
-    Object src/overlay71_opus_partial_25.o
-    Object src/to70_overlay_71_residual_26_extra827_run01.o
-    Object src/overlay71_opus_partial_26.o
-    Object src/to70_overlay_71_residual_27_extra828_run01.o
-    Object src/overlay71_opus_partial_27.o
-    Object src/to90_extra1923_run01.o
-    Object src/to90_extra2564_run01.o
-    Object src/overlay71_r28_state.o
-    Object src/overlay71_opus_partial_28.o
-    Object src/to70_overlay_71_residual_29_extra984_run01.o
-    Object src/overlay71_opus_partial_29.o
-    Object src/to52_r4_overlay71_results_transition.o
-    Object src/overlay71_opus_partial_30.o
+    Object src/trade_sequence_recede.o
+    Object src/trade_sequence_exchange.o
     Object src/overlay71_scene_alloc_r31.o
     Object src/overlay71_opus_partial_31.o
     Object src/r40_overlay_71_residual_32_run1.o

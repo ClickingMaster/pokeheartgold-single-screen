@@ -36,8 +36,8 @@ typedef struct {
     u8 count, flag;
 } Numeric;
 
-extern Root ov13_0224F538;
-extern Text *ov13_0224F540;
+extern Root gWifiSetupListScreen;
+extern Text *gWifiSetupTextEntry;
 extern Numeric *ov13_0224F544;
 extern u8 ov13_022453CC[];
 extern u8 ov13_0224546C[];
@@ -196,7 +196,7 @@ void ov13_0223221C(void);
 void ov13_0223224C(void);
 extern int FX_DivS32(int, int);
 extern void WifiSetup_LoadGraphics(const void *, void (*)(const void *, u32, u32));
-void ov13_0223110C(void);
+void WifiSetupTextEntry_LoadGraphics(void);
 extern u8 ov13_02246370[];
 extern u8 ov13_02246384[];
 extern u8 ov13_0224639C[];
@@ -215,7 +215,7 @@ extern void ov13_0222B934(int, int);
 extern void WifiSetupHeap_FreeAndClear(void *);
 extern u8 ov13_022463C8[];
 extern void ov13_02232E04(void);
-extern void ov13_0222FA3C(void);
+extern void WifiSetupListScreen_Init(void);
 extern void ov13_02238440(void);
 void ov13_022315B0(void);
 extern int WifiSetup_StrNLen(const void *, int);

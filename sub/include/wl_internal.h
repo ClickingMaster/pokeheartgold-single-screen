@@ -154,7 +154,10 @@ typedef struct WlBss {
     u16 powerState; // WSetPowerState: hardware power state >> 1
     u16 unk_12;
     u16 unk_14;
-    u8 unk_16[8];
+    u16 unk_16;
+    u16 unk_18;
+    u16 unk_1a; // 1 -> 2 -> 0 on the next two WlIntrActEnd; WlIntrTbtt sets power state 2 while it is 2
+    u16 unk_1c;
     u16 ssidLength;
     u8 ssid[32];
     u16 ssidMask[16];
@@ -164,9 +167,10 @@ typedef struct WlBss {
     u16 unk_6c;
     u16 beaconPeriod;
     u16 listenInterval;
-    u16 unk_72;
+    u16 listenCount; // counted down by WlIntrTbtt, reloaded with listenInterval
     u16 dtimPeriod;
-    u8 unk_76[4];
+    u16 dtimCount; // counted down by WlIntrTbtt, reloaded with dtimPeriod - 1
+    u16 unk_78;
     u16 channel;    // WSetChannel
     u16 capability; // capability information of the own beacon
     u16 beaconLostThreshold;
@@ -192,17 +196,81 @@ typedef struct WlBss {
     u8 unk_b2[4];
     u16 txBufRepairCount;  // WCheckTxBufIdBeforeFrame rewrote a frame's id words
     u16 txFrameRetryCount; // RestoreTxFrame / WCheckTxBuf copied a frame to the MAC again
-    u8 unk_ba[6];
+    u16 txResetCount;      // WlIntrTxErr / WlIntrRxCntup reset the MAC's TX side
+    u16 unk_bc;
+    u16 unk_be;
 } WlBss;
 
-// A frame waiting in the MAC memory (WlWork.txDesc / beaconDesc).
+// TX frame in the MAC memory: hardware TX header, then the 802.11 header.
+typedef struct WlTxFrame {
+    u16 status;
+    u16 unk_02; // MP: stations still to answer (bit per AID)
+    u16 retry;  // low byte: retry count
+    u16 unk_06;
+    u16 unk_08;
+    u16 length;
+    u16 frameCtrl; // 0x4000: WEP
+    u16 duration;
+    u16 addr1[3];
+    u16 addr2[3];
+    u16 addr3[3];
+    u16 seqCtrl;
+    u16 unk_24;
+} WlTxFrame;
+
+// TX frame in the driver heap (after its WlHeapBuf): queue data, then the frame as copied to the MAC memory.
+typedef struct WlTxHeapFrame {
+    u16 unk_00;
+    u16 unk_02;
+    u16 time; // low half of WlBss.intervalCount when queued (CheckFrameTimeout)
+    u16 unk_06;
+    WlTxFrame frame;
+} WlTxHeapFrame;
+
+// MP sequence state (WlTxCtrl.mpState).
+typedef struct WlMpState {
+    u8 unk_00[0x16];
+    u16 entrySize; // bytes per entry
+    u16 unk_18;    // WlIntrTxEnd: MP frame retried up to the threshold
+    u8 entries[8]; // entrySize bytes per station (+6: u16 missing answers); the table continues past the struct
+} WlMpState;
+
+// A frame waiting in the MAC memory (WlTxCtrl.txq / beacon).
 typedef struct WlTxDesc {
     u16 active;
     u8 unk_02[6];
-    u8 *frame;  // the frame's place in the MAC memory
-    u32 unk_0c; // the frame in the driver heap (+16)
+    u8 *frame;                // the frame's place in the MAC memory
+    WlTxHeapFrame *heapFrame; // the frame in the driver heap (-16 bytes: its WlHeapBuf)
     u8 unk_10[4];
 } WlTxDesc;
+
+// TX side of the MAC (WlWork+0x42C).
+typedef struct WlTxCtrl {
+    WlTxDesc txq[6]; // [0..2]: by priority (ResetTxqPri); [3]: MP frame, its active flag makes WDisableTmpttPowerSave leave the hardware alone; [5]: PS-Poll
+    WlTxDesc beacon;
+    u32 unk_8c; // bit 1: SetParentTbttTxq is due at the next TX end
+    WlMpState *mpState;
+    u32 unk_94;
+    u16 unk_98; // MP: stations addressed (bit per AID)
+    u16 unk_9a;
+    u16 unk_9c;
+    u16 unk_9e; // MP: retry count from which WlIntrTxEnd stops the TX queue
+    u8 unk_a0[4];
+    u16 unk_a4; // key saved by WlIntrStartRx (0xFFFF: none)
+    u16 unk_a6;
+    u16 unk_a8; // WlIntrTxEnd: MP stopped at the retry threshold
+    u16 unk_aa; // WlIntrTxEnd: MP ended
+    u16 unk_ac; // WlIntrTxEnd: MP ended with the MP end interrupt pending
+    u16 unk_ae; // WlIntrTbtt: queued frames timed out
+} WlTxCtrl;
+
+// RX side of the MAC (WlWork+0x4DC).
+typedef struct WlRxCtrl {
+    u16 unk_00;
+    u16 unk_02; // WlIntrRxCntup: RX counter interrupts while TX was busy
+    u16 unk_04; // next frame to read (halfword index into the MAC memory)
+    u8 unk_06[0x50 - 6];
+} WlRxCtrl;
 
 // Random number generator state (RND_Init / RND_seed / RND_rand).
 typedef struct WlRandom {
@@ -222,6 +290,12 @@ typedef struct WlRf {
     u16 unk_0a;
     u32 unk_0c; // type 2: an RF register value kept by InitRF; types 2/5: bit 16 set: WSetChannel writes it with the channel's flash value
 } WlRf;
+
+// MAC register self test entry (DiagMacRegister): register offset and the bits that can be written.
+typedef struct WlTestReg {
+    u16 offset;
+    u16 mask;
+} WlTestReg;
 
 // The driver's work area (WL_InitDriver stores its address at WL_WORK_ADDR).
 typedef struct WlWork {
@@ -248,9 +322,8 @@ typedef struct WlWork {
     u8 unk_406[0x420 - 0x406];
     u8 *unk_420; // MLME confirm message (IssueMlmeConfirm)
     u8 unk_424[8];
-    WlTxDesc txDesc[6]; // [3].active: WDisableTmpttPowerSave leaves the hardware alone while set; [5]: PS-Poll
-    WlTxDesc beaconDesc;
-    u8 unk_4b8[0x52c - 0x4b8];
+    WlTxCtrl txCtrl;
+    WlRxCtrl rxCtrl;
     WlCam cam;
     u32 counter[45]; // statistics: WUpdateCounter adds the hardware counters, WInitCounter clears
     WlRandom rnd;
@@ -259,7 +332,7 @@ typedef struct WlWork {
     OSAlarm timeOutAlarm;         // SetupTimeOut
     OSAlarm ksidAlarm;            // runs WClearKSID
     u32 unk_68c;
-    u16 unk_690; // flash 0x3e
+    u16 unk_690; // flash 0x3e: hardware workarounds (bit 0: RX ring check, 3: TX reset, 4: MP timeout, 5: key search, 6: MP answer count)
     u16 unk_692; // flash 0x3c
 } WlWork;
 
@@ -421,6 +494,26 @@ void SendFatalErrMsgTask(void);
 void TerminateWlTask(void);
 void ReleaseWlTask(void);
 
+// wl_diag_mac_register.c
+void DiagMacRegister(void);
+
+// wl_diag_mac_memory.c
+void DiagMacMemory(void);
+
+// wl_diag_base_band.c
+void DiagBaseBand(void);
+
+// wl_intr.c
+void WlIntr(void);
+void WlIntrPreTbtt(void);
+void WlIntrTbtt(void);
+void WlIntrActEnd(void);
+void WlIntrRfWakeup(void);
+void WlIntrCntOvf(void);
+void WlIntrTxErr(void);
+void WlIntrRxCntup(void);
+void WlIntrTxEnd(void);
+
 // wl_cam.c
 u32 CAM_Search(const u16 *addr);
 u32 CAM_SearchAdd(const u16 *addr);
@@ -489,9 +582,6 @@ void FLASH_DirectRead(u32 addr, u32 size, void *dest);
 void InitializeCmdIf(void);
 void InitializeMLME(void);
 void InitializeIntr(void);
-void DiagMacRegister(void);
-void DiagMacMemory(void);
-void DiagBaseBand(void);
 void FLASH_MakeImage(void);
 void FLASH_Read(u32 addr, u32 size, void *dest);
 u32 FLASH_VerifyCheckSum(u32 *checksum);
@@ -504,9 +594,20 @@ void ReleaseIntr(void);
 u16 *MakeDeAuthFrame(void *macAdrs, u16 reason, u16 unk);
 void TxManCtrlFrame(u16 *frame);
 void MLME_IssueDeAuthIndication(void *macAdrs, u16 reason);
+void WlIntrStartTx(void);
+void WlIntrStartRx(void);
+void WlIntrRxEnd(void);
+void WlIntrMpEnd(int timeout);
+void SetParentTbttTxq(void);
+int CheckFrameTimeout(WlTxHeapFrame *frame);
+void ResetTxqPri(u32 priority);
+void IntrCarrierSuppresionSignal(void);
 
 extern const u8 BC_ADRS[];
 
 extern const u16 crc16_table[16];
+
+extern const WlTestReg test_reg[27];
+extern const u16 test_pattern[3];
 
 #endif // WL_INTERNAL_H

@@ -40,7 +40,7 @@ void WaitMacStop(void) {
 void RestoreTxFrame(WlTxDesc *desc) {
     if (desc->active) {
         WaitMacStop();
-        CopyTxFrmToMacBuf(desc->frame, (void *)(desc->unk_0c - 16));
+        CopyTxFrmToMacBuf(desc->frame, (void *)((u8 *)desc->heapFrame - 16));
         wlWorkPlain->bss.txFrameRetryCount++;
     }
 }
@@ -48,7 +48,7 @@ void RestoreTxFrame(WlTxDesc *desc) {
 void WCheckTxBuf(void) {
     WlWork *w = wlWorkPlain;
     WlBss *bss = &w->bss;
-    WlTxDesc *desc = w->txDesc;
+    WlTxDesc *desc = w->txCtrl.txq;
     switch (w->bss.mode) {
     case 1:
         if (WCheckTxBufIdBeforeFrame(&desc[6])) {

@@ -59,7 +59,7 @@
 	.public ov07_0223646A
 	.public ov07_0223649C
 	.public ov07_02236520
-	.public ov07_02236670
+	.public sBattleAnimSpriteOrbitStepX
 	.public ov07_022366C8
 	.public ov07_022366CC
 	.public ov07_022366CD
@@ -290,44 +290,44 @@
 	.extern ov07_02221EC4
 	.extern ov07_02221F04
 	.extern ov07_02223060
-	.extern ov07_0222308C
-	.extern ov07_022230DC
-	.extern ov07_02223128
+	.extern BattleAnimFunc_OneFrameTask
+	.extern BattleAnimFunc_OneFrameSoundTask
+	.extern BattleAnimFunc_OneFrameUncountedTask
 	.extern ov07_022231BC
-	.extern ov07_02223350
-	.extern ov07_02223550
-	.extern ov07_02223864
-	.extern ov07_02223A94
-	.extern ov07_02223BC0
-	.extern ov07_02223E08
-	.extern ov07_02223EB4
-	.extern ov07_02224008
-	.extern ov07_02224348
-	.extern ov07_022245BC
-	.extern ov07_022247F4
-	.extern ov07_022248A0
-	.extern ov07_02224948
-	.extern ov07_02224A20
-	.extern ov07_02224BAC
-	.extern ov07_02224E58
-	.extern ov07_02225098
+	.extern BattleAnimFunc_ShakeTargets
+	.extern BattleAnimFunc_SlidingBg
+	.extern BattleAnimFunc_SlidingBg2
+	.extern BattleAnimFunc_RotateBattler
+	.extern BattleAnimFunc_CircleBattler
+	.extern BattleAnimSpriteFunc_SpritePops
+	.extern BattleAnimFunc_FadeBgPalette
+	.extern BattleAnimFunc_BattlerPaletteFade
+	.extern BattleAnimFunc_PulseBattlerSprite
+	.extern BattleAnimFunc_StretchBattler
+	.extern BattleAnimFunc_BlendBattlerSprites
+	.extern BattleAnimFunc_SetBattlerVanished
+	.extern BattleAnimFunc_BlinkBattler
+	.extern BattleAnimFunc_SlideBattler
+	.extern BattleAnimFunc_SlideBattler2
+	.extern BattleAnimFunc_ShakeAndScaleBattler
+	.extern BattleAnimFunc_ShakeAndScaleBattlerXY
 	.extern ov07_022251CC
-	.extern ov07_022252F8
-	.extern ov07_0222548C
-	.extern ov07_0222554C
+	.extern BattleAnimFunc_MoveBattlerBy
+	.extern BattleAnimFunc_MoveBattlerSin
+	.extern BattleAnimFunc_MoveBattlerLinear
 	.extern ov07_02225640
-	.extern ov07_02225768
-	.extern ov07_02225838
+	.extern BattleAnimFunc_ResetBattlerPosition
+	.extern BattleAnimFunc_BlendSpritePalette
 	.extern ov07_02225990
 	.extern ov07_02225CC4
-	.extern ov07_02225E9C
-	.extern ov07_02225F94
-	.extern ov07_022261B4
+	.extern BattleAnimFunc_ShakeBg
+	.extern BattleAnimFunc_SpriteMosaic
+	.extern BattleAnimFunc_MoveEmitter
 	.extern ov07_022262E8
-	.extern ov07_022264E0
-	.extern ov07_02226698
+	.extern BattleAnimFunc_MoveEmitterArc
+	.extern BattleAnimFunc_EmitterSinMotion
 	.extern ov07_02226838
-	.extern ov07_022269D8
+	.extern BattleAnimSpriteFunc_SpriteOrbit
 	.extern ov07_02226A9C
 	.extern ov07_02226C4C
 	.extern ov07_02226C90
@@ -1152,7 +1152,7 @@ ov07_0223649C: ; 0x0223649C
 	.word ov07_0222DD20
 	.word ov07_0222E020
 	.word ov07_0222E2EC
-	.word ov07_02223E08
+	.word BattleAnimSpriteFunc_SpritePops
 	.word ov07_0222EA48
 	.word ov07_0222F0B0
 	.word ov07_0222F378
@@ -1168,7 +1168,7 @@ ov07_0223649C: ; 0x0223649C
 	.word ov07_0222ACAC
 	.word ov07_0222B320
 	.word ov07_02226838
-	.word ov07_022269D8
+	.word BattleAnimSpriteFunc_SpriteOrbit
 	.word ov07_02226A9C
 	.word ov07_02226C4C
 	.word ov07_02230D74
@@ -1178,16 +1178,16 @@ ov07_0223649C: ; 0x0223649C
 
 ov07_02236520: ; 0x02236520
 	.word ov07_02223060
-	.word ov07_0222308C
-	.word ov07_022230DC
-	.word ov07_02223128
-	.word ov07_02223A94
+	.word BattleAnimFunc_OneFrameTask
+	.word BattleAnimFunc_OneFrameSoundTask
+	.word BattleAnimFunc_OneFrameUncountedTask
+	.word BattleAnimFunc_RotateBattler
 	.word ov07_02227824
 	.word ov07_02227AEC
 	.word ov07_02227D1C
 	.word ov07_0222BE00
 	.word ov07_0222C074
-	.word ov07_02223BC0
+	.word BattleAnimFunc_CircleBattler
 	.word ov07_0222C780
 	.word ov07_0222CA8C
 	.word ov07_02228070
@@ -1210,46 +1210,46 @@ ov07_02236520: ; 0x02236520
 	.word ov07_0222ED7C
 	.word ov07_0222E6F4
 	.word ov07_0222F848
-	.word ov07_02223EB4
-	.word ov07_02224008
-	.word ov07_02224348
-	.word ov07_02223350
+	.word BattleAnimFunc_FadeBgPalette
+	.word BattleAnimFunc_BattlerPaletteFade
+	.word BattleAnimFunc_PulseBattlerSprite
+	.word BattleAnimFunc_ShakeTargets
 	.word ov07_022303A4
-	.word ov07_022247F4
+	.word BattleAnimFunc_BlendBattlerSprites
 	.word ov07_02229220
-	.word ov07_022248A0
+	.word BattleAnimFunc_SetBattlerVanished
 	.word ov07_02230600
-	.word ov07_022245BC
+	.word BattleAnimFunc_StretchBattler
 	.word ov07_022308E4
-	.word ov07_02223550
-	.word ov07_02223864
+	.word BattleAnimFunc_SlidingBg
+	.word BattleAnimFunc_SlidingBg2
 	.word ov07_02230994
 	.word ov07_02230BA0
 	.word ov07_02230D1C
 	.word ov07_02229630
-	.word ov07_02224948
-	.word ov07_02224A20
-	.word ov07_02224BAC
-	.word ov07_02224E58
-	.word ov07_02225098
+	.word BattleAnimFunc_BlinkBattler
+	.word BattleAnimFunc_SlideBattler
+	.word BattleAnimFunc_SlideBattler2
+	.word BattleAnimFunc_ShakeAndScaleBattler
+	.word BattleAnimFunc_ShakeAndScaleBattlerXY
 	.word ov07_0222A838
 	.word ov07_022251CC
-	.word ov07_022252F8
+	.word BattleAnimFunc_MoveBattlerBy
 	.word ov07_0222AEA0
 	.word ov07_0222B130
-	.word ov07_0222548C
-	.word ov07_0222554C
-	.word ov07_02225768
-	.word ov07_02225838
+	.word BattleAnimFunc_MoveBattlerSin
+	.word BattleAnimFunc_MoveBattlerLinear
+	.word BattleAnimFunc_ResetBattlerPosition
+	.word BattleAnimFunc_BlendSpritePalette
 	.word ov07_02225990
-	.word ov07_022261B4
-	.word ov07_022264E0
+	.word BattleAnimFunc_MoveEmitter
+	.word BattleAnimFunc_MoveEmitterArc
 	.word ov07_02225CC4
-	.word ov07_02225E9C
-	.word ov07_02225F94
+	.word BattleAnimFunc_ShakeBg
+	.word BattleAnimFunc_SpriteMosaic
 	.word ov07_0222B640
 	.word ov07_0222B988
-	.word ov07_02226698
+	.word BattleAnimFunc_EmitterSinMotion
 	.word ov07_022262E8
 	.word ov07_02226C90
 	.word ov07_02226F80
@@ -1262,7 +1262,7 @@ ov07_02236520: ; 0x02236520
 	.word ov07_022318CC
 	.word ov07_022318F8
 
-ov07_02236670: ; 0x02236670
+sBattleAnimSpriteOrbitStepX: ; 0x02236670
 	.byte 0x05, 0x00, 0x05, 0x00, 0x05, 0x00, 0x05, 0x00, 0x04, 0x00, 0x04, 0x00, 0x04, 0x00, 0x03, 0x00
 	.byte 0x03, 0x00, 0x03, 0x00, 0x00, 0x00, 0xFD, 0xFF, 0xFD, 0xFF, 0xFD, 0xFF, 0xFC, 0xFF, 0xFC, 0xFF
 	.byte 0xFC, 0xFF, 0xFB, 0xFF, 0xFB, 0xFF, 0xFB, 0xFF, 0xFB, 0xFF, 0xFB, 0xFF, 0xFB, 0xFF, 0xFB, 0xFF

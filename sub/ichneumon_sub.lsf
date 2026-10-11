@@ -156,18 +156,10 @@ Autoload EXT_WRAM
 	Object lib/src/wl_random.o
 	Object lib/src/wl_tx_check.o
 	Object lib/src/wl_fatal_err.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_40_r01.o
-	Object lib/src/to90_arm7_sub_ext_wram_run186.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_41_r01.o
-	Object lib/src/to90_arm7_sub_ext_wram_run187.o
-	Object lib/src/to90_arm7_sub_ext_wram_run188.o
-	Object lib/src/to90_arm7_sub_ext_wram_run375.o
-	Object lib/src/to90_arm7_sub_ext_wram_run189.o
-	Object lib/src/to90_arm7_sub_ext_wram_run190.o
-	Object lib/src/to90_arm7_sub_ext_wram_run191.o
-	Object lib/src/to90_arm7_sub_ext_wram_run192.o
-	Object lib/src/to90_arm7_sub_ext_wram_run193.o
-	Object lib/src/to91_w41480_tx_end.o
+	Object lib/src/wl_diag_mac_register.o
+	Object lib/src/wl_diag_mac_memory.o
+	Object lib/src/wl_diag_base_band.o
+	Object lib/src/wl_intr.o
 	Object lib/src/op90_to91_w41480_tx_end_suffix_r01.o
 	Object lib/src/to90_arm7_sub_ext_wram_run194.o
 	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_43_r01.o

@@ -110,7 +110,7 @@ u32 WSetWepMode(u32 mode) {
         bss->unk_8a |= 0x4000;
     }
     if (bss->state == 0x40 && mode == 1) {
-        *(u16 *)(wlWork->beaconDesc.frame + 0x2E) = bss->capability;
+        *(u16 *)(wlWork->txCtrl.beacon.frame + 0x2E) = bss->capability;
     }
     if (mode == 0) {
         mode = 1;
@@ -180,8 +180,8 @@ u32 WSetActiveZoneTime(u16 time, u32 write) {
         WL_REG(0x134) = time;
     }
     w = wlWork;
-    if (w->beaconDesc.active) {
-        tim = w->beaconDesc.frame + 0x24 + w->bss.timOffset;
+    if (w->txCtrl.beacon.active) {
+        tim = w->txCtrl.beacon.frame + 0x24 + w->bss.timOffset;
         if (w->bss.powerMgtMode == 1) {
             WL_WriteByte(tim + 6, time & 0xFF);
             WL_WriteByte(tim + 7, (time >> 8) & 0xFF);
@@ -219,7 +219,7 @@ u32 WSetPreambleType(u32 type) {
     if (bss->state == 0x40) {
         w = wlWork;
         if (w->param.mode == 1) {
-            *(u16 *)(w->beaconDesc.frame + 0x2E) = bss->capability;
+            *(u16 *)(w->txCtrl.beacon.frame + 0x2E) = bss->capability;
         }
     }
     if (!type) {
@@ -361,7 +361,7 @@ u32 WSetSsid(u32 length, const u8 *ssid) {
     }
     bss->ssidLength = length;
     if (changed) {
-        u8 *dest = wlWork->beaconDesc.frame + 0x26 + bss->ssidOffset;
+        u8 *dest = wlWork->txCtrl.beacon.frame + 0x26 + bss->ssidOffset;
         for (i = 0; i < length; i++) {
             WL_WriteByte(dest + i, WL_ReadByte(bss->ssid + i));
         }

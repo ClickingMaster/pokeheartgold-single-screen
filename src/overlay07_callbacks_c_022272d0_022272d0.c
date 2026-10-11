@@ -66,13 +66,13 @@ extern void *BattleAnimUtil_GetPartnerBattler(void *, void *);
 extern void GF_AssertFail(void);
 
 void ov07_02226C90(void *arg);
-void ov07_02225810(void *task, CallbackWork *work);
-void ov07_02226804(void *task, CallbackWork *work);
-void ov07_02226A68(void *task, CallbackWork *work);
+void BattleAnimTask_WaitPaletteBlend(void *task, CallbackWork *work);
+void BattleAnimTask_PlaySpriteAnimOnce(void *task, CallbackWork *work);
+void BattleAnimTask_PlaySpriteAnimOnce2(void *task, CallbackWork *work);
 void ov07_022272D0(void *arg);
-void ov07_02225444(SysTask *task, void *data);
-void ov07_02225504(void *task, Work25444 *work);
-void *ov07_02225AE0(void *arg, int kind);
+void BattleAnimTask_MoveBattlerSin(SysTask *task, void *data);
+void BattleAnimTask_MoveBattlerLinear(void *task, Work25444 *work);
+void *BattleAnimUtil_GetRoleBattler(void *arg, int kind);
 void ov07_0222719C(void *task, Work2719C *work);
 
 void ov07_022272D0(void *arg) {

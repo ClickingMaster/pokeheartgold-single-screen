@@ -1,8 +1,0 @@
-#pragma force_active on
-#include "global.h"
-#pragma force_active on
-int BattleAnimSystem_IsBattlerSemiInvulnerable(void *,int);
-extern u32 BattleAnimSystem_GetArg(void *p, int i);void BattleAnimUtil_CollectPicsByFlags(void *,int,void *,int *),Pokepic_SetAttr(void *,int,int),ov07_022248A0(void *);
-void *BattleAnimUtil_AllocWork(void *,int),*BattleAnimSystem_GetBattlerSpriteManager(void *),*BattleAnimSystem_GetBattlerSprite(void *,int);void ManagedSprite_SetOamMode(void *,int),BattleAnimUtil_SetBlendWithBattleBg(void *,int,int),ov07_02222AC4(void *,s16,s16,s16,s16,int),BattleAnimSystem_CreateTaskDefaultPriority(void *,void *,void *),ov07_022247C8(void),ov07_022247F4(void *);
-void ov07_022247F4(void *w){void **s=BattleAnimUtil_AllocWork(w,48);int mask,i,x,y,z,extra,final;s[0]=w;s[1]=BattleAnimSystem_GetBattlerSpriteManager(w);mask=((s32)BattleAnimSystem_GetArg(w, 0));for(i=0;i<4;i++)if(mask&(1<<i))ManagedSprite_SetOamMode(BattleAnimSystem_GetBattlerSprite(s[0],i),1);x=((s32)BattleAnimSystem_GetArg(w, 1));z=((s32)BattleAnimSystem_GetArg(w, 3));BattleAnimUtil_SetBlendWithBattleBg(s[0],x,z);y=((s32)BattleAnimSystem_GetArg(w, 2));extra=((s32)BattleAnimSystem_GetArg(w, 4));final=((s32)BattleAnimSystem_GetArg(w, 5));ov07_02222AC4(s+2,(s16)x,(s16)y,(s16)z,(s16)extra,final);BattleAnimSystem_CreateTaskDefaultPriority(s[0],ov07_022247C8,s);}
-void ov07_022248A0(void *w){int i;int arg=((s32)BattleAnimSystem_GetArg(w, 1)),n;int data[5];BattleAnimUtil_CollectPicsByFlags(w,((s32)BattleAnimSystem_GetArg(w, 0)),data,&n);i=0;if(n>0){do{if(BattleAnimSystem_IsBattlerSemiInvulnerable(w,data[4])!=1||arg)Pokepic_SetAttr((void *)data[2],6,arg);i++;}while(i<n);}}

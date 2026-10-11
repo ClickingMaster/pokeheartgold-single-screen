@@ -155,8 +155,8 @@ typedef struct BattleAnimSinMotion {
     int ampY;
     int stepX;
     int stepY;
-    int unk_24;
-} BattleAnimSinMotion; // size: 0x28
+    int unk_20;
+} BattleAnimSinMotion; // size: 0x24
 
 typedef struct BattleAnimValueMotion {
     int value;

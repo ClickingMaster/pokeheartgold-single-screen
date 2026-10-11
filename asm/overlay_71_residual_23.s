@@ -712,36 +712,36 @@
 	.public TradeSequenceDepart_FlightTask_Sink
 	.public TradeSequenceDepart_FlightTask_Pause
 	.public TradeSequenceDepart_FlightTask_Leave
-	.public ov71_022494A0
-	.public ov71_022494D0
-	.public ov71_02249500
-	.public ov71_02249538
-	.public ov71_02249558
-	.public ov71_022495A0
-	.public ov71_02249670
-	.public ov71_022497C8
-	.public ov71_022497E0
-	.public ov71_022498E0
-	.public ov71_022498F0
-	.public ov71_02249970
-	.public ov71_02249988
-	.public ov71_02249990
-	.public ov71_022499A4
-	.public ov71_02249A50
-	.public ov71_02249A60
-	.public ov71_02249A98
-	.public ov71_02249B64
-	.public ov71_02249C90
-	.public ov71_02249C98
-	.public ov71_02249CF0
-	.public ov71_02249D14
-	.public ov71_02249D28
-	.public ov71_02249D58
-	.public ov71_02249D80
-	.public ov71_02249E24
-	.public ov71_02249E6C
-	.public ov71_0224A080
-	.public ov71_0224A0B8
+	.public TradeSequenceRecede_Init
+	.public TradeSequenceRecede_Exit
+	.public TradeSequenceRecede_Main
+	.public TradeSequenceRecede_Draw
+	.public TradeSequenceRecede_SetupScreens
+	.public TradeSequenceRecede_Run
+	.public TradeSequenceRecede_InitBgs
+	.public TradeSequenceRecede_FreeBgs
+	.public TradeSequenceRecede_Init3D
+	.public TradeSequenceRecede_Free3D
+	.public TradeSequenceRecede_CreateSprite
+	.public TradeSequenceRecede_DeleteSprite
+	.public TradeSequenceRecede_InitFlight
+	.public TradeSequenceRecede_StopFlight
+	.public TradeSequenceRecede_StartFlight
+	.public TradeSequenceRecede_IsFlightDone
+	.public TradeSequenceRecede_SetFlightTargets
+	.public TradeSequenceRecede_UpdateFlight
+	.public TradeSequenceRecede_FlightTask
+	.public TradeSequenceRecede_RequestScreenSwap
+	.public TradeSequenceRecede_ScreenSwapTask
+	.public TradeSequenceExchange_Init
+	.public TradeSequenceExchange_Exit
+	.public TradeSequenceExchange_Main
+	.public TradeSequenceExchange_SetupScreens
+	.public TradeSequenceExchange_Slide
+	.public TradeSequenceExchange_SlideTask
+	.public TradeSequenceExchange_InitBgs
+	.public TradeSequenceExchange_FreeBgs
+	.public TradeSequenceExchange_SetMonPicPositions
 	.public ov71_0224A0F0
 	.public ov71_0224A12C
 	.public ov71_0224A15C
@@ -822,17 +822,17 @@
 	.public sTradeSequenceDepartBgTemplate_Layer2
 	.public sTradeSequenceDepartBgTemplate_Layer3
 	.public sTradeSequenceDepartGraphicsBanks
-	.public ov71_0224BD7C
-	.public ov71_0224BD84
-	.public ov71_0224BD94
-	.public ov71_0224BDA4
-	.public ov71_0224BDC0
-	.public ov71_0224BDE8
-	.public ov71_0224BDF0
-	.public ov71_0224BE00
-	.public ov71_0224BE1C
-	.public ov71_0224BE38
-	.public ov71_0224BE54
+	.public sTradeSequenceRecedeStates
+	.public sTradeSequenceRecedeGraphicsModes
+	.public sTradeSequenceRecedeEdgeColors
+	.public sTradeSequenceRecedeBgTemplate
+	.public sTradeSequenceRecedeGraphicsBanks
+	.public sTradeSequenceExchangeStates
+	.public sTradeSequenceExchangeGraphicsModes
+	.public sTradeSequenceExchangeBgTemplate_SentMon
+	.public sTradeSequenceExchangeBgTemplate_ReceivedMon
+	.public sTradeSequenceExchangeBgTemplate_Background
+	.public sTradeSequenceExchangeGraphicsBanks
 	.public ov71_0224BE7C
 	.public ov71_0224BE84
 	.public ov71_0224BE94
@@ -909,23 +909,23 @@
 	.public TradeSequenceDepart_StopScroll
 	.public TradeSequenceDepart_IsFlightOutOfView
 	.public TradeSequenceDepart_IsFlightFlyingAway
-	.public ov71_022494A0
-	.public ov71_022494D0
-	.public ov71_02249500
-	.public ov71_02249538
-	.public ov71_022497C8
-	.public ov71_022498E0
-	.public ov71_02249970
-	.public ov71_02249988
-	.public ov71_02249990
-	.public ov71_02249A50
-	.public ov71_02249C90
-	.public ov71_02249CF0
-	.public ov71_02249D14
-	.public ov71_02249D28
-	.public ov71_02249D58
-	.public ov71_0224A080
-	.public ov71_0224A0B8
+	.public TradeSequenceRecede_Init
+	.public TradeSequenceRecede_Exit
+	.public TradeSequenceRecede_Main
+	.public TradeSequenceRecede_Draw
+	.public TradeSequenceRecede_FreeBgs
+	.public TradeSequenceRecede_Free3D
+	.public TradeSequenceRecede_DeleteSprite
+	.public TradeSequenceRecede_InitFlight
+	.public TradeSequenceRecede_StopFlight
+	.public TradeSequenceRecede_IsFlightDone
+	.public TradeSequenceRecede_RequestScreenSwap
+	.public TradeSequenceExchange_Init
+	.public TradeSequenceExchange_Exit
+	.public TradeSequenceExchange_Main
+	.public TradeSequenceExchange_SetupScreens
+	.public TradeSequenceExchange_FreeBgs
+	.public TradeSequenceExchange_SetMonPicPositions
 	.public ov71_0224A12C
 	.public ov71_0224A15C
 	.public ov71_0224A3D8
