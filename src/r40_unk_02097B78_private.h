@@ -4,7 +4,7 @@
 #include "global.h"
 
 #include "heap.h"
-#include "overlay106_cinematic_internal.h"
+#include "legendary_cinematic.h"
 #include "overlay_manager.h"
 #include "unk_02097B78.h"
 

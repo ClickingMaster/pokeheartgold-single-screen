@@ -11,16 +11,16 @@
 	.public ov105_021E5E38
 	.public ov105_021E5E3A
 	.public ov105_021E5E54
-	.public ov105_021E5900
-	.public ov105_021E5B14
-	.public ov105_021E5B68
-	.public ov105_021E5C84
-	.public ov105_021E5BCC
-	.public ov105_021E5CA4
+	.public ShipDepartureCutscene_Init
+	.public ShipDepartureCutscene_Exit
+	.public ShipDepartureCutscene_InitGraphics
+	.public ShipDepartureCutscene_SetBanks
+	.public ShipDepartureCutscene_InitCamera
+	.public ShipDepartureCutscene_LoadModel
 	.public ov105_021E5DD4
 	.public ov105_021E5E08
-	.public ov105_021E59DC
-	.public ov105_021E5C84
+	.public ShipDepartureCutscene_Main
+	.public ShipDepartureCutscene_SetBanks
 
 
 	.public _021E5DC4

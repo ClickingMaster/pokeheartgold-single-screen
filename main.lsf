@@ -3712,31 +3712,8 @@ Overlay OVY_12
 {
     After OVY_7
     Object src/battle/battle_022378C0.o
-    Object src/to80_extra2574_run01.o
-    Object src/battle/battle_022378C0_tail_run2.o
-    Object src/to70_overlay_12_022378C0_to42_gap2_extra1193_run01.o
-    Object src/battle/battle_022378C0_tail_run3.o
-    Object src/overlay12_helpers_1.o
-    Object src/battle/battle_system_init.o
-    Object src/overlay12_helpers_2.o
-    Object src/to70_overlay_12_022378C0_residual_3_extra761_run01.o
-    Object src/overlay12_helpers_3.o
-    Object src/to70_overlay_12_022378C0_residual_4_extra481_run01.o
-    Object src/overlay12_helpers_4.o
-    Object src/to90_extra2366_run01.o
-    Object src/overlay12_helpers_5.o
-    Object src/to46_overlay12_link_init.o
-    Object src/overlay12_link_init_tail.o
-    Object src/overlay12_helpers_6.o
-    Object src/to90_extra1993_run01.o
-    Object src/overlay12_helpers_7.o
-    Object src/to90_extra2479_run01.o
-    Object src/overlay12_helpers_8.o
-    Object src/to91_w17_a3f0500_run01.o
-    Object src/overlay12_helpers_9.o
-    Object src/to90_extra2365_run01.o
-    Object src/overlay12_helpers_10.o
-    Object asm/overlay_12_022378C0_residual_11.o
+    Object src/battle/battle_main.o
+    Object asm/battle_main_data.o
     Object src/battle/battle_system.o
     Object src/battle/battle_command.o
     Object asm/overlay_12_battle_command.o
@@ -4897,7 +4874,7 @@ Overlay OVY_28
 Overlay OVY_29
 {
     After OVY_27
-    Object src/overlay_29.o
+    Object src/number_entry.o
 }
 Overlay touch_save_app
 {
@@ -4913,30 +4890,13 @@ Overlay OVY_31
 Overlay OVY_32
 {
     After OVY_27
-    Object src/slop_r1_overlay32_m02_anchor1.o
-    Object src/overlay32_partial_1.o
-    Object src/slop_r1_overlay32_m02_anchor2.o
-    Object src/overlay32_partial_2.o
-    Object src/slop_r1_overlay32_m02_anchor3.o
-    Object src/overlay32_partial_3.o
-    Object src/slop_r1_overlay32_m02_anchor4.o
-    Object src/overlay32_partial_4.o
-    Object src/to45_overlay32_sprite_resources_r5.o
-    Object src/overlay32_partial_5.o
-    Object src/slop_r1_overlay32_m02_anchor6.o
-    Object src/overlay32_partial_6.o
-    Object src/slop_r1_overlay32_m02_anchor7.o
-    Object src/overlay32_partial_7.o
-    Object src/to47_overlay32_palette_controller.o
-    Object asm/to47_overlay32_palette_controller_rodata.o
+    Object src/friend_roster_app.o
+    Object asm/friend_roster_app_data.o
 }
 Overlay OVY_33
 {
     After OVY_27
-    Object src/op90_overlay_33_r01.o
-    Object src/ov33_to45_1.o
-    Object src/ov33_wave35_1.o
-    Object src/slop_small_overlay_33.o
+    Object src/comm_club_buttons.o
 }
 Overlay OVY_34
 {
@@ -4966,7 +4926,7 @@ Overlay OVY_34
 Overlay OVY_35
 {
     After npc_trade
-    Object src/r40_overlay_35_run1.o
+    Object src/ov35_02259d80.o
 }
 Overlay OVY_36
 {
@@ -6958,34 +6918,7 @@ Overlay OVY_68
 Overlay OVY_69
 {
     After main
-    Object src/overlay69_globe_1.o
-    Object src/to80_extra1792_run01.o
-    Object src/overlay69_helpers_1.o
-    Object src/r40_overlay_69_residual_2_run1.o
-    Object src/to45_overlay69_globe_locations_r2.o
-    Object src/overlay69_helpers_2.o
-    Object src/ov69_wave34_gesture_1.o
-    Object src/to70_overlay_69_residual_3_extra1217_run01.o
-    Object src/overlay69_helpers_3.o
-    Object src/to70_overlay_69_residual_4_extra493_run01.o
-    Object src/overlay69_helpers_4.o
-    Object src/to70_overlay_69_residual_5_extra238_run01.o
-    Object src/to70_to70_overlay_69_residual_5_extra238_residual_1_extra1292_run01.o
-    Object src/overlay69_helpers_5.o
-    Object src/overlay69_init_1.o
-    Object src/overlay69_helpers_6.o
-    Object src/to91_w17_geonet300_run01.o
-    Object src/op90_to91_w17_geonet300_residual_1_r01.o
-    Object src/to51_overlay69_load_models_r7.o
-    Object src/overlay69_helpers_7.o
-    Object src/to70_overlay_69_residual_8_extra819_run01.o
-    Object src/overlay69_helpers_8.o
-    Object src/opus10_overlay69_euler_scroll_run1.o
-    Object src/to47_overlay69_globe_render_r9.o
-    Object src/overlay69_message_lookup_r9.o
-    Object src/overlay69_helpers_9.o
-    Object src/to70_overlay_69_residual_10_extra976_run01.o
-    Object src/overlay69_helpers_10.o
+    Object src/geonet_globe_app.o
     Object asm/overlay_69_residual_11.o
 }
 Overlay OVY_70
@@ -10437,44 +10370,13 @@ Overlay OVY_104
 Overlay OVY_105
 {
     After main
-    Object src/overlay105_bootstrap.o
-    Object src/ov105_wave35_1.o
-    Object src/overlay105_scene_lifecycle_r46.o
-    Object src/r40_overlay_105_residual_2_run1.o
-    Object src/overlay105_scene_loader_to57.o
+    Object src/application/ship_departure_cutscene.o
     Object asm/overlay_105_data_to57.o
 }
 Overlay OVY_106
 {
     After main
-    Object src/overlay106_cinematic_1.o
-    Object src/overlay106_render_helpers_1.o
-    Object src/to90_extra1988_run01.o
-    Object src/overlay106_render_helpers_2.o
-    Object src/overlay106_cinematic_2.o
-    Object src/r40_overlay_106_residual_2_run1.o
-    Object src/overlay106_cinematic_3.o
-    Object src/to45_overlay106_capture.o
-    Object src/overlay106_cinematic_4.o
-    Object src/to70_overlay_106_residual_4_extra936_run01.o
-    Object src/overlay106_cinematic_5.o
-    Object src/op90_overlay_106_residual_5_r01.o
-    Object src/overlay106_cinematic_6.o
-    Object src/to70_overlay_106_residual_6_extra450_run01.o
-    Object src/overlay106_cinematic_7.o
-    Object src/to70_to70_overlay_106_residual_7_extra289_residual_1_extra1264_run01.o
-    Object src/to70_overlay_106_residual_7_extra289_run01.o
-    Object src/overlay106_cinematic_8.o
-    Object src/r40_overlay_106_residual_8_run1.o
-    Object src/to70_to70_overlay_106_residual_8_extra193_residual_1_extra1265_run01.o
-    Object src/to70_overlay_106_residual_8_extra193_run01.o
-    Object src/overlay106_cinematic_9.o
-    Object src/to70_to70_overlay106_r9_residual_extra379_residual_1_extra1248_run01.o
-    Object src/to70_overlay106_r9_residual_extra379_run01.o
-    Object src/overlay106_r9_palette_buffers.o
-    Object src/overlay106_cinematic_10.o
-    Object src/op90_overlay_106_residual_10_r01.o
-    Object src/overlay106_cinematic_11.o
+    Object src/application/legendary_cinematic.o
     Object asm/overlay_106_residual_11.o
 }
 Overlay OVY_107
@@ -10621,31 +10523,8 @@ Overlay OVY_110
 Overlay OVY_111
 {
     After main
-    Object src/bug_contest_swap_mon_states.o
-    Object src/overlay111_partial_1.o
-    Object src/to45_overlay111_display_hp_r2.o
-    Object src/to70_to45_overlay111_init_r2_extra680_run01.o
-    Object src/overlay111_partial_2.o
-    Object src/to90_extra2180_run01.o
-    Object src/overlay111_partial_3.o
-    Object src/r40_overlay_111_residual_4_run1.o
-    Object src/overlay111_partial_4.o
-    Object src/r40_overlay_111_residual_5_run1.o
-    Object src/to90_extra2181_run01.o
-    Object src/to91_w41465_ov111_021E64C8_run01.o
-    Object src/overlay111_partial_5.o
-    Object src/to91_w41507_scroll176.o
-    Object src/overlay111_partial_6.o
-    Object src/to45_overlay111_resource_groups_r7.o
-    Object src/overlay111_partial_7.o
-    Object src/to80_extra1768_run01.o
-    Object src/overlay111_partial_8.o
-    Object src/to70_overlay_111_residual_9_extra565_run01.o
-    Object src/overlay111_partial_9.o
-    Object src/r40_overlay_111_residual_10_run1.o
-    Object src/overlay111_partial_10.o
+    Object src/bug_contest_swap_mon.o
     Object asm/to70_overlay_111_residual_11_extra369_anchor.o
-    Object src/to70_overlay_111_residual_11_extra369_run01.o
 }
 Overlay OVY_112
 {

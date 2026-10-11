@@ -40,6 +40,6 @@
 .public GX_SetBankForSubOBJ
 .public MIi_CpuCopy16
 .public gSystem
-.public ov33_0225D520
-.public ov33_0225D5A8
-.public ov33_0225D5CC
+.public CommClubButtons_Init
+.public CommClubButtons_Exit
+.public CommClubButtons_IsExitDone

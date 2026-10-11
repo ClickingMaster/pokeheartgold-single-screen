@@ -1,0 +1,202 @@
+	.include "asm/macros.inc"
+	.public _0225D5C0
+	.public _0225D5C4
+	.public _0225D5C8
+	.public _0225D62C
+	.public _0225D630
+	.public _0225D796
+	.public _0225D82C
+	.public _0225D830
+	.public _0225D980
+	.public _0225D984
+	.public _0225D99C
+	.public _0225D9A0
+	.public _0225D9D4
+	.public _0225DA7C
+	.public _0225DA80
+	.public _0225DA84
+	.public _0225DCB2
+	.public _0225DCCC
+	.public _0225DCD0
+	.public _0225DD64
+	.public _0225DDA0
+	.public _0225DDA4
+	.public _0225DDA8
+	.public _0225DDDE
+	.public _0225DDE6
+	.public _0225DDF4
+	.public _0225DE02
+	.public _0225DE18
+	.public _0225DE22
+	.public _0225DE56
+	.public _0225DE6C
+	.public _0225DE8E
+	.public _0225DEA0
+	.public _0225DEA8
+	.public _0225DEB2
+	.public _0225DEBA
+	.public _0225DEEA
+	.public _0225DF0A
+	.public _0225DF2A
+	.public _0225DF3A
+	.public _0225DF50
+	.public _0225DF62
+	.public _0225DF68
+	.public _0225DF6C
+	.public _0225DF70
+	.public _0225DF74
+	.public _0225DF78
+	.public _0225DF7C
+	.public _0225DFB0
+	.public _0225DFBC
+	.public _0225DFC6
+	.public _0225DFCA
+	.public _0225DFE4
+	.public _0225E00C
+	.public _0225E05E
+	.public _0225E070
+	.public _0225E092
+	.public _0225E0A2
+	.public _0225E0F4
+	.public _0225E0F8
+	.public _0225E158
+	.public sFriendRosterAppPageArrowHitboxes
+	.public FriendRosterApp_Init
+	.public FriendRosterApp_SetVramBanks
+	.public FriendRosterApp_InitWindows
+	.public FriendRosterApp_PrintPageNumber
+	.public FriendRosterApp_PrintNames
+	.public FriendRosterApp_InitSprites
+	.public FriendRosterApp_LoadSpriteResources
+	.public FriendRosterApp_CreateSpriteHeader
+	.public FriendRosterApp_CreateSprite
+	.public FriendRosterApp_CreateSprites
+	.public FriendRosterApp_SetCursorPos
+	.public FriendRosterApp_InitGridInput
+	.public FriendRosterApp_Task
+	.public FriendRosterApp_HandleInput
+	.public FriendRosterApp_ChangePage
+	.public FriendRosterApp_SetBlinkPalette
+	.public FriendRosterApp_StepBlink
+	.public FriendRosterApp_StartSpriteBlink
+	.public FriendRosterApp_StartNameBlink
+	.public sFriendRosterAppGridCallbacks
+	.public sFriendRosterAppSpriteSpecs
+	.public sFriendRosterAppBgTemplateSub2
+	.public sFriendRosterAppBgTemplateSub0
+	.public sFriendRosterAppBgTemplateSub1
+	.public sFriendRosterAppGridHitboxes
+	.public sFriendRosterAppGridDpadBoxes
+	.public sFriendRosterAppWindowTemplates
+	.public sFriendRosterAppPageArrowHitboxes
+	.public FriendRosterApp_Init
+	.public FriendRosterApp_Exit
+	.public FriendRosterApp_IsExitDone
+	.public FriendRosterApp_SetVramBanks
+	.public FriendRosterApp_InitBgs
+	.public FriendRosterApp_FreeBgs
+	.public FriendRosterApp_LoadBgGraphics
+	.public FriendRosterApp_InitText
+	.public FriendRosterApp_FreeText
+	.public FriendRosterApp_InitWindows
+	.public FriendRosterApp_RemoveWindows
+	.public FriendRosterApp_PrintPageNumber
+	.public FriendRosterApp_PrintNames
+	.public FriendRosterApp_InitSprites
+	.public FriendRosterApp_FreeSprites
+	.public FriendRosterApp_CreateResourceManagers
+	.public FriendRosterApp_DestroyResourceManagers
+	.public FriendRosterApp_LoadSpriteResources
+	.public FriendRosterApp_CreateSpriteHeader
+	.public FriendRosterApp_CreateSprite
+	.public FriendRosterApp_CreateSprites
+	.public FriendRosterApp_DeleteSprites
+	.public FriendRosterApp_AnimateSprites
+	.public FriendRosterApp_SetCursorPos
+	.public FriendRosterApp_InitGridInput
+	.public FriendRosterApp_FreeGridInput
+	.public FriendRosterApp_GridNoop
+	.public FriendRosterApp_OnCursorMove
+	.public FriendRosterApp_Task
+	.public FriendRosterApp_HandleInput
+	.public FriendRosterApp_UpdateBlink
+	.public FriendRosterApp_ChangePage
+	.public FriendRosterApp_SetBlinkPalette
+	.public FriendRosterApp_StepBlink
+	.public FriendRosterApp_StartSpriteBlink
+	.public FriendRosterApp_StartNameBlink
+	.include "overlay_32.inc"
+	.include "global.inc"
+
+	.text
+	.public FriendRosterApp_Exit
+	.public FriendRosterApp_IsExitDone
+	.public FriendRosterApp_InitBgs
+	.public FriendRosterApp_FreeBgs
+	.public FriendRosterApp_LoadBgGraphics
+	.public FriendRosterApp_InitText
+	.public FriendRosterApp_FreeText
+	.public FriendRosterApp_RemoveWindows
+	.public FriendRosterApp_FreeSprites
+	.public FriendRosterApp_CreateResourceManagers
+	.public FriendRosterApp_DestroyResourceManagers
+	.public FriendRosterApp_DeleteSprites
+	.public FriendRosterApp_AnimateSprites
+	.public FriendRosterApp_FreeGridInput
+	.public FriendRosterApp_GridNoop
+	.public FriendRosterApp_OnCursorMove
+	.public FriendRosterApp_UpdateBlink
+
+	.rodata
+
+sFriendRosterAppPageArrowHitboxes:
+	.byte 0xA0, 0xBF, 0x08, 0x27
+	.byte 0xA0, 0xBF, 0x28, 0x47, 0xFF, 0x00, 0x00, 0x00
+
+sFriendRosterAppGridCallbacks: ; 0x0225E168
+	.word FriendRosterApp_GridNoop
+	.word FriendRosterApp_GridNoop
+	.word FriendRosterApp_OnCursorMove
+	.word FriendRosterApp_OnCursorMove
+
+sFriendRosterAppSpriteSpecs: ; 0x0225E178
+	.byte 0x20, 0x20, 0x00, 0x00, 0xD8, 0xB0, 0x01, 0x02
+	.byte 0x18, 0xB0, 0x01, 0x04, 0x38, 0xB0, 0x01, 0x06
+
+sFriendRosterAppBgTemplateSub2: ; 0x0225E188
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x0D, 0x01, 0x00, 0x02, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00
+
+sFriendRosterAppBgTemplateSub0: ; 0x0225E1A4
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
+	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x0F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+
+sFriendRosterAppBgTemplateSub1: ; 0x0225E1C0
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+	.byte 0x01, 0x00, 0x0E, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+
+sFriendRosterAppGridHitboxes: ; 0x0225E1DC
+	.byte 0x08, 0x17, 0x18, 0x67
+	.byte 0x08, 0x17, 0x98, 0xE7, 0x30, 0x3F, 0x18, 0x67, 0x30, 0x3F, 0x98, 0xE7, 0x58, 0x67, 0x18, 0x67
+	.byte 0x58, 0x67, 0x98, 0xE7, 0x80, 0x8F, 0x18, 0x67, 0x80, 0x8F, 0x98, 0xE7, 0xA0, 0xBF, 0xB0, 0xFF
+	.byte 0xFF, 0x00, 0x00, 0x00
+
+sFriendRosterAppGridDpadBoxes: ; 0x0225E204
+	.byte 0x40, 0x10, 0x00, 0x00, 0x00, 0x02, 0x00, 0x01, 0xC0, 0x10, 0x00, 0x00
+	.byte 0x01, 0x03, 0x00, 0x01, 0x40, 0x38, 0x00, 0x00, 0x00, 0x04, 0x02, 0x03, 0xC0, 0x38, 0x00, 0x00
+	.byte 0x01, 0x05, 0x02, 0x03, 0x40, 0x60, 0x00, 0x00, 0x02, 0x06, 0x04, 0x05, 0xC0, 0x60, 0x00, 0x00
+	.byte 0x03, 0x07, 0x04, 0x05, 0x40, 0x88, 0x00, 0x00, 0x04, 0x08, 0x06, 0x07, 0xC0, 0x88, 0x00, 0x00
+	.byte 0x05, 0x08, 0x06, 0x07, 0xD8, 0xB0, 0x00, 0x00, 0x87, 0x08, 0x08, 0x08
+
+sFriendRosterAppWindowTemplates: ; 0x0225E24C
+	.byte 0x04, 0x17, 0x15, 0x08
+	.byte 0x02, 0x02, 0x01, 0x00, 0x04, 0x0E, 0x15, 0x04, 0x02, 0x02, 0x11, 0x00, 0x04, 0x03, 0x01, 0x0A
+	.byte 0x02, 0x02, 0x19, 0x00, 0x04, 0x13, 0x01, 0x0A, 0x02, 0x02, 0x2D, 0x00, 0x04, 0x03, 0x06, 0x0A
+	.byte 0x02, 0x02, 0x41, 0x00, 0x04, 0x13, 0x06, 0x0A, 0x02, 0x02, 0x55, 0x00, 0x04, 0x03, 0x0B, 0x0A
+	.byte 0x02, 0x02, 0x69, 0x00, 0x04, 0x13, 0x0B, 0x0A, 0x02, 0x02, 0x7D, 0x00, 0x04, 0x03, 0x10, 0x0A
+	.byte 0x02, 0x02, 0x91, 0x00, 0x04, 0x13, 0x10, 0x0A, 0x02, 0x02, 0xA5, 0x00, 0x04, 0x03, 0x01, 0x0A
+	.byte 0x02, 0x02, 0xB9, 0x00, 0x04, 0x13, 0x01, 0x0A, 0x02, 0x02, 0xCD, 0x00, 0x04, 0x03, 0x06, 0x0A
+	.byte 0x02, 0x02, 0xE1, 0x00, 0x04, 0x13, 0x06, 0x0A, 0x02, 0x02, 0xF5, 0x00, 0x04, 0x03, 0x0B, 0x0A
+	.byte 0x02, 0x02, 0x09, 0x01, 0x04, 0x13, 0x0B, 0x0A, 0x02, 0x02, 0x1D, 0x01, 0x04, 0x03, 0x10, 0x0A
+	.byte 0x02, 0x02, 0x31, 0x01, 0x04, 0x13, 0x10, 0x0A, 0x02, 0x02, 0x45, 0x01

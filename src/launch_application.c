@@ -28,10 +28,10 @@
 #include "overlay_102.h"
 #include "overlay_103.h"
 #include "overlay_104.h"
-#include "overlay_105.h"
+#include "ship_departure_cutscene.h"
 #include "overlay_108.h"
 #include "overlay_109.h"
-#include "overlay_111.h"
+#include "bug_contest_swap_mon.h"
 #include "overlay_113.h"
 #include "overlay_14.h"
 #include "overlay_15.h"
@@ -47,7 +47,7 @@
 #include "overlay_65.h"
 #include "battle_room_results.h"
 #include "overlay_68.h"
-#include "overlay_69.h"
+#include "geonet_globe_app.h"
 #include "overlay_70.h"
 #include "overlay_71.h"
 #include "overlay_72.h"
@@ -1380,7 +1380,7 @@ void sub_0203FC68(FieldSystem *fieldSystem, void *args) {
 }
 
 void sub_0203FC90(FieldSystem *fieldSystem, void *args) {
-    static const OverlayManagerTemplate _020FA1D4 = { ov105_021E5900, ov105_021E59DC, ov105_021E5B14, FS_OVERLAY_ID(OVY_105) };
+    static const OverlayManagerTemplate _020FA1D4 = { ShipDepartureCutscene_Init, ShipDepartureCutscene_Main, ShipDepartureCutscene_Exit, FS_OVERLAY_ID(OVY_105) };
     OverlayManagerTemplate template = _020FA1D4;
     FieldSystem_LaunchApplication(fieldSystem, &template, args);
 }

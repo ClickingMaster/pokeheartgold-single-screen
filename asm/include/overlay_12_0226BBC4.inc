@@ -24,7 +24,7 @@
 .public MI_CpuFill8
 .public _ll_mul
 .public _s32_div_f
-.public ov12_022399BC
+.public Battle_StaticInit
 .public BattleFinger_LoadResources
 .public BattleFinger_FreeResources
 .public BattleFinger_New

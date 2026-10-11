@@ -196,7 +196,7 @@
 .public ov12_02237CC4
 .public ov12_02237D00
 .public ov12_02237ED0
-.public ov12_022399BC
+.public Battle_StaticInit
 .public BattleSystem_GetBattleType
 .public BattleSystem_GetBattleContext
 .public BattleSystem_GetOpponentData

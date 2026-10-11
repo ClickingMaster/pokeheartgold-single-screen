@@ -48,6 +48,6 @@
 .public NNS_G3dGetAnmByIdx
 .public G3X_SetEdgeColorTable
 .public memset
-.public ov105_021E5900
-.public ov105_021E59DC
-.public ov105_021E5B14
+.public ShipDepartureCutscene_Init
+.public ShipDepartureCutscene_Main
+.public ShipDepartureCutscene_Exit

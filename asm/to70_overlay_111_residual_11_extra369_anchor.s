@@ -1,5 +1,5 @@
-	.extern ov111_021E59E4
-	.extern ov111_021E5AA0
+	.extern BugContestSwapMon_ShowCaughtMon
+	.extern BugContestSwapMon_ChooseMon
 	.public BugContestSwapMon_Exit
 	.public BugContestSwapMon_Init
 	.public BugContestSwapMon_Main
@@ -129,41 +129,41 @@
 	.public _021E69E8
 	.public _021E6B74
 	.public _021E6D40
-	.public ov111_021E59E4
-	.public ov111_021E5AA0
-	.public ov111_021E5BE4
-	.public ov111_021E5C54
-	.public ov111_021E5CB4
-	.public ov111_021E5CD4
-	.public ov111_021E5D08
-	.public ov111_021E5D2C
-	.public ov111_021E5DF0
-	.public ov111_021E5E34
-	.public ov111_021E5F50
-	.public ov111_021E6000
-	.public ov111_021E60D4
-	.public ov111_021E6180
-	.public ov111_021E6268
-	.public ov111_021E62E0
-	.public ov111_021E6330
-	.public ov111_021E6380
-	.public ov111_021E63D0
-	.public ov111_021E64C8
-	.public ov111_021E65D4
-	.public ov111_021E6694
-	.public ov111_021E66DC
-	.public ov111_021E6710
-	.public ov111_021E6738
-	.public ov111_021E6784
-	.public ov111_021E67C4
-	.public ov111_021E67EC
-	.public ov111_021E6888
-	.public ov111_021E68FC
-	.public ov111_021E6934
-	.public ov111_021E696C
-	.public ov111_021E69A0
-	.public ov111_021E6A74
-	.public ov111_021E6B30
+	.public BugContestSwapMon_ShowCaughtMon
+	.public BugContestSwapMon_ChooseMon
+	.public BugContestSwapMon_ShowBothMons
+	.public BugContestSwapMon_InitYesNoPrompt
+	.public BugContestSwapMon_SetBanks
+	.public BugContestSwapMon_ResetDisplay
+	.public BugContestSwapMon_SetResult
+	.public BugContestSwapMon_DrawHpBar
+	.public BugContestSwapMon_VBlank
+	.public BugContestSwapMon_Setup
+	.public BugContestSwapMon_InitBgs
+	.public BugContestSwapMon_LoadBgGfx
+	.public BugContestSwapMon_InitSpriteSystem
+	.public BugContestSwapMon_LoadSpriteGfx
+	.public BugContestSwapMon_SetMonIcon
+	.public BugContestSwapMon_LoadSpriteChar
+	.public BugContestSwapMon_NewSprite
+	.public BugContestSwapMon_NewMonIconSprite
+	.public SwapMonPanel_New
+	.public SwapMonPanel_Draw
+	.public SwapMonPanel_Scroll
+	.public SwapMonPanel_Delete
+	.public SwapMonPanels_New
+	.public SwapMonPanels_Delete
+	.public SwapMonPanels_Add
+	.public SwapMonPanels_Scroll
+	.public SwapMonText_New
+	.public SwapMonText_Init
+	.public SwapMonText_IsPrinting
+	.public SwapMonText_PrintMessage
+	.public SwapMonText_PrintString
+	.public SwapMonText_PrintStringWithColor
+	.public SwapMonText_PrintNumber
+	.public SwapMonText_ShowMessageBox
+	.public SwapMonText_PrintOnWindow
 	.public ov111_021E6B7C
 	.public ov111_021E6B8C
 	.public ov111_021E6BA0
@@ -178,65 +178,65 @@
 	.public BugContestSwapMon_Main
 	.public _021E6B74
 	.public _021E6D40
-	.public ov111_021E59E4
-	.public ov111_021E5AA0
-	.public ov111_021E5BE4
-	.public ov111_021E5C54
-	.public ov111_021E5C94
-	.public ov111_021E5CB4
-	.public ov111_021E5CD4
-	.public ov111_021E5D08
-	.public ov111_021E5D2C
-	.public ov111_021E5DF0
-	.public ov111_021E5E34
-	.public ov111_021E5F04
-	.public ov111_021E5F50
-	.public ov111_021E5FD4
-	.public ov111_021E6000
-	.public ov111_021E60D4
-	.public ov111_021E6170
-	.public ov111_021E6180
-	.public ov111_021E6268
-	.public ov111_021E62E0
-	.public ov111_021E6330
-	.public ov111_021E6380
-	.public ov111_021E63D0
-	.public ov111_021E64C8
-	.public ov111_021E65CC
-	.public ov111_021E65D4
-	.public ov111_021E6684
-	.public ov111_021E6694
-	.public ov111_021E66DC
-	.public ov111_021E6710
-	.public ov111_021E6738
-	.public ov111_021E6770
-	.public ov111_021E6784
-	.public ov111_021E67A4
-	.public ov111_021E67C4
-	.public ov111_021E67EC
-	.public ov111_021E685C
-	.public ov111_021E6888
-	.public ov111_021E68FC
-	.public ov111_021E6934
-	.public ov111_021E696C
-	.public ov111_021E69A0
-	.public ov111_021E69F4
-	.public ov111_021E6A2C
-	.public ov111_021E6A44
-	.public ov111_021E6A74
-	.public ov111_021E6B30
-	.public ov111_021E5C94
-	.public ov111_021E5F04
-	.public ov111_021E5FD4
-	.public ov111_021E6170
-	.public ov111_021E65CC
-	.public ov111_021E6684
-	.public ov111_021E6770
-	.public ov111_021E67A4
-	.public ov111_021E685C
-	.public ov111_021E69F4
-	.public ov111_021E6A2C
-	.public ov111_021E6A44
+	.public BugContestSwapMon_ShowCaughtMon
+	.public BugContestSwapMon_ChooseMon
+	.public BugContestSwapMon_ShowBothMons
+	.public BugContestSwapMon_InitYesNoPrompt
+	.public BugContestSwapMon_GetInitialState
+	.public BugContestSwapMon_SetBanks
+	.public BugContestSwapMon_ResetDisplay
+	.public BugContestSwapMon_SetResult
+	.public BugContestSwapMon_DrawHpBar
+	.public BugContestSwapMon_VBlank
+	.public BugContestSwapMon_Setup
+	.public BugContestSwapMon_Teardown
+	.public BugContestSwapMon_InitBgs
+	.public BugContestSwapMon_FreeBgs
+	.public BugContestSwapMon_LoadBgGfx
+	.public BugContestSwapMon_InitSpriteSystem
+	.public BugContestSwapMon_FreeSpriteSystem
+	.public BugContestSwapMon_LoadSpriteGfx
+	.public BugContestSwapMon_SetMonIcon
+	.public BugContestSwapMon_LoadSpriteChar
+	.public BugContestSwapMon_NewSprite
+	.public BugContestSwapMon_NewMonIconSprite
+	.public SwapMonPanel_New
+	.public SwapMonPanel_Draw
+	.public SwapMonPanel_StartScroll
+	.public SwapMonPanel_Scroll
+	.public SwapMonPanel_IsScrollDone
+	.public SwapMonPanel_Delete
+	.public SwapMonPanels_New
+	.public SwapMonPanels_Delete
+	.public SwapMonPanels_Add
+	.public SwapMonPanels_StartScroll
+	.public SwapMonPanels_Scroll
+	.public SwapMonPanels_IsScrollDone
+	.public SwapMonText_New
+	.public SwapMonText_Init
+	.public SwapMonText_Delete
+	.public SwapMonText_IsPrinting
+	.public SwapMonText_PrintMessage
+	.public SwapMonText_PrintString
+	.public SwapMonText_PrintStringWithColor
+	.public SwapMonText_PrintNumber
+	.public SwapMonText_CloseMessageBox
+	.public SwapMonText_GetMessageFormat
+	.public SwapMonText_LoadGfx
+	.public SwapMonText_ShowMessageBox
+	.public SwapMonText_PrintOnWindow
+	.public BugContestSwapMon_GetInitialState
+	.public BugContestSwapMon_Teardown
+	.public BugContestSwapMon_FreeBgs
+	.public BugContestSwapMon_FreeSpriteSystem
+	.public SwapMonPanel_StartScroll
+	.public SwapMonPanel_IsScrollDone
+	.public SwapMonPanels_StartScroll
+	.public SwapMonPanels_IsScrollDone
+	.public SwapMonText_Delete
+	.public SwapMonText_CloseMessageBox
+	.public SwapMonText_GetMessageFormat
+	.public SwapMonText_LoadGfx
 	.include "asm/macros.inc"
 	.include "overlay_111.inc"
 	.include "global.inc"
@@ -302,6 +302,6 @@ ov111_021E6CA4: ; 0x021E6CA4
 	.data
 
 _021E6D40:
-	.word ov111_021E59E4
-	.word ov111_021E5AA0
+	.word BugContestSwapMon_ShowCaughtMon
+	.word BugContestSwapMon_ChooseMon
 	; 0x021E6D60

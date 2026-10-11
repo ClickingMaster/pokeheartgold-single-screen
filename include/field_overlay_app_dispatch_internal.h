@@ -108,14 +108,14 @@ extern BOOL ov27_0225C418(void *);
 extern void *ov28_0225D520(void *, void *, FieldSys *, void *);
 extern void ov28_0225D5EC(void *, void *);
 extern BOOL ov28_0225D624(void *);
-extern void *ov29_0225D520(void *, void *, FieldSys *, void *);
-extern void ov29_0225D5EC(void *, void *);
-extern BOOL ov29_0225D61C(void *);
-extern void *ov32_0225D520(void *, void *, FieldSys *, void *);
-extern void ov32_0225D5CC(void *, void *);
-extern BOOL ov32_0225D608(void *);
-extern void *ov33_0225D520(void *, void *, FieldSys *, void *);
-extern void ov33_0225D5A8(void *, void *);
-extern BOOL ov33_0225D5CC(void *);
+extern void *NumberEntry_Init(void *, void *, FieldSys *, void *);
+extern void NumberEntry_Exit(void *, void *);
+extern BOOL NumberEntry_IsExitDone(void *);
+extern void *FriendRosterApp_Init(void *, void *, FieldSys *, void *);
+extern void FriendRosterApp_Exit(void *, void *);
+extern BOOL FriendRosterApp_IsExitDone(void *);
+extern void *CommClubButtons_Init(void *, void *, FieldSys *, void *);
+extern void CommClubButtons_Exit(void *, void *);
+extern BOOL CommClubButtons_IsExitDone(void *);
 
 #endif

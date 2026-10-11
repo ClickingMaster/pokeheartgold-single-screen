@@ -84,9 +84,9 @@ static const AppEntry ov01_02206C60[] = {
     { TouchMartApp_Init, TouchMartApp_Exit, TouchMartApp_IsExitDone, FS_OVERLAY_ID(OVY_31)         },
     { ov27_0225C250, ov27_0225C398, ov27_0225C418, (u32)-1                       },
     { ov28_0225D520, ov28_0225D5EC, ov28_0225D624, FS_OVERLAY_ID(OVY_28)         },
-    { ov29_0225D520, ov29_0225D5EC, ov29_0225D61C, FS_OVERLAY_ID(OVY_29)         },
-    { ov32_0225D520, ov32_0225D5CC, ov32_0225D608, FS_OVERLAY_ID(OVY_32)         },
-    { ov33_0225D520, ov33_0225D5A8, ov33_0225D5CC, FS_OVERLAY_ID(OVY_33)         },
+    { NumberEntry_Init, NumberEntry_Exit, NumberEntry_IsExitDone, FS_OVERLAY_ID(OVY_29)         },
+    { FriendRosterApp_Init, FriendRosterApp_Exit, FriendRosterApp_IsExitDone, FS_OVERLAY_ID(OVY_32)         },
+    { CommClubButtons_Init, CommClubButtons_Exit, CommClubButtons_IsExitDone, FS_OVERLAY_ID(OVY_33)         },
     { ov01_021F6B88, ov01_021F6BA0, ov01_021F6BAC, FS_OVERLAY_ID(OVY_34)         },
 };
 

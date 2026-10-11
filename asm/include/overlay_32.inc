@@ -73,6 +73,6 @@
 .public GX_SetBankForSubBG
 .public GX_SetBankForSubOBJ
 .public gSystem
-.public ov32_0225D520
-.public ov32_0225D5CC
-.public ov32_0225D608
+.public FriendRosterApp_Init
+.public FriendRosterApp_Exit
+.public FriendRosterApp_IsExitDone

@@ -55,7 +55,7 @@ BOOL Battle_Run(OverlayManager *man, int *state) {
         }
         break;
     case BSTATE_LINK_INIT:
-        ov12_022399D4(man, setup);
+        Battle_LinkInit(man, setup);
         sub_02039F68(setup->wifiHistory);
         if (!sub_02039998()) {
             GameStats_Inc(setup->gameStats, GAME_STAT_LOCAL_LINK_BATTLES);
@@ -68,8 +68,8 @@ BOOL Battle_Run(OverlayManager *man, int *state) {
         *state = BSTATE_LINK_MAIN;
         break;
     case BSTATE_LINK_MAIN:
-        if (ov12_02239C28(man) == TRUE) {
-            ov12_0223A088(man);
+        if (Battle_LinkMain(man) == TRUE) {
+            Battle_LinkExit(man);
             *state = BSTATE_UNK_A_INIT;
         }
         break;
@@ -107,18 +107,18 @@ BOOL Battle_Run(OverlayManager *man, int *state) {
     case BSTATE_BATTLE_INIT:
         HandleLoadOverlay(FS_OVERLAY_ID(OVY_6), OVY_LOAD_ASYNC);
         HandleLoadOverlay(FS_OVERLAY_ID(OVY_7), OVY_LOAD_ASYNC);
-        ov12_02237F18(man);
+        Battle_BattleInit(man);
         *state = BSTATE_BATTLE_MAIN;
         break;
     case BSTATE_BATTLE_MAIN:
-        if (ov12_02238358(man) == TRUE) {
-            ov12_0223843C(man);
+        if (Battle_BattleMain(man) == TRUE) {
+            Battle_BattleExit(man);
             sub_02005BEC(0);
             *state = BSTATE_END_INIT;
         }
         break;
     case BSTATE_END_INIT:
-        if (ov12_0223A3F0(man) == TRUE) {
+        if (Battle_EndInit(man) == TRUE) {
             *state = BSTATE_END_MAIN;
         } else {
             Heap_Destroy(HEAP_ID_BATTLE);
@@ -126,7 +126,7 @@ BOOL Battle_Run(OverlayManager *man, int *state) {
         }
         break;
     case BSTATE_END_MAIN:
-        if (ov12_0223A5E4(man) == TRUE) {
+        if (Battle_EndMain(man) == TRUE) {
             UnloadOverlayByID(FS_OVERLAY_ID(OVY_5));
             Heap_Destroy(HEAP_ID_BATTLE);
             *state = BSTATE_END_WAIT;
@@ -187,7 +187,7 @@ void ov12_02237B6C(BattleSystem *battleSystem) {
     Main_SetVBlankIntrCB(NULL, NULL);
     BattleInput_Free(battleSystem->battleInput);
     RemoveWindow(battleSystem->window);
-    ov12_02238A30(battleSystem->bgConfig);
+    BgConfig_CleanupBattleBackgrounds(battleSystem->bgConfig);
     ov12_02238A64(battleSystem);
     SpriteSystem_FreeResourcesAndManager(battleSystem->spriteRenderer, battleSystem->gfxHandler);
     SpriteSystem_Free(battleSystem->spriteRenderer);
@@ -229,7 +229,7 @@ void ov12_02237BB8(BattleSystem *battleSystem) {
     NARC_Delete(unkNarcB);
 
     TextPrinter_SetDownArrowBaseTile(1);
-    ov12_0223A620(battleSystem);
+    BattleSystem_SetupTextFlags(battleSystem);
 
     G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(battleSystem->spriteRenderer), 0, FX32_CONST(272));
 }
@@ -248,7 +248,7 @@ void ov12_02237CC4(BattleSystem *battleSystem) {
 #include "constants/battle.h"
 
 #include "battle/battle_022378C0.h"
-#include "battle/battle_022378C0_tail_private.h"
+#include "battle/battle_main.h"
 #include "battle/battle_controller_player.h"
 #include "battle/battle_system.h"
 #include "battle/overlay_12_0224E4FC.h"
@@ -259,8 +259,8 @@ void ov12_02237CC4(BattleSystem *battleSystem) {
 #include "render_window.h"
 #include "unk_0200FA24.h"
 
-BOOL ov12_02238358(OverlayManager *man);
-void ov12_022387AC(BattleSystem *battleSystem, BgConfig *bgConfig);
+BOOL Battle_BattleMain(OverlayManager *man);
+void Battle_InitBackgrounds(BattleSystem *battleSystem, BgConfig *bgConfig);
 void ov12_022389B8(BattleSystem *battleSystem);
 
 void ov12_02237D00(BattleSystem *battleSystem) {
@@ -299,7 +299,7 @@ void ov12_02237D00(BattleSystem *battleSystem) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
 
-    Main_SetVBlankIntrCB(ov12_02239730, battleSystem);
+    Main_SetVBlankIntrCB(Battle_VBlankCallback, battleSystem);
 
     battleSystem->unk240F_1 = 1;
 
@@ -307,7 +307,7 @@ void ov12_02237D00(BattleSystem *battleSystem) {
     FillWindowPixelBuffer(battleSystem->window, 0xFF);
     DrawFrameAndWindow2(battleSystem->window, FALSE, 1, 10);
 
-    ov12_0223A620(battleSystem);
+    BattleSystem_SetupTextFlags(battleSystem);
 }
 
 void ov12_02237ED0(BattleSystem *battleSystem, int a1) {

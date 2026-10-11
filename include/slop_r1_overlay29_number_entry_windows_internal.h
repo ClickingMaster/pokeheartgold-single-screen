@@ -17,6 +17,6 @@ typedef struct Ov29NumberEntryDataSlopR1 {
 
 extern const WindowTemplate ov29_0225E178[3];
 
-void ov29_0225D714(Ov29NumberEntryDataSlopR1 *data);
+void NumberEntry_CreateButtonLabels(Ov29NumberEntryDataSlopR1 *data);
 
 #endif

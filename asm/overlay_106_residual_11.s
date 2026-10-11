@@ -4,31 +4,31 @@
 	.include "overlay_106.inc"
 	.include "global.inc"
 	.public _021E6D70
-	.public ov106_021E5A44
-	.public ov106_021E5A74
-	.public ov106_021E5AA8
-	.public ov106_021E5BBC
-	.public ov106_021E5C30
-	.public ov106_021E5CD0
-	.public ov106_021E5D70
-	.public ov106_021E5E0C
-	.public ov106_021E5E5C
-	.public ov106_021E5EE4
-	.public ov106_021E5F24
-	.public ov106_021E5F84
-	.public ov106_021E6280
-	.public ov106_021E62F4
-	.public ov106_021E6418
-	.public ov106_021E6520
-	.public ov106_021E6634
-	.public ov106_021E66B0
-	.public ov106_021E66FC
-	.public ov106_021E6814
-	.public ov106_021E68F4
-	.public ov106_021E6988
-	.public ov106_021E69F0
-	.public ov106_021E6A34
-	.public ov106_021E6B30
+	.public LegendaryCinematic_SetLights
+	.public LegendaryCinematic_SetEdgeMarking
+	.public LegendaryCinematic_LoadModels
+	.public LegendaryCinematic_FreeModels
+	.public LegendaryCinematic_DrawModels
+	.public LegendaryCinematic_IsModelAnimating
+	.public LegendaryCinematic_InitCameraAndLights
+	.public LegendaryCinematic_StartCapture
+	.public LegendaryCinematic_StopCapture
+	.public LegendaryCinematic_CaptureTask
+	.public LegendaryCinematic_CaptureStartTask
+	.public LegendaryCinematic_InitCapture
+	.public LugiaCinematic_Init
+	.public LugiaCinematic_Play
+	.public ArceusCinematic_InitBgs
+	.public ArceusCinematic_InitSprites
+	.public ArceusCinematic_DeleteSprite
+	.public ArceusCinematic_GetOverworldModel
+	.public ArceusCinematic_LoadArceusSprite
+	.public ArceusCinematic_Init
+	.public ArceusCinematic_Blend
+	.public ArceusCinematic_RunScript
+	.public ArceusCinematic_LoadBgPalette
+	.public ArceusCinematic_TransferBgPalettes
+	.public ArceusScriptCmd_WaitFade
 	.public ov106_021E6D7C
 	.public ov106_021E6D8C
 	.public ov106_021E6DB0
@@ -62,54 +62,54 @@
 	.public ScriptCinematic_Arceus
 	.public ScriptCinematic_HoOh
 	.public ScriptCinematic_Lugia
-	.public ov106_021E5900
-	.public ov106_021E594C
-	.public ov106_021E5954
-	.public ov106_021E597C
-	.public ov106_021E59A4
-	.public ov106_021E59D0
-	.public ov106_021E59FC
-	.public ov106_021E5D08
-	.public ov106_021E5D38
-	.public ov106_021E5D48
-	.public ov106_021E5DFC
-	.public ov106_021E601C
-	.public ov106_021E6064
-	.public ov106_021E60B0
-	.public ov106_021E6104
-	.public ov106_021E6118
-	.public ov106_021E6130
-	.public ov106_021E61B8
-	.public ov106_021E61F8
-	.public ov106_021E62C8
-	.public ov106_021E62DC
-	.public ov106_021E63E0
-	.public ov106_021E6408
-	.public ov106_021E64FC
-	.public ov106_021E664C
-	.public ov106_021E6668
-	.public ov106_021E6678
-	.public ov106_021E6694
-	.public ov106_021E68A8
-	.public ov106_021E68DC
-	.public ov106_021E6A80
-	.public ov106_021E6AB0
-	.public ov106_021E6AD0
-	.public ov106_021E6AF0
-	.public ov106_021E6B10
-	.public ov106_021E6B50
-	.public ov106_021E6BB0
-	.public ov106_021E6BD4
-	.public ov106_021E6BF8
-	.public ov106_021E6C28
-	.public ov106_021E6C5C
-	.public ov106_021E6C88
-	.public ov106_021E6CA8
-	.public ov106_021E6CC4
-	.public ov106_021E6CF8
-	.public ov106_021E6D1C
-	.public ov106_021E6D48
-	.public ov106_021E6D6C
+	.public LegendaryCinematic_Init3D
+	.public LegendaryCinematic_Free3D
+	.public LegendaryCinematic_FadeInFromBlack
+	.public LegendaryCinematic_FadeOutToBlack
+	.public LegendaryCinematic_FadeInFromWhite
+	.public LegendaryCinematic_FadeOutToWhite
+	.public LegendaryCinematic_SetCamera
+	.public LegendaryCinematic_AreModelsAnimating
+	.public LegendaryCinematic_SetBanks
+	.public LegendaryCinematic_SetGraphicsModes
+	.public LegendaryCinematic_FreeCamera
+	.public LegendaryCinematic_StartMotionBlur
+	.public LegendaryCinematic_StopMotionBlur
+	.public HoOhCinematic_Init
+	.public HoOhCinematic_Exit
+	.public HoOhCinematic_WaitFade
+	.public HoOhCinematic_PlayFirstScene
+	.public HoOhCinematic_LoadSecondScene
+	.public HoOhCinematic_PlaySecondScene
+	.public LugiaCinematic_Exit
+	.public LugiaCinematic_WaitFade
+	.public ArceusCinematic_VBlank
+	.public ArceusCinematic_SetBanks
+	.public ArceusCinematic_FreeBgs
+	.public ArceusCinematic_FreeSprites
+	.public ArceusCinematic_UpdateSprites
+	.public ArceusCinematic_LoadObjChar
+	.public ArceusCinematic_LoadObjPltt
+	.public ArceusCinematic_Exit
+	.public ArceusCinematic_WaitFade
+	.public ArceusScriptCmd_Wait
+	.public ArceusScriptCmd_FadeInFromBlack
+	.public ArceusScriptCmd_FadeOutToBlack
+	.public ArceusScriptCmd_FadeInFromWhite
+	.public ArceusScriptCmd_FadeOutToWhite
+	.public ArceusScriptCmd_LoadBg
+	.public ArceusScriptCmd_ToggleBg
+	.public ArceusScriptCmd_SetBgPriority
+	.public ArceusScriptCmd_SetBlendPlane
+	.public ArceusScriptCmd_StartBlend
+	.public ArceusScriptCmd_ResetBlend
+	.public ArceusScriptCmd_SaveBgm
+	.public ArceusScriptCmd_StopBgm
+	.public ArceusScriptCmd_PlayBgm
+	.public ArceusScriptCmd_SetSpriteVisible
+	.public ArceusScriptCmd_SetSpritePosition
+	.public ArceusScriptCmd_SetSpritePriority
+	.public ArceusScriptCmd_Nop
 	.rodata
 
 _021E6D70:
@@ -140,12 +140,12 @@ ov106_021E6E04: ; 0x021E6E04
 	.byte 0x84, 0x10, 0x84, 0x10
 
 sScriptCinematicSubs_HoOh: ; 0x021E6E14
-	.word ov106_021E60B0
-	.word ov106_021E6104
-	.word ov106_021E6118
-	.word ov106_021E6130
-	.word ov106_021E61B8
-	.word ov106_021E61F8
+	.word HoOhCinematic_Init
+	.word HoOhCinematic_Exit
+	.word HoOhCinematic_WaitFade
+	.word HoOhCinematic_PlayFirstScene
+	.word HoOhCinematic_LoadSecondScene
+	.word HoOhCinematic_PlaySecondScene
 
 ov106_021E6E2C: ; 0x021E6E2C
 	.byte 0x0F, 0x00, 0x00, 0x00
@@ -173,10 +173,10 @@ ov106_021E6EC4: ; 0x021E6EC4
 	.byte 0x84, 0x10, 0x84, 0x10
 
 sScriptCinematicSubs_Lugia: ; 0x021E6ED4
-	.word ov106_021E6280
-	.word ov106_021E62C8
-	.word ov106_021E62DC
-	.word ov106_021E62F4
+	.word LugiaCinematic_Init
+	.word LugiaCinematic_Exit
+	.word LugiaCinematic_WaitFade
+	.word LugiaCinematic_Play
 
 ov106_021E6EE4: ; 0x021E6EE4
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x02, 0x03, 0x04, 0x00, 0x00, 0x00, 0x00
@@ -193,11 +193,11 @@ ov106_021E6F24: ; 0x021E6F24
 	.byte 0x00, 0x00, 0x00, 0x00
 
 sScriptCinematicSubs_Arceus: ; 0x021E6F34
-	.word ov106_021E6814
-	.word ov106_021E68A8
-	.word ov106_021E68DC
-	.word ov106_021E68F4
-	.word ov106_021E6988
+	.word ArceusCinematic_Init
+	.word ArceusCinematic_Exit
+	.word ArceusCinematic_WaitFade
+	.word ArceusCinematic_Blend
+	.word ArceusCinematic_RunScript
 
 ov106_021E6F48: ; 0x021E6F48
 	.byte 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00
@@ -238,25 +238,25 @@ ov106_021E7010: ; 0x021E7010
 	.byte 0x00, 0x00, 0x00, 0x00
 
 ov106_021E7044: ; 0x021E7044
-	.word ov106_021E6A80
-	.word ov106_021E6AB0
-	.word ov106_021E6AD0
-	.word ov106_021E6AF0
-	.word ov106_021E6B10
-	.word ov106_021E6B30
-	.word ov106_021E6B50
-	.word ov106_021E6BB0
-	.word ov106_021E6BD4
-	.word ov106_021E6BF8
-	.word ov106_021E6C28
-	.word ov106_021E6C5C
-	.word ov106_021E6C88
-	.word ov106_021E6CA8
-	.word ov106_021E6CC4
-	.word ov106_021E6CF8
-	.word ov106_021E6D1C
-	.word ov106_021E6D48
-	.word ov106_021E6D6C
+	.word ArceusScriptCmd_Wait
+	.word ArceusScriptCmd_FadeInFromBlack
+	.word ArceusScriptCmd_FadeOutToBlack
+	.word ArceusScriptCmd_FadeInFromWhite
+	.word ArceusScriptCmd_FadeOutToWhite
+	.word ArceusScriptCmd_WaitFade
+	.word ArceusScriptCmd_LoadBg
+	.word ArceusScriptCmd_ToggleBg
+	.word ArceusScriptCmd_SetBgPriority
+	.word ArceusScriptCmd_SetBlendPlane
+	.word ArceusScriptCmd_StartBlend
+	.word ArceusScriptCmd_ResetBlend
+	.word ArceusScriptCmd_SaveBgm
+	.word ArceusScriptCmd_StopBgm
+	.word ArceusScriptCmd_PlayBgm
+	.word ArceusScriptCmd_SetSpriteVisible
+	.word ArceusScriptCmd_SetSpritePosition
+	.word ArceusScriptCmd_SetSpritePriority
+	.word ArceusScriptCmd_Nop
 
 ov106_021E7090: ; 0x021E7090
 	.byte 0x02, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00

@@ -18,7 +18,7 @@
 #include "overlay_103.h"
 #include "overlay_108.h"
 #include "overlay_109.h"
-#include "overlay_111.h"
+#include "bug_contest_swap_mon.h"
 #include "overlay_113.h"
 #include "overlay_14.h"
 #include "overlay_16.h"

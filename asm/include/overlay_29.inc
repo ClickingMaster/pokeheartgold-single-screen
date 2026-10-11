@@ -64,6 +64,6 @@
 .public GX_SetBankForSubOBJ
 .public _u32_div_f
 .public gSystem
-.public ov29_0225D520
-.public ov29_0225D5EC
-.public ov29_0225D61C
+.public NumberEntry_Init
+.public NumberEntry_Exit
+.public NumberEntry_IsExitDone

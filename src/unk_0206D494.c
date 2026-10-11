@@ -17,7 +17,7 @@
 #include "metatile_behavior.h"
 #include "msgdata.h"
 #include "npc_trade.h"
-#include "overlay_111.h"
+#include "bug_contest_swap_mon.h"
 #include "player_avatar.h"
 #include "player_data.h"
 #include "pm_string.h"
