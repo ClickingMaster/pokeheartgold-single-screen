@@ -36,7 +36,7 @@ extern void ov80_022314A0(void *);
 extern void ov80_022314DC(void *, void *);
 extern void *ov80_022375D0(void *, void *);
 extern u32 ov80_02231844(void *, u32, u32);
-extern void ov80_0222BE9C(void *, u16);
+extern void FrontierScript_GetVar(void *, u16);
 extern void ov80_0222F44C(void *, void *);
 extern void ov80_0223151C(void *, u16 *);
 extern void OS_ResetSystem(u32);

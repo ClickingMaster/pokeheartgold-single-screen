@@ -43,18 +43,6 @@ void sub_0200FC20(u16 a0);
 void WobbuffetPopBalloon_Update(WobbuffetPop *game, WobbuffetPopBalloon *balloon);
 void WobbuffetPopBalloon_Draw(WobbuffetPopBalloon *balloon);
 void WobbuffetPopBalloon_LoadTexture(WobbuffetPopBalloon *balloon);
-void ov93_0225EE98(void);
-void ov93_0225EF0C(WobbuffetPopBalloon *balloon);
-void ov93_0225EF5C(WobbuffetPopBalloon *balloon);
-void ov93_0225EFAC(WobbuffetPopBalloon *balloon);
-int ov93_0225F370(WobbuffetPopBalloon *balloon);
-int ov93_0225F44C(WobbuffetPopBalloon *balloon);
-u32 ov93_0225F9AC(WobbuffetPopBalloon *balloon);
-void ov93_0225F9D8(WobbuffetPop *game);
-void ov93_0225FABC(WobbuffetPop *game);
-ManagedSprite *ov93_0225FB00(WobbuffetPop *game);
-void ov93_0225FB6C(WobbuffetPopBalloon *balloon, ManagedSprite *sprite);
-void ov93_0225FBE4(ManagedSprite *sprite);
 int ov93_0225FDF4(int index);
 void ov93_0225FE80(WobbuffetPop *game, BgConfig *bgConfig, void *arg);
 BOOL ov93_0225FEC4(WobbuffetPop *game, const void *request);
@@ -166,9 +154,8 @@ WobbuffetPopBalloon *WobbuffetPopBalloon_New(WobbuffetPop *game);
 void WobbuffetPopBalloon_Free(WobbuffetPop *game, WobbuffetPopBalloon *balloon);
 void WobbuffetPopBalloon_VBlank(WobbuffetPop *game, WobbuffetPopBalloon *balloon);
 s32 WobbuffetPopBalloon_CalcAirAmount(WobbuffetPopBalloon *balloon, s32 request);
-void ov93_0225EA98(WobbuffetPopBalloon *balloon, s32 request);
+void WobbuffetPopBalloon_UpdateReboundSpeed(WobbuffetPopBalloon *balloon, s32 request);
 void WobbuffetPopBalloon_EmitPumpParticles(WobbuffetPop *game, WobbuffetPopBalloon *balloon, u32 request, u32 bonus);
-void WobbuffetPopBalloon_ReleaseTouch(WobbuffetPopBalloon *balloon);
 void WobbuffetPopBalloon_LoadPalette(WobbuffetPopBalloon *balloon);
 void WobbuffetPopBalloon_BlendPalette(WobbuffetPopBalloon *balloon, s32 air);
 BOOL WobbuffetPopBalloon_AddAir(WobbuffetPopBalloon *balloon, s32 air);
@@ -1620,8 +1607,8 @@ WobbuffetPopBalloon *WobbuffetPopBalloon_New(WobbuffetPop *game) {
     MI_CpuFill8(balloon, 0, sizeof(WobbuffetPopBalloon));
     balloon->selection = game->app->selection;
     WobbuffetPopBalloon_LoadTexture(balloon);
-    ov93_0225EF0C(balloon);
-    ov93_0225EF5C(balloon);
+    WobbuffetPopBalloon_InitMeshVertices(balloon);
+    WobbuffetPopBalloon_InitMeshTexCoords(balloon);
     switch (game->app->selection) {
     case 2:
         balloon->scaleX = 64 * FX32_ONE;
@@ -1636,18 +1623,18 @@ WobbuffetPopBalloon *WobbuffetPopBalloon_New(WobbuffetPop *game) {
         balloon->scaleY = 96 * FX32_ONE;
         break;
     }
-    balloon->unk_21C = 128;
+    balloon->handleX = 128;
     balloon->unk_220 = 40;
-    ov93_0225F9D8(game);
-    balloon->sprite = ov93_0225FB00(game);
-    ov93_0225FB6C(balloon, balloon->sprite);
-    balloon->unk_248 = 2 * FX32_ONE;
+    WobbuffetPop_LoadHandleSpriteResources(game);
+    balloon->sprite = WobbuffetPop_CreateHandleSprite(game);
+    WobbuffetPopBalloon_UpdateHandleSprite(balloon, balloon->sprite);
+    balloon->reboundSpeed = 2 * FX32_ONE;
     return balloon;
 }
 
 void WobbuffetPopBalloon_Free(WobbuffetPop *game, WobbuffetPopBalloon *balloon) {
-    ov93_0225FBE4(balloon->sprite);
-    ov93_0225FABC(game);
+    WobbuffetPop_DeleteHandleSprite(balloon->sprite);
+    WobbuffetPop_FreeHandleSpriteResources(game);
     Heap_Free(balloon->textureFile);
     Heap_Free(balloon->paletteSrc);
     Heap_Free(balloon->paletteDest);
@@ -1675,18 +1662,18 @@ void WobbuffetPopBalloon_Update(WobbuffetPop *game, WobbuffetPopBalloon *balloon
         balloon->touch[2] = gSystem.touchHeld;
         balloon->touch[3] = gSystem.touchNew;
     }
-    ov93_0225F370(balloon);
+    WobbuffetPopBalloon_TryGrabHandle(balloon);
     if (balloon->touch[2] == 0) {
         WobbuffetPopBalloon_ReleaseTouch(balloon);
-        if (balloon->unk_020 == 0) {
-            if (balloon->unk_020 == 0) {
-                balloon->unk_274 = 0;
+        if (balloon->vertices[0].topRightY == 0) {
+            if (balloon->vertices[0].topRightY == 0) {
+                balloon->playingPumpSe = 0;
             }
         }
     }
-    ov93_0225F44C(balloon);
+    WobbuffetPopBalloon_UpdateDrag(balloon);
     WobbuffetPopBalloon_Draw(balloon);
-    ov93_0225FB6C(balloon, balloon->sprite);
+    WobbuffetPopBalloon_UpdateHandleSprite(balloon, balloon->sprite);
     if (balloon->squash > 0) {
         balloon->squash += 8;
         if (balloon->squash > 30) {
@@ -1715,7 +1702,7 @@ void WobbuffetPopBalloon_Update(WobbuffetPop *game, WobbuffetPopBalloon *balloon
         ov93_02260F14(game, game->balloonIndex, amount, &message);
         ov93_02260F3C(game, &message.words);
         ov93_0225FEC4(game, &message.pump);
-        ov93_0225EA98(balloon, balloon->pumpStrength);
+        WobbuffetPopBalloon_UpdateReboundSpeed(balloon, balloon->pumpStrength);
         WobbuffetPopBalloon_EmitPumpParticles(game, balloon, balloon->pumpStrength, bonus);
         balloon->pumpStrength = 0;
     }
@@ -1740,16 +1727,16 @@ s32 WobbuffetPopBalloon_CalcAirAmount(WobbuffetPopBalloon *balloon, s32 request)
     return ov93_022630D8[balloon->selection] * amount / 100;
 }
 
-void ov93_0225EA98(WobbuffetPopBalloon *balloon, s32 request) {
+void WobbuffetPopBalloon_UpdateReboundSpeed(WobbuffetPopBalloon *balloon, s32 request) {
     if (balloon->pumpStrength >= 98) {
-        balloon->unk_248 += FX32_ONE;
+        balloon->reboundSpeed += FX32_ONE;
     } else if (balloon->pumpStrength >= 98) {
-        balloon->unk_248 += FX32_ONE;
+        balloon->reboundSpeed += FX32_ONE;
     } else {
-        balloon->unk_248 = 2 * FX32_ONE;
+        balloon->reboundSpeed = 2 * FX32_ONE;
     }
-    if (balloon->unk_248 > 17 * FX32_ONE) {
-        balloon->unk_248 = 17 * FX32_ONE;
+    if (balloon->reboundSpeed > 17 * FX32_ONE) {
+        balloon->reboundSpeed = 17 * FX32_ONE;
     }
 }
 
@@ -1763,8 +1750,8 @@ void WobbuffetPopBalloon_EmitPumpParticles(WobbuffetPop *game, WobbuffetPopBallo
         return;
     }
     if (balloon->pumpStrength < 98) {
-        x = balloon->unk_020;
-        y = balloon->unk_010;
+        x = balloon->vertices[0].topRightY;
+        y = balloon->vertices[0].topLeftY;
         if (y < x) {
             WobbuffetPop_EmitParticles(game, 2);
             PlaySE(SEQ_SE_PL_BALLOON03);
@@ -1778,10 +1765,10 @@ void WobbuffetPopBalloon_EmitPumpParticles(WobbuffetPop *game, WobbuffetPopBallo
 }
 
 void WobbuffetPopBalloon_ReleaseTouch(WobbuffetPopBalloon *balloon) {
-    if (balloon->unk_238 != 0) {
-        balloon->unk_238 = 0;
-        balloon->unk_23C = -1;
-        balloon->pumpStrength = balloon->unk_240 - ov93_0225F9AC(balloon);
+    if (balloon->grabbing != 0) {
+        balloon->grabbing = 0;
+        balloon->lastTouchY = -1;
+        balloon->pumpStrength = balloon->grabAreaPercent - WobbuffetPopBalloon_CalcMeshAreaPercent(balloon);
         if (balloon->pumpStrength < 25) {
             balloon->pumpStrength = 0;
         }
@@ -1828,7 +1815,7 @@ void WobbuffetPopBalloon_Draw(WobbuffetPopBalloon *balloon) {
     matrixMode2 = GX_MTXMODE_POSITION_VECTOR;
     NNS_G3dGeBufferOP_N(G3OP_MTX_MODE, &matrixMode2, 1);
     WobbuffetPopBalloon_SetMaterial(1, 1);
-    ov93_0225EE98();
+    WobbuffetPopBalloon_LoadShininessTable();
     texture = balloon->texture;
     base = (u16)texture->plttInfo.vramKey;
     texImageParam = 0x72400000 | ((u16)texture->texInfo.vramKey & 0x1FFFFFFF);
@@ -1837,7 +1824,7 @@ void WobbuffetPopBalloon_Draw(WobbuffetPopBalloon *balloon) {
     NNS_G3dGeBufferOP_N(G3OP_TEXPLTT_BASE, &texPlttBase, 1);
     polygonAttr = 0x1F00C1;
     NNS_G3dGeBufferOP_N(G3OP_POLYGON_ATTR, &polygonAttr, 1);
-    ov93_0225EFAC(balloon);
+    WobbuffetPopBalloon_DrawMesh(balloon);
     restore = 1;
     NNS_G3dGeBufferOP_N(G3OP_MTX_POP, &restore, 1);
     NNS_G3dGeFlushBuffer();

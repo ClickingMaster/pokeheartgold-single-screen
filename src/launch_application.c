@@ -74,7 +74,7 @@
 #include "frontier_data_access.h"
 #include "unk_0202DB34.h"
 #include "unk_02037C94.h"
-#include "unk_02055244.h"
+#include "field_overworld_transition.h"
 #include "unk_020552A4.h"
 #include "unk_02055418.h"
 #include "unk_0205A44C.h"

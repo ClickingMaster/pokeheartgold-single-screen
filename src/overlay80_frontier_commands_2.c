@@ -30,7 +30,7 @@ int FrtCmd_106(void *c) {
 
 BOOL ov80_0222FCA0(void *c) {
     void *d;
-    ov80_0222BE9C(c, U16(c, 0x78));
+    FrontierScript_GetVar(c, U16(c, 0x78));
     d = Frontier_GetData(SYS(c));
     if (U8(d, 0x702) >= 2) {
         U8(d, 0x702) = 0;

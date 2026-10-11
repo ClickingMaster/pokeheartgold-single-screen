@@ -94,7 +94,7 @@ BOOL sub_02097AA0(TaskManager *taskManager) {
         break;
     case 4:
         FieldBGM_PlayForMapHeader(fieldSystem, env->mapId, FALSE);
-        sub_02055408(taskManager);
+        CallTask_RestoreOverworldAndFadeIn(taskManager);
         env->state = 5;
         break;
     case 5:

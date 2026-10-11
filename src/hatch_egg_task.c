@@ -4,7 +4,7 @@
 #include "naming_screen.h"
 #include "hatch_egg_app.h"
 #include "trainer_memo.h"
-#include "unk_02055244.h"
+#include "field_overworld_transition.h"
 #include "unk_020552A4.h"
 
 typedef enum HatchEggTaskState {

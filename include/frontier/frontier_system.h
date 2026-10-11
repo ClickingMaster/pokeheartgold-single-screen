@@ -3,6 +3,7 @@
 
 #include "frontier/frontier_map.h"
 
+#include "list_menu_2d.h"
 #include "message_format.h"
 #include "msgdata.h"
 #include "pm_string.h"
@@ -23,10 +24,17 @@ typedef struct FrontierSystem {
     MessageFormat *msgFormat;               // 0x44
     String *unk_48;                         // 0x48
     String *unk_4C;                         // 0x4C
-    u8 unk_50;                              // 0x50
+    u8 textPrinterId;                       // 0x50
     s8 taskCount;                           // 0x51
     u16 mapId;                              // 0x52
-    u8 unk_54[0x68];
+    u8 filler_54[5];
+    u8 movementCount;                       // 0x59, map object movements still running
+    u8 messageWindowAdded;                  // 0x5A
+    u8 filler_5B[5];
+    void *menu;                             // 0x60
+    Window messageWindow;                   // 0x64
+    struct ListMenu2D *yesNoMenu;           // 0x74
+    u8 filler_78[0x44];
 } FrontierSystem; // size 0xBC
 
 FrontierSystem *FrontierSystem_Create(void *frontierWork, enum HeapID heapId, u32 mapId);

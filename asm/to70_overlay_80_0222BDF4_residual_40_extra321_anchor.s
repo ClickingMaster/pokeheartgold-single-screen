@@ -120,24 +120,24 @@
 	.extern ov80_0222DC14
 	.public FrontierScript_ReadVarPtr
 	.public FrontierScript_ReadVar
-	.public ov80_0222BE24
-	.public ov80_0222BE9C
+	.public FrontierScript_GetVarPtr
+	.public FrontierScript_GetVar
 	.public FrtCmd_000
 	.public FrtCmd_001
 	.public FrtCmd_002
 	.public FrtCmd_003
-	.public ov80_0222BEFC
+	.public FrontierScriptNative_WaitFrame
 	.public FrtCmd_004
 	.public FrtCmd_005
-	.public ov80_0222BF5C
+	.public FrontierScriptNative_WaitFrames
 	.public FrtCmd_006
 	.public FrtCmd_007
 	.public FrtCmd_008
 	.public FrtCmd_009
-	.public ov80_0222BFE4
+	.public FrontierScript_Compare
 	.public FrtCmd_032
 	.public FrtCmd_033
-	.public ov80_0222C03C
+	.public FrontierScript_Jump
 	.public FrtCmd_010
 	.public FrtCmd_011
 	.public FrtCmd_012
@@ -146,24 +146,24 @@
 	.public FrtCmd_015
 	.public FrtCmd_016
 	.public FrtCmd_017
-	.public ov80_0222C17C
+	.public FrontierScriptNative_WaitMessage
 	.public FrtCmd_018
 	.public FrtCmd_019
 	.public FrtCmd_020
-	.public ov80_0222C200
+	.public FrontierScriptNative_WaitPaletteFade
 	.public FrtCmd_021
 	.public FrtCmd_022
 	.public FrtCmd_023
 	.public FrtCmd_024
 	.public FrtCmd_025
-	.public ov80_0222C33C
+	.public FrontierScriptNative_WaitMenu
 	.public FrtCmd_026
 	.public FrtCmd_027
 	.public FrtCmd_028
 	.public FrtCmd_029
 	.public FrtCmd_030
 	.public FrtCmd_031
-	.public ov80_0222C4D0
+	.public FrontierScriptNative_WaitYesNo
 	.public FrtCmd_034
 	.public FrtCmd_035
 	.public FrtCmd_036
@@ -171,9 +171,9 @@
 	.public FrtCmd_038
 	.public FrtCmd_039
 	.public FrtCmd_040
-	.public ov80_0222C7B0
+	.public FrontierScript_StartMovement
 	.public FrtCmd_041
-	.public ov80_0222C80C
+	.public FrontierScriptNative_WaitMovements
 	.public FrtCmd_042
 	.public FrtCmd_043
 	.public FrtCmd_044
@@ -465,14 +465,14 @@
 	.public FrtCmd_203
 	.public FrtCmd_204
 	.public FrtCmd_205
-	.public ov80_0222BE9C
-	.public ov80_0222BEFC
-	.public ov80_0222BF5C
-	.public ov80_0222BFE4
-	.public ov80_0222C03C
-	.public ov80_0222C17C
-	.public ov80_0222C200
-	.public ov80_0222C80C
+	.public FrontierScript_GetVar
+	.public FrontierScriptNative_WaitFrame
+	.public FrontierScriptNative_WaitFrames
+	.public FrontierScript_Compare
+	.public FrontierScript_Jump
+	.public FrontierScriptNative_WaitMessage
+	.public FrontierScriptNative_WaitPaletteFade
+	.public FrontierScriptNative_WaitMovements
 	.public ov80_0222CB94
 	.public ov80_0222D200
 	.public ov80_0222D63C

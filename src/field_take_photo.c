@@ -22,7 +22,7 @@
 #include "task.h"
 #include "sound_playback.h"
 #include "unk_02054E00.h"
-#include "unk_02055244.h"
+#include "field_overworld_transition.h"
 #include "unk_020552A4.h"
 #include "unk_02067A80.h"
 

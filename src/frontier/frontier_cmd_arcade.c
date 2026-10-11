@@ -477,7 +477,7 @@ BOOL FrtCmd_ArcadeReceiveBuffer(FrontierScriptContext *ctx) {
 }
 
 static BOOL ov80_02234028(FrontierScriptContext *ctx) {
-    ov80_0222BE9C(ctx, ctx->data[0]);
+    FrontierScript_GetVar(ctx, ctx->data[0]);
     ArcadeContext *arcadeCtx = Frontier_GetData(ctx->frontierSystem->frontierWork);
 
     if (arcadeCtx->linkMessageCount >= 2) {

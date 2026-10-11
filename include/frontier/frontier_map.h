@@ -23,7 +23,8 @@ typedef struct FrontierMapObjectTemplate {
     s16 y;
     u8 unk_0A;
     u8 unk_0B;
-    u16 unk_0C[9];
+    u8 unk_0C;
+    u8 filler_0D[0x11];
 } FrontierMapObjectTemplate;
 
 // One of the 32 map objects kept in the frontier app's work (survives a map rebuild)

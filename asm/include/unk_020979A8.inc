@@ -18,7 +18,7 @@
 .public sub_020537F0
 .public FieldBGM_PlayForMapHeader
 .public CallTask_LeaveOverworld
-.public sub_02055408
+.public CallTask_RestoreOverworldAndFadeIn
 .public Field_GetTimeOfDay
 .public sub_020979A8
 .public LoadAreaOrDungeonLightTxt

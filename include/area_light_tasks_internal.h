@@ -18,7 +18,7 @@ void LoadAreaOrDungeonLightTxt(u32 archiveId, ModelAttributes *attributes);
 void sub_020979A8(FieldSystem *, u8, u8, u32, u32, u32);
 void sub_0203FC90(FieldSystem *, void *);
 void CallTask_LeaveOverworld(TaskManager *);
-void sub_02055408(TaskManager *);
+void CallTask_RestoreOverworldAndFadeIn(TaskManager *);
 void sub_020979EC(FieldSystem *, u8, void *);
 BOOL sub_02097A48(TaskManager *);
 BOOL sub_02097AA0(TaskManager *);

@@ -246,7 +246,7 @@ int FrtCmd_148(void *c) {
 
 BOOL ov80_02231040(void *c) {
     void *data;
-    ov80_0222BE9C(c, U16(c, 0x78));
+    FrontierScript_GetVar(c, U16(c, 0x78));
     data = Frontier_GetData(SYS(c));
     if (U8(data, 0xd90) >= 2) {
         U8(data, 0xd90) = 0;

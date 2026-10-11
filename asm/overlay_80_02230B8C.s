@@ -677,7 +677,7 @@ ov80_02231040: ; 0x02231040
 	add r1, r4, #0
 	add r1, #0x78
 	ldrh r1, [r1]
-	bl ov80_0222BE9C
+	bl FrontierScript_GetVar
 	ldr r0, [r4]
 	ldr r0, [r0]
 	bl Frontier_GetData

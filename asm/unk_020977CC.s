@@ -236,7 +236,7 @@ _02097982:
 	mov r2, #0
 	bl FieldBGM_PlayForMapHeader
 	add r0, r5, #0
-	bl sub_02055408
+	bl CallTask_RestoreOverworldAndFadeIn
 	mov r0, #5
 	strb r0, [r4]
 	b _020979A2

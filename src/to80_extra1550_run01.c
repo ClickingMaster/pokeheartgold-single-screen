@@ -1,6 +1,0 @@
-#pragma force_active on
-#include "global.h"
-typedef struct{void*root;u8 p[24];u8*script;}Ctx;
-typedef struct{u16 value,unused,id,x,y;u8 a,b,c,pad[19];}Info;
-extern u32 FrontierScriptContext_ReadWord(Ctx*);extern u16 FrontierScript_ReadVar(Ctx*),FrontierScriptContext_ReadHalfWord(Ctx*);extern void*sub_0209680C(void*),*Frontier_GetLaunchArgs(void*),*Save_PlayerData_GetProfile(void*),*CommPlayerInfo_GetProfile(int);extern u16 ov80_0222A7EC(void*);extern void FrontierMap_CreateObject(void*,Info*,int);int FrtCmd_036(Ctx*);
-int FrtCmd_036(Ctx*c){void*root=c->root;void*data=sub_0209680C(*(void**)root);u32 offset=FrontierScriptContext_ReadWord(c);u8*old=c->script;Info info;c->script=old+offset;while(1){int option=-1;info.id=FrontierScript_ReadVar(c);if(info.id==0xfd13)break;info.value=FrontierScript_ReadVar(c);info.a=*c->script++;info.x=FrontierScriptContext_ReadHalfWord(c)-8;info.y=FrontierScriptContext_ReadHalfWord(c)-16;info.b=*c->script++;info.c=*c->script++;info.unused=0;if(info.value==0xeeee){void*launch=Frontier_GetLaunchArgs(*(void**)root);void*profile=Save_PlayerData_GetProfile(*(void**)((u8*)launch+8));info.value=ov80_0222A7EC(profile);option=31;}else if(info.value==0xeeef){info.value=ov80_0222A7EC(CommPlayerInfo_GetProfile(*c->script++));}FrontierMap_CreateObject(data,&info,option);}c->script=old;return 0;}

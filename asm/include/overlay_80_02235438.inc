@@ -29,7 +29,7 @@
 .public FrontierScriptContext_ReadHalfWord
 .public FrontierScript_ReadVarPtr
 .public FrontierScript_ReadVar
-.public ov80_0222BE24
+.public FrontierScript_GetVarPtr
 .public ov80_0222F458
 .public FrtCmd_091
 .public FrtCmd_132

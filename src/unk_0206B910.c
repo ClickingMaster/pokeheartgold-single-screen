@@ -22,7 +22,7 @@
 #include "seal_case.h"
 #include "task.h"
 #include "link_synchronization.h"
-#include "unk_02055244.h"
+#include "field_overworld_transition.h"
 #include "unk_020552A4.h"
 #include "unk_02091054.h"
 

@@ -21,7 +21,7 @@ BOOL FrtCmd_163(FrontierScriptContextPrivate *ctx) {
 }
 
 BOOL ov80_02232318(FrontierScriptContextPrivate *ctx) {
-    ov80_0222BE9C(ctx, ctx->asyncValue);
+    FrontierScript_GetVar(ctx, ctx->asyncValue);
     FrontierDataPrivate *data = Frontier_GetData(FrontierObject(ctx));
     if (data->fieldA1A >= 2) {
         data->fieldA1A = 0;
@@ -37,7 +37,7 @@ BOOL FrtCmd_165(FrontierScriptContextPrivate *ctx) {
 }
 
 BOOL ov80_02232368(FrontierScriptContextPrivate *ctx) {
-    u16 *out = ov80_0222BE24(ctx, ctx->asyncValue);
+    u16 *out = FrontierScript_GetVarPtr(ctx, ctx->asyncValue);
     FrontierDataPrivate *data = Frontier_GetData(FrontierObject(ctx));
     if (data->fieldA1B == 0) {
         return FALSE;

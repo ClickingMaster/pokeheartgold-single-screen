@@ -32,7 +32,7 @@
 #include "communication_player_state.h"
 #include "unk_020517A4.h"
 #include "unk_020551B8.h"
-#include "unk_02055244.h"
+#include "field_overworld_transition.h"
 #include "unk_020552A4.h"
 #include "unk_02058034.h"
 #include "unk_02066EDC.h"

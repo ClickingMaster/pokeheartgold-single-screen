@@ -87,41 +87,57 @@ typedef struct WobbuffetPopCommonModel {
 } WobbuffetPopCommonModel;
 
 // The balloon the local player pumps (lower screen): texture, palette blend and squash/stretch.
+// One row of the touch-screen mesh: its four corners, as positions (0..128 per axis, fx32) or as
+// texture coordinates.
+typedef struct WobbuffetPopMeshQuad {
+    fx32 topLeftX;     // 0x00
+    fx32 topLeftY;     // 0x04
+    fx32 bottomLeftX;  // 0x08
+    fx32 bottomLeftY;  // 0x0C
+    fx32 topRightX;    // 0x10
+    fx32 topRightY;    // 0x14
+    fx32 bottomRightX; // 0x18
+    fx32 bottomRightY; // 0x1C
+} WobbuffetPopMeshQuad;
+
+#define WOBBUFFET_POP_MESH_ROWS 8
+
 typedef struct WobbuffetPopBalloon {
-    void *textureFile;     // 0x000
-    NNSG3dResTex *texture; // 0x004
-    u8 unk_008[8];         // 0x008
-    s32 unk_010;           // 0x010
-    u8 unk_014[0xC];       // 0x014
-    s32 unk_020;           // 0x020
-    u8 unk_024[0x1E8];     // 0x024
-    s32 touch[4];          // 0x20C: x, y, held, new
-    u32 unk_21C;           // 0x21C
-    u32 unk_220;           // 0x220
-    u8 unk_224[0x10];      // 0x224
-    ManagedSprite *sprite; // 0x234
-    u32 unk_238;           // 0x238
-    s32 unk_23C;           // 0x23C
-    s32 unk_240;           // 0x240
-    s32 pumpStrength;      // 0x244
-    s32 unk_248;           // 0x248
-    u16 *paletteSrc;       // 0x24C
-    u16 *paletteDest;      // 0x250
-    u32 paletteSize;       // 0x254
-    u32 paletteAddr;       // 0x258
-    s32 air;               // 0x25C: 0..800
-    fx32 scaleX;           // 0x260
-    fx32 scaleY;           // 0x264
-    s16 squash;            // 0x268
-    s16 unk_26A;           // 0x26A
-    s16 unk_26C;           // 0x26C
-    u8 unk_26E[2];         // 0x26E
-    u32 selection;         // 0x270
-    u8 unk_274;            // 0x274
-    u8 flashCounter;       // 0x275
-    u8 paletteDirty;       // 0x276
-    u8 unk_277;            // 0x277
-} WobbuffetPopBalloon;     // size: 0x278
+    void *textureFile;                                       // 0x000
+    NNSG3dResTex *texture;                                   // 0x004
+    u32 unk_008;                                             // 0x008
+    WobbuffetPopMeshQuad vertices[WOBBUFFET_POP_MESH_ROWS];  // 0x00C: row 0 is the pushed top
+    WobbuffetPopMeshQuad texCoords[WOBBUFFET_POP_MESH_ROWS]; // 0x10C
+    s32 touch[4];                                            // 0x20C: x, y, held, new
+    s32 handleX;                                             // 0x21C
+    u32 unk_220;                                             // 0x220
+    s32 grabX;                                               // 0x224
+    s32 grabY;                                               // 0x228
+    s32 grabOffsetY;                                         // 0x22C: touch y minus the handle's y
+    fx32 pushDepth;                                          // 0x230: how far the top is pushed down
+    ManagedSprite *sprite;                                   // 0x234: the handle
+    u32 grabbing;                                            // 0x238
+    s32 lastTouchY;                                          // 0x23C
+    s32 grabAreaPercent;                                     // 0x240: mesh area when the handle was grabbed
+    s32 pumpStrength;                                        // 0x244
+    s32 reboundSpeed;                                        // 0x248: how fast the released mesh springs back
+    u16 *paletteSrc;                                         // 0x24C
+    u16 *paletteDest;                                        // 0x250
+    u32 paletteSize;                                         // 0x254
+    u32 paletteAddr;                                         // 0x258
+    s32 air;                                                 // 0x25C: 0..800
+    fx32 scaleX;                                             // 0x260
+    fx32 scaleY;                                             // 0x264
+    s16 squash;                                              // 0x268
+    s16 unk_26A;                                             // 0x26A
+    s16 unk_26C;                                             // 0x26C
+    u8 unk_26E[2];                                           // 0x26E
+    u32 selection;                                           // 0x270
+    u8 playingPumpSe;                                        // 0x274
+    u8 flashCounter;                                         // 0x275
+    u8 paletteDirty;                                         // 0x276
+    u8 unk_277;                                              // 0x277
+} WobbuffetPopBalloon;                                       // size: 0x278
 
 typedef struct WobbuffetPopUnk1428 {
     u8 unk_00[8];    // 0x00
@@ -207,5 +223,24 @@ typedef struct WobbuffetPop {
 BOOL WobbuffetPopApp_Init(OverlayManager *man, int *state);
 BOOL WobbuffetPopApp_Main(OverlayManager *man, int *state);
 BOOL WobbuffetPopApp_Exit(OverlayManager *man, int *state);
+
+void WobbuffetPopBalloon_ReleaseTouch(WobbuffetPopBalloon *balloon);
+void WobbuffetPopBalloon_LoadShininessTable(void);
+void WobbuffetPopBalloon_InitMeshVertices(WobbuffetPopBalloon *balloon);
+void WobbuffetPopBalloon_InitMeshTexCoords(WobbuffetPopBalloon *balloon);
+void WobbuffetPopBalloon_DrawMesh(WobbuffetPopBalloon *balloon);
+void WobbuffetPopBalloon_ToVtx16(s32 x, s32 y, s16 *outX, s16 *outY);
+int WobbuffetPopBalloon_TryGrabHandle(WobbuffetPopBalloon *balloon);
+int WobbuffetPopBalloon_UpdateDrag(WobbuffetPopBalloon *balloon);
+s32 WobbuffetPopBalloon_DeformMesh(WobbuffetPopBalloon *balloon, s32 mode, fx32 amount);
+s32 WobbuffetPopBalloon_GetPushSide(WobbuffetPopBalloon *balloon, s32 mode);
+s32 WobbuffetPopBalloon_CalcSidePush(WobbuffetPopBalloon *balloon, s32 amount, s32 pushed, s32 other, s32 *outPushed, s32 *outOther);
+s32 WobbuffetPopBalloon_CalcMeshArea(WobbuffetPopBalloon *balloon);
+s32 WobbuffetPopBalloon_CalcMeshAreaPercent(WobbuffetPopBalloon *balloon);
+void WobbuffetPop_LoadHandleSpriteResources(WobbuffetPop *game);
+void WobbuffetPop_FreeHandleSpriteResources(WobbuffetPop *game);
+ManagedSprite *WobbuffetPop_CreateHandleSprite(WobbuffetPop *game);
+void WobbuffetPopBalloon_UpdateHandleSprite(WobbuffetPopBalloon *balloon, ManagedSprite *sprite);
+void WobbuffetPop_DeleteHandleSprite(ManagedSprite *sprite);
 
 #endif // POKEHEARTGOLD_WOBBUFFET_POP_H

@@ -17,7 +17,7 @@ void ov80_0222F210(FrontierMap *map);
 void ov80_0222F278(FrontierMap *map);
 void ov80_0222F33C(FrontierMap *map);
 void ov80_0222F3CC(FrontierMap *map);
-void ov80_0222BE9C(FrontierScriptContext *ctx, u16 a1);
+void FrontierScript_GetVar(FrontierScriptContext *ctx, u16 a1);
 void ov80_0222F44C(FrontierScriptContext *ctx, u16 *a1);
 
 #endif

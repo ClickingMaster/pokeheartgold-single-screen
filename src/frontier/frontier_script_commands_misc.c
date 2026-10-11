@@ -184,7 +184,7 @@ BOOL ov80_02235774(void *ctx, void *data, void *fieldSystem, u32 mode, u16 value
     if (remote == NULL) {
         return FALSE;
     }
-    dst = ov80_0222BE24(ctx, value);
+    dst = FrontierScript_GetVarPtr(ctx, value);
     if (mode == 2) {
         *dst = ov80_02236AD8(data, remote);
     } else {

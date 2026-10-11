@@ -49,23 +49,23 @@
 	.public _0225FBE0
 	.public _0225FBEC
 	.public _02262C04
-	.public ov93_0225EE98
-	.public ov93_0225EF0C
-	.public ov93_0225EF5C
-	.public ov93_0225EFAC
-	.public ov93_0225F268
-	.public ov93_0225F370
-	.public ov93_0225F44C
-	.public ov93_0225F548
-	.public ov93_0225F8AC
-	.public ov93_0225F8E4
-	.public ov93_0225F94C
-	.public ov93_0225F9AC
-	.public ov93_0225F9D8
-	.public ov93_0225FABC
-	.public ov93_0225FB00
-	.public ov93_0225FB6C
-	.public ov93_0225FBE4
+	.public WobbuffetPopBalloon_LoadShininessTable
+	.public WobbuffetPopBalloon_InitMeshVertices
+	.public WobbuffetPopBalloon_InitMeshTexCoords
+	.public WobbuffetPopBalloon_DrawMesh
+	.public WobbuffetPopBalloon_ToVtx16
+	.public WobbuffetPopBalloon_TryGrabHandle
+	.public WobbuffetPopBalloon_UpdateDrag
+	.public WobbuffetPopBalloon_DeformMesh
+	.public WobbuffetPopBalloon_GetPushSide
+	.public WobbuffetPopBalloon_CalcSidePush
+	.public WobbuffetPopBalloon_CalcMeshArea
+	.public WobbuffetPopBalloon_CalcMeshAreaPercent
+	.public WobbuffetPop_LoadHandleSpriteResources
+	.public WobbuffetPop_FreeHandleSpriteResources
+	.public WobbuffetPop_CreateHandleSprite
+	.public WobbuffetPopBalloon_UpdateHandleSprite
+	.public WobbuffetPop_DeleteHandleSprite
 	.public ov93_02262C05
 	.public ov93_02262C06
 	.public ov93_02262C07
@@ -75,17 +75,17 @@
 	.include "global.inc"
 
 	.text
-	.public ov93_0225EE98
-	.public ov93_0225EF0C
-	.public ov93_0225EF5C
-	.public ov93_0225F8AC
-	.public ov93_0225F94C
-	.public ov93_0225F9AC
-	.public ov93_0225F9D8
-	.public ov93_0225FABC
-	.public ov93_0225FB00
-	.public ov93_0225FB6C
-	.public ov93_0225FBE4
+	.public WobbuffetPopBalloon_LoadShininessTable
+	.public WobbuffetPopBalloon_InitMeshVertices
+	.public WobbuffetPopBalloon_InitMeshTexCoords
+	.public WobbuffetPopBalloon_GetPushSide
+	.public WobbuffetPopBalloon_CalcMeshArea
+	.public WobbuffetPopBalloon_CalcMeshAreaPercent
+	.public WobbuffetPop_LoadHandleSpriteResources
+	.public WobbuffetPop_FreeHandleSpriteResources
+	.public WobbuffetPop_CreateHandleSprite
+	.public WobbuffetPopBalloon_UpdateHandleSprite
+	.public WobbuffetPop_DeleteHandleSprite
 	.rodata
 
 _02262C04:

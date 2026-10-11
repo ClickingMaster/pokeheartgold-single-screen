@@ -4882,32 +4882,8 @@ Overlay OVY_80
     Object src/frontier/frontier_map_params.o
     Object asm/frontier_map_params_data.o
     Object src/frontier/frontier_link_messages.o
-    Object src/overlay80_command_helpers_1.o
-    Object src/to58_w18b_overlay_80_0222BDF4.o
-    Object src/overlay80_command_helpers_2.o
-    Object src/to58_r3_ov80_2.o
-    Object src/overlay80_command_helpers_3.o
-    Object src/to70_overlay_80_0222BDF4_residual_3_extra844_run01.o
-    Object src/overlay80_command_helpers_4.o
-    Object src/to58_r3_ov80_4.o
-    Object src/overlay80_command_helpers_5.o
-    Object src/to90_extra2389_run01.o
-    Object src/to91_w41559_frontier_cmd022.o
-    Object src/overlay80_command_helpers_6.o
-    Object src/to52_r6_w19_overlay80_r6.o
-    Object src/overlay80_command_helpers_7.o
-    Object src/to70_overlay_80_0222BDF4_residual_7_extra215_run01.o
-    Object src/to70_to70_overlay_80_0222BDF4_residual_7_extra215_residual_1_extra1309_run01.o
-    Object src/overlay80_command_helpers_8.o
-    Object src/to80_extra1550_run01.o
-    Object src/overlay80_command_helpers_9.o
-    Object src/to58_r3_ov80_9.o
-    Object src/overlay80_command_helpers_10.o
-    Object src/to58_w18b_overlay_80_0222BDF4_residual_10.o
-    Object src/overlay80_command_helpers_11.o
-    Object src/to58_w18b_overlay_80_0222BDF4_residual_11.o
-    Object src/overlay80_command_helpers_12.o
-    Object src/op90_overlay_80_0222BDF4_residual_12_r01.o
+    Object src/frontier/frontier_script_commands.o
+    Object src/frontier/frontier_cmd_create_sprites.o
     Object src/overlay80_command_helpers_13.o
     Object src/to58_r3_ov80_13.o
     Object src/overlay80_command_helpers_14.o
@@ -5175,13 +5151,7 @@ Overlay OVY_93
     After OVY_90
     Object src/application/wobbuffet_pop.o
     Object asm/overlay_93_thumb_1_to41_residual_21.o
-    Object src/overlay_93_arm_opus_partial_1.o
-    Object src/overlay93_draw_quads_slop_r1.o
-    Object src/overlay93_arm_math_r38_1.o
-    Object src/overlay93_arm_tail.o
-    Object src/overlay_93_arm_opus_partial_2.o
-    Object src/overlay93_clamp_pair_slop_r1.o
-    Object src/overlay_93_arm_opus_partial_3.o
+    Object src/application/wobbuffet_pop_balloon_mesh.o
     Object asm/overlay_93_arm_residual_3.o
     Object src/to90_extra2230_run01.o
     Object src/overlay93_helpers_1.o

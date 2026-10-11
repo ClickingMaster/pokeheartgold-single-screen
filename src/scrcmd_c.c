@@ -78,7 +78,7 @@
 #include "unk_02037C94.h"
 #include "unk_0203A3B0.h"
 #include "unk_02054648.h"
-#include "unk_02055244.h"
+#include "field_overworld_transition.h"
 #include "unk_020552A4.h"
 #include "unk_02055418.h"
 #include "unk_02056680.h"

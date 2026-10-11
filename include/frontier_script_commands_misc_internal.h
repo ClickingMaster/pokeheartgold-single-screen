@@ -25,7 +25,7 @@ void GF_AssertFail(void);
 u32 Comm_GetLocalNetId(void);
 u32 LinkSync_SendPacket(u32 value, void *data);
 void *LinkSync_GetPacket(u32 side);
-u16 *ov80_0222BE24(void *ctx, u32 value);
+u16 *FrontierScript_GetVarPtr(void *ctx, u32 value);
 u32 ov80_02236AD8(void *data, void *remote);
 extern const u16 ov80_0223C034[];
 void ResetSystem(void);

@@ -25,7 +25,7 @@
 #include "sound.h"
 #include "sound_playback.h"
 #include "unk_02054648.h"
-#include "unk_02055244.h"
+#include "field_overworld_transition.h"
 #include "unk_020552A4.h"
 #include "unk_02056680.h"
 #include "unk_02062108.h"

@@ -27,7 +27,7 @@
 #include "sound_playback.h"
 #include "spawn_warp.h"
 #include "unk_02054648.h"
-#include "unk_02055244.h"
+#include "field_overworld_transition.h"
 #include "unk_020552A4.h"
 #include "unk_02055418.h"
 #include "unk_02056D7C.h"
@@ -396,7 +396,7 @@ static BOOL FieldTask_NewGame(TaskManager *taskManager) {
         (*state_p)++;
         break;
     case 1:
-        sub_02055408(taskManager);
+        CallTask_RestoreOverworldAndFadeIn(taskManager);
         (*state_p)++;
         break;
     case 2:
@@ -440,7 +440,7 @@ static BOOL FieldTask_ContinueGame_Normal(TaskManager *taskManager) {
         *state_p = 2;
         break;
     case 2:
-        sub_02055408(taskManager);
+        CallTask_RestoreOverworldAndFadeIn(taskManager);
         *state_p = 3;
         break;
     case 3:
@@ -525,7 +525,7 @@ static BOOL sub_02053688(TaskManager *taskManager) {
     case 0:
         PlaySE(SEQ_SE_DP_KAIDAN2);
         FieldBGM_TryFadeIn(fieldSystem, env->location.mapId);
-        sub_020553B0(taskManager);
+        CallTask_FadeOutAndLeaveOverworld(taskManager);
         env->unk0++;
         break;
     case 1:
@@ -537,7 +537,7 @@ static BOOL sub_02053688(TaskManager *taskManager) {
             break;
         }
         FieldBGM_PlayForMapHeader(fieldSystem, env->location.mapId, FALSE);
-        sub_02055408(taskManager);
+        CallTask_RestoreOverworldAndFadeIn(taskManager);
         env->unk0++;
         break;
     case 3:
@@ -1075,7 +1075,7 @@ static BOOL sub_020540A4(TaskManager *taskManager) {
     case 0:
         PlaySE(SEQ_SE_DP_KAIDAN2);
         FieldBGM_TryFadeIn(fieldSystem, env->location.mapId);
-        sub_020553B0(taskManager);
+        CallTask_FadeOutAndLeaveOverworld(taskManager);
         env->unk0++;
         break;
     case 1:

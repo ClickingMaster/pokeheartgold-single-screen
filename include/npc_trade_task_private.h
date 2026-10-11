@@ -8,7 +8,7 @@
 #include "npc_trade.h"
 #include "trade_sequence.h"
 #include "task.h"
-#include "unk_02055244.h"
+#include "field_overworld_transition.h"
 extern u8 SDK_OVERLAY_OVY_71_ID;
 typedef struct NPCTradeTaskEnv {
     NPCTradeAppData *tradeWork;
