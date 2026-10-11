@@ -28,7 +28,7 @@ extern OffsetTable ov07_02235488;
 void *ParticleSystem_GetEmitterParam(void);
 u32 ov07_0221C468(void *ctx);
 u32 ov07_0221C470(void *ctx);
-int ov07_02231924(void *ctx, u32 battler);
+int BattleAnimUtil_GetBattlerType(void *ctx, u32 battler);
 void ov07_02220230(Work0230 *work);
 
 // @fn ov07_02220230
@@ -45,8 +45,8 @@ void ov07_02220230(Work0230 *work) {
     ctx = ParticleSystem_GetEmitterParam();
     attacker = ov07_0221C468(ctx);
     defender = ov07_0221C470(ctx);
-    kindA = ov07_02231924(ctx, attacker);
-    kindB = ov07_02231924(ctx, defender);
+    kindA = BattleAnimUtil_GetBattlerType(ctx, attacker);
+    kindB = BattleAnimUtil_GetBattlerType(ctx, defender);
     offA = tableA.values[kindA][kindB] * sizeof(Entry0230);
     work->value0 = offA + work->holder->inner->base0;
     offB = tableB.values[kindA][kindB] * sizeof(Entry0230);

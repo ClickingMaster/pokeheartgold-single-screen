@@ -15,18 +15,18 @@ void ov07_0221FF78(Ov07CallbackPosition *work) {
     int a = ov07_0221C468(ctx);
     ov07_0221C470(ctx);
     SPLEmitter *emitter = ov07_0221C478(ctx);
-    if (ov07_0223192C(ctx, 1) == 3) {
+    if (BattleAnimUtil_GetBattlerSide(ctx, 1) == 3) {
         ov07_02231B90(ctx, 1, &offset);
     } else {
-        int index = ov07_02231924(ctx, 1);
-        int other = ov07_022319E0(index);
+        int index = BattleAnimUtil_GetBattlerType(ctx, 1);
+        int other = BattleAnimUtil_GetOpposingBattlerType(index);
         int d = ParticleSystem_GetPerspectiveType(emitter);
         void *b = ov07_0221BFC0(ctx);
         ov07_02231AD0(other, &offset, b, d);
         ov07_02231AD0(index, &unusedOffset, b, d);
     }
     SetPosition(work, &offset);
-    ov07_02231DE8(1, &up);
+    BattleAnimUtil_GetCameraUp(1, &up);
     Camera *camera = ParticleSystem_GetCamera(emitter);
     angle = Camera_GetAngle(camera);
     Camera_SetAnglePos(&angle, camera);
@@ -40,7 +40,7 @@ void ov07_02220030(Ov07CallbackPosition *work) {
     SPLEmitter *emitter = ov07_0221C478(ctx);
     ov07_02231B90(ctx, 0, &offset);
     SetPosition(work, &offset);
-    ov07_02231DE8(a, &up);
+    BattleAnimUtil_GetCameraUp(a, &up);
     ParticleSystem_SetCameraUp(emitter, &up);
 }
 
@@ -76,7 +76,7 @@ void ov07_02220160(Ov07CallbackPosition *work) {
     SPLEmitter *emitter = ov07_0221C478(ctx);
     int d = ParticleSystem_GetPerspectiveType(emitter);
     int a = ov07_0221C468(ctx);
-    int mode = ov07_0223192C(ctx, a) == 3 ? 0 : 1;
+    int mode = BattleAnimUtil_GetBattlerSide(ctx, a) == 3 ? 0 : 1;
     void *b = ov07_0221BFC0(ctx);
     ov07_02231AD0(mode, &offset, b, d);
     SetPosition(work, &offset);
@@ -88,7 +88,7 @@ void ov07_022201C8(Ov07CallbackPosition *work) {
     SPLEmitter *emitter = ov07_0221C478(ctx);
     int d = ParticleSystem_GetPerspectiveType(emitter);
     int a = ov07_0221C470(ctx);
-    int mode = ov07_0223192C(ctx, a) == 3 ? 0 : 1;
+    int mode = BattleAnimUtil_GetBattlerSide(ctx, a) == 3 ? 0 : 1;
     void *b = ov07_0221BFC0(ctx);
     ov07_02231AD0(mode, &offset, b, d);
     SetPosition(work, &offset);

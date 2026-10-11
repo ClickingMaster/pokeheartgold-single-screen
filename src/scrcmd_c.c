@@ -46,7 +46,7 @@
 #include "overlay_01_02204ED8.h"
 #include "overlay_03.h"
 #include "overlay_04.h"
-#include "overlay_103.h"
+#include "mailbox_app.h"
 #include "overlay_26.h"
 #include "battle_room_results.h"
 #include "overlay_87.h"

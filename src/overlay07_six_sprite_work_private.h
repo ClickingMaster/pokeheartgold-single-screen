@@ -31,7 +31,7 @@ typedef char Ov07TemplateBridgeSize[(sizeof(union Ov07TemplateBridge) == 52) ? 1
 void *ov07_0221BFD0(void *);
 u32 ov07_0221C4A8(void *, int);
 void ov07_0221F9E8(struct T *, struct Context *);
-void ov07_02231E08(void *, int, int);
+void BattleAnimUtil_SetBlendWithBattleBg(void *, int, int);
 void ov07_0221C3F4(void *, void *, void *, u32);
 void ov07_0221C448(void *, void *);
 void ov07_02222268(W02LinearMotion *, s16, s16, s16, s16, u16);

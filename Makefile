@@ -401,7 +401,7 @@ $(BUILD_DIR)/lib/NitroSystem/src/g3d_cgtool_maya_texmtx_r.o: private MWCCVER := 
 $(BUILD_DIR)/lib/NitroSystem/src/g3d_anm_btp_init.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to90_extra1964_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSystem/src/g3d_cgtool_3dsmax_texmtx.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_to90_extra2319_residual_1_r01.o: private MWCCVER := 2.0/base
+$(BUILD_DIR)/src/wifi_setup_keyboard_slide_in.o: private MWCCVER := 2.0/base
 $(BUILD_DIR)/lib/NitroSystem/src/g3d_cgtool_xsi_texmtx.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to80_extra1719_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
@@ -463,7 +463,7 @@ $(BUILD_DIR)/src/op90_to61_overlay_13_arm_2_residual_5_residual_7_r01.o: private
 $(BUILD_DIR)/src/op90_to70_to52_r5_overlay96_r90_gap4_tail_extra260_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/op90_to80_extra1591_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/op90_to90_extra2552_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/op90_to91_w41573_mode_prefix_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/src/wifi_setup_keyboard_layout.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/op90_fx_mtx33_identity_residual_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to90_extra2338_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to90_extra2544_residual_1_r01.o: private MWCCVER := 2.0/sp2p3

@@ -26,7 +26,7 @@ typedef struct Ov07FadeWork {
     s16 transition;
 } Ov07FadeWork;
 
-void *ov07_022324D8(void *, u32);
+void *BattleAnimUtil_AllocWork(void *, u32);
 void ov07_02230170(Ov07CallbackWork *);
 void ov07_022301C4(Ov07CallbackWork *);
 void ov07_022302A8(void *, Ov07CallbackWork *);
@@ -44,7 +44,7 @@ void *ov07_0221FAF8(void *, int);
 void *ov07_0221FA78(void *);
 u32 ov07_0221E6C8(void *);
 void *ov07_0221BFD0(void *);
-int ov07_02231924(void *, void *);
+int BattleAnimUtil_GetBattlerType(void *, void *);
 void *ov07_0221C4A0(void *);
 void *ov07_02222C84(void *);
 void ov07_02222C98(void *);
@@ -54,7 +54,7 @@ void *ov07_02222D90(void *);
 void *ov07_02222BE4(void *, u32, void *);
 BOOL ov07_022222B4(void *);
 void ov07_02222268(void *, int, int, int, int, int);
-void ov07_02231EC0(void *, int, int);
+void BattleAnimUtil_SetWindowInsidePlanes(void *, int, int);
 int Pokepic_GetAttr(void *, int);
 void Pokepic_SetAttr(void *, int, int);
 void SetBgPriority(u8, u8);

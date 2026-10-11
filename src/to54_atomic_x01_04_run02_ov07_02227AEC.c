@@ -56,9 +56,9 @@ M2C_UNK ov07_02222644(void *, s32 *, s32 *);                                    
 s32 ov07_02222674(s16, s32, s32);                                                          /* extern */
 M2C_UNK ov07_022227A8(void *, s32, s32, s32, s32);                                         /* extern */
 M2C_UNK ov07_022227D8(void *);                                                             /* extern */
-s32 ov07_0223192C(s32, s32);                                                               /* extern */
-M2C_UNK ov07_02231A20(s32, s32, M2C_UNK *);                                                /* extern */
-M2C_UNK ov07_02231E08(s32, s32, s32);                                                      /* extern */
+s32 BattleAnimUtil_GetBattlerSide(s32, s32);                                                               /* extern */
+M2C_UNK BattleAnimUtil_GetBattlerTypePosition(s32, s32, M2C_UNK *);                                                /* extern */
+M2C_UNK BattleAnimUtil_SetBlendWithBattleBg(s32, s32, s32);                                                      /* extern */
 void ov07_02227300(s32 arg0, void *arg1);                                                  /* static */
 void ov07_02227630(s32 arg0, void *arg1);                                                  /* static */
 void ov07_022278B0(s32 arg0, void *arg1);                                                  /* static */

@@ -8,7 +8,7 @@ void ov07_0222E3A4(void *, u32);
 BOOL ov07_0222E3E8(void *);
 BOOL ov07_02222314(void *, void *);
 void Pokepic_SetAttr(void *, int, int);
-void *ov07_022324D8(void *, u32);
+void *BattleAnimUtil_AllocWork(void *, u32);
 void *ov07_0221C470(void *);
 void *ov07_0221FA48(void *, void *);
 void ManagedSprite_SetDrawPriority(void *, u32);

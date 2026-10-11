@@ -56,12 +56,12 @@ s32 ov07_022227D8(void *);                                                      
 s32 ov07_0222283C(void *, s16, s16, s32);                                                  /* extern */
 M2C_UNK ov07_02222AC4(void *, s32, s32, s32, s32, s32);                                    /* extern */
 M2C_UNK ov07_02222AF4(void *);                                                             /* extern */
-M2C_UNK ov07_02231E08(s32, s32, s32);                                                      /* extern */
-M2C_UNK ov07_02231E44(s32, s32, s32, s32);                                                 /* extern */
-M2C_UNK ov07_02231FA0(s32, M2C_UNK *);                                                     /* extern */
-M2C_UNK ov07_02231FE4(s32, void *);                                                        /* extern */
-M2C_UNK ov07_02232020(s32, s32, void *, void *);                                           /* extern */
-void *ov07_022324D8(s32, s32);                                                             /* extern */
+M2C_UNK BattleAnimUtil_SetBlendWithBattleBg(s32, s32, s32);                                                      /* extern */
+M2C_UNK BattleAnimUtil_SetBlendWithMask(s32, s32, s32, s32);                                                 /* extern */
+M2C_UNK BattleAnimUtil_GetPicPosition(s32, M2C_UNK *);                                                     /* extern */
+M2C_UNK BattleAnimUtil_InitCommonWork(s32, void *);                                                        /* extern */
+M2C_UNK BattleAnimUtil_CollectPicsByFlags(s32, s32, void *, void *);                                           /* extern */
+void *BattleAnimUtil_AllocWork(s32, s32);                                                             /* extern */
 void ov07_02228684(s32 arg0, void *arg1);                                                  /* static */
 void ov07_02228834(s32 arg0, void *arg1);                                                  /* static */
 void ov07_02228B38(s32 arg0, void *arg1);                                                  /* static */

@@ -22,7 +22,7 @@ extern int WifiSetupInput_IsKeyPressed(int);
 extern int WifiSetupInput_IsKeyRepeated(int);
 extern int WifiSetupInput_IsKeyReleased(int);
 extern void ov13_022335EC(int);
-extern void ov13_0223ABB8(int);
+extern void WifiSetupSound_Play(int);
 extern void ov13_0222B8E8(void *);
 extern void ov13_02233A6C(void);
 extern void ov13_02234AA4(void);
@@ -43,7 +43,7 @@ void ov13_022332E8(void) {
         return;
     }
     if (WifiSetupInput_IsKeyPressed(2)) {
-        ov13_0223ABB8(7);
+        WifiSetupSound_Play(7);
         ov13_0224F54C.work->state = 13;
         ov13_0222B8E8(ov13_02233A6C);
         return;
@@ -53,11 +53,11 @@ void ov13_022332E8(void) {
             if (ov13_0224F54C.work->repeat) {
                 return;
             }
-            ov13_0223ABB8(9);
+            WifiSetupSound_Play(9);
             ov13_0224F54C.work->repeat = 1;
             return;
         }
-        ov13_0223ABB8(19);
+        WifiSetupSound_Play(19);
         ov13_0224F54C.work->busy = WifiSetupTask_Create(0, ov13_02234AA4, 0, 120);
         return;
     }
@@ -70,11 +70,11 @@ void ov13_022332E8(void) {
             if (ov13_0224F54C.work->repeat) {
                 return;
             }
-            ov13_0223ABB8(9);
+            WifiSetupSound_Play(9);
             ov13_0224F54C.work->repeat = 1;
             return;
         }
-        ov13_0223ABB8(19);
+        WifiSetupSound_Play(19);
         ov13_0224F54C.work->busy = WifiSetupTask_Create(0, ov13_022349DC, 0, 120);
         return;
     }

@@ -49,9 +49,9 @@ void ov07_0222A8EC(void *task, A8Work *work) {
 
 void ov07_0222A988(void *owner, int unused1, int unused2, ManagedSprite *first) {
     u8 template[0x34];
-    A8Work *work = ov07_022324D8(owner, sizeof(A8Work));
+    A8Work *work = BattleAnimUtil_AllocWork(owner, sizeof(A8Work));
     work->delay = 10;
-    ov07_02231FE4(owner, work);
+    BattleAnimUtil_InitCommonWork(owner, work);
     ov07_0221F9E8(template, work->owner);
     work->sprite[0] = first;
     work->timer[0] = 0;

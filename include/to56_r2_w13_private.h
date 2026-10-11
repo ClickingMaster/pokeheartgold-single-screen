@@ -39,7 +39,7 @@ typedef struct R2W13Spin {
     int sign;
 } R2W13Spin;
 void ov07_0222D3BC(void *, void *, int, void *);
-void *ov07_022324D8(void *, int);
+void *BattleAnimUtil_AllocWork(void *, int);
 int ov07_0221C468(void *);
 int ov07_02222004(void *, int);
 int ov07_0221FB78(void *, int);
@@ -51,7 +51,7 @@ void ManagedSprite_OffsetPositionXY(void *, s16, s16);
 void ManagedSprite_SetDrawPriority(void *, int);
 void ManagedSprite_SetPriority(void *, int);
 void ManagedSprite_SetAffineTranslation(void *, s16, s16);
-int ov07_0223192C(void *, int);
+int BattleAnimUtil_GetBattlerSide(void *, int);
 void ManagedSprite_SetAnim(void *, int);
 void ov07_02222508(void *, int, int, int, int);
 void ov07_022223F0(void *, int, int, int);

@@ -14,8 +14,8 @@ typedef struct Rec {
 
 int ov07_02221664(void *p) {
     int ret = 1;
-    int a = ov07_02231924((void *)U32(p, 0), U32(p, 0x24));
-    int b = ov07_02231924((void *)U32(p, 0), U32(p, 0x28));
+    int a = BattleAnimUtil_GetBattlerType((void *)U32(p, 0), U32(p, 0x24));
+    int b = BattleAnimUtil_GetBattlerType((void *)U32(p, 0), U32(p, 0x28));
     switch (a) {
     case 0:
         break;
@@ -42,7 +42,7 @@ void ov07_022216A8(void *p, int q, Vec3 *out) {
     Rec temp;
     int i;
     for (i = 0; i < 6; i++) {
-        if (i == ov07_02231924((void *)U32(p, 0), q)) {
+        if (i == BattleAnimUtil_GetBattlerType((void *)U32(p, 0), q)) {
             ov07_0221F9A8((void *)U32(p, 0), &rec, 4);
         } else {
             ov07_0221F9A8((void *)U32(p, 0), &temp, 4);

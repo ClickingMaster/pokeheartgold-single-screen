@@ -5,8 +5,8 @@ typedef struct ManagedSprite ManagedSprite;
 typedef struct SpriteSystem SpriteSystem;
 typedef struct Pokepic Pokepic;
 
-void *ov07_022324D8(void *, u32);
-void ov07_02231FE4(void *, void *);
+void *BattleAnimUtil_AllocWork(void *, u32);
+void BattleAnimUtil_InitCommonWork(void *, void *);
 void *ov07_0221C410(void *, void *, void *);
 void ov07_0221C448(void *, void *);
 void ov07_0221F9E8(void *, void *);
@@ -19,7 +19,7 @@ void SpriteSystem_DrawSprites(SpriteSystem *);
 void Heap_Free(void *);
 ManagedSprite *SpriteSystem_NewSprite(void *, void *, void *);
 
-void ov07_02232508(void *);
+void BattleAnimUtil_FreeWork(void *);
 BOOL ov07_0222260C(void *);
 void ov07_02222644(void *, s32 *, s32 *);
 void ov07_022226FC(ManagedSprite *, s32, s32, u32, u32);
@@ -44,11 +44,11 @@ void *ov07_0221BFD0(void *);
 void ov07_0223494C(void *, void *);
 void ov07_0223475C(void *, void *);
 u32 ov07_0221C468(void *);
-void ov07_02231A50(void *, u32, s16 *);
-u32 ov07_0223192C(void *, u32);
+void BattleAnimUtil_GetBattlerPosition(void *, u32, s16 *);
+u32 BattleAnimUtil_GetBattlerSide(void *, u32);
 
 extern u32 ov07_0221C4A8(void *p, int i);
-void ov07_02232020(void *, void *, s16 *, void *);
+void BattleAnimUtil_CollectPicsByFlags(void *, void *, s16 *, void *);
 void *Sprite_GetPaletteProxy(void *);
 u32 ObjPlttTransfer_GetPaletteVramOffset(void *, int);
 BOOL ov07_02222EE8(void *);
@@ -79,10 +79,10 @@ typedef struct B4Work {
 
 int ov07_02222004(void *, int);
 int ov07_0221FB78(void *, int);
-int ov07_02231924(void *, int);
+int BattleAnimUtil_GetBattlerType(void *, int);
 int ov07_0221BFC0(void *);
-void ov07_02231A20(int, int, s16 *);
-void ov07_02231E08(void *, int, int);
+void BattleAnimUtil_GetBattlerTypePosition(int, int, s16 *);
+void BattleAnimUtil_SetBlendWithBattleBg(void *, int, int);
 int ov07_0221FA1C(void *, int);
 int ov07_0221FA10(void *, int);
 int ov07_0221FA2C(void *, int);
@@ -110,8 +110,8 @@ void ov07_0222B640(void *owner) {
     int height;
     void *task;
 
-    work = ov07_022324D8(owner, sizeof(B4Work));
-    ov07_02231FE4(owner, work);
+    work = BattleAnimUtil_AllocWork(owner, sizeof(B4Work));
+    BattleAnimUtil_InitCommonWork(owner, work);
     work->sprite1 = ov07_0221C4E8(work->owner, 0);
     work->sprite2 = ov07_0221C4E8(work->owner, 1);
     work->sprite3 = ov07_0221C4E8(work->owner, 2);
@@ -137,10 +137,10 @@ void ov07_0222B640(void *owner) {
     work->effect2 = ov07_02222F10(work->effectManager, ov07_0221BFD0(owner), 2, (u16)(paletteOffset << 4), 16, 0, 1, 0, 15, 0xFFFF, 1100);
 
     battler = ov07_0221C468(work->owner);
-    type = ov07_02231924(work->owner, battler);
-    ov07_02231A20(type, ov07_0221BFC0(work->owner), base);
+    type = BattleAnimUtil_GetBattlerType(work->owner, battler);
+    BattleAnimUtil_GetBattlerTypePosition(type, ov07_0221BFC0(work->owner), base);
     ManagedSprite_GetPositionXY(work->sprite1, &curX, &curY);
-    if (ov07_0223192C(work->owner, battler) == 3) {
+    if (BattleAnimUtil_GetBattlerSide(work->owner, battler) == 3) {
         facing = 0;
         ManagedSprite_SetPriority(work->sprite1, 1);
         ManagedSprite_SetDrawPriority(work->sprite1, facing);
@@ -158,7 +158,7 @@ void ov07_0222B640(void *owner) {
     ManagedSprite_SetDrawFlag(work->sprite1, TRUE);
     work->blendA = 0;
     work->blendB = 15;
-    ov07_02231E08(work->owner, -1, -1);
+    BattleAnimUtil_SetBlendWithBattleBg(work->owner, -1, -1);
     *(vu16 *)0x04000052 = work->blendA | (work->blendB << 8);
     task = ov07_0221C410(work->owner, ov07_0222B4E0, work);
     ov07_0222B4E0(task, work);

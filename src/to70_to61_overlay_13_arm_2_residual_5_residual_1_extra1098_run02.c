@@ -28,7 +28,7 @@ typedef struct Global {
 } Global;
 
 extern Global ov13_0224F538;
-extern void ov13_0223ABB8(int), ov13_02230F54(void), ov13_0223959C(void), WifiSetupButtonBar_Lock(void), ov13_0223BE6C(int, int, int, int, int), ov13_0222B8E8(void (*)(void)), ov13_02230F84(void), ov13_02230520(void);
+extern void WifiSetupSound_Play(int), ov13_02230F54(void), ov13_0223959C(void), WifiSetupButtonBar_Lock(void), ov13_0223BE6C(int, int, int, int, int), ov13_0222B8E8(void (*)(void)), ov13_02230F84(void), ov13_02230520(void);
 extern int WifiSetupButtonBar_GetSelected(void);
 extern int FX_DivS32(int, int);
 void ov13_02230414(void);
@@ -60,18 +60,18 @@ void ov13_02230414(void) {
     result = WifiSetupButtonBar_GetSelected();
     switch (result) {
     case 0:
-        ov13_0223ABB8(7);
+        WifiSetupSound_Play(7);
         break;
     case 1:
         if (ov13_0224F538.selected == 4) {
             ov13_0224F538.state->busy = 1;
-            ov13_0223ABB8(6);
+            WifiSetupSound_Play(6);
             ov13_02230F54();
         } else {
             index = FX_DivS32(ov13_0224F538.position, 28) + ov13_0224F538.selected;
             s = ov13_0224F538.state;
             if (s->items[index].kind == 2) {
-                ov13_0223ABB8(9);
+                WifiSetupSound_Play(9);
                 ov13_0223959C();
                 WifiSetupButtonBar_Lock();
                 ov13_0223BE6C(14, 1, 1, -1, 0);
@@ -80,7 +80,7 @@ void ov13_02230414(void) {
             }
             s->busy = 1;
             ov13_0224F538.state->target = index;
-            ov13_0223ABB8(6);
+            WifiSetupSound_Play(6);
         }
         break;
     default:

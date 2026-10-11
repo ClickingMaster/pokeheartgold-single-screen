@@ -29,7 +29,7 @@ typedef struct X07Group {
 typedef struct X07ManagedSpriteTemplate {
     u8 data[0x34];
 } X07ManagedSpriteTemplate;
-void *ov07_022324D8(void *, u32);
+void *BattleAnimUtil_AllocWork(void *, u32);
 void *ov07_0221C470(void *);
 void *ov07_0221FA48(void *, void *);
 int Pokepic_GetAttr(void *, int);

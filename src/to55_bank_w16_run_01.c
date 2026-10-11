@@ -30,7 +30,7 @@ void ov07_022208F8(void *unused, void **pp, int x) {
     ov07_0221C478(p);
     int d = ParticleSystem_GetPerspectiveType();
     int a = ov07_0221C470(p);
-    int n = ov07_0223192C(p, a) != 3;
+    int n = BattleAnimUtil_GetBattlerSide(p, a) != 3;
     int b = ov07_0221BFC0(p);
     ov07_02231AD0(n, x, b, d);
 }
@@ -40,7 +40,7 @@ void ov07_02220938(void *unused, void **pp, int x) {
     ov07_0221C478(p);
     int d = ParticleSystem_GetPerspectiveType();
     int a = ov07_0221C468(p);
-    int n = ov07_0223192C(p, a) != 3;
+    int n = BattleAnimUtil_GetBattlerSide(p, a) != 3;
     int b = ov07_0221BFC0(p);
     ov07_02231AD0(n, x, b, d);
 }

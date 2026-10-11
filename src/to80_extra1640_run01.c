@@ -30,7 +30,7 @@ void ov13_022337D8(int);
 extern int ov13_02239564(void);
 extern int ov13_02239550(void);
 extern void WifiSetupCursor_Hide(void);
-extern void ov13_0223ABB8(int);
+extern void WifiSetupSound_Play(int);
 extern void ov13_02234CA4(void);
 extern void ov13_022349DC(void);
 extern void ov13_02234AA4(void);
@@ -73,7 +73,7 @@ void ov13_02233810(void) {
     case 3:
         ov13_0224F54C.s->flag = 0;
         ov13_0224F54C.val = (145 * ov13_02239550()) / 55;
-        ov13_0223ABB8(19);
+        WifiSetupSound_Play(19);
         ov13_02233DCC();
         rem = FX_ModS32(ov13_0224F54C.val, 29);
         if (rem == 0) {
@@ -92,11 +92,11 @@ void ov13_02233810(void) {
             if (ov13_0224F54C.s->flag2) {
                 return;
             }
-            ov13_0223ABB8(9);
+            WifiSetupSound_Play(9);
             ov13_0224F54C.s->flag2 = 1;
             return;
         }
-        ov13_0223ABB8(19);
+        WifiSetupSound_Play(19);
         ov13_0224F54C.s->busy = WifiSetupTask_Create(0, ov13_022349DC, 0, 120);
         return;
     case 6:
@@ -104,11 +104,11 @@ void ov13_02233810(void) {
             if (ov13_0224F54C.s->flag2) {
                 return;
             }
-            ov13_0223ABB8(9);
+            WifiSetupSound_Play(9);
             ov13_0224F54C.s->flag2 = 1;
             return;
         }
-        ov13_0223ABB8(19);
+        WifiSetupSound_Play(19);
         ov13_0224F54C.s->busy = WifiSetupTask_Create(0, ov13_02234AA4, 0, 120);
         return;
     case 5:

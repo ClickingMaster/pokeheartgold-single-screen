@@ -12,7 +12,7 @@ typedef struct {
 
 extern Work *ov13_0224F4C0;
 extern const s8 ov13_022452DA[][4];
-void ov13_0222AE24(void), ov13_0223ABB8(int), ov13_0222AEB0(int);
+void ov13_0222AE24(void), WifiSetupSound_Play(int), ov13_0222AEB0(int);
 
 void ov13_0222AEB0(int action) {
     s8 old = ov13_0224F4C0->state;
@@ -33,5 +33,5 @@ void ov13_0222AEB0(int action) {
         }
     }
     ov13_0222AE24();
-    ov13_0223ABB8(8);
+    WifiSetupSound_Play(8);
 }

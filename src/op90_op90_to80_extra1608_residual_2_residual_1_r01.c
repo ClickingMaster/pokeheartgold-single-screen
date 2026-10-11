@@ -36,7 +36,7 @@ typedef struct Spawn07 {
 extern const Spawn07 ov07_022367CE[];
 enum HeapID ov07_0221BFD0(void *ctx);
 void ov07_0221F9E8(ManagedSpriteTemplate *template, void *ctx);
-void ov07_02231E08(void *ctx, int a1, int a2);
+void BattleAnimUtil_SetBlendWithBattleBg(void *ctx, int a1, int a2);
 u8 ov07_0221C4A8(void *ctx, int a1);
 void ov07_0221C3F4(void *ctx, void *func, void *data, u32 priority);
 void ov07_0222A328(void *ctx, Particle07 *particle);
@@ -58,7 +58,7 @@ void ov07_0222A58C(void *ctx, SpriteSystem *spriteSystem, SpriteManager *spriteM
     effect->spriteManager = spriteManager;
     effect->ctx = ctx;
     ov07_0221F9E8(&template, ctx);
-    ov07_02231E08(effect->ctx, -1, -1);
+    BattleAnimUtil_SetBlendWithBattleBg(effect->ctx, -1, -1);
     effect->count = ov07_0221C4A8(effect->ctx, 0);
     effect->count = 12;
     effect->particles[0].sprite = sprite;

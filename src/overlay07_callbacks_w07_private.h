@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-void *ov07_022324D8(void *, u32);
+void *BattleAnimUtil_AllocWork(void *, u32);
 void ov07_0221C410(void *, void *, void *);
 void ov07_0221C448(void *, void *);
 void ov07_0222DBD8(void *);

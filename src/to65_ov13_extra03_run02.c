@@ -9,7 +9,7 @@
 #define S(p, n) (((s8 *)(p))[n])
 #define W(p, n) (*(u32 *)((u8 *)(p) + (n)))
 #define P(p, n) (*(void **)((u8 *)(p) + (n)))
-extern u8 *ov13_0224F4BC;
+extern u8 *gWifiSetupKeyboard;
 extern u8 *ov13_0224F4C0;
 extern u8 ov13_0224F4C4[];
 extern u8 ov13_0224F4C8[];
@@ -23,7 +23,7 @@ extern u16 ov13_02245062[];
 extern u16 ov13_022452A2[];
 extern u16 ov13_022452A4[];
 extern s8 ov13_022452DA[];
-void ov13_022290F0(int, int, int);
+void WifiSetupKeyboard_SetRowY(int, int, int);
 void *WifiSetupOamBlock_GetOam(void *, int);
 void WifiSetupOamBlock_Free(void *);
 void WifiSetupOamBlock_SetModeAndPalette(void *, int, int, int);
@@ -43,16 +43,16 @@ void ov13_0222A378(void);
 void ov13_0222A554(void);
 void ov13_0222A724(void);
 void ov13_0222A960(void);
-void ov13_0223ABB8(int);
+void WifiSetupSound_Play(int);
 void ov13_02222CE0(void);
 int ov13_02220908(void *);
 void ov13_0223A6E4(void *);
 
-void ov13_022299CC(void *a);
-void ov13_02229A50(void *a);
-void ov13_02229AC4(void *a);
-void ov13_02229B38(void *a);
-void ov13_02229BAC(void *a);
+void WifiSetupKeyboard_SlideOutButtonsTask(void *a);
+void WifiSetupKeyboard_SlideOutRow3Task(void *a);
+void WifiSetupKeyboard_SlideOutRow2Task(void *a);
+void WifiSetupKeyboard_SlideOutRow1Task(void *a);
+void WifiSetupKeyboard_SlideOutRow0Task(void *a);
 void ov13_0222AF5C(void *a);
 void ov13_0222AFD4(void *a);
 void ov13_0222B044(void *a);
@@ -71,7 +71,7 @@ int ov13_0222A0C0(void);
 void ov13_0222A2EC(void *a);
 void ov13_0222A360(void *a);
 void ov13_0222B194(void *a);
-void ov13_02229C20(void *a);
+void WifiSetupKeyboard_DestroyTask(void *a);
 void ov13_0222AE24(void);
 void ov13_0222AEB0(int a);
 void ov13_0222B364(int a);
@@ -88,11 +88,11 @@ struct Sprite {
     u16 attr;
 };
 
-void ov13_022293F0(int a, int b);
+void WifiSetupKeyboard_SetKeyHighlight(int a, int b);
 void ov13_0222AD5C(int a, int b);
-void ov13_022294B8(void);
+void WifiSetupKeyboard_UpdateCursor(void);
 extern u16 ov13_02244FA4[];
-void ov13_0222936C(int);
+void WifiSetupKeyboard_SetPage(int);
 int ov13_0222B430(void *, int, u32);
 void ov13_0222B558(void);
 void ov13_0222B620(void);

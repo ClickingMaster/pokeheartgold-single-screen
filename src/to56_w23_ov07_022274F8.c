@@ -56,9 +56,9 @@ M2C_UNK ov07_02222644(void *, s32 *, s32 *);                                    
 s32 ov07_02222674(s16, s32, s32);                                                          /* extern */
 M2C_UNK ov07_022227A8(void *, s32, s32, s32, s32);                                         /* extern */
 M2C_UNK ov07_022227D8(void *);                                                             /* extern */
-s32 ov07_0223192C(s32, s32);                                                               /* extern */
-M2C_UNK ov07_02231A20(s32, s32, M2C_UNK *);                                                /* extern */
-M2C_UNK ov07_02231E08(s32, s32, s32);                                                      /* extern */
+s32 BattleAnimUtil_GetBattlerSide(s32, s32);                                                               /* extern */
+M2C_UNK BattleAnimUtil_GetBattlerTypePosition(s32, s32, M2C_UNK *);                                                /* extern */
+M2C_UNK BattleAnimUtil_SetBlendWithBattleBg(s32, s32, s32);                                                      /* extern */
 void ov07_02227300(s32 arg0, void *arg1);                                                  /* static */
 void ov07_02227630(s32 arg0, void *arg1);                                                  /* static */
 void ov07_022278B0(s32 arg0, void *arg1);                                                  /* static */
@@ -99,15 +99,15 @@ void ov07_022274F8(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     M2C_FIELD(temp_r0, s32 *, 0x10) = arg2;
     M2C_FIELD(temp_r0, s32 *, 8) = sp0;
     ov07_0221F9E8(&sp8, sp0);
-    ov07_02231E08(M2C_FIELD(temp_r0, s32 *, 8), -1, -1);
+    BattleAnimUtil_SetBlendWithBattleBg(M2C_FIELD(temp_r0, s32 *, 8), -1, -1);
     M2C_FIELD(temp_r0, u8 *, 5) = 0xFU;
     M2C_FIELD(temp_r0, u8 *, 6) = 0U;
     *(s16 *)0x04000052 = M2C_FIELD(temp_r0, u8 *, 5) | (M2C_FIELD(temp_r0, u8 *, 6) << 8);
     M2C_FIELD(temp_r0, s32 *, 0x14) = arg3;
-    if (ov07_0223192C(sp0, ov07_0221C470(sp0)) == 3) {
-        ov07_02231A20(0, ov07_0221BFC0(sp0), &sp4);
+    if (BattleAnimUtil_GetBattlerSide(sp0, ov07_0221C470(sp0)) == 3) {
+        BattleAnimUtil_GetBattlerTypePosition(0, ov07_0221BFC0(sp0), &sp4);
     } else {
-        ov07_02231A20(1, ov07_0221BFC0(sp0), &sp4);
+        BattleAnimUtil_GetBattlerTypePosition(1, ov07_0221BFC0(sp0), &sp4);
     }
     var_r6 = 1;
     if (((s32)ov07_0221C4A8((void *)(M2C_FIELD(temp_r0, s32 *, 8)), 0)) > 1) {

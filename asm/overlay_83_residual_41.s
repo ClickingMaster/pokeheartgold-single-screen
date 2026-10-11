@@ -1414,163 +1414,163 @@
 	.public BattleCastlePartyApp_PrintHealMenuHelp
 	.public BattleCastlePartyApp_PrintRentalMenuHelp
 	.public BattleCastlePartyApp_StartButtonAnim
-	.public ov83_02242F2C
+	.public BattleCastlePartyApp_AnimatePressedButton
 	.public ov83_02242FE8
 	.public ov83_02243108
 	.public ov83_02243268
-	.public ov83_022432B4
-	.public ov83_022433B8
-	.public ov83_022433F8
-	.public ov83_02243C88
-	.public ov83_02243D7C
-	.public ov83_02243DE8
-	.public ov83_02243E30
-	.public ov83_02243F9C
-	.public ov83_02243FD4
-	.public ov83_02244394
-	.public ov83_02244408
-	.public ov83_0224442C
-	.public ov83_02244488
-	.public ov83_022444C0
-	.public ov83_022444E0
-	.public ov83_0224465C
-	.public ov83_022446D0
-	.public ov83_02244704
-	.public ov83_0224474C
-	.public ov83_02244780
-	.public ov83_022447E0
-	.public ov83_0224484C
-	.public ov83_022448AC
-	.public ov83_022448E4
-	.public ov83_022449D4
-	.public ov83_02244A74
-	.public ov83_02244A88
-	.public ov83_02244A90
-	.public ov83_02244A98
-	.public ov83_02244AB0
-	.public ov83_02244ABC
-	.public ov83_02244AD8
-	.public ov83_02244B40
-	.public ov83_02244BA8
-	.public ov83_02244BEC
-	.public ov83_02244C4C
-	.public ov83_02244C58
-	.public ov83_02244C88
-	.public ov83_02244C9C
-	.public ov83_02244CCC
-	.public ov83_02244CD4
-	.public ov83_02244CDC
-	.public ov83_02244D0C
-	.public ov83_02244DA0
-	.public ov83_02244DF4
-	.public ov83_02244E24
-	.public ov83_02244F60
-	.public ov83_02245068
-	.public ov83_02245074
-	.public ov83_02245094
-	.public ov83_022450A8
-	.public ov83_02245104
+	.public BattleCastleOpponentApp_FadeIn
+	.public BattleCastleOpponentApp_DrawScreen
+	.public BattleCastleOpponentApp_HandleMenu
+	.public BattleCastleOpponentApp_LinkAction
+	.public BattleCastleOpponentApp_LinkExit
+	.public BattleCastleOpponentApp_FadeOut
+	.public BattleCastleOpponentApp_FreeResources
+	.public BattleCastleOpponentApp_DisableDisplay
+	.public BattleCastleOpponentApp_InitGraphics
+	.public BattleCastleOpponentApp_InitBgGraphics
+	.public BattleCastleOpponentApp_InitSpriteGfx
+	.public BattleCastleOpponentApp_FreeBgLayers
+	.public BattleCastleOpponentApp_VBlankCallback
+	.public BattleCastleOpponentApp_SetGraphicsBanks
+	.public BattleCastleOpponentApp_InitBgLayers
+	.public BattleCastleOpponentApp_LoadPartyBg
+	.public BattleCastleOpponentApp_LoadBgPalette
+	.public BattleCastleOpponentApp_LoadSummaryBg
+	.public BattleCastleOpponentApp_LoadSummaryBgPalette
+	.public BattleCastleOpponentApp_LoadSubScreenBg
+	.public BattleCastleOpponentApp_PrintMessage
+	.public BattleCastleOpponentApp_AddMessage
+	.public BattleCastleOpponentApp_ShowMessage
+	.public BattleCastleOpponentApp_PrintPartyHp
+	.public BattleCastleOpponentApp_PrintPartyLevels
+	.public BattleCastleOpponentApp_ShowYesNoPrompt
+	.public BattleCastleOpponentApp_OpenLevelMenu
+	.public BattleCastleOpponentApp_CloseLevelMenu
+	.public BattleCastleOpponentApp_BufferNumber
+	.public BattleCastleOpponentApp_BufferSpeciesName
+	.public BattleCastleOpponentApp_BufferPlayerName
+	.public BattleCastleOpponentApp_PrintPlayerName
+	.public BattleCastleOpponentApp_PrintPartnerName
+	.public BattleCastleOpponentApp_PrintGenderSymbol
+	.public BattleCastleOpponentApp_PrintChoosePrompt
+	.public BattleCastleOpponentApp_HideChoosePrompt
+	.public BattleCastleOpponentApp_OpenMainMenu
+	.public BattleCastleOpponentApp_CloseMainMenu
+	.public BattleCastleOpponentApp_OpenSummaryMenu
+	.public BattleCastleOpponentApp_CloseSummaryMenu
+	.public BattleCastleOpponentApp_SetMainState
+	.public BattleCastleOpponentApp_MoveCursor
+	.public BattleCastleOpponentApp_DrawCursor
+	.public BattleCastleOpponentApp_GetCursorPos
+	.public BattleCastleOpponentApp_GetTrainerNamePositions
+	.public BattleCastleOpponentApp_PlayActionEffect
+	.public BattleCastleOpponentApp_FinishLinkAction
+	.public BattleCastleOpponentApp_GetLevelChangeCost
+	.public BattleCastleOpponentApp_CloseAll
+	.public BattleCastleOpponentApp_CloseWindow
+	.public BattleCastleOpponentApp_SendLinkCommand
+	.public BattleCastleOpponentApp_PrepareLinkRanks
 	.public ov83_0224514C
-	.public ov83_0224517C
+	.public BattleCastleOpponentApp_PrepareLinkAction
 	.public ov83_022451B8
-	.public ov83_02245210
+	.public BattleCastleOpponentApp_PrepareLinkCursor
 	.public ov83_02245220
-	.public ov83_02245248
+	.public BattleCastleOpponentApp_PrepareLinkExit
 	.public ov83_02245254
-	.public ov83_02245270
-	.public ov83_02245288
-	.public ov83_02245300
-	.public ov83_02245318
-	.public ov83_02245390
-	.public ov83_022453C0
-	.public ov83_022453DC
-	.public ov83_02245554
-	.public ov83_02245584
-	.public ov83_0224563C
-	.public ov83_02245748
-	.public ov83_02245824
-	.public ov83_02245838
-	.public ov83_022459A0
-	.public ov83_022459AC
-	.public ov83_02245A40
-	.public ov83_02245ACC
-	.public ov83_02245C80
-	.public ov83_02245CA8
-	.public ov83_02245CE8
-	.public ov83_02245D08
-	.public ov83_02245D48
-	.public ov83_02245F24
-	.public ov83_02246114
-	.public ov83_0224691C
-	.public ov83_02246938
-	.public ov83_02246988
-	.public ov83_022469D8
-	.public ov83_022469E4
-	.public ov83_02246AA4
-	.public ov83_02246B6C
-	.public ov83_02246C2C
-	.public ov83_02246C70
-	.public ov83_02246CC0
-	.public ov83_02246D40
-	.public ov83_02246E08
-	.public ov83_0224714C
-	.public ov83_022471FC
-	.public ov83_02247264
-	.public ov83_022472A0
-	.public ov83_022472DC
-	.public ov83_02247314
+	.public BattleCastleOpponentApp_SetStatsBought
+	.public BattleCastleOpponentApp_BuyStats
+	.public BattleCastleOpponentApp_SetMovesBought
+	.public BattleCastleOpponentApp_BuyMoves
+	.public BattleCastleOpponentApp_CloseMenus
+	.public BattleCastleOpponentApp_OpenMessageBox
+	.public BattleCastleOpponentApp_PrintCastlePoints
+	.public BattleCastleOpponentApp_ConfirmLevelChange
+	.public BattleCastleOpponentApp_PrintTrainerNames
+	.public BattleCastleOpponentApp_ApplyAction
+	.public BattleCastleOpponentApp_CheckMon
+	.public BattleCastleOpponentApp_CheckMonAndRedrawHp
+	.public BattleCastleOpponentApp_ChangeLevel
+	.public BattleCastleOpponentApp_HideSummaryBg
+	.public BattleCastleOpponentApp_UpdateMonIcons
+	.public BattleCastleOpponentApp_TryBuy
+	.public BattleCastleOpponentApp_RankUp
+	.public BattleCastleOpponentApp_ShowBoughtMarks
+	.public BattleCastleOpponentApp_ShowMonBoughtMarks
+	.public BattleCastleOpponentApp_GetBoughtMarkPos
+	.public BattleCastleOpponentApp_PrintExpandedMessage
+	.public BattleCastleOpponentApp_LoadMonSummary
+	.public BattleCastleOpponentApp_PrintSummaryLabels
+	.public BattleCastleOpponentApp_PrintMonSummary
+	.public BattleCastleOpponentApp_ShowMonSummary
+	.public BattleCastleOpponentApp_ShowSummaryPanel
+	.public BattleCastleOpponentApp_LoadMonPic
+	.public BattleCastleOpponentApp_SetCursorPos
+	.public BattleCastleOpponentApp_CreateListMenu
+	.public BattleCastleOpponentApp_CreateMainMenuList
+	.public BattleCastleOpponentApp_CreateSummaryMenuList
+	.public BattleCastleOpponentApp_CreateLevelMenuList
+	.public BattleCastleOpponentApp_DestroyListMenu
+	.public BattleCastleOpponentApp_PrintMainMenuHelp
+	.public BattleCastleOpponentApp_PrintSummaryMenuHelp
+	.public BattleCastle_InitSpriteGfx
+	.public BattleCastle_CreateSprite
+	.public BattleCastle_FreeSpriteGfx
+	.public BattleCastle_LoadItemIconChar
+	.public BattleCastle_LoadItemIconPalette
+	.public BattleCastle_InitSpriteTransfer
+	.public BattleCastle_LoadPartyListGfx
 	.public ov83_022473BC
-	.public ov83_02247454
-	.public ov83_022474C4
-	.public ov83_0224753C
-	.public ov83_0224755C
-	.public ov83_02247568
-	.public ov83_0224759C
-	.public ov83_022475D4
-	.public ov83_022475EC
+	.public BattleCastleSprite_New
+	.public BattleCastleSprite_NewSubScreen
+	.public BattleCastleSprite_Delete
+	.public BattleCastleSprite_SetDrawFlag
+	.public BattleCastleSprite_SetPosition
+	.public BattleCastleSprite_SetPositionSubScreen
+	.public BattleCastleSprite_SetAnim
+	.public BattleCastleSprite_SetMonIconPalette
 	.public ov83_02247600
 	.public ov83_0224760C
-	.public ov83_02247624
+	.public BattleCastleSprite_IsAnimated
 	.public ov83_02247630
-	.public ov83_02247668
-	.public ov83_0224773C
-	.public ov83_02247768
-	.public ov83_0224776C
-	.public ov83_0224777C
-	.public ov83_022477B0
-	.public ov83_022477C4
-	.public ov83_022477E4
-	.public ov83_022477EC
-	.public ov83_0224780C
-	.public ov83_02247844
-	.public ov83_02247858
-	.public ov83_02247864
-	.public ov83_022478B4
-	.public ov83_022478D4
-	.public ov83_0224791C
-	.public ov83_02247944
-	.public ov83_02247988
-	.public ov83_02247998
-	.public ov83_022479E4
-	.public ov83_02247A18
+	.public BattleCastleSprite_LoadMonPic
+	.public BattleCastle_SetSpritesTranslucent
+	.public BattleCastle_GetMonIndex
+	.public BattleCastle_GetSideSlot
+	.public BattleCastle_GetRank
+	.public BattleCastle_PlaySEOnInput
+	.public BattleCastle_BufferPartnerName
+	.public BattleCastle_ClearBgToggleRequests
+	.public BattleCastle_RequestBgToggle
+	.public BattleCastle_ApplyBgToggleRequests
+	.public BattleCastlePrompt_Init
+	.public BattleCastlePrompt_Free
+	.public BattleCastlePrompt_Show
+	.public BattleCastlePrompt_Hide
+	.public BattleCastle_AddWindows
+	.public BattleCastle_RemoveWindows
+	.public BattleCastle_DrawWindowFrame
+	.public BattleCastle_GetMenuTiles
+	.public BattleCastle_PrintString
+	.public BattleCastle_PrintMsg
+	.public BattleCastle_FreeGrid
 	.public ov83_02247A20
-	.public ov83_02247A24
-	.public ov83_02247A7C
-	.public ov83_02247AD4
+	.public BattleCastlePartyApp_CreatePartyGrid
+	.public BattleCastleOpponentApp_CreatePartyGrid
+	.public BattleCastle_HandlePartyGridInput
 	.public ov83_02247B04
 	.public ov83_02247B1C
 	.public ov83_02247B34
 	.public ov83_02247B4C
 	.public ov83_02247B64
-	.public ov83_02247B7C
-	.public ov83_02247BC4
+	.public BattleCastlePartyApp_CreateItemGrid
+	.public BattleCastle_HandleItemGridInput
 	.public ov83_02247C58
 	.public ov83_02247C88
-	.public ov83_02247CB8
-	.public ov83_02247CC4
-	.public ov83_02247CCC
-	.public ov83_02247CE8
-	.public ov83_02247CF0
+	.public BattleCastle_CreateListMenuSpawner
+	.public BattleCastle_DestroyListMenuSpawner
+	.public BattleCastle_CreateListMenu
+	.public BattleCastle_DestroyListMenu
+	.public BattleCastle_IsAdvancePressed
 	.public ov83_02247D12
 	.public ov83_02247D18
 	.public ov83_02247D1E
@@ -1663,68 +1663,68 @@
 	.public BattleCastlePartyApp_SetCursorPos
 	.public BattleCastlePartyApp_ShowItemDescription
 	.public BattleCastlePartyApp_StartButtonAnim
-	.public ov83_022433B8
-	.public ov83_02243DE8
-	.public ov83_02243F9C
-	.public ov83_02244A74
-	.public ov83_02244A88
-	.public ov83_02244A90
-	.public ov83_02244A98
-	.public ov83_02244AB0
-	.public ov83_02244ABC
-	.public ov83_02244C4C
-	.public ov83_02244C58
-	.public ov83_02244C88
-	.public ov83_02244C9C
-	.public ov83_02244CCC
-	.public ov83_02244CD4
-	.public ov83_02244DF4
-	.public ov83_02245068
-	.public ov83_02245074
-	.public ov83_02245094
-	.public ov83_02245210
-	.public ov83_02245248
+	.public BattleCastleOpponentApp_DrawScreen
+	.public BattleCastleOpponentApp_FadeOut
+	.public BattleCastleOpponentApp_DisableDisplay
+	.public BattleCastleOpponentApp_ShowYesNoPrompt
+	.public BattleCastleOpponentApp_OpenLevelMenu
+	.public BattleCastleOpponentApp_CloseLevelMenu
+	.public BattleCastleOpponentApp_BufferNumber
+	.public BattleCastleOpponentApp_BufferSpeciesName
+	.public BattleCastleOpponentApp_BufferPlayerName
+	.public BattleCastleOpponentApp_HideChoosePrompt
+	.public BattleCastleOpponentApp_OpenMainMenu
+	.public BattleCastleOpponentApp_CloseMainMenu
+	.public BattleCastleOpponentApp_OpenSummaryMenu
+	.public BattleCastleOpponentApp_CloseSummaryMenu
+	.public BattleCastleOpponentApp_SetMainState
+	.public BattleCastleOpponentApp_GetTrainerNamePositions
+	.public BattleCastleOpponentApp_GetLevelChangeCost
+	.public BattleCastleOpponentApp_CloseAll
+	.public BattleCastleOpponentApp_CloseWindow
+	.public BattleCastleOpponentApp_PrepareLinkCursor
+	.public BattleCastleOpponentApp_PrepareLinkExit
 	.public ov83_02245254
-	.public ov83_02245270
-	.public ov83_02245300
-	.public ov83_022453C0
-	.public ov83_02245824
-	.public ov83_022459A0
-	.public ov83_02245CA8
-	.public ov83_02245CE8
-	.public ov83_0224691C
-	.public ov83_022469D8
-	.public ov83_0224753C
-	.public ov83_0224755C
-	.public ov83_022475D4
-	.public ov83_022475EC
+	.public BattleCastleOpponentApp_SetStatsBought
+	.public BattleCastleOpponentApp_SetMovesBought
+	.public BattleCastleOpponentApp_OpenMessageBox
+	.public BattleCastleOpponentApp_CheckMonAndRedrawHp
+	.public BattleCastleOpponentApp_HideSummaryBg
+	.public BattleCastleOpponentApp_ShowMonBoughtMarks
+	.public BattleCastleOpponentApp_GetBoughtMarkPos
+	.public BattleCastleOpponentApp_ShowMonSummary
+	.public BattleCastleOpponentApp_SetCursorPos
+	.public BattleCastleSprite_Delete
+	.public BattleCastleSprite_SetDrawFlag
+	.public BattleCastleSprite_SetAnim
+	.public BattleCastleSprite_SetMonIconPalette
 	.public ov83_02247600
 	.public ov83_0224760C
-	.public ov83_02247624
-	.public ov83_0224773C
-	.public ov83_02247768
-	.public ov83_0224776C
-	.public ov83_022477B0
-	.public ov83_022477C4
-	.public ov83_022477E4
-	.public ov83_02247844
-	.public ov83_02247858
-	.public ov83_022478B4
-	.public ov83_02247988
-	.public ov83_02247A18
+	.public BattleCastleSprite_IsAnimated
+	.public BattleCastle_SetSpritesTranslucent
+	.public BattleCastle_GetMonIndex
+	.public BattleCastle_GetSideSlot
+	.public BattleCastle_PlaySEOnInput
+	.public BattleCastle_BufferPartnerName
+	.public BattleCastle_ClearBgToggleRequests
+	.public BattleCastlePrompt_Init
+	.public BattleCastlePrompt_Free
+	.public BattleCastlePrompt_Hide
+	.public BattleCastle_GetMenuTiles
+	.public BattleCastle_FreeGrid
 	.public ov83_02247A20
 	.public ov83_02247B04
 	.public ov83_02247B1C
 	.public ov83_02247B34
 	.public ov83_02247B4C
 	.public ov83_02247B64
-	.public ov83_02247CB8
-	.public ov83_02247CC4
-	.public ov83_02247CE8
-	.public ov83_02247CF0
+	.public BattleCastle_CreateListMenuSpawner
+	.public BattleCastle_DestroyListMenuSpawner
+	.public BattleCastle_DestroyListMenu
+	.public BattleCastle_IsAdvancePressed
 
-	thumb_func_start ov83_02247568
-ov83_02247568: ; 0x02247568
+	thumb_func_start BattleCastleSprite_SetPosition
+BattleCastleSprite_SetPosition: ; 0x02247568
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0xc
 	add r5, r0, #0
@@ -1749,11 +1749,11 @@ ov83_02247568: ; 0x02247568
 	add sp, #0xc
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov83_02247568
+	thumb_func_end BattleCastleSprite_SetPosition
 
 
-	thumb_func_start ov83_0224759C
-ov83_0224759C: ; 0x0224759C
+	thumb_func_start BattleCastleSprite_SetPositionSubScreen
+BattleCastleSprite_SetPositionSubScreen: ; 0x0224759C
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0xc
 	add r5, r0, #0
@@ -1780,4 +1780,4 @@ ov83_0224759C: ; 0x0224759C
 	bl Sprite_SetMatrix
 	add sp, #0xc
 	pop {r4, r5, r6, r7, pc}
-	thumb_func_end ov83_0224759C
+	thumb_func_end BattleCastleSprite_SetPositionSubScreen

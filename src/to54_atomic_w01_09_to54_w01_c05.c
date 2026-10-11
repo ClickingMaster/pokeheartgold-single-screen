@@ -7,8 +7,8 @@
 void ov07_0221D270(void *p) {
     int a, b;
     U32_AT2(p, 0x18) += 4;
-    a = ov07_0223192C(p, U16_AT2(PTR_AT2(p, 0xc0), 0x14));
-    b = ov07_0223192C(p, U16_AT2(PTR_AT2(p, 0xc0), 0x16));
+    a = BattleAnimUtil_GetBattlerSide(p, U16_AT2(PTR_AT2(p, 0xc0), 0x14));
+    b = BattleAnimUtil_GetBattlerSide(p, U16_AT2(PTR_AT2(p, 0xc0), 0x16));
     if (a == b) {
         U32_AT2(p, 0x18) += U32_AT2(PTR_AT2(p, 0x18), 0) * 4;
     } else {

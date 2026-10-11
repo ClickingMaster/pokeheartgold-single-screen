@@ -56,12 +56,12 @@ s32 ov07_022227D8(void *);                                                      
 s32 ov07_0222283C(void *, s16, s16, s32);                                                  /* extern */
 M2C_UNK ov07_02222AC4(void *, s32, s32, s32, s32, s32);                                    /* extern */
 M2C_UNK ov07_02222AF4(void *);                                                             /* extern */
-M2C_UNK ov07_02231E08(s32, s32, s32);                                                      /* extern */
-M2C_UNK ov07_02231E44(s32, s32, s32, s32);                                                 /* extern */
-M2C_UNK ov07_02231FA0(s32, M2C_UNK *);                                                     /* extern */
-M2C_UNK ov07_02231FE4(s32, void *);                                                        /* extern */
-M2C_UNK ov07_02232020(s32, s32, void *, void *);                                           /* extern */
-void *ov07_022324D8(s32, s32);                                                             /* extern */
+M2C_UNK BattleAnimUtil_SetBlendWithBattleBg(s32, s32, s32);                                                      /* extern */
+M2C_UNK BattleAnimUtil_SetBlendWithMask(s32, s32, s32, s32);                                                 /* extern */
+M2C_UNK BattleAnimUtil_GetPicPosition(s32, M2C_UNK *);                                                     /* extern */
+M2C_UNK BattleAnimUtil_InitCommonWork(s32, void *);                                                        /* extern */
+M2C_UNK BattleAnimUtil_CollectPicsByFlags(s32, s32, void *, void *);                                           /* extern */
+void *BattleAnimUtil_AllocWork(s32, s32);                                                             /* extern */
 void ov07_02228684(s32 arg0, void *arg1);                                                  /* static */
 void ov07_02228834(s32 arg0, void *arg1);                                                  /* static */
 void ov07_02228B38(s32 arg0, void *arg1);                                                  /* static */
@@ -92,7 +92,7 @@ void ov07_02228F14(s32 arg0, void *arg1) {
         M2C_FIELD(arg1, u8 *, 0) = (u8)(M2C_FIELD(arg1, u8 *, 0) + 1);
         return;
     case 1:
-        ov07_02231FA0(M2C_FIELD(arg1, s32 *, 0x2C), &sp4);
+        BattleAnimUtil_GetPicPosition(M2C_FIELD(arg1, s32 *, 0x2C), &sp4);
         if (ov07_0222283C(arg1 + 0x38, M2C_FIELD(&sp4, s16 *, 0), M2C_FIELD(&sp4, s16 *, 2), M2C_FIELD(arg1, s32 *, 0x2C)) == 0) {
             M2C_FIELD(arg1, u8 *, 0) = (u8)(M2C_FIELD(arg1, u8 *, 0) + 1);
             return;

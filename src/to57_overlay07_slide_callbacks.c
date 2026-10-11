@@ -22,7 +22,7 @@ void ov07_02224998(void *task, WorkSlideA *w) {
 }
 
 void ov07_02224A20(void *ctx) {
-    WorkSlideA *w = ov07_022324D8(ctx, sizeof(WorkSlideA));
+    WorkSlideA *w = BattleAnimUtil_AllocWork(ctx, sizeof(WorkSlideA));
     int kind, picno;
     w->owner = ctx;
     w->param = ((s32)ov07_0221C4A8(ctx, 0));
@@ -35,7 +35,7 @@ void ov07_02224A20(void *ctx) {
         break;
     case 0x104:
         if (ov07_0221FAB0(ctx) == 1) {
-            picno = ov07_0223197C(ctx, ov07_0221C468(ctx));
+            picno = BattleAnimUtil_GetPartnerBattler(ctx, ov07_0221C468(ctx));
         }
         break;
     case 0x108:
@@ -43,7 +43,7 @@ void ov07_02224A20(void *ctx) {
         break;
     case 0x110:
         if (ov07_0221FAB0(ctx) == 1) {
-            picno = ov07_0223197C(ctx, ov07_0221C470(ctx));
+            picno = BattleAnimUtil_GetPartnerBattler(ctx, ov07_0221C470(ctx));
         }
         break;
     default:
@@ -54,9 +54,9 @@ void ov07_02224A20(void *ctx) {
         Heap_Free(w);
         return;
     }
-    ov07_02231FE4(ctx, w->cfg);
+    BattleAnimUtil_InitCommonWork(ctx, w->cfg);
     w->pic = ov07_0221FA48(ctx, picno);
-    ov07_02231FA0(w->pic, &w->x);
+    BattleAnimUtil_GetPicPosition(w->pic, &w->x);
     if (ov07_02222004(ctx, picno) <= 0) {
         w->delta *= -1;
     }
@@ -86,13 +86,13 @@ void ov07_02224B14(void *task, WorkSlideB *w) {
 }
 
 void ov07_02224BAC(void *ctx) {
-    WorkSlideB *w = ov07_022324D8(ctx, sizeof(WorkSlideB));
+    WorkSlideB *w = BattleAnimUtil_AllocWork(ctx, sizeof(WorkSlideB));
     int kind, picno;
     w->owner = ctx;
     w->param = ((s32)ov07_0221C4A8(ctx, 0));
     w->delta = ((s32)ov07_0221C4A8(ctx, 1));
     kind = ((s32)ov07_0221C4A8(ctx, 2));
-    ov07_02231FE4(ctx, w->cfg);
+    BattleAnimUtil_InitCommonWork(ctx, w->cfg);
     picno = 0xff;
     switch (kind) {
     case 0x102:
@@ -100,7 +100,7 @@ void ov07_02224BAC(void *ctx) {
         break;
     case 0x104:
         if (ov07_0221FAB0(ctx) == 1) {
-            picno = ov07_0223197C(ctx, ov07_0221C468(ctx));
+            picno = BattleAnimUtil_GetPartnerBattler(ctx, ov07_0221C468(ctx));
         }
         break;
     case 0x108:
@@ -108,7 +108,7 @@ void ov07_02224BAC(void *ctx) {
         break;
     case 0x110:
         if (ov07_0221FAB0(ctx) == 1) {
-            picno = ov07_0223197C(ctx, ov07_0221C470(ctx));
+            picno = BattleAnimUtil_GetPartnerBattler(ctx, ov07_0221C470(ctx));
         }
         break;
     default:
@@ -120,7 +120,7 @@ void ov07_02224BAC(void *ctx) {
         return;
     }
     w->pic = ov07_0221FA48(ctx, picno);
-    ov07_02231FA0(w->pic, &w->x);
+    BattleAnimUtil_GetPicPosition(w->pic, &w->x);
     if (ov07_02222004(ctx, picno) <= 0) {
         w->delta *= -1;
     }

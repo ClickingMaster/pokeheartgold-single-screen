@@ -20,7 +20,7 @@ typedef struct {
 } State;
 
 extern State ov13_0224F538;
-extern void ov13_0223ABB8(int);
+extern void WifiSetupSound_Play(int);
 extern void ov13_02230B14(void);
 extern void *WifiSetupTask_Create(int, void (*)(void), int, int);
 extern void ov13_02230ED0(void);
@@ -38,7 +38,7 @@ void ov13_02230D10(int input) {
             if (ov13_0224F538.value == 0) {
                 ov13_0224F538.state = 4;
             } else {
-                ov13_0223ABB8(19);
+                WifiSetupSound_Play(19);
                 ov13_0224F538.work->task = WifiSetupTask_Create(0, ov13_02230B14, 0, 120);
                 return;
             }
@@ -85,10 +85,10 @@ void ov13_02230D10(int input) {
         if (ov13_0224F538.work->flag) {
             return;
         }
-        ov13_0223ABB8(9);
+        WifiSetupSound_Play(9);
         ov13_0224F538.work->flag = 1;
         return;
     }
-    ov13_0223ABB8(8);
+    WifiSetupSound_Play(8);
     ov13_02230CC4();
 }

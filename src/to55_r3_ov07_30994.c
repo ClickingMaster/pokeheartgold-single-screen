@@ -38,10 +38,10 @@ typedef struct Ov07PicTaskB {
     Ov07Motion motion2;
 } Ov07PicTaskB;
 
-extern void *ov07_022324D8(void *, u32);
+extern void *BattleAnimUtil_AllocWork(void *, u32);
 extern void *ov07_0221C528(void *);
 extern u16 ov07_0221C468(void *);
-extern int ov07_0223192C(void *, int);
+extern int BattleAnimUtil_GetBattlerSide(void *, int);
 extern void *ov07_0221C4C0(void *, int);
 extern void Sprite_DeleteAndFreeResources(void *);
 extern s32 ov07_02222004(void *, int);
@@ -64,13 +64,13 @@ void ov07_02230A70(void *, Ov07PicTaskA *);
 void ov07_02230BF8(void *, Ov07PicTaskB *);
 
 void ov07_02230994(void *owner) {
-    Ov07SpriteTask *work = ov07_022324D8(owner, sizeof(Ov07SpriteTask));
+    Ov07SpriteTask *work = BattleAnimUtil_AllocWork(owner, sizeof(Ov07SpriteTask));
     u16 context;
 
     work->owner = owner;
     work->spriteSystem = ov07_0221C528(owner);
     context = ov07_0221C468(owner);
-    if (ov07_0223192C(owner, context) == 3) {
+    if (BattleAnimUtil_GetBattlerSide(owner, context) == 3) {
         work->sprite = ov07_0221C4C0(owner, 0);
         Sprite_DeleteAndFreeResources(ov07_0221C4C0(owner, 1));
     } else {
@@ -132,7 +132,7 @@ void ov07_02230A70(void *task, Ov07PicTaskA *work) {
 }
 
 void ov07_02230BA0(void *owner) {
-    Ov07PicTaskA *work = ov07_022324D8(owner, 0x64);
+    Ov07PicTaskA *work = BattleAnimUtil_AllocWork(owner, 0x64);
     u16 context;
 
     work->owner = owner;

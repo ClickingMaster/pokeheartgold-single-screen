@@ -5,7 +5,7 @@
 
 typedef void *Handle;
 
-void *ov07_022324D8(void *, u32);
+void *BattleAnimUtil_AllocWork(void *, u32);
 void ov07_0221C410(void *, void (*)(void *, void *), void *);
 void ov07_0221C448(void *, void *);
 void *ov07_0221C468(void *);
@@ -22,7 +22,7 @@ BOOL ov07_02222748(void *, void *);
 void ov07_02222A44(void *, int, int);
 void ov07_02222AC4(void *, int, int, int, int, int);
 BOOL ov07_02222AF4(void *);
-void ov07_02231E08(void *, int, int);
+void BattleAnimUtil_SetBlendWithBattleBg(void *, int, int);
 
 void ManagedSprite_SetDrawPriority(void *, int);
 void ManagedSprite_SetPriority(void *, int);

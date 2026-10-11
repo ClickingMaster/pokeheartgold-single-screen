@@ -51,7 +51,7 @@ typedef struct W29220 {
     ManagedSprite *sprite1;
 } W29220;
 
-void *ov07_022324D8(void *owner, u32 size);
+void *BattleAnimUtil_AllocWork(void *owner, u32 size);
 u16 ov07_0221C468(void *owner);
 Pokepic *ov07_0221FA48(void *owner, u16 index);
 void *ov07_0221FA78(void *owner);
@@ -63,10 +63,10 @@ void ov07_022281C0(void);
 void ov07_022283D8(void);
 void ov07_02228510(void);
 void ov07_0222915C(void);
-void ov07_02231FE4(void *owner, void *work);
+void BattleAnimUtil_InitCommonWork(void *owner, void *work);
 ManagedSprite *ov07_0221C4E8(void *owner, int index);
 u16 ov07_0221C470(void *owner);
-void ov07_02231FA0(void *object, void *position);
+void BattleAnimUtil_GetPicPosition(void *object, void *position);
 void ov07_02228070(void *owner);
 void ov07_02228174(void *owner);
 void ov07_02228384(void *owner);
@@ -76,7 +76,7 @@ void ov07_02229220(void *owner);
 void ov07_0222A8D8(ManagedSprite *sprite);
 
 void ov07_02228638(void *owner) {
-    W28384 *work = ov07_022324D8(owner, 0x58);
+    W28384 *work = BattleAnimUtil_AllocWork(owner, 0x58);
     work->state = 0;
     work->substate = 0;
     work->owner = owner;

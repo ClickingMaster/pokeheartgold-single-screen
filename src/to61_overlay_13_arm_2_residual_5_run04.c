@@ -48,10 +48,10 @@ extern u16 ov13_02245428[];
 extern void ov13_0222B8E8(void (*)(void));
 extern void WifiSetupFade_Start(int, int, int, int);
 extern void WifiSetupDisplay_ShowPlanes(int, int);
-extern void ov13_0223ABB8(int);
+extern void WifiSetupSound_Play(int);
 extern void WifiSetupFade_StartDelay(int);
 extern int WifiSetupFade_IsActive(int);
-extern int WifiSetupKeyboard_GetSelected(void);
+extern int WifiSetupKeyboard_GetInput(void);
 extern int ov13_0222A070(void);
 extern int ov13_0223C1DC(void);
 extern int ov13_0223C1F0(void);
@@ -61,8 +61,8 @@ extern void WifiSetupButtonBar_Close(void);
 extern void WifiSetupButtonBar_Unlock(void);
 extern void ov13_02239584(void);
 extern void WifiSetupKeyboard_Create(void);
-extern void ov13_02228400(int);
-extern void ov13_02228414(int);
+extern void WifiSetupKeyboard_SetCanDelete(int);
+extern void WifiSetupKeyboard_SetCanType(int);
 extern void WifiSetupKeyboard_Close(void);
 extern void ov13_0223C198(void);
 extern void ov13_02229D00(void);
@@ -255,18 +255,18 @@ void ov13_0223121C(void) {
         return;
     }
     WifiSetupKeyboard_Create();
-    ov13_0223ABB8(20);
+    WifiSetupSound_Play(20);
     if (ov13_0224F540->count == 0) {
-        ov13_02228400(0);
+        WifiSetupKeyboard_SetCanDelete(0);
     }
     if (ov13_0224F540->count == 32) {
-        ov13_02228414(0);
+        WifiSetupKeyboard_SetCanType(0);
     }
     ov13_0222B8E8(ov13_02231298);
 }
 
 void ov13_02231298(void) {
-    if (WifiSetupKeyboard_GetSelected() == 255) {
+    if (WifiSetupKeyboard_GetInput() == 255) {
         return;
     }
     ov13_0222B8E8(ov13_022312B8);
@@ -278,7 +278,7 @@ void ov13_022312B8(void) {
 }
 
 void ov13_022312C8(void) {
-    int x = WifiSetupKeyboard_GetSelected();
+    int x = WifiSetupKeyboard_GetInput();
     switch (x) {
     case 0:
         break;
@@ -286,26 +286,26 @@ void ov13_022312C8(void) {
         if (ov13_0224F540->count == 0) {
             break;
         }
-        ov13_0223ABB8(3);
+        WifiSetupSound_Play(3);
         ov13_0224F540->count--;
         ov13_0224F540->text[ov13_0224F540->count] = 0;
         if (ov13_0224F540->count == 0) {
-            ov13_02228400(0);
+            WifiSetupKeyboard_SetCanDelete(0);
         }
-        ov13_02228414(1);
+        WifiSetupKeyboard_SetCanType(1);
         break;
     case 130:
-        ov13_0223ABB8(7);
+        WifiSetupSound_Play(7);
         ov13_0224F540->flag = 0;
         ov13_0222B8E8(ov13_0223148C);
         return;
     case 131:
         if (ov13_0223191C()) {
-            ov13_0223ABB8(6);
+            WifiSetupSound_Play(6);
             ov13_0224F540->flag = 1;
         } else {
             ov13_0224F540->flag = 2;
-            ov13_0223ABB8(9);
+            WifiSetupSound_Play(9);
         }
         *ov13_0224F540->b = (*ov13_0224F540->b & 0xc1fffcff) | 0x200;
         ov13_0222B8E8(ov13_0223148C);
@@ -315,12 +315,12 @@ void ov13_022312C8(void) {
         if (ov13_0224F540->count == 32) {
             break;
         }
-        ov13_0223ABB8(1);
+        WifiSetupSound_Play(1);
         ov13_0224F540->text[ov13_0224F540->count] = x;
         ov13_0224F540->count++;
-        ov13_02228400(1);
+        WifiSetupKeyboard_SetCanDelete(1);
         if (ov13_0224F540->count == 32) {
-            ov13_02228414(0);
+            WifiSetupKeyboard_SetCanType(0);
         }
         break;
     }
@@ -341,7 +341,7 @@ void ov13_022314A8(void) {
         return;
     }
     WifiSetupKeyboard_Close();
-    ov13_0223ABB8(21);
+    WifiSetupSound_Play(21);
     ov13_0222B8E8(ov13_022314D8);
 }
 

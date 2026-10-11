@@ -1,7 +1,7 @@
 #include "to56_w10_overlay07_private.h"
 
 void ov07_02223EB4(void *owner) {
-    FadeWork *w = ov07_022324D8(owner, 8);
+    FadeWork *w = BattleAnimUtil_AllocWork(owner, 8);
     w->owner = owner;
     w->palette = ov07_0221FA78(owner);
     u16 opaque;
@@ -67,7 +67,7 @@ void ov07_02223F5C(void *task, FadeWork *w) {
 }
 
 void ov07_02224008(void *owner) {
-    FadeWork *w = ov07_022324D8(owner, 0x20);
+    FadeWork *w = BattleAnimUtil_AllocWork(owner, 0x20);
     w->owner = owner;
     w->palette = NULL;
     int kind = ((s32)ov07_0221C4A8(owner, 0));
@@ -78,7 +78,7 @@ void ov07_02224008(void *owner) {
         break;
     case 4:
         if (ov07_0221FAB0(owner) == 1) {
-            w->palette = ov07_0221FA48(w->owner, ov07_0223197C(w->owner, ov07_0221C468(w->owner)));
+            w->palette = ov07_0221FA48(w->owner, BattleAnimUtil_GetPartnerBattler(w->owner, ov07_0221C468(w->owner)));
         }
         break;
     case 8:
@@ -86,7 +86,7 @@ void ov07_02224008(void *owner) {
         break;
     case 16:
         if (ov07_0221FAB0(owner) == 1) {
-            w->palette = ov07_0221FA48(w->owner, ov07_0223197C(w->owner, ov07_0221C470(w->owner)));
+            w->palette = ov07_0221FA48(w->owner, BattleAnimUtil_GetPartnerBattler(w->owner, ov07_0221C470(w->owner)));
         }
         break;
     case 0x802:
@@ -213,7 +213,7 @@ void ov07_022241D8(void *task, ScaleWork *w) {
 }
 
 void ov07_02224348(void *owner) {
-    ScaleWork *w = ov07_022324D8(owner, sizeof(ScaleWork));
+    ScaleWork *w = BattleAnimUtil_AllocWork(owner, sizeof(ScaleWork));
     w->owner = owner;
     w->spriteSystem = ov07_0221C514(owner);
     void *pic;
@@ -237,7 +237,7 @@ void ov07_02224348(void *owner) {
     ManagedSprite_SetPriority(w->sprite, 1);
     ManagedSprite_SetOamMode(w->sprite, 1);
     ManagedSprite_SetAffineOverwriteMode(w->sprite, 2);
-    ov07_02231E08(w->owner, w->a, 16 - w->a);
+    BattleAnimUtil_SetBlendWithBattleBg(w->owner, w->a, 16 - w->a);
     ov07_0221C410(w->owner, ov07_022241D8, w);
     int flag = ((s32)ov07_0221C4A8(owner, 0)) != 0;
     if (ov07_0221FB78(w->owner, flag) == 1) {

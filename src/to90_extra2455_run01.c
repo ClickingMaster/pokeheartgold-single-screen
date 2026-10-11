@@ -30,7 +30,7 @@ extern Pos16 ov13_02245258[];
 extern Pos16 ov13_02245234;
 extern int WifiSetupInput_IsTouchPressed(const void *);
 extern void WifiSetup_RectFromPosSize(const void *, const void *, void *);
-extern void ov13_0223ABB8(int);
+extern void WifiSetupSound_Play(int);
 void ov13_0222A378(void);
 
 void ov13_0222A378(void) {
@@ -46,10 +46,10 @@ void ov13_0222A378(void) {
         WifiSetup_RectFromPosSize(cursor, &ov13_02245228, &record);
         if (WifiSetupInput_IsTouchPressed(&record)) {
             if (!ov13_0224F4C0->b) {
-                ov13_0223ABB8(9);
+                WifiSetupSound_Play(9);
                 return;
             }
-            ov13_0223ABB8(0);
+            WifiSetupSound_Play(0);
             ov13_0224F4C0->selected = i;
             return;
         }
@@ -59,10 +59,10 @@ void ov13_0222A378(void) {
         WifiSetup_RectFromPosSize(cursor, &ov13_02245230, &record);
         if (WifiSetupInput_IsTouchPressed(&record)) {
             if ((i == 0 && !ov13_0224F4C0->a) || (i == 1 && !ov13_0224F4C0->c)) {
-                ov13_0223ABB8(9);
+                WifiSetupSound_Play(9);
                 return;
             }
-            ov13_0223ABB8(0);
+            WifiSetupSound_Play(0);
             ov13_0224F4C0->selected = i + 10;
             return;
         }
@@ -71,7 +71,7 @@ void ov13_0222A378(void) {
     for (i = 0; i < 2; i++, cursor++) {
         WifiSetup_RectFromPosSize(cursor, &ov13_02245234, &record);
         if (WifiSetupInput_IsTouchPressed(&record)) {
-            ov13_0223ABB8(0);
+            WifiSetupSound_Play(0);
             ov13_0224F4C0->selected = i + 12;
             return;
         }

@@ -9,14 +9,14 @@ typedef struct Work {
     ManagedSprite *sprite;
     u8 unk14[0x28];
 } Work;
-void *ov07_022324D8(void *owner, u32 size);
+void *BattleAnimUtil_AllocWork(void *owner, u32 size);
 void ov07_0221C410(void *owner, void *func, void *data);
 void ov07_0223061C(void *task, Work *work);
 void ov07_022306D8(void *owner, int a, int b, ManagedSprite *sprite);
 
 // @fn ov07_022306D8
 void ov07_022306D8(void *owner, int a, int b, ManagedSprite *sprite) {
-    Work *work = ov07_022324D8(owner, sizeof(Work));
+    Work *work = BattleAnimUtil_AllocWork(owner, sizeof(Work));
     work->owner = owner;
     work->a = a;
     work->b = b;

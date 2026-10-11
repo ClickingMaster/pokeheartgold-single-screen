@@ -10,7 +10,7 @@ void ov07_0222F434(void *p) {
     ov07_02222508((u8 *)p + 0x4c, 10, 10, 1, 4);
     W(p, 0x94) = 0;
     W(p, 0x98) = 6;
-    ManagedSprite_SetDrawFlag(P(p, 0x20), ov07_02236800[ov07_02231924(P(p, 0), ov07_0221C468(P(p, 0)))]);
+    ManagedSprite_SetDrawFlag(P(p, 0x20), ov07_02236800[BattleAnimUtil_GetBattlerType(P(p, 0), ov07_0221C468(P(p, 0)))]);
     ManagedSprite_SetDrawFlag(P(p, 0x18), 1);
     ov07_02222644((u8 *)p + 0x28, &x, &y);
     if (W(p, 0xc8) == 1) {

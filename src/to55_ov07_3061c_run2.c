@@ -50,7 +50,7 @@ void ov07_02230714(void *task, Ov07W10Large *work) {
 }
 
 void ov07_022308E4(void *owner) {
-    Ov07W10Large *work = ov07_022324D8(owner, sizeof(Ov07W10Large));
+    Ov07W10Large *work = BattleAnimUtil_AllocWork(owner, sizeof(Ov07W10Large));
     work->owner = owner;
     work->field0C = ov07_0221FAA0(work->owner, ov07_0221C470(owner));
     work->pokepic = ov07_0221FA48(work->owner, ov07_0221C470(work->owner));

@@ -64,6 +64,6 @@ void ov07_0222C780(void *owner) {
     ManagedSprite_SetPriority(w->sprite, 1);
     ov07_02222590(&w->linear, 10, 12, 10, 15, 10, 7);
     w->pad64 = 1;
-    ov07_02231E08(w->owner, 28, 15);
+    BattleAnimUtil_SetBlendWithBattleBg(w->owner, 28, 15);
     ov07_0221C410(w->owner, ov07_0222C6A8, w);
 }

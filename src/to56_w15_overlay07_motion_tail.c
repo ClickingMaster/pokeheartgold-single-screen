@@ -29,13 +29,13 @@ extern BOOL ov07_022260DC(void *);
 extern BOOL ov07_022222B4(W02LinearMotion *);
 extern BOOL ov07_02222384(W02LinearMotion *, W02SinMotion *);
 extern BOOL ov07_02222180(Ov07Interp *);
-extern void ov07_02232508(void *);
+extern void BattleAnimUtil_FreeWork(void *);
 extern void ov07_0221C448(void *, void *);
 extern void ParticleSystem_DeleteEmitter(void *, void *);
 extern s32 GF_SinDeg(u16);
 
-extern void *ov07_022324D8(void *, u32);
-extern void ov07_02231FE4(void *, void *);
+extern void *BattleAnimUtil_AllocWork(void *, u32);
+extern void BattleAnimUtil_InitCommonWork(void *, void *);
 
 extern u32 ov07_0221C4A8(void *p, int i);
 extern u16 ov07_0221C468(void *);
@@ -81,7 +81,7 @@ extern void ov07_02231DD0(VecFx32 *);
 extern void ov07_022260F8(void *, void *);
 
 void ov07_022261B4(void *owner) {
-    Ov07Work104 *work = ov07_022324D8(owner, sizeof(Ov07Work104));
+    Ov07Work104 *work = BattleAnimUtil_AllocWork(owner, sizeof(Ov07Work104));
     VecFx32 a;
     VecFx32 b;
     s32 direction;
@@ -91,7 +91,7 @@ void ov07_022261B4(void *owner) {
     s32 y2;
     int i;
 
-    ov07_02231FE4(owner, &work->header);
+    BattleAnimUtil_InitCommonWork(owner, &work->header);
     ov07_0222600C(owner, work);
     direction = ov07_02222004(owner, ov07_0221C468(owner));
     ov07_02231B90(owner, work->handleA, (int)&a);
@@ -118,7 +118,7 @@ void ov07_022261B4(void *owner) {
 }
 
 void ov07_022262E8(void *owner) {
-    Ov07Work104 *work = ov07_022324D8(owner, sizeof(Ov07Work104));
+    Ov07Work104 *work = BattleAnimUtil_AllocWork(owner, sizeof(Ov07Work104));
     VecFx32 a;
     VecFx32 b;
     s32 mode;
@@ -129,7 +129,7 @@ void ov07_022262E8(void *owner) {
     s32 y2;
     int i;
 
-    ov07_02231FE4(owner, &work->header);
+    BattleAnimUtil_InitCommonWork(owner, &work->header);
     work->arg0 = ((s32)ov07_0221C4A8(owner, 0));
     work->arg10 = ((s32)ov07_0221C4A8(owner, 1));
     mode = ((s32)ov07_0221C4A8(owner, 2));
@@ -189,7 +189,7 @@ void ov07_0222647C(void *task, Ov07Work104 *work) {
     if (!ov07_02222384(&work->interpA.motion, &work->interpB.motion) && !active) {
         ParticleSystem_DeleteEmitter(work->resource, work->node);
         ov07_0221C448(work->header.owner, task);
-        ov07_02232508(work);
+        BattleAnimUtil_FreeWork(work);
         return;
     }
     SPL_SetEmitterPositionX(work->node, work->interpA.motion.x * 0xAC);
@@ -197,7 +197,7 @@ void ov07_0222647C(void *task, Ov07Work104 *work) {
 }
 
 void ov07_022264E0(void *owner) {
-    Ov07Work104 *work = ov07_022324D8(owner, sizeof(Ov07Work104));
+    Ov07Work104 *work = BattleAnimUtil_AllocWork(owner, sizeof(Ov07Work104));
     VecFx32 a;
     VecFx32 b;
     s32 direction;
@@ -207,7 +207,7 @@ void ov07_022264E0(void *owner) {
     s32 y2;
     int i;
 
-    ov07_02231FE4(owner, &work->header);
+    BattleAnimUtil_InitCommonWork(owner, &work->header);
     ov07_0222600C(owner, work);
     direction = ov07_02222004(owner, ov07_0221C468(owner));
     ov07_02231B90(owner, work->handleA, (int)&a);
@@ -251,13 +251,13 @@ void ov07_02226628(void *task, Ov07Work94 *work) {
 }
 
 void ov07_02226698(void *owner) {
-    Ov07Work94Init *work = ov07_022324D8(owner, sizeof(Ov07Work94Init));
+    Ov07Work94Init *work = BattleAnimUtil_AllocWork(owner, sizeof(Ov07Work94Init));
     s32 a;
     s32 b;
     s32 c;
     s32 d;
 
-    ov07_02231FE4(owner, (u8 *)work + 0x3C);
+    BattleAnimUtil_InitCommonWork(owner, (u8 *)work + 0x3C);
     work->arg0 = ((s32)ov07_0221C4A8(owner, 0));
     work->arg1 = ((s32)ov07_0221C4A8(owner, 1));
     work->arg2 = ((s32)ov07_0221C4A8(owner, 2));

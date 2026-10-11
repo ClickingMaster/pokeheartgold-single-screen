@@ -54,7 +54,7 @@ void ov07_02220978(void *emitter, Work *work) {
     case 31:
         t31 = *(const Table4 *)ov07_022354E0;
         {
-            int n = ov07_02231924(work->context, work->indexA);
+            int n = BattleAnimUtil_GetBattlerType(work->context, work->indexA);
             value.x = t31.v[n].x; value.y = t31.v[n].y;
         }
         value.z = 0;
@@ -64,7 +64,7 @@ void ov07_02220978(void *emitter, Work *work) {
         {
             int n;
             if (ov07_0221BFC0(work->context) == 1) n = 6;
-            else n = ov07_02231924(work->context, work->indexA);
+            else n = BattleAnimUtil_GetBattlerType(work->context, work->indexA);
             value.x = t30.v[n].x; value.y = t30.v[n].y;
         }
         value.z = 0;
@@ -74,7 +74,7 @@ void ov07_02220978(void *emitter, Work *work) {
         {
             int n;
             if (ov07_0221BFC0(work->context) == 1) n = 6;
-            else n = ov07_02231924(work->context, work->indexA);
+            else n = BattleAnimUtil_GetBattlerType(work->context, work->indexA);
             value.x = t32.v[n].x; value.y = t32.v[n].y;
         }
         value.z = 0;

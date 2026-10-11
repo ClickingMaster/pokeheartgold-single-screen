@@ -25,7 +25,7 @@ extern int WifiSetupInput_IsKeyPressed(int);
 extern void WifiSetupButtonBar_SelectIfNone(int);
 extern int ov13_02238C2C(void);
 extern void ov13_0223AC20(void);
-extern void ov13_0223ABB8(int);
+extern void WifiSetupSound_Play(int);
 extern void WifiSetupFade_StartDelay(int);
 extern void ov13_0223B940(void);
 extern void WifiSetupText_FreeBgCanvas(int);
@@ -367,7 +367,7 @@ extern void ov13_0223B0D8(void *, void *);
 
 void ov13_0223AC4C(int kind);
 
-void ov13_0223ABB8(int seq) {
+void WifiSetupSound_Play(int seq) {
     NNS_SndArcPlayerStartSeqArc(ov13_0224F5A8->handle, 0, seq);
 }
 
@@ -403,7 +403,7 @@ void ov13_0223AC4C(int kind) {
     }
     ov13_0224F5AC.objs->task = WifiSetupTask_Create(0, ov13_0223AD48, NULL, 0x78);
     ov13_0223B6F4(kind);
-    ov13_0223ABB8(0xd);
+    WifiSetupSound_Play(0xd);
 }
 
 void ov13_0223AD48(void *task, void *arg) {

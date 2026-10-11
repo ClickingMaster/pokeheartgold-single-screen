@@ -18,14 +18,14 @@ typedef struct W10Work {
 BOOL ov07_022223CC(void *a, void *b, ManagedSprite *sprite);
 BOOL ov07_02222440(void *a);
 void ov07_0221C448(void *owner, int arg);
-void ov07_02232508(void *work);
+void BattleAnimUtil_FreeWork(void *work);
 void ov07_0222928C(int arg0, W10Work *work);
 
 void ov07_0222928C(int arg0, W10Work *work) {
     if (ov07_022223CC((u8 *)work + 0x8C, (u8 *)work + 0xB0, work->sprite38) == 0) {
         Sprite_DeleteAndFreeResources(work->sprite38);
         ov07_0221C448(work->owner14, arg0);
-        ov07_02232508(work);
+        BattleAnimUtil_FreeWork(work);
         return;
     }
     if (ov07_02222440(&work->rotationD4) == 1) {
@@ -44,8 +44,8 @@ typedef struct W10EndWork {
     u8 pad28[0x2C];
 } W10EndWork;
 
-void *ov07_022324D8(void *owner, u32 size);
-void ov07_02231FE4(void *owner, void *work);
+void *BattleAnimUtil_AllocWork(void *owner, u32 size);
+void BattleAnimUtil_InitCommonWork(void *owner, void *work);
 ManagedSprite *ov07_0221C4E8(void *owner, int index);
 void ov07_02222AC4(void *work, int a, int b, int c, int d, int e);
 void ov07_0221EB98(void *owner, int arg);

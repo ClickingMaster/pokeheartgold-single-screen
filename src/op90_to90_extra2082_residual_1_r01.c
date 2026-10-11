@@ -14,7 +14,7 @@ typedef struct Work {
     s16 y;
     u8 unk68[8];
 } Work;
-void *ov07_022324D8(void *owner, u32 size);
+void *BattleAnimUtil_AllocWork(void *owner, u32 size);
 u32 ov07_0221C470(void *owner);
 Pokepic *ov07_0221FA48(void *owner, u32 battler);
 void ov07_0221C410(void *owner, void *func, void *data);
@@ -23,7 +23,7 @@ void ov07_0222E020(void *owner, int a, int b, ManagedSprite *sprite);
 
 // @fn ov07_0222E020
 void ov07_0222E020(void *owner, int a, int b, ManagedSprite *sprite) {
-    Work *work = ov07_022324D8(owner, sizeof(Work));
+    Work *work = BattleAnimUtil_AllocWork(owner, sizeof(Work));
     work->owner = owner;
     work->a = a;
     work->b = b;

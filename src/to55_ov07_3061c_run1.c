@@ -3,7 +3,7 @@
 void ov07_0223061C(void *task, Ov07W10Small *work) {
     switch (work->state) {
     case 0:
-        ov07_02231E08(work->owner, 0, 16);
+        BattleAnimUtil_SetBlendWithBattleBg(work->owner, 0, 16);
         ov07_02222AC4(&work->motion, 0, 16, 16, 0, 8);
         work->state++;
         break;

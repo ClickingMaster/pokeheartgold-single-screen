@@ -15,7 +15,7 @@ extern Work *ov13_0224F544;
 extern int ov13_0222A070(void);
 extern int ov13_0223261C(void);
 extern int ov13_02232168(int);
-extern void ov13_0223ABB8(int);
+extern void WifiSetupSound_Play(int);
 extern void ov13_0222A084(int);
 extern void ov13_0222A098(int);
 extern void ov13_0222A0AC(int);
@@ -33,7 +33,7 @@ void ov13_02231E58(void) {
         return;
     case 16:
         if (ov13_0224F544->index != 0 || ov13_0224F544->entries[2] != 0) {
-            ov13_0223ABB8(3);
+            WifiSetupSound_Play(3);
             if (ov13_0224F544->entries[ov13_0224F544->index * 3 + 2] == 0) {
                 ov13_0224F544->index--;
             }
@@ -47,23 +47,23 @@ void ov13_02231E58(void) {
         break;
     case 17:
         if (ov13_0224F544->index < 3 && ov13_0224F544->entries[ov13_0224F544->index * 3 + 2] != 0) {
-            ov13_0223ABB8(1);
+            WifiSetupSound_Play(1);
             ov13_0224F544->index++;
             ov13_0222A0AC(0);
         }
         break;
     case 18:
         ov13_0224F544->state = 0;
-        ov13_0223ABB8(7);
+        WifiSetupSound_Play(7);
         ov13_0222B8E8(ov13_02232200);
         return;
     case 19:
         if (ov13_0223261C()) {
-            ov13_0223ABB8(6);
+            WifiSetupSound_Play(6);
             ov13_0224F544->state = 1;
         } else {
             ov13_0224F544->state = 2;
-            ov13_0223ABB8(9);
+            WifiSetupSound_Play(9);
         }
         ov13_0224F544->index = 3;
         *ov13_0224F544->flags = (*ov13_0224F544->flags & 0xc1fffcff) | 0x200;
@@ -75,7 +75,7 @@ void ov13_02231E58(void) {
         if (ov13_0224F544->index == 3 && ov13_02232168(26)) {
             break;
         }
-        ov13_0223ABB8(1);
+        WifiSetupSound_Play(1);
         {
             u8 *entry = ov13_0224F544->entries;
             int index = ov13_0224F544->index * 3;

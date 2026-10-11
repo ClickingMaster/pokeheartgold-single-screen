@@ -5,7 +5,7 @@ void ov07_02222590(void *, int, int, int, int, int, int);
 void ov07_02222508(void *, int, int, int, int);
 int ov07_0221C468(void *);
 void ov07_0221C470(void *);
-int ov07_02231924(void *, int);
+int BattleAnimUtil_GetBattlerType(void *, int);
 void ManagedSprite_SetDrawFlag(void *, int);
 void ManagedSprite_SetAffineScale(void *, float, float);
 void ov07_02222644(void *, float *, float *);

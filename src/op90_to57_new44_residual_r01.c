@@ -19,7 +19,7 @@ typedef struct {
     u8 interp[0x24];
     u8 interp2[0x24];
 } State;
-extern State *ov07_022324D8(void *owner, int size);
+extern State *BattleAnimUtil_AllocWork(void *owner, int size);
 extern void *ov07_0221C468(void *owner);
 extern void *ov07_0221C470(void *owner);
 extern int ov07_02222004(void *owner, void *battler);
@@ -32,7 +32,7 @@ void ov07_0222D974(void *owner, int a, int b, ManagedSprite *sprite);
 
 // @fn ov07_0222D974
 void ov07_0222D974(void *owner, int a, int b, ManagedSprite *sprite) {
-    State *s = ov07_022324D8(owner, sizeof(State));
+    State *s = BattleAnimUtil_AllocWork(owner, sizeof(State));
     s->owner = owner;
     s->a = a;
     s->b = b;

@@ -5,7 +5,7 @@
 #include <string.h>
 typedef struct {void *scene;u32 a,b;void *pic;s16 x,y,top,bottom;void *effect;u8 tween[76];} Context;
 extern enum HeapID ov07_0221BFD0(void *);
-extern s32 ov07_0221C468(void *),ov07_02222004(void *,s32),ov07_02231924(void *,s32),ov07_0221FAEC(void *,s32),ov07_0221FAE8(void *),Pokepic_GetAttr(void *,s32);
+extern s32 ov07_0221C468(void *),ov07_02222004(void *,s32),BattleAnimUtil_GetBattlerType(void *,s32),ov07_0221FAEC(void *,s32),ov07_0221FAE8(void *),Pokepic_GetAttr(void *,s32);
 extern void *ov07_0221FA48(void *,s32),*ov07_0221FAF8(void *,s32);
 extern SysTask *ov07_0221C410(void *,void (*)(SysTask *,Context *),Context *);
 extern void ov07_0222C918(SysTask *,Context *),Pokepic_SetAttr(void *,s32,s32),ov07_02222268(void *,s32,s32,s32,s32,s32),SetBgPriority(u8,u8);
@@ -20,5 +20,5 @@ void ov07_0222CA8C(void *scene){
  direction=ov07_02222004(p->scene,ov07_0221C468(p->scene));p->top=p->y-8;p->bottom=p->y+88;if(p->top<0)p->top=0;if(p->bottom>191)p->bottom=191;
  obj=ov07_0221FAF8(scene,1);priority=SysTask_GetPriority(task);value=ov07_02222D88(p->x,p->y);p->effect=ov07_02222CCC(p->top,p->bottom,910,direction<<15,80,obj,priority+1,value,ov07_0221BFD0(scene));
  ov07_02222268(p->tween,0,80,0,40,24);*(s32*)(p->tween+8)*=direction;
- if((u32)(ov07_02231924(p->scene,ov07_0221C468(scene))-3)<=1){bg=ov07_0221FAEC(p->scene,1);SetBgPriority(bg,ov07_0221FAE8(p->scene));SetBgPriority(0,ov07_0221FAE8(p->scene)+1);}ov07_0222C918(task,p);
+ if((u32)(BattleAnimUtil_GetBattlerType(p->scene,ov07_0221C468(scene))-3)<=1){bg=ov07_0221FAEC(p->scene,1);SetBgPriority(bg,ov07_0221FAE8(p->scene));SetBgPriority(0,ov07_0221FAE8(p->scene)+1);}ov07_0222C918(task,p);
 }

@@ -25,7 +25,7 @@ extern int WifiSetupInput_IsKeyPressed(int);
 extern void WifiSetupButtonBar_SelectIfNone(int);
 extern int ov13_02238C2C(void);
 extern void ov13_0223AC20(void);
-extern void ov13_0223ABB8(int);
+extern void WifiSetupSound_Play(int);
 extern void WifiSetupFade_StartDelay(int);
 extern void ov13_0223B940(void);
 extern void WifiSetupText_FreeBgCanvas(int);

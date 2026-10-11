@@ -30,7 +30,7 @@ u32 *ov07_02222D60(void *handle);
 void ov07_0222C850(To56W01Work *work, u32 *table);
 BOOL ov07_022222B4(To56W01Motion *motion);
 u32 ov07_02222D88(u16 x, u16 y);
-void ov07_02231E74(void *, int, int);
+void BattleAnimUtil_SetBlendBgOverBattleBg(void *, int, int);
 void ov07_02222AC4(void *, int, int, int, int, int);
 BOOL ov07_02222AF4(void *);
 void ov07_02222D74(void *);

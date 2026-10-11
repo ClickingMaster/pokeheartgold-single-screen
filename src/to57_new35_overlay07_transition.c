@@ -91,7 +91,7 @@ void ov07_0222CE10(void *owner) {
     ov07_02222508(&w->anim, 14, 10, 10, 8);
     ov07_02222418(&w->scalar, 0, 16, 8);
     ManagedSprite_SetOamMode(w->sprite, 1);
-    ov07_02231E08(w->owner, 0, 31);
+    BattleAnimUtil_SetBlendWithBattleBg(w->owner, 0, 31);
     ManagedSprite_SetAffineOverwriteMode(w->sprite, 2);
     if (w->mirror == 1) {
         ManagedSprite_SetAffineScale(w->sprite, -1.4f, 1.4f);

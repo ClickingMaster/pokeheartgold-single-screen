@@ -49,7 +49,7 @@ typedef struct MoveWork {
 
 void GF_AssertFail(void);
 void Heap_Free(void *);
-void *ov07_022324D8(void *, int);
+void *BattleAnimUtil_AllocWork(void *, int);
 void *ov07_0221FA78(void *);
 
 extern u32 ov07_0221C4A8(void *p, int i);
@@ -63,10 +63,10 @@ void *ov07_0221FA48(void *, int);
 int ov07_0221FAA0(void *, int);
 int ov07_0221FAB0(void *);
 int ov07_0221FA04(void *, int);
-int ov07_0223197C(void *, int);
+int BattleAnimUtil_GetPartnerBattler(void *, int);
 int ov07_0221C4E8(void *, int);
 int ov07_0221FB78(void *, int);
-void ov07_02231E08(void *, int, int);
+void BattleAnimUtil_SetBlendWithBattleBg(void *, int, int);
 int PaletteData_BeginPaletteFade(void *, int, u16, s8, u8, u8, u16);
 void Pokepic_StartPaletteFade(void *, int, int, int, int);
 int Pokepic_ResumePaletteFade(void *);
@@ -87,7 +87,7 @@ int ov07_02222768(void *, void *);
 int ov07_02222788(void *, void *);
 void ov07_022226C4(void *, s16, s16, int, int);
 void ov07_02223224(void *);
-void ov07_02232020(void *, int, void *, void *);
+void BattleAnimUtil_CollectPicsByFlags(void *, int, void *, void *);
 void ov07_02223E94(void *, void *);
 void ov07_02223EB4(void *);
 void ov07_02224008(void *);

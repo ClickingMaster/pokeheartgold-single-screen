@@ -44,8 +44,8 @@ Ov07Slot *ov07_0221DD8C(Ov07Slot **slots, int kind) {
 }
 
 BOOL ov07_0221DDB0(Ov07Slot **slots, Ov07Context *ctx, int index) {
-    int first = ov07_0223192C(ctx, *(u16 *)((u8 *)ctx->config + 0x14));
-    int second = ov07_0223192C(ctx, *(u16 *)((u8 *)ctx->config + 0x16));
+    int first = BattleAnimUtil_GetBattlerSide(ctx, *(u16 *)((u8 *)ctx->config + 0x14));
+    int second = BattleAnimUtil_GetBattlerSide(ctx, *(u16 *)((u8 *)ctx->config + 0x16));
     int kind = *(int *)((u8 *)slots + index * 4 + 0x1C);
 
     if (kind == 2) {

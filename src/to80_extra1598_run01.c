@@ -6,7 +6,7 @@ typedef struct {u32 pad;VecFx32 position;} Base;
 typedef struct {u16 x,y,z;} Rotation;
 typedef struct {u8 pad[0x20];Base **base;u32 unk24;VecFx32 position;u8 pad34[0x1c];VecFx16 rotation;} Emitter;
 extern void *ov07_0221C478(void*);
-extern int ov07_02231924(void*,int);
+extern int BattleAnimUtil_GetBattlerType(void*,int);
 extern void ov07_0221F9A8(void*,void*,int);
 extern s8 ov07_0221FF34(void*,int,int);
 extern void ov07_02231B90(void*,int,VecFx32*);
@@ -20,7 +20,7 @@ void ov07_0222050C(void *context,Emitter *emitter,int a,int b,int mode,int arg) 
  volatile Rotation rotation;
  int kind,other;s8 factor;
  ov07_0221C478(context);
- kind=ov07_02231924(context,a);other=ov07_02231924(context,b);
+ kind=BattleAnimUtil_GetBattlerType(context,a);other=BattleAnimUtil_GetBattlerType(context,b);
  ov07_0221F9A8(context,&v0,3);ov07_0221F9A8(context,&v1,3);
  ov07_0221F9A8(context,&v2,3);ov07_0221F9A8(context,&v3,3);
  ov07_0221F9A8(context,&v4,3);ov07_0221F9A8(context,&v5,3);

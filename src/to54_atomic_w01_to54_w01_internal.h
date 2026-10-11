@@ -79,4 +79,4 @@ extern u8 gSystem[];
 void ov07_0221BE20(void);
 void ov07_0221FF2C(void *);
 BOOL ov07_0221F8C4(void *);
-int ov07_0223192C(void *, u16);
+int BattleAnimUtil_GetBattlerSide(void *, u16);

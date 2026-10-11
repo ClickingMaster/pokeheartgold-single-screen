@@ -154,7 +154,7 @@ void ov13_0223A414(void);
 void ov13_0223A4F4(void);
 u8 *ov13_0223A7F4(void);
 void ov13_0223A804(int a);
-void ov13_0223ABB8(int a);
+void WifiSetupSound_Play(int a);
 void ov13_0223AC20(void);
 void ov13_0223B1A0(void);
 int ov13_0223B2A8(void);
@@ -386,7 +386,7 @@ void ov13_02236D20(void) {
     case 0:
         switch (ov13_0222B980()) {
         case 0:
-            ov13_0223ABB8(7);
+            WifiSetupSound_Play(7);
             ov13_0224F56C.p->unk1D = 2;
             break;
         case 1:
@@ -401,11 +401,11 @@ void ov13_02236D20(void) {
         if (sel >= 4) {
             idx = sel - 4;
             if (ov13_0223A3FC(idx) == 0xFF) {
-                ov13_0223ABB8(9);
+                WifiSetupSound_Play(9);
                 WifiSetupButtonBar_SetSelected(-1);
                 return;
             }
-            ov13_0223ABB8(6);
+            WifiSetupSound_Play(6);
             k = ov13_022456AC[ov13_0222B970()];
             ov13_0223BE6C(0x46, 0, 1, k, idx + 1);
             ov13_02237328();
@@ -416,7 +416,7 @@ void ov13_02236D20(void) {
         if (sel <= 2) {
             ov13_0223A414();
         }
-        ov13_0223ABB8(6);
+        WifiSetupSound_Play(6);
         ov13_02237548();
         break;
     default:
@@ -603,7 +603,7 @@ void ov13_02237134(int dir) {
         break;
     }
     if (changed) {
-        ov13_0223ABB8(8);
+        WifiSetupSound_Play(8);
         ov13_022370B8();
     }
 }
@@ -619,7 +619,7 @@ void ov13_022373B8(void) {
     int idx = ov13_0224F56C.sel - 4;
     switch (ov13_0223C1DC()) {
     case 1:
-        ov13_0223ABB8(0xE);
+        WifiSetupSound_Play(0xE);
         ov13_0223A804(idx);
         WifiSetupOamTemplate_Copy(0, 0x56, WifiSetupOamBlock_GetOam(ov13_0224F56C.p->a[idx], 0));
         WifiSetupOamBlock_SetPosition(ov13_0224F56C.p->a[idx], -1, ov13_02245622[idx].x, ov13_02245622[idx].y);
@@ -628,7 +628,7 @@ void ov13_022373B8(void) {
         ov13_0224F56C.p->b[idx] = NULL;
         break;
     case 0:
-        ov13_0223ABB8(7);
+        WifiSetupSound_Play(7);
         WifiSetupOamTemplate_Copy(0, 0x11, WifiSetupOamBlock_GetOam(ov13_0224F56C.p->b[idx], 0));
         WifiSetupOamBlock_SetPosition(ov13_0224F56C.p->b[idx], -1, ov13_02245622[idx + 3].x, ov13_02245622[idx + 3].y);
         WifiSetupOamBlock_SetPriority(ov13_0224F56C.p->b[idx], -1, 3);
@@ -778,10 +778,10 @@ void ov13_02237A78(void) {
 void ov13_02237A7C(void) {
     switch (WifiSetupButtonBar_GetSelected()) {
     case 0:
-        ov13_0223ABB8(7);
+        WifiSetupSound_Play(7);
         break;
     case 1:
-        ov13_0223ABB8(6);
+        WifiSetupSound_Play(6);
         ov13_02237D78();
         ov13_0224F574.c = 1;
         break;
@@ -866,7 +866,7 @@ void ov13_02237C84(int dir) {
     } else {
         ov13_0224F574.b = next;
     }
-    ov13_0223ABB8(8);
+    WifiSetupSound_Play(8);
     WifiSetupCursor_ShowCorners(ov13_0224572E[ov13_0222B998(1)][ov13_0224F574.b].a, ov13_0224572E[ov13_0222B998(1)][ov13_0224F574.b].c, ov13_0224572E[ov13_0222B998(1)][ov13_0224F574.b].b, ov13_0224572E[ov13_0222B998(1)][ov13_0224F574.b].d);
 }
 
@@ -891,7 +891,7 @@ void ov13_02237DD0(void) {
     WifiSetupBusyIcon_Create(0);
     ov13_02237F04();
     WifiSetupSignalIcon_Create(0);
-    ov13_0223ABB8(0xC);
+    WifiSetupSound_Play(0xC);
     ov13_0222B8E8(ov13_02237F9C);
 }
 
@@ -1003,11 +1003,11 @@ void ov13_0223813C(void *arg) {
     ov13_0223AC20();
     if (r > 0) {
         ov13_0224F57C = 1;
-        ov13_0223ABB8(0x11);
+        WifiSetupSound_Play(0x11);
     } else {
         ov00_021FA9D4();
         ov13_02232DF4();
-        ov13_0223ABB8(0x12);
+        WifiSetupSound_Play(0x12);
     }
     ov13_0222B8E8(ov13_0223805C);
     WifiSetupTask_DestroyLater(0, arg);
@@ -1163,9 +1163,9 @@ void ov13_022385E0(void) {
     if (ov13_0223C1DC()) {
         return;
     }
-    ov13_0223ABB8(6);
+    WifiSetupSound_Play(6);
     ov13_0223C198();
-    ov13_0223ABB8(6);
+    WifiSetupSound_Play(6);
     ov13_0222B8E8(ov13_02238624);
 }
 
@@ -1197,7 +1197,7 @@ void ov13_02238694(void) {
     ov13_022386D4();
     WifiSetupBackground_LoadHeader(8);
     WifiSetup_PrintMessage(0x29);
-    ov13_0223ABB8(0x10);
+    WifiSetupSound_Play(0x10);
     ov13_0222B8E8(ov13_02238754);
 }
 
@@ -1329,10 +1329,10 @@ void ov13_02238A9C(void) {
 void ov13_02238AA0(void) {
     switch (WifiSetupButtonBar_GetSelected()) {
     case 0:
-        ov13_0223ABB8(7);
+        WifiSetupSound_Play(7);
         break;
     case 1:
-        ov13_0223ABB8(6);
+        WifiSetupSound_Play(6);
         ov13_0224F588 = 1;
         break;
     default:
@@ -1401,7 +1401,7 @@ void ov13_02238C4C(void) {
     WifiSetup_PrintMessageWithText(name, 0x28);
     WifiSetupBusyIcon_Create(0);
     ov13_0223B788(ov13_0223902C);
-    ov13_0223ABB8(0xB);
+    WifiSetupSound_Play(0xB);
     ov13_0222B8E8(ov13_02238D88);
 }
 

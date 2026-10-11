@@ -41,14 +41,14 @@ typedef struct Work30F98 {
 } Work30F98;
 
 extern u32 ov07_0221C4A8(void *p, int i);
-extern void *ov07_022324D8(void *, int);
-extern void ov07_02231FE4(void *, void *);
+extern void *BattleAnimUtil_AllocWork(void *, int);
+extern void BattleAnimUtil_InitCommonWork(void *, void *);
 extern void *ov07_0221C4E8(void *, int);
 extern int ov07_0221FB04(void *, int);
 void ov07_022310E0(void *, void *, void *, void *);
 extern void *ov07_0221C468(void *);
 extern void *ov07_0221C470(void *);
-extern int ov07_02231924(void *, void *);
+extern int BattleAnimUtil_GetBattlerType(void *, void *);
 extern int ov07_0221BFC0(void *);
 extern void ManagedSprite_SetDrawPriority(void *, int);
 extern void ManagedSprite_SetPriority(void *, int);
@@ -91,7 +91,7 @@ extern void ManagedSprite_SetAnimSpeed(void *, int);
 extern u16 ManagedSprite_GetAnimationFrame(void *);
 extern void ManagedSprite_SetPaletteOverrideOffset(void *, int);
 extern BOOL ManagedSprite_IsAnimated(void *);
-extern void ov07_02231E08(void *, int, int);
+extern void BattleAnimUtil_SetBlendWithBattleBg(void *, int, int);
 
 void ov07_022310E0(void *, void *, void *, void *);
 extern void *ov07_0221C468(void *);
@@ -106,7 +106,7 @@ void ov07_02230FE8(void *task, void *work_) {
     case 0:
         ov07_02222AC4(work->motion, 0, 16, 20, 4, 10);
         ManagedSprite_SetDrawFlag(work->sprite, 1);
-        ov07_02231E08(work->owner, 0, 20);
+        BattleAnimUtil_SetBlendWithBattleBg(work->owner, 0, 20);
         work->state++;
         break;
     case 1:
@@ -140,7 +140,7 @@ void ov07_02230FE8(void *task, void *work_) {
 
 void ov07_022310E0(void *owner, void *spriteSystem, void *spriteManager, void *firstSprite) {
     u8 template[0x34];
-    Work310E0 *work = ov07_022324D8(owner, sizeof(Work310E0));
+    Work310E0 *work = BattleAnimUtil_AllocWork(owner, sizeof(Work310E0));
     void *object;
     int multiplier;
     int i;

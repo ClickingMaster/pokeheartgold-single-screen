@@ -23,8 +23,8 @@ void ov07_02226F80(void *owner) {
     int first;
     int second;
 
-    work = ov07_022324D8(owner, sizeof(Ov07R2Work));
-    ov07_02231FE4(owner, work);
+    work = BattleAnimUtil_AllocWork(owner, sizeof(Ov07R2Work));
+    BattleAnimUtil_InitCommonWork(owner, work);
     work->value20 = (u32)(ov07_0221C4A8(owner, 0));
     work->duration = (int)(ov07_0221C4A8(owner, 1));
     work->value28 = (u32)(ov07_0221C4A8(owner, 2));
@@ -53,8 +53,8 @@ void ov07_02226F80(void *owner) {
     first = ov07_0221C468(owner);
     second = ov07_0221C470(owner);
     if (work->value2C != 0xFF) {
-        first = ov07_02231924(owner, first);
-        second = ov07_02231924(owner, second);
+        first = BattleAnimUtil_GetBattlerType(owner, first);
+        second = BattleAnimUtil_GetBattlerType(owner, second);
         switch (type) {
         case 0:
             switch (first) {

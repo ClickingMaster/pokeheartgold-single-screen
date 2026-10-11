@@ -26,7 +26,7 @@
 #include "naming_screen.h"
 #include "overlay_02.h"
 #include "overlay_102.h"
-#include "overlay_103.h"
+#include "mailbox_app.h"
 #include "overlay_104.h"
 #include "ship_departure_cutscene.h"
 #include "safari_area_customizer.h"
@@ -780,7 +780,7 @@ UseMailArgs *sub_0203F050(FieldSystem *fieldSystem, Pokemon *mon, enum HeapID he
 }
 
 UnkStruct_0203F074 *sub_0203F074(FieldSystem *fieldSystem, enum HeapID heapID) {
-    static const OverlayManagerTemplate _020FA2F4 = { ov103_021EC940, ov103_021EC988, ov103_021EC9A4, FS_OVERLAY_ID(OVY_103) };
+    static const OverlayManagerTemplate _020FA2F4 = { MailboxApp_Init, MailboxApp_Main, MailboxApp_Exit, FS_OVERLAY_ID(OVY_103) };
     UnkStruct_0203F074 *args = Heap_Alloc(heapID, sizeof(UnkStruct_0203F074));
     args->saveData = FieldSystem_GetSaveData(fieldSystem);
     args->fieldSystem = fieldSystem;

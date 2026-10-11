@@ -31,12 +31,12 @@ int ov07_0221C468(void *);
 int ov07_0221C470(void *);
 SPLEmitter *ov07_0221C478(void *);
 void *ov07_0221BFC0(void *);
-int ov07_02231924(void *, int);
-int ov07_0223192C(void *, int);
-int ov07_022319E0(int);
+int BattleAnimUtil_GetBattlerType(void *, int);
+int BattleAnimUtil_GetBattlerSide(void *, int);
+int BattleAnimUtil_GetOpposingBattlerType(int);
 void ov07_02231AD0(int, VecFx32 *, void *, int);
 void ov07_02231B90(void *, int, VecFx32 *);
-void ov07_02231DE8(int, VecFx32 *);
+void BattleAnimUtil_GetCameraUp(int, VecFx32 *);
 void ov07_0221F9A8(void *, void *, int);
 int ov07_0221FF34(void *, int, int);
 

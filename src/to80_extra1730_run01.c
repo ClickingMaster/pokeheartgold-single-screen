@@ -32,7 +32,7 @@ extern void WifiSetupCursor_Hide(void);
 extern int ov13_02239550(void);
 extern void ov13_022307AC(void);
 extern void WifiSetupButtonBar_Unlock(void);
-extern void ov13_0223ABB8(int);
+extern void WifiSetupSound_Play(int);
 extern void ov13_02230CC4(void);
 extern void ov13_02230B14(void *);
 extern void ov13_02230BD0(void *);
@@ -68,7 +68,7 @@ void ov13_022301A4(void) {
         ov13_0224F538.state->active = 0;
         WifiSetupButtonBar_Unlock();
         ov13_0224F538.value = FX_DivS32(ov13_0224F538.state->total * ov13_02239550(), ov13_0224F538.state->divisor);
-        ov13_0223ABB8(19);
+        WifiSetupSound_Play(19);
         ov13_022307AC();
         mod = FX_ModS32(ov13_0224F538.value, 28);
         if (mod == 0) {
@@ -83,22 +83,22 @@ void ov13_022301A4(void) {
     case 4:
         if (ov13_0224F538.value == 0) {
             if (ov13_0224F538.state->notice == 0) {
-                ov13_0223ABB8(9);
+                WifiSetupSound_Play(9);
                 ov13_0224F538.state->notice = 1;
             }
         } else {
-            ov13_0223ABB8(19);
+            WifiSetupSound_Play(19);
             ov13_0224F538.state->task = WifiSetupTask_Create(0, ov13_02230B14, 0, 120);
         }
         break;
     case 6:
         if (ov13_0224F538.state->phase <= 4 || ov13_0224F538.value == ov13_0224F538.state->total) {
             if (ov13_0224F538.state->notice == 0) {
-                ov13_0223ABB8(9);
+                WifiSetupSound_Play(9);
                 ov13_0224F538.state->notice = 1;
             }
         } else {
-            ov13_0223ABB8(19);
+            WifiSetupSound_Play(19);
             ov13_0224F538.state->task = WifiSetupTask_Create(0, ov13_02230BD0, 0, 120);
         }
         break;

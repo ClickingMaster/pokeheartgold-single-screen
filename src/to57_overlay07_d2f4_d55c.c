@@ -71,10 +71,10 @@ int ov07_0221D3CC(void *p, u32 type) {
         result = U16_AT(PTR_AT(p, 0xc0), 0x16);
         break;
     case 2:
-        result = ov07_0223197C(p, U16_AT(PTR_AT(p, 0xc0), 0x14));
+        result = BattleAnimUtil_GetPartnerBattler(p, U16_AT(PTR_AT(p, 0xc0), 0x14));
         break;
     case 3:
-        result = ov07_0223197C(p, U16_AT(PTR_AT(p, 0xc0), 0x16));
+        result = BattleAnimUtil_GetPartnerBattler(p, U16_AT(PTR_AT(p, 0xc0), 0x16));
         break;
     case 4:
         result = 0xff;

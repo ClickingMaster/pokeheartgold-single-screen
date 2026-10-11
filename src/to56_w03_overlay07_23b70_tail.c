@@ -65,7 +65,7 @@ void ov07_02223BC0(void *owner) {
         *(int *)&w->anim[0xc] *= -1;
         break;
     case 4:
-        value = ov07_0223197C(w->owner, ov07_0221C468(w->owner));
+        value = BattleAnimUtil_GetPartnerBattler(w->owner, ov07_0221C468(w->owner));
         w->pic = ov07_0221FA48(w->owner, value);
         *(int *)&w->anim[0xc] *= -1;
         break;
@@ -73,7 +73,7 @@ void ov07_02223BC0(void *owner) {
         w->pic = ov07_0221FA48(w->owner, ov07_0221C470(owner));
         break;
     case 16:
-        value = ov07_0223197C(w->owner, ov07_0221C470(w->owner));
+        value = BattleAnimUtil_GetPartnerBattler(w->owner, ov07_0221C470(w->owner));
         w->pic = ov07_0221FA48(w->owner, value);
         break;
     default:

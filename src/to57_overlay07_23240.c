@@ -92,17 +92,17 @@ void ov07_02223240(void *task, Ov07Work23240 *work) {
 }
 
 void ov07_02223350(void *owner) {
-    Ov07Work23240 *work = ov07_022324D8(owner, sizeof(Ov07Work23240));
-    ov07_02231FE4(owner, work->init);
+    Ov07Work23240 *work = BattleAnimUtil_AllocWork(owner, sizeof(Ov07Work23240));
+    BattleAnimUtil_InitCommonWork(owner, work->init);
     work->arg0 = ((s32)ov07_0221C4A8(owner, 0));
     work->arg1 = ((s32)ov07_0221C4A8(owner, 1));
     work->arg2 = ((s32)ov07_0221C4A8(owner, 2));
     work->arg3 = ((s32)ov07_0221C4A8(owner, 3));
     work->flags = ((s32)ov07_0221C4A8(owner, 4));
     if ((work->flags & 0x100) == 0x100) {
-        ov07_02232020(owner, work->flags, work->slots, work);
+        BattleAnimUtil_CollectPicsByFlags(owner, work->flags, work->slots, work);
     } else if ((work->flags & 0x200) == 0x200) {
-        ov07_022323FC(owner, work->flags, work->slots, work);
+        BattleAnimUtil_CollectSpritesByFlags(owner, work->flags, work->slots, work);
     }
     ov07_0221C410(work->owner, ov07_02223240, work);
 }
@@ -191,8 +191,8 @@ void ov07_022233D8(void *task, Ov07FadeWork *work) {
 void ov07_02223550(void *owner) {
     int narc;
     int member;
-    Ov07FadeWork *work = ov07_022324D8(owner, sizeof(Ov07FadeWork));
-    ov07_02231FE4(owner, &work->state);
+    Ov07FadeWork *work = BattleAnimUtil_AllocWork(owner, sizeof(Ov07FadeWork));
+    BattleAnimUtil_InitCommonWork(owner, &work->state);
     work->x = ((s32)ov07_0221C4A8(owner, 1));
     work->y = ((s32)ov07_0221C4A8(owner, 2));
     work->dx = ((s32)ov07_0221C4A8(owner, 3));
@@ -201,7 +201,7 @@ void ov07_02223550(void *owner) {
     work->unk08 = ((s32)ov07_0221C4A8(owner, 6));
     work->limit = ((s32)ov07_0221C4A8(owner, 7));
     work->counter = 0;
-    if (work->unk00 != 0 && ov07_0223192C(owner, ov07_0221C468(owner)) == 4) {
+    if (work->unk00 != 0 && BattleAnimUtil_GetBattlerSide(owner, ov07_0221C468(owner)) == 4) {
         work->x *= -1;
         work->y *= -1;
         work->dx *= -1;
@@ -223,7 +223,7 @@ void ov07_02223550(void *owner) {
     member = 2;
     if (ov07_0221BFC0(owner) == 1) {
         member = 4;
-    } else if (ov07_0223192C(owner, ov07_0221C468(owner)) == 4) {
+    } else if (BattleAnimUtil_GetBattlerSide(owner, ov07_0221C468(owner)) == 4) {
         member = 3;
     }
     member = ov07_0221FB7C(narc, member);
@@ -317,8 +317,8 @@ void ov07_022236F0(void *task, Ov07FadeWork *work) {
 void ov07_02223864(void *owner) {
     int narc;
     int member;
-    Ov07FadeWork *work = ov07_022324D8(owner, sizeof(Ov07FadeWork));
-    ov07_02231FE4(owner, &work->state);
+    Ov07FadeWork *work = BattleAnimUtil_AllocWork(owner, sizeof(Ov07FadeWork));
+    BattleAnimUtil_InitCommonWork(owner, &work->state);
     work->x = ((s32)ov07_0221C4A8(owner, 1));
     work->y = ((s32)ov07_0221C4A8(owner, 2));
     work->dx = ((s32)ov07_0221C4A8(owner, 3));
@@ -327,7 +327,7 @@ void ov07_02223864(void *owner) {
     work->unk08 = ((s32)ov07_0221C4A8(owner, 6));
     work->limit = ((s32)ov07_0221C4A8(owner, 7));
     work->counter = 0;
-    if (work->unk00 != 0 && ov07_0223192C(owner, ov07_0221C468(owner)) == 4) {
+    if (work->unk00 != 0 && BattleAnimUtil_GetBattlerSide(owner, ov07_0221C468(owner)) == 4) {
         work->x *= -1;
         work->y *= -1;
         work->dx *= -1;
@@ -354,7 +354,7 @@ void ov07_02223864(void *owner) {
     member = 2;
     if (ov07_0221BFC0(owner) == 1) {
         member = 4;
-    } else if (ov07_0223192C(owner, ov07_0221C468(owner)) == 4) {
+    } else if (BattleAnimUtil_GetBattlerSide(owner, ov07_0221C468(owner)) == 4) {
         member = 3;
     }
     member = ov07_0221FB7C(narc, member);

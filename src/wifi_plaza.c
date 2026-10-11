@@ -109,12 +109,12 @@ WiFiPlazaWork *WiFiPlazaWork_New(SaveData *save, enum HeapID heapID) {
     ov45_0222BD40(work->unk_1c0);
     ov45_0222BD30(work->unk_1e8);
     ov45_0222EE20(ov45_02254AC4, 8, work);
-    ov45_0222BC3C(work->unk_1fc);
+    ov45_0222BC3C(&work->unk_1fc);
     ov45_0222C388(work->unk_20c);
     ov45_0222C8AC(work->unk_3ac);
     WiFiPlazaWordSet_Init(work->wordSet, heapID);
     ov45_0222CB44(work->unk_4bc, work->save);
-    ov45_0222BCC8(work->unk_508, heapID);
+    ov45_0222BCC8(&work->unk_508, heapID);
     return work;
 }
 
@@ -128,7 +128,7 @@ void WiFiPlazaWork_Delete(WiFiPlazaWork *work) {
     x = sub_020318E8(work->save);
     sub_020318FC(x, vals[0]);
     sub_02031900(x, vals[1]);
-    ov45_0222BCD8(work->unk_508);
+    ov45_0222BCD8(&work->unk_508);
     WiFiPlazaWordSet_Free(work->wordSet);
     ov45_0222EE80();
     ov45_0222D890(work->unk_04);
@@ -152,7 +152,7 @@ void WiFiPlazaWork_Update(WiFiPlazaWork *work) {
     ov45_0222BE5C(work->unk_1c0);
     ov45_0222BD30(work->unk_1e8);
     ov45_0222BB58(work->unk_f8);
-    ov45_0222BB60(work->unk_1fc, work->unk_f8, work->unk_20c, work->unk_49c);
+    ov45_0222BB60(&work->unk_1fc, work->unk_f8, work->unk_20c, work->unk_49c);
     ov45_0222BCB8(work->unk_3a0);
     ov45_0222C3B0(work->unk_20c);
     ov45_0222CAA0(work->unk_49c);

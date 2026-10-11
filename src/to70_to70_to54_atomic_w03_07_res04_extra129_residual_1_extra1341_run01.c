@@ -5,7 +5,7 @@
 typedef Ov07ObjWindowWork Work;
 void ov07_02231524(u8 *,int);
 void ov07_0221C448(void *,void *);
-void ov07_02232508(void *);
+void BattleAnimUtil_FreeWork(void *);
 void ov07_022315C0(SysTask *arg,void *data) {
  Work *w=data;
  switch(w->prefix.state[0]) {
@@ -15,7 +15,7 @@ void ov07_022315C0(SysTask *arg,void *data) {
  case 3: if(w->init.alphaA) --w->init.alphaA; if(w->init.alphaB<16) ++w->init.alphaB;
  if(!w->init.alphaA && w->init.alphaB==16) { BgClearTilemapBufferAndCommit(w->prefix.field14,2); ManagedSprite_SetDrawFlag(w->sprites[0],0); ManagedSprite_SetDrawFlag(w->sprites[1],0); ManagedSprite_SetDrawFlag(w->sprites[2],0); ++w->prefix.state[0]; }
  *(vu16*)0x4000052=w->init.alphaA|(w->init.alphaB<<8); break;
- default: *(vu16*)0x400004a=(*(vu16*)0x400004a&~0x3f)|0x1f; *(vu16*)0x400004a=(*(vu16*)0x400004a&~0x3f00)|0x1f00; BgSetPosTextAndCommit(w->prefix.field14,2,BG_POS_OP_SET_X,0); BgSetPosTextAndCommit(w->prefix.field14,2,BG_POS_OP_SET_Y,0); *(vu32*)0x4000000&=0xffff1fff; ov07_0221C448(w->prefix.owner,arg); ov07_02232508(w); return;
+ default: *(vu16*)0x400004a=(*(vu16*)0x400004a&~0x3f)|0x1f; *(vu16*)0x400004a=(*(vu16*)0x400004a&~0x3f00)|0x1f00; BgSetPosTextAndCommit(w->prefix.field14,2,BG_POS_OP_SET_X,0); BgSetPosTextAndCommit(w->prefix.field14,2,BG_POS_OP_SET_Y,0); *(vu32*)0x4000000&=0xffff1fff; ov07_0221C448(w->prefix.owner,arg); BattleAnimUtil_FreeWork(w); return;
  }
  w->init.x+=w->init.xVel; w->init.y+=w->init.yVel; BgSetPosTextAndCommit(w->prefix.field14,2,BG_POS_OP_SET_X,w->init.x); BgSetPosTextAndCommit(w->prefix.field14,2,BG_POS_OP_SET_Y,w->init.y); ManagedSprite_TickFrame(w->sprites[0]); ManagedSprite_TickFrame(w->sprites[1]); ManagedSprite_TickFrame(w->sprites[2]); SpriteSystem_DrawSprites(w->prefix.field0C);
 }

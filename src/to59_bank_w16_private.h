@@ -24,7 +24,7 @@ void ov07_022216A8(Work *, int, VecFx32 *);
 void ov07_02221734(Work *, VecFx32 *);
 void ov07_02220938(void *, Work *, int);
 void ov07_022208F8(void *, Work *, int);
-int ov07_02231924(void *, int);
+int BattleAnimUtil_GetBattlerType(void *, int);
 int ov07_0221BFC0(void *);
 #define DECL(n) void n(void *, int, VecFx32 *);
 DECL(ov07_02231B90) DECL(ov07_02231BC0) DECL(ov07_02231BF0)

@@ -42,7 +42,7 @@ void ov07_0222C4C0(void *owner, void *a, void *b, void *sprite) {
         ov07_0222C18C(&w->child[i], w->unk4, w->spriteSystem, &blob, &w->sprite);
     }
     w->blend = 0;
-    ov07_02231E08(w->owner, 0, 31);
+    BattleAnimUtil_SetBlendWithBattleBg(w->owner, 0, 31);
     ManagedSprite_SetOamMode(w->sprite, 1);
     for (i = 0; i < 2; i++) {
         ManagedSprite_SetOamMode(w->child[i].sprite, 1);

@@ -879,7 +879,7 @@ void WifiSetup_SetRect(u16 left, u16 top, u16 right, u16 bottom, WifiSetupRect *
     rect->bottom = bottom;
 }
 
-void WifiSetup_RectFromPosSize(WifiSetupPoint *pos, WifiSetupPoint *size, WifiSetupRect *rect) {
+void WifiSetup_RectFromPosSize(const WifiSetupPoint *pos, const WifiSetupPoint *size, WifiSetupRect *rect) {
     rect->left = pos->x;
     rect->top = pos->y;
     rect->right = pos->x + size->x;

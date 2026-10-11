@@ -2,12 +2,12 @@
 #define TO57_NEW34_PRIVATE_H
 #include "global.h"
 
-void *ov07_022324D8(void *, int);
-void ov07_02231FE4(void *, void *);
+void *BattleAnimUtil_AllocWork(void *, int);
+void BattleAnimUtil_InitCommonWork(void *, void *);
 
 extern u32 ov07_0221C4A8(void *p, int i);
-void ov07_02232020(void *, u32, void *, void *);
-void ov07_022323FC(void *, u32, void *, void *);
+void BattleAnimUtil_CollectPicsByFlags(void *, u32, void *, void *);
+void BattleAnimUtil_CollectSpritesByFlags(void *, u32, void *, void *);
 void ov07_0221C410(void *, void *, void *);
 struct Ov07Work23240;
 void ov07_02223240(void *, struct Ov07Work23240 *);
@@ -26,7 +26,7 @@ struct Ov07FadeWork;
 void ov07_022233D8(void *, struct Ov07FadeWork *);
 void ov07_022236F0(void *, struct Ov07FadeWork *);
 u16 ov07_0221C468(void *);
-int ov07_0223192C(void *, u16);
+int BattleAnimUtil_GetBattlerSide(void *, u16);
 int ov07_0221FB7C(int, int);
 int ov07_0221BFD0(void *);
 int ov07_0221BFC0(void *);

@@ -11,7 +11,7 @@ extern int ov07_0221BFC0(void *);
 extern int ov07_0221C478(void *);
 extern int ParticleSystem_GetPerspectiveType(void);
 extern void ParticleSystem_GetDefaultCameraUp(void *);
-extern void ov07_02231A70(int,int,int,int,int);
+extern void BattleAnimUtil_GetEmitterPosition(int,int,int,int,int);
 extern void G2x_SetBlendAlpha_(u32,int,int,int,int);
 extern void ManagedSprite_GetPositionXY(void *, s16 *, s16 *);
 extern void *ov07_0221BFD0(void *);
@@ -31,11 +31,11 @@ extern int ov07_0221C530(void*); extern int ov07_0221C514(void*); extern int ov0
 extern void ParticleSystem_CreateEmitterWithParam(void*,int,void*,void*); extern void ParticleSystem_SetPerspectiveType(void*,int); extern void SysTask_Destroy(void*);
 extern void ov07_0221C69C(void*); extern void ov07_02232AFC(void*,void*); extern void *SysTask_CreateOnMainQueue(void*,void*,int); extern void ov07_02232A5C(void*,void*);
 extern void ov07_02230BF8(void);
-void *ov07_022324D8(void *, int);
+void *BattleAnimUtil_AllocWork(void *, int);
 
-#define WRAP5(n,v) void n(int a,int b,int c,int d){ov07_02231A70(a,b,c,d,v);}
+#define WRAP5(n,v) void n(int a,int b,int c,int d){BattleAnimUtil_GetEmitterPosition(a,b,c,d,v);}
 
-#define BIGWRAP(n,fn) void n(void *p,int q,int x){int z=ov07_0221C478(p);int d=ParticleSystem_GetPerspectiveType();int a=ov07_02231924(p,q);int b=ov07_0221BFC0(p); fn(a,x,b,d);}
+#define BIGWRAP(n,fn) void n(void *p,int q,int x){int z=ov07_0221C478(p);int d=ParticleSystem_GetPerspectiveType();int a=BattleAnimUtil_GetBattlerType(p,q);int b=ov07_0221BFC0(p); fn(a,x,b,d);}
 
 extern const u32 ov07_0223738C[][2]; extern const u32 ov07_02237390[][2]; extern const u32 ov07_0223746C[][3]; extern const u32 ov07_02237470[][3]; extern const u32 ov07_02237474[][3]; extern const u32 ov07_022375BC[][4];
 

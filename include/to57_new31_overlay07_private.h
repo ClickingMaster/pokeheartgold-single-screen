@@ -58,7 +58,7 @@ void ParticleSystem_SetPerspectiveType(void *, int);
 void *ov07_0221FF18(void *, u32, u32, Ov07Ctx *);
 int ov07_0221C468(Ov07Ctx *);
 int ov07_0221C470(Ov07Ctx *);
-int ov07_02231924(Ov07Ctx *, int);
+int BattleAnimUtil_GetBattlerType(Ov07Ctx *, int);
 void GF_AssertFail(void);
 void ov07_0221C9C0(Ov07Ctx *);
 void ov07_0221CBC0(Ov07Ctx *);

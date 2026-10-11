@@ -159,7 +159,7 @@ void WifiSetupText_MarkDirty(WifiSetupCanvas *canvas);
 
 void WifiSetup_SetPoint(u16 x, u16 y, WifiSetupPoint *point);
 void WifiSetup_SetRect(u16 left, u16 top, u16 right, u16 bottom, WifiSetupRect *rect);
-void WifiSetup_RectFromPosSize(WifiSetupPoint *pos, WifiSetupPoint *size, WifiSetupRect *rect);
+void WifiSetup_RectFromPosSize(const WifiSetupPoint *pos, const WifiSetupPoint *size, WifiSetupRect *rect);
 void WifiSetupDisplay_ShowPlanes(int screen, int planes);
 void WifiSetupDisplay_HidePlanes(int screen, int planes);
 void WifiSetupDisplay_SetWindowRect(int screen, int window, WifiSetupRect *rect);

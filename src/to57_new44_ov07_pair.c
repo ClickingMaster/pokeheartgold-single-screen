@@ -7,7 +7,7 @@ void ov07_0222D6E0(void *owner, void *spriteSystem, void *spriteManager, void *r
     int flip;
     int i;
 
-    work = ov07_022324D8(owner, sizeof(X07Group));
+    work = BattleAnimUtil_AllocWork(owner, sizeof(X07Group));
     work->owner = owner;
     work->spriteSystem = spriteSystem;
     work->spriteManager = spriteManager;

@@ -52,7 +52,7 @@ void ov07_0222AE14(void *task, AEWork *work) {
             ManagedSprite_SetDrawFlag(work->sprite1, FALSE);
             ManagedSprite_SetDrawFlag(work->sprite1, FALSE);
             ov07_0221C448(work->owner, task);
-            ov07_02232508(work);
+            BattleAnimUtil_FreeWork(work);
             return;
         }
         ov07_02222644(work->anim, &x, &y);
@@ -67,8 +67,8 @@ void ov07_0222AE14(void *task, AEWork *work) {
 
 void ov07_0222AEA0(void *owner) {
     u32 mode;
-    AEWork *work = ov07_022324D8(owner, sizeof(AEWork));
-    ov07_02231FE4(owner, work);
+    AEWork *work = BattleAnimUtil_AllocWork(owner, sizeof(AEWork));
+    BattleAnimUtil_InitCommonWork(owner, work);
     work->pokepic = ov07_0221FA48(work->owner, ov07_0221C470(work->owner));
     work->attr = Pokepic_GetAttr(work->pokepic, 1);
     work->attrCopy = work->attr;

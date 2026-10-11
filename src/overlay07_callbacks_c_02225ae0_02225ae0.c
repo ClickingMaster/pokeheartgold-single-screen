@@ -53,8 +53,8 @@ extern int ManagedSprite_IsAnimated(void *);
 extern void Sprite_DeleteAndFreeResources(void *);
 extern void ManagedSprite_TickFrame(void *);
 extern void SpriteSystem_DrawSprites(void *);
-extern void *ov07_022324D8(void *, int);
-extern void ov07_02231FE4(void *, void *);
+extern void *BattleAnimUtil_AllocWork(void *, int);
+extern void BattleAnimUtil_InitCommonWork(void *, void *);
 extern void ov07_0221C410(void *, void *, void *);
 extern void ov07_02227248(void *, void *);
 extern int ov07_02222240(void *, s16, s16, void *);
@@ -62,7 +62,7 @@ extern int ov07_022222B4(void *);
 extern void Pokepic_SetAttr(void *, int, int);
 extern void *ov07_0221C468(void *);
 extern void *ov07_0221C470(void *);
-extern void *ov07_0223197C(void *, void *);
+extern void *BattleAnimUtil_GetPartnerBattler(void *, void *);
 extern void GF_AssertFail(void);
 
 void ov07_02226C90(void *arg);
@@ -83,13 +83,13 @@ void *ov07_02225AE0(void *arg, int kind) {
         ret = ov07_0221C468(arg);
         break;
     case 4:
-        ret = ov07_0223197C(arg, ov07_0221C468(arg));
+        ret = BattleAnimUtil_GetPartnerBattler(arg, ov07_0221C468(arg));
         break;
     case 8:
         ret = ov07_0221C470(arg);
         break;
     case 16:
-        ret = ov07_0223197C(arg, ov07_0221C470(arg));
+        ret = BattleAnimUtil_GetPartnerBattler(arg, ov07_0221C470(arg));
         break;
     default:
         GF_AssertFail();

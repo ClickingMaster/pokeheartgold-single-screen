@@ -11,7 +11,7 @@ extern const Row ov07_022354D0;
 extern const Lookup ov07_02235510;
 typedef struct {int v[3];}Triple;
 extern const Triple ov07_02235CE0[6][6],ov07_02235CE4[6][6],ov07_02235CE8[6][6],ov07_02235620[6][6],ov07_02235624[6][6],ov07_02235628[6][6],ov07_022357D0[6][6],ov07_02235B30[6][6],ov07_02235B34[6][6],ov07_02235B38[6][6],ov07_02235E90[6][6],ov07_02235E94[6][6],ov07_02235E98[6][6],ov07_02235980[6][6],ov07_02235984[6][6],ov07_02235988[6][6],ov07_02236040[6][6],ov07_02236044[6][6],ov07_02236048[6][6],ov07_022361F0[6][6],ov07_022361F4[6][6],ov07_022361F8[6][6];
-extern int ov07_02231924(void *,int),ov07_0223192C(void *,int),ov07_0221BFC0(void *);
+extern int BattleAnimUtil_GetBattlerType(void *,int),BattleAnimUtil_GetBattlerSide(void *,int),ov07_0221BFC0(void *);
 void ov07_02220CAC(Out *,Work *);
 #define POS(xv,yv,zv) pos.x=(xv);pos.y=(yv);pos.z=(zv)
 #define TABLE(x,y,z,half,neg) POS((neg)*x[first][last].v[0],y[first][last].v[0],z[first][last].v[0]/(half))
@@ -19,18 +19,18 @@ void ov07_02220CAC(Out *,Work *);
 #define NEGROW(q) POS(-(q).v[0],-(q).v[1],-(q).v[2])
 void ov07_02220CAC(Out *out,Work *w) {
  Grid table;Row a,b,c,d,e,f,g,base;Lookup lookup;volatile VecFx16 pos;
- int first=ov07_02231924(w->ctx,w->first),last=ov07_02231924(w->ctx,w->last),i,index;
+ int first=BattleAnimUtil_GetBattlerType(w->ctx,w->first),last=BattleAnimUtil_GetBattlerType(w->ctx,w->last),i,index;
  switch(w->state){
  case 0:POS(0,0,0);break;
  case 1:case 2:if(ov07_0221BFC0(w->ctx)==1){if(w->side==2){POS(-3336,1840,736);}else{POS(2336,-1440,736);}}else{TABLE(ov07_02235CE0,ov07_02235CE4,ov07_02235CE8,2,1);}break;
  case 4:
  if(ov07_0221BFC0(w->ctx)==1){TABLE(ov07_02235CE0,ov07_02235CE4,ov07_02235CE8,2,-1);}
- else if(ov07_0223192C(w->ctx,w->first)==ov07_0223192C(w->ctx,w->last)){TABLE(ov07_02235CE0,ov07_02235CE4,ov07_02235CE8,2,1);}
- else if(ov07_0223192C(w->ctx,w->first)==3){POS(3776,2112,1532);}else{POS(-4228,-2728,1532);}break;
+ else if(BattleAnimUtil_GetBattlerSide(w->ctx,w->first)==BattleAnimUtil_GetBattlerSide(w->ctx,w->last)){TABLE(ov07_02235CE0,ov07_02235CE4,ov07_02235CE8,2,1);}
+ else if(BattleAnimUtil_GetBattlerSide(w->ctx,w->first)==3){POS(3776,2112,1532);}else{POS(-4228,-2728,1532);}break;
  case 5:
  if(ov07_0221BFC0(w->ctx)==1){TABLE(ov07_02235CE0,ov07_02235CE4,ov07_02235CE8,2,-1);}
- else if(ov07_0223192C(w->ctx,w->first)==ov07_0223192C(w->ctx,w->last)){TABLE(ov07_02235CE0,ov07_02235CE4,ov07_02235CE8,2,1);}
- else if(ov07_0223192C(w->ctx,w->first)==3){POS(3776,2112,1532);}else{POS(-4228,-2728,1532);}break;
+ else if(BattleAnimUtil_GetBattlerSide(w->ctx,w->first)==BattleAnimUtil_GetBattlerSide(w->ctx,w->last)){TABLE(ov07_02235CE0,ov07_02235CE4,ov07_02235CE8,2,1);}
+ else if(BattleAnimUtil_GetBattlerSide(w->ctx,w->first)==3){POS(3776,2112,1532);}else{POS(-4228,-2728,1532);}break;
  case 8:case 9:if(ov07_0221BFC0(w->ctx)==1){if(w->side==2){POS(-2336,1440,736);}else{POS(2336,-1440,736);}}else{TABLE(ov07_02235620,ov07_02235624,ov07_02235628,2,1);}break;
  case 10:case 11:if(ov07_0221BFC0(w->ctx)==1){POS(-2336,1440,736);}else{TABLE(ov07_022357D0,ov07_02235624,ov07_02235628,2,1);}break;
  case 12:case 13:if(ov07_0221BFC0(w->ctx)==1){POS(-2936,1440,736);}else{TABLE(ov07_02235B30,ov07_02235B34,ov07_02235B38,1,1);}break;
@@ -50,8 +50,8 @@ void ov07_02220CAC(Out *out,Work *w) {
  case 3:POS(-800,1200,500);break;
  case 22:POS(-3410,-2644,0);break;
  case 25:POS(-3440,1952,0);break;
- case 26:if(ov07_0223192C(w->ctx,w->first)==3){POS(3776,2112,0);}else{POS(-6000,-2200,0);}break;
- case 24:lookup=ov07_02235510;index=ov07_02231924(w->ctx,w->first);POS(lookup.p[index][0],lookup.p[index][1],0);break;
+ case 26:if(BattleAnimUtil_GetBattlerSide(w->ctx,w->first)==3){POS(3776,2112,0);}else{POS(-6000,-2200,0);}break;
+ case 24:lookup=ov07_02235510;index=BattleAnimUtil_GetBattlerType(w->ctx,w->first);POS(lookup.p[index][0],lookup.p[index][1],0);break;
  }
  out->pos.x=((volatile Pos *)&pos)->x;out->pos.y=((volatile Pos *)&pos)->y;out->pos.z=((volatile Pos *)&pos)->z;
 }

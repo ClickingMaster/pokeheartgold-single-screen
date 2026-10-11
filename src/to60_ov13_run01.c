@@ -17,7 +17,7 @@ extern void WifiSetupSignalIcon_Destroy(void);
 extern void WifiSetupBusyIcon_Destroy(void);
 extern void ov13_0223A840(void);
 extern void ov13_0223AC20(void);
-extern void ov13_0223ABB8(int a);
+extern void WifiSetupSound_Play(int a);
 extern void WifiSetup_PrintMessage(int a);
 extern void ov13_022279B4(int a);
 extern int WifiSetupButtonBar_GetSelected(void);

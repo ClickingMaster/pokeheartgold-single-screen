@@ -62,7 +62,7 @@ void ov07_02221F38(void *p, int idx, s16 *a, s16 *b) {
 }
 
 s16 ov07_02221F80(void *p, int unused, u32 which) {
-    int idx = ov07_02231924(p);
+    int idx = BattleAnimUtil_GetBattlerType(p);
     int set = ov07_0221FAB0(p) == 1;
     if (ov07_0221BFC0(p) == 1) {
         idx += 2;
@@ -86,7 +86,7 @@ u8 ov07_02221FF0(void **p) {
 
 int ov07_02222004(void *p, int index) {
     int out = 1;
-    int v = ov07_0223192C(p);
+    int v = BattleAnimUtil_GetBattlerSide(p);
     if (ov07_0221BFC0(p) != 0) {
         if (v == 3) {
             out -= 2;
@@ -99,7 +99,7 @@ int ov07_02222004(void *p, int index) {
 
 int ov07_0222202C(void *p) {
     int out = 1;
-    if (ov07_0223192C(p) == 4) {
+    if (BattleAnimUtil_GetBattlerSide(p) == 4) {
         out -= 2;
     }
     return out;

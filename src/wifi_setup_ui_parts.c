@@ -23,7 +23,6 @@ extern u8 ov13_0224F46C;
 extern char ov13_0224F470[];
 extern WifiSetupOamBlock **ov13_0224F4B0;
 extern void *ov13_0224F4B4;
-extern WifiSetupKeyboard *ov13_0224F4BC;
 extern void *ov13_0224F4F8;
 extern u16 ov13_02244EB8[];
 extern u16 ov13_02244EBC[];
@@ -55,9 +54,6 @@ extern void *ov13_0222BAF4(void *, int, int, int);
 extern void ov13_0223AC4C(int);
 extern void ov13_0223B1E0(int);
 extern u8 *ov13_02239FF0(void);
-extern void ov13_022290F0(int, int, int);
-extern void ov13_02228444(void);
-extern void ov13_022299CC(void);
 
 void WifiSetupBusyIcon_Task(void *task) {
     GXOamAttr *oam;
@@ -490,28 +486,28 @@ void WifiSetupKeyboard_Create(void) {
     int i, j, k;
     box.width = 17;
     box.height = 18;
-    ov13_0224F4BC = WifiSetupHeap_AllocZeroed(296, 4);
-    ov13_0224F4BC->selected = 255;
-    ov13_0224F4BC->unk_121 = 0;
-    ov13_0224F4BC->unk_123 = 1;
-    ov13_0224F4BC->unk_124 = 1;
+    gWifiSetupKeyboard = WifiSetupHeap_AllocZeroed(296, 4);
+    gWifiSetupKeyboard->input = 255;
+    gWifiSetupKeyboard->cursorKey = 0;
+    gWifiSetupKeyboard->canDelete = 1;
+    gWifiSetupKeyboard->canType = 1;
     for (i = 0; i < 47; i++) {
-        ov13_0224F4BC->keys[i] = WifiSetupOamTemplate_AllocOam(0, 52);
-        ov13_0224F4BC->keys[i]->attr01 = (ov13_0224F4BC->keys[i]->attr01 & 0xc1fffcff) | 512;
-        ov13_0224F4BC->keys[i]->attr2 = (ov13_0224F4BC->keys[i]->attr2 & ~0xc00) | 0xc00;
+        gWifiSetupKeyboard->keys[i] = WifiSetupOamTemplate_AllocOam(0, 52);
+        gWifiSetupKeyboard->keys[i]->attr01 = (gWifiSetupKeyboard->keys[i]->attr01 & 0xc1fffcff) | 512;
+        gWifiSetupKeyboard->keys[i]->attr2 = (gWifiSetupKeyboard->keys[i]->attr2 & ~0xc00) | 0xc00;
     }
     templ = ov13_02244F5C;
     for (i = 0; i < 4; i++) {
-        ov13_0224F4BC->extraKeys[i] = WifiSetupOamTemplate_AllocOam(0, *templ++);
-        ov13_0224F4BC->extraKeys[i]->attr01 = (ov13_0224F4BC->extraKeys[i]->attr01 & 0xc1fffcff) | 512;
-        ov13_0224F4BC->extraKeys[i]->attr2 = (ov13_0224F4BC->extraKeys[i]->attr2 & ~0xc00) | 0xc00;
+        gWifiSetupKeyboard->extraKeys[i] = WifiSetupOamTemplate_AllocOam(0, *templ++);
+        gWifiSetupKeyboard->extraKeys[i]->attr01 = (gWifiSetupKeyboard->extraKeys[i]->attr01 & 0xc1fffcff) | 512;
+        gWifiSetupKeyboard->extraKeys[i]->attr2 = (gWifiSetupKeyboard->extraKeys[i]->attr2 & ~0xc00) | 0xc00;
     }
     {
         u8 *buttonTempl = ov13_02244F54;
         for (i = 0; i < 2; i++) {
-            ov13_0224F4BC->buttons[i] = WifiSetupOamTemplate_AllocBlock(0, *buttonTempl++, 1);
-            WifiSetupOamBlock_SetAffineMode(ov13_0224F4BC->buttons[i], -1, 512, 0);
-            WifiSetupOamBlock_SetPriority(ov13_0224F4BC->buttons[i], -1, 3);
+            gWifiSetupKeyboard->buttons[i] = WifiSetupOamTemplate_AllocBlock(0, *buttonTempl++, 1);
+            WifiSetupOamBlock_SetAffineMode(gWifiSetupKeyboard->buttons[i], -1, 512, 0);
+            WifiSetupOamBlock_SetPriority(gWifiSetupKeyboard->buttons[i], -1, 3);
         }
     }
     i = 0;
@@ -519,48 +515,48 @@ void WifiSetupKeyboard_Create(void) {
     for (; i < 3; i++) {
         pre.offset = 0;
         for (j = 0; j < 4; j++) {
-            ov13_0224F4BC->rows[i][j] = WifiSetupText_AllocObjCanvas(0, 28, 2, 0, &numObjs, 0);
+            gWifiSetupKeyboard->rows[i][j] = WifiSetupText_AllocObjCanvas(0, 28, 2, 0, &numObjs, 0);
             box.x = 0;
             {
                 int index = 0;
                 for (k = pre.offset; index < 12;) {
                     pre.code = ov13_02245D74[i][k];
-                    WifiSetupText_DrawInRect(ov13_0224F4BC->rows[i][j], box.x, box.y, box.width, box.height, 2, 1152, &pre.code);
+                    WifiSetupText_DrawInRect(gWifiSetupKeyboard->rows[i][j], box.x, box.y, box.width, box.height, 2, 1152, &pre.code);
                     index++;
                     box.x += 18;
                     k++;
                 }
             }
             if (i == 0) {
-                ov13_0224F4BC->rowBlocks[j] = WifiSetupOamBlock_Alloc(0, numObjs, 1);
+                gWifiSetupKeyboard->rowBlocks[j] = WifiSetupOamBlock_Alloc(0, numObjs, 1);
             }
             pre.offset += 12;
         }
     }
-    ov13_0224F4BC->cursor = WifiSetupOamTemplate_AllocBlock(0, 64, 1);
-    WifiSetupOamBlock_SetAffineMode(ov13_0224F4BC->cursor, -1, 512, 0);
-    WifiSetupOamBlock_SetPriority(ov13_0224F4BC->cursor, -1, 2);
-    ov13_0224F4BC->task = WifiSetupTask_Create(0, (WifiSetupTaskFunc)ov13_02228444, NULL, 120);
-    ov13_022290F0(ov13_0224F4BC->page, 0, 192);
+    gWifiSetupKeyboard->cursor = WifiSetupOamTemplate_AllocBlock(0, 64, 1);
+    WifiSetupOamBlock_SetAffineMode(gWifiSetupKeyboard->cursor, -1, 512, 0);
+    WifiSetupOamBlock_SetPriority(gWifiSetupKeyboard->cursor, -1, 2);
+    gWifiSetupKeyboard->task = WifiSetupTask_Create(0, (WifiSetupTaskFunc)WifiSetupKeyboard_SlideInRow0Task, NULL, 120);
+    WifiSetupKeyboard_SetRowY(gWifiSetupKeyboard->page, 0, 192);
 }
 
 void WifiSetupKeyboard_Close(void) {
-    WifiSetupOamBlock_Free(ov13_0224F4BC->cursor);
-    WifiSetupTask_SetFunc(ov13_0224F4BC->task, (WifiSetupTaskFunc)ov13_022299CC);
+    WifiSetupOamBlock_Free(gWifiSetupKeyboard->cursor);
+    WifiSetupTask_SetFunc(gWifiSetupKeyboard->task, (WifiSetupTaskFunc)WifiSetupKeyboard_SlideOutButtonsTask);
 }
 
-int WifiSetupKeyboard_GetSelected(void) {
-    return ov13_0224F4BC->selected;
+int WifiSetupKeyboard_GetInput(void) {
+    return gWifiSetupKeyboard->input;
 }
 
-void ov13_02228400(int a) {
-    ov13_0224F4BC->unk_123 = a;
+void WifiSetupKeyboard_SetCanDelete(int canDelete) {
+    gWifiSetupKeyboard->canDelete = canDelete;
 }
 
-void ov13_02228414(int a) {
-    ov13_0224F4BC->unk_124 = a;
+void WifiSetupKeyboard_SetCanType(int canType) {
+    gWifiSetupKeyboard->canType = canType;
 }
 
 BOOL WifiSetupKeyboard_Exists(void) {
-    return ov13_0224F4BC != NULL;
+    return gWifiSetupKeyboard != NULL;
 }

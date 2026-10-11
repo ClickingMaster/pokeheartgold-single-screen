@@ -18,7 +18,7 @@ typedef struct Ov07Context {
 } Ov07Context;
 
 void GF_AssertFail(void);
-int ov07_0223192C(void *, u16);
+int BattleAnimUtil_GetBattlerSide(void *, u16);
 int ov07_0221FB7C(void *, int);
 int ov07_0221BFC0(void *);
 void GfGfxLoader_LoadCharData(int, int, void *, int, int, int, int, int);

@@ -172,6 +172,6 @@
 .public ov55_UnkApp_Init
 .public ov55_UnkApp_Main
 .public ov55_UnkApp_Exit
-.public ov103_021EC940
-.public ov103_021EC988
-.public ov103_021EC9A4
+.public MailboxApp_Init
+.public MailboxApp_Main
+.public MailboxApp_Exit

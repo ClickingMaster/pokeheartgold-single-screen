@@ -91,7 +91,7 @@ extern int ov13_0223943C();
 extern int ov13_0223959C();
 extern int ov13_0223A004();
 extern int ov13_0223A018();
-extern int ov13_0223ABB8();
+extern int WifiSetupSound_Play();
 extern int ov13_0223BE6C();
 extern int ov13_0223C198();
 extern int ov13_0223C1DC();
@@ -155,10 +155,10 @@ void ov13_02232494(void) {
     ov13_0224F544->b[13] = ov13_0223C1DC();
     switch (ov13_0224F544->b[13]) {
     case 0:
-        ov13_0223ABB8(7);
+        WifiSetupSound_Play(7);
         break;
     case 1:
-        ov13_0223ABB8(14);
+        WifiSetupSound_Play(14);
         break;
     default:
         return;

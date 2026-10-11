@@ -5,7 +5,7 @@
 #define PTR(p, o) (*(void **)((u8 *)(p) + (o)))
 
 void ov07_02230600(void *owner) {
-    void *data = ov07_022324D8(owner, 0x34);
+    void *data = BattleAnimUtil_AllocWork(owner, 0x34);
     WORD(data, 0) = (u32)owner;
     ov07_0221C410(owner, ov07_0223049C, data);
 }

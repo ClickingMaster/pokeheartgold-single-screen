@@ -91,7 +91,7 @@ extern int ov13_0223943C();
 extern int ov13_0223959C();
 extern int ov13_0223A004();
 extern int ov13_0223A018();
-extern int ov13_0223ABB8();
+extern int WifiSetupSound_Play();
 extern int ov13_0223BE6C();
 extern int ov13_0223C198();
 extern int ov13_0223C1DC();
@@ -159,7 +159,7 @@ int ov13_02233568(void) {
         return 0;
     }
     if (!ov13_0223417C(x)) {
-        ov13_0223ABB8(9);
+        WifiSetupSound_Play(9);
         return 1;
     }
     ov13_02234D54(x);
@@ -177,18 +177,18 @@ int ov13_02233568(void) {
 
 void ov13_022335EC(int x) {
     if (!ov13_0223417C(x)) {
-        ov13_0223ABB8(9);
+        WifiSetupSound_Play(9);
         return;
     }
     switch (x) {
     case 2:
     case 3:
-        ov13_0223ABB8(6);
+        WifiSetupSound_Play(6);
         ov13_0223376C(((x - 2) ^ 1) != 0);
         return;
     case 7:
     case 8:
-        ov13_0223ABB8(6);
+        WifiSetupSound_Play(6);
         ov13_022337D8(((x - 7) ^ 1) != 0);
         return;
     }
@@ -196,21 +196,21 @@ void ov13_022335EC(int x) {
     if ((u32)(x - 11) <= 1) {
         ov13_02235074();
         if (!ov13_022351C0()) {
-            ov13_0223ABB8(9);
+            WifiSetupSound_Play(9);
             ov13_0223BE6C(6, 1, 1, -1, 0);
             ov13_0222B8E8(ov13_02235260);
             return;
         }
         if (x == 11) {
-            ov13_0223ABB8(6);
+            WifiSetupSound_Play(6);
         } else {
-            ov13_0223ABB8(14);
+            WifiSetupSound_Play(14);
         }
     } else if (x == 13) {
         ov13_02235074();
-        ov13_0223ABB8(7);
+        WifiSetupSound_Play(7);
     } else {
-        ov13_0223ABB8(6);
+        WifiSetupSound_Play(6);
         ov13_02234210(0, 1, ov13_02234974(ov13_022455F4[x]));
         ov13_022344F0();
     }

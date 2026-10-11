@@ -2,7 +2,7 @@
 #pragma force_active on
 
 void ov07_0222D3BC(void *owner, void *arg1, int direction, void *sprite) {
-    R2W13Spin *w = ov07_022324D8(owner, 0x58);
+    R2W13Spin *w = BattleAnimUtil_AllocWork(owner, 0x58);
     w->owner = owner;
     w->arg1 = arg1;
     w->direction = direction;
@@ -26,7 +26,7 @@ void ov07_0222D3BC(void *owner, void *arg1, int direction, void *sprite) {
     ManagedSprite_SetDrawPriority(w->sprite, 100);
     ManagedSprite_SetPriority(w->sprite, 1);
     ManagedSprite_SetAffineTranslation(w->sprite, (s16)(signedDelta * -12), 12);
-    if (ov07_0223192C(owner, ov07_0221C468(owner)) == 4) {
+    if (BattleAnimUtil_GetBattlerSide(owner, ov07_0221C468(owner)) == 4) {
         ManagedSprite_SetAnim(w->sprite, 1);
     } else {
         ManagedSprite_SetAnim(w->sprite, 0);

@@ -15,7 +15,7 @@
 #include "mail_misc.h"
 #include "move_relearner.h"
 #include "overlay_02.h"
-#include "overlay_103.h"
+#include "mailbox_app.h"
 #include "safari_area_customizer.h"
 #include "photo_album_app.h"
 #include "bug_contest_swap_mon.h"

@@ -33,14 +33,14 @@ typedef struct B320Work {
     Motion motion;
 } B320Work;
 
-void *ov07_022324D8(void *owner, u32 size);
-void ov07_02231FE4(void *owner, void *work);
+void *BattleAnimUtil_AllocWork(void *owner, u32 size);
+void BattleAnimUtil_InitCommonWork(void *owner, void *work);
 void ov07_0221F9E8(ManagedSpriteTemplate *template, void *owner);
 u32 ov07_0221C468(void *owner);
 u32 ov07_0221C470(void *owner);
 Pokepic *ov07_0221FA48(void *owner, u32 battler);
 void ov07_02222268(Motion *motion, s16 x0, s16 x1, s16 y0, s16 y1, int frames);
-u32 ov07_0223192C(void *owner, u32 battler);
+u32 BattleAnimUtil_GetBattlerSide(void *owner, u32 battler);
 BOOL ov07_022222B4(Motion *motion);
 int ov07_0221FB04(void *owner, int a1);
 int ov07_0221BFC0(void *owner);
@@ -62,9 +62,9 @@ void ov07_0222B320(void *owner, int a1, int a2, ManagedSprite *sprite) {
     BOOL skip;
     int prio1, prio2;
 
-    work = ov07_022324D8(owner, sizeof(B320Work));
+    work = BattleAnimUtil_AllocWork(owner, sizeof(B320Work));
     work->delay = 10;
-    ov07_02231FE4(owner, work);
+    BattleAnimUtil_InitCommonWork(owner, work);
     ov07_0221F9E8(&template, work->owner);
     work->sprites[0] = sprite;
     for (i = 1; i < 8; i++) {
@@ -85,7 +85,7 @@ void ov07_0222B320(void *owner, int a1, int a2, ManagedSprite *sprite) {
     frame = 0;
     count = 0;
     skip = FALSE;
-    if (ov07_0223192C(work->owner, ov07_0221C468(work->owner)) == 4) {
+    if (BattleAnimUtil_GetBattlerSide(work->owner, ov07_0221C468(work->owner)) == 4) {
         skip = TRUE;
     }
     do {
@@ -108,7 +108,7 @@ void ov07_0222B320(void *owner, int a1, int a2, ManagedSprite *sprite) {
     for (i = 0; i < 8; i++) {
         work->drawPriority[i] = (8 - i) * 4;
         if (ov07_0221BFC0(work->owner) == 0) {
-            if (ov07_0223192C(work->owner, ov07_0221C468(work->owner)) == 3) {
+            if (BattleAnimUtil_GetBattlerSide(work->owner, ov07_0221C468(work->owner)) == 3) {
                 if (i < 4) {
                     ManagedSprite_SetPriority(work->sprites[i], prio2);
                 } else {

@@ -66,7 +66,7 @@ void ov07_02231378(void *taskOwner, R203Work *work) {
     int i;
     switch (work->state) {
     case 0:
-        ov07_02231E08(work->owner, 1, 15);
+        BattleAnimUtil_SetBlendWithBattleBg(work->owner, 1, 15);
         ov07_02222AC4((u8 *)work + 0x108, 1, 16, 15, 0, 10);
         ov07_022312A8(work, work->unk14);
         ov07_02231300(work);
@@ -106,7 +106,7 @@ void ov07_02231378(void *taskOwner, R203Work *work) {
 
 void ov07_02231468(void *owner, void *spriteSystem, void *spriteManager, void *firstSprite) {
     u8 template[0x34];
-    R203Work *work = ov07_022324D8(owner, sizeof(R203Work));
+    R203Work *work = BattleAnimUtil_AllocWork(owner, sizeof(R203Work));
     void *pic;
     int i;
     work->owner = owner;

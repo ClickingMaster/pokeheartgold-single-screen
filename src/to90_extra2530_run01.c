@@ -29,7 +29,7 @@ extern int WifiSetupInput_IsKeyRepeated(int);
 extern int WifiSetupInput_IsKeyPressed(int);
 extern int WifiSetupInput_IsKeyReleased(int);
 extern void ov13_0222AEB0(int);
-extern void ov13_0223ABB8(int);
+extern void WifiSetupSound_Play(int);
 void ov13_0222A960(void);
 
 void ov13_0222A960(void) {
@@ -53,12 +53,12 @@ void ov13_0222A960(void) {
             if (s->enabled) {
                 s->state = ov13_02245314[selected];
             } else {
-                ov13_0223ABB8(9);
+                WifiSetupSound_Play(9);
             }
             return;
         } else if (selected - 10 < 2) {
             if ((selected - 10 == 0 && s->available == 0) || (selected - 10 == 1 && s->other == 0)) {
-                ov13_0223ABB8(9);
+                WifiSetupSound_Play(9);
                 return;
             }
             s->state = ov13_02245224[selected - 10];
@@ -73,7 +73,7 @@ void ov13_0222A960(void) {
             if (s->held) {
                 return;
             }
-            ov13_0223ABB8(9);
+            WifiSetupSound_Play(9);
             ov13_0224F4C0->held = 1;
             return;
         }

@@ -1,6 +1,7 @@
 #ifndef POKEHEARTGOLD_WIFI_SETUP_UI_PARTS_H
 #define POKEHEARTGOLD_WIFI_SETUP_UI_PARTS_H
 
+#include "wifi_setup_keyboard.h"
 #include "wifi_setup_ui.h"
 
 // Screen parts shared by the access-point setup screens (ARM code in overlay 13): busy icon, sliding
@@ -33,26 +34,6 @@ typedef struct WifiSetupSignalIcon {
     void *task;
     s8 type;
 } WifiSetupSignalIcon;
-
-// Software keyboard: 3 pages of 4 text rows, 47 key sprites.
-typedef struct WifiSetupKeyboard {
-    WifiSetupCanvas *rows[3][4];
-    GXOamAttr *keys[47];
-    GXOamAttr *extraKeys[4];
-    WifiSetupOamBlock *buttons[2];
-    WifiSetupOamBlock *rowBlocks[4];
-    WifiSetupOamBlock *cursor;
-    void *task;
-    u8 selected;
-    u8 page;
-    s8 unk_11E;
-    s8 unk_11F;
-    u8 unk_120;
-    u8 unk_121;
-    u8 unk_122;
-    u8 unk_123;
-    u8 unk_124;
-} WifiSetupKeyboard;
 
 extern WifiSetupBusyIcon *gWifiSetupBusyIcon;
 extern WifiSetupSignalIcon *gWifiSetupSignalIcon;
@@ -100,11 +81,5 @@ void WifiSetupBackground_TransferTask(void *task);
 void WifiSetupSignalIcon_Create(int type);
 void WifiSetupSignalIcon_Destroy(void);
 void WifiSetupSignalIcon_Task(void);
-void WifiSetupKeyboard_Create(void);
-void WifiSetupKeyboard_Close(void);
-int WifiSetupKeyboard_GetSelected(void);
-void ov13_02228400(int a);
-void ov13_02228414(int a);
-BOOL WifiSetupKeyboard_Exists(void);
 
 #endif // POKEHEARTGOLD_WIFI_SETUP_UI_PARTS_H

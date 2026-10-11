@@ -12,7 +12,7 @@ void *Heap_Alloc(u32, u32);
 void Heap_Free(void *);
 void MI_CpuFill8(void *, u8, u32);
 void ov07_0221C69C(void);
-int ov07_0223197C(void *, u16);
+int BattleAnimUtil_GetPartnerBattler(void *, u16);
 int ov07_0221FA04(void *, int);
 int Pokepic_GetAttr(void *, int);
 void ManagedSprite_SetPositionXY(void *, s16, s16);

@@ -6,7 +6,7 @@ void ov07_0222C918(int task, To56W01Work *work) {
     case 0:
         if (!ov07_0222C870(work)) {
             work->state++;
-            ov07_02231E74(work->owner, 31, 0);
+            BattleAnimUtil_SetBlendBgOverBattleBg(work->owner, 31, 0);
             ov07_02222AC4(&work->motion, 31, 0, 0, 31, 16);
             return;
         }

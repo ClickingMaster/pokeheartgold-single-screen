@@ -6,8 +6,8 @@ typedef struct SpriteSystem SpriteSystem;
 typedef struct Ov07R2Work Ov07R2Work;
 void ov07_02226CB0(Ov07R2Work *);
 void ov07_02226F04(void *, Ov07R2Work *);
-void *ov07_022324D8(void *, u32);
-void ov07_02231FE4(void *, void *);
+void *BattleAnimUtil_AllocWork(void *, u32);
+void BattleAnimUtil_InitCommonWork(void *, void *);
 
 extern u32 ov07_0221C4A8(void *p, int i);
 ManagedSprite *ov07_0221C4E8(void *, void *);
@@ -22,7 +22,7 @@ int ov07_0221FAB0(void *);
 int ov07_0221FB04(void *, int);
 int ov07_0221C468(void *);
 int ov07_0221C470(void *);
-int ov07_02231924(void *, int);
+int BattleAnimUtil_GetBattlerType(void *, int);
 void ov07_0221C410(void *, void (*)(void *, Ov07R2Work *), Ov07R2Work *);
 void ov07_02226F80(void *);
 #endif

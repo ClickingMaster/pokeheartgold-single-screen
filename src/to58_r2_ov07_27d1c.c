@@ -14,8 +14,8 @@ extern int ov07_0221FA90(int, int);
 extern int ov07_0221FAE8(void *);
 extern int ov07_0221FA78(int);
 extern int ov07_0221C4E8(int, int);
-extern int ov07_0223192C(int, int);
-extern void ov07_02231E08(int, int, int);
+extern int BattleAnimUtil_GetBattlerSide(int, int);
+extern void BattleAnimUtil_SetBlendWithBattleBg(int, int, int);
 extern void ov07_0221C410(int, void (*)(int, void *), void *);
 extern void ov07_02222268(void *, s16, s16, s16, s16, u16);
 extern int ov07_022222B4(void *);
@@ -57,7 +57,7 @@ void ov07_02227D1C(int arg0) {
     FIELD(work, int, 0x14) = ov07_0221C514(FIELD(work, int, 0xc));
     FIELD(work, u8, 4) = 8;
     FIELD(work, u8, 5) = 6;
-    ov07_02231E08(FIELD(work, int, 0xc), -1, -1);
+    BattleAnimUtil_SetBlendWithBattleBg(FIELD(work, int, 0xc), -1, -1);
     *(volatile u16 *)0x04000052 = FIELD(work, u8, 4) | (FIELD(work, u8, 5) << 8);
     archive = ov07_0221FA80(FIELD(work, int, 0xc), ov07_0221C468(FIELD(work, int, 0xc)));
     priority = ov07_0221FAE8((void *)(u32)FIELD(work, int, 0xc));
@@ -71,7 +71,7 @@ void ov07_02227D1C(int arg0) {
         slot += 4;
         i++;
     } while (i < 4);
-    context = ov07_0223192C(FIELD(work, int, 0xc), ov07_0221C468(FIELD(work, int, 0xc)));
+    context = BattleAnimUtil_GetBattlerSide(FIELD(work, int, 0xc), ov07_0221C468(FIELD(work, int, 0xc)));
     if (context == 3) {
         ManagedSprite_SetDrawPriority(FIELD(work, void *, 0x18), 10);
         ManagedSprite_SetDrawPriority(FIELD(work, void *, 0x1c), 10);

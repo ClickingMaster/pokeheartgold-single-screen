@@ -48,10 +48,10 @@ extern u16 ov13_02245428[];
 extern void ov13_0222B8E8(void (*)(void));
 extern void WifiSetupFade_Start(int, int, int, int);
 extern void WifiSetupDisplay_ShowPlanes(int, int);
-extern void ov13_0223ABB8(int);
+extern void WifiSetupSound_Play(int);
 extern void WifiSetupFade_StartDelay(int);
 extern int WifiSetupFade_IsActive(int);
-extern int WifiSetupKeyboard_GetSelected(void);
+extern int WifiSetupKeyboard_GetInput(void);
 extern int ov13_0222A070(void);
 extern int ov13_0223C1DC(void);
 extern int ov13_0223C1F0(void);
@@ -61,8 +61,8 @@ extern void WifiSetupButtonBar_Close(void);
 extern void WifiSetupButtonBar_Unlock(void);
 extern void ov13_02239584(void);
 extern void WifiSetupKeyboard_Create(void);
-extern void ov13_02228400(int);
-extern void ov13_02228414(int);
+extern void WifiSetupKeyboard_SetCanDelete(int);
+extern void WifiSetupKeyboard_SetCanType(int);
 extern void WifiSetupKeyboard_Close(void);
 extern void ov13_0223C198(void);
 extern void ov13_02229D00(void);
@@ -232,11 +232,11 @@ void ov13_02230E5C(void) {
         if (ov13_0224F538.p->flag59) {
             return;
         }
-        ov13_0223ABB8(9);
+        WifiSetupSound_Play(9);
         ov13_0224F538.p->flag59 = 1;
         return;
     }
-    ov13_0223ABB8(19);
+    WifiSetupSound_Play(19);
     ov13_0224F538.p->task = WifiSetupTask_Create(0, ov13_02230B14, 0, 120);
 }
 
@@ -245,11 +245,11 @@ void ov13_02230ED0(void) {
         if (ov13_0224F538.p->flag59) {
             return;
         }
-        ov13_0223ABB8(9);
+        WifiSetupSound_Play(9);
         ov13_0224F538.p->flag59 = 1;
         return;
     }
-    ov13_0223ABB8(19);
+    WifiSetupSound_Play(19);
     ov13_0224F538.p->task = WifiSetupTask_Create(0, ov13_02230BD0, 0, 120);
 }
 
@@ -264,7 +264,7 @@ void ov13_02230F84(void) {
     if (ov13_0223C1DC()) {
         return;
     }
-    ov13_0223ABB8(6);
+    WifiSetupSound_Play(6);
     ov13_0223C198();
     ov13_0222B8E8(ov13_02230FB0);
 }

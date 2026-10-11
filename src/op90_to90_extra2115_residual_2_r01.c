@@ -15,7 +15,7 @@ extern u8 ov13_02245958[], ov13_0224527A[], ov13_02245228[], ov13_02245250[], ov
 int WifiSetupInput_IsTouchHeld(const void *rect);
 void WifiSetup_RectFromPosSize(const void *entry, const void *base, void *out);
 void ov13_0222A914(int sel);
-void ov13_0223ABB8(int se);
+void WifiSetupSound_Play(int se);
 void ov13_0222A724(void);
 // @fn ov13_0222A724
 void ov13_0222A724(void) {
@@ -52,7 +52,7 @@ void ov13_0222A724(void) {
                 return;
             }
             if (ov13_0224F4C0->b66 == 0) {
-                ov13_0223ABB8(9);
+                WifiSetupSound_Play(9);
                 ov13_0224F4C0->selected = -1;
                 return;
             }

@@ -91,7 +91,7 @@ extern int ov13_0223943C();
 extern int ov13_0223959C();
 extern int ov13_0223A004();
 extern int ov13_0223A018();
-extern int ov13_0223ABB8();
+extern int WifiSetupSound_Play();
 extern int ov13_0223BE6C();
 extern int ov13_0223C198();
 extern int ov13_0223C1DC();

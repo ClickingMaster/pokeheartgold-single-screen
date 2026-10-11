@@ -4,35 +4,35 @@
 
 	.text
 	.public _021EEB34
-	.public ov103_021EC9B4
-	.public ov103_021EC9E8
-	.public ov103_021ECC1C
-	.public ov103_021ECD68
-	.public ov103_021ECF68
-	.public ov103_021ED00C
-	.public ov103_021ED0C0
-	.public ov103_021ED144
-	.public ov103_021ED4D4
-	.public ov103_021ED5B4
-	.public ov103_021ED7E4
+	.public MailboxApp_VBlankCB
+	.public MailboxApp_InitBgLayers
+	.public MailboxApp_LoadBgGraphics
+	.public MailboxApp_CreateNameplateCells
+	.public MailboxApp_OpenMailMenu
+	.public MailboxApp_LoadMail
+	.public MailboxApp_DrawPage
+	.public MailboxApp_RunPaletteFlash
+	.public MailboxApp_State_YesNo
+	.public MailboxApp_State_SelectMail
+	.public MailboxApp_State_MailMenu
 	.public ov103_021ED9AC
-	.public ov103_021EDA98
-	.public ov103_021EDD54
-	.public ov103_021EDD98
-	.public ov103_021EDE7C
-	.public ov103_021EDEA8
-	.public ov103_021EDF88
-	.public ov103_021EE078
-	.public ov103_021EE160
-	.public ov103_021EE210
-	.public ov103_021EE2E0
-	.public ov103_021EE468
-	.public ov103_021EE550
-	.public ov103_021EE644
-	.public ov103_021EE7DC
-	.public ov103_021EE8A8
-	.public ov103_021EE930
-	.public ov103_021EE9C8
+	.public MailboxApp_StartCellFlash
+	.public MailboxApp_StartUseMail
+	.public MailboxApp_FinishUseMail
+	.public MailboxApp_PrintMailToBagResult
+	.public MailboxApp_CreateSprites
+	.public MailboxAppData_InitSpriteSystem
+	.public MailboxAppData_DeleteSprite
+	.public MailboxAppData_LoadMonIconResources
+	.public MailboxApp_ShowMailMonIcons
+	.public MailboxAppData_LoadSpriteResources
+	.public MailboxApp_DrawNameplate
+	.public MailboxApp_PrintTitleAndButtons
+	.public MailboxApp_PrintPageNumber
+	.public MailboxApp_PrintMessageBox
+	.public MailboxApp_PrintMessage
+	.public MailboxApp_PrintMail
+	.public MailboxApp_PrintMailLine
 	.public ov103_021EEB40
 	.public ov103_021EEB50
 	.public ov103_021EEB6C
@@ -57,98 +57,98 @@
 	.public ov103_021EEFC8
 	.public ov103_021EEFD8
 	.public ov103_021EF008
-	.public ov103_021EC940
-	.public ov103_021EC988
-	.public ov103_021EC9A4
-	.public ov103_021EC9D8
-	.public ov103_021ECBBC
-	.public ov103_021ECD18
-	.public ov103_021ECE0C
-	.public ov103_021ECE18
-	.public ov103_021ECE54
-	.public ov103_021ECE80
-	.public ov103_021ECE94
-	.public ov103_021ECEA4
-	.public ov103_021ECEEC
-	.public ov103_021ECF48
-	.public ov103_021ECFFC
-	.public ov103_021ED0A0
-	.public ov103_021ED124
-	.public ov103_021ED23C
-	.public ov103_021ED2B8
-	.public ov103_021ED2D4
-	.public ov103_021ED314
-	.public ov103_021ED3E8
-	.public ov103_021ED460
-	.public ov103_021ED47C
-	.public ov103_021ED53C
-	.public ov103_021ED550
-	.public ov103_021ED568
-	.public ov103_021ED5A8
-	.public ov103_021ED750
-	.public ov103_021ED760
-	.public ov103_021ED7A4
-	.public ov103_021ED7D8
-	.public ov103_021ED8D0
-	.public ov103_021ED8F8
-	.public ov103_021ED930
-	.public ov103_021ED93C
-	.public ov103_021ED954
+	.public MailboxApp_Init
+	.public MailboxApp_Main
+	.public MailboxApp_Exit
+	.public MailboxApp_SetGfxBanks
+	.public MailboxApp_FreeBgLayers
+	.public MailboxApp_LoadFrameAndFontGfx
+	.public MailboxApp_DeleteNameplateCells
+	.public MailboxAppData_CreateStrings
+	.public MailboxAppData_DeleteStrings
+	.public MailboxApp_CreateYesNoPrompt
+	.public MailboxApp_DestroyYesNoPrompt
+	.public MailboxApp_ShowYesNoPrompt
+	.public MailboxApp_CreateMailMenuItems
+	.public MailboxApp_DeleteMailMenuItems
+	.public MailboxApp_CloseMailMenu
+	.public MailboxApp_FreeMail
+	.public MailboxApp_DrawSelectedNameplate
+	.public MailboxApp_LoadStationeryGfx
+	.public MailboxApp_GetMailMenuItemCount
+	.public MailboxApp_RunState
+	.public MailboxApp_State_Setup
+	.public MailboxApp_State_Teardown
+	.public MailboxApp_State_WaitFade
+	.public MailboxApp_State_WaitText
+	.public MailboxApp_State_PaletteFlash
+	.public MailboxApp_State_StartSubApp
+	.public MailboxApp_State_RunSubApp
+	.public MailboxApp_State_FadeIn
+	.public MailboxApp_State_Quit
+	.public MailboxApp_State_ChangePage
+	.public MailboxApp_State_ShowMailPrompt
+	.public MailboxApp_State_OpenMailMenu
+	.public MailboxApp_State_ReadMail
+	.public MailboxApp_State_CloseMail
+	.public MailboxApp_State_ConfirmErase
+	.public MailboxApp_State_PrintHoldMailPrompt
+	.public MailboxApp_State_ConfirmHoldMail
 	.public ov103_021ED960
 	.public ov103_021ED97C
-	.public ov103_021ED99C
-	.public ov103_021ED9D8
-	.public ov103_021EDA14
-	.public ov103_021EDA40
-	.public ov103_021EDA70
-	.public ov103_021EDA84
-	.public ov103_021EDB18
-	.public ov103_021EDB60
-	.public ov103_021EDBB0
-	.public ov103_021EDBC8
-	.public ov103_021EDC00
-	.public ov103_021EDC58
-	.public ov103_021EDC68
-	.public ov103_021EDCC8
-	.public ov103_021EDCE0
-	.public ov103_021EDD14
-	.public ov103_021EDD48
-	.public ov103_021EDDE4
-	.public ov103_021EDE5C
-	.public ov103_021EDF50
-	.public ov103_021EDF68
-	.public ov103_021EE028
-	.public ov103_021EE048
-	.public ov103_021EE094
-	.public ov103_021EE0AC
-	.public ov103_021EE0CC
-	.public ov103_021EE0F8
-	.public ov103_021EE110
-	.public ov103_021EE13C
-	.public ov103_021EE150
-	.public ov103_021EE374
-	.public ov103_021EE390
-	.public ov103_021EE3C0
-	.public ov103_021EE3E4
-	.public ov103_021EE430
-	.public ov103_021EE60C
-	.public ov103_021EE628
-	.public ov103_021EE784
-	.public ov103_021EE824
-	.public ov103_021EE860
-	.public ov103_021EE888
-	.public ov103_021EEA24
-	.public ov103_021EEA48
-	.public ov103_021EEAA0
-	.public ov103_021EEAB0
-	.public ov103_021EEAB4
-	.public ov103_021EEAB8
-	.public ov103_021EEAC0
-	.public ov103_021EEAC8
-	.public ov103_021EEB04
+	.public MailboxApp_State_ShowMailToBagResult
+	.public MailboxApp_ReturnToMailList
+	.public MailboxApp_StartFadeIn
+	.public MailboxApp_StartFadeOut
+	.public MailboxApp_WaitForText
+	.public MailboxApp_AskYesNo
+	.public MailboxApp_StartSpriteFlash
+	.public MailboxAppData_SetListDimmed
+	.public MailboxApp_ShowMail
+	.public MailboxApp_HideMail
+	.public MailboxApp_PutMailInBag
+	.public MailboxApp_DeleteSelectedMail
+	.public MailboxApp_CreatePartyMenuArgs
+	.public MailboxApp_StartPartyMenu
+	.public MailboxApp_FinishGiveMail
+	.public MailboxApp_FinishSelectMonForMail
+	.public MailboxApp_FinishPartyMenu
+	.public MailboxApp_EraseMail
+	.public MailboxApp_SelectMonToHoldMail
+	.public MailboxApp_DeleteSprites
+	.public MailboxAppData_TickSprites
+	.public MailboxAppData_FreeSpriteSystem
+	.public MailboxAppData_NewSprite
+	.public MailboxAppData_DeleteAllSprites
+	.public MailboxAppData_SetSpriteAnim
+	.public MailboxAppData_SetSpriteDrawFlag
+	.public MailboxAppData_SetSpritePosition
+	.public MailboxAppData_SetSpriteTranslucent
+	.public MailboxAppData_OpenMonIconNarc
+	.public MailboxAppData_CloseMonIconNarc
+	.public MailboxAppData_MoveCursorToCloseButton
+	.public MailboxApp_AddWindows
+	.public MailboxApp_RemoveWindows
+	.public MailboxApp_PrintString
+	.public MailboxAppData_PrintMsg
+	.public MailboxAppData_ShowCloseButton
+	.public MailboxAppData_ShowCancelButton
+	.public MailboxApp_BufferAuthorName
+	.public MailboxApp_PrintMailPrompt
+	.public MailboxApp_DrawMessageBox
+	.public MailboxApp_ClearMessageBox
+	.public MailboxApp_GetTouchedPageArrow
+	.public MailboxApp_CreateGridInput
+	.public MailboxApp_FreeGridInput
+	.public MailboxApp_GridOnButton
+	.public MailboxApp_GridOnSwitchToTouchMode
+	.public MailboxApp_GridOnKeyMove
+	.public MailboxApp_GridOnTouch
+	.public MailboxApp_MoveCursor
+	.public MailboxApp_IsCloseMailInput
 
-	thumb_func_start ov103_021EE160
-ov103_021EE160: ; 0x021EE160
+	thumb_func_start MailboxAppData_LoadMonIconResources
+MailboxAppData_LoadMonIconResources: ; 0x021EE160
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x10
 	ldr r4, _021EE208 ; =0x000037F0
@@ -229,11 +229,11 @@ _021EE16C:
 	.balign 4, 0
 _021EE208: .word 0x000037F0
 _021EE20C: .word 0x000037F2
-	thumb_func_end ov103_021EE160
+	thumb_func_end MailboxAppData_LoadMonIconResources
 
 
-	thumb_func_start ov103_021EE210
-ov103_021EE210: ; 0x021EE210
+	thumb_func_start MailboxApp_ShowMailMonIcons
+MailboxApp_ShowMailMonIcons: ; 0x021EE210
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x18
 	add r5, r0, #0
@@ -271,7 +271,7 @@ _021EE254:
 	ldr r0, [r5, #0xc]
 	add r1, r4, #4
 	mov r2, #0
-	bl ov103_021EE0CC
+	bl MailboxAppData_SetSpriteDrawFlag
 	b _021EE2CE
 _021EE260:
 	ldr r0, [r5, #0xc]
@@ -320,7 +320,7 @@ _021EE260:
 	ldr r0, [r5, #0xc]
 	add r1, r4, #4
 	mov r2, #1
-	bl ov103_021EE0CC
+	bl MailboxAppData_SetSpriteDrawFlag
 _021EE2CE:
 	add r4, r4, #1
 	add r6, r6, #4
@@ -330,11 +330,11 @@ _021EE2CE:
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
 _021EE2DC: .word 0x0000FFFF
-	thumb_func_end ov103_021EE210
+	thumb_func_end MailboxApp_ShowMailMonIcons
 
 
-	thumb_func_start ov103_021EE2E0
-ov103_021EE2E0: ; 0x021EE2E0
+	thumb_func_start MailboxAppData_LoadSpriteResources
+MailboxAppData_LoadSpriteResources: ; 0x021EE2E0
 	push {r3, r4, r5, lr}
 	sub sp, #0x10
 	add r5, r0, #0
@@ -402,4 +402,4 @@ ov103_021EE2E0: ; 0x021EE2E0
 	.balign 4, 0
 _021EE36C: .word 0x000037F3
 _021EE370: .word 0x000037F1
-	thumb_func_end ov103_021EE2E0
+	thumb_func_end MailboxAppData_LoadSpriteResources

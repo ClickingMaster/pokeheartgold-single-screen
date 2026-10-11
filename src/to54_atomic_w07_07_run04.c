@@ -61,13 +61,13 @@ extern void Pokepic_SetVisible(void *, int, int, int, int);
 extern void ov07_02223224(void *);
 extern void ov07_0221C448(void *, void *);
 extern void Heap_Free(void *);
-extern void *ov07_022324D8(void *, int);
+extern void *BattleAnimUtil_AllocWork(void *, int);
 extern int ov07_0221C514(void *);
 extern int ov07_0221C4A0(void *);
 
 extern u32 ov07_0221C4A8(void *p, int i);
 extern void *ov07_0221C410(void *, void (*)(void *, void *), void *);
-extern void ov07_02231FE4(void *, void *);
+extern void BattleAnimUtil_InitCommonWork(void *, void *);
 extern void *ov07_0221C4E8(void *, int);
 extern void ManagedSprite_SetDrawFlag(void *, int);
 extern void ManagedSprite_SetMosaicFlag(void *, int);

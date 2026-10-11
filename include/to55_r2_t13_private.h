@@ -81,7 +81,7 @@ BOOL ov07_022227D8(SinMotion *);
 void ov07_0222C18C(Child *, void *, void *, void *, void *);
 void ov07_0222C1FC(Child *);
 void ov07_0222C208(Child *, int);
-void ov07_02231E08(void *, int, int);
+void BattleAnimUtil_SetBlendWithBattleBg(void *, int, int);
 void ManagedSprite_SetPositionXY(void *, s16, s16);
 void ManagedSprite_SetOamMode(void *, int);
 void ManagedSprite_SetDrawFlag(void *, BOOL);

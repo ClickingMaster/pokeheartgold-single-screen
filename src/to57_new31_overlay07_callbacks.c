@@ -123,8 +123,8 @@ int ov07_0221CCF4(Ov07Ctx *ctx) {
     Tbl36 table = ov07_02234CC8;
     int x = ov07_0221C468(ctx);
     int y = ov07_0221C470(ctx);
-    int a = ov07_02231924(ctx, x);
-    int b = ov07_02231924(ctx, y);
+    int a = BattleAnimUtil_GetBattlerType(ctx, x);
+    int b = BattleAnimUtil_GetBattlerType(ctx, y);
     int ret = table.v[a][b];
     if (ret == 0xff) {
         GF_AssertFail();
@@ -135,8 +135,8 @@ int ov07_0221CD4C(Ov07Ctx *ctx) {
     Tbl36 table = ov07_02234D58;
     int x = ov07_0221C468(ctx);
     int y = ov07_0221C470(ctx);
-    int a = ov07_02231924(ctx, x);
-    int b = ov07_02231924(ctx, y);
+    int a = BattleAnimUtil_GetBattlerType(ctx, x);
+    int b = BattleAnimUtil_GetBattlerType(ctx, y);
     int ret = table.v[a][b];
     if (ret == 0xff) {
         GF_AssertFail();

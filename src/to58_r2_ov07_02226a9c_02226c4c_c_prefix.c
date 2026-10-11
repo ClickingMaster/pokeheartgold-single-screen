@@ -1,10 +1,10 @@
 #include "global.h"
-void *ov07_022324D8(void *, int);
-void ov07_02231FE4(void *, void *);
+void *BattleAnimUtil_AllocWork(void *, int);
+void BattleAnimUtil_InitCommonWork(void *, void *);
 int ov07_0221C470(void *);
 int ov07_02221F80(void *, int, int);
 int ov07_0221BFC0(void *);
-int ov07_0223192C(void *, int);
+int BattleAnimUtil_GetBattlerSide(void *, int);
 void ManagedSprite_SetPositionXY(void *, int, int);
 void ManagedSprite_SetAnim(void *, int);
 int ov07_0221FB04(void *, int);
@@ -14,8 +14,8 @@ void ov07_02226A68(void);
 void ov07_02226A9C(void *, int, int, void *);
 
 void ov07_02226A9C(void *context, int ignored1, int ignored2, void *sprite) {
-    u8 *work = ov07_022324D8(context, 0x38);
-    ov07_02231FE4(context, work);
+    u8 *work = BattleAnimUtil_AllocWork(context, 0x38);
+    BattleAnimUtil_InitCommonWork(context, work);
     *(void **)(work + 0x1C) = sprite;
     int arg = ov07_0221C470(context);
     int x = ov07_02221F80(context, arg, 0);
@@ -26,7 +26,7 @@ void ov07_02226A9C(void *context, int ignored1, int ignored2, void *sprite) {
         x = 0x48;
         y = 0x20;
         anim = 0;
-    } else if (ov07_0223192C(*(void **)(work + 4), arg) == 3) {
+    } else if (BattleAnimUtil_GetBattlerSide(*(void **)(work + 4), arg) == 3) {
         y = 0x7E;
         anim = 1;
     } else {

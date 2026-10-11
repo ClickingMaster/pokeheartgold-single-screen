@@ -28,7 +28,7 @@ typedef struct Global {
 } Global;
 
 extern Global ov13_0224F538;
-extern void ov13_0223ABB8(int), ov13_02230F54(void), ov13_0223959C(void), WifiSetupButtonBar_Lock(void), ov13_0223BE6C(int, int, int, int, int), ov13_0222B8E8(void (*)(void)), ov13_02230F84(void), ov13_02230520(void);
+extern void WifiSetupSound_Play(int), ov13_02230F54(void), ov13_0223959C(void), WifiSetupButtonBar_Lock(void), ov13_0223BE6C(int, int, int, int, int), ov13_0222B8E8(void (*)(void)), ov13_02230F84(void), ov13_02230520(void);
 extern int WifiSetupButtonBar_GetSelected(void);
 extern int FX_DivS32(int, int);
 void ov13_02230414(void);
@@ -81,7 +81,7 @@ void ov13_0222FF50(void) {
                     break;
                 }
                 if (j >= ov13_0224F538.state->count) {
-                    ov13_0223ABB8(9);
+                    WifiSetupSound_Play(9);
                     break;
                 }
                 WifiSetupButtonBar_SelectIfNone(1);

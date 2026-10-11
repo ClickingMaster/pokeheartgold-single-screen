@@ -75,7 +75,7 @@ static void ov07_0222EB00(void *, void *);
 static void ov07_0222EBB0(void *, void *);
 
 void ov07_0222E6F4(void *owner) {
-    WorkA *work = ov07_022324D8(owner, sizeof(WorkA));
+    WorkA *work = BattleAnimUtil_AllocWork(owner, sizeof(WorkA));
     work->owner = owner;
     work->pic = ov07_0221FA48(work->owner, ov07_0221C468(owner));
     ov07_02222508(work->movement, 10, 10, 15, 8);
@@ -87,7 +87,7 @@ void ov07_0222E6F4(void *owner) {
 
 void ov07_0222E754(WorkB *work) {
     ov07_02222508(work->move0, work->x / 100, 10, work->y / 100, work->duration / 100);
-    ov07_02231E08(work->owner, 16, 0);
+    BattleAnimUtil_SetBlendWithBattleBg(work->owner, 16, 0);
     ov07_02222AC4(work->move1, 16, 10, 0, 6, (work->duration / 100) * 2);
     work->animState = 0;
     work->animCount = 0;
@@ -186,7 +186,7 @@ static void ov07_0222E90C(void *task, void *data) {
     case 2:
         if (IsBrightnessTransitionActive(1)) {
             work->state++;
-            ov07_02231E08(work->owner, 16, 0);
+            BattleAnimUtil_SetBlendWithBattleBg(work->owner, 16, 0);
             ov07_02222AC4(work->move1, 16, 0, 0, 16, 8);
         }
         break;
@@ -206,7 +206,7 @@ static void ov07_0222E90C(void *task, void *data) {
 }
 
 void ov07_0222EA48(void *owner, void *spriteSystem, void *arg, void *sprite) {
-    WorkB *work = ov07_022324D8(owner, sizeof(WorkB));
+    WorkB *work = BattleAnimUtil_AllocWork(owner, sizeof(WorkB));
     work->owner = owner;
     work->unk4 = spriteSystem;
     work->spriteSystem = arg;
@@ -263,7 +263,7 @@ static void ov07_0222EB00(void *task, void *data) {
 }
 
 void ov07_0222EB6C(void *owner) {
-    WorkC *work = ov07_022324D8(owner, sizeof(WorkC));
+    WorkC *work = BattleAnimUtil_AllocWork(owner, sizeof(WorkC));
     work->owner = owner;
     work->pic = ov07_0221FA48(work->owner, ov07_0221C468(owner));
     work->x = Pokepic_GetAttr(work->pic, 0);
@@ -333,7 +333,7 @@ static void ov07_0222EBB0(void *task, void *data) {
 }
 
 void ov07_0222ED7C(void *owner) {
-    WorkD *work = ov07_022324D8(owner, sizeof(WorkD));
+    WorkD *work = BattleAnimUtil_AllocWork(owner, sizeof(WorkD));
     work->owner = owner;
     work->multiplier = (int)ov07_02222004(work->owner, ov07_0221C468(owner));
     work->pic1 = ov07_0221FA48(work->owner, ov07_0221C468(owner));
