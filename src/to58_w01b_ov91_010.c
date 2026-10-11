@@ -3,7 +3,7 @@ void ov91_0225CC4C(u8 *base, u8 *arg) {
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
     if (*(void **)base != NULL) {
-        ov90_02258938(*(void **)base);
+        PlazaGameEntry_Free(*(void **)base);
         *(void **)base = NULL;
     }
     if (*(void **)(base + 0x34) != NULL) {
@@ -17,7 +17,7 @@ void ov91_0225CC4C(u8 *base, u8 *arg) {
         WifiConnection_StopVoiceChat();
     }
     if (*(void **)(base + 4) != NULL) {
-        ov90_02258A04(*(void **)(base + 4));
+        PlazaGameResults_Free(*(void **)(base + 4));
         *(void **)(base + 4) = NULL;
     }
 }

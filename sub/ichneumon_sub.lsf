@@ -140,10 +140,7 @@ Autoload EXT_WRAM
 	Object lib/src/wmsp_send_queue_init.o
 	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_20_r01.o
 	Object lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_20_residual_2_r01.o
-	Object lib/src/op90_op90_op90_to90_arm7_sub_ext_wram_residual_20_residual_2_residual_1_r01.o
-	Object lib/src/to90_arm7_sub_ext_wram_run82.o
-	Object lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_21_residual_1_r01.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_21_r01.o
+	Object lib/src/wmsp_send_queue.o
 	Object lib/src/op90_op90_op90_to90_arm7_sub_ext_wram_residual_21_residual_2_residual_1_r01.o
 	Object lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_21_residual_2_r01.o
 	Object lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_21_residual_2_r02.o

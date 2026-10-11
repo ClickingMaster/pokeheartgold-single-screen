@@ -18,14 +18,14 @@ typedef struct Ov07CallbackPosition {
     VecFx32 position;
 } Ov07CallbackPosition;
 
-void *sub_02015504(void);
-void sub_020154E4(void *, const VecFx32 *);
-int sub_02015530(void *);
-Camera *sub_02015524(SPLEmitter *);
-void sub_02015708(SPLEmitter *, VecFx32 *);
-void sub_02015720(SPLEmitter *, VecFx32 *);
-void sub_02015628(SPLEmitter *, VecFx32 *);
-void sub_02015640(SPLEmitter *, VecFx32 *);
+void *ParticleSystem_GetEmitterParam(void);
+void ParticleSystem_SetCameraUp(void *, const VecFx32 *);
+int ParticleSystem_GetPerspectiveType(void *);
+Camera *ParticleSystem_GetCamera(SPLEmitter *);
+void ParticleEmitter_SetConvergencePos(SPLEmitter *, VecFx32 *);
+void ParticleEmitter_GetConvergencePos(SPLEmitter *, VecFx32 *);
+void ParticleEmitter_SetMagnetPos(SPLEmitter *, VecFx32 *);
+void ParticleEmitter_GetMagnetPos(SPLEmitter *, VecFx32 *);
 
 int ov07_0221C468(void *);
 int ov07_0221C470(void *);

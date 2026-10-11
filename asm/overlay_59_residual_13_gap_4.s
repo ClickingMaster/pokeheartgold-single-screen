@@ -1,11 +1,11 @@
 	.include "asm/macros.inc"
 	.public Thunk_G3X_Reset
-	.public sub_0201543C
+	.public ParticleSystem_DrawAll
 	.public NNS_G2dSetupSoftwareSpriteCamera
 	.public Camera_PushLookAtToNNSGlb
 	.public NNS_G3dGlbFlushP
 	.public PokepicManager_DrawAll
-	.public sub_02015460
+	.public ParticleSystem_CalcAll
 	.text
 
 	thumb_func_start ov59_0223C304
@@ -13,7 +13,7 @@ ov59_0223C304: ; 0x0223C304
 	push {r4, lr}
 	add r4, r0, #0
 	bl Thunk_G3X_Reset
-	bl sub_0201543C
+	bl ParticleSystem_DrawAll
 	bl Thunk_G3X_Reset
 	bl NNS_G2dSetupSoftwareSpriteCamera
 	bl Camera_PushLookAtToNNSGlb
@@ -30,7 +30,7 @@ ov59_0223C304: ; 0x0223C304
 	bl NNS_G2dSetupSoftwareSpriteCamera
 	ldr r0, [r4, #0xc]
 	bl PokepicManager_DrawAll
-	bl sub_02015460
+	bl ParticleSystem_CalcAll
 	ldr r0, _0223C34C ; =0x04000540
 	mov r1, #1
 	str r1, [r0]

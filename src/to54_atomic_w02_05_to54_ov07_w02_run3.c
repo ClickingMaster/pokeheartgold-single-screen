@@ -40,8 +40,8 @@ BOOL ov07_02222468(W02ScalarMotion *m);
 BOOL ov07_02221DC4(int unused, W02Ctx *ctx) {
     W02Angle angle1 = ov07_02236414[2];
     W02Angle angle2 = ov07_02236414[5];
-    void *camera = sub_02015524(ctx->emitter);
-    sub_02015528(ctx->emitter, 1);
+    void *camera = ParticleSystem_GetCamera(ctx->emitter);
+    ParticleSystem_SetPerspectiveType(ctx->emitter, 1);
     if (ov07_0221BFC0(ctx->main) == 1) {
         Camera_SetAnglePos(&angle1, camera);
     } else {

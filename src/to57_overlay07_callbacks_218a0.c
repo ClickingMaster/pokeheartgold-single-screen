@@ -11,7 +11,7 @@ BOOL ov07_022218A0(SPLEmitter *emitter, Ov07ParticleCallbackWork *work) {
     }
     switch (param.mode) {
     case 0:
-        sub_02015640(emitter, &value);
+        ParticleEmitter_GetMagnetPos(emitter, &value);
         value.x *= work->scale;
         value.y *= work->scale;
         value.z *= work->scale;
@@ -35,7 +35,7 @@ BOOL ov07_022218A0(SPLEmitter *emitter, Ov07ParticleCallbackWork *work) {
     }
     value.x -= work->baseX;
     value.y -= work->baseY;
-    sub_02015628(emitter, &value);
+    ParticleEmitter_SetMagnetPos(emitter, &value);
     return TRUE;
 }
 
@@ -50,7 +50,7 @@ BOOL ov07_02221968(SPLEmitter *emitter, Ov07ParticleCallbackWork *work) {
     }
     switch (param.mode) {
     case 0:
-        sub_0201568C(emitter, &value);
+        ParticleEmitter_GetMagnetForce(emitter, &value);
         value *= work->scale;
         break;
     case 1:
@@ -62,7 +62,7 @@ BOOL ov07_02221968(SPLEmitter *emitter, Ov07ParticleCallbackWork *work) {
     case 0xff:
         break;
     }
-    sub_02015674(emitter, &value);
+    ParticleEmitter_SetMagnetForce(emitter, &value);
     return TRUE;
 }
 
@@ -77,7 +77,7 @@ BOOL ov07_022219EC(SPLEmitter *emitter, Ov07ParticleCallbackWork *work) {
     }
     switch (param.mode) {
     case 0:
-        sub_020156BC(emitter, &value);
+        ParticleEmitter_GetSpinAngle(emitter, &value);
         value *= work->scale;
         break;
     case 1:
@@ -89,7 +89,7 @@ BOOL ov07_022219EC(SPLEmitter *emitter, Ov07ParticleCallbackWork *work) {
     case 0xff:
         break;
     }
-    sub_020156A8(emitter, &value);
+    ParticleEmitter_SetSpinAngle(emitter, &value);
     return TRUE;
 }
 
@@ -104,7 +104,7 @@ BOOL ov07_02221A6C(SPLEmitter *emitter, Ov07ParticleCallbackWork *work) {
     }
     switch (param.mode) {
     case 0:
-        sub_020156EC(emitter, &value);
+        ParticleEmitter_GetSpinAxis(emitter, &value);
         break;
     case 1:
         value = param.value.x;
@@ -114,6 +114,6 @@ BOOL ov07_02221A6C(SPLEmitter *emitter, Ov07ParticleCallbackWork *work) {
     case 0xff:
         break;
     }
-    sub_020156D8(emitter, &value);
+    ParticleEmitter_SetSpinAxis(emitter, &value);
     return TRUE;
 }

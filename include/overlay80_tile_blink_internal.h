@@ -17,7 +17,7 @@ typedef struct TileBlinkManager {
 
 void *Heap_Alloc(u32 heapId, u32 size);
 void Heap_Free(void *ptr);
-void sub_02014DA0(void);
+void ParticleSystem_ZeroAll(void);
 void *SysTask_CreateOnMainQueue(void (*callback)(void *, void *), void *data, u32 priority);
 void SysTask_Destroy(void *task);
 void LoadRectToBgTilemapRect(void *bgConfig, u32 bgId, const void *src, u32 x, u32 y, u32 width, u32 height);

@@ -767,9 +767,9 @@ ov45_02254B74: ; 0x02254B74
 	.word FS_OVERLAY_ID(OVY_88)
 
 ov45_02254B84: ; 0x02254B84
-	.word ov48_02258800
-	.word ov48_02258920
-	.word ov48_022589FC
+	.word VisitorProfiles_Init
+	.word VisitorProfiles_Main
+	.word VisitorProfiles_Exit
 	.word FS_OVERLAY_ID(OVY_48)
 
 ov45_02254B94: ; 0x02254B94

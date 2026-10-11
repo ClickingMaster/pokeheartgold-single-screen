@@ -13,7 +13,7 @@ void SetAllSEPan(void);
 void *ov07_0221FB90(BattleSystem *, enum HeapID, u8);
 void *NARC_AllocAndReadWholeMember(u32, u32, u32);
 void ov06_0221BAD8(void);
-void sub_02015494(void *, void *, void *);
+void ParticleSystem_CreateEmitterWithParam(void *, void *, void *);
 void ov07_022207D0(void *, int, int);
 void ov07_02221EEC(void *, void *);
 void ov07_0221F9A8(void *, void *, int);

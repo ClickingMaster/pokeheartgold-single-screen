@@ -21,7 +21,7 @@
 #include "scrcmd.h"
 #include "text.h"
 #include "sound_playback.h"
-#include "unk_02014DA0.h"
+#include "particle_system.h"
 #include "unk_02026E30.h"
 
 static void _DestroyLocalWork(PartyMenu *partyMenu);
@@ -94,7 +94,7 @@ BOOL PartyMenu_AnimateIconFormChange(PartyMenu *partyMenu) {
         }
         _RunParticleSystem();
         if (work->effectTimer > work->duration) {
-            if (sub_020154B0(work->particleSystem) == 0) {
+            if (ParticleSystem_GetActiveEmitterCount(work->particleSystem) == 0) {
                 work->state++;
             }
         }
@@ -150,27 +150,27 @@ static void _CleanupEffects(PartyMenu *partyMenu) {
 }
 
 static void _CreateParticleSystem(IconFormChangeData *partyMenu) {
-    sub_02014DA0();
+    ParticleSystem_ZeroAll();
     void *particleHeap = Heap_Alloc(HEAP_ID_PARTY_MENU, PARTICLE_HEAP_SIZE);
 
-    partyMenu->particleSystem = sub_02014DB4(texAlloc, plttAlloc, particleHeap, PARTICLE_HEAP_SIZE, 1, HEAP_ID_PARTY_MENU);
+    partyMenu->particleSystem = ParticleSystem_New(texAlloc, plttAlloc, particleHeap, PARTICLE_HEAP_SIZE, 1, HEAP_ID_PARTY_MENU);
 
-    Camera_SetPerspectiveClippingPlane(1 * FX32_ONE, 900 * FX32_ONE, sub_02015524(partyMenu->particleSystem));
+    Camera_SetPerspectiveClippingPlane(1 * FX32_ONE, 900 * FX32_ONE, ParticleSystem_GetCamera(partyMenu->particleSystem));
 }
 
 static void _EmitParticles(IconFormChangeData *partyMenu) {
-    sub_0201526C(partyMenu->particleSystem, sub_02015264(NARC_a_2_0_6, partyMenu->fileId, HEAP_ID_PARTY_MENU), 0xA, 1);
+    ParticleSystem_SetResource(partyMenu->particleSystem, ParticleSystem_LoadResourceFile(NARC_a_2_0_6, partyMenu->fileId, HEAP_ID_PARTY_MENU), 0xA, 1);
 
     switch (partyMenu->species) {
     case SPECIES_GIRATINA:
-        sub_02015494(partyMenu->particleSystem, 0, particleEmitCallback, partyMenu);
-        sub_02015494(partyMenu->particleSystem, 1, particleEmitCallback, partyMenu);
-        sub_02015494(partyMenu->particleSystem, 2, particleEmitCallback, partyMenu);
+        ParticleSystem_CreateEmitterWithParam(partyMenu->particleSystem, 0, particleEmitCallback, partyMenu);
+        ParticleSystem_CreateEmitterWithParam(partyMenu->particleSystem, 1, particleEmitCallback, partyMenu);
+        ParticleSystem_CreateEmitterWithParam(partyMenu->particleSystem, 2, particleEmitCallback, partyMenu);
         PlaySE(SEQ_SE_PL_W467109);
         break;
     case SPECIES_SHAYMIN:
-        sub_02015494(partyMenu->particleSystem, 0, particleEmitCallback, partyMenu);
-        sub_02015494(partyMenu->particleSystem, 1, particleEmitCallback, partyMenu);
+        ParticleSystem_CreateEmitterWithParam(partyMenu->particleSystem, 0, particleEmitCallback, partyMenu);
+        ParticleSystem_CreateEmitterWithParam(partyMenu->particleSystem, 1, particleEmitCallback, partyMenu);
         PlaySE(SEQ_SE_PL_W363);
         break;
     }
@@ -186,25 +186,25 @@ static const fx32 sPartyMonSpritePositions[][2] = {
 };
 
 static void particleEmitCallback(SPLEmitter *emitter) {
-    IconFormChangeData *unkA = sub_02015504();
+    IconFormChangeData *unkA = ParticleSystem_GetEmitterParam();
     SPL_SetEmitterPositionX(emitter, sPartyMonSpritePositions[unkA->partyMonIndex][0]);
     SPL_SetEmitterPositionY(emitter, sPartyMonSpritePositions[unkA->partyMonIndex][1]);
 }
 
 static s32 _RunParticleSystem(void) {
     Thunk_G3X_Reset();
-    s32 val = sub_0201543C();
+    s32 val = ParticleSystem_DrawAll();
     if (val > 0) {
         Thunk_G3X_Reset();
     }
-    sub_02015460();
+    ParticleSystem_CalcAll();
     RequestSwap3DBuffers(GX_SORTMODE_MANUAL, GX_BUFFERMODE_Z);
     return val;
 }
 
 static void _DestroyParticleSystem(IconFormChangeData *partyMenu) {
-    void *unkA = sub_020154D0(partyMenu->particleSystem);
-    sub_02014EBC(partyMenu->particleSystem);
+    void *unkA = ParticleSystem_GetHeap(partyMenu->particleSystem);
+    ParticleSystem_Free(partyMenu->particleSystem);
     Heap_Free(unkA);
 }
 
@@ -213,7 +213,7 @@ static u32 texAlloc(u32 szByte, BOOL is4x4comp) {
 
     GF_ASSERT(unkC != NNS_GFD_ALLOC_ERROR_TEXKEY);
 
-    sub_02015354(unkC);
+    ParticleSystem_RegisterTexKey(unkC);
 
     return NNS_GfdGetTexKeyAddr(unkC);
 }
@@ -223,7 +223,7 @@ static u32 plttAlloc(u32 szByte, BOOL is4pltt) {
 
     GF_ASSERT(unkC != NNS_GFD_ALLOC_ERROR_PLTTKEY);
 
-    sub_02015394(unkC);
+    ParticleSystem_RegisterPlttKey(unkC);
 
     return NNS_GfdGetPlttKeyAddr(unkC);
 }

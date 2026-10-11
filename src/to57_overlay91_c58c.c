@@ -10,7 +10,7 @@ int ov91_0225C58C(OverlayManager *manager, int *state) {
         Ov91Block16 block;
     } stack;
 
-    if (ov90_02258B54(work->unk08) == 1) {
+    if (PlazaGameRoster_CheckConnectionLost(work->unk08) == 1) {
         switch (work->unk78) {
         case 0:
             if (IsPaletteFadeFinished() == 1) {
@@ -20,7 +20,7 @@ int ov91_0225C58C(OverlayManager *manager, int *state) {
             work->unk78++;
             break;
         case 1:
-            if (ov90_02258B98(work->unk08) == 1) {
+            if (PlazaGameRoster_ProcessConnectionLost(work->unk08) == 1) {
                 work->unk78++;
             }
             break;
@@ -36,13 +36,13 @@ int ov91_0225C58C(OverlayManager *manager, int *state) {
 
     switch (*state) {
     case 0:
-        work->unk00 = ov90_02258914(work->unk08, 0x6A);
+        work->unk00 = PlazaGameEntry_NewSwalotPlop(work->unk08, 0x6A);
         (*state)++;
         break;
     case 1:
-        if (ov90_022589BC(work->unk00) == 1) {
-            work->unk70 = ov90_022589CC(work->unk00);
-            ov90_02258938(work->unk00);
+        if (PlazaGameEntry_IsDone(work->unk00) == 1) {
+            work->unk70 = PlazaGameEntry_GetSelection(work->unk00);
+            PlazaGameEntry_Free(work->unk00);
             work->unk00 = NULL;
             (*state)++;
         }
@@ -72,7 +72,7 @@ int ov91_0225C58C(OverlayManager *manager, int *state) {
             GF_AssertFail();
         }
         work->unk44 = Comm_GetLocalNetId();
-        work->unk46 = ov90_0225886C(work->unk08, work->unk44);
+        work->unk46 = PlazaGameRoster_GetIndexOfNetId(work->unk08, work->unk44);
         if (work->unk44 == 0) {
             work->unk30 = ov91_0225CCC4(0x6A, 0x4B0, work->unk74, work->unk48);
             work->unk7C = 1;
@@ -212,14 +212,14 @@ int ov91_0225C58C(OverlayManager *manager, int *state) {
         (*state)++;
         break;
     case 14:
-        ov90_02258AA8(work->unk18, work->unk10);
-        work->unk04 = ov90_022589E0(work->unk08, work->unk18, 0x6A);
+        PlazaGame_CalcRanks(work->unk18, work->unk10);
+        work->unk04 = PlazaGameResults_NewSwalotPlop(work->unk08, work->unk18, 0x6A);
         (*state)++;
         break;
     case 15:
-        if (ov90_02258AA0(work->unk04) == 1) {
-            u32 result = ov90_02258AA4(work->unk04);
-            ov90_02258A04(work->unk04);
+        if (PlazaGameResults_IsDone(work->unk04) == 1) {
+            u32 result = PlazaGameResults_GetContinue(work->unk04);
+            PlazaGameResults_Free(work->unk04);
             work->unk04 = NULL;
             if (result == 0) {
                 return 1;

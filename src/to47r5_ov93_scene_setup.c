@@ -42,10 +42,10 @@ void ov93_0225D07C(void *unused, void *p) {
     one = 1;
     NNS_G3dGeBufferOP_N(0x12, &one, 1);
     Thunk_G3X_Reset();
-    if (sub_0201543C() > 0) {
+    if (ParticleSystem_DrawAll() > 0) {
         Thunk_G3X_Reset();
     }
-    sub_02015460();
+    ParticleSystem_CalcAll();
     SpriteSystem_DrawSprites(PAT(p, 0x28));
     SpriteSystem_UpdateTransfer();
     RequestSwap3DBuffers(0, 0);

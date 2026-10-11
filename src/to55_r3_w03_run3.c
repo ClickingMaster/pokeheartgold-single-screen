@@ -14,7 +14,7 @@ typedef struct Out {
 
 void ov07_02232CD8(void *arg) {
     u8 *p = arg;
-    s16 *q = sub_02015504(p);
+    s16 *q = ParticleSystem_GetEmitterParam(p);
     s32 dy = (s16)(100 - q[1]) * 172;
     s32 dx = (s16)(q[0] - 129) * 172;
     *(s32 *)(p + 0x28) = dx + BASE(p)[1];
@@ -46,17 +46,17 @@ void ov07_02232D80(u8 *p) {
     if (sel == 0xff) {
         if (*(u32 *)(p + 0x10)) {
             for (i = 0; i < *(int *)(p + 0x1c); i++) {
-                sub_02015494(*(void **)(p + 0x18), i, ov07_02232CD8, p);
+                ParticleSystem_CreateEmitterWithParam(*(void **)(p + 0x18), i, ov07_02232CD8, p);
             }
         } else {
             for (i = 0; i < *(int *)(p + 0x1c); i++) {
                 if (i != ov07_02232644(*(int *)(p + 4))) {
-                    sub_02015494(*(void **)(p + 0x18), i, ov07_02232CD8, p);
+                    ParticleSystem_CreateEmitterWithParam(*(void **)(p + 0x18), i, ov07_02232CD8, p);
                 }
             }
         }
     } else {
-        sub_02015494(*(void **)(p + 0x18), sel, ov07_02232CD8, p);
+        ParticleSystem_CreateEmitterWithParam(*(void **)(p + 0x18), sel, ov07_02232CD8, p);
     }
-    sub_02015528(*(void **)(p + 0x18), 1);
+    ParticleSystem_SetPerspectiveType(*(void **)(p + 0x18), 1);
 }

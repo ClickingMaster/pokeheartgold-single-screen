@@ -29,7 +29,7 @@ void ov59_0223C16C(SysTask *task, Ov59R13G3TaskData *data) {
         break;
     case 3:
         if (!Pokepic_ResumePaletteFade(work->scene->pic) && !ov59_0223C3DC(work->scene)) {
-            sub_020154B8(work->scene->particle);
+            ParticleSystem_DeleteAllEmitters(work->scene->particle);
             data->state++;
             return;
         }

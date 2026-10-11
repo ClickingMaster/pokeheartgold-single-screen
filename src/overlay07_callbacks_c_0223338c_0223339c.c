@@ -9,8 +9,8 @@ extern int ov07_02222748(void *, void *);
 extern int ov07_0221FA04(void *, int);
 extern int ov07_0221BFC0(void *);
 extern int ov07_0221C478(void *);
-extern int sub_02015530(void);
-extern void sub_02015510(void *);
+extern int ParticleSystem_GetPerspectiveType(void);
+extern void ParticleSystem_GetDefaultCameraUp(void *);
 extern void ov07_02231A70(int,int,int,int,int);
 extern void G2x_SetBlendAlpha_(u32,int,int,int,int);
 extern void ManagedSprite_GetPositionXY(void *, s16 *, s16 *);
@@ -18,7 +18,7 @@ extern void *ov07_0221BFD0(void *);
 extern void *Heap_Alloc(int,int);
 extern void Heap_Free(void *);
 extern void GF_AssertFail(void);
-extern int sub_020154B0(void *);
+extern int ParticleSystem_GetActiveEmitterCount(void *);
 extern void ov07_0221FF2C(void *);
 extern void ov07_02233EB8(void *, int);
 extern int ov07_02233EBC(void *, int);
@@ -28,14 +28,14 @@ extern int ov07_02222004(void*,void*); extern int ov07_0222202C(void*,void*); ex
 extern void ManagedSprite_SetOamMode(void*,int); extern void ManagedSprite_SetDrawPriority(void*,int); extern void ManagedSprite_SetPriority(void*,int);
 extern int ManagedSprite_GetPaletteOverrideOffset(void*); extern int ov07_0221FAF8(void*,int); extern int Pokepic_IsActive(void*);
 extern int ov07_0221C530(void*); extern int ov07_0221C514(void*); extern int ov07_0221C528(void*); extern int ov07_0221C4A0(void*); extern int ov07_0221FA78(void*);
-extern void sub_02015494(void*,int,void*,void*); extern void sub_02015528(void*,int); extern void SysTask_Destroy(void*);
+extern void ParticleSystem_CreateEmitterWithParam(void*,int,void*,void*); extern void ParticleSystem_SetPerspectiveType(void*,int); extern void SysTask_Destroy(void*);
 extern void ov07_0221C69C(void*); extern void ov07_02232AFC(void*,void*); extern void *SysTask_CreateOnMainQueue(void*,void*,int); extern void ov07_02232A5C(void*,void*);
 extern void ov07_02230BF8(void);
 void *ov07_022324D8(void *, int);
 
 #define WRAP5(n,v) void n(int a,int b,int c,int d){ov07_02231A70(a,b,c,d,v);}
 
-#define BIGWRAP(n,fn) void n(void *p,int q,int x){int z=ov07_0221C478(p);int d=sub_02015530();int a=ov07_02231924(p,q);int b=ov07_0221BFC0(p); fn(a,x,b,d);}
+#define BIGWRAP(n,fn) void n(void *p,int q,int x){int z=ov07_0221C478(p);int d=ParticleSystem_GetPerspectiveType();int a=ov07_02231924(p,q);int b=ov07_0221BFC0(p); fn(a,x,b,d);}
 
 extern const u32 ov07_0223738C[][2]; extern const u32 ov07_02237390[][2]; extern const u32 ov07_0223746C[][3]; extern const u32 ov07_02237470[][3]; extern const u32 ov07_02237474[][3]; extern const u32 ov07_022375BC[][4];
 

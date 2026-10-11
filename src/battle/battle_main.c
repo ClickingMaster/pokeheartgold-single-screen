@@ -45,7 +45,7 @@
 #include "text.h"
 #include "sound_playback.h"
 #include "unk_0200FA24.h"
-#include "unk_02014DA0.h"
+#include "particle_system.h"
 #include "unk_020163E0.h"
 #include "unk_020210A0.h"
 #include "unk_02026E30.h"
@@ -118,7 +118,7 @@ extern u32 *ov07_0221BEDC(enum HeapID heapId);
 extern void ov07_0221BFE0(u32 *animSystem);
 extern void ov05_0221BA00(BattleLinkScreenArgs *args);
 extern void sub_020302A4(BattleSetup *setup);
-extern void sub_02014F84(void);
+extern void ParticleSystem_FreeAll(void);
 extern void sub_02037930(int mode);
 extern void sub_020399FC(int a0, BgConfig *bgConfig);
 extern void sub_0203A930(int linkLevel);
@@ -330,7 +330,7 @@ void Battle_BattleExit(OverlayManager *man) {
     DestroyMsgData((MsgData *)battleSystem->unk10);
     MessageFormat_Delete(battleSystem->msgFormat);
     sub_02016F2C(battleSystem->unk1C8);
-    sub_02014F84();
+    ParticleSystem_FreeAll();
     ov07_0221BFE0(battleSystem->unk8C);
     BattleContext_Delete(battleSystem->ctx);
     for (i = 0; i < battleSystem->maxBattlers; i++) {
@@ -861,7 +861,7 @@ void Battle_ReserveTexAndPlttVram(void) {
     if (pltt == 0) {
         GF_AssertFail();
     }
-    sub_02014DA0();
+    ParticleSystem_ZeroAll();
 }
 
 // Sets an IRQ check flag in the DTCM system area through its literal address (OS_SetIrqCheckFlag addresses

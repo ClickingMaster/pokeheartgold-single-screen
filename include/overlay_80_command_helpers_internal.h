@@ -172,7 +172,7 @@ int FrtCmd_017(void *);
 extern void ManagedSprite_SetDrawFlag(void *, u32);
 extern void ov80_022399A4(void *, u16, u16, u16);
 extern void *ov80_02239A60(void *, u16);
-extern void sub_02015494(void *, u16, u32, u32);
+extern void ParticleSystem_CreateEmitterWithParam(void *, u16, u32, u32);
 extern u32 Comm_GetLocalNetId(void *);
 extern void *sub_02034818(u32);
 extern void BufferPlayersName(void *, u8, void *);

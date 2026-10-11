@@ -24,11 +24,11 @@ extern void Heap_Free(void *);
 extern void Camera_Delete(void *);
 extern void *GF_3DVramMan_Create(u32, int, int, int, int, void (*)(void));
 extern void GF_3DVramMan_Delete(void *);
-extern void *sub_020154D0(void *);
-extern void sub_02014EBC(void *);
-extern void sub_02015354(u32);
-extern void sub_02015394(u32);
-extern void sub_02015494(void *, u32, u32);
+extern void *ParticleSystem_GetHeap(void *);
+extern void ParticleSystem_Free(void *);
+extern void ParticleSystem_RegisterTexKey(u32);
+extern void ParticleSystem_RegisterPlttKey(u32);
+extern void ParticleSystem_CreateEmitterWithParam(void *, u32, u32);
 extern void sub_020181E0(void *, void *);
 extern void sub_020181EC(void *);
 extern void sub_02018068(void *);
@@ -38,8 +38,8 @@ extern u32 Comm_GetLocalNetId(void);
 extern u32 sub_02034818(u32);
 extern u32 sub_02037B38(u32);
 extern void sub_02037AC0(u8);
-extern u32 ov90_02258B54(void *p);
-extern void ov90_02258800(void *, u32, u32, u32, void *);
+extern u32 PlazaGameRoster_CheckConnectionLost(void *p);
+extern void PlazaGameRoster_Init(void *, u32, u32, u32, void *);
 extern void FillBgTilemapRect(void *, u32, u32, u32, u32, u32, u32, u32);
 extern void ScheduleBgTilemapBufferTransfer(void *, u32);
 extern void DrawFrameAndWindow1(void *, u32, u32, u32);
@@ -69,13 +69,13 @@ extern u32 ov93_02262724(void *, void *);
 extern void PlaySE(u32);
 extern void BlendPalette(void *, void *, u16, u8, u16);
 
-extern void sub_02014DA0(void *);
+extern void ParticleSystem_ZeroAll(void *);
 extern void *Heap_Alloc(u32, u32);
-extern void *sub_02014DB4(u32 (*)(u32, u32), u32 (*)(u32, u32), void *, u32, u32, u32);
-extern void *sub_02015524(void *);
+extern void *ParticleSystem_New(u32 (*)(u32, u32), u32 (*)(u32, u32), void *, u32, u32, u32);
+extern void *ParticleSystem_GetCamera(void *);
 extern void Camera_SetPerspectiveClippingPlane(u32, u32, void *);
-extern void *sub_02015264(u32, u32, u32);
-extern void sub_0201526C(void *, void *, u32, u32);
+extern void *ParticleSystem_LoadResourceFile(u32, u32, u32);
+extern void ParticleSystem_SetResource(void *, void *, u32, u32);
 
 /* Defined in a sibling object. */
 extern void ov93_02260A14(void *);
@@ -150,16 +150,16 @@ void ov93_0225ED60(void *p, s32 n);
 
 void ov93_0225D674(void *p) {
     void *mem;
-    sub_02014DA0(p);
+    ParticleSystem_ZeroAll(p);
     mem = Heap_Alloc(0x75, 0x12 << 10);
-    PAT(p, 0xa4) = sub_02014DB4(ov93_0225D744, ov93_0225D768, mem, 0x12 << 10, 1, 0x75);
-    Camera_SetPerspectiveClippingPlane(1 << 0xc, 0xe1 << 0xe, sub_02015524(PAT(p, 0xa4)));
-    sub_0201526C(PAT(p, 0xa4), sub_02015264(0xd5, 0, 0x75), 0xa, 1);
+    PAT(p, 0xa4) = ParticleSystem_New(ov93_0225D744, ov93_0225D768, mem, 0x12 << 10, 1, 0x75);
+    Camera_SetPerspectiveClippingPlane(1 << 0xc, 0xe1 << 0xe, ParticleSystem_GetCamera(PAT(p, 0xa4)));
+    ParticleSystem_SetResource(PAT(p, 0xa4), ParticleSystem_LoadResourceFile(0xd5, 0, 0x75), 0xa, 1);
 }
 
 void ov93_0225D6E0(void *p) {
     void *tmp;
-    tmp = sub_020154D0(PAT(p, 0xa4));
-    sub_02014EBC(PAT(p, 0xa4));
+    tmp = ParticleSystem_GetHeap(PAT(p, 0xa4));
+    ParticleSystem_Free(PAT(p, 0xa4));
     Heap_Free(tmp);
 }

@@ -32,5 +32,5 @@ typedef struct Ov59R13G3TaskData {
 void ov59_0223C16C(SysTask *task, Ov59R13G3TaskData *data);
 void ov59_0223C3C0(Ov59R13G3Scene *scene, int value);
 BOOL ov59_0223C3DC(Ov59R13G3Scene *scene);
-void sub_020154B8(void *particle);
+void ParticleSystem_DeleteAllEmitters(void *particle);
 #endif

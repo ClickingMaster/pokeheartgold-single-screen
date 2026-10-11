@@ -19,7 +19,7 @@ u8 ov01_021F0E90(void) {
 void ov01_021F0EAC(void) {
     void *p = *(void **)ov01_02209B64;
     if (p) {
-        sub_0201543C(p);
+        ParticleSystem_DrawAll(p);
     }
 }
 
@@ -28,7 +28,7 @@ void ov01_021F0EC0(void) {
     if (!p) {
         GF_ASSERT(FALSE);
     }
-    sub_02014F84();
+    ParticleSystem_FreeAll();
     ov01_021F1210(*(void **)(*(u8 **)ov01_02209B64 + 4));
     ov01_021E631C(*(void **)(*(u8 **)ov01_02209B64 + 4), 1);
     ov01_021E6340(*(void **)(*(u8 **)ov01_02209B64 + 4), 1);

@@ -3,157 +3,157 @@
 	.include "global.inc"
 
 	.text
-	.public _0225B164
-	.public ov48_02258800
-	.public ov48_02258920
-	.public ov48_022589FC
-	.public ov48_02258A80
-	.public ov48_02258B7C
-	.public ov48_02258BF4
-	.public ov48_02258C6C
-	.public ov48_02258CE4
-	.public ov48_02258D54
-	.public ov48_02258F0C
-	.public ov48_02258F64
-	.public ov48_0225909C
-	.public ov48_02259130
-	.public ov48_02259188
-	.public ov48_022591D8
-	.public ov48_0225932C
-	.public ov48_022593B4
-	.public ov48_022593F4
-	.public ov48_02259464
-	.public ov48_022594F0
-	.public ov48_02259650
-	.public ov48_02259688
-	.public ov48_02259750
-	.public ov48_02259798
-	.public ov48_022598EC
-	.public ov48_022599A0
-	.public ov48_02259A68
-	.public ov48_02259B10
-	.public ov48_02259BC0
-	.public ov48_02259C78
-	.public ov48_02259D00
-	.public ov48_02259DA0
-	.public ov48_02259EAC
-	.public ov48_02259F48
-	.public ov48_02259F8C
-	.public ov48_0225A00C
-	.public ov48_0225A108
-	.public ov48_0225A158
-	.public ov48_0225A20C
-	.public ov48_0225A2A0
-	.public ov48_0225A338
-	.public ov48_0225A354
+	.public sVisitorProfilesBgAnimPeriods
+	.public VisitorProfiles_Init
+	.public VisitorProfiles_Main
+	.public VisitorProfiles_Exit
+	.public VisitorProfilesPlaces_Load
+	.public VisitorProfilesPlaces_Set
+	.public VisitorProfiles_CalcGlobeMatrix
+	.public VisitorProfiles_CalcPlaceMatrix
+	.public VisitorProfiles_GetTouchDrag
+	.public VisitorProfiles_HandleGlobeInput
+	.public VisitorProfiles_WrapAngles
+	.public VisitorProfiles_Update
+	.public VisitorProfiles_HandleInput
+	.public VisitorProfiles_FocusStartPlace
+	.public VisitorProfiles_PickPlace
+	.public VisitorProfiles_FindNearestPlace
+	.public VisitorProfiles_CalcLocalHour
+	.public VisitorProfiles_FocusPlace
+	.public VisitorProfiles_InitSettings
+	.public VisitorProfiles_InitGraphics
+	.public VisitorProfiles_InitBgs
+	.public VisitorProfiles_FreeBgs
+	.public VisitorProfiles_InitSprites
+	.public VisitorProfiles_Init3D
+	.public VisitorProfiles_Setup3D
+	.public VisitorProfilesPlaces_Init
+	.public VisitorProfilesPlaces_Draw
+	.public VisitorProfiles_GetVisitorMarker
+	.public VisitorProfilesPlaces_FindIndex
+	.public VisitorProfilesCamera_Init
+	.public VisitorProfilesCamera_UpdateZoom
+	.public VisitorProfilesTouch_Init
+	.public VisitorProfilesTouch_Update
+	.public VisitorProfilesExitPrompt_Init
+	.public VisitorProfilesExitPrompt_Open
+	.public VisitorProfilesExitPrompt_HandleInput
+	.public VisitorProfilesPanel_Init
+	.public VisitorProfilesPanel_Free
+	.public VisitorProfilesPanel_Update
+	.public VisitorProfilesPanel_AddPlace
+	.public VisitorProfilesPanel_PushHistory
+	.public VisitorProfilesPanel_AnimateBgs
+	.public VisitorProfilesPanel_StartReveal
 	.public ov48_0225A428
-	.public ov48_0225A43C
-	.public ov48_0225A4C0
-	.public ov48_0225A57C
-	.public ov48_0225A5C4
-	.public ov48_0225A680
-	.public ov48_0225A6DC
-	.public ov48_0225A768
-	.public ov48_0225A790
-	.public ov48_0225A868
-	.public ov48_0225A894
-	.public ov48_0225A928
-	.public ov48_0225A95C
-	.public ov48_0225AA38
-	.public ov48_0225AA5C
-	.public ov48_0225AAAC
-	.public ov48_0225AC34
-	.public ov48_0225ACAC
-	.public ov48_0225ACD8
-	.public ov48_0225AD54
-	.public ov48_0225ADBC
-	.public ov48_0225ADF8
-	.public ov48_0225AEDC
-	.public ov48_0225AFB4
-	.public ov48_0225B010
-	.public ov48_0225B16C
-	.public ov48_0225B178
-	.public ov48_0225B184
-	.public ov48_0225B190
-	.public ov48_0225B1A0
-	.public ov48_0225B1B0
-	.public ov48_0225B1C4
-	.public ov48_0225B1D8
-	.public ov48_0225B1EC
-	.public ov48_0225B210
-	.public ov48_0225B238
+	.public VisitorProfilesPanel_Reveal
+	.public VisitorProfilesPanel_UpdateRow
+	.public VisitorProfilesPanel_CopyBaseRow
+	.public VisitorProfilesWindowMask_Init
+	.public VisitorProfilesWindowMask_Task
+	.public VisitorProfilesPanel_AddWindows
+	.public VisitorProfilesPanel_RemoveWindows
+	.public VisitorProfilesPanel_PrintPlace
+	.public VisitorProfilesPanel_TransferRowPixels
+	.public VisitorProfilesBgAnim_Init
+	.public VisitorProfilesBgAnim_Free
+	.public VisitorProfilesBgAnim_Update
+	.public VisitorProfilesBgAnim_SetEnabled
+	.public VisitorProfilesBgAnim_CopyRow
+	.public VisitorProfilesHourSprites_Init
+	.public VisitorProfilesHourSprites_Free
+	.public VisitorProfilesHourSprites_Reset
+	.public VisitorProfilesHourSprites_Set
+	.public VisitorProfilesHourSprites_Update
+	.public VisitorProfilesHourSprites_Start
+	.public VisitorProfilesHourSprites_Step
+	.public VisitorProfilesHourSpriteMotion_CalcPosition
+	.public VisitorProfilesHourSpriteMotion_UpdateWindowMask
+	.public VisitorProfilesHourSprites_UpdateSprite
+	.public sVisitorProfilesCameraPos
+	.public sVisitorProfilesMarkerModelFiles
+	.public sVisitorProfilesCameraTarget
+	.public sVisitorProfilesGraphicsModes
+	.public sVisitorProfilesObjCharTransferTemplate
+	.public sVisitorProfilesBgLayers
+	.public sVisitorProfilesYesNoTemplate
+	.public sVisitorProfilesPlaceNameColors
+	.public sVisitorProfilesIdentityMtx
+	.public sVisitorProfilesGraphicsBanks
+	.public sVisitorProfilesHourAnims
 	.public ov48_0225B239
-	.public ov48_0225B268
-	.public ov48_0225B2A4
-	.public ov48_0225B330
-	.public ov48_02259030
-	.public ov48_02259050
-	.public ov48_02259090
-	.public ov48_022592E0
-	.public ov48_022594A8
-	.public ov48_022594D0
-	.public ov48_022594DC
-	.public ov48_02259724
-	.public ov48_02259788
-	.public ov48_02259824
-	.public ov48_02259868
-	.public ov48_02259874
-	.public ov48_022598AC
-	.public ov48_022598BC
-	.public ov48_022598CC
-	.public ov48_022598DC
-	.public ov48_02259984
-	.public ov48_02259AD0
-	.public ov48_02259B3C
-	.public ov48_02259B68
-	.public ov48_02259B84
-	.public ov48_02259BA0
-	.public ov48_02259BBC
-	.public ov48_02259C38
-	.public ov48_02259C44
-	.public ov48_02259C4C
-	.public ov48_02259CFC
-	.public ov48_02259D94
-	.public ov48_02259E5C
-	.public ov48_02259E78
-	.public ov48_02259E90
-	.public ov48_02259F14
-	.public ov48_02259FEC
-	.public ov48_0225A1D0
-	.public ov48_0225A1EC
-	.public ov48_0225A244
-	.public ov48_0225A288
-	.public ov48_0225A294
-	.public ov48_0225A2EC
-	.public ov48_0225A30C
-	.public ov48_0225A41C
-	.public ov48_0225A430
-	.public ov48_0225A4B4
-	.public ov48_0225A634
-	.public ov48_0225A650
-	.public ov48_0225A668
-	.public ov48_0225A834
-	.public ov48_0225A858
-	.public ov48_0225AA50
-	.public ov48_0225AD38
-	.public ov48_0225AE3C
-	.public ov48_0225AE58
-	.public ov48_0225AE5C
-	.public ov48_0225AE60
-	.public ov48_0225AEA8
-	.public ov48_0225AEC4
-	.public ov48_0225B038
-	.public ov48_0225B050
-	.public ov48_0225B068
-	.public ov48_0225B0A4
-	.public ov48_0225B0C4
-	.public ov48_0225B0D4
-	.public ov48_0225B0E0
-	.public ov48_0225B108
-	.public ov48_0225B13C
+	.public sVisitorProfilesBgAnimTemplates
+	.public sVisitorProfilesBgTemplates
+	.public sVisitorProfilesHourSpritePaths
+	.public VisitorProfiles_UpdatePanel
+	.public VisitorProfiles_Draw
+	.public VisitorProfiles_VBlankCB
+	.public VisitorProfiles_AngleDistance
+	.public VisitorProfiles_FreeGraphics
+	.public VisitorProfiles_DrawSprites
+	.public VisitorProfiles_GraphicsVBlank
+	.public VisitorProfiles_FreeSprites
+	.public VisitorProfiles_Free3D
+	.public VisitorProfilesGlobe_Init
+	.public VisitorProfilesGlobe_Free
+	.public VisitorProfilesGlobe_Draw
+	.public VisitorProfilesGlobe_GetPosition
+	.public VisitorProfilesGlobe_GetMatrix
+	.public VisitorProfilesGlobe_GetRotation
+	.public VisitorProfilesGlobe_SetRotation
+	.public VisitorProfilesPlaces_Free
+	.public VisitorProfilesPlaces_Find
+	.public VisitorProfilesPlaces_GetCoords
+	.public VisitorProfilesPlaces_GetMarker
+	.public VisitorProfilesPlaces_GetCountry
+	.public VisitorProfilesPlaces_GetRegion
+	.public VisitorProfilesPlaces_GetCount
+	.public VisitorProfilesCamera_Free
+	.public VisitorProfilesCamera_Apply
+	.public VisitorProfilesCamera_ToggleZoom
+	.public VisitorProfilesCamera_GetZoomMode
+	.public VisitorProfilesTouch_Free
+	.public VisitorProfilesTouch_Get
+	.public VisitorProfilesTouch_HideExitButton
+	.public VisitorProfilesTouch_ShowExitButton
+	.public VisitorProfilesExitPrompt_Free
+	.public VisitorProfilesExitPrompt_Close
+	.public VisitorProfilesPanel_HideHint
+	.public VisitorProfilesPanel_ShowHint
+	.public VisitorProfilesPanel_HasPlace
+	.public VisitorProfilesPanel_InitHistory
+	.public VisitorProfilesPanel_ClearHistory
+	.public VisitorProfilesPanel_PopHistory
+	.public VisitorProfilesPanel_GetHistory
+	.public VisitorProfilesPanel_RevealSlow
+	.public VisitorProfilesPanel_RevealFast
+	.public VisitorProfilesPanel_ActivateRow
+	.public VisitorProfilesWindowMask_Free
+	.public VisitorProfilesWindowMask_SetWindow0
+	.public VisitorProfilesWindowMask_SetWindow1
+	.public VisitorProfilesPanel_GetRowPixels
+	.public VisitorProfilesPanel_GetBlankRowPixels
+	.public VisitorProfilesBgAnim_DisableAll
+	.public VisitorProfilesHourSprites_HideAll
+	.public VisitorProfilesHourSpriteMotion_Init
+	.public VisitorProfilesHourSpriteMotion_SetJoinNext
+	.public VisitorProfilesHourSpriteMotion_SetJoinPrev
+	.public VisitorProfilesHourSpriteMotion_Step
+	.public VisitorProfilesHourSpriteMotion_Start
+	.public VisitorProfilesHourSpriteMotion_GetPosition
+	.public VisitorProfiles_GetHourBgAnim
+	.public VisitorProfiles_GetHourSprite
+	.public VisitorProfilesMsg_Init
+	.public VisitorProfilesMsg_Free
+	.public VisitorProfilesMsg_Get
+	.public VisitorProfilesMsg_Read
+	.public VisitorProfilesMsg_GetCountryName
+	.public VisitorProfilesMsg_GetRegionName
+	.public VisitorProfiles_FindFirstVisitor
 
-	thumb_func_start ov48_0225AEDC
-ov48_0225AEDC: ; 0x0225AEDC
+	thumb_func_start VisitorProfilesHourSpriteMotion_CalcPosition
+VisitorProfilesHourSpriteMotion_CalcPosition: ; 0x0225AEDC
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	ldrh r0, [r5, #0xa]
@@ -258,18 +258,18 @@ _0225AF84:
 	.balign 4, 0
 _0225AFAC: .word 0x0000FFFF
 _0225AFB0: .word FX_SinCosTable_
-	thumb_func_end ov48_0225AEDC
+	thumb_func_end VisitorProfilesHourSpriteMotion_CalcPosition
 
 
-	thumb_func_start ov48_0225AFB4
-ov48_0225AFB4: ; 0x0225AFB4
+	thumb_func_start VisitorProfilesHourSpriteMotion_UpdateWindowMask
+VisitorProfilesHourSpriteMotion_UpdateWindowMask: ; 0x0225AFB4
 	push {r3, r4, r5, lr}
 	add r4, r1, #0
 	mov r1, #0
 	add r5, r0, #0
 	add r0, r4, #0
 	add r2, r1, #0
-	bl ov48_0225A650
+	bl VisitorProfilesWindowMask_SetWindow0
 	ldrh r0, [r5, #8]
 	cmp r0, #0
 	bne _0225AFE8
@@ -286,7 +286,7 @@ ov48_0225AFB4: ; 0x0225AFB4
 	lsl r2, r2, #0x10
 	add r0, r4, #0
 	asr r2, r2, #0x10
-	bl ov48_0225A650
+	bl VisitorProfilesWindowMask_SetWindow0
 _0225AFE8:
 	ldrh r0, [r5, #0xa]
 	cmp r0, #0
@@ -304,15 +304,15 @@ _0225AFE8:
 	lsl r1, r1, #0x10
 	add r0, r4, #0
 	asr r1, r1, #0x10
-	bl ov48_0225A650
+	bl VisitorProfilesWindowMask_SetWindow0
 _0225B00C:
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov48_0225AFB4
+	thumb_func_end VisitorProfilesHourSpriteMotion_UpdateWindowMask
 
 
-	thumb_func_start ov48_0225B010
-ov48_0225B010: ; 0x0225B010
+	thumb_func_start VisitorProfilesHourSprites_UpdateSprite
+VisitorProfilesHourSprites_UpdateSprite: ; 0x0225B010
 	push {r4, r5, lr}
 	sub sp, #0xc
 	add r4, r1, #0
@@ -320,7 +320,7 @@ ov48_0225B010: ; 0x0225B010
 	lsl r0, r4, #4
 	add r0, r5, r0
 	add r1, sp, #0
-	bl ov48_0225AEC4
+	bl VisitorProfilesHourSpriteMotion_GetPosition
 	add r0, r5, r4
 	add r0, #0x38
 	ldrb r0, [r0]
@@ -331,4 +331,4 @@ ov48_0225B010: ; 0x0225B010
 	bl Sprite_SetMatrix
 	add sp, #0xc
 	pop {r4, r5, pc}
-	thumb_func_end ov48_0225B010
+	thumb_func_end VisitorProfilesHourSprites_UpdateSprite

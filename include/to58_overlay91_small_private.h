@@ -1,7 +1,7 @@
 #ifndef TO58_W01B_OV91_SMALL_PRIVATE_H
 #define TO58_W01B_OV91_SMALL_PRIVATE_H
 #include "global.h"
-int ov90_0225886C(void *base, int arg);
+int PlazaGameRoster_GetIndexOfNetId(void *base, int arg);
 void ov91_0225CD74(void *object, int arg, int value);
 void ov91_0225CD84(void *object, int arg, int value);
 void ov91_0225D368(void *object);
@@ -16,12 +16,12 @@ void ov91_0225E23C(void *record);
 void ov91_0225E400(void *record);
 void Main_SetVBlankIntrCB(void *cb, void *arg);
 void HBlankInterruptDisable(void);
-void ov90_02258938(void *object);
+void PlazaGameEntry_Free(void *object);
 void ov91_0225CCEC(void *object);
 void ov91_0225CE80(void *object);
 void GF_DestroyVramTransferManager(void);
 void WifiConnection_StopVoiceChat(void);
-void ov90_02258A04(void *object);
+void PlazaGameResults_Free(void *object);
 void ov91_0225CC4C(u8 *base, u8 *arg);
 void ov91_0225E294(void *record, void *out);
 void ov91_0225E2E4(void *base, void *data, int mode);

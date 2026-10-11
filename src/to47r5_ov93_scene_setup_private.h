@@ -21,8 +21,8 @@ extern void RequestSwap3DBuffers(u32 sortMode, u32 bufferMode);
 extern void SpriteSystem_DrawSprites(void *spriteManager);
 extern void SpriteSystem_UpdateTransfer(void);
 extern void FillWindowPixelBuffer(Window *window, u8 fillValue);
-extern s32 sub_0201543C(void);
-extern void sub_02015460(void);
+extern s32 ParticleSystem_DrawAll(void);
+extern void ParticleSystem_CalcAll(void);
 extern void sub_020181EC(void *);
 extern void sub_020399FC(u32 a, void *b);
 

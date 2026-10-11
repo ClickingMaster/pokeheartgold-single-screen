@@ -24,7 +24,7 @@ BOOL ov07_02222468(W02ScalarMotion *m);
 
 BOOL ov07_02221E9C(int unused, W02Ctx *ctx) {
     VecFx32 v;
-    void *camera = sub_02015524(ctx->emitter);
+    void *camera = ParticleSystem_GetCamera(ctx->emitter);
     ov07_02231D70(ctx->main, ctx->obj24, &v);
     Camera_SetLookAtCamTarget(&v, camera);
     return TRUE;
@@ -32,7 +32,7 @@ BOOL ov07_02221E9C(int unused, W02Ctx *ctx) {
 
 BOOL ov07_02221EC4(int unused, W02Ctx *ctx) {
     VecFx32 v;
-    void *camera = sub_02015524(ctx->emitter);
+    void *camera = ParticleSystem_GetCamera(ctx->emitter);
     ov07_02231D70(ctx->main, ctx->obj28, &v);
     Camera_SetLookAtCamTarget(&v, camera);
     return TRUE;

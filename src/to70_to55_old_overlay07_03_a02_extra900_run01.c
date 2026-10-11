@@ -1,5 +1,5 @@
 #pragma force_active on
 #include "global.h"
 typedef struct{u8 p[16];int count;void*objects[18];int ready[11];u32 active;}Work;
-extern int sub_020154B0(void*);extern void ov07_0221FF2C(void*),SysTask_Destroy(void*);void ov07_02232A5C(void*,Work*);
-void ov07_02232A5C(void*task,Work*w){int busy=0,i;if(w->count>9)GF_AssertFail();for(i=0;i<w->count;i++){if(w->objects[i]){if(sub_020154B0(w->objects[i])==0&&w->ready[i]){ov07_0221FF2C(w->objects[i]);w->objects[i]=0;w->ready[i]=0;}else busy=1;}}if(busy==0){w->active=0;SysTask_Destroy(task);}}
+extern int ParticleSystem_GetActiveEmitterCount(void*);extern void ov07_0221FF2C(void*),SysTask_Destroy(void*);void ov07_02232A5C(void*,Work*);
+void ov07_02232A5C(void*task,Work*w){int busy=0,i;if(w->count>9)GF_AssertFail();for(i=0;i<w->count;i++){if(w->objects[i]){if(ParticleSystem_GetActiveEmitterCount(w->objects[i])==0&&w->ready[i]){ov07_0221FF2C(w->objects[i]);w->objects[i]=0;w->ready[i]=0;}else busy=1;}}if(busy==0){w->active=0;SysTask_Destroy(task);}}

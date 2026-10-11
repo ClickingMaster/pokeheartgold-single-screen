@@ -13,7 +13,7 @@
 
 #include "launch_application.h"
 #include "overlay_42.h"
-#include "unk_02014DA0.h"
+#include "particle_system.h"
 #include "unk_02034354.h"
 #include "unk_02096910.h"
 
@@ -433,17 +433,17 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
 
 static void ov80_02233F1C(FrontierScriptContext *ctx, ArcadeContext *arcadeCtx, u32 a2) {
     FrontierMap *map = FrontierSystem_GetFrontierMap(ctx->frontierSystem);
-    sub_02015494(ov80_02239A60(map->unk10, 0), a2, ov80_02233F40, arcadeCtx);
+    ParticleSystem_CreateEmitterWithParam(ov80_02239A60(map->unk10, 0), a2, ov80_02233F40, arcadeCtx);
 }
 
 extern const VecFx32 ov80_0223BE6C; //{-1, 0, 0}
 static void ov80_02233F40(SPLEmitter *emitter) {
     VecFx16 axis;
-    ArcadeContext *ctx = sub_02015504();
+    ArcadeContext *ctx = ParticleSystem_GetEmitterParam();
     const VecFx32 pos = ov80_0223BE6C;
 
     if (ctx->unkA7A == 1) {
-        sub_02015538(emitter, &axis);
+        ParticleEmitter_GetAxis(emitter, &axis);
         axis.x *= -1;
         SPL_SetEmitterAxis(emitter, &axis);
         SPL_SetEmitterPosition(emitter, &pos);

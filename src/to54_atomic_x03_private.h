@@ -74,7 +74,7 @@ void ov91_0226066C(void *);
 void ov91_022600FC(void *, void *);
 void ov91_02261070(void *, void *, void *);
 void ov91_0225FC84(void *);
-void ov90_02258C38(void *);
+void PlazaGameSign_Free(void *);
 void ov91_0225FA60(void *);
 void ov91_0225FB48(void *);
 void ov91_0225FD0C(void *);
@@ -117,6 +117,6 @@ void ov91_0225DBD0(void *, void *, void *, enum HeapID);
 void ov91_0225D628(void *, void *, void *, void *, enum HeapID);
 void ov91_022613AC(void *, u8);
 void ov91_02261580(void *, void *, void *, enum HeapID);
-void *ov90_02258BD4(void *, enum HeapID);
+void *PlazaGameSign_New(void *, enum HeapID);
 
 #endif

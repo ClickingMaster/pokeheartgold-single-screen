@@ -1658,7 +1658,7 @@ _0225CA6C:
 	ldr r0, [r5, #0x54]
 	bl SpriteManager_GetSpriteList
 	mov r1, #0x71
-	bl ov90_02258BD4
+	bl PlazaGameSign_New
 	add r1, r5, #0
 	add r1, #0x84
 	str r0, [r1]
@@ -1742,7 +1742,7 @@ _0225CB06:
 	add r0, #0x8c
 	ldr r3, [r3, #0x3c]
 	str r0, [sp, #4]
-	bl ov90_02258800
+	bl PlazaGameRoster_Init
 	mov r0, #1
 	add sp, #8
 	pop {r3, r4, r5, r6, r7, pc}
@@ -2151,7 +2151,7 @@ _0225CE56:
 	add r0, r4, #0
 	add r0, #0x8c
 	mov r1, #0x71
-	bl ov90_02258920
+	bl PlazaGameEntry_NewMimeJrTop
 	add r1, r4, #0
 	add r1, #0x9c
 	str r0, [r1]
@@ -2165,7 +2165,7 @@ _0225CE74:
 	add r0, r4, #0
 	add r0, #0x9c
 	ldr r0, [r0]
-	bl ov90_022589BC
+	bl PlazaGameEntry_IsDone
 	add r1, r0, #0
 	add r0, r4, #0
 	mov r2, #2
@@ -2176,12 +2176,12 @@ _0225CE8C:
 	add r0, r4, #0
 	add r0, #0x9c
 	ldr r0, [r0]
-	bl ov90_022589CC
+	bl PlazaGameEntry_GetSelection
 	strb r0, [r4, #0x14]
 	add r0, r4, #0
 	add r0, #0x9c
 	ldr r0, [r0]
-	bl ov90_02258938
+	bl PlazaGameEntry_Free
 	add r0, r4, #0
 	mov r1, #0
 	add r0, #0x9c
@@ -2264,7 +2264,7 @@ _0225CF52:
 	add r0, r4, #0
 	add r0, #0x84
 	ldr r0, [r0]
-	bl ov90_02258C8C
+	bl PlazaGameSign_StartCountdown
 	add r0, r4, #0
 	mov r1, #1
 	mov r2, #9
@@ -2275,7 +2275,7 @@ _0225CF6A:
 	add r0, r4, #0
 	add r0, #0x84
 	ldr r0, [r0]
-	bl ov90_02258CE0
+	bl PlazaGameSign_IsDone
 	add r5, r0, #0
 	beq _0225CF84
 	ldr r0, [r4, #4]
@@ -2339,7 +2339,7 @@ _0225CFE6:
 	add r0, r4, #0
 	add r0, #0x84
 	ldr r0, [r0]
-	bl ov90_02258CB0
+	bl PlazaGameSign_StartFinish
 	add r0, r4, #0
 	mov r1, #1
 	mov r2, #0xc
@@ -2350,7 +2350,7 @@ _0225D00E:
 	add r0, r4, #0
 	add r0, #0x84
 	ldr r0, [r0]
-	bl ov90_02258CE0
+	bl PlazaGameSign_IsDone
 	add r1, r0, #0
 	add r0, r4, #0
 	mov r2, #0xd
@@ -2471,13 +2471,13 @@ _0225D0F2:
 	ldrb r1, [r1]
 	add r0, r4, #0
 	add r0, #0xa0
-	bl ov90_02258AA8
+	bl PlazaGame_CalcRanks
 	add r0, r4, #0
 	add r1, r4, #0
 	add r0, #0x8c
 	add r1, #0xa0
 	mov r2, #0x71
-	bl ov90_022589EC
+	bl PlazaGameResults_NewMimeJrTop
 	add r1, r4, #0
 	add r1, #0xb8
 	str r0, [r1]
@@ -2491,18 +2491,18 @@ _0225D12A:
 	add r0, r4, #0
 	add r0, #0xb8
 	ldr r0, [r0]
-	bl ov90_02258AA0
+	bl PlazaGameResults_IsDone
 	add r5, r0, #0
 	beq _0225D186
 	add r0, r4, #0
 	add r0, #0xb8
 	ldr r0, [r0]
-	bl ov90_02258AA4
+	bl PlazaGameResults_GetContinue
 	add r6, r0, #0
 	add r0, r4, #0
 	add r0, #0xb8
 	ldr r0, [r0]
-	bl ov90_02258A04
+	bl PlazaGameResults_Free
 	add r0, r4, #0
 	mov r1, #0
 	add r0, #0xb8
@@ -2699,7 +2699,7 @@ _0225D2C8:
 	add r0, r5, #0
 	add r0, #0x84
 	ldr r0, [r0]
-	bl ov90_02258C38
+	bl PlazaGameSign_Free
 	add r0, r5, #0
 	bl ov92_0225D49C
 	add r0, r5, #0

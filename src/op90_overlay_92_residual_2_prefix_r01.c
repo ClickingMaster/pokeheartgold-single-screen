@@ -91,7 +91,7 @@ void sub_020181D4(Inst *, Anim *);
 void sub_02018198(Anim *, int);
 void sub_020182A0(Obj *, int);
 void *SpriteManager_GetSpriteList(void *);
-void *ov90_02258BD4(void *, int);
+void *PlazaGameSign_New(void *, int);
 void PaletteData_LoadPaletteSlotFromHardware(void *, int, int, int);
 void WifiConnection_StartVoiceChat(int);
 void ov92_0225C5C4(Ctx *ctx);
@@ -220,7 +220,7 @@ void ov92_0225C5C4(Ctx *ctx) {
         ctx->world->fixed[2].pos.y = -0x8000;
         ctx->world->fixed[3].pos.y = -0x8000;
     }
-    ctx->sprite = ov90_02258BD4(SpriteManager_GetSpriteList(ctx->spriteMan), 0x71);
+    ctx->sprite = PlazaGameSign_New(SpriteManager_GetSpriteList(ctx->spriteMan), 0x71);
     PaletteData_LoadPaletteSlotFromHardware(ctx->palette, 2, 0, 0x200);
     if (ctx->config->enabled) {
         WifiConnection_StartVoiceChat(0x71);

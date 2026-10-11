@@ -408,9 +408,9 @@
 .public WiFiPlazaSurvey_Init
 .public WiFiPlazaSurvey_Main
 .public WiFiPlazaSurvey_Exit
-.public ov48_02258800
-.public ov48_02258920
-.public ov48_022589FC
+.public VisitorProfiles_Init
+.public VisitorProfiles_Main
+.public VisitorProfiles_Exit
 .public ov49_02258800
 .public ov49_02258830
 .public ov49_02259AA4

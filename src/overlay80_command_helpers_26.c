@@ -87,7 +87,7 @@ int FrtCmd_066(void *c) {
 int FrtCmd_067(void *c) {
     void *p = sub_0209680C(APP(c));
     u16 a = FrontierScript_ReadVar(c), b = FrontierScript_ReadVar(c);
-    sub_02015494(ov80_02239A60(PTR(p, 0x10), a), b, 0, 0);
+    ParticleSystem_CreateEmitterWithParam(ov80_02239A60(PTR(p, 0x10), a), b, 0, 0);
     return 0;
 }
 

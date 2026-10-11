@@ -51,10 +51,10 @@ typedef struct {
 } Tbl36;
 extern const Tbl36 ov07_02234CC8;
 extern const Tbl36 ov07_02234D58;
-int sub_020154B0(void *);
-void sub_020154D4(void *, V3 *);
-void sub_020154E4(void *, V3 *);
-void sub_02015528(void *, int);
+int ParticleSystem_GetActiveEmitterCount(void *);
+void ParticleSystem_GetCameraUp(void *, V3 *);
+void ParticleSystem_SetCameraUp(void *, V3 *);
+void ParticleSystem_SetPerspectiveType(void *, int);
 void *ov07_0221FF18(void *, u32, u32, Ov07Ctx *);
 int ov07_0221C468(Ov07Ctx *);
 int ov07_0221C470(Ov07Ctx *);

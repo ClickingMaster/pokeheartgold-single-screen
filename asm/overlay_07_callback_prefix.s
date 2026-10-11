@@ -1873,7 +1873,7 @@ _0221C9E2:
 	ldr r0, [r0, #0x1c]
 	cmp r0, #0
 	beq _0221C9F6
-	bl sub_020154B0
+	bl ParticleSystem_GetActiveEmitterCount
 	add r6, r6, r0
 _0221C9F6:
 	add r7, r7, #1
@@ -2126,7 +2126,7 @@ ov07_0221CBC0: ; 0x0221CBC0
 	add r0, r0, r6
 	ldr r0, [r0, #0x1c]
 	add r1, sp, #4
-	bl sub_020154D4
+	bl ParticleSystem_GetCameraUp
 	mov r0, #0
 	ldr r1, [sp, #8]
 	mvn r0, r0
@@ -2138,7 +2138,7 @@ ov07_0221CBC0: ; 0x0221CBC0
 	add r1, sp, #4
 	add r0, r0, r6
 	ldr r0, [r0, #0x1c]
-	bl sub_020154E4
+	bl ParticleSystem_SetCameraUp
 _0221CC1E:
 	add r0, r5, #0
 	add r0, #0xc0
@@ -2149,7 +2149,7 @@ _0221CC1E:
 	add r0, r0, r6
 	ldrb r1, [r1]
 	ldr r0, [r0, #0x1c]
-	bl sub_02015528
+	bl ParticleSystem_SetPerspectiveType
 	add r0, r5, #0
 	add r0, #0xc0
 	ldr r0, [r0]
@@ -2205,7 +2205,7 @@ ov07_0221CC54: ; 0x0221CC54
 	add r0, r0, r6
 	ldr r0, [r0, #0x1c]
 	add r1, sp, #8
-	bl sub_020154D4
+	bl ParticleSystem_GetCameraUp
 	mov r0, #0
 	ldr r1, [sp, #0xc]
 	mvn r0, r0
@@ -2217,7 +2217,7 @@ ov07_0221CC54: ; 0x0221CC54
 	add r1, sp, #8
 	add r0, r0, r6
 	ldr r0, [r0, #0x1c]
-	bl sub_020154E4
+	bl ParticleSystem_SetCameraUp
 _0221CCBA:
 	add r0, r5, #0
 	add r0, #0xc0
@@ -2228,7 +2228,7 @@ _0221CCBA:
 	add r0, r0, r6
 	ldrb r1, [r1]
 	ldr r0, [r0, #0x1c]
-	bl sub_02015528
+	bl ParticleSystem_SetPerspectiveType
 	add r0, r5, #0
 	add r0, #0xc0
 	ldr r0, [r0]
@@ -2383,7 +2383,7 @@ _0221CDBC:
 	add r0, r0, r6
 	ldr r0, [r0, #0x1c]
 	add r1, sp, #4
-	bl sub_020154D4
+	bl ParticleSystem_GetCameraUp
 	mov r0, #0
 	ldr r1, [sp, #8]
 	mvn r0, r0
@@ -2395,7 +2395,7 @@ _0221CDBC:
 	add r1, sp, #4
 	add r0, r0, r6
 	ldr r0, [r0, #0x1c]
-	bl sub_020154E4
+	bl ParticleSystem_SetCameraUp
 _0221CE1A:
 	add r0, r5, #0
 	bl ov07_0221CCF4
@@ -2409,7 +2409,7 @@ _0221CE1A:
 	add r0, r0, r6
 	ldrb r1, [r1]
 	ldr r0, [r0, #0x1c]
-	bl sub_02015528
+	bl ParticleSystem_SetPerspectiveType
 	add r0, r5, #0
 	add r0, #0xc0
 	ldr r0, [r0]
@@ -2476,7 +2476,7 @@ _0221CE74:
 	add r0, r0, r6
 	ldr r0, [r0, #0x1c]
 	add r1, sp, #4
-	bl sub_020154D4
+	bl ParticleSystem_GetCameraUp
 	mov r0, #0
 	ldr r1, [sp, #8]
 	mvn r0, r0
@@ -2488,7 +2488,7 @@ _0221CE74:
 	add r1, sp, #4
 	add r0, r0, r6
 	ldr r0, [r0, #0x1c]
-	bl sub_020154E4
+	bl ParticleSystem_SetCameraUp
 _0221CED2:
 	add r0, r5, #0
 	bl ov07_0221CD4C
@@ -2502,7 +2502,7 @@ _0221CED2:
 	add r0, r0, r6
 	ldrb r1, [r1]
 	ldr r0, [r0, #0x1c]
-	bl sub_02015528
+	bl ParticleSystem_SetPerspectiveType
 	add r0, r5, #0
 	add r0, #0xc0
 	ldr r0, [r0]
@@ -2537,7 +2537,7 @@ _0221CF1E:
 	ldr r0, [r0, #0x1c]
 	cmp r0, #0
 	beq _0221CF32
-	bl sub_020154B0
+	bl ParticleSystem_GetActiveEmitterCount
 	add r6, r6, r0
 _0221CF32:
 	add r7, r7, #1
@@ -9012,12 +9012,12 @@ ov07_0221FE88: ; 0x0221FE88
 	mov r0, #0x1d
 	add r1, r6, #0
 	add r2, r5, #0
-	bl sub_02015264
+	bl ParticleSystem_LoadResourceFile
 	add r1, r0, #0
 	add r0, r4, #0
 	mov r2, #0xa
 	add r3, r7, #0
-	bl sub_0201526C
+	bl ParticleSystem_SetResource
 	add r0, r4, #0
 	pop {r3, r4, r5, r6, r7, pc}
 	thumb_func_end ov07_0221FE88
@@ -9034,12 +9034,12 @@ ov07_0221FEB0: ; 0x0221FEB0
 	add r0, r6, #0
 	add r1, r7, #0
 	add r2, r5, #0
-	bl sub_02015264
+	bl ParticleSystem_LoadResourceFile
 	add r1, r0, #0
 	ldr r3, [sp]
 	add r0, r4, #0
 	mov r2, #0xa
-	bl sub_0201526C
+	bl ParticleSystem_SetResource
 	add r0, r4, #0
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
@@ -9075,7 +9075,7 @@ _0221FEFC:
 	ldr r3, [sp]
 	add r0, r4, #0
 	mov r2, #0xa
-	bl sub_0201526C
+	bl ParticleSystem_SetResource
 	add r0, r4, #0
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
@@ -9087,7 +9087,7 @@ ov07_0221FF18: ; 0x0221FF18
 	lsl r4, r2, #2
 	ldr r2, _0221FF28 ; =ov07_022353E4
 	ldr r2, [r2, r4]
-	bl sub_02015494
+	bl ParticleSystem_CreateEmitterWithParam
 	pop {r4, pc}
 	nop
 _0221FF28: .word ov07_022353E4
@@ -9151,7 +9151,7 @@ ov07_0221FF78: ; 0x0221FF78
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x34
 	add r5, r0, #0
-	bl sub_02015504
+	bl ParticleSystem_GetEmitterParam
 	add r4, r0, #0
 	bl ov07_0221C468
 	add r0, r4, #0
@@ -9177,7 +9177,7 @@ _0221FFAE:
 	bl ov07_022319E0
 	str r0, [sp, #4]
 	add r0, r6, #0
-	bl sub_02015530
+	bl ParticleSystem_GetPerspectiveType
 	add r7, r0, #0
 	add r0, r4, #0
 	bl ov07_0221BFC0
@@ -9215,7 +9215,7 @@ _0221FFE6:
 	add r1, sp, #0x10
 	bl ov07_02231DE8
 	add r0, r6, #0
-	bl sub_02015524
+	bl ParticleSystem_GetCamera
 	add r4, r0, #0
 	add r0, sp, #8
 	add r1, r4, #0
@@ -9233,7 +9233,7 @@ ov07_02220030: ; 0x02220030
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x18
 	add r5, r0, #0
-	bl sub_02015504
+	bl ParticleSystem_GetEmitterParam
 	add r4, r0, #0
 	bl ov07_0221C470
 	add r6, r0, #0
@@ -9267,7 +9267,7 @@ ov07_02220030: ; 0x02220030
 	bl ov07_02231DE8
 	add r0, r7, #0
 	add r1, sp, #0
-	bl sub_020154E4
+	bl ParticleSystem_SetCameraUp
 	add sp, #0x18
 	pop {r3, r4, r5, r6, r7, pc}
 	thumb_func_end ov07_02220030
@@ -9277,7 +9277,7 @@ ov07_0222008C: ; 0x0222008C
 	push {r4, r5, lr}
 	sub sp, #0xc
 	add r4, r0, #0
-	bl sub_02015504
+	bl ParticleSystem_GetEmitterParam
 	add r5, r0, #0
 	bl ov07_0221C470
 	add r1, r0, #0
@@ -9312,7 +9312,7 @@ ov07_022200D0: ; 0x022200D0
 	push {r4, r5, lr}
 	sub sp, #0xc
 	add r4, r0, #0
-	bl sub_02015504
+	bl ParticleSystem_GetEmitterParam
 	add r5, r0, #0
 	bl ov07_0221C468
 	add r1, r0, #0
@@ -9347,7 +9347,7 @@ ov07_02220114: ; 0x02220114
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0xc
 	add r5, r0, #0
-	bl sub_02015504
+	bl ParticleSystem_GetEmitterParam
 	add r4, r0, #0
 	bl ov07_0221C468
 	add r6, r0, #0
@@ -9385,10 +9385,10 @@ ov07_02220160: ; 0x02220160
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0xc
 	add r5, r0, #0
-	bl sub_02015504
+	bl ParticleSystem_GetEmitterParam
 	add r6, r0, #0
 	bl ov07_0221C478
-	bl sub_02015530
+	bl ParticleSystem_GetPerspectiveType
 	add r7, r0, #0
 	add r0, r6, #0
 	bl ov07_0221C468
@@ -9436,10 +9436,10 @@ ov07_022201C8: ; 0x022201C8
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0xc
 	add r5, r0, #0
-	bl sub_02015504
+	bl ParticleSystem_GetEmitterParam
 	add r6, r0, #0
 	bl ov07_0221C478
-	bl sub_02015530
+	bl ParticleSystem_GetPerspectiveType
 	add r7, r0, #0
 	add r0, r6, #0
 	bl ov07_0221C470
@@ -9515,7 +9515,7 @@ _0222025E:
 	add r2, r2, #2
 	sub r1, r1, #1
 	bne _0222025E
-	bl sub_02015504
+	bl ParticleSystem_GetEmitterParam
 	add r4, r0, #0
 	bl ov07_0221C468
 	add r6, r0, #0
@@ -9684,7 +9684,7 @@ _02220394: ; jump table
 _022203A0:
 	add r0, r5, #0
 	add r1, r7, #0
-	bl sub_02015720
+	bl ParticleEmitter_GetConvergencePos
 	add r1, sp, #0x20
 	mov r0, #0x14
 	ldrsb r0, [r1, r0]
@@ -9755,7 +9755,7 @@ _02220416:
 	str r0, [sp, #0x18]
 	add r0, r5, #0
 	add r1, sp, #0x10
-	bl sub_02015708
+	bl ParticleEmitter_SetConvergencePos
 	add sp, #0x1c
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
@@ -9793,7 +9793,7 @@ _02220464: ; jump table
 _02220470:
 	add r0, r5, #0
 	add r1, r7, #0
-	bl sub_02015640
+	bl ParticleEmitter_GetMagnetPos
 	add r1, sp, #0x20
 	mov r0, #0x14
 	ldrsb r0, [r1, r0]
@@ -9864,7 +9864,7 @@ _022204E6:
 	str r0, [sp, #0x18]
 	add r0, r5, #0
 	add r1, sp, #0x10
-	bl sub_02015628
+	bl ParticleEmitter_SetMagnetPos
 	add sp, #0x1c
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
@@ -10242,7 +10242,7 @@ ov07_022207D0: ; 0x022207D0
 	add r7, r0, #0
 	add r5, r1, #0
 	add r4, r2, #0
-	bl sub_02015504
+	bl ParticleSystem_GetEmitterParam
 	add r6, r0, #0
 	bl ov07_0221C468
 	str r0, [sp, #8]
@@ -10374,7 +10374,7 @@ ov07_02220884: ; 0x02220884
 	push {r4, r5, r6, lr}
 	sub sp, #8
 	add r5, r0, #0
-	bl sub_02015504
+	bl ParticleSystem_GetEmitterParam
 	add r4, r0, #0
 	bl ov07_0221C468
 	add r6, r0, #0
@@ -10437,7 +10437,7 @@ ov07_022208F8: ; 0x022208F8
 	add r6, r2, #0
 	add r0, r4, #0
 	bl ov07_0221C478
-	bl sub_02015530
+	bl ParticleSystem_GetPerspectiveType
 	add r7, r0, #0
 	add r0, r4, #0
 	bl ov07_0221C470
@@ -10469,7 +10469,7 @@ ov07_02220938: ; 0x02220938
 	add r6, r2, #0
 	add r0, r4, #0
 	bl ov07_0221C478
-	bl sub_02015530
+	bl ParticleSystem_GetPerspectiveType
 	add r7, r0, #0
 	add r0, r4, #0
 	bl ov07_0221C468
@@ -12075,7 +12075,7 @@ _02221596:
 	ldr r5, _022215B0 ; =0xFFFFEB00
 _02221598:
 	ldr r0, [r4, #4]
-	bl sub_02015530
+	bl ParticleSystem_GetPerspectiveType
 	ldr r0, [r6, #0x20]
 	ldr r0, [r0]
 	ldr r0, [r0, #0xc]
@@ -12091,7 +12091,7 @@ _022215B0: .word 0xFFFFEB00
 ov07_022215B4: ; 0x022215B4
 	push {r4, r5, r6, lr}
 	add r6, r0, #0
-	bl sub_02015504
+	bl ParticleSystem_GetEmitterParam
 	add r5, r0, #0
 	bl ov07_0221BFD0
 	mov r1, #0x38
@@ -12404,7 +12404,7 @@ _022217FE:
 _02221802:
 	add r0, r5, #0
 	add r1, sp, #0
-	bl sub_0201560C
+	bl ParticleEmitter_SetGravity
 	add r2, sp, #0
 	mov r0, #0
 	mov r1, #8
@@ -12449,7 +12449,7 @@ _0222182E:
 	mul r0, r3
 	strh r0, [r2, #4]
 	add r0, r5, #0
-	bl sub_0201560C
+	bl ParticleEmitter_SetGravity
 	add sp, #0x1c
 	mov r0, #1
 	pop {r4, r5, pc}
@@ -12472,7 +12472,7 @@ _0222186A:
 	strh r0, [r1, #4]
 	add r0, r5, #0
 	add r1, sp, #0
-	bl sub_0201560C
+	bl ParticleEmitter_SetGravity
 	mov r0, #1
 	add sp, #0x1c
 	pop {r4, r5, pc}
@@ -12535,7 +12535,7 @@ _022218EA:
 _022218EE:
 	add r0, r5, #0
 	add r1, sp, #0
-	bl sub_02015640
+	bl ParticleEmitter_GetMagnetPos
 	mov r0, #8
 	ldrsb r1, [r4, r0]
 	ldr r2, [sp]
@@ -12590,7 +12590,7 @@ _0222194A:
 	str r0, [sp, #4]
 	add r0, r5, #0
 	add r1, sp, #0
-	bl sub_02015628
+	bl ParticleEmitter_SetMagnetPos
 	mov r0, #1
 	add sp, #0x20
 	pop {r4, r5, r6, pc}
@@ -12639,7 +12639,7 @@ _022219AE:
 _022219B2:
 	add r0, r5, #0
 	add r1, sp, #0
-	bl sub_0201568C
+	bl ParticleEmitter_GetMagnetForce
 	add r1, sp, #0
 	mov r0, #0
 	ldrsh r2, [r1, r0]
@@ -12661,7 +12661,7 @@ _022219CA:
 _022219DC:
 	add r0, r5, #0
 	add r1, sp, #0
-	bl sub_02015674
+	bl ParticleEmitter_SetMagnetForce
 	mov r0, #1
 	add sp, #0x18
 	pop {r3, r4, r5, pc}
@@ -12711,7 +12711,7 @@ _02221A32:
 _02221A36:
 	add r0, r5, #0
 	add r1, sp, #0
-	bl sub_020156BC
+	bl ParticleEmitter_GetSpinAngle
 	add r1, sp, #0
 	mov r0, #8
 	ldrh r2, [r1]
@@ -12731,7 +12731,7 @@ _02221A4C:
 _02221A5C:
 	add r0, r5, #0
 	add r1, sp, #0
-	bl sub_020156A8
+	bl ParticleEmitter_SetSpinAngle
 	mov r0, #1
 	add sp, #0x18
 	pop {r3, r4, r5, pc}
@@ -12781,7 +12781,7 @@ _02221AB2:
 _02221AB6:
 	add r0, r5, #0
 	add r1, sp, #0
-	bl sub_020156EC
+	bl ParticleEmitter_GetSpinAxis
 	b _02221AC6
 _02221AC0:
 	ldr r1, [sp, #0xc]
@@ -12790,7 +12790,7 @@ _02221AC0:
 _02221AC6:
 	add r0, r5, #0
 	add r1, sp, #0
-	bl sub_020156D8
+	bl ParticleEmitter_SetSpinAxis
 	mov r0, #1
 	add sp, #0x18
 	pop {r3, r4, r5, pc}
@@ -12866,7 +12866,7 @@ _02221B30:
 _02221B34:
 	add r0, r7, #0
 	add r1, sp, #0
-	bl sub_02015720
+	bl ParticleEmitter_GetConvergencePos
 	mov r0, #8
 	ldrsb r1, [r4, r0]
 	ldr r2, [sp]
@@ -12951,7 +12951,7 @@ _02221BCA:
 	str r0, [sp, #8]
 	add r0, r7, #0
 	add r1, sp, #0
-	bl sub_02015708
+	bl ParticleEmitter_SetConvergencePos
 	mov r0, #1
 	add sp, #0x20
 	pop {r3, r4, r5, r6, r7, pc}
@@ -13000,7 +13000,7 @@ _02221C36:
 _02221C3A:
 	add r0, r5, #0
 	add r1, sp, #0
-	bl sub_0201576C
+	bl ParticleEmitter_GetConvergenceForce
 	add r1, sp, #0
 	mov r0, #0
 	ldrsh r2, [r1, r0]
@@ -13022,7 +13022,7 @@ _02221C52:
 _02221C64:
 	add r0, r5, #0
 	add r1, sp, #0
-	bl sub_02015754
+	bl ParticleEmitter_SetConvergenceForce
 	mov r0, #1
 	add sp, #0x18
 	pop {r3, r4, r5, pc}
@@ -13117,7 +13117,7 @@ ov07_02221CEC: ; 0x02221CEC
 	strh r0, [r2, #4]
 	strh r0, [r2, #6]
 	ldr r0, [r1, #4]
-	bl sub_02015524
+	bl ParticleSystem_GetCamera
 	add r1, r0, #0
 	add r0, sp, #0
 	bl Camera_SetAnglePos
@@ -13142,11 +13142,11 @@ ov07_02221D10: ; 0x02221D10
 	strh r2, [r0, #4]
 	strh r1, [r0, #6]
 	ldr r0, [r4, #4]
-	bl sub_02015524
+	bl ParticleSystem_GetCamera
 	add r5, r0, #0
 	ldr r0, [r4, #4]
 	mov r1, #1
-	bl sub_02015528
+	bl ParticleSystem_SetPerspectiveType
 	add r0, sp, #0
 	add r1, r5, #0
 	bl Camera_SetAnglePos
@@ -13179,7 +13179,7 @@ ov07_02221D4C: ; 0x02221D4C
 	ldr r1, [sp, #0x14]
 	strh r1, [r0, #4]
 	ldr r0, [r4, #4]
-	bl sub_02015524
+	bl ParticleSystem_GetCamera
 	add r1, r0, #0
 	add r0, sp, #0
 	bl Camera_SetAnglePos
@@ -13204,11 +13204,11 @@ ov07_02221D88: ; 0x02221D88
 	strh r2, [r0, #4]
 	strh r1, [r0, #6]
 	ldr r0, [r4, #4]
-	bl sub_02015524
+	bl ParticleSystem_GetCamera
 	add r5, r0, #0
 	ldr r0, [r4, #4]
 	mov r1, #1
-	bl sub_02015528
+	bl ParticleSystem_SetPerspectiveType
 	add r0, sp, #0
 	add r1, r5, #0
 	bl Camera_SetAnglePos
@@ -13243,11 +13243,11 @@ ov07_02221DC4: ; 0x02221DC4
 	ldrh r1, [r1, #0x2e]
 	strh r1, [r0, #6]
 	ldr r0, [r4, #4]
-	bl sub_02015524
+	bl ParticleSystem_GetCamera
 	add r5, r0, #0
 	ldr r0, [r4, #4]
 	mov r1, #1
-	bl sub_02015528
+	bl ParticleSystem_SetPerspectiveType
 	ldr r0, [r4]
 	bl ov07_0221BFC0
 	cmp r0, #1
@@ -13284,11 +13284,11 @@ ov07_02221E24: ; 0x02221E24
 	strh r2, [r0, #4]
 	strh r1, [r0, #6]
 	ldr r0, [r4, #4]
-	bl sub_02015524
+	bl ParticleSystem_GetCamera
 	add r5, r0, #0
 	ldr r0, [r4, #4]
 	mov r1, #1
-	bl sub_02015528
+	bl ParticleSystem_SetPerspectiveType
 	add r0, sp, #0
 	add r1, r5, #0
 	bl Camera_SetAnglePos
@@ -13315,11 +13315,11 @@ ov07_02221E60: ; 0x02221E60
 	strh r2, [r0, #4]
 	strh r1, [r0, #6]
 	ldr r0, [r4, #4]
-	bl sub_02015524
+	bl ParticleSystem_GetCamera
 	add r5, r0, #0
 	ldr r0, [r4, #4]
 	mov r1, #1
-	bl sub_02015528
+	bl ParticleSystem_SetPerspectiveType
 	add r0, sp, #0
 	add r1, r5, #0
 	bl Camera_SetAnglePos
@@ -13336,7 +13336,7 @@ ov07_02221E9C: ; 0x02221E9C
 	sub sp, #0xc
 	add r5, r1, #0
 	ldr r0, [r5, #4]
-	bl sub_02015524
+	bl ParticleSystem_GetCamera
 	add r4, r0, #0
 	ldr r0, [r5]
 	ldr r1, [r5, #0x24]
@@ -13357,7 +13357,7 @@ ov07_02221EC4: ; 0x02221EC4
 	sub sp, #0xc
 	add r5, r1, #0
 	ldr r0, [r5, #4]
-	bl sub_02015524
+	bl ParticleSystem_GetCamera
 	add r4, r0, #0
 	ldr r0, [r5]
 	ldr r1, [r5, #0x28]
@@ -22010,7 +22010,7 @@ _02226116:
 	bne _0222613E
 	ldr r0, [r5, #0x34]
 	ldr r1, [r5, #0x38]
-	bl sub_020154C4
+	bl ParticleSystem_DeleteEmitter
 	ldr r0, [r5, #0x40]
 	add r1, r6, #0
 	bl ov07_0221C448
@@ -22430,7 +22430,7 @@ ov07_0222647C: ; 0x0222647C
 	bne _022264B6
 	ldr r0, [r5, #0x34]
 	ldr r1, [r5, #0x38]
-	bl sub_020154C4
+	bl ParticleSystem_DeleteEmitter
 	ldr r0, [r5, #0x40]
 	add r1, r6, #0
 	bl ov07_0221C448
@@ -22631,7 +22631,7 @@ ov07_02226628: ; 0x02226628
 	bne _0222665E
 	ldr r0, [r5, #0x34]
 	ldr r1, [r5, #0x38]
-	bl sub_020154C4
+	bl ParticleSystem_DeleteEmitter
 	ldr r0, [r5, #0x40]
 	add r1, r6, #0
 	bl ov07_0221C448
@@ -45035,7 +45035,7 @@ ov07_02231B90: ; 0x02231B90
 	add r5, r1, #0
 	add r6, r2, #0
 	bl ov07_0221C478
-	bl sub_02015530
+	bl ParticleSystem_GetPerspectiveType
 	add r7, r0, #0
 	add r0, r4, #0
 	add r1, r5, #0
@@ -45058,7 +45058,7 @@ ov07_02231BC0: ; 0x02231BC0
 	add r5, r1, #0
 	add r6, r2, #0
 	bl ov07_0221C478
-	bl sub_02015530
+	bl ParticleSystem_GetPerspectiveType
 	add r7, r0, #0
 	add r0, r4, #0
 	add r1, r5, #0
@@ -45081,7 +45081,7 @@ ov07_02231BF0: ; 0x02231BF0
 	add r5, r1, #0
 	add r6, r2, #0
 	bl ov07_0221C478
-	bl sub_02015530
+	bl ParticleSystem_GetPerspectiveType
 	add r7, r0, #0
 	add r0, r4, #0
 	add r1, r5, #0
@@ -45104,7 +45104,7 @@ ov07_02231C20: ; 0x02231C20
 	add r5, r1, #0
 	add r6, r2, #0
 	bl ov07_0221C478
-	bl sub_02015530
+	bl ParticleSystem_GetPerspectiveType
 	add r7, r0, #0
 	add r0, r4, #0
 	add r1, r5, #0
@@ -45127,7 +45127,7 @@ ov07_02231C50: ; 0x02231C50
 	add r5, r1, #0
 	add r6, r2, #0
 	bl ov07_0221C478
-	bl sub_02015530
+	bl ParticleSystem_GetPerspectiveType
 	add r7, r0, #0
 	add r0, r4, #0
 	add r1, r5, #0
@@ -45150,7 +45150,7 @@ ov07_02231C80: ; 0x02231C80
 	add r5, r1, #0
 	add r6, r2, #0
 	bl ov07_0221C478
-	bl sub_02015530
+	bl ParticleSystem_GetPerspectiveType
 	add r7, r0, #0
 	add r0, r4, #0
 	add r1, r5, #0
@@ -45173,7 +45173,7 @@ ov07_02231CB0: ; 0x02231CB0
 	add r5, r1, #0
 	add r6, r2, #0
 	bl ov07_0221C478
-	bl sub_02015530
+	bl ParticleSystem_GetPerspectiveType
 	add r7, r0, #0
 	add r0, r4, #0
 	add r1, r5, #0
@@ -45196,7 +45196,7 @@ ov07_02231CE0: ; 0x02231CE0
 	add r5, r1, #0
 	add r6, r2, #0
 	bl ov07_0221C478
-	bl sub_02015530
+	bl ParticleSystem_GetPerspectiveType
 	add r7, r0, #0
 	add r0, r4, #0
 	add r1, r5, #0
@@ -45219,7 +45219,7 @@ ov07_02231D10: ; 0x02231D10
 	add r5, r1, #0
 	add r6, r2, #0
 	bl ov07_0221C478
-	bl sub_02015530
+	bl ParticleSystem_GetPerspectiveType
 	add r7, r0, #0
 	add r0, r4, #0
 	add r1, r5, #0
@@ -45242,7 +45242,7 @@ ov07_02231D40: ; 0x02231D40
 	add r5, r1, #0
 	add r6, r2, #0
 	bl ov07_0221C478
-	bl sub_02015530
+	bl ParticleSystem_GetPerspectiveType
 	add r7, r0, #0
 	add r0, r4, #0
 	add r1, r5, #0
@@ -45265,7 +45265,7 @@ ov07_02231D70: ; 0x02231D70
 	add r5, r1, #0
 	add r6, r2, #0
 	bl ov07_0221C478
-	bl sub_02015530
+	bl ParticleSystem_GetPerspectiveType
 	add r7, r0, #0
 	add r0, r4, #0
 	add r1, r5, #0
@@ -45288,7 +45288,7 @@ ov07_02231DA0: ; 0x02231DA0
 	add r5, r1, #0
 	add r6, r2, #0
 	bl ov07_0221C478
-	bl sub_02015530
+	bl ParticleSystem_GetPerspectiveType
 	add r7, r0, #0
 	add r0, r4, #0
 	add r1, r5, #0
@@ -45330,7 +45330,7 @@ ov07_02231DE8: ; 0x02231DE8
 	cmp r0, #0
 	bne _02231DF8
 	add r0, r3, #0
-	bl sub_02015510
+	bl ParticleSystem_GetDefaultCameraUp
 	pop {r3, pc}
 _02231DF8:
 	ldr r2, _02231E04 ; =ov07_02236858
@@ -46987,7 +46987,7 @@ _02232A78:
 	ldr r0, [r5, #0x14]
 	cmp r0, #0
 	beq _02232A9C
-	bl sub_020154B0
+	bl ParticleSystem_GetActiveEmitterCount
 	cmp r0, #0
 	bne _02232A9A
 	ldr r0, [r5, #0x5c]
@@ -47042,10 +47042,10 @@ ov07_02232AC0: ; 0x02232AC0
 	ldr r2, [r4, #0x18]
 	mov r1, #0
 	add r3, r4, #0
-	bl sub_02015494
+	bl ParticleSystem_CreateEmitterWithParam
 	ldr r0, [r4, #0x10]
 	mov r1, #1
-	bl sub_02015528
+	bl ParticleSystem_SetPerspectiveType
 	add r0, r5, #0
 	bl SysTask_Destroy
 	add r0, r4, #0
@@ -47080,7 +47080,7 @@ _02232B1C:
 	add r1, r4, #0
 	add r2, r7, #0
 	add r3, r6, #0
-	bl sub_02015494
+	bl ParticleSystem_CreateEmitterWithParam
 	add r4, r4, #1
 	cmp r4, r5
 	blt _02232B1C
@@ -47088,7 +47088,7 @@ _02232B2E:
 	mov r1, #1
 	str r1, [r6, #0x5c]
 	ldr r0, [r6, #0x14]
-	bl sub_02015528
+	bl ParticleSystem_SetPerspectiveType
 	pop {r3, r4, r5, r6, r7, pc}
 _02232B3A:
 	ldr r0, [r6, #0x10]
@@ -47224,7 +47224,7 @@ ov07_02232C28: ; 0x02232C28
 	push {r3, r4, lr}
 	sub sp, #0xc
 	add r4, r0, #0
-	bl sub_02015504
+	bl ParticleSystem_GetEmitterParam
 	ldr r0, [r0, #4]
 	add r1, sp, #0
 	bl ov07_02232BB0
@@ -47256,7 +47256,7 @@ ov07_02232C64: ; 0x02232C64
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0xc
 	add r5, r0, #0
-	bl sub_02015504
+	bl ParticleSystem_GetEmitterParam
 	add r4, r0, #0
 	ldr r0, [r4, #8]
 	add r1, sp, #0
@@ -47311,7 +47311,7 @@ ov07_02232C64: ; 0x02232C64
 ov07_02232CD8: ; 0x02232CD8
 	push {r4, lr}
 	add r4, r0, #0
-	bl sub_02015504
+	bl ParticleSystem_GetEmitterParam
 	mov r1, #2
 	ldrsh r2, [r0, r1]
 	mov r1, #0x64
@@ -47413,7 +47413,7 @@ _02232D9A:
 	add r1, r4, #0
 	add r2, r6, #0
 	add r3, r5, #0
-	bl sub_02015494
+	bl ParticleSystem_CreateEmitterWithParam
 	ldr r0, [r5, #0x1c]
 	add r4, r4, #1
 	cmp r4, r0
@@ -47434,7 +47434,7 @@ _02232DBA:
 	add r1, r4, #0
 	add r2, r6, #0
 	add r3, r5, #0
-	bl sub_02015494
+	bl ParticleSystem_CreateEmitterWithParam
 _02232DD0:
 	ldr r0, [r5, #0x1c]
 	add r4, r4, #1
@@ -47445,11 +47445,11 @@ _02232DDA:
 	ldr r0, [r5, #0x18]
 	ldr r2, _02232DF0 ; =ov07_02232CD8
 	add r3, r5, #0
-	bl sub_02015494
+	bl ParticleSystem_CreateEmitterWithParam
 _02232DE4:
 	ldr r0, [r5, #0x18]
 	mov r1, #1
-	bl sub_02015528
+	bl ParticleSystem_SetPerspectiveType
 	pop {r4, r5, r6, pc}
 	nop
 _02232DF0: .word ov07_02232CD8
@@ -47460,7 +47460,7 @@ ov07_02232DF4: ; 0x02232DF4
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, [r4, #0x18]
-	bl sub_020154B0
+	bl ParticleSystem_GetActiveEmitterCount
 	cmp r0, #0
 	bne _02232E0C
 	ldr r0, [r4, #0x18]

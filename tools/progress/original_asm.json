@@ -1145,7 +1145,7 @@
   {
    "function": "__VENEER_MATH_CountPopulation",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_op90_op90_to90_arm7_sub_ext_wram_residual_20_residual_2_residual_1_r01.c",
+   "source": "sub/lib/src/wmsp_send_queue.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to MATH_CountPopulation: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
@@ -1243,7 +1243,7 @@
   {
    "function": "__VENEER_OS_Sleep",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_21_residual_1_r01.c",
+   "source": "sub/lib/src/wmsp_send_queue.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_Sleep: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },

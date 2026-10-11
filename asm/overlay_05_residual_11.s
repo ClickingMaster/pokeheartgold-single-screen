@@ -127,7 +127,7 @@ ov05_0221DB4C: ; 0x0221DB4C
 	ldr r3, [r3]
 	blx r3
 	add r4, r0, #0
-	bl sub_02015354
+	bl ParticleSystem_RegisterTexKey
 	cmp r4, #0
 	bne _0221DB64
 	bl GF_AssertFail
@@ -148,7 +148,7 @@ ov05_0221DB70: ; 0x0221DB70
 	ldr r3, [r3]
 	blx r3
 	add r4, r0, #0
-	bl sub_02015394
+	bl ParticleSystem_RegisterPlttKey
 	cmp r4, #0
 	bne _0221DB88
 	bl GF_AssertFail

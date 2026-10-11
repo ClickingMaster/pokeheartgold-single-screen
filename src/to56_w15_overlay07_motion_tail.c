@@ -31,7 +31,7 @@ extern BOOL ov07_02222384(W02LinearMotion *, W02SinMotion *);
 extern BOOL ov07_02222180(Ov07Interp *);
 extern void ov07_02232508(void *);
 extern void ov07_0221C448(void *, void *);
-extern void sub_020154C4(void *, void *);
+extern void ParticleSystem_DeleteEmitter(void *, void *);
 extern s32 GF_SinDeg(u16);
 
 extern void *ov07_022324D8(void *, u32);
@@ -187,7 +187,7 @@ void ov07_0222647C(void *task, Ov07Work104 *work) {
     BOOL active = ov07_022260DC(work->node);
 
     if (!ov07_02222384(&work->interpA.motion, &work->interpB.motion) && !active) {
-        sub_020154C4(work->resource, work->node);
+        ParticleSystem_DeleteEmitter(work->resource, work->node);
         ov07_0221C448(work->header.owner, task);
         ov07_02232508(work);
         return;
@@ -237,7 +237,7 @@ void ov07_02226628(void *task, Ov07Work94 *work) {
     BOOL active = ov07_022260DC(work->node);
 
     if (!ov07_02222180(&work->interp) && !active) {
-        sub_020154C4(work->resource, work->node);
+        ParticleSystem_DeleteEmitter(work->resource, work->node);
         ov07_0221C448(work->owner, task);
         Heap_Free(work);
         return;

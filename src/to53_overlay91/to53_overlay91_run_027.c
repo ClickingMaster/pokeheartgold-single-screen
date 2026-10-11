@@ -49,7 +49,7 @@ void ov91_0225EEBC(void *p, void *a, void *b);
 void ov91_0225F008(void);
 void ov91_0225F388(Ov91F3D4 *p);
 BOOL ov91_0225CCA8(Ov91Work *w, void *a, void *b, void *c);
-extern BOOL ov90_02258CE0(void *p);
+extern BOOL PlazaGameSign_IsDone(void *p);
 extern BOOL Comm_SendCommand(void *a, void *b, void *c);
 void ov91_0225E6B0(void *p);
 BOOL ov91_0225EE48(Ov91Ring *r, Ov91Ev *out);
@@ -80,7 +80,7 @@ void ov91_0225E7E8(void *a, void *b, int c, u32 d, int e);
 void ov91_0225DB18(void *p, void *b);
 extern void *Heap_Alloc(u32 heap, u32 size);
 extern void DrawFrameAndWindow1(void *w, int a, int b, int c);
-extern void ov90_02258C8C(void *p);
+extern void PlazaGameSign_StartCountdown(void *p);
 extern const u8 ov91_02261F8C[4];
 extern const u8 ov91_02261F90[540];
 void ov91_0225CE80(void *p);
@@ -219,12 +219,12 @@ void ov91_0225DB18(void *p, void *b) {
     DrawFrameAndWindow1((u8 *)p + 0x0C, 0, 1, 4);
     GfGfx_EngineATogglePlanes(2, 1);
     GfGfx_EngineATogglePlanes(4, 1);
-    ov90_02258C8C(*(void **)((u8 *)b + 0x6F0));
+    PlazaGameSign_StartCountdown(*(void **)((u8 *)b + 0x6F0));
 }
 
 
 BOOL ov91_0225DB44(void *unused, void *b) {
-    if (ov90_02258CE0(*(void **)((u8 *)b + 0x6F0)) == TRUE) {
+    if (PlazaGameSign_IsDone(*(void **)((u8 *)b + 0x6F0)) == TRUE) {
         return FALSE;
     }
     return TRUE;

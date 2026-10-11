@@ -171,6 +171,6 @@
 .public ov45_0222D6FC
 .public ov45_0222D724
 .public ov45_0222D844
-.public ov48_02258800
-.public ov48_02258920
-.public ov48_022589FC
+.public VisitorProfiles_Init
+.public VisitorProfiles_Main
+.public VisitorProfiles_Exit

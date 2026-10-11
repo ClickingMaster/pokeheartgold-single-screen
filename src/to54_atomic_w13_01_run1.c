@@ -11,7 +11,7 @@ void ov07_0221FF78(Ov07CallbackPosition *work) {
     VecFx32 offset;
     VecFx32 unusedOffset;
     VecFx32 up;
-    void *ctx = sub_02015504();
+    void *ctx = ParticleSystem_GetEmitterParam();
     int a = ov07_0221C468(ctx);
     ov07_0221C470(ctx);
     SPLEmitter *emitter = ov07_0221C478(ctx);
@@ -20,14 +20,14 @@ void ov07_0221FF78(Ov07CallbackPosition *work) {
     } else {
         int index = ov07_02231924(ctx, 1);
         int other = ov07_022319E0(index);
-        int d = sub_02015530(emitter);
+        int d = ParticleSystem_GetPerspectiveType(emitter);
         void *b = ov07_0221BFC0(ctx);
         ov07_02231AD0(other, &offset, b, d);
         ov07_02231AD0(index, &unusedOffset, b, d);
     }
     SetPosition(work, &offset);
     ov07_02231DE8(1, &up);
-    Camera *camera = sub_02015524(emitter);
+    Camera *camera = ParticleSystem_GetCamera(emitter);
     angle = Camera_GetAngle(camera);
     Camera_SetAnglePos(&angle, camera);
 }
@@ -35,18 +35,18 @@ void ov07_0221FF78(Ov07CallbackPosition *work) {
 void ov07_02220030(Ov07CallbackPosition *work) {
     VecFx32 offset;
     VecFx32 up;
-    void *ctx = sub_02015504();
+    void *ctx = ParticleSystem_GetEmitterParam();
     int a = ov07_0221C470(ctx);
     SPLEmitter *emitter = ov07_0221C478(ctx);
     ov07_02231B90(ctx, 0, &offset);
     SetPosition(work, &offset);
     ov07_02231DE8(a, &up);
-    sub_020154E4(emitter, &up);
+    ParticleSystem_SetCameraUp(emitter, &up);
 }
 
 void ov07_0222008C(Ov07CallbackPosition *work) {
     VecFx32 offset;
-    void *ctx = sub_02015504();
+    void *ctx = ParticleSystem_GetEmitterParam();
     int a = ov07_0221C470(ctx);
     ov07_02231B90(ctx, a, &offset);
     SetPosition(work, &offset);
@@ -54,7 +54,7 @@ void ov07_0222008C(Ov07CallbackPosition *work) {
 
 void ov07_022200D0(Ov07CallbackPosition *work) {
     VecFx32 offset;
-    void *ctx = sub_02015504();
+    void *ctx = ParticleSystem_GetEmitterParam();
     int a = ov07_0221C468(ctx);
     ov07_02231B90(ctx, a, &offset);
     SetPosition(work, &offset);
@@ -62,7 +62,7 @@ void ov07_022200D0(Ov07CallbackPosition *work) {
 
 void ov07_02220114(Ov07CallbackPosition *work) {
     VecFx32 offset;
-    void *ctx = sub_02015504();
+    void *ctx = ParticleSystem_GetEmitterParam();
     int a = ov07_0221C468(ctx);
     int b = ov07_0221C470(ctx);
     ov07_02231B90(ctx, a, &offset);
@@ -72,9 +72,9 @@ void ov07_02220114(Ov07CallbackPosition *work) {
 
 void ov07_02220160(Ov07CallbackPosition *work) {
     VecFx32 offset;
-    void *ctx = sub_02015504();
+    void *ctx = ParticleSystem_GetEmitterParam();
     SPLEmitter *emitter = ov07_0221C478(ctx);
-    int d = sub_02015530(emitter);
+    int d = ParticleSystem_GetPerspectiveType(emitter);
     int a = ov07_0221C468(ctx);
     int mode = ov07_0223192C(ctx, a) == 3 ? 0 : 1;
     void *b = ov07_0221BFC0(ctx);
@@ -84,9 +84,9 @@ void ov07_02220160(Ov07CallbackPosition *work) {
 
 void ov07_022201C8(Ov07CallbackPosition *work) {
     VecFx32 offset;
-    void *ctx = sub_02015504();
+    void *ctx = ParticleSystem_GetEmitterParam();
     SPLEmitter *emitter = ov07_0221C478(ctx);
-    int d = sub_02015530(emitter);
+    int d = ParticleSystem_GetPerspectiveType(emitter);
     int a = ov07_0221C470(ctx);
     int mode = ov07_0223192C(ctx, a) == 3 ? 0 : 1;
     void *b = ov07_0221BFC0(ctx);

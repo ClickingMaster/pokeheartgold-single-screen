@@ -2,7 +2,7 @@
 
 typedef struct { u32 a, b, c; } BlendConfig;
 extern const BlendConfig ov07_02236858;
-extern void sub_02015510(BlendConfig *);
+extern void ParticleSystem_GetDefaultCameraUp(BlendConfig *);
 extern int ov07_0221FAF8(void *, int);
 
 void ov07_02231DE8(int kind, BlendConfig *out);
@@ -10,7 +10,7 @@ void ov07_02231E08(void *arg, int eva, int evb);
 
 void ov07_02231DE8(int kind, BlendConfig *out) {
     if (kind == 0) {
-        sub_02015510(out);
+        ParticleSystem_GetDefaultCameraUp(out);
     } else {
         *out = ov07_02236858;
     }

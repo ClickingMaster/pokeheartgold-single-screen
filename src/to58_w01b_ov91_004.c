@@ -1,6 +1,6 @@
 #include "to58_overlay91_small_private.h"
 void ov91_0225CA9C(u8 *base, int arg, int index) {
-    int value = ov90_0225886C(base + 8, index);
+    int value = PlazaGameRoster_GetIndexOfNetId(base + 8, index);
     void *object = *(void **)(base + 0x30);
     if (object != NULL) {
         ov91_0225CD84(object, arg, value);

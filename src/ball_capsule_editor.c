@@ -37,7 +37,7 @@
 #include "touchscreen.h"
 #include "touchscreen_list_menu.h"
 #include "unk_02013534.h"
-#include "unk_02014DA0.h"
+#include "particle_system.h"
 #include "unk_020210A0.h"
 #include "unk_02026E30.h"
 #include "unk_02091054.h"
@@ -1230,16 +1230,16 @@ void BallCapsuleEditor_Alloc3DVram(void) {
 
     GF_ASSERT(texKey != 0);
     GF_ASSERT(plttKey != 0);
-    sub_02014DA0();
+    ParticleSystem_ZeroAll();
 }
 
 void BallCapsuleEditor_End3DFrame(void) {
     Thunk_G3X_Reset();
-    if (sub_0201543C() > 0) {
+    if (ParticleSystem_DrawAll() > 0) {
         Thunk_G3X_Reset();
         NNS_G2dSetupSoftwareSpriteCamera();
     }
-    sub_02015460();
+    ParticleSystem_CalcAll();
     RequestSwap3DBuffers(GX_SORTMODE_MANUAL, GX_BUFFERMODE_Z);
 }
 

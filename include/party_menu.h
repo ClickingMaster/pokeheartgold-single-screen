@@ -12,7 +12,7 @@
 #include "pokedex.h"
 #include "pokemon_types_def.h"
 #include "task.h"
-#include "unk_02014DA0.h"
+#include "particle_system.h"
 #include "unk_02020A0C.h"
 #include "unk_0202E41C.h"
 #include "yes_no_prompt.h"

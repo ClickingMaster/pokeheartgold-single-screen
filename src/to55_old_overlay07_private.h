@@ -11,7 +11,7 @@ void GF_AssertFail(void);
 void Heap_Free(void *ptr);
 void *NARC_AllocAndReadWholeMember(int narcId, int memberNo, int heapId);
 void ov06_0221BAD8(void *arg);
-void sub_02015504(void *arg);
+void ParticleSystem_GetEmitterParam(void *arg);
 void Sprite_DeleteAndFreeResources(void *sprite);
 void ManagedSprite_SetDrawFlag(void *sprite, BOOL draw);
 void ManagedSprite_SetPositionXY(void *sprite, s16 x, s16 y);

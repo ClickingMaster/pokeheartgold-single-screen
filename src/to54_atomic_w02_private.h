@@ -39,8 +39,8 @@ typedef struct W02ScalarMotion {
 } W02ScalarMotion;
 
 void GF_AssertFail(void);
-void *sub_02015524(void *);
-void sub_02015528(void *, int);
+void *ParticleSystem_GetCamera(void *);
+void ParticleSystem_SetPerspectiveType(void *, int);
 void Camera_SetAnglePos(const void *, void *);
 void Camera_SetLookAtCamTarget(const void *, void *);
 void ov07_02221CE0(void *, void *);

@@ -37,7 +37,7 @@ void ov92_0225D1FC(void *state) {
         offset += 0x20c;
     }
 
-    ov90_02258C38(PAT(state, 0x84));
+    PlazaGameSign_Free(PAT(state, 0x84));
     ov92_0225D49C(state);
     if (ov92_0225D8C4(state) == 1) {
         ov92_0225EB68(PAT(state, 0));

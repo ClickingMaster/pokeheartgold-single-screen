@@ -191,7 +191,7 @@ _021E5A20:
 	bne _021E5A28
 	bl GF_AssertFail
 _021E5A28:
-	bl sub_02014DA0
+	bl ParticleSystem_ZeroAll
 	pop {r3, r4, r5, pc}
 	nop
 _021E5A30: .word NNS_GfdDefaultFuncAllocTexVram

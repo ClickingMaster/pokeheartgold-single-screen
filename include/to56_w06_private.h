@@ -12,7 +12,7 @@ void ov07_0221C974(struct Ov07Script *);
 void ov07_0221CF14(struct Ov07Script *);
 void ov07_0221CF54(struct Ov07Script *);
 void ov07_0221CFA8(struct Ov07Script *);
-int sub_020154B0(void *);
+int ParticleSystem_GetActiveEmitterCount(void *);
 void *ov07_0221FE88(void *, u32, u32);
 void *ov07_0221FEB0(void *, u32, u32, u32);
 void ov07_0221C7B8(struct Ov07Script *, void *, int);

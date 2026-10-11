@@ -67,8 +67,8 @@
 .public WaitingIcon_Delete
 .public SetMasterBrightnessNeutral
 .public SetMasterBrightnessByColor
-.public sub_02014DA0
-.public sub_02014F84
+.public ParticleSystem_ZeroAll
+.public ParticleSystem_FreeAll
 .public sub_020163E0
 .public sub_0201649C
 .public sub_020164C4

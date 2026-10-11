@@ -21,7 +21,7 @@ void ov91_0225F508(Ov91Work *p, enum HeapID heapId) {
     ov91_022613AC(&p->f21A8, (u8)(u32)p->unk14);
     ov91_02261580(&p->f862C, &p->f1AB4, narc, heapId);
     NARC_Delete(narc);
-    p->unk21A4 = ov90_02258BD4(p->unk1AD0, heapId);
+    p->unk21A4 = PlazaGameSign_New(p->unk1AD0, heapId);
 }
 
 void ov91_0225F66C(Ov91Work *p) {
@@ -36,7 +36,7 @@ void ov91_0225F66C(Ov91Work *p) {
     ov91_022600FC(&p->f1F74, &p->f86CC);
     ov91_02261070(&p->f1C54, &p->f1AB4, &p->f86CC);
     ov91_0225FC84(&p->f1AB4);
-    ov90_02258C38(p->unk21A4);
+    PlazaGameSign_Free(p->unk21A4);
     ov91_0225FA60(&p->f1AB4);
     ov91_0225FB48(&p->f1AB4);
     ov91_0225FD0C(&p->f1AB4);

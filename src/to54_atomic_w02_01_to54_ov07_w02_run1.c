@@ -39,6 +39,6 @@ BOOL ov07_02222468(W02ScalarMotion *m);
 
 BOOL ov07_02221CEC(int unused, W02Ctx *ctx) {
     W02Angle angle = { 0, 0, 0, 0 };
-    Camera_SetAnglePos(&angle, sub_02015524(ctx->emitter));
+    Camera_SetAnglePos(&angle, ParticleSystem_GetCamera(ctx->emitter));
     return TRUE;
 }

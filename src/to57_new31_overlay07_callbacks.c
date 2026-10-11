@@ -11,7 +11,7 @@ void ov07_0221C9C0(Ov07Ctx *ctx) {
     }
     for (i = 0; i < 16; i++) {
         if (ctx->inner->actor[i] != NULL) {
-            sum += sub_020154B0(ctx->inner->actor[i]);
+            sum += ParticleSystem_GetActiveEmitterCount(ctx->inner->actor[i]);
         }
     }
     if (sum != 0 || ctx->half8E != 0 || ctx->half90 != 0) {
@@ -88,11 +88,11 @@ void ov07_0221CBC0(Ov07Ctx *ctx) {
     ctx->script += 1;
     ctx->inner->current = idx;
     if (ctx->flag[idx]) {
-        sub_020154D4(ctx->inner->actor[idx], &pos);
+        ParticleSystem_GetCameraUp(ctx->inner->actor[idx], &pos);
         pos.y *= -1;
-        sub_020154E4(ctx->inner->actor[idx], &pos);
+        ParticleSystem_SetCameraUp(ctx->inner->actor[idx], &pos);
     }
-    sub_02015528(ctx->inner->actor[idx], ctx->kind[idx]);
+    ParticleSystem_SetPerspectiveType(ctx->inner->actor[idx], ctx->kind[idx]);
     ctx->inner->out[0] = ov07_0221FF18(ctx->inner->actor[idx], a, b, ctx);
 }
 
@@ -111,11 +111,11 @@ void ov07_0221CC54(Ov07Ctx *ctx) {
     ctx->script += 1;
     ctx->inner->current = idx;
     if (ctx->flag[idx]) {
-        sub_020154D4(ctx->inner->actor[idx], &pos);
+        ParticleSystem_GetCameraUp(ctx->inner->actor[idx], &pos);
         pos.y *= -1;
-        sub_020154E4(ctx->inner->actor[idx], &pos);
+        ParticleSystem_SetCameraUp(ctx->inner->actor[idx], &pos);
     }
-    sub_02015528(ctx->inner->actor[idx], ctx->kind[idx]);
+    ParticleSystem_SetPerspectiveType(ctx->inner->actor[idx], ctx->kind[idx]);
     ctx->inner->out[slot] = ov07_0221FF18(ctx->inner->actor[idx], a, b, ctx);
 }
 
@@ -159,12 +159,12 @@ void ov07_0221CDA4(Ov07Ctx *ctx) {
     ctx->script += 1;
     ctx->inner->current = idx;
     if (ctx->flag[idx]) {
-        sub_020154D4(ctx->inner->actor[idx], &pos);
+        ParticleSystem_GetCameraUp(ctx->inner->actor[idx], &pos);
         pos.y *= -1;
-        sub_020154E4(ctx->inner->actor[idx], &pos);
+        ParticleSystem_SetCameraUp(ctx->inner->actor[idx], &pos);
     }
     select = ov07_0221CCF4(ctx);
-    sub_02015528(ctx->inner->actor[idx], ctx->kind[idx]);
+    ParticleSystem_SetPerspectiveType(ctx->inner->actor[idx], ctx->kind[idx]);
     ctx->inner->out[0] = ov07_0221FF18(ctx->inner->actor[idx], args[select], b, ctx);
 }
 void ov07_0221CE5C(Ov07Ctx *ctx) {
@@ -182,11 +182,11 @@ void ov07_0221CE5C(Ov07Ctx *ctx) {
     ctx->script += 1;
     ctx->inner->current = idx;
     if (ctx->flag[idx]) {
-        sub_020154D4(ctx->inner->actor[idx], &pos);
+        ParticleSystem_GetCameraUp(ctx->inner->actor[idx], &pos);
         pos.y *= -1;
-        sub_020154E4(ctx->inner->actor[idx], &pos);
+        ParticleSystem_SetCameraUp(ctx->inner->actor[idx], &pos);
     }
     select = ov07_0221CD4C(ctx);
-    sub_02015528(ctx->inner->actor[idx], ctx->kind[idx]);
+    ParticleSystem_SetPerspectiveType(ctx->inner->actor[idx], ctx->kind[idx]);
     ctx->inner->out[0] = ov07_0221FF18(ctx->inner->actor[idx], args[select], b, ctx);
 }

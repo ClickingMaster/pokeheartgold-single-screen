@@ -2,7 +2,7 @@
 
 #include "gf_3d_vramman.h"
 #include "gf_gfx_planes.h"
-#include "unk_02014DA0.h"
+#include "particle_system.h"
 #include "unk_02026E30.h"
 typedef struct ParticleScene {
     enum HeapID heapID;
@@ -56,31 +56,31 @@ void sub_020774A0(void) {
     NNSGfdPlttKey palette = NNS_GfdAllocPlttVram(0xA0, FALSE, 0);
     GF_ASSERT(texture != 0);
     GF_ASSERT(palette != 0);
-    sub_02014DA0();
+    ParticleSystem_ZeroAll();
 }
 void sub_020774E0(void) {
     Thunk_G3X_Reset();
-    if (sub_0201543C() > 0) {
+    if (ParticleSystem_DrawAll() > 0) {
         Thunk_G3X_Reset();
         NNS_G2dSetupSoftwareSpriteCamera();
     }
-    sub_02015460();
+    ParticleSystem_CalcAll();
     RequestSwap3DBuffers((GXSortMode)1, (GXBufferMode)0);
 }
 u32 sub_02077504(u32 size, BOOL compressed) {
     NNSGfdTexKey key = NNS_GfdAllocTexVram(size, compressed, 0);
-    sub_02015354(key);
+    ParticleSystem_RegisterTexKey(key);
     return (key << 16) >> 13;
 }
 u32 sub_02077520(u32 size, BOOL palette4) {
     NNSGfdPlttKey key = NNS_GfdAllocPlttVram(size, palette4, 0);
-    sub_02015394(key);
+    ParticleSystem_RegisterPlttKey(key);
     return (key << 16) >> 13;
 }
 SPLEmitter *sub_0207753C(enum HeapID heapID) {
     void *heap = Heap_Alloc(heapID, 0x4800);
-    SPLEmitter *context = sub_02014DB4(sub_02077504, sub_02077520, heap, 0x4800, TRUE, heapID);
-    Camera *camera = sub_02015524(context);
+    SPLEmitter *context = ParticleSystem_New(sub_02077504, sub_02077520, heap, 0x4800, TRUE, heapID);
+    Camera *camera = ParticleSystem_GetCamera(context);
     if (camera) {
         Camera_SetPerspectiveClippingPlane(FX32_ONE, 0x384000, camera);
     }
@@ -88,13 +88,13 @@ SPLEmitter *sub_0207753C(enum HeapID heapID) {
 }
 SPLEmitter *sub_02077584(enum HeapID heapID, NarcId narc, int file) {
     SPLEmitter *context = sub_0207753C(heapID);
-    void *resource = sub_02015264(narc, file, heapID);
-    sub_0201526C(context, resource, 10, TRUE);
+    void *resource = ParticleSystem_LoadResourceFile(narc, file, heapID);
+    ParticleSystem_SetResource(context, resource, 10, TRUE);
     return context;
 }
 void sub_020775AC(SPLEmitter *context) {
-    void *heap = sub_020154D0(context);
-    sub_02014EBC(context);
+    void *heap = ParticleSystem_GetHeap(context);
+    ParticleSystem_Free(context);
     Heap_Free(heap);
 }
 void sub_020775C4(SPLEmitter *emitter) {
@@ -114,15 +114,15 @@ ParticleScene *sub_02077604(ParticleScene *settings) {
         scene->resource = resource;
     }
     scene->context = sub_02077584(scene->heapID, (NarcId)119, scene->resource);
-    sub_02015528(scene->context, 1);
+    ParticleSystem_SetPerspectiveType(scene->context, 1);
     return scene;
 }
 void sub_02077634(ParticleScene *scene, int resource) {
-    sub_02015494(scene->context, resource, sub_020775C4, scene);
-    sub_02015528(scene->context, 1);
+    ParticleSystem_CreateEmitterWithParam(scene->context, resource, sub_020775C4, scene);
+    ParticleSystem_SetPerspectiveType(scene->context, 1);
 }
 BOOL sub_02077650(ParticleScene *scene) {
-    if (sub_020154B0(scene->context)) {
+    if (ParticleSystem_GetActiveEmitterCount(scene->context)) {
         return TRUE;
     }
     return FALSE;

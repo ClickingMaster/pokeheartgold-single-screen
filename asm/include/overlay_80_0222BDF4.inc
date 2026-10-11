@@ -73,7 +73,7 @@
 .public ResetVisibleHardwareWindows
 .public SetMasterBrightnessByColor
 .public sub_02014494
-.public sub_02015494
+.public ParticleSystem_CreateEmitterWithParam
 .public MailMsg_Init
 .public MailMsg_GetExpandedString
 .public MailMsg_SetMsgBankAndNum

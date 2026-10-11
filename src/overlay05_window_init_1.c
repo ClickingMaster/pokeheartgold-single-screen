@@ -2,7 +2,7 @@
 
 u32 ov05_0221DB4C(u32 size, BOOL is4x4) {
     NNSGfdTexKey key = NNS_GfdDefaultFuncAllocTexVram(size, is4x4, 0);
-    sub_02015354(key);
+    ParticleSystem_RegisterTexKey(key);
     if (key == 0) {
         GF_AssertFail();
     }
@@ -11,7 +11,7 @@ u32 ov05_0221DB4C(u32 size, BOOL is4x4) {
 
 u32 ov05_0221DB70(u32 size, BOOL is4x4) {
     NNSGfdPlttKey key = NNS_GfdDefaultFuncAllocPlttVram(size, is4x4, 1);
-    sub_02015394(key);
+    ParticleSystem_RegisterPlttKey(key);
     if (key == 0) {
         GF_AssertFail();
     }

@@ -18,7 +18,7 @@ void ov92_0225E918(void *work);
 void ov92_0225E9A8(void *work);
 void ov92_0225DA2C(void *object);
 void sub_020180F8(void *object, void *resource);
-void ov90_02258C38(void *roster);
+void PlazaGameSign_Free(void *roster);
 void ov92_0225D49C(void *state);
 int ov92_0225D8C4(void *state);
 void ov92_0225EB68(void *work);

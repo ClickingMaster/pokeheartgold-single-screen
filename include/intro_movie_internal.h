@@ -6,7 +6,7 @@
 #include "gf_3d_vramman.h"
 #include "sprite.h"
 #include "sys_task.h"
-#include "unk_02014DA0.h"
+#include "particle_system.h"
 
 enum IntroMovieSceneState {
     INTRO_MOVIE_SCENE_INIT,

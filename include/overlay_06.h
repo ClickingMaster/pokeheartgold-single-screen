@@ -3,7 +3,7 @@
 
 #include "heap.h"
 #include "palette.h"
-#include "unk_02014DA0.h"
+#include "particle_system.h"
 
 const u16 *ov06_0221BA00(int param_1);
 void ov06_0221BA1C(PaletteData *palData, int param_2, int unused, PaletteBufferId param_4, u32 param_5);

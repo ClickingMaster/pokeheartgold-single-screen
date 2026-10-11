@@ -36,7 +36,7 @@
 #include "text.h"
 #include "touchscreen.h"
 #include "sound_playback.h"
-#include "unk_02014DA0.h"
+#include "particle_system.h"
 #include "unk_02026E30.h"
 #include "unk_02087E70.h"
 #include "vram_transfer_manager.h"
@@ -243,7 +243,7 @@ void HatchEggApp_InitParticleVram(void) {
     if (pltt == 0) {
         GF_AssertFail();
     }
-    sub_02014DA0();
+    ParticleSystem_ZeroAll();
 }
 
 void HatchEggApp_InitBgs(BgConfig *bgConfig) {
@@ -286,11 +286,11 @@ void HatchEggApp_VBlankCB(void *data) {
 
 void HatchEggApp_Draw3D(void) {
     Thunk_G3X_Reset();
-    if (sub_0201543C() > 0) {
+    if (ParticleSystem_DrawAll() > 0) {
         Thunk_G3X_Reset();
         NNS_G2dSetupSoftwareSpriteCamera();
     }
-    sub_02015460();
+    ParticleSystem_CalcAll();
     RequestSwap3DBuffers(GX_SORTMODE_MANUAL, GX_BUFFERMODE_Z);
 }
 
@@ -355,20 +355,20 @@ void HatchEggApp_LoadBackground(BgConfig *bgConfig, PaletteData *paletteData) {
 
 u32 HatchEggApp_AllocParticleTexVram(u32 size, BOOL is4x4comp) {
     NNSGfdTexKey key = NNS_GfdAllocTexVram(size, is4x4comp, 0);
-    sub_02015354(key);
+    ParticleSystem_RegisterTexKey(key);
     return NNS_GfdGetTexKeyAddr(key);
 }
 
 u32 HatchEggApp_AllocParticlePlttVram(u32 size, BOOL is4pltt) {
     NNSGfdPlttKey key = NNS_GfdAllocPlttVram(size, is4pltt, 0);
-    sub_02015394(key);
+    ParticleSystem_RegisterPlttKey(key);
     return NNS_GfdGetPlttKeyAddr(key);
 }
 
 SPLEmitter *HatchEggApp_CreateParticleSystem(enum HeapID heapId) {
     void *particleHeap = Heap_Alloc(heapId, 0x4800);
-    SPLEmitter *particleSystem = sub_02014DB4(HatchEggApp_AllocParticleTexVram, HatchEggApp_AllocParticlePlttVram, particleHeap, 0x4800, TRUE, heapId);
-    Camera *camera = sub_02015524(particleSystem);
+    SPLEmitter *particleSystem = ParticleSystem_New(HatchEggApp_AllocParticleTexVram, HatchEggApp_AllocParticlePlttVram, particleHeap, 0x4800, TRUE, heapId);
+    Camera *camera = ParticleSystem_GetCamera(particleSystem);
     if (camera != NULL) {
         Camera_SetPerspectiveClippingPlane(FX32_CONST(1), FX32_CONST(900), camera);
     }
@@ -377,14 +377,14 @@ SPLEmitter *HatchEggApp_CreateParticleSystem(enum HeapID heapId) {
 
 SPLEmitter *HatchEggApp_CreateParticleSystemFromNarc(enum HeapID heapId, NarcId narcId, int fileId) {
     SPLEmitter *particleSystem = HatchEggApp_CreateParticleSystem(heapId);
-    void *resource = sub_02015264(narcId, fileId, heapId);
-    sub_0201526C(particleSystem, resource, 10, TRUE);
+    void *resource = ParticleSystem_LoadResourceFile(narcId, fileId, heapId);
+    ParticleSystem_SetResource(particleSystem, resource, 10, TRUE);
     return particleSystem;
 }
 
 void HatchEggApp_DestroyParticleSystem(SPLEmitter *particleSystem) {
-    void *particleHeap = sub_020154D0(particleSystem);
-    sub_02014EBC(particleSystem);
+    void *particleHeap = ParticleSystem_GetHeap(particleSystem);
+    ParticleSystem_Free(particleSystem);
     Heap_Free(particleHeap);
 }
 
@@ -407,18 +407,18 @@ HatchEggParticles *HatchEggParticles_New(HatchEggParticlesParam *param) {
         particles->fileId = fileId;
         particles->particleSystem = HatchEggApp_CreateParticleSystemFromNarc(particles->heapId, NARC_a_1_1_6, fileId);
     }
-    sub_02015528(particles->particleSystem, 1);
+    ParticleSystem_SetPerspectiveType(particles->particleSystem, 1);
     return particles;
 }
 
 void HatchEggParticles_Emit(HatchEggParticles *particles, int resId) {
-    sub_02015494(particles->particleSystem, resId, HatchEggParticles_EmitterCB, particles);
-    sub_02015528(particles->particleSystem, 1);
+    ParticleSystem_CreateEmitterWithParam(particles->particleSystem, resId, HatchEggParticles_EmitterCB, particles);
+    ParticleSystem_SetPerspectiveType(particles->particleSystem, 1);
 }
 #pragma force_active reset
 
 BOOL HatchEggParticles_IsRunning(HatchEggParticles *particles) {
-    return sub_020154B0(particles->particleSystem) != FALSE;
+    return ParticleSystem_GetActiveEmitterCount(particles->particleSystem) != FALSE;
 }
 
 void HatchEggParticles_Free(HatchEggParticles *particles) {

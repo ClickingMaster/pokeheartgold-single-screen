@@ -14,7 +14,7 @@ typedef struct Out {
 
 void ov07_02232C28(u8 *p) {
     s32 v[3];
-    u8 *q = sub_02015504(p);
+    u8 *q = ParticleSystem_GetEmitterParam(p);
     ov07_02232BB0(*(int *)(q + 4), v);
     *(s32 *)(p + 0x28) = v[0] + BASE(p)[1];
     *(s32 *)(p + 0x2c) = v[1] + BASE(p)[2];

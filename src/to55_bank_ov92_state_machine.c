@@ -7,18 +7,18 @@ s32 IsPaletteFadeFinished();                    /* extern */
 void *OverlayManager_GetData();                 /* extern */
 M2C_UNK StopSE(s32, s32);                       /* extern */
 M2C_UNK WifiConnection_StopVoiceChat();                        /* extern */
-s32 ov90_02258920(void *, s32);                 /* extern */
-M2C_UNK ov90_02258938(s32);                     /* extern */
-s32 ov90_022589BC(s32);                         /* extern */
-s8 ov90_022589CC(s32);                          /* extern */
-s32 ov90_022589EC(void *, void *, s32);         /* extern */
-M2C_UNK ov90_02258A04(s32);                     /* extern */
-s32 ov90_02258AA0(s32);                         /* extern */
-s32 ov90_02258AA4(s32);                         /* extern */
-M2C_UNK ov90_02258AA8(void *, u8);              /* extern */
-M2C_UNK ov90_02258C8C(s32);                     /* extern */
-M2C_UNK ov90_02258CB0(s32);                     /* extern */
-s32 ov90_02258CE0(s32);                         /* extern */
+s32 PlazaGameEntry_NewMimeJrTop(void *, s32);                 /* extern */
+M2C_UNK PlazaGameEntry_Free(s32);                     /* extern */
+s32 PlazaGameEntry_IsDone(s32);                         /* extern */
+s8 PlazaGameEntry_GetSelection(s32);                          /* extern */
+s32 PlazaGameResults_NewMimeJrTop(void *, void *, s32);         /* extern */
+M2C_UNK PlazaGameResults_Free(s32);                     /* extern */
+s32 PlazaGameResults_IsDone(s32);                         /* extern */
+s32 PlazaGameResults_GetContinue(s32);                         /* extern */
+M2C_UNK PlazaGame_CalcRanks(void *, u8);              /* extern */
+M2C_UNK PlazaGameSign_StartCountdown(s32);                     /* extern */
+M2C_UNK PlazaGameSign_StartFinish(s32);                     /* extern */
+s32 PlazaGameSign_IsDone(s32);                         /* extern */
 M2C_UNK ov92_0225C5C4(void *);                  /* extern */
 s32 ov92_0225CC6C(void *);                      /* extern */
 M2C_UNK ov92_0225D1FC(void *);                  /* extern */
@@ -73,15 +73,15 @@ s32 ov92_0225CDF4(void *arg0, u32 *arg1) {
     case 0:              /* switch 1 */
         switch (*arg1) { /* switch 2; irregular */
         case 0:          /* switch 2 */
-            M2C_FIELD(temp_r4, s32 *, 0x9C) = ov90_02258920(temp_r4 + 0x8C, 0x71);
+            M2C_FIELD(temp_r4, s32 *, 0x9C) = PlazaGameEntry_NewMimeJrTop(temp_r4 + 0x8C, 0x71);
             ov92_0225D88C(temp_r4, 1, 1, arg1);
             break;
         case 1: /* switch 2 */
-            ov92_0225D88C(temp_r4, ov90_022589BC(M2C_FIELD(temp_r4, s32 *, 0x9C)), 2, arg1);
+            ov92_0225D88C(temp_r4, PlazaGameEntry_IsDone(M2C_FIELD(temp_r4, s32 *, 0x9C)), 2, arg1);
             break;
         case 2: /* switch 2 */
-            M2C_FIELD(temp_r4, s8 *, 0x14) = ov90_022589CC(M2C_FIELD(temp_r4, s32 *, 0x9C));
-            ov90_02258938(M2C_FIELD(temp_r4, s32 *, 0x9C));
+            M2C_FIELD(temp_r4, s8 *, 0x14) = PlazaGameEntry_GetSelection(M2C_FIELD(temp_r4, s32 *, 0x9C));
+            PlazaGameEntry_Free(M2C_FIELD(temp_r4, s32 *, 0x9C));
             M2C_FIELD(temp_r4, s32 *, 0x9C) = 0;
             ov92_0225C5C4(temp_r4);
             ov92_0225D88C(temp_r4, 1, 3, arg1);
@@ -112,11 +112,11 @@ s32 ov92_0225CDF4(void *arg0, u32 *arg1) {
             ov92_0225D88C(temp_r4, M2C_FIELD(temp_r4, s32 *, 8), 8, arg1);
             break;
         case 8: /* switch 2 */
-            ov90_02258C8C(M2C_FIELD(temp_r4, s32 *, 0x84));
+            PlazaGameSign_StartCountdown(M2C_FIELD(temp_r4, s32 *, 0x84));
             ov92_0225D88C(temp_r4, 1, 9, arg1);
             break;
         case 9: /* switch 2 */
-            temp_r0_5 = ov90_02258CE0(M2C_FIELD(temp_r4, s32 *, 0x84));
+            temp_r0_5 = PlazaGameSign_IsDone(M2C_FIELD(temp_r4, s32 *, 0x84));
             if (temp_r0_5 != 0) {
                 ov92_0225E360(M2C_FIELD(temp_r4, void **, 4));
                 ov92_0225E100(M2C_FIELD(temp_r4, void **, 4));
@@ -140,11 +140,11 @@ s32 ov92_0225CDF4(void *arg0, u32 *arg1) {
         case 11: /* switch 2 */
             StopSE(0x58B, 0);
             StopSE(0x589, 0);
-            ov90_02258CB0(M2C_FIELD(temp_r4, s32 *, 0x84));
+            PlazaGameSign_StartFinish(M2C_FIELD(temp_r4, s32 *, 0x84));
             ov92_0225D88C(temp_r4, 1, 0xC, arg1);
             break;
         case 12: /* switch 2 */
-            ov92_0225D88C(temp_r4, ov90_02258CE0(M2C_FIELD(temp_r4, s32 *, 0x84)), 0xD, arg1);
+            ov92_0225D88C(temp_r4, PlazaGameSign_IsDone(M2C_FIELD(temp_r4, s32 *, 0x84)), 0xD, arg1);
             break;
         case 13: /* switch 2 */
             temp_r1 = 0x64 * ((s32)M2C_FIELD(M2C_FIELD(temp_r4, void **, 4), s32 *, 0x2AF0) / 10);
@@ -206,13 +206,13 @@ s32 ov92_0225CDF4(void *arg0, u32 *arg1) {
                 var_r6 += 1;
                 var_r5_3 += 8;
             } while (var_r6 < 4);
-            ov90_02258AA8(temp_r4 + 0xA0, M2C_FIELD(temp_r4, u8 *, 0x94));
-            M2C_FIELD(temp_r4, s32 *, 0xB8) = ov90_022589EC(temp_r4 + 0x8C, temp_r4 + 0xA0, 0x71);
+            PlazaGame_CalcRanks(temp_r4 + 0xA0, M2C_FIELD(temp_r4, u8 *, 0x94));
+            M2C_FIELD(temp_r4, s32 *, 0xB8) = PlazaGameResults_NewMimeJrTop(temp_r4 + 0x8C, temp_r4 + 0xA0, 0x71);
             ov92_0225D88C(temp_r4, 1, 0x12, arg1);
             break;
         case 18: /* switch 2 */
-            temp_r0_9 = ov90_02258AA0(M2C_FIELD(temp_r4, s32 *, 0xB8));
-            if ((temp_r0_9 != 0) && (temp_r6 = ov90_02258AA4(M2C_FIELD(temp_r4, s32 *, 0xB8)), ov90_02258A04(M2C_FIELD(temp_r4, s32 *, 0xB8)), M2C_FIELD(temp_r4, s32 *, 0xB8) = 0, temp_r6 != 0)) {
+            temp_r0_9 = PlazaGameResults_IsDone(M2C_FIELD(temp_r4, s32 *, 0xB8));
+            if ((temp_r0_9 != 0) && (temp_r6 = PlazaGameResults_GetContinue(M2C_FIELD(temp_r4, s32 *, 0xB8)), PlazaGameResults_Free(M2C_FIELD(temp_r4, s32 *, 0xB8)), M2C_FIELD(temp_r4, s32 *, 0xB8) = 0, temp_r6 != 0)) {
                 M2C_FIELD(temp_r4, s32 *, 0xCC) = 1;
                 ov92_0225D344(temp_r4);
                 ov92_0225D88C(temp_r4, temp_r0_9, 0, arg1);

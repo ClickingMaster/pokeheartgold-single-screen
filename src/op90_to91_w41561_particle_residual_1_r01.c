@@ -10,7 +10,7 @@ typedef struct ParticleState {
     u32 defender;
     u32 unk2C[3];
 } ParticleState;
-void *sub_02015504(void);
+void *ParticleSystem_GetEmitterParam(void);
 enum HeapID ov07_0221BFD0(void *context);
 void *ov07_0221C478(void *context);
 u32 ov07_0221C468(void *context);
@@ -21,7 +21,7 @@ void ov07_022215B4(void *task);
 
 // @fn ov07_022215B4
 void ov07_022215B4(void *task) {
-    void *context = sub_02015504();
+    void *context = ParticleSystem_GetEmitterParam();
     ParticleState *state = Heap_Alloc(ov07_0221BFD0(context), sizeof(ParticleState));
     state->context = context;
     state->particles = ov07_0221C478(state->context);

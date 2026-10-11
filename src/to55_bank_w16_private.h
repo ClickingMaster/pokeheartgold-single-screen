@@ -2,8 +2,8 @@
 #define TO54_W16_PRIVATE_H
 #include "global.h"
 
-void *sub_02015504(void *);
-int sub_02015530(void);
+void *ParticleSystem_GetEmitterParam(void *);
+int ParticleSystem_GetPerspectiveType(void);
 int ov07_0221C468(void *);
 int ov07_0221C470(void *);
 int ov07_0221C478(void *);

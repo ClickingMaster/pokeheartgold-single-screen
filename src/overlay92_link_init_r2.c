@@ -29,6 +29,6 @@ u32 ov92_0225CAB4(void *manager) {
     } while (i < 4);
 
     args = PAT(work, 0x88);
-    ov90_02258800((u8 *)work + 0x8c, PAT(args, 0x38), U32AT(args, 0x34), U32AT(args, 0x3c), args);
+    PlazaGameRoster_Init((u8 *)work + 0x8c, PAT(args, 0x38), U32AT(args, 0x34), U32AT(args, 0x3c), args);
     return 1;
 }

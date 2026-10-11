@@ -12,7 +12,7 @@
 #include "sys_task.h"
 #include "sys_task_api.h"
 #include "unk_02009D48.h"
-#include "unk_02014DA0.h"
+#include "particle_system.h"
 #include "unk_02091054.h"
 
 typedef struct Ov07Params {

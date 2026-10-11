@@ -3,7 +3,7 @@
 #include "global.h"
 
 #include "bg_window.h"
-#include "unk_02014DA0.h"
+#include "particle_system.h"
 
 typedef struct Ov05WorkResidual {
     u8 raw_00[0xC];

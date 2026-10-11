@@ -430,7 +430,7 @@ u32 ov07_022346BC(Ov07Emitter *emitter) {
 
 void ov07_022346C0(SysTask *task, void *data) {
     Ov07Emitter *emitter = data;
-    if (!sub_020154B0(emitter->emitter)) {
+    if (!ParticleSystem_GetActiveEmitterCount(emitter->emitter)) {
         emitter->unk20 = 0;
         ov07_0221FF2C(emitter->emitter);
         SysTask_Destroy(task);
@@ -440,13 +440,13 @@ void ov07_022346C0(SysTask *task, void *data) {
 void ov07_022346E4(Ov07Emitter *emitter, void (*cb)(SPLEmitter *)) {
     int i;
     for (i = 0; i < emitter->unk1C; i++) {
-        sub_02015494(emitter->emitter, i, cb, emitter);
+        ParticleSystem_CreateEmitterWithParam(emitter->emitter, i, cb, emitter);
     }
-    sub_02015528(emitter->emitter, emitter->init.unk04);
+    ParticleSystem_SetPerspectiveType(emitter->emitter, emitter->init.unk04);
 }
 
 void *ov07_02234710(void) {
-    return sub_02015504();
+    return ParticleSystem_GetEmitterParam();
 }
 
 s32 ov07_02234718(u32 id) {

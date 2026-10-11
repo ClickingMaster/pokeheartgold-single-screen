@@ -38,7 +38,7 @@ void ov07_0221CF14(Ov07Script *p) {
     int i;
     for (i = 0; i < 16; i++) {
         if (p->owner->objects[i] != NULL) {
-            sum += sub_020154B0(p->owner->objects[i]);
+            sum += ParticleSystem_GetActiveEmitterCount(p->owner->objects[i]);
         }
     }
     if (sum == 0) {

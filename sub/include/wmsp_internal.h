@@ -95,7 +95,8 @@ typedef struct WmspStatus {
     u16 resumePending; // set once WMSP_RequestResumeMP queued its request
     u16 unk_68;
     u16 unk_6a;
-    u8 unk_6c[0x70 - 0x6c];
+    u16 unk_6c;
+    u16 unk_6e;
     u16 mpBufIndex;
     u16 mpBufSize;
     u8 *mpBuf[2];
@@ -368,6 +369,9 @@ void __VENEER_OS_CancelVAlarm(OSVAlarm *alarm);
 void __VENEER_OS_SetVAlarm(OSVAlarm *alarm, s16 count, s16 delay, OSVAlarmHandler handler, void *arg);
 void __VENEER_OS_LockMutex(OSMutex *mutex);
 void __VENEER_OS_UnlockMutex(OSMutex *mutex);
+u32 __VENEER_MATH_CountPopulation(u32 value);
+u32 MATH_CountPopulation(u32 value);
+void __VENEER_OS_Sleep(u32 msec);
 
 // wmsp_system.c
 void WMSP_Init(u8 *driver, u32 *config);
@@ -544,11 +548,14 @@ void WMSP_StartMP(WmspStartMPRequest *request);
 // wmsp_set_mp_data.c
 void WMSP_SetMPData(WmspSetMPDataRequest *request);
 
+// wmsp_send_queue.c
+void WMSP_ResumeMaMP(u32 bitmap);
+u32 WMSP_PutSendQueue(u32 childBitmap, u32 priority, u32 port, u32 destBitmap, u16 *data, u16 size, void *callback, void *arg);
+
 // defined in the later WMSP files
 u32 WMSP_SetMPParameterCore(void *param, void *result);
-u32 WMSP_PutSendQueue(u32 childBitmap, u32 priority, u32 port, u32 destBitmap, u16 *data, u16 size, void *callback, void *arg);
+u16 WmspGetTmptt(u32 headerSize, u32 size, u32 bitmap, u32 line);
 void WMSP_SendMaMP(u16 bitmap);
-void WMSP_ResumeMaMP(u16 bitmap);
 void WMSP_SendMaKeyData(void);
 u16 *WMSP_GetBuffer4Callback2Wm9(void);
 void WMSP_ReturnResult2Wm9(void *result);

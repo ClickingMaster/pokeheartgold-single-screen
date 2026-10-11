@@ -21,14 +21,14 @@ extern void sub_020136B4(void *, int, int);
 extern void FontOAM_Delete(void *);
 extern void sub_020135AC(void *);
 extern void Thunk_G3X_Reset(void);
-extern int sub_020154B0(void *);
-extern void sub_0201543C(void);
-extern void sub_02015460(void);
-extern void sub_02014EBC(void *);
+extern int ParticleSystem_GetActiveEmitterCount(void *);
+extern void ParticleSystem_DrawAll(void);
+extern void ParticleSystem_CalcAll(void);
+extern void ParticleSystem_Free(void *);
 extern void Heap_Free(void *);
 extern void GF_3DVramMan_Delete(void *);
-extern void sub_02015354(void);
-extern void sub_02015394(void);
+extern void ParticleSystem_RegisterTexKey(void);
+extern void ParticleSystem_RegisterPlttKey(void);
 extern void GF_AssertFail(void);
 extern void GfGfx_EngineATogglePlanes(int, int);
 extern void FreeBgTilemapBuffer(void *, int);
@@ -80,17 +80,17 @@ int ov05_0221DAE0(Overlay05State *state) {
         return 0;
     }
     Thunk_G3X_Reset();
-    if (sub_020154B0(*(void **)&state->data[0xb5c]) == 0) {
+    if (ParticleSystem_GetActiveEmitterCount(*(void **)&state->data[0xb5c]) == 0) {
         return 0;
     }
-    sub_0201543C();
-    sub_02015460();
+    ParticleSystem_DrawAll();
+    ParticleSystem_CalcAll();
     return 1;
 }
 
 void ov05_0221DB18(Overlay05State *state) {
     if ((*(u8 **)&state->data[0])[0x28] == 1) {
-        sub_02014EBC(*(void **)&state->data[0xb5c]);
+        ParticleSystem_Free(*(void **)&state->data[0xb5c]);
         Heap_Free(*(void **)&state->data[0xb60]);
         GF_3DVramMan_Delete(*(void **)&state->data[0xb58]);
     }

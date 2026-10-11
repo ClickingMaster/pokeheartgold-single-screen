@@ -44,6 +44,6 @@ BOOL ov07_02221D4C(int unused, W02Ctx *ctx) {
     angle.x = pos[1];
     angle.y = pos[2];
     angle.z = pos[3];
-    Camera_SetAnglePos(&angle, sub_02015524(ctx->emitter));
+    Camera_SetAnglePos(&angle, ParticleSystem_GetCamera(ctx->emitter));
     return TRUE;
 }

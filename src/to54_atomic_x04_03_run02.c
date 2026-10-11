@@ -10,9 +10,9 @@ extern void *OverlayManager_GetData(OverlayManager *);
 extern void OverlayManager_FreeData(OverlayManager *);
 extern void Heap_Create(u32, u32, u32);
 extern void Heap_Destroy(u32);
-extern void ov90_02258800(void *, u8, u32, u8, void *);
+extern void PlazaGameRoster_Init(void *, u8, u32, u8, void *);
 extern void ov91_0225CBE4(void *, u32);
-extern int ov90_02258B54(void *);
+extern int PlazaGameRoster_CheckConnectionLost(void *);
 extern void ov91_0225CC38(void *);
 extern void sub_020398D4(int, int);
 extern void sub_02037AC0(int);
@@ -29,7 +29,7 @@ int ov91_0225C9EC(OverlayManager *manager, int *state) {
     OverlayManager_GetArgs(manager);
     switch (*state) {
     case 0:
-        done = ov90_02258B54((u8 *)work + 8);
+        done = PlazaGameRoster_CheckConnectionLost((u8 *)work + 8);
         ov91_0225CC38(work);
         OverlayManager_FreeData(manager);
         Heap_Destroy(0x6A);

@@ -26,7 +26,7 @@ extern void TextFlags_SetCanABSpeedUpPrint(u32);
 extern void TextFlags_SetAutoScrollParam(u32);
 extern void TextFlags_SetCanTouchSpeedUpPrint(u32);
 extern void WirelessStatusIcon_Destroy(void);
-extern void ov90_02258C38(void *);
+extern void PlazaGameSign_Free(void *);
 extern void ov93_022602E4(void *);
 extern void ov93_02260608(void *);
 extern void ov93_0225D064(void *);
@@ -41,7 +41,7 @@ extern void ov93_0225CFB8(void *);
 extern int IsPaletteFadeFinished(void);
 extern void sub_0200FB70(void);
 extern void sub_0200FC20(int);
-extern int ov90_02258B98(void *);
+extern int PlazaGameRoster_ProcessConnectionLost(void *);
 extern void sub_02037AC0(int);
 extern int sub_02037B38(int);
 extern int ov93_022627A4(void);
@@ -51,11 +51,11 @@ extern void BeginNormalPaletteFade(int, int, int, int, int, int, int);
 extern void ov93_0225E764(void *);
 extern void ov93_02262310(void *);
 extern int ov93_02262374(void *, void *);
-extern void ov90_02258C8C(void *);
-extern int ov90_02258CE0(void *);
+extern void PlazaGameSign_StartCountdown(void *);
+extern int PlazaGameSign_IsDone(void *);
 extern void ov93_0225D4B8(void *);
 extern void ov93_0225D5AC(void *, int);
-extern void ov90_02258CB0(void *);
+extern void PlazaGameSign_StartFinish(void *);
 extern void ov93_0225E4B0(void *);
 extern void ov93_0225E370(void *);
 extern int ov93_0225E300(void *);
@@ -110,8 +110,8 @@ extern void GfGfx_SwapDisplay(void);
 extern void GfGfx_BothDispOn(void);
 extern void GfGfx_EngineBTogglePlanes(int, int);
 extern void *SpriteManager_GetSpriteList(void *);
-extern void *ov90_02258BD4(void *, int);
-extern u32 ov90_02258C74(void *);
+extern void *PlazaGameSign_New(void *, int);
+extern u32 PlazaGameSign_GetPlttOffset(void *);
 extern void PaletteData_LoadPaletteSlotFromHardware(void *, int, u32, int);
 extern void ov93_0225CEA0(void *);
 extern void ov93_0225D07C(void *);
@@ -194,8 +194,8 @@ u32 ov93_0225C768(void *man) {
     TextFlags_SetAutoScrollParam(1);
     TextFlags_SetCanABSpeedUpPrint(0);
     TextFlags_SetCanTouchSpeedUpPrint(0);
-    PAT(p, 0x1c) = ov90_02258BD4(SpriteManager_GetSpriteList(PAT(p, 0x28)), 0x75);
-    PaletteData_LoadPaletteSlotFromHardware(PAT(p, 0x8c), 2, (ov90_02258C74(PAT(p, 0x1c)) << 20) >> 16, 0x60);
+    PAT(p, 0x1c) = PlazaGameSign_New(SpriteManager_GetSpriteList(PAT(p, 0x28)), 0x75);
+    PaletteData_LoadPaletteSlotFromHardware(PAT(p, 0x8c), 2, (PlazaGameSign_GetPlttOffset(PAT(p, 0x1c)) << 20) >> 16, 0x60);
     Main_SetVBlankIntrCB(ov93_0225CEA0, p);
     if (*(u8 *)((u8 *)PAT(p, 0) + 0x3c) != 0) {
         WifiConnection_StartVoiceChat(0x75);
@@ -226,7 +226,7 @@ u32 ov93_0225CA8C(void *man, int *state) {
             break;
         case 1:
         default:
-            if (ov90_02258B98(PAT(p, 0)) == 1) {
+            if (PlazaGameRoster_ProcessConnectionLost(PAT(p, 0)) == 1) {
                 return 1;
             }
             break;
@@ -287,11 +287,11 @@ u32 ov93_0225CA8C(void *man, int *state) {
             }
             break;
         case 3:
-            ov90_02258C8C(PAT(p, 0x1c));
+            PlazaGameSign_StartCountdown(PAT(p, 0x1c));
             U32AT(p, 0x20) = 4;
             break;
         case 4:
-            if (ov90_02258CE0(PAT(p, 0x1c)) == 1) {
+            if (PlazaGameSign_IsDone(PAT(p, 0x1c)) == 1) {
                 U32AT(p, 0x2fb8) = 1;
                 *(u8 *)((u8 *)p + 0x1559) = 0;
                 U32AT(p, 0x20) = 5;
@@ -300,11 +300,11 @@ u32 ov93_0225CA8C(void *man, int *state) {
             }
             break;
         case 6:
-            ov90_02258CB0(PAT(p, 0x1c));
+            PlazaGameSign_StartFinish(PAT(p, 0x1c));
             U32AT(p, 0x20) = 7;
             break;
         case 7:
-            if (ov90_02258CE0(PAT(p, 0x1c)) == 1) {
+            if (PlazaGameSign_IsDone(PAT(p, 0x1c)) == 1) {
                 U32AT(p, 0x20) = 8;
             }
             break;
@@ -342,7 +342,7 @@ u32 ov93_0225CD10(void *man) {
 
     p = OverlayManager_GetData(man);
     U32AT(PAT(p, 0), 0x24) = U32AT(p, 0x2fd0);
-    ov90_02258C38(PAT(p, 0x1c));
+    PlazaGameSign_Free(PAT(p, 0x1c));
     ov93_022602E4(p);
     ov93_02260608(p);
     Main_SetVBlankIntrCB(NULL, NULL);

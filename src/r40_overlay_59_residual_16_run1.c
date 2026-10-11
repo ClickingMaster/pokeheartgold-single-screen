@@ -27,18 +27,18 @@ void ov59_0223C474(void) {
     if (pltt == 0) {
         GF_AssertFail();
     }
-    sub_02014DA0();
+    ParticleSystem_ZeroAll();
 }
 
 u32 ov59_0223C4B4(u32 size, BOOL is4x4) {
     u32 key = NNS_GfdDefaultFuncAllocTexVram(size, is4x4, 0);
-    sub_02015354(key);
+    ParticleSystem_RegisterTexKey(key);
     return (key << 16) >> 13;
 }
 
 u32 ov59_0223C4D0(u32 size, BOOL is4color) {
     u32 key = NNS_GfdDefaultFuncAllocPlttVram(size, is4color, 0);
-    sub_02015394(key);
+    ParticleSystem_RegisterPlttKey(key);
     return (key << 16) >> 13;
 }
 
@@ -56,8 +56,8 @@ void ov59_0223C4EC(void *arg) {
 
 void *ov59_0223C53C(u32 heapId) {
     void *buffer = Heap_Alloc((enum HeapID)heapId, 0x4800);
-    void *emitter = sub_02014DB4(ov59_0223C4B4, ov59_0223C4D0, buffer, 0x4800, TRUE, (enum HeapID)heapId);
-    void *camera = sub_02015524(emitter);
+    void *emitter = ParticleSystem_New(ov59_0223C4B4, ov59_0223C4D0, buffer, 0x4800, TRUE, (enum HeapID)heapId);
+    void *camera = ParticleSystem_GetCamera(emitter);
 
     if (camera != NULL) {
         Camera_SetPerspectiveClippingPlane(0x1000, 0x384000, camera);
@@ -69,7 +69,7 @@ void ov59_0223C584(void *work) {
     void *resource;
 
     *(void **)((u8 *)work + 0x24) = ov59_0223C53C(*(u32 *)work);
-    sub_02015528(*(void **)((u8 *)work + 0x24), 1);
-    resource = sub_02015264(0xf4, 0xa, *(u32 *)work);
-    sub_0201526C(*(void **)((u8 *)work + 0x24), resource, 0xa, TRUE);
+    ParticleSystem_SetPerspectiveType(*(void **)((u8 *)work + 0x24), 1);
+    resource = ParticleSystem_LoadResourceFile(0xf4, 0xa, *(u32 *)work);
+    ParticleSystem_SetResource(*(void **)((u8 *)work + 0x24), resource, 0xa, TRUE);
 }

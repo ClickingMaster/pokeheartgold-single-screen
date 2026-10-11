@@ -4,7 +4,7 @@ void ov59_0223C304(void *work) {
     vu32 *a = (vu32 *)0x04000440;
     vu32 *b = (vu32 *)0x04000454;
     Thunk_G3X_Reset();
-    sub_0201543C();
+    ParticleSystem_DrawAll();
     Thunk_G3X_Reset();
     NNS_G2dSetupSoftwareSpriteCamera();
     Camera_PushLookAtToNNSGlb();
@@ -15,6 +15,6 @@ void ov59_0223C304(void *work) {
     NNS_G3dGlbFlushP();
     NNS_G2dSetupSoftwareSpriteCamera();
     PokepicManager_DrawAll(*(void **)((u8 *)work + 0xc));
-    sub_02015460();
+    ParticleSystem_CalcAll();
     *(vu32 *)0x04000540 = 1;
 }

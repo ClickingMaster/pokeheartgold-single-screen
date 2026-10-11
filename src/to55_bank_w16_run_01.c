@@ -3,7 +3,7 @@
 #define U32(p, o) (*(u32 *)((u8 *)(p) + (o)))
 
 void ov07_02220884(void *arg) {
-    void *p = sub_02015504(arg);
+    void *p = ParticleSystem_GetEmitterParam(arg);
     int a = ov07_0221C468(p);
     int b = ov07_0221C470(p);
     ov07_0222050C(p, (int)arg, b, a, 0, 0);
@@ -28,7 +28,7 @@ void ov07_022208B4(void *a, void *p) {
 void ov07_022208F8(void *unused, void **pp, int x) {
     void *p = *pp;
     ov07_0221C478(p);
-    int d = sub_02015530();
+    int d = ParticleSystem_GetPerspectiveType();
     int a = ov07_0221C470(p);
     int n = ov07_0223192C(p, a) != 3;
     int b = ov07_0221BFC0(p);
@@ -38,7 +38,7 @@ void ov07_022208F8(void *unused, void **pp, int x) {
 void ov07_02220938(void *unused, void **pp, int x) {
     void *p = *pp;
     ov07_0221C478(p);
-    int d = sub_02015530();
+    int d = ParticleSystem_GetPerspectiveType();
     int a = ov07_0221C468(p);
     int n = ov07_0223192C(p, a) != 3;
     int b = ov07_0221BFC0(p);
