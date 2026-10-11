@@ -20,10 +20,10 @@
 
 extern u8 gWifiSetupUsbConnectorExit;
 
-extern BOOL ov13_02238C2C(void);
-extern void ov13_022368D8(void);
-extern void ov13_022388A0(void);
-extern void ov13_02238694(void);
+extern BOOL WifiSetupUsbConnector_IsLidClosed(void);
+extern void WifiSetupConnectionList_Init(void);
+extern void WifiSetupUsbConnectorIntro_Init(void);
+extern void WifiSetupUsbConnectorDone_Init(void);
 
 void WifiSetupUsbConnector_Start(void);
 void WifiSetupUsbConnector_WaitFadeIn(void);
@@ -51,7 +51,7 @@ void WifiSetupUsbConnector_WaitFadeIn(void) {
     if (WifiSetupFade_IsActive(0) != 0) {
         return;
     }
-    ov13_022279B4(2);
+    WifiSetupButtonBar_Show(2);
     WifiSetupApp_SetStateFunc(WifiSetupUsbConnector_WaitButtonBar);
 }
 
@@ -74,7 +74,7 @@ void WifiSetupUsbConnector_HandleInput(void) {
         WifiSetupButtonBar_SelectIfNone(0);
         return;
     }
-    if (ov13_02238C2C()) {
+    if (WifiSetupUsbConnector_IsLidClosed()) {
         WifiSetupButtonBar_SelectIfNone(0);
     }
 }
@@ -122,7 +122,7 @@ void WifiSetupUsbConnector_End(void) {
             return;
         }
     }
-    if (ov13_022272A0() == 0) {
+    if (WifiSetupButtonBar_IsNotClosing() == 0) {
         return;
     }
     WifiSetupUsbScan_End();
@@ -134,14 +134,14 @@ void WifiSetupUsbConnector_End(void) {
     }
     WifiSetupDisplay_HidePlanes(0, 0x15);
     if (gWifiSetupUsbConnectorExit == 2) {
-        ov13_0222B8F8(2, 1);
-        WifiSetupApp_SetStateFunc(ov13_022368D8);
+        WifiSetupApp_SetTransition(2, 1);
+        WifiSetupApp_SetStateFunc(WifiSetupConnectionList_Init);
     } else if (gWifiSetupUsbConnectorExit == 3) {
-        ov13_0222B8F8(2, 1);
-        WifiSetupApp_SetStateFunc(ov13_022388A0);
+        WifiSetupApp_SetTransition(2, 1);
+        WifiSetupApp_SetStateFunc(WifiSetupUsbConnectorIntro_Init);
     } else {
-        ov13_0222B8F8(0, 0);
-        WifiSetupApp_SetStateFunc(ov13_02238694);
+        WifiSetupApp_SetTransition(0, 0);
+        WifiSetupApp_SetStateFunc(WifiSetupUsbConnectorDone_Init);
     }
 }
 

@@ -23,33 +23,38 @@
 #define WIFI_SETUP_SETTINGS_ITEM_BACK             13
 #define WIFI_SETUP_SETTINGS_ITEM_NONE             14
 
+// items of the two switch rows, in order: address on/off, DNS on/off
+typedef struct WifiSetupSettingsSwitchItems {
+    u8 items[4];
+} WifiSetupSettingsSwitchItems;
+
 typedef struct WifiSetupSettingsWork {
-    void *task;                  // 0x00, queue 0
-    volatile u8 buttonStates[4]; // 0x04
-    u16 *screenData;             // 0x08, top screen BG tiles of all items
-    void *paletteData;           // 0x0C
-    void *charData;              // 0x10
-    WifiSetupCanvas *canvas;     // 0x14, text of the visible rows
-    GXOamAttr *rows[5];          // 0x18, one object per visible row
-    GXOamAttr *addressSwitch;    // 0x2C, buttons of the "obtain address automatically" item
-    GXOamAttr *dnsSwitch;        // 0x30, buttons of the "obtain DNS automatically" item
-    GXOamAttr *ssidIcon;         // 0x34, next to the first item when record[0xE7] is 1 or 2, else NULL
-    void *scrollTask;            // 0x38, row scroll in progress
-    void *task2;                 // 0x3C, queue 1
-    u8 selection;                // 0x40, item chosen to leave the screen with
-    u8 scrollBarTimer;           // 0x41
-    u8 numItems;                 // 0x42
-    u8 autoDns;                  // 0x43, DNS switch kept while the address is set by hand
-    u8 objectsDirty;             // 0x44
-    u8 scrollBarHeld;            // 0x45
-    u8 scrollBarAtEnd;           // 0x46
-    u8 keyAtEnd;                 // 0x47
+    void *task;               // 0x00, queue 0
+    u8 buttonStates[4];       // 0x04, press timers of the switch buttons
+    u16 *screenData;          // 0x08, top screen BG tiles of all items
+    void *paletteData;        // 0x0C
+    void *charData;           // 0x10
+    WifiSetupCanvas *canvas;  // 0x14, text of the visible rows
+    GXOamAttr *rows[5];       // 0x18, one object per visible row
+    GXOamAttr *addressSwitch; // 0x2C, buttons of the "obtain address automatically" item
+    GXOamAttr *dnsSwitch;     // 0x30, buttons of the "obtain DNS automatically" item
+    GXOamAttr *ssidIcon;      // 0x34, next to the first item when record[0xE7] is 1 or 2, else NULL
+    void *scrollTask;         // 0x38, row scroll in progress
+    void *task2;              // 0x3C, queue 1
+    u8 selection;             // 0x40, item chosen to leave the screen with
+    u8 scrollBarTimer;        // 0x41
+    u8 lastButton;            // 0x42, bottom button (12/13) the cursor returns to
+    u8 autoDns;               // 0x43, DNS switch kept while the address is set by hand
+    u8 objectsDirty;          // 0x44
+    u8 scrollBarHeld;         // 0x45
+    u8 scrollBarAtEnd;        // 0x46
+    u8 keyAtEnd;              // 0x47
 } WifiSetupSettingsWork;
 
 typedef struct WifiSetupSettings {
     u8 cursorItem; // 0x00
     u8 fromMenu;   // 0x01
-    u8 unk_02;
+    u8 cursorRow;  // 0x02, visible row (0-3) of the cursor
     u8 unk_03;
     u16 scroll; // 0x04, 0 - WIFI_SETUP_SETTINGS_MAX_SCROLL
     u16 unk_06;
@@ -57,6 +62,7 @@ typedef struct WifiSetupSettings {
 } WifiSetupSettings;
 
 extern WifiSetupSettings gWifiSetupSettings;
+extern const WifiSetupSettingsSwitchItems ov13_022454FC;
 
 void WifiSetupSettings_Init(void);
 void WifiSetupSettings_LoadGraphics(void);

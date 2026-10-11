@@ -23,8 +23,8 @@ extern int WifiSetupDialog_GetSelected(void);
 extern void WifiSetupDialog_Close(void);
 extern int WifiSetupDialog_IsOpen(void);
 extern void WifiSetupSettings_Init(void);
-extern void ov13_022368D8(void);
-extern void ov13_022352C0(int);
+extern void WifiSetupConnectionList_Init(void);
+extern void WifiSetupSettings_SetFromMenu(int);
 extern int swprintf(u16 *, int, const u16 *, ...);
 
 void WifiSetupAddressEntry_WaitInvalidMessage(void) {
@@ -64,7 +64,7 @@ void WifiSetupErrorScreen_DrawMessage(void) {
     void *canvas, *msg;
     u16 text[8];
     int error;
-    ov13_0222B948(0, &out);
+    WifiSetupApp_GetScreenArgs(0, &out);
     error = gWifiSetupErrorCode;
     // message index per error code range
     if (error >= -20099) {
@@ -165,7 +165,7 @@ void WifiSetupErrorScreen_WaitFadeIn(void) {
     if (WifiSetupFade_IsActive(0)) {
         return;
     }
-    ov13_022279B4(4);
+    WifiSetupButtonBar_Show(4);
     WifiSetupApp_SetStateFunc(WifiSetupErrorScreen_WaitButtonBar);
 }
 
@@ -225,21 +225,21 @@ void WifiSetupErrorScreen_Exit(void) {
     if (WifiSetupFade_IsActive(0)) {
         return;
     }
-    if (!ov13_022272A0()) {
+    if (!WifiSetupButtonBar_IsNotClosing()) {
         return;
     }
     WifiSetupText_FreeBgCanvas(0);
     WifiSetupMessage_Hide();
     WifiSetupDisplay_HidePlanes(1, 1);
     WifiSetupDisplay_HidePlanes(0, 21);
-    ov13_0222B948(0, &x);
+    WifiSetupApp_GetScreenArgs(0, &x);
     if (x) {
-        ov13_0222B8F8(2, 1);
-        WifiSetupApp_SetStateFunc(ov13_022368D8);
+        WifiSetupApp_SetTransition(2, 1);
+        WifiSetupApp_SetStateFunc(WifiSetupConnectionList_Init);
     } else {
-        ov13_0222B8F8(2, 0);
-        ov13_0222B934(0, 0);
-        ov13_022352C0(0);
+        WifiSetupApp_SetTransition(2, 0);
+        WifiSetupApp_SetScreenArgs(0, 0);
+        WifiSetupSettings_SetFromMenu(0);
         WifiSetupApp_SetStateFunc(WifiSetupSettings_Init);
     }
 }

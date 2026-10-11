@@ -18,7 +18,7 @@
 
 typedef void (*WifiSetupAddressFunc)(u8 *digits);
 
-// store functions per address kind, indexed by the first value of ov13_0222B948
+// store functions per address kind, indexed by the first value of WifiSetupApp_GetScreenArgs
 typedef struct WifiSetupAddressFuncs {
     WifiSetupAddressFunc funcs[5];
 } WifiSetupAddressFuncs;
@@ -254,12 +254,12 @@ void WifiSetupAddressEntry_Exit(void) {
     WifiSetup_LoadGraphics(ov13_02246440, GX_LoadOBJPltt);
     WifiSetupDisplay_HidePlanes(1, 1);
     WifiSetupDisplay_HidePlanes(0, 21);
-    ov13_0222B948(&kind, 0);
+    WifiSetupApp_GetScreenArgs(&kind, 0);
     if (kind >= 3) {
         kind++;
     }
-    ov13_0222B8F8(2, 1);
-    ov13_0222B934(0, kind + 3);
+    WifiSetupApp_SetTransition(2, 1);
+    WifiSetupApp_SetScreenArgs(0, kind + 3);
     WifiSetupApp_SetStateFunc(WifiSetupSettings_Init);
     WifiSetupHeap_FreeAndClear(&gWifiSetupTextEntry[1]); // &gWifiSetupAddressEntry
 }
@@ -328,7 +328,7 @@ void WifiSetupAddressEntry_FinishConfirm(void) {
         WifiSetupApp_SetStateFunc(WifiSetupAddressEntry_OpenKeypad);
         return;
     }
-    ov13_0222B948(&kind, 0);
+    WifiSetupApp_GetScreenArgs(&kind, 0);
     store[kind](gWifiSetupAddressEntry->digits);
     WifiSetupApp_SetStateFunc(WifiSetupAddressEntry_Exit);
 }
@@ -383,7 +383,7 @@ int WifiSetupAddressEntry_IsValid(void) {
         }
     }
     WifiSetup_ParseAddress((const char *)gWifiSetupAddressEntry->digits, address);
-    ov13_0222B948(&kind, 0);
+    WifiSetupApp_GetScreenArgs(&kind, 0);
     if (kind == 1) {
         zero = 0;
         for (i = 0; i < 4; i++) {

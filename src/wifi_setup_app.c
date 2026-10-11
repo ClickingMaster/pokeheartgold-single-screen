@@ -262,12 +262,12 @@ void WifiSetupApp_SetStateFunc(WifiSetupAppStateFunc func) {
     gWifiSetupApp.stateFunc = func;
 }
 
-void ov13_0222B8F8(int a, int b) {
+void WifiSetupApp_SetTransition(int a, int b) {
     gWifiSetupApp.unk_10 = a;
     gWifiSetupApp.unk_14 = b;
 }
 
-void ov13_0222B90C(int *a, int *b) {
+void WifiSetupApp_GetTransition(int *a, int *b) {
     if (a != NULL) {
         *a = gWifiSetupApp.unk_10;
     }
@@ -276,12 +276,12 @@ void ov13_0222B90C(int *a, int *b) {
     }
 }
 
-void ov13_0222B934(int a, int b) {
+void WifiSetupApp_SetScreenArgs(int a, int b) {
     gWifiSetupApp.unk_18 = a;
     gWifiSetupApp.unk_1C = b;
 }
 
-void ov13_0222B948(int *a, int *b) {
+void WifiSetupApp_GetScreenArgs(int *a, int *b) {
     if (a != NULL) {
         *a = gWifiSetupApp.unk_18;
     }

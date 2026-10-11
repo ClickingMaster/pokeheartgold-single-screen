@@ -1809,16 +1809,7 @@ Overlay OVY_0
     Object lib/NitroDWC/src/friend_list.o
     Object lib/NitroDWC/src/friend_callback.o
     Object lib/NitroDWC/src/match_setup.o
-    Object src/to90_extra2331_run01.o
-    Object src/to70_to65_ov00_extra16_residual_1_extra1111_run01.o
-    Object src/op90_to70_to65_ov00_extra16_residual_1_extra1111_residual_2_r01.o
-    Object src/to65_ov00_extra16_run01.o
-    Object src/to70_to65_ov00_extra16_residual_2_extra1115_run01.o
-    Object src/to65_ov00_extra16_run02.o
-    Object src/to70_to65_ov00_extra16_residual_3_extra1116_run01.o
-    Object src/to65_ov00_extra16_run03.o
-    Object src/to70_to65_ov00_extra16_residual_4_extra1117_run01.o
-    Object src/to65_ov00_extra16_run04.o
+    Object lib/NitroDWC/src/match_connect.o
     Object src/op90_to65_ov00_extra16_residual_5_r01.o
     Object src/to65_ov00_extra16_run05.o
     Object src/to70_to65_ov00_extra16_residual_6_extra1118_run01.o
@@ -2695,79 +2686,7 @@ Overlay OVY_8
     Object src/to57_new22_overlay08_b20_selection.o
     Object src/to58_r2_ov08_b20_c.o
     Object src/to57_new22_overlay08_b20_helpers.o
-    Object src/to58_w10_ov08_b20_d.o
-    Object src/overlay08_b20_d_first2.o
-    Object asm/to90_extra1973_anchor.o
-    Object src/to90_extra1973_run01.o
-    Object asm/to90_extra2295_anchor.o
-    Object src/to90_extra2295_run01.o
-    Object src/overlay08_b20_d_fifth.o
-    Object asm/to90_extra1974_anchor.o
-    Object src/to90_extra1974_run01.o
-    Object src/overlay08_bank_21_c.o
-    Object asm/to90_extra2163_anchor.o
-    Object src/to90_extra2163_run01.o
-    Object src/overlay08_bank_23_c.o
-    Object src/to56_overlay08_bank24_e04.o
-    Object asm/to90_extra2085_anchor.o
-    Object asm/to90_extra2303_anchor.o
-    Object src/to90_extra2303_run01.o
-    Object src/to90_extra2085_run01.o
-    Object src/to56_overlay08_bank24_bg.o
-    Object asm/to90_extra2271_anchor.o
-    Object src/to90_extra2271_run01.o
-    Object src/to56_overlay08_bank24_text.o
-    Object src/overlay08_bank_25_c.o
-    Object src/to56_w15_overlay08_bank26.o
-    Object src/overlay08_bank_27_c.o
-    Object src/to56_r2_w23_overlay08_bank28.o
-    Object src/overlay08_bank_29_c.o
-    Object src/to56_overlay08_bank30_exact_a.o
-    Object asm/to90_extra2272_anchor.o
-    Object asm/to90_extra2527_anchor.o
-    Object src/op90_to90_extra2527_residual_1_r01.o
-    Object src/to90_extra2527_run01.o
-    Object src/to90_extra2272_run01.o
-    Object src/to56_overlay08_bank30_exact_b.o
-    Object asm/to90_extra2086_anchor.o
-    Object src/to90_extra2086_run01.o
-    Object src/to56_overlay08_bank30_exact_c.o
-    Object src/overlay08_bank_31_c.o
-    Object asm/to90_extra2278_anchor.o
-    Object asm/to90_extra2528_anchor.o
-    Object src/to90_extra2528_run01.o
-    Object src/to90_extra2278_run01.o
-    Object src/op90_to90_extra2278_residual_2_r01.o
-    Object src/to56_w13_overlay08_bank32_c01.o
-    Object asm/to90_extra2279_anchor.o
-    Object src/to90_extra2279_run01.o
-    Object src/op90_to90_extra2279_residual_1_r01.o
-    Object src/to90_extra2279_run02.o
-    Object src/to56_w13_overlay08_bank32_c03.o
-    Object asm/to90_extra2280_anchor.o
-    Object src/to90_extra2280_run01.o
-    Object src/to56_w13_overlay08_bank32_c05.o
-    Object src/op90_to56_w13_overlay08_bank32_asm06_r01.o
-    Object src/to56_w13_overlay08_bank32_c07.o
-    Object src/overlay08_bank_33_c.o
-    Object src/to56_overlay08_bank34_exact.o
-    Object asm/to90_extra2273_anchor.o
-    Object src/to90_extra2273_run01.o
-    Object src/overlay08_bank_35_c.o
-    Object src/to56_w07_overlay08_bank36_run01.o
-    Object asm/to90_extra1960_anchor.o
-    Object src/to90_extra1960_run01.o
-    Object src/to56_w07_overlay08_bank36_run02.o
-    Object asm/to90_extra2277_anchor.o
-    Object src/op90_op90_to91_w41433_ov08_02224858_prefix_residual_1_r01.o
-    Object src/op90_to91_w41433_ov08_02224858_prefix_r01.o
-    Object src/to91_w41433_ov08_02224858_run01.o
-    Object src/to90_extra2277_run01.o
-    Object src/to56_w07_overlay08_bank36_run03.o
-    Object asm/to90_extra2091_anchor.o
-    Object asm/to90_extra2304_anchor.o
-    Object src/to90_extra2304_run01.o
-    Object src/to90_extra2091_run01.o
+    Object src/battle/battle_bag_menu.o
     Object src/battle/battle_dpad_cursor.o
     Object asm/op90_to56_overlay08_bank42_residual_anchor.o
     Object src/battle/battle_dpad_cursor_input.o
@@ -2887,8 +2806,8 @@ Overlay OVY_13
     Object src/wifi_setup_error_screen.o
     Object src/wifi_setup_settings.o
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own7_own1.o
-    Object src/to60_ov13_run06.o
-    Object src/to60_ov13_run07.o
+    Object src/wifi_setup_auto_setup.o
+    Object src/wifi_setup_connection_menu.o
     Object src/wifi_setup_usb_connector_screen.o
     Object src/wifi_setup_bg_screen_state.o
     Object src/wifi_setup_bg_screen.o

@@ -23,11 +23,11 @@ void WifiSetupConnections_FormatSecondaryDns(char *buf);
 extern Work1B18 *gWifiSetupAddressEntry;
 extern const u8 ov13_022463E0[];
 void *WifiSetupHeap_AllocZeroed(u32 size, u32 align);
-void ov13_0222B948(int *out, int a);
+void WifiSetupApp_GetScreenArgs(int *out, int a);
 void WifiSetupAddressEntry_LoadGraphics(void);
 void WifiSetupBackground_LoadHeader(int a);
 void WifiSetupMessage_Show(int a, int b, int c);
-void ov13_02227964(int a);
+void WifiSetupBanner_Show(int a);
 void *WifiSetupText_InitBgCanvas(int a, int b);
 Oam *WifiSetupOamTemplate_AllocOam(int a, int b);
 void WifiSetupAddressEntry_UpdateCursor(void);
@@ -44,7 +44,7 @@ void ov13_02231B18(void) {
     int idx;
     Work1B18 *work;
     gWifiSetupAddressEntry = WifiSetupHeap_AllocZeroed(sizeof(Work1B18), 4);
-    ov13_0222B948(&idx, 0);
+    WifiSetupApp_GetScreenArgs(&idx, 0);
     funcs.f[idx]((char *)gWifiSetupAddressEntry->data);
     work = gWifiSetupAddressEntry;
     if (memcmp(work->data, ov13_022463E0, 3) != 0) {
@@ -56,7 +56,7 @@ void ov13_02231B18(void) {
     WifiSetupAddressEntry_LoadGraphics();
     WifiSetupBackground_LoadHeader(idx + 11);
     WifiSetupMessage_Show(vals.v[idx], -1, 0);
-    ov13_02227964(2);
+    WifiSetupBanner_Show(2);
     gWifiSetupAddressEntry->bg = WifiSetupText_InitBgCanvas(0, 0);
     gWifiSetupAddressEntry->oam = WifiSetupOamTemplate_AllocOam(0, 0x3f);
     gWifiSetupAddressEntry->oam->attr2 = (gWifiSetupAddressEntry->oam->attr2 & ~0xc00) | 0xc00;

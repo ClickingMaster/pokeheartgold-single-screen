@@ -48,7 +48,7 @@ extern int WM_GetAllowedChannel(void);
 extern int WM_GetLinkLevel(void);
 extern int WifiSetupApp_GetLanguage(void);
 extern int WifiSetupApp_GetKind(void);
-extern void ov13_0222B90C(int *, int *);
+extern void WifiSetupApp_GetTransition(int *, int *);
 extern void *WifiSetupText_GetString(void *, int);
 extern void *WifiSetupText_GetStringWithDigit(void *, int, int, int);
 extern void WifiSetupBanner_Open(int);
@@ -107,7 +107,7 @@ void WifiSetupButtonBar_SetSelected(int button) {
     ov13_0224F468->selected = button;
 }
 
-int ov13_022272A0(void) {
+int WifiSetupButtonBar_IsNotClosing(void) {
     if (!ov13_0224F468) {
         return 1;
     }
@@ -293,9 +293,9 @@ void WifiSetup_LoadGraphics(char *path, void (*load)(const void *, u32, u32)) {
     WifiSetupFile_Free(data);
 }
 
-void ov13_02227964(int a) {
+void WifiSetupBanner_Show(int a) {
     int type;
-    ov13_0222B90C(&type, 0);
+    WifiSetupApp_GetTransition(&type, 0);
     if (type == 1) {
         WifiSetupBanner_Open(a);
     } else if (type == 2) {
@@ -303,9 +303,9 @@ void ov13_02227964(int a) {
     }
 }
 
-void ov13_022279B4(int type) {
+void WifiSetupButtonBar_Show(int type) {
     int barType;
-    ov13_0222B90C(0, &barType);
+    WifiSetupApp_GetTransition(0, &barType);
     if (barType == 1) {
         WifiSetupButtonBar_Create(type);
     }
@@ -412,7 +412,7 @@ void WifiSetupBackground_LoadHeader(int n) {
     WifiSetupTask_Create(1, (WifiSetupTaskFunc)WifiSetupBackground_TransferTask, NULL, 120);
 }
 
-void ov13_02227E40(void) {
+void WifiSetupBackground_LoadSlotHeader(void) {
     WifiSetupBackground_LoadHeader(WifiSetupConnections_GetEdit()[244] + 5);
 }
 
