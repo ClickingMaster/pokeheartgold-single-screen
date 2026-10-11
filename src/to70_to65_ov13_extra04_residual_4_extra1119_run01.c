@@ -40,13 +40,13 @@ extern void ov13_02227E58(void);
 extern void ov13_0223943C(int, int, int, int, int);
 extern void ov13_02233DCC(void);
 extern void ov13_02234BCC(void);
-extern void ov13_0222B8E8(void *);
+extern void WifiSetupApp_SetStateFunc(void *);
 extern void ov13_02234B48(void);
 extern void ov13_022350A8(void);
 extern void ov13_02233250(void);
 extern int getMode(void);
 void ov13_02232E04(void), ov13_02233000(void);
-extern int ov13_0222B970(void);
+extern int WifiSetupApp_GetLanguage(void);
 
 typedef struct {
     u8 bytes[23];
@@ -86,7 +86,7 @@ void ov13_02232E04(void) {
     ov13_02233214();
     ov13_02233000();
     if (!ov13_0224F54C.state) {
-        WifiSetupMessage_Show(48, ov13_022455D4[ov13_0222B970()], user[244] + 1);
+        WifiSetupMessage_Show(48, ov13_022455D4[WifiSetupApp_GetLanguage()], user[244] + 1);
     } else {
         WifiSetupMessage_Show(69, -1, 0);
     }
@@ -111,5 +111,5 @@ void ov13_02232E04(void) {
     ov13_0224F54C.ui->task = WifiSetupTask_Create(0, ov13_022350A8, 0, 120);
     ov13_02233DCC();
     ov13_02234BCC();
-    ov13_0222B8E8(ov13_02233250);
+    WifiSetupApp_SetStateFunc(ov13_02233250);
 }

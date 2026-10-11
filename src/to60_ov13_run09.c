@@ -10,7 +10,7 @@ typedef void (*TaskFunc)(void *, void *);
 extern void WifiSetupFade_Start(int, int, int, int);
 extern void WifiSetupDisplay_ShowPlanes(int, int);
 extern void WifiSetupDisplay_HidePlanes(int, int);
-extern void ov13_0222B8E8(Func);
+extern void WifiSetupApp_SetStateFunc(Func);
 extern void ov13_0222B8F8(int, int);
 extern int WifiSetupFade_IsActive(int);
 extern void ov13_022279B4(int);

@@ -177,7 +177,7 @@ extern char ov13_0224742C[];
 extern char *ov13_02247430[];
 extern char *ov13_02247438[];
 
-int ov13_0222B970(void);
+int WifiSetupApp_GetLanguage(void);
 fx32 FX_DivS32(fx32 a, fx32 b);
 int GX_DisableBankForARM7(void);
 void GX_SetBankForARM7(int bank);
@@ -666,7 +666,7 @@ void WifiSetupText_Init(void) {
     int i;
     ov13_0224F5E0 = text = WifiSetupHeap_AllocZeroed(0x680, 4);
     ov13_0224F5E0->objCanvasPool = WifiSetupPool_NewWithItems(0x20, text->objCanvases, 0x30);
-    if (ov13_0222B970() == 6) {
+    if (WifiSetupApp_GetLanguage() == 6) {
         for (i = 0; i < 2; i++) {
             ov13_0224F5E0->fontData[i] = WifiSetupFile_Load(ov13_02247430[i], NULL, 4);
             NNS_G2dFontInitUTF16(&ov13_0224F5E0->fonts[i], ov13_0224F5E0->fontData[i]);

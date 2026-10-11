@@ -20,7 +20,7 @@ void ov13_0221BA00(enum HeapID HeapID) {
     OSIntrMode interrupts = OS_DisableInterrupts();
     ov00_021EC454(2);
     void *buffer = Heap_Alloc(HeapID, 0x40000);
-    ov13_0222B430(buffer, 1, 0);
+    WifiSetupApp_Run(buffer, 1, 0);
     Heap_Free(buffer);
     OS_RestoreInterrupts(interrupts);
 

@@ -45,7 +45,7 @@ extern u8 ov13_02245470[];
 extern u16 ov13_02245424[];
 extern u16 ov13_02245426[];
 extern u16 ov13_02245428[];
-extern void ov13_0222B8E8(void (*)(void));
+extern void WifiSetupApp_SetStateFunc(void (*)(void));
 extern void WifiSetupFade_Start(int, int, int, int);
 extern void WifiSetupDisplay_ShowPlanes(int, int);
 extern void WifiSetupSound_Play(int);
@@ -230,7 +230,7 @@ extern u8 ov13_0224F53C[];
 void ov13_02230520(void) {
     WifiSetupButtonBar_Lock();
     WifiSetupFade_StartDelay(8);
-    ov13_0222B8E8(ov13_02230540);
+    WifiSetupApp_SetStateFunc(ov13_02230540);
 }
 
 void ov13_02230540(void) {
@@ -244,5 +244,5 @@ void ov13_02230540(void) {
     }
     WifiSetupFade_Start(3, 1, 1, 8);
     WifiSetupFade_Start(3, 0, 29, 8);
-    ov13_0222B8E8(ov13_022305B0);
+    WifiSetupApp_SetStateFunc(ov13_022305B0);
 }

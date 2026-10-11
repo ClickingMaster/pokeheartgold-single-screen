@@ -19,7 +19,7 @@ extern void WifiSetupSound_Play(int);
 extern void WifiSetupKeypad_SetCanDelete(int);
 extern void WifiSetupKeypad_SetCanType(int);
 extern void WifiSetupKeypad_SetCanAdvance(int);
-extern void ov13_0222B8E8(void *);
+extern void WifiSetupApp_SetStateFunc(void *);
 extern void ov13_02232200(void);
 extern void ov13_02232440(void);
 extern void ov13_022325A4(void);
@@ -55,7 +55,7 @@ void ov13_02231E58(void) {
     case 18:
         ov13_0224F544->state = 0;
         WifiSetupSound_Play(7);
-        ov13_0222B8E8(ov13_02232200);
+        WifiSetupApp_SetStateFunc(ov13_02232200);
         return;
     case 19:
         if (ov13_0223261C()) {
@@ -69,7 +69,7 @@ void ov13_02231E58(void) {
         *ov13_0224F544->flags = (*ov13_0224F544->flags & 0xc1fffcff) | 0x200;
         ov13_02232440();
         ov13_022325A4();
-        ov13_0222B8E8(ov13_02232200);
+        WifiSetupApp_SetStateFunc(ov13_02232200);
         return;
     default:
         if (ov13_0224F544->index == 3 && ov13_02232168(26)) {

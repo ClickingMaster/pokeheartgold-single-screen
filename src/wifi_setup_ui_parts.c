@@ -46,11 +46,11 @@ extern u16 *ov13_02245D74[];
 extern s32 FX_DivS32(s32, s32);
 extern int WM_GetAllowedChannel(void);
 extern int WM_GetLinkLevel(void);
-extern int ov13_0222B970(void);
-extern int ov13_0222B980(void);
+extern int WifiSetupApp_GetLanguage(void);
+extern int WifiSetupApp_GetKind(void);
 extern void ov13_0222B90C(int *, int *);
-extern void *ov13_0222BADC(void *, int);
-extern void *ov13_0222BAF4(void *, int, int, int);
+extern void *WifiSetupText_GetString(void *, int);
+extern void *WifiSetupText_GetStringWithDigit(void *, int, int, int);
 extern void ov13_0223AC4C(int);
 extern void ov13_0223B1E0(int);
 extern u8 *ov13_02239FF0(void);
@@ -250,7 +250,7 @@ int WifiSetupMessage_Show(int a, int b, int c) {
     WifiSetup_LoadGraphics(ov13_02245B20, GXS_LoadBG0Scr);
     *(vu32 *)0x04001010 = 0x01920000;
     canvas = WifiSetupText_InitBgCanvas(1, 0);
-    text = ov13_0222BAF4(ov13_0224F4F8, a, b, c);
+    text = WifiSetupText_GetStringWithDigit(ov13_0224F4F8, a, b, c);
     flags = WifiSetup_GetTextFlags();
     WifiSetupText_DrawInRect(canvas, 20, 0, 216, 64, 2, flags, text);
     WifiSetupText_MarkDirty(canvas);
@@ -275,7 +275,7 @@ char *WifiSetup_LocalizePath(char *path) {
     if (((u8 *)path)[5] == 'x') {
         return ov13_0224F470;
     }
-    language = ov13_0222B970();
+    language = WifiSetupApp_GetLanguage();
     if (((u8 *)path)[5] == 'y' && language != 0) {
         return ov13_0224F470;
     }
@@ -315,7 +315,7 @@ void WifiSetup_PrintMessage(int message) {
     void *canvas, *text;
     u32 flags;
     canvas = WifiSetupText_InitBgCanvas(0, 0);
-    text = ov13_0222BADC(ov13_0224F4F8, message);
+    text = WifiSetupText_GetString(ov13_0224F4F8, message);
     flags = WifiSetup_GetTextFlags();
     WifiSetupText_DrawInRect(canvas, 13, 40, 230, 112, 2, flags, text);
     WifiSetupText_MarkDirty(canvas);
@@ -326,17 +326,17 @@ void WifiSetup_PrintMessageWithText(const u16 *str, int message) {
     u32 flags;
     int x, y;
     canvas = WifiSetupText_InitBgCanvas(0, 0);
-    text = ov13_0222BADC(ov13_0224F4F8, message);
+    text = WifiSetupText_GetString(ov13_0224F4F8, message);
     flags = WifiSetup_GetTextFlags();
     WifiSetupText_DrawInRect(canvas, 13, 60, 230, 94, 2, flags, text);
-    x = ov13_0222B970();
-    y = ov13_0222B970();
+    x = WifiSetupApp_GetLanguage();
+    y = WifiSetupApp_GetLanguage();
     WifiSetupText_Draw(canvas, ov13_02244F14[x * 2], ov13_02244F16[y * 2], 2, 521, str);
     WifiSetupText_MarkDirty(canvas);
 }
 
 u32 WifiSetup_GetTextFlags(void) {
-    return ov13_02244EF8[ov13_0222B970()];
+    return ov13_02244EF8[WifiSetupApp_GetLanguage()];
 }
 
 void WifiSetupCursor_Init(void) {
@@ -389,7 +389,7 @@ void WifiSetupCursor_Hide() {
 void WifiSetupBackground_Init(void) {
     ov13_0224F4B4 = WifiSetupHeap_AllocZeroed(192, 4);
     WifiSetup_LoadGraphics(ov13_02245D54, GX_LoadBG1Char);
-    switch (ov13_0222B980()) {
+    switch (WifiSetupApp_GetKind()) {
     case 0:
         WifiSetup_LoadGraphics(ov13_02245D04[0], GX_LoadBG1Scr);
         break;

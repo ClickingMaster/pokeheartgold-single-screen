@@ -10,7 +10,7 @@ typedef void (*TaskFunc)(void *, void *);
 extern void WifiSetupFade_Start(int, int, int, int);
 extern void WifiSetupDisplay_ShowPlanes(int, int);
 extern void WifiSetupDisplay_HidePlanes(int, int);
-extern void ov13_0222B8E8(Func);
+extern void WifiSetupApp_SetStateFunc(Func);
 extern void ov13_0222B8F8(int, int);
 extern int WifiSetupFade_IsActive(int);
 extern void ov13_022279B4(int);
@@ -371,7 +371,7 @@ void ov13_02239228(void *src);
 void ov13_02238D88(void) {
     WifiSetupFade_Start(2, 0, 0x15, 8);
     WifiSetupDisplay_ShowPlanes(0, 0x15);
-    ov13_0222B8E8(ov13_02238DBC);
+    WifiSetupApp_SetStateFunc(ov13_02238DBC);
 }
 
 void ov13_02238DBC(void) {
@@ -379,7 +379,7 @@ void ov13_02238DBC(void) {
         return;
     }
     ov13_022279B4(2);
-    ov13_0222B8E8(ov13_02238DE8);
+    WifiSetupApp_SetStateFunc(ov13_02238DE8);
 }
 
 void ov13_02238DE8(void) {
@@ -387,7 +387,7 @@ void ov13_02238DE8(void) {
         return;
     }
     WifiSetupButtonBar_Unlock();
-    ov13_0222B8E8(ov13_02238E10);
+    WifiSetupApp_SetStateFunc(ov13_02238E10);
 }
 
 void ov13_02238E10(void) {
@@ -419,13 +419,13 @@ void ov13_02238E60(void) {
     ov13_0224F58C = 2;
     ov13_0223AC20();
     WifiSetupSound_Play(7);
-    ov13_0222B8E8(ov13_02238EAC);
+    WifiSetupApp_SetStateFunc(ov13_02238EAC);
 }
 
 void ov13_02238EAC(void) {
     WifiSetupButtonBar_Lock();
     WifiSetupFade_StartDelay(8);
-    ov13_0222B8E8(ov13_02238ECC);
+    WifiSetupApp_SetStateFunc(ov13_02238ECC);
 }
 
 void ov13_02238ECC(void) {
@@ -437,7 +437,7 @@ void ov13_02238ECC(void) {
         WifiSetupFade_Start(3, 1, 1, 8);
     }
     WifiSetupFade_Start(3, 0, 0x15, 8);
-    ov13_0222B8E8(ov13_02238F38);
+    WifiSetupApp_SetStateFunc(ov13_02238F38);
 }
 
 void ov13_02238F38(void) {
@@ -462,13 +462,13 @@ void ov13_02238F38(void) {
     WifiSetupDisplay_HidePlanes(0, 0x15);
     if (ov13_0224F58C == 2) {
         ov13_0222B8F8(2, 1);
-        ov13_0222B8E8(ov13_022368D8);
+        WifiSetupApp_SetStateFunc(ov13_022368D8);
     } else if (ov13_0224F58C == 3) {
         ov13_0222B8F8(2, 1);
-        ov13_0222B8E8(ov13_022388A0);
+        WifiSetupApp_SetStateFunc(ov13_022388A0);
     } else {
         ov13_0222B8F8(0, 0);
-        ov13_0222B8E8(ov13_02238694);
+        WifiSetupApp_SetStateFunc(ov13_02238694);
     }
 }
 
@@ -483,25 +483,25 @@ void ov13_0223902C(int a) {
         WifiSetupSound_Play(0x12);
         ov13_0223BE6C(0x10, 1, 1, -1, 0);
         WifiSetupButtonBar_Lock();
-        ov13_0222B8E8(ov13_02239118);
+        WifiSetupApp_SetStateFunc(ov13_02239118);
         break;
     case 1:
         ov13_0224F58C = 1;
         ov13_0223AC20();
-        ov13_0222B8E8(ov13_02238EAC);
+        WifiSetupApp_SetStateFunc(ov13_02238EAC);
         break;
     case 2:
         ov13_0223AC20();
         ov13_0223BA24(NULL);
         ov13_0223BE6C(0x11, 0, 1, -1, 0);
         WifiSetupButtonBar_Lock();
-        ov13_0222B8E8(ov13_02239164);
+        WifiSetupApp_SetStateFunc(ov13_02239164);
         break;
     case 3:
         ov13_0224F58C = 2;
         ov13_0223AC20();
         WifiSetupSound_Play(9);
-        ov13_0222B8E8(ov13_02238EAC);
+        WifiSetupApp_SetStateFunc(ov13_02238EAC);
         break;
     }
 }
@@ -512,14 +512,14 @@ void ov13_02239118(void) {
     }
     WifiSetupSound_Play(6);
     ov13_0223C198();
-    ov13_0222B8E8(ov13_02239144);
+    WifiSetupApp_SetStateFunc(ov13_02239144);
 }
 
 void ov13_02239144(void) {
     if (ov13_0223C1F0() != 0) {
         return;
     }
-    ov13_0222B8E8(ov13_02238EAC);
+    WifiSetupApp_SetStateFunc(ov13_02238EAC);
 }
 
 void ov13_02239164(void) {
@@ -535,7 +535,7 @@ void ov13_02239164(void) {
         WifiSetupSound_Play(7);
     }
     ov13_0223C198();
-    ov13_0222B8E8(ov13_022391C0);
+    WifiSetupApp_SetStateFunc(ov13_022391C0);
 }
 
 void ov13_022391C0(void) {
@@ -543,14 +543,14 @@ void ov13_022391C0(void) {
         return;
     }
     if (ov13_0224F58C == 1) {
-        ov13_0222B8E8(ov13_02238EAC);
+        WifiSetupApp_SetStateFunc(ov13_02238EAC);
         return;
     }
     WifiSetupSound_Play(0xb);
     WifiSetupButtonBar_Unlock();
     ov13_0224F58C = 0;
     ov13_0223BA24(ov13_0223902C);
-    ov13_0222B8E8(ov13_02238E10);
+    WifiSetupApp_SetStateFunc(ov13_02238E10);
 }
 
 void ov13_02239228(void *src) {

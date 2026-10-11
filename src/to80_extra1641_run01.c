@@ -21,7 +21,7 @@ extern u8 ov13_022464CC[];
 extern int WifiSetupFade_IsActive(int);
 extern int DWCi_BACKUPlConvMaskCidr(void *);
 extern u8 *ov13_02239FF0(void);
-extern void WifiSetupTask_Destroy(int, void *), WifiSetupOam_Release(void *), ov13_02239514(void), WifiSetupText_FreeBgCanvas(int), WifiSetupCursor_Hide(void), WifiSetupMessage_Hide(int), ov13_02239288(void), WifiSetupFile_Free(void *), WifiSetup_LoadGraphics(void *, void (*)(const void *, u32, u32)), WifiSetupDisplay_HidePlanes(int, int), ov13_0222B934(int, int), ov13_0222B8F8(int, int), ov13_0222B8E8(void (*)(void)), ov13_0223A414(int), WifiSetupHeap_FreeAndClear(void *);
+extern void WifiSetupTask_Destroy(int, void *), WifiSetupOam_Release(void *), ov13_02239514(void), WifiSetupText_FreeBgCanvas(int), WifiSetupCursor_Hide(void), WifiSetupMessage_Hide(int), ov13_02239288(void), WifiSetupFile_Free(void *), WifiSetup_LoadGraphics(void *, void (*)(const void *, u32, u32)), WifiSetupDisplay_HidePlanes(int, int), ov13_0222B934(int, int), ov13_0222B8F8(int, int), WifiSetupApp_SetStateFunc(void (*)(void)), ov13_0223A414(int), WifiSetupHeap_FreeAndClear(void *);
 extern void ov13_02230FD8(void);
 extern void ov13_02231B18(void);
 extern void ov13_02237DD0(void);
@@ -69,7 +69,7 @@ void ov13_02233AD8(void) {
     case 1:
         ov13_0222B934(mode, 0);
         ov13_0222B8F8(2, 0);
-        ov13_0222B8E8(ov13_02230FD8);
+        WifiSetupApp_SetStateFunc(ov13_02230FD8);
         break;
     case 4:
     case 5:
@@ -82,7 +82,7 @@ void ov13_02233AD8(void) {
         }
         ov13_0222B8F8(2, 0);
         ov13_0222B934(value, 0);
-        ov13_0222B8E8(ov13_02231B18);
+        WifiSetupApp_SetStateFunc(ov13_02231B18);
         break;
     }
     case 11: {
@@ -99,21 +99,21 @@ void ov13_02233AD8(void) {
         }
         ov13_0222B8F8(2, 0);
         ov13_0222B934(0, 0);
-        ov13_0222B8E8(ov13_02237DD0);
+        WifiSetupApp_SetStateFunc(ov13_02237DD0);
         break;
     }
     case 12:
         ov13_0222B8F8(0, 0);
-        ov13_0222B8E8(ov13_022352D0);
+        WifiSetupApp_SetStateFunc(ov13_022352D0);
         break;
     case 13:
         if (ov13_0224F54C.flag == 0) {
             ov13_0222B8F8(2, 1);
-            ov13_0222B8E8(ov13_022368D8);
+            WifiSetupApp_SetStateFunc(ov13_022368D8);
         } else {
             ov13_0223A414(ov13_02239FF0()[0xf4]);
             ov13_0222B8F8(0, 1);
-            ov13_0222B8E8(ov13_02237618);
+            WifiSetupApp_SetStateFunc(ov13_02237618);
         }
         break;
     }

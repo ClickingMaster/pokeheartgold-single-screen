@@ -171,7 +171,7 @@ extern void *ov13_02246854[];
 #define MBW_P140     (ov13_0224F5BC->p140)
 #define MBW_P144     (ov13_0224F5BC->p144)
 
-int ov13_0222BAF4(void *a, int b, int c, int d);
+int WifiSetupText_GetStringWithDigit(void *a, int b, int c, int d);
 void *WifiSetup_LocalizePath(void *a);
 int WifiSetup_GetTextFlags(void);
 void *WifiSetupFile_Load(void *a, int b, int c);
@@ -325,7 +325,7 @@ void ov13_0223BE6C(int a, int kind, u8 c, int d, int e) {
     Ov13Bytes6 tbl = *(Ov13Bytes6 *)(ov13_02245878 + 4);
     int winTmp;
     int i;
-    unk14 = ov13_0222BAF4(ov13_0224F4F8, a, d, e);
+    unk14 = WifiSetupText_GetStringWithDigit(ov13_0224F4F8, a, d, e);
     ov13_0224F5B8 = WifiSetupHeap_AllocZeroed(sizeof(Ov13Select), 4);
     ov13_0224F5B8->kind = kind;
     ov13_0224F5B8->unk1B = -2;

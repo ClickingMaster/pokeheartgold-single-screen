@@ -39,7 +39,7 @@ extern void WifiSetupDisplay_HidePlanes(int, int);
 extern void ov13_02239B34(void);
 extern void ov13_0223A414(int);
 extern void ov13_0222B8F8(int, int);
-extern void ov13_0222B8E8(void *);
+extern void WifiSetupApp_SetStateFunc(void *);
 extern void ov13_0223A02C(void *);
 extern void ov13_0222B934(int, int);
 extern void WifiSetupHeap_FreeAndClear(void *);
@@ -90,22 +90,22 @@ void ov13_022305B0(void) {
         ov13_02239B34();
         ov13_0223A414(ov13_02239FF0()[244]);
         ov13_0222B8F8(2, 0);
-        ov13_0222B8E8(ov13_02237618);
+        WifiSetupApp_SetStateFunc(ov13_02237618);
     } else if (ov13_0224F538.state == 4) {
         ov13_02239B34();
         ov13_0222B8F8(0, 1);
-        ov13_0222B8E8(ov13_022363F4);
+        WifiSetupApp_SetStateFunc(ov13_022363F4);
     } else {
         ov13_0223A02C(&ov13_0224F538.work->records[ov13_0224F538.work->index]);
         ov13_0222B8F8(0, 0);
         if (ov13_0224F538.work->records[ov13_0224F538.work->index].chars[40]) {
             ov13_0222B8F8(0, 1);
             ov13_0222B934(1, 1);
-            ov13_0222B8E8(ov13_02230FD8);
+            WifiSetupApp_SetStateFunc(ov13_02230FD8);
         } else {
             ov13_0222B8F8(0, 1);
             ov13_0222B934(0, 1);
-            ov13_0222B8E8(ov13_02238440);
+            WifiSetupApp_SetStateFunc(ov13_02238440);
         }
     }
     WifiSetupHeap_FreeAndClear(&ov13_0224F53C);

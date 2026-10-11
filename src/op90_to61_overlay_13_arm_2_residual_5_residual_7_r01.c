@@ -32,7 +32,7 @@ void *WifiSetupText_InitBgCanvas(int a, int b);
 Oam *WifiSetupOamTemplate_AllocOam(int a, int b);
 void ov13_02232440(void);
 void ov13_0223237C(void);
-void ov13_0222B8E8(void (*fn)(void));
+void WifiSetupApp_SetStateFunc(void (*fn)(void));
 void ov13_02231D48(void);
 void ov13_02231B18(void);
 extern const struct S80 { u8 pad[8]; Bytes5 vals; u8 rest[11]; } ov13_02245480;
@@ -62,7 +62,7 @@ void ov13_02231B18(void) {
     ov13_0224F544->oam->attr2 = (ov13_0224F544->oam->attr2 & ~0xc00) | 0xc00;
     ov13_02232440();
     ov13_0223237C();
-    ov13_0222B8E8(ov13_02231D48);
+    WifiSetupApp_SetStateFunc(ov13_02231D48);
 }
 
 const struct S80 ov13_02245480 = {{0x32,0x35,0x35,0,0xb,0,0x10,0},{{0x3F,0x40,0x41,0x42,0x43}},{0,0,0,0x29}};

@@ -20,7 +20,7 @@ extern G *ov13_0224F540;
 extern void *WifiSetupHeap_AllocZeroed(int, int);
 extern void *WifiSetupText_InitBgCanvas(int, int);
 extern void *WifiSetupOamTemplate_AllocOam(int, int);
-extern void ov13_0222B948(int *, int *), ov13_0223A28C(void *), ov13_0223110C(void), WifiSetupBackground_LoadHeader(int), WifiSetupMessage_Show(int, int, int), ov13_02227964(int), ov13_022317A8(void), ov13_022316B4(void), ov13_022311C8(void), ov13_0222B8E8(void (*)(void));
+extern void ov13_0222B948(int *, int *), ov13_0223A28C(void *), ov13_0223110C(void), WifiSetupBackground_LoadHeader(int), WifiSetupMessage_Show(int, int, int), ov13_02227964(int), ov13_022317A8(void), ov13_022316B4(void), ov13_022311C8(void), WifiSetupApp_SetStateFunc(void (*)(void));
 extern u8 WifiSetup_StrNLen(void *, int);
 void ov13_02230FD8(void);
 
@@ -49,5 +49,5 @@ void ov13_02230FD8(void) {
     }
     ov13_022317A8();
     ov13_022316B4();
-    ov13_0222B8E8(ov13_022311C8);
+    WifiSetupApp_SetStateFunc(ov13_022311C8);
 }

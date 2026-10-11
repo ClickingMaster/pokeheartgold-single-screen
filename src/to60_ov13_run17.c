@@ -171,7 +171,7 @@ extern void *ov13_02246854[];
 #define MBW_P140     (ov13_0224F5BC->p140)
 #define MBW_P144     (ov13_0224F5BC->p144)
 
-int ov13_0222BAF4(void *a, int b, int c, int d);
+int WifiSetupText_GetStringWithDigit(void *a, int b, int c, int d);
 void *WifiSetup_LocalizePath(void *a);
 int WifiSetup_GetTextFlags(void);
 void *WifiSetupFile_Load(void *a, int b, int c);

@@ -3,6 +3,6 @@
 
 #include "global.h"
 
-BOOL ov13_0222B430(void *, s32, s32);
+BOOL WifiSetupApp_Run(void *, s32, s32);
 
 #endif // POKEHEARTGOLD_OVERLAY_13_ARM_2_H

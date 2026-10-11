@@ -3562,15 +3562,7 @@ Overlay OVY_13
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own6.o
     Object src/wifi_setup_keypad_view.o
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own2.o
-    Object src/to90_extra2116_run01.o
-    Object src/to65_ov13_extra03_run06.o
-    Object src/op90_to80_extra1417_residual_1_r01.o
-    Object src/to80_extra1417_run01.o
-    Object src/to80_extra1846_run01.o
-    Object src/to60_ov13_run01.o
-    Object src/to90_extra2314_run01.o
-    Object src/to60_ov13_run02.o
-    Object src/op90_to60_overlay_13_arm_2_residual_3_r01.o
+    Object src/wifi_setup_app.o
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own2_own1.o
     Object src/to60_ov13_run03.o
     Object src/to60_ov13_run04.o

@@ -39,7 +39,7 @@ extern void WifiSetupDisplay_HidePlanes(int, int);
 extern void ov13_02239B34(void);
 extern void ov13_0223A414(int);
 extern void ov13_0222B8F8(int, int);
-extern void ov13_0222B8E8(void *);
+extern void WifiSetupApp_SetStateFunc(void *);
 extern void ov13_0223A02C(void *);
 extern void ov13_0222B934(int, int);
 extern void WifiSetupHeap_FreeAndClear(void *);

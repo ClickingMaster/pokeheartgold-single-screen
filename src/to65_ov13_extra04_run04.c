@@ -62,11 +62,11 @@ extern int WifiSetup_LoadGraphics();
 extern int ov13_02227964();
 extern int ov13_022279B4();
 extern int ov13_02227E58();
-extern int ov13_0222B8E8();
+extern int WifiSetupApp_SetStateFunc();
 extern int ov13_0222B8F8();
 extern int ov13_0222B934();
 extern int ov13_0222B948();
-extern int ov13_0222B970();
+extern int WifiSetupApp_GetLanguage();
 extern int ov13_02231D9C();
 extern int ov13_0223287C();
 extern int ov13_02233000();
@@ -154,7 +154,7 @@ void ov13_02234468(u8 *p, int x);
 void ov13_02232BD8(void) {
     WifiSetupFade_Start(2, 0, 21, 8);
     WifiSetupDisplay_ShowPlanes(0, 21);
-    ov13_0222B8E8(ov13_02232C0C);
+    WifiSetupApp_SetStateFunc(ov13_02232C0C);
 }
 
 void ov13_02232C0C(void) {
@@ -165,7 +165,7 @@ void ov13_02232C0C(void) {
         return;
     }
     ov13_022279B4(4);
-    ov13_0222B8E8(ov13_02232C48);
+    WifiSetupApp_SetStateFunc(ov13_02232C48);
 }
 
 void ov13_02232C48(void) {
@@ -173,7 +173,7 @@ void ov13_02232C48(void) {
         return;
     }
     WifiSetupButtonBar_Unlock();
-    ov13_0222B8E8(ov13_02232C70);
+    WifiSetupApp_SetStateFunc(ov13_02232C70);
 }
 
 void ov13_02232C70(void) {
@@ -197,13 +197,13 @@ void ov13_02232CA8(void) {
         return;
     }
     WifiSetupSound_Play(6);
-    ov13_0222B8E8(ov13_02232CD0);
+    WifiSetupApp_SetStateFunc(ov13_02232CD0);
 }
 
 void ov13_02232CD0(void) {
     WifiSetupButtonBar_Lock();
     WifiSetupFade_StartDelay(8);
-    ov13_0222B8E8(ov13_02232CF0);
+    WifiSetupApp_SetStateFunc(ov13_02232CF0);
 }
 
 void ov13_02232CF0(void) {
@@ -213,7 +213,7 @@ void ov13_02232CF0(void) {
     WifiSetupButtonBar_Close();
     WifiSetupFade_Start(3, 1, 1, 8);
     WifiSetupFade_Start(3, 0, 21, 8);
-    ov13_0222B8E8(ov13_02232D40);
+    WifiSetupApp_SetStateFunc(ov13_02232D40);
 }
 
 void ov13_02232D40(void) {
@@ -234,12 +234,12 @@ void ov13_02232D40(void) {
     ov13_0222B948(0, &x);
     if (x) {
         ov13_0222B8F8(2, 1);
-        ov13_0222B8E8(ov13_022368D8);
+        WifiSetupApp_SetStateFunc(ov13_022368D8);
     } else {
         ov13_0222B8F8(2, 0);
         ov13_0222B934(0, 0);
         ov13_022352C0(0);
-        ov13_0222B8E8(ov13_02232E04);
+        WifiSetupApp_SetStateFunc(ov13_02232E04);
     }
 }
 

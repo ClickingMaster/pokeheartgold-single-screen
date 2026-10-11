@@ -28,7 +28,7 @@ typedef struct Global {
 } Global;
 
 extern Global ov13_0224F538;
-extern void WifiSetupSound_Play(int), ov13_02230F54(void), ov13_0223959C(void), WifiSetupButtonBar_Lock(void), ov13_0223BE6C(int, int, int, int, int), ov13_0222B8E8(void (*)(void)), ov13_02230F84(void), ov13_02230520(void);
+extern void WifiSetupSound_Play(int), ov13_02230F54(void), ov13_0223959C(void), WifiSetupButtonBar_Lock(void), ov13_0223BE6C(int, int, int, int, int), WifiSetupApp_SetStateFunc(void (*)(void)), ov13_02230F84(void), ov13_02230520(void);
 extern int WifiSetupButtonBar_GetSelected(void);
 extern int FX_DivS32(int, int);
 void ov13_02230414(void);

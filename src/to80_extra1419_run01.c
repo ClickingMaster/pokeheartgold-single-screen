@@ -23,7 +23,7 @@ extern int WifiSetupInput_IsKeyRepeated(int);
 extern int WifiSetupInput_IsKeyReleased(int);
 extern void ov13_022335EC(int);
 extern void WifiSetupSound_Play(int);
-extern void ov13_0222B8E8(void *);
+extern void WifiSetupApp_SetStateFunc(void *);
 extern void ov13_02233A6C(void);
 extern void ov13_02234AA4(void);
 extern void ov13_022349DC(void);
@@ -45,7 +45,7 @@ void ov13_022332E8(void) {
     if (WifiSetupInput_IsKeyPressed(2)) {
         WifiSetupSound_Play(7);
         ov13_0224F54C.work->state = 13;
-        ov13_0222B8E8(ov13_02233A6C);
+        WifiSetupApp_SetStateFunc(ov13_02233A6C);
         return;
     }
     if (WifiSetupInput_IsKeyRepeated(512)) {

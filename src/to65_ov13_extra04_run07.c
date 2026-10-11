@@ -62,11 +62,11 @@ extern int WifiSetup_LoadGraphics();
 extern int ov13_02227964();
 extern int ov13_022279B4();
 extern int ov13_02227E58();
-extern int ov13_0222B8E8();
+extern int WifiSetupApp_SetStateFunc();
 extern int ov13_0222B8F8();
 extern int ov13_0222B934();
 extern int ov13_0222B948();
-extern int ov13_0222B970();
+extern int WifiSetupApp_GetLanguage();
 extern int ov13_02231D9C();
 extern int ov13_0223287C();
 extern int ov13_02233000();
@@ -154,7 +154,7 @@ void ov13_02234468(u8 *p, int x);
 void ov13_02233A6C(void) {
     ov13_0223959C();
     WifiSetupFade_StartDelay(8);
-    ov13_0222B8E8(ov13_02233A8C);
+    WifiSetupApp_SetStateFunc(ov13_02233A8C);
 }
 
 void ov13_02233A8C(void) {
@@ -163,5 +163,5 @@ void ov13_02233A8C(void) {
     }
     WifiSetupFade_Start(3, 1, 1, 8);
     WifiSetupFade_Start(3, 0, 29, 8);
-    ov13_0222B8E8(ov13_02233AD8);
+    WifiSetupApp_SetStateFunc(ov13_02233AD8);
 }
