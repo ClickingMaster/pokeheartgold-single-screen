@@ -113,7 +113,7 @@ extern void *WifiSetupFile_Load(void *, u32 *, int);
 extern int WifiSetup_StrNLen(const char *, int);
 extern void *WifiSetupTask_Create(int, WifiSetupTaskFunc2, void *, int);
 extern void WifiSetupTask_DestroyLater(int, void *);
-extern void ov13_0223AC40(void *, void *);
+extern void WifiSetupSound_UpdateTask(void *, void *);
 
 void WifiSetupApScan_StoreResults(WifiSetupScanCallback *cb);
 
@@ -571,7 +571,7 @@ void WifiSetupSound_Init(void) {
     NNS_SndArcInitOnMemory(gWifiSetupSound, gWifiSetupSound->data);
     NNS_SndArcPlayerSetup(0);
     NNS_SndHandleInit((NNSSndHandle *)gWifiSetupSound->handle);
-    gWifiSetupSound->task = WifiSetupTask_Create(0, ov13_0223AC40, NULL, 0xc8);
+    gWifiSetupSound->task = WifiSetupTask_Create(0, WifiSetupSound_UpdateTask, NULL, 0xc8);
 }
 
 WifiSetupSound *gWifiSetupSound;

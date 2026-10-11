@@ -2924,17 +2924,7 @@ Overlay OVY_13
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own3.o
     Object src/wifi_setup_access_points.o
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own4.o
-    Object src/to60_ov13_run13.o
-    Object src/op90_to60_overlay_13_arm_2_residual_11_r01.o
-    Object src/to60_ov13_run14.o
-    Object src/op90_to60_overlay_13_arm_2_residual_12_r01.o
-    Object src/to60_ov13_run15.o
-    Object src/to80_extra1382_run01.o
-    Object src/to60_ov13_run16.o
-    Object src/to90_extra2540_run01.o
-    Object src/to60_ov13_run17.o
-    Object src/to61_overlay_13_arm_2_residual_15_run01.o
-    Object src/op90_to61_overlay_13_arm_2_residual_15_residual_1_r01.o
+    Object src/wifi_setup_local_wireless.o
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own8.o
     Object src/to61_overlay_13_arm_2_residual_15_run02.o
     Object src/op90_to61_overlay_13_arm_2_residual_15_residual_2_r01.o
@@ -4149,14 +4139,8 @@ Overlay OVY_45
     Object src/wifi_plaza_receive.o
     Object src/wifi_plaza_word_set.o
     Object src/wifi_plaza_history.o
-    Object src/overlay45_lobby_object_lifecycle_r26.o
-    Object src/overlay45_helpers_26.o
-    Object src/overlay45_lobby_flow_handlers.o
-    Object src/overlay45_helpers_27.o
-    Object src/overlay45_time_support_before.o
-    Object src/to90_extra2430_run01.o
-    Object src/to90_extra2166_run01.o
-    Object src/overlay45_time_support_after.o
+    Object src/wifi_plaza_apps.o
+    Object src/wifi_plaza_util.o
     Object src/overlay45_helpers_28.o
     Object src/to80_extra1782_run01.o
     Object src/overlay45_effect_spawners_29.o

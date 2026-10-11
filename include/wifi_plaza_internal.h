@@ -16,7 +16,7 @@
 typedef struct WiFiPlazaArgs {
     void *unk_00;
     SaveData *save;
-    void *unk_08;
+    u32 unk_08;
 } WiFiPlazaArgs;
 
 // Second part of a plaza player record (copied to the save data when the plaza is left, WiFiPlazaWork_Delete).
@@ -187,6 +187,29 @@ typedef struct WiFiPlazaUnk20C {
     u32 unk_128[9][3];
 } WiFiPlazaUnk20C;
 
+// A time of day (ov45_0222D500 / ov45_0222D524 / ov45_0222D594).
+typedef union WiFiPlazaTime {
+    u32 word;
+
+    struct {
+        u8 hour;
+        u8 minute;
+        u8 second;
+        u8 unk_03;
+    } field;
+
+    u8 value[4];
+    s8 signedValue[4];
+} WiFiPlazaTime;
+
+// A country and region (ov45_0222D638 adds them to a list of 50).
+typedef struct WiFiPlazaPlace {
+    u16 country;
+    u8 region;
+    u8 value : 4;
+    u8 occupied : 4;
+} WiFiPlazaPlace;
+
 // Part of WiFiPlazaWork at 0x4BC: the last activities of the own player (id < 24, 24 = none; value -1 = none), a ring
 // of 13 entries; crc covers everything before save (ov45_0222CCA4 / ov45_0222CCB8).
 typedef struct WiFiPlazaHistory {
@@ -199,11 +222,23 @@ typedef struct WiFiPlazaHistory {
     u16 corrupt;
 } WiFiPlazaHistory;
 
+// The applications of the plaza (wifi_plaza_apps.c), one overlay at a time.
+typedef struct WiFiPlazaApps {
+    OverlayManager *manager;
+    void *args[13]; // per app
+    u8 current;     // app
+    u8 unk_39;
+    u16 heapID;
+    struct WiFiPlazaWork *work;
+    SaveData *save;
+    void *unk_44;
+} WiFiPlazaApps;
+
 typedef struct WiFiPlazaWork {
     SaveData *save;
     void *unk_04; // ov45_0222D860
     u32 unk_08;
-    u8 unk_0c[0xc8]; // filled by ov45_0222B79C from the profile
+    WiFiPlazaPlace places[50]; // filled by ov45_0222B79C from the profile
     u32 unk_d4;
     s64 unk_d8; // ov45_0222ECB8, refreshed every frame
     s64 unk_e0; // ov45_022320C4 when the lobby opened (WiFiPlaza_OnLobbyEvent 0)
@@ -246,7 +281,7 @@ u32 ov45_0222A1FC(WiFiPlazaWork *work);
 void ov45_0222A208(void *a0, void *a1, void *a2);
 void *ov45_0222A210(WiFiPlazaWork *work);
 void *ov45_0222A214(WiFiPlazaWork *work);
-void *ov45_0222A22C(WiFiPlazaWork *work);
+u32 *ov45_0222A22C(WiFiPlazaWork *work);
 BOOL ov45_0222A230(WiFiPlazaWork *work, int bit);
 BOOL ov45_0222A25C(WiFiPlazaWork *work, int bit);
 BOOL ov45_0222A288(WiFiPlazaWork *work, int bit);
@@ -288,7 +323,7 @@ WiFiPlazaPlayer *WiFiPlazaWork_GetPlayer(WiFiPlazaWork *work, u32 index);
 WiFiPlazaPlayer *WiFiPlazaWork_GetMyPlayer(WiFiPlazaWork *work);
 void ov45_0222A5E8(WiFiPlazaWork *work, int value);
 void ov45_0222A704(WiFiPlazaWork *work, int index, int value);
-void ov45_0222A72C(WiFiPlazaWork *work, u8 value);
+void ov45_0222A72C(WiFiPlazaWork *work, u32 value);
 void ov45_0222A770(WiFiPlazaWork *work, int a, int b);
 void ov45_0222A7DC(WiFiPlazaWork *work, u32 a, u32 b);
 void WiFiPlazaPlayer_CopyToProfile(WiFiPlazaPlayer *player, PlayerProfile *profile, enum HeapID heapID);
@@ -323,8 +358,8 @@ void ov45_0222AB94(void *unused, u32 slot0, u32 slot1);
 void ov45_0222ABD0(void *unused, u32 slot0, u32 slot1, u8 value);
 void ov45_0222AC14(void *unused, int selector, int count, int slot0, int slot1, int slot2, int slot3, int flag);
 void ov45_0222ACB8(void *unused, int mode, u8 kind, u32 slot0, u32 slot1, u32 slot2, u32 slot3);
-int ov45_0222AD2C(void);
-int ov45_0222AD3C(void);
+int ov45_0222AD2C(WiFiPlazaWork *work);
+int ov45_0222AD3C(WiFiPlazaWork *work);
 int ov45_0222AD4C(WiFiPlazaWork *work);
 u8 ov45_0222AD58(WiFiPlazaWork *work, u32 index);
 void ov45_0222AD70(void *unused, u32 value);
@@ -380,7 +415,7 @@ void WiFiPlaza_OnPlayerLeave(int id, WiFiPlazaWork *work);
 void WiFiPlaza_OnPlayerUpdate(int id, WiFiPlazaPlayer *player, WiFiPlazaWork *work);
 void WiFiPlaza_OnLobbyEvent(u32 event, WiFiPlazaWork *work);
 void ov45_0222B75C(const WiFiPlazaPlayer *data, u32 size, WiFiPlazaWork *work);
-void ov45_0222B79C(WiFiPlazaProfile *profile, void *out);
+void ov45_0222B79C(WiFiPlazaProfile *profile, WiFiPlazaPlace *out);
 void ov45_0222B840(WiFiPlazaWork *work);
 void WiFiPlazaProfile_InitFromSave(WiFiPlazaProfile *profile, SaveData *save, enum HeapID heapID);
 void ov45_0222BA3C(WiFiPlazaWork *work);
@@ -493,27 +528,54 @@ void ov45_0222CCA4(WiFiPlazaHistory *history);
 void ov45_0222CCB8(WiFiPlazaHistory *history);
 u16 ov45_0222CCDC(WiFiPlazaHistory *history);
 
+// wifi_plaza_apps.c
+int ov45_0222CCE4(u16 avatar);
+u16 ov45_0222CD04(u32 index);
+WiFiPlazaApps *WiFiPlazaApps_New(u32 unk_39, SaveData *save, void *unk_44, WiFiPlazaWork *work, enum HeapID heapID);
+void WiFiPlazaApps_Delete(WiFiPlazaApps *apps);
+void WiFiPlazaApps_StartFirst(WiFiPlazaApps *apps);
+BOOL WiFiPlazaApps_Run(WiFiPlazaApps *apps);
+void WiFiPlazaApps_VBlank(WiFiPlazaApps *apps);
+void WiFiPlazaApps_StartOverlay(WiFiPlazaApps *apps, void **args, const OverlayManagerTemplate *template);
+void WiFiPlazaApps_InitArgs(WiFiPlazaApps *apps, u32 app, enum HeapID heapID);
+void WiFiPlazaApps_FreeArgs(WiFiPlazaApps *apps, u32 app);
+void WiFiPlazaApps_Start(WiFiPlazaApps *apps, u32 app);
+BOOL WiFiPlazaApps_End(WiFiPlazaApps *apps, u32 app);
+void ov45_0222D434(WiFiPlazaApps *apps, void **args, u32 mode);
+void ov45_0222D500(u32 *out, s64 *seconds);
+
+// wifi_plaza_util.c
+void ov45_0222D524(const WiFiPlazaTime *left, const WiFiPlazaTime *right, WiFiPlazaTime *out);
+void ov45_0222D594(const WiFiPlazaTime *first, const WiFiPlazaTime *second, WiFiPlazaTime *out);
+void ov45_0222D638(WiFiPlazaPlace *places, u32 country, u32 region, u32 value);
+u16 ov45_0222D6B0(WiFiPlazaPlace *places, u32 index);
+u8 ov45_0222D6D4(WiFiPlazaPlace *places, u32 index);
+u8 ov45_0222D6FC(WiFiPlazaPlace *places, u32 index);
+u8 ov45_0222D724(WiFiPlazaPlace *places, u32 index);
+void ov45_0222D740(void *file);
+BOOL ov45_0222D79C(u32 country, u32 region);
+u8 ov45_0222D7C0(u32 index);
+int ov45_0222D7CC(u32 errorCode, u32 context);
+BOOL ov45_0222D7FC(u32 errorCode, u32 context);
+BOOL ov45_0222D844(void);
+void *ov45_0222D860(enum HeapID heapID);
+void ov45_0222D890(void *view);
+void ov45_0222D8A4(void *view);
+
 // data (asm)
 extern const WiFiPlazaTimerPhase _02254A28[5];
+extern const u8 ov45_02254BB4[];
 // start time of each group
 extern const s32 ov45_02254A3C[9];
 // handlers per lobby message type
 extern void (*const ov45_02254A60[9])(WiFiPlazaWork *work, WiFiPlazaLobbyMessage *msg);
 
 // defined in the other overlay 45 files
-u16 ov45_0222CCE4(u16 avatar);
-u16 ov45_0222CD04(u16 a0);
-void *WiFiPlazaApps_New(void *a0, SaveData *save, void *a2, WiFiPlazaWork *work, enum HeapID heapID);
-void WiFiPlazaApps_Delete(void *apps);
-void WiFiPlazaApps_StartFirst(void *apps);
-int WiFiPlazaApps_Run(void *apps);
-void WiFiPlazaApps_VBlank(void *apps);
-void ov45_0222D500(u32 *a0, s64 *a1);
-void ov45_0222D638(void *a0, u16 country, u8 region, int a3);
-BOOL ov45_0222D79C(u16 country, u8 region);
-void *ov45_0222D860(enum HeapID heapID);
-void ov45_0222D890(void *a0);
-void ov45_0222D8A4(void *a0);
+void ov45_0222DE1C(void *a0);
+void ov45_0222DEA4(void *a0, u32 a1);
+void ov45_0222DF78(void *a0, enum HeapID heapID);
+void ov45_0222DFD0(void *a0);
+void ov45_0222E000(void *a0);
 void ov45_0222D8BC(void *a0, u32 *a1);
 void ov45_0222D8C8(void *a0, int slot, int gender, int a3);
 int ov45_0222D8D4(void *a0, int slot);

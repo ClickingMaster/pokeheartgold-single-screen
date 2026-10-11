@@ -182,10 +182,10 @@ typedef struct WlBss {
     u16 capability; // capability information of the own beacon
     u16 beaconLostThreshold;
     u16 beaconLostCount;
-    u8 unk_82[6];
-    u16 unk_88; // station whose frames and CAM state WClearAids drops
-    u16 unk_8a; // bit 14 set while WEP is on
-    u16 unk_8c; // WSetFrameLifeTime: life time * beaconPeriod / 100 (0xFFFF: none)
+    u16 unk_82[3]; // MLME_BeaconLostTask: address of the BSS whose beacons were lost
+    u16 unk_88;    // station whose frames and CAM state WClearAids drops
+    u16 unk_8a;    // bit 14 set while WEP is on
+    u16 unk_8c;    // WSetFrameLifeTime: life time * beaconPeriod / 100 (0xFFFF: none)
     u8 unk_8e[4];
     u16 ssidOffset; // offset of the SSID in the beacon frame
     u16 unk_94;     // offset of the beacon's TIM element (MAC memory 0x0480425C + unk_94)
@@ -512,6 +512,49 @@ typedef struct WlMlme {
     } cfm;
 } WlMlme;
 
+// Indication to the WMSP (MLME_Issue*Indication): heap buffer, command (0x84 ..), parameter length in halfwords.
+typedef struct WlIndHeader {
+    WlHeapBuf buf;
+    u16 command;
+    u16 length;
+} WlIndHeader;
+
+// Auth (0x84), DeAuth (0x85), DisAss (0x88): the peer and the algorithm / reason code.
+typedef struct WlMlmePeerInd {
+    WlIndHeader header;
+    u16 peerMacAdrs[3];
+    u16 param;
+} WlMlmePeerInd;
+
+// Ass (0x86) and ReAss (0x87).
+typedef struct WlMlmeAssInd {
+    WlIndHeader header;
+    u16 peerMacAdrs[3];
+    u16 aid;
+    u16 ssidLength;
+    u8 ssid[32];
+} WlMlmeAssInd;
+
+// Beacon lost (0x8B).
+typedef struct WlMlmeBeaconLostInd {
+    WlIndHeader header;
+    u16 macAdrs[3];
+} WlMlmeBeaconLostInd;
+
+// Beacon received (0x8D): the sender, two bytes of the RX header and the game information.
+typedef struct WlMlmeBeaconRecvInd {
+    WlIndHeader header;
+    u8 unk_10[6];
+    u16 gameInfoLength;
+    u8 unk_18[6];
+    u8 unk_1e; // low byte of the RX header's unk_0e
+    u8 unk_1f; // low byte of the RX header's unk_12
+    u8 unk_20[14];
+    u16 srcMacAdrs[3];
+    u8 unk_34[8];
+    u8 gameInfo[128];
+} WlMlmeBeaconRecvInd;
+
 // MAC register self test entry (DiagMacRegister): register offset and the bits that can be written.
 typedef struct WlTestReg {
     u16 offset;
@@ -787,6 +830,33 @@ int MLME_DisAssReqCmd(WlMlmePeerReq *req, WlCmdCfm *cfm);
 int MLME_StartReqCmd(WlMlmeStartReq *req, WlCmdCfm *cfm);
 int MLME_MeasChanReqCmd(WlMlmeMeasChanReq *req, WlMlmeMeasChanCfm *cfm);
 
+// wl_mlme_task.c
+void MLME_ScanTask(void);
+void MLME_ScanTimeOut(void);
+void MLME_JoinTask(void);
+void MLME_JoinTimeOut(void);
+void MLME_AuthTask(void);
+void MLME_AuthTimeOut(void);
+void MLME_AssTask(void);
+void MLME_AssTimeOut(void);
+void MLME_ReAssTask(void);
+void MLME_ReAssTimeOut(void);
+void MLME_MeasChannelTask(void);
+void MLME_MeasChanTimeOut(void);
+
+// wl_mlme_ind.c
+void MLME_BeaconLostTask(void);
+void IssueMlmeConfirm(void);
+int MLME_IssueAuthIndication(const u16 *macAdrs, int algorithm);
+int MLME_IssueDeAuthIndication(const u16 *macAdrs, int reason);
+int MLME_IssueAssIndication(const u16 *macAdrs, u32 aid, const u8 *ssidElement);
+int MLME_IssueReAssIndication(const u16 *macAdrs, u32 aid, const u8 *ssidElement);
+int MLME_IssueDisAssIndication(const u16 *macAdrs, int reason);
+int MLME_IssueBeaconLostIndication(const u16 *macAdrs);
+int MLME_IssueBeaconSendIndication(void);
+int MLME_IssueBeaconRecvIndication(WlRxFrame *frame);
+void InitializeMLME(void);
+
 // wl_cam.c
 u32 CAM_Search(const u16 *addr);
 u32 CAM_SearchAdd(const u16 *addr);
@@ -853,30 +923,28 @@ void InitRxCtrl(void);
 void DeleteAllTxFrames(void);
 void DeleteTxFrames(u32 station);
 void FLASH_DirectRead(u32 addr, u32 size, void *dest);
-void InitializeMLME(void);
 void FLASH_MakeImage(void);
 void FLASH_Read(u32 addr, u32 size, void *dest);
 u32 FLASH_VerifyCheckSum(u32 *checksum);
 void CopyTxFrmToMacBuf(void *frame, void *src);
 void MakeBeaconFrame(void);
 void MakePsPollFrame(u16 aid);
-void IssueMlmeConfirm(void);
 WlTxHeapFrame *MakeDeAuthFrame(const u16 *macAdrs, u16 reason, u32 unk);
 void TxManCtrlFrame(WlTxHeapFrame *frame);
-void MLME_IssueDeAuthIndication(void *macAdrs, u16 reason);
 int CheckFrameTimeout(WlTxHeapFrame *frame);
 void ResetTxqPri(u32 priority);
 void IntrCarrierSuppresionSignal(void);
 void TxEndKeyData(WlTxDesc *desc);
 void UpdateGameInfoElement(void);
-int MLME_IssueBeaconSendIndication(void);
 void TxqPri(u32 priority);
+WlTxHeapFrame *MakeProbeReqFrame(const u16 *bssid);
+WlTxHeapFrame *MakeAuthFrame(const u16 *macAdrs, u16 length, u32 test);
+WlTxHeapFrame *MakeAssReqFrame(const u16 *macAdrs);
+WlTxHeapFrame *MakeReAssReqFrame(const u16 *macAdrs);
+void ClearQueuedPri(u32 priority);
+void MessageDeleteTx(u32 priority, u32 confirm);
 WlTxHeapFrame *MakeDisAssFrame(const u16 *macAdrs, u32 reason);
 void DeleteTxFrameByAdrs(const u16 *macAdrs);
-void MLME_AuthTask(void);
-void MLME_AssTask(void);
-void MLME_ReAssTask(void);
-void MLME_MeasChannelTask(void);
 void RxBeaconFrame(WlRxFrame *frame);
 void RxKeyDataFrame(WlRxFrame *frame);
 u32 RxMpFrame(WlRxFrame *frame);

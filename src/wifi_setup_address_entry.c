@@ -45,10 +45,10 @@ extern char ov13_02246440[];
 
 extern void WifiSetup_ParseAddress(const char *text, u8 *address);
 extern int DWC_BACKUPlCheckAddress(void *address);
-extern void ov13_0223BE6C(int, int, int, int, int);
-extern int ov13_0223C1DC(void);
-extern void ov13_0223C198(void);
-extern int ov13_0223C1F0(void);
+extern void WifiSetupDialog_Open(int, int, int, int, int);
+extern int WifiSetupDialog_GetSelected(void);
+extern void WifiSetupDialog_Close(void);
+extern int WifiSetupDialog_IsOpen(void);
 extern void WifiSetupSettings_Init(void);
 extern long atol(const char *);
 
@@ -238,11 +238,11 @@ void WifiSetupAddressEntry_WaitKeypadClosed(void) {
         return;
     }
     if (gWifiSetupAddressEntry->result == WIFI_SETUP_ADDRESS_INVALID) {
-        ov13_0223BE6C(6, 3, 1, -1, 0);
+        WifiSetupDialog_Open(6, 3, 1, -1, 0);
         WifiSetupApp_SetStateFunc(WifiSetupAddressEntry_WaitInvalidMessage);
         return;
     }
-    ov13_0223BE6C(71, 2, 1, -1, 0);
+    WifiSetupDialog_Open(71, 2, 1, -1, 0);
     WifiSetupApp_SetStateFunc(WifiSetupAddressEntry_WaitConfirm);
 }
 
@@ -301,7 +301,7 @@ void WifiSetupAddressEntry_UpdateCursor(void) {
 }
 
 void WifiSetupAddressEntry_WaitConfirm(void) {
-    gWifiSetupAddressEntry->result = ov13_0223C1DC();
+    gWifiSetupAddressEntry->result = WifiSetupDialog_GetSelected();
     switch (gWifiSetupAddressEntry->result) {
     case 0:
         WifiSetupSound_Play(7);
@@ -312,7 +312,7 @@ void WifiSetupAddressEntry_WaitConfirm(void) {
     default:
         return;
     }
-    ov13_0223C198();
+    WifiSetupDialog_Close();
     WifiSetupApp_SetStateFunc(WifiSetupAddressEntry_FinishConfirm);
 }
 
@@ -320,7 +320,7 @@ void WifiSetupAddressEntry_FinishConfirm(void) {
     WifiSetupAddressFunc store[5];
     int kind;
     *(WifiSetupAddressFuncs *)store = ov13_022454AC;
-    if (ov13_0223C1F0()) {
+    if (WifiSetupDialog_IsOpen()) {
         return;
     }
     if (!gWifiSetupAddressEntry->result) {

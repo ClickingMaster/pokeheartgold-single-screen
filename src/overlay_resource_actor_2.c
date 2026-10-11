@@ -4,7 +4,7 @@ void sub_02075D08(void *task, Work *work) {
     sub_02075E14(work);
     if (work->overlayMan == 0) {
         PokepicManager_DrawAll(work->pokepicMgr);
-        sub_020774E0();
+        ParticleScene_DrawAndSwap();
         RequestSwap3DBuffers(1, 0);
     }
     if (work->done != 0) {

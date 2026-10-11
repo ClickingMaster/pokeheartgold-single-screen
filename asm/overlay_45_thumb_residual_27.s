@@ -205,11 +205,11 @@
 	.public WiFiPlazaApps_Delete
 	.public WiFiPlazaApps_StartFirst
 	.public WiFiPlazaApps_Run
-	.public ov45_0222CDC4
-	.public ov45_0222CDE4
-	.public ov45_0222CE0C
-	.public ov45_0222CE2C
-	.public ov45_0222CE54
+	.public WiFiPlazaApps_StartOverlay
+	.public WiFiPlazaApps_InitArgs
+	.public WiFiPlazaApps_FreeArgs
+	.public WiFiPlazaApps_Start
+	.public WiFiPlazaApps_End
 	.public ov45_0222CE78
 	.public ov45_0222CE94
 	.public ov45_0222CEB0
@@ -590,8 +590,8 @@
 	.public ov45_02230A58
 	.public ov45_02230AC0
 
-	thumb_func_start ov45_0222CDC4
-ov45_0222CDC4: ; 0x0222CDC4
+	thumb_func_start WiFiPlazaApps_StartOverlay
+WiFiPlazaApps_StartOverlay: ; 0x0222CDC4
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
 	ldr r0, [r5]
@@ -607,11 +607,11 @@ _0222CDD6:
 	bl OverlayManager_New
 	str r0, [r5]
 	pop {r4, r5, r6, pc}
-	thumb_func_end ov45_0222CDC4
+	thumb_func_end WiFiPlazaApps_StartOverlay
 
 
-	thumb_func_start ov45_0222CDE4
-ov45_0222CDE4: ; 0x0222CDE4
+	thumb_func_start WiFiPlazaApps_InitArgs
+WiFiPlazaApps_InitArgs: ; 0x0222CDE4
 	push {r4, r5, r6, lr}
 	add r4, r1, #0
 	add r5, r0, #0
@@ -631,11 +631,11 @@ _0222CDF4:
 	pop {r4, r5, r6, pc}
 	nop
 _0222CE08: .word ov45_02254E88
-	thumb_func_end ov45_0222CDE4
+	thumb_func_end WiFiPlazaApps_InitArgs
 
 
-	thumb_func_start ov45_0222CE0C
-ov45_0222CE0C: ; 0x0222CE0C
+	thumb_func_start WiFiPlazaApps_FreeArgs
+WiFiPlazaApps_FreeArgs: ; 0x0222CE0C
 	push {r3, r4, r5, lr}
 	add r5, r1, #0
 	add r4, r0, #0
@@ -652,11 +652,11 @@ _0222CE1A:
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 _0222CE28: .word _02254E20
-	thumb_func_end ov45_0222CE0C
+	thumb_func_end WiFiPlazaApps_FreeArgs
 
 
-	thumb_func_start ov45_0222CE2C
-ov45_0222CE2C: ; 0x0222CE2C
+	thumb_func_start WiFiPlazaApps_Start
+WiFiPlazaApps_Start: ; 0x0222CE2C
 	push {r3, r4, r5, lr}
 	add r4, r1, #0
 	add r5, r0, #0
@@ -676,11 +676,11 @@ _0222CE3A:
 	pop {r3, r4, r5, pc}
 	nop
 _0222CE50: .word ov45_02254E54
-	thumb_func_end ov45_0222CE2C
+	thumb_func_end WiFiPlazaApps_Start
 
 
-	thumb_func_start ov45_0222CE54
-ov45_0222CE54: ; 0x0222CE54
+	thumb_func_start WiFiPlazaApps_End
+WiFiPlazaApps_End: ; 0x0222CE54
 	push {r3, r4, r5, lr}
 	add r5, r1, #0
 	add r4, r0, #0
@@ -698,7 +698,7 @@ _0222CE62:
 	pop {r3, r4, r5, pc}
 	nop
 _0222CE74: .word ov45_02254EBC
-	thumb_func_end ov45_0222CE54
+	thumb_func_end WiFiPlazaApps_End
 
 
 	thumb_func_start ov45_0222CE78
@@ -834,7 +834,7 @@ ov45_0222CF40: ; 0x0222CF40
 	ldr r2, _0222CF64 ; =ov45_02254B94
 	add r0, r5, #0
 	add r1, r6, #0
-	bl ov45_0222CDC4
+	bl WiFiPlazaApps_StartOverlay
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
 _0222CF64: .word ov45_02254B94
@@ -868,47 +868,47 @@ _0222CF7E: ; jump table
 	.short _0222CFE4 - _0222CF7E - 2 ; case 10
 _0222CF94:
 	mov r1, #9
-	bl ov45_0222CE2C
+	bl WiFiPlazaApps_Start
 	b _0222CFF0
 _0222CF9C:
 	mov r1, #1
-	bl ov45_0222CE2C
+	bl WiFiPlazaApps_Start
 	b _0222CFF0
 _0222CFA4:
 	mov r1, #2
-	bl ov45_0222CE2C
+	bl WiFiPlazaApps_Start
 	b _0222CFF0
 _0222CFAC:
 	mov r1, #3
-	bl ov45_0222CE2C
+	bl WiFiPlazaApps_Start
 	b _0222CFF0
 _0222CFB4:
 	mov r1, #4
-	bl ov45_0222CE2C
+	bl WiFiPlazaApps_Start
 	b _0222CFF0
 _0222CFBC:
 	mov r1, #6
-	bl ov45_0222CE2C
+	bl WiFiPlazaApps_Start
 	b _0222CFF0
 _0222CFC4:
 	mov r1, #7
-	bl ov45_0222CE2C
+	bl WiFiPlazaApps_Start
 	b _0222CFF0
 _0222CFCC:
 	mov r1, #8
-	bl ov45_0222CE2C
+	bl WiFiPlazaApps_Start
 	b _0222CFF0
 _0222CFD4:
 	mov r1, #0xa
-	bl ov45_0222CE2C
+	bl WiFiPlazaApps_Start
 	b _0222CFF0
 _0222CFDC:
 	mov r1, #0xb
-	bl ov45_0222CE2C
+	bl WiFiPlazaApps_Start
 	b _0222CFF0
 _0222CFE4:
 	mov r1, #0xc
-	bl ov45_0222CE2C
+	bl WiFiPlazaApps_Start
 	b _0222CFF0
 _0222CFEC:
 	bl GF_AssertFail
@@ -969,7 +969,7 @@ ov45_0222D028: ; 0x0222D028
 	str r0, [r4, #8]
 	add r0, r5, #0
 	add r1, r6, #0
-	bl ov45_0222CDC4
+	bl WiFiPlazaApps_StartOverlay
 	pop {r4, r5, r6, pc}
 	nop
 _0222D050: .word ov45_02254B84
@@ -986,12 +986,12 @@ ov45_0222D054: ; 0x0222D054
 	beq _0222D06C
 	add r0, r4, #0
 	mov r1, #0xa
-	bl ov45_0222CE2C
+	bl WiFiPlazaApps_Start
 	b _0222D074
 _0222D06C:
 	add r0, r4, #0
 	mov r1, #0
-	bl ov45_0222CE2C
+	bl WiFiPlazaApps_Start
 _0222D074:
 	mov r0, #0
 	pop {r4, pc}
@@ -1046,11 +1046,11 @@ _0222D0C4: .word Heap_Free
 
 	thumb_func_start ov45_0222D0C8
 ov45_0222D0C8: ; 0x0222D0C8
-	ldr r3, _0222D0D0 ; =ov45_0222CDC4
+	ldr r3, _0222D0D0 ; =WiFiPlazaApps_StartOverlay
 	ldr r2, _0222D0D4 ; =ov45_02254B74
 	bx r3
 	nop
-_0222D0D0: .word ov45_0222CDC4
+_0222D0D0: .word WiFiPlazaApps_StartOverlay
 _0222D0D4: .word ov45_02254B74
 	thumb_func_end ov45_0222D0C8
 
@@ -1065,12 +1065,12 @@ ov45_0222D0D8: ; 0x0222D0D8
 	beq _0222D0F0
 	add r0, r4, #0
 	mov r1, #0xa
-	bl ov45_0222CE2C
+	bl WiFiPlazaApps_Start
 	b _0222D0F8
 _0222D0F0:
 	add r0, r4, #0
 	mov r1, #0
-	bl ov45_0222CE2C
+	bl WiFiPlazaApps_Start
 _0222D0F8:
 	mov r0, #0
 	pop {r4, pc}
@@ -1120,11 +1120,11 @@ _0222D138: .word Heap_Free
 
 	thumb_func_start ov45_0222D13C
 ov45_0222D13C: ; 0x0222D13C
-	ldr r3, _0222D144 ; =ov45_0222CDC4
+	ldr r3, _0222D144 ; =WiFiPlazaApps_StartOverlay
 	ldr r2, _0222D148 ; =ov45_02254B64
 	bx r3
 	nop
-_0222D144: .word ov45_0222CDC4
+_0222D144: .word WiFiPlazaApps_StartOverlay
 _0222D148: .word ov45_02254B64
 	thumb_func_end ov45_0222D13C
 
@@ -1140,7 +1140,7 @@ ov45_0222D14C: ; 0x0222D14C
 	pop {r3, pc}
 _0222D15A:
 	mov r1, #0
-	bl ov45_0222CE2C
+	bl WiFiPlazaApps_Start
 	mov r0, #0
 	pop {r3, pc}
 	thumb_func_end ov45_0222D14C
@@ -1204,7 +1204,7 @@ ov45_0222D1B0: ; 0x0222D1B0
 	ldr r2, _0222D1D8 ; =ov45_02254B54
 	add r0, r5, #0
 	add r1, r4, #0
-	bl ov45_0222CDC4
+	bl WiFiPlazaApps_StartOverlay
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 _0222D1D4: .word FS_OVERLAY_ID(OVY_90)
@@ -1228,7 +1228,7 @@ ov45_0222D1DC: ; 0x0222D1DC
 	bl ov45_0222A72C
 	add r0, r4, #0
 	mov r1, #0
-	bl ov45_0222CE2C
+	bl WiFiPlazaApps_Start
 	mov r0, #0
 	pop {r3, r4, r5, pc}
 	nop
@@ -1290,7 +1290,7 @@ ov45_0222D250: ; 0x0222D250
 	ldr r2, _0222D278 ; =ov45_02254BA4
 	add r0, r5, #0
 	add r1, r4, #0
-	bl ov45_0222CDC4
+	bl WiFiPlazaApps_StartOverlay
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 _0222D274: .word FS_OVERLAY_ID(OVY_90)
@@ -1314,7 +1314,7 @@ ov45_0222D27C: ; 0x0222D27C
 	bl ov45_0222A72C
 	add r0, r4, #0
 	mov r1, #0
-	bl ov45_0222CE2C
+	bl WiFiPlazaApps_Start
 	mov r0, #0
 	pop {r3, r4, r5, pc}
 	nop
@@ -1380,7 +1380,7 @@ ov45_0222D2F8: ; 0x0222D2F8
 	ldr r2, _0222D320 ; =ov45_02254B34
 	add r0, r5, #0
 	add r1, r4, #0
-	bl ov45_0222CDC4
+	bl WiFiPlazaApps_StartOverlay
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 _0222D31C: .word FS_OVERLAY_ID(OVY_90)
@@ -1404,7 +1404,7 @@ ov45_0222D324: ; 0x0222D324
 	bl ov45_0222A72C
 	add r0, r4, #0
 	mov r1, #0
-	bl ov45_0222CE2C
+	bl WiFiPlazaApps_Start
 	mov r0, #0
 	pop {r3, r4, r5, pc}
 	nop
@@ -1458,12 +1458,12 @@ ov45_0222D38C: ; 0x0222D38C
 	beq _0222D3A4
 	add r0, r4, #0
 	mov r1, #0xa
-	bl ov45_0222CE2C
+	bl WiFiPlazaApps_Start
 	b _0222D3AC
 _0222D3A4:
 	add r0, r4, #0
 	mov r1, #0
-	bl ov45_0222CE2C
+	bl WiFiPlazaApps_Start
 _0222D3AC:
 	mov r0, #0
 	pop {r4, pc}
@@ -1475,11 +1475,11 @@ ov45_0222D3B0: ; 0x0222D3B0
 	ldr r2, [r1]
 	mov r3, #0
 	strb r3, [r2, #4]
-	ldr r3, _0222D3BC ; =ov45_0222CDC4
+	ldr r3, _0222D3BC ; =WiFiPlazaApps_StartOverlay
 	ldr r2, _0222D3C0 ; =ov45_02254B24
 	bx r3
 	.balign 4, 0
-_0222D3BC: .word ov45_0222CDC4
+_0222D3BC: .word WiFiPlazaApps_StartOverlay
 _0222D3C0: .word ov45_02254B24
 	thumb_func_end ov45_0222D3B0
 
@@ -1489,11 +1489,11 @@ ov45_0222D3C4: ; 0x0222D3C4
 	ldr r2, [r1]
 	mov r3, #1
 	strb r3, [r2, #4]
-	ldr r3, _0222D3D0 ; =ov45_0222CDC4
+	ldr r3, _0222D3D0 ; =WiFiPlazaApps_StartOverlay
 	ldr r2, _0222D3D4 ; =ov45_02254B14
 	bx r3
 	.balign 4, 0
-_0222D3D0: .word ov45_0222CDC4
+_0222D3D0: .word WiFiPlazaApps_StartOverlay
 _0222D3D4: .word ov45_02254B14
 	thumb_func_end ov45_0222D3C4
 
@@ -1564,10 +1564,10 @@ _0222D430: .word ov45_0222D434
 ov45_0222D434: ; 0x0222D434
 	ldr r3, [r1]
 	str r2, [r3, #8]
-	ldr r3, _0222D440 ; =ov45_0222CDC4
+	ldr r3, _0222D440 ; =WiFiPlazaApps_StartOverlay
 	ldr r2, _0222D444 ; =ov45_02254B04
 	bx r3
 	nop
-_0222D440: .word ov45_0222CDC4
+_0222D440: .word WiFiPlazaApps_StartOverlay
 _0222D444: .word ov45_02254B04
 	thumb_func_end ov45_0222D434

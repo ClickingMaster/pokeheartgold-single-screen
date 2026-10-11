@@ -117,7 +117,7 @@ void ov45_0222A704(WiFiPlazaWork *work, int index, int value) {
     ov45_0222BA3C(work);
 }
 
-void ov45_0222A72C(WiFiPlazaWork *work, u8 value) {
+void ov45_0222A72C(WiFiPlazaWork *work, u32 value) {
     if (value >= 27) {
         GF_AssertFail();
     }

@@ -84,7 +84,7 @@ extern int ov13_0223959C();
 extern int WifiSetupConnections_SetAutoAddress();
 extern int WifiSetupConnections_SetAutoDns();
 extern void WifiSetupConnections_Edit(int);
-extern int ov13_0223BE6C();
+extern int WifiSetupDialog_Open();
 extern int DWCi_BACKUPlConvMaskCidr(void *);
 extern int swprintf(u16 *, u32, const u16 *, ...);
 extern s32 FX_DivS32(s32, s32);
@@ -343,7 +343,7 @@ void WifiSetupSettings_SelectItem(int item) {
         ov13_02235074();
         if (!ov13_022351C0()) {
             WifiSetupSound_Play(9);
-            ov13_0223BE6C(6, 1, 1, -1, 0);
+            WifiSetupDialog_Open(6, 1, 1, -1, 0);
             WifiSetupApp_SetStateFunc((WifiSetupAppStateFunc)ov13_02235260);
             return;
         }

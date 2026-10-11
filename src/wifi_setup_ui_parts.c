@@ -51,8 +51,8 @@ extern int WifiSetupApp_GetKind(void);
 extern void ov13_0222B90C(int *, int *);
 extern void *WifiSetupText_GetString(void *, int);
 extern void *WifiSetupText_GetStringWithDigit(void *, int, int, int);
-extern void ov13_0223AC4C(int);
-extern void ov13_0223B1E0(int);
+extern void WifiSetupBanner_Open(int);
+extern void WifiSetupBanner_SetKind(int);
 extern u8 *WifiSetupConnections_GetEdit(void);
 
 void WifiSetupBusyIcon_Task(void *task) {
@@ -297,9 +297,9 @@ void ov13_02227964(int a) {
     int type;
     ov13_0222B90C(&type, 0);
     if (type == 1) {
-        ov13_0223AC4C(a);
+        WifiSetupBanner_Open(a);
     } else if (type == 2) {
-        ov13_0223B1E0(a);
+        WifiSetupBanner_SetKind(a);
     }
 }
 

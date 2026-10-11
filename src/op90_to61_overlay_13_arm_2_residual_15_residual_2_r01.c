@@ -16,7 +16,7 @@ typedef struct {
     Entry entries[1];
 } State;
 
-extern State *ov13_0224F5BC;
+extern State *gWifiSetupMbParent;
 u16 ov13_0223D5C4(const u8 *);
 
 static inline int macEqual(const u8 *mac, const u8 *other) {
@@ -28,9 +28,9 @@ static inline int macEqual(const u8 *mac, const u8 *other) {
 u16 ov13_0223D5C4(const u8 *mac) {
     u16 i;
     for (i = 1; i < 2; i++) {
-        if (ov13_0224F5BC->mask & (1 << i)) {
-            if (macEqual(mac, ov13_0224F5BC->entries[i - 1].mac)) {
-                return ov13_0224F5BC->entries[i - 1].port;
+        if (gWifiSetupMbParent->mask & (1 << i)) {
+            if (macEqual(mac, gWifiSetupMbParent->entries[i - 1].mac)) {
+                return gWifiSetupMbParent->entries[i - 1].port;
             }
         }
     }

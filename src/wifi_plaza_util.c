@@ -1,0 +1,219 @@
+#include <nitro/rtc.h>
+
+#include "global.h"
+
+#include "location_gmm_dat.h"
+#include "unk_02037C94.h"
+#include "wifi_connection.h"
+#include "wifi_plaza_internal.h"
+
+BOOL sub_020397FC(void);
+
+#pragma force_active on
+
+// out = left + right (hour, minute, second; the hour wraps at 24).
+void ov45_0222D524(const WiFiPlazaTime *left, const WiFiPlazaTime *right, WiFiPlazaTime *out) {
+    WiFiPlazaTime a = *left, b = *right;
+    a.field.second += b.field.second;
+    a.field.minute += a.field.second / 60;
+    out->field.second = a.field.second % 60;
+    a.field.minute += b.field.minute;
+    a.field.hour += a.field.minute / 60;
+    out->field.minute = a.field.minute % 60;
+    a.field.hour += b.field.hour;
+    out->field.hour = a.field.hour % 24;
+}
+
+// out = first - second (hour, minute, second; the hour wraps at 24).
+void ov45_0222D594(const WiFiPlazaTime *first, const WiFiPlazaTime *second, WiFiPlazaTime *out) {
+    WiFiPlazaTime a = *first, b = *second;
+    int delta;
+    u8 value;
+    value = b.value[2];
+    delta = a.signedValue[2] - (s8)value;
+    if (delta < 0) {
+        int borrow = (-delta) / 60 + 1;
+        a.value[2] = (u8)(a.value[2] + borrow * 60);
+        a.value[1] = (u8)(a.value[1] - borrow);
+    }
+    out->value[2] = (u8)(a.value[2] - value);
+    value = b.value[1];
+    delta = a.signedValue[1] - (s8)value;
+    if (delta < 0) {
+        int borrow = (-delta) / 60 + 1;
+        a.value[1] = (u8)(a.value[1] + borrow * 60);
+        a.value[0] = (u8)(a.value[0] - borrow);
+    }
+    out->value[1] = (u8)(a.value[1] - value);
+    delta = (s8)a.value[0] - (s8)b.value[0];
+    if (delta < 0) {
+        int borrow = (-delta) / 24 + 1;
+        a.value[0] = (u8)(a.value[0] + borrow * 24);
+    }
+    out->value[0] = (u8)(a.value[0] - b.value[0]);
+}
+
+#pragma force_active reset
+
+// Adds a country and region to the list (the first free entry, or the entry of the same place unless value is 1).
+void ov45_0222D638(WiFiPlazaPlace *places, u32 country, u32 region, u32 value) {
+    s32 i;
+    BOOL use;
+    if (country == 0) {
+        return;
+    }
+    if (region > (u32)LocationGmmDatRegionCountGetByCountryMsgNo(country)) {
+        return;
+    }
+    use = FALSE;
+    for (i = 0; i < 50; i++) {
+        if (places[i].occupied == 0) {
+            use = TRUE;
+        } else if (places[i].country == country && places[i].region == region) {
+            if (value == 1) {
+                return;
+            }
+            use = TRUE;
+        }
+        if (use) {
+            places[i].country = country;
+            places[i].region = region;
+            places[i].value = value;
+            places[i].occupied = 1;
+            return;
+        }
+    }
+}
+
+u16 ov45_0222D6B0(WiFiPlazaPlace *places, u32 index) {
+    if (index >= 50) {
+        GF_AssertFail();
+    }
+    places += index;
+    if (places->occupied != 1) {
+        GF_AssertFail();
+    }
+    return places->country;
+}
+
+u8 ov45_0222D6D4(WiFiPlazaPlace *places, u32 index) {
+    if (index >= 50) {
+        GF_AssertFail();
+    }
+    if (places[index].occupied != 1) {
+        GF_AssertFail();
+    }
+    return places[index].region;
+}
+
+u8 ov45_0222D6FC(WiFiPlazaPlace *places, u32 index) {
+    if (index >= 50) {
+        GF_AssertFail();
+    }
+    places += index;
+    if (places->occupied != 1) {
+        GF_AssertFail();
+    }
+    return places->value;
+}
+
+u8 ov45_0222D724(WiFiPlazaPlace *places, u32 index) {
+    if (index >= 50) {
+        GF_AssertFail();
+    }
+    return places[index].occupied;
+}
+
+// Turns off the diffuse, ambient, specular and emission flags of the materials of the first model of file.
+void ov45_0222D740(void *file) {
+    NNSG3dResMdlSet *set = NNS_G3dGetMdlSet(file);
+    NNSG3dResMdl *model = NNS_G3dGetMdlByIdx(set, 0);
+    NNSi_G3dModifyMatFlag(model, FALSE, NNS_G3D_MATFLAG_DIFFUSE);
+    NNSi_G3dModifyMatFlag(model, FALSE, NNS_G3D_MATFLAG_AMBIENT);
+    NNSi_G3dModifyMatFlag(model, FALSE, NNS_G3D_MATFLAG_SPECULAR);
+    NNSi_G3dModifyMatFlag(model, FALSE, NNS_G3D_MATFLAG_EMISSION);
+}
+
+// TRUE if region exists in country (region 0 for a country without regions).
+BOOL ov45_0222D79C(u32 country, u32 region) {
+    u32 count = LocationGmmDatRegionCountGetByCountryMsgNo(country);
+    if (count == 0 && region == 0) {
+        return TRUE;
+    }
+    if (region >= 1 && region <= count) {
+        return TRUE;
+    }
+    return FALSE;
+}
+
+u8 ov45_0222D7C0(u32 index) {
+    return ov45_02254BB4[index];
+}
+
+// The error message class of a connection error (WifiConnection_ClassifyErrorCode, with the plaza's own errors 25 and
+// 26).
+int ov45_0222D7CC(u32 errorCode, u32 context) {
+    int class = WifiConnection_ClassifyErrorCode(errorCode, context);
+    if (class == 11 || errorCode == 25) {
+        if (context != 2) {
+            return 14;
+        }
+        return 11;
+    }
+    if (errorCode == 26) {
+        return 13;
+    }
+    if (class < 0) {
+        class = 11;
+    }
+    return class;
+}
+
+// FALSE for the errors that end the connection.
+BOOL ov45_0222D7FC(u32 errorCode, u32 context) {
+    int class = WifiConnection_ClassifyErrorCode(errorCode, context);
+    if (errorCode == 25) {
+        class = 11;
+    } else if (errorCode == 26) {
+        class = 12;
+    }
+    switch (class) {
+    case 1:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+    case 11:
+        return FALSE;
+    default:
+        return TRUE;
+    }
+}
+
+BOOL ov45_0222D844(void) {
+    if (sub_020393C8() || sub_020397FC()) {
+        return TRUE;
+    }
+    return FALSE;
+}
+
+void *ov45_0222D860(enum HeapID heapID) {
+    u8 *view = Heap_Alloc(heapID, 0x230);
+    memset(view, 0, 0x230);
+    ov45_0222DE1C(view + 8);
+    ov45_0222DF78(view + 0x5c, heapID);
+    return view;
+}
+
+void ov45_0222D890(void *view) {
+    ov45_0222DFD0((u8 *)view + 0x5c);
+    Heap_Free(view);
+}
+
+void ov45_0222D8A4(void *view) {
+    ov45_0222E000((u8 *)view + 0x5c);
+    ov45_0222DEA4((u8 *)view + 8, 0);
+}

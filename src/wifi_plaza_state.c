@@ -365,7 +365,7 @@ void ov45_0222B75C(const WiFiPlazaPlayer *data, u32 size, WiFiPlazaWork *work) {
 
 // Fills out (200 bytes) with the country and region of the own player, of every player in the lobby and of the
 // 20 lobby entries of ov45_0222EDC4 / ov45_0222EDF0.
-void ov45_0222B79C(WiFiPlazaProfile *profile, void *out) {
+void ov45_0222B79C(WiFiPlazaProfile *profile, WiFiPlazaPlace *out) {
     WiFiPlazaPlayerList list;
     int country;
     int region;

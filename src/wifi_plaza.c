@@ -12,7 +12,7 @@
 typedef struct WiFiPlaza {
     SaveData *save;
     WiFiPlazaWork *work;
-    void *apps;
+    WiFiPlazaApps *apps;
     SysTask *vblankTask;
 } WiFiPlaza;
 

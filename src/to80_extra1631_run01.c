@@ -10,41 +10,41 @@
 #define B(p, o) (*((u8 *)(p) + (o)))
 #define V(p, o) (*(void **)((u8 *)(p) + (o)))
 extern u8 *ov13_0224F5C8;
-extern int ov13_0223D45C(void);
-extern int ov13_0223D470(int);
-extern int ov13_0223CF80(void);
+extern int WifiSetupMbParent_GetState(void);
+extern int WifiSetupMbParent_GetMask(int);
+extern int WifiSetupMbParent_AreAllBootable(void);
 extern int ov13_0223DF28(void);
-extern void ov13_0223CB34(void *, u16);
-extern void ov13_0223CFE8(void);
-extern void ov13_0223D0E0(void);
+extern void WifiSetupMbParent_Start(void *, u16);
+extern void WifiSetupMbParent_BootChildren(void);
+extern void WifiSetupMbParent_End(void);
 extern void ov13_0223E7BC(void);
 void ov13_0223EF78(void);
 
 void ov13_0223EF78(void) {
     int state;
-    switch (ov13_0223D45C()) {
+    switch (WifiSetupMbParent_GetState()) {
     case 1:
-        ov13_0223CB34(ov13_0224F5C8 + 0xab4, H(ov13_0224F5C8, 0x64a));
+        WifiSetupMbParent_Start(ov13_0224F5C8 + 0xab4, H(ov13_0224F5C8, 0x64a));
         break;
     case 2:
-        if (ov13_0223D470(2)) {
+        if (WifiSetupMbParent_GetMask(2)) {
             B(ov13_0224F5C8, 0xa90) = 5;
             return;
         }
-        if (ov13_0223D470(3) || ov13_0223D470(4)) {
+        if (WifiSetupMbParent_GetMask(3) || WifiSetupMbParent_GetMask(4)) {
             B(ov13_0224F5C8, 0xa90) = 6;
             return;
         }
-        if (B(ov13_0224F5C8, 0xa90) == 5 && !ov13_0223D470(2)) {
+        if (B(ov13_0224F5C8, 0xa90) == 5 && !WifiSetupMbParent_GetMask(2)) {
             B(ov13_0224F5C8, 0xa90) = 13;
         }
         break;
     case 3:
-        if (ov13_0223CF80()) {
-            ov13_0223CFE8();
+        if (WifiSetupMbParent_AreAllBootable()) {
+            WifiSetupMbParent_BootChildren();
             return;
         }
-        if ((u8)(B(ov13_0224F5C8, 0xa90) + 250) <= 1 && !ov13_0223D470(3)) {
+        if ((u8)(B(ov13_0224F5C8, 0xa90) + 250) <= 1 && !WifiSetupMbParent_GetMask(3)) {
             B(ov13_0224F5C8, 0xa90) = 18;
         }
         break;
@@ -52,7 +52,7 @@ void ov13_0223EF78(void) {
         B(ov13_0224F5C8, 0xa90) = 7;
         break;
     case 7:
-        ov13_0223D0E0();
+        WifiSetupMbParent_End();
         B(ov13_0224F5C8, 0xa90) = 1;
         break;
     case 0:

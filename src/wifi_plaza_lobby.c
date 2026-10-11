@@ -125,7 +125,7 @@ void ov45_0222ACB8(void *unused, int mode, u8 kind, u32 slot0, u32 slot1, u32 sl
     }
 }
 
-int ov45_0222AD2C(void) {
+int ov45_0222AD2C(WiFiPlazaWork *work) {
     int value = ov45_0222ECDC(3);
     if ((u32)value >= 5) {
         value = 0;
@@ -133,7 +133,7 @@ int ov45_0222AD2C(void) {
     return value;
 }
 
-int ov45_0222AD3C(void) {
+int ov45_0222AD3C(WiFiPlazaWork *work) {
     int value = ov45_0222ECDC(2);
     if ((u32)value >= 5) {
         value = 0;

@@ -205,11 +205,11 @@
 	.public WiFiPlazaApps_Delete
 	.public WiFiPlazaApps_StartFirst
 	.public WiFiPlazaApps_Run
-	.public ov45_0222CDC4
-	.public ov45_0222CDE4
-	.public ov45_0222CE0C
-	.public ov45_0222CE2C
-	.public ov45_0222CE54
+	.public WiFiPlazaApps_StartOverlay
+	.public WiFiPlazaApps_InitArgs
+	.public WiFiPlazaApps_FreeArgs
+	.public WiFiPlazaApps_Start
+	.public WiFiPlazaApps_End
 	.public ov45_0222CE78
 	.public ov45_0222CE94
 	.public ov45_0222CEB0

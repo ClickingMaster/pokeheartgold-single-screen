@@ -22,11 +22,11 @@ void *ov45_0222A210(WiFiPlazaWork *work) {
 }
 
 void *ov45_0222A214(WiFiPlazaWork *work) {
-    ov45_0222B79C(&work->profile, work->unk_0c);
-    return work->unk_0c;
+    ov45_0222B79C(&work->profile, work->places);
+    return work->places;
 }
 
-void *ov45_0222A22C(WiFiPlazaWork *work) {
+u32 *ov45_0222A22C(WiFiPlazaWork *work) {
     return &work->unk_d4;
 }
 

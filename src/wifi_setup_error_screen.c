@@ -19,25 +19,25 @@ extern const u16 ov13_022454DE[];
 extern char ov13_02246458[];
 extern const u16 ov13_0224646C[]; // error code format
 
-extern int ov13_0223C1DC(void);
-extern void ov13_0223C198(void);
-extern int ov13_0223C1F0(void);
+extern int WifiSetupDialog_GetSelected(void);
+extern void WifiSetupDialog_Close(void);
+extern int WifiSetupDialog_IsOpen(void);
 extern void WifiSetupSettings_Init(void);
 extern void ov13_022368D8(void);
 extern void ov13_022352C0(int);
 extern int swprintf(u16 *, int, const u16 *, ...);
 
 void WifiSetupAddressEntry_WaitInvalidMessage(void) {
-    if (ov13_0223C1DC()) {
+    if (WifiSetupDialog_GetSelected()) {
         return;
     }
     WifiSetupSound_Play(6);
-    ov13_0223C198();
+    WifiSetupDialog_Close();
     WifiSetupApp_SetStateFunc(WifiSetupAddressEntry_FinishInvalidMessage);
 }
 
 void WifiSetupAddressEntry_FinishInvalidMessage(void) {
-    if (ov13_0223C1F0()) {
+    if (WifiSetupDialog_IsOpen()) {
         return;
     }
     gWifiSetupAddressEntry->cursor->attr01 &= 0xc1fffcff; // show again

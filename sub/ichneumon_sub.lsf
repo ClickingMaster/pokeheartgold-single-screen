@@ -172,29 +172,8 @@ Autoload EXT_WRAM
 	Object lib/src/wl_wait_loop.o
 	Object lib/src/wl_cmd_if.o
 	Object lib/src/wl_mlme_cmd.o
-	Object lib/src/to90_arm7_sub_ext_wram_run397.o
-	Object lib/src/to90_arm7_sub_ext_wram_run249.o
-	Object lib/src/to90_arm7_sub_ext_wram_run250.o
-	Object lib/src/to90_arm7_sub_ext_wram_run251.o
-	Object lib/src/to90_arm7_sub_ext_wram_run252.o
-	Object lib/src/to90_arm7_sub_ext_wram_run253.o
-	Object lib/src/to90_arm7_sub_ext_wram_run254.o
-	Object lib/src/to90_arm7_sub_ext_wram_run255.o
-	Object lib/src/to90_arm7_sub_ext_wram_run256.o
-	Object lib/src/to90_arm7_sub_ext_wram_run257.o
-	Object lib/src/to90_arm7_sub_ext_wram_run399.o
-	Object lib/src/to90_arm7_sub_ext_wram_run258.o
-	Object lib/src/to90_arm7_sub_ext_wram_run259.o
-	Object lib/src/to90_arm7_sub_ext_wram_run391.o
-	Object lib/src/to90_arm7_sub_ext_wram_run260.o
-	Object lib/src/to90_arm7_sub_ext_wram_run261.o
-	Object lib/src/to90_arm7_sub_ext_wram_run262.o
-	Object lib/src/to90_arm7_sub_ext_wram_run263.o
-	Object lib/src/to90_arm7_sub_ext_wram_run264.o
-	Object lib/src/to90_arm7_sub_ext_wram_run265.o
-	Object lib/src/to90_arm7_sub_ext_wram_run266.o
-	Object lib/src/to90_arm7_sub_ext_wram_run267.o
-	Object lib/src/to90_arm7_sub_ext_wram_run268.o
+	Object lib/src/wl_mlme_task.o
+	Object lib/src/wl_mlme_ind.o
 	Object lib/src/to90_arm7_sub_ext_wram_run269.o
 	Object lib/src/to90_arm7_sub_ext_wram_run270.o
 	Object lib/src/to90_arm7_sub_ext_wram_run271.o

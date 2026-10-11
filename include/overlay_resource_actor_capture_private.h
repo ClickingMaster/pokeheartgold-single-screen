@@ -103,7 +103,7 @@ BOOL sub_02075D3C(Work *);
 void sub_020771A0(void *);
 void sub_02077394(Work *);
 extern void PokepicManager_DrawAll(void *);
-extern void sub_020774E0(void);
+extern void ParticleScene_DrawAndSwap(void);
 extern void RequestSwap3DBuffers(int, int);
 extern void SysTask_Destroy(void *);
 extern void sub_02075E14(Work *);
