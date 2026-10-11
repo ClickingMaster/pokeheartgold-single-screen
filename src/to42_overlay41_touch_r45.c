@@ -49,7 +49,7 @@ void ov41_022490F0(Ov41Work *self) {
                 ov41_02249480(w, 4, x, y, (void *)W((Ov41Work *)W(w, 0x10), 4), U8F(w, 0x21));
             } else {
                 ov41_02248158((void *)W(w, 4));
-                ov41_022463FC();
+                DressUp_DisableDragWindow();
                 W(w, 0x30) = 0;
                 PlaySE(0x5EA);
             }
@@ -95,7 +95,7 @@ void ov41_022492B0(Ov41Work *self) {
     if (W(w, 0x10) != 0) {
         ov41_02248020((void *)W(w, 4), (void *)W(w, 0x10));
         ov41_02248158((void *)W(w, 4));
-        ov41_022463FC();
+        DressUp_DisableDragWindow();
         W(w, 0x30) = 0;
         PlaySE(0x5EB);
         ov41_02249418(w);

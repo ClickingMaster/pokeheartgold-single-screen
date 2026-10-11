@@ -15,7 +15,7 @@ void ov41_0224B8F0(Ov41AccessoryList *list, SaveFashionDataSub *fashionData) {
 }
 
 void ov41_0224B938(Ov41Work *work, Ov41GfxManagers *managers, Ov41AccessoryList *list, enum HeapID heapId) {
-    ov41_022464AC(managers, heapId);
+    AccessoryPortrait_AllocRawResTables(managers, heapId);
     ov41_0224B958(work, managers, list, heapId);
 }
 
@@ -55,10 +55,10 @@ BOOL AccessoryPortrait_Init(OverlayManager *man, int *state) {
     work->fashionData = Save_FashionData_GetEntry(args->saveFashionData, args->unk_4);
     work->selection = args->unk_4;
     work->mode = args->unk_8;
-    ov41_02246130();
+    DressUpGfx_InitDisplay();
     gSystem.screensFlipped = FALSE;
     GfGfx_SwapDisplay();
-    ov41_02246670(work->gfx, HEAP_ID_14);
+    AccessoryPortrait_InitAppGfx(work->gfx, HEAP_ID_14);
     config.value = *(u32 *)&work->gfx[0x40];
     config.x = 0x48;
     config.y = 0x10;
@@ -79,7 +79,7 @@ BOOL AccessoryPortrait_Main(OverlayManager *man, int *state) {
     NNS_G2dSetupSoftwareSpriteCamera();
     ov41_0224B554(work->portrait);
     RequestSwap3DBuffers(0, 0);
-    ov41_022466C8(work->gfx);
+    AccessoryPortrait_RenderSprites(work->gfx);
     switch (*state) {
     case 0:
         (*state)++;
@@ -118,8 +118,8 @@ BOOL AccessoryPortrait_Exit(OverlayManager *man, int *state) {
     ov41_0224B57C(work->portrait);
     ov41_0224BD8C(work);
     ov41_0224BE34(work);
-    ov41_02246698(work->gfx);
-    ov41_02246150();
+    AccessoryPortrait_FreeAppGfx(work->gfx);
+    DressUpGfx_ResetDisplay();
     Main_SetVBlankIntrCB(NULL, NULL);
     HBlankInterruptDisable();
     OverlayManager_FreeData(man);

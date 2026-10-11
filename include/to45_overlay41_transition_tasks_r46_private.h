@@ -69,9 +69,9 @@ void ov41_02249B44(void *object, s32 *x, s32 *y);
 void ov41_02249AF4(void *object, s32 x, s32 y);
 void ov41_022486C4(void *work, s32 argument5, s32 argument6, void *object);
 void ov41_02248724(void *work);
-void ov41_022463FC(void);
+void DressUp_DisableDragWindow(void);
 void ov41_0224AC08(void *work, s32 group, s32 message, s32 argument);
 void ov41_02248114(void *work, s32 deltaX, s32 deltaY);
-Ov41R46PictureResource *ov41_022463DC(void *work, void *data, u32 index);
+Ov41R46PictureResource *DressUpGfx_StoreUnpackedChar(void *work, void *data, u32 index);
 
 #endif

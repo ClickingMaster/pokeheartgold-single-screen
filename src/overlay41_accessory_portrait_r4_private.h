@@ -66,12 +66,12 @@ u8 *FashionEntry_GetItem(SaveFashionDataSub *fashionData, int index);
 u8 sub_0202BE80(SaveFashionDataSub *fashionData);
 u8 FashionItem_GetId(u8 *item);
 
-void ov41_02246130(void);
-void ov41_02246150(void);
-void ov41_022464AC(Ov41GfxManagers *managers, enum HeapID heapId);
-void ov41_02246670(void *gfx, enum HeapID heapId);
-void ov41_02246698(void *gfx);
-void ov41_022466C8(void *gfx);
+void DressUpGfx_InitDisplay(void);
+void DressUpGfx_ResetDisplay(void);
+void AccessoryPortrait_AllocRawResTables(Ov41GfxManagers *managers, enum HeapID heapId);
+void AccessoryPortrait_InitAppGfx(void *gfx, enum HeapID heapId);
+void AccessoryPortrait_FreeAppGfx(void *gfx);
+void AccessoryPortrait_RenderSprites(void *gfx);
 void *ov41_0224B530(Ov41PortraitConfig *config, SaveFashionDataSub *fashionData);
 void ov41_0224B554(void *portrait);
 void ov41_0224B57C(void *portrait);

@@ -91,12 +91,12 @@
 .public String_Copy
 .public CopyU16ArrayToString
 .public Save_PlayerData_GetOptionsAddr
-.public sub_0202D488
-.public sub_0202D5DC
-.public sub_0202D8D0
-.public sub_0202D8E4
+.public FrontierData_WifiRankAction
+.public FrontierData_FlagAction
+.public BattleRoomDownload_GetLeadersRoom
+.public BattleRoomDownload_CopyLeaders
 .public Save_FrontierData_Get
-.public sub_0202D928
+.public Save_BattleRoomDownload_Get
 .public Save_Frontier_GetStatic
 .public FrontierSave_GetStat
 .public MI_CpuCopy8

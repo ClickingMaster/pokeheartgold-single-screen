@@ -1,187 +1,248 @@
 #include "frontier_data.h"
 
 #include "global.h"
-#include "to91_frontier_download_names.h"
 
+#include "frontier_data_access.h"
 #include "heap.h"
 #include "mail_message.h"
 #include "msgdata.h"
-#include "unk_0202D230.h"
+#include "to91_frontier_download_names.h"
 #include "unk_02030A98.h"
 
-typedef struct FrontierRecord {
-    u8 flag0 : 1, flag1 : 1, mode : 3, group : 3;
-    u8 unk1, unk2, unk3;
-    u16 unk4, unk6;
-    u8 unk8[4];
-    u8 unkC[28];
-    u32 unk28;
-    u8 unk2C[16];
-} FrontierRecord;
+// Sub-blocks of the frontier save (Save_Frontier_GetStatic):
+//   0x8E0 BattleTowerChallenge, 0x954 FrontierData, 0xABC 4 tower messages, 0xADC BattleRoomDownload
+
+// The Battle Tower challenge in progress (BattleTowerChallenge_GetField / SetField field ids in comments).
+typedef struct BattleTowerChallenge {
+    u8 unk0_0 : 1;      // 7
+    u8 saved : 1;       // BattleTowerChallenge_GetSaved / SetSaved
+    u8 towerMode : 3;   // 0
+    u8 multiAllyId : 3; // 9
+    u8 unk1;
+    u8 battleNumber;      // 1
+    u8 unk3;              // 2, 20 points each off the Wi-Fi score
+    u16 unk4;             // 3, 10 points each off the Wi-Fi score
+    u16 unk6;             // 4, the last part of the Wi-Fi score
+    u8 partySlots[4];     // 5
+    u8 trainers[28];      // 8, 14 trainer ids
+    u32 unk28;            // 10
+    u8 multiAllyData[16]; // 6
+} BattleTowerChallenge;   // size = 0x3C
+
 struct FrontierData {
-    u16 points;
-    u8 streak, rank;
+    u16 battlePoints;
+    u8 wifiStreak;
+    u8 wifiRank; // 1..10
     u32 unk4;
+
     union {
         u16 flags;
+
         struct {
-            u16 pad : 4, active : 1, pad2 : 11;
+            u16 pad : 4, wifiStreakActive : 1, pad2 : 11;
         } bits;
     } state;
-    u16 stats[6];
+
+    u16 towerRounds[6]; // per tower mode
+    u16 wifiScore;
+    u8 wifiTeams[2][0xA8];
+}; // size = 0x168
+
+// One trainer of a downloaded Wi-Fi Battle Room.
+typedef struct BattleRoomTrainer {
+    u8 team[0xA8];
+    u16 name[16];
+    u8 useDefaultName : 1, gender : 1, pad : 6;
+    u8 trainerClass;
+    u8 messages[24];
     u16 score;
-    u8 records[2][0xA8];
-};
-extern const MailMessageTemplate _020F682C[4];
-u32 sub_0202D230(void);
-void sub_0202D234(u32 addr);
-void sub_0202D240(void *data);
-void sub_0202D254(void *data);
-void sub_0202D274(void *data);
-u32 sub_0202D284(u32 addr, u32 field, void *out);
-void sub_0202D308(u32 addr, u32 field, void *value);
-void sub_0202D3B0(u32 addr, u8 a, u32 b, u32 c);
-u32 sub_0202D3DC(u32 addr);
-void sub_0202D3E4(u32 addr, u32 value);
-u32 sub_0202D450(FrontierData *, u32);
-u32 sub_0202D488(FrontierData *, u32);
-void sub_0202D4B8(FrontierData *, u32, void *);
-void sub_0202D4DC(FrontierData *, s32, UnkStruct_02069528 *);
-u32 sub_0202D230(void) {
-    return 0xE4;
+} BattleRoomTrainer; // size = 0xE4
+
+typedef struct BattleRoomDownload {
+    u32 markDate;      // year, month, day, hour of the last mark, one byte each
+    u8 roomMarks[250]; // one bit per (rank 1..10, room 1..200)
+    u8 hasTrainers, hasLeaders;
+    u8 trainersRoom, trainersRank, leadersRoom, leadersRank;
+    BattleRoomTrainer trainers[7];
+    Ov67DownloadRecords leaders;
+} BattleRoomDownload; // size = 0xB3C
+
+typedef struct BattleTowerOpponent {
+    u32 id;
+    u16 trainerClass;
+    u8 pad6[2];
+    u16 name[8];
+    u8 messages[24];
+    u8 team[0xA8];
+} BattleTowerOpponent;
+
+// asm/frontier_data_rodata.s
+extern const MailMessageTemplate gTowerMessageTemplates[4];
+
+u32 BattleRoomTrainer_sizeof(void);
+void FrontierData_Reset(void *data);
+void TowerMessages_Init(void *data);
+void BattleRoomDownload_Init(void *data);
+u8 FrontierData_GetWifiWinCount(FrontierData *data);
+void sub_0202D638(FrontierData *data, u32 value);
+u32 sub_0202D63C(FrontierData *data);
+void BattleRoomDownload_MarkRoom(BattleRoomDownload *download, u32 rank, u32 room, u32 *date);
+void BattleRoomDownload_ClearRoomMarks(BattleRoomDownload *download);
+BOOL BattleRoomDownload_IsDateNewer(u32 *date, u32 *stored);
+BOOL BattleRoomDownload_IsRoomMarked(BattleRoomDownload *download, u32 rank, u32 room, u32 *date);
+void BattleRoomDownload_SetTrainers(BattleRoomDownload *download, void *trainers, u32 rank, u32 room);
+void BattleRoomDownload_GetTrainersRoom(BattleRoomDownload *download, u8 *out);
+void BattleRoomDownload_GetTrainer(BattleRoomDownload *download, BattleTowerOpponent *out, u32 index);
+void BattleRoomDownload_SetLeaders(BattleRoomDownload *download, void *leaders, u32 rank, u32 room);
+void *BattleRoomDownload_CopyLeaders(BattleRoomDownload *download, enum HeapID heapID);
+
+u32 BattleRoomTrainer_sizeof(void) {
+    return sizeof(BattleRoomTrainer);
 }
-void sub_0202D234(u32 addr) {
-    MI_CpuFill8((void *)addr, 0, 0x3C);
+
+void BattleTowerChallenge_Clear(u32 challenge) {
+    MI_CpuFill8((void *)challenge, 0, sizeof(BattleTowerChallenge));
 }
-void sub_0202D240(void *data) {
-    MI_CpuFill8(data, 0, 0x168);
-    ((FrontierData *)data)->rank = 1;
+
+void FrontierData_Reset(void *data) {
+    MI_CpuFill8(data, 0, sizeof(FrontierData));
+    ((FrontierData *)data)->wifiRank = 1;
 }
-void sub_0202D254(void *data) {
+
+void TowerMessages_Init(void *data) {
     MailMessage *messages = data;
     int i;
     for (i = 0; i < 4; i++) {
-        MailMsg_Init_FromTemplate(&messages[i], &_020F682C[i]);
+        MailMsg_Init_FromTemplate(&messages[i], &gTowerMessageTemplates[i]);
     }
 }
-void sub_0202D274(void *data) {
-    MI_CpuFill8(data, 0, 0xB3C);
+
+void BattleRoomDownload_Init(void *data) {
+    MI_CpuFill8(data, 0, sizeof(BattleRoomDownload));
 }
-u32 sub_0202D284(u32 addr, u32 field, void *out) {
-    FrontierRecord *r = (FrontierRecord *)addr;
+
+u32 BattleTowerChallenge_GetField(u32 challenge, u32 field, void *out) {
+    BattleTowerChallenge *c = (BattleTowerChallenge *)challenge;
     switch (field) {
     case 0:
-        return r->mode;
+        return c->towerMode;
     case 1:
-        return r->unk2;
+        return c->battleNumber;
     case 2:
-        return r->unk3;
+        return c->unk3;
     case 3:
-        return r->unk4;
+        return c->unk4;
     case 4:
-        return r->unk6;
+        return c->unk6;
     case 5:
-        MI_CpuCopy8(r->unk8, out, 4);
+        MI_CpuCopy8(c->partySlots, out, 4);
         return 0;
     case 6:
-        MI_CpuCopy8(r->unk2C, out, 16);
+        MI_CpuCopy8(c->multiAllyData, out, 16);
         return 0;
     case 7:
-        return r->flag0;
+        return c->unk0_0;
     case 8:
-        MI_CpuCopy8(r->unkC, out, 28);
+        MI_CpuCopy8(c->trainers, out, 28);
         return 0;
     case 9:
-        return r->group;
+        return c->multiAllyId;
     case 10:
-        return r->unk28;
+        return c->unk28;
     }
     return 0;
 }
-void sub_0202D308(u32 addr, u32 field, void *value) {
-    FrontierRecord *r = (FrontierRecord *)addr;
+
+void BattleTowerChallenge_SetField(u32 challenge, u32 field, void *value) {
+    BattleTowerChallenge *c = (BattleTowerChallenge *)challenge;
     switch (field) {
     case 0:
-        r->mode = *(u8 *)value;
+        c->towerMode = *(u8 *)value;
         break;
     case 1:
-        r->unk2 = *(u8 *)value;
+        c->battleNumber = *(u8 *)value;
         break;
     case 2:
-        r->unk3 = *(u8 *)value;
+        c->unk3 = *(u8 *)value;
         break;
     case 3:
-        r->unk4 = *(u16 *)value;
+        c->unk4 = *(u16 *)value;
         break;
     case 4:
-        r->unk6 = *(u16 *)value;
+        c->unk6 = *(u16 *)value;
         break;
     case 5:
-        MI_CpuCopy8(value, r->unk8, 4);
+        MI_CpuCopy8(value, c->partySlots, 4);
         break;
     case 6:
-        MI_CpuCopy8(value, r->unk2C, 16);
+        MI_CpuCopy8(value, c->multiAllyData, 16);
         break;
     case 7:
-        r->flag0 = *(u8 *)value;
+        c->unk0_0 = *(u8 *)value;
         break;
     case 8:
-        MI_CpuCopy8(value, r->unkC, 28);
+        MI_CpuCopy8(value, c->trainers, 28);
         break;
     case 10:
-        r->unk28 = *(u32 *)value;
+        c->unk28 = *(u32 *)value;
         break;
     case 9:
-        r->group = *(u8 *)value;
+        c->multiAllyId = *(u8 *)value;
         break;
     }
 }
-void sub_0202D3B0(u32 addr, u8 a, u32 b, u32 c) {
-    FrontierRecord *r = (FrontierRecord *)addr;
-    int x = r->unk3 + a;
+
+// Adds to the three Wi-Fi score counters, each capped below its type's maximum.
+void sub_0202D3B0(u32 challenge, u8 a, u32 b, u32 c) {
+    BattleTowerChallenge *ch = (BattleTowerChallenge *)challenge;
+    int x = ch->unk3 + a;
     int y;
     int z;
     if (x < 255) {
-        r->unk3 = x;
+        ch->unk3 = x;
     }
-    y = r->unk4 + b;
+    y = ch->unk4 + b;
     if (y < 65535) {
-        r->unk4 = y;
+        ch->unk4 = y;
     }
-    z = r->unk6 + c;
+    z = ch->unk6 + c;
     if (z < 65535) {
-        r->unk6 = z;
+        ch->unk6 = z;
     }
 }
-u32 sub_0202D3DC(u32 addr) {
-    return ((FrontierRecord *)addr)->flag1;
+
+u32 BattleTowerChallenge_GetSaved(u32 challenge) {
+    return ((BattleTowerChallenge *)challenge)->saved;
 }
-void sub_0202D3E4(u32 addr, u32 value) {
-    ((FrontierRecord *)addr)->flag1 = (u8)value;
+
+void BattleTowerChallenge_SetSaved(u32 challenge, u32 value) {
+    ((BattleTowerChallenge *)challenge)->saved = (u8)value;
 }
+
+// action: 0 get, 1 set, 5 add, 6 subtract; capped at 9999. Returns the new amount.
 u32 FrontierData_BattlePointAction(FrontierData *data, u32 param, u32 action) {
     switch (action) {
     case 1:
         if (param > 9999) {
-            data->points = 9999;
+            data->battlePoints = 9999;
         } else {
-            data->points = param;
+            data->battlePoints = param;
         }
         break;
     case 5: {
-        int points = data->points + param;
+        int points = data->battlePoints + param;
         if (points > 9999) {
-            data->points = 9999;
+            data->battlePoints = 9999;
         } else {
-            data->points = points;
+            data->battlePoints = points;
         }
         break;
     }
     case 6:
-        if (data->points < param) {
-            data->points = 0;
+        if (data->battlePoints < param) {
+            data->battlePoints = 0;
         } else {
-            data->points -= param;
+            data->battlePoints -= param;
         }
         break;
     case 0:
@@ -190,72 +251,69 @@ u32 FrontierData_BattlePointAction(FrontierData *data, u32 param, u32 action) {
     case 4:
         break;
     }
-    return data->points;
+    return data->battlePoints;
 }
+
+// action: 2 reset, 3 count (starts at 1 when the streak flag is not set); returns the count.
 u32 sub_0202D450(FrontierData *data, u32 action) {
     switch (action) {
     case 2:
-        data->streak = 0;
+        data->wifiStreak = 0;
         data->state.flags &= ~16;
         break;
     case 3:
-        if (data->state.bits.active) {
-            data->streak++;
+        if (data->state.bits.wifiStreakActive) {
+            data->wifiStreak++;
         } else {
-            data->streak = 1;
+            data->wifiStreak = 1;
             data->state.flags |= 16;
         }
         break;
     }
-    return data->streak;
+    return data->wifiStreak;
 }
-u32 sub_0202D488(FrontierData *data, u32 action) {
+
+// action: 0 get, 2 reset to 1, 3 up (max 10), 4 down (min 1). Returns the rank.
+u32 FrontierData_WifiRankAction(FrontierData *data, u32 action) {
     switch (action) {
     case 2:
-        data->rank = 1;
+        data->wifiRank = 1;
         break;
     case 3:
-        if (data->rank < 10) {
-            data->rank++;
+        if (data->wifiRank < 10) {
+            data->wifiRank++;
         }
         break;
     case 4:
-        if (data->rank > 1) {
-            data->rank--;
+        if (data->wifiRank > 1) {
+            data->wifiRank--;
         }
         break;
     }
-    return data->rank;
+    return data->wifiRank;
 }
+
 void sub_0202D4B8(FrontierData *data, u32 index, void *src) {
     if (index == 0) {
-        MI_CpuCopy8(src, data->records[1], 0xA8);
+        MI_CpuCopy8(src, data->wifiTeams[1], 0xA8);
     } else {
-        MI_CpuCopy8(src, data->records[0], 0xA8);
+        MI_CpuCopy8(src, data->wifiTeams[0], 0xA8);
     }
 }
+
 void sub_0202D4DC(FrontierData *data, s32 index, UnkStruct_02069528 *dst) {
     if (index == 0) {
-        MI_CpuCopy8(data->records[1], dst, 0xA8);
+        MI_CpuCopy8(data->wifiTeams[1], dst, 0xA8);
     } else {
-        MI_CpuCopy8(data->records[0], dst, 0xA8);
+        MI_CpuCopy8(data->wifiTeams[0], dst, 0xA8);
     }
 }
-u16 sub_0202D4FC(FrontierData *, u32);
-u16 sub_0202D564(FrontierData *);
-u8 sub_0202D568(FrontierData *);
-u32 sub_0202D57C(void *, u32, u32);
-u32 sub_0202D5C4(FrontierData *, u32, u16);
-u32 sub_0202D5DC(FrontierData *, u16, u32);
-void sub_0202D638(FrontierData *, u32);
-u32 sub_0202D63C(FrontierData *);
-void sub_0202D640(SaveData *, int, MailMessage *);
-MailMessage *sub_0202D660(SaveData *, u32);
-u16 sub_0202D4FC(FrontierData *data, u32 addr) {
-    FrontierRecord *r = (FrontierRecord *)addr;
-    u16 base = 1000 * (r->unk2 - 1);
-    u16 a = 10 * r->unk4;
-    u16 b = 20 * r->unk3;
+
+u16 FrontierData_CalcWifiScore(FrontierData *data, u32 challenge) {
+    BattleTowerChallenge *c = (BattleTowerChallenge *)challenge;
+    u16 base = 1000 * (c->battleNumber - 1);
+    u16 a = 10 * c->unk4;
+    u16 b = 20 * c->unk3;
     u16 score;
     u16 time;
     if (a + b > 950) {
@@ -263,59 +321,66 @@ u16 sub_0202D4FC(FrontierData *data, u32 addr) {
     } else {
         score = 950 - (a + b);
     }
-    if (r->unk6 > 970) {
+    if (c->unk6 > 970) {
         time = 0;
     } else {
-        time = (1000 - r->unk6) / 30;
+        time = (1000 - c->unk6) / 30;
     }
     u16 result = (u16)(base + score + time);
-    data->score = result;
+    data->wifiScore = result;
     return result;
 }
-u16 sub_0202D564(FrontierData *data) {
-    return data->score;
+
+u16 FrontierData_GetWifiScore(FrontierData *data) {
+    return data->wifiScore;
 }
-u8 sub_0202D568(FrontierData *data) {
-    return data->score / 1000;
+
+u8 FrontierData_GetWifiWinCount(FrontierData *data) {
+    return data->wifiScore / 1000;
 }
-u32 sub_0202D57C(void *ptr, u32 index, u32 action) {
+
+// action: 0 get, 2 reset, 3 count up (max 65534). Index 5 has no counter, index 6 uses slot 5.
+u32 FrontierData_TowerRoundAction(void *ptr, u32 towerMode, u32 action) {
     FrontierData *data = ptr;
-    if (index == 5) {
+    if (towerMode == 5) {
         return 0;
     }
-    if (index == 6) {
-        index = 5;
+    if (towerMode == 6) {
+        towerMode = 5;
     }
     switch (action) {
     case 2:
-        data->stats[index] = 0;
+        data->towerRounds[towerMode] = 0;
         break;
     case 3:
-        if (data->stats[index] < 65534) {
-            data->stats[index]++;
+        if (data->towerRounds[towerMode] < 65534) {
+            data->towerRounds[towerMode]++;
         }
         break;
     }
-    return data->stats[index];
+    return data->towerRounds[towerMode];
 }
-u32 sub_0202D5C4(FrontierData *data, u32 index, u16 value) {
-    if (index == 5) {
+
+u32 FrontierData_SetTowerRound(FrontierData *data, u32 towerMode, u16 round) {
+    if (towerMode == 5) {
         return 0;
     }
-    if (index == 6) {
-        index = 5;
+    if (towerMode == 6) {
+        towerMode = 5;
     }
-    data->stats[index] = value;
-    return data->stats[index];
+    data->towerRounds[towerMode] = round;
+    return data->towerRounds[towerMode];
 }
-u32 sub_0202D5DC(FrontierData *data, u16 index, u32 action) {
+
+// action: 0 get, 1 set, 2 clear.
+u32 FrontierData_FlagAction(FrontierData *data, u16 flag, u32 action) {
     u16 mask = 1;
     u16 i;
-    if (index >= 16) {
+    if (flag >= 16) {
         GF_ASSERT(FALSE);
         return 0;
     }
-    for (i = 0; i < index; i++) {
+    for (i = 0; i < flag; i++) {
         mask <<= 1;
     }
     switch (action) {
@@ -328,172 +393,153 @@ u32 sub_0202D5DC(FrontierData *data, u16 index, u32 action) {
         data->state.flags |= mask;
         break;
     case 0:
-        return (data->state.flags >> index) & 1;
+        return (data->state.flags >> flag) & 1;
     }
     return 0;
 }
+
 void sub_0202D638(FrontierData *data, u32 value) {
     data->unk4 = value;
 }
+
 u32 sub_0202D63C(FrontierData *data) {
     return data->unk4;
 }
-void sub_0202D640(SaveData *save, int index, MailMessage *message) {
+
+void Save_Frontier_SetTowerMessage(SaveData *save, int index, MailMessage *message) {
     MailMessage *messages = (MailMessage *)((u8 *)Save_Frontier_GetStatic(save) + 0xABC);
     MailMsg_Copy(&messages[index], message);
 }
-MailMessage *sub_0202D660(SaveData *save, u32 index) {
+
+MailMessage *Save_Frontier_GetTowerMessage(SaveData *save, u32 index) {
     MailMessage *messages = (MailMessage *)((u8 *)Save_Frontier_GetStatic(save) + 0xABC);
     return &messages[index];
 }
-typedef struct FrontierDownloadRecord {
-    u8 team[0xA8];
-    u16 name[16];
-    u8 systemName : 1, gender : 1, pad : 6;
-    u8 trainerClass;
-    u8 messages[24];
-    u16 score;
-} FrontierDownloadRecord;
-typedef struct FrontierDownload {
-    u32 date;
-    u8 bits[250];
-    u8 availableA, availableB;
-    u8 metaA0, metaA1, metaB0, metaB1;
-    FrontierDownloadRecord recordsA[7];
-    Ov67DownloadRecords recordsB;
-} FrontierDownload;
-typedef struct FrontierOpponent {
-    u32 id;
-    u16 trainerClass;
-    u8 pad6[2];
-    u16 name[8];
-    u8 messages[24];
-    u8 team[0xA8];
-} FrontierOpponent;
-void sub_0202D678(FrontierDownload *, u32, u32, u32 *);
-void sub_0202D6DC(FrontierDownload *);
-BOOL sub_0202D6F8(u32 *, u32 *);
-BOOL sub_0202D720(FrontierDownload *, u32, u32, u32 *);
-u32 sub_0202D7B0(u32);
-u32 sub_0202D7B8(u32);
-void sub_0202D7C0(FrontierDownload *, void *, u32, u32);
-void sub_0202D7F0(FrontierDownload *, u8 *);
-void sub_0202D804(FrontierDownload *, FrontierOpponent *, u32);
-void sub_0202D8A4(FrontierDownload *, void *, u32, u32);
-void sub_0202D8D0(u32, u8 *);
-void *sub_0202D8E4(FrontierDownload *, enum HeapID);
-u32 sub_0202D908(SaveData *);
-u32 sub_0202D928(SaveData *);
-void sub_0202D678(FrontierDownload *data, u32 group, u32 entry, u32 *date) {
+
+void BattleRoomDownload_MarkRoom(BattleRoomDownload *download, u32 rank, u32 room, u32 *date) {
     u8 mask = 1;
-    if (entry != 0 && entry <= 200 && group != 0 && group <= 10) {
-        u16 index = (entry - 1) + (group - 1) * 200;
+    if (room != 0 && room <= 200 && rank != 0 && rank <= 10) {
+        u16 index = (room - 1) + (rank - 1) * 200;
         u8 bit = index % 8;
         u8 byte = index / 8;
         mask <<= bit;
-        data->bits[byte] |= mask;
-        data->date = (date[0] << 24) | ((date[1] << 24) >> 8) | ((date[2] << 24) >> 16) | date[3];
+        download->roomMarks[byte] |= mask;
+        download->markDate = (date[0] << 24) | ((date[1] << 24) >> 8) | ((date[2] << 24) >> 16) | date[3];
     }
 }
-void sub_0202D6DC(FrontierDownload *data) {
-    MI_CpuFill8(data->bits, 0, 250);
-    MI_CpuFill8(&data->date, 0, 4);
+
+void BattleRoomDownload_ClearRoomMarks(BattleRoomDownload *download) {
+    MI_CpuFill8(download->roomMarks, 0, 250);
+    MI_CpuFill8(&download->markDate, 0, 4);
 }
-BOOL sub_0202D6F8(u32 *a, u32 *b) {
-    if (a[0] > b[0]) {
+
+BOOL BattleRoomDownload_IsDateNewer(u32 *date, u32 *stored) {
+    if (date[0] > stored[0]) {
         return TRUE;
     }
-    if (a[1] > b[1]) {
+    if (date[1] > stored[1]) {
         return TRUE;
     }
-    if (a[2] > b[2]) {
+    if (date[2] > stored[2]) {
         return TRUE;
     }
     return FALSE;
 }
-BOOL sub_0202D720(FrontierDownload *data, u32 group, u32 entry, u32 *date) {
+
+BOOL BattleRoomDownload_IsRoomMarked(BattleRoomDownload *download, u32 rank, u32 room, u32 *date) {
     u8 mask = 1;
-    u32 previous[4];
+    u32 stored[4];
     u16 index;
     u8 bit;
     u8 byte;
-    if (entry > 200 || group > 10) {
+    if (room > 200 || rank > 10) {
         return FALSE;
     }
-    u32 stored = data->date;
-    previous[0] = (u8)(stored >> 24);
-    previous[1] = (u8)(stored >> 16);
-    previous[2] = (u8)(stored >> 8);
-    previous[3] = (u8)stored;
-    if (sub_0202D6F8(date, previous)) {
-        sub_0202D6DC(data);
+    u32 markDate = download->markDate;
+    stored[0] = (u8)(markDate >> 24);
+    stored[1] = (u8)(markDate >> 16);
+    stored[2] = (u8)(markDate >> 8);
+    stored[3] = (u8)markDate;
+    if (BattleRoomDownload_IsDateNewer(date, stored)) {
+        BattleRoomDownload_ClearRoomMarks(download);
         return FALSE;
     }
-    index = (group - 1) * 200 + (entry - 1);
+    index = (rank - 1) * 200 + (room - 1);
     bit = index % 8;
     byte = index / 8;
     mask <<= bit;
-    if (data->bits[byte] & mask) {
+    if (download->roomMarks[byte] & mask) {
         return TRUE;
     }
     return FALSE;
 }
-u32 sub_0202D7B0(u32 addr) {
-    return ((FrontierDownload *)addr)->availableA;
+
+u32 BattleRoomDownload_HasTrainers(u32 download) {
+    return ((BattleRoomDownload *)download)->hasTrainers;
 }
-u32 sub_0202D7B8(u32 addr) {
-    return ((FrontierDownload *)addr)->availableB;
+
+u32 BattleRoomDownload_HasLeaders(u32 download) {
+    return ((BattleRoomDownload *)download)->hasLeaders;
 }
-void sub_0202D7C0(FrontierDownload *data, void *records, u32 a, u32 b) {
-    MI_CpuCopy8(records, data->recordsA, 0x63C);
-    data->metaA1 = a;
-    data->metaA0 = b;
-    data->availableA = 1;
+
+void BattleRoomDownload_SetTrainers(BattleRoomDownload *download, void *trainers, u32 rank, u32 room) {
+    MI_CpuCopy8(trainers, download->trainers, sizeof(download->trainers));
+    download->trainersRank = rank;
+    download->trainersRoom = room;
+    download->hasTrainers = 1;
 }
-void sub_0202D7F0(FrontierDownload *data, u8 *out) {
-    out[0] = data->metaA1;
-    out[1] = data->metaA0;
+
+void BattleRoomDownload_GetTrainersRoom(BattleRoomDownload *download, u8 *out) {
+    out[0] = download->trainersRank;
+    out[1] = download->trainersRoom;
 }
-void sub_0202D804(FrontierDownload *data, FrontierOpponent *out, u32 index) {
-    FrontierDownloadRecord *records = data->recordsA;
-    u32 offset = index * sizeof(FrontierDownloadRecord);
-    u8 *messages = out->team;
+
+void BattleRoomDownload_GetTrainer(BattleRoomDownload *download, BattleTowerOpponent *out, u32 index) {
+    BattleRoomTrainer *trainers = download->trainers;
+    u32 offset = index * sizeof(BattleRoomTrainer);
+    u8 *team = out->team;
     out->id = 10000;
-    out->trainerClass = ((FrontierDownloadRecord *)((u8 *)records + offset))->trainerClass;
-    if (((FrontierDownloadRecord *)((u8 *)records + offset))->systemName) {
+    out->trainerClass = ((BattleRoomTrainer *)((u8 *)trainers + offset))->trainerClass;
+    if (((BattleRoomTrainer *)((u8 *)trainers + offset))->useDefaultName) {
         MsgData *msg = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, (NarcId)27, 28, (enum HeapID)11);
-        ReadMsgDataIntoU16Array(msg, (((FrontierDownloadRecord *)((u8 *)records + offset))->gender) + 33, out->name);
+        ReadMsgDataIntoU16Array(msg, (((BattleRoomTrainer *)((u8 *)trainers + offset))->gender) + 33, out->name);
         DestroyMsgData(msg);
     } else {
-        MI_CpuCopy8(((FrontierDownloadRecord *)((u8 *)records + offset))->name, out->name, 16);
+        MI_CpuCopy8(((BattleRoomTrainer *)((u8 *)trainers + offset))->name, out->name, 16);
     }
-    MI_CpuCopy8(((FrontierDownloadRecord *)((u8 *)records + offset))->messages, out->messages, 8);
-    MI_CpuCopy8(((FrontierDownloadRecord *)((u8 *)records + offset))->messages + 8, out->messages + 8, 8);
-    MI_CpuCopy8(((FrontierDownloadRecord *)((u8 *)records + offset))->messages + 16, out->messages + 16, 8);
-    MI_CpuCopy8(((FrontierDownloadRecord *)((u8 *)records + offset))->team, messages, 0xA8);
+    MI_CpuCopy8(((BattleRoomTrainer *)((u8 *)trainers + offset))->messages, out->messages, 8);
+    MI_CpuCopy8(((BattleRoomTrainer *)((u8 *)trainers + offset))->messages + 8, out->messages + 8, 8);
+    MI_CpuCopy8(((BattleRoomTrainer *)((u8 *)trainers + offset))->messages + 16, out->messages + 16, 8);
+    MI_CpuCopy8(((BattleRoomTrainer *)((u8 *)trainers + offset))->team, team, 0xA8);
 }
-void sub_0202D8A4(FrontierDownload *data, void *records, u32 a, u32 b) {
-    MI_CpuCopy8(records, data->recordsB, 0x3FC);
-    data->metaB1 = a;
-    data->metaB0 = b;
-    data->availableB = 1;
+
+void BattleRoomDownload_SetLeaders(BattleRoomDownload *download, void *leaders, u32 rank, u32 room) {
+    MI_CpuCopy8(leaders, download->leaders, sizeof(download->leaders));
+    download->leadersRank = rank;
+    download->leadersRoom = room;
+    download->hasLeaders = 1;
 }
-void sub_0202D8D0(u32 addr, u8 *out) {
-    FrontierDownload *data = (FrontierDownload *)addr;
-    out[0] = data->metaB1;
-    out[1] = data->metaB0;
+
+void BattleRoomDownload_GetLeadersRoom(u32 addr, u8 *out) {
+    BattleRoomDownload *download = (BattleRoomDownload *)addr;
+    out[0] = download->leadersRank;
+    out[1] = download->leadersRoom;
 }
-void *sub_0202D8E4(FrontierDownload *data, enum HeapID heapId) {
-    void *out = Heap_Alloc(heapId, 0x3FC);
-    MI_CpuCopy8(data->recordsB, out, 0x3FC);
+
+void *BattleRoomDownload_CopyLeaders(BattleRoomDownload *download, enum HeapID heapID) {
+    void *out = Heap_Alloc(heapID, sizeof(download->leaders));
+    MI_CpuCopy8(download->leaders, out, sizeof(download->leaders));
     return out;
 }
-u32 sub_0202D908(SaveData *save) {
+
+u32 Save_BattleTowerChallenge_Get(SaveData *save) {
     return (u32)Save_Frontier_GetStatic(save) + 0x8E0;
 }
+
 FrontierData *Save_FrontierData_Get(SaveData *save) {
     return (FrontierData *)((u8 *)Save_Frontier_GetStatic(save) + 0x954);
 }
-u32 sub_0202D928(SaveData *save) {
+
+u32 Save_BattleRoomDownload_Get(SaveData *save) {
     return (u32)Save_Frontier_GetStatic(save) + 0xADC;
 }

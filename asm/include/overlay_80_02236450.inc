@@ -4,9 +4,9 @@
 .public Heap_Free
 .public GF_AssertFail
 .public PlayerProfile_GetVersion
-.public sub_0202D7B0
-.public sub_0202D804
-.public sub_0202D928
+.public BattleRoomDownload_HasTrainers
+.public BattleRoomDownload_GetTrainer
+.public Save_BattleRoomDownload_Get
 .public sub_02034818
 .public GetFrontierTrainerIVs
 .public FrontierFieldSystem_0204B510

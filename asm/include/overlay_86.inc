@@ -101,7 +101,7 @@
 .public String_Delete
 .public Save_PlayerData_GetOptionsAddr
 .public Options_GetFrame
-.public sub_0202D5DC
+.public FrontierData_FlagAction
 .public Save_FrontierData_Get
 .public sub_02030AD4
 .public sub_02030AE8

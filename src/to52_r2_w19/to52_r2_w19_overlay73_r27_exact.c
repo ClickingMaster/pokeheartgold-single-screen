@@ -30,7 +30,7 @@ int ov73_021E926C(void *p) {
         PlaySE(0x5DC);
     } else if (U32(gSystem, 0x48) & 1) {
         ov00_021ECB94(date, time);
-        if (sub_0202D720(PTR(PTR(p, 0), 4), U32(p, 0x94), U32(p, 0x9C), date)) {
+        if (BattleRoomDownload_IsRoomMarked(PTR(PTR(p, 0), 4), U32(p, 0x94), U32(p, 0x9C), date)) {
             U32(p, 0x1C) = 0x14;
         } else {
             U32(p, 0x1C) = 0x10;

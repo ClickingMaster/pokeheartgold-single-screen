@@ -290,7 +290,7 @@ static void BattleControllerPlayer_SelectionScreenInput(BattleSystem *battleSyst
                 break;
             }
 
-            if ((ov12_02261264(BattleSystem_GetOpponentData(battleSystem, battlerId)) == 1) || (ctx->totalTurns)) {
+            if ((OpponentData_GetInputMode(BattleSystem_GetOpponentData(battleSystem, battlerId)) == 1) || (ctx->totalTurns)) {
                 BattleController_EmitSelectCommand(battleSystem, ctx, battlerId, ctx->selectedMonIndex[battlerId]);
                 ctx->unk_0[battlerId] = SSI_STATE_1;
             } else {
@@ -305,7 +305,7 @@ static void BattleControllerPlayer_SelectionScreenInput(BattleSystem *battleSyst
                     continue;
                 }
 
-                if (ov12_02261264(BattleSystem_GetOpponentData(battleSystem, battlerIdCheck)) != 0x1) {
+                if (OpponentData_GetInputMode(BattleSystem_GetOpponentData(battleSystem, battlerIdCheck)) != 0x1) {
                     continue;
                 }
 
@@ -3218,13 +3218,13 @@ static void ov12_0224D03C(BattleSystem *battleSystem, BattleContext *ctx) {
         int battlerId;
         int maxBattlers = BattleSystem_GetMaxBattlers(battleSystem);
         OpponentData *opponent = BattleSystem_GetOpponentData(battleSystem, ctx->battlerIdAttacker);
-        u8 flag = ov12_02261258(opponent);
+        u8 flag = OpponentData_GetBattlerType(opponent);
 
         do {
             battlerId = ctx->turnOrder[ctx->unk_217E++];
             if (!(ctx->switchInFlag & MaskOfFlagNo(battlerId)) && ctx->battleMons[battlerId].hp != 0) {
                 opponent = BattleSystem_GetOpponentData(battleSystem, battlerId);
-                if (((flag & 1) && !(ov12_02261258(opponent) & 1)) || (!(flag & 1) && ov12_02261258(opponent) & 1)) {
+                if (((flag & 1) && !(OpponentData_GetBattlerType(opponent) & 1)) || (!(flag & 1) && OpponentData_GetBattlerType(opponent) & 1)) {
                     ov12_02252D14(battleSystem, ctx);
                     ctx->battlerIdTarget = battlerId;
                     ctx->command = CONTROLLER_COMMAND_23;
@@ -3539,7 +3539,7 @@ static BOOL ov12_0224D7EC(BattleSystem *battleSystem, BattleContext *ctx) {
                 }
 
                 if (hp == 0) {
-                    if (ov12_02261258(opponent) & 1) {
+                    if (OpponentData_GetBattlerType(opponent) & 1) {
                         battleOutcome |= BATTLE_RESULT_WIN;
                     } else {
                         battleOutcome |= BATTLE_RESULT_LOSE;
@@ -3560,7 +3560,7 @@ static BOOL ov12_0224D7EC(BattleSystem *battleSystem, BattleContext *ctx) {
                 }
 
                 if (hp == 0) {
-                    if (ov12_02261258(opponent) & 1) {
+                    if (OpponentData_GetBattlerType(opponent) & 1) {
                         battleOutcome |= BATTLE_RESULT_WIN;
                     } else {
                         battleOutcome |= BATTLE_RESULT_LOSE;

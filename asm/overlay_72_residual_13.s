@@ -413,7 +413,7 @@ ov72_02239784: ; 0x02239784
 	lsr r1, r1, #0x18
 	lsr r2, r2, #0x18
 	add r3, sp, #0
-	bl sub_0202D720
+	bl BattleRoomDownload_IsRoomMarked
 	cmp r0, #0
 	beq _022397CC
 	mov r0, #0x14

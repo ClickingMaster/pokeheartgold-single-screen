@@ -218,7 +218,7 @@
 .public Save_Pokedex_Get
 .public Options_GetTextFrameDelay
 .public Options_GetFrame
-.public sub_0202D660
+.public Save_Frontier_GetTowerMessage
 .public Save_Pokewalker_Get
 .public sub_02032624
 .public sub_0203263C

@@ -26,7 +26,7 @@
 #include "script_manager.h"
 #include "sys_flags.h"
 #include "sys_vars.h"
-#include "unk_0202D230.h"
+#include "frontier_data_access.h"
 #include "unk_02030A98.h"
 #include "unk_02035900.h"
 #include "unk_020379A0.h"
@@ -77,10 +77,10 @@ BOOL ScrCmd_412(ScriptContext *ctx) {
         ResetSystem();
         break;
     case 3:
-        sub_0204A698(sub_0202D908(ctx->fieldSystem->saveData));
+        sub_0204A698(Save_BattleTowerChallenge_Get(ctx->fieldSystem->saveData));
         break;
     case 4:
-        *result = sub_0204A6A0(sub_0202D908(ctx->fieldSystem->saveData));
+        *result = sub_0204A6A0(Save_BattleTowerChallenge_Get(ctx->fieldSystem->saveData));
         break;
     case 5:
         sub_0204A6A8(ctx->fieldSystem);
@@ -285,7 +285,7 @@ BOOL ScrCmd_418(ScriptContext *ctx) {
     u16 *unk4 = ScriptGetVarPointer(ctx);
     u16 *unk6 = ScriptGetVarPointer(ctx);
     u8 unk[2];
-    sub_0202D8D0(sub_0202D928(ctx->fieldSystem->saveData), unk);
+    BattleRoomDownload_GetLeadersRoom(Save_BattleRoomDownload_Get(ctx->fieldSystem->saveData), unk);
     *unk4 = unk[0];
     *unk6 = unk[1];
     return FALSE;
@@ -293,7 +293,7 @@ BOOL ScrCmd_418(ScriptContext *ctx) {
 
 BOOL ScrCmd_419(ScriptContext *ctx) {
     u16 *unk = ScriptGetVarPointer(ctx);
-    *unk = sub_0202D7B8(sub_0202D928(ctx->fieldSystem->saveData));
+    *unk = BattleRoomDownload_HasLeaders(Save_BattleRoomDownload_Get(ctx->fieldSystem->saveData));
     return FALSE;
 }
 

@@ -652,66 +652,66 @@
 	.public TradeSequence_SetCameraPerspectiveAngle
 	.public TradeSequence_InitCamera
 	.public TradeSequence_FreeCamera
-	.public ov71_022478C8
-	.public ov71_02247924
-	.public ov71_02247990
-	.public ov71_022479C8
-	.public ov71_02247A10
-	.public ov71_02247C34
-	.public ov71_02247C60
-	.public ov71_02247DEC
-	.public ov71_02247ED0
-	.public ov71_02247F9C
-	.public ov71_02247FF8
-	.public ov71_0224809C
-	.public ov71_022480C0
-	.public ov71_02248110
-	.public ov71_02248120
-	.public ov71_02248140
-	.public ov71_0224817C
-	.public ov71_022481C8
-	.public ov71_022481D8
-	.public ov71_022481EC
-	.public ov71_0224820C
-	.public ov71_022482EC
-	.public ov71_02248358
-	.public ov71_022483AC
-	.public ov71_022483E4
-	.public ov71_02248408
-	.public ov71_0224843C
-	.public ov71_02248484
-	.public ov71_02248530
-	.public ov71_02248604
-	.public ov71_0224889C
-	.public ov71_022488E4
-	.public ov71_022489F8
-	.public ov71_02248A08
-	.public ov71_02248B24
-	.public ov71_02248B54
-	.public ov71_02248B60
-	.public ov71_02248BBC
-	.public ov71_02248C24
-	.public ov71_02248CF4
-	.public ov71_02248D0C
-	.public ov71_02248D80
-	.public ov71_02248E04
-	.public ov71_02248E30
-	.public ov71_02248E78
-	.public ov71_02248EB4
-	.public ov71_02248F8C
-	.public ov71_02248FC8
-	.public ov71_02249004
-	.public ov71_0224903C
-	.public ov71_02249184
-	.public ov71_02249208
-	.public ov71_02249254
-	.public ov71_02249260
-	.public ov71_0224926C
-	.public ov71_022492FC
-	.public ov71_02249358
-	.public ov71_022493B8
-	.public ov71_02249414
-	.public ov71_02249460
+	.public TradeSequenceSend_Init
+	.public TradeSequenceSend_Exit
+	.public TradeSequenceSend_Main
+	.public TradeSequenceSend_Draw
+	.public TradeSequenceSend_SetupScreens
+	.public TradeSequenceSend_WaitFadeIn
+	.public TradeSequenceSend_ShowMessages
+	.public TradeSequenceSend_ReplaceMonWithModel
+	.public TradeSequenceSend_Init3D
+	.public TradeSequenceSend_CreateMonPic
+	.public TradeSequenceSend_CreateSprites
+	.public TradeSequenceSend_DeleteSprites
+	.public TradeSequenceSend_StartBrightness
+	.public TradeSequenceSend_IsBrightnessDone
+	.public TradeSequenceSend_StopBrightness
+	.public TradeSequenceSend_BrightnessTask
+	.public TradeSequenceSend_StartBounce
+	.public TradeSequenceSend_IsBounceDone
+	.public TradeSequenceSend_GetBounceCount
+	.public TradeSequenceSend_StopBounce
+	.public TradeSequenceSend_BounceTask
+	.public TradeSequenceDepart_Init
+	.public TradeSequenceDepart_Exit
+	.public TradeSequenceDepart_Main
+	.public TradeSequenceDepart_Draw
+	.public TradeSequenceDepart_SetupScreens
+	.public TradeSequenceDepart_WaitBgZoom
+	.public TradeSequenceDepart_FlyOffTopScreen
+	.public TradeSequenceDepart_FlyThroughBottomScreen
+	.public TradeSequenceDepart_InitBgs
+	.public TradeSequenceDepart_FreeBgs
+	.public TradeSequenceDepart_Init3D
+	.public TradeSequenceDepart_Free3D
+	.public TradeSequenceDepart_CreateStreaks
+	.public TradeSequenceDepart_DeleteStreaks
+	.public TradeSequenceDepart_RequestScreenSwap
+	.public TradeSequenceDepart_ScreenSwapTask
+	.public TradeSequenceDepart_StartStreakFall
+	.public TradeSequenceDepart_StreakFallTask
+	.public TradeSequenceDepart_StopStreakFall
+	.public TradeSequenceDepart_StartScroll
+	.public TradeSequenceDepart_ScrollTask
+	.public TradeSequenceDepart_StopScroll
+	.public TradeSequenceDepart_StartAlphaFade
+	.public TradeSequenceDepart_AlphaFadeTask
+	.public TradeSequenceDepart_StartFlight
+	.public TradeSequenceDepart_SetAngleSpeed
+	.public TradeSequenceDepart_SetRadius
+	.public TradeSequenceDepart_SetSpin
+	.public TradeSequenceDepart_UpdateFlight
+	.public TradeSequenceDepart_FlightTask_Appear
+	.public TradeSequenceDepart_FlightTask_FlyAway
+	.public TradeSequenceDepart_IsFlightOutOfView
+	.public TradeSequenceDepart_IsFlightFlyingAway
+	.public TradeSequenceDepart_RestartFlightFromBelow
+	.public TradeSequenceDepart_FlightTask_Rise
+	.public TradeSequenceDepart_FlightTask_Hover
+	.public TradeSequenceDepart_FlightTask_Sink
+	.public TradeSequenceDepart_FlightTask_Pause
+	.public TradeSequenceDepart_FlightTask_Leave
 	.public ov71_022494A0
 	.public ov71_022494D0
 	.public ov71_02249500
@@ -809,19 +809,19 @@
 	.public sTradeSequenceSceneMain
 	.public sTradeSequenceSceneExit
 	.public sTradeSequenceSceneModes
-	.public ov71_0224BC5C
-	.public ov71_0224BC64
-	.public ov71_0224BC74
-	.public ov71_0224BC84
-	.public ov71_0224BCA0
-	.public ov71_0224BCBC
-	.public ov71_0224BCE4
-	.public ov71_0224BCEC
-	.public ov71_0224BCFC
-	.public ov71_0224BD0C
-	.public ov71_0224BD1C
-	.public ov71_0224BD38
-	.public ov71_0224BD54
+	.public sTradeSequenceSendModelRotation
+	.public sTradeSequenceSendStates
+	.public sTradeSequenceSendGraphicsModes
+	.public sTradeSequenceSendBgTemplate_Text
+	.public sTradeSequenceSendBgTemplate_Background
+	.public sTradeSequenceSendGraphicsBanks
+	.public sTradeSequenceDepartPaletteOffsets
+	.public sTradeSequenceDepartGraphicsModes
+	.public sTradeSequenceDepartStates
+	.public sTradeSequenceDepartEdgeColors
+	.public sTradeSequenceDepartBgTemplate_Layer2
+	.public sTradeSequenceDepartBgTemplate_Layer3
+	.public sTradeSequenceDepartGraphicsBanks
 	.public ov71_0224BD7C
 	.public ov71_0224BD84
 	.public ov71_0224BD94
@@ -853,7 +853,7 @@
 	.public ov71_0224BFDC
 	.public sTradeSequenceDeferredFrees
 	.public ov71_0224C0C4
-	.public ov71_0224C0C8
+	.public sTradeSequenceDepartCameraAngle
 	.public ov71_0224C0D0
 	.include "overlay_71.inc"
 	.include "global.inc"
@@ -892,23 +892,23 @@
 	.public TradeSequence_SetCameraPerspectiveType
 	.public TradeSequence_SetCameraPerspectiveAngle
 	.public TradeSequence_FreeCamera
-	.public ov71_02247990
-	.public ov71_02247C34
-	.public ov71_0224809C
-	.public ov71_02248110
-	.public ov71_02248120
-	.public ov71_022481C8
-	.public ov71_022481D8
-	.public ov71_022481EC
-	.public ov71_022483AC
-	.public ov71_022483E4
-	.public ov71_022489F8
-	.public ov71_02248B24
-	.public ov71_02248B54
-	.public ov71_02248CF4
-	.public ov71_02248E04
-	.public ov71_02249254
-	.public ov71_02249260
+	.public TradeSequenceSend_Main
+	.public TradeSequenceSend_WaitFadeIn
+	.public TradeSequenceSend_DeleteSprites
+	.public TradeSequenceSend_IsBrightnessDone
+	.public TradeSequenceSend_StopBrightness
+	.public TradeSequenceSend_IsBounceDone
+	.public TradeSequenceSend_GetBounceCount
+	.public TradeSequenceSend_StopBounce
+	.public TradeSequenceDepart_Main
+	.public TradeSequenceDepart_Draw
+	.public TradeSequenceDepart_Free3D
+	.public TradeSequenceDepart_DeleteStreaks
+	.public TradeSequenceDepart_RequestScreenSwap
+	.public TradeSequenceDepart_StopStreakFall
+	.public TradeSequenceDepart_StopScroll
+	.public TradeSequenceDepart_IsFlightOutOfView
+	.public TradeSequenceDepart_IsFlightFlyingAway
 	.public ov71_022494A0
 	.public ov71_022494D0
 	.public ov71_02249500

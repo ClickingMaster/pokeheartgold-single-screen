@@ -652,66 +652,66 @@
 	.public TradeSequence_SetCameraPerspectiveAngle
 	.public TradeSequence_InitCamera
 	.public TradeSequence_FreeCamera
-	.public ov71_022478C8
-	.public ov71_02247924
-	.public ov71_02247990
-	.public ov71_022479C8
-	.public ov71_02247A10
-	.public ov71_02247C34
-	.public ov71_02247C60
-	.public ov71_02247DEC
-	.public ov71_02247ED0
-	.public ov71_02247F9C
-	.public ov71_02247FF8
-	.public ov71_0224809C
-	.public ov71_022480C0
-	.public ov71_02248110
-	.public ov71_02248120
-	.public ov71_02248140
-	.public ov71_0224817C
-	.public ov71_022481C8
-	.public ov71_022481D8
-	.public ov71_022481EC
-	.public ov71_0224820C
-	.public ov71_022482EC
-	.public ov71_02248358
-	.public ov71_022483AC
-	.public ov71_022483E4
-	.public ov71_02248408
-	.public ov71_0224843C
-	.public ov71_02248484
-	.public ov71_02248530
-	.public ov71_02248604
-	.public ov71_0224889C
-	.public ov71_022488E4
-	.public ov71_022489F8
-	.public ov71_02248A08
-	.public ov71_02248B24
-	.public ov71_02248B54
-	.public ov71_02248B60
-	.public ov71_02248BBC
-	.public ov71_02248C24
-	.public ov71_02248CF4
-	.public ov71_02248D0C
-	.public ov71_02248D80
-	.public ov71_02248E04
-	.public ov71_02248E30
-	.public ov71_02248E78
-	.public ov71_02248EB4
-	.public ov71_02248F8C
-	.public ov71_02248FC8
-	.public ov71_02249004
-	.public ov71_0224903C
-	.public ov71_02249184
-	.public ov71_02249208
-	.public ov71_02249254
-	.public ov71_02249260
-	.public ov71_0224926C
-	.public ov71_022492FC
-	.public ov71_02249358
-	.public ov71_022493B8
-	.public ov71_02249414
-	.public ov71_02249460
+	.public TradeSequenceSend_Init
+	.public TradeSequenceSend_Exit
+	.public TradeSequenceSend_Main
+	.public TradeSequenceSend_Draw
+	.public TradeSequenceSend_SetupScreens
+	.public TradeSequenceSend_WaitFadeIn
+	.public TradeSequenceSend_ShowMessages
+	.public TradeSequenceSend_ReplaceMonWithModel
+	.public TradeSequenceSend_Init3D
+	.public TradeSequenceSend_CreateMonPic
+	.public TradeSequenceSend_CreateSprites
+	.public TradeSequenceSend_DeleteSprites
+	.public TradeSequenceSend_StartBrightness
+	.public TradeSequenceSend_IsBrightnessDone
+	.public TradeSequenceSend_StopBrightness
+	.public TradeSequenceSend_BrightnessTask
+	.public TradeSequenceSend_StartBounce
+	.public TradeSequenceSend_IsBounceDone
+	.public TradeSequenceSend_GetBounceCount
+	.public TradeSequenceSend_StopBounce
+	.public TradeSequenceSend_BounceTask
+	.public TradeSequenceDepart_Init
+	.public TradeSequenceDepart_Exit
+	.public TradeSequenceDepart_Main
+	.public TradeSequenceDepart_Draw
+	.public TradeSequenceDepart_SetupScreens
+	.public TradeSequenceDepart_WaitBgZoom
+	.public TradeSequenceDepart_FlyOffTopScreen
+	.public TradeSequenceDepart_FlyThroughBottomScreen
+	.public TradeSequenceDepart_InitBgs
+	.public TradeSequenceDepart_FreeBgs
+	.public TradeSequenceDepart_Init3D
+	.public TradeSequenceDepart_Free3D
+	.public TradeSequenceDepart_CreateStreaks
+	.public TradeSequenceDepart_DeleteStreaks
+	.public TradeSequenceDepart_RequestScreenSwap
+	.public TradeSequenceDepart_ScreenSwapTask
+	.public TradeSequenceDepart_StartStreakFall
+	.public TradeSequenceDepart_StreakFallTask
+	.public TradeSequenceDepart_StopStreakFall
+	.public TradeSequenceDepart_StartScroll
+	.public TradeSequenceDepart_ScrollTask
+	.public TradeSequenceDepart_StopScroll
+	.public TradeSequenceDepart_StartAlphaFade
+	.public TradeSequenceDepart_AlphaFadeTask
+	.public TradeSequenceDepart_StartFlight
+	.public TradeSequenceDepart_SetAngleSpeed
+	.public TradeSequenceDepart_SetRadius
+	.public TradeSequenceDepart_SetSpin
+	.public TradeSequenceDepart_UpdateFlight
+	.public TradeSequenceDepart_FlightTask_Appear
+	.public TradeSequenceDepart_FlightTask_FlyAway
+	.public TradeSequenceDepart_IsFlightOutOfView
+	.public TradeSequenceDepart_IsFlightFlyingAway
+	.public TradeSequenceDepart_RestartFlightFromBelow
+	.public TradeSequenceDepart_FlightTask_Rise
+	.public TradeSequenceDepart_FlightTask_Hover
+	.public TradeSequenceDepart_FlightTask_Sink
+	.public TradeSequenceDepart_FlightTask_Pause
+	.public TradeSequenceDepart_FlightTask_Leave
 	.public ov71_022494A0
 	.public ov71_022494D0
 	.public ov71_02249500
@@ -809,19 +809,19 @@
 	.public sTradeSequenceSceneMain
 	.public sTradeSequenceSceneExit
 	.public sTradeSequenceSceneModes
-	.public ov71_0224BC5C
-	.public ov71_0224BC64
-	.public ov71_0224BC74
-	.public ov71_0224BC84
-	.public ov71_0224BCA0
-	.public ov71_0224BCBC
-	.public ov71_0224BCE4
-	.public ov71_0224BCEC
-	.public ov71_0224BCFC
-	.public ov71_0224BD0C
-	.public ov71_0224BD1C
-	.public ov71_0224BD38
-	.public ov71_0224BD54
+	.public sTradeSequenceSendModelRotation
+	.public sTradeSequenceSendStates
+	.public sTradeSequenceSendGraphicsModes
+	.public sTradeSequenceSendBgTemplate_Text
+	.public sTradeSequenceSendBgTemplate_Background
+	.public sTradeSequenceSendGraphicsBanks
+	.public sTradeSequenceDepartPaletteOffsets
+	.public sTradeSequenceDepartGraphicsModes
+	.public sTradeSequenceDepartStates
+	.public sTradeSequenceDepartEdgeColors
+	.public sTradeSequenceDepartBgTemplate_Layer2
+	.public sTradeSequenceDepartBgTemplate_Layer3
+	.public sTradeSequenceDepartGraphicsBanks
 	.public ov71_0224BD7C
 	.public ov71_0224BD84
 	.public ov71_0224BD94
@@ -853,7 +853,7 @@
 	.public ov71_0224BFDC
 	.public sTradeSequenceDeferredFrees
 	.public ov71_0224C0C4
-	.public ov71_0224C0C8
+	.public sTradeSequenceDepartCameraAngle
 	.public ov71_0224C0D0
 	.include "overlay_71.inc"
 	.include "global.inc"
@@ -892,23 +892,23 @@
 	.public TradeSequence_SetCameraPerspectiveType
 	.public TradeSequence_SetCameraPerspectiveAngle
 	.public TradeSequence_FreeCamera
-	.public ov71_02247990
-	.public ov71_02247C34
-	.public ov71_0224809C
-	.public ov71_02248110
-	.public ov71_02248120
-	.public ov71_022481C8
-	.public ov71_022481D8
-	.public ov71_022481EC
-	.public ov71_022483AC
-	.public ov71_022483E4
-	.public ov71_022489F8
-	.public ov71_02248B24
-	.public ov71_02248B54
-	.public ov71_02248CF4
-	.public ov71_02248E04
-	.public ov71_02249254
-	.public ov71_02249260
+	.public TradeSequenceSend_Main
+	.public TradeSequenceSend_WaitFadeIn
+	.public TradeSequenceSend_DeleteSprites
+	.public TradeSequenceSend_IsBrightnessDone
+	.public TradeSequenceSend_StopBrightness
+	.public TradeSequenceSend_IsBounceDone
+	.public TradeSequenceSend_GetBounceCount
+	.public TradeSequenceSend_StopBounce
+	.public TradeSequenceDepart_Main
+	.public TradeSequenceDepart_Draw
+	.public TradeSequenceDepart_Free3D
+	.public TradeSequenceDepart_DeleteStreaks
+	.public TradeSequenceDepart_RequestScreenSwap
+	.public TradeSequenceDepart_StopStreakFall
+	.public TradeSequenceDepart_StopScroll
+	.public TradeSequenceDepart_IsFlightOutOfView
+	.public TradeSequenceDepart_IsFlightFlyingAway
 	.public ov71_022494A0
 	.public ov71_022494D0
 	.public ov71_02249500
@@ -954,8 +954,8 @@
 	.public ov71_0224BA48
 	.public ov71_0224BAA0
 
-	thumb_func_start ov71_0224926C
-ov71_0224926C: ; 0x0224926C
+	thumb_func_start TradeSequenceDepart_RestartFlightFromBelow
+TradeSequenceDepart_RestartFlightFromBelow: ; 0x0224926C
 	push {r3, r4, r5, lr}
 	sub sp, #8
 	add r5, r0, #0
@@ -989,20 +989,20 @@ ov71_0224926C: ; 0x0224926C
 	add r2, r1, #0
 	str r0, [r4, #0x18]
 	add r0, r4, #0
-	bl ov71_02248FC8
+	bl TradeSequenceDepart_SetRadius
 	mov r2, #0x56
 	ldrsh r2, [r4, r2]
 	add r0, r4, #0
 	mov r1, #1
 	neg r2, r2
 	mov r3, #0x1e
-	bl ov71_02249004
+	bl TradeSequenceDepart_SetSpin
 	mov r1, #2
 	add r2, r1, #0
 	add r0, r4, #0
 	add r2, #0xfe
 	mov r3, #0x32
-	bl ov71_02249004
+	bl TradeSequenceDepart_SetSpin
 	mov r1, #2
 	ldr r0, [r4]
 	lsl r1, r1, #0xc
@@ -1010,24 +1010,24 @@ ov71_0224926C: ; 0x0224926C
 	ldr r0, [r4]
 	mov r1, #1
 	bl TradeSequence_SetModelVisible
-	ldr r1, _022492F8 ; =ov71_022492FC
+	ldr r1, _022492F8 ; =TradeSequenceDepart_FlightTask_Rise
 	add r0, r5, #0
 	bl SysTask_SetFunc
 	add sp, #8
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 _022492F4: .word 0x000058CC
-_022492F8: .word ov71_022492FC
-	thumb_func_end ov71_0224926C
+_022492F8: .word TradeSequenceDepart_FlightTask_Rise
+	thumb_func_end TradeSequenceDepart_RestartFlightFromBelow
 
 
-	thumb_func_start ov71_022492FC
-ov71_022492FC: ; 0x022492FC
+	thumb_func_start TradeSequenceDepart_FlightTask_Rise
+TradeSequenceDepart_FlightTask_Rise: ; 0x022492FC
 	push {r3, r4, r5, lr}
 	add r4, r1, #0
 	add r5, r0, #0
 	add r0, r4, #0
-	bl ov71_0224903C
+	bl TradeSequenceDepart_UpdateFlight
 	add r0, r4, #0
 	add r0, #0x80
 	ldr r0, [r0]
@@ -1050,7 +1050,7 @@ ov71_022492FC: ; 0x022492FC
 	ldr r0, [r0]
 	cmp r0, #0
 	bne _0224933C
-	ldr r1, _02249354 ; =ov71_02249358
+	ldr r1, _02249354 ; =TradeSequenceDepart_FlightTask_Hover
 	add r0, r5, #0
 	bl SysTask_SetFunc
 _0224933C:
@@ -1064,17 +1064,17 @@ _0224933C:
 	bl TradeSequence_SetModelRotation
 	pop {r3, r4, r5, pc}
 	nop
-_02249354: .word ov71_02249358
-	thumb_func_end ov71_022492FC
+_02249354: .word TradeSequenceDepart_FlightTask_Hover
+	thumb_func_end TradeSequenceDepart_FlightTask_Rise
 
 
-	thumb_func_start ov71_02249358
-ov71_02249358: ; 0x02249358
+	thumb_func_start TradeSequenceDepart_FlightTask_Hover
+TradeSequenceDepart_FlightTask_Hover: ; 0x02249358
 	push {r3, r4, r5, lr}
 	add r4, r1, #0
 	add r5, r0, #0
 	add r0, r4, #0
-	bl ov71_0224903C
+	bl TradeSequenceDepart_UpdateFlight
 	add r0, r4, #0
 	add r0, #0x80
 	ldr r0, [r0]
@@ -1097,7 +1097,7 @@ ov71_02249358: ; 0x02249358
 	mov r1, #0x35
 	add r0, #0x80
 	str r1, [r0]
-	ldr r1, _022493B4 ; =ov71_022493B8
+	ldr r1, _022493B4 ; =TradeSequenceDepart_FlightTask_Sink
 	add r0, r5, #0
 	bl SysTask_SetFunc
 _0224939A:
@@ -1112,17 +1112,17 @@ _0224939A:
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 _022493B0: .word 0xFFFC5800
-_022493B4: .word ov71_022493B8
-	thumb_func_end ov71_02249358
+_022493B4: .word TradeSequenceDepart_FlightTask_Sink
+	thumb_func_end TradeSequenceDepart_FlightTask_Hover
 
 
-	thumb_func_start ov71_022493B8
-ov71_022493B8: ; 0x022493B8
+	thumb_func_start TradeSequenceDepart_FlightTask_Sink
+TradeSequenceDepart_FlightTask_Sink: ; 0x022493B8
 	push {r3, r4, r5, lr}
 	add r4, r1, #0
 	add r5, r0, #0
 	add r0, r4, #0
-	bl ov71_0224903C
+	bl TradeSequenceDepart_UpdateFlight
 	add r0, r4, #0
 	add r0, #0x80
 	ldr r0, [r0]
@@ -1145,7 +1145,7 @@ ov71_022493B8: ; 0x022493B8
 	ldr r0, [r0]
 	cmp r0, #0
 	bne _022493F8
-	ldr r1, _02249410 ; =ov71_02249414
+	ldr r1, _02249410 ; =TradeSequenceDepart_FlightTask_Pause
 	add r0, r5, #0
 	bl SysTask_SetFunc
 _022493F8:
@@ -1159,17 +1159,17 @@ _022493F8:
 	bl TradeSequence_SetModelRotation
 	pop {r3, r4, r5, pc}
 	nop
-_02249410: .word ov71_02249414
-	thumb_func_end ov71_022493B8
+_02249410: .word TradeSequenceDepart_FlightTask_Pause
+	thumb_func_end TradeSequenceDepart_FlightTask_Sink
 
 
-	thumb_func_start ov71_02249414
-ov71_02249414: ; 0x02249414
+	thumb_func_start TradeSequenceDepart_FlightTask_Pause
+TradeSequenceDepart_FlightTask_Pause: ; 0x02249414
 	push {r3, r4, r5, lr}
 	add r4, r1, #0
 	add r5, r0, #0
 	add r0, r4, #0
-	bl ov71_0224903C
+	bl TradeSequenceDepart_UpdateFlight
 	add r0, r4, #0
 	add r0, #0x80
 	ldr r0, [r0]
@@ -1185,7 +1185,7 @@ ov71_02249414: ; 0x02249414
 	mov r0, #2
 	lsl r0, r0, #0x10
 	str r0, [r4, #0x2c]
-	ldr r1, _0224945C ; =ov71_02249460
+	ldr r1, _0224945C ; =TradeSequenceDepart_FlightTask_Leave
 	add r0, r5, #0
 	bl SysTask_SetFunc
 _02249446:
@@ -1199,19 +1199,19 @@ _02249446:
 	bl TradeSequence_SetModelRotation
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-_0224945C: .word ov71_02249460
-	thumb_func_end ov71_02249414
+_0224945C: .word TradeSequenceDepart_FlightTask_Leave
+	thumb_func_end TradeSequenceDepart_FlightTask_Pause
 
 
-	thumb_func_start ov71_02249460
-ov71_02249460: ; 0x02249460
+	thumb_func_start TradeSequenceDepart_FlightTask_Leave
+TradeSequenceDepart_FlightTask_Leave: ; 0x02249460
 	push {r4, lr}
 	add r4, r1, #0
 	ldr r0, [r4, #0x78]
 	cmp r0, #0
 	bne _0224949C
 	add r0, r4, #0
-	bl ov71_0224903C
+	bl TradeSequenceDepart_UpdateFlight
 	ldr r1, [r4, #0x28]
 	ldr r0, [r4, #0x2c]
 	add r0, r1, r0
@@ -1234,4 +1234,4 @@ ov71_02249460: ; 0x02249460
 _0224949C:
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov71_02249460
+	thumb_func_end TradeSequenceDepart_FlightTask_Leave

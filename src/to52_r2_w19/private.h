@@ -12,7 +12,7 @@ void ov73_021EA134(void *, int, int);
 void CopyWindowToVram(void *);
 void PlaySE(int);
 void ov00_021ECB94(void *, void *);
-int sub_0202D720(void *, u8, u8, void *);
+int BattleRoomDownload_IsRoomMarked(void *, u8, u8, void *);
 void BufferIntegerAsString(void *, int, int, int, int, int);
 void ov73_021E9F34(void *, void *, int, int, int);
 void ov73_021E83EC(void *, int, int);

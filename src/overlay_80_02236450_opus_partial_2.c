@@ -4,11 +4,11 @@ void ov80_02236698(void *a0, void *dst, int index) {
     void *r;
 
     MI_CpuFill8(dst, 0, 0x110);
-    r = sub_0202D928(a0);
-    if (sub_0202D7B0() == 0) {
+    r = Save_BattleRoomDownload_Get(a0);
+    if (BattleRoomDownload_HasTrainers() == 0) {
         ov80_022366D4(dst, index);
     } else {
-        sub_0202D804(r, dst, index);
+        BattleRoomDownload_GetTrainer(r, dst, index);
     }
 }
 

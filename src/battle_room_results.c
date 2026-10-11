@@ -24,7 +24,7 @@
 #include "sound_playback.h"
 #include "unk_02009D48.h"
 #include "unk_02019BA4.h"
-#include "unk_0202D230.h"
+#include "frontier_data_access.h"
 #include "unk_02030A98.h"
 
 #define BATTLE_ROOM_RESULTS_NUM_LEADERS        30
@@ -69,7 +69,7 @@ typedef struct BattleRoomResults {
     Options *options;                                          // 0x018
     FrontierSave *frontierSave;                                // 0x01C
     FrontierData *frontierData;                                // 0x020
-    u32 downloadData;                                          // 0x024, FrontierDownload (sub_0202D928)
+    u32 downloadData;                                          // 0x024, BattleRoomDownload (Save_BattleRoomDownload_Get)
     MsgData *msgData;                                          // 0x028
     MessageFormat *msgFormat;                                  // 0x02C
     String *string;                                            // 0x030
@@ -103,10 +103,10 @@ typedef struct BattleRoomLeaderRecord {
     u8 unk_21;            // 0x21
 } BattleRoomLeaderRecord; // size: 0x22
 
-typedef struct FrontierDownload FrontierDownload;
+typedef struct BattleRoomDownload BattleRoomDownload;
 
 // Defined in frontier_data.c; not declared in its header.
-void *sub_0202D8E4(FrontierDownload *data, enum HeapID heapID);
+void *BattleRoomDownload_CopyLeaders(BattleRoomDownload *data, enum HeapID heapID);
 
 typedef struct BattleRoomResultsGraphicsBanks {
     u32 banks[10];
@@ -183,7 +183,7 @@ BOOL BattleRoomResults_Init(OverlayManager *man, int *state) {
     results->options = Save_PlayerData_GetOptionsAddr(args->saveData);
     results->frontierSave = Save_Frontier_GetStatic(args->saveData);
     results->frontierData = Save_FrontierData_Get(args->saveData);
-    results->downloadData = sub_0202D928(args->saveData);
+    results->downloadData = Save_BattleRoomDownload_Get(args->saveData);
     results->heapID = HEAP_ID_72;
     SetKeyRepeatTimers(4, 8);
     return TRUE;
@@ -582,13 +582,13 @@ void BattleRoomResults_PrintResults(BattleRoomResults *results) {
     BattleRoomResults_PrintMessage(results, 2, 5, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
     BattleRoomResults_PrintMessage(results, 3, 8, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
     BattleRoomResults_PrintMessage(results, 4, 12, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
-    if (sub_0202D5DC(results->frontierData, 12, 0) == 0) {
+    if (FrontierData_FlagAction(results->frontierData, 12, 0) == 0) {
         BattleRoomResults_PrintMessage(results, 6, 9, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
     } else {
         BattleRoomResults_PrintMessage(results, 6, 10, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
     }
     BattleRoomResults_PrintMessage(results, 8, 11, 0, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
-    BufferIntegerAsString(results->msgFormat, 0, sub_0202D488(results->frontierData, 0), 2, PRINTING_MODE_LEFT_ALIGN, TRUE);
+    BufferIntegerAsString(results->msgFormat, 0, FrontierData_WifiRankAction(results->frontierData, 0), 2, PRINTING_MODE_LEFT_ALIGN, TRUE);
     BattleRoomResults_PrintFormattedMessage(results, 5, 14, GetWindowWidth(&results->windows[5]) * 8, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 1);
     BufferIntegerAsString(results->msgFormat, 0, FrontierSave_GetStat(results->frontierSave, 9, 255), 4, PRINTING_MODE_RIGHT_ALIGN, TRUE);
     width = GetWindowWidth(&results->windows[7]);
@@ -611,7 +611,7 @@ void BattleRoomResults_LoadLeaders(BattleRoomResults *results) {
     BattleRoomLeaderRecord *record;
     u8 *nameRecord;
 
-    query.records = sub_0202D8E4((FrontierDownload *)results->downloadData, results->heapID);
+    query.records = BattleRoomDownload_CopyLeaders((BattleRoomDownload *)results->downloadData, results->heapID);
     query.index = 0;
     leader = results->leaders;
     record = query.records;
@@ -691,7 +691,7 @@ void BattleRoomResults_PrintLeadersScreen(BattleRoomResults *results) {
         FillWindowPixelBuffer(window, 0);
     }
     BattleRoomResults_PrintTitle(results);
-    sub_0202D8D0(results->downloadData, values);
+    BattleRoomDownload_GetLeadersRoom(results->downloadData, values);
     BufferIntegerAsString(results->msgFormat, 0, values[0], 2, PRINTING_MODE_LEFT_ALIGN, TRUE);
     BattleRoomResults_PrintFormattedMessage(results, 1, 17, 0, 0, 0, MAKE_TEXT_COLOR(15, 2, 0), 0);
     BufferIntegerAsString(results->msgFormat, 1, values[1], 3, PRINTING_MODE_LEADING_ZEROS, TRUE);

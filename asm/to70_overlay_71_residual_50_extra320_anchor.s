@@ -1,19 +1,19 @@
 	.extern TradeSequence_SetModelPosition
 	.extern TradeSequence_SetModelAlpha
-	.extern ov71_022478C8
-	.extern ov71_02247924
-	.extern ov71_02247990
-	.extern ov71_02247A10
-	.extern ov71_02247C34
-	.extern ov71_02247C60
-	.extern ov71_02247DEC
-	.extern ov71_022482EC
-	.extern ov71_02248358
-	.extern ov71_022483AC
-	.extern ov71_02248408
-	.extern ov71_0224843C
-	.extern ov71_02248484
-	.extern ov71_02248530
+	.extern TradeSequenceSend_Init
+	.extern TradeSequenceSend_Exit
+	.extern TradeSequenceSend_Main
+	.extern TradeSequenceSend_SetupScreens
+	.extern TradeSequenceSend_WaitFadeIn
+	.extern TradeSequenceSend_ShowMessages
+	.extern TradeSequenceSend_ReplaceMonWithModel
+	.extern TradeSequenceDepart_Init
+	.extern TradeSequenceDepart_Exit
+	.extern TradeSequenceDepart_Main
+	.extern TradeSequenceDepart_SetupScreens
+	.extern TradeSequenceDepart_WaitBgZoom
+	.extern TradeSequenceDepart_FlyOffTopScreen
+	.extern TradeSequenceDepart_FlyThroughBottomScreen
 	.extern ov71_022494A0
 	.extern ov71_022494D0
 	.extern ov71_02249500
@@ -688,66 +688,66 @@
 	.public TradeSequence_SetCameraPerspectiveAngle
 	.public TradeSequence_InitCamera
 	.public TradeSequence_FreeCamera
-	.public ov71_022478C8
-	.public ov71_02247924
-	.public ov71_02247990
-	.public ov71_022479C8
-	.public ov71_02247A10
-	.public ov71_02247C34
-	.public ov71_02247C60
-	.public ov71_02247DEC
-	.public ov71_02247ED0
-	.public ov71_02247F9C
-	.public ov71_02247FF8
-	.public ov71_0224809C
-	.public ov71_022480C0
-	.public ov71_02248110
-	.public ov71_02248120
-	.public ov71_02248140
-	.public ov71_0224817C
-	.public ov71_022481C8
-	.public ov71_022481D8
-	.public ov71_022481EC
-	.public ov71_0224820C
-	.public ov71_022482EC
-	.public ov71_02248358
-	.public ov71_022483AC
-	.public ov71_022483E4
-	.public ov71_02248408
-	.public ov71_0224843C
-	.public ov71_02248484
-	.public ov71_02248530
-	.public ov71_02248604
-	.public ov71_0224889C
-	.public ov71_022488E4
-	.public ov71_022489F8
-	.public ov71_02248A08
-	.public ov71_02248B24
-	.public ov71_02248B54
-	.public ov71_02248B60
-	.public ov71_02248BBC
-	.public ov71_02248C24
-	.public ov71_02248CF4
-	.public ov71_02248D0C
-	.public ov71_02248D80
-	.public ov71_02248E04
-	.public ov71_02248E30
-	.public ov71_02248E78
-	.public ov71_02248EB4
-	.public ov71_02248F8C
-	.public ov71_02248FC8
-	.public ov71_02249004
-	.public ov71_0224903C
-	.public ov71_02249184
-	.public ov71_02249208
-	.public ov71_02249254
-	.public ov71_02249260
-	.public ov71_0224926C
-	.public ov71_022492FC
-	.public ov71_02249358
-	.public ov71_022493B8
-	.public ov71_02249414
-	.public ov71_02249460
+	.public TradeSequenceSend_Init
+	.public TradeSequenceSend_Exit
+	.public TradeSequenceSend_Main
+	.public TradeSequenceSend_Draw
+	.public TradeSequenceSend_SetupScreens
+	.public TradeSequenceSend_WaitFadeIn
+	.public TradeSequenceSend_ShowMessages
+	.public TradeSequenceSend_ReplaceMonWithModel
+	.public TradeSequenceSend_Init3D
+	.public TradeSequenceSend_CreateMonPic
+	.public TradeSequenceSend_CreateSprites
+	.public TradeSequenceSend_DeleteSprites
+	.public TradeSequenceSend_StartBrightness
+	.public TradeSequenceSend_IsBrightnessDone
+	.public TradeSequenceSend_StopBrightness
+	.public TradeSequenceSend_BrightnessTask
+	.public TradeSequenceSend_StartBounce
+	.public TradeSequenceSend_IsBounceDone
+	.public TradeSequenceSend_GetBounceCount
+	.public TradeSequenceSend_StopBounce
+	.public TradeSequenceSend_BounceTask
+	.public TradeSequenceDepart_Init
+	.public TradeSequenceDepart_Exit
+	.public TradeSequenceDepart_Main
+	.public TradeSequenceDepart_Draw
+	.public TradeSequenceDepart_SetupScreens
+	.public TradeSequenceDepart_WaitBgZoom
+	.public TradeSequenceDepart_FlyOffTopScreen
+	.public TradeSequenceDepart_FlyThroughBottomScreen
+	.public TradeSequenceDepart_InitBgs
+	.public TradeSequenceDepart_FreeBgs
+	.public TradeSequenceDepart_Init3D
+	.public TradeSequenceDepart_Free3D
+	.public TradeSequenceDepart_CreateStreaks
+	.public TradeSequenceDepart_DeleteStreaks
+	.public TradeSequenceDepart_RequestScreenSwap
+	.public TradeSequenceDepart_ScreenSwapTask
+	.public TradeSequenceDepart_StartStreakFall
+	.public TradeSequenceDepart_StreakFallTask
+	.public TradeSequenceDepart_StopStreakFall
+	.public TradeSequenceDepart_StartScroll
+	.public TradeSequenceDepart_ScrollTask
+	.public TradeSequenceDepart_StopScroll
+	.public TradeSequenceDepart_StartAlphaFade
+	.public TradeSequenceDepart_AlphaFadeTask
+	.public TradeSequenceDepart_StartFlight
+	.public TradeSequenceDepart_SetAngleSpeed
+	.public TradeSequenceDepart_SetRadius
+	.public TradeSequenceDepart_SetSpin
+	.public TradeSequenceDepart_UpdateFlight
+	.public TradeSequenceDepart_FlightTask_Appear
+	.public TradeSequenceDepart_FlightTask_FlyAway
+	.public TradeSequenceDepart_IsFlightOutOfView
+	.public TradeSequenceDepart_IsFlightFlyingAway
+	.public TradeSequenceDepart_RestartFlightFromBelow
+	.public TradeSequenceDepart_FlightTask_Rise
+	.public TradeSequenceDepart_FlightTask_Hover
+	.public TradeSequenceDepart_FlightTask_Sink
+	.public TradeSequenceDepart_FlightTask_Pause
+	.public TradeSequenceDepart_FlightTask_Leave
 	.public ov71_022494A0
 	.public ov71_022494D0
 	.public ov71_02249500
@@ -845,19 +845,19 @@
 	.public sTradeSequenceSceneMain
 	.public sTradeSequenceSceneExit
 	.public sTradeSequenceSceneModes
-	.public ov71_0224BC5C
-	.public ov71_0224BC64
-	.public ov71_0224BC74
-	.public ov71_0224BC84
-	.public ov71_0224BCA0
-	.public ov71_0224BCBC
-	.public ov71_0224BCE4
-	.public ov71_0224BCEC
-	.public ov71_0224BCFC
-	.public ov71_0224BD0C
-	.public ov71_0224BD1C
-	.public ov71_0224BD38
-	.public ov71_0224BD54
+	.public sTradeSequenceSendModelRotation
+	.public sTradeSequenceSendStates
+	.public sTradeSequenceSendGraphicsModes
+	.public sTradeSequenceSendBgTemplate_Text
+	.public sTradeSequenceSendBgTemplate_Background
+	.public sTradeSequenceSendGraphicsBanks
+	.public sTradeSequenceDepartPaletteOffsets
+	.public sTradeSequenceDepartGraphicsModes
+	.public sTradeSequenceDepartStates
+	.public sTradeSequenceDepartEdgeColors
+	.public sTradeSequenceDepartBgTemplate_Layer2
+	.public sTradeSequenceDepartBgTemplate_Layer3
+	.public sTradeSequenceDepartGraphicsBanks
 	.public ov71_0224BD7C
 	.public ov71_0224BD84
 	.public ov71_0224BD94
@@ -889,7 +889,7 @@
 	.public ov71_0224BFDC
 	.public sTradeSequenceDeferredFrees
 	.public ov71_0224C0C4
-	.public ov71_0224C0C8
+	.public sTradeSequenceDepartCameraAngle
 	.public ov71_0224C0D0
 	.public TradeSequence_BoxMonCantFlip
 	.public TradeSequence_StopPulses
@@ -924,23 +924,23 @@
 	.public TradeSequence_SetCameraPerspectiveType
 	.public TradeSequence_SetCameraPerspectiveAngle
 	.public TradeSequence_FreeCamera
-	.public ov71_02247990
-	.public ov71_02247C34
-	.public ov71_0224809C
-	.public ov71_02248110
-	.public ov71_02248120
-	.public ov71_022481C8
-	.public ov71_022481D8
-	.public ov71_022481EC
-	.public ov71_022483AC
-	.public ov71_022483E4
-	.public ov71_022489F8
-	.public ov71_02248B24
-	.public ov71_02248B54
-	.public ov71_02248CF4
-	.public ov71_02248E04
-	.public ov71_02249254
-	.public ov71_02249260
+	.public TradeSequenceSend_Main
+	.public TradeSequenceSend_WaitFadeIn
+	.public TradeSequenceSend_DeleteSprites
+	.public TradeSequenceSend_IsBrightnessDone
+	.public TradeSequenceSend_StopBrightness
+	.public TradeSequenceSend_IsBounceDone
+	.public TradeSequenceSend_GetBounceCount
+	.public TradeSequenceSend_StopBounce
+	.public TradeSequenceDepart_Main
+	.public TradeSequenceDepart_Draw
+	.public TradeSequenceDepart_Free3D
+	.public TradeSequenceDepart_DeleteStreaks
+	.public TradeSequenceDepart_RequestScreenSwap
+	.public TradeSequenceDepart_StopStreakFall
+	.public TradeSequenceDepart_StopScroll
+	.public TradeSequenceDepart_IsFlightOutOfView
+	.public TradeSequenceDepart_IsFlightFlyingAway
 	.public ov71_022494A0
 	.public ov71_022494D0
 	.public ov71_02249500
@@ -1000,19 +1000,19 @@ sTradeSequenceMonPicSettings: ; 0x0224BBDC
 	.byte 0x00, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00
 
 sTradeSequenceSceneInit: ; 0x0224BBEC
-	.word ov71_022478C8
+	.word TradeSequenceSend_Init
 
 sTradeSequenceSceneMain: ; 0x0224BBF0
-	.word ov71_02247990
+	.word TradeSequenceSend_Main
 
 sTradeSequenceSceneExit: ; 0x0224BBF4
-	.word ov71_02247924
+	.word TradeSequenceSend_Exit
 
 sTradeSequenceSceneModes: ; 0x0224BBF8
 	.byte 0x03, 0x00, 0x00, 0x00
-	.word ov71_022482EC
-	.word ov71_022483AC
-	.word ov71_02248358
+	.word TradeSequenceDepart_Init
+	.word TradeSequenceDepart_Main
+	.word TradeSequenceDepart_Exit
 	.byte 0x03, 0x00, 0x00, 0x00
 	.word ov71_022494A0
 	.word ov71_02249500
@@ -1035,62 +1035,62 @@ sTradeSequenceSceneModes: ; 0x0224BBF8
 	.word ov71_0224B198
 	.byte 0x05, 0x00, 0x00, 0x00
 
-ov71_0224BC5C: ; 0x0224BC5C
+sTradeSequenceSendModelRotation: ; 0x0224BC5C
 	.byte 0x00, 0x00, 0x00, 0xF0
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov71_0224BC64: ; 0x0224BC64
-	.word ov71_02247A10
-	.word ov71_02247C34
-	.word ov71_02247C60
-	.word ov71_02247DEC
+sTradeSequenceSendStates: ; 0x0224BC64
+	.word TradeSequenceSend_SetupScreens
+	.word TradeSequenceSend_WaitFadeIn
+	.word TradeSequenceSend_ShowMessages
+	.word TradeSequenceSend_ReplaceMonWithModel
 
-ov71_0224BC74: ; 0x0224BC74
+sTradeSequenceSendGraphicsModes: ; 0x0224BC74
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00
 
-ov71_0224BC84: ; 0x0224BC84
+sTradeSequenceSendBgTemplate_Text: ; 0x0224BC84
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov71_0224BCA0: ; 0x0224BCA0
+sTradeSequenceSendBgTemplate_Background: ; 0x0224BCA0
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x1E, 0x01, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov71_0224BCBC: ; 0x0224BCBC
+sTradeSequenceSendGraphicsBanks: ; 0x0224BCBC
 	.byte 0x02, 0x00, 0x00, 0x00
 	.byte 0x40, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x10, 0x00, 0x00, 0x00
 
-ov71_0224BCE4: ; 0x0224BCE4
+sTradeSequenceDepartPaletteOffsets: ; 0x0224BCE4
 	.byte 0x20, 0x00, 0x60, 0x00, 0xA0, 0x00, 0xE0, 0x00
 
-ov71_0224BCEC: ; 0x0224BCEC
+sTradeSequenceDepartGraphicsModes: ; 0x0224BCEC
 	.byte 0x01, 0x00, 0x00, 0x00
 	.byte 0x04, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 
-ov71_0224BCFC: ; 0x0224BCFC
-	.word ov71_02248408
-	.word ov71_0224843C
-	.word ov71_02248484
-	.word ov71_02248530
+sTradeSequenceDepartStates: ; 0x0224BCFC
+	.word TradeSequenceDepart_SetupScreens
+	.word TradeSequenceDepart_WaitBgZoom
+	.word TradeSequenceDepart_FlyOffTopScreen
+	.word TradeSequenceDepart_FlyThroughBottomScreen
 
-ov71_0224BD0C: ; 0x0224BD0C
+sTradeSequenceDepartEdgeColors: ; 0x0224BD0C
 	.byte 0x84, 0x10, 0x84, 0x10
 	.byte 0x84, 0x10, 0x84, 0x10, 0x84, 0x10, 0x84, 0x10, 0x84, 0x10, 0x84, 0x10
 
-ov71_0224BD1C: ; 0x0224BD1C
+sTradeSequenceDepartBgTemplate_Layer2: ; 0x0224BD1C
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x01, 0x16, 0x00
 	.byte 0x00, 0x02, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov71_0224BD38: ; 0x0224BD38
+sTradeSequenceDepartBgTemplate_Layer3: ; 0x0224BD38
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x1E, 0x04, 0x00, 0x03, 0x01, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov71_0224BD54: ; 0x0224BD54
+sTradeSequenceDepartGraphicsBanks: ; 0x0224BD54
 	.byte 0x02, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00
 	.byte 0x80, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00

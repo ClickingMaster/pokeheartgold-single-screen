@@ -19,7 +19,7 @@
 #include "pokedex.h"
 #include "pokemon.h"
 #include "scrcmd_9.h"
-#include "unk_0202D230.h"
+#include "frontier_data_access.h"
 #include "unk_02035900.h"
 #include "unk_0204A3F4.h"
 
@@ -199,7 +199,7 @@ void FrontierFieldSystem_0204B6AC(FrontierFieldSystem *frontierFsys, SaveData *s
         Pokemon *mon = Party_GetMonByIndex(party, frontierFsys->partyMonIndexes[i]);
         frontierFsys->unk83e[1 + i] = GetMonData(mon, MON_DATA_SPECIES, NULL);
     }
-    frontierFsys->unk83e[3] = sub_0202D57C(frontierFsys->frontierData, 3, 0);
+    frontierFsys->unk83e[3] = FrontierData_TowerRoundAction(frontierFsys->frontierData, 3, 0);
 }
 
 void FrontierFieldSystem_0204B708(FrontierFieldSystem *frontierFsys) {

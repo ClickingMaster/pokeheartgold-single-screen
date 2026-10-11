@@ -5,7 +5,7 @@
 #include "frontier_data.h"
 #include "player_data.h"
 #include "save_wifi_history.h"
-#include "unk_0202D230.h"
+#include "frontier_data_access.h"
 #include "unk_0205B3DC.h"
 
 void sub_02069528(SaveData *saveData, s32 a1, UnkStruct_02069528 *a2) {
@@ -23,18 +23,18 @@ void sub_02069528(SaveData *saveData, s32 a1, UnkStruct_02069528 *a2) {
     a2->trainerClass = GetUnionRoomAvatarAttrBySprite(a2->playerGender, PlayerProfile_GetAvatar(playerProfile), 1);
 
     for (s32 index = 0, position = 0; index < 3; index++, position += 8) {
-        MI_CpuCopy8(sub_0202D660(saveData, index), &a2->unkCA[position], 8);
+        MI_CpuCopy8(Save_Frontier_GetTowerMessage(saveData, index), &a2->unkCA[position], 8);
     }
 
-    MI_CpuCopy8(sub_0202D660(saveData, 3), &a2->unkC0, sizeof(a2->unkC0));
+    MI_CpuCopy8(Save_Frontier_GetTowerMessage(saveData, 3), &a2->unkC0, sizeof(a2->unkC0));
 
     if (a1 == 0) {
-        a2->unkE2 = sub_0202D5DC(frontierData, 7, 0);
+        a2->unkE2 = FrontierData_FlagAction(frontierData, 7, 0);
         if (a2->unkE2 != 0) {
             sub_0202D4DC(frontierData, a1, a2);
         }
     } else {
-        a2->unkE2 = sub_0202D564(frontierData);
+        a2->unkE2 = FrontierData_GetWifiScore(frontierData);
         sub_0202D4DC(frontierData, a1, a2);
     }
 }

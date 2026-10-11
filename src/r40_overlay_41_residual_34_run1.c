@@ -26,7 +26,7 @@ void ov41_02248724(void *unused) {
     node = sentinel->next;
     while (node != sentinel) {
         if (node->type <= 2) {
-            ov41_02246014(node->value, index);
+            DressUpGfx_SetSlotPriority(node->value, index);
         }
         node = node->next;
         index--;

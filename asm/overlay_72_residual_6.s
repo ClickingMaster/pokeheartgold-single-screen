@@ -307,7 +307,7 @@ NintendoWfc_SessionInit: ; 0x0223886C
 	ldr r0, [r4]
 	mov r1, #0
 	ldr r0, [r0]
-	bl sub_0202D488
+	bl FrontierData_WifiRankAction
 	add r1, r4, #0
 	add r1, #0x90
 	str r0, [r1]

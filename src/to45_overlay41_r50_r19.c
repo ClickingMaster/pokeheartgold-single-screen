@@ -3,15 +3,15 @@
 void GfGfxLoader_GXLoadPal(int, int, int, int, int, int);
 void GfGfxLoader_LoadScrnData(int, int, void *, int, int, int, int, int);
 void GfGfxLoader_LoadCharData(int, int, void *, int, int, int, int, int);
-void ov41_022462E4(void *, void *, int, int, int, int);
-void ov41_02246304(void *, void *, int, int, int, int, int);
-void ov41_02246328(void *, void *, int, int, int);
-void ov41_02246344(void *, void *, int, int, int);
-void *ov41_02246280(void *, int, int, int, int, int);
-void ov41_02246360(void *, int);
-void ov41_02246374(void *, int);
-void ov41_02246388(void *, int);
-void ov41_0224639C(void *, int);
+void DressUpGfx_LoadCharRes(void *, void *, int, int, int, int);
+void DressUpGfx_LoadPlttRes(void *, void *, int, int, int, int, int);
+void DressUpGfx_LoadCellRes(void *, void *, int, int, int);
+void DressUpGfx_LoadAnimRes(void *, void *, int, int, int);
+void *DressUpGfx_CreateSprite(void *, int, int, int, int, int);
+void DressUpGfx_FreeCharRes(void *, int);
+void DressUpGfx_FreePlttRes(void *, int);
+void DressUpGfx_FreeCellRes(void *, int);
+void DressUpGfx_FreeAnimRes(void *, int);
 void Sprite_SetPriority(void *, int);
 void Sprite_Delete(void *);
 void *AllocWindows(int, int);
@@ -75,19 +75,19 @@ void ov41_0224BCA4(void *work) {
 }
 
 void ov41_0224BCF0(void *work) {
-    ov41_022462E4(PTR_OFS(work, 0x14), PTR_AT(work, 0x194), 0xE9, 0, 1, 0x3E8);
-    ov41_02246304(PTR_OFS(work, 0x14), PTR_AT(work, 0x194), 0xEA, 0, 1, 6, 0x3E8);
-    ov41_02246328(PTR_OFS(work, 0x14), PTR_AT(work, 0x194), 0xE8, 0, 0x3E8);
-    ov41_02246344(PTR_OFS(work, 0x14), PTR_AT(work, 0x194), 0xE7, 0, 0x3E8);
-    PTR_AT(work, 0x198) = ov41_02246280(PTR_OFS(work, 0x14), 0x3E8, 0, 0x90, 0x64, 1);
+    DressUpGfx_LoadCharRes(PTR_OFS(work, 0x14), PTR_AT(work, 0x194), 0xE9, 0, 1, 0x3E8);
+    DressUpGfx_LoadPlttRes(PTR_OFS(work, 0x14), PTR_AT(work, 0x194), 0xEA, 0, 1, 6, 0x3E8);
+    DressUpGfx_LoadCellRes(PTR_OFS(work, 0x14), PTR_AT(work, 0x194), 0xE8, 0, 0x3E8);
+    DressUpGfx_LoadAnimRes(PTR_OFS(work, 0x14), PTR_AT(work, 0x194), 0xE7, 0, 0x3E8);
+    PTR_AT(work, 0x198) = DressUpGfx_CreateSprite(PTR_OFS(work, 0x14), 0x3E8, 0, 0x90, 0x64, 1);
     Sprite_SetPriority(PTR_AT(work, 0x198), 1);
 }
 
 void ov41_0224BD8C(void *work) {
-    ov41_02246360(PTR_OFS(work, 0x14), 0x3E8);
-    ov41_02246374(PTR_OFS(work, 0x14), 0x3E8);
-    ov41_02246388(PTR_OFS(work, 0x14), 0x3E8);
-    ov41_0224639C(PTR_OFS(work, 0x14), 0x3E8);
+    DressUpGfx_FreeCharRes(PTR_OFS(work, 0x14), 0x3E8);
+    DressUpGfx_FreePlttRes(PTR_OFS(work, 0x14), 0x3E8);
+    DressUpGfx_FreeCellRes(PTR_OFS(work, 0x14), 0x3E8);
+    DressUpGfx_FreeAnimRes(PTR_OFS(work, 0x14), 0x3E8);
     Sprite_Delete(PTR_AT(work, 0x198));
 }
 

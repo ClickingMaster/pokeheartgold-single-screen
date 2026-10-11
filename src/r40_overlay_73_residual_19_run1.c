@@ -34,7 +34,7 @@ int ov73_021E84D0(void *p) {
     GfGfx_EngineBTogglePlanes(2, 1);
     sub_02039418(PTR(PTR(p, 0), 0xC));
     ov73_021EA12C(p);
-    value = sub_0202D488(PTR(PTR(p, 0), 0), 0);
+    value = FrontierData_WifiRankAction(PTR(PTR(p, 0), 0), 0);
     PTR(p, 0x90) = value;
     PTR(p, 0x94) = PTR(p, 0x90);
     U32(p, 0x9C) = 1;

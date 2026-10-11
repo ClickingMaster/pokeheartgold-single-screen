@@ -38,7 +38,7 @@ typedef struct Ov41Unk {
 } Ov41Unk;
 
 int ov41_022484E8(int mode, int index, void *a2);
-void *ov41_02245EE0(Ov41Template *tmpl);
+void *DressUpGfx_AddSlotObject(Ov41Template *tmpl);
 void *ov41_022499F0(void *a0, void *obj, int mode);
 void ov41_02249A50(void *a0, void *a1);
 void ov41_02249B94(void *a0, int *x, int *y);
@@ -90,7 +90,7 @@ void ov41_022485DC(Ov41Unk *data, int mode, int index) {
     GF_ASSERT(tmpl.res0 != NULL);
     GF_ASSERT(tmpl.res1 != NULL);
     entry = ov41_022484E8(mode, index, data->unk4);
-    obj = ov41_02245EE0(&tmpl);
+    obj = DressUpGfx_AddSlotObject(&tmpl);
     work = ov41_022499F0(data->unk8, obj, mode);
     ov41_02249A50(work, data->tables[mode].entries[entry].unkC);
     ov41_02249B94(work, &x, &y);

@@ -396,7 +396,7 @@
 .public ov12_022567D4
 .public BattleBuffer_GetNext
 .public ov12_022568B0
-.public ov12_02261294
+.public OpponentData_SetSpriteDrawFlag
 .public BattleController_EmitPokemonSendOut
 .public BattleController_EmitPokemonEnterBall
 .public BattleController_EmitDrawYesNoBox

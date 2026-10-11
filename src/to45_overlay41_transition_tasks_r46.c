@@ -39,7 +39,7 @@ void ov41_022494F4(SysTask *task, Ov41R46MoveTask *environment) {
             ov41_022486C4(environment->work, environment->argument5, environment->argument6, environment->object);
             ov41_02248724(environment->work);
             if (*environment->moving == 0) {
-                ov41_022463FC();
+                DressUp_DisableDragWindow();
             }
             DestroySysTaskAndEnvironment(task);
             return;
@@ -67,7 +67,7 @@ void ov41_022495A4(Ov41R46DragState **statePtr, s32 x, s32 y) {
 
 void ov41_022495C8(void *work, const Ov41R46NarcMember *member) {
     void *data = GfGfxLoader_LoadFromNarc((NarcId)member->narcId, member->memberId, FALSE, HEAP_ID_14, FALSE);
-    Ov41R46PictureResource *resource = ov41_022463DC(work, data, 0x76);
+    Ov41R46PictureResource *resource = DressUpGfx_StoreUnpackedChar(work, data, 0x76);
 
     UnscanPokepic(resource->rawData, (NarcId)member->narcId);
 }

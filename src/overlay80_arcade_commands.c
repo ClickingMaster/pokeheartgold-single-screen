@@ -88,7 +88,7 @@ BOOL FrtCmd_178(FrontierScriptContextPrivate *ctx) {
             idx = ov80_022385D8(data[0xA0]);
             sub_02031108(Save_Frontier_GetStatic(*(void **)data), idx, sub_0205C268(idx), 0);
             if (data[0xA0] == 1) {
-                sub_0202D57C(Save_FrontierData_Get(*(void **)data), 6, 2);
+                FrontierData_TowerRoundAction(Save_FrontierData_Get(*(void **)data), 6, 2);
             }
             if (data[0xA0] == 4) {
                 sub_02031108(Save_Frontier_GetStatic(*(void **)data), 0x88, sub_0205C268(0x88), 0);

@@ -232,12 +232,12 @@
 .public ov12_02256F28
 .public ov12_022581D4
 .public ov12_022582B8
-.public ov12_02258D74
+.public OpponentData_New
 .public ov12_02258DB0
-.public ov12_02258E54
-.public ov12_02258E7C
-.public ov12_02260EA4
-.public ov12_02261264
+.public OpponentData_RunCommand
+.public OpponentData_Free
+.public OpponentData_SetInputTasks
+.public OpponentData_GetInputMode
 .public OpponentData_GetHpBar
 .public BattleController_ProcessQueue
 .public ov12_02265FD4

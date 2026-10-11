@@ -27,9 +27,9 @@
 .public Save_WiFiHistory_Get
 .public WifiHistory_GetPlayerCountry
 .public WiFiHistory_GetPlayerRegion
-.public sub_0202D240
-.public sub_0202D254
-.public sub_0202D274
+.public FrontierData_Reset
+.public TowerMessages_Init
+.public BattleRoomDownload_Init
 .public sub_02030AA4
 .public sub_02030AD4
 .public sub_02030AE8

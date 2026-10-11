@@ -1,6 +1,6 @@
 #include "overlay41_lifecycle_r17_private.h"
 
-void ov41_02246CC0(void *work, u32 heapId, u32 texSize, u32 plttSize) {
+void DressUpGfx_CreatePokepicManager(void *work, u32 heapId, u32 texSize, u32 plttSize) {
     u32 key;
 
     PTR_AT(work, 0x20) = PokepicManager_Create(heapId);
@@ -14,14 +14,14 @@ void ov41_02246CC0(void *work, u32 heapId, u32 texSize, u32 plttSize) {
     U32_AT(work, 0x2C) = 1;
 }
 
-void ov41_02246D2C(void *work) {
+void DressUpGfx_DestroyPokepicManager(void *work) {
     PokepicManager_Delete(PTR_AT(work, 0x20));
     NNS_GfdDefaultFuncFreeTexVram(U32_AT(work, 0x24));
     NNS_GfdDefaultFuncFreePlttVram(U32_AT(work, 0x28));
     U32_AT(work, 0x2C) = 0;
 }
 
-void ov41_02246D54(void *work, u32 count1, u32 count2, u32 heapId) {
+void DressUpGfx_AllocRawResTables(void *work, u32 count1, u32 count2, u32 heapId) {
     u32 size = count1 * 8;
     PTR_AT(work, 0) = Heap_Alloc(heapId, size);
     memset(PTR_AT(work, 0), 0, size);
@@ -35,7 +35,7 @@ void ov41_02246D54(void *work, u32 count1, u32 count2, u32 heapId) {
     U32_AT(work, 0xC) = count2;
 }
 
-void ov41_02246DA8(void *work) {
+void DressUpGfx_FreeRawResTables(void *work) {
     if (PTR_AT(work, 0x10) != NULL) {
         GF2dGfxRawResObj_Destroy(PTR_AT(work, 0x10));
         PTR_AT(work, 0x10) = NULL;
@@ -72,7 +72,7 @@ BOOL ov41_02246DE0(void *manager, int *state) {
     ov41_02248E84(PTR_AT(args, 8), (u8 *)work + 0x184);
     ov41_02247240(work);
     ov41_022499B4((u8 *)work + 0x35C, 0x35C - 0x8D, 13);
-    PTR_AT(work, 0x364) = ov41_02245EA0(0x2BC, 13);
+    PTR_AT(work, 0x364) = DressUpGfx_CreateSlotList(0x2BC, 13);
     ov41_02247288(work, PTR_AT(args, 0), 10, 0);
     ov41_02247334(work);
     ov41_02247480(work, 0);
@@ -218,7 +218,7 @@ BOOL ov41_02247150(void *manager, int *state) {
     ov41_022474C4(work);
     ov41_02247310(work);
     ov41_022473F0(work);
-    ov41_02245ECC(PTR_AT(work, 0x364));
+    DressUpGfx_FreeSlotList(PTR_AT(work, 0x364));
     PTR_AT(work, 0x364) = NULL;
     ov41_022499DC((u8 *)work + 0x35C);
     ov41_02247274(work);
@@ -236,9 +236,9 @@ BOOL ov41_02247150(void *manager, int *state) {
 void ov41_02247240(void *work) {
     u8 data[0x18];
 
-    ov41_02246130(work);
-    ov41_02246170(work);
-    ov41_022463B0(work, data);
-    ov41_02246250(work, data);
-    ov41_022463D4(data);
+    DressUpGfx_InitDisplay(work);
+    DressUp_InitGfxCore(work);
+    DressUp_LoadRawResTables(work, data);
+    DressUpGfx_UploadRawResTables(work, data);
+    DressUpGfx_DestroyRawResTables(data);
 }

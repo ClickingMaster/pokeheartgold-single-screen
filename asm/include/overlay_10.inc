@@ -38,5 +38,5 @@
 .public GetHeldItemFlingPower
 .public CalcMoveDamage
 .public GetItemVar
-.public ov12_02258800
-.public ov12_02258BB4
+.public TrainerAI_PostKOSwitchIn
+.public TrainerAI_GetMoveType

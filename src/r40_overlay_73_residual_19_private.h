@@ -27,7 +27,7 @@ void GfGfx_EngineATogglePlanes(int, int);
 void GfGfx_EngineBTogglePlanes(int, int);
 void sub_02039418(void *);
 void ov73_021EA12C(void *);
-void *sub_0202D488(void *, int);
+void *FrontierData_WifiRankAction(void *, int);
 int ov00_021EC5B4(void);
 void ov73_021E9FF8(void *, void *, int, int, int);
 void ov73_021E83EC(void *, int, int);

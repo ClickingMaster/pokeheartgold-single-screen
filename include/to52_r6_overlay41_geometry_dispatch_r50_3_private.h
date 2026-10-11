@@ -7,11 +7,11 @@ typedef struct Ov41Dispatch14 {
     s32 mode;
 } Ov41Dispatch14;
 
-BOOL ov41_02245F14(void *, s32, s32, void *);
+BOOL DressUpGfx_HitTestSlotPixels(void *, s32, s32, void *);
 BOOL ov41_022497A8(void *, s32, s32, void *);
-void ov41_02245F9C(void *, s16, s16);
+void DressUpGfx_SetSlotPos(void *, s16, s16);
 void ov41_0224971C(void *, s32, s32);
-void ov41_02245FA8(void *, s32 *, s32 *);
+void DressUpGfx_GetSlotPos(void *, s32 *, s32 *);
 void ov41_02249780(void *);
 void ov41_022497A0(void *, s32 *, s32 *);
 

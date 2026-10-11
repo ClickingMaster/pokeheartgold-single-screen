@@ -55,18 +55,18 @@ void RemoveWindow(void *window);
 void YesNoPrompt_Reset(void *prompt);
 
 /* --- in-module callees not transcribed in this candidate --- */
-void *ov41_0224607C(void *);
-void *ov41_022460A8(void *);
-void ov41_022460DC(void *, TouchscreenHitbox *);
-void ov41_022461D0(void *);
-void ov41_0224621C(void *);
-void ov41_0224683C(void *, u32, u32);
-void ov41_0224689C(void *, u32, u32);
-void ov41_022466D0(void);
-void ov41_022466F0(void);
-void ov41_02246778(void);
-void ov41_02246D54(void *, int, int, void *);
-void ov41_02246DA8(void *);
+void *DressUpGfx_FindFreeSlot(void *);
+void *DressUpGfx_CreateSlotGraphicsObject(void *);
+void DressUpGfx_GetSlotHitbox(void *, TouchscreenHitbox *);
+void DressUp_FreeGfxCore(void *);
+void DressUp_DrawFrame3D(void *);
+void DressUpGfx_AddImages(void *, u32, u32);
+void DressUpGfx_AddPalettes(void *, u32, u32);
+void DressUpGfx_SetVramBanks(void);
+void DressUpGfx_Init3D(void);
+void DressUpGfx_Init2DModes(void);
+void DressUpGfx_AllocRawResTables(void *, int, int, void *);
+void DressUpGfx_FreeRawResTables(void *);
 void ov41_02247BB8(void *, void *, int, int, int, int);
 void ov41_02247C7C(void *);
 void ov41_02248164(void *, int);
@@ -99,7 +99,7 @@ u32 Pokepic_GetAttr(void *, int);
 
 void GF2dGfxRawResMan_AllocObj(void *);
 void NARC_Delete(void *);
-void ov41_02246A20(void *);
-void ov41_02246B34(void *);
+void DressUpGfx_FreeBgs(void *);
+void DressUpGfx_FreeSpriteSystem(void *);
 
 #endif

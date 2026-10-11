@@ -11,7 +11,7 @@
 #include "save_trainer_card.h"
 #include "task.h"
 #include "friend_group_access.h"
-#include "unk_0202D230.h"
+#include "frontier_data_access.h"
 #include "unk_02030A98.h"
 #include "unk_02035900.h"
 #include "unk_020379A0.h"

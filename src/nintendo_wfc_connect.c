@@ -34,7 +34,7 @@
 #include "touchscreen.h"
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
-#include "unk_0202D230.h"
+#include "frontier_data_access.h"
 #include "unk_0203170C.h"
 #include "unk_02034B0C.h"
 #include "unk_02037C94.h"
@@ -202,7 +202,7 @@ typedef struct NintendoWfcModeRow {
     NintendoWfcModeFunc func[3];
 } NintendoWfcModeRow;
 
-typedef struct FrontierDownload FrontierDownload;
+typedef struct BattleRoomDownload BattleRoomDownload;
 
 // Defined in OVY_0 / OVY_38 (DWC and HTTP wrappers); not declared in any header.
 int ov00_021EC0FC(void *a0);
@@ -240,12 +240,12 @@ void sub_020399EC(void);
 void sub_0203A930(s32 a0);
 int WCM_GetPhase(void);
 u64 DWC_CreateFriendKey(const void *data);
-u8 sub_0202D568(FrontierData *data);
-void sub_0202D678(FrontierDownload *data, u32 group, u32 entry, u32 *date);
-BOOL sub_0202D720(FrontierDownload *data, u32 group, u32 entry, u32 *date);
-void sub_0202D7C0(FrontierDownload *data, void *records, u32 a, u32 b);
-void sub_0202D7F0(FrontierDownload *data, u8 *out);
-void sub_0202D8A4(FrontierDownload *data, void *records, u32 a, u32 b);
+u8 FrontierData_GetWifiWinCount(FrontierData *data);
+void BattleRoomDownload_MarkRoom(BattleRoomDownload *data, u32 group, u32 entry, u32 *date);
+BOOL BattleRoomDownload_IsRoomMarked(BattleRoomDownload *data, u32 group, u32 entry, u32 *date);
+void BattleRoomDownload_SetTrainers(BattleRoomDownload *data, void *records, u32 a, u32 b);
+void BattleRoomDownload_GetTrainersRoom(BattleRoomDownload *data, u8 *out);
+void BattleRoomDownload_SetLeaders(BattleRoomDownload *data, void *records, u32 a, u32 b);
 
 extern NintendoWfcHttp sNintendoWfcHttp;
 extern u8 ov72_0223B82C[];
@@ -1139,7 +1139,7 @@ int NintendoWfc_SessionInit(NintendoWfcConnect *wfc) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, TRUE);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, TRUE);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, TRUE);
-    wfc->ownRank = sub_0202D488(wfc->args->frontierData, 0);
+    wfc->ownRank = FrontierData_WifiRankAction(wfc->args->frontierData, 0);
     wfc->rank = wfc->ownRank;
     wfc->room = 1;
     wfc->waitingIcon = NULL;
@@ -1797,8 +1797,8 @@ int ov72_02239784(NintendoWfcConnect *wfc) {
         if (value > 0) {
             ov00_021ECB94(date, time);
             wfc->room = value;
-            // sub_0202D720 takes u32 group/entry; the original call truncated them to u8
-            if (sub_0202D720((FrontierDownload *)wfc->args->unk4, (u8)wfc->rank, (u8)wfc->room, date)) {
+            // BattleRoomDownload_IsRoomMarked takes u32 group/entry; the original call truncated them to u8
+            if (BattleRoomDownload_IsRoomMarked((BattleRoomDownload *)wfc->args->unk4, (u8)wfc->rank, (u8)wfc->room, date)) {
                 wfc->state = 20;
             } else {
                 wfc->state = 16;
@@ -1844,11 +1844,11 @@ int ov72_022398BC(NintendoWfcConnect *wfc) {
         case 0: {
             u32 time[3];
             u32 date[4];
-            // sub_0202D7C0/sub_0202D678 take u32; the original calls truncated rank and room to u8
-            sub_0202D7C0((FrontierDownload *)wfc->args->unk4, wfc->downloadBuffer, (u8)wfc->ownRank, (u8)wfc->room);
+            // BattleRoomDownload_SetTrainers/BattleRoomDownload_MarkRoom take u32; the original calls truncated rank and room to u8
+            BattleRoomDownload_SetTrainers((BattleRoomDownload *)wfc->args->unk4, wfc->downloadBuffer, (u8)wfc->ownRank, (u8)wfc->room);
             NintendoWfc_SetState(wfc, 39, 19);
             ov00_021ECB94(date, time);
-            sub_0202D678((FrontierDownload *)wfc->args->unk4, (u8)wfc->rank, (u8)wfc->room, date);
+            BattleRoomDownload_MarkRoom((BattleRoomDownload *)wfc->args->unk4, (u8)wfc->rank, (u8)wfc->room, date);
         } break;
         case -1:
             wfc->httpResult = result;
@@ -1913,8 +1913,8 @@ int ov72_02239A08(NintendoWfcConnect *wfc) {
 
 int ov72_02239A3C(NintendoWfcConnect *wfc) {
     u8 buf[4];
-    int a2 = sub_0202D568(wfc->args->frontierData);
-    sub_0202D7F0((FrontierDownload *)wfc->args->unk4, buf);
+    int a2 = FrontierData_GetWifiWinCount(wfc->args->frontierData);
+    BattleRoomDownload_GetTrainersRoom((BattleRoomDownload *)wfc->args->unk4, buf);
     sub_02069528(wfc->args->saveData, 1, &wfc->uploadRecord);
     NintendoWfcHttp_RequestUpload(buf[0], buf[1], a2, &wfc->uploadRecord);
     wfc->state = 27;
@@ -1929,7 +1929,7 @@ int ov72_02239A88(NintendoWfcConnect *wfc) {
         wfc->timeoutCounter = 0;
         switch (result) {
         case 0:
-            sub_0202D5DC(wfc->args->frontierData, 5, 2);
+            FrontierData_FlagAction(wfc->args->frontierData, 5, 2);
             NintendoWfc_SetState(wfc, 39, 28);
             break;
         case -1:
@@ -2076,8 +2076,8 @@ int ov72_02239D6C(NintendoWfcConnect *wfc) {
         *(volatile int *)&wfc->timeoutCounter = 0; // the original accessed this counter as volatile here
         switch (result) {
         case 0:
-            // sub_0202D8A4 takes u32; the original call truncated rank and room to u8
-            sub_0202D8A4((FrontierDownload *)wfc->args->unk4, wfc->downloadBuffer + 0x63C, (u8)wfc->rank, (u8)wfc->room);
+            // BattleRoomDownload_SetLeaders takes u32; the original call truncated rank and room to u8
+            BattleRoomDownload_SetLeaders((BattleRoomDownload *)wfc->args->unk4, wfc->downloadBuffer + 0x63C, (u8)wfc->rank, (u8)wfc->room);
             NintendoWfc_SetState(wfc, 39, 38);
             break;
         case -1:

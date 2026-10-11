@@ -47,9 +47,9 @@ void *ov41_0224B630(void *args) {
     PTR_AT(work, 0x234) = AllocMonZeroed(S32_AT(args, 0x68));
     FashionMon_ToPokemon(PTR_AT(args, 0), PTR_AT(work, 0x234));
     ov41_0224B6CC(work, args);
-    ov41_02246544(work, PTR_AT(args, 0x58), S32_AT(args, 0x68));
+    AccessoryPortrait_InitBg(work, PTR_AT(args, 0x58), S32_AT(args, 0x68));
     ov41_022499B4((u8 *)work + 0x184, 0x15, S32_AT(args, 0x68));
-    PTR_AT(work, 0x18C) = ov41_02245EA0(0x14, S32_AT(args, 0x68));
+    PTR_AT(work, 0x18C) = DressUpGfx_CreateSlotList(0x14, S32_AT(args, 0x68));
     ov41_0224B780(work, args);
     ov41_0224B848(work, args);
     ov41_0224B4E8((u8 *)work + 0x218, (u8 *)work + 0x190, S32_AT(args, 0x68));
@@ -67,21 +67,21 @@ void ov41_0224B6CC(void *work, void *args) {
     config.unk04 = 0x76;
     config.unk08 = 0x13;
     config.unk0C = S32_AT(args, 0x68);
-    ov41_02246518(work, &config, S32_AT(args, 0x68));
+    AccessoryPortrait_InitGfxCore(work, &config, S32_AT(args, 0x68));
     ov41_0224B938(work, temporary, args, S32_AT(args, 0x68));
-    ov41_02246250(work, temporary);
-    ov41_022463D4(temporary);
+    DressUpGfx_UploadRawResTables(work, temporary);
+    DressUpGfx_DestroyRawResTables(temporary);
 }
 
 void ov41_0224B720(void *work) {
-    ov41_022465D8(work, S32_AT(work, 0x23C) + S32_AT(work, 0x244), S32_AT(work, 0x240) + S32_AT(work, 0x248), U16_AT(work, 0x24C), (u8 *)work + 0x250);
+    AccessoryPortrait_DrawTransformed(work, S32_AT(work, 0x23C) + S32_AT(work, 0x244), S32_AT(work, 0x240) + S32_AT(work, 0x248), U16_AT(work, 0x24C), (u8 *)work + 0x250);
 }
 
 void ov41_0224B754(void *work) {
-    ov41_0224626C(work);
-    ov41_02246594(work);
+    DressUpGfx_FreeAllTexAndPltt(work);
+    AccessoryPortrait_FreeGfxCore(work);
     if (PTR_AT(work, 0x260) != NULL) {
-        ov41_022465C0(work);
+        AccessoryPortrait_FreeBg(work);
     }
     NARC_Delete(PTR_AT(work, 0x180));
 }

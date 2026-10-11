@@ -30,7 +30,7 @@
 #include "unk_0200FA24.h"
 #include "palette_blink.h"
 #include "unk_02019BA4.h"
-#include "unk_0202D230.h"
+#include "frontier_data_access.h"
 #include "unk_02030A98.h"
 #include "unk_0205BFF0.h"
 
@@ -909,7 +909,7 @@ u32 FrontierRecordsApp_GetTowerStreakLabel(FrontierRecordsApp *app, u32 mode) {
         index = 8;
         break;
     }
-    return sub_0202D5DC(frontierData, index, 0) == 1 ? msg_0019_00030 : msg_0019_00029;
+    return FrontierData_FlagAction(frontierData, index, 0) == 1 ? msg_0019_00030 : msg_0019_00029;
 }
 
 void FrontierRecordsApp_PrintReturnButton(FrontierRecordsApp *app) {

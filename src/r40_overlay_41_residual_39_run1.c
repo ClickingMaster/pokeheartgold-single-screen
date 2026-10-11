@@ -24,8 +24,8 @@ void *ov41_02248AFC(void *data, int a1, int a2, int wanted) {
 
 void ov41_02248B20(void *data, void *object, int index, void *value) {
     if (*(int *)data != index || value != *(void **)((u8 *)data + 0x14 + index * 12)) {
-        ov41_02246008(object, 0);
+        DressUpGfx_SetSlotVisible(object, 0);
     } else {
-        ov41_02246008(object, 1);
+        DressUpGfx_SetSlotVisible(object, 1);
     }
 }

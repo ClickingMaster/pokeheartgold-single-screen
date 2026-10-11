@@ -66,7 +66,7 @@ u32 ov80_022385D8(u32 index);
 u32 ov80_02238610(u32 index);
 void sub_02031108(void *frontierSave, u32 stat, u32 substat, u32 value);
 void *Save_FrontierData_Get(void *saveData);
-void sub_0202D57C(void *frontierData, u32 stat, u32 value);
+void FrontierData_TowerRoundAction(void *frontierData, u32 stat, u32 value);
 u32 sub_0205C048(u32 a, u32 b);
 void FrontierFieldSystem_SetRandomFrontierTrainers(ArcadeDataPrivate *data, void *saveData);
 void *SaveArray_Party_Get(void *saveData);

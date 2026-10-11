@@ -271,7 +271,7 @@ sRecordMixingHandlers: ; 0x021EA744
 	.word ov73_021E7A84, ov73_021E7BC8, 0
 	.word ov73_021E7A74, ov73_021E7B3C, 0
 	.word Save_Rankings_GetMixingSize, RecordMixing_Rankings_Load, RecordMixing_Rankings_Merge
-	.word sub_0202D230, ov73_021EA348, ov73_021EA370
+	.word BattleRoomTrainer_sizeof, ov73_021EA348, ov73_021EA370
 	.word ov73_021E7A7C, ov73_021E7C50, 0
 	.word ov73_021E7A84, ov73_021E7C94, 0
 	.word ov73_021E7A74, ov73_021E7C0C, ov73_021EA2FC

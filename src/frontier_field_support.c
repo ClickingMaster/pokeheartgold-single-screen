@@ -141,30 +141,30 @@ u32 sub_020672D8(SaveData *saveData) {
         return 0;
     }
     frontierData = Save_FrontierData_Get(saveData);
-    flag13 = sub_0202D5DC(frontierData, 13, 0);
-    flag0 = sub_0202D5DC(frontierData, 0, 0);
-    flag1 = sub_0202D5DC(frontierData, 1, 0);
-    sub_0202D5DC(frontierData, 14, 0);
-    sub_0202D5DC(frontierData, 2, 0);
-    sub_0202D5DC(frontierData, 3, 0);
+    flag13 = FrontierData_FlagAction(frontierData, 13, 0);
+    flag0 = FrontierData_FlagAction(frontierData, 0, 0);
+    flag1 = FrontierData_FlagAction(frontierData, 1, 0);
+    FrontierData_FlagAction(frontierData, 14, 0);
+    FrontierData_FlagAction(frontierData, 2, 0);
+    FrontierData_FlagAction(frontierData, 3, 0);
     if (flag13 != 0 && flag0 != 0 && flag1 != 0) {
         return 0;
     }
     if (flag13 == 0) {
-        sub_0202D5DC(frontierData, 13, 1);
+        FrontierData_FlagAction(frontierData, 13, 1);
         return 1;
     }
     if (stat < 50) {
         return 0;
     }
     if (flag0 == 0) {
-        sub_0202D5DC(frontierData, 0, 1);
+        FrontierData_FlagAction(frontierData, 0, 1);
         return 2;
     }
     if (stat < 100 || flag1 != 0) {
         return 0;
     }
-    sub_0202D5DC(frontierData, 1, 1);
+    FrontierData_FlagAction(frontierData, 1, 1);
     return 3;
 }
 
@@ -183,12 +183,12 @@ u32 sub_02067398(SaveData *saveData) {
         return 0;
     }
     frontierData = Save_FrontierData_Get(saveData);
-    flag13 = sub_0202D5DC(frontierData, 13, 0);
-    flag0 = sub_0202D5DC(frontierData, 0, 0);
-    flag1 = sub_0202D5DC(frontierData, 1, 0);
-    flag14 = sub_0202D5DC(frontierData, 14, 0);
-    flag2 = sub_0202D5DC(frontierData, 2, 0);
-    flag3 = sub_0202D5DC(frontierData, 3, 0);
+    flag13 = FrontierData_FlagAction(frontierData, 13, 0);
+    flag0 = FrontierData_FlagAction(frontierData, 0, 0);
+    flag1 = FrontierData_FlagAction(frontierData, 1, 0);
+    flag14 = FrontierData_FlagAction(frontierData, 14, 0);
+    flag2 = FrontierData_FlagAction(frontierData, 2, 0);
+    flag3 = FrontierData_FlagAction(frontierData, 3, 0);
     if (flag13 != 0 && flag0 != 0 && flag1 != 0) {
         return 0;
     }
@@ -246,22 +246,22 @@ u32 sub_020674E0(SaveData *saveData) {
     u32 next;
     sub_0202D638(frontierData, value);
     next = sub_020674A4(value);
-    sub_0202D308(sub_0202D908(saveData), 10, &next);
+    BattleTowerChallenge_SetField(Save_BattleTowerChallenge_Get(saveData), 10, &next);
     return next;
 }
 
 u32 sub_0206751C(SaveData *saveData) {
     FrontierData *frontierData = Save_FrontierData_Get(saveData);
-    u32 unk = sub_0202D908(saveData);
+    u32 unk = Save_BattleTowerChallenge_Get(saveData);
     u32 value = sub_020674A4(sub_0202D63C(frontierData));
     s32 i;
     s32 count;
-    count = sub_0202D57C(frontierData, (u16)sub_0202D284(unk, 0, 0), 0) * 24;
+    count = FrontierData_TowerRoundAction(frontierData, (u16)BattleTowerChallenge_GetField(unk, 0, 0), 0) * 24;
     i = 0;
     for (i = 0; i < count; i++) {
         value = sub_020674A4(value);
     }
-    sub_0202D308(sub_0202D908(saveData), 10, &value);
+    BattleTowerChallenge_SetField(Save_BattleTowerChallenge_Get(saveData), 10, &value);
     return value;
 }
 

@@ -3,6 +3,7 @@
 
 #include "battle/battle.h"
 #include "battle/battle_022378C0.h"
+#include "battle/battle_controller_opponent.h"
 
 #include "bg_window.h"
 #include "gf_3d_vramman.h"
@@ -43,11 +44,6 @@ void ov12_0223A664(BattleSystem *battleSystem, BattleSetup *setup);
 void ov12_0223A7A0(void);
 
 // Defined in other modules that have no header declaring them yet.
-void ov12_02258DB0(BattleSystem *battleSystem, OpponentData *opponentData, u16 ball, int a3);
-void ov12_02258E54(BattleSystem *battleSystem, OpponentData *opponentData);
-void ov12_02258E7C(BattleSystem *battleSystem, OpponentData *opponentData, int a2);
-OpponentData *ov12_02258D74(BattleSystem *battleSystem, const u8 *data);
-void ov12_02260EA4(BattleSystem *battleSystem, OpponentData *opponentData);
 void BattleController_ProcessQueue(BattleSystem *battleSystem, int a1);
 void ov12_02265FD4(UnkBattleSystemSub17C *dest, BattleSystem *battleSystem, s32 idx, s32 terrain);
 void BgConfig_InitBattleMenuBackgrounds(BgConfig *bgConfig);

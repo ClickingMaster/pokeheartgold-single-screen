@@ -8,7 +8,7 @@ BOOL ov41_02248790(void *, int, int);
 void ov41_022487F8(void *, int, void *);
 void ov41_02249A70(void *);
 void *ov41_02248A94(void);
-void ov41_02246014(void *, int);
+void DressUpGfx_SetSlotPriority(void *, int);
 void ov41_02248B84(void *, int, void *, int, void *);
 int ov41_0224895C(void *);
 void *ov41_02248ABC(void *, int, int);

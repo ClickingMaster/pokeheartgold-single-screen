@@ -237,7 +237,7 @@ BOOL Battle_BattleMain(OverlayManager *man) {
             BattleContext_Main(battleSystem, battleSystem->ctx);
         }
         for (i = 0; i < battleSystem->maxBattlers; i++) {
-            ov12_02258E54(battleSystem, battleSystem->opponentData[i]);
+            OpponentData_RunCommand(battleSystem, battleSystem->opponentData[i]);
         }
     } else {
         if (battleSystem->unk23FC) {
@@ -245,7 +245,7 @@ BOOL Battle_BattleMain(OverlayManager *man) {
             BattleController_ProcessQueue(battleSystem, 1);
         }
         for (i = 0; i < battleSystem->maxBattlers; i++) {
-            ov12_02258E54(battleSystem, battleSystem->opponentData[i]);
+            OpponentData_RunCommand(battleSystem, battleSystem->opponentData[i]);
             BattleController_ProcessQueue(battleSystem, 0);
         }
         if (!battleSystem->unk23FE) {
@@ -254,7 +254,7 @@ BOOL Battle_BattleMain(OverlayManager *man) {
                 BattleController_ProcessQueue(battleSystem, 1);
             }
             for (i = 0; i < battleSystem->maxBattlers; i++) {
-                ov12_02258E54(battleSystem, battleSystem->opponentData[i]);
+                OpponentData_RunCommand(battleSystem, battleSystem->opponentData[i]);
                 BattleController_ProcessQueue(battleSystem, 0);
             }
         }
@@ -334,7 +334,7 @@ void Battle_BattleExit(OverlayManager *man) {
     BattleAnimSystem_Delete(battleSystem->unk8C);
     BattleContext_Delete(battleSystem->ctx);
     for (i = 0; i < battleSystem->maxBattlers; i++) {
-        ov12_02258E7C(battleSystem, battleSystem->opponentData[i], battleSystem->unk23FD);
+        OpponentData_Free(battleSystem, battleSystem->opponentData[i], battleSystem->unk23FD);
     }
     PokepicManager_Delete(battleSystem->pokepicManager);
     if (battleSystem->unk23FD != 2) {
@@ -548,13 +548,13 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
             for (i = 0; i < BATTLER_MAX; i++) {
                 battlerInitData.battler = i;
                 battlerInitData.battlerType = sDoublesBattlerTypes[i];
-                battleSystem->opponentData[i] = ov12_02258D74(battleSystem, (u8 *)&battlerInitData);
+                battleSystem->opponentData[i] = OpponentData_New(battleSystem, (u8 *)&battlerInitData);
             }
 
             battleSystem->maxBattlers = i;
 
             for (i = 0; i < BATTLER_MAX; i++) {
-                ov12_02260EA4(battleSystem, battleSystem->opponentData[i]);
+                OpponentData_SetInputTasks(battleSystem, battleSystem->opponentData[i]);
                 Party_Copy(setup->party[i], battleSystem->trainerParty[i]);
             }
 
@@ -574,11 +574,11 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
             for (i = 0; i < BATTLER_MAX; i++) {
                 battlerInitData.battler = i;
                 battlerInitData.battlerType = sLinkMultiBattlerTypes[ov12_0223BFCC(battleSystem, networkID)][ov12_0223BFCC(battleSystem, i)];
-                battleSystem->opponentData[i] = ov12_02258D74(battleSystem, (u8 *)&battlerInitData);
+                battleSystem->opponentData[i] = OpponentData_New(battleSystem, (u8 *)&battlerInitData);
             }
             battleSystem->maxBattlers = i;
             for (i = 0; i < BATTLER_MAX; i++) {
-                ov12_02260EA4(battleSystem, battleSystem->opponentData[i]);
+                OpponentData_SetInputTasks(battleSystem, battleSystem->opponentData[i]);
                 Party_Copy(setup->party[i], battleSystem->trainerParty[i]);
             }
             for (i = 0; i < battleSystem->maxBattlers; i++) {
@@ -597,8 +597,8 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
             for (i = 0; i < BATTLER_MAX; i++) {
                 battlerInitData.battler = i;
                 battlerInitData.battlerType = sLinkDoublesBattlerTypes[networkID][i];
-                battleSystem->opponentData[i] = ov12_02258D74(battleSystem, (u8 *)&battlerInitData);
-                ov12_02260EA4(battleSystem, battleSystem->opponentData[i]);
+                battleSystem->opponentData[i] = OpponentData_New(battleSystem, (u8 *)&battlerInitData);
+                OpponentData_SetInputTasks(battleSystem, battleSystem->opponentData[i]);
             }
             battleSystem->maxBattlers = i;
             for (i = 0; i < BATTLER_MAX; i++) {
@@ -626,8 +626,8 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
             for (i = 0; i < BATTLER_MAX / 2; i++) {
                 battlerInitData.battler = i;
                 battlerInitData.battlerType = sLinkSinglesBattlerTypes[networkID * 2 + i];
-                battleSystem->opponentData[i] = ov12_02258D74(battleSystem, (u8 *)&battlerInitData);
-                ov12_02260EA4(battleSystem, battleSystem->opponentData[i]);
+                battleSystem->opponentData[i] = OpponentData_New(battleSystem, (u8 *)&battlerInitData);
+                OpponentData_SetInputTasks(battleSystem, battleSystem->opponentData[i]);
             }
             battleSystem->maxBattlers = i;
             for (i = 0; i < BATTLER_MAX; i++) {
@@ -649,8 +649,8 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
         for (i = 0; i < BATTLER_MAX; i++) {
             battlerInitData.battler = i;
             battlerInitData.battlerType = sDoublesBattlerTypes[i];
-            battleSystem->opponentData[i] = ov12_02258D74(battleSystem, (u8 *)&battlerInitData);
-            ov12_02260EA4(battleSystem, battleSystem->opponentData[i]);
+            battleSystem->opponentData[i] = OpponentData_New(battleSystem, (u8 *)&battlerInitData);
+            OpponentData_SetInputTasks(battleSystem, battleSystem->opponentData[i]);
         }
         battleSystem->maxBattlers = i;
         for (i = 0; i < BATTLER_MAX; i++) {
@@ -683,8 +683,8 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
         for (i = 0; i < BATTLER_MAX; i++) {
             battlerInitData.battler = i;
             battlerInitData.battlerType = sDoublesBattlerTypes[i];
-            battleSystem->opponentData[i] = ov12_02258D74(battleSystem, (u8 *)&battlerInitData);
-            ov12_02260EA4(battleSystem, battleSystem->opponentData[i]);
+            battleSystem->opponentData[i] = OpponentData_New(battleSystem, (u8 *)&battlerInitData);
+            OpponentData_SetInputTasks(battleSystem, battleSystem->opponentData[i]);
         }
         battleSystem->maxBattlers = i;
         for (i = 0; i < BATTLER_MAX; i++) {
@@ -707,8 +707,8 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
         for (i = 0; i < BATTLER_MAX; i++) {
             battlerInitData.battler = i;
             battlerInitData.battlerType = sDoublesBattlerTypes[i];
-            battleSystem->opponentData[i] = ov12_02258D74(battleSystem, (u8 *)&battlerInitData);
-            ov12_02260EA4(battleSystem, battleSystem->opponentData[i]);
+            battleSystem->opponentData[i] = OpponentData_New(battleSystem, (u8 *)&battlerInitData);
+            OpponentData_SetInputTasks(battleSystem, battleSystem->opponentData[i]);
         }
         battleSystem->maxBattlers = i;
         for (i = 0; i < BATTLER_MAX; i++) {
@@ -738,8 +738,8 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
         for (i = 0; i < BATTLER_MAX / 2; i++) {
             battlerInitData.battler = i;
             battlerInitData.battlerType = sSinglesBattlerTypes[i];
-            battleSystem->opponentData[i] = ov12_02258D74(battleSystem, (u8 *)&battlerInitData);
-            ov12_02260EA4(battleSystem, battleSystem->opponentData[i]);
+            battleSystem->opponentData[i] = OpponentData_New(battleSystem, (u8 *)&battlerInitData);
+            OpponentData_SetInputTasks(battleSystem, battleSystem->opponentData[i]);
         }
         battleSystem->maxBattlers = i;
         for (i = 0; i < BATTLER_MAX; i++) {
@@ -947,7 +947,7 @@ void Task_UpdateCriticalHpMusic(SysTask *task, void *data) {
     }
     for (i = 0; i < maxBattlers; i++) {
         OpponentData *opponentData = BattleSystem_GetOpponentData(battleSystem, i);
-        if ((!ov12_02261264(opponentData) && !(BattleSystem_GetBattleSpecial(battleSystem) & BATTLE_SPECIAL_RECORDING))
+        if ((!OpponentData_GetInputMode(opponentData) && !(BattleSystem_GetBattleSpecial(battleSystem) & BATTLE_SPECIAL_RECORDING))
             || (!BattleSystem_GetFieldSide(battleSystem, i) && (BattleSystem_GetBattleSpecial(battleSystem) & BATTLE_SPECIAL_RECORDING))) {
             BattleHpBar *hpBar = OpponentData_GetHpBar(opponentData);
             if (hpBar && CalculateHpBarColor(hpBar->hp, hpBar->maxHp, 48) == 1) {

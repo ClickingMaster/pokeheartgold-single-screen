@@ -19,7 +19,7 @@ extern u8 gSystem[];
 void PlaySE(u32 seq);
 u32 MTRandom(void);
 
-void ov41_022463FC(void);
+void DressUp_DisableDragWindow(void);
 void ov41_02248020(void *a, void *b);
 BOOL ov41_022480A4(void *a, void *b, void *c);
 void ov41_02248158(void *a);

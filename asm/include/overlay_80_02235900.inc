@@ -1,7 +1,7 @@
 #include <nitro/fs/overlay.h>
 #pragma once
 .public Heap_Free
-.public sub_0202D57C
+.public FrontierData_TowerRoundAction
 .public Save_FrontierData_Get
 .public sub_02030C5C
 .public Save_Frontier_GetStatic

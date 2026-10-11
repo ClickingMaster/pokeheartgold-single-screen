@@ -1,38 +1,38 @@
 #include "overlay41_helpers_internal.h"
 
 /* ---- prototypes, source order ---- */
-void *ov41_02245EA0(int count, enum HeapID heapId);
-void ov41_02245ECC(void *w);
-void ov41_02245F04(Ov41Work *w);
-void ov41_02245F9C(Ov41Work *w);
-void ov41_02246008(Ov41Work *w);
-void ov41_02246014(Ov41Work *w);
-void ov41_02246130(void);
-void ov41_02246150(void);
-void ov41_02246250(Ov41Work *w, u32 *src);
-void ov41_0224626C(Ov41Work *w);
-void ov41_022462E4(Ov41Work *w, void *narc, int fileId, BOOL compressed, int a4, int a5);
-void ov41_02246328(Ov41Work *w, void *narc, int fileId, BOOL compressed, int id);
-void ov41_02246344(Ov41Work *w, void *narc, int fileId, BOOL compressed, int id);
-void ov41_02246360(Ov41Work *w, int id);
-void ov41_02246374(Ov41Work *w, int id);
-void ov41_02246388(Ov41Work *w, int id);
-void ov41_0224639C(Ov41Work *w, int id);
-void ov41_022463D4(void *a);
-void *ov41_022463DC(Ov41Work *w, void *a, u32 idx);
-void ov41_02246494(Ov41Work *w);
-void ov41_022464AC(Ov41Work *w, void *arg);
-void ov41_022465C0(Ov41Work *w);
-void ov41_022465CC(Ov41Work *w);
-void ov41_02246698(Ov41Work *w);
-void ov41_022466B8(Ov41Work *w);
-void ov41_022466C8(void *a);
-void ov41_022467C8(void);
-void ov41_022467D4(void);
-void ov41_02246820(Ov41Work *w);
-void ov41_02246830(Ov41Work *w);
-void ov41_02246A7C(Ov41Work *w);
-void ov41_02246B5C(Ov41Work *w);
+void *DressUpGfx_CreateSlotList(int count, enum HeapID heapId);
+void DressUpGfx_FreeSlotList(void *w);
+void DressUpGfx_IsTouchHeldOnSlot(Ov41Work *w);
+void DressUpGfx_SetSlotPos(Ov41Work *w);
+void DressUpGfx_SetSlotVisible(Ov41Work *w);
+void DressUpGfx_SetSlotPriority(Ov41Work *w);
+void DressUpGfx_InitDisplay(void);
+void DressUpGfx_ResetDisplay(void);
+void DressUpGfx_UploadRawResTables(Ov41Work *w, u32 *src);
+void DressUpGfx_FreeAllTexAndPltt(Ov41Work *w);
+void DressUpGfx_LoadCharRes(Ov41Work *w, void *narc, int fileId, BOOL compressed, int a4, int a5);
+void DressUpGfx_LoadCellRes(Ov41Work *w, void *narc, int fileId, BOOL compressed, int id);
+void DressUpGfx_LoadAnimRes(Ov41Work *w, void *narc, int fileId, BOOL compressed, int id);
+void DressUpGfx_FreeCharRes(Ov41Work *w, int id);
+void DressUpGfx_FreePlttRes(Ov41Work *w, int id);
+void DressUpGfx_FreeCellRes(Ov41Work *w, int id);
+void DressUpGfx_FreeAnimRes(Ov41Work *w, int id);
+void DressUpGfx_DestroyRawResTables(void *a);
+void *DressUpGfx_StoreUnpackedChar(Ov41Work *w, void *a, u32 idx);
+void DressUp_VBlank(Ov41Work *w);
+void AccessoryPortrait_AllocRawResTables(Ov41Work *w, void *arg);
+void AccessoryPortrait_FreeBg(Ov41Work *w);
+void DressUpGfx_HandlePokepicLoad(Ov41Work *w);
+void AccessoryPortrait_FreeAppGfx(Ov41Work *w);
+void AccessoryPortrait_AppVBlank(Ov41Work *w);
+void AccessoryPortrait_RenderSprites(void *a);
+void DressUpGfx_ResetFrameVram(void);
+void DressUpGfx_DisablePlanes(void);
+void DressUpGfx_DestroyGraphicsManager(Ov41Work *w);
+void DressUpGfx_DrawGraphicsManager(Ov41Work *w);
+void DressUp_DestroyCharRawResMan(Ov41Work *w);
+void DressUpGfx_RenderSprites(Ov41Work *w);
 void ov41_02246C90(Ov41Work *w, int fileId);
 void ov41_02246CB0(Ov41Work *w);
 void ov41_0224726C(void *a);
@@ -99,5 +99,5 @@ void ov41_02249888(void *src, void *dst);
 /* ---- bodies ---- */
 
 void ov41_02247478(void *a) {
-    ov41_02246494(a);
+    DressUp_VBlank(a);
 }

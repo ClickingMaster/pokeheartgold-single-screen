@@ -14,7 +14,7 @@ extern u8 PlayerProfile_GetVersion(void *profile);
 extern u8 PlayerProfile_GetAvatar(void *profile);
 extern const u16 *PlayerProfile_GetNamePtr(void *profile);
 extern void CopyU16StringArrayN(u16 *dst, const u16 *src, u32 count);
-extern void *sub_0202D660(void *save, int index);
+extern void *Save_Frontier_GetTowerMessage(void *save, int index);
 extern void MailMsg_Copy(void *dst, void *src);
 extern u8 *Save_TrainerHouse_Get(void *save);
 extern void ov112_021F3608(void *save, u8 *out);

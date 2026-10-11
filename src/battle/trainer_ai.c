@@ -3205,7 +3205,7 @@ static BOOL AI_CannotDamageWonderGuard(BattleSystem *battleSystem, BattleContext
                 && i != ctx->selectedMonIndex[battler]) {
                 for (j = 0; j < MAX_MON_MOVES; j++) {
                     move = GetMonData(mon, MON_DATA_MOVE1 + j, NULL);
-                    moveType = ov12_02258BB4(battleSystem, ctx, mon, move);
+                    moveType = TrainerAI_GetMoveType(battleSystem, ctx, mon, move);
 
                     if (move) {
                         effectiveness = 0;
@@ -3323,7 +3323,7 @@ static BOOL AI_OnlyIneffectiveMoves(BattleSystem *battleSystem, BattleContext *c
             && i != ctx->aiSwitchedPartySlot[aiSlot2]) {
             for (j = 0; j < MAX_MON_MOVES; j++) {
                 move = GetMonData(mon, MON_DATA_MOVE1 + j, NULL);
-                type = ov12_02258BB4(battleSystem, ctx, mon, move);
+                type = TrainerAI_GetMoveType(battleSystem, ctx, mon, move);
 
                 if (move && ctx->trainerAIData.moveData[move].power) {
                     effectiveness = 0;
@@ -3382,7 +3382,7 @@ static BOOL AI_OnlyIneffectiveMoves(BattleSystem *battleSystem, BattleContext *c
             && i != ctx->aiSwitchedPartySlot[aiSlot2]) {
             for (j = 0; j < MAX_MON_MOVES; j++) {
                 move = GetMonData(mon, MON_DATA_MOVE1 + j, NULL);
-                type = ov12_02258BB4(battleSystem, ctx, mon, move);
+                type = TrainerAI_GetMoveType(battleSystem, ctx, mon, move);
 
                 if (move && ctx->trainerAIData.moveData[move].power) {
                     effectiveness = 0;
@@ -3660,7 +3660,7 @@ static BOOL AI_HasPartyMemberWithSuperEffectiveMove(BattleSystem *battleSystem, 
             if (effectiveness & checkEffectiveness) {
                 for (j = 0; j < MAX_MON_MOVES; j++) {
                     move = GetMonData(mon, MON_DATA_MOVE1 + j, NULL);
-                    moveType = ov12_02258BB4(battleSystem, ctx, mon, move);
+                    moveType = TrainerAI_GetMoveType(battleSystem, ctx, mon, move);
 
                     if (move) {
                         effectiveness = 0;
@@ -3879,7 +3879,7 @@ int ov10_022205BC(BattleSystem *battleSystem, int battler) {
             // If this is a switch which should use the post-KO switch logic, then do so.
             // If there is no valid battler, pick the first one in party order.
             if (ctx->aiSwitchedPartySlot[battler] == 6) {
-                if ((i = ov12_02258800(battleSystem, battler)) == 6) {
+                if ((i = TrainerAI_PostKOSwitchIn(battleSystem, battler)) == 6) {
                     battler1 = battler;
                     if ((battleType & BATTLE_TYPE_TAG) || (battleType & BATTLE_TYPE_MULTI)) {
                         battler2 = battler1;

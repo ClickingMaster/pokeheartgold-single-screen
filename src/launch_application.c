@@ -71,7 +71,7 @@
 #include "global_terminal_app.h"
 #include "friend_roster.h"
 #include "friend_group_access.h"
-#include "unk_0202D230.h"
+#include "frontier_data_access.h"
 #include "unk_0202DB34.h"
 #include "unk_02037C94.h"
 #include "unk_02055244.h"
@@ -444,7 +444,7 @@ static BOOL sub_0203E878(TaskManager *taskman) {
             case 4:
             case 5:
                 sub_02090D60(data->easyChat, &mailMessage);
-                sub_0202D640(fieldSystem->saveData, data->unk10 - 2, &mailMessage);
+                Save_Frontier_SetTowerMessage(fieldSystem->saveData, data->unk10 - 2, &mailMessage);
                 *data->unk4 = MailMsg_GetFieldI(&mailMessage, 0);
                 break;
             }
@@ -483,7 +483,7 @@ void sub_0203E960(TaskManager *taskman, int a1, UnkStruct_0203E8C8 *a2, u16 *a3,
         args = EasyChat_CreateArgs(2, 0, fieldSystem->saveData, &fieldSystem->menuInputState, HEAP_ID_FIELD3);
         data->easyChat = args;
         sub_02090D40(args);
-        MailMessage *mailMessage = sub_0202D660(fieldSystem->saveData, (u8)(a1 - 2));
+        MailMessage *mailMessage = Save_Frontier_GetTowerMessage(fieldSystem->saveData, (u8)(a1 - 2));
         sub_02090D20(data->easyChat, mailMessage);
         sub_02090D34(data->easyChat);
     }
@@ -1198,7 +1198,7 @@ NintendoWifiConnectArgs *NintendoWifiConnection_LaunchApp(FieldSystem *fieldSyst
 
     NintendoWifiConnectArgs *args = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(NintendoWifiConnectArgs));
     args->frontierData = Save_FrontierData_Get(fieldSystem->saveData);
-    args->unk4 = sub_0202D928(fieldSystem->saveData);
+    args->unk4 = Save_BattleRoomDownload_Get(fieldSystem->saveData);
     args->sysInfo = Save_SysInfo_Get(fieldSystem->saveData);
     args->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
     args->unk14 = FriendRoster_GetUserData(Save_FriendRoster_Get(fieldSystem->saveData));

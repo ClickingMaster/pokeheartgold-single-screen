@@ -3,9 +3,9 @@
 extern FrontierSave _021D2AFC;
 u32 Save_Frontier_sizeof(void);
 void Save_Frontier_Init(FrontierSave *frontier);
-void sub_0202D240(void *data);
-void sub_0202D254(void *data);
-void sub_0202D274(void *data);
+void FrontierData_Reset(void *data);
+void TowerMessages_Init(void *data);
+void BattleRoomDownload_Init(void *data);
 void sub_02030A98(void *state);
 void sub_02030C50(void *state);
 void sub_02030DFC(void *state);
@@ -24,9 +24,9 @@ u32 Save_Frontier_sizeof(void) {
 }
 void Save_Frontier_Init(FrontierSave *frontier) {
     MI_CpuFill8(frontier, 0, sizeof(*frontier));
-    sub_0202D240((u8 *)frontier + 0x954);
-    sub_0202D254((u8 *)frontier + 0xabc);
-    sub_0202D274((u8 *)frontier + 0xadc);
+    FrontierData_Reset((u8 *)frontier + 0x954);
+    TowerMessages_Init((u8 *)frontier + 0xabc);
+    BattleRoomDownload_Init((u8 *)frontier + 0xadc);
     sub_02030A98((u8 *)frontier + 0x1618);
     sub_02030C50((u8 *)frontier + 0x161c);
     sub_02030DFC((u8 *)frontier + 0x1620);

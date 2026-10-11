@@ -37,6 +37,6 @@ void ov41_02249A70(Ov41Node *head) {
 }
 
 void ov41_02249A90(Ov41Dispatch *d, s32 arg) {
-    if (d->mode < 3) ov41_02246014(d->obj, arg);
+    if (d->mode < 3) DressUpGfx_SetSlotPriority(d->obj, arg);
     else ov41_02249700(d->obj, arg);
 }
