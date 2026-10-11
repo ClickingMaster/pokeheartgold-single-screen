@@ -293,8 +293,8 @@ void FrontierMap_Scroll(FrontierMap *map) {
 // Scroll mode 1: the BGs and the sprite surface follow the camera directly.
 void FrontierMap_ScrollToCamera(FrontierMap *map) {
     FrontierLaunchArgs *args = Frontier_GetLaunchArgs(map->frontier);
-    s16 y = map->scrollY + ov42_022293A8(&map->camera);
-    s16 x = map->scrollX + ov42_022293B0(&map->camera);
+    s16 y = map->shake.y + ov42_022293A8(&map->camera);
+    s16 x = map->shake.x + ov42_022293B0(&map->camera);
     f32 fy;
     f32 fx;
 

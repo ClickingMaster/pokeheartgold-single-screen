@@ -14,10 +14,10 @@
 	.public UnloadDwcOverlay
 	.public UnloadOVY13
 	.public UnloadOVY38
-	.public sub_020915F0
-	.public sub_02091634
+	.public RunNintendoWFCSetupAndReset
+	.public NintendoWFCSetupApp_Init
 	.rodata
 
 	.public gApp_MainMenu_SelectOption_NintendoWFCSetup
 gApp_MainMenu_SelectOption_NintendoWFCSetup:
-	.word sub_02091634, 0, 0, 0xFFFFFFFF
+	.word NintendoWFCSetupApp_Init, 0, 0, 0xFFFFFFFF

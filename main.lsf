@@ -653,7 +653,7 @@ Static main
     Object src/bag.o
     Object src/field_app_controller_1.o
     Object asm/unk_02078834_residual_1.o
-    Object src/slop_small_unk_02078DD8.o
+    Object src/wifi_plaza_player_info.o
     Object src/party_menu.o
     Object src/party_context_menu.o
     Object src/party_menu_sprites.o
@@ -805,8 +805,8 @@ Static main
     Object src/unk_020912AC.o
     Object src/dex_mon_measures.o
     Object src/unk_02091564.o
-    Object src/network_overlay_loader_1.o
-    Object asm/unk_020915B0_residual_1.o
+    Object src/network_overlay_loader.o
+    Object asm/network_overlay_loader_data.o
     Object src/location_gmm_dat.o
     Object src/move_relearner.o
     Object src/easy_chat_menu_lifecycle.o
@@ -867,7 +867,7 @@ Static main
     Object src/r40_unk_020957B0_run1.o
     Object asm/unk_020957B0_r40_residual_1.o
     Object src/grid_cursor_2.o
-    Object src/slop_small_unk_02095DF4.o
+    Object src/pokeathlon_course_task.o
     Object src/phonebook_dat.o
     Object src/choose_starter.o
     Object src/battle_greeting_task.o
@@ -4728,47 +4728,7 @@ Overlay OVY_80
     Object src/frontier/frontier_link_messages.o
     Object src/frontier/frontier_script_commands.o
     Object src/frontier/frontier_cmd_create_sprites.o
-    Object src/overlay80_command_helpers_13.o
-    Object src/to58_r3_ov80_13.o
-    Object src/overlay80_command_helpers_14.o
-    Object src/to58_r3_ov80_14.o
-    Object src/overlay80_command_helpers_15.o
-    Object src/to50_overlay80_command_helpers_r15.o
-    Object src/overlay80_command_helpers_16.o
-    Object src/to58_r3_ov80_16.o
-    Object src/overlay80_command_helpers_17.o
-    Object src/to45_overlay80_battle_record_r17_run1.o
-    Object src/to90_extra2388_run01.o
-    Object src/to45_overlay80_battle_record_r17_run2.o
-    Object src/overlay80_command_helpers_18.o
-    Object src/to58_r3_ov80_18.o
-    Object src/overlay80_command_helpers_19.o
-    Object src/to70_overlay_80_0222BDF4_residual_19_extra840_run01.o
-    Object src/overlay80_command_helpers_20.o
-    Object src/overlay80_frontier_commands_r20.o
-    Object src/overlay80_command_helpers_21.o
-    Object src/to50_overlay80_gate_d244.o
-    Object src/overlay80_command_helpers_22.o
-    Object src/to58_r3_ov80_22.o
-    Object src/overlay80_command_helpers_23.o
-    Object src/to50_overlay80_command_helper_r23.o
-    Object src/overlay80_command_helpers_24.o
-    Object src/overlay80_transition_windows_r24.o
-    Object src/overlay80_command_helpers_25.o
-    Object src/to70_overlay_80_0222BDF4_residual_25_extra1222_run01.o
-    Object src/r40_overlay_80_0222BDF4_residual_25_run1.o
-    Object src/overlay80_command_helpers_26.o
-    Object src/overlay80_frontier_task_command_r26.o
-    Object src/overlay80_command_helpers_27.o
-    Object src/to70_overlay_80_0222BDF4_residual_27_extra841_run01.o
-    Object src/overlay80_command_helpers_28.o
-    Object src/to70_overlay_80_0222BDF4_residual_28_extra842_run01.o
-    Object src/overlay80_command_helpers_29.o
-    Object src/to70_overlay_80_0222BDF4_residual_29_extra843_run01.o
-    Object src/overlay80_command_helpers_30.o
-    Object src/to50_overlay80_command_helper_r30.o
-    Object src/overlay80_command_helpers_31.o
-    Object src/overlay80_frontier_messages/overlay80_printer_commands.o
+    Object src/frontier/frontier_script_commands_ext.o
     Object src/op90_overlay80_frontier_messages_residual_r01.o
     Object src/overlay80_frontier_messages/overlay80_message_window.o
     Object src/overlay80_command_helpers_32.o

@@ -16,7 +16,7 @@ void UnloadOVY13(void) {
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_13));
 }
 
-void sub_020915F0(void *unused, void *args) {
+void RunNintendoWFCSetupAndReset(void *unused, void *args) {
     (void)unused;
     LoadDwcOverlay();
     LoadOVY13();
@@ -34,12 +34,12 @@ void UnloadOVY38(void) {
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_38));
 }
 
-BOOL sub_02091634(void *manager, u32 *state) {
+BOOL NintendoWFCSetupApp_Init(void *manager, u32 *state) {
     void *args;
     (void)state;
     Heap_Create(3, 0x30, 0x41000);
     args = OverlayManager_GetArgs(manager);
-    sub_020915F0(*(void **)((u8 *)args + 8), (void *)0x30);
+    RunNintendoWFCSetupAndReset(*(void **)((u8 *)args + 8), (void *)0x30);
     Heap_Destroy(0x30);
     OS_ResetSystem(0);
     return TRUE;

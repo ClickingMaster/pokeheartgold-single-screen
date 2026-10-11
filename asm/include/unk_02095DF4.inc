@@ -11,4 +11,4 @@
 .public sub_020505C8
 .public TaskManager_GetFieldSystem
 .public TaskManager_GetEnvironment
-.public sub_02095DF4
+.public CallTask_PokeathlonCourse

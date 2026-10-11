@@ -132,8 +132,8 @@
 .public Party_GetCount
 .public Party_GetMonByIndex
 .public SaveArray_Party_Get
-.public sub_02078DD8
-.public sub_02078E28
+.public WiFiPlazaPlayerInfo_New
+.public WiFiPlazaPlayerInfo_Free
 .public LoadDwcOverlay
 .public UnloadDwcOverlay
 .public LoadOVY38

@@ -40,7 +40,7 @@
 #include "unk_02037C94.h"
 #include "unk_0203A3B0.h"
 #include "unk_02069528.h"
-#include "unk_020915B0.h"
+#include "network_overlay_loader.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 

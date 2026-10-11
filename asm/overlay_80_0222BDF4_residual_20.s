@@ -65,80 +65,80 @@
 	.public FrtCmd_049
 	.public FrtCmd_050
 	.public FrtCmd_051
-	.public ov80_0222CA94
-	.public ov80_0222CAD0
+	.public FrontierScriptNative_WaitSpriteAnim
+	.public FrontierScript_SetObjectMovement
 	.public FrtCmd_083
 	.public FrtCmd_084
 	.public FrtCmd_052
-	.public ov80_0222CB94
+	.public FrontierScript_FreeNamingScreenArgs
 	.public FrtCmd_108
 	.public FrtCmd_109
-	.public ov80_0222CC20
-	.public ov80_0222CC70
+	.public FrontierScriptNative_WaitSaveBattleRecord
+	.public FrontierScript_GetBattleRecordType
 	.public FrtCmd_110
 	.public FrtCmd_111
 	.public FrtCmd_112
 	.public FrtCmd_114
 	.public FrtCmd_115
-	.public ov80_0222CE80
+	.public FrontierScriptNative_WaitSave
 	.public FrtCmd_116
 	.public FrtCmd_117
 	.public FrtCmd_119
 	.public FrtCmd_120
 	.public FrtCmd_121
 	.public FrtCmd_122
-	.public ov80_0222CF6C
+	.public FrontierScript_CountDigits
 	.public FrtCmd_123
 	.public FrtCmd_124
 	.public FrtCmd_125
 	.public FrtCmd_126
-	.public ov80_0222D0D4
+	.public FrontierScript_ReadString
 	.public FrtCmd_127
 	.public FrtCmd_128
 	.public FrtCmd_129
 	.public FrtCmd_130
 	.public FrtCmd_131
 	.public FrtCmd_053
-	.public ov80_0222D200
+	.public FrontierScriptNative_WaitLinkSync
 	.public FrtCmd_054
 	.public FrtCmd_055
 	.public ov80_0222D244
 	.public FrtCmd_056
 	.public FrtCmd_057
 	.public FrtCmd_058
-	.public ov80_0222D2AC
+	.public FrontierScriptNative_WaitButton
 	.public FrtCmd_059
-	.public ov80_0222D2EC
+	.public FrontierScriptNative_WaitButtonOrFrames
 	.public FrtCmd_060
 	.public FrtCmd_061
 	.public FrtCmd_062
-	.public ov80_0222D390
-	.public ov80_0222D404
-	.public ov80_0222D520
-	.public ov80_0222D63C
-	.public ov80_0222D644
-	.public ov80_0222D968
-	.public ov80_0222DAAC
-	.public ov80_0222DC14
+	.public FrontierTransition_Flash
+	.public FrontierTransition_FlashWipeHorizontal
+	.public FrontierTransition_FlashWipeVertical
+	.public FrontierScript_PackHalfWords
+	.public FrontierTransition_RowScrollTask
+	.public FrontierTransition_RowScroll1
+	.public FrontierTransition_RowScroll2
+	.public FrontierTransition_Wave
 	.public FrtCmd_063
-	.public ov80_0222DCF0
+	.public FrontierScriptNative_WaitTransition
 	.public FrtCmd_064
 	.public FrtCmd_065
 	.public FrtCmd_066
 	.public FrtCmd_067
 	.public FrtCmd_068
-	.public ov80_0222DE00
+	.public FrontierScriptNative_WaitMapEffect
 	.public FrtCmd_076
 	.public FrtCmd_077
-	.public ov80_0222DE9C
+	.public FrontierScriptNative_WaitShake
 	.public FrtCmd_078
 	.public FrtCmd_079
-	.public ov80_0222DF3C
+	.public FrontierScriptNative_WaitWindowTask
 	.public FrtCmd_150
 	.public FrtCmd_069
 	.public FrtCmd_070
 	.public FrtCmd_071
-	.public ov80_0222E05C
+	.public FrontierScriptNative_WaitBrainIntro
 	.public FrtCmd_072
 	.public FrtCmd_073
 	.public FrtCmd_074
@@ -148,7 +148,7 @@
 	.public FrtCmd_200
 	.public FrtCmd_201
 	.public FrtCmd_203
-	.public ov80_0222E198
+	.public FrontierScriptNative_WaitLinkSyncOrAbort
 	.public FrtCmd_204
 	.public FrtCmd_205
 	.public FrtCmd_206
@@ -358,13 +358,13 @@
 	.public FrontierScriptNative_WaitMessage
 	.public FrontierScriptNative_WaitPaletteFade
 	.public FrontierScriptNative_WaitMovements
-	.public ov80_0222CB94
-	.public ov80_0222D200
-	.public ov80_0222D63C
-	.public ov80_0222DE00
-	.public ov80_0222DE9C
-	.public ov80_0222DF3C
-	.public ov80_0222E05C
+	.public FrontierScript_FreeNamingScreenArgs
+	.public FrontierScriptNative_WaitLinkSync
+	.public FrontierScript_PackHalfWords
+	.public FrontierScriptNative_WaitMapEffect
+	.public FrontierScriptNative_WaitShake
+	.public FrontierScriptNative_WaitWindowTask
+	.public FrontierScriptNative_WaitBrainIntro
 	.public ov80_0222E38C
 	.public ov80_0222E5A8
 	.public ov80_0222E8FC
@@ -407,7 +407,7 @@ FrtCmd_122: ; 0x0222CF38
 	ldrb r4, [r2]
 	bl FrontierScript_ReadVar
 	add r6, r0, #0
-	bl ov80_0222CF6C
+	bl FrontierScript_CountDigits
 	add r3, r0, #0
 	mov r0, #1
 	str r0, [sp]
@@ -424,8 +424,8 @@ FrtCmd_122: ; 0x0222CF38
 	thumb_func_end FrtCmd_122
 
 
-	thumb_func_start ov80_0222CF6C
-ov80_0222CF6C: ; 0x0222CF6C
+	thumb_func_start FrontierScript_CountDigits
+FrontierScript_CountDigits: ; 0x0222CF6C
 	push {r4, lr}
 	mov r1, #0xa
 	add r4, r0, #0
@@ -500,7 +500,7 @@ _0222CFF8: .word 0x000186A0
 _0222CFFC: .word 0x000F4240
 _0222D000: .word 0x00989680
 _0222D004: .word 0x05F5E100
-	thumb_func_end ov80_0222CF6C
+	thumb_func_end FrontierScript_CountDigits
 
 
 	thumb_func_start FrtCmd_123
@@ -591,7 +591,7 @@ FrtCmd_126: ; 0x0222D084
 	ldrb r4, [r1]
 	add r0, r7, #0
 	mov r1, #0xb
-	bl ov80_0222D0D4
+	bl FrontierScript_ReadString
 	add r7, r0, #0
 	str r4, [sp]
 	mov r0, #2
@@ -611,8 +611,8 @@ FrtCmd_126: ; 0x0222D084
 	thumb_func_end FrtCmd_126
 
 
-	thumb_func_start ov80_0222D0D4
-ov80_0222D0D4: ; 0x0222D0D4
+	thumb_func_start FrontierScript_ReadString
+FrontierScript_ReadString: ; 0x0222D0D4
 	push {r3, r4, r5, lr}
 	add r4, r0, #0
 	add r3, r1, #0
@@ -628,7 +628,7 @@ ov80_0222D0D4: ; 0x0222D0D4
 	bl DestroyMsgData
 	add r0, r4, #0
 	pop {r3, r4, r5, pc}
-	thumb_func_end ov80_0222D0D4
+	thumb_func_end FrontierScript_ReadString
 
 
 	thumb_func_start FrtCmd_127

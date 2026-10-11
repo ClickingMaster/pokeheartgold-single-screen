@@ -100,7 +100,7 @@
 #include "unk_02091564.h"
 #include "unk_02092BE8.h"
 #include "phone_rematch.h"
-#include "unk_02095DF4.h"
+#include "pokeathlon_course_task.h"
 #include "battle_greeting_task.h"
 #include "unk_02097024.h"
 #include "unk_02097268.h"
@@ -4588,7 +4588,7 @@ BOOL ScrCmd_Pokeathlon(ScriptContext *ctx) {
     u16 *sp14 = ScriptGetVarPointer(ctx);
     u16 *sp18 = ScriptGetVarPointer(ctx);
     u16 *spC = ScriptGetVarPointer(ctx);
-    sub_02095DF4(ctx->fieldSystem, r6, r4, r7, sp10, sp14, sp18, spC);
+    CallTask_PokeathlonCourse(ctx->fieldSystem, r6, r4, r7, sp10, sp14, sp18, spC);
     return TRUE;
 }
 

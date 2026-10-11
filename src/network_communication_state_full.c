@@ -15,7 +15,7 @@
 #include "unk_02034B0C.h"
 #include "link_synchronization.h"
 #include "unk_0203A3B0.h"
-#include "unk_020915B0.h"
+#include "network_overlay_loader.h"
 
 typedef struct UnkStruct_sub_02039C6C {
     UnkStruct_ov44_0223197C *unk0;

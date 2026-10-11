@@ -5,7 +5,7 @@
 #include "poke_overlay.h"
 #include "system.h"
 #include "unk_02037C94.h"
-#include "unk_020915B0.h"
+#include "network_overlay_loader.h"
 #include "wifi_plaza_internal.h"
 
 // Overlay data of the Wi-Fi Plaza overlay.

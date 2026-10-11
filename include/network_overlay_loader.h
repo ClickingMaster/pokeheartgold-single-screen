@@ -1,0 +1,7 @@
+#ifndef POKEHEARTGOLD_NETWORK_OVERLAY_LOADER_H
+#define POKEHEARTGOLD_NETWORK_OVERLAY_LOADER_H
+
+void UnloadDwcOverlay(void);
+void LoadDwcOverlay(void);
+
+#endif // POKEHEARTGOLD_NETWORK_OVERLAY_LOADER_H

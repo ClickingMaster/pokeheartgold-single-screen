@@ -144,7 +144,7 @@ typedef struct WiFiPlazaTimer {
     s32 duration;
     u32 phase;    // _02254A28[].phase, then 5 at the end
     u32 counter;  // updates in the current phase
-    void *unk_1c; // sub_02078DD8 (ov45_0222B244 / ov45_0222B270)
+    void *unk_1c; // WiFiPlazaPlayerInfo_New (ov45_0222B244 / ov45_0222B270)
 } WiFiPlazaTimer;
 
 // A phase of WiFiPlazaTimer and its share of the duration (in 1/256).
@@ -984,7 +984,7 @@ extern u8 ov45_02254AC4[];
 void *Save_PlazaSurvey_Get(SaveData *save);
 void PlazaSurvey_SetSurveyId(void *a0, u32 a1);
 void PlazaSurvey_SetAnswer(void *a0, u32 a1);
-void *sub_02078DD8(PlayerProfile *profile, enum HeapID heapID);
-void sub_02078E28(void *a0);
+void *WiFiPlazaPlayerInfo_New(PlayerProfile *profile, enum HeapID heapID);
+void WiFiPlazaPlayerInfo_Free(void *a0);
 
 #endif // POKEHEARTGOLD_WIFI_PLAZA_INTERNAL_H

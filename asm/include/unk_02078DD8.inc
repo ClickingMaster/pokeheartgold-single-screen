@@ -7,8 +7,8 @@
 .public PlayerProfile_GetAvatar
 .public PlayerProfile_GetVersion
 .public PlayerProfile_GetLanguage
-.public sub_02078DD8
-.public sub_02078E28
+.public WiFiPlazaPlayerInfo_New
+.public WiFiPlazaPlayerInfo_Free
 .public memset
 .public gOverlayTemplate_Battle
 .public gNatureStatMods

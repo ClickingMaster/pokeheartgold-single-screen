@@ -51,8 +51,8 @@ _020915E8: .word UnloadOverlayByID
 _020915EC: .word FS_OVERLAY_ID(OVY_13)
 	thumb_func_end UnloadOVY13
 
-	thumb_func_start sub_020915F0
-sub_020915F0: ; 0x020915F0
+	thumb_func_start RunNintendoWFCSetupAndReset
+RunNintendoWFCSetupAndReset: ; 0x020915F0
 	push {r4, lr}
 	add r4, r1, #0
 	bl LoadDwcOverlay
@@ -65,7 +65,7 @@ sub_020915F0: ; 0x020915F0
 	bl OS_ResetSystem
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end sub_020915F0
+	thumb_func_end RunNintendoWFCSetupAndReset
 
 	thumb_func_start LoadOVY38
 LoadOVY38: ; 0x02091614
@@ -88,8 +88,8 @@ _0209162C: .word UnloadOverlayByID
 _02091630: .word FS_OVERLAY_ID(OVY_38)
 	thumb_func_end UnloadOVY38
 
-	thumb_func_start sub_02091634
-sub_02091634: ; 0x02091634
+	thumb_func_start NintendoWFCSetupApp_Init
+NintendoWFCSetupApp_Init: ; 0x02091634
 	push {r4, lr}
 	mov r2, #0x41
 	add r4, r0, #0
@@ -101,7 +101,7 @@ sub_02091634: ; 0x02091634
 	bl OverlayManager_GetArgs
 	ldr r0, [r0, #8]
 	mov r1, #0x30
-	bl sub_020915F0
+	bl RunNintendoWFCSetupAndReset
 	mov r0, #0x30
 	bl Heap_Destroy
 	mov r0, #0
@@ -109,10 +109,10 @@ sub_02091634: ; 0x02091634
 	mov r0, #1
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end sub_02091634
+	thumb_func_end NintendoWFCSetupApp_Init
 
 	.rodata
 
 	.public gApp_MainMenu_SelectOption_NintendoWFCSetup
 gApp_MainMenu_SelectOption_NintendoWFCSetup:
-	.word sub_02091634, 0, 0, 0xFFFFFFFF
+	.word NintendoWFCSetupApp_Init, 0, 0, 0xFFFFFFFF

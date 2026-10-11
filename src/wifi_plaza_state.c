@@ -129,12 +129,12 @@ void ov45_0222B244(WiFiPlazaWork *work) {
     if (work->timer.unk_1c != NULL) {
         GF_AssertFail();
     }
-    work->timer.unk_1c = sub_02078DD8(Save_PlayerData_GetProfile(work->save), work->heapID);
+    work->timer.unk_1c = WiFiPlazaPlayerInfo_New(Save_PlayerData_GetProfile(work->save), work->heapID);
 }
 
 void ov45_0222B270(WiFiPlazaWork *work) {
     if (work->timer.unk_1c != NULL) {
-        sub_02078E28(work->timer.unk_1c);
+        WiFiPlazaPlayerInfo_Free(work->timer.unk_1c);
         work->timer.unk_1c = NULL;
     }
 }

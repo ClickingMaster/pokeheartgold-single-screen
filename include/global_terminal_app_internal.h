@@ -9,7 +9,7 @@
 #include "system.h"
 #include "unk_02034B0C.h"
 #include "unk_02037C94.h"
-#include "unk_020915B0.h"
+#include "network_overlay_loader.h"
 
 typedef struct GlobalTerminalAppArgs {
     void *unk00;
