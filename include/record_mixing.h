@@ -10,7 +10,7 @@
 
 typedef struct RecordMixingArgs {
     SaveData *saveData;
-    struct UnkStruct_0205AC88 *unk4;
+    struct UnionRoomObjects *unk4;
     Options *options;
     GameStats *gameStats;
     MenuInputStateMgr *menuInputStatePtr;

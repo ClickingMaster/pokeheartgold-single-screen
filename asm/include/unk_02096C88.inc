@@ -13,7 +13,7 @@
 .public sub_02037FF0
 .public sub_02038C1C
 .public sub_0205A904
-.public sub_0205AD24
+.public UnionRoomObjects_ResetSlots
 .public sub_02091570
 .public SpinTradeLink_New
 .public SpinTradeLink_Free

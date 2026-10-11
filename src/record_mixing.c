@@ -157,7 +157,7 @@ void sub_0203893C(void);
 void sub_02038C1C(int count); // defined with an s8 parameter; the callers pass an int untruncated
 void sub_02039EAC(s32 *arg0);
 s32 sub_02039EB4(SaveData *saveData, s32 arg1, u32 *arg2);
-void sub_0205AD24(struct UnkStruct_0205AC88 *manager);
+void UnionRoomObjects_ResetSlots(struct UnionRoomObjects *manager);
 void RecordMixingLink_RegisterCommands(RecordMixingApp *app); // registers the comm command table (wireless_room.c)
 
 // Record exchange, in the record data part of this overlay.
@@ -383,7 +383,7 @@ BOOL RecordMixing_Exit(OverlayManager *man, int *state) {
     RecordMixing_FreeBgs(app->bgConfig);
     sub_02038C1C(2);
     sub_02037FF0();
-    sub_0205AD24(app->args->unk4);
+    UnionRoomObjects_ResetSlots(app->args->unk4);
     GF_TouchpadStopSampling();
     FontID_Release(4);
     DestroyMsgData(app->msgData);

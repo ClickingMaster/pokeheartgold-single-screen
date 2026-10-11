@@ -422,11 +422,7 @@ Static main
     Object src/field_link_messages_4.o
     Object src/field_link_avatar_alloc.o
     Object src/field_link_messages_5.o
-    Object src/field_player_effect.o
-    Object src/op90_unk_0205AC88_r01.o
-    Object src/field_player_effect_2.o
-    Object src/field_player_object_sync.o
-    Object src/field_player_effect_3.o
+    Object src/union_room_objects.o
     Object src/unk_0205B3DC.o
     Object src/dialog_box.o
     Object src/metatile_behavior.o
@@ -1617,14 +1613,7 @@ Overlay OVY_0
     Object src/to80_extra1723_run01.o
     Object src/to65_overlay_00_arm_residual_7_run04.o
     Object src/to70_to65_overlay_00_arm_residual_7_residual_4_extra1137_run01.o
-    Object src/to65_overlay_00_arm_residual_7_run05.o
-    Object src/to90_extra2454_run01.o
-    Object src/to80_extra1647_run01.o
-    Object src/to65_overlay_00_arm_residual_7_run06.o
-    Object src/to80_extra1840_run01.o
-    Object src/to90_extra2333_run01.o
-    Object src/to65_overlay_00_arm_residual_7_run07.o
-    Object src/to80_extra1430_run01.o
+    Object lib/NitroDWC/src/gp_buffer.o
     Object src/to70_ov00_extra18_run01.o
     Object src/to80_extra1663_run01.o
     Object src/to70_to70_ov00_extra18_residual_2_extra1146_run01.o
@@ -5438,28 +5427,7 @@ Object src/application/pokewalker/pokewalker_upload.o
 Object src/application/pokewalker/pokewalker_ui.o
 Object src/application/pokewalker/pokewalker_main_menu.o
 Object src/application/pokewalker/pokewalker_erase.o
-Object src/to58_overlay112_mid_090.o
-Object src/to53_overlay112_091.o
-Object src/to70_to58_overlay112_mid_092_remaining_extra455_run01.o
-    Object src/to58_overlay112_mid_092.o
-Object src/to53_overlay112_093.o
-Object src/to58_overlay112_mid_094.o
-Object src/to53_overlay112_095.o
-Object src/to70_to54_atomic_w19_01_residual0_extra424_run01.o
-Object src/to54_atomic_w19_02_run1.o
-Object src/to80_extra1901_run01.o
-Object src/to54_atomic_w19_04_run2.o
-Object src/to53_overlay112_097.o
-Object src/to58_overlay112_mid_098.o
-Object src/to53_overlay112_099.o
-Object src/to58_overlay112_mid_100.o
-Object src/to53_overlay112_101.o
-Object src/to58_overlay112_mid_102.o
-Object src/to53_overlay112_103.o
-Object src/to58_overlay112_mid_104.o
-Object src/to53_overlay112_105.o
-Object src/to90_extra2069_run01.o
-Object src/to53_overlay112_107.o
+Object src/application/pokewalker/pokewalker_link.o
 Object src/to90_extra1940_run01.o
 Object src/to70_to58_overlay112_mid_108_remaining_extra907_run01.o
     Object src/to58_overlay112_mid_108.o

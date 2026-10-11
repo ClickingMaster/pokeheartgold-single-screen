@@ -86,7 +86,7 @@
 #include "communication_club_link.h"
 #include "unk_02058AEC.h"
 #include "unk_0205A44C.h"
-#include "unk_0205AC88.h"
+#include "union_room_objects.h"
 #include "unk_0205B3DC.h"
 #include "unk_0205BB1C.h"
 #include "unk_0205FD20.h"
@@ -2723,7 +2723,7 @@ BOOL ScrCmd_265(ScriptContext *ctx) {
 BOOL sub_020441C4(ScriptContext *ctx);
 
 BOOL ScrCmd_266(ScriptContext *ctx) {
-    sub_0205AD0C(ctx->fieldSystem->unk84);
+    UnionRoomObjects_RequestLeaveAll(ctx->fieldSystem->unk84);
     sub_02037FF0();
     SetupNativeScript(ctx, sub_020441C4);
     return TRUE;
@@ -2791,7 +2791,7 @@ BOOL sub_02044318(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_270(ScriptContext *ctx) {
-    sub_0205B27C(ctx->fieldSystem->mapObjectManager, ctx->fieldSystem->unk84);
+    UnionRoomObjects_RestoreAfterScript(ctx->fieldSystem->mapObjectManager, ctx->fieldSystem->unk84);
     return FALSE;
 }
 

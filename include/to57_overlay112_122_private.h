@@ -41,7 +41,7 @@ void PokewalkerApp_StartMessage(void *, int, int, int);
 void PokewalkerApp_HideSprite(void *, int);
 u32 MTRandom(void);
 void PokewalkerApp_SpawnFallingParticle(void *);
-void ov112_021ED314(int);
+void PokewalkerApp_PlayTransferSE(int);
 int ov112_021EE2D4(void *);
 int ov112_021EE31C(void *);
 int ov112_021EE3E0(void *);

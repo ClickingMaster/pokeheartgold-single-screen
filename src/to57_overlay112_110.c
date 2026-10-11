@@ -19,7 +19,7 @@ int ov112_021ED66C(void *p) {
         PokewalkerApp_SpawnFallingParticle(p);
     }
     ov112_021EA60C(p);
-    ov112_021ED314(state);
+    PokewalkerApp_PlayTransferSE(state);
 
     state = PokewalkerIr_GetAndClearError();
     switch (state) {

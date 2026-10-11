@@ -6,7 +6,7 @@ typedef struct {u8 pad[12];int state;u32 pad10;u16 code,entered;u8 pad18[0x1e520
 void PokewalkerIr_GetChunkProgress(void),PokewalkerIr_Stop(void);
 int PokewalkerIr_GetTotalProgress(void),PokewalkerIr_GetAndClearError(void),ov112_021E7668(void);
 void PokewalkerApp_SpawnFallingParticle(View*),ov112_021EA60C(View*),ov112_021ED530(View*),ov112_021ED5DC(View*);
-void ov112_021ED314(int);
+void PokewalkerApp_PlayTransferSE(int);
 void PokewalkerApp_ShowSprite(View*,int),PokewalkerApp_ShowSubBg1(View*,int),PokewalkerApp_ShowMessageBox(View*,int,int),PokewalkerApp_SelectMenuItem(View*,int,int,int);
 BOOL PokewalkerApp_GetTouchedButton(int);
 void ManagedSprite_SetDrawFlag(void*,BOOL);
@@ -16,7 +16,7 @@ int ov112_021ED918(View*);
 int ov112_021ED918(View *v){
  int changed,code;RTCDate date;RTCTime time;
  PokewalkerIr_GetChunkProgress();changed=PokewalkerIr_GetTotalProgress();if(changed)PokewalkerApp_SpawnFallingParticle(v);
- ov112_021ED314(changed);ov112_021EA60C(v);code=PokewalkerIr_GetAndClearError();
+ PokewalkerApp_PlayTransferSE(changed);ov112_021EA60C(v);code=PokewalkerIr_GetAndClearError();
  switch(code){
  case 2:if(v->entered==1)v->code=42;break;
  case 4:case 5:case 7:case 8:case 9:case 11:case 12:case 13:v->code=code;break;

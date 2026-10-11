@@ -39,7 +39,7 @@ void PokewalkerApp_ReturnStrollMon(PokewalkerApp *app);
 void PokewalkerApp_GiveStarfBerry(PokewalkerApp *app);
 void PokewalkerApp_ReceiveItems(PokewalkerApp *app);
 void PokewalkerApp_ReceiveMons(PokewalkerApp *app, int a1);
-void ov112_021ED0C8(PokewalkerApp *app);
+void PokewalkerApp_ShowMonPicture(PokewalkerApp *app);
 BOOL sub_02006B84(void);
 void NNS_G2dInitOamManagerModule(void);
 
@@ -56,7 +56,7 @@ int PokewalkerApp_LinkSave_Enter(PokewalkerApp *app) {
         }
         if (app->strollMon != NULL) {
             PokewalkerApp_LoadMonPicture(app->strollMon, app->monSpriteBuffer, &app->monPicTemplate, 0);
-            ov112_021ED0C8(app);
+            PokewalkerApp_ShowMonPicture(app);
             ov112_021EAA10(app);
             app->unk_1F2C2 = 0;
             PlayFanfare(SEQ_ME_KEYITEM);
@@ -73,7 +73,7 @@ int PokewalkerApp_LinkSave_Enter(PokewalkerApp *app) {
     } else if (app->unk_10 == 4) {
         PokewalkerApp_ReturnStrollMon(app);
         PokewalkerApp_LoadMonPicture(app->strollMon, app->monSpriteBuffer, &app->monPicTemplate, 0);
-        ov112_021ED0C8(app);
+        PokewalkerApp_ShowMonPicture(app);
         app->state = 0;
         sub_020326A4(app->pokewalker, 1, 0);
     }

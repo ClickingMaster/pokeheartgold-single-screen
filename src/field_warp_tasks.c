@@ -32,7 +32,7 @@
 #include "unk_02055418.h"
 #include "unk_02056D7C.h"
 #include "unk_02058AEC.h"
-#include "unk_0205AC88.h"
+#include "union_room_objects.h"
 #include "unk_0206793C.h"
 
 struct UnkTaskEnv_02053688 {
@@ -476,7 +476,7 @@ static BOOL FieldTask_ContinueGame_CommError(TaskManager *taskManager) {
         break;
     case 2:
         fieldSystem->unk80 = sub_02059DB0(fieldSystem);
-        fieldSystem->unk84 = sub_0205AC88(fieldSystem->unk80);
+        fieldSystem->unk84 = UnionRoomObjects_New(fieldSystem->unk80);
         CallTask_RestoreOverworld(taskManager);
         (*state_p)++;
         break;
@@ -1002,7 +1002,7 @@ void sub_02053F14(FieldSystem *fieldSystem) {
     MI_CpuClear8(env, sizeof(struct UnkTaskEnv_02053E5C));
     env->location = *location;
     sub_02059E04(fieldSystem);
-    sub_0205AD3C(fieldSystem->unk84);
+    UnionRoomObjects_Delete(fieldSystem->unk84);
     fieldSystem->mapLoadType = 0;
     FieldSystem_CreateTask(fieldSystem, sub_02053E5C, env);
     fieldSystem->unk80 = NULL;
@@ -1062,7 +1062,7 @@ void sub_02054030(TaskManager *taskManager) {
     _CopyPlayerPosToLocationWorkFacingSouth(location, fieldSystem);
     InitLocation(&env->location, MAP_UNION, -1, 8, 14, DIR_NORTH);
     fieldSystem->unk80 = sub_02059DB0(fieldSystem);
-    fieldSystem->unk84 = sub_0205AC88(fieldSystem->unk80);
+    fieldSystem->unk84 = UnionRoomObjects_New(fieldSystem->unk80);
     fieldSystem->mapLoadType = MAP_LOAD_TYPE_UNION;
     TaskManager_Call(taskManager, sub_02053F70, env);
 }

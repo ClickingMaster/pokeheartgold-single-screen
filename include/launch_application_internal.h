@@ -112,7 +112,7 @@ typedef struct WirelessTradeData {
 } WirelessTradeData;
 
 typedef struct UnkStruct_0203F4C8 {
-    struct UnkStruct_0205AC88 *unk0;
+    struct UnionRoomObjects *unk0;
     Options *options;
 } UnkStruct_0203F4C8;
 

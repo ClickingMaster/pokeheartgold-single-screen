@@ -34,7 +34,7 @@ typedef struct SpinTradeJoinRequest {
 
 u32 MATH_CountPopulation(u32 value);
 void sub_02038C1C(int count);
-void sub_0205AD24(void *ptr);
+void UnionRoomObjects_ResetSlots(void *ptr);
 void ov85_021E9C84(void *ptr, int event, int value);
 void ov85_021E9D9C(void *ptr, int event, int value);
 void SpinTrade_ReceiveMemberSlot(void *ptr, void *data);
@@ -103,7 +103,7 @@ void SpinTradeLink_Close(void *ptr) {
     SpinTradeLink *menu = ptr;
     sub_02038C1C(2);
     sub_02037FF0();
-    sub_0205AD24(menu->parent->input.communication);
+    UnionRoomObjects_ResetSlots(menu->parent->input.communication);
     sub_0205A904(0);
 }
 

@@ -120,7 +120,7 @@
 .public sub_020398D4
 .public WirelessStatusIcon_Create
 .public sub_0205A904
-.public sub_0205AD24
+.public UnionRoomObjects_ResetSlots
 .public DrawingSessionLink_RegisterCommands
 .public NNS_G2dInitOamManagerModule
 .public G2x_SetBlendBrightness_

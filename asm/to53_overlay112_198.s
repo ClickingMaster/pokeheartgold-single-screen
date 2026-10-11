@@ -222,51 +222,51 @@
 	.extern PokewalkerApp_EraseRecords_End
 	.extern PokewalkerApp_SelectMenuItem
 	.extern PokewalkerApp_StartMessage
-	.extern ov112_021EC478
-	.extern ov112_021EC520
-	.extern ov112_021EC54C
-	.extern ov112_021EC55C
-	.extern ov112_021EC640
-	.extern ov112_021EC67C
-	.extern ov112_021EC69C
-	.extern ov112_021EC6C0
-	.extern ov112_021EC6D8
-	.extern ov112_021EC6F8
-	.extern ov112_021EC70C
-	.extern ov112_021EC778
-	.extern ov112_021EC7B8
-	.extern ov112_021EC7D0
-	.extern ov112_021EC8A4
-	.extern ov112_021EC950
-	.extern ov112_021EC99C
-	.extern ov112_021ECA18
-	.extern ov112_021ECA88
-	.extern ov112_021ECAA8
-	.extern ov112_021ECCC4
-	.extern ov112_021ECDA0
-	.extern ov112_021ECE28
-	.extern ov112_021ECECC
-	.extern ov112_021ECEEC
-	.extern ov112_021ECEF8
-	.extern ov112_021ECF38
-	.extern ov112_021ECF88
-	.extern ov112_021ECFD4
-	.extern ov112_021ED020
-	.extern ov112_021ED054
-	.extern ov112_021ED090
-	.extern ov112_021ED0C8
-	.extern ov112_021ED0D0
-	.extern ov112_021ED13C
-	.extern ov112_021ED180
-	.extern ov112_021ED1A0
-	.extern ov112_021ED224
-	.extern ov112_021ED25C
-	.extern ov112_021ED264
-	.extern ov112_021ED2F4
-	.extern ov112_021ED314
-	.extern ov112_021ED330
-	.extern ov112_021ED35C
-	.extern ov112_021ED4D4
+	.extern PokewalkerApp_Link_Enter
+	.extern PokewalkerApp_Link_Update
+	.extern PokewalkerApp_Link_Exit
+	.extern PokewalkerApp_Link_Start
+	.extern PokewalkerApp_Link_PrintPointAtCard
+	.extern PokewalkerApp_Link_WaitPointAtCard
+	.extern PokewalkerApp_Link_FadeOutToSelectMon
+	.extern PokewalkerApp_Link_WaitFadeOutToSelectMon
+	.extern PokewalkerApp_Link_FadeIn
+	.extern PokewalkerApp_Link_WaitFadeIn
+	.extern PokewalkerApp_Link_PrintSelectCourse
+	.extern PokewalkerApp_Link_WaitSelectCourse
+	.extern PokewalkerApp_GetCoursePageCount
+	.extern PokewalkerApp_PrintCoursePage
+	.extern PokewalkerApp_PrintCourseInfo
+	.extern PokewalkerApp_ListUnlockedCourses
+	.extern PokewalkerApp_Link_ShowCourseMenu
+	.extern PokewalkerApp_UpdatePageArrows
+	.extern PokewalkerApp_GetSelectedCourse
+	.extern PokewalkerApp_Link_HandleCourseMenu
+	.extern PokewalkerApp_Link_EndCourseMenu
+	.extern PokewalkerApp_ChangeCoursePage
+	.extern PokewalkerApp_Link_PrintConfirmCourse
+	.extern PokewalkerApp_Link_WaitConfirmCourse
+	.extern PokewalkerApp_Link_ShowConfirmCourseYesNo
+	.extern PokewalkerApp_Link_HandleConfirmCourseYesNo
+	.extern PokewalkerApp_Link_PrintInstructions
+	.extern PokewalkerApp_Link_WaitInstructions
+	.extern PokewalkerApp_Link_PrintWillConnectWithMon
+	.extern PokewalkerApp_Link_PrintWillConnect
+	.extern PokewalkerApp_Link_PrintPointAtCardForStroll
+	.extern PokewalkerApp_Link_WaitPointAtCardForStroll
+	.extern PokewalkerApp_ShowMonPicture
+	.extern PokewalkerApp_FadeInMonPicture
+	.extern PokewalkerApp_FadeInMonPictureTask
+	.extern PokewalkerApp_ScrollSubBgTask
+	.extern PokewalkerApp_Link_PrintPointAtCardForGifts
+	.extern PokewalkerApp_Link_WaitPointAtCardForGifts
+	.extern PokewalkerApp_ResetLinkError
+	.extern PokewalkerApp_Link_StartUpload
+	.extern PokewalkerApp_StartSubBgScroll
+	.extern PokewalkerApp_PlayTransferSE
+	.extern PokewalkerApp_UpdateLinkProgress
+	.extern PokewalkerApp_Link_UpdateUpload
+	.extern PokewalkerApp_Link_StartReceive
 	.extern ov112_021ED530
 	.extern ov112_021ED590
 	.extern ov112_021ED5DC
@@ -791,7 +791,7 @@
 	.extern ov112_021FF090
 	.extern ov112_021FF09C
 	.extern ov112_021FF0AC
-	.extern ov112_021FF0C4
+	.extern sCourseMenuCursorPositions
 	.extern sSelectMonGraphicsModes
 	.extern sSelectMonObjCharTransferTemplate
 	.extern sSelectMonGraphicsBanks
@@ -849,7 +849,7 @@
 	.extern sMainMenuStates
 	.extern sMode1States
 	.extern sEraseRecordsStates
-	.extern ov112_021FF7CC
+	.extern sLinkStates
 	.extern sStartStrollStates
 	.extern sLinkSaveStates
 	.extern sStrollReportStates

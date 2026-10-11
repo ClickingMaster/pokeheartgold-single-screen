@@ -9,7 +9,7 @@ BOOL PokewalkerIr_GetChunkProgress(void);
 BOOL PokewalkerIr_GetTotalProgress(void);
 void PokewalkerApp_SpawnFallingParticle(void *p);
 void ov112_021EA60C(void *p);
-void ov112_021ED314(int value);
+void PokewalkerApp_PlayTransferSE(int value);
 int PokewalkerIr_GetAndClearError(void);
 BOOL ov112_021ED610(void *p);
 void ov112_021EAA98(void *p, void *q, int value);

@@ -20,11 +20,11 @@
 .public FieldSystem_TaskIsRunning
 .public sub_0205A1F0
 .public sub_0205A1F4
-.public sub_0205AC88
-.public sub_0205AD0C
-.public sub_0205AD24
-.public sub_0205AD3C
-.public sub_0205B27C
+.public UnionRoomObjects_New
+.public UnionRoomObjects_RequestLeaveAll
+.public UnionRoomObjects_ResetSlots
+.public UnionRoomObjects_Delete
+.public UnionRoomObjects_RestoreAfterScript
 .public PlayerAvatar_GetXCoord
 .public PlayerAvatar_GetZCoord
 .public PlayerAvatar_GetMapObject
@@ -51,20 +51,20 @@
 .public ov01_021FD8E8
 .public ov01_02200730
 
-	.public sub_0205AD60
-	.public sub_0205AD9C
-	.public sub_0205AEA0
-	.public sub_0205AEA8
-	.public sub_0205AF78
-	.public sub_0205B0DC
-	.public sub_0205B118
-	.public sub_0205B13C
-	.public sub_0205B1E4
-	.public sub_0205B218
-	.public sub_0205B240
-	.public sub_0205B338
-	.public sub_0205B35C
-	.public sub_0205B380
-	.public sub_0205B3A0
-	.public sub_0205B3B8
-	.public sub_0205B3CC
+	.public UnionRoomObjects_Task
+	.public UnionRoomObjects_UpdateGroup
+	.public UnionRoomSlots_SetRequest
+	.public UnionRoomObjects_UpdatePlayers
+	.public UnionRoomObjects_UpdateMapObjects
+	.public UnionRoomSlot_DestroyEffects
+	.public UnionRoomSlot_TickEmote
+	.public UnionRoomSlot_Appear
+	.public UnionRoomSlot_Leave
+	.public UnionRoomSlot_StartEmote
+	.public UnionRoomObjects_ShowRange
+	.public UnionRoomMessage_Init
+	.public UnionRoomMessages_Init
+	.public UnionRoomMessage_Free
+	.public UnionRoomMessages_FreeAll
+	.public UnionRoomMessages_New
+	.public UnionRoomMessages_Free

@@ -189,7 +189,7 @@
 .public WirelessStatusIcon_Destroy
 .public sub_0203A930
 .public sub_0205A904
-.public sub_0205AD24
+.public UnionRoomObjects_ResetSlots
 .public SpriteToUnionRoomAvatarIdx
 .public sub_0205B4A4
 .public sub_02069528

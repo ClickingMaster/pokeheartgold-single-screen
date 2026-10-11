@@ -51,7 +51,7 @@ extern int sub_0203783C(void);
 extern int sub_02037854(void);
 extern void sub_02038C1C(int count);
 extern void sub_020356EC(BOOL value);
-extern void sub_0205AD24(struct UnkStruct_0205AC88 *unionRoom);
+extern void UnionRoomObjects_ResetSlots(struct UnionRoomObjects *unionRoom);
 extern void DrawingSessionLink_RegisterCommands(DrawingSessionWork *work); // wireless_room_packets.c: registers the command table
 
 extern const TouchscreenHitbox sDrawingSessionYesNoHitbox[];
@@ -270,7 +270,7 @@ BOOL DrawingSession_Exit(OverlayManager *man, int *state) {
     case 1:
         sub_02038C1C(1);
         sub_02037FF0();
-        sub_0205AD24(args->unk0);
+        UnionRoomObjects_ResetSlots(args->unk0);
         GX_SetDispSelect(GX_DISP_SELECT_MAIN_SUB);
         sub_0205A904(0);
         sub_020356EC(FALSE);

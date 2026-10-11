@@ -79,6 +79,6 @@ int ov112_021EE4D0(void *vp) {
     if ((u32)p->counter > MTRandom() % 0xB4) {
         PokewalkerApp_SpawnFallingParticle(p);
     }
-    ov112_021ED314(p->counter);
+    PokewalkerApp_PlayTransferSE(p->counter);
     return 0x36;
 }

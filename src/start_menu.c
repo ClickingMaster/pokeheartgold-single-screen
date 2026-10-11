@@ -38,7 +38,7 @@
 #include "unk_02034B0C.h"
 #include "unk_02037C94.h"
 #include "unk_0205A44C.h"
-#include "unk_0205AC88.h"
+#include "union_room_objects.h"
 #include "unk_0205CB48.h"
 #include "unk_02066EDC.h"
 #include "field_warp_state.h"
@@ -656,7 +656,7 @@ static BOOL StartMenu_HandleTouchInput(TaskManager *taskManager, FieldSystem *fi
 
 static void sub_0203C69C(StartMenuTaskData *startMenu, FieldSystem *fieldSystem) {
     if (sub_02035650() && startMenu->unk_350) {
-        sub_0205AD0C(fieldSystem->unk84);
+        UnionRoomObjects_RequestLeaveAll(fieldSystem->unk84);
         sub_02037FF0();
         sub_0205A904(0);
     }
@@ -1245,7 +1245,7 @@ static BOOL Task_StartMenu_HandleReturn_RemovedEasyChatThing(TaskManager *taskMa
     }
     EasyChat_FreeArgs(startMenu->exitTaskEnvironment);
     FieldSystem_LoadFieldOverlay(fieldSystem);
-    sub_0205AD0C(fieldSystem->unk84);
+    UnionRoomObjects_RequestLeaveAll(fieldSystem->unk84);
     return FALSE;
 }
 

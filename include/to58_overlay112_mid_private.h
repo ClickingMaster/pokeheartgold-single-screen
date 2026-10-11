@@ -43,7 +43,7 @@ extern int PokewalkerApp_StartMessageBox(Ov112State *, int, int);
 extern void BgClearTilemapBufferAndCommit(void *, int);
 extern void PokewalkerApp_LoadTilemap(Ov112State *, int, int);
 extern void PokewalkerApp_PrintExit(Ov112State *, int);
-extern void ov112_021ED2F4(Ov112State *);
+extern void PokewalkerApp_StartSubBgScroll(Ov112State *);
 
 
 

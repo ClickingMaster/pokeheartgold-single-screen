@@ -256,7 +256,7 @@ int PokewalkerApp_EraseRecords_PrintPointAtCard(PokewalkerApp *app) {
     FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
     PokewalkerApp_LoadTilemap(app, 2, 14);
     PokewalkerApp_PrintExit(app, 1);
-    ov112_021ED2F4(app);
+    PokewalkerApp_StartSubBgScroll(app);
     app->textPrinterId = PokewalkerApp_StartMessageBox(app, 0, msg_0274_00005);
     return 14;
 }
@@ -312,7 +312,7 @@ int PokewalkerApp_EraseRecords_UpdateLink(PokewalkerApp *app) {
         ManagedSprite_SetDrawFlag(app->sprites[2], FALSE);
         PokewalkerApp_ReturnWalkerMonToBox(app);
         sub_02032624(app->pokewalker);
-        app->unk_1D758 = 0;
+        app->walkerSteps = 0;
         app->unk_1D75C = 0;
         PokewalkerIr_Stop();
         return 20;

@@ -157,7 +157,7 @@ struct MapLoadMode {
 };
 
 struct UnkStruct_02059E1C;
-struct UnkStruct_0205AC88;
+struct UnionRoomObjects;
 
 typedef BOOL (*ScrCmdFunc)(ScriptContext *ctx);
 
