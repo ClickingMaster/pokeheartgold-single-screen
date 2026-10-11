@@ -77,7 +77,7 @@ extern void sub_0208DF2C(void *);
 extern void sub_020885DC(void *);
 extern void GfGfx_BothDispOn(void);
 extern void Sound_SetSceneAndPlayBGM(u32, u32, u32);
-extern void sub_0203A964(void);
+extern void WirelessStatusIcon_CreateIfConnected(void);
 
 BOOL PokemonSummary_Init(void *, u32 *);
 BOOL PokemonSummary_Main(void *, u32 *);

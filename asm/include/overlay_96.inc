@@ -320,10 +320,10 @@
 .public Comm_GetLocalNetId
 .public LinkSync_StartSync
 .public LinkSync_IsSynced
-.public sub_0203A86C
+.public WirelessStatusIcon_Refresh
 .public WirelessStatusIcon_Destroy
-.public sub_0203A994
-.public sub_0203A9C8
+.public WirelessStatusIcon_CreateOnScreenIfConnected
+.public WirelessStatusIcon_SetBackPriority
 .public Save_VarsFlags_Get
 .public Save_VarsFlags_CheckFlagInArray
 .public Save_VarsFlags_SetFlagInArray

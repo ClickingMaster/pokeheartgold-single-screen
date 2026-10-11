@@ -20,7 +20,7 @@
 #include "sprite.h"
 #include "system.h"
 #include "touchscreen.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
 
 // sound_playback.c (no header declares them)
@@ -255,7 +255,7 @@ BOOL PokeathlonLampJump_Init(PokeathlonCourseData *course) {
             lampJump->jumps[jumpIndex].unk04 = 4096.0 * ((f32)jumpX / 64.0 - 2.0);
             lampJump->mons[jumpIndex].unk28 = TRUE;
         }
-        sub_0203A994(1);
+        WirelessStatusIcon_CreateOnScreenIfConnected(1);
         PokeathlonCourse_IncrementField1ED(course);
         break;
     case 6:

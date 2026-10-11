@@ -46,7 +46,7 @@ void ov01_021F6A9C(FieldSystem *fieldSystem, int a1, void *a2);
 int ov01_021F6B00(FieldSystem *fieldSystem);
 int ov01_021F6AEC(FieldSystem *fieldSystem);
 BOOL ov01_021F6B10(FieldSystem *fieldSystem);
-UnkStruct_0206793C *ov01_0220329C(LocalMapObject *obj, int a1);
+UnkStruct_0206793C *FollowMonBall_Spawn(LocalMapObject *obj, int a1);
 void ov01_02205790(FieldSystem *fieldSystem, u8 a1);
 void ov01_02205784(LocalMapObject *object);
 BOOL ov01_022057C4(FieldSystem *fieldSystem);

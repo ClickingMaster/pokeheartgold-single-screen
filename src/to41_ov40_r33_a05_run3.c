@@ -178,7 +178,7 @@ int ov40_0223BF88(void *p) {
     case 2:
         VsRecorder_ResetFade((u8 *)w + 8);
         VsRecorder_RebuildMenuRowsParent(p);
-        sub_0203A948(1, 0x6D);
+        WirelessStatusIcon_ShowOnBothScreens(1, 0x6D);
         VsRecorder_StartFlipScreens(p, 1);
         WORD(p, 8)
         ++;

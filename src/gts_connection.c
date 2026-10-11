@@ -23,7 +23,7 @@
 #include "system.h"
 #include "text.h"
 #include "unk_0203170C.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 #include "wifi_connection.h"
 #include "yes_no_prompt.h"
 
@@ -102,7 +102,7 @@ u64 DWC_CreateFriendKey(void *userData);
 void sub_02039418(SaveData *saveData);
 void sub_0203946C(void);
 void sub_020399EC(void);
-void sub_0203A930(s32 level);
+void WirelessStatusIcon_SetLevel(s32 level);
 
 int GtsConnection_Init(GtsApp *app, int state);
 int GtsConnection_Main(GtsApp *app, int state);
@@ -210,7 +210,7 @@ int GtsConnection_Main(GtsApp *app, int state) {
     int prevState;
     int result;
 
-    sub_0203A930(Gts_GetWifiIconLevel());
+    WirelessStatusIcon_SetLevel(Gts_GetWifiIconLevel());
     prevState = app->state;
     result = sGtsConnectionStates[prevState](app);
     if (prevState != app->state) {

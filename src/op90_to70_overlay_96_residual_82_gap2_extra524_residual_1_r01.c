@@ -130,7 +130,7 @@ void ov96_022043AC(void *secondary, u8 index, Slot *slot, Competitor *competitor
 void ov96_02202738(State *s, u8 *data);
 void ov96_02203D74(void *screen, void *renderer, void *resource);
 void ov96_02201E10(State *s, u8 selected);
-void sub_0203A994(int value);
+void WirelessStatusIcon_CreateOnScreenIfConnected(int value);
 void BeginNormalPaletteFade(int a, int b, int c, int d, int e, int f, u32 heap);
 BOOL IsPaletteFadeFinished(void);
 void ReadWholeNarcMemberByIdPair(void *dest, int narc, int member);
@@ -296,7 +296,7 @@ int ov96_02201558(void *course) {
         ov96_02201E10(s, ov96_021E5F24(course));
         GfGfx_EngineATogglePlanes(16, 1);
         GfGfx_EngineBTogglePlanes(16, 1);
-        sub_0203A994(1);
+        WirelessStatusIcon_CreateOnScreenIfConnected(1);
         BeginNormalPaletteFade(2, 3, 3, 0, 6, 1, s->heap);
         PokeathlonCourse_IncrementField1ED(course);
         }

@@ -9,8 +9,8 @@
 #include "msgdata/msg/msg_0096_D31R0201.h"
 #include "msgdata/msg/msg_0066_D23R0102.h"
 	.include "asm/macros.inc"
-	.public ov01_02203654
-	.public ov01_02203890
+	.public FollowMonBallEffect_UpdateRecallWhite
+	.public FollowMonBallEffect_UpdateRecall
 	.public ov01_022094B0
 	.public ov01_022094BC
 	.public ov01_022094C8
@@ -22,22 +22,22 @@
 	.include "global.inc"
 
 	.text
-	.public ov01_022031C0
-	.public ov01_022031E8
-	.public ov01_022031F8
-	.public ov01_02203270
-	.public ov01_0220329C
-	.public ov01_0220335C
-	.public ov01_022033E0
-	.public ov01_022033E4
-	.public ov01_022034B8
-	.public ov01_022034F8
-	.public ov01_022035A4
-	.public ov01_022035DC
-	.public ov01_022037E8
-	.public ov01_02203820
-	.public ov01_022039BC
-	.public ov01_022039E0
+	.public FollowMonBall_New
+	.public FollowMonBall_Free
+	.public FollowMonBall_LoadModels
+	.public FollowMonBall_FreeModels
+	.public FollowMonBall_Spawn
+	.public FollowMonBallEffect_InitBurst
+	.public FollowMonBallEffect_Destroy
+	.public FollowMonBallEffect_UpdateRelease
+	.public FollowMonBallEffect_DrawRelease
+	.public FollowMonBallEffect_UpdateBurst
+	.public FollowMonBallEffect_DrawBurst
+	.public FollowMonBallEffect_InitRecallWhite
+	.public FollowMonBallEffect_DrawBall
+	.public FollowMonBallEffect_InitRecall
+	.public FollowMonBall_GetPullCoordinate
+	.public FollowMonBall_GetPullStep
 	.rodata
 
 ov01_022094B0: ; 0x022094B0
@@ -48,31 +48,31 @@ ov01_022094BC: ; 0x022094BC
 
 ov01_022094C8: ; 0x022094C8
 	.word 0x00000054
-	.word ov01_02203820
-	.word ov01_022033E0
-	.word ov01_02203890
-	.word ov01_022037E8
+	.word FollowMonBallEffect_InitRecall
+	.word FollowMonBallEffect_Destroy
+	.word FollowMonBallEffect_UpdateRecall
+	.word FollowMonBallEffect_DrawBall
 
 ov01_022094DC: ; 0x022094DC
 	.word 0x00000054
-	.word ov01_0220335C
-	.word ov01_022033E0
-	.word ov01_022033E4
-	.word ov01_022034B8
+	.word FollowMonBallEffect_InitBurst
+	.word FollowMonBallEffect_Destroy
+	.word FollowMonBallEffect_UpdateRelease
+	.word FollowMonBallEffect_DrawRelease
 
 ov01_022094F0: ; 0x022094F0
 	.word 0x00000054
-	.word ov01_022035DC
-	.word ov01_022033E0
-	.word ov01_02203654
-	.word ov01_022037E8
+	.word FollowMonBallEffect_InitRecallWhite
+	.word FollowMonBallEffect_Destroy
+	.word FollowMonBallEffect_UpdateRecallWhite
+	.word FollowMonBallEffect_DrawBall
 
 ov01_02209504: ; 0x02209504
 	.word 0x00000054
-	.word ov01_0220335C
-	.word ov01_022033E0
-	.word ov01_022034F8
-	.word ov01_022035A4
+	.word FollowMonBallEffect_InitBurst
+	.word FollowMonBallEffect_Destroy
+	.word FollowMonBallEffect_UpdateBurst
+	.word FollowMonBallEffect_DrawBurst
 
 	.data
 

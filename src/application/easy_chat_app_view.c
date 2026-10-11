@@ -19,7 +19,7 @@
 #include "text.h"
 #include "unk_02009D48.h"
 #include "unk_0200FA24.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 
 typedef struct EasyChatSentenceView EasyChatSentenceView;
 typedef struct EasyChatMenuView EasyChatMenuView;
@@ -455,7 +455,7 @@ void EasyChatAppView_LoadSpriteGraphics(EasyChatViewCommand *command, NARC *narc
         view->cellFiles[i] = GfGfxLoader_GetCellBankFromOpenNarc(narc, 7, TRUE, &view->cellBanks[i], HEAP_ID_35);
         view->animFiles[i] = GfGfxLoader_GetAnimBankFromOpenNarc(narc, 8, TRUE, &view->animBanks[i], HEAP_ID_35);
     }
-    sub_0203A964();
+    WirelessStatusIcon_CreateIfConnected();
 }
 
 void EasyChatAppView_Cmd_Unload(SysTask *task, EasyChatViewCommand *command) {

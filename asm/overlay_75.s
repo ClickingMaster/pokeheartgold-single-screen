@@ -196,7 +196,7 @@ WiiMessageSettings_Main: ; 0x022469D8
 	bl ov00_021EC9D4
 	mov r1, #3
 	sub r0, r1, r0
-	bl sub_0203A930
+	bl WirelessStatusIcon_SetLevel
 _022469FC:
 	ldr r0, [r5]
 	cmp r0, #4

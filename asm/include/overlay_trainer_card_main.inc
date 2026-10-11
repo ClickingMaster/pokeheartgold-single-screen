@@ -129,7 +129,7 @@
 .public GetIGTHours
 .public GetIGTMinutes
 .public sub_02037474
-.public sub_0203A964
+.public WirelessStatusIcon_CreateIfConnected
 .public NNS_G2dGetUnpackedBGCharacterData
 .public NNS_G2dGetUnpackedPaletteData
 .public NNS_G2dInitOamManagerModule

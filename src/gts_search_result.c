@@ -18,7 +18,7 @@
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
 // A search result (screen 3): the Pokemon, its trainer and where they live, the wanted Pokemon; left/right (or

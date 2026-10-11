@@ -55,7 +55,7 @@ extern void sub_02086F44(OverlayState *);
 extern void sub_02086FCC(OverlayState *);
 extern void sub_02087064(OverlayState *);
 extern void sub_020871C4(void *, void *, int, int, int, int, int, int, void *);
-extern void *sub_0203A4AC(int);
+extern void *WirelessStatusIcon_LoadPaletteFile(int);
 extern void PaletteData_LoadPalette(void *, void *, int, int, int);
 extern void Heap_Free(void *);
 extern void *TouchHitboxController_Create(void *, int, void *, void *, int);

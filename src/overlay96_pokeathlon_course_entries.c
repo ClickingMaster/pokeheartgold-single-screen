@@ -122,7 +122,7 @@ extern void SpriteSystem_DrawSprites(void *);
 extern void BeginNormalPaletteFade(u32, u32, u32, u32, u32, u32, u32);
 extern u32 IsPaletteFadeFinished(void);
 extern s32 GF_SinDeg(u16);
-extern void sub_0203A994(u32);
+extern void WirelessStatusIcon_CreateOnScreenIfConnected(u32);
 extern void WirelessStatusIcon_Destroy(void);
 
 u32 ov96_0220E22C(void *course, u8 *state);
@@ -252,7 +252,7 @@ u32 ov96_0220E3F0(void *course) {
         ov96_0220ED9C(w);
         ov96_0220EE8C(w);
         ov96_0221022C(w);
-        sub_0203A994(2);
+        WirelessStatusIcon_CreateOnScreenIfConnected(2);
         ov96_0220EA08(w);
         ov96_0220F3FC(w);
         PokeathlonCourse_IncrementField1ED(course);

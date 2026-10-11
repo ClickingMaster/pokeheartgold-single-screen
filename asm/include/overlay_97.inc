@@ -77,7 +77,7 @@
 .public SaveArray_PCStorage_Get
 .public Save_Pokeathlon_Get
 .public PokeathlonSave_GetUnkDC_AtIndex
-.public sub_0203A994
+.public WirelessStatusIcon_CreateOnScreenIfConnected
 .public GetMonData
 .public GetBoxMonData
 .public MonIsShiny

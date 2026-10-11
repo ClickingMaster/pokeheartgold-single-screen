@@ -133,7 +133,7 @@
 .public Options_GetFrame
 .public WirelessStatusIcon_Create
 .public WirelessStatusIcon_Destroy
-.public sub_0203A948
+.public WirelessStatusIcon_ShowOnBothScreens
 .public AcquireBoxMonLock
 .public ReleaseBoxMonLock
 .public GetBoxMonData

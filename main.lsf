@@ -279,10 +279,8 @@ Static main
     Object src/link_synchronization.o
     Object asm/link_synchronization_data.o
     Object src/network_communication_state_full.o
+    Object asm/wireless_status_icon_data.o
     Object src/wireless_status_icon.o
-    Object asm/op90_unk_0203A3B0_anchor.o
-    Object src/op90_unk_0203A3B0_r01.o
-    Object src/wireless_status_icon_2.o
     Object src/communication_error.o
     Object src/unk_0203AC88.o
     Object src/wfc_user_info_warning.o
@@ -1394,9 +1392,7 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object src/to90_w41415_fp_init4_run01.o
     Object lib/asm/op90_to90_w41415_fp_init4_suffix_anchor.o
     Object src/op90_to90_w41415_fp_init4_suffix_r01.o
-    Object src/to90_msl_interval_demo_run01.o
-    Object src/to90_msl_interval_demo_run02.o
-    Object src/to90_msl_interval_demo_run03.o
+    Object lib/MSL_C/src/msl_console_io.o
     Object src/to90_msl_interval_demo_run04.o
     Object src/to90_msl_interval_demo_run05.o
     Object src/to90_msl_interval_demo_run06.o
@@ -1422,27 +1418,11 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object src/to91_msl_scalar_new.o
     Object src/to90_msl_interval_demo_run21.o
     Object src/to91_msl_array_new.o
-    Object src/to90_msl_interval_demo_run22.o
-    Object src/to90_msl_interval_demo_run23.o
-    Object src/to90_msl_interval_demo_run24.o
-    Object src/to90_msl_interval_demo_run25.o
-    Object src/to90_msl_interval_demo_run26.o
-    Object src/to90_msl_interval_demo_run27.o
-    Object src/to90_msl_interval_demo_run28.o
-    Object src/to90_msl_interval_demo_run29.o
-    Object src/to90_msl_interval_demo_run30.o
-    Object src/to90_msl_interval_demo_run31.o
-    Object src/to90_msl_interval_demo_run32.o
-    Object src/to90_msl_interval_demo_run33.o
-    Object src/to90_msl_interval_demo_run34.o
-    Object src/to91_w41422_ZSt9duhandlerv_run01.o
-    Object src/to90_msl_interval_demo_run35.o
-    Object src/to90_msl_interval_demo_run36.o
-    Object src/to90_msl_interval_demo_run37.o
-    Object src/to90_msl_interval_demo_run38.o
-    Object src/to90_msl_interval_demo_run39.o
-    Object src/to90_msl_interval_demo_run40.o
-    Object src/to90_msl_interval_demo_run41.o
+    Object lib/MSL_C/src/msl_new_bad_alloc.o
+    Object lib/MSL_C/src/msl_static_init.o
+    Object lib/MSL_C/src/msl_type_info.o
+    Object lib/MSL_C/src/msl_exception_handlers.o
+    Object lib/MSL_C/src/msl_exception_frames.o
     Object lib/asm/op90_to91_w41419_ExitProcess_prefix_anchor.o
     Object src/op90_op90_to91_w41419_ExitProcess_prefix_residual_1_r01.o
     Object src/op90_to91_w41419_ExitProcess_prefix_r01.o
@@ -1827,11 +1807,7 @@ Overlay field
     Object src/field/scrcmd_pokemon_misc.o
     Object src/field/scrcmd_move_tutor.o
     Object src/field/scrcmd_moneybox.o
-    Object src/field_follow_effect_1.o
-    Object src/overlay_01_022031C0.o
-    Object src/field_follow_effect_2.o
-    Object src/to90_extra1984_run01.o
-    Object src/field_follow_effect_3.o
+    Object src/field/field_follow_mon_ball.o
     Object asm/overlay_01_022031C0_residual_3.o
     Object src/field/field_emote_bubble.o
     Object asm/overlay_01_02203E40_residual_1.o

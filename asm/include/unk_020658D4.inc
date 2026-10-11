@@ -90,7 +90,7 @@
 .public VeryTallGrass_Spawn
 .public VeryTallGrass_SpawnAt
 .public ov01_021FFF5C
-.public ov01_0220329C
+.public FollowMonBall_Spawn
 .public ov01_0220542C
 .public ov01_022055DC
 .public ov01_02205604

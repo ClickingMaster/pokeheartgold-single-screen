@@ -58,7 +58,7 @@
 	.public BattleRecord_Exists
 	.public BattleRecord_GetHeader
 	.public BattleRecordHeader_GetField
-	.public sub_0203A948
+	.public WirelessStatusIcon_ShowOnBothScreens
 	.public OrbitCursor_SetVisible
 	.public OrbitCursor_SetRadius
 	.text
@@ -392,7 +392,7 @@ _0223AAF0:
 	bl VsRecorder_SetVBlankPaused
 	mov r0, #1
 	mov r1, #0x6d
-	bl sub_0203A948
+	bl WirelessStatusIcon_ShowOnBothScreens
 	add r0, r4, #0
 	mov r1, #1
 	bl VsRecorder_StartFlipScreens

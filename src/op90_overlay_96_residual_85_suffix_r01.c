@@ -78,7 +78,7 @@ extern void ov96_021E634C(void *,int,void *,void *,int,int,Point *);
 extern void ov96_021FD060(State *);
 
 
-extern void sub_0203A994(int);
+extern void WirelessStatusIcon_CreateOnScreenIfConnected(int);
 extern u16 LCRandom(void);
 extern void ov96_02200E80(void *,void *);
 static inline int TeamNum(int i){return i/3;}
@@ -133,7 +133,7 @@ int ov96_022047EC(void *course){
  if(ov96_021E5F24(course)==0)PokeathlonPennantCapture_PackFrame(s,ov96_021E8A20((u8 *)PokeathlonCourse_GetDataCopyArea(course)+40));
  ov96_021E634C(course,0,s->resource,s->renderer,1,1,&selected);PokeathlonPennantCapture_LoadBgGfx(s);GfGfx_EngineATogglePlanes(16,1);GfGfx_EngineBTogglePlanes(16,1);
  ActorB *actor=s->actors+own;int y=actor->y/4096;int ax=actor->x/4096;ScheduleSetBgPosText(s->bg,0,BG_POS_OP_SET_X,ax-128);ScheduleSetBgPosText(s->bg,0,BG_POS_OP_SET_Y,y-96);
- sub_0203A994(1);PokeathlonCourse_IncrementField1ED(course);break;}
+ WirelessStatusIcon_CreateOnScreenIfConnected(1);PokeathlonCourse_IncrementField1ED(course);break;}
  case 5:if(ov96_021E5F24(course)==0)s->random=LCRandom()%20;PokeathlonCourse_IncrementField1ED(course);break;
  case 6:return 1;
  }

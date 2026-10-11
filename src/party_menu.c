@@ -25,7 +25,7 @@
 #include "system.h"
 #include "sound_playback.h"
 #include "touchpad.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 #include "unk_02066EDC.h"
 #include "unk_0208805C.h"
 #include "unk_02088288.h"
@@ -279,7 +279,7 @@ static BOOL PartyMenuApp_Init(OverlayManager *manager, int *pState) {
     sub_0207A89C(partyMenu);
     TextFlags_SetCanTouchSpeedUpPrint(TRUE);
     Main_SetVBlankIntrCB(sub_020796B8, partyMenu);
-    sub_0203A994(2);
+    WirelessStatusIcon_CreateOnScreenIfConnected(2);
     FontID_Alloc(4, HEAP_ID_PARTY_MENU);
     NARC_Delete(narc);
     return TRUE;
@@ -636,7 +636,7 @@ static BOOL PartyMenuApp_Exit(OverlayManager *manager, int *pState) {
     FontID_Release(4);
     OverlayManager_FreeData(manager);
     Heap_Destroy(HEAP_ID_PARTY_MENU);
-    sub_0203A964();
+    WirelessStatusIcon_CreateIfConnected();
     return TRUE;
 }
 

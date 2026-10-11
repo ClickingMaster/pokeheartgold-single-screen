@@ -51,7 +51,7 @@ BOOL PokemonSummary_Init(void *manager, u32 *state) {
     *(volatile u16 *)0x04000304 |= 0x8000;
     GfGfx_BothDispOn();
     Sound_SetSceneAndPlayBGM(0x3d, 0, 0);
-    sub_0203A964();
+    WirelessStatusIcon_CreateIfConnected();
     NARC_Delete(narcA2);
     NARC_Delete(narc27);
     return TRUE;

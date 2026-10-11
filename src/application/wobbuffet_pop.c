@@ -28,7 +28,7 @@
 #include "unk_02026E30.h"
 #include "unk_02035900.h"
 #include "unk_02037C94.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
 #include "wifi_connection.h"
 

@@ -41,7 +41,7 @@
 #include "touchscreen.h"
 #include "unk_0200CE7C.h"
 #include "unk_02026E30.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 #include "unk_0208805C.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
@@ -321,7 +321,7 @@ BOOL Bag_Init(OverlayManager *man, int *state) {
     BagApp_Init3D(app);
     Main_SetVBlankIntrCB(BagApp_VBlankCallback, app);
     Sound_SetSceneAndPlayBGM(0x33, 0, 0);
-    sub_0203A964();
+    WirelessStatusIcon_CreateIfConnected();
     reg_GX_POWCNT |= 0x8000;
     ToggleBgLayer(GF_BG_LYR_SUB_0, GF_PLANE_TOGGLE_ON);
     return TRUE;

@@ -48,7 +48,7 @@ MailView_CreateMonIcons: ; 0x021E6BB4
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x94
 	add r5, r0, #0
-	bl sub_0203A964
+	bl WirelessStatusIcon_CreateIfConnected
 	ldrb r0, [r5, #0xc]
 	cmp r0, #1
 	bne _021E6BC6

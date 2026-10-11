@@ -12,7 +12,7 @@ int PokeathlonCourse_GetField1ED(void *course);
 void PokeathlonCourse_IncrementField1ED(void *course);
 void PokeathlonCourse_SetStateTransitionType(void *course, int type);
 void ov96_021EEFAC(void *course);
-void sub_0203A994(int value);
+void WirelessStatusIcon_CreateOnScreenIfConnected(int value);
 void GfGfx_EngineATogglePlanes(int plane, int enable);
 void GfGfx_EngineBTogglePlanes(int plane, int enable);
 void BeginNormalPaletteFade(int, int, int, int, int, int, int);

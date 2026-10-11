@@ -14,7 +14,7 @@
 #include "communication_player_state.h"
 #include "unk_02034B0C.h"
 #include "link_synchronization.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 #include "network_overlay_loader.h"
 
 typedef struct UnkStruct_sub_02039C6C {
@@ -302,9 +302,9 @@ void sub_0203817C(void) {
         _021D4150->unk24();
     }
     if (sub_02039998()) {
-        sub_0203A930(3 - ov00_021EC9D4());
+        WirelessStatusIcon_SetLevel(3 - ov00_021EC9D4());
     } else if (sub_02035650()) {
-        sub_0203A930(3 - WM_GetLinkLevel());
+        WirelessStatusIcon_SetLevel(3 - WM_GetLinkLevel());
     }
 }
 

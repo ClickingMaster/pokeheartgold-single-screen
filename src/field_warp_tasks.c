@@ -887,7 +887,7 @@ static BOOL sub_02053CCC(TaskManager *taskManager) {
         if (FollowMon_IsActive(fieldSystem)
             && !ov01_022057C4(fieldSystem)
             && PlayerAvatar_GetState(fieldSystem->playerAvatar) != 1) {
-            env->unk1C = ov01_0220329C(FollowMon_GetMapObject(fieldSystem), 1);
+            env->unk1C = FollowMonBall_Spawn(FollowMon_GetMapObject(fieldSystem), 1);
         }
         env->unk0++;
         break;

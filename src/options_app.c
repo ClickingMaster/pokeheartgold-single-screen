@@ -23,7 +23,7 @@
 #include "system.h"
 #include "touchscreen.h"
 #include "sound_playback.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
 
 // Not to be confused with `Options`, which is almost exactly the same, save for two members being swapped. SMH
@@ -500,7 +500,7 @@ static BOOL ov54_021E5CE4(OptionsApp_Data *data) {
         OptionsApp_SetupInterfaceText(data);
         GF_CreateVramTransferManager(32, data->heapID);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
-        sub_0203A964();
+        WirelessStatusIcon_CreateIfConnected();
         OptionsApp_SetupSprites(data);
 
         Main_SetVBlankIntrCB((GFIntrCB)OptionsApp_OnVBlank, data);

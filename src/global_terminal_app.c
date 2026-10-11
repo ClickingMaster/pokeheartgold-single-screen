@@ -85,7 +85,7 @@ BOOL GlobalTerminalApp_Main(OverlayManager *man, int *state) {
 
     if (data->wifiLoaded == 1 && data->disconnect == 1 && data->isConnected == 1) {
         ov00_021ECB40();
-        sub_0203A930(3 - ov00_021EC9D4());
+        WirelessStatusIcon_SetLevel(3 - ov00_021EC9D4());
     }
     return FALSE;
 }

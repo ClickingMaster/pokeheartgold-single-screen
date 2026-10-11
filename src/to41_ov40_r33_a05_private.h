@@ -36,7 +36,7 @@ void StopSE(u16, int);
 BOOL TouchscreenHitbox_TouchNewIsIn(const void *);
 BOOL BattleRecord_Exists(void);
 void BattleRecord_Delete(void);
-void sub_0203A948(int, int);
+void WirelessStatusIcon_ShowOnBothScreens(int, int);
 void OrbitCursor_SetVisible(void *, int);
 void OrbitCursor_SetRadius(void *, int, int);
 void OrbitCursor_MoveTarget(void *, int, int);

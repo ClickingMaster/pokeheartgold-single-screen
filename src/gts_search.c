@@ -18,7 +18,7 @@
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
 // SEEK POKEMON (screen 4): the player sets the wanted Pokemon (species, gender, level, the trainer's country) with

@@ -42,7 +42,7 @@
 #include "unk_02035900.h"
 #include "link_synchronization.h"
 #include "unk_02037C94.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 #include "render_model.h"
 #include "render_animation.h"
 #include "vram_transfer_manager.h"
@@ -434,7 +434,7 @@ void sub_02038C1C(int count);
 void sub_02039EAC(s32 *state);
 BOOL sub_02039EB4(SaveData *saveData, int a1, s32 *state);
 int GF_TouchpadUpdate(SpinTradeTouchSamples *out, int mode, u32 threshold);
-void *sub_0203A4AC(enum HeapID heapId);
+void *WirelessStatusIcon_LoadPaletteFile(enum HeapID heapId);
 BOOL SpinTradeLink_SendCommand(SpinTradeLinkMenu *menu, int command, void *data, int size);
 Party *SpinTradeLink_GetReceivedParty(SpinTradeLinkMenu *menu, int netId);
 void RenderModel_LoadFromNarc(UnkOv01_021FFECC_sub *model, int index, NARC *narc, int fileId, enum HeapID heapId, BOOL atEnd);
@@ -1738,7 +1738,7 @@ void SpinTrade_LoadSpriteResources(SpinTradeApp *app) {
     SpriteSystem_LoadAnimResObjFromOpenNarc(spriteSystem, spriteManager, narc, 18, FALSE, 7);
     NARC_Delete(narc);
     WirelessStatusIcon_Create();
-    raw = sub_0203A4AC(HEAP_ID_102);
+    raw = WirelessStatusIcon_LoadPaletteFile(HEAP_ID_102);
     NNS_G2dGetUnpackedPaletteData(raw, &plttData);
     PaletteData_LoadPalette(paletteData, plttData->pRawData, PLTTBUF_MAIN_OBJ, 14 * 16, 0x20);
     Heap_Free(raw);

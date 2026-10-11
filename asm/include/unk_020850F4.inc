@@ -42,8 +42,8 @@
 .public TouchHitboxController_Destroy
 .public WirelessStatusIcon_Create
 .public WirelessStatusIcon_Destroy
-.public sub_0203A930
-.public sub_0203A948
+.public WirelessStatusIcon_SetLevel
+.public WirelessStatusIcon_ShowOnBothScreens
 .public sub_02085400
 .public sub_0208541C
 .public sub_02085438

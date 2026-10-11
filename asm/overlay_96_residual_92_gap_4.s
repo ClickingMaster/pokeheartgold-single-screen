@@ -571,7 +571,7 @@ _0220968E:
 	ldr r0, [r0, #4]
 	bl PokeathlonCourse_SetVBlankIntrCB
 	mov r0, #1
-	bl sub_0203A994
+	bl WirelessStatusIcon_CreateOnScreenIfConnected
 	ldr r0, [sp, #0xc]
 	mov r1, #1
 	bl PokeathlonCourse_SetField1F4

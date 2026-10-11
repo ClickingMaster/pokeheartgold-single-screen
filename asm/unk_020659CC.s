@@ -127,7 +127,7 @@ _02065A76:
 	beq _02065ADC
 	add r0, r5, #0
 	mov r1, #0
-	bl ov01_0220329C
+	bl FollowMonBall_Spawn
 	add r0, r5, #0
 	mov r1, #0
 	bl sub_02069E84
@@ -172,7 +172,7 @@ _02065B12:
 	beq _02065B44
 	add r0, r5, #0
 	mov r1, #0
-	bl ov01_0220329C
+	bl FollowMonBall_Spawn
 	add r0, r5, #0
 	mov r1, #0
 	bl sub_02069E84
@@ -228,7 +228,7 @@ sub_02065B70: ; 0x02065B70
 	beq _02065BBA
 	add r0, r5, #0
 	mov r1, #0
-	bl ov01_0220329C
+	bl FollowMonBall_Spawn
 	add r0, r5, #0
 	mov r1, #0
 	bl sub_02069E84

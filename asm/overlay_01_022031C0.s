@@ -9,8 +9,8 @@
 #include "msgdata/msg/msg_0096_D31R0201.h"
 #include "msgdata/msg/msg_0066_D23R0102.h"
 	.include "asm/macros.inc"
-	.public ov01_02203654
-	.public ov01_02203890
+	.public FollowMonBallEffect_UpdateRecallWhite
+	.public FollowMonBallEffect_UpdateRecall
 	.public ov01_022094B0
 	.public ov01_022094BC
 	.public ov01_022094C8
@@ -22,25 +22,25 @@
 	.include "global.inc"
 
 	.text
-	.public ov01_022031C0
-	.public ov01_022031E8
-	.public ov01_022031F8
-	.public ov01_02203270
-	.public ov01_0220329C
-	.public ov01_0220335C
-	.public ov01_022033E0
-	.public ov01_022033E4
-	.public ov01_022034B8
-	.public ov01_022034F8
-	.public ov01_022035A4
-	.public ov01_022035DC
-	.public ov01_022037E8
-	.public ov01_02203820
-	.public ov01_022039BC
-	.public ov01_022039E0
+	.public FollowMonBall_New
+	.public FollowMonBall_Free
+	.public FollowMonBall_LoadModels
+	.public FollowMonBall_FreeModels
+	.public FollowMonBall_Spawn
+	.public FollowMonBallEffect_InitBurst
+	.public FollowMonBallEffect_Destroy
+	.public FollowMonBallEffect_UpdateRelease
+	.public FollowMonBallEffect_DrawRelease
+	.public FollowMonBallEffect_UpdateBurst
+	.public FollowMonBallEffect_DrawBurst
+	.public FollowMonBallEffect_InitRecallWhite
+	.public FollowMonBallEffect_DrawBall
+	.public FollowMonBallEffect_InitRecall
+	.public FollowMonBall_GetPullCoordinate
+	.public FollowMonBall_GetPullStep
 
-	thumb_func_start ov01_02203654
-ov01_02203654: ; 0x02203654
+	thumb_func_start FollowMonBallEffect_UpdateRecallWhite
+FollowMonBallEffect_UpdateRecallWhite: ; 0x02203654
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x28
 	add r5, r1, #0
@@ -134,12 +134,12 @@ _022036C4:
 	add r0, r4, #0
 	add r1, #0x48
 	add r2, #0x3c
-	bl ov01_022039BC
+	bl FollowMonBall_GetPullCoordinate
 	ldr r0, [r5, #0x3c]
 	ldr r0, [r0]
 	str r0, [r5, #0x40]
 	add r0, r4, #0
-	bl ov01_022039E0
+	bl FollowMonBall_GetPullStep
 	str r0, [r5, #0x44]
 	b _02203738
 _02203734:
@@ -227,4 +227,4 @@ _022037D8:
 _022037DC: .word 0xFFFF0000
 _022037E0: .word ov01_02209B18
 _022037E4: .word ov01_022094BC
-	thumb_func_end ov01_02203654
+	thumb_func_end FollowMonBallEffect_UpdateRecallWhite

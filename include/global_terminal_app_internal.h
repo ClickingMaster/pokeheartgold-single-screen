@@ -33,7 +33,7 @@ typedef struct GlobalTerminalApp {
 
 void LoadOVY38(void);
 void UnloadOVY38(void);
-void sub_0203A930(int a0);
+void WirelessStatusIcon_SetLevel(int a0);
 const OverlayManagerTemplate *sub_02087E10(u8 a0);
 BOOL sub_02034DB8(void);
 void sub_02034DE0(void);

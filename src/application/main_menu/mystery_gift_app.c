@@ -55,7 +55,7 @@
 #include "unk_0200A090.h"
 #include "unk_02034B0C.h"
 #include "unk_02035900.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 
 // Main menu option "Mystery Gift": receives a gift (from a friend or a distribution over DS wireless, or
 // over Nintendo Wi-Fi Connection), stores it in the save, and opens the Wonder Card viewers.
@@ -86,7 +86,7 @@ extern BOOL CTRDG_IsExisting();
 extern int WM_GetLinkLevel(void);
 extern fx32 FX_Sqrt(fx32 value);
 extern void sub_02034DE0(void);
-extern void sub_0203A930(int a0);
+extern void WirelessStatusIcon_SetLevel(int a0);
 extern void sub_02038D28(SaveData *saveData);
 extern void sub_02038D64(void);
 extern u32 sub_02038D80(void);
@@ -2235,7 +2235,7 @@ void ov74_0222CEE0(MysteryGiftAppData *data) {
     }
     state = ov74_0223D0A8.state;
     if (state == 37 || state == 38 || state == 39 || state == 40 || state == 41 || state == 43) {
-        sub_0203A930(3 - WM_GetLinkLevel());
+        WirelessStatusIcon_SetLevel(3 - WM_GetLinkLevel());
     }
     switch (ov74_0223D0A8.state) {
     case 37:

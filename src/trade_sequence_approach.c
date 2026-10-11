@@ -19,7 +19,7 @@
 #include "trade_sequence_models.h"
 #include "unk_0200FA24.h"
 #include "unk_02026E30.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 
 // Scene 4 of the trade animation (trades and receiving): after a sprite animation the ball model comes out of the
 // distance on the bottom screen, spirals toward the viewer, and the screens swap as it leaves the bottom one; then the
@@ -82,7 +82,7 @@ extern const GraphicsBanks sTradeSequenceApproachGraphicsBanks;
 extern u32 _0224C020[]; // 1 in the data: the ball spirals (when 0 it would only follow the center)
 
 // No header declares it.
-void sub_0203A948(int a0, enum HeapID heapID);
+void WirelessStatusIcon_ShowOnBothScreens(int a0, enum HeapID heapID);
 
 TradeSequenceApproach *TradeSequenceApproach_Init(TradeSequence *ts);
 void TradeSequenceApproach_Exit(TradeSequenceApproach *approach);
@@ -229,7 +229,7 @@ void TradeSequenceApproach_InitBgs(TradeSequenceApproach *approach) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     WirelessStatusIcon_Create();
-    sub_0203A948(1, HEAP_ID_56);
+    WirelessStatusIcon_ShowOnBothScreens(1, HEAP_ID_56);
 }
 
 #pragma force_active reset

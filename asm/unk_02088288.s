@@ -151,7 +151,7 @@ PokemonSummary_Init: ; 0x02088298
 	mov r0, #0x3d
 	add r2, r1, #0
 	bl Sound_SetSceneAndPlayBGM
-	bl sub_0203A964
+	bl WirelessStatusIcon_CreateIfConnected
 	add r0, r5, #0
 	bl NARC_Delete
 	add r0, r7, #0

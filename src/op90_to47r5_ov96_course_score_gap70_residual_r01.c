@@ -8,7 +8,7 @@
 #include "sprite.h"
 #include "oam_manager.h"
 #include "unk_0200FA24.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 #include "obj_char_transfer.h"
 #include "pokeathlon/pokeathlon.h"
 
@@ -333,7 +333,7 @@ BOOL ov96_021F94A8(PokeathlonCourseData *course, int unused) {
                 u8 k;
                 for (k = 0; k < 6; k++) p[28 + k] = 17;
             }
-            sub_0203A994(1);
+            WirelessStatusIcon_CreateOnScreenIfConnected(1);
             BeginNormalPaletteFade(2, 3, 3, 0, 6, 1, w->heap);
             PokeathlonCourse_IncrementField1ED(course);
             break;

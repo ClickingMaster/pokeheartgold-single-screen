@@ -236,11 +236,11 @@
 .public FrontierCard_GetGreeting
 .public FrontierCard_GetBirthdayMonth
 .public FrontierCard_GetAvatar
-.public sub_0203A4AC
-.public sub_0203A86C
+.public WirelessStatusIcon_LoadPaletteFile
+.public WirelessStatusIcon_Refresh
 .public WirelessStatusIcon_Create
 .public WirelessStatusIcon_Destroy
-.public sub_0203A948
+.public WirelessStatusIcon_ShowOnBothScreens
 .public Save_VarsFlags_Get
 .public Save_VarsFlags_GetBattleFactoryPrintProgress
 .public Save_VarsFlags_GetBattleHallPrintProgress

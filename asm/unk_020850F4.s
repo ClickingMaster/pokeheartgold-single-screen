@@ -130,7 +130,7 @@ _0208512C:
 	bl WirelessStatusIcon_Create
 	mov r0, #1
 	mov r1, #0x6c
-	bl sub_0203A948
+	bl WirelessStatusIcon_ShowOnBothScreens
 _0208520A:
 	mov r0, #7
 	str r0, [sp]
@@ -174,7 +174,7 @@ sub_0208524C: ; 0x0208524C
 	bl ov00_021EC9D4
 	mov r1, #3
 	sub r0, r1, r0
-	bl sub_0203A930
+	bl WirelessStatusIcon_SetLevel
 _02085270:
 	cmp r5, #0
 	beq _02085278

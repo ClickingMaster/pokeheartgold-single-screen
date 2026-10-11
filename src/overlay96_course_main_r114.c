@@ -147,7 +147,7 @@ u32 ov96_02215AC4(void *course) {
             U32_AT(p, 0x20) = (0xfff80007 & U32_AT(p, 0x20)) | ((u16)U32_AT(work, 0x438) << 3);
             ov96_02218330((u8 *)work + 0x188, course);
         }
-        sub_0203A994(2);
+        WirelessStatusIcon_CreateOnScreenIfConnected(2);
         GfGfx_EngineATogglePlanes(0x10, 1);
         GfGfx_EngineBTogglePlanes(0x10, 1);
         return 1;

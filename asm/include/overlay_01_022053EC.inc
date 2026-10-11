@@ -84,7 +84,7 @@
 .public ov01_021F9744
 .public ov01_021FA44C
 .public ov01_021FC5A4
-.public ov01_0220329C
+.public FollowMonBall_Spawn
 .public ov01_02205424
 .public ov01_0220542C
 .public ov01_022054E0

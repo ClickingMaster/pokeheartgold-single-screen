@@ -4099,7 +4099,7 @@ VsRecorder_FlipScreensTask: ; 0x0222FB74
 	add r5, r0, #0
 	ldr r0, [r4]
 	bl VsRecorder_SetScreensFlipped
-	bl sub_0203A86C
+	bl WirelessStatusIcon_Refresh
 	mov r0, #1
 	str r0, [r4, #4]
 	add r0, r5, #0

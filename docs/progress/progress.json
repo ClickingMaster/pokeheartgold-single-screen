@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "d31945415683f2b98d02d8aadcc1f5d04e1bbaec",
+  "commit": "bd9c4ee145546e31a3a28a8078d872c52a31d537",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "87b4aed3a7f76657457d28ba441a5ee706524b9ccdfb5b45560f6c6dff3fb647",
+    "ARM9": "3f0f739d8e89375f22e6ed44979ba2f12fe24cc871c139223d84a09dcb7647df",
     "ARM7": "9c5e95fc87a7ed277b340afcbcf5ab95f37fa6b9d0ec613dccd875e86c2e707b"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -19013,26 +19013,10 @@
     {
       "cpu": "ARM9",
       "module": "field",
-      "object": "field_follow_effect_1.o",
-      "bytes": 1160,
+      "object": "field_follow_mon_ball.o",
+      "bytes": 2116,
       "status": "c",
-      "source": "src/field_follow_effect_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
-      "object": "field_follow_effect_2.o",
-      "bytes": 164,
-      "status": "c",
-      "source": "src/field_follow_effect_2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
-      "object": "field_follow_effect_3.o",
-      "bytes": 88,
-      "status": "c",
-      "source": "src/field_follow_effect_3.c"
+      "source": "src/field/field_follow_mon_ball.c"
     },
     {
       "cpu": "ARM9",
@@ -20317,14 +20301,6 @@
     {
       "cpu": "ARM9",
       "module": "field",
-      "object": "overlay_01_022031C0.o",
-      "bytes": 404,
-      "status": "c",
-      "source": "src/overlay_01_022031C0.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
       "object": "overlay_01_02204004.o",
       "bytes": 2068,
       "status": "c",
@@ -21137,14 +21113,6 @@
       "bytes": 332,
       "status": "c",
       "source": "src/to90_extra1983_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
-      "object": "to90_extra1984_run01.o",
-      "bytes": 300,
-      "status": "c",
-      "source": "src/to90_extra1984_run01.c"
     },
     {
       "cpu": "ARM9",
@@ -25418,6 +25386,14 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "msl_console_io.o",
+      "bytes": 140,
+      "status": "c",
+      "source": "lib/MSL_C/src/msl_console_io.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "msl_direct_io_fread.o",
       "bytes": 268,
       "status": "c",
@@ -25446,6 +25422,22 @@
       "bytes": 4488,
       "status": "c",
       "source": "lib/MSL_C/src/msl_e_pow.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "msl_exception_frames.o",
+      "bytes": 764,
+      "status": "c",
+      "source": "lib/MSL_C/src/msl_exception_frames.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "msl_exception_handlers.o",
+      "bytes": 72,
+      "status": "c",
+      "source": "lib/MSL_C/src/msl_exception_handlers.c"
     },
     {
       "cpu": "ARM9",
@@ -25618,6 +25610,14 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "msl_new_bad_alloc.o",
+      "bytes": 44,
+      "status": "c",
+      "source": "lib/MSL_C/src/msl_new_bad_alloc.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "msl_pool_alloc.o",
       "bytes": 48,
       "status": "c",
@@ -25710,6 +25710,14 @@
       "bytes": 304,
       "status": "c",
       "source": "lib/MSL_C/src/msl_signal.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "msl_static_init.o",
+      "bytes": 112,
+      "status": "c",
+      "source": "lib/MSL_C/src/msl_static_init.c"
     },
     {
       "cpu": "ARM9",
@@ -25822,6 +25830,14 @@
       "bytes": 1132,
       "status": "c",
       "source": "lib/MSL_C/src/msl_strtoull_core.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "msl_type_info.o",
+      "bytes": 168,
+      "status": "c",
+      "source": "lib/MSL_C/src/msl_type_info.c"
     },
     {
       "cpu": "ARM9",
@@ -26209,14 +26225,6 @@
       "bytes": 200,
       "status": "c",
       "source": "src/op90_unk_02032B84_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_unk_0203A3B0_r01.o",
-      "bytes": 364,
-      "status": "c",
-      "source": "src/op90_unk_0203A3B0_r01.c"
     },
     {
       "cpu": "ARM9",
@@ -30215,30 +30223,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to90_msl_interval_demo_run01.o",
-      "bytes": 80,
-      "status": "c",
-      "source": "src/to90_msl_interval_demo_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_msl_interval_demo_run02.o",
-      "bytes": 52,
-      "status": "c",
-      "source": "src/to90_msl_interval_demo_run02.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_msl_interval_demo_run03.o",
-      "bytes": 8,
-      "status": "c",
-      "source": "src/to90_msl_interval_demo_run03.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to90_msl_interval_demo_run04.o",
       "bytes": 140,
       "status": "c",
@@ -30379,166 +30363,6 @@
       "bytes": 20,
       "status": "c",
       "source": "src/to90_msl_interval_demo_run21.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_msl_interval_demo_run22.o",
-      "bytes": 12,
-      "status": "c",
-      "source": "src/to90_msl_interval_demo_run22.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_msl_interval_demo_run23.o",
-      "bytes": 20,
-      "status": "c",
-      "source": "src/to90_msl_interval_demo_run23.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_msl_interval_demo_run24.o",
-      "bytes": 12,
-      "status": "c",
-      "source": "src/to90_msl_interval_demo_run24.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_msl_interval_demo_run25.o",
-      "bytes": 44,
-      "status": "c",
-      "source": "src/to90_msl_interval_demo_run25.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_msl_interval_demo_run26.o",
-      "bytes": 68,
-      "status": "c",
-      "source": "src/to90_msl_interval_demo_run26.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_msl_interval_demo_run27.o",
-      "bytes": 4,
-      "status": "c",
-      "source": "src/to90_msl_interval_demo_run27.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_msl_interval_demo_run28.o",
-      "bytes": 48,
-      "status": "c",
-      "source": "src/to90_msl_interval_demo_run28.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_msl_interval_demo_run29.o",
-      "bytes": 20,
-      "status": "c",
-      "source": "src/to90_msl_interval_demo_run29.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_msl_interval_demo_run30.o",
-      "bytes": 28,
-      "status": "c",
-      "source": "src/to90_msl_interval_demo_run30.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_msl_interval_demo_run31.o",
-      "bytes": 20,
-      "status": "c",
-      "source": "src/to90_msl_interval_demo_run31.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_msl_interval_demo_run32.o",
-      "bytes": 20,
-      "status": "c",
-      "source": "src/to90_msl_interval_demo_run32.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_msl_interval_demo_run33.o",
-      "bytes": 28,
-      "status": "c",
-      "source": "src/to90_msl_interval_demo_run33.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_msl_interval_demo_run34.o",
-      "bytes": 12,
-      "status": "c",
-      "source": "src/to90_msl_interval_demo_run34.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_msl_interval_demo_run35.o",
-      "bytes": 24,
-      "status": "c",
-      "source": "src/to90_msl_interval_demo_run35.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_msl_interval_demo_run36.o",
-      "bytes": 24,
-      "status": "c",
-      "source": "src/to90_msl_interval_demo_run36.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_msl_interval_demo_run37.o",
-      "bytes": 432,
-      "status": "c",
-      "source": "src/to90_msl_interval_demo_run37.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_msl_interval_demo_run38.o",
-      "bytes": 92,
-      "status": "c",
-      "source": "src/to90_msl_interval_demo_run38.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_msl_interval_demo_run39.o",
-      "bytes": 160,
-      "status": "c",
-      "source": "src/to90_msl_interval_demo_run39.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_msl_interval_demo_run40.o",
-      "bytes": 32,
-      "status": "c",
-      "source": "src/to90_msl_interval_demo_run40.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to90_msl_interval_demo_run41.o",
-      "bytes": 48,
-      "status": "c",
-      "source": "src/to90_msl_interval_demo_run41.c"
     },
     {
       "cpu": "ARM9",
@@ -30705,14 +30529,6 @@
       "bytes": 12,
       "status": "c",
       "source": "src/to91_w41419_ExitProcess_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to91_w41422_ZSt9duhandlerv_run01.o",
-      "bytes": 12,
-      "status": "c",
-      "source": "src/to91_w41422_ZSt9duhandlerv_run01.c"
     },
     {
       "cpu": "ARM9",
@@ -31813,17 +31629,9 @@
       "cpu": "ARM9",
       "module": "main",
       "object": "wireless_status_icon.o",
-      "bytes": 846,
+      "bytes": 1574,
       "status": "c",
       "source": "src/wireless_status_icon.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "wireless_status_icon_2.o",
-      "bytes": 364,
-      "status": "c",
-      "source": "src/wireless_status_icon_2.c"
     },
     {
       "cpu": "ARM9",

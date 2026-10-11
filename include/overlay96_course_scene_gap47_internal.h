@@ -48,7 +48,7 @@ void ov96_021EE60C(void *, void *);
 void ov96_021EF54C(void *);
 void ov96_021EE644(void *);
 void ov96_021EFA28(void *);
-void sub_0203A994(int);
+void WirelessStatusIcon_CreateOnScreenIfConnected(int);
 void GfGfx_EngineATogglePlanes(int, int);
 void GfGfx_EngineBTogglePlanes(int, int);
 void PokeathlonCourse_SetField1F4(void *, int);

@@ -29,7 +29,7 @@ int sub_020850F4(void *overlayManager) {
     sub_020860B8(data);
     if (data->args.words[12] != 0) {
         WirelessStatusIcon_Create((void *)data->args.words[12]);
-        sub_0203A948(1, HEAP_ID_108);
+        WirelessStatusIcon_ShowOnBothScreens(1, HEAP_ID_108);
     }
     G2x_SetBlendAlpha_(0x04000050, 0, 6, 0xF, 7);
     G2x_SetBlendAlpha_(0x04001050, 0, 0xE, 7, 8);
@@ -42,7 +42,7 @@ int sub_0208524C(void *overlayManager) {
     BOOL done = sub_02085BEC(data);
 
     if (data->args.words[12] != 0) {
-        sub_0203A930(3 - ov00_021EC9D4((void *)data->args.words[12]));
+        WirelessStatusIcon_SetLevel(3 - ov00_021EC9D4((void *)data->args.words[12]));
     }
     if (done != FALSE) {
         return TRUE;

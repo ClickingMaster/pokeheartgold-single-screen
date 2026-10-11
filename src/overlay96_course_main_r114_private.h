@@ -52,7 +52,7 @@ extern void SpriteSystem_DrawSprites(void *);
 extern void BeginNormalPaletteFade(u32, u32, u32, u32, u32, u32, u32);
 extern u32 IsPaletteFadeFinished(void);
 extern void MI_CpuFill8(void *, u8, u32);
-extern void sub_0203A994(u32);
+extern void WirelessStatusIcon_CreateOnScreenIfConnected(u32);
 extern void WirelessStatusIcon_Destroy(void);
 extern void ov96_02215FC8(void *);
 extern u32 ov96_02216234(void *);

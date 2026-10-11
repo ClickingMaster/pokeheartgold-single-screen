@@ -153,7 +153,7 @@ BOOL sub_02055DBC(TaskManager *man) {
             LocalMapObject *followMon = FollowMon_GetMapObject(fieldSystem);
             int species = FollowMon_GetSpecies(followMon);
             if (!FollowMon_GetPermissionBySpeciesAndMap(species, env->location.mapId)) {
-                env->unk24 = ov01_0220329C(followMon, 1);
+                env->unk24 = FollowMonBall_Spawn(followMon, 1);
             }
         }
         env->state++;

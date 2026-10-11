@@ -263,7 +263,7 @@
 .public sub_02039FD8
 .public WirelessStatusIcon_Create
 .public WirelessStatusIcon_Destroy
-.public sub_0203A930
+.public WirelessStatusIcon_SetLevel
 .public ZeroBoxMonData
 .public AcquireBoxMonLock
 .public ReleaseBoxMonLock

@@ -88,7 +88,7 @@ void sub_02033A0C(int arg0);
 void sub_02033AA4(int arg0);
 void sub_02033908(int arg0);
 void sub_02033ACC(int arg0);
-void sub_0203A930(int arg0);
+void WirelessStatusIcon_SetLevel(int arg0);
 int ov00_021EC9D4(void);
 s32 WM_GetLinkLevel(void);
 int sub_02035664(void);

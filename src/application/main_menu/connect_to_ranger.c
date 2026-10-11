@@ -37,7 +37,7 @@
 #include "text.h"
 #include "title_screen.h"
 #include "unk_02034B0C.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 
 // Main menu option "Connect to Pokemon Ranger": receives the Manaphy Egg from Pokemon Ranger over DS
 // wireless and stores it as a Wonder Card.
@@ -114,7 +114,7 @@ extern const GraphicsModes _0223B330;
 extern const GraphicsBanks _0223B340;
 
 extern void sub_02034DE0(void);
-extern void sub_0203A930(int a0);
+extern void WirelessStatusIcon_SetLevel(int a0);
 
 // Wireless link with Pokemon Ranger (link_status part of this overlay)
 
@@ -489,7 +489,7 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
 #define CONNECT_STATE (*(u32 *)((u8 *)app + stateOffset))
 
     if (*(BOOL *)((u8 *)app + linkInitialisedOffset) == TRUE) {
-        sub_0203A930(3 - RangerLink_GetLinkLevel());
+        WirelessStatusIcon_SetLevel(3 - RangerLink_GetLinkLevel());
         RangerLink_Update();
         RangerLink_SetChannel(1);
     }

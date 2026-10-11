@@ -31,7 +31,7 @@
 #include "text.h"
 #include "touchscreen.h"
 #include "unk_02037C94.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
 // Wi-Fi Plaza connect / disconnect screens, two OverlayManager templates started by the Wi-Fi Plaza

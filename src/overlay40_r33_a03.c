@@ -62,7 +62,7 @@ void TouchHitboxController_Destroy(void *controller);
 void ov40_0223A83C(void *p);
 void VsRecorder_ResetFade(void *p);
 void VsRecorder_RebuildMenuRowsParent(void *p);
-void sub_0203A948(int a, int heapId);
+void WirelessStatusIcon_ShowOnBothScreens(int a, int heapId);
 void VsRecorder_StartFlipScreens(void *p, int value);
 BOOL VsRecorder_IsFlipScreensDone(void *p);
 void VsRecorder_ClearPaletteBlend(void *p);
@@ -199,7 +199,7 @@ int ov40_0223A924(void *p) {
         VsRecorder_SetVBlankPaused(p, (void *)1);
         VsRecorder_RebuildMenuRowsParent(p);
         VsRecorder_SetVBlankPaused(p, NULL);
-        sub_0203A948(1, 0x6D);
+        WirelessStatusIcon_ShowOnBothScreens(1, 0x6D);
         VsRecorder_StartFlipScreens(p, 1);
         WORD(p, 8)
         ++;

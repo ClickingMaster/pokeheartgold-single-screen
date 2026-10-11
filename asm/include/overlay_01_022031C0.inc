@@ -42,7 +42,7 @@
 .public Field3dObject_Draw
 .public Field3dObject_SetActiveFlag
 .public Field3dObject_SetPos
-.public ov01_022031C0
-.public ov01_022031E8
-.public ov01_0220329C
+.public FollowMonBall_New
+.public FollowMonBall_Free
+.public FollowMonBall_Spawn
 .public ov01_022055DC

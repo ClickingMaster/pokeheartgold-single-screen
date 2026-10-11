@@ -190,7 +190,7 @@
 .public sub_020398D4
 .public sub_02039EAC
 .public sub_02039EB4
-.public sub_0203A4AC
+.public WirelessStatusIcon_LoadPaletteFile
 .public WirelessStatusIcon_Create
 .public sub_02055198
 .public sub_0205A904

@@ -66,7 +66,7 @@
 .public sub_02034DB8
 .public sub_02034DE0
 .public sub_02039FD8
-.public sub_0203A930
+.public WirelessStatusIcon_SetLevel
 .public sub_02087E10
 .public LoadDwcOverlay
 .public UnloadDwcOverlay

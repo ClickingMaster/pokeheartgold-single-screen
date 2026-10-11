@@ -89,7 +89,7 @@ extern void ov96_021E634C(void *,int,int,void *,u32,u8,u32);
 extern void ov96_021FD060(State *);
 extern void GfGfx_EngineATogglePlanes(int,int);
 extern void GfGfx_EngineBTogglePlanes(int,int);
-extern void sub_0203A994(int);
+extern void WirelessStatusIcon_CreateOnScreenIfConnected(int);
 extern int LCRandom(void);
 extern void ov96_02200E80(void *,void *);
 
@@ -196,7 +196,7 @@ int ov96_021FC768(void *course){
  ov96_021FD060(s);
  GfGfx_EngineATogglePlanes(16,1);
  GfGfx_EngineBTogglePlanes(16,1);
- sub_0203A994(1);
+ WirelessStatusIcon_CreateOnScreenIfConnected(1);
  PokeathlonCourse_IncrementField1ED(course);
  break;}
  case 5:if(ov96_021E5F24(course)==0){u8 *stage=s->stage;u8 idx=LCRandom()%10;ReadWholeNarcMemberByIdPair(stage,229,idx);ov96_02200E80(s->secondary,stage);}PokeathlonCourse_IncrementField1ED(course);break;

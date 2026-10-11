@@ -46,7 +46,7 @@
 #include "unk_0203170C.h"
 #include "unk_02034B0C.h"
 #include "unk_02037C94.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 #include "network_overlay_loader.h"
 #include "vram_transfer_manager.h"
 #include "wii_number.h"
@@ -255,7 +255,7 @@ void sub_02085438(NumberEntryArgs *args);
 BOOL LoadOVY38(void);
 void UnloadOVY38(void);
 void sub_02034DE0(void);
-void sub_0203A930(int a0);
+void WirelessStatusIcon_SetLevel(int a0);
 void sub_02039528(SaveData *saveData);
 void sub_0203957C(void);
 void sub_020399EC(void);
@@ -424,7 +424,7 @@ BOOL WiiMessageSettings_Main(OverlayManager *man, int *state) {
     if (app->networkLoaded == TRUE) {
         ov00_021ECB40();
         GtsServer_Update();
-        sub_0203A930(3 - ov00_021EC9D4());
+        WirelessStatusIcon_SetLevel(3 - ov00_021EC9D4());
     }
 
     switch (*state) {

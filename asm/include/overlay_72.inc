@@ -135,7 +135,7 @@
 .public sub_02039FD8
 .public WirelessStatusIcon_Create
 .public WirelessStatusIcon_Destroy
-.public sub_0203A930
+.public WirelessStatusIcon_SetLevel
 .public sub_02069528
 .public LoadDwcOverlay
 .public UnloadDwcOverlay

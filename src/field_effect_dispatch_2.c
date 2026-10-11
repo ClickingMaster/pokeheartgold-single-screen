@@ -133,7 +133,7 @@ void ov01_02205720(void *src, void *dst, u32 dir, u32 facing) {
 }
 
 void *ov01_02205784(void *p) {
-    return ov01_0220329C(p, 0);
+    return FollowMonBall_Spawn(p, 0);
 }
 
 void ov01_02205790(void *p, u32 dir) {

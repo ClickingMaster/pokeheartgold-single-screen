@@ -193,7 +193,7 @@
 .public sub_0203A378
 .public WirelessStatusIcon_Create
 .public WirelessStatusIcon_Destroy
-.public sub_0203A930
+.public WirelessStatusIcon_SetLevel
 .public ShowCommunicationError
 .public LoadDwcOverlay
 .public UnloadDwcOverlay

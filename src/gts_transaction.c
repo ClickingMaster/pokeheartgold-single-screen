@@ -31,7 +31,7 @@
 #include "sys_vars.h"
 #include "text.h"
 #include "unk_02037C94.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 
 // Talking to the GTS server (screen 7), entered with nextScreenArg: 7 deposit the selected Pokemon (post.asp,
 // post_finish.asp), 8 take the deposited Pokemon back (get.asp, return.asp), 9 trade for the selected search result
@@ -100,7 +100,7 @@ void sub_0202DB88(void *gtsSave, u32 value);
 void sub_0202DB98(void *gtsSave, u32 value);
 u16 sub_0202DBA0(void *gtsSave);
 // Not declared in a public header.
-void sub_0203A930(s32 level);
+void WirelessStatusIcon_SetLevel(s32 level);
 void sub_020399EC(void);
 void ov00_021ECB94(RTCDate *date, RTCTime *time);
 
@@ -179,7 +179,7 @@ int GtsTransaction_Init(GtsApp *app, int state) {
 }
 
 int GtsTransaction_Main(GtsApp *app, int state) {
-    sub_0203A930(Gts_GetWifiIconLevel());
+    WirelessStatusIcon_SetLevel(Gts_GetWifiIconLevel());
     return sGtsTransactionStates[app->state](app);
 }
 

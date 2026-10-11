@@ -67,7 +67,7 @@ int ov96_021EEE0C(void *course) {
         PokeathlonCourse_IncrementField1ED(course);
         break;
     case 1:
-        sub_0203A994(1);
+        WirelessStatusIcon_CreateOnScreenIfConnected(1);
         GfGfx_EngineATogglePlanes(0x10, 1);
         GfGfx_EngineBTogglePlanes(0x10, 0);
         BeginNormalPaletteFade(0, 1, 1, 0, 4, 1, work->heapId);

@@ -47,7 +47,7 @@
 #include "communication_player_state.h"
 #include "unk_02035900.h"
 #include "link_synchronization.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 #include "unk_0205BFF0.h"
 #include "unk_02096910.h"
 #include "vram_transfer_manager.h"

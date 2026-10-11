@@ -30,7 +30,7 @@
 #include "unk_02009D48.h"
 #include "unk_0200FA24.h"
 #include "unk_02013FDC.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 
 #define TRADE_SEQUENCE_NUM_SCENES       7
 #define TRADE_SEQUENCE_MAX_DEFERRED     32

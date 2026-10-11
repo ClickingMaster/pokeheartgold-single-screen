@@ -1154,7 +1154,7 @@ MimeJrTop_InitGame: ; 0x0225C5C4
 	bl G2dRenderer_SetPlttTransferReservedRegion
 	bl WirelessStatusIcon_Create
 	mov r0, #0x71
-	bl sub_0203A4AC
+	bl WirelessStatusIcon_LoadPaletteFile
 	add r1, sp, #0x24
 	add r4, r0, #0
 	bl NNS_G2dGetUnpackedPaletteData

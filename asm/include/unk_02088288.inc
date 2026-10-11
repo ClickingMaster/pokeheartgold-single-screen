@@ -92,7 +92,7 @@
 .public PlayerProfile_GetTrainerID
 .public PlayerProfile_GetTrainerGender
 .public Options_GetFrame
-.public sub_0203A964
+.public WirelessStatusIcon_CreateIfConnected
 .public Save_VarsFlags_Get
 .public CheckFlag982
 .public AllocMonZeroed

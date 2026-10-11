@@ -34,7 +34,7 @@
 #include "unk_02035900.h"
 #include "link_synchronization.h"
 #include "unk_02037C94.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
 
 // These are declared only in other modules' private headers.
@@ -52,7 +52,7 @@ u8 CommPlayerInfo_GetCountry(int netId);
 u8 CommPlayerInfo_GetRegion(int netId);
 void sub_0203986C(void);
 int sub_0203A084(SaveData *saveData, void *friendData, u32 *index);
-void sub_0203A948(int a0, enum HeapID heapId);
+void WirelessStatusIcon_ShowOnBothScreens(int a0, enum HeapID heapId);
 void ov45_0222ACB8(void *lobby, u8 game, int count, u32 id0, u32 id1, u32 id2, u32 id3);
 
 extern const u8 _0225C1E0[];
@@ -2100,7 +2100,7 @@ BOOL PlazaGameContinue_Run(PlazaGameContinue *prompt, PlazaGameMessageBox *messa
     case 0: {
         enum HeapID heap = heapId;
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, heap);
-        sub_0203A948(0, heapId);
+        WirelessStatusIcon_ShowOnBothScreens(0, heapId);
         if (prompt->unk01) {
             WifiConnection_StartVoiceChat(heap);
         }

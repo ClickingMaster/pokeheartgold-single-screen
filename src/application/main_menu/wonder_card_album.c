@@ -39,7 +39,7 @@
 #include "sys_task_api.h"
 #include "system.h"
 #include "unk_02035900.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 
 // Main menu > Mystery Gift > "Check card": browses the three saved Wonder Cards, flips a card between its
 // front and back, deletes it, or shares it with other players over DS wireless.

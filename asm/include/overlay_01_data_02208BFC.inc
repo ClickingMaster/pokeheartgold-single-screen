@@ -38,8 +38,8 @@
 .public UnionChatMarker_Free
 .public WarpArrow_New
 .public WarpArrow_Free
-.public ov01_022031C0
-.public ov01_022031E8
+.public FollowMonBall_New
+.public FollowMonBall_Free
 .public EmoteBubble_New
 .public EmoteBubble_Free
 .public FlashDarkness_New

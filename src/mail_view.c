@@ -27,7 +27,7 @@
 #include "text.h"
 #include "touchscreen.h"
 #include "oam_manager.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 
@@ -838,7 +838,7 @@ void MailView_CreateMonIcons(MailView *mailView) {
     int xOffset;
     MailView *shifted;
 
-    sub_0203A964();
+    WirelessStatusIcon_CreateIfConnected();
     if (mailView->screen == MAIL_VIEW_SCREEN_WRITE) {
         return;
     }

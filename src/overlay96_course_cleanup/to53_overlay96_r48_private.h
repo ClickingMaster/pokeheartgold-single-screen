@@ -13,7 +13,7 @@
 #include "sound_system.h"
 #include "sprite_system.h"
 #include "system.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 
 typedef struct Ov96R48Work {
     void *course;

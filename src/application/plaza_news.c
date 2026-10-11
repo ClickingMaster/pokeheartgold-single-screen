@@ -21,7 +21,7 @@
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
 #include "oam_manager.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
 
 // Hours, minutes and seconds as kept by the lobby (overlay 45), copied as one word.

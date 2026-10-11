@@ -46,7 +46,7 @@ int ov96_021EF0FC(void *course) {
         ov96_021EF54C(w);
         ov96_021EE644(w->obj34);
         ov96_021EFA28(w);
-        sub_0203A994(2);
+        WirelessStatusIcon_CreateOnScreenIfConnected(2);
         GfGfx_EngineATogglePlanes(0x10, 1);
         GfGfx_EngineBTogglePlanes(0x10, 1);
         PokeathlonCourse_SetField1F4(course, 1);

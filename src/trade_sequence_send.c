@@ -26,7 +26,7 @@
 #include "trade_sequence_models.h"
 #include "unk_0200FA24.h"
 #include "unk_02026E30.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 
 // Scene 0 of the trade animation: the sent Pokemon's picture and the "will be sent to" / "Bye-bye" messages, then
 // a flash replaces the picture by a 3D model that bounces until the screen fades out.
@@ -86,7 +86,7 @@ extern const GraphicsBanks sTradeSequenceSendGraphicsBanks;
 // Defined in render_window.c; not declared in its header.
 void DrawFrame2AroundWindow(Window *window, u32 baseTile, u32 paletteNum);
 // No header declares it.
-void sub_0203A948(int a0, enum HeapID heapID);
+void WirelessStatusIcon_ShowOnBothScreens(int a0, enum HeapID heapID);
 
 TradeSequenceSend *TradeSequenceSend_Init(TradeSequence *ts);
 void TradeSequenceSend_Exit(TradeSequenceSend *send);
@@ -216,7 +216,7 @@ BOOL TradeSequenceSend_SetupScreens(TradeSequenceSend *send, u32 *state) {
     TradeSequenceSend_CreateSprites(send);
     G2_BlendNone();
     WirelessStatusIcon_Create();
-    sub_0203A948(1, HEAP_ID_56);
+    WirelessStatusIcon_ShowOnBothScreens(1, HEAP_ID_56);
     BeginNormalPaletteFade(0, 1, 1, RGB_BLACK, 16, 1, HEAP_ID_57);
     return TRUE;
 }

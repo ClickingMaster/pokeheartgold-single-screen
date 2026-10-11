@@ -22,7 +22,7 @@
 #include "touchpad.h"
 #include "unk_02009D48.h"
 #include "unk_02026E30.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
 
 // VS Recorder app core: resources, BG / sprite setup, V-blank and the screen dispatcher.
@@ -40,8 +40,8 @@ void *OrbitCursor_New(VsRecorderBannerArgs args, SpriteSystem *spriteSystem, Spr
 BOOL OrbitCursor_Start(void *banner, int colorScheme);
 BOOL OrbitCursor_SetActive(void *banner, int a1);
 BOOL OrbitCursor_SetVisible(void *banner, int a1);
-void sub_0203A948(int a0, enum HeapID heapID);
-void *sub_0203A4AC(enum HeapID heapID);
+void WirelessStatusIcon_ShowOnBothScreens(int a0, enum HeapID heapID);
+void *WirelessStatusIcon_LoadPaletteFile(enum HeapID heapID);
 void sub_02088030(VsRecorderWork *work);
 
 extern const GraphicsModes _02244C44;
@@ -115,8 +115,8 @@ void VsRecorder_InitResources(VsRecorderWork *work) {
         G2dRenderer_SetObjCharTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DSUB, GX_OBJVRAMMODE_CHAR_1D_128K);
         G2dRenderer_SetPlttTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DSUB);
         WirelessStatusIcon_Create();
-        sub_0203A948(1, HEAP_ID_109);
-        file = sub_0203A4AC(HEAP_ID_109);
+        WirelessStatusIcon_ShowOnBothScreens(1, HEAP_ID_109);
+        file = WirelessStatusIcon_LoadPaletteFile(HEAP_ID_109);
         NNS_G2dGetUnpackedPaletteData(file, &pltt);
         PaletteData_LoadPalette(work->plttData, pltt->pRawData, PLTTBUF_MAIN_OBJ, 0xE0, 0x20);
         PaletteData_LoadPalette(work->plttData, pltt->pRawData, PLTTBUF_SUB_OBJ, 0xE0, 0x20);

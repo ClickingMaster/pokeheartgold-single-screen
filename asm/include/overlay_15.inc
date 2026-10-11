@@ -156,7 +156,7 @@
 .public RoamerSave_GetRepelAddr
 .public RoamerSave_RepelNotInUse
 .public RoamerSave_SetFlute
-.public sub_0203A964
+.public WirelessStatusIcon_CreateIfConnected
 .public GetItemFieldUseFunc
 .public Leftover_CanPlantBerry
 .public GetMoveAttr

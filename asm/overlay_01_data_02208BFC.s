@@ -60,7 +60,7 @@ gFieldEffectRenderers: ; 0x02208C5C
 	.word 0x0000000E, ov01_021FFECC, ov01_021FFEE8
 	.word 0x0000000F, TrainerReveal_New, TrainerReveal_Free
 	.word 0x00000010, ApricornRegrowth_New, ApricornRegrowth_Free
-	.word 0x00000011, ov01_022031C0, ov01_022031E8
+	.word 0x00000011, FollowMonBall_New, FollowMonBall_Free
 	.word 0x00000012, EmoteBubble_New, EmoteBubble_Free
 	.word 0x00000013, FlashDarkness_New, FlashDarkness_Free
 	.word 0x00000014, MapObjectModelList_New, MapObjectModelList_Free

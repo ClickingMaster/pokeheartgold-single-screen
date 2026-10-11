@@ -37,7 +37,7 @@ BOOL sub_02065A4C(LocalMapObject *object, FollowStateSol *state) {
             state->state = 3;
             if (sub_02069E14(object) && !state->flag0) {
                 if (sub_02069EAC(object)) {
-                    ov01_0220329C(object, 0);
+                    FollowMonBall_Spawn(object, 0);
                     sub_02069E84(object, 0);
                 } else {
                     sub_02069DC8(object, 0);
@@ -53,7 +53,7 @@ BOOL sub_02065A4C(LocalMapObject *object, FollowStateSol *state) {
         if (sub_02065DF4(object, state) == TRUE) {
             if (sub_02069E14(object)) {
                 if (sub_02069EAC(object)) {
-                    ov01_0220329C(object, 0);
+                    FollowMonBall_Spawn(object, 0);
                     sub_02069E84(object, 0);
                 } else {
                     sub_02069DC8(object, 0);
@@ -77,7 +77,7 @@ BOOL sub_02065B70(LocalMapObject *object, FollowStateSol *state) {
         sub_02065D58(object, state);
         if (sub_02069E14(object)) {
             if (sub_02069EAC(object)) {
-                ov01_0220329C(object, 0);
+                FollowMonBall_Spawn(object, 0);
                 sub_02069E84(object, 0);
             } else {
                 sub_02069DC8(object, 0);

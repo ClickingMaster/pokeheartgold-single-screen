@@ -18,7 +18,7 @@
 #include "sound_playback.h"
 #include "system.h"
 #include "touchscreen.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 
 // Course helpers, sprite scene and object helpers (OVY_96, not yet tidied).
 void *ov96_021E60C0(PokeathlonCourseData *course, int participant, int member);
@@ -443,7 +443,7 @@ BOOL PokeathlonGoalRoll_Init(PokeathlonCourseData *course) {
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         goalRoll->timer = 2700;
         PokeathlonGoalRollDisplay_UpdateTimer(goalRoll->display, goalRoll->timer);
-        sub_0203A994(2);
+        WirelessStatusIcon_CreateOnScreenIfConnected(2);
         BeginNormalPaletteFade(FADE_SUB_THEN_MAIN, FADE_TYPE_DOWNWARD_IN, FADE_TYPE_DOWNWARD_IN, RGB_BLACK, 6, 1, goalRoll->heapId);
         PokeathlonCourse_IncrementField1ED(course);
         break;

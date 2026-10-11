@@ -20,7 +20,7 @@
 #include "touchscreen.h"
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
 // The GTS main menu (screen 1): DEPOSIT POKEMON (SUMMARY once a Pokemon is deposited), SEEK POKEMON, EXIT.
@@ -43,7 +43,7 @@ typedef enum GtsMainMenuState {
 } GtsMainMenuState;
 
 // Sets the level of the wireless status icon (wireless_status_icon_2.c); not declared in a public header.
-void sub_0203A930(s32 level);
+void WirelessStatusIcon_SetLevel(s32 level);
 
 extern int (*const sGtsMainMenuStates[])(GtsApp *app);
 extern const GraphicsModes sGtsMainMenuGraphicsModes;
@@ -125,7 +125,7 @@ int GtsMainMenu_Init(GtsApp *app, int state) {
 }
 
 int GtsMainMenu_Main(GtsApp *app, int state) {
-    sub_0203A930(Gts_GetWifiIconLevel());
+    WirelessStatusIcon_SetLevel(Gts_GetWifiIconLevel());
     return sGtsMainMenuStates[app->state](app);
 }
 

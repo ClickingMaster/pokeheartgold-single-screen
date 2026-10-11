@@ -25,7 +25,7 @@
 #include "string_util.h"
 #include "system.h"
 #include "text.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 #include "yes_no_prompt.h"
 
 // The wanted Pokemon of a deposit (screen 6): after the Pokemon to deposit is chosen (screen 5), the player picks the
@@ -76,7 +76,7 @@ typedef struct GtsCountryGroup {
 } GtsCountryGroup;
 
 // Sets the level of the wireless status icon (wireless_status_icon_2.c); not declared in a public header.
-void sub_0203A930(s32 level);
+void WirelessStatusIcon_SetLevel(s32 level);
 
 extern int (*const sGtsWantedStates[])(GtsApp *app);
 extern const BgTemplate sGtsWantedBg0Template;
@@ -162,7 +162,7 @@ int GtsWanted_Init(GtsApp *app, int state) {
 #pragma force_active reset
 
 int GtsWanted_Main(GtsApp *app, int state) {
-    sub_0203A930(Gts_GetWifiIconLevel());
+    WirelessStatusIcon_SetLevel(Gts_GetWifiIconLevel());
     return sGtsWantedStates[app->state](app);
 }
 

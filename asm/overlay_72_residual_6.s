@@ -376,7 +376,7 @@ NintendoWfc_SessionMain: ; 0x0223894C
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	bl NintendoWfc_GetWifiIconLevel
-	bl sub_0203A930
+	bl WirelessStatusIcon_SetLevel
 	ldr r4, [r5, #0x1c]
 	ldr r1, _02238978 ; =sNintendoWfcStates
 	lsl r2, r4, #2

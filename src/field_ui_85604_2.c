@@ -55,7 +55,7 @@ extern void sub_02086F44(OverlayState *);
 extern void sub_02086FCC(OverlayState *);
 extern void sub_02087064(OverlayState *);
 extern void sub_020871C4(void *, void *, int, int, int, int, int, int, void *);
-extern void *sub_0203A4AC(int);
+extern void *WirelessStatusIcon_LoadPaletteFile(int);
 extern void PaletteData_LoadPalette(void *, void *, int, int, int);
 extern void Heap_Free(void *);
 extern void *TouchHitboxController_Create(void *, int, void *, void *, int);
@@ -96,7 +96,7 @@ BOOL sub_02085820(OverlayState *state) {
     sub_02087064(state);
     sub_020871C4(*(void **)&state->raw[0x2F8], &state->raw[0x39C], 4, 2, 0x15, 0x1B, 2, 0x64, *(void **)&state->raw[0x3E4]);
     if (*(u32 *)&state->raw[0x3E8] != 0) {
-        resource = sub_0203A4AC(0x6C);
+        resource = WirelessStatusIcon_LoadPaletteFile(0x6C);
         NNS_G2dGetUnpackedPaletteData(resource, &palette);
         PaletteData_LoadPalette(*(void **)&state->raw[0x2FC], *(void **)((u8 *)palette + 0xC), 3, 0xE0, 0x20);
         Heap_Free(resource);

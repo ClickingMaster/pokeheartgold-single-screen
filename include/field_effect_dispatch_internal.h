@@ -36,7 +36,7 @@ extern void TaskManager_Call(void *, void *, void *);
 extern u32 GF_GetNumPendingVramTransferTasks(void);
 extern void SysTask_Destroy(void *);
 extern void Heap_Free(void *);
-extern void *ov01_0220329C(void *, u32);
+extern void *FollowMonBall_Spawn(void *, u32);
 extern void ov01_02205F00(void);
 extern void ov01_02205B14(void);
 

@@ -38,7 +38,7 @@
 #include "unk_0200A090.h"
 #include "unk_0203170C.h"
 #include "unk_02034B0C.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 #include "unk_02069528.h"
 #include "network_overlay_loader.h"
 #include "vram_transfer_manager.h"
@@ -172,7 +172,7 @@ void sub_02034DE0(void);
 void sub_02039418(SaveData *saveData);
 void sub_0203946C(void);
 void sub_020399EC(void);
-void sub_0203A930(s32 a0);
+void WirelessStatusIcon_SetLevel(s32 a0);
 u64 DWC_CreateFriendKey(const void *data);
 u8 FrontierData_GetWifiWinCount(FrontierData *data);
 void BattleRoomDownload_MarkRoom(BattleRoomDownload *data, u32 group, u32 entry, u32 *date);
@@ -612,7 +612,7 @@ int NintendoWfcUnused_SessionMain(NintendoWfcUnused *wfc) {
     int newState;
     int result;
 
-    sub_0203A930(NintendoWfcUnused_GetWifiIconLevel(wfc));
+    WirelessStatusIcon_SetLevel(NintendoWfcUnused_GetWifiIconLevel(wfc));
     prevState = wfc->state;
     result = sNintendoWfcUnusedStates[prevState](wfc);
     newState = wfc->state;

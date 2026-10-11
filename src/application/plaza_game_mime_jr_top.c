@@ -39,12 +39,12 @@
 #include "unk_02035900.h"
 #include "link_synchronization.h"
 #include "unk_02037C94.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
 #include "wifi_connection.h"
 
 // Declared in no public header.
-void *sub_0203A4AC(enum HeapID heapId);
+void *WirelessStatusIcon_LoadPaletteFile(enum HeapID heapId);
 void sub_0200FC20(u16 color);
 void MTX_MultVec43(const VecFx32 *vec, const MtxFx43 *mtx, VecFx32 *dst);
 fx32 FX_Sqrt(fx32 x);
@@ -291,7 +291,7 @@ void MimeJrTop_InitGame(MimeJrTopApp *app) {
     G2dRenderer_SetObjCharTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN, GX_OBJVRAMMODE_CHAR_1D_128K);
     G2dRenderer_SetPlttTransferReservedRegion(NNS_G2D_VRAM_TYPE_2DMAIN);
     WirelessStatusIcon_Create();
-    raw = sub_0203A4AC(HEAP_ID_113);
+    raw = WirelessStatusIcon_LoadPaletteFile(HEAP_ID_113);
     NNS_G2dGetUnpackedPaletteData(raw, &pal);
     PaletteData_LoadPalette(app->resources.palette, pal->pRawData, PLTTBUF_MAIN_OBJ, 0xE0, 32);
     Heap_Free(raw);

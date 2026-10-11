@@ -187,7 +187,7 @@
 .public sub_02039EB4
 .public WirelessStatusIcon_Create
 .public WirelessStatusIcon_Destroy
-.public sub_0203A930
+.public WirelessStatusIcon_SetLevel
 .public sub_0205A904
 .public UnionRoomObjects_ResetSlots
 .public SpriteToUnionRoomAvatarIdx

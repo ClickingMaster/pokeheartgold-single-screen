@@ -144,7 +144,7 @@
 .public TouchHitboxController_Create
 .public TouchHitboxController_Destroy
 .public TouchHitboxController_IsTriggered
-.public sub_0203A964
+.public WirelessStatusIcon_CreateIfConnected
 .public sub_02090D70
 .public sub_02090D74
 .public sub_02090D78

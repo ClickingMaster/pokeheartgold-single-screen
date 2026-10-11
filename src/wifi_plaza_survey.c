@@ -16,7 +16,7 @@
 #include "sprite_transfer.h"
 #include "system.h"
 #include "oam_manager.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
 
 typedef void (*WiFiPlazaSurveyInitFunc)(void *modeWork, WiFiPlazaSurveyMessages *messages, WiFiPlazaSurveyWork *work, WiFiPlazaSurveyArgs *args, enum HeapID heapID);

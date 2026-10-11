@@ -162,7 +162,7 @@
 .public sub_0203A084
 .public WirelessStatusIcon_Create
 .public WirelessStatusIcon_Destroy
-.public sub_0203A948
+.public WirelessStatusIcon_ShowOnBothScreens
 .public NNS_G2dInitOamManagerModule
 .public FX_Div
 .public MIi_CpuClear16

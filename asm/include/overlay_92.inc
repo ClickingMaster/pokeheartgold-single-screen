@@ -153,7 +153,7 @@
 .public LinkSync_StartSync
 .public LinkSync_IsSynced
 .public sub_020398D4
-.public sub_0203A4AC
+.public WirelessStatusIcon_LoadPaletteFile
 .public WirelessStatusIcon_Create
 .public NNS_G2dGetUnpackedPaletteData
 .public NNS_G3dGlbFlushP

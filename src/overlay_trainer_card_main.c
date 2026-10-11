@@ -33,7 +33,7 @@
 #include "oam_manager.h"
 #include "touchpad.h"
 #include "unk_02035900.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
 
@@ -225,7 +225,7 @@ int TrainerCardMainApp_Init(OverlayManager *manager, int *state) {
     TrainerCardMain_DrawCard(cardMain);
     TrainerCardMain_PrintCancelButton(cardMain, 0);
     Main_SetVBlankIntrCB((GFIntrCB)TrainerCardMain_VBlankCB, cardMain);
-    sub_0203A964();
+    WirelessStatusIcon_CreateIfConnected();
     GF_SndHandleSetPlayerVolume(1, 0x2a);
     BeginNormalPaletteFade(FADE_SUB_THEN_MAIN, FADE_TYPE_DOWNWARD_IN, FADE_TYPE_DOWNWARD_IN, RGB_BLACK, 6, 1, HEAP_ID_25);
     if (cardMain->card->version != VERSION_HEARTGOLD && cardMain->card->version != VERSION_SOULSILVER) {

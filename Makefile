@@ -387,7 +387,6 @@ $(BUILD_DIR)/src/op90_overlay_80_022310C4_r01.o: private MWCFLAGS := $(filter-ou
 $(BUILD_DIR)/lib/NitroSystem/src/g2d_renderer_mtx_cache.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/lib/libCPS/src/cps_reset.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/lib/libCPS/src/cps_ip_frag.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/op90_unk_0203A3B0_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/lib/NitroSDK/src/mb/mb_init.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSystem/src/g3d_anm_bca_scale.o: private MWCCVER := 2.0/sp1p5
 $(BUILD_DIR)/lib/NitroSystem/src/g3d_anm_bca_scale.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))

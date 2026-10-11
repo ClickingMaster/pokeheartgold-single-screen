@@ -4,8 +4,8 @@
 
 	.bss
 
-	.public _021D4154
-_021D4154:
+	.public gWirelessStatusIcon
+gWirelessStatusIcon:
 	.space 0x4
 
 	.rodata
@@ -37,8 +37,8 @@ _020F6ABC:
 	.data
 
 	.balign 4, 0
-	.public _0210F91C
-_0210F91C:
+	.public gWirelessStatusIconAnims
+gWirelessStatusIconAnims:
 	.word _020F6AB4
 	.word _020F6AAC
 	.word _020F6AA4
@@ -46,23 +46,23 @@ _0210F91C:
 	.word _020F6ABC
 
 	.balign 4, 0
-	.public _0210F930
-_0210F930:
+	.public gWirelessStatusIconNclr
+gWirelessStatusIconNclr:
 	.asciz "data/pl_wm.NCLR"
 
 	.balign 4, 0
-	.public _0210F940
-_0210F940:
+	.public gWirelessStatusIconWifiNcgr
+gWirelessStatusIconWifiNcgr:
 	.asciz "data/pl_wifi.NCGR"
 
 	.balign 4, 0
-	.public _0210F954
-_0210F954:
+	.public gWirelessStatusIconWmNcgr
+gWirelessStatusIconWmNcgr:
 	.asciz "data/pl_wm.NCGR"
 
 	.balign 4, 0
-	.public _0210F964
-_0210F964:
+	.public gWirelessStatusIconWm256kNcgr
+gWirelessStatusIconWm256kNcgr:
 	.asciz "data/wm256k.NCGR"
 
 .text

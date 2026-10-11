@@ -17,7 +17,7 @@
 .public String_Cat
 .public TouchHitboxController_Create
 .public TouchHitboxController_IsTriggered
-.public sub_0203A4AC
+.public WirelessStatusIcon_LoadPaletteFile
 .public sub_02085688
 .public sub_02085BEC
 .public sub_020860B8

@@ -27,7 +27,7 @@
 #include "text.h"
 #include "touchscreen.h"
 #include "unk_02009D48.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 
 // Course helpers (OVY_96, not yet tidied).
 u8 *ov96_021E8A20(void *block);
@@ -406,7 +406,7 @@ BOOL PokeathlonBlockSmash_Init(PokeathlonCourseData *course) {
         PokeathlonBlockSmash_PrintInitialText(work);
         PokeathlonBlockSmash_CreateTeamRows(course);
         PokeathlonCourse_SetVBlankIntrCB((PokeathlonCourseData *)work->bgConfig); // the callback gets the BgConfig
-        sub_0203A994(1);
+        WirelessStatusIcon_CreateOnScreenIfConnected(1);
         PokeathlonCourse_SetField1F4(course, 1);
         GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);

@@ -34,7 +34,7 @@
 #include "unk_02035900.h"
 #include "link_synchronization.h"
 #include "unk_02037C94.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 #include "unk_0205A44C.h"
 #include "vram_transfer_manager.h"
 

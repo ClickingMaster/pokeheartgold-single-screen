@@ -45,7 +45,7 @@ BOOL ov01_02205B14(TaskManager *task){
   if(!env->direction)delta*=-1;
   MapObject_CopyPositionVector(object,&position);position.z-=((s8)z.bytes[env->step])*4096;position.x+=delta;position.y+=((s8)y.bytes[env->step])*4096;
   MapObject_SetPositionVector(object,&position);env->step++;if(env->step>=8)env->state++;break; }
- case 5:ov01_0220329C(FollowMon_GetMapObject(field),3);env->state++;break;
+ case 5:FollowMonBall_Spawn(FollowMon_GetMapObject(field),3);env->state++;break;
  case 6: {
 
   env->timer++;if(env->timer<20)break;

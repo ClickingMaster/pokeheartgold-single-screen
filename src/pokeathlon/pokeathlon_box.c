@@ -17,7 +17,7 @@
 #include "text.h"
 #include "oam_manager.h"
 #include "unk_02013FDC.h"
-#include "unk_0203A3B0.h"
+#include "wireless_status_icon.h"
 
 // functions in asm:
 int sub_020935E0(int);
@@ -165,7 +165,7 @@ BOOL ov97_0221E700(OverlayManager *manager) {
     Party *party = SaveArray_Party_Get(courseArgs->saveData);
     sub_02093440(data->unk8, data->bgConfig, pcStorage, party, 0, 0, isMode0, 18, &PokeathlonBox_GetLightBoxMon, &PokeathlonBox_GetBoxName, data->selectedMons, &ov97_0221EC14, data);
 
-    sub_0203A994(2);
+    WirelessStatusIcon_CreateOnScreenIfConnected(2);
     PokeathlonBox_SetupGraphics(data->graphics, data->bgConfig, data->courseId, courseArgs->field_F);
     Main_SetVBlankIntrCB(&ov97_0221E88C, data);
     data->state = 0;

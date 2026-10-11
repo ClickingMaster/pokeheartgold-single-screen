@@ -140,7 +140,7 @@
 .public sub_02039F68
 .public WirelessStatusIcon_Create
 .public WirelessStatusIcon_Destroy
-.public sub_0203A930
+.public WirelessStatusIcon_SetLevel
 .public GetMonData
 .public SetMonData
 .public MonApplyFriendshipMod

@@ -28,7 +28,7 @@ void Heap_Free(void *ptr);
 
 void *BattleRecord_GetHeader(void);
 u64 BattleRecordHeader_GetField(void *a, int b, int c);
-void sub_0203A948(int a, int b);
+void WirelessStatusIcon_ShowOnBothScreens(int a, int b);
 int BattleRecord_Exists(void);
 void BattleRecord_Delete(void);
 void OrbitCursor_SetVisible(void *p, int a);

@@ -102,7 +102,7 @@
 .public String_SetEmpty
 .public Options_GetTextFrameDelay
 .public Options_GetFrame
-.public sub_0203A964
+.public WirelessStatusIcon_CreateIfConnected
 .public sub_02074490
 .public sub_02074494
 .public sub_020744A0

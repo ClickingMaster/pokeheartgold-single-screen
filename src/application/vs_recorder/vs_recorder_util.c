@@ -19,7 +19,7 @@
 extern const TouchscreenHitbox ov40_02244E08[];
 extern const TouchscreenHitbox ov40_02244E0C[];
 
-void sub_0203A86C(void);
+void WirelessStatusIcon_Refresh(void);
 
 void VsRecorder_RemoveListWindow(VsRecorderListWindow *list) {
     ClearWindowTilemapAndCopyToVram(&list->window);
@@ -269,7 +269,7 @@ void VsRecorder_ImportBattleRecord(VsRecorderWork *work) {
 void VsRecorder_FlipScreensTask(SysTask *task, void *data) {
     VsRecorderFlipArgs *args = data;
     VsRecorder_SetScreensFlipped(args->flipped);
-    sub_0203A86C();
+    WirelessStatusIcon_Refresh();
     args->done = TRUE;
     SysTask_Destroy(task);
 }

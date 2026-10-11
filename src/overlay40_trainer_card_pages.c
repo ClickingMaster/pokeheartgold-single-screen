@@ -792,7 +792,7 @@ int ov40_022425E8(void *p) {
         ov40_02240910(p);
         VsRecorder_RebuildMenuRowsParent(p);
         VsRecorder_SetVBlankPaused(p, NULL);
-        sub_0203A948(1, 0x6D);
+        WirelessStatusIcon_ShowOnBothScreens(1, 0x6D);
         VsRecorder_StartFlipScreens(p, 1);
         WORD(p, 8)
         ++;
