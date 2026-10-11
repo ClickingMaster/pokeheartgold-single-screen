@@ -18,9 +18,9 @@ int ov40_02239A58(void *p);
 
 int ov40_0223A034(void *p) {
     void *w = PTR(p, 0x860);
-    ov40_0222FA88((u8 *)p + 0x47C);
-    ov40_0222F6D0((u8 *)p + 0x49C, *(s16 *)((u8 *)p + 0x48C));
-    ov40_0222F09C((u8 *)p + 0x49C, p, WORD(w, 0xC), WORD(w, 0x14), PTR(w, 0x748));
+    VsRecorder_UpdateTouchScroll((u8 *)p + 0x47C);
+    VsRecorder_ListScroll((u8 *)p + 0x49C, *(s16 *)((u8 *)p + 0x48C));
+    VsRecorder_RedrawRankingList((u8 *)p + 0x49C, p, WORD(w, 0xC), WORD(w, 0x14), PTR(w, 0x748));
     TouchHitboxController_IsTriggered(PTR(w, 0xDC));
     return 0;
 }
@@ -29,14 +29,14 @@ int ov40_0223A080(void *p) {
     void *w = PTR(p, 0x860);
     switch (WORD(p, 8)) {
     case 0:
-        ov40_02230964(p, 1);
-        ov40_0222FA24((u8 *)p + 0x47C);
-        ov40_0222F720((u8 *)p + 0x49C);
+        VsRecorder_SetVBlankPaused(p, 1);
+        VsRecorder_FreeTouchScroll((u8 *)p + 0x47C);
+        VsRecorder_RemoveListWindow((u8 *)p + 0x49C);
         if (PTR(w, 0x748) != NULL) {
             String_Delete(PTR(w, 0x748));
         }
-        ov40_0222F920((u8 *)p + 0x49C, p);
-        ov40_02230964(p, 0);
+        VsRecorder_FreeListArrows((u8 *)p + 0x49C, p);
+        VsRecorder_SetVBlankPaused(p, 0);
         OrbitCursor_SetVisible(PTR(p, 0x6F4), 0);
         GfGfx_EngineBTogglePlanes(4, 0);
         GfGfx_EngineATogglePlanes(4, 0);
@@ -63,26 +63,26 @@ int ov40_0223A158(void *p) {
     case 0:
         ov40_022393F4(p);
         ov40_02239514(p);
-        ov40_02230964(p, 1);
+        VsRecorder_SetVBlankPaused(p, 1);
         ov40_022398F8(p);
-        ov40_02230964(p, 0);
+        VsRecorder_SetVBlankPaused(p, 0);
         TouchHitboxController_Destroy(PTR(w, 0xDC));
         WORD(p, 8) = WORD(p, 8) + 1;
         break;
     case 1:
-        ov40_02230964(p, 1);
+        VsRecorder_SetVBlankPaused(p, 1);
         VsRecorder_ResetFade((u8 *)w + 8);
         VsRecorder_RebuildMenuRowsParent(p);
-        ov40_02230964(p, 0);
+        VsRecorder_SetVBlankPaused(p, 0);
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 2);
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 3);
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 7);
-        ov40_0222FB90(p, 1);
+        VsRecorder_StartFlipScreens(p, 1);
         WORD(p, 8) = WORD(p, 8) + 1;
         break;
     default:
-        if (ov40_0222FBB4(p) != NULL) {
+        if (VsRecorder_IsFlipScreensDone(p) != NULL) {
             if (VsRecorder_StepFade((u8 *)w + 8, 0)) {
                 VsRecorder_ClearPaletteBlend(p);
                 VsRecorder_ResetFade((u8 *)w + 8);

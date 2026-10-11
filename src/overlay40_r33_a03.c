@@ -28,20 +28,20 @@ void ov40_0223CD58(void *p);
 void ov40_0223CCA0(void *p);
 void ov40_0223CD14(void *p);
 void GfGfxLoader_LoadCharDataFromOpenNarc(void *narc, int memberNo, void *bgConfig, int layer, int tileStart, int size, int compressed, int heapId);
-void ov40_02230964(void *p, void *value);
-void ov40_0223064C(void *obj, void *p);
-void ov40_02230638(void *obj, void *p);
-void ov40_022306A0(void *obj, int value);
+void VsRecorder_SetVBlankPaused(void *p, void *value);
+void VsRecorder_FreeVideoInfo(void *obj, void *p);
+void VsRecorder_CreateVideoInfo(void *obj, void *p);
+void VsRecorder_SetVideoPartyIconsDrawFlag(void *obj, int value);
 int ov40_02230410(void *obj);
-void ov40_022307DC(void *p, int value, int bgId);
-void ov40_0222E7B8(void *obj, void *p);
-void ov40_0222E79C(void *obj, void *p);
-void ov40_0222E7DC(void *obj, int value);
+void VsRecorder_LoadScreen(void *p, int value, int bgId);
+void VsRecorder_FreeProfile(void *obj, void *p);
+void VsRecorder_CreateProfile(void *obj, void *p);
+void VsRecorder_SetProfileDrawFlag(void *obj, int value);
 void ManagedSprite_SetAnim(void *sprite, int anim);
 void VsRecorder_SetTextSpriteMsg(void *dst, void *src, int id);
 int ov40_0222FC14(void *a0, void *a1, u8 value);
 void ov40_022306E0(void *p);
-void ov40_0223077C(void *a0, void *a1, int a2, int a3);
+void VsRecorder_PlaceOrbitCursor(void *a0, void *a1, int a2, int a3);
 void OrbitCursor_SetVisible(void *p, int value);
 void OrbitCursor_SetRadius(void *p, int a, int b);
 void PlaySE(int seqNo);
@@ -53,18 +53,18 @@ void *ov40_0223D540(void *p);
 BOOL ov39_0222774C(void *p, u64 value);
 BOOL GlobalTerminalNet_GetError(void *p, u32 *value);
 BOOL System_GetTouchNew(void);
-void ov40_0222DEAC(void *p);
+void VsRecorder_RemoveTopMessage(void *p);
 void ov40_0223B44C(void *p);
-void ov40_0222FDC4(void *p);
-void ov40_0222FCCC(void *p);
-void ov40_0222F734(void *p);
+void VsRecorder_FreeSavedVideos(void *p);
+void VsRecorder_LoadSavedVideos(void *p);
+void VsRecorder_ClearListWindow(void *p);
 void TouchHitboxController_Destroy(void *controller);
 void ov40_0223A83C(void *p);
 void VsRecorder_ResetFade(void *p);
 void VsRecorder_RebuildMenuRowsParent(void *p);
 void sub_0203A948(int a, int heapId);
-void ov40_0222FB90(void *p, int value);
-BOOL ov40_0222FBB4(void *p);
+void VsRecorder_StartFlipScreens(void *p, int value);
+BOOL VsRecorder_IsFlipScreensDone(void *p);
 void VsRecorder_ClearPaletteBlend(void *p);
 void VsRecorder_SetScreenIfDone(void *p, int a1, int a2, void *a3);
 void Heap_Free(void *p);
@@ -139,7 +139,7 @@ int ov40_0223A924(void *p) {
         break;
     }
     case 3:
-        ov40_0223077C(p, PTR(p, 0x6F0), 0x80, 0x60);
+        VsRecorder_PlaceOrbitCursor(p, PTR(p, 0x6F0), 0x80, 0x60);
         OrbitCursor_SetVisible(PTR(p, 0x6F0), 1);
         OrbitCursor_SetRadius(PTR(p, 0x6F0), 0x18, 0x18);
         WORD(p, 8)
@@ -177,15 +177,15 @@ int ov40_0223A924(void *p) {
     }
     case 6:
         if (System_GetTouchNew()) {
-            ov40_0222DEAC(p);
-            ov40_02230964(p, (void *)1);
+            VsRecorder_RemoveTopMessage(p);
+            VsRecorder_SetVBlankPaused(p, (void *)1);
             ov40_0223B44C(p);
-            ov40_02230964(p, NULL);
+            VsRecorder_SetVBlankPaused(p, NULL);
             OrbitCursor_SetVisible(PTR(p, 0x6F0), 0);
             OrbitCursor_SetRadius(PTR(p, 0x6F0), 0, 0);
-            ov40_0222FDC4(p);
-            ov40_0222FCCC(p);
-            ov40_0222F734((u8 *)p + 0x49C);
+            VsRecorder_FreeSavedVideos(p);
+            VsRecorder_LoadSavedVideos(p);
+            VsRecorder_ClearListWindow((u8 *)p + 0x49C);
             WORD(p, 8)
             ++;
         }
@@ -196,16 +196,16 @@ int ov40_0223A924(void *p) {
         TouchHitboxController_Destroy(PTR(w, 0x190));
         ov40_0223A83C(p);
         VsRecorder_ResetFade((u8 *)w + 8);
-        ov40_02230964(p, (void *)1);
+        VsRecorder_SetVBlankPaused(p, (void *)1);
         VsRecorder_RebuildMenuRowsParent(p);
-        ov40_02230964(p, NULL);
+        VsRecorder_SetVBlankPaused(p, NULL);
         sub_0203A948(1, 0x6D);
-        ov40_0222FB90(p, 1);
+        VsRecorder_StartFlipScreens(p, 1);
         WORD(p, 8)
         ++;
         break;
     default:
-        if (ov40_0222FBB4(p)) {
+        if (VsRecorder_IsFlipScreensDone(p)) {
             if (VsRecorder_StepFade((int *)w + 2, 0)) {
                 VsRecorder_ClearPaletteBlend(p);
                 VsRecorder_ResetFade((u8 *)w + 8);
@@ -291,19 +291,19 @@ int ov40_0223ACD0(Ov40Work *p) {
         ov40_0223CD14(p);
         GfGfxLoader_LoadCharDataFromOpenNarc(PTR(p, 0x14), 0x3E, PTR(p, 0x24), 3, 0, 0, 0, 0x6D);
         GfGfxLoader_LoadCharDataFromOpenNarc(PTR(p, 0x14), 0x3E, PTR(p, 0x24), 7, 0, 0, 0, 0x6D);
-        ov40_02230964(p, (void *)1);
+        VsRecorder_SetVBlankPaused(p, (void *)1);
         if (WORD(w, 0x10) == 0) {
-            ov40_0223064C((u8 *)w + 0x220, p);
-            ov40_02230638((u8 *)w + 0x220, p);
-            ov40_022306A0((u8 *)w + 0x220, 0);
-            ov40_022307DC(p, ov40_02230410((u8 *)w + 0x220), 3);
+            VsRecorder_FreeVideoInfo((u8 *)w + 0x220, p);
+            VsRecorder_CreateVideoInfo((u8 *)w + 0x220, p);
+            VsRecorder_SetVideoPartyIconsDrawFlag((u8 *)w + 0x220, 0);
+            VsRecorder_LoadScreen(p, ov40_02230410((u8 *)w + 0x220), 3);
         } else {
-            ov40_0222E7B8((u8 *)w + 0x194, p);
-            ov40_0222E79C((u8 *)w + 0x194, p);
-            ov40_0222E7DC((u8 *)w + 0x194, 0);
+            VsRecorder_FreeProfile((u8 *)w + 0x194, p);
+            VsRecorder_CreateProfile((u8 *)w + 0x194, p);
+            VsRecorder_SetProfileDrawFlag((u8 *)w + 0x194, 0);
             GfGfxLoader_LoadScrnDataFromOpenNarc(PTR(p, 0x14), 0x50, PTR(p, 0x24), 3, 0, 0, 0, 0x6D);
         }
-        ov40_02230964(p, NULL);
+        VsRecorder_SetVBlankPaused(p, NULL);
         GfGfxLoader_LoadScrnDataFromOpenNarc(PTR(p, 0x14), 6, PTR(p, 0x24), 7, 0, 0, 0, 0x6D);
         WORD(p, 8)
         ++;
@@ -312,9 +312,9 @@ int ov40_0223ACD0(Ov40Work *p) {
         VsRecorder_StepFade((int *)w + 2, 0);
         if (VsRecorder_StepBlend(w, (int *)w + 1, 0, 0)) {
             if (WORD(w, 0x10) == 0) {
-                ov40_022306A0((u8 *)w + 0x220, 1);
+                VsRecorder_SetVideoPartyIconsDrawFlag((u8 *)w + 0x220, 1);
             } else {
-                ov40_0222E7DC((u8 *)w + 0x194, 1);
+                VsRecorder_SetProfileDrawFlag((u8 *)w + 0x194, 1);
             }
             GfGfx_EngineBTogglePlanes(4, TRUE);
             GfGfx_EngineATogglePlanes(4, TRUE);

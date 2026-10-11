@@ -25,7 +25,7 @@
 	.public WindowIsInUse
 	.public VsRecorder_NewMessageFormat
 	.public ov40_0222DD68
-	.public ov40_02230DCC
+	.public VsRecorder_SanitizeName
 	.public ov40_02235B4C
 	.public ov40_02235C7C
 	.public ov40_02235DAC
@@ -95,7 +95,7 @@ _02235B66:
 	bl FashionEntry_GetMonSecondText
 	add r0, r5, #0
 	add r1, r4, #0
-	bl ov40_02230DCC
+	bl VsRecorder_SanitizeName
 	mov r0, #0x8b
 	lsl r0, r0, #2
 	ldr r0, [r6, r0]
@@ -232,7 +232,7 @@ _02235C96:
 	bl FashionEntry_GetMonSecondText
 	add r0, r5, #0
 	add r1, r4, #0
-	bl ov40_02230DCC
+	bl VsRecorder_SanitizeName
 	mov r0, #0x8e
 	lsl r0, r0, #2
 	ldr r0, [r6, r0]

@@ -7,7 +7,7 @@ void ov40_02237B7C(void *p, u32 msgId) {
     u32 x;
     FillWindowPixelBuffer(window, 0);
     str = NewString_ReadMsgData(PTR_AT(p, 0x48), msgId);
-    x = ov40_022306C0(window, str);
+    x = VsRecorder_GetCenteredTextX(window, str);
     AddTextPrinterParameterizedWithColor(window, 0, str, x, 0, 0xff, 0xf0d00, NULL);
     String_Delete(str);
     ScheduleWindowCopyToVram(window);

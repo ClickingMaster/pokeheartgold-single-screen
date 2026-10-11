@@ -17,9 +17,9 @@ void GfGfxLoader_LoadScrnDataFromOpenNarc(void *, int, void *, int, int, int, in
 BOOL VsRecorder_HasResumeScreen(void *);
 void VsRecorder_SetSubState(void *, int);
 u32 ov40_0222DAF0(void *);
-void ov40_02230E34(void *);
-void ov40_02230EB4(void *);
-void ov40_02230964(void *, int);
+void VsRecorder_ShowTouchHere(void *);
+void VsRecorder_HideTouchHere(void *);
+void VsRecorder_SetVBlankPaused(void *, int);
 void VsRecorder_LoadDecorGfx(void *);
 void VsRecorder_CreateDecorSprites(void *);
 void VsRecorder_LoadMenuRowGfx(void *);

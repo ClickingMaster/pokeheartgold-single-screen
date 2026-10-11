@@ -5,7 +5,7 @@ void ov40_02236230(u32 a, int b, void *p) {
     switch (a) {
     case 0:
         if (b == 2) {
-            ov40_02230944(p);
+            VsRecorder_OnTouchConfirm(p);
             if (WORD(w, 0x1A0) > 0) {
                 WORD(w, 0x1A0) = WORD(w, 0x1A0) - 1;
             } else {
@@ -16,7 +16,7 @@ void ov40_02236230(u32 a, int b, void *p) {
         break;
     case 1:
         if (b == 2) {
-            ov40_02230944(p);
+            VsRecorder_OnTouchConfirm(p);
             WORD(w, 0x1A0)
             ++;
             WORD(w, 0x1A0) = WORD(w, 0x1A0) % 0x12;
@@ -25,13 +25,13 @@ void ov40_02236230(u32 a, int b, void *p) {
         break;
     case 2:
         if (b == 0) {
-            ov40_02230944(p);
+            VsRecorder_OnTouchConfirm(p);
             VsRecorder_SetSubState(p, 9);
         }
         break;
     case 3:
         if (b == 0) {
-            ov40_02230944(p);
+            VsRecorder_OnTouchConfirm(p);
             if (ov40_022361C8((u8 *)w + 4) != 0) {
                 VsRecorder_SetSubState(p, 5);
             } else {
@@ -46,11 +46,11 @@ void ov40_022362E4(u32 a, int b, void *p) {
     void *w = PTR(p, 0x860);
     if (b == 0) {
         if (a != 6) {
-            ov40_02230944(p);
+            VsRecorder_OnTouchConfirm(p);
             WORD(w, 0x380) = a;
             VsRecorder_SetSubState(p, 8);
         } else {
-            ov40_02230944(p);
+            VsRecorder_OnTouchConfirm(p);
             VsRecorder_SetSubState(p, 7);
         }
     }
@@ -60,11 +60,11 @@ void ov40_02236320(u32 a, int b, void *p) {
     void *w = PTR(p, 0x860);
     if (b == 0) {
         if (a != 6) {
-            ov40_02230944(p);
+            VsRecorder_OnTouchConfirm(p);
             WORD(w, 0x380) = a;
             VsRecorder_SetSubState(p, 4);
         } else {
-            ov40_02230944(p);
+            VsRecorder_OnTouchConfirm(p);
             VsRecorder_SetSubState(p, 0xC);
         }
     }
@@ -76,7 +76,7 @@ void ov40_0223635C(u32 a, int b, void *p) {
         switch (a) {
         case 0:
         default:
-            ov40_02230944(p);
+            VsRecorder_OnTouchConfirm(p);
             if (WORD(w, 0x2F64) == 0) {
                 VsRecorder_SetSubState(p, 7);
             } else {
@@ -84,11 +84,11 @@ void ov40_0223635C(u32 a, int b, void *p) {
             }
             break;
         case 1:
-            ov40_02230944(p);
+            VsRecorder_OnTouchConfirm(p);
             VsRecorder_SetSubState(p, 9);
             break;
         case 2:
-            ov40_02230944(p);
+            VsRecorder_OnTouchConfirm(p);
             VsRecorder_SetSubState(p, 6);
             break;
         }
@@ -101,7 +101,7 @@ void ov40_022363BC(u32 a, int b, void *p) {
         switch (a) {
         case 0: {
             int idx;
-            ov40_02230944(p);
+            VsRecorder_OnTouchConfirm(p);
             WORD(w, 0x1B0)
             ++;
             WORD(w, 0x1B0) = WORD(w, 0x1B0) % 0x1E;
@@ -109,10 +109,10 @@ void ov40_022363BC(u32 a, int b, void *p) {
             WORD(w, 0x2F68) = WORD(w, 0x1B0) % 6;
             WORD(w, 0x2F6C) = WORD(w, 0x1B0) / 6;
             OrbitCursor_SetTarget(PTR(p, 0x6F0), (s16)(WORD(w, 0x2F68) * 0x18 + 0x6E), (s16)(WORD(w, 0x2F6C) * 0x16 + 0x34));
-            ov40_02230964(p, 1);
+            VsRecorder_SetVBlankPaused(p, 1);
             ov40_02237564(p);
             ov40_02237474(p);
-            ov40_02230964(p, 0);
+            VsRecorder_SetVBlankPaused(p, 0);
             ov40_022371E4(p, WORD(w, 0x1B0));
             idx = WORD(w, 0x1B0);
             if (HALF((u8 *)w + idx * 2, 0x2C) != 0) {
@@ -123,7 +123,7 @@ void ov40_022363BC(u32 a, int b, void *p) {
             break;
         }
         case 1:
-            ov40_02230944(p);
+            VsRecorder_OnTouchConfirm(p);
             OrbitCursor_SetVisible(PTR(p, 0x6F0), 0);
             OrbitCursor_SetRadius(PTR(p, 0x6F0), 0, 0);
             VsRecorder_SetSubState(p, 0xB);
@@ -135,14 +135,14 @@ void ov40_022363BC(u32 a, int b, void *p) {
 void ov40_022364D0(void *p) {
     void *w = PTR(p, 0x860);
     ov40_0222D73C(p, 2);
-    ov40_02230970(p, (u8 *)w + 0x348, 2, 3, 0x20, 0xE8, 0x24, -8, 0, 1);
-    ov40_02230970(p, (u8 *)w + 0x364, 2, 0x35, 0x80, 0xE8, 0x24, -8, 1, 1);
+    VsRecorder_CreateLabeledSprite(p, (u8 *)w + 0x348, 2, 3, 0x20, 0xE8, 0x24, -8, 0, 1);
+    VsRecorder_CreateLabeledSprite(p, (u8 *)w + 0x364, 2, 0x35, 0x80, 0xE8, 0x24, -8, 1, 1);
 }
 
 void ov40_02236534(void *p) {
     void *w = PTR(p, 0x860);
-    ov40_022309CC((u8 *)w + 0x348);
-    ov40_022309CC((u8 *)w + 0x364);
+    VsRecorder_FreeLabeledSprite((u8 *)w + 0x348);
+    VsRecorder_FreeLabeledSprite((u8 *)w + 0x364);
     ov40_0222D7DC(p);
 }
 

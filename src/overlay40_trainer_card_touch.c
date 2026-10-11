@@ -31,13 +31,13 @@ int ov40_02240B90(void *p) {
         GfGfx_EngineBTogglePlanes(4, 0);
         GfGfx_EngineATogglePlanes(4, 0);
         ov40_02240910(p);
-        ov40_02230964(p, (void *)1);
+        VsRecorder_SetVBlankPaused(p, (void *)1);
         if (WORD(w, 0x1CC) == 0) {
-            ov40_0223064C((u8 *)w + 0x10C, p);
+            VsRecorder_FreeVideoInfo((u8 *)w + 0x10C, p);
         } else {
-            ov40_0222E7B8((u8 *)w + 0x80, p);
+            VsRecorder_FreeProfile((u8 *)w + 0x80, p);
         }
-        ov40_02230964(p, NULL);
+        VsRecorder_SetVBlankPaused(p, NULL);
         ov40_02241A34(p);
         WORD(p, 8)
         ++;
@@ -53,15 +53,15 @@ int ov40_02240B90(void *p) {
         break;
     case 2:
         VsRecorder_ResetFade((int *)w + 2);
-        ov40_02230964(p, (void *)1);
+        VsRecorder_SetVBlankPaused(p, (void *)1);
         VsRecorder_RebuildMenuRowsParent(p);
-        ov40_02230964(p, NULL);
-        ov40_0222FB90(p, 1);
+        VsRecorder_SetVBlankPaused(p, NULL);
+        VsRecorder_StartFlipScreens(p, 1);
         WORD(p, 8)
         ++;
         break;
     case 3:
-        if (ov40_0222FBB4(p) != NULL) {
+        if (VsRecorder_IsFlipScreensDone(p) != NULL) {
             if (VsRecorder_StepFade((int *)w + 2, 0)) {
                 VsRecorder_ClearPaletteBlend(p);
                 VsRecorder_ResetFade((int *)w + 2);

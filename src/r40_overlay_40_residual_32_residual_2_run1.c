@@ -17,10 +17,10 @@ int ov40_02239EFC(void *p) {
         GfGfxLoader_LoadScrnDataFromOpenNarc(PTR(p, 0x14), 0x22, PTR(p, 0x24), 7, 0, 0, 0, 0x6D);
         ov40_02239418(p);
         ov40_02239574(p);
-        ov40_02230964(p, 1);
-        ov40_0222F9E0((u8 *)p + 0x47C, p, 2);
+        VsRecorder_SetVBlankPaused(p, 1);
+        VsRecorder_CreateTouchScrollSpritesWithAnim((u8 *)p + 0x47C, p, 2);
         ov40_02238F00(p);
-        ov40_02230964(p, 0);
+        VsRecorder_SetVBlankPaused(p, 0);
         ov40_02239340(p);
         GfGfx_EngineATogglePlanes(8, 1);
         GfGfx_EngineBTogglePlanes(8, 1);

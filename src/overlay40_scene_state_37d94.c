@@ -31,10 +31,10 @@ int ov40_02237D94(void *p) {
         PaletteData_BlendPalettes(PTR(p, 0x28), 3, 0xC, (u8)WORD(inner, 0x1AC), (u16)WORD(p, 0x58));
         break;
     case 2:
-        ov40_0223077C(p, PTR(p, 0x6F0), 0x80, 0x60);
+        VsRecorder_PlaceOrbitCursor(p, PTR(p, 0x6F0), 0x80, 0x60);
         OrbitCursor_SetVisible(PTR(p, 0x6F0), 1);
         OrbitCursor_SetRadius(PTR(p, 0x6F0), 0x18, 0x18);
-        ov40_0222DED0(p, 0x121);
+        VsRecorder_ShowTopMessage(p, 0x121);
         PlaySE(0x57D);
         WORD(p, 8)
         ++;
@@ -46,13 +46,13 @@ int ov40_02237D94(void *p) {
         }
         break;
     case 4:
-        ov40_0222DFB0(p);
+        VsRecorder_HideTopMessage(p);
         if (GlobalTerminalNet_GetError(ov40_0223D540(p), &selected) == 1) {
             StopSE(0x57D, 0);
-            ov40_02230CDC(p, 3, WORD(selected, 0xC), WORD(selected, 4));
+            VsRecorder_ShowMessageScreen(p, 3, WORD(selected, 0xC), WORD(selected, 4));
             WORD(inner, 0x388) = 0;
             WORD(inner, 0x2F64) = 0;
-            ov40_02230964(p, 1);
+            VsRecorder_SetVBlankPaused(p, 1);
             ov40_02236EB4(p);
             OrbitCursor_SetVisible(PTR(p, 0x6F4), 0);
             OrbitCursor_SetActive(PTR(p, 0x6F0), 0);
@@ -60,7 +60,7 @@ int ov40_02237D94(void *p) {
             OrbitCursor_SetRadius(PTR(p, 0x6F0), 0, 0);
             GfGfx_EngineATogglePlanes(4, 0);
             BgClearTilemapBufferAndCommit(PTR(p, 0x24), 3);
-            ov40_02230964(p, 0);
+            VsRecorder_SetVBlankPaused(p, 0);
             WORD(p, 8) = 7;
         } else {
             StopSE(0x57D, 0);
@@ -76,7 +76,7 @@ int ov40_02237D94(void *p) {
             WORD(p, 8)
             ++;
             WORD(p, 0xC) = 0;
-            ov40_0222DED0(p, 0x126);
+            VsRecorder_ShowTopMessage(p, 0x126);
         } else {
             WORD(p, 8) = 0xFF;
         }
@@ -86,9 +86,9 @@ int ov40_02237D94(void *p) {
         ++;
         if ((s32)WORD(p, 0xC) >= 60 || System_GetTouchNew() == 1) {
             WORD(p, 0xC) = 0;
-            ov40_0222DFB0(p);
+            VsRecorder_HideTopMessage(p);
             WORD(inner, 0x2F64) = 0;
-            ov40_02230964(p, 1);
+            VsRecorder_SetVBlankPaused(p, 1);
             ov40_02236EB4(p);
             OrbitCursor_SetVisible(PTR(p, 0x6F4), 0);
             OrbitCursor_SetActive(PTR(p, 0x6F0), 0);
@@ -96,7 +96,7 @@ int ov40_02237D94(void *p) {
             OrbitCursor_SetRadius(PTR(p, 0x6F0), 0, 0);
             GfGfx_EngineATogglePlanes(4, 0);
             BgClearTilemapBufferAndCommit(PTR(p, 0x24), 3);
-            ov40_02230964(p, 0);
+            VsRecorder_SetVBlankPaused(p, 0);
             WORD(p, 8)
             ++;
         }
@@ -128,20 +128,20 @@ int ov40_02237D94(void *p) {
         if (VsRecorder_StepBlend((u8 *)inner + 0x1A4, (u8 *)inner + 0x1A8, 0, 0)) {
             ov40_02237C9C(p);
             ov40_02238290(p);
-            ov40_02230964(p, 1);
+            VsRecorder_SetVBlankPaused(p, 1);
             inner->copied = ov40_02245310;
             WORD(inner, 0x2EB0) = WORD(inner, 0x388);
-            ov40_0222F9E0((u8 *)p + 0x47C, p, 2);
-            ov40_0222F734((u8 *)p + 0x49C);
-            ov40_0222EED0((u8 *)p + 0x49C, p, &inner->copied, (u8 *)inner + 0x2E0C);
-            ov40_0222FA5C((u8 *)p + 0x47C, (u8 *)p + 0x49C);
-            ov40_0222F740((u8 *)p + 0x49C, p, 1);
-            ov40_0222F858((u8 *)p + 0x49C, 0x38, 0xB0);
-            ov40_02230964(p, 0);
+            VsRecorder_CreateTouchScrollSpritesWithAnim((u8 *)p + 0x47C, p, 2);
+            VsRecorder_ClearListWindow((u8 *)p + 0x49C);
+            VsRecorder_InitPairList((u8 *)p + 0x49C, p, &inner->copied, (u8 *)inner + 0x2E0C);
+            VsRecorder_TouchScrollSetEnabled((u8 *)p + 0x47C, (u8 *)p + 0x49C);
+            VsRecorder_CreateListArrows((u8 *)p + 0x49C, p, 1);
+            VsRecorder_SetListArrowsY((u8 *)p + 0x49C, 0x38, 0xB0);
+            VsRecorder_SetVBlankPaused(p, 0);
             ov40_02237AC0(p);
             GfGfx_EngineBTogglePlanes(4, 1);
             GfGfx_EngineATogglePlanes(4, 1);
-            ov40_0223077C(p, PTR(p, 0x6F0), 0x10, (s16)(WORD(p, 0x4D8) * 24 + 0x44));
+            VsRecorder_PlaceOrbitCursor(p, PTR(p, 0x6F0), 0x10, (s16)(WORD(p, 0x4D8) * 24 + 0x44));
             OrbitCursor_SetVisible(PTR(p, 0x6F0), 1);
             OrbitCursor_SetRadius(PTR(p, 0x6F0), 0xC, 0xC);
             VsRecorder_SetSubState(p, 5);

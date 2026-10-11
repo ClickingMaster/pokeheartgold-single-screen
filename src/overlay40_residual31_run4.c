@@ -6,10 +6,10 @@
 void ov40_02238290(void *p);
 void ov40_02238304(void *p);
 int ov40_02238358(void *p);
-void ov40_02230DCC(void *p, void *str);
-void ov40_0222FA88(void *p);
-void ov40_0222F5EC(void *p, int value);
-void ov40_0222EFD8(void *p, void *owner, void *data);
+void VsRecorder_SanitizeName(void *p, void *str);
+void VsRecorder_UpdateTouchScroll(void *p);
+void VsRecorder_ListMoveCursor(void *p, int value);
+void VsRecorder_RedrawPairList(void *p, void *owner, void *data);
 void OrbitCursor_MoveTarget(void *p, int a1, int a2);
 
 void ov40_02238290(void *p) {
@@ -25,7 +25,7 @@ void ov40_02238290(void *p) {
         do {
             PTR(entry, 0x2E10) = String_New(20, (enum HeapID)109);
             CopyU16ArrayToString(PTR(entry, 0x2E10), PTR(source, 0x38C));
-            ov40_02230DCC(p, PTR(entry, 0x2E10));
+            VsRecorder_SanitizeName(p, PTR(entry, 0x2E10));
             PTR(entry, 0x2E0C) = String_New(30, (enum HeapID)109);
             CopyU16ArrayToString(PTR(entry, 0x2E0C), (u16 *)((u8 *)PTR(source, 0x38C) + 0x80));
             i++;
@@ -66,9 +66,9 @@ int ov40_02238358(void *p) {
 
     inner = PTR(p, 0x860);
     if (WORD(inner, 0x2F64) == 0) {
-        ov40_0222FA88((u8 *)p + 0x47C);
-        ov40_0222F5EC((u8 *)p + 0x49C, *(s16 *)((u8 *)p + 0x48C));
-        ov40_0222EFD8((u8 *)p + 0x49C, p, (u8 *)inner + 0x2E0C);
+        VsRecorder_UpdateTouchScroll((u8 *)p + 0x47C);
+        VsRecorder_ListMoveCursor((u8 *)p + 0x49C, *(s16 *)((u8 *)p + 0x48C));
+        VsRecorder_RedrawPairList((u8 *)p + 0x49C, p, (u8 *)inner + 0x2E0C);
         OrbitCursor_MoveTarget(PTR(p, 0x6F0), 0x10, (s16)(WORD(p, 0x4D8) * 24 + 0x44));
     }
     TouchHitboxController_IsTriggered(PTR(inner, 0x33C));

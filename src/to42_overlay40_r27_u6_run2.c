@@ -88,9 +88,9 @@ int ov40_022322E0(void *p) {
         PaletteData_BlendPalettes(PTR(p, 0x28), 1, 2, WORD(w, 8), WORD(p, 0x58));
         break;
     case 1:
-        ov40_02230964(p, 1);
+        VsRecorder_SetVBlankPaused(p, 1);
         VsRecorder_FreeMenuRows(p);
-        ov40_02230964(p, 0);
+        VsRecorder_SetVBlankPaused(p, 0);
         SetBgPriority(0, 0);
         SetBgPriority(1, 3);
         SetBgPriority(2, 0);
@@ -105,7 +105,7 @@ int ov40_022322E0(void *p) {
         ++;
         break;
     default:
-        ov40_0222FB90(p, 0);
+        VsRecorder_StartFlipScreens(p, 0);
         if (VsRecorder_HasResumeScreen(p) == 1) {
             ok = 0;
             if (WORD(p, 0x86C) == 0) {
@@ -137,7 +137,7 @@ int ov40_02232470(void *p) {
     switch (WORD(p, 8)) {
     case 0:
         ov40_02233044(p);
-        ov40_022307DC(p, 6, 7);
+        VsRecorder_LoadScreen(p, 6, 7);
         WORD(p, 8)
         ++;
         break;
@@ -148,11 +148,11 @@ int ov40_02232470(void *p) {
         ++;
         break;
     case 2:
-        ov40_02230964(p, 1);
-        ov40_02230638((u8 *)w + 0x9C, p);
-        ov40_022307DC(p, ov40_02230410((u8 *)w + 0x9C), 3);
-        ov40_022306A0((u8 *)w + 0x9C, 0);
-        ov40_02230964(p, 0);
+        VsRecorder_SetVBlankPaused(p, 1);
+        VsRecorder_CreateVideoInfo((u8 *)w + 0x9C, p);
+        VsRecorder_LoadScreen(p, ov40_02230410((u8 *)w + 0x9C), 3);
+        VsRecorder_SetVideoPartyIconsDrawFlag((u8 *)w + 0x9C, 0);
+        VsRecorder_SetVBlankPaused(p, 0);
         GfGfx_EngineATogglePlanes(8, 1);
         GfGfx_EngineBTogglePlanes(8, 1);
         GfGfx_EngineATogglePlanes(4, 0);
@@ -163,7 +163,7 @@ int ov40_02232470(void *p) {
     case 3:
         VsRecorder_StepFade((u8 *)w + 8, 0);
         if (VsRecorder_StepBlend(w, (u8 *)w + 4, 0, 0)) {
-            ov40_022306A0((u8 *)w + 0x9C, 1);
+            VsRecorder_SetVideoPartyIconsDrawFlag((u8 *)w + 0x9C, 1);
             ov40_02232F88(p);
             GfGfx_EngineATogglePlanes(4, 1);
             GfGfx_EngineBTogglePlanes(4, 1);

@@ -24,9 +24,9 @@ u32 ov40_0223480C(void *p) {
     case 1:
         VsRecorder_StepFade((u8 *)work + 8, 1);
         if (VsRecorder_StepBlend(work, (u8 *)work + 4, 1, 0) != 0) {
-            ov40_02230964(p, 1);
+            VsRecorder_SetVBlankPaused(p, 1);
             ov40_02235B10(p);
-            ov40_02230964(p, 0);
+            VsRecorder_SetVBlankPaused(p, 0);
             BgClearTilemapBufferAndCommit(PTR(p, 0x24), 3);
             BgClearTilemapBufferAndCommit(PTR(p, 0x24), 7);
             WORD(p, 8)
@@ -36,28 +36,28 @@ u32 ov40_0223480C(void *p) {
         break;
     case 2:
         VsRecorder_ResetFade((u8 *)work + 8);
-        ov40_02230964(p, 1);
+        VsRecorder_SetVBlankPaused(p, 1);
         VsRecorder_RebuildMenuRowsParent(p);
-        ov40_02230964(p, 0);
+        VsRecorder_SetVBlankPaused(p, 0);
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 2);
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 3);
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 7);
-        ov40_0222FB90(p, 1);
+        VsRecorder_StartFlipScreens(p, 1);
         WORD(p, 8)
         ++;
         break;
     default:
-        if (ov40_0222FBB4(p) != 0) {
+        if (VsRecorder_IsFlipScreensDone(p) != 0) {
             if (VsRecorder_StepFade((u8 *)work + 8, 0) != 0) {
-                ov40_02230964(p, 1);
+                VsRecorder_SetVBlankPaused(p, 1);
                 if (PTR(work, 0x228) != NULL) {
                     AccessoryPortrait_Destroy(PTR(work, 0x228));
                     VsRecorder_ResetBg2(p);
                     SetBgPriority(2, 0);
                     ov40_02235994();
                 }
-                ov40_02230964(p, 0);
+                VsRecorder_SetVBlankPaused(p, 0);
                 VsRecorder_ClearPaletteBlend(p);
                 VsRecorder_ResetFade((u8 *)work + 8);
                 PaletteData_BlendPalettes(PTR(p, 0x28), 2, 0xc, 0x10, (u16)WORD(p, 0x58));

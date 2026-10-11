@@ -39,11 +39,11 @@ void ov40_02238F00(void *p) {
     }
     WORD(w, 0xB10) = WORD(w, 0x20);
     PTR(w, 0xB0C) = (u8 *)w + 0x74C + WORD(w, 0xC) * 0x140;
-    ov40_02230964(p, 1);
-    ov40_0222F734((u8 *)p + 0x49C);
-    ov40_0222EB9C((u8 *)p + 0x49C, p, WORD(w, 0x744), (u8 *)w + 0xB0C, WORD(w, 0xC), WORD(w, 0x14), PTR(w, 0x748));
-    ov40_0222FA5C((u8 *)p + 0x47C, (u8 *)p + 0x49C);
-    ov40_0222F740((u8 *)p + 0x49C, p, 1);
-    ov40_0222F858((u8 *)p + 0x49C, 0x70, 0xB8);
-    ov40_02230964(p, 0);
+    VsRecorder_SetVBlankPaused(p, 1);
+    VsRecorder_ClearListWindow((u8 *)p + 0x49C);
+    VsRecorder_InitRankingList((u8 *)p + 0x49C, p, WORD(w, 0x744), (u8 *)w + 0xB0C, WORD(w, 0xC), WORD(w, 0x14), PTR(w, 0x748));
+    VsRecorder_TouchScrollSetEnabled((u8 *)p + 0x47C, (u8 *)p + 0x49C);
+    VsRecorder_CreateListArrows((u8 *)p + 0x49C, p, 1);
+    VsRecorder_SetListArrowsY((u8 *)p + 0x49C, 0x70, 0xB8);
+    VsRecorder_SetVBlankPaused(p, 0);
 }

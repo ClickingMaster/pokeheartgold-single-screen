@@ -3,7 +3,7 @@
 int ov40_02232A48(void *p) {
     switch (WORD(p, 8)) {
     case 0:
-        ov40_0222DED0(p, 0x12B);
+        VsRecorder_ShowTopMessage(p, 0x12B);
         BeginNormalPaletteFade(0, 1, 1, 0, 6, 1, 0x6D);
         WORD(p, 8)
         ++;
@@ -20,14 +20,14 @@ int ov40_02232A48(void *p) {
             BattleRecord_Load(PTR(p, 0x830), 0x6D, &unused, 0, PTR(p, 0x86C));
             ov40_02244BBC(PTR(p, 0x830), PTR(p, 0x86C));
             BattleRecord_Delete();
-            ov40_0222FDC4(p);
-            ov40_0222FCCC(p);
+            VsRecorder_FreeSavedVideos(p);
+            VsRecorder_LoadSavedVideos(p);
         }
         WORD(p, 8)
         ++;
         break;
     default:
-        ov40_0222DFB0();
+        VsRecorder_HideTopMessage();
         ov40_02233044(p);
         VsRecorder_SetSubState(p, 9);
         break;
@@ -52,20 +52,20 @@ int ov40_02232AF8(void *p) {
         break;
     case 2:
         if (WORD(w, 0x198) == 0) {
-            ov40_02230964(p, 1);
+            VsRecorder_SetVBlankPaused(p, 1);
             if (WORD(w, 0xC) == 0) {
-                ov40_0223064C((u8 *)w + 0x9C, p);
+                VsRecorder_FreeVideoInfo((u8 *)w + 0x9C, p);
             } else {
-                ov40_0222E7B8((u8 *)w + 0x10, p);
+                VsRecorder_FreeProfile((u8 *)w + 0x10, p);
             }
-            ov40_02230964(p, 0);
+            VsRecorder_SetVBlankPaused(p, 0);
             TouchHitboxController_Destroy(PTR(w, 0x174));
             ov40_02232FCC(p);
             ov40_022330B8(p);
         }
-        ov40_02230964(p, 1);
+        VsRecorder_SetVBlankPaused(p, 1);
         VsRecorder_RebuildMenuRows(p);
-        ov40_02230964(p, 0);
+        VsRecorder_SetVBlankPaused(p, 0);
         VsRecorder_SetResumeScreen(p, *(void **)PTR(p, 0x10));
         sub_02087A84(PTR(p, 0x868), 1, 0);
         WORD(p, 8)
@@ -87,9 +87,9 @@ int ov40_02232BD8(void *p) {
         GfGfx_EngineBTogglePlanes(4, 0);
         GfGfx_EngineATogglePlanes(4, 0);
         if (WORD(w, 0xC) == 0) {
-            ov40_0223064C((u8 *)w + 0x9C, p);
+            VsRecorder_FreeVideoInfo((u8 *)w + 0x9C, p);
         } else {
-            ov40_0222E7B8((u8 *)w + 0x10, p);
+            VsRecorder_FreeProfile((u8 *)w + 0x10, p);
         }
         ov40_02232FCC(p);
         WORD(p, 8)
@@ -105,10 +105,10 @@ int ov40_02232BD8(void *p) {
         PaletteData_BlendPalettes(PTR(p, 0x28), 3, 0xC, WORD(w, 8), WORD(p, 0x58));
         break;
     case 2:
-        ov40_0222FB90(p, 1);
-        ov40_02230964(p, 1);
+        VsRecorder_StartFlipScreens(p, 1);
+        VsRecorder_SetVBlankPaused(p, 1);
         VsRecorder_RebuildMenuRowsParent(p);
-        ov40_02230964(p, 0);
+        VsRecorder_SetVBlankPaused(p, 0);
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 2);
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 3);
@@ -117,7 +117,7 @@ int ov40_02232BD8(void *p) {
         ++;
         break;
     default:
-        if (ov40_0222FBB4()) {
+        if (VsRecorder_IsFlipScreensDone()) {
             if (VsRecorder_StepFade((u8 *)w + 8, 0)) {
                 VsRecorder_ClearPaletteBlend(p);
                 VsRecorder_ResetFade((u8 *)w + 8);
@@ -140,7 +140,7 @@ int ov40_02232D44(void *p) {
 
     switch (WORD(p, 8)) {
     case 0:
-        ov40_022307DC(p, 6, 7);
+        VsRecorder_LoadScreen(p, 6, 7);
         GfGfx_EngineATogglePlanes(8, 1);
         GfGfx_EngineBTogglePlanes(8, 1);
         WORD(p, 8)
@@ -153,11 +153,11 @@ int ov40_02232D44(void *p) {
         ++;
         break;
     case 2:
-        ov40_02230964(p, 1);
-        ov40_02230638((u8 *)w + 0x9C, p);
-        ov40_022307DC(p, ov40_02230410((u8 *)w + 0x9C), 3);
-        ov40_022306A0((u8 *)w + 0x9C, 0);
-        ov40_02230964(p, 0);
+        VsRecorder_SetVBlankPaused(p, 1);
+        VsRecorder_CreateVideoInfo((u8 *)w + 0x9C, p);
+        VsRecorder_LoadScreen(p, ov40_02230410((u8 *)w + 0x9C), 3);
+        VsRecorder_SetVideoPartyIconsDrawFlag((u8 *)w + 0x9C, 0);
+        VsRecorder_SetVBlankPaused(p, 0);
         GfGfx_EngineATogglePlanes(8, 1);
         GfGfx_EngineBTogglePlanes(8, 1);
         GfGfx_EngineATogglePlanes(4, 0);
@@ -168,7 +168,7 @@ int ov40_02232D44(void *p) {
     case 3:
         VsRecorder_StepFade((u8 *)w + 8, 0);
         if (VsRecorder_StepBlend(w, (u8 *)w + 4, 0, 0)) {
-            ov40_022306A0((u8 *)w + 0x9C, 1);
+            VsRecorder_SetVideoPartyIconsDrawFlag((u8 *)w + 0x9C, 1);
             ov40_02232F88(p);
             GfGfx_EngineATogglePlanes(4, 1);
             GfGfx_EngineBTogglePlanes(4, 1);
@@ -211,11 +211,11 @@ void ov40_02232ED4(int hitbox, int event, void *p) {
     }
     switch (hitbox) {
     case 0:
-        ov40_02230944(p);
+        VsRecorder_OnTouchConfirm(p);
         VsRecorder_SetSubState(p, 4);
         break;
     case 1:
-        ov40_02230944(p);
+        VsRecorder_OnTouchConfirm(p);
         if (WORD(p, 0x86C) == 0 || BattleRecordHeader_GetField(PTR(w, 0xA0), 5, 0) == 1) {
             VsRecorder_SetSubState(p, 7);
         } else {
@@ -223,7 +223,7 @@ void ov40_02232ED4(int hitbox, int event, void *p) {
         }
         break;
     case 2:
-        ov40_02230944(p);
+        VsRecorder_OnTouchConfirm(p);
         VsRecorder_SetSubState(p, 8);
         break;
     }

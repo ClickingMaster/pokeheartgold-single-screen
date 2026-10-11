@@ -35,20 +35,20 @@
 	.public VsRecorder_StepBlend
 	.public VsRecorder_StepFade
 	.public VsRecorder_NewMessageFormat
-	.public ov40_0222DED0
-	.public ov40_0222DFB0
-	.public ov40_0222E79C
-	.public ov40_0222E7B8
-	.public ov40_0222E7DC
+	.public VsRecorder_ShowTopMessage
+	.public VsRecorder_HideTopMessage
+	.public VsRecorder_CreateProfile
+	.public VsRecorder_FreeProfile
+	.public VsRecorder_SetProfileDrawFlag
 	.public ov40_02230410
-	.public ov40_02230638
-	.public ov40_0223064C
-	.public ov40_022306A0
-	.public ov40_02230738
-	.public ov40_022307DC
-	.public ov40_02230964
-	.public ov40_02230D94
-	.public ov40_02230DCC
+	.public VsRecorder_CreateVideoInfo
+	.public VsRecorder_FreeVideoInfo
+	.public VsRecorder_SetVideoPartyIconsDrawFlag
+	.public VsRecorder_ResetBgPriorities
+	.public VsRecorder_LoadScreen
+	.public VsRecorder_SetVBlankPaused
+	.public VsRecorder_IsVideoSaved
+	.public VsRecorder_SanitizeName
 	.public ov40_0223A430
 	.public ov40_0223A83C
 	.public ov40_0223B374
@@ -100,7 +100,7 @@ _0223C276: ; jump table
 	.short _0223C340 - _0223C276 - 2 ; case 3
 _0223C27E:
 	mov r1, #1
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	ldr r0, [r4, #0x10]
 	cmp r0, #0
 	bne _0223C298
@@ -108,21 +108,21 @@ _0223C27E:
 	lsl r0, r0, #4
 	add r0, r4, r0
 	add r1, r5, #0
-	bl ov40_0223064C
+	bl VsRecorder_FreeVideoInfo
 	b _0223C2A4
 _0223C298:
 	mov r0, #0x65
 	lsl r0, r0, #2
 	add r0, r4, r0
 	add r1, r5, #0
-	bl ov40_0222E7B8
+	bl VsRecorder_FreeProfile
 _0223C2A4:
 	mov r0, #4
 	mov r1, #0
 	bl GfGfx_EngineATogglePlanes
 	add r0, r5, #0
 	mov r1, #0
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	ldr r0, [r5, #8]
 	add r0, r0, #1
 	str r0, [r5, #8]
@@ -141,7 +141,7 @@ _0223C2BC:
 	b _0223C3A0
 _0223C2D4:
 	mov r1, #1
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	ldr r0, [r4, #0x10]
 	cmp r0, #0
 	bne _0223C304
@@ -149,28 +149,28 @@ _0223C2D4:
 	lsl r0, r0, #2
 	add r0, r4, r0
 	add r1, r5, #0
-	bl ov40_0222E79C
+	bl VsRecorder_CreateProfile
 	mov r0, #0x65
 	lsl r0, r0, #2
 	add r0, r4, r0
 	mov r1, #0
-	bl ov40_0222E7DC
+	bl VsRecorder_SetProfileDrawFlag
 	add r0, r5, #0
 	mov r1, #0x50
 	mov r2, #3
-	bl ov40_022307DC
+	bl VsRecorder_LoadScreen
 	b _0223C330
 _0223C304:
 	mov r0, #0x22
 	lsl r0, r0, #4
 	add r0, r4, r0
 	add r1, r5, #0
-	bl ov40_02230638
+	bl VsRecorder_CreateVideoInfo
 	mov r0, #0x22
 	lsl r0, r0, #4
 	add r0, r4, r0
 	mov r1, #0
-	bl ov40_022306A0
+	bl VsRecorder_SetVideoPartyIconsDrawFlag
 	mov r0, #0x22
 	lsl r0, r0, #4
 	add r0, r4, r0
@@ -178,11 +178,11 @@ _0223C304:
 	add r1, r0, #0
 	add r0, r5, #0
 	mov r2, #3
-	bl ov40_022307DC
+	bl VsRecorder_LoadScreen
 _0223C330:
 	add r0, r5, #0
 	mov r1, #0
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	ldr r0, [r5, #8]
 	add r0, r0, #1
 	str r0, [r5, #8]
@@ -202,14 +202,14 @@ _0223C340:
 	lsl r0, r0, #2
 	add r0, r4, r0
 	mov r1, #1
-	bl ov40_0222E7DC
+	bl VsRecorder_SetProfileDrawFlag
 	b _0223C370
 _0223C364:
 	mov r0, #0x22
 	lsl r0, r0, #4
 	add r0, r4, r0
 	mov r1, #1
-	bl ov40_022306A0
+	bl VsRecorder_SetVideoPartyIconsDrawFlag
 _0223C370:
 	mov r0, #4
 	mov r1, #1
@@ -280,7 +280,7 @@ _0223C3E0:
 	b _0223C48E
 _0223C3F0:
 	mov r1, #1
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	ldr r0, [r4, #0x10]
 	cmp r0, #0
 	bne _0223C40A
@@ -288,14 +288,14 @@ _0223C3F0:
 	lsl r0, r0, #4
 	add r0, r4, r0
 	add r1, r5, #0
-	bl ov40_0223064C
+	bl VsRecorder_FreeVideoInfo
 	b _0223C416
 _0223C40A:
 	mov r0, #0x65
 	lsl r0, r0, #2
 	add r0, r4, r0
 	add r1, r5, #0
-	bl ov40_0222E7B8
+	bl VsRecorder_FreeProfile
 _0223C416:
 	mov r0, #0x62
 	lsl r0, r0, #2
@@ -317,15 +317,15 @@ _0223C416:
 	bl ov40_0223D504
 	add r0, r5, #0
 	mov r1, #0
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	add r0, r5, #0
 	mov r1, #1
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	add r0, r5, #0
 	bl VsRecorder_RebuildMenuRows
 	add r0, r5, #0
 	mov r1, #0
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	ldr r1, [r5, #0x10]
 	add r0, r5, #0
 	ldr r1, [r1]
@@ -381,7 +381,7 @@ _0223C4B8: ; jump table
 	.short _0223C69E - _0223C4B8 - 2 ; case 4
 	.short _0223C6BC - _0223C4B8 - 2 ; case 5
 _0223C4C4:
-	bl ov40_02230738
+	bl VsRecorder_ResetBgPriorities
 	add r0, r5, #0
 	add r1, r5, #4
 	mov r2, #0
@@ -432,7 +432,7 @@ _0223C4F8:
 	add r0, r4, #0
 	mov r1, #6
 	mov r2, #7
-	bl ov40_022307DC
+	bl VsRecorder_LoadScreen
 	mov r0, #8
 	mov r1, #1
 	bl GfGfx_EngineATogglePlanes
@@ -513,12 +513,12 @@ _0223C592:
 	b _0223C6E2
 _0223C5E0:
 	mov r1, #1
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	mov r0, #0x22
 	lsl r0, r0, #4
 	add r0, r5, r0
 	add r1, r4, #0
-	bl ov40_02230638
+	bl VsRecorder_CreateVideoInfo
 	mov r0, #0x22
 	lsl r0, r0, #4
 	add r0, r5, r0
@@ -526,15 +526,15 @@ _0223C5E0:
 	add r1, r0, #0
 	add r0, r4, #0
 	mov r2, #3
-	bl ov40_022307DC
+	bl VsRecorder_LoadScreen
 	mov r0, #0x22
 	lsl r0, r0, #4
 	add r0, r5, r0
 	mov r1, #0
-	bl ov40_022306A0
+	bl VsRecorder_SetVideoPartyIconsDrawFlag
 	add r0, r4, #0
 	mov r1, #0
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	mov r0, #8
 	mov r1, #1
 	bl GfGfx_EngineATogglePlanes
@@ -567,7 +567,7 @@ _0223C642:
 	lsl r0, r0, #4
 	add r0, r5, r0
 	mov r1, #1
-	bl ov40_022306A0
+	bl VsRecorder_SetVideoPartyIconsDrawFlag
 	add r0, r4, #0
 	bl ov40_0223CD14
 	mov r0, #4
@@ -696,7 +696,7 @@ ov40_0223C710: ; 0x0223C710
 	str r0, [sp, #0x18]
 	ldr r1, [sp, #0x18]
 	add r0, r5, #0
-	bl ov40_02230DCC
+	bl VsRecorder_SanitizeName
 	ldr r0, [r5, #0x48]
 	add r1, r4, #0
 	bl NewString_ReadMsgData
@@ -772,7 +772,7 @@ ov40_0223C80C: ; 0x0223C80C
 	add r2, r1, #0
 	add r0, r4, #0
 	add r1, r3, #0
-	bl ov40_02230D94
+	bl VsRecorder_IsVideoSaved
 	cmp r0, #0
 	ldr r0, [r4, #8]
 	bne _0223C838
@@ -799,7 +799,7 @@ _0223C84A: ; jump table
 _0223C858:
 	add r0, r4, #0
 	mov r1, #1
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	ldr r0, [r5, #0x10]
 	cmp r0, #0
 	bne _0223C874
@@ -807,28 +807,28 @@ _0223C858:
 	lsl r0, r0, #4
 	add r0, r5, r0
 	add r1, r4, #0
-	bl ov40_0223064C
+	bl VsRecorder_FreeVideoInfo
 	b _0223C880
 _0223C874:
 	mov r0, #0x65
 	lsl r0, r0, #2
 	add r0, r5, r0
 	add r1, r4, #0
-	bl ov40_0222E7B8
+	bl VsRecorder_FreeProfile
 _0223C880:
 	add r0, r4, #0
 	bl ov40_0223CCA0
 	add r0, r4, #0
 	mov r1, #0
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	add r0, r4, #0
 	mov r1, #1
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	add r0, r4, #0
 	bl ov40_0223D504
 	add r0, r4, #0
 	mov r1, #0
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	mov r0, #4
 	mov r1, #0
 	bl GfGfx_EngineATogglePlanes
@@ -853,12 +853,12 @@ _0223C8BC:
 	beq _0223C902
 	add r0, r4, #0
 	mov r1, #1
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	add r0, r4, #0
 	bl ov40_0223B374
 	add r0, r4, #0
 	mov r1, #0
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	ldr r0, [r4, #0x24]
 	mov r1, #3
 	bl BgClearTilemapBufferAndCommit
@@ -884,7 +884,7 @@ _0223C902:
 _0223C91C:
 	ldr r1, _0223CC40 ; =0x00000115
 	add r0, r4, #0
-	bl ov40_0222DED0
+	bl VsRecorder_ShowTopMessage
 	ldr r0, [r4, #8]
 	add r0, r0, #1
 	str r0, [r4, #8]
@@ -896,7 +896,7 @@ _0223C92C:
 	b _0223CC98
 _0223C936:
 	add r0, r4, #0
-	bl ov40_0222DFB0
+	bl VsRecorder_HideTopMessage
 	ldr r0, [r4, #0x24]
 	mov r1, #2
 	bl BgClearTilemapBufferAndCommit
@@ -927,12 +927,12 @@ _0223C964:
 	beq _0223C99A
 	add r0, r4, #0
 	mov r1, #1
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	add r0, r4, #0
 	bl ov40_0223B44C
 	add r0, r4, #0
 	mov r1, #0
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	ldr r0, [r4, #8]
 	add r0, r0, #1
 	str r0, [r4, #8]
@@ -952,12 +952,12 @@ _0223C99A:
 _0223C9B4:
 	add r0, r4, #0
 	mov r1, #1
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	add r0, r4, #0
 	bl ov40_0223A430
 	add r0, r4, #0
 	mov r1, #0
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	ldr r0, _0223CC44 ; =0x0000086C
 	ldr r0, [r4, r0]
 	cmp r0, #0xd2
@@ -1013,7 +1013,7 @@ _0223CA0A:
 	bl GfGfxLoader_LoadCharDataFromOpenNarc
 	add r0, r4, #0
 	mov r1, #1
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	ldr r0, [r5, #0x10]
 	cmp r0, #0
 	bne _0223CA7C
@@ -1021,12 +1021,12 @@ _0223CA0A:
 	lsl r0, r0, #4
 	add r0, r5, r0
 	add r1, r4, #0
-	bl ov40_02230638
+	bl VsRecorder_CreateVideoInfo
 	mov r0, #0x22
 	lsl r0, r0, #4
 	add r0, r5, r0
 	mov r1, #0
-	bl ov40_022306A0
+	bl VsRecorder_SetVideoPartyIconsDrawFlag
 	mov r0, #0x22
 	lsl r0, r0, #4
 	add r0, r5, r0
@@ -1034,19 +1034,19 @@ _0223CA0A:
 	add r1, r0, #0
 	add r0, r4, #0
 	mov r2, #3
-	bl ov40_022307DC
+	bl VsRecorder_LoadScreen
 	b _0223CAAC
 _0223CA7C:
 	mov r0, #0x65
 	lsl r0, r0, #2
 	add r0, r5, r0
 	add r1, r4, #0
-	bl ov40_0222E79C
+	bl VsRecorder_CreateProfile
 	mov r0, #0x65
 	lsl r0, r0, #2
 	add r0, r5, r0
 	mov r1, #0
-	bl ov40_0222E7DC
+	bl VsRecorder_SetProfileDrawFlag
 	mov r0, #0
 	str r0, [sp]
 	str r0, [sp, #4]
@@ -1061,7 +1061,7 @@ _0223CA7C:
 _0223CAAC:
 	add r0, r4, #0
 	mov r1, #0
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	mov r0, #0
 	str r0, [sp]
 	str r0, [sp, #4]
@@ -1096,14 +1096,14 @@ _0223CAD4:
 	lsl r0, r0, #4
 	add r0, r5, r0
 	mov r1, #1
-	bl ov40_022306A0
+	bl VsRecorder_SetVideoPartyIconsDrawFlag
 	b _0223CB0E
 _0223CB02:
 	mov r0, #0x65
 	lsl r0, r0, #2
 	add r0, r5, r0
 	mov r1, #1
-	bl ov40_0222E7DC
+	bl VsRecorder_SetProfileDrawFlag
 _0223CB0E:
 	mov r0, #4
 	mov r1, #1
@@ -1163,7 +1163,7 @@ _0223CB6C:
 _0223CB7A:
 	add r0, r4, #0
 	mov r1, #1
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	ldr r0, [r5, #0x10]
 	cmp r0, #0
 	bne _0223CB96
@@ -1171,26 +1171,26 @@ _0223CB7A:
 	lsl r0, r0, #4
 	add r0, r5, r0
 	add r1, r4, #0
-	bl ov40_0223064C
+	bl VsRecorder_FreeVideoInfo
 	b _0223CBA2
 _0223CB96:
 	mov r0, #0x65
 	lsl r0, r0, #2
 	add r0, r5, r0
 	add r1, r4, #0
-	bl ov40_0222E7B8
+	bl VsRecorder_FreeProfile
 _0223CBA2:
 	add r0, r4, #0
 	mov r1, #0
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	add r0, r4, #0
 	mov r1, #1
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	add r0, r4, #0
 	bl ov40_0223D504
 	add r0, r4, #0
 	mov r1, #0
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	add r0, r4, #0
 	bl ov40_0223CCA0
 	mov r0, #4
@@ -1217,12 +1217,12 @@ _0223CBDE:
 	beq _0223CC24
 	add r0, r4, #0
 	mov r1, #1
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	add r0, r4, #0
 	bl ov40_0223B374
 	add r0, r4, #0
 	mov r1, #0
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	ldr r0, [r4, #0x24]
 	mov r1, #3
 	bl BgClearTilemapBufferAndCommit

@@ -11,7 +11,7 @@ void InitWindow(void *);
 void AddWindowParameterized(void *, void *, u32, u32, u32, u32, u32, u32, u32);
 void FillWindowPixelBuffer(void *, u32);
 void *NewString_ReadMsgData(void *, u32);
-u32 ov40_022306C0(void *, void *);
+u32 VsRecorder_GetCenteredTextX(void *, void *);
 u8 AddTextPrinterParameterizedWithColor(void *, u32, void *, u32, u32, u32, u32, void *);
 void ScheduleWindowCopyToVram(void *);
 void String_Delete(void *);

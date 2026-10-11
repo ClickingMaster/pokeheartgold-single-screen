@@ -6,7 +6,7 @@ int ov40_02234A38(void *p) {
     void *w = PTR(p, 0x860);
     switch (S32(p, 8)) {
     case 0:
-        ov40_022307DC(p, 0x3c, 7);
+        VsRecorder_LoadScreen(p, 0x3c, 7);
         GfGfx_EngineATogglePlanes(8, 1);
         GfGfx_EngineBTogglePlanes(8, 1);
         GfGfx_EngineATogglePlanes(4, 1);
@@ -18,7 +18,7 @@ int ov40_02234A38(void *p) {
     case 1:
         VsRecorder_StepFade((u8 *)w + 8, 0);
         if (VsRecorder_StepBlend(w, (u8 *)w + 4, 0, 0)) {
-            ov40_0222DED0(p, 0x72);
+            VsRecorder_ShowTopMessage(p, 0x72);
             ov40_02235FFC(p);
             S32(p, 8)
             ++;
@@ -28,7 +28,7 @@ int ov40_02234A38(void *p) {
     case 2:
         TouchHitboxController_IsTriggered(PTR(w, 0x1d0));
         if (TouchscreenHitbox_TouchNewIsIn(ov40_022451C4) || S32(w, 0x1e4) == 1) {
-            ov40_02230944(p);
+            VsRecorder_OnTouchConfirm(p);
             S32(p, 8)
             ++;
         }
@@ -36,7 +36,7 @@ int ov40_02234A38(void *p) {
     case 3:
         ov40_0223610C();
         TouchHitboxController_Destroy(PTR(w, 0x1d0));
-        ov40_0222DFB0(p);
+        VsRecorder_HideTopMessage(p);
         S32(p, 8)
         ++;
         /* fallthrough */
@@ -71,23 +71,23 @@ int ov40_02234BBC(void *p) {
     switch (S32(p, 8)) {
     case 0:
         ov40_022359B4(p, 1);
-        ov40_022307DC(p, 0x3a, 7);
+        VsRecorder_LoadScreen(p, 0x3a, 7);
         S32(p, 8)
         ++;
         break;
     case 1:
         if (VsRecorder_StepBlend(w, (u8 *)w + 4, 0, 2)) {
-            ov40_0222DED0(p, 0x72);
-            ov40_02230964(p, 1);
-            ov40_0222F9D4((u8 *)p + 0x47c, p);
+            VsRecorder_ShowTopMessage(p, 0x72);
+            VsRecorder_SetVBlankPaused(p, 1);
+            VsRecorder_CreateTouchScrollSprites((u8 *)p + 0x47c, p);
             *(Block44 *)((u8 *)w + 0x1ec) = ov40_022451F4;
             U32(w, 0x1ec) = U32(w, 0x1e8);
             U32(w, 0x1f0) = U32(w, 0x1d4);
-            ov40_0222F734((u8 *)p + 0x49c);
-            ov40_0222E9B8((u8 *)p + 0x49c, p, PTR(w, 0x1e0), (u8 *)w + 0x1ec);
-            ov40_0222FA5C((u8 *)p + 0x47c, (u8 *)p + 0x49c);
-            ov40_0222F740((u8 *)p + 0x49c, p, 2);
-            ov40_02230964(p, 0);
+            VsRecorder_ClearListWindow((u8 *)p + 0x49c);
+            VsRecorder_InitList((u8 *)p + 0x49c, p, PTR(w, 0x1e0), (u8 *)w + 0x1ec);
+            VsRecorder_TouchScrollSetEnabled((u8 *)p + 0x47c, (u8 *)p + 0x49c);
+            VsRecorder_CreateListArrows((u8 *)p + 0x49c, p, 2);
+            VsRecorder_SetVBlankPaused(p, 0);
             S32(w, 0x2e0) = 0;
             S32(p, 8)
             ++;
@@ -95,29 +95,29 @@ int ov40_02234BBC(void *p) {
         break;
     case 2: {
         int ret;
-        ov40_0222FA88((u8 *)p + 0x47c);
-        ov40_0222F6D0((u8 *)p + 0x49c, S16(p, 0x48c));
-        ret = ov40_0222F38C((u8 *)p + 0x49c, p);
+        VsRecorder_UpdateTouchScroll((u8 *)p + 0x47c);
+        VsRecorder_ListScroll((u8 *)p + 0x49c, S16(p, 0x48c));
+        ret = VsRecorder_UpdateMessageList((u8 *)p + 0x49c, p);
         if (ret != 0) {
             S32(w, 0x2e0) = ret;
-            ov40_02230944(p);
+            VsRecorder_OnTouchConfirm(p);
             S32(p, 8)
             ++;
         }
         if (TouchscreenHitbox_TouchNewIsIn(ov40_022451C4)) {
-            ov40_02230944(p);
+            VsRecorder_OnTouchConfirm(p);
             S32(p, 8)
             ++;
         }
         break;
     }
     case 3:
-        ov40_0222DFB0(p);
-        ov40_02230964(p, 1);
-        ov40_0222FA24((u8 *)p + 0x47c);
-        ov40_0222F720((u8 *)p + 0x49c);
-        ov40_0222F920((u8 *)p + 0x49c, p);
-        ov40_02230964(p, 0);
+        VsRecorder_HideTopMessage(p);
+        VsRecorder_SetVBlankPaused(p, 1);
+        VsRecorder_FreeTouchScroll((u8 *)p + 0x47c);
+        VsRecorder_RemoveListWindow((u8 *)p + 0x49c);
+        VsRecorder_FreeListArrows((u8 *)p + 0x49c, p);
+        VsRecorder_SetVBlankPaused(p, 0);
         S32(p, 8)
         ++;
         /* fallthrough */

@@ -25,7 +25,7 @@ void ov40_02235B4C(void *scene) {
     source = NewString_ReadMsgData(PTR_AT(scene, 0x48), 0x38);
     line = String_New(0xFF, 0x6D);
     FashionEntry_GetMonSecondText(PTR_AT(inner, 0x22C), line);
-    ov40_02230DCC(scene, line);
+    VsRecorder_SanitizeName(scene, line);
     word = FashionEntry_GetMailMessageWord(PTR_AT(inner, 0x22C));
     BufferString(fmt, 0, line, 0, 1, 2);
     BufferECWord(fmt, 1, word);
@@ -70,7 +70,7 @@ void ov40_02235C7C(void *scene) {
     source = NewString_ReadMsgData(PTR_AT(scene, 0x48), 0x38);
     line = String_New(0xFF, 0x6D);
     FashionEntry_GetMonSecondText(PTR_AT(inner, 0x238), line);
-    ov40_02230DCC(scene, line);
+    VsRecorder_SanitizeName(scene, line);
     word = FashionEntry_GetMailMessageWord(PTR_AT(inner, 0x238));
     BufferString(fmt, 0, line, 0, 1, 2);
     BufferECWord(fmt, 1, word);

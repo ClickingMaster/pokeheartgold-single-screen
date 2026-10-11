@@ -22,7 +22,7 @@ typedef struct Ov40Unk {
 
 extern const TouchscreenHitbox ov40_02245708[];
 
-u32 ov40_022306C0(Window *window, String *string);
+u32 VsRecorder_GetCenteredTextX(Window *window, String *string);
 int ov40_02235DAC(Ov40Unk *data, u32 index);
 void ov40_02235FFC(Ov40Unk *data);
 
@@ -49,7 +49,7 @@ void ov40_02235FFC(Ov40Unk *data) {
         AddWindowParameterized(data->bgConfig, window, GF_BG_LYR_SUB_2, x, y, width, height, 14, baseTile);
         FillWindowPixelBuffer(window, 0);
         string = NewString_ReadMsgData(data->msgData, i + 0x44);
-        textX = ov40_022306C0(window, string);
+        textX = VsRecorder_GetCenteredTextX(window, string);
         textY = (height * 8 - 16) / 2;
         if (ov40_02235DAC(data, i) == 1) {
             AddTextPrinterParameterizedWithColor(window, 0, string, textX, textY, 0xFF, 0xF0D00, NULL);

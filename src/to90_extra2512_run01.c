@@ -1,9 +1,0 @@
-#pragma force_active on
-#include "global.h"
-#pragma force_active on
-#define W(p,o) (*(int*)((u8*)(p)+(o)))
-#define P(p,o) (*(void**)((u8*)(p)+(o)))
-#define H(p,o) (*(u16*)((u8*)(p)+(o)))
-#define B(p,o) (*(u8*)((u8*)(p)+(o)))
-extern void*G2dRenderer_Init(int,void*,int),*Create2DGfxResObjMan(int,int,int),*AddCharResObjFromNarc(void*,int,int,int,int,int,int),*AddPlttResObjFromNarc(void*,int,int,int,int,int,int,int),*AddCellOrAnimResObjFromNarc(void*,int,int,int,int,int,int);extern void G2dRenderer_SetSubSurfaceCoords(void*,int,int),GfGfx_EngineBTogglePlanes(int,int),SpriteTransfer_CreateCharTransferTask_AllocAtEnd(void*),SpriteTransfer_CreateExtPlttTransferTask(void*);typedef struct{int heap;void*renderer;u8 surface[0x128];void*manager[6];void*first[4];u8 gap[8];void*second[4];}Work;void ov112_021F09B4(Work*);
-void ov112_021F09B4(Work*w){int i;w->renderer=G2dRenderer_Init(7,w->surface,w->heap);G2dRenderer_SetSubSurfaceCoords(w->surface,0,1<<20);GfGfx_EngineBTogglePlanes(16,1);for(i=0;i<6;i++)w->manager[i]=Create2DGfxResObjMan(2,i,w->heap);w->first[0]=AddCharResObjFromNarc(w->manager[0],259,4,1,1,2,w->heap);w->first[1]=AddPlttResObjFromNarc(w->manager[1],259,3,0,1,2,4,w->heap);w->first[2]=AddCellOrAnimResObjFromNarc(w->manager[2],259,6,1,1,2,w->heap);w->first[3]=AddCellOrAnimResObjFromNarc(w->manager[3],259,5,1,1,3,w->heap);SpriteTransfer_CreateCharTransferTask_AllocAtEnd(w->first[0]);SpriteTransfer_CreateExtPlttTransferTask(w->first[1]);w->second[0]=AddCharResObjFromNarc(w->manager[0],93,9,0,2,2,w->heap);w->second[1]=AddPlttResObjFromNarc(w->manager[1],93,6,0,2,2,4,w->heap);w->second[2]=AddCellOrAnimResObjFromNarc(w->manager[2],93,10,0,2,2,w->heap);w->second[3]=AddCellOrAnimResObjFromNarc(w->manager[3],93,10,0,2,3,w->heap);SpriteTransfer_CreateCharTransferTask_AllocAtEnd(w->second[0]);SpriteTransfer_CreateExtPlttTransferTask(w->second[1]);}

@@ -17,7 +17,7 @@ void ov40_02239340(void *p) {
         baseTile += t->width * t->height;
         FillWindowPixelBuffer(win, 0);
         str = NewString_ReadMsgData(PTR(p, 0x48), i + 0x50);
-        AddTextPrinterParameterizedWithColor(win, 0, str, ov40_022306C0(win, str), 0, 0xFF, 0xF0D00, NULL);
+        AddTextPrinterParameterizedWithColor(win, 0, str, VsRecorder_GetCenteredTextX(win, str), 0, 0xFF, 0xF0D00, NULL);
         ScheduleWindowCopyToVram(win);
         String_Delete(str);
         win = (u8 *)win + 0x10;
@@ -117,12 +117,12 @@ void ov40_02239574(void *p) {
     ScheduleWindowCopyToVram((u8 *)w + 0x34);
     String_Delete(s);
     tn = FrontierCard_NewNameString(PTR(p, 0x88C), 0x6D);
-    ov40_02230DCC(p, tn);
+    VsRecorder_SanitizeName(p, tn);
     switch (WORD(w, 0x14)) {
     case 0:
         v20 = FrontierCard_GetAvatar(PTR(p, 0x88C));
         s = NewString_ReadMsgData(PTR(p, 0x48), 0x55);
-        s2 = NewString_ReadMsgData(PTR(w, 0x744), ov40_0222E658(v20, 4));
+        s2 = NewString_ReadMsgData(PTR(w, 0x744), VsRecorder_GetAvatarFileId(v20, 4));
         BufferString(mf, 0, s2, 0, 1, 2);
         break;
     case 1:
@@ -214,19 +214,19 @@ void ov40_02239954(u32 sel, int flag, void *scene) {
     }
     switch (sel) {
     case 0:
-        ov40_02230944(scene);
+        VsRecorder_OnTouchConfirm(scene);
         S32(w, 0xC) = S32(w, 0xC) + 1;
         S32(w, 0xC) = S32(w, 0xC) % S32(w, 0x10);
         VsRecorder_SetSubState(scene, 4);
         break;
     case 1:
-        ov40_02230944(scene);
+        VsRecorder_OnTouchConfirm(scene);
         S32(w, 0x14) = S32(w, 0x14) + 1;
         S32(w, 0x14) = S32(w, 0x14) % S32(w, 0x18);
         VsRecorder_SetSubState(scene, 4);
         break;
     default:
-        ov40_02230944(scene);
+        VsRecorder_OnTouchConfirm(scene);
         VsRecorder_SetSubState(scene, 7);
         break;
     }
@@ -266,10 +266,10 @@ int ov40_02239A58(void *p) {
         PaletteData_BlendPalettes(PTR(p, 0x28), 1, 2, WORD(w, 8), WORD(p, 0x58));
         break;
     case 1:
-        ov40_02230964(p, 1);
+        VsRecorder_SetVBlankPaused(p, 1);
         VsRecorder_FreeMenuRows(p);
         ov40_02239838(p);
-        ov40_02230964(p, 0);
+        VsRecorder_SetVBlankPaused(p, 0);
         SetBgPriority(0, 1);
         SetBgPriority(1, 3);
         SetBgPriority(2, 0);
@@ -278,12 +278,12 @@ int ov40_02239A58(void *p) {
         SetBgPriority(5, 3);
         SetBgPriority(6, 0);
         SetBgPriority(7, 2);
-        ov40_0222FB90(p, 0);
+        VsRecorder_StartFlipScreens(p, 0);
         OrbitCursor_SetVisible(PTR(p, 0x6F0), 0);
         WORD(p, 8) = WORD(p, 8) + 1;
         break;
     default:
-        if (ov40_0222FBB4(p) != NULL) {
+        if (VsRecorder_IsFlipScreensDone(p) != NULL) {
             VsRecorder_SetSubState(p, 2);
         }
         break;

@@ -8,6 +8,7 @@
 #include "font_sprite.h"
 #include "gf_gfx_loader.h"
 #include "math_util.h"
+#include "orbit_cursor.h"
 #include "palette.h"
 #include "sound_playback.h"
 #include "sprite_system.h"
@@ -152,7 +153,7 @@ BOOL VsRecorder_MenuCanSelect(VsRecorderWork *work) {
     switch (work->mode) {
     default:
         if (selection <= 3 && work->savedVideos[selection] == NULL) {
-            ov40_0222DD9C(work, 0x10D);
+            VsRecorder_ShowNotice(work, 0x10D);
             result = FALSE;
         }
         break;
@@ -161,19 +162,19 @@ BOOL VsRecorder_MenuCanSelect(VsRecorderWork *work) {
             SaveFashionData *fashionData = Save_FashionData_Get(work->saveData);
             result = FashionEntry_IsSaved(Save_FashionData_GetEntry(fashionData, selection));
             if (!result) {
-                ov40_0222DD9C(work, 0x122);
+                VsRecorder_ShowNotice(work, 0x122);
             }
         }
         break;
     case 6:
         if (selection == 100 && ((BOOL(*)(void))ov40_0222DD94)()) {
-            ov40_0222DD9C(work, 0x111);
+            VsRecorder_ShowNotice(work, 0x111);
             result = FALSE;
         }
         break;
     case 2:
         if (selection == 9999 && work->savedVideos[0] == NULL) {
-            ov40_0222DD9C(work, 0x81);
+            VsRecorder_ShowNotice(work, 0x81);
             result = FALSE;
         }
         break;
@@ -210,27 +211,27 @@ void VsRecorder_OnMenuTouch(u32 index, u32 event, void *arg) {
         return;
     }
     VsRecorder_GetSpritePos(work->choiceRows[index].sprite, &pos.x, &pos.y);
-    OrbitCursor_SetPosition(work->banners[0], (s16)(pos.x + 16), pos.y);
-    OrbitCursor_SetTarget(work->banners[0], (s16)(pos.x + 16), pos.y);
+    OrbitCursor_SetPosition(work->orbitCursors[0], (s16)(pos.x + 16), pos.y);
+    OrbitCursor_SetTarget(work->orbitCursors[0], (s16)(pos.x + 16), pos.y);
     work->selection = work->menu[work->menuCursor].selection;
     VsRecorder_SetSubState(work, work->menu[work->menuCursor].nextSubState);
     if (work->menu[work->menuCursor].nextSubState == VS_RECORDER_MENU_ACTION_CANCEL) {
         sub_02087A84(work->result, 0, 0);
     } else {
         VsRecorder_ClearMenuHitboxes(work);
-        OrbitCursor_SetVisible(work->banners[0], 1);
+        OrbitCursor_SetVisible(work->orbitCursors[0], 1);
     }
     if (work->selection == 999) {
-        ov40_0222DFE8(work, 193);
+        VsRecorder_ShowMenuNotice(work, 193);
         return;
     }
     if (work->selection == 9999) {
-        ov40_0222DFE8(work, 301);
+        VsRecorder_ShowMenuNotice(work, 301);
         return;
     }
-    if (work->unk_089C) {
-        ov40_0222DE40(work);
-        work->unk_089C = 0;
+    if (work->menuNoticeShown) {
+        VsRecorder_HideNotice(work);
+        work->menuNoticeShown = 0;
     }
 }
 

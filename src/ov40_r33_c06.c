@@ -11,14 +11,14 @@ void VsRecorder_FreeTextSprite(void *p);
 void Sprite_DeleteAndFreeResources(void *sprite);
 void ov40_0222D7DC(void *p);
 void ManagedSprite_SetDrawFlag(void *sprite, BOOL draw);
-void ov40_0222FF48(void *p, void *a1, void *a2);
+void VsRecorder_DeleteMonIcon(void *p, void *a1, void *a2);
 void *ov40_0223D540(void *p);
 void ov39_02227F74(void *p, void *dest);
 void GlobalTerminalNet_GetRankings(void *p, void *dest1, void *dest2);
 void MI_CpuCopy8(const void *src, void *dest, u32 size);
 void FillWindowPixelBuffer(void *window, u8 fillValue);
 void *NewString_ReadMsgData(void *msgData, int msgId);
-int ov40_022306C0(void *window, void *string);
+int VsRecorder_GetCenteredTextX(void *window, void *string);
 u8 AddTextPrinterParameterizedWithColor(void *window, int fontId, void *string, u32 x, u32 y, u32 textSpeed, u32 color, void *callback);
 void String_Delete(void *string);
 void ScheduleWindowCopyToVram(void *window);
@@ -56,7 +56,7 @@ void ov40_0223CCBC(void *p, int msgId) {
 
     FillWindowPixelBuffer(window, 0);
     string = NewString_ReadMsgData(PTR(p, 0x48), msgId);
-    width = ov40_022306C0(window, string);
+    width = VsRecorder_GetCenteredTextX(window, string);
     AddTextPrinterParameterizedWithColor(window, 0, string, width, 0, 0xff, 0xf0d00, NULL);
     String_Delete(string);
     ScheduleWindowCopyToVram(window);

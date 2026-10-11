@@ -39,7 +39,7 @@ typedef struct Ov40Unk {
 extern const Ov40WinDefs ov40_022458E8;
 extern const Ov40MsgIds ov40_022456F0;
 
-u32 ov40_022306C0(Window *window, String *string);
+u32 VsRecorder_GetCenteredTextX(Window *window, String *string);
 void ov40_0223DBD4(Ov40Unk *data, int mode);
 
 // @fn ov40_0223DBD4
@@ -74,7 +74,7 @@ void ov40_0223DBD4(Ov40Unk *data, int mode) {
         string = NewString_ReadMsgData(data->msgData, *msgId);
         baseTile += def[i].width * def[i].height;
         if (center) {
-            ov40_022306C0(window, string);
+            VsRecorder_GetCenteredTextX(window, string);
         }
         AddTextPrinterParameterizedWithColor(window, 0, string, 0, 0, 0xFF, 0xF0D00, NULL);
         ScheduleWindowCopyToVram(window);

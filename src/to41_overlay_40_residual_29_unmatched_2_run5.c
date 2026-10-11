@@ -31,7 +31,7 @@ void ov40_02236F38(void *p) {
         InitWindow(win);
         AddWindowParameterized(PTR(p, 0x24), win, 6, t->x, t->y, t->width, t->height, 0xE, baseTile);
         str = NewString_ReadMsgData(PTR(p, 0x48), i + 0x3C);
-        x = ov40_022306C0(win, str);
+        x = VsRecorder_GetCenteredTextX(win, str);
         FillWindowPixelBuffer(win, 0);
         AddTextPrinterParameterizedWithColor(win, 0, str, x, 0, 0xFF, 0xF0D00, NULL);
         ScheduleWindowCopyToVram(win);

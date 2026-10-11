@@ -33,7 +33,7 @@ void ov40_0223A510(void *p, int msgId, int index) {
         void *name = FrontierCard_NewNameString(value, 0x6D);
         void *message;
 
-        ov40_02230DCC(p, name);
+        VsRecorder_SanitizeName(p, name);
         message = NewString_ReadMsgData(PTR(p, 0x48), msgId);
         BufferString(fmt, 0, name, 0, 1, 2);
         StringExpandPlaceholders(fmt, out, message);
@@ -48,7 +48,7 @@ void ov40_0223A510(void *p, int msgId, int index) {
         void *name = FrontierCard_NewNameString(value, 0x6D);
         void *message;
 
-        ov40_02230DCC(p, name);
+        VsRecorder_SanitizeName(p, name);
         message = NewString_ReadMsgData(PTR(p, 0x48), msgId);
         BufferString(fmt, 0, name, 0, 1, 2);
         StringExpandPlaceholders(fmt, out, message);
@@ -76,9 +76,9 @@ int ov40_0223A640(void *p) {
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 2);
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
         if (WORD(w, 0x10) == 0) {
-            ov40_022306A0((u8 *)w + 0x220, 0);
+            VsRecorder_SetVideoPartyIconsDrawFlag((u8 *)w + 0x220, 0);
         } else {
-            ov40_0222E7DC((u8 *)w + 0x194, 0);
+            VsRecorder_SetProfileDrawFlag((u8 *)w + 0x194, 0);
         }
         WORD(p, 8)
         ++;
@@ -92,8 +92,8 @@ int ov40_0223A640(void *p) {
         PaletteData_BlendPalettes(PTR(p, 0x28), 3, 0xC, (u8)WORD(w, 8), (u16)WORD(p, 0x58));
         break;
     case 2:
-        ov40_0222DED0(p, 0x75);
-        ov40_0223077C(p, PTR(p, 0x6F0), 0x80, 0x60);
+        VsRecorder_ShowTopMessage(p, 0x75);
+        VsRecorder_PlaceOrbitCursor(p, PTR(p, 0x6F0), 0x80, 0x60);
         OrbitCursor_SetVisible(PTR(p, 0x6F0), 1);
         OrbitCursor_SetRadius(PTR(p, 0x6F0), 0x18, 0x18);
         WORD(w, 0x2038) = 0;
@@ -116,11 +116,11 @@ int ov40_0223A640(void *p) {
         void *result;
         void *ctx;
 
-        ov40_0222DFB0(p);
+        VsRecorder_HideTopMessage(p);
         ctx = ov40_0223D540(p);
         if (GlobalTerminalNet_GetError(ctx, &result) == TRUE) {
             StopSE(0x57D, 0);
-            ov40_02230CDC(p, 8, WORD(result, 0xC), WORD(result, 4));
+            VsRecorder_ShowMessageScreen(p, 8, WORD(result, 0xC), WORD(result, 4));
             WORD(p, 8)
             ++;
             WORD(w, 0x2038) = 0;
@@ -140,7 +140,7 @@ int ov40_0223A640(void *p) {
         if (WORD(w, 0x2038) != 0) {
             PlaySE(0x577);
             VsRecorder_SetSubState(p, WORD(w, 0x2034));
-            ov40_0222FC40(p, 1);
+            VsRecorder_SetBattleResult(p, 1);
         } else {
             VsRecorder_SetSubState(p, 0x14);
         }

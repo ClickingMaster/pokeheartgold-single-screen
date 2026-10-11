@@ -10,7 +10,7 @@ void ov40_0223707C(void *p) {
     void *fmt = VsRecorder_NewMessageFormat(0x6D);
     void *win = (u8 *)w + 0x1D4;
     CopyU16ArrayToString(name, (u16 *)PTR((u8 *)w + WORD(p, 0x4D4) * 4, 0x38C));
-    ov40_02230DCC(p, name);
+    VsRecorder_SanitizeName(p, name);
     BufferString(fmt, 0, name, 0, 1, 2);
     StringExpandPlaceholders(fmt, expanded, tmpl);
     FillWindowPixelBuffer(win, 0xCC);

@@ -5,11 +5,11 @@ int ov40_02236D60(void *p) {
     switch (WORD(p, 8)) {
     case 0:
         VsRecorder_ApplyBlend((u8 *)w + 0x1A4, (u8 *)w + 0x1A8, 8, 0x12, 8, 0x12, 1);
-        ov40_02230964(p, 1);
+        VsRecorder_SetVBlankPaused(p, 1);
         ov40_02237564(p);
         ov40_02237410(p);
         ov40_022371A0(p);
-        ov40_02230964(p, 0);
+        VsRecorder_SetVBlankPaused(p, 0);
         GfGfx_EngineATogglePlanes(4, 0);
         WORD(p, 8)
         ++;

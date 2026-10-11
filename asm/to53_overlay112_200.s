@@ -375,64 +375,64 @@
 	.extern PokewalkerApp_StrollReport_Enter
 	.extern PokewalkerApp_StrollReport_Update
 	.extern PokewalkerApp_StrollReport_Exit
-	.extern ov112_021EF700
-	.extern ov112_021EF758
-	.extern ov112_021EF8C0
-	.extern ov112_021EF8D4
-	.extern ov112_021EF958
-	.extern ov112_021EF994
-	.extern ov112_021EF9D4
-	.extern ov112_021EFA1C
-	.extern ov112_021EFA44
-	.extern ov112_021EFA74
-	.extern ov112_021EFA9C
-	.extern ov112_021EFAC0
-	.extern ov112_021EFAD4
-	.extern ov112_021EFB14
-	.extern ov112_021EFC9C
-	.extern ov112_021EFCB0
-	.extern ov112_021EFCD8
-	.extern ov112_021EFCFC
-	.extern ov112_021EFD24
-	.extern ov112_021EFD4C
-	.extern ov112_021EFDA8
-	.extern ov112_021EFED8
-	.extern ov112_021EFEEC
-	.extern ov112_021EFF14
-	.extern ov112_021EFF38
-	.extern ov112_021EFF4C
-	.extern ov112_021EFF70
-	.extern ov112_021EFF84
-	.extern ov112_021F00CC
-	.extern ov112_021F00E0
-	.extern ov112_021F0114
-	.extern ov112_021F015C
-	.extern ov112_021F0180
-	.extern ov112_021F0194
-	.extern ov112_021F01B8
-	.extern ov112_021F01CC
-	.extern ov112_021F0314
-	.extern ov112_021F0328
-	.extern ov112_021F0368
-	.extern ov112_021F0394
-	.extern ov112_021F039C
-	.extern ov112_021F03BC
-	.extern ov112_021F04DC
-	.extern ov112_021F050C
-	.extern ov112_021F051C
-	.extern ov112_021F05CC
-	.extern ov112_021F05FC
-	.extern ov112_021F0668
-	.extern ov112_021F06CC
-	.extern ov112_021F0908
-	.extern ov112_021F0980
-	.extern ov112_021F09B4
-	.extern ov112_021F0B28
-	.extern ov112_021F0B9C
-	.extern ov112_021F0C30
-	.extern ov112_021F0C50
-	.extern ov112_021F0C8C
-	.extern ov112_021F0D04
+	.extern PokewalkerApp_StrollReport_Start
+	.extern PokewalkerApp_StrollReport_ShowResults
+	.extern PokewalkerApp_StrollReport_WaitResultsFade
+	.extern PokewalkerApp_StrollReport_PrintMonArrived
+	.extern PokewalkerApp_StrollReport_PrintLevelUp
+	.extern PokewalkerApp_StrollReport_PrintWatts
+	.extern PokewalkerApp_StrollReport_PrintRouteFound
+	.extern PokewalkerApp_StrollReport_PrintRouteAvailable
+	.extern PokewalkerApp_StrollReport_PrintMilestone
+	.extern PokewalkerApp_StrollReport_PrintStarfBerry
+	.extern PokewalkerApp_StrollReport_FadeOut
+	.extern PokewalkerApp_StrollReport_WaitFadeOut
+	.extern PokewalkerApp_CountReceivedMons
+	.extern PokewalkerApp_StrollReport_ShowCaughtMons
+	.extern PokewalkerApp_StrollReport_WaitCaughtMonsFade
+	.extern PokewalkerApp_StrollReport_PrintMonsSent
+	.extern PokewalkerApp_StrollReport_CaughtMonsFadeOut
+	.extern PokewalkerApp_StrollReport_WaitCaughtMonsFadeOut
+	.extern PokewalkerApp_AddItemToList
+	.extern PokewalkerApp_CountReceivedItems
+	.extern PokewalkerApp_StrollReport_ShowItems
+	.extern PokewalkerApp_StrollReport_WaitItemsFade
+	.extern PokewalkerApp_StrollReport_PrintItemsPlaced
+	.extern PokewalkerApp_StrollReport_ItemsFadeOut
+	.extern PokewalkerApp_StrollReport_WaitItemsFadeOut
+	.extern PokewalkerApp_StrollReport_GiftsFadeOut
+	.extern PokewalkerApp_StrollReport_WaitGiftsFadeOut
+	.extern PokewalkerApp_StrollReport_ShowGifts
+	.extern PokewalkerApp_StrollReport_WaitGiftsFade
+	.extern PokewalkerApp_StrollReport_PrintGiftWatts
+	.extern PokewalkerApp_StrollReport_PrintGiftRouteFound
+	.extern PokewalkerApp_StrollReport_GiftsDoneFadeOut
+	.extern PokewalkerApp_StrollReport_WaitGiftsDoneFadeOut
+	.extern PokewalkerApp_StrollReport_RecordsFadeOut
+	.extern PokewalkerApp_StrollReport_WaitRecordsFadeOut
+	.extern PokewalkerApp_StrollReport_ShowRecords
+	.extern PokewalkerApp_StrollReport_WaitRecordsFade
+	.extern PokewalkerApp_StrollReport_PrintRecords
+	.extern PokewalkerApp_StrollReport_WaitMessage
+	.extern PokewalkerApp_StrollReport_End
+	.extern PokewalkerBoxDisplay_New
+	.extern PokewalkerBoxDisplay_Init
+	.extern PokewalkerBoxDisplay_ShowMon
+	.extern PokewalkerBoxDisplay_Update
+	.extern PokewalkerBoxDisplay_Free
+	.extern PokewalkerBoxDisplay_DeleteSprites
+	.extern PokewalkerBoxDisplay_LoadBgGraphics
+	.extern PokewalkerBoxDisplay_InitBgs
+	.extern PokewalkerBoxDisplay_PrintMonInfo
+	.extern PokewalkerBoxDisplay_ShowMonSprites
+	.extern PokewalkerBoxDisplay_HideSprites
+	.extern PokewalkerBoxDisplay_InitSprites
+	.extern PokewalkerBoxDisplay_CreateSprites
+	.extern PokewalkerBoxDisplay_CreateSprite
+	.extern PokewalkerApp_InitSpriteTemplate
+	.extern PokewalkerBoxDisplay_GetMonPictureLocation
+	.extern PokewalkerBoxDisplay_LoadMonPicture
+	.extern PokewalkerBoxDisplay_TransferMonPicture
 	.extern ov112_021F0D48
 	.extern ov112_021F0DC0
 	.extern ov112_021F0DF4
@@ -798,8 +798,8 @@
 	.extern sSelectMonObjCharTransferTemplate
 	.extern sSelectMonGraphicsBanks
 	.extern sEventLogAppTemplate
-	.extern ov112_021FF134
-	.extern ov112_021FF150
+	.extern sBoxDisplayBgTemplateSub1
+	.extern sBoxDisplayBgTemplateSub3
 	.extern ov112_021FF16C
 	.extern ov112_021FF172
 	.extern ov112_021FF17A

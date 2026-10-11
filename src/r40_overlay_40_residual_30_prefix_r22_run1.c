@@ -21,7 +21,7 @@ void ov40_022371E4(void *p, int index) {
     }
     GetSpeciesNameIntoArray(species, 0x6D, name);
     CopyU16ArrayToString(str, name);
-    x = ov40_022306C0(window, str);
+    x = VsRecorder_GetCenteredTextX(window, str);
     AddTextPrinterParameterizedWithColor(window, 0, str, x, 6, 0xFF, 0xF0D00, 0);
     ScheduleWindowCopyToVram(window);
     String_Delete(str);

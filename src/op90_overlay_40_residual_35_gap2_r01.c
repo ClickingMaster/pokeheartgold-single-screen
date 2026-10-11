@@ -42,9 +42,9 @@ typedef struct {
 
 extern const Ov40Order ov40_02245838;
 BOOL ov40_022303B8(u16 *species);
-ManagedSprite *ov40_0222FEA0(Ov40Work *work, void *a1, int resId, int species, int form, int a5);
-void ov40_0222FF64(Ov40Work *work, int resId, ManagedSprite *sprite);
-void ov40_02230964(Ov40Work *work, int a1);
+ManagedSprite *VsRecorder_NewMonIcon(Ov40Work *work, void *a1, int resId, int species, int form, int a5);
+void VsRecorder_DeleteSprite(Ov40Work *work, int resId, ManagedSprite *sprite);
+void VsRecorder_SetVBlankPaused(Ov40Work *work, int a1);
 void ov40_0223D618(Ov40Work *work);
 void ov40_0223D8D4(Ov40Work *work);
 
@@ -62,13 +62,13 @@ void ov40_0223D8D4(Ov40Work *work) {
     if (data->row == work->cursor) {
         return;
     }
-    ov40_02230964(work, 1);
+    VsRecorder_SetVBlankPaused(work, 1);
     if (data->row > work->cursor) {
         row = 4;
     }
     for (j = 0; j < 6; j++) {
         if (data->slots[row][j].sprite != NULL) {
-            ov40_0222FF64(work, data->slots[row][j].resId, data->slots[row][j].sprite);
+            VsRecorder_DeleteSprite(work, data->slots[row][j].resId, data->slots[row][j].sprite);
             freed[j] = data->slots[row][j].resId;
             data->slots[row][j].sprite = NULL;
         }
@@ -126,7 +126,7 @@ void ov40_0223D8D4(Ov40Work *work) {
             int sp = species[j];
             int fm = forms[j];
             data->slots[row][j].resId = data->resCounter;
-            data->slots[row][j].sprite = ov40_0222FEA0(work, data->unk50C, data->slots[row][j].resId, sp, fm, 0);
+            data->slots[row][j].sprite = VsRecorder_NewMonIcon(work, data->unk50C, data->slots[row][j].resId, sp, fm, 0);
             if (data->slots[row][j].sprite != NULL) {
                 ManagedSprite_SetDrawPriority(data->slots[row][j].sprite, 6 - j);
             }
@@ -140,5 +140,5 @@ void ov40_0223D8D4(Ov40Work *work) {
             SpriteManager_UnloadCharObjById(work->spriteMan, freed[j] + 100000);
         }
     }
-    ov40_02230964(work, 0);
+    VsRecorder_SetVBlankPaused(work, 0);
 }

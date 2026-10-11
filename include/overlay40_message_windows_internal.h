@@ -1,8 +1,0 @@
-#ifndef POKEHEARTGOLD_OVERLAY40_MESSAGE_WINDOWS_INTERNAL_H
-#define POKEHEARTGOLD_OVERLAY40_MESSAGE_WINDOWS_INTERNAL_H
-
-#include "global.h"
-
-#pragma require_prototypes off
-
-#endif

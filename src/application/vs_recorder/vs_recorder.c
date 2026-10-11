@@ -127,23 +127,23 @@ void VsRecorder_InitResources(VsRecorderWork *work) {
     args.resBase = 1;
     args.mode = work->mode;
     args.yOffset = FX32_CONST(256);
-    work->banners[0] = OrbitCursor_New(args, work->spriteSystem, work->spriteManager, work->plttData);
-    OrbitCursor_Start(work->banners[0], work->colorScheme);
-    OrbitCursor_SetActive(work->banners[0], 0);
-    OrbitCursor_SetVisible(work->banners[0], 0);
+    work->orbitCursors[0] = OrbitCursor_New(args, work->spriteSystem, work->spriteManager, work->plttData);
+    OrbitCursor_Start(work->orbitCursors[0], work->colorScheme);
+    OrbitCursor_SetActive(work->orbitCursors[0], 0);
+    OrbitCursor_SetVisible(work->orbitCursors[0], 0);
     args.resBase = 2;
     args.yOffset = FX32_CONST(256);
-    work->banners[1] = OrbitCursor_New(args, work->spriteSystem, work->spriteManager, work->plttData);
-    OrbitCursor_Start(work->banners[1], work->colorScheme);
-    OrbitCursor_SetActive(work->banners[1], 0);
-    OrbitCursor_SetVisible(work->banners[1], 0);
+    work->orbitCursors[1] = OrbitCursor_New(args, work->spriteSystem, work->spriteManager, work->plttData);
+    OrbitCursor_Start(work->orbitCursors[1], work->colorScheme);
+    OrbitCursor_SetActive(work->orbitCursors[1], 0);
+    OrbitCursor_SetVisible(work->orbitCursors[1], 0);
     work->fontSystem = FontSystem_NewInit(20, HEAP_ID_109);
     work->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0013_bin, HEAP_ID_109);
     work->recordMsgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0026_bin, HEAP_ID_109);
-    ov40_0222FCCC(work);
+    VsRecorder_LoadSavedVideos(work);
     sub_02088030(work);
     VsRecorder_LoadFrameBg(work);
-    ov40_0222FBF8(work);
+    VsRecorder_StartVBlankTask(work);
 }
 
 #pragma force_active reset
@@ -370,7 +370,7 @@ BOOL VsRecorder_Main(VsRecorderWork *work, int *screen) {
         VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_MESSAGE:
-        ov40_02230D20(work);
+        VsRecorder_MessageScreen(work);
         break;
     default:
         return TRUE;

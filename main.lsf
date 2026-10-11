@@ -3075,64 +3075,10 @@ Overlay OVY_40
     Object asm/to91_w41503_battle_names_anchor_own1.o
     Object src/application/vs_recorder/vs_recorder_row_text.o
     Object src/application/vs_recorder/vs_recorder_gfx.o
-    Object src/overlay40_message_windows_r8_run1.o
-    Object src/to47r5_overlay40_message_renderer.o
-    Object src/overlay40_message_windows_r8_run2.o
-    Object src/overlay_40_sol_partial_8.o
-    Object src/to70_overlay_40_residual_9_extra276_run01.o
-    Object src/overlay_40_sol_partial_9.o
-    Object src/r40_overlay_40_residual_10_run1.o
-    Object src/overlay_40_sol_partial_10.o
-    Object src/to80_extra1776_run01.o
-    Object src/overlay_40_sol_partial_11.o
-    Object src/overlay40_window_list_r12_run1.o
-    Object src/r40_overlay_40_residual_12_middle_run1.o
-    Object src/overlay40_window_list_middle_e9b8.o
-    Object src/op90_overlay_40_residual_12_middle_tail_eb9c_r01.o
-    Object src/r40_overlay_40_residual_12_middle_run2.o
-    Object src/overlay40_window_list_middle_prefix_r4.o
-    Object src/op90_op90_overlay_40_residual_12_middle_r40_residual_2_residual_2_residual_1_r01.o
-    Object src/op90_overlay_40_residual_12_middle_r40_residual_2_residual_2_r01.o
-    Object src/overlay40_window_list_middle_f488_r1.o
-    Object src/overlay40_window_list_middle_suffix_r4.o
-    Object src/overlay40_window_list_r12_run2.o
-    Object src/overlay_40_sol_partial_12.o
-    Object src/to90_extra2210_run01.o
-    Object src/overlay_40_sol_partial_13.o
-    Object src/r40_overlay_40_residual_14_run1.o
-    Object src/overlay_40_sol_partial_14.o
-    Object src/to80_extra1519_run01.o
-    Object src/overlay_40_sol_partial_15.o
-    Object src/r40_overlay_40_residual_16_run1.o
-    Object src/overlay_40_sol_partial_16.o
-    Object src/r40_overlay_40_residual_17_run1.o
-    Object src/overlay_40_sol_partial_17.o
-    Object src/r40_overlay_40_residual_18_run1.o
-    Object src/overlay_40_sol_partial_18.o
-    Object src/to90_extra2485_run01.o
-    Object src/overlay40_trainer_card_resources_r19.o
-    Object src/overlay_40_sol_partial_19.o
-    Object src/to90_extra1927_run01.o
-    Object src/r40_overlay_40_residual_20_run1.o
-    Object src/overlay_40_sol_partial_20.o
-    Object src/op90_overlay_40_residual_21_gap_1_r01.o
-    Object src/overlay40_message_windows_tail.o
-    Object src/overlay_40_sol_partial_21.o
-    Object src/op90_overlay_40_residual_22_r01.o
-    Object src/overlay_40_sol_partial_22.o
-    Object src/to70_overlay_40_residual_23_extra957_run01.o
-    Object src/overlay_40_sol_partial_23.o
-    Object src/to80_extra1777_run01.o
-    Object src/overlay_40_sol_partial_24.o
-    Object src/overlay40_touch_indicator_r25.o
-    Object src/overlay_40_sol_partial_25.o
-    Object src/to70_overlay_40_residual_26_extra783_run01.o
-    Object src/overlay_40_sol_partial_26.o
-    Object src/to70_overlay_40_residual_27_unmatched_1_extra1200_run01.o
-    Object src/r40_overlay_40_residual_27_unmatched_1_run1.o
-    Object src/overlay40_pc_box_grid_run1.o
-    Object src/r40_overlay_40_residual_27_unmatched_2_run1.o
-    Object src/overlay40_pc_box_grid_run2.o
+    Object src/application/vs_recorder/vs_recorder_windows.o
+    Object src/application/vs_recorder/vs_recorder_list.o
+    Object src/application/vs_recorder/vs_recorder_util.o
+    Object src/application/vs_recorder/vs_recorder_screen.o
     Object src/overlay40_pc_box_grid_gap3.o
     Object src/overlay40_pc_box_grid_run3.o
     Object src/op90_overlay_40_residual_27_unmatched_4_r01.o
@@ -5359,26 +5305,6 @@ Object src/to53_overlay112_123.o
 Object src/to58_ov112_124.o
 Object src/application/pokewalker/pokewalker_stroll.o
 Object src/application/pokewalker/pokewalker_app_modes.o
-Object src/to53_overlay112_145.o
-Object src/to70_to53_overlay112_146_extra250_run01.o
-Object src/to53_overlay112_147.o
-Object src/to90_extra2072_run01.o
-Object src/to53_overlay112_149.o
-Object src/to90_extra2259_run01.o
-Object src/op90_to90_extra2259_residual_1_r01.o
-Object src/to53_overlay112_151.o
-Object src/to70_to53_overlay112_152_extra270_run01.o
-Object src/to53_overlay112_153.o
-Object src/to70_to53_overlay112_154_extra271_run01.o
-Object src/to53_overlay112_155.o
-Object src/to90_extra2412_run01.o
-Object src/to53_overlay112_157.o
-Object src/to57_overlay112_158.o
-Object src/to53_overlay112_159.o
-Object src/to90_extra2512_run01.o
-Object src/to53_overlay112_161.o
-Object src/to70_to53_overlay112_162_extra688_run01.o
-Object src/to53_overlay112_163.o
 Object src/to56_w22_overlay112_before.o
 Object src/op90_to56_w22_overlay112_middle_r01.o
 Object src/to56_w22_overlay112_after.o

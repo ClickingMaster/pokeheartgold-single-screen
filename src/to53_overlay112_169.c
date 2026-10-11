@@ -22,7 +22,7 @@ extern void PlayBGM(int);
 extern u32 ov112_021FF9B8[];
 extern void ov112_021F1FD0(void *);
 extern void ov112_021F1EFC(void *, int);
-void ov112_021F0C30(void *, u32, u32, u32, u32);
+void PokewalkerApp_InitSpriteTemplate(void *, u32, u32, u32, u32);
 int ov112_021F0F48(void *, int);
 u8 ov112_021F0F60(void *);
 int ov112_021F0F70(u32 **, u32 **);

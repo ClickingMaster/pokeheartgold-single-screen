@@ -52,7 +52,7 @@ int ov40_02230ED8(void *work) {
         if (S32(work, 0xC) < 0x12) {
             break;
         }
-        ov40_02230E34(work);
+        VsRecorder_ShowTouchHere(work);
         OrbitCursor_SetVisible(PTR(work, 0x6F4), 0);
         S32(work, 0xC) = 0;
         S32(work, 8)
@@ -78,7 +78,7 @@ int ov40_02230ED8(void *work) {
         break;
     case 6:
         if (System_GetTouchHeld() == TRUE) {
-            ov40_02230EB4(work);
+            VsRecorder_HideTouchHere(work);
             OrbitCursor_SetVisible(PTR(work, 0x6F0), 0);
             sub_02087A54(PTR(work, 0x6F4));
             sub_02087A54(PTR(work, 0x6F0));
@@ -96,7 +96,7 @@ int ov40_02230ED8(void *work) {
 int ov40_02231100(void *work) {
     switch (S32(work, 8)) {
     case 0:
-        ov40_02230964(work, 1);
+        VsRecorder_SetVBlankPaused(work, 1);
         VsRecorder_LoadDecorGfx(work);
         VsRecorder_CreateDecorSprites(work);
         VsRecorder_LoadMenuRowGfx(work);
@@ -104,7 +104,7 @@ int ov40_02231100(void *work) {
         VsRecorder_CreateMenuRowText(work);
         VsRecorder_RefreshChoiceRows(work);
         VsRecorder_RefreshPathRows(work);
-        ov40_02230964(work, 0);
+        VsRecorder_SetVBlankPaused(work, 0);
         if (VsRecorder_HasResumeScreen(work) == TRUE) {
             if (S32(work, 0) == 0) {
                 GfGfxLoader_LoadScrnDataFromOpenNarc(PTR(work, 0x14), 0x45, PTR(work, 0x24), 5, 0, 0, 0, 0x6D);

@@ -41,19 +41,19 @@ int ov40_0223B62C(void *p) {
         SetBgPriority(5, 3);
         SetBgPriority(6, 0);
         SetBgPriority(7, 2);
-        ov40_0222FB90(p, 0);
+        VsRecorder_StartFlipScreens(p, 0);
         OrbitCursor_SetVisible(PTR(p, 0x6F0), 0);
         WORD(p, 8)
         ++;
         break;
     case 2:
-        if (ov40_0222FBB4(p)) {
-            ov40_02230964(p, 1);
+        if (VsRecorder_IsFlipScreensDone(p)) {
+            VsRecorder_SetVBlankPaused(p, 1);
             VsRecorder_FreeMenuRows(p);
-            ov40_02230964(p, 0);
-            ov40_02230964(p, 1);
+            VsRecorder_SetVBlankPaused(p, 0);
+            VsRecorder_SetVBlankPaused(p, 1);
             ov40_0223A430(p);
-            ov40_02230964(p, 0);
+            VsRecorder_SetVBlankPaused(p, 0);
             WORD(p, 8)
             ++;
         }

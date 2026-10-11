@@ -14,9 +14,9 @@ int ov40_0223AF3C(void *p) {
     case 1:
         VsRecorder_StepFade(w + 8, 1);
         if (VsRecorder_StepBlend(w, w + 4, 1, 0)) {
-            ov40_02230964(p, 1);
+            VsRecorder_SetVBlankPaused(p, 1);
             ov40_0223B44C(p);
-            ov40_02230964(p, 0);
+            VsRecorder_SetVBlankPaused(p, 0);
             WORD(p, 8)
             ++;
         }
@@ -33,17 +33,17 @@ int ov40_0223AF3C(void *p) {
         ov40_0223CD14(p);
         GfGfxLoader_LoadCharDataFromOpenNarc(PTR(p, 0x14), 0x3e, PTR(p, 0x24), 3, 0, 0, 0, 0x6d);
         GfGfxLoader_LoadCharDataFromOpenNarc(PTR(p, 0x14), 0x3e, PTR(p, 0x24), 7, 0, 0, 0, 0x6d);
-        ov40_02230964(p, 1);
+        VsRecorder_SetVBlankPaused(p, 1);
         if (WORD(w, 0x10) == 0) {
-            ov40_02230638(w + 0x220, p);
-            ov40_022306A0(w + 0x220, 0);
-            ov40_022307DC(p, ov40_02230410(w + 0x220), 3);
+            VsRecorder_CreateVideoInfo(w + 0x220, p);
+            VsRecorder_SetVideoPartyIconsDrawFlag(w + 0x220, 0);
+            VsRecorder_LoadScreen(p, ov40_02230410(w + 0x220), 3);
         } else {
-            ov40_0222E79C(w + 0x194, p);
-            ov40_0222E7DC(w + 0x194, 0);
+            VsRecorder_CreateProfile(w + 0x194, p);
+            VsRecorder_SetProfileDrawFlag(w + 0x194, 0);
             GfGfxLoader_LoadScrnDataFromOpenNarc(PTR(p, 0x14), 0x50, PTR(p, 0x24), 3, 0, 0, 0, 0x6d);
         }
-        ov40_02230964(p, 0);
+        VsRecorder_SetVBlankPaused(p, 0);
         GfGfxLoader_LoadScrnDataFromOpenNarc(PTR(p, 0x14), 6, PTR(p, 0x24), 7, 0, 0, 0, 0x6d);
         WORD(p, 8)
         ++;
@@ -52,9 +52,9 @@ int ov40_0223AF3C(void *p) {
         VsRecorder_StepFade(w + 8, 0);
         if (VsRecorder_StepBlend(w, w + 4, 0, 0)) {
             if (WORD(w, 0x10) == 0) {
-                ov40_022306A0(w + 0x220, 1);
+                VsRecorder_SetVideoPartyIconsDrawFlag(w + 0x220, 1);
             } else {
-                ov40_0222E7DC(w + 0x194, 1);
+                VsRecorder_SetProfileDrawFlag(w + 0x194, 1);
             }
             GfGfx_EngineBTogglePlanes(4, TRUE);
             GfGfx_EngineATogglePlanes(4, TRUE);
@@ -86,13 +86,13 @@ int ov40_0223B190(void *p) {
         GfGfx_EngineBTogglePlanes(4, FALSE);
         GfGfx_EngineATogglePlanes(4, FALSE);
         ov40_0223A83C(p);
-        ov40_02230964(p, 1);
+        VsRecorder_SetVBlankPaused(p, 1);
         if (WORD(w, 0x10) == 0) {
-            ov40_0223064C(w + 0x220, p);
+            VsRecorder_FreeVideoInfo(w + 0x220, p);
         } else {
-            ov40_0222E7B8(w + 0x194, p);
+            VsRecorder_FreeProfile(w + 0x194, p);
         }
-        ov40_02230964(p, 0);
+        VsRecorder_SetVBlankPaused(p, 0);
         extern void ov40_0223CCA0(void *);
         ov40_0223CCA0(p);
         WORD(p, 8)

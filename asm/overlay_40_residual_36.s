@@ -3388,102 +3388,102 @@
 	.public ov40_0222DD68
 	.public ov40_0222DD8C
 	.public ov40_0222DD94
-	.public ov40_0222DD9C
-	.public ov40_0222DE40
-	.public ov40_0222DEAC
-	.public ov40_0222DED0
-	.public ov40_0222DF60
-	.public ov40_0222DFB0
-	.public ov40_0222DFE8
-	.public ov40_0222E09C
-	.public ov40_0222E4A4
-	.public ov40_0222E4C4
-	.public ov40_0222E4D4
-	.public ov40_0222E510
-	.public ov40_0222E618
-	.public ov40_0222E624
-	.public ov40_0222E658
-	.public ov40_0222E690
-	.public ov40_0222E79C
-	.public ov40_0222E7B8
-	.public ov40_0222E7DC
-	.public ov40_0222E7F0
-	.public ov40_0222E8C4
-	.public ov40_0222E9B8
-	.public ov40_0222EB9C
-	.public ov40_0222EED0
-	.public ov40_0222EFD8
-	.public ov40_0222F09C
-	.public ov40_0222F38C
-	.public ov40_0222F488
-	.public ov40_0222F5EC
-	.public ov40_0222F6D0
-	.public ov40_0222F720
-	.public ov40_0222F734
-	.public ov40_0222F740
-	.public ov40_0222F858
-	.public ov40_0222F878
-	.public ov40_0222F8C0
-	.public ov40_0222F920
+	.public VsRecorder_ShowNotice
+	.public VsRecorder_HideNotice
+	.public VsRecorder_RemoveTopMessage
+	.public VsRecorder_ShowTopMessage
+	.public VsRecorder_SetMessageText
+	.public VsRecorder_HideTopMessage
+	.public VsRecorder_ShowMenuNotice
+	.public VsRecorder_PrintProfile
+	.public VsRecorder_RemoveProfileWindows
+	.public VsRecorder_SetProfileMonIconDrawFlag
+	.public VsRecorder_FreeProfileMonIcon
+	.public VsRecorder_CreateProfileMonIcon
+	.public VsRecorder_SetProfileAvatarDrawFlag
+	.public VsRecorder_FreeProfileAvatar
+	.public VsRecorder_GetAvatarFileId
+	.public VsRecorder_CreateProfileAvatar
+	.public VsRecorder_CreateProfile
+	.public VsRecorder_FreeProfile
+	.public VsRecorder_SetProfileDrawFlag
+	.public VsRecorder_PrintListLocation
+	.public VsRecorder_InitMessageList
+	.public VsRecorder_InitList
+	.public VsRecorder_InitRankingList
+	.public VsRecorder_InitPairList
+	.public VsRecorder_RedrawPairList
+	.public VsRecorder_RedrawRankingList
+	.public VsRecorder_UpdateMessageList
+	.public VsRecorder_RedrawNameList
+	.public VsRecorder_ListMoveCursor
+	.public VsRecorder_ListScroll
+	.public VsRecorder_RemoveListWindow
+	.public VsRecorder_ClearListWindow
+	.public VsRecorder_CreateListArrows
+	.public VsRecorder_SetListArrowsY
+	.public VsRecorder_UpdateListArrows
+	.public VsRecorder_UpdateListArrowsCursor
+	.public VsRecorder_FreeListArrows
 	.public ov40_0222F950
-	.public ov40_0222F9C0
-	.public ov40_0222F9D4
-	.public ov40_0222F9E0
-	.public ov40_0222FA18
-	.public ov40_0222FA24
-	.public ov40_0222FA2C
-	.public ov40_0222FA5C
-	.public ov40_0222FA88
-	.public ov40_0222FB28
-	.public ov40_0222FB40
-	.public ov40_0222FB74
-	.public ov40_0222FB90
-	.public ov40_0222FBB4
-	.public ov40_0222FBBC
-	.public ov40_0222FBF8
+	.public VsRecorder_DeleteTouchScrollSprites
+	.public VsRecorder_CreateTouchScrollSprites
+	.public VsRecorder_CreateTouchScrollSpritesWithAnim
+	.public VsRecorder_InitTouchScroll
+	.public VsRecorder_FreeTouchScroll
+	.public VsRecorder_TouchScrollTrack
+	.public VsRecorder_TouchScrollSetEnabled
+	.public VsRecorder_UpdateTouchScroll
+	.public VsRecorder_AddGameStatsScore
+	.public VsRecorder_ImportBattleRecord
+	.public VsRecorder_FlipScreensTask
+	.public VsRecorder_StartFlipScreens
+	.public VsRecorder_IsFlipScreensDone
+	.public VsRecorder_VBlankTask
+	.public VsRecorder_StartVBlankTask
 	.public ov40_0222FC14
-	.public ov40_0222FC40
+	.public VsRecorder_SetBattleResult
 	.public ov40_0222FC4C
-	.public ov40_0222FCCC
-	.public ov40_0222FDC4
-	.public ov40_0222FE00
-	.public ov40_0222FE68
-	.public ov40_0222FE8C
-	.public ov40_0222FE98
-	.public ov40_0222FEA0
-	.public ov40_0222FF48
-	.public ov40_0222FF64
-	.public ov40_0222FF74
-	.public ov40_02230398
+	.public VsRecorder_LoadSavedVideos
+	.public VsRecorder_FreeSavedVideos
+	.public VsRecorder_LoadMonIconGfx
+	.public VsRecorder_UnloadMonIconGfx
+	.public VsRecorder_OpenMonIconNarc
+	.public VsRecorder_CloseMonIconNarc
+	.public VsRecorder_NewMonIcon
+	.public VsRecorder_DeleteMonIcon
+	.public VsRecorder_DeleteSprite
+	.public VsRecorder_PrintVideoInfo
+	.public VsRecorder_RemoveVideoInfoWindows
 	.public ov40_022303B8
 	.public ov40_02230404
 	.public ov40_02230410
-	.public ov40_02230424
-	.public ov40_02230638
-	.public ov40_0223064C
-	.public ov40_022306A0
-	.public ov40_022306C0
+	.public VsRecorder_CreateVideoPartyIcons
+	.public VsRecorder_CreateVideoInfo
+	.public VsRecorder_FreeVideoInfo
+	.public VsRecorder_SetVideoPartyIconsDrawFlag
+	.public VsRecorder_GetCenteredTextX
 	.public ov40_022306E0
 	.public ov40_022306F0
-	.public ov40_02230738
-	.public ov40_0223077C
-	.public ov40_022307B0
-	.public ov40_022307DC
-	.public ov40_022307FC
-	.public ov40_02230864
-	.public ov40_02230944
-	.public ov40_02230958
-	.public ov40_02230964
-	.public ov40_02230970
-	.public ov40_022309CC
-	.public ov40_022309DC
-	.public ov40_02230CDC
-	.public ov40_02230D20
-	.public ov40_02230D94
-	.public ov40_02230DCC
-	.public ov40_02230E08
-	.public ov40_02230E34
-	.public ov40_02230EB4
+	.public VsRecorder_ResetBgPriorities
+	.public VsRecorder_PlaceOrbitCursor
+	.public VsRecorder_CountDigits
+	.public VsRecorder_LoadScreen
+	.public VsRecorder_TouchIndicatorTask
+	.public VsRecorder_ShowTouchIndicator
+	.public VsRecorder_OnTouchConfirm
+	.public VsRecorder_IsVBlankPaused
+	.public VsRecorder_SetVBlankPaused
+	.public VsRecorder_CreateLabeledSprite
+	.public VsRecorder_FreeLabeledSprite
+	.public VsRecorder_SetupMessageScreenMsg
+	.public VsRecorder_ShowMessageScreen
+	.public VsRecorder_MessageScreen
+	.public VsRecorder_IsVideoSaved
+	.public VsRecorder_SanitizeName
+	.public VsRecorder_SetPlaceholderName
+	.public VsRecorder_ShowTouchHere
+	.public VsRecorder_HideTouchHere
 	.public ov40_02230ED8
 	.public ov40_02231100
 	.public ov40_0223131C
@@ -4020,32 +4020,32 @@
 	.public VsRecorder_NewMessageFormat
 	.public ov40_0222DD8C
 	.public ov40_0222DD94
-	.public ov40_0222E4C4
-	.public ov40_0222E618
-	.public ov40_0222E79C
-	.public ov40_0222E7DC
-	.public ov40_0222F720
-	.public ov40_0222F734
-	.public ov40_0222F858
-	.public ov40_0222F9C0
-	.public ov40_0222F9D4
-	.public ov40_0222FA18
-	.public ov40_0222FA24
-	.public ov40_0222FB28
-	.public ov40_0222FBB4
-	.public ov40_0222FC40
-	.public ov40_0222FE8C
-	.public ov40_0222FE98
-	.public ov40_0222FF64
+	.public VsRecorder_SetProfileMonIconDrawFlag
+	.public VsRecorder_SetProfileAvatarDrawFlag
+	.public VsRecorder_CreateProfile
+	.public VsRecorder_SetProfileDrawFlag
+	.public VsRecorder_RemoveListWindow
+	.public VsRecorder_ClearListWindow
+	.public VsRecorder_SetListArrowsY
+	.public VsRecorder_DeleteTouchScrollSprites
+	.public VsRecorder_CreateTouchScrollSprites
+	.public VsRecorder_InitTouchScroll
+	.public VsRecorder_FreeTouchScroll
+	.public VsRecorder_AddGameStatsScore
+	.public VsRecorder_IsFlipScreensDone
+	.public VsRecorder_SetBattleResult
+	.public VsRecorder_OpenMonIconNarc
+	.public VsRecorder_CloseMonIconNarc
+	.public VsRecorder_DeleteSprite
 	.public ov40_02230404
 	.public ov40_02230410
-	.public ov40_02230638
-	.public ov40_022306A0
+	.public VsRecorder_CreateVideoInfo
+	.public VsRecorder_SetVideoPartyIconsDrawFlag
 	.public ov40_022306E0
-	.public ov40_02230944
-	.public ov40_02230958
-	.public ov40_02230964
-	.public ov40_022309CC
+	.public VsRecorder_OnTouchConfirm
+	.public VsRecorder_IsVBlankPaused
+	.public VsRecorder_SetVBlankPaused
+	.public VsRecorder_FreeLabeledSprite
 	.public ov40_02236158
 	.public ov40_022361C8
 	.public ov40_022371D4
@@ -4110,13 +4110,13 @@ _0223FDC4:
 	sub r0, #0xc0
 	add r0, r5, r0
 	mov r1, #0
-	bl ov40_022306A0
+	bl VsRecorder_SetVideoPartyIconsDrawFlag
 	b _0223FDF4
 _0223FDEA:
 	add r0, r5, #0
 	add r0, #0x80
 	mov r1, #0
-	bl ov40_0222E7DC
+	bl VsRecorder_SetProfileDrawFlag
 _0223FDF4:
 	ldr r0, [r4, #8]
 	add r0, r0, #1
@@ -4152,14 +4152,14 @@ _0223FE1A:
 _0223FE34:
 	add r0, r4, #0
 	mov r1, #0x75
-	bl ov40_0222DED0
+	bl VsRecorder_ShowTopMessage
 	mov r1, #0x6f
 	lsl r1, r1, #4
 	ldr r1, [r4, r1]
 	add r0, r4, #0
 	mov r2, #0x80
 	mov r3, #0x60
-	bl ov40_0223077C
+	bl VsRecorder_PlaceOrbitCursor
 	mov r0, #0x6f
 	lsl r0, r0, #4
 	ldr r0, [r4, r0]
@@ -4212,13 +4212,13 @@ _0223FEA6:
 	mov r1, #0
 	bl StopSE
 	add r0, r4, #0
-	bl ov40_0222DFB0
+	bl VsRecorder_HideTopMessage
 	ldr r3, [sp, #4]
 	add r0, r4, #0
 	ldr r2, [r3, #0xc]
 	ldr r3, [r3, #4]
 	mov r1, #8
-	bl ov40_02230CDC
+	bl VsRecorder_ShowMessageScreen
 	ldr r0, [r4, #8]
 	mov r1, #0
 	add r0, r0, #1
@@ -4274,17 +4274,17 @@ _0223FF34:
 	add r0, #0xbf
 	bl PlaySE
 	add r0, r4, #0
-	bl ov40_0222DFB0
+	bl VsRecorder_HideTopMessage
 	ldr r1, [r5, #0xc]
 	add r0, r4, #0
 	bl VsRecorder_SetSubState
 	add r0, r4, #0
 	mov r1, #1
-	bl ov40_0222FC40
+	bl VsRecorder_SetBattleResult
 	b _0223FF68
 _0223FF5A:
 	add r0, r4, #0
-	bl ov40_0222DFB0
+	bl VsRecorder_HideTopMessage
 	add r0, r4, #0
 	mov r1, #0x1f
 	bl VsRecorder_SetSubState
@@ -4332,7 +4332,7 @@ _0223FFAC: ; jump table
 	.short _022401B6 - _0223FFAC - 2 ; case 4
 	.short _022401D4 - _0223FFAC - 2 ; case 5
 _0223FFB8:
-	bl ov40_02230738
+	bl VsRecorder_ResetBgPriorities
 	add r0, r5, #0
 	add r1, r5, #4
 	mov r2, #0
@@ -4390,7 +4390,7 @@ _0223FFEC:
 	add r0, r4, #0
 	mov r1, #6
 	mov r2, #7
-	bl ov40_022307DC
+	bl VsRecorder_LoadScreen
 	mov r0, #8
 	mov r1, #1
 	bl GfGfx_EngineATogglePlanes
@@ -4480,12 +4480,12 @@ _022400AE:
 	b _022401FA
 _022400F8:
 	mov r1, #1
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	mov r0, #0x43
 	lsl r0, r0, #2
 	add r0, r5, r0
 	add r1, r4, #0
-	bl ov40_02230638
+	bl VsRecorder_CreateVideoInfo
 	mov r0, #0x43
 	lsl r0, r0, #2
 	add r0, r5, r0
@@ -4493,15 +4493,15 @@ _022400F8:
 	add r1, r0, #0
 	add r0, r4, #0
 	mov r2, #3
-	bl ov40_022307DC
+	bl VsRecorder_LoadScreen
 	mov r0, #0x43
 	lsl r0, r0, #2
 	add r0, r5, r0
 	mov r1, #0
-	bl ov40_022306A0
+	bl VsRecorder_SetVideoPartyIconsDrawFlag
 	add r0, r4, #0
 	mov r1, #0
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	mov r0, #8
 	mov r1, #1
 	bl GfGfx_EngineATogglePlanes
@@ -4534,7 +4534,7 @@ _0224015A:
 	lsl r0, r0, #2
 	add r0, r5, r0
 	mov r1, #1
-	bl ov40_022306A0
+	bl VsRecorder_SetVideoPartyIconsDrawFlag
 	add r0, r4, #0
 	bl ov40_02241AB0
 	mov r0, #4
@@ -4719,12 +4719,12 @@ _022402BA:
 	b _02240414
 _02240304:
 	mov r1, #1
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	add r0, r5, #0
 	bl VsRecorder_FreeMenuRows
 	add r0, r5, #0
 	mov r1, #0
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	mov r0, #0
 	add r1, r0, #0
 	bl SetBgPriority
@@ -4765,7 +4765,7 @@ _02240360:
 	b _022403FA
 _02240372:
 	mov r1, #0
-	bl ov40_0222FB90
+	bl VsRecorder_StartFlipScreens
 	mov r0, #0x6f
 	lsl r0, r0, #4
 	ldr r0, [r5, r0]
@@ -4786,7 +4786,7 @@ _02240398:
 	b _02240414
 _022403A2:
 	mov r1, #0
-	bl ov40_0222FB90
+	bl VsRecorder_StartFlipScreens
 	mov r0, #0x6f
 	lsl r0, r0, #4
 	ldr r0, [r5, r0]
@@ -4826,7 +4826,7 @@ _022403EC:
 	b _02240414
 _022403FA:
 	mov r1, #0
-	bl ov40_0222FB90
+	bl VsRecorder_StartFlipScreens
 	mov r0, #0x6f
 	lsl r0, r0, #4
 	ldr r0, [r5, r0]
@@ -4947,7 +4947,7 @@ _022404CE:
 	beq _022404F6
 	add r0, r5, #0
 	mov r1, #0x70
-	bl ov40_0222DD9C
+	bl VsRecorder_ShowNotice
 	ldr r0, [r5, #8]
 	add r0, r0, #1
 	str r0, [r5, #8]
@@ -5020,7 +5020,7 @@ ov40_02240544: ; 0x02240544
 	beq _02240588
 	b _022405D0
 _02240562:
-	bl ov40_0222DE40
+	bl VsRecorder_HideNotice
 	mov r2, #8
 	str r2, [sp]
 	mov r3, #0x12
@@ -5106,12 +5106,12 @@ ov40_022405F0: ; 0x022405F0
 	bl VsRecorder_ResetFade
 	add r0, r5, #0
 	mov r1, #1
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	add r0, r5, #0
 	bl VsRecorder_RebuildMenuRowsParent
 	add r0, r5, #0
 	mov r1, #0
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	ldr r0, [r5, #8]
 	add r0, r0, #1
 	str r0, [r5, #8]
@@ -5222,13 +5222,13 @@ _022406EE: ; jump table
 	.short _02240814 - _022406EE - 2 ; case 4
 _022406F8:
 	mov r1, #0x75
-	bl ov40_0222DD9C
+	bl VsRecorder_ShowNotice
 	ldr r1, _0224083C ; =0x000006F4
 	add r0, r4, #0
 	ldr r1, [r4, r1]
 	mov r2, #0x80
 	mov r3, #0x60
-	bl ov40_0223077C
+	bl VsRecorder_PlaceOrbitCursor
 	ldr r0, _0224083C ; =0x000006F4
 	mov r1, #1
 	ldr r0, [r4, r0]
@@ -5278,7 +5278,7 @@ _02240764:
 	pop {r3, r4, r5, r6, pc}
 _02240772:
 	add r0, r4, #0
-	bl ov40_0222DE40
+	bl VsRecorder_HideNotice
 	add r0, r4, #0
 	bl ov40_0223D540
 	add r1, sp, #0
@@ -5296,10 +5296,10 @@ _02240772:
 	ldr r2, [r3, #0xc]
 	ldr r3, [r3, #4]
 	mov r1, #8
-	bl ov40_02230CDC
+	bl VsRecorder_ShowMessageScreen
 	add r0, r4, #0
 	mov r1, #0
-	bl ov40_0222FB90
+	bl VsRecorder_StartFlipScreens
 	ldr r0, [r4, #8]
 	mov r1, #0
 	add r0, r0, #1
@@ -5344,7 +5344,7 @@ _022407EE:
 	b _02240834
 _02240806:
 	mov r1, #1
-	bl ov40_0222FB90
+	bl VsRecorder_StartFlipScreens
 	ldr r0, [r4, #8]
 	add r0, r0, #1
 	str r0, [r4, #8]
@@ -5523,13 +5523,13 @@ _0224094C: ; jump table
 	.short _02240AB4 - _0224094C - 2 ; case 3
 _02240954:
 	mov r1, #0
-	bl ov40_0222FB90
+	bl VsRecorder_StartFlipScreens
 	ldr r0, [r4, #8]
 	add r0, r0, #1
 	str r0, [r4, #8]
 	b _02240B18
 _02240962:
-	bl ov40_0222FBB4
+	bl VsRecorder_IsFlipScreensDone
 	cmp r0, #0
 	bne _0224096C
 	b _02240B18
@@ -5568,7 +5568,7 @@ _0224096C:
 	add r0, r4, #0
 	mov r1, #6
 	mov r2, #7
-	bl ov40_022307DC
+	bl VsRecorder_LoadScreen
 	mov r0, #0
 	mov r1, #1
 	bl SetBgPriority
@@ -5631,7 +5631,7 @@ _0224096C:
 	b _02240B18
 _02240A4C:
 	mov r1, #1
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	mov r0, #0x73
 	mov r1, #0
 	lsl r0, r0, #2
@@ -5639,7 +5639,7 @@ _02240A4C:
 	sub r0, #0xc0
 	add r0, r5, r0
 	add r1, r4, #0
-	bl ov40_02230638
+	bl VsRecorder_CreateVideoInfo
 	mov r0, #0x43
 	lsl r0, r0, #2
 	add r0, r5, r0
@@ -5647,15 +5647,15 @@ _02240A4C:
 	add r1, r0, #0
 	add r0, r4, #0
 	mov r2, #3
-	bl ov40_022307DC
+	bl VsRecorder_LoadScreen
 	mov r0, #0x43
 	lsl r0, r0, #2
 	add r0, r5, r0
 	mov r1, #0
-	bl ov40_022306A0
+	bl VsRecorder_SetVideoPartyIconsDrawFlag
 	add r0, r4, #0
 	mov r1, #0
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	mov r0, #8
 	mov r1, #1
 	bl GfGfx_EngineATogglePlanes
@@ -5688,7 +5688,7 @@ _02240AB4:
 	lsl r0, r0, #2
 	add r0, r5, r0
 	mov r1, #1
-	bl ov40_022306A0
+	bl VsRecorder_SetVideoPartyIconsDrawFlag
 	add r0, r4, #0
 	bl ov40_02241AB0
 	mov r0, #4

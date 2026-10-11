@@ -6,8 +6,8 @@
 #define WORD(p, off) (*(u32 *)((u8 *)(p) + (off)))
 void VsRecorder_RebuildMenuRowsParent(void *);
 void BgClearTilemapBufferAndCommit(void *, int);
-void ov40_0222FB90(void *, int);
-void *ov40_0222FBB4(void *);
+void VsRecorder_StartFlipScreens(void *, int);
+void *VsRecorder_IsFlipScreensDone(void *);
 int VsRecorder_StepFade(void *, int);
 void VsRecorder_ClearPaletteBlend(void *);
 void VsRecorder_ResetFade(void *);
@@ -17,7 +17,7 @@ void VsRecorder_SetSubState(void *, int);
 void Heap_Free(void *);
 void SetBgPriority(int, int);
 void GfGfxLoader_LoadCharDataFromOpenNarc(void *, int, void *, int, int, int, int, int);
-void ov40_02230964(void *, int);
+void VsRecorder_SetVBlankPaused(void *, int);
 void VsRecorder_FreeMenuRows(void *);
 void BattleRecord_GetBattlerAndPartyCount(int, int *, int *);
 void *String_New(int, int);

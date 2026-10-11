@@ -10,13 +10,13 @@ typedef struct SolCtx40 {
     u8 pad[0x330];
     void *hitbox[5];
 } SolCtx40;
-void ov40_02230964(void *, int);
+void VsRecorder_SetVBlankPaused(void *, int);
 void ov40_02237008(void *);
 void ov40_02236534(void *);
 void OrbitCursor_SetActive(void *, int);
 void OrbitCursor_SetVisible(void *, int);
-void ov40_0222FB90(void *, int);
-int ov40_0222FBB4(void);
+void VsRecorder_StartFlipScreens(void *, int);
+int VsRecorder_IsFlipScreensDone(void);
 void TouchHitboxController_Destroy(void *);
 void VsRecorder_ResetFade(void *);
 void VsRecorder_RebuildMenuRowsParent(void *);

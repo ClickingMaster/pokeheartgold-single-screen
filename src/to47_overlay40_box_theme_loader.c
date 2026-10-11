@@ -45,12 +45,12 @@ int ov40_022376FC(void *work) {
     switch (WORD_AT(work, 8)) {
     case 0:
         ov40_0222C710(work, 2);
-        ov40_02230964(work, 1);
+        VsRecorder_SetVBlankPaused(work, 1);
         ov40_02236EB4(work);
         ov40_0223757C(work);
         ov40_02237548(work, 1);
         ov40_022373E4(work, 0);
-        ov40_02230964(work, 0);
+        VsRecorder_SetVBlankPaused(work, 0);
         GfGfxLoader_LoadCharDataFromOpenNarc(PTR_AT(work, 0x14), 0x3E, PTR_AT(work, 0x24), 7, 0, 0, 0, 0x6D);
         GfGfxLoader_LoadScrnDataFromOpenNarc(PTR_AT(work, 0x14), 0x4D, PTR_AT(work, 0x24), 7, 0, 0, 0, 0x6D);
         GfGfx_EngineATogglePlanes(8, 1);

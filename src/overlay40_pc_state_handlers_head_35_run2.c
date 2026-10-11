@@ -19,15 +19,15 @@ void ov40_0223D874(void *p) {
     u8 *base;
     u8 *row;
     base = PTR(p, 0x860);
-    ov40_02230964(p, (void *)1);
+    VsRecorder_SetVBlankPaused(p, (void *)1);
     for (j = 0; j < 5; base += 0x30, j++) {
         for (i = 0, row = base; i < 6; i++, row += 8) {
             void *sprite = PTR(row, 0x51C);
             if (sprite != NULL) {
-                ov40_0222FF48(p, PTR(row, 0x518), sprite);
+                VsRecorder_DeleteMonIcon(p, PTR(row, 0x518), sprite);
                 PTR(row, 0x51C) = NULL;
             }
         }
     }
-    ov40_02230964(p, NULL);
+    VsRecorder_SetVBlankPaused(p, NULL);
 }

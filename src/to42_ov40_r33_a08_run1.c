@@ -22,13 +22,13 @@ void ManagedSprite_SetDrawPriority(void *sprite, int priority);
 BOOL SpriteManager_UnloadCharObjById(void *manager, u32 id);
 void GlobalTerminalNet_CopyRequestHeader(const void *src, void *dst);
 void VsRecorder_SetSubState(void *p, int state);
-void ov40_0222DEAC(void *p);
-void *ov40_0222FEA0(void *p, void *a1, void *a2, u32 a3, u32 a4, int a5);
-void ov40_0222FF48(void *p, void *a1, void *a2);
-void ov40_0222FF64(void *p, void *a1, void *a2);
+void VsRecorder_RemoveTopMessage(void *p);
+void *VsRecorder_NewMonIcon(void *p, void *a1, void *a2, u32 a3, u32 a4, int a5);
+void VsRecorder_DeleteMonIcon(void *p, void *a1, void *a2);
+void VsRecorder_DeleteSprite(void *p, void *a1, void *a2);
 int ov40_022303B8(void *p);
-void ov40_02230944(void *p);
-void ov40_02230964(void *p, int value);
+void VsRecorder_OnTouchConfirm(void *p);
+void VsRecorder_SetVBlankPaused(void *p, int value);
 void ov40_0223A3BC(void *p);
 void ov40_0223CE38(void *p);
 
@@ -54,11 +54,11 @@ void ov40_0223CE64(u32 a, int b, void *p) {
     }
     switch (a) {
     case 0:
-        ov40_02230944(p);
+        VsRecorder_OnTouchConfirm(p);
         VsRecorder_SetSubState(p, 8);
         break;
     case 1:
-        ov40_02230944(p);
+        VsRecorder_OnTouchConfirm(p);
         if (BattleRecord_Exists()) {
             VsRecorder_SetSubState(p, 9);
         } else {
@@ -67,7 +67,7 @@ void ov40_0223CE64(u32 a, int b, void *p) {
         }
         break;
     case 2:
-        ov40_02230944(p);
+        VsRecorder_OnTouchConfirm(p);
         if (BattleRecord_Exists()) {
             VsRecorder_SetSubState(p, 0xb);
         } else {
@@ -76,7 +76,7 @@ void ov40_0223CE64(u32 a, int b, void *p) {
         }
         break;
     case 3:
-        ov40_02230944(p);
+        VsRecorder_OnTouchConfirm(p);
         VsRecorder_SetSubState(p, 0xa);
         break;
     }
@@ -98,11 +98,11 @@ void ov40_0223CF00(u32 a, int b, void *p) {
         } else {
             VsRecorder_SetSubState(p, 0x11);
         }
-        ov40_02230944(p);
+        VsRecorder_OnTouchConfirm(p);
         break;
     case 3:
-        ov40_02230944(p);
-        ov40_0222DEAC(p);
+        VsRecorder_OnTouchConfirm(p);
+        VsRecorder_RemoveTopMessage(p);
         VsRecorder_SetSubState(p, 0xd);
         break;
     }
@@ -114,12 +114,12 @@ void ov40_0223CF70(u32 a, int b, void *p) {
     }
     switch (a) {
     case 0:
-        ov40_02230944(p);
+        VsRecorder_OnTouchConfirm(p);
         ov40_0223CE38(p);
         VsRecorder_SetSubState(p, 0x11);
         break;
     case 1:
-        ov40_02230944(p);
+        VsRecorder_OnTouchConfirm(p);
         VsRecorder_SetSubState(p, 0x10);
         break;
     }

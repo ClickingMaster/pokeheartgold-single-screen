@@ -22,13 +22,13 @@ void ManagedSprite_SetDrawPriority(void *sprite, int priority);
 BOOL SpriteManager_UnloadCharObjById(void *manager, u32 id);
 void GlobalTerminalNet_CopyRequestHeader(const void *src, void *dst);
 void VsRecorder_SetSubState(void *p, int state);
-void ov40_0222DEAC(void *p);
-void *ov40_0222FEA0(void *p, void *a1, void *a2, u32 a3, u32 a4, int a5);
-void ov40_0222FF48(void *p, void *a1, void *a2);
-void ov40_0222FF64(void *p, void *a1, void *a2);
+void VsRecorder_RemoveTopMessage(void *p);
+void *VsRecorder_NewMonIcon(void *p, void *a1, void *a2, u32 a3, u32 a4, int a5);
+void VsRecorder_DeleteMonIcon(void *p, void *a1, void *a2);
+void VsRecorder_DeleteSprite(void *p, void *a1, void *a2);
 int ov40_022303B8(void *p);
-void ov40_02230944(void *p);
-void ov40_02230964(void *p, int value);
+void VsRecorder_OnTouchConfirm(void *p);
+void VsRecorder_SetVBlankPaused(void *p, int value);
 void ov40_0223A3BC(void *p);
 void ov40_0223CE38(void *p);
 
@@ -72,7 +72,7 @@ void ov40_0223D1F0(void *p) {
         u8 *r = q;
         for (i = 0; i < 6; i++, r += 8) {
             if (PTR(r, 0x2090) != NULL) {
-                ov40_0222FF48(p, PTR(r, 0x208c), PTR(r, 0x2090));
+                VsRecorder_DeleteMonIcon(p, PTR(r, 0x208c), PTR(r, 0x2090));
                 PTR(r, 0x2090) = NULL;
             }
         }

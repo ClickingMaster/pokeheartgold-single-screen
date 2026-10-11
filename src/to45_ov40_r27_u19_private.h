@@ -8,7 +8,7 @@
 
 void *VsRecorder_NewMessageFormat(u32 heapId);
 void *ov40_0222DD68(u32 heapId, u32 unused, u32 *count);
-void ov40_02230DCC(void *scene, void *string);
+void VsRecorder_SanitizeName(void *scene, void *string);
 
 int WindowIsInUse(const void *window);
 void InitWindow(void *window);

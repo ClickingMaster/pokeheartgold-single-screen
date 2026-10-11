@@ -60,10 +60,10 @@ void VsRecorder_UpdateMenuTouch(void *p);
 void VsRecorder_GetSpritePos(void *p, s16 *x, s16 *y);
 void VsRecorder_FreeTextSprite(void *p);
 void ov40_0222D7DC(void *p);
-void ov40_0222DE40(void *p);
-void ov40_0222DED0(void *p, int value);
-void ov40_0222DFB0(void *p);
-void ov40_02230944(void *p);
+void VsRecorder_HideNotice(void *p);
+void VsRecorder_ShowTopMessage(void *p, int value);
+void VsRecorder_HideTopMessage(void *p);
+void VsRecorder_OnTouchConfirm(void *p);
 void *ov40_0223D540(void *p);
 
 extern const u8 ov40_02245100[];
@@ -72,8 +72,8 @@ extern const u8 ov40_022451C8[];
 extern const u8 ov40_022451CC[];
 extern const s16 _02245CC0[];
 
-void *ov40_022309DC(void *p);
-void ov40_02230E08(void *str, u32 heapId);
+void *VsRecorder_SetupMessageScreenMsg(void *p);
+void VsRecorder_SetPlaceholderName(void *str, u32 heapId);
 int ov40_0223142C(void *p);
 int ov40_0223169C(void *p);
 int ov40_02231700(void);
@@ -82,16 +82,16 @@ void ov40_02235868(void *p, u32 msgId);
 void ov40_022359B4(void *p, int a);
 BOOL ov40_02235DAC(void *scene, u32 sel);
 void ov40_02235E34(void *scene, u32 sel);
-int ov40_022306C0(void *window, void *str);
+int VsRecorder_GetCenteredTextX(void *window, void *str);
 
 /* module-local prototypes */
-void ov40_02230CDC(void *p);
-void ov40_02230D20(void *p);
-BOOL ov40_02230D94(void *p, u64 val);
-void ov40_02230DCC(void *p, void *str);
-void ov40_02230E08(void *str, u32 heapId);
-void ov40_02230E34(void *p);
-void ov40_02230EB4(void *p);
+void VsRecorder_ShowMessageScreen(void *p);
+void VsRecorder_MessageScreen(void *p);
+BOOL VsRecorder_IsVideoSaved(void *p, u64 val);
+void VsRecorder_SanitizeName(void *p, void *str);
+void VsRecorder_SetPlaceholderName(void *str, u32 heapId);
+void VsRecorder_ShowTouchHere(void *p);
+void VsRecorder_HideTouchHere(void *p);
 int ov40_022313F0(void *p);
 int ov40_0223169C(void *p);
 int ov40_02231700(void);
@@ -142,11 +142,11 @@ void VsRecorder_ResetFade(void *);
 void VsRecorder_RebuildMenuRowsParent(void *);
 void VsRecorder_ClearPaletteBlend(void *);
 void VsRecorder_SetScreenIfDone(void *, u32, u32, void *);
-void ov40_0222FB90(void *, u32);
-BOOL ov40_0222FBB4(void *);
+void VsRecorder_StartFlipScreens(void *, u32);
+BOOL VsRecorder_IsFlipScreensDone(void *);
 void AccessoryPortrait_Destroy(void *);
 void FrontierCard_Delete(void *);
-void ov40_02230964(void *, u32);
+void VsRecorder_SetVBlankPaused(void *, u32);
 
 u32 ov40_0223480C(void *);
 

@@ -5,9 +5,9 @@ int ov40_022325B0(void *p) {
     switch (WORD(p, 8)) {
     case 0:
         if (WORD(w, 0xC) == 0) {
-            ov40_0223064C((u8 *)w + 0x9C, p);
+            VsRecorder_FreeVideoInfo((u8 *)w + 0x9C, p);
         } else {
-            ov40_0222E7B8((u8 *)w + 0x10, p);
+            VsRecorder_FreeProfile((u8 *)w + 0x10, p);
         }
         GfGfx_EngineATogglePlanes(4, 0);
         WORD(p, 8)
@@ -20,26 +20,26 @@ int ov40_022325B0(void *p) {
         }
         break;
     case 2:
-        ov40_02230964(p, 1);
+        VsRecorder_SetVBlankPaused(p, 1);
         if (WORD(w, 0xC) == 0) {
-            ov40_0222E79C((u8 *)w + 0x10, p);
-            ov40_0222E7DC((u8 *)w + 0x10, 0);
-            ov40_022307DC(p, 0x50, 3);
+            VsRecorder_CreateProfile((u8 *)w + 0x10, p);
+            VsRecorder_SetProfileDrawFlag((u8 *)w + 0x10, 0);
+            VsRecorder_LoadScreen(p, 0x50, 3);
         } else {
-            ov40_02230638((u8 *)w + 0x9C, p);
-            ov40_022306A0((u8 *)w + 0x9C, 0);
-            ov40_022307DC(p, ov40_02230410((u8 *)w + 0x9C), 3);
+            VsRecorder_CreateVideoInfo((u8 *)w + 0x9C, p);
+            VsRecorder_SetVideoPartyIconsDrawFlag((u8 *)w + 0x9C, 0);
+            VsRecorder_LoadScreen(p, ov40_02230410((u8 *)w + 0x9C), 3);
         }
-        ov40_02230964(p, 0);
+        VsRecorder_SetVBlankPaused(p, 0);
         WORD(p, 8)
         ++;
         break;
     case 3:
         if (VsRecorder_StepBlend(w, (u8 *)w + 4, 0, 1)) {
             if (WORD(w, 0xC) == 0) {
-                ov40_0222E7DC((u8 *)w + 0x10, 1);
+                VsRecorder_SetProfileDrawFlag((u8 *)w + 0x10, 1);
             } else {
-                ov40_022306A0((u8 *)w + 0x9C, 1);
+                VsRecorder_SetVideoPartyIconsDrawFlag((u8 *)w + 0x9C, 1);
             }
             GfGfx_EngineBTogglePlanes(4, 1);
             GfGfx_EngineATogglePlanes(4, 1);
@@ -64,7 +64,7 @@ void ov40_022326DC(void *p) {
     AddWindowParameterized(PTR(p, 0x24), win, 6, 4, 6, 0xA, 2, 0xE, 1);
     FillWindowPixelBuffer(win, 0);
     str = NewString_ReadMsgData(PTR(p, 0x48), 0x82);
-    AddTextPrinterParameterizedWithColor(win, 0, str, ov40_022306C0(win, str), 0, 0xFF, 0xF0D00, NULL);
+    AddTextPrinterParameterizedWithColor(win, 0, str, VsRecorder_GetCenteredTextX(win, str), 0, 0xFF, 0xF0D00, NULL);
     String_Delete(str);
     ScheduleWindowCopyToVram(win);
     win = (u8 *)w + 0x188;
@@ -72,7 +72,7 @@ void ov40_022326DC(void *p) {
     AddWindowParameterized(PTR(p, 0x24), win, 6, 0x12, 6, 0xA, 2, 0xE, 0x15);
     FillWindowPixelBuffer(win, 0);
     str = NewString_ReadMsgData(PTR(p, 0x48), 0x83);
-    AddTextPrinterParameterizedWithColor(win, 0, str, ov40_022306C0(win, str), 0, 0xFF, 0xF0D00, NULL);
+    AddTextPrinterParameterizedWithColor(win, 0, str, VsRecorder_GetCenteredTextX(win, str), 0, 0xFF, 0xF0D00, NULL);
     String_Delete(str);
     ScheduleWindowCopyToVram(win);
 }

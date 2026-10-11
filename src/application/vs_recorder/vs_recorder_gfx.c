@@ -47,7 +47,7 @@ void VsRecorder_SetMenuRowText(VsRecorderWork *work, VsRecorderMenuRow *row, int
             MessageFormat *format = VsRecorder_NewMessageFormat(HEAP_ID_109);
             String *template = NewString_ReadMsgData(work->msgData, 7);
             String *name = FrontierCard_NewNameString((const u16 *)work->videoOwners[entry->selection], HEAP_ID_109);
-            ov40_02230DCC(work, name);
+            VsRecorder_SanitizeName(work, name);
             str = String_New(0xFF, HEAP_ID_109);
             BufferString(format, 0, name, 0, 1, 2);
             StringExpandPlaceholders(format, str, template);
@@ -63,7 +63,7 @@ void VsRecorder_SetMenuRowText(VsRecorderWork *work, VsRecorderMenuRow *row, int
             MessageFormat *format = VsRecorder_NewMessageFormat(HEAP_ID_109);
             String *template = NewString_ReadMsgData(work->msgData, 7);
             String *name = FrontierCard_NewNameString((const u16 *)work->videoOwners[entry->selection], HEAP_ID_109);
-            ov40_02230DCC(work, name);
+            VsRecorder_SanitizeName(work, name);
             str = String_New(0xFF, HEAP_ID_109);
             BufferString(format, 0, name, 0, 1, 2);
             StringExpandPlaceholders(format, str, template);
@@ -411,8 +411,8 @@ void VsRecorder_ReloadSchemePalettes(VsRecorderWork *work) {
     PaletteData_LoadNarc(plttData, NARC_a_1_9_1, VsRecorder_GetSchemeFileId(work, 0), HEAP_ID_109, PLTTBUF_MAIN_BG, 0x20, 0xE0);
     PaletteData_LoadNarc(plttData, NARC_a_1_9_1, VsRecorder_GetSchemeFileId(work, 0), HEAP_ID_109, PLTTBUF_SUB_BG, 0x20, 0xE0);
 
-    OrbitCursor_ReloadPalette(work->banners[0], work->colorScheme);
-    OrbitCursor_ReloadPalette(work->banners[0], work->colorScheme);
+    OrbitCursor_ReloadPalette(work->orbitCursors[0], work->colorScheme);
+    OrbitCursor_ReloadPalette(work->orbitCursors[0], work->colorScheme);
     SpriteManager_UnloadPlttObjById(spriteManager, 9999);
     SpriteManager_UnloadPlttObjById(spriteManager, 10000);
     SpriteSystem_LoadPaletteBufferFromOpenNarc(plttData, PLTTBUF_MAIN_OBJ, spriteSystem, spriteManager, narc, VsRecorder_GetSchemeFileId(work, 2), FALSE, 3, NNS_G2D_VRAM_TYPE_2DMAIN, 9999);

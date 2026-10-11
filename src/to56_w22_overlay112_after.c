@@ -38,9 +38,9 @@ void PlaySE(int);
 void MI_CpuCopy8(const void *, void *, u32);
 void Heap_Free(void *);
 
-void ov112_021F0C50(void *);
-void ov112_021F0C8C(void *, const void *);
-void ov112_021F0D04(void *);
+void PokewalkerBoxDisplay_GetMonPictureLocation(void *);
+void PokewalkerBoxDisplay_LoadMonPicture(void *, const void *);
+void PokewalkerBoxDisplay_TransferMonPicture(void *);
 void ov112_021F0D48(void *);
 void ov112_021F0DC0(void);
 void ov112_021F0DF4(void);

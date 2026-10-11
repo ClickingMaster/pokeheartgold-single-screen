@@ -2,7 +2,7 @@
 
 int ov40_0223169C(void *p) {
     if (System_GetTouchNew() && PTR(p, 0x89C) == NULL) {
-        ov40_0222DE40(p);
+        VsRecorder_HideNotice(p);
     }
     if (WORD(p, 0) == 0) {
         switch (ov40_02231700()) {

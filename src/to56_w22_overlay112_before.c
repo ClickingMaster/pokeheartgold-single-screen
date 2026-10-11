@@ -38,9 +38,9 @@ void PlaySE(int);
 void MI_CpuCopy8(const void *, void *, u32);
 void Heap_Free(void *);
 
-void ov112_021F0C50(void *);
-void ov112_021F0C8C(void *, const void *);
-void ov112_021F0D04(void *);
+void PokewalkerBoxDisplay_GetMonPictureLocation(void *);
+void PokewalkerBoxDisplay_LoadMonPicture(void *, const void *);
+void PokewalkerBoxDisplay_TransferMonPicture(void *);
 void ov112_021F0D48(void *);
 void ov112_021F0DC0(void);
 void ov112_021F0DF4(void);
@@ -49,7 +49,7 @@ BOOL ov112_021F0E60(void *);
 BOOL ov112_021F0EB4(void *);
 BOOL ov112_021F0EFC(void *);
 
-void ov112_021F0C50(void *vp) {
+void PokewalkerBoxDisplay_GetMonPictureLocation(void *vp) {
     u8 *p = vp;
     void *paletteResource = *(void **)(p + 0x164);
     NNSG2dImageProxy *image = SpriteTransfer_GetCharProxy(*(void **)(p + 0x160));
@@ -66,7 +66,7 @@ typedef struct MonImageDesc {
     u8 gender;
 } MonImageDesc;
 
-void ov112_021F0C8C(void *vp, const void *descv) {
+void PokewalkerBoxDisplay_LoadMonPicture(void *vp, const void *descv) {
     u8 *p = vp;
     const MonImageDesc *desc = descv;
     PokepicTemplate tmpl;
@@ -82,7 +82,7 @@ void ov112_021F0C8C(void *vp, const void *descv) {
     Heap_Free(raw);
 }
 
-void ov112_021F0D04(void *vp) {
+void PokewalkerBoxDisplay_TransferMonPicture(void *vp) {
     u8 *p = vp;
     DC_FlushRange(*(void **)(p + 0x1b8), 0xc80);
     GXS_LoadOBJ(*(void **)(p + 0x1b8), *(u32 *)(p + 0x1dc), 0xc80);

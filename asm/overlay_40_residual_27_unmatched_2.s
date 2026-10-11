@@ -1,12 +1,12 @@
 	.include "asm/macros.inc"
 	.include "overlay_40.inc"
 	.include "global.inc"
-	.public ov40_02230D94
+	.public VsRecorder_IsVideoSaved
 	.public BattleRecordHeader_GetField
 	.text
 
-	thumb_func_start ov40_02230D94
-ov40_02230D94: ; 0x02230D94
+	thumb_func_start VsRecorder_IsVideoSaved
+VsRecorder_IsVideoSaved: ; 0x02230D94
 	push {r3, r4, r5, r6, r7, lr}
 	add r6, r1, #0
 	add r7, r2, #0
@@ -35,4 +35,4 @@ _02230DBA:
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
 _02230DC8: .word 0x0000087C
-	thumb_func_end ov40_02230D94
+	thumb_func_end VsRecorder_IsVideoSaved

@@ -24,7 +24,7 @@ void ov40_02240E28(void *p, int msgId, int unused) {
         void *s;
         str = String_New(0xFF, 0x6D);
         s = FrontierCard_NewNameString(v, 0x6D);
-        ov40_02230DCC(p, s);
+        VsRecorder_SanitizeName(p, s);
         name = NewString_ReadMsgData(PTR(p, 0x48), msgId);
         BufferString(fmt, 0, s, 0, 1, 2);
         StringExpandPlaceholders(fmt, str, name);
@@ -51,7 +51,7 @@ void ov40_02240F24(void *p, int msgId, int idx) {
         void *s;
         str = String_New(0xFF, 0x6D);
         s = FrontierCard_NewNameString(v, 0x6D);
-        ov40_02230DCC(p, s);
+        VsRecorder_SanitizeName(p, s);
         name = NewString_ReadMsgData(PTR(p, 0x48), msgId);
         BufferString(fmt, 0, s, 0, 1, 2);
         StringExpandPlaceholders(fmt, str, name);
@@ -65,7 +65,7 @@ void ov40_02240F24(void *p, int msgId, int idx) {
         void *s;
         str = String_New(0xFF, 0x6D);
         s = FrontierCard_NewNameString(v, 0x6D);
-        ov40_02230DCC(p, s);
+        VsRecorder_SanitizeName(p, s);
         name = NewString_ReadMsgData(PTR(p, 0x48), msgId);
         BufferString(fmt, 0, s, 0, 1, 2);
         StringExpandPlaceholders(fmt, str, name);
@@ -134,16 +134,16 @@ void ov40_02241114(void *p) {
 
 int ov40_02241144(void *p) {
     void *w = PTR(p, 0x860);
-    if (ov40_02230D94(p, BattleRecordHeader_GetField(BattleRecord_GetHeader(), 4, 0))) {
+    if (VsRecorder_IsVideoSaved(p, BattleRecordHeader_GetField(BattleRecord_GetHeader(), 4, 0))) {
         switch (WORD(p, 8)) {
         case 0:
-            ov40_02230964(p, (void *)1);
+            VsRecorder_SetVBlankPaused(p, (void *)1);
             if (WORD(w, 0x1CC) == 0) {
-                ov40_0223064C((u8 *)w + 0x10C, p);
+                VsRecorder_FreeVideoInfo((u8 *)w + 0x10C, p);
             } else {
-                ov40_0222E7B8((u8 *)w + 0x80, p);
+                VsRecorder_FreeProfile((u8 *)w + 0x80, p);
             }
-            ov40_02230964(p, NULL);
+            VsRecorder_SetVBlankPaused(p, NULL);
             ov40_02241A34(p);
             GfGfx_EngineATogglePlanes(4, 0);
             GfGfx_EngineBTogglePlanes(4, 0);
@@ -153,10 +153,10 @@ int ov40_02241144(void *p) {
         case 1:
             VsRecorder_StepFade((int *)w + 2, 1);
             if (VsRecorder_StepBlend((int *)w, (int *)w + 1, 1, 0)) {
-                ov40_02230964(p, (void *)1);
+                VsRecorder_SetVBlankPaused(p, (void *)1);
                 ov40_022421FC(p);
                 ov40_02241054(p);
-                ov40_02230964(p, NULL);
+                VsRecorder_SetVBlankPaused(p, NULL);
                 BgClearTilemapBufferAndCommit(PTR(p, 0x24), 3);
                 BgClearTilemapBufferAndCommit(PTR(p, 0x24), 7);
                 WORD(p, 8)
@@ -165,13 +165,13 @@ int ov40_02241144(void *p) {
             BLEND(p, w, 3, 0xC);
             break;
         case 2:
-            ov40_0222DED0(p, 0x115);
+            VsRecorder_ShowTopMessage(p, 0x115);
             WORD(p, 8)
             ++;
             break;
         case 3:
             if (System_GetTouchNew()) {
-                ov40_0222DFB0(p);
+                VsRecorder_HideTopMessage(p);
                 BgClearTilemapBufferAndCommit(PTR(p, 0x24), 2);
                 BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
                 GfGfx_EngineBTogglePlanes(4, 0);
@@ -194,16 +194,16 @@ int ov40_02241144(void *p) {
             TouchHitboxController_Destroy(PTR(w, 0x60C));
             TouchHitboxController_Destroy(PTR(w, 0x610));
             VsRecorder_ResetFade((int *)w + 2);
-            ov40_02230964(p, (void *)1);
+            VsRecorder_SetVBlankPaused(p, (void *)1);
             ov40_02240910(p);
             VsRecorder_RebuildMenuRowsParent(p);
-            ov40_02230964(p, NULL);
-            ov40_0222FB90(p, 1);
+            VsRecorder_SetVBlankPaused(p, NULL);
+            VsRecorder_StartFlipScreens(p, 1);
             WORD(p, 8)
             ++;
             break;
         default:
-            if (ov40_0222FBB4(p) != NULL) {
+            if (VsRecorder_IsFlipScreensDone(p) != NULL) {
                 if (VsRecorder_StepFade((int *)w + 2, 0)) {
                     VsRecorder_ClearPaletteBlend(p);
                     VsRecorder_ResetFade((int *)w + 2);

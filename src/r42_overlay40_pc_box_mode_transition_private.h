@@ -8,15 +8,15 @@
 #define S32(p, off)  (*(s32 *)((u8 *)(p) + (off)))
 
 BOOL TouchscreenHitbox_TouchNewIsIn(const void *hitbox);
-void ov40_02230944(void *work);
+void VsRecorder_OnTouchConfirm(void *work);
 void VsRecorder_SetSubState(void *work, int state);
 void Thunk_G3X_Reset(void);
 void AccessoryPortrait_Draw(void *p);
 void RequestSwap3DBuffers(int a, int b);
 void BgClearTilemapBufferAndCommit(void *bgConfig, int bgId);
 void ov40_02236130(void *work);
-void ov40_02230964(void *work, int value);
-void ov40_0222E7B8(void *p, void *work);
+void VsRecorder_SetVBlankPaused(void *work, int value);
+void VsRecorder_FreeProfile(void *p, void *work);
 void ov40_0223584C(void *work);
 void VsRecorder_StepFade(void *p, int value);
 BOOL VsRecorder_StepBlend(void *a, void *b, int c, int d);
@@ -29,7 +29,7 @@ void *GlobalTerminalNet_UnpackDressUpPhoto(void *p, void *q);
 void *AccessoryPortrait_Create(void *p, void *q);
 void AccessoryPortrait_SetMonVisible(void *p, int value);
 void ov40_02235940(void);
-void ov40_022307DC(void *work, int a, int b);
+void VsRecorder_LoadScreen(void *work, int a, int b);
 void GfGfx_EngineBTogglePlanes(int planes, int enable);
 void GfGfx_EngineATogglePlanes(int planes, int enable);
 void Main_SetVBlankIntrCB(void (*callback)(void *), void *arg);

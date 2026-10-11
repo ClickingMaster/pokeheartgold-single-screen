@@ -12,14 +12,14 @@ extern int VsRecorder_StepFade(Anim*,int);
 extern void *Save_FrontierData_Get(void*);
 extern u32 FrontierData_BattlePointAction(void*,int,int);
 extern void PaletteData_BlendPalettes(void*,int,u16,u8,u16);
-extern void ov40_02230964(Work*,int);
+extern void VsRecorder_SetVBlankPaused(Work*,int);
 extern void VsRecorder_FreeMenuRows(Work*);
-extern void ov40_0222FB90(Work*,int);
+extern void VsRecorder_StartFlipScreens(Work*,int);
 extern void OrbitCursor_SetVisible(void*,int);
-extern void ov40_02230738(void);
+extern void VsRecorder_ResetBgPriorities(void);
 extern void SetBgPriority(int,int);
 extern void ov40_02233238(Work*);
-extern int ov40_0222FBB4(Work*);
+extern int VsRecorder_IsFlipScreensDone(Work*);
 extern void ov40_0223316C(Work*);
 extern void ov40_022335F4(Work*);
 extern void ov40_02233550(Work*);
@@ -29,4 +29,4 @@ extern void VsRecorder_StepBlend(int*,int*,int,int);
 extern void ov40_02233C3C(Work*);
 extern void VsRecorder_SetSubState(Work*,int);
 int ov40_02233CAC(Work*);
-int ov40_02233CAC(Work*w){Anim *a;if(w->state==0){a=Heap_Alloc(109,sizeof(*a));MI_CpuFill8(a,0,sizeof(*a));w->anim=a;a->blend=0;int i=0;Anim *p=a;int angle=0;for(;i<5;i++,p=(Anim*)((u8*)p+4),angle+=72){if((u32)(i-2)<=1)p->positions[0]=52;else p->positions[0]=64;p->angles[0]=angle;p->values[0]=0.2f;}BgClearTilemapBufferAndCommit(w->bg,3);BgClearTilemapBufferAndCommit(w->bg,2);BgClearTilemapBufferAndCommit(w->bg,7);BgClearTilemapBufferAndCommit(w->bg,6);VsRecorder_InitBgBlend(&a->a,&a->b,0);VsRecorder_ApplyBlend(&a->a,&a->b,0,0,4,2,0);PlaySE(0x579);w->state++;}else a=w->anim;switch(w->state){case 1:if(VsRecorder_StepFade(a,1)){a->points=FrontierData_BattlePointAction(Save_FrontierData_Get(w->save),0,0);w->state++;}PaletteData_BlendPalettes(w->palette,2,12,(u8)a->blend,(u16)w->color);PaletteData_BlendPalettes(w->palette,3,12,(u8)a->blend,(u16)w->color);PaletteData_BlendPalettes(w->palette,1,2,(u8)a->blend,(u16)w->color);break;case 2:ov40_02230964(w,1);VsRecorder_FreeMenuRows(w);ov40_02230964(w,0);ov40_0222FB90(w,0);OrbitCursor_SetVisible(w->object,0);ov40_02230738();SetBgPriority(6,2);ov40_02233238(w);PaletteData_BlendPalettes(w->palette,3,28,(u8)a->blend,(u16)w->color);w->state++;break;case 3:if(ov40_0222FBB4(w)){ov40_02230964(w,1);ov40_0223316C(w);ov40_022335F4(w);ov40_02233550(w);ov40_02230964(w,0);GfGfx_EngineBTogglePlanes(8,1);GfGfx_EngineBTogglePlanes(4,1);w->state++;}break;case 4:{int result=ov40_022339CC(w);VsRecorder_StepBlend(&a->a,&a->b,0,0);VsRecorder_StepFade(a,0);if(result==0){w->state++;ov40_02233C3C(w);}PaletteData_BlendPalettes(w->palette,3,28,(u8)a->blend,(u16)w->color);break;}default:VsRecorder_SetSubState(w,1);break;}return 0;}
+int ov40_02233CAC(Work*w){Anim *a;if(w->state==0){a=Heap_Alloc(109,sizeof(*a));MI_CpuFill8(a,0,sizeof(*a));w->anim=a;a->blend=0;int i=0;Anim *p=a;int angle=0;for(;i<5;i++,p=(Anim*)((u8*)p+4),angle+=72){if((u32)(i-2)<=1)p->positions[0]=52;else p->positions[0]=64;p->angles[0]=angle;p->values[0]=0.2f;}BgClearTilemapBufferAndCommit(w->bg,3);BgClearTilemapBufferAndCommit(w->bg,2);BgClearTilemapBufferAndCommit(w->bg,7);BgClearTilemapBufferAndCommit(w->bg,6);VsRecorder_InitBgBlend(&a->a,&a->b,0);VsRecorder_ApplyBlend(&a->a,&a->b,0,0,4,2,0);PlaySE(0x579);w->state++;}else a=w->anim;switch(w->state){case 1:if(VsRecorder_StepFade(a,1)){a->points=FrontierData_BattlePointAction(Save_FrontierData_Get(w->save),0,0);w->state++;}PaletteData_BlendPalettes(w->palette,2,12,(u8)a->blend,(u16)w->color);PaletteData_BlendPalettes(w->palette,3,12,(u8)a->blend,(u16)w->color);PaletteData_BlendPalettes(w->palette,1,2,(u8)a->blend,(u16)w->color);break;case 2:VsRecorder_SetVBlankPaused(w,1);VsRecorder_FreeMenuRows(w);VsRecorder_SetVBlankPaused(w,0);VsRecorder_StartFlipScreens(w,0);OrbitCursor_SetVisible(w->object,0);VsRecorder_ResetBgPriorities();SetBgPriority(6,2);ov40_02233238(w);PaletteData_BlendPalettes(w->palette,3,28,(u8)a->blend,(u16)w->color);w->state++;break;case 3:if(VsRecorder_IsFlipScreensDone(w)){VsRecorder_SetVBlankPaused(w,1);ov40_0223316C(w);ov40_022335F4(w);ov40_02233550(w);VsRecorder_SetVBlankPaused(w,0);GfGfx_EngineBTogglePlanes(8,1);GfGfx_EngineBTogglePlanes(4,1);w->state++;}break;case 4:{int result=ov40_022339CC(w);VsRecorder_StepBlend(&a->a,&a->b,0,0);VsRecorder_StepFade(a,0);if(result==0){w->state++;ov40_02233C3C(w);}PaletteData_BlendPalettes(w->palette,3,28,(u8)a->blend,(u16)w->color);break;}default:VsRecorder_SetSubState(w,1);break;}return 0;}

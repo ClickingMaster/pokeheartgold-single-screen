@@ -23,14 +23,14 @@ int ov40_02244514(void *p) {
         SetBgPriority(7, 2);
         GfGfxLoader_LoadCharDataFromOpenNarc(PTR(p, 0x14), 0x3E, PTR(p, 0x24), 3, 0, 0, 0, 0x6D);
         GfGfxLoader_LoadCharDataFromOpenNarc(PTR(p, 0x14), 0x3E, PTR(p, 0x24), 7, 0, 0, 0, 0x6D);
-        ov40_02230964(p, 1);
+        VsRecorder_SetVBlankPaused(p, 1);
         VsRecorder_FreeMenuRows(p);
-        ov40_02230964(p, 0);
+        VsRecorder_SetVBlankPaused(p, 0);
         WORD(p, 8)
         ++;
         break;
     default:
-        ov40_0222FB90(p, 0);
+        VsRecorder_StartFlipScreens(p, 0);
         VsRecorder_SetSubState(p, 2);
         break;
     }

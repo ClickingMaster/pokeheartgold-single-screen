@@ -11,11 +11,11 @@ typedef struct Ov40R31Work {
 void ov40_02238304(void *);
 void ov40_02237C74(void *);
 void ov40_02237D6C(void *);
-void ov40_02230964(void *, u32);
-void ov40_0222FA24(void *);
-void ov40_0222F720(void *);
-void ov40_0222F920(void *, void *);
-void ov40_0222E7B8(void *, void *);
+void VsRecorder_SetVBlankPaused(void *, u32);
+void VsRecorder_FreeTouchScroll(void *);
+void VsRecorder_RemoveListWindow(void *);
+void VsRecorder_FreeListArrows(void *, void *);
+void VsRecorder_FreeProfile(void *, void *);
 void ov40_022361B0(void *);
 void ov40_02236EB4(void *);
 void ov40_0223707C(void *, u32);

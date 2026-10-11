@@ -4,20 +4,20 @@ int ov40_02238D5C(void *p) {
     void *ctx = PTR(p, 0x860);
     switch (U32(p, 8)) {
     case 0:
-        ov40_02230964(p, 1);
+        VsRecorder_SetVBlankPaused(p, 1);
         ov40_02237008(p);
         ov40_02236534(p);
         OrbitCursor_SetActive(PTR(p, 0x6F4), 0);
         OrbitCursor_SetVisible(PTR(p, 0x6F4), 0);
         OrbitCursor_SetActive(PTR(p, 0x6F0), 1);
         OrbitCursor_SetVisible(PTR(p, 0x6F0), 0);
-        ov40_02230964(p, 0);
-        ov40_0222FB90(p, 1);
+        VsRecorder_SetVBlankPaused(p, 0);
+        VsRecorder_StartFlipScreens(p, 1);
         U32(p, 8)
         ++;
         break;
     case 1:
-        if (ov40_0222FBB4() != 0) {
+        if (VsRecorder_IsFlipScreensDone() != 0) {
             int i;
             for (i = 0; i < 5; i++) {
                 TouchHitboxController_Destroy(((SolCtx40 *)ctx)->hitbox[i]);

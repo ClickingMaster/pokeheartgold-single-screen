@@ -15,19 +15,19 @@ int ov40_022366CC(void *p) {
         PaletteData_BlendPalettes(PTR(p, 0x28), 1, 2, (u8)WORD(w, 0x1AC), (u16)WORD(p, 0x58));
         break;
     case 1:
-        ov40_02230964(p, 1);
+        VsRecorder_SetVBlankPaused(p, 1);
         VsRecorder_FreeMenuRows(p);
-        ov40_02230964(p, 0);
-        ov40_0222FB90(p, 0);
+        VsRecorder_SetVBlankPaused(p, 0);
+        VsRecorder_StartFlipScreens(p, 0);
         OrbitCursor_SetVisible(PTR(p, 0x6F0), 0);
         WORD(p, 8)
         ++;
         break;
     case 2:
-        if (ov40_0222FBB4(p)) {
-            ov40_02230964(p, 1);
+        if (VsRecorder_IsFlipScreensDone(p)) {
+            VsRecorder_SetVBlankPaused(p, 1);
             ov40_022364D0(p);
-            ov40_02230738(ov40_02230964(p, 0));
+            VsRecorder_ResetBgPriorities(VsRecorder_SetVBlankPaused(p, 0));
             WORD(p, 8)
             ++;
         }

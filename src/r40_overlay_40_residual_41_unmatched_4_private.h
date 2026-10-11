@@ -9,7 +9,7 @@
 void *VsRecorder_NewMessageFormat(u32 heapId);
 void *String_New(u32 size, u32 heapId);
 void *FrontierCard_NewNameString(u32 value, u32 heapId);
-void ov40_02230DCC(void *work, void *string);
+void VsRecorder_SanitizeName(void *work, void *string);
 void *NewString_ReadMsgData(void *msgData, int msgId);
 void BufferString(void *format, u32 index, void *string, int a3, int a4, int a5);
 void StringExpandPlaceholders(void *format, void *dest, void *src);
@@ -20,7 +20,7 @@ u8 AddTextPrinterParameterizedWithColor(void *window, int fontId, void *string, 
 void ScheduleWindowCopyToVram(void *window);
 void InitWindow(void *window);
 void AddWindowParameterized(void *bgConfig, void *window, int bgId, int x, int y, int width, int height, int palette, int baseTile);
-int ov40_022306C0(void *window, void *string);
+int VsRecorder_GetCenteredTextX(void *window, void *string);
 void ov40_022442F0(void *p, int msgId, int idx);
 void ov40_022443B4(void *p);
 

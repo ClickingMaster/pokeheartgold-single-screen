@@ -30,7 +30,7 @@ typedef struct Ov40Unk {
 
 extern const Ov40WinRect ov40_02245268[];
 
-u32 ov40_022306C0(Window *window, String *string);
+u32 VsRecorder_GetCenteredTextX(Window *window, String *string);
 void ov40_02237C9C(Ov40Unk *data);
 
 #pragma optimization_level 2
@@ -56,7 +56,7 @@ void ov40_02237C9C(Ov40Unk *data) {
         FillWindowPixelBuffer(window, 0);
         if (i == 0) {
             string = NewString_ReadMsgData(data->msgData, sub->unk380 + 0x136);
-            textX = ov40_022306C0(window, string);
+            textX = VsRecorder_GetCenteredTextX(window, string);
             textY = 0;
         }
         if (string != NULL) {

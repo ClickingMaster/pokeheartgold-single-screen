@@ -37,7 +37,7 @@ typedef struct {
 
 extern const Ov40Order ov40_0224554C;
 BOOL ov40_022303B8(u16 *species);
-ManagedSprite *ov40_0222FEA0(Ov40Work *work, void *a1, int resId, int species, int form, int a5);
+ManagedSprite *VsRecorder_NewMonIcon(Ov40Work *work, void *a1, int resId, int species, int form, int a5);
 void ov40_0223A3BC(Ov40Work *work);
 void ov40_0223D008(Ov40Work *work);
 
@@ -89,7 +89,7 @@ void ov40_0223D008(Ov40Work *work) {
             int sp = species[k];
             int fm = forms[k];
             data->slots[i][k].resId = data->resCounter;
-            data->slots[i][k].sprite = ov40_0222FEA0(work, data->unk50C, data->slots[i][k].resId, sp, fm, 0);
+            data->slots[i][k].sprite = VsRecorder_NewMonIcon(work, data->unk50C, data->slots[i][k].resId, sp, fm, 0);
             if (data->slots[i][k].sprite != NULL) {
                 ManagedSprite_SetDrawPriority(data->slots[i][k].sprite, 6 - k);
             }

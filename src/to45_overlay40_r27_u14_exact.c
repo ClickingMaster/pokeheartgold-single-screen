@@ -23,10 +23,10 @@ int ov40_02233F28(void *p) {
         WORD(p, 8)
         ++;
     case 2:
-        ov40_02230964(p, 1);
+        VsRecorder_SetVBlankPaused(p, 1);
         ov40_022338D0(p);
         ov40_0223320C(p);
-        ov40_02230964(p, 0);
+        VsRecorder_SetVBlankPaused(p, 0);
         GfGfx_EngineATogglePlanes(8, 0);
         GfGfx_EngineATogglePlanes(4, 0);
         GfGfx_EngineBTogglePlanes(8, 0);
@@ -37,9 +37,9 @@ int ov40_02233F28(void *p) {
         break;
     case 3:
         VsRecorder_SetScreensFlipped(1);
-        ov40_02230964(p, 1);
+        VsRecorder_SetVBlankPaused(p, 1);
         VsRecorder_RebuildMenuRowsParent(p);
-        ov40_02230964(p, 0);
+        VsRecorder_SetVBlankPaused(p, 0);
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 2);
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 3);
@@ -125,18 +125,18 @@ int ov40_022341E0(void *p) {
         ++;
         break;
     case 2:
-        ov40_0222FB90(p, 0);
-        ov40_02230964(p, 1);
+        VsRecorder_StartFlipScreens(p, 0);
+        VsRecorder_SetVBlankPaused(p, 1);
         WORD(p, 8)
         ++;
         break;
     default:
-        if (ov40_0222FBB4(p)) {
-            ov40_02230964(p, 0);
-            ov40_02230964(p, 1);
+        if (VsRecorder_IsFlipScreensDone(p)) {
+            VsRecorder_SetVBlankPaused(p, 0);
+            VsRecorder_SetVBlankPaused(p, 1);
             VsRecorder_FreeMenuRows(p);
             ov40_02235A30(p);
-            ov40_02230964(p, 0);
+            VsRecorder_SetVBlankPaused(p, 0);
             GfGfxLoader_LoadCharDataFromOpenNarc(PTR(p, 0x14), 0x3E, PTR(p, 0x24), 3, 0, 0, 0, 0x6D);
             GfGfxLoader_LoadCharDataFromOpenNarc(PTR(p, 0x14), 0x3E, PTR(p, 0x24), 7, 0, 0, 0, 0x6D);
             VsRecorder_SetSubState(p, 2);
@@ -152,17 +152,17 @@ int ov40_02234330(void *p) {
     switch (WORD(p, 8)) {
     case 0:
         ov40_02235940(p);
-        ov40_022307DC(p, 0x23, 3);
-        ov40_022307DC(p, 0x25, 7);
+        VsRecorder_LoadScreen(p, 0x23, 3);
+        VsRecorder_LoadScreen(p, 0x25, 7);
         GfGfx_EngineBTogglePlanes(8, 1);
         GfGfx_EngineATogglePlanes(8, 1);
-        ov40_02230964(p, 1);
+        VsRecorder_SetVBlankPaused(p, 1);
         PTR(inner, 0x22C) = Save_FashionData_GetEntry(Save_FashionData_Get(PTR(p, 0x830)), 0);
         if (PTR(inner, 0x228) == NULL) {
             PTR(inner, 0x228) = AccessoryPortrait_Create((u8 *)inner + 0x218, PTR(inner, 0x22C));
             AccessoryPortrait_SetMonVisible(PTR(inner, 0x228), 1);
         }
-        ov40_02230964(p, 0);
+        VsRecorder_SetVBlankPaused(p, 0);
         GfGfx_EngineATogglePlanes(4, 0);
         GfGfx_EngineATogglePlanes(1, 0);
         Main_SetVBlankIntrCB(ov40_02235900, p);

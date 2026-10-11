@@ -23,24 +23,24 @@
 	.public VsRecorder_StepFade
 	.public VsRecorder_ResetFade
 	.public VsRecorder_ClearPaletteBlend
-	.public ov40_0222DEAC
-	.public ov40_0222E79C
-	.public ov40_0222E7B8
-	.public ov40_0222E7DC
-	.public ov40_0222F734
-	.public ov40_0222FB90
-	.public ov40_0222FBB4
+	.public VsRecorder_RemoveTopMessage
+	.public VsRecorder_CreateProfile
+	.public VsRecorder_FreeProfile
+	.public VsRecorder_SetProfileDrawFlag
+	.public VsRecorder_ClearListWindow
+	.public VsRecorder_StartFlipScreens
+	.public VsRecorder_IsFlipScreensDone
 	.public ov40_0222FC14
-	.public ov40_0222FCCC
-	.public ov40_0222FDC4
+	.public VsRecorder_LoadSavedVideos
+	.public VsRecorder_FreeSavedVideos
 	.public ov40_02230410
-	.public ov40_02230638
-	.public ov40_0223064C
-	.public ov40_022306A0
+	.public VsRecorder_CreateVideoInfo
+	.public VsRecorder_FreeVideoInfo
+	.public VsRecorder_SetVideoPartyIconsDrawFlag
 	.public ov40_022306E0
-	.public ov40_0223077C
-	.public ov40_022307DC
-	.public ov40_02230964
+	.public VsRecorder_PlaceOrbitCursor
+	.public VsRecorder_LoadScreen
+	.public VsRecorder_SetVBlankPaused
 	.public ov40_0223A510
 	.public ov40_0223A83C
 	.public ov40_0223A874
@@ -245,7 +245,7 @@ _0223A9D4:
 	ldr r1, [r4, r1]
 	mov r2, #0x80
 	mov r3, #0x60
-	bl ov40_0223077C
+	bl VsRecorder_PlaceOrbitCursor
 	mov r0, #0x6f
 	lsl r0, r0, #4
 	ldr r0, [r4, r0]
@@ -333,15 +333,15 @@ _0223AA9C:
 	b _0223ABFC
 _0223AA9E:
 	add r0, r4, #0
-	bl ov40_0222DEAC
+	bl VsRecorder_RemoveTopMessage
 	add r0, r4, #0
 	mov r1, #1
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	add r0, r4, #0
 	bl ov40_0223B44C
 	add r0, r4, #0
 	mov r1, #0
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	mov r0, #0x6f
 	lsl r0, r0, #4
 	ldr r0, [r4, r0]
@@ -354,12 +354,12 @@ _0223AA9E:
 	add r2, r1, #0
 	bl OrbitCursor_SetRadius
 	add r0, r4, #0
-	bl ov40_0222FDC4
+	bl VsRecorder_FreeSavedVideos
 	add r0, r4, #0
-	bl ov40_0222FCCC
+	bl VsRecorder_LoadSavedVideos
 	ldr r0, _0223AC20 ; =0x0000049C
 	add r0, r4, r0
-	bl ov40_0222F734
+	bl VsRecorder_ClearListWindow
 	ldr r0, [r4, #8]
 	add r0, r0, #1
 	str r0, [r4, #8]
@@ -384,25 +384,25 @@ _0223AAF0:
 	bl VsRecorder_ResetFade
 	add r0, r4, #0
 	mov r1, #1
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	add r0, r4, #0
 	bl VsRecorder_RebuildMenuRowsParent
 	add r0, r4, #0
 	mov r1, #0
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	mov r0, #1
 	mov r1, #0x6d
 	bl sub_0203A948
 	add r0, r4, #0
 	mov r1, #1
-	bl ov40_0222FB90
+	bl VsRecorder_StartFlipScreens
 	ldr r0, [r4, #8]
 	add r0, r0, #1
 	str r0, [r4, #8]
 	b _0223ABFC
 _0223AB4A:
 	add r0, r4, #0
-	bl ov40_0222FBB4
+	bl VsRecorder_IsFlipScreensDone
 	cmp r0, #0
 	beq _0223ABFC
 	add r0, r5, #0
@@ -705,7 +705,7 @@ _0223AD9A:
 	bl GfGfxLoader_LoadCharDataFromOpenNarc
 	add r0, r4, #0
 	mov r1, #1
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	ldr r0, [r5, #0x10]
 	cmp r0, #0
 	bne _0223AE1E
@@ -713,17 +713,17 @@ _0223AD9A:
 	lsl r0, r0, #4
 	add r0, r5, r0
 	add r1, r4, #0
-	bl ov40_0223064C
+	bl VsRecorder_FreeVideoInfo
 	mov r0, #0x22
 	lsl r0, r0, #4
 	add r0, r5, r0
 	add r1, r4, #0
-	bl ov40_02230638
+	bl VsRecorder_CreateVideoInfo
 	mov r0, #0x22
 	lsl r0, r0, #4
 	add r0, r5, r0
 	mov r1, #0
-	bl ov40_022306A0
+	bl VsRecorder_SetVideoPartyIconsDrawFlag
 	mov r0, #0x22
 	lsl r0, r0, #4
 	add r0, r5, r0
@@ -731,24 +731,24 @@ _0223AD9A:
 	add r1, r0, #0
 	add r0, r4, #0
 	mov r2, #3
-	bl ov40_022307DC
+	bl VsRecorder_LoadScreen
 	b _0223AE5A
 _0223AE1E:
 	mov r0, #0x65
 	lsl r0, r0, #2
 	add r0, r5, r0
 	add r1, r4, #0
-	bl ov40_0222E7B8
+	bl VsRecorder_FreeProfile
 	mov r0, #0x65
 	lsl r0, r0, #2
 	add r0, r5, r0
 	add r1, r4, #0
-	bl ov40_0222E79C
+	bl VsRecorder_CreateProfile
 	mov r0, #0x65
 	lsl r0, r0, #2
 	add r0, r5, r0
 	mov r1, #0
-	bl ov40_0222E7DC
+	bl VsRecorder_SetProfileDrawFlag
 	mov r0, #0
 	str r0, [sp]
 	str r0, [sp, #4]
@@ -763,7 +763,7 @@ _0223AE1E:
 _0223AE5A:
 	add r0, r4, #0
 	mov r1, #0
-	bl ov40_02230964
+	bl VsRecorder_SetVBlankPaused
 	mov r0, #0
 	str r0, [sp]
 	str r0, [sp, #4]
@@ -798,14 +798,14 @@ _0223AE82:
 	lsl r0, r0, #4
 	add r0, r5, r0
 	mov r1, #1
-	bl ov40_022306A0
+	bl VsRecorder_SetVideoPartyIconsDrawFlag
 	b _0223AEBC
 _0223AEB0:
 	mov r0, #0x65
 	lsl r0, r0, #2
 	add r0, r5, r0
 	mov r1, #1
-	bl ov40_0222E7DC
+	bl VsRecorder_SetProfileDrawFlag
 _0223AEBC:
 	mov r0, #4
 	mov r1, #1

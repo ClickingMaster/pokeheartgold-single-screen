@@ -8,15 +8,16 @@
 #include "font_sprite.h"
 #include "gf_3d_vramman.h"
 #include "gf_gfx_planes.h"
+#include "global_terminal_net.h"
 #include "message_format.h"
 #include "msgdata.h"
 #include "obj_char_transfer.h"
 #include "palette.h"
+#include "pm_string.h"
 #include "pokemon_types_def.h"
 #include "pokepic.h"
 #include "save.h"
 #include "sprite_system.h"
-#include "string.h"
 #include "sys_task.h"
 #include "touch_hitbox_controller.h"
 #include "touchscreen.h"
@@ -38,6 +39,16 @@ u32 FrontierCard_GetRegion(FrontierCard *card);
 String *FrontierCard_GetGreeting(FrontierCard *card, MailMessage *message, enum HeapID heapID);
 u32 FrontierCard_GetBirthdayMonth(FrontierCard *card);
 u32 FrontierCard_GetAvatar(FrontierCard *card);
+FrontierCard *FrontierCard_New(enum HeapID heapID);
+void FrontierCard_InitFromSave(FrontierCard *card, SaveData *saveData);
+
+// battle_record.c (not in battle_recording.h)
+BOOL BattleRecord_Load(SaveData *save, enum HeapID heapID, int *out, void *battle, int index);
+void BattleRecord_Delete(void);
+void *BattleRecord_CopyHeader(enum HeapID heapID);
+FrontierCard *BattleRecord_CopyProfile(enum HeapID heapID);
+void BattleRecord_Import(void *profile, void *summary, void *data, void *battle, SaveData *save);
+u64 BattleRecordHeader_GetField(void *summary, int field, int index);
 
 // one step of a screen; TRUE when the screen is done
 typedef BOOL (*VsRecorderScreenFunc)(VsRecorderWork *work);
@@ -134,6 +145,117 @@ typedef struct VsRecorderDecor {
     int state;
 } VsRecorderDecor; // size 0x30
 
+// trainer profile panel (frontier card) on the top screen
+typedef struct VsRecorderProfile {
+    FrontierCard *card;
+    ManagedSprite *monIcon;
+    ManagedSprite *avatar;
+    Window windows[8];
+} VsRecorderProfile; // size 0x8C
+
+// one entry of a list window: message, value (message / month / species) and a ranking time
+typedef struct VsRecorderListEntry {
+    u32 msgId;
+    int value;
+    u64 time;
+} VsRecorderListEntry;
+
+typedef struct VsRecorderListConfig {
+    VsRecorderListEntry *entries;
+    int count;
+    int lineHeight; // in 16-pixel units
+    int x;
+    int y;
+    int width;
+    int height;
+    int baseTile;
+    int bgId;
+    int rows;
+    TouchscreenHitbox *hitboxes; // one per visible row, or NULL
+} VsRecorderListConfig;
+
+// a scrolling list in one BG window
+typedef struct VsRecorderListWindow {
+    int state;
+    int count;
+    s16 scroll; // first shown entry (scrolled lists)
+    u8 unk_0A[2];
+    int drawnPos; // scroll / cursor of the last redraw
+    int rows;     // visible rows
+    int pages;
+    Window window;
+    VsRecorderListConfig *config;
+    ManagedSprite *arrows[2]; // up, down
+    MsgData *msgData;
+    int cursor;    // selected entry (cursor lists)
+    int cursorRow; // row of the cursor on screen
+    int topMargin;
+    int bottomMargin;
+    int unk_48;
+    u32 unk_4C;
+} VsRecorderListWindow; // size 0x50
+
+// drag scrolling on the touch screen (two side markers)
+typedef struct VsRecorderTouchScroll {
+    u32 timer;
+    BOOL held;
+    u32 startX;
+    int lastY;
+    s16 direction; // -1 up, 1 down, 0 none
+    u8 unk_12[2];
+    BOOL enabled;
+    ManagedSprite *sprites[2];
+} VsRecorderTouchScroll; // size 0x20
+
+typedef struct VsRecorderFlipArgs {
+    int flipped;
+    u32 done;
+} VsRecorderFlipArgs;
+
+// video list received from the server
+typedef struct VsRecorderVideoList {
+    GlobalTerminalNetVideoHeader *headers[30];
+    GlobalTerminalNetVideoHeader videos[30]; // copies of the headers
+    volatile s32 count;
+    u8 flags[30]; // data[0x27] of each video
+    u8 unk_1B52[2];
+} VsRecorderVideoList; // size 0x1B54
+
+// server data of the work (0x8B4)
+typedef struct VsRecorderNetData {
+    u8 *downloadedVideo; // profile 0x80 + header 0x64 + battle
+    u8 unk_0004[0x1D54 - 4];
+    VsRecorderVideoList videoList;
+} VsRecorderNetData; // size 0x38A8
+
+// battle video info panel on the top screen: owner, battle mode, video number, party icons
+typedef struct VsRecorderVideoInfo {
+    const u16 *ownerName;
+    void *header; // battle record header
+    u8 unk_08[4];
+    ManagedSprite *monIcons[12];
+    Window windows[5];
+} VsRecorderVideoInfo; // size 0x8C
+
+// message screen (VS_RECORDER_SCREEN_MESSAGE)
+typedef struct VsRecorderMessageScreen {
+    u32 savedSubState;
+    u32 savedStep;
+    int returnScreen;
+    int msgId;
+    int step;
+    int timer;
+    BOOL active;
+} VsRecorderMessageScreen;
+
+// ring shown at a confirmed touch (one of the orbit cursors)
+typedef struct VsRecorderTouchIndicator {
+    BOOL active;
+    int counter;
+    struct OrbitCursor *cursor;
+    SysTask *task;
+} VsRecorderTouchIndicator;
+
 struct VsRecorderWork {
     u32 mode;                                // 0x0000, 0 VS Recorder item, 1-6 Global Terminal
     u32 subState;                            // 0x0004, index into the screen's function table
@@ -157,7 +279,12 @@ struct VsRecorderWork {
     u8 colorScheme;                          // 0x005C, Save_Misc
     GF3DVramMan *vramMan;                    // 0x0060
     PokepicManager *pokepicManager;          // 0x0064
-    u8 unk_0068[0x534 - 0x68];               // 0x0068, starts with the OVY_39 client work
+    u8 unk_0068[0x504 - 0x68];               // 0x0068, starts with the OVY_39 client work
+    VsRecorderMessageScreen messageScreen;   // 0x0504
+    u32 unk_0520;                            // 0x0520
+    u32 vblankBusy;                          // 0x0524
+    u32 vblankPaused;                        // 0x0528
+    VsRecorderFlipArgs flipArgs;             // 0x052C
     VsRecorderMenuRow pathRows[5];           // 0x0534
     VsRecorderMenuRow choiceRows[5];         // 0x05FC
     const VsRecorderMenuEntry *menuPath[5];  // 0x06C4, entry chosen at each depth
@@ -166,12 +293,13 @@ struct VsRecorderWork {
     int unk_06E0;                            // 0x06E0, row layout
     u32 menuCursor;                          // 0x06E4
     u8 unk_06E8[8];                          // 0x06E8
-    void *banners[2];                        // 0x06F0, top / bottom screen banner (OrbitCursor_New)
+    struct OrbitCursor *orbitCursors[2];     // 0x06F0, touch cursors (orbit_cursor.h)
     VsRecorderDecor decor[6];                // 0x06F8
     const VsRecorderMenuEntry *menu;         // 0x0818, current choices
     const VsRecorderMenuEntry *menuStack[5]; // 0x081C
     SaveData *saveData;                      // 0x0830
-    u32 unk_0834;                            // 0x0834
+    u16 unk_0834;                            // 0x0834
+    u16 unk_0836;                            // 0x0836
     u32 hasResumeScreen;                     // 0x0838
     u32 resumeScreen;                        // 0x083C
     u32 unk_0840[8];                         // 0x0840
@@ -180,11 +308,15 @@ struct VsRecorderWork {
     void *result;                            // 0x0868, Pair87 of the launcher
     u32 selection;                           // 0x086C
     u32 unk_0870;                            // 0x0870
-    u8 unk_0874[0x87C - 0x874];              // 0x0874
+    u32 battleResult;                        // 0x0874
+    u32 unk_0878;                            // 0x0878
     void *savedVideos[4];                    // 0x087C
     FrontierCard *videoOwners[4];            // 0x088C
-    u32 unk_089C;                            // 0x089C
-    u8 unk_08A0[0x416C - 0x8A0];             // 0x08A0
+    u32 menuNoticeShown;                     // 0x089C, notice raised by the menu touch
+    u32 messageShown;                        // 0x08A0
+    Window messageWindow;                    // 0x08A4
+    VsRecorderNetData net;                   // 0x08B4
+    VsRecorderTouchIndicator touchIndicator; // 0x415C
     SysTask *task;                           // 0x416C
 }; // size 0x4170
 
@@ -269,23 +401,119 @@ u16 *ov40_0222DD68(enum HeapID heapID, int unused, int *count);
 void ov40_0222DD8C(VsRecorderWork *work, u32 value);
 u32 ov40_0222DD94(VsRecorderWork *work);
 
+// vs_recorder_windows.c
+void VsRecorder_ShowNotice(VsRecorderWork *work, int msgId);
+void VsRecorder_HideNotice(VsRecorderWork *work);
+void VsRecorder_RemoveTopMessage(VsRecorderWork *work);
+void VsRecorder_ShowTopMessage(VsRecorderWork *work, int msgId);
+void VsRecorder_SetMessageText(VsRecorderWork *work, int msgId);
+void VsRecorder_HideTopMessage(VsRecorderWork *work);
+void VsRecorder_ShowMenuNotice(VsRecorderWork *work, int msgId);
+void VsRecorder_PrintProfile(VsRecorderProfile *profile, VsRecorderWork *work);
+void VsRecorder_RemoveProfileWindows(VsRecorderProfile *profile);
+void VsRecorder_SetProfileMonIconDrawFlag(VsRecorderProfile *profile, BOOL draw);
+void VsRecorder_FreeProfileMonIcon(VsRecorderProfile *profile, VsRecorderWork *work);
+void VsRecorder_CreateProfileMonIcon(VsRecorderProfile *profile, VsRecorderWork *work);
+void VsRecorder_SetProfileAvatarDrawFlag(VsRecorderProfile *profile, BOOL draw);
+void VsRecorder_FreeProfileAvatar(VsRecorderProfile *profile, VsRecorderWork *work);
+u32 VsRecorder_GetAvatarFileId(int avatar, int kind);
+void VsRecorder_CreateProfileAvatar(VsRecorderProfile *profile, VsRecorderWork *work);
+void VsRecorder_CreateProfile(VsRecorderProfile *profile, VsRecorderWork *work);
+void VsRecorder_FreeProfile(VsRecorderProfile *profile, VsRecorderWork *work);
+void VsRecorder_SetProfileDrawFlag(VsRecorderProfile *profile, BOOL draw);
+
+// vs_recorder_list.c
+void VsRecorder_PrintListLocation(VsRecorderListWindow *list, VsRecorderWork *work);
+void VsRecorder_InitMessageList(VsRecorderListWindow *list, VsRecorderWork *work, VsRecorderListConfig *config);
+void VsRecorder_InitList(VsRecorderListWindow *list, VsRecorderWork *work, MsgData *msgData, VsRecorderListConfig *config);
+void VsRecorder_InitRankingList(VsRecorderListWindow *list, VsRecorderWork *work, MsgData *msgData, VsRecorderListConfig *config, int unused, int type, String *valueTemplate);
+void VsRecorder_InitPairList(VsRecorderListWindow *list, VsRecorderWork *work, VsRecorderListConfig *config, String **items);
+int VsRecorder_RedrawPairList(VsRecorderListWindow *list, VsRecorderWork *work, String **items);
+int VsRecorder_RedrawRankingList(VsRecorderListWindow *list, VsRecorderWork *work, void *unused, u32 type, String *valueTemplate);
+u32 VsRecorder_UpdateMessageList(VsRecorderListWindow *list, VsRecorderWork *work);
+int VsRecorder_RedrawNameList(VsRecorderListWindow *list, VsRecorderWork *work);
+void VsRecorder_ListMoveCursor(VsRecorderListWindow *list, s16 delta);
+void VsRecorder_ListScroll(VsRecorderListWindow *list, s16 delta);
+
+// vs_recorder_util.c
+void VsRecorder_RemoveListWindow(VsRecorderListWindow *list);
+void VsRecorder_ClearListWindow(VsRecorderListWindow *list);
+void VsRecorder_CreateListArrows(VsRecorderListWindow *list, VsRecorderWork *work, NNS_G2D_VRAM_TYPE vram);
+void VsRecorder_SetListArrowsY(VsRecorderListWindow *list, int upY, int downY);
+void VsRecorder_UpdateListArrows(VsRecorderListWindow *list);
+void VsRecorder_UpdateListArrowsCursor(VsRecorderListWindow *list);
+void VsRecorder_FreeListArrows(VsRecorderListWindow *list, VsRecorderWork *work);
+ManagedSprite *ov40_0222F950(void *unused, VsRecorderWork *work, NNS_G2D_VRAM_TYPE vram, int anim);
+void VsRecorder_DeleteTouchScrollSprites(VsRecorderTouchScroll *scroll);
+void VsRecorder_CreateTouchScrollSprites(VsRecorderTouchScroll *scroll, VsRecorderWork *work);
+void VsRecorder_CreateTouchScrollSpritesWithAnim(VsRecorderTouchScroll *scroll, VsRecorderWork *work, int anim);
+void VsRecorder_InitTouchScroll(VsRecorderTouchScroll *scroll);
+void VsRecorder_FreeTouchScroll(VsRecorderTouchScroll *scroll);
+void VsRecorder_TouchScrollTrack(VsRecorderTouchScroll *scroll, int y);
+void VsRecorder_TouchScrollSetEnabled(VsRecorderTouchScroll *scroll, VsRecorderListWindow *list);
+void VsRecorder_UpdateTouchScroll(VsRecorderTouchScroll *scroll);
+void VsRecorder_AddGameStatsScore(VsRecorderWork *work, int score);
+void VsRecorder_ImportBattleRecord(VsRecorderWork *work);
+void VsRecorder_FlipScreensTask(SysTask *task, void *data);
+SysTask *VsRecorder_StartFlipScreens(VsRecorderWork *work, int flipped);
+u32 VsRecorder_IsFlipScreensDone(VsRecorderWork *work);
+void VsRecorder_VBlankTask(SysTask *task, void *data);
+void VsRecorder_StartVBlankTask(VsRecorderWork *work);
+BOOL ov40_0222FC14(VsRecorderWork *work, u32 a1, u32 a2);
+void VsRecorder_SetBattleResult(VsRecorderWork *work, u32 result);
+void ov40_0222FC4C(VsRecorderWork *work, int *state);
+void VsRecorder_LoadSavedVideos(VsRecorderWork *work);
+void VsRecorder_FreeSavedVideos(VsRecorderWork *work);
+void VsRecorder_LoadMonIconGfx(VsRecorderWork *work);
+void VsRecorder_UnloadMonIconGfx(VsRecorderWork *work);
+NARC *VsRecorder_OpenMonIconNarc(void);
+void VsRecorder_CloseMonIconNarc(NARC *narc);
+ManagedSprite *VsRecorder_NewMonIcon(VsRecorderWork *work, NARC *narc, int index, int species, int form, int isEgg);
+void VsRecorder_DeleteMonIcon(VsRecorderWork *work, u32 index, ManagedSprite *sprite);
+void VsRecorder_DeleteSprite(void *unused0, void *unused1, ManagedSprite *sprite);
+
+// vs_recorder_screen.c
+void VsRecorder_PrintVideoInfo(VsRecorderVideoInfo *info, VsRecorderWork *work);
+void VsRecorder_RemoveVideoInfoWindows(VsRecorderVideoInfo *info);
+BOOL ov40_022303B8(void *header);
+BOOL ov40_02230404(VsRecorderVideoInfo *info);
+int ov40_02230410(VsRecorderVideoInfo *info);
+void VsRecorder_CreateVideoPartyIcons(VsRecorderVideoInfo *info, VsRecorderWork *work);
+void VsRecorder_CreateVideoInfo(VsRecorderVideoInfo *info, VsRecorderWork *work);
+void VsRecorder_FreeVideoInfo(VsRecorderVideoInfo *info, VsRecorderWork *work);
+void VsRecorder_SetVideoPartyIconsDrawFlag(VsRecorderVideoInfo *info, BOOL draw);
+int VsRecorder_GetCenteredTextX(Window *window, String *str);
+void ov40_022306E0(VsRecorderWork *work);
+BOOL ov40_022306F0(VsRecorderWork *work);
+void VsRecorder_ResetBgPriorities(void);
+void VsRecorder_PlaceOrbitCursor(VsRecorderWork *work, struct OrbitCursor *cursor, s16 x, s16 y);
+int VsRecorder_CountDigits(u64 value);
+void VsRecorder_LoadScreen(VsRecorderWork *work, int fileId, GFBgLayer layer);
+void VsRecorder_TouchIndicatorTask(SysTask *task, void *data);
+void VsRecorder_ShowTouchIndicator(VsRecorderWork *work);
+void VsRecorder_OnTouchConfirm(VsRecorderWork *work);
+u32 VsRecorder_IsVBlankPaused(VsRecorderWork *work);
+void VsRecorder_SetVBlankPaused(VsRecorderWork *work, u32 paused);
+void VsRecorder_CreateLabeledSprite(VsRecorderWork *work, VsRecorderTextSprite *textSprite, NNS_G2D_VRAM_TYPE vram, int msgId, s16 x, s16 y, s16 textX, s16 textY, int anim, BOOL draw);
+void VsRecorder_FreeLabeledSprite(VsRecorderTextSprite *textSprite);
+u32 VsRecorder_SetupMessageScreenMsg(VsRecorderWork *work, u32 group, u32 index, u32 type);
+void VsRecorder_ShowMessageScreen(VsRecorderWork *work, int group, u32 index, u32 type);
+void VsRecorder_MessageScreen(VsRecorderWork *work);
+BOOL VsRecorder_IsVideoSaved(VsRecorderWork *work, u64 number);
+void VsRecorder_SanitizeName(VsRecorderWork *work, String *str);
+void VsRecorder_SetPlaceholderName(String *str, enum HeapID heapID);
+void VsRecorder_ShowTouchHere(VsRecorderWork *work);
+void VsRecorder_HideTouchHere(VsRecorderWork *work);
+
 // other OVY_40 modules (still address-named)
-void ov40_02230DCC(VsRecorderWork *work, String *name);
-void ov40_0222DD9C(VsRecorderWork *work, int msgId);
-void ov40_0222DE40(VsRecorderWork *work);
-void ov40_0222DFE8(VsRecorderWork *work, int msgId);
-void ov40_0222FBF8(VsRecorderWork *work);
-void ov40_0222FCCC(VsRecorderWork *work);
-void ov40_02230D20(VsRecorderWork *work);
+GlobalTerminalNet *ov40_0223D540(VsRecorderWork *work);
+u32 ov40_02244AB0(SaveData *save, u32 a1, u32 a2, u16 *a3, void *a4);
 void ov40_0223D544(VsRecorderWork *work);
 void ov40_0223D5E8(VsRecorderWork *work);
 void ov40_0223D600(VsRecorderWork *work);
 
 // main ARM9 (unk_02087E70 launcher, banner object)
 void sub_02087A84(void *result, u32 first, u32 second);
-BOOL OrbitCursor_SetTarget(void *banner, int x, int y);
-BOOL OrbitCursor_SetPosition(void *banner, s16 x, s16 y);
-BOOL OrbitCursor_SetVisible(void *banner, int flag);
 void sub_02088030(VsRecorderWork *work);
 
 #endif // POKEHEARTGOLD_APPLICATION_VS_RECORDER_VS_RECORDER_INTERNAL_H

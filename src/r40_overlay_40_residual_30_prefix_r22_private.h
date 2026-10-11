@@ -11,7 +11,7 @@ void *String_New(int, int);
 int ov40_022371D4(void *, u32);
 void GetSpeciesNameIntoArray(int, int, u16 *);
 void CopyU16ArrayToString(void *, u16 *);
-int ov40_022306C0(void *, void *);
+int VsRecorder_GetCenteredTextX(void *, void *);
 u8 AddTextPrinterParameterizedWithColor(void *, u32, void *, u32, u32, u32, u32, void *);
 void String_Delete(void *);
 #endif

@@ -13,8 +13,8 @@ int ov40_0223512C(void *work) {
         }
         AccessoryPortrait_SetMonVisible(PTR(inner, 0x228), 0);
         ov40_02235940();
-        ov40_022307DC(work, 0x23, 3);
-        ov40_022307DC(work, 0x24, 7);
+        VsRecorder_LoadScreen(work, 0x23, 3);
+        VsRecorder_LoadScreen(work, 0x24, 7);
         GfGfx_EngineBTogglePlanes(8, 1);
         GfGfx_EngineBTogglePlanes(4, 1);
         GfGfx_EngineATogglePlanes(8, 1);
@@ -58,11 +58,11 @@ int ov40_0223527C(void *work) {
     void *inner = PTR(work, 0x860);
 
     if (TouchscreenHitbox_TouchNewIsIn(ov40_022451C4)) {
-        ov40_02230944(work);
+        VsRecorder_OnTouchConfirm(work);
         VsRecorder_SetSubState(work, 9);
     }
     if (TouchscreenHitbox_TouchNewIsIn(ov40_022451D0)) {
-        ov40_02230944(work);
+        VsRecorder_OnTouchConfirm(work);
         VsRecorder_SetSubState(work, 10);
     }
     if (TouchscreenHitbox_TouchNewIsIn(ov40_022451D4)) {
@@ -72,14 +72,14 @@ int ov40_0223527C(void *work) {
         } else {
             S32(inner, 0x234) = S32(inner, 0x2E4) - 1;
         }
-        ov40_02230944(work);
+        VsRecorder_OnTouchConfirm(work);
         VsRecorder_SetSubState(work, 11);
     }
     if (TouchscreenHitbox_TouchNewIsIn(ov40_022451D8)) {
         S32(inner, 0x234)
         ++;
         S32(inner, 0x234) %= S32(inner, 0x2E4);
-        ov40_02230944(work);
+        VsRecorder_OnTouchConfirm(work);
         VsRecorder_SetSubState(work, 11);
     }
     if (PTR(inner, 0x228) != NULL) {
@@ -100,9 +100,9 @@ int ov40_0223534C(void *work) {
             BgClearTilemapBufferAndCommit(PTR(work, 0x24), 6);
             ov40_02236130(work);
         } else {
-            ov40_02230964(work, 1);
-            ov40_0222E7B8((u8 *)inner + 0x250, work);
-            ov40_02230964(work, 0);
+            VsRecorder_SetVBlankPaused(work, 1);
+            VsRecorder_FreeProfile((u8 *)inner + 0x250, work);
+            VsRecorder_SetVBlankPaused(work, 0);
         }
         ov40_0223584C(work);
         S32(work, 8)
