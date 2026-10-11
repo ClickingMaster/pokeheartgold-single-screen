@@ -1,6 +1,6 @@
 #include "global.h"
 
-void *ov41_0224A928(void *work, int narc, int group, int message, int width, int height);
+void *DressUpButton_CreateTextBitmap(void *work, int narc, int group, int message, int width, int height);
 void *NewMsgDataFromNarc(int, int, int, int);
 void GF_AssertFail(void);
 void *NewString_ReadMsgData(void *, int);
@@ -12,7 +12,7 @@ void AddTextPrinterParameterizedWithColor(void *, int, void *, int, int, int, in
 void String_Delete(void *);
 void DestroyMsgData(void *);
 
-void *ov41_0224A928(void *work, int narc, int group, int message, int width, int height)
+void *DressUpButton_CreateTextBitmap(void *work, int narc, int group, int message, int width, int height)
 {
     void *messages = NewMsgDataFromNarc(0, narc, group, 0xd);
     void *str;

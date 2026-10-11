@@ -12,4 +12,4 @@
 
 typedef struct { void *obj; s32 state; void *arg; void (*cb)(void *, void *); } Ov41Cb;
 
-void ov41_0224A9B0(void *p) { WindowArray_Delete(p, 1); }
+void DressUpButton_DeleteTextBitmap(void *p) { WindowArray_Delete(p, 1); }

@@ -59,8 +59,8 @@
 .public memcpy
 .public memset
 .public gGameLanguage
-.public ov41_02249710
-.public ov41_02249780
+.public DressUpMon_GetPriority
+.public DressUpMon_GetCenterPos
 .public IsValidFashionMagic
 .public GetFashionObjectPlacement
 .public FashionMon_Init

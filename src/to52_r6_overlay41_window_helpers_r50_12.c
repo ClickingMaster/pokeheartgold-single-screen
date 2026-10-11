@@ -15,7 +15,7 @@ typedef struct Ov41WindowConfig {
     u32 field2C;
 } Ov41WindowConfig;
 
-extern void ov41_02249C7C(void *, const Ov41WindowConfig *);
+extern void DressUpBgScreen_LoadFromTemplate(void *, const Ov41WindowConfig *);
 extern u32 Options_GetFrame(void *);
 extern void LoadUserFrameGfx2(void *, u32, u16, u8, u8, u32);
 extern void LoadFontPal1(u32, u32, u32);
@@ -45,7 +45,7 @@ void ov41_0224ACA4(void *dest, void *resource) {
     config.field24 = 0;
     config.field28 = 0;
     config.field2C = 0xE;
-    ov41_02249C7C(dest, &config);
+    DressUpBgScreen_LoadFromTemplate(dest, &config);
 }
 
 void ov41_0224ACDC(void *bgConfig, void *options) {

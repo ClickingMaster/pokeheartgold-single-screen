@@ -53,8 +53,8 @@ typedef struct FashionItemCoords {
     u16 yCopy;
 } FashionItemCoords;
 
-extern void ov41_02249780(int, int *, int *);
-extern int ov41_02249710(int);
+extern void DressUpMon_GetCenterPos(int, int *, int *);
+extern int DressUpMon_GetPriority(int);
 u32 GraphicsObject_GetPosition(void *object);
 int GraphicsObject_GetDepth(void *object);
 void MATHi_CRC32InitTableRev(u32 *table, u32 polynomial);
@@ -120,8 +120,8 @@ void GetFashionObjectPlacement(int a0, u8 *a1, u8 *a2, u8 *a3) {
     int x;
     int y;
     int z;
-    ov41_02249780(a0, &x, &y);
-    z = ov41_02249710(a0);
+    DressUpMon_GetCenterPos(a0, &x, &y);
+    z = DressUpMon_GetPriority(a0);
     GF_ASSERT(x < 256);
     GF_ASSERT(y < 256);
     GF_ASSERT(z > -128);

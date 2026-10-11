@@ -14,8 +14,8 @@ BOOL AccessoryPortrait_Init(OverlayManager *man, int *state);
 BOOL AccessoryPortrait_Main(OverlayManager *man, int *state);
 BOOL AccessoryPortrait_Exit(OverlayManager *man, int *state);
 
-BOOL ov41_02246DE0(OverlayManager *man, int *state);
-BOOL ov41_02246F08(OverlayManager *man, int *state);
-BOOL ov41_02247150(OverlayManager *man, int *state);
+BOOL DressUp_Init(OverlayManager *man, int *state);
+BOOL DressUp_Main(OverlayManager *man, int *state);
+BOOL DressUp_Exit(OverlayManager *man, int *state);
 
 #endif // POKEHEARTGOLD_OVY_41_H

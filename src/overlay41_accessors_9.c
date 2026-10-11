@@ -12,4 +12,4 @@
 
 typedef struct { void *obj; s32 state; void *arg; void (*cb)(void *, void *); } Ov41Cb;
 
-void ov41_0224A9F8(void *p) { ov41_0224A9BC(p); TextOBJ_UpdatePosition(*(void **)((u8 *)p+0x10)); }
+void DressUpButton_MoveTextBy(void *p) { DressUpButton_MoveBy(p); TextOBJ_UpdatePosition(*(void **)((u8 *)p+0x10)); }

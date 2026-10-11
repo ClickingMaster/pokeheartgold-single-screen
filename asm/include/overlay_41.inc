@@ -248,11 +248,11 @@
 .public NNS_GfdDefaultFuncAllocPlttVram
 .public NNS_GfdDefaultFuncFreePlttVram
 .public gSystem
-.public ov41_02246DE0
-.public ov41_02246F08
-.public ov41_02247150
-.public ov41_02249710
-.public ov41_02249780
+.public DressUp_Init
+.public DressUp_Main
+.public DressUp_Exit
+.public DressUpMon_GetPriority
+.public DressUpMon_GetCenterPos
 .public ov41_0224B530
 .public ov41_0224B554
 .public ov41_0224B57C

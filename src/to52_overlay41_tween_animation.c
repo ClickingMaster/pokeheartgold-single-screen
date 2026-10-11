@@ -69,12 +69,12 @@ void ov41_0224B450(W07Anim *p) {
     }
 }
 
-void ov41_0224B4E8(void **dst, W07Arg *arg, void *out) {
+void DressUp_StartBackdropAnim(void **dst, W07Arg *arg, void *out) {
     W07LoadArgs args;
     *dst++ = arg;
     args.p = (u8 *)arg + 0x48;
     args.member = arg->index * 4 + 0x89;
     args.count = 0x10;
     args.dst = out;
-    ov41_02249CE0(dst, &args);
+    DressUpBgScreen_InitAltAnim(dst, &args);
 }

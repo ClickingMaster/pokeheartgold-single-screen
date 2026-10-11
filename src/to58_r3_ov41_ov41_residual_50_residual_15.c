@@ -7,12 +7,12 @@ void ov41_0224B57C(void *work);
 void ov41_0224B8DC(void *, void *);
 void ov41_0224B8F0(void *, void *);
 void ov41_0224B630(void *);
-void ov41_0224B50C(void *);
+void DressUp_UpdateBackdropAnim(void *);
 void ov41_0224B720(void *);
 void ov41_0224B878(void *);
 void ov41_0224B85C(void *);
 void DressUpGfx_FreeSlotList(void *);
-void ov41_022499DC(void *);
+void DressUpNodePool_Free(void *);
 void ov41_0224B754(void *);
 void Heap_Free(void *);
 
@@ -27,7 +27,7 @@ void ov41_0224B530(void *source, void *arg)
 void ov41_0224B554(void *work)
 {
     if (*(u32 *)((u8 *)work + 0x260) == 1) {
-        ov41_0224B50C((u8 *)work + 0x218);
+        DressUp_UpdateBackdropAnim((u8 *)work + 0x218);
     }
     if (*(u32 *)((u8 *)work + 0x264) == 1) {
         ov41_0224B720(work);
@@ -42,7 +42,7 @@ void ov41_0224B57C(void *work)
     ov41_0224B85C(work);
     DressUpGfx_FreeSlotList(*(void **)((u8 *)work + 0x18c));
     *(u32 *)((u8 *)work + 0x18c) = 0;
-    ov41_022499DC((u8 *)work + 0x184);
+    DressUpNodePool_Free((u8 *)work + 0x184);
     ov41_0224B754(work);
     Heap_Free(*(void **)((u8 *)work + 0x234));
     Heap_Free(work);

@@ -18,6 +18,6 @@ BOOL ov41_0224B32C(W07Tween *);
 void ov41_0224B31C(W07Tween *, fx32, fx32, int);
 void ov41_0224B374(W07Source *, W07Anim *);
 void ov41_0224B450(W07Anim *);
-void ov41_0224B4E8(void **, W07Arg *, void *);
-void ov41_02249CE0(void *, W07LoadArgs *);
+void DressUp_StartBackdropAnim(void **, W07Arg *, void *);
+void DressUpBgScreen_InitAltAnim(void *, W07LoadArgs *);
 #endif

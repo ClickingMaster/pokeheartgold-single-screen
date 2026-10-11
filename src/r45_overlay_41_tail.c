@@ -31,7 +31,7 @@ void ov41_0224B6CC(void *work, void *args);
 void ov41_0224B780(void *work, void *args);
 
 void ov41_0224B5D8(void *work, s32 x, s32 y) {
-    ov41_02248120((u8 *)work + 0x190, PTR_AT(work, 0x23C), PTR_AT(work, 0x240), x, y);
+    DressUpCanvas_SetOrigin((u8 *)work + 0x190, PTR_AT(work, 0x23C), PTR_AT(work, 0x240), x, y);
     if (PTR_AT(work, 0x260) != NULL) {
         BgSetPosTextAndCommit(PTR_AT(work, 0x40), 2, 0, 0x88 - x);
         BgSetPosTextAndCommit(PTR_AT(work, 0x40), 2, 3, 0x10 - y);
@@ -48,11 +48,11 @@ void *ov41_0224B630(void *args) {
     FashionMon_ToPokemon(PTR_AT(args, 0), PTR_AT(work, 0x234));
     ov41_0224B6CC(work, args);
     AccessoryPortrait_InitBg(work, PTR_AT(args, 0x58), S32_AT(args, 0x68));
-    ov41_022499B4((u8 *)work + 0x184, 0x15, S32_AT(args, 0x68));
+    DressUpNodePool_Init((u8 *)work + 0x184, 0x15, S32_AT(args, 0x68));
     PTR_AT(work, 0x18C) = DressUpGfx_CreateSlotList(0x14, S32_AT(args, 0x68));
     ov41_0224B780(work, args);
     ov41_0224B848(work, args);
-    ov41_0224B4E8((u8 *)work + 0x218, (u8 *)work + 0x190, S32_AT(args, 0x68));
+    DressUp_StartBackdropAnim((u8 *)work + 0x218, (u8 *)work + 0x190, S32_AT(args, 0x68));
     S32_AT(work, 0x260) = 1;
     S32_AT(work, 0x264) = 1;
     ov41_0224B888(work, args);
@@ -100,9 +100,9 @@ void ov41_0224B780(void *work, void *rawArgs) {
     bundle.unk18 = PTR_AT(work, 0x18C);
     bundle.unk1C = (u8 *)work + 0x184;
     bundle.unk20 = (void *)0x15;
-    ov41_02247F3C((u8 *)work + 0x190, &bundle);
-    ov41_02247FAC((u8 *)work + 0x190, PTR_AT(work, 0x234), temporary, FashionMon_GetX(args->base), FashionMon_GetY(args->base), FashionMon_GetZ(args->base), args->heapId);
+    DressUpCanvas_Init((u8 *)work + 0x190, &bundle);
+    AccessoryPortrait_CreateCanvasMonPic((u8 *)work + 0x190, PTR_AT(work, 0x234), temporary, FashionMon_GetX(args->base), FashionMon_GetY(args->base), FashionMon_GetZ(args->base), args->heapId);
     for (i = 0; i < args->count; i++) {
-        ov41_02248044((u8 *)work + 0x190, FashionItem_GetId(args->mons[i]), FashionItem_GetX(args->mons[i]), FashionItem_GetY(args->mons[i]), FashionItem_GetZ(args->mons[i]));
+        AccessoryPortrait_PlaceCanvasAccessory((u8 *)work + 0x190, FashionItem_GetId(args->mons[i]), FashionItem_GetX(args->mons[i]), FashionItem_GetY(args->mons[i]), FashionItem_GetZ(args->mons[i]));
     }
 }
