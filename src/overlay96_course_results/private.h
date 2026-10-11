@@ -41,7 +41,7 @@ void PokeathlonCourse_SetField5E0_AtIndex(void *, u8, u16);
 int ov96_021E5F24(void *);
 void PokeathlonCourse_SetStateField07(void *, u8);
 void *SpriteManager_GetSpriteList(void *);
-u16 ov96_0220AD4C(void *);
+u16 PokeathlonBlockSmashBlocks_GetScore(void *);
 u8 PokeathlonPennantCaptureCpu_SortCells(R92Rect **, R92Rect **);
 extern const R92Pair ov96_0221CC00;
 

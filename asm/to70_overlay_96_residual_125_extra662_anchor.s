@@ -156,7 +156,7 @@
 	.extern ov96_021F9234
 	.extern ov96_021FCD74
 	.extern ov96_02204DE8
-	.extern ov96_02209738
+	.extern PokeathlonBlockSmash_Draw
 	.extern PokeathlonGoalRoll_Draw
 	.extern ov96_0221A670
 	.extern ov96_0221A680
@@ -407,12 +407,12 @@
 	.public PokeathlonPennantCaptureCpu_SetPlayer
 	.public PokeathlonPennantCaptureCpu_SetPennants
 	.public PokeathlonPennantCaptureCpu_Delete
-	.public ov96_02209738
-	.public ov96_0220AD4C
-	.public ov96_0220B730
-	.public ov96_0220B774
-	.public ov96_0220B788
-	.public ov96_0220C998
+	.public PokeathlonBlockSmash_Draw
+	.public PokeathlonBlockSmashBlocks_GetScore
+	.public PokeathlonBlockSmashMon_GetMode
+	.public PokeathlonBlockSmashMon_IsGaugeFull
+	.public PokeathlonBlockSmashMon_IsTired
+	.public PokeathlonBlockSmashCpu_Delete
 	.public ov96_0220D408
 	.public ov96_0220D420
 	.public ov96_0220E850
@@ -1088,9 +1088,9 @@ ov96_0221DC50:
 	.word PokeathlonPennantCapture_State_End
 
 ov96_0221DC5C:
-	.word ov96_02209130
-	.word ov96_0220935C
-	.word ov96_022093D0
+	.word PokeathlonBlockSmash_Intro
+	.word PokeathlonBlockSmash_Play
+	.word PokeathlonBlockSmash_Finish
 
 ov96_0221DC68: ; 0x0221DC68
 	.word ov96_0221CDBC

@@ -1,7 +1,0 @@
-#pragma force_active on
-#include "global.h"
-#pragma force_active on
-typedef union{u32 word;struct{u32 points:8,pad:16,choice:2,pad2:1,active:1,pad3:4;}bits;}Datum;
-typedef struct{u8 choice,pad[3];void*off,*on,*bars[20],*extra[5];}Row;
-extern void*PokeathlonCourse_GetHeapAllocPtr4(void*),*PokeathlonCourse_GetDataCopyArea(void*);extern u8 *ov96_021E8A20(void *ptr);extern int ManagedSprite_GetDrawFlag(void*);extern void ManagedSprite_SetDrawFlag(void*,int),ManagedSprite_ResetSpriteAnimCtrlState(void*),ov96_0220A254(void*,u8,u8);void ov96_0220A14C(void*);
-void ov96_0220A14C(void*course){Row*r;int outer;Datum*data;if(!course)GF_AssertFail();r=PokeathlonCourse_GetHeapAllocPtr4(course);data=(Datum*)(u32 *)ov96_021E8A20((u8*)PokeathlonCourse_GetDataCopyArea(course)+0xf0);outer=0;r=(Row*)((u8*)r+0x54);do{int n=(int)((u8)data->word/5u);int i;if(n>20){if(!ManagedSprite_GetDrawFlag(r->extra[0])){for(i=0;i<5;i++)ManagedSprite_SetDrawFlag(r->extra[i],1);for(i=0;i<20;i++)ManagedSprite_SetDrawFlag(r->bars[i],0);}n-=20;}if(n>20)n=20;{int j;for(j=0;j<n;j++){if(!ManagedSprite_GetDrawFlag(r->bars[j])){ManagedSprite_ResetSpriteAnimCtrlState(r->bars[j]);ManagedSprite_SetDrawFlag(r->bars[j],1);}}}if(data->bits.active){int choice=data->bits.choice;if(choice!=r->choice){ov96_0220A254(course,(u8)outer,(u8)choice);r->choice=data->bits.choice;}ManagedSprite_SetDrawFlag(r->off,0);ManagedSprite_SetDrawFlag(r->on,1);}else{ManagedSprite_SetDrawFlag(r->on,0);ManagedSprite_SetDrawFlag(r->off,1);}r++;data++;outer++;}while(outer<4);}

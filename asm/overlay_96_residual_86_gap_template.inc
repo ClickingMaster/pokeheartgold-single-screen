@@ -199,12 +199,12 @@
 	.public PokeathlonPennantCaptureCpu_SetPlayer
 	.public PokeathlonPennantCaptureCpu_SetPennants
 	.public PokeathlonPennantCaptureCpu_Delete
-	.public ov96_02209738
-	.public ov96_0220AD4C
-	.public ov96_0220B730
-	.public ov96_0220B774
-	.public ov96_0220B788
-	.public ov96_0220C998
+	.public PokeathlonBlockSmash_Draw
+	.public PokeathlonBlockSmashBlocks_GetScore
+	.public PokeathlonBlockSmashMon_GetMode
+	.public PokeathlonBlockSmashMon_IsGaugeFull
+	.public PokeathlonBlockSmashMon_IsTired
+	.public PokeathlonBlockSmashCpu_Delete
 	.public ov96_0220D408
 	.public ov96_0220D420
 	.public ov96_0220E850

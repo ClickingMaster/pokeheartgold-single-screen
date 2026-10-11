@@ -198,12 +198,12 @@
 	.public PokeathlonPennantCaptureCpu_SetPlayer
 	.public PokeathlonPennantCaptureCpu_SetPennants
 	.public PokeathlonPennantCaptureCpu_Delete
-	.public ov96_02209738
-	.public ov96_0220AD4C
-	.public ov96_0220B730
-	.public ov96_0220B774
-	.public ov96_0220B788
-	.public ov96_0220C998
+	.public PokeathlonBlockSmash_Draw
+	.public PokeathlonBlockSmashBlocks_GetScore
+	.public PokeathlonBlockSmashMon_GetMode
+	.public PokeathlonBlockSmashMon_IsGaugeFull
+	.public PokeathlonBlockSmashMon_IsTired
+	.public PokeathlonBlockSmashCpu_Delete
 	.public ov96_0220D408
 	.public ov96_0220D420
 	.public ov96_0220E850
@@ -240,8 +240,8 @@
 	.public ov96_0221A720
 
 
-	thumb_func_start ov96_022093D0
-ov96_022093D0: ; 0x022093D0
+	thumb_func_start PokeathlonBlockSmash_Finish
+PokeathlonBlockSmash_Finish: ; 0x022093D0
 	push {r4, r5, r6, lr}
 	add r6, r0, #0
 	bl PokeathlonCourse_GetHeapAllocPtr4
@@ -253,7 +253,7 @@ ov96_022093D0: ; 0x022093D0
 	bl ov96_021E5F24
 	add r4, r0, #0
 	ldr r0, [r5, #0x40]
-	bl ov96_0220AD4C
+	bl PokeathlonBlockSmashBlocks_GetScore
 	lsl r1, r4, #0x18
 	add r2, r0, #0
 	add r0, r6, #0
@@ -296,11 +296,11 @@ _02209442:
 	mov r0, #0
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
-	thumb_func_end ov96_022093D0
+	thumb_func_end PokeathlonBlockSmash_Finish
 
 
-	thumb_func_start ov96_02209448
-ov96_02209448: ; 0x02209448
+	thumb_func_start PokeathlonBlockSmash_Init
+PokeathlonBlockSmash_Init: ; 0x02209448
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0xec
 	str r0, [sp, #0xc]
@@ -351,7 +351,7 @@ _0220947C:
 	ldr r1, [r2]
 	and r0, r1
 	str r0, [r2]
-	bl ov96_02209820
+	bl PokeathlonBlockSmash_SetVramBanks
 	ldr r0, _02209730 ; =gSystem + 0x60
 	mov r1, #1
 	strb r1, [r0, #9]
@@ -388,13 +388,13 @@ _022094EE:
 	ldr r1, [sp, #0x14]
 	ldr r0, [r0, #4]
 	ldr r1, [r1]
-	bl ov96_02209C14
+	bl PokeathlonBlockSmash_InitBgs
 	ldr r0, [sp, #0xc]
-	bl ov96_02209DE4
+	bl PokeathlonBlockSmash_InitText
 	ldr r0, [sp, #0x14]
-	bl ov96_02209D14
+	bl PokeathlonBlockSmash_LoadBgGraphics
 	ldr r0, [sp, #0x14]
-	bl ov96_02209840
+	bl PokeathlonBlockSmash_InitSpriteSystem
 	ldr r0, [sp, #0x14]
 	ldr r0, [r0, #0xc]
 	bl SpriteManager_GetSpriteList
@@ -488,7 +488,7 @@ _022095D2:
 	b _02209722
 _022095E0:
 	ldr r0, [sp, #0x14]
-	bl ov96_02209A14
+	bl PokeathlonBlockSmash_LoadSpriteResources
 	ldr r0, [sp, #0x14]
 	ldr r1, [sp, #0x14]
 	ldr r0, [r0, #8]
@@ -511,7 +511,7 @@ _022095E0:
 	b _02209722
 _02209618:
 	ldr r0, [sp, #0x14]
-	bl ov96_02209910
+	bl PokeathlonBlockSmash_CreateHudSprites
 	ldr r0, [sp, #0x14]
 	ldr r1, [sp, #0x14]
 	ldr r2, [sp, #0x14]
@@ -519,7 +519,7 @@ _02209618:
 	ldr r1, [r1, #8]
 	ldr r2, [r2, #0xc]
 	ldr r3, [sp, #0xc]
-	bl ov96_0220A744
+	bl PokeathlonBlockSmashBlocks_New
 	ldr r1, [sp, #0x14]
 	str r0, [r1, #0x40]
 	ldr r0, [sp, #0xc]
@@ -533,7 +533,7 @@ _0220963C:
 	ldr r1, [r1, #8]
 	ldr r2, [r2, #0xc]
 	ldr r3, [sp, #0xc]
-	bl ov96_0220B374
+	bl PokeathlonBlockSmashMon_New
 	ldr r1, [sp, #0x14]
 	ldr r2, [sp, #0x14]
 	str r0, [r1, #0x4c]
@@ -545,7 +545,7 @@ _0220963C:
 	ldr r0, [r0]
 	ldr r1, [r1, #8]
 	ldr r2, [r2, #0xc]
-	bl ov96_0220B7F4
+	bl PokeathlonBlockSmashRivals_New
 	ldr r1, [sp, #0x14]
 	str r0, [r1, #0x44]
 	add r0, r1, #0
@@ -559,14 +559,14 @@ _0220963C:
 	ldr r1, [sp, #0x14]
 	ldr r0, [sp, #0xc]
 	ldr r1, [r1]
-	bl ov96_0220C93C
+	bl PokeathlonBlockSmashCpu_New
 	ldr r1, [sp, #0x14]
 	str r0, [r1, #0x48]
 _0220968E:
 	ldr r0, [sp, #0x14]
-	bl ov96_02209F14
+	bl PokeathlonBlockSmash_PrintInitialText
 	ldr r0, [sp, #0xc]
-	bl ov96_02209F8C
+	bl PokeathlonBlockSmash_CreateTeamRows
 	ldr r0, [sp, #0x14]
 	ldr r0, [r0, #4]
 	bl PokeathlonCourse_SetVBlankIntrCB
@@ -587,7 +587,7 @@ _0220968E:
 	bne _022096D2
 	ldr r0, [sp, #0x14]
 	ldr r0, [r0, #0x48]
-	bl ov96_0220C9CC
+	bl PokeathlonBlockSmashCpu_WriteReports
 _022096D2:
 	mov r0, #6
 	str r0, [sp]
@@ -609,10 +609,10 @@ _022096F2:
 	cmp r0, #0
 	bne _02209702
 	ldr r0, [sp, #0xc]
-	bl ov96_0220A424
+	bl PokeathlonBlockSmash_WriteReport
 _02209702:
 	ldr r0, [sp, #0xc]
-	bl ov96_0220A4DC
+	bl PokeathlonBlockSmash_UpdateLinkData
 	ldr r0, [sp, #0xc]
 	bl PokeathlonCourse_IncrementField1ED
 	b _02209722
@@ -634,4 +634,4 @@ _02209728: .word 0xFFFFE0FF
 _0220972C: .word 0x04001000
 _02209730: .word gSystem + 0x60
 _02209734: .word 0x00007FFF
-	thumb_func_end ov96_02209448
+	thumb_func_end PokeathlonBlockSmash_Init

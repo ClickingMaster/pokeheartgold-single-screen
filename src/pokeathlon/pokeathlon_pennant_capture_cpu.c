@@ -18,8 +18,8 @@ void ov96_021EB0A4(void *object, int x, int y, int *outX, int *outY);
 void ov96_021EB52C(void *sprite, int a1, int show);
 void **ov96_021EB5EC(void *pool, int id, int kind);
 // the CPU's cell checks, next in link order (overlay96_course_scene_helpers.c)
-BOOL ov96_022090A8(PokeathlonPennantCaptureCpuCell *cell, s32 x, s32 y);
-BOOL ov96_022090D8(PokeathlonPennantCaptureCpuCell *cell);
+BOOL PokeathlonPennantCaptureCpu_IsNearCellTarget(PokeathlonPennantCaptureCpuCell *cell, s32 x, s32 y);
+BOOL PokeathlonPennantCaptureCpu_IsCellTargetOnField(PokeathlonPennantCaptureCpuCell *cell);
 
 extern const WindowTemplate ov96_0221CBEC;
 extern const PokeathlonPennantCaptureSpriteIds ov96_0221CBCC[];
@@ -193,13 +193,13 @@ void PokeathlonPennantCaptureCpu_ChooseTarget(PokeathlonPennantCaptureCpu *cpu, 
         {
             PokeathlonPennantCapturePennant *pennant = pennants;
             for (j = 0; j < 5; j++, pennant++) {
-                if (pennant->active && ov96_022090A8(cell, pennant->x, pennant->y)) {
+                if (pennant->active && PokeathlonPennantCaptureCpu_IsNearCellTarget(cell, pennant->x, pennant->y)) {
                     cell->score += 7;
                 }
             }
         }
         for (j = 0; j < 4; j++) {
-            if (j != who && ov96_022090A8(cell, players[j].x, players[j].y)) {
+            if (j != who && PokeathlonPennantCaptureCpu_IsNearCellTarget(cell, players[j].x, players[j].y)) {
                 cell->score -= 3;
             }
         }
@@ -207,7 +207,7 @@ void PokeathlonPennantCaptureCpu_ChooseTarget(PokeathlonPennantCaptureCpu *cpu, 
             if (!obstacles[j].active) {
                 break;
             }
-            if (ov96_022090A8(cell, (u16)obstacles[j].x, (u16)obstacles[j].y)) {
+            if (PokeathlonPennantCaptureCpu_IsNearCellTarget(cell, (u16)obstacles[j].x, (u16)obstacles[j].y)) {
                 cell->score -= 2;
             }
         }
@@ -215,11 +215,11 @@ void PokeathlonPennantCaptureCpu_ChooseTarget(PokeathlonPennantCaptureCpu *cpu, 
             if (!fieldItems[j].active) {
                 break;
             }
-            if (ov96_022090A8(cell, (u16)fieldItems[j].x, (u16)fieldItems[j].y)) {
+            if (PokeathlonPennantCaptureCpu_IsNearCellTarget(cell, (u16)fieldItems[j].x, (u16)fieldItems[j].y)) {
                 cell->score += 2;
             }
         }
-        if (!ov96_022090D8(cell)) {
+        if (!PokeathlonPennantCaptureCpu_IsCellTargetOnField(cell)) {
             cell->score -= 100;
         }
     }
