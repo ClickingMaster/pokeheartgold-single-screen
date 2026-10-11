@@ -1,7 +1,7 @@
 #pragma force_active on
 #include "global.h"
 
-#include "to90_vct_ssp_private.h"
+#include "vct/vct_session.h"
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
@@ -21,8 +21,8 @@ extern u32 _021D6F60[3];
 extern u32 _021D6F78[3];
 extern Packet *_021D6F6C[3];
 extern Packet *_021D6F84[3];
-extern Session _021D6FCC;
-extern Session _021D6FB4;
+extern Session gVctServerSession;
+extern Session gVctRejectSession;
 extern u64 sTransceiverLimit;
 extern int ulaw_segment[8];
 extern void vct_free_packet_buffer(void *);
@@ -78,8 +78,8 @@ int vct_handle_ssp(u32 aid, u8 *b, u32 n, u32 arg);
 void vct_add_notify_aid_list(Session *s, u8 *b);
 
 void vct_finish_ssp(void) {
-    _021D6F90.core.used = 0;
-    _021D6F90.core.free = 0;
+    gVctSsp.core.used = 0;
+    gVctSsp.core.free = 0;
 }
 
 void vct_check_timeout(void) {
@@ -90,17 +90,17 @@ void vct_check_timeout(void) {
     if (__vct.state == 0) {
         return;
     }
-    if (_021D6F90.core.tick == 0) {
+    if (gVctSsp.core.tick == 0) {
         return;
     }
-    if (now - _021D6F90.core.tick <= sTransceiverLimit) {
+    if (now - gVctSsp.core.tick <= sTransceiverLimit) {
         return;
     }
-    _021D6F90.core.tick = 0;
-    _021D6F90.server.state = 0;
-    _021D6F90.server.mode = 0;
+    gVctSsp.core.tick = 0;
+    gVctSsp.server.state = 0;
+    gVctSsp.server.mode = 0;
     vct_send_notify(0);
-    __vct.callback(_021D6F90.server.aid, 9, &_021D6FCC, __vct.context);
+    __vct.callback(gVctSsp.server.aid, 9, &gVctServerSession, __vct.context);
 }
 
 int vct_handle_ssp(u32 aid, u8 *b, u32 n, u32 arg) {
@@ -127,14 +127,14 @@ Session *vct_create_session_impl(u32 aid) {
     if (aid == __vct.aid) {
         return 0;
     }
-    s = _021D6F90.core.free;
+    s = gVctSsp.core.free;
     if (!s) {
         return 0;
     }
-    _021D6F90.core.free = s->next;
+    gVctSsp.core.free = s->next;
     vct_init_session(s, aid);
-    s->next = _021D6F90.core.used;
-    _021D6F90.core.used = s;
+    s->next = gVctSsp.core.used;
+    gVctSsp.core.used = s;
     return s;
 }
 
@@ -161,7 +161,7 @@ void vct_add_notify_aid_list(Session *s, u8 *b) {
         return;
     }
     b[11] = s->aid;
-    *(u32 *)(b + 12) = _021D6F90.core.mask;
+    *(u32 *)(b + 12) = gVctSsp.core.mask;
 }
 
 int vct_send_notify_impl(Session *s, u8 *b) {
@@ -169,7 +169,7 @@ int vct_send_notify_impl(Session *s, u8 *b) {
     vct_add_notify_aid_list(s, b);
     for (u8 aid = 0; aid < 32; aid++) {
         u32 mask = aid ? 1 << aid : 1;
-        if ((_021D6F90.core.mask & mask) && aid != __vct.aid) {
+        if ((gVctSsp.core.mask & mask) && aid != __vct.aid) {
             b[9] = aid;
             if (DWC_SendReliable(aid, b, 16)) {
                 count++;
@@ -177,7 +177,7 @@ int vct_send_notify_impl(Session *s, u8 *b) {
         }
     }
     if (b[10] == 1) {
-        s->mask = _021D6F90.core.mask;
+        s->mask = gVctSsp.core.mask;
     } else if (b[10] == 0) {
         s->mask = 0;
     }
@@ -190,7 +190,7 @@ int vct_send_notify_impl(Session *s, u8 *b) {
 void vct_send_notify(u32 kind) {
     u8 b[16];
     b[4] = 255;
-    vct_build_ssp_header(&_021D6FCC, b, 4);
+    vct_build_ssp_header(&gVctServerSession, b, 4);
     b[10] = kind;
-    vct_send_notify_impl(&_021D6FCC, b);
+    vct_send_notify_impl(&gVctServerSession, b);
 }

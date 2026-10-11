@@ -378,7 +378,7 @@ void GtsMainMenu_SelectButton(GtsApp *app, int button) {
         }
         break;
     case 1:
-        app->unk_11DE = 0;
+        app->hasSearchResults = 0;
         Gts_SetNextScreen(app, 4, 13);
         app->state = GTS_MAIN_MENU_STATE_FADE_OUT;
         PlaySE(SEQ_SE_DP_SELECT);

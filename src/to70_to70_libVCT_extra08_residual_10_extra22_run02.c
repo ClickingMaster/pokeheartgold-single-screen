@@ -1,7 +1,7 @@
 #pragma force_active on
 #include "global.h"
 
-#include "to90_vct_ssp_private.h"
+#include "vct/vct_session.h"
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
@@ -32,8 +32,8 @@ extern s8 sTransRecvState[][11];
 extern s8 sSendState[][11];
 extern s8 sTransSendState[][11];
 
-extern Session _021D6FCC;
-extern Session _021D6FB4;
+extern Session gVctServerSession;
+extern Session gVctRejectSession;
 extern Packet *_021D6FE4[];
 extern u32 E2scales[];
 
@@ -98,7 +98,7 @@ extern void vct_send_notify(s32);
 extern s32 vct_handle_ssp_server(Header *, Event *);
 
 s32 vct_check_multisession(Session *session) {
-    Session *p = _021D6F90.core.used;
+    Session *p = gVctSsp.core.used;
     while (p) {
         if (p->state != 0 && p->mode == 2 && session != p) {
             return 0;

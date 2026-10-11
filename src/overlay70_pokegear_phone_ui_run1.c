@@ -16,19 +16,19 @@ void ov70_0223D808(Ov70Work *work);
 void ov70_0223D8E8(void *sprite, int index);
 
 int ov70_0223C930(Ov70Work *work) {
-    ov70_0223CAC4(work, 0x98, 1, 0, 0xf0f);
+    GtsSearch_PrintMessage(work, 0x98, 1, 0, 0xf0f);
     Gts_SetState(work, 0x15, 1);
     return 3;
 }
 
-int ov70_0223C958(Ov70Work *work) {
+int GtsSearch_WaitText(Ov70Work *work) {
     if (!TextPrinterCheckActive((u8)work->printerBF0)) {
         work->state2c = work->field30;
     }
     return 3;
 }
 
-int ov70_0223C978(Ov70Work *work) {
+int GtsSearch_WaitTextAndPause(Ov70Work *work) {
     if (!TextPrinterCheckActive((u8)work->printerBF0)) {
         work->field11C0++;
         if (work->field11C0 > 0x2d) {
@@ -39,7 +39,7 @@ int ov70_0223C978(Ov70Work *work) {
     return 3;
 }
 
-int ov70_0223C9AC(Ov70Work *work) {
+int GtsSearch_ScrollOut(Ov70Work *work) {
     work->valueF14++;
     if (IsPaletteFadeFinished()) {
         *(vu16 *)0x04000304 |= 0x8000;
@@ -55,7 +55,7 @@ int ov70_0223C9AC(Ov70Work *work) {
     return 3;
 }
 
-int ov70_0223CA18(Ov70Work *work) {
+int GtsSearch_ScrollIn(Ov70Work *work) {
     work->valueF14--;
     if (IsPaletteFadeFinished()) {
         work->valueF14 = 0;
@@ -64,7 +64,7 @@ int ov70_0223CA18(Ov70Work *work) {
     return 3;
 }
 
-int ov70_0223CA40(Ov70Work *work) {
+int GtsSearch_HandleScrolledOut(Ov70Work *work) {
     int index;
 
     if (gSystem.newKeys & 1) {
@@ -82,14 +82,14 @@ int ov70_0223CA40(Ov70Work *work) {
     return 3;
 }
 
-void ov70_0223CAC4(Ov70Work *work, int msgId, int color, int a, int b) {
+void GtsSearch_PrintMessage(Ov70Work *work, int msgId, int color, int a, int b) {
     ReadMsgDataIntoString(work->msgDataBA0, msgId, work->strBBC);
     FillWindowPixelBuffer(work->windowF18, 0xf);
     DrawFrameAndWindow2(work->windowF18, 0, 1, 0xe);
     work->printerBF0 = AddTextPrinterParameterized(work->windowF18, 1, work->strBBC, 0, 0, color, 0);
 }
 
-void ov70_0223CB1C(void *a, void *b, void *msgData) {
+void GtsSearch_DrawFieldLabels(void *a, void *b, void *msgData) {
     void *str;
 
     str = NewString_ReadMsgData(msgData, 0x3d);
@@ -112,7 +112,7 @@ void ov70_0223CB1C(void *a, void *b, void *msgData) {
     String_Delete(str);
 }
 
-void ov70_0223CC04(void *bgConfig, void *window, void *msgData, int flag) {
+void GtsSearch_DrawResultsButton(void *bgConfig, void *window, void *msgData, int flag) {
     u32 color = 0x10200;
     int pal;
     void *str;
@@ -130,14 +130,14 @@ void ov70_0223CC04(void *bgConfig, void *window, void *msgData, int flag) {
     String_Delete(str);
 }
 
-int ov70_0223CC68(const Ov70Key *a, const Ov70Key *b, int c, int d) {
+int GtsSearch_IsSameSearch(const Ov70Key *a, const Ov70Key *b, int c, int d) {
     if (a->field00 == b->field00 && a->field02 == b->field02 && a->field03 == b->field03 && a->field04 == b->field04 && c == d) {
         return 1;
     }
     return 0;
 }
 
-void ov70_0223CCA4(Ov70Work *work) {
+void GtsSearch_ScrollBgs(Ov70Work *work) {
     BgSetPosTextAndCommit(work->bgConfig, 0, 3, work->valueF14);
     BgSetPosTextAndCommit(work->bgConfig, 1, 3, work->valueF14);
     BgSetPosTextAndCommit(work->bgConfig, 2, 3, work->valueF14);
@@ -148,7 +148,7 @@ void ov70_0223CCA4(Ov70Work *work) {
     BgSetPosTextAndCommit(work->bgConfig, 7, 3, -work->valueF14);
 }
 
-void ov70_0223CD28(int value) {
+void GtsSearch_SetBlendBrightness(int value) {
     if (value != 0) {
         G2x_SetBlendBrightness_((vu16 *)0x04000050, 0xa, value);
     } else {

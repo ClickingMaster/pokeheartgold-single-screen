@@ -127,6 +127,6 @@ void ov70_0223EB34(Ov70Work24 *);
 void ov70_0223EC0C(Ov70Work24 *);
 void ov70_0223EA40(void *);
 void ov70_0223EBD4(Ov70Work24 *);
-void ov70_0223AB3C(void *, int);
+void GtsSearchResult_InitBgs(void *, int);
 
 #endif

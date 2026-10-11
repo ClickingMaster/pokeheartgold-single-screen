@@ -4,7 +4,7 @@
 // sAdpcmState 0x10, sAudioSession 0x2C, sStream 0x38, _021D6234 0x1F4, sSendInfo 0x640.
 #include "global.h"
 
-#include "to90_vct_ssp_private.h"
+#include "vct/vct_session.h"
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>

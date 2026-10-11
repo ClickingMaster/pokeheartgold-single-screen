@@ -1,7 +1,7 @@
 #pragma force_active on
 #include "global.h"
 
-#include "to90_vct_ssp_private.h"
+#include "vct/vct_session.h"
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
@@ -21,8 +21,8 @@ extern u32 _021D6F60[3];
 extern u32 _021D6F78[3];
 extern Packet *_021D6F6C[3];
 extern Packet *_021D6F84[3];
-extern Session _021D6FCC;
-extern Session _021D6FB4;
+extern Session gVctServerSession;
+extern Session gVctRejectSession;
 extern u64 sTransceiverLimit;
 extern int ulaw_segment[8];
 extern void vct_free_packet_buffer(void *);

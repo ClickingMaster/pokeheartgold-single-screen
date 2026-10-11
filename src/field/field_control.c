@@ -630,7 +630,7 @@ static u16 GetInteractedMetatileScript(FieldSystem *fieldSystem, u8 metatileBeha
 }
 
 static BOOL FieldSystem_ProcessStep(FieldSystem *fieldSystem) {
-    if (FieldSystem_IsSaveGymmickTypeEqualTo(fieldSystem, GYMMICK_BLACKTHORN) && ov04_02255090(fieldSystem)) {
+    if (FieldSystem_IsSaveGymmickTypeEqualTo(fieldSystem, GYMMICK_BLACKTHORN) && BlackthornGymmick_TryStartPlatformAction(fieldSystem)) {
         return TRUE;
     } else if (ov01_021F3114(fieldSystem, fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar)) == 1) {
         ViridianGymmick_HandleTileAction(fieldSystem, sub_0205F504(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar)));

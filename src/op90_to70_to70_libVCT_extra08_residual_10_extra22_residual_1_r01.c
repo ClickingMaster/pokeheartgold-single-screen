@@ -1,6 +1,6 @@
 #pragma force_active on
 #include "global.h"
-#include "to90_vct_ssp_private.h"
+#include "vct/vct_session.h"
 #include <nitro/code32.h>
 typedef struct Packet { u8 pad[4]; u8 kind; u8 pad5; u8 index; } Packet;
 extern u8 sRecvState[], sTransRecvState[];

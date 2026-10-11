@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-#include "to90_vct_ssp_private.h"
+#include "vct/vct_session.h"
 
 #define VOICE_CHAT_MODE_PHONE      1
 #define VOICE_CHAT_MODE_CONFERENCE 3

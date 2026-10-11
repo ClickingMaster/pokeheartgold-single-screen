@@ -1,265 +1,265 @@
 	.include "asm/macros.inc"
-	.public ov05_0221BA00
-	.public ov05_0221BA70
-	.public ov05_0221BB00
-	.public ov05_0221BB30
-	.public ov05_0221BD28
-	.public ov05_0221BE04
-	.public ov05_0221BE80
-	.public ov05_0221BF08
-	.public ov05_0221C018
-	.public ov05_0221C050
-	.public ov05_0221C21C
-	.public ov05_0221C430
+	.public LinkBattleScreen_Start
+	.public LinkBattleScreen_RunTask
+	.public LinkBattleScreen_SetVramBanks
+	.public LinkBattleScreen_UpdateBattleVideoPrompt
+	.public LinkBattleScreen_Init
+	.public LinkBattleScreen_InitPartyScreen
+	.public LinkBattleScreen_InitVsScreen
+	.public LinkBattleScreen_InitResultScreen
+	.public LinkBattleScreen_WaitFadeAndDelay
+	.public LinkBattleScreen_SlidePanelsIn
+	.public LinkBattleScreen_ShakePanels
+	.public LinkBattleScreen_SlidePanelsOut
 	.public ov05_0221C558
-	.public ov05_0221C568
-	.public ov05_0221C5A8
-	.public ov05_0221C5C4
-	.public ov05_0221C6C8
+	.public LinkBattleScreen_DetermineNudgeDirection
+	.public LinkBattleScreen_NudgePanels
+	.public LinkBattleScreen_NudgePanelsRight
+	.public LinkBattleScreen_NudgePanelsLeft
 	.public ov05_0221C7FC
-	.public ov05_0221C80C
-	.public ov05_0221C8A0
-	.public ov05_0221C8E0
-	.public ov05_0221C908
-	.public ov05_0221CAB8
-	.public ov05_0221CB70
-	.public ov05_0221CC04
-	.public ov05_0221CC58
-	.public ov05_0221CC74
-	.public ov05_0221CCF4
-	.public ov05_0221CD24
-	.public ov05_0221CDC4
-	.public ov05_0221CE0C
-	.public ov05_0221CE50
-	.public ov05_0221CE88
-	.public ov05_0221CEB8
-	.public ov05_0221CFF0
-	.public ov05_0221D020
-	.public ov05_0221D054
-	.public ov05_0221D094
-	.public ov05_0221D140
-	.public ov05_0221D228
-	.public ov05_0221D240
-	.public ov05_0221D318
-	.public ov05_0221D3AC
-	.public ov05_0221D414
-	.public ov05_0221D4D0
-	.public ov05_0221D530
-	.public ov05_0221D5DC
-	.public ov05_0221D664
-	.public ov05_0221D690
-	.public ov05_0221D6C4
-	.public ov05_0221D7AC
-	.public ov05_0221D890
-	.public ov05_0221D904
-	.public ov05_0221D9F0
-	.public ov05_0221DAE0
-	.public ov05_0221DB18
-	.public ov05_0221DB4C
-	.public ov05_0221DB70
-	.public ov05_0221DB94
-	.public ov05_0221DC34
-	.public ov05_0221DC60
-	.public ov05_0221DD08
-	.public ov05_0221DDEC
-	.public ov05_0221DE38
-	.public ov05_0221DE6C
-	.public ov05_0221DF38
-	.public ov05_0221E07C
-	.public ov05_0221E0A8
-	.public ov05_0221E110
-	.public ov05_0221E274
-	.public ov05_0221E2D8
-	.public ov05_0221E390
-	.public ov05_0221E42C
+	.public LinkBattleScreen_RevealCenterBand
+	.public LinkBattleScreen_ShowWinLoseSprites
+	.public LinkBattleScreen_ShowDrawSprite
+	.public LinkBattleScreen_SaveBattleVideo
+	.public LinkBattleScreen_WaitForPartner
+	.public LinkBattleScreen_ApplyOutcomePalette
+	.public LinkBattleScreen_SlidePartyPanelsIn
+	.public LinkBattleScreen_StartExit
+	.public LinkBattleScreen_Finish
+	.public LinkBattleScreen_IsLocalPlayerOnLeft
+	.public LinkBattleScreen_InitSpriteSystem
+	.public LinkBattleScreen_CreateSprite
+	.public LinkBattleScreen_FreeSprites
+	.public LinkBattleScreen_UpdateSpriteAnims
+	.public LinkBattleScreen_VBlankCallback
+	.public LinkBattleScreen_InitVsBgLayers
+	.public LinkBattleScreen_RemoveMessageWindows
+	.public LinkBattleScreen_FreeMessageData
+	.public LinkBattleScreen_FreeVsBgLayers
+	.public LinkBattleScreen_LoadVsBgGraphics
+	.public LinkBattleScreen_InitMessageWindows
+	.public LinkBattleScreen_SetBg1AlphaBlend
+	.public LinkBattleScreen_InitVsSprites
+	.public LinkBattleScreen_LoadPartyBallGfx
+	.public LinkBattleScreen_SetBallRowPosition
+	.public LinkBattleScreen_SetPartyBallAnims
+	.public LinkBattleScreen_SetAllPartyBallAnims
+	.public LinkBattleScreen_CreateNameTextObj
+	.public LinkBattleScreen_CreateNameTextObjs
+	.public LinkBattleScreen_SetNamePosition
+	.public LinkBattleScreen_FreeNameTextObjs
+	.public LinkBattleScreen_InitLayout
+	.public LinkBattleScreen_InitResultSprites
+	.public LinkBattleScreen_LoadOutcomeGfx
+	.public LinkBattleScreen_SetupOutcomeSprites
+	.public LinkBattleScreen_InitParticles
+	.public LinkBattleScreen_UpdateParticles
+	.public LinkBattleScreen_FreeParticles
+	.public LinkBattleScreen_AllocParticleTexVram
+	.public LinkBattleScreen_AllocParticlePlttVram
+	.public LinkBattleScreen_InitPartyBgLayers
+	.public LinkBattleScreen_FreePartyBgLayers
+	.public LinkBattleScreen_LoadPartyBgGraphics
+	.public LinkBattleScreen_DrawPartyPanels
+	.public LinkBattleScreen_StashPanelTilemap
+	.public LinkBattleScreen_StashPanelTilemaps
+	.public LinkBattleScreen_RevealPanelColumns
+	.public LinkBattleScreen_ReadPartyMonInfo
+	.public LinkBattleScreen_ReadMonInfo
+	.public LinkBattleScreen_GetMonIconAnim
+	.public LinkBattleScreen_CreateMonSprites
+	.public LinkBattleScreen_InitPartySprites
+	.public LinkBattleScreen_LoadMonIconGfx
+	.public LinkBattleScreen_LoadItemIconGfx
+	.public LinkBattleScreen_LoadStatusIconGfx
 	.public ov05_0221E4C8
-	.public ov05_0221E564
-	.public ov05_0221E5E4
-	.public ov05_0221E60C
-	.public ov05_0221E624
-	.public ov05_0221E714
-	.public ov05_0221E74C
-	.public ov05_0221E7B8
-	.public ov05_0221E8A8
-	.public ov05_0221E944
-	.public ov05_0221E9C4
-	.public ov05_0221E9F8
-	.public ov05_0221EA18
-	.public ov05_0221EA38
-	.public _0221EA54
-	.public ov05_0221EA58
-	.public ov05_0221EA60
-	.public ov05_0221EA6C
+	.public LinkBattleScreen_SetPartySpriteOffset
+	.public LinkBattleScreen_AddPartyWindows
+	.public LinkBattleScreen_RemovePartyWindows
+	.public LinkBattleScreen_PrintMonName
+	.public LinkBattleScreen_PrintMonLevel
+	.public LinkBattleScreen_PrintMonHp
+	.public LinkBattleScreen_DrawMonHpBar
+	.public LinkBattleScreen_DrawMonPanelText
+	.public LinkBattleScreen_DrawAllMonPanelText
+	.public LinkBattleScreen_DrawMessageBox
+	.public LinkBattleScreen_IsBattleRecordActive
+	.public LinkBattleScreen_ShowWaitingIcon
+	.public LinkBattleScreen_HideWaitingIcon
+	.public sBallRowFirstSprite
+	.public sBattleVideoYesNoTemplate
+	.public sPartyPanelPositions
+	.public sPanelNudgeSteps
 	.public ov05_0221EA6D
-	.public ov05_0221EA78
-	.public ov05_0221EA88
-	.public ov05_0221EA98
-	.public ov05_0221EAAC
-	.public ov05_0221EAC0
-	.public ov05_0221EAD4
-	.public ov05_0221EAEC
-	.public ov05_0221EB04
-	.public ov05_0221EB1C
-	.public ov05_0221EB38
-	.public ov05_0221EB54
-	.public ov05_0221EB70
-	.public ov05_0221EB8C
-	.public ov05_0221EBA8
-	.public ov05_0221EBC4
-	.public ov05_0221EBE0
-	.public ov05_0221EC00
-	.public ov05_0221EC28
-	.public ov05_0221EC5C
-	.public ov05_0221EC98
-	.public ov05_0221ECE4
-	.public ov05_0221EDA4
-	.public ov05_0221EF2C
+	.public sVsGraphicsModes
+	.public sPartyGraphicsModes
+	.public sVsSequence
+	.public sLinkBattleScreenOamTransferParam
+	.public sPartySequence
+	.public sResultSpriteResourceCounts
+	.public sPartySpriteResourceCounts
+	.public sVsSpriteResourceCounts
+	.public sVsBg3Template
+	.public sPartyBg2Template
+	.public sVsBg2Template
+	.public sVsBg1Template
+	.public sPartyBg1Template
+	.public sVsBg0Template
+	.public sPartyBg3Template
+	.public sLinkBattleScreenOamParam
+	.public sVramBanks
+	.public sResultDrawSequence
+	.public sMonSpritePositions
+	.public sResultSequence
+	.public sPartyWindowTemplates
+	.public sVsSpriteTemplates
+	.public sPartySpriteTemplates
 	.include "overlay_05.inc"
 	.include "global.inc"
 
 	.text
 	.rodata
 
-_0221EA54:
+sBallRowFirstSprite:
 	.byte 0x00, 0x03, 0x06, 0x09
 
-ov05_0221EA58: ; 0x0221EA58
+sBattleVideoYesNoTemplate: ; 0x0221EA58
 	.byte 0x00, 0x19, 0x0D, 0x06, 0x04, 0x0D, 0x94, 0x00
 
-ov05_0221EA60: ; 0x0221EA60
+sPartyPanelPositions: ; 0x0221EA60
 	.byte 0x00, 0x00, 0x00, 0x06, 0x00, 0x0C, 0x10, 0x01, 0x10, 0x07, 0x10, 0x0D
 
-ov05_0221EA6C: ; 0x0221EA6C
+sPanelNudgeSteps: ; 0x0221EA6C
 	.byte 0x06
 
 ov05_0221EA6D: ; 0x0221EA6D
 	.byte 0x06, 0x00, 0x06
 	.byte 0x00, 0x06, 0x04, 0x0A, 0x00, 0x0A, 0x00, 0x0A
 
-ov05_0221EA78: ; 0x0221EA78
+sVsGraphicsModes: ; 0x0221EA78
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 
-ov05_0221EA88: ; 0x0221EA88
+sPartyGraphicsModes: ; 0x0221EA88
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov05_0221EA98: ; 0x0221EA98
-	.word ov05_0221BE80
-	.word ov05_0221C018
-	.word ov05_0221C050
-	.word ov05_0221C21C
-	.word ov05_0221C430
+sVsSequence: ; 0x0221EA98
+	.word LinkBattleScreen_InitVsScreen
+	.word LinkBattleScreen_WaitFadeAndDelay
+	.word LinkBattleScreen_SlidePanelsIn
+	.word LinkBattleScreen_ShakePanels
+	.word LinkBattleScreen_SlidePanelsOut
 
-ov05_0221EAAC: ; 0x0221EAAC
+sLinkBattleScreenOamTransferParam: ; 0x0221EAAC
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x01, 0x00, 0x00, 0x40, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00
 
-ov05_0221EAC0: ; 0x0221EAC0
-	.word ov05_0221BE04
-	.word ov05_0221C018
-	.word ov05_0221CC04
-	.word ov05_0221C018
-	.word ov05_0221CC58
+sPartySequence: ; 0x0221EAC0
+	.word LinkBattleScreen_InitPartyScreen
+	.word LinkBattleScreen_WaitFadeAndDelay
+	.word LinkBattleScreen_SlidePartyPanelsIn
+	.word LinkBattleScreen_WaitFadeAndDelay
+	.word LinkBattleScreen_StartExit
 
-ov05_0221EAD4: ; 0x0221EAD4
+sResultSpriteResourceCounts: ; 0x0221EAD4
 	.byte 0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov05_0221EAEC: ; 0x0221EAEC
+sPartySpriteResourceCounts: ; 0x0221EAEC
 	.byte 0x09, 0x00, 0x00, 0x00
 	.byte 0x04, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov05_0221EB04: ; 0x0221EB04
+sVsSpriteResourceCounts: ; 0x0221EB04
 	.byte 0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov05_0221EB1C: ; 0x0221EB1C
+sVsBg3Template: ; 0x0221EB1C
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x1E, 0x04
 	.byte 0x01, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov05_0221EB38: ; 0x0221EB38
+sPartyBg2Template: ; 0x0221EB38
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1E, 0x04, 0x00, 0x02, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov05_0221EB54: ; 0x0221EB54
+sVsBg2Template: ; 0x0221EB54
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x1C, 0x04, 0x01, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov05_0221EB70: ; 0x0221EB70
+sVsBg1Template: ; 0x0221EB70
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x1B, 0x04, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov05_0221EB8C: ; 0x0221EB8C
+sPartyBg1Template: ; 0x0221EB8C
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1F, 0x00
 	.byte 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov05_0221EBA8: ; 0x0221EBA8
+sVsBg0Template: ; 0x0221EBA8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov05_0221EBC4: ; 0x0221EBC4
+sPartyBg3Template: ; 0x0221EBC4
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1D, 0x04, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov05_0221EBE0: ; 0x0221EBE0
+sLinkBattleScreenOamParam: ; 0x0221EBE0
 	.byte 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00
 
-ov05_0221EC00: ; 0x0221EC00
+sVramBanks: ; 0x0221EC00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x06, 0x00, 0x00, 0x00, 0x60, 0x00, 0x00, 0x00
 
-ov05_0221EC28: ; 0x0221EC28
-	.word ov05_0221BF08
-	.word ov05_0221C018
-	.word ov05_0221C050
-	.word ov05_0221C21C
+sResultDrawSequence: ; 0x0221EC28
+	.word LinkBattleScreen_InitResultScreen
+	.word LinkBattleScreen_WaitFadeAndDelay
+	.word LinkBattleScreen_SlidePanelsIn
+	.word LinkBattleScreen_ShakePanels
 	.word ov05_0221C7FC
-	.word ov05_0221C80C
-	.word ov05_0221C018
-	.word ov05_0221C8E0
-	.word ov05_0221C018
-	.word ov05_0221C908
-	.word ov05_0221C018
-	.word ov05_0221CAB8
-	.word ov05_0221CC58
+	.word LinkBattleScreen_RevealCenterBand
+	.word LinkBattleScreen_WaitFadeAndDelay
+	.word LinkBattleScreen_ShowDrawSprite
+	.word LinkBattleScreen_WaitFadeAndDelay
+	.word LinkBattleScreen_SaveBattleVideo
+	.word LinkBattleScreen_WaitFadeAndDelay
+	.word LinkBattleScreen_WaitForPartner
+	.word LinkBattleScreen_StartExit
 
-ov05_0221EC5C: ; 0x0221EC5C
+sMonSpritePositions: ; 0x0221EC5C
 	.byte 0x1E, 0x10, 0x26, 0x18
 	.byte 0x2E, 0x18, 0x24, 0x2C, 0x10, 0x0E, 0x1E, 0x40, 0x26, 0x48, 0x2E, 0x48, 0x24, 0x5C, 0x10, 0x3E
 	.byte 0x1E, 0x70, 0x26, 0x78, 0x2E, 0x78, 0x24, 0x8C, 0x10, 0x6E, 0x9E, 0x18, 0xA6, 0x20, 0xAE, 0x20
 	.byte 0xA4, 0x34, 0x90, 0x16, 0x9E, 0x48, 0xA6, 0x50, 0xAE, 0x50, 0xA4, 0x64, 0x90, 0x46, 0x9E, 0x78
 	.byte 0xA6, 0x80, 0xAE, 0x80, 0xA4, 0x94, 0x90, 0x76
 
-ov05_0221EC98: ; 0x0221EC98
-	.word ov05_0221BF08
-	.word ov05_0221C018
-	.word ov05_0221C050
-	.word ov05_0221C21C
+sResultSequence: ; 0x0221EC98
+	.word LinkBattleScreen_InitResultScreen
+	.word LinkBattleScreen_WaitFadeAndDelay
+	.word LinkBattleScreen_SlidePanelsIn
+	.word LinkBattleScreen_ShakePanels
 	.word ov05_0221C558
-	.word ov05_0221C018
-	.word ov05_0221C568
-	.word ov05_0221C5A8
+	.word LinkBattleScreen_WaitFadeAndDelay
+	.word LinkBattleScreen_DetermineNudgeDirection
+	.word LinkBattleScreen_NudgePanels
 	.word ov05_0221C7FC
-	.word ov05_0221C80C
-	.word ov05_0221C018
-	.word ov05_0221C8A0
-	.word ov05_0221C018
-	.word ov05_0221CB70
-	.word ov05_0221C018
-	.word ov05_0221C908
-	.word ov05_0221C018
-	.word ov05_0221CAB8
-	.word ov05_0221CC58
+	.word LinkBattleScreen_RevealCenterBand
+	.word LinkBattleScreen_WaitFadeAndDelay
+	.word LinkBattleScreen_ShowWinLoseSprites
+	.word LinkBattleScreen_WaitFadeAndDelay
+	.word LinkBattleScreen_ApplyOutcomePalette
+	.word LinkBattleScreen_WaitFadeAndDelay
+	.word LinkBattleScreen_SaveBattleVideo
+	.word LinkBattleScreen_WaitFadeAndDelay
+	.word LinkBattleScreen_WaitForPartner
+	.word LinkBattleScreen_StartExit
 
-ov05_0221ECE4: ; 0x0221ECE4
+sPartyWindowTemplates: ; 0x0221ECE4
 	.byte 0x01, 0x06, 0x01, 0x09, 0x02, 0x00, 0x01, 0x00, 0x01, 0x01, 0x04, 0x05
 	.byte 0x02, 0x00, 0x13, 0x00, 0x01, 0x07, 0x04, 0x08, 0x02, 0x00, 0x1D, 0x00, 0x01, 0x08, 0x03, 0x06
 	.byte 0x01, 0x03, 0x2D, 0x00, 0x01, 0x06, 0x07, 0x09, 0x02, 0x00, 0x33, 0x00, 0x01, 0x01, 0x0A, 0x05
@@ -274,7 +274,7 @@ ov05_0221ECE4: ; 0x0221ECE4
 	.byte 0x02, 0x00, 0x0D, 0x01, 0x01, 0x17, 0x11, 0x08, 0x02, 0x00, 0x17, 0x01, 0x01, 0x18, 0x10, 0x06
 	.byte 0x01, 0x08, 0x27, 0x01
 
-ov05_0221EDA4: ; 0x0221EDA4
+sVsSpriteTemplates: ; 0x0221EDA4
 	.byte 0x07, 0xB8, 0x00, 0x00, 0x07, 0xB8, 0x00, 0x00, 0x07, 0xB8, 0x00, 0x00
 	.byte 0x07, 0xB8, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x07, 0xB8, 0x00, 0x00, 0x07, 0xB8, 0x00, 0x00, 0x07, 0xB8, 0x00, 0x00, 0x07, 0xB8, 0x00, 0x00
@@ -301,7 +301,7 @@ ov05_0221EDA4: ; 0x0221EDA4
 	.byte 0x08, 0xB8, 0x00, 0x00, 0x07, 0xB8, 0x00, 0x00, 0x08, 0xB8, 0x00, 0x00, 0x08, 0xB8, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 
-ov05_0221EF2C: ; 0x0221EF2C
+sPartySpriteTemplates: ; 0x0221EF2C
 	.byte 0x09, 0xB8, 0x00, 0x00
 	.byte 0x08, 0xB8, 0x00, 0x00, 0x09, 0xB8, 0x00, 0x00, 0x09, 0xB8, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0F, 0xB8, 0x00, 0x00, 0x09, 0xB8, 0x00, 0x00

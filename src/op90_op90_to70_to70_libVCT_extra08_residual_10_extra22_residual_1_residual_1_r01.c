@@ -1,7 +1,7 @@
 #pragma force_active on
 #include "global.h"
 
-#include "to90_vct_ssp_private.h"
+#include "vct/vct_session.h"
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>

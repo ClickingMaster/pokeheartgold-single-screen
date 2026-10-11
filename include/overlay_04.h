@@ -8,7 +8,7 @@ void GymmickFree_Cianwood(FieldSystem *fieldSystem);
 void GymmickFree_Vermilion(FieldSystem *fieldSystem);
 void GymmickFree_Azalea(FieldSystem *fieldSystem);
 void GymmickFree_Blackthorn(FieldSystem *fieldSystem);
-BOOL ov04_02255090(FieldSystem *fieldSystem);
+BOOL BlackthornGymmick_TryStartPlatformAction(FieldSystem *fieldSystem);
 void GymmickFree_Fuchsia(FieldSystem *fieldSystem);
 void GymmickFree_Viridian(FieldSystem *fieldSystem);
 void ViridianGymmick_HandleTileAction(FieldSystem *fieldSystem, u8 arg1);

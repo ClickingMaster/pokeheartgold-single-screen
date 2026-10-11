@@ -2235,91 +2235,91 @@
 	.public Gts_DrawTrainerInfo
 	.public Gts_LoadMonPicture
 	.public GtsSummary_DrawWanted
-	.public ov70_0223A8BC
-	.public ov70_0223AA90
-	.public ov70_0223AB00
-	.public ov70_0223AB3C
-	.public ov70_0223ABD8
-	.public ov70_0223ABF4
-	.public ov70_0223AC98
-	.public ov70_0223ACE4
-	.public ov70_0223ACF4
-	.public ov70_0223AE40
-	.public ov70_0223AE98
-	.public ov70_0223AF30
-	.public ov70_0223AF5C
-	.public ov70_0223AFA8
-	.public ov70_0223AFFC
-	.public ov70_0223B12C
-	.public ov70_0223B188
-	.public ov70_0223B1B8
-	.public ov70_0223B258
-	.public ov70_0223B2C0
-	.public ov70_0223B2D0
-	.public ov70_0223B300
-	.public ov70_0223B344
-	.public ov70_0223B364
-	.public ov70_0223B3BC
-	.public ov70_0223B3EC
-	.public ov70_0223B41C
-	.public ov70_0223B484
-	.public ov70_0223B4D4
-	.public ov70_0223B55C
-	.public ov70_0223B6EC
-	.public ov70_0223B788
-	.public ov70_0223B7CC
-	.public ov70_0223B8B4
-	.public ov70_0223B8E0
-	.public ov70_0223B9C8
-	.public ov70_0223BAAC
-	.public ov70_0223BAE0
-	.public ov70_0223BC2C
-	.public ov70_0223BC7C
-	.public ov70_0223BCD0
-	.public ov70_0223BD04
-	.public ov70_0223BD80
-	.public ov70_0223BD90
-	.public ov70_0223BE84
-	.public ov70_0223BF00
-	.public ov70_0223BFA8
-	.public ov70_0223C008
-	.public ov70_0223C0C8
-	.public ov70_0223C19C
-	.public ov70_0223C1F8
-	.public ov70_0223C23C
-	.public ov70_0223C274
-	.public ov70_0223C2B0
-	.public ov70_0223C2EC
-	.public ov70_0223C304
-	.public ov70_0223C420
-	.public ov70_0223C4B0
-	.public ov70_0223C4E4
-	.public ov70_0223C50C
-	.public ov70_0223C52C
-	.public ov70_0223C618
-	.public ov70_0223C640
-	.public ov70_0223C660
-	.public ov70_0223C6F0
-	.public ov70_0223C718
-	.public ov70_0223C744
-	.public ov70_0223C7C4
-	.public ov70_0223C7EC
-	.public ov70_0223C818
-	.public ov70_0223C8B0
-	.public ov70_0223C8DC
+	.public GtsSearchResult_Init
+	.public GtsSearchResult_Main
+	.public GtsSearchResult_Exit
+	.public GtsSearchResult_InitBgs
+	.public GtsSearchResult_FreeBgs
+	.public GtsSearchResult_LoadGraphics
+	.public GtsSearchResult_CreateMonSprite
+	.public GtsSearchResult_DeleteMonSprite
+	.public GtsSearchResult_CreateWindows
+	.public GtsSearchResult_RemoveWindows
+	.public GtsSearchResult_CreateStrings
+	.public GtsSearchResult_DeleteStrings
+	.public GtsSearchResult_Start
+	.public GtsSearchResult_Select
+	.public GtsSearchResult_HandleInput
+	.public GtsSearchResult_FadeOut
+	.public GtsSearchResult_ShowTradePrompt
+	.public GtsSearchResult_HandleTradePrompt
+	.public GtsSearchResult_DrawDetails
+	.public GtsSearchResult_Redraw
+	.public GtsSearchResult_ScrollIn
+	.public GtsSearchResult_ScrollOut
+	.public GtsSearchResult_WaitText
+	.public GtsSearchResult_PrintMessage
+	.public GtsSearchResult_PrintLabel
+	.public GtsSearchResult_PrintButtonLabel
+	.public GtsSearchResult_DrawWanted
+	.public GtsSearchResult_DrawLocation
+	.public GtsSearchResult_ScrollBgs
+	.public GtsSearch_Init
+	.public GtsSearch_Main
+	.public GtsSearch_Exit
+	.public GtsSearch_InitBgs
+	.public GtsSearch_FreeBgs
+	.public GtsSearch_LoadGraphics
+	.public GtsSearch_CreateSprites
+	.public GtsSearch_DeleteSprites
+	.public GtsSearch_CreateWindows
+	.public GtsSearch_RemoveWindows
+	.public GtsSearch_CreateData
+	.public GtsSearch_FreeData
+	.public GtsSearch_Start
+	.public GtsSearch_GetTouchedButton
+	.public GtsSearch_SelectButton
+	.public GtsSearch_HandleInput
+	.public GtsSearch_StartSearch
+	.public GtsSearch_IsDateRecent
+	.public GtsSearch_SendSearch
+	.public GtsSearch_WaitSearch
+	.public GtsSearch_ShowResultCount
+	.public GtsSearch_WaitResultsShown
+	.public GtsSearch_SearchFailed
+	.public GtsSearch_ServerError
+	.public GtsSearch_ServerErrorExit
+	.public GtsSearch_GetCursorButton
+	.public GtsSearch_MoveCursor
+	.public GtsSearch_SetCursor
+	.public GtsSearch_FadeOut
+	.public GtsSearch_AskSpecies
+	.public GtsSearch_OpenSpeciesSelector
+	.public GtsSearch_HandleSpeciesSelector
+	.public GtsSearch_AskGender
+	.public GtsSearch_OpenGenderSelector
+	.public GtsSearch_HandleGenderSelector
+	.public GtsSearch_AskLevel
+	.public GtsSearch_OpenLevelSelector
+	.public GtsSearch_HandleLevelSelector
+	.public GtsSearch_AskCountry
+	.public GtsSearch_OpenCountrySelector
+	.public GtsSearch_HandleCountrySelector
+	.public GtsSearch_ShowExitPrompt
+	.public GtsSearch_HandleExitPrompt
 	.public ov70_0223C928
 	.public ov70_0223C930
-	.public ov70_0223C958
-	.public ov70_0223C978
-	.public ov70_0223C9AC
-	.public ov70_0223CA18
-	.public ov70_0223CA40
-	.public ov70_0223CAC4
-	.public ov70_0223CB1C
-	.public ov70_0223CC04
-	.public ov70_0223CC68
-	.public ov70_0223CCA4
-	.public ov70_0223CD28
+	.public GtsSearch_WaitText
+	.public GtsSearch_WaitTextAndPause
+	.public GtsSearch_ScrollOut
+	.public GtsSearch_ScrollIn
+	.public GtsSearch_HandleScrolledOut
+	.public GtsSearch_PrintMessage
+	.public GtsSearch_DrawFieldLabels
+	.public GtsSearch_DrawResultsButton
+	.public GtsSearch_IsSameSearch
+	.public GtsSearch_ScrollBgs
+	.public GtsSearch_SetBlendBrightness
 	.public ov70_0223CD44
 	.public ov70_0223CDD8
 	.public ov70_0223CDF8
@@ -2655,20 +2655,20 @@
 	.public sGtsSummaryBg1Template
 	.public sGtsSummaryBg0Template
 	.public sGtsSummaryInfoWindowRects
-	.public ov70_02245498
-	.public ov70_022454A4
-	.public ov70_022454A5
-	.public ov70_022454B4
-	.public ov70_022454D0
-	.public ov70_022454EC
-	.public ov70_0224562C
-	.public ov70_02245634
-	.public ov70_02245640
-	.public ov70_02245658
-	.public ov70_02245674
-	.public ov70_02245690
-	.public ov70_022456AC
-	.public ov70_022456C8
+	.public sGtsSearchResultButtonHitboxes
+	.public sGtsSearchResultLeft
+	.public sGtsSearchResultRight
+	.public sGtsSearchResultBg1Template
+	.public sGtsSearchResultBg0Template
+	.public sGtsSearchResultInfoWindows
+	.public sGtsSearchLineWindowPositions
+	.public sGtsSearchValueWindowPositions
+	.public sGtsSearchFieldWindowPositions
+	.public sGtsSearchBg3Template
+	.public sGtsSearchBg2Template
+	.public sGtsSearchBg0Template
+	.public sGtsSearchBg1Template
+	.public sGtsSearchButtonHitboxes
 	.public ov70_022456E8
 	.public ov70_022456F0
 	.public ov70_02245700
@@ -2765,13 +2765,13 @@
 	.public sGtsMainMenuStates
 	.public sGtsGenderSymbolColors
 	.public sGtsSummaryStates
-	.public ov70_022464CC
-	.public ov70_022464F0
-	.public ov70_022464F1
-	.public ov70_022464FE
-	.public ov70_02246500
-	.public ov70_02246502
-	.public ov70_02246528
+	.public sGtsSearchResultStates
+	.public sGtsSearchButtonColumns
+	.public sGtsSearchButtonRows
+	.public sGtsSearchCursorX
+	.public sGtsSearchCursorY
+	.public sGtsSearchCursorAnims
+	.public sGtsSearchStates
 	.public ov70_022465A8
 	.public ov70_022465EC
 	.public ov70_02246614
@@ -2811,8 +2811,8 @@
 	.public GtsMainMenu_WaitExitAnim
 	.public GtsSummary_DeleteMonSprite
 	.public GtsSummary_Start
-	.public ov70_0223ABD8
-	.public ov70_0223ACE4
+	.public GtsSearchResult_FreeBgs
+	.public GtsSearchResult_DeleteMonSprite
 	.public ov70_0223C928
 	.public ov70_0223D924
 	.public ov70_0223E114
@@ -3043,26 +3043,26 @@ sGtsSummaryInfoWindowRects: ; 0x022453B8
 	.byte 0x04, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00
 	.byte 0x08, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 
-ov70_02245498: ; 0x02245498
+sGtsSearchResultButtonHitboxes: ; 0x02245498
 	.byte 0xA2, 0xBF, 0x03, 0x7D, 0xA2, 0xBF, 0x82, 0xFD
 	.byte 0xFF, 0x00, 0x00, 0x00
 
-ov70_022454A4: ; 0x022454A4
+sGtsSearchResultLeft: ; 0x022454A4
 	.byte 0x01
 
-ov70_022454A5: ; 0x022454A5
+sGtsSearchResultRight: ; 0x022454A5
 	.byte 0x02, 0x03, 0x00, 0x00, 0x04, 0x05, 0x01, 0x02, 0x06, 0x05, 0x03
 	.byte 0x04, 0x06, 0x00, 0x00
 
-ov70_022454B4: ; 0x022454B4
+sGtsSearchResultBg1Template: ; 0x022454B4
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1E, 0x02, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov70_022454D0: ; 0x022454D0
+sGtsSearchResultBg0Template: ; 0x022454D0
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x1F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov70_022454EC: ; 0x022454EC
+sGtsSearchResultInfoWindows: ; 0x022454EC
 	.byte 0x01, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x09, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x08, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
@@ -3085,36 +3085,36 @@ ov70_022454EC: ; 0x022454EC
 	.byte 0x02, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 	.byte 0x1B, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00
 
-ov70_0224562C: ; 0x0224562C
+sGtsSearchLineWindowPositions: ; 0x0224562C
 	.byte 0x01, 0x00, 0x10, 0x00
 	.byte 0x02, 0x00, 0x12, 0x00
 
-ov70_02245634: ; 0x02245634
+sGtsSearchValueWindowPositions: ; 0x02245634
 	.byte 0x16, 0x00, 0x08, 0x00, 0x16, 0x00, 0x0D, 0x00, 0x16, 0x00, 0x03, 0x00
 
-ov70_02245640: ; 0x02245640
+sGtsSearchFieldWindowPositions: ; 0x02245640
 	.byte 0x01, 0x00, 0x01, 0x00, 0x02, 0x00, 0x03, 0x00, 0x01, 0x00, 0x06, 0x00, 0x02, 0x00, 0x08, 0x00
 	.byte 0x01, 0x00, 0x0B, 0x00, 0x02, 0x00, 0x0D, 0x00
 
-ov70_02245658: ; 0x02245658
+sGtsSearchBg3Template: ; 0x02245658
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x03, 0x07, 0x00, 0x02, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov70_02245674: ; 0x02245674
+sGtsSearchBg2Template: ; 0x02245674
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x02, 0x02, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov70_02245690: ; 0x02245690
+sGtsSearchBg0Template: ; 0x02245690
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov70_022456AC: ; 0x022456AC
+sGtsSearchBg1Template: ; 0x022456AC
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x03
 	.byte 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov70_022456C8: ; 0x022456C8
+sGtsSearchButtonHitboxes: ; 0x022456C8
 	.byte 0x03, 0x29, 0x02, 0x63, 0x2B, 0x51, 0x02, 0x63
 	.byte 0x53, 0x79, 0x02, 0x63, 0x7B, 0xA1, 0x02, 0x63, 0x13, 0x2D, 0x91, 0xFF, 0x3A, 0x55, 0x91, 0xFF
 	.byte 0x62, 0x7D, 0x91, 0xFF, 0xFF, 0x00, 0x00, 0x00
@@ -3548,8 +3548,8 @@ sGtsScreens: ; 0x022463EC
 	.word ov70_02244038, ov70_02244124, ov70_02244154
 	.word GtsMainMenu_Init, GtsMainMenu_Main, GtsMainMenu_Exit
 	.word GtsSummary_Init, GtsSummary_Main, GtsSummary_Exit
-	.word ov70_0223A8BC, ov70_0223AA90, ov70_0223AB00
-	.word ov70_0223B55C, ov70_0223B6EC, ov70_0223B788
+	.word GtsSearchResult_Init, GtsSearchResult_Main, GtsSearchResult_Exit
+	.word GtsSearch_Init, GtsSearch_Main, GtsSearch_Exit
 	.word ov70_0223CD44, ov70_0223CDD8, ov70_0223CDF8
 	.word ov70_0223E78C, ov70_0223E884, ov70_0223E8A4
 	.word ov70_0223F96C, ov70_0223F9B4, ov70_0223F9D4
@@ -3587,67 +3587,67 @@ sGtsSummaryStates: ; 0x022464A8
 	.word GtsSummary_ShowMenu
 	.word GtsSummary_HandleMenu
 
-ov70_022464CC: ; 0x022464CC
-	.word ov70_0223AF5C
-	.word ov70_0223AFFC
-	.word ov70_0223B12C
-	.word ov70_0223B344
-	.word ov70_0223B188
-	.word ov70_0223B1B8
-	.word ov70_0223B2C0
-	.word ov70_0223B2D0
-	.word ov70_0223B300
+sGtsSearchResultStates: ; 0x022464CC
+	.word GtsSearchResult_Start
+	.word GtsSearchResult_HandleInput
+	.word GtsSearchResult_FadeOut
+	.word GtsSearchResult_WaitText
+	.word GtsSearchResult_ShowTradePrompt
+	.word GtsSearchResult_HandleTradePrompt
+	.word GtsSearchResult_Redraw
+	.word GtsSearchResult_ScrollIn
+	.word GtsSearchResult_ScrollOut
 
-ov70_022464F0: ; 0x022464F0
+sGtsSearchButtonColumns: ; 0x022464F0
 	.byte 0x00
 
-ov70_022464F1: ; 0x022464F1
+sGtsSearchButtonRows: ; 0x022464F1
 	.byte 0x00, 0x00, 0x01, 0x00, 0x02, 0x00, 0x03, 0x01, 0x00, 0x01, 0x01, 0x01, 0x02
 
-ov70_022464FE: ; 0x022464FE
+sGtsSearchCursorX: ; 0x022464FE
 	.byte 0x00, 0x00
 
-ov70_02246500: ; 0x02246500
+sGtsSearchCursorY: ; 0x02246500
 	.byte 0x00, 0x00
 
-ov70_02246502: ; 0x02246502
+sGtsSearchCursorAnims: ; 0x02246502
 	.byte 0x2D, 0x00, 0x00, 0x00, 0x28, 0x00, 0x2D, 0x00, 0x00, 0x00, 0x50, 0x00, 0x2D, 0x00
 	.byte 0x00, 0x00, 0x78, 0x00, 0x2D, 0x00, 0xC0, 0x00, 0x20, 0x00, 0x2E, 0x00, 0xC0, 0x00, 0x48, 0x00
 	.byte 0x2E, 0x00, 0xC0, 0x00, 0x70, 0x00, 0x2E, 0x00
 
-ov70_02246528: ; 0x02246528
-	.word ov70_0223BD04
-	.word ov70_0223BE84
-	.word ov70_0223C4B0
-	.word ov70_0223C4E4
-	.word ov70_0223C50C
-	.word ov70_0223C52C
-	.word ov70_0223C618
-	.word ov70_0223C640
-	.word ov70_0223C660
-	.word ov70_0223C6F0
-	.word ov70_0223C718
-	.word ov70_0223C744
-	.word ov70_0223C7C4
-	.word ov70_0223C7EC
-	.word ov70_0223C818
-	.word ov70_0223BF00
-	.word ov70_0223C008
-	.word ov70_0223C0C8
-	.word ov70_0223C19C
-	.word ov70_0223C1F8
-	.word ov70_0223C23C
-	.word ov70_0223C958
-	.word ov70_0223C978
-	.word ov70_0223C8B0
-	.word ov70_0223C8DC
+sGtsSearchStates: ; 0x02246528
+	.word GtsSearch_Start
+	.word GtsSearch_HandleInput
+	.word GtsSearch_FadeOut
+	.word GtsSearch_AskSpecies
+	.word GtsSearch_OpenSpeciesSelector
+	.word GtsSearch_HandleSpeciesSelector
+	.word GtsSearch_AskGender
+	.word GtsSearch_OpenGenderSelector
+	.word GtsSearch_HandleGenderSelector
+	.word GtsSearch_AskLevel
+	.word GtsSearch_OpenLevelSelector
+	.word GtsSearch_HandleLevelSelector
+	.word GtsSearch_AskCountry
+	.word GtsSearch_OpenCountrySelector
+	.word GtsSearch_HandleCountrySelector
+	.word GtsSearch_StartSearch
+	.word GtsSearch_SendSearch
+	.word GtsSearch_WaitSearch
+	.word GtsSearch_ShowResultCount
+	.word GtsSearch_WaitResultsShown
+	.word GtsSearch_SearchFailed
+	.word GtsSearch_WaitText
+	.word GtsSearch_WaitTextAndPause
+	.word GtsSearch_ShowExitPrompt
+	.word GtsSearch_HandleExitPrompt
 	.word ov70_0223C928
 	.word ov70_0223C930
-	.word ov70_0223C274
-	.word ov70_0223C2B0
-	.word ov70_0223C9AC
-	.word ov70_0223CA18
-	.word ov70_0223CA40
+	.word GtsSearch_ServerError
+	.word GtsSearch_ServerErrorExit
+	.word GtsSearch_ScrollOut
+	.word GtsSearch_ScrollIn
+	.word GtsSearch_HandleScrolledOut
 
 ov70_022465A8: ; 0x022465A8
 	.word ov70_0223D44C

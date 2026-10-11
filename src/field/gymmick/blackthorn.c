@@ -101,7 +101,7 @@ static u8 BlackthornGymmick_CheckWallCollision(FieldSystem *fieldSystem, const u
 static u16 BlackthornGymmick_GetMaxRotationExtent(FieldSystem *fieldSystem, const u8 dim, const BlackthornGymXZPoint *const points, const u8 *const extentDat);
 static BOOL Task_BlackthornGymmick_MovePlatform(TaskManager *taskman);
 static BOOL Task_BlackthornGymmick_RotatePlatform(TaskManager *taskman);
-static BlackthornPlatformRotationBonkState ov04_02255CBC(FieldSystem *fieldSystem, BlackthornGymmickPlatformData *platform, u16 *out);
+static BlackthornPlatformRotationBonkState BlackthornPlatform_CheckRotationBonk(FieldSystem *fieldSystem, BlackthornGymmickPlatformData *platform, u16 *out);
 static u16 BlackthornGymmick_GetMaximumRotationAngle(FieldSystem *fieldSystem, BlackthornGymmickPlatformData *platform);
 static void SysTask_BlackthornGymmick_MovePlatform(SysTask *task, void *data);
 
@@ -178,7 +178,7 @@ void GymmickFree_Blackthorn(FieldSystem *fieldSystem) {
     fieldSystem->unk4->unk24 = NULL;
 }
 
-BOOL ov04_02255090(FieldSystem *fieldSystem) {
+BOOL BlackthornGymmick_TryStartPlatformAction(FieldSystem *fieldSystem) {
     if (Save_Gymmick_GetType(Save_GetGymmickPtr(FieldSystem_GetSaveData(fieldSystem))) != GYMMICK_BLACKTHORN) {
         return FALSE;
     }
@@ -628,7 +628,7 @@ static BOOL Task_BlackthornGymmick_RotatePlatform(TaskManager *taskman) {
         BlackthornGymmickPlatformData *platform = &localData->platforms[taskData->platformIdx];
         taskData->moveStepTimer = 0;
         u16 rotateExtent;
-        BlackthornPlatformRotationBonkState response = ov04_02255CBC(fieldSystem, platform, &rotateExtent);
+        BlackthornPlatformRotationBonkState response = BlackthornPlatform_CheckRotationBonk(fieldSystem, platform, &rotateExtent);
         if (response == ROTATE_BONK_OK) {
             taskData->state = STATE_ROTATE_RUN;
         } else if (response == ROTATE_BONK_PARTIAL_GO) {
@@ -686,7 +686,7 @@ static BOOL Task_BlackthornGymmick_RotatePlatform(TaskManager *taskman) {
     return FALSE;
 }
 
-static BlackthornPlatformRotationBonkState ov04_02255CBC(FieldSystem *fieldSystem, BlackthornGymmickPlatformData *platform, u16 *out) {
+static BlackthornPlatformRotationBonkState BlackthornPlatform_CheckRotationBonk(FieldSystem *fieldSystem, BlackthornGymmickPlatformData *platform, u16 *out) {
     u8 rightWallMinus1 = platform->width - 1;
     if (BlackthornGymmick_CheckWallCollision(fieldSystem, platform->width, platform->bottomWall) != 0xFF) {
         return ROTATE_BONK_NO_GO;

@@ -1,5 +1,0 @@
-#pragma force_active on
-#include "global.h"
-#pragma force_active on
-struct Inner{u8 pad[36];u32 heap;};struct S{struct Inner*inner;u32 pad4;void*palette,*bg;};void*NARC_New(int,u32);void GfGfxLoader_LoadCharDataFromOpenNarc(void*,int,void*,int,int,int,int,u32);void GfGfxLoader_LoadScrnDataFromOpenNarc(void*,int,void*,int,int,int,int,u32);void GfGfxLoader_GXLoadPalFromOpenNarc(void*,int,int,int,int,u32);void PaletteData_LoadPaletteSlotFromHardware(void*,int,int,int);void BG_SetMaskColor(int,u16);void NARC_Delete(void*);void ov05_0221D094(struct S*);
-void ov05_0221D094(struct S*s){void*n=NARC_New(104,s->inner->heap);GfGfxLoader_LoadCharDataFromOpenNarc(n,0,s->bg,1,0,0,0,s->inner->heap);GfGfxLoader_LoadScrnDataFromOpenNarc(n,4,s->bg,1,0,0,0,s->inner->heap);GfGfxLoader_LoadScrnDataFromOpenNarc(n,2,s->bg,2,0,0,0,s->inner->heap);GfGfxLoader_LoadScrnDataFromOpenNarc(n,3,s->bg,3,0,0,0,s->inner->heap);GfGfxLoader_GXLoadPalFromOpenNarc(n,1,0,0,0,s->inner->heap);PaletteData_LoadPaletteSlotFromHardware(s->palette,0,0,160);BG_SetMaskColor(1,0x18c6);NARC_Delete(n);}

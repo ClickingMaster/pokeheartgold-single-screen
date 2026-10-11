@@ -131,7 +131,7 @@
 .public EcruteakGymmick_ExtinguishCandle
 .public GymmickInit_Blackthorn
 .public GymmickFree_Blackthorn
-.public ov04_02255090
+.public BlackthornGymmick_TryStartPlatformAction
 .public GymmickCheckCollision_Blackthorn
 .public GymmickInit_Cianwood
 .public GymmickFree_Cianwood

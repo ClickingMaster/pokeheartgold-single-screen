@@ -168,4 +168,4 @@
 .public NNS_GfdDefaultFuncAllocTexVram
 .public NNS_GfdDefaultFuncAllocPlttVram
 .public gSystem
-.public ov05_0221BA00
+.public LinkBattleScreen_Start

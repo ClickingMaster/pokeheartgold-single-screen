@@ -2235,91 +2235,91 @@
 	.public Gts_DrawTrainerInfo
 	.public Gts_LoadMonPicture
 	.public GtsSummary_DrawWanted
-	.public ov70_0223A8BC
-	.public ov70_0223AA90
-	.public ov70_0223AB00
-	.public ov70_0223AB3C
-	.public ov70_0223ABD8
-	.public ov70_0223ABF4
-	.public ov70_0223AC98
-	.public ov70_0223ACE4
-	.public ov70_0223ACF4
-	.public ov70_0223AE40
-	.public ov70_0223AE98
-	.public ov70_0223AF30
-	.public ov70_0223AF5C
-	.public ov70_0223AFA8
-	.public ov70_0223AFFC
-	.public ov70_0223B12C
-	.public ov70_0223B188
-	.public ov70_0223B1B8
-	.public ov70_0223B258
-	.public ov70_0223B2C0
-	.public ov70_0223B2D0
-	.public ov70_0223B300
-	.public ov70_0223B344
-	.public ov70_0223B364
-	.public ov70_0223B3BC
-	.public ov70_0223B3EC
-	.public ov70_0223B41C
-	.public ov70_0223B484
-	.public ov70_0223B4D4
-	.public ov70_0223B55C
-	.public ov70_0223B6EC
-	.public ov70_0223B788
-	.public ov70_0223B7CC
-	.public ov70_0223B8B4
-	.public ov70_0223B8E0
-	.public ov70_0223B9C8
-	.public ov70_0223BAAC
-	.public ov70_0223BAE0
-	.public ov70_0223BC2C
-	.public ov70_0223BC7C
-	.public ov70_0223BCD0
-	.public ov70_0223BD04
-	.public ov70_0223BD80
-	.public ov70_0223BD90
-	.public ov70_0223BE84
-	.public ov70_0223BF00
-	.public ov70_0223BFA8
-	.public ov70_0223C008
-	.public ov70_0223C0C8
-	.public ov70_0223C19C
-	.public ov70_0223C1F8
-	.public ov70_0223C23C
-	.public ov70_0223C274
-	.public ov70_0223C2B0
-	.public ov70_0223C2EC
-	.public ov70_0223C304
-	.public ov70_0223C420
-	.public ov70_0223C4B0
-	.public ov70_0223C4E4
-	.public ov70_0223C50C
-	.public ov70_0223C52C
-	.public ov70_0223C618
-	.public ov70_0223C640
-	.public ov70_0223C660
-	.public ov70_0223C6F0
-	.public ov70_0223C718
-	.public ov70_0223C744
-	.public ov70_0223C7C4
-	.public ov70_0223C7EC
-	.public ov70_0223C818
-	.public ov70_0223C8B0
-	.public ov70_0223C8DC
+	.public GtsSearchResult_Init
+	.public GtsSearchResult_Main
+	.public GtsSearchResult_Exit
+	.public GtsSearchResult_InitBgs
+	.public GtsSearchResult_FreeBgs
+	.public GtsSearchResult_LoadGraphics
+	.public GtsSearchResult_CreateMonSprite
+	.public GtsSearchResult_DeleteMonSprite
+	.public GtsSearchResult_CreateWindows
+	.public GtsSearchResult_RemoveWindows
+	.public GtsSearchResult_CreateStrings
+	.public GtsSearchResult_DeleteStrings
+	.public GtsSearchResult_Start
+	.public GtsSearchResult_Select
+	.public GtsSearchResult_HandleInput
+	.public GtsSearchResult_FadeOut
+	.public GtsSearchResult_ShowTradePrompt
+	.public GtsSearchResult_HandleTradePrompt
+	.public GtsSearchResult_DrawDetails
+	.public GtsSearchResult_Redraw
+	.public GtsSearchResult_ScrollIn
+	.public GtsSearchResult_ScrollOut
+	.public GtsSearchResult_WaitText
+	.public GtsSearchResult_PrintMessage
+	.public GtsSearchResult_PrintLabel
+	.public GtsSearchResult_PrintButtonLabel
+	.public GtsSearchResult_DrawWanted
+	.public GtsSearchResult_DrawLocation
+	.public GtsSearchResult_ScrollBgs
+	.public GtsSearch_Init
+	.public GtsSearch_Main
+	.public GtsSearch_Exit
+	.public GtsSearch_InitBgs
+	.public GtsSearch_FreeBgs
+	.public GtsSearch_LoadGraphics
+	.public GtsSearch_CreateSprites
+	.public GtsSearch_DeleteSprites
+	.public GtsSearch_CreateWindows
+	.public GtsSearch_RemoveWindows
+	.public GtsSearch_CreateData
+	.public GtsSearch_FreeData
+	.public GtsSearch_Start
+	.public GtsSearch_GetTouchedButton
+	.public GtsSearch_SelectButton
+	.public GtsSearch_HandleInput
+	.public GtsSearch_StartSearch
+	.public GtsSearch_IsDateRecent
+	.public GtsSearch_SendSearch
+	.public GtsSearch_WaitSearch
+	.public GtsSearch_ShowResultCount
+	.public GtsSearch_WaitResultsShown
+	.public GtsSearch_SearchFailed
+	.public GtsSearch_ServerError
+	.public GtsSearch_ServerErrorExit
+	.public GtsSearch_GetCursorButton
+	.public GtsSearch_MoveCursor
+	.public GtsSearch_SetCursor
+	.public GtsSearch_FadeOut
+	.public GtsSearch_AskSpecies
+	.public GtsSearch_OpenSpeciesSelector
+	.public GtsSearch_HandleSpeciesSelector
+	.public GtsSearch_AskGender
+	.public GtsSearch_OpenGenderSelector
+	.public GtsSearch_HandleGenderSelector
+	.public GtsSearch_AskLevel
+	.public GtsSearch_OpenLevelSelector
+	.public GtsSearch_HandleLevelSelector
+	.public GtsSearch_AskCountry
+	.public GtsSearch_OpenCountrySelector
+	.public GtsSearch_HandleCountrySelector
+	.public GtsSearch_ShowExitPrompt
+	.public GtsSearch_HandleExitPrompt
 	.public ov70_0223C928
 	.public ov70_0223C930
-	.public ov70_0223C958
-	.public ov70_0223C978
-	.public ov70_0223C9AC
-	.public ov70_0223CA18
-	.public ov70_0223CA40
-	.public ov70_0223CAC4
-	.public ov70_0223CB1C
-	.public ov70_0223CC04
-	.public ov70_0223CC68
-	.public ov70_0223CCA4
-	.public ov70_0223CD28
+	.public GtsSearch_WaitText
+	.public GtsSearch_WaitTextAndPause
+	.public GtsSearch_ScrollOut
+	.public GtsSearch_ScrollIn
+	.public GtsSearch_HandleScrolledOut
+	.public GtsSearch_PrintMessage
+	.public GtsSearch_DrawFieldLabels
+	.public GtsSearch_DrawResultsButton
+	.public GtsSearch_IsSameSearch
+	.public GtsSearch_ScrollBgs
+	.public GtsSearch_SetBlendBrightness
 	.public ov70_0223CD44
 	.public ov70_0223CDD8
 	.public ov70_0223CDF8
@@ -2655,20 +2655,20 @@
 	.public sGtsSummaryBg1Template
 	.public sGtsSummaryBg0Template
 	.public sGtsSummaryInfoWindowRects
-	.public ov70_02245498
-	.public ov70_022454A4
-	.public ov70_022454A5
-	.public ov70_022454B4
-	.public ov70_022454D0
-	.public ov70_022454EC
-	.public ov70_0224562C
-	.public ov70_02245634
-	.public ov70_02245640
-	.public ov70_02245658
-	.public ov70_02245674
-	.public ov70_02245690
-	.public ov70_022456AC
-	.public ov70_022456C8
+	.public sGtsSearchResultButtonHitboxes
+	.public sGtsSearchResultLeft
+	.public sGtsSearchResultRight
+	.public sGtsSearchResultBg1Template
+	.public sGtsSearchResultBg0Template
+	.public sGtsSearchResultInfoWindows
+	.public sGtsSearchLineWindowPositions
+	.public sGtsSearchValueWindowPositions
+	.public sGtsSearchFieldWindowPositions
+	.public sGtsSearchBg3Template
+	.public sGtsSearchBg2Template
+	.public sGtsSearchBg0Template
+	.public sGtsSearchBg1Template
+	.public sGtsSearchButtonHitboxes
 	.public ov70_022456E8
 	.public ov70_022456F0
 	.public ov70_02245700
@@ -2765,13 +2765,13 @@
 	.public sGtsMainMenuStates
 	.public sGtsGenderSymbolColors
 	.public sGtsSummaryStates
-	.public ov70_022464CC
-	.public ov70_022464F0
-	.public ov70_022464F1
-	.public ov70_022464FE
-	.public ov70_02246500
-	.public ov70_02246502
-	.public ov70_02246528
+	.public sGtsSearchResultStates
+	.public sGtsSearchButtonColumns
+	.public sGtsSearchButtonRows
+	.public sGtsSearchCursorX
+	.public sGtsSearchCursorY
+	.public sGtsSearchCursorAnims
+	.public sGtsSearchStates
 	.public ov70_022465A8
 	.public ov70_022465EC
 	.public ov70_02246614
@@ -2811,8 +2811,8 @@
 	.public GtsMainMenu_WaitExitAnim
 	.public GtsSummary_DeleteMonSprite
 	.public GtsSummary_Start
-	.public ov70_0223ABD8
-	.public ov70_0223ACE4
+	.public GtsSearchResult_FreeBgs
+	.public GtsSearchResult_DeleteMonSprite
 	.public ov70_0223C928
 	.public ov70_0223D924
 	.public ov70_0223E114

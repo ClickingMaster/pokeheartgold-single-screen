@@ -1,7 +1,7 @@
 #pragma force_active on
 #include "global.h"
 
-#include "to90_vct_ssp_private.h"
+#include "vct/vct_session.h"
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
@@ -21,8 +21,8 @@ extern u32 _021D6F60[3];
 extern u32 _021D6F78[3];
 extern Packet *_021D6F6C[3];
 extern Packet *_021D6F84[3];
-extern Session _021D6FCC;
-extern Session _021D6FB4;
+extern Session gVctServerSession;
+extern Session gVctRejectSession;
 extern u64 sTransceiverLimit;
 extern int ulaw_segment[8];
 extern void vct_free_packet_buffer(void *);
@@ -86,13 +86,13 @@ Session *VCT_CreateSession(u32 aid) {
 
 int VCT_DeleteSession(Session *s) {
     Session *prev = 0;
-    Session *cur = _021D6F90.core.used;
+    Session *cur = gVctSsp.core.used;
     if (!s) {
         return 0;
     }
     if (__vct.mode == 2) {
-        if (s == &_021D6FCC) {
-            _021D6F90.server.state = 0;
+        if (s == &gVctServerSession) {
+            gVctSsp.server.state = 0;
         }
         return 1;
     }
@@ -103,13 +103,13 @@ int VCT_DeleteSession(Session *s) {
                 prev->next = s->next;
             } else {
                 if (cur->next) {
-                    _021D6F90.core.used = cur->next;
+                    gVctSsp.core.used = cur->next;
                 } else {
-                    _021D6F90.core.used = 0;
+                    gVctSsp.core.used = 0;
                 }
             }
-            s->next = _021D6F90.core.free;
-            _021D6F90.core.free = s;
+            s->next = gVctSsp.core.free;
+            gVctSsp.core.free = s;
             return 1;
         }
         prev = cur;
@@ -189,7 +189,7 @@ int VCT_AddConferenceClient(u8 aid) {
     if (__vct.mode != 3) {
         return -2;
     }
-    if (_021D6F90.core.count == 3) {
+    if (gVctSsp.core.count == 3) {
         return -6;
     }
     if (aid == __vct.aid) {
@@ -207,6 +207,6 @@ int VCT_AddConferenceClient(u8 aid) {
     s->mode = 2;
     s->mask = 1 << aid;
     __vct.callback(aid, 7, s, __vct.context);
-    _021D6F90.core.count++;
+    gVctSsp.core.count++;
     return 0;
 }

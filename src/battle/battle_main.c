@@ -116,7 +116,7 @@ extern const u8 sDoublesBattlerTypes[4];
 // Declared by no header yet.
 extern u32 *BattleAnimSystem_New(enum HeapID heapId);
 extern void BattleAnimSystem_Delete(u32 *animSystem);
-extern void ov05_0221BA00(BattleLinkScreenArgs *args);
+extern void LinkBattleScreen_Start(BattleLinkScreenArgs *args);
 extern void sub_020302A4(BattleSetup *setup);
 extern void ParticleSystem_FreeAll(void);
 extern void sub_02037930(int mode);
@@ -1339,7 +1339,7 @@ BOOL ov12_0223A0D4(OverlayManager *man) {
         LINK_SCREEN_ARGS(battleSystem)->multiOrSide = 1;
         break;
     }
-    ov05_0221BA00(LINK_SCREEN_ARGS(battleSystem));
+    LinkBattleScreen_Start(LINK_SCREEN_ARGS(battleSystem));
     return TRUE;
 }
 
@@ -1400,7 +1400,7 @@ BOOL ov12_0223A260(OverlayManager *man) {
         LINK_SCREEN_ARGS(battleSystem)->mode = 1;
         LINK_SCREEN_ARGS(battleSystem)->multiOrSide = 0;
     }
-    ov05_0221BA00(LINK_SCREEN_ARGS(battleSystem));
+    LinkBattleScreen_Start(LINK_SCREEN_ARGS(battleSystem));
     return TRUE;
 }
 
@@ -1502,7 +1502,7 @@ BOOL Battle_EndInit(OverlayManager *man) {
         }
     }
     args->unk_2C = setup->unk1B2;
-    ov05_0221BA00(args);
+    LinkBattleScreen_Start(args);
     return TRUE;
 }
 

@@ -452,7 +452,7 @@ BOOL Gts_Main(OverlayManager *man, int *state) {
             if (app->reloadGraphics) {
                 Gts_InitGraphics(app);
                 ov70_02240D74(app, PlayerProfile_GetTrainerGender(app->args->profile));
-                ov70_02241184(app, app->unk_0128, 0);
+                ov70_02241184(app, app->searchResultCount, 0);
                 Gts_LoadSubScreenBg(app);
                 Gts_ShowSubScreenPanel(app);
                 app->reloadGraphics = FALSE;
@@ -532,18 +532,18 @@ void Gts_InitData(GtsApp *app, OverlayManager *man) {
     app->screen = 0;
     Gts_SetNextScreen(app, 0, 0);
     app->menuCursor = 0;
-    app->unk_0B8A = 0;
-    app->unk_0B8C = 3;
-    app->unk_0B8D = 0;
-    app->unk_0B8E = 0;
-    app->unk_0B90 = 0;
+    app->searchCriteria.species = 0;
+    app->searchCriteria.gender = 3;
+    app->searchCriteria.minLevel = 0;
+    app->searchCriteria.maxLevel = 0;
+    app->lastSearch.species = 0;
     app->playerAnimDone = 0;
     app->unk_0120 = 18;
     app->boxMonCount = 0;
     app->countingBox = 0;
-    app->unk_11DE = 0;
+    app->hasSearchResults = 0;
     app->waitingIcon = NULL;
-    app->unk_12CC = 0;
+    app->searchCountry = 0;
 }
 
 void ov70_0223887C(GtsApp *app) {

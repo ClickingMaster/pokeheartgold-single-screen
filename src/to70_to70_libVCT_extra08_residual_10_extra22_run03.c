@@ -1,7 +1,7 @@
 #pragma force_active on
 #include "global.h"
 
-#include "to90_vct_ssp_private.h"
+#include "vct/vct_session.h"
 
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
@@ -32,8 +32,8 @@ extern s8 sTransRecvState[][11];
 extern s8 sSendState[][11];
 extern s8 sTransSendState[][11];
 
-extern Session _021D6FCC;
-extern Session _021D6FB4;
+extern Session gVctServerSession;
+extern Session gVctRejectSession;
 extern Packet *_021D6FE4[];
 extern u32 E2scales[];
 
@@ -98,10 +98,10 @@ extern void vct_send_notify(s32);
 extern s32 vct_handle_ssp_server(Header *, Event *);
 
 Session *vct_find_session(u8 id) {
-    Session *p = _021D6F90.core.used;
+    Session *p = gVctSsp.core.used;
     if (__vct.mode == 2) {
-        if (_021D6F90.server.state && _021D6F90.server.aid == id) {
-            return &_021D6FCC;
+        if (gVctSsp.server.state && gVctSsp.server.aid == id) {
+            return &gVctServerSession;
         }
         return 0;
     }
@@ -144,8 +144,8 @@ s32 vct_handle_ssp_client(Header *header, Event *event) {
     }
     session = vct_create_session_impl(header->id);
     if (!session) {
-        vct_init_session(&_021D6FB4, header->id);
-        vct_response_impl(&_021D6FB4, 3);
+        vct_init_session(&gVctRejectSession, header->id);
+        vct_response_impl(&gVctRejectSession, 3);
         return 0;
     }
     state = vct_check_recv_state(session, header);
@@ -161,9 +161,9 @@ s32 vct_handle_ssp_client(Header *header, Event *event) {
 
 s32 vct_handle_ssp_server(Header *header, Event *event) {
     s32 state;
-    if (_021D6F90.server.state == 2) {
-        if (_021D6F90.server.aid == header->id) {
-            state = vct_check_recv_state(&_021D6FCC, header);
+    if (gVctSsp.server.state == 2) {
+        if (gVctSsp.server.aid == header->id) {
+            state = vct_check_recv_state(&gVctServerSession, header);
             switch (state) {
             case -2:
                 event->event = 12;
@@ -173,9 +173,9 @@ s32 vct_handle_ssp_server(Header *header, Event *event) {
             case -1:
                 return 0;
             }
-            event->event = vct_dispatch_session(header, &_021D6FCC);
-            event->session = &_021D6FCC;
-            _021D6FCC.mode = state;
+            event->event = vct_dispatch_session(header, &gVctServerSession);
+            event->session = &gVctServerSession;
+            gVctServerSession.mode = state;
         } else {
             vct_send_notify(1);
             return 0;
@@ -183,30 +183,30 @@ s32 vct_handle_ssp_server(Header *header, Event *event) {
     } else {
         u8 id = header->id;
         u32 bit = id ? 1 << id : 1;
-        if (!(_021D6F90.core.mask & bit)) {
+        if (!(gVctSsp.core.mask & bit)) {
             return 0;
         }
-        _021D6F90.server.aid = id;
-        _021D6F90.server.state = 2;
-        _021D6F90.server.mode = 0;
-        state = vct_check_recv_state(&_021D6FCC, header);
+        gVctSsp.server.aid = id;
+        gVctSsp.server.state = 2;
+        gVctSsp.server.mode = 0;
+        state = vct_check_recv_state(&gVctServerSession, header);
         switch (state) {
         case -3:
         case -2:
         case -1:
-            _021D6F90.server.state = 0;
+            gVctSsp.server.state = 0;
             return 0;
         }
-        event->event = vct_dispatch_session(header, &_021D6FCC);
-        event->session = &_021D6FCC;
-        _021D6FCC.mode = state;
+        event->event = vct_dispatch_session(header, &gVctServerSession);
+        event->session = &gVctServerSession;
+        gVctServerSession.mode = state;
     }
     if (event->event == 10) {
         vct_send_notify(1);
-        _021D6F90.core.tick = OS_GetTick();
+        gVctSsp.core.tick = OS_GetTick();
     } else {
         vct_send_notify(0);
-        _021D6F90.core.tick = 0;
+        gVctSsp.core.tick = 0;
     }
     return 1;
 }
@@ -224,8 +224,8 @@ s32 vct_response_reject(Header *header, Event *event) {
         vct_response_impl(session, 2);
         return 1;
     }
-    vct_init_session(&_021D6FB4, header->id);
-    vct_response_impl(&_021D6FB4, 2);
+    vct_init_session(&gVctRejectSession, header->id);
+    vct_response_impl(&gVctRejectSession, 2);
     return 0;
 }
 
@@ -238,31 +238,31 @@ s32 vct_handle_notify(Header *header, Event *event) {
     }
     switch (header->notify) {
     case 0:
-        if (!_021D6F90.server.state) {
+        if (!gVctSsp.server.state) {
             return 0;
         }
-        if (_021D6F90.server.mode == 5 || _021D6F90.server.mode == 2) {
+        if (gVctSsp.server.mode == 5 || gVctSsp.server.mode == 2) {
             event->event = 9;
         } else {
             event->event = 5;
         }
-        _021D6F90.server.state = 0;
-        _021D6F90.server.mode = 0;
-        event->session = &_021D6FCC;
+        gVctSsp.server.state = 0;
+        gVctSsp.server.mode = 0;
+        event->session = &gVctServerSession;
         break;
     case 1:
-        _021D6F90.server.state = 2;
+        gVctSsp.server.state = 2;
         if (header->peer == __vct.aid) {
-            _021D6F90.server.mode = 2;
+            gVctSsp.server.mode = 2;
             event->event = 7;
-            _021D6F90.server.mask = header->mask;
+            gVctSsp.server.mask = header->mask;
         } else {
-            _021D6F90.server.mode = 3;
+            gVctSsp.server.mode = 3;
             event->event = 6;
-            _021D6F90.server.mask = header->peer ? 1 << header->peer : 1;
+            gVctSsp.server.mask = header->peer ? 1 << header->peer : 1;
         }
-        _021D6F90.server.other = header->peer;
-        event->session = &_021D6FCC;
+        gVctSsp.server.other = header->peer;
+        event->session = &gVctServerSession;
         break;
     default:
         return 0;
