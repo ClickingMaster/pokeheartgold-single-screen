@@ -7,7 +7,7 @@ extern const SoundEvent ov07_02237200[];
 extern void ManagedSprite_SetAnim(void *, int);
 extern void ManagedSprite_SetAnimationFrame(void *, int);
 extern void ManagedSprite_OffsetPositionXY(void *, int, int);
-extern void sub_0200602C(int, int);
+extern void PlaySE_SetPan(int, int);
 extern void ov07_02232F74(void *, int);
 int ov07_02233228(u8 *);
 
@@ -26,7 +26,7 @@ int ov07_02233228(u8 *state) {
         *(int *)(state + 0xc) += 1;
         for (int i = 0; i < 5; i++) {
             if (*(int *)(state + 0xc) == ov07_02237200[i].time) {
-                sub_0200602C((u16)ov07_02237200[i].sound, 0x75);
+                PlaySE_SetPan((u16)ov07_02237200[i].sound, 0x75);
             }
         }
         if (*(int *)(state + 0xc) > 20 || amount == 255) {

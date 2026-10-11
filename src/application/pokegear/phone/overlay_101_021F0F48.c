@@ -3,7 +3,7 @@
 #include "application/pokegear/phone/phone_internal.h"
 
 #include "text.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 void PhoneContactListNode_Init(PhoneContactListNode *node);
 void PhoneContactListUISlotData_Init(PhoneContactListUISlotData *slotData);

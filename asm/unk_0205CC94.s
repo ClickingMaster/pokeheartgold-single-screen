@@ -201,7 +201,7 @@ _0205CE2A:
 	ldr r0, _0205CE5C ; =_020FCB98
 	ldrh r4, [r0, r1]
 	add r0, r4, #0
-	bl sub_02006088
+	bl PlaySEWithFieldBank
 	b _0205CE4A
 _0205CE40:
 	ldr r0, _0205CE5C ; =_020FCB98

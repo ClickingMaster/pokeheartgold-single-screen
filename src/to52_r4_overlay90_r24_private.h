@@ -3,7 +3,7 @@
 #include "global.h"
 #include "bg_window.h"
 #include "sprite.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #pragma require_prototypes off
 void ov90_02258DB0(void *, int);
 int ov90_02259F7C(void *);

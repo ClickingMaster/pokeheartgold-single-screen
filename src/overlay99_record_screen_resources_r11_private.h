@@ -6,13 +6,13 @@
 #define P(p, o)   (*(void **)((u8 *)(p) + (o)))
 extern void ov98_0221EC08(void *, u32, u32, u32, u32);
 extern void ov98_0221EBEC(void *, u32, u32, u32, u32, u32);
-extern void *ov98_0221E5C0(void *);
-extern void *ov98_0221E5D0(void *);
+extern void *PokeathlonUtil_GetSpriteSystem(void *);
+extern void *PokeathlonUtil_GetSpriteManager(void *);
 extern void SpriteSystem_LoadCharResObjFromOpenNarc(void *, void *, void *, u32, u32, u32, u32);
 extern void SpriteSystem_LoadPlttResObjFromOpenNarc(void *, void *, void *, u32, u32, u32, u32, u32);
 extern void SpriteSystem_LoadCellResObjFromOpenNarc(void *, void *, void *, u32, u32, u32);
 extern void SpriteSystem_LoadAnimResObjFromOpenNarc(void *, void *, void *, u32, u32, u32);
-extern void ov98_0221E8A8(void *, const void *, u32, u32, u32);
+extern void PokeathlonUtil_LoadMonIconResources(void *, const void *, u32, u32, u32);
 extern void ManagedSprite_SetDrawFlag(void *, u32);
 extern void ov99_021E8F50(void *);
 extern const u32 ov99_021EA384[];

@@ -1,7 +1,7 @@
 #pragma force_active on
 #include "global.h"
 #include "sound.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 typedef struct MenuState {u8 group,index,choice,player,first,second;u16 pad6,other,busy;u8 match,padd[3];void*entry;u8 menu[0x24],animation[12];u16 update,key;u32 value,extra;}MenuState;
 extern void *ov49_02259FE8(void*),*ov49_0225A010(void*),*ov49_0225EF84(void*),*ov49_0225EF40(void*,int),*ov49_02259FF0(void*),*ov49_02258DAC(void*),*ov49_02258F40(void*,void*),*ov45_0222A5C0(void*),*ov45_0222A578(void*,int),*ov49_02264C04(void*,int,int);
 extern int ov45_0222B034(void*),ov45_0222B040(void*),ov45_0222B06C(void*),ov49_0225EF88(void*),ov49_02258E60(void*,int),ov42_022282A4(int),ov49_02264CA8(MenuState*,void*,int),ov45_0222AE74(void*,int),ov45_0222B028(void*),ov49_0225A0DC(void*),ov49_02264E20(MenuState*,void*,void*),ov49_0225A1D4(void*),ov45_0222AAC8(void*),ov49_022652D0(void*),ov49_022652E0(void*),ov49_0225CB70(void*),String_GetLength(void*);

@@ -49,7 +49,7 @@ extern BOOL ov96_021EF2AC(PokeathlonCourseData *course);
 extern void ov96_021EF23C(void *arg);
 extern void ov96_021EE644(void *arg);
 extern void ov96_021EF610(Ov96ResultsWork *work);
-extern void *ov98_0221EABC(enum HeapID heapId, BgConfig *bgConfig, int count, const void *templates, int arg);
+extern void *PokeathlonUtil_CreateTextContext(enum HeapID heapId, BgConfig *bgConfig, int count, const void *templates, int arg);
 extern void sub_0200FC20(u16 color);
 
 void ov96_021EF2C0(PokeathlonCourseData *course);
@@ -111,6 +111,6 @@ void ov96_021EF54C(Ov96ResultsWork *work) {
         GfGfxLoader_LoadScrnDataFromOpenNarc(work->narc, 8, work->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, TRUE, work->heapId);
     }
     ov96_021EF3A8(work);
-    work->message = ov98_0221EABC(work->heapId, work->bgConfig, 12, ov96_0221BB38, 0x135);
+    work->message = PokeathlonUtil_CreateTextContext(work->heapId, work->bgConfig, 12, ov96_0221BB38, 0x135);
     ov96_021EF610(work);
 }

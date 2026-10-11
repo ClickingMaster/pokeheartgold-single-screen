@@ -7,9 +7,9 @@
 #include "list_menu_items.h"
 #include "pokedex_util.h"
 #include "screen_fade.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #include "sound_chatot.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_020210A0.h"
 #include "unk_0208805C.h"
 

@@ -32,7 +32,7 @@ void Main_SetVBlankIntrCB(void (*)(void *), void *);
 void HBlankInterruptDisable(void);
 void BeginNormalPaletteFade(int, int, int, int, int, int, int);
 BOOL IsPaletteFadeFinished(void);
-void sub_0200616C(int);
+void StopAllSE(int);
 void ov45_0222A520(void *, int);
 BOOL ov45_0222A330(void *);
 void ov45_0222A4A8(void *);

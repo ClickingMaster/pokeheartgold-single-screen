@@ -6,7 +6,7 @@
 #include "pokepic.h"
 #include "screen_fade.h"
 #include "sys_task_api.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 typedef struct Ov59R13G3Scene {
     u8 pad00[0x20];

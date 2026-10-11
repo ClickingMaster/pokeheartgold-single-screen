@@ -11,7 +11,7 @@
 #include "palette.h"
 #include "sys_task_api.h"
 #include "text.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 static TouchscreenListMenu *TouchscreenListMenu_CreateInternal(TouchscreenListMenuSpawner *spawner, TouchscreenListMenuHeader *header, u8 isTouch, u8 x, u8 y, u8 width, u8 selection, TouchscreenListMenuCallback callback, void *callbackArg, BOOL silent, enum TouchscreenListMenuTextAlignment alignment);
 static void TouchscreenListMenuSpawner_ScheduleLoadGraphicsToVram(TouchscreenListMenuSpawner *spawner, TouchscreenListMenuHeader *header, PaletteData *paletteData, enum HeapID heapID);

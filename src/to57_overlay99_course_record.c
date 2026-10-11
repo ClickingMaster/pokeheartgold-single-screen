@@ -18,12 +18,12 @@ BOOL PokeathlonCourseRecord_Init(OverlayManager *manager, int *state) {
     work->applyPending = 1;
     work->unk84 = 1;
     ov99_021E5B54(work, args);
-    ov98_0221F090();
+    PokeathlonUtil_ResetDisplay();
     ov99_021E5C88(work);
     ov99_021E5D58(work);
-    work->textContext = ov98_0221EABC(work->heapId, work->bgConfig, 0x11, ov99_021E96D8, 0x13a);
+    work->textContext = PokeathlonUtil_CreateTextContext(work->heapId, work->bgConfig, 0x11, ov99_021E96D8, 0x13a);
     counts = ov99_021E95A4;
-    work->spriteContext = ov98_0221E5E0(work->heapId, &counts, 0x1a);
+    work->spriteContext = PokeathlonUtil_CreateSpriteContext(work->heapId, &counts, 0x1a);
     ov99_021E6274(work);
     ov99_021E6438(work);
     ov99_021E64E0(work, 0);
@@ -81,10 +81,10 @@ BOOL PokeathlonCourseRecord_Main(OverlayManager *manager, int *state) {
         }
         break;
     case 4:
-        ov98_0221EB84(work->textContext, 0x11);
+        PokeathlonUtil_FreeTextContext(work->textContext, 0x11);
         ov99_021E5D2C(work);
-        ov98_0221E684(work->spriteContext, work->sprites, 0x1a);
-        ov98_0221F0EC();
+        PokeathlonUtil_FreeSpriteContext(work->spriteContext, work->sprites, 0x1a);
+        PokeathlonUtil_DisableDisplay();
         return TRUE;
     default:
         if (_021EA5C0 != NULL) {
@@ -92,6 +92,6 @@ BOOL PokeathlonCourseRecord_Main(OverlayManager *manager, int *state) {
         }
         break;
     }
-    ov98_0221E6CC(work->spriteContext);
+    PokeathlonUtil_DrawSprites(work->spriteContext);
     return FALSE;
 }

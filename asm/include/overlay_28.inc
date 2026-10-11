@@ -91,6 +91,6 @@
 .public ov01_021E7F54
 .public ov01_021F6BB0
 .public ov01_021F6BD0
-.public ov28_0225D520
-.public ov28_0225D5EC
-.public ov28_0225D624
+.public DowsingMchn_Init
+.public DowsingMchn_Exit
+.public DowsingMchn_IsExitDone

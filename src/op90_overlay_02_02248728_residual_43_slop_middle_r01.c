@@ -1,6 +1,6 @@
 #pragma force_active on
 #include "global.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "field_system.h"
 #include "field/overlay_01_021FB878.h"
 #include "field/field_3d_object_task.h"

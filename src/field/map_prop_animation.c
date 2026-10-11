@@ -1,7 +1,7 @@
 #include "field/map_prop_animation.h"
 #include "field/overlay_01_02204004.h"
 
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 #include "constants/sndseq.h"
 

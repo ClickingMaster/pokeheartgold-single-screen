@@ -8,7 +8,7 @@
 #include "pokepic.h"
 #include "sound.h"
 #include "sys_task_api.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_020163E0.h"
 
 #define BATTLE(w) (*(BattleSystem **)(w))

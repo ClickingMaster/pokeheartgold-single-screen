@@ -65,7 +65,7 @@ extern BOOL ov07_022223CC(void *, void *, void *);
 extern void ov07_022344B4(Ov07CallbackWork *, int);
 extern BOOL ov07_02222EE8(void *);
 extern void ov07_02222EF8(void *);
-extern void sub_0200602C(int, int);
+extern void PlaySE_SetPan(int, int);
 
 BOOL ov07_022335B4(Ov07CallbackWork *work) {
     switch (work->state) {
@@ -110,7 +110,7 @@ BOOL ov07_022335B4(Ov07CallbackWork *work) {
             return FALSE;
         }
         if (work->unkA0 == 0x401) {
-            sub_0200602C(0x7E8, 0x75);
+            PlaySE_SetPan(0x7E8, 0x75);
         }
         work->state++;
         break;

@@ -9,8 +9,8 @@ extern void ov96_021FB8B4(Work *,int);
 extern void ov96_021EAE4C(void *,int,int);
 extern void ov96_021EAD88(void *,int,int,int);
 extern void ov96_021EAB94(void *,int);
-extern void sub_0200606C(int,int);
-extern void sub_020061D0(int,int);
+extern void PlaySEOnPlayer(int,int);
+extern void SetPlayerPan(int,int);
 extern void ov96_021EAC0C(void *,int);
 extern void ov96_021EAED4(void *,int,int,int,int);
 extern void *ov96_021EB5B8(void *);
@@ -27,10 +27,10 @@ void ov96_021FA83C(int index,Work *w){
  if(w->mode==0){ov96_021FB8FC(w,0);ov96_021EAE4C(w->actor,w->x,y);}else{ov96_021FB8B4(w,offset);ov96_021EAD88(w->actor,w->x,y,0);}
  if(w->timer>=w->time1){w->phase=2;w->timer=0;if(w->mode==0)ov96_021EAB94(w->actor,0);}break;}
  case 2:
- if(w->timer>=w->time2){w->phase=3;w->timer=0;if(w->mode==0){ov96_021EAB94(w->actor,1);sub_0200606C(0x8aa,ov96_0221DC2C[index]);sub_020061D0(ov96_0221DC2C[index],ov96_0221DC28[index]);}}break;
+ if(w->timer>=w->time2){w->phase=3;w->timer=0;if(w->mode==0){ov96_021EAB94(w->actor,1);PlaySEOnPlayer(0x8aa,ov96_0221DC2C[index]);SetPlayerPan(ov96_0221DC2C[index],ov96_0221DC28[index]);}}break;
  case 3:{int offset=ov96_0221C589[w->mode][w->timer-1];int y=w->y-offset;
  if(w->mode==0){ov96_021FB8FC(w,1);ov96_021EAE4C(w->actor,w->x,y);}else{ov96_021FB8B4(w,offset);ov96_021EAD88(w->actor,w->x,y,0);}
- if(w->timer>=w->time1){w->state=0;w->phase=0;w->timer=0;ov96_021EAD88(w->actor,w->x,w->y,0);if(w->mode!=0){sub_0200606C(0x8a8,ov96_0221DC2C[index]);sub_020061D0(ov96_0221DC2C[index],ov96_0221DC28[index]);}ov96_021FB8B4(w,0);w->c3c=0;w->c3e=0;}
+ if(w->timer>=w->time1){w->state=0;w->phase=0;w->timer=0;ov96_021EAD88(w->actor,w->x,w->y,0);if(w->mode!=0){PlaySEOnPlayer(0x8a8,ov96_0221DC2C[index]);SetPlayerPan(ov96_0221DC2C[index],ov96_0221DC28[index]);}ov96_021FB8B4(w,0);w->c3c=0;w->c3e=0;}
  else if(w->timer<w->time1-5)w->c3c=0;break;}
  default:GF_AssertFail();break;
  }break;

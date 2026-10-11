@@ -32,8 +32,8 @@ extern void ov96_021FC6EC(void *, u32, s32);
 extern void ov96_021FA83C(u32, void *, void *);
 extern void ov96_021EAC0C(void *, u32);
 extern void ov96_021FAB24(void *, void *);
-extern void sub_0200606C(u32, u32);
-extern void sub_020061D0(u32, s32);
+extern void PlaySEOnPlayer(u32, u32);
+extern void SetPlayerPan(u32, s32);
 extern const u8 ov96_0221DC2C[];
 extern const s8 ov96_0221DC28[];
 
@@ -141,8 +141,8 @@ void ov96_021FA34C(void *sys, void *work, void *node, void *sel) {
                     ov96_021FBF5C(spr, &r2);
                     if (ov96_021FAAE0(S32AT(node, 0x3C) + 0x110 - ov96_021EAF90(ref), (u8)ov96_021EAF8C(ref), &r2)) {
                         ov96_021FBEA4(spr);
-                        sub_0200606C(0x8A5, ov96_0221DC2C[U8AT(node, 0x18)]);
-                        sub_020061D0(ov96_0221DC2C[U8AT(node, 0x18)], ov96_0221DC28[U8AT(node, 0x18)]);
+                        PlaySEOnPlayer(0x8A5, ov96_0221DC2C[U8AT(node, 0x18)]);
+                        SetPlayerPan(ov96_0221DC2C[U8AT(node, 0x18)], ov96_0221DC28[U8AT(node, 0x18)]);
                         if (U16AT(node, 0x60) == 1 && U16AT(node, 0x62) == 1) {
                             ov96_021E8228(sys, (u8)ov96_021E5F24(sys), U8AT(node, 0x18), 2, 1);
                             U8AT(node, 0x30) = 3;
@@ -167,7 +167,7 @@ void ov96_021FA34C(void *sys, void *work, void *node, void *sel) {
         if (U8AT(node, 8) != 1 && U16AT(node, 0) >= 0x1000) {
             U8AT(node, 8) = 1;
             U16AT(node, 2) = U32AT(work, 0x230);
-            sub_0200606C(0x8AB, ov96_0221DC2C[U8AT(node, 0x18)]);
+            PlaySEOnPlayer(0x8AB, ov96_0221DC2C[U8AT(node, 0x18)]);
             U16AT(work, 0x3C4) = 30;
         }
     }

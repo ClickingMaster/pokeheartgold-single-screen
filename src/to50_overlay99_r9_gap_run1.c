@@ -4,7 +4,7 @@ void ov99_021E80D0(void *work) {
     int i = 0;
     u8 *cursor = work;
     do {
-        PTR(cursor, 0x408) = ov98_0221E6E0(PTR(work, 0x404), template);
+        PTR(cursor, 0x408) = PokeathlonUtil_NewSprite(PTR(work, 0x404), template);
         ManagedSprite_SetAnimateFlag(PTR(cursor, 0x408), TRUE);
         template++;
         cursor += 4;

@@ -7,7 +7,7 @@
 #include "gf_gfx_loader.h"
 #include "sys_task_api.h"
 #include "system.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 struct UnkStruct_02016C28 {
     BgConfig *bgConfig;

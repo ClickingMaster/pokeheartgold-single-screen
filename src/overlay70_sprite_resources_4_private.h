@@ -13,7 +13,7 @@
 #include "sprite.h"
 #include "sprite_transfer.h"
 #include "touchscreen_list_menu.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
 #include "unk_0200B150.h"

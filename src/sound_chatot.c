@@ -4,8 +4,8 @@
 
 #include "math_util.h"
 #include "sound.h"
-#include "sound_02004A44.h"
-#include "unk_02005D10.h"
+#include "sound_system.h"
+#include "sound_playback.h"
 
 BOOL ChatotSoundMain(void) {
     u8 *r4 = GF_SdatGetAttrPtr(16);
@@ -13,7 +13,7 @@ BOOL ChatotSoundMain(void) {
 
     if (*r0 == 1) {
         if (*r4 == 1) {
-            if (sub_02005738(14) == 0) {
+            if (Sound_IsWaveOutPlaying(14) == 0) {
                 sub_02006DB8();
                 return TRUE;
             }
@@ -53,16 +53,16 @@ BOOL sub_02006D04(SOUND_CHATOT *a0, u32 a1, s32 a2, s32 a3) {
         return FALSE;
     }
 
-    sub_02006300(0);
+    StopCry(0);
     sub_02006DB8();
-    sub_02005600(14);
+    Sound_AllocWaveOutChannel(14);
     u16 r4 = (LCRandom() % 8192);
 
     Chatot_Decode(sp0, Chatot_GetData(a0));
 
-    UnkStruct_02004A44_0 sp8;
+    SoundWaveOutParam sp8;
 
-    sp8.unk00 = sub_020055AC(14);
+    sp8.unk00 = Sound_GetWaveOutHandle(14);
     sp8.unk04 = NNS_SND_WAVE_FORMAT_PCM8;
     sp8.unk08 = sub_020059D8();
     sp8.unk0c = 0;
@@ -73,8 +73,8 @@ BOOL sub_02006D04(SOUND_CHATOT *a0, u32 a1, s32 a2, s32 a3) {
     sp8.unk24 = a3 / 2 + 64;
     sp8.unk1c = a2;
 
-    BOOL ret = sub_020056E8(&sp8, 14);
-    sub_02005774(14, a2);
+    BOOL ret = Sound_StartWaveOut(&sp8, 14);
+    Sound_SetWaveOutVolume(14, a2);
     *sp4 = 1;
     sub_02006E3C(0);
 
@@ -86,8 +86,8 @@ void sub_02006DB8() {
     u8 *r4 = GF_SdatGetAttrPtr(30);
 
     if (*r5 == 1) {
-        sub_020058B8(14);
-        sub_02005680(14);
+        Sound_StopWaveOutAndFreeBuffer(14);
+        Sound_FreeWaveOutChannel(14);
     }
 
     *r4 = 0;
@@ -149,7 +149,7 @@ BOOL sub_02006EA0(SOUND_CHATOT *a0, u32 a1, u32 a2, s32 a3, u8 a4) {
 
     if (ret == 0) {
         sub_02006E3C(1);
-        sub_02006920(0, SPECIES_CHATOT, a3, a2, 11, a4, 0);
+        PlayCryDelayedEx(0, SPECIES_CHATOT, a3, a2, 11, a4, 0);
         ret = 1;
     }
 

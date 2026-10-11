@@ -6,7 +6,7 @@
 #include "pokeathlon/pokeathlon.h"
 #include "filesystem.h"
 #include "follow_mon.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 typedef struct Ov96DEntry { u32 active; u32 a; Sprite *sprite; SysTask *task; } Ov96DEntry;
 typedef struct Ov96Work { u8 pad000[0x71C]; Sprite *sprites[3]; u8 spriteCount; u8 pad729[0x607]; u32 dCount; Ov96DEntry d[3]; } Ov96Work;
 typedef struct Ov96ParticipantView { u16 species; u16 field2; u16 special; u8 kind; u8 field7; u32 participant; u32 fieldC; } Ov96ParticipantView;

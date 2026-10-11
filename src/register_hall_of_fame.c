@@ -24,13 +24,13 @@
 #include "pokemon.h"
 #include "pokepic.h"
 #include "screen_fade.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #include "sprite_system.h"
 #include "sys_task_api.h"
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_02013FDC.h"
 #include "unk_02026E84.h"
 #include "unk_0206D494.h"
@@ -2113,7 +2113,7 @@ static void Task_RegisterHallOfFame_IndivMonAnimAndCry(SysTask *task, void *task
         if (showPic->hofMon->species == SPECIES_CHATOT) {
             sub_02006EA0(NULL, 0, 100, 0, sp4);
         } else {
-            sub_020062E0(showPic->hofMon->species, sp4, showPic->hofMon->form);
+            PlayCryDelayed(showPic->hofMon->species, sp4, showPic->hofMon->form);
         }
         showPic->startCry = FALSE;
     }

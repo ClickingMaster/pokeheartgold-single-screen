@@ -8,7 +8,7 @@
 #include "overlay_13_arm_2.h"
 /* overlay 45 prototypes in private header */
 #include "system.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_02032844.h"
 #include "unk_02033AE0.h"
 #include "unk_02034354.h"

@@ -22,7 +22,7 @@ typedef struct BattleAppWork {
 extern u8 SDK_OVERLAY_OVY_40_ID;
 #define OVERLAY_40_ID ((FSOverlayID) & SDK_OVERLAY_OVY_40_ID)
 
-void sub_0200616C(int);
+void StopAllSE(int);
 BattleAppWork *sub_02087A78(OverlayManager *);
 void ov40_0222C480(BattleAppWork *);
 void GF_SndHandleSetPlayerVolume(u32, u32);

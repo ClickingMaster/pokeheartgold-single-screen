@@ -3,7 +3,7 @@
 int sub_02087E70(OverlayManager *manager, int *state, BOOL special) {
     BattleAppWork *work;
 
-    sub_0200616C(0);
+    StopAllSE(0);
     Heap_Create(HEAP_ID_3, HEAP_ID_109, 0x55000);
     work = sub_02087A78(manager);
     ov40_0222C480(work);

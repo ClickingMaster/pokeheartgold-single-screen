@@ -8,7 +8,7 @@
 #include "map_object.h"
 #include "metatile_behavior.h"
 #include "player_avatar.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_02062108.h"
 
 typedef struct FootstepEntry {

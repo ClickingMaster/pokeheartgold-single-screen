@@ -4,7 +4,7 @@
 
 #include "dex_mon_measures.h"
 #include "overlay_18.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 
 FS_EXTERN_OVERLAY(ds_protect);
 

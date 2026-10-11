@@ -12,8 +12,8 @@ void ov99_021E8C50(void *p) {
     ManagedSprite_SetDrawFlag(P(p, 0x1c), draw);
 }
 void ov99_021E8C88(void *p) {
-    void *a = ov98_0221E5C0(P(p, 0x14));
-    void *b = ov98_0221E5D0(P(p, 0x14));
+    void *a = PokeathlonUtil_GetSpriteSystem(P(p, 0x14));
+    void *b = PokeathlonUtil_GetSpriteManager(P(p, 0x14));
     SpriteSystem_LoadCharResObjFromOpenNarc(a, b, P(p, 8), 1, 1, 1, 0);
     SpriteSystem_LoadPlttResObjFromOpenNarc(a, b, P(p, 8), 0, 0, 1, 1, 0);
     SpriteSystem_LoadCellResObjFromOpenNarc(a, b, P(p, 8), 2, 1, 0);
@@ -22,5 +22,5 @@ void ov99_021E8C88(void *p) {
     SpriteSystem_LoadCharResObjFromOpenNarc(a, b, P(p, 8), 0xd, 1, 2, 1);
     SpriteSystem_LoadCellResObjFromOpenNarc(a, b, P(p, 8), 0xe, 1, 1);
     SpriteSystem_LoadAnimResObjFromOpenNarc(a, b, P(p, 8), 0xf, 1, 1);
-    ov98_0221E8A8(P(p, 0x14), ov99_021EA364, 0xf, 0, 1);
+    PokeathlonUtil_LoadMonIconResources(P(p, 0x14), ov99_021EA364, 0xf, 0, 1);
 }

@@ -4,7 +4,7 @@
 #include "bag_view.h"
 #include "bag.h"
 #include "item.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #pragma force_active on
 typedef struct{u8 prefix[0x234];BagView*bag;Bag*save;u8 gap23c[0x7f0-0x23c];void*actions[5];u8 remaining[0x94c-0x804];}State;
 typedef struct{u8 v[5];}Choices;

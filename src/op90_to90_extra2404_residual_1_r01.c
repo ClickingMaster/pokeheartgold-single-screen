@@ -1,12 +1,12 @@
 #pragma force_active on
 #include "global.h"
 #include "sprite_system.h"
-typedef struct Ov98SpriteContext Ov98SpriteContext;
-ManagedSprite *ov98_0221E6E0(Ov98SpriteContext *, const ManagedSpriteTemplate *);
+typedef struct PokeathlonSpriteContext PokeathlonSpriteContext;
+ManagedSprite *PokeathlonUtil_NewSprite(PokeathlonSpriteContext *, const ManagedSpriteTemplate *);
 void MI_CpuCopy8(const void *src, void *dest, u32 size);
 typedef struct Work {
     u8 pad00[0x14];
-    Ov98SpriteContext *spriteCtx;
+    PokeathlonSpriteContext *spriteCtx;
     ManagedSprite *sprites[41];
     u32 flags[10];
 } Work;
@@ -30,12 +30,12 @@ void ov99_021E8D88(Work *work) {
             tmpl.drawPriority = 0;
             tmpl.animation = 16;
             j = idx + 12;
-            work->sprites[j] = ov98_0221E6E0(work->spriteCtx, &tmpl);
+            work->sprites[j] = PokeathlonUtil_NewSprite(work->spriteCtx, &tmpl);
             ManagedSprite_SetDrawFlag(work->sprites[j], work->flags[idx] == 0);
             tmpl.drawPriority = 1;
             tmpl.animation = 4;
             j = idx + 2;
-            work->sprites[j] = ov98_0221E6E0(work->spriteCtx, &tmpl);
+            work->sprites[j] = PokeathlonUtil_NewSprite(work->spriteCtx, &tmpl);
             ManagedSprite_SetDrawFlag(work->sprites[j], ov99_021E8518(work, idx, 1));
             ManagedSprite_SetAnimateFlag(work->sprites[j], TRUE);
             ov99_021E86D4(work, idx, (u16)(c * 6 + 1), (u16)(r * 8 + 6), work->flags[idx] == 0, 0);

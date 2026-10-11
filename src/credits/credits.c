@@ -13,7 +13,7 @@
 #include "overlay_manager.h"
 #include "screen_fade.h"
 #include "sound.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #include "sprite.h"
 #include "sprite_transfer.h"
 #include "sys_task_api.h"

@@ -21,7 +21,7 @@
 #include "pokemon_mood.h"
 #include "screen_fade.h"
 #include "text.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_0202FBCC.h"
 
 static u8 ov12_0223BFB0(u8 *buffer, u8 *index, u16 *size);

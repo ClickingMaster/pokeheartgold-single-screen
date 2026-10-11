@@ -24,7 +24,7 @@ BOOL PokeathlonMedals_Main(OverlayManager *manager, int *state) {
             work->flags &= 0xEFFFFFFF;
             break;
         }
-        if (!ov99_021E7BC8(work) && !ov98_0221EF24()) {
+        if (!ov99_021E7BC8(work) && !PokeathlonUtil_CheckExitInput()) {
             break;
         }
         PlaySE(0x5DC);
@@ -44,7 +44,7 @@ BOOL PokeathlonMedals_Main(OverlayManager *manager, int *state) {
         }
         break;
     }
-    ov98_0221E6CC(work->unk404);
+    PokeathlonUtil_DrawSprites(work->unk404);
     return FALSE;
 }
 

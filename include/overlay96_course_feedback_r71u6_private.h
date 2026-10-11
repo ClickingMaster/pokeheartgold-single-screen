@@ -8,8 +8,8 @@
 
 extern void GF_AssertFail(void);
 extern void Sprite_SetAnimCtrlSeq(void *, u32);
-extern void sub_0200606C(u32, u32);
-extern void sub_020061D0(u32, s32);
+extern void PlaySEOnPlayer(u32, u32);
+extern void SetPlayerPan(u32, s32);
 extern u32 ov96_021E5F24(void *);
 extern void ov96_021E8228(void *, u32, u32, u32, u32);
 extern void *ov96_021EB5B8(void *);

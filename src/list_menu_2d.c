@@ -11,7 +11,7 @@
 #include "render_window.h"
 #include "system.h"
 #include "text.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 static struct ListMenu2D *Create2dMenuInternalEx(const struct ListMenu2DTemplate *template, u8 x, u8 y, u8 initialSelection, u8 heapID, int cancelKey);
 static struct ListMenu2D *Create2dMenuInternal(const struct ListMenu2DTemplate *template, u8 x, u8 y, u8 initialSelection, u8 heapID, int cancelKey);

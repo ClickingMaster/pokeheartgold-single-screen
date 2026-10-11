@@ -1,7 +1,7 @@
 #include "global.h"
 #include "system.h"
 #include "sprite_system.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #pragma force_active on
 #define W(p,o) (*(s32*)((u8*)(p)+(o)))
 #define H(p,o) (*(u16 *)((u8 *)(p)+(o)))

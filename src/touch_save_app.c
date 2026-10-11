@@ -20,7 +20,7 @@
 #include "systask_environment.h"
 #include "task.h"
 #include "text.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "yes_no_prompt.h"
 
 FS_EXTERN_OVERLAY(ds_protect);

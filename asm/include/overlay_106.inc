@@ -6,7 +6,7 @@
 .public sub_02005E44
 .public StopBGM
 .public PlaySE
-.public sub_02006118
+.public PlaySE_SetVolume
 .public StopSE
 .public PlayCry
 .public CreateSysTaskAndEnvironment

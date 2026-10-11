@@ -7,7 +7,7 @@
 
 #include "system.h"
 #include "touchscreen.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 extern const u32 ov18_021FB6F0[];
 extern const TouchscreenHitbox ov18_021FB72C[];

@@ -6,7 +6,7 @@
 #include "pokegear_apps.h"
 #include "render_text.h"
 #include "screen_fade.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 
 static void PokegearPhone_LoadContactsAndInitFromArgs(PokegearPhoneAppData *phoneApp);
 static void PokegearPhone_UnloadContactsAndDeregisterCallbacks(PokegearPhoneAppData *phoneApp);

@@ -52,18 +52,18 @@ extern void MI_CpuCopy8(const void *, void *, u32);
 extern void MI_CpuFill8(void *, u8, u32);
 extern u32 MATH_CountPopulation(u32);
 
-extern void *ov98_0221E6E0(void *, const void *);
-extern void ov98_0221E6F0(void *, void **, const int *, u32, u32, s16, s16, BOOL);
+extern void *PokeathlonUtil_NewSprite(void *, const void *);
+extern void PokeathlonUtil_CreateSpriteRow(void *, void **, const int *, u32, u32, s16, s16, BOOL);
 extern void ov98_0221EBD8(void *, u32, u32, u32);
 extern void ov98_0221EBEC(void *, u32, u32, u32, u8, u32);
 extern void ov98_0221EC08(void *, u32, u32, u32, u8);
-extern void ov98_0221ECD0(void *, u32, u32, s32, u32, u32);
-extern void *ov98_0221EEFC(void *);
+extern void PokeathlonUtil_PrintMessageWithNumber(void *, u32, u32, s32, u32, u32);
+extern void *PokeathlonUtil_GetMessageFormat(void *);
 extern u8 ov98_0221EF80(s32);
-extern u32 ov98_0221F024(const void *);
+extern u32 PokeathlonUtil_CountSpeciesWithAllMedals(const void *);
 extern u8 ov98_0221F058(const void *);
-extern u32 ov98_0221F120(u32, u32);
-extern u8 ov98_0221F150(s32);
+extern u32 PokeathlonUtil_GetDecimalDigit(u32, u32);
+extern u8 PokeathlonUtil_CountDecimalDigits(s32);
 
 extern void ManagedSprite_SetAnim(void *, int);
 extern void ManagedSprite_SetAnimateFlag(void *, BOOL);
@@ -105,16 +105,16 @@ void ov99_021E6FD0(Ov99Work *w, Ov99Params *params);
 void ov99_021E6C30(Ov99Work *w, s32 value, u32 index, u32 count, s16 x, s16 y, u8 spacing, BOOL mainScreen) {
     Ov99SpriteTemplate template = { 0 };
     u32 i;
-    u32 digits = ov98_0221F150(value);
+    u32 digits = PokeathlonUtil_CountDecimalDigits(value);
 
     for (i = 0; i < count; i++) {
         void *sprite;
-        template.animation = ov98_0221F120(value, (u8)(count - i));
+        template.animation = PokeathlonUtil_GetDecimalDigit(value, (u8)(count - i));
         MI_CpuCopy8(mainScreen ? ov99_021E9DBC : ov99_021E9DD4, template.resIdList, sizeof(template.resIdList));
         template.vram = mainScreen ? NNS_G2D_VRAM_TYPE_2DMAIN : NNS_G2D_VRAM_TYPE_2DSUB;
         template.x = x + i * spacing;
         template.y = y;
-        sprite = ov98_0221E6E0(w->sprites, &template);
+        sprite = PokeathlonUtil_NewSprite(w->sprites, &template);
         w->sprite[index + i] = sprite;
         ManagedSprite_SetAnimateFlag(sprite, TRUE);
         if (count - digits > i) {
@@ -161,7 +161,7 @@ void ov99_021E6D34(Ov99Work *w) {
     countD = ov99_021E7100(stat08);
     total = countA + countB + countC + countD;
 
-    msgFormat = ov98_0221EEFC(w->text);
+    msgFormat = PokeathlonUtil_GetMessageFormat(w->text);
     BufferPlayersName(msgFormat, 0, ov99_021E7098(w->summary));
     ov98_0221EC08(w->text, 0, 0xB, 1, 0);
     ov98_0221EBD8(w->text, 1, 0xC, 0);
@@ -174,9 +174,9 @@ void ov99_021E6D34(Ov99Work *w) {
     ov98_0221EBD8(w->text, 8, 0x10, 0);
     ov98_0221EBD8(w->text, 0xD, 0x1F, 0);
     ov98_0221EBD8(w->text, 0xE, 1, 0);
-    ov98_0221ECD0(w->text, 0xA, 0x1C, stat04, 4, 0);
-    ov98_0221ECD0(w->text, 0xB, 0x1D, stat06, 4, 0);
-    ov98_0221ECD0(w->text, 0xC, 0x1E, stat0A, 4, 0);
+    PokeathlonUtil_PrintMessageWithNumber(w->text, 0xA, 0x1C, stat04, 4, 0);
+    PokeathlonUtil_PrintMessageWithNumber(w->text, 0xB, 0x1D, stat06, 4, 0);
+    PokeathlonUtil_PrintMessageWithNumber(w->text, 0xC, 0x1E, stat0A, 4, 0);
     ov99_021E6D14(w, countD);
     ov99_021E6C14(w);
     if (gender == 1) {
@@ -185,11 +185,11 @@ void ov99_021E6D34(Ov99Work *w) {
     }
     ov99_021E6C30(w, total, 1, 2, 0xC8, 0x70, 0x20, TRUE);
     ov99_021E6C30(w, stat08, 3, 4, 0x50, 0xA0, 0x20, FALSE);
-    ov98_0221E6F0(w->sprites, w->sprite, ov99_021E9DAC, countA, 7, 0x10, 0x28, TRUE);
-    ov98_0221E6F0(w->sprites, w->sprite, ov99_021E9DAC, countB, 0x11, 0x10, 0x48, TRUE);
-    ov98_0221E6F0(w->sprites, w->sprite, ov99_021E9DAC, countC, 0x1B, 0x10, 0x68, TRUE);
-    ov98_0221E6F0(w->sprites, w->sprite, ov99_021E9DAC, countD, 0x25, 0x10, 0x88, TRUE);
-    ov98_0221E6F0(w->sprites, w->sprite, ov99_021E9D8C, countD, 0x39, 0x60, 0x78, FALSE);
+    PokeathlonUtil_CreateSpriteRow(w->sprites, w->sprite, ov99_021E9DAC, countA, 7, 0x10, 0x28, TRUE);
+    PokeathlonUtil_CreateSpriteRow(w->sprites, w->sprite, ov99_021E9DAC, countB, 0x11, 0x10, 0x48, TRUE);
+    PokeathlonUtil_CreateSpriteRow(w->sprites, w->sprite, ov99_021E9DAC, countC, 0x1B, 0x10, 0x68, TRUE);
+    PokeathlonUtil_CreateSpriteRow(w->sprites, w->sprite, ov99_021E9DAC, countD, 0x25, 0x10, 0x88, TRUE);
+    PokeathlonUtil_CreateSpriteRow(w->sprites, w->sprite, ov99_021E9D8C, countD, 0x39, 0x60, 0x78, FALSE);
 }
 
 u16 ov99_021E6F70(void *save) {
@@ -244,7 +244,7 @@ void ov99_021E6FD0(Ov99Work *w, Ov99Params *params) {
     summary->profile = profile;
     summary->unk06 = ov99_021E6F70(save);
     summary->unk0A = ov99_021E6FA0(unkDC);
-    summary->unk16 = ov98_0221F024(unkDC);
+    summary->unk16 = PokeathlonUtil_CountSpeciesWithAllMedals(unkDC);
     summary->unk17 = ov98_0221F058(recordsSolo);
     summary->total = summary->courseTotal + summary->unk06 + summary->unk0A;
     summary->gender = PlayerProfile_GetTrainerGender(profile);

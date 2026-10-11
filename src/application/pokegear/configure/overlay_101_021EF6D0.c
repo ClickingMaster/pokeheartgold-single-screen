@@ -1,6 +1,6 @@
 #include "application/pokegear/configure/pokegear_configure_internal.h"
 
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 static BOOL PokegearConfigure_IsSkinUnlocked(PokegearConfigureAppData *configureApp, u8 skin);
 

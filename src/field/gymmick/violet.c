@@ -5,7 +5,7 @@
 #include "overlay_01_022053EC.h"
 #include "overlay_04.h"
 #include "task.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 #define ELEVATOR_Y_DOWN  (FX32_CONST(32))
 #define ELEVATOR_Y_UP    (FX32_CONST(496))

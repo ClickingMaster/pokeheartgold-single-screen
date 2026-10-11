@@ -3,7 +3,7 @@
 #include "constants/sndseq.h"
 
 #include "options.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #include "sound_chatot.h"
 #include "system.h"
 

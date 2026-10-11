@@ -8,7 +8,7 @@
 .public sub_02005B58
 .public PlayBGM
 .public GF_SndStartFadeOutBGM
-.public sub_0200602C
+.public PlaySE_SetPan
 .public PlaySE
 .public StopSE
 .public IsCryFinished

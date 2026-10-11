@@ -10,7 +10,7 @@
 #include "overlay_app_manager_internal.h"
 #include "overlay_manager.h"
 #include "poke_overlay.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #include "sys_flags.h"
 #include "unk_0202FBCC.h"
 

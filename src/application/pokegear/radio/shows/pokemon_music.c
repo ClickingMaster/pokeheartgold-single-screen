@@ -8,9 +8,9 @@
 
 #include "bag.h"
 #include "math_util.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #include "sound_radio.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 typedef enum PokemonMusicTrack {
     PKMUSTRACK_MARCH,

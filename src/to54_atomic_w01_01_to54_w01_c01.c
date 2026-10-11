@@ -16,7 +16,7 @@ BOOL ov07_0221C634(void *p) {
     U8_AT(p, 0x18)
     --;
     PlaySE(U16_AT2(p, 0x1a));
-    sub_020061B4(U16_AT2(p, 0x1a), 0xffff, U32_AT2(p, 0x14));
+    SetSeqTrackPan(U16_AT2(p, 0x1a), 0xffff, U32_AT2(p, 0x14));
     if (U8_AT(p, 0x18) == 0) {
         ret = 0;
     }
@@ -29,7 +29,7 @@ BOOL ov07_0221C674(void *p) {
     U8_AT(p, 3) = old - 1;
     if (old == 0) {
         PlaySE(U16_AT2(p, 0x1a));
-        sub_020061B4(U16_AT2(p, 0x1a), 0xffff, U32_AT2(p, 0x14));
+        SetSeqTrackPan(U16_AT2(p, 0x1a), 0xffff, U32_AT2(p, 0x14));
         ret = 0;
     }
     return ret;

@@ -6,7 +6,7 @@ extern void OamManager_ApplyAndResetBuffers(void);
 extern void ov99_021E59588(void); /* unused compatibility declaration */
 extern void ov99_021E7CE4(void *, int, int, int);
 extern void *ov99_021E9430(void *);
-extern int ov98_0221F024(void *);
+extern int PokeathlonUtil_CountSpeciesWithAllMedals(void *);
 extern void ov98_0221EF80(int);
 extern int Pokedex_GetSeenSpindaPersonality(void *, int);
 extern int MATH_CountPopulation(u32);
@@ -19,9 +19,9 @@ extern void String_Delete(void *);
 extern void *Heap_Alloc(int, u32);
 extern void SysTask_Destroy(void *);
 extern void ov98_0221EBD8(void *, int, int, int);
-extern void ov98_0221EE84(void *, int);
+extern void PokeathlonUtil_ClearAndCopyWindow(void *, int);
 extern void ov98_0221EBEC(void *, int, int, int, int, int);
-extern void *ov98_0221E6E0(void *, const void *);
+extern void *PokeathlonUtil_NewSprite(void *, const void *);
 extern void ManagedSprite_SetAnimateFlag(void *, BOOL);
 extern const u8 ov99_021E9E2C[];
 

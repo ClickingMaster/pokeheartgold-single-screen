@@ -14,7 +14,7 @@
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_02068F84.h"
 
 #define VIEW_PHOTO_NUM_SPRITES 3

@@ -77,7 +77,7 @@ void sub_0205CD70(LocalMapObject *object, PlayerAvatar *avatar) {
         }
         if (_020FCB98[behavior].special == 1) {
             sequence = _020FCB98[behavior].sequence;
-            sub_02006088(sequence);
+            PlaySEWithFieldBank(sequence);
         } else {
             sequence = _020FCB98[behavior].sequence;
             PlaySE(sequence);

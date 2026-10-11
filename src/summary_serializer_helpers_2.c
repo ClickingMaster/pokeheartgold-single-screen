@@ -8,7 +8,7 @@ void sub_02089C50(void *v) {
         if (*(u16 *)(w + 0x23c) == 0x1b9) {
             sub_02006EA0(*(void **)(*(u8 **)(w + 0x22c) + 0x28), 0, 100, 0, value);
         } else {
-            sub_020062E0(*(u16 *)(w + 0x23c), value, *(u16 *)(w + 0x27e));
+            PlayCryDelayed(*(u16 *)(w + 0x23c), value, *(u16 *)(w + 0x27e));
         }
     }
 }

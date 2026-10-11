@@ -6,7 +6,7 @@
 #include "overlay_manager.h"
 #include "palette.h"
 #include "screen_fade.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #include "sprite_system.h"
 #include "unk_02019BA4.h"
 typedef struct R8WorkW20 {
@@ -31,8 +31,8 @@ void PlaySE(u16);
 void ov99_021E7794(R8WorkW20 *);
 BOOL ov99_021E7598(R8WorkW20 *);
 BOOL ov99_021E7BC8(R8WorkW20 *);
-BOOL ov98_0221EF24(void);
-void ov98_0221E6CC(void *);
+BOOL PokeathlonUtil_CheckExitInput(void);
+void PokeathlonUtil_DrawSprites(void *);
 BOOL PokeathlonMedals_Main(OverlayManager *, int *);
 void ov99_021E7A54(R8WorkW20 *);
 void ov99_021E7A78(R8WorkW20 *);

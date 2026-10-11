@@ -6,7 +6,7 @@
 #include "berry_pots_app_internal.h"
 #include "system.h"
 #include "touchscreen.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 typedef struct SysTaskArgs_ov17_0220351C {
     BerryPotsAppData *data;

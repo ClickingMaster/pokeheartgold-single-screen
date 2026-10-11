@@ -13,9 +13,9 @@ void ov99_021E6144(R99 *w, u32 show) {
     void *obj = P(w, 0x10);
     for (i = 0; i < 3; i++) {
         if (show) {
-            ov98_0221EE28(obj, i + 14, ov99_021E5C4C(P(w, 0), (u8)U32(w, 0x88), (u8)i));
+            PokeathlonUtil_PrintSpeciesName(obj, i + 14, ov99_021E5C4C(P(w, 0), (u8)U32(w, 0x88), (u8)i));
         } else {
-            ov98_0221EE84(obj, i + 14);
+            PokeathlonUtil_ClearAndCopyWindow(obj, i + 14);
         }
     }
 }

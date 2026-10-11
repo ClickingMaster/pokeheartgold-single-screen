@@ -16,10 +16,10 @@ BOOL PokeathlonEventRecord_Init(void *manager, int *state) {
     MI_CpuFill8(work, 0, 0xe4);
     U32_AT(work, 0xc) = 0x84;
     ov99_021E93DC(work, args);
-    ov98_0221F090();
+    PokeathlonUtil_ResetDisplay();
     ov99_021E8590(work);
     ov99_021E860C(work);
-    PTR(work, 0x10) = ov98_0221EABC(U32_AT(work, 0xc), PTR(work, 4), 0x13, ov99_021EA45C, 0x13a);
+    PTR(work, 0x10) = PokeathlonUtil_CreateTextContext(U32_AT(work, 0xc), PTR(work, 4), 0x13, ov99_021EA45C, 0x13a);
     ov99_021E88D4(work);
     ov99_021E8788(work);
     ov99_021E8C04(work);

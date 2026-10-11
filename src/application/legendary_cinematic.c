@@ -25,7 +25,7 @@
 #include "sys_task_api.h"
 #include "systask_environment.h"
 #include "system.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_02009D48.h"
 #include "unk_02013FDC.h"
 #include "unk_02026E30.h"
@@ -159,7 +159,7 @@ extern int (*const sScriptCinematicSubs_Arceus[])(LegendaryCinematic *);
 // declared only by the NitroSDK internal headers, which clash with lib/include
 u32 GX_GetBankForLCDC(void);
 // defined in sound_se.c, not declared by a header yet
-BOOL sub_02006118(u16 seqNo, u16 volume);
+BOOL PlaySE_SetVolume(u16 seqNo, u16 volume);
 // sound_02004A44.h declares the volume as u16, but LugiaCinematic_Play passes it untruncated
 u16 GF_GetCurrentPlayingBGM();
 void GF_SetVolumeBySeqNo(u16 seqNo, int volume);
@@ -686,7 +686,7 @@ int LugiaCinematic_Play(LegendaryCinematic *cinematic) {
         return 1;
     }
     if (cinematic->frame == 0) {
-        sub_02006118(SEQ_SE_GS_TAKI_RUGIADEMO, 0);
+        PlaySE_SetVolume(SEQ_SE_GS_TAKI_RUGIADEMO, 0);
     } else if (cinematic->frame == 115) {
         PlaySE(SEQ_SE_GS_RUGIA_TAKISHUTUGEN);
     } else if (cinematic->frame == 145) {

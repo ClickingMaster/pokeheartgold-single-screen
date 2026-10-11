@@ -1,8 +1,8 @@
 #include "to50_overlay99_r9_gap_private.h"
 void ov99_021E8224(void *work) {
-    MessageFormat *format = (MessageFormat *)ov98_0221EEFC(PTR(work, 0x400));
+    MessageFormat *format = (MessageFormat *)PokeathlonUtil_GetMessageFormat(PTR(work, 0x400));
     int i;
-    ov98_0221EC24(PTR(work, 0x400), 0xb, 0x7e, 3);
+    PokeathlonUtil_PrintMessageCentered(PTR(work, 0x400), 0xb, 0x7e, 3);
     ov98_0221EC08(PTR(work, 0x400), 0, 0x7f, 1, 0);
     ov98_0221EBEC(PTR(work, 0x400), 4, 0, 1, 0, 4);
     for (i = 0; i < 5; i++) {

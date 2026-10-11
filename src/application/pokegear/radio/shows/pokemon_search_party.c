@@ -7,10 +7,10 @@
 #include "msgdata/msg/msg_0419.h"
 
 #include "math_util.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #include "sound_radio.h"
 #include "sys_flags.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 typedef enum PSPEpisodeUnlockFlag {
     PSP_EPISODE_UNLOCK_ALWAYS,

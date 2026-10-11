@@ -1,5 +1,5 @@
 #include "global.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #pragma force_active on
 #define P(p,n) (*(void**)((u8*)(p)+(n)))
 #define W(p,n) (*(u32*)((u8*)(p)+(n)))

@@ -4,7 +4,7 @@
 
 #include "render_text.h"
 #include "screen_fade.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 const TouchscreenHitbox ov101_021F8400 = {
     .rect = { 0x88, 0xb8, 0x08, 0xf8 }

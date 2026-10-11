@@ -50,9 +50,9 @@ void ov96_021ECD24(Ov96CounterDisplayR38 *display) {
             PlaySE(0x8E3);
         }
 
-        hundreds = ov98_0221F120(display->current, 3);
-        tens = ov98_0221F120(display->current, 2);
-        ones = ov98_0221F120(display->current, 1);
+        hundreds = PokeathlonUtil_GetDecimalDigit(display->current, 3);
+        tens = PokeathlonUtil_GetDecimalDigit(display->current, 2);
+        ones = PokeathlonUtil_GetDecimalDigit(display->current, 1);
         ManagedSprite_SetAnim(display->sprites[1], hundreds + 1);
         ManagedSprite_SetAnim(display->sprites[2], tens + 1);
         ManagedSprite_SetAnim(display->sprites[3], ones + 1);

@@ -27,7 +27,7 @@
 #include "string_util.h"
 #include "system.h"
 #include "text.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_02009D48.h"
 #include "unk_0208805C.h"
 #include "yes_no_prompt.h"

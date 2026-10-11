@@ -7,7 +7,7 @@ BOOL ov96_021EF19C(void *course) {
     NARC_Delete(work->narc);
     WirelessStatusIcon_Destroy();
     ov96_021EE5E0(work->unk34);
-    ov98_0221EB84(work->message, 12);
+    PokeathlonUtil_FreeTextContext(work->message, 12);
     for (i = 0; i < 7; i++) {
         FreeBgTilemapBuffer(work->bgConfig, ov96_0221BA18[i]);
     }

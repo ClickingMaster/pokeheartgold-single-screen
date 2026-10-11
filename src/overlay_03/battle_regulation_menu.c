@@ -13,7 +13,7 @@
 #include "save_link_ruleset.h"
 #include "task.h"
 #include "text.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 enum RegulationMenus {
     REGULATION_MENU_REGULATIONS,

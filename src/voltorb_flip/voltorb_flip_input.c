@@ -8,7 +8,7 @@
 #include "sprite_system.h"
 #include "system.h"
 #include "touchscreen.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_020192D0.h"
 
 static void VoltorbFlipInputHandler_HandleDpad(VoltorbFlipInputHandler *inputHandler);

@@ -23,11 +23,11 @@
 #include "save_vars_flags.h"
 #include "screen_fade.h"
 #include "sound.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #include "sys_flags.h"
 #include "task.h"
 #include "text.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_020552A4.h"
 #include "unk_02055418.h"
 #include "unk_0206793C.h"
@@ -226,7 +226,7 @@ static BOOL Task_GameClear(TaskManager *taskman) {
         Sound_SetMasterVolume(env->bgmVolume);
         if (env->bgmVolume == 0) {
             StopBGM(GF_GetCurrentPlayingBGM(), 0);
-            sub_0200616C(0);
+            StopAllSE(0);
             env->timer = SCREEN_FADEOUT_FRAMES;
             ++(*state);
         }

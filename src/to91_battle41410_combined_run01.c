@@ -33,7 +33,7 @@ extern void ov07_02232AB8(void*);
 extern void *ov07_0221FDFC(BattleSystem*,enum HeapID);
 extern void ov07_0221FE08(void*);
 typedef Ov07Input Arguments;
-extern void sub_0200602C(int,int);
+extern void PlaySE_SetPan(int,int);
 void ov12_0225C18C(SysTask*,void*);
 void ov12_0225C18C(SysTask *task,void *data) {
  BattleEngineWork *engine;Work *work=data;
@@ -56,7 +56,7 @@ void ov12_0225C18C(SysTask *task,void *data) {
  if((ov07_02233F20(work->objectC)==0 ||work->value94!=0) &&ov07_02232A04((u8*)work->object8)==1 &&ov07_02233EA0(work->objectC)==1) {
  if(work->object10)ov07_0221FE08(work->object10);
  Pokepic_StartPaletteFade(work->context->pic,16,16,0,ov12_0226D15A[work->palette]);Pokepic_SetAttr(work->context->pic,6,0);ov07_02232A44(work->object8);
- if(work->facing==2)sub_0200602C(1798,117);else sub_0200602C(1798,-117);work->state++;
+ if(work->facing==2)PlaySE_SetPan(1798,117);else PlaySE_SetPan(1798,-117);work->state++;
  }break;
  case 3:if(ov07_02233E88(work->objectC)!=1)work->state++;
  case 4:

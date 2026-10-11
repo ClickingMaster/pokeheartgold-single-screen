@@ -252,7 +252,7 @@ ov96_021EF19C: ; 0x021EF19C
 	bl ov96_021EE5E0
 	ldr r0, [r6, #0x30]
 	mov r1, #0xc
-	bl ov98_0221EB84
+	bl PokeathlonUtil_FreeTextContext
 	ldr r5, _021EF230 ; =ov96_0221BA18
 	mov r4, #0
 _021EF1C2:

@@ -8,10 +8,10 @@
 #include "map_header.h"
 #include "pokegear_apps.h"
 #include "screen_fade.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #include "sys_vars.h"
 #include "touchscreen.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 void Radio_Load(PokegearRadioAppData *radioApp);
 void Radio_Unload(PokegearRadioAppData *radioApp);

@@ -1,7 +1,7 @@
 #include "field_system.h"
 #include "metatile_behavior.h"
 #include "overlay_04.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_02054648.h"
 #include "unk_0205FD20.h"
 

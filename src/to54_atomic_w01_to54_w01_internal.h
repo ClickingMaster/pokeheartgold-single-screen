@@ -73,7 +73,7 @@ void ov07_0221D2B0(void *);
 void ov07_0221D2E4(void *);
 #endif
 void PlaySE(u16);
-void sub_020061B4(u16, u16, u32);
+void SetSeqTrackPan(u16, u16, u32);
 
 extern u8 gSystem[];
 void ov07_0221BE20(void);

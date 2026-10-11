@@ -22,7 +22,7 @@
 #include "sprite_system.h"
 #include "system.h"
 #include "touchscreen.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_0203A3B0.h"
 #include "vram_transfer_manager.h"
 

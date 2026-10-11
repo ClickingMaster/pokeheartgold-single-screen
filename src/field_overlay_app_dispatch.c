@@ -83,7 +83,7 @@ static const AppEntry ov01_02206C60[] = {
     { ov30_0225D520, ov30_0225D64C, ov30_0225D6FC, FS_OVERLAY_ID(touch_save_app) },
     { TouchMartApp_Init, TouchMartApp_Exit, TouchMartApp_IsExitDone, FS_OVERLAY_ID(OVY_31)         },
     { ov27_0225C250, ov27_0225C398, ov27_0225C418, (u32)-1                       },
-    { ov28_0225D520, ov28_0225D5EC, ov28_0225D624, FS_OVERLAY_ID(OVY_28)         },
+    { DowsingMchn_Init, DowsingMchn_Exit, DowsingMchn_IsExitDone, FS_OVERLAY_ID(OVY_28)         },
     { NumberEntry_Init, NumberEntry_Exit, NumberEntry_IsExitDone, FS_OVERLAY_ID(OVY_29)         },
     { FriendRosterApp_Init, FriendRosterApp_Exit, FriendRosterApp_IsExitDone, FS_OVERLAY_ID(OVY_32)         },
     { CommClubButtons_Init, CommClubButtons_Exit, CommClubButtons_IsExitDone, FS_OVERLAY_ID(OVY_33)         },

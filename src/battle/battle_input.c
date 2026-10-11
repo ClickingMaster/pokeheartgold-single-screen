@@ -17,7 +17,7 @@
 #include "render_text.h"
 #include "render_window.h"
 #include "touchscreen.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_02013534.h"
 #include "unk_02077678.h"
 #include "unk_0208805C.h"

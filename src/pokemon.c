@@ -19,7 +19,7 @@
 #include "msgdata.h"
 #include "party.h"
 #include "seal_case.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #include "sprite.h"
 #include "sprite_system.h"
 #include "trainer_data.h"
@@ -3691,7 +3691,7 @@ void sub_0207204C(SOUND_CHATOT *r7, u32 r6, u16 r5, s32 r4, s32 sp20, u32 sp24, 
     if (r5 == SPECIES_CHATOT) {
         if (!sub_02006F30((int)r6)) {
             sub_02006E3C(1);
-            sub_02006920(r6, r5, sp20, sp24, sp2C, sp30, r4);
+            PlayCryDelayedEx(r6, r5, sp20, sp24, sp2C, sp30, r4);
         } else {
             if (sp28) {
                 sub_02006E3C(1);
@@ -3699,7 +3699,7 @@ void sub_0207204C(SOUND_CHATOT *r7, u32 r6, u16 r5, s32 r4, s32 sp20, u32 sp24, 
             sub_02006EA0(r7, 0, sp24, sp20, sp30);
         }
     } else {
-        sub_02006920(r6, r5, sp20, sp24, sp2C, sp30, r4);
+        PlayCryDelayedEx(r6, r5, sp20, sp24, sp2C, sp30, r4);
     }
 }
 

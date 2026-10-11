@@ -20,7 +20,7 @@
 #include "pokemon.h"
 #include "scrcmd.h"
 #include "text.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_02014DA0.h"
 #include "unk_02026E30.h"
 

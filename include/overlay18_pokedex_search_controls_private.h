@@ -6,7 +6,7 @@
 #include "menu_input_state.h"
 #include "sprite_system.h"
 #include "system.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_02019BA4.h"
 #include "unk_02020A0C.h"
 

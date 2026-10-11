@@ -10,7 +10,7 @@
 #include "render_text.h"
 #include "system.h"
 #include "text.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_0200CE7C.h"
 #include "unk_0208805C.h"
 

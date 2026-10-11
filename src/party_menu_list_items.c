@@ -11,7 +11,7 @@
 #include "party_context_menu.h"
 #include "party_menu_sprites.h"
 #include "text.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 static void PartyMonContextMenuAction_Item(PartyMenu *partyMenu, int *pState);
 static void PartyMonContextMenuAction_Give(PartyMenu *partyMenu, int *pState);

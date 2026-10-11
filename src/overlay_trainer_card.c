@@ -6,7 +6,7 @@
 #include "overlay_trainer_card_main.h"
 #include "overlay_trainer_card_signature.h"
 #include "save_trainer_card.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 
 FS_EXTERN_OVERLAY(trainer_card_main);
 FS_EXTERN_OVERLAY(trainer_card_signature);

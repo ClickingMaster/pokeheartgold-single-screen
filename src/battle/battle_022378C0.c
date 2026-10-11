@@ -9,7 +9,7 @@
 #include "gf_gfx_planes.h"
 #include "poke_overlay.h"
 #include "render_text.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #include "system.h"
 #include "unk_02026E84.h"
 #include "unk_020379A0.h"

@@ -4,7 +4,7 @@
 #include "pokepic.h"
 #include "gf_gfx_planes.h"
 #include "unk_0200FA24.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_020379A0.h"
 #pragma force_active on
 typedef struct {

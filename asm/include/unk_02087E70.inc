@@ -1,7 +1,7 @@
 #include <nitro/fs/overlay.h>
 #pragma once
 .public GF_SndHandleSetPlayerVolume
-.public sub_0200616C
+.public StopAllSE
 .public UnloadOverlayByID
 .public Heap_Create
 .public Heap_Destroy

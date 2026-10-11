@@ -2,7 +2,7 @@
 
 #include "application/pokegear/map/pokegear_map_internal.h"
 
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 static BOOL ov101_021EB654(PokegearMapAppData *mapApp);
 static int ov101_021EB784(PokegearMapAppData *mapApp, int flyDest);

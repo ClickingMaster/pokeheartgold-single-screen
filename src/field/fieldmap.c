@@ -53,7 +53,7 @@
 #include "poke_overlay.h"
 #include "save_local_field_data.h"
 #include "screen_fade.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #include "sys_flags.h"
 #include "system.h"
 #include "task.h"

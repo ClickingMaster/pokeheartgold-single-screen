@@ -4,9 +4,9 @@
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0418.h"
 
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #include "sound_radio.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 typedef struct TeamRocketRadioData {
     enum HeapID heapID;

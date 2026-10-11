@@ -12,7 +12,7 @@ void Heap_Free(void *);
 void sub_0208981C(void *, void *, void *);
 void sub_020729A4(void *, u8 *, u16, int);
 void sub_02006EA0(void *, int, int, int, u8);
-void sub_020062E0(u16, u8, u8);
+void PlayCryDelayed(u16, u8, u8);
 void sub_0208B448(void *);
 void sub_0208B5A8(void *);
 void sub_0208C2A0(void *);

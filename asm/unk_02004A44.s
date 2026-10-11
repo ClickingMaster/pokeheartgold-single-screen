@@ -15,8 +15,8 @@ _020F5710:
 	.byte 0x30, 0x7F, 0x00, 0x00
 	.byte 0x00, 0x34, 0x00, 0x00
 	.byte 0x30, 0x75, 0x00, 0x00
-	.public _020F5730
-_020F5730:
+	.public gGBSoundsSeqPairs
+gGBSoundsSeqPairs:
 	.short SEQ_GS_TITLE, SEQ_GS_P_TITLE
 	.short SEQ_GS_TITLE01, SEQ_GS_P_TITLE01
 	.short SEQ_GS_OPENING_TITLE_G, SEQ_GS_P_OPENING_TITLE_G
@@ -160,8 +160,8 @@ _020F5730:
 _021D05E8:
 	.space 0x10
 
-	.public _021D05F8
-_021D05F8:
+	.public gSoundMicAutoParam
+gSoundMicAutoParam:
 	.space 0x28
 
 	.public _021D0620

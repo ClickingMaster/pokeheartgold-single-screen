@@ -5,7 +5,7 @@ extern void GF_AssertFail(void);
 extern void ManagedSprite_SetAffineZRotation(void *, int);
 extern void ManagedSprite_OffsetPositionXY(void *, s16, s16);
 extern void ManagedSprite_OffsetAffineZRotation(void *, int);
-extern void sub_0200602C(int, int);
+extern void PlaySE_SetPan(int, int);
 extern int _s32_div_f(int, int);
 extern void ov07_02232F74(void *, int);
 int ov07_022332F4(u8 *);
@@ -28,7 +28,7 @@ int ov07_022332F4(u8 *state) {
             ov07_02232F74(state, 18);
             return 1;
         }
-        if (*(int *)(state + 0xc) == 5) sub_0200602C(0x5fd, 0x75);
+        if (*(int *)(state + 0xc) == 5) PlaySE_SetPan(0x5fd, 0x75);
         ManagedSprite_OffsetPositionXY(*(void **)(state + 0x30), amount, 0);
         int delta = _s32_div_f(0x1fffe * amount, 360);
         ManagedSprite_OffsetAffineZRotation(*(void **)(state + 0x30), delta);

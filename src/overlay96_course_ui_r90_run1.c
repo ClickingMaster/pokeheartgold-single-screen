@@ -16,6 +16,6 @@ void ov96_02207BE4(void *work) {
 
 void ov96_02207C38(int x, int y, int seq, BOOL player) {
     if (x >= 0 && x < 256 && y >= 0 && y < 192) {
-        sub_0200606C((u16)seq, player ? 3 : 4);
+        PlaySEOnPlayer((u16)seq, player ? 3 : 4);
     }
 }

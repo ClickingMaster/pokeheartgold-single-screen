@@ -186,27 +186,27 @@
 	.public ov85_021E88AC
 	.public ov85_021E8A08
 	.public ov85_021E8B08
-	.public ov85_021E8BB0
-	.public ov85_021E8C14
-	.public ov85_021E8C3C
-	.public ov85_021E8C5C
-	.public ov85_021E8D64
-	.public ov85_021E8E00
-	.public ov85_021E8E38
-	.public ov85_021E8E6C
-	.public ov85_021E8F58
-	.public ov85_021E8F88
-	.public ov85_021E9084
-	.public ov85_021E9160
-	.public ov85_021E9244
-	.public ov85_021E9288
-	.public ov85_021E92B8
-	.public ov85_021E92F8
-	.public ov85_021E9324
+	.public SpinTradeGroup_VBlankTask
+	.public SpinTradeGroup_VBlankCallback
+	.public SpinTradeGroup_SetGraphicsBanks
+	.public SpinTradeGroup_InitBgLayers
+	.public SpinTradeGroup_InitData
+	.public SpinTradeGroup_FreeData
+	.public SpinTradeGroup_FreeBgLayers
+	.public SpinTradeGroup_LoadBgGraphics
+	.public SpinTradeGroup_InitObjTransfer
+	.public SpinTradeGroup_InitSpriteResources
+	.public SpinTradeGroup_CreateAvatarSprites
+	.public SpinTradeGroup_InitWindows
+	.public SpinTradeGroup_PrintTitle
+	.public SpinTradeGroup_RemoveWindows
+	.public SpinTradeGroup_State_ShowPrompt
+	.public SpinTradeGroup_State_HandleInput
+	.public SpinTradeGroup_HandleButtons
 	.public ov85_021E943C
 	.public ov85_021E9440
-	.public ov85_021E9458
-	.public ov85_021E9468
+	.public SpinTradeGroup_WaitPrinterThen
+	.public SpinTradeGroup_State_WaitPrinter
 	.public ov85_021E948C
 	.public ov85_021E94BC
 	.public ov85_021E94EC
@@ -218,42 +218,42 @@
 	.public ov85_021E97B8
 	.public ov85_021E97E8
 	.public ov85_021E9814
-	.public ov85_021E9834
-	.public ov85_021E9864
+	.public SpinTradeGroup_State_StartSave
+	.public SpinTradeGroup_State_Save
 	.public ov85_021E98C4
-	.public ov85_021E98E0
-	.public ov85_021E9900
+	.public SpinTradeGroup_State_ShowCanceled
+	.public SpinTradeGroup_State_FadeOutCanceled
 	.public ov85_021E993C
 	.public ov85_021E996C
 	.public ov85_021E9A1C
 	.public ov85_021E9A6C
-	.public ov85_021E9A90
-	.public ov85_021E9AB0
+	.public SpinTradeGroup_State_StartExitSync
+	.public SpinTradeGroup_State_WaitExitSync
 	.public ov85_021E9AF0
 	.public ov85_021E9B1C
 	.public ov85_021E9B40
 	.public ov85_021E9BA0
 	.public ov85_021E9BDC
-	.public ov85_021E9C50
+	.public SpinTradeGroup_State_Proceed
 	.public ov85_021E9C84
 	.public ov85_021E9D9C
-	.public ov85_021E9E58
-	.public ov85_021E9EA4
-	.public ov85_021E9EC0
+	.public SpinTradeGroup_CycleHighlightColor
+	.public SpinTradeGroup_CountProfiles
+	.public SpinTradeGroup_PrintMemberList
 	.public ov85_021E9FCC
-	.public ov85_021E9FD0
-	.public ov85_021E9FEC
-	.public ov85_021EA010
-	.public ov85_021EA0EC
-	.public ov85_021EA17C
-	.public ov85_021EA19C
-	.public ov85_021EA1AC
-	.public ov85_021EA2C0
-	.public ov85_021EA324
-	.public ov85_021EA368
-	.public ov85_021EA398
-	.public ov85_021EA39C
-	.public ov85_021EA3F0
+	.public SpinTradeGroup_CountMembers
+	.public SpinTradeGroup_GetMemberMask
+	.public SpinTradeGroup_UpdateMembers
+	.public SpinTradeGroup_PrintMessage
+	.public SpinTradeGroup_IsPrinterDone
+	.public SpinTradeGroup_ClearMessage
+	.public SpinTradeGroup_UpdateAvatars
+	.public SpinTradeGroup_LoadAvatarGraphics
+	.public SpinTradeGroup_LoadAvatar
+	.public SpinTradeGroup_FreeAvatarGraphics
+	.public SpinTradeGroup_GetTextSpeed
+	.public SpinTradeGroup_SetMaxConnections
+	.public SpinTradeGroup_CheckMembers
 	.public ov85_021EA4EC
 	.public ov85_021EA4F0
 	.public ov85_021EA4F4

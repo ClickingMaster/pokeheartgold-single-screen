@@ -10,7 +10,7 @@
 #include "save_data_read_error.h"
 #include "screen_fade.h"
 #include "sound.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #include "sys_task.h"
 #include "system.h"
 #include "timer_3.h"

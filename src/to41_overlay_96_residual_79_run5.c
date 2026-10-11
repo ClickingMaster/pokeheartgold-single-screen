@@ -93,7 +93,7 @@ void ov96_021FFD80(void *w, int a, int b) {
 
 void ov96_021FFE38(int a, int b, int c) {
     if (a >= 0 && a < 0x100) {
-        sub_0200606C((u16)b, c ? 3 : 4);
+        PlaySEOnPlayer((u16)b, c ? 3 : 4);
     }
 }
 

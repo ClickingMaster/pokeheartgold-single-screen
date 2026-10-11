@@ -17,11 +17,11 @@ BOOL IsPaletteFadeFinished(void);
 void ov99_021E8828(Ov99EventMainWork *work);
 void ov99_021E8788(Ov99EventMainWork *work);
 void ov99_021E8C50(Ov99EventMainWork *work);
-BOOL ov98_0221EF24(void);
+BOOL PokeathlonUtil_CheckExitInput(void);
 BOOL ov99_021E90F4(Ov99EventMainWork *work);
 void PlaySE(u32 seq);
 void GF_AssertFail(void);
-void ov98_0221E6CC(void *ctx);
+void PokeathlonUtil_DrawSprites(void *ctx);
 extern u8 _021EA5E4[];
 BOOL PokeathlonEventRecord_Main(void *manager, int *state);
 #endif

@@ -1,51 +1,51 @@
 	.include "asm/macros.inc"
-	.public ov98_0221E5C0
-	.public ov98_0221E5D0
-	.public ov98_0221E5E0
-	.public ov98_0221E684
-	.public ov98_0221E6CC
-	.public ov98_0221E6E0
-	.public ov98_0221E6F0
+	.public PokeathlonUtil_GetSpriteSystem
+	.public PokeathlonUtil_GetSpriteManager
+	.public PokeathlonUtil_CreateSpriteContext
+	.public PokeathlonUtil_FreeSpriteContext
+	.public PokeathlonUtil_DrawSprites
+	.public PokeathlonUtil_NewSprite
+	.public PokeathlonUtil_CreateSpriteRow
 	.public ov98_0221E784
-	.public ov98_0221E7E8
-	.public ov98_0221E8A8
-	.public ov98_0221E970
-	.public ov98_0221E9FC
-	.public ov98_0221EA4C
-	.public ov98_0221EAA8
-	.public ov98_0221EABC
-	.public ov98_0221EB84
+	.public PokeathlonUtil_LoadMonPicSprite
+	.public PokeathlonUtil_LoadMonIconResources
+	.public PokeathlonUtil_SetMonIconSprite
+	.public PokeathlonUtil_LoadSpriteChars
+	.public PokeathlonUtil_LoadSpritePalette
+	.public PokeathlonUtil_LoadCharDataFromNarc
+	.public PokeathlonUtil_CreateTextContext
+	.public PokeathlonUtil_FreeTextContext
 	.public ov98_0221EBD8
 	.public ov98_0221EBEC
 	.public ov98_0221EC08
-	.public ov98_0221EC24
-	.public ov98_0221EC3C
-	.public ov98_0221ECD0
-	.public ov98_0221ED3C
-	.public ov98_0221ED48
-	.public ov98_0221EDA4
-	.public ov98_0221EDC4
-	.public ov98_0221EE28
-	.public ov98_0221EE84
-	.public ov98_0221EE9C
-	.public ov98_0221EEDC
-	.public ov98_0221EEEC
-	.public ov98_0221EEFC
-	.public ov98_0221EF14
-	.public ov98_0221EF24
+	.public PokeathlonUtil_PrintMessageCentered
+	.public PokeathlonUtil_PrintMessageEx
+	.public PokeathlonUtil_PrintMessageWithNumber
+	.public PokeathlonUtil_PrintMessage
+	.public PokeathlonUtil_PrintMessageAt
+	.public PokeathlonUtil_BufferNumber
+	.public PokeathlonUtil_PrintMessageWithPlayerName
+	.public PokeathlonUtil_PrintSpeciesName
+	.public PokeathlonUtil_ClearAndCopyWindow
+	.public PokeathlonUtil_PrintString
+	.public PokeathlonUtil_ClearWindowTilemap
+	.public PokeathlonUtil_SetWindowY
+	.public PokeathlonUtil_GetMessageFormat
+	.public PokeathlonUtil_ClearWindow
+	.public PokeathlonUtil_CheckExitInput
 	.public ov98_0221EF64
 	.public ov98_0221EF80
 	.public ov98_0221EFA4
 	.public ov98_0221EFB4
 	.public ov98_0221EFE8
 	.public ov98_0221F01C
-	.public ov98_0221F024
+	.public PokeathlonUtil_CountSpeciesWithAllMedals
 	.public ov98_0221F058
-	.public ov98_0221F090
-	.public ov98_0221F0EC
-	.public ov98_0221F120
-	.public ov98_0221F150
-	.public ov98_0221F174
+	.public PokeathlonUtil_ResetDisplay
+	.public PokeathlonUtil_DisableDisplay
+	.public PokeathlonUtil_GetDecimalDigit
+	.public PokeathlonUtil_CountDecimalDigits
+	.public PokeathlonUtil_SetGfxBanks
 	.public _0221F194
 	.public ov98_0221F19C
 	.public ov98_0221F1AC
@@ -60,8 +60,8 @@
 
 	.text
 
-	thumb_func_start ov98_0221E6F0
-ov98_0221E6F0: ; 0x0221E6F0
+	thumb_func_start PokeathlonUtil_CreateSpriteRow
+PokeathlonUtil_CreateSpriteRow: ; 0x0221E6F0
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x3c
 	str r0, [sp]
@@ -128,7 +128,7 @@ _0221E75C:
 	strh r1, [r0, #2]
 	ldr r0, [sp]
 	add r1, sp, #8
-	bl ov98_0221E6E0
+	bl PokeathlonUtil_NewSprite
 	mov r1, #1
 	stmia r4!, {r0}
 	bl ManagedSprite_SetAnimateFlag
@@ -139,4 +139,4 @@ _0221E75C:
 	add sp, #0x3c
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov98_0221E6F0
+	thumb_func_end PokeathlonUtil_CreateSpriteRow

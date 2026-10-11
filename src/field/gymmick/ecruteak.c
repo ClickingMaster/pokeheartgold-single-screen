@@ -6,7 +6,7 @@
 #include "overlay_01_021F72DC.h"
 #include "overlay_01_021F944C.h"
 #include "overlay_04.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_02023694.h"
 
 #define NUM_CANDLES 4

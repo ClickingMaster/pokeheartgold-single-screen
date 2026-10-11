@@ -9,7 +9,7 @@
 #include "overlay_01_021F944C.h"
 #include "script.h"
 #include "task.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_02055418.h"
 #include "unk_0205CB48.h"
 #include "unk_02062108.h"

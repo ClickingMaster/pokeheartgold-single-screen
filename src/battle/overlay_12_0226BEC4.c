@@ -7,7 +7,7 @@
 
 #include "heap.h"
 #include "sys_task.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 static void ov12_0226BF04(SysTask *task, void *data);
 

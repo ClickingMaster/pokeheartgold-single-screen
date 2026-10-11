@@ -2,7 +2,7 @@
 #pragma once
 .public sub_02005BA8
 .public PlaySE
-.public sub_02006088
+.public PlaySEWithFieldBank
 .public GF_AssertFail
 .public Save_GameStats_Get
 .public GameStats_Inc

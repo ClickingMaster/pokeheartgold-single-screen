@@ -53,7 +53,7 @@ void ov96_021EB588(void *sprite, VecFx32 *pos);
 void ov96_021EB52C(void *sprite, int a, int b);
 void ov96_021EB564(void *sprite, int value);
 BOOL ov96_021EB570(void *sprite, int value);
-void sub_0200606C(u32 seqNo, u32 playerNo);
+void PlaySEOnPlayer(u32 seqNo, u32 playerNo);
 u32 sub_02006190(u32 a);
 void ov96_021FEECC(void *screen, Actor *actor, VecFx32 *pos, Packet *packet, u8 index, u8 target, Packet *info, int a7, int a8, int a9);
 void ov96_02200950(void *screen, u8 index, u8 target, u8 hide, int status);
@@ -114,7 +114,7 @@ void ov96_021FE550(void *course, int selected, Actor *actor, Shared *shared) {
         ov96_021EB564(s->cursors[s->frame], 9);
         s->frame = (s->frame + 1) % 4;
         if (d >= 0 && d < 256) {
-            sub_0200606C(0x8A3, 5);
+            PlaySEOnPlayer(0x8A3, 5);
         }
     }
     }

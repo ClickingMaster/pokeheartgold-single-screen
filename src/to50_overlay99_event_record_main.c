@@ -24,7 +24,7 @@ BOOL PokeathlonEventRecord_Main(void *manager, int *state)
             ov99_021E8C50(work);
             work->refreshRequested = 0;
         }
-        if (ov98_0221EF24() || ov99_021E90F4(work)) {
+        if (PokeathlonUtil_CheckExitInput() || ov99_021E90F4(work)) {
             PlaySE(0x5dc);
             BeginNormalPaletteFade(0, 0, 0, 0, 6, 1, work->heapId);
             *state = 3;
@@ -43,6 +43,6 @@ BOOL PokeathlonEventRecord_Main(void *manager, int *state)
         }
         break;
     }
-    ov98_0221E6CC(work->spriteContext);
+    PokeathlonUtil_DrawSprites(work->spriteContext);
     return FALSE;
 }

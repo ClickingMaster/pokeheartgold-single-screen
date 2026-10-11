@@ -26,7 +26,7 @@
 #include "sprite_system.h"
 #include "system.h"
 #include "touchscreen.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_0200FA24.h"
 #include "unk_020163E0.h"
 #include "unk_02019BA4.h"

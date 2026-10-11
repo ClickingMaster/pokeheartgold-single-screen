@@ -2,7 +2,7 @@
 
 #include "field_system.h"
 #include "overlay_04.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_02062108.h"
 
 typedef struct VermilionGymmickLocalData {

@@ -10,7 +10,7 @@
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 static u16 sDownArrowBaseTile;
 static TextFlags sTextFlags;

@@ -9,7 +9,7 @@ void StopSE(u16, int);
 void GF_AssertFail(void);
 void ov07_0221C69C(void);
 void ov07_0221F8C8(void *, s8);
-void sub_020061EC(void);
+void SetAllSEPan(void);
 void *ov07_0221FB90(BattleSystem *, enum HeapID, u8);
 void *NARC_AllocAndReadWholeMember(u32, u32, u32);
 void ov06_0221BAD8(void);

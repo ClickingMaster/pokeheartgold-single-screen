@@ -64,7 +64,7 @@
 #include "scrcmd.h"
 #include "screen_fade.h"
 #include "script_pokemon_util.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #include "sys_flags.h"
 #include "sys_vars.h"
 #include "system.h"
@@ -5319,7 +5319,7 @@ BOOL ScrCmd_803(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_805(ScriptContext *ctx) {
-    sub_02004B24(75);
+    Sound_LoadSceneSoundEffects(75);
     return FALSE;
 }
 

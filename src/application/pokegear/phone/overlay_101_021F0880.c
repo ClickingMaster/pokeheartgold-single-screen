@@ -4,7 +4,7 @@
 
 #include "font.h"
 #include "text.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 void ov101_021F0990(PokegearPhoneAppData *phoneApp);
 void PokegearPhone_ContextMenu_OnCursorMove_DynamicTooltip(TouchscreenListMenu *menu, u8 cursorPos, void *callbackArg, int event);

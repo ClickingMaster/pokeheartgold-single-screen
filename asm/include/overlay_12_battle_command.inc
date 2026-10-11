@@ -5,7 +5,7 @@
 .public PaletteData_GetSelectedBuffersBitmask
 .public PaletteData_SetAutoTransparent
 .public PlayBGM
-.public sub_0200602C
+.public PlaySE_SetPan
 .public PlaySE
 .public OverlayManager_New
 .public OverlayManager_Delete

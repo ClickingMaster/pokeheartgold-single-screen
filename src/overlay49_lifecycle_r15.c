@@ -54,8 +54,8 @@ extern void ov49_0225E2B4(void *);
 extern void ov49_02258B20(void *);
 extern void ov49_02258994(void *);
 extern void ov49_0225A7D0(void *);
-extern void sub_0200616C(u32);
-extern void sub_02006300(u32);
+extern void StopAllSE(u32);
+extern void StopCry(u32);
 extern int ov45_0222A53C(void *);
 extern void GF_AssertFail(void);
 extern void TextFlags_SetCanABSpeedUpPrint(BOOL);
@@ -288,7 +288,7 @@ BOOL ov49_02259EF8(OverlayManager *manager) {
     Heap_Free(work);
     Heap_Destroy((enum HeapID)0x77);
     Heap_Destroy((enum HeapID)0x78);
-    sub_0200616C(0);
-    sub_02006300(0);
+    StopAllSE(0);
+    StopCry(0);
     return TRUE;
 }

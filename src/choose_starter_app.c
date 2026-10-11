@@ -24,7 +24,7 @@
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_02009D48.h"
 #include "unk_0200B150.h"
 #include "unk_02013FDC.h"

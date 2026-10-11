@@ -14,7 +14,7 @@
 #include "gf_gfx_loader.h"
 #include "map_object.h"
 #include "task.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 typedef enum ClearBellAnimationState {
     CLEAR_BELL_ANIM_STATE_NUL,

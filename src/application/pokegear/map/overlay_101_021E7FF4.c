@@ -8,7 +8,7 @@
 #include "gf_gfx_loader.h"
 #include "screen_fade.h"
 #include "text.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_02013534.h"
 #include "unk_0208805C.h"
 

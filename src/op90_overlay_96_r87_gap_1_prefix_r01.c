@@ -53,7 +53,7 @@ extern u8 *ov96_021E8A20(void *ptr);
 extern void *PokeathlonCourse_GetHeapAllocPtr4(void *course);
 extern u8 PokeathlonCourse_GetParticipantCount(void *course);
 extern u8 *ov96_021E60C0(void *course, int index, u16 mode);
-extern void sub_0200606C(u32 seqNo, u32 playerNo);
+extern void PlaySEOnPlayer(u32 seqNo, u32 playerNo);
 extern u32 sub_02006190(u32 playerNo);
 extern void ov96_021EB52C(void *obj, int a, int b);
 extern void ov96_021EB564(void *obj, int anim);
@@ -117,7 +117,7 @@ void ov96_02206380(void *course, int viewer, CoursePlayer *players, CourseNetDat
         ov96_02207C38(x + 128 - baseX, y + 96 - baseY, 0x8A3, 1);
     }
     if ((u8)(((u8)((packet->words[5] >> 19) & 0xF) >> local) & 1)) {
-        sub_0200606C(0x8CE, 3);
+        PlaySEOnPlayer(0x8CE, 3);
     }
     if ((u8)((packet->words[4] >> 18) & 1)) {
         x = packet->words[4] & 0x1FF;

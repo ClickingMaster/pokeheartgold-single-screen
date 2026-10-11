@@ -17,7 +17,7 @@
 #include "overlay_01.h"
 #include "script_manager.h"
 #include "task.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 // Declared in include/summary_screen_helpers_internal.h (not includable here).
 extern void G2x_SetBlendAlpha_(u32 reg, int plane1, int plane2, int eva, int evb);

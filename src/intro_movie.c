@@ -13,7 +13,7 @@
 #include "obj_char_transfer.h"
 #include "obj_pltt_transfer.h"
 #include "screen_fade.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #include "sprite.h"
 #include "sys_task_api.h"
 #include "system.h"

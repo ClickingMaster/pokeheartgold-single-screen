@@ -18,7 +18,7 @@ void ov07_0221F120(Ov07CallbackContext *ctx) {
     effect->y = ov07_0221F8C8(ctx, (s8)effect->y);
     effect->z = ov07_0221F980((s8)effect->x, (s8)effect->y, (s8)effect->z);
     PlaySE(effect->sequence);
-    sub_020061B4(effect->sequence, 0xFFFF, effect->x);
+    SetSeqTrackPan(effect->sequence, 0xFFFF, effect->x);
     ov07_0221C56C(ctx, effect);
 }
 
@@ -33,7 +33,7 @@ void ov07_0221F1C0(Ov07CallbackContext *ctx) {
     effect->byte03 = (u8)NEXT_ARG(ctx);
     ctx->script += 4;
     PlaySE(effect->sequence);
-    sub_020061B4(effect->sequence, 0xFFFF, effect->x);
+    SetSeqTrackPan(effect->sequence, 0xFFFF, effect->x);
     ov07_0221C56C(ctx, effect);
 }
 
@@ -51,7 +51,7 @@ void ov07_0221F238(Ov07CallbackContext *ctx) {
     effect->y = ov07_0221F8C8(ctx, (s8)effect->y);
     effect->z = ov07_0221F8C8(ctx, (s8)effect->z);
     PlaySE(effect->sequence);
-    sub_020061B4(effect->sequence, 0xFFFF, effect->x);
+    SetSeqTrackPan(effect->sequence, 0xFFFF, effect->x);
     ov07_0221C56C(ctx, effect);
 }
 

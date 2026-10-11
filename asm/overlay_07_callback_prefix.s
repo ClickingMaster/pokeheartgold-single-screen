@@ -1291,7 +1291,7 @@ _0221C606:
 	add r4, r0, #0
 _0221C60C:
 	ldr r0, [r5, #0x14]
-	bl sub_020061EC
+	bl SetAllSEPan
 	ldrh r0, [r5, #0x1a]
 	bl IsSEPlaying
 	cmp r0, #0
@@ -1343,7 +1343,7 @@ _0221C648:
 	ldrh r0, [r5, #0x1a]
 	ldr r1, _0221C670 ; =0x0000FFFF
 	ldr r2, [r5, #0x14]
-	bl sub_020061B4
+	bl SetSeqTrackPan
 	ldrb r0, [r5, #0x18]
 	cmp r0, #0
 	bne _0221C66C
@@ -1370,7 +1370,7 @@ ov07_0221C674: ; 0x0221C674
 	ldrh r0, [r4, #0x1a]
 	ldr r1, _0221C698 ; =0x0000FFFF
 	ldr r2, [r4, #0x14]
-	bl sub_020061B4
+	bl SetSeqTrackPan
 	mov r0, #0
 _0221C696:
 	pop {r4, pc}
@@ -7110,7 +7110,7 @@ ov07_0221F0CC: ; 0x0221F0CC
 	ldr r1, _0221F100 ; =0x0000FFFF
 	add r0, r4, #0
 	add r2, r5, #0
-	bl sub_020061B4
+	bl SetSeqTrackPan
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 _0221F100: .word 0x0000FFFF
@@ -7128,7 +7128,7 @@ ov07_0221F104: ; 0x0221F104
 	lsl r1, r2, #0x18
 	asr r1, r1, #0x18
 	bl ov07_0221F8C8
-	bl sub_020061EC
+	bl SetAllSEPan
 	pop {r3, pc}
 	thumb_func_end ov07_0221F104
 
@@ -7199,7 +7199,7 @@ ov07_0221F120: ; 0x0221F120
 	ldrh r0, [r4, #0x1a]
 	ldr r1, _0221F1BC ; =0x0000FFFF
 	ldr r2, [r4, #8]
-	bl sub_020061B4
+	bl SetSeqTrackPan
 	add r0, r5, #0
 	add r1, r4, #0
 	bl ov07_0221C56C
@@ -7258,7 +7258,7 @@ ov07_0221F1C0: ; 0x0221F1C0
 	ldrh r0, [r4, #0x1a]
 	ldr r1, _0221F234 ; =0x0000FFFF
 	ldr r2, [r4, #8]
-	bl sub_020061B4
+	bl SetSeqTrackPan
 	add r0, r5, #0
 	add r1, r4, #0
 	bl ov07_0221C56C
@@ -7335,7 +7335,7 @@ ov07_0221F238: ; 0x0221F238
 	ldrh r0, [r4, #0x1a]
 	ldr r1, _0221F2D8 ; =0x0000FFFF
 	ldr r2, [r4, #8]
-	bl sub_020061B4
+	bl SetSeqTrackPan
 	add r0, r5, #0
 	add r1, r4, #0
 	bl ov07_0221C56C
@@ -8131,7 +8131,7 @@ ov07_0221F880: ; 0x0221F880
 	mov r1, #0
 	add r4, #0x8d
 	strb r1, [r4]
-	bl sub_02006300
+	bl StopCry
 	pop {r4, pc}
 _0221F8A4:
 	mov r0, #1
@@ -48128,7 +48128,7 @@ _02233272:
 	add r1, r7, #0
 	lsl r0, r0, #0x10
 	lsr r0, r0, #0x10
-	bl sub_0200602C
+	bl PlaySE_SetPan
 _02233286:
 	add r6, r6, #1
 	add r4, #8
@@ -48253,7 +48253,7 @@ _02233352:
 	bne _0223335E
 	ldr r0, _02233384 ; =0x000005FD
 	mov r1, #0x75
-	bl sub_0200602C
+	bl PlaySE_SetPan
 _0223335E:
 	ldr r0, [r5, #0x30]
 	add r1, r4, #0
@@ -48828,7 +48828,7 @@ _02233786:
 	bne _0223379A
 	ldr r0, _02233870 ; =0x000007E8
 	mov r1, #0x75
-	bl sub_0200602C
+	bl PlaySE_SetPan
 _0223379A:
 	ldr r0, [r4, #8]
 	add r0, r0, #1

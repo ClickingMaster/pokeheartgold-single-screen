@@ -8,7 +8,7 @@
 #include "save_vars_flags.h"
 #include "scrcmd.h"
 #include "script_pokemon_util.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #include "sys_flags.h"
 #include "sys_vars.h"
 #include "unk_020632B0.h"

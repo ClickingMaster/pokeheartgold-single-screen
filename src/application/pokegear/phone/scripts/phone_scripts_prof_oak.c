@@ -3,7 +3,7 @@
 #include "application/pokegear/phone/phone_internal.h"
 #include "msgdata/msg/msg_0666.h"
 
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_0205BB1C.h"
 
 u16 PhoneCall_GetScriptId_ProfOak(PokegearPhoneCallContext *ctx, PokegearPhoneCallState *state) {

@@ -2,7 +2,7 @@
 
 #include "field_system.h"
 #include "overlay_04.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 typedef struct FuchsiaGymmickWallData {
     int x;

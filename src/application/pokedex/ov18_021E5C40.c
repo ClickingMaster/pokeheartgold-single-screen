@@ -12,7 +12,7 @@
 #include "gf_gfx_loader.h"
 #include "pokedex_util.h"
 #include "sprite_system.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_02091278.h"
 #include "unk_020912AC.h"
 

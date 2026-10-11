@@ -6,7 +6,7 @@
 #include "ascii_util.h"
 #include "naming_screen.h"
 #include "player_data.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 typedef struct PalPadSharedH17 {
     u8 padding_00[4];

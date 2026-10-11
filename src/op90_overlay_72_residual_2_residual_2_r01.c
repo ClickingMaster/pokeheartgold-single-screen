@@ -8,7 +8,7 @@
 #include "msgdata.h"
 #include "font.h"
 #include "render_text.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #include "system.h"
 #include "unk_02034B0C.h"
 #include "unk_02037C94.h"

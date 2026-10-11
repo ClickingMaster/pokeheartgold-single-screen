@@ -8,9 +8,9 @@
 #include "gf_gfx_loader.h"
 #include "palette.h"
 #include "pokemon.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #include "sprite.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 typedef struct Ov18State {
     u8 raw[0x258];

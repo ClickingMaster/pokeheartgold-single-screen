@@ -20,7 +20,7 @@
 #include "screen_fade.h"
 #include "script_pokemon_util.h"
 #include "task.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_02054E00.h"
 #include "unk_02055244.h"
 #include "unk_020552A4.h"

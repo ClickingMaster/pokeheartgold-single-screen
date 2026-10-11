@@ -6,7 +6,7 @@ void ov49_022693A4(BOOL suppress, BOOL special, BOOL player, u32 value) {
             return;
         }
         if (player) {
-            sub_0200606C(value, 5);
+            PlaySEOnPlayer(value, 5);
             return;
         } else {
             PlaySE(value);

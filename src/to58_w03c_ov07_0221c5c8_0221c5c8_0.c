@@ -1,5 +1,5 @@
 #include "global.h"
-void sub_020061EC(int);
+void SetAllSEPan(int);
 int IsSEPlaying(int);
 int ov07_0221C5C8(u8 *);
 
@@ -19,7 +19,7 @@ int ov07_0221C5C8(u8 *state) {
     } else {
         if (*(int *)(state + 0x14) <= *(int *)(state + 0xC)) result = 0;
     }
-    sub_020061EC(*(int *)(state + 0x14));
+    SetAllSEPan(*(int *)(state + 0x14));
     if (!IsSEPlaying(*(u16 *)(state + 0x1A))) result = 0;
     return result;
 }

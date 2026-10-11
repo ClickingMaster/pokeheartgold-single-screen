@@ -13,7 +13,7 @@ extern void ov96_021E8228(void *,u8,int,int,int);
 extern int LCRandom(void);
 extern int System_GetTouchNewCoords(int *,int *);
 extern void PlaySE(int);
-extern void sub_0200592C(int,int,int);
+extern void GF_SndSetTrackPitchBySeqNo(int,int,int);
 u16 ov96_0220AAEC(Work *,int,s16,int,int,int *);
 u16 ov96_0220AAEC(Work *w,int event,s16 power,int boost,int extra,int *finished) {
  int count;
@@ -52,7 +52,7 @@ u16 ov96_0220AAEC(Work *w,int event,s16 power,int boost,int extra,int *finished)
  if(!removed && w->flags.count) {
  Particle *p=w->entries[w->flags.count-1];
  if(p->health<=20)ManagedSprite_SetAnim(p->sprite,3);
- else if(p->health<=60){ManagedSprite_SetAnim(p->sprite,2);PlaySE(2232);sub_0200592C(2232,65535,64-((int)LCRandom()%128));}
+ else if(p->health<=60){ManagedSprite_SetAnim(p->sprite,2);PlaySE(2232);GF_SndSetTrackPitchBySeqNo(2232,65535,64-((int)LCRandom()%128));}
  }
  *finished=removed>0 && w->flags.count==0;
  return (u16)removed;

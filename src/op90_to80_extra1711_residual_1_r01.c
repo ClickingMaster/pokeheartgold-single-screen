@@ -1,7 +1,7 @@
 #pragma force_active on
 #include "global.h"
 #include "pokeathlon/pokeathlon.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 typedef struct Entry {
     void *obj;

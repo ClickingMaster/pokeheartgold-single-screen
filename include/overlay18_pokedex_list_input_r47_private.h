@@ -7,7 +7,7 @@
 
 #include "system.h"
 #include "touchscreen.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_02019BA4.h"
 
 extern const u32 ov18_021FB84C[];

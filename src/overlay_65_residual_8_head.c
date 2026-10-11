@@ -1,7 +1,7 @@
 #include "bg_window.h"
 #include "heap.h"
 #include "overlay_65_residual_8_internal.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 
 int ov65_0221E354(void *p) {
     int result = ov65_0221FC54(PTR(p, 0x180), (u8 *)p + 0x664, (u8 *)p + 0x670, (u8 *)p + 0x36c0, 1);

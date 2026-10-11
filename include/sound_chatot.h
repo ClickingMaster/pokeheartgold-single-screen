@@ -19,6 +19,6 @@ u32 sub_02006EFC(SOUND_CHATOT *chatot);
 BOOL sub_02006F30(int a0);
 
 BOOL PlayCry(u16 species, u8 form);
-void sub_02006920(int, u16, int, int, int, u8, u8);
+void PlayCryDelayedEx(int, u16, int, int, int, u8, u8);
 
 #endif // POKEHEARTGOLD_SOUND_CHATOT_H

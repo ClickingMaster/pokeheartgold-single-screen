@@ -25,10 +25,10 @@
 #include "overlay_manager.h"
 #include "screen_fade.h"
 #include "sound.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #include "system.h"
 #include "text.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "geometry_math.h"
 #include "unk_02026E30.h"
 

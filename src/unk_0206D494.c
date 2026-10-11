@@ -31,7 +31,7 @@
 #include "script_manager.h"
 #include "sys_flags.h"
 #include "task.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_02054648.h"
 #include "unk_0205FD20.h"
 #include "unk_02062108.h"

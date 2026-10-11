@@ -11,10 +11,10 @@ extern char _021EA5CC[];
 Ov99EventWork *OverlayManager_GetData(void *);
 void BeginNormalPaletteFade(u32, u32, u32, u32, u32, u32, u32);
 BOOL IsPaletteFadeFinished(void);
-BOOL ov98_0221EF24(void);
+BOOL PokeathlonUtil_CheckExitInput(void);
 void PlaySE(u32);
 void GF_AssertFail(void);
-void ov98_0221E6CC(void *);
+void PokeathlonUtil_DrawSprites(void *);
 BOOL ov99_021E6888(void *manager, int *state);
 
 BOOL ov99_021E6888(void *manager, int *state) {
@@ -30,7 +30,7 @@ BOOL ov99_021E6888(void *manager, int *state) {
         }
         break;
     case 2:
-        if (ov98_0221EF24()) {
+        if (PokeathlonUtil_CheckExitInput()) {
             PlaySE(0x5DC);
             BeginNormalPaletteFade(0, 0, 0, 0, 6, 1, work->heapId);
             *state = 3;
@@ -49,6 +49,6 @@ BOOL ov99_021E6888(void *manager, int *state) {
         }
         break;
     }
-    ov98_0221E6CC(work->spriteContext);
+    PokeathlonUtil_DrawSprites(work->spriteContext);
     return FALSE;
 }

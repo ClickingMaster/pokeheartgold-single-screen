@@ -13,7 +13,7 @@ void Heap_Free(void *ptr);
 void MI_CpuFill8(void *dest, u8 value, u32 size);
 void ov96_021EB52C(void *sprite, int value, int arg);
 void ov96_021EB564(void *sprite, int value);
-BOOL sub_0200606C(u16 seqNo, int playerNo);
+BOOL PlaySEOnPlayer(u16 seqNo, int playerNo);
 void DC_FlushRange(const void *ptr, u32 size);
 void GXS_LoadOBJ(const void *src, u32 offset, u32 size);
 void GXS_LoadOBJPltt(const void *src, u32 offset, u32 size);

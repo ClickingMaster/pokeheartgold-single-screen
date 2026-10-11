@@ -46,7 +46,7 @@
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_02013534.h"
 #include "unk_020163E0.h"
 #include "unk_0208805C.h"
@@ -6698,12 +6698,12 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
     case STATE_GET_POKEMON_CHECK_IF_TRAINER:
         if (!ov07_02232F60(data->ballData, BALL_ANIM_THROW)) { // Likely checking if the current ball animation is still active. The second parameter is unused, as the same data is contained in unk8.
             if (BattleSystem_GetBattleType(data->battleSystem) & BATTLE_TYPE_TRAINER) {
-                sub_0200602C(SEQ_SE_DP_KON, 0x75);
+                PlaySE_SetPan(SEQ_SE_DP_KON, 0x75);
                 UnkBallData_SetBallAnimation(data->ballData, BALL_ANIM_DEFLECT);
                 data->state = STATE_GET_POKEMON_BALL_BLOCKED;
                 break;
             }
-            sub_0200602C(SEQ_SE_DP_BOWA4, 0x75);
+            PlaySE_SetPan(SEQ_SE_DP_BOWA4, 0x75);
             UnkBallData_SetBallAnimation(data->ballData, BALL_ANIM_OPEN);
             data->state = STATE_GET_POKEMON_CALCULATE_SHAKES;
             data->tempData[DATA_GET_POKEMON_FRAME_COUNTER] = 23;
@@ -6761,7 +6761,7 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
         data->tempData[DATA_GET_POKEMON_FRAME_COUNTER]--;
         if (data->tempData[DATA_GET_POKEMON_FRAME_COUNTER] == 0) { // Perform the next step when there are no more frames to wait.
             UnkBallData_SetBallAnimation(data->ballData, BALL_ANIM_CLICK);
-            sub_0200602C(SEQ_SE_DP_GETTING, 0x75);
+            PlaySE_SetPan(SEQ_SE_DP_GETTING, 0x75);
             data->state = STATE_GET_POKEMON_GOTCHA;
         }
         break;

@@ -1,9 +1,9 @@
 #include "sound.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 
 extern int _021D05E8[4];
 extern const u8 _020F5710[8][4];
-extern const u16 _020F5730[136][2];
+extern const u16 gGBSoundsSeqPairs[136][2];
 BOOL NNS_SndPlayerReadVariable(NNSSndHandle *handle, u32 variable, s16 *value);
 void NNS_SndPlayerSetTrackAllocatableChannel(NNSSndHandle *handle, u32 tracks, u32 channels);
 u8 GF_GetPlayerNoBySeq(u16 seqNo);
@@ -68,8 +68,8 @@ void SoundSys_ToggleGBSounds(void) {
 u16 GBSounds_GetGBSeqNoByDSSeqNo(u16 seqNo) {
     u16 i;
     for (i = 0; i < 136; i++) {
-        if (seqNo == _020F5730[i][0]) {
-            return _020F5730[i][1];
+        if (seqNo == gGBSoundsSeqPairs[i][0]) {
+            return gGBSoundsSeqPairs[i][1];
         }
     }
     return seqNo;
@@ -77,8 +77,8 @@ u16 GBSounds_GetGBSeqNoByDSSeqNo(u16 seqNo) {
 u16 GBSounds_GetDSSeqNoByGBSeqNo(u16 seqNo) {
     u16 i;
     for (i = 0; i < 136; i++) {
-        if (seqNo == _020F5730[i][1]) {
-            return _020F5730[i][0];
+        if (seqNo == gGBSoundsSeqPairs[i][1]) {
+            return gGBSoundsSeqPairs[i][0];
         }
     }
     return seqNo;

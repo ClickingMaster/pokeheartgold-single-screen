@@ -12,7 +12,7 @@ extern const Ov49R80UpdateFunc ov49_0226A8CC[];
 void GF_AssertFail(void);
 void PlaySE(u16 seqNo);
 void PlayCry(u16 species, int form);
-void sub_0200606C(u16 seqNo, int player);
+void PlaySEOnPlayer(u16 seqNo, int player);
 u16 GF_DegreeToSinCosIdx(int degrees);
 
 u8 ov49_02269154(u8 *work, u32 row, int column);

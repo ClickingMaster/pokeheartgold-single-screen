@@ -37,9 +37,9 @@
 .public ov27_0225C398
 .public ov27_0225C418
 .public ov27_0225C41C
-.public ov28_0225D520
-.public ov28_0225D5EC
-.public ov28_0225D624
+.public DowsingMchn_Init
+.public DowsingMchn_Exit
+.public DowsingMchn_IsExitDone
 .public NumberEntry_Init
 .public NumberEntry_Exit
 .public NumberEntry_IsExitDone

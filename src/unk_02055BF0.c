@@ -23,7 +23,7 @@
 #include "save_follow_mon.h"
 #include "script.h"
 #include "sound.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_02054648.h"
 #include "unk_02055244.h"
 #include "unk_020552A4.h"

@@ -2,9 +2,9 @@
 
 #include "application/pokegear/radio/radio_internal.h"
 
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #include "touchscreen.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 void Radio_ToggleChannelSelectionButtons(PokegearRadioAppData *radioApp, u8 on, u8 off);
 void Radio_OpenStation(PokegearRadioAppData *radioApp);

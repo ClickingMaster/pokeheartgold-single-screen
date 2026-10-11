@@ -11,7 +11,7 @@
 #include "phonebook_dat.h"
 #include "render_text.h"
 #include "text.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 static BOOL (*const sPhoneCallHandlers[])(PokegearPhoneCallContext *) = {
     GearPhoneCall_Simple,

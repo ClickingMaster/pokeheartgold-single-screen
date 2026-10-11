@@ -5,8 +5,8 @@
 #include "mail_misc.h"
 #include "overlay_102.h"
 #include "pokegear_apps.h"
-#include "sound_02004A44.h"
-#include "unk_02005D10.h"
+#include "sound_system.h"
+#include "sound_playback.h"
 #include "unk_02092BE8.h"
 #include "vram_transfer_manager.h"
 
@@ -55,7 +55,7 @@ static BOOL PokegearApp_RunSubapp(OverlayManager **ppOvyMan) {
 
 BOOL Pokegear_Init(OverlayManager *man, int *state) {
     PokegearArgs *args = OverlayManager_GetArgs(man);
-    sub_0200616C(0);
+    StopAllSE(0);
     Heap_Create(HEAP_ID_3, HEAP_ID_POKEGEAR, 0x32000);
     PokegearAppData *pokegearApp = OverlayManager_CreateAndGetData(man, sizeof(PokegearAppData), HEAP_ID_POKEGEAR);
     memset(pokegearApp, 0, sizeof(PokegearAppData));

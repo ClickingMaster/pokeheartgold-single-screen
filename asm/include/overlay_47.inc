@@ -6,7 +6,7 @@
 .public FontID_String_GetWidth
 .public LoadFontPal1
 .public PlaySE
-.public sub_0200616C
+.public StopAllSE
 .public OverlayManager_CreateAndGetData
 .public OverlayManager_GetData
 .public OverlayManager_FreeData

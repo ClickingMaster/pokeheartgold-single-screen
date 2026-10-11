@@ -28,7 +28,7 @@
 #include "save_arrays.h"
 #include "screen_fade.h"
 #include "script.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #include "sound_radio.h"
 #include "start_menu.h"
 #include "sys_flags.h"

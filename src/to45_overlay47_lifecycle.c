@@ -79,6 +79,6 @@ BOOL ov47_022589A8(OverlayManager *manager) {
     ov47_02258A60(data);
     OverlayManager_FreeData(manager);
     Heap_Destroy(0x81);
-    sub_0200616C(0);
+    StopAllSE(0);
     return TRUE;
 }

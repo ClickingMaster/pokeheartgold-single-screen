@@ -7,7 +7,7 @@
 .public LoadFontPal1
 .public Sound_SetSceneAndPlayBGM
 .public PlaySE
-.public sub_020062E0
+.public PlayCryDelayed
 .public sub_02006EA0
 .public OverlayManager_CreateAndGetData
 .public OverlayManager_GetData

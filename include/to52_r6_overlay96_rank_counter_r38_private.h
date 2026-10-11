@@ -23,7 +23,7 @@ u16 ov96_021ECC4C(void *source, u8 index);
 void MATH_QSort(void *base, u32 count, u32 width, MATHQSortComparator compare, void *context);
 BOOL IsSEPlaying(u32 seqNo);
 void PlaySE(u32 seqNo);
-u32 ov98_0221F120(u32 value, u32 digit);
+u32 PokeathlonUtil_GetDecimalDigit(u32 value, u32 digit);
 void ManagedSprite_SetAnim(void *sprite, u32 animation);
 void ManagedSprite_OffsetPositionXY(void *sprite, s16 x, s16 y);
 

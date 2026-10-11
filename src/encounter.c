@@ -26,7 +26,7 @@
 #include "save_arrays.h"
 #include "save_local_field_data.h"
 #include "sound.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #include "sys_flags.h"
 #include "unk_0202FBCC.h"
 #include "unk_02034354.h"

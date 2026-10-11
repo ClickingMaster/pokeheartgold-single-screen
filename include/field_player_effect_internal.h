@@ -11,7 +11,7 @@
 #include "save_palpad.h"
 #include "sys_task_api.h"
 #include "task.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_02062108.h"
 #include "unk_0206793C.h"
 #include "unk_020689C8.h"

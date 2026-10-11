@@ -2,16 +2,18 @@
 #define TO53_OV96_R48_PRIVATE_H
 
 #include "global.h"
+
+#include "pokeathlon/pokeathlon_util.h"
+
 #include "bg_window.h"
 #include "filesystem.h"
 #include "gf_gfx_planes.h"
 #include "heap.h"
 #include "poke_overlay.h"
+#include "sound_system.h"
 #include "sprite_system.h"
 #include "system.h"
 #include "unk_0203A3B0.h"
-#include "overlay_98_helpers_internal.h"
-#include "sound_02004A44.h"
 
 typedef struct Ov96R48Work {
     void *course;
@@ -29,7 +31,7 @@ typedef struct Ov96R48Work {
     u32 mode;
     u32 showRecord;
     u32 flag2C;
-    Ov98TextContext *message;
+    PokeathlonTextContext *message;
     void *unk34;
     ManagedSprite *sprites[4];
 } Ov96R48Work;

@@ -3,7 +3,7 @@
 #include "pokeathlon/pokeathlon.h"
 #include "message_format.h"
 #include "sound.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "heap.h"
 #include "sprite_system.h"
 #include "sys_task_api.h"

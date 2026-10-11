@@ -1,6 +1,6 @@
 #include "unk020932e0_residual_4_private.h"
 
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 void sub_02094150(SpriteTemplate *, UnkStruct_020932E0_R4 *, NNS_G2D_VRAM_TYPE);
 Sprite *sub_0209417C(UnkStruct_020932E0_R4 *, int, int, int, BOOL);

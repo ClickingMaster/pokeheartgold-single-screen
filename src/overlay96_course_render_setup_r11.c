@@ -16,7 +16,7 @@ typedef struct Ov96R11Entry {
 
 void NNS_G3dInit(void);
 void G3X_InitMtxStack(void);
-void sub_0200606C(u32 a, u32 b);
+void PlaySEOnPlayer(u32 a, u32 b);
 void ov96_021F6398(void *work);
 
 extern const u8 ov96_0221DC18[];
@@ -48,7 +48,7 @@ void ov96_021F6088(void *work, s32 index, Ov96R11Input *input) {
             entry->value = -value;
             entry->value2 = -value;
             entry->active = 1;
-            sub_0200606C(0x8c2, ov96_0221DC18[index]);
+            PlaySEOnPlayer(0x8c2, ov96_0221DC18[index]);
         }
     }
 }

@@ -38,7 +38,7 @@ extern void ov07_0223494C(Source*,int);
 extern void ov12_0226430C(void*,int,int);
 extern void Heap_Free(void*);
 extern void SysTask_Destroy(void*);
-extern void sub_0200602C(int,int);
+extern void PlaySE_SetPan(int,int);
 extern const s16 ov07_022377F4[];
 extern const u8 ov12_0226D120[];
 extern const u16 ov12_0226D15A[];
@@ -60,7 +60,7 @@ void ov12_0225C9BC(void *task,void *data) {
  }else {table=ov12_0226D128;second.values[0]=table.values[type];second.values[1]=5;second.values[2]=5;second.values[3]=work->battler;second.values[4]=work->species;
  second.values[7]=(int)BattleSystem_GetSpriteSystem(work->system);second.values[8]=(int)BattleSystem_GetPaletteData(work->system);second.values[5]=1;second.values[6]=0;work->object=ov07_02233DB8(&second);}
  work->state=5;Pokepic_StartPaletteFade(work->pic,0,16,0,ov12_0226D15A[work->species]);
- switch(work->type){case 0:case 2:case 4:sub_0200602C(1798,-117);break;case 1:case 3:case 5:sub_0200602C(1798,117);break;}
+ switch(work->type){case 0:case 2:case 4:PlaySE_SetPan(1798,-117);break;case 1:case 3:case 5:PlaySE_SetPan(1798,117);break;}
  }break;
  case 5:if(Pokepic_ResumePaletteFade(work->pic)==0)work->state++;break;
  case 6:Pokepic_AddAttr(work->pic,12,-32);Pokepic_AddAttr(work->pic,13,-32);sub_0200914C(work->pic,work->height);if(Pokepic_GetAttr(work->pic,12)<=0){Pokepic_Delete(work->pic);work->state=7;}break;

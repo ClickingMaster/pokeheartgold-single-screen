@@ -13,7 +13,7 @@
 #include "screen_fade.h"
 #include "sys_flags.h"
 #include "touchscreen.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 FS_EXTERN_OVERLAY(OVY_26);
 

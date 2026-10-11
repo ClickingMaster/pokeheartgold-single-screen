@@ -12,8 +12,8 @@ typedef struct Ov99R9R2Work {
 } Ov99R9R2Work;
 extern const SpriteResourceCountsListUnion ov99_021E9FC4;
 extern const int ov99_021E9F60[];
-void *ov98_0221E5E0(enum HeapID heapId, const SpriteResourceCountsListUnion *counts, int maxSprites);
-void ov98_0221E6F0(void *ctx, void **sprites, const int *resources, u32 activeCount, u32 startIndex, s16 x, s16 y, BOOL subScreen);
+void *PokeathlonUtil_CreateSpriteContext(enum HeapID heapId, const SpriteResourceCountsListUnion *counts, int maxSprites);
+void PokeathlonUtil_CreateSpriteRow(void *ctx, void **sprites, const int *resources, u32 activeCount, u32 startIndex, s16 x, s16 y, BOOL subScreen);
 void ov99_021E7F90(Ov99R9R2Work *work);
 void ov99_021E80D0(Ov99R9R2Work *work);
 void ov99_021E810C(Ov99R9R2Work *work);

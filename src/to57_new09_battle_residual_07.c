@@ -6,7 +6,7 @@
 
 #include "heap.h"
 #include "sys_task_api.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 typedef struct HealthbarUpdateMessageR4W06 {
     u8 command;
@@ -149,5 +149,5 @@ void ov12_0225ABB8(BattleSystem *battleSystem, OpponentData *opponentData, u8 *m
         pan = 1 - 0x76;
     }
     ov12_0226430C(battleSystem, opponentData->unk194, message[0]);
-    sub_0200602C(*(u16 *)&message[2], pan);
+    PlaySE_SetPan(*(u16 *)&message[2], pan);
 }

@@ -1,8 +1,8 @@
 #include "to50_overlay99_sprite_resources_private.h"
 
 void ov99_021E6274(Ov99ResourceWork *work) {
-    SpriteSystem *system = ov98_0221E5C0(work->spriteContext);
-    SpriteManager *manager = ov98_0221E5D0(work->spriteContext);
+    SpriteSystem *system = PokeathlonUtil_GetSpriteSystem(work->spriteContext);
+    SpriteManager *manager = PokeathlonUtil_GetSpriteManager(work->spriteContext);
 
     SpriteSystem_LoadCharResObjFromOpenNarc(system, manager, work->narc, 0x15, TRUE, 1, 0);
     SpriteSystem_LoadPlttResObjFromOpenNarc(system, manager, work->narc, 0x14, FALSE, 1, 1, 0);
@@ -25,5 +25,5 @@ void ov99_021E6274(Ov99ResourceWork *work) {
     SpriteSystem_LoadAnimResObjFromOpenNarc(system, manager, work->narc, 11, TRUE, 3);
 
     ov99_021E6400(work);
-    ov98_0221E8A8(work->spriteContext, ov99_021E9554, 3, 0, TRUE);
+    PokeathlonUtil_LoadMonIconResources(work->spriteContext, ov99_021E9554, 3, 0, TRUE);
 }

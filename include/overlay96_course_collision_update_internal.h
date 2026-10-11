@@ -25,8 +25,8 @@ extern BOOL ov96_021F6060(const VecFx32 *position, fx32 radius, const VecFx32 *o
 extern void ov96_021F75BC(void *manager, u8 index);
 extern u8 ov96_021F65D8(Ov96CourseCollisionCounter *counter);
 extern void ov96_021F75E8(void *manager, u8 index, u8 value);
-extern void sub_0200606C(u32 seqNo, u32 playerNo);
-extern void sub_02005944(u32 playerNo, u32 volume, u32 value);
+extern void PlaySEOnPlayer(u32 seqNo, u32 playerNo);
+extern void GF_SndSetTrackPitchByPlayerNo(u32 playerNo, u32 volume, u32 value);
 extern void ov96_021E8228(void *course, u8 participant, u8 slot, u32 event, u32 value);
 
 extern const u8 ov96_0221DC18[];

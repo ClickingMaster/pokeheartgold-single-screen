@@ -10,10 +10,10 @@ typedef struct Ov99ResourceWork {
     u8 pad0c[8];
     void *spriteContext;
 } Ov99ResourceWork;
-SpriteSystem *ov98_0221E5C0(void *ctx);
-SpriteManager *ov98_0221E5D0(void *ctx);
+SpriteSystem *PokeathlonUtil_GetSpriteSystem(void *ctx);
+SpriteManager *PokeathlonUtil_GetSpriteManager(void *ctx);
 void ov99_021E6400(Ov99ResourceWork *work);
-void ov98_0221E8A8(void *ctx, const int *ids, int count, int screen, BOOL flag);
+void PokeathlonUtil_LoadMonIconResources(void *ctx, const int *ids, int count, int screen, BOOL flag);
 extern const int ov99_021E9554[];
 void ov99_021E6274(Ov99ResourceWork *work);
 #endif

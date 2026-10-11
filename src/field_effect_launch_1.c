@@ -5,8 +5,8 @@
 #include "player_data.h"
 #include "screen_fade.h"
 #include "sound.h"
-#include "sound_02004A44.h"
-#include "unk_02005D10.h"
+#include "sound_system.h"
+#include "sound_playback.h"
 #include "unk_02055418.h"
 
 void sub_020977CC(FieldSystem *fieldSystem, u8 param1, u8 param2, u32 mapId, u32 x, u32 y) {

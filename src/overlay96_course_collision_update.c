@@ -39,8 +39,8 @@ void ov96_021F6600(void *course, void *work) {
                     value = ov96_021F65D8((Ov96CourseCollisionCounter *)counter);
                     ov96_021F75E8(PTR_AT(work, 0x8c), (u8)inner, value);
                     U8_AT(work, 0x142) = 1;
-                    sub_0200606C(0x88d, *sound);
-                    sub_02005944(*sound, 0xffff, ov96_0221C110[value - 1]);
+                    PlaySEOnPlayer(0x88d, *sound);
+                    GF_SndSetTrackPitchByPlayerNo(*sound, 0xffff, ov96_0221C110[value - 1]);
                     ov96_021E8228(course, participant, (u8)outer, 3, 1);
                 }
             }

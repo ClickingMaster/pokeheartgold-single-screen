@@ -1,7 +1,7 @@
 #include "global.h"
 
 #include "heap.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #include "task.h"
 
 typedef struct {

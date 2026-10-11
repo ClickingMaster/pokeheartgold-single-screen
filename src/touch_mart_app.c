@@ -28,7 +28,7 @@
 #include "systask_environment.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "yes_no_prompt.h"
 
 // Bottom-screen counterpart of the field mart (overlay_03 shop_menu.c): the item list, the

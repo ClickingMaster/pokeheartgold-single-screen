@@ -26,8 +26,8 @@ typedef struct Ov07SoundEffect {
 
 void PlaySE(u16);
 void StopSE(u16, int);
-void sub_020061B4(u16, u32, int);
-void sub_020061EC(int);
+void SetSeqTrackPan(u16, u32, int);
+void SetAllSEPan(int);
 void *ov07_0221C53C(Ov07CallbackContext *);
 void ov07_0221C56C(Ov07CallbackContext *, Ov07SoundEffect *);
 int ov07_0221F8C8(Ov07CallbackContext *, s8);

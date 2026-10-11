@@ -1,7 +1,7 @@
 #pragma force_active on
 #include "global.h"
 #include "system.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 
 typedef struct {
     u8 unk0[4];

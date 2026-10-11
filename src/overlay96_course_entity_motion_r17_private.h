@@ -36,7 +36,7 @@ extern BOOL ov96_02218934(PokeathlonCourseEntityMotionR17 *);
 extern void ov96_02219030(PokeathlonCourseEntityMotionR17 *);
 extern void VEC_MultAdd(fx32, const VecFx32 *, const VecFx32 *, VecFx32 *);
 extern void *PokeathlonCourse_GetHeapAllocPtr4(void *);
-extern BOOL sub_0200606C(u16, int);
+extern BOOL PlaySEOnPlayer(u16, int);
 
 void ov96_02218AF0(PokeathlonCourseEntityMotionR17 *);
 void ov96_02218EB8(PokeathlonCourseEntityMotionR17 *);

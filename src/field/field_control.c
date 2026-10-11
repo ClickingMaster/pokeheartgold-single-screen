@@ -43,11 +43,11 @@
 #include "safari_zone.h"
 #include "save_pokegear.h"
 #include "script_pokemon_util.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #include "start_menu.h"
 #include "sys_flags.h"
 #include "sys_vars.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_02031B0C.h"
 #include "unk_02032844.h"
 #include "unk_02034354.h"
@@ -1095,7 +1095,7 @@ static void FieldSystem_ProcessSoundplateAtCoords(FieldSystem *fieldSystem, int 
             if (soundplateSoundID < SOUNDPLATE_SOUND_MAX) {
                 if (fieldSystem->environmentSoundState != sSoundplateSounds[soundplateSoundID][SOUNDPLATE_SOUND_SEQ]) {
                     if (sSoundplateSounds[soundplateSoundID][SOUNDPLATE_SOUND_UNK_BOOL] == TRUE) {
-                        sub_02006088(sSoundplateSounds[soundplateSoundID][SOUNDPLATE_SOUND_SEQ]);
+                        PlaySEWithFieldBank(sSoundplateSounds[soundplateSoundID][SOUNDPLATE_SOUND_SEQ]);
                     } else {
                         PlaySE(sSoundplateSounds[soundplateSoundID][SOUNDPLATE_SOUND_SEQ]);
                     }

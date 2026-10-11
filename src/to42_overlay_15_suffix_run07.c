@@ -16,7 +16,7 @@
 #include "string_util.h"
 #include "text.h"
 #include "to42_overlay_15_suffix_private.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "yes_no_prompt.h"
 
 void ov15_021FEA5C(BagWorkRaw *);

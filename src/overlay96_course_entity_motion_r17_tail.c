@@ -7,5 +7,5 @@ void ov96_02219398(PokeathlonCourseEntityMotionR17 *p) {
 }
 
 BOOL ov96_022193CC(u32 id, BOOL flag) {
-    return sub_0200606C((u16)id, flag ? 3 : 4);
+    return PlaySEOnPlayer((u16)id, flag ? 3 : 4);
 }

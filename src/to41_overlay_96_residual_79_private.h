@@ -12,7 +12,7 @@
 #define BYTE(p, n) (*(u8 *)((u8 *)(p) + (n)))
 
 extern void GF_AssertFail(void);
-extern void sub_0200606C(u16 a, int b);
+extern void PlaySEOnPlayer(u16 a, int b);
 extern void ov96_021EB630(void *p, int v);
 extern void ov96_021EB52C(void *p, int a, int b);
 extern void ov96_021EB564(void *p, int v);

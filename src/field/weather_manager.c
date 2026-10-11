@@ -10,7 +10,7 @@
 #include "math_util.h"
 #include "overlay_01_02203E40.h"
 #include "sprite_transfer.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_0200B150.h"
 #include "unk_0200FA24.h"
 #include "unk_02025C44.h"

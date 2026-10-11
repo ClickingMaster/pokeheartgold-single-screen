@@ -1,8 +1,8 @@
 #include "to50_overlay99_record_sprite_resources_private.h"
 void ov99_021E6A9C(Ov99ResourceWork *work)
 {
-    SpriteSystem *system = ov98_0221E5C0(work->spriteContext);
-    SpriteManager *manager = ov98_0221E5D0(work->spriteContext);
+    SpriteSystem *system = PokeathlonUtil_GetSpriteSystem(work->spriteContext);
+    SpriteManager *manager = PokeathlonUtil_GetSpriteManager(work->spriteContext);
     SpriteSystem_LoadCharResObjFromOpenNarc(system, manager, work->narc, 0x11, TRUE, 1, 0);
     SpriteSystem_LoadPlttResObjFromOpenNarc(system, manager, work->narc, 0x10, FALSE, 2, 1, 0);
     SpriteSystem_LoadCellResObjFromOpenNarc(system, manager, work->narc, 0x12, TRUE, 0);

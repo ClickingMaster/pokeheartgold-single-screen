@@ -1,6 +1,6 @@
 #pragma force_active on
 #include "global.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 typedef struct Packet{u8 x,y;struct{u8 height:6,event:2;} motion;u8 unused;struct{u8 state:4,opponent:2,team:2;} status;struct{u8 low:3,power:2,hidden:2,other:1;} detail;}Packet;
 typedef struct Input{Packet packet[4];u32 padding;union{struct{u32 low:7,pressed:1,rest:24;}bits;u32 raw;}flags;}Input;
 typedef struct Participant{void*actor;void*effect;void*indicator;void*unused;void*launch;void*collision;int state;u8 buffers[0xc0];int scale;u8 pade0;s8 time;u16 pade2;struct{u32 count:8,pad8:6,team:2,opponent:2,pad18:1,launch:1,air:1,remote:1,pad22:1,event:2,other:2,rest:5;} flags;}Participant;
@@ -8,7 +8,7 @@ typedef struct Scene{void*ui;u8 pad4[12];Participant participant[4];u8 pad3b0[9]
 typedef struct Heap{char pad[0x1c];void*actors;char pad20[0x160];void*remote;}Heap;
 typedef struct Rank{u8 y,pad[3];void*actor;}Rank;
 extern Heap*PokeathlonCourse_GetHeapAllocPtr4(void*);extern int PokeathlonCourse_GetParticipantCount(void*),ov96_021E5F24(void*);extern void*ov96_021EAA04(void*,u8),*ov96_0221935C(void*,u8,int);
-extern void ov96_02219770(void*,BOOL,BOOL),ov96_02215884(void*,int,int),ManagedSprite_SetPositionXYWithSubscreenOffset(void*,s16,s16,int),ManagedSprite_ResetSpriteAnimCtrlState(void*),ManagedSprite_SetDrawFlag(void*,BOOL),ov96_021EAC0C(void*,int),ov96_021EAF60(void*,u8,int,void*),sub_02006118(u16,int),ManagedSprite_SetAnimNoRestart(void*,u16),ManagedSprite_SetAnim(void*,u16),ov96_021EAC5C(void*,int),ov96_021EAB38(void*,int),ov96_02216AA4(Packet*,Participant*,void*,void*,u8),ov96_0221996C(void*,u8,int,int),ov96_022193CC(u16,BOOL),ov96_021EB01C(void*,int,int,int),ov96_021EB10C(void*,float,float),ov96_021EB06C(void*,int,int,int*,int*),ov96_02218510(void*,int),ov96_021EABA8(void*,int);
+extern void ov96_02219770(void*,BOOL,BOOL),ov96_02215884(void*,int,int),ManagedSprite_SetPositionXYWithSubscreenOffset(void*,s16,s16,int),ManagedSprite_ResetSpriteAnimCtrlState(void*),ManagedSprite_SetDrawFlag(void*,BOOL),ov96_021EAC0C(void*,int),ov96_021EAF60(void*,u8,int,void*),PlaySE_SetVolume(u16,int),ManagedSprite_SetAnimNoRestart(void*,u16),ManagedSprite_SetAnim(void*,u16),ov96_021EAC5C(void*,int),ov96_021EAB38(void*,int),ov96_02216AA4(Packet*,Participant*,void*,void*,u8),ov96_0221996C(void*,u8,int,int),ov96_022193CC(u16,BOOL),ov96_021EB01C(void*,int,int,int),ov96_021EB10C(void*,float,float),ov96_021EB06C(void*,int,int,int*,int*),ov96_02218510(void*,int),ov96_021EABA8(void*,int);
 extern int ManagedSprite_IsAnimated(void*),ov96_02219940(void*,u8,u8),ov96_02219794(void*,u8,u8),ov96_02216C00(const void*,const void*,void*);
 extern void MATH_QSort(void*,u32,u32,int(*)(const void*,const void*,void*),void*);
 void ov96_02216C38(Scene*,Input*,void*);
@@ -23,7 +23,7 @@ void ov96_02216C38(Scene*scene,Input*input,void*course){int participant;Packet*p
  if(show){int x,y,ox,oy;int dx,dy;s16 px,py;y=packet->y;oy=input->packet[other].y;ox=input->packet[other].x;x=packet->x;dx=x-ox;if(dx<0)dx=-dx;hx=dx/2;dy=y-oy;if(dy<0)dy=-dy;hy=dy/2;if(x>ox)x=ox;px=hx+x;if(y>oy)y=oy;py=hy+y;ManagedSprite_SetPositionXYWithSubscreenOffset(part->collision,px,py,0x1e0000);ManagedSprite_ResetSpriteAnimCtrlState(part->collision);ManagedSprite_SetDrawFlag(part->collision,1);}}
  part->flags.event=packet->motion.event;part->flags.opponent=packet->status.opponent;ov96_021EAC0C(actor,packet->detail.power+1);
  if(packet->status.state==4&&part->state!=4)ov96_021EAF60(heap->actors,actorIndex,1,part->buffers+32+team*64);else if(part->state==4&&packet->status.state!=4)ov96_021EAF60(heap->actors,actorIndex,1,part->buffers+team*64);
- if(packet->status.state==5&&part->state!=5){if(participant==ov96_021E5F24(course))PlaySE_SetPitch(2257,256);else sub_02006118(2261,64);}else if(packet->status.state==12&&part->state!=12){if(*((u8*)ov96_0221935C(course,(u8)participant,team)+24))PlaySE(2259);}
+ if(packet->status.state==5&&part->state!=5){if(participant==ov96_021E5F24(course))PlaySE_SetPitch(2257,256);else PlaySE_SetVolume(2261,64);}else if(packet->status.state==12&&part->state!=12){if(*((u8*)ov96_0221935C(course,(u8)participant,team)+24))PlaySE(2259);}
  if(packet->status.state==6&&part->state!=6){ManagedSprite_SetAnimNoRestart(part->effect,(u16)(packet->detail.power+11));ManagedSprite_SetDrawFlag(part->effect,1);}else if((packet->status.state!=6&&part->state==6)||(packet->status.state==7&&part->state==5)){ManagedSprite_SetAnim(part->effect,(u16)(packet->detail.power+15));ManagedSprite_SetDrawFlag(part->effect,1);}
  if(ManagedSprite_IsAnimated(part->effect)==1)ManagedSprite_SetPositionXYWithSubscreenOffset(part->effect,packet->x,packet->y,0x1e0000);
  if(packet->status.state==6)ov96_021EAC5C(actor,12);

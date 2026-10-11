@@ -5,7 +5,7 @@
 #include "msgdata.h"
 #include "player_data.h"
 #include "yes_no_prompt.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "sprite_system.h"
 #include "overlay_manager.h"
 #include "unk_0200FA24.h"

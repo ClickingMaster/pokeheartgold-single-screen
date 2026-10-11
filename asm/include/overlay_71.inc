@@ -2,7 +2,7 @@
 #pragma once
 .public Sound_SetSceneAndPlayBGM
 .public PlaySE
-.public sub_020062E0
+.public PlayCryDelayed
 .public PlayFanfare
 .public IsFanfarePlaying
 .public OverlayManager_CreateAndGetData

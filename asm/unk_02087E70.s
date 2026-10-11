@@ -19,7 +19,7 @@ sub_02087E70: ; 0x02087E70
 	add r4, r0, #0
 	mov r0, #0
 	add r5, r2, #0
-	bl sub_0200616C
+	bl StopAllSE
 	mov r2, #0x55
 	mov r0, #3
 	mov r1, #0x6d

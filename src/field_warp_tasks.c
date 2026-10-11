@@ -17,14 +17,14 @@
 #include "screen_fade.h"
 #include "script.h"
 #include "sound.h"
-#include "sound_02004A44.h"
+#include "sound_system.h"
 #include "sys_flags.h"
 #include "sys_task.h"
 #include "sys_vars.h"
 #include "system.h"
 #include "task.h"
 #include "terrain_attributes.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "unk_0203BA5C.h"
 #include "unk_02054648.h"
 #include "unk_02055244.h"
@@ -734,7 +734,7 @@ static BOOL sub_02053A2C(TaskManager *taskManager) {
         (*state_p)++;
         break;
     case 1:
-        sub_0200615C(5, 10);
+        StopSEByHandle(5, 10);
         GF_SndHandleMoveVolume(0, 128, 15);
         fieldSystem->environmentSoundState = ENVIRONMENT_SOUND_NONE;
         FieldBGM_PlayForMapHeader(fieldSystem, fieldSystem->location->mapId, TRUE);

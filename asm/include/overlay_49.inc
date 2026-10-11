@@ -11,12 +11,12 @@
 .public LoadFontPal0
 .public LoadFontPal1
 .public PlaySE
-.public sub_0200606C
+.public PlaySEOnPlayer
 .public StopSE
-.public sub_0200616C
+.public StopAllSE
 .public IsSEPlaying
 .public PlayCry
-.public sub_02006300
+.public StopCry
 .public OverlayManager_CreateAndGetData
 .public OverlayManager_GetData
 .public OverlayManager_GetArgs

@@ -3,7 +3,7 @@
 #include "gf_gfx_loader.h"
 #include "oaks_speech_internal.h"
 #include "text.h"
-#include "unk_02005D10.h"
+#include "sound_playback.h"
 #include "yes_no_prompt.h"
 
 struct OakSpeechYesNo {
