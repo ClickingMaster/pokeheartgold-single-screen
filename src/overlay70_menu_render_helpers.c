@@ -41,7 +41,7 @@ void ov70_02242EE4(Ov70R36 *work) {
     work->cursor = 0;
     work->savedCursor = 0;
     cursor = *(volatile int *)&work->cursor;
-    ov70_02238F9C(work->cursorSprite, ov70_02245D76[cursor * 2], ov70_02245D77[cursor * 2]);
+    Gts_SetSpritePosition(work->cursorSprite, ov70_02245D76[cursor * 2], ov70_02245D77[cursor * 2]);
     BgCellManager_DrawCell(work->listMenu, 0);
     BgCellManager_StartCellMove(work->listMenu, 0, -4, 0, 4);
     work->state = 0x20;

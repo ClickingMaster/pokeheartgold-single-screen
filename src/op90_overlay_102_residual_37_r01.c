@@ -7,7 +7,7 @@ typedef struct {void*owner,*base,*args,*view;Window windows[2];void*sprite0,*spr
 typedef char StateSize[sizeof(Work)==0x98?1:-1];
 typedef char ScrollOffset[offsetof(Work,scroll)==0x60?1:-1];
 typedef char PositionOffset[offsetof(Work,y)==0x8c?1:-1];
-extern void ov102_021EC090(u8 *,int);extern u32 ov102_021E8FD8(void *);extern void ov102_021EC13C(u8*,int,u32);extern void ov102_021EC298(ScrollWork*,void*,int,int,int,int);
+extern void ov102_021EC090(u8 *,int);extern u32 EasyChatApp_GetCategoryWordCount(void *);extern void ov102_021EC13C(u8*,int,u32);extern void ov102_021EC298(ScrollWork*,void*,int,int,int,int);
 void ov102_021EBFA0(void *,int);
 
 // @fn ov102_021EBFA0
@@ -36,7 +36,7 @@ void ov102_021EBFA0(void *input, int change) {
         y = w->y + 120;
         row += 10;
         count = rows;
-        if (rows + row > ov102_021E8FD8(w->base)) count--;
+        if (rows + row > EasyChatApp_GetCategoryWordCount(w->base)) count--;
     }
     for (i = 0; i < count; i++) {
         ov102_021EC13C((u8 *)w, (int)(row + i), y);

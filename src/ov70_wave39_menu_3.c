@@ -40,7 +40,7 @@ int ov70_022438D4(void *w) {
     x = ov70_02245DF8[n * 2];
     y = ov70_02245DF9[n * 2];
     U32(w, 0x48) = n;
-    ov70_02238F9C(PTR(w, 0xc), (x + 16) * 8, y * 8);
+    Gts_SetSpritePosition(PTR(w, 0xc), (x + 16) * 8, y * 8);
     if (PTR(w, 0x18)) {
         Sprite_SetDrawFlag(PTR(w, 0x18), 1);
     }

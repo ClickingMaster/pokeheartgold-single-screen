@@ -8,7 +8,7 @@ int ov70_0223D934(Ov70Work *work) {
     ListMenuItems_AppendFromMsgData(PTR(work, 0x11ac), work->msgDataBA0, 0x62, 1);
     ListMenuItems_AppendFromMsgData(PTR(work, 0x11ac), work->msgDataBA0, 0x63, 2);
     ListMenuItems_AppendFromMsgData(PTR(work, 0x11ac), work->msgDataBA0, 0x64, 3);
-    work->menu11D0 = ov70_02238CAC(work, 3, 0xa);
+    work->menu11D0 = Gts_CreateListMenu(work, 3, 0xa);
     work->state2c = 8;
     return 3;
 }
@@ -21,19 +21,19 @@ int ov70_0223D998(Ov70Work *work) {
     input = TouchscreenListMenu_HandleInput(work->menu11D0);
     switch (input) {
     case 1:
-        ov70_02238D60(work);
+        Gts_DestroyListMenu(work);
         ListMenuItems_Delete(PTR(work, 0x11ac));
         ClearFrameAndWindow2(work->windowF18, 0);
         work->state2c = 2;
-        ov70_02238E50(work, 8, 5);
+        Gts_SetNextScreen(work, 8, 5);
         break;
     case 2:
-        ov70_02238D60(work);
+        Gts_DestroyListMenu(work);
         ListMenuItems_Delete(PTR(work, 0x11ac));
         mon = ov70_0223E49C(work->unk00->unk08, work->unk00->unk0C, work->field120, work->field122);
         if (ov70_0223E4FC(mon)) {
             ov70_0223E01C(work, 0x25, 1, 0, 0xf0f, 1);
-            ov70_02238D84(work, 4, 1);
+            Gts_SetState(work, 4, 1);
             break;
         }
         {
@@ -44,13 +44,13 @@ int ov70_0223D998(Ov70Work *work) {
                 } else {
                     ov70_0223E01C(work, 0xb2, 1, 0, 0xf0f, 1);
                 }
-                ov70_02238D84(work, 4, 1);
+                Gts_SetState(work, 4, 1);
                 break;
             }
         }
         if (ov70_0223E59C(mon)) {
             ov70_0223E01C(work, 0xb3, 1, 0, 0xf0f, 1);
-            ov70_02238D84(work, 4, 1);
+            Gts_SetState(work, 4, 1);
             break;
         }
         flag = 0;
@@ -64,12 +64,12 @@ int ov70_0223D998(Ov70Work *work) {
         if (!flag) {
             work->field124 = ov70_0223E49C(work->unk00->unk08, work->unk00->unk0C, work->field120, work->field122);
             work->state2c = 2;
-            ov70_02238E50(work, 6, 0);
+            Gts_SetNextScreen(work, 6, 0);
         }
         break;
     case 3:
     case -2:
-        ov70_02238D60(work);
+        Gts_DestroyListMenu(work);
         ListMenuItems_Delete(PTR(work, 0x11ac));
         ClearFrameAndWindow2(work->windowF18, 0);
         work->state2c = 0;
@@ -83,7 +83,7 @@ int ov70_0223DB30(Ov70Work *work) {
     ListMenuItems_AppendFromMsgData(PTR(work, 0x11ac), work->msgDataBA0, 0x57, 1);
     ListMenuItems_AppendFromMsgData(PTR(work, 0x11ac), work->msgDataBA0, 0x58, 2);
     ListMenuItems_AppendFromMsgData(PTR(work, 0x11ac), work->msgDataBA0, 0x59, 3);
-    work->menu11D0 = ov70_02238CAC(work, 3, 0xa);
+    work->menu11D0 = Gts_CreateListMenu(work, 3, 0xa);
     work->state2c = 0xa;
     return 3;
 }
@@ -96,19 +96,19 @@ int ov70_0223DB94(Ov70Work *work) {
     input = TouchscreenListMenu_HandleInput(work->menu11D0);
     switch (input) {
     case 1:
-        ov70_02238D60(work);
+        Gts_DestroyListMenu(work);
         ListMenuItems_Delete(PTR(work, 0x11ac));
         work->state2c = 2;
-        ov70_02238E50(work, 8, 6);
+        Gts_SetNextScreen(work, 8, 6);
         break;
     case 2:
-        ov70_02238D60(work);
+        Gts_DestroyListMenu(work);
         ListMenuItems_Delete(PTR(work, 0x11ac));
         ClearFrameAndWindow2(work->windowF18, 0);
         mon = ov70_0223E49C(work->unk00->unk08, work->unk00->unk0C, work->field120, work->field122);
         if (ov70_0223E4FC(mon)) {
             ov70_0223E01C(work, 0x25, 1, 0, 0xf0f, 1);
-            ov70_02238D84(work, 4, 1);
+            Gts_SetState(work, 4, 1);
             break;
         }
         {
@@ -119,13 +119,13 @@ int ov70_0223DB94(Ov70Work *work) {
                 } else {
                     ov70_0223E01C(work, 0xb2, 1, 0, 0xf0f, 1);
                 }
-                ov70_02238D84(work, 4, 1);
+                Gts_SetState(work, 4, 1);
                 break;
             }
         }
         if (ov70_0223E59C(mon)) {
             ov70_0223E01C(work, 0xb3, 1, 0, 0xf0f, 1);
-            ov70_02238D84(work, 4, 1);
+            Gts_SetState(work, 4, 1);
             break;
         }
         flag = 0;
@@ -142,7 +142,7 @@ int ov70_0223DB94(Ov70Work *work) {
         break;
     case 3:
     case -2:
-        ov70_02238D60(work);
+        Gts_DestroyListMenu(work);
         ListMenuItems_Delete(PTR(work, 0x11ac));
         ClearFrameAndWindow2(work->windowF18, 0);
         work->state2c = 0;
@@ -163,17 +163,17 @@ int ov70_0223DD0C(Ov70Work *work) {
 }
 
 int ov70_0223DD68(Ov70Work *work) {
-    work->prompt11C8 = ov70_02238C14(work->bgConfig, 0xc, 0x1ad, 8, 1);
+    work->prompt11C8 = Gts_CreateYesNoPrompt(work->bgConfig, 0xc, 0x1ad, 8, 1);
     work->state2c = 6;
     return 3;
 }
 
 int ov70_0223DD94(Ov70Work *work) {
-    int result = ov70_02238C8C(work);
+    int result = Gts_HandleYesNoPrompt(work);
     if (result == 1) {
         YesNoPrompt_Destroy(work->prompt11C8);
         work->state2c = 2;
-        ov70_02238E50(work, 0, 0);
+        Gts_SetNextScreen(work, 0, 0);
     } else if (result == 2) {
         YesNoPrompt_Destroy(work->prompt11C8);
         work->state2c = 0;
@@ -183,18 +183,18 @@ int ov70_0223DD94(Ov70Work *work) {
 
 int ov70_0223DDD0(Ov70Work *work) {
     ov70_0223E01C(work, 0x19, 1, 0, 0xf0f, 1);
-    ov70_02238D84(work, 3, 0xc);
+    Gts_SetState(work, 3, 0xc);
     return 3;
 }
 
 int ov70_0223DDFC(Ov70Work *work) {
-    work->prompt11C8 = ov70_02238C14(work->bgConfig, 0xa, 0x1ad, 8, 1);
+    work->prompt11C8 = Gts_CreateYesNoPrompt(work->bgConfig, 0xa, 0x1ad, 8, 1);
     work->state2c = 0xd;
     return 3;
 }
 
 int ov70_0223DE28(Ov70Work *work) {
-    int result = ov70_02238C8C(work);
+    int result = Gts_HandleYesNoPrompt(work);
     if (result == 1) {
         YesNoPrompt_Destroy(work->prompt11C8);
         ov70_0223DE6C(work);
@@ -209,13 +209,13 @@ int ov70_0223DE28(Ov70Work *work) {
 int ov70_0223DE6C(Ov70Work *work) {
     if (ov70_0223E76C((u8 *)work + 0x260 + work->field12C * 0x124) && work->field120 != 0x12 && Party_GetCount(work->unk00->unk08) == 6) {
         ov70_0223E01C(work, 0x1c, 1, 0, 0xf0f, 1);
-        ov70_02238D84(work, 4, 1);
+        Gts_SetState(work, 4, 1);
         return 0;
     }
     work->field124 = ov70_0223E49C(work->unk00->unk08, work->unk00->unk0C, work->field120, work->field122);
     work->state2c = 2;
     work->field11FC = 1;
-    ov70_02238E50(work, 7, 9);
+    Gts_SetNextScreen(work, 7, 9);
     ov70_0223E690((u8 *)work + 0x13c, work);
     U32(work, 0x128) = 0;
     return 1;
@@ -223,23 +223,23 @@ int ov70_0223DE6C(Ov70Work *work) {
 
 int ov70_0223DF14(Ov70Work *work) {
     ov70_0223E01C(work, 0x19, 1, 0, 0xf0f, 1);
-    ov70_02238D84(work, 3, 0xf);
+    Gts_SetState(work, 3, 0xf);
     return 3;
 }
 
 int ov70_0223DF40(Ov70Work *work) {
-    work->prompt11C8 = ov70_02238C14(work->bgConfig, 0xa, 0x1ad, 8, 1);
+    work->prompt11C8 = Gts_CreateYesNoPrompt(work->bgConfig, 0xa, 0x1ad, 8, 1);
     work->state2c = 0x10;
     return 3;
 }
 
 int ov70_0223DF6C(Ov70Work *work) {
-    int result = ov70_02238C8C(work);
+    int result = Gts_HandleYesNoPrompt(work);
     if (result == 1) {
         YesNoPrompt_Destroy(work->prompt11C8);
         work->field124 = ov70_0223E49C(work->unk00->unk08, work->unk00->unk0C, work->field120, work->field122);
         work->state2c = 2;
-        ov70_02238E50(work, 6, 0);
+        Gts_SetNextScreen(work, 6, 0);
     } else if (result == 2) {
         YesNoPrompt_Destroy(work->prompt11C8);
         ClearFrameAndWindow2(work->window1158, 0);

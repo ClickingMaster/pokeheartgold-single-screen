@@ -192,7 +192,7 @@ WiiMessageSettings_Main: ; 0x022469D8
 	cmp r0, #1
 	bne _022469FC
 	bl ov00_021ECB40
-	bl ov70_022378DC
+	bl GtsServer_Update
 	bl ov00_021EC9D4
 	mov r1, #3
 	sub r0, r1, r0

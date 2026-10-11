@@ -1,7 +1,0 @@
-#pragma force_active on
-#include "global.h"
-#pragma force_active on
-extern u8 ov102_021EC648[];void ov102_021E77F8(void),ov102_021E7AA4(void),ov102_021E8D60(void);
-void *OverlayManager_CreateAndGetData(void *,int,int),*OverlayManager_GetArgs(void *),*sub_02090E44(void *),*sub_02091880(int,void *),*ov102_021E909C(void *,void *),*TouchHitboxController_Create(void *,int,void *,void *,int);int sub_02090D70(void *),MailMsg_GetMsgBank(void *),MailMsg_GetMsgNo(void *);void sub_02090D8C(void *,void *,void *),ov102_021E7A4C(void *,void *),ov102_021E8D50(void *,void *),ov102_021E7934(u8 *,void *);u8 *ov102_021E7888(void *);
-u8 *ov102_021E7888(void *manager){u8 *s=OverlayManager_CreateAndGetData(manager,124,34);MI_CpuFill8(s,0,124);*(void **)s=OverlayManager_GetArgs(manager);*(int *)(s+4)=sub_02090D70(*(void **)s);*(void **)(s+116)=sub_02090E44(*(void **)s);sub_02090D8C(*(void **)s,s+16,s+8);if(*(int *)(s+4)==2)ov102_021E7934(s+100,s+8);*(void **)(s+24)=sub_02091880(34,*(void **)s);*(void **)(s+20)=ov102_021E909C(s,*(void **)(s+24));*(void **)(s+64)=TouchHitboxController_Create(ov102_021EC648,5,ov102_021E77F8,s,34);*(int *)(s+68)=0;*(int *)(s+72)=0;s[107]=0;*(int *)(s+44)=0;*(int *)(s+40)=0;*(u16 *)(s+78)=0;ov102_021E7A4C(s,ov102_021E7AA4);ov102_021E8D50(s,ov102_021E8D60);return s;}
-void ov102_021E7934(u8 *s,void *msg){int i;*(u16 *)s=MailMsg_GetMsgBank(msg);s[3]=20;s[2]=MailMsg_GetMsgNo(msg);for(i=0;i<5;i++)(*(s8 *)(s+4))+=*(s8 *)(s+3);}

@@ -10,7 +10,7 @@ int ov70_0223C4B0(R14Work *w) {
 
 int ov70_0223C4E4(R14Work *w) {
     ov70_0223CAC4(w, 9, 1, 0, 0xf0f);
-    ov70_02238D84(w, 0x15, 4);
+    Gts_SetState(w, 0x15, 4);
     return 3;
 }
 

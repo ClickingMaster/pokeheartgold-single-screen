@@ -3,7 +3,7 @@
 #include "application/pokegear/pokegear_internal.h"
 
 #include "mail_misc.h"
-#include "overlay_102.h"
+#include "easy_chat_app.h"
 #include "pokegear_apps.h"
 #include "sound_system.h"
 #include "sound_playback.h"

@@ -10,6 +10,6 @@
     }
 
 int ov70_02239698(Ov70State *state) {
-    ov70_02238D84(state, 10, 2);
+    Gts_SetState(state, 10, 2);
     return 3;
 }

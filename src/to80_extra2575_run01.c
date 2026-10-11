@@ -72,13 +72,13 @@ typedef struct Ov70Work {
 
 #pragma force_active off
 struct SaveBlock22;
-extern BOOL ov70_02237F38(void);
-extern int ov70_02237F58(void);
+extern BOOL GtsServer_IsRequestDone(void);
+extern int GtsServer_GetResult(void);
 extern int ov70_02240D00(Ov70Work *,void *);
-extern void ov70_02238F80(u8 *);
+extern void Gts_DeleteWaitingIcon(u8 *);
 extern void ov70_02244FA4(u8 *,void *,int,int,int);
 struct Ov70State;
-extern void ov70_02238D84(struct Ov70State *,u32,u32);
+extern void Gts_SetState(struct Ov70State *,u32,u32);
 extern u16 sub_0202DB54(struct SaveBlock22 *);
 extern void sub_0202DB64(struct SaveBlock22 *,void *);
 extern u16 sub_0202DBA0(struct SaveBlock22 *);
@@ -90,14 +90,14 @@ int ov70_02240240(Ov70Work *);
 typedef char whole_work_extent[sizeof(Ov70Work)==0x1608?1:-1];
 #pragma force_active on
 int ov70_02240240(Ov70Work *w){
- if(ov70_02237F38()){
-  int result=ov70_02237F58();w->timer1604=0;
+ if(GtsServer_IsRequestDone()){
+  int result=GtsServer_GetResult();w->timer1604=0;
   switch(result){
    case 0:w->state2c=26;break;
    case 1:{int r;w->value36=1;r=ov70_02240D00(w,w->unk13c);
     switch(r){
-     case 1:ov70_02238F80((u8 *)(void *)w);ov70_02244FA4((u8 *)(void *)w,w->ptrBA0,29,1,0xf0f);ov70_02238D84((struct Ov70State *)(void *)w,37,28);break;
-     case 2:ov70_02238F80((u8 *)(void *)w);ov70_02244FA4((u8 *)(void *)w,w->ptrBA0,35,1,0xf0f);ov70_02238D84((struct Ov70State *)(void *)w,37,28);break;
+     case 1:Gts_DeleteWaitingIcon((u8 *)(void *)w);ov70_02244FA4((u8 *)(void *)w,w->ptrBA0,29,1,0xf0f);Gts_SetState((struct Ov70State *)(void *)w,37,28);break;
+     case 2:Gts_DeleteWaitingIcon((u8 *)(void *)w);ov70_02244FA4((u8 *)(void *)w,w->ptrBA0,35,1,0xf0f);Gts_SetState((struct Ov70State *)(void *)w,37,28);break;
      case 0:w->state2c=18;w->unk11FC=1;break;
     }break;}
    case -3:{Pokemon *mon;w->value36=0;

@@ -59,7 +59,7 @@ extern const u8 ov70_02245D77[];
 void PlaySE(u16);
 void Sprite_SetAnimActiveFlag(void *, int);
 void Sprite_SetAnimCtrlSeq(void *, int);
-void ov70_02238F9C(void *, int, int);
+void Gts_SetSpritePosition(void *, int, int);
 int ov70_02242164(Ov70R36 *, int);
 int ov70_022429A0(void *, int);
 int ov70_02242508(int, int);

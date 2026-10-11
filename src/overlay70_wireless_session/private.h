@@ -10,7 +10,7 @@ void WirelessStatusIcon_Destroy(void);
 void sub_02039418(void *);
 void Sys_SetSleepDisableFlag(int);
 void ov70_02244FA4(void *, void *, int, int, int);
-void ov70_02238D84(void *, int, int);
+void Gts_SetState(void *, int, int);
 void ov70_02245124(void *);
 void ov00_021EC3F0(void *, int, int, int);
 void ov00_021EC454(int);
@@ -21,7 +21,7 @@ int ov00_021EC724(void);
 int ov00_021EC11C(u32 *, u32 *);
 void ov00_021EC210(void);
 void ov00_021EC8D8(void);
-void ov70_02238F80(void *);
+void Gts_DeleteWaitingIcon(void *);
 void ov00_021EC0FC(void *);
 void ov00_021EC9E0(void *);
 

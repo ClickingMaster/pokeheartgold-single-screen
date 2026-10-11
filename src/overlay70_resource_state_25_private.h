@@ -38,7 +38,7 @@ void *ov70_0223F634(enum HeapID heapId, int member, u32 *sizeOut);
 void *ov70_0223F684(enum HeapID heapId);
 void ov70_0223F948(void *pairs);
 int ov70_0223E8E8(Ov70Work25 *, int, int, int, int);
-void ov70_02238D84(Ov70Work25 *, int, int);
-void ov70_02238E50(Ov70Work25 *, int, int);
+void Gts_SetState(Ov70Work25 *, int, int);
+void Gts_SetNextScreen(Ov70Work25 *, int, int);
 void ov70_022420C4(void *, int);
 #endif

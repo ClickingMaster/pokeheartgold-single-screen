@@ -186,10 +186,10 @@
 .public ov44_0222A60C
 .public ov44_0222A758
 .public gApplication_TitleScreen
-.public ov70_022378C0
-.public ov70_022378DC
-.public ov70_02237F2C
-.public ov70_02237F38
-.public ov70_02237F58
-.public ov70_02238304
+.public GtsServer_Init
+.public GtsServer_Update
+.public GtsServer_Exit
+.public GtsServer_IsRequestDone
+.public GtsServer_GetResult
+.public GtsServer_RequestSetProfile
 .public ov75_App_MainMenu_SelectOption_WiiMessageSettings

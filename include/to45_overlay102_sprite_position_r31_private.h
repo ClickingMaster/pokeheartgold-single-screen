@@ -5,7 +5,7 @@
 
 void ov102_021EA270(void *work, void *resource, int index, int value);
 void *ov102_021EA2B4(void *work, void *resource, int x, int y, int anim, int kind);
-u8 ov102_021E8F7C(void *args);
+u8 EasyChatApp_GetListMode(void *args);
 void ov102_021EC4CC(u32 word, u32 *column, u32 *row);
 void Sprite_SetAnimCtrlSeq(void *sprite, int sequence);
 void Sprite_SetDrawFlag(void *sprite, int draw);

@@ -77,7 +77,7 @@ int ov70_02242C64(Ov70R36 *work) {
 
     if (oldCursor != work->cursor) {
         int cursor = work->cursor;
-        ov70_02238F9C(work->cursorSprite, ov70_02245D8A[cursor * 2], ov70_02245D8B[cursor * 2]);
+        Gts_SetSpritePosition(work->cursorSprite, ov70_02245D8A[cursor * 2], ov70_02245D8B[cursor * 2]);
         if (work->cursor == 5) {
             Sprite_SetAnimCtrlSeq(work->cursorSprite, 0x30);
         } else {

@@ -133,10 +133,10 @@
 	.public ov73_021EA0F0
 	.public ov73_021EA19C
 	.public ov73_021EA218
-	.public ov73_021EA268
-	.public ov73_021EA2B4
-	.public ov73_021EA2E0
-	.public ov73_021EA324
+	.public RecordMixing_FriendGroup_Load
+	.public RecordMixing_Fashion_Load
+	.public RecordMixing_Fashion_Merge
+	.public RecordMixing_Rankings_Merge
 	.public RecordMixing_BuildSendBuffer
 	.public RecordMixing_MergeReceivedRecords
 	.public sRecordMixingAvatarVramOffsets
@@ -166,7 +166,7 @@
 	.public ov73_021EA6F0
 	.public ov73_021EA70C
 	.public ov73_021EA728
-	.public ov73_021EA744
+	.public sRecordMixingHandlers
 	.public ov73_021EA83C
 	.public ov73_021EA840
 	.public ov73_021EA844
@@ -243,11 +243,11 @@
 	.public ov73_021EA134
 	.public ov73_021EA15C
 	.public ov73_021EA180
-	.public ov73_021EA25C
-	.public ov73_021EA290
-	.public ov73_021EA2A8
+	.public RecordMixing_FriendGroup_GetSize
+	.public RecordMixing_FriendGroup_Merge
+	.public RecordMixing_Fashion_GetSize
 	.public ov73_021EA2FC
-	.public ov73_021EA31C
+	.public RecordMixing_Rankings_Load
 	.public ov73_021EA348
 	.public ov73_021EA370
 

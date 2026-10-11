@@ -3,7 +3,7 @@
 int ov70_02244854(void *work) {
     WirelessStatusIcon_Destroy();
     ov70_02244FA4(work, PTR_AT(work, 0xBAC), 0x1B, 1, 0xF0F);
-    ov70_02238D84(work, 0x14, 0xB);
+    Gts_SetState(work, 0x14, 0xB);
     return 3;
 }
 
@@ -29,7 +29,7 @@ int ov70_022448C0(void *work) {
             U32_AT(work, 0x48) = U32_AT(temp, 4);
             ov00_021EC210();
             ov00_021EC8D8();
-            ov70_02238F80(work);
+            Gts_DeleteWaitingIcon(work);
             U32_AT(work, 0x2C) = 0x17;
             break;
         case 0:
@@ -41,7 +41,7 @@ int ov70_022448C0(void *work) {
         case 8:
         default:
             ov00_021EC0FC(temp);
-            ov70_02238F80(work);
+            Gts_DeleteWaitingIcon(work);
             U32_AT(work, 0x2C) = 0x15;
             U32_AT(work, 0x3C) = -2;
             break;

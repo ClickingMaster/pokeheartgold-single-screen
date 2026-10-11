@@ -2,41 +2,41 @@
 
 int ov70_02240640(Ov70Work *work) {
     work->value36 = 1;
-    ov70_02238E50(work, 9, 7);
+    Gts_SetNextScreen(work, 9, 7);
     work->state2c = 0x24;
     return 3;
 }
 
 int ov70_02240658(Ov70Work *work) {
     work->value36 = 0;
-    ov70_02238E50(work, 9, 8);
+    Gts_SetNextScreen(work, 9, 8);
     work->state2c = 0x24;
     return 3;
 }
 
 int ov70_02240670(Ov70Work *work) {
-    ov70_02238E50(work, 9, 9);
+    Gts_SetNextScreen(work, 9, 9);
     work->state2c = 0x24;
     return 3;
 }
 
 int ov70_02240684(Ov70Work *work) {
     work->value36 = 0;
-    ov70_02238E50(work, 9, 10);
+    Gts_SetNextScreen(work, 9, 10);
     work->state2c = 0x1e;
     return 3;
 }
 
 int ov70_0224069C(Ov70Work *work) {
-    ov70_022380EC(work);
+    GtsServer_RequestReturn(work);
     work->state2c = 0x17;
     work->timer1604 = 0;
     return 3;
 }
 
 int ov70_022406B8(Ov70Work *work) {
-    if (ov70_02237F38()) {
-        int result = ov70_02237F58() + 15;
+    if (GtsServer_IsRequestDone()) {
+        int result = GtsServer_GetResult() + 15;
         work->timer1604 = 0;
         switch (result) {
         case 15:
@@ -70,9 +70,9 @@ int ov70_022406B8(Ov70Work *work) {
 
 int ov70_02240748(Ov70Work *work) {
     ov70_02244FA4(work, work->ptrBA0, 0x93, 1, 0xf0f);
-    ov70_02238D84(work, 0x25, 0x24);
-    ov70_02238E50(work, 1, 0);
-    ov70_02238F80(work);
+    Gts_SetState(work, 0x25, 0x24);
+    Gts_SetNextScreen(work, 1, 0);
+    Gts_DeleteWaitingIcon(work);
     ov70_02241234(work);
     return 3;
 }
@@ -101,17 +101,17 @@ void ov70_0224078C(Ov70Work *work) {
 
 int ov70_022407E4(Ov70Work *work) {
     ov70_0224078C(work);
-    ov70_02238D84(work, 0x25, 0x24);
-    ov70_02238E50(work, 0, 0);
-    ov70_02238F80(work);
+    Gts_SetState(work, 0x25, 0x24);
+    Gts_SetNextScreen(work, 0, 0);
+    Gts_DeleteWaitingIcon(work);
     return 3;
 }
 
 int ov70_0224080C(Ov70Work *work) {
     ov70_0224078C(work);
-    ov70_02238D84(work, 0x25, 0x24);
-    ov70_02238E50(work, 1, 0);
-    ov70_02238F80(work);
+    Gts_SetState(work, 0x25, 0x24);
+    Gts_SetNextScreen(work, 1, 0);
+    Gts_DeleteWaitingIcon(work);
     ov70_02241234(work);
     return 3;
 }

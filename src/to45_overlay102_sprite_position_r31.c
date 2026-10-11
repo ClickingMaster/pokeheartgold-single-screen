@@ -14,7 +14,7 @@ void ov102_021EB950(u8 *work) {
 void ov102_021EB98C(u8 *work, int draw) {
     if (draw != 0) {
         Sprite_SetDrawFlag(PTR(work, 0x5c), 1);
-        if (ov102_021E8F7C(PTR(work, 4)) == 0) {
+        if (EasyChatApp_GetListMode(PTR(work, 4)) == 0) {
             Sprite_SetAnimCtrlSeq(PTR(work, 0x5c), 4);
         } else {
             Sprite_SetAnimCtrlSeq(PTR(work, 0x5c), 6);
@@ -33,7 +33,7 @@ void ov102_021EB9C0(Ov102SpriteWork31 *work, u32 index) {
     u32 mode;
 
     state = work;
-    mode = ov102_021E8F7C(state->args);
+    mode = EasyChatApp_GetListMode(state->args);
     selection = index;
 
     position.z = 0;

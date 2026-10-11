@@ -17,8 +17,8 @@ fail:
 void ov102_021EBEF4(u8 *p, int enabled) {
     if (enabled != 0) {
         Sprite_SetDrawFlag(*(void **)(p + 0x30), TRUE);
-        Sprite_SetDrawFlag(*(void **)(p + 0x34), ov102_021E9050(*(u8 **)(p + 4)));
-        Sprite_SetDrawFlag(*(void **)(p + 0x38), ov102_021E9064(*(u8 **)(p + 4)));
+        Sprite_SetDrawFlag(*(void **)(p + 0x34), EasyChatApp_CanScrollWordListUp(*(u8 **)(p + 4)));
+        Sprite_SetDrawFlag(*(void **)(p + 0x38), EasyChatApp_CanScrollWordListDown(*(u8 **)(p + 4)));
     } else {
         Sprite_SetDrawFlag(*(void **)(p + 0x30), enabled);
         Sprite_SetDrawFlag(*(void **)(p + 0x34), FALSE);

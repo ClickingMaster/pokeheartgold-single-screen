@@ -151,13 +151,13 @@ void sub_0203A930(void);
 void WirelessStatusIcon_Destroy(void);
 
 /* overlay 70 */
-void ov70_02238B54(void *, Ov70Work *, void *, int);
-void ov70_02238D84(Ov70Work *, int, int);
-void ov70_02238D8C(void *, int, int);
+void Gts_InitSpriteTemplate(void *, Ov70Work *, void *, int);
+void Gts_SetState(Ov70Work *, int, int);
+void Gts_SetSpritePositionRounded(void *, int, int);
 void ov70_02238E44(Ov70Work *);
-void ov70_02238E50(Ov70Work *, int, int);
-void ov70_02238E58(Ov70Work *);
-void ov70_02238F9C(void *, int, int);
+void Gts_SetNextScreen(Ov70Work *, int, int);
+void Gts_SwitchScreen(Ov70Work *);
+void Gts_SetSpritePosition(void *, int, int);
 void ov70_022391F0(void *, int, int);
 void ov70_022392BC(void *);
 void ov70_02239C6C(Ov70Work *);

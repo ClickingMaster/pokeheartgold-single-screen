@@ -12,7 +12,7 @@ int ov70_02244954(Ov70Work *work) {
     case 0:
     case 4:
     case 5:
-        ov70_02238F80(work);
+        Gts_DeleteWaitingIcon(work);
         result = ov00_021EC11C(&a, &b);
         U32(work, 0x40) = result;
         S32(work, 0x44) = a;
@@ -59,52 +59,52 @@ int ov70_02244A04(Ov70Work *work) {
     profileId = Save_SysInfo_GetDwcProfileId(PTR(PTR(work, 0), 4));
     {
         u64 key = DWC_CreateFriendKey(id);
-        ov70_022378C0(profileId, (u32)key, (u32)(key >> 32));
+        GtsServer_Init(profileId, (u32)key, (u32)(key >> 32));
     }
     U32(work, 0x2c) = 7;
     return 3;
 }
 
 int ov70_02244A4C(Ov70Work *work) {
-    ov70_022382C0(work);
+    GtsServer_RequestInfo(work);
     U32(work, 0x2c) = 8;
     U32(work, 0x1604) = 0;
     return 3;
 }
 
 int ov70_02244A68(Ov70Work *work) {
-    if (ov70_02237F38()) {
-        int result = ov70_02237F58();
+    if (GtsServer_IsRequestDone()) {
+        int result = GtsServer_GetResult();
         U32(work, 0x1604) = 0;
         switch (result + 15) {
         case 15:
             U32(work, 0x2c) = 9;
             break;
         case 16:
-            ov70_02238F80(work);
+            Gts_DeleteWaitingIcon(work);
             S32(work, 0x3c) = result;
             U32(work, 0x2c) = 0x15;
             break;
         case 14:
         case 17:
-            ov70_02238F80(work);
+            Gts_DeleteWaitingIcon(work);
             S32(work, 0x3c) = result;
             U32(work, 0x2c) = 0x15;
             break;
         case 0:
         case 3:
-            ov70_02238F80(work);
+            Gts_DeleteWaitingIcon(work);
             S32(work, 0x3c) = result;
             U32(work, 0x2c) = 0x15;
             break;
         case 1:
         case 13:
-            ov70_02238F80(work);
+            Gts_DeleteWaitingIcon(work);
             S32(work, 0x3c) = result;
             U32(work, 0x2c) = 0x15;
             break;
         default:
-            ov70_02238F80(work);
+            Gts_DeleteWaitingIcon(work);
             sub_020399EC();
             break;
         }
@@ -120,24 +120,24 @@ int ov70_02244A68(Ov70Work *work) {
 
 int ov70_02244B20(Ov70Work *work) {
     sub_0203189C(PTR(PTR(work, 0), 0x20), work + 0x1260);
-    ov70_02238304(work + 0x1260, work + 0x12c4);
+    GtsServer_RequestSetProfile(work + 0x1260, work + 0x12c4);
     U32(work, 0x2c) = 0xa;
     U32(work, 0x1604) = 0;
     return 3;
 }
 
 int ov70_02244B54(Ov70Work *work) {
-    if (ov70_02237F38()) {
-        int result = ov70_02237F58();
+    if (GtsServer_IsRequestDone()) {
+        int result = GtsServer_GetResult();
         U32(work, 0x1604) = 0;
         switch (result + 15) {
         case 15:
-            ov70_02238F80(work);
+            Gts_DeleteWaitingIcon(work);
             switch (U32(work, 0x12c4)) {
             case 0:
                 switch (U32(work, 0x12c8)) {
                 case 0:
-                    ov70_02238E50(work, 1, 0);
+                    Gts_SetNextScreen(work, 1, 0);
                     U32(work, 0x2c) = 0xb;
                     break;
                 case 3:
@@ -166,36 +166,36 @@ int ov70_02244B54(Ov70Work *work) {
                 U32(work, 0x2c) = 0x15;
                 break;
             default:
-                ov70_02238F80(work);
+                Gts_DeleteWaitingIcon(work);
                 sub_020399EC();
                 break;
             }
             break;
         case 16:
-            ov70_02238F80(work);
+            Gts_DeleteWaitingIcon(work);
             S32(work, 0x3c) = result;
             U32(work, 0x2c) = 0x15;
             break;
         case 14:
         case 17:
-            ov70_02238F80(work);
+            Gts_DeleteWaitingIcon(work);
             S32(work, 0x3c) = result;
             U32(work, 0x2c) = 0x15;
             break;
         case 0:
         case 3:
-            ov70_02238F80(work);
+            Gts_DeleteWaitingIcon(work);
             S32(work, 0x3c) = result;
             U32(work, 0x2c) = 0x15;
             break;
         case 1:
         case 13:
-            ov70_02238F80(work);
+            Gts_DeleteWaitingIcon(work);
             S32(work, 0x3c) = result;
             U32(work, 0x2c) = 0x15;
             break;
         default:
-            ov70_02238F80(work);
+            Gts_DeleteWaitingIcon(work);
             sub_020399EC();
             break;
         }
@@ -226,7 +226,7 @@ int ov70_02244CCC(Ov70Work *work) {
 
 int ov70_02244D08(Ov70Work *work) {
     WirelessStatusIcon_Destroy();
-    ov70_02238F80(work);
+    Gts_DeleteWaitingIcon(work);
     BeginNormalPaletteFade(0, 0, 0, 0, 6, 1, 0x3d);
     U32(work, 0x2c) = 0;
     U32(work, 0x11fc) = 1;
@@ -234,10 +234,10 @@ int ov70_02244D08(Ov70Work *work) {
 }
 
 int ov70_02244D44(Ov70Work *work) {
-    int result = ov70_02238C8C(work);
+    int result = Gts_HandleYesNoPrompt(work);
     if (result == 1) {
         YesNoPrompt_Destroy(PTR(work, 0x11c8));
-        ov70_02238E50(work, 0, 0);
+        Gts_SetNextScreen(work, 0, 0);
         U32(work, 0x2c) = 0xb;
     } else if (result == 2) {
         YesNoPrompt_Destroy(PTR(work, 0x11c8));
@@ -285,7 +285,7 @@ int ov70_02244D80(Ov70Work *work) {
         break;
     }
     ov70_02244FA4(work, PTR(work, 0xba0), msg, 1, 0xf0f);
-    ov70_02238D84(work, 0xc, 0x16);
+    Gts_SetState(work, 0xc, 0x16);
     return 3;
 }
 
@@ -319,7 +319,7 @@ int ov70_02244E44(Ov70Work *work) {
         S16(work, 0x1602)
         ++;
         if (S16(work, 0x1602) > 0x1e) {
-            ov70_02238E50(work, 0, 0);
+            Gts_SetNextScreen(work, 0, 0);
             U32(work, 0x2c) = 0xb;
         }
         break;
@@ -347,7 +347,7 @@ int ov70_02244F34(Ov70Work *work) {
 
 int ov70_02244F68(Ov70Work *work) {
     if (!TextPrinterCheckActive((u8)U32(work, 0xbf0))) {
-        PTR(work, 0x11c8) = ov70_02238C14(PTR(work, 4), 10, 0x234, 8, 0);
+        PTR(work, 0x11c8) = Gts_CreateYesNoPrompt(PTR(work, 4), 10, 0x234, 8, 0);
         U32(work, 0x2c) = U32(work, 0x30);
     }
     return 3;

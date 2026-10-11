@@ -33,7 +33,7 @@ void ov70_02239414(Ov70Work9 *work) {
     Ov70SpriteResourcesHeader9 header;
 
     CreateSpriteResourcesHeader(&header, 0, 0, 0, 0, -1, -1, 0, 1, work->resourceManagers[0], work->resourceManagers[1], work->resourceManagers[2], work->resourceManagers[3], NULL, NULL);
-    ov70_02238B54(&template, work, &header, 1);
+    Gts_InitSpriteTemplate(&template, work, &header, 1);
     template.x = ov70_02245240[work->spriteKind * 2] << 12;
     template.y = ov70_02245242[work->spriteKind * 2] << 12;
     work->spriteDCC = Sprite_CreateAffine(&template);

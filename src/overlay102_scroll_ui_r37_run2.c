@@ -2,8 +2,8 @@
 
 BOOL ov102_021EC05C(u8 *p) {
     if (ov102_021EC2EC(p + 0x60)) {
-        Sprite_SetDrawFlag(*(void **)(p + 0x34), ov102_021E9050(*(u8 **)(p + 4)));
-        Sprite_SetDrawFlag(*(void **)(p + 0x38), ov102_021E9064(*(u8 **)(p + 4)));
+        Sprite_SetDrawFlag(*(void **)(p + 0x34), EasyChatApp_CanScrollWordListUp(*(u8 **)(p + 4)));
+        Sprite_SetDrawFlag(*(void **)(p + 0x38), EasyChatApp_CanScrollWordListDown(*(u8 **)(p + 4)));
         return TRUE;
     } else {
         return FALSE;

@@ -13,10 +13,10 @@ int ov70_02243B2C(void *work) {
     U32(work, 0x48) = 0;
     {
         u32 i = U32(work, 0x48) * 2;
-        ov70_02238F9C(PTR(work, 0xc), ov70_02245D8A[i], ov70_02245D8B[i]);
+        Gts_SetSpritePosition(PTR(work, 0xc), ov70_02245D8A[i], ov70_02245D8B[i]);
     }
-    ov70_02238F9C(PTR(work, 0x10), 0xb0, 0x88);
-    ov70_02238F9C(PTR(work, 0x14), 0x58, 0x88);
+    Gts_SetSpritePosition(PTR(work, 0x10), 0xb0, 0x88);
+    Gts_SetSpritePosition(PTR(work, 0x14), 0x58, 0x88);
     Sprite_SetDrawFlag(PTR(work, 0xc), 1);
     Sprite_SetDrawFlag(PTR(work, 0x10), 1);
     Sprite_SetDrawFlag(PTR(work, 0x14), 1);

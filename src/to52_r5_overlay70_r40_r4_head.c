@@ -40,8 +40,8 @@ int ov70_02244038(void *work) {
         if (U32(parent, 0x3C) != 0) {
             sub_02039418(PTR(parent, 0x20));
             ov70_02244FA4(work, PTR(work, 0xBA8), 1, 1, 0xF0F);
-            ov70_02238D84(work, 0xC, 2);
-            ov70_02238F64(work);
+            Gts_SetState(work, 0xC, 2);
+            Gts_CreateWaitingIcon(work);
         } else {
             Sys_ClearSleepDisableFlag(4);
             U32(work, 0x2C) = 0;

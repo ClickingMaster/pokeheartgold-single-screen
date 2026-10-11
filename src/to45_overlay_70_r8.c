@@ -38,7 +38,7 @@ void ov70_0223BD90(R14Work *w, int value) {
         break;
     case 6:
         ov70_0223CAC4(w, 0xf, 1, 0, 0xf0f);
-        ov70_02238D84(w, 0x15, 0x17);
+        Gts_SetState(w, 0x15, 0x17);
         PlaySE(0x5dc);
         break;
     }
@@ -56,7 +56,7 @@ int ov70_0223BE84(R14Work *w) {
             ov70_0223BD90(w, (int)ov70_0223C2EC(w));
         } else if (gSystem.newKeys & 2) {
             ov70_0223CAC4(w, 0xf, 1, 0, 0xf0f);
-            ov70_02238D84(w, 0x15, 0x17);
+            Gts_SetState(w, 0x15, 0x17);
             PlaySE(0x5dc);
         }
     }
@@ -66,16 +66,16 @@ int ov70_0223BE84(R14Work *w) {
 int ov70_0223BF00(R14Work *w) {
     if (*(s16 *)(w + 0xb8a) == 0) {
         ov70_0223CAC4(w, 0xc, 1, 0, 0xf0f);
-        ov70_02238D84(w, 0x15, 1);
+        Gts_SetState(w, 0x15, 1);
         PlaySE(0x5f3);
     } else if (ov70_0223CC68(w + 0xb8a, w + 0xb90, U32(w, 0x12cc), U32(w, 0xb98))) {
         ov70_0223CAC4(w, 0x21, 1, 0, 0xf0f);
-        ov70_02238D84(w, 0x15, 1);
+        Gts_SetState(w, 0x15, 1);
         PlaySE(0x5f3);
     } else {
         PlaySE(0x5fe);
         ov70_0223CAC4(w, 0xd, 1, 0, 0xf0f);
-        ov70_02238D84(w, 0x15, 0x10);
+        Gts_SetState(w, 0x15, 0x10);
         ov70_02241234(w);
     }
     return 3;
@@ -113,7 +113,7 @@ int ov70_0223C008(Ov70R8Work *w) {
         selection += 2;
     }
     if (w->extra == 0) {
-        ov70_02238130(&w->current, selection, w->mapRecord);
+        GtsServer_RequestSearch(&w->current, selection, w->mapRecord);
     } else {
         MI_CpuFill8(&record, 0, sizeof(record));
         record.species = w->current.species;
@@ -123,7 +123,7 @@ int ov70_0223C008(Ov70R8Work *w) {
         record.d = w->current.d;
         record.selection = selection;
         record.extra = w->extra;
-        ov70_022381A4(&record, w->mapRecord);
+        GtsServer_RequestSearchEx(&record, w->mapRecord);
     }
     *(u16 *)&w->stored.species = *(u16 *)&w->current.species;
     *(u16 *)&w->stored.a = *(u16 *)&w->current.a;
@@ -136,8 +136,8 @@ int ov70_0223C008(Ov70R8Work *w) {
 }
 
 int ov70_0223C0C8(R14Work *w) {
-    if (ov70_02237F38()) {
-        int value = ov70_02237F58();
+    if (GtsServer_IsRequestDone()) {
+        int value = GtsServer_GetResult();
         U32(w, 0x1604) = 0;
         switch (value) {
         case 0:

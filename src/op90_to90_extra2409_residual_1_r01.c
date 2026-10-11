@@ -36,7 +36,7 @@ extern void ov70_02243E8C(void *, void *, void *, int, int, int);
 extern void ov70_02243EB8(void *, void *, void *, int);
 extern void Sprite_SetAnimCtrlSeq(void *, int);
 extern void Sprite_SetDrawFlag(void *, int);
-extern void ov70_02238F9C(void *, int, int);
+extern void Gts_SetSpritePosition(void *, int, int);
 extern int ov70_02243F54(Work *, int);
 int ov70_02243254(Work *work);
 
@@ -71,7 +71,7 @@ int ov70_02243254(Work *work) {
     } else {
         work->selected = work->selection;
     }
-    ov70_02238F9C(work->sprite, (ov70_02245E26[work->selected][0] + 16) * 8, ov70_02245E27[work->selected][0] * 8);
+    Gts_SetSpritePosition(work->sprite, (ov70_02245E26[work->selected][0] + 16) * 8, ov70_02245E27[work->selected][0] * 8);
     Sprite_SetDrawFlag(work->sprite, 1);
     work->state = 9;
     return -1;

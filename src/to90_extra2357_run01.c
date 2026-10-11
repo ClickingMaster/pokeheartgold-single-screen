@@ -21,7 +21,7 @@ void ov102_021EA8C0(void *);
 void ov102_021EAA3C(void *);
 void ov102_021EAE40(void *, u32);
 void ov102_021EA920(void *);
-u32 ov102_021E8F6C(void *);
+u32 EasyChatApp_GetType(void *);
 void ov102_021EAC20(void *);
 void ov102_021EA41C(u8 *, NARC *);
 void ov102_021EA644(u8 *);
@@ -67,5 +67,5 @@ void ov102_021EA41C(u8 *work, NARC *narc) {
     ov102_021EAA3C(work);
     ov102_021EAE40(work, 0);
     ov102_021EA920(work);
-    if (ov102_021E8F6C(PTR(work, 4)) == 2) ov102_021EAC20(work);
+    if (EasyChatApp_GetType(PTR(work, 4)) == 2) ov102_021EAC20(work);
 }

@@ -2,7 +2,7 @@
 
 int ov70_0223EEE8(u8 *work) {
     ov70_0223E8E8(work, 10, 1, 0, 0xF0F);
-    ov70_02238D84(work, 0x10, 8);
+    Gts_SetState(work, 0x10, 8);
     return 3;
 }
 

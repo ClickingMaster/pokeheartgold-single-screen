@@ -15,9 +15,9 @@ int ov70_02243598(void *w) {
     BgCellManager_DrawCellAt(PTR(w, 0x1c), 0, 0x10, 0);
     Sprite_SetAnimCtrlSeq(PTR(w, 0xc), 0x31);
     U32(w, 0x48) = 0;
-    ov70_02238F9C(PTR(w, 0xc), ov70_02245D76[U32(w, 0x48) * 2], ov70_02245D77[U32(w, 0x48) * 2]);
-    ov70_02238F9C(PTR(w, 0x10), 0xe4, 0x78);
-    ov70_02238F9C(PTR(w, 0x14), 0x9a, 0x78);
+    Gts_SetSpritePosition(PTR(w, 0xc), ov70_02245D76[U32(w, 0x48) * 2], ov70_02245D77[U32(w, 0x48) * 2]);
+    Gts_SetSpritePosition(PTR(w, 0x10), 0xe4, 0x78);
+    Gts_SetSpritePosition(PTR(w, 0x14), 0x9a, 0x78);
     Sprite_SetDrawFlag(PTR(w, 0xc), 1);
     Sprite_SetDrawFlag(PTR(w, 0x10), 1);
     Sprite_SetDrawFlag(PTR(w, 0x14), 1);

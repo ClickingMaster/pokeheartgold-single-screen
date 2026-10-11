@@ -3,11 +3,11 @@
 int ov70_0223A260(Ov70Work *work) {
     if ((gSystem.newKeys & 1) || gSystem.touchNew) {
         ov70_0223A4F4(work, 5, 1, 0, 0xF0F, work->field13C);
-        ov70_02238D84(work, 3, 7);
+        Gts_SetState(work, 3, 7);
         PlaySE(0x5DC);
     } else if (gSystem.newKeys & 2) {
         work->state = 2;
-        ov70_02238E50(work, 1, 0);
+        Gts_SetNextScreen(work, 1, 0);
         PlaySE(0x5DC);
     }
     return 3;
@@ -20,18 +20,18 @@ int ov70_0223A2D0(Ov70Work *work) {
 }
 
 int ov70_0223A2F8(Ov70Work *work) {
-    work->yesNo11C8 = ov70_02238C14(work->bgConfig, 12, 0x16A, 8, 1);
+    work->yesNo11C8 = Gts_CreateYesNoPrompt(work->bgConfig, 12, 0x16A, 8, 1);
     work->state = 6;
     return 3;
 }
 
 int ov70_0223A324(Ov70Work *work) {
-    int result = ov70_02238C8C();
+    int result = Gts_HandleYesNoPrompt();
     if (result == 1) {
         YesNoPrompt_Destroy(work->yesNo11C8);
         work->state = 2;
         work->flag11FC = 1;
-        ov70_02238E50(work, 7, 8);
+        Gts_SetNextScreen(work, 7, 8);
         ov70_0223A874(work);
     } else if (result == 2) {
         YesNoPrompt_Destroy(work->yesNo11C8);
@@ -46,8 +46,8 @@ int ov70_0223A384(Ov70Work *work) {
     work->listItems11AC = ListMenuItems_New(2, 0x3D);
     ListMenuItems_AppendFromMsgData(work->listItems11AC, work->msgDataBA0, 0x37, 1);
     ListMenuItems_AppendFromMsgData(work->listItems11AC, work->msgDataBA0, 0x38, 2);
-    work->touchMenu11D0 = ov70_02238CAC(work, 2, 0xD);
-    ov70_02238FB4(1);
+    work->touchMenu11D0 = Gts_CreateListMenu(work, 2, 0xD);
+    Gts_DimScreen(1);
     work->state = 8;
     return 3;
 }
@@ -55,22 +55,22 @@ int ov70_0223A384(Ov70Work *work) {
 int ov70_0223A3DC(Ov70Work *work) {
     int result = TouchscreenListMenu_HandleInput(work->touchMenu11D0);
     if (result == 1) {
-        ov70_02238D60(work);
+        Gts_DestroyListMenu(work);
         ListMenuItems_Delete(work->listItems11AC);
         void *mon = work->field13C;
         if (ov70_0223E76C(mon) && Party_GetCount(work->root->party) == 6) {
             ov70_0223A4F4(work, 0x24, 1, 0, 0xF0F, mon);
-            ov70_02238D84(work, 3, 1);
+            Gts_SetState(work, 3, 1);
             return 3;
         }
         ov70_0223A4F4(work, 6, 1, 0, 0xF0F, mon);
-        ov70_02238D84(work, 3, 5);
+        Gts_SetState(work, 3, 5);
         ov70_0223A874(work);
     } else if (result == 2 || result == -2) {
-        ov70_02238D60(work);
+        Gts_DestroyListMenu(work);
         ListMenuItems_Delete(work->listItems11AC);
         work->state = 2;
-        ov70_02238E50(work, 1, 0);
+        Gts_SetNextScreen(work, 1, 0);
         ov70_0223A874(work);
     }
     return 3;

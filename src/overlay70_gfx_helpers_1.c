@@ -43,7 +43,7 @@ void ov70_02241358(void *work) {
     s32 i;
     u8 *p = work;
     for (i = 0; i < 8; i++, p += 4) {
-        ov70_02238F9C(R19_PTR(p, 0xee4), R19_S16(p, 0x120c), R19_S16(p, 0x120e));
+        Gts_SetSpritePosition(R19_PTR(p, 0xee4), R19_S16(p, 0x120c), R19_S16(p, 0x120e));
     }
 }
 
@@ -51,7 +51,7 @@ void ov70_02241380(void *work) {
     s32 i;
     u8 *p = work;
     for (i = 0; i < 8; i++, p += 4) {
-        ov70_02238F9C(R19_PTR(p, 0xee4), R19_S16(p, 0x120c), R19_S16(p, 0x120e) + 0x20);
+        Gts_SetSpritePosition(R19_PTR(p, 0xee4), R19_S16(p, 0x120c), R19_S16(p, 0x120e) + 0x20);
     }
 }
 
@@ -78,7 +78,7 @@ int ov70_02241468(void *work) {
     int result = 3;
     if (OverlayManager_Run(R19_PTR(work, 0xb8))) {
         OverlayManager_Delete(R19_PTR(work, 0xb8));
-        ov70_02238E50(work, 5, R19_U32(work, 0x24));
+        Gts_SetNextScreen(work, 5, R19_U32(work, 0x24));
         result = 4;
     }
     return result;

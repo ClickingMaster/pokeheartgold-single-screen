@@ -14,17 +14,17 @@ int ov70_0223B12C(R14Work *w) {
 }
 
 int ov70_0223B188(R14Work *w) {
-    P(w, 0x11c8) = ov70_02238C2C(P(w, 4), 10, 0x12e, 3, 4, 1);
+    P(w, 0x11c8) = Gts_CreateYesNoPromptOnBg(P(w, 4), 10, 0x12e, 3, 4, 1);
     U32(w, 0x2c) = 5;
     return 3;
 }
 
 int ov70_0223B1B8(R14Work *w) {
-    int result = ov70_02238C8C(w);
+    int result = Gts_HandleYesNoPrompt(w);
     if (result == 1) {
         YesNoPrompt_Destroy(P(w, 0x11c8));
         U32(w, 0x2c) = 2;
-        ov70_02238E50(w, 5, 6);
+        Gts_SetNextScreen(w, 5, 6);
         ov70_0223B3BC(P(w, 0xba0), w + 0x1138, 0x4d);
         ov70_0223B3BC(P(w, 0xba0), w + 0x10e8, 0x51);
         ov70_0223B258(w);
@@ -67,7 +67,7 @@ int ov70_0223B300(R14Work *w) {
     if (IsPaletteFadeFinished()) {
         *(vu16 *)0x04000304 &= 0xFFFF7FFF;
         U32(w, 0x2c) = 2;
-        ov70_02238E50(w, 4, 15);
+        Gts_SetNextScreen(w, 4, 15);
         U32(w, 0xf14) = 0x10;
     }
     return 3;

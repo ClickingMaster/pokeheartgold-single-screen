@@ -28,7 +28,7 @@
 	.public ov73_021EA6F0
 	.public ov73_021EA70C
 	.public ov73_021EA728
-	.public ov73_021EA744
+	.public sRecordMixingHandlers
 	.public ov73_021EA83C
 	.public ov73_021EA840
 	.public ov73_021EA844
@@ -133,15 +133,15 @@
 	.extern ov73_021E9F00
 	.extern ov73_021E9F9C
 	.extern ov73_021E9FC8
-	.extern ov73_021EA25C
-	.extern ov73_021EA268
-	.extern ov73_021EA290
-	.extern ov73_021EA2A8
-	.extern ov73_021EA2B4
-	.extern ov73_021EA2E0
+	.extern RecordMixing_FriendGroup_GetSize
+	.extern RecordMixing_FriendGroup_Load
+	.extern RecordMixing_FriendGroup_Merge
+	.extern RecordMixing_Fashion_GetSize
+	.extern RecordMixing_Fashion_Load
+	.extern RecordMixing_Fashion_Merge
 	.extern ov73_021EA2FC
-	.extern ov73_021EA31C
-	.extern ov73_021EA324
+	.extern RecordMixing_Rankings_Load
+	.extern RecordMixing_Rankings_Merge
 	.extern ov73_021EA348
 	.extern ov73_021EA370
 #include "config.h"
@@ -264,13 +264,13 @@ ov73_021EA728: ; 0x021EA728
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1E, 0x04, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov73_021EA744: ; 0x021EA744
-	.word ov73_021EA25C, ov73_021EA268, ov73_021EA290
-	.word ov73_021EA2A8, ov73_021EA2B4, ov73_021EA2E0
+sRecordMixingHandlers: ; 0x021EA744
+	.word RecordMixing_FriendGroup_GetSize, RecordMixing_FriendGroup_Load, RecordMixing_FriendGroup_Merge
+	.word RecordMixing_Fashion_GetSize, RecordMixing_Fashion_Load, RecordMixing_Fashion_Merge
 	.word ov73_021E7A7C, ov73_021E7B84, 0
 	.word ov73_021E7A84, ov73_021E7BC8, 0
 	.word ov73_021E7A74, ov73_021E7B3C, 0
-	.word Save_Rankings_GetMixingSize, ov73_021EA31C, ov73_021EA324
+	.word Save_Rankings_GetMixingSize, RecordMixing_Rankings_Load, RecordMixing_Rankings_Merge
 	.word sub_0202D230, ov73_021EA348, ov73_021EA370
 	.word ov73_021E7A7C, ov73_021E7C50, 0
 	.word ov73_021E7A84, ov73_021E7C94, 0

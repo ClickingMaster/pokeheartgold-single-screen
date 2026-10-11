@@ -56,7 +56,7 @@ void ov70_0223963C(Ov70R8 *);
 void ov70_022395C4(Ov70R8 *);
 void ov70_022392E0(void *);
 void Sprite_SetDrawFlag(void *, int);
-void ov70_02238E58(Ov70R8 *);
+void Gts_SwitchScreen(Ov70R8 *);
 void SetBothScreensModesAndDisable(const void *);
 void InitBgFromTemplate(void *, int, const void *, int);
 void BgClearTilemapBufferAndCommit(void *, int);

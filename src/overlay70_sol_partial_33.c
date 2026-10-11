@@ -10,6 +10,6 @@
     }
 
 int ov70_02241494(Ov70State *state) {
-    ov70_02238E58(state);
+    Gts_SwitchScreen(state);
     return 1;
 }

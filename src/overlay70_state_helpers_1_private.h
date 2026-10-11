@@ -16,16 +16,16 @@ typedef struct Ov70Work {
     u32 timer1604;
 } Ov70Work;
 
-void ov70_02238E50(Ov70Work *, int, int);
-void ov70_022380EC(Ov70Work *);
-int ov70_02237F38(void);
-int ov70_02237F58(void);
+void Gts_SetNextScreen(Ov70Work *, int, int);
+void GtsServer_RequestReturn(Ov70Work *);
+int GtsServer_IsRequestDone(void);
+int GtsServer_GetResult(void);
 void ov70_022404D4(Ov70Work *);
 void sub_02039AD8(int);
 void sub_020399EC(void);
 void ov70_02244FA4(Ov70Work *, void *, int, int, int);
-void ov70_02238D84(Ov70Work *, int, int);
-void ov70_02238F80(Ov70Work *);
+void Gts_SetState(Ov70Work *, int, int);
+void Gts_DeleteWaitingIcon(Ov70Work *);
 void ov70_02241234(Ov70Work *);
 int ov70_02240640(Ov70Work *);
 int ov70_02240658(Ov70Work *);

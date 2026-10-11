@@ -3,7 +3,7 @@
 int ov70_0224308C(void *w) {
     ov70_02242D44(w, 4, 0x20);
     Sprite_SetAnimCtrlSeq(PTR(w, 0xc), 0x3d);
-    ov70_02238F9C(PTR(w, 0xc), 0x88, 0x28);
+    Gts_SetSpritePosition(PTR(w, 0xc), 0x88, 0x28);
     BgCellManager_StartCellMove(PTR(w, 0x1c), 0, -4, 0, 4);
     U32(w, 0x4c) = 1;
     U32(w, 0x50) = 5;

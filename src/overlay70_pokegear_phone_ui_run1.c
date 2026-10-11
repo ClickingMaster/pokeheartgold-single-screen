@@ -17,7 +17,7 @@ void ov70_0223D8E8(void *sprite, int index);
 
 int ov70_0223C930(Ov70Work *work) {
     ov70_0223CAC4(work, 0x98, 1, 0, 0xf0f);
-    ov70_02238D84(work, 0x15, 1);
+    Gts_SetState(work, 0x15, 1);
     return 3;
 }
 
@@ -47,7 +47,7 @@ int ov70_0223C9AC(Ov70Work *work) {
         if (work->field11DE != 0) {
             Sprite_SetAnimCtrlSeq(work->spritesEE4[1], 0x10);
             work->state2c = 2;
-            ov70_02238E50(work, 3, 0x10);
+            Gts_SetNextScreen(work, 3, 0x10);
             work->field12C = 0;
         }
         Sprite_SetDrawFlag(work->spriteF10, 0);
@@ -74,7 +74,7 @@ int ov70_0223CA40(Ov70Work *work) {
         if (work->field11DE != 0 && index >= 0) {
             Sprite_SetAnimCtrlSeq(work->spritesEE4[index + 1], index * 4 + 0x10);
             work->state2c = 2;
-            ov70_02238E50(work, 3, 0);
+            Gts_SetNextScreen(work, 3, 0);
             work->field12C = index;
             PlaySE(0x5dc);
         }
@@ -191,7 +191,7 @@ int ov70_0223CDF8(Ov70Work *work) {
     ov70_0223D378(work);
     ov70_0223CF48(work->bgConfig);
     Sprite_SetDrawFlag(work->spriteF10, 0);
-    ov70_02238E58(work);
+    Gts_SwitchScreen(work);
     return 1;
 }
 

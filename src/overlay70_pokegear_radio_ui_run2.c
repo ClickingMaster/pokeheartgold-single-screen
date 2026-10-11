@@ -1,21 +1,21 @@
 #include "overlay70_pokegear_radio_ui_private.h"
 
 int ov70_022403FC(Ov70Work *work) {
-    ov70_02238E50(work, 1, 0);
+    Gts_SetNextScreen(work, 1, 0);
     work->state2c = 0x24;
     return 3;
 }
 
 int ov70_02240410(Ov70Work *work) {
-    ov70_02238008(work->unk13c);
+    GtsServer_RequestGet(work->unk13c);
     work->state2c = 0x1b;
     work->timer1604 = 0;
     return 3;
 }
 
 int ov70_02240430(Ov70Work *work) {
-    if (ov70_02237F38()) {
-        int result = ov70_02237F58();
+    if (GtsServer_IsRequestDone()) {
+        int result = GtsServer_GetResult();
         work->timer1604 = 0;
         switch (result + 15) {
         case 15:
@@ -63,11 +63,11 @@ int ov70_02240430(Ov70Work *work) {
 void ov70_022404D4(Ov70Work *work) {
     switch (work->unk1c) {
     case 1:
-        ov70_02238E50(work, 1, 0);
+        Gts_SetNextScreen(work, 1, 0);
         work->state2c = 0x24;
         break;
     case 2:
-        ov70_02238E50(work, 2, 3);
+        Gts_SetNextScreen(work, 2, 3);
         work->state2c = 0x24;
         break;
     }
@@ -92,15 +92,15 @@ int ov70_02240540(Ov70Work *work) {
 }
 
 int ov70_02240598(Ov70Work *work) {
-    ov70_022380A8(work);
+    GtsServer_RequestDelete(work);
     work->state2c = 0x14;
     work->timer1604 = 0;
     return 3;
 }
 
 int ov70_022405B4(Ov70Work *work) {
-    if (ov70_02237F38()) {
-        int result = ov70_02237F58();
+    if (GtsServer_IsRequestDone()) {
+        int result = GtsServer_GetResult();
         work->timer1604 = 0;
         switch (result + 15) {
         case 15:

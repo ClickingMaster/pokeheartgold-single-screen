@@ -12,7 +12,7 @@
 
 #define PTR(base, offset) (*(void **)((u8 *)(base) + (offset)))
 
-extern u8 *ov102_021E8F68(u8 *work);
+extern u8 *EasyChatApp_GetMenuInputStatePtr(u8 *work);
 extern void ov102_021E91BC(void *work);
 extern SysTask *ov102_021E93D4(SysTaskFunc func, void *work, u32 priority);
 extern void ov102_021E93DC(SysTask *task, void *work);
@@ -32,7 +32,7 @@ void *ov102_021E909C(void *arg0, void *arg1) {
     HBlankInterruptDisable();
     PTR(work, 0x18) = arg0;
     PTR(work, 0x1C) = arg1;
-    PTR(work, 0x1F8) = ov102_021E8F68(arg0);
+    PTR(work, 0x1F8) = EasyChatApp_GetMenuInputStatePtr(arg0);
     ov102_021E9198(work);
     NNS_G2dInitOamManagerModule();
     OamManager_Create(1, 0x7F, 0, 0x20, 0, 0x7F, 0, 0x20, HEAP_ID_35);

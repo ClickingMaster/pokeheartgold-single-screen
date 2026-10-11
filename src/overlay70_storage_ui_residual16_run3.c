@@ -5,12 +5,12 @@ int ov70_0223AA90(Ov70Work *work) {
     int i = 0;
     u8 *walker = (u8 *)work;
     for (; i < 8; i++, walker += 4) {
-        ov70_02238F9C(*(void **)(walker + 0xEE4), *(s16 *)(walker + 0x120C),
+        Gts_SetSpritePosition(*(void **)(walker + 0xEE4), *(s16 *)(walker + 0x120C),
             work->offsetF14 + *(s16 *)(walker + 0x120E) + 0x20);
     }
     {
         void *sprite = work->spriteEE0;
-        ov70_02238F9C(sprite, 0xD0, 0x3A - work->offsetF14);
+        Gts_SetSpritePosition(sprite, 0xD0, 0x3A - work->offsetF14);
     }
     ov70_02241330(work, work->selected, work->offsetF14);
     return ret;
@@ -23,7 +23,7 @@ int ov70_0223AB00(Ov70Work *work) {
     ov70_0223AE40(work);
     ov70_0223ABD8(work->bgConfig);
     Sprite_SetDrawFlag(work->spriteF10, 0);
-    ov70_02238E58(work);
+    Gts_SwitchScreen(work);
     return 1;
 }
 

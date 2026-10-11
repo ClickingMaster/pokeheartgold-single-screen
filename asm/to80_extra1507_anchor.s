@@ -1,7 +1,7 @@
-	.extern ov102_021E7D0C
-	.extern ov102_021E821C
-	.extern ov102_021E8600
-	.extern ov102_021E86B8
+	.extern EasyChatApp_Handler_WordMenu
+	.extern EasyChatApp_Handler_MessageMenu
+	.extern EasyChatApp_MoveCategoryGridCursor
+	.extern EasyChatApp_MoveInitialGridCursor
 	.extern ov102_021E94CC
 	.extern ov102_021E9694
 	.extern ov102_021E983C
@@ -39,85 +39,85 @@
 	.public EasyChat_Init
 	.public EasyChat_Main
 	.public _021EC5D8
-	.public ov102_021E77F8
-	.public ov102_021E7888
-	.public ov102_021E7934
-	.public ov102_021E7968
-	.public ov102_021E79A0
-	.public ov102_021E79DC
-	.public ov102_021E7A0C
-	.public ov102_021E7A24
-	.public ov102_021E7A4C
-	.public ov102_021E7A58
-	.public ov102_021E7AA4
-	.public ov102_021E7AB8
-	.public ov102_021E7B18
-	.public ov102_021E7BD8
-	.public ov102_021E7BE8
-	.public ov102_021E7BF8
-	.public ov102_021E7C84
-	.public ov102_021E7D0C
-	.public ov102_021E7D30
-	.public ov102_021E7DBC
-	.public ov102_021E7EEC
-	.public ov102_021E7F30
-	.public ov102_021E7F6C
-	.public ov102_021E80BC
-	.public ov102_021E8178
-	.public ov102_021E821C
-	.public ov102_021E8240
-	.public ov102_021E8294
-	.public ov102_021E839C
-	.public ov102_021E83E4
-	.public ov102_021E8458
-	.public ov102_021E848C
-	.public ov102_021E8580
-	.public ov102_021E85A8
-	.public ov102_021E85E8
-	.public ov102_021E8600
-	.public ov102_021E86B8
-	.public ov102_021E874C
-	.public ov102_021E878C
-	.public ov102_021E8798
-	.public ov102_021E87A8
-	.public ov102_021E87AC
-	.public ov102_021E87B0
-	.public ov102_021E87B4
-	.public ov102_021E8820
-	.public ov102_021E896C
-	.public ov102_021E8A34
-	.public ov102_021E8B18
-	.public ov102_021E8B40
-	.public ov102_021E8C3C
-	.public ov102_021E8C64
-	.public ov102_021E8CA4
-	.public ov102_021E8D1C
-	.public ov102_021E8D50
-	.public ov102_021E8D58
-	.public ov102_021E8D60
-	.public ov102_021E8D94
-	.public ov102_021E8E84
-	.public ov102_021E8EF8
-	.public ov102_021E8F14
+	.public EasyChatApp_OnTouchButton
+	.public EasyChatApp_Create
+	.public EasyChatMessageCursor_Init
+	.public EasyChatMessageCursor_Next
+	.public EasyChatMessageCursor_Prev
+	.public EasyChatMessageCursor_SetIndex
+	.public EasyChatMessageCursor_GetIndex
+	.public EasyChatApp_Delete
+	.public EasyChatApp_SetHandler
+	.public EasyChatApp_UpdateMenuInputState
+	.public EasyChatApp_Handler_Main
+	.public EasyChatApp_WordMenuAction
+	.public EasyChatApp_WordMenuHandleKeys
+	.public EasyChatApp_GetOneWordMenuTouch
+	.public EasyChatApp_GetTwoWordMenuTouch
+	.public EasyChatApp_WordMenuHandleTouch
+	.public EasyChatApp_WordMenuRun
+	.public EasyChatApp_Handler_WordMenu
+	.public EasyChatApp_MessageMenuAction
+	.public EasyChatApp_MessageMenuHandleKeys
+	.public EasyChatApp_IsTouchOnSlider
+	.public EasyChatApp_IsTouchInSliderRange
+	.public EasyChatApp_GetMessageMenuTouch
+	.public EasyChatApp_MessageMenuHandleTouch
+	.public EasyChatApp_MessageMenuRun
+	.public EasyChatApp_Handler_MessageMenu
+	.public EasyChatApp_Handler_CategoryMenu
+	.public EasyChatApp_CategoryMenuHandleKeys
+	.public EasyChatApp_GetListButtonTouch
+	.public EasyChatApp_GetCategoryGridTouch
+	.public EasyChatApp_GetInitialGridTouch
+	.public EasyChatApp_CategoryMenuHandleTouch
+	.public EasyChatApp_CategoryMenuHandleInput
+	.public EasyChatApp_CategoryHasWords
+	.public EasyChatApp_MoveCategoryCursor
+	.public EasyChatApp_MoveCategoryGridCursor
+	.public EasyChatApp_MoveInitialGridCursor
+	.public EasyChatWordPage_Init
+	.public EasyChatWordPage_GetCursorPos
+	.public EasyChatWordPage_GetWordIndex
+	.public EasyChatWordPage_GetScroll
+	.public EasyChatWordPage_GetTopRow
+	.public EasyChatWordPage_GetMaxTopRow
+	.public EasyChatApp_Handler_WordList
+	.public EasyChatApp_WordListHandleKeys
+	.public EasyChatApp_GetWordListTouch
+	.public EasyChatApp_WordListHandleTouch
+	.public EasyChatApp_WordListHandleInput
+	.public EasyChatWordPage_HandleKeys
+	.public EasyChatWordPage_PageUp
+	.public EasyChatWordPage_PageDown
+	.public EasyChatApp_SetSelectedWord
+	.public EasyChatApp_Handler_Exit
+	.public EasyChatApp_SetSubHandler
+	.public EasyChatApp_EndSubHandler
+	.public EasyChatApp_SubHandler_Start
+	.public EasyChatApp_SubHandler_ConfirmFinish
+	.public EasyChatApp_SubHandler_ConfirmQuit
+	.public EasyChatApp_HasChanged
+	.public EasyChatApp_IsComplete
 	.public ov102_021E8F5C
 	.public ov102_021E8F64
-	.public ov102_021E8F68
-	.public ov102_021E8F6C
+	.public EasyChatApp_GetMenuInputStatePtr
+	.public EasyChatApp_GetType
 	.public ov102_021E8F70
-	.public ov102_021E8F7C
-	.public ov102_021E8F84
-	.public ov102_021E8F90
-	.public ov102_021E8FA8
-	.public ov102_021E8FB4
-	.public ov102_021E8FC0
-	.public ov102_021E8FC8
-	.public ov102_021E8FD0
-	.public ov102_021E8FD8
-	.public ov102_021E8FFC
-	.public ov102_021E9028
-	.public ov102_021E9044
-	.public ov102_021E9050
-	.public ov102_021E9064
+	.public EasyChatApp_GetListMode
+	.public EasyChatApp_GetMsgBank
+	.public EasyChatApp_GetWord
+	.public EasyChatApp_GetMessageString
+	.public EasyChatApp_GetMessageIndex
+	.public EasyChatApp_GetWordSlot
+	.public EasyChatApp_GetMenuCursor
+	.public EasyChatApp_GetCategory
+	.public EasyChatApp_GetCategoryWordCount
+	.public EasyChatApp_GetCategoryWord
+	.public EasyChatApp_GetWordListCursor
+	.public EasyChatApp_GetWordListScroll
+	.public EasyChatApp_CanScrollWordListUp
+	.public EasyChatApp_CanScrollWordListDown
 	.public ov102_021E9084
 	.public ov102_021E9090
 	.public ov102_021E909C
@@ -317,43 +317,43 @@
 	.public ov102_021EC808
 	.public ov102_021EC820
 	.public EasyChat_Exit
-	.public ov102_021E7A0C
-	.public ov102_021E7A24
-	.public ov102_021E7A4C
-	.public ov102_021E7BD8
-	.public ov102_021E7BE8
-	.public ov102_021E8580
-	.public ov102_021E85E8
-	.public ov102_021E878C
-	.public ov102_021E8798
-	.public ov102_021E87A8
-	.public ov102_021E87AC
-	.public ov102_021E87B0
-	.public ov102_021E8B18
-	.public ov102_021E8D1C
-	.public ov102_021E8D50
-	.public ov102_021E8D58
-	.public ov102_021E8D60
-	.public ov102_021E8EF8
+	.public EasyChatMessageCursor_GetIndex
+	.public EasyChatApp_Delete
+	.public EasyChatApp_SetHandler
+	.public EasyChatApp_GetOneWordMenuTouch
+	.public EasyChatApp_GetTwoWordMenuTouch
+	.public EasyChatApp_CategoryMenuHandleInput
+	.public EasyChatApp_MoveCategoryCursor
+	.public EasyChatWordPage_GetCursorPos
+	.public EasyChatWordPage_GetWordIndex
+	.public EasyChatWordPage_GetScroll
+	.public EasyChatWordPage_GetTopRow
+	.public EasyChatWordPage_GetMaxTopRow
+	.public EasyChatApp_WordListHandleInput
+	.public EasyChatApp_Handler_Exit
+	.public EasyChatApp_SetSubHandler
+	.public EasyChatApp_EndSubHandler
+	.public EasyChatApp_SubHandler_Start
+	.public EasyChatApp_HasChanged
 	.public ov102_021E8F5C
 	.public ov102_021E8F64
-	.public ov102_021E8F68
-	.public ov102_021E8F6C
+	.public EasyChatApp_GetMenuInputStatePtr
+	.public EasyChatApp_GetType
 	.public ov102_021E8F70
-	.public ov102_021E8F7C
-	.public ov102_021E8F84
-	.public ov102_021E8F90
-	.public ov102_021E8FA8
-	.public ov102_021E8FB4
-	.public ov102_021E8FC0
-	.public ov102_021E8FC8
-	.public ov102_021E8FD0
-	.public ov102_021E8FD8
-	.public ov102_021E8FFC
-	.public ov102_021E9028
-	.public ov102_021E9044
-	.public ov102_021E9050
-	.public ov102_021E9064
+	.public EasyChatApp_GetListMode
+	.public EasyChatApp_GetMsgBank
+	.public EasyChatApp_GetWord
+	.public EasyChatApp_GetMessageString
+	.public EasyChatApp_GetMessageIndex
+	.public EasyChatApp_GetWordSlot
+	.public EasyChatApp_GetMenuCursor
+	.public EasyChatApp_GetCategory
+	.public EasyChatApp_GetCategoryWordCount
+	.public EasyChatApp_GetCategoryWord
+	.public EasyChatApp_GetWordListCursor
+	.public EasyChatApp_GetWordListScroll
+	.public EasyChatApp_CanScrollWordListUp
+	.public EasyChatApp_CanScrollWordListDown
 	.public ov102_021E9084
 	.public ov102_021E9090
 	.public ov102_021E91BC
@@ -440,16 +440,16 @@
 	.rodata
 
 _021EC5D8:
-	.word ov102_021E8600
-	.word ov102_021E86B8
+	.word EasyChatApp_MoveCategoryGridCursor
+	.word EasyChatApp_MoveInitialGridCursor
 
 ov102_021EC5E0: ; 0x021EC5E0
 	.byte 0x40, 0x80, 0x14, 0xD7, 0xFF, 0x00, 0x00, 0x00
 
 ov102_021EC5E8: ; 0x021EC5E8
-	.word ov102_021E7D0C
-	.word ov102_021E7D0C
-	.word ov102_021E821C
+	.word EasyChatApp_Handler_WordMenu
+	.word EasyChatApp_Handler_WordMenu
+	.word EasyChatApp_Handler_MessageMenu
 
 ov102_021EC5F4: ; 0x021EC5F4
 	.byte 0x30, 0x68, 0xE4, 0xFC, 0x68, 0xA0, 0xE4, 0xFC, 0xFF, 0x00, 0x00, 0x00

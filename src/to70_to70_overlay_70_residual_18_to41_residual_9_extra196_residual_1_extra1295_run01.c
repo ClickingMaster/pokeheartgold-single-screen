@@ -2,7 +2,7 @@
 #include "global.h"
 typedef struct {u8 pad[0x24];s32 choice,a,b;} Menu;
 extern u8 gSystem[];extern void PlaySE(int),Sprite_SetAnimCtrlSeq(void *,int);
-extern int ov70_0223C2EC(void *);extern void ov70_02238F9C(void *,int,int);
+extern int ov70_0223C2EC(void *);extern void Gts_SetSpritePosition(void *,int,int);
 typedef struct {u16 value,pad[2];} Triple;
 extern Triple ov70_022464FE[],ov70_02246500[],ov70_02246502[];
 void ov70_0223C304(u8 *);
@@ -24,6 +24,6 @@ void ov70_0223C304(u8 *w) {
   (*(Menu**)(w+0x11c4))->choice=0;
  }
  a=ov70_0223C2EC(w);b=ov70_0223C2EC(w);
- ov70_02238F9C(*(void**)(w+0xdcc),ov70_022464FE[a].value,ov70_02246500[b].value);
+ Gts_SetSpritePosition(*(void**)(w+0xdcc),ov70_022464FE[a].value,ov70_02246500[b].value);
  Sprite_SetAnimCtrlSeq(*(void**)(w+0xdcc),ov70_02246502[ov70_0223C2EC(w)].value);
 }

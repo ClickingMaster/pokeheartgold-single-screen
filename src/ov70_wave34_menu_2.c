@@ -29,7 +29,7 @@ Ov70MenuState *ov70_02242014(void *input, int arg54, void *arg60) {
     state->cursorLimit = 0;
     state->messageData = BgCellManager_New(state->bg, 2, 1, 0x3d);
     BgCellManager_InitCell(state->messageData, 0, 2, 0x20, 0x14);
-    ov70_02238F9C(state->sprite, 0x88, 0x28);
+    Gts_SetSpritePosition(state->sprite, 0x88, 0x28);
     Sprite_SetAnimCtrlSeq(state->sprite, 0x2f);
     state->printer = MessagePrinter_New(0xf, 0xe, 2, 0x3d);
     return state;

@@ -15,7 +15,7 @@ void ov70_0223EBD4(Ov70Work24 *work) {
 void ov70_0223EC0C(Ov70Work24 *work) {
     Ov70SpriteTemplate24 template;
 
-    ov70_02238B54(&template, work, (u8 *)work + 0xD60, 1);
+    Gts_InitSpriteTemplate(&template, work, (u8 *)work + 0xD60, 1);
     template.x = 0xA0000;
     template.y = 0x20000;
     work->spriteDD0 = Sprite_CreateAffine(&template);

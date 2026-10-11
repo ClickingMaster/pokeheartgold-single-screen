@@ -60,7 +60,7 @@ void LoadUserFrameGfx1(void *, int, int, int, int, int);
 void GfGfxLoader_LoadCharDataFromOpenNarc(void *, int, void *, int, int, int, int, int);
 void GfGfxLoader_LoadScrnDataFromOpenNarc(void *, int, void *, int, int, int, int, int);
 void CreateSpriteResourcesHeader(Ov70SpriteResourcesHeader9 *, int, int, int, int, int, int, int, int, void *, void *, void *, void *, void *, void *);
-void ov70_02238B54(Ov70SpriteTemplate9 *, Ov70Work9 *, Ov70SpriteResourcesHeader9 *, int);
+void Gts_InitSpriteTemplate(Ov70SpriteTemplate9 *, Ov70Work9 *, Ov70SpriteResourcesHeader9 *, int);
 void *Sprite_CreateAffine(Ov70SpriteTemplate9 *);
 void ov70_02239C6C(Ov70Work9 *);
 void ov70_02239CF8(Ov70Work9 *);

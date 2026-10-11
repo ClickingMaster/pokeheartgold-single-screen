@@ -12,7 +12,7 @@
 int ov70_022408BC(Ov70State *state) {
     if (Save_WriteFileAsync(*(void **)((u8 *)state->field00 + 0x20)) == 2) {
         state->state = state->field11D6;
-        ov70_02238F80(state);
+        Gts_DeleteWaitingIcon(state);
     }
     return 3;
 }

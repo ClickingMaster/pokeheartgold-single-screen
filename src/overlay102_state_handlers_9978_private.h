@@ -23,10 +23,10 @@ typedef struct Ov102StateR16 {
 #define DECL_VOID1(name) void name(void *)
 #define DECL_VOID2(name) void name(void *, int)
 #define DECL_INT1(name)  int name(void *)
-DECL_INT1(ov102_021E8FC0);
-DECL_INT1(ov102_021E8FC8);
-DECL_INT1(ov102_021E8FD0);
-DECL_INT1(ov102_021E9028);
+DECL_INT1(EasyChatApp_GetWordSlot);
+DECL_INT1(EasyChatApp_GetMenuCursor);
+DECL_INT1(EasyChatApp_GetCategory);
+DECL_INT1(EasyChatApp_GetWordListCursor);
 void ov102_021E94A4(Ov102StateR16 *);
 DECL_VOID2(ov102_021EA71C);
 DECL_INT1(ov102_021EA754);

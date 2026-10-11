@@ -40,7 +40,7 @@ int ov70_022421D0(Ov70MenuState *state, const u8 *enabled) {
 
     if (old != state->cursor) {
         PlaySE(0x5dc);
-        ov70_02238F9C(state->sprite,
+        Gts_SetSpritePosition(state->sprite,
             (ov70_02245E26[state->cursor * 2] + 0x10) * 8,
             ov70_02245E26[state->cursor * 2 + 1] * 8);
         if (state->cursor == 9) {

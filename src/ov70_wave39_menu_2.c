@@ -27,7 +27,7 @@ int ov70_02243768(void *w) {
     U32(w, 0x48) = 10;
     S16(w, 0x3c) = -1;
     n = U32(w, 0x48);
-    ov70_02238F9C(PTR(w, 0xc), (ov70_02245DF8[n * 2] + 16) * 8, ov70_02245DF9[n * 2] * 8);
+    Gts_SetSpritePosition(PTR(w, 0xc), (ov70_02245DF8[n * 2] + 16) * 8, ov70_02245DF9[n * 2] * 8);
     Sprite_SetAnimCtrlSeq(PTR(w, 0xc), 0x31);
     return -1;
 }

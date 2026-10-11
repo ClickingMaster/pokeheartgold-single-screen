@@ -2114,63 +2114,63 @@
 	.public _022451BA
 	.public _022451E4
 	.public _022451E8
-	.public _022451EC
-	.public _02246800
-	.public ov70_022378C0
-	.public ov70_022378DC
-	.public ov70_02237F2C
-	.public ov70_02237F38
-	.public ov70_02237F58
-	.public ov70_02237F64
-	.public ov70_02237FB4
-	.public ov70_02238008
-	.public ov70_02238058
-	.public ov70_022380A8
-	.public ov70_022380EC
-	.public ov70_02238130
-	.public ov70_022381A4
-	.public ov70_02238208
-	.public ov70_0223826C
-	.public ov70_022382C0
-	.public ov70_02238304
-	.public ov70_02238360
-	.public ov70_02238398
-	.public ov70_02238430
-	.public ov70_022385C0
-	.public ov70_022386F4
-	.public ov70_022387AC
-	.public ov70_022387F8
-	.public ov70_02238818
+	.public sGtsListMenuTemplate
+	.public gGtsServer
+	.public GtsServer_Init
+	.public GtsServer_Update
+	.public GtsServer_Exit
+	.public GtsServer_IsRequestDone
+	.public GtsServer_GetResult
+	.public GtsServer_RequestPost
+	.public GtsServer_RequestPostFinish
+	.public GtsServer_RequestGet
+	.public GtsServer_RequestResult
+	.public GtsServer_RequestDelete
+	.public GtsServer_RequestReturn
+	.public GtsServer_RequestSearch
+	.public GtsServer_RequestSearchEx
+	.public GtsServer_RequestExchange
+	.public GtsServer_RequestExchangeFinish
+	.public GtsServer_RequestInfo
+	.public GtsServer_RequestSetProfile
+	.public GtsServer_StartRequest
+	.public GtsServer_GetErrorResult
+	.public Gts_Init
+	.public Gts_Main
+	.public Gts_Exit
+	.public Gts_VBlankCB
+	.public Gts_SetGfxBanks
+	.public Gts_InitData
 	.public ov70_0223887C
-	.public ov70_02238880
-	.public ov70_022388D0
-	.public ov70_02238900
-	.public ov70_02238B54
-	.public ov70_02238B80
-	.public ov70_02238C14
-	.public ov70_02238C2C
-	.public ov70_02238C8C
-	.public ov70_02238CAC
-	.public ov70_02238D38
-	.public ov70_02238D60
-	.public ov70_02238D84
-	.public ov70_02238D8C
-	.public ov70_02238DF8
-	.public ov70_02238E20
+	.public Gts_SetupWindow0
+	.public Gts_InitObjTransfer
+	.public Gts_InitSpriteResources
+	.public Gts_InitSpriteTemplate
+	.public Gts_InitSpriteResourcesHeaders
+	.public Gts_CreateYesNoPrompt
+	.public Gts_CreateYesNoPromptOnBg
+	.public Gts_HandleYesNoPrompt
+	.public Gts_CreateListMenu
+	.public Gts_ListMenuCallback
+	.public Gts_DestroyListMenu
+	.public Gts_SetState
+	.public Gts_SetSpritePositionRounded
+	.public Gts_Alloc
+	.public Gts_Free
 	.public ov70_02238E44
-	.public ov70_02238E50
-	.public ov70_02238E58
-	.public ov70_02238E64
-	.public ov70_02238E70
-	.public ov70_02238E98
-	.public ov70_02238F04
-	.public ov70_02238F10
-	.public ov70_02238F24
-	.public ov70_02238F64
-	.public ov70_02238F80
-	.public ov70_02238F9C
-	.public ov70_02238FB4
-	.public ov70_02238FE0
+	.public Gts_SetNextScreen
+	.public Gts_SwitchScreen
+	.public Gts_GetTextFrameDelay
+	.public Gts_InitGraphics
+	.public Gts_FreeGraphics
+	.public Gts_DecrementTimer
+	.public Gts_StartCountingBoxMons
+	.public Gts_CountBoxMonsStep
+	.public Gts_CreateWaitingIcon
+	.public Gts_DeleteWaitingIcon
+	.public Gts_SetSpritePosition
+	.public Gts_DimScreen
+	.public Gts_ClearDim
 	.public ov70_02238FF4
 	.public ov70_022390DC
 	.public ov70_022390FC
@@ -2512,12 +2512,12 @@
 	.public ov70_022413AC
 	.public ov70_02241468
 	.public ov70_02241494
-	.public ov70_022414A0
-	.public ov70_02241648
-	.public ov70_02241808
-	.public ov70_0224182C
-	.public ov70_02241868
-	.public ov70_022418A4
+	.public GtsTrade_Init
+	.public GtsTrade_Main
+	.public GtsTrade_Exit
+	.public GtsTrade_CreatePartnerProfile
+	.public GtsTrade_GetReceivedMon
+	.public GtsTrade_StoreReceivedMon
 	.public ov70_0224190C
 	.public ov70_02241DB4
 	.public ov70_02242014
@@ -2635,9 +2635,9 @@
 	.public ov70_02245124
 	.public ov70_0224512C
 	.public ov70_022451A8
-	.public ov70_022451F8
-	.public ov70_02245208
-	.public ov70_02245218
+	.public sGtsGraphicsModes
+	.public sGtsObjCharTransferTemplate
+	.public sGtsGraphicsBanks
 	.public ov70_02245240
 	.public ov70_02245242
 	.public ov70_0224524C
@@ -2703,7 +2703,7 @@
 	.public ov70_02245D0C
 	.public ov70_02245D26
 	.public ov70_02245D48
-	.public ov70_02245D50
+	.public sGtsTradeSequenceTemplate
 	.public ov70_02245D60
 	.public ov70_02245D66
 	.public ov70_02245D67
@@ -2750,18 +2750,18 @@
 	.public ov70_0224603C
 	.public ov70_02246058
 	.public ov70_02246074
-	.public ov70_022460A0
-	.public ov70_022460EC
-	.public ov70_0224613C
-	.public ov70_02246184
-	.public ov70_022461D0
-	.public ov70_0224621C
-	.public ov70_02246268
-	.public ov70_022462B4
-	.public ov70_02246304
-	.public ov70_02246358
-	.public ov70_022463A4
-	.public ov70_022463EC
+	.public sGtsPostUrl
+	.public sGtsPostFinishUrl
+	.public sGtsGetUrl
+	.public sGtsResultUrl
+	.public sGtsDeleteUrl
+	.public sGtsReturnUrl
+	.public sGtsSearchUrl
+	.public sGtsExchangeUrl
+	.public sGtsExchangeFinishUrl
+	.public sGtsInfoUrl
+	.public sGtsSetProfileUrl
+	.public sGtsScreens
 	.public ov70_02246464
 	.public ov70_0224649C
 	.public ov70_022464A8
@@ -2778,28 +2778,28 @@
 	.public ov70_02246658
 	.public ov70_022466F8
 	.public ov70_02246780
-	.public ov70_0224680C
-	.public ov70_02246814
+	.public gGtsServerFriendKey
+	.public gGtsServerRequest
 	.public ov70_02246900
 	.public ov70_02246920
-	.public ov70_0224693C
-	.public ov70_02246944
+	.public gGtsServerShortResponse
+	.public gGtsGlobals
 	.include "overlay_70.inc"
 	.include "global.inc"
 
 	.text
-	.public ov70_02237F2C
-	.public ov70_02237F58
+	.public GtsServer_Exit
+	.public GtsServer_GetResult
 	.public ov70_0223887C
-	.public ov70_02238D60
-	.public ov70_02238D84
+	.public Gts_DestroyListMenu
+	.public Gts_SetState
 	.public ov70_02238E44
-	.public ov70_02238E50
-	.public ov70_02238E58
-	.public ov70_02238E64
-	.public ov70_02238F04
-	.public ov70_02238F10
-	.public ov70_02238FE0
+	.public Gts_SetNextScreen
+	.public Gts_SwitchScreen
+	.public Gts_GetTextFrameDelay
+	.public Gts_DecrementTimer
+	.public Gts_StartCountingBoxMons
+	.public Gts_ClearDim
 	.public ov70_022392BC
 	.public ov70_022392E0
 	.public ov70_022394A8
@@ -2848,10 +2848,10 @@
 	.public ov70_02245124
 
 #if 0
-	thumb_func_start ov70_022378C0
-ov70_022378C0: ; 0x022378C0
+	thumb_func_start GtsServer_Init
+GtsServer_Init: ; 0x022378C0
 	push {r3, r4}
-	ldr r3, _022378D8 ; =_02246800
+	ldr r3, _022378D8 ; =gGtsServer
 	mov r4, #1
 	str r4, [r3]
 	mov r4, #0
@@ -2862,16 +2862,16 @@ ov70_022378C0: ; 0x022378C0
 	pop {r3, r4}
 	bx lr
 	nop
-_022378D8: .word _02246800
-	thumb_func_end ov70_022378C0
+_022378D8: .word gGtsServer
+	thumb_func_end GtsServer_Init
 #endif
 
 
 #if 0
-	thumb_func_start ov70_022378DC
-ov70_022378DC: ; 0x022378DC
+	thumb_func_start GtsServer_Update
+GtsServer_Update: ; 0x022378DC
 	push {r3, lr}
-	ldr r1, _02237BC0 ; =_02246800
+	ldr r1, _02237BC0 ; =gGtsServer
 	ldr r0, [r1]
 	cmp r0, #0x18
 	bls _022378E8
@@ -2917,17 +2917,17 @@ _02237926:
 	beq _0223794C
 	pop {r3, pc}
 _02237934:
-	ldr r0, _02237BC0 ; =_02246800
+	ldr r0, _02237BC0 ; =gGtsServer
 	mov r1, #0x18
 	str r1, [r0]
 	bl GameStats_GetError
-	bl ov70_02238398
-	ldr r1, _02237BC0 ; =_02246800
+	bl GtsServer_GetErrorResult
+	ldr r1, _02237BC0 ; =gGtsServer
 	str r0, [r1, #4]
 	bl GameStats_Shutdown
 	pop {r3, pc}
 _0223794C:
-	ldr r0, _02237BC0 ; =_02246800
+	ldr r0, _02237BC0 ; =gGtsServer
 	mov r1, #0x18
 	ldr r2, _02237BC4 ; =ov70_02246920
 	str r1, [r0]
@@ -3002,7 +3002,7 @@ _022379C0:
 	b _022379CE
 _022379C6:
 	mov r1, #0xc
-	ldr r0, _02237BC0 ; =_02246800
+	ldr r0, _02237BC0 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 _022379CE:
@@ -3016,17 +3016,17 @@ _022379D4:
 	beq _022379FA
 	pop {r3, pc}
 _022379E2:
-	ldr r0, _02237BC0 ; =_02246800
+	ldr r0, _02237BC0 ; =gGtsServer
 	mov r1, #0x18
 	str r1, [r0]
 	bl GameStats_GetError
-	bl ov70_02238398
-	ldr r1, _02237BC0 ; =_02246800
+	bl GtsServer_GetErrorResult
+	ldr r1, _02237BC0 ; =gGtsServer
 	str r0, [r1, #4]
 	bl GameStats_Shutdown
 	pop {r3, pc}
 _022379FA:
-	ldr r0, _02237BC0 ; =_02246800
+	ldr r0, _02237BC0 ; =gGtsServer
 	mov r2, #0x18
 	ldr r1, _02237BC4 ; =ov70_02246920
 	str r2, [r0]
@@ -3070,13 +3070,13 @@ _02237A3C:
 	b _02237A54
 _02237A42:
 	mov r1, #1
-	ldr r0, _02237BC0 ; =_02246800
+	ldr r0, _02237BC0 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 	b _02237A54
 _02237A4C:
 	mov r1, #0xc
-	ldr r0, _02237BC0 ; =_02246800
+	ldr r0, _02237BC0 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 _02237A54:
@@ -3090,17 +3090,17 @@ _02237A5A:
 	beq _02237A80
 	pop {r3, pc}
 _02237A68:
-	ldr r0, _02237BC0 ; =_02246800
+	ldr r0, _02237BC0 ; =gGtsServer
 	mov r1, #0x18
 	str r1, [r0]
 	bl GameStats_GetError
-	bl ov70_02238398
-	ldr r1, _02237BC0 ; =_02246800
+	bl GtsServer_GetErrorResult
+	ldr r1, _02237BC0 ; =gGtsServer
 	str r0, [r1, #4]
 	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237A80:
-	ldr r0, _02237BC0 ; =_02246800
+	ldr r0, _02237BC0 ; =gGtsServer
 	mov r1, #0x18
 	str r1, [r0]
 	bl GameStats_GetResponseLength
@@ -3108,7 +3108,7 @@ _02237A80:
 	lsl r1, r1, #2
 	cmp r0, r1
 	bne _02237A9A
-	ldr r0, _02237BC0 ; =_02246800
+	ldr r0, _02237BC0 ; =gGtsServer
 	mov r1, #0
 	str r1, [r0, #4]
 	b _02237AD4
@@ -3125,25 +3125,25 @@ _02237A9A:
 	b _02237ACC
 _02237AAE:
 	mov r1, #2
-	ldr r0, _02237BC0 ; =_02246800
+	ldr r0, _02237BC0 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 	b _02237AD4
 _02237AB8:
 	mov r1, #3
-	ldr r0, _02237BC0 ; =_02246800
+	ldr r0, _02237BC0 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 	b _02237AD4
 _02237AC2:
 	mov r1, #1
-	ldr r0, _02237BC0 ; =_02246800
+	ldr r0, _02237BC0 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 	b _02237AD4
 _02237ACC:
 	mov r1, #0xc
-	ldr r0, _02237BC0 ; =_02246800
+	ldr r0, _02237BC0 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 _02237AD4:
@@ -3157,17 +3157,17 @@ _02237ADA:
 	beq _02237B00
 	pop {r3, pc}
 _02237AE8:
-	ldr r0, _02237BC0 ; =_02246800
+	ldr r0, _02237BC0 ; =gGtsServer
 	mov r1, #0x18
 	str r1, [r0]
 	bl GameStats_GetError
-	bl ov70_02238398
-	ldr r1, _02237BC0 ; =_02246800
+	bl GtsServer_GetErrorResult
+	ldr r1, _02237BC0 ; =gGtsServer
 	str r0, [r1, #4]
 	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237B00:
-	ldr r0, _02237BC0 ; =_02246800
+	ldr r0, _02237BC0 ; =gGtsServer
 	mov r1, #0x18
 	str r1, [r0]
 	bl GameStats_GetResponseLength
@@ -3175,7 +3175,7 @@ _02237B00:
 	lsl r1, r1, #2
 	cmp r0, r1
 	bne _02237B1A
-	ldr r0, _02237BC0 ; =_02246800
+	ldr r0, _02237BC0 ; =gGtsServer
 	mov r1, #1
 	str r1, [r0, #4]
 	b _02237B68
@@ -3199,30 +3199,30 @@ _02237B34:
 	b _02237B60
 _02237B3A:
 	mov r1, #2
-	ldr r0, _02237BC0 ; =_02246800
+	ldr r0, _02237BC0 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 	b _02237B68
 _02237B44:
 	mov r1, #3
-	ldr r0, _02237BC0 ; =_02246800
+	ldr r0, _02237BC0 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 	b _02237B68
 _02237B4E:
-	ldr r0, _02237BC0 ; =_02246800
+	ldr r0, _02237BC0 ; =gGtsServer
 	mov r1, #0
 	str r1, [r0, #4]
 	b _02237B68
 _02237B56:
 	mov r1, #1
-	ldr r0, _02237BC0 ; =_02246800
+	ldr r0, _02237BC0 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 	b _02237B68
 _02237B60:
 	mov r1, #0xc
-	ldr r0, _02237BC0 ; =_02246800
+	ldr r0, _02237BC0 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 _02237B68:
@@ -3236,17 +3236,17 @@ _02237B6E:
 	beq _02237B94
 	pop {r3, pc}
 _02237B7C:
-	ldr r0, _02237BC0 ; =_02246800
+	ldr r0, _02237BC0 ; =gGtsServer
 	mov r1, #0x18
 	str r1, [r0]
 	bl GameStats_GetError
-	bl ov70_02238398
-	ldr r1, _02237BC0 ; =_02246800
+	bl GtsServer_GetErrorResult
+	ldr r1, _02237BC0 ; =gGtsServer
 	str r0, [r1, #4]
 	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237B94:
-	ldr r1, _02237BC0 ; =_02246800
+	ldr r1, _02237BC0 ; =gGtsServer
 	mov r2, #0x18
 	ldr r0, _02237BC4 ; =ov70_02246920
 	str r2, [r1]
@@ -3270,7 +3270,7 @@ _02237BB8:
 	str r0, [r1, #4]
 	b _02237BE6
 	nop
-_02237BC0: .word _02246800
+_02237BC0: .word gGtsServer
 _02237BC4: .word ov70_02246920
 _02237BC8: .word ov70_02246900
 _02237BCC:
@@ -3287,7 +3287,7 @@ _02237BD8:
 	b _02237BE6
 _02237BDE:
 	mov r1, #0xc
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 _02237BE6:
@@ -3301,17 +3301,17 @@ _02237BEC:
 	beq _02237C12
 	pop {r3, pc}
 _02237BFA:
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mov r1, #0x18
 	str r1, [r0]
 	bl GameStats_GetError
-	bl ov70_02238398
-	ldr r1, _02237EC0 ; =_02246800
+	bl GtsServer_GetErrorResult
+	ldr r1, _02237EC0 ; =gGtsServer
 	str r0, [r1, #4]
 	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237C12:
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mov r2, #0x18
 	ldr r1, _02237EC4 ; =ov70_02246920
 	str r2, [r0]
@@ -3355,13 +3355,13 @@ _02237C54:
 	b _02237C6C
 _02237C5A:
 	mov r1, #1
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 	b _02237C6C
 _02237C64:
 	mov r1, #0xc
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 _02237C6C:
@@ -3375,17 +3375,17 @@ _02237C72:
 	beq _02237C98
 	pop {r3, pc}
 _02237C80:
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mov r1, #0x18
 	str r1, [r0]
 	bl GameStats_GetError
-	bl ov70_02238398
-	ldr r1, _02237EC0 ; =_02246800
+	bl GtsServer_GetErrorResult
+	ldr r1, _02237EC0 ; =gGtsServer
 	str r0, [r1, #4]
 	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237C98:
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mov r1, #0x18
 	str r1, [r0]
 	bl GameStats_GetResponseLength
@@ -3397,13 +3397,13 @@ _02237C98:
 	mov r1, #0x49
 	lsl r1, r1, #2
 	bl _u32_div_f
-	ldr r1, _02237EC0 ; =_02246800
+	ldr r1, _02237EC0 ; =gGtsServer
 	str r0, [r1, #4]
 	b _02237CE4
 _02237CBC:
 	cmp r0, #0
 	bne _02237CC8
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mov r1, #0
 	str r1, [r0, #4]
 	b _02237CE4
@@ -3414,13 +3414,13 @@ _02237CC8:
 	cmp r0, #0xe
 	bne _02237CDC
 	mov r1, #1
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 	b _02237CE4
 _02237CDC:
 	mov r1, #0xc
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 _02237CE4:
@@ -3434,17 +3434,17 @@ _02237CEA:
 	beq _02237D10
 	pop {r3, pc}
 _02237CF8:
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mov r1, #0x18
 	str r1, [r0]
 	bl GameStats_GetError
-	bl ov70_02238398
-	ldr r1, _02237EC0 ; =_02246800
+	bl GtsServer_GetErrorResult
+	ldr r1, _02237EC0 ; =gGtsServer
 	str r0, [r1, #4]
 	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237D10:
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mov r1, #0x18
 	str r1, [r0]
 	bl GameStats_GetResponseLength
@@ -3452,7 +3452,7 @@ _02237D10:
 	lsl r1, r1, #2
 	cmp r0, r1
 	bne _02237D2A
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mov r1, #0
 	str r1, [r0, #4]
 	b _02237DB6
@@ -3486,55 +3486,55 @@ _02237D40: ; jump table
 	.short _02237DA4 - _02237D40 - 2 ; case 14
 _02237D5E:
 	mov r1, #4
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 	b _02237DB6
 _02237D68:
 	mov r1, #5
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 	b _02237DB6
 _02237D72:
 	mov r1, #6
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 	b _02237DB6
 _02237D7C:
 	mov r1, #7
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 	b _02237DB6
 _02237D86:
 	mov r1, #8
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 	b _02237DB6
 _02237D90:
 	mov r1, #9
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 	b _02237DB6
 _02237D9A:
 	mov r1, #0xa
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 	b _02237DB6
 _02237DA4:
 	mov r1, #1
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 	b _02237DB6
 _02237DAE:
 	mov r1, #0xc
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 _02237DB6:
@@ -3548,17 +3548,17 @@ _02237DBC:
 	beq _02237DE2
 	pop {r3, pc}
 _02237DCA:
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mov r1, #0x18
 	str r1, [r0]
 	bl GameStats_GetError
-	bl ov70_02238398
-	ldr r1, _02237EC0 ; =_02246800
+	bl GtsServer_GetErrorResult
+	ldr r1, _02237EC0 ; =gGtsServer
 	str r0, [r1, #4]
 	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237DE2:
-	ldr r1, _02237EC0 ; =_02246800
+	ldr r1, _02237EC0 ; =gGtsServer
 	mov r2, #0x18
 	ldr r0, _02237EC4 ; =ov70_02246920
 	str r2, [r1]
@@ -3592,17 +3592,17 @@ _02237E10:
 	beq _02237E36
 	pop {r3, pc}
 _02237E1E:
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mov r1, #0x18
 	str r1, [r0]
 	bl GameStats_GetError
-	bl ov70_02238398
-	ldr r1, _02237EC0 ; =_02246800
+	bl GtsServer_GetErrorResult
+	ldr r1, _02237EC0 ; =gGtsServer
 	str r0, [r1, #4]
 	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237E36:
-	ldr r1, _02237EC0 ; =_02246800
+	ldr r1, _02237EC0 ; =gGtsServer
 	mov r2, #0x18
 	ldr r0, _02237EC4 ; =ov70_02246920
 	str r2, [r1]
@@ -3639,7 +3639,7 @@ _02237E6C:
 	b _02237E7A
 _02237E72:
 	mov r1, #0xc
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 _02237E7A:
@@ -3653,23 +3653,23 @@ _02237E80:
 	beq _02237EA6
 	pop {r3, pc}
 _02237E8E:
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mov r1, #0x18
 	str r1, [r0]
 	bl GameStats_GetError
-	bl ov70_02238398
-	ldr r1, _02237EC0 ; =_02246800
+	bl GtsServer_GetErrorResult
+	ldr r1, _02237EC0 ; =gGtsServer
 	str r0, [r1, #4]
 	bl GameStats_Shutdown
 	pop {r3, pc}
 _02237EA6:
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mov r1, #0x18
 	str r1, [r0]
 	bl GameStats_GetResponseLength
 	cmp r0, #8
 	bne _02237EBC
-	ldr r0, _02237EC0 ; =_02246800
+	ldr r0, _02237EC0 ; =gGtsServer
 	mov r1, #0
 	str r1, [r0, #4]
 	b _02237F12
@@ -3677,7 +3677,7 @@ _02237EBC:
 	ldr r0, _02237EC4 ; =ov70_02246920
 	b _02237ECC
 	.balign 4, 0
-_02237EC0: .word _02246800
+_02237EC0: .word gGtsServer
 _02237EC4: .word ov70_02246920
 _02237EC8: .word ov70_02246900
 _02237ECC:
@@ -3697,29 +3697,29 @@ _02237EE2:
 	beq _02237F00
 	b _02237F0A
 _02237EE8:
-	ldr r0, _02237F28 ; =_02246800
+	ldr r0, _02237F28 ; =gGtsServer
 	mov r1, #0
 	str r1, [r0, #4]
 	b _02237F12
 _02237EF0:
-	ldr r0, _02237F28 ; =_02246800
+	ldr r0, _02237F28 ; =gGtsServer
 	mov r1, #1
 	str r1, [r0, #4]
 	b _02237F12
 _02237EF8:
-	ldr r0, _02237F28 ; =_02246800
+	ldr r0, _02237F28 ; =gGtsServer
 	mov r1, #2
 	str r1, [r0, #4]
 	b _02237F12
 _02237F00:
 	mov r1, #1
-	ldr r0, _02237F28 ; =_02246800
+	ldr r0, _02237F28 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 	b _02237F12
 _02237F0A:
 	mov r1, #0xc
-	ldr r0, _02237F28 ; =_02246800
+	ldr r0, _02237F28 ; =gGtsServer
 	mvn r1, r1
 	str r1, [r0, #4]
 _02237F12:
@@ -3734,7 +3734,7 @@ _02237F18:
 _02237F24:
 	pop {r3, pc}
 	nop
-_02237F28: .word _02246800
-	thumb_func_end ov70_022378DC
+_02237F28: .word gGtsServer
+	thumb_func_end GtsServer_Update
 
 #endif

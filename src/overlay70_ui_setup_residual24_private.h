@@ -80,12 +80,12 @@ void WirelessStatusIcon_Destroy(void);
 void ov70_0223ECA4(Ov70Work24 *);
 void ov70_0224212C(void *);
 void ov70_0223ED24(Ov70Work24 *);
-void ov70_02238E58(Ov70Work24 *);
+void Gts_SwitchScreen(Ov70Work24 *);
 void ov70_022392BC(void *);
 void ov70_022391F0(void *, int, int);
 void ov70_02239CF8(Ov70Work24 *);
 void ov70_02239D44(Ov70Work24 *, int);
-void ov70_02238B54(Ov70SpriteTemplate24 *, Ov70Work24 *, void *, int);
+void Gts_InitSpriteTemplate(Ov70SpriteTemplate24 *, Ov70Work24 *, void *, int);
 
 void *NARC_New(int, int);
 void NARC_Delete(void *);

@@ -89,7 +89,7 @@ int ov70_0223D44C(Ov70Work *work) {
             msgId = 0x11;
         }
         ov70_0223E01C(work, msgId, 1, 0, 0xf0f, 0);
-        ov70_02238D84(work, 3, 1);
+        Gts_SetState(work, 3, 1);
     }
     return 3;
 }
@@ -98,7 +98,7 @@ void ov70_0223D490(Ov70Work *work) {
     void *mon;
 
     if (work->field122 == 0x1e) {
-        ov70_02238E50(work, 1, 0);
+        Gts_SetNextScreen(work, 1, 0);
         work->state2c = 2;
         PlaySE(0x5dc);
         return;
@@ -113,15 +113,15 @@ void ov70_0223D490(Ov70Work *work) {
             mon = ov70_0223E49C(work->unk00->unk08, work->unk00->unk0C, work->field120, work->field122);
             BufferBoxMonNickname(work->ptrB9C, 0, mon);
             ov70_0223E01C(work, 0x16, 1, 0, 0xf0f, 0);
-            ov70_02238D84(work, 3, 7);
+            Gts_SetState(work, 3, 7);
         } else {
             ov70_0223E01C(work, 0x1a, 1, 0, 0xf0f, 1);
-            ov70_02238D84(work, 4, 1);
+            Gts_SetState(work, 4, 1);
         }
         break;
     case 2:
         ov70_0223E01C(work, 0x1b, 1, 0, 0xf0f, 1);
-        ov70_02238D84(work, 4, 1);
+        Gts_SetState(work, 4, 1);
         break;
     }
 }
@@ -143,11 +143,11 @@ void ov70_0223D588(Ov70Work *work) {
             if (ov70_0223E4DC(work->unk00->unk08, work->unk00->unk0C, work->field120, work->field122)) {
                 BufferBoxMonNickname(work->ptrB9C, 0, mon);
                 ov70_0223E01C(work, 0x12, 1, 0, 0xf0f, 0);
-                ov70_02238D84(work, 3, 9);
+                Gts_SetState(work, 3, 9);
                 PlaySE(0x5dc);
             } else {
                 ov70_0223E01C(work, 0x1a, 1, 0, 0xf0f, 1);
-                ov70_02238D84(work, 4, 1);
+                Gts_SetState(work, 4, 1);
             }
         } else {
             PlaySE(0x5dc);
@@ -166,11 +166,11 @@ int ov70_0223D680(void) {
 
 void ov70_0223D690(Ov70Work *work, int code) {
     if (code == 5) {
-        ov70_02238E50(work, 1, 0);
+        Gts_SetNextScreen(work, 1, 0);
         work->state2c = 2;
         PlaySE(0x5dc);
     } else if (code == 6) {
-        ov70_02238E50(work, 3, 0x11);
+        Gts_SetNextScreen(work, 3, 0x11);
         work->state2c = 2;
         PlaySE(0x5dc);
     }
@@ -271,7 +271,7 @@ void ov70_0223D808(Ov70Work *work) {
 }
 
 void ov70_0223D8E8(void *sprite, int index) {
-    ov70_02238D8C(sprite, ov70_02245784[index * 2], ov70_02245786[index * 2]);
+    Gts_SetSpritePositionRounded(sprite, ov70_02245784[index * 2], ov70_02245786[index * 2]);
     if (index == 0x1f || (index >= 0 && index <= 5)) {
         Sprite_SetPriority(sprite, 0);
     } else {

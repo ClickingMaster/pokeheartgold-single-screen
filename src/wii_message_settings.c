@@ -137,7 +137,7 @@ typedef struct WiiMessageSettings {
     u32 unk_90;                 // 0x090
     void *childArgs;            // 0x094
     Unk020317F4 request;        // 0x098
-    int responseStatus;         // 0x0FC, written by ov70_02238304
+    int responseStatus;         // 0x0FC, written by GtsServer_RequestSetProfile
     int responseResult;         // 0x100
     u32 password;               // 0x104
     u32 registrationCode;       // 0x108, last 4 digits; -1: entry cancelled
@@ -279,12 +279,12 @@ void ov00_021FA0D8(void);
 void ov00_021ED9B4(void);
 s32 WifiConnection_ClassifyErrorCode(s32 errorCode, u32 errorType);
 u64 DWC_CreateFriendKey(void *userData);
-void ov70_022378DC(void);
-void ov70_022378C0(u32 profileId, u32 friendKeyLo, u32 friendKeyHi);
-void ov70_02237F2C(void);
-BOOL ov70_02237F38(void);
-int ov70_02237F58(void);
-void ov70_02238304(Unk020317F4 *request, int *response);
+void GtsServer_Update(void);
+void GtsServer_Init(u32 profileId, u32 friendKeyLo, u32 friendKeyHi);
+void GtsServer_Exit(void);
+BOOL GtsServer_IsRequestDone(void);
+int GtsServer_GetResult(void);
+void GtsServer_RequestSetProfile(Unk020317F4 *request, int *response);
 
 extern NNSFndHeapHandle _02249BE0;
 extern const WiiMessageSettingsAppEntry sWiiMessageSettingsApps[];
@@ -423,7 +423,7 @@ BOOL WiiMessageSettings_Main(OverlayManager *man, int *state) {
 
     if (app->networkLoaded == TRUE) {
         ov00_021ECB40();
-        ov70_022378DC();
+        GtsServer_Update();
         sub_0203A930(3 - ov00_021EC9D4());
     }
 
@@ -1568,7 +1568,7 @@ BOOL WiiMessageSettingsScreen_Disconnect(WiiMessageSettingsScreen *screen) {
     WirelessStatusIcon_Destroy();
     Sys_ClearSleepDisableFlag(4);
     if (screen->app->serverSessionStarted == TRUE) {
-        ov70_02237F2C();
+        GtsServer_Exit();
         screen->app->serverSessionStarted = FALSE;
     }
     screen->state = WMS_STATE_PRINT_DISCONNECTED;
@@ -1630,7 +1630,7 @@ BOOL WiiMessageSettingsScreen_WaitConnect(WiiMessageSettingsScreen *screen) {
             sub_0203957C();
             Sys_ClearSleepDisableFlag(4);
             if (screen->app->serverSessionStarted == TRUE) {
-                ov70_02237F2C();
+                GtsServer_Exit();
                 screen->app->serverSessionStarted = FALSE;
             }
             WiiMessageSettingsScreen_HideWaitingIcon(screen);
@@ -1688,7 +1688,7 @@ BOOL ov75_022488BC(WiiMessageSettingsScreen *screen) {
         sub_0203957C();
         Sys_ClearSleepDisableFlag(4);
         if (screen->app->serverSessionStarted == TRUE) {
-            ov70_02237F2C();
+            GtsServer_Exit();
             screen->app->serverSessionStarted = FALSE;
         }
         screen->state = WMS_STATE_SHOW_CONNECTION_ERROR;
@@ -1733,7 +1733,7 @@ BOOL WiiMessageSettingsScreen_StartServerSession(WiiMessageSettingsScreen *scree
     }
     profileId = Save_SysInfo_GetDwcProfileId(sysInfo);
     friendKey = DWC_CreateFriendKey(userData);
-    ov70_022378C0(profileId, (u32)friendKey, (u32)(friendKey >> 32));
+    GtsServer_Init(profileId, (u32)friendKey, (u32)(friendKey >> 32));
     screen->app->serverSessionStarted = TRUE;
     screen->state = WMS_STATE_SEND_REGISTRATION_REQUEST;
     return FALSE;
@@ -1744,7 +1744,7 @@ BOOL WiiMessageSettingsScreen_StartServerSession(WiiMessageSettingsScreen *scree
 BOOL WiiMessageSettingsScreen_SendRegistrationRequest(WiiMessageSettingsScreen *screen) {
     WiiMessageSettings_InitRequest(screen->app);
     WiiMessageSettings_SetRequestWiiAddress(screen->app);
-    ov70_02238304(&screen->app->request, &screen->app->responseStatus);
+    GtsServer_RequestSetProfile(&screen->app->request, &screen->app->responseStatus);
     screen->state = WMS_STATE_WAIT_REGISTRATION_RESPONSE;
     screen->timeoutTimer = 0;
     return FALSE;
@@ -1753,8 +1753,8 @@ BOOL WiiMessageSettingsScreen_SendRegistrationRequest(WiiMessageSettingsScreen *
 #pragma force_active on
 
 BOOL WiiMessageSettingsScreen_WaitRegistrationResponse(WiiMessageSettingsScreen *screen) {
-    if (ov70_02237F38()) {
-        int result = ov70_02237F58();
+    if (GtsServer_IsRequestDone()) {
+        int result = GtsServer_GetResult();
         screen->timeoutTimer = 0;
         switch (result) {
         case 0:
@@ -1923,12 +1923,12 @@ BOOL WiiMessageSettingsScreen_ConfirmRegistrationCode(WiiMessageSettingsScreen *
         WiiMessageSettingsScreen_PrintMessage(screen, screen->msgData, msg_0188_00018, 0, 0xF0F);
         WiiMessageSettingsScreen_ShowWaitingIcon(screen);
         WiiMessageSettings_SetRequestRegistrationCode(screen->app);
-        ov70_02238304(&screen->app->request, &screen->app->responseStatus);
+        GtsServer_RequestSetProfile(&screen->app->request, &screen->app->responseStatus);
         screen->subState++;
         break;
     case 1:
-        if (ov70_02237F38()) {
-            result = ov70_02237F58();
+        if (GtsServer_IsRequestDone()) {
+            result = GtsServer_GetResult();
             screen->timeoutTimer = 0;
             WiiMessageSettingsScreen_HideWaitingIcon(screen);
             switch (result) {
@@ -2106,7 +2106,7 @@ BOOL WiiMessageSettingsScreen_DisconnectAndWait(WiiMessageSettingsScreen *screen
         sub_0203957C();
         Sys_ClearSleepDisableFlag(4);
         if (screen->app->serverSessionStarted == TRUE) {
-            ov70_02237F2C();
+            GtsServer_Exit();
             screen->app->serverSessionStarted = FALSE;
         }
         screen->subState++;
@@ -2250,7 +2250,7 @@ BOOL WiiMessageSettingsScreen_DisconnectAndQuit(WiiMessageSettingsScreen *screen
             WirelessStatusIcon_Destroy();
             Sys_ClearSleepDisableFlag(4);
             if (screen->app->serverSessionStarted == TRUE) {
-                ov70_02237F2C();
+                GtsServer_Exit();
                 screen->app->serverSessionStarted = FALSE;
             }
             screen->subState++;

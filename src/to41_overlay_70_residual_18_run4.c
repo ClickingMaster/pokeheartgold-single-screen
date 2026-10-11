@@ -8,6 +8,6 @@ int ov70_0223B788(R14Work *w) {
     ov70_0223BC2C(w);
     ov70_0223B8B4(P(w, 4));
     Sprite_SetDrawFlag(P(w, 0xf10), 0);
-    ov70_02238E58(w);
+    Gts_SwitchScreen(w);
     return 1;
 }

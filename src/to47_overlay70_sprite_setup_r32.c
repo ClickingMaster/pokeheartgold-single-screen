@@ -8,7 +8,7 @@ void ov70_02240D74(u8 *work, int which) {
     int anim;
 
     ov70_0224127C(work);
-    ov70_02238B54(&template, work, work + 0xd84, 2);
+    Gts_InitSpriteTemplate(&template, work, work + 0xd84, 2);
     template.whichScreen = 2;
     template.position.x = 0x80000;
     template.position.y = 0x182000;
@@ -44,7 +44,7 @@ void ov70_02240D74(u8 *work, int which) {
     *(Sprite **)(work + 0xf10) = Sprite_CreateAffine(&template);
     Sprite_SetAnimActiveFlag(*(Sprite **)(work + 0xf10), 1);
     Sprite_SetAnimCtrlSeq(*(Sprite **)(work + 0xf10), 42);
-    ov70_02238F9C(*(Sprite **)(work + 0xf10), 55, *(u8 **)(work + 0xf14) + 0x1a8);
+    Gts_SetSpritePosition(*(Sprite **)(work + 0xf10), 55, *(u8 **)(work + 0xf14) + 0x1a8);
     Sprite_SetDrawFlag(*(Sprite **)(work + 0xf10), 0);
 
     spriteSlot = work;

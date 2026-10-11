@@ -44,7 +44,7 @@ int ov70_022390FC(Ov70R8 *work) {
     ov70_022395C4(work);
     ov70_022392E0(work->bgConfig);
     Sprite_SetDrawFlag(work->spriteF10, 0);
-    ov70_02238E58(work);
+    Gts_SwitchScreen(work);
     return 1;
 }
 

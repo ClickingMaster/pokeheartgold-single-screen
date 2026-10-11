@@ -2,16 +2,16 @@
 
 int ov70_022408FC(Ov70Work *work) {
     if (Save_WriteFileAsync(work->unk00->unk20) == 2) {
-        ov70_02238E50(work, 1, 0);
-        ov70_02238F80(work);
+        Gts_SetNextScreen(work, 1, 0);
+        Gts_DeleteWaitingIcon(work);
         ov70_02244FA4(work, work->ptrBA0, work->unk28, 1, 0xf0f);
-        ov70_02238D84(work, 0x25, 0x1c);
+        Gts_SetState(work, 0x25, 0x1c);
     }
     return 3;
 }
 
 int ov70_02240948(Ov70Work *work) {
-    ov70_02238F80(work);
+    Gts_DeleteWaitingIcon(work);
     WirelessStatusIcon_Destroy();
     if (work->unk11FC == 1) {
         BeginNormalPaletteFade(0, 0, 0, 0, 6, 1, 0x3d);

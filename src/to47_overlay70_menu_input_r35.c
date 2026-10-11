@@ -40,7 +40,7 @@ extern const s32 ov70_02245DB0[];
 
 void PlaySE(u16);
 void Sprite_SetAnimCtrlSeq(void *, int);
-void ov70_02238F9C(void *, int, int);
+void Gts_SetSpritePosition(void *, int, int);
 int ov70_02242164(Ov70R36 *, int);
 int ov70_0224251C(Ov70R36 *, int);
 void ov70_02242574(Ov70R36 *, int);
@@ -74,7 +74,7 @@ int ov70_0224261C(Ov70R36 *work) {
         int cursor;
         PlaySE(0x5dc);
         cursor = work->cursor;
-        ov70_02238F9C(work->cursorSprite, ov70_02245D76[cursor * 2], ov70_02245D77[cursor * 2]);
+        Gts_SetSpritePosition(work->cursorSprite, ov70_02245D76[cursor * 2], ov70_02245D77[cursor * 2]);
         if (work->cursor == 4) {
             Sprite_SetAnimCtrlSeq(work->cursorSprite, 0x30);
         } else {
@@ -118,7 +118,7 @@ int ov70_022426F4(Ov70R36 *work) {
 
     if (oldCursor != work->cursor) {
         int cursor = work->cursor;
-        ov70_02238F9C(work->cursorSprite, ov70_02245D66[cursor * 2], ov70_02245D67[cursor * 2]);
+        Gts_SetSpritePosition(work->cursorSprite, ov70_02245D66[cursor * 2], ov70_02245D67[cursor * 2]);
         if (work->cursor == 3) {
             Sprite_SetAnimCtrlSeq(work->cursorSprite, 0x30);
         } else {

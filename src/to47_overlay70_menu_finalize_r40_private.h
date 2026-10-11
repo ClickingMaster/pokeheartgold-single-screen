@@ -21,7 +21,7 @@ void ov70_0224352C(void *, int, int);
 int ov70_02242508(int, int);
 void ov70_02243F00(void *, void *, void *, int, int);
 void ov70_02243EB8(void *, void *, void *, int);
-void ov70_02238F9C(void *, int, int);
+void Gts_SetSpritePosition(void *, int, int);
 void Sprite_SetDrawFlag(void *, int);
 int ov70_02242C64(void *);
 

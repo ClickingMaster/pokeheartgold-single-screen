@@ -31,7 +31,7 @@ int ov70_02243928(Work39 *w) {
         U32(w, 0x48) = S16(w, 0x3e);
     }
     i = U32(w, 0x48);
-    ov70_02238F9C(PTR(w, 0xc), (ov70_02245E26[i * 2] + 16) * 8, ov70_02245E27[i * 2] * 8);
+    Gts_SetSpritePosition(PTR(w, 0xc), (ov70_02245E26[i * 2] + 16) * 8, ov70_02245E27[i * 2] * 8);
     Sprite_SetDrawFlag(PTR(w, 0xc), 1);
     if (PTR(w, 0x18)) {
         Sprite_SetDrawFlag(PTR(w, 0x18), 1);

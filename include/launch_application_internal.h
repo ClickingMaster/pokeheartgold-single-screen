@@ -124,7 +124,7 @@ typedef struct NamingScreenData {
     String *unk10;
 } NamingScreenData;
 
-typedef struct UnkStruct_0203F844 {
+typedef struct GtsArgs {
     int unk0;
     SysInfo *sysInfo;
     Party *party;
@@ -141,7 +141,7 @@ typedef struct UnkStruct_0203F844 {
     void *unk34;
     u32 unk38;
     int unk3C;
-} UnkStruct_0203F844;
+} GtsArgs;
 
 typedef struct UnkStruct_0203E644 {
     u8 unk0[0x26];

@@ -39,7 +39,7 @@ int ov70_022429B8(Ov70R36 *work, const u8 *enabled) {
         int cursor;
         PlaySE(0x5dc);
         cursor = work->cursor;
-        ov70_02238F9C(work->cursorSprite, (ov70_02245DF8[cursor * 2] + 0x10) << 3, ov70_02245DF9[cursor * 2] << 3);
+        Gts_SetSpritePosition(work->cursorSprite, (ov70_02245DF8[cursor * 2] + 0x10) << 3, ov70_02245DF9[cursor * 2] << 3);
         switch (work->cursor) {
         case 9:
             Sprite_SetAnimCtrlSeq(work->cursorSprite, 0x30);

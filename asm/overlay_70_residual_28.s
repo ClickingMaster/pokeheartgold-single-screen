@@ -2114,63 +2114,63 @@
 	.public _022451BA
 	.public _022451E4
 	.public _022451E8
-	.public _022451EC
-	.public _02246800
-	.public ov70_022378C0
-	.public ov70_022378DC
-	.public ov70_02237F2C
-	.public ov70_02237F38
-	.public ov70_02237F58
-	.public ov70_02237F64
-	.public ov70_02237FB4
-	.public ov70_02238008
-	.public ov70_02238058
-	.public ov70_022380A8
-	.public ov70_022380EC
-	.public ov70_02238130
-	.public ov70_022381A4
-	.public ov70_02238208
-	.public ov70_0223826C
-	.public ov70_022382C0
-	.public ov70_02238304
-	.public ov70_02238360
-	.public ov70_02238398
-	.public ov70_02238430
-	.public ov70_022385C0
-	.public ov70_022386F4
-	.public ov70_022387AC
-	.public ov70_022387F8
-	.public ov70_02238818
+	.public sGtsListMenuTemplate
+	.public gGtsServer
+	.public GtsServer_Init
+	.public GtsServer_Update
+	.public GtsServer_Exit
+	.public GtsServer_IsRequestDone
+	.public GtsServer_GetResult
+	.public GtsServer_RequestPost
+	.public GtsServer_RequestPostFinish
+	.public GtsServer_RequestGet
+	.public GtsServer_RequestResult
+	.public GtsServer_RequestDelete
+	.public GtsServer_RequestReturn
+	.public GtsServer_RequestSearch
+	.public GtsServer_RequestSearchEx
+	.public GtsServer_RequestExchange
+	.public GtsServer_RequestExchangeFinish
+	.public GtsServer_RequestInfo
+	.public GtsServer_RequestSetProfile
+	.public GtsServer_StartRequest
+	.public GtsServer_GetErrorResult
+	.public Gts_Init
+	.public Gts_Main
+	.public Gts_Exit
+	.public Gts_VBlankCB
+	.public Gts_SetGfxBanks
+	.public Gts_InitData
 	.public ov70_0223887C
-	.public ov70_02238880
-	.public ov70_022388D0
-	.public ov70_02238900
-	.public ov70_02238B54
-	.public ov70_02238B80
-	.public ov70_02238C14
-	.public ov70_02238C2C
-	.public ov70_02238C8C
-	.public ov70_02238CAC
-	.public ov70_02238D38
-	.public ov70_02238D60
-	.public ov70_02238D84
-	.public ov70_02238D8C
-	.public ov70_02238DF8
-	.public ov70_02238E20
+	.public Gts_SetupWindow0
+	.public Gts_InitObjTransfer
+	.public Gts_InitSpriteResources
+	.public Gts_InitSpriteTemplate
+	.public Gts_InitSpriteResourcesHeaders
+	.public Gts_CreateYesNoPrompt
+	.public Gts_CreateYesNoPromptOnBg
+	.public Gts_HandleYesNoPrompt
+	.public Gts_CreateListMenu
+	.public Gts_ListMenuCallback
+	.public Gts_DestroyListMenu
+	.public Gts_SetState
+	.public Gts_SetSpritePositionRounded
+	.public Gts_Alloc
+	.public Gts_Free
 	.public ov70_02238E44
-	.public ov70_02238E50
-	.public ov70_02238E58
-	.public ov70_02238E64
-	.public ov70_02238E70
-	.public ov70_02238E98
-	.public ov70_02238F04
-	.public ov70_02238F10
-	.public ov70_02238F24
-	.public ov70_02238F64
-	.public ov70_02238F80
-	.public ov70_02238F9C
-	.public ov70_02238FB4
-	.public ov70_02238FE0
+	.public Gts_SetNextScreen
+	.public Gts_SwitchScreen
+	.public Gts_GetTextFrameDelay
+	.public Gts_InitGraphics
+	.public Gts_FreeGraphics
+	.public Gts_DecrementTimer
+	.public Gts_StartCountingBoxMons
+	.public Gts_CountBoxMonsStep
+	.public Gts_CreateWaitingIcon
+	.public Gts_DeleteWaitingIcon
+	.public Gts_SetSpritePosition
+	.public Gts_DimScreen
+	.public Gts_ClearDim
 	.public ov70_02238FF4
 	.public ov70_022390DC
 	.public ov70_022390FC
@@ -2512,12 +2512,12 @@
 	.public ov70_022413AC
 	.public ov70_02241468
 	.public ov70_02241494
-	.public ov70_022414A0
-	.public ov70_02241648
-	.public ov70_02241808
-	.public ov70_0224182C
-	.public ov70_02241868
-	.public ov70_022418A4
+	.public GtsTrade_Init
+	.public GtsTrade_Main
+	.public GtsTrade_Exit
+	.public GtsTrade_CreatePartnerProfile
+	.public GtsTrade_GetReceivedMon
+	.public GtsTrade_StoreReceivedMon
 	.public ov70_0224190C
 	.public ov70_02241DB4
 	.public ov70_02242014
@@ -2635,9 +2635,9 @@
 	.public ov70_02245124
 	.public ov70_0224512C
 	.public ov70_022451A8
-	.public ov70_022451F8
-	.public ov70_02245208
-	.public ov70_02245218
+	.public sGtsGraphicsModes
+	.public sGtsObjCharTransferTemplate
+	.public sGtsGraphicsBanks
 	.public ov70_02245240
 	.public ov70_02245242
 	.public ov70_0224524C
@@ -2703,7 +2703,7 @@
 	.public ov70_02245D0C
 	.public ov70_02245D26
 	.public ov70_02245D48
-	.public ov70_02245D50
+	.public sGtsTradeSequenceTemplate
 	.public ov70_02245D60
 	.public ov70_02245D66
 	.public ov70_02245D67
@@ -2750,18 +2750,18 @@
 	.public ov70_0224603C
 	.public ov70_02246058
 	.public ov70_02246074
-	.public ov70_022460A0
-	.public ov70_022460EC
-	.public ov70_0224613C
-	.public ov70_02246184
-	.public ov70_022461D0
-	.public ov70_0224621C
-	.public ov70_02246268
-	.public ov70_022462B4
-	.public ov70_02246304
-	.public ov70_02246358
-	.public ov70_022463A4
-	.public ov70_022463EC
+	.public sGtsPostUrl
+	.public sGtsPostFinishUrl
+	.public sGtsGetUrl
+	.public sGtsResultUrl
+	.public sGtsDeleteUrl
+	.public sGtsReturnUrl
+	.public sGtsSearchUrl
+	.public sGtsExchangeUrl
+	.public sGtsExchangeFinishUrl
+	.public sGtsInfoUrl
+	.public sGtsSetProfileUrl
+	.public sGtsScreens
 	.public ov70_02246464
 	.public ov70_0224649C
 	.public ov70_022464A8
@@ -2778,28 +2778,28 @@
 	.public ov70_02246658
 	.public ov70_022466F8
 	.public ov70_02246780
-	.public ov70_0224680C
-	.public ov70_02246814
+	.public gGtsServerFriendKey
+	.public gGtsServerRequest
 	.public ov70_02246900
 	.public ov70_02246920
-	.public ov70_0224693C
-	.public ov70_02246944
+	.public gGtsServerShortResponse
+	.public gGtsGlobals
 	.include "overlay_70.inc"
 	.include "global.inc"
 
 	.text
-	.public ov70_02237F2C
-	.public ov70_02237F58
+	.public GtsServer_Exit
+	.public GtsServer_GetResult
 	.public ov70_0223887C
-	.public ov70_02238D60
-	.public ov70_02238D84
+	.public Gts_DestroyListMenu
+	.public Gts_SetState
 	.public ov70_02238E44
-	.public ov70_02238E50
-	.public ov70_02238E58
-	.public ov70_02238E64
-	.public ov70_02238F04
-	.public ov70_02238F10
-	.public ov70_02238FE0
+	.public Gts_SetNextScreen
+	.public Gts_SwitchScreen
+	.public Gts_GetTextFrameDelay
+	.public Gts_DecrementTimer
+	.public Gts_StartCountingBoxMons
+	.public Gts_ClearDim
 	.public ov70_022392BC
 	.public ov70_022392E0
 	.public ov70_022394A8
@@ -2855,7 +2855,7 @@ ov70_02240640: ; 0x02240640
 	strh r1, [r4, #0x36]
 	mov r1, #9
 	mov r2, #7
-	bl ov70_02238E50
+	bl Gts_SetNextScreen
 	mov r0, #0x24
 	str r0, [r4, #0x2c]
 	mov r0, #3
@@ -2871,7 +2871,7 @@ ov70_02240658: ; 0x02240658
 	strh r1, [r4, #0x36]
 	mov r1, #9
 	mov r2, #8
-	bl ov70_02238E50
+	bl Gts_SetNextScreen
 	mov r0, #0x24
 	str r0, [r4, #0x2c]
 	mov r0, #3
@@ -2885,7 +2885,7 @@ ov70_02240670: ; 0x02240670
 	mov r1, #9
 	add r2, r1, #0
 	add r4, r0, #0
-	bl ov70_02238E50
+	bl Gts_SetNextScreen
 	mov r0, #0x24
 	str r0, [r4, #0x2c]
 	mov r0, #3
@@ -2901,7 +2901,7 @@ ov70_02240684: ; 0x02240684
 	strh r1, [r4, #0x36]
 	mov r1, #9
 	mov r2, #0xa
-	bl ov70_02238E50
+	bl Gts_SetNextScreen
 	mov r0, #0x1e
 	str r0, [r4, #0x2c]
 	mov r0, #3
@@ -2913,7 +2913,7 @@ ov70_02240684: ; 0x02240684
 ov70_0224069C: ; 0x0224069C
 	push {r4, lr}
 	add r4, r0, #0
-	bl ov70_022380EC
+	bl GtsServer_RequestReturn
 	mov r0, #0x17
 	str r0, [r4, #0x2c]
 	ldr r0, _022406B4 ; =0x00001604
@@ -2930,10 +2930,10 @@ _022406B4: .word 0x00001604
 ov70_022406B8: ; 0x022406B8
 	push {r4, lr}
 	add r4, r0, #0
-	bl ov70_02237F38
+	bl GtsServer_IsRequestDone
 	cmp r0, #0
 	beq _0224072A
-	bl ov70_02237F58
+	bl GtsServer_GetResult
 	ldr r1, _02240744 ; =0x00001604
 	mov r2, #0
 	add r0, #0xf
@@ -3019,13 +3019,13 @@ ov70_02240748: ; 0x02240748
 	add r0, r4, #0
 	mov r1, #0x25
 	mov r2, #0x24
-	bl ov70_02238D84
+	bl Gts_SetState
 	add r0, r4, #0
 	mov r1, #1
 	mov r2, #0
-	bl ov70_02238E50
+	bl Gts_SetNextScreen
 	add r0, r4, #0
-	bl ov70_02238F80
+	bl Gts_DeleteWaitingIcon
 	add r0, r4, #0
 	bl ov70_02241234
 	mov r0, #3
@@ -3096,13 +3096,13 @@ ov70_022407E4: ; 0x022407E4
 	add r0, r4, #0
 	mov r1, #0x25
 	mov r2, #0x24
-	bl ov70_02238D84
+	bl Gts_SetState
 	mov r1, #0
 	add r0, r4, #0
 	add r2, r1, #0
-	bl ov70_02238E50
+	bl Gts_SetNextScreen
 	add r0, r4, #0
-	bl ov70_02238F80
+	bl Gts_DeleteWaitingIcon
 	mov r0, #3
 	pop {r4, pc}
 	.balign 4, 0
@@ -3117,13 +3117,13 @@ ov70_0224080C: ; 0x0224080C
 	add r0, r4, #0
 	mov r1, #0x25
 	mov r2, #0x24
-	bl ov70_02238D84
+	bl Gts_SetState
 	add r0, r4, #0
 	mov r1, #1
 	mov r2, #0
-	bl ov70_02238E50
+	bl Gts_SetNextScreen
 	add r0, r4, #0
-	bl ov70_02238F80
+	bl Gts_DeleteWaitingIcon
 	add r0, r4, #0
 	bl ov70_02241234
 	mov r0, #3

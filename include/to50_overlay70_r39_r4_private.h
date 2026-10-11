@@ -43,7 +43,7 @@ void ov70_02243EB8(void *, void *, void *, int);
 void ov70_02243E8C(void *, void *, void *, int, int, int);
 void Sprite_SetAnimCtrlSeq(void *, int);
 void Sprite_SetDrawFlag(void *, int);
-void ov70_02238F9C(void *, int, int);
+void Gts_SetSpritePosition(void *, int, int);
 int ov70_0224261C(void *);
 int ov70_022429B8(void *, void *);
 int ov70_02242390(void *, void *);

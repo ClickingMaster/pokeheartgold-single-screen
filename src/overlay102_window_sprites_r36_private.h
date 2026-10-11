@@ -22,10 +22,10 @@ void ToggleBgLayer(int bgId, int enable);
 void G2x_SetBlendAlpha_(u32 reg, int plane1, int plane2, int eva, int evb);
 
 void *ov102_021EA268(void *work);
-void *ov102_021E8F68(void *args);
+void *EasyChatApp_GetMenuInputStatePtr(void *args);
 void ov102_021EA270(void *work, void *out, int index, int value);
 void *ov102_021EA2B4(void *work, void *resource, int x, int y, int anim, int kind);
-u32 ov102_021E8FD8(void *args);
+u32 EasyChatApp_GetCategoryWordCount(void *args);
 void ov102_021EC11C(void *state);
 void ov102_021EC13C(void *state, u32 index, void *entry);
 int ov102_021EC37C(void *state, int plane1, int plane2, int start, int target, int frames);

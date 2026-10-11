@@ -1,7 +1,7 @@
 #pragma force_active on
 #include "global.h"
 typedef struct { u16 x, y; } Position;
-void *ov102_021E8FA8(void *, int);
+void *EasyChatApp_GetMessageString(void *, int);
 void ov102_021EAC44(void *, void *);
 void AddTextPrinterParameterizedWithColor(void *, int, void *, int, int, int, u32, void *);
 void ov102_021EAD70(void *, void *);
@@ -9,7 +9,7 @@ void ov102_021EAD98(void *, void *, void *, u32);
 void ov102_021EAC70(void *);
 void String_Delete(void *);
 u32 ov102_021EAC7C(void *, void *);
-u32 ov102_021E8F90(void *, int);
+u32 EasyChatApp_GetWord(void *, int);
 int FontID_String_GetWidth(int, void *, int);
 int ov102_021EAB30(u8 *s, void *win);
 // @fn ov102_021EAB30
@@ -20,7 +20,7 @@ int ov102_021EAB30(u8 *s, void *win) {
     u8 *writer;
     Position *pos;
     u32 icon;
-    str = ov102_021E8FA8(*(void **)(s + 4), 35);
+    str = EasyChatApp_GetMessageString(*(void **)(s + 4), 35);
     count = 0;
     y = 0;
     active = 1;
@@ -38,7 +38,7 @@ int ov102_021EAB30(u8 *s, void *win) {
             ((Position *)(writer + 0x84))->x = x + 50;
             ((Position *)(writer + 0x84))->y = y + 8;
             ov102_021EAD70(win, pos);
-            icon = ov102_021E8F90(*(void **)(s + 4), count);
+            icon = EasyChatApp_GetWord(*(void **)(s + 4), count);
             if (icon != 0xFFFF) {
                 ov102_021EAD98(s, win, pos, icon);
             }

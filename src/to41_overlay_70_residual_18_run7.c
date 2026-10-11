@@ -40,7 +40,7 @@ int ov70_0223BD04(R14Work *w) {
         }
     } else {
         ov70_0223CAC4(w, 8, 1, 0, 0xf0f);
-        ov70_02238D84(w, 0x15, 1);
+        Gts_SetState(w, 0x15, 1);
     }
     Sprite_SetDrawFlag(P(w, 0xf10), 1);
     return 3;

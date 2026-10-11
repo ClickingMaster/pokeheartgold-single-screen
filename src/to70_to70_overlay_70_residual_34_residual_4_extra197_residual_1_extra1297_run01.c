@@ -4,7 +4,7 @@ typedef struct Work { char pad0[12]; void *sprite; char gap[0x2c]; s16 type; cha
 extern struct { char pad[0x48]; u32 pressed,held; } gSystem;
 extern u8 ov70_02245DC0[],ov70_02245DC1[],ov70_02245DC2[],ov70_02245DC3[],ov70_02245E26[],ov70_02245E27[];
 extern u8 *ov70_02245E84[];
-extern void PlaySE(int),ov70_02238F9C(void*,int,int),Sprite_SetAnimCtrlSeq(void*,int);
+extern void PlaySE(int),Gts_SetSpritePosition(void*,int,int),Sprite_SetAnimCtrlSeq(void*,int);
 extern int ov70_02242164(Work*,int),ov70_02242364(Work*,int);
 int ov70_02242390(Work*,int);
 int ov70_02242390(Work*w,int offset) {
@@ -15,8 +15,8 @@ int ov70_02242390(Work*w,int offset) {
  else if(gSystem.held&0x20) w->selection=ov70_02245DC2[w->selection*4];
  else if(gSystem.held&0x10) w->selection=ov70_02245DC3[w->selection*4];
  if(old==3 && w->selection<3) w->selection=w->previous;
- if(old!=w->selection) { PlaySE(1500); if(w->selection==3) { ov70_02238F9C(w->sprite,192,136); Sprite_SetAnimCtrlSeq(w->sprite,48); }
- else { ov70_02238F9C(w->sprite,(ov70_02245E26[w->selection*2]+16)*8,ov70_02245E27[w->selection*2]*8); Sprite_SetAnimCtrlSeq(w->sprite,47); } }
+ if(old!=w->selection) { PlaySE(1500); if(w->selection==3) { Gts_SetSpritePosition(w->sprite,192,136); Sprite_SetAnimCtrlSeq(w->sprite,48); }
+ else { Gts_SetSpritePosition(w->sprite,(ov70_02245E26[w->selection*2]+16)*8,ov70_02245E27[w->selection*2]*8); Sprite_SetAnimCtrlSeq(w->sprite,47); } }
  result=ov70_02242164(w,5);
  if(result!=-1) {
  result=ov70_02242364(w,result); if(result==-1) return result;

@@ -14,7 +14,7 @@ extern const u8 ov70_02245E26[], ov70_02245E27[];
 void ov70_02242D44(void *, int, int);
 void Sprite_SetAnimCtrlSeq(void *, int);
 void Sprite_SetDrawFlag(void *, int);
-void ov70_02238F9C(void *, int, int);
+void Gts_SetSpritePosition(void *, int, int);
 void BgCellManager_StartCellMove(void *, int, int, int, int);
 int ov70_022421D0(void *, void *);
 void ov70_02241DB4(void *, int);

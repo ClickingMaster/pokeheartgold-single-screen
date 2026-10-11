@@ -3,7 +3,7 @@
 typedef struct {u32 words[9];} Template;
 typedef struct {s16 x,y;} Coord;
 extern void ov102_021EAD5C(void *,Coord *),ov102_021EA270(void *,Template *,int,int),ov102_021EB088(void *,int),Sprite_SetAnimCtrlSeq(void *,int),Sprite_SetDrawFlag(void *,int);
-extern void *ov102_021EA2B4(void *,Template *,int,int,int,int);extern int ov102_021E8F6C(void *);
+extern void *ov102_021EA2B4(void *,Template *,int,int,int,int);extern int EasyChatApp_GetType(void *);
 void ov102_021EA920(u8 *);
 void ov102_021EA920(u8 *w) {
  Template a,b;Coord pos;
@@ -15,5 +15,5 @@ void ov102_021EA920(u8 *w) {
  *(void**)(w+0x6c)=ov102_021EA2B4(*(void**)w,&a,248,64,1,1);Sprite_SetAnimCtrlSeq(*(void**)(w+0x6c),21);
  *(void**)(w+0x74)=ov102_021EA2B4(*(void**)w,&a,28,64,1,1);Sprite_SetAnimCtrlSeq(*(void**)(w+0x74),18);
  *(void**)(w+0x70)=ov102_021EA2B4(*(void**)w,&a,128,64,1,1);Sprite_SetAnimCtrlSeq(*(void**)(w+0x70),23);
- if(ov102_021E8F6C(*(void**)(w+4))!=2){Sprite_SetDrawFlag(*(void**)(w+0x6c),0);Sprite_SetDrawFlag(*(void**)(w+0x68),0);Sprite_SetDrawFlag(*(void**)(w+0x70),0);Sprite_SetDrawFlag(*(void**)(w+0x74),0);}
+ if(EasyChatApp_GetType(*(void**)(w+4))!=2){Sprite_SetDrawFlag(*(void**)(w+0x6c),0);Sprite_SetDrawFlag(*(void**)(w+0x68),0);Sprite_SetDrawFlag(*(void**)(w+0x70),0);Sprite_SetDrawFlag(*(void**)(w+0x74),0);}
 }

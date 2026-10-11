@@ -19,14 +19,14 @@ void ov70_0223ED24(Ov70Work25 *work) {
 int ov70_0223ED58(Ov70Work25 *work) {
     if (IsPaletteFadeFinished()) {
         ov70_0223E8E8(work, 9, 1, 0, 0xF0F);
-        ov70_02238D84(work, 0x10, 1);
+        Gts_SetState(work, 0x10, 1);
     }
     return 3;
 }
 
 int ov70_0223ED8C(Ov70Work25 *work) {
     if (gSystem.newKeys & PAD_BUTTON_B) {
-        ov70_02238E50(work, 5, 5);
+        Gts_SetNextScreen(work, 5, 5);
         work->state = 2;
     }
     work->state = 3;

@@ -25,7 +25,7 @@ int ov70_0223F9D4(Ov70Work *work) {
     ov70_0223FC58(work);
     ov70_0223FC30(work);
     ov70_0223FB34(work->bgConfig);
-    ov70_02238E58(work);
+    Gts_SwitchScreen(work);
     return 1;
 }
 
@@ -107,19 +107,19 @@ int ov70_0223FC68(Ov70Work *work) {
     switch (work->unk24) {
     case 7:
         ov70_02244FA4(work, work->ptrBA0, 0x18, 1, 0xf0f);
-        ov70_02238D84(work, 0x25, 2);
+        Gts_SetState(work, 0x25, 2);
         break;
     case 8:
         ov70_02244FA4(work, work->ptrBA0, 0x18, 1, 0xf0f);
-        ov70_02238D84(work, 0x25, 7);
+        Gts_SetState(work, 0x25, 7);
         break;
     case 9:
         ov70_02244FA4(work, work->ptrBA0, 0x18, 1, 0xf0f);
-        ov70_02238D84(work, 0x25, 0xc);
+        Gts_SetState(work, 0x25, 0xc);
         break;
     case 10:
         ov70_02244FA4(work, work->ptrBA0, 0x18, 1, 0xf0f);
-        ov70_02238D84(work, 0x25, 0x12);
+        Gts_SetState(work, 0x25, 0x12);
         work->unk11FC = 1;
         break;
     case 11:
@@ -135,13 +135,13 @@ int ov70_0223FC68(Ov70Work *work) {
         GF_AssertFail();
         break;
     }
-    ov70_02238F64(work);
+    Gts_CreateWaitingIcon(work);
     return 3;
 }
 
 int ov70_0223FD64(Ov70Work *work) {
     Pokemon_RemoveCapsule(work->unk13c);
-    ov70_02237F64(work->unk13c);
+    GtsServer_RequestPost(work->unk13c);
     work->state2c = 3;
     work->timer1604 = 0;
     ov70_02240D44(work, 4, 6);
@@ -149,8 +149,8 @@ int ov70_0223FD64(Ov70Work *work) {
 }
 
 int ov70_0223FD98(Ov70Work *work) {
-    if (ov70_02237F38()) {
-        int result = ov70_02237F58();
+    if (GtsServer_IsRequestDone()) {
+        int result = GtsServer_GetResult();
         work->timer1604 = 0;
         switch (result + 15) {
         case 15:
@@ -197,7 +197,7 @@ int ov70_0223FD98(Ov70Work *work) {
 }
 
 int ov70_0223FE40(Ov70Work *work) {
-    ov70_02237FB4(work);
+    GtsServer_RequestPostFinish(work);
     work->state2c = 5;
     work->timer1604 = 0;
     work->value36 = 1;
@@ -205,8 +205,8 @@ int ov70_0223FE40(Ov70Work *work) {
 }
 
 int ov70_0223FE60(Ov70Work *work) {
-    if (ov70_02237F38()) {
-        int result = ov70_02237F58();
+    if (GtsServer_IsRequestDone()) {
+        int result = GtsServer_GetResult();
         work->timer1604 = 0;
         switch (result + 15) {
         case 15:
@@ -239,7 +239,7 @@ int ov70_0223FE60(Ov70Work *work) {
 }
 
 int ov70_0223FEE4(Ov70Work *work) {
-    ov70_02238008(work->unk13c);
+    GtsServer_RequestGet(work->unk13c);
     work->state2c = 8;
     work->timer1604 = 0;
     ov70_02240D44(work, 9, 0xb);
@@ -247,8 +247,8 @@ int ov70_0223FEE4(Ov70Work *work) {
 }
 
 int ov70_0223FF10(Ov70Work *work) {
-    if (ov70_02237F38()) {
-        int result = ov70_02237F58();
+    if (GtsServer_IsRequestDone()) {
+        int result = GtsServer_GetResult();
         work->timer1604 = 0;
         switch (result + 15) {
         case 15: {
@@ -291,15 +291,15 @@ int ov70_0223FF10(Ov70Work *work) {
 }
 
 int ov70_0223FFCC(Ov70Work *work) {
-    ov70_022380EC(work);
+    GtsServer_RequestReturn(work);
     work->state2c = 0xa;
     work->timer1604 = 0;
     return 3;
 }
 
 int ov70_0223FFE8(Ov70Work *work) {
-    if (ov70_02237F38()) {
-        int result = ov70_02237F58() + 15;
+    if (GtsServer_IsRequestDone()) {
+        int result = GtsServer_GetResult() + 15;
         work->timer1604 = 0;
         switch (result) {
         case 15:
@@ -334,7 +334,7 @@ int ov70_0224006C(Ov70Work *work) {
 
     Pokemon_RemoveCapsule(work->unk13c);
     entry = (u32 *)((u8 *)work + 0x124 * work->unk12c);
-    ov70_02238208(entry[0xda], work->unk13c, work->unkA5C);
+    GtsServer_RequestExchange(entry[0xda], work->unk13c, work->unkA5C);
     ov70_02240D44(work, 0xe, 0x10);
     work->state2c = 0xd;
     work->timer1604 = 0;
@@ -342,8 +342,8 @@ int ov70_0224006C(Ov70Work *work) {
 }
 
 int ov70_022400BC(Ov70Work *work) {
-    if (ov70_02237F38()) {
-        int result = ov70_02237F58();
+    if (GtsServer_IsRequestDone()) {
+        int result = GtsServer_GetResult();
         work->timer1604 = 0;
         switch (result + 15) {
         case 15:
@@ -390,15 +390,15 @@ int ov70_022400BC(Ov70Work *work) {
 }
 
 int ov70_02240180(Ov70Work *work) {
-    ov70_0223826C(work);
+    GtsServer_RequestExchangeFinish(work);
     work->state2c = 0xf;
     work->timer1604 = 0;
     return 3;
 }
 
 int ov70_0224019C(Ov70Work *work) {
-    if (ov70_02237F38()) {
-        int result = ov70_02237F58() + 15;
+    if (GtsServer_IsRequestDone()) {
+        int result = GtsServer_GetResult() + 15;
         work->timer1604 = 0;
         switch (result) {
         case 15:
@@ -427,7 +427,7 @@ int ov70_0224019C(Ov70Work *work) {
 }
 
 int ov70_02240220(Ov70Work *work) {
-    ov70_02238058(work->unk13c);
+    GtsServer_RequestResult(work->unk13c);
     work->state2c = 0x19;
     work->timer1604 = 0;
     return 3;

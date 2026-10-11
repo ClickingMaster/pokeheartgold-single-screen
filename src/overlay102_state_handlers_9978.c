@@ -17,7 +17,7 @@ void ov102_021E9978(void *unused, Ov102StateR16 *s) {
         int a = ov102_021EBA5C(w->unk1E8);
         int b = ov102_021EA754(w->unk1E0);
         if (a && b) {
-            ov102_021EB9C0(w->unk1E8, ov102_021E8FD0(w->unk18));
+            ov102_021EB9C0(w->unk1E8, EasyChatApp_GetCategory(w->unk18));
             ov102_021EB98C(w->unk1E8, 1);
             ov102_021E94A4(s);
         }
@@ -66,7 +66,7 @@ void ov102_021E9A8C(void *unused, Ov102StateR16 *s) {
         break;
     case 3:
         if (ov102_021EB654(w->unk1E4)) {
-            ov102_021EB9C0(w->unk1E8, ov102_021E8FD0(w->unk18));
+            ov102_021EB9C0(w->unk1E8, EasyChatApp_GetCategory(w->unk18));
             ov102_021EB98C(w->unk1E8, 1);
             ov102_021E94A4(s);
         }
@@ -117,7 +117,7 @@ void ov102_021E9BD0(void *unused, Ov102StateR16 *s) {
         break;
     case 2:
         if (ov102_021EBE80(w->unk1EC)) {
-            ov102_021EBF38(w->unk1EC, ov102_021E9028(w->unk18));
+            ov102_021EBF38(w->unk1EC, EasyChatApp_GetWordListCursor(w->unk18));
             ov102_021EBEF4(w->unk1EC, 1);
             ov102_021EC290(w->unk1F0, 1);
             ov102_021E94A4(s);
@@ -151,7 +151,7 @@ void ov102_021E9C70(void *unused, Ov102StateR16 *s) {
         break;
     case 4:
         if (ov102_021EBBC4(w->unk1E8) && ov102_021EB654(w->unk1E4)) {
-            ov102_021EB9C0(w->unk1E8, ov102_021E8FD0(w->unk18));
+            ov102_021EB9C0(w->unk1E8, EasyChatApp_GetCategory(w->unk18));
             ov102_021EB98C(w->unk1E8, 1);
             ov102_021E94A4(s);
         }
@@ -237,12 +237,12 @@ void ov102_021E9E60(void *unused, Ov102StateR16 *s) {
 
 void ov102_021E9F38(void *unused, Ov102StateR16 *s) {
     Ov102WorkR16 *w = s->work;
-    u8 value = ov102_021E8FC8(w->unk18);
+    u8 value = EasyChatApp_GetMenuCursor(w->unk18);
     if (value == 0) {
         w->unk1F4 = 0;
         ((void (*)(void *))ov102_021EB524)(w->unk1E4);
         ov102_021EAF5C(w->unk1E0, 1);
-        ov102_021EAFF0(w->unk1E0, ov102_021E8FC0(w->unk18));
+        ov102_021EAFF0(w->unk1E0, EasyChatApp_GetWordSlot(w->unk18));
     } else {
         w->unk1F4 = 1;
         ov102_021EAF5C(w->unk1E0, 0);

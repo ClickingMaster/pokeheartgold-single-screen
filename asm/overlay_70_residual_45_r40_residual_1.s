@@ -2114,63 +2114,63 @@
 	.public _022451BA
 	.public _022451E4
 	.public _022451E8
-	.public _022451EC
-	.public _02246800
-	.public ov70_022378C0
-	.public ov70_022378DC
-	.public ov70_02237F2C
-	.public ov70_02237F38
-	.public ov70_02237F58
-	.public ov70_02237F64
-	.public ov70_02237FB4
-	.public ov70_02238008
-	.public ov70_02238058
-	.public ov70_022380A8
-	.public ov70_022380EC
-	.public ov70_02238130
-	.public ov70_022381A4
-	.public ov70_02238208
-	.public ov70_0223826C
-	.public ov70_022382C0
-	.public ov70_02238304
-	.public ov70_02238360
-	.public ov70_02238398
-	.public ov70_02238430
-	.public ov70_022385C0
-	.public ov70_022386F4
-	.public ov70_022387AC
-	.public ov70_022387F8
-	.public ov70_02238818
+	.public sGtsListMenuTemplate
+	.public gGtsServer
+	.public GtsServer_Init
+	.public GtsServer_Update
+	.public GtsServer_Exit
+	.public GtsServer_IsRequestDone
+	.public GtsServer_GetResult
+	.public GtsServer_RequestPost
+	.public GtsServer_RequestPostFinish
+	.public GtsServer_RequestGet
+	.public GtsServer_RequestResult
+	.public GtsServer_RequestDelete
+	.public GtsServer_RequestReturn
+	.public GtsServer_RequestSearch
+	.public GtsServer_RequestSearchEx
+	.public GtsServer_RequestExchange
+	.public GtsServer_RequestExchangeFinish
+	.public GtsServer_RequestInfo
+	.public GtsServer_RequestSetProfile
+	.public GtsServer_StartRequest
+	.public GtsServer_GetErrorResult
+	.public Gts_Init
+	.public Gts_Main
+	.public Gts_Exit
+	.public Gts_VBlankCB
+	.public Gts_SetGfxBanks
+	.public Gts_InitData
 	.public ov70_0223887C
-	.public ov70_02238880
-	.public ov70_022388D0
-	.public ov70_02238900
-	.public ov70_02238B54
-	.public ov70_02238B80
-	.public ov70_02238C14
-	.public ov70_02238C2C
-	.public ov70_02238C8C
-	.public ov70_02238CAC
-	.public ov70_02238D38
-	.public ov70_02238D60
-	.public ov70_02238D84
-	.public ov70_02238D8C
-	.public ov70_02238DF8
-	.public ov70_02238E20
+	.public Gts_SetupWindow0
+	.public Gts_InitObjTransfer
+	.public Gts_InitSpriteResources
+	.public Gts_InitSpriteTemplate
+	.public Gts_InitSpriteResourcesHeaders
+	.public Gts_CreateYesNoPrompt
+	.public Gts_CreateYesNoPromptOnBg
+	.public Gts_HandleYesNoPrompt
+	.public Gts_CreateListMenu
+	.public Gts_ListMenuCallback
+	.public Gts_DestroyListMenu
+	.public Gts_SetState
+	.public Gts_SetSpritePositionRounded
+	.public Gts_Alloc
+	.public Gts_Free
 	.public ov70_02238E44
-	.public ov70_02238E50
-	.public ov70_02238E58
-	.public ov70_02238E64
-	.public ov70_02238E70
-	.public ov70_02238E98
-	.public ov70_02238F04
-	.public ov70_02238F10
-	.public ov70_02238F24
-	.public ov70_02238F64
-	.public ov70_02238F80
-	.public ov70_02238F9C
-	.public ov70_02238FB4
-	.public ov70_02238FE0
+	.public Gts_SetNextScreen
+	.public Gts_SwitchScreen
+	.public Gts_GetTextFrameDelay
+	.public Gts_InitGraphics
+	.public Gts_FreeGraphics
+	.public Gts_DecrementTimer
+	.public Gts_StartCountingBoxMons
+	.public Gts_CountBoxMonsStep
+	.public Gts_CreateWaitingIcon
+	.public Gts_DeleteWaitingIcon
+	.public Gts_SetSpritePosition
+	.public Gts_DimScreen
+	.public Gts_ClearDim
 	.public ov70_02238FF4
 	.public ov70_022390DC
 	.public ov70_022390FC
@@ -2512,12 +2512,12 @@
 	.public ov70_022413AC
 	.public ov70_02241468
 	.public ov70_02241494
-	.public ov70_022414A0
-	.public ov70_02241648
-	.public ov70_02241808
-	.public ov70_0224182C
-	.public ov70_02241868
-	.public ov70_022418A4
+	.public GtsTrade_Init
+	.public GtsTrade_Main
+	.public GtsTrade_Exit
+	.public GtsTrade_CreatePartnerProfile
+	.public GtsTrade_GetReceivedMon
+	.public GtsTrade_StoreReceivedMon
 	.public ov70_0224190C
 	.public ov70_02241DB4
 	.public ov70_02242014
@@ -2635,9 +2635,9 @@
 	.public ov70_02245124
 	.public ov70_0224512C
 	.public ov70_022451A8
-	.public ov70_022451F8
-	.public ov70_02245208
-	.public ov70_02245218
+	.public sGtsGraphicsModes
+	.public sGtsObjCharTransferTemplate
+	.public sGtsGraphicsBanks
 	.public ov70_02245240
 	.public ov70_02245242
 	.public ov70_0224524C
@@ -2703,7 +2703,7 @@
 	.public ov70_02245D0C
 	.public ov70_02245D26
 	.public ov70_02245D48
-	.public ov70_02245D50
+	.public sGtsTradeSequenceTemplate
 	.public ov70_02245D60
 	.public ov70_02245D66
 	.public ov70_02245D67
@@ -2750,18 +2750,18 @@
 	.public ov70_0224603C
 	.public ov70_02246058
 	.public ov70_02246074
-	.public ov70_022460A0
-	.public ov70_022460EC
-	.public ov70_0224613C
-	.public ov70_02246184
-	.public ov70_022461D0
-	.public ov70_0224621C
-	.public ov70_02246268
-	.public ov70_022462B4
-	.public ov70_02246304
-	.public ov70_02246358
-	.public ov70_022463A4
-	.public ov70_022463EC
+	.public sGtsPostUrl
+	.public sGtsPostFinishUrl
+	.public sGtsGetUrl
+	.public sGtsResultUrl
+	.public sGtsDeleteUrl
+	.public sGtsReturnUrl
+	.public sGtsSearchUrl
+	.public sGtsExchangeUrl
+	.public sGtsExchangeFinishUrl
+	.public sGtsInfoUrl
+	.public sGtsSetProfileUrl
+	.public sGtsScreens
 	.public ov70_02246464
 	.public ov70_0224649C
 	.public ov70_022464A8
@@ -2778,28 +2778,28 @@
 	.public ov70_02246658
 	.public ov70_022466F8
 	.public ov70_02246780
-	.public ov70_0224680C
-	.public ov70_02246814
+	.public gGtsServerFriendKey
+	.public gGtsServerRequest
 	.public ov70_02246900
 	.public ov70_02246920
-	.public ov70_0224693C
-	.public ov70_02246944
+	.public gGtsServerShortResponse
+	.public gGtsGlobals
 	.include "overlay_70.inc"
 	.include "global.inc"
 
 	.text
-	.public ov70_02237F2C
-	.public ov70_02237F58
+	.public GtsServer_Exit
+	.public GtsServer_GetResult
 	.public ov70_0223887C
-	.public ov70_02238D60
-	.public ov70_02238D84
+	.public Gts_DestroyListMenu
+	.public Gts_SetState
 	.public ov70_02238E44
-	.public ov70_02238E50
-	.public ov70_02238E58
-	.public ov70_02238E64
-	.public ov70_02238F04
-	.public ov70_02238F10
-	.public ov70_02238FE0
+	.public Gts_SetNextScreen
+	.public Gts_SwitchScreen
+	.public Gts_GetTextFrameDelay
+	.public Gts_DecrementTimer
+	.public Gts_StartCountingBoxMons
+	.public Gts_ClearDim
 	.public ov70_022392BC
 	.public ov70_022392E0
 	.public ov70_022394A8
@@ -2850,19 +2850,19 @@
 	.public ov70_022451A8
 	.rodata
 
-_022451EC:
+sGtsListMenuTemplate:
 	.byte 0x02, 0x00, 0x00, 0x0A
 	.byte 0x00, 0x00, 0x80, 0x01, 0xBC, 0x01, 0x3C, 0x00
 
-ov70_022451F8: ; 0x022451F8
+sGtsGraphicsModes: ; 0x022451F8
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov70_02245208: ; 0x02245208
+sGtsObjCharTransferTemplate: ; 0x02245208
 	.byte 0x14, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
 	.byte 0x00, 0x08, 0x00, 0x00, 0x3D, 0x00, 0x00, 0x00
 
-ov70_02245218: ; 0x02245218
+sGtsGraphicsBanks: ; 0x02245218
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x60, 0x00, 0x00, 0x00
@@ -3223,7 +3223,7 @@ ov70_02245D26: ; 0x02245D26
 ov70_02245D48: ; 0x02245D48
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x00, 0x00, 0x00
 
-ov70_02245D50: ; 0x02245D50
+sGtsTradeSequenceTemplate: ; 0x02245D50
 	.word TradeSequence_Init, TradeSequence_Main, TradeSequence_Exit, FS_OVERLAY_ID(OVY_71)
 
 ov70_02245D60: ; 0x02245D60
@@ -3409,51 +3409,51 @@ ov70_02246074: ; 0x02246074
 	.data
 
 	.balign 4, 0
-ov70_022460A0:
+sGtsPostUrl:
 	.asciz "http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/post.asp"
 
 	.balign 4, 0
-ov70_022460EC: ; 0x022460EC
+sGtsPostFinishUrl: ; 0x022460EC
 	.asciz "http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/post_finish.asp"
 
 	.balign 4, 0
-ov70_0224613C: ; 0x0224613C
+sGtsGetUrl: ; 0x0224613C
 	.asciz "http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/get.asp"
 
 	.balign 4, 0
-ov70_02246184: ; 0x02246184
+sGtsResultUrl: ; 0x02246184
 	.asciz "http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/result.asp"
 
 	.balign 4, 0
-ov70_022461D0: ; 0x022461D0
+sGtsDeleteUrl: ; 0x022461D0
 	.asciz "http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/delete.asp"
 
 	.balign 4, 0
-ov70_0224621C: ; 0x0224621C
+sGtsReturnUrl: ; 0x0224621C
 	.asciz "http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/return.asp"
 
 	.balign 4, 0
-ov70_02246268: ; 0x02246268
+sGtsSearchUrl: ; 0x02246268
 	.asciz "http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/search.asp"
 
 	.balign 4, 0
-ov70_022462B4: ; 0x022462B4
+sGtsExchangeUrl: ; 0x022462B4
 	.asciz "http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/exchange.asp"
 
 	.balign 4, 0
-ov70_02246304: ; 0x02246304
+sGtsExchangeFinishUrl: ; 0x02246304
 	.asciz "http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/exchange_finish.asp"
 
 	.balign 4, 0
-ov70_02246358: ; 0x02246358
+sGtsInfoUrl: ; 0x02246358
 	.asciz "http://gamestats2.gs.nintendowifi.net/pokemondpds/worldexchange/info.asp"
 
 	.balign 4, 0
-ov70_022463A4: ; 0x022463A4
+sGtsSetProfileUrl: ; 0x022463A4
 	.asciz "http://gamestats2.gs.nintendowifi.net/pokemondpds/common/setProfile.asp"
 
 	.balign 4, 0
-ov70_022463EC: ; 0x022463EC
+sGtsScreens: ; 0x022463EC
 	.word ov70_02244038, ov70_02244124, ov70_02244154
 	.word ov70_02238FF4, ov70_022390DC, ov70_022390FC
 	.word ov70_02239D8C, ov70_02239E68, ov70_02239E7C
@@ -3463,7 +3463,7 @@ ov70_022463EC: ; 0x022463EC
 	.word ov70_0223E78C, ov70_0223E884, ov70_0223E8A4
 	.word ov70_0223F96C, ov70_0223F9B4, ov70_0223F9D4
 	.word ov70_022413AC, ov70_02241468, ov70_02241494
-	.word ov70_022414A0, ov70_02241648, ov70_02241808
+	.word GtsTrade_Init, GtsTrade_Main, GtsTrade_Exit
 
 ov70_02246464: ; 0x02246464
 	.word ov70_02239658
@@ -3709,13 +3709,13 @@ ov70_02246780: ; 0x02246780
 
 	.bss
 
-_02246800:
+gGtsServer:
 	.space 0xC
 
-ov70_0224680C: ; 0x0224680C
+gGtsServerFriendKey: ; 0x0224680C
 	.space 0x8
 
-ov70_02246814: ; 0x02246814
+gGtsServerRequest: ; 0x02246814
 	.space 0xEC
 
 ov70_02246900: ; 0x02246900
@@ -3724,8 +3724,8 @@ ov70_02246900: ; 0x02246900
 ov70_02246920: ; 0x02246920
 	.space 0x1C
 
-ov70_0224693C: ; 0x0224693C
+gGtsServerShortResponse: ; 0x0224693C
 	.space 0x8
 
-ov70_02246944: ; 0x02246944
+gGtsGlobals: ; 0x02246944
 	.space 0x1c

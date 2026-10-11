@@ -14,7 +14,7 @@ typedef struct Entry73 {
     void *unk04;
     void (*func)(Args73 *args);
 } Entry73;
-extern const Entry73 ov73_021EA744[];
+extern const Entry73 sRecordMixingHandlers[];
 int Comm_GetLocalNetId(void);
 BOOL sub_02034818(int idx);
 void *sub_020270C4(SaveData *saveData);
@@ -47,16 +47,16 @@ void RecordMixing_MergeReceivedRecords(SaveData *saveData, u8 (*buffer)[0xBC0]) 
     offsets[1] = 0;
     offsets[2] = 0;
     for (i = 0; i < 2; i++) {
-        offsets[0] += ov73_021EA744[i].getSize(saveData);
+        offsets[0] += sRecordMixingHandlers[i].getSize(saveData);
     }
     for (i = 0; i < 3; i++) {
-        offsets[1] += ov73_021EA744[i].getSize(saveData);
+        offsets[1] += sRecordMixingHandlers[i].getSize(saveData);
     }
     for (i = 0; i < 4; i++) {
-        offsets[2] += ov73_021EA744[i].getSize(saveData);
+        offsets[2] += sRecordMixingHandlers[i].getSize(saveData);
     }
     for (i = 0; (u32)i < 10; i++) {
-        size = ov73_021EA744[i].getSize(saveData);
+        size = sRecordMixingHandlers[i].getSize(saveData);
         GF_ASSERT(remaining > size);
         for (j = 0; j < 5; j++) {
             if (sub_02034818(j)) {
@@ -79,8 +79,8 @@ void RecordMixing_MergeReceivedRecords(SaveData *saveData, u8 (*buffer)[0xBC0]) 
             }
             break;
         }
-        if (ov73_021EA744[i].func != NULL) {
-            ov73_021EA744[i].func(&args);
+        if (sRecordMixingHandlers[i].func != NULL) {
+            sRecordMixingHandlers[i].func(&args);
         }
         offset += size;
         remaining -= size;

@@ -5750,32 +5750,9 @@ Overlay OVY_69
 Overlay OVY_70
 {
     After OVY_7
-    Object src/to47_overlay_70_entry.o
-    Object src/to52_overlay70_entry_state_machine.o
+    Object src/gts_server.o
     Object asm/overlay_70_to52_publics_only.o
-    Object src/overlay70_sol_partial_1.o
-    Object src/overlay70_state_ready.o
-    Object src/overlay70_sol_partial_2.o
-    Object src/overlay70_pokegear_map_ui_run1.o
-    Object src/op90_overlay_70_residual_3_residual_2_r01.o
-    Object src/overlay70_pokegear_map_ui_run2.o
-    Object src/to70_overlay_70_residual_3_residual_3_extra825_run01.o
-    Object src/overlay70_pokegear_map_ui_run3.o
-    Object src/op90_overlay_70_residual_3_residual_4_r01.o
-    Object src/overlay70_pokegear_map_ui_run4.o
-    Object src/to90_extra2381_run01.o
-    Object src/overlay70_pokegear_map_ui_run5.o
-    Object src/to70_overlay_70_residual_3_residual_6_extra980_run01.o
-    Object src/overlay70_pokegear_map_ui_run6.o
-    Object src/overlay70_sol_partial_3.o
-    Object src/overlay70_sprite_resources_4.o
-    Object src/overlay70_sol_partial_4.o
-    Object src/to70_overlay_70_residual_5_extra466_run01.o
-    Object src/overlay70_sol_partial_5.o
-    Object src/to70_overlay_70_residual_6_extra623_run01.o
-    Object src/overlay70_sol_partial_6.o
-    Object src/overlay70_box_progress_helpers.o
-    Object src/overlay70_sol_partial_7.o
+    Object src/gts.o
     Object src/overlay70_graphics_lifecycle.o
     Object src/overlay70_sol_partial_8.o
     Object src/to52_r5_overlay70_ui_setup_r9.o
@@ -5906,9 +5883,7 @@ Overlay OVY_70
     Object src/overlay70_sol_partial_32.o
     Object src/overlay70_gfx_helpers_1.o
     Object src/overlay70_sol_partial_33.o
-    Object src/to70_overlay_70_residual_34_residual_1_extra55_run01.o
-    Object src/to80_extra1609_run01.o
-    Object src/ov70_wave34_menu_1.o
+    Object src/gts_trade.o
     Object src/to50_overlay70_window_setup_modes.o
     Object src/overlay70_window_cleanup_r46.o
     Object src/ov70_wave34_menu_2.o
@@ -6142,14 +6117,7 @@ Overlay OVY_73
     Object src/overlay73_helpers_36.o
     Object src/to70_to58_r3_ov73_37_prefix_extra908_run01.o
     Object src/to58_r3_ov73_37.o
-    Object src/overlay73_helpers_37.o
-    Object src/to58_r3_ov73_38.o
-    Object src/overlay73_helpers_38.o
-    Object src/to58_r3_ov73_39.o
-    Object src/overlay73_helpers_39.o
-    Object src/to58_r3_ov73_40.o
-    Object src/overlay73_helpers_40.o
-    Object src/to50_overlay73_resource_copy.o
+    Object src/record_mixing_exchange.o
     Object asm/op90_overlay_73_residual_41_remaining_anchor.o
     Object src/op90_overlay_73_residual_41_remaining_r01.o
 }
@@ -8056,36 +8024,7 @@ Overlay pokegear_app
 Overlay OVY_102
 {
     After pokegear
-    Object src/to70_overlay_102_extra274_run01.o
-    Object src/overlay102_helpers_1.o
-    Object src/to70_overlay_102_residual_2_to45_residual_extra478_run01.o
-    Object src/to45_overlay102_message_cursor_r2.o
-    Object src/overlay102_helpers_2.o
-    Object src/to45_overlay102_easy_chat_gate_r3.o
-    Object src/overlay102_helpers_3.o
-    Object src/overlay102_easy_chat_input_r4_run1.o
-    Object src/to90_extra1987_run01.o
-    Object src/overlay102_easy_chat_input_r4_run2.o
-    Object src/to90_extra2358_run01.o
-    Object src/overlay102_easy_chat_input_r4_run3.o
-    Object src/to70_overlay_102_residual_4_part3_extra756_run01.o
-    Object src/overlay102_easy_chat_input_r4_run4.o
-    Object src/overlay102_helpers_4.o
-    Object src/to70_overlay_102_residual_5_extra934_run01.o
-    Object src/overlay102_helpers_5.o
-    Object src/to45_overlay102_navigation_r6.o
-    Object src/overlay102_helpers_6.o
-    Object src/to47_overlay102_input_dispatch_r7.o
-    Object src/overlay102_helpers_7.o
-    Object src/to70_overlay_102_residual_8_extra381_run01.o
-    Object src/r40_overlay_102_residual_8_run1.o
-    Object src/to70_overlay_102_residual_8_r40_residual_2_extra463_run01.o
-    Object src/overlay102_helpers_8.o
-    Object src/to70_overlay_102_residual_9_remaining_extra414_run01.o
-    Object src/to50_overlay102_state_callback_r9.o
-    Object src/overlay102_helpers_9.o
-    Object src/to70_overlay_102_residual_10_extra923_run01.o
-    Object src/overlay102_helpers_10.o
+    Object src/application/easy_chat_app.o
     Object src/to45_overlay102_r11_lifecycle_exact.o
     Object src/overlay102_helpers_11.o
     Object src/to90_extra1986_run01.o

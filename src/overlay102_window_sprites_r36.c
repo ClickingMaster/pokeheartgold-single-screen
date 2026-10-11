@@ -18,7 +18,7 @@ void *ov102_021EBC34(void *work, void *args, void *fieldSystem) {
     PTR(state, 0x30) = NULL;
     PTR(state, 0x34) = NULL;
     PTR(state, 0x38) = NULL;
-    PTR(state, 0x94) = ov102_021E8F68(PTR(state, 4));
+    PTR(state, 0x94) = EasyChatApp_GetMenuInputStatePtr(PTR(state, 4));
     return state;
 }
 
@@ -80,7 +80,7 @@ void ov102_021EBDEC(void *arg) {
 
     FillWindowPixelBuffer(state + 0x10, 0);
     ov102_021EC11C(state);
-    count = ov102_021E8FD8(PTR(state, 4));
+    count = EasyChatApp_GetCategoryWordCount(PTR(state, 4));
     if (count > 10) {
         count = 10;
     }

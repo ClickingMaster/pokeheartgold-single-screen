@@ -25,7 +25,7 @@
 #include "mail_misc.h"
 #include "naming_screen.h"
 #include "overlay_02.h"
-#include "overlay_102.h"
+#include "easy_chat_app.h"
 #include "mailbox_app.h"
 #include "overlay_104.h"
 #include "ship_departure_cutscene.h"
@@ -48,7 +48,7 @@
 #include "battle_room_results.h"
 #include "move_relearner_app.h"
 #include "geonet_globe_app.h"
-#include "overlay_70.h"
+#include "gts.h"
 #include "trade_sequence.h"
 #include "nintendo_wfc_connect.h"
 #include "record_mixing.h"
@@ -1169,10 +1169,10 @@ void TrainerCardSignature_LaunchApp(FieldSystem *fieldSystem) {
 }
 
 void sub_0203F844(FieldSystem *fieldSystem, u16 a1) {
-    static const OverlayManagerTemplate _020FA264 = { ov70_02238430, ov70_022385C0, ov70_022386F4, FS_OVERLAY_ID(OVY_70) };
+    static const OverlayManagerTemplate _020FA264 = { Gts_Init, Gts_Main, Gts_Exit, FS_OVERLAY_ID(OVY_70) };
     OverlayManagerTemplate template = _020FA264;
 
-    UnkStruct_0203F844 *args = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(UnkStruct_0203F844));
+    GtsArgs *args = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(GtsArgs));
     args->unk0 = sub_0202DB34(fieldSystem->saveData);
     args->sysInfo = Save_SysInfo_Get(fieldSystem->saveData);
     args->party = (Party *)SaveArray_Get(fieldSystem->saveData, SAVE_PARTY);

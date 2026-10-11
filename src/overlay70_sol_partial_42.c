@@ -12,7 +12,7 @@
 int ov70_02244834(Ov70State *state) {
     sub_0203946C(state);
     ov00_021EC8D8();
-    ov70_02238E50(state, 0, 0);
+    Gts_SetNextScreen(state, 0, 0);
     state->state = 19;
     return 3;
 }
