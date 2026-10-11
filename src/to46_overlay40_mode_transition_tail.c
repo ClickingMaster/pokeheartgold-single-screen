@@ -28,7 +28,7 @@ int ov40_02235434(void *p) {
             if (S32(w, 0xC) == 0) {
                 if (PTR(w, 0x228) != NULL) {
                     AccessoryPortrait_Destroy();
-                    ov40_0222BC54(p);
+                    VsRecorder_ResetBg2(p);
                     SetBgPriority(2, 0);
                     PTR(w, 0x228) = NULL;
                     ov40_02235994();
@@ -115,7 +115,7 @@ int ov40_02235644(void *p) {
             if (S32(w, 0xC) == 0) {
                 if (PTR(w, 0x228) != NULL) {
                     AccessoryPortrait_Destroy();
-                    ov40_0222BC54(p);
+                    VsRecorder_ResetBg2(p);
                     SetBgPriority(2, 0);
                     PTR(w, 0x228) = NULL;
                     ov40_02235994();

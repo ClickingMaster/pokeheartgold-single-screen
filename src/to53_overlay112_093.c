@@ -32,9 +32,9 @@ extern void PokewalkerApp_RemoveWindowBank(Ov112State *, int);
 extern void PokewalkerApp_PrintExit(Ov112State *, int);
 extern void ov112_021ED2F4(Ov112State *);
 extern void BgClearTilemapBufferAndCommit(void *, int);
-void ov112_021EC460(Ov112State *, int, int, int);
-extern int (*ov112_021FF730[])(Ov112State *);
-extern int (*ov112_021FF740[])(Ov112State *);
+void PokewalkerApp_StartMessage(Ov112State *, int, int, int);
+extern int (*sMode1States[])(Ov112State *);
+extern int (*sEraseRecordsStates[])(Ov112State *);
 extern int (*ov112_021FF7CC[])(Ov112State *);
 
 #define W(p, o) (*(int *)((p)->raw + (o)))

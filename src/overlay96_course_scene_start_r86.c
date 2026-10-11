@@ -36,8 +36,8 @@ int ov96_02204E58(void *course) {
     OamManager_Free();
     ObjCharTransfer_Destroy();
     ObjPlttTransfer_Destroy();
-    ov96_02208B2C(PTR(p, 0x36C));
-    ov96_02207D64(PTR(p, 0x370));
+    PokeathlonPennantCaptureCpu_Delete(PTR(p, 0x36C));
+    PokeathlonPennantCaptureDisplay_Delete(PTR(p, 0x370));
     FontID_Release(4);
     PokeathlonCourse_FreePtr4HeapAlloc(course);
     gSystem[0x69] = 0;

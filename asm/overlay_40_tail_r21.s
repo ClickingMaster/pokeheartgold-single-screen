@@ -3315,14 +3315,14 @@
 	.public _02244C40
 	.public _02244C44
 	.public _02245CC0
-	.public ov40_0222B6E0
-	.public ov40_0222B934
-	.public ov40_0222BA90
-	.public ov40_0222BC44
-	.public ov40_0222BC54
-	.public ov40_0222BC68
-	.public ov40_0222BD04
-	.public ov40_0222BD30
+	.public VsRecorder_InitResources
+	.public VsRecorder_FreeResources
+	.public VsRecorder_InitBgLayers
+	.public VsRecorder_SetScreensFlipped
+	.public VsRecorder_ResetBg2
+	.public VsRecorder_InitSpriteSystem
+	.public VsRecorder_VBlankCB
+	.public VsRecorder_Main
 	.public ov40_0222BF64
 	.public ov40_0222BF80
 	.public ov40_0222BF8C
@@ -4007,8 +4007,8 @@
 
 	.text
 
-	thumb_func_start ov40_0222BD04
-ov40_0222BD04: ; 0x0222BD04
+	thumb_func_start VsRecorder_VBlankCB
+VsRecorder_VBlankCB: ; 0x0222BD04
 	push {r4, lr}
 	add r4, r0, #0
 	bl GF_RunVramTransferTasks
@@ -4026,11 +4026,11 @@ ov40_0222BD04: ; 0x0222BD04
 	nop
 _0222BD28: .word 0x027E0000
 _0222BD2C: .word 0x00003FF8
-	thumb_func_end ov40_0222BD04
+	thumb_func_end VsRecorder_VBlankCB
 
 
-	thumb_func_start ov40_0222BD30
-ov40_0222BD30: ; 0x0222BD30
+	thumb_func_start VsRecorder_Main
+VsRecorder_Main: ; 0x0222BD30
 	push {r4, r5, r6, lr}
 	add r5, r1, #0
 	ldr r1, [r5]
@@ -4299,4 +4299,4 @@ _0222BF54: .word ov40_02245B98
 _0222BF58: .word ov40_02245B44
 _0222BF5C: .word ov40_02245B30
 _0222BF60: .word ov40_02245CA8
-	thumb_func_end ov40_0222BD30
+	thumb_func_end VsRecorder_Main

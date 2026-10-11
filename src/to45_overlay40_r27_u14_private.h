@@ -23,7 +23,7 @@ void *Save_FashionData_Get(void *);
 void SetBgPriority(int, int);
 void Thunk_G3X_Reset(void);
 void *memset(void *, int, u32);
-void ov40_0222BC44(int);
+void VsRecorder_SetScreensFlipped(int);
 void ov40_0222BF64(void *, int, int, u32);
 void ov40_0222BF80(void *, int);
 void ov40_0222D874(void *);

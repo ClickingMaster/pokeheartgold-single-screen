@@ -57,7 +57,7 @@
 #include "unk_02035900.h"
 #include "field_interaction.h"
 #include "unk_02056D7C.h"
-#include "unk_02058034.h"
+#include "communication_club_link.h"
 #include "unk_02066EDC.h"
 #include "unk_0206D494.h"
 #include "unk_02092BE8.h"

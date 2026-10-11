@@ -15,7 +15,6 @@ typedef struct BagWorkRaw {
     u8 raw[0x900];
 } BagWorkRaw;
 
-extern int TypeIcon_GetPalette(u32);
 extern int MoveCategoryIcon_GetCharFile(u32);
 extern u32 MoveCategoryIcon_GetPalette(u32);
 extern NarcId MoveCategoryIcon_GetNarc(void);

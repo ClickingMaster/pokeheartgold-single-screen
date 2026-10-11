@@ -193,14 +193,14 @@
 	.public ov96_022043AC
 	.public ov96_022043B8
 	.public ov96_02204DE8
-	.public ov96_02206368
-	.public ov96_02207400
-	.public ov96_022077F4
+	.public PokeathlonPennantCapture_TickFreezeTimer
+	.public PokeathlonPennantCapture_AddPoint2D
+	.public PokeathlonPennantCapture_ResetPennantSpots
 	.public ov96_02207BD4
-	.public ov96_02207BD8
-	.public ov96_02208AE8
-	.public ov96_02208AF0
-	.public ov96_02208B2C
+	.public PokeathlonPennantCapture_GetDrawPriority
+	.public PokeathlonPennantCaptureCpu_SetPlayer
+	.public PokeathlonPennantCaptureCpu_SetPennants
+	.public PokeathlonPennantCaptureCpu_Delete
 	.public ov96_02209738
 	.public ov96_0220AD4C
 	.public ov96_0220B730

@@ -21,7 +21,7 @@ int sub_02087E70(OverlayManager *manager, int *state, BOOL special) {
     } else {
         work->result58 = 0x7FDD;
     }
-    ov40_0222B6E0(work);
+    VsRecorder_InitResources(work);
     return TRUE;
 }
 
@@ -36,7 +36,7 @@ int sub_02087F04(OverlayManager *manager, int *state) {
 int sub_02087F10(OverlayManager *manager, int *state) {
     BattleAppWork *work = sub_02087A78(manager);
     work->statePtr = state;
-    if (ov40_0222BD30(work, state)) {
+    if (VsRecorder_Main(work, state)) {
         return TRUE;
     }
     return FALSE;
@@ -67,7 +67,7 @@ int sub_02087F2C(OverlayManager *manager, int *state) {
         }
         break;
     default:
-        ov40_0222B934(work);
+        VsRecorder_FreeResources(work);
         Heap_Destroy(HEAP_ID_109);
         UnloadOverlayByID(OVERLAY_40_ID);
         gSystem.screensFlipped = FALSE;

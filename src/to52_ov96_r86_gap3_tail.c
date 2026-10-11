@@ -16,7 +16,7 @@ BOOL ov96_02205C94(void *course) {
         if (flag) {
             ov96_021EB63C(PTR8(work, 0x20));
             ov96_021EB144(PTR8(work, 0x348), 1);
-            ov96_021E8324(course, ov96_02207C64);
+            ov96_021E8324(course, PokeathlonPennantCapture_UpdateOwnScore);
             return TRUE;
         }
     }

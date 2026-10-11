@@ -9,7 +9,7 @@ const Pair ov96_0221CBCC = {{0x66, 0x67}};
 static const Pair sIds18 = {{0x66, 0x67}};
 extern void ov96_021EB408(void *, int, int, u8, u8);
 extern void ov96_021EB52C(void *, int, int);
-extern void ov96_022089D0(void *, Work *);
+extern void PokeathlonPennantCaptureDisplay_GetPicVramOffsets(void *, Work *);
 extern void Sprite_SetMatrix(void *, VecFx32 *);
 extern void *ov96_021EB4F4(void *, u8, u8);
 extern void *ov96_021EB5B8(void *);
@@ -34,5 +34,5 @@ void ov96_02208914(void *ctx, Work *w) {
         Sprite_SetMatrix(sprite, &pos);
         ov96_021EB52C(w->handles[i], 1, 1);
     }
-    ov96_022089D0(ctx, w);
+    PokeathlonPennantCaptureDisplay_GetPicVramOffsets(ctx, w);
 }

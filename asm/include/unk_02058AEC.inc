@@ -92,7 +92,7 @@
 .public sub_02057B14
 .public sub_02057E08
 .public sub_02057F70
-.public sub_020588DC
+.public CommClubLink_GetCard
 .public sub_02059538
 .public sub_02059AE4
 .public sub_02059B08

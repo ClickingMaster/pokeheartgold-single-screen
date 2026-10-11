@@ -14,7 +14,7 @@ int ov112_021EE31C(void *vp) {
     Ov112State *p = vp;
     int choice = PokewalkerApp_GetTouchedButton(1);
     if (choice != -1) {
-        ov112_021EC440(p, choice, choice + 2, 0x33);
+        PokewalkerApp_SelectMenuItem(p, choice, choice + 2, 0x33);
         PlaySE(0x5DD);
         return 0x41;
     }
@@ -31,11 +31,11 @@ int ov112_021EE31C(void *vp) {
         }
         p->selection = 1;
     } else if (*(u32 *)(gSystem + 0x48) & 1) {
-        ov112_021EC440(p, p->selection, p->selection + 2, 0x33);
+        PokewalkerApp_SelectMenuItem(p, p->selection, p->selection + 2, 0x33);
         PlaySE(0x5DD);
         return 0x41;
     } else if (*(u32 *)(gSystem + 0x48) & 2) {
-        ov112_021EC440(p, 1, 3, 0x33);
+        PokewalkerApp_SelectMenuItem(p, 1, 3, 0x33);
         PlaySE(0x5DC);
         return 0x41;
     }
@@ -62,7 +62,7 @@ int ov112_021EE464(void *p) {
     ov112_021EA5A4(p, 0);
     BufferBoxMonNickname(PTR(p, 0x1E448), 1, box);
     PokewalkerApp_LoadMonPicture(box, (u8 *)p + 0x1D7AC, (u8 *)p + 0x1D79C, 0);
-    ov112_021EC460(p, 2, 0x1A, 0x35);
+    PokewalkerApp_StartMessage(p, 2, 0x1A, 0x35);
     return 0x40;
 }
 int ov112_021EE4B8(void *p) {

@@ -10,7 +10,7 @@ void ov40_0222FB40(void *p) {
 }
 
 void ov40_0222FB74(void *task, void *data) {
-    ov40_0222BC44(PTRAT(data, 0));
+    VsRecorder_SetScreensFlipped(PTRAT(data, 0));
     sub_0203A86C();
     U32AT(data, 4) = 1;
     SysTask_Destroy(task);

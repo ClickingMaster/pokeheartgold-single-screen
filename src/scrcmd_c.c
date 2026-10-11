@@ -83,7 +83,7 @@
 #include "unk_02055418.h"
 #include "field_transition_tasks.h"
 #include "unk_02056D7C.h"
-#include "unk_02058034.h"
+#include "communication_club_link.h"
 #include "unk_02058AEC.h"
 #include "unk_0205A44C.h"
 #include "unk_0205AC88.h"
@@ -2957,7 +2957,7 @@ BOOL ScrCmd_587(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_284(ScriptContext *ctx) {
-    sub_02058190(ctx->fieldSystem);
+    CommClubLink_StartCardExchange(ctx->fieldSystem);
     return FALSE;
 }
 

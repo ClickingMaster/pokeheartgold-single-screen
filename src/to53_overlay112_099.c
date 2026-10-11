@@ -40,7 +40,7 @@ int ov112_021ECFD4(void *p) {
     PokewalkerApp_HideSprite(p, 3);
     PokewalkerApp_HideSprite(p, 4);
     ov112_021ED0D0(p);
-    ov112_021EC460(p, 2, 16, *(u32 *)((u8 *)p + 0xC));
+    PokewalkerApp_StartMessage(p, 2, 16, *(u32 *)((u8 *)p + 0xC));
     return 64;
 }
 
@@ -49,7 +49,7 @@ int ov112_021ED020(void *p) {
     BgClearTilemapBufferAndCommit(*(void **)((u8 *)p + 0x18), 5);
     BgClearTilemapBufferAndCommit(*(void **)((u8 *)p + 0x18), 1);
     BgClearTilemapBufferAndCommit(*(void **)((u8 *)p + 0x18), 2);
-    ov112_021EC460(p, 2, 16, *(u32 *)((u8 *)p + 0xC));
+    PokewalkerApp_StartMessage(p, 2, 16, *(u32 *)((u8 *)p + 0xC));
     return 64;
 }
 

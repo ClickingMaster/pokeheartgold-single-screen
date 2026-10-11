@@ -17,9 +17,9 @@
 .public _021028B4
 .public _021028C4
 .public gSystem
-.public ov40_0222B6E0
-.public ov40_0222B934
-.public ov40_0222BD30
+.public VsRecorder_InitResources
+.public VsRecorder_FreeResources
+.public VsRecorder_Main
 .public ov40_0222C480
 .public ov40_0222CA8C
 .public ov40_0222CABC

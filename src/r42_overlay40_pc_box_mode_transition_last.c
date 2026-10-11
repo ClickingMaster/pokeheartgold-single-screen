@@ -53,7 +53,7 @@ int ov40_02234D94(void *p) {
                 ov40_02230964(p, 1);
                 if (PTR(w, 0x228) != NULL) {
                     AccessoryPortrait_Destroy();
-                    ov40_0222BC54(p);
+                    VsRecorder_ResetBg2(p);
                     SetBgPriority(2, 0);
                     ov40_02235994();
                 }
@@ -65,7 +65,7 @@ int ov40_02234D94(void *p) {
                 ov40_0222BF80(p, 5);
                 Heap_Free(w);
                 UnloadOverlayByID(FS_OVERLAY_ID(OVY_41));
-                Main_SetVBlankIntrCB(ov40_0222BD04, p);
+                Main_SetVBlankIntrCB(VsRecorder_VBlankCB, p);
             } else {
                 PaletteData_BlendPalettes(PTR(p, 0x28), 1, 2, (u8)U32(w, 8), (u16)U32(p, 0x58));
                 BLEND(p, w, 3);

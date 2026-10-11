@@ -79,13 +79,13 @@ Work *PokeathlonCourse_GetHeapAllocPtr4(void *course);
 int ov96_021E5F24(void *course);
 u8 *ov96_021E8A20(void *ptr);
 void ov96_02205AFC(Work *w, u8 *dest);
-int ov96_02208B34(void *obj);
+int PokeathlonPennantCaptureCpu_Update(void *obj);
 BOOL ov96_02205DD4(Work *w, u8 idx, u8 x, u8 y);
 f32 ov96_022073F0(void *p, int index);
-void ov96_02207400(VecFx32 *a, VecFx32 *b, VecFx32 *out);
-int ov96_022079B8(VecFx32 *v);
-void ov96_02205E30(void *course);
-void ov96_02207870(Work *w);
+void PokeathlonPennantCapture_AddPoint2D(VecFx32 *a, VecFx32 *b, VecFx32 *out);
+int PokeathlonPennantCapture_GetDirection(VecFx32 *v);
+void PokeathlonPennantCapture_UpdatePlayers(void *course);
+void PokeathlonPennantCapture_RefillPennants(Work *w);
 void ov96_022055AC(void *course);
 
 static inline void ResetTouch(Player *p) {
@@ -127,7 +127,7 @@ void ov96_022055AC(void *course) {
     if (w->timer != 0) {
         w->timer--;
     }
-    ov96_02208B34(w->obj);
+    PokeathlonPennantCaptureCpu_Update(w->obj);
     w->updated = 0;
     for (i = 0; i < 4; i++) {
         input = (Input *)ov96_021E8A20(&(copy + 2)[i]);
@@ -207,7 +207,7 @@ void ov96_022055AC(void *course) {
                 VEC_MultAdd(scale, &delta, &zero, &delta);
                 len = VEC_Mag(&delta) / FX32_ONE;
                 vel = w->players[i].vel;
-                ov96_02207400(&vel, &delta, &vel);
+                PokeathlonPennantCapture_AddPoint2D(&vel, &delta, &vel);
                 mag = VEC_Mag(&vel);
                 if (mag > 4096.0f * limit) {
                     VecFx32 zero2 = { 0, 0, 0 };
@@ -216,10 +216,10 @@ void ov96_022055AC(void *course) {
                     VEC_MultAdd(4096.0f * limit, &vel, &zero2, &w->players[i].vel);
                     VEC_MultAdd(4096.0f * limit, &vel, &zero2, &result);
                 } else {
-                    ov96_02207400(&self->players[i].vel, &delta, &w->players[i].vel);
+                    PokeathlonPennantCapture_AddPoint2D(&self->players[i].vel, &delta, &w->players[i].vel);
                     result = delta;
                 }
-                w->players[i].changed = ov96_022079B8(&self->players[i].vel);
+                w->players[i].changed = PokeathlonPennantCapture_GetDirection(&self->players[i].vel);
                 w->updated = 1;
                 w->outY = w->players[i].posX / FX32_ONE;
                 w->outX = w->players[i].posY / FX32_ONE;
@@ -230,8 +230,8 @@ void ov96_022055AC(void *course) {
             }
         }
     }
-    ov96_02205E30(course);
-    ov96_02207870(w);
+    PokeathlonPennantCapture_UpdatePlayers(course);
+    PokeathlonPennantCapture_RefillPennants(w);
     if (w->timer == 0) {
         w->finished = 1;
     } else {

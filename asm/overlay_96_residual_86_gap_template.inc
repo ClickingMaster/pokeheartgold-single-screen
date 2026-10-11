@@ -191,14 +191,14 @@
 	.public ov96_022043AC
 	.public ov96_022043B8
 	.public ov96_02204DE8
-	.public ov96_02206368
-	.public ov96_02207400
-	.public ov96_022077F4
+	.public PokeathlonPennantCapture_TickFreezeTimer
+	.public PokeathlonPennantCapture_AddPoint2D
+	.public PokeathlonPennantCapture_ResetPennantSpots
 	.public ov96_02207BD4
-	.public ov96_02207BD8
-	.public ov96_02208AE8
-	.public ov96_02208AF0
-	.public ov96_02208B2C
+	.public PokeathlonPennantCapture_GetDrawPriority
+	.public PokeathlonPennantCaptureCpu_SetPlayer
+	.public PokeathlonPennantCaptureCpu_SetPennants
+	.public PokeathlonPennantCaptureCpu_Delete
 	.public ov96_02209738
 	.public ov96_0220AD4C
 	.public ov96_0220B730
@@ -339,11 +339,11 @@ ov96_02204E58: ; 0x02204E58
 	mov r0, #0xdb
 	lsl r0, r0, #2
 	ldr r0, [r4, r0]
-	bl ov96_02208B2C
+	bl PokeathlonPennantCaptureCpu_Delete
 	mov r0, #0x37
 	lsl r0, r0, #4
 	ldr r0, [r4, r0]
-	bl ov96_02207D64
+	bl PokeathlonPennantCaptureDisplay_Delete
 	mov r0, #4
 	bl FontID_Release
 	add r0, r5, #0
@@ -554,7 +554,7 @@ ov96_02205048: ; 0x02205048
 	mov r0, #0x37
 	lsl r0, r0, #4
 	ldr r0, [r4, r0]
-	bl ov96_02207DDC
+	bl PokeathlonPennantCaptureDisplay_LoadBgGfx
 	add sp, #0x10
 	pop {r4, pc}
 	thumb_func_end ov96_02205048
@@ -955,19 +955,19 @@ _022053AC:
 	cmp r0, #0
 	bne _02205408
 	ldr r0, [sp, #0x18]
-	bl ov96_02207870
+	bl PokeathlonPennantCapture_RefillPennants
 	mov r1, #0xdb
 	ldr r0, [sp, #0x18]
 	lsl r1, r1, #2
 	ldr r0, [r0, r1]
 	add r1, sp, #0x34
-	bl ov96_02208AF8
+	bl PokeathlonPennantCaptureCpu_SetObstacles
 	mov r1, #0xdb
 	ldr r0, [sp, #0x18]
 	lsl r1, r1, #2
 	ldr r0, [r0, r1]
 	add r1, sp, #0x20
-	bl ov96_02208AF8
+	bl PokeathlonPennantCaptureCpu_SetObstacles
 	mov r1, #0xdb
 	ldr r0, [sp, #0x18]
 	lsl r1, r1, #2
@@ -975,10 +975,10 @@ _022053AC:
 	ldr r2, _02205498 ; =0x00000564
 	ldr r1, [sp, #0x18]
 	add r1, r1, r2
-	bl ov96_02208AF0
+	bl PokeathlonPennantCaptureCpu_SetPennants
 _02205408:
 	ldr r0, [sp, #0x18]
-	bl ov96_0220764C
+	bl PokeathlonPennantCapture_UpdateFieldDrawPriorities
 	mov r0, #0x5c
 	bl GF_heap_c_dummy_return_true
 	cmp r0, #0
@@ -1241,7 +1241,7 @@ _0220561C:
 	ldr r0, [sp, #0x2c]
 	lsl r1, r1, #2
 	ldr r0, [r0, r1]
-	bl ov96_02208B34
+	bl PokeathlonPennantCaptureCpu_Update
 	mov r0, #0
 	ldr r5, [sp, #0x2c]
 	str r0, [sp, #0x30]
@@ -1677,7 +1677,7 @@ _022058FE:
 	str r0, [r3]
 	mov r0, ip
 	mov r2, ip
-	bl ov96_02207400
+	bl PokeathlonPennantCapture_AddPoint2D
 	add r0, sp, #0x6c
 	bl VEC_Mag
 	bl _fflt
@@ -1718,7 +1718,7 @@ _022059EA:
 	ldr r0, [sp, #4]
 	ldr r2, [sp, #8]
 	add r1, sp, #0x60
-	bl ov96_02207400
+	bl PokeathlonPennantCapture_AddPoint2D
 	add r3, sp, #0x60
 	ldmia r3!, {r0, r1}
 	add r2, sp, #0x48
@@ -1727,7 +1727,7 @@ _022059EA:
 	str r0, [r2]
 _02205A00:
 	ldr r0, [sp, #4]
-	bl ov96_022079B8
+	bl PokeathlonPennantCapture_GetDirection
 	add r1, r4, #0
 	add r1, #0xd4
 	strb r0, [r1]
@@ -1813,9 +1813,9 @@ _02205A72:
 	b _02205664
 _02205AA8:
 	ldr r0, [sp]
-	bl ov96_02205E30
+	bl PokeathlonPennantCapture_UpdatePlayers
 	ldr r0, [sp, #0x2c]
-	bl ov96_02207870
+	bl PokeathlonPennantCapture_RefillPennants
 	ldr r1, _02205AF8 ; =0x0000050C
 	ldr r0, [sp, #0x2c]
 	ldrh r0, [r0, r1]
@@ -2091,7 +2091,7 @@ ov96_02205C94: ; 0x02205C94
 	ldr r0, [r6, r0]
 	mov r1, #1
 	bl ov96_021EB144
-	ldr r1, _02205D28 ; =ov96_02207C64
+	ldr r1, _02205D28 ; =PokeathlonPennantCapture_UpdateOwnScore
 	add r0, r5, #0
 	bl ov96_021E8324
 	mov r0, #1
@@ -2128,7 +2128,7 @@ _02205D1C:
 	mov r0, #0
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
-_02205D28: .word ov96_02207C64
+_02205D28: .word PokeathlonPennantCapture_UpdateOwnScore
 _02205D2C: .word gSystem + 0x40
 	thumb_func_end ov96_02205C94
 	.endif
@@ -2178,27 +2178,27 @@ ov96_02205D30: ; 0x02205D30
 	ldr r1, [sp, #4]
 	ldr r3, [sp, #8]
 	add r2, #0x24
-	bl ov96_02206380
+	bl PokeathlonPennantCapture_ApplyFrame
 	add r0, r5, #0
 	add r1, r7, #0
 	add r2, r6, #0
-	bl ov96_02206A24
+	bl PokeathlonPennantCapture_UpdateObstacleSprites
 	add r0, r5, #0
 	add r1, r7, #0
 	add r2, r6, #0
-	bl ov96_02206AC0
+	bl PokeathlonPennantCapture_UpdateFieldItemSprites
 	add r0, r5, #0
 	add r1, r4, #0
 	add r2, r7, #0
 	add r3, r6, #0
-	bl ov96_02206B80
+	bl PokeathlonPennantCapture_UpdatePennantSprites
 	add r0, r5, #0
-	bl ov96_02207BE4
+	bl PokeathlonPennantCapture_AnimateBg
 	mov r0, #0x37
 	lsl r0, r0, #4
 	ldrh r1, [r4, #0x22]
 	ldr r0, [r5, r0]
-	bl ov96_02208740
+	bl PokeathlonPennantCaptureDisplay_SetTimer
 	ldrh r1, [r4, #0x22]
 	ldr r0, [sp]
 	bl ov96_021E6454
@@ -2261,8 +2261,8 @@ _02205E28:
 
 	.if R86_GAP == 4
 
-	thumb_func_start ov96_02205E30
-ov96_02205E30: ; 0x02205E30
+	thumb_func_start PokeathlonPennantCapture_UpdatePlayers
+PokeathlonPennantCapture_UpdatePlayers: ; 0x02205E30
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x4c
 	str r0, [sp, #8]
@@ -2287,7 +2287,7 @@ _02205E4C:
 	ldr r0, [sp, #8]
 	add r1, r6, #0
 	add r2, r5, #0
-	bl ov96_02206368
+	bl PokeathlonPennantCapture_TickFreezeTimer
 	mov r0, #1
 	strb r0, [r4]
 _02205E68:
@@ -2318,7 +2318,7 @@ _02205E8E:
 	b _02206326
 _02205E98:
 	add r0, r5, #0
-	bl ov96_02207B8C
+	bl PokeathlonPennantCapture_CanDeposit
 	cmp r0, #0
 	beq _02205EFA
 	add r0, r5, #0
@@ -2567,7 +2567,7 @@ _0220605A:
 	ldr r1, [r5, #0x74]
 	add r0, r6, #0
 	add r3, sp, #0x34
-	bl ov96_02207300
+	bl PokeathlonPennantCapture_CollideWithObstacles
 	lsl r0, r0, #0x18
 	lsr r0, r0, #0x18
 	str r0, [r5, #0x74]
@@ -2731,7 +2731,7 @@ _022061EC:
 	ldr r0, [sp, #8]
 	ldr r1, [sp, #0x18]
 	add r2, sp, #0x40
-	bl ov96_02207418
+	bl PokeathlonPennantCapture_CollidePlayers
 	ldr r1, _02206344 ; =0x00000519
 	ldrb r1, [r6, r1]
 	cmp r1, #0
@@ -2876,7 +2876,7 @@ _02206316:
 	add r0, r6, r0
 	add r1, r5, #0
 	add r2, r3, r2
-	bl ov96_022078B0
+	bl PokeathlonPennantCapture_PickUpPennants
 _02206326:
 	ldr r0, [sp, #0x10]
 	add r5, #0xb8
@@ -2902,5 +2902,5 @@ _02206358: .word 0x3FB99999
 _0220635C: .word 0x40B00000
 _02206360: .word 0x00000000
 _02206364: .word 0x00000564
-	thumb_func_end ov96_02205E30
+	thumb_func_end PokeathlonPennantCapture_UpdatePlayers
 	.endif

@@ -36,6 +36,10 @@ u32 sub_02088288(SaveData *);
 BOOL sub_0208828C(SaveData *);
 void sub_02089D40(PokemonSummaryArgs *, const u8 *);
 void sub_0208AD34(PokemonSummaryArgs *, PlayerProfile *);
+int sub_0208AD54(void);
+int sub_0208AD58(void);
+int sub_0208AD5C(void);
+int sub_0208AD60(void);
 u32 Pokemon_GetStatusIconId(Pokemon *pokemon);
 
 #endif // POKEHEARTGOLD_UNK_02088288_H

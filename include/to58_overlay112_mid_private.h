@@ -8,7 +8,7 @@ typedef struct Ov112State {
     u32 textPrinter;
 } Ov112State;
 
-extern int (*ov112_021FF6C4[])(Ov112State *);
+extern int (*sMainMenuStates[])(Ov112State *);
 extern int TextPrinterCheckActive(u8);
 
 
@@ -37,7 +37,7 @@ extern int PokewalkerApp_HandleTwoChoiceMenu(Ov112State *);
 
 extern void FillBgTilemapRect(void *, int, int, int, int, int, int, int);
 extern void BgCommitTilemapBufferToVram(void *, int);
-extern void ov112_021EC460(Ov112State *, int, int, int);
+extern void PokewalkerApp_StartMessage(Ov112State *, int, int, int);
 extern void PokewalkerApp_HideSprite(Ov112State *, int);
 extern int PokewalkerApp_StartMessageBox(Ov112State *, int, int);
 extern void BgClearTilemapBufferAndCommit(void *, int);

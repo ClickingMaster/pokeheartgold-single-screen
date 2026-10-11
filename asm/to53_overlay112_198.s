@@ -139,89 +139,89 @@
 	.extern PokewalkerApp_LoadMonIconPalettes
 	.extern PokewalkerApp_LoadMonIcon
 	.extern PokewalkerApp_SetMonIconGraphics
-	.extern ov112_021EAC18
-	.extern ov112_021EAC34
-	.extern ov112_021EAC58
-	.extern ov112_021EAC5C
-	.extern ov112_021EADD0
+	.extern PokewalkerApp_MainMenu_Enter
+	.extern PokewalkerApp_MainMenu_Update
+	.extern PokewalkerApp_MainMenu_Exit
+	.extern PokewalkerApp_MainMenu_Start
+	.extern PokewalkerApp_ShowWalkerRecords
 	.extern ov112_021EAF48
 	.extern ov112_021EAF5C
 	.extern ov112_021EAFFC
-	.extern ov112_021EB1D8
-	.extern ov112_021EB1E8
-	.extern ov112_021EB208
-	.extern ov112_021EB244
-	.extern ov112_021EB28C
-	.extern ov112_021EB388
-	.extern ov112_021EB3A8
-	.extern ov112_021EB3B8
-	.extern ov112_021EB3D8
-	.extern ov112_021EB44C
-	.extern ov112_021EB568
-	.extern ov112_021EB5AC
-	.extern ov112_021EB5BC
-	.extern ov112_021EB5DC
-	.extern ov112_021EB664
-	.extern ov112_021EB780
-	.extern ov112_021EB7D8
-	.extern ov112_021EB838
-	.extern ov112_021EB85C
-	.extern ov112_021EB864
-	.extern ov112_021EB8C4
-	.extern ov112_021EB8E8
-	.extern ov112_021EB908
+	.extern PokewalkerApp_MainMenu_PrintWelcome
+	.extern PokewalkerApp_MainMenu_WaitWelcome
+	.extern PokewalkerApp_MainMenu_PrintStrollReady
+	.extern PokewalkerApp_MainMenu_ShowStrollMenu
+	.extern PokewalkerApp_MainMenu_HandleStrollMenu
+	.extern PokewalkerApp_MainMenu_EndStrollMenu
+	.extern PokewalkerApp_MainMenu_PrintReceive
+	.extern PokewalkerApp_MainMenu_WaitReceive
+	.extern PokewalkerApp_MainMenu_ShowReceiveMenu
+	.extern PokewalkerApp_MainMenu_HandleReceiveMenu
+	.extern PokewalkerApp_MainMenu_EndReceiveMenu
+	.extern PokewalkerApp_MainMenu_PrintStrollReady2
+	.extern PokewalkerApp_MainMenu_WaitStrollReady2
+	.extern PokewalkerApp_MainMenu_ShowFullMenu
+	.extern PokewalkerApp_MainMenu_HandleFullMenu
+	.extern PokewalkerApp_MainMenu_EndFullMenu
+	.extern PokewalkerApp_MainMenu_PrintBoxesFull
+	.extern PokewalkerApp_MainMenu_WaitBoxesFull
+	.extern PokewalkerApp_MainMenu_Quit
+	.extern PokewalkerApp_MainMenu_PrintNoPokemon
+	.extern PokewalkerApp_MainMenu_WaitMessage
+	.extern PokewalkerApp_MainMenu_WaitCursor
+	.extern PokewalkerApp_MainMenu_End
 	.extern ov112_021EB90C
 	.extern ov112_021EB950
-	.extern ov112_021EB9C0
-	.extern ov112_021EB9E4
-	.extern ov112_021EBA08
-	.extern ov112_021EBA28
-	.extern ov112_021EBA50
-	.extern ov112_021EBA54
-	.extern ov112_021EBA6C
-	.extern ov112_021EBA8C
-	.extern ov112_021EBAB0
-	.extern ov112_021EBAB4
-	.extern ov112_021EBB58
-	.extern ov112_021EBB84
-	.extern ov112_021EBB98
-	.extern ov112_021EBBB0
-	.extern ov112_021EBBD8
-	.extern ov112_021EBC3C
-	.extern ov112_021EBC7C
-	.extern ov112_021EBCD8
-	.extern ov112_021EBD9C
-	.extern ov112_021EBDE8
-	.extern ov112_021EBE4C
-	.extern ov112_021EBE6C
-	.extern ov112_021EBE78
-	.extern ov112_021EBF18
-	.extern ov112_021EBF4C
-	.extern ov112_021EBF70
-	.extern ov112_021EBFC8
-	.extern ov112_021EC000
-	.extern ov112_021EC038
-	.extern ov112_021EC044
-	.extern ov112_021EC134
-	.extern ov112_021EC1A8
-	.extern ov112_021EC1E4
-	.extern ov112_021EC208
-	.extern ov112_021EC284
-	.extern ov112_021EC2A8
-	.extern ov112_021EC2E4
-	.extern ov112_021EC304
-	.extern ov112_021EC338
-	.extern ov112_021EC374
-	.extern ov112_021EC378
-	.extern ov112_021EC390
-	.extern ov112_021EC3B0
-	.extern ov112_021EC3C8
-	.extern ov112_021EC3F0
-	.extern ov112_021EC404
-	.extern ov112_021EC414
-	.extern ov112_021EC434
-	.extern ov112_021EC440
-	.extern ov112_021EC460
+	.extern PokewalkerApp_IsDownXLHeld
+	.extern PokewalkerApp_IsUpSelectRHeld
+	.extern PokewalkerApp_Mode1_Enter
+	.extern PokewalkerApp_Mode1_Update
+	.extern PokewalkerApp_Mode1_Exit
+	.extern PokewalkerApp_Mode1_PrintMessage
+	.extern PokewalkerApp_Mode1_WaitMessage
+	.extern PokewalkerApp_Mode1_WaitInput
+	.extern PokewalkerApp_Mode1_End
+	.extern PokewalkerApp_EraseRecords_Enter
+	.extern PokewalkerApp_EraseRecords_Update
+	.extern PokewalkerApp_EraseRecords_Exit
+	.extern PokewalkerApp_EraseRecords_PrintCaution
+	.extern PokewalkerApp_EraseRecords_WaitCaution
+	.extern PokewalkerApp_EraseRecords_HandleCautionYesNo
+	.extern PokewalkerApp_EraseRecords_PrintWillErase
+	.extern PokewalkerApp_EraseRecords_ShowEraseMenu
+	.extern PokewalkerApp_EraseRecords_HandleEraseMenu
+	.extern PokewalkerApp_EraseRecords_EndEraseMenu
+	.extern PokewalkerApp_EraseRecords_PrintCarryOverSteps
+	.extern PokewalkerApp_EraseRecords_WaitCarryOverSteps
+	.extern PokewalkerApp_EraseRecords_ShowCarryOverStepsMenu
+	.extern PokewalkerApp_EraseRecords_HandleCarryOverStepsMenu
+	.extern PokewalkerApp_EraseRecords_PrintConnect
+	.extern PokewalkerApp_EraseRecords_WaitMessage
+	.extern PokewalkerApp_EraseRecords_PrintPointAtCard
+	.extern PokewalkerApp_EraseRecords_WaitPointAtCard
+	.extern PokewalkerApp_EraseRecords_PrepareLink
+	.extern PokewalkerApp_EraseRecords_StartLink
+	.extern PokewalkerApp_EraseRecords_UpdateLink
+	.extern PokewalkerApp_ReturnWalkerMonToBox
+	.extern PokewalkerApp_EraseRecords_PrintCanceled
+	.extern PokewalkerApp_EraseRecords_WaitCanceled
+	.extern PokewalkerApp_EraseRecords_PrintInitialized
+	.extern PokewalkerApp_EraseRecords_WaitInitialized
+	.extern PokewalkerApp_EraseRecords_PrintComeBack
+	.extern PokewalkerApp_EraseRecords_WaitComeBack
+	.extern PokewalkerApp_EraseRecords_ShowReturnedMon
+	.extern PokewalkerApp_EraseRecords_AnimateReturnedMon
+	.extern PokewalkerApp_EraseRecords_AfterAnimation
+	.extern PokewalkerApp_EraseRecords_PrintArrived
+	.extern PokewalkerApp_EraseRecords_WaitArrived
+	.extern PokewalkerApp_EraseRecords_PrintSaving
+	.extern PokewalkerApp_EraseRecords_WaitSaving
+	.extern PokewalkerApp_EraseRecords_Save
+	.extern PokewalkerApp_EraseRecords_EndSave
+	.extern PokewalkerApp_EraseRecords_WaitCursor
+	.extern PokewalkerApp_EraseRecords_End
+	.extern PokewalkerApp_SelectMenuItem
+	.extern PokewalkerApp_StartMessage
 	.extern ov112_021EC478
 	.extern ov112_021EC520
 	.extern ov112_021EC54C
@@ -846,9 +846,9 @@
 	.extern ov112_021FF640
 	.extern ov112_021FF660
 	.extern ov112_021FF684
-	.extern ov112_021FF6C4
-	.extern ov112_021FF730
-	.extern ov112_021FF740
+	.extern sMainMenuStates
+	.extern sMode1States
+	.extern sEraseRecordsStates
 	.extern ov112_021FF7CC
 	.extern ov112_021FF8D8
 	.extern ov112_021FF8F8

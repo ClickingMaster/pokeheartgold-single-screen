@@ -113,7 +113,7 @@ int ov40_0223534C(void *work) {
         if (ov40_0222DA00(inner, (u8 *)inner + 4, 1, 0)) {
             if (PTR(inner, 0x228) != NULL) {
                 AccessoryPortrait_Destroy();
-                ov40_0222BC54(work);
+                VsRecorder_ResetBg2(work);
                 SetBgPriority(2, 0);
                 PTR(inner, 0x228) = NULL;
                 ov40_02235994();

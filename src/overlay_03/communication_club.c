@@ -17,7 +17,7 @@
 #include "unk_02035900.h"
 #include "link_synchronization.h"
 #include "unk_02037C94.h"
-#include "unk_02058034.h"
+#include "communication_club_link.h"
 
 typedef struct CommClubManager CommClubManager;
 typedef void (*CommClubManagerTaskFunc)(SysTask *, void *);

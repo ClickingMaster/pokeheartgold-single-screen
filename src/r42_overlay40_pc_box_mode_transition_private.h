@@ -21,7 +21,7 @@ void ov40_0223584C(void *work);
 void ov40_0222DA84(void *p, int value);
 BOOL ov40_0222DA00(void *a, void *b, int c, int d);
 void AccessoryPortrait_Destroy(void);
-void ov40_0222BC54(void *work);
+void VsRecorder_ResetBg2(void *work);
 void SetBgPriority(int bgId, int priority);
 void ov40_02235994(void);
 void PaletteData_BlendPalettes(void *palette, int mask, int coeff, int color, int selector);

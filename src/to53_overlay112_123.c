@@ -13,7 +13,7 @@
 int ov112_021EE510(void) { return 56; }
 
 int ov112_021EE514(void *p) {
-    ov112_021EC460(p, 2, 27, 57);
+    PokewalkerApp_StartMessage(p, 2, 27, 57);
     return 64;
 }
 

@@ -36,7 +36,7 @@ int ov40_02233F28(void *p) {
         ++;
         break;
     case 3:
-        ov40_0222BC44(1);
+        VsRecorder_SetScreensFlipped(1);
         ov40_02230964(p, 1);
         ov40_0222D88C(p);
         ov40_02230964(p, 0);

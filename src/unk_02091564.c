@@ -7,7 +7,7 @@
 #include "scrcmd_battle_castle.h"
 #include "unk_02033AE0.h"
 #include "unk_02056D7C.h"
-#include "unk_02058034.h"
+#include "communication_club_link.h"
 #include "unk_02058AEC.h"
 #include "unk_0205A44C.h"
 
@@ -81,7 +81,7 @@ static const UnkStruct_02091564 sUnkTable_02106078[] = {
     { sub_02091570, sub_020342C4,         NULL         },
     { sub_02091570, sub_020342C4,         NULL         },
     { sub_02091570, sub_020342C4,         NULL         },
-    { sub_020588CC, sub_02091588,         sub_020588DC },
+    { CommClubLink_SetCardReceived, sub_02091588,         CommClubLink_GetCard },
     { sub_02091570, sub_020342C4,         NULL         },
     { sub_02091570, sub_020342C4,         NULL         },
     { sub_02091570, sub_020342C4,         NULL         },

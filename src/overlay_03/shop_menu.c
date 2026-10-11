@@ -23,7 +23,7 @@
 #include "task.h"
 #include "text.h"
 #include "sound_playback.h"
-#include "unk_02058034.h"
+#include "communication_club_link.h"
 #include "unk_02091054.h"
 #include "mart_bag_task.h"
 

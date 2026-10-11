@@ -382,13 +382,7 @@ Static main
     Object src/communication_player_movement_11.o
     Object src/to50_comm_player_force_position.o
     Object src/communication_player_movement_12.o
-    Object src/link_lobby.o
-    Object src/lobby_session_1.o
-    Object src/link_lobby_2.o
-    Object src/to50_link_lobby_callback.o
-    Object src/link_lobby_3.o
-    Object src/r40_unk_0205857C_run1.o
-    Object src/link_lobby_4.o
+    Object src/communication_club_link.o
     Object src/field_object_manager_1.o
     Object src/field_application_tasks.o
     Object src/to51_unk_02058D4C.o
@@ -2483,106 +2477,7 @@ Object src/battle/battle_anim_util.o
 Overlay OVY_8
 {
     After OVY_6
-    Object src/to56_w05_overlay08_bank00_c01.o
-    Object asm/to90_extra2089_anchor.o
-    Object src/to90_extra2089_run01.o
-    Object src/to56_w05_overlay08_bank00_c02.o
-    Object asm/to90_extra2090_anchor.o
-    Object src/to90_extra2090_run01.o
-    Object src/to56_w05_overlay08_bank00_c03.o
-    Object src/to57_new49_overlay08_bank00_input.o
-    Object src/overlay08_bank_01_c.o
-    Object src/to56_r3_w18_overlay08_bank_02.o
-    Object src/overlay08_bank_03_c.o
-    Object asm/to90_extra2162_anchor.o
-    Object src/to90_extra2162_run01.o
-    Object src/overlay08_bank_05_c.o
-    Object asm/to90_extra2517_anchor.o
-    Object src/to90_extra2517_run01.o
-    Object src/op90_to90_extra2517_residual_1_r01.o
-    Object src/to56_w04_overlay08_bank06_c01.o
-    Object asm/to90_extra2088_anchor.o
-    Object src/to90_extra2088_run01.o
-    Object src/to56_w04_overlay08_bank06_c02.o
-    Object src/op90_to56_w04_overlay08_bank06_asm03_r01.o
-    Object src/to56_w04_overlay08_bank06_c03.o
-    Object src/overlay08_bank_07_c.o
-    Object src/to56_w21_00_c.o
-    Object src/op90_to56_w21_01_asm_r01.o
-    Object src/to56_w21_02_c.o
-    Object src/op90_to56_w21_03_asm_r01.o
-    Object src/to56_w21_04_c.o
-    Object asm/to91_w41476_d91c_anchor.o
-    Object src/to91_w41476_d91c_run01.o
-    Object src/to56_w21_06_c.o
-    Object src/overlay08_bank_09_c.o
-    Object asm/to90_extra2276_anchor.o
-    Object src/to90_extra2276_run01.o
-    Object src/to90_extra2276_run02.o
-    Object src/to56_r3b_w07_overlay08_bank10_tail.o
-    Object src/overlay08_bank_11_c.o
-    Object src/to56_overlay08_bank12.o
-    Object src/overlay08_bank_13_c.o
-    Object src/to58_w15b_ov08_bank14_residual1.o
-    Object src/to56_overlay08_bank14_c1.o
-    Object src/op90_to58_w13_ov08_bank14_2_prefix_r01.o
-    Object src/to58_w13_ov08_bank14_2_a.o
-    Object asm/to90_extra2284_anchor.o
-    Object src/to90_extra2284_run01.o
-    Object src/to90_extra2284_run02.o
-    Object src/to58_w13_ov08_bank14_2_b.o
-    Object asm/to90_extra2285_anchor.o
-    Object src/to90_extra2285_run01.o
-    Object src/to56_overlay08_bank14_c2.o
-    Object src/to58_overlay08_bank14_r3_front.o
-    Object src/to59_overlay08_bank14_middle.o
-    Object src/to58_overlay08_bank14_r3_tail.o
-    Object src/to57_overlay08_bank14_f550.o
-    Object src/to56_overlay08_bank14_c3.o
-    Object src/to58_overlay08_bank14_f5d0.o
-    Object asm/to90_extra2096_anchor.o
-    Object asm/to90_extra2305_anchor.o
-    Object src/to90_extra2305_run01.o
-    Object src/to90_extra2096_run01.o
-    Object src/to58_overlay08_bank14_f900.o
-    Object asm/to90_extra2097_anchor.o
-    Object src/to90_extra2097_run01.o
-    Object src/to90_extra2097_run02.o
-    Object src/to90_extra2097_run03.o
-    Object asm/to90_extra2306_anchor.o
-    Object src/to90_extra2306_run01.o
-    Object src/to56_overlay08_bank14_c4.o
-    Object src/to58_w15b_ov08_bank14_residual5.o
-    Object src/to56_overlay08_bank14_c5.o
-    Object src/to58_w15b_ov08_bank14_residual6.o
-    Object src/to56_overlay08_bank14_c6.o
-    Object src/to58_w15_ov08_bank14_7.o
-    Object src/to56_overlay08_bank14_c7.o
-    Object src/overlay08_bank_15_c.o
-    Object src/to56_overlay08_bank16.o
-    Object src/overlay08_bank_17_c.o
-    Object src/to56_overlay08_bank18_run0.o
-    Object asm/to90_extra2270_anchor.o
-    Object src/to90_extra2270_run01.o
-    Object src/to56_overlay08_bank18_run1.o
-    Object src/overlay08_bank_19_c.o
-    Object src/to57_overlay08_bank20_head.o
-    Object src/to90_extra2417_run01.o
-    Object src/to57_overlay08_bank20_tail.o
-    Object src/to56_r3_w01_run1.o
-    Object asm/to90_extra2275_anchor.o
-    Object src/to90_extra2275_run01.o
-    Object src/to56_r3_w01_run2.o
-    Object asm/to90_extra1962_anchor.o
-    Object src/to90_extra1962_run01.o
-    Object src/to57_new22_overlay08_b20_tiles.o
-    Object src/to58_w14_ov08_b20_b_prefix.o
-    Object src/op90_to58_w14_ov08_b20_b_residual_r01.o
-    Object src/op90_op90_to58_w14_ov08_b20_b_residual_residual_1_r01.o
-    Object src/to58_w14_ov08_b20_b_suffix.o
-    Object src/to57_new22_overlay08_b20_selection.o
-    Object src/to58_r2_ov08_b20_c.o
-    Object src/to57_new22_overlay08_b20_helpers.o
+    Object src/battle/battle_party_menu.o
     Object src/battle/battle_bag_menu.o
     Object src/battle/battle_dpad_cursor.o
     Object asm/op90_to56_overlay08_bank42_residual_anchor.o
@@ -3425,11 +3320,7 @@ Overlay OVY_39
 Overlay OVY_40
 {
     After OVY_39
-    Object src/op90_overlay_40_prefix_r21_r01.o
-    Object src/overlay40_ui_lifecycle_run1.o
-    Object src/to90_extra2015_run01.o
-    Object src/overlay40_ui_lifecycle_run2.o
-    Object src/r40_overlay_40_tail_r21_run1.o
+    Object src/application/vs_recorder/vs_recorder.o
     Object src/overlay_40_sol_partial_1.o
     Object src/overlay40_box_flow_r2_run1.o
     Object src/to90_extra2372_run01.o
@@ -5374,44 +5265,10 @@ Overlay OVY_96
     Object src/to90_extra2067_run01.o
     Object src/to52_ov96_r86_gap3_tail.o
     Object src/overlay96_course_scene_update_r86.o
-    Object asm/to90_extra2401_anchor.o
-    Object src/to90_extra2401_run01.o
-    Object src/overlay96_exact_bank_86.o
-    Object src/op90_overlay_96_r87_gap_1_prefix_r01.o
-    Object src/overlay96_course_collision_r87_gap1_run1.o
-    Object src/op90_overlay_96_r87_gap_1_tail_r01.o
-    Object src/overlay96_course_collision_r87_run1.o
-    Object src/overlay96_course_collision_gap2_head.o
-    Object src/op90_overlay_96_r87_gap_2_residual_r01.o
-    Object src/overlay96_course_collision_gap2_tail.o
-    Object src/overlay96_course_collision_r87_run2.o
-    Object src/overlay96_exact_bank_87.o
-    Object src/to90_extra2402_run01.o
-    Object src/r40_overlay_96_residual_88_run1.o
-    Object src/overlay96_exact_bank_88.o
-    Object src/overlay96_course_collision_r89.o
-    Object src/overlay96_exact_bank_89.o
-    Object src/overlay96_course_ui_r90_run1.o
-    Object src/to70_overlay_96_residual_90_gap_1_extra374_run01.o
-    Object src/to70_to70_overlay_96_residual_90_gap_1_extra374_residual_1_extra1327_run01.o
-    Object src/overlay96_course_ui_r90_run2.o
-    Object src/overlay96_course_ui_r90_gap2.o
-    Object src/overlay96_course_ui_r90_run3.o
-    Object src/overlay96_course_ui_r90_gap3_run1.o
-    Object src/op90_overlay_96_residual_90_gap_3_r01.o
-    Object src/overlay96_course_ui_r90_gap3_run2.o
-    Object src/overlay96_course_ui_r90_run4.o
-    Object src/to52_r5_overlay96_r90_gap4_head.o
+    Object src/pokeathlon/pokeathlon_pennant_capture_field.o
+    Object src/pokeathlon/pokeathlon_pennant_capture_display.o
     Object src/op90_to70_to52_r5_overlay96_r90_gap4_tail_extra260_residual_1_r01.o
-    Object src/to70_to52_r5_overlay96_r90_gap4_tail_extra260_run01.o
-    Object src/overlay96_course_ui_r90_run5.o
-    Object src/overlay96_exact_bank_90.o
-    Object src/to80_extra1589_run01.o
-    Object src/overlay96_exact_bank_91.o
-    Object src/overlay96_course_scene_emitter_tick.o
-    Object src/op90_overlay_96_course_scene_update_residual_r01.o
-    Object src/overlay96_course_scene_random_rect.o
-    Object src/op90_overlay_96_residual_92_gap_2_r01.o
+    Object src/pokeathlon/pokeathlon_pennant_capture_cpu.o
     Object src/overlay96_course_scene_helpers.o
     Object src/to90_extra2060_run01.o
     Object src/overlay96_course_scene_transition.o
@@ -5876,48 +5733,8 @@ Object src/application/pokewalker/pokewalker_ir_status.o
 Object src/application/pokewalker/pokewalker_app.o
 Object src/application/pokewalker/pokewalker_upload.o
 Object src/application/pokewalker/pokewalker_ui.o
-Object src/to53_overlay112_055.o
-Object src/to58_overlay112_mid_056.o
-Object src/to53_overlay112_057.o
-Object src/to80_extra1717_run01.o
-Object src/to80_extra1597_run01.o
-Object src/to53_overlay112_059.o
-Object src/to57_overlay112_060.o
-Object src/to53_overlay112_061.o
-Object src/to57_overlay112_062.o
-Object src/to53_overlay112_063.o
-Object src/to70_to58_overlay112_mid_064_remaining_extra206_run01.o
-Object src/to80_extra1356_run01.o
-    Object src/to58_overlay112_mid_064.o
-Object src/to53_overlay112_065.o
-Object src/to57_overlay112_066.o
-Object src/to53_overlay112_067.o
-Object src/to58_overlay112_mid_068.o
-Object src/to53_overlay112_069.o
-Object src/overlay112_070.o
-Object src/to53_overlay112_071.o
-Object src/to58_overlay112_mid_072.o
-    Object src/to80_extra1826_run01.o
-Object src/to53_overlay112_073.o
-Object src/to58_overlay112_mid_074.o
-Object src/to53_overlay112_075.o
-Object src/to56_w22_overlay112_states.o
-Object src/to80_extra1825_run01.o
-Object src/to53_overlay112_077.o
-Object src/to70_to53_overlay112_078_extra687_run01.o
-Object src/to53_overlay112_079.o
-Object src/to58_overlay112_mid_080.o
-Object src/to53_overlay112_081.o
-Object src/to57_overlay112_c044.o
-Object src/to53_overlay112_083.o
-Object src/to58_overlay112_mid_084.o
-Object src/to53_overlay112_085.o
-Object src/to70_to58_overlay112_mid_086_before_extra1065_run01.o
-    Object src/to58_overlay112_mid_086.o
-    Object src/to70_to58_overlay112_mid_086_after_extra1064_run01.o
-Object src/to53_overlay112_087.o
-Object src/to58_overlay112_mid_088.o
-Object src/to53_overlay112_089.o
+Object src/application/pokewalker/pokewalker_main_menu.o
+Object src/application/pokewalker/pokewalker_erase.o
 Object src/to58_overlay112_mid_090.o
 Object src/to53_overlay112_091.o
 Object src/to70_to58_overlay112_mid_092_remaining_extra455_run01.o

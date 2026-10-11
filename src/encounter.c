@@ -34,7 +34,7 @@
 #include "battle_transition_task.h"
 #include "field_overworld_transition.h"
 #include "unk_020552A4.h"
-#include "unk_02058034.h"
+#include "communication_club_link.h"
 #include "unk_02066EDC.h"
 #include "unk_0206D494.h"
 #include "unk_02087E70.h"
@@ -816,7 +816,7 @@ static BOOL sub_02051540(TaskManager *taskManager) {
         if (BattleRecord_Exists() == TRUE) {
             BattleRecord_Delete();
         }
-        sub_02058190(fieldSystem);
+        CommClubLink_StartCardExchange(fieldSystem);
         return TRUE;
     }
     return FALSE;

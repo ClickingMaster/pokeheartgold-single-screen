@@ -53,7 +53,7 @@ u32 ov40_0223480C(void *p) {
                 ov40_02230964(p, 1);
                 if (PTR(work, 0x228) != NULL) {
                     AccessoryPortrait_Destroy(PTR(work, 0x228));
-                    ov40_0222BC54(p);
+                    VsRecorder_ResetBg2(p);
                     SetBgPriority(2, 0);
                     ov40_02235994();
                 }
@@ -65,7 +65,7 @@ u32 ov40_0223480C(void *p) {
                 ov40_0222BF80(p, 5);
                 Heap_Free(work);
                 UnloadOverlayByID(FS_OVERLAY_ID(OVY_41));
-                Main_SetVBlankIntrCB(ov40_0222BD04, p);
+                Main_SetVBlankIntrCB(VsRecorder_VBlankCB, p);
             } else {
                 PaletteData_BlendPalettes(PTR(p, 0x28), 1, 2, (u8)WORD(work, 8), (u16)WORD(p, 0x58));
                 PaletteData_BlendPalettes(PTR(p, 0x28), 3, 0xc, (u8)WORD(work, 8), (u16)WORD(p, 0x58));

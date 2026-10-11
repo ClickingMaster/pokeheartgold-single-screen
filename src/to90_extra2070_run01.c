@@ -7,7 +7,7 @@ void PokewalkerIr_GetChunkProgress(void),PokewalkerIr_Stop(void);
 int PokewalkerIr_GetTotalProgress(void),PokewalkerIr_GetAndClearError(void),ov112_021E7668(void);
 void PokewalkerApp_SpawnFallingParticle(View*),ov112_021EA60C(View*),ov112_021ED530(View*),ov112_021ED5DC(View*);
 void ov112_021ED314(int);
-void PokewalkerApp_ShowSprite(View*,int),PokewalkerApp_ShowSubBg1(View*,int),PokewalkerApp_ShowMessageBox(View*,int,int),ov112_021EC440(View*,int,int,int);
+void PokewalkerApp_ShowSprite(View*,int),PokewalkerApp_ShowSubBg1(View*,int),PokewalkerApp_ShowMessageBox(View*,int,int),PokewalkerApp_SelectMenuItem(View*,int,int,int);
 BOOL PokewalkerApp_GetTouchedButton(int);
 void ManagedSprite_SetDrawFlag(void*,BOOL);
 void PlaySE(u16);
@@ -28,7 +28,7 @@ int ov112_021ED918(View *v){
  if(!ov112_021E7668()){
   PokewalkerApp_ShowSubBg1(v,1);
   if(!PokewalkerApp_GetTouchedButton(5) || (gSystem.newKeys&1) || (gSystem.newKeys&2)){
-   PokewalkerIr_Stop();v->code=33;v->state=66;ov112_021EC440(v,3,3,33);PlaySE(1501);return 65;
+   PokewalkerIr_Stop();v->code=33;v->state=66;PokewalkerApp_SelectMenuItem(v,3,3,33);PlaySE(1501);return 65;
   }
  }else{
   if(!v->entered){PokewalkerApp_ShowMessageBox(v,2,6);v->entered=1;}

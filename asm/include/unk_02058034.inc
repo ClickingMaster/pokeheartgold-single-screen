@@ -58,14 +58,14 @@
 .public sub_02058124
 .public sub_02058164
 .public sub_02058180
-.public sub_02058190
+.public CommClubLink_StartCardExchange
 .public sub_02058258
 .public sub_02058284
 .public sub_020582A8
 .public sub_02058720
 .public sub_02058740
-.public sub_020588CC
-.public sub_020588DC
+.public CommClubLink_SetCardReceived
+.public CommClubLink_GetCard
 .public sub_02058AA0
 .public sub_02059538
 .public sub_02068FC8
@@ -77,10 +77,10 @@
 .public ov03_02255C54
 
 	.public sub_02058034
-	.public sub_02058038
-	.public sub_02058098
-	.public sub_020582CC
-	.public sub_020582F4
+	.public CommClubLink_Init
+	.public CommClubLink_Free
+	.public CommClubLink_Task
+	.public CommClubLink_SetState
 	.public sub_02058304
 	.public sub_02058328
 	.public sub_0205832C
@@ -107,7 +107,7 @@
 	.public sub_02058870
 	.public sub_020588A0
 	.public sub_020588B4
-	.public sub_020588F8
+	.public CommClubLink_SendCard
 	.public sub_02058930
 	.public sub_0205896C
 	.public sub_020589B0
@@ -116,4 +116,4 @@
 	.public sub_02058A38
 	.public sub_02058A60
 	.public sub_02058A78
-	.public _021D41C8
+	.public gCommClubLink

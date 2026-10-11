@@ -4,14 +4,14 @@
 
 	.bss
 
-	.public _021D41C8
-_021D41C8:
+	.public gCommClubLink
+gCommClubLink:
 	.space 0x4
 
 	.text
 
-	thumb_func_start sub_02058190
-sub_02058190: ; 0x02058190
+	thumb_func_start CommClubLink_StartCardExchange
+CommClubLink_StartCardExchange: ; 0x02058190
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0xc
 	add r4, r0, #0
@@ -27,13 +27,13 @@ sub_02058190: ; 0x02058190
 	bl sub_02037D78
 	cmp r0, #0
 	beq _02058248
-	ldr r0, _0205824C ; =_021D41C8
+	ldr r0, _0205824C ; =gCommClubLink
 	ldr r1, [r0]
 	cmp r1, #0
 	bne _020581D0
 	add r0, r4, #0
-	bl sub_02058038
-	ldr r0, _0205824C ; =_021D41C8
+	bl CommClubLink_Init
+	ldr r0, _0205824C ; =gCommClubLink
 	mov r1, #1
 	ldr r0, [r0]
 	add r0, #0x3e
@@ -44,7 +44,7 @@ _020581D0:
 	add r1, #0x3e
 	strb r0, [r1]
 _020581D6:
-	ldr r0, _0205824C ; =_021D41C8
+	ldr r0, _0205824C ; =gCommClubLink
 	mov r1, #0
 	ldr r0, [r0]
 	add r0, #0x3f
@@ -57,7 +57,7 @@ _020581D6:
 	bl Comm_CountConnected
 	cmp r0, #0
 	ble _0205821E
-	ldr r6, _0205824C ; =_021D41C8
+	ldr r6, _0205824C ; =gCommClubLink
 	add r5, r4, #0
 	add r7, r4, #0
 _020581FE:
@@ -77,7 +77,7 @@ _02058212:
 	cmp r4, r0
 	blt _020581FE
 _0205821E:
-	ldr r0, _0205824C ; =_021D41C8
+	ldr r0, _0205824C ; =gCommClubLink
 	mov r3, #0xff
 	ldr r1, [r0]
 	ldr r0, [r1, #0x14]
@@ -92,14 +92,14 @@ _0205821E:
 	bl sub_02068FC8
 	mov r0, #0x5f
 	bl LinkSync_StartSync
-	ldr r0, _02058254 ; =sub_020588F8
+	ldr r0, _02058254 ; =CommClubLink_SendCard
 	mov r1, #0
-	bl sub_020582F4
+	bl CommClubLink_SetState
 _02058248:
 	add sp, #0xc
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
-_0205824C: .word _021D41C8
+_0205824C: .word gCommClubLink
 _02058250: .word 0x0000066C
-_02058254: .word sub_020588F8
-	thumb_func_end sub_02058190
+_02058254: .word CommClubLink_SendCard
+	thumb_func_end CommClubLink_StartCardExchange

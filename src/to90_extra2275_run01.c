@@ -1,5 +1,0 @@
-#pragma force_active on
-#include "global.h"
-#pragma force_active on
-typedef struct{u8 p[17];u8 selected;u8 q[34];u8 option;}Header;typedef struct{Header*header;u8 p[0x2088-4];void*menu;u8 a,b,c;}Work;extern const u32 sBattlePartyPageCursorBoxes[];void BattleDpadCursor_SetBoxes(void*,u32),BattleDpadCursor_SetPosition(void*,int),BattlePartyMenu_SetLearnMoveCursorMask(Work*),BattlePartyMenu_SetForgetMoveCursorMask(Work*);void BattlePartyMenu_SetPageCursor(Work*,u32);
-void BattlePartyMenu_SetPageCursor(Work*w,u32 kind){BattleDpadCursor_SetBoxes(w->menu,sBattlePartyPageCursorBoxes[kind]);switch(kind){case 0:BattleDpadCursor_SetPosition(w->menu,w->header->selected);w->a=0;w->header->option=0;break;case 1:BattleDpadCursor_SetPosition(w->menu,w->a);w->header->option=0;break;case 3:case 4:BattleDpadCursor_SetPosition(w->menu,w->header->option);break;case 6:case 8:BattlePartyMenu_SetLearnMoveCursorMask(w);BattleDpadCursor_SetPosition(w->menu,w->b);break;case 7:case 9:BattlePartyMenu_SetForgetMoveCursorMask(w);BattleDpadCursor_SetPosition(w->menu,w->c);break;}}

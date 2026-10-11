@@ -51,10 +51,10 @@ typedef struct Layout {
 u8 *ov96_021E8A20(void *area);
 void ov96_021EB52C(void *sprite, int a, int b);
 BOOL ov96_021E5F24(PokeathlonCourseData *data);
-void ov96_02207870(Work *work);
-void ov96_02208AF8(void *unk, u8 (*pairs)[2]);
-void ov96_02208AF0(void *unk, void *arg);
-void ov96_0220764C(Work *work);
+void PokeathlonPennantCapture_RefillPennants(Work *work);
+void PokeathlonPennantCaptureCpu_SetObstacles(void *unk, u8 (*pairs)[2]);
+void PokeathlonPennantCaptureCpu_SetPennants(void *unk, void *arg);
+void PokeathlonPennantCapture_UpdateFieldDrawPriorities(Work *work);
 void ov96_02205D30(PokeathlonCourseData *data);
 BOOL ov96_022052B0(PokeathlonCourseData *data, u8 *state);
 
@@ -102,12 +102,12 @@ BOOL ov96_022052B0(PokeathlonCourseData *data, u8 *state) {
             work->posC[i].y = pc[1] * 8;
         }
         if (!ov96_021E5F24(data)) {
-            ov96_02207870(work);
-            ov96_02208AF8(work->unk36C, layout.b);
-            ov96_02208AF8(work->unk36C, layout.a);
-            ov96_02208AF0(work->unk36C, work->unk564);
+            PokeathlonPennantCapture_RefillPennants(work);
+            PokeathlonPennantCaptureCpu_SetObstacles(work->unk36C, layout.b);
+            PokeathlonPennantCaptureCpu_SetObstacles(work->unk36C, layout.a);
+            PokeathlonPennantCaptureCpu_SetPennants(work->unk36C, work->unk564);
         }
-        ov96_0220764C(work);
+        PokeathlonPennantCapture_UpdateFieldDrawPriorities(work);
         GF_ASSERT(GF_heap_c_dummy_return_true((enum HeapID)0x5C));
         (*state)++;
         PokeathlonCourse_SetStateTransitionType(data, 0x13);

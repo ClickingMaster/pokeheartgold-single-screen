@@ -13,7 +13,7 @@ void PaletteData_LoadPaletteSlotFromHardware(void *, int, int, int);
 void SetBgPriority(int, int);
 void GlobalTerminalNet_UnpackDressUpPhoto(void *, void *);
 void GlobalTerminalNet_CopyRequestHeader(void *, void *);
-void ov40_0222BC54(void *);
+void VsRecorder_ResetBg2(void *);
 void ov40_0222BF80(void *, int);
 int ov40_0222DA00(void *, void *, int, int);
 void ov40_0222E79C(void *, void *);

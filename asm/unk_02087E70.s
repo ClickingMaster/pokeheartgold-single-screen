@@ -69,7 +69,7 @@ _02087EE2:
 	str r0, [r4, #0x58]
 _02087EE6:
 	add r0, r4, #0
-	bl ov40_0222B6E0
+	bl VsRecorder_InitResources
 	mov r0, #1
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
@@ -102,7 +102,7 @@ sub_02087F10: ; 0x02087F10
 	bl sub_02087A78
 	add r1, r4, #0
 	str r4, [r0, #0x10]
-	bl ov40_0222BD30
+	bl VsRecorder_Main
 	cmp r0, #0
 	beq _02087F28
 	mov r0, #1
@@ -171,7 +171,7 @@ _02087F8A:
 	b _02087FC2
 _02087F9E:
 	add r0, r5, #0
-	bl ov40_0222B934
+	bl VsRecorder_FreeResources
 	mov r0, #0x6d
 	bl Heap_Destroy
 	ldr r0, _02087FCC ; =FS_OVERLAY_ID(OVY_40)

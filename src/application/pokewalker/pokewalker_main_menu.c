@@ -1,0 +1,562 @@
+// Pokewalker connection app, mode 0: the main menu. Checks the PC boxes (at least five free spaces, at least one
+// Pokemon), shows the Pokewalker's records on the sub screen, and lets the player pick what to do (go for a Stroll,
+// receive gifts, return from a Stroll); the choice selects the next app mode. The state functions are in table
+// sMainMenuStates (asm data); state 27 leaves the mode.
+
+#include "global.h"
+
+#include "application/pokewalker/pokewalker_app.h"
+#include "msgdata/msg/msg_0274.h"
+
+#include "message_format.h"
+#include "pokemon.h"
+#include "pokemon_storage_system.h"
+#include "save_arrays.h"
+#include "sound.h"
+#include "sound_playback.h"
+#include "sound_system.h"
+#include "system.h"
+#include "text.h"
+#include "touchscreen.h"
+#include "unk_0200FA24.h"
+
+typedef int (*PokewalkerAppStateFunc)(PokewalkerApp *app);
+
+extern const PokewalkerAppStateFunc sMainMenuStates[];
+// Cursor positions of the menus' items.
+extern const int ov112_021FF090[];
+extern const int ov112_021FF09C[];
+extern const int ov112_021FF0AC[];
+
+int PokewalkerApp_MainMenu_Enter(PokewalkerApp *app) {
+    Sound_SetSceneAndPlayBGM(73, SEQ_GS_PHC, 0);
+    PlayBGM(SEQ_GS_PHC);
+    return 2;
+}
+
+int PokewalkerApp_MainMenu_Update(PokewalkerApp *app) {
+    app->state = sMainMenuStates[app->state](app);
+    if (app->state == 27) {
+        app->state = 0;
+        return 3;
+    }
+    return 2;
+}
+
+int PokewalkerApp_MainMenu_Exit(PokewalkerApp *app) {
+    return 1;
+}
+
+#pragma force_active on
+int PokewalkerApp_MainMenu_Start(PokewalkerApp *app) {
+    struct {
+        u16 unk2;
+        u16 unk0;
+    } walkerState;
+    PCStorage *storage = SaveArray_PCStorage_Get(app->saveData);
+    BeginNormalPaletteFade(0, 1, 1, RGB_BLACK, 6, 1, HEAP_ID_154);
+    if (PCStorage_CountEmptySpotsInAllBoxes(storage) < 5) {
+        PokewalkerApp_RemoveWindowBank(app, 3);
+        PokewalkerApp_AddWindowBank(app, 1);
+        return 20;
+    }
+    if (PCStorage_CountMonsInAllBoxes(storage) == 0 && sub_0203263C(app->pokewalker) == 0) {
+        PokewalkerApp_RemoveWindowBank(app, 3);
+        PokewalkerApp_AddWindowBank(app, 1);
+        return 23;
+    }
+    sub_02032688(app->pokewalker, &walkerState.unk0, &walkerState.unk2);
+    switch (walkerState.unk0) {
+    case 0:
+        app->nextMode = 3;
+        app->strollMonSpecies = SPECIES_NONE;
+        app->unk_10 = 0;
+        PokewalkerApp_RemoveWindowBank(app, 3);
+        PokewalkerApp_AddWindowBank(app, 1);
+        FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
+        BgCommitTilemapBufferToVram(app->bgConfig, GF_BG_LYR_MAIN_1);
+        sub_020326A4(app->pokewalker, 0, 0);
+        return 4;
+    case 1:
+        app->strollMonSpecies = SPECIES_NONE;
+        app->unk_10 = 0;
+        PokewalkerApp_RemoveWindowBank(app, 3);
+        PokewalkerApp_AddWindowBank(app, 7);
+        FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
+        BgCommitTilemapBufferToVram(app->bgConfig, GF_BG_LYR_MAIN_1);
+        PokewalkerApp_ShowWalkerRecords(app, FALSE);
+        return 15;
+    case 2:
+        PokewalkerApp_RemoveWindowBank(app, 3);
+        PokewalkerApp_AddWindowBank(app, 1);
+        FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
+        BgCommitTilemapBufferToVram(app->bgConfig, GF_BG_LYR_MAIN_1);
+        PokewalkerApp_ShowWalkerRecords(app, TRUE);
+        return 10;
+    }
+    return 1;
+}
+
+// Sub screen: total watts and steps, watts needed for the next course, and the Pokemon on a Stroll.
+void PokewalkerApp_ShowWalkerRecords(PokewalkerApp *app, BOOL onStroll) {
+    u32 steps, watts;
+    int wattsNeeded;
+    Pokemon *mon;
+    BoxPokemon *boxMon;
+    sub_02032674(app->pokewalker, &steps, &watts);
+    BufferIntegerAsString(app->msgFormat, 7, watts, 7, PRINTING_MODE_LEFT_ALIGN, TRUE);
+    BufferIntegerAsString(app->msgFormat, 6, steps, 7, PRINTING_MODE_LEFT_ALIGN, TRUE);
+    wattsNeeded = PokewalkerApp_GetWattsToNextCourse(app, watts);
+    BufferIntegerAsString(app->msgFormat, 12, wattsNeeded, 7, PRINTING_MODE_LEFT_ALIGN, TRUE);
+    PokewalkerApp_LoadTilemap(app, 5, 16);
+    PokewalkerApp_ShowSubBg1(app, TRUE);
+    app->subBgScrollX = 0;
+    PokewalkerApp_PrintSubString(app, 1, app->totalWattsText, 0, MAKE_TEXT_COLOR(1, 2, 0));
+    PokewalkerApp_PrintSubMessage(app, 2, msg_0274_00083, MAKE_TEXT_COLOR(1, 2, 0));
+    PokewalkerApp_PrintSubString(app, 3, app->totalStepsText, 0, MAKE_TEXT_COLOR(1, 2, 0));
+    PokewalkerApp_PrintSubMessage(app, 4, msg_0274_00084, MAKE_TEXT_COLOR(1, 2, 0));
+    if (wattsNeeded < 0) {
+        PokewalkerApp_PrintSubMessage(app, 0, msg_0274_00088, MAKE_TEXT_COLOR(1, 2, 0));
+    } else if (wattsNeeded == 0) {
+        PokewalkerApp_PrintSubMessage(app, 0, msg_0274_00087, MAKE_TEXT_COLOR(1, 2, 0));
+    } else {
+        PokewalkerApp_PrintSubMessage(app, 0, msg_0274_00086, MAKE_TEXT_COLOR(1, 2, 0));
+    }
+    if (onStroll) {
+        mon = AllocMonZeroed(HEAP_ID_154);
+        boxMon = Mon_GetBoxMon(mon);
+        Pokewalker_TryGetBoxMon(app->pokewalker, boxMon);
+        BufferBoxMonNickname(app->msgFormat, 13, boxMon);
+        PokewalkerApp_PrintSubMessage(app, 5, msg_0274_00089, MAKE_TEXT_COLOR(3, 4, 0));
+        PokewalkerApp_LoadMonPicture(boxMon, app->monSpriteBuffer, &app->monPicTemplate, 1);
+        PokewalkerApp_ShowSprite(app, 7);
+        Heap_Free(mon);
+    } else {
+        PokewalkerApp_HideSprite(app, 7);
+        FillWindowPixelBuffer(&app->subWindows[5], 0);
+        CopyWindowToVram(&app->subWindows[5]);
+    }
+    ov112_021EA64C(app);
+}
+#pragma force_active reset
+
+int ov112_021EAF48(PokewalkerApp *app) {
+    return IsPaletteFadeFinished() == TRUE ? 4 : 2;
+}
+
+// Top menu: 6 items (cursor positions ov112_021FF0AC).
+int ov112_021EAF5C(PokewalkerApp *app) {
+    int i;
+
+    PokewalkerApp_RemoveWindowBank(app, 1);
+    PokewalkerApp_AddWindowBank(app, 3);
+    FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
+    PokewalkerApp_LoadTilemap(app, 5, 17);
+    PokewalkerApp_LoadTilemap(app, 2, 23);
+    for (i = 0; i < 4; i++) {
+        String *string = NewString_ReadMsgData(app->msgData, msg_0274_00152 + i);
+        PokewalkerApp_PrintString(app, i, string, 4, MAKE_TEXT_COLOR(15, 1, 0));
+        String_Delete(string);
+    }
+    PokewalkerApp_PrintExit(app, 6);
+    app->menuSelection = 0;
+    PokewalkerApp_SetCursorPosition(app, ov112_021FF0AC[app->menuSelection]);
+    return 3;
+}
+
+int ov112_021EAFFC(PokewalkerApp *app) {
+    u32 keys = gSystem.newKeys;
+
+    if (keys & PAD_KEY_UP) {
+        if (app->menuSelection > 0) {
+            app->menuSelection--;
+        }
+        PokewalkerApp_SetCursorPosition(app, ov112_021FF0AC[app->menuSelection]);
+    } else if (keys & PAD_KEY_DOWN) {
+        if (app->menuSelection < 5) {
+            app->menuSelection++;
+        }
+        PokewalkerApp_SetCursorPosition(app, ov112_021FF0AC[app->menuSelection]);
+    } else if (keys & PAD_BUTTON_A) {
+        switch (app->menuSelection) {
+        case 0:
+            app->nextMode = 2;
+            sub_020326A4(app->pokewalker, 0, 0);
+            PokewalkerApp_RemoveWindowBank(app, 3);
+            PokewalkerApp_AddWindowBank(app, 1);
+            FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
+            BgCommitTilemapBufferToVram(app->bgConfig, GF_BG_LYR_MAIN_1);
+            return 26;
+        case 1:
+            app->nextMode = 3;
+            app->strollMonSpecies = SPECIES_NONE;
+            app->unk_10 = 0;
+            PokewalkerApp_RemoveWindowBank(app, 3);
+            PokewalkerApp_AddWindowBank(app, 1);
+            FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
+            BgCommitTilemapBufferToVram(app->bgConfig, GF_BG_LYR_MAIN_1);
+            sub_020326A4(app->pokewalker, 0, 0);
+            return 4;
+        case 2:
+            sub_020326A4(app->pokewalker, 1, 1);
+            app->strollMonSpecies = SPECIES_NONE;
+            app->unk_10 = 0;
+            PokewalkerApp_RemoveWindowBank(app, 3);
+            PokewalkerApp_AddWindowBank(app, 7);
+            FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
+            BgCommitTilemapBufferToVram(app->bgConfig, GF_BG_LYR_MAIN_1);
+            return 15;
+        case 3:
+            PokewalkerApp_RemoveWindowBank(app, 3);
+            PokewalkerApp_AddWindowBank(app, 1);
+            FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
+            BgCommitTilemapBufferToVram(app->bgConfig, GF_BG_LYR_MAIN_1);
+            return 10;
+        case 4:
+            PokewalkerApp_RemoveWindowBank(app, 3);
+            PokewalkerApp_AddWindowBank(app, 1);
+            FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
+            BgCommitTilemapBufferToVram(app->bgConfig, GF_BG_LYR_MAIN_1);
+            return 15;
+        }
+    }
+    return 3;
+}
+
+int PokewalkerApp_MainMenu_PrintWelcome(PokewalkerApp *app) {
+    PokewalkerApp_StartMessage(app, 2, msg_0274_00000, 6);
+    return 24;
+}
+
+int PokewalkerApp_MainMenu_WaitWelcome(PokewalkerApp *app) {
+    return !TextPrinterCheckActive(app->textPrinterId) ? 7 : 5;
+}
+
+int PokewalkerApp_MainMenu_PrintStrollReady(PokewalkerApp *app) {
+    FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
+    BgCommitTilemapBufferToVram(app->bgConfig, GF_BG_LYR_MAIN_1);
+    PokewalkerApp_StartMessage(app, 0, msg_0274_00008, 7);
+    return 24;
+}
+
+// "Save, then go for a Stroll" / exit.
+int PokewalkerApp_MainMenu_ShowStrollMenu(PokewalkerApp *app) {
+    PokewalkerApp_LoadTilemap(app, 2, 10);
+    PokewalkerApp_PrintString(app, 5, app->saveAndStrollText, 4, MAKE_TEXT_COLOR(15, 1, 0));
+    PokewalkerApp_PrintExit(app, 1);
+    app->menuSelection = 0;
+    PokewalkerApp_SetCursorPosition(app, 2);
+    return 8;
+}
+
+int PokewalkerApp_MainMenu_HandleStrollMenu(PokewalkerApp *app) {
+    int selection = PokewalkerApp_GetTouchedButton(1);
+    if (selection != TOUCH_MENU_NO_INPUT) {
+        PokewalkerApp_SelectMenuItem(app, selection, selection + 2, 9);
+        PlaySE(SEQ_SE_DP_DECIDE);
+        return 25;
+    }
+    if (gSystem.newKeys & PAD_KEY_UP) {
+        if (app->menuSelection != 0) {
+            PlaySE(SEQ_SE_DP_SELECT);
+        }
+        PokewalkerApp_SetCursorPosition(app, 2);
+        app->menuSelection = 0;
+    } else if (gSystem.newKeys & PAD_KEY_DOWN) {
+        if (app->menuSelection != 1) {
+            PlaySE(SEQ_SE_DP_SELECT);
+        }
+        PokewalkerApp_SetCursorPosition(app, 3);
+        app->menuSelection = 1;
+    } else if (gSystem.newKeys & PAD_BUTTON_A) {
+        PlaySE(SEQ_SE_DP_DECIDE);
+        selection = app->menuSelection;
+        PokewalkerApp_SelectMenuItem(app, selection, selection + 2, 9);
+        return 25;
+    } else if (gSystem.newKeys & PAD_BUTTON_B) {
+        PlaySE(SEQ_SE_DP_DECIDE);
+        PokewalkerApp_SelectMenuItem(app, 1, 3, 9);
+        return 25;
+    } else if (PokewalkerApp_IsDownXLHeld()) {
+        PlaySE(SEQ_SE_DP_SELECT);
+        ov112_021EB90C(app, 3);
+        return 26;
+    } else if (PokewalkerApp_IsUpSelectRHeld() && ov112_021EB950(app, 3)) {
+        PlaySE(SEQ_SE_DP_SELECT);
+        return 26;
+    }
+    return 8;
+}
+
+int PokewalkerApp_MainMenu_EndStrollMenu(PokewalkerApp *app) {
+    PokewalkerApp_HideCursor(app);
+    if (app->menuSelection == 0) {
+        app->nextMode = 3;
+    } else {
+        app->nextMode = 11;
+    }
+    return 26;
+}
+
+int PokewalkerApp_MainMenu_PrintReceive(PokewalkerApp *app) {
+    PokewalkerApp_StartMessage(app, 0, msg_0274_00002, 12);
+    return 24;
+}
+
+int PokewalkerApp_MainMenu_WaitReceive(PokewalkerApp *app) {
+    return !TextPrinterCheckActive(app->textPrinterId) ? 12 : 11;
+}
+
+// "Return from a Stroll" / "Receive a gift" / exit.
+#pragma force_active on
+int PokewalkerApp_MainMenu_ShowReceiveMenu(PokewalkerApp *app) {
+    PokewalkerApp_LoadTilemap(app, 2, 11);
+    PokewalkerApp_LoadTilemap(app, 5, 16);
+    PokewalkerApp_PrintString(app, 3, app->returnFromStrollText, 4, MAKE_TEXT_COLOR(15, 1, 0));
+    PokewalkerApp_PrintString(app, 4, app->receiveGiftText, 4, MAKE_TEXT_COLOR(15, 1, 0));
+    PokewalkerApp_PrintExit(app, 1);
+    app->menuSelection = 0;
+    PokewalkerApp_SetCursorPosition(app, ov112_021FF090[app->menuSelection]);
+    return 13;
+}
+
+int PokewalkerApp_MainMenu_HandleReceiveMenu(PokewalkerApp *app) {
+    int selection = PokewalkerApp_GetTouchedButton(2);
+    if (selection != TOUCH_MENU_NO_INPUT) {
+        PokewalkerApp_SelectMenuItem(app, selection, ov112_021FF090[selection], 14);
+        PlaySE(SEQ_SE_DP_DECIDE);
+        return 25;
+    }
+    if (gSystem.newKeys & PAD_KEY_UP) {
+        if (app->menuSelection != 0) {
+            PlaySE(SEQ_SE_DP_SELECT);
+            --app->menuSelection;
+        }
+        PokewalkerApp_SetCursorPosition(app, ov112_021FF090[app->menuSelection]);
+    } else if (gSystem.newKeys & PAD_KEY_DOWN) {
+        if (app->menuSelection < 2) {
+            PlaySE(SEQ_SE_DP_SELECT);
+            ++app->menuSelection;
+        }
+        PokewalkerApp_SetCursorPosition(app, ov112_021FF090[app->menuSelection]);
+    } else if (gSystem.newKeys & PAD_BUTTON_A) {
+        PlaySE(SEQ_SE_DP_DECIDE);
+        PokewalkerApp_SelectMenuItem(app, app->menuSelection, ov112_021FF090[app->menuSelection], 14);
+        return 25;
+    } else if (gSystem.newKeys & PAD_BUTTON_B) {
+        PlaySE(SEQ_SE_DP_SELECT);
+        PokewalkerApp_SelectMenuItem(app, 2, 3, 14);
+        return 25;
+    } else if (PokewalkerApp_IsDownXLHeld()) {
+        PlaySE(SEQ_SE_DP_SELECT);
+        ov112_021EB90C(app, 3);
+        return 26;
+    } else if (PokewalkerApp_IsUpSelectRHeld()) {
+        if (ov112_021EB950(app, 3)) {
+            PlaySE(SEQ_SE_DP_SELECT);
+            return 26;
+        }
+    }
+    return 13;
+}
+#pragma force_active reset
+
+int PokewalkerApp_MainMenu_EndReceiveMenu(PokewalkerApp *app) {
+    PokewalkerApp_HideCursor(app);
+    switch (app->menuSelection) {
+    case 0:
+        app->nextMode = 3;
+        app->unk_10 = 1;
+        break;
+    case 1:
+        app->nextMode = 3;
+        app->unk_10 = 2;
+        break;
+    case 2:
+        app->nextMode = 11;
+        break;
+    default:
+        GF_ASSERT((s32)app->menuSelection < 3);
+        break;
+    }
+    return 26;
+}
+
+int PokewalkerApp_MainMenu_PrintStrollReady2(PokewalkerApp *app) {
+    PokewalkerApp_StartMessage(app, 0, msg_0274_00008, 17);
+    return 24;
+}
+
+int PokewalkerApp_MainMenu_WaitStrollReady2(PokewalkerApp *app) {
+    return !TextPrinterCheckActive(app->textPrinterId) ? 17 : 16;
+}
+
+// "Go for a Stroll" / "Receive a gift" / "Return from a Stroll" / exit.
+int PokewalkerApp_MainMenu_ShowFullMenu(PokewalkerApp *app) {
+    PokewalkerApp_LoadTilemap(app, 2, 12);
+    PokewalkerApp_LoadTilemap(app, 5, 16);
+    PokewalkerApp_PrintString(app, 3, app->goForStrollText, 4, MAKE_TEXT_COLOR(15, 1, 0));
+    PokewalkerApp_PrintString(app, 4, app->receiveGiftText, 4, MAKE_TEXT_COLOR(15, 1, 0));
+    PokewalkerApp_PrintString(app, 5, app->returnFromStrollText, 4, MAKE_TEXT_COLOR(15, 1, 0));
+    PokewalkerApp_PrintExit(app, 1);
+    app->menuSelection = 0;
+    PokewalkerApp_SetCursorPosition(app, ov112_021FF09C[app->menuSelection]);
+    return 18;
+}
+
+int PokewalkerApp_MainMenu_HandleFullMenu(PokewalkerApp *app) {
+    int selection = PokewalkerApp_GetTouchedButton(3);
+    if (selection != TOUCH_MENU_NO_INPUT) {
+        PokewalkerApp_SelectMenuItem(app, selection, ov112_021FF09C[selection], 19);
+        PlaySE(SEQ_SE_DP_DECIDE);
+        return 25;
+    }
+    if (gSystem.newKeys & PAD_KEY_UP) {
+        if (app->menuSelection != 0) {
+            PlaySE(SEQ_SE_DP_SELECT);
+            app->menuSelection--;
+        }
+        PokewalkerApp_SetCursorPosition(app, ov112_021FF09C[app->menuSelection]);
+    } else if (gSystem.newKeys & PAD_KEY_DOWN) {
+        if (app->menuSelection < 3) {
+            PlaySE(SEQ_SE_DP_SELECT);
+            app->menuSelection++;
+        }
+        PokewalkerApp_SetCursorPosition(app, ov112_021FF09C[app->menuSelection]);
+    } else if (gSystem.newKeys & PAD_BUTTON_A) {
+        PlaySE(SEQ_SE_DP_DECIDE);
+        selection = app->menuSelection;
+        PokewalkerApp_SelectMenuItem(app, selection, ov112_021FF09C[selection], 19);
+        return 25;
+    } else if (gSystem.newKeys & PAD_BUTTON_B) {
+        PlaySE(SEQ_SE_DP_SELECT);
+        PokewalkerApp_SelectMenuItem(app, 3, 3, 19);
+        return 25;
+    } else if (PokewalkerApp_IsDownXLHeld()) {
+        PlaySE(SEQ_SE_DP_SELECT);
+        ov112_021EB90C(app, 7);
+        return 26;
+    } else if (PokewalkerApp_IsUpSelectRHeld() && ov112_021EB950(app, 3)) {
+        PlaySE(SEQ_SE_DP_SELECT);
+        return 26;
+    }
+    return 18;
+}
+
+int PokewalkerApp_MainMenu_EndFullMenu(PokewalkerApp *app) {
+    PokewalkerApp_HideCursor(app);
+    switch (app->menuSelection) {
+    case 0:
+        app->nextMode = 3;
+        app->unk_10 = 0;
+        break;
+    case 1:
+        app->nextMode = 3;
+        app->unk_10 = 1;
+        break;
+    case 2:
+        app->nextMode = 3;
+        app->unk_10 = 2;
+        break;
+    case 3:
+        app->nextMode = 11;
+        break;
+    default:
+        GF_ASSERT(app->menuSelection < 4);
+        break;
+    }
+    return 26;
+}
+
+int PokewalkerApp_MainMenu_PrintBoxesFull(PokewalkerApp *app) {
+    PokewalkerApp_HideCursor(app);
+    FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
+    FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
+    BgCommitTilemapBufferToVram(app->bgConfig, GF_BG_LYR_MAIN_2);
+    BgCommitTilemapBufferToVram(app->bgConfig, GF_BG_LYR_MAIN_1);
+    PokewalkerApp_StartMessage(app, 2, msg_0274_00015, 22);
+    return 24;
+}
+
+int PokewalkerApp_MainMenu_WaitBoxesFull(PokewalkerApp *app) {
+    if (!TextPrinterCheckActive(app->textPrinterId)) {
+        app->nextMode = 11;
+        return 26;
+    }
+    return 21;
+}
+
+int PokewalkerApp_MainMenu_Quit(PokewalkerApp *app) {
+    app->nextMode = 11;
+    return 26;
+}
+
+int PokewalkerApp_MainMenu_PrintNoPokemon(PokewalkerApp *app) {
+    PokewalkerApp_HideCursor(app);
+    FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
+    FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
+    BgCommitTilemapBufferToVram(app->bgConfig, GF_BG_LYR_MAIN_2);
+    BgCommitTilemapBufferToVram(app->bgConfig, GF_BG_LYR_MAIN_1);
+    PokewalkerApp_StartMessage(app, 2, msg_0274_00022, 22);
+    return 24;
+}
+
+// Waits for the message, then goes to nextState.
+int PokewalkerApp_MainMenu_WaitMessage(PokewalkerApp *app) {
+    if (!TextPrinterCheckActive(app->textPrinterId)) {
+        app->state = app->nextState;
+        return app->state;
+    }
+    return 24;
+}
+
+// Waits for the cursor animation, then goes to nextState.
+int PokewalkerApp_MainMenu_WaitCursor(PokewalkerApp *app) {
+    if (!ManagedSprite_IsAnimated(app->sprites[0])) {
+        app->state = app->nextState;
+        return app->state;
+    }
+    return 25;
+}
+
+int PokewalkerApp_MainMenu_End(PokewalkerApp *app) {
+    return 27;
+}
+
+void ov112_021EB90C(PokewalkerApp *app, int bank) {
+    app->nextMode = 2;
+    PokewalkerApp_RemoveWindowBank(app, bank);
+    PokewalkerApp_AddWindowBank(app, 1);
+    FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
+    BgCommitTilemapBufferToVram(app->bgConfig, GF_BG_LYR_MAIN_1);
+    PokewalkerApp_HideCursor(app);
+}
+
+BOOL ov112_021EB950(PokewalkerApp *app, int bank) {
+    struct {
+        u16 unk2;
+        u16 unk0;
+    } walkerState;
+    sub_02032688(app->pokewalker, &walkerState.unk0, &walkerState.unk2);
+    if (walkerState.unk0 != 2) {
+        return FALSE;
+    }
+    app->nextMode = 3;
+    app->unk_10 = 4;
+    PokewalkerApp_RemoveWindowBank(app, bank);
+    PokewalkerApp_AddWindowBank(app, 1);
+    FillBgTilemapRect(app->bgConfig, GF_BG_LYR_MAIN_1, 0, 0, 0, 32, 24, TILEMAP_FILL_KEEP_PAL);
+    BgCommitTilemapBufferToVram(app->bgConfig, GF_BG_LYR_MAIN_1);
+    PokewalkerApp_HideCursor(app);
+    return TRUE;
+}
+
+BOOL PokewalkerApp_IsDownXLHeld(void) {
+    u32 keys = gSystem.heldKeys;
+    return (keys & PAD_KEY_DOWN) && (keys & PAD_BUTTON_X) && (keys & PAD_BUTTON_L);
+}
+
+BOOL PokewalkerApp_IsUpSelectRHeld(void) {
+    u32 keys = gSystem.heldKeys;
+    return (keys & PAD_KEY_UP) && (keys & PAD_BUTTON_SELECT) && (keys & PAD_BUTTON_R);
+}

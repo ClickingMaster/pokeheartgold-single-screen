@@ -3315,14 +3315,14 @@
 	.public _02244C40
 	.public _02244C44
 	.public _02245CC0
-	.public ov40_0222B6E0
-	.public ov40_0222B934
-	.public ov40_0222BA90
-	.public ov40_0222BC44
-	.public ov40_0222BC54
-	.public ov40_0222BC68
-	.public ov40_0222BD04
-	.public ov40_0222BD30
+	.public VsRecorder_InitResources
+	.public VsRecorder_FreeResources
+	.public VsRecorder_InitBgLayers
+	.public VsRecorder_SetScreensFlipped
+	.public VsRecorder_ResetBg2
+	.public VsRecorder_InitSpriteSystem
+	.public VsRecorder_VBlankCB
+	.public VsRecorder_Main
 	.public ov40_0222BF64
 	.public ov40_0222BF80
 	.public ov40_0222BF8C

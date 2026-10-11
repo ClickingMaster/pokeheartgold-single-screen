@@ -20,7 +20,7 @@ _0205858C:
 	bl LinkSync_GetPlayerState
 	cmp r0, #0x5e
 	bne _020585E0
-	ldr r6, _02058600 ; =_021D41C8
+	ldr r6, _02058600 ; =gCommClubLink
 	ldr r0, [r6]
 	ldr r1, [r0, #0x14]
 	ldr r0, [r1, #0x10]
@@ -46,7 +46,7 @@ _020585CA:
 	add r5, r5, #4
 	cmp r4, #4
 	blt _020585BA
-	ldr r0, _02058600 ; =_021D41C8
+	ldr r0, _02058600 ; =gCommClubLink
 	ldr r1, _02058604 ; =0x0000238E
 	ldr r0, [r0]
 	mov r2, #0
@@ -61,7 +61,7 @@ _020585E0:
 	cmp r1, r0
 	blt _0205858C
 _020585F0:
-	ldr r1, _02058600 ; =_021D41C8
+	ldr r1, _02058600 ; =gCommClubLink
 	mov r0, #4
 	ldr r1, [r1]
 	ldr r1, [r1, #0x14]
@@ -69,6 +69,6 @@ _020585F0:
 	bl sub_020399FC
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-_02058600: .word _021D41C8
+_02058600: .word gCommClubLink
 _02058604: .word 0x0000238E
 	thumb_func_end sub_0205857C

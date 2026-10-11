@@ -19,7 +19,7 @@ void PokewalkerIr_Stop(void);
 BOOL ov112_021E7668(void);
 void PokewalkerApp_ShowSubBg1(void *p, int value);
 int PokewalkerApp_GetTouchedButton(int value);
-void ov112_021EC440(void *p, int a, int b, int c);
+void PokewalkerApp_SelectMenuItem(void *p, int a, int b, int c);
 void PokewalkerApp_ShowMessageBox(void *p, int a, int b);
 void ov112_021ED7DC(void *p);
 int ov112_021ED66C(void *p);

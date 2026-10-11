@@ -28,7 +28,7 @@ extern void PokewalkerApp_ShowSprite(Ov112State *, int);
 extern void PokewalkerApp_HideSprite(Ov112State *, int);
 extern void PokewalkerApp_SetSpriteAnim(Ov112State *, int, int);
 extern void *PokewalkerApp_StartMessageBox(Ov112State *, int, int);
-extern void ov112_021EC440(Ov112State *, int, int, int);
+extern void PokewalkerApp_SelectMenuItem(Ov112State *, int, int, int);
 extern void PokewalkerApp_LoadTilemap(Ov112State *, int, int);
 extern void PokewalkerApp_PrintExit(Ov112State *, int);
 extern void PokewalkerApp_RemoveWindowBank(Ov112State *, int);

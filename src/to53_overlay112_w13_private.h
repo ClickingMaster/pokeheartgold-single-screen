@@ -24,7 +24,7 @@ int ov112_021E9338(void *p);
 void PokewalkerApp_HideSprite(void *p, int index);
 void ov112_021ED2F4(void *p);
 void ov112_021ED0D0(void *p);
-void ov112_021EC460(void *p, int a, int b, int c);
+void PokewalkerApp_StartMessage(void *p, int a, int b, int c);
 void ov112_021EA5A4(void *p, int index);
 void PokewalkerApp_LoadSubBg1Tilemap(void *p);
 void *SysTask_CreateOnMainQueue(void *func, void *arg, u32 priority);

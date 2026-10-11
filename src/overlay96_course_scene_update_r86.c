@@ -12,12 +12,12 @@ void ov96_02205D30(void *course) {
     u32 y = (packed >> 9) & 0x1FF;
     ScheduleSetBgPosText(PTR(p, 0), 0, 0, x - 0x80);
     ScheduleSetBgPosText(PTR(p, 0), 0, 3, y - 0x60);
-    ov96_02206380(course, mode, p + 0x24, copy);
-    ov96_02206A24(p, x, y);
-    ov96_02206AC0(p, x, y);
-    ov96_02206B80(p, v, x, y);
-    ov96_02207BE4(p);
-    ov96_02208740(PTR(p, 0x370), *(u16 *)(v + 0x22));
+    PokeathlonPennantCapture_ApplyFrame(course, mode, p + 0x24, copy);
+    PokeathlonPennantCapture_UpdateObstacleSprites(p, x, y);
+    PokeathlonPennantCapture_UpdateFieldItemSprites(p, x, y);
+    PokeathlonPennantCapture_UpdatePennantSprites(p, v, x, y);
+    PokeathlonPennantCapture_AnimateBg(p);
+    PokeathlonPennantCaptureDisplay_SetTimer(PTR(p, 0x370), *(u16 *)(v + 0x22));
     ov96_021E6454(course, *(u16 *)(v + 0x22));
 }
 

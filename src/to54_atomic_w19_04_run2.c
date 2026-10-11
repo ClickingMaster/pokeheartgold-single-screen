@@ -41,7 +41,7 @@ int ov112_021ECAA8(Ov112State *p) {
         if (a <= 4) {
             W(p, 0x1ec50) = a;
             if (ov112_021ECA88(p) >= 0) {
-                ov112_021EC440(p, a, ov112_021FF0C4[a], 11);
+                PokewalkerApp_SelectMenuItem(p, a, ov112_021FF0C4[a], 11);
                 PlaySE(0x5dd);
                 ov112_021EC8A4(p, W(p, 0x1ec54), W(p, 0x1ec50));
                 return 0x41;
@@ -58,7 +58,7 @@ int ov112_021ECAA8(Ov112State *p) {
             ov112_021ECA18(p, W(p, 0x1ec54));
             PokewalkerApp_SetSpriteAnim(p, 4, 3);
         } else {
-            ov112_021EC440(p, a, ov112_021FF0C4[a], 11);
+            PokewalkerApp_SelectMenuItem(p, a, ov112_021FF0C4[a], 11);
             PlaySE(0x5dd);
             return 0x41;
         }
@@ -90,18 +90,18 @@ int ov112_021ECAA8(Ov112State *p) {
         PokewalkerApp_SetSpriteAnim(p, 4, 3);
     } else if (gSystem.newKeys & 1) {
         if (W(p, 0x1ec50) > 4) {
-            ov112_021EC440(p, W(p, 0x1ec50), ov112_021FF0C4[W(p, 0x1ec50)], 11);
+            PokewalkerApp_SelectMenuItem(p, W(p, 0x1ec50), ov112_021FF0C4[W(p, 0x1ec50)], 11);
             PlaySE(0x5dd);
             return 0x41;
         }
         if (ov112_021ECA88(p) >= 0) {
-            ov112_021EC440(p, W(p, 0x1ec50), ov112_021FF0C4[W(p, 0x1ec50)], 11);
+            PokewalkerApp_SelectMenuItem(p, W(p, 0x1ec50), ov112_021FF0C4[W(p, 0x1ec50)], 11);
             PlaySE(0x5dd);
             return 0x41;
         }
         PlaySE(0x5dc);
     } else if (gSystem.newKeys & 2) {
-        ov112_021EC440(p, 5, 3, 11);
+        PokewalkerApp_SelectMenuItem(p, 5, 3, 11);
         PlaySE(0x5dc);
         return 0x41;
     }

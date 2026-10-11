@@ -17,7 +17,7 @@ void ov96_021E8228(void *course, u8 player, u8 type, u8 index, u32 value);
 void ov96_021E8324(void *course, void (*callback)(void));
 void ov96_021EB144(void *ptr, int);
 void ov96_021EB63C(void *ptr);
-void ov96_02207C64(void);
+void PokeathlonPennantCapture_UpdateOwnScore(void);
 void ov96_02205D30(void *course);
 BOOL System_GetTouchNew(void);
 BOOL System_GetTouchHeld(void);

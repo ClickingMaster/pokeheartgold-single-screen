@@ -57,7 +57,7 @@
 #include "unk_02054648.h"
 #include "unk_02054E00.h"
 #include "unk_02055BF0.h"
-#include "unk_02058034.h"
+#include "communication_club_link.h"
 #include "unk_02058AEC.h"
 #include "unk_0205A44C.h"
 #include "unk_0205CB48.h"

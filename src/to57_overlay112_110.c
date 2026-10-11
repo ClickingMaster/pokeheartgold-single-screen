@@ -64,7 +64,7 @@ int ov112_021ED66C(void *p) {
             U16_AT(p, 0x14) = 0x21;
             U32_AT(p, 0xC) = 0x42;
             PokewalkerIr_Stop();
-            ov112_021EC440(p, 3, 3, 0x21);
+            PokewalkerApp_SelectMenuItem(p, 3, 3, 0x21);
             PlaySE(0x5DD);
             return 0x41;
         }

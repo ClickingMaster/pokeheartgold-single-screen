@@ -13,7 +13,7 @@ void *ov40_0222FB90(void *p, void *value);
 
 extern void BattleRecord_Create(void *, u32, void *);
 extern void BattleRecord_Import(void *, void *, void *, u32, void *);
-extern void ov40_0222BC44(void *);
+extern void VsRecorder_SetScreensFlipped(void *);
 extern void sub_0203A86C(void);
 extern void SysTask_Destroy(void *);
 extern void *SysTask_CreateOnVBlankQueue(void (*)(void *, void *), void *, u32);
