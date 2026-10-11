@@ -160,20 +160,10 @@ Autoload EXT_WRAM
 	Object lib/src/wl_diag_mac_memory.o
 	Object lib/src/wl_diag_base_band.o
 	Object lib/src/wl_intr.o
-	Object lib/src/op90_to91_w41480_tx_end_suffix_r01.o
-	Object lib/src/to90_arm7_sub_ext_wram_run194.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_43_r01.o
-	Object lib/src/to90_arm7_sub_ext_wram_run376.o
-	Object lib/src/to90_arm7_sub_ext_wram_run195.o
-	Object lib/src/to90_arm7_sub_ext_wram_run196.o
-	Object lib/src/to90_arm7_sub_ext_wram_run197.o
-	Object lib/src/to90_arm7_sub_ext_wram_run198.o
-	Object lib/src/to90_arm7_sub_ext_wram_run199.o
-	Object lib/src/to90_arm7_sub_ext_wram_run200.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_44_r01.o
-	Object lib/src/to90_arm7_sub_ext_wram_run201.o
-	Object lib/src/to90_arm7_sub_ext_wram_run202.o
-	Object lib/src/to90_arm7_sub_ext_wram_run203.o
+	Object lib/src/wl_intr_rx_end.o
+	Object lib/src/wl_intr_mp_end.o
+	Object lib/src/wl_intr_start_tx.o
+	Object lib/src/wl_intr_ctrl.o
 	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_45_r01.o
 	Object lib/src/to90_arm7_sub_ext_wram_run204.o
 	Object lib/src/to90_arm7_sub_ext_wram_run205.o

@@ -65,9 +65,9 @@ $(BUILD_DIR)/lib/src/op90_to90_arm7_sub_ext_wram_residual_54_r01.o: private MWCC
 $(BUILD_DIR)/lib/src/wmsp_send_ma.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/src/wmsp_start_parent.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/src/op90_to91_w41574_txq_prefix_r01.o: private MWCCVER := 2.0/sp1
-$(BUILD_DIR)/lib/src/op90_to91_w41480_tx_end_suffix_r01.o: private MWCCVER := 2.0/sp1
+$(BUILD_DIR)/lib/src/wl_intr_rx_end.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/src/nvram_command.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/src/mic_command.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/src/op90_op90_to91_w41568_rx_suffix_residual_1_r01.o: private MWCCVER := 2.0/sp1
-$(BUILD_DIR)/lib/src/op90_to90_arm7_sub_ext_wram_residual_43_r01.o: private MWCCVER := 2.0/sp1
+$(BUILD_DIR)/lib/src/wl_intr_start_tx.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/src/wmsp_get_tmptt.o: private OPTFLAGS := -O4,p

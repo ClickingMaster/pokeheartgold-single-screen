@@ -1,12 +1,12 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "1674d1b0262ee7eff31eab741bada6bf19d6f41f",
+  "commit": "83c4b86fb4d43e3ea2b0fc35aaee2d0f6c4269de",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "7e70858d54cecc3f1ef2d83eaaaccf21bb1f72ac19ed2929c74403a3cf4536ec",
-    "ARM7": "041cd831059a607c3024fb52a1c23ac0386deeb07d13d5249a72069997cfeb7d"
+    "ARM9": "64e138e81409920275c7e55a818bf16e303268de365ea433781755a311d4d2e8",
+    "ARM7": "140c1dd7806de3d8a95af07b503fbb44bc2969f899878df1d65ad0f8a9fb98a1"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
   "totals": {
@@ -51616,14 +51616,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to70_wvr_extra02_run01.o",
-      "bytes": 1016,
-      "status": "c",
-      "source": "src/to70_wvr_extra02_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to80_extra1363_run01.o",
       "bytes": 556,
       "status": "c",
@@ -54574,6 +54566,14 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "wvr.o",
+      "bytes": 1016,
+      "status": "c",
+      "source": "lib/NitroSDK/src/wvr.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "yes_no_prompt.o",
       "bytes": 2232,
       "status": "c",
@@ -55113,25 +55113,6 @@
     {
       "cpu": "ARM7",
       "module": "EXT_WRAM",
-      "object": "op90_to90_arm7_sub_ext_wram_residual_43_r01.o",
-      "bytes": 268,
-      "status": "c",
-      "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_43_r01.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "op90_to90_arm7_sub_ext_wram_residual_44_r01.o",
-      "bytes": 8,
-      "status": "veneer",
-      "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_44_r01.c",
-      "functions": [
-        "__VENEER_OS_SetIrqFunction"
-      ]
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
       "object": "op90_to90_arm7_sub_ext_wram_residual_45_r01.o",
       "bytes": 876,
       "status": "c",
@@ -55232,14 +55213,6 @@
     {
       "cpu": "ARM7",
       "module": "EXT_WRAM",
-      "object": "op90_to91_w41480_tx_end_suffix_r01.o",
-      "bytes": 1212,
-      "status": "c",
-      "source": "sub/lib/src/op90_to91_w41480_tx_end_suffix_r01.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
       "object": "op90_to91_w41568_rx_suffix_r01.o",
       "bytes": 808,
       "status": "c",
@@ -55276,86 +55249,6 @@
       "bytes": 164,
       "status": "c",
       "source": "sub/lib/src/to90_arm7_current1_sup_rates_run01.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run194.o",
-      "bytes": 240,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run194.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run195.o",
-      "bytes": 200,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run195.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run196.o",
-      "bytes": 104,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run196.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run197.o",
-      "bytes": 40,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run197.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run198.o",
-      "bytes": 56,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run198.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run199.o",
-      "bytes": 120,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run199.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run200.o",
-      "bytes": 36,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run200.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run201.o",
-      "bytes": 32,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run201.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run202.o",
-      "bytes": 76,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run202.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run203.o",
-      "bytes": 468,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run203.c"
     },
     {
       "cpu": "ARM7",
@@ -56504,14 +56397,6 @@
     {
       "cpu": "ARM7",
       "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run376.o",
-      "bytes": 624,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run376.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
       "object": "to90_arm7_sub_ext_wram_run379.o",
       "bytes": 800,
       "status": "c",
@@ -56784,6 +56669,49 @@
       "bytes": 2472,
       "status": "c",
       "source": "sub/lib/src/wl_intr.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
+      "object": "wl_intr_ctrl.o",
+      "bytes": 1756,
+      "status": "c",
+      "source": "sub/lib/src/wl_intr_ctrl.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
+      "object": "wl_intr_ctrl.o",
+      "bytes": 8,
+      "status": "veneer",
+      "source": "sub/lib/src/wl_intr_ctrl.c",
+      "functions": [
+        "__VENEER_OS_SetIrqFunction"
+      ]
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
+      "object": "wl_intr_mp_end.o",
+      "bytes": 240,
+      "status": "c",
+      "source": "sub/lib/src/wl_intr_mp_end.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
+      "object": "wl_intr_rx_end.o",
+      "bytes": 1212,
+      "status": "c",
+      "source": "sub/lib/src/wl_intr_rx_end.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
+      "object": "wl_intr_start_tx.o",
+      "bytes": 268,
+      "status": "c",
+      "source": "sub/lib/src/wl_intr_start_tx.c"
     },
     {
       "cpu": "ARM7",

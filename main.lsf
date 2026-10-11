@@ -907,7 +907,7 @@ Static main
     Object lib/src/spl_list.o
     Object lib/src/spl_random.o
     Object lib/NitroSDK/asm/to70_wvr_extra02_anchor.o
-    Object src/to70_wvr_extra02_run01.o
+    Object lib/NitroSDK/src/wvr.o
     Object lib/NitroDWC/asm/to59_dwcbm_anchor.o
     Object src/to59_dwcbm_run01.o
     Object src/to70_dwcbm_residual_1_run01.o

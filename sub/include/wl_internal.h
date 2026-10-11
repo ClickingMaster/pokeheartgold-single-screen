@@ -193,12 +193,13 @@ typedef struct WlBss {
     u32 intervalCount;     // WIntervalTimer calls (every 100 ms in state 0x40)
     u8 unk_ac[4];
     u16 fatalErr; // SetFatalErr bits; WIntervalTimer queues task 21 (SendFatalErrMsgTask) while set
-    u8 unk_b2[4];
+    u16 unk_b2;
+    u16 rxDropCount;       // WlIntrRxEnd dropped a received frame (bad length, status or rate)
     u16 txBufRepairCount;  // WCheckTxBufIdBeforeFrame rewrote a frame's id words
     u16 txFrameRetryCount; // RestoreTxFrame / WCheckTxBuf copied a frame to the MAC again
     u16 txResetCount;      // WlIntrTxErr / WlIntrRxCntup reset the MAC's TX side
-    u16 unk_bc;
-    u16 unk_be;
+    u16 mpTimeOutCount;    // WlIntrMpEnd waits for the MP answers (MacBugTxMp)
+    u16 keyRestoreCount;   // WlIntrStartRx stopped the TX of a key data frame
 } WlBss;
 
 // TX frame in the MAC memory: hardware TX header, then the 802.11 header.
@@ -237,11 +238,13 @@ typedef struct WlMpState {
 
 // A frame waiting in the MAC memory (WlTxCtrl.txq / beacon).
 typedef struct WlTxDesc {
-    u16 active;
-    u8 unk_02[6];
-    u8 *frame;                // the frame's place in the MAC memory
-    WlTxHeapFrame *heapFrame; // the frame in the driver heap (-16 bytes: its WlHeapBuf)
-    u8 unk_10[4];
+    u16 active; // txq[4], txq[5]: 2 while the key data frame is sent, then 1 (CheckKeyTxEndMain)
+    u16 unk_02;
+    u16 count; // frames completed
+    u16 unk_06;
+    u8 *frame;                                 // the frame's place in the MAC memory
+    WlTxHeapFrame *heapFrame;                  // the frame in the driver heap (-16 bytes: its WlHeapBuf)
+    void (*callback)(void *frame, int result); // WlIntrTxEndTask: 1 timed out, 2 sent, 3 sent (no heap frame)
 } WlTxDesc;
 
 // TX side of the MAC (WlWork+0x42C).
@@ -256,7 +259,7 @@ typedef struct WlTxCtrl {
     u16 unk_9c;
     u16 unk_9e; // MP: retry count from which WlIntrTxEnd stops the TX queue
     u8 unk_a0[4];
-    u16 unk_a4; // key saved by WlIntrStartRx (0xFFFF: none)
+    u16 unk_a4; // TX pointer saved by WlIntrStartRx (0xFFFF: none)
     u16 unk_a6;
     u16 unk_a8; // WlIntrTxEnd: MP stopped at the retry threshold
     u16 unk_aa; // WlIntrTxEnd: MP ended
@@ -266,9 +269,9 @@ typedef struct WlTxCtrl {
 
 // RX side of the MAC (WlWork+0x4DC).
 typedef struct WlRxCtrl {
-    u16 unk_00;
-    u16 unk_02; // WlIntrRxCntup: RX counter interrupts while TX was busy
-    u16 unk_04; // next frame to read (halfword index into the MAC memory)
+    u16 lastMpSeqCtrl; // sequence control of the last MP frame received
+    u16 unk_02;        // WlIntrRxCntup: RX counter interrupts while TX was busy
+    u16 unk_04;        // next frame to read (halfword index into the MAC memory)
     u8 unk_06[0x50 - 6];
 } WlRxCtrl;
 
@@ -514,6 +517,28 @@ void WlIntrTxErr(void);
 void WlIntrRxCntup(void);
 void WlIntrTxEnd(void);
 
+// wl_intr_rx_end.c
+void WlIntrRxEnd(void);
+
+// wl_intr_mp_end.c
+void WlIntrMpEnd(int timeout);
+
+// wl_intr_start_tx.c
+void WlIntrStartTx(void);
+
+// wl_intr_ctrl.c
+void WlIntrStartRx(void);
+void SetParentTbttTxq(void);
+void MacBugTxMp(void);
+u16 *AdjustRingPointer(u16 *pointer);
+u32 CheckKeyTxEnd(void);
+u32 CheckKeyTxEndMain(WlTxDesc *desc);
+void InitializeIntr(void);
+void __VENEER_OS_SetIrqFunction(OSIrqMask intrBit, OSIrqFunction function);
+void ReleaseIntr(void);
+void WlIntrTxBeaconTask(void);
+void WlIntrTxEndTask(void);
+
 // wl_cam.c
 u32 CAM_Search(const u16 *addr);
 u32 CAM_SearchAdd(const u16 *addr);
@@ -581,7 +606,6 @@ void DeleteTxFrames(u32 station);
 void FLASH_DirectRead(u32 addr, u32 size, void *dest);
 void InitializeCmdIf(void);
 void InitializeMLME(void);
-void InitializeIntr(void);
 void FLASH_MakeImage(void);
 void FLASH_Read(u32 addr, u32 size, void *dest);
 u32 FLASH_VerifyCheckSum(u32 *checksum);
@@ -590,18 +614,15 @@ void MakeBeaconFrame(void);
 void MakePsPollFrame(u16 aid);
 void SendMessageToWmDirect(WlHeapBufMan *man, void *msg);
 void IssueMlmeConfirm(void);
-void ReleaseIntr(void);
 u16 *MakeDeAuthFrame(void *macAdrs, u16 reason, u16 unk);
 void TxManCtrlFrame(u16 *frame);
 void MLME_IssueDeAuthIndication(void *macAdrs, u16 reason);
-void WlIntrStartTx(void);
-void WlIntrStartRx(void);
-void WlIntrRxEnd(void);
-void WlIntrMpEnd(int timeout);
-void SetParentTbttTxq(void);
 int CheckFrameTimeout(WlTxHeapFrame *frame);
 void ResetTxqPri(u32 priority);
 void IntrCarrierSuppresionSignal(void);
+void TxEndKeyData(WlTxDesc *desc);
+void UpdateGameInfoElement(void);
+int MLME_IssueBeaconSendIndication(void);
 
 extern const u8 BC_ADRS[];
 
