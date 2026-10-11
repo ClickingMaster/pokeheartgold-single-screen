@@ -7,13 +7,13 @@ int ov70_02243FE0(void *work, int index) {
         int i = 0;
         if (i < count) {
             do {
-                if (ov70_02243FD4(work, base + i) > 0) {
+                if (GtsSelector_CountCountriesOfLetter(work, base + i) > 0) {
                     return TRUE;
                 }
                 i++;
             } while (i < ov70_02245F58[index].b);
         }
-    } else if (ov70_02243FD4(work, base) > 0) {
+    } else if (GtsSelector_CountCountriesOfLetter(work, base) > 0) {
         return TRUE;
     }
     return FALSE;

@@ -55,7 +55,7 @@ void TerminateWlTask(void) {
 void ReleaseWlTask(void) {
     WlWork *w = wlWorkPlain;
     ReleaseIntr();
-    ReleaseHeapBuf(&w->heap.bufMan[0], (WlHeapBuf *)(wlWorkPlain->unk_318 - 12));
+    ReleaseHeapBuf(&w->heap.bufMan[0], (WlHeapBuf *)(wlWorkPlain->flashImage - 12));
     ReleaseHeapBuf(&w->heap.bufMan[0], (WlHeapBuf *)((u32)wlWorkPlain->bss.gameInfo - 12));
     __VENEER_OS_ExitThread();
 }

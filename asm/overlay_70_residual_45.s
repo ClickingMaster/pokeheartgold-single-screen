@@ -2518,77 +2518,77 @@
 	.public GtsTrade_CreatePartnerProfile
 	.public GtsTrade_GetReceivedMon
 	.public GtsTrade_StoreReceivedMon
-	.public ov70_0224190C
-	.public ov70_02241DB4
-	.public ov70_02242014
-	.public ov70_022420C4
-	.public ov70_0224212C
-	.public ov70_02242144
-	.public ov70_02242164
-	.public ov70_022421D0
-	.public ov70_02242364
-	.public ov70_02242390
-	.public ov70_02242508
-	.public ov70_0224251C
-	.public ov70_02242574
-	.public ov70_0224261C
-	.public ov70_022426F4
-	.public ov70_022427C4
-	.public ov70_02242860
-	.public ov70_022428C0
-	.public ov70_022429A0
-	.public ov70_022429B8
-	.public ov70_02242B5C
-	.public ov70_02242BBC
-	.public ov70_02242C64
-	.public ov70_02242D44
-	.public ov70_02242E58
-	.public ov70_02242EE4
-	.public ov70_02242FC4
-	.public ov70_02242FF4
-	.public ov70_02242FFC
-	.public ov70_0224304C
-	.public ov70_02243068
-	.public ov70_0224308C
-	.public ov70_022430CC
-	.public ov70_02243120
-	.public ov70_0224316C
-	.public ov70_02243254
-	.public ov70_022433A8
-	.public ov70_02243400
-	.public ov70_02243420
-	.public ov70_0224342C
-	.public ov70_02243458
-	.public ov70_022434C0
-	.public ov70_0224352C
-	.public ov70_02243598
-	.public ov70_02243688
-	.public ov70_02243700
-	.public ov70_02243750
-	.public ov70_02243768
-	.public ov70_022437C8
-	.public ov70_02243848
-	.public ov70_022438D4
-	.public ov70_02243928
-	.public ov70_02243A6C
-	.public ov70_02243AC4
-	.public ov70_02243B1C
-	.public ov70_02243B2C
-	.public ov70_02243C08
-	.public ov70_02243C8C
-	.public ov70_02243CC8
-	.public ov70_02243CEC
-	.public ov70_02243D28
-	.public ov70_02243D90
-	.public ov70_02243DA0
-	.public ov70_02243DDC
-	.public ov70_02243E74
-	.public ov70_02243E8C
-	.public ov70_02243EB8
-	.public ov70_02243F00
-	.public ov70_02243F54
-	.public ov70_02243F7C
-	.public ov70_02243FD4
+	.public GtsSelector_AddWindows
+	.public GtsSelector_RemoveWindows
+	.public GtsSelector_New
+	.public GtsSelector_Start
+	.public GtsSelector_Delete
+	.public GtsSelector_Main
+	.public GtsSelector_GetTouchedButton
+	.public GtsSelector_HandleGroupInput
+	.public GtsSelector_GetLetter
+	.public GtsSelector_HandleLetterInput
+	.public GtsSelector_CountPages
+	.public GtsSelector_SelectSpeciesButton
+	.public GtsSelector_ChangeSpeciesPage
+	.public GtsSelector_HandleSpeciesListInput
+	.public GtsSelector_HandleGenderInput
+	.public GtsSelector_ChangeLevelPage
+	.public GtsSelector_SelectLevelButton
+	.public GtsSelector_HandleLevelInput
+	.public GtsSelector_GetCountryGroup
+	.public GtsSelector_HandleCountryGroupInput
+	.public GtsSelector_SelectCountryButton
+	.public GtsSelector_ChangeCountryPage
+	.public GtsSelector_HandleCountryListInput
+	.public GtsSelector_ShowGroups
+	.public GtsSelector_ShowGenders
+	.public GtsSelector_ShowLevels
+	.public GtsSelector_PrintString
+	.public GtsSelector_Idle
+	.public GtsSelector_WaitShow
+	.public GtsSelector_WaitMove
+	.public GtsSelector_WaitHide
+	.public GtsSelector_OpenSpeciesGroups
+	.public GtsSelector_HandleSpeciesGroups
+	.public GtsSelector_CloseSpeciesGroups
+	.public GtsSelector_ReopenSpeciesGroups
+	.public GtsSelector_OpenSpeciesLetters
+	.public GtsSelector_HandleSpeciesLetters
+	.public GtsSelector_CloseSpeciesLetters
+	.public GtsSelector_BackToSpeciesLetters
+	.public GtsSelector_CountSeenSpecies
+	.public GtsSelector_CreateSpeciesListItems
+	.public GtsSelector_PrintListPage
+	.public GtsSelector_PrintCountryPage
+	.public GtsSelector_OpenSpeciesList
+	.public GtsSelector_HandleSpeciesList
+	.public GtsSelector_CancelSpeciesList
+	.public GtsSelector_FinishSpecies
+	.public GtsSelector_OpenCountryGroups
+	.public GtsSelector_HandleCountryGroups
+	.public GtsSelector_CloseCountryGroups
+	.public GtsSelector_ReopenCountryGroups
+	.public GtsSelector_OpenCountryLetters
+	.public GtsSelector_HandleCountryLetters
+	.public GtsSelector_CloseCountryLetters
+	.public GtsSelector_BackToCountryLetters
+	.public GtsSelector_OpenCountryList
+	.public GtsSelector_HandleCountryList
+	.public GtsSelector_CancelCountryList
+	.public GtsSelector_FinishCountry
+	.public GtsSelector_OpenGenders
+	.public GtsSelector_HandleGenders
+	.public GtsSelector_FinishGender
+	.public GtsSelector_OpenLevels
+	.public GtsSelector_HandleLevels
+	.public GtsSelector_FinishLevel
+	.public GtsSelector_PrintMessage
+	.public GtsSelector_PrintButtonLabel
+	.public GtsSelector_PrintPageNumber
+	.public GtsSelector_CountSeenSpeciesOfLetter
+	.public GtsSelector_GroupHasSeenSpecies
+	.public GtsSelector_CountCountriesOfLetter
 	.public ov70_02243FE0
 	.public ov70_02244038
 	.public ov70_02244124
@@ -2704,47 +2704,47 @@
 	.public sGtsAvatarHitboxes
 	.public sGtsViewMonSummaryPages
 	.public sGtsTradeSequenceTemplate
-	.public ov70_02245D60
-	.public ov70_02245D66
-	.public ov70_02245D67
-	.public ov70_02245D6E
-	.public ov70_02245D76
-	.public ov70_02245D77
-	.public ov70_02245D80
-	.public ov70_02245D81
-	.public ov70_02245D8A
-	.public ov70_02245D8B
-	.public ov70_02245D96
-	.public ov70_02245DA2
-	.public ov70_02245DB0
-	.public ov70_02245DC0
-	.public ov70_02245DC1
-	.public ov70_02245DC2
-	.public ov70_02245DC3
-	.public ov70_02245DD0
-	.public ov70_02245DE4
-	.public ov70_02245DF8
-	.public ov70_02245DF9
-	.public ov70_02245E0E
+	.public sGtsSelectorGenderWindowPositions
+	.public sGtsSelectorGenderCursorX
+	.public sGtsSelectorGenderCursorY
+	.public sGtsSelectorLevelWindowPositions
+	.public sGtsSelectorSpeciesCursorX
+	.public sGtsSelectorSpeciesCursorY
+	.public sGtsSelectorLevelCursorX
+	.public sGtsSelectorLevelCursorY
+	.public sGtsSelectorCountryCursorX
+	.public sGtsSelectorCountryCursorY
+	.public sGtsSelectorCountryWindowPositions
+	.public sGtsSelectorSpeciesWindowPositions
+	.public sGtsSelectorGenders
+	.public sGtsSelectorLetterNextUp
+	.public sGtsSelectorLetterNextDown
+	.public sGtsSelectorLetterNextLeft
+	.public sGtsSelectorLetterNextRight
+	.public sGtsSelectorGenderHitboxes
+	.public sGtsSelectorLetterHitboxes
+	.public sGtsSelectorCountryGroupCursorX
+	.public sGtsSelectorCountryGroupCursorY
+	.public sGtsSelectorGridWindowPositions
 	.public ov70_02245E10
-	.public ov70_02245E26
-	.public ov70_02245E27
-	.public ov70_02245E3E
-	.public ov70_02245E5E
+	.public sGtsSelectorGroupCursorX
+	.public sGtsSelectorGroupCursorY
+	.public sGtsSelectorListHitboxes
+	.public sGtsSelectorCountryListHitboxes
 	.public ov70_02245E84
-	.public ov70_02245EA8
+	.public sGtsSelectorGroupNext
 	.public ov70_02245EA9
 	.public ov70_02245EAA
 	.public ov70_02245EAB
-	.public ov70_02245ED0
-	.public ov70_02245EFC
-	.public ov70_02245EFD
-	.public ov70_02245EFE
-	.public ov70_02245EFF
-	.public ov70_02245F28
+	.public sGtsSelectorGroupHitboxes
+	.public sGtsSelectorCountryGroupNextUp
+	.public sGtsSelectorCountryGroupNextDown
+	.public sGtsSelectorCountryGroupNextLeft
+	.public sGtsSelectorCountryGroupNextRight
+	.public sGtsSelectorCountryGroupHitboxes
 	.public ov70_02245F58
 	.public ov70_02245F5C
-	.public ov70_02245FA0
+	.public sGtsSelectorLetterMsgs
 	.public ov70_0224600C
 	.public ov70_02246020
 	.public ov70_0224603C
@@ -2776,7 +2776,7 @@
 	.public sGtsGenderColors
 	.public sGtsWantedStates
 	.public sGtsTransactionStates
-	.public ov70_022466F8
+	.public sGtsSelectorStates
 	.public ov70_02246780
 	.public gGtsServerFriendKey
 	.public gGtsServerRequest
@@ -2833,14 +2833,14 @@
 	.public GtsTransaction_IsDepositMissingFromSave
 	.public Gts_GetAvatarAnimSeq
 	.public GtsViewMon_Exit
-	.public ov70_02242508
-	.public ov70_022429A0
-	.public ov70_02242FF4
-	.public ov70_0224304C
-	.public ov70_02243068
-	.public ov70_02243400
-	.public ov70_02243420
-	.public ov70_02243B1C
+	.public GtsSelector_CountPages
+	.public GtsSelector_GetCountryGroup
+	.public GtsSelector_Idle
+	.public GtsSelector_WaitMove
+	.public GtsSelector_WaitHide
+	.public GtsSelector_CloseSpeciesLetters
+	.public GtsSelector_BackToSpeciesLetters
+	.public GtsSelector_BackToCountryLetters
 	.public ov70_02244290
 	.public ov70_022446A8
 	.public ov70_02244834
@@ -3317,95 +3317,95 @@ sGtsViewMonSummaryPages: ; 0x02245D48
 sGtsTradeSequenceTemplate: ; 0x02245D50
 	.word TradeSequence_Init, TradeSequence_Main, TradeSequence_Exit, FS_OVERLAY_ID(OVY_71)
 
-ov70_02245D60: ; 0x02245D60
+sGtsSelectorGenderWindowPositions: ; 0x02245D60
 	.byte 0x04, 0x03, 0x04, 0x07, 0x04, 0x0B
 
-ov70_02245D66: ; 0x02245D66
+sGtsSelectorGenderCursorX: ; 0x02245D66
 	.byte 0xC0
 
-ov70_02245D67: ; 0x02245D67
+sGtsSelectorGenderCursorY: ; 0x02245D67
 	.byte 0x20, 0xC0, 0x40, 0xC0, 0x60, 0xC0, 0x88
 
-ov70_02245D6E: ; 0x02245D6E
+sGtsSelectorLevelWindowPositions: ; 0x02245D6E
 	.byte 0x03, 0x02
 	.byte 0x03, 0x05, 0x03, 0x08, 0x03, 0x0B
 
-ov70_02245D76: ; 0x02245D76
+sGtsSelectorSpeciesCursorX: ; 0x02245D76
 	.byte 0xC0
 
-ov70_02245D77: ; 0x02245D77
+sGtsSelectorSpeciesCursorY: ; 0x02245D77
 	.byte 0x18, 0xC0, 0x30, 0xC0, 0x48, 0xC0, 0x60, 0xC0, 0x88
 
-ov70_02245D80: ; 0x02245D80
+sGtsSelectorLevelCursorX: ; 0x02245D80
 	.byte 0xC0
 
-ov70_02245D81: ; 0x02245D81
+sGtsSelectorLevelCursorY: ; 0x02245D81
 	.byte 0x18, 0xC0, 0x30, 0xC0, 0x48, 0xC0, 0x60, 0xC0, 0x88
 
-ov70_02245D8A: ; 0x02245D8A
+sGtsSelectorCountryCursorX: ; 0x02245D8A
 	.byte 0x88
 
-ov70_02245D8B: ; 0x02245D8B
+sGtsSelectorCountryCursorY: ; 0x02245D8B
 	.byte 0x10, 0x88, 0x28, 0x88, 0x40
 	.byte 0x88, 0x58, 0x88, 0x70, 0xC0, 0x88
 
-ov70_02245D96: ; 0x02245D96
+sGtsSelectorCountryWindowPositions: ; 0x02245D96
 	.byte 0x03, 0x01, 0x03, 0x04, 0x03, 0x07, 0x03, 0x0A, 0x03, 0x0D
 	.byte 0x18, 0x11
 
-ov70_02245DA2: ; 0x02245DA2
+sGtsSelectorSpeciesWindowPositions: ; 0x02245DA2
 	.byte 0x04, 0x02, 0x00, 0x04, 0x05, 0x00, 0x04, 0x08, 0x00, 0x04, 0x0B, 0x00, 0x00, 0x00
 
-ov70_02245DB0: ; 0x02245DB0
+sGtsSelectorGenders: ; 0x02245DB0
 	.byte 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0xFE, 0xFF, 0xFF, 0xFF
 
-ov70_02245DC0: ; 0x02245DC0
+sGtsSelectorLetterNextUp: ; 0x02245DC0
 	.byte 0x03
 
-ov70_02245DC1: ; 0x02245DC1
+sGtsSelectorLetterNextDown: ; 0x02245DC1
 	.byte 0x03
 
-ov70_02245DC2: ; 0x02245DC2
+sGtsSelectorLetterNextLeft: ; 0x02245DC2
 	.byte 0x02
 
-ov70_02245DC3: ; 0x02245DC3
+sGtsSelectorLetterNextRight: ; 0x02245DC3
 	.byte 0x01, 0x03, 0x03, 0x00, 0x02, 0x03, 0x03, 0x01, 0x00, 0x02, 0x02, 0x03, 0x03
 
-ov70_02245DD0: ; 0x02245DD0
+sGtsSelectorGenderHitboxes: ; 0x02245DD0
 	.byte 0x18, 0x2C, 0x88, 0xF8, 0x38, 0x4C, 0x88, 0xF8, 0x58, 0x6C, 0x88, 0xF8, 0x85, 0x9A, 0xC5, 0xFA
 	.byte 0xFF, 0x00, 0x00, 0x00
 
-ov70_02245DE4: ; 0x02245DE4
+sGtsSelectorLetterHitboxes: ; 0x02245DE4
 	.byte 0x28, 0x3C, 0x88, 0x97, 0x28, 0x3C, 0xA8, 0xB7, 0x28, 0x3C, 0xC8, 0xD7
 	.byte 0x85, 0x9A, 0xC5, 0xFA, 0xFF, 0x00, 0x00, 0x00
 
-ov70_02245DF8: ; 0x02245DF8
+sGtsSelectorCountryGroupCursorX: ; 0x02245DF8
 	.byte 0x01
 
-ov70_02245DF9: ; 0x02245DF9
+sGtsSelectorCountryGroupCursorY: ; 0x02245DF9
 	.byte 0x05, 0x05, 0x05, 0x09, 0x05, 0x0D, 0x05
 	.byte 0x01, 0x08, 0x05, 0x08, 0x09, 0x08, 0x0D, 0x08, 0x01, 0x0B, 0x08, 0x11, 0x08, 0x03
 
-ov70_02245E0E: ; 0x02245E0E
+sGtsSelectorGridWindowPositions: ; 0x02245E0E
 	.byte 0x01, 0x05
 
 ov70_02245E10: ; 0x02245E10
 	.byte 0x05, 0x05, 0x09, 0x05, 0x0D, 0x05, 0x01, 0x08, 0x05, 0x08, 0x09, 0x08, 0x0D, 0x08, 0x01, 0x0B
 	.byte 0x09, 0x11, 0x01, 0x02, 0x01, 0x02
 
-ov70_02245E26: ; 0x02245E26
+sGtsSelectorGroupCursorX: ; 0x02245E26
 	.byte 0x01
 
-ov70_02245E27: ; 0x02245E27
+sGtsSelectorGroupCursorY: ; 0x02245E27
 	.byte 0x05, 0x05, 0x05, 0x09, 0x05, 0x0D, 0x05, 0x01, 0x08
 	.byte 0x05, 0x08, 0x09, 0x08, 0x0D, 0x08, 0x01, 0x0B, 0x08, 0x11, 0x01, 0x02, 0x01, 0x02
 
-ov70_02245E3E: ; 0x02245E3E
+sGtsSelectorListHitboxes: ; 0x02245E3E
 	.byte 0x10, 0x23
 	.byte 0x88, 0xF8, 0x28, 0x3C, 0x88, 0xF8, 0x40, 0x54, 0x88, 0xF8, 0x58, 0x6C, 0x88, 0xF8, 0x85, 0x9A
 	.byte 0xC6, 0xF8, 0x6C, 0x81, 0x8F, 0xA0, 0x6C, 0x7E, 0xDF, 0xF0, 0xFF, 0x00, 0x00, 0x00
 
-ov70_02245E5E: ; 0x02245E5E
+sGtsSelectorCountryListHitboxes: ; 0x02245E5E
 	.byte 0x08, 0x1C
 	.byte 0x08, 0xF7, 0x20, 0x34, 0x08, 0xF7, 0x38, 0x4C, 0x08, 0xF7, 0x50, 0x64, 0x08, 0xF7, 0x68, 0x7C
 	.byte 0x08, 0xF7, 0x85, 0x9A, 0xC3, 0xF8, 0x7C, 0x91, 0x4D, 0x60, 0x7C, 0x91, 0xAD, 0xBE, 0xFF, 0x00
@@ -3416,7 +3416,7 @@ ov70_02245E84: ; 0x02245E84
 	.byte 0x09, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00, 0x0F, 0x00, 0x00, 0x00, 0x12, 0x00, 0x00, 0x00
 	.byte 0x15, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00
 
-ov70_02245EA8: ; 0x02245EA8
+sGtsSelectorGroupNext: ; 0x02245EA8
 	.byte 0x09
 
 ov70_02245EA9: ; 0x02245EA9
@@ -3430,27 +3430,27 @@ ov70_02245EAB: ; 0x02245EAB
 	.byte 0x09, 0x06, 0x01, 0x03, 0x09, 0x07, 0x02, 0x00, 0x00, 0x08, 0x07, 0x05, 0x01, 0x09, 0x04, 0x06
 	.byte 0x02, 0x09, 0x05, 0x07, 0x03, 0x09, 0x06, 0x04, 0x04, 0x09, 0x08, 0x08, 0x08, 0x02, 0x09, 0x09
 
-ov70_02245ED0: ; 0x02245ED0
+sGtsSelectorGroupHitboxes: ; 0x02245ED0
 	.byte 0x28, 0x3C, 0x88, 0x97, 0x28, 0x3C, 0xA8, 0xB7, 0x28, 0x3C, 0xC8, 0xD7, 0x28, 0x3C, 0xE8, 0xF7
 	.byte 0x40, 0x54, 0x88, 0x97, 0x40, 0x54, 0xA8, 0xB7, 0x40, 0x54, 0xC8, 0xD7, 0x40, 0x54, 0xE8, 0xF7
 	.byte 0x58, 0x6C, 0x88, 0x97, 0x85, 0x9A, 0xC5, 0xFA, 0xFF, 0x00, 0x00, 0x00
 
-ov70_02245EFC: ; 0x02245EFC
+sGtsSelectorCountryGroupNextUp: ; 0x02245EFC
 	.byte 0x0A
 
-ov70_02245EFD: ; 0x02245EFD
+sGtsSelectorCountryGroupNextDown: ; 0x02245EFD
 	.byte 0x04
 
-ov70_02245EFE: ; 0x02245EFE
+sGtsSelectorCountryGroupNextLeft: ; 0x02245EFE
 	.byte 0x03
 
-ov70_02245EFF: ; 0x02245EFF
+sGtsSelectorCountryGroupNextRight: ; 0x02245EFF
 	.byte 0x01
 	.byte 0x0A, 0x05, 0x00, 0x02, 0x0A, 0x06, 0x01, 0x03, 0x0A, 0x07, 0x02, 0x00, 0x00, 0x08, 0x07, 0x05
 	.byte 0x01, 0x09, 0x04, 0x06, 0x02, 0x09, 0x05, 0x07, 0x03, 0x09, 0x06, 0x04, 0x04, 0x09, 0x08, 0x08
 	.byte 0x08, 0x0A, 0x09, 0x09, 0x09, 0x00, 0x0A, 0x0A
 
-ov70_02245F28: ; 0x02245F28
+sGtsSelectorCountryGroupHitboxes: ; 0x02245F28
 	.byte 0x28, 0x3C, 0x88, 0x97, 0x28, 0x3C, 0xA8, 0xB7
 	.byte 0x28, 0x3C, 0xC8, 0xD7, 0x28, 0x3C, 0xE8, 0xF7, 0x40, 0x54, 0x88, 0x97, 0x40, 0x54, 0xA8, 0xB7
 	.byte 0x40, 0x54, 0xC8, 0xD7, 0x40, 0x54, 0xE8, 0xF7, 0x58, 0x6C, 0x88, 0x97, 0x85, 0x9A, 0xC5, 0xFA
@@ -3466,7 +3466,7 @@ ov70_02245F5C: ; 0x02245F5C
 	.byte 0x0F, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x12, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 	.byte 0x15, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 
-ov70_02245FA0: ; 0x02245FA0
+sGtsSelectorLetterMsgs: ; 0x02245FA0
 	.byte 0xBC, 0x00, 0x00, 0x00, 0xBD, 0x00, 0x00, 0x00, 0xBE, 0x00, 0x00, 0x00, 0xBF, 0x00, 0x00, 0x00
 	.byte 0xC0, 0x00, 0x00, 0x00, 0xC1, 0x00, 0x00, 0x00, 0xC2, 0x00, 0x00, 0x00, 0xC3, 0x00, 0x00, 0x00
 	.byte 0xC4, 0x00, 0x00, 0x00, 0xC5, 0x00, 0x00, 0x00, 0xC6, 0x00, 0x00, 0x00, 0xC7, 0x00, 0x00, 0x00
@@ -3735,41 +3735,41 @@ sGtsTransactionStates: ; 0x02246658
 	.word GtsTransaction_ServerErrorExit
 	.word GtsTransaction_ServerError
 
-ov70_022466F8: ; 0x022466F8
-	.word ov70_02242FF4
-	.word ov70_02242FFC
-	.word ov70_0224304C
-	.word ov70_02243068
-	.word ov70_0224308C
-	.word ov70_022430CC
-	.word ov70_02243120
-	.word ov70_0224316C
-	.word ov70_02243254
-	.word ov70_022433A8
-	.word ov70_02243400
-	.word ov70_02243420
-	.word ov70_02243598
-	.word ov70_02243688
-	.word ov70_02243700
-	.word ov70_02243750
-	.word ov70_02243768
-	.word ov70_022437C8
-	.word ov70_02243848
-	.word ov70_022438D4
-	.word ov70_02243928
-	.word ov70_02243A6C
-	.word ov70_02243AC4
-	.word ov70_02243B1C
-	.word ov70_02243B2C
-	.word ov70_02243C08
-	.word ov70_02243C8C
-	.word ov70_02243CC8
-	.word ov70_02243CEC
-	.word ov70_02243D28
-	.word ov70_02243D90
-	.word ov70_02243DA0
-	.word ov70_02243DDC
-	.word ov70_02243E74
+sGtsSelectorStates: ; 0x022466F8
+	.word GtsSelector_Idle
+	.word GtsSelector_WaitShow
+	.word GtsSelector_WaitMove
+	.word GtsSelector_WaitHide
+	.word GtsSelector_OpenSpeciesGroups
+	.word GtsSelector_HandleSpeciesGroups
+	.word GtsSelector_CloseSpeciesGroups
+	.word GtsSelector_ReopenSpeciesGroups
+	.word GtsSelector_OpenSpeciesLetters
+	.word GtsSelector_HandleSpeciesLetters
+	.word GtsSelector_CloseSpeciesLetters
+	.word GtsSelector_BackToSpeciesLetters
+	.word GtsSelector_OpenSpeciesList
+	.word GtsSelector_HandleSpeciesList
+	.word GtsSelector_CancelSpeciesList
+	.word GtsSelector_FinishSpecies
+	.word GtsSelector_OpenCountryGroups
+	.word GtsSelector_HandleCountryGroups
+	.word GtsSelector_CloseCountryGroups
+	.word GtsSelector_ReopenCountryGroups
+	.word GtsSelector_OpenCountryLetters
+	.word GtsSelector_HandleCountryLetters
+	.word GtsSelector_CloseCountryLetters
+	.word GtsSelector_BackToCountryLetters
+	.word GtsSelector_OpenCountryList
+	.word GtsSelector_HandleCountryList
+	.word GtsSelector_CancelCountryList
+	.word GtsSelector_FinishCountry
+	.word GtsSelector_OpenGenders
+	.word GtsSelector_HandleGenders
+	.word GtsSelector_FinishGender
+	.word GtsSelector_OpenLevels
+	.word GtsSelector_HandleLevels
+	.word GtsSelector_FinishLevel
 
 ov70_02246780: ; 0x02246780
 	.word ov70_022446D0

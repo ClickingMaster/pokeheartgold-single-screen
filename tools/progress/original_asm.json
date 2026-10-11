@@ -1152,7 +1152,7 @@
   {
    "function": "__VENEER_MI_WaitDma",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_op90_op90_to90_arm7_sub_ext_wram_residual_63_residual_1_residual_1_r01.c",
+   "source": "sub/lib/src/wl_rx_init.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to MI_WaitDma: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
@@ -1544,21 +1544,21 @@
   {
    "function": "__VENEER_NVRAM_ReadDataBytes",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_66_r01.c",
+   "source": "sub/lib/src/wl_flash.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to NVRAM_ReadDataBytes: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_SPI_Lock",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_66_r01.c",
+   "source": "sub/lib/src/wl_flash.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to SPI_Lock: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_SPI_Unlock",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_66_r01.c",
+   "source": "sub/lib/src/wl_flash.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to SPI_Unlock: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
@@ -1656,14 +1656,14 @@
   {
    "function": "__VENEER_NVRAM_ReadStatusRegister",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to91_w41425_flashwait_suffix_r01.c",
+   "source": "sub/lib/src/wl_flash.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to NVRAM_ReadStatusRegister: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_NVRAM_SoftwareReset",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to91_w41425_flashwait_suffix_r01.c",
+   "source": "sub/lib/src/wl_flash.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to NVRAM_SoftwareReset: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },

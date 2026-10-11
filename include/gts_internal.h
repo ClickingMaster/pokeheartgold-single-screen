@@ -159,12 +159,15 @@ typedef struct GtsUnk1234 {
     u16 unk_18[10];
 } GtsUnk1234;
 
-// What the selector of species, gender, level and country is created with.
+// The selector of species, gender, level and country (gts_selector.c).
+typedef struct GtsSelector GtsSelector;
+
+// What the selector is created with.
 typedef struct GtsSelectorArgs {
     BgConfig *bgConfig;
     Window *windows;
     Window *messageWindow;
-    Sprite *sprites[4];
+    Sprite *sprites[4]; // the cursor, the right and left arrows, the screen's own cursor (may be NULL)
     MsgData *gtsMsgData;
     MsgData *speciesNames;
     MsgData *countryNames;
@@ -269,7 +272,7 @@ struct GtsApp {
     Window selectorWindow;                   // 0x1168
     Window wideWindows[2];                   // 0x1178
     Window panelWindow;                      // 0x1198, the caption of the sub screen panel
-    void *selector;                          // 0x11A8, the species/gender/level/country selector
+    GtsSelector *selector;                   // 0x11A8, the species/gender/level/country selector
     ListMenuItem *listItems;                 // 0x11AC
     u8 filler_11B0[0xC];                     // 0x11B0
     WaitingIcon *waitingIcon;                // 0x11BC
@@ -397,12 +400,18 @@ int Gts_CreateCountryListItems(ListMenuItem **items, MsgData *msgData, int group
 void ov70_0223F948(GtsUnk1234 *arg);
 void ov70_0223F960(GtsUnk1234 *arg, int index, u16 value1, u16 value2);
 
+// The selector (gts_selector.c). mode: 0 species, 1 gender, 2 level, 3 country. GtsSelector_Main returns -1 while
+// the player chooses, -2 for BACK, else the choice.
+GtsSelector *GtsSelector_New(GtsSelectorArgs *args, int bgId, int levelRangeKind);
+void GtsSelector_Start(GtsSelector *selector, int mode);
+void GtsSelector_Delete(GtsSelector *selector);
+int GtsSelector_Main(GtsSelector *selector);
+// The count of the countries starting with the letter (index A = 0); unused is not read.
+int GtsSelector_CountCountriesOfLetter(void *unused, u32 letter);
+
 // Defined in pieces not merged yet.
 void ov70_02244FA4(GtsApp *app, MsgData *msgData, int msgId, int textSpeed, u32 unused4);
-void *ov70_02242014(GtsSelectorArgs *args, int arg1, int arg2);
-void ov70_022420C4(void *selector, int mode);
-void ov70_0224212C(void *selector);
-int ov70_02242144(void *selector);
+BOOL ov70_02243FE0(GtsSelector *selector, int group);
 void ov70_02245084(Window *window, String *string, int x, int y, int align, u32 color);
 void ov70_022450B8(Window *window, String *string, int x, int y, int align, u32 color);
 void ov70_022450EC(Window *window, MsgData *msgData, int caption);

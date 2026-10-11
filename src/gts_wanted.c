@@ -154,7 +154,7 @@ int GtsWanted_Init(GtsApp *app, int state) {
     args.countryNames = app->countryNames;
     args.pokedex = app->args->pokedex;
     args.unk_2C = app->searchCursor->unk_14;
-    app->selector = ov70_02242014(&args, 2, 0);
+    app->selector = GtsSelector_New(&args, 2, 0);
     app->state = GTS_WANTED_STATE_START;
     return 2;
 }
@@ -169,7 +169,7 @@ int GtsWanted_Main(GtsApp *app, int state) {
 int GtsWanted_Exit(GtsApp *app, int state) {
     WirelessStatusIcon_Destroy();
     GtsWanted_DeleteSprites(app);
-    ov70_0224212C(app->selector);
+    GtsSelector_Delete(app->selector);
     GtsWanted_FreeData(app);
     GtsWanted_RemoveWindows(app);
     GtsWanted_FreeBgs(app->bgConfig);
@@ -334,7 +334,7 @@ int GtsWanted_HandleInput(GtsApp *app) {
 }
 
 int GtsWanted_OpenSpeciesSelector(GtsApp *app) {
-    ov70_022420C4(app->selector, 0);
+    GtsSelector_Start(app->selector, 0);
     app->state = GTS_WANTED_STATE_HANDLE_SPECIES_SELECTOR;
     return 3;
 }
@@ -370,7 +370,7 @@ BOOL Gts_SetFixedGender(GtsWantedMon *wanted, u32 genderRatio) {
 #pragma force_active on
 
 int GtsWanted_HandleSpeciesSelector(GtsApp *app) {
-    int selection = ov70_02242144(app->selector);
+    int selection = GtsSelector_Main(app->selector);
     switch (selection) {
     case -2:
         ClearFrameAndWindow2(&app->waitingIconWindow, FALSE);
@@ -409,7 +409,7 @@ int GtsWanted_AskGender(GtsApp *app) {
 
 int GtsWanted_OpenGenderSelector(GtsApp *app) {
     app->unk_0118 = 0xFFFF;
-    ov70_022420C4(app->selector, 1);
+    GtsSelector_Start(app->selector, 1);
     app->state = GTS_WANTED_STATE_HANDLE_GENDER_SELECTOR;
     return 3;
 }
@@ -417,7 +417,7 @@ int GtsWanted_OpenGenderSelector(GtsApp *app) {
 #pragma force_active on
 
 int GtsWanted_HandleGenderSelector(GtsApp *app) {
-    u32 selection = ov70_02242144(app->selector);
+    u32 selection = GtsSelector_Main(app->selector);
     switch (selection) {
     case -2:
         ClearFrameAndWindow2(&app->waitingIconWindow, FALSE);
@@ -443,7 +443,7 @@ int GtsWanted_AskLevel(GtsApp *app) {
 }
 
 int GtsWanted_OpenLevelSelector(GtsApp *app) {
-    ov70_022420C4(app->selector, 2);
+    GtsSelector_Start(app->selector, 2);
     app->unk_0118 = 0xFFFF;
     app->state = GTS_WANTED_STATE_HANDLE_LEVEL_SELECTOR;
     return 3;
@@ -453,7 +453,7 @@ int GtsWanted_OpenLevelSelector(GtsApp *app) {
 
 // Canceling goes back to the gender, or to the species when it has only one gender.
 int GtsWanted_HandleLevelSelector(GtsApp *app) {
-    u32 selection = ov70_02242144(app->selector);
+    u32 selection = GtsSelector_Main(app->selector);
     switch (selection) {
     case 12: // past the 12 level ranges
     case -2:

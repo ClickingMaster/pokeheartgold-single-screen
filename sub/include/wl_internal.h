@@ -289,14 +289,16 @@ typedef struct WlMpState {
 // Received frame in the driver heap (TakeoutRxFrame): driver data, then the hardware RX header and the
 // 802.11 frame as read from the MAC memory.
 typedef struct WlRxFrame {
-    u8 unk_00[6];
+    u16 unk_00;
+    u16 station; // CAM index (RxDataFrameTask)
+    u16 unk_04;
     u16 length; // frame body (size - 24)
     u16 status; // RX header: bits 0..3 frame type, bit 9: fragment
     u16 unk_0a;
     u16 unk_0c;
-    u16 unk_0e; // TakeoutRxFrame moves the low byte of unk_12 into the high byte
-    u16 unk_10;
-    u16 unk_12;
+    u16 unk_0e;      // TakeoutRxFrame moves the low byte of rssi into the high byte
+    u16 frameLength; // 802.11 header and body
+    u16 rssi;        // low byte
     u16 frameCtrl;
     u16 duration;
     u16 addr1[3];
@@ -305,10 +307,11 @@ typedef struct WlRxFrame {
     u16 seqCtrl;
 } WlRxFrame;
 
-// Driver heap buffer holding a received frame.
+// Driver heap buffer holding a received frame; it becomes an indication to the WMSP (command, length).
 typedef struct WlRxBuf {
     WlHeapBuf header;
-    u8 unk_0c[4];
+    u16 command;
+    u16 length;
     WlRxFrame frame;
 } WlRxBuf;
 
@@ -345,12 +348,20 @@ typedef struct WlTxCtrl {
     u16 unk_ae; // WlIntrTbtt: queued frames timed out
 } WlTxCtrl;
 
+// Fragment reassembly slot.
+typedef struct WlDefrag {
+    u16 timer; // DefragTimerTask counts it down and drops the frame at 0
+    u8 unk_02[18];
+    WlHeapBuf *buf;
+} WlDefrag;
+
 // RX side of the MAC (WlWork+0x4DC).
 typedef struct WlRxCtrl {
     u16 lastMpSeqCtrl; // sequence control of the last MP frame received
     u16 unk_02;        // WlIntrRxCntup: RX counter interrupts while TX was busy
     u16 unk_04;        // next frame to read (halfword index into the MAC memory)
-    u8 unk_06[0x50 - 6];
+    u16 unk_06;
+    WlDefrag defrag[3]; // fragment reassembly slots (DefragTimerTask)
 } WlRxCtrl;
 
 // Random number generator state (RND_Init / RND_seed / RND_rand).
@@ -645,12 +656,24 @@ typedef struct WlMlmeBeaconRecvInd {
     u16 gameInfoLength;
     u8 unk_18[6];
     u8 unk_1e; // low byte of the RX header's unk_0e
-    u8 unk_1f; // low byte of the RX header's unk_12
+    u8 unk_1f; // low byte of the RX header's rssi
     u8 unk_20[14];
     u16 srcMacAdrs[3];
     u8 unk_34[8];
     u8 gameInfo[128];
 } WlMlmeBeaconRecvInd;
+
+// AP list entry (UpdateApList: from beacons and probe responses).
+typedef struct WlApEntry {
+    u16 unk_00; // low byte of the RX header's rssi; 0: entry free
+    u16 strength;
+    u16 capaInfo;
+    u16 bssid[3];
+    u16 ssidLength;
+    u8 ssid[32];
+    u16 beaconPeriod;
+    u16 lifeTime; // UpdateApListTask counts it down
+} WlApEntry;
 
 // MAC register self test entry (DiagMacRegister): register offset and the bits that can be written.
 typedef struct WlTestReg {
@@ -669,13 +692,14 @@ typedef struct WlWork {
     OSThread thread;
     WlTask task[24];
     WlHeap heap;
-    u8 unk_20c[0x304 - 0x20c];
+    u8 unk_20c[0x23c - 0x20c];
+    WlApEntry apList[4]; // BSSs heard (UpdateApList)
     OSMessageQueue *indicateQueue;
     OSMessageQueue *requestQueue;
     u32 dmaNo;
     u32 unk_310;
     u32 lockId;
-    u32 unk_318;
+    u8 *flashImage; // the wireless settings of the flash, from 0x2A (FLASH_MakeImage)
     WlParam param;
     WlBss bss;
     WlMlme mlme;
@@ -1092,6 +1116,34 @@ u32 SetSupRateSet(u8 *dest);
 // wl_tx_init.c
 void InitTxCtrl(void);
 
+// wl_rx_init.c
+void __VENEER_MI_WaitDma(u32 dmaNo);
+void DefragTimerTask(void);
+void InitRxCtrl(void);
+
+// wl_ap_list.c
+void UpdateApList(u32 strength, const WlRxFrame *frame, const u8 *ssid);
+void InitApList(void);
+void UpdateApListTask(void);
+
+// wl_flash.c
+u32 FLASH_VerifyCheckSum(u32 *out);
+void FLASH_Wait(void);
+void __VENEER_NVRAM_ReadStatusRegister(u8 *out);
+void __VENEER_NVRAM_SoftwareReset(void);
+void FLASH_Read(u32 offset, u32 size, void *destination);
+void FLASH_DirectRead(u32 offset, u32 size, void *destination);
+void __VENEER_SPI_Lock(u32 id);
+void __VENEER_NVRAM_ReadDataBytes(u32 address, u32 length, void *out);
+void __VENEER_SPI_Unlock(u32 id);
+int FLASH_MakeImage(void);
+
+// wl_rx_data.c
+void RxDataFrameTask(void);
+int RxMpFrame(WlRxFrame *frame);
+void RxKeyDataFrame(WlRxFrame *frame);
+int RxMpAckFrame(WlRxFrame *frame);
+
 // wl_cam.c
 u32 CAM_Search(const u16 *addr);
 u32 CAM_SearchAdd(const u16 *addr);
@@ -1133,6 +1185,14 @@ void WaitLoop_Rxpe(void);
 // wl_wait_loop_waitus.c
 void WaitLoop_Waitus(u32 us, OSAlarmHandler handler);
 
+// targets of the veneers (DMA, SPI and NVRAM drivers)
+void MI_WaitDma(u32 dmaNo);
+void SPI_Lock(u32 id);
+void SPI_Unlock(u32 id);
+void NVRAM_ReadStatusRegister(u8 *out);
+void NVRAM_ReadDataBytes(u32 address, u32 length, u8 *out);
+void NVRAM_SoftwareReset(void);
+
 // veneers defined in other ARM7 files
 void __VENEER_OS_CancelAlarm(OSAlarm *alarm);
 void __VENEER_OS_CreateAlarm(OSAlarm *alarm);
@@ -1150,18 +1210,9 @@ void __VENEER_OS_FreeToHeap(u32 id, u32 heap, void *ptr);
 void __VENEER_OS_ExitThread(void);
 
 // defined in the later WL files
-void InitApList(void);
-void InitRxCtrl(void);
-void FLASH_DirectRead(u32 addr, u32 size, void *dest);
-void FLASH_MakeImage(void);
-void FLASH_Read(u32 addr, u32 size, void *dest);
-u32 FLASH_VerifyCheckSum(u32 *checksum);
 OSIntrMode __VENEER_OS_DisableInterrupts(void);
 OSIntrMode __VENEER_OS_RestoreInterrupts(OSIntrMode state);
 void RxBeaconFrame(WlRxFrame *frame);
-void RxKeyDataFrame(WlRxFrame *frame);
-u32 RxMpFrame(WlRxFrame *frame);
-u32 RxMpAckFrame(WlRxFrame *frame);
 
 extern const u8 BC_ADRS[];
 extern const u8 MP_ADRS[];

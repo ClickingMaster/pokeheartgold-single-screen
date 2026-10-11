@@ -4925,47 +4925,7 @@ Overlay OVY_70
     Object src/gts_transaction.o
     Object src/gts_avatars.o
     Object src/gts_trade.o
-    Object src/to50_overlay70_window_setup_modes.o
-    Object src/overlay70_window_cleanup_r46.o
-    Object src/ov70_wave34_menu_2.o
-    Object src/to70_overlay_70_residual_34_residual_3_extra824_run01.o
-    Object src/ov70_wave34_menu_3.o
-    Object src/to70_overlay_70_residual_34_residual_4_extra197_run01.o
-    Object src/to70_to70_overlay_70_residual_34_residual_4_extra197_residual_1_extra1297_run01.o
-    Object src/overlay70_sol_partial_34.o
-    Object src/ov70_wave37_input_1.o
-    Object src/to47_overlay70_menu_input_r35.o
-    Object src/ov70_wave37_input_2.o
-    Object src/to70_overlay_70_residual_35_residual_2_extra498_run01.o
-    Object src/overlay70_sol_partial_35.o
-    Object src/overlay70_menu_grid_input.o
-    Object src/overlay70_menu_page_input.o
-    Object src/to70_overlay_70_residual_36_residual_extra319_run01.o
-    Object src/overlay70_menu_render_helpers.o
-    Object src/overlay70_sol_partial_36.o
-    Object src/to70_overlay_70_residual_37_extra979_run01.o
-    Object src/overlay70_sol_partial_37.o
-    Object src/ov70_wave38_menu_1.o
-    Object src/to90_extra2409_run01.o
-    Object src/op90_to90_extra2409_residual_1_r01.o
-    Object src/to50_overlay70_r38r1_exact.o
-    Object src/overlay70_sol_partial_38.o
-    Object src/to90_w41406_pokedex42_run01.o
-    Object src/ov70_wave39_menu_1.o
-    Object src/op90_to50_overlay70_r39r2_residual_r01.o
-    Object src/to50_overlay70_r39r2_exact.o
-    Object src/ov70_wave39_menu_2.o
-    Object src/to50_overlay70_r39_r3.o
-    Object src/ov70_wave39_menu_3.o
-    Object src/to50_overlay70_r39_r4.o
-    Object src/ov70_wave39_menu_4.o
-    Object src/overlay70_sol_partial_39.o
-    Object src/to47_overlay70_menu_finalize_r40.o
-    Object src/overlay70_selection_helpers_1.o
-    Object src/to70_overlay_70_residual_40_residual_2_extra499_run01.o
-    Object src/overlay70_selection_helpers_2.o
-    Object src/to70_overlay_70_residual_40_residual_3_extra981_run01.o
-    Object src/overlay70_selection_helpers_3.o
+    Object src/gts_selector.o
     Object src/to52_r5_overlay70_r40_r4_head.o
     Object src/to80_extra1596_run01.o
     Object src/overlay70_selection_helpers_4.o

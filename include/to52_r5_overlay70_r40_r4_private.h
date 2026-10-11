@@ -15,7 +15,7 @@ extern const s32 ov70_02245E84[];
 extern const PairW20 ov70_02245F5C[];
 extern const PairW20 ov70_02245F58[];
 extern int (*ov70_02246780[])(void *);
-int ov70_02243FD4(void *, u32);
+int GtsSelector_CountCountriesOfLetter(void *, u32);
 void ov70_02244670(void *);
 void ov70_022441A4(void *);
 void ov70_022442B4(void *);

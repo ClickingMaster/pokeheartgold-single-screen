@@ -170,7 +170,7 @@ int GtsSearch_Init(GtsApp *app, int state) {
     args.countryNames = app->countryNames;
     args.pokedex = app->args->pokedex;
     args.unk_2C = app->searchCursor->unk_14;
-    app->selector = ov70_02242014(&args, 2, 1);
+    app->selector = GtsSelector_New(&args, 2, 1);
     GtsSearch_DrawFieldLabels(app->infoWindows, &app->wideWindows[0], app->gtsMsgData);
     GtsSearch_DrawResultsButton(app->bgConfig, &app->infoWindows[8], app->gtsMsgData, app->hasSearchResults);
     Gts_PrintSpeciesName(&app->infoWindows[1], app->speciesNames, app->searchCriteria.species, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
@@ -205,7 +205,7 @@ int GtsSearch_Main(GtsApp *app, int state) {
 
 int GtsSearch_Exit(GtsApp *app, int state) {
     app->vblankFunc = NULL;
-    ov70_0224212C(app->selector);
+    GtsSelector_Delete(app->selector);
     GtsSearch_DeleteSprites(app);
     GtsSearch_FreeData(app);
     GtsSearch_RemoveWindows(app);
@@ -730,7 +730,7 @@ int GtsSearch_AskSpecies(GtsApp *app) {
 }
 
 int GtsSearch_OpenSpeciesSelector(GtsApp *app) {
-    ov70_022420C4(app->selector, 0);
+    GtsSelector_Start(app->selector, 0);
     GtsSearch_SetBlendBrightness(9);
     app->state = GTS_SEARCH_STATE_HANDLE_SPECIES_SELECTOR;
     return 3;
@@ -739,7 +739,7 @@ int GtsSearch_OpenSpeciesSelector(GtsApp *app) {
 #pragma force_active on
 
 int GtsSearch_HandleSpeciesSelector(GtsApp *app) {
-    int selection = ov70_02242144(app->selector);
+    int selection = GtsSelector_Main(app->selector);
     switch (selection) {
     case -2:
         GtsSearch_SetBlendBrightness(0);
@@ -774,7 +774,7 @@ int GtsSearch_AskGender(GtsApp *app) {
 }
 
 int GtsSearch_OpenGenderSelector(GtsApp *app) {
-    ov70_022420C4(app->selector, 1);
+    GtsSelector_Start(app->selector, 1);
     GtsSearch_SetBlendBrightness(9);
     app->state = GTS_SEARCH_STATE_HANDLE_GENDER_SELECTOR;
     return 3;
@@ -783,7 +783,7 @@ int GtsSearch_OpenGenderSelector(GtsApp *app) {
 #pragma force_active on
 
 int GtsSearch_HandleGenderSelector(GtsApp *app) {
-    u32 selection = ov70_02242144(app->selector);
+    u32 selection = GtsSelector_Main(app->selector);
     switch (selection) {
     case (u32)-2:
         GtsSearch_SetBlendBrightness(0);
@@ -813,7 +813,7 @@ int GtsSearch_AskLevel(GtsApp *app) {
 
 int GtsSearch_OpenLevelSelector(GtsApp *app) {
     app->unk_0118 = 0xFFFF;
-    ov70_022420C4(app->selector, 2);
+    GtsSelector_Start(app->selector, 2);
     GtsSearch_SetBlendBrightness(9);
     app->state = GTS_SEARCH_STATE_HANDLE_LEVEL_SELECTOR;
     return 3;
@@ -822,7 +822,7 @@ int GtsSearch_OpenLevelSelector(GtsApp *app) {
 #pragma force_active on
 
 int GtsSearch_HandleLevelSelector(GtsApp *app) {
-    u32 selection = ov70_02242144(app->selector);
+    u32 selection = GtsSelector_Main(app->selector);
     switch (selection) {
     case 11:
     case (u32)-2:
@@ -852,7 +852,7 @@ int GtsSearch_AskCountry(GtsApp *app) {
 
 int GtsSearch_OpenCountrySelector(GtsApp *app) {
     app->unk_0118 = 0xFFFF;
-    ov70_022420C4(app->selector, 3);
+    GtsSelector_Start(app->selector, 3);
     GtsSearch_SetBlendBrightness(9);
     app->state = GTS_SEARCH_STATE_HANDLE_COUNTRY_SELECTOR;
     return 3;
@@ -861,7 +861,7 @@ int GtsSearch_OpenCountrySelector(GtsApp *app) {
 #pragma force_active on
 
 int GtsSearch_HandleCountrySelector(GtsApp *app) {
-    int selection = ov70_02242144(app->selector);
+    int selection = GtsSelector_Main(app->selector);
     if (selection != -1) {
         if (selection == -2 || selection == ov70_0224590C[0] + 1) {
             GtsSearch_SetBlendBrightness(0);

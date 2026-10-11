@@ -165,7 +165,7 @@ int MLME_IssueBeaconRecvIndication(WlRxFrame *frame) {
     }
     ind->header.command = 0x8D;
     ind->header.length = ((int)bss->gameInfoLength + 1) / 2 + 22;
-    WL_WriteByte(&ind->unk_1f, frame->unk_12 & 255);
+    WL_WriteByte(&ind->unk_1f, frame->rssi & 255);
     WL_WriteByte(&ind->unk_1e, frame->unk_0e & 255);
     WSetMacAdrs1(ind->srcMacAdrs, frame->addr2);
     ind->gameInfoLength = bss->gameInfoLength;

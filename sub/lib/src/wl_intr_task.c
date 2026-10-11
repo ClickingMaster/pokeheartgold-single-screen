@@ -68,7 +68,7 @@ WlRxFrame *TakeoutRxFrame(u16 *src, u32 size) {
     }
     DMA_Read(&buf->frame.status, src, size + 12);
     buf->frame.length = size - 24;
-    buf->frame.unk_0e = (buf->frame.unk_0e & 0xFF) | ((u16)(buf->frame.unk_12 & 0xFF) << 8);
+    buf->frame.unk_0e = (buf->frame.unk_0e & 0xFF) | ((u16)(buf->frame.rssi & 0xFF) << 8);
     return &buf->frame;
 }
 
