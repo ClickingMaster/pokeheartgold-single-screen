@@ -441,7 +441,7 @@
 .public ov01_021FCD8C
 .public ov01_021FF0E4
 .public ov01_021FF964
-.public ov01_02203AB4
+.public FieldSystem_ShowEmoteBubble
 .public Field3dObjectList_GetRenderObjectByID
 .public ov01_022052C4
 .public ov01_022052F4

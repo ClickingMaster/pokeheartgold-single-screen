@@ -16,15 +16,15 @@ void ov01_021FFC28(LocalCtx *ctx) {
 }
 
 void ov01_021FFC38(LocalCtx *ctx) {
-    ov01_021F18D4(ctx->owner, 8, 0x7b);
-    ov01_021F1908(ctx->owner, 8, 0x93);
+    FieldEffectManager_LoadBillboardResource(ctx->owner, 8, 0x7b);
+    FieldEffectManager_LoadBillboardSequence(ctx->owner, 8, 0x93);
     FieldEffectManager_LoadTexResource(ctx->owner, 9, 0x16, 1);
     FieldEffectManager_AddRecord(ctx->owner, 0xa, 8, 8, 9, 0, ov01_02209258);
 }
 
 void ov01_021FFC80(LocalCtx *ctx) {
-    ov01_021F18FC(ctx->owner, 8);
-    ov01_021F1924(ctx->owner, 8);
+    FieldEffectManager_FreeBillboardResource(ctx->owner, 8);
+    FieldEffectManager_FreeBillboardSequence(ctx->owner, 8);
     FieldEffectManager_FreeTexResource(ctx->owner, 9);
     FieldEffectManager_ReleaseRecord(ctx->owner, 0xa);
 }

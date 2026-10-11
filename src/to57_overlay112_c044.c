@@ -17,11 +17,11 @@
 extern int PokewalkerIr_GetAndClearError(void);
 extern void PokewalkerIr_Stop(void);
 extern BOOL ov112_021E7668(void);
-extern void ov112_021E98E8(void *, int);
-extern int ov112_021E9888(int);
+extern void PokewalkerApp_ShowSubBg1(void *, int);
+extern int PokewalkerApp_GetTouchedButton(int);
 extern void ov112_021EC440(void *, int, int, int);
-extern void *ov112_021EA08C(void *, int, int);
-extern void ov112_021EA570(void *);
+extern void *PokewalkerApp_StartMessageBox(void *, int, int);
+extern void PokewalkerApp_HideCursor(void *);
 
 void ov112_021EC134(void *);
 
@@ -65,15 +65,15 @@ int ov112_021EC044(void *work) {
         PokewalkerIr_Stop();
     }
     if (!ov112_021E7668()) {
-        ov112_021E98E8(work, 1);
-        if (ov112_021E9888(5) == 0 || (gSystem.newKeys & 1) || (gSystem.newKeys & 2)) {
+        PokewalkerApp_ShowSubBg1(work, 1);
+        if (PokewalkerApp_GetTouchedButton(5) == 0 || (gSystem.newKeys & 1) || (gSystem.newKeys & 2)) {
             PokewalkerIr_Stop();
             ov112_021EC440(work, 1, 3, 0x12);
             PlaySE(0x5DC);
             return 0x21;
         }
     } else {
-        ov112_021E98E8(work, 0);
+        PokewalkerApp_ShowSubBg1(work, 0);
     }
     return result;
 }
@@ -98,8 +98,8 @@ void ov112_021EC134(void *work) {
 }
 
 int ov112_021EC1A8(void *work) {
-    PTR(work, 0x1E524) = ov112_021EA08C(work, 0, 0x21);
-    ov112_021EA570(work);
+    PTR(work, 0x1E524) = PokewalkerApp_StartMessageBox(work, 0, 0x21);
+    PokewalkerApp_HideCursor(work);
     FillBgTilemapRect(PTR(work, 0x18), 2, 0, 0, 0, 0x20, 0x18, 0x10);
     return 0x13;
 }

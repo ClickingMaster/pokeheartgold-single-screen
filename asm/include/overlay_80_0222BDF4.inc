@@ -165,12 +165,12 @@
 .public NamingScreen_DeleteArgs
 .public HealParty
 .public Frontier_GetLaunchArgs
-.public sub_0209680C
+.public Frontier_GetMap
 .public Frontier_GetData
 .public Frontier_SetData
 .public Frontier_LaunchApplication
-.public sub_0209684C
-.public sub_02096854
+.public Frontier_RequestExit
+.public Frontier_ChangeMode
 .public sub_02096BF8
 .public G2x_SetBGyAffine_
 .public GX_LoadOBJ

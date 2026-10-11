@@ -3,16 +3,16 @@
 
 #include "global.h"
 
-typedef struct FrontierHeaderRecord {
+typedef struct FrontierObjectGfxSlot {
     u16 value;
     u16 pad;
-} FrontierHeaderRecord;
+} FrontierObjectGfxSlot;
 
-typedef struct FrontierRecord {
+typedef struct FrontierObjectSlot {
     u8 pad[12];
     u16 value;
     u8 rest[46];
-} FrontierRecord;
+} FrontierObjectSlot;
 
 typedef struct FrontierWork {
     void *launchArgs;
@@ -30,10 +30,10 @@ typedef struct FrontierWork {
     u16 taskId;
     u8 exitRequested;
     u8 pad_023;
-    FrontierHeaderRecord headerRecords[24];
-    FrontierRecord records[32];
+    FrontierObjectGfxSlot objectGfx[24];
+    FrontierObjectSlot objects[32];
     u8 pad_804[0x200];
-    u16 extra[8];
+    u16 spriteState[8];
     u8 pad_a14[0x40];
 } FrontierWork;
 
@@ -72,19 +72,19 @@ void FrontierSystem_RestoreVars(void *, void *);
 void Frontier_CreateMap(FrontierWork *);
 void Frontier_FreeMap(FrontierWork *);
 void *Frontier_GetLaunchArgs(FrontierWork *);
-void *sub_0209680C(FrontierWork *);
+void *Frontier_GetMap(FrontierWork *);
 void *Frontier_GetData(FrontierWork *);
 void Frontier_SetData(FrontierWork *, void *);
 void Frontier_LaunchApplication(FrontierWork *, const void *, void *, u8, void (*)(void *));
-void sub_0209684C(FrontierLaunchArgsInternal *);
-void sub_02096854(FrontierWork *, u8, u16);
-void *sub_02096864(FrontierWork *);
-void *sub_02096868(FrontierWork *);
-void *sub_0209686C(FrontierWork *, int);
-void *sub_02096878(FrontierWork *);
-void sub_02096884(FrontierWork *);
+void Frontier_RequestExit(FrontierLaunchArgsInternal *);
+void Frontier_ChangeMode(FrontierWork *, u8, u16);
+void *Frontier_GetMapObjectGfx(FrontierWork *);
+void *Frontier_GetMapObjects(FrontierWork *);
+void *Frontier_GetMapObject(FrontierWork *, int);
+void *Frontier_GetMapSpriteState(FrontierWork *);
+void Frontier_ResetMapSpriteState(FrontierWork *);
 int Frontier_Exit(void *);
-void sub_02096780(FrontierWork *);
+void Frontier_ResetMapObjects(FrontierWork *);
 void Frontier_LoadOverlays(void);
 void Frontier_UnloadOverlays(void);
 int Frontier_Init(void *);

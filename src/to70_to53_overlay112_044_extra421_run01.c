@@ -1,6 +1,0 @@
-#pragma force_active on
-#include "global.h"
-#pragma force_active on
-void *NewString_ReadMsgData(void *,int);void DrawFrameAndWindow2(void *,int,int,int),FillWindowPixelBuffer(void *,int),StringExpandPlaceholders(void *,void *,void *),String_Delete(void *);int Options_GetTextFrameDelay(void *);u8 AddTextPrinterParameterized(void *,int,void *,int,int,int,void *),ov112_021EA08C(u8 *,int,int);void ov112_021EA10C(u8 *,int,int);
-u8 ov112_021EA08C(u8 *s,int index,int id){void *str=NewString_ReadMsgData(*(void **)(s+0x1e44c),id);u8 *windows=s+0x1ea68;u8 result;DrawFrameAndWindow2(windows+index*16,1,994,13);FillWindowPixelBuffer(windows+index*16,255);StringExpandPlaceholders(*(void **)(s+0x1e448),*(void **)(s+0x1e454),str);int delay=Options_GetTextFrameDelay(*(void **)(s+0x1e43c));result=AddTextPrinterParameterized(windows+index*16,1,*(void **)(s+0x1e454),0,0,delay,NULL);String_Delete(str);return result;}
-void ov112_021EA10C(u8 *s,int index,int id){void *str=NewString_ReadMsgData(*(void **)(s+0x1e44c),id);u8 *windows=s+0x1ea68;DrawFrameAndWindow2(windows+index*16,1,994,13);FillWindowPixelBuffer(windows+index*16,255);StringExpandPlaceholders(*(void **)(s+0x1e448),*(void **)(s+0x1e454),str);AddTextPrinterParameterized(windows+index*16,1,*(void **)(s+0x1e454),0,0,0,NULL);String_Delete(str);}

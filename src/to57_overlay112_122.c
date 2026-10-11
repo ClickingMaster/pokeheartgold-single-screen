@@ -4,28 +4,28 @@
 int ov112_021EE2D4(void *vp) {
     Ov112State *p = vp;
     PokewalkerApp_LoadTilemap(p, 2, 10);
-    ov112_021E9FA4(p, 5, p->field468, 4, 0xF0100);
-    ov112_021E9F40(p, 1);
+    PokewalkerApp_PrintString(p, 5, p->field468, 4, 0xF0100);
+    PokewalkerApp_PrintExit(p, 1);
     p->selection = 0;
-    ov112_021EA51C(p, 2);
+    PokewalkerApp_SetCursorPosition(p, 2);
     return 0x32;
 }
 int ov112_021EE31C(void *vp) {
     Ov112State *p = vp;
-    int choice = ov112_021E9888(1);
+    int choice = PokewalkerApp_GetTouchedButton(1);
     if (choice != -1) {
         ov112_021EC440(p, choice, choice + 2, 0x33);
         PlaySE(0x5DD);
         return 0x41;
     }
     if (*(u32 *)(gSystem + 0x48) & 0x40) {
-        ov112_021EA51C(p, 2);
+        PokewalkerApp_SetCursorPosition(p, 2);
         if (p->selection != 0) {
             PlaySE(0x5DC);
         }
         p->selection = 0;
     } else if (*(u32 *)(gSystem + 0x48) & 0x80) {
-        ov112_021EA51C(p, 3);
+        PokewalkerApp_SetCursorPosition(p, 3);
         if (p->selection != 1) {
             PlaySE(0x5DC);
         }
@@ -43,7 +43,7 @@ int ov112_021EE31C(void *vp) {
 }
 int ov112_021EE3E0(void *vp) {
     Ov112State *p = vp;
-    ov112_021EA570(p);
+    PokewalkerApp_HideCursor(p);
     if (p->selection == 0) {
         FillBgTilemapRect(p->bg, 1, 0, 0, 0, 0x20, 0x18, 0x10);
         FillBgTilemapRect(p->bg, 2, 0, 0, 0, 0x20, 0x18, 0x10);
@@ -67,7 +67,7 @@ int ov112_021EE464(void *p) {
 }
 int ov112_021EE4B8(void *p) {
     U32(p, 0x1F2D0) = 0;
-    ov112_021EA688(p, 8);
+    PokewalkerApp_HideSprite(p, 8);
     return 0x36;
 }
 int ov112_021EE4D0(void *vp) {
@@ -77,7 +77,7 @@ int ov112_021EE4D0(void *vp) {
         return 0x37;
     }
     if ((u32)p->counter > MTRandom() % 0xB4) {
-        ov112_021EA7D0(p);
+        PokewalkerApp_SpawnFallingParticle(p);
     }
     ov112_021ED314(p->counter);
     return 0x36;

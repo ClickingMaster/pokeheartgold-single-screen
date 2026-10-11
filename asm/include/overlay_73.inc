@@ -193,7 +193,7 @@
 .public SpriteToUnionRoomAvatarIdx
 .public sub_0205B4A4
 .public sub_02069528
-.public sub_0208FB64
+.public RecordMixingLink_RegisterCommands
 .public LoadDwcOverlay
 .public UnloadDwcOverlay
 .public LoadOVY38

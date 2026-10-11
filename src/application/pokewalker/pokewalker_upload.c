@@ -467,11 +467,11 @@ void PokewalkerApp_BuildStrollData(PokewalkerStrollData *data, PokewalkerApp *ap
     PokewalkerApp_ApplyAdvantageTypes(sPokewalkerCourses[courseId].advantageTypes, app->strollMon, data->routeMonSteps);
     PokewalkerApp_PrintStrollTexts(windows, app, &sPokewalkerCourses[courseId], chosen);
     for (j = 0; j < 3; j++) {
-        file = GfGfxLoader_LoadFromNarc(NARC_a_2_4_8, ov112_021E9470(data->routeMons[j].species), TRUE, HEAP_ID_154, TRUE);
+        file = GfGfxLoader_LoadFromNarc(NARC_a_2_4_8, PokewalkerApp_GetSpeciesIconFile(data->routeMons[j].species), TRUE, HEAP_ID_154, TRUE);
         MI_CpuCopy8(file, &data->routeMonIcons[j * 0x180], 0x180);
         Heap_Free(file);
     }
-    file = GfGfxLoader_LoadFromNarc(NARC_a_2_5_6, ov112_021E9480(data->routeMons[2].species, data->routeMons[2].gender, 0), TRUE, HEAP_ID_154, TRUE);
+    file = GfGfxLoader_LoadFromNarc(NARC_a_2_5_6, PokewalkerApp_GetPictureFile(data->routeMons[2].species, data->routeMons[2].gender, 0), TRUE, HEAP_ID_154, TRUE);
     MI_CpuCopy8(file, data->routeMonPicture, 0x600);
     Heap_Free(file);
     for (j = 0; j < 3; j++) {
@@ -486,13 +486,13 @@ void PokewalkerApp_BuildStrollData(PokewalkerStrollData *data, PokewalkerApp *ap
     MI_CpuCopy8(sPokewalkerRouteImages[sPokewalkerCourseRouteImageIds[courseId].routeImageId], data->routeImage, 0xC0);
     PokewalkerApp_ConvertTo2bpp(windows[13].pixelBuffer, 10, 2, buf, 0, 0, 80, 16);
     MI_CpuCopy8(buf, data->courseNameImage, 0x140);
-    file = GfGfxLoader_LoadFromNarc(NARC_a_2_4_8, ov112_021E9464(app->strollMon), TRUE, HEAP_ID_154, TRUE);
+    file = GfGfxLoader_LoadFromNarc(NARC_a_2_4_8, PokewalkerApp_GetBoxMonIconFile(app->strollMon), TRUE, HEAP_ID_154, TRUE);
     MI_CpuCopy8(file, data->monIcon, 0x180);
     Heap_Free(file);
     GF_ASSERT(app->strollMonSpecies != SPECIES_NONE);
-    file = GfGfxLoader_LoadFromNarc(NARC_a_2_5_6, ov112_021E9480(app->strollMonSpecies, app->strollMonGender, app->strollMonForm), TRUE, HEAP_ID_154, TRUE);
+    file = GfGfxLoader_LoadFromNarc(NARC_a_2_5_6, PokewalkerApp_GetPictureFile(app->strollMonSpecies, app->strollMonGender, app->strollMonForm), TRUE, HEAP_ID_154, TRUE);
     if (app->strollMonSpecies == SPECIES_SPINDA) {
-        ov112_021E9A30(file, sSpindaSpotMask, GetBoxMonData(app->strollMon, MON_DATA_PERSONALITY, NULL));
+        PokewalkerApp_DrawSpindaSpotsOnPicture(file, sSpindaSpotMask, GetBoxMonData(app->strollMon, MON_DATA_PERSONALITY, NULL));
     }
     MI_CpuCopy8(file, data->monPicture, 0x600);
     Heap_Free(file);

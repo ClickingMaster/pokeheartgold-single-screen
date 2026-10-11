@@ -9,7 +9,7 @@
 #include "bg_window.h"
 #include "filesystem.h"
 #include "font.h"
-#include "frontier_application_internal.h"
+#include "spin_trade_link.h"
 #include "game_stats.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
@@ -43,7 +43,7 @@
 #include "unk_0205B3DC.h"
 #include "vram_transfer_manager.h"
 
-// View of the link menu owned by frontier_menu_communication.c (Work97024.menu)
+// View of the link menu owned by frontier_menu_communication.c (SpinTradeArgs.menu)
 typedef struct SpinTradeGroupMenu {
     u8 unk_00[0x20];
     u32 count;            // 0x20
@@ -91,7 +91,7 @@ typedef struct SpinTradeGroupApp {
     int state;                              // 0x0000
     u8 unk_0004[4];                         // 0x0004
     u32 result;                             // 0x0008
-    Work97024 *args;                        // 0x000C
+    SpinTradeArgs *args;                        // 0x000C
     SpinTradeGroupMenu *menu;               // 0x0010
     BgConfig *bgConfig;                     // 0x0014
     u8 unk_0018[4];                         // 0x0018
@@ -176,8 +176,8 @@ void sub_0203897C(void);
 void sub_02038C1C(int count);
 void sub_02039EAC(s32 *state);
 BOOL sub_02039EB4(SaveData *saveData, int a1, s32 *state);
-void sub_02096CE0(SpinTradeGroupMenu *menu);
-BOOL sub_02096D4C(SpinTradeGroupMenu *menu, int command, void *data, int size);
+void SpinTradeLink_RegisterCommands(SpinTradeGroupMenu *menu);
+BOOL SpinTradeLink_SendCommand(SpinTradeGroupMenu *menu, int command, void *data, int size);
 
 BOOL SpinTradeGroupApp_Init(OverlayManager *manager, int *state);
 BOOL SpinTradeGroupApp_Main(OverlayManager *man, int *state);
@@ -254,7 +254,7 @@ void ov85_021EA4EC(void *a0, void *a1);
 
 BOOL SpinTradeGroupApp_Init(OverlayManager *manager, int *state) {
     NARC *narc;
-    Work97024 *args = OverlayManager_GetArgs(manager);
+    SpinTradeArgs *args = OverlayManager_GetArgs(manager);
     SpinTradeGroupApp *app;
     switch (*state) {
     case 0:
@@ -287,7 +287,7 @@ BOOL SpinTradeGroupApp_Init(OverlayManager *manager, int *state) {
         SpinTradeGroup_CreateAvatarSprites(app);
         SpinTradeGroup_InitWindows(app);
         Sound_SetSceneAndPlayBGM(52, 0, 0);
-        sub_02096CE0(args->menu);
+        SpinTradeLink_RegisterCommands(args->menu);
         sub_0203897C();
         sub_02038C1C(3);
         if (!Comm_GetLocalNetId()) {
@@ -323,7 +323,7 @@ BOOL SpinTradeGroupApp_Main(OverlayManager *man, int *state) {
         if (IsPaletteFadeFinished()) {
             app->state = 1;
             if (Comm_GetLocalNetId() != 0 && SpinTradeGroup_CountMembers() > 2) {
-                sub_02096D4C(app->menu, 4, NULL, 0);
+                SpinTradeLink_SendCommand(app->menu, 4, NULL, 0);
             }
         }
         break;
@@ -623,7 +623,7 @@ void SpinTradeGroup_HandleButtons(SpinTradeGroupApp *app) {
                 a = 1;
                 SpinTradeGroup_PrintMessage(app, 3, 0);
                 SpinTradeGroup_WaitPrinterThen(app, 0x16);
-                sub_02096D4C(app->menu, 7, &a, 1);
+                SpinTradeLink_SendCommand(app->menu, 7, &a, 1);
                 SpinTradeGroup_SetMaxConnections(app, 0);
             } else {
                 PlaySE(0x5F2);
@@ -642,7 +642,7 @@ void SpinTradeGroup_HandleButtons(SpinTradeGroupApp *app) {
                 b = 1;
                 SpinTradeGroup_PrintMessage(app, 4, 0);
                 SpinTradeGroup_WaitPrinterThen(app, 4);
-                sub_02096D4C(app->menu, 7, &b, 1);
+                SpinTradeLink_SendCommand(app->menu, 7, &b, 1);
                 SpinTradeGroup_SetMaxConnections(app, 0);
             } else {
                 PlaySE(0x5F2);
@@ -651,7 +651,7 @@ void SpinTradeGroup_HandleButtons(SpinTradeGroupApp *app) {
     } else {
         if (app->unk_4A48 == 0 && !Comm_GetLocalNetId() && app->menu->participantCount == Comm_CountConnected()) {
             c = 0;
-            sub_02096D4C(app->menu, 7, &c, 1);
+            SpinTradeLink_SendCommand(app->menu, 7, &c, 1);
         }
     }
 }
@@ -683,7 +683,7 @@ int ov85_021E948C(SpinTradeGroupApp *app, int state) {
     u32 v;
     if (!Comm_GetLocalNetId()) {
         v = 0;
-        sub_02096D4C(app->menu, 7, &v, 1);
+        SpinTradeLink_SendCommand(app->menu, 7, &v, 1);
     }
     app->subState = 3;
     ov85_021E943C(app);
@@ -728,7 +728,7 @@ int ov85_021E94EC(SpinTradeGroupApp *app, int state) {
         if (input == -2) {
             if (!Comm_GetLocalNetId()) {
                 v = 0;
-                sub_02096D4C(app->menu, 7, &v, 1);
+                SpinTradeLink_SendCommand(app->menu, 7, &v, 1);
                 SpinTradeGroup_SetMaxConnections(app, 1);
             }
             SpinTradeGroup_WaitPrinterThen(app, 0);
@@ -742,7 +742,7 @@ int ov85_021E94EC(SpinTradeGroupApp *app, int state) {
             app->unk_4A50 = 1;
             app->unk_4A5C = 0;
             app->subState = 6;
-            sub_02096D4C(app->menu, 2, buf, 4);
+            SpinTradeLink_SendCommand(app->menu, 2, buf, 4);
         }
         app->yesNoMenu = NULL;
     }
@@ -769,7 +769,7 @@ int ov85_021E962C(SpinTradeGroupApp *app, int a1) {
         MI_CpuFill8(buf, 0, 4);
         buf[2] = 1;
         buf[0] = (u8)Comm_GetLocalNetId();
-        sub_02096D4C(app->menu, 2, buf, 4);
+        SpinTradeLink_SendCommand(app->menu, 2, buf, 4);
         app->unk_4A5C = 0;
         app->subState = 9;
     }
@@ -805,7 +805,7 @@ int ov85_021E9700(SpinTradeGroupApp *app, int a1) {
         if (r != -1) {
             if (r == -2) {
                 u32 v = 0;
-                sub_02096D4C(app->menu, 7, &v, 1);
+                SpinTradeLink_SendCommand(app->menu, 7, &v, 1);
                 SpinTradeGroup_SetMaxConnections(app, 1);
                 SpinTradeGroup_WaitPrinterThen(app, 0);
             } else if (Comm_GetLocalNetId() == 0) {
@@ -824,7 +824,7 @@ int ov85_021E9700(SpinTradeGroupApp *app, int a1) {
 
 int ov85_021E97B8(SpinTradeGroupApp *app, int state) {
     if (app->unk_4A53 == 0) {
-        if (sub_02096D4C(app->menu, 5, NULL, 0) == 1) {
+        if (SpinTradeLink_SendCommand(app->menu, 5, NULL, 0) == 1) {
             app->subState = 0x1F;
         }
     }
@@ -917,11 +917,11 @@ int ov85_021E996C(SpinTradeGroupApp *app, int a1) {
             if (r == -2) {
                 u32 v = 0;
                 app->subState = 0;
-                sub_02096D4C(app->menu, 7, &v, 1);
+                SpinTradeLink_SendCommand(app->menu, 7, &v, 1);
                 SpinTradeGroup_SetMaxConnections(app, 1);
             } else {
                 app->subState = 0xD;
-                sub_02096D4C(app->menu, 3, NULL, 0);
+                SpinTradeLink_SendCommand(app->menu, 3, NULL, 0);
                 BufferPlayersName(app->msgFormat, 0, CommPlayerInfo_GetProfile(0));
             }
             app->yesNoMenu = NULL;
@@ -1112,7 +1112,7 @@ void ov85_021E9D9C(SpinTradeGroupApp *app, int a1, int a2) {
             p->participantMask = 0;
             if (Comm_GetLocalNetId() == 0) {
                 u32 v = 1;
-                sub_02096D4C(app->menu, 7, &v, 1);
+                SpinTradeLink_SendCommand(app->menu, 7, &v, 1);
             }
             break;
         }
@@ -1379,7 +1379,7 @@ int SpinTradeGroup_CheckMembers(SpinTradeGroupApp *app, int a1) {
     int v = SpinTradeGroup_CountMembers();
     if (v > (int)app->menu->participantCount) {
         u8 x = 1;
-        sub_02096D4C(app->menu, 7, &x, 1);
+        SpinTradeLink_SendCommand(app->menu, 7, &x, 1);
         app->unk_4A48 = 1;
     } else {
         app->unk_4A48 = 0;

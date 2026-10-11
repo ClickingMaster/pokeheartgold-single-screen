@@ -5,8 +5,8 @@ int Frontier_Init(void *manager) {
     Frontier_LoadOverlays();
     work = OverlayManager_CreateAndGetData(manager, 0xa54, 11);
     MI_CpuFill8(work, 0, 0xa54);
-    sub_02096780(work);
-    sub_02096884(work);
+    Frontier_ResetMapObjects(work);
+    Frontier_ResetMapSpriteState(work);
     work->launchArgs = OverlayManager_GetArgs(manager);
     if (work->launchArgs == 0) {
         GF_AssertFail();
@@ -68,7 +68,7 @@ int Frontier_Main(void *manager, int *state) {
         break;
     case 5:
         Frontier_FreeMap(work);
-        sub_02096780(work);
+        Frontier_ResetMapObjects(work);
         *state = 6;
         break;
     case 6:
@@ -108,14 +108,14 @@ void Frontier_FreeMap(FrontierWork *work) {
     work->mapActive = 0;
 }
 
-void sub_02096780(FrontierWork *work) {
+void Frontier_ResetMapObjects(FrontierWork *work) {
     int i;
     for (i = 0; i < 24; i++) {
-        work->headerRecords[i].value = 0xffff;
+        work->objectGfx[i].value = 0xffff;
     }
-    MI_CpuFill8(work->records, 0, sizeof(work->records));
+    MI_CpuFill8(work->objects, 0, sizeof(work->objects));
     for (i = 0; i < 32; i++) {
-        work->records[i].value = 0xffff;
+        work->objects[i].value = 0xffff;
     }
 }
 
@@ -135,7 +135,7 @@ void *Frontier_GetLaunchArgs(FrontierWork *work) {
     return work->launchArgs;
 }
 
-void *sub_0209680C(FrontierWork *work) {
+void *Frontier_GetMap(FrontierWork *work) {
     return work->map;
 }
 
@@ -157,33 +157,33 @@ void Frontier_LaunchApplication(FrontierWork *work, const void *template, void *
     work->childExit = exit;
 }
 
-void sub_0209684C(FrontierLaunchArgsInternal *args) {
+void Frontier_RequestExit(FrontierLaunchArgsInternal *args) {
     ((u8 *)args)[0x22] = 1;
 }
 
-void sub_02096854(FrontierWork *work, u8 mode, u16 taskId) {
+void Frontier_ChangeMode(FrontierWork *work, u8 mode, u16 taskId) {
     ((FrontierLaunchArgsInternal *)work->launchArgs)->mode = mode;
     work->rebuildPending = 1;
     work->taskId = taskId;
 }
 
-void *sub_02096864(FrontierWork *work) {
+void *Frontier_GetMapObjectGfx(FrontierWork *work) {
     return (u8 *)work + 0x24;
 }
 
-void *sub_02096868(FrontierWork *work) {
+void *Frontier_GetMapObjects(FrontierWork *work) {
     return (u8 *)work + 0x84;
 }
 
-void *sub_0209686C(FrontierWork *work, int index) {
+void *Frontier_GetMapObject(FrontierWork *work, int index) {
     return (u8 *)work + 0x84 + index * 0x3c;
 }
 
-void *sub_02096878(FrontierWork *work) {
+void *Frontier_GetMapSpriteState(FrontierWork *work) {
     return (u8 *)work + 0xa04;
 }
 
-void sub_02096884(FrontierWork *work) {
+void Frontier_ResetMapSpriteState(FrontierWork *work) {
     int i;
     MI_CpuFill8((u8 *)work + 0xa04, 0, 8);
     i = 0;

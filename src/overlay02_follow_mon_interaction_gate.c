@@ -10,7 +10,7 @@ WIP_LOCAL BOOL ov02_0224FB54(FieldSystem *fieldSystem, void *a1, void *arg2) {
         if (v > 0xe) {
             return FALSE;
         }
-        ov01_02203AB4(fieldSystem, *(LocalMapObject **)((u8 *)fieldSystem + 0xe4), v - 1);
+        FieldSystem_ShowEmoteBubble(fieldSystem, *(LocalMapObject **)((u8 *)fieldSystem + 0xe4), v - 1);
         return TRUE;
     }
     return FALSE;

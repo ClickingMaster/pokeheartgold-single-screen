@@ -15,9 +15,9 @@ typedef struct FieldEffectFollowArgs {
     int x;                   /* 0x00 */
     int y;                   /* 0x04 */
     int z;                   /* 0x08 */
-    TaskManager *taskman;    /* 0x0C */
-    FieldSystem *fieldSys;   /* 0x10 */
-    UnkOv01_021FFECC *unk14; /* 0x14 */
+    FieldSystem *fieldSystem;    /* 0x0C */
+    FieldEffectManager *manager; /* 0x10 */
+    void *unk14; /* 0x14 */
     LocalMapObject *object;  /* 0x18 */
     s16 dx;                  /* 0x1C */
     s16 dz;                  /* 0x1E */
@@ -28,8 +28,8 @@ typedef struct FieldEffectFollowArgs {
 typedef struct FieldEffectSimpleArgs {
     int x;                  /* 0x00 */
     int z;                  /* 0x04 */
-    TaskManager *taskman;   /* 0x08 */
-    UnkOv01_021FFECC *unkC; /* 0x0C */
+    FieldSystem *fieldSystem;   /* 0x08 */
+    void *unkC; /* 0x0C */
     void *unk10;            /* 0x10 */
 } FieldEffectSimpleArgs;    /* 0x14 */
 
@@ -66,20 +66,11 @@ typedef struct Ov01FieldEffectCtx {
     FieldEffectManager *manager;
 } Ov01FieldEffectCtx;
 
-void ov01_021F18D4(FieldEffectManager *manager, int a1, int a2);
-void FieldEffectManager_ReleaseRecord(FieldEffectManager *manager, int a1);
-void ov01_021F18FC(FieldEffectManager *manager, int a1);
-void ov01_021F1908(FieldEffectManager *manager, int a1, int a2);
-void ov01_021F1924(FieldEffectManager *manager, int a1);
-void FieldEffectManager_LoadTexResource(FieldEffectManager *manager, int a1, int a2, int a3);
-void FieldEffectManager_FreeTexResource(FieldEffectManager *manager, int a1);
-void FieldEffectManager_AddRecord(FieldEffectManager *manager, int a1, int a2, int a3, int a4, int a5, const FieldEffectAnimSpec *a6);
-void *FieldEffectManager_CreateBillboardFromRecord(void *a0, int a1, const VecFx32 *pos);
 
 int FieldEffect_GetParam(void *a0);
 void FieldEffect_SetPosition(void *a0, VecFx32 *a1);
 void FieldEffect_GetPosition(void *a0, VecFx32 *a1);
-int sub_0206121C(TaskManager *taskman, VecFx32 *pos);
+int sub_0206121C(FieldSystem *fieldSystem, VecFx32 *pos);
 BOOL sub_0205F0F8(LocalMapObject *object, u32 spriteId, u32 objId, u32 mapId);
 BOOL BillboardObject_Delete(void *sprite);
 void BillboardObject_SetVisible(void *sprite, int a1);
@@ -88,8 +79,8 @@ void BillboardObject_SetFrame(void *sprite, fx32 a1);
 void BillboardObject_SetPosition(void *sprite, VecFx32 *pos);
 fx32 BillboardObject_GetSequenceFrame(void *sprite);
 
-extern const UnkOv01_02209280 ov01_02209138;
-extern const UnkOv01_02209280 ov01_0220914C;
+extern const FieldEffectBasicTemplate ov01_02209138;
+extern const FieldEffectBasicTemplate ov01_0220914C;
 extern const FieldEffectAnimSpec ov01_02209160;
 extern const FieldEffectAnimSpec ov01_02209178;
 extern const FieldEffectAnimSpec ov01_02209190;

@@ -5,13 +5,13 @@
 
 #define LOAD_PRINTER(p, a, b, next)                                \
     do {                                                           \
-        *(void **)((u8 *)(p) + 0x1E524) = ov112_021EA08C(p, a, b); \
+        *(void **)((u8 *)(p) + 0x1E524) = PokewalkerApp_StartMessageBox(p, a, b); \
         return next;                                               \
     } while (0)
 
 
 void ov112_021ED2F4(void *p) {
-    ov112_021E98A4(p);
+    PokewalkerApp_LoadSubBg1Tilemap(p);
     *(void **)((u8 *)p + 0x1F2DC) = SysTask_CreateOnMainQueue(ov112_021ED180, p, 2);
 }
 

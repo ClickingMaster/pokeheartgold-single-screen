@@ -29,7 +29,7 @@ typedef struct Ov01_02200858_Work {
 
 // The user-data block handed to FieldEffectManager_CreateEffect as a4 and recovered via FieldEffect_GetUserData.
 typedef struct Ov01_02200858_Args {
-    FieldSystem *unk0;
+    FieldEffectManager *unk0;
     Ov01_02200858_Work *unk4;
     PlayerAvatar *unk8;
 } Ov01_02200858_Args; // 0xc

@@ -30,7 +30,7 @@ typedef struct Ov01FE780Ctx {
 // via FieldEffect_GetUserData in ov01_021FE868.
 typedef struct Ov01FE780Args {
     u32 dir;                /* 0x00 */
-    FieldSystem *fieldSys;  /* 0x04 */
+    FieldEffectManager *manager; /* 0x04 */
     Ov01FE780Ctx *ctx;      /* 0x08 */
     LocalMapObject *object; /* 0x0C */
 } Ov01FE780Args;            /* 0x10 */

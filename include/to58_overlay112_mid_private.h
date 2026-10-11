@@ -23,11 +23,11 @@ extern int TextPrinterCheckActive(u8);
 
 #include "system.h"
 #define W(p,o) (*(u32 *)((u8 *)(p)+(o)))
-extern void ov112_021E9C10();
-extern void ov112_021E9A78(void *, int);
-extern void ov112_021EA570(Ov112State *);
+extern void PokewalkerApp_RemoveWindowBank();
+extern void PokewalkerApp_AddWindowBank(void *, int);
+extern void PokewalkerApp_HideCursor(Ov112State *);
 extern int ov112_021E9338(Ov112State *);
-extern int ov112_021E9750(Ov112State *);
+extern int PokewalkerApp_HandleTwoChoiceMenu(Ov112State *);
 
 
 
@@ -38,11 +38,11 @@ extern int ov112_021E9750(Ov112State *);
 extern void FillBgTilemapRect(void *, int, int, int, int, int, int, int);
 extern void BgCommitTilemapBufferToVram(void *, int);
 extern void ov112_021EC460(Ov112State *, int, int, int);
-extern void ov112_021EA688(Ov112State *, int);
-extern int ov112_021EA08C(Ov112State *, int, int);
+extern void PokewalkerApp_HideSprite(Ov112State *, int);
+extern int PokewalkerApp_StartMessageBox(Ov112State *, int, int);
 extern void BgClearTilemapBufferAndCommit(void *, int);
 extern void PokewalkerApp_LoadTilemap(Ov112State *, int, int);
-extern void ov112_021E9F40(Ov112State *, int);
+extern void PokewalkerApp_PrintExit(Ov112State *, int);
 extern void ov112_021ED2F4(Ov112State *);
 
 
@@ -61,9 +61,9 @@ extern void ov112_021EA5A4(Ov112State *, int);
 
 extern void BufferBoxMonNickname(void *, int, void *);
 extern void PokewalkerApp_LoadMonPicture(void *, void *, void *, int);
-extern void ov112_021EA670(Ov112State *, int);
+extern void PokewalkerApp_ShowSprite(Ov112State *, int);
 extern u32 MTRandom(void);
-extern void ov112_021EA7D0(Ov112State *);
+extern void PokewalkerApp_SpawnFallingParticle(Ov112State *);
 extern void sub_02032674(void *, void *, void *);
 extern void sub_02032650(void *, u32, u16);
 

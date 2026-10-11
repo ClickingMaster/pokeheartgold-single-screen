@@ -30,7 +30,7 @@ extern const GraphicsBanks ov112_021FF0FC;
 extern const GraphicsModes ov112_021FF0DC;
 extern const ObjCharTransferTemplate ov112_021FF0EC;
 
-extern void ov112_021EA688(void *, int);
+extern void PokewalkerApp_HideSprite(void *, int);
 extern void PokewalkerApp_Teardown(void *);
 extern void *ov112_021F039C(int);
 extern void ov112_021F03BC(void *, void *);

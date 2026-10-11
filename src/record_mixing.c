@@ -158,7 +158,7 @@ void sub_02038C1C(int count); // defined with an s8 parameter; the callers pass 
 void sub_02039EAC(s32 *arg0);
 s32 sub_02039EB4(SaveData *saveData, s32 arg1, u32 *arg2);
 void sub_0205AD24(struct UnkStruct_0205AC88 *manager);
-void sub_0208FB64(RecordMixingApp *app); // registers the comm command table (wireless_room.c)
+void RecordMixingLink_RegisterCommands(RecordMixingApp *app); // registers the comm command table (wireless_room.c)
 
 // Record exchange, in the record data part of this overlay.
 void RecordMixing_BuildSendBuffer(SaveData *saveData, void *dest);
@@ -295,7 +295,7 @@ BOOL RecordMixing_Init(OverlayManager *man, int *state) {
         RecordMixing_PrintButtons(app);
         Sound_SetSceneAndPlayBGM(0x34, 0, 0);
         reg_GX_POWCNT &= ~REG_GX_POWCNT_DSEL_MASK;
-        sub_0208FB64(app);
+        RecordMixingLink_RegisterCommands(app);
         sub_0203893C();
         sub_02038C1C(3);
         if (!Comm_GetLocalNetId()) {

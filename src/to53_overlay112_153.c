@@ -11,7 +11,7 @@ typedef struct W12Work {
 
 extern void FillBgTilemapRect(void *, int, int, int, int, int, int, int);
 extern void PokewalkerApp_LoadTilemap(W12Work *, int, int);
-extern void ov112_021E9FD8(W12Work *, int, void *, int);
+extern void PokewalkerApp_PrintStringDefaultColor(W12Work *, int, void *, int);
 extern int IsPaletteFadeFinished(void);
 extern void BufferPokewalkerCourseName(void *, int, u8);
 extern int sub_02032718(void *);
@@ -19,12 +19,12 @@ extern void *String_New(int, int);
 extern void CopyU16ArrayToStringN(void *, void *, int);
 extern void BufferString(void *, int, void *, u32, int, void *);
 extern void String_Delete(void *);
-extern int ov112_021EA08C(W12Work *, int, int);
+extern int PokewalkerApp_StartMessageBox(W12Work *, int, int);
 extern void PlayFanfare(int);
 extern void BeginNormalPaletteFade(int, int, int, int, int, int, int);
-extern void ov112_021E9C10(W12Work *, int);
-extern void ov112_021E9A78(void *, int);
-extern void ov112_021EA688(W12Work *, int);
+extern void PokewalkerApp_RemoveWindowBank(W12Work *, int);
+extern void PokewalkerApp_AddWindowBank(void *, int);
+extern void PokewalkerApp_HideSprite(W12Work *, int);
 extern void GF_AssertFail(void);
 extern int TextPrinterCheckActive(u8);
 extern int IsFanfarePlaying(void);
@@ -109,9 +109,9 @@ int ov112_021F00CC(void) {
 int ov112_021F00E0(W12Work *w) {
     int result;
     if (U16(w, 0x9d7a) == 0) {
-        result = ov112_021EA08C(w, 0, 0x2e);
+        result = PokewalkerApp_StartMessageBox(w, 0, 0x2e);
     } else {
-        result = ov112_021EA08C(w, 0, 0x2d);
+        result = PokewalkerApp_StartMessageBox(w, 0, 0x2d);
     }
     U32(w, 0x1e524) = result;
     U32(w, 0xc) = 0x1b;
@@ -122,7 +122,7 @@ int ov112_021F0114(W12Work *w) {
     u32 course = U32(w, 0x1ec78);
     if (course != 0) {
         BufferPokewalkerCourseName(PTR(w, 0x1e448), 4, (u8)course);
-        U32(w, 0x1e524) = ov112_021EA08C(w, 0, 0x30);
+        U32(w, 0x1e524) = PokewalkerApp_StartMessageBox(w, 0, 0x30);
         U32(w, 0xc) = 0x1c;
         U32(w, 0x1ec78) = 0;
         return 0x23;

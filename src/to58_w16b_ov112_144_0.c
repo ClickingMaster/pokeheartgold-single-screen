@@ -12,15 +12,15 @@ int ov112_021EF67C(void *s) {
 }
 extern void FillBgTilemapRect(void *, int, int, int, int, int, int, int);
 extern void BgCommitTilemapBufferToVram(void *, int);
-extern void ov112_021E9C10(void *, int);
-extern void ov112_021E9A78(void *, int);
+extern void PokewalkerApp_RemoveWindowBank(void *, int);
+extern void PokewalkerApp_AddWindowBank(void *, int);
 int ov112_021EF6A0(void *);
 int ov112_021EF6A0(void *s) {
     FillBgTilemapRect(*(void **)((u8 *)s + 0x18), 1, 0, 0, 0, 0x20, 0x18, 0x10);
     FillBgTilemapRect(*(void **)((u8 *)s + 0x18), 2, 0, 0, 0, 0x20, 0x18, 0x10);
     BgCommitTilemapBufferToVram(*(void **)((u8 *)s + 0x18), 1);
     BgCommitTilemapBufferToVram(*(void **)((u8 *)s + 0x18), 2);
-    ov112_021E9C10(s, 6);
-    ov112_021E9A78(s, 1);
+    PokewalkerApp_RemoveWindowBank(s, 6);
+    PokewalkerApp_AddWindowBank(s, 1);
     return 1;
 }

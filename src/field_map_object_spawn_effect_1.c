@@ -47,12 +47,12 @@ void ov01_021FDA30(LocalTaskCtx *ctx) {
     FieldEffectManager_HeapFree(ctx);
 }
 void ov01_021FDA40(LocalTaskCtx *ctx) {
-    ov01_021F18D4(ctx->owner, 2, 0x23);
-    ov01_021F18D4(ctx->owner, 0xd, 0x69);
+    FieldEffectManager_LoadBillboardResource(ctx->owner, 2, 0x23);
+    FieldEffectManager_LoadBillboardResource(ctx->owner, 0xd, 0x69);
 }
 void ov01_021FDA5C(LocalTaskCtx *ctx) {
-    ov01_021F18FC(ctx->owner, 2);
-    ov01_021F18FC(ctx->owner, 0xd);
+    FieldEffectManager_FreeBillboardResource(ctx->owner, 2);
+    FieldEffectManager_FreeBillboardResource(ctx->owner, 0xd);
 }
 void ov01_021FDA74(void *obj, void *arg) {
     LocalSpawn(obj, arg, ov01_02208F88);
@@ -186,7 +186,7 @@ void ov01_021FDD48(void *task, LocalEffectState *state) {
         VecFx32 pos;
     } local;
     if (ov01_021F9744(MapObject_GetManager(state->mapObject), state->spriteId, local.args) && ov01_021FA2D4(state->mapObject) != 1) {
-        *(void **)local.args = ov01_021F18F0((void *)state->data14[1], 2);
+        *(void **)local.args = FieldEffectManager_GetBillboardResource((void *)state->data14[1], 2);
         FieldEffect_GetPosition(task, &local.pos);
         state->effect = FieldEffectManager_CreateBillboard((void *)state->data14[1], local.args, &local.pos);
         state->active = 1;
@@ -199,7 +199,7 @@ void ov01_021FDD94(void *task, LocalExtendedEffectState *state) {
     } local;
     void *oldEffect;
     *(LocalTenWords *)local.args = *(LocalTenWords *)((u8 *)state + 0x10);
-    *(void **)local.args = ov01_021F18F0((void *)state->data04[1], 2);
+    *(void **)local.args = FieldEffectManager_GetBillboardResource((void *)state->data04[1], 2);
     FieldEffect_GetPosition(task, &local.pos);
     state->effect = FieldEffectManager_CreateBillboard((void *)state->data04[1], local.args, &local.pos);
     oldEffect = *(void **)((u8 *)state + 0x38);
@@ -353,9 +353,9 @@ void ov01_021FE190(void *task, LocalEffectState *state) {
     void *resource;
     if (ov01_021F9744(MapObject_GetManager(state->mapObject), state->spriteId, local.args) && ov01_021FA2D4(state->mapObject) != 1) {
         if (state->mode <= 2) {
-            resource = ov01_021F18F0((void *)state->data14[1], 2);
+            resource = FieldEffectManager_GetBillboardResource((void *)state->data14[1], 2);
         } else {
-            resource = ov01_021F18F0((void *)state->data14[1], 0xd);
+            resource = FieldEffectManager_GetBillboardResource((void *)state->data14[1], 0xd);
         }
         *(void **)local.args = resource;
         if (ov01_0220553C(state->mapObject)) {

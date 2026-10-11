@@ -63,14 +63,14 @@ ov01_021FEDC8: ; 0x021FEDC8
 	ldr r0, [r4]
 	add r1, r4, #4
 	mov r3, #0x1e
-	bl ov01_021F19F4
+	bl FieldEffectManager_LoadRenderModel
 	mov r2, #0
 	str r2, [sp]
 	ldr r0, [r4]
 	add r4, #0x18
 	add r1, r4, #0
 	mov r3, #0x87
-	bl ov01_021F1A18
+	bl FieldEffectManager_LoadRenderAnimation
 	add sp, #4
 	pop {r3, r4, pc}
 	thumb_func_end ov01_021FEDC8
@@ -148,7 +148,7 @@ ov01_021FEE64: ; 0x021FEE64
 	ldr r0, [r4, #0x78]
 	add r1, r4, #0
 	add r3, #0x18
-	bl ov01_021F1A34
+	bl FieldEffectManager_InitRenderAnimation
 	ldr r1, [r4, #0x7c]
 	add r0, r4, #0
 	add r0, #0x24

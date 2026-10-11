@@ -14,8 +14,8 @@ void ov01_021FEDB8(void *work) {
 
 void ov01_021FEDC8(void *work) {
     u8 *p = work;
-    ov01_021F19F4(*(void **)p, p + 4, 0, 0x1e, 0);
-    ov01_021F1A18(*(void **)p, p + 0x18, 0, 0x87, 0);
+    FieldEffectManager_LoadRenderModel(*(void **)p, p + 4, 0, 0x1e, 0);
+    FieldEffectManager_LoadRenderAnimation(*(void **)p, p + 0x18, 0, 0x87, 0);
 }
 
 void ov01_021FEDF0(void *work) {
@@ -39,7 +39,7 @@ BOOL ov01_021FEE64(void *object, void *data) {
     EffectWorkPrivate *p = data;
     TwoWordsPrivate *source = FieldEffect_GetUserData(object);
     p->source = *source;
-    ov01_021F1A34(p->source.word0, p, p->source.word4 + 4, p->source.word4 + 0x18, 0);
+    FieldEffectManager_InitRenderAnimation(p->source.word0, p, p->source.word4 + 4, p->source.word4 + 0x18, 0);
     RenderObj_InitWithAnimation(p->fields + 0x24, p->source.word4 + 4, p);
     return TRUE;
 }

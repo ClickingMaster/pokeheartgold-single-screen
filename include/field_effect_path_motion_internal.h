@@ -12,12 +12,12 @@ typedef struct EffectContextPrivate {
 
 extern void *FieldEffectManager_HeapAllocAndFill(void *, u32, u32, u32);
 extern void FieldEffectManager_HeapFree(void *);
-extern void ov01_021F18D4(void *, u32, u32);
-extern void ov01_021F1908(void *, u32, u32);
+extern void FieldEffectManager_LoadBillboardResource(void *, u32, u32);
+extern void FieldEffectManager_LoadBillboardSequence(void *, u32, u32);
 extern void FieldEffectManager_LoadTexResource(void *, u32, u32, u32);
 extern void FieldEffectManager_AddRecord(void *, u32, u32, u32, u32, u32, const void *);
-extern void ov01_021F18FC(void *, u32);
-extern void ov01_021F1924(void *, u32);
+extern void FieldEffectManager_FreeBillboardResource(void *, u32);
+extern void FieldEffectManager_FreeBillboardSequence(void *, u32);
 extern void FieldEffectManager_FreeTexResource(void *, u32);
 extern void FieldEffectManager_ReleaseRecord(void *, u32);
 extern const u32 ov01_02209200[];

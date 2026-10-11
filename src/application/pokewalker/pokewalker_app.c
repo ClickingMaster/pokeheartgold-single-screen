@@ -69,25 +69,25 @@ void PokewalkerApp_Setup(PokewalkerApp *app) {
     PokewalkerApp_SetGxBanks();
     PokewalkerApp_InitBgs(app->bgConfig);
     PokewalkerApp_LoadBgGraphics(app);
-    ov112_021E9A78(app, 0);
-    ov112_021E9A78(app, 1);
-    ov112_021EA1AC(app);
-    ov112_021EA4F4(app);
+    PokewalkerApp_AddWindowBank(app, 0);
+    PokewalkerApp_AddWindowBank(app, 1);
+    PokewalkerApp_InitSprites(app);
+    PokewalkerApp_ResetCursor(app);
     TextFlags_SetCanTouchSpeedUpPrint(TRUE);
-    ov112_021E9C98(app);
+    PokewalkerApp_LoadStrings(app);
     Main_SetVBlankIntrCB(PokewalkerApp_VBlankCB, app);
     *(volatile u16 *)0x04000304 &= 0xFFFF7FFF;
     ToggleBgLayer(4, 1);
 }
 
 void PokewalkerApp_Teardown(PokewalkerApp *app) {
-    ov112_021EA1F8(app);
-    ov112_021E9C10(app, 1);
-    ov112_021E9C10(app, 0);
+    PokewalkerApp_FreeSprites(app);
+    PokewalkerApp_RemoveWindowBank(app, 1);
+    PokewalkerApp_RemoveWindowBank(app, 0);
     PokewalkerApp_FreeBgs(app->bgConfig);
     GF_TouchpadStopSampling();
     GF_DestroyVramTransferManager();
-    ov112_021E9E30(app);
+    PokewalkerApp_FreeStrings(app);
     PokewalkerApp_FreeMessages(app);
     FontID_Release(4);
     Main_SetVBlankIntrCB(NULL, NULL);

@@ -13,8 +13,8 @@ void ov01_021FEC54(void *manager) {
 }
 
 void ov01_021FEC64(Ov01EffectManager *manager) {
-    ov01_021F19F4(manager->context, manager->primary, 0, 0x1D, 0);
-    ov01_021F1A18(manager->context, manager->secondary, 0, 0x86, 0);
+    FieldEffectManager_LoadRenderModel(manager->context, manager->primary, 0, 0x1D, 0);
+    FieldEffectManager_LoadRenderAnimation(manager->context, manager->secondary, 0, 0x86, 0);
 }
 
 void ov01_021FEC8C(Ov01EffectManager *manager) {
@@ -40,7 +40,7 @@ void ov01_021FECA0(void *mapObject, void *arg, u32 variant, u32 direction) {
 BOOL ov01_021FED14(void *task, Ov01EffectState *state) {
     Ov01TaskArgs *args = FieldEffect_GetUserData(task);
     state->args = *args;
-    ov01_021F1A34(state->args.context, state, (u8 *)state->args.resource + 4, (u8 *)state->args.resource + 0x18, 0);
+    FieldEffectManager_InitRenderAnimation(state->args.context, state, (u8 *)state->args.resource + 4, (u8 *)state->args.resource + 0x18, 0);
     RenderObj_InitWithAnimation((u8 *)state + 0x24, (u8 *)state->args.resource + 4, state);
     return TRUE;
 }

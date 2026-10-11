@@ -18,9 +18,9 @@ int ov112_021EDF4C(Ov112R118 *w) {
     if (ov112_021ED610(w)) {
         CopyU16ArrayToStringN(s, w->raw + 0x9D54, 12);
         BufferString(PTR(w, 0x1E448), 1, s, (u32)(U8(w, 0x9D51) << 25) >> 30, 1, 1);
-        printer = (int)ov112_021EA08C(w, 2, 0x1B);
+        printer = (int)PokewalkerApp_StartMessageBox(w, 2, 0x1B);
     } else {
-        printer = (int)ov112_021EA08C(w, 2, 0x20);
+        printer = (int)PokewalkerApp_StartMessageBox(w, 2, 0x20);
     }
     U32(w, 0x1E524) = printer;
     PokewalkerIr_Stop();

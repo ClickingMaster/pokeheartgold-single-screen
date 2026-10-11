@@ -59,11 +59,11 @@ ov01_021FF490: ; 0x021FF490
 	ldr r0, [r4]
 	mov r1, #3
 	mov r2, #0x77
-	bl ov01_021F18D4
+	bl FieldEffectManager_LoadBillboardResource
 	ldr r0, [r4]
 	mov r1, #2
 	mov r2, #0x90
-	bl ov01_021F1908
+	bl FieldEffectManager_LoadBillboardSequence
 	ldr r0, [r4]
 	mov r1, #2
 	mov r2, #0x12
@@ -91,10 +91,10 @@ ov01_021FF4D4: ; 0x021FF4D4
 	add r4, r0, #0
 	ldr r0, [r4]
 	mov r1, #3
-	bl ov01_021F18FC
+	bl FieldEffectManager_FreeBillboardResource
 	ldr r0, [r4]
 	mov r1, #2
-	bl ov01_021F1924
+	bl FieldEffectManager_FreeBillboardSequence
 	ldr r0, [r4]
 	mov r1, #2
 	bl FieldEffectManager_FreeTexResource

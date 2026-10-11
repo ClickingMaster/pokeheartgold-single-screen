@@ -20,8 +20,8 @@
 .public FieldEffectManager_CreateBillboardFromRecord
 .public FieldEffectManager_AddRecord
 .public FieldEffectManager_ReleaseRecord
-.public ov01_021F18D4
-.public ov01_021F18FC
+.public FieldEffectManager_LoadBillboardResource
+.public FieldEffectManager_FreeBillboardResource
 .public FieldEffectManager_LoadTexResource
 .public FieldEffectManager_FreeTexResource
 .public ov01_022006A8

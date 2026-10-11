@@ -1,8 +1,8 @@
 #include <nitro/fs/overlay.h>
 #pragma once
 .public GF_AssertFail
-.public sub_0209680C
-.public sub_02096868
+.public Frontier_GetMap
+.public Frontier_GetMapObjects
 .public MI_CpuFill8
 .public ov42_022299C0
 .public ov80_0222EFD0

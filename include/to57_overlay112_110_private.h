@@ -7,7 +7,7 @@ extern u8 gSystem[];
 
 BOOL PokewalkerIr_GetChunkProgress(void);
 BOOL PokewalkerIr_GetTotalProgress(void);
-void ov112_021EA7D0(void *p);
+void PokewalkerApp_SpawnFallingParticle(void *p);
 void ov112_021EA60C(void *p);
 void ov112_021ED314(int value);
 int PokewalkerIr_GetAndClearError(void);
@@ -17,10 +17,10 @@ void ov112_021ED530(void *p);
 void ov112_021ED590(void *p);
 void PokewalkerIr_Stop(void);
 BOOL ov112_021E7668(void);
-void ov112_021E98E8(void *p, int value);
-int ov112_021E9888(int value);
+void PokewalkerApp_ShowSubBg1(void *p, int value);
+int PokewalkerApp_GetTouchedButton(int value);
 void ov112_021EC440(void *p, int a, int b, int c);
-void ov112_021EA10C(void *p, int a, int b);
+void PokewalkerApp_ShowMessageBox(void *p, int a, int b);
 void ov112_021ED7DC(void *p);
 int ov112_021ED66C(void *p);
 

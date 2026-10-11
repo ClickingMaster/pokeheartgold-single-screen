@@ -13,15 +13,15 @@ void ov01_021FF6CC(void *work) {
 }
 
 void ov01_021FF6DC(void *work) {
-    ov01_021F18D4(*(void **)work, 6, 0x79);
-    ov01_021F1908(*(void **)work, 6, 0x91);
+    FieldEffectManager_LoadBillboardResource(*(void **)work, 6, 0x79);
+    FieldEffectManager_LoadBillboardSequence(*(void **)work, 6, 0x91);
     FieldEffectManager_LoadTexResource(*(void **)work, 7, 0x14, 1);
     FieldEffectManager_AddRecord(*(void **)work, 8, 6, 6, 7, 0, ov01_02209200);
 }
 
 void ov01_021FF724(void *work) {
-    ov01_021F18FC(*(void **)work, 6);
-    ov01_021F1924(*(void **)work, 6);
+    FieldEffectManager_FreeBillboardResource(*(void **)work, 6);
+    FieldEffectManager_FreeBillboardSequence(*(void **)work, 6);
     FieldEffectManager_FreeTexResource(*(void **)work, 7);
     FieldEffectManager_ReleaseRecord(*(void **)work, 8);
 }

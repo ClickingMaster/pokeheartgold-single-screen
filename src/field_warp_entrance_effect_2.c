@@ -11,7 +11,7 @@ void ov01_0220093C(void *a0, Ov01_02200858_Inst *inst);
 void ov01_02200A08(void *a0, Ov01_02200858_Inst *inst);
 int ov01_02200AB0(u8 tile);
 
-extern const UnkOv01_02209280 ov01_02209340;
+extern const FieldEffectBasicTemplate ov01_02209340;
 
 int ov01_02200AB0(u8 tile) {
     if (MetatileBehavior_IsWarpEntranceNorth(tile)) {

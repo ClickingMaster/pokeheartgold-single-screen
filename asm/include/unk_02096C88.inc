@@ -15,12 +15,12 @@
 .public sub_0205A904
 .public sub_0205AD24
 .public sub_02091570
-.public sub_02096C88
-.public sub_02096CC8
-.public sub_02096CE0
-.public sub_02096CF4
-.public sub_02096D4C
-.public sub_02097018
+.public SpinTradeLink_New
+.public SpinTradeLink_Free
+.public SpinTradeLink_RegisterCommands
+.public SpinTradeLink_Close
+.public SpinTradeLink_SendCommand
+.public SpinTradeLink_GetReceivedParty
 .public MATH_CountPopulation
 .public memcpy
 .public memset
@@ -33,29 +33,29 @@
 .public ov85_021E9C84
 .public ov85_021E9D9C
 
-	.public sub_02096D60
-	.public sub_02096D80
+	.public SpinTradeLink_ReceivePacket
+	.public SpinTradeLink_ReceiveParty
 	.public sub_02096DA8
 	.public sub_02096DB4
 	.public sub_02096DBC
 	.public sub_02096DE4
-	.public sub_02096DF4
+	.public SpinTradeLink_HandleJoinRequest
 	.public sub_02096ED0
 	.public sub_02096EF0
 	.public sub_02096F0C
-	.public sub_02096F2C
-	.public sub_02096F3C
-	.public sub_02096F50
-	.public sub_02096F60
-	.public sub_02096F70
-	.public sub_02096F80
-	.public sub_02096F9C
-	.public sub_02096FAC
-	.public sub_02096FBC
-	.public sub_02096FD0
-	.public sub_02096FE4
-	.public sub_02096FE8
-	.public sub_02096FF0
+	.public SpinTradeLink_HandleStatus
+	.public SpinTradeLink_HandleJoin
+	.public SpinTradeLink_HandleSlot
+	.public SpinTradeLink_HandleCount
+	.public SpinTradeLink_HandleJump
+	.public SpinTradeLink_HandleSpin
+	.public SpinTradeLink_HandleTradeSlot
+	.public SpinTradeLink_HandleResult
+	.public SpinTradeLink_HandleCancel
+	.public SpinTradeLink_HandleConfirm
+	.public SpinTradeLink_GetPacketSize
+	.public SpinTradeLink_GetPartySize
+	.public SpinTradeLink_GetPartyRecvBuffer
 
-	.public sub_02096D14
-	.public sub_02096FFC
+	.public SpinTradeLink_SendPacket
+	.public SpinTradeLink_CountMemberProfiles

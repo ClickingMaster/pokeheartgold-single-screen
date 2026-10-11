@@ -12,17 +12,17 @@ typedef struct Ov112State {
 extern const int ov112_021FF09C[];
 
 void PokewalkerApp_LoadTilemap(Ov112State *, int, int);
-void ov112_021E9FA4(Ov112State *, int, void *, int, int);
-void ov112_021E9F40(Ov112State *, int);
-void ov112_021EA51C(Ov112State *, int);
-int ov112_021E9888(int);
+void PokewalkerApp_PrintString(Ov112State *, int, void *, int, int);
+void PokewalkerApp_PrintExit(Ov112State *, int);
+void PokewalkerApp_SetCursorPosition(Ov112State *, int);
+int PokewalkerApp_GetTouchedButton(int);
 void ov112_021EC440(Ov112State *, int, int, int);
 void PlaySE(int);
 int ov112_021EB9C0(void);
 int ov112_021EB9E4(void);
 void ov112_021EB90C(Ov112State *, int);
 int ov112_021EB950(Ov112State *, int);
-void ov112_021EA570(Ov112State *);
+void PokewalkerApp_HideCursor(Ov112State *);
 void GF_AssertFail(void);
 void FillBgTilemapRect(void *, int, int, int, int, int, int, int);
 void BgCommitTilemapBufferToVram(void *, int);

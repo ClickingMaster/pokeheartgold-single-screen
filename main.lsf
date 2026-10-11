@@ -793,10 +793,10 @@ Static main
     Object src/trainer_memo.o
     Object src/trade_communication.o
     Object asm/trade_communication_data.o
-    Object src/wireless_room_packets.o
-    Object asm/unk_0208F814.o
-    Object src/wireless_room.o
-    Object asm/unk_0208FB64.o
+    Object src/drawing_session_link.o
+    Object asm/drawing_session_link_data.o
+    Object src/record_mixing_link.o
+    Object asm/record_mixing_link_data.o
     Object src/use_item_on_mon.o
     Object src/mail_misc.o
     Object src/unk_02091054.o
@@ -878,10 +878,10 @@ Static main
 	Object src/unk_020968B0.o
     Object src/battle_frontier_communication.o
     Object asm/unk_02096910.o
-    Object src/frontier_menu_communication.o
-    Object asm/unk_02096C88.o
-    Object src/frontier_application_flow.o
-    Object asm/unk_02097024.o
+    Object src/spin_trade_link.o
+    Object asm/spin_trade_link_data.o
+    Object src/spin_trade_flow.o
+    Object asm/spin_trade_flow_data.o
     Object src/unk_020971F8.o
     Object src/unk_02097268.o
     Object src/unk_02097720.o
@@ -1764,33 +1764,9 @@ Overlay OVY_0
     Object lib/NitroDWC/src/friend_callback.o
     Object lib/NitroDWC/src/match_setup.o
     Object lib/NitroDWC/src/match_connect.o
-    Object src/op90_to65_ov00_extra16_residual_5_r01.o
-    Object src/to65_ov00_extra16_run05.o
-    Object src/to70_to65_ov00_extra16_residual_6_extra1118_run01.o
-    Object src/to65_ov00_extra16_run06.o
-    Object src/to90_extra1948_run01.o
-    Object src/to70_to65_ov00_extra16_residual_7_extra340_run01.o
-    Object src/to70_to70_to65_ov00_extra16_residual_7_extra340_residual_2_extra1155_run01.o
-    Object src/op90_to70_to70_to65_ov00_extra16_residual_7_extra340_residual_2_extra1155_residual_1_r01.o
-    Object src/to70_to65_ov00_extra16_residual_7_extra340_run02.o
-    Object src/to65_ov00_extra16_run07.o
-    Object src/to80_extra1637_run01.o
-    Object src/to80_extra1848_run01.o
-    Object src/to80_extra1637_run02.o
-    Object src/to65_ov00_extra16_run08.o
-    Object src/to80_extra1416_run01.o
-    Object src/to65_ov00_extra16_run09.o
-    Object src/to70_to65_ov00_extra16_residual_10_extra1112_run01.o
-    Object src/to65_ov00_extra16_run10.o
-    Object src/to80_extra1414_run01.o
-    Object src/to80_extra1664_run01.o
-    Object src/to65_ov00_extra16_run11.o
-    Object src/to80_extra1415_run01.o
-    Object src/to65_ov00_extra16_run12.o
-    Object src/to70_to65_ov00_extra16_residual_13_extra1113_run01.o
-    Object src/to80_extra1732_run01.o
-    Object src/to65_ov00_extra16_run13.o
-    Object src/to70_to65_ov00_extra16_residual_14_extra1114_run01.o
+    Object lib/NitroDWC/src/match_command.o
+    Object lib/NitroDWC/src/match_join.o
+    Object lib/NitroDWC/src/match_sync.o
     Object lib/NitroDWC/src/match_browse.o
     Object lib/NitroDWC/src/transport.o
     Object lib/NitroDWC/src/ap_connect_control.o
@@ -2234,7 +2210,7 @@ Overlay field
     Object src/field_camera_dispatch_1.o
     Object asm/overlay_01_021FCD2C_residual_1.o
     Object src/field_sweet_scent_task.o
-    Object src/field_effect_renderer_list.o
+    Object src/field/map_object_model_list.o
     Object src/field/field_shadow.o
     Object asm/overlay_01_021FD41C_residual_4.o
     Object asm/overlay_01_021FDA14_residual_1.o
@@ -2283,7 +2259,7 @@ Overlay field
     Object src/to90_extra1984_run01.o
     Object src/field_follow_effect_3.o
     Object asm/overlay_01_022031C0_residual_3.o
-    Object src/field_effect_ground_marker.o
+    Object src/field/field_emote_bubble.o
     Object asm/overlay_01_02203E40_residual_1.o
     Object src/field_camera_matrix_effect_1.o
     Object src/field/overlay_01_02204004.o
@@ -6021,32 +5997,7 @@ Object src/application/pokewalker/pokewalker_ir_requests.o
 Object src/application/pokewalker/pokewalker_ir_status.o
 Object src/application/pokewalker/pokewalker_app.o
 Object src/application/pokewalker/pokewalker_upload.o
-Object src/to53_overlay112_035.o
-Object src/to57_overlay112_036.o
-Object src/to53_overlay112_037.o
-Object src/op90_to53_overlay112_038_r01.o
-Object src/to53_overlay112_039.o
-Object src/to55_r3_w04_pixel.o
-Object src/op90_to55_r3_w04_mid_r01.o
-Object src/op90_to55_r3_w04_mid_r02.o
-Object src/to55_r3_w04_driver.o
-Object src/to91_w41464_ov112_021E9A78_run01.o
-Object src/to55_r3_w04_windows.o
-Object src/to53_overlay112_041.o
-Object src/to57_overlay112_message_strings.o
-Object src/to53_overlay112_043.o
-Object src/to70_to53_overlay112_044_extra421_run01.o
-Object src/to53_overlay112_045.o
-Object src/to55_overlay112_046.o
-Object src/to53_overlay112_047.o
-Object src/to58_overlay112_mid_048.o
-Object src/to53_overlay112_049.o
-Object src/to70_to53_overlay112_050_extra686_run01.o
-Object src/to53_overlay112_051.o
-Object src/to57_overlay112_052.o
-Object src/to53_overlay112_053.o
-Object src/to70_to58_ov112_054_prefix_extra1063_run01.o
-    Object src/to58_ov112_054_exact.o
+Object src/application/pokewalker/pokewalker_ui.o
 Object src/to53_overlay112_055.o
 Object src/to58_overlay112_mid_056.o
 Object src/to53_overlay112_057.o

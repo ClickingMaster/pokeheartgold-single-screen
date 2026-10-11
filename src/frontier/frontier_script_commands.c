@@ -54,9 +54,9 @@ typedef UnkStruct_ov42_02228110 *(*FrontierMapGetObjectFunc)(UnkStruct_ov42_0222
 extern const u8 ov80_0223B9D8[][3];
 extern const WindowTemplate ov80_0223B9D0;
 
-void *sub_0209680C(void *frontierWork);
-void sub_0209684C(void *frontierWork);
-void sub_02096854(void *frontierWork, u16 mode, u16 taskId);
+void *Frontier_GetMap(void *frontierWork);
+void Frontier_RequestExit(void *frontierWork);
+void Frontier_ChangeMode(void *frontierWork, u16 mode, u16 taskId);
 u16 ov80_0222A7EC(PlayerProfile *profile);
 void ov80_0222E268(FrontierSystem *system, MsgData *msgData, u16 msgId, u16 canABSpeedUp, const FrontierMessageParams *params);
 void ov80_0222E38C(FrontierSystem *system);
@@ -191,14 +191,14 @@ BOOL FrtCmd_001(FrontierScriptContext *ctx) {
 
 BOOL FrtCmd_002(FrontierScriptContext *ctx) {
     FrontierScriptContext_Stop(ctx);
-    sub_0209684C(ctx->frontierSystem->frontierWork);
+    Frontier_RequestExit(ctx->frontierSystem->frontierWork);
     return FALSE;
 }
 
 BOOL FrtCmd_003(FrontierScriptContext *ctx) {
     FrontierSystem *system = ctx->frontierSystem;
     u16 mode = FrontierScript_ReadVar(ctx);
-    sub_02096854(system->frontierWork, mode, 0xFFFF);
+    Frontier_ChangeMode(system->frontierWork, mode, 0xFFFF);
     FrontierScriptContext_Pause(ctx, FrontierScriptNative_WaitFrame);
     return TRUE;
 }
@@ -211,7 +211,7 @@ BOOL FrtCmd_004(FrontierScriptContext *ctx) {
     FrontierSystem *system = ctx->frontierSystem;
     u16 mode = FrontierScript_ReadVar(ctx);
     u16 taskId = FrontierScript_ReadVar(ctx);
-    sub_02096854(system->frontierWork, mode, taskId);
+    Frontier_ChangeMode(system->frontierWork, mode, taskId);
     FrontierScriptContext_Stop(ctx);
     return FALSE;
 }
@@ -531,7 +531,7 @@ BOOL FrontierScriptNative_WaitYesNo(FrontierScriptContext *ctx) {
 // every connected player.
 BOOL FrtCmd_034(FrontierScriptContext *ctx) {
     FrontierSystem *system = ctx->frontierSystem;
-    FrontierMap *map = sub_0209680C(system->frontierWork);
+    FrontierMap *map = Frontier_GetMap(system->frontierWork);
     u32 offset = FrontierScriptContext_ReadWord(ctx);
     const u8 *saved = ctx->scriptPtr;
     FrontierMapObjectGfx gfx;
@@ -565,7 +565,7 @@ BOOL FrtCmd_034(FrontierScriptContext *ctx) {
 #pragma force_active reset
 
 BOOL FrtCmd_035(FrontierScriptContext *ctx) {
-    FrontierMap *map = sub_0209680C(ctx->frontierSystem->frontierWork);
+    FrontierMap *map = Frontier_GetMap(ctx->frontierSystem->frontierWork);
     FrontierMap_RemoveObjectGfx(map, FrontierScript_ReadVar(ctx));
     return FALSE;
 }
@@ -575,7 +575,7 @@ BOOL FrtCmd_035(FrontierScriptContext *ctx) {
 // player whose net id follows.
 BOOL FrtCmd_036(FrontierScriptContext *ctx) {
     FrontierSystem *system = ctx->frontierSystem;
-    FrontierMap *map = sub_0209680C(system->frontierWork);
+    FrontierMap *map = Frontier_GetMap(system->frontierWork);
     u32 offset = FrontierScriptContext_ReadWord(ctx);
     const u8 *saved = ctx->scriptPtr;
     FrontierMapObjectTemplate template;
@@ -609,7 +609,7 @@ BOOL FrtCmd_036(FrontierScriptContext *ctx) {
 #pragma force_active reset
 
 BOOL FrtCmd_037(FrontierScriptContext *ctx) {
-    FrontierMap *map = sub_0209680C(ctx->frontierSystem->frontierWork);
+    FrontierMap *map = Frontier_GetMap(ctx->frontierSystem->frontierWork);
     // the id goes to overlay 42 as the full halfword (the original call does not narrow it to the u8 parameter)
     UnkStruct_ov42_02228110 *object = ((FrontierMapGetObjectFunc)ov42_02228110)(map->objectManager, FrontierScript_ReadVar(ctx));
     FrontierMap_DeleteObject(map, object);
@@ -617,7 +617,7 @@ BOOL FrtCmd_037(FrontierScriptContext *ctx) {
 }
 
 BOOL FrtCmd_038(FrontierScriptContext *ctx) {
-    FrontierMap *map = sub_0209680C(ctx->frontierSystem->frontierWork);
+    FrontierMap *map = Frontier_GetMap(ctx->frontierSystem->frontierWork);
     u16 id = FrontierScript_ReadVar(ctx);
     u8 state = FrontierScriptContext_ReadByte(ctx);
     UnkStruct_ov42_0222903C *objectSprite = NULL;
@@ -636,7 +636,7 @@ BOOL FrtCmd_039(FrontierScriptContext *ctx) {
 // Starts the movement script at the given offset on a map object.
 BOOL FrtCmd_040(FrontierScriptContext *ctx) {
     FrontierSystem *system = ctx->frontierSystem;
-    FrontierMap *map = sub_0209680C(system->frontierWork);
+    FrontierMap *map = Frontier_GetMap(system->frontierWork);
     int id = FrontierScript_ReadVar(ctx);
     int offset = FrontierScriptContext_ReadWord(ctx);
     FrontierMapObject *object = FrontierMap_FindObject(system->frontierWork, id);
@@ -674,7 +674,7 @@ BOOL FrontierScriptNative_WaitMovements(FrontierScriptContext *ctx) {
 // Loads the sprite resources of a list.
 BOOL FrtCmd_042(FrontierScriptContext *ctx) {
     FrontierSystem *system = ctx->frontierSystem;
-    FrontierMap *map = sub_0209680C(system->frontierWork);
+    FrontierMap *map = Frontier_GetMap(system->frontierWork);
     int offset = FrontierScriptContext_ReadWord(ctx);
     const u8 *saved = ctx->scriptPtr;
     NARC *narc;
@@ -694,7 +694,7 @@ BOOL FrtCmd_042(FrontierScriptContext *ctx) {
 }
 
 BOOL FrtCmd_043(FrontierScriptContext *ctx) {
-    FrontierMap *map = sub_0209680C(ctx->frontierSystem->frontierWork);
+    FrontierMap *map = Frontier_GetMap(ctx->frontierSystem->frontierWork);
     u16 kind = FrontierScript_ReadVar(ctx);
     FrontierMapSprite_UnloadResources(map->spriteManager, kind);
     FrontierMap_RemoveLoadedResource(map, kind);

@@ -16,7 +16,7 @@ extern const FrontierScrCmdFunc gFrontierCommandTable[];
 extern const u32 ov80_0223B9CC;
 
 u32 FrontierMap_GetParam(u32 mapId, u32 field);
-FrontierMap *sub_0209680C(void *frontierWork);
+FrontierMap *Frontier_GetMap(void *frontierWork);
 
 FrontierSystem *FrontierSystem_Create(void *frontierWork, enum HeapID heapId, u32 mapId) {
     FrontierSystem *system = Heap_Alloc(heapId, sizeof(FrontierSystem));
@@ -164,5 +164,5 @@ u16 *FrontierSystem_GetVarPtr(FrontierSystem *system, u32 index) {
 }
 
 FrontierMap *FrontierSystem_GetFrontierMap(FrontierSystem *system) {
-    return sub_0209680C(system->frontierWork);
+    return Frontier_GetMap(system->frontierWork);
 }

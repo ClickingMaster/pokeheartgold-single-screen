@@ -23,7 +23,7 @@
 .public FieldEffectManager_GetFromMapObject
 .public FieldEffectManager_CreateEffect
 .public FieldEffectManager_DestroyEffect
-.public ov01_021F19F4
+.public FieldEffectManager_LoadRenderModel
 .public ov01_021FE200
 .public ov01_021FE220
 .public ov01_021FE3C4

@@ -102,7 +102,7 @@
 #include "phone_rematch.h"
 #include "pokeathlon_course_task.h"
 #include "battle_greeting_task.h"
-#include "unk_02097024.h"
+#include "spin_trade_flow.h"
 #include "unk_02097268.h"
 #include "unk_020977CC.h"
 #include "unk_020979A8.h"
@@ -1780,7 +1780,7 @@ static BOOL sub_020429A0(ScriptContext *ctx) {
 static BOOL sub_020429D4(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     void **p_work = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
-    if (!sub_020970C0(*p_work)) {
+    if (!SpinTradeFlow_Run(*p_work)) {
         return FALSE;
     }
     *p_work = NULL;
@@ -2138,7 +2138,7 @@ BOOL ScrCmd_NicknameInput(ScriptContext *ctx) {
 
 BOOL ScrCmd_629(ScriptContext *ctx) {
     void **p_work = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
-    *p_work = sub_0209707C(ctx->fieldSystem);
+    *p_work = SpinTradeFlow_New(ctx->fieldSystem);
     SetupNativeScript(ctx, sub_020429D4);
     return TRUE;
 }
@@ -4428,7 +4428,7 @@ BOOL ScrCmd_596(ScriptContext *ctx) {
 
 BOOL ScrCmd_597(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
-    ov01_02203AB4(fieldSystem, MapObjectManager_GetFirstActiveObjectByID(fieldSystem->mapObjectManager, obj_partner_poke), 0);
+    FieldSystem_ShowEmoteBubble(fieldSystem, MapObjectManager_GetFirstActiveObjectByID(fieldSystem->mapObjectManager, obj_partner_poke), 0);
     return TRUE;
 }
 

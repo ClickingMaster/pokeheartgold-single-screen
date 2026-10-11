@@ -19,7 +19,7 @@ void ov01_021FEA38(void *p) {
 void ov01_021FEA48(void *v) {
     u8 *p = v;
     if (*(u32 *)(p + 4) == 0) {
-        ov01_021F19F4(*(void **)(p + 0x10), p + 0x14, 0, 0x57, 1);
+        FieldEffectManager_LoadRenderModel(*(void **)(p + 0x10), p + 0x14, 0, 0x57, 1);
         RenderObj_InitFromModel(p + 0x28, p + 0x14);
         *(u32 *)(p + 4) = 1;
     }

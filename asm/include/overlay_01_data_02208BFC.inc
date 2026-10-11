@@ -1,7 +1,7 @@
 #include <nitro/fs/overlay.h>
 #pragma once
-.public ov01_021FD1B8
-.public ov01_021FD1CC
+.public MapObjectModelList_New
+.public MapObjectModelList_Free
 .public FieldShadow_New
 .public FieldShadow_Free
 .public ov01_021FDA14
@@ -40,8 +40,8 @@
 .public ov01_02200874
 .public ov01_022031C0
 .public ov01_022031E8
-.public ov01_02203A18
-.public ov01_02203A38
+.public EmoteBubble_New
+.public EmoteBubble_Free
 .public ov01_02203E40
 .public ov01_02203E64
 .public ov01_022051EC

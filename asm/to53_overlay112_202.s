@@ -78,67 +78,67 @@
 	.extern ov112_021E9338
 	.extern PokewalkerApp_GetPixel4bpp
 	.extern PokewalkerApp_ConvertTo2bpp
-	.extern ov112_021E9464
-	.extern ov112_021E9470
-	.extern ov112_021E9480
-	.extern ov112_021E95A0
-	.extern ov112_021E9610
-	.extern ov112_021E966C
-	.extern ov112_021E96D0
-	.extern ov112_021E9750
-	.extern ov112_021E9888
-	.extern ov112_021E98A4
-	.extern ov112_021E98E8
-	.extern ov112_021E98F8
-	.extern ov112_021E9934
-	.extern ov112_021E9998
-	.extern ov112_021E9A30
-	.extern ov112_021E9A78
-	.extern ov112_021E9C10
+	.extern PokewalkerApp_GetBoxMonIconFile
+	.extern PokewalkerApp_GetSpeciesIconFile
+	.extern PokewalkerApp_GetPictureFile
+	.extern PokewalkerApp_UnlockNextCourse
+	.extern PokewalkerApp_GetWattsToNextCourse
+	.extern PokewalkerApp_ShowYesNoMenu
+	.extern PokewalkerApp_ShowSaveEraseStepsMenu
+	.extern PokewalkerApp_HandleTwoChoiceMenu
+	.extern PokewalkerApp_GetTouchedButton
+	.extern PokewalkerApp_LoadSubBg1Tilemap
+	.extern PokewalkerApp_ShowSubBg1
+	.extern PokewalkerApp_GetPixel2bpp
+	.extern PokewalkerApp_SetPixel2bpp
+	.extern PokewalkerApp_DrawSpindaSpots
+	.extern PokewalkerApp_DrawSpindaSpotsOnPicture
+	.extern PokewalkerApp_AddWindowBank
+	.extern PokewalkerApp_RemoveWindowBank
 	.extern ov112_021E9C94
-	.extern ov112_021E9C98
-	.extern ov112_021E9E30
-	.extern ov112_021E9F40
-	.extern ov112_021E9F5C
-	.extern ov112_021E9FA4
-	.extern ov112_021E9FD8
-	.extern ov112_021EA010
-	.extern ov112_021EA044
-	.extern ov112_021EA08C
-	.extern ov112_021EA10C
-	.extern ov112_021EA17C
-	.extern ov112_021EA19C
-	.extern ov112_021EA1AC
-	.extern ov112_021EA1F8
-	.extern ov112_021EA230
-	.extern ov112_021EA2C4
-	.extern ov112_021EA3C0
-	.extern ov112_021EA4F4
-	.extern ov112_021EA51C
-	.extern ov112_021EA570
-	.extern ov112_021EA584
+	.extern PokewalkerApp_LoadStrings
+	.extern PokewalkerApp_FreeStrings
+	.extern PokewalkerApp_PrintExit
+	.extern PokewalkerApp_PrintMessage
+	.extern PokewalkerApp_PrintString
+	.extern PokewalkerApp_PrintStringDefaultColor
+	.extern PokewalkerApp_PrintSubString
+	.extern PokewalkerApp_PrintSubMessage
+	.extern PokewalkerApp_StartMessageBox
+	.extern PokewalkerApp_ShowMessageBox
+	.extern PokewalkerApp_CreateWaitingIcon
+	.extern PokewalkerApp_DeleteWaitingIcon
+	.extern PokewalkerApp_InitSprites
+	.extern PokewalkerApp_FreeSprites
+	.extern PokewalkerApp_InitSpriteSystem
+	.extern PokewalkerApp_LoadSpriteResources
+	.extern PokewalkerApp_CreateSprites
+	.extern PokewalkerApp_ResetCursor
+	.extern PokewalkerApp_SetCursorPosition
+	.extern PokewalkerApp_HideCursor
+	.extern PokewalkerApp_PressCursor
 	.extern ov112_021EA5A4
 	.extern ov112_021EA60C
 	.extern ov112_021EA64C
-	.extern ov112_021EA670
-	.extern ov112_021EA688
-	.extern ov112_021EA6A0
-	.extern ov112_021EA6B8
-	.extern ov112_021EA6D8
-	.extern ov112_021EA76C
-	.extern ov112_021EA7D0
-	.extern ov112_021EA838
-	.extern ov112_021EA864
-	.extern ov112_021EA984
-	.extern ov112_021EA9A0
+	.extern PokewalkerApp_ShowSprite
+	.extern PokewalkerApp_HideSprite
+	.extern PokewalkerApp_SetSpriteAnim
+	.extern PokewalkerApp_SetSpritePosition
+	.extern PokewalkerApp_DrawParticle
+	.extern PokewalkerApp_SpawnRisingParticle
+	.extern PokewalkerApp_SpawnFallingParticle
+	.extern PokewalkerApp_AgeParticles
+	.extern PokewalkerApp_UpdateParticles
+	.extern PokewalkerApp_ClearParticles
+	.extern PokewalkerApp_FindFreeParticle
 	.extern ov112_021EA9BC
 	.extern ov112_021EAA10
 	.extern ov112_021EAA34
 	.extern ov112_021EAA98
 	.extern ov112_021EAAE4
-	.extern ov112_021EAB58
-	.extern ov112_021EAB78
-	.extern ov112_021EABE8
+	.extern PokewalkerApp_LoadMonIconPalettes
+	.extern PokewalkerApp_LoadMonIcon
+	.extern PokewalkerApp_SetMonIconGraphics
 	.extern ov112_021EAC18
 	.extern ov112_021EAC34
 	.extern ov112_021EAC58
@@ -546,7 +546,7 @@
 	.public ov112_021F3814
 	.public ov112_021F387E
 	.public ov112_021F38E8
-	.public ov112_021F397E
+	.public sPokewalkerPictureFiles
 	.public sPokewalkerCourses
 	.public sPokewalkerCourseRouteImageIds
 	.public sStrollTextWindowWidths
@@ -785,7 +785,7 @@
 	.public ov112_021FEC68
 	.public ov112_021FEC70
 	.public ov112_021FEC78
-	.public ov112_021FEC80
+	.public sWindowBankScreens
 	.public ov112_021FEC88
 	.public ov112_021FEC98
 	.public ov112_021FECAC
@@ -840,8 +840,8 @@
 	.public ov112_021FF4C0
 	.public ov112_021FF4C8
 	.public ov112_021FF4D4
-	.public ov112_021FF504
-	.public ov112_021FF514
+	.public sSpindaSpotPixels
+	.public sTouchButtons
 	.public sPokewalkerRouteImages
 	.public ov112_021FF54C
 	.public ov112_021FF550
@@ -969,7 +969,7 @@ ov112_021F38E8:
 	.byte 0x2D, 0x28, 0x2E, 0x28, 0x2F, 0x28, 0x30, 0x28, 0x29, 0x29, 0x2A, 0x29, 0x2B, 0x29, 0x2C, 0x29
 	.byte 0x2D, 0x29, 0x2E, 0x29, 0x2F, 0x29, 0x2B, 0x2A, 0x2C, 0x2A, 0x2D, 0x2A, 0xFF, 0xFF
 
-ov112_021F397E: ; 0x021F397E
+sPokewalkerPictureFiles: ; 0x021F397E
 	.byte 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x02, 0x00, 0xED, 0x01, 0x03, 0x00
 	.byte 0x03, 0x00, 0x04, 0x00, 0x04, 0x00, 0x05, 0x00, 0x05, 0x00, 0x06, 0x00, 0x06, 0x00, 0x07, 0x00
@@ -4522,7 +4522,7 @@ ov112_021FEC70:
 ov112_021FEC78:
 	.byte 0x04, 0x01, 0x10, 0x0C, 0x02, 0x01, 0x10, 0x01
 
-ov112_021FEC80: ; 0x021FEC80
+sWindowBankScreens: ; 0x021FEC80
 	.byte 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00
 
 ov112_021FEC88: ; 0x021FEC88
@@ -4828,13 +4828,13 @@ ov112_021FF4D4: ; 0x021FF4D4
 _021FF500:
 	.byte 0xFF, 0xFF, 0x00, 0x00
 
-ov112_021FF504: ; 0x021FF504
+sSpindaSpotPixels: ; 0x021FF504
 	.word ov112_021F3814
 	.word ov112_021F387E
 	.word ov112_021F37AC
 	.word ov112_021F38E8
 
-ov112_021FF514: ; 0x021FF514
+sTouchButtons: ; 0x021FF514
 	.word ov112_021F366C
 	.word ov112_021F3678
 	.word ov112_021F3694

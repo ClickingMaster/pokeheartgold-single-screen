@@ -32,7 +32,7 @@ typedef struct EffectWork {
 extern void *FieldEffectManager_HeapAllocAndFill(u32, u32, u32, u32);
 extern void FieldEffectManager_HeapFree(void *);
 extern void GF_AssertFail(void);
-extern void ov01_021F19F4(void *, void *, u32, u32, u32);
+extern void FieldEffectManager_LoadRenderModel(void *, void *, u32, u32, u32);
 extern void RenderObj_InitFromModel(void *, void *);
 extern void RenderModel_Free(void *);
 extern void *FieldEffect_GetState(void *);

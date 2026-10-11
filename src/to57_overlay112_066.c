@@ -3,17 +3,17 @@
 int ov112_021EB5DC(Ov112State *p) {
     PokewalkerApp_LoadTilemap(p, 2, 12);
     PokewalkerApp_LoadTilemap(p, 5, 16);
-    ov112_021E9FA4(p, 3, P(p, 0x1e45c), 4, 0xf0100);
-    ov112_021E9FA4(p, 4, P(p, 0x1e460), 4, 0xf0100);
-    ov112_021E9FA4(p, 5, P(p, 0x1e464), 4, 0xf0100);
-    ov112_021E9F40(p, 1);
+    PokewalkerApp_PrintString(p, 3, P(p, 0x1e45c), 4, 0xf0100);
+    PokewalkerApp_PrintString(p, 4, P(p, 0x1e460), 4, 0xf0100);
+    PokewalkerApp_PrintString(p, 5, P(p, 0x1e464), 4, 0xf0100);
+    PokewalkerApp_PrintExit(p, 1);
     W(p, 0x1ec50) = 0;
-    ov112_021EA51C(p, ov112_021FF09C[W(p, 0x1ec50)]);
+    PokewalkerApp_SetCursorPosition(p, ov112_021FF09C[W(p, 0x1ec50)]);
     return 18;
 }
 
 int ov112_021EB664(Ov112State *p) {
-    int selection = ov112_021E9888(3);
+    int selection = PokewalkerApp_GetTouchedButton(3);
     if (selection != -1) {
         ov112_021EC440(p, selection, ov112_021FF09C[selection], 19);
         PlaySE(1501);
@@ -25,14 +25,14 @@ int ov112_021EB664(Ov112State *p) {
             W(p, 0x1ec50)
             --;
         }
-        ov112_021EA51C(p, ov112_021FF09C[W(p, 0x1ec50)]);
+        PokewalkerApp_SetCursorPosition(p, ov112_021FF09C[W(p, 0x1ec50)]);
     } else if (gSystem.newKeys & 0x80) {
         if (W(p, 0x1ec50) < 3) {
             PlaySE(1500);
             W(p, 0x1ec50)
             ++;
         }
-        ov112_021EA51C(p, ov112_021FF09C[W(p, 0x1ec50)]);
+        PokewalkerApp_SetCursorPosition(p, ov112_021FF09C[W(p, 0x1ec50)]);
     } else if (gSystem.newKeys & 1) {
         PlaySE(1501);
         selection = W(p, 0x1ec50);
@@ -54,7 +54,7 @@ int ov112_021EB664(Ov112State *p) {
 }
 
 int ov112_021EB780(Ov112State *p) {
-    ov112_021EA570(p);
+    PokewalkerApp_HideCursor(p);
     switch (W(p, 0x1ec50)) {
     case 0:
         W(p, 4) = 3;
@@ -81,7 +81,7 @@ int ov112_021EB780(Ov112State *p) {
 }
 
 int ov112_021EB7D8(Ov112State *p) {
-    ov112_021EA570(p);
+    PokewalkerApp_HideCursor(p);
     FillBgTilemapRect(P(p, 0x18), 2, 0, 0, 0, 32, 24, 16);
     FillBgTilemapRect(P(p, 0x18), 1, 0, 0, 0, 32, 24, 16);
     BgCommitTilemapBufferToVram(P(p, 0x18), 2);

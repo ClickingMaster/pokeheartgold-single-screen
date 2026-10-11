@@ -12,12 +12,12 @@ typedef struct LocalState {
 } LocalState;
 void *FieldEffectManager_HeapAllocAndFill(void *, u32, u32, u32);
 void FieldEffectManager_HeapFree(void *);
-void ov01_021F18D4(void *, int, int);
-void ov01_021F1908(void *, int, int);
+void FieldEffectManager_LoadBillboardResource(void *, int, int);
+void FieldEffectManager_LoadBillboardSequence(void *, int, int);
 void FieldEffectManager_LoadTexResource(void *, int, int, int);
 void FieldEffectManager_AddRecord(void *, int, int, int, int, int, const void *);
-void ov01_021F18FC(void *, int);
-void ov01_021F1924(void *, int);
+void FieldEffectManager_FreeBillboardResource(void *, int);
+void FieldEffectManager_FreeBillboardSequence(void *, int);
 void FieldEffectManager_FreeTexResource(void *, int);
 void FieldEffectManager_ReleaseRecord(void *, int);
 void *FieldEffectManager_GetFromMapObject(void *);

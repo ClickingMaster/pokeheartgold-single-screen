@@ -10,11 +10,11 @@ BOOL ov01_021FF174(void *a0, FieldEffectFollowWork *work) {
     pos.x = work->args.x << 16;
     pos.z = work->args.z << 16;
     pos.y = MapObject_GetPositionVectorYCoord(work->args.object);
-    work->unk14 = sub_0206121C(work->args.taskman, &pos);
+    work->unk14 = sub_0206121C(work->args.fieldSystem, &pos);
     pos.x = pos.x + (2 << 14);
     pos.z = pos.z + (0x12 << 12);
     FieldEffect_SetPosition(a0, &pos);
-    work->sprite = FieldEffectManager_CreateBillboardFromRecord(work->args.fieldSys, 0, &pos);
+    work->sprite = FieldEffectManager_CreateBillboardFromRecord(work->args.manager, 0, &pos);
     if (MapObject_TestFlagsBits(work->args.object, MAPOBJECTFLAG_VISIBLE) == 1) {
         BillboardObject_SetVisible(work->sprite, 0);
     }
@@ -50,7 +50,7 @@ void ov01_021FF234(void *a0, FieldEffectFollowWork *work) {
         pos.x = work->args.x << 16;
         pos.z = work->args.z << 16;
         pos.y = cur.y;
-        work->unk14 = sub_0206121C(work->args.taskman, &pos);
+        work->unk14 = sub_0206121C(work->args.fieldSystem, &pos);
         if (work->unk14 == 1) {
             cur.y = pos.y;
             FieldEffect_SetPosition(a0, &cur);

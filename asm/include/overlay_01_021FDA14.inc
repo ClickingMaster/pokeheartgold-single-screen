@@ -40,9 +40,9 @@
 .public FieldEffectManager_CreateEffect
 .public FieldEffectManager_DestroyEffect
 .public FieldEffectManager_CreateBillboard
-.public ov01_021F18D4
-.public ov01_021F18F0
-.public ov01_021F18FC
+.public FieldEffectManager_LoadBillboardResource
+.public FieldEffectManager_GetBillboardResource
+.public FieldEffectManager_FreeBillboardResource
 .public ov01_021F72DC
 .public ov01_021F9744
 .public ov01_021FA2D4

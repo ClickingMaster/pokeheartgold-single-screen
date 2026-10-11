@@ -141,7 +141,7 @@
 .public sub_0208828C
 .public sub_02089D40
 .public sub_0208AD34
-.public sub_0208F814
+.public DrawingSessionLink_RegisterCommands
 .public sub_02091574
 .public MI_CpuFill8
 .public MI_CpuCopy8

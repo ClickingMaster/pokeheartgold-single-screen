@@ -18,7 +18,7 @@ int ov112_021EDE1C(void *s) {
 extern void PokewalkerIr_Stop(void *);
 extern int ov112_021ED640(void *);
 extern void BufferBoxMonNickname(void *, int, void *);
-extern int ov112_021EA08C(void *, int, int);
+extern int PokewalkerApp_StartMessageBox(void *, int, int);
 extern void PlayFanfare(int);
 int ov112_021EDE68(void *);
 int ov112_021EDE68(void *s) {
@@ -36,7 +36,7 @@ int ov112_021EDE68(void *s) {
     }
     FillBgTilemapRect(*(void **)((u8 *)s + 0x18), 2, 0, 0, 0, 0x20, 0x18, 0x10);
     BgCommitTilemapBufferToVram(*(void **)((u8 *)s + 0x18), 2);
-    *(int *)((u8 *)s + 0x1e524) = ov112_021EA08C(s, 2, 0x18);
+    *(int *)((u8 *)s + 0x1e524) = PokewalkerApp_StartMessageBox(s, 2, 0x18);
     PlayFanfare(0x4a2);
     return 0x24;
 }

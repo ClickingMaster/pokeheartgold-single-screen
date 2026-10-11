@@ -20,7 +20,7 @@
 .public FieldEffectManager_GetRendererData
 .public FieldEffectManager_GetFromMapObject
 .public FieldEffectManager_CreateEffect
-.public ov01_021F19F4
+.public FieldEffectManager_LoadRenderModel
 .public ov01_021FEA0C
 .public ov01_021FEA20
 .public ov01_021FEAB0

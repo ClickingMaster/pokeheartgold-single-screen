@@ -12,7 +12,7 @@
 #include "field_bgm.h"
 #include "filesystem.h"
 #include "font.h"
-#include "frontier_application_internal.h"
+#include "spin_trade_link.h"
 #include "game_stats.h"
 #include "gf_3d_vramman.h"
 #include "gf_gfx_planes.h"
@@ -103,7 +103,7 @@
 #define SPIN_TRADE_STATE_WAIT_FADE_OUT       52
 #define SPIN_TRADE_STATE_EXIT                53
 
-// Link commands sent through sub_02096D4C
+// Link commands sent through SpinTradeLink_SendCommand
 #define SPIN_TRADE_CMD_STATUS     8
 #define SPIN_TRADE_CMD_JOIN       9
 #define SPIN_TRADE_CMD_JUMP       10
@@ -120,7 +120,7 @@
 #define SPIN_TRADE_MAX_PLAYERS 5
 #define SPIN_TRADE_ANGLE_FULL  FX32_CONST(360)
 
-// View of the link menu owned by frontier_menu_communication.c (Work97024.menu)
+// View of the link menu owned by frontier_menu_communication.c (SpinTradeArgs.menu)
 typedef struct SpinTradeLinkMenu {
     u8 unk_00[0x3C];
     u32 unk_3C;            // 0x3C
@@ -329,7 +329,7 @@ typedef struct SpinTradeApp {
     PlayerProfile *profiles[SPIN_TRADE_MAX_PLAYERS]; // 0x084
     String *names[SPIN_TRADE_MAX_PLAYERS];           // 0x098
     u8 scratch[0x20];                                // 0x0AC
-    Work97024 *args;                                 // 0x0CC
+    SpinTradeArgs *args;                                 // 0x0CC
     SpinTradeLinkMenu *menu;                         // 0x0D0
     SpinTradeMachine machine;                        // 0x0D4
     SpinTradeObjects objects;                        // 0x190
@@ -435,8 +435,8 @@ void sub_02039EAC(s32 *state);
 BOOL sub_02039EB4(SaveData *saveData, int a1, s32 *state);
 int GF_TouchpadUpdate(SpinTradeTouchSamples *out, int mode, u32 threshold);
 void *sub_0203A4AC(enum HeapID heapId);
-BOOL sub_02096D4C(SpinTradeLinkMenu *menu, int command, void *data, int size);
-Party *sub_02097018(SpinTradeLinkMenu *menu, int netId);
+BOOL SpinTradeLink_SendCommand(SpinTradeLinkMenu *menu, int command, void *data, int size);
+Party *SpinTradeLink_GetReceivedParty(SpinTradeLinkMenu *menu, int netId);
 void RenderModel_LoadFromNarc(UnkOv01_021FFECC_sub *model, int index, NARC *narc, int fileId, enum HeapID heapId, BOOL atEnd);
 void RenderModel_BindTexturesOnVBlank(UnkOv01_021FFECC_sub *model);
 void RenderAnimation_LoadFromNarc(SpinTradeRenderAnim *anim, int unused, NARC *narc, int fileId, enum HeapID heapId, BOOL atEnd);
@@ -633,7 +633,7 @@ BOOL SpinTrade_IsCancelled(SpinTradeApp *app);
 
 #pragma force_active on
 BOOL SpinTradeApp_Init(OverlayManager *man, int *state) {
-    Work97024 *args = OverlayManager_GetArgs(man);
+    SpinTradeArgs *args = OverlayManager_GetArgs(man);
     SpinTradeApp *app;
     int i, slot, myNetId;
     SpinTradeMachine *machine;
@@ -760,7 +760,7 @@ BOOL SpinTrade_State_WaitMembers(SpinTradeApp *app) {
 
 BOOL SpinTrade_State_SendStart(SpinTradeApp *app) {
     u16 status = 1;
-    if (sub_02096D4C(app->menu, SPIN_TRADE_CMD_STATUS, &status, 2) == 1) {
+    if (SpinTradeLink_SendCommand(app->menu, SPIN_TRADE_CMD_STATUS, &status, 2) == 1) {
         app->state = SPIN_TRADE_STATE_WAIT_CONNECTIONS;
         return TRUE;
     }
@@ -778,7 +778,7 @@ BOOL SpinTrade_State_WaitConnections(SpinTradeApp *app) {
 
 BOOL SpinTrade_State_SendPlayerCount(SpinTradeApp *app) {
     app->playerCount = SpinTrade_CountMembers(app) + 1;
-    if (sub_02096D4C(app->menu, SPIN_TRADE_CMD_COUNT, &app->playerCount, 4) == 1) {
+    if (SpinTradeLink_SendCommand(app->menu, SPIN_TRADE_CMD_COUNT, &app->playerCount, 4) == 1) {
         app->sendCount = 0;
         app->state = SPIN_TRADE_STATE_SEND_SLOTS;
     }
@@ -794,7 +794,7 @@ BOOL SpinTrade_State_SendSlots(SpinTradeApp *app) {
     if (app->sendCount == 0) {
         values[1] = 0;
         values[0] = 0;
-        if (sub_02096D4C(app->menu, SPIN_TRADE_CMD_SLOT, values, 4) == 1) {
+        if (SpinTradeLink_SendCommand(app->menu, SPIN_TRADE_CMD_SLOT, values, 4) == 1) {
             app->sendCount++;
         }
         return FALSE;
@@ -807,7 +807,7 @@ BOOL SpinTrade_State_SendSlots(SpinTradeApp *app) {
             if (slot >= app->sendCount) {
                 values[1] = netId;
                 values[0] = app->sendCount;
-                if (sub_02096D4C(app->menu, SPIN_TRADE_CMD_SLOT, values, 4) == 1) {
+                if (SpinTradeLink_SendCommand(app->menu, SPIN_TRADE_CMD_SLOT, values, 4) == 1) {
                     app->sendCount++;
                 }
                 break;
@@ -823,14 +823,14 @@ BOOL SpinTrade_State_SendSlots(SpinTradeApp *app) {
 
 BOOL SpinTrade_State_SendReady(SpinTradeApp *app) {
     u16 status = 8;
-    if (sub_02096D4C(app->menu, SPIN_TRADE_CMD_STATUS, &status, 2) == 1) {
+    if (SpinTradeLink_SendCommand(app->menu, SPIN_TRADE_CMD_STATUS, &status, 2) == 1) {
         app->state = SPIN_TRADE_STATE_START_SYNC;
     }
     return FALSE;
 }
 
 BOOL SpinTrade_State_SendJoin(SpinTradeApp *app) {
-    if (sub_02096D4C(app->menu, SPIN_TRADE_CMD_JOIN, NULL, 0) == 1) {
+    if (SpinTradeLink_SendCommand(app->menu, SPIN_TRADE_CMD_JOIN, NULL, 0) == 1) {
         app->unk_010 = 0;
         app->state = SPIN_TRADE_STATE_WAIT_READY;
         return FALSE;
@@ -861,7 +861,7 @@ BOOL SpinTrade_State_WaitSync(SpinTradeApp *app) {
 }
 
 BOOL SpinTrade_State_SendTradeSlot(SpinTradeApp *app) {
-    if (sub_02096D4C(app->menu, SPIN_TRADE_CMD_TRADE_SLOT, &app->args->unk0[1], 4)) {
+    if (SpinTradeLink_SendCommand(app->menu, SPIN_TRADE_CMD_TRADE_SLOT, &app->args->unk0[1], 4)) {
         app->state = SPIN_TRADE_STATE_SEND_PARTY;
     }
     return FALSE;
@@ -878,10 +878,10 @@ BOOL SpinTrade_State_SendParty(SpinTradeApp *app) {
 BOOL SpinTrade_State_CheckEggs(SpinTradeApp *app) {
     if (app->playerCount == SpinTrade_CountReceivedParties(app)) {
         if (SpinTrade_AnyPartyHasBadEgg(app) == 1) {
-            sub_02096D4C(app->menu, SPIN_TRADE_CMD_CANCEL, NULL, 0);
+            SpinTradeLink_SendCommand(app->menu, SPIN_TRADE_CMD_CANCEL, NULL, 0);
             app->state = SPIN_TRADE_STATE_CANCEL;
         } else {
-            sub_02096D4C(app->menu, SPIN_TRADE_CMD_CONFIRM, NULL, 0);
+            SpinTradeLink_SendCommand(app->menu, SPIN_TRADE_CMD_CONFIRM, NULL, 0);
             app->state = SPIN_TRADE_STATE_WAIT_CONFIRM;
         }
     }
@@ -974,7 +974,7 @@ BOOL SpinTrade_State_WaitBeforeSpin(SpinTradeApp *app) {
 
 BOOL SpinTrade_State_SendSpinStart(SpinTradeApp *app) {
     u16 status = 4;
-    if (sub_02096D4C(app->menu, SPIN_TRADE_CMD_STATUS, &status, 2) == 1) {
+    if (SpinTradeLink_SendCommand(app->menu, SPIN_TRADE_CMD_STATUS, &status, 2) == 1) {
         app->state = SPIN_TRADE_STATE_START_SPIN_SYNC;
     }
     return FALSE;
@@ -1051,7 +1051,7 @@ BOOL SpinTrade_State_SpinHost(SpinTradeApp *app) {
         SpinTrade_StartButtonFlash(app);
     }
     if (app->sendJump) {
-        if (sub_02096D4C(app->args->menu, SPIN_TRADE_CMD_JUMP, &app->sendJump, 1) == 1) {
+        if (SpinTradeLink_SendCommand(app->args->menu, SPIN_TRADE_CMD_JUMP, &app->sendJump, 1) == 1) {
             app->sendJump = FALSE;
         }
     }
@@ -1076,7 +1076,7 @@ BOOL SpinTrade_State_SpinHost(SpinTradeApp *app) {
     data[1] = app->frame;
     data[2] = app->machine.speed / FX32_ONE;
     data[3] = app->machine.angle / FX32_ONE;
-    sub_02096D4C(app->menu, SPIN_TRADE_CMD_SPIN, data, 8);
+    SpinTradeLink_SendCommand(app->menu, SPIN_TRADE_CMD_SPIN, data, 8);
     return FALSE;
 }
 #pragma force_active reset
@@ -1102,8 +1102,8 @@ BOOL SpinTrade_State_SpinClient(SpinTradeApp *app) {
         SpinTrade_StartButtonFlash(app);
     }
     if (app->sendJump != 0) {
-        Work97024 *args = app->args;
-        if (sub_02096D4C(args->menu, SPIN_TRADE_CMD_JUMP, &app->sendJump, 1) == TRUE) {
+        SpinTradeArgs *args = app->args;
+        if (SpinTradeLink_SendCommand(args->menu, SPIN_TRADE_CMD_JUMP, &app->sendJump, 1) == TRUE) {
             app->sendJump = FALSE;
         }
     }
@@ -1208,7 +1208,7 @@ BOOL SpinTrade_State_SendResult(SpinTradeApp *app) {
         } while (i < app->playerCount);
     }
     data[1] = app->bonusMask;
-    if (sub_02096D4C(app->menu, SPIN_TRADE_CMD_RESULT, data, 16) == 1) {
+    if (SpinTradeLink_SendCommand(app->menu, SPIN_TRADE_CMD_RESULT, data, 16) == 1) {
         app->state = SPIN_TRADE_STATE_SHOW_NAMES;
     }
     return FALSE;
@@ -2972,7 +2972,7 @@ BOOL SpinTrade_HasReceivedStatus(SpinTradeApp *app, u32 status) {
 
 BOOL SpinTrade_HaveAllMembersJoined(SpinTradeApp *app) {
     SpinTradeLinkMenu *menu = app->menu;
-    Work97024 *args = app->args;
+    SpinTradeArgs *args = app->args;
     u32 count = 0;
     s32 needed = args->unk0[2] - 1;
     u32 mask = menu->memberMask;
@@ -3027,7 +3027,7 @@ BOOL SpinTrade_IsMemberPresent(SpinTradeApp *app, u32 netId) {
 // Replaces the offered party slot with the Pokemon (egg) offered by netId
 void SpinTrade_ReceiveTradedMon(SpinTradeApp *app, int netId) {
     Party *party = app->party;
-    Party *otherParty = sub_02097018(app->menu, netId);
+    Party *otherParty = SpinTradeLink_GetReceivedParty(app->menu, netId);
     int otherSlot = app->tradeSlots[netId];
     Pokemon *dest = Party_GetMonByIndex(party, app->args->unk0[1]);
     Pokemon *mon = Party_GetMonByIndex(otherParty, otherSlot);
@@ -3121,7 +3121,7 @@ BOOL SpinTrade_AnyPartyHasBadEgg(SpinTradeApp *app) {
     }
     for (i = 0; i < SPIN_TRADE_MAX_PLAYERS; i++) {
         if (SpinTrade_IsMemberPresent(app, i)) {
-            if (SpinTrade_PartyHasBadEgg(sub_02097018(app->menu, i)) == 1) {
+            if (SpinTrade_PartyHasBadEgg(SpinTradeLink_GetReceivedParty(app->menu, i)) == 1) {
                 return TRUE;
             }
         }

@@ -216,9 +216,9 @@
 .public Bag_AddItem
 .public Save_Bag_Get
 .public MonSetTrainerMemo
-.public sub_02096CE0
-.public sub_02096D4C
-.public sub_02097018
+.public SpinTradeLink_RegisterCommands
+.public SpinTradeLink_SendCommand
+.public SpinTradeLink_GetReceivedParty
 .public NNS_G2dGetUnpackedCharacterData
 .public NNS_G2dGetUnpackedPaletteData
 .public NNS_G2dGetUnpackedScreenData

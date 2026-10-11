@@ -10,7 +10,7 @@
 .public Comm_GetLocalNetId
 .public sub_02038C1C
 .public sub_020398D4
-.public sub_0208FB64
+.public RecordMixingLink_RegisterCommands
 .public sub_02091570
 .public sub_02091590
 .public MATH_CountPopulation
@@ -25,15 +25,15 @@
 	.public sub_0208FB88
 	.public sub_0208FB98
 	.public sub_0208FBE0
-	.public sub_0208FBF0
+	.public RecordMixingLink_HandleJoinRequest
 	.public sub_0208FCDC
 	.public sub_0208FCFC
 	.public sub_0208FD00
 	.public sub_0208FD04
 	.public sub_0208FD1C
-	.public sub_0208FD3C
+	.public RecordMixingLink_SendRecords
 	.public sub_0208FD7C
 	.public sub_0208FD80
 	.public sub_0208FD84
-	.public sub_0208FD88
-	.public _021059DC
+	.public RecordMixingLink_GetRecvBuffer
+	.public gRecordMixingLinkCommands

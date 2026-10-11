@@ -1,9 +1,9 @@
 #include "field_effect_map_marker_internal.h"
 
-UnkOv01_021FFECC *ov01_021FF854(void *a0);
-void ov01_021FF870(UnkOv01_021FFECC *a0);
-void ov01_021FF880(UnkOv01_021FFECC *a0);
-void ov01_021FF8C8(UnkOv01_021FFECC *a0);
+UnkOv01_021FF854 *ov01_021FF854(void *a0);
+void ov01_021FF870(UnkOv01_021FF854 *a0);
+void ov01_021FF880(UnkOv01_021FF854 *a0);
+void ov01_021FF8C8(UnkOv01_021FF854 *a0);
 void ov01_021FF8F0(LocalMapObject *mapObject, int a1);
 void ov01_021FF964(LocalMapObject *mapObject, int a1, int a2, int a3, int a4);
 BOOL ov01_021FF9F4(void *a0, UnkOv01_02209218_Work *work);
@@ -16,31 +16,31 @@ extern void ov01_021FFD64(void *a0, UnkOv01_02209218_Work *work);
 extern void ov01_021FFD70(void *a0, UnkOv01_02209218_Work *work);
 extern void ov01_021FFE98(void *a0, UnkOv01_02209218_Work *work);
 
-extern const UnkOv01_02209280 ov01_02209218;
+extern const FieldEffectBasicTemplate ov01_02209218;
 extern const u32 ov01_0220922C[6];
 
-UnkOv01_021FFECC *ov01_021FF854(void *a0) {
-    UnkOv01_021FFECC *ptr = FieldEffectManager_HeapAllocAndFill(a0, 4, 0, 0);
+UnkOv01_021FF854 *ov01_021FF854(void *a0) {
+    UnkOv01_021FF854 *ptr = FieldEffectManager_HeapAllocAndFill(a0, 4, 0, 0);
     ptr->unk0 = a0;
     ov01_021FF880(ptr);
     return ptr;
 }
 
-void ov01_021FF870(UnkOv01_021FFECC *a0) {
+void ov01_021FF870(UnkOv01_021FF854 *a0) {
     ov01_021FF8C8(a0);
     FieldEffectManager_HeapFree(a0);
 }
 
-void ov01_021FF880(UnkOv01_021FFECC *a0) {
-    ov01_021F18D4(a0->unk0, 7, 0x7a);
-    ov01_021F1908(a0->unk0, 7, 0x92);
+void ov01_021FF880(UnkOv01_021FF854 *a0) {
+    FieldEffectManager_LoadBillboardResource(a0->unk0, 7, 0x7a);
+    FieldEffectManager_LoadBillboardSequence(a0->unk0, 7, 0x92);
     FieldEffectManager_LoadTexResource(a0->unk0, 8, 0x15, 1);
     FieldEffectManager_AddRecord(a0->unk0, 9, 7, 7, 8, 0, ov01_0220922C);
 }
 
-void ov01_021FF8C8(UnkOv01_021FFECC *a0) {
-    ov01_021F18FC(a0->unk0, 7);
-    ov01_021F1924(a0->unk0, 7);
+void ov01_021FF8C8(UnkOv01_021FF854 *a0) {
+    FieldEffectManager_FreeBillboardResource(a0->unk0, 7);
+    FieldEffectManager_FreeBillboardSequence(a0->unk0, 7);
     FieldEffectManager_FreeTexResource(a0->unk0, 8);
     FieldEffectManager_ReleaseRecord(a0->unk0, 9);
 }
@@ -48,7 +48,7 @@ void ov01_021FF8C8(UnkOv01_021FFECC *a0) {
 void ov01_021FF8F0(LocalMapObject *mapObject, int a1) {
     VecFx32 position;
     UnkOv01_02209218_Args args;
-    FieldSystem *fieldSystem = FieldEffectManager_GetFromMapObject(mapObject);
+    FieldEffectManager *fieldSystem = FieldEffectManager_GetFromMapObject(mapObject);
 
     args.unk00 = MapObject_GetXCoord(mapObject);
     args.unk04 = MapObject_GetYCoord(mapObject);
@@ -56,18 +56,18 @@ void ov01_021FF8F0(LocalMapObject *mapObject, int a1) {
     args.unk1C = 0;
     args.unk1E = 0;
     args.unk20 = -1;
-    args.unk10 = fieldSystem;
+    args.manager = fieldSystem;
     args.unk0C = FieldEffectManager_GetFieldSystem(fieldSystem);
     args.unk14 = FieldEffectManager_GetRendererData(fieldSystem, 0xc);
     args.unk18 = mapObject;
     MapObject_CopyPositionVector(mapObject, &position);
-    FieldEffectManager_CreateEffect(fieldSystem, &ov01_02209218, &position, a1, (UnkOv01_021FFF5C *)&args, MapObject_GetPriorityPlusValue(mapObject, 2));
+    FieldEffectManager_CreateEffect(fieldSystem, &ov01_02209218, &position, a1, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
 }
 
 void ov01_021FF964(LocalMapObject *mapObject, int a1, int a2, int a3, int a4) {
     VecFx32 position;
     UnkOv01_02209218_Args args;
-    FieldSystem *fieldSystem = FieldEffectManager_GetFromMapObject(mapObject);
+    FieldEffectManager *fieldSystem = FieldEffectManager_GetFromMapObject(mapObject);
 
     args.unk00 = a2;
     args.unk04 = MapObject_GetYCoord(mapObject);
@@ -79,12 +79,12 @@ void ov01_021FF964(LocalMapObject *mapObject, int a1, int a2, int a3, int a4) {
     } else {
         args.unk20 = -1;
     }
-    args.unk10 = fieldSystem;
+    args.manager = fieldSystem;
     args.unk0C = FieldEffectManager_GetFieldSystem(fieldSystem);
     args.unk14 = FieldEffectManager_GetRendererData(fieldSystem, 0xc);
     args.unk18 = mapObject;
     MapObject_CopyPositionVector(mapObject, &position);
-    FieldEffectManager_CreateEffect(fieldSystem, &ov01_02209218, &position, a1, (UnkOv01_021FFF5C *)&args, MapObject_GetPriorityPlusValue(mapObject, 2));
+    FieldEffectManager_CreateEffect(fieldSystem, &ov01_02209218, &position, a1, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
 }
 
 BOOL ov01_021FF9F4(void *a0, UnkOv01_02209218_Work *work) {
@@ -101,7 +101,7 @@ BOOL ov01_021FF9F4(void *a0, UnkOv01_02209218_Work *work) {
     position.x += 2 << 14;
     position.z += 0x12 << 12;
     FieldEffect_SetPosition(a0, &position);
-    work->unk3C = FieldEffectManager_CreateBillboardFromRecord(work->unk18.unk10, 9, &position);
+    work->unk3C = FieldEffectManager_CreateBillboardFromRecord(work->unk18.manager, 9, &position);
     if (MapObject_TestFlagsBits(work->unk18.unk18, MAPOBJECTFLAG_VISIBLE) == TRUE) {
         BillboardObject_SetVisible(work->unk3C, 0);
     }

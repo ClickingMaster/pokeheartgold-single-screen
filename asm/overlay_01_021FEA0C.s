@@ -88,7 +88,7 @@ ov01_021FEA48: ; 0x021FEA48
 	add r1, #0x14
 	mov r2, #0
 	mov r3, #0x57
-	bl ov01_021F19F4
+	bl FieldEffectManager_LoadRenderModel
 	add r0, r4, #0
 	add r1, r4, #0
 	add r0, #0x28

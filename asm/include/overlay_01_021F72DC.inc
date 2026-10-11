@@ -98,7 +98,7 @@
 .public ov01_021FA44C
 .public ov01_021FA458
 .public ov01_021FA464
-.public ov01_021FD2EC
+.public MapObjectModel_CreateEffect
 .public ov01_0220553C
 .public ov01_02205564
 .public ov01_02205808

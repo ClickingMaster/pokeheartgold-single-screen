@@ -34,11 +34,11 @@ typedef struct FrontierMapMainBgTemplates {
 } FrontierMapMainBgTemplates;
 
 // Frontier application work (frontier_runtime.c)
-FrontierMapObjectGfx *sub_02096864(void *frontier);
-FrontierMapObject *sub_02096868(void *frontier);
-FrontierMapObject *sub_0209686C(void *frontier, int index);
-FrontierMapSpriteState *sub_02096878(void *frontier);
-void sub_02096884(void *frontier);
+FrontierMapObjectGfx *Frontier_GetMapObjectGfx(void *frontier);
+FrontierMapObject *Frontier_GetMapObjects(void *frontier);
+FrontierMapObject *Frontier_GetMapObject(void *frontier, int index);
+FrontierMapSpriteState *Frontier_GetMapSpriteState(void *frontier);
+void Frontier_ResetMapSpriteState(void *frontier);
 
 // Other frontier overlay modules (no header yet)
 u32 FrontierMap_GetParam(u32 mapId, u32 field);
@@ -189,7 +189,7 @@ void FrontierMap_SaveObjects(FrontierMap *map) {
     FrontierMapObject *object;
 
     for (i = 0; i < FRONTIER_MAP_OBJECT_MAX; i++) {
-        object = sub_0209686C(map->frontier, i);
+        object = Frontier_GetMapObject(map->frontier, i);
         if (object->object != NULL) {
             object->template.unk_0A = ov42_02228188(object->object, 6);
             object->template.unk_02 = ov42_02228188(object->object, 5);
@@ -205,7 +205,7 @@ void FrontierMap_SaveObjects(FrontierMap *map) {
 // Recreates the object graphics, objects and sprites saved by FrontierMap_SaveObjects.
 void FrontierMap_RestoreObjects(FrontierMap *map) {
     FrontierMapObjectTemplate template;
-    FrontierMapObjectGfx *gfx = sub_02096864(map->frontier);
+    FrontierMapObjectGfx *gfx = Frontier_GetMapObjectGfx(map->frontier);
     int i;
 
     for (i = 0; i < FRONTIER_MAP_OBJECT_GFX_MAX; i++) {
@@ -214,7 +214,7 @@ void FrontierMap_RestoreObjects(FrontierMap *map) {
         }
     }
     for (i = 0; i < FRONTIER_MAP_OBJECT_MAX; i++) {
-        FrontierMapObject *object = sub_0209686C(map->frontier, i);
+        FrontierMapObject *object = Frontier_GetMapObject(map->frontier, i);
         if (object->template.id != FRONTIER_MAP_NO_ID) {
             FrontierMapObject_GetTemplate(object, (u16 *)&template);
             FrontierMap_CreateObject(map, &template, i);
@@ -249,7 +249,7 @@ void FrontierMap_Update(SysTask *task, FrontierMap *map) {
 #pragma unused(task)
     s32 i;
     u32 mask;
-    FrontierMapObject *player = sub_0209686C(map->frontier, FRONTIER_MAP_OBJECT_MAX - 1);
+    FrontierMapObject *player = Frontier_GetMapObject(map->frontier, FRONTIER_MAP_OBJECT_MAX - 1);
 
     if (player->object != NULL) {
         ov42_02229358(&map->camera, player->object);
@@ -488,7 +488,7 @@ void FrontierMap_InitMapObjects(FrontierMap *map, u32 mapId, void *profile) {
 
 void FrontierMap_FreeMapObjects(FrontierMap *map) {
     s32 i;
-    FrontierMapObject *object = sub_02096868(map->frontier);
+    FrontierMapObject *object = Frontier_GetMapObjects(map->frontier);
 
     for (i = 0; i < FRONTIER_MAP_OBJECT_MAX; i++) {
         if (object->object != NULL) {
@@ -578,7 +578,7 @@ void FrontierMap_FreeSpriteSystem(FrontierMap *map) {
 }
 
 void FrontierMap_AddObjectGfx(FrontierMap *map, const FrontierMapObjectGfx *gfx) {
-    FrontierMapObjectGfx *table = sub_02096864(map->frontier);
+    FrontierMapObjectGfx *table = Frontier_GetMapObjectGfx(map->frontier);
     int i;
     FrontierMapObjectGfx *entry;
     int slot;
@@ -612,7 +612,7 @@ void FrontierMap_AddObjectGfx(FrontierMap *map, const FrontierMapObjectGfx *gfx)
 
 void FrontierMap_RemoveObjectGfx(FrontierMap *map, u16 id) {
     s32 i;
-    FrontierMapObjectGfx *table = sub_02096864(map->frontier);
+    FrontierMapObjectGfx *table = Frontier_GetMapObjectGfx(map->frontier);
 
     for (i = 0; i < FRONTIER_MAP_OBJECT_GFX_MAX; i++) {
         if (id == table[i].id) {
@@ -626,7 +626,7 @@ void FrontierMap_RemoveObjectGfx(FrontierMap *map, u16 id) {
 #pragma force_active on
 // index -1: first free object slot.
 UnkStruct_ov42_02228110 *FrontierMap_CreateObject(FrontierMap *map, const FrontierMapObjectTemplate *template, int index) {
-    FrontierMapObject *slot = sub_02096868(map->frontier);
+    FrontierMapObject *slot = Frontier_GetMapObjects(map->frontier);
     UnkStruct_ov42_02122667 args;
     UnkStruct_ov42_02228110 *object;
     UnkStruct_ov42_0222903C *objectSprite;
@@ -657,7 +657,7 @@ UnkStruct_ov42_02228110 *FrontierMap_CreateObject(FrontierMap *map, const Fronti
 
 void FrontierMap_DeleteObject(FrontierMap *map, UnkStruct_ov42_02228110 *object) {
     s32 i;
-    FrontierMapObject *objects = sub_02096868(map->frontier);
+    FrontierMapObject *objects = Frontier_GetMapObjects(map->frontier);
 
     for (i = 0; i < FRONTIER_MAP_OBJECT_MAX; i++) {
         if (objects[i].object == object) {
@@ -675,7 +675,7 @@ void FrontierMap_DeleteObject(FrontierMap *map, UnkStruct_ov42_02228110 *object)
 
 void FrontierMap_GetObjectById(FrontierMap *map, u16 id, UnkStruct_ov42_02228110 **object, UnkStruct_ov42_0222903C **objectSprite) {
     s32 i;
-    FrontierMapObject *objects = sub_02096868(map->frontier);
+    FrontierMapObject *objects = Frontier_GetMapObjects(map->frontier);
 
     for (i = 0; i < FRONTIER_MAP_OBJECT_MAX; i++) {
         if (id == objects[i].template.id) {
@@ -759,7 +759,7 @@ u32 FrontierMap_IsSpriteAnimActive(FrontierMap *map, u16 index) {
 
 #pragma force_active on
 void FrontierMap_SaveSprites(FrontierMap *map) {
-    FrontierMapSpriteState *state = sub_02096878(map->frontier);
+    FrontierMapSpriteState *state = Frontier_GetMapSpriteState(map->frontier);
     FrontierMapSpriteSet *spriteSet = &map->spriteSet;
     int i;
 
@@ -784,7 +784,7 @@ void FrontierMap_SaveSprites(FrontierMap *map) {
 }
 
 void FrontierMap_RestoreSprites(FrontierMap *map) {
-    FrontierMapSpriteState *state = sub_02096878(map->frontier);
+    FrontierMapSpriteState *state = Frontier_GetMapSpriteState(map->frontier);
     NARC *narc = NARC_New(NARC_a_1_8_4, HEAP_ID_101);
     int i;
     ManagedSprite *sprite;
@@ -806,7 +806,7 @@ void FrontierMap_RestoreSprites(FrontierMap *map) {
         }
     }
     NARC_Delete(narc);
-    sub_02096884(map->frontier);
+    Frontier_ResetMapSpriteState(map->frontier);
 }
 #pragma force_active reset
 
@@ -826,7 +826,7 @@ void FrontierMapObject_GetTemplate(FrontierMapObject *object, u16 *dest) {
 
 #pragma force_active on
 void FrontierMap_SetObject(void *frontier, u32 index, UnkStruct_ov42_02228110 *object, UnkStruct_ov42_0222903C *objectSprite, const FrontierMapObjectTemplate *template) {
-    FrontierMapObject *slot = sub_0209686C(frontier, index);
+    FrontierMapObject *slot = Frontier_GetMapObject(frontier, index);
 
     slot->object = object;
     slot->objectSprite = objectSprite;
@@ -836,7 +836,7 @@ void FrontierMap_SetObject(void *frontier, u32 index, UnkStruct_ov42_02228110 *o
 
 FrontierMapObject *FrontierMap_FindObject(void *frontier, u32 id) {
     s32 i;
-    FrontierMapObject *object = sub_02096868(frontier);
+    FrontierMapObject *object = Frontier_GetMapObjects(frontier);
 
     for (i = 0; i < FRONTIER_MAP_OBJECT_MAX; i++) {
         if (object->object != NULL && object->template.id == id) {

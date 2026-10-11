@@ -1,26 +1,26 @@
 #include "global.h"
 #include "system.h"
-extern void ov112_021E9C10(void *, int);
-extern void ov112_021E9A78(void *, int);
+extern void PokewalkerApp_RemoveWindowBank(void *, int);
+extern void PokewalkerApp_AddWindowBank(void *, int);
 extern void FillBgTilemapRect(void *, int, int, int, int, int, int, int);
 extern void BgCommitTilemapBufferToVram(void *, int);
-extern void ov112_021EA570(void *);
+extern void PokewalkerApp_HideCursor(void *);
 void ov112_021EB90C(u8 *, int);
 void ov112_021EB90C(u8 *work, int arg1) {
     *(u32 *)(work + 4) = 2;
-    ov112_021E9C10(work, arg1);
-    ov112_021E9A78(work, 1);
+    PokewalkerApp_RemoveWindowBank(work, arg1);
+    PokewalkerApp_AddWindowBank(work, 1);
     FillBgTilemapRect(*(void **)(work + 0x18), 1, 0, 0, 0, 0x20, 0x18, 0x10);
     BgCommitTilemapBufferToVram(*(void **)(work + 0x18), 1);
-    ov112_021EA570(work);
+    PokewalkerApp_HideCursor(work);
 }
 
 extern void sub_02032688(void *, u16 *, void *);
-extern void ov112_021E9C10(void *, int);
-extern void ov112_021E9A78(void *, int);
+extern void PokewalkerApp_RemoveWindowBank(void *, int);
+extern void PokewalkerApp_AddWindowBank(void *, int);
 extern void FillBgTilemapRect(void *, int, int, int, int, int, int, int);
 extern void BgCommitTilemapBufferToVram(void *, int);
-extern void ov112_021EA570(void *);
+extern void PokewalkerApp_HideCursor(void *);
 int ov112_021EB950(u8 *, int);
 int ov112_021EB950(u8 *work, int arg1) {
     u8 result[4];
@@ -28,11 +28,11 @@ int ov112_021EB950(u8 *work, int arg1) {
     if (*(u16 *)(result + 2) != 2) return 0;
     *(u32 *)(work + 4) = 3;
     *(u32 *)(work + 0x10) = 4;
-    ov112_021E9C10(work, arg1);
-    ov112_021E9A78(work, 1);
+    PokewalkerApp_RemoveWindowBank(work, arg1);
+    PokewalkerApp_AddWindowBank(work, 1);
     FillBgTilemapRect(*(void **)(work + 0x18), 1, 0, 0, 0, 0x20, 0x18, 0x10);
     BgCommitTilemapBufferToVram(*(void **)(work + 0x18), 1);
-    ov112_021EA570(work);
+    PokewalkerApp_HideCursor(work);
     return 1;
 }
 

@@ -12,7 +12,7 @@
 .public Comm_GetLocalNetId
 .public sub_02038C1C
 .public sub_020398D4
-.public sub_0208F814
+.public DrawingSessionLink_RegisterCommands
 .public sub_02091570
 .public sub_02091598
 .public sub_020915A0

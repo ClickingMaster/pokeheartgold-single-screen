@@ -63,7 +63,7 @@ void ov01_021F8CFC(void *obj) {
     void **slot = sub_0205F3E8(obj, 4);
     LocalConfig c;
     ov01_021F8CC8(MapObject_GetSpriteID(obj), &c);
-    *slot = ov01_021FD2EC(obj, &c);
+    *slot = MapObjectModel_CreateEffect(obj, &c);
 }
 
 void ov01_021F8D24(void) {
@@ -89,5 +89,5 @@ void ov01_021F8D58(void *obj) {
     void **slot = sub_0205F40C(obj);
     LocalConfig c;
     ov01_021F8CC8(MapObject_GetSpriteID(obj), &c);
-    *slot = ov01_021FD2EC(obj, &c);
+    *slot = MapObjectModel_CreateEffect(obj, &c);
 }

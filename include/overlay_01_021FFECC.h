@@ -3,7 +3,9 @@
 
 #include "field/field_effect_manager.h"
 
-UnkOv01_021FFECC *ov01_021FFECC(void *a0);
+typedef struct UnkOv01_021FFECC UnkOv01_021FFECC;
+
+UnkOv01_021FFECC *ov01_021FFECC(FieldEffectManager *manager);
 void ov01_021FFEE8(UnkOv01_021FFECC *a0);
 void ov01_021FFF5C(LocalMapObject *mapObject, int a1);
 

@@ -48,12 +48,12 @@ void ov112_021E7D7C(void *state);
 void ov112_021E7DA4(void *state);
 void PokewalkerApp_Teardown(void *state);
 void PokewalkerApp_SetGxBanks(void);
-void ov112_021EA1F8(void *state);
-void ov112_021E9C10(void *state, int which);
+void PokewalkerApp_FreeSprites(void *state);
+void PokewalkerApp_RemoveWindowBank(void *state, int which);
 void PokewalkerApp_FreeBgs(void *bg);
 void GF_TouchpadStopSampling(void);
 void GF_DestroyVramTransferManager(void);
-void ov112_021E9E30(void *state);
+void PokewalkerApp_FreeStrings(void *state);
 void FontID_Release(int fontId);
 
 #endif

@@ -15,8 +15,8 @@ typedef struct {
     int unk04;               // 0x04
     int unk08;               // 0x08
     void *unk0C;             // 0x0c
-    FieldSystem *unk10;      // 0x10
-    UnkOv01_021FFECC *unk14; // 0x14
+    FieldEffectManager *manager; // 0x10
+    void *unk14; // 0x14
     LocalMapObject *unk18;   // 0x18
     s16 unk1C;               // 0x1c
     s16 unk1E;               // 0x1e
@@ -35,15 +35,6 @@ typedef struct {
     Sprite *unk3C;               // 0x3c
 } UnkOv01_02209218_Work;         // sizeof == 0x40
 
-void ov01_021F18D4(void *a0, int a1, int a2);
-void ov01_021F1908(void *a0, int a1, int a2);
-void FieldEffectManager_LoadTexResource(void *a0, int a1, int a2, int a3);
-void FieldEffectManager_AddRecord(void *a0, int a1, int a2, int a3, int a4, int a5, const void *a6);
-void ov01_021F18FC(void *a0, int a1);
-void ov01_021F1924(void *a0, int a1);
-void FieldEffectManager_FreeTexResource(void *a0, int a1);
-void FieldEffectManager_ReleaseRecord(void *a0, int a1);
-Sprite *FieldEffectManager_CreateBillboardFromRecord(FieldSystem *a0, int a1, VecFx32 *a2);
 
 // FieldEffect_GetUserData comes from the tracked include/unk_020689C8.h (returns UnkOv01_021FFFCC *)
 void *FieldEffect_GetParam(void *a0);
@@ -54,5 +45,9 @@ void BillboardObject_SetPosition(Sprite *a0, VecFx32 *a1);
 void BillboardObject_AdvanceFrame(Sprite *a0, fx32 a1);
 void FieldEffect_SetPosition(void *a0, VecFx32 *a1);
 BOOL sub_0206121C(void *a0, VecFx32 *a1);
+
+typedef struct UnkOv01_021FF854 {
+    FieldEffectManager *unk0;
+} UnkOv01_021FF854;
 
 #endif // POKEHEARTGOLD_FIELD_EFFECT_MAP_MARKER_INTERNAL_H

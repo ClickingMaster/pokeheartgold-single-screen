@@ -14,7 +14,7 @@ void BillboardObject_SetVisible(void *, u8);
 void *sub_0205F3E8(void *, int);
 void *sub_0205F40C(void *);
 u32 MapObject_GetSpriteID(void *);
-void *ov01_021FD2EC(void *, const LocalConfig *);
+void *MapObjectModel_CreateEffect(void *, const LocalConfig *);
 void FieldEffectManager_DestroyEffect(void *);
 void GF_AssertFail(void);
 s32 _s32_div_f(s32, s32);

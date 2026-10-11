@@ -9,15 +9,15 @@ int ov112_021EB208(Ov112State *p) {
 
 int ov112_021EB244(Ov112State *p) {
     PokewalkerApp_LoadTilemap(p, 2, 10);
-    ov112_021E9FA4(p, 5, P(p, 0x1e46c), 4, 0x000f0100);
-    ov112_021E9F40(p, 1);
+    PokewalkerApp_PrintString(p, 5, P(p, 0x1e46c), 4, 0x000f0100);
+    PokewalkerApp_PrintExit(p, 1);
     W(p, 0x1ec50) = 0;
-    ov112_021EA51C(p, 2);
+    PokewalkerApp_SetCursorPosition(p, 2);
     return 8;
 }
 
 int ov112_021EB28C(Ov112State *p) {
-    int selection = ov112_021E9888(1);
+    int selection = PokewalkerApp_GetTouchedButton(1);
     if (selection != -1) {
         ov112_021EC440(p, selection, selection + 2, 9);
         PlaySE(0x5dd);
@@ -27,13 +27,13 @@ int ov112_021EB28C(Ov112State *p) {
         if (W(p, 0x1ec50) != 0) {
             PlaySE(0x5dc);
         }
-        ov112_021EA51C(p, 2);
+        PokewalkerApp_SetCursorPosition(p, 2);
         W(p, 0x1ec50) = 0;
     } else if (gSystem.newKeys & 0x80) {
         if (W(p, 0x1ec50) != 1) {
             PlaySE(0x5dc);
         }
-        ov112_021EA51C(p, 3);
+        PokewalkerApp_SetCursorPosition(p, 3);
         W(p, 0x1ec50) = 1;
     } else if (gSystem.newKeys & 1) {
         PlaySE(0x5dd);
@@ -56,7 +56,7 @@ int ov112_021EB28C(Ov112State *p) {
 }
 
 int ov112_021EB388(Ov112State *p) {
-    ov112_021EA570(p);
+    PokewalkerApp_HideCursor(p);
     if (W(p, 0x1ec50) == 0) {
         W(p, 4) = 3;
     } else {

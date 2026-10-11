@@ -11,7 +11,7 @@ void sub_0205A0B4(void *);
 void sub_0203894C(void *);
 void sub_0203898C(void *);
 void sub_02037F64(void *);
-void sub_0208F814(int);
+void DrawingSessionLink_RegisterCommands(int);
 void sub_02038918(void *);
 void sub_02059EBC(void *);
 #endif

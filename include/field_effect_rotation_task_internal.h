@@ -32,8 +32,8 @@ typedef struct Ov01EffectState {
 
 extern void *FieldEffectManager_HeapAllocAndFill(u32, u32, u32, u32);
 extern void FieldEffectManager_HeapFree(void *);
-extern void ov01_021F19F4(void *, void *, u32, u32, u32);
-extern void ov01_021F1A18(void *, void *, u32, u32, u32);
+extern void FieldEffectManager_LoadRenderModel(void *, void *, u32, u32, u32);
+extern void FieldEffectManager_LoadRenderAnimation(void *, void *, u32, u32, u32);
 extern void RenderModel_Free(void *);
 extern void RenderAnimation_Free(void *);
 extern BOOL MapObject_TestFlagsBits(void *, u32);
@@ -44,7 +44,7 @@ extern s32 MapObject_GetPreviousYCoord(void *);
 extern s32 MapObject_GetPriorityPlusValue(void *, s32);
 extern void FieldEffectManager_CreateEffect(void *, const void *, const Ov01Vec3 *, u32, Ov01SpawnArgs *, s32);
 extern Ov01TaskArgs *FieldEffect_GetUserData(void *);
-extern void ov01_021F1A34(void *, void *, void *, void *, u32);
+extern void FieldEffectManager_InitRenderAnimation(void *, void *, void *, void *, u32);
 extern void RenderObj_InitWithAnimation(void *, void *, void *);
 extern BOOL RenderAnimation_IsDone(void *);
 extern void FieldEffectManager_DestroyEffect(void *);

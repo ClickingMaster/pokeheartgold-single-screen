@@ -17,9 +17,9 @@
 .public FieldEffectManager_GetFromMapObject
 .public FieldEffectManager_CreateEffect
 .public FieldEffectManager_DestroyEffect
-.public ov01_021F19F4
-.public ov01_021F1A18
-.public ov01_021F1A34
+.public FieldEffectManager_LoadRenderModel
+.public FieldEffectManager_LoadRenderAnimation
+.public FieldEffectManager_InitRenderAnimation
 .public ov01_021FED9C
 .public ov01_021FEDB8
 .public ov01_021FEE04

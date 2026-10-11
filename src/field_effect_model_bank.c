@@ -74,9 +74,9 @@ void ov01_021FE230(UnkOv01_021FE200 *a0) {
     u32 i;
 
     for (i = 0; i < OV01_021FE200_COUNT; i++) {
-        ov01_021F19F4(a0->unk0, &a0->unk4[i], 0, ov01_0220901C[i], 0);
+        FieldEffectManager_LoadRenderModel(a0->unk0, &a0->unk4[i], 0, ov01_0220901C[i], 0);
         RenderObj_InitFromModel(&a0->unk194[i], &a0->unk4[i]);
-        ov01_021F19F4(a0->unk0, &a0->unkCC[i], 0, ov01_02208FF4[i], 0);
+        FieldEffectManager_LoadRenderModel(a0->unk0, &a0->unkCC[i], 0, ov01_02208FF4[i], 0);
         RenderObj_InitFromModel(&a0->unk4DC[i], &a0->unkCC[i]);
     }
 }
@@ -169,7 +169,7 @@ BOOL ov01_021FE3F8(LocalMapObject *a0, u32 a1) {
     u32 direction;
     u32 prevDirection;
     u32 priority;
-    FieldSystem *fieldSystem;
+    FieldEffectManager *effectManager;
     UnkOv01_021FE200 *manager;
 
     x = MapObject_GetPreviousXCoord(a0);
@@ -178,8 +178,8 @@ BOOL ov01_021FE3F8(LocalMapObject *a0, u32 a1) {
     direction = MapObject_GetFacingDirection(a0);
     prevDirection = MapObject_GetPreviousFacingDirection(a0);
     priority = MapObject_GetPriorityPlusValue(a0, 2);
-    fieldSystem = FieldEffectManager_GetFromMapObject(a0);
-    manager = (UnkOv01_021FE200 *)FieldEffectManager_GetRendererData(fieldSystem, 2);
+    effectManager = FieldEffectManager_GetFromMapObject(a0);
+    manager = (UnkOv01_021FE200 *)FieldEffectManager_GetRendererData(effectManager, 2);
     if (MapObject_TestFlagsBits(a0, MAPOBJECTFLAG_VISIBLE) == TRUE) {
         return FALSE;
     }
@@ -213,7 +213,7 @@ BOOL ov01_021FE3F8(LocalMapObject *a0, u32 a1) {
         break;
     }
 
-    FieldEffectManager_CreateEffect(fieldSystem, (const UnkOv01_02209280 *)&ov01_02208FE0, &position, 0, (UnkOv01_021FFF5C *)&args, priority);
+    FieldEffectManager_CreateEffect(effectManager, (const FieldEffectBasicTemplate *)&ov01_02208FE0, &position, 0, &args, priority);
 }
 
 BOOL ov01_021FE4FC(void *a0, UnkOv01_021FE200_Work *a1) {

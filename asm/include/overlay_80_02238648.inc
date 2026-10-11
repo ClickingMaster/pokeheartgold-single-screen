@@ -92,11 +92,11 @@
 .public WirelessStatusIcon_Destroy
 .public sub_02055198
 .public Frontier_GetLaunchArgs
-.public sub_02096864
-.public sub_02096868
-.public sub_0209686C
-.public sub_02096878
-.public sub_02096884
+.public Frontier_GetMapObjectGfx
+.public Frontier_GetMapObjects
+.public Frontier_GetMapObject
+.public Frontier_GetMapSpriteState
+.public Frontier_ResetMapSpriteState
 .public G3X_SetFog
 .public G3X_SetClearColor
 .public GX_BeginLoadBGExtPltt

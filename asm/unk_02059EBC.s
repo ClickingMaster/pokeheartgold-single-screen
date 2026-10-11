@@ -44,7 +44,7 @@ _02059F08:
 	cmp r0, #2
 	bne _02059F18
 	mov r0, #0
-	bl sub_0208F814
+	bl DrawingSessionLink_RegisterCommands
 	ldr r0, [r4, #0x18]
 	bl sub_02038918
 _02059F18:

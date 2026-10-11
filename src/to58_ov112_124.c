@@ -7,9 +7,9 @@ extern int IsPaletteFadeFinished(void);
 extern void ov112_021EAA10(void *);
 extern int TextPrinterCheckActive(u8);
 extern int ManagedSprite_IsAnimated(void *);
-extern void ov112_021EA570(void *);
+extern void PokewalkerApp_HideCursor(void *);
 extern void ov112_021EA64C(void *);
-extern void ov112_021EA688(void *, int);
+extern void PokewalkerApp_HideSprite(void *, int);
 extern void FillBgTilemapRect(void *, int, int, int, int, int, int, int);
 extern void BgCommitTilemapBufferToVram(void *, int);
 int ov112_021EE52C(void);
@@ -41,7 +41,7 @@ int ov112_021EE570(void *p) {
 
 int ov112_021EE594(void *p) {
     if (!ManagedSprite_IsAnimated(*(void **)((u8 *)p + 0x1e530))) {
-        ov112_021EA570(p);
+        PokewalkerApp_HideCursor(p);
         return *(u32 *)((u8 *)p + 8) = *(u32 *)((u8 *)p + 12);
     }
     return 0x41;
@@ -49,9 +49,9 @@ int ov112_021EE594(void *p) {
 
 int ov112_021EE5B8(void *p) {
     ov112_021EA64C(p);
-    ov112_021EA688(p, 3);
-    ov112_021EA688(p, 4);
-    ov112_021EA688(p, 8);
+    PokewalkerApp_HideSprite(p, 3);
+    PokewalkerApp_HideSprite(p, 4);
+    PokewalkerApp_HideSprite(p, 8);
     FillBgTilemapRect(*(void **)((u8 *)p + 0x18), 1, 0, 0, 0, 0x20, 0x18, 0x10);
     BgCommitTilemapBufferToVram(*(void **)((u8 *)p + 0x18), 1);
     return 0x43;

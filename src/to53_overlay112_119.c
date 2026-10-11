@@ -5,7 +5,7 @@
 
 #define LOAD_PRINTER(p, a, b, next)                                \
     do {                                                           \
-        *(void **)((u8 *)(p) + 0x1E524) = ov112_021EA08C(p, a, b); \
+        *(void **)((u8 *)(p) + 0x1E524) = PokewalkerApp_StartMessageBox(p, a, b); \
         return next;                                               \
     } while (0)
 
@@ -19,7 +19,7 @@ int ov112_021EE10C(void *p) {
 }
 
 int ov112_021EE12C(void *p) {
-    *(void **)((u8 *)p + 0x1E524) = ov112_021EA08C(p, 2, 29);
+    *(void **)((u8 *)p + 0x1E524) = PokewalkerApp_StartMessageBox(p, 2, 29);
     FillBgTilemapRect(*(void **)((u8 *)p + 0x18), 2, 0, 0, 0, 32, 24, 16);
     BgCommitTilemapBufferToVram(*(void **)((u8 *)p + 0x18), 2);
     PokewalkerIr_Stop();
@@ -44,6 +44,6 @@ int ov112_021EE1BC(void *p) {
 }
 
 int ov112_021EE1DC(void *p) {
-    ov112_021E966C(p, 1);
+    PokewalkerApp_ShowYesNoMenu(p, 1);
     return 46;
 }

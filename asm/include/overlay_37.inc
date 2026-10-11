@@ -121,7 +121,7 @@
 .public WirelessStatusIcon_Create
 .public sub_0205A904
 .public sub_0205AD24
-.public sub_0208F814
+.public DrawingSessionLink_RegisterCommands
 .public NNS_G2dInitOamManagerModule
 .public G2x_SetBlendBrightness_
 .public GX_LoadOBJPltt

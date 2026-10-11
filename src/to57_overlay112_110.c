@@ -16,7 +16,7 @@ int ov112_021ED66C(void *p) {
     PokewalkerIr_GetChunkProgress();
     state = PokewalkerIr_GetTotalProgress();
     if (state != 0) {
-        ov112_021EA7D0(p);
+        PokewalkerApp_SpawnFallingParticle(p);
     }
     ov112_021EA60C(p);
     ov112_021ED314(state);
@@ -59,8 +59,8 @@ int ov112_021ED66C(void *p) {
         return 0x20;
     }
     if (!ov112_021E7668()) {
-        ov112_021E98E8(p, 1);
-        if (ov112_021E9888(5) == 0 || (U32_AT(gSystem, 0x48) & 1) || (U32_AT(gSystem, 0x48) & 2)) {
+        PokewalkerApp_ShowSubBg1(p, 1);
+        if (PokewalkerApp_GetTouchedButton(5) == 0 || (U32_AT(gSystem, 0x48) & 1) || (U32_AT(gSystem, 0x48) & 2)) {
             U16_AT(p, 0x14) = 0x21;
             U32_AT(p, 0xC) = 0x42;
             PokewalkerIr_Stop();
@@ -70,10 +70,10 @@ int ov112_021ED66C(void *p) {
         }
     } else {
         if (U16_AT(p, 0x16) == 0) {
-            ov112_021EA10C(p, 2, 6);
+            PokewalkerApp_ShowMessageBox(p, 2, 6);
             U16_AT(p, 0x16) = 1;
         }
-        ov112_021E98E8(p, 0);
+        PokewalkerApp_ShowSubBg1(p, 0);
     }
     return 0x1B;
 }

@@ -30,7 +30,7 @@ extern const GraphicsBanks ov112_021FF0FC;
 extern const GraphicsModes ov112_021FF0DC;
 extern const ObjCharTransferTemplate ov112_021FF0EC;
 
-extern void ov112_021EA688(void *, int);
+extern void PokewalkerApp_HideSprite(void *, int);
 extern void PokewalkerApp_Teardown(void *);
 extern void *ov112_021F039C(int);
 extern void ov112_021F03BC(void *, void *);
@@ -63,6 +63,6 @@ BOOL ov112_021EF298(PCStorage *storage, u32 boxno, u32 slotno, Ov112BoxMon *ptr)
 int ov112_021EEF30(void *p) {
     FillBgTilemapRect(*(BgConfig **)((u8 *)p + 0x18), 1, 0, 0, 0, 0x20, 0x18, 0x10);
     BgCommitTilemapBufferToVram(*(void **)((u8 *)p + 0x18), 1);
-    ov112_021EA688(p, 6);
+    PokewalkerApp_HideSprite(p, 6);
     return 11;
 }

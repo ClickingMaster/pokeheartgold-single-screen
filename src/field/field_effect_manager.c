@@ -9,7 +9,7 @@
 void *FieldEffectPool_New(enum HeapID heapID, u32 count);
 void FieldEffectPool_Delete(void *manager);
 void FieldEffectPool_DrawAll(void *manager);
-void *FieldEffectPool_AddBasicEffect(void *manager, const void *template, const VecFx32 *position, int parameter, void *userData, u32 priority);
+FieldEffect *FieldEffectPool_AddBasicEffect(void *manager, const FieldEffectBasicTemplate *template, const VecFx32 *position, int parameter, void *userData, u32 priority);
 void FieldEffect_Destroy(int effect);
 void *Billboard_Create(const FieldEffectBillboardListTemplate *template);
 void Billboard_Delete(void *billboards);
@@ -19,14 +19,14 @@ void BillboardGfxSequence_Init(void *data, FieldEffectGfxSequence *sequence);
 void *ov01_021FC4C4(enum HeapID parentHeapID, int heapID, int heapSize, int capacity);
 void ov01_021FC520(void *heapManager);
 void *ov01_021FC5A4(void *heapManager, int id);
-void *ov01_021FC588(void *heapManager, int id);
+void ov01_021FC588(void *heapManager, int id);
 void ov01_021FC5CC(void *heapManager, int id, NARC *narc, int fileId, BOOL atEnd);
 void ov01_021EA3B0(NNSG3dResMdl *mdl);
 void NNS_G3dMdlSetMdlFogEnableFlagAll(NNSG3dResMdl *mdl, int flag);
 void RenderModel_LoadFromNarc(void *model, int index, NARC *narc, int fileId, enum HeapID heapID, BOOL atEnd);
 void RenderModel_BindTexturesOnVBlank(void *model);
 void RenderAnimation_LoadFromNarc(void *animation, int unused, NARC *narc, int fileId, enum HeapID heapID, BOOL atEnd);
-void RenderAnimation_InitForModel(void *animation, int a1, int a2, int a3, enum HeapID heapID);
+void RenderAnimation_InitForModel(void *animation, void *model, void *source, int unused, enum HeapID heapID);
 
 extern const VecFx32 ov01_02206988;
 
@@ -47,8 +47,8 @@ void FieldEffectManager_InitAnimManagerList(FieldEffectManager *manager, u32 ani
     FieldEffectManager_InitEffects(manager);
 }
 
-void FieldEffectManager_InitGfx(FieldEffectManager *manager, enum HeapID heapID, u32 recordCount, u32 a3, u32 a4, u32 resCount, int a6, int a7, int a8) {
-    FieldEffectManager_CreateGfx(manager, heapID, recordCount, a3, a4, resCount, a6, a7, a8);
+void FieldEffectManager_InitGfx(FieldEffectManager *manager, enum HeapID heapID, u32 recordCount, u32 resourceCount, u32 sequenceCount, u32 resCount, int resourceHeapSize, int sequenceHeapSize, int a8) {
+    FieldEffectManager_CreateGfx(manager, heapID, recordCount, resourceCount, sequenceCount, resCount, resourceHeapSize, sequenceHeapSize, a8);
 }
 
 void FieldEffectManager_InitRenderer(FieldEffectManager *manager, u32 id) {
@@ -245,8 +245,8 @@ void FieldEffectManager_DrawEffects(FieldEffectManager *manager) {
     }
 }
 
-void *FieldEffectManager_CreateEffect(FieldEffectManager *manager, const void *template, const VecFx32 *position, int parameter, void *userData, u32 priority) {
-    void *effect = FieldEffectPool_AddBasicEffect(manager->effects, template, position, parameter, userData, priority);
+FieldEffect *FieldEffectManager_CreateEffect(FieldEffectManager *manager, const FieldEffectBasicTemplate *template, const VecFx32 *position, int parameter, void *userData, u32 priority) {
+    FieldEffect *effect = FieldEffectPool_AddBasicEffect(manager->effects, template, position, parameter, userData, priority);
     GF_ASSERT(effect != NULL);
     return effect;
 }
@@ -255,18 +255,18 @@ void FieldEffectManager_DestroyEffect(int effect) {
     FieldEffect_Destroy(effect);
 }
 
-void FieldEffectManager_CreateGfx(FieldEffectManager *manager, enum HeapID heapID, u32 recordCount, u32 a3, u32 a4, u32 resCount, int a6, int a7, int a8) {
+void FieldEffectManager_CreateGfx(FieldEffectManager *manager, enum HeapID heapID, u32 recordCount, u32 resourceCount, u32 sequenceCount, u32 resCount, int resourceHeapSize, int sequenceHeapSize, int a8) {
     FieldEffectBillboardListTemplate template;
     FieldEffectGfx *gfx = FieldEffectManager_HeapAllocAndFill(manager, sizeof(FieldEffectGfx), FALSE, 0);
 #pragma unused(a8)
     manager->gfx = gfx;
     gfx->heapID = heapID;
     gfx->recordCount = recordCount;
-    gfx->unk_06 = a3;
-    gfx->unk_08 = a4;
+    gfx->resourceCount = resourceCount;
+    gfx->sequenceCount = sequenceCount;
     gfx->resCount = resCount;
-    gfx->unk_10 = ov01_021FC4C4(heapID, 0x44, a6, a3);
-    gfx->unk_14 = ov01_021FC4C4(heapID, 0x45, a7, a4);
+    gfx->resourceBank = ov01_021FC4C4(heapID, 0x44, resourceHeapSize, resourceCount);
+    gfx->sequenceBank = ov01_021FC4C4(heapID, 0x45, sequenceHeapSize, sequenceCount);
     gfx->resMan = GF3dGfxRawResMan_Create(resCount, heapID);
     FieldEffectGfx_InitRecords(manager, gfx, recordCount);
     template.count = recordCount;
@@ -279,8 +279,8 @@ void FieldEffectManager_FreeGfx(FieldEffectManager *manager) {
     if (gfx != NULL) {
         Billboard_Delete(gfx->billboards);
         FieldEffectGfx_FreeRecords(gfx);
-        ov01_021FC520(gfx->unk_10);
-        ov01_021FC520(gfx->unk_14);
+        ov01_021FC520(gfx->resourceBank);
+        ov01_021FC520(gfx->sequenceBank);
         GF3dGfxRawResMan_Destroy(gfx->resMan);
         FieldEffectManager_HeapFree(gfx);
         manager->gfx = NULL;
@@ -313,22 +313,22 @@ static inline FieldEffectGfx *FieldEffectManager_GetGfx(FieldEffectManager *mana
     return manager->gfx;
 }
 
-FieldEffectRecord *FieldEffectManager_AddRecord(FieldEffectManager *manager, u32 id, int a2, int a3, int resId, int noTexKeys, int a6) {
+FieldEffectRecord *FieldEffectManager_AddRecord(FieldEffectManager *manager, u32 id, int resourceId, int sequenceId, int resId, int noTexKeys, const void *params) {
     FieldEffectGfxSequence sequence;
-    int seqId = a3;
+    int seqId = sequenceId;
     FieldEffectGfx *gfx = FieldEffectManager_GetGfx(manager);
-    void *data = ov01_021FC5A4(gfx->unk_10, a2);
+    void *data = ov01_021FC5A4(gfx->resourceBank, resourceId);
     GF_3DGfxRawResObj *texObj;
     NNSG3dResTex *tex;
     FieldEffectRecord *record;
-    BillboardGfxSequence_Init(ov01_021FC5A4(gfx->unk_14, seqId), &sequence);
+    BillboardGfxSequence_Init(ov01_021FC5A4(gfx->sequenceBank, seqId), &sequence);
     texObj = GF3dGfxRawResMan_GetObjById(gfx->resMan, resId);
     GF_ASSERT(texObj);
     tex = GF3dGfxRawResObj_GetTex(texObj);
     if (noTexKeys == TRUE) {
         texObj = NULL;
     }
-    record = FieldEffectGfx_AddRecord(gfx, id, data, &sequence, tex, texObj, a6);
+    record = FieldEffectGfx_AddRecord(gfx, id, data, &sequence, tex, texObj, (int)params);
     GF_ASSERT(record);
     return record;
 }
@@ -428,24 +428,24 @@ void FieldEffectManager_ReleaseRecord(FieldEffectManager *manager, u32 id) {
     FieldEffectGfx_ReleaseRecord(manager->gfx, id);
 }
 
-void ov01_021F18D4(FieldEffectManager *manager, int id, int fileId) {
-    ov01_021FC5CC(manager->gfx->unk_10, id, manager->narc, fileId, FALSE);
+void FieldEffectManager_LoadBillboardResource(FieldEffectManager *manager, int id, int fileId) {
+    ov01_021FC5CC(manager->gfx->resourceBank, id, manager->narc, fileId, FALSE);
 }
 
-void *ov01_021F18F0(FieldEffectManager *manager, int id) {
-    return ov01_021FC5A4(manager->gfx->unk_10, id);
+void *FieldEffectManager_GetBillboardResource(FieldEffectManager *manager, int id) {
+    return ov01_021FC5A4(manager->gfx->resourceBank, id);
 }
 
-void *ov01_021F18FC(FieldEffectManager *manager, int id) {
-    return ov01_021FC588(manager->gfx->unk_10, id);
+void FieldEffectManager_FreeBillboardResource(FieldEffectManager *manager, int id) {
+    ov01_021FC588(manager->gfx->resourceBank, id);
 }
 
-void ov01_021F1908(FieldEffectManager *manager, int id, int fileId) {
-    ov01_021FC5CC(manager->gfx->unk_14, id, manager->narc, fileId, FALSE);
+void FieldEffectManager_LoadBillboardSequence(FieldEffectManager *manager, int id, int fileId) {
+    ov01_021FC5CC(manager->gfx->sequenceBank, id, manager->narc, fileId, FALSE);
 }
 
-void *ov01_021F1924(FieldEffectManager *manager, int id) {
-    return ov01_021FC588(manager->gfx->unk_14, id);
+void FieldEffectManager_FreeBillboardSequence(FieldEffectManager *manager, int id) {
+    ov01_021FC588(manager->gfx->sequenceBank, id);
 }
 
 void FieldEffectManager_LoadTexResource(FieldEffectManager *manager, int id, u32 fileId, BOOL copyWithoutTex) {
@@ -485,17 +485,17 @@ void FieldEffectTexTransfer_FreeHeaderTask(SysTask *task, void *data) {
     }
 }
 
-void ov01_021F19F4(FieldEffectManager *manager, void *a1, int a2, int a3, int a4) {
-    RenderModel_LoadFromNarc(a1, a2, manager->narc, a3, manager->heapID, a4);
-    RenderModel_BindTexturesOnVBlank(a1);
+void FieldEffectManager_LoadRenderModel(FieldEffectManager *manager, void *model, int index, int fileId, BOOL atEnd) {
+    RenderModel_LoadFromNarc(model, index, manager->narc, fileId, manager->heapID, atEnd);
+    RenderModel_BindTexturesOnVBlank(model);
 }
 
-void ov01_021F1A18(FieldEffectManager *manager, void *a1, int a2, int a3, int a4) {
-    RenderAnimation_LoadFromNarc(a1, a2, manager->narc, a3, manager->heapID, a4);
+void FieldEffectManager_LoadRenderAnimation(FieldEffectManager *manager, void *animation, int index, int fileId, BOOL atEnd) {
+    RenderAnimation_LoadFromNarc(animation, index, manager->narc, fileId, manager->heapID, atEnd);
 }
 
-void ov01_021F1A34(FieldEffectManager *manager, void *a1, int a2, int a3, int a4) {
-    RenderAnimation_InitForModel(a1, a2, a3, a4, manager->heapID);
+void FieldEffectManager_InitRenderAnimation(FieldEffectManager *manager, void *animation, void *model, void *source, int unused) {
+    RenderAnimation_InitForModel(animation, model, source, unused, manager->heapID);
 }
 
 #pragma force_active on

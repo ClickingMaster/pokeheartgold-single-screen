@@ -5,7 +5,7 @@
 
 #define LOAD_PRINTER(p, a, b, next)                                \
     do {                                                           \
-        *(void **)((u8 *)(p) + 0x1E524) = ov112_021EA08C(p, a, b); \
+        *(void **)((u8 *)(p) + 0x1E524) = PokewalkerApp_StartMessageBox(p, a, b); \
         return next;                                               \
     } while (0)
 
@@ -13,7 +13,7 @@
 int ov112_021EDF08(void *p) {
     ov112_021EAAE4(p, (u8 *)p + 0x1F2C0);
     if (!TextPrinterCheckActive(*(u32 *)((u8 *)p + 0x1E524)) &&
-        !ov112_021EA838(p) && !IsFanfarePlaying()) {
+        !PokewalkerApp_AgeParticles(p) && !IsFanfarePlaying()) {
         *(u32 *)((u8 *)p + 4) = 5;
         return 66;
     }

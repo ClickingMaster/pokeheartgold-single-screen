@@ -2,7 +2,6 @@
 
 #include "field/field_effect_manager.h"
 
-#include "field_effect_renderer_list_internal.h"
 #include "field_system.h"
 #include "gf_rtc.h"
 #include "map_object.h"
@@ -14,6 +13,7 @@
 
 // Not declared in any header yet.
 void *FieldEffect_GetParam(void *effect);
+void FieldEffect_SetPosition(void *effect, VecFx32 *position);
 void NNS_G3dMdlSetMdlAlphaAll(NNSG3dResMdl *mdl, u32 alpha);
 void RenderObj_Draw(void *renderObj, VecFx32 *pos, VecFx32 *scale, MtxFx33 *mtx);
 BOOL ov01_021F8F88(LocalMapObject *object);
@@ -27,11 +27,18 @@ typedef struct FieldShadow {
     u32 unk_0C;
     fx32 alpha;
     VecFx32 scale;
-    FieldSystem *manager; // the field effect manager, typed as overlay_01_021F1348.h does
+    FieldEffectManager *manager;
     SysTask *task;
     UnkOv01_021FFECC_sub models[4];
     NNSG3dRenderObj renderObjs[4];
 } FieldShadow;
+
+// The user data of the shadow effects.
+typedef struct FieldShadowEffectArgs {
+    FieldEffectManager *manager;
+    FieldShadow *shadow;
+    LocalMapObject *mapObject;
+} FieldShadowEffectArgs;
 
 // Field effect work of one shadow; 0x20 bytes (the first word of each template).
 typedef struct FieldShadowEffect {
@@ -40,21 +47,19 @@ typedef struct FieldShadowEffect {
     u32 mapId;
     int hidden;
     void *parameter;
-    u32 unk_14;
-    FieldShadow *shadow;
-    LocalMapObject *mapObject;
+    FieldShadowEffectArgs args;
 } FieldShadowEffect;
 
 extern const u32 ov01_02208E90[4];
-extern const UnkOv01_02209280 ov01_02208EA0;
+extern const FieldEffectBasicTemplate ov01_02208EA0;
 extern const fx32 ov01_02208EB4[5];
-extern const UnkOv01_02209280 ov01_02208EC8;
-extern const UnkOv01_02209280 ov01_02208EDC;
+extern const FieldEffectBasicTemplate ov01_02208EC8;
+extern const FieldEffectBasicTemplate ov01_02208EDC;
 extern const MtxFx33 ov01_02208EF0;
 extern const MtxFx33 ov01_02208F14;
 extern const VecFx32 ov01_02208F38[5];
 
-FieldShadow *FieldShadow_New(FieldSystem *manager);
+FieldShadow *FieldShadow_New(FieldEffectManager *manager);
 void FieldShadow_Free(FieldShadow *shadow);
 void FieldShadow_StartTask(FieldShadow *shadow);
 void FieldShadow_StopTask(FieldShadow *shadow);
@@ -68,19 +73,19 @@ void FieldShadow_FreeModels(FieldShadow *shadow);
 void FieldShadow_SetAlpha(FieldShadow *shadow, u32 alpha);
 void FieldShadow_CreateMapObjectShadow(LocalMapObject *object);
 void ov01_021FD684(LocalMapObject *object);
-BOOL FieldShadowEffect_Init(void *effect, FieldShadowEffect *work);
-void FieldShadowEffect_Destroy(void *effect, FieldShadowEffect *work);
-void FieldShadowEffect_Update(void *effect, FieldShadowEffect *work);
-BOOL ov01_021FD784(void *effect, FieldShadowEffect *work);
-void FieldShadowEffect_Draw(void *effect, FieldShadowEffect *work);
-void ov01_021FD838(void *effect, FieldShadowEffect *work);
+BOOL FieldShadowEffect_Init(FieldEffect *effect, FieldShadowEffect *work);
+void FieldShadowEffect_Destroy(FieldEffect *effect, FieldShadowEffect *work);
+void FieldShadowEffect_Update(FieldEffect *effect, FieldShadowEffect *work);
+BOOL ov01_021FD784(FieldEffect *effect, FieldShadowEffect *work);
+void FieldShadowEffect_Draw(FieldEffect *effect, FieldShadowEffect *work);
+void ov01_021FD838(FieldEffect *effect, FieldShadowEffect *work);
 void ov01_021FD8E8(LocalMapObject *object, int index);
-void ov01_021FD92C(void *effect, FieldShadowEffect *work);
-void ov01_021FD980(void *effect, FieldShadowEffect *work);
+void ov01_021FD92C(FieldEffect *effect, FieldShadowEffect *work);
+void ov01_021FD980(FieldEffect *effect, FieldShadowEffect *work);
 void FieldShadow_OffsetByFacing(u32 direction, VecFx32 *pos);
 
-FieldShadow *FieldShadow_New(FieldSystem *manager) {
-    FieldShadow *shadow = (FieldShadow *)FieldEffectManager_HeapAllocAndFill(manager, sizeof(FieldShadow), 0, 0);
+FieldShadow *FieldShadow_New(FieldEffectManager *manager) {
+    FieldShadow *shadow = FieldEffectManager_HeapAllocAndFill(manager, sizeof(FieldShadow), FALSE, 0);
     shadow->manager = manager;
     FieldShadow_LoadModels(shadow);
     FieldShadow_StartTask(shadow);
@@ -94,7 +99,7 @@ void FieldShadow_Free(FieldShadow *shadow) {
 }
 
 void FieldShadow_StartTask(FieldShadow *shadow) {
-    FieldSystem *fieldSystem = (FieldSystem *)FieldEffectManager_GetFieldSystem(shadow->manager);
+    FieldSystem *fieldSystem = FieldEffectManager_GetFieldSystem(shadow->manager);
     u32 priority = MapObjectManager_GetPriority(fieldSystem->mapObjectManager) - 1;
     shadow->task = SysTask_CreateOnMainQueue((SysTaskFunc)FieldShadow_UpdateTask, shadow, priority);
 }
@@ -177,7 +182,7 @@ void FieldShadow_UpdateTask(SysTask *task, FieldShadow *shadow) {
 void FieldShadow_LoadModels(FieldShadow *shadow) {
     int i;
     for (i = 0; i < 4; i++) {
-        ov01_021F19F4(shadow->manager, &shadow->models[i], 0, ov01_02208E90[i], 0);
+        FieldEffectManager_LoadRenderModel(shadow->manager, &shadow->models[i], 0, ov01_02208E90[i], 0);
         RenderObj_InitFromModel(&shadow->renderObjs[i], &shadow->models[i]);
     }
 }
@@ -195,46 +200,46 @@ void FieldShadow_SetAlpha(FieldShadow *shadow, u32 alpha) {
 }
 
 void FieldShadow_CreateMapObjectShadow(LocalMapObject *object) {
-    FieldEffectRendererArgs args;
+    FieldShadowEffectArgs args;
     VecFx32 pos;
-    FieldSystem *manager = FieldEffectManager_GetFromMapObject(object);
-    args.unk0 = (u32)manager;
-    args.unk4 = (FieldSystem *)FieldEffectManager_GetRendererData(manager, 0);
-    args.unk8 = object;
+    FieldEffectManager *manager = FieldEffectManager_GetFromMapObject(object);
+    args.manager = manager;
+    args.shadow = FieldEffectManager_GetRendererData(manager, 0);
+    args.mapObject = object;
     MapObject_CopyPositionVector(object, &pos);
-    FieldEffectManager_CreateEffect(manager, &ov01_02208EA0, &pos, 0, (UnkOv01_021FFF5C *)&args, MapObject_GetPriorityPlusValue(object, 2));
+    FieldEffectManager_CreateEffect(manager, &ov01_02208EA0, &pos, 0, &args, MapObject_GetPriorityPlusValue(object, 2));
 }
 
 void ov01_021FD684(LocalMapObject *object) {
-    FieldEffectRendererArgs args;
+    FieldShadowEffectArgs args;
     VecFx32 pos;
-    FieldSystem *manager = FieldEffectManager_GetFromMapObject(object);
-    args.unk0 = (u32)manager;
-    args.unk4 = (FieldSystem *)FieldEffectManager_GetRendererData(manager, 0);
-    args.unk8 = object;
+    FieldEffectManager *manager = FieldEffectManager_GetFromMapObject(object);
+    args.manager = manager;
+    args.shadow = FieldEffectManager_GetRendererData(manager, 0);
+    args.mapObject = object;
     MapObject_CopyPositionVector(object, &pos);
-    FieldEffectManager_CreateEffect(manager, &ov01_02208EC8, &pos, 3, (UnkOv01_021FFF5C *)&args, MapObject_GetPriorityPlusValue(object, 2));
+    FieldEffectManager_CreateEffect(manager, &ov01_02208EC8, &pos, 3, &args, MapObject_GetPriorityPlusValue(object, 2));
 }
 
-BOOL FieldShadowEffect_Init(void *effect, FieldShadowEffect *work) {
-    *(FieldEffectRendererArgs *)&work->unk_14 = *(FieldEffectRendererArgs *)FieldEffect_GetUserData(effect);
+BOOL FieldShadowEffect_Init(FieldEffect *effect, FieldShadowEffect *work) {
+    work->args = *(FieldShadowEffectArgs *)FieldEffect_GetUserData(effect);
     work->parameter = FieldEffect_GetParam(effect);
-    work->spriteId = MapObject_GetSpriteID(work->mapObject);
-    work->objectId = MapObject_GetID(work->mapObject);
-    if (MapObject_CheckFlag25(work->mapObject) == TRUE) {
-        work->mapId = sub_0205F544(work->mapObject);
+    work->spriteId = MapObject_GetSpriteID(work->args.mapObject);
+    work->objectId = MapObject_GetID(work->args.mapObject);
+    if (MapObject_CheckFlag25(work->args.mapObject) == TRUE) {
+        work->mapId = sub_0205F544(work->args.mapObject);
     } else {
-        work->mapId = MapObject_GetMapID(work->mapObject);
+        work->mapId = MapObject_GetMapID(work->args.mapObject);
     }
     return TRUE;
 }
 
-void FieldShadowEffect_Destroy(void *effect, FieldShadowEffect *work) {
+void FieldShadowEffect_Destroy(FieldEffect *effect, FieldShadowEffect *work) {
 }
 
-void FieldShadowEffect_Update(void *effect, FieldShadowEffect *work) {
+void FieldShadowEffect_Update(FieldEffect *effect, FieldShadowEffect *work) {
     VecFx32 pos;
-    LocalMapObject *object = work->mapObject;
+    LocalMapObject *object = work->args.mapObject;
     if (!sub_0205F0F8(object, work->spriteId, work->objectId, work->mapId)) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
@@ -252,21 +257,21 @@ void FieldShadowEffect_Update(void *effect, FieldShadowEffect *work) {
     FieldEffect_SetPosition(effect, &pos);
 }
 
-BOOL ov01_021FD784(void *effect, FieldShadowEffect *work) {
-    *(FieldEffectRendererArgs *)&work->unk_14 = *(FieldEffectRendererArgs *)FieldEffect_GetUserData(effect);
+BOOL ov01_021FD784(FieldEffect *effect, FieldShadowEffect *work) {
+    work->args = *(FieldShadowEffectArgs *)FieldEffect_GetUserData(effect);
     work->parameter = FieldEffect_GetParam(effect);
-    work->spriteId = MapObject_GetSpriteID(work->mapObject);
-    work->objectId = MapObject_GetID(work->mapObject);
-    if (MapObject_CheckFlag25(work->mapObject) == TRUE) {
-        work->mapId = sub_0205F544(work->mapObject);
+    work->spriteId = MapObject_GetSpriteID(work->args.mapObject);
+    work->objectId = MapObject_GetID(work->args.mapObject);
+    if (MapObject_CheckFlag25(work->args.mapObject) == TRUE) {
+        work->mapId = sub_0205F544(work->args.mapObject);
     } else {
-        work->mapId = MapObject_GetMapID(work->mapObject);
+        work->mapId = MapObject_GetMapID(work->args.mapObject);
     }
     work->hidden = TRUE;
     return TRUE;
 }
 
-void FieldShadowEffect_Draw(void *effect, FieldShadowEffect *work) {
+void FieldShadowEffect_Draw(FieldEffect *effect, FieldShadowEffect *work) {
     VecFx32 pos;
     VecFx32 scale;
     MtxFx33 mtx;
@@ -275,7 +280,7 @@ void FieldShadowEffect_Draw(void *effect, FieldShadowEffect *work) {
         return;
     }
     mtx = ov01_02208F14;
-    shadow = work->shadow;
+    shadow = work->args.shadow;
     FieldShadow_GetScale(shadow, &scale);
     FieldEffect_GetPosition(effect, &pos);
     pos.x -= 0x800;
@@ -284,7 +289,7 @@ void FieldShadowEffect_Draw(void *effect, FieldShadowEffect *work) {
     RenderObj_Draw(&shadow->renderObjs[0], &pos, &scale, &mtx);
 }
 
-void ov01_021FD838(void *effect, FieldShadowEffect *work) {
+void ov01_021FD838(FieldEffect *effect, FieldShadowEffect *work) {
     VecFx32 pos;
     VecFx32 scale;
     MtxFx33 mtx;
@@ -297,8 +302,8 @@ void ov01_021FD838(void *effect, FieldShadowEffect *work) {
         return;
     }
     mtx = ov01_02208EF0;
-    shadow = work->shadow;
-    object = work->mapObject;
+    shadow = work->args.shadow;
+    object = work->args.mapObject;
     renderObj = &shadow->renderObjs[0];
     FieldShadow_GetScale(shadow, &scale);
     if (ov01_021F8F88(object) != 0) {
@@ -320,19 +325,19 @@ void ov01_021FD838(void *effect, FieldShadowEffect *work) {
 }
 
 void ov01_021FD8E8(LocalMapObject *object, int index) {
-    FieldEffectRendererArgs args;
+    FieldShadowEffectArgs args;
     VecFx32 pos;
-    FieldSystem *manager = FieldEffectManager_GetFromMapObject(object);
-    args.unk0 = (u32)manager;
-    args.unk4 = (FieldSystem *)FieldEffectManager_GetRendererData(manager, 0);
-    args.unk8 = object;
+    FieldEffectManager *manager = FieldEffectManager_GetFromMapObject(object);
+    args.manager = manager;
+    args.shadow = FieldEffectManager_GetRendererData(manager, 0);
+    args.mapObject = object;
     MapObject_CopyPositionVector(object, &pos);
-    FieldEffectManager_CreateEffect(manager, &ov01_02208EDC, &pos, index, (UnkOv01_021FFF5C *)&args, MapObject_GetPriorityPlusValue(object, 2));
+    FieldEffectManager_CreateEffect(manager, &ov01_02208EDC, &pos, index, &args, MapObject_GetPriorityPlusValue(object, 2));
 }
 
-void ov01_021FD92C(void *effect, FieldShadowEffect *work) {
+void ov01_021FD92C(FieldEffect *effect, FieldShadowEffect *work) {
     VecFx32 pos;
-    LocalMapObject *object = work->mapObject;
+    LocalMapObject *object = work->args.mapObject;
     if (!sub_0205F0F8(object, work->spriteId, work->objectId, work->mapId)) {
         FieldEffectManager_DestroyEffect((int)effect);
         return;
@@ -346,7 +351,7 @@ void ov01_021FD92C(void *effect, FieldShadowEffect *work) {
     FieldEffect_SetPosition(effect, &pos);
 }
 
-void ov01_021FD980(void *effect, FieldShadowEffect *work) {
+void ov01_021FD980(FieldEffect *effect, FieldShadowEffect *work) {
     VecFx32 pos;
 
     if (work->hidden == 1) {
@@ -354,7 +359,7 @@ void ov01_021FD980(void *effect, FieldShadowEffect *work) {
     }
     {
         u32 index = (u32)FieldEffect_GetParam(effect);
-        FieldShadow *shadow = work->shadow;
+        FieldShadow *shadow = work->args.shadow;
         NNSG3dRenderObj *renderObj = &shadow->renderObjs[index];
         FieldEffect_GetPosition(effect, &pos);
         pos.x -= 0x800;

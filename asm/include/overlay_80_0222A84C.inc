@@ -10,7 +10,7 @@
 .public GF_AssertFail
 .public String_New
 .public String_Delete
-.public sub_0209680C
+.public Frontier_GetMap
 .public MI_CpuFill8
 .public FrontierSystem_Create
 .public FrontierSystem_Main

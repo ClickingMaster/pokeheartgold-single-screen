@@ -22,8 +22,8 @@
 .public FieldEffectManager_GetFromMapObject
 .public FieldEffectManager_CreateEffect
 .public FieldEffectManager_DestroyEffect
-.public ov01_021F19F4
-.public ov01_021FD1B8
-.public ov01_021FD1CC
-.public ov01_021FD2EC
-.public FieldEffect_InitRenderObject
+.public FieldEffectManager_LoadRenderModel
+.public MapObjectModelList_New
+.public MapObjectModelList_Free
+.public MapObjectModel_CreateEffect
+.public MapObjectModelList_Init

@@ -18,7 +18,7 @@
 #include "field/overlay_01_021EABA8.h"
 #include "field/overlay_01_021EAF00.h"
 #include "field/field_texture_manager.h"
-#include "field/overlay_01_021FD1B8.h"
+#include "field/map_object_model_list.h"
 #include "field/overlay_01_02204004.h"
 #include "field/signpost.h"
 #include "field/weather_manager.h"
@@ -724,7 +724,7 @@ static void ov01_021E64A4(FieldSystem *fieldSystem) {
 
     ov01_021F91F8(fieldSystem->mapObjectManager, 32, MapObjectsToPreload_GetCount(fieldSystem->mapObjectsToPreload) + 3, MapObjectsToPreload_GetIDs(fieldSystem->mapObjectsToPreload), v0);
     ov01_022057DC(fieldSystem->mapObjectManager);
-    FieldEffect_InitRenderObject(fieldSystem->fieldEffectManager);
+    MapObjectModelList_Init(fieldSystem->fieldEffectManager);
     PlayerAvatar_InitMapFeatures(fieldSystem->playerAvatar);
 
     if (fieldSystem->unkAC != 0) {

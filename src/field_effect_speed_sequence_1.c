@@ -27,8 +27,8 @@ void ov01_021FE5BC(LocalManager *m) {
 void ov01_021FE5CC(LocalManager *m) {
     if (m->active == 0) {
         m->active = 1;
-        ov01_021F18D4(m->owner, 11, 0x80);
-        ov01_021F1908(m->owner, 11, 0x95);
+        FieldEffectManager_LoadBillboardResource(m->owner, 11, 0x80);
+        FieldEffectManager_LoadBillboardSequence(m->owner, 11, 0x95);
         FieldEffectManager_LoadTexResource(m->owner, 12, 0x1a, 1);
         FieldEffectManager_AddRecord(m->owner, 13, 11, 11, 12, 0, ov01_022090AC);
     }
@@ -36,8 +36,8 @@ void ov01_021FE5CC(LocalManager *m) {
 void ov01_021FE61C(LocalManager *m) {
     if (m->active == 1) {
         m->active = 0;
-        ov01_021F18FC(m->owner, 11);
-        ov01_021F1924(m->owner, 11);
+        FieldEffectManager_FreeBillboardResource(m->owner, 11);
+        FieldEffectManager_FreeBillboardSequence(m->owner, 11);
         FieldEffectManager_FreeTexResource(m->owner, 12);
         FieldEffectManager_ReleaseRecord(m->owner, 13);
     }

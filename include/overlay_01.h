@@ -82,8 +82,6 @@ void CallFieldTask_RockClimb(TaskManager *taskManager, int playerDirection, int 
 void CallFieldTask_Surf(TaskManager *taskManager, int playerDirection, int partySlot);
 void CallFieldTask_Waterfall(TaskManager *taskManager, int playerDirection, int partySlot);
 void CallFieldTask_Whirlpool(TaskManager *taskManager, int playerDirection, int partySlot);
-u32 FieldEffectManager_GetNarcMemberSize(FieldEffectManager *fieldEffectManager, int);
-void FieldEffectManager_ReadNarcMember(FieldEffectManager *fieldEffectManager, int, void *);
 int MapNumToFloorNo(u32 mapId);
 void PrintCurFloorInNewWindow(FieldSystem *fieldSystem, u8 x, u8 y, u16 *p_ret, MessageFormat *msgFmt, u16 floor);
 int Field_SaveGameNormal(FieldSystem *fieldSystem);
@@ -101,7 +99,7 @@ struct SaveStatsPrinter *Field_SaveStatsPrinter_New(FieldSystem *fieldSystem, en
 void Field_SaveStatsPrinter_Print(struct SaveStatsPrinter *printer);
 void Field_SaveStatsPrinter_RemoveFromScreen(struct SaveStatsPrinter *printer);
 void Field_SaveStatsPrinter_Delete(struct SaveStatsPrinter *printer);
-void ov01_02203AB4(FieldSystem *fieldSystem, LocalMapObject *partnerPokeObj, int a2);
+void FieldSystem_ShowEmoteBubble(FieldSystem *fieldSystem, LocalMapObject *partnerPokeObj, int a2);
 void ov01_02205AEC(FieldSystem *fieldSystem);
 void ov01_02205720(LocalMapObject *playerObj, LocalMapObject *tsurePokeObj, int a2, int a3);
 void ov01_021EACBC(void *fieldSystemUnk28, u8 a1);

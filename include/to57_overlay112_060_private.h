@@ -14,16 +14,16 @@ typedef struct W12Work {
 #define S32(w, n) (*(s32 *)((w)->raw + (n)))
 #define PTR(w, n) (*(void **)((w)->raw + (n)))
 
-extern void ov112_021E9C10(W12Work *, int);
-extern void ov112_021E9A78(void *, int);
+extern void PokewalkerApp_RemoveWindowBank(W12Work *, int);
+extern void PokewalkerApp_AddWindowBank(void *, int);
 extern void FillBgTilemapRect(void *, int, int, int, int, int, int, int);
 extern void BgCommitTilemapBufferToVram(void *, int);
 extern void PokewalkerApp_LoadTilemap(W12Work *, int, int);
 extern String *NewString_ReadMsgData(void *, int);
-extern void ov112_021E9FA4(W12Work *, int, String *, int, u32);
+extern void PokewalkerApp_PrintString(W12Work *, int, String *, int, u32);
 extern void String_Delete(String *);
-extern void ov112_021E9F40(W12Work *, int);
-extern void ov112_021EA51C(W12Work *, int);
+extern void PokewalkerApp_PrintExit(W12Work *, int);
+extern void PokewalkerApp_SetCursorPosition(W12Work *, int);
 extern void sub_020326A4(void *, u16, u16);
 extern const u32 ov112_021FF0AC[];
 int ov112_021EAF5C(W12Work *);

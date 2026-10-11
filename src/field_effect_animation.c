@@ -69,8 +69,8 @@ void ov01_0220024C(Work *w, int which) {
 void ov01_02200260(Work *w) {
     if (w->active0 == 0) {
         w->active0 = 1;
-        ov01_021F18D4(w->manager, 1, 0x76);
-        ov01_021F1908(w->manager, 1, 0x8c);
+        FieldEffectManager_LoadBillboardResource(w->manager, 1, 0x76);
+        FieldEffectManager_LoadBillboardSequence(w->manager, 1, 0x8c);
         FieldEffectManager_LoadTexResource(w->manager, 1, 0x11, 1);
         FieldEffectManager_AddRecord(w->manager, 1, 1, 1, 1, 0, ov01_022092F0);
     }
@@ -78,8 +78,8 @@ void ov01_02200260(Work *w) {
 void ov01_022002AC(Work *w) {
     if (w->active1 == 0) {
         w->active1 = 1;
-        ov01_021F18D4(w->manager, 10, 0x7d);
-        ov01_021F1908(w->manager, 10, 0x8c);
+        FieldEffectManager_LoadBillboardResource(w->manager, 10, 0x7d);
+        FieldEffectManager_LoadBillboardSequence(w->manager, 10, 0x8c);
         FieldEffectManager_LoadTexResource(w->manager, 11, 0x18, 1);
         FieldEffectManager_AddRecord(w->manager, 12, 10, 10, 11, 0, ov01_022092F0);
     }
@@ -87,8 +87,8 @@ void ov01_022002AC(Work *w) {
 void ov01_022002FC(Work *w) {
     if (w->active0 == 1) {
         w->active0 = 0;
-        ov01_021F18FC(w->manager, 1);
-        ov01_021F1924(w->manager, 1);
+        FieldEffectManager_FreeBillboardResource(w->manager, 1);
+        FieldEffectManager_FreeBillboardSequence(w->manager, 1);
         FieldEffectManager_FreeTexResource(w->manager, 1);
         FieldEffectManager_ReleaseRecord(w->manager, 1);
     }
@@ -96,8 +96,8 @@ void ov01_022002FC(Work *w) {
 void ov01_0220032C(Work *w) {
     if (w->active1 == 1) {
         w->active1 = 0;
-        ov01_021F18FC(w->manager, 10);
-        ov01_021F1924(w->manager, 10);
+        FieldEffectManager_FreeBillboardResource(w->manager, 10);
+        FieldEffectManager_FreeBillboardSequence(w->manager, 10);
         FieldEffectManager_FreeTexResource(w->manager, 11);
         FieldEffectManager_ReleaseRecord(w->manager, 12);
     }

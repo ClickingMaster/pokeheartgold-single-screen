@@ -6,8 +6,8 @@
 
 typedef BOOL (*FrontierMapMovementFunc)(void *frontier, FrontierMapObject *object);
 
-FrontierMap *sub_0209680C(void *frontier);
-FrontierMapObject *sub_02096868(void *frontier);
+FrontierMap *Frontier_GetMap(void *frontier);
+FrontierMapObject *Frontier_GetMapObjects(void *frontier);
 void ov80_0222EFD0(UnkStruct_ov44_02232031 *command, UnkStruct_ov42_02228110 *object, u16 id, s32 direction);
 
 extern const FrontierMapMovementFunc ov80_0223DB24[];
@@ -32,7 +32,7 @@ void FrontierMap_RunObjectMovement(void *frontier, FrontierMapObject *object) {
 }
 
 void FrontierMap_RunObjectMovements(void *frontier) {
-    FrontierMapObject *object = sub_02096868(frontier);
+    FrontierMapObject *object = Frontier_GetMapObjects(frontier);
     s32 i;
 
     for (i = 0; i < FRONTIER_MAP_OBJECT_MAX; i++, object++) {
@@ -46,7 +46,7 @@ void FrontierMap_RunObjectMovements(void *frontier) {
 // data[2] is the wait timer).
 BOOL FrontierMapMovement_LookAround(void *frontier, FrontierMapObject *object) {
     FrontierMapObjectMovement *movement = &object->movement;
-    FrontierMap *map = sub_0209680C(frontier);
+    FrontierMap *map = Frontier_GetMap(frontier);
     UnkStruct_ov44_02232031 command;
     int nextState;
 

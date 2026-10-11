@@ -11,7 +11,7 @@ typedef struct W12Work {
 
 extern void FillBgTilemapRect(void *, int, int, int, int, int, int, int);
 extern void PokewalkerApp_LoadTilemap(W12Work *, int, int);
-extern void ov112_021E9FD8(W12Work *, int, void *, int);
+extern void PokewalkerApp_PrintStringDefaultColor(W12Work *, int, void *, int);
 extern int IsPaletteFadeFinished(void);
 extern void BufferPokewalkerCourseName(void *, int, u8);
 extern int sub_02032718(void *);
@@ -19,12 +19,12 @@ extern void *String_New(int, int);
 extern void CopyU16ArrayToStringN(void *, void *, int);
 extern void BufferString(void *, int, void *, u32, int, void *);
 extern void String_Delete(void *);
-extern int ov112_021EA08C(W12Work *, int, int);
+extern int PokewalkerApp_StartMessageBox(W12Work *, int, int);
 extern void PlayFanfare(int);
 extern void BeginNormalPaletteFade(int, int, int, int, int, int, int);
-extern void ov112_021E9C10(W12Work *, int);
-extern void ov112_021E9A78(void *, int);
-extern void ov112_021EA688(W12Work *, int);
+extern void PokewalkerApp_RemoveWindowBank(W12Work *, int);
+extern void PokewalkerApp_AddWindowBank(void *, int);
+extern void PokewalkerApp_HideSprite(W12Work *, int);
 extern void GF_AssertFail(void);
 extern int TextPrinterCheckActive(u8);
 extern int IsFanfarePlaying(void);
@@ -107,7 +107,7 @@ int ov112_021EFED8(void) {
 }
 
 int ov112_021EFEEC(W12Work *w) {
-    U32(w, 0x1e524) = ov112_021EA08C(w, 0, 0x32);
+    U32(w, 0x1e524) = PokewalkerApp_StartMessageBox(w, 0, 0x32);
     U32(w, 0xc) = 0x14;
     PlayFanfare(0x4a2);
     return 0x23;

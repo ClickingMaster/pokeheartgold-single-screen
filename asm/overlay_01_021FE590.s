@@ -70,11 +70,11 @@ ov01_021FE5CC: ; 0x021FE5CC
 	ldr r0, [r4, #8]
 	mov r1, #0xb
 	mov r2, #0x80
-	bl ov01_021F18D4
+	bl FieldEffectManager_LoadBillboardResource
 	ldr r0, [r4, #8]
 	mov r1, #0xb
 	mov r2, #0x95
-	bl ov01_021F1908
+	bl FieldEffectManager_LoadBillboardSequence
 	ldr r0, [r4, #8]
 	mov r1, #0xc
 	mov r2, #0x1a
@@ -109,10 +109,10 @@ ov01_021FE61C: ; 0x021FE61C
 	str r0, [r4, #4]
 	ldr r0, [r4, #8]
 	mov r1, #0xb
-	bl ov01_021F18FC
+	bl FieldEffectManager_FreeBillboardResource
 	ldr r0, [r4, #8]
 	mov r1, #0xb
-	bl ov01_021F1924
+	bl FieldEffectManager_FreeBillboardSequence
 	ldr r0, [r4, #8]
 	mov r1, #0xc
 	bl FieldEffectManager_FreeTexResource

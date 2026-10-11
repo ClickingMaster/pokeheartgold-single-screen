@@ -12,7 +12,7 @@ void FillBgTilemapRect(void *bg, int layer, int fill, int x, int y, int width, i
 void BgCommitTilemapBufferToVram(void *bg, int layer);
 BOOL ov112_021ED610(void *p);
 BOOL ov112_021ED640(void *p);
-void *ov112_021EA08C(void *p, int a, int b);
+void *PokewalkerApp_StartMessageBox(void *p, int a, int b);
 void PokewalkerIr_Stop(void);
 void ov112_021EAAE4(void *p, void *q);
 int TextPrinterCheckActive(u8 id);

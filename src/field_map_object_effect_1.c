@@ -14,14 +14,14 @@ void ov01_021FF480(LocalCtx *c) {
     FieldEffectManager_HeapFree(c);
 }
 void ov01_021FF490(LocalCtx *c) {
-    ov01_021F18D4(c->owner, 3, 0x77);
-    ov01_021F1908(c->owner, 2, 0x90);
+    FieldEffectManager_LoadBillboardResource(c->owner, 3, 0x77);
+    FieldEffectManager_LoadBillboardSequence(c->owner, 2, 0x90);
     FieldEffectManager_LoadTexResource(c->owner, 2, 0x12, 1);
     FieldEffectManager_AddRecord(c->owner, 3, 3, 2, 2, 0, ov01_022091D4);
 }
 void ov01_021FF4D4(LocalCtx *c) {
-    ov01_021F18FC(c->owner, 3);
-    ov01_021F1924(c->owner, 2);
+    FieldEffectManager_FreeBillboardResource(c->owner, 3);
+    FieldEffectManager_FreeBillboardSequence(c->owner, 2);
     FieldEffectManager_FreeTexResource(c->owner, 2);
     FieldEffectManager_ReleaseRecord(c->owner, 3);
 }

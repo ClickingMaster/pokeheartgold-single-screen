@@ -47,11 +47,11 @@ ov01_021FDA40: ; 0x021FDA40
 	ldr r0, [r4]
 	mov r1, #2
 	mov r2, #0x23
-	bl ov01_021F18D4
+	bl FieldEffectManager_LoadBillboardResource
 	ldr r0, [r4]
 	mov r1, #0xd
 	mov r2, #0x69
-	bl ov01_021F18D4
+	bl FieldEffectManager_LoadBillboardResource
 	pop {r4, pc}
 	.balign 4, 0
 	thumb_func_end ov01_021FDA40
@@ -62,10 +62,10 @@ ov01_021FDA5C: ; 0x021FDA5C
 	add r4, r0, #0
 	ldr r0, [r4]
 	mov r1, #2
-	bl ov01_021F18FC
+	bl FieldEffectManager_FreeBillboardResource
 	ldr r0, [r4]
 	mov r1, #0xd
-	bl ov01_021F18FC
+	bl FieldEffectManager_FreeBillboardResource
 	pop {r4, pc}
 	.balign 4, 0
 	thumb_func_end ov01_021FDA5C
@@ -446,7 +446,7 @@ ov01_021FDD48: ; 0x021FDD48
 	beq _021FDD8E
 	ldr r0, [r4, #0x18]
 	mov r1, #2
-	bl ov01_021F18F0
+	bl FieldEffectManager_GetBillboardResource
 	str r0, [sp]
 	add r0, r5, #0
 	add r1, sp, #0x28
@@ -481,7 +481,7 @@ _021FDDA4:
 	bne _021FDDA4
 	ldr r0, [r4, #8]
 	mov r1, #2
-	bl ov01_021F18F0
+	bl FieldEffectManager_GetBillboardResource
 	str r0, [sp]
 	add r0, r5, #0
 	add r1, sp, #0x28
@@ -991,11 +991,11 @@ ov01_021FE190: ; 0x021FE190
 	ldr r0, [r4, #0x18]
 	bhi _021FE1C4
 	mov r1, #2
-	bl ov01_021F18F0
+	bl FieldEffectManager_GetBillboardResource
 	b _021FE1CA
 _021FE1C4:
 	mov r1, #0xd
-	bl ov01_021F18F0
+	bl FieldEffectManager_GetBillboardResource
 _021FE1CA:
 	str r0, [sp]
 	ldr r0, [r4, #0x20]

@@ -11,7 +11,7 @@ void ov01_0220093C(void *a0, Ov01_02200858_Inst *inst);
 void ov01_02200A08(void *a0, Ov01_02200858_Inst *inst);
 int ov01_02200AB0(u8 tile);
 
-extern const UnkOv01_02209280 ov01_02209340;
+extern const FieldEffectBasicTemplate ov01_02209340;
 
 Ov01_02200858_Work *ov01_02200858(FieldEffectManager *a0) {
     Ov01_02200858_Work *work = (Ov01_02200858_Work *)FieldEffectManager_HeapAllocAndFill(a0, sizeof(Ov01_02200858_Work), 0, 0);
@@ -26,7 +26,7 @@ void ov01_02200874(Ov01_02200858_Work *work) {
 }
 
 void ov01_02200884(Ov01_02200858_Work *work) {
-    ov01_021F19F4(work->unk0, &work->unk4, 0, 0x55, 0);
+    FieldEffectManager_LoadRenderModel(work->unk0, &work->unk4, 0, 0x55, 0);
     RenderObj_InitFromModel(&work->unk18, &work->unk4);
 }
 
@@ -39,11 +39,11 @@ void ov01_022008B4(PlayerAvatar *a0) {
     VecFx32 position = { 0, 0, 0 };
 
     LocalMapObject *mapObject = PlayerAvatar_GetMapObject(a0);
-    FieldSystem *fieldSystem = FieldEffectManager_GetFromMapObject(mapObject);
+    FieldEffectManager *fieldSystem = FieldEffectManager_GetFromMapObject(mapObject);
     args.unk0 = fieldSystem;
     args.unk4 = (Ov01_02200858_Work *)FieldEffectManager_GetRendererData(fieldSystem, 3);
     args.unk8 = a0;
-    FieldEffectManager_CreateEffect(fieldSystem, &ov01_02209340, &position, 0, (UnkOv01_021FFF5C *)&args, MapObject_GetPriorityPlusValue(mapObject, 2));
+    FieldEffectManager_CreateEffect(fieldSystem, &ov01_02209340, &position, 0, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
 }
 
 BOOL ov01_02200900(void *a0, Ov01_02200858_Inst *inst) {

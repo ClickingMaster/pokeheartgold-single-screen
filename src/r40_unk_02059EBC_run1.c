@@ -17,7 +17,7 @@ void sub_02059EBC(void *p) {
                 sub_02037F64(PTR(p, 0x18));
             }
         } else if (U32(p, 0x20) == 2) {
-            sub_0208F814(0);
+            DrawingSessionLink_RegisterCommands(0);
             sub_02038918(PTR(p, 0x18));
         }
         sub_0205A034(p, sub_0205A0B4, 0xC);

@@ -23,10 +23,10 @@
 .public FieldEffectManager_CreateBillboardFromRecord
 .public FieldEffectManager_AddRecord
 .public FieldEffectManager_ReleaseRecord
-.public ov01_021F18D4
-.public ov01_021F18FC
-.public ov01_021F1908
-.public ov01_021F1924
+.public FieldEffectManager_LoadBillboardResource
+.public FieldEffectManager_FreeBillboardResource
+.public FieldEffectManager_LoadBillboardSequence
+.public FieldEffectManager_FreeBillboardSequence
 .public FieldEffectManager_LoadTexResource
 .public FieldEffectManager_FreeTexResource
 .public ov01_02200040

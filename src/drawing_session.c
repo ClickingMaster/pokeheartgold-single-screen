@@ -52,7 +52,7 @@ extern int sub_02037854(void);
 extern void sub_02038C1C(int count);
 extern void sub_020356EC(BOOL value);
 extern void sub_0205AD24(struct UnkStruct_0205AC88 *unionRoom);
-extern void sub_0208F814(DrawingSessionWork *work); // wireless_room_packets.c: registers the command table
+extern void DrawingSessionLink_RegisterCommands(DrawingSessionWork *work); // wireless_room_packets.c: registers the command table
 
 extern const TouchscreenHitbox sDrawingSessionYesNoHitbox[];
 extern const TouchscreenHitbox sDrawingSessionCanvasHitbox[];
@@ -167,7 +167,7 @@ BOOL DrawingSession_Init(OverlayManager *man, int *state) {
         DrawingSession_AddWindows(work, man);
         Sound_SetSceneAndPlayBGM(0x34, 0, 0);
         GX_SetDispSelect(GX_DISP_SELECT_SUB_MAIN);
-        sub_0208F814(work);
+        DrawingSessionLink_RegisterCommands(work);
         sub_020398D4(0, 1);
         if (Comm_GetLocalNetId() == 0) {
             sub_02038C1C(3);

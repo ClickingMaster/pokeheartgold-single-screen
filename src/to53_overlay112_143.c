@@ -5,7 +5,7 @@
 
 #define LOAD_PRINTER(p, a, b, next)                              \
     do {                                                         \
-        *(void **)((u8 *)(p) + 0x1E524) = ov112_021EA08C(p, a, b); \
+        *(void **)((u8 *)(p) + 0x1E524) = PokewalkerApp_StartMessageBox(p, a, b); \
         return next;                                             \
     } while (0)
 
@@ -30,7 +30,7 @@ int ov112_021EF644(void *p) {
 int ov112_021EF660(void) { return 1; }
 
 int ov112_021EF664(void *p) {
-    ov112_021E9C10(p, 1);
-    ov112_021E9A78(p, 4);
+    PokewalkerApp_RemoveWindowBank(p, 1);
+    PokewalkerApp_AddWindowBank(p, 4);
     return 2;
 }

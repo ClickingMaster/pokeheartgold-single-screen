@@ -13,13 +13,13 @@ void ov01_022006C4(void *manager) {
 }
 
 void ov01_022006D4(void *manager) {
-    ov01_021F18D4(*(void **)manager, 4, 0x78);
+    FieldEffectManager_LoadBillboardResource(*(void **)manager, 4, 0x78);
     FieldEffectManager_LoadTexResource(*(void **)manager, 3, 0x13, 1);
     FieldEffectManager_AddRecord(*(void **)manager, 4, 4, 0, 3, 0, ov01_0220931C);
 }
 
 void ov01_02200710(void *manager) {
-    ov01_021F18FC(*(void **)manager, 4);
+    FieldEffectManager_FreeBillboardResource(*(void **)manager, 4);
     FieldEffectManager_FreeTexResource(*(void **)manager, 3);
     FieldEffectManager_ReleaseRecord(*(void **)manager, 4);
 }

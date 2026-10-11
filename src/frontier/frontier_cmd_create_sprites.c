@@ -8,7 +8,7 @@
 // This command is compiled with MWCC 2.0/sp2 (see Makefile), so it stays in its own file.
 
 u32 FrontierScript_ReadVar(FrontierScriptContext *ctx);
-FrontierMap *sub_0209680C(void *frontierWork);
+FrontierMap *Frontier_GetMap(void *frontierWork);
 ManagedSprite *FrontierMap_CreateSprite(FrontierMap *map, u32 idx, u32 id);
 void FrontierMap_SetSpriteAnimActive(FrontierMap *map, u32 idx, u32 on);
 BOOL FrtCmd_044(FrontierScriptContext *ctx);
@@ -26,7 +26,7 @@ BOOL FrtCmd_044(FrontierScriptContext *ctx) {
     const u8 *saved;
     u32 id;
     ManagedSprite *sprite;
-    FrontierMap *map = sub_0209680C(ctx->frontierSystem->frontierWork);
+    FrontierMap *map = Frontier_GetMap(ctx->frontierSystem->frontierWork);
     u32 offset = FrontierScriptContext_ReadWord(ctx);
 
     saved = ctx->scriptPtr;

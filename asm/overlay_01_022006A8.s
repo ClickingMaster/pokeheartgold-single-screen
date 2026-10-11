@@ -59,7 +59,7 @@ ov01_022006D4: ; 0x022006D4
 	ldr r0, [r4]
 	mov r1, #4
 	mov r2, #0x78
-	bl ov01_021F18D4
+	bl FieldEffectManager_LoadBillboardResource
 	ldr r0, [r4]
 	mov r1, #3
 	mov r2, #0x13
@@ -87,7 +87,7 @@ ov01_02200710: ; 0x02200710
 	add r4, r0, #0
 	ldr r0, [r4]
 	mov r1, #4
-	bl ov01_021F18FC
+	bl FieldEffectManager_FreeBillboardResource
 	ldr r0, [r4]
 	mov r1, #3
 	bl FieldEffectManager_FreeTexResource

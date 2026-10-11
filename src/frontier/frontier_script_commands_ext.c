@@ -85,7 +85,7 @@ typedef struct FrontierCameraPos {
 
 extern BOOL (*const ov80_0223B9EC[])(FrontierTransitionWork *work);
 
-void *sub_0209680C(void *frontierWork);
+void *Frontier_GetMap(void *frontierWork);
 BOOL sub_02096BF8(u8 *data, u16 value);
 BOOL BattleRecord_Load(SaveData *saveData, enum HeapID heapId, int *result, BattleSetup *setup, int index);
 void FrontierMap_SetSpriteAnimActive(FrontierMap *map, u32 idx, u32 on);
@@ -204,13 +204,13 @@ static inline u8 ReadScriptByte(FrontierScriptContext *ctx) {
 }
 
 BOOL FrtCmd_045(FrontierScriptContext *ctx) {
-    FrontierMap *map = sub_0209680C(ctx->frontierSystem->frontierWork);
+    FrontierMap *map = Frontier_GetMap(ctx->frontierSystem->frontierWork);
     FrontierMap_DeleteSprite(map, FrontierScript_ReadVar(ctx));
     return FALSE;
 }
 
 BOOL FrtCmd_046(FrontierScriptContext *ctx) {
-    FrontierMap *map = sub_0209680C(ctx->frontierSystem->frontierWork);
+    FrontierMap *map = Frontier_GetMap(ctx->frontierSystem->frontierWork);
     u16 index = FrontierScript_ReadVar(ctx);
     u8 draw = ReadScriptByte(ctx);
     ManagedSprite *sprite = FrontierMap_GetSprite(map, index);
@@ -222,7 +222,7 @@ BOOL FrtCmd_046(FrontierScriptContext *ctx) {
 }
 
 BOOL FrtCmd_047(FrontierScriptContext *ctx) {
-    FrontierMap *map = sub_0209680C(ctx->frontierSystem->frontierWork);
+    FrontierMap *map = Frontier_GetMap(ctx->frontierSystem->frontierWork);
     ManagedSprite *sprite = FrontierMap_GetSprite(map, FrontierScript_ReadVar(ctx));
     if (sprite == NULL) {
         GF_AssertFail();
@@ -232,7 +232,7 @@ BOOL FrtCmd_047(FrontierScriptContext *ctx) {
 }
 
 BOOL FrtCmd_048(FrontierScriptContext *ctx) {
-    FrontierMap *map = sub_0209680C(ctx->frontierSystem->frontierWork);
+    FrontierMap *map = Frontier_GetMap(ctx->frontierSystem->frontierWork);
     u16 index = FrontierScript_ReadVar(ctx);
     u16 mode = FrontierScript_ReadVar(ctx);
     ManagedSprite *sprite = FrontierMap_GetSprite(map, index);
@@ -250,7 +250,7 @@ BOOL FrtCmd_048(FrontierScriptContext *ctx) {
 BOOL FrtCmd_049(FrontierScriptContext *ctx) {
     u16 index = FrontierScript_ReadVar(ctx);
     u16 anim = FrontierScript_ReadVar(ctx);
-    FrontierMap *map = sub_0209680C(ctx->frontierSystem->frontierWork);
+    FrontierMap *map = Frontier_GetMap(ctx->frontierSystem->frontierWork);
     ManagedSprite_SetAnim(FrontierMap_GetSprite(map, index), anim);
     FrontierMap_SetSpriteAnimActive(map, index, TRUE);
     return FALSE;
@@ -258,7 +258,7 @@ BOOL FrtCmd_049(FrontierScriptContext *ctx) {
 
 BOOL FrtCmd_050(FrontierScriptContext *ctx) {
     u16 index = FrontierScript_ReadVar(ctx);
-    FrontierMap_SetSpriteAnimActive(sub_0209680C(ctx->frontierSystem->frontierWork), index, FALSE);
+    FrontierMap_SetSpriteAnimActive(Frontier_GetMap(ctx->frontierSystem->frontierWork), index, FALSE);
     return FALSE;
 }
 
@@ -272,7 +272,7 @@ BOOL FrontierScriptNative_WaitSpriteAnim(FrontierScriptContext *ctx) {
     FrontierMap *map;
     ManagedSprite *sprite;
     u16 *index;
-    map = sub_0209680C(ctx->frontierSystem->frontierWork);
+    map = Frontier_GetMap(ctx->frontierSystem->frontierWork);
     index = &ctx->data[0];
     sprite = FrontierMap_GetSprite(map, *index);
     if (!FrontierMap_IsSpriteAnimActive(map, *index) || !ManagedSprite_IsAnimated(sprite)) {
@@ -1209,7 +1209,7 @@ BOOL FrtCmd_064(FrontierScriptContext *ctx) {
 }
 
 BOOL FrtCmd_065(FrontierScriptContext *ctx) {
-    FrontierMap *map = sub_0209680C(ctx->frontierSystem->frontierWork);
+    FrontierMap *map = Frontier_GetMap(ctx->frontierSystem->frontierWork);
     u16 index = FrontierScript_ReadVar(ctx);
     u16 member = FrontierScript_ReadVar(ctx);
     u16 camera = FrontierScript_ReadVar(ctx);
@@ -1218,13 +1218,13 @@ BOOL FrtCmd_065(FrontierScriptContext *ctx) {
 }
 
 BOOL FrtCmd_066(FrontierScriptContext *ctx) {
-    FrontierMap *map = sub_0209680C(ctx->frontierSystem->frontierWork);
+    FrontierMap *map = Frontier_GetMap(ctx->frontierSystem->frontierWork);
     ov80_02239A1C((void *)map->unk10, FrontierScript_ReadVar(ctx));
     return FALSE;
 }
 
 BOOL FrtCmd_067(FrontierScriptContext *ctx) {
-    FrontierMap *map = sub_0209680C(ctx->frontierSystem->frontierWork);
+    FrontierMap *map = Frontier_GetMap(ctx->frontierSystem->frontierWork);
     u16 index = FrontierScript_ReadVar(ctx);
     u16 resource = FrontierScript_ReadVar(ctx);
     ParticleSystem_CreateEmitterWithParam(ov80_02239A60(map->unk10, index), resource, NULL, NULL);
@@ -1237,7 +1237,7 @@ BOOL FrtCmd_068(FrontierScriptContext *ctx) {
 }
 
 BOOL FrontierScriptNative_WaitMapEffect(FrontierScriptContext *ctx) {
-    return ov80_02239A74((void *)((FrontierMap *)sub_0209680C(ctx->frontierSystem->frontierWork))->unk10) == TRUE;
+    return ov80_02239A74((void *)((FrontierMap *)Frontier_GetMap(ctx->frontierSystem->frontierWork))->unk10) == TRUE;
 }
 
 // Shakes the map: offset x / y, flipped every interval + 1 frames, count times.
@@ -1246,7 +1246,7 @@ BOOL FrtCmd_076(FrontierScriptContext *ctx) {
     u16 y;
     u16 interval;
     u16 count;
-    FrontierMapShake *shake = &((FrontierMap *)sub_0209680C(ctx->frontierSystem->frontierWork))->shake;
+    FrontierMapShake *shake = &((FrontierMap *)Frontier_GetMap(ctx->frontierSystem->frontierWork))->shake;
     if (shake->task != NULL) {
         GF_AssertFail();
         SysTask_Destroy(shake->task);
@@ -1270,13 +1270,13 @@ BOOL FrtCmd_077(FrontierScriptContext *ctx) {
 }
 
 BOOL FrontierScriptNative_WaitShake(FrontierScriptContext *ctx) {
-    return ((FrontierMap *)sub_0209680C(ctx->frontierSystem->frontierWork))->shake.task == NULL;
+    return ((FrontierMap *)Frontier_GetMap(ctx->frontierSystem->frontierWork))->shake.task == NULL;
 }
 
 #pragma force_active on
 // Sets the main screen's window 0 (or turns it off) after a delay.
 BOOL FrtCmd_078(FrontierScriptContext *ctx) {
-    FrontierMap *map = sub_0209680C(ctx->frontierSystem->frontierWork);
+    FrontierMap *map = Frontier_GetMap(ctx->frontierSystem->frontierWork);
     FrontierMapWindowTask *data = &map->windowTask;
     if (data->task) {
         GF_AssertFail();
@@ -1300,7 +1300,7 @@ BOOL FrtCmd_079(FrontierScriptContext *ctx) {
 }
 
 BOOL FrontierScriptNative_WaitWindowTask(FrontierScriptContext *ctx) {
-    return ((FrontierMap *)sub_0209680C(ctx->frontierSystem->frontierWork))->windowTask.task == NULL;
+    return ((FrontierMap *)Frontier_GetMap(ctx->frontierSystem->frontierWork))->windowTask.task == NULL;
 }
 
 BOOL FrtCmd_150(FrontierScriptContext *ctx) {
@@ -1343,7 +1343,7 @@ BOOL FrtCmd_071(FrontierScriptContext *ctx) {
 #pragma force_active reset
 
 BOOL FrontierScriptNative_WaitBrainIntro(FrontierScriptContext *ctx) {
-    sub_0209680C(ctx->frontierSystem->frontierWork);
+    Frontier_GetMap(ctx->frontierSystem->frontierWork);
     return ctx->data[0] == TRUE;
 }
 
