@@ -909,28 +909,10 @@ Static main
     Object lib/NitroSDK/asm/to70_wvr_extra02_anchor.o
     Object lib/NitroSDK/src/wvr.o
     Object lib/NitroDWC/asm/to59_dwcbm_anchor.o
-    Object src/to59_dwcbm_run01.o
-    Object src/to70_dwcbm_residual_1_run01.o
-    Object src/to59_dwcbm_run02.o
-    Object src/to90_extra2311_run01.o
-    Object src/to90_extra2551_run01.o
-    Object src/to59_dwcbm_run03.o
-    Object src/op90_to59_dwcbm_residual_3_r01.o
-    Object src/to59_dwcbm_run04.o
-    Object src/op90_to80_extra1653_residual_1_r01.o
-    Object src/to80_extra1653_run01.o
-    Object src/to70_dwcbm_residual_4_run01.o
-    Object src/op90_to70_dwcbm_residual_4_residual_2_r01.o
-    Object src/to70_dwcbm_residual_4_run02.o
-    Object src/to80_extra1425_run01.o
-    Object src/to70_dwcbm_residual_4_run03.o
-    Object src/to59_dwcbm_run05.o
-    Object src/op90_op90_to59_dwcbm_residual_5_residual_1_r01.o
-    Object src/op90_to59_dwcbm_residual_5_r01.o
-    Object src/to59_dwcbm_run06.o
-    Object src/op90_to59_dwcbm_residual_6_r01.o
-    Object src/to59_dwcbm_run07.o
-    Object src/to90_extra2312_run01.o
+    Object lib/NitroDWC/src/dwc_bm.o
+    Object lib/NitroDWC/src/dwc_nvram.o
+    Object lib/NitroDWC/src/dwc_bm_init.o
+    Object lib/NitroDWC/src/dwc_auth_wifi_id.o
     Object lib/NitroDWC/asm/to59_dwcaccount_anchor.o
     Object lib/NitroDWC/src/dwc_account.o
     Object lib/src/nitrocrypto_rc4_init.o
@@ -1915,7 +1897,7 @@ Object src/op90_to91_w41563_friend_callback_suffix_r01.o
     Object src/to61_overlay_00_arm_residual_1_run34.o
     Object lib/NitroDWC/src/ap_connect_control.o
     Object lib/NitroDWC/src/ap_connect.o
-    Object src/op90_to60_overlay_00_arm_residual_5_r01.o
+    Object lib/NitroDWC/src/available_check_poll.o
     Object lib/NitroDWC/asm/to60_overlay_00_arm_anchor_own1_own1.o
     Object src/to60_ov00_run06.o
     Object src/to80_extra1618_run01.o
@@ -3087,34 +3069,9 @@ Overlay OVY_13
     Object src/wifi_setup_screens.o
     Object src/op90_to61_overlay_13_arm_2_residual_5_residual_7_r01.o
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own7.o
-    Object src/to61_overlay_13_arm_2_residual_5_run07.o
-    Object src/to80_extra1406_run01.o
-    Object src/to61_overlay_13_arm_2_residual_5_run08.o
-    Object src/to65_ov13_extra04_run01.o
-    Object src/to90_extra2446_run01.o
-    Object src/op90_to90_extra2446_residual_1_r01.o
-    Object src/to65_ov13_extra04_run02.o
-    Object src/to90_extra2447_run01.o
-    Object src/op90_to90_extra2447_residual_1_r01.o
-    Object src/to65_ov13_extra04_run03.o
-    Object src/to80_extra1418_run01.o
-    Object src/to65_ov13_extra04_run04.o
-    Object src/to70_to65_ov13_extra04_residual_4_extra1119_run01.o
-    Object src/op90_to70_to65_ov13_extra04_residual_4_extra1119_residual_1_r01.o
-    Object src/to65_ov13_extra04_run05.o
-    Object src/to80_extra1419_run01.o
-    Object src/to65_ov13_extra04_run06.o
-    Object src/to80_extra1640_run01.o
-    Object src/to65_ov13_extra04_run07.o
-    Object src/to80_extra1641_run01.o
-    Object src/to90_extra2328_run01.o
-    Object src/to80_extra1641_run02.o
-    Object src/to80_extra1849_run01.o
-    Object src/to65_ov13_extra04_run08.o
-    Object src/to80_extra1420_run01.o
-    Object src/to65_ov13_extra04_run09.o
-    Object src/op90_to65_ov13_extra04_residual_9_r01.o
-    Object src/op90_op90_to65_ov13_extra04_residual_9_residual_1_r01.o
+    Object src/wifi_setup_address_entry.o
+    Object src/wifi_setup_error_screen.o
+    Object src/wifi_setup_settings.o
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own7_own1.o
     Object src/to60_ov13_run06.o
     Object src/to60_ov13_run07.o

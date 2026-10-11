@@ -40,9 +40,9 @@ void TerminateWlTask(void) {
     wlWorkPlain->param.errors |= 0x8000;
     if (wlWorkPlain->bss.state) {
         WStop();
-        if (wlWorkPlain->unk_404) {
-            wlWorkPlain->unk_404 = 0;
-            u8 *msg = wlWorkPlain->unk_420;
+        if (wlWorkPlain->mlme.state) {
+            wlWorkPlain->mlme.state = 0;
+            u8 *msg = (u8 *)wlWorkPlain->mlme.cfm.header;
             *(u16 *)(msg + 4) = 6;
             IssueMlmeConfirm();
         }

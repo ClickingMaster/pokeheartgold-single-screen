@@ -90,7 +90,7 @@ int WCheckSSID(u32 length, const u8 *ssid) {
     if (!ownLength) {
         return 1;
     }
-    if (w->unk_404 == 0x13) {
+    if (w->mlme.state == 0x13) {
         if (length < ownLength) {
             return 0;
         }

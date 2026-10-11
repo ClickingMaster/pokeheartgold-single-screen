@@ -366,13 +366,13 @@ void CAM_TimerTask(void) {
                                 goto clear;
                             }
                             {
-                                u16 *frame;
+                                WlTxHeapFrame *frame;
                                 wlWorkPlain->cam.unk_08 |= 1 << aid;
                                 CAM_SetPowerMgtMode((u16)aid, 0);
                                 wlWorkPlain->cam.activeMap |= 1 << aid;
                                 frame = MakeDeAuthFrame(sta->macAdrs, 1, 0);
                                 if (frame) {
-                                    *frame = 1;
+                                    frame->unk_00 = 1;
                                     TxManCtrlFrame(frame);
                                     count++;
                                     continue;
@@ -380,9 +380,9 @@ void CAM_TimerTask(void) {
                                 MLME_IssueDeAuthIndication(sta->macAdrs, 1);
                             }
                         } else if (aid == w->bss.unk_88) {
-                            u16 *frame = MakeDeAuthFrame(sta->macAdrs, 1, 0);
+                            WlTxHeapFrame *frame = MakeDeAuthFrame(sta->macAdrs, 1, 0);
                             if (frame) {
-                                *frame = 1;
+                                frame->unk_00 = 1;
                                 TxManCtrlFrame(frame);
                                 count++;
                                 continue;

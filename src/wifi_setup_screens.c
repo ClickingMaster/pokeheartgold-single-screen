@@ -195,7 +195,7 @@ extern void ov13_0223C198(void);
 extern int ov13_0223C1DC(void);
 extern int ov13_0223C1F0(void);
 extern void ov13_022363F4(void);
-extern void ov13_02232E04(void);
+extern void WifiSetupSettings_Init(void);
 extern void WifiSetupText_FreeCanvas(void *);
 extern void DWCi_BM_GetWiFiInfo(WifiSetupWiFiInfo *info);
 extern void OS_Terminate(void);
@@ -3031,7 +3031,7 @@ void ov13_022315B0(void) {
     if (b == 0) {
         ov13_0222B8F8(2, 1);
         ov13_0222B934(0, a);
-        WifiSetupApp_SetStateFunc(ov13_02232E04);
+        WifiSetupApp_SetStateFunc(WifiSetupSettings_Init);
     } else if (gWifiSetupTextEntry->flag == 0) {
         ov13_0222B8F8(0, 1);
         ov13_0222B934(1, 0);

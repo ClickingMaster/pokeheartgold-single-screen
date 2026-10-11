@@ -440,5 +440,5 @@ void WSetDefaultParameters(void) {
     b = WL_REG(0x044);
     c = WL_REG(0x044);
     RND_Init(a + (b << 8), c);
-    wlWork->bss.unk_14 = 1;
+    wlWork->bss.receiveDtims = 1;
 }

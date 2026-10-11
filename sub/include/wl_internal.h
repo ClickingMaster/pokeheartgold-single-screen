@@ -160,7 +160,7 @@ typedef struct WlBss {
     u16 powerMgtMode;
     u16 powerState; // WSetPowerState: hardware power state >> 1
     u16 unk_12;
-    u16 unk_14;
+    u16 receiveDtims; // MLME_PwrMgtReqCmd: wake up for the DTIM beacons
     u16 unk_16;
     u16 unk_18;
     u16 unk_1a; // 1 -> 2 -> 0 on the next two WlIntrActEnd; WlIntrTbtt sets power state 2 while it is 2
@@ -331,6 +331,187 @@ typedef struct WlRf {
     u32 unk_0c; // type 2: an RF register value kept by InitRF; types 2/5: bit 16 set: WSetChannel writes it with the channel's flash value
 } WlRf;
 
+// Message header of a request from the WMSP (queued in WlHeap.bufMan[10]); the request's parameters follow it,
+// its confirm starts `length` halfwords after the start of the message.
+typedef struct WlCmdRequest {
+    WlHeapBuf buf;
+    u16 command; // bits 8..15: group (0 MLME, 1 MA, 2 PARAMSET/PARAMGET, 3 DEV), bits 0..7: command
+    vu16 length;
+} WlCmdRequest;
+
+// Confirm header; the command handlers get a pointer to it, set `length` (halfwords) and add their results.
+typedef struct WlCmdCfm {
+    u16 command;
+    u16 length;
+    u16 result;
+} WlCmdCfm;
+
+typedef struct WlCmdConfirm {
+    u8 unk_00[16];
+    WlCmdCfm cfm;
+} WlCmdConfirm;
+
+// Command table entry (WlibCmdTbl_*): minimum request and confirm lengths (halfwords) and the handler.
+typedef struct WlCmdEntry {
+    u16 reqLength;
+    u16 cfmLength;
+    u16 (*func)(WlCmdRequest *req, WlCmdCfm *cfm);
+} WlCmdEntry;
+
+// Command interface state (RequestCmdTask).
+typedef struct WlCmdIf {
+    WlCmdRequest *request; // request being executed (0xFFFFFFFF: none)
+    u16 busy;              // command groups with a request in progress (bit per group)
+    u16 unk_06;
+} WlCmdIf;
+
+// MLME request parameters (after the WlCmdRequest header) and confirms.
+typedef struct WlMlmeResetReq {
+    WlCmdRequest header;
+    u16 initCounter;
+} WlMlmeResetReq;
+
+typedef struct WlMlmePwrMgtReq {
+    WlCmdRequest header;
+    u16 pwrMgtMode;
+    u16 wakeUp;
+    u16 receiveDtims;
+} WlMlmePwrMgtReq;
+
+typedef struct WlMlmeScanReq {
+    WlCmdRequest header;
+    u16 bssid[3];
+    u16 ssidLength;
+    u8 ssid[32];
+    u16 scanType; // 0: active (probe requests)
+    u8 channelList[16];
+    u16 maxChannelTime;
+    u16 unk_4c;
+} WlMlmeScanReq;
+
+typedef struct WlMlmeJoinReq {
+    WlCmdRequest header;
+    u16 timeOut;
+    u16 unk_12[3];
+    u16 bssid[3];
+    u16 ssidLength;
+    u8 ssid[32];
+    u16 capaInfo; // 0x20: short preamble
+    WlRateSet rateSet;
+    u16 beaconPeriod;
+    u16 dtimPeriod;
+    u16 channel;
+} WlMlmeJoinReq;
+
+// Auth / DeAuth / Ass / ReAss / DisAss: the peer, a parameter (algorithm, reason code, listen interval), a time out.
+typedef struct WlMlmePeerReq {
+    WlCmdRequest header;
+    u16 peerMacAdrs[3];
+    u16 param;
+    u16 timeOut;
+} WlMlmePeerReq;
+
+typedef struct WlMlmeStartReq {
+    WlCmdRequest header;
+    u16 ssidLength;
+    u8 ssid[32];
+    u16 beaconPeriod;
+    u16 dtimPeriod;
+    u16 channel;
+    WlRateSet rateSet;
+    u16 gameInfoLength;
+    u8 gameInfo[128];
+} WlMlmeStartReq;
+
+typedef struct WlMlmeMeasChanReq {
+    WlCmdRequest header;
+    u16 unk_10;
+    u16 ccaMode;
+    u16 edThreshold;
+    u16 measureTime;
+    u8 channelList[16];
+} WlMlmeMeasChanReq;
+
+typedef struct WlMlmeAuthCfm {
+    WlCmdCfm header;
+    u16 unk_06;
+    u16 peerMacAdrs[3];
+    u16 algorithm;
+} WlMlmeAuthCfm;
+
+typedef struct WlMlmeDeAuthCfm {
+    WlCmdCfm header;
+    u16 peerMacAdrs[3];
+} WlMlmeDeAuthCfm;
+
+typedef struct WlMlmeScanCfm {
+    WlCmdCfm header;
+    u16 unk_06;
+    u16 unk_08;
+} WlMlmeScanCfm;
+
+typedef struct WlMlmeJoinCfm {
+    WlCmdCfm header;
+    u16 reason;
+} WlMlmeJoinCfm;
+
+typedef struct WlMlmeMeasChanCfm {
+    WlCmdCfm header;
+    u16 unk_06;
+    u16 result[16]; // per channel: channel | busy percentage << 8
+} WlMlmeMeasChanCfm;
+
+// MLME request in progress (the MLME_*ReqCmd handlers and the MLME tasks).
+typedef struct WlMlme {
+    u16 state; // request and its step: 0x10 scan, 0x20 join, 0x30 auth, 0x41 deauth, 0x50 ass, 0x60 reass, 0x71 disass, 0x80 measure channel
+    u16 unk_02;
+
+    union {
+        u8 *frame; // deauth / disass: the frame being sent
+
+        struct {
+            u16 result;
+            u16 reason;
+        } join;
+
+        struct {
+            u16 cfmSpace; // confirm halfwords left for the results
+            u16 channelIndex;
+            u16 unk_08;
+            u16 elapsed; // time spent on the channel
+            u16 step;    // time out per probe
+        } scan;
+
+        struct {
+            u32 samples;
+            u32 total; // 100 per sample with the channel busy
+            u16 power; // power state before the measurement
+            u16 bbp13; // BBP registers 0x13 and 0x35 before the measurement
+            u16 bbp35;
+            u16 unk_12;
+            u16 index;
+            u16 result;
+        } meas;
+    } work;
+
+    union {
+        void *any;
+        WlMlmeScanReq *scan;
+        WlMlmeJoinReq *join;
+        WlMlmePeerReq *peer;
+        WlMlmeMeasChanReq *meas;
+    } req;
+
+    union {
+        WlCmdCfm *header;
+        WlMlmeAuthCfm *auth;
+        WlMlmeDeAuthCfm *deauth;
+        WlMlmeScanCfm *scan;
+        WlMlmeJoinCfm *join;
+        WlMlmeMeasChanCfm *meas;
+    } cfm;
+} WlMlme;
+
 // MAC register self test entry (DiagMacRegister): register offset and the bits that can be written.
 typedef struct WlTestReg {
     u16 offset;
@@ -357,10 +538,8 @@ typedef struct WlWork {
     u32 unk_318;
     WlParam param;
     WlBss bss;
-    u16 unk_404; // pending MLME request (0x13: WCheckSSID accepts an SSID that starts with the own one)
-    u8 unk_406[0x420 - 0x406];
-    u8 *unk_420; // MLME confirm message (IssueMlmeConfirm)
-    u8 unk_424[8];
+    WlMlme mlme;
+    WlCmdIf cmdIf;
     WlTxCtrl txCtrl;
     WlRxCtrl rxCtrl;
     WlCam cam;
@@ -583,6 +762,31 @@ void WlIntrMpEndTask(void);
 void SetParentTbttTxqTask(void);
 WlRxFrame *TakeoutRxFrame(u16 *src, u32 size);
 
+// wl_wait_loop.c
+void WaitLoop_ClrAid(void);
+int WaitLoop_BbpAccess(void);
+int WaitLoop_RfAccess(void);
+
+// wl_cmd_if.c
+void RequestCmdTask(void);
+int CMD_ReservedReqCmd(WlCmdRequest *req, WlCmdCfm *cfm);
+void SendMessageToWmDirect(WlHeapBufMan *man, void *msg);
+void SendMessageToWmTask(void);
+void InitializeCmdIf(void);
+
+// wl_mlme_cmd.c
+int MLME_ResetReqCmd(WlMlmeResetReq *req, WlCmdCfm *cfm);
+int MLME_PwrMgtReqCmd(WlMlmePwrMgtReq *req, WlCmdCfm *cfm);
+int MLME_ScanReqCmd(WlMlmeScanReq *req, WlMlmeScanCfm *cfm);
+int MLME_JoinReqCmd(WlMlmeJoinReq *req, WlMlmeJoinCfm *cfm);
+int MLME_AuthReqCmd(WlMlmePeerReq *req, WlMlmeAuthCfm *cfm);
+int MLME_DeAuthReqCmd(WlMlmePeerReq *req, WlMlmeDeAuthCfm *cfm);
+int MLME_AssReqCmd(WlMlmePeerReq *req, WlCmdCfm *cfm);
+int MLME_ReAssReqCmd(WlMlmePeerReq *req, WlCmdCfm *cfm);
+int MLME_DisAssReqCmd(WlMlmePeerReq *req, WlCmdCfm *cfm);
+int MLME_StartReqCmd(WlMlmeStartReq *req, WlCmdCfm *cfm);
+int MLME_MeasChanReqCmd(WlMlmeMeasChanReq *req, WlMlmeMeasChanCfm *cfm);
+
 // wl_cam.c
 u32 CAM_Search(const u16 *addr);
 u32 CAM_SearchAdd(const u16 *addr);
@@ -641,18 +845,14 @@ void __VENEER_OS_FreeToHeap(u32 id, u32 heap, void *ptr);
 void __VENEER_OS_ExitThread(void);
 
 // defined in the later WL files
-int WaitLoop_BbpAccess(void);
-int WaitLoop_RfAccess(void);
 void StopBeaconFrame(void);
 void StartBeaconFrame(void);
 void InitApList(void);
 void InitTxCtrl(void);
 void InitRxCtrl(void);
 void DeleteAllTxFrames(void);
-void WaitLoop_ClrAid(void);
 void DeleteTxFrames(u32 station);
 void FLASH_DirectRead(u32 addr, u32 size, void *dest);
-void InitializeCmdIf(void);
 void InitializeMLME(void);
 void FLASH_MakeImage(void);
 void FLASH_Read(u32 addr, u32 size, void *dest);
@@ -660,10 +860,9 @@ u32 FLASH_VerifyCheckSum(u32 *checksum);
 void CopyTxFrmToMacBuf(void *frame, void *src);
 void MakeBeaconFrame(void);
 void MakePsPollFrame(u16 aid);
-void SendMessageToWmDirect(WlHeapBufMan *man, void *msg);
 void IssueMlmeConfirm(void);
-u16 *MakeDeAuthFrame(void *macAdrs, u16 reason, u16 unk);
-void TxManCtrlFrame(u16 *frame);
+WlTxHeapFrame *MakeDeAuthFrame(const u16 *macAdrs, u16 reason, u32 unk);
+void TxManCtrlFrame(WlTxHeapFrame *frame);
 void MLME_IssueDeAuthIndication(void *macAdrs, u16 reason);
 int CheckFrameTimeout(WlTxHeapFrame *frame);
 void ResetTxqPri(u32 priority);
@@ -672,6 +871,12 @@ void TxEndKeyData(WlTxDesc *desc);
 void UpdateGameInfoElement(void);
 int MLME_IssueBeaconSendIndication(void);
 void TxqPri(u32 priority);
+WlTxHeapFrame *MakeDisAssFrame(const u16 *macAdrs, u32 reason);
+void DeleteTxFrameByAdrs(const u16 *macAdrs);
+void MLME_AuthTask(void);
+void MLME_AssTask(void);
+void MLME_ReAssTask(void);
+void MLME_MeasChannelTask(void);
 void RxBeaconFrame(WlRxFrame *frame);
 void RxKeyDataFrame(WlRxFrame *frame);
 u32 RxMpFrame(WlRxFrame *frame);

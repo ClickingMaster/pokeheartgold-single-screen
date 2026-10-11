@@ -137,9 +137,9 @@ void WifiSetupBusyIcon_Create(int a);
 void ov13_0222C10C(void);
 void ov13_0222C44C(void);
 void ov13_0222F2AC(void);
-void ov13_022327E0(void);
-void ov13_02232DF4(void);
-void ov13_02232E04(void);
+void WifiSetupErrorScreen_Init(void);
+void WifiSetupErrorScreen_SetCode(void);
+void WifiSetupSettings_Init(void);
 void ov13_022352C0(int a);
 void ov13_02235F80(void);
 void ov13_022363F4(void);
@@ -492,7 +492,7 @@ void ov13_02236F14(void) {
             } else {
                 ov13_0222B934(0, 0);
                 ov13_022352C0(0);
-                WifiSetupApp_SetStateFunc(ov13_02232E04);
+                WifiSetupApp_SetStateFunc(WifiSetupSettings_Init);
             }
             break;
         case 3:
@@ -846,7 +846,7 @@ void ov13_02237B54(void) {
         ov13_0222B8F8(2, 0);
         ov13_0222B934(0, 0);
         ov13_022352C0(1);
-        WifiSetupApp_SetStateFunc(ov13_02232E04);
+        WifiSetupApp_SetStateFunc(WifiSetupSettings_Init);
         break;
     }
 }
@@ -987,7 +987,7 @@ void ov13_022380A8(void) {
     WifiSetupDisplay_HidePlanes(0, 0x15);
     if (ov13_0224F57C == 0) {
         ov13_0222B8F8(0, 1);
-        WifiSetupApp_SetStateFunc(ov13_022327E0);
+        WifiSetupApp_SetStateFunc(WifiSetupErrorScreen_Init);
     } else {
         ov13_0222B8F8(0, 1);
         WifiSetupApp_SetStateFunc(ov13_022381CC);
@@ -1006,7 +1006,7 @@ void ov13_0223813C(void *arg) {
         WifiSetupSound_Play(0x11);
     } else {
         ov00_021FA9D4();
-        ov13_02232DF4();
+        WifiSetupErrorScreen_SetCode();
         WifiSetupSound_Play(0x12);
     }
     WifiSetupApp_SetStateFunc(ov13_0223805C);
@@ -1087,7 +1087,7 @@ void ov13_0223832C(void) {
     ov13_0222B948(0, &mode);
     if (mode == 0) {
         ov13_0222B934(0, 0);
-        WifiSetupApp_SetStateFunc(ov13_02232E04);
+        WifiSetupApp_SetStateFunc(WifiSetupSettings_Init);
         return;
     }
     WifiSetupApp_SetStateFunc(ov13_0222C44C);

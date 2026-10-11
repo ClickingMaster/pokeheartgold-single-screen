@@ -20,20 +20,20 @@ void ov13_0223A2F0(char *buf);
 void ov13_0223A330(char *buf);
 void ov13_0223A374(char *buf);
 void ov13_0223A3B8(char *buf);
-extern Work1B18 *ov13_0224F544;
+extern Work1B18 *gWifiSetupAddressEntry;
 extern const u8 ov13_022463E0[];
 void *WifiSetupHeap_AllocZeroed(u32 size, u32 align);
 void ov13_0222B948(int *out, int a);
-void ov13_02231C8C(void);
+void WifiSetupAddressEntry_LoadGraphics(void);
 void WifiSetupBackground_LoadHeader(int a);
 void WifiSetupMessage_Show(int a, int b, int c);
 void ov13_02227964(int a);
 void *WifiSetupText_InitBgCanvas(int a, int b);
 Oam *WifiSetupOamTemplate_AllocOam(int a, int b);
-void ov13_02232440(void);
-void ov13_0223237C(void);
+void WifiSetupAddressEntry_UpdateCursor(void);
+void WifiSetupAddressEntry_DrawDigits(void);
 void WifiSetupApp_SetStateFunc(void (*fn)(void));
-void ov13_02231D48(void);
+void WifiSetupAddressEntry_FadeIn(void);
 void ov13_02231B18(void);
 extern const struct S80 { u8 pad[8]; Bytes5 vals; u8 rest[11]; } ov13_02245480;
 extern const InitTable ov13_02245498;
@@ -43,26 +43,26 @@ void ov13_02231B18(void) {
     Bytes5 vals = ov13_02245480.vals;
     int idx;
     Work1B18 *work;
-    ov13_0224F544 = WifiSetupHeap_AllocZeroed(sizeof(Work1B18), 4);
+    gWifiSetupAddressEntry = WifiSetupHeap_AllocZeroed(sizeof(Work1B18), 4);
     ov13_0222B948(&idx, 0);
-    funcs.f[idx]((char *)ov13_0224F544->data);
-    work = ov13_0224F544;
+    funcs.f[idx]((char *)gWifiSetupAddressEntry->data);
+    work = gWifiSetupAddressEntry;
     if (memcmp(work->data, ov13_022463E0, 3) != 0) {
         work->result = 3;
     } else {
         MI_CpuFill8(work->data, 0, 12);
-        ov13_0224F544->result = 0;
+        gWifiSetupAddressEntry->result = 0;
     }
-    ov13_02231C8C();
+    WifiSetupAddressEntry_LoadGraphics();
     WifiSetupBackground_LoadHeader(idx + 11);
     WifiSetupMessage_Show(vals.v[idx], -1, 0);
     ov13_02227964(2);
-    ov13_0224F544->bg = WifiSetupText_InitBgCanvas(0, 0);
-    ov13_0224F544->oam = WifiSetupOamTemplate_AllocOam(0, 0x3f);
-    ov13_0224F544->oam->attr2 = (ov13_0224F544->oam->attr2 & ~0xc00) | 0xc00;
-    ov13_02232440();
-    ov13_0223237C();
-    WifiSetupApp_SetStateFunc(ov13_02231D48);
+    gWifiSetupAddressEntry->bg = WifiSetupText_InitBgCanvas(0, 0);
+    gWifiSetupAddressEntry->oam = WifiSetupOamTemplate_AllocOam(0, 0x3f);
+    gWifiSetupAddressEntry->oam->attr2 = (gWifiSetupAddressEntry->oam->attr2 & ~0xc00) | 0xc00;
+    WifiSetupAddressEntry_UpdateCursor();
+    WifiSetupAddressEntry_DrawDigits();
+    WifiSetupApp_SetStateFunc(WifiSetupAddressEntry_FadeIn);
 }
 
 const struct S80 ov13_02245480 = {{0x32,0x35,0x35,0,0xb,0,0x10,0},{{0x3F,0x40,0x41,0x42,0x43}},{0,0,0,0x29}};

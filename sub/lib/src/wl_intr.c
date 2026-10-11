@@ -121,7 +121,7 @@ void WlIntrTbtt(void) {
             if (bss->listenCount == 1) {
                 power = 1;
             }
-            if (bss->unk_14) {
+            if (bss->receiveDtims) {
                 if (bss->dtimCount == 1 || (bss->dtimCount == 0 && bss->dtimPeriod == 1)) {
                     power = 1;
                 }

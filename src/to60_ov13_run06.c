@@ -96,7 +96,7 @@ typedef struct Ov13ObjHolder {
 typedef void (*Ov13Func)(void);
 typedef void (*Ov13ArgFunc)(int);
 
-extern Ov13State ov13_0224F54C;
+extern Ov13State gWifiSetupSettings;
 extern u8 ov13_0224F558;
 extern u8 ov13_0224F55C;
 extern u8 ov13_0224F560;
@@ -138,8 +138,8 @@ extern int WifiSetupInput_IsTouchPressed(Ov13Rect *);
 extern int WifiSetupInput_IsTouchPressedInBox(Ov13Rect *);
 extern void ov13_0223959C(void);
 extern void WifiSetupCursor_Hide(void);
-extern void ov13_02233DCC(void);
-extern void ov13_022344F0(void);
+extern void WifiSetupSettings_DrawRows(void);
+extern void WifiSetupSettings_UpdateObjects(void);
 extern void ov13_02239578(int);
 extern void ov13_02239584(void);
 extern void WifiSetupTask_DestroyLater(int, int);
@@ -153,7 +153,7 @@ extern void ov13_0223C198(void);
 extern int ov13_0223C1F0(void);
 extern void ov13_022393E0(u32);
 extern void WifiSetupApp_SetStateFunc(Ov13Func);
-extern void ov13_022332D8(void);
+extern void WifiSetupSettings_Main(void);
 extern void ov13_02227E40(void);
 extern void ov13_0223A4F4(void);
 extern void WifiSetup_LoadGraphics(void *, void *);
@@ -291,7 +291,7 @@ void ov13_02236938(void);
 void ov13_02236084(void);
 
 extern s32 FX_DivS32(s32, s32);
-int ov13_02234700(void);
+int WifiSetupSettings_GetTouchedItem(void);
 int ov13_022349B8(int x);
 void ov13_02234B48(void);
 void ov13_02234D54(u8 st);
@@ -310,7 +310,7 @@ void ov13_022363F4(void);
 #define SETPRIO3(a) (REG16(a) = (u16)((REG16(a) & ~3) | 3))
 
 int ov13_02234974(int x) {
-    int d = FX_DivS32(ov13_0224F54C.unk4, 0x1D);
+    int d = FX_DivS32(gWifiSetupSettings.unk4, 0x1D);
     int i;
     for (i = 0; i < 4; i++, d++) {
         if (d == x) {
@@ -321,7 +321,7 @@ int ov13_02234974(int x) {
 }
 
 int ov13_022349B8(int x) {
-    int d = FX_DivS32(ov13_0224F54C.unk4, 0x1D);
+    int d = FX_DivS32(gWifiSetupSettings.unk4, 0x1D);
     return d + x;
 }
 
@@ -329,28 +329,28 @@ void ov13_022349DC(int arg) {
     int m;
     ov13_0223959C();
     WifiSetupCursor_Hide();
-    if (ov13_0224F54C.unk4 > 6) {
-        ov13_0224F54C.unk4 -= 6;
+    if (gWifiSetupSettings.unk4 > 6) {
+        gWifiSetupSettings.unk4 -= 6;
     } else {
-        ov13_0224F54C.unk4 = 0;
+        gWifiSetupSettings.unk4 = 0;
     }
-    m = FX_ModS32(ov13_0224F54C.unk4, 0x1D);
+    m = FX_ModS32(gWifiSetupSettings.unk4, 0x1D);
     if (m == 0x17) {
-        ov13_02233DCC();
+        WifiSetupSettings_DrawRows();
         return;
     }
     if (m > 0x17) {
-        ov13_0224F54C.unk4 += 0x1D - m;
+        gWifiSetupSettings.unk4 += 0x1D - m;
         m = 0;
     }
-    ov13_022344F0();
+    WifiSetupSettings_UpdateObjects();
     if (m != 0) {
         return;
     }
-    ov13_02239578(ov13_0224F54C.unk4 * 0x37 / 0x91);
+    ov13_02239578(gWifiSetupSettings.unk4 * 0x37 / 0x91);
     ov13_02239584();
     ov13_02234CA4();
-    ov13_0224F54C.unk8->unk38 = 0;
+    gWifiSetupSettings.unk8->unk38 = 0;
     WifiSetupTask_DestroyLater(0, arg);
 }
 
@@ -358,125 +358,125 @@ void ov13_02234AA4(int arg) {
     int m;
     ov13_0223959C();
     WifiSetupCursor_Hide();
-    ov13_0224F54C.unk4 += 6;
-    m = FX_ModS32(ov13_0224F54C.unk4, 0x1D);
+    gWifiSetupSettings.unk4 += 6;
+    m = FX_ModS32(gWifiSetupSettings.unk4, 0x1D);
     if (m >= 6) {
-        ov13_022344F0();
+        WifiSetupSettings_UpdateObjects();
         return;
     }
-    ov13_0224F54C.unk4 -= m;
-    ov13_02233DCC();
-    ov13_02239578(ov13_0224F54C.unk4 * 0x37 / 0x91);
+    gWifiSetupSettings.unk4 -= m;
+    WifiSetupSettings_DrawRows();
+    ov13_02239578(gWifiSetupSettings.unk4 * 0x37 / 0x91);
     ov13_02239584();
     ov13_02234CA4();
-    ov13_0224F54C.unk8->unk38 = 0;
+    gWifiSetupSettings.unk8->unk38 = 0;
     WifiSetupTask_DestroyLater(0, arg);
 }
 
 void ov13_02234B48(void) {
     int d;
     int m;
-    if (ov13_0224F54C.unk8->unk44 == 0) {
+    if (gWifiSetupSettings.unk8->unk44 == 0) {
         return;
     }
-    d = FX_DivS32(ov13_0224F54C.unk4, 0x1D);
-    m = FX_ModS32(ov13_0224F54C.unk4, 0x1D) - 0x33;
+    d = FX_DivS32(gWifiSetupSettings.unk4, 0x1D);
+    m = FX_ModS32(gWifiSetupSettings.unk4, 0x1D) - 0x33;
     d = ov13_022455E8[d];
     G2_SetBG0Offset(0, m);
     G2_SetBG2Offset(0, m + d);
-    ov13_0224F54C.unk8->unk44 = 0;
+    gWifiSetupSettings.unk8->unk44 = 0;
 }
 
 void ov13_02234BCC(void) {
     Ov13Rect rect;
     Ov13Buf14 buf = ov13_02245518;
-    int idx = buf.a[ov13_0224F54C.state];
+    int idx = buf.a[gWifiSetupSettings.state];
     if (idx >= 3) {
         WifiSetupCursor_ShowPair(3, ov13_022455A2[idx].x, ov13_022455A2[idx].w, ov13_022455A2[idx].y);
         return;
     }
     rect = ov13_022455A2[idx];
-    rect.y += ov13_0224F54C.unk2 * 0x1D;
+    rect.y += gWifiSetupSettings.unk2 * 0x1D;
     WifiSetupCursor_ShowPair(1, rect.x, rect.w, rect.y);
 }
 
 void ov13_02234CA4(void) {
     Ov13Save *save;
     int n;
-    u8 st = ov13_0224F54C.state;
+    u8 st = gWifiSetupSettings.state;
     if ((u8)(st + 245) <= 2) {
         ov13_02234BCC();
         return;
     }
     save = ov13_02239FF0();
-    n = ov13_0224F54C.unk2 + FX_DivS32(ov13_0224F54C.unk4, 0x1D);
+    n = gWifiSetupSettings.unk2 + FX_DivS32(gWifiSetupSettings.unk4, 0x1D);
     switch (n) {
     case 2:
         if (save->unkF5) {
-            ov13_0224F54C.state = 2;
+            gWifiSetupSettings.state = 2;
         } else {
-            ov13_0224F54C.state = 3;
+            gWifiSetupSettings.state = 3;
         }
         break;
     case 6:
         if (save->unkF6) {
-            ov13_0224F54C.state = 7;
+            gWifiSetupSettings.state = 7;
         } else {
-            ov13_0224F54C.state = 8;
+            gWifiSetupSettings.state = 8;
         }
         break;
     default:
-        ov13_0224F54C.state = ov13_022455DC[n];
+        gWifiSetupSettings.state = ov13_022455DC[n];
         break;
     }
     ov13_02234BCC();
 }
 
 void ov13_02234D54(u8 st) {
-    ov13_0224F54C.state = st;
-    ov13_0224F54C.unk2 = ov13_02234974(ov13_022455F4[st]);
+    gWifiSetupSettings.state = st;
+    gWifiSetupSettings.unk2 = ov13_02234974(ov13_022455F4[st]);
     ov13_02234BCC();
 }
 
 void ov13_02234D84(int key) {
     Ov13Save *save = ov13_02239FF0();
     int ret = 0;
-    u8 st = ov13_0224F54C.state;
+    u8 st = gWifiSetupSettings.state;
     if (st == 8 && save->unkF5 == 0 && (key == 0 || key == 2)) {
         return;
     }
     switch (st) {
     case 0:
         if (key == 1) {
-            ov13_0224F54C.state = 11;
+            gWifiSetupSettings.state = 11;
         } else if (key == 3) {
-            ov13_0224F54C.unk2++;
+            gWifiSetupSettings.unk2++;
         } else {
             ret = 2;
         }
         break;
     case 10:
         if (key == 1) {
-            ov13_0224F54C.unk2--;
+            gWifiSetupSettings.unk2--;
         } else if (key == 3) {
-            ov13_0224F54C.state = ov13_0224F54C.unk8->unk42;
+            gWifiSetupSettings.state = gWifiSetupSettings.unk8->unk42;
         } else {
             ret = 2;
         }
         break;
     case 11:
         if (key == 1) {
-            if (ov13_0224F54C.unk8->unk47) {
+            if (gWifiSetupSettings.unk8->unk47) {
                 return;
             }
             WifiSetupSound_Play(9);
-            ov13_0224F54C.unk8->unk47 = 1;
+            gWifiSetupSettings.unk8->unk47 = 1;
             return;
         } else if (key == 3) {
-            ov13_0224F54C.state = 0;
-            ov13_0224F54C.unk2 = 0;
-            ov13_0224F54C.unk4 = 0;
-            ov13_02233DCC();
+            gWifiSetupSettings.state = 0;
+            gWifiSetupSettings.unk2 = 0;
+            gWifiSetupSettings.unk4 = 0;
+            WifiSetupSettings_DrawRows();
             ov13_02239578(0);
         } else {
             ret = 2;
@@ -484,54 +484,54 @@ void ov13_02234D84(int key) {
         break;
     case 12:
     case 13:
-        ov13_0224F54C.unk8->unk42 = st;
+        gWifiSetupSettings.unk8->unk42 = st;
         if (key == 1) {
-            ov13_0224F54C.state = 10;
-            ov13_0224F54C.unk2 = 3;
-            ov13_0224F54C.unk4 = 0x91;
-            ov13_02233DCC();
+            gWifiSetupSettings.state = 10;
+            gWifiSetupSettings.unk2 = 3;
+            gWifiSetupSettings.unk4 = 0x91;
+            WifiSetupSettings_DrawRows();
             ov13_02239578(0x37);
         } else if (key == 3) {
-            if (ov13_0224F54C.unk8->unk47) {
+            if (gWifiSetupSettings.unk8->unk47) {
                 return;
             }
             WifiSetupSound_Play(9);
-            ov13_0224F54C.unk8->unk47 = 1;
+            gWifiSetupSettings.unk8->unk47 = 1;
             return;
         } else if (st == 12) {
-            ov13_0224F54C.state = 13;
+            gWifiSetupSettings.state = 13;
         } else {
-            ov13_0224F54C.state = 12;
+            gWifiSetupSettings.state = 12;
         }
         break;
     default:
         if (key == 1) {
-            if (ov13_0224F54C.unk2 != 0) {
-                ov13_0224F54C.unk2--;
+            if (gWifiSetupSettings.unk2 != 0) {
+                gWifiSetupSettings.unk2--;
                 break;
             }
             WifiSetupSound_Play(0x13);
-            ov13_0224F54C.unk8->unk38 = WifiSetupTask_Create(0, ov13_022349DC, 0, 0x78);
+            gWifiSetupSettings.unk8->unk38 = WifiSetupTask_Create(0, ov13_022349DC, 0, 0x78);
             return;
         }
         if (key == 3) {
-            if (ov13_0224F54C.unk2 < 3) {
-                ov13_0224F54C.unk2++;
+            if (gWifiSetupSettings.unk2 < 3) {
+                gWifiSetupSettings.unk2++;
                 break;
             }
             WifiSetupSound_Play(0x13);
-            ov13_0224F54C.unk8->unk38 = WifiSetupTask_Create(0, ov13_02234AA4, 0, 0x78);
+            gWifiSetupSettings.unk8->unk38 = WifiSetupTask_Create(0, ov13_02234AA4, 0, 0x78);
             return;
         }
         ret = 2;
         if (st == 2) {
-            ov13_0224F54C.state = 3;
+            gWifiSetupSettings.state = 3;
         } else if (st == 3) {
-            ov13_0224F54C.state = 2;
+            gWifiSetupSettings.state = 2;
         } else if (st == 7) {
-            ov13_0224F54C.state = 8;
+            gWifiSetupSettings.state = 8;
         } else if (st == 8) {
-            ov13_0224F54C.state = 7;
+            gWifiSetupSettings.state = 7;
         } else {
             break;
         }
@@ -550,16 +550,16 @@ void ov13_02234D84(int key) {
 }
 
 void ov13_02235074(void) {
-    ov13_02239378(ov13_0224F54C.unk8->unk10, ov13_022454F8[ov13_0224F54C.state - 11], ov13_022454F8[ov13_0224F54C.state - 11]);
+    ov13_02239378(gWifiSetupSettings.unk8->unk10, ov13_022454F8[gWifiSetupSettings.state - 11], ov13_022454F8[gWifiSetupSettings.state - 11]);
 }
 
 void ov13_022350A8(void) {
     int i;
     for (i = 0; i < 4; i++) {
-        if (ov13_0224F54C.unk8->unk4[i] != 0) {
-            ov13_0224F54C.unk8->unk4[i]--;
-            if (ov13_0224F54C.unk8->unk4[i] == 0) {
-                ov13_02233DCC();
+        if (gWifiSetupSettings.unk8->unk4[i] != 0) {
+            gWifiSetupSettings.unk8->unk4[i]--;
+            if (gWifiSetupSettings.unk8->unk4[i] == 0) {
+                WifiSetupSettings_DrawRows();
             }
         }
     }
@@ -569,13 +569,13 @@ void ov13_022350FC(void) {
     Ov13Buf4 buf = ov13_022454FC;
     int i;
     for (i = 0; i < 4; i++) {
-        if (ov13_0224F54C.state == buf.a[i]) {
-            ov13_0224F54C.unk8->unk4[i] = 0x14;
+        if (gWifiSetupSettings.state == buf.a[i]) {
+            gWifiSetupSettings.unk8->unk4[i] = 0x14;
             if (i & 1) {
-                ov13_0224F54C.unk8->unk4[i - 1] = 0;
+                gWifiSetupSettings.unk8->unk4[i - 1] = 0;
                 return;
             }
-            ov13_0224F54C.unk8->unk4[i + 1] = 0;
+            gWifiSetupSettings.unk8->unk4[i + 1] = 0;
             return;
         }
     }
@@ -609,7 +609,7 @@ void ov13_02235260(void) {
     }
     WifiSetupSound_Play(6);
     ov13_0223C198();
-    ov13_022393E0(ov13_0224F54C.unk8->unkC);
+    ov13_022393E0(gWifiSetupSettings.unk8->unkC);
     WifiSetupApp_SetStateFunc(ov13_022352A0);
 }
 
@@ -617,11 +617,11 @@ void ov13_022352A0(void) {
     if (ov13_0223C1F0()) {
         return;
     }
-    WifiSetupApp_SetStateFunc(ov13_022332D8);
+    WifiSetupApp_SetStateFunc(WifiSetupSettings_Main);
 }
 
 void ov13_022352C0(u8 x) {
-    ov13_0224F54C.unk1 = x;
+    gWifiSetupSettings.unk1 = x;
 }
 
 void ov13_022352D0(void) {
