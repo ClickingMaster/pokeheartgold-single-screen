@@ -2644,11 +2644,11 @@
 	.public ov49_02259AA4
 	.public ov49_02259C90
 	.public ov49_02259EF8
-	.public ov49_02259FE8
+	.public WiFiPlazaRoom_GetLobby
 	.public ov49_02259FEC
-	.public ov49_02259FF0
-	.public ov49_02259FF8
-	.public ov49_0225A000
+	.public WiFiPlazaRoom_GetObjManager
+	.public WiFiPlazaRoom_GetModels
+	.public WiFiPlazaRoom_GetMap
 	.public ov49_0225A008
 	.public ov49_0225A010
 	.public ov49_0225A018
@@ -2663,13 +2663,13 @@
 	.public ov49_0225A064
 	.public ov49_0225A06C
 	.public ov49_0225A084
-	.public ov49_0225A08C
+	.public WiFiPlazaRoom_PrintMessage
 	.public ov49_0225A09C
-	.public ov49_0225A0AC
+	.public WiFiPlazaRoom_IsMessageFinished
 	.public ov49_0225A0BC
 	.public ov49_0225A0CC
 	.public ov49_0225A0DC
-	.public ov49_0225A0EC
+	.public WiFiPlazaRoom_CloseMessage
 	.public ov49_0225A0FC
 	.public ov49_0225A10C
 	.public ov49_0225A120
@@ -2686,11 +2686,11 @@
 	.public ov49_0225A22C
 	.public ov49_0225A23C
 	.public ov49_0225A24C
-	.public ov49_0225A264
+	.public WiFiPlazaRoom_OpenYesNoMenu
 	.public ov49_0225A294
-	.public ov49_0225A2C4
-	.public ov49_0225A2F8
-	.public ov49_0225A30C
+	.public WiFiPlazaRoom_GetYesNoResult
+	.public WiFiPlazaRoom_CloseYesNoMenu
+	.public WiFiPlazaRoom_GetMsgString
 	.public ov49_0225A31C
 	.public ov49_0225A334
 	.public ov49_0225A37C
@@ -3172,26 +3172,26 @@
 	.public ov49_022682D4
 	.public ov49_02268334
 	.public ov49_022683FC
-	.public ov49_02268490
-	.public ov49_022684F4
-	.public ov49_022684FC
-	.public ov49_02268588
-	.public ov49_022685F8
+	.public WiFiPlazaLight_Create
+	.public WiFiPlazaLight_Delete
+	.public WiFiPlazaLight_Update
+	.public WiFiPlazaLight_FadeToColorSet
+	.public WiFiPlazaLight_FadeLight1
 	.public ov49_02268620
-	.public ov49_02268624
-	.public ov49_02268640
-	.public ov49_02268664
-	.public ov49_022686C0
-	.public ov49_022686E4
-	.public ov49_022686F0
-	.public ov49_02268764
-	.public ov49_02268850
-	.public ov49_02268870
+	.public WiFiPlazaLight_PackColor
+	.public WiFiPlazaLight_UnpackColor
+	.public WiFiPlazaLight_LerpColor
+	.public WiFiPlazaLight_UnpackColorSet
+	.public WiFiPlazaLight_UnpackLight1
+	.public WiFiPlazaLight_Apply
+	.public WiFiPlazaEvent_Create
+	.public WiFiPlazaEvent_Delete
+	.public WiFiPlazaEvent_Update
 	.public ov49_02268968
-	.public ov49_02268974
-	.public ov49_022689A0
+	.public WiFiPlazaEvent_GetColorSet
+	.public WiFiPlazaEvent_GetLight1Set
 	.public ov49_022689D4
-	.public ov49_02268A00
+	.public WiFiPlazaEvent_TurnOffLight2
 	.public ov49_02268A0C
 	.public ov49_02268A6C
 	.public ov49_02268A7C
@@ -3207,9 +3207,9 @@
 	.public ov49_02268CCC
 	.public ov49_02268CDC
 	.public ov49_02268CEC
-	.public ov49_02268D0C
-	.public ov49_02268D94
-	.public ov49_02268DB0
+	.public WiFiPlazaEvent_GetModelList
+	.public WiFiPlazaEvent_StartLoopSE
+	.public WiFiPlazaEvent_StopLoopSE
 	.public ov49_02268DCC
 	.public ov49_02268FAC
 	.public ov49_02269090
@@ -3324,8 +3324,8 @@
 	.public ov49_0226A7A8
 	.public ov49_0226A7B8
 	.public ov49_0226A7C8
-	.public ov49_0226A7D8
-	.public ov49_0226A7E0
+	.public sWiFiPlazaLight1Colors
+	.public sWiFiPlazaLightColorSets
 	.public ov49_0226A81C
 	.public ov49_0226A820
 	.public ov49_0226A824
@@ -3380,11 +3380,11 @@
 	.public ov49_0225974C
 	.public ov49_02259758
 	.public ov49_02259A3C
-	.public ov49_02259FE8
+	.public WiFiPlazaRoom_GetLobby
 	.public ov49_02259FEC
-	.public ov49_02259FF0
-	.public ov49_02259FF8
-	.public ov49_0225A000
+	.public WiFiPlazaRoom_GetObjManager
+	.public WiFiPlazaRoom_GetModels
+	.public WiFiPlazaRoom_GetMap
 	.public ov49_0225A008
 	.public ov49_0225A010
 	.public ov49_0225A018
@@ -3501,10 +3501,10 @@
 	.public ov49_02266748
 	.public ov49_02266754
 	.public ov49_02266760
-	.public ov49_022684F4
+	.public WiFiPlazaLight_Delete
 	.public ov49_02268620
-	.public ov49_02268624
-	.public ov49_022686E4
+	.public WiFiPlazaLight_PackColor
+	.public WiFiPlazaLight_UnpackLight1
 	.public ov49_02268968
 	.public ov49_02268B04
 	.public ov49_02268B08
@@ -4155,10 +4155,10 @@ ov49_0226A7C8: ; 0x0226A7C8
 	.byte 0x13, 0x14, 0x1F, 0x23, 0x20, 0x22, 0x1B, 0x1E
 	.byte 0x24, 0x1D, 0x18, 0x21, 0x1E, 0x15, 0x22, 0x1F
 
-ov49_0226A7D8: ; 0x0226A7D8
+sWiFiPlazaLight1Colors: ; 0x0226A7D8
 	.byte 0xCE, 0x39, 0x94, 0x52, 0xFF, 0x7F, 0x08, 0x21
 
-ov49_0226A7E0: ; 0x0226A7E0
+sWiFiPlazaLightColorSets: ; 0x0226A7E0
 	.byte 0xF7, 0x66, 0x10, 0x42, 0xCE, 0x39, 0x94, 0x52, 0x10, 0x42, 0x4A, 0x41, 0x10, 0x42, 0xCE, 0x39
 	.byte 0x94, 0x52, 0x10, 0x42, 0x08, 0x31, 0x10, 0x42, 0xCE, 0x39, 0x94, 0x52, 0x10, 0x42, 0xA5, 0x20
 	.byte 0x10, 0x42, 0xAD, 0x39, 0x94, 0x52, 0x10, 0x42, 0x63, 0x1C, 0x10, 0x42, 0x4A, 0x31, 0x94, 0x52

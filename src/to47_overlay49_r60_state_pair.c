@@ -21,8 +21,8 @@ extern void *ov49_0225EF3C(void *);
 extern void ov49_0225EF8C(void *, u32);
 extern u32 ov49_0225EF88(void *);
 extern void ov49_0225EF90(void *);
-extern void *ov49_02259FE8(void *);
-extern void *ov49_02259FF0(void *);
+extern void *WiFiPlazaRoom_GetLobby(void *);
+extern void *WiFiPlazaRoom_GetObjManager(void *);
 extern void *ov49_02258D70(void *, u32);
 extern void *ov49_02258DAC(void *);
 extern u32 ov49_02258E34(void *);
@@ -50,7 +50,7 @@ extern void *ov49_0225EF84(void *);
 extern void *ov49_0225EF40(void *, u32);
 extern void ov49_0225EF68(void *);
 extern void ov49_0225EF98(void *, u32, const void *, u32);
-extern void *ov49_02259FF8(void *);
+extern void *WiFiPlazaRoom_GetModels(void *);
 extern int ov45_0222ADA8(void *, int);
 extern void ov45_0222AE08(int, int *, int *);
 extern void ov49_0225E420(void *, int, int, VecFx32 *);
@@ -93,9 +93,9 @@ BOOL ov49_02261930(void *state, void *ctx, u32 index) {
     fx32 delta;
     fx32 offset;
 
-    field = ov49_02259FE8(ctx);
-    map = ov49_02259FF0(ctx);
-    third = ov49_02259FF8(ctx);
+    field = WiFiPlazaRoom_GetLobby(ctx);
+    map = WiFiPlazaRoom_GetObjManager(ctx);
+    third = WiFiPlazaRoom_GetModels(ctx);
     work = (Ov49R60Work *)ov49_0225EF84(state);
 
     switch (ov49_0225EF88(state)) {
@@ -182,8 +182,8 @@ BOOL ov49_02261B74(void *state, void *ctx, u32 index) {
     void *manager;
 
     work = ov49_0225EF3C(state);
-    field = ov49_02259FE8(ctx);
-    map = ov49_02259FF0(ctx);
+    field = WiFiPlazaRoom_GetLobby(ctx);
+    map = WiFiPlazaRoom_GetObjManager(ctx);
     object = ov49_02258D70(map, index);
     manager = ov49_02258DAC(map);
 

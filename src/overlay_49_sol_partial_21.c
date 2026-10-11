@@ -33,7 +33,7 @@ extern void ov49_02267C20(void *, u32, u32);
 extern void ov49_02266B28(void *, u32, u32);
 extern void ov49_02267908(void *, u32, u32);
 extern void ov49_02267AF0(void *, u32, u32);
-extern void ov49_02268640(void *);
+extern void WiFiPlazaLight_UnpackColor(void *);
 extern void ov49_02269154(void *);
 extern void ov49_0225E82C(void *, u32, u32);
 extern void ModelInstance_SetVisible();

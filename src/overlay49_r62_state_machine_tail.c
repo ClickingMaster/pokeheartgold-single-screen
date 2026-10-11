@@ -7,13 +7,13 @@ typedef struct Ov49R62MenuWork {
 
 #define SHOW_MESSAGE(ctx, work, message, next)                    \
     do {                                                          \
-        ov49_0225A08C((ctx), ov49_0225A30C((ctx), 1, (message))); \
+        WiFiPlazaRoom_PrintMessage((ctx), WiFiPlazaRoom_GetMsgString((ctx), 1, (message))); \
         (work)->nextState = (next);                               \
     } while (0)
 
 BOOL ov49_022644E8(void *state, void *ctx) {
     Ov49R62MenuWork *work = ov49_0225EF84(state);
-    void *object = ov49_02259FE8(ctx);
+    void *object = WiFiPlazaRoom_GetLobby(ctx);
     u32 selected;
     u32 choice;
 
@@ -227,14 +227,14 @@ cancel_menu3:
         ov49_0225EF8C(state, 0x17);
         break;
     case 23:
-        if (ov49_0225A0AC(ctx)) {
+        if (WiFiPlazaRoom_IsMessageFinished(ctx)) {
             ov49_0225EF8C(state, work->nextState);
         }
         break;
     case 24:
         ov49_0225EF68(state);
-        ov49_0225A0EC(ctx);
-        ctx = ov49_02259FF0(ctx);
+        WiFiPlazaRoom_CloseMessage(ctx);
+        ctx = WiFiPlazaRoom_GetObjManager(ctx);
         ov49_02258EEC(ctx, ov49_02258DAC(ctx), 1);
         return TRUE;
     }

@@ -62,13 +62,13 @@ void ov49_02262E10(Ov49R62Status *status, void *ctx, u32 force, u32 mode) {
     if (status->flags & 1) {
         ov49_0225A24C(ctx, 0, 0, 0x68, 0x10);
         ov49_0225A37C(ctx, status->selection, 0);
-        message = ov49_0225A30C(ctx, 1, 0x36);
+        message = WiFiPlazaRoom_GetMsgString(ctx, 1, 0x36);
         ov49_0225A23C(ctx, message, 0, 0);
     }
     if (status->flags & 4) {
         ov49_0225A24C(ctx, 0, 0x10, 0x68, 0x10);
         if (savedMode == 1 && status->value2 == 0 && status->value0 == 1) {
-            message = ov49_0225A30C(ctx, 1, 0x45);
+            message = WiFiPlazaRoom_GetMsgString(ctx, 1, 0x45);
             x = 0x68 - FontID_String_GetWidth(0, message, 0);
             ov49_0225A23C(ctx, message, x, 0x10);
         }
@@ -77,13 +77,13 @@ void ov49_02262E10(Ov49R62Status *status, void *ctx, u32 force, u32 mode) {
         ov49_0225A24C(ctx, 0, 0x20, 0x68, 0x20);
         ov49_0225A31C(ctx, status->value1, 1, 1, 2);
         ov49_0225A31C(ctx, 4 - status->value1, 1, 0, 2);
-        message = ov49_0225A30C(ctx, 1, 0x44);
+        message = WiFiPlazaRoom_GetMsgString(ctx, 1, 0x44);
         ov49_0225A23C(ctx, message, 0, 0x20);
     }
     if (status->enabled == 1 && (status->flags & 8)) {
         ov49_0225A24C(ctx, 0, 0x40, 0x68, 0x10);
         ov49_0225A31C(ctx, status->value4, 2, 0, 2);
-        message = ov49_0225A30C(ctx, 0, 0xF);
+        message = WiFiPlazaRoom_GetMsgString(ctx, 0, 0xF);
         ov49_0225A23C(ctx, message, 0, 0x40);
     }
     status->flags = 0;

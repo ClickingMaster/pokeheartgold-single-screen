@@ -12,10 +12,10 @@ typedef struct Config49 {
 } Config49;
 
 void ov49_0225EF8C(void *, u8);
-BOOL ov49_0225A0AC(void *);
+BOOL WiFiPlazaRoom_IsMessageFinished(void *);
 u32 WiFiPlazaPlayer_GetLanguage(void *);
-void *ov49_0225A30C(void *, u32, u32);
-void ov49_0225A08C(void *, void *);
+void *WiFiPlazaRoom_GetMsgString(void *, u32, u32);
+void WiFiPlazaRoom_PrintMessage(void *, void *);
 void ov49_0225A3AC(void *, u32, void *);
 void ov49_0225A3BC(void *, u32, void *);
 void ov49_0225A3CC(void *, u32, void *);
@@ -27,7 +27,7 @@ void *WiFiPlazaWork_GetPlayer(void *, u8);
 u32 WiFiPlazaPlayer_IsLanguageValid(void *);
 void *ov45_0222AAC8(void *);
 void ov49_0225A39C(void *, void *, void *);
-void ov49_02259FE8(void *);
+void WiFiPlazaRoom_GetLobby(void *);
 u32 ov45_0222B094(void);
 void ov49_0225A0CC(void *);
 void ov49_0225A334(void *, u8, u32);

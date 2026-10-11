@@ -34,7 +34,7 @@ extern void ov49_02267C20(void *, u32, u32);
 extern void ov49_02266B28(void *, u32, u32);
 extern void ov49_02267908(void *, u32, u32);
 extern void ov49_02267AF0(void *, u32, u32);
-extern void ov49_02268640(void *);
+extern void WiFiPlazaLight_UnpackColor(void *);
 extern void ov49_02269154(void *);
 extern void ov49_0225E82C(void *, u32, u32);
 extern void ModelInstance_SetVisible();
@@ -54,7 +54,7 @@ extern void ov49_0225BF80(void *);
 extern void ov49_0225CAA8(void *);
 extern void Camera_UnsetStaticPtr(void *);
 extern void Camera_Delete(void *);
-extern void ov49_0225A08C(void *, void *);
+extern void WiFiPlazaRoom_PrintMessage(void *, void *);
 extern void ov49_0225A334(void *, u8, u32);
 extern void *ov49_02264C04(void *, u8, u32);
 
@@ -74,6 +74,6 @@ void ov49_02264F24(void *event, void *object) {
     if (U8_AT(event, 0xD) == 1 && S16_AT(event, 0xE) == 0x1C2) {
         ov49_0225A334(object, U8_AT(event, 3), 0);
         value = ov49_02264C04(object, U8_AT(event, 3), 0x2AB);
-        ov49_0225A08C(object, value);
+        WiFiPlazaRoom_PrintMessage(object, value);
     }
 }

@@ -6,9 +6,9 @@ BOOL ov49_0225FA14(void *controller, void *work, u32 arg) {
     u16 *data;
     void *entry;
 
-    selection = ov49_02259FE8(work);
+    selection = WiFiPlazaRoom_GetLobby(work);
     data = ov49_02259FEC(work);
-    object = ov49_02259FF0(work);
+    object = WiFiPlazaRoom_GetObjManager(work);
     entry = ov49_02258DAC(object);
 
     switch (ov49_0225EF88(controller)) {
@@ -41,12 +41,12 @@ BOOL ov49_0225FA14(void *controller, void *work, u32 arg) {
         break;
     case 3:
         ov49_0225A37C(work, data[4], 0);
-        ov49_0225A08C(work, ov49_0225A30C(work, 0, 0x15));
+        WiFiPlazaRoom_PrintMessage(work, WiFiPlazaRoom_GetMsgString(work, 0, 0x15));
         ov49_0225EF90(controller);
         break;
     case 4:
-        if (ov49_0225A0AC(work) == 1) {
-            ov49_0225A0EC(work);
+        if (WiFiPlazaRoom_IsMessageFinished(work) == 1) {
+            WiFiPlazaRoom_CloseMessage(work);
             ov49_0225EF90(controller);
         }
         break;
@@ -68,9 +68,9 @@ BOOL ov49_0225FB5C(void *controller, void *work, u32 arg) {
     void *entry;
 
     message = ov49_0225A010(work);
-    object = ov49_02259FF0(work);
+    object = WiFiPlazaRoom_GetObjManager(work);
     entry = ov49_02258DAC(object);
-    selection = ov49_02259FE8(work);
+    selection = WiFiPlazaRoom_GetLobby(work);
     data = ov49_02259FEC(work);
 
     switch (ov49_0225EF88(controller)) {
@@ -100,12 +100,12 @@ BOOL ov49_0225FB5C(void *controller, void *work, u32 arg) {
         break;
     case 3:
         ov49_0225A37C(work, data[4], 0);
-        ov49_0225A08C(work, ov49_0225A30C(work, 0, 8));
+        WiFiPlazaRoom_PrintMessage(work, WiFiPlazaRoom_GetMsgString(work, 0, 8));
         ov49_0225EF90(controller);
         break;
     case 4:
-        if (ov49_0225A0AC(work) == 1) {
-            ov49_0225A0EC(work);
+        if (WiFiPlazaRoom_IsMessageFinished(work) == 1) {
+            WiFiPlazaRoom_CloseMessage(work);
             ov49_0225EF90(controller);
         }
         break;
@@ -120,9 +120,9 @@ BOOL ov49_0225FB5C(void *controller, void *work, u32 arg) {
 }
 
 BOOL ov49_0225FCA8(void *controller, void *work, u32 arg) {
-    void *selection = ov49_02259FE8(work);
+    void *selection = WiFiPlazaRoom_GetLobby(work);
     u16 *data = ov49_02259FEC(work);
-    void *object = ov49_02259FF0(work);
+    void *object = WiFiPlazaRoom_GetObjManager(work);
     void *entry = ov49_02258DAC(object);
 
     switch (ov49_0225EF88(controller)) {
@@ -149,12 +149,12 @@ BOOL ov49_0225FCA8(void *controller, void *work, u32 arg) {
         }
         break;
     case 3:
-        ov49_0225A08C(work, ov49_0225A30C(work, 1, 0x5B));
+        WiFiPlazaRoom_PrintMessage(work, WiFiPlazaRoom_GetMsgString(work, 1, 0x5B));
         ov49_0225EF90(controller);
         break;
     case 4:
-        if (ov49_0225A0AC(work) == 1) {
-            ov49_0225A0EC(work);
+        if (WiFiPlazaRoom_IsMessageFinished(work) == 1) {
+            WiFiPlazaRoom_CloseMessage(work);
             ov49_0225EF90(controller);
         }
         break;

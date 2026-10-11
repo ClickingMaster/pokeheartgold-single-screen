@@ -4,7 +4,7 @@
 
 extern void GF_AssertFail(void);
 
-extern u32 ov49_02259FF0(void *p);
+extern u32 WiFiPlazaRoom_GetObjManager(void *p);
 extern u32 ov49_02258DAC(void *p);
 extern u32 ov49_02258E60(void *p, u32 a);
 extern void ov49_0225A53C(void *p, u32 a);
@@ -15,14 +15,14 @@ extern void ov45_0222AE08(void *p, fx32 *a, fx32 *b);
 extern void ov49_0225E420(void *p, fx32 a, fx32 b, VecFx32 *v);
 extern u32 ov49_0225EF88(void *p);
 extern void ov49_0225EF90(void *p);
-extern u32 ov49_02259FE8(void *p);
+extern u32 WiFiPlazaRoom_GetLobby(void *p);
 extern u32 ov45_0222A330(void *p);
 extern u32 ov45_0222A374(void *p);
-extern u32 ov49_0225A30C(void *p, u32 a, u32 b);
-extern void ov49_0225A08C(void *p, u32 a);
+extern u32 WiFiPlazaRoom_GetMsgString(void *p, u32 a, u32 b);
+extern void WiFiPlazaRoom_PrintMessage(void *p, u32 a);
 extern void PlaySE(u32 id);
-extern u32 ov49_0225A0AC(void *p);
-extern void ov49_0225A0EC(void *p);
+extern u32 WiFiPlazaRoom_IsMessageFinished(void *p);
+extern void WiFiPlazaRoom_CloseMessage(void *p);
 extern void ov49_02258EEC(void *, void *, int);
 extern u32 ov49_0225A520(void *p, fx32 a);
 extern BOOL ov49_0225F438(void *p);
@@ -145,22 +145,22 @@ BOOL ov49_02260D90(void *a, void *b) {
     void *t;
     switch (ov49_0225EF88(a)) {
     case 0:
-        t = (void *)ov49_02259FE8(b);
+        t = (void *)WiFiPlazaRoom_GetLobby(b);
         if (ov45_0222A330(t) == 1) {
-            v = ov49_0225A30C(b, 1, 3);
+            v = WiFiPlazaRoom_GetMsgString(b, 1, 3);
         } else if (ov45_0222A374(t) == 1) {
-            v = ov49_0225A30C(b, 1, 0x4E);
+            v = WiFiPlazaRoom_GetMsgString(b, 1, 0x4E);
         } else {
-            v = ov49_0225A30C(b, 1, 2);
+            v = WiFiPlazaRoom_GetMsgString(b, 1, 2);
         }
-        ov49_0225A08C(b, v);
+        WiFiPlazaRoom_PrintMessage(b, v);
         PlaySE(0x5DC);
         ov49_0225EF90(a);
         break;
     case 1:
-        if (ov49_0225A0AC(b)) {
-            ov49_0225A0EC(b);
-            t = (void *)ov49_02259FF0(b);
+        if (WiFiPlazaRoom_IsMessageFinished(b)) {
+            WiFiPlazaRoom_CloseMessage(b);
+            t = (void *)WiFiPlazaRoom_GetObjManager(b);
             ov49_02258EEC(t, (void*)(ov49_02258DAC(t)), 1);
             return TRUE;
         }

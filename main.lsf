@@ -3972,29 +3972,9 @@ Overlay OVY_49
     Object src/to42_overlay49_r73b_run4.o
     Object src/to91_w41477_interp_run01.o
     Object src/to42_overlay49_r73b_run5.o
-    Object src/overlay_49_sol_partial_74.o
-    Object src/to47_overlay49_color_fade.o
-    Object src/overlay_49_sol_partial_75.o
-    Object src/to47_overlay49_color_math.o
-    Object src/overlay_49_sol_partial_76.o
-    Object src/to47_overlay49_view_r76.o
-    Object src/overlay_49_sol_partial_77.o
-    Object src/overlay49_message_helpers_1.o
-    Object src/to70_overlay_49_residual_77_extra808_run01.o
-    Object src/overlay49_message_helpers_2.o
-    Object src/overlay_49_sol_partial_78.o
-    Object src/to47_overlay49_periodic_effects_r78.o
-    Object src/overlay_49_sol_partial_79.o
-    Object src/overlay49_audio_state_r79.o
-    Object src/overlay_49_sol_partial_80.o
-    Object src/overlay49_selection_sound_update.o
-    Object src/overlay49_battle_effects_r80_run1.o
-    Object src/to70_overlay_49_residual_80_gap2_extra105_run01.o
-    Object src/to70_to70_overlay_49_residual_80_gap2_extra105_residual_1_extra1284_run01.o
-    Object src/overlay49_battle_effects_r80_run2.o
-    Object src/r40_overlay_49_residual_80_gap3_run1.o
+    Object src/wifi_plaza_event.o
     Object asm/to90_extra2491_anchor.o
-    Object src/to90_extra2491_run01.o
+    Object src/ov49_022695c4.o
 }
 Overlay trainer_card
 {

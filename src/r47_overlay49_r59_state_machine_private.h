@@ -18,9 +18,9 @@ typedef struct Ov49ResultR59 {
 
 void *ov49_0225EF84(void *);
 void *ov49_0225A010(void *);
-void *ov49_02259FF0(void *);
+void *WiFiPlazaRoom_GetObjManager(void *);
 void *ov49_02258DAC(void *);
-void *ov49_02259FE8(void *);
+void *WiFiPlazaRoom_GetLobby(void *);
 u32 ov49_0225EF88(void *);
 u8 *ov49_0225EF40(void *, u32);
 void ov49_02258EEC(void *, void *, int);
@@ -38,10 +38,10 @@ u32 ov49_02258E34(void *);
 void ov45_0222A4C8(void *, u32);
 void ov49_02258EAC(void *, void *, u32, u32);
 void ov49_0225A37C(void *, u32, u32);
-u32 ov49_0225A30C(void *, u32, u32);
-void ov49_0225A08C(void *, u32);
-u32 ov49_0225A0AC(void *);
-void ov49_0225A0EC(void *);
+u32 WiFiPlazaRoom_GetMsgString(void *, u32, u32);
+void WiFiPlazaRoom_PrintMessage(void *, u32);
+u32 WiFiPlazaRoom_IsMessageFinished(void *);
+void WiFiPlazaRoom_CloseMessage(void *);
 void ov49_0225EF68(void *);
 void ov45_0222A5E8(void *, u32);
 void ov49_0225EF98(void *, u32, const void *, u32);

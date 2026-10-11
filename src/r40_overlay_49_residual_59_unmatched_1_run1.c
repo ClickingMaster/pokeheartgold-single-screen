@@ -7,9 +7,9 @@ BOOL ov49_0225F448(void *controller, void *work, u32 index) {
     } volatile temp;
     void *object;
 
-    object = ov49_02259FF0(work);
+    object = WiFiPlazaRoom_GetObjManager(work);
     temp.entry = ov49_02258D70(object, index);
-    temp.selection = ov49_02259FE8(work);
+    temp.selection = WiFiPlazaRoom_GetLobby(work);
 
     switch (ov49_0225EF88(controller)) {
     case 0:

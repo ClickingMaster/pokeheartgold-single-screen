@@ -31,7 +31,7 @@ void ov49_0225A134(void *);
 void ov49_0225A144(void *, void *, u32);
 void *ov49_0225A154(void *);
 u32 ov49_0225A164(void *, u32);
-void *ov49_0225A30C(void *, u32, u32);
+void *WiFiPlazaRoom_GetMsgString(void *, u32, u32);
 void ov49_0225A37C(void *, u32, u32);
 void ov49_0225A38C(void *, u32, u32);
 

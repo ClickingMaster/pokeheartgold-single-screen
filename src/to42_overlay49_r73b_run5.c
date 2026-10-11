@@ -32,18 +32,18 @@ void ov49_022683FC(Ov49Ctl *ctl, u32 index, VecFx32 *v, fx32 a, fx32 b, fx32 c, 
     ModelInstance_SetPosition(ctl->objects[index], v->x, v->y, v->z);
 }
 
-void *ov49_02268490(u32 heapId, u32 a, u32 b) {
+void *WiFiPlazaLight_Create(u32 heapId, u32 a, u32 b) {
     Ov49Allocated *p = Heap_Alloc(heapId, sizeof(Ov49Allocated));
     int i;
     memset(p, 0, sizeof(Ov49Allocated));
-    ov49_022686C0(p, &ov49_0226A7E0[a * 10]);
-    ov49_022686E4(p, &ov49_0226A7D8[b]);
+    WiFiPlazaLight_UnpackColorSet(p, &sWiFiPlazaLightColorSets[a * 10]);
+    WiFiPlazaLight_UnpackLight1(p, &sWiFiPlazaLight1Colors[b]);
     for (i = 0; i < 2; i++) {
         p->values48[i] = 60;
     }
     for (i = 0; i < 4; i++) {
         p->values50[i] = 60;
     }
-    ov49_022686F0(p);
+    WiFiPlazaLight_Apply(p);
     return p;
 }

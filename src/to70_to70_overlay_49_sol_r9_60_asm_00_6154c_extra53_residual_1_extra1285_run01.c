@@ -1,7 +1,7 @@
 #pragma force_active on
 #include "global.h"
 #pragma force_active on
-extern void *ov49_02259FE8(void *),*ov49_02259FF0(void *),*ov49_0225EF84(void *),*ov49_0225A010(void *),*ov49_02258D70(void *,int);
+extern void *WiFiPlazaRoom_GetLobby(void *),*WiFiPlazaRoom_GetObjManager(void *),*ov49_0225EF84(void *),*ov49_0225A010(void *),*ov49_02258D70(void *,int);
 extern int ov49_0225EF88(void *),ov45_0222A230(void *,int),ov45_0222A550(void *,int),ov45_0222AADC(void),ov49_02258F38(void *);
 extern void ov49_0225EF40(void *,int),ov49_0225EF8C(void *,int),ov49_022591C0(void *,int),ov49_02258D54(void *);
 extern void *WiFiPlazaWork_GetPlayer(void *,int);
@@ -14,7 +14,7 @@ extern const u8 ov49_02269B58[],ov49_02269B40[];
 extern void ov49_0225EFC4(void *,int,const void *,void *),ov49_0225EF90(void *),ov49_0225EF68(void *),ov49_0225EF98(void *,int,const void *,int);
 int ov49_0226154C(void *,void *,int);
 int ov49_0226154C(void *p,void *ctx,int idx){
- void *a=ov49_02259FE8(ctx),*b=ov49_02259FF0(ctx),*slot=ov49_02258D70(b,idx),*d=ov49_0225EF84(p),*e=ov49_0225A010(ctx);
+ void *a=WiFiPlazaRoom_GetLobby(ctx),*b=WiFiPlazaRoom_GetObjManager(ctx),*slot=ov49_02258D70(b,idx),*d=ov49_0225EF84(p),*e=ov49_0225A010(ctx);
  switch(ov49_0225EF88(p)){
  case 0:ov49_0225EF40(p,8);ov49_0225EF8C(p,1);
  case 1:{int x=ov45_0222A230(a,idx);int y=ov45_0222A550(a,idx);if(x==1 || y==1)ov49_0225EF8C(p,2);break;}

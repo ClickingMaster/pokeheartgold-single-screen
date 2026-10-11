@@ -42,20 +42,20 @@ u32 ov45_0222F314(u8);                              /* extern */
 s16 ov45_0222F3E8(u8);                              /* extern */
 s32 ov45_0222F430();                                /* extern */
 s32 ov45_0222F464();                                /* extern */
-s32 ov49_02259FE8(s32);                             /* extern */
-M2C_UNK ov49_0225A08C(s32, s32);                    /* extern */
+s32 WiFiPlazaRoom_GetLobby(s32);                             /* extern */
+M2C_UNK WiFiPlazaRoom_PrintMessage(s32, s32);                    /* extern */
 M2C_UNK ov49_0225A09C(s32, s32);                    /* extern */
-s32 ov49_0225A0AC(s32);                             /* extern */
+s32 WiFiPlazaRoom_IsMessageFinished(s32);                             /* extern */
 M2C_UNK ov49_0225A0BC(s32);                         /* extern */
 M2C_UNK ov49_0225A0CC(s32);                         /* extern */
-M2C_UNK ov49_0225A0EC(s32);                         /* extern */
+M2C_UNK WiFiPlazaRoom_CloseMessage(s32);                         /* extern */
 M2C_UNK ov49_0225A174(s32, void *, s32, s32);       /* extern */
 u32 ov49_0225A1D4(s32);                             /* extern */
 M2C_UNK ov49_0225A1E4(s32, s32, s32);               /* extern */
 M2C_UNK ov49_0225A294(s32);                         /* extern */
-s32 ov49_0225A2C4(s32);                             /* extern */
-M2C_UNK ov49_0225A2F8(s32);                         /* extern */
-s32 ov49_0225A30C(s32, s32, s32);                   /* extern */
+s32 WiFiPlazaRoom_GetYesNoResult(s32);                             /* extern */
+M2C_UNK WiFiPlazaRoom_CloseYesNoMenu(s32);                         /* extern */
+s32 WiFiPlazaRoom_GetMsgString(s32, s32, s32);                   /* extern */
 M2C_UNK ov49_0225A37C(s32, u8, s32);                /* extern */
 void *ov49_0225EF3C();                              /* extern */
 M2C_UNK ov49_0225EF40(s32, s32);                    /* extern */
@@ -137,7 +137,7 @@ s32 ov49_02262028(s32 arg0, s32 arg1, s32 arg2) {
     sp14 = arg2;
     temp_r6 = ov49_0225EF3C();
     temp_r4 = ov49_0225EF84(arg0);
-    sp30 = ov49_02259FE8(arg1);
+    sp30 = WiFiPlazaRoom_GetLobby(arg1);
     temp_r0 = ov49_0225EF88(arg0);
     switch (temp_r0) {                              /* switch 1 */
     case 9:                                         /* switch 1 */
@@ -274,10 +274,10 @@ block_46:
             M2C_FIELD(temp_r4, s16 *, 0) = ov45_0222F3E8(M2C_FIELD(temp_r6, u8 *, 1));
             M2C_FIELD(temp_r4, s32 *, 0x10) = 0x384;
             if ((s32) M2C_FIELD(temp_r4, s16 *, 0) > 0x14A) {
-                var_r0 = ov49_0225A30C(arg1, 0, 0xA);
+                var_r0 = WiFiPlazaRoom_GetMsgString(arg1, 0, 0xA);
             } else {
                 M2C_FIELD(temp_r4, s32 *, 0x14) = 1;
-                var_r0 = ov49_0225A30C(arg1, 0, 0xB);
+                var_r0 = WiFiPlazaRoom_GetMsgString(arg1, 0, 0xB);
             }
             ov49_0225A09C(arg1, var_r0);
             ov49_0225A0BC(arg1);
@@ -300,7 +300,7 @@ block_46:
         if (((s32) M2C_FIELD(temp_r4, s16 *, 0) <= 0x14A) && (M2C_FIELD(temp_r4, s32 *, 0x14) == 0)) {
             ov49_0225A0CC(arg1);
             M2C_FIELD(temp_r4, s32 *, 0x14) = 1;
-            ov49_0225A09C(arg1, ov49_0225A30C(arg1, 0, 0xB));
+            ov49_0225A09C(arg1, WiFiPlazaRoom_GetMsgString(arg1, 0, 0xB));
             ov49_0225A0BC(arg1);
         }
         ov49_02262DF8(temp_r4 + 0x3C, arg1, 0);
@@ -315,7 +315,7 @@ block_46:
                 var_r6 = 0x12;
             }
             ov49_0225A0CC(arg1);
-            ov49_0225A09C(arg1, ov49_0225A30C(arg1, 0, var_r6));
+            ov49_0225A09C(arg1, WiFiPlazaRoom_GetMsgString(arg1, 0, var_r6));
             ov49_0225A0BC(arg1);
             ov49_0225EF8C(sp10, 9U);
             M2C_FIELD(temp_r4, u16 *, 8) = (u16) temp_r7;
@@ -353,7 +353,7 @@ block_75:
             } else if (M2C_FIELD(temp_r4, s16 *, 0) == 0) {
                 ov49_0225EF8C(sp10, 8U);
                 ov49_0225A0CC(arg1);
-                ov49_0225A09C(arg1, ov49_0225A30C(arg1, 0, 0x12));
+                ov49_0225A09C(arg1, WiFiPlazaRoom_GetMsgString(arg1, 0, 0x12));
                 ov49_0225A0BC(arg1);
             }
         }
@@ -390,9 +390,9 @@ block_75:
     case 9:                                         /* switch 3 */
         ov49_02262DD4(temp_r4 + 0x3C, 0);
         ov49_02262DF8(temp_r4 + 0x3C, arg1, 0);
-        ov45_0222A5E8(ov49_02259FE8(arg1), M2C_FIELD(temp_r6, u8 *, 3));
+        ov45_0222A5E8(WiFiPlazaRoom_GetLobby(arg1), M2C_FIELD(temp_r6, u8 *, 3));
         sub_02039B38();
-        ov49_02259FE8(arg1);
+        WiFiPlazaRoom_GetLobby(arg1);
         CommPlayerInfo_Init(ov45_0222A2C8(), 0);
         ov45_0222AB1C(sp30);
         CommPlayerInfo_SetProfile();
@@ -516,13 +516,13 @@ block_118:
         /* Duplicate return node #164. Try simplifying control flow for better match */
         break;
     case 16:                                        /* switch 3 */
-        ov49_0225A08C(arg1, ov49_0225A30C(arg1, 0, 0x1A));
+        WiFiPlazaRoom_PrintMessage(arg1, WiFiPlazaRoom_GetMsgString(arg1, 0, 0x1A));
         ov49_0225EF8C(sp10, 0x11U);
         ov49_02262DB8(temp_r4 + 0x3C, arg1);
         /* Duplicate return node #164. Try simplifying control flow for better match */
         break;
     case 17:                                        /* switch 3 */
-        if ((ov49_02262CB4(temp_r4, arg1, temp_r6, sp10, sp14) == 0) && (ov49_0225A0AC(arg1) == 1)) {
+        if ((ov49_02262CB4(temp_r4, arg1, temp_r6, sp10, sp14) == 0) && (WiFiPlazaRoom_IsMessageFinished(arg1) == 1)) {
             ov49_0225EF8C(sp10, 0x12U);
         }
         /* Duplicate return node #164. Try simplifying control flow for better match */
@@ -533,22 +533,22 @@ block_118:
         /* Duplicate return node #164. Try simplifying control flow for better match */
         break;
     case 19:                                        /* switch 3 */
-        temp_r0_9 = ov49_0225A2C4(arg1);
+        temp_r0_9 = WiFiPlazaRoom_GetYesNoResult(arg1);
         switch (temp_r0_9) {                        /* switch 5; irregular */
         case 0:                                     /* switch 5 */
-            ov49_0225A2F8(arg1);
+            WiFiPlazaRoom_CloseYesNoMenu(arg1);
             ov49_0225EF8C(sp10, 0x17U);
             ov45_0222A404(sp30);
             break;
         case 1:                                     /* switch 5 */
-            ov49_0225A2F8(arg1);
+            WiFiPlazaRoom_CloseYesNoMenu(arg1);
             ov49_0225EF8C(sp10, 0x14U);
             break;
         case 2:                                     /* switch 5 */
             if (ov49_02262CB4(temp_r4, arg1, temp_r6, sp10, sp14) != 1) {
 
             } else {
-                ov49_0225A2F8(arg1);
+                WiFiPlazaRoom_CloseYesNoMenu(arg1);
             }
             break;
         }
@@ -559,10 +559,10 @@ block_118:
         ov49_02262D70(temp_r4 + 0x3C, arg1, M2C_FIELD(temp_r6, u8 *, 2), 1, (s32) M2C_FIELD(temp_r4, s16 *, 0));
         ov49_02262E04(temp_r4 + 0x3C, arg1, 1);
         if ((s32) M2C_FIELD(temp_r4, s16 *, 0) > 0x14A) {
-            var_r0_2 = ov49_0225A30C(arg1, 0, 0xA);
+            var_r0_2 = WiFiPlazaRoom_GetMsgString(arg1, 0, 0xA);
         } else {
             M2C_FIELD(temp_r4, s32 *, 0x14) = 1;
-            var_r0_2 = ov49_0225A30C(arg1, 0, 0xB);
+            var_r0_2 = WiFiPlazaRoom_GetMsgString(arg1, 0, 0xB);
         }
         ov49_0225A09C(arg1, var_r0_2);
         ov49_0225A0BC(arg1);
@@ -577,7 +577,7 @@ block_118:
         } else {
             var_r2 = 0x12;
         }
-        ov49_0225A09C(arg1, ov49_0225A30C(arg1, 0, var_r2));
+        ov49_0225A09C(arg1, WiFiPlazaRoom_GetMsgString(arg1, 0, var_r2));
         ov49_0225A0BC(arg1);
         ov49_0225EF8C(sp10, 9U);
         ov49_02262D70(temp_r4 + 0x3C, arg1, M2C_FIELD(temp_r6, u8 *, 2), 1, 0);
@@ -585,7 +585,7 @@ block_118:
         /* Duplicate return node #164. Try simplifying control flow for better match */
         break;
     case 22:                                        /* switch 3 */
-        ov49_0225A09C(arg1, ov49_0225A30C(arg1, 0, 0x12));
+        ov49_0225A09C(arg1, WiFiPlazaRoom_GetMsgString(arg1, 0, 0x12));
         ov49_0225A0BC(arg1);
         ov49_02262D70(temp_r4 + 0x3C, arg1, M2C_FIELD(temp_r6, u8 *, 2), 1, 0);
         ov49_02262DD4(temp_r4 + 0x3C, 0);
@@ -606,7 +606,7 @@ block_118:
         /* Duplicate return node #164. Try simplifying control flow for better match */
         break;
     case 25:                                        /* switch 3 */
-        if (ov49_0225A0AC(arg1) == 1) {
+        if (WiFiPlazaRoom_IsMessageFinished(arg1) == 1) {
             ov49_0225EF8C(sp10, M2C_FIELD(temp_r4, u8 *, 4));
         }
         /* Duplicate return node #164. Try simplifying control flow for better match */
@@ -634,10 +634,10 @@ block_118:
         /* Duplicate return node #164. Try simplifying control flow for better match */
         break;
     case 28:                                        /* switch 3 */
-        ov49_0225A0EC(arg1);
+        WiFiPlazaRoom_CloseMessage(arg1);
         ov49_02262CA8(temp_r4, arg1);
         ov49_02262DB8(temp_r4 + 0x3C, arg1);
-        ov49_0225A2F8(arg1);
+        WiFiPlazaRoom_CloseYesNoMenu(arg1);
         ov49_0225EF68(sp10);
         return 1;
      }

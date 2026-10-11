@@ -20,9 +20,9 @@ extern void *ov49_02269BD0[];
 extern void *ov49_02269C20[];
 extern void *ov49_02269C40[];
 
-extern void *ov49_02259FF0(void *);
+extern void *WiFiPlazaRoom_GetObjManager(void *);
 extern s32 ov49_02258DAC(void *);
-extern void *ov49_0225A000(void *);
+extern void *WiFiPlazaRoom_GetMap(void *);
 extern s32 ov49_02258E60(void *, s32);
 extern BOOL ov49_02261FC0(void *, void *, void **, u32, u16 *);
 extern BOOL ov45_0222AFF8(void *);
@@ -44,9 +44,9 @@ BOOL ov49_02261DBC(Ov49R60Result *result, void *state, void *ctx, void *object, 
     u32 packed;
     s32 valid = FALSE;
 
-    map = ov49_02259FF0(ctx);
+    map = WiFiPlazaRoom_GetObjManager(ctx);
     direction = ov49_02258DAC(map);
-    sub = ov49_0225A000(ctx);
+    sub = WiFiPlazaRoom_GetMap(ctx);
     expected = ov49_02258E60(object, 4);
     movement = 1;
 

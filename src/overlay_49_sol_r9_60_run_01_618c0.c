@@ -1,7 +1,7 @@
 #include "overlay49_sol_r9_60_private.h"
 
 BOOL ov49_022618C0(void *state, void *ctx, u32 index) {
-    void *object = ov49_02259FF0(ctx);
+    void *object = WiFiPlazaRoom_GetObjManager(ctx);
     void *target = ov49_02258D70(object, index);
 
     switch (ov49_0225EF88(state)) {

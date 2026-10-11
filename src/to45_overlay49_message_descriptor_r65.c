@@ -24,12 +24,12 @@ void ov49_02264F9C(Ov49MessageWork *out, void *ctx, u32 count, u32 first, u32 sp
         void *message;
         if (special != 0 && i == count - 1) {
             if (special == 1) {
-                message = ov49_0225A30C(ctx, 3, 0x205);
+                message = WiFiPlazaRoom_GetMsgString(ctx, 3, 0x205);
             } else {
-                message = ov49_0225A30C(ctx, 3, 0xEB);
+                message = WiFiPlazaRoom_GetMsgString(ctx, 3, 0xEB);
             }
         } else {
-            message = ov49_0225A30C(ctx, 3, first + i);
+            message = WiFiPlazaRoom_GetMsgString(ctx, 3, first + i);
         }
         ov49_0225A144(ctx, message, i);
     }
@@ -52,15 +52,15 @@ void ov49_02265044(Ov49MessageWork *out, void *ctx, u32 range, u32 count, u32 fi
         if (special != 0 && i == count - 1) {
             choice = range;
             if (special == 1) {
-                message = ov49_0225A30C(ctx, 3, 0x205);
+                message = WiFiPlazaRoom_GetMsgString(ctx, 3, 0x205);
             } else {
-                message = ov49_0225A30C(ctx, 3, 0xEB);
+                message = WiFiPlazaRoom_GetMsgString(ctx, 3, 0xEB);
             }
         } else {
             do {
                 choice = MTRandom() % range;
             } while (ov49_0225A164(ctx, choice) == 1);
-            message = ov49_0225A30C(ctx, 3, first + choice);
+            message = WiFiPlazaRoom_GetMsgString(ctx, 3, first + choice);
         }
         ov49_0225A144(ctx, message, choice);
     }
@@ -78,7 +78,7 @@ void ov49_02265110(Ov49MessageWork *out, void *ctx) {
     ov49_0225A10C(ctx, 8);
     out->requestedCount = 8;
     for (i = 0; i < 8; i++) {
-        ov49_0225A144(ctx, ov49_0225A30C(ctx, 1, ov49_02269E1C[i]), i);
+        ov49_0225A144(ctx, WiFiPlazaRoom_GetMsgString(ctx, 1, ov49_02269E1C[i]), i);
     }
     out->descriptor = ov49_02269E24;
     out->descriptor.count = out->requestedCount;
@@ -93,9 +93,9 @@ void ov49_02265170(Ov49MessageWork *out, void *ctx) {
     out->requestedCount = 4;
     for (i = 0; i < 3; i++) {
         ov49_0225A38C(ctx, i, 0);
-        ov49_0225A144(ctx, ov49_0225A30C(ctx, 1, 0x27), i);
+        ov49_0225A144(ctx, WiFiPlazaRoom_GetMsgString(ctx, 1, 0x27), i);
     }
-    ov49_0225A144(ctx, ov49_0225A30C(ctx, 1, 0x25), 3);
+    ov49_0225A144(ctx, WiFiPlazaRoom_GetMsgString(ctx, 1, 0x25), 3);
     out->descriptor = ov49_02269E24;
     out->descriptor.count = out->requestedCount;
     out->descriptor.capacity = out->requestedCount;
@@ -109,9 +109,9 @@ void ov49_022651E8(Ov49MessageWork *out, void *ctx) {
     out->requestedCount = 4;
     for (i = 0; i < 3; i++) {
         ov49_0225A37C(ctx, i, 0);
-        ov49_0225A144(ctx, ov49_0225A30C(ctx, 1, 0x26), i);
+        ov49_0225A144(ctx, WiFiPlazaRoom_GetMsgString(ctx, 1, 0x26), i);
     }
-    ov49_0225A144(ctx, ov49_0225A30C(ctx, 1, 0x25), 3);
+    ov49_0225A144(ctx, WiFiPlazaRoom_GetMsgString(ctx, 1, 0x25), 3);
     out->descriptor = ov49_02269E24;
     out->descriptor.count = out->requestedCount;
     out->descriptor.capacity = out->requestedCount;

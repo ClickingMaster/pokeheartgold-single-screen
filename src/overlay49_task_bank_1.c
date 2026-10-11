@@ -3,7 +3,7 @@
 #define P(p, o) ((void *)((u8 *)(p) + (o)))
 #define W(p, o) (*(void **)((u8 *)(p) + (o)))
 
-void ov49_0225A08C(void *p, u32 a) {
+void WiFiPlazaRoom_PrintMessage(void *p, u32 a) {
     ov49_0225AB44(P(p, 0x2f8), a);
 }
 
@@ -11,7 +11,7 @@ void ov49_0225A09C(void *p, u32 a) {
     ov49_0225ABA4(P(p, 0x2f8), a);
 }
 
-void ov49_0225A0AC(void *p) {
+void WiFiPlazaRoom_IsMessageFinished(void *p) {
     ov49_0225AC5C(P(p, 0x2f8));
 }
 
@@ -27,7 +27,7 @@ void ov49_0225A0DC(void *p) {
     ov49_0225AC4C(P(p, 0x2f8));
 }
 
-void ov49_0225A0EC(void *p) {
+void WiFiPlazaRoom_CloseMessage(void *p) {
     ov49_0225AC74(P(p, 0x2f8));
 }
 
@@ -95,7 +95,7 @@ void ov49_0225A24C(void *p, u32 a, u32 b, u32 c, u16 d) {
     ov49_0225B178(P(p, 0x3c4), a, b, c, d);
 }
 
-void ov49_0225A264(void *p) {
+void WiFiPlazaRoom_OpenYesNoMenu(void *p) {
     ov49_0225AF30(P(p, 0x338), P(p, 0x3a4), P(p, 0x3c), 0, 0, 0x77, 0x19, 0xd, 6);
 }
 
@@ -103,7 +103,7 @@ void ov49_0225A294(void *p) {
     ov49_0225AF30(P(p, 0x338), P(p, 0x3a4), P(p, 0x3c), 0, 1, 0x77, 0x19, 0xd, 6);
 }
 
-u32 ov49_0225A2C4(void *p) {
+u32 WiFiPlazaRoom_GetYesNoResult(void *p) {
     s32 r = ov49_0225AFD8(P(p, 0x338));
     if (r == 0) {
         goto zero;
@@ -123,11 +123,11 @@ two:
     return 2;
 }
 
-void ov49_0225A2F8(void *p) {
+void WiFiPlazaRoom_CloseYesNoMenu(void *p) {
     ov49_0225B014(P(p, 0x338), 0, 0);
 }
 
-void ov49_0225A30C(void *p, u32 a, u32 b) {
+void WiFiPlazaRoom_GetMsgString(void *p, u32 a, u32 b) {
     ov49_0225B388(P(p, 0x2dc), a, b);
 }
 

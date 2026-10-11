@@ -33,7 +33,7 @@ extern void ov49_02267C20(void *, u32, u32);
 extern void ov49_02266B28(void *, u32, u32);
 extern void ov49_02267908(void *, u32, u32);
 extern void ov49_02267AF0(void *, u32, u32);
-extern void ov49_02268640(void *);
+extern void WiFiPlazaLight_UnpackColor(void *);
 extern void ov49_02269154(void *);
 extern void ov49_0225E82C(void *, u32, u32);
 extern void ModelInstance_SetVisible();
@@ -54,7 +54,7 @@ extern void ov49_0225CAA8(void *);
 extern void Camera_UnsetStaticPtr(void *);
 extern void Camera_Delete(void *);
 
-u32 ov49_02259FE8(void *p) {
+u32 WiFiPlazaRoom_GetLobby(void *p) {
     return U32_AT(p, 0x34);
 }
 
@@ -62,15 +62,15 @@ u32 ov49_02259FEC(void *p) {
     return U32_AT(p, 0x38);
 }
 
-u32 ov49_02259FF0(void *p) {
+u32 WiFiPlazaRoom_GetObjManager(void *p) {
     return U32_AT(p, 0x3E0);
 }
 
-u32 ov49_02259FF8(void *p) {
+u32 WiFiPlazaRoom_GetModels(void *p) {
     return U32_AT(p, 0x3E4);
 }
 
-u32 ov49_0225A000(void *p) {
+u32 WiFiPlazaRoom_GetMap(void *p) {
     return U32_AT(p, 0x3E8);
 }
 

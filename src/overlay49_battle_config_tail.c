@@ -46,7 +46,7 @@ int ov49_02264B94(void *state) {
 void ov49_02264C04(void *ctx, void *object, u32 value) {
     u32 i;
 
-    if (ov45_0222AB28(ov49_02259FE8(ctx), object) == 1) {
+    if (ov45_0222AB28(WiFiPlazaRoom_GetLobby(ctx), object) == 1) {
         for (i = 0; i < 0x163; i++) {
             if (value == ov49_02269EC4[i * 2]) {
                 value = ov49_02269EC6[i * 2];
@@ -54,11 +54,11 @@ void ov49_02264C04(void *ctx, void *object, u32 value) {
             }
         }
     }
-    ov49_0225A30C(ctx, 3, value);
+    WiFiPlazaRoom_GetMsgString(ctx, 3, value);
 }
 
 void ov49_02264C50(void *ctx, void *left, void *right) {
-    void *object = ov49_02259FE8(ctx);
+    void *object = WiFiPlazaRoom_GetLobby(ctx);
     int a = ov45_0222AB28(object, left);
     int b = ov45_0222AB28(object, right);
     u32 value = 0x29;
@@ -70,7 +70,7 @@ void ov49_02264C50(void *ctx, void *left, void *right) {
     } else if (a == 0 && b == 1) {
         value = 0x2A9;
     }
-    ov49_0225A30C(ctx, 3, value);
+    WiFiPlazaRoom_GetMsgString(ctx, 3, value);
 }
 
 BOOL ov49_02264CA8(Ov49BattleConfig *config, void *object, s32 index) {

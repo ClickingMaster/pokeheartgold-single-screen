@@ -12,7 +12,7 @@ typedef struct Ov49Residual61Config {
     u8 value;
 } Ov49Residual61Config;
 
-extern void *ov49_02259FE8(void *);
+extern void *WiFiPlazaRoom_GetLobby(void *);
 extern s32 sub_0203988C(void);
 extern u32 ov45_0222F314(u32);
 extern u32 ov45_0222F3E8(u32);
@@ -26,7 +26,7 @@ extern const u8 ov49_02269DF8[];
 void ov49_02262DD4(Ov49Residual61State *, s32);
 
 BOOL ov49_02262CB4(Ov49Residual61State *work, void *ctx, Ov49Residual61Config *config, void *state, void *arg) {
-    void *object = ov49_02259FE8(ctx);
+    void *object = WiFiPlazaRoom_GetLobby(ctx);
     s32 connection = sub_0203988C();
     u32 index = ov45_0222F314(config->index);
 

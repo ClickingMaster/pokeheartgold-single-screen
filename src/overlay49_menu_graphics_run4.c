@@ -12,7 +12,7 @@ void ov49_0225A98C(void *work) {
     if (flag == 0 && U8_AT(work, 6) == 0) {
         ov49_02258B5C(PTR_AT(work, 0x3E0));
         ov49_0225EF30(PTR_AT(work, 0x3F0));
-        ov49_02268870(PTR_AT(work, 0x3DC));
+        WiFiPlazaEvent_Update(PTR_AT(work, 0x3DC));
     }
     ov49_0225AA70(work);
     if (U8_AT(work, 3) == 0) {

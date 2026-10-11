@@ -2554,11 +2554,11 @@
 	.public ov49_02259AA4
 	.public ov49_02259C90
 	.public ov49_02259EF8
-	.public ov49_02259FE8
+	.public WiFiPlazaRoom_GetLobby
 	.public ov49_02259FEC
-	.public ov49_02259FF0
-	.public ov49_02259FF8
-	.public ov49_0225A000
+	.public WiFiPlazaRoom_GetObjManager
+	.public WiFiPlazaRoom_GetModels
+	.public WiFiPlazaRoom_GetMap
 	.public ov49_0225A008
 	.public ov49_0225A010
 	.public ov49_0225A018
@@ -2573,13 +2573,13 @@
 	.public ov49_0225A064
 	.public ov49_0225A06C
 	.public ov49_0225A084
-	.public ov49_0225A08C
+	.public WiFiPlazaRoom_PrintMessage
 	.public ov49_0225A09C
-	.public ov49_0225A0AC
+	.public WiFiPlazaRoom_IsMessageFinished
 	.public ov49_0225A0BC
 	.public ov49_0225A0CC
 	.public ov49_0225A0DC
-	.public ov49_0225A0EC
+	.public WiFiPlazaRoom_CloseMessage
 	.public ov49_0225A0FC
 	.public ov49_0225A10C
 	.public ov49_0225A120
@@ -2596,11 +2596,11 @@
 	.public ov49_0225A22C
 	.public ov49_0225A23C
 	.public ov49_0225A24C
-	.public ov49_0225A264
+	.public WiFiPlazaRoom_OpenYesNoMenu
 	.public ov49_0225A294
-	.public ov49_0225A2C4
-	.public ov49_0225A2F8
-	.public ov49_0225A30C
+	.public WiFiPlazaRoom_GetYesNoResult
+	.public WiFiPlazaRoom_CloseYesNoMenu
+	.public WiFiPlazaRoom_GetMsgString
 	.public ov49_0225A31C
 	.public ov49_0225A334
 	.public ov49_0225A37C
@@ -3082,26 +3082,26 @@
 	.public ov49_022682D4
 	.public ov49_02268334
 	.public ov49_022683FC
-	.public ov49_02268490
-	.public ov49_022684F4
-	.public ov49_022684FC
-	.public ov49_02268588
-	.public ov49_022685F8
+	.public WiFiPlazaLight_Create
+	.public WiFiPlazaLight_Delete
+	.public WiFiPlazaLight_Update
+	.public WiFiPlazaLight_FadeToColorSet
+	.public WiFiPlazaLight_FadeLight1
 	.public ov49_02268620
-	.public ov49_02268624
-	.public ov49_02268640
-	.public ov49_02268664
-	.public ov49_022686C0
-	.public ov49_022686E4
-	.public ov49_022686F0
-	.public ov49_02268764
-	.public ov49_02268850
-	.public ov49_02268870
+	.public WiFiPlazaLight_PackColor
+	.public WiFiPlazaLight_UnpackColor
+	.public WiFiPlazaLight_LerpColor
+	.public WiFiPlazaLight_UnpackColorSet
+	.public WiFiPlazaLight_UnpackLight1
+	.public WiFiPlazaLight_Apply
+	.public WiFiPlazaEvent_Create
+	.public WiFiPlazaEvent_Delete
+	.public WiFiPlazaEvent_Update
 	.public ov49_02268968
-	.public ov49_02268974
-	.public ov49_022689A0
+	.public WiFiPlazaEvent_GetColorSet
+	.public WiFiPlazaEvent_GetLight1Set
 	.public ov49_022689D4
-	.public ov49_02268A00
+	.public WiFiPlazaEvent_TurnOffLight2
 	.public ov49_02268A0C
 	.public ov49_02268A6C
 	.public ov49_02268A7C
@@ -3117,9 +3117,9 @@
 	.public ov49_02268CCC
 	.public ov49_02268CDC
 	.public ov49_02268CEC
-	.public ov49_02268D0C
-	.public ov49_02268D94
-	.public ov49_02268DB0
+	.public WiFiPlazaEvent_GetModelList
+	.public WiFiPlazaEvent_StartLoopSE
+	.public WiFiPlazaEvent_StopLoopSE
 	.public ov49_02268DCC
 	.public ov49_02268FAC
 	.public ov49_02269090
@@ -3234,8 +3234,8 @@
 	.public ov49_0226A7A8
 	.public ov49_0226A7B8
 	.public ov49_0226A7C8
-	.public ov49_0226A7D8
-	.public ov49_0226A7E0
+	.public sWiFiPlazaLight1Colors
+	.public sWiFiPlazaLightColorSets
 	.public ov49_0226A81C
 	.public ov49_0226A820
 	.public ov49_0226A824
@@ -3294,11 +3294,11 @@
 	.public ov49_0225974C
 	.public ov49_02259758
 	.public ov49_02259A3C
-	.public ov49_02259FE8
+	.public WiFiPlazaRoom_GetLobby
 	.public ov49_02259FEC
-	.public ov49_02259FF0
-	.public ov49_02259FF8
-	.public ov49_0225A000
+	.public WiFiPlazaRoom_GetObjManager
+	.public WiFiPlazaRoom_GetModels
+	.public WiFiPlazaRoom_GetMap
 	.public ov49_0225A008
 	.public ov49_0225A010
 	.public ov49_0225A018
@@ -3415,10 +3415,10 @@
 	.public ov49_02266748
 	.public ov49_02266754
 	.public ov49_02266760
-	.public ov49_022684F4
+	.public WiFiPlazaLight_Delete
 	.public ov49_02268620
-	.public ov49_02268624
-	.public ov49_022686E4
+	.public WiFiPlazaLight_PackColor
+	.public WiFiPlazaLight_UnpackLight1
 	.public ov49_02268968
 	.public ov49_02268B04
 	.public ov49_02268B08
@@ -3469,7 +3469,7 @@ ov49_02264D30: ; 0x02264D30
 	add r5, r0, #0
 	add r0, r2, #0
 	add r4, r1, #0
-	bl ov49_0225A0AC
+	bl WiFiPlazaRoom_IsMessageFinished
 	cmp r0, #0
 	beq _02264D48
 	ldrb r1, [r5, #7]
@@ -3509,10 +3509,10 @@ ov49_02264D4C: ; 0x02264D4C
 	ldrh r2, [r3, r2]
 	add r0, r5, #0
 	mov r1, #3
-	bl ov49_0225A30C
+	bl WiFiPlazaRoom_GetMsgString
 	add r1, r0, #0
 	add r0, r5, #0
-	bl ov49_0225A08C
+	bl WiFiPlazaRoom_PrintMessage
 	pop {r3, r4, r5, pc}
 	nop
 _02264D98: .word ov49_02269E44
@@ -3640,10 +3640,10 @@ _02264E76:
 	add r0, r7, #0
 	mov r1, #3
 	add r2, r4, #0
-	bl ov49_0225A30C
+	bl WiFiPlazaRoom_GetMsgString
 	add r1, r0, #0
 	add r0, r7, #0
-	bl ov49_0225A08C
+	bl WiFiPlazaRoom_PrintMessage
 	mov r0, #1
 	pop {r3, r4, r5, r6, r7, pc}
 _02264E8C:
@@ -3688,7 +3688,7 @@ ov49_02264EC8: ; 0x02264EC8
 	add r4, r1, #0
 	add r5, r0, #0
 	add r0, r4, #0
-	bl ov49_02259FE8
+	bl WiFiPlazaRoom_GetLobby
 	bl ov45_0222B094
 	ldr r1, _02264F0C ; =0x000001C2
 	cmp r0, r1
@@ -3706,7 +3706,7 @@ ov49_02264EC8: ; 0x02264EC8
 	bl ov49_02264C04
 	add r1, r0, #0
 	add r0, r4, #0
-	bl ov49_0225A08C
+	bl WiFiPlazaRoom_PrintMessage
 	add r0, r4, #0
 	bl ov49_0225A0BC
 _02264F08:

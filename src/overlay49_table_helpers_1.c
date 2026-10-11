@@ -12,7 +12,7 @@ void ov49_02264D14(Config49 *cfg, void *object) {
 }
 
 void ov49_02264D30(Config49 *cfg, void *object, void *check) {
-    if (ov49_0225A0AC(check)) ov49_0225EF8C(object, cfg->action7);
+    if (WiFiPlazaRoom_IsMessageFinished(check)) ov49_0225EF8C(object, cfg->action7);
 }
 
 void ov49_02264D4C(void *unused0, void *unused1, void *ctx, void *arg, void *a, void *b) {
@@ -24,7 +24,7 @@ void ov49_02264D4C(void *unused0, void *unused1, void *ctx, void *arg, void *a, 
     ai = WiFiPlazaPlayer_GetLanguage(a);
     bi = WiFiPlazaPlayer_GetLanguage(b);
     value = ov49_02269E44[ai][bi];
-    ov49_0225A08C(ctx, ov49_0225A30C(ctx, 3, value));
+    WiFiPlazaRoom_PrintMessage(ctx, WiFiPlazaRoom_GetMsgString(ctx, 3, value));
 }
 
 void ov49_02264D9C(void *ctx, u32 index, void *arg, void *value) {
@@ -51,7 +51,7 @@ BOOL ov49_02264E20(Config49 *cfg, void *object, void *ctx) {
         case 1: action = 0x25; break;
         case 2: action = 0x26; break;
         }
-        ov49_0225A08C(ctx, ov49_0225A30C(ctx, 3, action));
+        WiFiPlazaRoom_PrintMessage(ctx, WiFiPlazaRoom_GetMsgString(ctx, 3, action));
         return TRUE;
     }
     return FALSE;
@@ -67,11 +67,11 @@ void ov49_02264E90(Config49 *cfg, void *object, void *ctx, void *arg, u32 which)
 }
 
 void ov49_02264EC8(Config49 *cfg, void *object) {
-    ov49_02259FE8(object);
+    WiFiPlazaRoom_GetLobby(object);
     if (ov45_0222B094() == 0x1c2) {
         ov49_0225A0CC(object);
         ov49_0225A334(object, cfg->index3, 0);
-        ov49_0225A08C(object, ov49_02264C04(object, cfg->index3, 0x2ac));
+        WiFiPlazaRoom_PrintMessage(object, ov49_02264C04(object, cfg->index3, 0x2ac));
         ov49_0225A0BC(object);
     }
 }

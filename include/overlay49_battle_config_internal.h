@@ -19,9 +19,9 @@ typedef struct Ov49BattleConfig {
 extern const u16 ov49_02269EC4[];
 extern const u16 ov49_02269EC6[];
 
-void *ov49_02259FE8(void *ctx);
+void *WiFiPlazaRoom_GetLobby(void *ctx);
 int ov45_0222AB28(void *object, void *value);
-void *ov49_0225A30C(void *ctx, u32 type, u32 value);
+void *WiFiPlazaRoom_GetMsgString(void *ctx, u32 type, u32 value);
 int ov45_0222A53C(void *object);
 void *WiFiPlazaWork_GetMyPlayer(void *object);
 void *WiFiPlazaWork_GetPlayer(void *object, u8 index);

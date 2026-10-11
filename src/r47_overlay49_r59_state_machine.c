@@ -3,9 +3,9 @@
 BOOL ov49_022607C4(void *controller, void *work, u32 arg) {
     void *state = ov49_0225EF84(controller);
     void *owner = ov49_0225A010(work);
-    void *object = ov49_02259FF0(work);
+    void *object = WiFiPlazaRoom_GetObjManager(work);
     void *entry = ov49_02258DAC(object);
-    void *anim = ov49_02259FE8(work);
+    void *anim = WiFiPlazaRoom_GetLobby(work);
     int value;
     int choice;
 
@@ -35,7 +35,7 @@ BOOL ov49_022607C4(void *controller, void *work, u32 arg) {
             GF_AssertFail();
             break;
         }
-        ov45_0222A5E8(ov49_02259FE8(work), 12);
+        ov45_0222A5E8(WiFiPlazaRoom_GetLobby(work), 12);
         ov49_0225EFC4(owner, arg, ov49_02269B88, selection);
         break;
     }
@@ -81,7 +81,7 @@ BOOL ov49_022607C4(void *controller, void *work, u32 arg) {
         result->y = position.y / 16;
         result->value = converted;
         result->state = *((u8 *)state + 2);
-        ov45_0222A4C8(ov49_02259FE8(work), 1);
+        ov45_0222A4C8(WiFiPlazaRoom_GetLobby(work), 1);
         ov49_0225EF68(controller);
         return TRUE;
     }
@@ -125,7 +125,7 @@ BOOL ov49_022607C4(void *controller, void *work, u32 arg) {
             break;
         }
         if (valid) {
-            ov49_0225A08C(work, ov49_0225A30C(work, 0, value));
+            WiFiPlazaRoom_PrintMessage(work, WiFiPlazaRoom_GetMsgString(work, 0, value));
             ov49_0225EF90(controller);
         } else {
             ov49_0225EF8C(controller, 7);
@@ -133,14 +133,14 @@ BOOL ov49_022607C4(void *controller, void *work, u32 arg) {
         break;
     }
     case 6:
-        if (ov49_0225A0AC(work) == 1) {
-            ov49_0225A0EC(work);
+        if (WiFiPlazaRoom_IsMessageFinished(work) == 1) {
+            WiFiPlazaRoom_CloseMessage(work);
             ov49_0225EF90(controller);
         }
         break;
     case 7:
         ov49_0225EF68(controller);
-        ov45_0222A5E8(ov49_02259FE8(work), 1);
+        ov45_0222A5E8(WiFiPlazaRoom_GetLobby(work), 1);
         ov49_02258EEC(object, (void*)(entry), 1);
         ov49_0225EF98(ov49_0225A010(work), arg, ov49_02269B38, 0);
         break;

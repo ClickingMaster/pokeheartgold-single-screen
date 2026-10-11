@@ -18,19 +18,19 @@ typedef struct Ov49F518Work {
 } Ov49F518Work;
 
 #pragma require_prototypes off
-void *ov49_02259FE8(void *);
-void *ov49_02259FF0(void *);
+void *WiFiPlazaRoom_GetLobby(void *);
+void *WiFiPlazaRoom_GetObjManager(void *);
 void *ov49_02258DAC(void *);
 void *ov49_0225EF84(void *);
 u8 *ov49_0225EF40(void *, u32);
 u32 ov49_0225EF88(void *);
-u32 ov49_0225A30C(void *, u32, u32);
+u32 WiFiPlazaRoom_GetMsgString(void *, u32, u32);
 void *ov49_0225A008(void *);
 void *ov49_0225A010(void *);
 u32 ov49_0225A02C(void *);
 u32 ov49_0225A1D4(void *);
-u32 ov49_0225A2C4(void *);
-u32 ov49_0225A0AC(void *);
+u32 WiFiPlazaRoom_GetYesNoResult(void *);
+u32 WiFiPlazaRoom_IsMessageFinished(void *);
 u32 ov49_02258F38(void *);
 extern const u8 ov49_02269B38[];
 BOOL ov49_0225F518(void *, void *, u32);

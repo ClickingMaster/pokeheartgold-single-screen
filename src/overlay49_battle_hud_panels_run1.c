@@ -4,7 +4,7 @@
 
 extern void GF_AssertFail(void);
 
-extern u32 ov49_02259FF0(void *p);
+extern u32 WiFiPlazaRoom_GetObjManager(void *p);
 extern u32 ov49_02258DAC(void *p);
 extern u32 ov49_02258E60(void *p, u32 a);
 extern void ov49_0225A53C(void *p, u32 a);
@@ -15,14 +15,14 @@ extern void ov45_0222AE08(void *p, fx32 *a, fx32 *b);
 extern void ov49_0225E420(void *p, fx32 a, fx32 b, VecFx32 *v);
 extern u32 ov49_0225EF88(void *p);
 extern void ov49_0225EF90(void *p);
-extern u32 ov49_02259FE8(void *p);
+extern u32 WiFiPlazaRoom_GetLobby(void *p);
 extern u32 ov45_0222A330(void *p);
 extern u32 ov45_0222A374(void *p);
-extern u32 ov49_0225A30C(void *p, u32 a, u32 b);
-extern void ov49_0225A08C(void *p, u32 a);
+extern u32 WiFiPlazaRoom_GetMsgString(void *p, u32 a, u32 b);
+extern void WiFiPlazaRoom_PrintMessage(void *p, u32 a);
 extern void PlaySE(u32 id);
-extern u32 ov49_0225A0AC(void *p);
-extern void ov49_0225A0EC(void *p);
+extern u32 WiFiPlazaRoom_IsMessageFinished(void *p);
+extern void WiFiPlazaRoom_CloseMessage(void *p);
 extern void ov49_02258EEC(void *, void *, int);
 extern u32 ov49_0225A520(void *p, fx32 a);
 extern BOOL ov49_0225F438(void *p);
@@ -36,7 +36,7 @@ extern u32 ov49_0225A154(void *p);
 extern const Ov49Blk ov49_02269C00;
 
 u32 ov49_02260230(void *unused, void *p) {
-    if (ov49_02258E60((void *)ov49_02258DAC((void *)ov49_02259FF0(p)), 5)) {
+    if (ov49_02258E60((void *)ov49_02258DAC((void *)WiFiPlazaRoom_GetObjManager(p)), 5)) {
         ov49_0225A53C(p, 1);
     }
     return 0;

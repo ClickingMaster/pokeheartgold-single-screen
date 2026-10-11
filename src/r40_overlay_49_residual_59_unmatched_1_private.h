@@ -3,9 +3,9 @@
 
 #include "global.h"
 
-void *ov49_02259FF0(void *p);
+void *WiFiPlazaRoom_GetObjManager(void *p);
 void *ov49_02258D70(void *p, u32 index);
-void *ov49_02259FE8(void *p);
+void *WiFiPlazaRoom_GetLobby(void *p);
 u32 ov49_0225EF88(void *p);
 void ov49_0225A56C(void *p, u32 index);
 void ov49_0225EF8C(void *p, u32 state);
@@ -27,10 +27,10 @@ u8 ov49_0225A030(void *p);
 void ov49_02258EAC(void *p, void *entry, u32 value, u16 arg);
 void ov49_0225A018(void *p, u32 value);
 u32 ov45_0222A4B8(void *p);
-u32 ov49_0225A30C(void *p, u32 a, u32 b);
-void ov49_0225A08C(void *p, u32 value);
-u32 ov49_0225A0AC(void *p);
-void ov49_0225A0EC(void *p);
+u32 WiFiPlazaRoom_GetMsgString(void *p, u32 a, u32 b);
+void WiFiPlazaRoom_PrintMessage(void *p, u32 value);
+u32 WiFiPlazaRoom_IsMessageFinished(void *p);
+void WiFiPlazaRoom_CloseMessage(void *p);
 void *ov49_0225A010(void *p);
 u8 ov49_0225A02C(void *p);
 void ov49_0225EF98(void *p, u32 value, const void *config, u32 unused);

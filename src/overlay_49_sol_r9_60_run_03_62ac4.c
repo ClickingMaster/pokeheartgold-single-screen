@@ -47,7 +47,7 @@ BOOL ov49_02262B14(void *state, void *ctx) {
             return TRUE;
         }
         ov49_0225A37C(ctx, index, 0);
-        ov49_0225A0FC(ctx, ov49_0225A30C(ctx, 1, value));
+        ov49_0225A0FC(ctx, WiFiPlazaRoom_GetMsgString(ctx, 1, value));
         ov49_02262D70(task, ctx, index, 0, 0);
         ov49_02262E04(task, ctx, 1);
         ov49_0225EF90(state);
@@ -55,8 +55,8 @@ BOOL ov49_02262B14(void *state, void *ctx) {
     case 1:
         if ((*(u32 *)(gSystem + 0x48) & 0xF3) != 0) {
             ov49_02262DB8(object, ctx);
-            ov49_0225A0EC(ctx);
-            object = ov49_02259FF0(ctx);
+            WiFiPlazaRoom_CloseMessage(ctx);
+            object = WiFiPlazaRoom_GetObjManager(ctx);
             ov49_02258EEC(object, (void*)(ov49_02258DAC(object)), 1);
             ov49_0225EF68(state);
             return TRUE;
@@ -68,7 +68,7 @@ BOOL ov49_02262B14(void *state, void *ctx) {
 }
 
 void ov49_02262BF8(Ov49Residual60Work *work, void *state, void *ctx, u32 value, u32 next) {
-    ov49_0225A08C(ctx, ov49_0225A30C(ctx, 0, value));
+    WiFiPlazaRoom_PrintMessage(ctx, WiFiPlazaRoom_GetMsgString(ctx, 0, value));
     work->state4 = next;
     ov49_0225EF8C(state, 0x19);
 }
@@ -87,7 +87,7 @@ void ov49_02262C38(Ov49Residual60Work *work, void *ctx, u32 count, u32 first) {
     ov49_0225A10C(ctx, count);
     work->count38 = count;
     for (i = 0; i < count; i++) {
-        ov49_0225A144(ctx, ov49_0225A30C(ctx, 0, first + i), i);
+        ov49_0225A144(ctx, WiFiPlazaRoom_GetMsgString(ctx, 0, first + i), i);
     }
     *(Ov49Residual60CopyBlock *)&work->copied18 = *(Ov49Residual60CopyBlock *)ov49_02269DFC;
     work->count28 = work->count38;

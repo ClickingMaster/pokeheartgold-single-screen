@@ -9,8 +9,8 @@ BOOL ov49_0225F518(void *controller, void *ctx, u32 arg) {
     u32 message;
     BOOL done;
 
-    selection = ov49_02259FE8(ctx);
-    object = ov49_02259FF0(ctx);
+    selection = WiFiPlazaRoom_GetLobby(ctx);
+    object = WiFiPlazaRoom_GetObjManager(ctx);
     entry = ov49_02258DAC(object);
     work = ov49_0225EF84(controller);
 
@@ -64,12 +64,12 @@ BOOL ov49_0225F518(void *controller, void *ctx, u32 arg) {
         }
         break;
     case 8:
-        ov49_0225A08C(ctx, ov49_0225A30C(ctx, 1, 0));
+        WiFiPlazaRoom_PrintMessage(ctx, WiFiPlazaRoom_GetMsgString(ctx, 1, 0));
         U16_AT(work, 0) = 0x10;
         ov49_0225EF8C(controller, 0x15);
         break;
     case 9:
-        ov49_0225A09C(ctx, ov49_0225A30C(ctx, 1, 5));
+        ov49_0225A09C(ctx, WiFiPlazaRoom_GetMsgString(ctx, 1, 5));
         ov49_0225A174(ctx, work + 8, 0, 0);
         ov49_0225A1F4(ctx, 1);
         ov49_0225EF8C(controller, 0xA);
@@ -95,8 +95,8 @@ BOOL ov49_0225F518(void *controller, void *ctx, u32 arg) {
         if (done == TRUE) {
             ov49_0225A1E4(ctx, 0, 0);
             if (U16_AT(work, 0x28) != 0) {
-                ov49_0225A09C(ctx, ov49_0225A30C(ctx, 1, 8));
-                ov49_0225A264(ctx);
+                ov49_0225A09C(ctx, WiFiPlazaRoom_GetMsgString(ctx, 1, 8));
+                WiFiPlazaRoom_OpenYesNoMenu(ctx);
                 ov49_0225EF8C(controller, 0xB);
             } else {
                 ov49_0225EF8C(controller, 0x11);
@@ -104,22 +104,22 @@ BOOL ov49_0225F518(void *controller, void *ctx, u32 arg) {
         }
         break;
     case 11:
-        switch (ov49_0225A2C4(ctx)) {
+        switch (WiFiPlazaRoom_GetYesNoResult(ctx)) {
         case 0:
-            ov49_0225A2F8(ctx);
+            WiFiPlazaRoom_CloseYesNoMenu(ctx);
             ov49_0225EF8C(controller, 0xC);
             ov45_0222A770(selection, U16_AT(work, 0x28), U16_AT(work, 0x2A));
             ov49_0225A490(ctx);
             PlaySE(0x5E5);
             break;
         case 1:
-            ov49_0225A2F8(ctx);
+            WiFiPlazaRoom_CloseYesNoMenu(ctx);
             ov49_0225EF8C(controller, 9);
             break;
         }
         break;
     case 12:
-        ov49_0225A09C(ctx, ov49_0225A30C(ctx, 1, 0xA));
+        ov49_0225A09C(ctx, WiFiPlazaRoom_GetMsgString(ctx, 1, 0xA));
         ov49_0225A174(ctx, work + 8, 0, 0);
         ov49_0225A1F4(ctx, 1);
         ov49_0225EF8C(controller, 0xD);
@@ -145,8 +145,8 @@ BOOL ov49_0225F518(void *controller, void *ctx, u32 arg) {
         if (done == TRUE) {
             ov49_0225A1E4(ctx, 0, 0);
             if (U16_AT(work, 0x2A) != 0) {
-                ov49_0225A09C(ctx, ov49_0225A30C(ctx, 1, 8));
-                ov49_0225A264(ctx);
+                ov49_0225A09C(ctx, WiFiPlazaRoom_GetMsgString(ctx, 1, 8));
+                WiFiPlazaRoom_OpenYesNoMenu(ctx);
                 ov49_0225EF8C(controller, 0xF);
             } else {
                 ov49_0225EF8C(controller, 0x13);
@@ -154,16 +154,16 @@ BOOL ov49_0225F518(void *controller, void *ctx, u32 arg) {
         }
         break;
     case 15:
-        switch (ov49_0225A2C4(ctx)) {
+        switch (WiFiPlazaRoom_GetYesNoResult(ctx)) {
         case 0:
-            ov49_0225A2F8(ctx);
+            WiFiPlazaRoom_CloseYesNoMenu(ctx);
             ov49_0225EF8C(controller, 0x14);
             ov45_0222A770(selection, U16_AT(work, 0x28), U16_AT(work, 0x2A));
             ov49_0225A490(ctx);
             PlaySE(0x5E5);
             break;
         case 1:
-            ov49_0225A2F8(ctx);
+            WiFiPlazaRoom_CloseYesNoMenu(ctx);
             ov49_0225EF8C(controller, 0xC);
             break;
         }
@@ -174,23 +174,23 @@ BOOL ov49_0225F518(void *controller, void *ctx, u32 arg) {
         ov49_0225A334(ctx, arg, 0);
         ov49_0225A39C(ctx, U16_AT(work, 2), 1);
         if (ov45_0222AB28(selection, arg) == 0) {
-            message = ov49_0225A30C(ctx, 1, 1);
+            message = WiFiPlazaRoom_GetMsgString(ctx, 1, 1);
         } else {
-            message = ov49_0225A30C(ctx, 1, 0x7C);
+            message = WiFiPlazaRoom_GetMsgString(ctx, 1, 0x7C);
         }
-        ov49_0225A08C(ctx, message);
+        WiFiPlazaRoom_PrintMessage(ctx, message);
         U16_AT(work, 0) = 0x12;
         ov49_0225EF8C(controller, 0x15);
         break;
     case 17:
-        ov49_0225A08C(ctx, ov49_0225A30C(ctx, 1, 2));
+        WiFiPlazaRoom_PrintMessage(ctx, WiFiPlazaRoom_GetMsgString(ctx, 1, 2));
         U16_AT(work, 0) = 0x16;
         ov49_0225EF8C(controller, 0x15);
         break;
     case 18:
         if (!IsSEPlaying(0x5BF) && (gSystem.newKeys & 3) != 0) {
             PlaySE(0x5DC);
-            ov49_0225A08C(ctx, ov49_0225A30C(ctx, 1, 4));
+            WiFiPlazaRoom_PrintMessage(ctx, WiFiPlazaRoom_GetMsgString(ctx, 1, 4));
             U16_AT(work, 0) = 9;
             ov49_0225EF8C(controller, 0x15);
             ov45_0222A770(selection, U16_AT(work, 0x28), U16_AT(work, 0x2A));
@@ -199,25 +199,25 @@ BOOL ov49_0225F518(void *controller, void *ctx, u32 arg) {
         break;
     case 19:
         ov49_0225A40C(ctx, 0, U16_AT(work, 0x28));
-        ov49_0225A08C(ctx, ov49_0225A30C(ctx, 1, 0xC));
+        WiFiPlazaRoom_PrintMessage(ctx, WiFiPlazaRoom_GetMsgString(ctx, 1, 0xC));
         U16_AT(work, 0) = 0x11;
         ov49_0225EF8C(controller, 0x15);
         break;
     case 20:
         ov49_0225A40C(ctx, 0, U16_AT(work, 0x28));
         ov49_0225A40C(ctx, 1, U16_AT(work, 0x2A));
-        ov49_0225A08C(ctx, ov49_0225A30C(ctx, 1, 0xB));
+        WiFiPlazaRoom_PrintMessage(ctx, WiFiPlazaRoom_GetMsgString(ctx, 1, 0xB));
         U16_AT(work, 0) = 0x11;
         ov49_0225EF8C(controller, 0x15);
         break;
     case 21:
-        if (ov49_0225A0AC(ctx) == 1) {
+        if (WiFiPlazaRoom_IsMessageFinished(ctx) == 1) {
             ov49_0225EF8C(controller, U16_AT(work, 0));
         }
         break;
     case 22:
         ov49_02258EEC(object, entry, 1);
-        ov49_0225A0EC(ctx);
+        WiFiPlazaRoom_CloseMessage(ctx);
         ov49_02261540(work, ctx);
         ov49_0225EF68(controller);
         ov49_0225EF98(ov49_0225A010(ctx), ov49_0225A02C(ctx), ov49_02269B38, 0);

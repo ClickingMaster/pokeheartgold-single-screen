@@ -17,8 +17,8 @@ typedef struct Ov49Entry {
 extern void GF_AssertFail(void);
 extern void *Heap_Alloc(u32, u32);
 
-extern const u8 ov49_0226A7E0[];
-extern const u16 ov49_0226A7D8[];
+extern const u8 sWiFiPlazaLightColorSets[];
+extern const u16 sWiFiPlazaLight1Colors[];
 extern const u32 ov49_0226A70C[];
 extern void (*const ov49_0226A4CC[])(void *, u32);
 extern u32 (*const ov49_0226A484[])(void *);
@@ -37,9 +37,9 @@ extern void ov49_02265B14(void *, void *, int, int);
 extern void ov49_02265BE8(void *, void *, u32, int, u32);
 extern u32 ov49_02265C40(void *, void *, u32, u32);
 extern void ov49_02265980(void *, void *, u32, const void *);
-extern void ov49_022686C0(void *, const u8 *);
-extern void ov49_022686E4(void *, const u16 *);
-extern void ov49_022686F0(void *);
+extern void WiFiPlazaLight_UnpackColorSet(void *, const u8 *);
+extern void WiFiPlazaLight_UnpackLight1(void *, const u16 *);
+extern void WiFiPlazaLight_Apply(void *);
 extern void ov49_02259148(void *, VecFx32 *);
 
 #endif
