@@ -28,7 +28,7 @@ extern s16 *sub_02010EE0(void *, int);
 extern void sub_02010A00(int, s32 *, int, int);
 extern int sub_02010A7C(int, int);
 extern void sub_02010A8C(void *, void *);
-extern void sub_02013488(u32, int, int, int, int, u32, u32);
+extern void ScreenWindow_QueueSetRect(u32, int, int, int, int, u32, u32);
 extern void sub_02011A44(int, int, int, int, int *, int *);
 extern u32 FX_Sqrt(u32);
 extern BOOL sub_020117FC(EffectWork *);
@@ -73,10 +73,10 @@ BOOL sub_020117FC(EffectWork *work) {
             work->f[14] = remaining;
             sub_02010A8C(work, &work->f[4]);
         } else {
-            sub_02013488(work->f[18], work->f[8], work->f[9], work->f[10], work->f[11], work->f[13], work->f[12]);
+            ScreenWindow_QueueSetRect(work->f[18], work->f[8], work->f[9], work->f[10], work->f[11], work->f[13], work->f[12]);
             return TRUE;
         }
-        sub_02013488(work->f[18], work->f[0] / 128, work->f[1] / 128, work->f[2] / 128, work->f[3] / 128, work->f[13], work->f[12]);
+        ScreenWindow_QueueSetRect(work->f[18], work->f[0] / 128, work->f[1] / 128, work->f[2] / 128, work->f[3] / 128, work->f[13], work->f[12]);
     }
     return FALSE;
 }

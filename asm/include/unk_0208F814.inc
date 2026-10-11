@@ -22,5 +22,5 @@
 .public MATH_CountPopulation
 .public gOverlayTemplate_Battle
 .public gNatureStatMods
-.public ov37_021E6FC8
-.public ov37_021E75E0
+.public DrawingSession_HandleNetEvent
+.public DrawingSession_GetMemberCount

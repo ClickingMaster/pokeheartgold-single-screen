@@ -44,7 +44,7 @@
 #include "overlay_55.h"
 #include "overlay_58.h"
 #include "hall_of_fame_showcase.h"
-#include "overlay_65.h"
+#include "wireless_trade_select_mon.h"
 #include "battle_room_results.h"
 #include "overlay_68.h"
 #include "geonet_globe_app.h"
@@ -991,7 +991,7 @@ void CallTask_WirelessTrade(TaskManager *taskman) {
     TaskManager_Call(taskman, Task_WirelessTrade, data);
 }
 
-static const OverlayManagerTemplate _020FA2C4 = { ov37_021E5900, ov37_021E5A84, ov37_021E5B94, FS_OVERLAY_ID(OVY_37) };
+static const OverlayManagerTemplate _020FA2C4 = { DrawingSession_Init, DrawingSession_Main, DrawingSession_Exit, FS_OVERLAY_ID(OVY_37) };
 static const OverlayManagerTemplate _020FA2B4 = { ov73_021E5900, ov73_021E5AB8, ov73_021E5BAC, FS_OVERLAY_ID(OVY_73) };
 
 void sub_0203F4C8(FieldSystem *fieldSystem) {

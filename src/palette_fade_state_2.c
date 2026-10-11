@@ -1,7 +1,7 @@
 #include "palette_fade_state_internal.h"
 
 void ResetVisibleHardwareWindows(int screen) {
-    sub_020131F4(0, screen);
+    ScreenWindow_SetVisible(0, screen);
 }
 
 void SetMasterBrightnessNeutral(int screen) {
@@ -35,10 +35,10 @@ void sub_0200FC60(int screen, u16 color) {
     } else {
         GXS_LoadBGPltt(&color, 0, 2);
     }
-    sub_02013424(_021D0F80, 1, screen);
-    sub_02013440(_021D0F80, 0x3f, 0, 0, screen);
-    sub_02013488(_021D0F80, 0, 0, 0, 0, 0, screen);
-    sub_02013468(_021D0F80, 0x20, 0, screen);
+    ScreenWindow_QueueSetVisible(_021D0F80, 1, screen);
+    ScreenWindow_QueueSetInside(_021D0F80, 0x3f, 0, 0, screen);
+    ScreenWindow_QueueSetRect(_021D0F80, 0, 0, 0, 0, 0, screen);
+    ScreenWindow_QueueSetOutside(_021D0F80, 0x20, 0, screen);
 }
 
 void sub_0200FCDC(u16 color) {

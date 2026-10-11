@@ -467,12 +467,12 @@ BOOL FadeFunc_41(FadeWork *work) {
 BOOL FadeFunc_42(FadeWork *work) {
     if (work->state == 0) {
         sub_0200FCDC(work->color);
-        sub_02012DD8(work, _020F5E74);
+        ClockWipe_Begin(work, _020F5E74);
         work->topScreen = 1;
         work->bottomScreen = 0;
         return 0;
     }
-    return sub_02012E10(work);
+    return ClockWipe_Update(work);
 }
 
 int sub_020109BC(int angle) {

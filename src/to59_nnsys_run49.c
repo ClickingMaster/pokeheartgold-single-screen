@@ -28,7 +28,7 @@ extern Byte _02110A24[];
 extern Byte _02110A28[];
 void NNS_G3dAnmObjInit(Byte *obj, Byte *anm, void *model, void *tex);
 void InitCharCanvas(void *, void *, u32, u32, u32, void *, u32);
-extern Byte _021093FC[];
+extern Byte gCharCanvasVTableBG[];
 void NNS_G2dCharCanvasInitForBG(void *canvas, void *base, u32 p2, u32 p3, u32 p4);
 u32 NNSi_G2dBitReaderRead(Byte *reader, int n);
 

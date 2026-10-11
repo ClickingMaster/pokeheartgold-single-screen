@@ -13,29 +13,29 @@
 .public sub_02010F84
 .public sub_02010FEC
 .public sub_02011068
-.public sub_02012DD8
-.public sub_02012E10
-.public sub_020131F4
-.public sub_02013220
-.public sub_020132A8
-.public sub_020132E8
-.public sub_0201333C
-.public sub_02013364
-.public sub_02013424
-.public sub_02013440
-.public sub_02013468
-.public sub_02013488
+.public ClockWipe_Begin
+.public ClockWipe_Update
+.public ScreenWindow_SetVisible
+.public ScreenWindow_SetInside
+.public ScreenWindow_SetOutside
+.public ScreenWindow_GetInside
+.public ScreenWindow_GetOutside
+.public ScreenWindow_SetRect
+.public ScreenWindow_QueueSetVisible
+.public ScreenWindow_QueueSetInside
+.public ScreenWindow_QueueSetOutside
+.public ScreenWindow_QueueSetRect
 .public Heap_Alloc
 .public Heap_Free
 .public GF_AssertFail
 .public _s32_div_f
 .public FX_SinCosTable_
 
-	.public sub_02012E6C
-	.public sub_02012F54
-	.public sub_02013004
-	.public sub_020131AC
-	.public sub_020134BC
-	.public sub_020134D0
-	.public sub_020134EC
-	.public sub_02013504
+	.public ClockWipe_Init
+	.public ClockWipe_Step
+	.public ClockWipe_GetScanlineSpan
+	.public ClockWipe_BuildScanlines
+	.public ScreenWindow_SetVisibleTask
+	.public ScreenWindow_SetInsideTask
+	.public ScreenWindow_SetOutsideTask
+	.public ScreenWindow_SetRectTask

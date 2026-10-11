@@ -21,12 +21,12 @@ void sub_0208F680(int sender, int unused, void *data, TradeContext *context) {
         work->count++;
         if (work->count * 0x590 >= 0x590) {
             if (Comm_GetLocalNetId() == 1) {
-                ov65_0221DE24(work, 27, 0);
+                WirelessTradeSelectMon_SendCommandIfChanged(work, 27, 0);
             } else {
-                ov65_0221DE64(Comm_GetLocalNetId(), work->send, work->sequence);
+                WirelessTradeSelectMon_SendPartyChunk(Comm_GetLocalNetId(), work->send, work->sequence);
             }
         } else {
-            ov65_0221DE64(Comm_GetLocalNetId(), work->send, work->sequence);
+            WirelessTradeSelectMon_SendPartyChunk(Comm_GetLocalNetId(), work->send, work->sequence);
         }
         work->sequence++;
     }

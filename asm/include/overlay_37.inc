@@ -132,8 +132,8 @@
 .public _fflt
 .public _fsub
 .public gSystem
-.public ov37_021E5900
-.public ov37_021E5A84
-.public ov37_021E5B94
-.public ov37_021E6FC8
-.public ov37_021E75E0
+.public DrawingSession_Init
+.public DrawingSession_Main
+.public DrawingSession_Exit
+.public DrawingSession_HandleNetEvent
+.public DrawingSession_GetMemberCount

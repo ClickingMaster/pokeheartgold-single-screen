@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "d0e11e457f7f6eed7685e9c2821ac6c48cb3152d",
+  "commit": "68114ec83ed61b9589172f598f33cd74e5b0bf24",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "e4b5e58a5ddc5a85af3e1a04b25d0c6f4a745a6ad9b6e3e8da868c769f425fa0",
+    "ARM9": "f2b59feeba8557638785d3ffe5923a98136ba91c56046c4a02fb7097e16f3778",
     "ARM7": "7c4e2dc2ca5f16a55ea8dbc32ca197157739963d65ea0ef91c348511ea78fc75"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -15636,226 +15636,18 @@
     {
       "cpu": "ARM9",
       "module": "OVY_37",
-      "object": "op90_overlay_37_residual_2_tail_r01.o",
-      "bytes": 468,
+      "object": "drawing_session.o",
+      "bytes": 8132,
       "status": "c",
-      "source": "src/op90_overlay_37_residual_2_tail_r01.c"
+      "source": "src/drawing_session.c"
     },
     {
       "cpu": "ARM9",
       "module": "OVY_37",
-      "object": "opus10_overlay37_blit_clip_run1.o",
-      "bytes": 1276,
-      "status": "c",
-      "source": "src/opus10_overlay37_blit_clip_run1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_37",
-      "object": "opus_overlay37_1.o",
-      "bytes": 388,
-      "status": "c",
-      "source": "src/opus_overlay37_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_37",
-      "object": "opus_overlay37_2.o",
-      "bytes": 908,
-      "status": "c",
-      "source": "src/opus_overlay37_2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_37",
-      "object": "overlay37_helpers_1.o",
-      "bytes": 118,
-      "status": "c",
-      "source": "src/overlay37_helpers_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_37",
-      "object": "overlay37_helpers_10.o",
-      "bytes": 156,
-      "status": "c",
-      "source": "src/overlay37_helpers_10.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_37",
-      "object": "overlay37_helpers_2.o",
-      "bytes": 58,
-      "status": "c",
-      "source": "src/overlay37_helpers_2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_37",
-      "object": "overlay37_helpers_3.o",
-      "bytes": 450,
-      "status": "c",
-      "source": "src/overlay37_helpers_3.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_37",
-      "object": "overlay37_helpers_4.o",
-      "bytes": 36,
-      "status": "c",
-      "source": "src/overlay37_helpers_4.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_37",
-      "object": "overlay37_helpers_5.o",
-      "bytes": 276,
-      "status": "c",
-      "source": "src/overlay37_helpers_5.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_37",
-      "object": "overlay37_helpers_6.o",
-      "bytes": 390,
-      "status": "c",
-      "source": "src/overlay37_helpers_6.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_37",
-      "object": "overlay37_helpers_7.o",
-      "bytes": 28,
-      "status": "c",
-      "source": "src/overlay37_helpers_7.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_37",
-      "object": "overlay37_helpers_8.o",
-      "bytes": 104,
-      "status": "c",
-      "source": "src/overlay37_helpers_8.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_37",
-      "object": "overlay37_helpers_9.o",
-      "bytes": 76,
-      "status": "c",
-      "source": "src/overlay37_helpers_9.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_37",
-      "object": "overlay37_message_print_r50.o",
-      "bytes": 116,
-      "status": "c",
-      "source": "src/overlay37_message_print_r50.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_37",
-      "object": "overlay37_network_wait_r50.o",
-      "bytes": 152,
-      "status": "c",
-      "source": "src/overlay37_network_wait_r50.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_37",
-      "object": "overlay37_prompt_state_r50.o",
-      "bytes": 356,
-      "status": "c",
-      "source": "src/overlay37_prompt_state_r50.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_37",
-      "object": "overlay37_prompt_sync_r50.o",
-      "bytes": 188,
-      "status": "c",
-      "source": "src/overlay37_prompt_sync_r50.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_37",
-      "object": "overlay37_residual2_ui_r38_1.o",
-      "bytes": 294,
-      "status": "c",
-      "source": "src/overlay37_residual2_ui_r38_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_37",
-      "object": "overlay37_residual2_ui_r38_2.o",
-      "bytes": 296,
-      "status": "c",
-      "source": "src/overlay37_residual2_ui_r38_2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_37",
-      "object": "overlay37_sprite_matrix_r50.o",
-      "bytes": 110,
-      "status": "c",
-      "source": "src/overlay37_sprite_matrix_r50.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_37",
-      "object": "overlay37_sprite_resources_r50.o",
-      "bytes": 388,
-      "status": "c",
-      "source": "src/overlay37_sprite_resources_r50.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_37",
-      "object": "to70_overlay_37_residual_11_extra584_run01.o",
+      "object": "ov37_021e78e0.o",
       "bytes": 134,
       "status": "c",
-      "source": "src/to70_overlay_37_residual_11_extra584_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_37",
-      "object": "to80_extra1694_run01.o",
-      "bytes": 556,
-      "status": "c",
-      "source": "src/to80_extra1694_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_37",
-      "object": "to80_extra2571_run01.o",
-      "bytes": 272,
-      "status": "c",
-      "source": "src/to80_extra2571_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_37",
-      "object": "to90_extra2209_run01.o",
-      "bytes": 228,
-      "status": "c",
-      "source": "src/to90_extra2209_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_37",
-      "object": "to90_extra2484_run01.o",
-      "bytes": 340,
-      "status": "c",
-      "source": "src/to90_extra2484_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_37",
-      "object": "to91_w41540_radio_run01.o",
-      "bytes": 104,
-      "status": "c",
-      "source": "src/to91_w41540_radio_run01.c"
+      "source": "src/ov37_021e78e0.c"
     },
     {
       "cpu": "ARM9",
@@ -28980,458 +28772,10 @@
     {
       "cpu": "ARM9",
       "module": "OVY_65",
-      "object": "op90_overlay_65_residual_3_opus10_residual_4_r01.o",
-      "bytes": 56,
+      "object": "wireless_trade_select_mon.o",
+      "bytes": 16120,
       "status": "c",
-      "source": "src/op90_overlay_65_residual_3_opus10_residual_4_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "op90_overlay_65_residual_9_opus10_residual_2_r01.o",
-      "bytes": 332,
-      "status": "c",
-      "source": "src/op90_overlay_65_residual_9_opus10_residual_2_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "op90_to45_overlay65_r15_gap1_r01.o",
-      "bytes": 528,
-      "status": "c",
-      "source": "src/op90_to45_overlay65_r15_gap1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "op90_to50_overlay65_r14_residual3_head_r01.o",
-      "bytes": 372,
-      "status": "c",
-      "source": "src/op90_to50_overlay65_r14_residual3_head_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "opus10_overlay65_party_rows_run1.o",
-      "bytes": 108,
-      "status": "c",
-      "source": "src/opus10_overlay65_party_rows_run1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "opus10_overlay65_party_rows_run2.o",
-      "bytes": 64,
-      "status": "c",
-      "source": "src/opus10_overlay65_party_rows_run2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "opus10_overlay65_party_rows_run3.o",
-      "bytes": 64,
-      "status": "c",
-      "source": "src/opus10_overlay65_party_rows_run3.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "opus10_overlay65_party_rows_run4.o",
-      "bytes": 220,
-      "status": "c",
-      "source": "src/opus10_overlay65_party_rows_run4.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "opus10_overlay65_summary_rows_run1.o",
-      "bytes": 988,
-      "status": "c",
-      "source": "src/opus10_overlay65_summary_rows_run1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "overlay65_partial_1.o",
-      "bytes": 34,
-      "status": "c",
-      "source": "src/overlay65_partial_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "overlay65_partial_10.o",
-      "bytes": 18,
-      "status": "c",
-      "source": "src/overlay65_partial_10.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "overlay65_partial_11.o",
-      "bytes": 36,
-      "status": "c",
-      "source": "src/overlay65_partial_11.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "overlay65_partial_12.o",
-      "bytes": 106,
-      "status": "c",
-      "source": "src/overlay65_partial_12.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "overlay65_partial_13.o",
-      "bytes": 20,
-      "status": "c",
-      "source": "src/overlay65_partial_13.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "overlay65_partial_14.o",
-      "bytes": 28,
-      "status": "c",
-      "source": "src/overlay65_partial_14.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "overlay65_partial_15.o",
-      "bytes": 20,
-      "status": "c",
-      "source": "src/overlay65_partial_15.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "overlay65_partial_2.o",
-      "bytes": 42,
-      "status": "c",
-      "source": "src/overlay65_partial_2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "overlay65_partial_3.o",
-      "bytes": 18,
-      "status": "c",
-      "source": "src/overlay65_partial_3.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "overlay65_partial_4.o",
-      "bytes": 68,
-      "status": "c",
-      "source": "src/overlay65_partial_4.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "overlay65_partial_5.o",
-      "bytes": 16,
-      "status": "c",
-      "source": "src/overlay65_partial_5.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "overlay65_partial_6.o",
-      "bytes": 28,
-      "status": "c",
-      "source": "src/overlay65_partial_6.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "overlay65_partial_7.o",
-      "bytes": 36,
-      "status": "c",
-      "source": "src/overlay65_partial_7.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "overlay65_partial_8.o",
-      "bytes": 20,
-      "status": "c",
-      "source": "src/overlay65_partial_8.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "overlay65_partial_9.o",
-      "bytes": 20,
-      "status": "c",
-      "source": "src/overlay65_partial_9.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "overlay65_trade_select_r38_1.o",
-      "bytes": 726,
-      "status": "c",
-      "source": "src/overlay65_trade_select_r38_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "overlay_65_residual_8_head.o",
-      "bytes": 288,
-      "status": "c",
-      "source": "src/overlay_65_residual_8_head.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "overlay_65_residual_8_tail.o",
-      "bytes": 300,
-      "status": "c",
-      "source": "src/overlay_65_residual_8_tail.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "to45_overlay65_r11.o",
-      "bytes": 984,
-      "status": "c",
-      "source": "src/to45_overlay65_r11.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "to45_overlay65_r15_run1.o",
-      "bytes": 106,
-      "status": "c",
-      "source": "src/to45_overlay65_r15_run1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "to45_overlay65_r15_run2.o",
-      "bytes": 398,
-      "status": "c",
-      "source": "src/to45_overlay65_r15_run2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "to47_overlay65_resources_r4_4.o",
-      "bytes": 968,
-      "status": "c",
-      "source": "src/to47_overlay65_resources_r4_4.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "to50_overlay65_r14_r2.o",
-      "bytes": 1008,
-      "status": "c",
-      "source": "src/to50_overlay65_r14_r2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "to50_overlay65_r14_residual1.o",
-      "bytes": 412,
-      "status": "c",
-      "source": "src/to50_overlay65_r14_residual1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "to50_overlay65_r14_residual3.o",
-      "bytes": 1016,
-      "status": "c",
-      "source": "src/to50_overlay65_r14_residual3.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "to50_overlay65_r14_residual4_exit.o",
-      "bytes": 168,
-      "status": "c",
-      "source": "src/to50_overlay65_r14_residual4_exit.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "to50_overlay65_residual10.o",
-      "bytes": 816,
-      "status": "c",
-      "source": "src/to50_overlay65_residual10.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "to50_overlay65_residual12.o",
-      "bytes": 576,
-      "status": "c",
-      "source": "src/to50_overlay65_residual12.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "to50_overlay65_residual13.o",
-      "bytes": 208,
-      "status": "c",
-      "source": "src/to50_overlay65_residual13.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "to50_overlay65_residual14.o",
-      "bytes": 80,
-      "status": "c",
-      "source": "src/to50_overlay65_residual14.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "to50_overlay65_residual5.o",
-      "bytes": 106,
-      "status": "c",
-      "source": "src/to50_overlay65_residual5.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "to50_overlay65_residual6.o",
-      "bytes": 308,
-      "status": "c",
-      "source": "src/to50_overlay65_residual6.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "to50_overlay65_summary_flow.o",
-      "bytes": 708,
-      "status": "c",
-      "source": "src/to50_overlay65_summary_flow.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "to51_overlay65_e740.o",
-      "bytes": 280,
-      "status": "c",
-      "source": "src/to51_overlay65_e740.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "to59_ov65_dc34.o",
-      "bytes": 136,
-      "status": "c",
-      "source": "src/to59_ov65_dc34.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "to70_overlay_65_r14_residual_6_extra974_run01.o",
-      "bytes": 86,
-      "status": "c",
-      "source": "src/to70_overlay_65_r14_residual_6_extra974_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "to70_overlay_65_residual_3_opus10_residual_2_extra1215_run01.o",
-      "bytes": 708,
-      "status": "c",
-      "source": "src/to70_overlay_65_residual_3_opus10_residual_2_extra1215_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "to70_overlay_65_residual_8_extra211_run01.o",
-      "bytes": 396,
-      "status": "c",
-      "source": "src/to70_overlay_65_residual_8_extra211_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "to70_to45_overlay65_r15_gap2_extra1051_run01.o",
-      "bytes": 68,
-      "status": "c",
-      "source": "src/to70_to45_overlay65_r15_gap2_extra1051_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "to80_extra1540_run01.o",
-      "bytes": 52,
-      "status": "c",
-      "source": "src/to80_extra1540_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "to80_extra1699_run01.o",
-      "bytes": 592,
-      "status": "c",
-      "source": "src/to80_extra1699_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "to80_extra1898_run01.o",
-      "bytes": 124,
-      "status": "c",
-      "source": "src/to80_extra1898_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "wireless_trade_graphics_init.o",
-      "bytes": 784,
-      "status": "c",
-      "source": "src/wireless_trade_graphics_init.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "wireless_trade_select_partial_1.o",
-      "bytes": 48,
-      "status": "c",
-      "source": "src/wireless_trade_select_partial_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "wireless_trade_select_partial_2.o",
-      "bytes": 142,
-      "status": "c",
-      "source": "src/wireless_trade_select_partial_2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "wireless_trade_select_partial_3.o",
-      "bytes": 194,
-      "status": "c",
-      "source": "src/wireless_trade_select_partial_3.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "wireless_trade_select_partial_4.o",
-      "bytes": 32,
-      "status": "c",
-      "source": "src/wireless_trade_select_partial_4.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_65",
-      "object": "wireless_trade_select_partial_5.o",
-      "bytes": 60,
-      "status": "c",
-      "source": "src/wireless_trade_select_partial_5.c"
+      "source": "src/wireless_trade_select_mon.c"
     },
     {
       "cpu": "ARM9",
@@ -43711,18 +43055,10 @@
     {
       "cpu": "ARM9",
       "module": "OVY_83",
-      "object": "op90_overlay_83_r20_gap2_r01.o",
-      "bytes": 1588,
+      "object": "battle_castle_party_app.o",
+      "bytes": 20902,
       "status": "c",
-      "source": "src/op90_overlay_83_r20_gap2_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "op90_overlay_83_residual_18_retained_r01.o",
-      "bytes": 182,
-      "status": "c",
-      "source": "src/op90_overlay_83_residual_18_retained_r01.c"
+      "source": "src/frontier/battle_castle_party_app.c"
     },
     {
       "cpu": "ARM9",
@@ -43731,22 +43067,6 @@
       "bytes": 56,
       "status": "c",
       "source": "src/op90_overlay_83_residual_27_residual_2_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "op90_overlay_83_residual_5_r01.o",
-      "bytes": 180,
-      "status": "c",
-      "source": "src/op90_overlay_83_residual_5_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "op90_overlay_83_residual_6_head_r01.o",
-      "bytes": 148,
-      "status": "c",
-      "source": "src/op90_overlay_83_residual_6_head_r01.c"
     },
     {
       "cpu": "ARM9",
@@ -43779,14 +43099,6 @@
       "bytes": 182,
       "status": "c",
       "source": "src/op90_to91_w41472_ov83_kind_prefix_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "opus10_overlay83_menu_printers_run1.o",
-      "bytes": 1068,
-      "status": "c",
-      "source": "src/opus10_overlay83_menu_printers_run1.c"
     },
     {
       "cpu": "ARM9",
@@ -43839,46 +43151,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_83",
-      "object": "ov83_wave42_1.o",
-      "bytes": 372,
-      "status": "c",
-      "source": "src/ov83_wave42_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "ov83_wave42_2.o",
-      "bytes": 834,
-      "status": "c",
-      "source": "src/ov83_wave42_2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "ov83_wave42_3.o",
-      "bytes": 350,
-      "status": "c",
-      "source": "src/ov83_wave42_3.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "ov83_wave43a_1.o",
-      "bytes": 508,
-      "status": "c",
-      "source": "src/ov83_wave43a_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "ov83_wave43b_1.o",
-      "bytes": 468,
-      "status": "c",
-      "source": "src/ov83_wave43b_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
       "object": "overlay83_action_handlers_gap30.o",
       "bytes": 580,
       "status": "c",
@@ -43895,26 +43167,10 @@
     {
       "cpu": "ARM9",
       "module": "OVY_83",
-      "object": "overlay83_item_ui_callbacks.o",
-      "bytes": 360,
-      "status": "c",
-      "source": "src/overlay83_item_ui_callbacks.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
       "object": "overlay83_mon_sprite_loader_r42.o",
       "bytes": 268,
       "status": "c",
       "source": "src/overlay83_mon_sprite_loader_r42.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_party_menu_open_r10.o",
-      "bytes": 108,
-      "status": "c",
-      "source": "src/overlay83_party_menu_open_r10.c"
     },
     {
       "cpu": "ARM9",
@@ -43943,30 +43199,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_83",
-      "object": "overlay83_party_ui_gap6_tail.o",
-      "bytes": 188,
-      "status": "c",
-      "source": "src/overlay83_party_ui_gap6_tail.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_party_ui_r21.o",
-      "bytes": 524,
-      "status": "c",
-      "source": "src/overlay83_party_ui_r21.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_player_text_r12.o",
-      "bytes": 284,
-      "status": "c",
-      "source": "src/overlay83_player_text_r12.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
       "object": "overlay83_r40_r2_exact_01.o",
       "bytes": 328,
       "status": "c",
@@ -43983,146 +43215,10 @@
     {
       "cpu": "ARM9",
       "module": "OVY_83",
-      "object": "overlay83_residual11_ui_r38_1.o",
-      "bytes": 392,
-      "status": "c",
-      "source": "src/overlay83_residual11_ui_r38_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
       "object": "overlay83_setup_r46_27.o",
       "bytes": 116,
       "status": "c",
       "source": "src/overlay83_setup_r46_27.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_sol_partial_1.o",
-      "bytes": 64,
-      "status": "c",
-      "source": "src/overlay83_sol_partial_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_sol_partial_10.o",
-      "bytes": 20,
-      "status": "c",
-      "source": "src/overlay83_sol_partial_10.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_sol_partial_11.o",
-      "bytes": 66,
-      "status": "c",
-      "source": "src/overlay83_sol_partial_11.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_sol_partial_12.o",
-      "bytes": 8,
-      "status": "c",
-      "source": "src/overlay83_sol_partial_12.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_sol_partial_13.o",
-      "bytes": 48,
-      "status": "c",
-      "source": "src/overlay83_sol_partial_13.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_sol_partial_14.o",
-      "bytes": 60,
-      "status": "c",
-      "source": "src/overlay83_sol_partial_14.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_sol_partial_15.o",
-      "bytes": 18,
-      "status": "c",
-      "source": "src/overlay83_sol_partial_15.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_sol_partial_16.o",
-      "bytes": 16,
-      "status": "c",
-      "source": "src/overlay83_sol_partial_16.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_sol_partial_17.o",
-      "bytes": 56,
-      "status": "c",
-      "source": "src/overlay83_sol_partial_17.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_sol_partial_18.o",
-      "bytes": 18,
-      "status": "c",
-      "source": "src/overlay83_sol_partial_18.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_sol_partial_19.o",
-      "bytes": 24,
-      "status": "c",
-      "source": "src/overlay83_sol_partial_19.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_sol_partial_2.o",
-      "bytes": 70,
-      "status": "c",
-      "source": "src/overlay83_sol_partial_2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_sol_partial_20.o",
-      "bytes": 20,
-      "status": "c",
-      "source": "src/overlay83_sol_partial_20.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_sol_partial_21.o",
-      "bytes": 12,
-      "status": "c",
-      "source": "src/overlay83_sol_partial_21.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_sol_partial_22.o",
-      "bytes": 12,
-      "status": "c",
-      "source": "src/overlay83_sol_partial_22.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_sol_partial_23.o",
-      "bytes": 20,
-      "status": "c",
-      "source": "src/overlay83_sol_partial_23.c"
     },
     {
       "cpu": "ARM9",
@@ -44171,14 +43267,6 @@
       "bytes": 48,
       "status": "c",
       "source": "src/overlay83_sol_partial_29.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_sol_partial_3.o",
-      "bytes": 56,
-      "status": "c",
-      "source": "src/overlay83_sol_partial_3.c"
     },
     {
       "cpu": "ARM9",
@@ -44263,14 +43351,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_83",
-      "object": "overlay83_sol_partial_4.o",
-      "bytes": 58,
-      "status": "c",
-      "source": "src/overlay83_sol_partial_4.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
       "object": "overlay83_sol_partial_40.o",
       "bytes": 42,
       "status": "c",
@@ -44351,14 +43431,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_83",
-      "object": "overlay83_sol_partial_5.o",
-      "bytes": 50,
-      "status": "c",
-      "source": "src/overlay83_sol_partial_5.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
       "object": "overlay83_sol_partial_50.o",
       "bytes": 36,
       "status": "c",
@@ -44367,82 +43439,10 @@
     {
       "cpu": "ARM9",
       "module": "OVY_83",
-      "object": "overlay83_sol_partial_6.o",
-      "bytes": 12,
-      "status": "c",
-      "source": "src/overlay83_sol_partial_6.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_sol_partial_7.o",
-      "bytes": 18,
-      "status": "c",
-      "source": "src/overlay83_sol_partial_7.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_sol_partial_8.o",
-      "bytes": 8,
-      "status": "c",
-      "source": "src/overlay83_sol_partial_8.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_sol_partial_9.o",
-      "bytes": 8,
-      "status": "c",
-      "source": "src/overlay83_sol_partial_9.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
       "object": "overlay83_summary_details_r38.o",
       "bytes": 2056,
       "status": "c",
       "source": "src/overlay83_summary_details_r38.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_summary_display_r20_commit.o",
-      "bytes": 46,
-      "status": "c",
-      "source": "src/overlay83_summary_display_r20_commit.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_summary_display_r20_party.o",
-      "bytes": 148,
-      "status": "c",
-      "source": "src/overlay83_summary_display_r20_party.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_summary_display_r20_text.o",
-      "bytes": 62,
-      "status": "c",
-      "source": "src/overlay83_summary_display_r20_text.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_summary_display_r20_visibility.o",
-      "bytes": 80,
-      "status": "c",
-      "source": "src/overlay83_summary_display_r20_visibility.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "overlay83_summary_display_r20_windows.o",
-      "bytes": 496,
-      "status": "c",
-      "source": "src/overlay83_summary_display_r20_windows.c"
     },
     {
       "cpu": "ARM9",
@@ -44479,14 +43479,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_83",
-      "object": "r40_overlay_83_residual_16_run1.o",
-      "bytes": 56,
-      "status": "c",
-      "source": "src/r40_overlay_83_residual_16_run1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
       "object": "r40_overlay_83_residual_31_run1.o",
       "bytes": 60,
       "status": "c",
@@ -44515,22 +43507,6 @@
       "bytes": 96,
       "status": "c",
       "source": "src/r40_overlay_83_residual_49_run2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "r46_overlay83_run1.o",
-      "bytes": 256,
-      "status": "c",
-      "source": "src/r46_overlay83_run1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "r46_overlay83_run2.o",
-      "bytes": 76,
-      "status": "c",
-      "source": "src/r46_overlay83_run2.c"
     },
     {
       "cpu": "ARM9",
@@ -44567,50 +43543,10 @@
     {
       "cpu": "ARM9",
       "module": "OVY_83",
-      "object": "to42_overlay83_menu_r2.o",
-      "bytes": 368,
-      "status": "c",
-      "source": "src/to42_overlay83_menu_r2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "to46_overlay83_residual13.o",
-      "bytes": 460,
-      "status": "c",
-      "source": "src/to46_overlay83_residual13.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "to47_overlay83_battle_summary_r19.o",
-      "bytes": 936,
-      "status": "c",
-      "source": "src/to47_overlay83_battle_summary_r19.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "to47_overlay83_hp_action_r4.o",
-      "bytes": 752,
-      "status": "c",
-      "source": "src/to47_overlay83_hp_action_r4.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
       "object": "to47_overlay83_menu_builders.o",
       "bytes": 584,
       "status": "c",
       "source": "src/to47_overlay83_menu_builders.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "to47_overlay83_menu_r11.o",
-      "bytes": 544,
-      "status": "c",
-      "source": "src/to47_overlay83_menu_r11.c"
     },
     {
       "cpu": "ARM9",
@@ -44623,66 +43559,10 @@
     {
       "cpu": "ARM9",
       "module": "OVY_83",
-      "object": "to47_overlay83_record_dispatch.o",
-      "bytes": 212,
-      "status": "c",
-      "source": "src/to47_overlay83_record_dispatch.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "to47_overlay83_sprite_setup.o",
-      "bytes": 1168,
-      "status": "c",
-      "source": "src/to47_overlay83_sprite_setup.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
       "object": "to52_r7_overlay83_r29.o",
       "bytes": 280,
       "status": "c",
       "source": "src/to52_r7_overlay83_r29.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "to70_overlay_83_r46_residual_2_extra349_run01.o",
-      "bytes": 258,
-      "status": "c",
-      "source": "src/to70_overlay_83_r46_residual_2_extra349_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "to70_overlay_83_residual_11_extra511_run01.o",
-      "bytes": 180,
-      "status": "c",
-      "source": "src/to70_overlay_83_residual_11_extra511_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "to70_overlay_83_residual_11_residual_2_extra90_run01.o",
-      "bytes": 244,
-      "status": "c",
-      "source": "src/to70_overlay_83_residual_11_residual_2_extra90_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "to70_overlay_83_residual_15_extra851_run01.o",
-      "bytes": 120,
-      "status": "c",
-      "source": "src/to70_overlay_83_residual_15_extra851_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "to70_overlay_83_residual_16_r40_residual_2_extra999_run01.o",
-      "bytes": 88,
-      "status": "c",
-      "source": "src/to70_overlay_83_residual_16_r40_residual_2_extra999_run01.c"
     },
     {
       "cpu": "ARM9",
@@ -44735,14 +43615,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_83",
-      "object": "to70_overlay_83_residual_3_extra241_run01.o",
-      "bytes": 368,
-      "status": "c",
-      "source": "src/to70_overlay_83_residual_3_extra241_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
       "object": "to70_overlay_83_residual_40_residual_3_extra438_run01.o",
       "bytes": 230,
       "status": "c",
@@ -44783,14 +43655,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_83",
-      "object": "to70_to70_overlay_83_residual_11_residual_2_extra90_residual_1_extra1311_run01.o",
-      "bytes": 464,
-      "status": "c",
-      "source": "src/to70_to70_overlay_83_residual_11_residual_2_extra90_residual_1_extra1311_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
       "object": "to80_extra1558_run01.o",
       "bytes": 2192,
       "status": "c",
@@ -44815,46 +43679,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_83",
-      "object": "to80_extra1561_run01.o",
-      "bytes": 52,
-      "status": "c",
-      "source": "src/to80_extra1561_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "to80_extra1562_run01.o",
-      "bytes": 52,
-      "status": "c",
-      "source": "src/to80_extra1562_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "to80_extra1563_run01.o",
-      "bytes": 52,
-      "status": "c",
-      "source": "src/to80_extra1563_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "to80_extra1798_run01.o",
-      "bytes": 40,
-      "status": "c",
-      "source": "src/to80_extra1798_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "to80_extra1799_run01.o",
-      "bytes": 32,
-      "status": "c",
-      "source": "src/to80_extra1799_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
       "object": "to80_extra1800_run01.o",
       "bytes": 40,
       "status": "c",
@@ -44867,14 +43691,6 @@
       "bytes": 836,
       "status": "c",
       "source": "src/to90_extra1930_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "to90_extra2048_run01.o",
-      "bytes": 472,
-      "status": "c",
-      "source": "src/to90_extra2048_run01.c"
     },
     {
       "cpu": "ARM9",
@@ -44895,14 +43711,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_83",
-      "object": "to90_extra2225_run01.o",
-      "bytes": 532,
-      "status": "c",
-      "source": "src/to90_extra2225_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
       "object": "to90_extra2226_run01.o",
       "bytes": 364,
       "status": "c",
@@ -44915,30 +43723,6 @@
       "bytes": 160,
       "status": "c",
       "source": "src/to90_extra2227_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "to90_extra2391_run01.o",
-      "bytes": 348,
-      "status": "c",
-      "source": "src/to90_extra2391_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "to90_extra2563_run01.o",
-      "bytes": 3412,
-      "status": "c",
-      "source": "src/to90_extra2563_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_83",
-      "object": "to91_w17_menu232_run01.o",
-      "bytes": 232,
-      "status": "c",
-      "source": "src/to91_w17_menu232_run01.c"
     },
     {
       "cpu": "ARM9",
@@ -60555,6 +59339,25 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "g2d_canvas_arrange.o",
+      "bytes": 360,
+      "status": "c",
+      "source": "lib/NitroSystem/src/g2d_canvas_arrange.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "g2d_canvas_arrange.o",
+      "bytes": 760,
+      "status": "inline_asm",
+      "source": "lib/NitroSystem/src/g2d_canvas_arrange.c",
+      "functions": [
+        "NNS_G2dArrangeOBJ1D"
+      ]
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "g2d_cell_animation.o",
       "bytes": 520,
       "status": "c",
@@ -60567,6 +59370,25 @@
       "bytes": 780,
       "status": "c",
       "source": "lib/NitroSystem/src/g2d_cell_transfer_manager.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "g2d_char_canvas.o",
+      "bytes": 2432,
+      "status": "c",
+      "source": "lib/NitroSystem/src/g2d_char_canvas.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "g2d_char_canvas.o",
+      "bytes": 136,
+      "status": "inline_asm",
+      "source": "lib/NitroSystem/src/g2d_char_canvas.c",
+      "functions": [
+        "NNS_G2dCharCanvasInitForOBJ1D"
+      ]
     },
     {
       "cpu": "ARM9",
@@ -60602,6 +59424,14 @@
       "bytes": 820,
       "status": "c",
       "source": "lib/NitroSystem/src/g2d_font.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "g2d_font_load.o",
+      "bytes": 560,
+      "status": "c",
+      "source": "lib/NitroSystem/src/g2d_font_load.c"
     },
     {
       "cpu": "ARM9",
@@ -60730,6 +59560,14 @@
       "bytes": 156,
       "status": "c",
       "source": "lib/NitroSystem/src/g2d_srt_control.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "g2d_text_canvas.o",
+      "bytes": 1056,
+      "status": "c",
+      "source": "lib/NitroSystem/src/g2d_text_canvas.c"
     },
     {
       "cpu": "ARM9",
@@ -62222,33 +61060,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "op90_op90_op90_op90_to65_nnsys_residual_34_residual_3_residual_1_residual_1_residual_2_r01.o",
-      "bytes": 528,
-      "status": "c",
-      "source": "src/op90_op90_op90_op90_to65_nnsys_residual_34_residual_3_residual_1_residual_1_residual_2_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_op90_op90_to65_nnsys_residual_34_residual_3_residual_1_residual_1_r01.o",
-      "bytes": 408,
-      "status": "c",
-      "source": "src/op90_op90_op90_to65_nnsys_residual_34_residual_3_residual_1_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_op90_op90_to80_extra1922_residual_1_residual_1_residual_1_r01.o",
-      "bytes": 760,
-      "status": "inline_asm",
-      "source": "src/op90_op90_op90_to80_extra1922_residual_1_residual_1_residual_1_r01.c",
-      "functions": [
-        "NNS_G2dArrangeOBJ1D"
-      ]
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "op90_op90_to59_dwcaccount_residual_3_residual_1_r01.o",
       "bytes": 476,
       "status": "original_asm",
@@ -62264,14 +61075,6 @@
       "bytes": 388,
       "status": "c",
       "source": "src/op90_op90_to59_dwcbm_residual_5_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_op90_to65_nnsys_residual_34_residual_3_residual_2_r01.o",
-      "bytes": 500,
-      "status": "c",
-      "source": "src/op90_op90_to65_nnsys_residual_34_residual_3_residual_2_r01.c"
     },
     {
       "cpu": "ARM9",
@@ -62335,14 +61138,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "op90_op90_to80_extra1922_residual_1_residual_1_r01.o",
-      "bytes": 180,
-      "status": "c",
-      "source": "src/op90_op90_to80_extra1922_residual_1_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "op90_op90_to90_extra2123_residual_1_residual_1_r01.o",
       "bytes": 400,
       "status": "c",
@@ -62382,14 +61177,6 @@
       "bytes": 70,
       "status": "c",
       "source": "src/op90_op90_unk_020863F4_residual_2_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_slop_r1_m09_window_out_residual_r01.o",
-      "bytes": 40,
-      "status": "c",
-      "source": "src/op90_slop_r1_m09_window_out_residual_r01.c"
     },
     {
       "cpu": "ARM9",
@@ -62486,30 +61273,6 @@
       "bytes": 100,
       "status": "c",
       "source": "src/op90_to65_nitro_unified_residual_26_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to65_nnsys_residual_34_residual_3_r01.o",
-      "bytes": 80,
-      "status": "c",
-      "source": "src/op90_to65_nnsys_residual_34_residual_3_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to65_nnsys_residual_34_residual_3_r02.o",
-      "bytes": 128,
-      "status": "c",
-      "source": "src/op90_to65_nnsys_residual_34_residual_3_r02.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to65_nnsys_residual_34_residual_3_r03.o",
-      "bytes": 412,
-      "status": "c",
-      "source": "src/op90_to65_nnsys_residual_34_residual_3_r03.c"
     },
     {
       "cpu": "ARM9",
@@ -63086,17 +61849,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "op90_to80_extra1759_residual_1_r01.o",
-      "bytes": 136,
-      "status": "inline_asm",
-      "source": "src/op90_to80_extra1759_residual_1_r01.c",
-      "functions": [
-        "NNS_G2dCharCanvasInitForOBJ1D"
-      ]
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "op90_to80_extra1834_residual_1_r01.o",
       "bytes": 1612,
       "status": "c",
@@ -63141,14 +61893,6 @@
       "bytes": 220,
       "status": "c",
       "source": "src/op90_to80_extra1920_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to80_extra1922_residual_1_r01.o",
-      "bytes": 92,
-      "status": "c",
-      "source": "src/op90_to80_extra1922_residual_1_r01.c"
     },
     {
       "cpu": "ARM9",
@@ -65808,14 +64552,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "screen_effect_step.o",
-      "bytes": 232,
-      "status": "c",
-      "source": "src/screen_effect_step.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "screen_fade_update.o",
       "bytes": 360,
       "status": "c",
@@ -65832,34 +64568,10 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "screen_window_effect.o",
-      "bytes": 146,
+      "object": "screen_window_wipe.o",
+      "bytes": 1876,
       "status": "c",
-      "source": "src/screen_window_effect.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "screen_window_effect_2.o",
-      "bytes": 176,
-      "status": "c",
-      "source": "src/screen_window_effect_2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "screen_window_effect_3.o",
-      "bytes": 400,
-      "status": "c",
-      "source": "src/screen_window_effect_3.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "screen_window_effect_4.o",
-      "bytes": 458,
-      "status": "c",
-      "source": "src/screen_window_effect_4.c"
+      "source": "src/screen_window_wipe.c"
     },
     {
       "cpu": "ARM9",
@@ -65908,14 +64620,6 @@
       "bytes": 182,
       "status": "c",
       "source": "src/slop_r1_field_prop_collect_m08.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "slop_r1_m09_screen_gradient.o",
-      "bytes": 424,
-      "status": "c",
-      "source": "src/slop_r1_m09_screen_gradient.c"
     },
     {
       "cpu": "ARM9",
@@ -66736,14 +65440,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to59_nnsys_run46.o",
-      "bytes": 44,
-      "status": "c",
-      "source": "src/to59_nnsys_run46.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to59_nnsys_run47.o",
       "bytes": 212,
       "status": "c",
@@ -67116,14 +65812,6 @@
       "bytes": 320,
       "status": "c",
       "source": "src/to59_wifi_run12.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_nnsys_residual_34_run03.o",
-      "bytes": 40,
-      "status": "c",
-      "source": "src/to65_nnsys_residual_34_run03.c"
     },
     {
       "cpu": "ARM9",
@@ -68616,14 +67304,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to70_nnsys_residual_35_run01.o",
-      "bytes": 220,
-      "status": "c",
-      "source": "src/to70_nnsys_residual_35_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to70_nnsys_residual_36_run01.o",
       "bytes": 160,
       "status": "c",
@@ -69656,14 +68336,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to80_extra1457_run01.o",
-      "bytes": 292,
-      "status": "c",
-      "source": "src/to80_extra1457_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to80_extra1458_run01.o",
       "bytes": 1004,
       "status": "c",
@@ -69788,14 +68460,6 @@
       "bytes": 284,
       "status": "c",
       "source": "src/to80_extra1472_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to80_extra1477_run01.o",
-      "bytes": 856,
-      "status": "c",
-      "source": "src/to80_extra1477_run01.c"
     },
     {
       "cpu": "ARM9",
@@ -70184,22 +68848,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to80_extra1759_run01.o",
-      "bytes": 176,
-      "status": "c",
-      "source": "src/to80_extra1759_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to80_extra1759_run02.o",
-      "bytes": 360,
-      "status": "c",
-      "source": "src/to80_extra1759_run02.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to80_extra1834_run01.o",
       "bytes": 2288,
       "status": "c",
@@ -70316,14 +68964,6 @@
       "bytes": 72,
       "status": "c",
       "source": "src/to80_extra1921_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to80_extra1922_run01.o",
-      "bytes": 92,
-      "status": "c",
-      "source": "src/to80_extra1922_run01.c"
     },
     {
       "cpu": "ARM9",

@@ -12,8 +12,8 @@ void *GridInputHandler_Create(const void *, const void *, const void *, void *, 
 int GridInputHandler_HandleInput_NoHold(void *);
 int GridInputHandler_GetNextInput(void *);
 int TouchscreenHitbox_FindRectAtTouchNew(const void *);
-void ov83_02242AC0(void *, int, int, int);
-void ov83_02242AE0(void *, int);
+void BattleCastlePartyApp_SetItemCursor(void *, int, int, int);
+void BattleCastlePartyApp_ShowItemDescription(void *, int);
 void *ov83_02247B7C(void *);
 void ov83_02247C58(void *, int);
 void ov83_02247C88(void *, int);

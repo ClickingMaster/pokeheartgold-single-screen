@@ -28,7 +28,7 @@ extern s16 *sub_02010EE0(void *, int);
 extern void sub_02010A00(int, s32 *, int, int);
 extern int sub_02010A7C(int, int);
 extern void sub_02010A8C(void *, void *);
-extern void sub_02013488(u32, int, int, int, int, u32, u32);
+extern void ScreenWindow_QueueSetRect(u32, int, int, int, int, u32, u32);
 extern void sub_02011A44(int, int, int, int, int *, int *);
 extern u32 FX_Sqrt(u32);
 extern BOOL sub_020117FC(EffectWork *);

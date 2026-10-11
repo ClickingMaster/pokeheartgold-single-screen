@@ -35,8 +35,8 @@ typedef struct TradeContext {
     TradeWork *work;
 } TradeContext;
 extern const u32 _02105430[];
-void ov65_0221DE24(TradeWork *, int, int);
-void ov65_0221DE64(int, void *, int);
+void WirelessTradeSelectMon_SendCommandIfChanged(TradeWork *, int, int);
+void WirelessTradeSelectMon_SendPartyChunk(int, void *, int);
 
 void sub_0208F658(TradeContext *context);
 u32 sub_0208F66C(u32 slot);

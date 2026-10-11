@@ -697,7 +697,7 @@
   {
    "function": "NNS_G2dArrangeOBJ1D",
    "cpu": "ARM9",
-   "source": "src/op90_op90_op90_to80_extra1922_residual_1_residual_1_residual_1_r01.c",
+   "source": "lib/NitroSystem/src/g2d_canvas_arrange.c",
    "kind": "inline-asm",
    "reason": "inlines a clz helper written as inline asm; MWCC 2.0 has no clz intrinsic and never emits clz from C"
   },
@@ -746,7 +746,7 @@
   {
    "function": "NNS_G2dCharCanvasInitForOBJ1D",
    "cpu": "ARM9",
-   "source": "src/op90_to80_extra1759_residual_1_r01.c",
+   "source": "lib/NitroSystem/src/g2d_char_canvas.c",
    "kind": "inline-asm",
    "reason": "inlines a clz helper written as inline asm; MWCC 2.0 has no clz intrinsic and never emits clz from C"
   },

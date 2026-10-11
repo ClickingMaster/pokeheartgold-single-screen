@@ -233,5 +233,5 @@
 .public WirelessTradeSelectMon_Init
 .public WirelessTradeSelectMon_Main
 .public WirelessTradeSelectMon_Exit
-.public ov65_0221DE24
-.public ov65_0221DE64
+.public WirelessTradeSelectMon_SendCommandIfChanged
+.public WirelessTradeSelectMon_SendPartyChunk

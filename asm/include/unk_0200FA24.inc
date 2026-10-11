@@ -58,11 +58,11 @@
 .public FadeFunc_40
 .public FadeFunc_41
 .public FadeFunc_42
-.public sub_020131F4
-.public sub_02013424
-.public sub_02013440
-.public sub_02013468
-.public sub_02013488
+.public ScreenWindow_SetVisible
+.public ScreenWindow_QueueSetVisible
+.public ScreenWindow_QueueSetInside
+.public ScreenWindow_QueueSetOutside
+.public ScreenWindow_QueueSetRect
 .public HBlankInterruptDisable
 .public Main_SetHBlankIntrCB
 .public Heap_AllocAtEnd

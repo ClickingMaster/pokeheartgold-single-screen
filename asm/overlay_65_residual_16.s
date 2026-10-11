@@ -581,175 +581,175 @@
 	.public _0221FD1C
 	.public _0221FD2C
 	.public _0221FD30
-	.public _0221FD34
-	.public ov65_0221BFBC
-	.public ov65_0221BFEC
-	.public ov65_0221C08C
-	.public ov65_0221C1C4
-	.public ov65_0221C3DC
-	.public ov65_0221C414
-	.public ov65_0221C46C
-	.public ov65_0221C5E0
-	.public ov65_0221C9D8
-	.public ov65_0221CA64
-	.public ov65_0221CADC
-	.public ov65_0221CB5C
-	.public ov65_0221CC0C
-	.public ov65_0221CCB0
-	.public ov65_0221CD0C
-	.public ov65_0221CE1C
-	.public ov65_0221CE98
-	.public ov65_0221CEB8
-	.public ov65_0221D0EC
-	.public ov65_0221D1C8
-	.public ov65_0221D204
-	.public ov65_0221D25C
-	.public ov65_0221D280
-	.public ov65_0221D3B8
-	.public ov65_0221D3E8
-	.public ov65_0221D57C
-	.public ov65_0221D5FC
-	.public ov65_0221D648
-	.public ov65_0221D674
-	.public ov65_0221D8C4
-	.public ov65_0221D930
-	.public ov65_0221DBF4
-	.public ov65_0221DC34
-	.public ov65_0221DCBC
-	.public ov65_0221DCFC
-	.public ov65_0221DD34
-	.public ov65_0221DDC0
-	.public ov65_0221DE10
-	.public ov65_0221DE24
-	.public ov65_0221DE58
-	.public ov65_0221DE64
-	.public ov65_0221DE8C
-	.public ov65_0221DEA0
-	.public ov65_0221DF0C
-	.public ov65_0221DF1C
-	.public ov65_0221DFB8
-	.public ov65_0221E050
-	.public ov65_0221E06C
-	.public ov65_0221E144
-	.public ov65_0221E194
-	.public ov65_0221E270
-	.public ov65_0221E2C0
-	.public ov65_0221E330
-	.public ov65_0221E354
-	.public ov65_0221E3BC
-	.public ov65_0221E474
-	.public ov65_0221E558
-	.public ov65_0221E600
-	.public ov65_0221E684
-	.public ov65_0221E72C
-	.public ov65_0221E740
-	.public ov65_0221E858
-	.public ov65_0221E8EC
-	.public ov65_0221E928
-	.public ov65_0221E9A8
-	.public ov65_0221EA74
-	.public ov65_0221EB9C
-	.public ov65_0221EBF8
-	.public ov65_0221EC34
-	.public ov65_0221ED80
-	.public ov65_0221ED94
-	.public ov65_0221EE18
-	.public ov65_0221EF0C
-	.public ov65_0221F028
-	.public ov65_0221F0C4
-	.public ov65_0221F0D8
-	.public ov65_0221F120
-	.public ov65_0221F258
-	.public ov65_0221F2A8
-	.public ov65_0221F354
-	.public ov65_0221F3B0
-	.public ov65_0221F3F4
-	.public ov65_0221F4B0
-	.public ov65_0221F4D4
-	.public ov65_0221F5A0
-	.public ov65_0221F714
-	.public ov65_0221F748
-	.public ov65_0221F760
-	.public ov65_0221F780
-	.public ov65_0221F79C
-	.public ov65_0221F7E0
-	.public ov65_0221F850
-	.public ov65_0221F864
-	.public ov65_0221F890
-	.public ov65_0221F8B4
-	.public ov65_0221F8D0
-	.public ov65_0221FAE0
-	.public ov65_0221FB4C
-	.public ov65_0221FB90
-	.public ov65_0221FC08
-	.public ov65_0221FC54
-	.public ov65_0221FCA0
-	.public ov65_0221FD20
-	.public ov65_0221FD3C
-	.public ov65_0221FD48
-	.public ov65_0221FD58
-	.public ov65_0221FD68
+	.public sWirelessTradeSelectMonSummaryPages
+	.public WirelessTradeSelectMon_LoadMonIconGfx
+	.public WirelessTradeSelectMon_PrintPlayerNames
+	.public WirelessTradeSelectMon_ReloadScreen
+	.public WirelessTradeSelectMon_PrintPartyNicknames
+	.public WirelessTradeSelectMon_BufferPartyNicknames
+	.public WirelessTradeSelectMon_PrintNicknameList
+	.public WirelessTradeSelectMon_LoadPartyIcons
+	.public WirelessTradeSelectMon_ExchangeData
+	.public WirelessTradeSelectMon_GetMonInfo
+	.public WirelessTradeSelectMon_SetBallSprite
+	.public WirelessTradeSelectMon_ShowPartnerMon
+	.public WirelessTradeSelectMon_ShowSelectedMon
+	.public WirelessTradeSelectMon_RunSelect
+	.public WirelessTradeSelectMon_FreeSprites
+	.public WirelessTradeSelectMon_FreeIconCharData
+	.public WirelessTradeSelectMon_VBlankCB
+	.public WirelessTradeSelectMon_SetGfxBanks
+	.public WirelessTradeSelectMon_InitBgs
+	.public WirelessTradeSelectMon_InitWork
+	.public WirelessTradeSelectMon_FreeBgs
+	.public WirelessTradeSelectMon_LoadScreenData
+	.public WirelessTradeSelectMon_CommitNameBg
+	.public WirelessTradeSelectMon_LoadBgGraphics
+	.public WirelessTradeSelectMon_InitObjTransfer
+	.public WirelessTradeSelectMon_InitSpriteResources
+	.public WirelessTradeSelectMon_LoadMonPic
+	.public WirelessTradeSelectMon_PrintMonNickname
+	.public WirelessTradeSelectMon_GetGenderSymbol
+	.public WirelessTradeSelectMon_ShowMonDetails
+	.public WirelessTradeSelectMon_HideMonDetails
+	.public WirelessTradeSelectMon_CreateSprites
+	.public WirelessTradeSelectMon_ReadDpad
+	.public WirelessTradeSelectMon_PlayCryOnTouch
+	.public WirelessTradeSelectMon_UpdateCursorBlink
+	.public WirelessTradeSelectMon_GetNextCursorPos
+	.public WirelessTradeSelectMon_SetCursorSprite
+	.public WirelessTradeSelectMon_MoveCursor
+	.public WirelessTradeSelectMon_SendCommand
+	.public WirelessTradeSelectMon_SendCommandIfChanged
+	.public WirelessTradeSelectMon_GetPartyChunk
+	.public WirelessTradeSelectMon_SendPartyChunk
+	.public WirelessTradeSelectMon_SendSpecialRibbons
+	.public WirelessTradeSelectMon_SendPalPad
+	.public WirelessTradeSelectMon_SendChatot
+	.public WirelessTradeSelectMon_HandleKeys
+	.public WirelessTradeSelectMon_HandleTouch
+	.public WirelessTradeSelectMon_SelectMon
+	.public WirelessTradeSelectMon_OpenSummary
+	.public WirelessTradeSelectMon_AskQuit
+	.public WirelessTradeSelectMon_HandleQuitPrompt
+	.public WirelessTradeSelectMon_ShowResultMessage
+	.public WirelessTradeSelectMon_WaitResultMessage
+	.public WirelessTradeSelectMon_PrintRosterMessage
+	.public WirelessTradeSelectMon_HandleGiveUpPrompt
+	.public WirelessTradeSelectMon_HandleDeletePrompt
+	.public WirelessTradeSelectMon_HandleRosterListInput
+	.public WirelessTradeSelectMon_ShowRosterList
+	.public WirelessTradeSelectMon_HandleRosterFullPrompt
+	.public WirelessTradeSelectMon_HandleRegisterPrompt
+	.public WirelessTradeSelectMon_WaitQuitSync
+	.public WirelessTradeSelectMon_RegisterNextFriend
+	.public WirelessTradeSelectMon_StartFriendRegistration
+	.public WirelessTradeSelectMon_WaitQuitAnswers
+	.public WirelessTradeSelectMon_CreateTouchMenu
+	.public WirelessTradeSelectMon_ShowOwnMonMenu
+	.public WirelessTradeSelectMon_HandleOwnMonMenu
+	.public WirelessTradeSelectMon_OfferTrade
+	.public WirelessTradeSelectMon_WaitOfferAnswers
+	.public WirelessTradeSelectMon_StartTradeSlide
+	.public WirelessTradeSelectMon_InitSlide
+	.public WirelessTradeSelectMon_SlideMonIcon
+	.public WirelessTradeSelectMon_UpdateTradeSlide
+	.public WirelessTradeSelectMon_RestoreIcons
+	.public WirelessTradeSelectMon_AskTradeConfirm
+	.public WirelessTradeSelectMon_AcceptTrade
+	.public WirelessTradeSelectMon_PrintMessageInWindow
+	.public WirelessTradeSelectMon_HandleTradeConfirm
+	.public WirelessTradeSelectMon_AskDetachCapsule
+	.public WirelessTradeSelectMon_HandleCapsulePrompt
+	.public WirelessTradeSelectMon_WaitConfirmAnswers
+	.public WirelessTradeSelectMon_FinishTrade
+	.public WirelessTradeSelectMon_ShowPartnerMonMenu
+	.public WirelessTradeSelectMon_DestroyTouchMenu
+	.public WirelessTradeSelectMon_HandlePartnerMonMenu
+	.public WirelessTradeSelectMon_TradeMons
+	.public WirelessTradeSelectMon_ScrollBg
+	.public WirelessTradeSelectMon_SetSpritePos
+	.public WirelessTradeSelectMon_ShowWaitingIcon
+	.public WirelessTradeSelectMon_HideWaitingIcon
+	.public WirelessTradeSelectMon_HasOtherNonEggMon
+	.public WirelessTradeSelectMon_FindBadEggParty
+	.public WirelessTradeSelectMon_StartTimeout
+	.public WirelessTradeSelectMon_UpdateTimeout
+	.public WirelessTradeSelectMon_StartMenuDim
+	.public WirelessTradeSelectMon_EndMenuDim
+	.public WirelessTradeSelectMon_AddWindows
+	.public WirelessTradeSelectMon_RemoveWindows
+	.public WirelessTradeSelectMon_PrintString
+	.public WirelessTradeSelectMon_PrintMessage
+	.public WirelessTradeSelectMon_CreateYesNoPrompt
+	.public WirelessTradeSelectMon_HandleYesNoPrompt
+	.public WirelessTradeSelectMon_CreateRosterListMenu
+	.public WirelessTradeSelectMon_RosterListCursorCB
+	.public sWirelessTradeSelectMonTouchMenuTemplate
+	.public sWirelessTradeSelectMonObjCharTransferTemplate
+	.public sWirelessTradeSelectMonGraphicsModes
+	.public sWirelessTradeSelectMonCursorAnims
 	.public ov65_0221FD6C
 	.public ov65_0221FD70
-	.public ov65_0221FD80
-	.public ov65_0221FD9C
-	.public ov65_0221FDB8
-	.public ov65_0221FDD4
-	.public ov65_0221FDF0
-	.public ov65_0221FE0C
-	.public ov65_0221FE28
-	.public ov65_0221FE44
-	.public ov65_0221FE6C
-	.public ov65_0221FEA4
+	.public sWirelessTradeSelectMonBgTemplate_Sub0
+	.public sWirelessTradeSelectMonBgTemplate_Sub1
+	.public sWirelessTradeSelectMonBgTemplate_Main1
+	.public sWirelessTradeSelectMonBgTemplate_Sub2
+	.public sWirelessTradeSelectMonBgTemplate_Main0
+	.public sWirelessTradeSelectMonBgTemplate_Main2
+	.public sWirelessTradeSelectMonBgTemplate_Main3
+	.public sWirelessTradeSelectMonGraphicsBanks
+	.public sWirelessTradeSelectMonSlotHitboxes
+	.public sWirelessTradeSelectMonDetailSpritePos
 	.public ov65_0221FEA8
-	.public ov65_0221FEEC
-	.public ov65_0221FF4C
+	.public sWirelessTradeSelectMonBallPalettes
+	.public sWirelessTradeSelectMonSlotPos
 	.public ov65_0221FF50
-	.public ov65_0221FFB4
-	.public ov65_022200EC
-	.public ov65_0222010C
-	.public ov65_02220144
+	.public sWirelessTradeSelectMonCursorMoves
+	.public sWirelessTradeSelectMonRosterListTemplate
+	.public sWirelessTradeSelectMonNameWindowPos
+	.public sWirelessTradeSelectMonDetailWindows
 	.include "overlay_65.inc"
 	.include "global.inc"
 
 	.text
-	.public ov65_0221D25C
-	.public ov65_0221D648
-	.public ov65_0221DE10
-	.public ov65_0221DE58
-	.public ov65_0221DE64
-	.public ov65_0221DE8C
-	.public ov65_0221DF0C
-	.public ov65_0221E050
-	.public ov65_0221E330
-	.public ov65_0221E72C
-	.public ov65_0221ED80
-	.public ov65_0221F0C4
-	.public ov65_0221F4B0
-	.public ov65_0221F714
-	.public ov65_0221F748
-	.public ov65_0221F760
-	.public ov65_0221F850
-	.public ov65_0221F8B4
-	.public ov65_0221FD20
+	.public WirelessTradeSelectMon_CommitNameBg
+	.public WirelessTradeSelectMon_GetGenderSymbol
+	.public WirelessTradeSelectMon_SendCommand
+	.public WirelessTradeSelectMon_GetPartyChunk
+	.public WirelessTradeSelectMon_SendPartyChunk
+	.public WirelessTradeSelectMon_SendSpecialRibbons
+	.public WirelessTradeSelectMon_SendChatot
+	.public WirelessTradeSelectMon_SelectMon
+	.public WirelessTradeSelectMon_PrintRosterMessage
+	.public WirelessTradeSelectMon_WaitQuitSync
+	.public WirelessTradeSelectMon_InitSlide
+	.public WirelessTradeSelectMon_AcceptTrade
+	.public WirelessTradeSelectMon_DestroyTouchMenu
+	.public WirelessTradeSelectMon_ScrollBg
+	.public WirelessTradeSelectMon_SetSpritePos
+	.public WirelessTradeSelectMon_ShowWaitingIcon
+	.public WirelessTradeSelectMon_StartTimeout
+	.public WirelessTradeSelectMon_EndMenuDim
+	.public WirelessTradeSelectMon_RosterListCursorCB
 	.rodata
 
-_0221FD34:
+sWirelessTradeSelectMonSummaryPages:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x00, 0x00, 0x00
 
-ov65_0221FD3C: ; 0x0221FD3C
+sWirelessTradeSelectMonTouchMenuTemplate: ; 0x0221FD3C
 	.byte 0x02, 0x00, 0x00, 0x0C
 	.byte 0x00, 0x00, 0x80, 0x01, 0xCE, 0x01, 0x4E, 0x00
 
-ov65_0221FD48: ; 0x0221FD48
+sWirelessTradeSelectMonObjCharTransferTemplate: ; 0x0221FD48
 	.byte 0x14, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00
 	.byte 0x00, 0x08, 0x00, 0x00, 0x1A, 0x00, 0x00, 0x00
 
-ov65_0221FD58: ; 0x0221FD58
+sWirelessTradeSelectMonGraphicsModes: ; 0x0221FD58
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov65_0221FD68: ; 0x0221FD68
+sWirelessTradeSelectMonCursorAnims: ; 0x0221FD68
 	.byte 0x00, 0x00, 0x00, 0x00
 
 ov65_0221FD6C: ; 0x0221FD6C
@@ -758,51 +758,51 @@ ov65_0221FD6C: ; 0x0221FD6C
 ov65_0221FD70: ; 0x0221FD70
 	.byte 0x02, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00, 0x12, 0x00, 0x00, 0x00, 0x13, 0x00, 0x00, 0x00
 
-ov65_0221FD80: ; 0x0221FD80
+sWirelessTradeSelectMonBgTemplate_Sub0: ; 0x0221FD80
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x1F, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov65_0221FD9C: ; 0x0221FD9C
+sWirelessTradeSelectMonBgTemplate_Sub1: ; 0x0221FD9C
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1E, 0x00
 	.byte 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov65_0221FDB8: ; 0x0221FDB8
+sWirelessTradeSelectMonBgTemplate_Main1: ; 0x0221FDB8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1F, 0x02, 0x00, 0x01, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov65_0221FDD4: ; 0x0221FDD4
+sWirelessTradeSelectMonBgTemplate_Sub2: ; 0x0221FDD4
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1B, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov65_0221FDF0: ; 0x0221FDF0
+sWirelessTradeSelectMonBgTemplate_Main0: ; 0x0221FDF0
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x1E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov65_0221FE0C: ; 0x0221FE0C
+sWirelessTradeSelectMonBgTemplate_Main2: ; 0x0221FE0C
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1C, 0x04
 	.byte 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov65_0221FE28: ; 0x0221FE28
+sWirelessTradeSelectMonBgTemplate_Main3: ; 0x0221FE28
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1D, 0x04, 0x00, 0x03, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov65_0221FE44: ; 0x0221FE44
+sWirelessTradeSelectMonGraphicsBanks: ; 0x0221FE44
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov65_0221FE6C: ; 0x0221FE6C
+sWirelessTradeSelectMonSlotHitboxes: ; 0x0221FE6C
 	.byte 0x20, 0x47, 0x00, 0x3F
 	.byte 0x20, 0x47, 0x40, 0x7F, 0x48, 0x6F, 0x00, 0x3F, 0x48, 0x6F, 0x40, 0x7F, 0x70, 0x97, 0x00, 0x3F
 	.byte 0x70, 0x97, 0x40, 0x7F, 0x20, 0x47, 0x80, 0xBF, 0x20, 0x47, 0xC0, 0xFF, 0x48, 0x6F, 0x80, 0xBF
 	.byte 0x48, 0x6F, 0xC0, 0xFF, 0x70, 0x97, 0x80, 0xBF, 0x70, 0x97, 0xC0, 0xFF, 0xA0, 0xC0, 0xC8, 0x00
 	.byte 0xFF, 0x00, 0x00, 0x00
 
-ov65_0221FEA4: ; 0x0221FEA4
+sWirelessTradeSelectMonDetailSpritePos: ; 0x0221FEA4
 	.byte 0x3F, 0x00, 0x00, 0x00
 
 ov65_0221FEA8: ; 0x0221FEA8
@@ -812,7 +812,7 @@ ov65_0221FEA8: ; 0x0221FEA8
 	.byte 0x08, 0x00, 0x00, 0x00, 0x63, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00
 	.byte 0xE3, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00
 
-ov65_0221FEEC: ; 0x0221FEEC
+sWirelessTradeSelectMonBallPalettes: ; 0x0221FEEC
 	.byte 0x31, 0x00, 0x00, 0x00
 	.byte 0x33, 0x00, 0x00, 0x00, 0x33, 0x00, 0x00, 0x00, 0x31, 0x00, 0x00, 0x00, 0x32, 0x00, 0x00, 0x00
 	.byte 0x32, 0x00, 0x00, 0x00, 0x32, 0x00, 0x00, 0x00, 0x32, 0x00, 0x00, 0x00, 0x33, 0x00, 0x00, 0x00
@@ -821,7 +821,7 @@ ov65_0221FEEC: ; 0x0221FEEC
 	.byte 0x36, 0x00, 0x00, 0x00, 0x37, 0x00, 0x00, 0x00, 0x38, 0x00, 0x00, 0x00, 0x39, 0x00, 0x00, 0x00
 	.byte 0x3A, 0x00, 0x00, 0x00, 0x3B, 0x00, 0x00, 0x00, 0x3C, 0x00, 0x00, 0x00
 
-ov65_0221FF4C: ; 0x0221FF4C
+sWirelessTradeSelectMonSlotPos: ; 0x0221FF4C
 	.byte 0x00, 0x00, 0x00, 0x00
 
 ov65_0221FF50: ; 0x0221FF50
@@ -833,7 +833,7 @@ ov65_0221FF50: ; 0x0221FF50
 	.byte 0x70, 0x00, 0x00, 0x00, 0xC0, 0x00, 0x00, 0x00, 0x70, 0x00, 0x00, 0x00, 0xC0, 0x00, 0x00, 0x00
 	.byte 0xA0, 0x00, 0x00, 0x00
 
-ov65_0221FFB4: ; 0x0221FFB4
+sWirelessTradeSelectMonCursorMoves: ; 0x0221FFB4
 	.byte 0x04, 0x02, 0x0C, 0x0C, 0x00, 0x00, 0x02, 0x04, 0x0C, 0x0C, 0x00, 0x00
 	.byte 0x07, 0x06, 0x01, 0x00, 0x00, 0x00, 0x01, 0x06, 0x07, 0x00, 0x00, 0x00, 0x05, 0x03, 0x0C, 0x0C
 	.byte 0x00, 0x00, 0x03, 0x05, 0x0C, 0x0C, 0x00, 0x00, 0x00, 0x07, 0x06, 0x01, 0x00, 0x00, 0x06, 0x07
@@ -855,19 +855,19 @@ ov65_0221FFB4: ; 0x0221FFB4
 	.byte 0x00, 0x00, 0x00, 0x00, 0x0B, 0x09, 0x07, 0x06, 0x00, 0x00, 0x07, 0x06, 0x00, 0x00, 0x00, 0x00
 	.byte 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov65_022200EC: ; 0x022200EC
+sWirelessTradeSelectMonRosterListTemplate: ; 0x022200EC
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x20, 0x00
 	.byte 0x00, 0x08, 0x00, 0x10, 0x2F, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov65_0222010C: ; 0x0222010C
+sWirelessTradeSelectMonNameWindowPos: ; 0x0222010C
 	.byte 0x00, 0x00, 0x07, 0x00
 	.byte 0x08, 0x00, 0x07, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x08, 0x00, 0x0C, 0x00, 0x00, 0x00, 0x11, 0x00
 	.byte 0x08, 0x00, 0x11, 0x00, 0x10, 0x00, 0x07, 0x00, 0x18, 0x00, 0x07, 0x00, 0x10, 0x00, 0x0C, 0x00
 	.byte 0x18, 0x00, 0x0C, 0x00, 0x10, 0x00, 0x11, 0x00, 0x18, 0x00, 0x11, 0x00, 0x04, 0x00, 0x08, 0x00
 	.byte 0x14, 0x00, 0x08, 0x00
 
-ov65_02220144: ; 0x02220144
+sWirelessTradeSelectMonDetailWindows: ; 0x02220144
 	.byte 0x04, 0x00, 0x01, 0x00, 0x09, 0x00, 0x02, 0x00, 0x01, 0x00, 0x14, 0x00
 	.byte 0x01, 0x00, 0x09, 0x00, 0x02, 0x00, 0x13, 0x00, 0x04, 0x00, 0x03, 0x00, 0x08, 0x00, 0x02, 0x00
 	.byte 0x25, 0x00, 0x14, 0x00, 0x03, 0x00, 0x08, 0x00, 0x02, 0x00, 0x35, 0x00, 0x02, 0x00, 0x13, 0x00

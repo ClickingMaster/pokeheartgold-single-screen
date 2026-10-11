@@ -45,7 +45,7 @@ void sub_0208F8E4(int index, void *unused, const u8 *src, Work *work) {
 }
 
 void sub_0208F918(void *a, void *b, void *c, Work *work) {
-    ov37_021E6FC8(work, 3, 0);
+    DrawingSession_HandleNetEvent(work, 3, 0);
     MIi_CpuClearFast(0, (u32 *)&work->raw[0x43d0], 0x3840);
     if (Comm_GetLocalNetId() == 0) {
         U32(work, 0x318) = Comm_CountConnected();
@@ -65,7 +65,7 @@ void sub_0208F960(int id, void *unused, const FourBytes *packet, Work *work) {
         local.data[1] = U32(work, 0x318);
         switch (packet->data[2]) {
         case 0:
-            if (Comm_CountConnected() != U32(work, 0x318) || ov37_021E75E0() != U32(work, 0x318) || MATH_CountPopulation(sub_02033250()) != U32(work, 0x318)) {
+            if (Comm_CountConnected() != U32(work, 0x318) || DrawingSession_GetMemberCount() != U32(work, 0x318) || MATH_CountPopulation(sub_02033250()) != U32(work, 0x318)) {
                 local.data[3] = 0;
             } else {
                 U32(work, 0x93b4) |= 1 << id;
@@ -86,14 +86,14 @@ void sub_0208F960(int id, void *unused, const FourBytes *packet, Work *work) {
                 return;
             }
             if (packet->data[3] == 0) {
-                ov37_021E6FC8(work, 9, sender);
+                DrawingSession_HandleNetEvent(work, 9, sender);
             } else {
                 U16(work, 0x93b8) = packet->data[1];
-                ov37_021E6FC8(work, 8, packet->data[0]);
+                DrawingSession_HandleNetEvent(work, 8, packet->data[0]);
             }
             break;
         case 1:
-            ov37_021E6FC8(work, 0x15, packet->data[0]);
+            DrawingSession_HandleNetEvent(work, 0x15, packet->data[0]);
             break;
         default:
             return;
@@ -105,7 +105,7 @@ void sub_0208FA50(void) {
 }
 
 void sub_0208FA54(void *a, void *b, const u8 *data, Work *work) {
-    ov37_021E6FC8(work, 1, data[0]);
+    DrawingSession_HandleNetEvent(work, 1, data[0]);
     if (Comm_GetLocalNetId() == 0 && U32(work, 0x300) == 1) {
         U32(work, 0x43cc) = 0;
         sub_0208FAF8(work, U32(work, 0x43cc));
@@ -119,7 +119,7 @@ void sub_0208FA8C(void) {
 
 void sub_0208FA90(void *a, void *b, void *c, Work *work) {
     if (Comm_GetLocalNetId() != 0) {
-        ov37_021E6FC8(work, 15, 0);
+        DrawingSession_HandleNetEvent(work, 15, 0);
     }
 }
 

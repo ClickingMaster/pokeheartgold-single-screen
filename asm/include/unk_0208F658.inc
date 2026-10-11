@@ -13,8 +13,8 @@
 .public memcpy
 .public gOverlayTemplate_Battle
 .public gNatureStatMods
-.public ov65_0221DE24
-.public ov65_0221DE64
+.public WirelessTradeSelectMon_SendCommandIfChanged
+.public WirelessTradeSelectMon_SendPartyChunk
 
 	.public sub_0208F66C
 	.public sub_0208F680
