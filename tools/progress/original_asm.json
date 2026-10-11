@@ -1019,126 +1019,126 @@
   {
    "function": "SVC_SoftReset",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_libsyscall_r01.c",
+   "source": "sub/lib/src/svc_reset_wait.c",
    "kind": "asm",
    "reason": "svc/swi"
   },
   {
    "function": "SVC_WaitByLoop",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_libsyscall_r01.c",
+   "source": "sub/lib/src/svc_reset_wait.c",
    "kind": "asm",
    "reason": "svc/swi"
   },
   {
    "function": "SVC_WaitIntr",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_libsyscall_r01.c",
+   "source": "sub/lib/src/svc_reset_wait.c",
    "kind": "asm",
    "reason": "svc/swi"
   },
   {
    "function": "IsMmemExpanded",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "source": "sub/lib/src/svc_copy_uncompress.c",
    "kind": "asm",
    "reason": "svc/swi"
   },
   {
    "function": "SVC_CpuSet",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "source": "sub/lib/src/svc_copy_uncompress.c",
    "kind": "asm",
    "reason": "svc/swi"
   },
   {
    "function": "SVC_CpuSetFast",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "source": "sub/lib/src/svc_copy_uncompress.c",
    "kind": "asm",
    "reason": "svc/swi"
   },
   {
    "function": "SVC_GetCRC16",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "source": "sub/lib/src/svc_copy_uncompress.c",
    "kind": "asm",
    "reason": "svc/swi"
   },
   {
    "function": "SVC_GetPitchTable",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "source": "sub/lib/src/svc_copy_uncompress.c",
    "kind": "asm",
    "reason": "svc/swi"
   },
   {
    "function": "SVC_GetSinTable",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "source": "sub/lib/src/svc_copy_uncompress.c",
    "kind": "asm",
    "reason": "svc/swi"
   },
   {
    "function": "SVC_GetVolumeTable",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "source": "sub/lib/src/svc_copy_uncompress.c",
    "kind": "asm",
    "reason": "svc/swi"
   },
   {
    "function": "SVC_Sqrt",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "source": "sub/lib/src/svc_copy_uncompress.c",
    "kind": "asm",
    "reason": "svc/swi"
   },
   {
    "function": "SVC_UncompressHuffmanFromDevice",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "source": "sub/lib/src/svc_copy_uncompress.c",
    "kind": "asm",
    "reason": "svc/swi"
   },
   {
    "function": "SVC_UncompressLZ16FromDevice",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "source": "sub/lib/src/svc_copy_uncompress.c",
    "kind": "asm",
    "reason": "svc/swi"
   },
   {
    "function": "SVC_UncompressLZ8",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "source": "sub/lib/src/svc_copy_uncompress.c",
    "kind": "asm",
    "reason": "svc/swi"
   },
   {
    "function": "SVC_UncompressRL16FromDevice",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "source": "sub/lib/src/svc_copy_uncompress.c",
    "kind": "asm",
    "reason": "svc/swi"
   },
   {
    "function": "SVC_UncompressRL8",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "source": "sub/lib/src/svc_copy_uncompress.c",
    "kind": "asm",
    "reason": "svc/swi"
   },
   {
    "function": "SVC_UnpackBits",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_libsyscall_r02.c",
+   "source": "sub/lib/src/svc_copy_uncompress.c",
    "kind": "asm",
    "reason": "svc/swi"
   },
   {
    "function": "SVC_WaitVBlankIntr",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_op90_libsyscall_residual_1_r01.c",
+   "source": "sub/lib/src/svc_wait_vblank_div.c",
    "kind": "asm",
    "reason": "Thumb svc/swi system-call stubs (SVC_WaitVBlankIntr, SVC_Halt, SVC_Sleep, SVC_ChangeSoundBias, SVC_SetSoundBias, SVC_ResetSoundBias, SVC_Div, SVC_DivRem) at 2-byte-aligned entry points"
   },
@@ -1397,7 +1397,7 @@
   {
    "function": "OSi_AlarmHandler",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_alarm_handler_r01.c",
+   "source": "sub/lib/src/os_alarm_handler.c",
    "kind": "asm",
    "reason": "push {r0,lr} ... pop {r0,lr}: preserves r0 for the interrupt dispatcher (non-AAPCS; MWCC pads with r3)"
   },
@@ -1677,7 +1677,7 @@
   {
    "function": "_start_ModuleParams",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to91_w41567_startup_suffix_residual_1_r01.c",
+   "source": "sub/lib/src/sp_startup.c",
    "kind": "asm",
    "reason": "pure data (module-params struct) in .text; pure data in .text (not code)"
   },
@@ -1719,7 +1719,7 @@
   {
    "function": "detect_main_memory_size",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to91_w41567_startup_suffix_r01.c",
+   "source": "sub/lib/src/sp_startup.c",
    "kind": "asm",
    "reason": "unscheduled source-order code with the loaded value in ip ahead of named variables; MWCC always numbers the load last and schedules at the levels that emit movne/bne (q03b); crt0 neighbour of hand-written _start/do_autoload"
   },

@@ -29,7 +29,7 @@
 #include "unk_02009D48.h"
 #include "unk_02013FDC.h"
 #include "unk_02026E30.h"
-#include "unk_02097B78.h"
+#include "legendary_cinematic_manager.h"
 
 #define LEGENDARY_CINEMATIC_MAX_MODELS  8
 #define LEGENDARY_CINEMATIC_MODEL_ANIMS 4

@@ -72,8 +72,8 @@ extern void NNS_SndPlayerSetTrackPitch(void *, u32, int);
 extern void NNS_SndPlayerStopSeq(void *, int);
 extern void NNS_SndMain(void);
 
-int ov13_0223D4C8(void);
-void ov13_0223D66C(u8 *work);
+int WifiSetupMbParent_GetChildState(void);
+void WifiSetupWh_Init(u8 *work);
 
 void WifiSetupBanner_SlideInTask0(void *task, void *arg);
 void WifiSetupBanner_SlideInTask1(void *task, void *arg);
@@ -2933,7 +2933,7 @@ void WifiSetupDialog_FreeTask(void *task, void *arg) {
 
 void WifiSetupMbParent_Init(void *buf) {
     gWifiSetupMbParent = buf;
-    ov13_0223D66C((u8 *)buf + 0x1B160);
+    WifiSetupWh_Init((u8 *)buf + 0x1B160);
     gWifiSetupMbParent->mbWorkPtr = NULL;
     gWifiSetupMbParent->segmentPtr = NULL;
 }
@@ -3115,7 +3115,7 @@ void WifiSetupMbParent_StateCallback(u16 aid, u32 status, void *arg) {
         gWifiSetupMbParent->children[aid - 1].aid = aid;
         break;
     case 3:
-        if (ov13_0223D4C8() == 6) {
+        if (WifiSetupMbParent_GetChildState() == 6) {
             break;
         }
         WifiSetupMbParent_ClearChild(aid);

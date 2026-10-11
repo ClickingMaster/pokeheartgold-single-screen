@@ -1,8 +1,6 @@
 Static ichneumon_sub
 {
-	Object lib/src/to91_w41567_autoload_callback.o
-	Object lib/src/op90_to91_w41567_startup_suffix_r01.o
-	Object lib/src/op90_to91_w41567_startup_suffix_residual_1_r01.o
+	Object lib/src/sp_startup.o
 	Address 0x02380000
 	StackSize 1024 1024
 }
@@ -33,7 +31,7 @@ Autoload WRAM
 	Object lib/src/OS_timer.o
 	Object lib/src/OS_tick.o
 	Object lib/src/to90_arm7_alarm_prefix.o
-	Object lib/src/op90_to90_arm7_alarm_handler_r01.o
+	Object lib/src/os_alarm_handler.o
 	Object lib/src/to90_arm7_alarm_suffix.o
 	Object lib/src/OS_valarm.o
 	Object lib/src/OS_system.o
@@ -48,11 +46,7 @@ Autoload WRAM
 	Object lib/src/PXI_fifo.o
 	Object lib/src/EXI_genPort.o
 	Object lib/src/PAD_xyButton.o
-	Object lib/src/to90_a7_next1668_o03_run01.o
-	Object lib/src/op90_to90_a7_next1668_o03_residual_1_r01.o
-	Object lib/src/to90_a7_next1668_o03_run02.o
-	Object lib/src/op90_to90_a7_next1668_o03_residual_2_r01.o
-	Object lib/src/to90_a7_next1668_o03_run03.o
+	Object lib/src/sound_driver.o
 	Object asm/to90_arm7_sub_wram_1_anchor.o
 	Object lib/src/sound_channel.o
 	Object lib/src/sound_main.o
@@ -63,9 +57,9 @@ Autoload WRAM
 	Object lib/src/sound_alarm.o
 	Object lib/src/sound_command.o
 	Object lib/src/card_driver.o
-	Object lib/src/op90_libsyscall_r01.o
-	Object lib/src/op90_op90_libsyscall_residual_1_r01.o
-	Object lib/src/op90_libsyscall_r02.o
+	Object lib/src/svc_reset_wait.o
+	Object lib/src/svc_wait_vblank_div.o
+	Object lib/src/svc_copy_uncompress.o
 	Object asm/to90_arm7_wram160_r8_anchor.o
 	Object lib/src/spi_server.o
 	Object lib/src/touch_panel_driver.o

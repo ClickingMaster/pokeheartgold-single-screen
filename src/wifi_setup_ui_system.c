@@ -9,15 +9,6 @@
 
 #pragma force_active on
 
-typedef struct WifiSetupArchiveState {
-    void *buf;
-    u8 unk_04[0x80];
-    WifiSetupPool *filePool;
-    FSArchive arc;
-    u8 unk_88[0xE4 - 0x88 - sizeof(FSArchive)];
-    u16 lockId;
-} WifiSetupArchiveState;
-
 typedef struct WifiSetupOamBlockManager {
     u8 blocks[0x20][0x10];
     WifiSetupOamBlock first;
@@ -134,7 +125,7 @@ typedef struct WifiSetupIrqSave {
 
 // The address of a global of this module, formed from the module's first .bss label so that it gets
 // its own literal-pool slot, as in the original code.
-#define MODULE_BSS_ADDR(addr) ((void *)(ov13_0224F5C8 + ((addr) - 0x0224F5C8)))
+#define MODULE_BSS_ADDR(addr) ((void *)(gWifiSetupShare + ((addr) - 0x0224F5C8)))
 
 static inline int GX_GetVisiblePlane13(void) {
     return (int)((reg_GX_DISPCNT & 0x1F00) >> 8);
@@ -153,8 +144,8 @@ static inline void OamGetPosition(const GXOamAttr *oam, s32 *x, s32 *y) {
     *y = oam->attr01 & 0xFF;
 }
 
-extern char ov13_0224F5C8[];
-extern WifiSetupArchiveState *ov13_0224F5CC;
+extern char gWifiSetupShare[];
+extern WifiSetupArchiveState *gWifiSetupArchive;
 extern WifiSetupOamBlockManager *ov13_0224F5D0;
 extern void *ov13_0224F5D4[];
 extern WifiSetupFade *ov13_0224F5DC;
@@ -204,7 +195,7 @@ void NNS_G2dMapScrToCharText(void *screen, u32 width, u32 height, u32 left, u32 
 int WifiSetupArchive_Proc(FSArchive *arc, int command);
 int WifiSetupArchive_Read(FSArchive *arc, void *dst, u32 pos, u32 len);
 void WifiSetupArchive_ReadDone(void *arg);
-int ov13_0223F954(void);
+int WifiSetupArchive_Write(void);
 void WifiSetupFade_Task(void *task, WifiSetupFade *fade);
 void WifiSetupFade_DelayTask(void *task, WifiSetupFade *fade);
 void WifiSetupText_BgTransferTask(void *task, u8 *dirty);
@@ -217,23 +208,23 @@ void WifiSetupTask_DestroyNow(int queue, WifiSetupTask *task);
 
 void WifiSetupArchive_Unload(void) {
     FS_ChangeDir(ov13_02247424);
-    FS_UnloadArchiveTables(&ov13_0224F5CC->arc);
-    FS_UnloadArchive(&ov13_0224F5CC->arc);
-    FS_ReleaseArchiveName(&ov13_0224F5CC->arc);
-    OS_ReleaseLockID(ov13_0224F5CC->lockId);
-    ov13_0224F5CC->lockId = 0;
-    WifiSetupHeap_FreeAndClear(&ov13_0224F5CC->buf);
-    ov13_0224F5CC->buf = NULL;
+    FS_UnloadArchiveTables(&gWifiSetupArchive->arc);
+    FS_UnloadArchive(&gWifiSetupArchive->arc);
+    FS_ReleaseArchiveName(&gWifiSetupArchive->arc);
+    OS_ReleaseLockID(gWifiSetupArchive->lockId);
+    gWifiSetupArchive->lockId = 0;
+    WifiSetupHeap_FreeAndClear(&gWifiSetupArchive->tables);
+    gWifiSetupArchive->tables = NULL;
     WifiSetupHeap_FreeAndClear(MODULE_BSS_ADDR(0x0224F5CC));
 }
 
 int WifiSetupArchive_Proc(FSArchive *arc, int command) {
     switch (command) {
     case 9:
-        CARD_LockRom(ov13_0224F5CC->lockId);
+        CARD_LockRom(gWifiSetupArchive->lockId);
         return 0;
     case 10:
-        CARD_UnlockRom(ov13_0224F5CC->lockId);
+        CARD_UnlockRom(gWifiSetupArchive->lockId);
         return 0;
     case 1:
         return 4;
@@ -251,7 +242,7 @@ void WifiSetupArchive_ReadDone(void *arg) {
     FS_NotifyArchiveAsyncEnd(arg, FS_RESULT_SUCCESS);
 }
 
-int ov13_0223F954(void) {
+int WifiSetupArchive_Write(void) {
     return 1;
 }
 
@@ -262,7 +253,7 @@ void *WifiSetupFile_Load(const char *path, u32 *outSize, int align) {
     int a;
     void *out;
 
-    WifiSetupPool_Pop(ov13_0224F5CC->filePool);
+    WifiSetupPool_Pop(gWifiSetupArchive->filePool);
     FS_InitFile(&file);
     if (!FS_OpenFile(&file, path)) {
         OS_Terminate();
@@ -295,7 +286,7 @@ void *WifiSetupFile_Load(const char *path, u32 *outSize, int align) {
 
 void WifiSetupFile_Free(void *data) {
     WifiSetupHeap_FreeAndClear(&data);
-    WifiSetupPool_Push(ov13_0224F5CC->filePool, data);
+    WifiSetupPool_Push(gWifiSetupArchive->filePool, data);
 }
 
 BOOL WifiSetup_HasSameSuffix(const char *a, const char *b, int len) {

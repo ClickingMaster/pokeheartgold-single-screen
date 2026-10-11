@@ -887,7 +887,7 @@ Static main
     Object src/unk_02097720.o
     Object src/field_effect_launch_1.o
     Object src/area_light_tasks_1.o
-    Object src/r40_unk_02097B78_run1.o
+    Object src/legendary_cinematic_manager.o
     Object asm/unk_02097B78_r40_residual_1.o
     Object src/field_cinematic_tasks_1.o
     Object src/unk_02097D3C.o
@@ -2773,33 +2773,7 @@ Overlay OVY_13
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own4.o
     Object src/wifi_setup_local_wireless.o
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor_own8.o
-    Object src/to61_overlay_13_arm_2_residual_15_run02.o
-    Object src/op90_to61_overlay_13_arm_2_residual_15_residual_2_r01.o
-    Object src/to61_overlay_13_arm_2_residual_15_run03.o
-    Object src/to80_extra1909_run01.o
-    Object src/to61_overlay_13_arm_2_residual_15_run04.o
-    Object src/to90_extra2317_run01.o
-    Object src/to61_overlay_13_arm_2_residual_15_run05.o
-    Object src/to90_extra2529_run01.o
-    Object src/to61_overlay_13_arm_2_residual_15_run06.o
-    Object src/op90_to61_overlay_13_arm_2_residual_15_residual_6_r01.o
-    Object src/to61_overlay_13_arm_2_residual_15_run07.o
-    Object src/to90_extra2318_run01.o
-    Object src/to61_overlay_13_arm_2_residual_15_run08.o
-    Object src/op90_to61_overlay_13_arm_2_residual_15_residual_8_r01.o
-    Object src/to61_overlay_13_arm_2_residual_15_run09.o
-    Object src/op90_to61_overlay_13_arm_2_residual_15_residual_9_r01.o
-    Object src/to61_overlay_13_arm_2_residual_15_run10.o
-    Object src/op90_to61_overlay_13_arm_2_residual_15_residual_10_r01.o
-    Object src/to61_overlay_13_arm_2_residual_15_run11.o
-    Object src/to80_extra1401_run01.o
-    Object src/to61_overlay_13_arm_2_residual_15_run12.o
-    Object src/to80_extra1402_run01.o
-    Object src/to61_overlay_13_arm_2_residual_15_run13.o
-    Object src/to80_extra1631_run01.o
-    Object src/to61_overlay_13_arm_2_residual_15_run14.o
-    Object src/to80_extra1632_run01.o
-    Object src/to61_overlay_13_arm_2_residual_15_run15.o
+    Object src/wifi_setup_share.o
     Object src/wifi_setup_ui_system.o
 }
 Overlay OVY_14

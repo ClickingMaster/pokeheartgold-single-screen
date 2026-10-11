@@ -1,13 +1,16 @@
 #include <nitro/types.h>
+
+// The code below is compiled as Thumb (16-bit) code.
 #include <nitro/code16.h>
 
-// libsyscall SVC stubs SVC_WaitVBlankIntr..SVC_DivRem (hand-written Thumb).
-// The original stubs sit at 2-byte aligned addresses (0x038008C2...), which MWCC
-// cannot emit as separate functions (each function gets a 4-aligned section), so
-// the run is one asm function and the interior entry points are added as aliases
-// by tools/object_aliases.py (op90_op90_libsyscall_residual_1_r01.alias-map.json).
+// BIOS calls SVC_WaitVBlankIntr .. SVC_DivRem. Their entry points sit at 2-byte aligned addresses,
+// which MWCC cannot emit as separate functions (each function gets a 4-aligned section), so the run is
+// one asm function; tools/object_aliases.py adds the inner entry points as aliases
+// (svc_wait_vblank_div.alias-map.json).
+
 void SVC_WaitVBlankIntr(void);
 
+// clang-format off
 asm void SVC_WaitVBlankIntr(void)
 {
     // SVC_WaitVBlankIntr
@@ -41,3 +44,4 @@ asm void SVC_WaitVBlankIntr(void)
     add r0, r1, #0
     bx lr
 }
+// clang-format on

@@ -1,6 +1,6 @@
 #include "global.h"
 
-#include "r40_unk_02097B78_private.h"
+#include "legendary_cinematic_manager_private.h"
 
 static int (*const sLegendaryCinematicScripts[])(void *) = {
     ScriptCinematic_HoOh,

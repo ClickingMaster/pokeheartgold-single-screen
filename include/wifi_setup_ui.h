@@ -108,6 +108,17 @@ typedef struct WifiSetupCanvas {
     } u;
 } WifiSetupCanvas;
 
+// The "rom:/dwc/utility.bin" archive (WifiSetupArchive_Load).
+typedef struct WifiSetupArchiveState {
+    void *tables;            // FS archive tables
+    u8 poolItems[0x80];      // 0x04, items of filePool
+    WifiSetupPool *filePool; // 0x84
+    FSArchive arc;           // 0x88
+    u8 unk_88[0xE4 - 0x88 - sizeof(FSArchive)];
+    u16 lockId; // 0xE4
+} WifiSetupArchiveState;
+
+void WifiSetupArchive_Load(void);
 void WifiSetupArchive_Unload(void);
 void *WifiSetupFile_Load(const char *path, u32 *outSize, int align);
 void WifiSetupFile_Free(void *data);

@@ -58,7 +58,7 @@ typedef struct WifiSetupTextBanks {
 typedef void (*WifiSetupSessionCallback)(int event);
 
 typedef struct WifiSetupSession {
-    u8 unk_00000[0x1E280];
+    u8 share[0x1E280]; // WifiSetupShare (wifi_setup_share.h)
     u8 unk_1E280[0x18];
     WifiSetupSessionCallback callback; // 0x1E298
     void *task;                        // 0x1E29C
@@ -66,14 +66,16 @@ typedef struct WifiSetupSession {
     u8 unk_1E2A1;                      // 0x1E2A1
 } WifiSetupSession;
 
+// Parameters of the session (WifiSetupShare_Init); the first part is also the Download Play parent's
+// file description (WifiSetupMbParentFile).
 typedef struct WifiSetupSessionParams {
-    int unk_00;
-    const u16 *unk_04;
-    const u16 *unk_08;
+    const char *filePath;
+    const u16 *title;
+    const u16 *description;
     int unk_0C;
     int unk_10;
-    int unk_14;
-    u8 languageCode;
+    u32 ggid;
+    u8 languageCode; // the session's copy holds 2 here
 } WifiSetupSessionParams;
 
 extern WifiSetupClient gWifiSetupClient;

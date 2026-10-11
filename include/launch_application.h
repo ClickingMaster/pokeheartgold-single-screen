@@ -44,7 +44,7 @@
 #include "script.h"
 #include "unk_02088288.h"
 #include "unk_02092BE8.h"
-#include "unk_02097B78.h"
+#include "legendary_cinematic_manager.h"
 #include "unk_02097D3C.h"
 
 typedef enum NameScreenType {

@@ -22,14 +22,14 @@ extern void WifiSetupConnections_SetFromInfo(u8 *result);
 extern void WifiSetupSound_Init(void);
 extern void WifiSetupSound_Free(void);
 extern void ov13_0222C1BC(void);
-extern void ov13_0223F664(void);
-extern void ov13_0223E80C(WifiSetupSession *session, WifiSetupSessionParams *params);
-extern int ov13_0223EA58(void);
-extern int ov13_0223E8FC(void);
-extern void ov13_0223EAA0(void);
-extern void ov13_0223EAD4(void *task);
-extern void ov13_0223EE58(u8 *event, u8 *ok);
-extern u16 *ov13_0223EE9C(void);
+extern void WifiSetupArchive_Load(void);
+extern void WifiSetupShare_Init(WifiSetupSession *session, WifiSetupSessionParams *params);
+extern int WifiSetupShare_Start(void);
+extern int WifiSetupShare_Cancel(void);
+extern void WifiSetupShare_StartDownload(void);
+extern void WifiSetupShare_Update(void *task);
+extern void WifiSetupShare_GetState(u8 *event, u8 *ok);
+extern u16 *WifiSetupShare_GetChildUser(void);
 extern void DWC_BM_Init(void *work);
 extern void GXx_SetMasterBrightness_(vu16 *reg, int brightness);
 
@@ -169,7 +169,7 @@ void WifiSetupApp_InitSystem(void) {
     WifiSetupHeap_Init(gWifiSetupApp.heap);
     WifiSetup_InstallVBlankIntr();
     WifiSetupTask_InitScheduler();
-    ov13_0223F664();
+    WifiSetupArchive_Load();
     WifiSetupInput_Init();
     WifiSetupFade_Init();
     work = WifiSetupHeap_AllocZeroed(0x700, 32);
@@ -365,11 +365,11 @@ void ov13_0222BB20(WifiSetupSessionCallback callback) {
     gWifiSetupSession->unk_1E2A0 = 0;
     gWifiSetupSession->unk_1E2A1 = 0;
     params = ov13_02245F8C;
-    params.unk_04 = WifiSetupText_GetString(ov13_0224F4F8, 0);
-    params.unk_08 = WifiSetupText_GetString(ov13_0224F4F8, 1);
+    params.title = WifiSetupText_GetString(ov13_0224F4F8, 0);
+    params.description = WifiSetupText_GetString(ov13_0224F4F8, 1);
     params.languageCode = WifiSetupApp_GetLanguageCode();
-    ov13_0223E80C(gWifiSetupSession, &params);
-    if (ov13_0223EA58() == 0) {
+    WifiSetupShare_Init(gWifiSetupSession, &params);
+    if (WifiSetupShare_Start() == 0) {
         OS_Terminate();
     }
     gWifiSetupSession->task = WifiSetupTask_Create(0, (WifiSetupTaskFunc)ov13_0222BCC0, NULL, 120);
@@ -380,7 +380,7 @@ void ov13_0222BC0C(void) {
 }
 
 void ov13_0222BC2C(void *task) {
-    if (ov13_0223E8FC() == 0) {
+    if (WifiSetupShare_Cancel() == 0) {
         return;
     }
     gWifiSetupSession->unk_1E2A1 = 1;
@@ -396,7 +396,7 @@ void ov13_0222BC84(WifiSetupSessionCallback callback) {
 }
 
 void ov13_0222BC9C(void) {
-    ov13_0223EAA0();
+    WifiSetupShare_StartDownload();
 }
 
 u8 *ov13_0222BCA8(void) {
@@ -409,14 +409,14 @@ void ov13_0222BCC0(void *task) {
     u8 event;
     u8 ok;
 
-    ov13_0223EAD4(task);
+    WifiSetupShare_Update(task);
     if (gWifiSetupSession->unk_1E2A0 && !gWifiSetupSession->unk_1E2A1) {
         if (gWifiSetupSession->callback != NULL) {
             gWifiSetupSession->callback(0);
         }
         return;
     }
-    ov13_0223EE58(&event, &ok);
+    WifiSetupShare_GetState(&event, &ok);
     switch (event) {
     case 5:
         if (!ok) {
@@ -424,7 +424,7 @@ void ov13_0222BCC0(void *task) {
         }
         {
             u8 *dst = gWifiSetupSession->unk_1E280;
-            u16 *src = ov13_0223EE9C();
+            u16 *src = WifiSetupShare_GetChildUser();
             MIi_CpuCopy16(src, (u16 *)dst, 0x16);
         }
         if (gWifiSetupSession->callback == NULL) {
