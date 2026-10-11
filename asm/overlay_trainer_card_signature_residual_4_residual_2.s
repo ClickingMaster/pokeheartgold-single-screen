@@ -7,63 +7,63 @@
 	.public TrainerCardSignature_Exit
 	.public TrainerCardSignature_Init
 	.public TrainerCardSignature_Main
-	.public _021E94AC
-	.public ov52_021E83C4
-	.public ov52_021E84CC
-	.public ov52_021E85DC
-	.public ov52_021E870C
-	.public ov52_021E888C
-	.public ov52_021E8994
-	.public ov52_021E89D4
-	.public ov52_021E8BDC
-	.public ov52_021E8DC4
-	.public ov52_021E8E64
-	.public ov52_021E8F2C
-	.public ov52_021E8FAC
-	.public ov52_021E9124
-	.public ov52_021E9158
-	.public ov52_021E9260
-	.public ov52_021E927C
-	.public ov52_021E9300
-	.public ov52_021E9364
-	.public ov52_021E94B2
-	.public ov52_021E94BA
-	.public ov52_021E94CC
-	.public ov52_021E94DC
-	.public ov52_021E94EC
-	.public ov52_021E9508
-	.public ov52_021E9524
-	.public ov52_021E9540
-	.public ov52_021E955C
-	.public ov52_021E9578
-	.public ov52_021E95A0
-	.public ov52_021E96C0
-	.public ov52_021E837C
-	.public ov52_021E83A4
-	.public ov52_021E8568
-	.public ov52_021E85A0
-	.public ov52_021E86DC
-	.public ov52_021E8B94
+	.public sTrainerCardSignatureDoneButtonPos
+	.public TrainerCardSignature_InitBgLayers
+	.public TrainerCardSignature_InitStrings
+	.public TrainerCardSignature_LoadBgGraphics
+	.public TrainerCardSignature_InitSpriteResources
+	.public TrainerCardSignature_CreateDoneButtonSprite
+	.public TrainerCardSignature_PrintCentered
+	.public TrainerCardSignature_CreateWindows
+	.public TrainerCardSignature_HandleTouch
+	.public TrainerCardSignature_State_ConfirmPrompt
+	.public TrainerCardSignature_State_ErasePrompt
+	.public TrainerCardSignature_BlitClipped
+	.public TrainerCardSignature_DrawLine
+	.public TrainerCardSignature_SavePenPositions
+	.public TrainerCardSignature_DrawStrokes
+	.public TrainerCardSignature_TakeNewStroke
+	.public TrainerCardSignature_PrintMessage
+	.public TrainerCardSignature_PackCanvas
+	.public TrainerCardSignature_UpdatePenSound
+	.public sTrainerCardSignatureCanvasHitbox
+	.public sTrainerCardSignatureButtonHitboxes
+	.public sTrainerCardSignatureGraphicsModes
+	.public sTrainerCardSignatureObjCharTransferTemplate
+	.public sTrainerCardSignatureSubBg0Template
+	.public sTrainerCardSignatureSubBg1Template
+	.public sTrainerCardSignatureMainBg0Template
+	.public sTrainerCardSignatureMainBg1Template
+	.public sTrainerCardSignatureMainBg2Template
+	.public sTrainerCardSignatureGraphicsBanks
+	.public sTrainerCardSignaturePenBitmaps
+	.public sTrainerCardSignatureStateFuncs
+	.public TrainerCardSignature_VBlankCB
+	.public TrainerCardSignature_SetGfxBanks
+	.public TrainerCardSignature_FreeStrings
+	.public TrainerCardSignature_FreeBgLayers
+	.public TrainerCardSignature_InitObjTransfer
+	.public TrainerCardSignature_RemoveWindows
 	.public ov52_021E8BD8
 	.public ov52_021E8CBC
-	.public ov52_021E8CDC
-	.public ov52_021E8CF4
-	.public ov52_021E8D3C
-	.public ov52_021E8D64
-	.public ov52_021E8D8C
-	.public ov52_021E8EDC
-	.public ov52_021E8EFC
+	.public TrainerCardSignature_SetDoneButtonPressed
+	.public TrainerCardSignature_State_Draw
+	.public TrainerCardSignature_UpdateCanvas
+	.public TrainerCardSignature_ShowYesNoPrompt
+	.public TrainerCardSignature_State_WaitConfirmMessage
+	.public TrainerCardSignature_State_PrintEraseMessage
+	.public TrainerCardSignature_State_WaitEraseMessage
 	.public ov52_021E9218
-	.public ov52_021E921C
+	.public TrainerCardSignature_AnimateButtonPalette
 	.public ov52_021E925C
-	.public ov52_021E92E8
-	.public ov52_021E9424
-	.public ov52_021E9488
-	.public ov52_021E8994
+	.public TrainerCardSignature_IsPrinterDone
+	.public TrainerCardSignature_PlayPenSoundOnTurn
+	.public TrainerCardSignature_SetDoneButtonHidden
+	.public TrainerCardSignature_PrintCentered
 
 
-	thumb_func_start ov52_021E89D4
-ov52_021E89D4: ; 0x021E89D4
+	thumb_func_start TrainerCardSignature_CreateWindows
+TrainerCardSignature_CreateWindows: ; 0x021E89D4
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x1c
 	add r5, r0, #0
@@ -138,7 +138,7 @@ ov52_021E89D4: ; 0x021E89D4
 	ldr r1, [r5, #0x2c]
 	add r0, r5, r0
 	mov r3, #2
-	bl ov52_021E8994
+	bl TrainerCardSignature_PrintCentered
 	mov r1, #2
 	lsl r1, r1, #8
 	bl DC_FlushRange
@@ -268,4 +268,4 @@ _021E8B84: .word 0x000E0702
 _021E8B88: .word 0x00005B9C
 _021E8B8C: .word 0x00010200
 _021E8B90: .word 0x000E0D0F
-	thumb_func_end ov52_021E89D4
+	thumb_func_end TrainerCardSignature_CreateWindows

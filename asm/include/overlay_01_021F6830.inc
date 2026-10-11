@@ -46,9 +46,9 @@
 .public ov30_0225D520
 .public ov30_0225D64C
 .public ov30_0225D6FC
-.public ov31_0225D520
-.public ov31_0225D710
-.public ov31_0225D758
+.public TouchMartApp_Init
+.public TouchMartApp_Exit
+.public TouchMartApp_IsExitDone
 .public ov32_0225D520
 .public ov32_0225D5CC
 .public ov32_0225D608

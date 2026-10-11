@@ -82,6 +82,12 @@ typedef struct MicWork {
 
 extern MicWork micw;
 
+typedef struct NvramWork {
+    u16 command[16]; // PXI command words collected by NVRAM_AnalyzeCommand
+} NvramWork;
+
+extern NvramWork nvramw;
+
 BOOL SPIi_CheckException(u32 owner);
 void SPIi_GetException(u32 owner);
 void SPIi_ReleaseException(u32 owner);

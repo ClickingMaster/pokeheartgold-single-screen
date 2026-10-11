@@ -22,14 +22,9 @@ Autoload WRAM
 	Object lib/src/OS_irqHandler.o
 	Object lib/src/OS_irqTable.o
 	Object lib/src/OS_interrupt.o
-	Object lib/src/to90_arm7_spinlock_run01.o
-	Object lib/src/to90_arm7_spinlock_run02.o
-	Object lib/src/op90_to90_arm7_spinlock_alias_cartridge_r01.o
-	Object lib/src/to90_arm7_spinlock_run03.o
+	Object lib/src/os_spinlock_arm7.o
 	Object lib/asm/to90_arm7_spinlock_alias_card.o
-	Object lib/src/to90_arm7_spinlock_run04.o
-	Object lib/src/op90_to90_arm7_spinlock_bitmap_get_r01.o
-	Object lib/src/op90_to90_arm7_spinlock_bitmap_release_r01.o
+	Object lib/src/os_lock_id_arm7.o
 	Object lib/src/OS_thread.o
 	Object lib/src/OS_context.o
 	Object lib/src/OS_message.o
@@ -44,14 +39,14 @@ Autoload WRAM
 	Object lib/src/to90_arm7_alarm_suffix.o
 	Object lib/src/OS_valarm.o
 	Object lib/src/OS_system.o
-	Object lib/src/to90_arm7_system_wait.o
+	Object lib/src/os_spin_wait.o
 	Object lib/src/OS_reset.o
-	Object lib/src/to90_arm7_reset_c.o
+	Object lib/src/os_reset_arm7.o
 	Object lib/src/OS_terminate_proc.o
-	Object lib/src/to90_arm7_terminate.o
-	Object lib/src/to90_a7_next1668_o02_run01.o
-	Object lib/src/op90_MI_memory_r01.o
-	Object lib/src/op90_MI_swap_r01.o
+	Object lib/src/os_terminate.o
+	Object lib/src/mi_dma_arm7.o
+	Object lib/src/mi_memory_arm7.o
+	Object lib/src/mi_swap_arm7.o
 	Object lib/src/PXI_fifo.o
 	Object lib/src/EXI_genPort.o
 	Object lib/src/PAD_xyButton.o
@@ -69,44 +64,7 @@ Autoload WRAM
 	Object lib/src/sound_shared_work.o
 	Object lib/src/sound_alarm.o
 	Object lib/src/sound_command.o
-	Object lib/src/to90_arm7_sub_wram_1_run69.o
-	Object lib/src/op90_to90_arm7_sub_wram_1_residual_16_r01.o
-	Object lib/src/to90_arm7_sub_wram_1_run70.o
-	Object lib/src/to90_arm7_sub_wram_1_run71.o
-	Object lib/src/to90_arm7_sub_wram_1_run72.o
-	Object lib/src/to90_arm7_sub_wram_1_run102.o
-	Object lib/src/to90_arm7_sub_wram_1_run73.o
-	Object lib/src/op90_to90_arm7_sub_wram_1_residual_17_r01.o
-	Object lib/src/to90_arm7_sub_wram_1_run74.o
-	Object lib/src/to90_arm7_sub_wram_1_run75.o
-	Object lib/src/to90_arm7_sub_wram_1_run76.o
-	Object lib/src/to90_arm7_sub_wram_1_run103.o
-	Object lib/src/to91_arm7_cardaddr41479_run01.o
-	Object lib/src/to90_arm7_sub_wram_1_run77.o
-	Object lib/src/to90_arm7_sub_wram_1_run78.o
-	Object lib/src/to90_arm7_sub_wram_1_run79.o
-	Object lib/src/to90_arm7_sub_wram_1_run80.o
-	Object lib/src/to90_arm7_sub_wram_1_run81.o
-	Object lib/src/to90_arm7_sub_wram_1_run82.o
-	Object lib/src/to90_arm7_sub_wram_1_run83.o
-	Object lib/src/to90_arm7_sub_wram_1_run104.o
-	Object lib/src/to90_arm7_sub_wram_1_run84.o
-	Object lib/src/to90_arm7_sub_wram_1_run85.o
-	Object lib/src/to90_arm7_sub_wram_1_run86.o
-	Object lib/src/to90_arm7_sub_wram_1_run105.o
-	Object lib/src/to90_arm7_sub_wram_1_run87.o
-	Object lib/src/to90_arm7_sub_wram_1_run88.o
-	Object lib/src/to90_arm7_sub_wram_1_run89.o
-	Object lib/src/to90_arm7_sub_wram_1_run90.o
-	Object lib/src/to91_arm7_card41457_run01.o
-	Object lib/src/op90_to91_arm7_card41457_suffix_r01.o
-	Object lib/src/to90_arm7_sub_wram_1_run91.o
-	Object lib/src/to90_arm7_sub_wram_1_run92.o
-	Object lib/src/to90_arm7_sub_wram_1_run93.o
-	Object lib/src/to90_arm7_sub_wram_1_run94.o
-	Object lib/src/to90_arm7_sub_wram_1_run95.o
-	Object lib/src/to90_arm7_sub_wram_1_run96.o
-	Object lib/src/op90_to90_arm7_sub_wram_1_residual_20_r01.o
+	Object lib/src/card_driver.o
 	Object lib/src/op90_libsyscall_r01.o
 	Object lib/src/op90_op90_libsyscall_residual_1_r01.o
 	Object lib/src/op90_libsyscall_r02.o
@@ -133,8 +91,8 @@ Autoload WRAM
 	Object lib/src/to90_arm7_sub_wram_2_run21.o
 	Object lib/src/op90_to90_arm7_sub_wram_2_residual_13_r01.o
 	Object lib/src/to90_arm7_sub_wram_2_run24.o
-	Object lib/src/to90_arm7_sub_wram_2_run91.o
-	Object lib/src/op90_to90_arm7_sub_wram_2_residual_15_r01.o
+	Object lib/src/nvram_init.o
+	Object lib/src/nvram_command.o
 	Object asm/to90_arm7_wram160_r8_anchor_own3.o
 	Object lib/src/nvram_driver.o
 	Object lib/src/rtc_driver.o

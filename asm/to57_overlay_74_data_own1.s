@@ -5,9 +5,9 @@
 	.include "asm/macros.inc"
 	.include "overlay_74_thumb.inc"
 	.include "global.inc"
-	.extern ov74_02229200
-	.extern ov74_02229294
-	.extern ov74_02229450
+	.extern ConnectToRanger_Init
+	.extern ConnectToRanger_Main
+	.extern ConnectToRanger_Exit
 	.extern ov74_02229DA0
 	.extern ov74_02229DCC
 	.extern ov74_02229DD4

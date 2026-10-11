@@ -9,9 +9,9 @@ struct OverlayManager;
 
 extern u8 *ov74_0223D0A4;
 extern u8 _0223B368[];
-extern u16 ov74_0223BD68[][2];
-extern u16 ov74_0223D080[];
-extern u16 ov74_0223D090[];
+extern u16 sRangerCharTable[][2];
+extern u16 gConnectToRanger_PlayerName[];
+extern u16 gConnectToRanger_TrainerId[];
 
 extern void ov74_02229BC0(void (*func)(), u16 value);
 extern void ov74_02229C60(void);
@@ -67,11 +67,11 @@ extern void sub_0203769C(void);
 extern int sub_020373B4(int);
 extern void *sub_02034818(int);
 
-u16 ov74_02228C84(u16 value);
-void ov74_IntToWstring5(u16 *dst, int value);
+u16 ConnectToRanger_ConvertCharToRanger(u16 value);
+void ConnectToRanger_FormatNumber5Digits(u16 *dst, int value);
 void ov74_02229C0C(void);
 void ov74_02229CB8(void *);
-void ov74_02228D20(void *);
+void ConnectToRanger_EncodePlayerData(void *);
 void ov74_02229B68(void *);
 void ov74_02229BD0(void);
 void ov74_02229C44(void);

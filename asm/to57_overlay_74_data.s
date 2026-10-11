@@ -99,7 +99,7 @@
 	.public ov74_02236988
 	.public ov74_02236AE0
 	.public ov74_0223BD5C
-	.public ov74_0223BD68
+	.public sRangerCharTable
 	.public ov74_0223C1F4
 	.public ov74_0223C220
 	.public ov74_0223C230
@@ -117,15 +117,15 @@
 	.public ov74_0223C6D0
 	.public ov74_0223C6E0
 	.public ov74_0223C700
-	.public ov74_0223D080
-	.public ov74_0223D090
+	.public gConnectToRanger_PlayerName
+	.public gConnectToRanger_TrainerId
 	.public ov74_0223D0A4
 	.public ov74_0223D0A8
 	.public ov74_0223D0BC
 	.public ov74_0223D0C0
-	.extern ov74_02229200
-	.extern ov74_02229294
-	.extern ov74_02229450
+	.extern ConnectToRanger_Init
+	.extern ConnectToRanger_Main
+	.extern ConnectToRanger_Exit
 	.extern ov74_02229DA0
 	.extern ov74_02229DCC
 	.extern ov74_02229DD4
@@ -438,7 +438,7 @@
 	.public ov74_02236F44
 	.public ov74_02236F80
 	.public ov74_0223BD5C
-	.public ov74_0223BD68
+	.public sRangerCharTable
 	.public ov74_0223C1F4
 	.public ov74_0223C220
 	.public ov74_0223C230
@@ -485,8 +485,8 @@
 	.public ov74_0223D038
 	.public ov74_0223D040
 	.public ov74_0223D054
-	.public ov74_0223D080
-	.public ov74_0223D090
+	.public gConnectToRanger_PlayerName
+	.public gConnectToRanger_TrainerId
 	.public ov74_0223D0A4
 	.public ov74_0223D0A8
 	.public ov74_0223D0BC
@@ -515,7 +515,7 @@
 gApp_MainMenu:
 	.word MainMenuApp_Init, MainMenuApp_Main, MainMenuApp_Exit, 0xFFFFFFFF
 gApp_MainMenu_SelectOption_ConnectToRanger:
-	.word ov74_02229200, ov74_02229294, ov74_02229450, 0xFFFFFFFF
+	.word ConnectToRanger_Init, ConnectToRanger_Main, ConnectToRanger_Exit, 0xFFFFFFFF
 _0223B330:
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 _0223B340:
@@ -810,10 +810,10 @@ _0223B760:
 
 ov74_0223BD5C: ; 0x0223BD5C
 	.word 0x00150116 ; bitfield
-	.word ov74_0223D090
-	.word ov74_0223D080
+	.word gConnectToRanger_TrainerId
+	.word gConnectToRanger_PlayerName
 
-ov74_0223BD68: ; 0x0223BD68
+sRangerCharTable: ; 0x0223BD68
 	.byte 0x00, 0x00, 0xFF, 0xFF, 0x21, 0x00, 0xE1, 0x00
 	.byte 0x23, 0x00, 0xC0, 0x01, 0x25, 0x00, 0xD2, 0x01, 0x27, 0x00, 0xEA, 0x00, 0x28, 0x00, 0xEB, 0x00
 	.byte 0x29, 0x00, 0xBF, 0x01, 0x2A, 0x00, 0xBD, 0x01, 0x2B, 0x00, 0xAD, 0x01, 0x2C, 0x00, 0xBE, 0x01

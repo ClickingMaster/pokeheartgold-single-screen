@@ -3,64 +3,64 @@
 	.include "global.inc"
 
 	.text
-	.public _0225EE40
-	.public _0225EF40
-	.public ov31_0225D520
-	.public ov31_0225D684
-	.public ov31_0225D7A0
-	.public ov31_0225D83C
-	.public ov31_0225D9D4
-	.public ov31_0225DAC4
-	.public ov31_0225DB38
-	.public ov31_0225DBD4
-	.public ov31_0225DCA8
-	.public ov31_0225DD14
-	.public ov31_0225DE24
-	.public ov31_0225DE84
-	.public ov31_0225DF98
-	.public ov31_0225E060
-	.public ov31_0225E184
-	.public ov31_0225E20C
-	.public ov31_0225E2D4
-	.public ov31_0225E54C
-	.public ov31_0225E5FC
-	.public ov31_0225E700
-	.public ov31_0225E7D4
-	.public ov31_0225EA08
-	.public ov31_0225EA9C
-	.public ov31_0225EB30
-	.public ov31_0225EBC4
-	.public ov31_0225EC58
-	.public ov31_0225EE44
-	.public ov31_0225EE60
-	.public ov31_0225EE88
-	.public ov31_0225EED0
-	.public ov31_0225EEEC
-	.public ov31_0225EF08
-	.public ov31_0225EF48
-	.public ov31_0225D60C
-	.public ov31_0225D654
-	.public ov31_0225D710
-	.public ov31_0225D758
-	.public ov31_0225D75C
-	.public ov31_0225DAA4
-	.public ov31_0225DBA0
-	.public ov31_0225DCF4
-	.public ov31_0225DE00
-	.public ov31_0225E0E4
+	.public sTouchMartTextSkipHitbox
+	.public sTouchMartButtonSets
+	.public TouchMartApp_Init
+	.public TouchMartApp_PrintCancel
+	.public TouchMartApp_RunTask
+	.public TouchMartApp_HandleAction
+	.public TouchMartApp_LoadMainTilemap
+	.public TouchMartApp_SetupBgs
+	.public TouchMartApp_LoadGraphics
+	.public TouchMartApp_AddWindows
+	.public TouchMartApp_AddItemWindows
+	.public TouchMartApp_PrintItemList
+	.public TouchMartApp_PrintPrice
+	.public TouchMartApp_PrintMoney
+	.public TouchMartApp_PrintPageNumber
+	.public TouchMartApp_EditListTilemap
+	.public TouchMartApp_PrintSelectedItem
+	.public TouchMartApp_PrintInBag
+	.public TouchMartApp_PrintQuantity
+	.public TouchMartApp_PrintHowMany
+	.public TouchMartApp_PrintConfirmPurchase
+	.public TouchMartApp_CreateYesNoPrompt
+	.public TouchMartApp_PrintPurchaseDone
+	.public TouchMartApp_PrintCannotAfford
+	.public TouchMartApp_PrintNoRoom
+	.public TouchMartApp_PrintNoRoomInBag
+	.public TouchMartApp_PrintPremierBallBonus
+	.public TouchMartApp_AddDetailWindows
+	.public sTouchMartQuantityButtons
+	.public sTouchMartItemListButtons
+	.public sTouchMartItemWindowPositions
+	.public sTouchMartBgTemplate_Sub0
+	.public sTouchMartBgTemplate_Sub1
+	.public sTouchMartBgTemplate_Sub2
+	.public sTouchMartListTilemapEdits
+	.public TouchMartApp_SetupText
+	.public TouchMartApp_FreeText
+	.public TouchMartApp_Exit
+	.public TouchMartApp_IsExitDone
+	.public TouchMartApp_IsSelectionValid
+	.public TouchMartApp_GetTouchedButton
+	.public TouchMartApp_FreeWindows
+	.public TouchMartApp_RemoveItemWindows
+	.public TouchMartApp_PrintItemName
+	.public TouchMartApp_LoadListTilemap
 	.public ov31_0225E12C
-	.public ov31_0225E474
-	.public ov31_0225E4BC
-	.public ov31_0225E4EC
-	.public ov31_0225E51C
-	.public ov31_0225E774
-	.public ov31_0225E948
-	.public ov31_0225E95C
-	.public ov31_0225E9CC
-	.public ov31_0225EDA0
+	.public TouchMartApp_PrintBuyButton
+	.public TouchMartApp_BufferItemName
+	.public TouchMartApp_BufferItemNamePlural
+	.public TouchMartApp_BufferItemNameWithIndefArticle
+	.public TouchMartApp_HandleYesNoPrompt
+	.public TouchMartApp_PurchaseDonePrinterCallback
+	.public TouchMartApp_GetCannotAffordMessage
+	.public TouchMartApp_GetNoRoomMessage
+	.public TouchMartApp_RemoveDetailWindows
 
-	thumb_func_start ov31_0225E184
-ov31_0225E184: ; 0x0225E184
+	thumb_func_start TouchMartApp_PrintSelectedItem
+TouchMartApp_PrintSelectedItem: ; 0x0225E184
 	push {r3, r4, r5, r6, r7, lr}
 	mov r1, #0x29
 	add r5, r0, #0
@@ -85,7 +85,7 @@ ov31_0225E184: ; 0x0225E184
 	add r1, #0xe4
 	add r2, r7, #0
 	add r3, r6, #0
-	bl ov31_0225DE00
+	bl TouchMartApp_PrintItemName
 	add r0, r7, #0
 	bl String_Delete
 	mov r2, #0x9a
@@ -115,7 +115,7 @@ ov31_0225E184: ; 0x0225E184
 	add r1, r1, #4
 	ldr r1, [r5, r1]
 	add r2, #0xe4
-	bl ov31_0225DE24
+	bl TouchMartApp_PrintPrice
 _0225E1FE:
 	add r5, #0xe4
 	add r0, r5, #0
@@ -123,11 +123,11 @@ _0225E1FE:
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
 _0225E208: .word 0x00000283
-	thumb_func_end ov31_0225E184
+	thumb_func_end TouchMartApp_PrintSelectedItem
 
 
-	thumb_func_start ov31_0225E20C
-ov31_0225E20C: ; 0x0225E20C
+	thumb_func_start TouchMartApp_PrintInBag
+TouchMartApp_PrintInBag: ; 0x0225E20C
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x10
 	add r5, r0, #0
@@ -214,11 +214,11 @@ ov31_0225E20C: ; 0x0225E20C
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
 _0225E2D0: .word 0x00010200
-	thumb_func_end ov31_0225E20C
+	thumb_func_end TouchMartApp_PrintInBag
 
 
-	thumb_func_start ov31_0225E2D4
-ov31_0225E2D4: ; 0x0225E2D4
+	thumb_func_start TouchMartApp_PrintQuantity
+TouchMartApp_PrintQuantity: ; 0x0225E2D4
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x18
 	add r5, r0, #0
@@ -396,4 +396,4 @@ ov31_0225E2D4: ; 0x0225E2D4
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
 _0225E470: .word 0x00010200
-	thumb_func_end ov31_0225E2D4
+	thumb_func_end TouchMartApp_PrintQuantity

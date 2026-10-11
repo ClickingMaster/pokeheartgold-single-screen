@@ -4907,31 +4907,8 @@ Overlay touch_save_app
 Overlay OVY_31
 {
     After OVY_27
-    Object src/overlay31_app_start.o
-    Object src/overlay31_helpers_1.o
-    Object src/to70_overlay_31_residual_2_extra583_run01.o
-    Object src/overlay31_helpers_2.o
-    Object src/overlay31_selection_dispatch.o
-    Object src/overlay31_helpers_3.o
-    Object src/overlay31_background_setup.o
-    Object src/overlay31_helpers_4.o
-    Object src/overlay31_window_setup.o
-    Object src/overlay31_helpers_5.o
-    Object src/overlay31_list_render.o
-    Object src/overlay31_helpers_6.o
-    Object src/to45_overlay31_status_text_r7.o
-    Object src/overlay31_helpers_7.o
-    Object src/overlay31_points_display/overlay31_points_display.o
-    Object src/overlay31_helpers_8.o
-    Object src/to70_to45_overlay31_message_r9_residual_extra189_run01.o
-    Object src/to70_to70_to45_overlay31_message_r9_residual_extra189_residual_1_extra1335_run01.o
-    Object src/to45_overlay31_yesno_prompt_r9.o
-    Object src/overlay31_helpers_9.o
-    Object src/to90_extra2013_run01.o
-    Object src/overlay31_helpers_10.o
-    Object src/r40_overlay_31_residual_11_run1.o
-    Object src/overlay31_helpers_11.o
-    Object asm/overlay_31_residual_12.o
+    Object src/touch_mart_app.o
+    Object asm/touch_mart_app_data.o
 }
 Overlay OVY_32
 {
@@ -6637,30 +6614,7 @@ Overlay trainer_card_main
 Overlay trainer_card_signature
 {
     After trainer_card_main
-    Object src/to46_trainer_card_signature_lifecycle.o
-    Object src/trainer_card_signature_helpers_1.o
-    Object src/to90_extra2065_run01.o
-    Object src/to90_extra2299_run01.o
-    Object src/trainer_card_signature_helpers_2.o
-    Object src/to70_overlay_trainer_card_signature_residual_3_extra375_run01.o
-    Object src/trainer_card_signature_helpers_3.o
-    Object src/to90_extra2243_run01.o
-    Object src/to50_trainer_card_signature_sprite_r4.o
-    Object src/ov52_wave36_1.o
-    Object src/r40_overlay_trainer_card_signature_residual_4_residual_2_run1.o
-    Object src/trainer_card_signature_helpers_4.o
-    Object src/to91_signature224_run01.o
-    Object src/trainer_card_signature_helpers_5.o
-    Object src/to70_overlay_trainer_card_signature_residual_6_extra327_run01.o
-    Object src/trainer_card_signature_helpers_6.o
-    Object src/to50_trainer_card_signature_draw.o
-    Object src/trainer_card_signature_helpers_7.o
-    Object src/op90_to70_overlay_trainer_card_signature_residual_8_extra679_residual_1_r01.o
-    Object src/to70_overlay_trainer_card_signature_residual_8_extra679_run01.o
-    Object src/trainer_card_signature_helpers_8.o
-    Object src/to70_overlay_trainer_card_signature_residual_9_extra301_run01.o
-    Object src/to70_to70_overlay_trainer_card_signature_residual_9_extra301_residual_1_extra1332_run01.o
-    Object src/trainer_card_signature_helpers_9.o
+    Object src/overlay_trainer_card_signature.o
     Object asm/overlay_trainer_card_signature_residual_10.o
 }
 Overlay OVY_53
@@ -7616,19 +7570,7 @@ Overlay OVY_74
 {
     After OVY_38
     Object src/application/main_menu/main_menu.o
-    Object src/overlay74_thumb_c_02228c84_02228c84.o
-    Object src/to54_atomic_w08_01_run0.o
-Object src/op90_to90_extra2077_residual_1_r01.o
-Object src/to90_extra2077_run01.o
-Object src/to54_atomic_w08_03_run1.o
-Object src/to70_to54_atomic_w08_04_residual1_extra131_run01.o
-Object src/to91_w41569_mac_identifier.o
-Object src/to54_atomic_w08_05_run2.o
-Object src/to90_extra2078_run01.o
-Object src/to54_atomic_w08_07_run3.o
-Object src/op90_to54_atomic_w08_08_residual3_r01.o
-Object src/to54_atomic_w08_09_run4.o
-Object src/to80_extra1822_run01.o
+    Object src/application/main_menu/connect_to_ranger.o
 Object src/to54_atomic_w08_11_run5.o
     Object src/overlay74_thumb_c_02229bc0_02229bc0.o
     Object src/to70_overlay74_thumb_residual_02229bd0_02229c0c_extra726_run01.o
@@ -8711,50 +8653,8 @@ Overlay OVY_86
 Overlay OVY_87
 {
     After main
-    Object src/to70_overlay_87_to47_residual_00_extra169_run01.o
-    Object src/to47_overlay87_exact_run_01.o
-    Object src/to70_overlay_87_to47_residual_01_before_extra417_run01.o
-    Object src/to50_overlay87_touch_selection.o
-    Object src/to80_extra1570_run01.o
-    Object src/to90_extra2539_run01.o
-    Object src/to51_overlay87_slide_out.o
-    Object src/to47_overlay87_exact_run_02.o
-    Object src/to52_r7_overlay87_r02.o
-    Object src/to47_overlay87_exact_run_03.o
-    Object src/to70_overlay_87_to47_residual_03_extra299_run01.o
-    Object src/to47_overlay87_exact_run_04.o
-    Object src/op90_overlay_87_to47_residual_04_r01.o
-    Object src/to47_overlay87_exact_run_05.o
-    Object src/to70_overlay_87_to47_residual_05_extra228_run01.o
-    Object src/to47_overlay87_exact_run_06.o
-    Object src/to70_overlay_87_to47_residual_06_extra642_run01.o
-    Object src/to47_overlay87_exact_run_07.o
-    Object src/to70_overlay_87_to47_residual_07_extra855_run01.o
-    Object src/to47_overlay87_exact_run_08.o
-    Object src/to70_overlay_87_to47_residual_08_extra1017_run01.o
-    Object src/to47_overlay87_exact_run_09.o
-    Object src/to70_overlay_87_to47_residual_09_extra643_run01.o
-    Object src/to47_overlay87_exact_run_10.o
-    Object src/to91_ov87_choices148.o
-    Object src/op90_to91_ov87_choices148_residual_r01.o
-    Object src/to47_overlay87_exact_run_11.o
-    Object src/to91_w41463_touch_run01.o
-    Object src/to47_overlay87_exact_run_12.o
-    Object src/op90_to70_overlay_87_to47_residual_12_residual2_extra180_residual_1_r01.o
-    Object src/to70_overlay_87_to47_residual_12_residual2_extra180_run01.o
-    Object src/to57_overlay87_match_logic.o
-    Object src/overlay_87_to47_residual_12_exact.o
-    Object src/to47_overlay87_exact_run_13.o
-    Object src/overlay87_resource_ui_r13_run1.o
-    Object src/op90_to52_r5_overlay87_r13_middle_r01.o
-    Object src/to52_r5_overlay87_sprite_init.o
-    Object src/overlay87_sprite_resources_r13.o
-    Object src/to70_overlay_87_to47_residual_13_suffix_extra644_run01.o
-    Object src/to47_overlay87_exact_run_14.o
-    Object src/to70_overlay_87_to47_residual_14_extra645_run01.o
-    Object src/op90_to70_overlay_87_to47_residual_14_extra645_residual_1_r01.o
-    Object src/to47_overlay87_exact_run_15.o
-    Object asm/overlay_87_to47_residual_15.o
+    Object src/scratch_off_cards.o
+    Object asm/scratch_off_cards_data.o
 }
 Overlay OVY_88
 {

@@ -1,6 +1,6 @@
 #ifndef TO30_OV74_PROTOTYPES_H
 #define TO30_OV74_PROTOTYPES_H
-void ov74_022295C8(void *p, u32 value);
+void ConnectToRanger_SetTimeout(void *p, u32 value);
 void ov74_02229BC0(void *func, u16 value);
 void ov74_02229C5C(void);
 void ov74_02229CB4(void);

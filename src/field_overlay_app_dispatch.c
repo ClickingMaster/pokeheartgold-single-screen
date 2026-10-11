@@ -81,7 +81,7 @@ static const u16 ov01_02206C08[] = {
 static const AppEntry ov01_02206C60[] = {
     { ov27_02259F80, ov27_0225A19C, ov27_0225A2C8, (u32)-1                       },
     { ov30_0225D520, ov30_0225D64C, ov30_0225D6FC, FS_OVERLAY_ID(touch_save_app) },
-    { ov31_0225D520, ov31_0225D710, ov31_0225D758, FS_OVERLAY_ID(OVY_31)         },
+    { TouchMartApp_Init, TouchMartApp_Exit, TouchMartApp_IsExitDone, FS_OVERLAY_ID(OVY_31)         },
     { ov27_0225C250, ov27_0225C398, ov27_0225C418, (u32)-1                       },
     { ov28_0225D520, ov28_0225D5EC, ov28_0225D624, FS_OVERLAY_ID(OVY_28)         },
     { ov29_0225D520, ov29_0225D5EC, ov29_0225D61C, FS_OVERLAY_ID(OVY_29)         },

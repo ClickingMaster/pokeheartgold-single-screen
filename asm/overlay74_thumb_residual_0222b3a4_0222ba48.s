@@ -20,9 +20,9 @@
 	.public gApp_MainMenu_SelectOption_MysteryGift
 
 	.text
-	.public ov74_02229200
-	.public ov74_02229294
-	.public ov74_02229450
+	.public ConnectToRanger_Init
+	.public ConnectToRanger_Main
+	.public ConnectToRanger_Exit
 	.public ov74_02229DA0
 	.public ov74_02229DCC
 	.public ov74_02229DD4
@@ -204,7 +204,7 @@
 	.extern ov74_02236988
 	.extern ov74_02236AE0
 	.extern ov74_0223BD5C
-	.extern ov74_0223BD68
+	.extern sRangerCharTable
 	.extern ov74_0223C1F4
 	.extern ov74_0223C220
 	.extern ov74_0223C230
@@ -222,29 +222,29 @@
 	.extern ov74_0223C6D0
 	.extern ov74_0223C6E0
 	.extern ov74_0223C700
-	.extern ov74_0223D080
-	.extern ov74_0223D090
+	.extern gConnectToRanger_PlayerName
+	.extern gConnectToRanger_TrainerId
 	.extern ov74_0223D0A4
 	.extern ov74_0223D0A8
 	.extern ov74_0223D0BC
 	.extern ov74_0223D0C0
 
-	.extern ov74_02228C84
-	.extern ov74_IntToWstring5
-	.extern ov74_02228D20
-	.extern ov74_02228D64
-	.extern ov74_02228E98
-	.extern ov74_02228F14
-	.extern ov74_02228F8C
-	.extern ov74_02229084
-	.extern ov74_02229190
-	.extern ov74_02229200
-	.extern ov74_02229294
-	.extern ov74_02229450
-	.extern ov74_0222947C
-	.extern ov74_022295C8
-	.extern ov74_022295D0
-	.extern ov74_0222962C
+	.extern ConnectToRanger_ConvertCharToRanger
+	.extern ConnectToRanger_FormatNumber5Digits
+	.extern ConnectToRanger_EncodePlayerData
+	.extern ConnectToRanger_SetupGraphics
+	.extern ConnectToRanger_LoadSubScreenBg
+	.extern ConnectToRanger_ShowPokedexRequiredMessage
+	.extern ConnectToRanger_PrintScreen
+	.extern ConnectToRanger_PrintPlayerInfo
+	.extern ConnectToRanger_FreeGraphics
+	.extern ConnectToRanger_Init
+	.extern ConnectToRanger_Main
+	.extern ConnectToRanger_Exit
+	.extern ConnectToRanger_StoreManaphyEggCard
+	.extern ConnectToRanger_SetTimeout
+	.extern ConnectToRanger_CheckTimeoutOrCancel
+	.extern ConnectToRanger_RunTransfer
 	.extern ov74_02229B68
 	.extern ov74_02229BC0
 	.extern ov74_02229BD0

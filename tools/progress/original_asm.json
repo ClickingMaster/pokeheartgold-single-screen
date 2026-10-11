@@ -977,42 +977,42 @@
   {
    "function": "MI_CpuFill8",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_MI_memory_r01.c",
+   "source": "sub/lib/src/mi_memory_arm7.c",
    "kind": "asm",
    "reason": "unscheduled source-order code (subs not moved into the load delay slot, orr before tst) combined with post-index and subs peepholes; MWCC schedules at every optimisation level that emits those peepholes"
   },
   {
    "function": "MIi_CpuClear32",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_MI_memory_r01.c",
+   "source": "sub/lib/src/mi_memory_arm7.c",
    "kind": "asm",
    "reason": "ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode)"
   },
   {
    "function": "MIi_CpuClearFast",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_MI_memory_r01.c",
+   "source": "sub/lib/src/mi_memory_arm7.c",
    "kind": "asm",
    "reason": "8-register ldm/stm block copy; ARM push of callee-saved regs without lr (non-MWCC prologue; 0 occurrences in MWCC 2.0 ARM code); ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode)"
   },
   {
    "function": "MIi_CpuCopy32",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_MI_memory_r01.c",
+   "source": "sub/lib/src/mi_memory_arm7.c",
    "kind": "asm",
    "reason": "ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode)"
   },
   {
    "function": "MIi_CpuCopyFast",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_MI_memory_r01.c",
+   "source": "sub/lib/src/mi_memory_arm7.c",
    "kind": "asm",
    "reason": "8-register ldm/stm block copy; ARM push of callee-saved regs without lr (non-MWCC prologue; 0 occurrences in MWCC 2.0 ARM code); ARM single-register ldm/stm with writeback (0 occurrences in ARM mode); ARM single-register stmia rN!,{rX} (MWCC uses str rX,[rN],#4; 0 occurrences in ARM mode)"
   },
   {
    "function": "MI_SwapWord",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_MI_swap_r01.c",
+   "source": "sub/lib/src/mi_swap_arm7.c",
    "kind": "asm",
    "reason": "swp/swpb"
   },
@@ -1439,21 +1439,21 @@
   {
    "function": "OS_UnLockCartridge",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_spinlock_alias_cartridge_r01.c",
+   "source": "sub/lib/src/os_spinlock_arm7.c",
    "kind": "asm",
    "reason": "tail jump via bx r1; the 5 ARM7 bx r1 hits in MWCC code are mov lr,pc indirect calls, never tail jumps"
   },
   {
    "function": "OS_GetLockID",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_spinlock_bitmap_get_r01.c",
+   "source": "sub/lib/src/os_lock_id_arm7.c",
    "kind": "asm",
    "reason": "loads -3 from the literal pool (ldr r0,=0xfffffffd) where MWCC emits mvn r0,#2; mask shifts kept unfolded"
   },
   {
    "function": "OS_ReleaseLockID",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_spinlock_bitmap_release_r01.c",
+   "source": "sub/lib/src/os_lock_id_arm7.c",
    "kind": "asm",
    "reason": "mov rX,#0x80000000; mov rX,rX,lsr rN kept unfolded with pl/mi predicates; MWCC always folds a single-use shift into the orr operand and hoists the load"
   },
@@ -1712,7 +1712,7 @@
   {
    "function": "MI_CpuCopy8",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_MI_memory_r01.c",
+   "source": "sub/lib/src/mi_memory_arm7.c",
    "kind": "asm",
    "reason": "subs followed by blo/bhs carry branches and ip temporaries while r3 is free; byte-identical to the hand-written ARM9 MI_CpuCopy8 once its branch sequences are collapsed (p06, q06b)"
   },

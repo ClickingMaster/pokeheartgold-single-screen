@@ -7,108 +7,108 @@
 	.public TrainerCardSignature_Exit
 	.public TrainerCardSignature_Init
 	.public TrainerCardSignature_Main
-	.public _021E94AC
-	.public ov52_021E83C4
-	.public ov52_021E84CC
-	.public ov52_021E85DC
-	.public ov52_021E870C
-	.public ov52_021E888C
-	.public ov52_021E8994
-	.public ov52_021E89D4
-	.public ov52_021E8BDC
-	.public ov52_021E8DC4
-	.public ov52_021E8E64
-	.public ov52_021E8F2C
-	.public ov52_021E8FAC
-	.public ov52_021E9124
-	.public ov52_021E9158
-	.public ov52_021E9260
-	.public ov52_021E927C
-	.public ov52_021E9300
-	.public ov52_021E9364
-	.public ov52_021E94B2
-	.public ov52_021E94BA
-	.public ov52_021E94CC
-	.public ov52_021E94DC
-	.public ov52_021E94EC
-	.public ov52_021E9508
-	.public ov52_021E9524
-	.public ov52_021E9540
-	.public ov52_021E955C
-	.public ov52_021E9578
-	.public ov52_021E95A0
-	.public ov52_021E96C0
-	.public ov52_021E837C
-	.public ov52_021E83A4
-	.public ov52_021E8568
-	.public ov52_021E85A0
-	.public ov52_021E86DC
-	.public ov52_021E8B94
+	.public sTrainerCardSignatureDoneButtonPos
+	.public TrainerCardSignature_InitBgLayers
+	.public TrainerCardSignature_InitStrings
+	.public TrainerCardSignature_LoadBgGraphics
+	.public TrainerCardSignature_InitSpriteResources
+	.public TrainerCardSignature_CreateDoneButtonSprite
+	.public TrainerCardSignature_PrintCentered
+	.public TrainerCardSignature_CreateWindows
+	.public TrainerCardSignature_HandleTouch
+	.public TrainerCardSignature_State_ConfirmPrompt
+	.public TrainerCardSignature_State_ErasePrompt
+	.public TrainerCardSignature_BlitClipped
+	.public TrainerCardSignature_DrawLine
+	.public TrainerCardSignature_SavePenPositions
+	.public TrainerCardSignature_DrawStrokes
+	.public TrainerCardSignature_TakeNewStroke
+	.public TrainerCardSignature_PrintMessage
+	.public TrainerCardSignature_PackCanvas
+	.public TrainerCardSignature_UpdatePenSound
+	.public sTrainerCardSignatureCanvasHitbox
+	.public sTrainerCardSignatureButtonHitboxes
+	.public sTrainerCardSignatureGraphicsModes
+	.public sTrainerCardSignatureObjCharTransferTemplate
+	.public sTrainerCardSignatureSubBg0Template
+	.public sTrainerCardSignatureSubBg1Template
+	.public sTrainerCardSignatureMainBg0Template
+	.public sTrainerCardSignatureMainBg1Template
+	.public sTrainerCardSignatureMainBg2Template
+	.public sTrainerCardSignatureGraphicsBanks
+	.public sTrainerCardSignaturePenBitmaps
+	.public sTrainerCardSignatureStateFuncs
+	.public TrainerCardSignature_VBlankCB
+	.public TrainerCardSignature_SetGfxBanks
+	.public TrainerCardSignature_FreeStrings
+	.public TrainerCardSignature_FreeBgLayers
+	.public TrainerCardSignature_InitObjTransfer
+	.public TrainerCardSignature_RemoveWindows
 	.public ov52_021E8BD8
 	.public ov52_021E8CBC
-	.public ov52_021E8CDC
-	.public ov52_021E8CF4
-	.public ov52_021E8D3C
-	.public ov52_021E8D64
-	.public ov52_021E8D8C
-	.public ov52_021E8EDC
-	.public ov52_021E8EFC
+	.public TrainerCardSignature_SetDoneButtonPressed
+	.public TrainerCardSignature_State_Draw
+	.public TrainerCardSignature_UpdateCanvas
+	.public TrainerCardSignature_ShowYesNoPrompt
+	.public TrainerCardSignature_State_WaitConfirmMessage
+	.public TrainerCardSignature_State_PrintEraseMessage
+	.public TrainerCardSignature_State_WaitEraseMessage
 	.public ov52_021E9218
-	.public ov52_021E921C
+	.public TrainerCardSignature_AnimateButtonPalette
 	.public ov52_021E925C
-	.public ov52_021E92E8
-	.public ov52_021E9424
-	.public ov52_021E9488
+	.public TrainerCardSignature_IsPrinterDone
+	.public TrainerCardSignature_PlayPenSoundOnTurn
+	.public TrainerCardSignature_SetDoneButtonHidden
 	.rodata
 
-_021E94AC:
+sTrainerCardSignatureDoneButtonPos:
 	.byte 0xE0, 0x00, 0xAF, 0x00
 	.byte 0x00, 0x00
 
-ov52_021E94B2: ; 0x021E94B2
+sTrainerCardSignatureCanvasHitbox: ; 0x021E94B2
 	.byte 0x48, 0x88, 0x20, 0xE0, 0xFF, 0x00, 0x00, 0x00
 
-ov52_021E94BA: ; 0x021E94BA
+sTrainerCardSignatureButtonHitboxes: ; 0x021E94BA
 	.byte 0xA6, 0xC0, 0xCB, 0xFF, 0xFF, 0x00
 	.byte 0x00, 0x00, 0xA6, 0xC0, 0x00, 0x5F, 0xA6, 0xC0, 0x60, 0xBF, 0x00, 0x00
 
-ov52_021E94CC: ; 0x021E94CC
+sTrainerCardSignatureGraphicsModes: ; 0x021E94CC
 	.byte 0x01, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov52_021E94DC: ; 0x021E94DC
+sTrainerCardSignatureObjCharTransferTemplate: ; 0x021E94DC
 	.byte 0x14, 0x00, 0x00, 0x00
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x27, 0x00, 0x00, 0x00
 
-ov52_021E94EC: ; 0x021E94EC
+sTrainerCardSignatureSubBg0Template: ; 0x021E94EC
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1F, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov52_021E9508: ; 0x021E9508
+sTrainerCardSignatureSubBg1Template: ; 0x021E9508
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1E, 0x02, 0x00, 0x01, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov52_021E9524: ; 0x021E9524
+sTrainerCardSignatureMainBg0Template: ; 0x021E9524
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1E, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov52_021E9540: ; 0x021E9540
+sTrainerCardSignatureMainBg1Template: ; 0x021E9540
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x1F, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov52_021E955C: ; 0x021E955C
+sTrainerCardSignatureMainBg2Template: ; 0x021E955C
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1B, 0x02
 	.byte 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov52_021E9578: ; 0x021E9578
+sTrainerCardSignatureGraphicsBanks: ; 0x021E9578
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov52_021E95A0: ; 0x021E95A0
+sTrainerCardSignaturePenBitmaps: ; 0x021E95A0
 	.byte 0x00, 0x00, 0x00, 0x00, 0x10, 0x01, 0x00, 0x00, 0x10, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -128,12 +128,12 @@ ov52_021E95A0: ; 0x021E95A0
 
 	.data
 
-ov52_021E96C0:
+sTrainerCardSignatureStateFuncs:
 	.word 0
-	.word ov52_021E8CF4
-	.word ov52_021E8D8C
-	.word ov52_021E8DC4
-	.word ov52_021E8EDC
-	.word ov52_021E8EFC
-	.word ov52_021E8E64
+	.word TrainerCardSignature_State_Draw
+	.word TrainerCardSignature_State_WaitConfirmMessage
+	.word TrainerCardSignature_State_ConfirmPrompt
+	.word TrainerCardSignature_State_PrintEraseMessage
+	.word TrainerCardSignature_State_WaitEraseMessage
+	.word TrainerCardSignature_State_ErasePrompt
 	; 0x021E96E0

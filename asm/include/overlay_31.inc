@@ -79,6 +79,6 @@
 .public ov03_02257978
 .public ov03_02258120
 .public ov03_022581BC
-.public ov31_0225D520
-.public ov31_0225D710
-.public ov31_0225D758
+.public TouchMartApp_Init
+.public TouchMartApp_Exit
+.public TouchMartApp_IsExitDone
