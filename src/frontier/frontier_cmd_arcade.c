@@ -372,8 +372,8 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
         ov80_02233F1C(ctx, arcadeCtx, var0);
         break;
     case 40:
-        ov80_0222A474(&arcadeCtx->unkF4[0], arcadeCtx->unk74[arcadeCtx->unk11], 0xb, 0xcc);
-        ov80_0222A474(&arcadeCtx->unkF4[1], arcadeCtx->unk74[arcadeCtx->unk11 + 7], 0xb, 0xcc);
+        FrontierTrainer_LoadRecord(&arcadeCtx->unkF4[0], arcadeCtx->unk74[arcadeCtx->unk11], 0xb, 0xcc);
+        FrontierTrainer_LoadRecord(&arcadeCtx->unkF4[1], arcadeCtx->unk74[arcadeCtx->unk11 + 7], 0xb, 0xcc);
         break;
     case 41:
         ov80_02234B7C(arcadeCtx, frontierMap, var0, var1);
@@ -414,7 +414,7 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
         }
         break;
     case 49:
-        ov80_0222A52C(arcadeCtx->unk330, arcadeCtx->unk314, arcadeCtx->unk31C, arcadeCtx->unk320, NULL, 4, 0xb, 0xcd);
+        FrontierMon_GenerateList(arcadeCtx->unk330, arcadeCtx->unk314, arcadeCtx->unk31C, arcadeCtx->unk320, NULL, 4, 0xb, 0xcd);
         break;
     case 50:
         ov80_022383C0(arcadeCtx);

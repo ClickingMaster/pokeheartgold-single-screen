@@ -23,7 +23,7 @@
 .public OS_ResetSystem
 .public MI_CpuFill8
 .public gOverlayTemplate_Battle
-.public ov80_0222A474
+.public FrontierTrainer_LoadRecord
 .public FrontierScriptContext_Pause
 .public FrontierScriptContext_ReadHalfWord
 .public FrontierScript_ReadVarPtr

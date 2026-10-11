@@ -34,5 +34,5 @@ void ov80_02236E24(int a0, int a1, u16 *a2, void *a3, u8 *a4, int a5, u16 a6, co
     } else {
         ov80_02236C9C(a7, a7, 6, 6, a2, 11, entry, a6, a4);
     }
-    ov80_0222A52C(a3, a2, a4, NULL, a5, 6, 11, 0xCD);
+    FrontierMon_GenerateList(a3, a2, a4, NULL, a5, 6, 11, 0xCD);
 }

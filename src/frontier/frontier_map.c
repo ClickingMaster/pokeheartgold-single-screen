@@ -41,9 +41,9 @@ FrontierMapSpriteState *sub_02096878(void *frontier);
 void sub_02096884(void *frontier);
 
 // Other frontier overlay modules (no header yet)
-u32 ov80_0222ACA0(u32 mapId, u32 field);
-void ov80_0222AD9C(void *map, void *effect, u32 mapId);
-void ov80_0222ADB4(void *map, void *effect, u32 mapId);
+u32 FrontierMap_GetParam(u32 mapId, u32 field);
+void FrontierMap_InitEffect(void *map, void *effect, u32 mapId);
+void FrontierMap_ExitEffect(void *map, void *effect, u32 mapId);
 int ov80_0222A7EC(void *profile);
 u32 ov80_02239960(enum HeapID heapID);
 void ov80_02239980(u32 resourceManager);
@@ -63,7 +63,7 @@ extern const GraphicsBanks ov80_0223D5D8;
 extern const FrontierMapMainBgTemplates ov80_0223D600;
 extern const u8 ov80_0223D654[];
 
-// Map parameter table fields (ov80_0222ACA0)
+// Map parameter table fields (FrontierMap_GetParam)
 #define MAP_PARAM_BG_MODE     0
 #define MAP_PARAM_BGM         3
 #define MAP_PARAM_BG_SIZE     4
@@ -127,21 +127,21 @@ void *FrontierMap_Init(void *frontier) {
     GfGfx_BothDispOn();
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
-    Sound_SetFieldBGM(ov80_0222ACA0(mapId, MAP_PARAM_BGM));
-    sub_02055198(NULL, ov80_0222ACA0(mapId, MAP_PARAM_BGM));
+    Sound_SetFieldBGM(FrontierMap_GetParam(mapId, MAP_PARAM_BGM));
+    sub_02055198(NULL, FrontierMap_GetParam(mapId, MAP_PARAM_BGM));
     TextFlags_SetAutoScrollParam(1);
     TextFlags_SetCanABSpeedUpPrint(FALSE);
     TextFlags_SetCanTouchSpeedUpPrint(FALSE);
     Main_SetVBlankIntrCB((GFIntrCB)FrontierMap_VBlank, map);
     map->vblankTask = SysTask_CreateOnVBlankQueue((SysTaskFunc)FrontierMap_VBlankTask, map, 10);
-    ov80_0222AD9C(map, &map->mapEffect, map->mapId);
+    FrontierMap_InitEffect(map, &map->mapEffect, map->mapId);
     WirelessStatusIcon_Create();
     return map;
 }
 
 void FrontierMap_Free(FrontierMap *map) {
     Frontier_GetLaunchArgs(map->frontier);
-    ov80_0222ADB4(map, &map->mapEffect, map->mapId);
+    FrontierMap_ExitEffect(map, &map->mapEffect, map->mapId);
     FrontierMap_FreeMapObjects(map);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_OFF);
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
@@ -272,14 +272,14 @@ void FrontierMap_Update(SysTask *task, FrontierMap *map) {
 void FrontierMap_Scroll(FrontierMap *map) {
     FrontierLaunchArgs *args = Frontier_GetLaunchArgs(map->frontier);
 
-    switch (ov80_0222ACA0(args->unk20, MAP_PARAM_SCROLL_MODE)) {
+    switch (FrontierMap_GetParam(args->unk20, MAP_PARAM_SCROLL_MODE)) {
     default:
     case 0:
         if (map->bg3Layer != NULL) {
             ov42_02229420(map->bg3Layer, &map->camera);
         }
         if (map->bg2Layer != NULL) {
-            if (ov80_0222ACA0(args->unk20, MAP_PARAM_BG2_SCROLLS) == 1) {
+            if (FrontierMap_GetParam(args->unk20, MAP_PARAM_BG2_SCROLLS) == 1) {
                 ov42_02229420(map->bg2Layer, &map->camera);
             }
         }
@@ -311,8 +311,8 @@ void FrontierMap_ScrollToCamera(FrontierMap *map) {
     G2dRenderer_SetMainSurfaceCoords(SpriteSystem_GetRenderer(map->spriteSystem), (fx32)fx, (fx32)fy);
     ScheduleSetBgPosText(map->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_X, x);
     ScheduleSetBgPosText(map->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_Y, y);
-    if (ov80_0222ACA0(args->unk20, MAP_PARAM_BG2_SCREEN) != FRONTIER_MAP_NO_ID) {
-        if (ov80_0222ACA0(args->unk20, MAP_PARAM_BG2_SCROLLS) == 1) {
+    if (FrontierMap_GetParam(args->unk20, MAP_PARAM_BG2_SCREEN) != FRONTIER_MAP_NO_ID) {
+        if (FrontierMap_GetParam(args->unk20, MAP_PARAM_BG2_SCROLLS) == 1) {
             ScheduleSetBgPosText(map->bgConfig, GF_BG_LYR_MAIN_2, BG_POS_OP_SET_X, x);
             ScheduleSetBgPosText(map->bgConfig, GF_BG_LYR_MAIN_2, BG_POS_OP_SET_Y, y);
         }
@@ -339,7 +339,7 @@ void FrontierMap_SetVramBank(BgConfig *bgConfig, u32 mapId) {
     GraphicsModes graphicsModes;
     BgTemplate subTemplate;
     FrontierMapMainBgTemplates main;
-    int bgMode = ov80_0222ACA0(mapId, MAP_PARAM_BG_MODE);
+    int bgMode = FrontierMap_GetParam(mapId, MAP_PARAM_BG_MODE);
     u16 bgSize;
 
     GfGfx_DisableEngineAPlanes();
@@ -359,9 +359,9 @@ void FrontierMap_SetVramBank(BgConfig *bgConfig, u32 mapId) {
         main.bg2.bgExtPltt = GX_BG_EXTPLTT_01;
         main.bg3.bgExtPltt = GX_BG_EXTPLTT_01;
     }
-    bgSize = ov80_0222ACA0(mapId, MAP_PARAM_BG_SIZE);
+    bgSize = FrontierMap_GetParam(mapId, MAP_PARAM_BG_SIZE);
     main.bg3.size = bgSize;
-    if (ov80_0222ACA0(mapId, MAP_PARAM_BG2_SCREEN) != FRONTIER_MAP_NO_ID) {
+    if (FrontierMap_GetParam(mapId, MAP_PARAM_BG2_SCREEN) != FRONTIER_MAP_NO_ID) {
         main.bg2.size = bgSize;
     }
     if (bgMode == GX_BGMODE_0) {
@@ -435,14 +435,14 @@ void FrontierMap_InitMapObjects(FrontierMap *map, u32 mapId, void *profile) {
     ov42_02229394(&map->camera);
     map->objectGfx = ov42_02228F24(SpriteManager_GetSpriteList(map->spriteManager), map->paletteData, 32, ov80_0222A7EC(profile), 0, 1, HEAP_ID_101);
     layerTemplate = ov80_0223D554;
-    layerTemplate.narcId = ov80_0222ACA0(mapId, MAP_PARAM_NARC);
-    layerTemplate.fileId = ov80_0222ACA0(mapId, MAP_PARAM_BG3_SCREEN);
-    scrollMode = ov80_0222ACA0(mapId, MAP_PARAM_SCROLL_MODE);
+    layerTemplate.narcId = FrontierMap_GetParam(mapId, MAP_PARAM_NARC);
+    layerTemplate.fileId = FrontierMap_GetParam(mapId, MAP_PARAM_BG3_SCREEN);
+    scrollMode = FrontierMap_GetParam(mapId, MAP_PARAM_SCROLL_MODE);
     if (scrollMode == 0) {
         map->bg3Layer = ov42_022293B8(SpriteSystem_GetRenderer(map->spriteSystem), map->bgConfig, &layerTemplate, HEAP_ID_101);
     }
-    if (ov80_0222ACA0(mapId, MAP_PARAM_BG2_SCREEN) != FRONTIER_MAP_NO_ID) {
-        layerTemplate.fileId = ov80_0222ACA0(mapId, MAP_PARAM_BG2_SCREEN);
+    if (FrontierMap_GetParam(mapId, MAP_PARAM_BG2_SCREEN) != FRONTIER_MAP_NO_ID) {
+        layerTemplate.fileId = FrontierMap_GetParam(mapId, MAP_PARAM_BG2_SCREEN);
         layerTemplate.unk_1 = GF_BG_LYR_MAIN_2;
         layerTemplate.screenBase = GX_BG_SCRBASE_0x0800;
         layerTemplate.charBase = GX_BG_CHARBASE_0x20000;
@@ -454,14 +454,14 @@ void FrontierMap_InitMapObjects(FrontierMap *map, u32 mapId, void *profile) {
     map->unk2C = ov42_02229A40(128, HEAP_ID_101);
     map->unk30 = (UnkStruct_ov42_022299C0 *)ov42_02229974(128, HEAP_ID_101);
     ov42_02227F48(map->unk18, ov80_0223D654);
-    bgMode = ov80_0222ACA0(mapId, MAP_PARAM_BG_MODE);
-    narcId = (NarcId)ov80_0222ACA0(mapId, MAP_PARAM_NARC);
+    bgMode = FrontierMap_GetParam(mapId, MAP_PARAM_BG_MODE);
+    narcId = (NarcId)FrontierMap_GetParam(mapId, MAP_PARAM_NARC);
     narc = NARC_New(narcId, HEAP_ID_101);
-    GfGfxLoader_LoadCharDataFromOpenNarc(narc, ov80_0222ACA0(mapId, MAP_PARAM_BG3_CHAR), map->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, TRUE, HEAP_ID_101);
+    GfGfxLoader_LoadCharDataFromOpenNarc(narc, FrontierMap_GetParam(mapId, MAP_PARAM_BG3_CHAR), map->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, TRUE, HEAP_ID_101);
     if (bgMode == GX_BGMODE_0) {
-        PaletteData_LoadNarc(map->paletteData, narcId, ov80_0222ACA0(mapId, MAP_PARAM_BG3_PALETTE), HEAP_ID_101, PLTTBUF_MAIN_BG, 0x160, 0);
+        PaletteData_LoadNarc(map->paletteData, narcId, FrontierMap_GetParam(mapId, MAP_PARAM_BG3_PALETTE), HEAP_ID_101, PLTTBUF_MAIN_BG, 0x160, 0);
     } else {
-        plttFile = GfGfxLoader_GetPlttDataFromOpenNarc(narc, ov80_0222ACA0(mapId, MAP_PARAM_BG3_PALETTE), &bg3Pltt, HEAP_ID_101);
+        plttFile = GfGfxLoader_GetPlttDataFromOpenNarc(narc, FrontierMap_GetParam(mapId, MAP_PARAM_BG3_PALETTE), &bg3Pltt, HEAP_ID_101);
         DC_FlushRange(bg3Pltt->pRawData, bg3Pltt->szByte);
         GX_BeginLoadBGExtPltt();
         GX_LoadBGExtPltt(bg3Pltt->pRawData, 0x6000, 0x2000);
@@ -469,12 +469,12 @@ void FrontierMap_InitMapObjects(FrontierMap *map, u32 mapId, void *profile) {
         Heap_Free(plttFile);
     }
     PaletteData_FillPaletteInBuffer(map->paletteData, PLTTBUF_MAIN_BG, PLTTSEL_BOTH, 0, 0, 1);
-    GfGfxLoader_LoadScrnDataFromOpenNarc(narc, ov80_0222ACA0(mapId, MAP_PARAM_BG3_SCREEN), map->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, TRUE, HEAP_ID_101);
-    if (ov80_0222ACA0(mapId, MAP_PARAM_BG2_SCREEN) != FRONTIER_MAP_NO_ID) {
-        GfGfxLoader_LoadCharDataFromOpenNarc(narc, ov80_0222ACA0(mapId, MAP_PARAM_BG2_CHAR), map->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, TRUE, HEAP_ID_101);
-        GfGfxLoader_LoadScrnDataFromOpenNarc(narc, ov80_0222ACA0(mapId, MAP_PARAM_BG2_SCREEN), map->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, TRUE, HEAP_ID_101);
+    GfGfxLoader_LoadScrnDataFromOpenNarc(narc, FrontierMap_GetParam(mapId, MAP_PARAM_BG3_SCREEN), map->bgConfig, GF_BG_LYR_MAIN_3, 0, 0, TRUE, HEAP_ID_101);
+    if (FrontierMap_GetParam(mapId, MAP_PARAM_BG2_SCREEN) != FRONTIER_MAP_NO_ID) {
+        GfGfxLoader_LoadCharDataFromOpenNarc(narc, FrontierMap_GetParam(mapId, MAP_PARAM_BG2_CHAR), map->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, TRUE, HEAP_ID_101);
+        GfGfxLoader_LoadScrnDataFromOpenNarc(narc, FrontierMap_GetParam(mapId, MAP_PARAM_BG2_SCREEN), map->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, TRUE, HEAP_ID_101);
         if (bgMode != GX_BGMODE_0) {
-            void *bg2PlttFile = GfGfxLoader_GetPlttDataFromOpenNarc(narc, ov80_0222ACA0(mapId, MAP_PARAM_BG2_PALETTE), &bg2Pltt, HEAP_ID_101);
+            void *bg2PlttFile = GfGfxLoader_GetPlttDataFromOpenNarc(narc, FrontierMap_GetParam(mapId, MAP_PARAM_BG2_PALETTE), &bg2Pltt, HEAP_ID_101);
             DC_FlushRange(bg2Pltt->pRawData, bg2Pltt->szByte);
             GX_BeginLoadBGExtPltt();
             GX_LoadBGExtPltt(bg2Pltt->pRawData, 0x4000, 0x2000);

@@ -162,7 +162,7 @@ extern const WindowTemplate ov82_0223FF00[4];
 // Frontier overlay (80) helpers
 u8 ov80_02237920(u8 index);
 u32 ov80_0223792C(u8 mode);
-void ov80_0222A7CC(void *a0, u32 a1);
+void Frontier_BufferPartnerName(void *a0, u32 a1);
 
 // Not declared by the owners' headers yet
 u32 sub_02030BD0(u8 type, void *hallRecords);
@@ -615,7 +615,7 @@ BOOL BattleHallApp_LinkDecide(BattleHallApp *app) {
         app->brightness = 0;
         BattleHallSprite_SetVisible(app->monIcon, FALSE);
         BattleHallApp_DrawMessageFrame(&app->windows[0], Options_GetFrame(app->options));
-        ov80_0222A7CC(app->msgFormat, 0);
+        Frontier_BufferPartnerName(app->msgFormat, 0);
         app->printerId = BattleHallApp_ShowMessage(app, msg_0441_00011, 1);
         app->timer = 10;
         BattleHallApp_SetCellPalette(app->bgConfig, app->partnerCursor, 2);

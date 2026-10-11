@@ -99,7 +99,7 @@ u32 CAM_SearchAdd(const u16 *addr) {
 }
 
 void CAM_AddBcFrame(WlHeapBufMan *from, WlHeapBuf *frame) {
-    WlHeapBufMan *queue = &wlWorkPlain->heapBufMan[3];
+    WlHeapBufMan *queue = &wlWorkPlain->heap.bufMan[3];
     u32 mask = __VENEER_OS_DisableIrqMask(WL_IRQ_MASK);
     if (queue->count == 0) {
         CAM_SetTIMElementBitmap(0);

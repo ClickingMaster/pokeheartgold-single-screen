@@ -26,7 +26,7 @@ typedef struct W08Work {
 } W08Work;
 void *ov80_02237B58(u8, int);
 int ov80_02237D8C(u8);
-void ov80_0222A6B8(void *, u16, u16, void *, void *, void *, void *, u8);
+void FrontierTrainer_GenerateMons(void *, u16, u16, void *, void *, void *, void *, u8);
 void ov80_02237E30(void *);
 BOOL Comm_GetLocalNetId(void);
 int ov80_02237B24(u8, int);

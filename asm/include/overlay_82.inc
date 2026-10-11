@@ -158,7 +158,7 @@
 .public memset
 .public gOverlayTemplate_PokemonSummary
 .public gSystem
-.public ov80_0222A7CC
+.public Frontier_BufferPartnerName
 .public ov80_02237920
 .public ov80_0223792C
 .public BattleHallApp_Init

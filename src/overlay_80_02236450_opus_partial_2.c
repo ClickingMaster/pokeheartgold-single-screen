@@ -41,7 +41,7 @@ u32 ov80_02236734(void *work, FrontierMon *dst, u16 trainerMonId, u32 otId, u32 
     int stat;
 
     MI_CpuFill8(dst, 0, 0x38);
-    ov80_02229EF4(&src, trainerMonId, ov80_02236AF0(p[0xf]));
+    FrontierData_ReadMember(&src, trainerMonId, ov80_02236AF0(p[0xf]));
     dst->species = src.species;
     dst->form = src.unk_0e;
     if (useFixedItem != 0) {
@@ -159,13 +159,13 @@ void ov80_02236A34(void *bs, u8 *mons, int count, int idx, int heapId) {
     void *mon;
     int i;
 
-    ov80_0222A480(bs, mons, count, idx, heapId);
+    FrontierTrainer_SetBattleTrainer(bs, mons, count, idx, heapId);
     mon = AllocMonZeroed(heapId);
     i = 0;
     if (count > 0) {
         mons += 0x30;
         do {
-            ov80_0222A140(mons, mon, 0x78);
+            FrontierMon_ToPokemon(mons, mon, 0x78);
             Party_AddMon(((void **)((u8 *)bs + idx * 4))[1], mon);
             i++;
             mons += 0x38;

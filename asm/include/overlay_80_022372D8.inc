@@ -26,10 +26,10 @@
 .public _fsub
 .public _s32_div_f
 .public _u32_div_f
-.public ov80_02229F04
-.public ov80_0222A140
-.public ov80_0222A480
-.public ov80_0222A4EC
+.public FrontierTrainer_Load
+.public FrontierMon_ToPokemon
+.public FrontierTrainer_SetBattleTrainer
+.public FrontierMon_GenerateWithRandomOtId
 .public ov80_022372D8
 .public ov80_02237334
 .public ov80_02237448

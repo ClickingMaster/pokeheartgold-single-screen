@@ -288,11 +288,11 @@ ov80_0222AA40: ; 0x0222AA40
 	add r0, r6, #0
 	mov r1, #1
 	add r7, r3, #0
-	bl ov80_0222ACA0
+	bl FrontierMap_GetParam
 	str r0, [sp]
 	add r0, r6, #0
 	mov r1, #2
-	bl ov80_0222ACA0
+	bl FrontierMap_GetParam
 	add r6, r0, #0
 	ldr r1, [sp]
 	mov r0, #0xb6
@@ -318,11 +318,11 @@ ov80_0222AA7C: ; 0x0222AA7C
 	add r6, r1, #0
 	mov r1, #2
 	add r7, r2, #0
-	bl ov80_0222ACA0
+	bl FrontierMap_GetParam
 	add r4, r0, #0
 	add r0, r6, #0
 	mov r1, #2
-	bl ov80_0222ACA0
+	bl FrontierMap_GetParam
 	add r2, r0, #0
 	cmp r4, r2
 	beq _0222AAD4

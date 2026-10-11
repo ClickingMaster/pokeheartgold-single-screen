@@ -1,12 +1,12 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "83c4b86fb4d43e3ea2b0fc35aaee2d0f6c4269de",
+  "commit": "34b4ebe2d03c01028b496b7d4db8e8747ee650b8",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "64e138e81409920275c7e55a818bf16e303268de365ea433781755a311d4d2e8",
-    "ARM7": "140c1dd7806de3d8a95af07b503fbb44bc2969f899878df1d65ad0f8a9fb98a1"
+    "ARM9": "133a4b1498c19d73e849a88c0db183f6f4042039ba2041dee71f3a9407db45f9",
+    "ARM7": "7148c33a572b8e49a7bc3519dc342d5a3e8a5715b371402d53c6aae60a2e7788"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
   "totals": {
@@ -27511,6 +27511,14 @@
     {
       "cpu": "ARM9",
       "module": "OVY_80",
+      "object": "frontier_map_params.o",
+      "bytes": 584,
+      "status": "c",
+      "source": "src/frontier/frontier_map_params.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_80",
       "object": "frontier_map_sprites.o",
       "bytes": 248,
       "status": "c",
@@ -27567,6 +27575,14 @@
     {
       "cpu": "ARM9",
       "module": "OVY_80",
+      "object": "frontier_trainers.o",
+      "bytes": 2398,
+      "status": "c",
+      "source": "src/frontier/frontier_trainers.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_80",
       "object": "frontier_transition.o",
       "bytes": 2532,
       "status": "c",
@@ -27587,22 +27603,6 @@
       "bytes": 78,
       "status": "c",
       "source": "src/op90_overlay80_frontier_messages_residual_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
-      "object": "op90_overlay_80_02229EE0_residual_3_r01.o",
-      "bytes": 216,
-      "status": "c",
-      "source": "src/op90_overlay_80_02229EE0_residual_3_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
-      "object": "op90_overlay_80_02229EE0_residual_3_r02.o",
-      "bytes": 276,
-      "status": "c",
-      "source": "src/op90_overlay_80_02229EE0_residual_3_r02.c"
     },
     {
       "cpu": "ARM9",
@@ -27827,38 +27827,6 @@
       "bytes": 168,
       "status": "c",
       "source": "src/ov80_2238034_partial_4.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
-      "object": "ov80_29ee0_partial_1.o",
-      "bytes": 138,
-      "status": "c",
-      "source": "src/ov80_29ee0_partial_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
-      "object": "ov80_29ee0_partial_2.o",
-      "bytes": 432,
-      "status": "c",
-      "source": "src/ov80_29ee0_partial_2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
-      "object": "ov80_29ee0_partial_3.o",
-      "bytes": 60,
-      "status": "c",
-      "source": "src/ov80_29ee0_partial_3.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
-      "object": "ov80_29ee0_partial_4.o",
-      "bytes": 126,
-      "status": "c",
-      "source": "src/ov80_29ee0_partial_4.c"
     },
     {
       "cpu": "ARM9",
@@ -28639,14 +28607,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_80",
-      "object": "slop_small_overlay_80_02229EE0.o",
-      "bytes": 40,
-      "status": "c",
-      "source": "src/slop_small_overlay_80_02229EE0.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
       "object": "slop_small_overlay_80_02238034.o",
       "bytes": 44,
       "status": "c",
@@ -28715,14 +28675,6 @@
       "bytes": 734,
       "status": "c",
       "source": "src/to41_overlay_80_022340E8_run8.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
-      "object": "to42_ov80_0222aca0.o",
-      "bytes": 584,
-      "status": "c",
-      "source": "src/to42_ov80_0222aca0.c"
     },
     {
       "cpu": "ARM9",
@@ -28967,14 +28919,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_80",
-      "object": "to70_overlay_80_02229EE0_residual_2_extra467_run01.o",
-      "bytes": 62,
-      "status": "c",
-      "source": "src/to70_overlay_80_02229EE0_residual_2_extra467_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
       "object": "to70_overlay_80_0222BDF4_residual_19_extra840_run01.o",
       "bytes": 112,
       "status": "c",
@@ -29167,14 +29111,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_80",
-      "object": "to70_slop_small_overlay_80_02229EE0_residual_extra58_run01.o",
-      "bytes": 928,
-      "status": "c",
-      "source": "src/to70_slop_small_overlay_80_02229EE0_residual_extra58_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
       "object": "to70_to70_overlay_80_0222BDF4_residual_40_extra321_residual_1_extra1308_run01.o",
       "bytes": 148,
       "status": "c",
@@ -29331,14 +29267,6 @@
       "bytes": 90,
       "status": "c",
       "source": "src/to90_extra2389_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_80",
-      "object": "to90_extra2421_run01.o",
-      "bytes": 120,
-      "status": "c",
-      "source": "src/to90_extra2421_run01.c"
     },
     {
       "cpu": "ARM9",
@@ -55113,30 +55041,6 @@
     {
       "cpu": "ARM7",
       "module": "EXT_WRAM",
-      "object": "op90_to90_arm7_sub_ext_wram_residual_45_r01.o",
-      "bytes": 876,
-      "status": "c",
-      "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_45_r01.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "op90_to90_arm7_sub_ext_wram_residual_46_r01.o",
-      "bytes": 112,
-      "status": "c",
-      "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_46_r01.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "op90_to90_arm7_sub_ext_wram_residual_51_r01.o",
-      "bytes": 136,
-      "status": "c",
-      "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_51_r01.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
       "object": "op90_to90_arm7_sub_ext_wram_residual_52_r01.o",
       "bytes": 8,
       "status": "veneer",
@@ -55249,30 +55153,6 @@
       "bytes": 164,
       "status": "c",
       "source": "sub/lib/src/to90_arm7_current1_sup_rates_run01.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run204.o",
-      "bytes": 220,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run204.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run205.o",
-      "bytes": 192,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run205.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run232.o",
-      "bytes": 44,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run232.c"
     },
     {
       "cpu": "ARM7",
@@ -56708,10 +56588,26 @@
     {
       "cpu": "ARM7",
       "module": "EXT_WRAM",
+      "object": "wl_intr_rx_end_task.o",
+      "bytes": 876,
+      "status": "c",
+      "source": "sub/lib/src/wl_intr_rx_end_task.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
       "object": "wl_intr_start_tx.o",
       "bytes": 268,
       "status": "c",
       "source": "sub/lib/src/wl_intr_start_tx.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
+      "object": "wl_intr_task.o",
+      "bytes": 524,
+      "status": "c",
+      "source": "sub/lib/src/wl_intr_task.c"
     },
     {
       "cpu": "ARM7",
@@ -56846,6 +56742,22 @@
       "functions": [
         "__VENEER_MIi_CpuClear32"
       ]
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
+      "object": "wl_wait_loop_rxpe.o",
+      "bytes": 44,
+      "status": "c",
+      "source": "sub/lib/src/wl_wait_loop_rxpe.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
+      "object": "wl_wait_loop_waitus.o",
+      "bytes": 136,
+      "status": "c",
+      "source": "sub/lib/src/wl_wait_loop_waitus.c"
     },
     {
       "cpu": "ARM7",

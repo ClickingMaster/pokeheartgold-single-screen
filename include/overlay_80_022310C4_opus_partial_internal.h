@@ -60,7 +60,7 @@ void sub_02030C34(u8 *bits);
 u32 sub_0205C0A0(u32 a, u32 b);
 u32 sub_0205C268(u32 a);
 
-void *ov80_02229F04(TrHouseWork *work, u32 a, u32 heapId, u32 c);
+void *FrontierTrainer_Load(TrHouseWork *work, u32 a, u32 heapId, u32 c);
 void ov80_0222A30C(u8 a);
 void ov80_0222AF10(void *a);
 void ov80_0222AF54(void *a);

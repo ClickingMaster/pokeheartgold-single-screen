@@ -35,11 +35,11 @@
 .public MI_CpuFill8
 .public _s32_div_f
 .public _0223DD40
-.public ov80_02229F04
-.public ov80_0222A140
+.public FrontierTrainer_Load
+.public FrontierMon_ToPokemon
 .public ov80_0222A30C
 .public ov80_0222A3BC
-.public ov80_0222A52C
+.public FrontierMon_GenerateList
 .public ov80_0222A840
 .public ov80_0222B108
 .public ov80_0222B174

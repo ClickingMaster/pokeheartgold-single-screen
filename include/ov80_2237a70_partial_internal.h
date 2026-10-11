@@ -20,7 +20,7 @@ BOOL Party_AddMon(void *, void *);
 void SaveArray_Party_Init(void *);
 void *AllocMonZeroed(int);
 void Heap_Free(void *);
-void ov80_0222A140(void *, void *, int);
+void FrontierMon_ToPokemon(void *, void *, int);
 void LoadRectToBgTilemapRect(void *, u8, void *, int, int, int, int);
 void ScheduleBgTilemapBufferTransfer(void *, u8);
 int sub_0205C1F0(int);

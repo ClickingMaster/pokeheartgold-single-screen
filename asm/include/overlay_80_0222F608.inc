@@ -24,9 +24,9 @@
 .public OS_ResetSystem
 .public MI_CpuFill8
 .public gOverlayTemplate_Battle
-.public ov80_0222A140
-.public ov80_0222A474
-.public ov80_0222A52C
+.public FrontierMon_ToPokemon
+.public FrontierTrainer_LoadRecord
+.public FrontierMon_GenerateList
 .public FrontierSystem_GetFrontierMap
 .public FrontierScriptContext_Pause
 .public FrontierScriptContext_ReadHalfWord

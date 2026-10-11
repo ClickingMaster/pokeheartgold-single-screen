@@ -11,7 +11,7 @@ extern void *ov80_02236DF8(u8,int);
 extern void ov80_02236E90(void *,u16,u8,Row *,void *,void *,void *,void *,int);
 extern void *AllocMonZeroed(int);
 extern int ov80_02237120(void *);
-extern void ov80_0222A140(Row *,void *,int);
+extern void FrontierMon_ToPokemon(Row *,void *,int);
 extern void ov80_0222A3BC(void *,void *,void *);
 extern void Heap_Free(void *);
 extern void *Party_GetMonByIndex(void *,int);
@@ -26,6 +26,6 @@ void ov80_0222FF00(u8 *s){Row rows[12];u16 ids[6],others[6];int count,i;
  ov80_02236E24(ov80_022372B4(s),s[5],s+0x584,s+0x5b0,s+0x590,s+0x598,*(u16 *)(s+0x580),ids,others);
  ov80_022300D4(s,4,1);ov80_022300D4(s,5,1);count=12;{u8 *p;i=0;p=s;for(;i<6;i++){rows[i+6]=*(Row *)(p+0x5b0);p+=56;}}}
  ov80_02236E90(ov80_02236DF8(s[4],1),((u16 *)(s+0x18))[s[6]],s[5],rows,s+0x3d2,s+0x3f0,s+0x3da,s+0x3e0,count);
- for(i=0;i<6;i++){void *mon=AllocMonZeroed(11);ov80_0222A140(&((Row *)(s+0x280))[i],mon,ov80_02237120(s));ov80_0222A3BC(*(void **)(s+0x4f8),*(void **)(s+0x4d4),mon);Heap_Free(mon);}
+ for(i=0;i<6;i++){void *mon=AllocMonZeroed(11);FrontierMon_ToPokemon(&((Row *)(s+0x280))[i],mon,ov80_02237120(s));ov80_0222A3BC(*(void **)(s+0x4f8),*(void **)(s+0x4d4),mon);Heap_Free(mon);}
  for(i=0;i<6;i++)Party_GetMonByIndex(*(void **)(s+0x4d4),i);
 }

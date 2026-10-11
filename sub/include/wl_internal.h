@@ -58,6 +58,13 @@ typedef struct WlHeapParam {
     } sink;
 } WlHeapParam;
 
+// The driver heap: where the memory comes from, and the buffer lists of the parts of the driver
+// ([0]: messages to the WMSP, [1..3]: TX by priority, [5], [7], [8]: received frames for the MLME tasks ...).
+typedef struct WlHeap {
+    WlHeapParam param;
+    WlHeapBufMan bufMan[11];
+} WlHeap;
+
 // Parameter block of WL_InitDriver, filled by WMSP_Init and its caller.
 typedef struct WlInitParam {
     void *work; // 0x694-byte work area
@@ -230,11 +237,40 @@ typedef struct WlTxHeapFrame {
 
 // MP sequence state (WlTxCtrl.mpState).
 typedef struct WlMpState {
-    u8 unk_00[0x16];
+    u8 unk_00[0x10];
+    u16 unk_10; // stations that answered (bit per AID)
+    u16 unk_12; // WlIntrMpEndTask: stations addressed that did not answer
+    u16 unk_14;
     u16 entrySize; // bytes per entry
     u16 unk_18;    // WlIntrTxEnd: MP frame retried up to the threshold
     u8 entries[8]; // entrySize bytes per station (+6: u16 missing answers); the table continues past the struct
 } WlMpState;
+
+// Received frame in the driver heap (TakeoutRxFrame): driver data, then the hardware RX header and the
+// 802.11 frame as read from the MAC memory.
+typedef struct WlRxFrame {
+    u8 unk_00[6];
+    u16 length; // frame body (size - 24)
+    u16 status; // RX header: bits 0..3 frame type, bit 9: fragment
+    u16 unk_0a;
+    u16 unk_0c;
+    u16 unk_0e; // TakeoutRxFrame moves the low byte of unk_12 into the high byte
+    u16 unk_10;
+    u16 unk_12;
+    u16 frameCtrl;
+    u16 duration;
+    u16 addr1[3];
+    u16 addr2[3];
+    u16 addr3[3];
+    u16 seqCtrl;
+} WlRxFrame;
+
+// Driver heap buffer holding a received frame.
+typedef struct WlRxBuf {
+    WlHeapBuf header;
+    u8 unk_0c[4];
+    WlRxFrame frame;
+} WlRxBuf;
 
 // A frame waiting in the MAC memory (WlTxCtrl.txq / beacon).
 typedef struct WlTxDesc {
@@ -258,7 +294,8 @@ typedef struct WlTxCtrl {
     u16 unk_9a;
     u16 unk_9c;
     u16 unk_9e; // MP: retry count from which WlIntrTxEnd stops the TX queue
-    u8 unk_a0[4];
+    u16 unk_a0; // WlIntrMpEndTask: WlMpState.unk_10 of the last MP sequence
+    u16 unk_a2;
     u16 unk_a4; // TX pointer saved by WlIntrStartRx (0xFFFF: none)
     u16 unk_a6;
     u16 unk_a8; // WlIntrTxEnd: MP stopped at the retry threshold
@@ -310,8 +347,7 @@ typedef struct WlWork {
     u16 unk_16;
     OSThread thread;
     WlTask task[24];
-    WlHeapParam heap;
-    WlHeapBufMan heapBufMan[11];
+    WlHeap heap;
     u8 unk_20c[0x304 - 0x20c];
     OSMessageQueue *indicateQueue;
     OSMessageQueue *requestQueue;
@@ -539,6 +575,14 @@ void ReleaseIntr(void);
 void WlIntrTxBeaconTask(void);
 void WlIntrTxEndTask(void);
 
+// wl_intr_rx_end_task.c
+void WlIntrRxEndTask(void);
+
+// wl_intr_task.c
+void WlIntrMpEndTask(void);
+void SetParentTbttTxqTask(void);
+WlRxFrame *TakeoutRxFrame(u16 *src, u32 size);
+
 // wl_cam.c
 u32 CAM_Search(const u16 *addr);
 u32 CAM_SearchAdd(const u16 *addr);
@@ -574,6 +618,12 @@ void InitializeCAM(void);
 void InitCAM(void);
 void CAM_InitElement(u32 index, const u8 *addr);
 
+// wl_wait_loop_rxpe.c
+void WaitLoop_Rxpe(void);
+
+// wl_wait_loop_waitus.c
+void WaitLoop_Waitus(u32 us, OSAlarmHandler handler);
+
 // veneers defined in other ARM7 files
 void __VENEER_OS_CancelAlarm(OSAlarm *alarm);
 void __VENEER_OS_CreateAlarm(OSAlarm *alarm);
@@ -591,7 +641,6 @@ void __VENEER_OS_FreeToHeap(u32 id, u32 heap, void *ptr);
 void __VENEER_OS_ExitThread(void);
 
 // defined in the later WL files
-void WaitLoop_Waitus(u32 us, OSAlarmHandler handler);
 int WaitLoop_BbpAccess(void);
 int WaitLoop_RfAccess(void);
 void StopBeaconFrame(void);
@@ -599,7 +648,6 @@ void StartBeaconFrame(void);
 void InitApList(void);
 void InitTxCtrl(void);
 void InitRxCtrl(void);
-void WaitLoop_Rxpe(void);
 void DeleteAllTxFrames(void);
 void WaitLoop_ClrAid(void);
 void DeleteTxFrames(u32 station);
@@ -623,6 +671,11 @@ void IntrCarrierSuppresionSignal(void);
 void TxEndKeyData(WlTxDesc *desc);
 void UpdateGameInfoElement(void);
 int MLME_IssueBeaconSendIndication(void);
+void TxqPri(u32 priority);
+void RxBeaconFrame(WlRxFrame *frame);
+void RxKeyDataFrame(WlRxFrame *frame);
+u32 RxMpFrame(WlRxFrame *frame);
+u32 RxMpAckFrame(WlRxFrame *frame);
 
 extern const u8 BC_ADRS[];
 

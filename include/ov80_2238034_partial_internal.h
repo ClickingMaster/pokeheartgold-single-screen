@@ -20,7 +20,7 @@ void sub_0207217C(void *mon, void *profile, u32, u32, u32, u32);
 void *SaveArray_Party_Init(void *save);
 void *AllocMonZeroed(u32 heapId);
 void Heap_Free(void *ptr);
-void ov80_0222A140(void *src, void *mon, u32 level);
+void FrontierMon_ToPokemon(void *src, void *mon, u32 level);
 void Party_AddMon(void *party, void *mon);
 void *Party_GetMonByIndex(void *party, s32 slot);
 void SetMonData(void *mon, u32 attr, const void *value);

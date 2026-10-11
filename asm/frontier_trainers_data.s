@@ -87,25 +87,25 @@
 	.public _0222A836
 	.public _0222A83C
 	.public _0223B620
-	.public ov80_02229EE0
-	.public ov80_02229EF4
-	.public ov80_02229F04
-	.public ov80_02229F6C
-	.public ov80_0222A140
+	.public FrontierData_AllocMember
+	.public FrontierData_ReadMember
+	.public FrontierTrainer_Load
+	.public FrontierMon_Generate
+	.public FrontierMon_ToPokemon
 	.public ov80_0222A30C
 	.public ov80_0222A334
 	.public ov80_0222A3BC
-	.public ov80_0222A3D4
-	.public ov80_0222A400
-	.public ov80_0222A43C
-	.public ov80_0222A474
-	.public ov80_0222A480
-	.public ov80_0222A4EC
-	.public ov80_0222A52C
-	.public ov80_0222A5A4
-	.public ov80_0222A5E0
-	.public ov80_0222A6B8
-	.public ov80_0222A7CC
+	.public Frontier_SetSpriteAnim
+	.public Frontier_SetSpritePosition
+	.public Frontier_GetHpGaugeFrame
+	.public FrontierTrainer_LoadRecord
+	.public FrontierTrainer_SetBattleTrainer
+	.public FrontierMon_GenerateWithRandomOtId
+	.public FrontierMon_GenerateList
+	.public FrontierTrainer_GetMonIv
+	.public FrontierTrainer_PickMonSets
+	.public FrontierTrainer_GenerateMons
+	.public Frontier_BufferPartnerName
 	.public ov80_0222A7EC
 	.public ov80_0222A840
 	.public ov80_0223B628
@@ -114,18 +114,18 @@
 	.include "global.inc"
 
 	.text
-	.public ov80_02229EE0
-	.public ov80_02229EF4
-	.public ov80_02229F04
+	.public FrontierData_AllocMember
+	.public FrontierData_ReadMember
+	.public FrontierTrainer_Load
 	.public ov80_0222A334
 	.public ov80_0222A3BC
-	.public ov80_0222A3D4
-	.public ov80_0222A400
-	.public ov80_0222A43C
-	.public ov80_0222A474
-	.public ov80_0222A480
-	.public ov80_0222A5A4
-	.public ov80_0222A7CC
+	.public Frontier_SetSpriteAnim
+	.public Frontier_SetSpritePosition
+	.public Frontier_GetHpGaugeFrame
+	.public FrontierTrainer_LoadRecord
+	.public FrontierTrainer_SetBattleTrainer
+	.public FrontierTrainer_GetMonIv
+	.public Frontier_BufferPartnerName
 	.public ov80_0222A7EC
 	.public ov80_0222A840
     .rodata

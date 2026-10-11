@@ -164,13 +164,11 @@ Autoload EXT_WRAM
 	Object lib/src/wl_intr_mp_end.o
 	Object lib/src/wl_intr_start_tx.o
 	Object lib/src/wl_intr_ctrl.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_45_r01.o
-	Object lib/src/to90_arm7_sub_ext_wram_run204.o
-	Object lib/src/to90_arm7_sub_ext_wram_run205.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_46_r01.o
+	Object lib/src/wl_intr_rx_end_task.o
+	Object lib/src/wl_intr_task.o
 	Object lib/src/wl_cam.o
-	Object lib/src/to90_arm7_sub_ext_wram_run232.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_51_r01.o
+	Object lib/src/wl_wait_loop_rxpe.o
+	Object lib/src/wl_wait_loop_waitus.o
 	Object lib/src/to90_arm7_sub_ext_wram_run233.o
 	Object lib/src/to90_arm7_sub_ext_wram_run234.o
 	Object lib/src/to90_arm7_sub_ext_wram_run235.o

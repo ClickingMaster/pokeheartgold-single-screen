@@ -534,7 +534,7 @@ _02230F1E:
 	add r1, r4, r1
 	ldrh r1, [r1, #0x18]
 	mov r3, #0xcc
-	bl ov80_0222A474
+	bl FrontierTrainer_LoadRecord
 	ldrb r1, [r4, #5]
 	mov r0, #0x15
 	lsl r0, r0, #4
@@ -546,7 +546,7 @@ _02230F1E:
 	add r0, r4, r0
 	mov r2, #0xb
 	mov r3, #0xcc
-	bl ov80_0222A474
+	bl FrontierTrainer_LoadRecord
 	b _02230FB6
 _02230F4C:
 	ldr r1, _02230FD0 ; =0x000006F5

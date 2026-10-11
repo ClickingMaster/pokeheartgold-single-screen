@@ -23,7 +23,7 @@ void WIntervalTimer(void) {
     AddTask(1, 10);
     AddTask(2, 18);
     AddTask(1, 17);
-    if (w->heapBufMan[9].count) {
+    if (w->heap.bufMan[9].count) {
         AddTask(2, 19);
     }
     if (w->bss.fatalErr) {

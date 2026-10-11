@@ -32,9 +32,9 @@
 .public Party_GetMonByIndex
 .public HealParty
 .public _s32_div_f
-.public ov80_02229F04
-.public ov80_0222A140
-.public ov80_0222A480
+.public FrontierTrainer_Load
+.public FrontierMon_ToPokemon
+.public FrontierTrainer_SetBattleTrainer
 .public ov80_02237ADC
 .public ov80_02237B24
 .public ov80_02237B58

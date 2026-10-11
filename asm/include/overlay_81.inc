@@ -204,7 +204,7 @@
 .public DC_FlushRange
 .public memset
 .public gOverlayTemplate_PokemonSummary
-.public ov80_0222A7CC
+.public Frontier_BufferPartnerName
 .public ov80_02236DD4
 .public ov80_02237254
 .public BattleFactoryApp_Init

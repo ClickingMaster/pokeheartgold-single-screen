@@ -321,10 +321,10 @@ extern const DpadMenuBox ov83_02248610[]; // rental item grid
 extern const u8 ov83_02248611[];          // = &ov83_02248610[0].top, referenced by its own label
 
 // Frontier overlay (80) helpers
-void ov80_0222A3D4(Sprite *sprite, int value);
-void ov80_0222A400(Sprite *sprite, s16 x, s16 y, int value);
-u32 ov80_0222A43C(u16 hp, u16 maxHp);
-void ov80_0222A7CC(MessageFormat *msgFormat, int value);
+void Frontier_SetSpriteAnim(Sprite *sprite, int value);
+void Frontier_SetSpritePosition(Sprite *sprite, s16 x, s16 y, int value);
+u32 Frontier_GetHpGaugeFrame(u16 hp, u16 maxHp);
+void Frontier_BufferPartnerName(MessageFormat *msgFormat, int value);
 int ov80_02237B24(u8 frontierType, int kind);
 u8 ov80_02237B58(u8 frontierType, int kind); // number of opponent mons (defined with an int result)
 void ov80_02237FA4(FrontierSave *frontierSave, int frontierType, int points);
@@ -533,7 +533,7 @@ BOOL BattleCastleOpponentApp_Main(OverlayManager *manager, int *state) {
                 app->flags.raw &= ~1;
             }
             BattleCastle_DrawWindowFrame(&app->windows[CASTLE_OPP_WIN_MESSAGE], Options_GetFrame(app->options));
-            ov80_0222A7CC(app->msgFormat, 0);
+            Frontier_BufferPartnerName(app->msgFormat, 0);
             app->printerId = BattleCastleOpponentApp_ShowMessage(app, msg_0033_00007, 1);
             BattleCastleOpponentApp_SetMainState(app, state, CASTLE_OPP_MAIN_LINK_EXIT);
         }
@@ -2232,7 +2232,7 @@ void BattleCastleOpponentApp_UpdateMonIcons(BattleCastleOpponentApp *app) {
         Pokemon *mon = Party_GetMonByIndex(app->party, i);
         u32 hp = GetMonData(mon, MON_DATA_HP, NULL);
         u32 maxHp = GetMonData(mon, MON_DATA_MAX_HP, NULL);
-        u32 hpState = ov80_0222A43C(hp, maxHp);
+        u32 hpState = Frontier_GetHpGaugeFrame(hp, maxHp);
 
         if (app->monIcons[i] != NULL) {
             ov83_02247600(app->monIcons[i], hpState);
@@ -3001,11 +3001,11 @@ void BattleCastleSprite_SetMonIconPalette(BattleCastleSprite *sprite, Pokemon *m
 }
 
 void ov83_02247600(BattleCastleSprite *sprite, int value) {
-    ov80_0222A3D4(sprite->sprite, value);
+    Frontier_SetSpriteAnim(sprite->sprite, value);
 }
 
 void ov83_0224760C(BattleCastleSprite *sprite, int value) {
-    ov80_0222A400(sprite->sprite, sprite->x, sprite->y, value);
+    Frontier_SetSpritePosition(sprite->sprite, sprite->x, sprite->y, value);
 }
 
 int BattleCastleSprite_IsAnimated(BattleCastleSprite *sprite) {

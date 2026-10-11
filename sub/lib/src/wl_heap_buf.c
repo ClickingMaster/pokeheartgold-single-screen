@@ -20,12 +20,12 @@ void *AllocateHeapBuf(WlHeapBufMan *man, u32 size) {
     if (!size) {
         return NULL;
     }
-    switch (w->heap.mode) {
+    switch (w->heap.param.mode) {
     case 0:
-        buf = __VENEER_OS_AllocFromHeap(w->heap.source.arena, w->heap.sink.heap, size + sizeof(WlHeapBuf));
+        buf = __VENEER_OS_AllocFromHeap(w->heap.param.source.arena, w->heap.param.sink.heap, size + sizeof(WlHeapBuf));
         break;
     case 1:
-        buf = w->heap.source.alloc(size + sizeof(WlHeapBuf));
+        buf = w->heap.param.source.alloc(size + sizeof(WlHeapBuf));
         break;
     }
     if (!buf) {
@@ -46,12 +46,12 @@ int ReleaseHeapBuf(WlHeapBufMan *man, WlHeapBuf *buf) {
     }
     result = DeleteHeapBuf(man, buf);
     if (!result) {
-        switch (w->heap.mode) {
+        switch (w->heap.param.mode) {
         case 0:
-            __VENEER_OS_FreeToHeap(w->heap.source.arena, w->heap.sink.heap, buf);
+            __VENEER_OS_FreeToHeap(w->heap.param.source.arena, w->heap.param.sink.heap, buf);
             break;
         case 1:
-            w->heap.sink.free(buf);
+            w->heap.param.sink.free(buf);
             break;
         }
     }
@@ -167,21 +167,21 @@ void InitHeapBufMan(WlHeapBufMan *man, u32 id) {
 void InitializeHeapBuf(WlHeapParam *param) {
     WlWork *w = wlWork;
     WlBss *bss = &w->bss;
-    w->heap.mode = param->mode;
-    w->heap.source.arena = param->source.arena;
-    w->heap.sink.heap = param->sink.heap;
-    InitHeapBufMan(&w->heapBufMan[0], 2);
-    InitHeapBufMan(&w->heapBufMan[1], 3);
-    InitHeapBufMan(&w->heapBufMan[2], 4);
-    InitHeapBufMan(&w->heapBufMan[3], 5);
-    InitHeapBufMan(&w->heapBufMan[4], 6);
-    InitHeapBufMan(&w->heapBufMan[5], 7);
-    InitHeapBufMan(&w->heapBufMan[6], 8);
-    InitHeapBufMan(&w->heapBufMan[7], 9);
-    InitHeapBufMan(&w->heapBufMan[8], 10);
-    InitHeapBufMan(&w->heapBufMan[9], 11);
-    InitHeapBufMan(&w->heapBufMan[10], 12);
-    bss->gameInfo = (u8 *)AllocateHeapBuf(&w->heapBufMan[0], 129) + sizeof(WlHeapBuf);
+    w->heap.param.mode = param->mode;
+    w->heap.param.source.arena = param->source.arena;
+    w->heap.param.sink.heap = param->sink.heap;
+    InitHeapBufMan(&w->heap.bufMan[0], 2);
+    InitHeapBufMan(&w->heap.bufMan[1], 3);
+    InitHeapBufMan(&w->heap.bufMan[2], 4);
+    InitHeapBufMan(&w->heap.bufMan[3], 5);
+    InitHeapBufMan(&w->heap.bufMan[4], 6);
+    InitHeapBufMan(&w->heap.bufMan[5], 7);
+    InitHeapBufMan(&w->heap.bufMan[6], 8);
+    InitHeapBufMan(&w->heap.bufMan[7], 9);
+    InitHeapBufMan(&w->heap.bufMan[8], 10);
+    InitHeapBufMan(&w->heap.bufMan[9], 11);
+    InitHeapBufMan(&w->heap.bufMan[10], 12);
+    bss->gameInfo = (u8 *)AllocateHeapBuf(&w->heap.bufMan[0], 129) + sizeof(WlHeapBuf);
     bss->gameInfoLength = 0;
     bss->unk_a4 = 0;
 }
@@ -189,14 +189,14 @@ void InitializeHeapBuf(WlHeapParam *param) {
 // Frees the buffers of managers 1..8.
 void ReleaseAllWlHeapBuf(void) {
     WlWork *w = wlWork;
-    ReleaseAllHeapBuf(&w->heapBufMan[1]);
-    ReleaseAllHeapBuf(&w->heapBufMan[2]);
-    ReleaseAllHeapBuf(&w->heapBufMan[3]);
-    ReleaseAllHeapBuf(&w->heapBufMan[4]);
-    ReleaseAllHeapBuf(&w->heapBufMan[5]);
-    ReleaseAllHeapBuf(&w->heapBufMan[6]);
-    ReleaseAllHeapBuf(&w->heapBufMan[7]);
-    ReleaseAllHeapBuf(&w->heapBufMan[8]);
+    ReleaseAllHeapBuf(&w->heap.bufMan[1]);
+    ReleaseAllHeapBuf(&w->heap.bufMan[2]);
+    ReleaseAllHeapBuf(&w->heap.bufMan[3]);
+    ReleaseAllHeapBuf(&w->heap.bufMan[4]);
+    ReleaseAllHeapBuf(&w->heap.bufMan[5]);
+    ReleaseAllHeapBuf(&w->heap.bufMan[6]);
+    ReleaseAllHeapBuf(&w->heap.bufMan[7]);
+    ReleaseAllHeapBuf(&w->heap.bufMan[8]);
 }
 
 void ReleaseAllHeapBuf(WlHeapBufMan *man) {

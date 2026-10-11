@@ -54,7 +54,7 @@ extern void sub_02030BF4(u8, void *, u8);
 extern void sub_02096910(void);
 extern u32 ov80_0223792C(u8);
 extern void GfGfx_EngineATogglePlanes(int, int);
-extern void ov80_0222A474(void *, u16, int, int);
+extern void FrontierTrainer_LoadRecord(void *, u16, int, int);
 extern u32 ov80_02231888(void *);
 extern u32 GetMonData(void *, int, void *);
 extern void ov80_022319B0(void *);

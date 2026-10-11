@@ -50,7 +50,7 @@ void ov80_02237894(Ov80Mon *a, u32 b, u32 c, u16 *d, int e, u32 f, u32 g) {
         ability = ov80_0223796C(b);
     }
     for (i = 0; i < e; i++) {
-        ov80_0222A4EC(&a[i], d[i], i, ability, 0, f, g);
+        FrontierMon_GenerateWithRandomOtId(&a[i], d[i], i, ability, 0, f, g);
     }
 }
 

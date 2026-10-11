@@ -25,7 +25,7 @@ void ov80_02230A60(void *work) {
     if (count > 0) {
         cursor = p + 0x3F0;
         do {
-            ov80_0222A140(cursor, mon, ov80_02237120(work));
+            FrontierMon_ToPokemon(cursor, mon, ov80_02237120(work));
             ov80_0222A3BC(*(void **)(p + 0x4F8), *(void **)(p + 0x4D8), mon);
             cursor += 0x38;
             i++;

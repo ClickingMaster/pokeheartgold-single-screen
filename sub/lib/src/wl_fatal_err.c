@@ -23,7 +23,7 @@ void SendFatalErrMsgTask(void) {
     if (!bss->fatalErr) {
         return;
     }
-    msg = AllocateHeapBuf(&w->heapBufMan[0], 18);
+    msg = AllocateHeapBuf(&w->heap.bufMan[0], 18);
     if (!msg) {
         return;
     }
@@ -33,7 +33,7 @@ void SendFatalErrMsgTask(void) {
     *(u16 *)(msg + 16) = bss->fatalErr;
     bss->fatalErr = 0;
     __VENEER_OS_EnableIrqMask(mask);
-    SendMessageToWmDirect(&wlWorkPlain->heapBufMan[0], msg);
+    SendMessageToWmDirect(&wlWorkPlain->heap.bufMan[0], msg);
 }
 
 void TerminateWlTask(void) {
@@ -55,7 +55,7 @@ void TerminateWlTask(void) {
 void ReleaseWlTask(void) {
     WlWork *w = wlWorkPlain;
     ReleaseIntr();
-    ReleaseHeapBuf(&w->heapBufMan[0], (WlHeapBuf *)(wlWorkPlain->unk_318 - 12));
-    ReleaseHeapBuf(&w->heapBufMan[0], (WlHeapBuf *)((u32)wlWorkPlain->bss.gameInfo - 12));
+    ReleaseHeapBuf(&w->heap.bufMan[0], (WlHeapBuf *)(wlWorkPlain->unk_318 - 12));
+    ReleaseHeapBuf(&w->heap.bufMan[0], (WlHeapBuf *)((u32)wlWorkPlain->bss.gameInfo - 12));
     __VENEER_OS_ExitThread();
 }

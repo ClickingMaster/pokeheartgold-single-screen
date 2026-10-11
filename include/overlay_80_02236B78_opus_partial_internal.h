@@ -61,9 +61,9 @@ void Heap_Free(void *ptr);
 void SaveArray_Party_Init(void *party);
 int Party_GetCount(void *party);
 void Party_RemoveMon(void *party, int slot);
-void ov80_0222A140(void *a0, void *a1, int a2);
+void FrontierMon_ToPokemon(void *a0, void *a1, int a2);
 void ov80_0222A3BC(void *a0, void *a1, void *a2);
-void ov80_0222A52C(void *a0, void *a1, void *a2, void *a3, int a4, int a5, int a6, int a7);
+void FrontierMon_GenerateList(void *a0, void *a1, void *a2, void *a3, int a4, int a5, int a6, int a7);
 
 int ov80_02236B78(int a0, u32 a1, int a2);
 void ov80_02236BE4(int a0, int a1, u16 *a2, int a3);

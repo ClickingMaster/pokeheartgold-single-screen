@@ -21,7 +21,7 @@ typedef struct {
     u8 altIv;
 } FrontierRange;
 extern const int ov80_0223C464[5];
-extern void ov80_02229EF4(void *, int, int);
+extern void FrontierData_ReadMember(void *, int, int);
 int ov80_02236C9C(const u16 *species, const u16 *items, int count, int num, u16 *out, enum HeapID heapId, const FrontierRange *range, u16 streak, u8 *ivs);
 // @fn ov80_02236C9C
 int ov80_02236C9C(const u16 *species, const u16 *items, int count, int num, u16 *out, enum HeapID heapId, const FrontierRange *range, u16 streak, u8 *ivs) {
@@ -58,7 +58,7 @@ int ov80_02236C9C(const u16 *species, const u16 *items, int count, int num, u16 
             id = range->max - LCRandom() % (span + 1);
             iv = range->iv;
         }
-        ov80_02229EF4(cur, id, 0xCD);
+        FrontierData_ReadMember(cur, id, 0xCD);
         for (j = 0; j < i; j++) {
             FrontierMonSrc *other = &mons[j];
             if (other->species == cur->species || other->item == cur->item) {

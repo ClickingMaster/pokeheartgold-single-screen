@@ -21,9 +21,9 @@
 .public Party_GetMonByIndex
 .public HealParty
 .public _s32_div_f
-.public ov80_02229F04
-.public ov80_0222A140
-.public ov80_0222A480
+.public FrontierTrainer_Load
+.public FrontierMon_ToPokemon
+.public FrontierTrainer_SetBattleTrainer
 .public ov80_022380A0
 .public BattleArcade_GetMonCount
 .public BattleArcade_GetOpponentMonCount

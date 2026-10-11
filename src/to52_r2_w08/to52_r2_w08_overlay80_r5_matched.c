@@ -6,7 +6,7 @@ void ov80_02232F08(void *work) {
     int i = U8(work, 0x11);
     obj = ov80_02237B58(U8(work, 0x10), 1);
     value = ov80_02237D8C(U8(work, 0x10));
-    ov80_0222A6B8(obj,
+    FrontierTrainer_GenerateMons(obj,
         ((W08Work *)work)->values[i],
         ((W08Work *)work)->values[i + 7],
         (u8 *)work + 0x26c,

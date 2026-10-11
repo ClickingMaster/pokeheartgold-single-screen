@@ -37,8 +37,8 @@ extern void sub_02051D18(BattleSetupX *, int, void *, void *, void *, void *);
 extern BOOL Comm_GetLocalNetId(void);
 extern void BattleSetup_AddMonToParty(BattleSetupX *, Pokemon *, int);
 extern void BattleSetup_SetAllySideBattlersToPlayer(BattleSetupX *);
-extern void *ov80_02229F04(void *, u16, enum HeapID, int);
-extern void ov80_0222A480(BattleSetupX *, void *, int, int, enum HeapID);
+extern void *FrontierTrainer_Load(void *, u16, enum HeapID, int);
+extern void FrontierTrainer_SetBattleTrainer(BattleSetupX *, void *, int, int, enum HeapID);
 extern u32 ov80_02238444(ArcadeData *);
 extern void *sub_02034818(int);
 extern void HealParty(Party *);
@@ -81,8 +81,8 @@ BattleSetupX *BattleArcade_NewBattleSetup(ArcadeData *data, FieldSysX *fs) {
     }
     Heap_Free(mon);
     BattleSetup_SetAllySideBattlersToPlayer(setup);
-    Heap_Free(ov80_02229F04(trainer, data->trainerIds[data->trainerIdx], HEAP_ID_FIELD2, 204));
-    ov80_0222A480(setup, trainer, enemyCount, 1, HEAP_ID_FIELD2);
+    Heap_Free(FrontierTrainer_Load(trainer, data->trainerIds[data->trainerIdx], HEAP_ID_FIELD2, 204));
+    FrontierTrainer_SetBattleTrainer(setup, trainer, enemyCount, 1, HEAP_ID_FIELD2);
     Party_InitWithMaxSize(setup->parties[1], BattleArcade_GetOpponentMonCount(data->type, 0));
     for (i = 0; i < 4; i++) {
         setup->trainerAI[i][0] = ov80_02238444(data);
@@ -98,8 +98,8 @@ BattleSetupX *BattleArcade_NewBattleSetup(ArcadeData *data, FieldSysX *fs) {
     case 3:
         BattleSetup_SetAllySideBattlersToPlayer(setup);
         PlayerProfile_Copy(sub_02034818(1 - Comm_GetLocalNetId()), *(void **)((u8 *)setup + 0x100));
-        Heap_Free(ov80_02229F04(trainer, data->trainerIds[data->trainerIdx + 7], HEAP_ID_FIELD2, 204));
-        ov80_0222A480(setup, trainer, enemyCount, 3, HEAP_ID_FIELD2);
+        Heap_Free(FrontierTrainer_Load(trainer, data->trainerIds[data->trainerIdx + 7], HEAP_ID_FIELD2, 204));
+        FrontierTrainer_SetBattleTrainer(setup, trainer, enemyCount, 3, HEAP_ID_FIELD2);
         Party_InitWithMaxSize(setup->parties[3], BattleArcade_GetOpponentMonCount(data->type, 0));
         mon = AllocMonZeroed(HEAP_ID_FIELD2);
         for (i = 0; i < enemyCount; i++) {

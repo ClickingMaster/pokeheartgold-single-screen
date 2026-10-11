@@ -5686,21 +5686,12 @@ Overlay OVY_79
 Overlay OVY_80
 {
     After OVY_42
-    Object src/ov80_29ee0_partial_1.o
-    Object src/to70_slop_small_overlay_80_02229EE0_residual_extra58_run01.o
-    Object src/slop_small_overlay_80_02229EE0.o
-    Object src/ov80_29ee0_partial_2.o
-    Object src/to70_overlay_80_02229EE0_residual_2_extra467_run01.o
-    Object src/to90_extra2421_run01.o
-    Object src/ov80_29ee0_partial_3.o
-    Object src/op90_overlay_80_02229EE0_residual_3_r01.o
-    Object src/op90_overlay_80_02229EE0_residual_3_r02.o
-    Object src/ov80_29ee0_partial_4.o
-    Object asm/overlay_80_02229EE0_residual_4.o
+    Object src/frontier/frontier_trainers.o
+    Object asm/frontier_trainers_data.o
     Object src/frontier_system_helpers_1.o
     Object src/frontier/frontier_script_context.o
-    Object src/to42_ov80_0222aca0.o
-    Object asm/overlay_80_0222ACA0_data.o
+    Object src/frontier/frontier_map_params.o
+    Object asm/frontier_map_params_data.o
     Object src/ov80_2aef8_partial_1.o
     Object src/overlay_80_0222AEF8.o
     Object src/ov80_2aef8_partial_2.o

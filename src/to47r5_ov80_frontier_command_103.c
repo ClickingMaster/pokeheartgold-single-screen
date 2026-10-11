@@ -61,7 +61,7 @@ int FrtCmd_103(void *c) {
     }
     case 17: {
         void *mon = AllocMonZeroed(11);
-        ov80_0222A140((u8 *)data + 0x3f0 + b * 0x38, mon, ov80_02237120(data));
+        FrontierMon_ToPokemon((u8 *)data + 0x3f0 + b * 0x38, mon, ov80_02237120(data));
         *dest = GetMonData(mon, 0xb1, NULL);
         Heap_Free(mon);
         break;
@@ -89,7 +89,7 @@ int FrtCmd_103(void *c) {
         } while (j < 18);
         mon = AllocMonZeroed(11);
         for (i = 0; i < n; i++) {
-            ov80_0222A140(((Rec38 *)((u8 *)data + 0x3f0)) + i, mon, ov80_02237120(data));
+            FrontierMon_ToPokemon(((Rec38 *)((u8 *)data + 0x3f0)) + i, mon, ov80_02237120(data));
             type1 = GetMonData(mon, 0xb1, NULL);
             type2 = GetMonData(mon, 0xb2, NULL);
             if (type1 == type2) {
@@ -158,8 +158,8 @@ int FrtCmd_103(void *c) {
         }
         break;
     case 33:
-        ov80_0222A474((u8 *)data + 0x34, U16((u8 *)data + U8(data, 6) * 2, 0x18), 11, 204);
-        ov80_0222A474((u8 *)data + 0x144, U16((u8 *)data + (U8(data, 6) + 7) * 2, 0x18), 11, 204);
+        FrontierTrainer_LoadRecord((u8 *)data + 0x34, U16((u8 *)data + U8(data, 6) * 2, 0x18), 11, 204);
+        FrontierTrainer_LoadRecord((u8 *)data + 0x144, U16((u8 *)data + (U8(data, 6) + 7) * 2, 0x18), 11, 204);
         break;
     case 34: {
         int n = ov80_02236DD4(U8(data, 4));
@@ -190,7 +190,7 @@ int FrtCmd_103(void *c) {
         ov80_022371B0(data);
         break;
     case 39:
-        ov80_0222A52C((u8 *)data + 0x3f0, (u8 *)data + 0x3d2, (u8 *)data + 0x3da, (u8 *)data + 0x3e0, 0, 4, 11, 205);
+        FrontierMon_GenerateList((u8 *)data + 0x3f0, (u8 *)data + 0x3d2, (u8 *)data + 0x3da, (u8 *)data + 0x3e0, 0, 4, 11, 205);
         break;
     case 40:
         ov80_02237130(data);

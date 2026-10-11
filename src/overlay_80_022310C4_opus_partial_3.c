@@ -11,7 +11,7 @@ u8 ov80_022317CC(TrHouse *s) {
 
 void ov80_022317D0(TrHouse *s, u32 a) {
     TrHouseWork work;
-    Heap_Free(ov80_02229F04(&work, s->unk18[(u8)(a + s->idx * 2)], 0xB, 0xCC));
+    Heap_Free(FrontierTrainer_Load(&work, s->unk18[(u8)(a + s->idx * 2)], 0xB, 0xCC));
     ov80_0222A30C((u8)work.unk4);
 }
 

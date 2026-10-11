@@ -44,7 +44,7 @@ void FrontierScriptContext_Init(FrontierScriptContext *, const void *, void *);
 void FrontierScriptContext_Start(FrontierScriptContext *, void *);
 u32 FrontierScriptContext_ReadWord(FrontierScriptContext *);
 void FrontierMap_RunObjectMovements(void *);
-u32 ov80_0222ACA0(u32, u32);
+u32 FrontierMap_GetParam(u32, u32);
 void *AllocAndReadWholeNarcMemberByIdPair(u32, u32, u32);
 void *NewMsgDataFromNarc(u32, u32, u32, u32);
 void DestroyMsgData(void *);

@@ -42,7 +42,7 @@ void ov80_02234390(void *ctx) {
     count = BattleArcade_GetOpponentMonCount(p[0x10], 1);
     multiplayer = BattleArcade_MultiplayerCheck(p[0x10]);
     lastPtr = p + 0x320;
-    ov80_0222A6B8(count, *(u16 *)(p + 0x78 + index * 2), *(u16 *)(p + 0x78 + (index + 7) * 2), p + 0x314, p + 0x330, p + 0x31C, lastPtr, multiplayer);
+    FrontierTrainer_GenerateMons(count, *(u16 *)(p + 0x78 + index * 2), *(u16 *)(p + 0x78 + (index + 7) * 2), p + 0x314, p + 0x330, p + 0x31C, lastPtr, multiplayer);
     rank = ov80_02238498(ctx);
     for (i = 0; i < 3; i++) {
         if (rank >= ov80_0223BE98[i * 2]) {

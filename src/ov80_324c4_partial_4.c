@@ -33,7 +33,7 @@ void ov80_02232E68(void *ctx, u32 index) {
     u8 work[0x30];
     u8 *p = ctx;
     u8 item = p[0x11] + index * 7;
-    void *allocated = ov80_02229F04(work, *(u16 *)(p + 0x30 + item * 2), 11, 0xCC);
+    void *allocated = FrontierTrainer_Load(work, *(u16 *)(p + 0x30 + item * 2), 11, 0xCC);
     Heap_Free(allocated);
     ov80_0222A30C((u8) * (u16 *)(work + 4));
 }

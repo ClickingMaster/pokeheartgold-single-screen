@@ -71,7 +71,7 @@ void ov80_02237E30(void *context) {
     if (count > 0) {
         record = work + 0x288;
         do {
-            ov80_0222A140(record, mon, ov80_02237D88(context));
+            FrontierMon_ToPokemon(record, mon, ov80_02237D88(context));
             ov80_02237E18(context, *(void **)(work + 0x2C), mon);
             i++;
             record += 0x38;

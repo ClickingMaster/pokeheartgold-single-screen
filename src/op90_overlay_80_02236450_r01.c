@@ -3,7 +3,7 @@
 #define PRIVATE_OVERLAY_80_02236450_H
 #include "global.h"
 
-/* 0x10-byte NARC record read by ov80_02229EF4 */
+/* 0x10-byte NARC record read by FrontierData_ReadMember */
 typedef struct FrontierMonSrc {
     /* 0x00 */ u16 species;
     /* 0x02 */ u16 moves[4];
@@ -86,10 +86,10 @@ void CalcMonLevelAndStats(void *);
 void sub_02051D18(void *, int, void *, int, int, int);
 int _s32_div_f(int, int);
 
-void ov80_02229EF4(void *, int, int);
-void *ov80_02229F04(void *, int, int, int);
-void ov80_0222A140(void *, void *, int);
-void ov80_0222A480(void *, u8 *, int, int, int);
+void FrontierData_ReadMember(void *, int, int);
+void *FrontierTrainer_Load(void *, int, int, int);
+void FrontierMon_ToPokemon(void *, void *, int);
+void FrontierTrainer_SetBattleTrainer(void *, u8 *, int, int, int);
 
 u32 ov80_02236450(void *, void *, int, u32, u32, u32, u32, int);
 
@@ -163,9 +163,9 @@ u32 ov80_022364A4(u8 *work, FrontierTrainerMons *raw, u16 trainerId, FrontierMon
     cursor = selected;
     do {
         id = raw->ids[(u8)(FrontierFieldSystem_0204B510(work) % raw->count)];
-        ov80_02229EF4(&candidate, id, ov80_02236AF0(work[0xf]));
+        FrontierData_ReadMember(&candidate, id, ov80_02236AF0(work[0xf]));
         for (j = 0; j < i; j++) {
-            ov80_02229EF4(&previous, selected[j], ov80_02236AF0(work[0xf]));
+            FrontierData_ReadMember(&previous, selected[j], ov80_02236AF0(work[0xf]));
             if (previous.species == candidate.species) {
                 break;
             }
@@ -185,7 +185,7 @@ u32 ov80_022364A4(u8 *work, FrontierTrainerMons *raw, u16 trainerId, FrontierMon
         }
         if (tries < 50) {
             for (j = 0; j < i; j++) {
-                ov80_02229EF4(&previous, selected[j], ov80_02236AF0(work[0xf]));
+                FrontierData_ReadMember(&previous, selected[j], ov80_02236AF0(work[0xf]));
                 if (previous.item != 0 && previous.item == candidate.item) {
                     break;
                 }

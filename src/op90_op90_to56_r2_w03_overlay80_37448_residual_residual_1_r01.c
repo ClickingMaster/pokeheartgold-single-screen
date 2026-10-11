@@ -96,10 +96,10 @@ u32 sub_02030BD0(u32 a, void *b);
 void *sub_02034818(int a);
 int Comm_GetLocalNetId(void);
 void sub_02051D18(Ov80Setup *setup, int a, u32 b, u32 c, u32 d, u32 e);
-void *ov80_02229F04(TrHouseWork *dst, u32 species, u32 heapId, u32 d);
-void ov80_0222A140(Ov80Mon *a, void *b, u8 c);
-void ov80_0222A480(Ov80Setup *a, TrHouseWork *b, int c, int d, u32 e);
-void ov80_0222A4EC(Ov80Mon *a, u16 b, int c, u8 d, int e, u32 f, u32 g);
+void *FrontierTrainer_Load(TrHouseWork *dst, u32 species, u32 heapId, u32 d);
+void FrontierMon_ToPokemon(Ov80Mon *a, void *b, u8 c);
+void FrontierTrainer_SetBattleTrainer(Ov80Setup *a, TrHouseWork *b, int c, int d, u32 e);
+void FrontierMon_GenerateWithRandomOtId(Ov80Mon *a, u16 b, int c, u8 d, int e, u32 f, u32 g);
 
 void ov80_022372D8(u32 a, int n, u32 c, u32 d, u16 *out);
 void ov80_02237334(int a, int b, int c, u32 d, u8 e, u16 *f);
@@ -152,8 +152,8 @@ Ov80Setup *ov80_022375D0(Ov80Battle *p, Ov80Arg *q) {
     }
     Heap_Free(mon);
     BattleSetup_SetAllySideBattlersToPlayer(setup);
-    Heap_Free(ov80_02229F04(&trainer, p->species[slot2], 11, 0xCC));
-    ov80_0222A480(setup, &trainer, n2, 1, 11);
+    Heap_Free(FrontierTrainer_Load(&trainer, p->species[slot2], 11, 0xCC));
+    FrontierTrainer_SetBattleTrainer(setup, &trainer, n2, 1, 11);
     Party_InitWithMaxSize(setup->party1, n2);
     val = sub_02030BD0(p->f6F5, p->f704[p->mode]);
     if (p->mode == 2) {
@@ -168,7 +168,7 @@ Ov80Setup *ov80_022375D0(Ov80Battle *p, Ov80Arg *q) {
     for (i = 0; i < n2; i++) {
         while (ov80_02237820(p, slot2) != 0) {
         }
-        ov80_0222A140(&p->mons[slot2], mon, ov80_022378F8(p, val));
+        FrontierMon_ToPokemon(&p->mons[slot2], mon, ov80_022378F8(p, val));
         UpdateMonAbility(mon);
         BattleSetup_AddMonToParty(setup, mon, 1);
     }
@@ -178,13 +178,13 @@ Ov80Setup *ov80_022375D0(Ov80Battle *p, Ov80Arg *q) {
     case 3:
         BattleSetup_SetAllySideBattlersToPlayer(setup);
         PlayerProfile_Copy(sub_02034818(1 - Comm_GetLocalNetId()), setup->battlers[3].profile);
-        Heap_Free(ov80_02229F04(&trainer, p->species[slot2 + 1], 11, 0xCC));
-        ov80_0222A480(setup, &trainer, n2, 3, 11);
+        Heap_Free(FrontierTrainer_Load(&trainer, p->species[slot2 + 1], 11, 0xCC));
+        FrontierTrainer_SetBattleTrainer(setup, &trainer, n2, 3, 11);
         Party_InitWithMaxSize(setup->party2, n2);
         mon = AllocMonZeroed(11);
         while (ov80_02237820(p, slot2) != 0) {
         }
-        ov80_0222A140((Ov80Mon *)((u8 *)p + 0x290 + slot2 * sizeof(Ov80Mon)), mon, ov80_022378F8(p, val));
+        FrontierMon_ToPokemon((Ov80Mon *)((u8 *)p + 0x290 + slot2 * sizeof(Ov80Mon)), mon, ov80_022378F8(p, val));
         UpdateMonAbility(mon);
         BattleSetup_AddMonToParty(setup, mon, 3);
         Heap_Free(mon);

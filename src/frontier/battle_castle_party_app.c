@@ -261,8 +261,8 @@ extern const BgTemplate ov83_02247E48;
 extern const GraphicsBanks ov83_02247E88;
 
 // Frontier overlay (80) helpers
-u32 ov80_0222A43C(u16 hp, u16 maxHp);
-void ov80_0222A7CC(MessageFormat *msgFormat, int value);
+u32 Frontier_GetHpGaugeFrame(u16 hp, u16 maxHp);
+void Frontier_BufferPartnerName(MessageFormat *msgFormat, int value);
 int ov80_02237B24(u8 frontierType, int kind);
 void ov80_02237FA4(FrontierSave *frontierSave, int frontierType, int points);
 
@@ -446,7 +446,7 @@ int BattleCastlePartyApp_Main(OverlayManager *manager, int *state) {
                 app->flags.bits.effectActive = FALSE;
             }
             BattleCastle_DrawWindowFrame(&app->windows[CASTLE_PARTY_WIN_MESSAGE], Options_GetFrame(app->options));
-            ov80_0222A7CC(app->msgFormat, 0);
+            Frontier_BufferPartnerName(app->msgFormat, 0);
             app->printerId = BattleCastlePartyApp_ShowMessage(app, msg_0031_00008, 1);
             BattleCastlePartyApp_SetMainState(app, state, CASTLE_PARTY_MAIN_LINK_EXIT);
         }
@@ -2725,7 +2725,7 @@ void BattleCastlePartyApp_UpdateMonIcons(BattleCastlePartyApp *app) {
         Pokemon *mon = Party_GetMonByIndex(app->party, i);
         u32 hp = GetMonData(mon, MON_DATA_HP, NULL);
         u32 maxHp = GetMonData(mon, MON_DATA_MAX_HP, NULL);
-        u32 hpState = ov80_0222A43C(hp, maxHp);
+        u32 hpState = Frontier_GetHpGaugeFrame(hp, maxHp);
 
         if (app->monIcons[i] != NULL) {
             ov83_02247600(app->monIcons[i], hpState);

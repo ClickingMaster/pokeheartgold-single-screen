@@ -246,7 +246,7 @@ void LowestIdleTask(void) {
 // A request is a heap buffer: hand it to the request manager and queue task 11 to run it.
 void ExecuteMessage(WlHeapBuf **message) {
     if (*message) {
-        NewHeapBuf(&wlWork->heapBufMan[10], *message);
+        NewHeapBuf(&wlWork->heap.bufMan[10], *message);
         AddTask(2, 11);
     }
 }

@@ -58,11 +58,11 @@
 .public SaveArray_Party_Get
 .public MI_CpuFill8
 .public _s32_div_f
-.public ov80_02229F04
-.public ov80_0222A140
+.public FrontierTrainer_Load
+.public FrontierMon_ToPokemon
 .public ov80_0222A30C
-.public ov80_0222A52C
-.public ov80_0222A6B8
+.public FrontierMon_GenerateList
+.public FrontierTrainer_GenerateMons
 .public ov80_0222A840
 .public FrontierSystem_GetFrontierMap
 .public ov80_0222B5C8

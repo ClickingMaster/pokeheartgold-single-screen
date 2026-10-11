@@ -16,11 +16,11 @@ typedef struct Ov80PartyBuildWork {
 
 void ov80_02236DD4(u8);
 u32 sub_02030A24(void *, int, u8, int);
-void ov80_0222A52C(Ov80PartyRecord *, u16 *, u8 *, u32 *, int, int, int, int);
+void FrontierMon_GenerateList(Ov80PartyRecord *, u16 *, u8 *, u32 *, int, int, int, int);
 void *AllocMonZeroed(int);
 void Heap_Free(void *);
 int ov80_02237120(void *);
-void ov80_0222A140(Ov80PartyRecord *, void *, int);
+void FrontierMon_ToPokemon(Ov80PartyRecord *, void *, int);
 void ov80_0222A3BC(void *, void *, void *);
 void ov80_02230270(void *);
 

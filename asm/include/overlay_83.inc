@@ -224,10 +224,10 @@
 .public memset
 .public _s32_div_f
 .public gSystem
-.public ov80_0222A3D4
-.public ov80_0222A400
-.public ov80_0222A43C
-.public ov80_0222A7CC
+.public Frontier_SetSpriteAnim
+.public Frontier_SetSpritePosition
+.public Frontier_GetHpGaugeFrame
+.public Frontier_BufferPartnerName
 .public ov80_02237B24
 .public ov80_02237B58
 .public ov80_02237D8C

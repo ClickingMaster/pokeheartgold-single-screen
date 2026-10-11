@@ -25,11 +25,11 @@ void ov80_02237130(Ov80FrontierWork *work) {
     int i;
     void *mon;
     Ov80MonSetup *p;
-    ov80_0222A52C(work->unk280, work->unk254, work->unk260, work->unk268, 0, 6, 11, 0xCD);
+    FrontierMon_GenerateList(work->unk280, work->unk254, work->unk260, work->unk268, 0, 6, 11, 0xCD);
     SaveArray_Party_Init(work->unk4D4);
     mon = AllocMonZeroed(11);
     for (i = 0, p = work->unk280; i < 6; i++, p++) {
-        ov80_0222A140(p, mon, ov80_02237120(work));
+        FrontierMon_ToPokemon(p, mon, ov80_02237120(work));
         ov80_0222A3BC(work->unk4F8, work->unk4D4, mon);
     }
     Heap_Free(mon);
@@ -45,10 +45,10 @@ void ov80_022371B0(Ov80FrontierWork *work) {
         Party_RemoveMon(work->unk4D4, count - 1);
         count--;
     }
-    ov80_0222A52C(buf, work->unk584, work->unk590, work->unk598, 0, 2, 11, 0xCD);
+    FrontierMon_GenerateList(buf, work->unk584, work->unk590, work->unk598, 0, 2, 11, 0xCD);
     mon = AllocMonZeroed(11);
     for (i = 0; i < 2; i++) {
-        ov80_0222A140(&buf[i], mon, ov80_02237120(work));
+        FrontierMon_ToPokemon(&buf[i], mon, ov80_02237120(work));
         ov80_0222A3BC(work->unk4F8, work->unk4D4, mon);
         work->unk4EC[i] = work->unk584[i];
     }

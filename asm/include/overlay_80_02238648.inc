@@ -144,9 +144,9 @@
 .public ov42_02229A78
 .public ov42_02229AC8
 .public ov80_0222A7EC
-.public ov80_0222ACA0
-.public ov80_0222AD9C
-.public ov80_0222ADB4
+.public FrontierMap_GetParam
+.public FrontierMap_InitEffect
+.public FrontierMap_ExitEffect
 .public FrontierMap_Init
 .public FrontierMap_Free
 .public FrontierMap_SaveObjects

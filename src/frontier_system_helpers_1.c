@@ -88,16 +88,16 @@ void FrontierSystem_deadstripped_0222AA3C(FrontierSystem *system, u16 mode, u32 
 }
 
 void ov80_0222AA40(void **narcData, void **msgData, u32 mode, u32 heapId) {
-    u32 member = ov80_0222ACA0(mode, 1);
-    u32 bank = ov80_0222ACA0(mode, 2);
+    u32 member = FrontierMap_GetParam(mode, 1);
+    u32 bank = FrontierMap_GetParam(mode, 2);
     *narcData = AllocAndReadWholeNarcMemberByIdPair(0xb6, member, heapId);
     *msgData = NewMsgDataFromNarc(1, 0x1b, bank, heapId);
 }
 
 void ov80_0222AA7C(FrontierSystem *system, u16 mode, u32 heapId) {
     s32 i;
-    u32 oldBank = ov80_0222ACA0(system->mode, 2);
-    u32 newBank = ov80_0222ACA0(mode, 2);
+    u32 oldBank = FrontierMap_GetParam(system->mode, 2);
+    u32 newBank = FrontierMap_GetParam(mode, 2);
     if (oldBank != newBank) {
         void *msgData = NewMsgDataFromNarc(1, 0x1b, newBank, heapId);
         for (i = 0; i < 8; i++) {

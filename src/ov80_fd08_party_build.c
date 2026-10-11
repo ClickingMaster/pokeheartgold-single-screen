@@ -26,10 +26,10 @@ void ov80_02230270(void *arg0) {
         attrs[i] = sub_02030A24(*(void **)(raw + 0x4F4), 5, (u8)i, 0);
         work->firstIds[i] = ids[i];
     }
-    ov80_0222A52C(records, ids, attrs, values, 0, 4, 11, 0xCD);
+    FrontierMon_GenerateList(records, ids, attrs, values, 0, 4, 11, 0xCD);
     mon = AllocMonZeroed(11);
     for (i = 0; i < 4; i++) {
-        ov80_0222A140(&records[i], mon, ov80_02237120(work));
+        FrontierMon_ToPokemon(&records[i], mon, ov80_02237120(work));
         ov80_0222A3BC(*(void **)(raw + 0x4F8), *(void **)(raw + 0x4D4), mon);
     }
     Heap_Free(mon);
@@ -40,10 +40,10 @@ void ov80_02230270(void *arg0) {
         attrs[i] = sub_02030A24(*(void **)(raw + 0x4F4), 8, (u8)i, 0);
         work->secondIds[i] = ids[i];
     }
-    ov80_0222A52C(records, ids, attrs, values, 0, 4, 11, 0xCD);
+    FrontierMon_GenerateList(records, ids, attrs, values, 0, 4, 11, 0xCD);
     mon = AllocMonZeroed(11);
     for (i = 0; i < 4; i++) {
-        ov80_0222A140(&records[i], mon, ov80_02237120(work));
+        FrontierMon_ToPokemon(&records[i], mon, ov80_02237120(work));
         ov80_0222A3BC(*(void **)(raw + 0x4F8), *(void **)(raw + 0x4D8), mon);
     }
     Heap_Free(mon);

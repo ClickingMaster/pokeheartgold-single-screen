@@ -97,10 +97,10 @@ u32 sub_02030BD0(u32 a, void *b);
 void *sub_02034818(int a);
 int Comm_GetLocalNetId(void);
 void sub_02051D18(Ov80Setup *setup, int a, u32 b, u32 c, u32 d, u32 e);
-void *ov80_02229F04(TrHouseWork *dst, u32 species, u32 heapId, u32 d);
-void ov80_0222A140(Ov80Mon *a, void *b, u8 c);
-void ov80_0222A480(Ov80Setup *a, TrHouseWork *b, int c, int d, u32 e);
-void ov80_0222A4EC(Ov80Mon *a, u16 b, int c, u8 d, int e, u32 f, u32 g);
+void *FrontierTrainer_Load(TrHouseWork *dst, u32 species, u32 heapId, u32 d);
+void FrontierMon_ToPokemon(Ov80Mon *a, void *b, u8 c);
+void FrontierTrainer_SetBattleTrainer(Ov80Setup *a, TrHouseWork *b, int c, int d, u32 e);
+void FrontierMon_GenerateWithRandomOtId(Ov80Mon *a, u16 b, int c, u8 d, int e, u32 f, u32 g);
 
 void ov80_022372D8(u32 a, int n, u32 c, u32 d, u16 *out);
 void ov80_02237334(int a, int b, int c, u32 d, u8 e, u16 *f);

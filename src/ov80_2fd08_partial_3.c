@@ -15,7 +15,7 @@ int ov80_02230794(void *work, int row) {
     TrainerRecordR20 trainer;
     void *raw;
     int index = (u8)(p[6] + row * 7);
-    raw = ov80_02229F04(&trainer, *(u16 *)(p + 0x18 + index * 2), 11, 0xCC);
+    raw = FrontierTrainer_Load(&trainer, *(u16 *)(p + 0x18 + index * 2), 11, 0xCC);
     Heap_Free(raw);
     return ov80_0222A30C((u8)trainer.species);
 }

@@ -2,7 +2,7 @@
 #define PRIVATE_OVERLAY_80_02236450_H
 #include "global.h"
 
-/* 0x10-byte NARC record read by ov80_02229EF4 */
+/* 0x10-byte NARC record read by FrontierData_ReadMember */
 typedef struct FrontierMonSrc {
     /* 0x00 */ u16 species;
     /* 0x02 */ u16 moves[4];
@@ -85,10 +85,10 @@ void CalcMonLevelAndStats(void *);
 void sub_02051D18(void *, int, void *, int, int, int);
 int _s32_div_f(int, int);
 
-void ov80_02229EF4(void *, int, int);
-void *ov80_02229F04(void *, int, int, int);
-void ov80_0222A140(void *, void *, int);
-void ov80_0222A480(void *, u8 *, int, int, int);
+void FrontierData_ReadMember(void *, int, int);
+void *FrontierTrainer_Load(void *, int, int, int);
+void FrontierMon_ToPokemon(void *, void *, int);
+void FrontierTrainer_SetBattleTrainer(void *, u8 *, int, int, int);
 
 u32 ov80_02236450(void *, void *, int, u32, u32, u32, u32, int);
 u32 ov80_022364A4(void *, void *, int, void *, u8, u32, u32, u32, int);

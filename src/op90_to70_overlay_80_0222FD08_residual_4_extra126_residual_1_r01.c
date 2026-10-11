@@ -24,7 +24,7 @@ typedef struct Ov80LevelRange Ov80LevelRange;
 u8 ov80_02236DF8(u8 mode, int unk);
 const Ov80LevelRange *ov80_02236C2C(u16 a0, u8 a1);
 int ov80_02236C9C(const u16 *species, const u16 *items, int count, int num, u16 *out, enum HeapID heapID, const Ov80LevelRange *range, u16 unk, u8 *ivs);
-void ov80_0222A52C(void *dest, u16 *ids, u8 *ivs, void *unk, void *unk2, int num, enum HeapID heapID, int arcId);
+void FrontierMon_GenerateList(void *dest, u16 *ids, u8 *ivs, void *unk, void *unk2, int num, enum HeapID heapID, int arcId);
 void ov80_022308C4(Ov80Work *work);
 
 // @fn ov80_022308C4
@@ -56,5 +56,5 @@ void ov80_022308C4(Ov80Work *work) {
         work->unk254[i] = work->unk3D2[i];
     }
     ov80_02236C9C(species, items, count1 + count2, num, work->unk3D2, HEAP_ID_FIELD2, ov80_02236C2C(work->unk18[work->unk6], work->unk5), 0, work->unk3DA);
-    ov80_0222A52C(work->unk3F0, work->unk3D2, work->unk3DA, NULL, work->unk3E0, num, HEAP_ID_FIELD2, 0xCD);
+    FrontierMon_GenerateList(work->unk3F0, work->unk3D2, work->unk3DA, NULL, work->unk3E0, num, HEAP_ID_FIELD2, 0xCD);
 }

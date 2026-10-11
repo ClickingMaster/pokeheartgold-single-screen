@@ -185,9 +185,9 @@ int FrtCmd_145(void *c) {
         break;
     case 32: {
         u8 *q = (u8 *)data + U8(data, 5) * 4;
-        ov80_0222A474((u8 *)data + 0x40, U16(q, 0x18), 0xb, 0xcc);
+        FrontierTrainer_LoadRecord((u8 *)data + 0x40, U16(q, 0x18), 0xb, 0xcc);
         q = (u8 *)data + (U8(data, 5) * 2 + 1) * 2;
-        ov80_0222A474((u8 *)data + 0x150, U16(q, 0x18), 0xb, 0xcc);
+        FrontierTrainer_LoadRecord((u8 *)data + 0x150, U16(q, 0x18), 0xb, 0xcc);
         break;
     }
     case 33:

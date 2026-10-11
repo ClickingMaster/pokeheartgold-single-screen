@@ -240,7 +240,7 @@ extern const DpadMenuBox ov81_02243808[];
 // Frontier overlay (80) helpers
 int ov80_02236DD4(int frontierType);
 BOOL ov80_02237254(int frontierType);
-void ov80_0222A7CC(void *a0, u32 a1);
+void Frontier_BufferPartnerName(void *a0, u32 a1);
 
 // text.h (and render_text.h, which includes it) are not included: text.h declares fontId as u8
 // (FontID), but this module passes it unnarrowed
@@ -1844,7 +1844,7 @@ BOOL BattleFactoryApp_ShowLinkTradeResult(BattleFactoryApp *app) {
             BattleFactoryBall_Free(app->unk_378[1]);
             app->unk_378[1] = NULL;
         }
-        ov80_0222A7CC(app->msgFormat, 0);
+        Frontier_BufferPartnerName(app->msgFormat, 0);
         BattleFactoryApp_BufferSpeciesName(app, 1, Mon_GetBoxMon(Party_GetMonByIndex(app->party, app->picked[0] + 2)));
         BattleFactoryApp_BufferSpeciesName(app, 2, Mon_GetBoxMon(Party_GetMonByIndex(app->otherParty, app->picked[1])));
         BattleFactoryApp_DrawMessageFrame(&app->windows[7], Options_GetFrame(app->options));

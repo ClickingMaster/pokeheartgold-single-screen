@@ -46,7 +46,7 @@
 .public _fflt
 .public _fsub
 .public _s32_div_f
-.public ov80_02229F04
+.public FrontierTrainer_Load
 .public ov80_0222A30C
 .public ov80_0222A840
 .public ov80_0222AF10

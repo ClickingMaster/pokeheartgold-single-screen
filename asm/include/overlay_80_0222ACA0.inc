@@ -6,9 +6,9 @@
 .public GfGfx_EngineATogglePlanes
 .public GF_AssertFail
 .public G2x_SetBlendAlpha_
-.public ov80_0222ACA0
-.public ov80_0222AD9C
-.public ov80_0222ADB4
+.public FrontierMap_GetParam
+.public FrontierMap_InitEffect
+.public FrontierMap_ExitEffect
 .public FrontierMapTileBlink_Create
 .public FrontierMapTileBlink_Free
 .public FrontierMapBgAnim_Create
