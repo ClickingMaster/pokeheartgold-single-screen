@@ -19,11 +19,11 @@
 .public Heap_Alloc
 .public Heap_Free
 .public Save_GameStats_Get
-.public sub_0202FC24
-.public sub_0202FC48
-.public sub_0202FC5C
-.public sub_0202FC90
-.public sub_020304F0
+.public BattleRecord_Delete
+.public BattleRecord_Exists
+.public BattleRecord_Get
+.public BattleRecord_Load
+.public BattleRecord_RestoreSetup
 .public Save_VarsFlags_Get
 .public BattleSetup_New
 .public BattleSetup_Delete

@@ -4,7 +4,7 @@
 #include "record_mixing_exchange.h"
 #include "save.h"
 #include "save_arrays.h"
-#include "unk_02034354.h"
+#include "communication_player_state.h"
 #include "unk_02035900.h"
 
 // Merges the records received from the other members into the save, record type by record type (a separate TU from
@@ -58,7 +58,7 @@ void RecordMixing_MergeReceivedRecords(SaveData *saveData, u8 (*buffers)[0xBC0])
         size = sRecordMixingHandlers[i].getSize(saveData);
         GF_ASSERT(remaining > size);
         for (j = 0; j < RECORD_MIXING_MAX_MEMBERS; j++) {
-            if (sub_02034818(j)) {
+            if (CommPlayerInfo_GetProfile(j)) {
                 args.records[j] = buffers[j] + offset;
             } else {
                 args.records[j] = NULL;
@@ -71,7 +71,7 @@ void RecordMixing_MergeReceivedRecords(SaveData *saveData, u8 (*buffers)[0xBC0])
         case 9:
             // types 7, 8 and 9 also get the received records of types 2, 3 and 4
             for (j = 0; j < RECORD_MIXING_MAX_MEMBERS; j++) {
-                if (sub_02034818(j)) {
+                if (CommPlayerInfo_GetProfile(j)) {
                     args.records2[j] = buffers[j] + offsetOfEarlier[-7];
                 } else {
                     args.records2[j] = NULL;

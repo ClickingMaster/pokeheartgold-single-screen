@@ -23,7 +23,7 @@
 .public PlayerProfile_GetTrainerGender
 .public PlayerProfile_GetVersion
 .public Save_WiFiHistory_Get
-.public sub_02034818
+.public CommPlayerInfo_GetProfile
 .public Comm_GetLocalNetId
 .public sub_02039F68
 .public MapHeader_GetMapSec

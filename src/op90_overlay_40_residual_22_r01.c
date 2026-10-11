@@ -56,7 +56,7 @@ typedef struct {
 } Ov40Ctx;
 
 extern const Ov40IconLayout ov40_02244F90;
-u64 sub_0203088C(void *summary, int field, int index);
+u64 BattleRecordHeader_GetField(void *summary, int field, int index);
 BOOL ov40_02230404(Ov40Work *work);
 void ov40_02230424(Ov40Work *work, Ov40Ctx *ctx);
 
@@ -97,8 +97,8 @@ void ov40_02230424(Ov40Work *work, Ov40Ctx *ctx) {
     do {
         for (i = start; i < end; i++) {
             species[n] = 0xFF;
-            mon = sub_0203088C(work->summary, 0, i);
-            form = sub_0203088C(work->summary, 1, i);
+            mon = BattleRecordHeader_GetField(work->summary, 0, i);
+            form = BattleRecordHeader_GetField(work->summary, 1, i);
             if (mon != 0) {
                 species[n] = mon;
                 forms[n] = form;

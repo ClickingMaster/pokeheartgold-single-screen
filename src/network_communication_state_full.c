@@ -11,9 +11,9 @@
 #include "sound_playback.h"
 #include "unk_02032844.h"
 #include "unk_02033AE0.h"
-#include "unk_02034354.h"
+#include "communication_player_state.h"
 #include "unk_02034B0C.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 #include "unk_0203A3B0.h"
 #include "unk_020915B0.h"
 
@@ -335,7 +335,7 @@ void sub_020381FC(void) {
 void sub_02038218(void) {
     if (sub_02034DB8()) {
         sub_02034B0C(_021D4150->unk2C, 1);
-        sub_02034354(_021D4150->unk28, _021D4150->unk30);
+        CommPlayerInfo_Init(_021D4150->unk28, _021D4150->unk30);
         if (sub_02035ED8(1, 1, 512, 1)) {
             sub_02035FD8();
             sub_020381C0(sub_02038260, 0);
@@ -358,7 +358,7 @@ void sub_0203827C(void) {
 void sub_02038294(void) {
     if (sub_02034DB8()) {
         sub_02034B0C(_021D4150->unk2C, 1);
-        sub_02034354(_021D4150->unk28, _021D4150->unk30);
+        CommPlayerInfo_Init(_021D4150->unk28, _021D4150->unk30);
         if (sub_02035F14(1, 1, 512)) {
             sub_02035FD8();
             sub_020381C0(sub_020382DC, 0);
@@ -469,7 +469,7 @@ void sub_020384B4(void) {
     if (sub_02034DB8()) {
         sub_02034B0C(_021D4150->unk2C, 1);
         sub_02033908(_021D4150->unk4A);
-        sub_02034354(_021D4150->unk28, 0);
+        CommPlayerInfo_Init(_021D4150->unk28, 0);
         if (sub_02035F14(1, 1, 512)) {
             sub_02035FD8();
             sub_020381C0(sub_02038508, 64);
@@ -593,7 +593,7 @@ void sub_0203876C(void) {
         return;
     }
     if (_021D4150->unk4C == 1) {
-        sub_02034434();
+        CommPlayerInfo_SendLocal();
         sub_020381C0(sub_020387E8, 0);
         return;
     }
@@ -634,7 +634,7 @@ void sub_02038854(void) {
             sub_020381C0(sub_02038610, 0);
         }
     } else if (!Comm_GetLocalNetId()) {
-        sub_02034638();
+        CommPlayerInfo_HostRedistribute();
     }
     if (sub_02037700() && !sub_02039918()) {
         sub_020381C0(sub_02038804, 0);
@@ -851,7 +851,7 @@ void sub_02038CC4(void) {
 void sub_02038CE8(void) {
     if (sub_02034DB8()) {
         sub_02034B0C(_021D4150->unk2C, 0);
-        sub_02034354(_021D4150->unk28, 0);
+        CommPlayerInfo_Init(_021D4150->unk28, 0);
         sub_02033A7C(sub_02038C3C);
         sub_020381C0(sub_02038CC4, 0);
     }
@@ -900,7 +900,7 @@ BOOL sub_02038D90(void) {
 void sub_02038E00(void) {
     if (sub_02034DB8()) {
         sub_02034B0C(_021D4150->unk2C, 1);
-        sub_02034354(_021D4150->unk28, 0);
+        CommPlayerInfo_Init(_021D4150->unk28, 0);
         if (sub_02035ED8(1, 1, 512, 1)) {
             sub_02035FD8();
             sub_020381C0(sub_02038260, 0);
@@ -911,7 +911,7 @@ void sub_02038E00(void) {
 void sub_02038E48(void) {
     if (sub_02034DB8()) {
         sub_02034B0C(_021D4150->unk2C, 1);
-        sub_02034354(_021D4150->unk28, 0);
+        CommPlayerInfo_Init(_021D4150->unk28, 0);
         if (sub_02035F14(1, 1, 512)) {
             sub_02035FD8();
             sub_020381C0(sub_020382DC, 0);
@@ -1073,7 +1073,7 @@ void sub_02039144(void) {
 void sub_020391D0(void) {
     sub_0203786C(0);
     if (WifiConnection_Disconnect(_021D4150->unk50) && WifiConnection_FinishDisconnect()) {
-        sub_020343E4();
+        CommPlayerInfo_Free();
         sub_020381C0(sub_02039144, 0);
     } else if (WifiConnection_Update(0) < 0) {
         sub_020381C0(sub_02038E90, 0);
@@ -1137,7 +1137,7 @@ void sub_020392F4(void) {
 void sub_02039330(void) {
     if (_021D4150) {
         sub_0201A738(1);
-        sub_020343E4();
+        CommPlayerInfo_Free();
         sub_020381C0(sub_0203847C, 5);
     }
 }
@@ -1649,7 +1649,7 @@ void sub_02039D8C(void) {
     sub_02039D08();
     if (ov45_0222E944()) {
         sub_0201A738(1);
-        sub_020343E4();
+        CommPlayerInfo_Free();
         sub_020381C0(sub_0203847C, 5);
         sub_0203786C(0);
     }
@@ -1715,12 +1715,12 @@ void sub_02039EAC(s32 *arg0) {
 s32 sub_02039EB4(SaveData *saveData, s32 arg1, u32 *arg2) {
     switch (*arg2) {
     case 0:
-        sub_02037AC0(111);
+        LinkSync_StartSync(111);
         *arg2 = 1;
     default:
         break;
     case 1:
-        if (sub_02037B38(111)) {
+        if (LinkSync_IsSynced(111)) {
             Save_PrepareForAsyncWrite(saveData, arg1);
             *arg2 = 2;
         }
@@ -1730,13 +1730,13 @@ s32 sub_02039EB4(SaveData *saveData, s32 arg1, u32 *arg2) {
         GF_ASSERT(temp_r0 != 2);
         if (temp_r0 == 1) {
             *arg2 = 3;
-            sub_02037AC0(112);
+            LinkSync_StartSync(112);
         } else if (temp_r0 == 3) {
             *arg2 = 7;
         }
         break;
     case 3:
-        if (sub_02037B38(112)) {
+        if (LinkSync_IsSynced(112)) {
             *arg2 = 4;
         }
         break;
@@ -1760,10 +1760,10 @@ s32 sub_02039EB4(SaveData *saveData, s32 arg1, u32 *arg2) {
 
 void sub_02039F68(SaveWiFiHistory *arg0) {
     s32 temp_r7 = Comm_CountConnected();
-    if (sub_02034818(0)) {
+    if (CommPlayerInfo_GetProfile(0)) {
         for (int i = 0; i < temp_r7; i++) {
             if (i != Comm_GetLocalNetId()) {
-                sub_02039FB8(arg0, sub_020348A8(i), sub_020348CC(i), PlayerProfile_GetLanguage(sub_02034818(i)));
+                sub_02039FB8(arg0, CommPlayerInfo_GetCountry(i), CommPlayerInfo_GetRegion(i), PlayerProfile_GetLanguage(CommPlayerInfo_GetProfile(i)));
             }
         }
     }
@@ -1871,19 +1871,19 @@ s32 sub_0203A1C4(SaveData *saveData, s32 *arg1, enum HeapID heapID) {
     DWCFriendData *friendData = FriendRoster_GetDwcFriendData(Save_FriendRoster_Get(saveData), 0);
     for (int i = 0; i < Comm_CountConnected(); i++) {
         if (i != Comm_GetLocalNetId()) {
-            DWCFriendData *temp_r0 = sub_0203484C(i);
+            DWCFriendData *temp_r0 = CommPlayerInfo_GetExchangeToken(i);
             if (temp_r0) {
                 s32 sp10;
                 arg1[i] = sub_0203A084(saveData, temp_r0, &sp10);
                 GF_ASSERT(arg1[i] != 3);
                 if (arg1[i] == 0) {
                     sub_0203A280(saveData, i, sp10, heapID, 2);
-                    sub_02034A20(saveData);
+                    CommPlayerInfo_SaveRecords(saveData);
                 } else if (arg1[i] == 1) {
                     if (!sub_02039998()) {
                         sub_0203A280(saveData, i, sp10, heapID, 1);
                         MI_CpuCopy8(temp_r0, &friendData[sp10], sizeof(DWCFriendData));
-                        sub_02034A20(saveData);
+                        CommPlayerInfo_SaveRecords(saveData);
                     }
                 } else if (arg1[i] == 2) {
                     spC = 1;
@@ -1897,9 +1897,9 @@ s32 sub_0203A1C4(SaveData *saveData, s32 *arg1, enum HeapID heapID) {
 void sub_0203A280(SaveData *saveData, s32 arg1, s32 arg2, enum HeapID heapID, u32 arg4) {
     WiFiList *wifiList = Save_FriendRoster_Get(saveData);
     DWCFriendData *friendData = FriendRoster_GetDwcFriendData(wifiList, arg2);
-    PlayerProfile *playerProfile = sub_02034818(arg1);
+    PlayerProfile *playerProfile = CommPlayerInfo_GetProfile(arg1);
     if (arg4 != 2) {
-        MI_CpuCopy8(sub_0203484C(arg1), friendData, 12);
+        MI_CpuCopy8(CommPlayerInfo_GetExchangeToken(arg1), friendData, 12);
     }
     if (arg4 == 0) {
         String *string = PlayerProfile_GetPlayerName_NewString(playerProfile, heapID);
@@ -1912,16 +1912,16 @@ void sub_0203A280(SaveData *saveData, s32 arg1, s32 arg2, enum HeapID heapID, u3
         FriendRoster_SetEntryField(wifiList, arg2, 0, PlayerProfile_GetTrainerID(playerProfile));
     }
     String *string = String_New(120, heapID);
-    CopyU16ArrayToString(string, sub_02034884(arg1));
+    CopyU16ArrayToString(string, CommPlayerInfo_GetGroupName(arg1));
     sub_0202C2B4(wifiList, arg2, string);
     String_Delete(string);
     FriendRoster_SetEntryField(wifiList, arg2, 7, PlayerProfile_GetAvatar(playerProfile));
-    sub_02034A20(saveData);
+    CommPlayerInfo_SaveRecords(saveData);
 }
 
 s32 sub_0203A378(SaveData *saveData, s32 arg1) {
     int i;
-    DWCFriendData *friendData = sub_0203484C(arg1);
+    DWCFriendData *friendData = CommPlayerInfo_GetExchangeToken(arg1);
     WiFiList *r5 = Save_FriendRoster_Get(saveData);
 
     for (i = 0; i < 32; i++) {

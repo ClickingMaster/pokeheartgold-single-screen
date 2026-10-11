@@ -31,8 +31,8 @@ int ov40_0223BB74(void *p) {
     Ov40BBWork *w = PTR(p, 0x860);
     switch (WORD(p, 8)) {
     case 0:
-        if (sub_0202FC48()) {
-            sub_0202FC24();
+        if (BattleRecord_Exists()) {
+            BattleRecord_Delete();
         }
         w->block = ov40_022454F0;
         w->block.e[0] = 0;

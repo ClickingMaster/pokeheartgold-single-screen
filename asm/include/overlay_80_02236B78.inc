@@ -4,7 +4,7 @@
 .public LCRandom
 .public GF_AssertFail
 .public PlayerProfile_Copy
-.public sub_02034818
+.public CommPlayerInfo_GetProfile
 .public Comm_GetLocalNetId
 .public BattleSetup_New
 .public BattleSetup_AddMonToParty

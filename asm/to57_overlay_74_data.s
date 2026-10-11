@@ -58,30 +58,30 @@
 	.public RangerLink_WmPowerOff
 	.public RangerLink_WmReset
 	.public RangerLink_WmEnd
-	.public ov74_0223512C
-	.public ov74_02235230
-	.public ov74_02235258
-	.public ov74_022352A0
-	.public ov74_022352D0
-	.public ov74_02235308
-	.public ov74_02235390
-	.public ov74_0223539C
-	.public ov74_022353FC
-	.public ov74_02235414
-	.public ov74_02235464
-	.public ov74_0223546C
-	.public ov74_02235474
-	.public ov74_02235568
-	.public ov74_02235634
-	.public ov74_0223563C
-	.public ov74_0223567C
-	.public ov74_02235690
-	.public ov74_02235708
-	.public ov74_02235728
-	.public ov74_022358BC
-	.public ov74_022358C8
-	.public ov74_02235930
-	.public ov74_022359BC
+	.public MainMenuUtil_SetCryptoHeap
+	.public MainMenuUtil_GetCartridgeGiftSize
+	.public MainMenuUtil_ReadCartridgeGift
+	.public MainMenuUtil_InitWork
+	.public MainMenuUtil_CreateAppData
+	.public MainMenuUtil_InitBg
+	.public MainMenuUtil_SetFadeWhite
+	.public MainMenuUtil_StartFade
+	.public MainMenuUtil_WaitFade
+	.public MainMenuTextPrinter_Init
+	.public MainMenuTextPrinter_SetSize
+	.public MainMenuTextPrinter_SetFrameAndFont
+	.public MainMenuTextPrinter_SetTextPos
+	.public MainMenuTextPrinter_AddWindowAndPrint
+	.public MainMenuTextPrinter_GetTileCount
+	.public MainMenuUtil_InitObjTransfer
+	.public MainMenuUtil_SpritesActive
+	.public MainMenuUtil_InitSprites
+	.public MainMenuUtil_GetSpriteList
+	.public MainMenuUtil_LoadSpriteResources
+	.public MainMenuUtil_UpdateSprites
+	.public MainMenuUtil_UpdateGiftSprite
+	.public MainMenuUtil_CreateSprite
+	.public MainMenuUtil_FreeSprites
 	.public ov74_02235A68
 	.public ov74_02235DC4
 	.public ov74_02235ED0
@@ -240,7 +240,7 @@
 	.public _0223B540
 	.public _0223B55C
 	.public _0223B578
-	.public _0223B690
+	.public sGiftCartridgePublicKey
 	.public _0223B710
 	.public _0223B720
 	.public _0223B73C
@@ -351,43 +351,43 @@
 	.public AGB_CalcBoxMonChecksum
 	.public AGB_SetBoxMonData
 	.public AGB_GetBoxMonLevel
-	.public ov74_0223512C
-	.public ov74_02235138
-	.public ov74_0223514C
-	.public ov74_022351FC
-	.public ov74_02235230
-	.public ov74_02235258
-	.public ov74_022352A0
-	.public ov74_022352D0
-	.public ov74_02235308
-	.public ov74_02235390
-	.public ov74_0223539C
-	.public ov74_022353FC
-	.public ov74_02235414
-	.public ov74_02235464
-	.public ov74_0223546C
-	.public ov74_02235474
-	.public ov74_0223547C
-	.public ov74_02235568
-	.public ov74_02235634
-	.public ov74_0223563C
-	.public ov74_0223567C
-	.public ov74_02235690
-	.public ov74_02235708
-	.public ov74_02235728
-	.public ov74_0223589C
-	.public ov74_022358BC
-	.public ov74_022358C8
-	.public ov74_02235930
-	.public ov74_022359BC
+	.public MainMenuUtil_SetCryptoHeap
+	.public MainMenuUtil_CryptoAlloc
+	.public MainMenuUtil_CheckGiftCartridgeSignature
+	.public MainMenuUtil_IsGiftCartridgeInserted
+	.public MainMenuUtil_GetCartridgeGiftSize
+	.public MainMenuUtil_ReadCartridgeGift
+	.public MainMenuUtil_InitWork
+	.public MainMenuUtil_CreateAppData
+	.public MainMenuUtil_InitBg
+	.public MainMenuUtil_SetFadeWhite
+	.public MainMenuUtil_StartFade
+	.public MainMenuUtil_WaitFade
+	.public MainMenuTextPrinter_Init
+	.public MainMenuTextPrinter_SetSize
+	.public MainMenuTextPrinter_SetFrameAndFont
+	.public MainMenuTextPrinter_SetTextPos
+	.public MainMenuTextPrinter_Print
+	.public MainMenuTextPrinter_AddWindowAndPrint
+	.public MainMenuTextPrinter_GetTileCount
+	.public MainMenuUtil_InitObjTransfer
+	.public MainMenuUtil_SpritesActive
+	.public MainMenuUtil_InitSprites
+	.public MainMenuUtil_GetSpriteList
+	.public MainMenuUtil_LoadSpriteResources
+	.public MainMenuUtil_SetSubScreenOffset
+	.public MainMenuUtil_UpdateSprites
+	.public MainMenuUtil_UpdateGiftSprite
+	.public MainMenuUtil_CreateSprite
+	.public MainMenuUtil_FreeSprites
 	.public ov74_02235A68
-	.public ov74_02235A74
-	.public ov74_02235AC4
-	.public ov74_02235B14
-	.public ov74_02235BD0
-	.public ov74_02235C10
-	.public ov74_02235CE4
-	.public ov74_02235DA4
+	.public MainMenuUtil_VBlankCB
+	.public MainMenuUtil_GetGiftPalette
+	.public MainMenuUtil_LoadGiftMonSprite
+	.public MainMenuUtil_ShowGiftBox
+	.public MainMenuUtil_ShowGiftPokemon
+	.public MainMenuUtil_ShowGiftItem
+	.public MainMenuUtil_LoadCardSubScreenPalette
 	.public ov74_02235DC4
 	.public ov74_02235ED0
 	.public ov74_02235F58
@@ -467,7 +467,7 @@
 	.public sAgbKeepFirstAbilitySpecies
 	.public ov74_0223CC5C
 	.public ov74_0223CC5E
-	.public ov74_0223CE9C
+	.public sGiftCartridgeGameCodes
 	.public ov74_0223CEF0
 	.public ov74_0223CF04
 	.public ov74_0223CF18
@@ -495,8 +495,8 @@
 	.public sMigrateFromAgbIcons
 	.public sPmAgbSave
 	.public sPmAgbSaveCounter
-	.public ov74_0223D450
-	.public ov74_0223D454
+	.public sMainMenuUtilCryptoHeapId
+	.public gMainMenuUtilWork
 	.public ov74_0223D488
 	.public ov74_0223D48C
 	.public ov74_0223D654
@@ -724,7 +724,7 @@ sPmAgbRomCodeMappings:
 	.byte 0x02, 0x04
 	.short LANGUAGE_ITALIAN
 	.balign 4, 0
-_0223B690:
+sGiftCartridgePublicKey:
 	.byte 0xC8, 0x7E, 0x66, 0x71, 0x46, 0x0B, 0xE6, 0x6F, 0x17, 0x8A, 0x5C, 0x7D, 0xEA, 0xE1, 0x93, 0xFD
 	.byte 0xEE, 0xFA, 0x99, 0x84, 0xFE, 0x35, 0x02, 0xB9, 0x7F, 0x4F, 0xF1, 0x19, 0x74, 0xA2, 0x0F, 0x65
 	.byte 0x8A, 0x9C, 0x44, 0x81, 0x0C, 0x1F, 0x94, 0xE4, 0xC0, 0xB6, 0xD7, 0x20, 0xEE, 0x11, 0x9A, 0x8D
@@ -1244,7 +1244,7 @@ ov74_0223CC5E: ; 0x0223CC5E
 	.byte 0x9E, 0x01, 0x9E, 0x01, 0x9F, 0x01, 0x9F, 0x01, 0xA0, 0x01, 0xA0, 0x01, 0xA1, 0x01, 0xA1, 0x01
 	.byte 0xA2, 0x01, 0xA2, 0x01, 0xA3, 0x01, 0xA3, 0x01, 0xA4, 0x01, 0xA4, 0x01
 
-ov74_0223CE9C: ; 0x0223CE9C
+sGiftCartridgeGameCodes: ; 0x0223CE9C
 	.ascii "EB5B"
 	.ascii "EC5B"
 	.ascii "ED5B"

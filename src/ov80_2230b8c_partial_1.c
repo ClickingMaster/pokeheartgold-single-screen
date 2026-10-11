@@ -111,7 +111,7 @@ int FrtCmd_145(void *c) {
         OS_ResetSystem(0);
         break;
     case 9:
-        *out = sub_02030B14(PTR(data, 0x6f8));
+        *out = HallChallenge_GetSaved(PTR(data, 0x6f8));
         break;
     case 10:
         ov80_0223157C(data, 2);

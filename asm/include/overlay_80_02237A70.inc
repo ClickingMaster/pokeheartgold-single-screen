@@ -8,10 +8,10 @@
 .public Save_PlayerData_GetProfile
 .public PlayerProfile_Copy
 .public FrontierSave_GetStat
-.public sub_02031108
-.public sub_02031228
-.public sub_02031248
-.public sub_02034818
+.public FrontierSave_SetStat
+.public FrontierSave_AddStat
+.public FrontierSave_SubStat
+.public CommPlayerInfo_GetProfile
 .public Comm_GetLocalNetId
 .public BattleSetup_New
 .public BattleSetup_AddMonToParty

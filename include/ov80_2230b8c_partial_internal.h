@@ -40,7 +40,7 @@ extern void ov80_0222BE9C(void *, u16);
 extern void ov80_0222F44C(void *, void *);
 extern void ov80_0223151C(void *, u16 *);
 extern void OS_ResetSystem(u32);
-extern u32 sub_02030B14(void *);
+extern u32 HallChallenge_GetSaved(void *);
 extern void ov80_0223157C(void *, int);
 extern u32 ov80_022317C0(void *);
 extern u32 ov80_022317D0(void *, u8);

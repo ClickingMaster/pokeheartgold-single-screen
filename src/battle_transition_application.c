@@ -93,8 +93,8 @@ BOOL sub_02087B64(OverlayManager *manager, int *state) {
 
 BOOL sub_02087BAC(OverlayManager *manager, int *state) {
     Unk87Work *work = OverlayManager_GetData(manager);
-    if (sub_0202FC48() == TRUE) {
-        sub_0202FC24();
+    if (BattleRecord_Exists() == TRUE) {
+        BattleRecord_Delete();
     }
     Heap_Free(work->large);
     OverlayManager_FreeData(manager);

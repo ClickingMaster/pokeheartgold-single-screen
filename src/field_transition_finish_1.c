@@ -12,7 +12,7 @@
 #include "poke_overlay.h"
 #include "sound_system.h"
 #include "sys_flags.h"
-#include "unk_0202FBCC.h"
+#include "battle_recording.h"
 
 typedef struct Unk87Work {
     u32 state;
@@ -43,10 +43,10 @@ extern u8 SDK_OVERLAY_OVY_40_ID;
 #define OVERLAY_39_ID ((FSOverlayID) & SDK_OVERLAY_OVY_39_ID)
 #define OVERLAY_40_ID ((FSOverlayID) & SDK_OVERLAY_OVY_40_ID)
 
-extern void sub_0202FC24(void);
-extern void *sub_0202FC5C(void);
-extern void sub_0202FC90(void *saveData, enum HeapID heapId, BOOL *result, BattleSetup *setup, u32 value);
-extern void sub_020304F0(BattleSetup *setup, void *saveData);
+extern void BattleRecord_Delete(void);
+extern void *BattleRecord_Get(void);
+extern void BattleRecord_Load(void *saveData, enum HeapID heapId, BOOL *result, BattleSetup *setup, u32 value);
+extern void BattleRecord_RestoreSetup(BattleSetup *setup, void *saveData);
 extern void ov40_02244920(void *data, BattleSetup *setup, enum HeapID heapId);
 extern void sub_02005B68(BOOL enabled);
 extern void *sub_02087FF8(void *large, u32 value);
@@ -84,17 +84,17 @@ BOOL sub_02087C38(Unk87Work *work, enum HeapID heapId) {
         break;
     case 1:
         work->setup = BattleSetup_New(heapId, 0);
-        if (!sub_0202FC48()) {
-            sub_0202FC90(work->saveData, heapId, &result, work->setup, *(u32 *)(work->large + 0x86C));
+        if (!BattleRecord_Exists()) {
+            BattleRecord_Load(work->saveData, heapId, &result, work->setup, *(u32 *)(work->large + 0x86C));
         } else {
-            sub_020304F0(work->setup, work->saveData);
+            BattleRecord_RestoreSetup(work->setup, work->saveData);
             result = TRUE;
         }
         *(BagCursor **)((u8 *)work->setup + 0x10C) = BagCursor_New(heapId);
         *(GameStats **)((u8 *)work->setup + 0x144) = Save_GameStats_Get(work->saveData);
         overlayId = OVERLAY_40_ID;
         if (HandleLoadOverlay(overlayId, OVY_LOAD_ASYNC) == TRUE) {
-            ov40_02244920(sub_0202FC5C(), work->setup, heapId);
+            ov40_02244920(BattleRecord_Get(), work->setup, heapId);
             UnloadOverlayByID(overlayId);
         }
         *(u32 *)(work->large + 0x874) = 1;

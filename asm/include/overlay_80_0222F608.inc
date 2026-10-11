@@ -9,7 +9,7 @@
 .public BgTilemapRectChangePalette
 .public ScheduleBgTilemapBufferTransfer
 .public ScheduleSetBgPosText
-.public sub_0203095C
+.public FactoryChallenge_GetSaved
 .public BattleSetup_Delete
 .public IsBattleResultWin
 .public AllocMonZeroed

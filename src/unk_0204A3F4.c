@@ -19,7 +19,7 @@
 #include "sys_flags.h"
 #include "sys_vars.h"
 #include "frontier_data_access.h"
-#include "unk_02030A98.h"
+#include "frontier_save_access.h"
 #include "unk_0204B538.h"
 #include "unk_02066EDC.h"
 
@@ -209,12 +209,12 @@ u32 sub_0204A764(SaveData *saveData) {
         return towerMode;
     }
     if (towerMode == TOWER_MODE_6) {
-        sub_02031108(Save_Frontier_GetStatic(saveData), 100, sub_0205C268(100), 0);
+        FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), 100, sub_0205C268(100), 0);
     } else {
         FrontierData_FlagAction(frontierData, towerMode + 8, 2);
     }
     FrontierData_TowerRoundAction(frontierData, towerMode, 2);
-    sub_02031108(Save_Frontier_GetStatic(saveData), sub_0205C310(towerMode), sub_0205C268(sub_0205C310(towerMode)), 0);
+    FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), sub_0205C310(towerMode), sub_0205C268(sub_0205C310(towerMode)), 0);
     if (towerMode != TOWER_MODE_WIFI && towerMode != TOWER_MODE_6) {
         sub_020674E0(saveData);
     }
@@ -435,15 +435,15 @@ void FrontierFieldSystem_0204AD04(FrontierFieldSystem *frontierFsys, SaveData *s
     }
     u32 unk4 = frontierFsys->towerMode == TOWER_MODE_6 ? 112 : frontierFsys->towerMode * 2;
     FrontierSave_GetStat(frontierSaveData, unk4, sub_0205C268(unk4));
-    sub_0203126C(frontierSaveData, unk4, sub_0205C268(unk4), frontierFsys->currentBattleInSession + frontierFsys->curWinStreak);
+    FrontierSave_RaiseStat(frontierSaveData, unk4, sub_0205C268(unk4), frontierFsys->currentBattleInSession + frontierFsys->curWinStreak);
     if (frontierFsys->towerMode == TOWER_MODE_6) {
         FrontierSave_GetStat(Save_Frontier_GetStatic(saveData), 100, sub_0205C268(100));
     } else {
         FrontierData_FlagAction(frontierFsys->frontierData, frontierFsys->towerMode + 8, 0);
     }
-    u32 unk = sub_02031108(frontierSaveData, unk4 + 1, sub_0205C268(unk4 + 1), frontierFsys->currentBattleInSession + frontierFsys->curWinStreak);
+    u32 unk = FrontierSave_SetStat(frontierSaveData, unk4 + 1, sub_0205C268(unk4 + 1), frontierFsys->currentBattleInSession + frontierFsys->curWinStreak);
     if (frontierFsys->towerMode == TOWER_MODE_6) {
-        sub_02031108(Save_Frontier_GetStatic(saveData), 100, sub_0205C268(100), 0);
+        FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), 100, sub_0205C268(100), 0);
     } else {
         FrontierData_FlagAction(frontierFsys->frontierData, frontierFsys->towerMode + 8, 2);
     }
@@ -472,14 +472,14 @@ void FrontierFieldSystem_0204AE20(FrontierFieldSystem *frontierFsys, SaveData *s
     } else {
         FrontierData_FlagAction(frontierFsys->frontierData, frontierFsys->towerMode + 8, 0);
     }
-    u32 unk6 = sub_02031108(frontierSaveData, unk4 + 1, sub_0205C268(unk4 + 1), frontierFsys->currentBattleInSession + frontierFsys->curWinStreak);
+    u32 unk6 = FrontierSave_SetStat(frontierSaveData, unk4 + 1, sub_0205C268(unk4 + 1), frontierFsys->currentBattleInSession + frontierFsys->curWinStreak);
     if (frontierFsys->towerMode == TOWER_MODE_6) {
-        sub_02031108(Save_Frontier_GetStatic(saveData), 100, sub_0205C268(100), 1);
+        FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), 100, sub_0205C268(100), 1);
     } else {
         FrontierData_FlagAction(frontierFsys->frontierData, frontierFsys->towerMode + 8, 1);
     }
     FrontierSave_GetStat(frontierSaveData, unk4, sub_0205C268(unk4));
-    sub_0203126C(frontierSaveData, unk4, sub_0205C268(unk4), unk6);
+    FrontierSave_RaiseStat(frontierSaveData, unk4, sub_0205C268(unk4), unk6);
     GameStats_Add(gameStats, GAME_STAT_BATTLE_TOWER_WIN_COUNT, 7);
     FrontierData_TowerRoundAction(frontierFsys->frontierData, frontierFsys->towerMode, 3);
     if (frontierFsys->towerMode != TOWER_MODE_6) {

@@ -50,7 +50,7 @@ BOOL ov01_021F6D78(FieldFriendCtx *ctx) {
         return TRUE;
     }
     if (Bag_HasItem(Save_Bag_Get(ctx->saveData), 0x1B5, 1, HEAP_ID_FIELD1) == 1) {
-        BufferPlayersName(ctx->msgFmt, 0, (void *)sub_02034818(ctx->unk88));
+        BufferPlayersName(ctx->msgFmt, 0, (void *)CommPlayerInfo_GetProfile(ctx->unk88));
         ov01_021F71C4(ctx, 0x3E);
         ctx->state = 2;
         return FALSE;
@@ -113,7 +113,7 @@ BOOL ov01_021F6EFC(FieldFriendCtx *ctx) {
             ctx->unk9a = 0;
             ctx->state = 8;
         } else {
-            BufferPlayersName(ctx->msgFmt, 0, (void *)sub_02034818(ctx->unk88));
+            BufferPlayersName(ctx->msgFmt, 0, (void *)CommPlayerInfo_GetProfile(ctx->unk88));
             ov01_021F71C4(ctx, 0x40);
             ctx->state = 6;
         }
@@ -163,7 +163,7 @@ BOOL ov01_021F6FDC(FieldFriendCtx *ctx) {
 
     switch (ctx->unk94) {
     case -2:
-        BufferPlayersName(ctx->msgFmt, 0, (void *)sub_02034818(ctx->unk88));
+        BufferPlayersName(ctx->msgFmt, 0, (void *)CommPlayerInfo_GetProfile(ctx->unk88));
         ov01_021F71C4(ctx, 0x40);
         ctx->state = 6;
         break;
@@ -196,12 +196,12 @@ BOOL ov01_021F7084(FieldFriendCtx *ctx) {
 
     if (!ov01_021F6CA0(ctx)) {
         if (ctx->unk90 == 0) {
-            sub_020311AC(Save_Frontier_GetStatic(ctx->saveData), ctx->unk8c);
+            FrontierSave_DeleteRow(Save_Frontier_GetStatic(ctx->saveData), ctx->unk8c);
             FriendRoster_RemoveFriend(roster, ctx->unk8c);
             sub_0203A280(ctx->saveData, ctx->unk88, 0x1F, 4, 0);
             ctx->state = 1;
         } else {
-            BufferPlayersName(ctx->msgFmt, 0, (void *)sub_02034818(ctx->unk88));
+            BufferPlayersName(ctx->msgFmt, 0, (void *)CommPlayerInfo_GetProfile(ctx->unk88));
             ov01_021F71C4(ctx, 0x40);
             ctx->state = 6;
         }

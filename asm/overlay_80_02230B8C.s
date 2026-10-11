@@ -405,7 +405,7 @@ _02230E22:
 _02230E2A:
 	ldr r0, _02230FC4 ; =0x000006F8
 	ldr r0, [r4, r0]
-	bl sub_02030B14
+	bl HallChallenge_GetSaved
 	strh r0, [r5]
 	b _02230FB6
 _02230E36:

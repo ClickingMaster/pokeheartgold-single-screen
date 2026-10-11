@@ -7,7 +7,7 @@
 #include "party.h"
 #include "sys_task.h"
 #include "unk_02035900.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 #include "unk_02037C94.h"
 typedef void (*LobbyState)(void);
 typedef struct Lobby {
@@ -22,7 +22,7 @@ typedef struct Lobby {
     Party *party;
 } Lobby;
 extern Lobby *_021D41C8;
-void sub_02034434(void);
+void CommPlayerInfo_SendLocal(void);
 void ov03_02255C54(void);
 void ov03_02255BEC(void);
 BOOL sub_02034DB8(void);
@@ -31,7 +31,7 @@ BOOL sub_02037EC8(void);
 u32 sub_02057180(void);
 void sub_02056D7C(void *, FieldSystem *, int);
 void sub_02057F80(void);
-void sub_02034638(void);
+void CommPlayerInfo_HostRedistribute(void);
 void sub_02056E60(void);
 void sub_0205701C(int);
 BOOL sub_02057E50(void);

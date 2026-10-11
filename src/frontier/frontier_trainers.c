@@ -19,7 +19,7 @@
 #include "sprite.h"
 #include "string_util.h"
 #include "trainer_memo.h"
-#include "unk_02034354.h"
+#include "communication_player_state.h"
 #include "unk_02035900.h"
 #include "unk_02037C94.h"
 #include "unk_0208805C.h"
@@ -519,7 +519,7 @@ void FrontierTrainer_GenerateMons(u8 count, int trainerIndex, int partnerIndex, 
 
 void Frontier_BufferPartnerName(MessageFormat *msgFmt, int field) {
     int netId = Comm_GetLocalNetId() ^ 1;
-    BufferPlayersName(msgFmt, field, sub_02034818(netId));
+    BufferPlayersName(msgFmt, field, CommPlayerInfo_GetProfile(netId));
 }
 
 int ov80_0222A7EC(PlayerProfile *profile) {

@@ -25,7 +25,7 @@ int sub_0205A47C(struct UnkStruct_02059E1C *p, int a1) {
 }
 
 void sub_0205A498(int a0, int a1, void *a2) {
-    sub_02034818(Comm_GetLocalNetId() ^ 1);
+    CommPlayerInfo_GetProfile(Comm_GetLocalNetId() ^ 1);
     *(u16 *)((u8 *)a2 + 0x66A) = 1;
 }
 

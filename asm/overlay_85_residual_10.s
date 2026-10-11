@@ -388,7 +388,7 @@ SpinTrade_State_StartSave: ; 0x021E6594
 	mov r1, #0xb
 	bl SpinTrade_PrintMessage
 	mov r0, #0xca
-	bl sub_02037AC0
+	bl LinkSync_StartSync
 	ldr r0, _021E65D0 ; =gSystem + 0x60
 	mov r1, #1
 	strb r1, [r0, #0xc]
@@ -406,7 +406,7 @@ SpinTrade_State_WaitSaveSync: ; 0x021E65D4
 	push {r4, lr}
 	add r4, r0, #0
 	mov r0, #0xca
-	bl sub_02037B38
+	bl LinkSync_IsSynced
 	cmp r0, #0
 	beq _021E6604
 	ldr r1, [r4, #0x28]

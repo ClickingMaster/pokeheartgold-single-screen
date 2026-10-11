@@ -9,7 +9,7 @@
 #include "save.h"
 #include "sprite.h"
 
-// Text box printed by the overlay's shared message helpers (ov74_02235414 ... ov74_02235568).
+// Text box printed by the overlay's shared message helpers (MainMenuTextPrinter_Init ... MainMenuTextPrinter_AddWindowAndPrint).
 typedef struct MainMenuTextPrinter {
     u32 unk_00;               // 0x00
     u32 unk_04;               // 0x04
@@ -35,24 +35,24 @@ typedef struct MainMenuTextPrinter {
 } MainMenuTextPrinter;        // size: 0x54
 
 // Shared helpers of the overlay (screen setup, fades, text, sprites).
-void ov74_022352A0(enum HeapID heapID);
-void *ov74_022352D0(OverlayManager *manager, enum HeapID heapID, u32 size, u32 heapSize);
-void ov74_02235308(BgConfig *bgConfig, u8 bgId, u32 screenSize, u32 screenBase, u32 charBase);
-void ov74_02235390(u32 a0);
-void ov74_0223539C(u32 a0, u32 newState, int *state, u32 waitingState);
-void ov74_022353FC(int *state);
-void ov74_02235414(MainMenuTextPrinter *printer, Window *window, u32 unk30, u32 msgFileId, u32 unk38, u32 unk3C);
-void ov74_02235464(MainMenuTextPrinter *printer, u32 width, u32 height, u32 baseTile);
-void ov74_0223546C(MainMenuTextPrinter *printer, u32 unk00, u32 fontId);
-void ov74_02235474(MainMenuTextPrinter *printer, u32 textX, u32 textY);
-int ov74_02235568(BgConfig *bgConfig, MainMenuTextPrinter *printer, int x, int y, int msgId);
-u32 ov74_02235634(MainMenuTextPrinter *printer);
-void ov74_0223563C(void);
-void ov74_02235690(void);
-void ov74_02235728(NarcId narcId, u32 charFileId, u32 plttFileId, u32 cellFileId, u32 animFileId, u32 a5);
-void ov74_022358BC(void);
-Sprite *ov74_02235930(u32 a0, Sprite *sprite, u32 x, u32 y, u32 animSeq);
-void ov74_022359BC(void);
+void MainMenuUtil_InitWork(enum HeapID heapID);
+void *MainMenuUtil_CreateAppData(OverlayManager *manager, enum HeapID heapID, u32 size, u32 heapSize);
+void MainMenuUtil_InitBg(BgConfig *bgConfig, int bgId, u32 screenSize, u32 screenBase, u32 charBase);
+void MainMenuUtil_SetFadeWhite(u32 a0);
+void MainMenuUtil_StartFade(u32 a0, u32 newState, int *state, u32 waitingState);
+void MainMenuUtil_WaitFade(int *state);
+void MainMenuTextPrinter_Init(MainMenuTextPrinter *printer, Window *window, u32 unk30, u32 msgFileId, u32 unk38, u32 unk3C);
+void MainMenuTextPrinter_SetSize(MainMenuTextPrinter *printer, u32 width, u32 height, u32 baseTile);
+void MainMenuTextPrinter_SetFrameAndFont(MainMenuTextPrinter *printer, u32 unk00, u32 fontId);
+void MainMenuTextPrinter_SetTextPos(MainMenuTextPrinter *printer, u32 textX, u32 textY);
+int MainMenuTextPrinter_AddWindowAndPrint(BgConfig *bgConfig, MainMenuTextPrinter *printer, int x, int y, int msgId);
+u32 MainMenuTextPrinter_GetTileCount(MainMenuTextPrinter *printer);
+void MainMenuUtil_InitObjTransfer(void);
+void MainMenuUtil_InitSprites(void);
+void MainMenuUtil_LoadSpriteResources(NarcId narcId, u32 charFileId, u32 plttFileId, u32 cellFileId, u32 animFileId, u32 a5);
+void MainMenuUtil_UpdateSprites(void);
+Sprite *MainMenuUtil_CreateSprite(u32 a0, Sprite *sprite, u32 x, u32 y, u32 animSeq);
+void MainMenuUtil_FreeSprites(void);
 u32 ov74_02235A68(int a0);
 
 #endif // POKEHEARTGOLD_APPLICATION_MAIN_MENU_MAIN_MENU_INTERNAL_H

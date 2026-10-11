@@ -105,7 +105,7 @@ int FrtCmd_131(void *c) {
 int FrtCmd_053(void *c) {
     u16 v = FrontierScript_ReadVar(c);
     U16(c, 0x78) = v;
-    sub_02037AC0((u8)v);
+    LinkSync_StartSync((u8)v);
     FrontierScriptContext_Pause(c, ov80_0222D200);
     return 1;
 }
@@ -114,11 +114,11 @@ BOOL ov80_0222D200(void *c) {
     if (Comm_CountConnected(c) < 2) {
         return TRUE;
     }
-    return sub_02037B38((u8)U16(c, 0x78));
+    return LinkSync_IsSynced((u8)U16(c, 0x78));
 }
 
 int FrtCmd_054(void *c) {
-    sub_02037BEC(c);
+    LinkSync_ClearPackets(c);
     return 0;
 }
 

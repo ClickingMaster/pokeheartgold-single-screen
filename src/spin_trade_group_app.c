@@ -34,9 +34,9 @@
 #include "unk_0200A090.h"
 #include "oam_manager.h"
 #include "unk_0200FA24.h"
-#include "unk_02034354.h"
+#include "communication_player_state.h"
 #include "unk_02035900.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 #include "unk_02037C94.h"
 #include "unk_0203A3B0.h"
 #include "unk_0205A44C.h"
@@ -922,7 +922,7 @@ int ov85_021E996C(SpinTradeGroupApp *app, int a1) {
             } else {
                 app->subState = 0xD;
                 sub_02096D4C(app->menu, 3, NULL, 0);
-                BufferPlayersName(app->msgFormat, 0, sub_02034818(0));
+                BufferPlayersName(app->msgFormat, 0, CommPlayerInfo_GetProfile(0));
             }
             app->yesNoMenu = NULL;
         }
@@ -935,7 +935,7 @@ int ov85_021E9A1C(SpinTradeGroupApp *app, int a1) {
     if (Comm_GetLocalNetId() == 0) {
         SpinTradeGroup_PrintMessage(app, 5, 0);
     } else {
-        BufferPlayersName(app->msgFormat, 0, sub_02034818(0));
+        BufferPlayersName(app->msgFormat, 0, CommPlayerInfo_GetProfile(0));
         SpinTradeGroup_PrintMessage(app, 0x10, 0);
     }
     SpinTradeGroup_WaitPrinterThen(app, 14);
@@ -954,14 +954,14 @@ int ov85_021E9A6C(SpinTradeGroupApp *app, int state) {
 }
 
 int SpinTradeGroup_State_StartExitSync(SpinTradeGroupApp *app, int state) {
-    sub_02037AC0(0xCA);
+    LinkSync_StartSync(0xCA);
     app->subState = 0x10;
     ov85_021E943C(app);
     return state;
 }
 
 int SpinTradeGroup_State_WaitExitSync(SpinTradeGroupApp *app, int state) {
-    if (sub_02037B38(0xCA)) {
+    if (LinkSync_IsSynced(0xCA)) {
         sub_020398D4(0, 0);
         BeginNormalPaletteFade(0, 0x10, 0x10, 0, 0x10, 1, HEAP_ID_102);
         state = 3;
@@ -1072,7 +1072,7 @@ void ov85_021E9C84(SpinTradeGroupApp *app, int msg, int a2) {
         if (app->unk_4A50 == 1) {
             return;
         }
-        BufferPlayersName(app->msgFormat, 0, sub_02034818(a2));
+        BufferPlayersName(app->msgFormat, 0, CommPlayerInfo_GetProfile(a2));
         if (a2 == Comm_GetLocalNetId()) {
             return;
         }
@@ -1104,7 +1104,7 @@ void ov85_021E9D9C(SpinTradeGroupApp *app, int a1, int a2) {
         switch (a1) {
         case 1: {
             SpinTradeGroupMenu *p;
-            BufferPlayersName(app->msgFormat, 0, sub_02034818(a2));
+            BufferPlayersName(app->msgFormat, 0, CommPlayerInfo_GetProfile(a2));
             SpinTradeGroup_SetMaxConnections(app, 1);
             app->subState = a1;
             app->menu->participantCount = Comm_CountConnected();
@@ -1117,7 +1117,7 @@ void ov85_021E9D9C(SpinTradeGroupApp *app, int a1, int a2) {
             break;
         }
         case 0x13:
-            BufferPlayersName(app->msgFormat, 0, sub_02034818(a2));
+            BufferPlayersName(app->msgFormat, 0, CommPlayerInfo_GetProfile(a2));
             if (a2 != Comm_GetLocalNetId()) {
                 if (Comm_GetLocalNetId() == 0) {
                     SpinTradeGroupMenu *p = app->menu;
@@ -1153,7 +1153,7 @@ int SpinTradeGroup_CountProfiles(void) {
     count = 0;
     i = 0;
     for (; i < 5; i++) {
-        if (sub_02034818(i)) {
+        if (CommPlayerInfo_GetProfile(i)) {
             count++;
         }
     }
@@ -1201,7 +1201,7 @@ int SpinTradeGroup_CountMembers(void) {
     count = 0;
     i = 0;
     for (; i < 5; i++) {
-        if (sub_02034818(i)) {
+        if (CommPlayerInfo_GetProfile(i)) {
             count++;
         }
     }
@@ -1214,7 +1214,7 @@ u32 SpinTradeGroup_GetMemberMask(void) {
     mask = 0;
     i = 0;
     for (; i < 5; i++) {
-        if (sub_02034818(i)) {
+        if (CommPlayerInfo_GetProfile(i)) {
             mask |= 1 << i;
         }
     }
@@ -1226,7 +1226,7 @@ BOOL SpinTradeGroup_UpdateMembers(SpinTradeGroupApp *app) {
     BOOL changed = FALSE;
     for (i = 0; i < 5; i++) {
         app->members[i].prevProfile = app->members[i].profile;
-        app->members[i].profile = sub_02034818(i);
+        app->members[i].profile = CommPlayerInfo_GetProfile(i);
         app->trainerIds[i].prev = app->trainerIds[i].cur;
         if (app->members[i].profile != 0) {
             app->trainerIds[i].cur.f.id = PlayerProfile_GetTrainerID(app->members[i].profile);

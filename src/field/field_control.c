@@ -50,7 +50,7 @@
 #include "sound_playback.h"
 #include "unk_02031B0C.h"
 #include "unk_02032844.h"
-#include "unk_02034354.h"
+#include "communication_player_state.h"
 #include "unk_02035900.h"
 #include "unk_02037C94.h"
 #include "unk_0203DB6C.h"
@@ -373,7 +373,7 @@ static BOOL ov01_021E6ED8() { // CheckTrainerInfo?
     int i;
     int ret = 0;
     for (i = 1; i < 5; i++) {
-        if (sub_02034818(i)) { // CommInfo_TrainerInfo?
+        if (CommPlayerInfo_GetProfile(i)) { // CommInfo_TrainerInfo?
             ret++;
         }
     }

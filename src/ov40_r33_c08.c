@@ -2,7 +2,7 @@
 
 #define PTR(p, off) (*(void **)((u8 *)(p) + (off)))
 
-void sub_02030938(void *p);
+void BattleRecordHeader_Free(void *p);
 void sub_020314BC(void *p);
 void TouchHitboxController_IsTriggered(void *controller);
 void ClearWindowTilemapAndCopyToVram(void *window);

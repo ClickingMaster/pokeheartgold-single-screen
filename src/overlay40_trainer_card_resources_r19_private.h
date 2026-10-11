@@ -7,11 +7,11 @@
 
 #define PTR(p, off) (*(void **)((u8 *)(p) + (off)))
 
-int sub_0202FC48(void);
-void sub_0202FC24(void);
-void sub_0202FC90(void *saveData, int heapId, int *result, void *setup, int value);
-void *sub_0203077C(int heapId);
-void *sub_020307AC(int heapId);
+int BattleRecord_Exists(void);
+void BattleRecord_Delete(void);
+void BattleRecord_Load(void *saveData, int heapId, int *result, void *setup, int value);
+void *BattleRecord_CopyHeader(int heapId);
+void *BattleRecord_CopyProfile(int heapId);
 void *sub_020314A4(int heapId);
 void sub_020314C4(void *a, void *b);
 u32 sub_02074490(void);

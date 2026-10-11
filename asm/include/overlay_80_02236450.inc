@@ -7,7 +7,7 @@
 .public BattleRoomDownload_HasTrainers
 .public BattleRoomDownload_GetTrainer
 .public Save_BattleRoomDownload_Get
-.public sub_02034818
+.public CommPlayerInfo_GetProfile
 .public GetFrontierTrainerIVs
 .public FrontierFieldSystem_0204B510
 .public BattleSetup_New

@@ -5,9 +5,9 @@
 #include "safari_zone.h"
 #include "task.h"
 #include "unk_02033AE0.h"
-#include "unk_02034354.h"
+#include "communication_player_state.h"
 #include "unk_02035900.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 
 typedef struct UnkCommStruct {
     void (*func)();
@@ -53,7 +53,7 @@ static u32 ov03_02258830(int mult, int arg1) {
 static void ov03_0225884C(BOOL unkBool, u32 arg1_unused, SafariZoneAreaSet *areaSetSrc, UnkCommStruct *unkCommStruct) {
     if (unkBool != Comm_GetLocalNetId()) {
         SafariZone_SetAreaSet(unkCommStruct->safariZone, 1, areaSetSrc);
-        SafariZone_SetLinkLeaderFromProfile(unkCommStruct->safariZone, sub_02034818(unkBool), HEAP_ID_FIELD2);
+        SafariZone_SetLinkLeaderFromProfile(unkCommStruct->safariZone, CommPlayerInfo_GetProfile(unkBool), HEAP_ID_FIELD2);
     }
 }
 
@@ -74,16 +74,16 @@ static BOOL ov03_02258894(TaskManager *taskManager) {
 }
 
 static void ov03_022588B0(UnkCommStruct *unkCommStruct) {
-    if (sub_02037B38(13)) {
-        sub_02034818(1 - Comm_GetLocalNetId());
+    if (LinkSync_IsSynced(13)) {
+        CommPlayerInfo_GetProfile(1 - Comm_GetLocalNetId());
         ov03_02258810(NULL, unkCommStruct);
     }
 }
 
 static void ov03_022588D4(UnkCommStruct *unkCommStruct) {
-    if (sub_02037B38(12) && sub_02034818(1)) {
+    if (LinkSync_IsSynced(12) && CommPlayerInfo_GetProfile(1)) {
         sub_020376D4(22, SafariZone_GetAreaSet(unkCommStruct->safariZone, 0));
-        sub_02037AC0(13);
+        LinkSync_StartSync(13);
         ov03_02258810(&ov03_022588B0, unkCommStruct);
     }
 }
@@ -92,7 +92,7 @@ void ov03_02258910(FieldSystem *fieldSystem) {
     UnkCommStruct *unkCommStruct = ov03_02258878();
     unkCommStruct->safariZone = Save_SafariZone_Get(fieldSystem->saveData);
     ov03_02258814(unkCommStruct);
-    sub_02037AC0(12);
+    LinkSync_StartSync(12);
     ov03_02258810(&ov03_022588D4, unkCommStruct);
     TaskManager_Call(fieldSystem->taskman, &ov03_02258894, unkCommStruct);
 }

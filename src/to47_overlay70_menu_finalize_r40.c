@@ -4,7 +4,7 @@ int ov70_02243B2C(void *work) {
     BgCellManager_LoadCellTilemap(PTR(work, 0x1c), 0, 0x64, 0x1e, 1);
     BgCellManager_GetCellTilemap(PTR(work, 0x1c), 0);
     ov70_0224190C(work, 3);
-    U32(work, 0x5c) = ov70_0223F904((void **)((u8 *)work + 0x34), PTR(work, 0x2c), S16(work, 0x3e) + ov70_02245E84[S16(work, 0x3c)]);
+    U32(work, 0x5c) = Gts_CreateCountryListItems((void **)((u8 *)work + 0x34), PTR(work, 0x2c), S16(work, 0x3e) + ov70_02245E84[S16(work, 0x3c)]);
     ov70_0224352C(work, 0, U32(work, 0x5c));
     S16(work, 0x5a) = 0;
     ov70_02243F00(PTR(work, 0x1c), PTR(work, 0x38), (u8 *)PTR(work, 4) + 0x50, S16(work, 0x5a), ov70_02242508(U32(work, 0x5c), 5));

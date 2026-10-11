@@ -20,23 +20,23 @@ BOOL sub_02058D4C(void *param0) {
         break;
     case 2:
         if (DialogBox_IsPrintFinished(v0->unk_30)) {
-            sub_02037AC0(93);
+            LinkSync_StartSync(93);
             v0->unk_34 = 3;
         }
         break;
     case 3:
-        if (sub_02037B38(93)) {
+        if (LinkSync_IsSynced(93)) {
             v0->unk_34 = 7;
             sub_0205F55C(v0->fieldSystem->mapObjectManager);
             v0->unk_08(1, v0->unk_50);
         } else if (gSystem.newKeys & PAD_BUTTON_B) {
             v0->unk_34 = 4;
-            sub_02037AC0(92);
+            LinkSync_StartSync(92);
             v0->unk_43 = 5;
         }
         break;
     case 4:
-        if (sub_02037B38(93)) {
+        if (LinkSync_IsSynced(93)) {
             v0->unk_34 = 7;
             sub_0205F55C(v0->fieldSystem->mapObjectManager);
             v0->unk_08(1, v0->unk_50);
@@ -58,7 +58,7 @@ BOOL sub_02058D4C(void *param0) {
         sub_02057F70();
         return 1;
     case 8:
-        if (sub_02037B38(93)) {
+        if (LinkSync_IsSynced(93)) {
             v0->unk_34 = 5;
             v0->unk_08(1, v0->unk_50);
         } else {
@@ -189,7 +189,7 @@ BOOL sub_02058D4C(void *param0) {
             } else {
                 v0->unk_82 = (v0->unk_38 != 0);
                 sub_020596A8(v0, v0->unk_82);
-                sub_02037AC0(0);
+                LinkSync_StartSync(0);
                 BufferPlayersName(v0->unk_28, 0, v0->unk_74);
                 ReadMsgDataIntoString(v0->unk_2C, 14, v0->unk_0C);
                 StringExpandPlaceholders(v0->unk_28, v0->unk_10, v0->unk_0C);
@@ -202,7 +202,7 @@ BOOL sub_02058D4C(void *param0) {
         if (DialogBox_IsPrintFinished(v0->unk_30)) {
             if (sub_02058D24()) {
                 v0->unk_34 = 5;
-            } else if (sub_02037B38(0)) {
+            } else if (LinkSync_IsSynced(0)) {
                 sub_020596F0(v0);
                 v0->unk_34 = 28;
             }
@@ -210,12 +210,12 @@ BOOL sub_02058D4C(void *param0) {
         break;
     case 28:
         if (sub_02059738(v0)) {
-            sub_02037AC0(1);
+            LinkSync_StartSync(1);
             v0->unk_34 = 29;
         }
         break;
     case 29:
-        if (sub_02037B38(1)) {
+        if (LinkSync_IsSynced(1)) {
             v0->unk_83 = sub_02059748(v0);
 
             if (v0->unk_82 && v0->unk_83) {
@@ -255,7 +255,7 @@ BOOL sub_02058D4C(void *param0) {
             v0->unk_84 = 255;
             ReadMsgDataIntoString(v0->unk_2C, 15, v0->unk_0C);
             v0->unk_30 = sub_02059478(v0, v0->unk_0C);
-            sub_02037AC0(2);
+            LinkSync_StartSync(2);
             v0->unk_34 = 39;
             break;
         }
@@ -287,7 +287,7 @@ BOOL sub_02058D4C(void *param0) {
                 ReadMsgDataIntoString(v0->unk_2C, 14, v0->unk_0C);
                 StringExpandPlaceholders(v0->unk_28, v0->unk_10, v0->unk_0C);
                 v0->unk_30 = sub_02059478(v0, v0->unk_10);
-                sub_02037AC0(2);
+                LinkSync_StartSync(2);
                 v0->unk_34 = 39;
             } else {
                 FieldMap_FadeScreen(FADE_TYPE_BRIGHTNESS_OUT);
@@ -316,7 +316,7 @@ BOOL sub_02058D4C(void *param0) {
         break;
     case 39:
         if (DialogBox_IsPrintFinished(v0->unk_30)) {
-            if (sub_02037B38(2)) {
+            if (LinkSync_IsSynced(2)) {
                 sub_0205975C(v0);
                 v0->unk_34 = 41;
             }
@@ -325,13 +325,13 @@ BOOL sub_02058D4C(void *param0) {
     case 41:
         if (sub_02059798(v0)) {
             if (v0->unk_84 == 255) {
-                sub_02037AC0(4);
+                LinkSync_StartSync(4);
                 v0->unk_34 = 44;
             } else if (v0->unk_85 == 255) {
                 v0->unk_34 = 42;
             } else {
                 sub_020597D4(v0);
-                sub_02037AC0(93);
+                LinkSync_StartSync(93);
                 v0->unk_34 = 2;
             }
         }
@@ -345,13 +345,13 @@ BOOL sub_02058D4C(void *param0) {
     case 43:
         if (DialogBox_IsPrintFinished(v0->unk_30)) {
             if (++(v0->unk_43) > 60) {
-                sub_02037AC0(4);
+                LinkSync_StartSync(4);
                 v0->unk_34 = 44;
             }
         }
         break;
     case 44:
-        if (sub_02037B38(4)) {
+        if (LinkSync_IsSynced(4)) {
             ClearFrameAndWindow2(&(v0->unk_14), 0);
             v0->unk_08(0, NULL);
             v0->unk_34 = 5;

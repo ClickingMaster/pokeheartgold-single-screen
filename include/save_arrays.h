@@ -7,7 +7,7 @@
 #include "pokemon_storage_system.h"
 #include "save.h"
 #include "unk_0202E41C.h"
-#include "unk_02030A98.h"
+#include "frontier_save_access.h"
 
 typedef u32 (*SAVESIZEFN)(void);
 typedef void (*SAVEINITFN)(void *);
@@ -38,10 +38,10 @@ MysteryGiftSave *Save_MysteryGift_Get(SaveData *saveData);
 struct MigratedPokemon *Save_MigratedPokemon_Get(SaveData *saveData);
 HallOfFame *LoadHallOfFame(SaveData *saveData, enum HeapID heapID, int *ret_p);
 int SaveHallOfFame(SaveData *saveData, HallOfFame *hallOfFame);
-struct UnkStruct_0202FBCC *sub_0202711C(SaveData *saveData, enum HeapID heapID, int *ret_p, int idx);
-int sub_02027134(SaveData *saveData, struct UnkStruct_0202FBCC *data, int idx);
-struct UnkStruct_02030A98 *sub_02027144(SaveData *saveData, enum HeapID heapID, int *ret_p);
-int sub_02027158(SaveData *saveData, struct UnkStruct_02030A98 *data);
+struct BattleRecord *sub_0202711C(SaveData *saveData, enum HeapID heapID, int *ret_p, int idx);
+int sub_02027134(SaveData *saveData, struct BattleRecord *data, int idx);
+struct FrontierSpeciesRecords *sub_02027144(SaveData *saveData, enum HeapID heapID, int *ret_p);
+int sub_02027158(SaveData *saveData, struct FrontierSpeciesRecords *data);
 u32 PCStorage_GetSizeOfBox(void);
 u32 PCStorage_GetNumBoxes(void);
 u32 Save_GetPCBoxModifiedFlags(SaveData *saveData);

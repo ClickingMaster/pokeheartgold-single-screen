@@ -58,7 +58,7 @@ void GF_AssertFail(void);
 void *Heap_Free(void *);
 void MI_CpuFill8(void *, u8, u32);
 void MI_CpuCopy8(const void *, void *, u32);
-void *sub_02034818(int);
+void *CommPlayerInfo_GetProfile(int);
 int PlayerProfile_GetVersion(void *);
 void *Save_BattleRoomDownload_Get(void *);
 int BattleRoomDownload_HasTrainers(void);

@@ -19,7 +19,7 @@ void SetBgPriority(int, int);
 void GfGfxLoader_LoadCharDataFromOpenNarc(void *, int, void *, int, int, int, int, int);
 void ov40_02230964(void *, int);
 void ov40_0222D874(void *);
-void sub_0202FEB8(int, int *, int *);
+void BattleRecord_GetBattlerAndPartyCount(int, int *, int *);
 void *String_New(int, int);
 void *Heap_Alloc(int, int);
 void ov40_02244A84(void *, int);

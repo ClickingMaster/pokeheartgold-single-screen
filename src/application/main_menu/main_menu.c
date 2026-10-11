@@ -135,22 +135,22 @@ extern u32 sub_02038D80(void);
 extern u32 PmAgbCartridgeGetOffsets(u32 a0);
 extern u32 PmAgbCartridge_GetVersionInternal(void);
 extern u32 PmAgbCartridge_GetLanguage(void);
-extern void ov74_0223512C(enum HeapID heapID);
-extern u32 ov74_02235230(void);
-extern void ov74_022352A0(enum HeapID heapID);
-extern void ov74_02235308(BgConfig *bgConfig, u8 bgId, u32 screenSize, u32 screenBase, u32 charBase);
-extern void ov74_02235390(u32 a0);
-extern void ov74_0223539C(u32 a0, u32 newState, int *state, u32 waitingState);
-extern void ov74_022353FC(int *state);
-extern void ov74_02235414(UnkStruct_ov74_02235414 *a0, Window *window, u32 palette1, u32 gmmId, u32 baseTile, u32 palette2);
-extern void ov74_02235464(UnkStruct_ov74_02235414 *a0, u32 width, u32 height, u32 baseTile);
-extern void ov74_02235568(BgConfig *bgConfig, UnkStruct_ov74_02235414 *a1, u32 x, u32 y, u32 msgId);
-extern void ov74_0223563C(void);
-extern void ov74_02235690(void);
-extern void ov74_02235728(NarcId narcId, u32 charFileId, u32 plttFileId, u32 cellFileId, u32 animFileId, u32 a5);
-extern void ov74_022358BC(void);
-extern Sprite *ov74_02235930(u32 a0, Sprite *sprite, u32 x, u32 y, u32 ctrlSeq);
-extern void ov74_022359BC(void);
+extern void MainMenuUtil_SetCryptoHeap(enum HeapID heapID);
+extern u32 MainMenuUtil_GetCartridgeGiftSize(void);
+extern void MainMenuUtil_InitWork(enum HeapID heapID);
+extern void MainMenuUtil_InitBg(BgConfig *bgConfig, u8 bgId, u32 screenSize, u32 screenBase, u32 charBase);
+extern void MainMenuUtil_SetFadeWhite(u32 a0);
+extern void MainMenuUtil_StartFade(u32 a0, u32 newState, int *state, u32 waitingState);
+extern void MainMenuUtil_WaitFade(int *state);
+extern void MainMenuTextPrinter_Init(UnkStruct_ov74_02235414 *a0, Window *window, u32 palette1, u32 gmmId, u32 baseTile, u32 palette2);
+extern void MainMenuTextPrinter_SetSize(UnkStruct_ov74_02235414 *a0, u32 width, u32 height, u32 baseTile);
+extern void MainMenuTextPrinter_AddWindowAndPrint(BgConfig *bgConfig, UnkStruct_ov74_02235414 *a1, u32 x, u32 y, u32 msgId);
+extern void MainMenuUtil_InitObjTransfer(void);
+extern void MainMenuUtil_InitSprites(void);
+extern void MainMenuUtil_LoadSpriteResources(NarcId narcId, u32 charFileId, u32 plttFileId, u32 cellFileId, u32 animFileId, u32 a5);
+extern void MainMenuUtil_UpdateSprites(void);
+extern Sprite *MainMenuUtil_CreateSprite(u32 a0, Sprite *sprite, u32 x, u32 y, u32 ctrlSeq);
+extern void MainMenuUtil_FreeSprites(void);
 extern void ov74_02236034(BOOL enable);
 extern void ov74_02236074(void);
 
@@ -237,7 +237,7 @@ static u32 ov74_022270C4(MainMenuAppData *data, int *state, BOOL a2) {
     } else {
         PlaySE(SEQ_SE_DP_SELECT);
         data->selectedApp = APPOPTION_TITLE_SCREEN;
-        ov74_02235390(1);
+        MainMenuUtil_SetFadeWhite(1);
     }
 
     if (data->selectedApp == APPOPTION_NEW_GAME) {
@@ -246,9 +246,9 @@ static u32 ov74_022270C4(MainMenuAppData *data, int *state, BOOL a2) {
         *state = 6;
     } else {
         if (data->selectedApp == APPOPTION_CONNECT_TO_WII) {
-            ov74_02235390(1);
+            MainMenuUtil_SetFadeWhite(1);
         }
-        ov74_0223539C(0, 7, state, 8);
+        MainMenuUtil_StartFade(0, 7, state, 8);
     }
 
     if (data->unk13C == 13) {
@@ -507,9 +507,9 @@ static BOOL ov74_02227584(MainMenuAppData *data) {
                 data->unk18C[i] = 0;
                 UnkStruct_ov74_02235414 unk;
                 const UnkStruct_ov74_0223BBD4 *unk2 = &ov74_0223BBD4[i];
-                ov74_02235414(&unk, &data->unk190, 0, unk2->gmmId, 0x3F7, 2);
-                ov74_02235464(&unk, unk2->width, unk2->height, 1);
-                ov74_02235568(data->bgConfig, &unk, unk2->x, unk2->y, unk2->msgId);
+                MainMenuTextPrinter_Init(&unk, &data->unk190, 0, unk2->gmmId, 0x3F7, 2);
+                MainMenuTextPrinter_SetSize(&unk, unk2->width, unk2->height, 1);
+                MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, &unk, unk2->x, unk2->y, unk2->msgId);
                 return TRUE;
             }
         }
@@ -660,7 +660,7 @@ static BOOL ov74_0222779C(MainMenuAppData *data) {
         break;
     case 17: {
         UnkStruct_ov74_02235414 unk;
-        ov74_02235414(&unk, &data->unk154, 0, NARC_msg_msg_0017_bin, 0x3F7, 2);
+        MainMenuTextPrinter_Init(&unk, &data->unk154, 0, NARC_msg_msg_0017_bin, 0x3F7, 2);
         UnkStruct_ov74_0223BC30 *unk2;
         u32 unk3 = data->unk40 & ~data->unk44;
         if (unk3 & (1 << 0)) {
@@ -678,21 +678,21 @@ static BOOL ov74_0222779C(MainMenuAppData *data) {
             DestroyMsgData(msgData);
             unk.textY = 4;
         }
-        ov74_02235464(&unk, unk2->width, unk2->height, 0x91);
+        MainMenuTextPrinter_SetSize(&unk, unk2->width, unk2->height, 0x91);
         unk.layer = GF_BG_LYR_MAIN_1;
-        ov74_02235568(data->bgConfig, &unk, unk2->x, unk2->y, unk2->msgId);
+        MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, &unk, unk2->x, unk2->y, unk2->msgId);
 
         BgTilemapRectChangePalette(data->bgConfig, GF_BG_LYR_MAIN_1, GetWindowX(unk.window), GetWindowY(unk.window), GetWindowWidth(unk.window), GetWindowHeight(unk.window), 0);
 
         if ((unk3 & (1 << 7)) && !(unk3 & (1 << 1 | 1 << 0))) {
             for (int i = 0; i < (int)NELEMS(data->unk164); i++) {
                 Window *window = &data->unk164[i];
-                ov74_02235414(&unk, window, 0, NARC_msg_msg_0017_bin, 0x3F7, 2);
+                MainMenuTextPrinter_Init(&unk, window, 0, NARC_msg_msg_0017_bin, 0x3F7, 2);
                 UnkStruct_ov74_0223BC30 *unk3 = &ov74_0223BC30[i + 5];
                 unk.textY = 4;
-                ov74_02235464(&unk, unk3->width, unk3->height, (i * 72) + 1);
+                MainMenuTextPrinter_SetSize(&unk, unk3->width, unk3->height, (i * 72) + 1);
                 unk.layer = GF_BG_LYR_MAIN_1;
-                ov74_02235568(data->bgConfig, &unk, unk3->x, unk3->y, unk3->msgId);
+                MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, &unk, unk3->x, unk3->y, unk3->msgId);
             }
             data->currentNewGameOption = 0;
             ov74_02228548(data, -1);
@@ -806,17 +806,17 @@ static void MainMenu_SetupGraphics(MainMenuAppData *data) {
 
     GX_SetDispSelect(GX_DISP_SELECT_SUB_MAIN);
 
-    ov74_02235308(data->bgConfig, GF_BG_LYR_MAIN_0, GF_BG_SCR_SIZE_256x512, 0xF000, 0x0);
+    MainMenuUtil_InitBg(data->bgConfig, GF_BG_LYR_MAIN_0, GF_BG_SCR_SIZE_256x512, 0xF000, 0x0);
     G2_SetBG0Priority(2);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_0, 32, 0, HEAP_ID_MAIN_MENU);
     BgClearTilemapBufferAndCommit(data->bgConfig, GF_BG_LYR_MAIN_0);
 
-    ov74_02235308(data->bgConfig, GF_BG_LYR_MAIN_1, GF_BG_SCR_SIZE_256x256, 0xD800, 0x8000);
+    MainMenuUtil_InitBg(data->bgConfig, GF_BG_LYR_MAIN_1, GF_BG_SCR_SIZE_256x256, 0xD800, 0x8000);
     G2_SetBG1Priority(1);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_1, 32, 0, HEAP_ID_MAIN_MENU);
     BgClearTilemapBufferAndCommit(data->bgConfig, GF_BG_LYR_MAIN_1);
 
-    ov74_02235308(data->bgConfig, GF_BG_LYR_MAIN_2, GF_BG_SCR_SIZE_256x512, 0xE000, 0x0);
+    MainMenuUtil_InitBg(data->bgConfig, GF_BG_LYR_MAIN_2, GF_BG_SCR_SIZE_256x512, 0xE000, 0x0);
     G2_SetBG2Priority(0);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_2, 32, 0, HEAP_ID_MAIN_MENU);
     BgClearTilemapBufferAndCommit(data->bgConfig, GF_BG_LYR_MAIN_2);
@@ -836,16 +836,16 @@ static void MainMenu_SetupGraphics(MainMenuAppData *data) {
 }
 
 static void MainMenu_SetupSprites(MainMenuAppData *data) {
-    ov74_0223563C();
-    ov74_02235690();
+    MainMenuUtil_InitObjTransfer();
+    MainMenuUtil_InitSprites();
     // FIXME: Unpack a/1/1/3 and use NAIX constants here.
-    ov74_02235728(NARC_a_1_1_3, 47, 44, 46, 45, 0);
+    MainMenuUtil_LoadSpriteResources(NARC_a_1_1_3, 47, 44, 46, 45, 0);
 
-    data->upArrowSprite = ov74_02235930(0, data->upArrowSprite, 236, 20, 0);
+    data->upArrowSprite = MainMenuUtil_CreateSprite(0, data->upArrowSprite, 236, 20, 0);
     Sprite_SetDrawFlag(data->upArrowSprite, TRUE);
     Sprite_SetAnimActiveFlag(data->upArrowSprite, FALSE);
 
-    data->downArrowSprite = ov74_02235930(0, data->downArrowSprite, 236, 172, 1);
+    data->downArrowSprite = MainMenuUtil_CreateSprite(0, data->downArrowSprite, 236, 172, 1);
     Sprite_SetDrawFlag(data->downArrowSprite, TRUE);
     Sprite_SetAnimActiveFlag(data->downArrowSprite, FALSE);
 }
@@ -922,7 +922,7 @@ static BOOL MainMenu_PrintContinueButton(MainMenuAppData *data, u32 a1, UnkStruc
     messageFormat = MessageFormat_New(HEAP_ID_MAIN_MENU);
     u32 textColor = (PlayerProfile_GetTrainerGender(data->profile) == PLAYER_GENDER_FEMALE) ? MAKE_TEXT_COLOR(3, 4, 15) : MAKE_TEXT_COLOR(7, 8, 15);
 
-    ov74_02235568(data->bgConfig, a2, 3, a3, sMainMenuButtons[a1].msgId);
+    MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, a2, 3, a3, sMainMenuButtons[a1].msgId);
 
     static u32 sContinueButtonMsgs[] = {
         msg_0442_00000, // "CONTINUE"
@@ -989,7 +989,7 @@ static BOOL MainMenu_PrintMigrateFromAgbButton(MainMenuAppData *data, u32 a1, Un
         break;
     }
 
-    ov74_02235568(data->bgConfig, a2, 3, a3, msgId);
+    MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, a2, 3, a3, msgId);
     ClearWirelessIcon(data, 23, a3);
     data->unkEC[a1] = sMainMenuButtons[a1].id;
 
@@ -1006,9 +1006,9 @@ static BOOL MainMenu_PrintMysteryGiftButton(MainMenuAppData *data, u32 a1, UnkSt
             data->drawMysteryGiftButton = TRUE;
         }
 
-        ov74_0223512C(HEAP_ID_MAIN_MENU);
+        MainMenuUtil_SetCryptoHeap(HEAP_ID_MAIN_MENU);
 
-        if (ov74_02235230() != 0) {
+        if (MainMenuUtil_GetCartridgeGiftSize() != 0) {
             data->drawMysteryGiftButton = TRUE;
             ov74_02236034(TRUE);
         }
@@ -1019,7 +1019,7 @@ static BOOL MainMenu_PrintMysteryGiftButton(MainMenuAppData *data, u32 a1, UnkSt
     }
 
     if (data->drawMysteryGiftButton == TRUE) {
-        ov74_02235568(data->bgConfig, a2, 3, y, sMainMenuButtons[a1].msgId);
+        MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, a2, 3, y, sMainMenuButtons[a1].msgId);
         ClearWirelessIcon(data, 23, y);
         data->unkEC[a1] = sMainMenuButtons[a1].id;
         data->unk38 |= (1 << 0);
@@ -1033,7 +1033,7 @@ static BOOL MainMenu_PrintMysteryGiftButton(MainMenuAppData *data, u32 a1, UnkSt
 
 static BOOL MainMenu_PrintConnectToRangerButton(MainMenuAppData *data, u32 a1, UnkStruct_ov74_02235414 *a2, u32 a3) {
     if (data->drawConnectToRangerButton == TRUE && data->hasPokedex == TRUE) {
-        ov74_02235568(data->bgConfig, a2, 3, a3, sMainMenuButtons[a1].msgId);
+        MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, a2, 3, a3, sMainMenuButtons[a1].msgId);
         DrawWirelessIcon(data, 23, a3, 1);
         data->unk110[a1] = 1;
         data->unkEC[a1] = sMainMenuButtons[a1].id;
@@ -1047,7 +1047,7 @@ static BOOL MainMenu_PrintConnectToRangerButton(MainMenuAppData *data, u32 a1, U
 
 static BOOL MainMenu_PrintConnectToWiiButton(MainMenuAppData *data, u32 a1, UnkStruct_ov74_02235414 *a2, u32 a3) {
     if (data->drawConnectToWiiButton == TRUE) {
-        ov74_02235568(data->bgConfig, a2, 3, a3, sMainMenuButtons[a1].msgId);
+        MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, a2, 3, a3, sMainMenuButtons[a1].msgId);
         data->unk110[a1] = 1;
         DrawWirelessIcon(data, 23, a3, 1);
         data->unkEC[a1] = sMainMenuButtons[a1].id;
@@ -1059,7 +1059,7 @@ static BOOL MainMenu_PrintConnectToWiiButton(MainMenuAppData *data, u32 a1, UnkS
 }
 
 static BOOL MainMenu_PrintNintendoWFCSetupButton(MainMenuAppData *data, u32 a1, UnkStruct_ov74_02235414 *a2, u32 a3) {
-    ov74_02235568(data->bgConfig, a2, 3, a3, sMainMenuButtons[a1].msgId);
+    MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, a2, 3, a3, sMainMenuButtons[a1].msgId);
     data->unk110[a1] = 2;
     DrawWirelessIcon(data, 23, a3, 2);
     data->unkEC[a1] = sMainMenuButtons[a1].id;
@@ -1068,7 +1068,7 @@ static BOOL MainMenu_PrintNintendoWFCSetupButton(MainMenuAppData *data, u32 a1, 
 }
 
 static BOOL MainMenu_PrintConnectToPokewalkerButton(MainMenuAppData *data, u32 a1, UnkStruct_ov74_02235414 *a2, u32 a3) {
-    ov74_02235568(data->bgConfig, a2, 3, a3, sMainMenuButtons[a1].msgId);
+    MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, a2, 3, a3, sMainMenuButtons[a1].msgId);
     ClearWirelessIcon(data, 23, a3);
     data->unkEC[a1] = sMainMenuButtons[a1].id;
 
@@ -1076,7 +1076,7 @@ static BOOL MainMenu_PrintConnectToPokewalkerButton(MainMenuAppData *data, u32 a
 }
 
 static BOOL MainMenu_PrintWiiMessageSettingsButton(MainMenuAppData *data, u32 a1, UnkStruct_ov74_02235414 *a2, u32 a3) {
-    ov74_02235568(data->bgConfig, a2, 3, a3, sMainMenuButtons[a1].msgId);
+    MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, a2, 3, a3, sMainMenuButtons[a1].msgId);
     ClearWirelessIcon(data, 23, a3);
     data->unkEC[a1] = sMainMenuButtons[a1].id;
 
@@ -1095,8 +1095,8 @@ static BOOL ov74_022282CC(MainMenuAppData *data) {
     for (i = 0, y = 1; i < APPOPTION_COUNT; i++) {
         const MainMenuButton *button = &sMainMenuButtons[i];
         UnkStruct_ov74_02235414 unk;
-        ov74_02235414(&unk, &data->unk5C[i], 1, NARC_msg_msg_0442_bin, 0x3F7, 2);
-        ov74_02235464(&unk, 23, button->height, data->unk20);
+        MainMenuTextPrinter_Init(&unk, &data->unk5C[i], 1, NARC_msg_msg_0442_bin, 0x3F7, 2);
+        MainMenuTextPrinter_SetSize(&unk, 23, button->height, data->unk20);
         if (button->printFunction != NULL) {
             if (data->unkEC[i] != 0) {
                 SetWindowX(unk.window, 3);
@@ -1117,7 +1117,7 @@ static BOOL ov74_022282CC(MainMenuAppData *data) {
                 }
             }
         } else {
-            ov74_02235568(data->bgConfig, &unk, 3, y, button->msgId);
+            MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, &unk, 3, y, button->msgId);
             data->unkEC[i] = button->id;
             y += button->height + 2;
         }
@@ -1285,7 +1285,7 @@ static void MainMenu_FreeGraphics(OverlayManager *manager) {
     if (data->upArrowSprite != NULL || data->downArrowSprite != NULL) {
         Sprite_Delete(data->upArrowSprite);
         Sprite_Delete(data->downArrowSprite);
-        ov74_022359BC();
+        MainMenuUtil_FreeSprites();
     }
 
     for (u32 i = 0; i < NELEMS(data->unk5C); i++) {
@@ -1377,7 +1377,7 @@ BOOL MainMenuApp_Init(OverlayManager *manager, int *state) {
     data->badges = PlayerProfile_CountBadges(data->profile);
     data->unk144 = 15;
 
-    ov74_022352A0(HEAP_ID_MAIN_MENU);
+    MainMenuUtil_InitWork(HEAP_ID_MAIN_MENU);
     if (!Save_FileExists(data->saveData)) {
         data->dontHaveSavedata = TRUE;
     }
@@ -1415,20 +1415,20 @@ BOOL MainMenuApp_Main(OverlayManager *manager, int *state) {
         if (ov74_02227580(data) == 0) { // always 0
             *state = 3;
         } else {
-            ov74_0223539C(1, 2, state, 8);
+            MainMenuUtil_StartFade(1, 2, state, 8);
             ((vu16 *)HW_PLTT)[0] = MAIN_MENU_BACKGROUND_COLOR;
         }
         break;
     case 2:
         if (!ov74_02227584(data)) {
-            ov74_0223539C(0, 3, state, 8);
+            MainMenuUtil_StartFade(0, 3, state, 8);
         }
         break;
     case 3:
         data->unk13C = 12;
         if (data->dontHaveSavedata == TRUE) {
             data->selectedApp = APPOPTION_NEW_GAME;
-            ov74_0223539C(0, 7, state, 8);
+            MainMenuUtil_StartFade(0, 7, state, 8);
         } else {
             DetectInsertedGBACart(data);
             *state = 4;
@@ -1440,7 +1440,7 @@ BOOL MainMenuApp_Main(OverlayManager *manager, int *state) {
         Main_SetVBlankIntrCB((GFIntrCB)MainMenu_OnVBlank, data->bgConfig);
         ov74_022282CC(data);
         ov74_0222841C(data, data->currentOption);
-        ov74_0223539C(1, 5, state, 8);
+        MainMenuUtil_StartFade(1, 5, state, 8);
         ((vu16 *)HW_PLTT)[0] = MAIN_MENU_BACKGROUND_COLOR;
         data->unk13C = 10;
         break;
@@ -1459,7 +1459,7 @@ BOOL MainMenuApp_Main(OverlayManager *manager, int *state) {
             if (data->unk150 & PAD_BUTTON_B) {
                 *state = 5;
             } else {
-                ov74_0223539C(0, 7, state, 8);
+                MainMenuUtil_StartFade(0, 7, state, 8);
             }
         }
         break;
@@ -1467,7 +1467,7 @@ BOOL MainMenuApp_Main(OverlayManager *manager, int *state) {
         MainMenu_FreeGraphics(manager);
         return TRUE;
     case 8: // Wait for palette fade
-        ov74_022353FC(state);
+        MainMenuUtil_WaitFade(state);
         break;
     case 9: // Unused exit state
         return TRUE;
@@ -1475,7 +1475,7 @@ BOOL MainMenuApp_Main(OverlayManager *manager, int *state) {
 
     ov74_022276AC(data);
     HandleScreenScroll(data);
-    ov74_022358BC();
+    MainMenuUtil_UpdateSprites();
     return FALSE;
 }
 

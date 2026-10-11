@@ -35,9 +35,9 @@
 #include "unk_0200FA24.h"
 #include "unk_02026E30.h"
 #include "unk_02033AE0.h"
-#include "unk_02034354.h"
+#include "communication_player_state.h"
 #include "unk_02035900.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 #include "unk_02037C94.h"
 #include "unk_0203A3B0.h"
 #include "vram_transfer_manager.h"
@@ -295,7 +295,7 @@ void MimeJrTop_InitGame(MimeJrTopApp *app) {
     NNS_G2dGetUnpackedPaletteData(raw, &pal);
     PaletteData_LoadPalette(app->resources.palette, pal->pRawData, PLTTBUF_MAIN_OBJ, 0xE0, 32);
     Heap_Free(raw);
-    n = sub_020347A0();
+    n = CommPlayerInfo_CountAccepted();
     app->netId = Comm_GetLocalNetId();
     MimeJrTop_RegisterCommands(app);
     if (MimeJrTop_IsParent(app) == TRUE) {
@@ -414,7 +414,7 @@ BOOL MimeJrTop_Init(OverlayManager *man, int *state) {
     output = input;
     do {
         ((MimeJrTopApp *)input)->netIds[0] = 0xFF;
-        if (sub_02034818(i) != NULL) {
+        if (CommPlayerInfo_GetProfile(i) != NULL) {
             ((MimeJrTopApp *)output)->netIds[0] = i;
             output += 4;
         }
@@ -688,7 +688,7 @@ BOOL MimeJrTop_Main(OverlayManager *man, int *state) {
             }
             break;
         case 19:
-            sub_02037AC0(0x1B);
+            LinkSync_StartSync(0x1B);
             if (app->args->unk3C) {
                 WifiConnection_StopVoiceChat();
             }
@@ -696,7 +696,7 @@ BOOL MimeJrTop_Main(OverlayManager *man, int *state) {
             break;
         case 20:
         default:
-            if (sub_02037B38(0x1B) == TRUE) {
+            if (LinkSync_IsSynced(0x1B) == TRUE) {
                 return TRUE;
             }
             return FALSE;
@@ -784,15 +784,15 @@ BOOL MimeJrTop_Exit(OverlayManager *man, int *state) {
         if (result != 0) {
             return TRUE;
         }
-        sub_02037AC0(0xE7);
+        LinkSync_StartSync(0xE7);
         (*state)++;
         goto return_false;
     } else {
-        if (sub_02037B38(0xE7) == TRUE) {
+        if (LinkSync_IsSynced(0xE7) == TRUE) {
             goto return_true;
         }
         result = Comm_CountConnected();
-        if (result >= sub_020347A0()) {
+        if (result >= CommPlayerInfo_CountAccepted()) {
             goto return_false;
         }
         goto return_true;

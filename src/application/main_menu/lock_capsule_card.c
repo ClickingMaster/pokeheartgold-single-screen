@@ -76,7 +76,7 @@ struct LockCapsuleCardView {
 }; // size: 0x3D0C
 
 // Overlay helpers (not in a header yet).
-u32 ov74_0223567C(void);
+u32 MainMenuUtil_SpritesActive(void);
 
 // Declared here rather than through font.h / text.h: the card screens pass the u32 font ids of their text box
 // tables unconverted (those headers type them as the u8 FontID; matching).
@@ -123,7 +123,7 @@ void LockCapsuleCard_DeleteSprites(LockCapsuleCardView *view) {
         Sprite_Delete(view->monIconSprites[2]);
     }
     view->monIconSprites[0] = view->monIconSprites[1] = view->monIconSprites[2] = NULL;
-    ov74_022359BC();
+    MainMenuUtil_FreeSprites();
 }
 
 #pragma force_active reset
@@ -401,12 +401,12 @@ void LockCapsuleCard_CreateMonIconSprites(LockCapsuleCardView *view) {
     NNSG2dCharacterData *charData;
 
     if (view->monIconSprites[0] == NULL && view->monIconSprites[1] == NULL && view->monIconSprites[2] == NULL) {
-        if (ov74_0223567C() == 1) {
+        if (MainMenuUtil_SpritesActive() == 1) {
             LockCapsuleCard_DeleteSprites(view);
         }
-        ov74_0223563C();
-        ov74_02235690();
-        ov74_02235728(NARC_a_1_1_3, 30, 27, 29, 28, 0);
+        MainMenuUtil_InitObjTransfer();
+        MainMenuUtil_InitSprites();
+        MainMenuUtil_LoadSpriteResources(NARC_a_1_1_3, 30, 27, 29, 28, 0);
         GfGfxLoader_GXLoadPal(NARC_poketool_icongra_poke_icon, sub_02074490(), GF_PAL_LOCATION_MAIN_OBJ, (enum GFPalSlotOffset)0x60, 0, view->heapId);
     }
     x = 178;
@@ -417,7 +417,7 @@ void LockCapsuleCard_CreateMonIconSprites(LockCapsuleCardView *view) {
                 Sprite_SetDrawFlag(view->monIconSprites[i], FALSE);
             }
         } else {
-            view->monIconSprites[i] = ov74_02235930(0, view->monIconSprites[i], x, 16, i + 10);
+            view->monIconSprites[i] = MainMenuUtil_CreateSprite(0, view->monIconSprites[i], x, 16, i + 10);
             data = GfGfxLoader_GetCharData(NARC_poketool_icongra_poke_icon, GetMonIconNaixEx(species, FALSE, 0), FALSE, &charData, view->heapId);
             DC_FlushRange(charData->pRawData, 0x200);
             GX_LoadOBJ(charData->pRawData, (100 + i * 16) * 32, 0x200);
@@ -440,7 +440,7 @@ BOOL LockCapsuleCard_Init(OverlayManager *manager, int *state) {
     SetMasterBrightnessByColor(PM_LCD_TOP, RGB_BLACK);
     SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
     view->unk_2BF4 = 1;
-    ov74_022352A0(HEAP_ID_85);
+    MainMenuUtil_InitWork(HEAP_ID_85);
     Heap_Create(HEAP_ID_DEFAULT, HEAP_ID_89, 0x570);
     return TRUE;
 }
@@ -676,7 +676,7 @@ BOOL LockCapsuleCard_Main(OverlayManager *manager, int *state) {
     if (view->spriteList != NULL) {
         SpriteList_RenderAndAnimateSprites(view->spriteList);
     }
-    ov74_022358BC();
+    MainMenuUtil_UpdateSprites();
     if (view->callback != NULL) {
         view->callback(view);
     }

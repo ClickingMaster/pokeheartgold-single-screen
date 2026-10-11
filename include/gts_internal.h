@@ -52,7 +52,7 @@ typedef struct GtsRecord {
     u8 trainerGender;                        // 0x0F6
     u8 unk_0F7[0x15];                        // 0x0F7
     u16 trainerName[PLAYER_NAME_LENGTH + 1]; // 0x10C
-    u8 unk_11C[2];                           // 0x11C
+    u16 trainerId;                           // 0x11C
     u8 country;                              // 0x11E
     u8 city;                                 // 0x11F
     u8 trainerClass;                         // 0x120
@@ -140,12 +140,23 @@ typedef struct GtsSearchCursor {
     u16 unk_0A;
     u8 unk_0C[8];
     void *unk_14;
-    u8 unk_18[8];
-    u32 genderRatio; // 0x20, of the wanted species
-    int column;      // 0x24
-    int leftRow;     // 0x28
-    int rightRow;    // 0x2C
+    u16 *alphabeticalSpecies;     // 0x18
+    u32 alphabeticalSpeciesCount; // 0x1C
+    u32 genderRatio;              // 0x20, of the wanted species
+    int column;                   // 0x24
+    int leftRow;                  // 0x28
+    int rightRow;                 // 0x2C
 } GtsSearchCursor;
+
+// The icon of a Pokemon of the shown box, loaded into VRAM in the next VBlank (gts_select_mon.c).
+typedef struct GtsMonIcon GtsMonIcon;
+
+typedef struct GtsUnk1234 {
+    u16 unk_00;
+    u16 unk_02;
+    u16 unk_04[10];
+    u16 unk_18[10];
+} GtsUnk1234;
 
 // What the selector of species, gender, level and country is created with.
 typedef struct GtsSelectorArgs {
@@ -198,9 +209,9 @@ struct GtsApp {
     u8 filler_011A[2];                       // 0x011A
     u16 menuCursor;                          // 0x011C
     u8 filler_011E[2];                       // 0x011E
-    u16 selectedBox;                         // 0x0120, GTS_BOX_PARTY for the party
-    u16 selectedSlot;                        // 0x0122
-    u8 filler_0124[4];                       // 0x0124
+    u16 selectedBox;                         // 0x0120, shown by screen 5, GTS_BOX_PARTY for the party
+    u16 selectedSlot;                        // 0x0122, screen 5's cursor: slot 0..29, 30 BACK, 31 the box name
+    BoxPokemon *selectedMon;                 // 0x0124, the Pokemon to deposit or to trade
     u32 searchResultCount;                   // 0x0128, in searchResults
     int selectedResult;                      // 0x012C, in searchResults
     PlayerProfile *partnerProfile;           // 0x0130
@@ -208,7 +219,8 @@ struct GtsApp {
     u32 offeredSlot;                         // 0x0138
     GtsRecord record;                        // 0x013C
     GtsRecord searchResults[8];              // 0x0260
-    u8 filler_0B80[0xA];                     // 0x0B80
+    GtsMonSummary depositSummary;            // 0x0B80, of the Pokemon to deposit
+    GtsWantedMon depositWanted;              // 0x0B84, what the player wants for it
     GtsWantedMon searchCriteria;             // 0x0B8A, of SEEK POKEMON
     GtsWantedMon lastSearch;                 // 0x0B90
     u8 filler_0B96[2];                       // 0x0B96
@@ -219,7 +231,8 @@ struct GtsApp {
     MsgData *wifiMsgData;                    // 0x0BA8, message bank 778
     MsgData *wifiErrorMsgData;               // 0x0BAC, message bank 800
     MsgData *countryNames;                   // 0x0BB0
-    u8 filler_0BB4[8];                       // 0x0BB4
+    String *boxName;                         // 0x0BB4
+    String *cancelText;                      // 0x0BB8
     String *msgBuffer;                       // 0x0BBC
     String *titleString;                     // 0x0BC0
     String *unk_0BC4[10];                    // 0x0BC4
@@ -234,18 +247,20 @@ struct GtsApp {
     u8 filler_0DA8[0x24];                    // 0x0DA8
     Sprite *cursorSprite;                    // 0x0DCC
     Sprite *unk_0DD0;                        // 0x0DD0
-    u8 filler_0DD4[0x10C];                   // 0x0DD4
+    u8 filler_0DD4[4];                       // 0x0DD4
+    Sprite *monIconSprites[30];              // 0x0DD8, of the shown box
+    Sprite *heldItemSprites[30];             // 0x0E50
+    Sprite *capsuleSprites[6];               // 0x0EC8, the party's Ball Capsules
     Sprite *monSprite;                       // 0x0EE0
     Sprite *avatarSprites[8];                // 0x0EE4, [0] the player, [1 + i] the trainer of searchResults[i]
-    Sprite *unk_0F04;                        // 0x0F04
-    Sprite *unk_0F08;                        // 0x0F08
+    Sprite *arrowSprites[2];                 // 0x0F04, screen 5's box arrows; the selector's on screen 4
     Sprite *avatarMarkerSprite;              // 0x0F0C, over the selected trainer
     Sprite *panelSprite;                     // 0x0F10, of the sub screen panel
     int scrollY;                             // 0x0F14, of a search result's screens
     Window waitingIconWindow;                // 0x0F18, also the message window
     u8 filler_0F28[0x10];                    // 0x0F28
     Window titleWindow;                      // 0x0F38
-    u8 filler_0F48[0x10];                    // 0x0F48
+    Window boxNameWindow;                    // 0x0F48, of screen 5
     Window windows[16];                      // 0x0F58, each screen's own windows
     Window infoWindows[16];                  // 0x1058, a Pokemon's summary, trainer and wanted Pokemon
     Window promptWindow;                     // 0x1158, the message window of a Yes/No prompt
@@ -270,17 +285,17 @@ struct GtsApp {
     void *avatarPlttAlloc;                   // 0x11E8
     NNSG2dPaletteData *avatarPlttData;       // 0x11EC
     Pokemon *depositedMon;                   // 0x11F0, copy of the deposited Pokemon (GtsTrade)
-    u8 filler_11F4[4];                       // 0x11F4
+    GtsMonSummary *boxSummaries;             // 0x11F4, of the shown box's Pokemon
     u16 boxMonCount;                         // 0x11F8, Pokemon and Eggs in the PC, counted one box per frame
     u16 countingBox;                         // 0x11FA, 1-based box being counted, 0 when done
     int unk_11FC;                            // 0x11FC
-    u8 filler_1200[4];                       // 0x1200
+    GtsMonIcon *monIcons;                    // 0x1200, of the shown box, freed by the VBlank task
     GtsVBlankFunc vblankTask;                // 0x1204, run once
     GtsVBlankFunc vblankFunc;                // 0x1208, run every frame
     s16 avatarPositions[8][2];               // 0x120C, {x, y} of avatarSprites
     u8 filler_122C[8];                       // 0x122C
-    u32 unk_1234[4];                         // 0x1234
-    u8 filler_1244[0x88];                    // 0x1244
+    GtsUnk1234 unk_1234;                     // 0x1234
+    u8 filler_1260[0x6C];                    // 0x1260
     u32 searchCountry;                       // 0x12CC, of SEEK POKEMON, 0 for any
     u8 filler_12D0[0x334];                   // 0x12D0
     u32 requestFrames;                       // 0x1604, frames the request in flight took
@@ -348,28 +363,42 @@ void Gts_SetAvatarMarker(GtsApp *app, u32 index, u32 scrollY);
 void Gts_ResetAvatarPositions(GtsApp *app);
 void Gts_LowerAvatars(GtsApp *app);
 
+// Choosing the Pokemon to deposit or to trade (gts_select_mon.c).
+BOOL Gts_IsPartyBox(int box);
+BoxPokemon *Gts_GetBoxMon(Party *party, PCStorage *pcStorage, int box, int slot);
+BOOL Gts_MonHoldsMail(Pokemon *mon);
+
+// Choosing the wanted Pokemon of a deposit (gts_wanted.c), and the helpers that follow it: the wanted Pokemon's
+// texts, level ranges, species and country lists, the record of a deposit or trade.
+// align: 0 left, 1 centered, 2 right in the window.
+BOOL Gts_SetFixedGender(GtsWantedMon *wanted, u32 genderRatio);
+void Gts_PrintSpeciesName(Window *window, MsgData *speciesNames, int species, int align, int y, u32 color);
+void Gts_PrintSpeciesNameNoTransfer(Window *window, MsgData *speciesNames, int species, int y, u32 color);
+void Gts_PrintCountryName(Window *window, MsgData *countryNames, MsgData *msgData, u32 country, int align, int y, u32 color);
+void Gts_PrintGender(Window *window, MsgData *msgData, int gender, BOOL showGenderless, int y, int xOrAlign, u32 color);
+void Gts_PrintGenderNoTransfer(Window *window, MsgData *msgData, int gender, BOOL showGenderless, int x, int y, u32 color);
+void Gts_PrintLevelRange(Window *window, MsgData *msgData, int levelRange, int align, int y, u32 color, int kind);
+void Gts_PrintLevelRangeAt(Window *window, MsgData *msgData, int levelRange, int align, int x, int y, u32 color, int kind);
+void Gts_DrawWantedMon(MsgData *msgData, MsgData *speciesNames, MessageFormat *msgFormat, Window *windows, int species, int gender, int levelRange);
+void Gts_DrawWantedMonLevelLeft(MsgData *msgData, MsgData *speciesNames, MessageFormat *msgFormat, Window *windows, int species, int gender, int levelRange);
+u16 *Gts_LoadAlphabeticalSpecies(enum HeapID heapID, int unused, u32 *count);
+u16 *Gts_LoadSpeciesByLetter(enum HeapID heapID, int letter, u32 *count);
+void *Gts_CreateJohtoDexFlags(enum HeapID heapID);
+void Gts_InitRecord(GtsRecord *record, GtsApp *app);
+int Gts_CreateLevelRangeListItems(ListMenuItem **items, MsgData *msgData, int kind);
+void Gts_SetLevelRange(GtsWantedMon *wanted, int levelRange, int kind);
+int Gts_FindLevelRange(int minLevel, int maxLevel, int kind);
+void Gts_SetSearchCountry(GtsApp *app, int index);
+int Gts_GetCountryGroupRange(int group, int *start);
+int Gts_CreateCountryListItems(ListMenuItem **items, MsgData *msgData, int group);
+void ov70_0223F948(GtsUnk1234 *arg);
+void ov70_0223F960(GtsUnk1234 *arg, int index, u16 value1, u16 value2);
+
 // Defined in pieces not merged yet.
-void *ov70_0223E49C(Party *party, PCStorage *pcStorage, int box, int slot);
-BOOL ov70_0223EDE4(GtsWantedMon *wanted, u32 genderRatio);
-void ov70_0223F1D8(Window *window, MsgData *speciesNames, int species, int x, int y, u32 color);
-void ov70_0223F244(Window *window, MsgData *countryNames, MsgData *msgData, u32 country, int x, int y, u32 color);
-void ov70_0223F2BC(Window *window, MsgData *msgData, int gender, BOOL showGenderless, int x, int y, u32 color);
-void ov70_0223F370(Window *window, MsgData *msgData, int levelRange, int x, int y, u32 color, int kind);
-void *ov70_0223F684(enum HeapID heapID);
-void ov70_0223F828(GtsWantedMon *wanted, int levelRange, int kind);
-void ov70_0223F8A8(GtsApp *app, int index);
-void ov70_0223F948(u32 *arg);
-void ov70_0223F960(u32 *arg, int arg1, int arg2, int arg3);
 void *ov70_02242014(GtsSelectorArgs *args, int arg1, int arg2);
 void ov70_022420C4(void *selector, int mode);
 void ov70_0224212C(void *selector);
 int ov70_02242144(void *selector);
-BOOL ov70_0223E76C(Pokemon *mon);
-void ov70_0223F470(MsgData *msgData, MsgData *speciesNames, MessageFormat *msgFormat, Window *windows, int species, int gender, int levelRange);
-int ov70_0223F864(int minLevel, int maxLevel, int kind);
-void ov70_0223F20C(Window *window, MsgData *msgData, int msgId, int y, u32 color);
-void ov70_0223F324(Window *window, MsgData *msgData, int gender, BOOL showGenderless, int x, int y, u32 color);
-void ov70_0223F38C(Window *window, MsgData *msgData, int levelRange, int align, int x, int y, u32 color, int kind);
 void ov70_02245084(Window *window, String *string, int x, int y, int align, u32 color);
 void ov70_022450B8(Window *window, String *string, int x, int y, int align, u32 color);
 void ov70_022450EC(Window *window, MsgData *msgData, int caption);

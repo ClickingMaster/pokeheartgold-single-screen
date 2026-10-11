@@ -13,8 +13,8 @@ typedef struct Ov40Tbl {
 extern Ov40Tbl ov40_0224551C;
 extern Ov40Tbl ov40_0224554C;
 
-BOOL sub_0202FC48(void);
-void *sub_02030920(int heapId);
+BOOL BattleRecord_Exists(void);
+void *BattleRecordHeader_New(int heapId);
 void *sub_020314A4(int heapId);
 void MI_CpuCopy8(const void *src, void *dest, u32 size);
 void ManagedSprite_SetDrawFlag(void *sprite, BOOL draw);
@@ -59,7 +59,7 @@ void ov40_0223CE64(u32 a, int b, void *p) {
         break;
     case 1:
         ov40_02230944(p);
-        if (sub_0202FC48()) {
+        if (BattleRecord_Exists()) {
             ov40_0222BF80(p, 9);
         } else {
             WORD(inner, 0x2034) = 9;
@@ -68,7 +68,7 @@ void ov40_0223CE64(u32 a, int b, void *p) {
         break;
     case 2:
         ov40_02230944(p);
-        if (sub_0202FC48()) {
+        if (BattleRecord_Exists()) {
             ov40_0222BF80(p, 0xb);
         } else {
             WORD(inner, 0x2034) = 0xb;
@@ -131,6 +131,6 @@ void ov40_0223CFA8(void *p) {
     PTR(inner, 0x194) = sub_020314A4(0x6d);
     GlobalTerminalNet_CopyRequestHeader(PTR((u8 *)p + WORD(p, 0x4d4) * 4, 0x2608), PTR(inner, 0x194));
     PTR(inner, 0x220) = PTR(inner, 0x194);
-    PTR(inner, 0x224) = sub_02030920(0x6d);
+    PTR(inner, 0x224) = BattleRecordHeader_New(0x6d);
     MI_CpuCopy8((u8 *)PTR((u8 *)p + WORD(p, 0x4d4) * 4, 0x2608) + 0x80, PTR(inner, 0x224), 0x64);
 }

@@ -12,7 +12,7 @@
 #include "sound_system.h"
 #include "system.h"
 #include "unk_02026E84.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 #include "unk_02037C94.h"
 #include "unk_020755E8.h"
 #include "vram_transfer_manager.h"
@@ -96,11 +96,11 @@ BOOL Battle_Run(OverlayManager *man, int *state) {
         if (ov12_0223A3A8(man) == TRUE) {
             UnloadOverlayByID(FS_OVERLAY_ID(OVY_5));
             *state = BSTATE_SYNC;
-            sub_02037AC0(0x3D);
+            LinkSync_StartSync(0x3D);
         }
         break;
     case BSTATE_SYNC:
-        if (sub_02037B38(0x3D)) {
+        if (LinkSync_IsSynced(0x3D)) {
             *state = BSTATE_BATTLE_INIT;
         }
         break;

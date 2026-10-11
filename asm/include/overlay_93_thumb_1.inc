@@ -145,12 +145,12 @@
 .public GF_3DVramMan_Create
 .public GF_3DVramMan_Delete
 .public PlayerProfile_GetPlayerName_NewString
-.public sub_020347A0
-.public sub_02034818
+.public CommPlayerInfo_CountAccepted
+.public CommPlayerInfo_GetProfile
 .public Comm_CountConnected
 .public Comm_GetLocalNetId
-.public sub_02037AC0
-.public sub_02037B38
+.public LinkSync_StartSync
+.public LinkSync_IsSynced
 .public sub_020398D4
 .public sub_020399FC
 .public WirelessStatusIcon_Create

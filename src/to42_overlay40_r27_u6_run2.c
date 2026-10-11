@@ -110,7 +110,7 @@ int ov40_022322E0(void *p) {
             ok = 0;
             if (WORD(p, 0x86C) == 0) {
                 ok = 1;
-            } else if (sub_0203088C(PTR((u8 *)p + WORD(p, 0x86C) * 4, 0x87C), 5, ok) == 1) {
+            } else if (BattleRecordHeader_GetField(PTR((u8 *)p + WORD(p, 0x86C) * 4, 0x87C), 5, ok) == 1) {
                 ok = 1;
             } else if (WORD(p, 0x874) == 1) {
                 ok = 1;

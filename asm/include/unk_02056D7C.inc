@@ -6,8 +6,8 @@
 .public GF_AssertFail
 .public PlayerProfile_GetTrainerGender
 .public PlayerProfile_GetVersion
-.public sub_020346E8
-.public sub_02034818
+.public CommPlayerInfo_ClearPlayer
+.public CommPlayerInfo_GetProfile
 .public sub_02037108
 .public sub_02037184
 .public Comm_IsNetIdConnected

@@ -22,7 +22,7 @@ BOOL FrtCmd_109(void *context) {
 BOOL ov80_0222CC20(void *context) {
     void *state = PTR_AT(context, 0);
     void *args = Frontier_GetLaunchArgs(PTR_AT(state, 0));
-    int result = sub_0202FE14(
+    int result = BattleRecord_Save(
         PTR_AT(args, 8),
         U16_AT(state, 0xB4),
         U16_AT(state, 0xB6),

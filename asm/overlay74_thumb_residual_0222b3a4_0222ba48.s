@@ -163,30 +163,30 @@
 	.extern RangerLink_WmPowerOff
 	.extern RangerLink_WmReset
 	.extern RangerLink_WmEnd
-	.extern ov74_0223512C
-	.extern ov74_02235230
-	.extern ov74_02235258
-	.extern ov74_022352A0
-	.extern ov74_022352D0
-	.extern ov74_02235308
-	.extern ov74_02235390
-	.extern ov74_0223539C
-	.extern ov74_022353FC
-	.extern ov74_02235414
-	.extern ov74_02235464
-	.extern ov74_0223546C
-	.extern ov74_02235474
-	.extern ov74_02235568
-	.extern ov74_02235634
-	.extern ov74_0223563C
-	.extern ov74_0223567C
-	.extern ov74_02235690
-	.extern ov74_02235708
-	.extern ov74_02235728
-	.extern ov74_022358BC
-	.extern ov74_022358C8
-	.extern ov74_02235930
-	.extern ov74_022359BC
+	.extern MainMenuUtil_SetCryptoHeap
+	.extern MainMenuUtil_GetCartridgeGiftSize
+	.extern MainMenuUtil_ReadCartridgeGift
+	.extern MainMenuUtil_InitWork
+	.extern MainMenuUtil_CreateAppData
+	.extern MainMenuUtil_InitBg
+	.extern MainMenuUtil_SetFadeWhite
+	.extern MainMenuUtil_StartFade
+	.extern MainMenuUtil_WaitFade
+	.extern MainMenuTextPrinter_Init
+	.extern MainMenuTextPrinter_SetSize
+	.extern MainMenuTextPrinter_SetFrameAndFont
+	.extern MainMenuTextPrinter_SetTextPos
+	.extern MainMenuTextPrinter_AddWindowAndPrint
+	.extern MainMenuTextPrinter_GetTileCount
+	.extern MainMenuUtil_InitObjTransfer
+	.extern MainMenuUtil_SpritesActive
+	.extern MainMenuUtil_InitSprites
+	.extern MainMenuUtil_GetSpriteList
+	.extern MainMenuUtil_LoadSpriteResources
+	.extern MainMenuUtil_UpdateSprites
+	.extern MainMenuUtil_UpdateGiftSprite
+	.extern MainMenuUtil_CreateSprite
+	.extern MainMenuUtil_FreeSprites
 	.extern ov74_02235A68
 	.extern ov74_02235DC4
 	.extern ov74_02235ED0

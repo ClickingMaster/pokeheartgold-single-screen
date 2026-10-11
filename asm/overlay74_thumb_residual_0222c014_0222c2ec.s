@@ -163,30 +163,30 @@
 	.extern RangerLink_WmPowerOff
 	.extern RangerLink_WmReset
 	.extern RangerLink_WmEnd
-	.extern ov74_0223512C
-	.extern ov74_02235230
-	.extern ov74_02235258
-	.extern ov74_022352A0
-	.extern ov74_022352D0
-	.extern ov74_02235308
-	.extern ov74_02235390
-	.extern ov74_0223539C
-	.extern ov74_022353FC
-	.extern ov74_02235414
-	.extern ov74_02235464
-	.extern ov74_0223546C
-	.extern ov74_02235474
-	.extern ov74_02235568
-	.extern ov74_02235634
-	.extern ov74_0223563C
-	.extern ov74_0223567C
-	.extern ov74_02235690
-	.extern ov74_02235708
-	.extern ov74_02235728
-	.extern ov74_022358BC
-	.extern ov74_022358C8
-	.extern ov74_02235930
-	.extern ov74_022359BC
+	.extern MainMenuUtil_SetCryptoHeap
+	.extern MainMenuUtil_GetCartridgeGiftSize
+	.extern MainMenuUtil_ReadCartridgeGift
+	.extern MainMenuUtil_InitWork
+	.extern MainMenuUtil_CreateAppData
+	.extern MainMenuUtil_InitBg
+	.extern MainMenuUtil_SetFadeWhite
+	.extern MainMenuUtil_StartFade
+	.extern MainMenuUtil_WaitFade
+	.extern MainMenuTextPrinter_Init
+	.extern MainMenuTextPrinter_SetSize
+	.extern MainMenuTextPrinter_SetFrameAndFont
+	.extern MainMenuTextPrinter_SetTextPos
+	.extern MainMenuTextPrinter_AddWindowAndPrint
+	.extern MainMenuTextPrinter_GetTileCount
+	.extern MainMenuUtil_InitObjTransfer
+	.extern MainMenuUtil_SpritesActive
+	.extern MainMenuUtil_InitSprites
+	.extern MainMenuUtil_GetSpriteList
+	.extern MainMenuUtil_LoadSpriteResources
+	.extern MainMenuUtil_UpdateSprites
+	.extern MainMenuUtil_UpdateGiftSprite
+	.extern MainMenuUtil_CreateSprite
+	.extern MainMenuUtil_FreeSprites
 	.extern ov74_02235A68
 	.extern ov74_02235DC4
 	.extern ov74_02235ED0
@@ -942,7 +942,7 @@ _0222C322: ; jump table
 	.short _0222CD34 - _0222C322 - 2 ; case 58
 _0222C398:
 	mov r0, #0x54
-	bl ov74_022352A0
+	bl MainMenuUtil_InitWork
 	ldr r0, _0222C644 ; =0x000015D8
 	str r5, [r4, r0]
 	mov r0, #1
@@ -958,11 +958,11 @@ _0222C3AA:
 	mov r1, #3
 	add r2, r5, #0
 	mov r3, #2
-	bl ov74_0223539C
+	bl MainMenuUtil_StartFade
 	bl _0222CD3A
 _0222C3C8:
 	add r0, r5, #0
-	bl ov74_022353FC
+	bl MainMenuUtil_WaitFade
 	bl _0222CD3A
 _0222C3D2:
 	ldr r2, _0222C648 ; =MysteryGiftApp_SelectExit
@@ -1112,7 +1112,7 @@ _0222C4CE:
 	add r1, r4, r0
 	ldr r0, _0222C664 ; =0x000030A0
 	str r1, [r6, r0]
-	bl ov74_02235708
+	bl MainMenuUtil_GetSpriteList
 	str r0, [r6, #0xc]
 	ldr r0, _0222C668 ; =MysteryGiftAnim_Task
 	add r1, r6, #0
@@ -1351,7 +1351,7 @@ _0222C728:
 	cmp r0, #0
 	beq _0222C780
 	mov r0, #0xab
-	bl sub_02037B38
+	bl LinkSync_IsSynced
 	cmp r0, #1
 	bne _0222C7B0
 	add r0, r4, #0
@@ -1504,7 +1504,7 @@ _0222C896:
 	cmp r0, #4
 	bne _0222C8B0
 	mov r0, #0x93
-	bl sub_02037AC0
+	bl LinkSync_StartSync
 	mov r0, #0xd
 	str r0, [r5]
 	ldr r0, _0222CA24 ; =0x0000043C
@@ -1540,7 +1540,7 @@ _0222C8BA:
 	b _0222CD3A
 _0222C8E8:
 	mov r0, #0x93
-	bl sub_02037B38
+	bl LinkSync_IsSynced
 	cmp r0, #1
 	bne _0222C902
 	bl ov74_02236128
@@ -1713,7 +1713,7 @@ _0222CA56:
 	mov r1, #0xea
 	add r0, #0x8c
 	lsl r1, r1, #2
-	bl ov74_02235258
+	bl MainMenuUtil_ReadCartridgeGift
 _0222CA6C:
 	add r1, r4, #0
 	ldr r0, [r4, #4]
@@ -1985,17 +1985,17 @@ _0222CC7E:
 	ldr r2, [r4, r2]
 	mov r1, #0x39
 	mov r3, #2
-	bl ov74_0223539C
+	bl MainMenuUtil_StartFade
 	b _0222CD3A
 _0222CCAA:
 	mov r0, #1
-	bl ov74_02235390
+	bl MainMenuUtil_SetFadeWhite
 	ldr r2, _0222CD6C ; =0x000015D8
 	mov r0, #0
 	ldr r2, [r4, r2]
 	mov r1, #0x3a
 	mov r3, #2
-	bl ov74_0223539C
+	bl MainMenuUtil_StartFade
 	b _0222CD3A
 _0222CCC0:
 	ldr r0, [r4]
@@ -2042,7 +2042,7 @@ _0222CD14:
 	ldr r2, [r4, r2]
 	mov r1, #0x38
 	mov r3, #2
-	bl ov74_0223539C
+	bl MainMenuUtil_StartFade
 	add r0, r4, #0
 	add r0, #0xda
 	ldrb r1, [r0]
@@ -2065,7 +2065,7 @@ _0222CD3A:
 _0222CD46:
 	ldr r0, _0222CD78 ; =0x000029F4
 	ldr r0, [r4, r0]
-	bl ov74_022358C8
+	bl MainMenuUtil_UpdateGiftSprite
 	mov r0, #0
 	add sp, #0x14
 	pop {r4, r5, r6, r7, pc}

@@ -28,9 +28,9 @@ void ov70_02242EE4(Ov70R36 *work) {
     BgCellManager_GetCellTilemap(work->listMenu, 0);
     ov70_0224190C(work, 2);
     if (work->mode == 1) {
-        work->count = (int)ov70_0223F7E4((u8 *)work + 0x34, work->msgData, 1);
+        work->count = (int)Gts_CreateLevelRangeListItems((u8 *)work + 0x34, work->msgData, 1);
     } else if (work->mode == 0) {
-        work->count = (int)ov70_0223F7E4((u8 *)work + 0x34, work->msgData, 0);
+        work->count = (int)Gts_CreateLevelRangeListItems((u8 *)work + 0x34, work->msgData, 0);
     }
     ov70_022434C0(work, 0, work->count);
     work->page = 0;

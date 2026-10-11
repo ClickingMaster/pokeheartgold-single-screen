@@ -15,7 +15,7 @@ void ov40_02230398(void *work) {
 }
 
 BOOL ov40_022303B8(void *work) {
-    switch (sub_0203088C(work, 3, 0)) {
+    switch (BattleRecordHeader_GetField(work, 3, 0)) {
     case 0xE:
     case 0x11:
     case 0x14:

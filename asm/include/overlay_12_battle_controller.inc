@@ -1,7 +1,7 @@
 #include <nitro/fs/overlay.h>
 #pragma once
 .public GF_AssertFail
-.public sub_0202FC48
+.public BattleRecord_Exists
 .public Comm_CountConnected
 .public Comm_GetLocalNetId
 .public GetMonData

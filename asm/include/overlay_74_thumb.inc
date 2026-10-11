@@ -233,8 +233,8 @@
 .public MigratedPokemon_CountPokemon
 .public Comm_RegisterCommandTable
 .public sub_020342C0
-.public sub_02034434
-.public sub_02034818
+.public CommPlayerInfo_SendLocal
+.public CommPlayerInfo_GetProfile
 .public sub_02034D8C
 .public sub_02034DB8
 .public sub_02034DE0
@@ -246,8 +246,8 @@
 .public sub_02037474
 .public Comm_GetLocalNetId
 .public CommRandom_Init
-.public sub_02037AC0
-.public sub_02037B38
+.public LinkSync_StartSync
+.public LinkSync_IsSynced
 .public sub_02037D78
 .public sub_02037E1C
 .public sub_02037E9C

@@ -50,7 +50,7 @@ BOOL sub_02058D24(void) {
     int count = Comm_CountConnected();
     i = 0;
     for (i = 0; i < count; i++) {
-        if (sub_02037B5C(i) == 0x5E) {
+        if (LinkSync_GetPlayerState(i) == 0x5E) {
             return TRUE;
         }
     }

@@ -1168,7 +1168,7 @@ MimeJrTop_InitGame: ; 0x0225C5C4
 	bl PaletteData_LoadPalette
 	add r0, r4, #0
 	bl Heap_Free
-	bl sub_020347A0
+	bl CommPlayerInfo_CountAccepted
 	add r4, r0, #0
 	bl Comm_GetLocalNetId
 	str r0, [r5, #0x44]
@@ -1720,7 +1720,7 @@ _0225CAEE:
 	add r0, #0xbc
 	str r7, [r0]
 	add r0, r4, #0
-	bl sub_02034818
+	bl CommPlayerInfo_GetProfile
 	cmp r0, #0
 	beq _0225CB06
 	add r0, r5, #0
@@ -2537,7 +2537,7 @@ _0225D186:
 	b _0225D1CA
 _0225D194:
 	mov r0, #0x1b
-	bl sub_02037AC0
+	bl LinkSync_StartSync
 	add r0, r4, #0
 	add r0, #0x88
 	ldr r0, [r0]
@@ -2554,7 +2554,7 @@ _0225D1AA:
 	b _0225D1CA
 _0225D1B8:
 	mov r0, #0x1b
-	bl sub_02037B38
+	bl LinkSync_IsSynced
 	cmp r0, #1
 	bne _0225D1C6
 	mov r0, #1

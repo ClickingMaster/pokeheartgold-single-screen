@@ -35,9 +35,9 @@ extern void ModelResource_Free(void *);
 extern void ModelAnimation_Free(void *, void *);
 extern u32 ModelAnimation_Advance(void *, u32);
 extern u32 Comm_GetLocalNetId(void);
-extern u32 sub_02034818(u32);
-extern u32 sub_02037B38(u32);
-extern void sub_02037AC0(u8);
+extern u32 CommPlayerInfo_GetProfile(u32);
+extern u32 LinkSync_IsSynced(u32);
+extern void LinkSync_StartSync(u8);
 extern u32 PlazaGameRoster_CheckConnectionLost(void *p);
 extern void PlazaGameRoster_Init(void *, u32, u32, u32, void *);
 extern void FillBgTilemapRect(void *, u32, u32, u32, u32, u32, u32, u32);
@@ -155,7 +155,7 @@ u32 ov93_0225E548(void *p, u32 a) {
     if (((Ov93Pend *)p)->arg != a) {
         return 0;
     }
-    if (sub_02037B38((u8)((Ov93Pend *)p)->arg) == 1) {
+    if (LinkSync_IsSynced((u8)((Ov93Pend *)p)->arg) == 1) {
         ((Ov93Pend *)p)->kind = 0;
         return 1;
     }

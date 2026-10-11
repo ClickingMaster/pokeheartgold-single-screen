@@ -126,14 +126,14 @@
 .public Pokedex_Copy
 .public Options_GetFrame
 .public GameStats_Inc
-.public sub_020302A4
+.public BattleRecord_StoreSetup
 .public sub_02035650
 .public Comm_CountConnected
 .public Comm_GetLocalNetId
 .public sub_020378AC
 .public sub_02037930
-.public sub_02037AC0
-.public sub_02037B38
+.public LinkSync_StartSync
+.public LinkSync_IsSynced
 .public sub_02039998
 .public sub_020399FC
 .public sub_02039AD8

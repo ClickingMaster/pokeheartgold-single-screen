@@ -43,10 +43,10 @@
 #include "unk_0200CE7C.h"
 #include "unk_0200FA24.h"
 #include "unk_02013FDC.h"
-#include "unk_02030A98.h"
-#include "unk_02034354.h"
+#include "frontier_save_access.h"
+#include "communication_player_state.h"
 #include "unk_02035900.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 #include "unk_0203A3B0.h"
 #include "unk_0205BFF0.h"
 #include "unk_02096910.h"
@@ -131,7 +131,7 @@ u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *stri
 #define CASTLE_OPP_LINK_CMD_CURSOR 22
 #define CASTLE_OPP_LINK_CMD_EXIT   23
 
-// sub_02037AC0 / sub_02037B38 link sync ids
+// LinkSync_StartSync / LinkSync_IsSynced link sync ids
 #define CASTLE_OPP_SYNC_START  216
 #define CASTLE_OPP_SYNC_ACTION 133
 #define CASTLE_OPP_SYNC_EXIT   134
@@ -230,8 +230,8 @@ typedef struct BattleCastleOpponentApp {
     MessagePrinter *msgPrinter;                  // 0x2B4
     Options *options;                            // 0x2B8
     SaveData *saveData;                          // 0x2BC
-    void *unk_2C0;                               // 0x2C0 (sub_02030CC8)
-    u32 unk_2C4;                                 // 0x2C4 (sub_02030E08)
+    void *unk_2C0;                               // 0x2C0 (Save_Frontier_GetCastleChallenge)
+    u32 unk_2C4;                                 // 0x2C4 (Save_Frontier_GetCastleFlags)
     BattleCastleSpriteGfx spriteGfx;             // 0x2C8
     BattleCastleSprite *monIcons[4];             // 0x4E4
     BattleCastleSprite *hiddenMonIcons[4];       // 0x4F4 (shown until the mon is checked)
@@ -492,8 +492,8 @@ BOOL BattleCastleOpponentApp_Init(OverlayManager *manager, int *state) {
     app->manager = manager;
     args = OverlayManager_GetArgs(manager);
     app->saveData = args->saveData;
-    app->unk_2C0 = sub_02030CC8(app->saveData);
-    app->unk_2C4 = sub_02030E08(app->saveData);
+    app->unk_2C0 = Save_Frontier_GetCastleChallenge(app->saveData);
+    app->unk_2C4 = Save_Frontier_GetCastleFlags(app->saveData);
     app->frontierType = args->frontierType;
     app->selectionOut = &args->selection;
     app->options = Save_PlayerData_GetOptionsAddr(app->saveData);
@@ -602,15 +602,15 @@ BOOL BattleCastleOpponentApp_FadeIn(BattleCastleOpponentApp *app) {
     switch (app->subState) {
     case 0:
         if (ov80_02237D8C(app->frontierType) == TRUE) {
-            sub_02037BEC();
-            sub_02037AC0(CASTLE_OPP_SYNC_START);
+            LinkSync_ClearPackets();
+            LinkSync_StartSync(CASTLE_OPP_SYNC_START);
         }
         app->subState++;
         break;
     case 1:
         if (ov80_02237D8C(app->frontierType) == TRUE) {
-            if (sub_02037B38(CASTLE_OPP_SYNC_START) == TRUE) {
-                sub_02037BEC();
+            if (LinkSync_IsSynced(CASTLE_OPP_SYNC_START) == TRUE) {
+                LinkSync_ClearPackets();
                 app->subState++;
             }
         } else {
@@ -1086,21 +1086,21 @@ BOOL BattleCastleOpponentApp_LinkAction(BattleCastleOpponentApp *app) {
     case 3:
         app->timer--;
         if (app->timer == 0) {
-            sub_02037BEC();
-            sub_02037AC0(CASTLE_OPP_SYNC_ACTION);
+            LinkSync_ClearPackets();
+            LinkSync_StartSync(CASTLE_OPP_SYNC_ACTION);
             app->subState++;
         }
         break;
     case 4:
-        if (sub_02037B38(CASTLE_OPP_SYNC_ACTION) == TRUE) {
+        if (LinkSync_IsSynced(CASTLE_OPP_SYNC_ACTION) == TRUE) {
             app->subState++;
         }
         break;
     case 5: {
         int slot = BattleCastle_GetSideSlot(app->unk_015, app->linkSlot);
         if (BattleCastleOpponentApp_FinishLinkAction(app, slot, app->action) == TRUE) {
-            sub_02037BEC();
-            sub_020379A0(HEAP_ID_107);
+            LinkSync_ClearPackets();
+            LinkSync_Init(HEAP_ID_107);
             app->linkSlot = 0xFF;
             app->partnerExited = FALSE;
             return TRUE;
@@ -1124,14 +1124,14 @@ BOOL BattleCastleOpponentApp_LinkExit(BattleCastleOpponentApp *app) {
             app->timer--;
         }
         if (app->timer == 0) {
-            sub_02037BEC();
-            sub_02037AC0(CASTLE_OPP_SYNC_EXIT);
+            LinkSync_ClearPackets();
+            LinkSync_StartSync(CASTLE_OPP_SYNC_EXIT);
             app->subState++;
         }
         break;
     case 2:
-        if (sub_02037B38(CASTLE_OPP_SYNC_EXIT) == TRUE) {
-            sub_02037BEC();
+        if (LinkSync_IsSynced(CASTLE_OPP_SYNC_EXIT) == TRUE) {
+            LinkSync_ClearPackets();
             BattleCastleOpponentApp_CloseWindow(&app->windows[CASTLE_OPP_WIN_MESSAGE]);
             return TRUE;
         }
@@ -1569,7 +1569,7 @@ void BattleCastleOpponentApp_PrintPlayerName(BattleCastleOpponentApp *app, Windo
 }
 
 void BattleCastleOpponentApp_PrintPartnerName(BattleCastleOpponentApp *app, Window *window, int x, int y, u8 fontId) {
-    PlayerProfile *profile = sub_02034818(Comm_GetLocalNetId() ^ 1);
+    PlayerProfile *profile = CommPlayerInfo_GetProfile(Comm_GetLocalNetId() ^ 1);
     u32 color = PlayerProfile_GetTrainerGender(profile) == PLAYER_GENDER_MALE ? CASTLE_OPP_TEXT_COLOR_MALE_NAME : CASTLE_OPP_TEXT_COLOR_FEMALE;
 
     BufferPlayersName(app->msgFormat, 0, profile);
@@ -2298,7 +2298,7 @@ void BattleCastleOpponentApp_RankUp(BattleCastleOpponentApp *app, u8 slot, int a
             slot = BattleCastle_GetRank(app->saveData, app->frontierType, kind);
             frontierSave = Save_Frontier_GetStatic(app->saveData);
             stat = sub_0205C174(app->frontierType, kind);
-            sub_02031108(frontierSave, stat, sub_0205C268(sub_0205C174(app->frontierType, kind)), (u16)(slot + 1));
+            FrontierSave_SetStat(frontierSave, stat, sub_0205C268(sub_0205C174(app->frontierType, kind)), (u16)(slot + 1));
             if (ov80_02237D8C(app->frontierType) == TRUE) {
                 app->flags.bits.linkResume = CASTLE_OPP_RESUME_SUMMARY_MENU;
             }
@@ -2324,7 +2324,7 @@ void BattleCastleOpponentApp_RankUp(BattleCastleOpponentApp *app, u8 slot, int a
             slot = BattleCastle_GetRank(app->saveData, app->frontierType, kind);
             frontierSave = Save_Frontier_GetStatic(app->saveData);
             stat = sub_0205C174(app->frontierType, kind);
-            sub_02031108(frontierSave, stat, sub_0205C268(sub_0205C174(app->frontierType, kind)), (u16)(slot + 1));
+            FrontierSave_SetStat(frontierSave, stat, sub_0205C268(sub_0205C174(app->frontierType, kind)), (u16)(slot + 1));
             if (ov80_02237D8C(app->frontierType) == TRUE) {
                 app->flags.bits.linkResume = CASTLE_OPP_RESUME_SUMMARY_MENU;
             }
@@ -3092,7 +3092,7 @@ void BattleCastle_PlaySEOnInput(int input, u16 seqNo) {
 }
 
 void BattleCastle_BufferPartnerName(MessageFormat *msgFormat, int field) {
-    PlayerProfile *profile = sub_02034818(Comm_GetLocalNetId() ^ 1);
+    PlayerProfile *profile = CommPlayerInfo_GetProfile(Comm_GetLocalNetId() ^ 1);
     BufferPlayersName(msgFormat, field, profile);
 }
 

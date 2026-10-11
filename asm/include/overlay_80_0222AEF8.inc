@@ -3,8 +3,8 @@
 .public Heap_Free
 .public GF_AssertFail
 .public Save_PlayerData_GetProfile
-.public sub_02030E08
-.public sub_02030FA0
+.public Save_Frontier_GetCastleFlags
+.public Save_Frontier_GetArcadeFlags
 .public Save_Frontier_GetStatic
 .public FrontierSave_GetStat
 .public sub_02036FD8

@@ -47,8 +47,8 @@ void sub_02087A08(void *p, int a, int b);
 void PlaySE(int seqNo);
 void StopSE(int seqNo, int fadeFrames);
 BOOL ov40_0223D5CC(void);
-void *sub_020307F8(void);
-u64 sub_0203088C(void *p, int a, int b);
+void *BattleRecord_GetHeader(void);
+u64 BattleRecordHeader_GetField(void *p, int a, int b);
 void *ov40_0223D540(void *p);
 BOOL ov39_0222774C(void *p, u64 value);
 BOOL GlobalTerminalNet_GetError(void *p, u32 *value);
@@ -68,8 +68,8 @@ BOOL ov40_0222FBB4(void *p);
 void ov40_0222DD08(void *p);
 void ov40_0222BF64(void *p, int a1, int a2, void *a3);
 void Heap_Free(void *p);
-BOOL sub_0202FC48(void);
-void sub_0202FC24(void);
+BOOL BattleRecord_Exists(void);
+void BattleRecord_Delete(void);
 int ov40_0223A874(void *p);
 int ov40_0223A924(void *p);
 int ov40_0223AC24(void *p);
@@ -152,7 +152,7 @@ int ov40_0223A924(void *p) {
             return 0;
         }
         ov40_0223A510(p, 0x118, 0);
-        value = sub_0203088C(sub_020307F8(), 4, 0);
+        value = BattleRecordHeader_GetField(BattleRecord_GetHeader(), 4, 0);
         if (ov39_0222774C(ov40_0223D540(p), value) == TRUE) {
             WORD(p, 8)
             ++;
@@ -217,8 +217,8 @@ int ov40_0223A924(void *p) {
                 BgClearTilemapBufferAndCommit(PTR(p, 0x24), 3);
                 BgClearTilemapBufferAndCommit(PTR(p, 0x24), 7);
                 Heap_Free(w);
-                if (sub_0202FC48() == TRUE) {
-                    sub_0202FC24();
+                if (BattleRecord_Exists() == TRUE) {
+                    BattleRecord_Delete();
                 }
             } else {
                 PaletteData_BlendPalettes(PTR(p, 0x28), 1, 2, (u8)WORD(w, 8), (u16)WORD(p, 0x58));

@@ -1,6 +1,6 @@
 #include "overlay_80_022310C4_opus_partial_internal.h"
 void ov80_02231930(void *save, u8 a, s32 b, u8 c);
-u32 sub_02031108(void *, u32, u32, u16);
+u32 FrontierSave_SetStat(void *, u32, u32, u16);
 
 void ov80_02231930(void *save, u8 a, s32 b, u8 c) {
     void *frontier;
@@ -20,5 +20,5 @@ void ov80_02231930(void *save, u8 a, s32 b, u8 c) {
     packed |= (u8)(c << (rem * 4));
     frontier = Save_Frontier_GetStatic(save);
     stat = sub_0205C0A0(a, b);
-    sub_02031108(frontier, stat, sub_0205C268(sub_0205C0A0(a, b)), packed);
+    FrontierSave_SetStat(frontier, stat, sub_0205C268(sub_0205C0A0(a, b)), packed);
 }

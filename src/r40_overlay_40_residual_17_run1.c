@@ -4,9 +4,9 @@ void ov40_0222FB40(void *p) {
     u32 unused;
     void *base;
 
-    sub_0202FBF0(PTRAT(p, 0x830), 0x7E, &unused);
+    BattleRecord_Create(PTRAT(p, 0x830), 0x7E, &unused);
     base = PTRAT(p, 0x8B4);
-    sub_02030814(base, ADD(base, 0x80), ADD(base, 0xE4), 0, PTRAT(p, 0x830));
+    BattleRecord_Import(base, ADD(base, 0x80), ADD(base, 0xE4), 0, PTRAT(p, 0x830));
 }
 
 void ov40_0222FB74(void *task, void *data) {

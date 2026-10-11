@@ -246,10 +246,10 @@ _02258BA6:
 	beq _02258BB2
 	bl GF_AssertFail
 _02258BB2:
-	bl sub_02034420
+	bl CommPlayerInfo_Exists
 	cmp r0, #1
 	bne _02258BC4
-	bl sub_020343E4
+	bl CommPlayerInfo_Free
 	bl sub_0203986C
 	b _02258BD0
 _02258BC4:

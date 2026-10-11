@@ -47,7 +47,7 @@
 #include "unk_0200A090.h"
 #include "unk_02034B0C.h"
 #include "unk_02035900.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 #include "unk_0203A3B0.h"
 
 // Main menu option "Mystery Gift": receives a gift (from a friend or a distribution over DS wireless, or
@@ -128,16 +128,16 @@ typedef struct MysteryGiftLinkState {
 void ov74_02235F58(UnkWonderCardSubstruct_104 *header, WonderCard *card, enum HeapID heapID);
 void ov74_022360A0(SaveData *saveData);
 int ov74_022360B0(void);
-u32 ov74_02235230(void);
+u32 MainMenuUtil_GetCartridgeGiftSize(void);
 void ov74_02236034(BOOL a0);
-void ov74_0223512C(enum HeapID heapID);
+void MainMenuUtil_SetCryptoHeap(enum HeapID heapID);
 void WonderCard_SetGraphicsBanks(void);
 int ov74_022365FC(void);
 int ov74_02236AE0(OverlayManager *manager, int *state);
-void ov74_022358C8(int animStatus);
+void MainMenuUtil_UpdateGiftSprite(int animStatus);
 int MysteryGift_CheckCanReceive(SaveData *saveData, UnkWonderCardSubstruct_104 *header);
-BOOL ov74_02235258(void *data, int size);
-void *ov74_02235708(void);
+BOOL MainMenuUtil_ReadCartridgeGift(void *data, int size);
+void *MainMenuUtil_GetSpriteList(void);
 u32 ov74_0223615C(void);
 void ov74_02236128(void);
 void ov74_02236140(void);
@@ -175,7 +175,7 @@ extern const OverlayManagerTemplate _0223B420;
 extern const MysteryGiftMenuItem ov74_0223C2A0[];
 extern const MysteryGiftMenuItem ov74_0223C2B0[];
 
-// Sprite system of the overlay's shared helpers (ov74_02235708).
+// Sprite system of the overlay's shared helpers (MainMenuUtil_GetSpriteList).
 typedef struct MainMenuSpriteSystem {
     SpriteList *spriteList;    // 0x000
     u8 unk_004[0x128];         // 0x004
@@ -267,7 +267,7 @@ void MysteryGiftApp_FreeGraphics(OverlayManager *manager) {
     MysteryGiftAppData *data = OverlayManager_GetData(manager);
     int i;
 
-    ov74_022359BC();
+    MainMenuUtil_FreeSprites();
     if (data->listMenuItems != NULL) {
         ListMenuItems_Delete(data->listMenuItems);
     }
@@ -296,14 +296,14 @@ void MysteryGiftApp_FreeGraphics(OverlayManager *manager) {
 #pragma force_active reset
 
 void MysteryGiftApp_InitSprites(MysteryGiftAppData *data) {
-    ov74_0223563C();
-    ov74_02235690();
-    ov74_02235728(NARC_a_1_1_3, 14, 11, 13, 12, 0);
+    MainMenuUtil_InitObjTransfer();
+    MainMenuUtil_InitSprites();
+    MainMenuUtil_LoadSpriteResources(NARC_a_1_1_3, 14, 11, 13, 12, 0);
 }
 
 void MysteryGiftApp_SetSpriteAnim(MysteryGiftAppData *data, int animSeq) {
     if (animSeq != -1) {
-        data->sprite = ov74_02235930(0, data->sprite, 128, 100, animSeq);
+        data->sprite = MainMenuUtil_CreateSprite(0, data->sprite, 128, 100, animSeq);
     } else {
         Sprite_SetDrawFlag(data->sprite, FALSE);
     }
@@ -362,7 +362,7 @@ int MysteryGiftApp_AcceptGift(OverlayManager *manager) {
         MysteryGiftApp_SetWaitingIconVisible(data, TRUE);
     }
     if (data->receiveMode == 1) {
-        sub_02037AC0(171);
+        LinkSync_StartSync(171);
         return 9;
     }
     return 21;
@@ -501,7 +501,7 @@ int MysteryGiftApp_SelectGetFromFriend(OverlayManager *manager) {
     Window *window;
     MysteryGiftAppData *data = OverlayManager_GetData(manager);
 
-    data->receiveMode = ov74_02235230() ? 2 : 1;
+    data->receiveMode = MainMenuUtil_GetCartridgeGiftSize() ? 2 : 1;
     MysteryGiftApp_EraseWindowIfInUse(&data->windows[1], FALSE);
     window = &data->windows[2];
     if (window->bgConfig == NULL) {
@@ -657,7 +657,7 @@ int MysteryGiftApp_SelectCheckCard(OverlayManager *manager) {
         data->unk_05CC = 1;
         ov74_0222CE10(data);
     }
-    ov74_0223539C(0, 54, data->mainState, 2);
+    MainMenuUtil_StartFade(0, 54, data->mainState, 2);
     return -1;
 }
 
@@ -668,7 +668,7 @@ int MysteryGiftApp_SelectViewLockCapsuleCard(OverlayManager *manager) {
         data->unk_05CC = 1;
         ov74_0222CE10(data);
     }
-    ov74_0223539C(0, 55, data->mainState, 2);
+    MainMenuUtil_StartFade(0, 55, data->mainState, 2);
     return -1;
 }
 
@@ -678,8 +678,8 @@ int MysteryGiftApp_SelectExit(OverlayManager *manager) {
     if (data->unk_05C8 == 30) {
         data->unk_05CC = 1;
     }
-    ov74_02235390(1);
-    ov74_0223539C(0, 53, data->mainState, 2);
+    MainMenuUtil_SetFadeWhite(1);
+    MainMenuUtil_StartFade(0, 53, data->mainState, 2);
     return -1;
 }
 
@@ -899,11 +899,11 @@ void MysteryGiftApp_ShowWfcError(MysteryGiftAppData *data) {
     BgClearTilemapBufferAndCommit(data->bgConfig, GF_BG_LYR_MAIN_0);
     msgFormat = MessageFormat_New(HEAP_ID_84);
     BufferIntegerAsString(msgFormat, 0, data->wfcErrorCode, 5, PRINTING_MODE_LEADING_ZEROS, TRUE);
-    ov74_02235414(&printer, &data->wfcErrorWindow, 1, NARC_msg_msg_0800_bin, 31, 3);
-    ov74_02235464(&printer, 24, 16, 100);
-    ov74_0223546C(&printer, 0, 1);
+    MainMenuTextPrinter_Init(&printer, &data->wfcErrorWindow, 1, NARC_msg_msg_0800_bin, 31, 3);
+    MainMenuTextPrinter_SetSize(&printer, 24, 16, 100);
+    MainMenuTextPrinter_SetFrameAndFont(&printer, 0, 1);
     printer.msgFormat = msgFormat;
-    ov74_02235568(data->bgConfig, &printer, 4, 4, msgId);
+    MainMenuTextPrinter_AddWindowAndPrint(data->bgConfig, &printer, 4, 4, msgId);
     MessageFormat_Delete(msgFormat);
 }
 
@@ -979,8 +979,8 @@ BOOL MysteryGiftApp_Init(OverlayManager *manager, int *state) {
     SetMasterBrightnessByColor(PM_LCD_TOP, RGB_BLACK);
     SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
     Sound_SetSceneAndPlayBGM(10, SEQ_GS_WIFI_PRESENT, 1);
-    ov74_0223512C(HEAP_ID_84);
-    if (ov74_02235230()) {
+    MainMenuUtil_SetCryptoHeap(HEAP_ID_84);
+    if (MainMenuUtil_GetCartridgeGiftSize()) {
         data->receiveMode = 2;
         sub_0201A4B0(gGameVersion);
         ov74_02236034(TRUE);
@@ -1815,17 +1815,17 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
     }
     switch (*state) {
     case 0:
-        ov74_022352A0(HEAP_ID_84);
+        MainMenuUtil_InitWork(HEAP_ID_84);
         data->mainState = state;
         *state = 1;
         break;
     case 1:
         MysteryGiftApp_SetupScreen(manager, data);
         MysteryGiftApp_InitSprites(data);
-        ov74_0223539C(1, 3, state, 2);
+        MainMenuUtil_StartFade(1, 3, state, 2);
         break;
     case 2:
-        ov74_022353FC(state);
+        MainMenuUtil_WaitFade(state);
         break;
     case 3:
         MysteryGiftApp_HandleListMenuInput(manager, state, MysteryGiftApp_SelectExit);
@@ -1881,7 +1881,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
             anim = Heap_Alloc(HEAP_ID_84, sizeof(MysteryGiftAnimData));
             memset(anim, 0, sizeof(MysteryGiftAnimData));
             anim->status = &data->animStatus;
-            anim->spriteSystem = ov74_02235708();
+            anim->spriteSystem = MainMenuUtil_GetSpriteList();
             SysTask_CreateOnMainQueue((SysTaskFunc)MysteryGiftAnim_Task, anim, 5);
         } else {
             ov74_02235DC4(data->bgConfig, card);
@@ -1957,7 +1957,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
     case 9:
         result = Comm_GetLocalNetId();
         if (result && Comm_IsNetIdConnected((u16)result)) {
-            if (sub_02037B38(171) == TRUE) {
+            if (LinkSync_IsSynced(171) == TRUE) {
                 MysteryGiftApp_SetWaitingIconVisible(data, FALSE);
                 sub_020398D4(1, 1);
                 MysteryGiftApp_PrintMessage(manager, &data->messageWindow, msg_0247_00007);
@@ -2012,7 +2012,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
             MysteryGiftApp_SetSpriteAnim(data, -1);
             *state = 14;
         } else if (ov74_0223615C() == 4) {
-            sub_02037AC0(147);
+            LinkSync_StartSync(147);
             *state = 13;
             data->timer = 120;
         } else if (ov74_0223615C() == 3) {
@@ -2023,7 +2023,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
         }
         break;
     case 13:
-        if (sub_02037B38(147) == TRUE) {
+        if (LinkSync_IsSynced(147) == TRUE) {
             ov74_02236128();
             data->timer = 10;
             *state = 15;
@@ -2078,7 +2078,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
             data->unk_15DC--;
         } else {
             if (data->unk_0084 != 27) {
-                ov74_02235258(&data->receivedHeader, sizeof(UnkWonderCardSubstruct_104) + sizeof(WonderCard));
+                MainMenuUtil_ReadCartridgeGift(&data->receivedHeader, sizeof(UnkWonderCardSubstruct_104) + sizeof(WonderCard));
             }
             data->giftCheckResult = MysteryGift_CheckCanReceive(data->saveData, &data->receivedHeader);
             if (data->giftCheckResult == 1) {
@@ -2175,10 +2175,10 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
         if (gSystem.newKeys) {
             PlaySE(SEQ_SE_DP_SELECT);
             if (data->receivedHeader.unk8E_2 == 1) {
-                ov74_0223539C(0, 57, data->mainState, 2);
+                MainMenuUtil_StartFade(0, 57, data->mainState, 2);
             } else {
-                ov74_02235390(1);
-                ov74_0223539C(0, 58, data->mainState, 2);
+                MainMenuUtil_SetFadeWhite(1);
+                MainMenuUtil_StartFade(0, 58, data->mainState, 2);
             }
         }
         break;
@@ -2191,7 +2191,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
         } else {
             WonderCardAlbum_DrawCardOnBg(data->bgConfig, &data->receivedCard, HEAP_ID_84);
         }
-        ov74_0223539C(1, 56, data->mainState, 2);
+        MainMenuUtil_StartFade(1, 56, data->mainState, 2);
         data->receivedHeader.unk8E_2 = 0;
         break;
     case 58:
@@ -2203,7 +2203,7 @@ BOOL MysteryGiftApp_Main(OverlayManager *manager, int *state) {
     if (data->callback != NULL) {
         data->callback(data);
     }
-    ov74_022358C8(data->animStatus);
+    MainMenuUtil_UpdateGiftSprite(data->animStatus);
     return FALSE;
 }
 

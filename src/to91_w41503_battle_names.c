@@ -4,13 +4,13 @@
 #include "heap.h"
 #include "pm_string.h"
 #pragma force_active on
-void sub_0202FEB8(int,int *,int *);
+void BattleRecord_GetBattlerAndPartyCount(int,int *,int *);
 void ov40_02244A84(void *,u32);
 void ov40_02244920(void *,BattleSetup *,enum HeapID);
 void ov40_02244920(void *record,BattleSetup *input,enum HeapID heap){
  u8 *setup=(u8*)input;
  struct {int last,count;} counts;int i,j;String *str,*checked;int n;u16 *buf;u8 *entry,*dst,*src;
- sub_0202FEB8(*((u8*)record+0xaa),&counts.count,&counts.last);
+ BattleRecord_GetBattlerAndPartyCount(*((u8*)record+0xaa),&counts.count,&counts.last);
  str=String_New(64,heap);checked=String_New(64,heap);buf=Heap_Alloc(heap,128);
  i=0;if(i<counts.count){entry=setup;dst=setup+0x3c;src=dst;do{
   u32 cursor=(u32)entry+14;

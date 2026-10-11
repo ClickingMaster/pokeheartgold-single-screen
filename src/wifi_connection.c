@@ -22,7 +22,7 @@ extern void *FriendRoster_GetUserData(void *);
 extern void *FriendRoster_GetDwcFriendData(void *, int);
 extern void FriendRoster_MergeFriend(void *, int, int);
 extern void *Save_FriendRoster_Get(void *);
-extern void sub_02031214(void *, int, int);
+extern void FrontierSave_ClearRow(void *, int, int);
 extern void *Save_Frontier_GetStatic(void *);
 extern int sub_02034084(void);
 extern int sub_02034098(void);
@@ -433,7 +433,7 @@ void ov00_021E6298(void) {
 
 void ov00_021E629C(int index, int srcIndex) {
     FriendRoster_MergeFriend(Save_FriendRoster_Get(gWifiConnection->saveData), index, srcIndex);
-    sub_02031214(Save_Frontier_GetStatic(gWifiConnection->saveData), index, srcIndex);
+    FrontierSave_ClearRow(Save_Frontier_GetStatic(gWifiConnection->saveData), index, srcIndex);
 }
 
 #pragma force_active reset

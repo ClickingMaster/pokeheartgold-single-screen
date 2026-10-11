@@ -10,7 +10,7 @@
 #include "sys_task.h"
 #include "unk_02033AE0.h"
 #include "unk_02035900.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 typedef struct LinkWork {
     BattleSetup *setup;
     u8 pad4[12];
@@ -34,7 +34,7 @@ typedef struct LinkHeader {
 extern const u32 _020FFE30[];
 int sub_02037190(void);
 BOOL sub_02036FD8(int command, void *data, int size);
-void sub_0203049C(int sender, u32 flags);
+void BattleRecord_SetAiFlags(int sender, u32 flags);
 BOOL BattleController_RecvLinkData(BattleSystem *battle, u8 *data);
 void sub_02074E5C(BattleSystem *battle);
 void sub_02074EC4(LinkWork *work);

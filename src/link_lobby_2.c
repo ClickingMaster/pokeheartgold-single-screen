@@ -19,7 +19,7 @@ void sub_02058284(void) {
 
 void sub_020582A8(void) {
     if (_021D41C8) {
-        sub_02037AC0(91);
+        LinkSync_StartSync(91);
         sub_020582F4(sub_02058A38, 5);
     }
 }

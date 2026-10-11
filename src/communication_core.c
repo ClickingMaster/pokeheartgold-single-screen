@@ -5,16 +5,16 @@
 #include "gf_rtc.h"
 #include "heap.h"
 #include "system.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 
 // Called with the argument types their call sites were matched against.
 extern void *SysTask_CreateOnVBlankQueue(void *func, void *data, int priority);
 extern void SysTask_Destroy(void *task);
-extern void sub_020379F8(void);
+extern void LinkSync_Free(void);
 extern int sub_0203993C(void);
 extern void sub_020398D4(int, int);
 extern void sub_02039A00(int);
-extern void sub_02037ADC(void);
+extern void LinkSync_Update(void);
 extern void sub_0203817C(void);
 extern u16 sub_02033250(void);
 extern int sub_02033298(void);
@@ -43,7 +43,7 @@ extern void sub_02034170(int netId, int command, int size, void *data);
 extern u32 sub_020341DC(int command);
 extern int sub_02034244(int command);
 extern void *sub_02034280(int command, int netId, int size);
-extern void sub_020343E4(void);
+extern void CommPlayerInfo_Free(void);
 extern void sub_02034E2C(void);
 extern int sub_02034EF0(int, int, int);
 extern int sub_02034F64(int, int);
@@ -93,7 +93,7 @@ int Comm_InitWork(int create, int packetSize) {
             return 1;
         }
 
-        sub_020379A0(HEAP_ID_15);
+        LinkSync_Init(HEAP_ID_15);
         gCommCore.allocation = Heap_Alloc(HEAP_ID_15, 0x6e0);
         gCommCore.work = (u8 *)(32 - ((u32)gCommCore.allocation & 31)) + (u32)gCommCore.allocation;
         MI_CpuFill8(gCommCore.work, 0, 0x6c0);
@@ -351,8 +351,8 @@ void sub_02036024(void) {
         }
     }
     if (destroy) {
-        sub_020379F8();
-        sub_020343E4();
+        LinkSync_Free();
+        CommPlayerInfo_Free();
         gCommCore.updateLock = 0;
         SysTask_Destroy(*(void **)(gCommCore.work + 0x57C));
         *(void **)(gCommCore.work + 0x57C) = NULL;
@@ -432,7 +432,7 @@ BOOL Comm_Update(void) {
         sub_020355C8(0);
     }
     sub_02039A00(0);
-    sub_02037ADC();
+    LinkSync_Update();
     return TRUE;
 }
 

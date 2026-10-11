@@ -57,7 +57,7 @@ extern int Field_GetNumObjectEvents(void *);
 extern void *Field_GetObjectEvents(void *);
 extern int GetDeltaXByFacingDirection(int);
 extern int GetDeltaYByFacingDirection(int);
-extern void sub_020346E8(int);
+extern void CommPlayerInfo_ClearPlayer(int);
 extern void sub_02057818(int);
 extern void sub_0205776C(int, int, const u8 *, void *);
 extern void sub_0205712C(void *);

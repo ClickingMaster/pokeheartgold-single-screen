@@ -101,9 +101,9 @@ void sub_020587E8(void) {
             _021D41C8->timer--;
         }
         if (_021D41C8->timer == 90) {
-            sub_02037AC0(4);
+            LinkSync_StartSync(4);
         }
-        if (sub_02037B38(4)) {
+        if (LinkSync_IsSynced(4)) {
             sub_020582F4(sub_0205876C, 0);
         }
     }
@@ -119,7 +119,7 @@ void sub_0205882C(void) {
 }
 
 void sub_02058854(void) {
-    if (sub_02037B38(3)) {
+    if (LinkSync_IsSynced(3)) {
         sub_020582F4(sub_0205882C, 2);
     }
 }
@@ -130,7 +130,7 @@ void sub_02058870(void) {
         return;
     }
     sub_02056EA0(0);
-    sub_02037AC0(3);
+    LinkSync_StartSync(3);
     sub_020582F4(sub_02058854, 0);
 }
 
@@ -156,7 +156,7 @@ void *sub_020588DC(int index) {
 
 void sub_020588F8(void) {
     int id = Comm_GetLocalNetId();
-    if (sub_02037B38(95)) {
+    if (LinkSync_IsSynced(95)) {
         sub_02036FD8(88, _021D41C8->packets[id], 0x66c);
         sub_020582F4(sub_02058930, 0);
     }
@@ -169,7 +169,7 @@ void sub_02058930(void) {
             return;
         }
     }
-    sub_02037AC0(97);
+    LinkSync_StartSync(97);
     sub_020582F4(sub_020589D8, 0);
 }
 
@@ -179,9 +179,9 @@ void sub_0205896C(void) {
             _021D41C8->timer--;
         }
         if (_021D41C8->timer == 90) {
-            sub_02037AC0(5);
+            LinkSync_StartSync(5);
         }
-        if (sub_02037B38(5)) {
+        if (LinkSync_IsSynced(5)) {
             sub_020582F4(sub_020589F4, 0);
         }
     }
@@ -197,7 +197,7 @@ void sub_020589B0(void) {
 }
 
 void sub_020589D8(void) {
-    if (sub_02037B38(97)) {
+    if (LinkSync_IsSynced(97)) {
         sub_020582F4(sub_020589B0, 2);
     }
 }
@@ -207,7 +207,7 @@ void sub_020589F4(void) {
         _021D41C8->timer--;
         return;
     }
-    sub_02037AC0(98);
+    LinkSync_StartSync(98);
     if (_021D41C8->host) {
         sub_020582F4(sub_0205838C, 30);
         return;
@@ -216,7 +216,7 @@ void sub_020589F4(void) {
 }
 
 void sub_02058A38(void) {
-    if (sub_02037B38(91)) {
+    if (LinkSync_IsSynced(91)) {
         sub_020398D4(0, 0);
         sub_02056EA0(1);
         sub_020582F4(sub_02058A78, 5);

@@ -27,9 +27,9 @@
 #include "sys_flags.h"
 #include "sys_vars.h"
 #include "frontier_data_access.h"
-#include "unk_02030A98.h"
+#include "frontier_save_access.h"
 #include "unk_02035900.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 #include "unk_0204A3F4.h"
 #include "unk_0204B538.h"
 #include "unk_02066EDC.h"
@@ -240,7 +240,7 @@ BOOL ScrCmd_416(ScriptContext *ctx) {
         break;
     }
     if (sub_0205C298(ctx->fieldSystem->saveData) == 1) {
-        if (sub_02037C0C(Comm_GetLocalNetId(), frontierFsys->unk83e) == 1) {
+        if (LinkSync_SendPacket(Comm_GetLocalNetId(), frontierFsys->unk83e) == 1) {
             *unkPtr = TRUE;
         } else {
             return TRUE;

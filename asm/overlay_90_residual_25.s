@@ -235,7 +235,7 @@ PlazaGameResults_RecordFriendPlays: ; 0x0225B9A8
 _0225B9BE:
 	add r0, r5, r6
 	ldrb r0, [r0, #0x10]
-	bl sub_0203484C
+	bl CommPlayerInfo_GetExchangeToken
 	add r1, r0, #0
 	ldr r0, [r5, #0xc]
 	add r2, r7, #0

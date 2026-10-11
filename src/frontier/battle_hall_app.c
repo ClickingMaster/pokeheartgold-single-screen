@@ -38,7 +38,7 @@
 #include "oam_manager.h"
 #include "unk_0200FA24.h"
 #include "unk_02035900.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 #include "unk_0203A3B0.h"
 #include "unk_02088288.h"
 #include "unk_02096910.h"
@@ -368,15 +368,15 @@ BOOL BattleHallApp_FadeIn(BattleHallApp *app) {
     switch (app->subState) {
     case 0:
         if (app->linkReady == 0 && ov80_0223792C(app->mode) == TRUE) {
-            sub_02037BEC();
-            sub_02037AC0(0x70);
+            LinkSync_ClearPackets();
+            LinkSync_StartSync(0x70);
         }
         app->subState++;
         break;
     case 1:
         if (app->linkReady == 0 && ov80_0223792C(app->mode) == TRUE) {
-            if (sub_02037B38(0x70) == TRUE) {
-                sub_02037BEC();
+            if (LinkSync_IsSynced(0x70) == TRUE) {
+                LinkSync_ClearPackets();
                 app->linkReady = 1;
                 app->subState++;
             }
@@ -678,14 +678,14 @@ BOOL BattleHallApp_LinkDecide(BattleHallApp *app) {
         }
         break;
     case 8:
-        sub_02037BEC();
-        sub_02037AC0(0x68);
+        LinkSync_ClearPackets();
+        LinkSync_StartSync(0x68);
         app->subState = 9;
         break;
     case 9:
-        if (sub_02037B38(0x68) == TRUE) {
-            sub_02037BEC();
-            sub_020379A0(HEAP_ID_105);
+        if (LinkSync_IsSynced(0x68) == TRUE) {
+            LinkSync_ClearPackets();
+            LinkSync_Init(HEAP_ID_105);
             app->linkChoice = NO_LINK_CHOICE;
             return TRUE;
         }
@@ -697,13 +697,13 @@ BOOL BattleHallApp_LinkDecide(BattleHallApp *app) {
 BOOL BattleHallApp_LinkSync(BattleHallApp *app) {
     switch (app->subState) {
     case 0:
-        sub_02037BEC();
-        sub_02037AC0(0x68);
+        LinkSync_ClearPackets();
+        LinkSync_StartSync(0x68);
         app->subState++;
         break;
     case 1:
-        if (sub_02037B38(0x68) == 1) {
-            sub_02037BEC();
+        if (LinkSync_IsSynced(0x68) == 1) {
+            LinkSync_ClearPackets();
             return TRUE;
         }
         break;

@@ -21,7 +21,7 @@
 #include "script_manager.h"
 #include "seal_case.h"
 #include "task.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 #include "unk_02055244.h"
 #include "unk_020552A4.h"
 #include "unk_02091054.h"
@@ -216,7 +216,7 @@ BOOL ScrCmd_237(ScriptContext *ctx) {
 
 static void sub_0206BCA4(UnkStruct_0206BCD4 *a0, u8 a1) {
     if (a0->unk04 != 0) {
-        sub_02037AC0(a1);
+        LinkSync_StartSync(a1);
     }
 }
 
@@ -224,7 +224,7 @@ static BOOL sub_0206BCB4(UnkStruct_0206BCD4 *a0, u8 a1) {
     if (a0->unk04 == 0) {
         return TRUE;
     }
-    return sub_02037B38(a1) == TRUE;
+    return LinkSync_IsSynced(a1) == TRUE;
 }
 
 static UnkStruct_0206BCD4 *sub_0206BCD4(void) {

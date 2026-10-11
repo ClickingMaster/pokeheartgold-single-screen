@@ -3,7 +3,7 @@
 #include "party.h"
 #include "player_avatar.h"
 #include "pokemon.h"
-#include "unk_02030A98.h"
+#include "frontier_save_access.h"
 #include "unk_02033AE0.h"
 #include "unk_02035900.h"
 

@@ -28,9 +28,9 @@
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
 #include "oam_manager.h"
-#include "unk_02030A98.h"
+#include "frontier_save_access.h"
 #include "unk_02035900.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 #include "unk_0203A3B0.h"
 #include "unk_02096910.h"
 #include "vram_transfer_manager.h"
@@ -109,8 +109,8 @@ BOOL BattleArcadeGameBoard_InitOverlay(OverlayManager *man, int *state) {
     work->man = man;
     args = (GAME_BOARD_ARGS *)OverlayManager_GetArgs(man);
     work->saveData = args->saveData;
-    work->arcadeSaveData = sub_02030E88(work->saveData);
-    work->arcadeScoreSaveData = sub_02030FA0(work->saveData);
+    work->arcadeSaveData = Save_Frontier_GetArcadeChallenge(work->saveData);
+    work->arcadeScoreSaveData = Save_Frontier_GetArcadeFlags(work->saveData);
     work->type = args->type;
     work->unk2A = args->unk1E;
     work->winStreak = args->winStreak;
@@ -231,8 +231,8 @@ static BOOL BattleArcadeGameBoard_Init(GAME_BOARD_WORK *work) {
     switch (work->substate) {
     case 0:
         if (BattleArcade_MultiplayerCheck(work->type) == TRUE) {
-            sub_02037BEC();
-            sub_02037AC0(199);
+            LinkSync_ClearPackets();
+            LinkSync_StartSync(199);
             work->substate++;
         } else {
             work->substate++;
@@ -240,8 +240,8 @@ static BOOL BattleArcadeGameBoard_Init(GAME_BOARD_WORK *work) {
         break;
     case 1:
         if (BattleArcade_MultiplayerCheck(work->type) == TRUE) {
-            if (sub_02037B38(199) == TRUE) {
-                sub_02037BEC();
+            if (LinkSync_IsSynced(199) == TRUE) {
+                LinkSync_ClearPackets();
                 work->substate++;
             }
         } else {
@@ -262,8 +262,8 @@ static BOOL BattleArcadeGameBoard_Init(GAME_BOARD_WORK *work) {
         break;
     case 5:
         if (BattleArcade_MultiplayerCheck(work->type) == TRUE) {
-            sub_02037BEC();
-            sub_02037AC0(201);
+            LinkSync_ClearPackets();
+            LinkSync_StartSync(201);
             work->substate++;
         } else {
             work->substate++;
@@ -271,8 +271,8 @@ static BOOL BattleArcadeGameBoard_Init(GAME_BOARD_WORK *work) {
         break;
     case 6:
         if (BattleArcade_MultiplayerCheck(work->type) == TRUE) {
-            if (sub_02037B38(201) == TRUE) {
-                sub_02037BEC();
+            if (LinkSync_IsSynced(201) == TRUE) {
+                LinkSync_ClearPackets();
                 work->substate++;
             }
         } else {
@@ -431,14 +431,14 @@ static BOOL ov84_0223E384(GAME_BOARD_WORK *work) {
         }
         break;
     case 3:
-        sub_02037BEC();
-        sub_02037AC0(151);
+        LinkSync_ClearPackets();
+        LinkSync_StartSync(151);
         work->substate++;
         break;
     case 4:
-        if (sub_02037B38(151) == TRUE) {
-            sub_02037BEC();
-            sub_020379A0(HEAP_ID_GAME_BOARD);
+        if (LinkSync_IsSynced(151) == TRUE) {
+            LinkSync_ClearPackets();
+            LinkSync_Init(HEAP_ID_GAME_BOARD);
             work->unkE = 255;
             return TRUE;
         }
@@ -458,14 +458,14 @@ static BOOL BattleArcadeGameBoard_EndMulti(GAME_BOARD_WORK *work) {
             work->wait--;
         }
         if (work->wait == 0) {
-            sub_02037BEC();
-            sub_02037AC0(152);
+            LinkSync_ClearPackets();
+            LinkSync_StartSync(152);
             work->substate++;
         }
         break;
     case 2:
-        if (sub_02037B38(152) == TRUE) {
-            sub_02037BEC();
+        if (LinkSync_IsSynced(152) == TRUE) {
+            LinkSync_ClearPackets();
             return TRUE;
         }
         break;

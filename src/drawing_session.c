@@ -30,9 +30,9 @@
 #include "oam_manager.h"
 #include "touchpad.h"
 #include "unk_02032844.h"
-#include "unk_02034354.h"
+#include "communication_player_state.h"
 #include "unk_02035900.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 #include "unk_02037C94.h"
 #include "unk_0203A3B0.h"
 #include "unk_0205A44C.h"
@@ -889,7 +889,7 @@ int DrawingSession_StateHandleDisbandPrompt(DrawingSessionWork *work, int state)
     case YESNORESPONSE_YES:
         DrawingSession_SetNextSubState(work, 15);
         sub_02037108(0x7F, NULL, 0);
-        BufferPlayersName(work->msgFormat, 0, sub_02034818(0));
+        BufferPlayersName(work->msgFormat, 0, CommPlayerInfo_GetProfile(0));
         state = 2;
         DrawingSession_HideYesNo(work);
         break;
@@ -909,7 +909,7 @@ int DrawingSession_StateHandleDisbandPrompt(DrawingSessionWork *work, int state)
 }
 
 int DrawingSession_StatePrintLeaderLeft(DrawingSessionWork *work, int state) {
-    BufferPlayersName(work->msgFormat, 0, sub_02034818(0));
+    BufferPlayersName(work->msgFormat, 0, CommPlayerInfo_GetProfile(0));
     DrawingSession_PrintMessage(work, msg_0252_00003, 1);
     DrawingSession_SetNextSubState(work, 16);
     DrawingSession_UpdateCanvas(work);
@@ -919,14 +919,14 @@ int DrawingSession_StatePrintLeaderLeft(DrawingSessionWork *work, int state) {
 int DrawingSession_StateWaitLeaderLeftMsg(DrawingSessionWork *work, int state) {
     if (DrawingSession_IsPrinterDone(work->printerId)) {
         DrawingSession_SetNextSubState(work, 17);
-        sub_02037AC0(200);
+        LinkSync_StartSync(200);
     }
     DrawingSession_UpdateCanvas(work);
     return state;
 }
 
 int DrawingSession_StateWaitSyncAndFadeOut(DrawingSessionWork *work, int state) {
-    if (sub_02037B38(200) || Comm_CountConnected() == 1) {
+    if (LinkSync_IsSynced(200) || Comm_CountConnected() == 1) {
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, (enum FadeType)0x10, (enum FadeType)0x10, RGB_BLACK, 0x10, 1, HEAP_ID_39);
         state = 3;
     }
@@ -1009,7 +1009,7 @@ void DrawingSession_HandleNetEvent(DrawingSessionWork *work, int event, u32 memb
             DrawingSession_HideYesNo(work);
         }
         DrawingSession_SetQuitButtonPressed(work->buttons, FALSE);
-        BufferPlayersName(work->msgFormat, 0, sub_02034818(member));
+        BufferPlayersName(work->msgFormat, 0, CommPlayerInfo_GetProfile(member));
         work->joinedMember = member;
         work->unk_93B4 = 0;
         break;
@@ -1024,7 +1024,7 @@ void DrawingSession_HandleNetEvent(DrawingSessionWork *work, int event, u32 memb
         if (work->leaveRequested == 1) {
             return;
         }
-        BufferPlayersName(work->msgFormat, 0, sub_02034818(member));
+        BufferPlayersName(work->msgFormat, 0, CommPlayerInfo_GetProfile(member));
         if (member == Comm_GetLocalNetId()) {
             return;
         }
@@ -1206,7 +1206,7 @@ void DrawingSession_UpdatePenCursors(DrawingSessionWork *work) {
 
     for (i = 0, stroke = work->strokes; i < DRAWING_SESSION_MAX_MEMBERS; i++) {
         if (i != Comm_GetLocalNetId()) {
-            if (stroke->count != 0 && sub_02034818(i)) {
+            if (stroke->count != 0 && CommPlayerInfo_GetProfile(i)) {
                 Sprite_SetDrawFlag(work->penCursors[i], TRUE);
                 DrawingSession_SetPenCursorPos(work->penCursors[i], stroke->xs[stroke->count - 1], stroke->ys[stroke->count - 1]);
             } else {
@@ -1233,7 +1233,7 @@ u32 ov37_021E745C(void) {
     int i;
     u32 count = 0;
     for (i = 0; i < DRAWING_SESSION_MAX_MEMBERS; i++) {
-        if (sub_02034818(i)) {
+        if (CommPlayerInfo_GetProfile(i)) {
             count++;
         }
     }
@@ -1318,7 +1318,7 @@ int DrawingSession_CountMembers(void) {
     int i;
     u32 count = 0;
     for (i = 0; i < DRAWING_SESSION_MAX_MEMBERS; i++) {
-        if (sub_02034818(i)) {
+        if (CommPlayerInfo_GetProfile(i)) {
             count++;
         }
     }
@@ -1334,7 +1334,7 @@ BOOL DrawingSession_UpdateMembers(DrawingSessionWork *work) {
     BOOL changed = FALSE;
     for (i = 0; i < DRAWING_SESSION_MAX_MEMBERS; i++) {
         work->members[i].prev = work->members[i].cur;
-        work->members[i].cur = sub_02034818(i);
+        work->members[i].cur = CommPlayerInfo_GetProfile(i);
     }
     for (i = 0; i < DRAWING_SESSION_MAX_MEMBERS; i++) {
         if (work->members[i].prev != work->members[i].cur) {

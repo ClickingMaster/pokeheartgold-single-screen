@@ -6,26 +6,26 @@
 .public Comm_IsNetIdConnected
 .public Comm_GetLocalNetId
 .public sub_020376E0
-.public sub_020379A0
-.public sub_020379F8
-.public sub_02037A10
-.public sub_02037A24
-.public sub_02037A98
-.public sub_02037AAC
-.public sub_02037AC0
-.public sub_02037ADC
-.public sub_02037B38
-.public sub_02037B5C
-.public sub_02037B6C
-.public sub_02037B88
-.public sub_02037B8C
-.public sub_02037BA0
-.public sub_02037BC8
-.public sub_02037BEC
-.public sub_02037C0C
-.public sub_02037C44
-.public sub_02037C68
+.public LinkSync_Init
+.public LinkSync_Free
+.public LinkSync_Exists
+.public LinkSync_RecvRequest
+.public LinkSync_RecvState
+.public LinkSync_RecvDone
+.public LinkSync_StartSync
+.public LinkSync_Update
+.public LinkSync_IsSynced
+.public LinkSync_GetPlayerState
+.public LinkSync_RecvValue
+.public LinkSync_GetValueSize
+.public LinkSync_SendValue
+.public LinkSync_GetValue
+.public LinkSync_ClearValues
+.public LinkSync_ClearPackets
+.public LinkSync_SendPacket
+.public LinkSync_GetPacket
+.public LinkSync_RecvPacket
 .public MI_CpuFill8
 .public MI_CpuCopy8
 
-	.public _021D414C
+	.public gLinkSync

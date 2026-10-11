@@ -45,7 +45,7 @@ void ov80_02232E9C(void *ctx) {
         void *frontier = Save_Frontier_GetStatic(*(void **)(p + 4));
         u32 stat = sub_0205C174(p[0x10], (u8)i);
         u32 substat = sub_0205C268(sub_0205C174(p[0x10], (u8)i));
-        sub_02031108(frontier, stat, substat, 1);
+        FrontierSave_SetStat(frontier, stat, substat, 1);
     }
     ov80_02232B58(ctx, 1);
 }

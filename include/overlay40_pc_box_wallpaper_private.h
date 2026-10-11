@@ -8,7 +8,7 @@
 #define HALF(p, off) (*(u16 *)((u8 *)(p) + (off)))
 #define BYTE(p, off) (*(u8 *)((u8 *)(p) + (off)))
 
-extern void *_021D2AF8;
+extern void *gBattleRecord;
 
 void GF_AssertFail(void);
 void *Heap_Alloc(int heapId, u32 size);
@@ -31,8 +31,8 @@ void *NewMsgDataFromNarc(u32 kind, u32 narcId, u32 msgId, u32 heapId);
 void ReadMsgDataIntoString(void *msgData, u32 msgNo, void *str);
 void DestroyMsgData(void *msgData);
 u16 SaveArray_CalcCRC16(void *save, void *data, u32 size);
-void sub_02030250(void *a, u32 b, u32 c);
-int sub_0202FDA4(void *save, void *a, void *b, int c);
+void BattleRecord_Encrypt(void *a, u32 b, u32 c);
+int BattleRecord_WriteSlot(void *save, void *a, void *b, int c);
 int sub_02027134(void *save, void *a, int b);
 int SaveGameNormal(void *save);
 void sub_0201A728(int a);

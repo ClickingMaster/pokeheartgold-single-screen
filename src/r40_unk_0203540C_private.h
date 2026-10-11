@@ -9,7 +9,7 @@ typedef struct NetworkState {
 } NetworkState;
 extern NetworkState _021D4134;
 int sub_02033298(int);
-int sub_020347CC(void);
+int CommPlayerInfo_DropDisconnected(void);
 void sub_020353B8(void);
 int sub_020338F4(void);
 int sub_0203567C(void);

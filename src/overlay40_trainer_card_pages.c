@@ -122,7 +122,7 @@ int ov40_022417DC(void *p) {
         if (!ov40_0223D5CC(p)) {
             return 0;
         }
-        sub_0202FC90(PTR(p, 0x830), 0x6D, &a, 0, 0);
+        BattleRecord_Load(PTR(p, 0x830), 0x6D, &a, 0, 0);
         PTR(w, 0x1D0) = sub_020314A4(0x6D);
         sub_020314C4(PTR(w, 0x1D0), PTR(p, 0x830));
         if (GlobalTerminalNet_RequestVideoUpload(ov40_0223D540(p), PTR(w, 0x1D0)) == 1) {
@@ -135,7 +135,7 @@ int ov40_022417DC(void *p) {
         if (!ov40_0223D5CC(p)) {
             return 0;
         }
-        sub_0202FC24();
+        BattleRecord_Delete();
         ov40_0222DFB0(p);
         if (GlobalTerminalNet_GetError(ov40_0223D540(p), (u32 *)&q) == 1) {
             StopSE(0x57D, 0);
@@ -386,7 +386,7 @@ void ov40_02241E40(u32 a, int b, void *p) {
             break;
         case 1:
             ov40_02230944(p);
-            if (sub_0202FC48()) {
+            if (BattleRecord_Exists()) {
                 ov40_0222BF80(p, 0x14);
             } else {
                 WORD(w, 0xC) = 0x14;
@@ -395,7 +395,7 @@ void ov40_02241E40(u32 a, int b, void *p) {
             break;
         case 2:
             ov40_02230944(p);
-            if (sub_0202FC48()) {
+            if (BattleRecord_Exists()) {
                 ov40_0222BF80(p, 0x16);
             } else {
                 WORD(w, 0xC) = 0x16;
@@ -747,7 +747,7 @@ int ov40_022425E8(void *p) {
             return 0;
         }
         ov40_02240F24(p, 0x118, 0);
-        v = sub_0203088C(sub_020307F8(), 4, 0);
+        v = BattleRecordHeader_GetField(BattleRecord_GetHeader(), 4, 0);
         if (ov39_0222774C(ov40_0223D540(p), (u32)v, (u32)(v >> 32)) == 1) {
             WORD(p, 8)
             ++;
@@ -810,8 +810,8 @@ int ov40_022425E8(void *p) {
                 BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
                 BgClearTilemapBufferAndCommit(PTR(p, 0x24), 3);
                 BgClearTilemapBufferAndCommit(PTR(p, 0x24), 7);
-                if (sub_0202FC48() == 1) {
-                    sub_0202FC24();
+                if (BattleRecord_Exists() == 1) {
+                    BattleRecord_Delete();
                 }
             } else {
                 BLEND(p, w, 1, 2);

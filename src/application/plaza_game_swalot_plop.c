@@ -36,9 +36,9 @@
 #include "unk_0200FA24.h"
 #include "unk_02026E30.h"
 #include "unk_02033AE0.h"
-#include "unk_02034354.h"
+#include "communication_player_state.h"
 #include "unk_02035900.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 #include "unk_02037C94.h"
 #include "unk_0203A3B0.h"
 #include "vram_transfer_manager.h"
@@ -174,7 +174,7 @@ BOOL SwalotPlop_Main(OverlayManager *man, int *state) {
         GF_CreateVramTransferManager(0x20, HEAP_ID_106);
         SwalotPlop_RegisterCommands(app);
         app->canSend = TRUE;
-        app->playerCount = sub_020347A0();
+        app->playerCount = CommPlayerInfo_CountAccepted();
         if (app->playerCount <= 1) {
             GF_AssertFail();
         }
@@ -207,11 +207,11 @@ BOOL SwalotPlop_Main(OverlayManager *man, int *state) {
             break;
         }
         SwalotPlopGame_SetOptions(app->game, msg.options);
-        sub_02037AC0(1);
+        LinkSync_StartSync(1);
         (*state)++;
         break;
     case 3:
-        if (sub_02037B38(1) != 0) {
+        if (LinkSync_IsSynced(1) != 0) {
             BeginNormalPaletteFade(0, 0x1B, 0x1B, 0xFFFF, 6, 1, HEAP_ID_106);
             (*state)++;
         }
@@ -295,12 +295,12 @@ BOOL SwalotPlop_Main(OverlayManager *man, int *state) {
     case 12:
         SwalotPlopGame_RunFinish(app->game, 1);
         if (IsPaletteFadeFinished() != 0) {
-            sub_02037AC0(3);
+            LinkSync_StartSync(3);
             (*state)++;
         }
         break;
     case 13:
-        if (sub_02037B38(3) == 0) {
+        if (LinkSync_IsSynced(3) == 0) {
             return FALSE;
         }
         if (args->unk38 != 0) {
@@ -351,11 +351,11 @@ BOOL SwalotPlop_Exit(OverlayManager *man, int *state) {
         if (connectionLost == TRUE) {
             return TRUE;
         }
-        sub_02037AC0(4);
+        LinkSync_StartSync(4);
         (*state)++;
         break;
     case 1:
-        if (sub_02037B38(4) != 0 || Comm_CountConnected() < sub_020347A0()) {
+        if (LinkSync_IsSynced(4) != 0 || Comm_CountConnected() < CommPlayerInfo_CountAccepted()) {
             return TRUE;
         }
         break;
@@ -674,11 +674,11 @@ BOOL SwalotPlopGame_RunIntro(SwalotPlopGame *game, BOOL ready) {
     case 1:
         if (SwalotPlopDemo_Update(&game->demo, game) == TRUE) {
             game->gfx.intro.state++;
-            sub_02037AC0(2);
+            LinkSync_StartSync(2);
         }
         break;
     case 2:
-        if (sub_02037B38(2)) {
+        if (LinkSync_IsSynced(2)) {
             game->gfx.intro.state++;
             game->gfx.intro.counter = 65;
         }

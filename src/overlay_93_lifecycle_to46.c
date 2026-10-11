@@ -42,8 +42,8 @@ extern int IsPaletteFadeFinished(void);
 extern void sub_0200FB70(void);
 extern void sub_0200FC20(int);
 extern int PlazaGameRoster_ProcessConnectionLost(void *);
-extern void sub_02037AC0(int);
-extern int sub_02037B38(int);
+extern void LinkSync_StartSync(int);
+extern int LinkSync_IsSynced(int);
 extern int ov93_022627A4(void);
 extern void ov93_0225E10C(void *);
 extern void ov93_02262250(void *);
@@ -241,11 +241,11 @@ u32 ov93_0225CA8C(void *man, int *state) {
         }
         break;
     case 1:
-        sub_02037AC0(0xd3);
+        LinkSync_StartSync(0xd3);
         (*state)++;
         break;
     case 2:
-        if (sub_02037B38(0xd3) == 1) {
+        if (LinkSync_IsSynced(0xd3) == 1) {
             (*state)++;
         }
         break;

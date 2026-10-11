@@ -69,8 +69,8 @@
 	.public ov40_0224549C
 	.public ov40_022454B0
 	.public ov40_022454E0
-	.public sub_020307F8
-	.public sub_0203088C
+	.public BattleRecord_GetHeader
+	.public BattleRecordHeader_GetField
 	.public sub_020315B8
 	.public sub_02087A84
 	.text
@@ -764,10 +764,10 @@ ov40_0223C80C: ; 0x0223C80C
 	mov r0, #0x86
 	lsl r0, r0, #4
 	ldr r5, [r4, r0]
-	bl sub_020307F8
+	bl BattleRecord_GetHeader
 	mov r1, #4
 	mov r2, #0
-	bl sub_0203088C
+	bl BattleRecordHeader_GetField
 	add r3, r0, #0
 	add r2, r1, #0
 	add r0, r4, #0

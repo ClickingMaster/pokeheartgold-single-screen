@@ -72,6 +72,6 @@ int FrtCmd_207(void *c);
 void ov80_0222E328(void *p, int n, void *out);
 
 int FrtCmd_111(void *c) {
-    sub_0202FC24(c);
+    BattleRecord_Delete(c);
     return 0;
 }

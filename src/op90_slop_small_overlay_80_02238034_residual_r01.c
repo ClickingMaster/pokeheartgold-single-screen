@@ -40,7 +40,7 @@ extern void BattleSetup_SetAllySideBattlersToPlayer(BattleSetupX *);
 extern void *FrontierTrainer_Load(void *, u16, enum HeapID, int);
 extern void FrontierTrainer_SetBattleTrainer(BattleSetupX *, void *, int, int, enum HeapID);
 extern u32 ov80_02238444(ArcadeData *);
-extern void *sub_02034818(int);
+extern void *CommPlayerInfo_GetProfile(int);
 extern void HealParty(Party *);
 BattleSetupX *BattleArcade_NewBattleSetup(ArcadeData *data, FieldSysX *fs);
 // @fn BattleArcade_NewBattleSetup
@@ -97,7 +97,7 @@ BattleSetupX *BattleArcade_NewBattleSetup(ArcadeData *data, FieldSysX *fs) {
     case 2:
     case 3:
         BattleSetup_SetAllySideBattlersToPlayer(setup);
-        PlayerProfile_Copy(sub_02034818(1 - Comm_GetLocalNetId()), *(void **)((u8 *)setup + 0x100));
+        PlayerProfile_Copy(CommPlayerInfo_GetProfile(1 - Comm_GetLocalNetId()), *(void **)((u8 *)setup + 0x100));
         Heap_Free(FrontierTrainer_Load(trainer, data->trainerIds[data->trainerIdx + 7], HEAP_ID_FIELD2, 204));
         FrontierTrainer_SetBattleTrainer(setup, trainer, enemyCount, 3, HEAP_ID_FIELD2);
         Party_InitWithMaxSize(setup->parties[3], BattleArcade_GetOpponentMonCount(data->type, 0));

@@ -10,7 +10,7 @@ void sub_02059F78(void *p) {
     _021D41CC[0]++;
     profile = sub_02035878();
     if (sub_020376F8() != 0 && sub_02059F54() == TRUE && profile[0x1C] != 4) {
-        sub_02034434();
+        CommPlayerInfo_SendLocal();
         sub_020398D4(1, 1);
         sub_0205A904(11);
         sub_0205A034(p, sub_02059FF8, 0);

@@ -165,10 +165,10 @@ void ConnectToRanger_SetupGraphics(ConnectToRangerApp *app) {
 
     GfGfx_SetBanks(&banks);
     SetBothScreensModesAndDisable(&modes);
-    ov74_02235308(app->bgConfig, GF_BG_LYR_MAIN_0, 1, 0xF000, 0);
-    ov74_02235308(app->bgConfig, GF_BG_LYR_MAIN_1, 1, 0xF800, 0x4000);
-    ov74_02235308(app->bgConfig, GF_BG_LYR_SUB_0, 1, 0x7800, 0);
-    ov74_02235308(app->bgConfig, GF_BG_LYR_SUB_1, 1, 0x7000, 0x4000);
+    MainMenuUtil_InitBg(app->bgConfig, GF_BG_LYR_MAIN_0, 1, 0xF000, 0);
+    MainMenuUtil_InitBg(app->bgConfig, GF_BG_LYR_MAIN_1, 1, 0xF800, 0x4000);
+    MainMenuUtil_InitBg(app->bgConfig, GF_BG_LYR_SUB_0, 1, 0x7800, 0);
+    MainMenuUtil_InitBg(app->bgConfig, GF_BG_LYR_SUB_1, 1, 0x7000, 0x4000);
     ResetAllTextPrinters();
     LoadFontPal0(GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, app->heapID);
     LoadUserFrameGfx1(app->bgConfig, GF_BG_LYR_MAIN_0, 1, 1, 0, app->heapID);
@@ -195,9 +195,9 @@ void ConnectToRanger_LoadSubScreenBg(ConnectToRangerApp *app) {
 BOOL ConnectToRanger_ShowPokedexRequiredMessage(ConnectToRangerApp *app) {
     MainMenuTextPrinter printer;
     if (WindowIsInUse(&app->messageWindow) == FALSE) {
-        ov74_02235414(&printer, &app->messageWindow, 0, NARC_msg_msg_0017_bin, 1, 1);
-        ov74_02235464(&printer, 22, 16, app->nextFreeTile);
-        ov74_02235568(app->bgConfig, &printer, 5, 4, msg_0017_00002);
+        MainMenuTextPrinter_Init(&printer, &app->messageWindow, 0, NARC_msg_msg_0017_bin, 1, 1);
+        MainMenuTextPrinter_SetSize(&printer, 22, 16, app->nextFreeTile);
+        MainMenuTextPrinter_AddWindowAndPrint(app->bgConfig, &printer, 5, 4, msg_0017_00002);
         return TRUE;
     }
     if (gSystem.newKeys & (PAD_BUTTON_A | PAD_BUTTON_B)) {
@@ -211,22 +211,22 @@ BOOL ConnectToRanger_ShowPokedexRequiredMessage(ConnectToRangerApp *app) {
 #pragma force_active on
 
 void ConnectToRanger_PrintScreen(ConnectToRangerApp *app) {
-    ov74_02235414(&app->statusText, &app->statusWindow, 0, NARC_msg_msg_0247_bin, 10, 2);
-    ov74_02235464(&app->statusText, 27, 4, app->nextFreeTile);
-    ov74_0223546C(&app->statusText, 1, 1);
-    ov74_02235568(app->bgConfig, &app->statusText, 2, 19, msg_0247_00072);
-    app->nextFreeTile += ov74_02235634(&app->statusText);
+    MainMenuTextPrinter_Init(&app->statusText, &app->statusWindow, 0, NARC_msg_msg_0247_bin, 10, 2);
+    MainMenuTextPrinter_SetSize(&app->statusText, 27, 4, app->nextFreeTile);
+    MainMenuTextPrinter_SetFrameAndFont(&app->statusText, 1, 1);
+    MainMenuTextPrinter_AddWindowAndPrint(app->bgConfig, &app->statusText, 2, 19, msg_0247_00072);
+    app->nextFreeTile += MainMenuTextPrinter_GetTileCount(&app->statusText);
 
-    ov74_02235414(&app->titleText, &app->messageWindow, 0, NARC_msg_msg_0247_bin, 1, 1);
-    ov74_02235464(&app->titleText, 30, 4, app->nextFreeTile);
-    ov74_0223546C(&app->titleText, 0, 1);
-    ov74_02235568(app->bgConfig, &app->titleText, 1, 1, msg_0247_00011);
-    app->nextFreeTile += ov74_02235634(&app->titleText);
+    MainMenuTextPrinter_Init(&app->titleText, &app->messageWindow, 0, NARC_msg_msg_0247_bin, 1, 1);
+    MainMenuTextPrinter_SetSize(&app->titleText, 30, 4, app->nextFreeTile);
+    MainMenuTextPrinter_SetFrameAndFont(&app->titleText, 0, 1);
+    MainMenuTextPrinter_AddWindowAndPrint(app->bgConfig, &app->titleText, 1, 1, msg_0247_00011);
+    app->nextFreeTile += MainMenuTextPrinter_GetTileCount(&app->titleText);
 
-    ov74_0223563C();
-    ov74_02235690();
-    ov74_02235728(NARC_a_1_1_3, 14, 11, 13, 12, 0);
-    app->sprite = ov74_02235930(0, app->sprite, 128, 76, 1);
+    MainMenuUtil_InitObjTransfer();
+    MainMenuUtil_InitSprites();
+    MainMenuUtil_LoadSpriteResources(NARC_a_1_1_3, 14, 11, 13, 12, 0);
+    app->sprite = MainMenuUtil_CreateSprite(0, app->sprite, 128, 76, 1);
     ConnectToRanger_PrintPlayerInfo(app);
 }
 
@@ -247,16 +247,16 @@ void ConnectToRanger_PrintPlayerInfo(ConnectToRangerApp *app) {
     u8 macAddress[6];
     RangerApplicationNo applicationNo;
 
-    ov74_02235414(&app->playerText, &app->playerInfoWindow, 0, NARC_msg_msg_0247_bin, 1, 1);
-    ov74_02235464(&app->playerText, 26, 4, app->nextFreeTile);
-    ov74_0223546C(&app->playerText, 0, 1);
+    MainMenuTextPrinter_Init(&app->playerText, &app->playerInfoWindow, 0, NARC_msg_msg_0247_bin, 1, 1);
+    MainMenuTextPrinter_SetSize(&app->playerText, 26, 4, app->nextFreeTile);
+    MainMenuTextPrinter_SetFrameAndFont(&app->playerText, 0, 1);
     app->playerText.msgFormat = msgFormat;
     BufferPlayersName(msgFormat, 0, app->profile);
     BufferIntegerAsString(msgFormat, 1, PlayerProfile_GetTrainerID_VisibleHalf(app->profile), 5, PRINTING_MODE_LEADING_ZEROS, TRUE);
-    ov74_02235568(app->bgConfig, &app->playerText, 3, 13, msg_0247_00068);
+    MainMenuTextPrinter_AddWindowAndPrint(app->bgConfig, &app->playerText, 3, 13, msg_0247_00068);
     app->playerText.clearWindow = FALSE;
-    ov74_02235474(&app->playerText, 0, GetFontAttribute(0, 1));
-    ov74_02235568(app->bgConfig, &app->playerText, -1, -1, msg_0247_00070);
+    MainMenuTextPrinter_SetTextPos(&app->playerText, 0, GetFontAttribute(0, 1));
+    MainMenuTextPrinter_AddWindowAndPrint(app->bgConfig, &app->playerText, -1, -1, msg_0247_00070);
 
     OS_GetMacAddress(macAddress);
     applicationNo = GetApplicationNumber(macAddress);
@@ -264,7 +264,7 @@ void ConnectToRanger_PrintPlayerInfo(ConnectToRangerApp *app) {
     BufferIntegerAsString(msgFormat, 0, high, 4, PRINTING_MODE_LEADING_ZEROS, TRUE);
     BufferIntegerAsString(msgFormat, 1, low, 4, PRINTING_MODE_LEADING_ZEROS, TRUE);
     app->playerText.rightAlign = TRUE;
-    ov74_02235568(app->bgConfig, &app->playerText, -1, -1, msg_0247_00071);
+    MainMenuTextPrinter_AddWindowAndPrint(app->bgConfig, &app->playerText, -1, -1, msg_0247_00071);
     MessageFormat_Delete(msgFormat);
 }
 
@@ -272,7 +272,7 @@ void ConnectToRanger_PrintPlayerInfo(ConnectToRangerApp *app) {
 
 void ConnectToRanger_FreeGraphics(OverlayManager *manager) {
     ConnectToRangerApp *app = OverlayManager_GetData(manager);
-    ov74_022359BC();
+    MainMenuUtil_FreeSprites();
     if (WindowIsInUse(&app->messageWindow) == TRUE) {
         ClearWindowTilemapAndCopyToVram(&app->messageWindow);
         RemoveWindow(&app->messageWindow);
@@ -289,14 +289,14 @@ void ConnectToRanger_FreeGraphics(OverlayManager *manager) {
 }
 
 BOOL ConnectToRanger_Init(OverlayManager *manager, int *state) {
-    ConnectToRangerApp *app = ov74_022352D0(manager, HEAP_ID_83, sizeof(ConnectToRangerApp), 0x20000);
+    ConnectToRangerApp *app = MainMenuUtil_CreateAppData(manager, HEAP_ID_83, sizeof(ConnectToRangerApp), 0x20000);
     app->heapID = HEAP_ID_83;
     app->bgConfig = BgConfig_Alloc(HEAP_ID_83);
     app->saveData = ((UnkStruct_02111868_sub *)OverlayManager_GetArgs(manager))->saveData;
     app->profile = Save_PlayerData_GetProfile(app->saveData);
     app->pokedex = Save_Pokedex_Get(app->saveData);
     app->options = Save_PlayerData_GetOptionsAddr(app->saveData);
-    ov74_022352A0(app->heapID);
+    MainMenuUtil_InitWork(app->heapID);
     app->mysteryGift = Save_MysteryGift_Get(app->saveData);
     app->unk_14C = 9;
     app->nextFreeTile = 40;
@@ -317,44 +317,44 @@ BOOL ConnectToRanger_Main(OverlayManager *manager, int *state) {
     case 0:
         ConnectToRanger_SetupGraphics(app);
         if (!Pokedex_IsEnabled(app->pokedex)) {
-            ov74_0223539C(1, 1, state, 13);
+            MainMenuUtil_StartFade(1, 1, state, 13);
         } else {
             *state = 2;
         }
         break;
     case 1:
         if (!ConnectToRanger_ShowPokedexRequiredMessage(app)) {
-            ov74_02235390(1);
-            ov74_0223539C(0, 12, state, 13);
+            MainMenuUtil_SetFadeWhite(1);
+            MainMenuUtil_StartFade(0, 12, state, 13);
         }
         break;
     case 2:
         ConnectToRanger_PrintScreen(app);
         if (!SaveMysteryGift_FindAvailable(app->mysteryGift)) {
             app->statusText.speed = 1;
-            app->textPrinterId = ov74_02235568(app->bgConfig, &app->statusText, 2, 19, msg_0247_00022);
-            ov74_0223539C(1, 3, state, 13);
+            app->textPrinterId = MainMenuTextPrinter_AddWindowAndPrint(app->bgConfig, &app->statusText, 2, 19, msg_0247_00022);
+            MainMenuUtil_StartFade(1, 3, state, 13);
         } else {
             app->unk_14C = 7;
-            ov74_0223539C(1, 4, state, 13);
+            MainMenuUtil_StartFade(1, 4, state, 13);
         }
         break;
     case 3:
         if (!TextPrinterCheckActive((u8)app->textPrinterId)) {
             if (gSystem.newKeys & PAD_BUTTON_A) {
-                ov74_02235390(1);
-                ov74_0223539C(0, 12, state, 13);
+                MainMenuUtil_SetFadeWhite(1);
+                MainMenuUtil_StartFade(0, 12, state, 13);
             }
         }
         break;
     case 4:
         app->connectResult = ConnectToRanger_RunTransfer(app);
         if (app->connectResult == 5) {
-            ov74_02235390(1);
-            ov74_0223539C(0, 12, state, 13);
+            MainMenuUtil_SetFadeWhite(1);
+            MainMenuUtil_StartFade(0, 12, state, 13);
         } else if (app->connectResult == 4) {
-            ov74_02235390(1);
-            ov74_0223539C(0, 12, state, 13);
+            MainMenuUtil_SetFadeWhite(1);
+            MainMenuUtil_StartFade(0, 12, state, 13);
         }
         break;
     case 5:
@@ -362,12 +362,12 @@ BOOL ConnectToRanger_Main(OverlayManager *manager, int *state) {
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG0, GF_PLANE_TOGGLE_ON);
         GfGfx_EngineBTogglePlanes(GX_PLANEMASK_BG1, GF_PLANE_TOGGLE_OFF);
         WonderCardAlbum_DrawCardOnBg(app->bgConfig, &app->wonderCard, HEAP_ID_83);
-        ov74_0223539C(1, 6, state, 13);
+        MainMenuUtil_StartFade(1, 6, state, 13);
         app->wonderCard.unk104.unk8E_2 = FALSE;
         break;
     case 6:
         if (gSystem.newKeys) {
-            ov74_0223539C(0, 11, state, 13);
+            MainMenuUtil_StartFade(0, 11, state, 13);
         }
         break;
     case 11:
@@ -377,10 +377,10 @@ BOOL ConnectToRanger_Main(OverlayManager *manager, int *state) {
         ConnectToRanger_FreeGraphics(manager);
         return TRUE;
     case 13:
-        ov74_022353FC(state);
+        MainMenuUtil_WaitFade(state);
         break;
     }
-    ov74_022358BC();
+    MainMenuUtil_UpdateSprites();
     return FALSE;
 }
 
@@ -544,7 +544,7 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
         }
         break;
     case RANGER_CONNECT_FOUND:
-        ov74_02235568(app->bgConfig, &app->statusText, 2, 19, msg_0247_00031);
+        MainMenuTextPrinter_AddWindowAndPrint(app->bgConfig, &app->statusText, 2, 19, msg_0247_00031);
         Sprite_SetDrawFlag(app->sprite, FALSE);
         WaitingIcon_Delete(app->waitingIcon);
         app->waitingIcon = NULL;
@@ -569,7 +569,7 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
             RangerLink_StartSendNames();
             CONNECT_STATE = RANGER_CONNECT_WAIT_TOUCH;
             app->timer = 3200;
-            ov74_02235568(app->bgConfig, &app->statusText, 2, 19, msg_0247_00035);
+            MainMenuTextPrinter_AddWindowAndPrint(app->bgConfig, &app->statusText, 2, 19, msg_0247_00035);
             PlaySE(SEQ_SE_DP_SELECT);
             app->waitingIcon = NULL;
             return 1;
@@ -578,7 +578,7 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
         break;
     case RANGER_CONNECT_WAIT_TOUCH:
         if (RangerLink_IsSendDone()) {
-            ov74_02235568(app->bgConfig, &app->statusText, 2, 19, msg_0247_00073);
+            MainMenuTextPrinter_AddWindowAndPrint(app->bgConfig, &app->statusText, 2, 19, msg_0247_00073);
             Sprite_SetDrawFlag(app->sprite, TRUE);
             ConnectToRanger_PrintPlayerInfo(app);
             CONNECT_STATE = RANGER_CONNECT_SEND_PLAYER;
@@ -594,13 +594,13 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
         if (RangerLink_IsCommandDone()) {
             CONNECT_STATE = RANGER_CONNECT_SAVE_DELAY;
             app->timer = 60;
-            ov74_02235568(app->bgConfig, &app->statusText, 2, 19, msg_0247_00073);
+            MainMenuTextPrinter_AddWindowAndPrint(app->bgConfig, &app->statusText, 2, 19, msg_0247_00073);
         }
         ConnectToRanger_CheckTimeoutOrCancel(app, &CONNECT_STATE, TRUE, PAD_BUTTON_B);
         break;
     case RANGER_CONNECT_SAVE_DELAY:
         if (--app->timer == 0) {
-            ov74_02235568(app->bgConfig, &app->statusText, 2, 19, msg_0247_00074);
+            MainMenuTextPrinter_AddWindowAndPrint(app->bgConfig, &app->statusText, 2, 19, msg_0247_00074);
             app->waitingIcon = WaitingIcon_New(&app->statusWindow, 10);
             ConnectToRanger_StoreManaphyEggCard(app);
             ov74_022360A0(app->saveData);
@@ -663,7 +663,7 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
     case RANGER_CONNECT_DONE_DELAY:
         if (--app->timer == 0) {
             CONNECT_STATE = RANGER_CONNECT_DONE;
-            ov74_02235568(app->bgConfig, &app->statusText, 2, 19, msg_0247_00075);
+            MainMenuTextPrinter_AddWindowAndPrint(app->bgConfig, &app->statusText, 2, 19, msg_0247_00075);
             Sprite_SetDrawFlag(app->sprite, FALSE);
             WaitingIcon_Delete(app->waitingIcon);
             PlaySE(SEQ_SE_DP_SELECT);
@@ -687,7 +687,7 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
         CONNECT_STATE = RANGER_CONNECT_TIMEOUT;
         // fallthrough
     case RANGER_CONNECT_TIMEOUT:
-        ov74_02235568(app->bgConfig, &app->statusText, 2, 19, msg_0247_00076);
+        MainMenuTextPrinter_AddWindowAndPrint(app->bgConfig, &app->statusText, 2, 19, msg_0247_00076);
         Sprite_SetDrawFlag(app->sprite, FALSE);
         if (app->waitingIcon) {
             WaitingIcon_Delete(app->waitingIcon);

@@ -18,14 +18,14 @@ BOOL sub_02075074(LinkWork *work, u32 value, ...) {
     if (sub_02037190() != 264) {
         return FALSE;
     }
-    if (sub_02037B38(51) == 0) {
+    if (LinkSync_IsSynced(51) == 0) {
         return FALSE;
     }
     return Comm_SendCommand(24, &value, 4);
 }
 void sub_020750B4(int sender, int unused, u32 *data, LinkWork *work) {
     work->setup->aiFlags[sender] = *data;
-    sub_0203049C(sender, work->setup->aiFlags[sender]);
+    BattleRecord_SetAiFlags(sender, work->setup->aiFlags[sender]);
     work->received++;
 }
 BOOL sub_020750E0(LinkWork *work) {
@@ -39,7 +39,7 @@ BOOL sub_02075108(LinkWork *work) {
     if (sub_02037190() != 264) {
         return FALSE;
     }
-    if (sub_02037B38(52) == 0) {
+    if (LinkSync_IsSynced(52) == 0) {
         return FALSE;
     }
     return sub_02036FD8(25, &work->buffer, PlayerProfile_sizeof());
@@ -58,7 +58,7 @@ BOOL sub_02075178(LinkWork *work) {
     if (sub_02037190() != 264) {
         return FALSE;
     }
-    if (sub_02037B38(53) == 0) {
+    if (LinkSync_IsSynced(53) == 0) {
         return FALSE;
     }
     return sub_02036FD8(26, &work->buffer, 52);
@@ -77,7 +77,7 @@ BOOL sub_020751DC(LinkWork *work) {
     if (sub_02037190() != 264) {
         return FALSE;
     }
-    if (sub_02037B38(54) == 0) {
+    if (LinkSync_IsSynced(54) == 0) {
         return FALSE;
     }
     return sub_02036FD8(27, &work->buffer, PartyCore_sizeof());
@@ -96,7 +96,7 @@ BOOL sub_02075248(LinkWork *work) {
     if (sub_02037190() != 264) {
         return FALSE;
     }
-    if (sub_02037B38(55) == 0) {
+    if (LinkSync_IsSynced(55) == 0) {
         return FALSE;
     }
     return sub_02036FD8(28, &work->buffer, 1000);

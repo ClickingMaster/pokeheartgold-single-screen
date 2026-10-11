@@ -31,7 +31,7 @@
 #include "palette_blink.h"
 #include "unk_02019BA4.h"
 #include "frontier_data_access.h"
-#include "unk_02030A98.h"
+#include "frontier_save_access.h"
 #include "unk_0205BFF0.h"
 
 // Facilities, as passed in UnkStruct_0203FAB4.unk5
@@ -160,7 +160,7 @@ u32 sub_0205C01C(u8 a0, u8 a1);
 u32 sub_0205C074(u8 a0, u8 a1);
 u32 sub_0205C1C8(u8 a0);
 u32 sub_0205C240(u8 a0);
-u32 sub_02030AD4(int a0, u32 a1, u8 a2, u32 a3);
+u32 FactoryFlags_GetField(int a0, u32 a1, u8 a2, u32 a3);
 
 // text.h is not included: it declares fontId as u8 (FontID), but this module passes it unnarrowed
 u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, String *string, u32 x, u32 y, u32 textSpeed, u32 color, void *callback);
@@ -671,8 +671,8 @@ u32 FrontierRecordsApp_GetFactoryStreakLabel(FrontierRecordsApp *app, u32 level)
         FrontierSave *frontierSave = Save_Frontier_GetStatic(app->saveData);
         result = FrontierSave_GetStat(frontierSave, stat, sub_0205C268(stat));
     } else {
-        int factory = sub_02030AE8(app->saveData);
-        result = sub_02030AD4(factory, 10, (u8)(mode + level * 4), 0);
+        int factory = Save_Frontier_GetFactoryFlags(app->saveData);
+        result = FactoryFlags_GetField(factory, 10, (u8)(mode + level * 4), 0);
     }
     return (u8)result == 1 ? msg_0019_00030 : msg_0019_00029;
 }
@@ -711,11 +711,11 @@ void FrontierRecordsApp_PrintHallRecords(FrontierRecordsApp *app) {
     FrontierRecordsApp_BufferNumber(app, 0, value);
     FrontierRecordsApp_PrintFormattedMessage(app, 2, msg_0019_00050, 112, 0, 0, COLOR_TEXT, 2);
     FrontierRecordsApp_PrintMessage(app, 3, msg_0019_00043, 0, 0, 0, COLOR_TEXT, 0);
-    records = sub_020312C4(app->saveData, 11, &flag);
+    records = FrontierSpeciesRecords_Load(app->saveData, 11, &flag);
     if (flag != 1) {
         value = 0;
     } else {
-        value = sub_020312E0(app->saveData, records, sub_0205C144(app->mode), app->species);
+        value = FrontierSpeciesRecords_Get(app->saveData, records, sub_0205C144(app->mode), app->species);
     }
     if (records != NULL) {
         Heap_Free(records);
@@ -782,7 +782,7 @@ u32 FrontierRecordsApp_GetCastleStreakLabel(FrontierRecordsApp *app) {
         FrontierSave *frontierSave = Save_Frontier_GetStatic(app->saveData);
         result = FrontierSave_GetStat(frontierSave, 0x6C, sub_0205C268(0x6C));
     } else {
-        result = sub_02030E58(sub_02030E08(app->saveData), 9, mode, 0, 0);
+        result = CastleFlags_GetField(Save_Frontier_GetCastleFlags(app->saveData), 9, mode, 0, 0);
     }
     return (u8)result == 1 ? msg_0019_00030 : msg_0019_00029;
 }
@@ -821,7 +821,7 @@ u32 FrontierRecordsApp_GetArcadeStreakLabel(FrontierRecordsApp *app) {
         FrontierSave *frontierSave = Save_Frontier_GetStatic(app->saveData);
         result = FrontierSave_GetStat(frontierSave, 0x6E, sub_0205C268(0x6E));
     } else {
-        result = sub_02030FE4(sub_02030FA0(app->saveData), 8, mode, 0, 0);
+        result = ArcadeFlags_GetField(Save_Frontier_GetArcadeFlags(app->saveData), 8, mode, 0, 0);
     }
     return (u8)result == 1 ? msg_0019_00030 : msg_0019_00029;
 }
@@ -1123,7 +1123,7 @@ u16 *FrontierRecordsApp_LoadSortedSpecies(int letter, u32 *count) {
 void FrontierRecordsApp_InitSpeciesGroups(FrontierRecordsApp *app) {
     u32 enabled;
     u32 count;
-    u32 *records = sub_020312C4(app->saveData, 11, &enabled);
+    u32 *records = FrontierSpeciesRecords_Load(app->saveData, 11, &enabled);
     u16 letter;
 
     if (enabled == 1) {
@@ -1132,7 +1132,7 @@ void FrontierRecordsApp_InitSpeciesGroups(FrontierRecordsApp *app) {
             u16 i;
             app->groups[letter].species = Heap_Alloc(HEAP_ID_121, count * 2);
             for (i = 0; i < count; i++) {
-                if (sub_020312E0(app->saveData, records, sub_0205C144(app->mode), species[i])) {
+                if (FrontierSpeciesRecords_Get(app->saveData, records, sub_0205C144(app->mode), species[i])) {
                     app->groups[letter].species[app->groups[letter].count] = species[i];
                     app->groups[letter].count++;
                 }

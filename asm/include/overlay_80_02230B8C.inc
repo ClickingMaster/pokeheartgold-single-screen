@@ -4,7 +4,7 @@
 .public Heap_Alloc
 .public Heap_Free
 .public GfGfx_EngineATogglePlanes
-.public sub_02030B14
+.public HallChallenge_GetSaved
 .public sub_02030BD0
 .public sub_02030BF4
 .public BattleSetup_Delete

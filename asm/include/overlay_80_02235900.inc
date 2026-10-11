@@ -3,12 +3,12 @@
 .public Heap_Free
 .public FrontierData_TowerRoundAction
 .public Save_FrontierData_Get
-.public sub_02030C5C
+.public Save_Frontier_GetHallFlags
 .public Save_Frontier_GetStatic
 .public FrontierSave_GetStat
-.public sub_02031108
+.public FrontierSave_SetStat
 .public Comm_GetLocalNetId
-.public sub_02037B5C
+.public LinkSync_GetPlayerState
 .public FrontierFieldSystem_New
 .public FrontierFieldSystem_Free
 .public FrontierFieldSystem_SetRandomFrontierTrainers

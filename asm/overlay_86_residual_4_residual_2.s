@@ -280,7 +280,7 @@ _021E65C8:
 	ldr r0, [r5, r0]
 	mov r1, #0xb
 	add r2, sp, #0x10
-	bl sub_020312C4
+	bl FrontierSpeciesRecords_Load
 	add r4, r0, #0
 	ldr r0, [sp, #0x10]
 	cmp r0, #1
@@ -296,7 +296,7 @@ _021E6618:
 	ldrh r3, [r5, #8]
 	ldr r0, [r5, r0]
 	add r1, r4, #0
-	bl sub_020312E0
+	bl FrontierSpeciesRecords_Get
 	add r6, r0, #0
 _021E6630:
 	cmp r4, #0

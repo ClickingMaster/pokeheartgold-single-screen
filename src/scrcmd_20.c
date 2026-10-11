@@ -24,7 +24,7 @@
 #include "script.h"
 #include "script_manager.h"
 #include "task.h"
-#include "unk_02030A98.h"
+#include "frontier_save_access.h"
 #include "unk_02035900.h"
 #include "unk_0205BB1C.h"
 #include "unk_0205BFF0.h"
@@ -134,9 +134,9 @@ BOOL ScrCmd_491(ScriptContext *ctx) {
 BOOL ScrCmd_628(ScriptContext *ctx) {
     u16 r4 = ScriptGetVar(ctx);
     u16 r5 = ScriptGetVar(ctx);
-    u32 r0 = sub_02030AE8(ctx->fieldSystem->saveData);
+    u32 r0 = Save_Frontier_GetFactoryFlags(ctx->fieldSystem->saveData);
     u8 s = 0;
-    sub_02030AA4(r0, 0xa, r5 * 4 + r4, &s);
+    FactoryFlags_SetField(r0, 0xa, r5 * 4 + r4, &s);
     if (r4 == 3) {
         u32 r7;
         if (r5 == 0) {
@@ -144,10 +144,10 @@ BOOL ScrCmd_628(ScriptContext *ctx) {
         } else {
             r7 = 0x68;
         }
-        sub_02031108(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), r7, sub_0205C268(r7), 0);
+        FrontierSave_SetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), r7, sub_0205C268(r7), 0);
     }
-    sub_02031108(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), sub_0205BFF0(r5, r4), sub_0205C268(sub_0205BFF0(r5, r4)), 0);
-    sub_02031108(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), sub_0205C048(r5, r4), sub_0205C268(sub_0205C048(r5, r4)), 0);
+    FrontierSave_SetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), sub_0205BFF0(r5, r4), sub_0205C268(sub_0205BFF0(r5, r4)), 0);
+    FrontierSave_SetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), sub_0205C048(r5, r4), sub_0205C268(sub_0205C048(r5, r4)), 0);
     return FALSE;
 }
 
@@ -155,8 +155,8 @@ BOOL ScrCmd_633(ScriptContext *ctx) {
     u16 r7 = ScriptReadHalfword(ctx);
     u16 r5 = ScriptGetVar(ctx);
     u16 *resultPtr = ScriptGetVarPointer(ctx);
-    sub_02030B04(ctx->fieldSystem->saveData);
-    u32 sp04 = sub_02030C5C(ctx->fieldSystem->saveData);
+    Save_Frontier_GetHallChallenge(ctx->fieldSystem->saveData);
+    u32 sp04 = Save_Frontier_GetHallFlags(ctx->fieldSystem->saveData);
     void *r1 = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
     switch (r7) {
     case 0:
@@ -166,7 +166,7 @@ BOOL ScrCmd_633(ScriptContext *ctx) {
         if (r5 == 3) {
             *resultPtr = FrontierSave_GetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), 0x6a, sub_0205C268(0x6a));
         } else {
-            *resultPtr = sub_02030CA0(sp04, 5, r5, 0, 0);
+            *resultPtr = HallFlags_GetField(sp04, 5, r5, 0, 0);
         }
         break;
     case 2:
@@ -237,7 +237,7 @@ static BOOL BattleHall_DoesPartyContainEligibleMons(s32 numRequiredMons, SaveDat
 // upon continuing battle hall challenge without previously saving
 BOOL ScrCmd_636(ScriptContext *ctx) {
     u16 r4 = ScriptGetVar(ctx);
-    u32 r1 = sub_02030C5C(ctx->fieldSystem->saveData);
+    u32 r1 = Save_Frontier_GetHallFlags(ctx->fieldSystem->saveData);
     sub_0204F878(ctx->fieldSystem->saveData, r1, r4);
     return FALSE;
 }
@@ -412,12 +412,12 @@ BOOL ScrCmd_BufferBattleHallStreak(ScriptContext *ctx) {
         *result = 0;
         return FALSE;
     }
-    unk0 = sub_020312C4(fieldSystem->saveData, 0x20, &unk1);
+    unk0 = FrontierSpeciesRecords_Load(fieldSystem->saveData, 0x20, &unk1);
     if (unk1 != 1) {
         winStreak = 0;
     } else {
         for (i = 0; i < MAX_SPECIES; i++) {
-            winStreak += sub_020312E0(fieldSystem->saveData, unk0, 0, i);
+            winStreak += FrontierSpeciesRecords_Get(fieldSystem->saveData, unk0, 0, i);
         }
     }
     if (unk0 != NULL) {
@@ -468,15 +468,15 @@ BOOL ScrCmd_BattleHallCountUsedSpecies(ScriptContext *ctx) {
         *result = 0;
         return FALSE;
     }
-    void *unk1 = sub_020312C4(fieldSystem->saveData, 0x20, &unk0);
+    void *unk1 = FrontierSpeciesRecords_Load(fieldSystem->saveData, 0x20, &unk0);
     if (unk0 != 1) {
         numSpecies = 0;
     } else {
         for (i = 0; i < MAX_SPECIES; i++) {
             u32 winStreak = 0;
-            winStreak += sub_020312E0(fieldSystem->saveData, unk1, 0, i);
-            winStreak += sub_020312E0(fieldSystem->saveData, unk1, 1, i);
-            winStreak += sub_020312E0(fieldSystem->saveData, unk1, 2, i);
+            winStreak += FrontierSpeciesRecords_Get(fieldSystem->saveData, unk1, 0, i);
+            winStreak += FrontierSpeciesRecords_Get(fieldSystem->saveData, unk1, 1, i);
+            winStreak += FrontierSpeciesRecords_Get(fieldSystem->saveData, unk1, 2, i);
             if (winStreak > 0) {
                 numSpecies++;
             }
@@ -500,10 +500,10 @@ BOOL ScrCmd_BattleHallGetTotalStreak(ScriptContext *ctx) {
         *result = 0;
         return FALSE;
     }
-    void *unk1 = sub_020312C4(fieldSystem->saveData, 0x20, &unk0);
+    void *unk1 = FrontierSpeciesRecords_Load(fieldSystem->saveData, 0x20, &unk0);
     if (unk0 == 1) {
         for (u32 i = 0; i < MAX_SPECIES; i++) {
-            winStreak += sub_020312E0(fieldSystem->saveData, unk1, 0, i);
+            winStreak += FrontierSpeciesRecords_Get(fieldSystem->saveData, unk1, 0, i);
         }
     }
     if (unk1 != NULL) {
@@ -538,9 +538,9 @@ void sub_0204F85C(u32 a0, u32 unused, UnkStruct_0204F1E4 *a2, UnkStruct_0204F1E4
 void sub_0204F878(SaveData *saveData, u32 a1, u8 a2) {
     u8 unk0;
     unk0 = 0;
-    sub_02030C6C(a1, 5, a2, 0, &unk0);
+    HallFlags_SetField(a1, 5, a2, 0, &unk0);
     if (a2 == 3) {
-        sub_02031108(Save_Frontier_GetStatic(saveData), 0x6a, sub_0205C268(0x6a), 0);
+        FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), 0x6a, sub_0205C268(0x6a), 0);
     }
-    sub_02031108(Save_Frontier_GetStatic(saveData), sub_0205C0CC(a2), sub_0205C268(sub_0205C0CC(a2)), 0);
+    FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), sub_0205C0CC(a2), sub_0205C268(sub_0205C0CC(a2)), 0);
 }

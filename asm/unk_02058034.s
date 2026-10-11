@@ -52,7 +52,7 @@ _020581D6:
 	bl Comm_GetLocalNetId
 	str r0, [sp, #8]
 	bl Comm_GetLocalNetId
-	bl sub_02034818
+	bl CommPlayerInfo_GetProfile
 	mov r4, #0
 	bl Comm_CountConnected
 	cmp r0, #0
@@ -91,7 +91,7 @@ _0205821E:
 	add r2, r0, #0
 	bl sub_02068FC8
 	mov r0, #0x5f
-	bl sub_02037AC0
+	bl LinkSync_StartSync
 	ldr r0, _02058254 ; =sub_020588F8
 	mov r1, #0
 	bl sub_020582F4

@@ -313,13 +313,13 @@
 .public ApricornBox_StoreJuiceRecords
 .public Comm_RegisterCommandTable
 .public sub_020342B8
-.public sub_02034818
+.public CommPlayerInfo_GetProfile
 .public sub_02036FD8
 .public Comm_SendCommand
 .public Comm_CountConnected
 .public Comm_GetLocalNetId
-.public sub_02037AC0
-.public sub_02037B38
+.public LinkSync_StartSync
+.public LinkSync_IsSynced
 .public sub_0203A86C
 .public WirelessStatusIcon_Destroy
 .public sub_0203A994

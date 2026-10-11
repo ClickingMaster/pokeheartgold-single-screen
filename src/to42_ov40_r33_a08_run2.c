@@ -13,8 +13,8 @@ typedef struct Ov40Tbl {
 extern Ov40Tbl ov40_0224551C;
 extern Ov40Tbl ov40_0224554C;
 
-BOOL sub_0202FC48(void);
-void *sub_02030920(int heapId);
+BOOL BattleRecord_Exists(void);
+void *BattleRecordHeader_New(int heapId);
 void *sub_020314A4(int heapId);
 void MI_CpuCopy8(const void *src, void *dest, u32 size);
 void ManagedSprite_SetDrawFlag(void *sprite, BOOL draw);

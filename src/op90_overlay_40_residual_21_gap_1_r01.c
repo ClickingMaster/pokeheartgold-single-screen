@@ -41,7 +41,7 @@ void MessageFormat_ResetBuffers(void *format);
 void MessageFormat_Delete(void *format);
 
 void *sub_020315B8(u32 value, int heapId);
-u64 sub_0203088C(void *summary, int field, int index);
+u64 BattleRecordHeader_GetField(void *summary, int field, int index);
 void ov40_02230DCC(void *p, void *str);
 int ov40_022306C0(void *window, void *str);
 
@@ -111,7 +111,7 @@ void ov40_0222FF74(void *work, void *p) {
     String_Delete(out);
     MessageFormat_ResetBuffers(fmt);
 
-    msgId2 = (int)sub_0203088C(PTR(work, 4), 3, 0);
+    msgId2 = (int)BattleRecordHeader_GetField(PTR(work, 4), 3, 0);
     window = (u8 *)work + 0x4C;
     str = NewString_ReadMsgData(PTR(p, 0x48), msgId2 + 0x84);
     FillWindowPixelBuffer(window, 0);
@@ -120,7 +120,7 @@ void ov40_0222FF74(void *work, void *p) {
     String_Delete(str);
     MessageFormat_ResetBuffers(fmt);
 
-    value = (u32)sub_0203088C(PTR(work, 4), 2, 0);
+    value = (u32)BattleRecordHeader_GetField(PTR(work, 4), 2, 0);
     if (value != 0) {
         window = (u8 *)work + 0x5C;
         numberStr = String_New(0xFF, 0x6D);
@@ -142,7 +142,7 @@ void ov40_0222FF74(void *work, void *p) {
         ScheduleWindowCopyToVram(window);
     }
 
-    total = sub_0203088C(PTR(work, 4), 4, 0);
+    total = BattleRecordHeader_GetField(PTR(work, 4), 4, 0);
     rest = total;
     digitsLo = String_New(0xFF, 0x6D);
     digitsMid = String_New(0xFF, 0x6D);

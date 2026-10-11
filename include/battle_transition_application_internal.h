@@ -14,7 +14,7 @@
 #include "poke_overlay.h"
 #include "sound_system.h"
 #include "sys_flags.h"
-#include "unk_0202FBCC.h"
+#include "battle_recording.h"
 
 typedef struct Unk87Work {
     u32 state;
@@ -50,10 +50,10 @@ extern u8 SDK_OVERLAY_OVY_40_ID;
 #define OVERLAY_39_ID ((FSOverlayID) & SDK_OVERLAY_OVY_39_ID)
 #define OVERLAY_40_ID ((FSOverlayID) & SDK_OVERLAY_OVY_40_ID)
 
-extern void sub_0202FC24(void);
-extern void *sub_0202FC5C(void);
-extern void sub_0202FC90(void *saveData, enum HeapID heapId, BOOL *result, BattleSetup *setup, u32 value);
-extern void sub_020304F0(BattleSetup *setup, void *saveData);
+extern void BattleRecord_Delete(void);
+extern void *BattleRecord_Get(void);
+extern void BattleRecord_Load(void *saveData, enum HeapID heapId, BOOL *result, BattleSetup *setup, u32 value);
+extern void BattleRecord_RestoreSetup(BattleSetup *setup, void *saveData);
 extern void ov40_02244920(void *data, BattleSetup *setup, enum HeapID heapId);
 extern void sub_02005B68(BOOL enabled);
 extern void *sub_02087FF8(void *large, u32 value);

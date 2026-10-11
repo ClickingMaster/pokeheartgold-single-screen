@@ -38,9 +38,9 @@
 #include "unk_0200FA24.h"
 #include "touchpad.h"
 #include "unk_02026E30.h"
-#include "unk_02034354.h"
+#include "communication_player_state.h"
 #include "unk_02035900.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 #include "unk_02037C94.h"
 #include "unk_0203A3B0.h"
 #include "unk_02069660.h"
@@ -848,13 +848,13 @@ BOOL SpinTrade_State_WaitReady(SpinTradeApp *app) {
 }
 
 BOOL SpinTrade_State_StartSync(SpinTradeApp *app) {
-    sub_02037AC0(SPIN_TRADE_LINK_SYNC_NO);
+    LinkSync_StartSync(SPIN_TRADE_LINK_SYNC_NO);
     app->state = SPIN_TRADE_STATE_WAIT_SYNC;
     return FALSE;
 }
 
 BOOL SpinTrade_State_WaitSync(SpinTradeApp *app) {
-    if (sub_02037B38(SPIN_TRADE_LINK_SYNC_NO)) {
+    if (LinkSync_IsSynced(SPIN_TRADE_LINK_SYNC_NO)) {
         app->state = SPIN_TRADE_STATE_SEND_TRADE_SLOT;
     }
     return FALSE;
@@ -910,7 +910,7 @@ BOOL SpinTrade_State_SetupDrop(SpinTradeApp *app) {
     drop->slotAngle = ov85_021EA788[playerCount][app->mySlot];
     for (netId = 0; netId < 8; netId++) {
         if (SpinTrade_IsMemberPresent(app, netId)) {
-            app->profiles[netId] = sub_02034818(netId);
+            app->profiles[netId] = CommPlayerInfo_GetProfile(netId);
             PlayerName_FlatToString(app->profiles[netId], app->names[netId]);
         }
     }
@@ -989,13 +989,13 @@ BOOL SpinTrade_State_WaitSpinStart(SpinTradeApp *app) {
 }
 
 BOOL SpinTrade_State_StartSpinSync(SpinTradeApp *app) {
-    sub_02037AC0(SPIN_TRADE_LINK_SYNC_NO);
+    LinkSync_StartSync(SPIN_TRADE_LINK_SYNC_NO);
     app->state = SPIN_TRADE_STATE_WAIT_SPIN_SYNC;
     return FALSE;
 }
 
 BOOL SpinTrade_State_WaitSpinSync(SpinTradeApp *app) {
-    if (sub_02037B38(SPIN_TRADE_LINK_SYNC_NO)) {
+    if (LinkSync_IsSynced(SPIN_TRADE_LINK_SYNC_NO)) {
         app->state = SPIN_TRADE_STATE_START_COUNTDOWN;
     }
     return FALSE;
@@ -1170,13 +1170,13 @@ BOOL SpinTrade_State_AlignToSlot(SpinTradeApp *app) {
 #pragma force_active reset
 
 BOOL SpinTrade_State_StartResultSync(SpinTradeApp *app) {
-    sub_02037AC0(SPIN_TRADE_LINK_SYNC_NO);
+    LinkSync_StartSync(SPIN_TRADE_LINK_SYNC_NO);
     app->state = SPIN_TRADE_STATE_WAIT_RESULT_SYNC;
     return FALSE;
 }
 
 BOOL SpinTrade_State_WaitResultSync(SpinTradeApp *app) {
-    if (sub_02037B38(SPIN_TRADE_LINK_SYNC_NO)) {
+    if (LinkSync_IsSynced(SPIN_TRADE_LINK_SYNC_NO)) {
         if (Comm_GetLocalNetId() == 0) {
             app->state = SPIN_TRADE_STATE_SEND_RESULT;
         } else {
@@ -1350,14 +1350,14 @@ BOOL SpinTrade_State_StartSave(SpinTradeApp *app) {
     GameStats_Inc(app->args->input.gameStats, GAME_STAT_EGGS_SPUN);
     GameStats_AddScore(app->args->input.gameStats, SCORE_EVENT_SPIN_TRADE);
     SpinTrade_PrintMessage(app, msg_0206_00011);
-    sub_02037AC0(SPIN_TRADE_LINK_SYNC_NO);
+    LinkSync_StartSync(SPIN_TRADE_LINK_SYNC_NO);
     gSystem.softResetDisabled = TRUE;
     app->state = SPIN_TRADE_STATE_WAIT_SAVE_SYNC;
     return FALSE;
 }
 
 BOOL SpinTrade_State_WaitSaveSync(SpinTradeApp *app) {
-    if (sub_02037B38(SPIN_TRADE_LINK_SYNC_NO)) {
+    if (LinkSync_IsSynced(SPIN_TRADE_LINK_SYNC_NO)) {
         SpinTrade_ReceiveTradedMon(app, app->landedEgg->netId);
         sub_02039EAC(&app->saveState);
         app->waitingIcon = WaitingIcon_New(&app->text.msgWindow, 10);
@@ -1392,7 +1392,7 @@ BOOL SpinTrade_State_WaitCancelMessage(SpinTradeApp *app) {
 
 BOOL SpinTrade_State_StartExitSync(SpinTradeApp *app) {
     if (app->unk_018 == 0) {
-        sub_02037AC0(SPIN_TRADE_LINK_SYNC_NO);
+        LinkSync_StartSync(SPIN_TRADE_LINK_SYNC_NO);
     }
     SpinTrade_PrintMessage(app, msg_0206_00010);
     app->state = SPIN_TRADE_STATE_WAIT_EXIT_SYNC;
@@ -1402,7 +1402,7 @@ BOOL SpinTrade_State_StartExitSync(SpinTradeApp *app) {
 #pragma force_active on
 BOOL SpinTrade_State_WaitExitSync(SpinTradeApp *app) {
     if (app->unk_018 == 0) {
-        if (sub_02037B38(SPIN_TRADE_LINK_SYNC_NO)) {
+        if (LinkSync_IsSynced(SPIN_TRADE_LINK_SYNC_NO)) {
             sub_020398D4(0, 0);
             sub_02038C1C(1);
             sub_02037FF0();
@@ -1806,7 +1806,7 @@ void SpinTrade_PrintPlayerMessage(SpinTradeApp *app, int msgNo, PlayerProfile *p
     Window *window = &text->msgWindow;
     String *template;
 
-    BufferPlayersName(text->msgFormat, 1, sub_02034818(Comm_GetLocalNetId()));
+    BufferPlayersName(text->msgFormat, 1, CommPlayerInfo_GetProfile(Comm_GetLocalNetId()));
     BufferPlayersName(text->msgFormat, 2, profile);
     template = String_New(256, HEAP_ID_102);
     ReadMsgDataIntoString(text->msgData, msgNo, template);
@@ -3032,7 +3032,7 @@ void SpinTrade_ReceiveTradedMon(SpinTradeApp *app, int netId) {
     Pokemon *dest = Party_GetMonByIndex(party, app->args->unk0[1]);
     Pokemon *mon = Party_GetMonByIndex(otherParty, otherSlot);
 
-    MonSetTrainerMemo(mon, sub_02034818(Comm_GetLocalNetId()), 5, 0, HEAP_ID_FIELD2);
+    MonSetTrainerMemo(mon, CommPlayerInfo_GetProfile(Comm_GetLocalNetId()), 5, 0, HEAP_ID_FIELD2);
     CopyPokemonToPokemon(mon, dest);
 }
 

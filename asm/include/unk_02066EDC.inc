@@ -25,7 +25,7 @@
 .public Save_Frontier_GetStatic
 .public FrontierSave_GetStat
 .public Comm_GetLocalNetId
-.public sub_02037C44
+.public LinkSync_GetPacket
 .public sub_0203A05C
 .public FieldSystem_LaunchApplication
 .public NintendoWifiConnection_LaunchApp

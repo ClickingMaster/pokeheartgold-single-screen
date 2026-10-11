@@ -15,7 +15,7 @@ extern u16 *FrontierScript_ReadVarPtr(void *);
 extern void *Frontier_GetData(void *);
 extern void *FrontierSystem_GetFrontierMap(void *);
 extern void OS_ResetSystem(u32);
-extern u16 sub_0203095C(void *);
+extern u16 FactoryChallenge_GetSaved(void *);
 extern void sub_02096910(void *);
 extern void ov80_0223049C(void *, int);
 extern u16 ov80_02230784(void *);

@@ -4,13 +4,13 @@
 u32 Comm_GetLocalNetId(void);
 BOOL Comm_SendCommand(u32 command, void *data, u32 size);
 void *Save_PlayerData_GetProfile(void *save);
-void sub_02030FA0(void *save);
+void Save_Frontier_GetArcadeFlags(void *save);
 void *SaveArray_Party_Get(void *save);
 u32 SizeOfStructPokemon(void);
 void *Party_GetMonByIndex(void *party, s32 slot);
 void MI_CpuCopy8(const void *src, void *dst, u32 size);
 BOOL sub_02036FD8(u32 command, void *data, u32 size);
-void sub_02030E08(void *save);
+void Save_Frontier_GetCastleFlags(void *save);
 void *Save_Frontier_GetStatic(void *save);
 u32 sub_0205C1F0(u32 value);
 u32 sub_0205C268(u32 value);

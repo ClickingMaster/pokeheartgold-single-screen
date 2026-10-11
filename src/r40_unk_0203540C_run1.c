@@ -5,7 +5,7 @@
 
 void sub_0203540C(int value, u8 *unused) {
     int mode = sub_02033298(value);
-    int connected = sub_020347CC();
+    int connected = CommPlayerInfo_DropDisconnected();
     sub_020353B8();
     if (sub_020338F4() == 0 && sub_0203567C() == 0 && (((u32)U8O(0xD95) << 29) >> 31)) {
         U8O(0xD95) = (U8O(0xD95) & ~1) | 1;

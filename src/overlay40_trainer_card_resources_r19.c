@@ -7,7 +7,7 @@ void ov40_0222FCCC(void *p) {
 
     q = p;
     for (i = 0; i < 4; i++, q += 4) {
-        sub_0202FC90(PTR(p, 0x830), 0x6D, &result, NULL, i);
+        BattleRecord_Load(PTR(p, 0x830), 0x6D, &result, NULL, i);
         switch (result) {
         case 0:
             PTR(q, 0x87C) = NULL;
@@ -34,17 +34,17 @@ void ov40_0222FCCC(void *p) {
             }
             break;
         case 1:
-            PTR(q, 0x87C) = sub_0203077C(0x6D);
+            PTR(q, 0x87C) = BattleRecord_CopyHeader(0x6D);
             if (i == 0) {
                 PTR(q, 0x88C) = sub_020314A4(0x6D);
                 sub_020314C4(PTR(q, 0x88C), PTR(p, 0x830));
             } else {
-                PTR(q, 0x88C) = sub_020307AC(0x6D);
+                PTR(q, 0x88C) = BattleRecord_CopyProfile(0x6D);
             }
             break;
         }
-        if (sub_0202FC48() == 1) {
-            sub_0202FC24();
+        if (BattleRecord_Exists() == 1) {
+            BattleRecord_Delete();
         }
     }
 }

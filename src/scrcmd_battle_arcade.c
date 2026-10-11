@@ -22,7 +22,7 @@
 #include "script.h"
 #include "script_manager.h"
 #include "task.h"
-#include "unk_02030A98.h"
+#include "frontier_save_access.h"
 #include "unk_02035900.h"
 #include "unk_0204A3F4.h"
 #include "unk_0205BB1C.h"
@@ -67,8 +67,8 @@ BOOL ScrCmd_643(ScriptContext *ctx) {
     u16 arg0 = ScriptReadHalfword(ctx);
     u16 arg1 = ScriptGetVar(ctx);
     u16 *result = ScriptGetVarPointer(ctx);
-    sub_02030E88(ctx->fieldSystem->saveData);
-    void *unk0 = sub_02030FA0(ctx->fieldSystem->saveData);
+    Save_Frontier_GetArcadeChallenge(ctx->fieldSystem->saveData);
+    void *unk0 = Save_Frontier_GetArcadeFlags(ctx->fieldSystem->saveData);
     void *unk1 = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
     switch (arg0) {
     case 0:
@@ -78,7 +78,7 @@ BOOL ScrCmd_643(ScriptContext *ctx) {
         if (arg1 == 3) {
             *result = FrontierSave_GetStat(Save_Frontier_GetStatic(ctx->fieldSystem->saveData), 110, sub_0205C268(110));
         } else {
-            *result = sub_02030FE4(unk0, 8, arg1, 0, 0);
+            *result = ArcadeFlags_GetField(unk0, 8, arg1, 0, 0);
         }
         break;
     case 3: // Unused
@@ -106,18 +106,18 @@ BOOL ScrCmd_643(ScriptContext *ctx) {
 
 BOOL ScrCmd_646(ScriptContext *ctx) {
     u16 unk = ScriptGetVar(ctx);
-    sub_0204FFB0(ctx->fieldSystem->saveData, sub_02030FA0(ctx->fieldSystem->saveData), unk);
+    sub_0204FFB0(ctx->fieldSystem->saveData, Save_Frontier_GetArcadeFlags(ctx->fieldSystem->saveData), unk);
     return FALSE;
 }
 
 static void sub_0204FFB0(SaveData *saveData, void *a1, u8 a2) {
     u8 unk;
     unk = 0;
-    sub_02030FB0(a1, 8, a2, 0, &unk);
+    ArcadeFlags_SetField(a1, 8, a2, 0, &unk);
     if (a2 == 3) {
-        sub_02031108(Save_Frontier_GetStatic(saveData), 110, sub_0205C268(110), 0);
+        FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), 110, sub_0205C268(110), 0);
     }
-    sub_02031108(Save_Frontier_GetStatic(saveData), sub_0205C2C0(a2), sub_0205C268(sub_0205C2C0(a2)), 0);
+    FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), sub_0205C2C0(a2), sub_0205C268(sub_0205C2C0(a2)), 0);
 }
 
 BOOL ScrCmd_644(ScriptContext *ctx) {

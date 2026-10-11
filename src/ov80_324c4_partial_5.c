@@ -30,12 +30,12 @@ void ov80_022331E8(void *save, u32 mode, s32 amount) {
             frontier = Save_Frontier_GetStatic(save);
             stat = sub_0205C1F0(mode);
             substat = sub_0205C268(sub_0205C1F0(mode));
-            sub_02031108(frontier, stat, substat, 9999);
+            FrontierSave_SetStat(frontier, stat, substat, 9999);
         } else {
             frontier = Save_Frontier_GetStatic(save);
             stat = sub_0205C1F0(mode);
             substat = sub_0205C268(sub_0205C1F0(mode));
-            sub_02031228(frontier, stat, substat, amount);
+            FrontierSave_AddStat(frontier, stat, substat, amount);
         }
     }
     GameStats_Add(Save_GameStats_Get(save), 0x42, amount);

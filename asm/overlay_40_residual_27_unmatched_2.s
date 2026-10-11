@@ -2,7 +2,7 @@
 	.include "overlay_40.inc"
 	.include "global.inc"
 	.public ov40_02230D94
-	.public sub_0203088C
+	.public BattleRecordHeader_GetField
 	.text
 
 	thumb_func_start ov40_02230D94
@@ -19,7 +19,7 @@ _02230D9E:
 	beq _02230DBA
 	mov r1, #4
 	mov r2, #0
-	bl sub_0203088C
+	bl BattleRecordHeader_GetField
 	eor r1, r7
 	eor r0, r6
 	orr r0, r1

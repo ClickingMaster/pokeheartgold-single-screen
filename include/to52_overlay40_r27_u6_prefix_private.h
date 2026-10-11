@@ -29,7 +29,7 @@ void TextOBJ_SetSpritesDrawFlag(void *obj, BOOL draw);
 void *TouchHitboxController_Create(const void *hitboxes, int count, const void *callbacks, void *arg, u32 heapId);
 void TextOBJ_SetPosition(void *p, int x, int y);
 void sub_020878B8(void *p, s16 x, s16 y);
-u64 sub_0203088C(void *summary, int field, int index);
+u64 BattleRecordHeader_GetField(void *summary, int field, int index);
 
 void ov40_0222BF80(void *p, int value);
 BOOL ov40_0222BFB0(void *p);

@@ -74,21 +74,21 @@ M2C_UNK ov49_02262DB8(void *, s32);                 /* extern */
 M2C_UNK ov49_02262DD4(void *, s16);                 /* extern */
 M2C_UNK ov49_02262DF8(void *, s32, s32);            /* extern */
 M2C_UNK ov49_02262E04(void *, s32, s32);            /* extern */
-M2C_UNK sub_02034354(s32, s32);                     /* extern */
-M2C_UNK sub_020343E4();                             /* extern */
-M2C_UNK sub_02034434();                             /* extern */
-M2C_UNK sub_0203476C();                             /* extern */
-s32 sub_02034780();                                 /* extern */
-u32 sub_020347A0();                                 /* extern */
-M2C_UNK sub_02034B00();                             /* extern */
+M2C_UNK CommPlayerInfo_Init(s32, s32);                     /* extern */
+M2C_UNK CommPlayerInfo_Free();                             /* extern */
+M2C_UNK CommPlayerInfo_SendLocal();                             /* extern */
+M2C_UNK CommPlayerInfo_Accept();                             /* extern */
+s32 CommPlayerInfo_FindReceived();                                 /* extern */
+u32 CommPlayerInfo_CountAccepted();                                 /* extern */
+M2C_UNK CommPlayerInfo_SetProfile();                             /* extern */
 s32 Comm_CountConnected();                                 /* extern */
 s32 Comm_GetLocalNetId();                                 /* extern */
 M2C_UNK sub_020378E4(s32);                          /* extern */
-M2C_UNK sub_02037AC0(u8);                           /* extern */
-s32 sub_02037B38(u8);                               /* extern */
-M2C_UNK sub_02037BEC();                             /* extern */
-s32 sub_02037C0C(s32, void *);                      /* extern */
-s32 *sub_02037C44(s32);                             /* extern */
+M2C_UNK LinkSync_StartSync(u8);                           /* extern */
+s32 LinkSync_IsSynced(u8);                               /* extern */
+M2C_UNK LinkSync_ClearPackets();                             /* extern */
+s32 LinkSync_SendPacket(s32, void *);                      /* extern */
+s32 *LinkSync_GetPacket(s32);                             /* extern */
 u32 sub_020390C4();                                 /* extern */
 M2C_UNK sub_0203981C(u8);                           /* extern */
 M2C_UNK sub_0203986C();                             /* extern */
@@ -393,9 +393,9 @@ block_75:
         ov45_0222A5E8(ov49_02259FE8(arg1), M2C_FIELD(temp_r6, u8 *, 3));
         sub_02039B38();
         ov49_02259FE8(arg1);
-        sub_02034354(ov45_0222A2C8(), 0);
+        CommPlayerInfo_Init(ov45_0222A2C8(), 0);
         ov45_0222AB1C(sp30);
-        sub_02034B00();
+        CommPlayerInfo_SetProfile();
         sub_020378E4(0);
         ov49_02262C20(temp_r4, sp10, 0xA, 0x11);
         /* Duplicate return node #164. Try simplifying control flow for better match */
@@ -403,21 +403,21 @@ block_75:
     case 10:                                        /* switch 3 */
         ov49_02262DD4(temp_r4 + 0x3C, 0);
         ov49_02262DF8(temp_r4 + 0x3C, arg1, 0);
-        sub_02034434();
+        CommPlayerInfo_SendLocal();
         Comm_GetLocalNetId();
-        sub_0203476C();
+        CommPlayerInfo_Accept();
         ov49_0225EF8C(sp10, 0xBU);
         /* Duplicate return node #164. Try simplifying control flow for better match */
         break;
     case 11:                                        /* switch 3 */
         ov49_02262DD4(temp_r4 + 0x3C, 0);
         ov49_02262DF8(temp_r4 + 0x3C, arg1, 0);
-        if (sub_02034780() != 0xFF) {
+        if (CommPlayerInfo_FindReceived() != 0xFF) {
             do {
-                sub_0203476C();
-            } while (sub_02034780() != 0xFF);
+                CommPlayerInfo_Accept();
+            } while (CommPlayerInfo_FindReceived() != 0xFF);
         }
-        temp_r5_2 = sub_020347A0();
+        temp_r5_2 = CommPlayerInfo_CountAccepted();
         if (temp_r5_2 >= ov45_0222F314(M2C_FIELD(temp_r6, u8 *, 1))) {
             if ((ov45_0222F464() == 1) && (M2C_FIELD(temp_r4, u16 *, 2) == 0)) {
                 ov45_0222F1BC();
@@ -435,7 +435,7 @@ block_75:
     case 12:                                        /* switch 3 */
         ov49_02262DD4(temp_r4 + 0x3C, 0);
         ov49_02262DF8(temp_r4 + 0x3C, arg1, 0);
-        sub_02037BEC();
+        LinkSync_ClearPackets();
         ov45_0222A43C(sp30);
         ov49_02262C20(temp_r4, sp10, 0xD, 0xE);
         /* Duplicate return node #164. Try simplifying control flow for better match */
@@ -444,7 +444,7 @@ block_75:
         ov49_02262DD4(temp_r4 + 0x3C, 0);
         ov49_02262DF8(temp_r4 + 0x3C, arg1, 0);
         M2C_FIELD(temp_r4, s32 *, 0xC) = ov45_0222A548(sp30);
-        if (sub_02037C0C(Comm_GetLocalNetId(), temp_r4 + 0xC) != 1) {
+        if (LinkSync_SendPacket(Comm_GetLocalNetId(), temp_r4 + 0xC) != 1) {
 
         } else {
             ov49_0225EF8C(sp10, 0xEU);
@@ -455,7 +455,7 @@ block_75:
         ov49_02262DD4(temp_r4 + 0x3C, 0);
         ov49_02262DF8(temp_r4 + 0x3C, arg1, 0);
         sp18 = 0;
-        temp_r0_7 = sub_020347A0();
+        temp_r0_7 = CommPlayerInfo_CountAccepted();
         sp28 = temp_r0_7;
         sp24 = Comm_GetLocalNetId();
         var_r7_2 = 0;
@@ -465,7 +465,7 @@ block_75:
         if ((s32) temp_r0_7 > 0) {
 loop_108:
             if (sp24 != var_r4) {
-                temp_r0_8 = sub_02037C44(var_r4);
+                temp_r0_8 = LinkSync_GetPacket(var_r4);
                 if (temp_r0_8 != 0) {
                     if (ov45_0222EC68(*temp_r0_8) == -1) {
                         sp18 = 1;
@@ -594,7 +594,7 @@ block_118:
         /* Duplicate return node #164. Try simplifying control flow for better match */
         break;
     case 23:                                        /* switch 3 */
-        sub_020343E4();
+        CommPlayerInfo_Free();
         sub_0203986C();
         ov49_0225EF8C(sp10, 0x18U);
         /* Duplicate return node #164. Try simplifying control flow for better match */
@@ -617,7 +617,7 @@ block_118:
             M2C_FIELD(temp_r4, s8 *, 5) = (s8) (temp_r0_11 - 1);
         }
         if (M2C_FIELD(temp_r4, s8 *, 5) == 0) {
-            sub_02037AC0(M2C_FIELD(temp_r4, u8 *, 6));
+            LinkSync_StartSync(M2C_FIELD(temp_r4, u8 *, 6));
             ov49_0225EF8C(sp10, 0x1BU);
         }
         /* Duplicate return node #164. Try simplifying control flow for better match */
@@ -625,10 +625,10 @@ block_118:
     case 27:                                        /* switch 3 */
         M2C_FIELD(temp_r4, u16 *, 0xA) = (u16) (M2C_FIELD(temp_r4, u16 *, 0xA) + 1);
         if ((u32) M2C_FIELD(temp_r4, u16 *, 0xA) >= 0x96U) {
-            sub_02037AC0(M2C_FIELD(temp_r4, u8 *, 6));
+            LinkSync_StartSync(M2C_FIELD(temp_r4, u8 *, 6));
             M2C_FIELD(temp_r4, u16 *, 0xA) = 0U;
         }
-        if (sub_02037B38(M2C_FIELD(temp_r4, u8 *, 6)) != 0) {
+        if (LinkSync_IsSynced(M2C_FIELD(temp_r4, u8 *, 6)) != 0) {
             ov49_0225EF8C(sp10, M2C_FIELD(temp_r4, u8 *, 4));
         }
         /* Duplicate return node #164. Try simplifying control flow for better match */

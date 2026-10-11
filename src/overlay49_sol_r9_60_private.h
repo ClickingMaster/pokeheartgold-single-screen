@@ -48,7 +48,7 @@ void ov49_0225A144(void *, void *, u32);
 void *ov49_0225A154(void *);
 u32 sub_020392A0(void);
 void sub_020398D4(u32, u32);
-void sub_020343E4(void);
+void CommPlayerInfo_Free(void);
 void sub_0203986C(void);
 void GF_AssertFail(void);
 void ov49_02262D70(void *, void *, u32, u32, u32);

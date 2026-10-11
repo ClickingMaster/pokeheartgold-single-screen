@@ -52,9 +52,9 @@ void ov40_02232FCC(void *);
 void ov40_02233044(void *);
 void ov40_022330B8(void *);
 void ov40_02244BBC(void *, void *);
-void sub_0202FC24(void);
-void sub_0202FC90(void *, int, void *, int, void *);
-u64 sub_0203088C(void *, int, int);
+void BattleRecord_Delete(void);
+void BattleRecord_Load(void *, int, void *, int, void *);
+u64 BattleRecordHeader_GetField(void *, int, int);
 void sub_02087A84(void *, int, int);
 
 extern const u8 ov40_0224512C[];

@@ -33,7 +33,7 @@
 .public sub_020341DC
 .public sub_02034244
 .public sub_02034280
-.public sub_020343E4
+.public CommPlayerInfo_Free
 .public sub_02034E2C
 .public sub_02034EF0
 .public sub_02034F64
@@ -100,9 +100,9 @@
 .public sub_02037958
 .public sub_02037974
 .public sub_02037988
-.public sub_020379A0
-.public sub_020379F8
-.public sub_02037ADC
+.public LinkSync_Init
+.public LinkSync_Free
+.public LinkSync_Update
 .public sub_0203817C
 .public sub_020398D4
 .public sub_0203993C

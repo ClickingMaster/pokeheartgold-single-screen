@@ -178,12 +178,12 @@
 .public GameStats_Inc
 .public GameStats_AddScore
 .public sub_02033250
-.public sub_02034818
+.public CommPlayerInfo_GetProfile
 .public sub_02036FD8
 .public Comm_CountConnected
 .public Comm_GetLocalNetId
-.public sub_02037AC0
-.public sub_02037B38
+.public LinkSync_StartSync
+.public LinkSync_IsSynced
 .public sub_02037FF0
 .public sub_0203897C
 .public sub_02038C1C

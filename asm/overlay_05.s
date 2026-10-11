@@ -137,7 +137,7 @@ LinkBattleScreen_Start: ; 0x0221BA00
 	str r5, [r4]
 	mov r1, #0
 	strb r1, [r4, r0]
-	bl sub_020304B4
+	bl BattleRecord_AreAiFlagsValid
 	ldr r1, _0221BA68 ; =0x00000BC8
 	str r0, [r4, r1]
 	ldr r0, [r4, r1]

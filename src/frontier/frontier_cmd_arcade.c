@@ -14,7 +14,7 @@
 #include "launch_application.h"
 #include "overlay_42.h"
 #include "particle_system.h"
-#include "unk_02034354.h"
+#include "communication_player_state.h"
 #include "unk_02096910.h"
 
 static void GameBoardArgs_Set(GAME_BOARD_ARGS *args, ArcadeContext *data);
@@ -226,7 +226,7 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
         OS_ResetSystem(0);
         break;
     case 9:
-        *out = sub_02030E98(arcadeCtx->unk8);
+        *out = ArcadeChallenge_GetSaved(arcadeCtx->unk8);
         break;
     case 10:
         BattleArcadeData_SaveRecord(arcadeCtx, 2);
@@ -362,7 +362,7 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
             if (BattleArcade_MultiplayerCheck(arcadeCtx->type) == FALSE) {
                 profile = Save_PlayerData_GetProfile(args->saveData);
             } else {
-                profile = sub_02034818(var1);
+                profile = CommPlayerInfo_GetProfile(var1);
             }
             BufferPlayersName(ctx->frontierSystem->unk44, var0, profile);
         }

@@ -10,7 +10,7 @@ u16 FrontierScriptContext_ReadHalfWord(void *ctx);
 void *Frontier_GetLaunchArgs(void *app);
 void *Save_PlayerData_GetProfile(void *saveData);
 u32 Comm_GetLocalNetId(void);
-void *sub_02034818(u32 player);
+void *CommPlayerInfo_GetProfile(u32 player);
 void BufferItemName(void *fmt, u32 field, u32 item);
 void BufferIntegerAsString(void *fmt, u32 field, s32 value, u32 digits, u32 mode, BOOL charset);
 void BufferPlayersName(void *fmt, u32 field, void *profile);
@@ -106,7 +106,7 @@ int FrtCmd_124(void *ctx) {
     u8 *script = PTR(ctx, 0x1c);
     PTR(ctx, 0x1c) = script + 1;
     u8 field = *script;
-    void *profile = sub_02034818(Comm_GetLocalNetId() ^ 1);
+    void *profile = CommPlayerInfo_GetProfile(Comm_GetLocalNetId() ^ 1);
     BufferPlayersName(PTR(FSYS(ctx), 0x44), field, profile);
     return 0;
 }

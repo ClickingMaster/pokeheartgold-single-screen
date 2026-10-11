@@ -1,30 +1,30 @@
 #include "link_synchronization_internal.h"
 
-void sub_020379A0(enum HeapID heap) {
+void LinkSync_Init(enum HeapID heap) {
     int i;
-    if (_021D414C == NULL) {
-        _021D414C = Heap_Alloc(heap, sizeof(LinkSync));
-        MI_CpuFill8(_021D414C, 0, sizeof(LinkSync));
+    if (gLinkSync == NULL) {
+        gLinkSync = Heap_Alloc(heap, sizeof(LinkSync));
+        MI_CpuFill8(gLinkSync, 0, sizeof(LinkSync));
     }
     for (i = 0; i < 8; i++) {
-        _021D414C->states[i] = 255;
+        gLinkSync->states[i] = 255;
     }
-    _021D414C->completed = 255;
-    _021D414C->requested = 255;
-    _021D414C->pending = 0;
-    _021D414C->resend = 0;
+    gLinkSync->completed = 255;
+    gLinkSync->requested = 255;
+    gLinkSync->pending = 0;
+    gLinkSync->resend = 0;
 }
 
-void sub_020379F8(void) {
-    Heap_Free(_021D414C);
-    _021D414C = NULL;
+void LinkSync_Free(void) {
+    Heap_Free(gLinkSync);
+    gLinkSync = NULL;
 }
 
-BOOL sub_02037A10(void) {
-    return _021D414C != NULL;
+BOOL LinkSync_Exists(void) {
+    return gLinkSync != NULL;
 }
 
-void sub_02037A24(int sender, int unused, u8 *data) {
+void LinkSync_RecvRequest(int sender, int unused, u8 *data) {
     u8 state = data[0];
     u8 packet[2];
     int i;
@@ -34,112 +34,112 @@ void sub_02037A24(int sender, int unused, u8 *data) {
     packet[0] = sender;
     packet[1] = state;
     sub_02037184(18, packet);
-    _021D414C->states[sender] = state;
+    gLinkSync->states[sender] = state;
     for (i = 0; i < 8; i++) {
-        if (Comm_IsNetIdConnected((u16)i) && state != _021D414C->states[i]) {
+        if (Comm_IsNetIdConnected((u16)i) && state != gLinkSync->states[i]) {
             return;
         }
     }
     if (sub_02037184(17, &state) == 0) {
-        _021D414C->resend = 1;
+        gLinkSync->resend = 1;
     }
 }
 
-void sub_02037A98(int sender, int unused, u8 *data) {
-    _021D414C->states[data[0]] = data[1];
+void LinkSync_RecvState(int sender, int unused, u8 *data) {
+    gLinkSync->states[data[0]] = data[1];
 }
 
-void sub_02037AAC(int sender, int unused, u8 *data) {
-    _021D414C->completed = data[0];
+void LinkSync_RecvDone(int sender, int unused, u8 *data) {
+    gLinkSync->completed = data[0];
 }
 
-void sub_02037AC0(u8 state) {
-    _021D414C->requested = state;
-    _021D414C->pending = 1;
+void LinkSync_StartSync(u8 state) {
+    gLinkSync->requested = state;
+    gLinkSync->pending = 1;
 }
 
-void sub_02037ADC(void) {
-    if (_021D414C) {
-        if (_021D414C->pending && sub_020376E0(16, &_021D414C->requested)) {
-            _021D414C->pending = 0;
+void LinkSync_Update(void) {
+    if (gLinkSync) {
+        if (gLinkSync->pending && sub_020376E0(16, &gLinkSync->requested)) {
+            gLinkSync->pending = 0;
         }
-        if (_021D414C->resend && sub_02037184(17, _021D414C->states)) {
-            _021D414C->resend = 0;
+        if (gLinkSync->resend && sub_02037184(17, gLinkSync->states)) {
+            gLinkSync->resend = 0;
         }
     }
 }
 
-BOOL sub_02037B38(u8 state) {
-    if (_021D414C == NULL) {
+BOOL LinkSync_IsSynced(u8 state) {
+    if (gLinkSync == NULL) {
         return TRUE;
     }
-    if (_021D414C->completed == state) {
+    if (gLinkSync->completed == state) {
         return TRUE;
     }
     return FALSE;
 }
 
-u8 sub_02037B5C(int index) {
-    return _021D414C->states[index];
+u8 LinkSync_GetPlayerState(int index) {
+    return gLinkSync->states[index];
 }
 
-void sub_02037B6C(int sender, int unused, u8 *data) {
-    _021D414C->values[sender][0] = data[0];
-    _021D414C->values[sender][1] = data[1];
+void LinkSync_RecvValue(int sender, int unused, u8 *data) {
+    gLinkSync->values[sender][0] = data[0];
+    gLinkSync->values[sender][1] = data[1];
 }
 
-u32 sub_02037B88(void) {
+u32 LinkSync_GetValueSize(void) {
     return 2;
 }
 
-void sub_02037B8C(u32 key, u8 value) {
+void LinkSync_SendValue(u32 key, u8 value) {
     u8 packet[2];
     packet[0] = key;
     packet[1] = value;
     sub_020376E0(19, packet);
 }
 
-s32 sub_02037BA0(s32 sender, s32 key) {
-    if (_021D414C == NULL) {
+s32 LinkSync_GetValue(s32 sender, s32 key) {
+    if (gLinkSync == NULL) {
         return -1;
     }
-    if (_021D414C->values[sender][0] == key) {
-        return _021D414C->values[sender][1];
+    if (gLinkSync->values[sender][0] == key) {
+        return gLinkSync->values[sender][1];
     }
     return -1;
 }
 
-void sub_02037BC8(void) {
+void LinkSync_ClearValues(void) {
     int i;
     for (i = 0; i < 8; i++) {
-        MI_CpuFill8(_021D414C->values[i], 0, 2);
+        MI_CpuFill8(gLinkSync->values[i], 0, 2);
     }
 }
 
-void sub_02037BEC(void) {
+void LinkSync_ClearPackets(void) {
     int i;
     for (i = 0; i < 8; i++) {
-        _021D414C->received[i] = 0;
+        gLinkSync->received[i] = 0;
     }
 }
 
-u32 sub_02037C0C(u32 index, s16 *data) {
-    if (_021D414C) {
-        MI_CpuCopy8(data, &_021D414C->packets[index], 0x46);
-        sub_020376E0(20, &_021D414C->packets[index]);
+u32 LinkSync_SendPacket(u32 index, s16 *data) {
+    if (gLinkSync) {
+        MI_CpuCopy8(data, &gLinkSync->packets[index], 0x46);
+        sub_020376E0(20, &gLinkSync->packets[index]);
         return TRUE;
     }
     return FALSE;
 }
 
-u16 *sub_02037C44(s32 index) {
-    if (_021D414C->received[index]) {
-        return (u16 *)&_021D414C->packets[index];
+u16 *LinkSync_GetPacket(s32 index) {
+    if (gLinkSync->received[index]) {
+        return (u16 *)&gLinkSync->packets[index];
     }
     return NULL;
 }
 
-void sub_02037C68(int sender, int unused, void *data) {
-    _021D414C->received[sender] = 1;
-    MI_CpuCopy8(data, &_021D414C->packets[sender], 0x46);
+void LinkSync_RecvPacket(int sender, int unused, void *data) {
+    gLinkSync->received[sender] = 1;
+    MI_CpuCopy8(data, &gLinkSync->packets[sender], 0x46);
 }

@@ -11,8 +11,8 @@ void ov70_02241DB4(void *,int); void ListMenuItems_Delete(void *); void GF_Asser
 void Sprite_SetDrawFlag(void *,int); void Sprite_SetAnimCtrlSeq(void *,int); void ov70_02242E58(void *); void ov70_02242EE4(void *); void Gts_SetSpritePosition(void *,int,int);
 int ov70_02242C64(void *); int ov70_022426F4(void *); int ov70_022428C0(void *); void BgCellManager_StartCellMove(void *,int,int,int,int);
 void *NewString_ReadMsgData(void *,int); void String_Delete(void *); void ov70_02242FC4(void *,void *,void *,int,int); void CopyWindowPixelsToVram_TextMode(void *); void BgCellManager_PutWindowTiles(void *,int,void *);
-void AddTextPrinterParameterizedWithColor(void *,int,void *,int,int,int,int,int); void PrintUIntOnWindow(void *,int,int,int,void *,int,int); void sub_0200CDAC(void *,int,void *,int,int); void *ov70_0223F658(int,int,u32 *); int ov70_0224342C(void *,void *,u32,void *); void Heap_Free(void *);
-int ov70_0223F8D0(u32,u32 *);
+void AddTextPrinterParameterizedWithColor(void *,int,void *,int,int,int,int,int); void PrintUIntOnWindow(void *,int,int,int,void *,int,int); void sub_0200CDAC(void *,int,void *,int,int); void *Gts_LoadSpeciesByLetter(int,int,u32 *); int ov70_0224342C(void *,void *,u32,void *); void Heap_Free(void *);
+int Gts_GetCountryGroupRange(u32,u32 *);
 extern const u8 ov70_02245D66[],ov70_02245D67[],ov70_02245D80[],ov70_02245D81[];
 typedef struct Ov70Pair29 { s32 a,b; } Ov70Pair29; extern const s32 ov70_02245E84[]; extern const Ov70Pair29 ov70_02245F5C[]; extern void (*ov70_02246780[])(void *); extern const Ov70Pair29 ov70_02245F58[]; typedef struct Far29 { u8 pad[0x12d0]; void *task; u32 value; } Far29;
 

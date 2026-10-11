@@ -150,7 +150,7 @@ void ov70_02240CE4(void *history, void *mon) {
 }
 
 int ov70_02240D00(Ov70Work *work, void *mon) {
-    if (ov70_0223E76C(mon) && Party_GetCount(work->unk00->unk08) == 6) {
+    if (Gts_MonHoldsMail(mon) && Party_GetCount(work->unk00->unk08) == 6) {
         return 2;
     }
     if (work->unk11F8 == 0x21c && Party_GetCount(work->unk00->unk08) == 6) {

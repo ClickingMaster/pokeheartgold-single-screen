@@ -11,7 +11,7 @@ void sub_0205AA9C(MessageFormat *msgFmt, u16 mode, u16 objId, PlayerProfile *pro
     if (mode == 0) {
         selected = sub_02035798(objId - 1);
     } else {
-        selected = sub_02034818(Comm_GetLocalNetId() ^ 1);
+        selected = CommPlayerInfo_GetProfile(Comm_GetLocalNetId() ^ 1);
     }
     if (selected == NULL) {
         DestroyMsgData(msgData);

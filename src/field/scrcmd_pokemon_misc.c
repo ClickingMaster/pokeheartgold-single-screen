@@ -40,7 +40,7 @@
 #include "system.h"
 #include "sound_playback.h"
 #include "billboard_lists.h"
-#include "unk_02030A98.h"
+#include "frontier_save_access.h"
 #include "unk_02031B0C.h"
 #include "unk_02037C94.h"
 #include "unk_0205BFF0.h"
@@ -147,13 +147,13 @@ BOOL ScrCmd_648(ScriptContext *ctx) {
 
     unkPtr = ov01_02200D9C(fieldSystem, 20, 1, 0, 1, input, *msgfmt, window, msgdata, cursorPos, itemsAbove);
 
-    unkG = sub_020312C4(fieldSystem->saveData, 0xb, &out_1);
+    unkG = FrontierSpeciesRecords_Load(fieldSystem->saveData, 0xb, &out_1);
 
     if (out_1 == 1) {
         data = ov01_02200C94(HEAP_ID_FIELD3, ov01_02209AE0[fileIndex], &out_2);
 
         for (i = 0; i < out_2; i++) {
-            unkPtr_2 = sub_020312E0(fieldSystem->saveData, unkG, sub_0205C144(unkA), data[i]);
+            unkPtr_2 = FrontierSpeciesRecords_Get(fieldSystem->saveData, unkG, sub_0205C144(unkA), data[i]);
             if (unkPtr_2 != 0) {
                 ov01_02200DF8(unkPtr, data[i], 0xff, data[i]);
             }

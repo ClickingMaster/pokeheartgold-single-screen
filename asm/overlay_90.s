@@ -206,7 +206,7 @@ _02258812:
 	add r2, r2, #1
 	sub r1, r1, #1
 	bne _02258812
-	bl sub_020347A0
+	bl CommPlayerInfo_CountAccepted
 	strb r0, [r6, #8]
 	bl Comm_GetLocalNetId
 	mov r5, #0
@@ -214,7 +214,7 @@ _02258812:
 	add r4, r5, #0
 _0225882A:
 	add r0, r4, #0
-	bl sub_02034818
+	bl CommPlayerInfo_GetProfile
 	cmp r0, #0
 	beq _02258840
 	cmp r7, r4

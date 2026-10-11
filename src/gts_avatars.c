@@ -356,7 +356,7 @@ void Gts_LowerAvatars(GtsApp *app) {
 
 // Screen 8: the summary of the Pokemon at selectedBox/selectedSlot, then back to screen 5.
 int GtsViewMon_Init(GtsApp *app, int state) {
-    app->summaryArgs.party = ov70_0223E49C(app->args->party, app->args->pcStorage, app->selectedBox, app->selectedSlot);
+    app->summaryArgs.party = (Party *)Gts_GetBoxMon(app->args->party, app->args->pcStorage, app->selectedBox, app->selectedSlot);
     app->summaryArgs.unk11 = 2;
     app->summaryArgs.partyCount = 1;
     app->summaryArgs.partySlot = 0;

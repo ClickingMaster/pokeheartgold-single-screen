@@ -9,7 +9,7 @@ extern u32 _021D41CC[];
 u8 *sub_02035878(void);
 BOOL sub_020376F8(void);
 BOOL sub_02059F54(void);
-void sub_02034434(void);
+void CommPlayerInfo_SendLocal(void);
 void sub_020398D4(int, int);
 void sub_0205A904(int);
 void sub_0205A034(void *, FieldCallback59F78, int);

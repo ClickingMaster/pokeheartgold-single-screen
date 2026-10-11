@@ -26,8 +26,8 @@
 .public FriendRoster_RemoveFriend
 .public Save_FriendRoster_Get
 .public Save_Frontier_GetStatic
-.public sub_020311AC
-.public sub_02034818
+.public FrontierSave_DeleteRow
+.public CommPlayerInfo_GetProfile
 .public Comm_CountConnected
 .public sub_0203A1C4
 .public sub_0203A280

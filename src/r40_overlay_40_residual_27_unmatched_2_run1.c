@@ -7,7 +7,7 @@ BOOL ov40_02230D94(void *work, u64 value) {
     entry = (u8 *)work + 4;
     do {
         void *summary = *(void **)(entry + 0x87c);
-        if (summary != NULL && sub_0203088C(summary, 4, 0) == value) {
+        if (summary != NULL && BattleRecordHeader_GetField(summary, 4, 0) == value) {
             return TRUE;
         }
         i++;

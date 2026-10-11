@@ -859,8 +859,8 @@ int ov40_0223F200(void *p) {
     void *inner = PTR(p, 0x860);
     switch (WORD(p, 8)) {
     case 0:
-        if (sub_0202FC48()) {
-            sub_0202FC24();
+        if (BattleRecord_Exists()) {
+            BattleRecord_Delete();
         }
         *(Ov40Blk44 *)((u8 *)inner + 0x4E0) = ov40_022457B0;
         WORD(inner, 0x4E0) = 0;
@@ -1127,7 +1127,7 @@ int ov40_0223F880(void *p) {
 
 int ov40_0223F984(Ov40Work *work) {
     void *inner = PTR(work, 0x860);
-    if (ov40_02230D94(work, sub_0203088C(sub_020307F8(), 4, 0))) {
+    if (ov40_02230D94(work, BattleRecordHeader_GetField(BattleRecord_GetHeader(), 4, 0))) {
         switch (WORD(work, 8)) {
         case 0:
             ov40_02230964(work, (void *)1);

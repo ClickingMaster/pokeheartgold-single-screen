@@ -91,7 +91,7 @@ _020361FE:
 _02036204:
 	mov r0, #0
 	bl sub_02039A00
-	bl sub_02037ADC
+	bl LinkSync_Update
 	mov r0, #1
 	pop {r4, pc}
 	nop

@@ -45,7 +45,7 @@ struct FieldSysPriv {
 };
 
 BOOL Comm_GetLocalNetId(void);
-PlayerProfile *sub_02034818(u32 netId);
+PlayerProfile *CommPlayerInfo_GetProfile(u32 netId);
 BOOL Comm_SendCommand(int a0, void *a1, int a2);
 void *sub_02036FD8(int a0, void *a1, int a2);
 void sub_020388E0(void);
@@ -55,8 +55,8 @@ void GF_AssertFail(void);
 void sub_02035838(MailMessage *a0);
 void sub_02035854(struct UnkSub_0205AA4C *a0);
 void sub_0203588C(void);
-u32 sub_020348A8(int netId);
-u32 sub_020348CC(int netId);
+u32 CommPlayerInfo_GetCountry(int netId);
+u32 CommPlayerInfo_GetRegion(int netId);
 void BufferCountryName(struct MessageFormat *msgFmt, u32 idx, u32 country);
 void BufferCityName(struct MessageFormat *msgFmt, u32 idx, u32 country, u32 city);
 

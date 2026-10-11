@@ -28,7 +28,7 @@ _02059F88:
 	ldrb r0, [r5, #0x1c]
 	cmp r0, #4
 	beq _02059FC8
-	bl sub_02034434
+	bl CommPlayerInfo_SendLocal
 	mov r0, #1
 	add r1, r0, #0
 	bl sub_020398D4

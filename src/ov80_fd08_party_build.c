@@ -15,15 +15,15 @@ void ov80_02230270(void *arg0) {
     i = 0;
     cursor = (u16 *)work;
     do {
-        cursor[12] = sub_02030A24(*(void **)(raw + 0x4F4), 3, (u8)i, 0);
+        cursor[12] = FactoryChallenge_GetField(*(void **)(raw + 0x4F4), 3, (u8)i, 0);
         i++;
         cursor++;
     } while (i < 14);
 
     for (i = 0; i < 4; i++) {
-        ids[i] = sub_02030A24(*(void **)(raw + 0x4F4), 4, (u8)i, 0);
-        values[i] = sub_02030A24(*(void **)(raw + 0x4F4), 6, (u8)i, 0);
-        attrs[i] = sub_02030A24(*(void **)(raw + 0x4F4), 5, (u8)i, 0);
+        ids[i] = FactoryChallenge_GetField(*(void **)(raw + 0x4F4), 4, (u8)i, 0);
+        values[i] = FactoryChallenge_GetField(*(void **)(raw + 0x4F4), 6, (u8)i, 0);
+        attrs[i] = FactoryChallenge_GetField(*(void **)(raw + 0x4F4), 5, (u8)i, 0);
         work->firstIds[i] = ids[i];
     }
     FrontierMon_GenerateList(records, ids, attrs, values, 0, 4, 11, 0xCD);
@@ -35,9 +35,9 @@ void ov80_02230270(void *arg0) {
     Heap_Free(mon);
 
     for (i = 0; i < 4; i++) {
-        ids[i] = sub_02030A24(*(void **)(raw + 0x4F4), 7, (u8)i, 0);
-        values[i] = sub_02030A24(*(void **)(raw + 0x4F4), 9, (u8)i, 0);
-        attrs[i] = sub_02030A24(*(void **)(raw + 0x4F4), 8, (u8)i, 0);
+        ids[i] = FactoryChallenge_GetField(*(void **)(raw + 0x4F4), 7, (u8)i, 0);
+        values[i] = FactoryChallenge_GetField(*(void **)(raw + 0x4F4), 9, (u8)i, 0);
+        attrs[i] = FactoryChallenge_GetField(*(void **)(raw + 0x4F4), 8, (u8)i, 0);
         work->secondIds[i] = ids[i];
     }
     FrontierMon_GenerateList(records, ids, attrs, values, 0, 4, 11, 0xCD);

@@ -23,9 +23,9 @@
 #include "sound_playback.h"
 #include "unk_0200A090.h"
 #include "oam_manager.h"
-#include "unk_02034354.h"
+#include "communication_player_state.h"
 #include "unk_02035900.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 #include "unk_02037C94.h"
 #include "unk_0203A3B0.h"
 #include "unk_020971F8.h"
@@ -238,15 +238,15 @@ s32 ov44_02232F64(OverlayManager *overlayManager, u32 *arg1) {
             ov44_02233D8C(temp_r4, temp_r7, HEAP_ID_103);
         }
         if (temp_r4->unk4 != 0) {
-            if (sub_02034420() == 1) {
+            if (CommPlayerInfo_Exists() == 1) {
                 ov44_0223438C(temp_r4);
-                sub_02034638();
+                CommPlayerInfo_HostRedistribute();
                 ov44_02234248(temp_r4);
             }
             var_r6 = ov44_022365B8[temp_r4->unk5](temp_r4, temp_r7, HEAP_ID_103);
         } else {
             var_r6 = ov44_02236540[temp_r4->unk5](temp_r4, temp_r7, HEAP_ID_103);
-            if (sub_02034420() == 1) {
+            if (CommPlayerInfo_Exists() == 1) {
                 ov44_0223427C(temp_r4, HEAP_ID_103);
             }
         }
@@ -320,8 +320,8 @@ void ov44_02233100(UnkStruct_ov44_02235340 *arg0, String *arg1) {
             default:
                 return;
             }
-            if (sub_02034420() == 1) {
-                sub_020346E8(arg1->maxsize);
+            if (CommPlayerInfo_Exists() == 1) {
+                CommPlayerInfo_ClearPlayer(arg1->maxsize);
             }
         }
     }
@@ -330,7 +330,7 @@ void ov44_02233100(UnkStruct_ov44_02235340 *arg0, String *arg1) {
 void ov44_02233160(UnkStruct_ov44_02235340 *arg0) {
     if (arg0->unk2C == 0) {
         arg0->unk2C = 1;
-        sub_02037AC0(13);
+        LinkSync_StartSync(13);
     }
 }
 
@@ -620,12 +620,12 @@ void ov44_02233A34(UnkStruct_ov44_02232F64 *arg0) {
 void ov44_02233A50(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
     UnkStruct_ov44_02232F64 *temp_r6;
 
-    if (sub_02034420() != 0) {
+    if (CommPlayerInfo_Exists() != 0) {
         temp_r6 = &arg0->unk30;
         for (s32 i = 0; i < 4; i++) {
-            if ((i == 0) && (sub_02034730(i) == 1)) {
+            if ((i == 0) && (CommPlayerInfo_IsReceivedOrAccepted(i) == 1)) {
                 ov44_02233AB8(arg0, temp_r6, arg1, i, heapID);
-            } else if (sub_02034750(i) == 1) {
+            } else if (CommPlayerInfo_IsAccepted(i) == 1) {
                 ov44_02233AB8(arg0, temp_r6, arg1, i, heapID);
             } else {
                 ov44_02233C18(temp_r6, arg1, i, heapID);
@@ -685,11 +685,11 @@ void ov44_02233C18(UnkStruct_ov44_02232F64 *arg0, UnkStruct_ov44_args *arg1, s32
 }
 
 void ov44_02233C88(UnkStruct_ov44_02232F64 *arg0, UnkStruct_ov44_args *arg1, s32 arg2, s32 arg3, enum HeapID heapID) {
-    BufferPlayersName(arg0->msgFmt, arg3, sub_02034818(arg2));
+    BufferPlayersName(arg0->msgFmt, arg3, CommPlayerInfo_GetProfile(arg2));
 }
 
 void ov44_02233CA0(UnkStruct_ov44_02232F64 *arg0, UnkStruct_ov44_args *arg1, s32 arg2, s32 arg3, enum HeapID heapID) {
-    BufferIntegerAsString(arg0->msgFmt, arg3, PlayerProfile_GetTrainerID_VisibleHalf(sub_02034818(arg2)), 5, PRINTING_MODE_LEADING_ZEROS, 1);
+    BufferIntegerAsString(arg0->msgFmt, arg3, PlayerProfile_GetTrainerID_VisibleHalf(CommPlayerInfo_GetProfile(arg2)), 5, PRINTING_MODE_LEADING_ZEROS, 1);
 }
 
 void ov44_02233CCC(UnkStruct_ov44_02232F64 *arg0) {
@@ -833,15 +833,15 @@ void ov44_02233F50(UnkStruct_ov44_02235340 *arg0) {
 }
 
 s32 ov44_02233F64(UnkStruct_ov44_02235340 *arg0) {
-    return sub_020347A0();
+    return CommPlayerInfo_CountAccepted();
 }
 
 s32 ov44_02233F6C(UnkStruct_ov44_02235340 *arg0, enum HeapID heapID) {
     s32 var_r7 = 1;
     for (s32 i = Comm_GetLocalNetId() - 1; i >= 0; i--) {
-        if (sub_02034714(i) == 1) {
+        if (CommPlayerInfo_IsReceived(i) == 1) {
             ov44_022340BC(arg0, i, heapID);
-        } else if (sub_02034750(i) == 0) {
+        } else if (CommPlayerInfo_IsAccepted(i) == 0) {
             var_r7 = 0;
         }
     }
@@ -852,10 +852,10 @@ void ov44_02233FA8(UnkStruct_ov44_02235340 *arg0) {
     UnkStruct_ov44_022345FC var_r5;
     var_r5.unk2 = 0;
     for (s32 i = 1; i < 4; i++) {
-        if (sub_02034714(i) == 1) {
+        if (CommPlayerInfo_IsReceived(i) == 1) {
             var_r5.unk0 = i;
             GF_ASSERT(Comm_SendCommand(22, &var_r5, 8) == TRUE);
-            sub_020346E8(i);
+            CommPlayerInfo_ClearPlayer(i);
         }
     }
 }
@@ -864,10 +864,10 @@ void ov44_02233FE8(UnkStruct_ov44_02235340 *arg0) {
     UnkStruct_ov44_022345FC var_r5;
     var_r5.unk2 = 0;
     for (s32 i = 1; i < 4; i++) {
-        if (sub_02034730(i) == 1) {
+        if (CommPlayerInfo_IsReceivedOrAccepted(i) == 1) {
             var_r5.unk0 = i;
             GF_ASSERT(Comm_SendCommand(22, &var_r5, 8) == TRUE);
-            sub_020346E8(i);
+            CommPlayerInfo_ClearPlayer(i);
         }
     }
 }
@@ -884,7 +884,7 @@ s32 ov44_02234044(UnkStruct_ov44_02235340 *arg0) {
     s32 var_r7 = 0;
     for (s32 i = 0; i < 4; i++) {
         if (arg0->unk14[i] == 1) {
-            if (sub_02034750(arg0->unk18[i]) == 1) {
+            if (CommPlayerInfo_IsAccepted(arg0->unk18[i]) == 1) {
                 var_r7 = 1;
             }
             arg0->unk14[i] = 0;
@@ -922,8 +922,8 @@ void ov44_022340B4(UnkStruct_ov44_02235340 *arg0) {
 }
 
 void ov44_022340BC(UnkStruct_ov44_02235340 *arg0, s32 arg1, enum HeapID heapID) {
-    if (sub_02034750(arg1) == 0) {
-        sub_0203476C(arg1);
+    if (CommPlayerInfo_IsAccepted(arg1) == 0) {
+        CommPlayerInfo_Accept(arg1);
         arg0->unk25 = arg1;
         ov44_022340EC(arg0, arg1, heapID);
         ov44_022340B4(arg0);
@@ -937,7 +937,7 @@ void ov44_022340EC(UnkStruct_ov44_02235340 *arg0, s32 arg1, enum HeapID heapID) 
         sp4 = ov44_02236510[arg1];
 
         if (arg1 != Comm_GetLocalNetId()) {
-            PlayerProfile *playerProfile = sub_02034818(arg1);
+            PlayerProfile *playerProfile = CommPlayerInfo_GetProfile(arg1);
             GF_ASSERT(playerProfile);
             sp4.unkA = PlayerProfile_GetAvatar(playerProfile);
         } else if (arg0->unk0->unk1C[2] == 0) {
@@ -979,16 +979,16 @@ void ov44_02234224(UnkStruct_ov44_02235340 *arg0, s32 arg1) {
 
 void ov44_02234248(UnkStruct_ov44_02235340 *arg0) {
     for (s32 i = 0; i < 4; i++) {
-        if (((arg0->unk25 + 1) < i) && (sub_02034714(i) == 1)) {
+        if (((arg0->unk25 + 1) < i) && (CommPlayerInfo_IsReceived(i) == 1)) {
             ov44_02234224(arg0, i);
-            sub_020346E8(i);
+            CommPlayerInfo_ClearPlayer(i);
         }
     }
 }
 
 void ov44_0223427C(UnkStruct_ov44_02235340 *arg0, enum HeapID heapID) {
     for (s32 i = 0; i < 4; i++) {
-        if ((arg0->unk28[i] == 1) && (sub_02034730(i) == 1)) {
+        if ((arg0->unk28[i] == 1) && (CommPlayerInfo_IsReceivedOrAccepted(i) == 1)) {
             ov44_022340BC(arg0, i, heapID);
             arg0->unk28[i] = 0;
             arg0->unk12 = 1;
@@ -1037,9 +1037,9 @@ void ov44_02234388(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_022341C0 *arg1)
 
 void ov44_0223438C(UnkStruct_ov44_02235340 *arg0) {
     int sp0 = 0;
-    if (sub_02034420() != 0) {
-        int sp_count = sub_020347A0();
-        if ((sub_020346D4() != 0) && (sub_02037824(5) == 0)) {
+    if (CommPlayerInfo_Exists() != 0) {
+        int sp_count = CommPlayerInfo_CountAccepted();
+        if ((CommPlayerInfo_HasNewEntries() != 0) && (sub_02037824(5) == 0)) {
             sp0 = 1;
         }
         int var_r4 = 0;
@@ -1069,7 +1069,7 @@ void ov44_0223438C(UnkStruct_ov44_02235340 *arg0) {
 }
 
 int ov44_0223442C(UnkStruct_ov44_02235340 *arg0) {
-    if (sub_02037B38(13) != 0) {
+    if (LinkSync_IsSynced(13) != 0) {
         return 1;
     }
     return 0;
@@ -1120,13 +1120,13 @@ s32 ov44_022344C4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
         return 0;
     }
     if (ov44_02233E6C(arg0) == 1) {
-        temp_r0 = sub_02034780();
+        temp_r0 = CommPlayerInfo_FindReceived();
         if ((temp_r0 != 255) && (arg0->unk6 != 0)) {
             if (sub_02034870(temp_r0) == 32) {
                 UnkStruct_ov44_022345FC subroutine_arg0;
                 subroutine_arg0.unk0 = temp_r0;
                 subroutine_arg0.unk2 = 0;
-                sub_020346E8(temp_r0);
+                CommPlayerInfo_ClearPlayer(temp_r0);
                 GF_ASSERT(Comm_SendCommand(22, &subroutine_arg0, 8) == TRUE);
             } else {
                 arg0->unk6 = temp_r0;
@@ -1193,7 +1193,7 @@ s32 ov44_022345FC(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
             }
         } else {
             subroutine_arg0.unk2 = 0;
-            sub_020346E8(arg0->unk6);
+            CommPlayerInfo_ClearPlayer(arg0->unk6);
             arg0->unk5 = 1;
         }
         GF_ASSERT(Comm_SendCommand(22, &subroutine_arg0, 8) == TRUE);
@@ -1265,7 +1265,7 @@ s32 ov44_02234764(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
 }
 
 s32 ov44_0223479C(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    if (Comm_CountConnected() != sub_020347A0()) {
+    if (Comm_CountConnected() != CommPlayerInfo_CountAccepted()) {
         ov44_02233FA8(arg0);
         return 0;
     }
@@ -1289,19 +1289,19 @@ s32 ov44_022347D4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
 }
 
 s32 ov44_022347FC(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    if (sub_02037B38(13) != 0) {
+    if (LinkSync_IsSynced(13) != 0) {
         ov44_02233EB4(arg0, arg1);
-        sub_02037BEC();
-        sub_02037AC0(14);
+        LinkSync_ClearPackets();
+        LinkSync_StartSync(14);
         arg0->unk5 = 15;
     }
     return 0;
 }
 
 s32 ov44_02234828(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    if (sub_02037B38(14) != 0) {
+    if (LinkSync_IsSynced(14) != 0) {
         s16 subroutine_arg0 = (s16)arg0->unk0->unk1B;
-        if (sub_02037C0C(Comm_GetLocalNetId(), &subroutine_arg0) == 1) {
+        if (LinkSync_SendPacket(Comm_GetLocalNetId(), &subroutine_arg0) == 1) {
             arg0->unk5 = 16;
         }
     }
@@ -1316,7 +1316,7 @@ s32 ov44_02234858(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
 
     for (i = 0; i < temp_r7; i++) {
         if (sp0 != i) {
-            u16 *temp_r0 = sub_02037C44(i);
+            u16 *temp_r0 = LinkSync_GetPacket(i);
             if (temp_r0 != NULL) {
                 if (temp_r0[0] == arg0->unk0->unk1B) {
                     var_r5++;
@@ -1336,13 +1336,13 @@ s32 ov44_02234858(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
 
 s32 ov44_022348A8(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
     sub_020398D4(1, 1);
-    sub_02037AC0(18);
+    LinkSync_StartSync(18);
     arg0->unk5 = 18;
     return 0;
 }
 
 s32 ov44_022348C4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    if (sub_02037B38(18) != 0) {
+    if (LinkSync_IsSynced(18) != 0) {
         arg0->unk7 = 1;
         ov44_022342E0(arg0, arg1, heapID);
         return 1;
@@ -1529,7 +1529,7 @@ s32 ov44_02234BB4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
 }
 
 s32 ov44_02234BF0(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    sub_02034434();
+    CommPlayerInfo_SendLocal();
     sub_020398D4(0, 1);
     ov44_02234440(arg0);
     arg0->unk5 = 1;
@@ -1541,7 +1541,7 @@ s32 ov44_02234C10(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
     if (Comm_IsNetIdConnected(0) == 0) {
         ov44_02234450(arg0);
         arg0->unk5 = 15;
-    } else if (sub_02034750(0) != 0) {
+    } else if (CommPlayerInfo_IsAccepted(0) != 0) {
         ov44_02234450(arg0);
         arg0->unk5 = 2;
     }
@@ -1655,8 +1655,8 @@ s32 ov44_02234E08(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
         ov44_022340B4(arg0);
     }
     if (ov44_0223442C(arg0) == 1) {
-        sub_02037BEC();
-        sub_02037AC0(14);
+        LinkSync_ClearPackets();
+        LinkSync_StartSync(14);
         ov44_022342E0(arg0, arg1, heapID);
         Wifi_LoadAndPrintTextToWindowWrapper(&arg0->unk30, arg1, msg_0778_00102, heapID);
         ov44_02234440(arg0);
@@ -1673,7 +1673,7 @@ s32 ov44_02234E08(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
 s32 ov44_02234EA4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
     s32 temp_r0;
 
-    if (sub_02037B38(14) != 0) {
+    if (LinkSync_IsSynced(14) != 0) {
         s16 subroutine_arg0 = (s16)arg0->unk0->unk1B;
         if (ov44_02233F64(arg0) != Comm_CountConnected()) {
             temp_r0 = arg0->unk8 - 1;
@@ -1683,7 +1683,7 @@ s32 ov44_02234EA4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
             }
             return 0;
         }
-        if (sub_02037C0C(Comm_GetLocalNetId(), &subroutine_arg0) == 1) {
+        if (LinkSync_SendPacket(Comm_GetLocalNetId(), &subroutine_arg0) == 1) {
             arg0->unk5 = 12;
         }
     }
@@ -1698,7 +1698,7 @@ s32 ov44_02234EF4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
 
     for (i = 0; i < temp_r7; i++) {
         if (sp0 != i) {
-            u16 *temp_r0 = sub_02037C44(i);
+            u16 *temp_r0 = LinkSync_GetPacket(i);
             if (temp_r0 != NULL) {
                 if (temp_r0[0] == arg0->unk0->unk1B) {
                     var_r5++;
@@ -1719,13 +1719,13 @@ s32 ov44_02234EF4(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
 
 s32 ov44_02234F44(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
     sub_020398D4(1, 1);
-    sub_02037AC0(18);
+    LinkSync_StartSync(18);
     arg0->unk5 = 14;
     return 0;
 }
 
 s32 ov44_02234F60(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum HeapID heapID) {
-    if (sub_02037B38(18) != 0) {
+    if (LinkSync_IsSynced(18) != 0) {
         ov44_022342E0(arg0, arg1, heapID);
         arg0->unk7 = 1;
         return 1;
@@ -1892,7 +1892,7 @@ s32 ov44_02235268(UnkStruct_ov44_02235340 *arg0, UnkStruct_ov44_args *arg1, enum
     u8 *temp_r0;
 
     if (IsPaletteFadeFinished()) {
-        sub_02034354(arg1->unk8, 0);
+        CommPlayerInfo_Init(arg1->unk8, 0);
         arg0->unk27 = 1;
         ov44_02234204(arg0);
         FreeStructOv44_02235340(arg0, heapID);

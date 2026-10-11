@@ -541,7 +541,7 @@ FrtCmd_124: ; 0x0222D034
 	bl Comm_GetLocalNetId
 	mov r1, #1
 	eor r0, r1
-	bl sub_02034818
+	bl CommPlayerInfo_GetProfile
 	add r2, r0, #0
 	ldr r0, [r5]
 	add r1, r4, #0

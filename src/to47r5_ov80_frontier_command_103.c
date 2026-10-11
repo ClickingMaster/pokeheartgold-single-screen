@@ -42,7 +42,7 @@ int FrtCmd_103(void *c) {
         OS_ResetSystem(0);
         break;
     case 9:
-        *dest = sub_0203095C(PTR(data, 0x4f4));
+        *dest = FactoryChallenge_GetSaved(PTR(data, 0x4f4));
         break;
     case 10:
         ov80_0223049C(data, 2);

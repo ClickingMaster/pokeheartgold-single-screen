@@ -10,7 +10,7 @@ typedef struct Ov93E4B0 {
     u8 pad2[0x339c-0x2fdc];
     u32 flag;
 } Ov93E4B0;
-extern void sub_02037AC0(u8);
+extern void LinkSync_StartSync(u8);
 extern u32 ov93_0225E0F4(void *);
 u32 ov93_0225E4B0(Ov93E4B0 *p);
 u32 ov93_0225E4B0(Ov93E4B0 *p) {
@@ -38,7 +38,7 @@ u32 ov93_0225E4B0(Ov93E4B0 *p) {
         return 0;
     }
     if (ready == 1) {
-        sub_02037AC0((u8)p->arg);
+        LinkSync_StartSync((u8)p->arg);
         if (ov93_0225E0F4(p) == 1) {
             p->kind = 7;
         } else {

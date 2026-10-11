@@ -9,15 +9,15 @@
 #include "heap.h"
 #include "player_data.h"
 #include "render_text.h"
-#include "unk_02034354.h"
+#include "communication_player_state.h"
 #include "unk_02035900.h"
 
 // External functions used throughout this file (in assembly for now)
 extern int ov97_0221E5C0(OverlayManager *man, int *state); // Init
 extern int ov97_0221E5D4(OverlayManager *man, int *state); // Main/Exec
 extern int ov97_0221E69C(OverlayManager *man, int *state); // Exit
-extern void sub_02037AC0(u8 param);
-extern BOOL sub_02037B38(u8 param);
+extern void LinkSync_StartSync(u8 param);
+extern BOOL LinkSync_IsSynced(u8 param);
 extern BOOL GF_heap_c_dummy_return_true(enum HeapID heapId);
 
 // Data tables in assembly
@@ -132,12 +132,12 @@ BOOL PokeathlonCourse_Main(OverlayManager *manager, int *state) {
         break;
 
     case POKEATHLON_STATE_START_TRANSITION:
-        sub_02037AC0(courseState->transitionType);
+        LinkSync_StartSync(courseState->transitionType);
         courseState->mainState = POKEATHLON_STATE_WAIT_TRANSITION;
         // Fallthrough to case POKEATHLON_STATE_WAIT_TRANSITION
 
     case POKEATHLON_STATE_WAIT_TRANSITION:
-        if (sub_02037B38(courseState->transitionType)) {
+        if (LinkSync_IsSynced(courseState->transitionType)) {
             courseState->mainState = POKEATHLON_STATE_IDLE;
             courseState->transitionType = 0; // Clear transition type
         }
@@ -145,12 +145,12 @@ BOOL PokeathlonCourse_Main(OverlayManager *manager, int *state) {
 
     case POKEATHLON_STATE_START_EXIT:
         GF_ASSERT(courseState->transitionType == 0x10);
-        sub_02037AC0(courseState->transitionType);
+        LinkSync_StartSync(courseState->transitionType);
         courseState->mainState = POKEATHLON_STATE_EXIT_SEQUENCE;
         // Fallthrough to case POKEATHLON_STATE_EXIT_SEQUENCE
 
     case POKEATHLON_STATE_EXIT_SEQUENCE:
-        if (!sub_02037B38(courseState->transitionType)) {
+        if (!LinkSync_IsSynced(courseState->transitionType)) {
             if (ov96_021E5F24(data)) {
                 break;
             }
@@ -288,7 +288,7 @@ void PokeathlonCourse_InitPlayerProfiles(PokeathlonCourseData *data) {
     } else {
         for (i = 0; i < data->participantCount; i++) {
             PlayerProfile *dest = PokeathlonCourse_GetPlayerProfile(data->playerProfiles, i);
-            PlayerProfile *src = sub_02034818(i);
+            PlayerProfile *src = CommPlayerInfo_GetProfile(i);
             PlayerProfile_Copy(src, dest);
         }
     }

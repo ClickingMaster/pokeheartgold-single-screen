@@ -12,7 +12,7 @@ BOOL sub_02059F54(void) {
     int count = 0;
     i = 1;
     for (; i < 5; i++) {
-        if (sub_02034818(i) != 0) {
+        if (CommPlayerInfo_GetProfile(i) != 0) {
             count++;
         }
     }

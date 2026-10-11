@@ -19,7 +19,7 @@ void sub_0205A0A0(void *p) {
 void sub_0205A0B4(void *p) {
     u8 *data = p;
     if (sub_02037F94() == TRUE) {
-        sub_02034434();
+        CommPlayerInfo_SendLocal();
         sub_0205A034(p, sub_0205A144, 3);
         return;
     }
@@ -49,7 +49,7 @@ void sub_0205A114(void *p) {
 void sub_0205A144(void *p) {
     u8 *data = p;
     if (sub_02037F94() == TRUE) {
-        if (sub_02034818(Comm_GetLocalNetId()) != 0) {
+        if (CommPlayerInfo_GetProfile(Comm_GetLocalNetId()) != 0) {
             *(u32 *)(data + 0x20) = 0;
             *(u32 *)(data + 0x1C) = 1;
             *(u32 *)(data + 0x44) = 0;

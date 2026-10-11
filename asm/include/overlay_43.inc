@@ -171,7 +171,7 @@
 .public Save_FriendRoster_Get
 .public Save_Frontier_GetStatic
 .public FrontierSave_GetStat
-.public sub_020311AC
+.public FrontierSave_DeleteRow
 .public sub_0203A128
 .public Save_VarsFlags_Get
 .public GetUnionRoomAvatarAttrBySprite

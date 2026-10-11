@@ -4,7 +4,7 @@
 
 #include "heap.h"
 #include "unk_02035900.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 typedef struct SyncPacket {
     u8 data[0x48];
 } SyncPacket;
@@ -15,47 +15,27 @@ typedef struct LinkSync {
     u8 received[8];
     u8 resend, completed, requested, pending;
 } LinkSync;
-extern LinkSync *_021D414C;
+extern LinkSync *gLinkSync;
 BOOL sub_02037184(int, void *);
 BOOL sub_020376E0(int, void *);
-void sub_020379A0(enum HeapID heap);
-void sub_020379F8(void);
-BOOL sub_02037A10(void);
-void sub_02037A24(int sender, int unused, u8 *data);
-void sub_02037A98(int sender, int unused, u8 *data);
-void sub_02037AAC(int sender, int unused, u8 *data);
-void sub_02037AC0(u8 state);
-void sub_02037ADC(void);
-BOOL sub_02037B38(u8 state);
-u8 sub_02037B5C(int index);
-void sub_02037B6C(int sender, int unused, u8 *data);
-u32 sub_02037B88(void);
-void sub_02037B8C(u32 key, u8 value);
-s32 sub_02037BA0(s32 sender, s32 key);
-void sub_02037BC8(void);
-void sub_02037BEC(void);
-u32 sub_02037C0C(u32 index, s16 *data);
-u16 *sub_02037C44(s32 index);
-void sub_02037C68(int sender, int unused, void *data);
-
-void sub_020379A0(enum HeapID heap);
-void sub_020379F8(void);
-BOOL sub_02037A10(void);
-void sub_02037A24(int sender, int unused, u8 *data);
-void sub_02037A98(int sender, int unused, u8 *data);
-void sub_02037AAC(int sender, int unused, u8 *data);
-void sub_02037AC0(u8 state);
-void sub_02037ADC(void);
-BOOL sub_02037B38(u8 state);
-u8 sub_02037B5C(int index);
-void sub_02037B6C(int sender, int unused, u8 *data);
-u32 sub_02037B88(void);
-void sub_02037B8C(u32 key, u8 value);
-s32 sub_02037BA0(s32 sender, s32 key);
-void sub_02037BC8(void);
-void sub_02037BEC(void);
-u32 sub_02037C0C(u32 index, s16 *data);
-u16 *sub_02037C44(s32 index);
-void sub_02037C68(int sender, int unused, void *data);
+void LinkSync_Init(enum HeapID heap);
+void LinkSync_Free(void);
+BOOL LinkSync_Exists(void);
+void LinkSync_RecvRequest(int sender, int unused, u8 *data);
+void LinkSync_RecvState(int sender, int unused, u8 *data);
+void LinkSync_RecvDone(int sender, int unused, u8 *data);
+void LinkSync_StartSync(u8 state);
+void LinkSync_Update(void);
+BOOL LinkSync_IsSynced(u8 state);
+u8 LinkSync_GetPlayerState(int index);
+void LinkSync_RecvValue(int sender, int unused, u8 *data);
+u32 LinkSync_GetValueSize(void);
+void LinkSync_SendValue(u32 key, u8 value);
+s32 LinkSync_GetValue(s32 sender, s32 key);
+void LinkSync_ClearValues(void);
+void LinkSync_ClearPackets(void);
+u32 LinkSync_SendPacket(u32 index, s16 *data);
+u16 *LinkSync_GetPacket(s32 index);
+void LinkSync_RecvPacket(int sender, int unused, void *data);
 
 #endif

@@ -59,10 +59,10 @@
 #include "unk_0200FA24.h"
 #include "unk_02013FDC.h"
 #include "friend_roster.h"
-#include "unk_02030A98.h"
-#include "unk_02034354.h"
+#include "frontier_save_access.h"
+#include "communication_player_state.h"
 #include "unk_02035900.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 #include "unk_02037C94.h"
 #include "unk_0203A3B0.h"
 #include "unk_02088288.h"
@@ -254,8 +254,8 @@ void sub_0208F7E0(FieldSystem *fieldSystem, WirelessTradeSelectMon *work);
 // network_communication_state_full.c; not declared in their public headers.
 BOOL FriendRoster_IsFriendValid(FriendRoster *roster, int index);
 void FriendRoster_RemoveFriend(FriendRoster *roster, int index);
-void sub_020311AC(FrontierSave *frontier, int row);
-void sub_02034AEC(SaveData *saveData, int a1);
+void FrontierSave_DeleteRow(FrontierSave *frontier, int row);
+void CommPlayerInfo_RecordTrades(SaveData *saveData, int a1);
 int sub_02036FD8(int command, void *data, int size);
 void sub_020399FC(enum HeapID heapID, BgConfig *bgConfig);
 void sub_02039EAC(s32 *a0);
@@ -451,8 +451,8 @@ void WirelessTradeSelectMon_LoadMonIconGfx(NNSG2dCharacterData *charData, u32 sp
 }
 
 void WirelessTradeSelectMon_PrintPlayerNames(WirelessTradeSelectMon *work) {
-    PlayerProfile *profile = sub_02034818(Comm_GetLocalNetId());
-    PlayerProfile *partnerProfile = sub_02034818(Comm_GetLocalNetId() ^ 1);
+    PlayerProfile *profile = CommPlayerInfo_GetProfile(Comm_GetLocalNetId());
+    PlayerProfile *partnerProfile = CommPlayerInfo_GetProfile(Comm_GetLocalNetId() ^ 1);
     String *name = PlayerProfile_GetPlayerName_NewString(profile, HEAP_ID_26);
     String *partnerName = PlayerProfile_GetPlayerName_NewString(partnerProfile, HEAP_ID_26);
     String *quit = NewString_ReadMsgData(work->msgData, 50); // "Quit"
@@ -644,7 +644,7 @@ BOOL WirelessTradeSelectMon_ExchangeData(WirelessTradeSelectMon *work) {
     WirelessTradeSelectMon_UpdateTimeout(work);
     switch (work->exchangeState) {
     case 0:
-        sub_02037AC0(0x50);
+        LinkSync_StartSync(0x50);
         sub_0201A728(2);
         WirelessTradeSelectMon_ShowWaitingIcon(work);
         i = 0;
@@ -660,7 +660,7 @@ BOOL WirelessTradeSelectMon_ExchangeData(WirelessTradeSelectMon *work) {
         work->exchangeState++;
         break;
     case 1:
-        if (sub_02037B38(0x50)) {
+        if (LinkSync_IsSynced(0x50)) {
             if (work->args->unk30 == 0) {
                 work->exchangeState = 6;
             } else {
@@ -697,11 +697,11 @@ BOOL WirelessTradeSelectMon_ExchangeData(WirelessTradeSelectMon *work) {
         break;
     case 6:
         sub_020378E4(1);
-        sub_02037AC0(0x51);
+        LinkSync_StartSync(0x51);
         work->exchangeState++;
         break;
     case 7:
-        if (sub_02037B38(0x51)) {
+        if (LinkSync_IsSynced(0x51)) {
             work->exchangeState++;
         }
         break;
@@ -758,7 +758,7 @@ BOOL WirelessTradeSelectMon_ExchangeData(WirelessTradeSelectMon *work) {
         work->exchangeState++;
         break;
     case 12:
-        WirelessTradeSelectMon_SendPalPad(sub_02034818(Comm_GetLocalNetId()), work->palPad, &work->palPadPacket);
+        WirelessTradeSelectMon_SendPalPad(CommPlayerInfo_GetProfile(Comm_GetLocalNetId()), work->palPad, &work->palPadPacket);
         work->exchangeState++;
         break;
     case 13:
@@ -1653,13 +1653,13 @@ void WirelessTradeSelectMon_OpenSummary(WirelessTradeSelectMon *work, u32 ofPart
         work->summaryArgs.party = work->party;
         work->summaryArgs.partyCount = Party_GetCount(work->args->party);
         work->summaryArgs.unk28 = 0;
-        sub_0208AD34(&work->summaryArgs, sub_02034818(Comm_GetLocalNetId()));
+        sub_0208AD34(&work->summaryArgs, CommPlayerInfo_GetProfile(Comm_GetLocalNetId()));
     } else {
         work->summaryArgs.party = work->partnerParty;
         work->summaryArgs.partyCount = Party_GetCount(work->partnerParty);
         // The partner's Chatot cry.
         work->summaryArgs.unk28 = (int)&work->chatot[Comm_GetLocalNetId() ^ 1];
-        sub_0208AD34(&work->summaryArgs, sub_02034818(Comm_GetLocalNetId() ^ 1));
+        sub_0208AD34(&work->summaryArgs, CommPlayerInfo_GetProfile(Comm_GetLocalNetId() ^ 1));
     }
 
     work->summaryArgs.unk11 = 1;
@@ -1746,14 +1746,14 @@ int WirelessTradeSelectMon_HandleDeletePrompt(WirelessTradeSelectMon *work) {
     switch (result) {
     case YESNORESPONSE_YES:
     case YESNORESPONSE_YES_TOUCH:
-        sub_020311AC(Save_Frontier_GetStatic(work->saveData), work->chosenRosterSlot);
+        FrontierSave_DeleteRow(Save_Frontier_GetStatic(work->saveData), work->chosenRosterSlot);
         FriendRoster_RemoveFriend(work->roster, work->chosenRosterSlot);
         sub_0203A280(work->saveData, work->friendNetId, 31, HEAP_ID_26, 0);
         work->callback = WirelessTradeSelectMon_RegisterNextFriend;
         break;
     case YESNORESPONSE_NO:
     case YESNORESPONSE_NO_TOUCH:
-        BufferPlayersName(work->rosterMsgFormat, 0, sub_02034818(work->friendNetId));
+        BufferPlayersName(work->rosterMsgFormat, 0, CommPlayerInfo_GetProfile(work->friendNetId));
         WirelessTradeSelectMon_PrintRosterMessage(work, 64); // "Give up on registering {name}?"
         work->callback = WirelessTradeSelectMon_HandleGiveUpPrompt;
         break;
@@ -1771,7 +1771,7 @@ int WirelessTradeSelectMon_HandleRosterListInput(WirelessTradeSelectMon *work) {
         return 0;
     case LIST_CANCEL:
         PlaySE(SEQ_SE_DP_SELECT);
-        BufferPlayersName(work->rosterMsgFormat, 0, sub_02034818(work->friendNetId));
+        BufferPlayersName(work->rosterMsgFormat, 0, CommPlayerInfo_GetProfile(work->friendNetId));
         WirelessTradeSelectMon_PrintRosterMessage(work, 64); // "Give up on registering {name}?"
         work->callback = WirelessTradeSelectMon_HandleGiveUpPrompt;
         break;
@@ -1823,7 +1823,7 @@ int WirelessTradeSelectMon_HandleRosterFullPrompt(WirelessTradeSelectMon *work) 
         break;
     case YESNORESPONSE_NO:
     case YESNORESPONSE_NO_TOUCH:
-        BufferPlayersName(work->rosterMsgFormat, 0, sub_02034818(work->friendNetId));
+        BufferPlayersName(work->rosterMsgFormat, 0, CommPlayerInfo_GetProfile(work->friendNetId));
         WirelessTradeSelectMon_PrintRosterMessage(work, 64); // "Give up on registering {name}?"
         work->callback = WirelessTradeSelectMon_HandleGiveUpPrompt;
         break;
@@ -1861,7 +1861,7 @@ int WirelessTradeSelectMon_HandleRegisterPrompt(WirelessTradeSelectMon *work) {
 }
 
 int WirelessTradeSelectMon_WaitQuitSync(WirelessTradeSelectMon *work) {
-    return sub_02037B38(0x13) ? 2 : 0;
+    return LinkSync_IsSynced(0x13) ? 2 : 0;
 }
 
 int WirelessTradeSelectMon_RegisterNextFriend(WirelessTradeSelectMon *work) {
@@ -1880,13 +1880,13 @@ int WirelessTradeSelectMon_RegisterNextFriend(WirelessTradeSelectMon *work) {
     if (work->friendNetId == -1) {
         DestroyMsgData(work->rosterMsgData);
         MessageFormat_Delete(work->rosterMsgFormat);
-        sub_02037AC0(0x13);
+        LinkSync_StartSync(0x13);
         WirelessTradeSelectMon_PrintMessage(&work->windows[23], 28, 1, work->msgData, work->msgFormat); // "Waiting for your friend to finish..."
         work->callback = WirelessTradeSelectMon_WaitQuitSync;
         return 0;
     }
     if (Bag_HasItem(Save_Bag_Get(work->saveData), ITEM_PAL_PAD, 1, HEAP_ID_26) == TRUE) {
-        BufferPlayersName(work->rosterMsgFormat, 0, sub_02034818(work->friendNetId));
+        BufferPlayersName(work->rosterMsgFormat, 0, CommPlayerInfo_GetProfile(work->friendNetId));
         WirelessTradeSelectMon_PrintRosterMessage(work, 62); // "Register {name} in your Pal Pad?"
         work->callback = WirelessTradeSelectMon_HandleRegisterPrompt;
         return 0;
@@ -1905,7 +1905,7 @@ int WirelessTradeSelectMon_RegisterNextFriend(WirelessTradeSelectMon *work) {
 int WirelessTradeSelectMon_StartFriendRegistration(WirelessTradeSelectMon *work) {
     // unk_02037C94.h declares sub_0203A1C4 as void, but it returns whether anyone can be registered.
     if (!((s32(*)(SaveData *, void *, enum HeapID))sub_0203A1C4)(work->saveData, work->friendStates, HEAP_ID_26)) {
-        sub_02037AC0(0x13);
+        LinkSync_StartSync(0x13);
         WirelessTradeSelectMon_PrintMessage(&work->windows[23], 28, 1, work->msgData, work->msgFormat); // "Waiting for your friend to finish..."
         work->callback = WirelessTradeSelectMon_WaitQuitSync;
         return 0;
@@ -2247,7 +2247,7 @@ int WirelessTradeSelectMon_WaitConfirmAnswers(WirelessTradeSelectMon *work) {
 }
 
 int WirelessTradeSelectMon_FinishTrade(WirelessTradeSelectMon *work) {
-    sub_02034AEC(work->saveData, 1);
+    CommPlayerInfo_RecordTrades(work->saveData, 1);
     WirelessTradeSelectMon_TradeMons(work->party, work->partnerParty, work->cursor, work->partnerCursor - 6, work->args);
     work->callback = WirelessTradeSelectMon_ShowResultMessage;
     return 2;
@@ -2321,11 +2321,11 @@ void WirelessTradeSelectMon_TradeMons(Party *party, Party *partnerParty, u32 slo
         SetMonData(received, MON_DATA_FRIENDSHIP, &data[1]);
         SetMonData(received, MON_DATA_MOOD, &data[0]);
     }
-    MonSetTrainerMemo(received, sub_02034818(Comm_GetLocalNetId()), 5, 0, HEAP_ID_FIELD2);
+    MonSetTrainerMemo(received, CommPlayerInfo_GetProfile(Comm_GetLocalNetId()), 5, 0, HEAP_ID_FIELD2);
     Pokemon_RemoveCapsule(received);
     CopyPokemonToPokemon(sent, args->unk38);
     CopyPokemonToPokemon(received, args->unk3C);
-    PlayerProfile_Copy(sub_02034818(Comm_GetLocalNetId() ^ 1), args->partnerProfile);
+    PlayerProfile_Copy(CommPlayerInfo_GetProfile(Comm_GetLocalNetId() ^ 1), args->partnerProfile);
     args->unk28 = slot;
     if (Party_HasMon(party, SPECIES_CHATOT) == FALSE) {
         Chatot_Invalidate(Save_Chatot_Get(args->saveData));

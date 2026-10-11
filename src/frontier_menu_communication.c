@@ -4,7 +4,7 @@
 #include "heap.h"
 #include "unk_02032844.h"
 #include "unk_02033AE0.h"
-#include "unk_02034354.h"
+#include "communication_player_state.h"
 #include "unk_02035900.h"
 #include "unk_02037C94.h"
 #include "unk_0205A44C.h"
@@ -247,7 +247,7 @@ void *sub_02096FF0(int sender, Menu *menu) {
 int sub_02096FFC(void) {
     int i, count = 0;
     for (i = 0; i < 5; i++) {
-        if (sub_02034818(i) != NULL) {
+        if (CommPlayerInfo_GetProfile(i) != NULL) {
             count++;
         }
     }

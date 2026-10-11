@@ -173,7 +173,7 @@ GlobalTerminalNet_RequestVideoUpload: ; 0x02227534
 	mov r0, #0
 	pop {r3, r4, r5, pc}
 _02227546:
-	bl sub_0202FBCC
+	bl BattleRecord_sizeof
 	sub r1, r0, #4
 	ldr r0, _02227584 ; =0x00001D4C
 	cmp r1, r0
@@ -186,7 +186,7 @@ _02227556:
 	str r0, [r5, r1]
 	ldr r0, [r5]
 	bl ov40_02244B3C
-	bl sub_020307DC
+	bl BattleRecord_GetProfile
 	add r1, r0, #0
 	add r0, r4, #0
 	mov r2, #0x80

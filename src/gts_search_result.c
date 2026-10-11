@@ -448,10 +448,10 @@ void GtsSearchResult_DrawWanted(Window *window, MsgData *msgData, MsgData *speci
     int levelRange;
 
     FillWindowPixelBuffer(window, 0);
-    ov70_0223F20C(window, speciesNames, wanted->species, 0, MAKE_TEXT_COLOR(1, 2, 0));
-    ov70_0223F324(window, msgData, wanted->gender, FALSE, 73, 0, MAKE_TEXT_COLOR(1, 2, 0));
-    levelRange = ov70_0223F864(wanted->minLevel, wanted->maxLevel, 0);
-    ov70_0223F38C(window, msgData, levelRange, 0, 104, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
+    Gts_PrintSpeciesNameNoTransfer(window, speciesNames, wanted->species, 0, MAKE_TEXT_COLOR(1, 2, 0));
+    Gts_PrintGenderNoTransfer(window, msgData, wanted->gender, FALSE, 73, 0, MAKE_TEXT_COLOR(1, 2, 0));
+    levelRange = Gts_FindLevelRange(wanted->minLevel, wanted->maxLevel, 0);
+    Gts_PrintLevelRangeAt(window, msgData, levelRange, 0, 104, 0, MAKE_TEXT_COLOR(1, 2, 0), 0);
 }
 
 void GtsSearchResult_DrawLocation(Window *windows, String *country, String *city) {

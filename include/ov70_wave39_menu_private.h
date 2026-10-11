@@ -21,7 +21,7 @@ extern const u8 ov70_02245D76[], ov70_02245D77[], ov70_02245DF8[], ov70_02245DF9
 extern const Pair39 ov70_02245F5C[], ov70_02245F58[];
 extern const s32 ov70_02245FA0[];
 int Pokedex_CheckMonSeenFlag(void *, int);
-void *ov70_0223F658(int, int, int *);
+void *Gts_LoadSpeciesByLetter(int, int, int *);
 void *ListMenuItems_New(int, int);
 void ListMenuItems_AppendFromMsgData(void *, void *, int, int);
 void ListMenuItems_Delete(void *);

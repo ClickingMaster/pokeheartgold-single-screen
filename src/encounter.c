@@ -28,8 +28,8 @@
 #include "sound.h"
 #include "sound_system.h"
 #include "sys_flags.h"
-#include "unk_0202FBCC.h"
-#include "unk_02034354.h"
+#include "battle_recording.h"
+#include "communication_player_state.h"
 #include "unk_020517A4.h"
 #include "unk_020551B8.h"
 #include "unk_02055244.h"
@@ -181,11 +181,11 @@ static void sub_0205087C(s32 flag, FieldSystem *fieldSystem) {
     switch (flag & 0xF) {
     case 1:
     case 6:
-        sub_02034AC0(fieldSystem->saveData, 1);
+        CommPlayerInfo_RecordBattleResult(fieldSystem->saveData, 1);
         break;
     case 2:
     case 5:
-        sub_02034AC0(fieldSystem->saveData, -1);
+        CommPlayerInfo_RecordBattleResult(fieldSystem->saveData, -1);
         break;
     }
 }
@@ -245,7 +245,7 @@ static BOOL Task_02050960(TaskManager *taskManager) {
         break;
     case 2:
         Encounter_Delete(encounter);
-        sub_0202FC24();
+        BattleRecord_Delete();
         return TRUE;
     }
     return FALSE;
@@ -792,7 +792,7 @@ void CallTask_02050960(TaskManager *taskManager, s32 target, s32 maxLevel, u32 f
 
     BattleSetup_InitForFixedLevelFacility(setup, fieldSystem, maxLevel);
 
-    sub_0202FBF0(fieldSystem->saveData, HEAP_ID_FIELD2, &result);
+    BattleRecord_Create(fieldSystem->saveData, HEAP_ID_FIELD2, &result);
 
     setup->unk1B2 = mode;
 
@@ -813,8 +813,8 @@ static BOOL sub_02051540(TaskManager *taskManager) {
         (*state)++;
         break;
     case 1:
-        if (sub_0202FC48() == TRUE) {
-            sub_0202FC24();
+        if (BattleRecord_Exists() == TRUE) {
+            BattleRecord_Delete();
         }
         sub_02058190(fieldSystem);
         return TRUE;
@@ -828,7 +828,7 @@ void sub_02051598(FieldSystem *fieldSystem, void *param1, s32 battleType) {
     u32 var;
 
     sub_020522F0(setup, fieldSystem, param1);
-    sub_0202FBF0(fieldSystem->saveData, HEAP_ID_FIELD2, &var);
+    BattleRecord_Create(fieldSystem->saveData, HEAP_ID_FIELD2, &var);
 
     setup->unk1B2 = sub_02051474(fieldSystem->linkBattleRuleset, battleType);
 
@@ -843,7 +843,7 @@ void sub_020515FC(FieldSystem *fieldSystem, Party *party, s32 battleType) {
     u32 var;
 
     sub_020520B0(setup, fieldSystem, party, NULL);
-    sub_0202FBF0(fieldSystem->saveData, HEAP_ID_FIELD2, &var);
+    BattleRecord_Create(fieldSystem->saveData, HEAP_ID_FIELD2, &var);
 
     setup->unk1B2 = sub_02051474(fieldSystem->linkBattleRuleset, battleType);
 

@@ -9,7 +9,7 @@ sub_0203540C: ; 0x0203540C
 	add r4, r0, #0
 	bl sub_02033298
 	add r5, r0, #0
-	bl sub_020347CC
+	bl CommPlayerInfo_DropDisconnected
 	add r6, r0, #0
 	bl sub_020353B8
 	bl sub_020338F4

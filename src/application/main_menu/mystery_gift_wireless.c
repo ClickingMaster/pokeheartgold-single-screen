@@ -8,9 +8,9 @@
 #include "player_data.h"
 #include "sys_task_api.h"
 #include "unk_02033AE0.h"
-#include "unk_02034354.h"
+#include "communication_player_state.h"
 #include "unk_02034B0C.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 
 // DS-wireless link used by Mystery Gift to receive a Wonder Card from a distribution system. The link
 // is driven by a small state callback run from a task every frame.
@@ -73,7 +73,7 @@ void ov74_02229BD0(void) {
         for (i = 0; i < 16; i++) {
             VOLATILE_WORK->unk_3C1[i] = 0;
         }
-        sub_02034434();
+        CommPlayerInfo_SendLocal();
         MysteryGiftComm_SetState(ov74_02229C0C, 0);
     }
 }
@@ -82,7 +82,7 @@ void ov74_02229C0C(void) {
     int i;
     for (i = 0; i < 16; i++) {
         if (VOLATILE_WORK->profiles[i] == NULL && Comm_IsNetIdConnected((u16)i) == 1) {
-            VOLATILE_WORK->profiles[i] = sub_02034818(i);
+            VOLATILE_WORK->profiles[i] = CommPlayerInfo_GetProfile(i);
         }
     }
 }
@@ -106,8 +106,8 @@ void ov74_02229C60(void) {
 void ov74_02229C80(void) {
     if (sub_02037EC8()) {
         sMysteryGiftCommWork->received = FALSE;
-        sub_02034434();
-        sub_02037AC0(0xAB);
+        CommPlayerInfo_SendLocal();
+        LinkSync_StartSync(0xAB);
         MysteryGiftComm_SetState(ov74_02229CB4, 0);
     }
 }

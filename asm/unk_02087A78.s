@@ -48,7 +48,7 @@ _02087C6A:
 	mov r1, #0
 	bl BattleSetup_New
 	str r0, [r5, #0x10]
-	bl sub_0202FC48
+	bl BattleRecord_Exists
 	cmp r0, #0
 	bne _02087C92
 	ldr r1, [r5, #0x14]
@@ -59,12 +59,12 @@ _02087C6A:
 	str r0, [sp]
 	ldr r0, [r5, #0xc]
 	ldr r3, [r5, #0x10]
-	bl sub_0202FC90
+	bl BattleRecord_Load
 	b _02087C9E
 _02087C92:
 	ldr r0, [r5, #0x10]
 	ldr r1, [r5, #0xc]
-	bl sub_020304F0
+	bl BattleRecord_RestoreSetup
 	mov r0, #1
 	str r0, [sp, #4]
 _02087C9E:
@@ -86,7 +86,7 @@ _02087C9E:
 	bl HandleLoadOverlay
 	cmp r0, #1
 	bne _02087CDA
-	bl sub_0202FC5C
+	bl BattleRecord_Get
 	ldr r1, [r5, #0x10]
 	add r2, r4, #0
 	bl ov40_02244920

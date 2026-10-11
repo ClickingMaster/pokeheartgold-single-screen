@@ -16,7 +16,7 @@ void BgCellManager_GetCellTilemap(void *, int);
 void BgCellManager_DrawCellAt(void *, int, int, int);
 void BgCellManager_StartCellMove(void *, int, int, int, int);
 void ov70_0224190C(void *, int);
-int ov70_0223F904(void **, void *, int);
+int Gts_CreateCountryListItems(void **, void *, int);
 void ov70_0224352C(void *, int, int);
 int ov70_02242508(int, int);
 void ov70_02243F00(void *, void *, void *, int, int);

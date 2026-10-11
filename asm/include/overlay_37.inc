@@ -105,7 +105,7 @@
 .public PlayerName_FlatToString
 .public Options_GetFrame
 .public sub_02033250
-.public sub_02034818
+.public CommPlayerInfo_GetProfile
 .public sub_020356EC
 .public Comm_SendCommand
 .public sub_02037108
@@ -113,8 +113,8 @@
 .public Comm_GetLocalNetId
 .public sub_0203783C
 .public sub_02037854
-.public sub_02037AC0
-.public sub_02037B38
+.public LinkSync_StartSync
+.public LinkSync_IsSynced
 .public sub_02037FF0
 .public sub_02038C1C
 .public sub_020398D4

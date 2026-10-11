@@ -15,7 +15,7 @@
 #include "move.h"
 #include "party.h"
 #include "pokemon.h"
-#include "unk_0202FBCC.h"
+#include "battle_recording.h"
 #include "unk_02035900.h"
 
 // Packets sent by the BattleController_Emit* functions. The first byte is the command that
@@ -1490,7 +1490,7 @@ void BattleController_EmitShowWaitMessage(BattleSystem *battleSystem, int battle
 
     packet.command = 55;
     packet.recordSize = 0;
-    if ((battleType & BATTLE_TYPE_LINK) && sub_0202FC48() == TRUE && !(battleSystem->battleSpecial & BATTLE_SPECIAL_RECORDING)) {
+    if ((battleType & BATTLE_TYPE_LINK) && BattleRecord_Exists() == TRUE && !(battleSystem->battleSpecial & BATTLE_SPECIAL_RECORDING)) {
         packet.recordSize = ov12_0223BE68(battleSystem, packet.record);
         GF_ASSERT(packet.recordSize < 28);
         BattleController_EmitPacket(battleSystem, 1, battlerId, &packet, sizeof(packet));
@@ -1547,7 +1547,7 @@ void BattleController_EmitRunAwayMessage(BattleSystem *battleSystem, BattleConte
             packet.escapedMask |= MaskOfFlagNo(i);
         }
     }
-    if ((battleType & BATTLE_TYPE_LINK) && sub_0202FC48() == TRUE && !(battleSystem->battleSpecial & BATTLE_SPECIAL_RECORDING)) {
+    if ((battleType & BATTLE_TYPE_LINK) && BattleRecord_Exists() == TRUE && !(battleSystem->battleSpecial & BATTLE_SPECIAL_RECORDING)) {
         packet.recordSize = ov12_0223BE68(battleSystem, packet.record);
         GF_ASSERT(packet.recordSize < 28);
     }
@@ -1560,7 +1560,7 @@ void BattleController_EmitForefitMessage(BattleSystem *battleSystem) {
 
     packet.command = 61;
     packet.recordSize = 0;
-    if ((battleType & BATTLE_TYPE_LINK) && sub_0202FC48() == TRUE && !(battleSystem->battleSpecial & BATTLE_SPECIAL_RECORDING)) {
+    if ((battleType & BATTLE_TYPE_LINK) && BattleRecord_Exists() == TRUE && !(battleSystem->battleSpecial & BATTLE_SPECIAL_RECORDING)) {
         packet.recordSize = ov12_0223BE68(battleSystem, packet.record);
         GF_ASSERT(packet.recordSize < 28);
     }
@@ -1621,7 +1621,7 @@ void BattleController_EmitSetBattleResults(BattleSystem *battleSystem) {
     packet.command = 65;
     packet.outcomeFlags = BattleSystem_GetBattleOutcomeFlags(battleSystem);
     packet.recordSize = 0;
-    if ((battleType & BATTLE_TYPE_LINK) && sub_0202FC48() == TRUE && !(battleSystem->battleSpecial & BATTLE_SPECIAL_RECORDING)) {
+    if ((battleType & BATTLE_TYPE_LINK) && BattleRecord_Exists() == TRUE && !(battleSystem->battleSpecial & BATTLE_SPECIAL_RECORDING)) {
         packet.recordSize = ov12_0223BE68(battleSystem, packet.record);
         GF_ASSERT(packet.recordSize <= 28);
     }

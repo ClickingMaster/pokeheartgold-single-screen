@@ -53,7 +53,7 @@ BOOL FrtCmd_178(FrontierScriptContextPrivate *ctx) {
         *out = *(u16 *)(data + arg * 2 + 0x76);
         break;
     case 6:
-        sub_0204F878(launchArgs->saveData, sub_02030C5C(launchArgs->saveData), 3);
+        sub_0204F878(launchArgs->saveData, Save_Frontier_GetHallFlags(launchArgs->saveData), 3);
         break;
     case 7:
         data[0xA0] = arg;
@@ -74,9 +74,9 @@ BOOL FrtCmd_178(FrontierScriptContextPrivate *ctx) {
         idx = ov80_022385D8(data[0xA0]);
         stat = FrontierSave_GetStat(Save_Frontier_GetStatic(*(void **)data), idx, sub_0205C268(idx));
         if (stat != *(u16 *)(data + 0x72)) {
-            sub_02031108(Save_Frontier_GetStatic(*(void **)data), idx, sub_0205C268(idx), 0);
+            FrontierSave_SetStat(Save_Frontier_GetStatic(*(void **)data), idx, sub_0205C268(idx), 0);
             idx = ov80_02238610(data[0xA0]);
-            sub_02031108(Save_Frontier_GetStatic(*(void **)data), idx, sub_0205C268(idx), 0);
+            FrontierSave_SetStat(Save_Frontier_GetStatic(*(void **)data), idx, sub_0205C268(idx), 0);
             *out = 0;
         }
         break;
@@ -86,22 +86,22 @@ BOOL FrtCmd_178(FrontierScriptContextPrivate *ctx) {
         *out = FrontierSave_GetStat(Save_Frontier_GetStatic(*(void **)data), idx, sub_0205C268(idx));
         if (*out == 0) {
             idx = ov80_022385D8(data[0xA0]);
-            sub_02031108(Save_Frontier_GetStatic(*(void **)data), idx, sub_0205C268(idx), 0);
+            FrontierSave_SetStat(Save_Frontier_GetStatic(*(void **)data), idx, sub_0205C268(idx), 0);
             if (data[0xA0] == 1) {
                 FrontierData_TowerRoundAction(Save_FrontierData_Get(*(void **)data), 6, 2);
             }
             if (data[0xA0] == 4) {
-                sub_02031108(Save_Frontier_GetStatic(*(void **)data), 0x88, sub_0205C268(0x88), 0);
-                sub_02031108(Save_Frontier_GetStatic(*(void **)data), 0x89, sub_0205C268(0x89), 0);
+                FrontierSave_SetStat(Save_Frontier_GetStatic(*(void **)data), 0x88, sub_0205C268(0x88), 0);
+                FrontierSave_SetStat(Save_Frontier_GetStatic(*(void **)data), 0x89, sub_0205C268(0x89), 0);
             }
             if (data[0xA0] == 2) {
-                sub_02031108(Save_Frontier_GetStatic(*(void **)data), sub_0205C048(0, 3), sub_0205C268(sub_0205C048(0, 3)), 0);
+                FrontierSave_SetStat(Save_Frontier_GetStatic(*(void **)data), sub_0205C048(0, 3), sub_0205C268(sub_0205C048(0, 3)), 0);
             }
             if (data[0xA0] == 3) {
-                sub_02031108(Save_Frontier_GetStatic(*(void **)data), sub_0205C048(1, 3), sub_0205C268(sub_0205C048(1, 3)), 0);
+                FrontierSave_SetStat(Save_Frontier_GetStatic(*(void **)data), sub_0205C048(1, 3), sub_0205C268(sub_0205C048(1, 3)), 0);
             }
         } else {
-            sub_02031108(Save_Frontier_GetStatic(*(void **)data), idx, sub_0205C268(idx), 0);
+            FrontierSave_SetStat(Save_Frontier_GetStatic(*(void **)data), idx, sub_0205C268(idx), 0);
         }
         break;
     }

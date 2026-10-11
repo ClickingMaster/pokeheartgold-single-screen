@@ -59,7 +59,7 @@ void *ov80_0222BA5C(u32 index, void *ctx, s32 size) {
 
 BOOL ov80_0222BA7C(void *ctx) {
     u8 *p = ctx;
-    sub_02030FA0(*(void **)(p + 4));
+    Save_Frontier_GetArcadeFlags(*(void **)(p + 4));
     *(u16 *)(p + 0x426) = *(u16 *)(p + 0x18);
     *(u16 *)(p + 0x428) = *(u16 *)(p + 0x1A);
     return Comm_SendCommand(0x41, p + 0x424, 0x28) == 1;

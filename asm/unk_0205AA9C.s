@@ -25,7 +25,7 @@ _0205AAC2:
 	bl Comm_GetLocalNetId
 	mov r1, #1
 	eor r0, r1
-	bl sub_02034818
+	bl CommPlayerInfo_GetProfile
 _0205AACE:
 	add r4, r0, #0
 	cmp r4, #0

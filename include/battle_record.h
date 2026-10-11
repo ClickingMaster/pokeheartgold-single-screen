@@ -4,10 +4,10 @@
 #include "heap.h"
 #include "save.h"
 
-// Battle Video functions of battle_record.c; the rest of its interface is in unk_0202FBCC.h.
+// Battle Video functions of battle_record.c; the record type and the recording interface are in battle_recording.h.
 
-BOOL sub_0202FD28(SaveData *save, enum HeapID heapId, int *out, int index);
-int sub_0202FE14(SaveData *save, int type, int arg, int index, u16 *state, u16 *writeState);
-BOOL sub_020304B4(void);
+BOOL BattleRecord_IsSlotValid(SaveData *save, enum HeapID heapId, int *out, int index);
+int BattleRecord_Save(SaveData *save, int type, int arg, int index, u16 *state, u16 *writeState);
+BOOL BattleRecord_AreAiFlagsValid(void);
 
 #endif // POKEHEARTGOLD_BATTLE_RECORD_H

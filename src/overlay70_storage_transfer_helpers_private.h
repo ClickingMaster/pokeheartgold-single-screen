@@ -204,7 +204,7 @@ void ov00_021ECB94(void *, void *);
 void sub_0202DB98(void *, u32);
 void sub_0202DB88(void *, u32);
 void sub_02039FB8(void *, int, int, int);
-int ov70_0223E76C(void *);
+int Gts_MonHoldsMail(void *);
 int Party_GetCount(void *);
 void *AllocMonZeroed(int);
 void *PCStorage_GetMonByIndexPair(void *, int, int);

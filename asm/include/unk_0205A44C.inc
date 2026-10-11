@@ -23,9 +23,9 @@
 .public PlayerProfile_GetAvatar
 .public PlayerProfile_GetVersion
 .public PlayerProfile_GetLanguage
-.public sub_02034818
-.public sub_020348A8
-.public sub_020348CC
+.public CommPlayerInfo_GetProfile
+.public CommPlayerInfo_GetCountry
+.public CommPlayerInfo_GetRegion
 .public sub_02035798
 .public sub_02035838
 .public sub_02035854

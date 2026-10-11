@@ -93,9 +93,9 @@
 .public FashionEntry_sizeof
 .public FriendRoster_GetUserData
 .public Save_FriendRoster_Get
-.public sub_0202FBCC
+.public BattleRecord_sizeof
 .public sub_0202FC74
-.public sub_020307DC
+.public BattleRecord_GetProfile
 .public sub_02039418
 .public sub_0203946C
 .public sub_020399EC

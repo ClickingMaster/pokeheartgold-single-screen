@@ -213,11 +213,11 @@ Static main
     Object src/safari_zone.o
     Object src/photo_album.o
     Object src/battle_record.o
-    Object asm/unk_0202FBCC.o
+    Object asm/battle_record_data.o
     Object src/frontier_state.o
     Object src/frontier_save.o
     Object src/frontier_card.o
-    Object asm/unk_02030A98.o
+    Object asm/frontier_save_data.o
     Object src/unk_0203170C.o
     Object src/save_plaza_survey.o
     Object src/pokeathlon/pokeathlon_save.o
@@ -257,7 +257,7 @@ Static main
     Object src/r40_unk_02034280_run1.o
     Object src/communication_dispatch_5.o
     Object src/communication_player_state.o
-    Object asm/unk_02034354.o
+    Object asm/communication_player_state_data.o
     Object src/to50_network_state_init.o
     Object asm/to50_network_state_data.o
     Object src/wireless_connection_state.o
@@ -277,7 +277,7 @@ Static main
     Object src/wireless_connection_state_8.o
     Object src/communication_core.o
     Object src/link_synchronization.o
-    Object asm/unk_020379A0.o
+    Object asm/link_synchronization_data.o
     Object src/network_communication_state_full.o
     Object src/wireless_status_icon.o
     Object asm/op90_unk_0203A3B0_anchor.o
@@ -4942,52 +4942,8 @@ Overlay OVY_70
     Object src/gts_summary.o
     Object src/gts_search_result.o
     Object src/gts_search.o
-    Object src/overlay70_pokegear_phone_ui_run1.o
-    Object src/to90_extra2033_run01.o
-    Object src/overlay70_pokegear_phone_ui_run2.o
-    Object src/overlay70_sol_partial_19.o
-    Object src/overlay70_menu_and_icon_helpers.o
-    Object src/overlay70_sol_partial_20.o
-    Object src/to47_overlay70_box_graphics_r21.o
-    Object src/overlay70_sol_partial_21.o
-    Object src/to70_overlay_70_residual_22_extra978_run01.o
-    Object src/overlay70_sol_partial_22.o
-    Object src/to47_overlay70_box_filter_r23.o
-    Object src/overlay70_filter_helpers_1.o
-    Object src/to70_overlay_70_residual_23_residual_2_extra619_run01.o
-    Object src/overlay70_filter_helpers_2.o
-    Object src/overlay70_sol_partial_23.o
-    Object src/op90_overlay_70_residual_24_unmatched_1_r01.o
-    Object src/overlay70_ui_setup_residual24_run1.o
-    Object src/to70_overlay_70_residual_24_unmatched_2_extra620_run01.o
-    Object src/overlay70_ui_setup_residual24_run2.o
-    Object src/overlay70_sol_partial_24.o
-    Object src/overlay70_resource_state_25.o
-    Object src/overlay70_sol_partial_25.o
-    Object src/overlay70_ui_helpers_1.o
-    Object src/to70_overlay_70_residual_26_extra361_run01.o
-    Object src/overlay70_ui_helpers_2.o
-    Object src/to70_overlay_70_residual_26_residual_2_extra821_run01.o
-    Object src/overlay70_ui_helpers_3.o
-    Object src/to70_overlay_70_residual_26_residual_3_extra822_run01.o
-    Object src/overlay70_ui_helpers_4.o
-    Object src/to70_overlay_70_residual_26_residual_4_extra496_run01.o
-    Object src/overlay70_ui_helpers_5.o
-    Object src/to70_overlay_70_residual_26_residual_5_extra823_run01.o
-    Object src/overlay70_ui_helpers_6.o
-    Object src/to70_overlay_70_residual_26_residual_6_extra497_run01.o
-    Object src/overlay70_ui_helpers_7.o
-    Object src/overlay70_ui_render_residual26_7_run1.o
-    Object src/to70_to70_to52_overlay70_membership_table_residual_extra222_residual_1_extra1336_run01.o
-    Object src/to70_to52_overlay70_membership_table_residual_extra222_run01.o
-    Object src/to52_overlay70_membership_table.o
-    Object src/overlay70_ui_render_residual26_7_run2.o
-    Object src/overlay70_ui_helpers_8.o
-    Object src/to70_overlay_70_residual_26_residual_8_extra621_run01.o
-    Object src/to70_to70_overlay_70_residual_26_residual_8_extra621_residual_1_extra1296_run01.o
-    Object src/overlay70_ui_helpers_9.o
-    Object src/op90_overlay_70_residual_26_residual_9_r01.o
-    Object src/overlay70_sol_partial_26.o
+    Object src/gts_select_mon.o
+    Object src/gts_wanted.o
     Object src/overlay70_pokegear_radio_ui_run1.o
     Object src/to80_extra2575_run01.o
     Object src/overlay70_pokegear_radio_ui_run2.o
@@ -5106,32 +5062,7 @@ Object src/application/main_menu/mystery_gift_wireless.o
     Object src/application/main_menu/ranger_link.o
     Object src/application/main_menu/migrate_from_agb.o
     Object src/application/main_menu/agb_cartridge.o
-    Object src/to57_overlay_74_exact_025.o
-    Object src/op90_to57_overlay_74_residual_026_r01.o
-    Object src/to57_overlay_74_exact_027.o
-    Object src/op90_to57_overlay_74_residual_028_r01.o
-    Object src/to57_overlay_74_exact_029.o
-    Object src/to70_to57_overlay_74_residual_030_extra703_run01.o
-    Object src/to57_overlay_74_exact_031.o
-    Object src/op90_to70_to57_overlay_74_residual_032_extra1059_residual_1_r01.o
-    Object src/to70_to57_overlay_74_residual_032_extra1059_run01.o
-    Object src/to57_overlay_74_exact_033.o
-    Object src/op90_to90_extra2283_residual_1_r01.o
-    Object src/to90_extra2283_run01.o
-    Object src/to57_overlay_74_exact_035.o
-    Object src/to70_to57_overlay_74_residual_036_extra1060_run01.o
-    Object src/to57_overlay_74_exact_037.o
-    Object src/op90_to90_extra2099_residual_1_r01.o
-    Object src/to90_extra2099_run01.o
-    Object src/to58_w16_ov74_038_exact.o
-    Object src/to70_to58_w16_ov74_038_suffix_extra183_run01.o
-    Object src/to80_extra1361_run01.o
-    Object src/to57_overlay_74_exact_039.o
-    Object src/to80_extra1360_run01.o
-    Object src/to70_to58_w12_ov74_040_residual_00_extra708_run01.o
-    Object src/to58_w12_ov74_040_exact_01.o
-    Object src/to70_to58_w12_ov74_040_residual_02_extra428_run01.o
-    Object src/to58_w12_ov74_040_exact_03.o
+    Object src/application/main_menu/main_menu_util.o
     Object asm/to57_overlay_74_data_own1.o
     Object src/op90_to70_to58_w12_ov74_040_residual_04_extra107_residual_1_r01.o
     Object src/to70_to58_w12_ov74_040_residual_04_extra107_run01.o

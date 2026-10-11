@@ -4,7 +4,7 @@
 .public LCRandom
 .public PlayerProfile_Copy
 .public sub_02030BD0
-.public sub_02034818
+.public CommPlayerInfo_GetProfile
 .public Comm_GetLocalNetId
 .public BattleSetup_New
 .public BattleSetup_AddMonToParty

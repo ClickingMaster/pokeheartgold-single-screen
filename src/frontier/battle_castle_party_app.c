@@ -46,10 +46,10 @@
 #include "unk_0200CE7C.h"
 #include "unk_0200FA24.h"
 #include "unk_02019BA4.h"
-#include "unk_02030A98.h"
-#include "unk_02034354.h"
+#include "frontier_save_access.h"
+#include "communication_player_state.h"
 #include "unk_02035900.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 #include "unk_0203A3B0.h"
 #include "unk_0205BFF0.h"
 #include "unk_0208805C.h"
@@ -129,7 +129,7 @@ FS_EXTERN_OVERLAY(OVY_80);
 #define CASTLE_LINK_CMD_CURSOR 12
 #define CASTLE_LINK_CMD_EXIT   13
 
-// sub_02037AC0 / sub_02037B38 link sync ids
+// LinkSync_StartSync / LinkSync_IsSynced link sync ids
 #define CASTLE_PARTY_SYNC_START  215
 #define CASTLE_PARTY_SYNC_ACTION 130
 #define CASTLE_PARTY_SYNC_EXIT   131
@@ -405,8 +405,8 @@ BOOL BattleCastlePartyApp_Init(OverlayManager *manager, int *state) {
     app->manager = manager;
     args = OverlayManager_GetArgs(manager);
     app->saveData = args->saveData;
-    app->unk_510 = sub_02030CC8(app->saveData);
-    app->unk_514 = sub_02030E08(app->saveData);
+    app->unk_510 = Save_Frontier_GetCastleChallenge(app->saveData);
+    app->unk_514 = Save_Frontier_GetCastleFlags(app->saveData);
     app->frontierType = args->frontierType;
     app->selectionOut = &args->selection;
     app->options = Save_PlayerData_GetOptionsAddr(app->saveData);
@@ -515,15 +515,15 @@ BOOL BattleCastlePartyApp_FadeIn(BattleCastlePartyApp *app) {
     switch (app->subState) {
     case 0:
         if (ov80_02237D8C(app->frontierType) == TRUE) {
-            sub_02037BEC();
-            sub_02037AC0(CASTLE_PARTY_SYNC_START);
+            LinkSync_ClearPackets();
+            LinkSync_StartSync(CASTLE_PARTY_SYNC_START);
         }
         app->subState++;
         break;
     case 1:
         if (ov80_02237D8C(app->frontierType) == TRUE) {
-            if (sub_02037B38(CASTLE_PARTY_SYNC_START) == TRUE) {
-                sub_02037BEC();
+            if (LinkSync_IsSynced(CASTLE_PARTY_SYNC_START) == TRUE) {
+                LinkSync_ClearPackets();
                 app->subState++;
             }
         } else {
@@ -1150,15 +1150,15 @@ BOOL BattleCastlePartyApp_LinkAction(BattleCastlePartyApp *app) {
     case 3:
         app->timer--;
         if (app->timer == 0) {
-            sub_02037BEC();
-            sub_02037AC0(CASTLE_PARTY_SYNC_ACTION);
+            LinkSync_ClearPackets();
+            LinkSync_StartSync(CASTLE_PARTY_SYNC_ACTION);
             app->subState++;
         }
         break;
     case 4:
-        if (sub_02037B38(CASTLE_PARTY_SYNC_ACTION) == TRUE) {
-            sub_02037BEC();
-            sub_020379A0(HEAP_ID_107);
+        if (LinkSync_IsSynced(CASTLE_PARTY_SYNC_ACTION) == TRUE) {
+            LinkSync_ClearPackets();
+            LinkSync_Init(HEAP_ID_107);
             app->unk_012 = 0xFF;
             if (app->flags.bits.linkResume == 0) {
                 BattleCastlePartyApp_CloseWindow(&app->windows[CASTLE_PARTY_WIN_MESSAGE]);
@@ -1185,14 +1185,14 @@ BOOL BattleCastlePartyApp_LinkExit(BattleCastlePartyApp *app) {
             app->timer--;
         }
         if (app->timer == 0) {
-            sub_02037BEC();
-            sub_02037AC0(CASTLE_PARTY_SYNC_EXIT);
+            LinkSync_ClearPackets();
+            LinkSync_StartSync(CASTLE_PARTY_SYNC_EXIT);
             app->subState++;
         }
         break;
     case 2:
-        if (sub_02037B38(CASTLE_PARTY_SYNC_EXIT) == TRUE) {
-            sub_02037BEC();
+        if (LinkSync_IsSynced(CASTLE_PARTY_SYNC_EXIT) == TRUE) {
+            LinkSync_ClearPackets();
             BattleCastlePartyApp_CloseWindow(&app->windows[CASTLE_PARTY_WIN_MESSAGE]);
             return TRUE;
         }
@@ -2035,7 +2035,7 @@ void BattleCastlePartyApp_PrintPlayerName(BattleCastlePartyApp *app, Window *win
 }
 
 void BattleCastlePartyApp_PrintPartnerName(BattleCastlePartyApp *app, Window *window, u32 x, u32 y, u8 fontId) {
-    PlayerProfile *profile = sub_02034818(Comm_GetLocalNetId() ^ 1);
+    PlayerProfile *profile = CommPlayerInfo_GetProfile(Comm_GetLocalNetId() ^ 1);
     u32 color;
 
     if (PlayerProfile_GetTrainerGender(profile) == PLAYER_GENDER_MALE) {
@@ -2760,7 +2760,7 @@ void BattleCastlePartyApp_RankUp(BattleCastlePartyApp *app, u8 slot, u16 action)
             rank = BattleCastle_GetRank(app->saveData, app->frontierType, kind);
             frontierSave = Save_Frontier_GetStatic(app->saveData);
             stat = sub_0205C174(app->frontierType, kind);
-            sub_02031108(frontierSave, stat, sub_0205C268(sub_0205C174(app->frontierType, kind)), (u16)(rank + 1));
+            FrontierSave_SetStat(frontierSave, stat, sub_0205C268(sub_0205C174(app->frontierType, kind)), (u16)(rank + 1));
             if (ov80_02237D8C(app->frontierType) == TRUE) {
                 if (action == CASTLE_PARTY_ACTION_HEAL_RANK_UP) {
                     app->flags.bits.linkResume = 1;
@@ -2790,7 +2790,7 @@ void BattleCastlePartyApp_RankUp(BattleCastlePartyApp *app, u8 slot, u16 action)
             rank = BattleCastle_GetRank(app->saveData, app->frontierType, kind);
             frontierSave = Save_Frontier_GetStatic(app->saveData);
             stat = sub_0205C174(app->frontierType, kind);
-            sub_02031108(frontierSave, stat, sub_0205C268(sub_0205C174(app->frontierType, kind)), (u16)(rank + 1));
+            FrontierSave_SetStat(frontierSave, stat, sub_0205C268(sub_0205C174(app->frontierType, kind)), (u16)(rank + 1));
             if (ov80_02237D8C(app->frontierType) == TRUE) {
                 if (action == CASTLE_PARTY_ACTION_HEAL_RANK_UP) {
                     app->flags.bits.linkResume = 1;

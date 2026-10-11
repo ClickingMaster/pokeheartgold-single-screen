@@ -6,7 +6,7 @@
 .public sub_02033250
 .public Comm_RegisterCommandTable
 .public sub_020342C0
-.public sub_02034818
+.public CommPlayerInfo_GetProfile
 .public Comm_SendCommand
 .public Comm_CountConnected
 .public Comm_GetLocalNetId

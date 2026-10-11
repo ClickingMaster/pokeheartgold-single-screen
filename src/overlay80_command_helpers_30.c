@@ -102,7 +102,7 @@ int FrtCmd_075(void *c) {
 
 int FrtCmd_113(void *c) {
     u16 *out = FrontierScript_ReadVarPtr(c);
-    *out = (u16)(u32)sub_020304B4();
+    *out = (u16)(u32)BattleRecord_AreAiFlagsValid();
     return 0;
 }
 
@@ -126,7 +126,7 @@ int FrtCmd_201(void *c) {
 int FrtCmd_203(void *c) {
     u16 v = FrontierScript_ReadVar(c);
     U16(c, 0x78) = v;
-    sub_02037AC0((u8)v);
+    LinkSync_StartSync((u8)v);
     FrontierScriptContext_Pause(c, ov80_0222E198);
     return 1;
 }

@@ -26,10 +26,10 @@ void ScheduleBgTilemapBufferTransfer(void *, u8);
 int sub_0205C1F0(int);
 int sub_0205C218(int);
 int sub_0205C268(int);
-void sub_02031248(void *, int, int, int);
+void FrontierSave_SubStat(void *, int, int, int);
 int FrontierSave_GetStat(void *, int, int);
-void sub_02031108(void *, int, int, int);
-void sub_02031228(void *, int, int, int);
+void FrontierSave_SetStat(void *, int, int, int);
+void FrontierSave_AddStat(void *, int, int, int);
 
 int ov80_02237A70(int, u32, int);
 void ov80_02237ADC(int, int, u16 *, int);

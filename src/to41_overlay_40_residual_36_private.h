@@ -54,11 +54,11 @@ void Sprite_DeleteAndFreeResources(void *sprite);
 void TextOBJ_SetSpritesDrawFlag(void *textOBJ, int draw);
 void TextOBJ_SetPosition(void *p, s32 a, s32 b);
 
-void *sub_020307F8(void);
-u64 sub_0203088C(void *a, int b, int c);
+void *BattleRecord_GetHeader(void);
+u64 BattleRecordHeader_GetField(void *a, int b, int c);
 void *sub_020315B8(u32 a, int heapId);
-int sub_0202FC48(void);
-void sub_0202FC24(void);
+int BattleRecord_Exists(void);
+void BattleRecord_Delete(void);
 
 void *ov40_0222DAB0(int heapId);
 void ov40_0222BF64(void *p, u32 value, BOOL valid, u32 *out);
@@ -98,8 +98,8 @@ extern const Ov40Quad ov40_02245684;
 extern const Ov40Quad ov40_02245694;
 
 void *sub_020314A4(int heapId);
-void *sub_02030920(int heapId);
-void sub_02030938(void *p);
+void *BattleRecordHeader_New(int heapId);
+void BattleRecordHeader_Free(void *p);
 void sub_020314BC(void *p);
 void GlobalTerminalNet_CopyRequestHeader(const void *src, void *dst);
 void ov40_0222D9E8(void *a, void *b, int c);

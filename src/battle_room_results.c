@@ -25,7 +25,7 @@
 #include "unk_02009D48.h"
 #include "unk_02019BA4.h"
 #include "frontier_data_access.h"
-#include "unk_02030A98.h"
+#include "frontier_save_access.h"
 
 #define BATTLE_ROOM_RESULTS_NUM_LEADERS        30
 #define BATTLE_ROOM_RESULTS_LEADERS_PER_PAGE   12

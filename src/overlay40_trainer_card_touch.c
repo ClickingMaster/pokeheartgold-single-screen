@@ -73,8 +73,8 @@ int ov40_02240B90(void *p) {
                 BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
                 BgClearTilemapBufferAndCommit(PTR(p, 0x24), 3);
                 BgClearTilemapBufferAndCommit(PTR(p, 0x24), 7);
-                if (sub_0202FC48() == 1) {
-                    sub_0202FC24();
+                if (BattleRecord_Exists() == 1) {
+                    BattleRecord_Delete();
                 }
             } else {
                 BLEND(p, w, 1, 2);

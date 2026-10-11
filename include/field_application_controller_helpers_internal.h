@@ -18,7 +18,7 @@ void *String_New(u32, int);
 void *ListMenuCursorNew(int);
 u8 sub_0203993C(void);
 u16 Comm_GetLocalNetId(void);
-void *sub_02034818(int);
+void *CommPlayerInfo_GetProfile(int);
 u32 sub_02059B08(void);
 void *SaveArray_Party_Alloc(int);
 void Party_InitWithMaxSize(void *, int);

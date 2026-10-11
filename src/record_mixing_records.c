@@ -8,7 +8,7 @@
 #include "save_arrays.h"
 #include "string_util.h"
 #include "unk_0202E41C.h"
-#include "unk_02034354.h"
+#include "communication_player_state.h"
 
 #define RECORD_MIXING_MAX_GROUPS_KEPT 4
 
@@ -200,7 +200,7 @@ int ov73_021E7CD8(RecordMixingEntry *entries, int count, RecordMixingEntry *entr
 
 // a for partners whose profile has a version set, b otherwise
 void *ov73_021E7D54(u32 netId, void *a, void *b) {
-    PlayerProfile *profile = sub_02034818(netId);
+    PlayerProfile *profile = CommPlayerInfo_GetProfile(netId);
     if (!profile) {
         return NULL;
     }

@@ -4,7 +4,7 @@ BOOL sub_020752D8(LinkWork *work) {
     if (sub_02037190() != 264) {
         return FALSE;
     }
-    if (sub_02037B38(56) == 0) {
+    if (LinkSync_IsSynced(56) == 0) {
         return FALSE;
     }
     return sub_02036FD8(33, &work->buffer, 1000);
@@ -23,7 +23,7 @@ BOOL sub_02075350(LinkWork *work, int index, int command) {
     if (sub_02037190() != 264) {
         return FALSE;
     }
-    if (!sub_02037B38((u8)command)) {
+    if (!LinkSync_IsSynced((u8)command)) {
         return FALSE;
     }
     if (index == 1) {
@@ -45,7 +45,7 @@ BOOL sub_020753D4(LinkWork *work, int index, int command) {
     if (sub_02037190() != 264) {
         return FALSE;
     }
-    if (!sub_02037B38((u8)command)) {
+    if (!LinkSync_IsSynced((u8)command)) {
         return FALSE;
     }
     if (index == 1) {

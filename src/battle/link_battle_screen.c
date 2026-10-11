@@ -49,10 +49,10 @@
 #include "text.h"
 #include "unk_0200CE7C.h"
 #include "unk_02026E30.h"
-#include "unk_0202FBCC.h"
-#include "unk_02034354.h"
+#include "battle_recording.h"
+#include "communication_player_state.h"
 #include "unk_02035900.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 #include "unk_0203A3B0.h"
 #include "unk_0208805C.h"
 #include "unk_02088288.h"
@@ -273,7 +273,7 @@ void LinkBattleScreen_Start(LinkBattleScreenArgs *args) {
     memset(screen, 0, sizeof(LinkBattleScreen));
     screen->args = args;
     screen->taskState = 0;
-    screen->canSaveVideo = sub_020304B4();
+    screen->canSaveVideo = BattleRecord_AreAiFlagsValid();
     if (screen->canSaveVideo == TRUE) {
         BattleSetup *setup = screen->args->setup;
         if (setup != NULL && setup->saveData != NULL) {
@@ -492,11 +492,11 @@ int LinkBattleScreen_InitResultScreen(LinkBattleScreen *screen) {
         LinkBattleScreen_LoadVsBgGraphics(screen);
         LinkBattleScreen_InitMessageWindows(screen);
         LinkBattleScreen_SetBg1AlphaBlend();
-        sub_0202FD28(screen->args->setup->saveData, screen->args->heapId, &value, 0);
+        BattleRecord_IsSlotValid(screen->args->setup->saveData, screen->args->heapId, &value, 0);
         screen->savedVideoCheck = value;
         screen->unk_BD0 = 0;
         for (i = 0; i < 8; i++) {
-            PlayerProfile *profile = sub_02034818(i);
+            PlayerProfile *profile = CommPlayerInfo_GetProfile(i);
             if (profile != NULL && PlayerProfile_GetVersion(profile) == 0) {
                 screen->unk_BD0 = 1;
                 break;
@@ -796,7 +796,7 @@ int LinkBattleScreen_SaveBattleVideo(LinkBattleScreen *screen) {
         screen->frame++;
         break;
     case 1:
-        result = sub_0202FE14(screen->args->setup->saveData, screen->args->unk_2C, 0, 0, &screen->unk_B84, &screen->unk_B86);
+        result = BattleRecord_Save(screen->args->setup->saveData, screen->args->unk_2C, 0, 0, &screen->unk_B84, &screen->unk_B86);
         if (result == 2) {
             ReadMsgDataIntoString(screen->msgData, msg_0638_00006, screen->string);
             PlaySE(SEQ_SE_DP_SAVE);
@@ -838,14 +838,14 @@ int LinkBattleScreen_WaitForPartner(LinkBattleScreen *screen) {
         LinkBattleScreen_DrawMessageBox(screen);
         ReadMsgDataIntoString(screen->msgData, msg_0638_00009, screen->string);
         screen->printerId = AddTextPrinterParameterized(&screen->msgWindow, 1, screen->string, 0, 0, 0, NULL);
-        sub_02037AC0(0x3E);
+        LinkSync_StartSync(0x3E);
         if (screen->canSaveVideo == FALSE && LinkBattleScreen_IsBattleRecordActive(screen) == TRUE) {
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG0, TRUE);
         }
         screen->frame++;
         break;
     case 1:
-        if (sub_02037B38(0x3E)) {
+        if (LinkSync_IsSynced(0x3E)) {
             screen->frame = 0;
             return 1;
         }
@@ -1830,7 +1830,7 @@ void LinkBattleScreen_DrawMessageBox(LinkBattleScreen *screen) {
 }
 
 BOOL LinkBattleScreen_IsBattleRecordActive(LinkBattleScreen *screen) {
-    if (screen->args->setup->saveData == NULL || sub_0202FC48() == FALSE) {
+    if (screen->args->setup->saveData == NULL || BattleRecord_Exists() == FALSE) {
         return FALSE;
     }
     return TRUE;

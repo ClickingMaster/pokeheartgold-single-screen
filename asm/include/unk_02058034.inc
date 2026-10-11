@@ -8,9 +8,9 @@
 .public Heap_Alloc
 .public Heap_Free
 .public GF_AssertFail
-.public sub_02034434
-.public sub_02034638
-.public sub_02034818
+.public CommPlayerInfo_SendLocal
+.public CommPlayerInfo_HostRedistribute
+.public CommPlayerInfo_GetProfile
 .public sub_02034DB8
 .public sub_02035664
 .public sub_02035FD8
@@ -26,9 +26,9 @@
 .public sub_020376E0
 .public CommRandom_Init
 .public sub_02037958
-.public sub_02037AC0
-.public sub_02037B38
-.public sub_02037B5C
+.public LinkSync_StartSync
+.public LinkSync_IsSynced
+.public LinkSync_GetPlayerState
 .public sub_02037D78
 .public sub_02037D8C
 .public sub_02037DD4

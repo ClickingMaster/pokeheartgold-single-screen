@@ -10,7 +10,7 @@
 typedef struct ArcadeContext {
     u32 heapId;
     SaveData *saveData;
-    u32 unk8; // challenge record (sub_02030E88)
+    u32 unk8; // challenge record (Save_Frontier_GetArcadeChallenge)
     BattleSetup *battleSetup;
     u8 type;
     u8 unk11; // battle number in the current round (0-6)

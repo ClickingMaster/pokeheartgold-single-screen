@@ -89,7 +89,7 @@ struct WonderCardAlbum {
 }; // size: 0x3D54
 
 // Overlay helpers (not in a header yet).
-u32 ov74_0223567C(void);
+u32 MainMenuUtil_SpritesActive(void);
 int ov74_022360B0(void);
 void ov74_022360A0(SaveData *saveData);
 void ov74_02235ED0(UnkWonderCardSubstruct_104 *header, void *buffer, enum HeapID heapID);
@@ -110,11 +110,11 @@ extern u8 AddTextPrinterParameterizedWithColor(Window *window, u32 fontId, Strin
 extern void RTC_ConvertDayToDate(RTCDate *date, s32 day);
 extern void WirelessStatusIcon_Create(void);
 extern void sub_020358B8(void *a0);
-extern void sub_02037AC0(u8 a0);
-extern int sub_02037B38(u8 a0);
+extern void LinkSync_StartSync(u8 a0);
+extern int LinkSync_IsSynced(u8 a0);
 extern BOOL sub_02037D78(void);
 extern void sub_020398D4(u32 a0, u32 a1);
-extern PlayerProfile *sub_02034818(int netId);
+extern PlayerProfile *CommPlayerInfo_GetProfile(int netId);
 
 extern const OverlayManagerTemplate gApp_MainMenu_SelectOption_MysteryGift;
 extern const MysteryGiftMenuItem ov74_0223C2D0[10];
@@ -126,9 +126,9 @@ extern u32 ov74_0223D0BC;
 
 void WonderCardAlbum_LoadShareSprites(WonderCardAlbum *album) {
     WonderCardAlbum_DeleteSprites(album);
-    ov74_0223563C();
-    ov74_02235690();
-    ov74_02235728(NARC_a_1_1_3, 19, 16, 18, 17, 0);
+    MainMenuUtil_InitObjTransfer();
+    MainMenuUtil_InitSprites();
+    MainMenuUtil_LoadSpriteResources(NARC_a_1_1_3, 19, 16, 18, 17, 0);
 }
 
 #pragma force_active on
@@ -151,16 +151,16 @@ void WonderCardAlbum_DeleteSprites(WonderCardAlbum *album) {
         Sprite_Delete(album->monIconSprites[2]);
     }
     album->monIconSprites[0] = album->monIconSprites[1] = album->monIconSprites[2] = NULL;
-    ov74_022359BC();
+    MainMenuUtil_FreeSprites();
 }
 
 #pragma force_active reset
 
 void WonderCardAlbum_CreateButtonSprites(WonderCardAlbum *album) {
     album->selection = 0;
-    album->buttonSprites[0] = ov74_02235930(0, album->buttonSprites[0], 72, 168, 1);
+    album->buttonSprites[0] = MainMenuUtil_CreateSprite(0, album->buttonSprites[0], 72, 168, 1);
     Sprite_SetPriority(album->buttonSprites[0], 2);
-    album->buttonSprites[1] = ov74_02235930(0, album->buttonSprites[1], 184, 168, 0);
+    album->buttonSprites[1] = MainMenuUtil_CreateSprite(0, album->buttonSprites[1], 184, 168, 0);
     Sprite_SetPriority(album->buttonSprites[1], 2);
 }
 
@@ -603,12 +603,12 @@ void WonderCardAlbum_CreateMonIconSprites(WonderCardAlbum *album) {
     NNSG2dCharacterData *charData;
 
     if (album->monIconSprites[0] == NULL && album->monIconSprites[1] == NULL && album->monIconSprites[2] == NULL) {
-        if (ov74_0223567C() == 1) {
+        if (MainMenuUtil_SpritesActive() == 1) {
             WonderCardAlbum_DeleteSprites(album);
         }
-        ov74_0223563C();
-        ov74_02235690();
-        ov74_02235728(NARC_a_1_1_3, 30, 27, 29, 28, 0);
+        MainMenuUtil_InitObjTransfer();
+        MainMenuUtil_InitSprites();
+        MainMenuUtil_LoadSpriteResources(NARC_a_1_1_3, 30, 27, 29, 28, 0);
         GfGfxLoader_GXLoadPal(NARC_poketool_icongra_poke_icon, sub_02074490(), GF_PAL_LOCATION_MAIN_OBJ, (enum GFPalSlotOffset)0x60, 0, album->heapId);
     }
     x = 178;
@@ -619,7 +619,7 @@ void WonderCardAlbum_CreateMonIconSprites(WonderCardAlbum *album) {
                 Sprite_SetDrawFlag(album->monIconSprites[i], FALSE);
             }
         } else {
-            album->monIconSprites[i] = ov74_02235930(0, album->monIconSprites[i], x, 16, i + 10);
+            album->monIconSprites[i] = MainMenuUtil_CreateSprite(0, album->monIconSprites[i], x, 16, i + 10);
             data = GfGfxLoader_GetCharData(NARC_poketool_icongra_poke_icon, GetMonIconNaixEx(species, FALSE, 0), FALSE, &charData, album->heapId);
             DC_FlushRange(charData->pRawData, 0x200);
             GX_LoadOBJ(charData->pRawData, (100 + i * 16) * 32, 0x200);
@@ -643,7 +643,7 @@ BOOL WonderCardAlbum_Init(OverlayManager *manager, int *state) {
     SetMasterBrightnessByColor(PM_LCD_BOTTOM, RGB_BLACK);
     album->cardIndex = 2;
     album->receiverSeq = 1;
-    ov74_022352A0(HEAP_ID_85);
+    MainMenuUtil_InitWork(HEAP_ID_85);
     Heap_Create(HEAP_ID_DEFAULT, HEAP_ID_89, 0x570);
     return TRUE;
 }
@@ -790,7 +790,7 @@ void WonderCardAlbum_HandleShareInput(WonderCardAlbum *album, BOOL canShare, int
     }
     if (action == 1) {
         PlaySE(SEQ_SE_DP_SELECT);
-        sub_02037AC0(171);
+        LinkSync_StartSync(171);
         album->timer = 1;
         *state = 22;
         WonderCardAlbum_PrintTextBox(album, &album->messageWindow, 17, 640);
@@ -986,13 +986,13 @@ BOOL WonderCardAlbum_Main(OverlayManager *manager, int *state) {
         break;
     case 24:
         if (ov74_0223615C() == 4) {
-            sub_02037AC0(147);
+            LinkSync_StartSync(147);
             sub_020398D4(1, 1);
             *state = 25;
         }
         break;
     case 25:
-        if (WonderCardAlbum_CountReceivers() == 0 || sub_02037B38(147) == TRUE) {
+        if (WonderCardAlbum_CountReceivers() == 0 || LinkSync_IsSynced(147) == TRUE) {
             sub_020398D4(0, 0);
             ov74_02236128();
             WonderCardAlbum_PrintTextBox(album, &album->messageWindow, 18, 640);
@@ -1031,7 +1031,7 @@ BOOL WonderCardAlbum_Main(OverlayManager *manager, int *state) {
     if (album->spriteList != NULL) {
         SpriteList_RenderAndAnimateSprites(album->spriteList);
     }
-    ov74_022358BC();
+    MainMenuUtil_UpdateSprites();
     if (album->callback != NULL) {
         album->callback(album);
     }
@@ -1081,7 +1081,7 @@ int WonderCardAlbum_CountReceivers(void) {
     int count = 0;
 
     for (i = 1; i < 5; i++) {
-        if (sub_02034818(i) != NULL) {
+        if (CommPlayerInfo_GetProfile(i) != NULL) {
             count++;
         }
     }
@@ -1104,7 +1104,7 @@ int WonderCardAlbum_UpdateReceiverList(WonderCardAlbum *album, Window *window) {
     int y;
 
     for (i = 1; i < 5; i++) {
-        profile = sub_02034818(i);
+        profile = CommPlayerInfo_GetProfile(i);
         if (profile == NULL) {
             if (album->receivers[i] != NULL) {
                 changes++;
@@ -1138,7 +1138,7 @@ int WonderCardAlbum_UpdateReceiverList(WonderCardAlbum *album, Window *window) {
     y = 0;
     FillWindowPixelBuffer(window, 0);
     for (i = 0; i < count; i++) {
-        profile = sub_02034818(netIds[i]);
+        profile = CommPlayerInfo_GetProfile(netIds[i]);
         if (profile != NULL) {
             BufferPlayersName(msgFormat, 0, profile);
             string = ReadMsgData_ExpandPlaceholders(msgFormat, msgData, msg_0247_00054, HEAP_ID_85);

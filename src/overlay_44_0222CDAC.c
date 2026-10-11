@@ -34,12 +34,12 @@
 #include "font_sprite.h"
 #include "touchpad.h"
 #include "friend_roster.h"
-#include "unk_02030A98.h"
+#include "frontier_save_access.h"
 #include "unk_0203170C.h"
-#include "unk_02034354.h"
+#include "communication_player_state.h"
 #include "unk_02034B0C.h"
 #include "unk_02035900.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 #include "unk_02037C94.h"
 #include "unk_0203A3B0.h"
 #include "unk_02078834.h"
@@ -1403,7 +1403,7 @@ s32 ov44_0222B228(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         u32 temp_r0 = ov44_02229F00(arg0, &arg0->unk4->unk0);
         if ((temp_r0 == 8) || (temp_r0 == 18) || (temp_r0 == 20) || (temp_r0 == 22) || (temp_r0 == 23) || (temp_r0 == 24) || (temp_r0 == 25) || (temp_r0 == 26) || (temp_r0 == 27) || (temp_r0 == 19)) {
             ov44_0222F818(arg0, 16);
-            sub_020343E4();
+            CommPlayerInfo_Free();
             sub_02039378();
             UnkStruct_ov44_0223197C *temp_r0_2 = sub_020398C8();
             arg0->unk4 = temp_r0_2;
@@ -1413,7 +1413,7 @@ s32 ov44_0222B228(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         } else {
             ov44_0222F510(arg0, 77, 0);
             sub_020398D4(1, 1);
-            sub_02037AC0(16);
+            LinkSync_StartSync(16);
             arg0->unk348 = 61;
         }
     } else {
@@ -1514,7 +1514,7 @@ s32 ov44_0222B528(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         Save_FriendRoster_Init(arg0->unk0);
         void *saveArray = SaveArray_Get(arg0->saveData, 31);
         sub_02031710(saveArray);
-        sub_02031188(Save_Frontier_GetStatic(arg0->saveData));
+        FrontierSave_ClearRows(Save_Frontier_GetStatic(arg0->saveData));
         arg0->unk348 = 14;
         arg0->unk4 = sub_020396FC(arg0->saveData, 1188);
         ov44_0222F510(arg0, 23, 1);
@@ -1759,7 +1759,7 @@ s32 ov44_0222BBA4(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         } else {
             ov44_0222F818(arg0, 16);
             sub_02039330();
-            sub_020343E4();
+            CommPlayerInfo_Free();
             arg0->unk34C = 8;
             arg0->unk348 = 34;
         }
@@ -1774,7 +1774,7 @@ s32 ov44_0222BBA4(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
             YesNoPrompt_Destroy(arg0->unk188);
             ov44_0222F818(arg0, 16);
             sub_02039330();
-            sub_020343E4();
+            CommPlayerInfo_Free();
             arg0->unk34C = 8;
             arg0->unk348 = 34;
         } else {
@@ -2806,9 +2806,9 @@ s32 ov44_0222D824(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         sub_020378E4(0);
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_53);
         arg0->unk384 = 0;
-        sub_02034354(arg0->saveData, 0);
-        sub_02034434();
-        sub_0203476C(Comm_GetLocalNetId());
+        CommPlayerInfo_Init(arg0->saveData, 0);
+        CommPlayerInfo_SendLocal();
+        CommPlayerInfo_Accept(Comm_GetLocalNetId());
         arg1 = 2;
     }
     return arg1;
@@ -3269,11 +3269,11 @@ s32 ov44_0222E45C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         if (ov44_02229F44(temp_r6) == 0) {
             arg0->unk348 = 49;
             ov44_0222F7BC(arg0);
-            sub_02034354(arg0->saveData, 0);
+            CommPlayerInfo_Init(arg0->saveData, 0);
             arg0->unk35C = 30;
         } else if (Comm_IsNetIdConnected(0) == 1) {
             ov44_0222F7BC(arg0);
-            sub_02034354(arg0->saveData, 0);
+            CommPlayerInfo_Init(arg0->saveData, 0);
             sub_020398D4(0, 1);
             ov44_0222A1B4(temp_r6);
             arg0->unk34C = ov44_02229F74(temp_r6);
@@ -3368,7 +3368,7 @@ s32 ov44_0222E634(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     }
     ov44_0222F780(arg0, WifiConnection_GetTargetFriendIndex());
     ov44_0222F510(arg0, 11, 0);
-    sub_02034354(arg0->saveData, 0);
+    CommPlayerInfo_Init(arg0->saveData, 0);
     arg0->unk348 = 49;
     arg0->unk35C = 30;
     return arg1;
@@ -3411,16 +3411,16 @@ s32 ov44_0222E860(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     } else if (ov44_0222E7C4(arg0) == 0) {
         u32 temp_r1 = arg0->unk35C;
         if (temp_r1 == 0) {
-            if (sub_02037B38(13) != 0) {
-                sub_02037BEC();
-                sub_02037AC0(14);
+            if (LinkSync_IsSynced(13) != 0) {
+                LinkSync_ClearPackets();
+                LinkSync_StartSync(14);
                 arg0->unk384 = 0;
                 arg0->unk348 = 50;
             }
         } else {
             arg0->unk35C = temp_r1 - 1;
             if (arg0->unk35C == 0) {
-                sub_02037AC0(13);
+                LinkSync_StartSync(13);
             }
         }
     }
@@ -3428,9 +3428,9 @@ s32 ov44_0222E860(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
 }
 
 s32 ov44_0222E908(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
-    if ((ov44_0222E7C4(arg0) == 0) && (sub_02037B38(14) != 0)) {
+    if ((ov44_0222E7C4(arg0) == 0) && (LinkSync_IsSynced(14) != 0)) {
         s16 r1 = ov44_02229F00(arg0, &arg0->unk4->unk0);
-        if (sub_02037C0C(Comm_GetLocalNetId(), &r1) != 0) {
+        if (LinkSync_SendPacket(Comm_GetLocalNetId(), &r1) != 0) {
             arg0->unk348 = 51;
         }
     }
@@ -3444,12 +3444,12 @@ s32 ov44_0222E948(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     } else {
         var_r0 = 0;
     }
-    u16 *temp_r4 = sub_02037C44(var_r0);
+    u16 *temp_r4 = LinkSync_GetPacket(var_r0);
     if ((ov44_0222E7C4(arg0) == 0) && (temp_r4 != NULL)) {
         u16 temp_r6 = ov44_02229F00(arg0, &arg0->unk4->unk0);
         u16 r0 = ov44_0222A0B4(temp_r6);
         if ((temp_r4[0] == r0) || (temp_r4[0] == temp_r6)) {
-            sub_02037AC0(15);
+            LinkSync_StartSync(15);
             arg0->unk348 = 52;
         } else {
             ov44_0222F780(arg0, WifiConnection_GetTargetFriendIndex());
@@ -3461,10 +3461,10 @@ s32 ov44_0222E948(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
 }
 
 s32 ov44_0222E9C4(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
-    if ((ov44_0222E7C4(arg0) == 0) && (sub_02037B38(15) != 0)) {
-        sub_02034434();
+    if ((ov44_0222E7C4(arg0) == 0) && (LinkSync_IsSynced(15) != 0)) {
+        CommPlayerInfo_SendLocal();
         sub_020398D4(1, 1);
-        sub_02037AC0(18);
+        LinkSync_StartSync(18);
         arg0->unk348 = 53;
     }
     return arg1;
@@ -3482,7 +3482,7 @@ s32 ov44_0222E9FC(UnkStruct_ov44_022319EC *arg0) {
 
 s32 ov44_0222EA2C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     ListMenuTemplate spC; // Unknown struct of size 0x20
-    if ((ov44_0222E7C4(arg0) == 0) && (sub_02037B38(18) != 0) && (ov44_0222E9FC(arg0) == 1)) {
+    if ((ov44_0222E7C4(arg0) == 0) && (LinkSync_IsSynced(18) != 0) && (ov44_0222E9FC(arg0) == 1)) {
         sub_0203A1C4(arg0->saveData, &spC, HEAP_ID_53);
         ov44_0222F7BC(arg0);
         u32 temp_r0 = ov44_02229F00(arg0, ov44_02231958(arg0, WifiConnection_GetTargetFriendIndex()));
@@ -3654,7 +3654,7 @@ s32 ov44_0222EE10(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
 }
 
 s32 ov44_0222EE54(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
-    if (sub_02037B38(16) == 0) {
+    if (LinkSync_IsSynced(16) == 0) {
         return arg1;
     }
     sub_020398D4(0, 1);
@@ -3703,7 +3703,7 @@ s32 ov44_0222EED4(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
                     arg0->unk35C = 30;
                 } else {
                     ov44_0222F7BC(arg0);
-                    sub_020343E4();
+                    CommPlayerInfo_Free();
                     sub_020393B4();
                     arg0->unk35C = 20;
                     arg0->unk348 = 65;
@@ -3721,7 +3721,7 @@ s32 ov44_0222EED4(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
                 } else if (temp_r0_2 == 2) {
                     YesNoPrompt_Destroy(arg0->unk188);
                     ov44_0222F7BC(arg0);
-                    sub_020343E4();
+                    CommPlayerInfo_Free();
                     sub_020393B4();
                     arg0->unk35C = 20;
                     arg0->unk348 = 65;
@@ -4992,7 +4992,7 @@ s32 ov44_02231974(s32 arg0) {
 }
 
 s32 ov44_0223197C(UnkStruct_ov44_022319EC *arg0, s32 arg1, s32 arg2) {
-    sub_020379A0(HEAP_ID_15);
+    LinkSync_Init(HEAP_ID_15);
     ov00_021E70B8(arg0->unk4->unk0.unk21);
     if (ov44_02229F44(arg2) == 1) {
         WifiConnection_SetExtraHeapEnabled(1, 128);

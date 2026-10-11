@@ -16,7 +16,7 @@
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "unk_02030A98.h"
+#include "frontier_save_access.h"
 
 // input given to PalPadRoster_HandleAction
 enum PalPadRosterInput {
@@ -264,7 +264,7 @@ int PalPadRoster_Main(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx
             wifiList = Save_FriendRoster_Get(shared->saveData);
             index = PalPadRoster_GetSelectedIndex(roster);
             FriendRoster_RemoveFriend(wifiList, shared->friends.slots[index]);
-            sub_020311AC(Save_Frontier_GetStatic(shared->saveData), shared->friends.slots[index]);
+            FrontierSave_DeleteRow(Save_Frontier_GetStatic(shared->saveData), shared->friends.slots[index]);
             PalPadShared_ReadFriendList(shared);
             PalPadRoster_DrawPage(roster, shared, gfx, roster->page, roster->cursor, 0, heapId);
             PalPadGfx_SetArrowsVisible(gfx, TRUE);

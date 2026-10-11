@@ -41,8 +41,8 @@
 .public Save_PlayerData_GetOptionsAddr
 .public LinkBattleRuleset_GetRuleValue
 .public Save_SpecialRibbons_Get
-.public sub_02034434
-.public sub_02034818
+.public CommPlayerInfo_SendLocal
+.public CommPlayerInfo_GetProfile
 .public sub_02035650
 .public sub_02035754
 .public sub_02035798
@@ -56,9 +56,9 @@
 .public Comm_GetLocalNetId
 .public sub_020376F8
 .public CommRandom_Init
-.public sub_02037AC0
-.public sub_02037B38
-.public sub_02037B5C
+.public LinkSync_StartSync
+.public LinkSync_IsSynced
+.public LinkSync_GetPlayerState
 .public sub_02037F18
 .public sub_02037F64
 .public sub_02037F94

@@ -131,10 +131,10 @@
 .public Comm_SendCommand
 .public sub_02037474
 .public Comm_GetLocalNetId
-.public sub_020379A0
-.public sub_02037AC0
-.public sub_02037B38
-.public sub_02037BEC
+.public LinkSync_Init
+.public LinkSync_StartSync
+.public LinkSync_IsSynced
+.public LinkSync_ClearPackets
 .public WirelessStatusIcon_Create
 .public WirelessStatusIcon_Destroy
 .public GetMonData

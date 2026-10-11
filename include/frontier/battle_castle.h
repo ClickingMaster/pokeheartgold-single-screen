@@ -119,8 +119,8 @@ typedef struct BattleCastlePartyApp {
     MessagePrinter *msgPrinter;                  // 0x504
     Options *options;                            // 0x508
     SaveData *saveData;                          // 0x50C
-    void *unk_510;                               // 0x510 (sub_02030CC8)
-    u32 unk_514;                                 // 0x514 (sub_02030E08)
+    void *unk_510;                               // 0x510 (Save_Frontier_GetCastleChallenge)
+    u32 unk_514;                                 // 0x514 (Save_Frontier_GetCastleFlags)
     BattleCastleSpriteGfx spriteGfx;             // 0x518
     BattleCastleSprite *unk_734;                 // 0x734
     BattleCastleSprite *unk_738;                 // 0x738

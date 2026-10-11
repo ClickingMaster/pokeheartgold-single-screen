@@ -34,9 +34,9 @@
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
 #include "unk_02032844.h"
-#include "unk_02034354.h"
+#include "communication_player_state.h"
 #include "unk_02035900.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 #include "unk_02037C94.h"
 #include "unk_0203A3B0.h"
 #include "unk_0205A44C.h"
@@ -1082,7 +1082,7 @@ int ov73_021E6D54(RecordMixingApp *app, int state) {
         } else {
             app->state = 13;
             Comm_SendCommand(113, NULL, 0);
-            BufferPlayersName(app->msgFmt, 0, sub_02034818(0));
+            BufferPlayersName(app->msgFmt, 0, CommPlayerInfo_GetProfile(0));
         }
         RecordMixing_HideYesNo(app);
     }
@@ -1096,7 +1096,7 @@ int ov73_021E6DF8(RecordMixingApp *app, int state) {
     if (Comm_GetLocalNetId() == 0) {
         RecordMixing_PrintMessage(app, 5, FALSE);
     } else {
-        PlayerProfile *leader = sub_02034818(0);
+        PlayerProfile *leader = CommPlayerInfo_GetProfile(0);
         BufferPlayersName(app->msgFmt, 0, leader);
         RecordMixing_PrintMessage(app, 16, FALSE);
     }
@@ -1116,14 +1116,14 @@ int ov73_021E6E48(RecordMixingApp *app, int state) {
 }
 
 int ov73_021E6E6C(RecordMixingApp *app, int state) {
-    sub_02037AC0(201);
+    LinkSync_StartSync(201);
     app->state = 16;
     ov73_021E66F0(app);
     return state;
 }
 
 int ov73_021E6E8C(RecordMixingApp *app, int state) {
-    if (sub_02037B38(201) != FALSE) {
+    if (LinkSync_IsSynced(201) != FALSE) {
         sub_020398D4(0, 0);
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, (enum FadeType)16, (enum FadeType)16, RGB_BLACK, 16, 1, HEAP_ID_50);
         state = 3;
@@ -1226,7 +1226,7 @@ void ov73_021E705C(RecordMixingApp *app, int state, int netId) {
         if (app->unk_4A28 == 1) {
             return;
         }
-        BufferPlayersName(app->msgFmt, 0, sub_02034818(netId));
+        BufferPlayersName(app->msgFmt, 0, CommPlayerInfo_GetProfile(netId));
         if (netId == Comm_GetLocalNetId()) {
             return;
         }
@@ -1249,7 +1249,7 @@ void ov73_021E7120(RecordMixingApp *app, int state, int netId) {
         switch (state) {
         case 1: {
             u32 one;
-            BufferPlayersName(app->msgFmt, 0, sub_02034818(netId));
+            BufferPlayersName(app->msgFmt, 0, CommPlayerInfo_GetProfile(netId));
             ov73_021E781C(app, 1);
             app->state = state;
             app->unk_4A1C = Comm_CountConnected();
@@ -1261,7 +1261,7 @@ void ov73_021E7120(RecordMixingApp *app, int state, int netId) {
             return;
         }
         case 19:
-            BufferPlayersName(app->msgFmt, 0, sub_02034818(netId));
+            BufferPlayersName(app->msgFmt, 0, CommPlayerInfo_GetProfile(netId));
             if (netId == Comm_GetLocalNetId()) {
                 return;
             }
@@ -1331,7 +1331,7 @@ void RecordMixing_PulsePalette(u16 *angle) {
 int ov73_021E7340(void) {
     int i, n = 0;
     for (i = 0; i < RECORD_MIXING_MAX_MEMBERS; i++) {
-        if (sub_02034818(i)) {
+        if (CommPlayerInfo_GetProfile(i)) {
             n++;
         }
     }
@@ -1389,7 +1389,7 @@ void ov73_021E7468(RecordMixingApp *app) {
 int RecordMixing_CountMembers(void) {
     int i, n = 0;
     for (i = 0; i < RECORD_MIXING_MAX_MEMBERS; i++) {
-        if (sub_02034818(i)) {
+        if (CommPlayerInfo_GetProfile(i)) {
             n++;
         }
     }
@@ -1409,7 +1409,7 @@ BOOL RecordMixing_UpdateMembers(RecordMixingApp *app) {
 
     for (i = 0; i < RECORD_MIXING_MAX_MEMBERS; i++) {
         app->members[i].prev = app->members[i].cur;
-        app->members[i].cur = sub_02034818(i);
+        app->members[i].cur = CommPlayerInfo_GetProfile(i);
         app->memberKeys[i].prev = app->memberKeys[i].cur;
         if (app->members[i].cur != NULL) {
             app->memberKeys[i].cur.s.id = PlayerProfile_GetTrainerID(app->members[i].cur);

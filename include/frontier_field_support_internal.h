@@ -12,9 +12,9 @@
 #include "task.h"
 #include "friend_group_access.h"
 #include "frontier_data_access.h"
-#include "unk_02030A98.h"
+#include "frontier_save_access.h"
 #include "unk_02035900.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 #include "unk_0204B538.h"
 
 extern FrontierData *Save_FrontierData_Get(SaveData *saveData);

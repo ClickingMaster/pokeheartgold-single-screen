@@ -30,9 +30,9 @@
 #include "oam_manager.h"
 #include "friend_roster.h"
 #include "unk_02033AE0.h"
-#include "unk_02034354.h"
+#include "communication_player_state.h"
 #include "unk_02035900.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 #include "unk_02037C94.h"
 #include "unk_0203A3B0.h"
 #include "vram_transfer_manager.h"
@@ -47,9 +47,9 @@ void DoubleBuffer_Swap(struct DoubleBuffer *buffer);
 void sub_0202C554(FriendRoster *data, s32 index, s32 value);
 void sub_0202C584(FriendRoster *data, s32 index, s32 value);
 void sub_0202C5B4(FriendRoster *data, s32 index, s32 value);
-void *sub_0203484C(int netId);
-u8 sub_020348A8(int netId);
-u8 sub_020348CC(int netId);
+void *CommPlayerInfo_GetExchangeToken(int netId);
+u8 CommPlayerInfo_GetCountry(int netId);
+u8 CommPlayerInfo_GetRegion(int netId);
 void sub_0203986C(void);
 int sub_0203A084(SaveData *saveData, void *friendData, u32 *index);
 void sub_0203A948(int a0, enum HeapID heapId);
@@ -93,11 +93,11 @@ void PlazaGameRoster_Init(PlazaGameRoster *roster, u32 fromLobby, SaveData *save
     int localNetId;
     int count;
     memset(roster, 0, sizeof(PlazaGameRoster));
-    roster->count = sub_020347A0();
+    roster->count = CommPlayerInfo_CountAccepted();
     localNetId = Comm_GetLocalNetId();
     count = 0;
     for (netId = 0; netId < 4; netId++) {
-        if (sub_02034818(netId) != NULL) {
+        if (CommPlayerInfo_GetProfile(netId) != NULL) {
             if (localNetId == netId) {
                 roster->localIndex = count;
             }
@@ -151,7 +151,7 @@ PlayerProfile *PlazaGameRoster_GetProfile(const PlazaGameRoster *roster, u32 net
     }
     if (roster->launchedFromField == 1) {
         int index = PlazaGameRoster_GetIndexOfNetId(roster, netId);
-        return index == roster->localIndex ? Save_PlayerData_GetProfile(roster->saveData) : sub_02034818(netId);
+        return index == roster->localIndex ? Save_PlayerData_GetProfile(roster->saveData) : CommPlayerInfo_GetProfile(netId);
     } else {
         GF_ASSERT(roster->args != NULL);
         return roster->args->profiles[netId];
@@ -315,8 +315,8 @@ BOOL PlazaGameRoster_CheckConnectionLost(PlazaGameRoster *roster) {
 BOOL PlazaGameRoster_ProcessConnectionLost(PlazaGameRoster *roster) {
     GF_ASSERT(roster->args != NULL);
     GF_ASSERT(roster->args->connectionLost == TRUE);
-    if (sub_02034420() == 1) {
-        sub_020343E4();
+    if (CommPlayerInfo_Exists() == 1) {
+        CommPlayerInfo_Free();
         sub_0203986C();
     } else if (sub_020392A0() == 1) {
         return TRUE;
@@ -887,14 +887,14 @@ void PlazaGameEntry_MainTask(SysTask *task, void *data) {
         entry->timer--;
         if (entry->timer == 0) {
             entry->state++;
-            sub_02037AC0(0x81);
+            LinkSync_StartSync(0x81);
             if (entry->roster.unkA) {
                 WifiConnection_StopVoiceChat();
             }
         }
         break;
     case 10:
-        if (sub_02037B38(0x81)) {
+        if (LinkSync_IsSynced(0x81)) {
             entry->state++;
         }
         break;
@@ -1282,8 +1282,8 @@ void PlazaGamePlayerInfo_Init(PlazaGamePlayerInfo *info, const PlazaGameRoster *
     for (i = 0; i < roster->count; i++) {
         info->profiles[i] = PlazaGameRoster_GetProfile(roster, roster->netIds[i]);
         GF_ASSERT(info->profiles[i]);
-        info->countries[i] = sub_020348A8(roster->netIds[i]);
-        info->regions[i] = sub_020348CC(roster->netIds[i]);
+        info->countries[i] = CommPlayerInfo_GetCountry(roster->netIds[i]);
+        info->regions[i] = CommPlayerInfo_GetRegion(roster->netIds[i]);
     }
 }
 
@@ -1764,14 +1764,14 @@ void PlazaGameResults_RankingTask(SysTask *task, void *data) {
             results->timer--;
             break;
         }
-        sub_02037AC0(0x82);
+        LinkSync_StartSync(0x82);
         if (results->roster.unkA != 0) {
             WifiConnection_StopVoiceChat();
         }
         results->state++;
         break;
     case 16:
-        if (sub_02037B38(0x82)) {
+        if (LinkSync_IsSynced(0x82)) {
             if (results->roster.launchedFromField != 0) {
                 results->state = 19;
             } else {
@@ -1960,11 +1960,11 @@ void PlazaGameResults_TeamTask(SysTask *task, void *data) {
         if (results->roster.unkA) {
             WifiConnection_StopVoiceChat();
         }
-        sub_02037AC0(0x82);
+        LinkSync_StartSync(0x82);
         results->state++;
         break;
     case 15:
-        if (sub_02037B38(0x82)) {
+        if (LinkSync_IsSynced(0x82)) {
             if (results->roster.launchedFromField) {
                 results->state = 18;
             } else {
@@ -2389,7 +2389,7 @@ void PlazaGameResults_RecordFriendPlays(PlazaGameResults *results) {
     int i;
     for (i = 0; i < results->roster.count; i++) {
         u32 index;
-        void *friendData = sub_0203484C(results->roster.netIds[i]);
+        void *friendData = CommPlayerInfo_GetExchangeToken(results->roster.netIds[i]);
         int result = sub_0203A084(results->roster.saveData, friendData, &index);
         switch (result) {
         case 0:

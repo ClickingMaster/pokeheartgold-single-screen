@@ -26,8 +26,8 @@ _020F6980:
 	.word 0, sub_020342C0, 0
 	.word 0, sub_020342C0, 0
 	.word sub_0203776C, sub_020342C0, 0
-	.word sub_020345D0, sub_02034520, 0
-	.word sub_0203453C, sub_02034520, 0
+	.word CommPlayerInfo_RecvPlayerEntry, CommPlayerInfo_GetEntrySize, 0
+	.word CommPlayerInfo_RecvEntry, CommPlayerInfo_GetEntrySize, 0
 	.word sub_02034524, sub_020342C0, 0
 	.word sub_02038B3C, sub_02038C18, 0
 	.word sub_02038B9C, sub_02038C18, 0
@@ -39,11 +39,11 @@ _020F6980:
 	.word sub_020342CC, sub_020342C0, 0
 	.word sub_02034310, sub_020342C0, 0
 	.word sub_02034338, sub_020342C0, 0
-	.word sub_02037A24, sub_020342C4, 0
-	.word sub_02037AAC, sub_020342C4, 0
-	.word sub_02037A98, sub_020342C8, 0
-	.word sub_02037B6C, sub_02037B88, 0
-	.word sub_02037C68, sub_02037C94, 0
+	.word LinkSync_RecvRequest, sub_020342C4, 0
+	.word LinkSync_RecvDone, sub_020342C4, 0
+	.word LinkSync_RecvState, sub_020342C8, 0
+	.word LinkSync_RecvValue, LinkSync_GetValueSize, 0
+	.word LinkSync_RecvPacket, sub_02037C94, 0
 	.word sub_02039220, sub_020342C0, 0
 
 	.text

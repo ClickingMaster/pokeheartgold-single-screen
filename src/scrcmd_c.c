@@ -74,7 +74,7 @@
 #include "friend_roster.h"
 #include "unk_02034B0C.h"
 #include "unk_02035900.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 #include "unk_02037C94.h"
 #include "unk_0203A3B0.h"
 #include "unk_02054648.h"
@@ -2651,7 +2651,7 @@ BOOL sub_02044054(ScriptContext *ctx);
 BOOL ScrCmd_257(ScriptContext *ctx) {
     u16 r0 = ScriptGetVar(ctx);
     ctx->data[0] = r0;
-    sub_02037AC0(r0);
+    LinkSync_StartSync(r0);
     SetupNativeScript(ctx, sub_02044054);
     return TRUE;
 }
@@ -2660,12 +2660,12 @@ BOOL sub_02044054(ScriptContext *ctx) {
     if (Comm_CountConnected() < 2) {
         return TRUE;
     } else {
-        return sub_02037B38(ctx->data[0]);
+        return LinkSync_IsSynced(ctx->data[0]);
     }
 }
 
 BOOL ScrCmd_258(ScriptContext *ctx) {
-    sub_02037BEC();
+    LinkSync_ClearPackets();
     return FALSE;
 }
 

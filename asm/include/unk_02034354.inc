@@ -17,35 +17,35 @@
 .public Save_WiFiHistory_Get
 .public WifiHistory_GetPlayerCountry
 .public WiFiHistory_GetPlayerRegion
-.public sub_02034354
-.public sub_020343E4
-.public sub_02034420
-.public sub_02034434
-.public sub_02034520
+.public CommPlayerInfo_Init
+.public CommPlayerInfo_Free
+.public CommPlayerInfo_Exists
+.public CommPlayerInfo_SendLocal
+.public CommPlayerInfo_GetEntrySize
 .public sub_02034524
-.public sub_0203453C
-.public sub_020345D0
-.public sub_02034638
-.public sub_020346D4
-.public sub_020346E8
-.public sub_02034714
-.public sub_02034730
-.public sub_02034750
-.public sub_0203476C
-.public sub_02034780
-.public sub_020347A0
-.public sub_020347CC
-.public sub_02034818
-.public sub_0203484C
+.public CommPlayerInfo_RecvEntry
+.public CommPlayerInfo_RecvPlayerEntry
+.public CommPlayerInfo_HostRedistribute
+.public CommPlayerInfo_HasNewEntries
+.public CommPlayerInfo_ClearPlayer
+.public CommPlayerInfo_IsReceived
+.public CommPlayerInfo_IsReceivedOrAccepted
+.public CommPlayerInfo_IsAccepted
+.public CommPlayerInfo_Accept
+.public CommPlayerInfo_FindReceived
+.public CommPlayerInfo_CountAccepted
+.public CommPlayerInfo_DropDisconnected
+.public CommPlayerInfo_GetProfile
+.public CommPlayerInfo_GetExchangeToken
 .public sub_02034870
-.public sub_02034884
-.public sub_020348A8
-.public sub_020348CC
-.public sub_020348F0
-.public sub_02034A20
-.public sub_02034AC0
-.public sub_02034AEC
-.public sub_02034B00
+.public CommPlayerInfo_GetGroupName
+.public CommPlayerInfo_GetCountry
+.public CommPlayerInfo_GetRegion
+.public CommPlayerInfo_RulesetsMatch
+.public CommPlayerInfo_SaveRecords
+.public CommPlayerInfo_RecordBattleResult
+.public CommPlayerInfo_RecordTrades
+.public CommPlayerInfo_SetProfile
 .public sub_020357C4
 .public Comm_SendCommand
 .public Comm_IsNetIdConnected
@@ -61,5 +61,5 @@
 .public MI_CpuFill8
 .public MI_CpuCopy8
 
-	.public sub_02034960
-	.public _021D4130
+	.public CommPlayerInfo_AddToRecords
+	.public gCommPlayerInfo

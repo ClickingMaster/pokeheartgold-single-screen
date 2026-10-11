@@ -41,9 +41,9 @@
 #include "bg_cell_manager.h"
 #include "unk_02019BA4.h"
 #include "unk_02026E30.h"
-#include "unk_02034354.h"
+#include "communication_player_state.h"
 #include "unk_02035900.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 #include "unk_0203A3B0.h"
 #include "unk_02088288.h"
 #include "unk_02096910.h"
@@ -703,15 +703,15 @@ BOOL BattleFactoryApp_SlideIn(BattleFactoryApp *app) {
     switch (app->subState) {
     case 0:
         if (ov80_02237254(app->frontierType) == TRUE) {
-            sub_02037BEC();
-            sub_02037AC0(237);
+            LinkSync_ClearPackets();
+            LinkSync_StartSync(237);
         }
         app->subState++;
         break;
     case 1:
         if (ov80_02237254(app->frontierType) == TRUE) {
-            if (sub_02037B38(237) == TRUE) {
-                sub_02037BEC();
+            if (LinkSync_IsSynced(237) == TRUE) {
+                LinkSync_ClearPackets();
                 app->subState++;
             }
         } else {
@@ -1222,14 +1222,14 @@ BOOL BattleFactoryApp_ConfirmRentals(BattleFactoryApp *app) {
         }
         if (BattleFactoryApp_SendLinkCommand(app, FACTORY_LINK_RENTALS, 0) == TRUE) {
             app->printerId = BattleFactoryApp_ShowMessage(app, msg_0194_00002);
-            sub_02037BEC();
-            sub_02037AC0(164);
+            LinkSync_ClearPackets();
+            LinkSync_StartSync(164);
             app->subState++;
         }
         break;
     case 7:
-        if (sub_02037B38(164) == TRUE) {
-            sub_02037BEC();
+        if (LinkSync_IsSynced(164) == TRUE) {
+            LinkSync_ClearPackets();
             return TRUE;
         }
         break;
@@ -1806,13 +1806,13 @@ BOOL BattleFactoryApp_LinkSync(BattleFactoryApp *app) {
     switch (app->subState) {
     case 0:
         app->printerId = BattleFactoryApp_ShowMessage(app, msg_0194_00015);
-        sub_02037BEC();
-        sub_02037AC0(165);
+        LinkSync_ClearPackets();
+        LinkSync_StartSync(165);
         app->subState++;
         break;
     case 1:
-        if (sub_02037B38(165) == TRUE) {
-            sub_02037BEC();
+        if (LinkSync_IsSynced(165) == TRUE) {
+            LinkSync_ClearPackets();
             return TRUE;
         }
         break;
@@ -2133,7 +2133,7 @@ void BattleFactoryApp_PrintPlayerName(BattleFactoryApp *app, Window *window, int
 }
 
 void BattleFactoryApp_PrintPartnerName(BattleFactoryApp *app, Window *window, int x, int y, u8 fontId) {
-    PlayerProfile *profile = sub_02034818(1 - Comm_GetLocalNetId());
+    PlayerProfile *profile = CommPlayerInfo_GetProfile(1 - Comm_GetLocalNetId());
     String *string = String_New(PLAYER_NAME_LENGTH + 1, HEAP_ID_100);
     u32 color;
 

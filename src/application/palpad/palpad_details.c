@@ -16,7 +16,7 @@
 #include "text.h"
 #include "touchscreen.h"
 #include "unk_02013FDC.h"
-#include "unk_02030A98.h"
+#include "frontier_save_access.h"
 #include "unk_0205B3DC.h"
 
 // input given to PalPadDetails_HandleAction

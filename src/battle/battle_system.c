@@ -22,7 +22,7 @@
 #include "screen_fade.h"
 #include "text.h"
 #include "sound_playback.h"
-#include "unk_0202FBCC.h"
+#include "battle_recording.h"
 
 static u8 ov12_0223BFB0(u8 *buffer, u8 *index, u16 *size);
 static void BattleSystem_AdjustMessageForSide(BattleSystem *battleSystem, BattleMessage *msg);
@@ -1124,7 +1124,7 @@ void BattleSystem_SetRandTemp(BattleSystem *battleSystem, u32 temp) {
 
 void ov12_0223BDDC(BattleSystem *battleSystem, int battlerId, u8 data) {
     if (!(battleSystem->battleSpecial & BATTLE_SPECIAL_RECORDING) && battleSystem->unk245C[battlerId] < 1024) {
-        sub_02030260(battlerId, battleSystem->unk245C[battlerId], data);
+        BattleRecord_SetCommand(battlerId, battleSystem->unk245C[battlerId], data);
         battleSystem->unk245C[battlerId]++;
     }
 }
@@ -1133,7 +1133,7 @@ BOOL ov12_0223BE0C(BattleSystem *battleSystem, int battlerId, u8 *data) {
     BOOL ret;
     *data = 0xFF;
     if ((battleSystem->battleSpecial & BATTLE_SPECIAL_RECORDING) && (battleSystem->unk245C[battlerId] < 1024)) {
-        *data = sub_0203027C(battlerId, battleSystem->unk245C[battlerId]);
+        *data = BattleRecord_GetCommand(battlerId, battleSystem->unk245C[battlerId]);
         battleSystem->unk245C[battlerId]++;
         ret = FALSE;
     } else if ((battleSystem->battleSpecial & BATTLE_SPECIAL_RECORDING) && battleSystem->unk245C[battlerId] >= 1024) {
@@ -1152,7 +1152,7 @@ u8 ov12_0223BE68(BattleSystem *battleSystem, u8 *buffer) {
             buffer[index++] = battlerId;
             buffer[index++] = battleSystem->unk245C[battlerId] - battleSystem->unk244C[battlerId];
             for (i = 0; i < battleSystem->unk245C[battlerId] - battleSystem->unk244C[battlerId]; i++) {
-                buffer[index++] = sub_0203027C(battlerId, battleSystem->unk244C[battlerId] + i);
+                buffer[index++] = BattleRecord_GetCommand(battlerId, battleSystem->unk244C[battlerId] + i);
             }
             battleSystem->unk244C[battlerId] = battleSystem->unk245C[battlerId];
         }
@@ -1181,7 +1181,7 @@ void ov12_0223BF14(BattleSystem *battleSystem, u16 size, u8 *buffer) {
         battlerId = ov12_0223BFB0(buffer, &index, &size);
         byte = ov12_0223BFB0(buffer, &index, &size);
         for (i = 0; i < byte; i++) {
-            sub_02030260(battlerId, battleSystem->unk2454[battlerId] + i, ov12_0223BFB0(buffer, &index, &size));
+            BattleRecord_SetCommand(battlerId, battleSystem->unk2454[battlerId] + i, ov12_0223BFB0(buffer, &index, &size));
         }
         battleSystem->unk2454[battlerId] += byte;
     }

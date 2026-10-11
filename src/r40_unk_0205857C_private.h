@@ -18,7 +18,7 @@ typedef struct Unk0205857CRoot {
 extern Unk0205857CRoot *_021D41C8;
 int Comm_CountConnected(void);
 int Comm_GetLocalNetId(void);
-int sub_02037B5C(int);
+int LinkSync_GetPlayerState(int);
 void Heap_Free(void *);
 void StartMapSceneScript(Unk0205857CField *, int, int);
 void sub_020399FC(int, void *);

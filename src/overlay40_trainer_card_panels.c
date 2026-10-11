@@ -134,7 +134,7 @@ void ov40_02241114(void *p) {
 
 int ov40_02241144(void *p) {
     void *w = PTR(p, 0x860);
-    if (ov40_02230D94(p, sub_0203088C(sub_020307F8(), 4, 0))) {
+    if (ov40_02230D94(p, BattleRecordHeader_GetField(BattleRecord_GetHeader(), 4, 0))) {
         switch (WORD(p, 8)) {
         case 0:
             ov40_02230964(p, (void *)1);
@@ -215,8 +215,8 @@ int ov40_02241144(void *p) {
                     BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
                     BgClearTilemapBufferAndCommit(PTR(p, 0x24), 3);
                     BgClearTilemapBufferAndCommit(PTR(p, 0x24), 7);
-                    if (sub_0202FC48() == 1) {
-                        sub_0202FC24();
+                    if (BattleRecord_Exists() == 1) {
+                        BattleRecord_Delete();
                     }
                 } else {
                     BLEND(p, w, 1, 2);

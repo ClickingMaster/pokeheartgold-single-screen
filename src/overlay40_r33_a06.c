@@ -66,8 +66,8 @@ int ov40_0222DA84(int *p, int direction);
 void ov40_0223CD14(void *p);
 void PaletteData_BlendPalettes(void *palette, int buffer, int mask, int coeff, int color);
 void ov40_0222C4B8(void *p);
-void *sub_020307F8(void);
-u64 sub_0203088C(void *p, int a, int b);
+void *BattleRecord_GetHeader(void);
+u64 BattleRecordHeader_GetField(void *p, int a, int b);
 BOOL ov40_02230D94(void *p, u64 value);
 void BgClearTilemapBufferAndCommit(void *bgConfig, int bgId);
 void ov40_0222DED0(void *p, int msgId);
@@ -303,7 +303,7 @@ void ov40_0223C710(void *p, int msgId, int unused) {
 
 int ov40_0223C80C(Ov40Work *p) {
     void *w = PTR(p, 0x860);
-    if (ov40_02230D94(p, sub_0203088C(sub_020307F8(), 4, 0))) {
+    if (ov40_02230D94(p, BattleRecordHeader_GetField(BattleRecord_GetHeader(), 4, 0))) {
         switch (WORD(p, 8)) {
         case 0:
             ov40_02230964(p, (void *)1);

@@ -1,21 +1,25 @@
+#include "battle_record.h"
+
 #include "battle/battle_setup.h"
 
+#include "battle_recording.h"
 #include "link_ruleset_data.h"
 #include "math_util.h"
 #include "pokemon.h"
 #include "pokemon_types_def.h"
 #include "save_arrays.h"
 #include "system.h"
-#include "unk_0202FBCC.h"
 
+// Battler order used for the header's species list.
 typedef struct {
     u8 order[2][4];
-} BattleOrder;
+} BattlerOrder;
+
 typedef struct {
     u8 order[4];
 } MultiOrder;
-extern const BattleOrder _020F68C8;
-extern const MultiOrder _020F68C4;
+
+// gBattleRecord->header: what the battle video lists show.
 typedef struct {
     u16 species[12];
     u8 forms[12];
@@ -23,13 +27,16 @@ typedef struct {
     u8 type, padding;
     LinkBattleRuleset rules;
     u8 rest[0x64 - 0x28 - sizeof(LinkBattleRuleset)];
-} RecordSummary;
+} BattleRecordHeader;
+
 typedef struct {
     u16 capacity, count;
     struct UnkPokemonStruct_02072A98 mons[6];
-} RecordParty;
+} BattleRecordParty;
+
+// gBattleRecord->data, encrypted while stored: the BattleSetup, the parties and every battler's inputs.
 typedef struct {
-    u32 flags;
+    u32 flags; // battle type
     int winFlag;
     int trainerId[4];
     Trainer trainer[4];
@@ -51,100 +58,149 @@ typedef struct {
     int unk_148;
     u8 chatot[4];
     u8 commands[4][1024];
-    RecordParty parties[4];
+    BattleRecordParty parties[4];
     PlayerProfile profiles[4];
     Options options;
     u16 magic, crc;
-} RecordData;
+} BattleRecordData;
 
-extern struct UnkStruct_0202FBCC *_021D2AF8;
-u32 sub_0202FBCC(void);
-void sub_0202FBD4(struct UnkStruct_0202FBCC *record);
-void sub_0202FC24(void);
-struct UnkStruct_0202FBCC *sub_0202FC5C(void);
+// Another facility's view of the frontier save's challenge area (Save_Frontier_GetStatic + 0x8E0).
+typedef struct {
+    u8 flag0 : 1, flag1 : 3, flag4 : 1, rest : 3;
+    u8 value;
+    u16 padding;
+    u16 values4[14];
+    u16 values20[4];
+    u8 values28[4];
+    u32 values2c[4];
+    u16 values3c[4];
+    u8 values44[4];
+    u32 values48[4];
+} FrontierRecord;
+
+// asm/battle_record_data.s
+extern const BattlerOrder gBattleRecordBattlerOrder;
+extern const MultiOrder gBattleRecordMultiOrder;
+extern BattleRecord *gBattleRecord;
+
+u32 BattleRecord_sizeof(void);
+void BattleRecord_Init(BattleRecord *record);
+void BattleRecord_Delete(void);
+BattleRecord *BattleRecord_Get(void);
 void *sub_0202FC74(void);
+BOOL BattleRecord_Load(SaveData *save, enum HeapID heapId, int *out, void *battle, int index);
+BOOL BattleRecord_IsSlotValid(SaveData *save, enum HeapID heapId, int *out, int index);
+void BattleRecord_Decrypt(void *data, u32 size, u32 seed);
+BOOL BattleRecord_IsEmpty(SaveData *save, BattleRecord *record);
+BOOL BattleRecord_IsValid(SaveData *save, BattleRecord *record);
+void BattleRecord_RestoreSetup(BattleSetup *setup, SaveData *save);
+int BattleRecord_WriteSlot(SaveData *save, BattleRecord *record, int index, u16 *state);
+int BattleRecord_Save(SaveData *save, int type, int arg, int index, u16 *state, u16 *writeState);
+void BattleRecord_FillHeader(SaveData *save, void *header, void *data, int type, int arg);
+void BattleRecord_Encrypt(void *data, u32 size, u32 seed);
+void BattleRecord_GetBattlerAndPartyCount(int type, int *count, int *last);
+void BattleRecord_StoreSetup(BattleSetup *setup);
+void BattleRecordParty_FromParty(Party *party, BattleRecordParty *record);
+void BattleRecord_SetAiFlags(int battlerId, u32 flags);
+BOOL BattleRecord_AreAiFlagsValid(void);
+void BattleRecordParty_ToParty(BattleRecordParty *record, Party *party);
+void *BattleRecord_CopyHeader(enum HeapID heapId);
+void *BattleRecord_CopyProfile(enum HeapID heapId);
+void *BattleRecord_GetProfile(void);
+void *BattleRecord_GetHeader(void);
+void BattleRecord_Import(void *profile, void *summary, void *data, void *battle, SaveData *save);
+u64 BattleRecordHeader_GetField(void *summary, int field, int index);
+void *BattleRecordHeader_New(enum HeapID heapId);
+void BattleRecordHeader_Free(void *summary);
+void FactoryChallenge_Clear(void *record);
+void *Save_Frontier_GetFactoryChallenge(SaveData *save);
+u32 FactoryChallenge_GetSaved(FrontierRecord *record);
+void FactoryChallenge_SetSaved(FrontierRecord *record, int flag);
+void FactoryChallenge_SetField(FrontierRecord *record, int field, int index, void *value);
+u32 FactoryChallenge_GetField(FrontierRecord *record, int field, int index);
 
-u32 sub_0202FBCC(void) {
-    return sizeof(struct UnkStruct_0202FBCC);
+u32 BattleRecord_sizeof(void) {
+    return sizeof(BattleRecord);
 }
-void sub_0202FBD4(struct UnkStruct_0202FBCC *record) {
+
+void BattleRecord_Init(BattleRecord *record) {
     MI_CpuClear32(record, sizeof(*record));
     record->unk_0000 = -1;
 }
-void sub_0202FBF0(SaveData *save, enum HeapID heapId, u32 *out) {
-    if (_021D2AF8 != NULL) {
-        Heap_Free(_021D2AF8);
-        _021D2AF8 = NULL;
+
+void BattleRecord_Create(SaveData *save, enum HeapID heapId, u32 *out) {
+    if (gBattleRecord != NULL) {
+        Heap_Free(gBattleRecord);
+        gBattleRecord = NULL;
     }
-    _021D2AF8 = sub_0202711C(save, heapId, (int *)out, 0);
-    sub_0202FBD4(_021D2AF8);
-}
-void sub_0202FC24(void) {
-    GF_ASSERT(_021D2AF8 != NULL);
-    Heap_Free(_021D2AF8);
-    _021D2AF8 = NULL;
-}
-BOOL sub_0202FC48(void) {
-    return _021D2AF8 != NULL;
-}
-struct UnkStruct_0202FBCC *sub_0202FC5C(void) {
-    GF_ASSERT(_021D2AF8 != NULL);
-    return _021D2AF8;
-}
-void *sub_0202FC74(void) {
-    GF_ASSERT(_021D2AF8 != NULL);
-    return (u8 *)_021D2AF8 + 4;
+    gBattleRecord = sub_0202711C(save, heapId, (int *)out, 0);
+    BattleRecord_Init(gBattleRecord);
 }
 
-BOOL sub_0202FC90(SaveData *save, enum HeapID heapId, int *out, void *battle, int index);
-BOOL sub_0202FD28(SaveData *save, enum HeapID heapId, int *out, int index);
-void sub_02030258(void *data, u32 size, u32 seed);
-BOOL sub_02030154(SaveData *save, struct UnkStruct_0202FBCC *record);
-BOOL sub_0203018C(SaveData *save, struct UnkStruct_0202FBCC *record);
-void sub_020304F0(BattleSetup *setup, SaveData *save);
-BOOL sub_0202FC90(SaveData *save, enum HeapID heapId, int *out, void *battle, int index) {
-    if (_021D2AF8 != NULL) {
-        Heap_Free(_021D2AF8);
-        _021D2AF8 = NULL;
+void BattleRecord_Delete(void) {
+    GF_ASSERT(gBattleRecord != NULL);
+    Heap_Free(gBattleRecord);
+    gBattleRecord = NULL;
+}
+
+BOOL BattleRecord_Exists(void) {
+    return gBattleRecord != NULL;
+}
+
+BattleRecord *BattleRecord_Get(void) {
+    GF_ASSERT(gBattleRecord != NULL);
+    return gBattleRecord;
+}
+
+void *sub_0202FC74(void) {
+    GF_ASSERT(gBattleRecord != NULL);
+    return gBattleRecord->profile;
+}
+
+BOOL BattleRecord_Load(SaveData *save, enum HeapID heapId, int *out, void *battle, int index) {
+    if (gBattleRecord != NULL) {
+        Heap_Free(gBattleRecord);
+        gBattleRecord = NULL;
     }
-    _021D2AF8 = sub_0202711C(save, heapId, out, index);
+    gBattleRecord = sub_0202711C(save, heapId, out, index);
     if (*out != 1) {
         *out = 3;
         return TRUE;
     }
-    void *data = (u8 *)_021D2AF8 + 0xe8;
+    void *data = gBattleRecord->data;
     u32 crc = *(u16 *)((u8 *)data + 0x1c64);
-    sub_02030258(data, 0x1c64, crc + ((crc ^ 0xffff) << 16));
-    if (sub_02030154(save, _021D2AF8) == TRUE) {
+    BattleRecord_Decrypt(data, 0x1c64, crc + ((crc ^ 0xffff) << 16));
+    if (BattleRecord_IsEmpty(save, gBattleRecord) == TRUE) {
         *out = 0;
         return TRUE;
     }
-    if (!sub_0203018C(save, _021D2AF8)) {
+    if (!BattleRecord_IsValid(save, gBattleRecord)) {
         *out = 2;
         return TRUE;
     }
     if (battle != NULL) {
-        sub_020304F0(battle, save);
+        BattleRecord_RestoreSetup(battle, save);
     }
     *out = 1;
     return TRUE;
 }
-BOOL sub_0202FD28(SaveData *save, enum HeapID heapId, int *out, int index) {
-    struct UnkStruct_0202FBCC *record = sub_0202711C(save, heapId, out, index);
+
+BOOL BattleRecord_IsSlotValid(SaveData *save, enum HeapID heapId, int *out, int index) {
+    BattleRecord *record = sub_0202711C(save, heapId, out, index);
     if (*out != 1) {
         *out = 3;
         Heap_Free(record);
         return FALSE;
     }
-    void *data = (u8 *)record + 0xe8;
+    void *data = record->data;
     u32 crc = *(u16 *)((u8 *)data + 0x1c64);
-    sub_02030258(data, 0x1c64, crc + ((crc ^ 0xffff) << 16));
-    if (sub_02030154(save, record) == TRUE) {
+    BattleRecord_Decrypt(data, 0x1c64, crc + ((crc ^ 0xffff) << 16));
+    if (BattleRecord_IsEmpty(save, record) == TRUE) {
         *out = 0;
         Heap_Free(record);
         return FALSE;
     }
-    if (!sub_0203018C(save, record)) {
+    if (!BattleRecord_IsValid(save, record)) {
         *out = 2;
         Heap_Free(record);
         return FALSE;
@@ -154,8 +210,7 @@ BOOL sub_0202FD28(SaveData *save, enum HeapID heapId, int *out, int index) {
     return TRUE;
 }
 
-int sub_0202FDA4(SaveData *save, struct UnkStruct_0202FBCC *record, int index, u16 *state);
-int sub_0202FDA4(SaveData *save, struct UnkStruct_0202FBCC *record, int index, u16 *state) {
+int BattleRecord_WriteSlot(SaveData *save, BattleRecord *record, int index, u16 *state) {
     switch (*state) {
     case 0: {
         sub_0201A728(8);
@@ -182,35 +237,32 @@ int sub_0202FDA4(SaveData *save, struct UnkStruct_0202FBCC *record, int index, u
     return 0;
 }
 
-int sub_0202FE14(SaveData *save, int type, int arg, int index, u16 *state, u16 *writeState);
-void sub_0202FF08(SaveData *save, void *header, void *data, int type, int arg);
-void sub_02030250(void *data, u32 size, u32 seed);
-int sub_0202FE14(SaveData *save, int type, int arg, int index, u16 *state, u16 *writeState) {
+int BattleRecord_Save(SaveData *save, int type, int arg, int index, u16 *state, u16 *writeState) {
     switch (*state) {
     case 0: {
-        if (_021D2AF8 == NULL) {
+        if (gBattleRecord == NULL) {
             return 3;
         }
-        u8 *header = (u8 *)_021D2AF8 + 0x84;
-        u8 *data = (u8 *)_021D2AF8 + 0xe8;
-        sub_0202FF08(save, header, data, type, arg);
+        u8 *header = gBattleRecord->header;
+        u8 *data = gBattleRecord->data;
+        BattleRecord_FillHeader(save, header, data, type, arg);
         *(u16 *)(header + 0x48) = 0xe281;
         *(u16 *)(header + 0x60) = SaveArray_CalcCRC16(save, header, 0x58);
         *(u16 *)(data + 0x1c62) = 0xe281;
         *(u16 *)(data + 0x1c64) = SaveArray_CalcCRC16(save, data, 0x1c64);
         u32 crc = *(u16 *)(data + 0x1c64);
-        sub_02030250(data, 0x1c64, crc + ((crc ^ 0xffff) << 16));
+        BattleRecord_Encrypt(data, 0x1c64, crc + ((crc ^ 0xffff) << 16));
         *writeState = 0;
         (*state)++;
         break;
     }
     case 1:
-        return sub_0202FDA4(save, _021D2AF8, index, writeState);
+        return BattleRecord_WriteSlot(save, gBattleRecord, index, writeState);
     }
     return 0;
 }
-void sub_0202FEB8(int type, int *count, int *last);
-void sub_0202FEB8(int type, int *count, int *last) {
+
+void BattleRecord_GetBattlerAndPartyCount(int type, int *count, int *last) {
     switch (type) {
     case 14:
     case 17:
@@ -229,16 +281,16 @@ void sub_0202FEB8(int type, int *count, int *last) {
     }
 }
 
-void sub_0202FF08(SaveData *save, void *header, void *recordData, int type, int arg) {
-    RecordSummary *summary = header;
-    RecordData *data = recordData;
+void BattleRecord_FillHeader(SaveData *save, void *header, void *recordData, int type, int arg) {
+    BattleRecordHeader *summary = header;
+    BattleRecordData *data = recordData;
     int count, partySize;
-    BattleOrder order = _020F68C8;
-    MultiOrder multi = _020F68C4;
+    BattlerOrder order = gBattleRecordBattlerOrder;
+    MultiOrder multi = gBattleRecordMultiOrder;
     int player;
     int k;
     MI_CpuFill8(summary, 0, sizeof(*summary));
-    sub_0202FEB8(type, &count, &partySize);
+    BattleRecord_GetBattlerAndPartyCount(type, &count, &partySize);
     k = 0;
     if (data->flags & 4) {
         if (data->flags & 128) {
@@ -307,14 +359,9 @@ void sub_0202FF08(SaveData *save, void *header, void *recordData, int type, int 
     summary->type = type;
 }
 
-BOOL sub_02030154(SaveData *save, struct UnkStruct_0202FBCC *record);
-BOOL sub_0203018C(SaveData *save, struct UnkStruct_0202FBCC *record);
-void sub_02030250(void *data, u32 size, u32 seed);
-void sub_02030258(void *data, u32 size, u32 seed);
-extern struct UnkStruct_0202FBCC *_021D2AF8;
-BOOL sub_02030154(SaveData *save, struct UnkStruct_0202FBCC *record) {
-    u8 *data = (u8 *)record + 0xe8;
-    u8 *header = (u8 *)record + 0x84;
+BOOL BattleRecord_IsEmpty(SaveData *save, BattleRecord *record) {
+    u8 *data = record->data;
+    u8 *header = record->header;
     if (!Save_CheckExtraChunksExist(save)) {
         return TRUE;
     }
@@ -323,9 +370,10 @@ BOOL sub_02030154(SaveData *save, struct UnkStruct_0202FBCC *record) {
     }
     return FALSE;
 }
-BOOL sub_0203018C(SaveData *save, struct UnkStruct_0202FBCC *record) {
-    u8 *data = (u8 *)record + 0xe8;
-    u8 *header = (u8 *)record + 0x84;
+
+BOOL BattleRecord_IsValid(SaveData *save, BattleRecord *record) {
+    u8 *data = record->data;
+    u8 *header = record->header;
     if (*(u16 *)(data + 0x1c62) != 0xe281 || *(u16 *)(header + 0x48) != 0xe281) {
         return FALSE;
     }
@@ -339,7 +387,7 @@ BOOL sub_0203018C(SaveData *save, struct UnkStruct_0202FBCC *record) {
     }
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 6; j++) {
-            struct UnkPokemonStruct_02072A98 *mon = &((RecordData *)data)->parties[i].mons[j];
+            struct UnkPokemonStruct_02072A98 *mon = &((BattleRecordData *)data)->parties[i].mons[j];
             if (mon->species > 495) {
                 return FALSE;
             }
@@ -355,33 +403,35 @@ BOOL sub_0203018C(SaveData *save, struct UnkStruct_0202FBCC *record) {
     }
     return TRUE;
 }
-void sub_02030250(void *data, u32 size, u32 seed) {
+
+void BattleRecord_Encrypt(void *data, u32 size, u32 seed) {
     _MonEncryptSegment(data, size, seed);
 }
-void sub_02030258(void *data, u32 size, u32 seed) {
+
+void BattleRecord_Decrypt(void *data, u32 size, u32 seed) {
     _MonDecryptSegment(data, size, seed);
 }
-void sub_02030260(int battlerId, u32 offset, u8 value) {
-    if (_021D2AF8 != NULL) {
-        u8 *buffer = (u8 *)_021D2AF8 + battlerId * 1024;
+
+void BattleRecord_SetCommand(int battlerId, u32 offset, u8 value) {
+    if (gBattleRecord != NULL) {
+        u8 *buffer = (u8 *)gBattleRecord + battlerId * 1024;
         buffer += offset;
         buffer[0x238] = value;
     }
 }
-u8 sub_0203027C(int battlerId, u32 offset) {
-    GF_ASSERT(_021D2AF8 != NULL);
-    u8 *buffer = (u8 *)_021D2AF8 + battlerId * 1024;
+
+u8 BattleRecord_GetCommand(int battlerId, u32 offset) {
+    GF_ASSERT(gBattleRecord != NULL);
+    u8 *buffer = (u8 *)gBattleRecord + battlerId * 1024;
     buffer += offset;
     return buffer[0x238];
 }
 
-void sub_020302A4(BattleSetup *setup);
-void sub_020306DC(Party *party, RecordParty *record);
-void sub_020302A4(BattleSetup *setup) {
-    if (_021D2AF8 == NULL) {
+void BattleRecord_StoreSetup(BattleSetup *setup) {
+    if (gBattleRecord == NULL) {
         return;
     }
-    RecordData *data = (RecordData *)((u8 *)_021D2AF8 + 0xe8);
+    BattleRecordData *data = (BattleRecordData *)(gBattleRecord->data);
     data->flags = setup->battleType;
     data->winFlag = setup->winFlag;
     data->battleBg = setup->battleBg;
@@ -414,24 +464,24 @@ void sub_020302A4(BattleSetup *setup) {
         data->chatot[i] = setup->unk1BC[i];
     }
     for (int i = 0; i < 4; i++) {
-        sub_020306DC(setup->party[i], &data->parties[i]);
+        BattleRecordParty_FromParty(setup->party[i], &data->parties[i]);
         PlayerProfile_Copy(setup->profile[i], &data->profiles[i]);
         data->chatot[i] = sub_02006EFC(setup->chatot[i]);
     }
     Options_Copy(setup->options, &data->options);
 }
-void sub_0203049C(int battlerId, u32 flags);
-BOOL sub_020304B4(void);
-void sub_0203049C(int battlerId, u32 flags) {
-    if (_021D2AF8 != NULL) {
-        ((RecordData *)((u8 *)_021D2AF8 + 0xe8))->aiFlags[battlerId] = flags;
+
+void BattleRecord_SetAiFlags(int battlerId, u32 flags) {
+    if (gBattleRecord != NULL) {
+        ((BattleRecordData *)(gBattleRecord->data))->aiFlags[battlerId] = flags;
     }
 }
-BOOL sub_020304B4(void) {
-    if (_021D2AF8 == NULL) {
+
+BOOL BattleRecord_AreAiFlagsValid(void) {
+    if (gBattleRecord == NULL) {
         return TRUE;
     }
-    RecordData *data = (RecordData *)((u8 *)_021D2AF8 + 0xe8);
+    BattleRecordData *data = (BattleRecordData *)(gBattleRecord->data);
     for (int i = 0; i < 4; i++) {
         if (data->aiFlags[i] > 320) {
             return FALSE;
@@ -439,10 +489,9 @@ BOOL sub_020304B4(void) {
     }
     return TRUE;
 }
-void sub_020304F0(BattleSetup *setup, SaveData *save);
-void sub_02030724(RecordParty *record, Party *party);
-void sub_020304F0(BattleSetup *setup, SaveData *save) {
-    RecordData *data = (RecordData *)((u8 *)_021D2AF8 + 0xe8);
+
+void BattleRecord_RestoreSetup(BattleSetup *setup, SaveData *save) {
+    BattleRecordData *data = (BattleRecordData *)(gBattleRecord->data);
     setup->battleType = data->flags;
     setup->battleBg = data->battleBg;
     setup->terrain = data->terrain;
@@ -467,7 +516,7 @@ void sub_020304F0(BattleSetup *setup, SaveData *save) {
         setup->trainer[i] = data->trainer[i];
         setup->aiFlags[i] = data->aiFlags[i];
         setup->unk_1A0[i] = data->positions[i];
-        sub_02030724(&data->parties[i], setup->party[i]);
+        BattleRecordParty_ToParty(&data->parties[i], setup->party[i]);
         PlayerProfile_Copy(&data->profiles[i], setup->profile[i]);
         setup->unk1BC[i] = data->chatot[i];
     }
@@ -477,7 +526,8 @@ void sub_020304F0(BattleSetup *setup, SaveData *save) {
         setup->options->frame = 0;
     }
 }
-void sub_020306DC(Party *party, RecordParty *record) {
+
+void BattleRecordParty_FromParty(Party *party, BattleRecordParty *record) {
     MI_CpuFill8(record, 0, sizeof(*record));
     record->capacity = Party_GetMaxCount(party);
     record->count = Party_GetCount(party);
@@ -485,7 +535,8 @@ void sub_020306DC(Party *party, RecordParty *record) {
         sub_02072A98(Party_GetMonByIndex(party, i), &record->mons[i]);
     }
 }
-void sub_02030724(RecordParty *record, Party *party) {
+
+void BattleRecordParty_ToParty(BattleRecordParty *record, Party *party) {
     u8 value = 0;
     Pokemon *mon = AllocMonZeroed((enum HeapID)11);
     Party_InitWithMaxSize(party, record->capacity);
@@ -497,64 +548,43 @@ void sub_02030724(RecordParty *record, Party *party) {
     Heap_Free(mon);
 }
 
-void *sub_0203077C(enum HeapID heapId);
-void *sub_020307AC(enum HeapID heapId);
-void *sub_020307DC(void);
-void *sub_020307F8(void);
-void sub_02030814(void *profile, void *summary, void *data, void *battle, SaveData *save);
-u64 sub_0203088C(void *summary, int field, int index);
-void *sub_02030920(enum HeapID heapId);
-void sub_02030938(void *summary);
-void sub_02030940(void *record);
-void *sub_0203094C(SaveData *save);
-typedef struct {
-    u8 flag0 : 1, flag1 : 3, flag4 : 1, rest : 3;
-    u8 value;
-    u16 padding;
-    u16 values4[14];
-    u16 values20[4];
-    u8 values28[4];
-    u32 values2c[4];
-    u16 values3c[4];
-    u8 values44[4];
-    u32 values48[4];
-} FrontierRecord;
-u32 sub_0203095C(FrontierRecord *record);
-void sub_02030964(FrontierRecord *record, int flag);
-void sub_02030978(FrontierRecord *record, int field, int index, void *value);
-u32 sub_02030A24(FrontierRecord *record, int field, int index);
-void *sub_0203077C(enum HeapID heapId) {
-    GF_ASSERT(_021D2AF8 != NULL);
+void *BattleRecord_CopyHeader(enum HeapID heapId) {
+    GF_ASSERT(gBattleRecord != NULL);
     void *result = Heap_Alloc(heapId, 0x64);
-    MI_CpuCopy32((u8 *)_021D2AF8 + 0x84, result, 0x64);
+    MI_CpuCopy32(gBattleRecord->header, result, 0x64);
     return result;
 }
-void *sub_020307AC(enum HeapID heapId) {
-    GF_ASSERT(_021D2AF8 != NULL);
+
+void *BattleRecord_CopyProfile(enum HeapID heapId) {
+    GF_ASSERT(gBattleRecord != NULL);
     void *result = Heap_Alloc(heapId, 0x80);
-    MI_CpuCopy32((u8 *)_021D2AF8 + 4, result, 0x80);
+    MI_CpuCopy32(gBattleRecord->profile, result, 0x80);
     return result;
 }
-void *sub_020307DC(void) {
-    GF_ASSERT(_021D2AF8 != NULL);
-    return (u8 *)_021D2AF8 + 4;
+
+void *BattleRecord_GetProfile(void) {
+    GF_ASSERT(gBattleRecord != NULL);
+    return gBattleRecord->profile;
 }
-void *sub_020307F8(void) {
-    GF_ASSERT(_021D2AF8 != NULL);
-    return (u8 *)_021D2AF8 + 0x84;
+
+void *BattleRecord_GetHeader(void) {
+    GF_ASSERT(gBattleRecord != NULL);
+    return gBattleRecord->header;
 }
-void sub_02030814(void *profile, void *summary, void *data, void *battle, SaveData *save) {
-    GF_ASSERT(_021D2AF8 != NULL);
-    MI_CpuCopy8(summary, (u8 *)_021D2AF8 + 0x84, 0x64);
-    MI_CpuCopy8(data, (u8 *)_021D2AF8 + 0xe8, 0x1c68);
-    MI_CpuCopy8(profile, (u8 *)_021D2AF8 + 4, 0x80);
-    u32 crc = *(u16 *)((u8 *)_021D2AF8 + 0x1d4c);
-    sub_02030258((u8 *)_021D2AF8 + 0xe8, 0x1c64, crc + ((crc ^ 0xffff) << 16));
+
+void BattleRecord_Import(void *profile, void *summary, void *data, void *battle, SaveData *save) {
+    GF_ASSERT(gBattleRecord != NULL);
+    MI_CpuCopy8(summary, gBattleRecord->header, 0x64);
+    MI_CpuCopy8(data, gBattleRecord->data, 0x1c68);
+    MI_CpuCopy8(profile, gBattleRecord->profile, 0x80);
+    u32 crc = *(u16 *)((u8 *)gBattleRecord + 0x1d4c);
+    BattleRecord_Decrypt(gBattleRecord->data, 0x1c64, crc + ((crc ^ 0xffff) << 16));
     if (battle != NULL) {
-        sub_020304F0(battle, save);
+        BattleRecord_RestoreSetup(battle, save);
     }
 }
-u64 sub_0203088C(void *summary, int field, int index) {
+
+u64 BattleRecordHeader_GetField(void *summary, int field, int index) {
     switch (field) {
     case 0:
         GF_ASSERT(index < 12);
@@ -583,27 +613,34 @@ u64 sub_0203088C(void *summary, int field, int index) {
     GF_ASSERT(FALSE);
     return 0;
 }
-void *sub_02030920(enum HeapID heapId) {
+
+void *BattleRecordHeader_New(enum HeapID heapId) {
     void *result = Heap_Alloc(heapId, 0x64);
     MI_CpuFill8(result, 0, 0x64);
     return result;
 }
-void sub_02030938(void *summary) {
+
+void BattleRecordHeader_Free(void *summary) {
     Heap_Free(summary);
 }
-void sub_02030940(void *record) {
+
+void FactoryChallenge_Clear(void *record) {
     MI_CpuFill8(record, 0, 0x58);
 }
-void *sub_0203094C(SaveData *save) {
+
+void *Save_Frontier_GetFactoryChallenge(SaveData *save) {
     return (u8 *)Save_Frontier_GetStatic(save) + 0x8e0;
 }
-u32 sub_0203095C(FrontierRecord *record) {
+
+u32 FactoryChallenge_GetSaved(FrontierRecord *record) {
     return record->flag4;
 }
-void sub_02030964(FrontierRecord *record, int flag) {
+
+void FactoryChallenge_SetSaved(FrontierRecord *record, int flag) {
     record->flag4 = (u8)flag;
 }
-void sub_02030978(FrontierRecord *record, int field, int index, void *value) {
+
+void FactoryChallenge_SetField(FrontierRecord *record, int field, int index, void *value) {
     switch (field) {
     case 0:
         record->flag0 = *(u8 *)value;
@@ -637,7 +674,8 @@ void sub_02030978(FrontierRecord *record, int field, int index, void *value) {
         break;
     }
 }
-u32 sub_02030A24(FrontierRecord *record, int field, int index) {
+
+u32 FactoryChallenge_GetField(FrontierRecord *record, int field, int index) {
     switch (field) {
     case 1:
         return record->flag1;

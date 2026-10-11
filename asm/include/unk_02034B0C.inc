@@ -38,7 +38,7 @@
 .public sub_02033AB8
 .public sub_02033FC4
 .public sub_0203401C
-.public sub_020347CC
+.public CommPlayerInfo_DropDisconnected
 .public sub_02034B0C
 .public sub_02034BE4
 .public sub_02034D8C

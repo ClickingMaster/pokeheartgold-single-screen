@@ -7,7 +7,7 @@
 #include "mail_message.h"
 #include "msgdata.h"
 #include "to91_frontier_download_names.h"
-#include "unk_02030A98.h"
+#include "frontier_save_access.h"
 
 // Sub-blocks of the frontier save (Save_Frontier_GetStatic):
 //   0x8E0 BattleTowerChallenge, 0x954 FrontierData, 0xABC 4 tower messages, 0xADC BattleRoomDownload

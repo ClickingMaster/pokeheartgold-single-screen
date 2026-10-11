@@ -4073,7 +4073,7 @@ ov40_0222FB40: ; 0x0222FB40
 	ldr r0, [r4, r0]
 	mov r1, #0x7e
 	add r2, sp, #4
-	bl sub_0202FBF0
+	bl BattleRecord_Create
 	ldr r1, _0222FB70 ; =0x000008B4
 	mov r3, #0
 	ldr r0, [r4, r1]
@@ -4084,7 +4084,7 @@ ov40_0222FB40: ; 0x0222FB40
 	add r1, r0, #0
 	add r1, #0x80
 	add r2, #0xe4
-	bl sub_02030814
+	bl BattleRecord_Import
 	add sp, #8
 	pop {r4, pc}
 	.balign 4, 0

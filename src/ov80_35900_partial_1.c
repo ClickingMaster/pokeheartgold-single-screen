@@ -47,7 +47,7 @@ BOOL ov80_022359D4(void *ctx) {
         data[0x6F] = 0;
         return TRUE;
     }
-    if (sub_02037B5C(Comm_GetLocalNetId() ^ 1) == 0xAF) {
+    if (LinkSync_GetPlayerState(Comm_GetLocalNetId() ^ 1) == 0xAF) {
         (*(u8 **)ctx)[0x39] = 1;
         return TRUE;
     }

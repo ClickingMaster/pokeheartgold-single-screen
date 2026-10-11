@@ -238,9 +238,9 @@ BOOL ov80_02236B30(u32 mode) {
     void *b;
 
     if (mode == 3 || mode == 6) {
-        a = sub_02034818(0);
+        a = CommPlayerInfo_GetProfile(0);
         GF_ASSERT(a != NULL);
-        b = sub_02034818(1);
+        b = CommPlayerInfo_GetProfile(1);
         GF_ASSERT(b != NULL);
         v0 = PlayerProfile_GetVersion(a);
         v1 = PlayerProfile_GetVersion(b);

@@ -21,7 +21,7 @@ extern void UnloadDwcOverlay(void);
 extern void *Heap_Alloc(u32, u32);
 extern void MysteryGiftApp_SetWaitingIconVisible(void);
 extern void *PmAgbCartridge_GetSectorData(u32);
-extern void *ov74_022358C8(u32);
+extern void *MainMenuUtil_UpdateGiftSprite(u32);
 
 extern void MysteryGiftAnim_ApplyBrightnessMain(void *);
 extern void MysteryGiftAnim_ApplyBrightnessSub(void *);
@@ -33,8 +33,8 @@ extern void *ov74_0223D0A8;
 extern u8 gRangerLinkParentParam[];
 extern u8 gRangerLinkWork[];
 extern u32 sPmAgbSave[];
-extern u32 ov74_0223D450;
-extern u32 ov74_0223D454[];
+extern u32 sMainMenuUtilCryptoHeapId;
+extern u32 gMainMenuUtilWork[];
 extern void *ov74_0223E2FC;
 extern u32 ov74_0223E304[];
 
@@ -47,7 +47,7 @@ void *RangerLink_GetSsid(void);
 void *PmAgbCartridge_GetPCStorage(void);
 void *PmAgbCartridge_GetTrainerInfo(void);
 void *PmAgbCartridge_GetPlayerName(void);
-void *ov74_02235138(u32 size);
+void *MainMenuUtil_CryptoAlloc(u32 size);
 
 extern const u16 _0223B760[][2];
 extern int CTRDG_IdentifyAgbBackup(int);
@@ -61,12 +61,12 @@ extern void CTRDG_Enable(BOOL);
 extern void CTRDG_Read32(const void *, void *);
 extern BOOL CTRDG_CpuCopy16(const void *, void *, u32);
 extern BOOL CTRDG_IsExisting(void);
-extern BOOL ov74_0223514C(void);
+extern BOOL MainMenuUtil_CheckGiftCartridgeSignature(void);
 
 extern void Heap_Create(u32, u32, u32);
 extern void *OverlayManager_CreateAndGetData(void *, u32, u32);
 extern void SetMasterBrightnessByColor(u32, u32);
-extern u32 ov74_0223D454[];
+extern u32 gMainMenuUtilWork[];
 extern BOOL IsPaletteFadeFinished(void);
 extern void PmAgbCartridge_WriteSectorAsync(int);
 extern void PmAgbCartridge_WriteSectorAsync(int);
@@ -101,6 +101,6 @@ extern int TranslateAgbSpecies(int);
 extern u32 CalcLevelBySpeciesAndExp(u16, u32);
 
 void ov74_022360A0(u32 value) {
-    ov74_0223D454[6] = value;
-    ov74_0223D454[5] = 0;
+    gMainMenuUtilWork[6] = value;
+    gMainMenuUtilWork[5] = 0;
 }

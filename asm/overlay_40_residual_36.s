@@ -5408,7 +5408,7 @@ ov40_0224085C: ; 0x0224085C
 	lsl r0, r0, #2
 	str r1, [r4, r0]
 	mov r0, #0x6d
-	bl sub_02030920
+	bl BattleRecordHeader_New
 	mov r1, #0x11
 	lsl r1, r1, #4
 	str r0, [r4, r1]
@@ -5455,7 +5455,7 @@ ov40_022408AC: ; 0x022408AC
 	lsl r0, r0, #2
 	str r1, [r4, r0]
 	mov r0, #0x6d
-	bl sub_02030920
+	bl BattleRecordHeader_New
 	mov r1, #0x11
 	lsl r1, r1, #4
 	str r0, [r4, r1]
@@ -5487,7 +5487,7 @@ ov40_02240910: ; 0x02240910
 	mov r0, #0x11
 	lsl r0, r0, #4
 	ldr r0, [r4, r0]
-	bl sub_02030938
+	bl BattleRecordHeader_Free
 	add r4, #0x80
 	ldr r0, [r4]
 	bl sub_020314BC

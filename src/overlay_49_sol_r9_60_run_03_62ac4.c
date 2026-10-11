@@ -5,7 +5,7 @@ BOOL ov49_02262AC4(void *state, void *ctx) {
     case 0:
         sub_020398D4(0, 0);
         if (sub_020392A0() == 0) {
-            sub_020343E4();
+            CommPlayerInfo_Free();
             sub_0203986C();
         }
         ov49_0225A018(ctx, 1);

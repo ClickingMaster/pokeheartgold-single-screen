@@ -14,14 +14,14 @@
 .public PlayerProfile_GetLanguage
 .public SavePalPad_Merge
 .public Chatot_Copy
-.public sub_0203049C
+.public BattleRecord_SetAiFlags
 .public Comm_RegisterCommandTable
 .public sub_020342B8
 .public sub_02036FD8
 .public Comm_SendCommand
 .public sub_02037190
 .public Comm_GetLocalNetId
-.public sub_02037B38
+.public LinkSync_IsSynced
 .public PartyCore_sizeof
 .public Party_Copy
 .public sub_02074E5C

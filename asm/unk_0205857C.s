@@ -17,7 +17,7 @@ _0205858C:
 	cmp r1, r0
 	beq _020585E0
 	add r0, r1, #0
-	bl sub_02037B5C
+	bl LinkSync_GetPlayerState
 	cmp r0, #0x5e
 	bne _020585E0
 	ldr r6, _02058600 ; =_021D41C8

@@ -444,7 +444,7 @@ void ov40_0224085C(void *p) {
     PTR(w, 0x80) = sub_020314A4(0x6d);
     GlobalTerminalNet_CopyRequestHeader(PTR(w, 0x4bc), PTR(w, 0x80));
     PTR(w, 0x10c) = PTR(w, 0x80);
-    PTR(w, 0x110) = sub_02030920(0x6d);
+    PTR(w, 0x110) = BattleRecordHeader_New(0x6d);
     MI_CpuCopy8((u8 *)PTR(w, 0x4bc) + 0x80, PTR(w, 0x110), 0x64);
 }
 
@@ -454,14 +454,14 @@ void ov40_022408AC(void *p) {
     PTR(w, 0x80) = sub_020314A4(0x6d);
     GlobalTerminalNet_CopyRequestHeader(PTR(p, 0x2608 + WORD(p, 0x4d4) * 4), PTR(w, 0x80));
     PTR(w, 0x10c) = PTR(w, 0x80);
-    PTR(w, 0x110) = sub_02030920(0x6d);
+    PTR(w, 0x110) = BattleRecordHeader_New(0x6d);
     MI_CpuCopy8((u8 *)PTR(p, 0x2608 + WORD(p, 0x4d4) * 4) + 0x80, PTR(w, 0x110), 0x64);
 }
 
 void ov40_02240910(void *p) {
     void *w = PTR(p, 0x860);
 
-    sub_02030938(PTR(w, 0x110));
+    BattleRecordHeader_Free(PTR(w, 0x110));
     sub_020314BC(PTR(w, 0x80));
 }
 

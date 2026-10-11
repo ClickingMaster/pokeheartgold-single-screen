@@ -9,7 +9,7 @@
 .public FriendRoster_MergeFriend
 .public Save_FriendRoster_Get
 .public Save_Frontier_GetStatic
-.public sub_02031214
+.public FrontierSave_ClearRow
 .public sub_02034084
 .public sub_02034098
 .public Comm_CountConnected

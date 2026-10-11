@@ -136,11 +136,11 @@ void sub_020378E4(int arg0);
 int ov45_0222E8F4(void);
 int ov45_0222E6C8(void);
 int ov45_0222E944(void);
-int sub_020348A8(int arg0);
-int sub_020348CC(int arg0);
+int CommPlayerInfo_GetCountry(int arg0);
+int CommPlayerInfo_GetRegion(int arg0);
 void LoadOVY38(void);
 void UnloadOVY38(void);
-void sub_02034A20(SaveData *saveData);
+void CommPlayerInfo_SaveRecords(SaveData *saveData);
 
 s32 sub_02037C94(void);
 void sub_02037C98(SaveData *saveData, s8 arg1);
@@ -327,8 +327,8 @@ void ov45_0222F70C(void);
 void ov45_0222E91C(void);
 int ov45_0222F254(void);
 
-DWCFriendData *sub_0203484C(int arg0);
-u16 *sub_02034884(int arg0);
+DWCFriendData *CommPlayerInfo_GetExchangeToken(int arg0);
+u16 *CommPlayerInfo_GetGroupName(int arg0);
 void sub_020367A8(void);
 void sub_02036904(void);
 void sub_020369CC(void);

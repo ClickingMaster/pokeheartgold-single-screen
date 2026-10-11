@@ -15,7 +15,7 @@
 #include "overlay_01_02200858.h"
 #include "player_data.h"
 #include "scrcmd.h"
-#include "unk_02034354.h"
+#include "communication_player_state.h"
 #include "unk_02035900.h"
 #include "unk_0205FD20.h"
 
@@ -42,7 +42,7 @@ u32 sub_0205C268(u32 param0) {
 }
 
 u8 sub_0205C278(void) {
-    PlayerProfile *profile = sub_02034818(Comm_GetLocalNetId() ^ 1);
+    PlayerProfile *profile = CommPlayerInfo_GetProfile(Comm_GetLocalNetId() ^ 1);
     GF_ASSERT(profile != NULL);
     return PlayerProfile_GetVersion(profile);
 }

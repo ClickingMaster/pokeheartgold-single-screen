@@ -54,10 +54,10 @@
 	.public ov40_0223CE38
 	.public ov40_0223D540
 	.public ov40_0223D5CC
-	.public sub_0202FC24
-	.public sub_0202FC48
-	.public sub_020307F8
-	.public sub_0203088C
+	.public BattleRecord_Delete
+	.public BattleRecord_Exists
+	.public BattleRecord_GetHeader
+	.public BattleRecordHeader_GetField
 	.public sub_0203A948
 	.public sub_020879E0
 	.public sub_02087A08
@@ -276,10 +276,10 @@ _0223AA18:
 	lsl r1, r1, #2
 	mov r2, #0
 	bl ov40_0223A510
-	bl sub_020307F8
+	bl BattleRecord_GetHeader
 	mov r1, #4
 	mov r2, #0
-	bl sub_0203088C
+	bl BattleRecordHeader_GetField
 	add r6, r0, #0
 	add r5, r1, #0
 	add r0, r4, #0
@@ -447,10 +447,10 @@ _0223AB4A:
 	bl BgClearTilemapBufferAndCommit
 	add r0, r5, #0
 	bl Heap_Free
-	bl sub_0202FC48
+	bl BattleRecord_Exists
 	cmp r0, #1
 	bne _0223ABFC
-	bl sub_0202FC24
+	bl BattleRecord_Delete
 	b _0223ABFC
 _0223ABCC:
 	ldr r0, [r4, #0x58]

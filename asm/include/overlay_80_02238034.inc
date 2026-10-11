@@ -5,7 +5,7 @@
 .public GF_AssertFail
 .public Save_PlayerData_GetProfile
 .public PlayerProfile_Copy
-.public sub_02034818
+.public CommPlayerInfo_GetProfile
 .public Comm_GetLocalNetId
 .public BattleSetup_New
 .public BattleSetup_AddMonToParty

@@ -10,10 +10,10 @@ typedef struct {
     u8 unk1C[0x18];
 } Ov74SaveWork;
 
-extern u32 ov74_0223D450;
-extern Ov74SaveWork ov74_0223D454;
+extern u32 sMainMenuUtilCryptoHeapId;
+extern Ov74SaveWork gMainMenuUtilWork;
 
-#define SAVE_WORK ((Ov74SaveWork *)(&ov74_0223D450 + 1))
+#define SAVE_WORK ((Ov74SaveWork *)(&sMainMenuUtilCryptoHeapId + 1))
 
 int ov74_022360B0(void);
 void ov74_02236128(void);
@@ -23,7 +23,7 @@ int ov74_022360B0(void) {
     Ov74SaveWork *work = SAVE_WORK;
     int ret;
 
-    switch (ov74_0223D454.state) {
+    switch (gMainMenuUtilWork.state) {
     case 0:
         sub_0201A728(4);
         Save_PrepareForAsyncWrite(work->save, 2);
@@ -54,7 +54,7 @@ int ov74_022360B0(void) {
 void ov74_02236128(void) {
     Ov74SaveWork *work = SAVE_WORK;
 
-    if (ov74_0223D454.state == 4) {
+    if (gMainMenuUtilWork.state == 4) {
         work->state = 1;
     }
 }

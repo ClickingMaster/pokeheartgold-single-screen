@@ -77,7 +77,7 @@ void ov70_02243EB8(void *, void *, void *, int);
 void BgCellManager_DrawCellAt(void *, int, int, int);
 void BgCellManager_DrawCell(void *, int);
 void BgCellManager_StartCellMove(void *, int, int, int, int);
-void *ov70_0223F7E4(void *, void *, int);
+void *Gts_CreateLevelRangeListItems(void *, void *, int);
 void ov70_022434C0(Ov70R36 *, int, int);
 void AddTextPrinterParameterizedWithColor(void *, int, void *, int, int, int, int, int);
 void CopyWindowPixelsToVram_TextMode(void *);

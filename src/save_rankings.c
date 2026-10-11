@@ -12,7 +12,7 @@
 #include "save_frontier.h"
 #include "string_util.h"
 #include "friend_group_access.h"
-#include "unk_02030A98.h"
+#include "frontier_save_access.h"
 
 struct SaveRankingsEntry {
     int groupId;

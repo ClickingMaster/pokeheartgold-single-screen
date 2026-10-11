@@ -4,7 +4,7 @@ void sub_0205857C(void) {
     int i;
 
     for (i = 0; i < Comm_CountConnected(); i++) {
-        if (i != Comm_GetLocalNetId() && sub_02037B5C(i) == 0x5e && _021D41C8->field->unk10 == 0 && _021D41C8->field->low6 == 0) {
+        if (i != Comm_GetLocalNetId() && LinkSync_GetPlayerState(i) == 0x5e && _021D41C8->field->unk10 == 0 && _021D41C8->field->low6 == 0) {
             int j;
             for (j = 0; j < 4; j++) {
                 if (_021D41C8->slots[j] != NULL) {

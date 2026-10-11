@@ -121,8 +121,8 @@ int GtsSummary_Init(GtsApp *app, int state) {
     GtsSummary_CreateMonSprite(app);
     Gts_DrawMonSummary(app->gtsMsgData, app->speciesNames, app->msgFormat, app->infoWindows, Mon_GetBoxMon(&app->record.mon), &app->record.summary);
     Gts_DrawTrainerInfo(app->gtsMsgData, &app->infoWindows[7], app->record.trainerName, &app->record.mon, &app->infoWindows[12]);
-    levelRange = ov70_0223F864(app->record.wanted.minLevel, app->record.wanted.maxLevel, 0);
-    ov70_0223F470(app->gtsMsgData, app->speciesNames, app->msgFormat, &app->infoWindows[9], app->record.wanted.species, app->record.wanted.gender, levelRange);
+    levelRange = Gts_FindLevelRange(app->record.wanted.minLevel, app->record.wanted.maxLevel, 0);
+    Gts_DrawWantedMonLevelLeft(app->gtsMsgData, app->speciesNames, app->msgFormat, &app->infoWindows[9], app->record.wanted.species, app->record.wanted.gender, levelRange);
     Gts_LoadMonPicture(&app->record.mon);
     BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_61);
     app->state = GTS_SUMMARY_STATE_START;
@@ -327,7 +327,7 @@ int GtsSummary_HandleMenu(GtsApp *app) {
         Gts_DestroyListMenu(app);
         ListMenuItems_Delete(app->listItems);
         Pokemon *mon = &app->record.mon;
-        if (ov70_0223E76C(mon) && Party_GetCount(app->args->party) == PARTY_SIZE) {
+        if (Gts_MonHoldsMail(mon) && Party_GetCount(app->args->party) == PARTY_SIZE) {
             GtsSummary_PrintMonMessage(app, 36, 1, 0, 0xF0F, mon); // Your party is full (the Pokemon holds Mail).
             Gts_SetState(app, GTS_SUMMARY_STATE_WAIT_TEXT, GTS_SUMMARY_STATE_HANDLE_INPUT);
             return 3;
@@ -472,6 +472,6 @@ void Gts_LoadMonPicture(Pokemon *mon) {
 }
 
 void GtsSummary_DrawWanted(GtsApp *app) {
-    int levelRange = ov70_0223F864(app->record.wanted.minLevel, app->record.wanted.maxLevel, 0);
-    ov70_0223F470(app->gtsMsgData, app->speciesNames, app->msgFormat, &app->infoWindows[9], app->record.wanted.species, app->record.wanted.gender, levelRange);
+    int levelRange = Gts_FindLevelRange(app->record.wanted.minLevel, app->record.wanted.maxLevel, 0);
+    Gts_DrawWantedMonLevelLeft(app->gtsMsgData, app->speciesNames, app->msgFormat, &app->infoWindows[9], app->record.wanted.species, app->record.wanted.gender, levelRange);
 }

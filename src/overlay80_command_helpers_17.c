@@ -78,6 +78,6 @@ void ov80_0222CB94(void *p) {
 int FrtCmd_108(void *c) {
     u32 x;
     void *a = Frontier_GetLaunchArgs(APP(c));
-    sub_0202FBF0(PTR(a, 8), 11, &x);
+    BattleRecord_Create(PTR(a, 8), 11, &x);
     return 0;
 }

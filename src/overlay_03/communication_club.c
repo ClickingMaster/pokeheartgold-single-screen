@@ -12,10 +12,10 @@
 #include "task.h"
 #include "text.h"
 #include "sound_playback.h"
-#include "unk_02034354.h"
+#include "communication_player_state.h"
 #include "unk_02034B0C.h"
 #include "unk_02035900.h"
-#include "unk_020379A0.h"
+#include "link_synchronization.h"
 #include "unk_02037C94.h"
 #include "unk_02058034.h"
 
@@ -438,7 +438,7 @@ static void ov03_02254500(void *arg0, CommClubManager *commClubManager) {
                 ov03_02254600(commClubManager);
                 commClubManager->connectionIndex = sub_02035150(commClubManager->connectionIndex);
                 sub_02058164(commClubManager->connectionIndex);
-                sub_02037BC8();
+                LinkSync_ClearValues();
                 ov03_02254B4C(&ov03_02254660);
             }
         }
@@ -462,8 +462,8 @@ static void ov03_02254660(void *arg0, CommClubManager *commClubManager) {
         ov03_02255ADC(commClubManager);
         sCommClubManager->unkA1 = 1;
     } else {
-        if (sub_02034818(Comm_GetLocalNetId())) {
-            sub_02037BC8();
+        if (CommPlayerInfo_GetProfile(Comm_GetLocalNetId())) {
+            LinkSync_ClearValues();
             ov03_022546B0(arg0, commClubManager);
         }
     }
@@ -506,20 +506,20 @@ static BOOL ov03_022547D8(void *arg0, CommClubManager *commClubManager) {
         ov03_0225574C(arg0, commClubManager);
         ov03_02253E20(0, FALSE);
         ov03_02255ADC(commClubManager);
-    } else if (sub_02037BA0(0, 3) == Comm_GetLocalNetId()) {
-        sub_02037BC8();
+    } else if (LinkSync_GetValue(0, 3) == Comm_GetLocalNetId()) {
+        LinkSync_ClearValues();
         ov03_0225574C(arg0, commClubManager);
         ov03_02255A70(commClubManager);
-    } else if (sub_02037BA0(0, 5) != -1) {
-        sub_02037BC8();
+    } else if (LinkSync_GetValue(0, 5) != -1) {
+        LinkSync_ClearValues();
         ov03_0225574C(arg0, commClubManager);
         ov03_02255A70(commClubManager);
-    } else if (sub_02037BA0(0, 4) == Comm_GetLocalNetId()) {
+    } else if (LinkSync_GetValue(0, 4) == Comm_GetLocalNetId()) {
         ov03_02253E20(116, FALSE);
         ov03_02254B4C(&ov03_02255280);
-    } else if (sub_02037BA0(0, 2) == Comm_GetLocalNetId()) {
-        sub_02037BC8();
-        commClubManager->connectedCount = sub_020347A0();
+    } else if (LinkSync_GetValue(0, 2) == Comm_GetLocalNetId()) {
+        LinkSync_ClearValues();
+        commClubManager->connectedCount = CommPlayerInfo_CountAccepted();
         if (DialogBox_IsPrintFinished(sCommClubManager->printerID) == FALSE) {
             RemoveTextPrinter(sCommClubManager->printerID);
         }
@@ -596,13 +596,13 @@ static void ov03_02254A54(ListMenu *listMenu_unused, u16 arg1_unused, u8 arg2) {
         ListMenuGetScrollAndRow(sCommClubManager->listMenu, &spC, NULL);
     }
     spC += arg2;
-    if (sub_02034818(spC)) {
-        BufferPlayersName(sCommClubManager->messageFormat[0], 0, sub_02034818(spC));
+    if (CommPlayerInfo_GetProfile(spC)) {
+        BufferPlayersName(sCommClubManager->messageFormat[0], 0, CommPlayerInfo_GetProfile(spC));
         ReadMsgDataIntoString(sCommClubManager->msgData, CommunicationClub_Text_00079, sCommClubManager->string[1]); // {STRVAR_1 3, 0, 0}
         StringExpandPlaceholders(sCommClubManager->messageFormat[0], sCommClubManager->string[0], sCommClubManager->string[1]);
         s32 temp_r4 = arg2 * 16;
         AddTextPrinterParameterized(&sCommClubManager->windows[0], 0, sCommClubManager->string[0], 8, temp_r4, 0, NULL);
-        BufferIntegerAsString(sCommClubManager->messageFormat[0], 2, PlayerProfile_GetTrainerID_VisibleHalf(sub_02034818(spC)), 5, PRINTING_MODE_LEADING_ZEROS, TRUE);
+        BufferIntegerAsString(sCommClubManager->messageFormat[0], 2, PlayerProfile_GetTrainerID_VisibleHalf(CommPlayerInfo_GetProfile(spC)), 5, PRINTING_MODE_LEADING_ZEROS, TRUE);
         ReadMsgDataIntoString(sCommClubManager->msgData, CommunicationClub_Text_ID_1, sCommClubManager->string[3]); // ID{STRVAR_1 54, 2, 0}
         StringExpandPlaceholders(sCommClubManager->messageFormat[0], sCommClubManager->string[2], sCommClubManager->string[3]);
         AddTextPrinterParameterized(&sCommClubManager->windows[0], 0, sCommClubManager->string[2], 72, temp_r4, 0, NULL);
@@ -631,7 +631,7 @@ static void ov03_02254B58(CommClubManager *commClubManager) {
     FillWindowPixelBuffer(&sCommClubManager->windows[1], 15);
     CopyWindowToVram(&sCommClubManager->windows[1]);
     commClubManager->unk97 = 1;
-    sub_0203476C(0);
+    CommPlayerInfo_Accept(0);
     ov03_02254B4C(&ov03_02254D78);
 }
 
@@ -685,13 +685,13 @@ static void ov03_02254BEC() {
     }
 
     if (sCommClubManager->commType == COMM_TYPE_8) {
-        if (sub_020347A0() > 1) {
+        if (CommPlayerInfo_CountAccepted() > 1) {
             ov03_02253E20(sCommClubManager->unk92 + 127, FALSE);
         } else {
             ov03_02253E20(sCommClubManager->unk92 + 117, FALSE);
         }
     } else if (sCommClubManager->commType == COMM_TYPE_POKEATHLON) {
-        if (sub_020347A0() > 1) {
+        if (CommPlayerInfo_CountAccepted() > 1) {
             ov03_02253E20(sCommClubManager->unk92 + 154, FALSE);
         } else {
             ov03_02253E20(sCommClubManager->unk92 + 142, FALSE);
@@ -705,11 +705,11 @@ static void ov03_02254C9C(CommClubManager *commClubManager_unused) {
     s32 num;
     s32 strno;
 
-    if (sub_020347A0() >= ov03_02255B70()) {
-        num = sub_020347A0();
+    if (CommPlayerInfo_CountAccepted() >= ov03_02255B70()) {
+        num = CommPlayerInfo_CountAccepted();
         strno = CommunicationClub_Text_NumPlayers; // {STRVAR_1 50, 0, 0} Players
     } else {
-        num = ov03_02255B70() - sub_020347A0();
+        num = ov03_02255B70() - CommPlayerInfo_CountAccepted();
         strno = CommunicationClub_Text_NumNeeded; // {STRVAR_1 50, 0, 0} more needed.
     }
     BufferIntegerAsString(sCommClubManager->messageFormat[1], 0, num, 2, PRINTING_MODE_5_UNUSED, TRUE);
@@ -764,7 +764,7 @@ static void ov03_02254D24(u32 arg0, CommClubManager *commClubManager) {
         CommunicationClub_Text_Contacted_Pokeathlon      // {STRVAR_1 3, 1, 0} has contacted you. Let {STRVAR_1 3, 1, 0} join your group?
     };
 
-    PlayerProfile *profile = sub_02034818(arg0);
+    PlayerProfile *profile = CommPlayerInfo_GetProfile(arg0);
     if (profile) {
         BufferPlayersName(commClubManager->messageFormat[2], 1, profile);
     }
@@ -813,13 +813,13 @@ static void ov03_02254E70(void *arg0, CommClubManager *commClubManager) {
     ov03_02254C9C(commClubManager);
 
     for (int i = 0; i < 8; i++) {
-        if (sub_02034714(i) && i != 0) {
+        if (CommPlayerInfo_IsReceived(i) && i != 0) {
             sCommClubManager->unk80[i] = 1;
             sCommClubManager->unk98 = 1;
-        } else if (sub_02034818(i) && sCommClubManager->unk80[i] == 0) {
+        } else if (CommPlayerInfo_GetProfile(i) && sCommClubManager->unk80[i] == 0) {
             sCommClubManager->unk80[i] = 1;
             sCommClubManager->unk98 = 1;
-        } else if (sub_02034818(i) == 0 && sCommClubManager->unk80[i] != 0) {
+        } else if (CommPlayerInfo_GetProfile(i) == 0 && sCommClubManager->unk80[i] != 0) {
             sCommClubManager->unk80[i] = 0;
             sCommClubManager->unk98 = 1;
         }
@@ -834,8 +834,8 @@ static void ov03_02254E70(void *arg0, CommClubManager *commClubManager) {
     }
 
     s32 listState = ListMenu_ProcessInput(commClubManager->listMenu);
-    if (sub_02034780() != 0xFF) {
-        commClubManager->unk95 = sub_02034780();
+    if (CommPlayerInfo_FindReceived() != 0xFF) {
+        commClubManager->unk95 = CommPlayerInfo_FindReceived();
         PlaySE(SEQ_SE_DP_PC_LOGIN);
         commClubManager->unkA1 = 1;
         ov03_02254D24(commClubManager->unk95, commClubManager);
@@ -867,7 +867,7 @@ static void ov03_02254E70(void *arg0, CommClubManager *commClubManager) {
         ov03_02254B4C(&ov03_0225558C);
         break;
     default:
-        if (ov03_02255B70() <= sub_020347A0()) {
+        if (ov03_02255B70() <= CommPlayerInfo_CountAccepted()) {
             u16 sConfirmGroupText[NUM_COMM_TYPES] = {
                 0,
                 0,
@@ -912,7 +912,7 @@ static void ov03_02254E70(void *arg0, CommClubManager *commClubManager) {
                 CommunicationClub_Text_ConfirmGroup_Pokeathlon // Pokéathlon! Is this group OK?
             };
             PlaySE(SEQ_SE_DP_SELECT);
-            commClubManager->connectedCount = sub_020347A0();
+            commClubManager->connectedCount = CommPlayerInfo_CountAccepted();
             ov03_02253E20(sConfirmGroupText[commClubManager->commType], FALSE);
             ov03_02254B4C(&ov03_022553C8);
         }
@@ -941,33 +941,33 @@ static void ov03_02255078(void *arg0, CommClubManager *commClubManager) {
         if (commClubManager->commType == COMM_TYPE_8 || commClubManager->commType == COMM_TYPE_POKEATHLON) {
             for (i = 1; i < ov03_02255B84(); i++) {
                 if (Comm_IsNetIdConnected(i)) {
-                    sub_020346E8(i);
-                    sub_02037B8C(5, i);
+                    CommPlayerInfo_ClearPlayer(i);
+                    LinkSync_SendValue(5, i);
                 }
             }
             ov03_02253E20(0, FALSE);
             ov03_02254B4C(&ov03_022552C8);
         } else {
-            sub_020346E8(commClubManager->unk95);
+            CommPlayerInfo_ClearPlayer(commClubManager->unk95);
             ov03_02253E20(0, FALSE);
             ov03_02254B4C(&ov03_022552C8);
         }
     } else if (sub_02037700() || ov03_02255C80()) {
         ov03_02255CE4(commClubManager);
-        sub_020346E8(commClubManager->unk95);
+        CommPlayerInfo_ClearPlayer(commClubManager->unk95);
         ov03_02253E20(0, FALSE);
         ov03_02254B4C(&ov03_022552C8);
     } else if (ov01_021F6AEC(commClubManager->fieldSystem) == 6) {
         if (commClubManager->unkA4 == 0) {
-            if ((commClubManager->commType == COMM_TYPE_SINGLE_BATTLE || commClubManager->commType == COMM_TYPE_DOUBLE_BATTLE || commClubManager->commType == COMM_TYPE_FLAT_BATTLE_1 || commClubManager->commType == COMM_TYPE_FLAT_BATTLE_2) && sub_020348F0() == 0) {
+            if ((commClubManager->commType == COMM_TYPE_SINGLE_BATTLE || commClubManager->commType == COMM_TYPE_DOUBLE_BATTLE || commClubManager->commType == COMM_TYPE_FLAT_BATTLE_1 || commClubManager->commType == COMM_TYPE_FLAT_BATTLE_2) && CommPlayerInfo_RulesetsMatch() == 0) {
                 ov03_02253E20(116, FALSE);
                 ov03_02254B4C(&ov03_02255280);
-                sub_02037B8C(4, commClubManager->unk95);
+                LinkSync_SendValue(4, commClubManager->unk95);
             } else {
-                sub_0203476C(commClubManager->unk95);
-                sub_02037B8C(2, commClubManager->unk95);
-                if (ov03_02255B84() == sub_020347A0()) {
-                    commClubManager->connectedCount = sub_020347A0();
+                CommPlayerInfo_Accept(commClubManager->unk95);
+                LinkSync_SendValue(2, commClubManager->unk95);
+                if (ov03_02255B84() == CommPlayerInfo_CountAccepted()) {
+                    commClubManager->connectedCount = CommPlayerInfo_CountAccepted();
                     if (ov03_02255B84() > 2) {
                         ov03_02254B4C(&ov03_02255388);
                     } else {
@@ -983,15 +983,15 @@ static void ov03_02255078(void *arg0, CommClubManager *commClubManager) {
             if (commClubManager->commType == COMM_TYPE_8 || commClubManager->commType == COMM_TYPE_POKEATHLON) {
                 for (i = 1; i < ov03_02255B84(); i++) {
                     if (Comm_IsNetIdConnected(i)) {
-                        sub_020346E8(i);
-                        sub_02037B8C(5, i);
+                        CommPlayerInfo_ClearPlayer(i);
+                        LinkSync_SendValue(5, i);
                     }
                 }
                 ov03_02254BEC();
                 ov03_02254B4C(&ov03_0225530C);
             } else {
-                sub_020346E8(commClubManager->unk95);
-                sub_02037B8C(3, commClubManager->unk95);
+                CommPlayerInfo_ClearPlayer(commClubManager->unk95);
+                LinkSync_SendValue(3, commClubManager->unk95);
                 ov03_02254BEC();
                 ov03_02254B4C(&ov03_0225530C);
             }
@@ -1116,7 +1116,7 @@ static void ov03_02255404(void *arg0, CommClubManager *commClubManager) {
                             }
                         }
                     }
-                    sub_02037AC0(10);
+                    LinkSync_StartSync(10);
                     ov03_02254B4C(&ov03_022556BC);
                 } else if (commClubManager->unkA4 == 1) {
                     sub_02037EC0(1);
@@ -1236,7 +1236,7 @@ static void ov03_0225558C(void *arg0, CommClubManager *commClubManager) {
         CommunicationClub_Text_CancelGroup_Pokeathlon // Cancel holding a Pokéathlon with this group?
     };
     ov03_02254C9C(commClubManager);
-    if (sub_020347A0() > 1) {
+    if (CommPlayerInfo_CountAccepted() > 1) {
         ov03_02253E20(sCancelGroupText[commClubManager->commType], FALSE);
         ov03_02254B4C(&ov03_022555F4);
     } else {
@@ -1289,7 +1289,7 @@ static void ov03_022556BC(void *arg0, CommClubManager *commClubManager) {
     } else {
         ov03_02254C9C(commClubManager);
         ListMenu_ProcessInput(commClubManager->listMenu);
-        if (sub_02037B38(10) && sub_02037A10()) {
+        if (LinkSync_IsSynced(10) && LinkSync_Exists()) {
             ov03_0225574C(arg0, commClubManager);
             ov03_02255B44(commClubManager);
         }
@@ -1325,7 +1325,7 @@ static void ov03_0225574C(void *task, CommClubManager *commClubManager) {
 }
 
 static void ov03_022557CC(CommClubManager *commClubManager) {
-    BufferPlayersName(commClubManager->messageFormat[2], 1, sub_02034818(1));
+    BufferPlayersName(commClubManager->messageFormat[2], 1, CommPlayerInfo_GetProfile(1));
     ov03_02253E20(69, TRUE);
     SysTask_CreateOnMainQueue(&ov03_02254D64, commClubManager, 0);
     ov03_02254B4C(&ov03_02255860);
@@ -1347,7 +1347,7 @@ static void ov03_02255860(u32 arg0_unused, CommClubManager *commClubManager) {
     } else if (ov03_02255C80() || sub_02037700()) {
         ov03_02254B4C(&ov03_02255A00);
     } else if (DialogBox_IsPrintFinished(sCommClubManager->printerID)) {
-        sub_02037AC0(10);
+        LinkSync_StartSync(10);
         ov03_02254B4C(&ov03_022558C4);
     }
 }
@@ -1361,10 +1361,10 @@ static void ov03_022558C4(void *task, CommClubManager *commClubManager) {
     } else if (Comm_IsNetIdConnected(0) == 0) {
         ov03_02254B4C(&ov03_02255A00);
         return;
-    } else if (sub_02037BA0(0, 5) != -1) {
+    } else if (LinkSync_GetValue(0, 5) != -1) {
         ov03_02254B4C(&ov03_02255A00);
         return;
-    } else if (sub_02037B38(10) && sub_02037A10()) {
+    } else if (LinkSync_IsSynced(10) && LinkSync_Exists()) {
         if (DialogBox_IsPrintFinished(sCommClubManager->printerID) == FALSE) {
             RemoveTextPrinter(sCommClubManager->printerID);
         }
@@ -1465,7 +1465,7 @@ static void ov03_02255AB0(SysTask *task, void *commClubManager) {
 static void ov03_02255ADC(void *commClubManager) {
     sub_02058180();
     for (int i = 0; i < 8; i++) {
-        sub_020346E8(i);
+        CommPlayerInfo_ClearPlayer(i);
     }
     SysTask_CreateOnMainQueue(&ov03_02255B04, commClubManager, 0);
 }
@@ -1481,7 +1481,7 @@ static void ov03_02255B44(CommClubManager *commClubManager_unused) {
     sub_02037EC0(0);
     sCommClubManager->retCode = 2;
     sub_020398D4(1, 1);
-    sub_02034434();
+    CommPlayerInfo_SendLocal();
     sub_020356C0(1);
 }
 

@@ -56,7 +56,7 @@ BOOL ov80_0222B5C8(void *ctx) {
     void *frontier;
     u32 stat;
     u32 substat;
-    sub_02030E08(*(void **)(p + 4));
+    Save_Frontier_GetCastleFlags(*(void **)(p + 4));
     *(u16 *)(p + 0x3C2) = *(u16 *)(p + 0x14);
     *(u16 *)(p + 0x3C4) = *(u16 *)(p + 0x16);
     frontier = Save_Frontier_GetStatic(*(void **)(p + 4));

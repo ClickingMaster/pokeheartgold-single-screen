@@ -7,8 +7,8 @@
 .public Save_GameStats_Get
 .public GameStats_Add
 .public Comm_GetLocalNetId
-.public sub_02037C0C
-.public sub_02037C44
+.public LinkSync_SendPacket
+.public LinkSync_GetPacket
 .public ResetSystem
 .public FrontierFieldSystem_Free
 .public FrontierFieldSystem_GetFrontierBattleNumber

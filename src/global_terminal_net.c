@@ -44,9 +44,9 @@ BOOL ov39_0222A4C0(u32 argLow, u32 argHigh, void *response);
 void ov00_021EC210(void);
 void ov00_021EC8D8(void);
 void sub_0203946C(void);
-u32 sub_0202FBCC(void);
+u32 BattleRecord_sizeof(void);
 void *sub_0202FC74(void);
-void *sub_020307DC(void);
+void *BattleRecord_GetProfile(void);
 void ov40_02244B3C(SaveData *saveData);
 int ov40_02244B70(SaveData *saveData, int arg1, int arg2, void *out1, void *out2);
 
@@ -361,12 +361,12 @@ BOOL GlobalTerminalNet_RequestVideoUpload(GlobalTerminalNet *net, const void *he
     if (!GlobalTerminalNet_IsIdle(net)) {
         return FALSE;
     }
-    if (sub_0202FBCC() - 4 != 0x1D4C) {
+    if (BattleRecord_sizeof() - 4 != 0x1D4C) {
         GF_AssertFail();
     }
     net->request.video = sub_0202FC74();
     ov40_02244B3C(net->saveData);
-    MI_CpuCopy8(header, sub_020307DC(), 0x80);
+    MI_CpuCopy8(header, BattleRecord_GetProfile(), 0x80);
     net->sendDelay = 60;
     net->pendingCommand = GTS_REQUEST_VIDEO_UPLOAD;
     return TRUE;

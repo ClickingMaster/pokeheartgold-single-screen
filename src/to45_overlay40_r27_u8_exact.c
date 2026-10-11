@@ -17,9 +17,9 @@ int ov40_02232A48(void *p) {
     case 2:
         if (WORD(p, 0x874) == 0) {
             void *unused;
-            sub_0202FC90(PTR(p, 0x830), 0x6D, &unused, 0, PTR(p, 0x86C));
+            BattleRecord_Load(PTR(p, 0x830), 0x6D, &unused, 0, PTR(p, 0x86C));
             ov40_02244BBC(PTR(p, 0x830), PTR(p, 0x86C));
-            sub_0202FC24();
+            BattleRecord_Delete();
             ov40_0222FDC4(p);
             ov40_0222FCCC(p);
         }
@@ -216,7 +216,7 @@ void ov40_02232ED4(int hitbox, int event, void *p) {
         break;
     case 1:
         ov40_02230944(p);
-        if (WORD(p, 0x86C) == 0 || sub_0203088C(PTR(w, 0xA0), 5, 0) == 1) {
+        if (WORD(p, 0x86C) == 0 || BattleRecordHeader_GetField(PTR(w, 0xA0), 5, 0) == 1) {
             ov40_0222BF80(p, 7);
         } else {
             ov40_0222BF80(p, 5);

@@ -32,7 +32,7 @@
 #include "save_vars_flags.h"
 #include "save_wifi_history.h"
 #include "unk_0202E41C.h"
-#include "unk_02030A98.h"
+#include "frontier_save_access.h"
 
 // These macros are temporary. As the respective sources
 // are decompiled, the calls should be phased out.
@@ -328,8 +328,8 @@ MigratedPokemon *Save_MigratedPokemon_Get(SaveData *saveData) {
     return SaveArray_Get(saveData, SAVE_UNK_28);
 }
 
-DECL_CHUNK_EX(sub_020312A4, sub_020312AC)
-DECL_CHUNK_EX(sub_0202FBCC, sub_0202FBD4)
+DECL_CHUNK_EX(FrontierSpeciesRecords_sizeof, FrontierSpeciesRecords_Init)
+DECL_CHUNK_EX(BattleRecord_sizeof, BattleRecord_Init)
 
 const struct ExtraSaveChunkHeader gExtraSaveChunkHeaders[] = {
     {
@@ -341,32 +341,32 @@ const struct ExtraSaveChunkHeader gExtraSaveChunkHeaders[] = {
     {
      1,
      SAVE_PAGE_MAX + 3,
-     (SAVESIZEFN)sub_020312A4,
-     (SAVEINITFN)sub_020312AC,
+     (SAVESIZEFN)FrontierSpeciesRecords_sizeof,
+     (SAVEINITFN)FrontierSpeciesRecords_Init,
      },
     {
      2,
      SAVE_PAGE_MAX + 4,
-     (SAVESIZEFN)sub_0202FBCC,
-     (SAVEINITFN)sub_0202FBD4,
+     (SAVESIZEFN)BattleRecord_sizeof,
+     (SAVEINITFN)BattleRecord_Init,
      },
     {
      3,
      SAVE_PAGE_MAX + 6,
-     (SAVESIZEFN)sub_0202FBCC,
-     (SAVEINITFN)sub_0202FBD4,
+     (SAVESIZEFN)BattleRecord_sizeof,
+     (SAVEINITFN)BattleRecord_Init,
      },
     {
      4,
      SAVE_PAGE_MAX + 8,
-     (SAVESIZEFN)sub_0202FBCC,
-     (SAVEINITFN)sub_0202FBD4,
+     (SAVESIZEFN)BattleRecord_sizeof,
+     (SAVEINITFN)BattleRecord_Init,
      },
     {
      5,
      SAVE_PAGE_MAX + 10,
-     (SAVESIZEFN)sub_0202FBCC,
-     (SAVEINITFN)sub_0202FBD4,
+     (SAVESIZEFN)BattleRecord_sizeof,
+     (SAVEINITFN)BattleRecord_Init,
      },
 };
 
@@ -380,21 +380,21 @@ int SaveHallOfFame(SaveData *saveData, HallOfFame *hallOfFame) {
     return WriteExtraSaveChunk(saveData, 0, hallOfFame);
 }
 
-struct UnkStruct_0202FBCC *sub_0202711C(SaveData *saveData, enum HeapID heapID, int *ret_p, int idx) {
+struct BattleRecord *sub_0202711C(SaveData *saveData, enum HeapID heapID, int *ret_p, int idx) {
     int sp4;
     return sub_020284A4(saveData, heapID, idx + 2, ret_p, &sp4);
 }
 
-int sub_02027134(SaveData *saveData, struct UnkStruct_0202FBCC *data, int idx) {
+int sub_02027134(SaveData *saveData, struct BattleRecord *data, int idx) {
     return sub_02028230(saveData, idx + 2, data);
 }
 
-struct UnkStruct_02030A98 *sub_02027144(SaveData *saveData, enum HeapID heapID, int *ret_p) {
+struct FrontierSpeciesRecords *sub_02027144(SaveData *saveData, enum HeapID heapID, int *ret_p) {
     int sp4;
     return sub_020284A4(saveData, heapID, 1, ret_p, &sp4);
 }
 
-int sub_02027158(SaveData *saveData, struct UnkStruct_02030A98 *data) {
+int sub_02027158(SaveData *saveData, struct FrontierSpeciesRecords *data) {
     return sub_02028230(saveData, 1, data);
 }
 

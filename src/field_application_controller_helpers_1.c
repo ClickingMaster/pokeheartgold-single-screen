@@ -60,7 +60,7 @@ void sub_02059538(void *fieldSystem, void *callback) {
     *(u32 *)(work + 0x50) = 0;
     work[0x89] = 0;
     *(u16 *)(work + 0x86) = Comm_GetLocalNetId();
-    *(void **)(work + 0x74) = sub_02034818(1 ^ *(u16 *)(work + 0x86));
+    *(void **)(work + 0x74) = CommPlayerInfo_GetProfile(1 ^ *(u16 *)(work + 0x86));
     switch (work[0x88]) {
     case 3:
         size = sub_02059B08();

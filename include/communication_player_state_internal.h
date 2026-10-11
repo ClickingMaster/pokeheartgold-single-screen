@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-typedef struct Unk02034354_Entry {
+typedef struct CommPlayerInfoEntry {
     /* 0x00 */ u8 rules[0x20];
     /* 0x20 */ u8 profile[0x20];
     /* 0x40 */ u8 token[0xC];
@@ -14,27 +14,27 @@ typedef struct Unk02034354_Entry {
     /* 0x64 */ u8 region;
     /* 0x65 */ u8 unk65;
     /* 0x66 */ u8 pad66[2];
-} Unk02034354_Entry;
+} CommPlayerInfoEntry;
 
-typedef struct Unk02034354_Score {
-    /* 0x0 */ u16 a;
-    /* 0x2 */ u16 b;
-    /* 0x4 */ u16 c;
-} Unk02034354_Score;
+typedef struct CommPlayerRecord {
+    /* 0x0 */ u16 wins;
+    /* 0x2 */ u16 losses;
+    /* 0x4 */ u16 trades;
+} CommPlayerRecord;
 
-typedef struct Unk02034354 {
+typedef struct CommPlayerInfo {
     /* 0x000 */ void *unk00;
     /* 0x004 */ void *rules;
     /* 0x008 */ void *save;
-    /* 0x00C */ Unk02034354_Entry entries[8];
+    /* 0x00C */ CommPlayerInfoEntry entries[8];
     /* 0x34C */ void *profiles[8];
-    /* 0x36C */ Unk02034354_Score scores[8];
+    /* 0x36C */ CommPlayerRecord scores[8];
     /* 0x39C */ u8 status[8];
     /* 0x3A4 */ u8 unk3A4;
     /* 0x3A5 */ u8 unk3A5;
     /* 0x3A6 */ u8 curIdx;
     /* 0x3A7 */ u8 unk3A7;
-} Unk02034354;
+} CommPlayerInfo;
 
 void *Heap_Alloc(u32 heapId, u32 size);
 void Heap_Free(void *ptr);
@@ -65,37 +65,37 @@ int sub_0203A084(void *a, void *b, int *c);
 u8 sub_0203A378(void *save, int a);
 void DWC_CreateExchangeToken(void *a, void *b);
 
-extern Unk02034354 *_021D4130;
+extern CommPlayerInfo *gCommPlayerInfo;
 
-void sub_02034354(void *save, void *rules);
-void sub_020343E4(void);
-BOOL sub_02034420(void);
-void sub_02034434(void);
-int sub_02034520(void);
+void CommPlayerInfo_Init(void *save, void *rules);
+void CommPlayerInfo_Free(void);
+BOOL CommPlayerInfo_Exists(void);
+void CommPlayerInfo_SendLocal(void);
+int CommPlayerInfo_GetEntrySize(void);
 void sub_02034524(void);
-void sub_0203453C(int netId, int unused, void *packet);
-void sub_020345D0(int netId, int unused, void *src);
-BOOL sub_02034638(void);
-u8 sub_020346D4(void);
-void sub_020346E8(int netId);
-BOOL sub_02034714(int netId);
-BOOL sub_02034730(int netId);
-BOOL sub_02034750(int netId);
-void sub_0203476C(int netId);
-int sub_02034780(void);
-int sub_020347A0(void);
-BOOL sub_020347CC(void);
-void *sub_02034818(int netId);
-void *sub_0203484C(int netId);
+void CommPlayerInfo_RecvEntry(int netId, int unused, void *packet);
+void CommPlayerInfo_RecvPlayerEntry(int netId, int unused, void *src);
+BOOL CommPlayerInfo_HostRedistribute(void);
+u8 CommPlayerInfo_HasNewEntries(void);
+void CommPlayerInfo_ClearPlayer(int netId);
+BOOL CommPlayerInfo_IsReceived(int netId);
+BOOL CommPlayerInfo_IsReceivedOrAccepted(int netId);
+BOOL CommPlayerInfo_IsAccepted(int netId);
+void CommPlayerInfo_Accept(int netId);
+int CommPlayerInfo_FindReceived(void);
+int CommPlayerInfo_CountAccepted(void);
+BOOL CommPlayerInfo_DropDisconnected(void);
+void *CommPlayerInfo_GetProfile(int netId);
+void *CommPlayerInfo_GetExchangeToken(int netId);
 u8 sub_02034870(int a);
-void *sub_02034884(int netId);
-u8 sub_020348A8(int netId);
-u8 sub_020348CC(int netId);
-BOOL sub_020348F0(void);
-void sub_02034960(int mode, int delta);
-void sub_02034A20(void *save);
-void sub_02034AC0(void *save, int b);
-void sub_02034AEC(void *save, int b);
-void sub_02034B00(void *a);
+void *CommPlayerInfo_GetGroupName(int netId);
+u8 CommPlayerInfo_GetCountry(int netId);
+u8 CommPlayerInfo_GetRegion(int netId);
+BOOL CommPlayerInfo_RulesetsMatch(void);
+void CommPlayerInfo_AddToRecords(int mode, int delta);
+void CommPlayerInfo_SaveRecords(void *save);
+void CommPlayerInfo_RecordBattleResult(void *save, int b);
+void CommPlayerInfo_RecordTrades(void *save, int b);
+void CommPlayerInfo_SetProfile(void *a);
 
 #endif

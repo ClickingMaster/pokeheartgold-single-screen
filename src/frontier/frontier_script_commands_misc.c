@@ -154,7 +154,7 @@ BOOL FrtCmd_137(void *ctx) {
     } else {
         GF_AssertFail();
     }
-    if (sub_02037C0C(Comm_GetLocalNetId(), data + 0x83E) == 1) {
+    if (LinkSync_SendPacket(Comm_GetLocalNetId(), data + 0x83E) == 1) {
         *dst = 1;
     } else {
         *dst = 0;
@@ -179,7 +179,7 @@ BOOL ov80_0223573C(void *ctx) {
 }
 
 BOOL ov80_02235774(void *ctx, void *data, void *fieldSystem, u32 mode, u16 value) {
-    void *remote = sub_02037C44(1 - Comm_GetLocalNetId());
+    void *remote = LinkSync_GetPacket(1 - Comm_GetLocalNetId());
     u16 *dst;
     if (remote == NULL) {
         return FALSE;

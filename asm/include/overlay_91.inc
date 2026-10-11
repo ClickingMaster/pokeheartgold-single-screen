@@ -162,12 +162,12 @@
 .public GF_3DVramMan_Delete
 .public PlayerName_FlatToString
 .public Comm_RegisterCommandTable
-.public sub_020347A0
+.public CommPlayerInfo_CountAccepted
 .public Comm_SendCommand
 .public Comm_CountConnected
 .public Comm_GetLocalNetId
-.public sub_02037AC0
-.public sub_02037B38
+.public LinkSync_StartSync
+.public LinkSync_IsSynced
 .public sub_020398D4
 .public WirelessStatusIcon_Create
 .public NNS_G2dInitOamManagerModule

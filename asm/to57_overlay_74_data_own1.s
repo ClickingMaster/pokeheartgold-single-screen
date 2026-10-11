@@ -99,7 +99,7 @@
 	.public sPmAgbSave
 	.public sPmAgbSaveCounter
 	.public sPmAgbRomHeader
-	.public ov74_0223D450
+	.public sMainMenuUtilCryptoHeapId
 	.bss
 sMysteryGiftCommWork: ; 0x0223D0A4
 	.space 0x4
@@ -129,6 +129,6 @@ sPmAgbSaveCounter: ; 0x0223D34C
 sPmAgbRomHeader: ; 0x0223D354
 	.space 0xFC
 
-ov74_0223D450: ; 0x0223D450
+sMainMenuUtilCryptoHeapId: ; 0x0223D450
 	.space 0x4
 

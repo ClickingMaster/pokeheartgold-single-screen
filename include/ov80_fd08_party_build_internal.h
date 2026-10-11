@@ -15,7 +15,7 @@ typedef struct Ov80PartyBuildWork {
 } Ov80PartyBuildWork;
 
 void ov80_02236DD4(u8);
-u32 sub_02030A24(void *, int, u8, int);
+u32 FactoryChallenge_GetField(void *, int, u8, int);
 void FrontierMon_GenerateList(Ov80PartyRecord *, u16 *, u8 *, u32 *, int, int, int, int);
 void *AllocMonZeroed(int);
 void Heap_Free(void *);

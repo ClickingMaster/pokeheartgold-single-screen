@@ -162,8 +162,8 @@ int GtsSearch_Init(GtsApp *app, int state) {
     args.windows = app->windows;
     args.messageWindow = &app->selectorWindow;
     args.sprites[0] = app->unk_0DD0;
-    args.sprites[1] = app->unk_0F04;
-    args.sprites[2] = app->unk_0F08;
+    args.sprites[1] = app->arrowSprites[0];
+    args.sprites[2] = app->arrowSprites[1];
     args.sprites[3] = app->cursorSprite;
     args.gtsMsgData = app->gtsMsgData;
     args.speciesNames = app->speciesNames;
@@ -173,10 +173,10 @@ int GtsSearch_Init(GtsApp *app, int state) {
     app->selector = ov70_02242014(&args, 2, 1);
     GtsSearch_DrawFieldLabels(app->infoWindows, &app->wideWindows[0], app->gtsMsgData);
     GtsSearch_DrawResultsButton(app->bgConfig, &app->infoWindows[8], app->gtsMsgData, app->hasSearchResults);
-    ov70_0223F1D8(&app->infoWindows[1], app->speciesNames, app->searchCriteria.species, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
-    ov70_0223F2BC(&app->infoWindows[3], app->gtsMsgData, app->searchCriteria.gender, TRUE, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
-    ov70_0223F370(&app->infoWindows[5], app->gtsMsgData, ov70_0223F864(app->searchCriteria.minLevel, app->searchCriteria.maxLevel, 1), 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 1);
-    ov70_0223F244(&app->wideWindows[1], app->countryNames, app->gtsMsgData, app->searchCountry, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
+    Gts_PrintSpeciesName(&app->infoWindows[1], app->speciesNames, app->searchCriteria.species, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
+    Gts_PrintGender(&app->infoWindows[3], app->gtsMsgData, app->searchCriteria.gender, TRUE, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
+    Gts_PrintLevelRange(&app->infoWindows[5], app->gtsMsgData, Gts_FindLevelRange(app->searchCriteria.minLevel, app->searchCriteria.maxLevel, 1), 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 1);
+    Gts_PrintCountryName(&app->wideWindows[1], app->countryNames, app->gtsMsgData, app->searchCountry, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
     app->vblankFunc = GtsSearch_ScrollBgs;
     if (app->nextScreenArg == 13) {
         BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_61);
@@ -293,14 +293,14 @@ void GtsSearch_CreateSprites(GtsApp *app) {
 
     template.position.x = 57 << 14;
     template.position.y = 117 * FX32_ONE;
-    app->unk_0F04 = Sprite_CreateAffine(&template);
-    Sprite_SetAnimCtrlSeq(app->unk_0F04, 38);
-    Sprite_SetDrawFlag(app->unk_0F04, FALSE);
+    app->arrowSprites[0] = Sprite_CreateAffine(&template);
+    Sprite_SetAnimCtrlSeq(app->arrowSprites[0], 38);
+    Sprite_SetDrawFlag(app->arrowSprites[0], FALSE);
 
     template.position.x = 35 << 14;
-    app->unk_0F08 = Sprite_CreateAffine(&template);
-    Sprite_SetAnimCtrlSeq(app->unk_0F08, 39);
-    Sprite_SetDrawFlag(app->unk_0F08, FALSE);
+    app->arrowSprites[1] = Sprite_CreateAffine(&template);
+    Sprite_SetAnimCtrlSeq(app->arrowSprites[1], 39);
+    Sprite_SetDrawFlag(app->arrowSprites[1], FALSE);
     WirelessStatusIcon_Create();
 }
 
@@ -309,8 +309,8 @@ void GtsSearch_CreateSprites(GtsApp *app) {
 void GtsSearch_DeleteSprites(GtsApp *app) {
     Sprite_Delete(app->cursorSprite);
     Sprite_Delete(app->unk_0DD0);
-    Sprite_Delete(app->unk_0F04);
-    Sprite_Delete(app->unk_0F08);
+    Sprite_Delete(app->arrowSprites[0]);
+    Sprite_Delete(app->arrowSprites[1]);
 }
 
 #pragma force_active on
@@ -374,8 +374,8 @@ void GtsSearch_CreateData(GtsApp *app) {
     app->titleString = NewString_ReadMsgData(app->gtsMsgData, 42); // SEEK POKEMON
     app->searchCursor = Heap_Alloc(HEAP_ID_61, sizeof(GtsSearchCursor));
     MIi_CpuClearFast(0, (u32 *)app->searchCursor, sizeof(GtsSearchCursor));
-    app->searchCursor->unk_14 = ov70_0223F684(HEAP_ID_61);
-    ov70_0223F948(app->unk_1234);
+    app->searchCursor->unk_14 = Gts_CreateJohtoDexFlags(HEAP_ID_61);
+    ov70_0223F948(&app->unk_1234);
 }
 
 void GtsSearch_FreeData(GtsApp *app) {
@@ -417,7 +417,7 @@ void GtsSearch_SelectButton(GtsApp *app, int button) {
         if (app->searchCriteria.species != SPECIES_NONE) {
             u32 genderRatio = GetMonBaseStat(app->searchCriteria.species, BASE_GENDER_RATIO);
             app->searchCursor->genderRatio = genderRatio;
-            if (ov70_0223EDE4(&app->searchCriteria, app->searchCursor->genderRatio)) {
+            if (Gts_SetFixedGender(&app->searchCriteria, app->searchCursor->genderRatio)) {
                 PlaySE(SEQ_SE_DP_SELECT);
                 break;
             }
@@ -744,7 +744,7 @@ int GtsSearch_HandleSpeciesSelector(GtsApp *app) {
     case -2:
         GtsSearch_SetBlendBrightness(0);
         app->state = GTS_SEARCH_STATE_START;
-        ov70_0223F960(app->unk_1234, app->searchCursor->unk_06 + app->searchCursor->unk_04, app->searchCursor->unk_0A, app->searchCursor->unk_08);
+        ov70_0223F960(&app->unk_1234, app->searchCursor->unk_06 + app->searchCursor->unk_04, app->searchCursor->unk_0A, app->searchCursor->unk_08);
         break;
     case -1:
         break;
@@ -753,12 +753,12 @@ int GtsSearch_HandleSpeciesSelector(GtsApp *app) {
         app->searchCriteria.species = selection;
         app->state = GTS_SEARCH_STATE_START;
         FillWindowPixelBuffer(&app->infoWindows[1], 0);
-        ov70_0223F1D8(&app->infoWindows[1], app->speciesNames, selection, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
+        Gts_PrintSpeciesName(&app->infoWindows[1], app->speciesNames, selection, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
         app->searchCursor->genderRatio = GetMonBaseStat(selection, BASE_GENDER_RATIO);
-        ov70_0223F960(app->unk_1234, app->searchCursor->unk_06 + app->searchCursor->unk_04, app->searchCursor->unk_0A, app->searchCursor->unk_08);
-        if (ov70_0223EDE4(&app->searchCriteria, app->searchCursor->genderRatio)) {
+        ov70_0223F960(&app->unk_1234, app->searchCursor->unk_06 + app->searchCursor->unk_04, app->searchCursor->unk_0A, app->searchCursor->unk_08);
+        if (Gts_SetFixedGender(&app->searchCriteria, app->searchCursor->genderRatio)) {
             FillWindowPixelBuffer(&app->infoWindows[3], 0);
-            ov70_0223F2BC(&app->infoWindows[3], app->gtsMsgData, app->searchCriteria.gender, TRUE, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
+            Gts_PrintGender(&app->infoWindows[3], app->gtsMsgData, app->searchCriteria.gender, TRUE, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
         }
         break;
     }
@@ -797,7 +797,7 @@ int GtsSearch_HandleGenderSelector(GtsApp *app) {
         app->searchCriteria.gender = selection + 1;
         app->state = GTS_SEARCH_STATE_START;
         FillWindowPixelBuffer(&app->infoWindows[3], 0);
-        ov70_0223F2BC(&app->infoWindows[3], app->gtsMsgData, app->searchCriteria.gender, TRUE, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
+        Gts_PrintGender(&app->infoWindows[3], app->gtsMsgData, app->searchCriteria.gender, TRUE, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
         break;
     }
     return 3;
@@ -833,10 +833,10 @@ int GtsSearch_HandleLevelSelector(GtsApp *app) {
         break;
     default:
         GtsSearch_SetBlendBrightness(0);
-        ov70_0223F828(&app->searchCriteria, selection, 1);
+        Gts_SetLevelRange(&app->searchCriteria, selection, 1);
         app->state = GTS_SEARCH_STATE_START;
         FillWindowPixelBuffer(&app->infoWindows[5], 0);
-        ov70_0223F370(&app->infoWindows[5], app->gtsMsgData, selection, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 1);
+        Gts_PrintLevelRange(&app->infoWindows[5], app->gtsMsgData, selection, 0, 0, MAKE_TEXT_COLOR(1, 2, 0), 1);
         break;
     }
     return 3;
@@ -869,10 +869,10 @@ int GtsSearch_HandleCountrySelector(GtsApp *app) {
             app->state = GTS_SEARCH_STATE_START;
         } else {
             GtsSearch_SetBlendBrightness(0);
-            ov70_0223F8A8(app, selection);
+            Gts_SetSearchCountry(app, selection);
             app->state = GTS_SEARCH_STATE_START;
             FillWindowPixelBuffer(&app->wideWindows[1], 0);
-            ov70_0223F244(&app->wideWindows[1], app->countryNames, app->gtsMsgData, app->searchCountry, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
+            Gts_PrintCountryName(&app->wideWindows[1], app->countryNames, app->gtsMsgData, app->searchCountry, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
         }
     }
     return 3;
