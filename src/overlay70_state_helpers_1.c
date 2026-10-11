@@ -73,7 +73,7 @@ int ov70_02240748(Ov70Work *work) {
     Gts_SetState(work, 0x25, 0x24);
     Gts_SetNextScreen(work, 1, 0);
     Gts_DeleteWaitingIcon(work);
-    ov70_02241234(work);
+    Gts_StopAvatarAnims(work);
     return 3;
 }
 
@@ -112,6 +112,6 @@ int ov70_0224080C(Ov70Work *work) {
     Gts_SetState(work, 0x25, 0x24);
     Gts_SetNextScreen(work, 1, 0);
     Gts_DeleteWaitingIcon(work);
-    ov70_02241234(work);
+    Gts_StopAvatarAnims(work);
     return 3;
 }

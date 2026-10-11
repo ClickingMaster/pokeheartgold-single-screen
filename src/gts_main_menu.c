@@ -110,10 +110,10 @@ int GtsMainMenu_Init(GtsApp *app, int state) {
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_61);
         app->state = GTS_MAIN_MENU_STATE_WAIT_ENTER_ANIM;
         app->mainMenuShown = TRUE;
-        ov70_02240EF4(app, PlayerProfile_GetTrainerGender(app->args->profile));
+        Gts_StartPlayerEnterAnim(app, PlayerProfile_GetTrainerGender(app->args->profile));
     } else {
         if (app->unk_11FC == 1 && GXS_GetMasterBrightness() != 0) {
-            ov70_02241358(app);
+            Gts_ResetAvatarPositions(app);
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_61);
         } else {
             BeginNormalPaletteFade(FADE_MAIN_ONLY, FADE_TYPE_BRIGHTNESS_IN, FADE_TYPE_BRIGHTNESS_IN, RGB_BLACK, 6, 1, HEAP_ID_61);
@@ -430,7 +430,7 @@ int GtsMainMenu_HandleInput(GtsApp *app) {
 
 int GtsMainMenu_StartExitAnim(GtsApp *app) {
     int gender = PlayerProfile_GetTrainerGender(app->args->profile);
-    ov70_02241004(app, gender);
+    Gts_StartPlayerExitAnim(app, gender);
     app->state = GTS_MAIN_MENU_STATE_WAIT_EXIT_ANIM;
     app->playerAnimDone = FALSE;
     return 3;

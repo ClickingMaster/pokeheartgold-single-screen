@@ -1108,20 +1108,10 @@ Static main
     Object src/op90_to70_libVCT_extra08_residual_7_r01.o
     Object src/to70_libVCT_extra08_run09.o
     Object src/op90_to70_libVCT_extra08_residual_8_r01.o
-    Object src/to70_libVCT_extra08_run10.o
-    Object src/to90_extra41537_run01.o
-    Object src/to70_libVCT_extra08_run11.o
-    Object src/to70_to70_libVCT_extra08_residual_10_extra22_run01.o
-    Object src/op90_op90_to70_to70_libVCT_extra08_residual_10_extra22_residual_1_residual_1_r01.o
-    Object src/op90_to70_to70_libVCT_extra08_residual_10_extra22_residual_1_r01.o
-    Object src/to70_to70_libVCT_extra08_residual_10_extra22_run02.o
-    Object src/to90_extra2349_run01.o
-    Object src/to70_to70_libVCT_extra08_residual_10_extra22_run03.o
-    Object src/to90_extra41533_run01.o
-    Object src/to70_to70_libVCT_extra08_residual_10_extra22_run04.o
-    Object src/op90_to70_to70_libVCT_extra08_residual_10_extra22_residual_4_r01.o
-    Object src/to70_to70_libVCT_extra08_residual_10_extra22_run05.o
-    Object src/op90_to70_to70_libVCT_extra08_residual_10_extra22_residual_6_r01.o
+    Object lib/libVCT/src/vct_ssp.o
+    Object lib/libVCT/src/vct_packet_buffer.o
+    Object lib/libVCT/src/vct_vad.o
+    Object lib/libVCT/src/vct_fir.o
     Object lib/asm/to70_libVCT_extra08_anchor_tail_own1.o
     Object lib/libVCT/src/vct_mix.o
     Object lib/libVCT/src/vct_main.o
@@ -1876,24 +1866,8 @@ Object src/op90_to91_w41563_friend_callback_suffix_r01.o
     Object src/to80_extra1732_run01.o
     Object src/to65_ov00_extra16_run13.o
     Object src/to70_to65_ov00_extra16_residual_14_extra1114_run01.o
-    Object src/to61_overlay_00_arm_residual_1_run26.o
-    Object src/to80_extra1395_run01.o
-    Object src/to61_overlay_00_arm_residual_1_run27.o
-    Object src/to80_extra1396_run01.o
-    Object src/to61_overlay_00_arm_residual_1_run28.o
-    Object src/to90_extra1944_run01.o
-    Object src/to61_overlay_00_arm_residual_1_run29.o
-    Object src/to80_extra1397_run01.o
-    Object src/to61_overlay_00_arm_residual_1_run30.o
-    Object src/to80_extra1721_run01.o
-    Object src/to80_extra1721_run02.o
-    Object src/to61_overlay_00_arm_residual_1_run31.o
-    Object src/to80_extra1398_run01.o
-    Object src/to61_overlay_00_arm_residual_1_run32.o
-    Object src/to80_extra1399_run01.o
-    Object src/to61_overlay_00_arm_residual_1_run33.o
-    Object src/to70_to61_overlay_00_arm_residual_1_residual_34_extra1092_run01.o
-    Object src/to61_overlay_00_arm_residual_1_run34.o
+    Object lib/NitroDWC/src/match_browse.o
+    Object lib/NitroDWC/src/transport.o
     Object lib/NitroDWC/src/ap_connect_control.o
     Object lib/NitroDWC/src/ap_connect.o
     Object lib/NitroDWC/src/available_check_poll.o
@@ -5069,12 +5043,7 @@ Overlay OVY_70
     Object src/overlay70_sol_partial_30.o
     Object src/overlay70_storage_transfer_helpers.o
     Object src/overlay70_sol_partial_31.o
-    Object src/to47_overlay70_sprite_setup_r32.o
-    Object src/ov70_wave34_tasks_1.o
-    Object src/to70_overlay_70_residual_32_residual_2_extra622_run01.o
-    Object src/overlay70_sol_partial_32.o
-    Object src/overlay70_gfx_helpers_1.o
-    Object src/overlay70_sol_partial_33.o
+    Object src/gts_avatars.o
     Object src/gts_trade.o
     Object src/to50_overlay70_window_setup_modes.o
     Object src/overlay70_window_cleanup_r46.o

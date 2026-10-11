@@ -100,7 +100,7 @@ int GtsSearchResult_Init(GtsApp *app, int state) {
     GtsSearchResult_PrintButtonLabel(app->gtsMsgData, &app->windows[0], 88);  // TRADE
     GtsSearchResult_PrintButtonLabel(app->gtsMsgData, &app->windows[1], 109); // CANCEL
     GtsSearchResult_DrawDetails(app);
-    ov70_02241330(app, app->selectedResult, -app->scrollY);
+    Gts_SetAvatarMarker(app, app->selectedResult, -app->scrollY);
     app->vblankFunc = GtsSearchResult_ScrollBgs;
     reg_GX_POWCNT |= REG_GX_POWCNT_DSEL_MASK;
     if (app->nextScreenArg == 17) {
@@ -129,7 +129,7 @@ int GtsSearchResult_Main(GtsApp *app, int state) {
         Sprite *sprite = app->monSprite;
         Gts_SetSpritePosition(sprite, 208, 58 - app->scrollY);
     }
-    ov70_02241330(app, app->selectedResult, app->scrollY);
+    Gts_SetAvatarMarker(app, app->selectedResult, app->scrollY);
     return ret;
 }
 
@@ -284,7 +284,7 @@ int GtsSearchResult_Start(GtsApp *app) {
         app->state = GTS_SEARCH_RESULT_STATE_SCROLL_IN;
     } else {
         app->state = GTS_SEARCH_RESULT_STATE_HANDLE_INPUT;
-        Sprite_SetDrawFlag(app->unk_0F0C, TRUE);
+        Sprite_SetDrawFlag(app->avatarMarkerSprite, TRUE);
     }
     return 3;
 }
@@ -298,7 +298,7 @@ void GtsSearchResult_Select(GtsApp *app, int result) {
         app->state = GTS_SEARCH_RESULT_STATE_FADE_OUT;
         Gts_SetNextScreen(app, 3, 17);
         app->selectedResult = result;
-        ov70_02241330(app, result, 0);
+        Gts_SetAvatarMarker(app, result, 0);
         PlaySE(SEQ_SE_DP_SELECT);
     }
 }
@@ -325,7 +325,7 @@ int GtsSearchResult_HandleInput(GtsApp *app) {
             GtsSearchResult_Select(app, next);
         }
     } else {
-        int next = ov70_02241164(app->searchResultCount);
+        int next = Gts_GetTouchedAvatar(app->searchResultCount);
         int button;
         if (next != -1) {
             GtsSearchResult_Select(app, next);
@@ -347,7 +347,7 @@ int GtsSearchResult_HandleInput(GtsApp *app) {
 #pragma force_active reset
 
 int GtsSearchResult_FadeOut(GtsApp *app) {
-    Sprite_SetDrawFlag(app->unk_0F0C, FALSE);
+    Sprite_SetDrawFlag(app->avatarMarkerSprite, FALSE);
     if (app->nextScreenArg != 15) {
         if (app->nextScreenArg == 6) {
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, FADE_TYPE_BRIGHTNESS_OUT, FADE_TYPE_BRIGHTNESS_OUT, RGB_BLACK, 6, 1, HEAP_ID_61);
@@ -402,7 +402,7 @@ int GtsSearchResult_ScrollIn(GtsApp *app) {
     if (IsPaletteFadeFinished()) {
         app->scrollY = 0;
         app->state = GTS_SEARCH_RESULT_STATE_HANDLE_INPUT;
-        Sprite_SetDrawFlag(app->unk_0F0C, TRUE);
+        Sprite_SetDrawFlag(app->avatarMarkerSprite, TRUE);
     }
     return 3;
 }

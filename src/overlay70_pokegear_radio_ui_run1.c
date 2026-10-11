@@ -5,7 +5,7 @@ int ov70_0223F96C(Ov70Work *work) {
     ov70_0223FA08(work->bgConfig);
     ov70_0223FB60(work);
     ov70_0223FBF4(work);
-    ov70_02241358(work);
+    Gts_ResetAvatarPositions(work);
     BeginNormalPaletteFade(3, 1, 1, 0, 6, 1, 0x3d);
     ov70_02245124(work);
     work->state2c = 0;
@@ -20,7 +20,7 @@ void ov70_0223F9B4(Ov70Work *work) {
 
 int ov70_0223F9D4(Ov70Work *work) {
     if (GXx_GetMasterBrightness_((volatile u16 *)0x0400106C)) {
-        ov70_02241380(work);
+        Gts_LowerAvatars(work);
     }
     ov70_0223FC58(work);
     ov70_0223FC30(work);

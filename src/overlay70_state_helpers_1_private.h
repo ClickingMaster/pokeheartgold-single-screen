@@ -26,7 +26,7 @@ void sub_020399EC(void);
 void ov70_02244FA4(Ov70Work *, void *, int, int, int);
 void Gts_SetState(Ov70Work *, int, int);
 void Gts_DeleteWaitingIcon(Ov70Work *);
-void ov70_02241234(Ov70Work *);
+void Gts_StopAvatarAnims(Ov70Work *);
 int ov70_02240640(Ov70Work *);
 int ov70_02240658(Ov70Work *);
 int ov70_02240670(Ov70Work *);

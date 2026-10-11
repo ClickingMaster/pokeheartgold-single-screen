@@ -2492,26 +2492,26 @@
 	.public ov70_02240D00
 	.public ov70_02240D44
 	.public ov70_02240D54
-	.public ov70_02240D74
-	.public ov70_02240EF4
-	.public ov70_02240F3C
-	.public ov70_02240F58
-	.public ov70_02241004
-	.public ov70_02241048
-	.public ov70_022410F0
-	.public ov70_02241164
-	.public ov70_02241184
-	.public ov70_0224122C
-	.public ov70_02241234
-	.public ov70_0224127C
-	.public ov70_022412C8
-	.public ov70_02241308
-	.public ov70_02241330
-	.public ov70_02241358
-	.public ov70_02241380
-	.public ov70_022413AC
-	.public ov70_02241468
-	.public ov70_02241494
+	.public Gts_CreateAvatars
+	.public Gts_StartPlayerEnterAnim
+	.public Gts_SetPlayerAnim
+	.public Gts_PlayerEnterTask
+	.public Gts_StartPlayerExitAnim
+	.public Gts_PlayerExitTask
+	.public Gts_SetAvatarPosition
+	.public Gts_GetTouchedAvatar
+	.public Gts_ShowResultAvatars
+	.public Gts_GetAvatarAnimSeq
+	.public Gts_StopAvatarAnims
+	.public Gts_LoadAvatarGraphics
+	.public Gts_LoadAvatar
+	.public Gts_FreeAvatarGraphics
+	.public Gts_SetAvatarMarker
+	.public Gts_ResetAvatarPositions
+	.public Gts_LowerAvatars
+	.public GtsViewMon_Init
+	.public GtsViewMon_Main
+	.public GtsViewMon_Exit
 	.public GtsTrade_Init
 	.public GtsTrade_Main
 	.public GtsTrade_Exit
@@ -2698,11 +2698,11 @@
 	.public ov70_02245CA8
 	.public ov70_02245CC4
 	.public ov70_02245CE0
-	.public ov70_02245CFC
-	.public ov70_02245D0A
-	.public ov70_02245D0C
-	.public ov70_02245D26
-	.public ov70_02245D48
+	.public sGtsAvatarCharOffsets
+	.public sGtsAvatarPositions
+	.public sGtsAvatarY
+	.public sGtsAvatarHitboxes
+	.public sGtsViewMonSummaryPages
 	.public sGtsTradeSequenceTemplate
 	.public ov70_02245D60
 	.public ov70_02245D66
@@ -2831,8 +2831,8 @@
 	.public ov70_022408E0
 	.public ov70_02240D44
 	.public ov70_02240D54
-	.public ov70_0224122C
-	.public ov70_02241494
+	.public Gts_GetAvatarAnimSeq
+	.public GtsViewMon_Exit
 	.public ov70_02242508
 	.public ov70_022429A0
 	.public ov70_02242FF4

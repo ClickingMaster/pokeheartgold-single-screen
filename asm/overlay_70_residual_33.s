@@ -2492,26 +2492,26 @@
 	.public ov70_02240D00
 	.public ov70_02240D44
 	.public ov70_02240D54
-	.public ov70_02240D74
-	.public ov70_02240EF4
-	.public ov70_02240F3C
-	.public ov70_02240F58
-	.public ov70_02241004
-	.public ov70_02241048
-	.public ov70_022410F0
-	.public ov70_02241164
-	.public ov70_02241184
-	.public ov70_0224122C
-	.public ov70_02241234
-	.public ov70_0224127C
-	.public ov70_022412C8
-	.public ov70_02241308
-	.public ov70_02241330
-	.public ov70_02241358
-	.public ov70_02241380
-	.public ov70_022413AC
-	.public ov70_02241468
-	.public ov70_02241494
+	.public Gts_CreateAvatars
+	.public Gts_StartPlayerEnterAnim
+	.public Gts_SetPlayerAnim
+	.public Gts_PlayerEnterTask
+	.public Gts_StartPlayerExitAnim
+	.public Gts_PlayerExitTask
+	.public Gts_SetAvatarPosition
+	.public Gts_GetTouchedAvatar
+	.public Gts_ShowResultAvatars
+	.public Gts_GetAvatarAnimSeq
+	.public Gts_StopAvatarAnims
+	.public Gts_LoadAvatarGraphics
+	.public Gts_LoadAvatar
+	.public Gts_FreeAvatarGraphics
+	.public Gts_SetAvatarMarker
+	.public Gts_ResetAvatarPositions
+	.public Gts_LowerAvatars
+	.public GtsViewMon_Init
+	.public GtsViewMon_Main
+	.public GtsViewMon_Exit
 	.public GtsTrade_Init
 	.public GtsTrade_Main
 	.public GtsTrade_Exit
@@ -2698,11 +2698,11 @@
 	.public ov70_02245CA8
 	.public ov70_02245CC4
 	.public ov70_02245CE0
-	.public ov70_02245CFC
-	.public ov70_02245D0A
-	.public ov70_02245D0C
-	.public ov70_02245D26
-	.public ov70_02245D48
+	.public sGtsAvatarCharOffsets
+	.public sGtsAvatarPositions
+	.public sGtsAvatarY
+	.public sGtsAvatarHitboxes
+	.public sGtsViewMonSummaryPages
 	.public sGtsTradeSequenceTemplate
 	.public ov70_02245D60
 	.public ov70_02245D66
@@ -2831,8 +2831,8 @@
 	.public ov70_022408E0
 	.public ov70_02240D44
 	.public ov70_02240D54
-	.public ov70_0224122C
-	.public ov70_02241494
+	.public Gts_GetAvatarAnimSeq
+	.public GtsViewMon_Exit
 	.public ov70_02242508
 	.public ov70_022429A0
 	.public ov70_02242FF4
@@ -2847,8 +2847,8 @@
 	.public ov70_02244944
 	.public ov70_02245124
 
-	thumb_func_start ov70_02241234
-ov70_02241234: ; 0x02241234
+	thumb_func_start Gts_StopAvatarAnims
+Gts_StopAvatarAnims: ; 0x02241234
 	push {r3, r4, r5, r6, r7, lr}
 	ldr r7, _02241278 ; =0x00000EE8
 	add r5, r0, #0
@@ -2863,12 +2863,12 @@ _0224123C:
 	bl Sprite_GetAnimationNumber
 	add r6, r0, #0
 	add r0, r4, #0
-	bl ov70_0224122C
+	bl Gts_GetAvatarAnimSeq
 	add r0, r0, #1
 	cmp r6, r0
 	beq _0224126E
 	add r0, r4, #0
-	bl ov70_0224122C
+	bl Gts_GetAvatarAnimSeq
 	add r1, r0, #0
 	ldr r0, _02241278 ; =0x00000EE8
 	add r1, r1, #1
@@ -2882,11 +2882,11 @@ _0224126E:
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
 _02241278: .word 0x00000EE8
-	thumb_func_end ov70_02241234
+	thumb_func_end Gts_StopAvatarAnims
 
 
-	thumb_func_start ov70_0224127C
-ov70_0224127C: ; 0x0224127C
+	thumb_func_start Gts_LoadAvatarGraphics
+Gts_LoadAvatarGraphics: ; 0x0224127C
 	push {r3, r4, lr}
 	sub sp, #4
 	ldr r2, _022412BC ; =0x000011EC
@@ -2919,11 +2919,11 @@ ov70_0224127C: ; 0x0224127C
 _022412BC: .word 0x000011EC
 _022412C0: .word 0x000011E8
 _022412C4: .word 0x000011E0
-	thumb_func_end ov70_0224127C
+	thumb_func_end Gts_LoadAvatarGraphics
 
 
-	thumb_func_start ov70_022412C8
-ov70_022412C8: ; 0x022412C8
+	thumb_func_start Gts_LoadAvatar
+Gts_LoadAvatar: ; 0x022412C8
 	push {r3, r4, r5, r6, r7, lr}
 	add r7, r0, #0
 	add r6, r1, #0
@@ -2937,7 +2937,7 @@ ov70_022412C8: ; 0x022412C8
 	ldr r1, [r7, #0x14]
 	mul r0, r4
 	add r0, r1, r0
-	ldr r1, _02241304 ; =ov70_02245CFC
+	ldr r1, _02241304 ; =sGtsAvatarCharOffsets
 	lsl r2, r5, #1
 	ldrh r1, [r1, r2]
 	mov r2, #2
@@ -2952,12 +2952,12 @@ ov70_022412C8: ; 0x022412C8
 	bl GXS_LoadOBJPltt
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-_02241304: .word ov70_02245CFC
-	thumb_func_end ov70_022412C8
+_02241304: .word sGtsAvatarCharOffsets
+	thumb_func_end Gts_LoadAvatar
 
 
-	thumb_func_start ov70_02241308
-ov70_02241308: ; 0x02241308
+	thumb_func_start Gts_FreeAvatarGraphics
+Gts_FreeAvatarGraphics: ; 0x02241308
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, _02241328 ; =0x000011DC
@@ -2975,32 +2975,32 @@ _02241324:
 	nop
 _02241328: .word 0x000011DC
 _0224132C: .word 0x000011E0
-	thumb_func_end ov70_02241308
+	thumb_func_end Gts_FreeAvatarGraphics
 
 
-	thumb_func_start ov70_02241330
-ov70_02241330: ; 0x02241330
+	thumb_func_start Gts_SetAvatarMarker
+Gts_SetAvatarMarker: ; 0x02241330
 	push {r4, lr}
 	lsl r4, r1, #2
 	ldr r1, _0224134C ; =0x00000F0C
-	ldr r3, _02241350 ; =ov70_02245D0C
+	ldr r3, _02241350 ; =sGtsAvatarY
 	ldr r0, [r0, r1]
-	ldr r1, _02241354 ; =ov70_02245D0A
+	ldr r1, _02241354 ; =sGtsAvatarPositions
 	ldrh r3, [r3, r4]
 	ldrh r1, [r1, r4]
 	add r3, #0x20
 	add r2, r2, r3
-	bl ov70_022410F0
+	bl Gts_SetAvatarPosition
 	pop {r4, pc}
 	nop
 _0224134C: .word 0x00000F0C
-_02241350: .word ov70_02245D0C
-_02241354: .word ov70_02245D0A
-	thumb_func_end ov70_02241330
+_02241350: .word sGtsAvatarY
+_02241354: .word sGtsAvatarPositions
+	thumb_func_end Gts_SetAvatarMarker
 
 
-	thumb_func_start ov70_02241358
-ov70_02241358: ; 0x02241358
+	thumb_func_start Gts_ResetAvatarPositions
+Gts_ResetAvatarPositions: ; 0x02241358
 	push {r3, r4, r5, r6, r7, lr}
 	ldr r7, _02241378 ; =0x0000120C
 	add r5, r0, #0
@@ -3020,11 +3020,11 @@ _02241362:
 	.balign 4, 0
 _02241378: .word 0x0000120C
 _0224137C: .word 0x00000EE4
-	thumb_func_end ov70_02241358
+	thumb_func_end Gts_ResetAvatarPositions
 
 
-	thumb_func_start ov70_02241380
-ov70_02241380: ; 0x02241380
+	thumb_func_start Gts_LowerAvatars
+Gts_LowerAvatars: ; 0x02241380
 	push {r3, r4, r5, r6, r7, lr}
 	ldr r7, _022413A4 ; =0x0000120C
 	add r5, r0, #0
@@ -3045,11 +3045,11 @@ _0224138A:
 	nop
 _022413A4: .word 0x0000120C
 _022413A8: .word 0x00000EE4
-	thumb_func_end ov70_02241380
+	thumb_func_end Gts_LowerAvatars
 
 
-	thumb_func_start ov70_022413AC
-ov70_022413AC: ; 0x022413AC
+	thumb_func_start GtsViewMon_Init
+GtsViewMon_Init: ; 0x022413AC
 	push {r4, lr}
 	mov r3, #0x12
 	add r4, r0, #0
@@ -3111,7 +3111,7 @@ ov70_022413AC: ; 0x022413AC
 	add r1, #0xf0
 	str r0, [r1]
 	add r0, r4, #0
-	ldr r1, _02241460 ; =ov70_02245D48
+	ldr r1, _02241460 ; =sGtsViewMonSummaryPages
 	add r0, #0xbc
 	bl sub_02089D40
 	ldr r1, [r4]
@@ -3134,13 +3134,13 @@ ov70_022413AC: ; 0x022413AC
 	mov r0, #2
 	pop {r4, pc}
 	.balign 4, 0
-_02241460: .word ov70_02245D48
+_02241460: .word sGtsViewMonSummaryPages
 _02241464: .word gOverlayTemplate_PokemonSummary
-	thumb_func_end ov70_022413AC
+	thumb_func_end GtsViewMon_Init
 
 
-	thumb_func_start ov70_02241468
-ov70_02241468: ; 0x02241468
+	thumb_func_start GtsViewMon_Main
+GtsViewMon_Main: ; 0x02241468
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	add r0, #0xb8
@@ -3161,4 +3161,4 @@ ov70_02241468: ; 0x02241468
 _02241490:
 	add r0, r4, #0
 	pop {r3, r4, r5, pc}
-	thumb_func_end ov70_02241468
+	thumb_func_end GtsViewMon_Main

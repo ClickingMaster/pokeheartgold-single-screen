@@ -482,7 +482,7 @@ int GtsSearch_StartSearch(GtsApp *app) {
         PlaySE(SEQ_SE_DP_Z_SEARCH);
         GtsSearch_PrintMessage(app, 13, 1, 0, 0xF0F); // Searching for the Pokemon you want...
         Gts_SetState(app, GTS_SEARCH_STATE_WAIT_TEXT, GTS_SEARCH_STATE_SEND_SEARCH);
-        ov70_02241234(app);
+        Gts_StopAvatarAnims(app);
     }
     return 3;
 }
@@ -559,7 +559,7 @@ int GtsSearch_WaitSearch(GtsApp *app) {
         case 7:
             app->searchResultCount = result;
             ((void (*)(u16))StopSE)(SEQ_SE_DP_Z_SEARCH); // called without its second argument
-            ov70_02241184(app, result, 1);
+            Gts_ShowResultAvatars(app, result, 1);
             if (result == 0) {
                 GtsSearch_DrawResultsButton(app->bgConfig, &app->infoWindows[8], app->gtsMsgData, FALSE);
             } else {
@@ -892,7 +892,7 @@ int GtsSearch_HandleExitPrompt(GtsApp *app) {
         YesNoPrompt_Destroy(app->yesNoPrompt);
         app->state = GTS_SEARCH_STATE_FADE_OUT;
         Gts_SetNextScreen(app, 1, 0);
-        ov70_02241234(app);
+        Gts_StopAvatarAnims(app);
         app->searchResultCount = 0;
     } else if (response == YESNORESPONSE_NO) {
         YesNoPrompt_Destroy(app->yesNoPrompt);

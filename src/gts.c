@@ -80,9 +80,8 @@ void sub_02034DE0(void);
 // Other GTS screens.
 void Gts_LoadSubScreenBg(GtsApp *app);
 void Gts_ShowSubScreenPanel(GtsApp *app);
-void ov70_02240D74(GtsApp *app, u32 gender);
-void ov70_02241184(GtsApp *app, u32 arg1, int arg2);
-void ov70_02241308(GtsApp *app);
+void Gts_CreateAvatars(GtsApp *app, u32 gender);
+void Gts_FreeAvatarGraphics(GtsApp *app);
 
 BOOL GtsServer_StartRequest(const char *url, void *payload, int payloadSize, void *response, int responseCapacity);
 void Gts_VBlankCB(void *arg);
@@ -451,8 +450,8 @@ BOOL Gts_Main(OverlayManager *man, int *state) {
         if (IsPaletteFadeFinished()) {
             if (app->reloadGraphics) {
                 Gts_InitGraphics(app);
-                ov70_02240D74(app, PlayerProfile_GetTrainerGender(app->args->profile));
-                ov70_02241184(app, app->searchResultCount, 0);
+                Gts_CreateAvatars(app, PlayerProfile_GetTrainerGender(app->args->profile));
+                Gts_ShowResultAvatars(app, app->searchResultCount, 0);
                 Gts_LoadSubScreenBg(app);
                 Gts_ShowSubScreenPanel(app);
                 app->reloadGraphics = FALSE;
@@ -538,7 +537,7 @@ void Gts_InitData(GtsApp *app, OverlayManager *man) {
     app->searchCriteria.maxLevel = 0;
     app->lastSearch.species = 0;
     app->playerAnimDone = 0;
-    app->unk_0120 = 18;
+    app->selectedBox = 18;
     app->boxMonCount = 0;
     app->countingBox = 0;
     app->hasSearchResults = 0;
@@ -788,7 +787,7 @@ void Gts_InitGraphics(GtsApp *app) {
 void Gts_FreeGraphics(GtsApp *app) {
     int i;
 
-    ov70_02241308(app);
+    Gts_FreeAvatarGraphics(app);
     SpriteTransfer_DeleteCharTransferTask(app->resources[0]);
     SpriteTransfer_DeleteCharTransferTask(app->resources[4]);
     SpriteTransfer_DeletePlttTransferTask(app->resources[1]);

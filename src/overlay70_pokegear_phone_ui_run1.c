@@ -70,7 +70,7 @@ int GtsSearch_HandleScrolledOut(Ov70Work *work) {
     if (gSystem.newKeys & 1) {
         BeginNormalPaletteFade(0, 0, 0, 0, 0x10, 1, 0x3d);
     } else {
-        index = ov70_02241164(work->field128);
+        index = Gts_GetTouchedAvatar(work->field128);
         if (work->field11DE != 0 && index >= 0) {
             Sprite_SetAnimCtrlSeq(work->spritesEE4[index + 1], index * 4 + 0x10);
             work->state2c = 2;
@@ -163,7 +163,7 @@ int ov70_0223CD44(Ov70Work *work) {
     ov70_0223CF74(work);
     ov70_0223D26C(work);
     ov70_0223D058(work);
-    ov70_02241358(work);
+    Gts_ResetAvatarPositions(work);
     if (GXx_GetMasterBrightness_((volatile u16 *)0x0400106C) == 0) {
         BeginNormalPaletteFade(3, 1, 1, 0, 6, 1, 0x3d);
     } else {
@@ -184,7 +184,7 @@ void ov70_0223CDD8(Ov70Work *work) {
 int ov70_0223CDF8(Ov70Work *work) {
     WirelessStatusIcon_Destroy();
     if (GXx_GetMasterBrightness_((volatile u16 *)0x0400106C)) {
-        ov70_02241380(work);
+        Gts_LowerAvatars(work);
     }
     ov70_0223D208(work);
     ov70_0223D414(work);

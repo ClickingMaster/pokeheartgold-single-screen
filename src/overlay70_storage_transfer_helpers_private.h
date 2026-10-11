@@ -153,9 +153,9 @@ void ov70_02240CE4(void *, void *);
 void ov70_02240D44(Ov70Work *, int, int);
 int ov70_02240D00(Ov70Work *, void *);
 int ov70_02240D54(Ov70Work *);
-void ov70_02241234(Ov70Work *);
-void ov70_02241358(Ov70Work *);
-void ov70_02241380(Ov70Work *);
+void Gts_StopAvatarAnims(Ov70Work *);
+void Gts_ResetAvatarPositions(Ov70Work *);
+void Gts_LowerAvatars(Ov70Work *);
 void ov70_02244FA4(Ov70Work *, void *, int, int, int);
 void ov70_02245124(Ov70Work *);
 
