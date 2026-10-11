@@ -6,8 +6,8 @@
 #define U32(p, o) (*(u32 *)((u8 *)(p) + (o)))
 #define PTR(p, o) (*(void **)((u8 *)(p) + (o)))
 extern void *sub_0209680C(void *);
-extern void *ov80_02239700(void *, u16);
-extern BOOL ov80_02239734(void *, u16);
+extern void *FrontierMap_GetSprite(void *, u16);
+extern BOOL FrontierMap_IsSpriteAnimActive(void *, u16);
 extern BOOL ManagedSprite_IsAnimated(void *);
 extern u16 FrontierScript_ReadVar(void *);
 extern void *Heap_Alloc(u32, u32);

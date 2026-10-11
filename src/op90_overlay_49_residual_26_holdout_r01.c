@@ -8,7 +8,7 @@ typedef char work_size[(sizeof(Work)==0x154)?1:-1];
 typedef char ui_size[(sizeof(((Ctx*)0)->ui)==0x2a0)?1:-1];
 extern void BeginNormalPaletteFade(int,int,int,int,int,int,int);extern int IsPaletteFadeFinished(void);
 extern void GfGfx_EngineBTogglePlanes(int,int);
-extern void *ov45_0222A5C0(Ov45Work *),*ov45_0222A578(Ov45Work *,u32);
+extern void *WiFiPlazaWork_GetMyPlayer(Ov45Work *),*WiFiPlazaWork_GetPlayer(Ov45Work *,u32);
 extern int ov45_0222A53C(Ov45Work*),ov45_0222ADA8(void *,int),ov45_0222AB28(void *,int),ov45_0222AB48(void *,int),ov45_0222AB58(void *,int);
 extern void ov45_0222ADD8(void *,int),ov45_0222AE54(Ov45Work*),ov45_0222AE08(u32,u32 *,u32 *);
 extern void ov49_0225B9AC(Work *,void *,void *,int,void *),ov49_0225B444(Ctx *),ov49_0225CB68(void *),ov49_0225BBCC(void *,void *),ov49_0225BA20(Work *,void *),ov49_0225B99C(Work *,void *,void *),ov49_0225B9F0(Work *,void *,int,int);
@@ -42,7 +42,7 @@ void ov49_0225B518(Work *w, Ctx *c, int input, int heap) {
         break;
     case 2:
         if (IsPaletteFadeFinished() == 1) {
-            ov49_0225B9AC(w, ui, c->config, heap, ov45_0222A5C0(chat));
+            ov49_0225B9AC(w, ui, c->config, heap, WiFiPlazaWork_GetMyPlayer(chat));
             w->substate = 4;
             GfGfx_EngineBTogglePlanes(1, 1);
             GfGfx_EngineBTogglePlanes(2, 1);
@@ -125,16 +125,16 @@ void ov49_0225B518(Work *w, Ctx *c, int input, int heap) {
             break;
         case 1:
         case 4:
-            ov49_0225B9AC(w, ui, c->config, heap, ov45_0222A5C0(chat));
+            ov49_0225B9AC(w, ui, c->config, heap, WiFiPlazaWork_GetMyPlayer(chat));
             break;
         case 2:
-            first = ov45_0222A5C0(chat);
+            first = WiFiPlazaWork_GetMyPlayer(chat);
             sel = w->sel;
             if (sel == ov45_0222A53C(chat)) {
-                source = ov45_0222A5C0(chat);
+                source = WiFiPlazaWork_GetMyPlayer(chat);
                 local = 1;
             } else {
-                source = ov45_0222A578(chat, sel);
+                source = WiFiPlazaWork_GetPlayer(chat, sel);
                 local = 0;
             }
             value = ov45_0222AB28(chat, w->sel);

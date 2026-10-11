@@ -52,11 +52,11 @@ typedef struct W29220 {
 } W29220;
 
 void *BattleAnimUtil_AllocWork(void *owner, u32 size);
-u16 ov07_0221C468(void *owner);
-Pokepic *ov07_0221FA48(void *owner, u16 index);
-void *ov07_0221FA78(void *owner);
+u16 BattleAnimSystem_GetAttacker(void *owner);
+Pokepic *BattleAnimSystem_GetBattlerPokepic(void *owner, u16 index);
+void *BattleAnimSystem_GetPaletteData(void *owner);
 u16 ov07_0221FAA0(void *owner, u16 index);
-void ov07_0221C410(void *owner, void (*callback)(void), void *work);
+void BattleAnimSystem_CreateTaskDefaultPriority(void *owner, void (*callback)(void), void *work);
 void ov07_02227FA4(void);
 void ov07_022280A8(void);
 void ov07_022281C0(void);
@@ -64,8 +64,8 @@ void ov07_022283D8(void);
 void ov07_02228510(void);
 void ov07_0222915C(void);
 void BattleAnimUtil_InitCommonWork(void *owner, void *work);
-ManagedSprite *ov07_0221C4E8(void *owner, int index);
-u16 ov07_0221C470(void *owner);
+ManagedSprite *BattleAnimSystem_GetBattlerSprite(void *owner, int index);
+u16 BattleAnimSystem_GetDefender(void *owner);
 void BattleAnimUtil_GetPicPosition(void *object, void *position);
 void ov07_02228070(void *owner);
 void ov07_02228174(void *owner);
@@ -78,7 +78,7 @@ void ov07_0222A8D8(ManagedSprite *sprite);
 void ov07_022284D8(void *owner) {
     W284D8 *work = BattleAnimUtil_AllocWork(owner, 0x14);
     work->owner = owner;
-    work->palette = ov07_0221FA78(work->owner);
-    work->pokepic = ov07_0221FA48(work->owner, ov07_0221C468(work->owner));
-    ov07_0221C410(work->owner, ov07_022283D8, work);
+    work->palette = BattleAnimSystem_GetPaletteData(work->owner);
+    work->pokepic = BattleAnimSystem_GetBattlerPokepic(work->owner, BattleAnimSystem_GetAttacker(work->owner));
+    BattleAnimSystem_CreateTaskDefaultPriority(work->owner, ov07_022283D8, work);
 }

@@ -5,10 +5,10 @@
 typedef struct {u32 pad;VecFx32 position;} Base;
 typedef struct {u16 x,y,z;} Rotation;
 typedef struct {u8 pad[0x20];Base **base;u32 unk24;VecFx32 position;u8 pad34[0x1c];VecFx16 rotation;} Emitter;
-extern void *ov07_0221C478(void*);
+extern void *BattleAnimSystem_GetCurrentParticleSystem(void*);
 extern int BattleAnimUtil_GetBattlerType(void*,int);
-extern void ov07_0221F9A8(void*,void*,int);
-extern s8 ov07_0221FF34(void*,int,int);
+extern void BattleAnimSystem_ReadScriptArgs(void*,void*,int);
+extern s8 BattleAnimSystem_GetSideSign(void*,int,int);
 extern void ov07_02231B90(void*,int,VecFx32*);
 extern void ov07_0222036C(void*,Emitter*,int,int,int,s8,VecFx32*);
 extern void ov07_0222043C(void*,Emitter*,int,int,int,s8,VecFx32*);
@@ -19,12 +19,12 @@ void ov07_0222050C(void *context,Emitter *emitter,int a,int b,int mode,int arg) 
  VecFx32 final,v0,v1,v3,v2,v6,v4,v5;volatile VecFx32 v7;VecFx32 offset;
  volatile Rotation rotation;
  int kind,other;s8 factor;
- ov07_0221C478(context);
+ BattleAnimSystem_GetCurrentParticleSystem(context);
  kind=BattleAnimUtil_GetBattlerType(context,a);other=BattleAnimUtil_GetBattlerType(context,b);
- ov07_0221F9A8(context,&v0,3);ov07_0221F9A8(context,&v1,3);
- ov07_0221F9A8(context,&v2,3);ov07_0221F9A8(context,&v3,3);
- ov07_0221F9A8(context,&v4,3);ov07_0221F9A8(context,&v5,3);
- ov07_0221F9A8(context,&v6,3);
+ BattleAnimSystem_ReadScriptArgs(context,&v0,3);BattleAnimSystem_ReadScriptArgs(context,&v1,3);
+ BattleAnimSystem_ReadScriptArgs(context,&v2,3);BattleAnimSystem_ReadScriptArgs(context,&v3,3);
+ BattleAnimSystem_ReadScriptArgs(context,&v4,3);BattleAnimSystem_ReadScriptArgs(context,&v5,3);
+ BattleAnimSystem_ReadScriptArgs(context,&v6,3);
  switch(kind) {
  default:case 0:convert(&rotation,&v0);break;
  case 1:negate(&rotation,&v0);break;
@@ -33,8 +33,8 @@ void ov07_0222050C(void *context,Emitter *emitter,int a,int b,int mode,int arg) 
  case 4:if(other==3)convert(&rotation,&v4);else if(other==5)convert(&rotation,&v5);else convert(&rotation,&v6);break;
  case 5:if(other==3)negate(&rotation,&v6);else if(other==2)negate(&rotation,&v2);else negate(&rotation,&v5);break;
  }
- factor=ov07_0221FF34(context,a,b);
- memset((void*)&v7,0,sizeof(v7));ov07_0221F9A8(context,(void*)&v7,3);
+ factor=BattleAnimSystem_GetSideSign(context,a,b);
+ memset((void*)&v7,0,sizeof(v7));BattleAnimSystem_ReadScriptArgs(context,(void*)&v7,3);
  ov07_02231B90(context,a,&offset);
  if(v7.x==0 && v7.y==0 && v7.z==0) {
   final=offset;

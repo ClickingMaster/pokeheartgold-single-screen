@@ -13,8 +13,8 @@
 #define RECORD_MIXING_MAX_GROUPS_KEPT 4
 
 // friend_group.c
-BOOL sub_0202C8C4(FRIEND_GROUP *group);
-BOOL sub_0202C8E4(FRIEND_GROUP *a, FRIEND_GROUP *b);
+BOOL FriendGroup_IsEmpty(FRIEND_GROUP *group);
+BOOL FriendGroup_Equals(FRIEND_GROUP *a, FRIEND_GROUP *b);
 
 extern const u8 *ov73_021EA664[];
 
@@ -52,12 +52,12 @@ void RecordMixing_MergeGroups(int count, int localId, FRIEND_GROUP *groups, FRIE
     int i;
     for (i = 0; i < count; i++) {
         FRIEND_GROUP *group = received[i];
-        if (i == localId || group == NULL || sub_0202C8C4(group) == TRUE || sub_0202C8E4(group, groups) != FALSE) {
+        if (i == localId || group == NULL || FriendGroup_IsEmpty(group) == TRUE || FriendGroup_Equals(group, groups) != FALSE) {
             continue;
         }
         int j;
         for (j = 0; j < RECORD_MIXING_MAX_GROUPS_KEPT; ++j) {
-            if (sub_0202C8E4(group, &groups[j + 2]) != FALSE) {
+            if (FriendGroup_Equals(group, &groups[j + 2]) != FALSE) {
                 RecordMixing_RemoveGroup(groups, j + 2);
             }
         }

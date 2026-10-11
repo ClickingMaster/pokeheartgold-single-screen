@@ -10,7 +10,7 @@
 #include "gf_gfx_planes.h" // GF_BG_LYR_MAIN_3
 #include "heap.h"          // enum HeapID
 #include "render_window.h" // LoadUserFrameGfx1 / LoadUserFrameGfx2 (u8 palette/frame matter)
-#include "unk_0202C034.h"  // UnkStruct_021D2230, sub_0202C6F4, sub_0202C254
+#include "friend_roster.h"  // FriendRoster, Save_FriendRoster_Get, sub_0202C254
 
 // ---------------------------------------------------------------------------
 // The task context. 0x9c bytes (MI_CpuFill8(ctx, 0, 0x9c) in ov01_021F722C and
@@ -50,11 +50,11 @@ typedef struct FieldFriendCtx {
 // Params are declared with the widths the call sites require (u8 printer id,
 // u8 frame/palette) so codegen is not perturbed.
 // ---------------------------------------------------------------------------
-extern void *sub_0202C23C(void *, int);
+extern void *FriendRoster_GetDwcFriendData(void *, int);
 extern BOOL sub_0203A1C4(SaveData *saveData, void *a1, int heapId);
 extern void sub_0203A280(SaveData *saveData, u32 a1, int a2, int a3, int a4);
-extern BOOL sub_0202C2DC(UnkStruct_021D2230 *data, int index);
-extern void sub_0202C338(UnkStruct_021D2230 *data, int index);
+extern BOOL FriendRoster_IsFriendValid(FriendRoster *data, int index);
+extern void FriendRoster_RemoveFriend(FriendRoster *data, int index);
 extern void sub_020311AC(void *frontier, int row);
 extern void *Save_Frontier_GetStatic(SaveData *saveData);
 extern int Comm_CountConnected(void);

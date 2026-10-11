@@ -71,7 +71,7 @@
 #include "task.h"
 #include "text.h"
 #include "trainer_memo.h"
-#include "unk_0202C034.h"
+#include "friend_roster.h"
 #include "unk_02034B0C.h"
 #include "unk_02035900.h"
 #include "unk_020379A0.h"
@@ -4028,7 +4028,7 @@ BOOL ScrCmd_564(ScriptContext *ctx) {
 
 BOOL ScrCmd_565(ScriptContext *ctx) {
     u16 *p_ret = ScriptGetVarPointer(ctx);
-    *p_ret = sub_0202C2F8(sub_0202C6F4(ctx->fieldSystem->saveData));
+    *p_ret = FriendRoster_CountFriends(Save_FriendRoster_Get(ctx->fieldSystem->saveData));
     return FALSE;
 }
 

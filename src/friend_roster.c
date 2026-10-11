@@ -1,9 +1,11 @@
+#include "friend_roster.h"
+
 #include "global.h"
-#include "to90_login_callback_private.h"
 
 #include "gf_rtc.h"
 #include "pm_string.h"
-#include "unk_0202C034.h"
+#include "to90_login_callback_private.h"
+
 typedef struct FriendEntry {
     u16 name[8], name2[8];
     u32 id;
@@ -11,38 +13,54 @@ typedef struct FriendEntry {
     u8 value2C, value2D, value2E, value2F;
     u16 value30, value32, value34, value36;
 } FriendEntry;
+
 typedef struct FriendEntryArray {
     FriendEntry entries[32];
 } FriendEntryArray;
-struct UnkStruct_021D2230 {
+
+struct FriendRoster {
     W41287Account header;
     u32 friendData[32][3];
     FriendEntryArray roster;
 };
-extern UnkStruct_021D2230 _021D2230;
-void sub_0203A01C(UnkStruct_021D2230 *data);
+
+// asm/friend_roster_data.s
+extern FriendRoster gFriendRoster;
+
+void sub_0203A01C(FriendRoster *data);
 BOOL DWC_IsValidFriendData(void *data);
-u32 sub_0202C034(void);
-void sub_0202C03C(UnkStruct_021D2230 *data);
-void *sub_0202C08C(UnkStruct_021D2230 *data);
-s32 sub_0202C090(UnkStruct_021D2230 *data, s32 index, s32 field);
-void sub_0202C190(UnkStruct_021D2230 *data, int index, int field, u8 value);
-void *sub_0202C23C(UnkStruct_021D2230 *data, int index);
-u16 *sub_0202C254(UnkStruct_021D2230 *data, s32 index);
-void sub_0202C270(UnkStruct_021D2230 *data, int index, String *name);
-u16 *sub_0202C298(UnkStruct_021D2230 *data, s32 index);
-void sub_0202C2B4(UnkStruct_021D2230 *data, int index, String *name);
-BOOL sub_0202C2DC(UnkStruct_021D2230 *data, int index);
-int sub_0202C2F8(UnkStruct_021D2230 *data);
-int sub_0202C318(UnkStruct_021D2230 *data);
-void sub_0202C338(UnkStruct_021D2230 *data, int index);
-void sub_0202C3E8(UnkStruct_021D2230 *data, int dest, int src);
-void sub_0202C46C(UnkStruct_021D2230 *data);
-void sub_0202C4B0(UnkStruct_021D2230 *data, s32 index);
-u32 sub_0202C034(void) {
-    return sizeof(UnkStruct_021D2230);
+
+u32 Save_FriendRoster_sizeof(void);
+void Save_FriendRoster_Init(FriendRoster *data);
+void *FriendRoster_GetUserData(FriendRoster *data);
+s32 FriendRoster_GetEntryField(FriendRoster *data, s32 index, s32 field);
+void FriendRoster_SetEntryField(FriendRoster *data, int index, int field, u8 value);
+void *FriendRoster_GetDwcFriendData(FriendRoster *data, int index);
+u16 *sub_0202C254(FriendRoster *data, s32 index);
+void sub_0202C270(FriendRoster *data, int index, String *name);
+u16 *sub_0202C298(FriendRoster *data, s32 index);
+void sub_0202C2B4(FriendRoster *data, int index, String *name);
+BOOL FriendRoster_IsFriendValid(FriendRoster *data, int index);
+int FriendRoster_CountFriends(FriendRoster *data);
+int FriendRoster_GetUsedSlotCount(FriendRoster *data);
+void FriendRoster_RemoveFriend(FriendRoster *data, int index);
+void FriendRoster_MoveFriend(FriendRoster *data, int dest, int src);
+void FriendRoster_Compact(FriendRoster *data);
+void FriendRoster_UpdateDate(FriendRoster *data, s32 index);
+void sub_0202C4F0(FriendRoster *data, s32 index, s32 a, s32 b, s32 c);
+void sub_0202C554(FriendRoster *data, s32 index, s32 value);
+void sub_0202C584(FriendRoster *data, s32 index, s32 value);
+void sub_0202C5B4(FriendRoster *data, s32 index, s32 value);
+void FriendRoster_MergeFriend(FriendRoster *data, s32 src, s32 dest);
+FriendRoster *Save_FriendRoster_Get(SaveData *saveData);
+void Save_FriendRoster_LoadFromSave(SaveData *saveData);
+void Save_FriendRoster_StoreToSave(SaveData *saveData);
+
+u32 Save_FriendRoster_sizeof(void) {
+    return sizeof(FriendRoster);
 }
-void sub_0202C03C(UnkStruct_021D2230 *data) {
+
+void Save_FriendRoster_Init(FriendRoster *data) {
     int i;
     MI_CpuClearFast(data, sizeof(*data));
     for (i = 0; i < 32; i++) {
@@ -51,12 +69,14 @@ void sub_0202C03C(UnkStruct_021D2230 *data) {
         data->roster.entries[i].value2E = 2;
     }
     sub_0203A01C(data);
-    MI_CpuCopy8(data, &_021D2230, sizeof(*data));
+    MI_CpuCopy8(data, &gFriendRoster, sizeof(*data));
 }
-void *sub_0202C08C(UnkStruct_021D2230 *data) {
+
+void *FriendRoster_GetUserData(FriendRoster *data) {
     return data;
 }
-s32 sub_0202C090(UnkStruct_021D2230 *data, s32 index, s32 field) {
+
+s32 FriendRoster_GetEntryField(FriendRoster *data, s32 index, s32 field) {
     int value;
     GF_ASSERT(index < 32);
     switch (field) {
@@ -102,7 +122,8 @@ s32 sub_0202C090(UnkStruct_021D2230 *data, s32 index, s32 field) {
     }
     return value;
 }
-void sub_0202C190(UnkStruct_021D2230 *data, int index, int field, u8 value) {
+
+void FriendRoster_SetEntryField(FriendRoster *data, int index, int field, u8 value) {
     GF_ASSERT(index < 32);
     switch (field) {
     case 0:
@@ -137,49 +158,58 @@ void sub_0202C190(UnkStruct_021D2230 *data, int index, int field, u8 value) {
         break;
     }
 }
-void *sub_0202C23C(UnkStruct_021D2230 *data, int index) {
+
+void *FriendRoster_GetDwcFriendData(FriendRoster *data, int index) {
     GF_ASSERT(index < 32);
     return data->friendData[index];
 }
-u16 *sub_0202C254(UnkStruct_021D2230 *data, s32 index) {
+
+u16 *sub_0202C254(FriendRoster *data, s32 index) {
     GF_ASSERT(index < 32);
     return data->roster.entries[index].name2;
 }
-void sub_0202C270(UnkStruct_021D2230 *data, int index, String *name) {
+
+void sub_0202C270(FriendRoster *data, int index, String *name) {
     GF_ASSERT(index < 32);
     CopyStringToU16Array(name, data->roster.entries[index].name2, 16);
 }
-u16 *sub_0202C298(UnkStruct_021D2230 *data, s32 index) {
+
+u16 *sub_0202C298(FriendRoster *data, s32 index) {
     GF_ASSERT(index < 32);
     return data->roster.entries[index].name;
 }
-void sub_0202C2B4(UnkStruct_021D2230 *data, int index, String *name) {
+
+void sub_0202C2B4(FriendRoster *data, int index, String *name) {
     GF_ASSERT(index < 32);
     CopyStringToU16Array(name, data->roster.entries[index].name, 16);
 }
-BOOL sub_0202C2DC(UnkStruct_021D2230 *data, int index) {
+
+BOOL FriendRoster_IsFriendValid(FriendRoster *data, int index) {
     GF_ASSERT(index < 32);
     return DWC_IsValidFriendData(data->friendData[index]);
 }
-int sub_0202C2F8(UnkStruct_021D2230 *data) {
+
+int FriendRoster_CountFriends(FriendRoster *data) {
     int i, count = 0;
     for (i = 0; i < 32; i++) {
-        if (sub_0202C2DC(data, i)) {
+        if (FriendRoster_IsFriendValid(data, i)) {
             count++;
         }
     }
     return count;
 }
-int sub_0202C318(UnkStruct_021D2230 *data) {
+
+int FriendRoster_GetUsedSlotCount(FriendRoster *data) {
     int end = 0, i;
     for (i = 0; i < 32; i++) {
-        if (sub_0202C2DC(data, i)) {
+        if (FriendRoster_IsFriendValid(data, i)) {
             end = i + 1;
         }
     }
     return end;
 }
-void sub_0202C338(UnkStruct_021D2230 *data, int index) {
+
+void FriendRoster_RemoveFriend(FriendRoster *data, int index) {
     int i;
     if (index >= 0 && index < 32) {
         for (i = index; i < 31; i++) {
@@ -193,7 +223,8 @@ void sub_0202C338(UnkStruct_021D2230 *data, int index) {
         ((FriendEntry *)((u8 *)&data->roster + 0x6C8))->value2E = 2;
     }
 }
-void sub_0202C3E8(UnkStruct_021D2230 *data, int dest, int src) {
+
+void FriendRoster_MoveFriend(FriendRoster *data, int dest, int src) {
     if (dest >= 0 && dest < 32 && src >= 0 && src < 32) {
         MI_CpuCopy8(&data->roster.entries[src], &data->roster.entries[dest], sizeof(FriendEntry));
         MI_CpuCopy8(data->friendData[src], data->friendData[dest], sizeof(data->friendData[src]));
@@ -204,12 +235,13 @@ void sub_0202C3E8(UnkStruct_021D2230 *data, int dest, int src) {
         data->roster.entries[src].value2E = 2;
     }
 }
-void sub_0202C46C(UnkStruct_021D2230 *data) {
+
+void FriendRoster_Compact(FriendRoster *data) {
     int i, empty = -1;
     for (i = 0; i < 32; i++) {
-        if (sub_0202C2DC(data, i)) {
+        if (FriendRoster_IsFriendValid(data, i)) {
             if (empty != -1) {
-                sub_0202C3E8(data, empty, i);
+                FriendRoster_MoveFriend(data, empty, i);
                 i = -1;
                 empty = -1;
             }
@@ -218,7 +250,8 @@ void sub_0202C46C(UnkStruct_021D2230 *data) {
         }
     }
 }
-void sub_0202C4B0(UnkStruct_021D2230 *data, s32 index) {
+
+void FriendRoster_UpdateDate(FriendRoster *data, s32 index) {
     RTCDate date;
     GF_RTC_CopyDate(&date);
     if (index >= 0 && index < 32) {
@@ -228,18 +261,7 @@ void sub_0202C4B0(UnkStruct_021D2230 *data, s32 index) {
     }
 }
 
-void sub_0202C4B0(UnkStruct_021D2230 *data, s32 index);
-void sub_0202C4F0(UnkStruct_021D2230 *data, s32 index, s32 a, s32 b, s32 c);
-void sub_0202C554(UnkStruct_021D2230 *data, s32 index, s32 value);
-void sub_0202C584(UnkStruct_021D2230 *data, s32 index, s32 value);
-void sub_0202C5B4(UnkStruct_021D2230 *data, s32 index, s32 value);
-void sub_0202C5E4(UnkStruct_021D2230 *data, s32 src, s32 dest);
-UnkStruct_021D2230 *sub_0202C6F4(SaveData *saveData);
-void sub_0202C6FC(SaveData *saveData);
-void sub_0202C714(SaveData *saveData);
-extern UnkStruct_021D2230 _021D2230;
-
-void sub_0202C4F0(UnkStruct_021D2230 *data, s32 index, s32 a, s32 b, s32 c) {
+void sub_0202C4F0(FriendRoster *data, s32 index, s32 a, s32 b, s32 c) {
     if (index >= 0 && index < 32) {
         data->roster.entries[index].value24 += a;
         if (data->roster.entries[index].value24 > 9999) {
@@ -253,41 +275,41 @@ void sub_0202C4F0(UnkStruct_021D2230 *data, s32 index, s32 a, s32 b, s32 c) {
         if (data->roster.entries[index].value28 > 9999) {
             data->roster.entries[index].value28 = 9999;
         }
-        sub_0202C4B0(data, index);
+        FriendRoster_UpdateDate(data, index);
     }
 }
 
-void sub_0202C554(UnkStruct_021D2230 *data, s32 index, s32 value) {
+void sub_0202C554(FriendRoster *data, s32 index, s32 value) {
     if (index >= 0 && index < 32) {
         data->roster.entries[index].value32 += value;
         if (data->roster.entries[index].value32 > 9999) {
             data->roster.entries[index].value32 = 9999;
         }
-        sub_0202C4B0(data, index);
+        FriendRoster_UpdateDate(data, index);
     }
 }
 
-void sub_0202C584(UnkStruct_021D2230 *data, s32 index, s32 value) {
+void sub_0202C584(FriendRoster *data, s32 index, s32 value) {
     if (index >= 0 && index < 32) {
         data->roster.entries[index].value34 += value;
         if (data->roster.entries[index].value34 > 9999) {
             data->roster.entries[index].value34 = 9999;
         }
-        sub_0202C4B0(data, index);
+        FriendRoster_UpdateDate(data, index);
     }
 }
 
-void sub_0202C5B4(UnkStruct_021D2230 *data, s32 index, s32 value) {
+void sub_0202C5B4(FriendRoster *data, s32 index, s32 value) {
     if (index >= 0 && index < 32) {
         data->roster.entries[index].value36 += value;
         if (data->roster.entries[index].value36 > 9999) {
             data->roster.entries[index].value36 = 9999;
         }
-        sub_0202C4B0(data, index);
+        FriendRoster_UpdateDate(data, index);
     }
 }
 
-void sub_0202C5E4(UnkStruct_021D2230 *data, s32 src, s32 dest) {
+void FriendRoster_MergeFriend(FriendRoster *data, s32 src, s32 dest) {
     if (dest >= 0 && dest < 32 && src >= 0 && src < 32) {
         data->roster.entries[dest].value24 += data->roster.entries[src].value24;
         if (data->roster.entries[dest].value24 > 9999) {
@@ -325,16 +347,16 @@ void sub_0202C5E4(UnkStruct_021D2230 *data, s32 src, s32 dest) {
     }
 }
 
-UnkStruct_021D2230 *sub_0202C6F4(SaveData *saveData) {
-    return &_021D2230;
+FriendRoster *Save_FriendRoster_Get(SaveData *saveData) {
+    return &gFriendRoster;
 }
 
-void sub_0202C6FC(SaveData *saveData) {
-    UnkStruct_021D2230 *data = SaveArray_Get(saveData, 25);
-    MI_CpuCopy8(data, &_021D2230, sizeof(UnkStruct_021D2230));
+void Save_FriendRoster_LoadFromSave(SaveData *saveData) {
+    FriendRoster *data = SaveArray_Get(saveData, 25);
+    MI_CpuCopy8(data, &gFriendRoster, sizeof(FriendRoster));
 }
 
-void sub_0202C714(SaveData *saveData) {
-    UnkStruct_021D2230 *data = SaveArray_Get(saveData, 25);
-    MI_CpuCopy8(&_021D2230, data, sizeof(UnkStruct_021D2230));
+void Save_FriendRoster_StoreToSave(SaveData *saveData) {
+    FriendRoster *data = SaveArray_Get(saveData, 25);
+    MI_CpuCopy8(&gFriendRoster, data, sizeof(FriendRoster));
 }

@@ -26,8 +26,8 @@ void ModelInstance_SetRotation(FootprintStampModelInstance *instance, u16 rotati
 u16 ModelInstance_GetRotation(FootprintStampModelInstance *instance, int axis);
 int ov45_0222EC68(u32 playerId);
 int ov45_0222EC7C(u32 playerId);
-void *ov45_0222A578(void *lobby, int slot);
-void ov45_0222A844(void *record, PlayerProfile *profile, enum HeapID heapId);
+void *WiFiPlazaWork_GetPlayer(void *lobby, int slot);
+void WiFiPlazaPlayer_CopyToProfile(void *record, PlayerProfile *profile, enum HeapID heapId);
 int ov45_0222AB28(void *lobby, int slot);
 BOOL ov45_0222D844(void);
 int ov45_0222EE50(const void *commands, u32 count, void *data);
@@ -1357,7 +1357,7 @@ void FootprintStamp_PrintPlayerName(MsgData *msgData, MessageFormat *msgFormat, 
     if (slot == -1) {
         return;
     }
-    record = ov45_0222A578(lobby, slot);
+    record = WiFiPlazaWork_GetPlayer(lobby, slot);
     if (record == NULL) {
         return;
     }
@@ -1366,7 +1366,7 @@ void FootprintStamp_PrintPlayerName(MsgData *msgData, MessageFormat *msgFormat, 
         return;
     }
     profile = PlayerProfile_New(HEAP_ID_125);
-    ov45_0222A844(record, profile, HEAP_ID_125);
+    WiFiPlazaPlayer_CopyToProfile(record, profile, HEAP_ID_125);
     name = PlayerProfile_GetPlayerName_NewString(profile, HEAP_ID_125);
     gender = PlayerProfile_GetTrainerGender(profile);
     BufferString(msgFormat, 0, name, gender, 1, 2);

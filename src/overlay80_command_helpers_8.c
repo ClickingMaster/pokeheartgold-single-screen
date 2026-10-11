@@ -73,6 +73,6 @@ void ov80_0222E328(void *p, int n, void *out);
 
 int FrtCmd_035(void *c) {
     void *p = sub_0209680C(APP(c));
-    ov80_022394D8(p, FrontierScript_ReadVar(c));
+    FrontierMap_RemoveObjectGfx(p, FrontierScript_ReadVar(c));
     return 0;
 }

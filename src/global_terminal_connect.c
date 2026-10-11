@@ -29,7 +29,7 @@
 #include "system.h"
 #include "text.h"
 #include "touchscreen.h"
-#include "unk_0202C034.h"
+#include "friend_roster.h"
 #include "unk_02037C94.h"
 #include "unk_0203A3B0.h"
 #include "vram_transfer_manager.h"
@@ -758,10 +758,10 @@ BOOL ov39_02228DA0(GlobalTerminalConnectWork *work) {
 }
 
 BOOL GlobalTerminalConnect_StateSaveProfileId(GlobalTerminalConnectWork *work) {
-    UnkStruct_021D2230 *wifiList = sub_0202C6F4(work->args->launchArgs->saveData);
+    FriendRoster *wifiList = Save_FriendRoster_Get(work->args->launchArgs->saveData);
     SysInfo *sysInfo = Save_SysInfo_Get(work->args->launchArgs->saveData);
 
-    sub_0202C08C(wifiList);
+    FriendRoster_GetUserData(wifiList);
     if (Save_SysInfo_GetDwcProfileId(sysInfo) == 0) {
         Save_SysInfo_SetDwcProfileId(sysInfo, (s32)sub_0203A040(wifiList));
     }

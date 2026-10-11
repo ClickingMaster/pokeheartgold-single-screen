@@ -94,9 +94,9 @@ extern const Ov07Table22 ov07_02237784;
 extern const s16 ov07_022377DC[][2];
 extern const s16 ov07_022377F4[][3];
 
-void ov07_0221C69C(void);
-SPLEmitter *ov07_0221FE88(enum HeapID heapId, u32 a1, int a2);
-void ov07_0221FF2C(SPLEmitter *emitter);
+void BattleAnimSystem_InitBlend(void);
+SPLEmitter *BattleAnimSystem_NewParticleSystem(enum HeapID heapId, u32 a1, int a2);
+void BattleAnimSystem_FreeParticleSystem(SPLEmitter *emitter);
 void ov07_02221F04(int a0, int a1, s16 *x, s16 *y);
 int ov07_02232658(void *a0, int a1);
 fx32 FX_Sqrt(fx32 x);

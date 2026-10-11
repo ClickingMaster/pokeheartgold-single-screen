@@ -25,7 +25,7 @@ void ov07_0223061C(void *task, Ov07W10Small *work) {
         break;
     case 4:
         Sprite_DeleteAndFreeResources(work->sprite);
-        ov07_0221C448(work->owner, task);
+        BattleAnimSystem_DestroyTask(work->owner, task);
         Heap_Free(work);
         return;
     }

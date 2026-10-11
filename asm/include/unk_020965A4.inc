@@ -34,5 +34,5 @@
 .public ov80_0222AAF8
 .public FrontierMap_Init
 .public FrontierMap_Free
-.public ov80_022389C4
-.public ov80_02238A18
+.public FrontierMap_SaveObjects
+.public FrontierMap_RestoreObjects

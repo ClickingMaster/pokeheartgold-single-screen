@@ -2,8 +2,8 @@
 
 #define PTR_AT(p, o) (*(void **)((u8 *)(p) + (o)))
 
-u16 ov07_0221FA1C(void *, int);
-void *ov07_0221FA38(void *, int);
+u16 BattleAnimSystem_GetBattlerSpecies(void *, int);
+void *BattleAnimSystem_GetBattlerPersonality(void *, int);
 void BattleAnimUtil_FreeWork(void *);
 void *ov07_02232A54(void *);
 

@@ -5,27 +5,27 @@
 #pragma opt_propagation off
 void *BattleAnimUtil_AllocWork(void *, int);
 void BattleAnimUtil_InitCommonWork(void *, Ov07T10Work *);
-void *ov07_0221C4E8(u8 *, int);
-int ov07_0221FB04(u32, u32);
-u16 ov07_0221C468(void *), ov07_0221C470(void *);
+void *BattleAnimSystem_GetBattlerSprite(u8 *, int);
+int BattleAnimSystem_GetBgPriority(u32, u32);
+u16 BattleAnimSystem_GetAttacker(void *), BattleAnimSystem_GetDefender(void *);
 int BattleAnimUtil_GetBattlerType(void *, int);
 void *ov07_0221BFC0(void *);
-void ov07_0221C410(void *, void *, void *);
+void BattleAnimSystem_CreateTaskDefaultPriority(void *, void *, void *);
 void ov07_0223174C(void *ctx, const Ov07Init *params) {
     Ov07ObjWindowWork *p=BattleAnimUtil_AllocWork(ctx,sizeof(*p));
     u32 mode;
     BattleAnimUtil_InitCommonWork(ctx,&p->prefix);
     p->init=*params;
-    p->sprites[0]=ov07_0221C4E8((u8 *)p->prefix.owner,0);
-    p->sprites[1]=ov07_0221C4E8((u8 *)p->prefix.owner,1);
-    p->sprites[2]=ov07_0221C4E8((u8 *)p->prefix.owner,2);
-    ov07_0221FB04((u32)p->prefix.owner,2);
+    p->sprites[0]=BattleAnimSystem_GetBattlerSprite((u8 *)p->prefix.owner,0);
+    p->sprites[1]=BattleAnimSystem_GetBattlerSprite((u8 *)p->prefix.owner,1);
+    p->sprites[2]=BattleAnimSystem_GetBattlerSprite((u8 *)p->prefix.owner,2);
+    BattleAnimSystem_GetBgPriority((u32)p->prefix.owner,2);
     ManagedSprite_SetPriority(p->sprites[0],2);
     ManagedSprite_SetPriority(p->sprites[1],2);
-    mode=BattleAnimUtil_GetBattlerType(ctx,p->init.value8==0?ov07_0221C468(ctx):ov07_0221C470(ctx));
+    mode=BattleAnimUtil_GetBattlerType(ctx,p->init.value8==0?BattleAnimSystem_GetAttacker(ctx):BattleAnimSystem_GetDefender(ctx));
     if((u32)ov07_0221BFC0(ctx)==1) {
         ManagedSprite_SetDrawFlag(p->sprites[2],0);
-        mode=ov07_0221FB04((u32)p->prefix.owner,2);
+        mode=BattleAnimSystem_GetBgPriority((u32)p->prefix.owner,2);
         ManagedSprite_SetPriority(p->sprites[0],mode);
         ManagedSprite_SetPriority(p->sprites[1],mode);
     } else if(mode<=1) ManagedSprite_SetDrawFlag(p->sprites[2],0);
@@ -44,5 +44,5 @@ void ov07_0223174C(void *ctx, const Ov07Init *params) {
     ManagedSprite_SetOamMode(p->sprites[1],GX_OAM_MODE_OBJWND);
     p->init.x=0;
     p->init.y=0;
-    ov07_0221C410(p->prefix.owner,(void *)ov07_022315C0,p);
+    BattleAnimSystem_CreateTaskDefaultPriority(p->prefix.owner,(void *)ov07_022315C0,p);
 }

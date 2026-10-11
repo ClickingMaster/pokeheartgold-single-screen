@@ -33,7 +33,7 @@
 #include "oam_manager.h"
 #include "font_sprite.h"
 #include "touchpad.h"
-#include "unk_0202C034.h"
+#include "friend_roster.h"
 #include "unk_02030A98.h"
 #include "unk_0203170C.h"
 #include "unk_02034354.h"
@@ -877,7 +877,7 @@ s32 ov44_0222A4B4(OverlayManager *overlayMananger, s32 *arg1) {
         GF_CreateVramTransferManager(32, HEAP_ID_53);
         data->unk180 = 8;
         data->saveData = overlayArgs->unk0;
-        data->unk0 = sub_0202C6F4(data->saveData);
+        data->unk0 = Save_FriendRoster_Get(data->saveData);
         data->unk354 = overlayArgs->unk4;
         data->unk34C = 8;
         data->unk370 = -1;
@@ -1419,7 +1419,7 @@ s32 ov44_0222B228(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     } else {
         Sound_SetSceneAndPlayBGM(11, SEQ_GS_WIFI_ACCESS, 1);
         ov44_0222B0B0(arg0);
-        sub_0202C08C(arg0->unk0);
+        FriendRoster_GetUserData(arg0->unk0);
         if (DWC_CheckHasProfile() == 0) {
             SetBgPriority(0, 3);
             SetBgPriority(1, 0);
@@ -1429,7 +1429,7 @@ s32 ov44_0222B228(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
             arg0->unk188 = ov44_02231A28(arg0->unk15C, &ov44_02235384, 0);
             arg0->unk348 = 6;
         } else {
-            sub_0202C08C(arg0->unk0);
+            FriendRoster_GetUserData(arg0->unk0);
             if (DWC_CheckValidConsole() == 0) {
                 ov44_0222F66C(arg0, 20);
                 arg0->unk348 = 3;
@@ -1511,7 +1511,7 @@ s32 ov44_0222B528(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         SetBgPriority(0, 3);
         ClearFrameAndWindow2(&arg0->unk300, 0);
         RemoveWindow(&arg0->unk300);
-        sub_0202C03C(arg0->unk0);
+        Save_FriendRoster_Init(arg0->unk0);
         void *saveArray = SaveArray_Get(arg0->saveData, 31);
         sub_02031710(saveArray);
         sub_02031188(Save_Frontier_GetStatic(arg0->saveData));
@@ -1641,8 +1641,8 @@ s32 ov44_0222B8E0(UnkStruct_ov44_022319EC *arg0) {
                 }
                 arg0->unk4C[i] = temp_r0_2;
                 arg0->unkCC[i] = temp_r0->unk21;
-                sub_0202C190(arg0->unk0, i, 7, temp_r0->unk1C[1]);
-                sub_0202C190(arg0->unk0, i, 8, temp_r0->unk1C[2]);
+                FriendRoster_SetEntryField(arg0->unk0, i, 7, temp_r0->unk1C[1]);
+                FriendRoster_SetEntryField(arg0->unk0, i, 8, temp_r0->unk1C[2]);
                 counter += 1;
             }
         }
@@ -1941,7 +1941,7 @@ s32 ov44_0222C084(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
             arg0->unk34C = 10;
             arg0->unk348 = 34;
             sub_02039330();
-        } else if (sub_0202C2F8(arg0->unk0) == 0) {
+        } else if (FriendRoster_CountFriends(arg0->unk0) == 0) {
             ov44_0222F510(arg0, 26, 1);
             arg0->unk348 = 59;
             arg0->unk35C = 1;
@@ -1980,7 +1980,7 @@ void ov44_0222C120(UnkStruct_ov44_022319EC *arg0) {
         if (WifiConnection_GetTargetFriendIndex() == -1) {
             ReadMsgDataIntoString(arg0->unk168, temp_r6, arg0->unk170);
         } else {
-            s32 temp_r0_3 = sub_0202C090(arg0->unk0, WifiConnection_GetTargetFriendIndex(), 8);
+            s32 temp_r0_3 = FriendRoster_GetEntryField(arg0->unk0, WifiConnection_GetTargetFriendIndex(), 8);
             if (temp_r0_3 == 0) {
                 color = MAKE_TEXT_COLOR(5, 6, 0);
             } else if (temp_r0_3 == 1) {
@@ -2052,7 +2052,7 @@ s32 ov44_0222C35C(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         } else {
             var_r4 = 97;
         }
-        arg0->unk10BE = sub_0202C318(arg0->unk0);
+        arg0->unk10BE = FriendRoster_GetUsedSlotCount(arg0->unk0);
         ov44_02231A7C(&arg0->unk38C, HEAP_ID_53, temp_r0, arg0->unk15C, var_r4, arg0->unk10BE);
         ov44_0222AA94(arg0, ov44_02231D9C(&arg0->unk38C, var_r4));
     }
@@ -2318,7 +2318,7 @@ s32 ov44_0222C9F4(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         ov44_0222F7BC(arg0);
         ov44_0222F818(arg0, 1);
         arg0->unk348 = 24;
-        sub_0202C4B0(arg0->unk0, arg0->unk382 - 1);
+        FriendRoster_UpdateDate(arg0->unk0, arg0->unk382 - 1);
     }
     return arg1;
 }
@@ -2329,7 +2329,7 @@ s32 ov44_0222CB34(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     ov44_0222F818(arg0, 1);
     arg0->unk348 = 23;
     if (WifiConnection_GetTargetFriendIndex() != -1) {
-        sub_0202C4B0(arg0->unk0, WifiConnection_GetTargetFriendIndex());
+        FriendRoster_UpdateDate(arg0->unk0, WifiConnection_GetTargetFriendIndex());
     }
     return arg1;
 }
@@ -2407,7 +2407,7 @@ s32 ov44_0222CDAC(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
     }
     if (TextPrinterCheckActive(arg0->unk180) == 0) {
         if (WifiConnection_GetTargetFriendIndex() != -1) {
-            sub_0202C4B0(arg0->unk0, WifiConnection_GetTargetFriendIndex());
+            FriendRoster_UpdateDate(arg0->unk0, WifiConnection_GetTargetFriendIndex());
         }
         if ((REG_POWCNT_ADDR / 2048 & reg_GX_POWCNT) >> 15 == 1) {
             arg0->unk184 = Std_CreateYesNoMenu(arg0->unk15C, &ov44_0223538C, 473, 11, HEAP_ID_53);
@@ -3632,7 +3632,7 @@ s32 ov44_0222EDB8(UnkStruct_ov44_022319EC *arg0, s32 arg1) {
         sub_02039330();
     }
     if (sub_02037D78() == 0) {
-        sub_0202C46C(arg0->unk0);
+        FriendRoster_Compact(arg0->unk0);
         ov44_0222F510(arg0, 27, 1);
         arg0->unk348 = 60;
         arg0->unk35C = 30;
@@ -4321,7 +4321,7 @@ void ov44_022300C8(UnkStruct_ov44_022319EC *arg0) {
     for (s32 i = 0; i < 8; i++) {
         s32 temp_r4 = i + (arg0->unkB1C.unk70 * 8) + 1;
         if (arg0->unkB1C.unk50[temp_r4 - 1] != 0) {
-            if (sub_0202C090(arg0->unk0, temp_r4 - 1, 8) == 0) {
+            if (FriendRoster_GetEntryField(arg0->unk0, temp_r4 - 1, 8) == 0) {
                 sp1C = 1;
             } else {
                 sp1C = 0;
@@ -4365,7 +4365,7 @@ void ov44_022300C8(UnkStruct_ov44_022319EC *arg0) {
 
 void ov44_02230234(UnkStruct_ov44_022319EC *arg0, enum HeapID heapID) {
     s32 var_r4;
-    if (sub_0202C090(arg0->unk0, arg0->unkB1C.unk71 - 1, 8) == 1) {
+    if (FriendRoster_GetEntryField(arg0->unk0, arg0->unkB1C.unk71 - 1, 8) == 1) {
         var_r4 = 7;
     } else {
         var_r4 = 8;
@@ -4388,7 +4388,7 @@ void ov44_02230234(UnkStruct_ov44_022319EC *arg0, enum HeapID heapID) {
 void ov44_02230300(UnkStruct_ov44_022319EC *arg0, enum HeapID heapID) {
     u32 color;
     s32 temp_r4 = arg0->unkB1C.unk71 - 1;
-    if (sub_0202C090(arg0->unk0, temp_r4, 8) == 0) {
+    if (FriendRoster_GetEntryField(arg0->unk0, temp_r4, 8) == 0) {
         color = MAKE_TEXT_COLOR(5, 6, 0);
     } else {
         color = MAKE_TEXT_COLOR(3, 4, 0);
@@ -4418,12 +4418,12 @@ void ov44_02230300(UnkStruct_ov44_022319EC *arg0, enum HeapID heapID) {
     // BATTLE RECORD
     ReadMsgDataIntoString(arg0->unk168, msg_0778_00044, arg0->unk178);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 56, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
-    BufferIntegerAsString(arg0->unkB1C.unk0, 0, sub_0202C090(arg0->unk0, temp_r4, 1), 4, PRINTING_MODE_RIGHT_ALIGN, TRUE);
+    BufferIntegerAsString(arg0->unkB1C.unk0, 0, FriendRoster_GetEntryField(arg0->unk0, temp_r4, 1), 4, PRINTING_MODE_RIGHT_ALIGN, TRUE);
     // W: {STRVAR_1 53, 0, 0}
     ReadMsgDataIntoString(arg0->unk168, msg_0778_00045, arg0->unk170);
     StringExpandPlaceholders(arg0->unkB1C.unk0, arg0->unk178, arg0->unk170);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 120, 56, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
-    BufferIntegerAsString(arg0->unkB1C.unk0, 0, sub_0202C090(arg0->unk0, temp_r4, 2), 4, PRINTING_MODE_RIGHT_ALIGN, TRUE);
+    BufferIntegerAsString(arg0->unkB1C.unk0, 0, FriendRoster_GetEntryField(arg0->unk0, temp_r4, 2), 4, PRINTING_MODE_RIGHT_ALIGN, TRUE);
     // L: {STRVAR_1 53, 0, 0}
     ReadMsgDataIntoString(arg0->unk168, msg_0778_00046, arg0->unk170);
     StringExpandPlaceholders(arg0->unkB1C.unk0, arg0->unk178, arg0->unk170);
@@ -4433,7 +4433,7 @@ void ov44_02230300(UnkStruct_ov44_022319EC *arg0, enum HeapID heapID) {
     // POKéMON TRADES
     ReadMsgDataIntoString(arg0->unk168, msg_0778_00047, arg0->unk178);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 80, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
-    BufferIntegerAsString(arg0->unkB1C.unk0, 0, sub_0202C090(arg0->unk0, temp_r4, 3), 4, PRINTING_MODE_RIGHT_ALIGN, TRUE);
+    BufferIntegerAsString(arg0->unkB1C.unk0, 0, FriendRoster_GetEntryField(arg0->unk0, temp_r4, 3), 4, PRINTING_MODE_RIGHT_ALIGN, TRUE);
     // {STRVAR_1 53, 0, 0}
     ReadMsgDataIntoString(arg0->unk168, msg_0778_00048, arg0->unk170);
     StringExpandPlaceholders(arg0->unkB1C.unk0, arg0->unk178, arg0->unk170);
@@ -4444,7 +4444,7 @@ void ov44_02230300(UnkStruct_ov44_022319EC *arg0, enum HeapID heapID) {
         // POFFIN SESSIONS
         ReadMsgDataIntoString(arg0->unk168, msg_0778_00049, arg0->unk178);
         AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 104, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
-        BufferIntegerAsString(arg0->unkB1C.unk0, 0, sub_0202C090(arg0->unk0, temp_r4, 9), 4, PRINTING_MODE_RIGHT_ALIGN, TRUE);
+        BufferIntegerAsString(arg0->unkB1C.unk0, 0, FriendRoster_GetEntryField(arg0->unk0, temp_r4, 9), 4, PRINTING_MODE_RIGHT_ALIGN, TRUE);
         // {STRVAR_1 53, 0, 0}
         ReadMsgDataIntoString(arg0->unk168, msg_0778_00050, arg0->unk170);
         StringExpandPlaceholders(arg0->unkB1C.unk0, arg0->unk178, arg0->unk170);
@@ -4455,11 +4455,11 @@ void ov44_02230300(UnkStruct_ov44_022319EC *arg0, enum HeapID heapID) {
     // DATE LAST PLAYED
     ReadMsgDataIntoString(arg0->unk168, msg_0778_00051, arg0->unk178);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 128, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
-    s32 temp_r0_2 = sub_0202C090(arg0->unk0, temp_r4, 6);
+    s32 temp_r0_2 = FriendRoster_GetEntryField(arg0->unk0, temp_r4, 6);
     if (temp_r0_2 != 0) {
         BufferIntegerAsString(arg0->unkB1C.unk0, 2, temp_r0_2, 2, PRINTING_MODE_LEFT_ALIGN, TRUE);
-        BufferIntegerAsString(arg0->unkB1C.unk0, 0, sub_0202C090(arg0->unk0, temp_r4, 4), 4, PRINTING_MODE_LEFT_ALIGN, TRUE);
-        BufferMonthNameAbbr(arg0->unkB1C.unk0, 1, sub_0202C090(arg0->unk0, temp_r4, 5));
+        BufferIntegerAsString(arg0->unkB1C.unk0, 0, FriendRoster_GetEntryField(arg0->unk0, temp_r4, 4), 4, PRINTING_MODE_LEFT_ALIGN, TRUE);
+        BufferMonthNameAbbr(arg0->unkB1C.unk0, 1, FriendRoster_GetEntryField(arg0->unk0, temp_r4, 5));
         // {STRVAR_34 16, 1, 0} {STRVAR_1 51, 2, 0}, {STRVAR_1 53, 0, 0}
         ReadMsgDataIntoString(arg0->unk168, msg_0778_00074, arg0->unk170);
         StringExpandPlaceholders(arg0->unkB1C.unk0, arg0->unk178, arg0->unk170);
@@ -4588,7 +4588,7 @@ void ov44_02230D8C(UnkStruct_ov44_022319EC *arg0, enum HeapID heapID) {
 }
 
 void ov44_02230E5C(UnkStruct_ov44_022319EC *arg0, enum HeapID heapID) {
-    UnkStruct_021D2230 *temp_r6 = sub_0202C6F4(arg0->saveData);
+    FriendRoster *temp_r6 = Save_FriendRoster_Get(arg0->saveData);
     s32 temp_r4 = arg0->unkB1C.unk71 - 1;
     // PLAZA GAMES PLAYED
     ReadMsgDataIntoString(arg0->unk168, msg_0778_00070, arg0->unk178);
@@ -4599,21 +4599,21 @@ void ov44_02230E5C(UnkStruct_ov44_022319EC *arg0, enum HeapID heapID) {
     StringExpandPlaceholders(arg0->unkB1C.unk0, arg0->unk178, arg0->unk170);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 24, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     // {STRVAR_1 53, 0, 0}
-    ov44_022310C8(arg0, msg_0778_00072, sub_0202C090(temp_r6, temp_r4, 10), 164, 24);
+    ov44_022310C8(arg0, msg_0778_00072, FriendRoster_GetEntryField(temp_r6, temp_r4, 10), 164, 24);
     BufferWiFiPlazaActivityName(arg0->unkB1C.unk0, 0, 1);
     // {STRVAR_3 0, 0, 0}
     ReadMsgDataIntoString(arg0->unk168, msg_0778_00071, arg0->unk170);
     StringExpandPlaceholders(arg0->unkB1C.unk0, arg0->unk178, arg0->unk170);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 48, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     // {STRVAR_1 53, 0, 0}
-    ov44_022310C8(arg0, msg_0778_00072, sub_0202C090(temp_r6, temp_r4, 11), 164, 48);
+    ov44_022310C8(arg0, msg_0778_00072, FriendRoster_GetEntryField(temp_r6, temp_r4, 11), 164, 48);
     BufferWiFiPlazaActivityName(arg0->unkB1C.unk0, 0, 2);
     // {STRVAR_3 0, 0, 0}
     ReadMsgDataIntoString(arg0->unk168, msg_0778_00071, arg0->unk170);
     StringExpandPlaceholders(arg0->unkB1C.unk0, arg0->unk178, arg0->unk170);
     AddTextPrinterParameterizedWithColor(&arg0->unkB1C.unk1FC, 0, arg0->unk178, 8, 72, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     // {STRVAR_1 53, 0, 0}
-    ov44_022310C8(arg0, msg_0778_00072, sub_0202C090(temp_r6, temp_r4, 12), 164, 72);
+    ov44_022310C8(arg0, msg_0778_00072, FriendRoster_GetEntryField(temp_r6, temp_r4, 12), 164, 72);
 }
 
 void ov44_02230FE8(UnkStruct_ov44_022319EC *arg0) {
@@ -4741,7 +4741,7 @@ void ov44_022312B8(UnkStruct_ov44_022319EC *arg0, Window *arg1, s32 arg2, s32 ar
     u8 temp_r7 = ov44_02235364[arg3];
     s32 sp14 = arg2 - 1;
     s32 color;
-    if (sub_0202C090(arg0->unk0, sp14, 8) == 0) {
+    if (FriendRoster_GetEntryField(arg0->unk0, sp14, 8) == 0) {
         color = MAKE_TEXT_COLOR(5, 6, 0);
     } else {
         color = MAKE_TEXT_COLOR(3, 4, 0);

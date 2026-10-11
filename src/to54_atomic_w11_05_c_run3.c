@@ -60,7 +60,7 @@ void ov07_0222B2A8(void *task, A8Work *work) {
         for (i = 0; i < 8; i++) {
             Sprite_DeleteAndFreeResources(work->sprite[i + 2]);
         }
-        ov07_0221C448(work->owner, task);
+        BattleAnimSystem_DestroyTask(work->owner, task);
         Heap_Free(work);
     } else {
         SpriteSystem_DrawSprites(work->spriteSystem);

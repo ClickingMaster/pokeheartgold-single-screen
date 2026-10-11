@@ -739,12 +739,12 @@ PalPadRosterPage_DrawFriend: ; 0x0222CA50
 	mov r2, #7
 	str r3, [sp, #0x14]
 	ldr r4, [sp, #0x40]
-	bl sub_0202C090
+	bl FriendRoster_GetEntryField
 	str r0, [sp, #0x1c]
 	ldr r0, [sp, #0x44]
 	ldr r1, [sp, #0x18]
 	mov r2, #8
-	bl sub_0202C090
+	bl FriendRoster_GetEntryField
 	add r7, r0, #0
 	cmp r7, #2
 	bne _0222CA8C

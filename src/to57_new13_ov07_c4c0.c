@@ -6,7 +6,7 @@ typedef struct CoordBlob {
     u8 rest[0x30];
 } CoordBlob;
 
-extern void ov07_0221F9E8(CoordBlob *, void *);
+extern void BattleAnimSystem_GetSpriteTemplate(CoordBlob *, void *);
 
 void ov07_0222C4C0(void *owner, void *a, void *b, void *sprite) {
     int i;
@@ -15,14 +15,14 @@ void ov07_0222C4C0(void *owner, void *a, void *b, void *sprite) {
     CoordBlob blob;
     MainWork *w;
 
-    w = Heap_Alloc(ov07_0221BFD0(owner), 0x100);
+    w = Heap_Alloc(BattleAnimSystem_GetHeapID(owner), 0x100);
     w->owner = owner;
     w->unk4 = a;
     w->spriteSystem = b;
     w->timer = 8;
     w->index = 0;
     w->state = 0;
-    idx = ov07_0221C468(owner);
+    idx = BattleAnimSystem_GetAttacker(owner);
     v = ov07_02222004(owner, idx);
     w->sprite = sprite;
     w->unk50 = 0;
@@ -35,7 +35,7 @@ void ov07_0222C4C0(void *owner, void *a, void *b, void *sprite) {
     ManagedSprite_SetPositionXY(w->sprite, w->x, w->y);
     ManagedSprite_SetDrawPriority(w->sprite, 100);
     ManagedSprite_SetPriority(w->sprite, 1);
-    ov07_0221F9E8(&blob, w->owner);
+    BattleAnimSystem_GetSpriteTemplate(&blob, w->owner);
     blob.x = w->x;
     blob.y = w->y;
     for (i = 0; i < 2; i++) {
@@ -47,5 +47,5 @@ void ov07_0222C4C0(void *owner, void *a, void *b, void *sprite) {
     for (i = 0; i < 2; i++) {
         ManagedSprite_SetOamMode(w->child[i].sprite, 1);
     }
-    ov07_0221C410(w->owner, ov07_0222C2D4, w);
+    BattleAnimSystem_CreateTaskDefaultPriority(w->owner, ov07_0222C2D4, w);
 }

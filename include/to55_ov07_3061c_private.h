@@ -40,8 +40,8 @@ typedef struct Ov07W10Large {
 } Ov07W10Large;
 
 void *BattleAnimUtil_AllocWork(void *, u32);
-void ov07_0221C410(void *, void *, void *);
-void ov07_0221C448(void *, void *);
+void BattleAnimSystem_CreateTaskDefaultPriority(void *, void *, void *);
+void BattleAnimSystem_DestroyTask(void *, void *);
 void BattleAnimUtil_SetBlendWithBattleBg(void *, int, int);
 void ov07_02222AC4(void *, int, int, int, int, int);
 BOOL ov07_02222AF4(void *);
@@ -56,9 +56,9 @@ void ov07_0222283C(void *, s16, s16, void *);
 BOOL ov07_02222788(void *, void *);
 void ov07_022226C4(void *, s16, s16, int, int);
 void Pokepic_SetAttr(void *, int, int);
-u32 ov07_0221C470(void *);
+u32 BattleAnimSystem_GetDefender(void *);
 u32 ov07_0221FAA0(void *, u32);
-void *ov07_0221FA48(void *, u32);
+void *BattleAnimSystem_GetBattlerPokepic(void *, u32);
 u32 Pokepic_GetAttr(void *, int);
 void ov07_022227A8(void *, int, int, int, int);
 

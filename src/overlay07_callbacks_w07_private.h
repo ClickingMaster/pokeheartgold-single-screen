@@ -4,8 +4,8 @@
 #include "global.h"
 
 void *BattleAnimUtil_AllocWork(void *, u32);
-void ov07_0221C410(void *, void *, void *);
-void ov07_0221C448(void *, void *);
+void BattleAnimSystem_CreateTaskDefaultPriority(void *, void *, void *);
+void BattleAnimSystem_DestroyTask(void *, void *);
 void ov07_0222DBD8(void *);
 BOOL ov07_0222DC54(void *);
 void Sprite_DeleteAndFreeResources(void *);

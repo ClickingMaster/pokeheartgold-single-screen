@@ -105,8 +105,8 @@ WiFiPlazaWork *WiFiPlazaWork_New(SaveData *save, enum HeapID heapID) {
     for (i = 0; i < 4; i++) {
         work->profiles[i] = PlayerProfile_New(heapID);
     }
-    WiFiPlazaProfile_InitFromSave(work->profile, work->save, heapID);
-    ov45_0222BD40(work->unk_1c0);
+    WiFiPlazaProfile_InitFromSave(&work->profile, work->save, heapID);
+    ov45_0222BD40(&work->unk_1c0);
     ov45_0222BD30(work->unk_1e8);
     ov45_0222EE20(ov45_02254AC4, 8, work);
     ov45_0222BC3C(&work->unk_1fc);
@@ -121,13 +121,13 @@ WiFiPlazaWork *WiFiPlazaWork_New(SaveData *save, enum HeapID heapID) {
 #pragma force_active reset
 
 void WiFiPlazaWork_Delete(WiFiPlazaWork *work) {
-    u32 vals[2];
+    WiFiPlazaPlayerUnk8C vals;
     int i;
     void *x;
-    ov45_0222AB0C(work->profile + 0x20, vals);
+    ov45_0222AB0C(&work->profile.player, &vals);
     x = sub_020318E8(work->save);
-    sub_020318FC(x, vals[0]);
-    sub_02031900(x, vals[1]);
+    sub_020318FC(x, vals.unk_00);
+    sub_02031900(x, vals.unk_04);
     ov45_0222BCD8(&work->unk_508);
     WiFiPlazaWordSet_Free(work->wordSet);
     ov45_0222EE80();
@@ -149,7 +149,7 @@ void WiFiPlazaWork_Update(WiFiPlazaWork *work) {
     work->unk_d8 = time;
     ov45_0222D500(&work->unk_d4, &time);
     ov45_0222B840(work);
-    ov45_0222BE5C(work->unk_1c0);
+    ov45_0222BE5C(&work->unk_1c0);
     ov45_0222BD30(work->unk_1e8);
     ov45_0222BB58(work->unk_f8);
     ov45_0222BB60(&work->unk_1fc, work->unk_f8, work->unk_20c, work->unk_49c);

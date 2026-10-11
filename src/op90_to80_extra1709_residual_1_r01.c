@@ -17,12 +17,12 @@ typedef struct Ov07MosaicWork {
 } Ov07MosaicWork;
 void *BattleAnimUtil_AllocWork(void *owner, u32 size);
 void BattleAnimUtil_InitCommonWork(void *owner, void *work);
-u32 ov07_0221C470(void *owner);
-Pokepic *ov07_0221FA48(void *owner, u32 battler);
+u32 BattleAnimSystem_GetDefender(void *owner);
+Pokepic *BattleAnimSystem_GetBattlerPokepic(void *owner, u32 battler);
 int BattleAnimUtil_GetBattlerType(void *owner, u32 battler);
 int ov07_0221FAE8(void *owner);
 void SetBgPriority(u8 bgId, u16 priority);
-void ov07_0221C410(void *owner, void *func, void *data);
+void BattleAnimSystem_CreateTaskDefaultPriority(void *owner, void *func, void *data);
 void ov07_0222BAF4(void *task, Ov07MosaicWork *work);
 void ov07_0222BC7C(void *owner);
 
@@ -32,9 +32,9 @@ void ov07_0222BC7C(void *owner) {
     int kind;
     s16 x, y;
     BattleAnimUtil_InitCommonWork(owner, &work->state);
-    work->pic = ov07_0221FA48(owner, ov07_0221C470(owner));
+    work->pic = BattleAnimSystem_GetBattlerPokepic(owner, BattleAnimSystem_GetDefender(owner));
     work->counter = 0;
-    kind = BattleAnimUtil_GetBattlerType(owner, ov07_0221C470(owner));
+    kind = BattleAnimUtil_GetBattlerType(owner, BattleAnimSystem_GetDefender(owner));
     switch (kind) {
     case 3:
     case 4:
@@ -55,5 +55,5 @@ void ov07_0222BC7C(void *owner) {
     G2_SetWnd0InsidePlane(GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG2 | GX_WND_PLANEMASK_BG3 | GX_WND_PLANEMASK_OBJ, TRUE);
     G2_SetWndOutsidePlane(GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG3 | GX_WND_PLANEMASK_OBJ, TRUE);
     G2_SetWnd0Position(work->x1, work->y1, work->x1 + 80, work->y2);
-    ov07_0221C410(work->owner, ov07_0222BAF4, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->owner, ov07_0222BAF4, work);
 }

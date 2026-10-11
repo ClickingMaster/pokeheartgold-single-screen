@@ -69,8 +69,8 @@
 #include "sys_flags.h"
 #include "trainer_data.h"
 #include "unk_020192D0.h"
-#include "unk_0202C034.h"
-#include "unk_0202C730.h"
+#include "friend_roster.h"
+#include "friend_group_access.h"
 #include "unk_0202D230.h"
 #include "unk_0202DB34.h"
 #include "unk_02037C94.h"
@@ -1052,7 +1052,7 @@ static BOOL Task_NamingScreen(TaskManager *taskman) {
         } else if (args->kind == 5) {
             u16 *var2 = String_cstr(args->nameInputString);
             SAV_FRIEND_GRP *friendGroup = Save_FriendGroup_Get(fieldSystem->saveData);
-            if (sub_0202C88C(friendGroup, var2)) {
+            if (Save_FriendGroup_IsGroupNameTaken(friendGroup, var2)) {
                 data->args->noInput = 2;
             }
         }
@@ -1095,7 +1095,7 @@ static void SetName(TaskManager *taskman) {
         break;
     case NAME_SCREEN_GROUP:
         SAV_FRIEND_GRP *friendGroup = Save_FriendGroup_Get(fieldSystem->saveData);
-        sub_0202C7F8(friendGroup, 0, 0, data->args->nameInputString);
+        Save_FriendGroup_SetName(friendGroup, 0, 0, data->args->nameInputString);
         break;
     case NAME_SCREEN_BOX:
     case NAME_SCREEN_UNK4:
@@ -1178,7 +1178,7 @@ void sub_0203F844(FieldSystem *fieldSystem, u16 a1) {
     args->party = (Party *)SaveArray_Get(fieldSystem->saveData, SAVE_PARTY);
     args->pcStorage = SaveArray_PCStorage_Get(fieldSystem->saveData);
     args->pokedex = Save_Pokedex_Get(fieldSystem->saveData);
-    args->unk14 = sub_0202C6F4(fieldSystem->saveData);
+    args->unk14 = Save_FriendRoster_Get(fieldSystem->saveData);
     args->wifiHistory = Save_WiFiHistory_Get(fieldSystem->saveData);
     args->profile = Save_PlayerData_GetProfile(fieldSystem->saveData);
     args->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
@@ -1201,9 +1201,9 @@ NintendoWifiConnectArgs *NintendoWifiConnection_LaunchApp(FieldSystem *fieldSyst
     args->unk4 = sub_0202D928(fieldSystem->saveData);
     args->sysInfo = Save_SysInfo_Get(fieldSystem->saveData);
     args->options = Save_PlayerData_GetOptionsAddr(fieldSystem->saveData);
-    args->unk14 = sub_0202C08C(sub_0202C6F4(fieldSystem->saveData));
+    args->unk14 = FriendRoster_GetUserData(Save_FriendRoster_Get(fieldSystem->saveData));
     args->saveData = fieldSystem->saveData;
-    args->unk1C = sub_0203A040(sub_0202C6F4(fieldSystem->saveData));
+    args->unk1C = sub_0203A040(Save_FriendRoster_Get(fieldSystem->saveData));
     args->unk18 = a1;
     args->unk24 = a2;
     args->unk20 = 1;

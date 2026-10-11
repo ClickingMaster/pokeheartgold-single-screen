@@ -42,12 +42,12 @@ typedef struct Work2719C {
 } Work2719C;
 
 
-extern u32 ov07_0221C4A8(void *p, int i);
+extern u32 BattleAnimSystem_GetArg(void *p, int i);
 extern void ov07_02222FC4(void *);
 extern void ov07_02222FF4(void *);
 extern int ov07_02222EE8(void *);
 extern void ov07_02222EF8(void *);
-extern void ov07_0221C448(void *, void *);
+extern void BattleAnimSystem_DestroyTask(void *, void *);
 extern void Heap_Free(void *);
 extern int ManagedSprite_IsAnimated(void *);
 extern void Sprite_DeleteAndFreeResources(void *);
@@ -55,13 +55,13 @@ extern void ManagedSprite_TickFrame(void *);
 extern void SpriteSystem_DrawSprites(void *);
 extern void *BattleAnimUtil_AllocWork(void *, int);
 extern void BattleAnimUtil_InitCommonWork(void *, void *);
-extern void ov07_0221C410(void *, void *, void *);
+extern void BattleAnimSystem_CreateTaskDefaultPriority(void *, void *, void *);
 extern void ov07_02227248(void *, void *);
 extern int ov07_02222240(void *, s16, s16, void *);
 extern int ov07_022222B4(void *);
 extern void Pokepic_SetAttr(void *, int, int);
-extern void *ov07_0221C468(void *);
-extern void *ov07_0221C470(void *);
+extern void *BattleAnimSystem_GetAttacker(void *);
+extern void *BattleAnimSystem_GetDefender(void *);
 extern void *BattleAnimUtil_GetPartnerBattler(void *, void *);
 extern void GF_AssertFail(void);
 
@@ -80,16 +80,16 @@ void *ov07_02225AE0(void *arg, int kind) {
 
     switch (kind) {
     case 2:
-        ret = ov07_0221C468(arg);
+        ret = BattleAnimSystem_GetAttacker(arg);
         break;
     case 4:
-        ret = BattleAnimUtil_GetPartnerBattler(arg, ov07_0221C468(arg));
+        ret = BattleAnimUtil_GetPartnerBattler(arg, BattleAnimSystem_GetAttacker(arg));
         break;
     case 8:
-        ret = ov07_0221C470(arg);
+        ret = BattleAnimSystem_GetDefender(arg);
         break;
     case 16:
-        ret = BattleAnimUtil_GetPartnerBattler(arg, ov07_0221C470(arg));
+        ret = BattleAnimUtil_GetPartnerBattler(arg, BattleAnimSystem_GetDefender(arg));
         break;
     default:
         GF_AssertFail();

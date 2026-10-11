@@ -11,7 +11,7 @@
 #include "save.h"
 #include "save_frontier.h"
 #include "string_util.h"
-#include "unk_0202C730.h"
+#include "friend_group_access.h"
 #include "unk_02030A98.h"
 
 struct SaveRankingsEntry {

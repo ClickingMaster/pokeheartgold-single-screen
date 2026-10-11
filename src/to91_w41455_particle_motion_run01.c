@@ -23,8 +23,8 @@ typedef char Ov07Work104Size[(sizeof(Ov07Work104)==0x104)?1:-1];
 #endif
 
 extern BOOL ov07_022260DC(void *),ov07_022222B4(W02LinearMotion *);
-extern void ParticleSystem_DeleteEmitter(ParticleSystem *,SPLEmitter *),ov07_0221C448(void *,void *),BattleAnimUtil_FreeWork(void *);
+extern void ParticleSystem_DeleteEmitter(ParticleSystem *,SPLEmitter *),BattleAnimSystem_DestroyTask(void *,void *),BattleAnimUtil_FreeWork(void *);
 void ov07_022260F8(void *,void *);
 static inline void PlaceEmitterX(SPLEmitter *emitter,fx32 displacement){emitter->emtr_pos.x=displacement+emitter->p_res->p_base->pos.x;}
 static inline void PlaceEmitterY(SPLEmitter *emitter,fx32 displacement){emitter->emtr_pos.y=displacement+emitter->p_res->p_base->pos.y;}
-void ov07_022260F8(void *task,void *data){Ov07Work104 *work=data;BOOL busy=ov07_022260DC(work->node);if(work->counter<work->delay){work->counter++;return;}if(!ov07_022222B4(&work->interpA.motion)&&!busy){ParticleSystem_DeleteEmitter(work->resource,work->node);ov07_0221C448(work->header.owner,task);BattleAnimUtil_FreeWork(work);return;}if((work->unk20<=work->unk1C&&work->unk24>=work->unk1C)||work->unk24==255){PlaceEmitterX(work->node,work->interpA.motion.x*172);PlaceEmitterY(work->node,work->interpA.motion.y*172);if(work->wave){work->angle+=360/(s16)work->arg6;PlaceEmitterY(work->node,work->interpA.motion.y*172+GF_SinDeg((u16)work->angle));}}}
+void ov07_022260F8(void *task,void *data){Ov07Work104 *work=data;BOOL busy=ov07_022260DC(work->node);if(work->counter<work->delay){work->counter++;return;}if(!ov07_022222B4(&work->interpA.motion)&&!busy){ParticleSystem_DeleteEmitter(work->resource,work->node);BattleAnimSystem_DestroyTask(work->header.owner,task);BattleAnimUtil_FreeWork(work);return;}if((work->unk20<=work->unk1C&&work->unk24>=work->unk1C)||work->unk24==255){PlaceEmitterX(work->node,work->interpA.motion.x*172);PlaceEmitterY(work->node,work->interpA.motion.y*172);if(work->wave){work->angle+=360/(s16)work->arg6;PlaceEmitterY(work->node,work->interpA.motion.y*172+GF_SinDeg((u16)work->angle));}}}

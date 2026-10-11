@@ -4,11 +4,11 @@
 
 void *ParticleSystem_GetEmitterParam(void *);
 int ParticleSystem_GetPerspectiveType(void);
-int ov07_0221C468(void *);
-int ov07_0221C470(void *);
-int ov07_0221C478(void *);
+int BattleAnimSystem_GetAttacker(void *);
+int BattleAnimSystem_GetDefender(void *);
+int BattleAnimSystem_GetCurrentParticleSystem(void *);
 int ov07_0221BFC0(void *);
-int ov07_0221BFD0(void);
+int BattleAnimSystem_GetHeapID(void);
 void ov07_0222050C(void *, int, int, int, int, int);
 int BattleAnimUtil_GetBattlerSide(void *, int);
 int BattleAnimUtil_GetBattlerType(void *, int);
@@ -17,7 +17,7 @@ int ov07_02221CB4(void);
 int ov07_02221C8C(int);
 void ov07_02221C74(int, void *, void *);
 void ov07_02221EEC(void *, void *);
-void ov07_0221F9A8(void *, void *, int);
+void BattleAnimSystem_ReadScriptArgs(void *, void *, int);
 void *Heap_Alloc(int, u32);
 void Heap_Free(void *);
 void ov07_022208B4(void *, void *);

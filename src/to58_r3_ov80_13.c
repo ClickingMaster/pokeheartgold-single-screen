@@ -7,7 +7,7 @@ int FrtCmd_046(void *c) {
     u8 *script = PTR(c, 0x1c);
     PTR(c, 0x1c) = script + 1;
     u8 flag = *script;
-    void *sprite = ov80_02239700(p, index);
+    void *sprite = FrontierMap_GetSprite(p, index);
     if (!sprite) {
         GF_AssertFail();
     }

@@ -114,8 +114,8 @@ extern const u8 sLinkMultiBattlerTypes[4][4];
 extern const u8 sDoublesBattlerTypes[4];
 
 // Declared by no header yet.
-extern u32 *ov07_0221BEDC(enum HeapID heapId);
-extern void ov07_0221BFE0(u32 *animSystem);
+extern u32 *BattleAnimSystem_New(enum HeapID heapId);
+extern void BattleAnimSystem_Delete(u32 *animSystem);
 extern void ov05_0221BA00(BattleLinkScreenArgs *args);
 extern void sub_020302A4(BattleSetup *setup);
 extern void ParticleSystem_FreeAll(void);
@@ -192,7 +192,7 @@ void Battle_BattleInit(OverlayManager *manager) {
     PokepicManager_SetPlttBaseAddrAndSize(battleSystem->pokepicManager, 0, 192);
     BattleSystem_HpBar_Init(battleSystem);
     Battle_ReserveTexAndPlttVram();
-    battleSystem->unk8C = ov07_0221BEDC(HEAP_ID_BATTLE);
+    battleSystem->unk8C = BattleAnimSystem_New(HEAP_ID_BATTLE);
     ov12_022389B8(battleSystem);
     GF_TouchpadResetSampling();
     GF_TouchpadStartSampling(4);
@@ -331,7 +331,7 @@ void Battle_BattleExit(OverlayManager *man) {
     MessageFormat_Delete(battleSystem->msgFormat);
     PokepicAnimManager_Delete(battleSystem->unk1C8);
     ParticleSystem_FreeAll();
-    ov07_0221BFE0(battleSystem->unk8C);
+    BattleAnimSystem_Delete(battleSystem->unk8C);
     BattleContext_Delete(battleSystem->ctx);
     for (i = 0; i < battleSystem->maxBattlers; i++) {
         ov12_02258E7C(battleSystem, battleSystem->opponentData[i], battleSystem->unk23FD);

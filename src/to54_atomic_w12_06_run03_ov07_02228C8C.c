@@ -21,24 +21,24 @@ s16 Pokepic_GetAttr(s32, s32);                                                  
 M2C_UNK Pokepic_SetAttr(s32, s32, s32);                                                    /* extern */
 M2C_UNK SpriteSystem_DrawSprites(s32);                                                     /* extern */
 s32 Sprite_GetPaletteProxy(s32);                                                           /* extern */
-s32 ov07_0221BFD0(s32);                                                                    /* extern */
-M2C_UNK ov07_0221C410(s32, void (*)(s32, void *), void *);                                 /* extern */
-M2C_UNK ov07_0221C448(s32, s32);                                                           /* extern */
-s32 ov07_0221C468(s32);                                                                    /* extern */
-s32 ov07_0221C470(s32);                                                                    /* extern */
-s32 ov07_0221C4A0(s32);                                                                    /* extern */
+s32 BattleAnimSystem_GetHeapID(s32);                                                                    /* extern */
+M2C_UNK BattleAnimSystem_CreateTaskDefaultPriority(s32, void (*)(s32, void *), void *);                                 /* extern */
+M2C_UNK BattleAnimSystem_DestroyTask(s32, s32);                                                           /* extern */
+s32 BattleAnimSystem_GetAttacker(s32);                                                                    /* extern */
+s32 BattleAnimSystem_GetDefender(s32);                                                                    /* extern */
+s32 BattleAnimSystem_GetBgConfig(s32);                                                                    /* extern */
 
-extern u32 ov07_0221C4A8(void *p, int i);                                                               /* extern */
-s32 *ov07_0221C4E8(s32, s32);                                                              /* extern */
-s32 ov07_0221C514(s32);                                                                    /* extern */
-s32 ov07_0221C768(s32, s32);                                                               /* extern */
-u16 ov07_0221E6C8(s32);                                                                    /* extern */
-s32 ov07_0221FA48(s32, s32);                                                               /* extern */
-s32 ov07_0221FA78(s32);                                                                    /* extern */
+extern u32 BattleAnimSystem_GetArg(void *p, int i);                                                               /* extern */
+s32 *BattleAnimSystem_GetBattlerSprite(s32, s32);                                                              /* extern */
+s32 BattleAnimSystem_GetBattlerSpriteManager(s32);                                                                    /* extern */
+s32 BattleAnimSystem_GetMoveParam(s32, s32);                                                               /* extern */
+u16 BattleAnimSystem_GetBattleBgPaletteMask(s32);                                                                    /* extern */
+s32 BattleAnimSystem_GetBattlerPokepic(s32, s32);                                                               /* extern */
+s32 BattleAnimSystem_GetPaletteData(s32);                                                                    /* extern */
 s32 ov07_0221FA80(s32, s32);                                                               /* extern */
 s32 ov07_0221FA90(s32, s32);                                                               /* extern */
 s32 ov07_0221FAA0(s32, s32);                                                               /* extern */
-s32 ov07_0221FAB0(s32);                                                                    /* extern */
+s32 BattleAnimSystem_IsDoubleBattle(s32);                                                                    /* extern */
 s32 ov07_0221FAF8(s32, s32);                                                               /* extern */
 s32 ov07_0221FB78(s32, s32);                                                               /* extern */
 s32 ov07_02222004(s32, s32);                                                               /* extern */
@@ -91,9 +91,9 @@ void ov07_02228C8C(s32 arg0) {
     M2C_FIELD(temp_r0, s8 *, 0) = 0;
     M2C_FIELD(temp_r0, s8 *, 1) = 0;
     M2C_FIELD(temp_r0, s32 *, 0xC) = arg0;
-    M2C_FIELD(temp_r0, s32 *, 0x10) = ov07_0221C514(arg0);
-    M2C_FIELD(temp_r0, s32 *, 8) = ov07_0221C4A0(M2C_FIELD(temp_r0, s32 *, 0xC));
-    if (ov07_0221FAB0(M2C_FIELD(temp_r0, s32 *, 0xC)) == 1) {
+    M2C_FIELD(temp_r0, s32 *, 0x10) = BattleAnimSystem_GetBattlerSpriteManager(arg0);
+    M2C_FIELD(temp_r0, s32 *, 8) = BattleAnimSystem_GetBgConfig(M2C_FIELD(temp_r0, s32 *, 0xC));
+    if (BattleAnimSystem_IsDoubleBattle(M2C_FIELD(temp_r0, s32 *, 0xC)) == 1) {
         var_r1 = 0x40;
     } else {
         var_r1 = 0xA;
@@ -109,5 +109,5 @@ void ov07_02228C8C(s32 arg0) {
             var_r5 += 0x14;
         } while (var_r6 < (s32)M2C_FIELD(temp_r0, s32 *, 4));
     }
-    ov07_0221C410(M2C_FIELD(temp_r0, s32 *, 0xC), ov07_02228B38, temp_r0);
+    BattleAnimSystem_CreateTaskDefaultPriority(M2C_FIELD(temp_r0, s32 *, 0xC), ov07_02228B38, temp_r0);
 }

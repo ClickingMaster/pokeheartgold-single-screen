@@ -18,7 +18,7 @@ void ov07_0222EF0C(void *, u32 *, fx32);
 BOOL ov07_0222EF58(void *, u32 *);
 void ManagedSprite_SetAnim(void *, u32);
 void Sprite_DeleteAndFreeResources(void *);
-void ov07_0221C448(void *, void *);
+void BattleAnimSystem_DestroyTask(void *, void *);
 void Heap_Free(void *);
 void SpriteSystem_DrawSprites(void *);
 void ov07_0222EF88(void *, X08Work *);

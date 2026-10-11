@@ -44,23 +44,23 @@
 	.public ov45_0222A53C
 	.public ov45_0222A548
 	.public ov45_0222A550
-	.public ov45_0222A578
-	.public ov45_0222A5C0
+	.public WiFiPlazaWork_GetPlayer
+	.public WiFiPlazaWork_GetMyPlayer
 	.public ov45_0222A5E8
 	.public ov45_0222A704
 	.public ov45_0222A72C
 	.public ov45_0222A770
 	.public ov45_0222A7DC
-	.public ov45_0222A844
+	.public WiFiPlazaPlayer_CopyToProfile
 	.public ov45_0222A92C
 	.public ov45_0222A964
 	.public ov45_0222A9A4
-	.public ov45_0222A9CC
-	.public ov45_0222AA10
-	.public ov45_0222AA28
-	.public ov45_0222AA5C
-	.public ov45_0222AA84
-	.public ov45_0222AAA8
+	.public WiFiPlazaPlayer_GetGender
+	.public WiFiPlazaPlayer_GetLanguage
+	.public WiFiPlazaPlayer_IsLanguageValid
+	.public WiFiPlazaPlayer_GetAvatar
+	.public WiFiPlazaPlayer_GetCountry
+	.public WiFiPlazaPlayer_GetRegion
 	.public ov45_0222AAC8
 	.public ov45_0222AADC
 	.public ov45_0222AAEC
@@ -536,7 +536,7 @@
 	.public ov45_0222A4C8
 	.public ov45_0222A920
 	.public ov45_0222A99C
-	.public ov45_0222A9A0
+	.public WiFiPlazaPlayer_GetTrainerID
 	.public ov45_0222A9C8
 	.public ov45_0222AA54
 	.public ov45_0222AB1C
@@ -605,10 +605,10 @@ ov45_0222B79C: ; 0x0222B79C
 	bl ov45_0222EC10
 	add r4, #0x20
 	add r0, r4, #0
-	bl ov45_0222AA84
+	bl WiFiPlazaPlayer_GetCountry
 	add r6, r0, #0
 	add r0, r4, #0
-	bl ov45_0222AAA8
+	bl WiFiPlazaPlayer_GetRegion
 	add r2, r0, #0
 	lsl r1, r6, #0x10
 	lsl r2, r2, #0x18
@@ -628,10 +628,10 @@ _0222B7DA:
 	beq _0222B80A
 	bl ov45_0222EA2C
 	str r0, [sp]
-	bl ov45_0222AA84
+	bl WiFiPlazaPlayer_GetCountry
 	add r7, r0, #0
 	ldr r0, [sp]
-	bl ov45_0222AAA8
+	bl WiFiPlazaPlayer_GetRegion
 	add r2, r0, #0
 	lsl r1, r7, #0x10
 	lsl r2, r2, #0x18

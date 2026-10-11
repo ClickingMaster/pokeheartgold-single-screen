@@ -10,7 +10,7 @@ extern void *SysTask_CreateOnMainQueue(void (*)(void *, void *), void *, int);
 extern u8 *sub_0209680C(void *);
 extern int FrontierScript_ReadVar(void *);
 extern int FrontierScriptContext_ReadWord(void *);
-extern void *ov80_02239938(void *, int);
+extern void *FrontierMap_FindObject(void *, int);
 int FrtCmd_040(u8 *);
 void ov80_0222C7B0(int, u8 *, void *, void *, void *, int);
 int FrtCmd_040(u8 *ctx) {
@@ -18,7 +18,7 @@ int FrtCmd_040(u8 *ctx) {
     u8 *p = sub_0209680C(*(void **)base);
     int id = FrontierScript_ReadVar(ctx);
     int delta = FrontierScriptContext_ReadWord(ctx);
-    void *owner = ov80_02239938(*(void **)base, id);
+    void *owner = FrontierMap_FindObject(*(void **)base, id);
     if (owner == 0) GF_AssertFail();
     ov80_0222C7B0(id, owner, (u8 *)*(u32 *)(ctx + 0x1c) + delta, *(void **)(p + 0x30), base + 0x59, *(u32 *)(base + 0x34));
     base[0x59]++;

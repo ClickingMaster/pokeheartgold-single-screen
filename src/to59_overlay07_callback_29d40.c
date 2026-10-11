@@ -9,7 +9,7 @@ typedef struct Ov07Work {
 } Ov07Work;
 
 extern const u8 ov07_02236778[];
-void ov07_0221C448(void *, void *);
+void BattleAnimSystem_DestroyTask(void *, void *);
 void ov07_02229D40(void *, Ov07Work *);
 
 void ov07_02229D40(void *owner, Ov07Work *work) {
@@ -72,7 +72,7 @@ void ov07_02229D40(void *owner, Ov07Work *work) {
                 i++;
             } while (i < F(work, u8, 5));
         }
-        ov07_0221C448(F(work, void *, 8), owner);
+        BattleAnimSystem_DestroyTask(F(work, void *, 8), owner);
         Heap_Free(work);
         return;
     }

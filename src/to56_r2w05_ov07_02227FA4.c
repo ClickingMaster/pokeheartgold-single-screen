@@ -20,7 +20,7 @@ int ov07_02222558(void *);
 void Pokepic_StartPaletteFade(void *, int, int, int, int);
 int Pokepic_ResumePaletteFade(void *);
 void Pokepic_SetAttr(void *, int, int);
-void ov07_0221C448(void *, int);
+void BattleAnimSystem_DestroyTask(void *, int);
 void Heap_Free(void *);
 void ov07_02227FA4(int, WFA4 *);
 
@@ -51,7 +51,7 @@ void ov07_02227FA4(int task, WFA4 *work) {
         Pokepic_SetAttr(work->pokepic, 0xD, work->animY);
         break;
     default:
-        ov07_0221C448(work->ctx, task);
+        BattleAnimSystem_DestroyTask(work->ctx, task);
         Heap_Free(work);
         break;
     }

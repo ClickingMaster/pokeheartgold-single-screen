@@ -20,11 +20,11 @@
 .public PlayerProfile_New
 .public Save_Profile_PlayerName_Set
 .public Options_GetFrame
-.public sub_0202C23C
+.public FriendRoster_GetDwcFriendData
 .public sub_0202C254
-.public sub_0202C2DC
-.public sub_0202C338
-.public sub_0202C6F4
+.public FriendRoster_IsFriendValid
+.public FriendRoster_RemoveFriend
+.public Save_FriendRoster_Get
 .public Save_Frontier_GetStatic
 .public sub_020311AC
 .public sub_02034818

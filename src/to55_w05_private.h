@@ -3,8 +3,8 @@
 #include "global.h"
 void ov07_02222590(void *, int, int, int, int, int, int);
 void ov07_02222508(void *, int, int, int, int);
-int ov07_0221C468(void *);
-void ov07_0221C470(void *);
+int BattleAnimSystem_GetAttacker(void *);
+void BattleAnimSystem_GetDefender(void *);
 int BattleAnimUtil_GetBattlerType(void *, int);
 void ManagedSprite_SetDrawFlag(void *, int);
 void ManagedSprite_SetAffineScale(void *, float, float);
@@ -15,7 +15,7 @@ int ov07_02222558(void *);
 void Sprite_DeleteAndFreeResources(void *);
 void SpriteSystem_DrawSprites(void *);
 void Heap_Free(void *);
-void ov07_0221C448(void *, void *);
+void BattleAnimSystem_DestroyTask(void *, void *);
 int ov07_0222FFD0(void *);
 void ov07_022220FC(void *, int, int, int, int, int, int, int);
 void ov07_02222180(void *);

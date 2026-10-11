@@ -76,7 +76,7 @@ extern void ov49_0225B0D4(void *, void *, u32);
 extern void ov49_0225B308(void *, u32);
 extern void ov49_0225B198(void *, void *, u32);
 extern void ov49_0225B450(void *, void *, void *, void *, u32);
-extern void *ov45_0222A5C0(void *);
+extern void *WiFiPlazaWork_GetMyPlayer(void *);
 extern u32 ov45_0222AADC(void *);
 extern void ov49_0225B9AC(void *, void *, void *, u32, void *);
 extern void *ov49_0225EEAC(void *, u32);
@@ -151,7 +151,7 @@ BOOL ov49_02259AA4(OverlayManager *manager, int *unused) {
     ov49_0225B308((u8 *)work + 0x2DC, 0x77);
     ov49_0225B198((u8 *)work + 0x3A0, (u8 *)work + 0x2DC, 0x77);
     ov49_0225B450((u8 *)work + 0x184, work->state38, (u8 *)work + 0x3C, *(void **)((u8 *)work + 0x3F4), 0x77);
-    args = ov45_0222A5C0(work->owner);
+    args = WiFiPlazaWork_GetMyPlayer(work->owner);
     if (ov45_0222AADC(args) == 1) {
         ov49_0225B9AC((u8 *)work + 0x184, (u8 *)work + 0x3C, (u8 *)work + 0x2DC, 0x77, args);
     }

@@ -30,7 +30,7 @@
 #include "sys_flags.h"
 #include "sys_vars.h"
 #include "unk_02018380.h"
-#include "unk_0202C730.h"
+#include "friend_group_access.h"
 #include "unk_0205B3DC.h"
 #include "unk_02066EDC.h"
 #include "unk_02091564.h"
@@ -186,7 +186,7 @@ static void InitGameStateAfterOakSpeech_Internal(enum HeapID heapID, SaveData *s
     Save_SysInfo_InitFromSystem(Save_SysInfo_Get(saveData));
     Save_SysInfo_RTC_Init(Save_SysInfo_RTC_Get(saveData));
     Save_BerryPotRTC_Init(Save_BerryPotRTC_Get(saveData));
-    sub_0202C7C0(Save_FriendGroup_Get(saveData), 1, MTRandom());
+    Save_FriendGroup_SetGroupId(Save_FriendGroup_Get(saveData), 1, MTRandom());
     sub_020674BC(saveData);
 
     PlayerProfile *profile = Save_PlayerData_GetProfile(saveData);

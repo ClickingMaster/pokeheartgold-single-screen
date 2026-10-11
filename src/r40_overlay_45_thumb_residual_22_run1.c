@@ -46,7 +46,7 @@ void ov45_0222BE9C(Ov45State *state, Ov45Input *input) {
         if (slot == -1) {
             return;
         }
-        ov45_0222A844(ov45_0222A578(state, slot), state->selected[i], state->heapId);
+        WiFiPlazaPlayer_CopyToProfile(WiFiPlazaWork_GetPlayer(state, slot), state->selected[i], state->heapId);
     }
     req.selected[0] = state->selected[0];
     req.selected[1] = state->selected[1];
@@ -67,7 +67,7 @@ void ov45_0222BF18(Ov45State *state, Ov45Input *input) {
         if (slot == -1) {
             return;
         }
-        ov45_0222A844(ov45_0222A578(state, slot), state->selected[i], state->heapId);
+        WiFiPlazaPlayer_CopyToProfile(WiFiPlazaWork_GetPlayer(state, slot), state->selected[i], state->heapId);
     }
     req.selected[0] = state->selected[0];
     req.selected[1] = state->selected[1];
@@ -92,7 +92,7 @@ void ov45_0222BF98(Ov45State *state, Ov45Input *input) {
                 if (slot == -1) {
                     return;
                 }
-                ov45_0222A844(ov45_0222A578(state, slot), state->selected[i], state->heapId);
+                WiFiPlazaPlayer_CopyToProfile(WiFiPlazaWork_GetPlayer(state, slot), state->selected[i], state->heapId);
                 selected[i] = state->selected[i];
             } else {
                 selected[i] = 0;
@@ -105,7 +105,7 @@ void ov45_0222BF98(Ov45State *state, Ov45Input *input) {
                 if (slot == -1) {
                     return;
                 }
-                ov45_0222A844(ov45_0222A578(state, slot), state->selected[i], state->heapId);
+                WiFiPlazaPlayer_CopyToProfile(WiFiPlazaWork_GetPlayer(state, slot), state->selected[i], state->heapId);
                 selected[i] = state->selected[i];
             } else {
                 selected[i] = 0;
@@ -136,7 +136,7 @@ void ov45_0222C0CC(Ov45State *state, Ov45Input *input) {
     if (slot == -1) {
         return;
     }
-    ov45_0222A844(ov45_0222A578(state, slot), state->selected[0], state->heapId);
+    WiFiPlazaPlayer_CopyToProfile(WiFiPlazaWork_GetPlayer(state, slot), state->selected[0], state->heapId);
     req.option = input->mode;
     req.count = input->count;
     req.selected = state->selected[0];
@@ -158,7 +158,7 @@ void ov45_0222C130(Ov45State *state, Ov45Input *input) {
             if (slot == -1) {
                 return;
             }
-            ov45_0222A844(ov45_0222A578(state, slot), state->selected[i], state->heapId);
+            WiFiPlazaPlayer_CopyToProfile(WiFiPlazaWork_GetPlayer(state, slot), state->selected[i], state->heapId);
             selected[i] = state->selected[i];
         } else {
             selected[i] = 0;
@@ -190,7 +190,7 @@ void ov45_0222C1EC(Ov45State *state, Ov45Input *input) {
             if (slot == -1) {
                 return;
             }
-            ov45_0222A844(ov45_0222A578(state, slot), state->selected[i], state->heapId);
+            WiFiPlazaPlayer_CopyToProfile(WiFiPlazaWork_GetPlayer(state, slot), state->selected[i], state->heapId);
             selected[i] = state->selected[i];
         } else {
             selected[i] = 0;
@@ -222,7 +222,7 @@ void ov45_0222C2A8(Ov45State *state, Ov45Input *input) {
             if (slot == -1) {
                 return;
             }
-            ov45_0222A844(ov45_0222A578(state, slot), state->selected[i], state->heapId);
+            WiFiPlazaPlayer_CopyToProfile(WiFiPlazaWork_GetPlayer(state, slot), state->selected[i], state->heapId);
             selected[i] = state->selected[i];
         } else {
             selected[i] = 0;

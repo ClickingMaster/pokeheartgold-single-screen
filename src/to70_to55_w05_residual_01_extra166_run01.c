@@ -7,7 +7,7 @@ void ov07_02222590(void *,int,int,int,int,int,int);
 void ov07_02222644(void *,float *,float *);
 void ManagedSprite_SetAffineScale(void *,float,float);
 void ov07_022222F0(void *,void *);
-int ov07_0221C470(void *),BattleAnimUtil_GetBattlerType(void *,int);
+int BattleAnimSystem_GetDefender(void *),BattleAnimUtil_GetBattlerType(void *,int);
 void ManagedSprite_SetDrawFlag(void *,int);
 void ov07_0222F408(void *,void *);
 extern const u16 ov07_02236800[];
@@ -24,6 +24,6 @@ void ov07_0222F600(u8 *w){
  ManagedSprite_SetAffineScale(P(w,28),sx,sy);
  ov07_022222F0(w+0x70,P(w,28));
  *(int *)(w+0x94)=0;*(int *)(w+0x98)=6;
- ManagedSprite_SetDrawFlag(P(w,36),ov07_02236800[BattleAnimUtil_GetBattlerType(P(w,0),ov07_0221C470(P(w,0)))]);
+ ManagedSprite_SetDrawFlag(P(w,36),ov07_02236800[BattleAnimUtil_GetBattlerType(P(w,0),BattleAnimSystem_GetDefender(P(w,0)))]);
  ManagedSprite_SetDrawFlag(P(w,28),1);ov07_0222F408(w,P(w,28));
 }

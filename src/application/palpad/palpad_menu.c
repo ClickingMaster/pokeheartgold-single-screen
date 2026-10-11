@@ -374,12 +374,12 @@ void PalPadMenu_ClearMessage(PalPadMenu *menu) {
 // Registering needs a free roster slot.
 BOOL PalPadMenu_CanSelect(u32 *selection, PalPadShared *shared) {
     int i;
-    UnkStruct_021D2230 *wifiList;
+    FriendRoster *wifiList;
 
     if (*selection == PALPAD_MENU_REGISTER) {
-        wifiList = sub_0202C6F4(shared->saveData);
+        wifiList = Save_FriendRoster_Get(shared->saveData);
         for (i = 0; i < PALPAD_FRIEND_MAX; i++) {
-            if (sub_0202C2DC(wifiList, i) == 0) {
+            if (FriendRoster_IsFriendValid(wifiList, i) == 0) {
                 return TRUE;
             }
         }

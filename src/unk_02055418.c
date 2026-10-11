@@ -19,7 +19,7 @@
 #include "script.h"
 #include "script_manager.h"
 #include "sys_vars.h"
-#include "unk_0202C730.h"
+#include "friend_group_access.h"
 #include "unk_02031B0C.h"
 #include "unk_02066EDC.h"
 #include "unk_0206D494.h"
@@ -77,8 +77,8 @@ void sub_02055508(FieldSystem *fieldSystem, int days) {
     BOOL hasPenalty = FieldSystem_HasPenalty(fieldSystem);
     ClearDailyFlags(fieldSystem);
     sub_0206759C(fieldSystem->saveData, days); // reset badge shininess..?
-    sub_0202C78C(Save_FriendGroup_Get(fieldSystem->saveData), days);
-    Roamers_SetRand(Save_Roamers_Get(fieldSystem->saveData), sub_0202C7DC(Save_FriendGroup_Get(fieldSystem->saveData)));
+    Save_FriendGroup_AdvanceSeeds(Save_FriendGroup_Get(fieldSystem->saveData), days);
+    Roamers_SetRand(Save_Roamers_Get(fieldSystem->saveData), Save_FriendGroup_GetCurrentSeed(Save_FriendGroup_Get(fieldSystem->saveData)));
     Party_UpdatePokerus(SaveArray_Party_Get(fieldSystem->saveData), days);
     Save_LCRNGAdvanceLotoID(fieldSystem->saveData, (u16)days);
     sub_02066D60(fieldSystem->saveData);

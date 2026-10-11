@@ -45,7 +45,7 @@ void Camera_SetAnglePos(const void *, void *);
 void Camera_SetLookAtCamTarget(const void *, void *);
 void ov07_02221CE0(void *, void *);
 int ov07_0221BFC0(void *);
-int ov07_0221FAB0(void *);
+int BattleAnimSystem_IsDoubleBattle(void *);
 void ov07_02231D70(void *, void *, void *);
 int BattleAnimUtil_GetBattlerType(void *);
 int BattleAnimUtil_GetBattlerSide(void *);

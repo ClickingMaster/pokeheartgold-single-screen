@@ -8,7 +8,7 @@ static inline void SetPosition(Ov07CallbackPosition *work, const VecFx32 *offset
 
 void ov07_022207D0(void *work, int a, int b) {
     void *ctx = ParticleSystem_GetEmitterParam();
-    int c = ov07_0221C468(ctx);
-    int d = ov07_0221C470(ctx);
+    int c = BattleAnimSystem_GetAttacker(ctx);
+    int d = BattleAnimSystem_GetDefender(ctx);
     ov07_0222050C(ctx, work, c, d, a, b);
 }

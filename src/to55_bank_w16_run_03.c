@@ -43,9 +43,9 @@ void ov07_022216A8(void *p, int q, Vec3 *out) {
     int i;
     for (i = 0; i < 6; i++) {
         if (i == BattleAnimUtil_GetBattlerType((void *)U32(p, 0), q)) {
-            ov07_0221F9A8((void *)U32(p, 0), &rec, 4);
+            BattleAnimSystem_ReadScriptArgs((void *)U32(p, 0), &rec, 4);
         } else {
-            ov07_0221F9A8((void *)U32(p, 0), &temp, 4);
+            BattleAnimSystem_ReadScriptArgs((void *)U32(p, 0), &temp, 4);
         }
     }
     S8(p, 8) = ov07_02221664(p);
@@ -66,7 +66,7 @@ void ov07_022216A8(void *p, int q, Vec3 *out) {
 void ov07_02221734(void *p, Vec3 *out) {
     Rec b;
     Vec3 a = { 0 };
-    ov07_0221F9A8((void *)U32(p, 0), &b, 4);
+    BattleAnimSystem_ReadScriptArgs((void *)U32(p, 0), &b, 4);
     S8(p, 8) = ov07_02221664(p);
     a.x = b.v.x;
     a.y = b.v.y;

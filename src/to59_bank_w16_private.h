@@ -18,7 +18,7 @@ typedef struct Work {
 
 typedef struct Param { int flag; VecFx32 value; } Param;
 void ov07_02220978(void *, Work *);
-void ov07_0221F9A8(void *, void *, int);
+void BattleAnimSystem_ReadScriptArgs(void *, void *, int);
 int ov07_02221664(Work *);
 void ov07_022216A8(Work *, int, VecFx32 *);
 void ov07_02221734(Work *, VecFx32 *);

@@ -9,7 +9,7 @@
 #include "save_data_write_error.h"
 #include "save_misc_data.h"
 #include "system.h"
-#include "unk_0202C034.h"
+#include "friend_roster.h"
 
 static BOOL saveWritten;
 static SaveData *sSaveDataPtr;
@@ -589,7 +589,7 @@ static BOOL Save_LoadDynamicRegion(SaveData *saveData) {
     pc_size = PCStorage_GetSizeOfBox() * PCStorage_GetNumBoxes();
     saveData->pcStorageLastCRC = GF_CalcCRC16(data + pc_offs, pc_size);
     Save_Frontier_Load(saveData);
-    sub_0202C6FC(saveData);
+    Save_FriendRoster_LoadFromSave(saveData);
     return TRUE;
 }
 
@@ -612,7 +612,7 @@ static int Save_WriteChunkFooterAsync(SaveData *saveData, int idx, u8 slot) {
 
 static void Save_WriteManInit(SaveData *saveData, struct AsyncWriteManager *writeMan, int a2) {
 #pragma unused(a2)
-    sub_0202C714(saveData);
+    Save_FriendRoster_StoreToSave(saveData);
     Save_Frontier_Commit(saveData);
 
     writeMan->state = 0;

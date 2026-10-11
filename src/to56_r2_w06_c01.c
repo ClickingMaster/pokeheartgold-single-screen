@@ -25,33 +25,33 @@ void ov07_02226F80(void *owner) {
 
     work = BattleAnimUtil_AllocWork(owner, sizeof(Ov07R2Work));
     BattleAnimUtil_InitCommonWork(owner, work);
-    work->value20 = (u32)(ov07_0221C4A8(owner, 0));
-    work->duration = (int)(ov07_0221C4A8(owner, 1));
-    work->value28 = (u32)(ov07_0221C4A8(owner, 2));
-    work->value2C = (u32)(ov07_0221C4A8(owner, 3));
-    work->enabled = (u32)(ov07_0221C4A8(owner, 5));
-    work->value34 = (u32)(ov07_0221C4A8(owner, 6));
-    work->sprite = ov07_0221C4E8(work->owner, (void *)work->value20);
+    work->value20 = (u32)(BattleAnimSystem_GetArg(owner, 0));
+    work->duration = (int)(BattleAnimSystem_GetArg(owner, 1));
+    work->value28 = (u32)(BattleAnimSystem_GetArg(owner, 2));
+    work->value2C = (u32)(BattleAnimSystem_GetArg(owner, 3));
+    work->enabled = (u32)(BattleAnimSystem_GetArg(owner, 5));
+    work->value34 = (u32)(BattleAnimSystem_GetArg(owner, 6));
+    work->sprite = BattleAnimSystem_GetBattlerSprite(work->owner, (void *)work->value20);
     work->counter = 0;
 
     if (work->value28 != 0xFF) {
-        ManagedSprite_SetPriority(work->sprite, ov07_0221FB04(owner, work->value28));
+        ManagedSprite_SetPriority(work->sprite, BattleAnimSystem_GetBgPriority(owner, work->value28));
     }
     if (work->value2C != 0xFF) {
         ManagedSprite_SetDrawPriority(work->sprite, work->value2C);
     }
 
-    if (ov07_0221FAB0(owner) != 1) {
-        if ((u32)(ov07_0221C4A8(owner, 4)) == 2 || (u32)(ov07_0221C4A8(owner, 4)) == 3) {
+    if (BattleAnimSystem_IsDoubleBattle(owner) != 1) {
+        if ((u32)(BattleAnimSystem_GetArg(owner, 4)) == 2 || (u32)(BattleAnimSystem_GetArg(owner, 4)) == 3) {
             ManagedSprite_SetDrawFlag(work->sprite, FALSE);
             Heap_Free(work);
             return;
         }
     }
 
-    type = (int)(ov07_0221C4A8(owner, 4));
-    first = ov07_0221C468(owner);
-    second = ov07_0221C470(owner);
+    type = (int)(BattleAnimSystem_GetArg(owner, 4));
+    first = BattleAnimSystem_GetAttacker(owner);
+    second = BattleAnimSystem_GetDefender(owner);
     if (work->value2C != 0xFF) {
         first = BattleAnimUtil_GetBattlerType(owner, first);
         second = BattleAnimUtil_GetBattlerType(owner, second);
@@ -122,5 +122,5 @@ void ov07_02226F80(void *owner) {
             break;
         }
     }
-    ov07_0221C410(work->owner, ov07_02226F04, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->owner, ov07_02226F04, work);
 }

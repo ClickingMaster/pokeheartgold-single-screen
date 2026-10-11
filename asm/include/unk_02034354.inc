@@ -9,10 +9,10 @@
 .public PlayerProfile_Init
 .public PlayerProfile_IsNameEmpty
 .public LinkBattleRuleset_Copy
-.public sub_0202C08C
+.public FriendRoster_GetUserData
 .public sub_0202C4F0
-.public sub_0202C6F4
-.public sub_0202C7E0
+.public Save_FriendRoster_Get
+.public Save_FriendGroup_GetName
 .public Save_FriendGroup_Get
 .public Save_WiFiHistory_Get
 .public WifiHistory_GetPlayerCountry

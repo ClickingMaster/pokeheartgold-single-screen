@@ -1,7 +1,7 @@
 #include "overlay80_object_updates_internal.h"
 
 void ov80_02239BF0(void *arg0, void *arg1, u32 type, const s16 *values, s32 count) {
-    u8 *object = ov80_02239938(arg0, arg1);
+    u8 *object = FrontierMap_FindObject(arg0, arg1);
     u8 *destination = object;
     s32 i;
     MI_CpuFill8(object + 0x26, 0, 0x10);

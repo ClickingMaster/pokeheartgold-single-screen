@@ -19,25 +19,25 @@
 #include "string_util.h"
 #include "system.h"
 
-// server client core (src/ov39_02229310 ARM code)
-BOOL ov39_0222A110(GlobalTerminalNetLogin *login);
-void ov39_0222A130(void);
-int ov39_0222A13C(void);
-int ov39_0222A158(void);
-BOOL ov39_0222A164(void *request, void *response);
-BOOL ov39_0222A1C0(int arg, void *response);
-BOOL ov39_0222A200(int arg, void *request, void *response);
-BOOL ov39_0222A268(int arg, void *response);
-void ov39_0222A2A8(GlobalTerminalNetResponse *response);
-void *ov39_0222A2B4(GlobalTerminalNet *net);
-int ov39_0222A2C0(int command);
+// request API of the socket client (src/global_terminal_socket.c, ARM)
+BOOL GlobalTerminalServer_Init(GlobalTerminalNetLogin *login);
+void GlobalTerminalServer_Stop(void);
+int GlobalTerminalServer_GetState(void);
+int GlobalTerminalServer_GetError(void);
+BOOL GlobalTerminalServer_UploadDressUp(void *request, void *response);
+BOOL GlobalTerminalServer_DownloadDressUp(int arg, void *response);
+BOOL GlobalTerminalServer_UploadBox(int arg, void *request, void *response);
+BOOL GlobalTerminalServer_DownloadBox(int arg, void *response);
+void GlobalTerminalServer_GetResponseSize(GlobalTerminalNetResponse *response);
+void *GlobalTerminalServer_GetResponse(GlobalTerminalNet *net);
+int GlobalTerminalServer_GetResponseBufferSize(int command);
 BOOL ov39_0222A2CC(void *response);
-BOOL ov39_0222A2EC(void *request, void *response);
-BOOL ov39_0222A33C(void *request, void *response);
-BOOL ov39_0222A394(void *request, void *response);
+BOOL GlobalTerminalServer_GetRankings(void *request, void *response);
+BOOL GlobalTerminalServer_UploadVideo(void *request, void *response);
+BOOL GlobalTerminalServer_SearchVideos(void *request, void *response);
 BOOL ov39_0222A3DC(void *request, void *response);
 BOOL ov39_0222A434(void *request, void *response);
-BOOL ov39_0222A48C(u32 argLow, u32 argHigh, int arg2, void *response);
+BOOL GlobalTerminalServer_DownloadVideo(u32 argLow, u32 argHigh, int arg2, void *response);
 BOOL ov39_0222A4C0(u32 argLow, u32 argHigh, void *response);
 
 // no public header
@@ -226,8 +226,8 @@ BOOL GlobalTerminalNet_Init(GlobalTerminalNet *net, GlobalTerminalNetArgs *args)
     net->prevStatus = -1;
     net->pendingCommand = GTS_REQUEST_NONE;
     net->activeCommand = GTS_REQUEST_NONE;
-    net->responseBuffer = Heap_Alloc(args->heapID, ov39_0222A2C0(-1));
-    MI_CpuFill8(net->responseBuffer, 0, ov39_0222A2C0(-1));
+    net->responseBuffer = Heap_Alloc(args->heapID, GlobalTerminalServer_GetResponseBufferSize(-1));
+    MI_CpuFill8(net->responseBuffer, 0, GlobalTerminalServer_GetResponseBufferSize(-1));
     net->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0800_bin, args->heapID);
     net->msgFormat = MessageFormat_New(args->heapID);
     net->string = String_New(256, args->heapID);
@@ -235,14 +235,14 @@ BOOL GlobalTerminalNet_Init(GlobalTerminalNet *net, GlobalTerminalNetArgs *args)
     net->login.dwcProfileId = args->dwcProfileId;
     net->login.gameVersion = GAME_VERSION;
     net->login.unk_05 = 2;
-    GF_ASSERT(ov39_0222A110(&net->login) == TRUE);
+    GF_ASSERT(GlobalTerminalServer_Init(&net->login) == TRUE);
     net->isRunning = 1;
     net->unk_3B8 = 1;
     return TRUE;
 }
 
 void GlobalTerminalNet_Free(GlobalTerminalNet *net) {
-    ov39_0222A130();
+    GlobalTerminalServer_Stop();
     net->isRunning = 0;
     String_Delete(net->string);
     MessageFormat_Delete(net->msgFormat);
@@ -255,7 +255,7 @@ void GlobalTerminalNet_Free(GlobalTerminalNet *net) {
 #pragma force_active reset
 
 BOOL GlobalTerminalNet_SeqStopClient(GlobalTerminalNet *net) {
-    ov39_0222A130();
+    GlobalTerminalServer_Stop();
     net->isRunning = 0;
     return TRUE;
 }
@@ -467,7 +467,7 @@ BOOL GlobalTerminalNet_Update(GlobalTerminalNet *net) {
             if (net->sendDelay != 0) {
                 net->sendDelay--;
             } else {
-                switch (ov39_0222A13C()) {
+                switch (GlobalTerminalServer_GetState()) {
                 case 1:
                 case 7:
                 case 8:
@@ -521,30 +521,30 @@ BOOL GlobalTerminalNet_SendPendingRequest(GlobalTerminalNet *net) {
 
     switch (net->pendingCommand) {
     case GTS_REQUEST_DRESS_UP_UPLOAD:
-        result = ov39_0222A164(&net->request, net->responseBuffer);
+        result = GlobalTerminalServer_UploadDressUp(&net->request, net->responseBuffer);
         break;
     case GTS_REQUEST_DRESS_UP_DOWNLOAD:
-        result = ov39_0222A1C0(net->requestArg.half, net->responseBuffer);
+        result = GlobalTerminalServer_DownloadDressUp(net->requestArg.half, net->responseBuffer);
         break;
     case GTS_REQUEST_BOX_UPLOAD:
-        result = ov39_0222A200(net->requestArg.bytes[0], &net->request, net->responseBuffer);
+        result = GlobalTerminalServer_UploadBox(net->requestArg.bytes[0], &net->request, net->responseBuffer);
         break;
     case GTS_REQUEST_BOX_DOWNLOAD:
-        result = ov39_0222A268(net->requestArg.bytes[0], net->responseBuffer);
+        result = GlobalTerminalServer_DownloadBox(net->requestArg.bytes[0], net->responseBuffer);
         break;
     case GTS_REQUEST_22000:
         result = ov39_0222A2CC(net->responseBuffer);
         break;
     case GTS_REQUEST_RANKINGS:
-        result = ov39_0222A2EC(&net->request, net->responseBuffer);
+        result = GlobalTerminalServer_GetRankings(&net->request, net->responseBuffer);
         break;
     case GTS_REQUEST_VIDEO_UPLOAD:
-        result = ov39_0222A33C(net->request.video, net->responseBuffer);
+        result = GlobalTerminalServer_UploadVideo(net->request.video, net->responseBuffer);
         break;
     case GTS_REQUEST_VIDEO_SEARCH:
         switch (net->searchKind) {
         case 0:
-            result = ov39_0222A394(&net->request, net->responseBuffer);
+            result = GlobalTerminalServer_SearchVideos(&net->request, net->responseBuffer);
             break;
         case 1:
             result = ov39_0222A3DC(&net->request, net->responseBuffer);
@@ -555,7 +555,7 @@ BOOL GlobalTerminalNet_SendPendingRequest(GlobalTerminalNet *net) {
         }
         break;
     case GTS_REQUEST_VIDEO_DOWNLOAD:
-        result = ov39_0222A48C(net->requestArg.word, net->requestArgHigh, 0x140, net->responseBuffer);
+        result = GlobalTerminalServer_DownloadVideo(net->requestArg.word, net->requestArgHigh, 0x140, net->responseBuffer);
         break;
     case GTS_REQUEST_23003:
         result = ov39_0222A4C0(net->requestArg.word, net->requestArgHigh, net->responseBuffer);
@@ -575,7 +575,7 @@ BOOL GlobalTerminalNet_PollStatus(GlobalTerminalNet *net) {
     if (net->activeCommand == GTS_REQUEST_NONE) {
         return TRUE;
     }
-    net->status = ov39_0222A13C();
+    net->status = GlobalTerminalServer_GetState();
     if (net->status != net->prevStatus) {
         switch (net->status) {
         case 0:
@@ -600,7 +600,7 @@ BOOL GlobalTerminalNet_PollStatus(GlobalTerminalNet *net) {
         case 9:
             net->error.type = 0;
             net->error.command = 0;
-            net->error.code = ov39_0222A158();
+            net->error.code = GlobalTerminalServer_GetError();
             net->error.isError = 1;
             net->completeFunc = ov39_02227B58;
             break;
@@ -622,7 +622,7 @@ BOOL ov39_02227B20(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *respon
 
 // stores the server's number for the uploaded video in the recording and saves it; done when the save finished
 BOOL GlobalTerminalNet_SaveUploadedVideoNumber(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *responseFunc) {
-    GlobalTerminalNetVideoNumberResponse *response = ov39_0222A2B4(net);
+    GlobalTerminalNetVideoNumberResponse *response = GlobalTerminalServer_GetResponse(net);
     int result = ov40_02244B70(net->saveData, response->numberLow, response->numberHigh, (u8 *)responseFunc + 4, (u8 *)responseFunc + 6);
     return (u32)(result - 2) <= 1;
 }
@@ -645,9 +645,9 @@ BOOL ov39_02227B58(GlobalTerminalNet *net, GlobalTerminalNetResponseFunc *respon
 
 BOOL GlobalTerminalNet_HandleResponse(GlobalTerminalNet *net) {
     BOOL result = TRUE;
-    GlobalTerminalNetResponse *response = ov39_0222A2B4(net);
+    GlobalTerminalNetResponse *response = GlobalTerminalServer_GetResponse(net);
 
-    ov39_0222A2A8(response);
+    GlobalTerminalServer_GetResponseSize(response);
     GF_ASSERT(net->activeCommand == response->command);
     net->responseFunc = NULL;
     switch (response->command) {
@@ -806,7 +806,7 @@ BOOL GlobalTerminalNet_CheckDressUpDownloadResult(GlobalTerminalNet *net, Global
 #pragma force_active on
 
 int GlobalTerminalNet_GetDressUpList(GlobalTerminalNet *net, void **out, int max) {
-    GlobalTerminalNetDressUpList *list = &((GlobalTerminalNetDressUpListResponse *)ov39_0222A2B4(net))->list;
+    GlobalTerminalNetDressUpList *list = &((GlobalTerminalNetDressUpListResponse *)GlobalTerminalServer_GetResponse(net))->list;
     int count = list->count;
     int i;
     GlobalTerminalNetDressUpEntry *entry;
@@ -866,7 +866,7 @@ BOOL GlobalTerminalNet_CheckBoxDownloadResult(GlobalTerminalNet *net, GlobalTerm
 
 int GlobalTerminalNet_GetBoxList(GlobalTerminalNet *net, void **out, int max) {
     int count;
-    int *base = &((GlobalTerminalNetBoxListResponse *)ov39_0222A2B4(net))->count;
+    int *base = &((GlobalTerminalNetBoxListResponse *)GlobalTerminalServer_GetResponse(net))->count;
     int i;
     GlobalTerminalNetBoxEntry *entry;
 
@@ -911,7 +911,7 @@ BOOL GlobalTerminalNet_Check22000Result(GlobalTerminalNet *net, GlobalTerminalNe
 }
 
 void ov39_02227F74(GlobalTerminalNet *net, void **out) {
-    GlobalTerminalNetBlockResponse *response = ov39_0222A2B4(net);
+    GlobalTerminalNetBlockResponse *response = GlobalTerminalServer_GetResponse(net);
     *out = &response->data;
 }
 
@@ -932,7 +932,7 @@ BOOL GlobalTerminalNet_CheckRankingsResult(GlobalTerminalNet *net, GlobalTermina
 }
 
 void GlobalTerminalNet_GetRankings(GlobalTerminalNet *net, void **out1, void **out2) {
-    u8 *data = (u8 *)&((GlobalTerminalNetBlockResponse *)ov39_0222A2B4(net))->data;
+    u8 *data = (u8 *)&((GlobalTerminalNetBlockResponse *)GlobalTerminalServer_GetResponse(net))->data;
     *out1 = data;
     *out2 = data + 0x558;
 }
@@ -958,7 +958,7 @@ BOOL GlobalTerminalNet_CheckVideoUploadResult(GlobalTerminalNet *net, GlobalTerm
 #pragma force_active on
 
 u64 GlobalTerminalNet_GetUploadedVideoNumber(GlobalTerminalNet *net) {
-    GlobalTerminalNetVideoNumberResponse *response = ov39_0222A2B4(net);
+    GlobalTerminalNetVideoNumberResponse *response = GlobalTerminalServer_GetResponse(net);
     return *(u64 *)&response->numberLow;
 }
 
@@ -981,7 +981,7 @@ BOOL GlobalTerminalNet_CheckVideoSearchResult(GlobalTerminalNet *net, GlobalTerm
 #pragma force_active on
 
 int GlobalTerminalNet_GetVideoList(GlobalTerminalNet *net, GlobalTerminalNetVideoHeader **out, int max) {
-    GlobalTerminalNetVideoList *list = &((GlobalTerminalNetVideoListResponse *)ov39_0222A2B4(net))->list;
+    GlobalTerminalNetVideoList *list = &((GlobalTerminalNetVideoListResponse *)GlobalTerminalServer_GetResponse(net))->list;
     int count = list->count;
     GlobalTerminalNetVideoEntry *entry;
     int i;
@@ -1024,7 +1024,7 @@ BOOL GlobalTerminalNet_CheckVideoDownloadResult(GlobalTerminalNet *net, GlobalTe
 #pragma force_active on
 
 u32 GlobalTerminalNet_GetDownloadedVideo(GlobalTerminalNet *net, u8 **out) {
-    GlobalTerminalNetVideoResponse *response = ov39_0222A2B4(net);
+    GlobalTerminalNetVideoResponse *response = GlobalTerminalServer_GetResponse(net);
     GlobalTerminalNetVideoView *view = (GlobalTerminalNetVideoView *)((u8 *)response + 4);
 
     *out = (u8 *)((u32)view + 12);

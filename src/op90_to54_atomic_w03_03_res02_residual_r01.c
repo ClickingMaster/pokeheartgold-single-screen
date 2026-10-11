@@ -10,7 +10,7 @@ typedef struct Work {
     u8 unk14[0x28];
 } Work;
 void *BattleAnimUtil_AllocWork(void *owner, u32 size);
-void ov07_0221C410(void *owner, void *func, void *data);
+void BattleAnimSystem_CreateTaskDefaultPriority(void *owner, void *func, void *data);
 void ov07_02230FE8(void *task, Work *work);
 void ov07_02230F98(void *owner, int a, int b, ManagedSprite *sprite);
 
@@ -25,5 +25,5 @@ void ov07_02230F98(void *owner, int a, int b, ManagedSprite *sprite) {
     ManagedSprite_SetDrawPriority(work->sprite, 100);
     ManagedSprite_SetPriority(work->sprite, 1);
     work->paletteOffset = ManagedSprite_GetPaletteOverrideOffset(work->sprite);
-    ov07_0221C410(work->owner, ov07_02230FE8, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->owner, ov07_02230FE8, work);
 }

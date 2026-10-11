@@ -88,7 +88,7 @@
 .public MI_CpuFill8
 .public memset
 .public gSystem
-.public ov45_0222A5C0
+.public WiFiPlazaWork_GetMyPlayer
 .public ov45_0222B244
 .public ov45_0222B270
 .public ov45_0222D7CC

@@ -12,9 +12,9 @@ void ov07_0221FF78(Ov07CallbackPosition *work) {
     VecFx32 unusedOffset;
     VecFx32 up;
     void *ctx = ParticleSystem_GetEmitterParam();
-    int a = ov07_0221C468(ctx);
-    ov07_0221C470(ctx);
-    SPLEmitter *emitter = ov07_0221C478(ctx);
+    int a = BattleAnimSystem_GetAttacker(ctx);
+    BattleAnimSystem_GetDefender(ctx);
+    SPLEmitter *emitter = BattleAnimSystem_GetCurrentParticleSystem(ctx);
     if (BattleAnimUtil_GetBattlerSide(ctx, 1) == 3) {
         ov07_02231B90(ctx, 1, &offset);
     } else {
@@ -36,8 +36,8 @@ void ov07_02220030(Ov07CallbackPosition *work) {
     VecFx32 offset;
     VecFx32 up;
     void *ctx = ParticleSystem_GetEmitterParam();
-    int a = ov07_0221C470(ctx);
-    SPLEmitter *emitter = ov07_0221C478(ctx);
+    int a = BattleAnimSystem_GetDefender(ctx);
+    SPLEmitter *emitter = BattleAnimSystem_GetCurrentParticleSystem(ctx);
     ov07_02231B90(ctx, 0, &offset);
     SetPosition(work, &offset);
     BattleAnimUtil_GetCameraUp(a, &up);
@@ -47,7 +47,7 @@ void ov07_02220030(Ov07CallbackPosition *work) {
 void ov07_0222008C(Ov07CallbackPosition *work) {
     VecFx32 offset;
     void *ctx = ParticleSystem_GetEmitterParam();
-    int a = ov07_0221C470(ctx);
+    int a = BattleAnimSystem_GetDefender(ctx);
     ov07_02231B90(ctx, a, &offset);
     SetPosition(work, &offset);
 }
@@ -55,7 +55,7 @@ void ov07_0222008C(Ov07CallbackPosition *work) {
 void ov07_022200D0(Ov07CallbackPosition *work) {
     VecFx32 offset;
     void *ctx = ParticleSystem_GetEmitterParam();
-    int a = ov07_0221C468(ctx);
+    int a = BattleAnimSystem_GetAttacker(ctx);
     ov07_02231B90(ctx, a, &offset);
     SetPosition(work, &offset);
 }
@@ -63,8 +63,8 @@ void ov07_022200D0(Ov07CallbackPosition *work) {
 void ov07_02220114(Ov07CallbackPosition *work) {
     VecFx32 offset;
     void *ctx = ParticleSystem_GetEmitterParam();
-    int a = ov07_0221C468(ctx);
-    int b = ov07_0221C470(ctx);
+    int a = BattleAnimSystem_GetAttacker(ctx);
+    int b = BattleAnimSystem_GetDefender(ctx);
     ov07_02231B90(ctx, a, &offset);
     (void)b;
     SetPosition(work, &offset);
@@ -73,9 +73,9 @@ void ov07_02220114(Ov07CallbackPosition *work) {
 void ov07_02220160(Ov07CallbackPosition *work) {
     VecFx32 offset;
     void *ctx = ParticleSystem_GetEmitterParam();
-    SPLEmitter *emitter = ov07_0221C478(ctx);
+    SPLEmitter *emitter = BattleAnimSystem_GetCurrentParticleSystem(ctx);
     int d = ParticleSystem_GetPerspectiveType(emitter);
-    int a = ov07_0221C468(ctx);
+    int a = BattleAnimSystem_GetAttacker(ctx);
     int mode = BattleAnimUtil_GetBattlerSide(ctx, a) == 3 ? 0 : 1;
     void *b = ov07_0221BFC0(ctx);
     ov07_02231AD0(mode, &offset, b, d);
@@ -85,9 +85,9 @@ void ov07_02220160(Ov07CallbackPosition *work) {
 void ov07_022201C8(Ov07CallbackPosition *work) {
     VecFx32 offset;
     void *ctx = ParticleSystem_GetEmitterParam();
-    SPLEmitter *emitter = ov07_0221C478(ctx);
+    SPLEmitter *emitter = BattleAnimSystem_GetCurrentParticleSystem(ctx);
     int d = ParticleSystem_GetPerspectiveType(emitter);
-    int a = ov07_0221C470(ctx);
+    int a = BattleAnimSystem_GetDefender(ctx);
     int mode = BattleAnimUtil_GetBattlerSide(ctx, a) == 3 ? 0 : 1;
     void *b = ov07_0221BFC0(ctx);
     ov07_02231AD0(mode, &offset, b, d);

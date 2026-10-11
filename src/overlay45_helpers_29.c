@@ -17,7 +17,7 @@ void ov45_0222A430(Overlay45State *, void *);
 void ov45_0222A4C8(Overlay45State *, u8);
 int ov45_0222A920(Overlay45State *);
 void *ov45_0222A99C(void **);
-void *ov45_0222A9A0(Overlay45State *);
+void *WiFiPlazaPlayer_GetTrainerID(Overlay45State *);
 void *ov45_0222A9C8(Overlay45State *);
 u8 ov45_0222AA54(Overlay45State *);
 void *ov45_0222AB1C(Overlay45State *);

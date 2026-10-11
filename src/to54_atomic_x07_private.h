@@ -66,7 +66,7 @@ BOOL ov07_02222AF4(void *);
 void ManagedSprite_SetDrawFlag(void *, BOOL);
 BOOL ov07_0222283C(void *, s16, s16, void *);
 void Sprite_DeleteAndFreeResources(void *);
-void ov07_0221C448(void *, void *);
+void BattleAnimSystem_DestroyTask(void *, void *);
 void Heap_Free(void *);
 void SpriteSystem_DrawSprites(void *);
 void ov07_0222D56C(X07ScaleSprite *);

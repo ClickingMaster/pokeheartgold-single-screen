@@ -42,12 +42,12 @@ typedef struct Work2719C {
 } Work2719C;
 
 
-extern u32 ov07_0221C4A8(void *p, int i);
+extern u32 BattleAnimSystem_GetArg(void *p, int i);
 extern void ov07_02222FC4(void *);
 extern void ov07_02222FF4(void *);
 extern int ov07_02222EE8(void *);
 extern void ov07_02222EF8(void *);
-extern void ov07_0221C448(void *, void *);
+extern void BattleAnimSystem_DestroyTask(void *, void *);
 extern void Heap_Free(void *);
 extern int ManagedSprite_IsAnimated(void *);
 extern void Sprite_DeleteAndFreeResources(void *);
@@ -55,13 +55,13 @@ extern void ManagedSprite_TickFrame(void *);
 extern void SpriteSystem_DrawSprites(void *);
 extern void *BattleAnimUtil_AllocWork(void *, int);
 extern void BattleAnimUtil_InitCommonWork(void *, void *);
-extern void ov07_0221C410(void *, void *, void *);
+extern void BattleAnimSystem_CreateTaskDefaultPriority(void *, void *, void *);
 extern void ov07_02227248(void *, void *);
 extern int ov07_02222240(void *, s16, s16, void *);
 extern int ov07_022222B4(void *);
 extern void Pokepic_SetAttr(void *, int, int);
-extern void *ov07_0221C468(void *);
-extern void *ov07_0221C470(void *);
+extern void *BattleAnimSystem_GetAttacker(void *);
+extern void *BattleAnimSystem_GetDefender(void *);
 extern void *BattleAnimUtil_GetPartnerBattler(void *, void *);
 extern void GF_AssertFail(void);
 
@@ -78,6 +78,6 @@ void ov07_0222719C(void *task, Work2719C *work);
 void ov07_022272D0(void *arg) {
     Work272D0 *work = BattleAnimUtil_AllocWork(arg, 0x28);
     BattleAnimUtil_InitCommonWork(arg, work->nested08);
-    work->value04 = (void *)((s32)ov07_0221C4A8(arg, 0));
-    ov07_0221C410(work->task0C, ov07_02227248, work);
+    work->value04 = (void *)((s32)BattleAnimSystem_GetArg(arg, 0));
+    BattleAnimSystem_CreateTaskDefaultPriority(work->task0C, ov07_02227248, work);
 }

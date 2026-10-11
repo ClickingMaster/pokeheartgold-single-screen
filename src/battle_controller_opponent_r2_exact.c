@@ -38,7 +38,7 @@ void ov12_02261B80(BattleSystem *bsys, u8 *ctx, void *arg2, BattleSourceR1 *src)
     params.vector.v[3] = 2;
     params.vector.v[4] = 0;
     params.vector.v[5] = 8;
-    ov07_0221C01C((BattleEngineWork *)arg2, src, selected, &params);
+    BattleAnimSystem_StartMove((BattleEngineWork *)arg2, src, selected, &params);
 }
 
 void ov12_02261CA8(BattleSystem *bsys, BattleSourceR2 *src, BattleParamsR2 *dst, u32 value) {

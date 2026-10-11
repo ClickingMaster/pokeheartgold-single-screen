@@ -36,7 +36,7 @@ void *ov07_02232D20(Args *a) {
         p->resource = ov07_0223261C(p->args.b);
         p->count = ov07_02232630(p->args.b);
     }
-    p->obj = ov07_0221FEB0(p->args.c, 0x5f, p->resource, 0);
+    p->obj = BattleAnimSystem_NewParticleSystemFromNarc(p->args.c, 0x5f, p->resource, 0);
     return p;
 }
 

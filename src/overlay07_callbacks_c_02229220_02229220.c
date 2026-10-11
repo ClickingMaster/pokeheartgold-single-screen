@@ -52,11 +52,11 @@ typedef struct W29220 {
 } W29220;
 
 void *BattleAnimUtil_AllocWork(void *owner, u32 size);
-u16 ov07_0221C468(void *owner);
-Pokepic *ov07_0221FA48(void *owner, u16 index);
-void *ov07_0221FA78(void *owner);
+u16 BattleAnimSystem_GetAttacker(void *owner);
+Pokepic *BattleAnimSystem_GetBattlerPokepic(void *owner, u16 index);
+void *BattleAnimSystem_GetPaletteData(void *owner);
 u16 ov07_0221FAA0(void *owner, u16 index);
-void ov07_0221C410(void *owner, void (*callback)(void), void *work);
+void BattleAnimSystem_CreateTaskDefaultPriority(void *owner, void (*callback)(void), void *work);
 void ov07_02227FA4(void);
 void ov07_022280A8(void);
 void ov07_022281C0(void);
@@ -64,8 +64,8 @@ void ov07_022283D8(void);
 void ov07_02228510(void);
 void ov07_0222915C(void);
 void BattleAnimUtil_InitCommonWork(void *owner, void *work);
-ManagedSprite *ov07_0221C4E8(void *owner, int index);
-u16 ov07_0221C470(void *owner);
+ManagedSprite *BattleAnimSystem_GetBattlerSprite(void *owner, int index);
+u16 BattleAnimSystem_GetDefender(void *owner);
 void BattleAnimUtil_GetPicPosition(void *object, void *position);
 void ov07_02228070(void *owner);
 void ov07_02228174(void *owner);
@@ -78,11 +78,11 @@ void ov07_0222A8D8(ManagedSprite *sprite);
 void ov07_02229220(void *owner) {
     W29220 *work = BattleAnimUtil_AllocWork(owner, 0x88);
     BattleAnimUtil_InitCommonWork(owner, work);
-    work->sprite0 = ov07_0221C4E8(work->owner, 0);
-    work->sprite1 = ov07_0221C4E8(work->owner, 1);
-    work->pic0 = ov07_0221FA48(work->owner, ov07_0221C468(work->owner));
-    work->pic1 = ov07_0221FA48(work->owner, ov07_0221C470(work->owner));
+    work->sprite0 = BattleAnimSystem_GetBattlerSprite(work->owner, 0);
+    work->sprite1 = BattleAnimSystem_GetBattlerSprite(work->owner, 1);
+    work->pic0 = BattleAnimSystem_GetBattlerPokepic(work->owner, BattleAnimSystem_GetAttacker(work->owner));
+    work->pic1 = BattleAnimSystem_GetBattlerPokepic(work->owner, BattleAnimSystem_GetDefender(work->owner));
     BattleAnimUtil_GetPicPosition(work->pic0, &work->pos0);
     BattleAnimUtil_GetPicPosition(work->pic1, &work->pos1);
-    ov07_0221C410(work->owner, ov07_0222915C, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->owner, ov07_0222915C, work);
 }

@@ -40,9 +40,9 @@ extern void BattleController_EmitCommandComplete(void *, int, int);
 extern void Heap_Free(void *);
 extern void SysTask_Destroy(void *);
 extern void GF_AssertFail(void);
-extern void *ov07_0221FB90(void *, int, int);
+extern void *BattleAnimBattlerSprites_New(void *, int, int);
 extern int ov07_0221FE70(void *);
-extern void ov07_0221FE3C(void *, int);
+extern void BattleAnimBattlerSprites_Free2(void *, int);
 
 void ov12_02260BA0(void *task, PartyGaugeWork *work) {
     int show;
@@ -146,7 +146,7 @@ void ov12_02260CDC(void *task, BattleObjectWork *work) {
         if (work->holder->object != NULL) {
             GF_AssertFail();
         }
-        work->holder->object = ov07_0221FB90(work->battleSystem, 5, work->battler);
+        work->holder->object = BattleAnimBattlerSprites_New(work->battleSystem, 5, work->battler);
         work->state++;
     } else {
         BattleController_EmitCommandComplete(work->battleSystem, work->battler, work->result);
@@ -163,7 +163,7 @@ void ov12_02260D28(void *task, BattleObjectWork *work) {
         work->state++;
         return;
     }
-    ov07_0221FE3C(work->holder->object, work->battler);
+    BattleAnimBattlerSprites_Free2(work->holder->object, work->battler);
     work->holder->object = NULL;
     BattleController_EmitCommandComplete(work->battleSystem, work->battler, work->result);
     Heap_Free(work);

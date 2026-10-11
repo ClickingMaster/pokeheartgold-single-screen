@@ -7,9 +7,9 @@ typedef struct Pokepic Pokepic;
 
 void *BattleAnimUtil_AllocWork(void *, u32);
 void BattleAnimUtil_InitCommonWork(void *, void *);
-void *ov07_0221C410(void *, void *, void *);
-void ov07_0221C448(void *, void *);
-void ov07_0221F9E8(void *, void *);
+void *BattleAnimSystem_CreateTaskDefaultPriority(void *, void *, void *);
+void BattleAnimSystem_DestroyTask(void *, void *);
+void BattleAnimSystem_GetSpriteTemplate(void *, void *);
 void ov07_0222A8D8(ManagedSprite *);
 void ManagedSprite_SetDrawFlag(ManagedSprite *, BOOL);
 void ManagedSprite_SetFlipMode(ManagedSprite *, int);
@@ -29,25 +29,25 @@ void ManagedSprite_SetAffineOverwriteMode(ManagedSprite *, int);
 void ManagedSprite_SetPriority(ManagedSprite *, int);
 void ManagedSprite_SetDrawPriority(ManagedSprite *, int);
 void ov07_02222590(void *, int, int, int, int, int, int);
-u32 ov07_0221C470(void *);
-Pokepic *ov07_0221FA48(void *, u32);
+u32 BattleAnimSystem_GetDefender(void *);
+Pokepic *BattleAnimSystem_GetBattlerPokepic(void *, u32);
 u32 ov07_0221FAA0(void *, u32);
-ManagedSprite *ov07_0221C4E8(void *, int);
+ManagedSprite *BattleAnimSystem_GetBattlerSprite(void *, int);
 int ov07_0221FAE8(void *);
-u32 ov07_0221FA04(void *, u32);
+u32 BattleAnimSystem_GetBattlerType(void *, u32);
 u32 Pokepic_GetAttr(Pokepic *, int);
 void ov07_02222268(void *, s32, s32, s32, s32, s32);
 BOOL ov07_022222B4(void *);
 void Pokepic_SetAttr(Pokepic *, int, int);
-void ov07_0221C7B8(void *, void *, int);
-void *ov07_0221BFD0(void *);
+void BattleAnimSystem_BuildBattlerPicParams(void *, void *, int);
+void *BattleAnimSystem_GetHeapID(void *);
 void ov07_0223494C(void *, void *);
 void ov07_0223475C(void *, void *);
-u32 ov07_0221C468(void *);
+u32 BattleAnimSystem_GetAttacker(void *);
 void BattleAnimUtil_GetBattlerPosition(void *, u32, s16 *);
 u32 BattleAnimUtil_GetBattlerSide(void *, u32);
 
-extern u32 ov07_0221C4A8(void *p, int i);
+extern u32 BattleAnimSystem_GetArg(void *p, int i);
 void BattleAnimUtil_CollectPicsByFlags(void *, void *, s16 *, void *);
 void *Sprite_GetPaletteProxy(void *);
 u32 ObjPlttTransfer_GetPaletteVramOffset(void *, int);
@@ -83,10 +83,10 @@ int BattleAnimUtil_GetBattlerType(void *, int);
 int ov07_0221BFC0(void *);
 void BattleAnimUtil_GetBattlerTypePosition(int, int, s16 *);
 void BattleAnimUtil_SetBlendWithBattleBg(void *, int, int);
-int ov07_0221FA1C(void *, int);
-int ov07_0221FA10(void *, int);
-int ov07_0221FA2C(void *, int);
-u32 ov07_0221FA38(void *, int);
+int BattleAnimSystem_GetBattlerSpecies(void *, int);
+int BattleAnimSystem_GetBattlerGender(void *, int);
+int BattleAnimSystem_GetBattlerForm(void *, int);
+u32 BattleAnimSystem_GetBattlerPersonality(void *, int);
 u8 GetMonPicHeightBySpeciesGenderForm(u16 species, u8 gender, u8 whichFacing, u8 form, u32 pid);
 void ManagedSprite_GetPositionXY(ManagedSprite *, s16 *, s16 *);
 void ManagedSprite_SetPositionXY(ManagedSprite *, s16, s16);
@@ -112,13 +112,13 @@ void ov07_0222B640(void *owner) {
 
     work = BattleAnimUtil_AllocWork(owner, sizeof(B4Work));
     BattleAnimUtil_InitCommonWork(owner, work);
-    work->sprite1 = ov07_0221C4E8(work->owner, 0);
-    work->sprite2 = ov07_0221C4E8(work->owner, 1);
-    work->sprite3 = ov07_0221C4E8(work->owner, 2);
+    work->sprite1 = BattleAnimSystem_GetBattlerSprite(work->owner, 0);
+    work->sprite2 = BattleAnimSystem_GetBattlerSprite(work->owner, 1);
+    work->sprite3 = BattleAnimSystem_GetBattlerSprite(work->owner, 2);
     offset = 0;
     work->timer = offset;
     offset = -32;
-    offset = (s16)ov07_02222004(owner, ov07_0221C468(owner)) * offset;
+    offset = (s16)ov07_02222004(owner, BattleAnimSystem_GetAttacker(owner)) * offset;
     work->scaleX = 1.0f;
     work->scaleY = 1.0f;
     if (ov07_0221FB78(owner, 1) == 1) {
@@ -132,11 +132,11 @@ void ov07_0222B640(void *owner) {
     ManagedSprite_SetAffineScale(work->sprite1, work->scaleX * (float)work->direction, work->scaleY);
 
     paletteOffset = ObjPlttTransfer_GetPaletteVramOffset(Sprite_GetPaletteProxy(*(void **)work->sprite1), 1);
-    work->effect1 = ov07_02222F10(work->effectManager, ov07_0221BFD0(owner), 2, (u16)(paletteOffset << 4), 16, 0, 1, 0, 15, 0xFFFF, 1100);
+    work->effect1 = ov07_02222F10(work->effectManager, BattleAnimSystem_GetHeapID(owner), 2, (u16)(paletteOffset << 4), 16, 0, 1, 0, 15, 0xFFFF, 1100);
     paletteOffset = ObjPlttTransfer_GetPaletteVramOffset(Sprite_GetPaletteProxy(*(void **)work->sprite3), 1);
-    work->effect2 = ov07_02222F10(work->effectManager, ov07_0221BFD0(owner), 2, (u16)(paletteOffset << 4), 16, 0, 1, 0, 15, 0xFFFF, 1100);
+    work->effect2 = ov07_02222F10(work->effectManager, BattleAnimSystem_GetHeapID(owner), 2, (u16)(paletteOffset << 4), 16, 0, 1, 0, 15, 0xFFFF, 1100);
 
-    battler = ov07_0221C468(work->owner);
+    battler = BattleAnimSystem_GetAttacker(work->owner);
     type = BattleAnimUtil_GetBattlerType(work->owner, battler);
     BattleAnimUtil_GetBattlerTypePosition(type, ov07_0221BFC0(work->owner), base);
     ManagedSprite_GetPositionXY(work->sprite1, &curX, &curY);
@@ -149,17 +149,17 @@ void ov07_0222B640(void *owner) {
         ManagedSprite_SetDrawPriority(work->sprite1, 0);
         facing = 2;
     }
-    battler = ov07_0221C470(work->owner);
-    species = ov07_0221FA1C(work->owner, battler);
-    gender = ov07_0221FA10(work->owner, battler);
-    form = ov07_0221FA2C(work->owner, battler);
-    height = GetMonPicHeightBySpeciesGenderForm(species, gender, facing, form, ov07_0221FA38(work->owner, battler));
+    battler = BattleAnimSystem_GetDefender(work->owner);
+    species = BattleAnimSystem_GetBattlerSpecies(work->owner, battler);
+    gender = BattleAnimSystem_GetBattlerGender(work->owner, battler);
+    form = BattleAnimSystem_GetBattlerForm(work->owner, battler);
+    height = GetMonPicHeightBySpeciesGenderForm(species, gender, facing, form, BattleAnimSystem_GetBattlerPersonality(work->owner, battler));
     ManagedSprite_SetPositionXY(work->sprite1, curX, base[1] + height);
     ManagedSprite_SetDrawFlag(work->sprite1, TRUE);
     work->blendA = 0;
     work->blendB = 15;
     BattleAnimUtil_SetBlendWithBattleBg(work->owner, -1, -1);
     *(vu16 *)0x04000052 = work->blendA | (work->blendB << 8);
-    task = ov07_0221C410(work->owner, ov07_0222B4E0, work);
+    task = BattleAnimSystem_CreateTaskDefaultPriority(work->owner, ov07_0222B4E0, work);
     ov07_0222B4E0(task, work);
 }

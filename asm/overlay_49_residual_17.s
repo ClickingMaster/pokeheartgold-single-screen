@@ -3899,15 +3899,15 @@ ov49_0225A334: ; 0x0225A334
 	cmp r4, r0
 	ldr r0, [r5, #0x34]
 	bne _0225A356
-	bl ov45_0222A5C0
+	bl WiFiPlazaWork_GetMyPlayer
 	b _0225A35C
 _0225A356:
 	add r1, r4, #0
-	bl ov45_0222A578
+	bl WiFiPlazaWork_GetPlayer
 _0225A35C:
 	add r1, r6, #0
 	mov r2, #0x77
-	bl ov45_0222A844
+	bl WiFiPlazaPlayer_CopyToProfile
 	mov r0, #0xb7
 	lsl r0, r0, #2
 	add r0, r5, r0
@@ -4121,7 +4121,7 @@ ov49_0225A490: ; 0x0225A490
 	bl ov49_0225B8F8
 	add r1, r0, #0
 	ldr r0, [r4, #0x34]
-	bl ov45_0222A578
+	bl WiFiPlazaWork_GetPlayer
 	mov r1, #0x61
 	lsl r1, r1, #2
 	str r0, [sp]

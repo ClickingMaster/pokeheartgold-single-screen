@@ -47,7 +47,7 @@ DECL_CHUNK(Save_FashionData)
 DECL_CHUNK(Save_Frontier)
 DECL_CHUNK_EX(sub_0202DB40, sub_0202DB44)
 DECL_CHUNK_EX(sub_0202E41C, sub_0202E424)
-DECL_CHUNK_EX(sub_0202C034, sub_0202C03C)
+DECL_CHUNK_EX(Save_FriendRoster_sizeof, Save_FriendRoster_Init)
 DECL_CHUNK_EX(PokeathlonSave_FriendshipRecords_sizeof, PokeathlonSave_FriendshipRecords_Init)
 DECL_CHUNK_EX(sub_0203170C, sub_02031710)
 DECL_CHUNK_EX(sub_020318C8, sub_020318CC)
@@ -208,8 +208,8 @@ const struct SaveChunkHeader gSaveChunkHeaders[] = {
     {
      SAVE_UNK_25,
      0,
-     (SAVESIZEFN)sub_0202C034,
-     (SAVEINITFN)sub_0202C03C,
+     (SAVESIZEFN)Save_FriendRoster_sizeof,
+     (SAVEINITFN)Save_FriendRoster_Init,
      },
     {
      SAVE_WIFI_HISTORY,

@@ -48,7 +48,7 @@ void ov07_0222EF88(void *task, X08Work *work) {
         for (i = 0; i < 6; i++) {
             Sprite_DeleteAndFreeResources(work->sprites[i]);
         }
-        ov07_0221C448(work->owner, task);
+        BattleAnimSystem_DestroyTask(work->owner, task);
         Heap_Free(work);
         return;
     }

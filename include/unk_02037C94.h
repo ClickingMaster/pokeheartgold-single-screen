@@ -4,7 +4,7 @@
 #include "overlay_44_02232E9C.h"
 #include "save.h"
 #include "save_wifi_history.h"
-#include "unk_0202C034.h"
+#include "friend_roster.h"
 
 BOOL sub_02037D78(void);
 void sub_02037EC0(u32 arg0);
@@ -23,7 +23,7 @@ BOOL sub_02038D90(void);
 BOOL sub_0203A05C(SaveData *saveData);
 void sub_02039F68(SaveWiFiHistory *);
 BOOL sub_02039AD8(int);
-void *sub_0203A040(UnkStruct_021D2230 *a0);
+void *sub_0203A040(FriendRoster *a0);
 void sub_020398D4(s8 a0, s8 a1);
 void sub_02039B58(void);
 void sub_02039358(void);

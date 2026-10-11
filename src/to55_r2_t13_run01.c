@@ -88,7 +88,7 @@ void ov07_0222C2D4(void *task, MainWork *w) {
             ov07_0222C1FC(&w->child[i]);
         }
         Sprite_DeleteAndFreeResources(w->sprite);
-        ov07_0221C448(w->owner, task);
+        BattleAnimSystem_DestroyTask(w->owner, task);
         Heap_Free(w);
         return;
     }

@@ -15,9 +15,9 @@ typedef struct {BattleSystem *system;Context *context;Ov07Work *object8;Ov07Call
 typedef Ov07Params Descriptor;
 typedef struct Ov07Input {u32 unk0;u32 fallbackSpecies;Pokemon *mon;} Ov07Input;
 extern Pokepic *ov12_022612A4(BattleSystem*,PokepicManager*,PokepicTemplate*,int,int,int,int,int,int,int,int,PokepicAnimScript*,PokepicCallback);
-extern int ov07_0221C394(u8*);
-extern BOOL ov07_0221C3B0(void*);
-extern BOOL ov07_0221C3C0(void*);
+extern int BattleAnimSystem_Execute(u8*);
+extern BOOL BattleAnimSystem_IsActive(void*);
+extern BOOL BattleAnimSystem_EndMove(void*);
 extern void ov12_02261F38(void*,int,int,void*,void*,int,int,int,int);
 extern void BattleController_InitMoveAnimData(BattleSystem*,BattleContext*,void*,int,int,int,int,int);
 extern void ov07_02234A20(W*,int);
@@ -30,8 +30,8 @@ extern int ov07_02232A04(u8*);
 extern void ov07_02232A44(void*);
 extern void *ov07_02232A54(void*);
 extern void ov07_02232AB8(void*);
-extern void *ov07_0221FDFC(BattleSystem*,enum HeapID);
-extern void ov07_0221FE08(void*);
+extern void *BattleAnimBattlerSprites_NewAll(BattleSystem*,enum HeapID);
+extern void BattleAnimBattlerSprites_Free(void*);
 typedef Ov07Input Arguments;
 extern void PlaySE_SetPan(int,int);
 void ov12_0225C18C(SysTask*,void*);
@@ -49,12 +49,12 @@ void ov12_0225C18C(SysTask *task,void *data) {
  NARC_ReadPokepicAnimScript(work->context->narc,script,work->species,work->type);
  work->context->pic=ov12_022612A4(work->system,manager,&work->template,ov07_022377DC[work->type][0],ov07_022377F4[work->type][1],ov07_022377F4[work->type][2],work->height,work->value90,work->value91,work->value93,work->battler,script,0);}
  Pokepic_SetAttr(work->context->pic,12,0);Pokepic_SetAttr(work->context->pic,13,0);Pokepic_SetAttr(work->context->pic,44,0);Pokepic_SetAttr(work->context->pic,6,1);
- work->object10=0;work->object10=ov07_0221FDFC(work->system,(enum HeapID)5);work->state++;break;
+ work->object10=0;work->object10=BattleAnimBattlerSprites_NewAll(work->system,(enum HeapID)5);work->state++;break;
  case 1:memset(&args,0,sizeof(args));args.unk0=work->type;args.mon=BattleSystem_GetPartyMon(work->system,work->battler,work->slot);args.fallbackSpecies=work->palette;
  work->object8=ov07_02232694((enum HeapID)5,&args);ov07_022329B0(work->object8);work->state++;break;
  case 2:
  if((ov07_02233F20(work->objectC)==0 ||work->value94!=0) &&ov07_02232A04((u8*)work->object8)==1 &&ov07_02233EA0(work->objectC)==1) {
- if(work->object10)ov07_0221FE08(work->object10);
+ if(work->object10)BattleAnimBattlerSprites_Free(work->object10);
  Pokepic_StartPaletteFade(work->context->pic,16,16,0,ov12_0226D15A[work->palette]);Pokepic_SetAttr(work->context->pic,6,0);ov07_02232A44(work->object8);
  if(work->facing==2)PlaySE_SetPan(1798,117);else PlaySE_SetPan(1798,-117);work->state++;
  }break;
@@ -77,7 +77,7 @@ void ov12_0225C18C(SysTask *task,void *data) {
  ov07_02233ECC(work->objectC);ov07_02232AB8(work->object8);
  if(work->shiny){BattleController_InitMoveAnimData(work->system,0,&message1,1,11,work->battler,work->battler,0);ov12_02261B80(work->system,(u8*)work->context,engine,&message1.source);work->state=7;}else work->state=8;
  }break;
- case 7:case 9:case 11:ov07_0221C394((u8*)engine);if(ov07_0221C3B0(engine)==0){ov07_0221C3C0(engine);work->state++;}break;
+ case 7:case 9:case 11:BattleAnimSystem_Execute((u8*)engine);if(BattleAnimSystem_IsActive(engine)==0){BattleAnimSystem_EndMove(engine);work->state++;}break;
  case 8:if(work->value98){BattleController_InitMoveAnimData(work->system,0,&message2,1,15,work->battler,work->battler,0);ov12_02261B80(work->system,(u8*)work->context,engine,&message2.source);work->state++;}else work->state=255;break;
  case 10:ov12_02261CA8(work->system,&work->source,&source.params,work->battler);ov07_02234A20(&source.display,5);
  BattleController_InitMoveAnimData(work->system,0,&message3,1,16,work->battler,work->battler,0);ov12_02261B80(work->system,(u8*)work->context,engine,&message3.source);work->context->flag=1;work->state++;break;
@@ -106,7 +106,7 @@ void ov12_0225C6C8(SysTask *task,void *data) {
  else work->state=6;
  }break;
  case 2:case 5:case 7:case 9:
- ov07_0221C394((u8 *)engine);if(ov07_0221C3B0(engine)==0){ov07_0221C3C0(engine);work->state++;}break;
+ BattleAnimSystem_Execute((u8 *)engine);if(BattleAnimSystem_IsActive(engine)==0){BattleAnimSystem_EndMove(engine);work->state++;}break;
  case 6:
  if(work->value98) {BattleController_InitMoveAnimData(work->system,0,&message3,1,15,work->battler,work->battler,0);ov12_02261B80(work->system,(u8*)work->context,engine,&message3.source);work->state++;}
  else work->state=255;break;

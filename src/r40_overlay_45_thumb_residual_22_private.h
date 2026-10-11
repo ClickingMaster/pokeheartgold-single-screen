@@ -18,8 +18,8 @@ typedef struct Ov45Input {
     u8 flag : 1;
 } Ov45Input;
 int ov45_0222EC68(int);
-void *ov45_0222A578(Ov45State *, int);
-void ov45_0222A844(void *, void *, int);
+void *WiFiPlazaWork_GetPlayer(Ov45State *, int);
+void WiFiPlazaPlayer_CopyToProfile(void *, void *, int);
 void ov45_0222D940(void *, void *);
 void ov45_0222D990(void *, void *);
 void ov45_0222D9EC(void *, void *);

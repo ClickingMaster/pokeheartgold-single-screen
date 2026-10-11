@@ -17,5 +17,5 @@ typedef struct Outer {
     Inner *inner;
 } Outer;
 
-void ov07_022217A4(void *p, void *b) { ov07_0221F9A8(*(void **)p, b, 5); }
+void ov07_022217A4(void *p, void *b) { BattleAnimSystem_ReadScriptArgs(*(void **)p, b, 5); }
 BOOL ov07_022217B0(void) { return TRUE; }

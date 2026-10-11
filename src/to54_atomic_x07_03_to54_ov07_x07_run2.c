@@ -29,7 +29,7 @@ void ov07_0222DA60(void *task, X07Popup *work) {
         }
         break;
     case 3:
-        ov07_0221C448(work->owner, task);
+        BattleAnimSystem_DestroyTask(work->owner, task);
         Heap_Free(work);
         return;
     }

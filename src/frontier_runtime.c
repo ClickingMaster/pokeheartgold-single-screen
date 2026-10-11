@@ -43,7 +43,7 @@ int Frontier_Main(void *manager, int *state) {
     case 2:
         return 1;
     case 3:
-        ov80_022389C4(work->map);
+        FrontierMap_SaveObjects(work->map);
         Frontier_FreeMap(work);
         Frontier_UnloadOverlays();
         *state = 4;
@@ -62,7 +62,7 @@ int Frontier_Main(void *manager, int *state) {
             work->childExit = 0;
             work->childArgs = 0;
             Frontier_CreateMap(work);
-            ov80_02238A18(work->map);
+            FrontierMap_RestoreObjects(work->map);
             *state = 1;
         }
         break;

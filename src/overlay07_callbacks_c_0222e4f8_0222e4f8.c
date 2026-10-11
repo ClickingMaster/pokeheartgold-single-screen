@@ -19,7 +19,7 @@ void ov07_0222E4F8(void *owner, void *data) {
         }
         break;
     case 1:
-        ov07_0221C448(PTR(data, 4), owner);
+        BattleAnimSystem_DestroyTask(PTR(data, 4), owner);
         Heap_Free(data);
         break;
     }

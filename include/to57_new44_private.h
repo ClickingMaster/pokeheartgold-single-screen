@@ -30,14 +30,14 @@ typedef struct X07ManagedSpriteTemplate {
     u8 data[0x34];
 } X07ManagedSpriteTemplate;
 void *BattleAnimUtil_AllocWork(void *, u32);
-void *ov07_0221C470(void *);
-void *ov07_0221FA48(void *, void *);
+void *BattleAnimSystem_GetDefender(void *);
+void *BattleAnimSystem_GetBattlerPokepic(void *, void *);
 int Pokepic_GetAttr(void *, int);
 void ov07_022227A8(void *, s16, s16, s16, int);
-void ov07_0221F9E8(X07ManagedSpriteTemplate *, void *);
+void BattleAnimSystem_GetSpriteTemplate(X07ManagedSpriteTemplate *, void *);
 void *SpriteSystem_NewSprite(void *, void *, const X07ManagedSpriteTemplate *);
 void ov07_0222D4F4(X07ScaleSprite *, void *, s16, s16, BOOL);
-void ov07_0221C410(void *, void (*)(void *, void *), void *);
+void BattleAnimSystem_CreateTaskDefaultPriority(void *, void (*)(void *, void *), void *);
 void ov07_0222D6E0(void *, void *, void *, void *);
 void ov07_0222D60C(void *, X07Group *);
 
@@ -58,7 +58,7 @@ typedef struct X07PairWork {
     u8 linear[0x24];
     u8 sine[0x24];
 } X07PairWork;
-void *ov07_0221C468(void *);
+void *BattleAnimSystem_GetAttacker(void *);
 int ov07_02222004(void *, void *);
 void ov07_02222268(void *, s16, s16, s16, s16, int);
 void ManagedSprite_SetAnimateFlag(void *, BOOL);
@@ -70,7 +70,7 @@ void ov07_022220B8(void *, void *, s16, s16);
 BOOL ov07_022223CC(void *, void *, void *);
 void ManagedSprite_SetDrawFlag(void *, BOOL);
 void Sprite_DeleteAndFreeResources(void *);
-void ov07_0221C448(void *, void *);
+void BattleAnimSystem_DestroyTask(void *, void *);
 void Heap_Free(void *);
 void SpriteSystem_DrawSprites(void *);
 void Pokepic_SetAttr(void *, int, int);

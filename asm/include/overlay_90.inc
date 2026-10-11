@@ -139,7 +139,7 @@
 .public sub_0202C554
 .public sub_0202C584
 .public sub_0202C5B4
-.public sub_0202C6F4
+.public Save_FriendRoster_Get
 .public Save_GameStats_Get
 .public GameStats_AddScore
 .public Comm_RegisterCommandTable

@@ -30,21 +30,21 @@ extern BOOL ov07_022222B4(W02LinearMotion *);
 extern BOOL ov07_02222384(W02LinearMotion *, W02SinMotion *);
 extern BOOL ov07_02222180(Ov07Interp *);
 extern void BattleAnimUtil_FreeWork(void *);
-extern void ov07_0221C448(void *, void *);
+extern void BattleAnimSystem_DestroyTask(void *, void *);
 extern void ParticleSystem_DeleteEmitter(void *, void *);
 extern s32 GF_SinDeg(u16);
 
 extern void *BattleAnimUtil_AllocWork(void *, u32);
 extern void BattleAnimUtil_InitCommonWork(void *, void *);
 
-extern u32 ov07_0221C4A8(void *p, int i);
-extern u16 ov07_0221C468(void *);
-extern u16 ov07_0221C470(void *);
+extern u32 BattleAnimSystem_GetArg(void *p, int i);
+extern u16 BattleAnimSystem_GetAttacker(void *);
+extern u16 BattleAnimSystem_GetDefender(void *);
 extern void ov07_02231B90(void *, int, int);
-extern SPLEmitter *ov07_0221C494(void *, int);
-extern void *ov07_0221C488(void *, int);
+extern SPLEmitter *BattleAnimSystem_GetEmitter(void *, int);
+extern void *BattleAnimSystem_GetParticleSystem(void *, int);
 extern void ov07_022220FC(void *, u16, u16, u16, u16, s32, s32, s32);
-extern void *ov07_0221C410(void *, void (*)(void *, void *), void *);
+extern void *BattleAnimSystem_CreateTaskDefaultPriority(void *, void (*)(void *, void *), void *);
 
 typedef struct Ov07Work94Init {
     s32 arg0;
@@ -75,7 +75,7 @@ extern void ov07_022223F0(W02ScalarMotion *, s32, s32, s32);
 
 extern void ov07_02222338(W02LinearMotion *, W02SinMotion *, s16, s16, s16, s16, u16, s32);
 
-extern void *ov07_0221C478(void *);
+extern void *BattleAnimSystem_GetCurrentParticleSystem(void *);
 extern void ov07_02231DD0(VecFx32 *);
 
 extern void ov07_022260F8(void *, void *);
@@ -93,7 +93,7 @@ void ov07_022261B4(void *owner) {
 
     BattleAnimUtil_InitCommonWork(owner, &work->header);
     ov07_0222600C(owner, work);
-    direction = ov07_02222004(owner, ov07_0221C468(owner));
+    direction = ov07_02222004(owner, BattleAnimSystem_GetAttacker(owner));
     ov07_02231B90(owner, work->handleA, (int)&a);
     ov07_02231B90(owner, work->handleB, (int)&b);
     x1 = a.x / 0xAC;
@@ -114,7 +114,7 @@ void ov07_022261B4(void *owner) {
     }
     SPL_SetEmitterPositionX(work->node, work->interpA.motion.x * 0xAC);
     SPL_SetEmitterPositionY(work->node, work->interpA.motion.y * 0xAC);
-    ov07_0221C410(work->header.owner, ov07_022260F8, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->header.owner, ov07_022260F8, work);
 }
 
 void ov07_022262E8(void *owner) {
@@ -130,13 +130,13 @@ void ov07_022262E8(void *owner) {
     int i;
 
     BattleAnimUtil_InitCommonWork(owner, &work->header);
-    work->arg0 = ((s32)ov07_0221C4A8(owner, 0));
-    work->arg10 = ((s32)ov07_0221C4A8(owner, 1));
-    mode = ((s32)ov07_0221C4A8(owner, 2));
-    work->arg6 = ((s32)ov07_0221C4A8(owner, 3));
-    work->delay = ((s32)ov07_0221C4A8(owner, 4));
+    work->arg0 = ((s32)BattleAnimSystem_GetArg(owner, 0));
+    work->arg10 = ((s32)BattleAnimSystem_GetArg(owner, 1));
+    mode = ((s32)BattleAnimSystem_GetArg(owner, 2));
+    work->arg6 = ((s32)BattleAnimSystem_GetArg(owner, 3));
+    work->delay = ((s32)BattleAnimSystem_GetArg(owner, 4));
     work->counter = 0;
-    packed = ((s32)ov07_0221C4A8(owner, 5));
+    packed = ((s32)BattleAnimSystem_GetArg(owner, 5));
     work->unk1C = 0;
     work->unk20 = (packed & 0xFFFF0000) >> 16;
     work->unk24 = (u16)packed;
@@ -146,14 +146,14 @@ void ov07_022262E8(void *owner) {
     if (work->unk24 == 0) {
         work->unk24 = 0xFF;
     }
-    work->node = ov07_0221C494(owner, work->arg0);
-    work->resource = ov07_0221C478(owner);
+    work->node = BattleAnimSystem_GetEmitter(owner, work->arg0);
+    work->resource = BattleAnimSystem_GetCurrentParticleSystem(owner);
     if (work->arg10 == 0) {
-        work->handleA = ov07_0221C468(owner);
-        work->handleB = ov07_0221C468(owner);
+        work->handleA = BattleAnimSystem_GetAttacker(owner);
+        work->handleB = BattleAnimSystem_GetAttacker(owner);
     } else {
-        work->handleA = ov07_0221C470(owner);
-        work->handleB = ov07_0221C470(owner);
+        work->handleA = BattleAnimSystem_GetDefender(owner);
+        work->handleB = BattleAnimSystem_GetDefender(owner);
     }
     if (work->node == NULL) {
         GF_AssertFail();
@@ -180,7 +180,7 @@ void ov07_022262E8(void *owner) {
     }
     SPL_SetEmitterPositionX(work->node, work->interpA.motion.x * 0xAC);
     SPL_SetEmitterPositionY(work->node, work->interpA.motion.y * 0xAC);
-    ov07_0221C410(work->header.owner, ov07_022260F8, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->header.owner, ov07_022260F8, work);
 }
 
 void ov07_0222647C(void *task, Ov07Work104 *work) {
@@ -188,7 +188,7 @@ void ov07_0222647C(void *task, Ov07Work104 *work) {
 
     if (!ov07_02222384(&work->interpA.motion, &work->interpB.motion) && !active) {
         ParticleSystem_DeleteEmitter(work->resource, work->node);
-        ov07_0221C448(work->header.owner, task);
+        BattleAnimSystem_DestroyTask(work->header.owner, task);
         BattleAnimUtil_FreeWork(work);
         return;
     }
@@ -209,7 +209,7 @@ void ov07_022264E0(void *owner) {
 
     BattleAnimUtil_InitCommonWork(owner, &work->header);
     ov07_0222600C(owner, work);
-    direction = ov07_02222004(owner, ov07_0221C468(owner));
+    direction = ov07_02222004(owner, BattleAnimSystem_GetAttacker(owner));
     ov07_02231B90(owner, work->handleA, (int)&a);
     ov07_02231B90(owner, work->handleB, (int)&b);
     x1 = a.x / 0xAC;
@@ -230,7 +230,7 @@ void ov07_022264E0(void *owner) {
     }
     SPL_SetEmitterPositionX(work->node, work->interpA.motion.x * 0xAC);
     SPL_SetEmitterPositionY(work->node, work->interpA.motion.y * 0xAC);
-    ov07_0221C410(work->header.owner, (void (*)(void *, void *))ov07_0222647C, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->header.owner, (void (*)(void *, void *))ov07_0222647C, work);
 }
 
 void ov07_02226628(void *task, Ov07Work94 *work) {
@@ -238,7 +238,7 @@ void ov07_02226628(void *task, Ov07Work94 *work) {
 
     if (!ov07_02222180(&work->interp) && !active) {
         ParticleSystem_DeleteEmitter(work->resource, work->node);
-        ov07_0221C448(work->owner, task);
+        BattleAnimSystem_DestroyTask(work->owner, task);
         Heap_Free(work);
         return;
     }
@@ -258,23 +258,23 @@ void ov07_02226698(void *owner) {
     s32 d;
 
     BattleAnimUtil_InitCommonWork(owner, (u8 *)work + 0x3C);
-    work->arg0 = ((s32)ov07_0221C4A8(owner, 0));
-    work->arg1 = ((s32)ov07_0221C4A8(owner, 1));
-    work->arg2 = ((s32)ov07_0221C4A8(owner, 2));
-    work->arg3 = ((s32)ov07_0221C4A8(owner, 3));
-    work->arg4 = ((s32)ov07_0221C4A8(owner, 4));
-    work->arg5 = ((s32)ov07_0221C4A8(owner, 5));
-    work->arg6 = ((s32)ov07_0221C4A8(owner, 6));
-    work->arg7 = ((s32)ov07_0221C4A8(owner, 7));
-    work->arg8 = ((s32)ov07_0221C4A8(owner, 8));
+    work->arg0 = ((s32)BattleAnimSystem_GetArg(owner, 0));
+    work->arg1 = ((s32)BattleAnimSystem_GetArg(owner, 1));
+    work->arg2 = ((s32)BattleAnimSystem_GetArg(owner, 2));
+    work->arg3 = ((s32)BattleAnimSystem_GetArg(owner, 3));
+    work->arg4 = ((s32)BattleAnimSystem_GetArg(owner, 4));
+    work->arg5 = ((s32)BattleAnimSystem_GetArg(owner, 5));
+    work->arg6 = ((s32)BattleAnimSystem_GetArg(owner, 6));
+    work->arg7 = ((s32)BattleAnimSystem_GetArg(owner, 7));
+    work->arg8 = ((s32)BattleAnimSystem_GetArg(owner, 8));
     if (work->arg8 == 0) {
-        work->handle = ov07_0221C468(owner);
+        work->handle = BattleAnimSystem_GetAttacker(owner);
     } else {
-        work->handle = ov07_0221C470(owner);
+        work->handle = BattleAnimSystem_GetDefender(owner);
     }
     ov07_02231B90(owner, work->handle, (int)&work->base);
-    work->node = ov07_0221C494(owner, work->arg0);
-    work->resource = ov07_0221C488(owner, ((s32)ov07_0221C4A8(owner, 9)));
+    work->node = BattleAnimSystem_GetEmitter(owner, work->arg0);
+    work->resource = BattleAnimSystem_GetParticleSystem(owner, ((s32)BattleAnimSystem_GetArg(owner, 9)));
     a = work->arg1 * 0xFFFF / 360;
     b = work->arg2 * 0xFFFF / 360;
     c = work->arg3 * 0xFFFF / 360;
@@ -287,5 +287,5 @@ void ov07_02226698(void *owner) {
         SPL_SetEmitterPositionX(work->node, x);
         SPL_SetEmitterPositionY(work->node, y);
     }
-    ov07_0221C410(work->owner, (void (*)(void *, void *))ov07_02226628, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->owner, (void (*)(void *, void *))ov07_02226628, work);
 }

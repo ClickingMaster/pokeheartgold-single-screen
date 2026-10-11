@@ -7,7 +7,7 @@
 .public Save_PlayerData_GetProfile
 .public Save_PlayerData_GetOptionsAddr
 .public PlayerProfile_TestBadgeFlag
-.public sub_0202C7DC
+.public Save_FriendGroup_GetCurrentSeed
 .public Save_FriendGroup_Get
 .public Save_TrainerCard_Get
 .public TrainerCard_GetBadgeShininessArr

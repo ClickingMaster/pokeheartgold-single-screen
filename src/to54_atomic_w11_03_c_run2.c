@@ -51,7 +51,7 @@ void ov07_0222AE14(void *task, AEWork *work) {
             ManagedSprite_SetDrawFlag(work->sprite0, FALSE);
             ManagedSprite_SetDrawFlag(work->sprite1, FALSE);
             ManagedSprite_SetDrawFlag(work->sprite1, FALSE);
-            ov07_0221C448(work->owner, task);
+            BattleAnimSystem_DestroyTask(work->owner, task);
             BattleAnimUtil_FreeWork(work);
             return;
         }
@@ -69,18 +69,18 @@ void ov07_0222AEA0(void *owner) {
     u32 mode;
     AEWork *work = BattleAnimUtil_AllocWork(owner, sizeof(AEWork));
     BattleAnimUtil_InitCommonWork(owner, work);
-    work->pokepic = ov07_0221FA48(work->owner, ov07_0221C470(work->owner));
+    work->pokepic = BattleAnimSystem_GetBattlerPokepic(work->owner, BattleAnimSystem_GetDefender(work->owner));
     work->attr = Pokepic_GetAttr(work->pokepic, 1);
     work->attrCopy = work->attr;
-    work->species = ov07_0221FAA0(work->owner, ov07_0221C470(work->owner));
-    work->sprite0 = ov07_0221C4E8(owner, 0);
-    work->sprite1 = ov07_0221C4E8(owner, 1);
-    work->sprite2 = ov07_0221C4E8(owner, 2);
+    work->species = ov07_0221FAA0(work->owner, BattleAnimSystem_GetDefender(work->owner));
+    work->sprite0 = BattleAnimSystem_GetBattlerSprite(owner, 0);
+    work->sprite1 = BattleAnimSystem_GetBattlerSprite(owner, 1);
+    work->sprite2 = BattleAnimSystem_GetBattlerSprite(owner, 2);
     ManagedSprite_SetAffineOverwriteMode(work->sprite0, 2);
     ManagedSprite_SetPriority(work->sprite0, ov07_0221FAE8(owner));
     ManagedSprite_SetPriority(work->sprite1, ov07_0221FAE8(owner));
     ManagedSprite_SetPriority(work->sprite2, ov07_0221FAE8(owner));
-    mode = ov07_0221FA04(work->owner, ov07_0221C470(work->owner));
+    mode = BattleAnimSystem_GetBattlerType(work->owner, BattleAnimSystem_GetDefender(work->owner));
     if (mode == 3 || mode == 4) {
         ManagedSprite_SetDrawPriority(work->sprite0, 30);
         ManagedSprite_SetDrawPriority(work->sprite1, 50);
@@ -91,7 +91,7 @@ void ov07_0222AEA0(void *owner) {
         ManagedSprite_SetDrawPriority(work->sprite2, 50);
     }
     ov07_02222590(work->anim, 100, 20, 100, 20, 100, 10);
-    ov07_0221C410(work->owner, (void *)ov07_0222AE14, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->owner, (void *)ov07_0222AE14, work);
 }
 
 typedef struct B8Work {

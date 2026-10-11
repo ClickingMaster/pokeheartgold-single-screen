@@ -7,8 +7,8 @@ BOOL ov80_0222CA94(void *c) {
 
     p = sub_0209680C(PTR(PTR(c, 0), 0));
     id = (u16 *)((u8 *)c + 0x78);
-    sprite = ov80_02239700(p, *id);
-    if (!ov80_02239734(p, *id) || !ManagedSprite_IsAnimated(sprite)) {
+    sprite = FrontierMap_GetSprite(p, *id);
+    if (!FrontierMap_IsSpriteAnimActive(p, *id) || !ManagedSprite_IsAnimated(sprite)) {
         return TRUE;
     }
     return FALSE;

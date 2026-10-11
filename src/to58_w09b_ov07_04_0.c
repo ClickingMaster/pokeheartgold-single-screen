@@ -5,10 +5,10 @@ extern void ManagedSprite_SetAnim(void *, int);
 extern void ManagedSprite_GetPositionXY(void *, s16 *, s16 *);
 extern int ManagedSprite_GetAnimationFrame(void *);
 extern void ManagedSprite_SetAnimationFrame(void *, int);
-extern void *ov07_0221FDFC(void *, void *);
+extern void *BattleAnimBattlerSprites_NewAll(void *, void *);
 extern void *ov07_02232D20(EffectInfo *);
 extern void ov07_02232D80(void *);
-extern void ov07_0221FE08(void *);
+extern void BattleAnimBattlerSprites_Free(void *);
 extern int ov07_02232DF4(void *);
 extern void ov07_02232E10(void *);
 extern void ov07_02232F74(void *, int);
@@ -24,7 +24,7 @@ int ov07_02232FA8(u8 *state) {
         info.c = 255;
         info.d = 0;
         ManagedSprite_GetPositionXY(*(void **)(state + 0x30), &info.x, &info.y);
-        *(void **)(state + 0xd8) = ov07_0221FDFC(*(void **)(state + 0xb4), *(void **)(state + 0x94));
+        *(void **)(state + 0xd8) = BattleAnimBattlerSprites_NewAll(*(void **)(state + 0xb4), *(void **)(state + 0x94));
         *(void **)(state + 0xd0) = ov07_02232D20(&info);
         *(int *)(state + 8) += 1;
         break;
@@ -37,7 +37,7 @@ int ov07_02232FA8(u8 *state) {
         break;
     case 2:
         ov07_02232D80(*(void **)(state + 0xd0));
-        ov07_0221FE08(*(void **)(state + 0xd8));
+        BattleAnimBattlerSprites_Free(*(void **)(state + 0xd8));
         *(int *)(state + 8) += 1;
         break;
     case 3:

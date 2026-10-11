@@ -101,7 +101,7 @@ void ov12_02261CA8(BattleSystem *bsys, BattleSourceR2 *src, BattleParamsR2 *dst,
 void ov12_02261D30(u8 *outA, u8 *outB, BOOL useKind, int kind, u16 move);
 BOOL ov12_02261DC8(BattleAnimWork *work, ManagedSprite *unused);
 
-extern int ov07_0221C01C(BattleEngineWork *arg2, BattleSourceR1 *src, u16 selected, BattleParamsR1 *params);
+extern int BattleAnimSystem_StartMove(BattleEngineWork *arg2, BattleSourceR1 *src, u16 selected, BattleParamsR1 *params);
 
 typedef char BattleMessageSize58[(sizeof(BattleSourceR1) == 0x58) ? 1 : -1];
 typedef char BattleParamsSize90[(sizeof(BattleParamsR1) == 0x90) ? 1 : -1];

@@ -7,7 +7,7 @@ int FrtCmd_048(void *c) {
     void *p = sub_0209680C(APP(c));
     u16 index = FrontierScript_ReadVar(c);
     u16 mode = FrontierScript_ReadVar(c);
-    void *sprite = ov80_02239700(p, index);
+    void *sprite = FrontierMap_GetSprite(p, index);
     if (!sprite) {
         GF_AssertFail();
     }

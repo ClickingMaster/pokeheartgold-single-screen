@@ -896,7 +896,7 @@ PalPadRosterPage_Draw: ; 0x0222C918
 	ldr r0, [sp, #0x3c]
 	str r0, [sp, #0x3c]
 	ldr r0, [r1, #4]
-	bl sub_0202C6F4
+	bl Save_FriendRoster_Get
 	str r0, [sp, #0x14]
 	add r0, r6, #0
 	add r0, #8

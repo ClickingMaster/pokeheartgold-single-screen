@@ -14,7 +14,7 @@ BOOL Pokepic_ResumePaletteFade(void*);
 void Sprite_DeleteAndFreeResources(void*);
 void SpriteSystem_DrawSprites(void*);
 void Heap_Free(void*);
-void ov07_0221C448(void*,void*);
+void BattleAnimSystem_DestroyTask(void*,void*);
 void ov07_0222DEEC(void*,Work*);
 void ov07_0222DEEC(void *task,Work *w){
  switch(w->state){
@@ -27,7 +27,7 @@ void ov07_0222DEEC(void *task,Work *w){
   if(ov07_02222AF4(w->fade))ManagedSprite_SetDrawFlag(w->sprite,0);
   if(!Pokepic_ResumePaletteFade(w->picture)){w->state++;Pokepic_StartPaletteFade(w->picture,10,0,0,0x7fff);}break;
  case 3:if(!Pokepic_ResumePaletteFade(w->picture))w->state++;break;
- case 4:Sprite_DeleteAndFreeResources(w->sprite);ov07_0221C448(w->parent,task);Heap_Free(w);return;
+ case 4:Sprite_DeleteAndFreeResources(w->sprite);BattleAnimSystem_DestroyTask(w->parent,task);Heap_Free(w);return;
  }
  SpriteSystem_DrawSprites(w->sprites);
 }

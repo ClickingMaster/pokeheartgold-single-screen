@@ -90,19 +90,19 @@ void BattleAnimUtil_FreeWork(void *work);
 
 // overlay 7 functions defined in sources not merged yet (switch to battle/battle_anim_internal.h when it lands)
 int ov07_0221BFC0(BattleAnimSystem *system);
-enum HeapID ov07_0221BFD0(BattleAnimSystem *system);
-u16 ov07_0221C468(BattleAnimSystem *system);
-u16 ov07_0221C470(BattleAnimSystem *system);
-SPLEmitter *ov07_0221C478(BattleAnimSystem *system);
-BgConfig *ov07_0221C4A0(BattleAnimSystem *system);
-ManagedSprite *ov07_0221C4E8(BattleAnimSystem *system, int index);
-SpriteManager *ov07_0221C514(BattleAnimSystem *system);
+enum HeapID BattleAnimSystem_GetHeapID(BattleAnimSystem *system);
+u16 BattleAnimSystem_GetAttacker(BattleAnimSystem *system);
+u16 BattleAnimSystem_GetDefender(BattleAnimSystem *system);
+SPLEmitter *BattleAnimSystem_GetCurrentParticleSystem(BattleAnimSystem *system);
+BgConfig *BattleAnimSystem_GetBgConfig(BattleAnimSystem *system);
+ManagedSprite *BattleAnimSystem_GetBattlerSprite(BattleAnimSystem *system, int index);
+SpriteManager *BattleAnimSystem_GetBattlerSpriteManager(BattleAnimSystem *system);
 SpriteManager *ov07_0221C528(BattleAnimSystem *system);
-SpriteSystem *ov07_0221C530(BattleAnimSystem *system);
-u8 ov07_0221FA04(BattleAnimSystem *system, int battler);
-Pokepic *ov07_0221FA48(BattleAnimSystem *system, int battler);
-PaletteData *ov07_0221FA78(BattleAnimSystem *system);
-BOOL ov07_0221FAB0(BattleAnimSystem *system);
+SpriteSystem *BattleAnimSystem_GetSpriteSystem(BattleAnimSystem *system);
+u8 BattleAnimSystem_GetBattlerType(BattleAnimSystem *system, int battler);
+Pokepic *BattleAnimSystem_GetBattlerPokepic(BattleAnimSystem *system, int battler);
+PaletteData *BattleAnimSystem_GetPaletteData(BattleAnimSystem *system);
+BOOL BattleAnimSystem_IsDoubleBattle(BattleAnimSystem *system);
 u32 ov07_0221FAF8(BattleAnimSystem *system, int index);
 
 #endif // POKEHEARTGOLD_BATTLE_BATTLE_ANIM_BATTLER_UTIL_H

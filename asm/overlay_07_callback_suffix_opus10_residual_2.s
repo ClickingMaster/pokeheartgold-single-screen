@@ -6,21 +6,21 @@
 
 	.public _02234B80
 	.public _02237840
-	.public ov07_02234B8C
-	.public ov07_02234B98
-	.public ov07_02234BA8
-	.public ov07_02234BC0
-	.public ov07_02234BD8
-	.public ov07_02234BF0
-	.public ov07_02234C08
-	.public ov07_02234C20
-	.public ov07_02234C40
-	.public ov07_02234C64
-	.public ov07_02234CC8
-	.public ov07_02234D58
-	.public ov07_02234DE8
-	.public ov07_02234F48
-	.public ov07_022353E4
+	.public sBattleAnimBgLayers
+	.public sBattleAnimWeatherMasks
+	.public sBattleAnimBgEffectMasks
+	.public sBattleAnimBgSwitchFuncs
+	.public sBattleAnimBattlerSpritePriorities
+	.public sBattleAnimBattlerSpriteCapacities
+	.public sBattleAnimSoundFuncs
+	.public sBattleAnimBgWaveSteps
+	.public sBattleAnimBgEffectFuncs
+	.public sSecretPowerTerrainAnims
+	.public sBattleAnimEmitterSelect6
+	.public sBattleAnimEmitterSelect4
+	.public sBattleAnimScriptCmdTable
+	.public sBattleAnimBackgroundFiles
+	.public sBattleAnimEmitterCallbackTable
 	.public ov07_02235440
 	.public ov07_02235488
 	.public ov07_022354D0
@@ -131,118 +131,118 @@
 	.public ov07_02237870
 	.public ov07_0223789C
 	.public ov07_022378B0
-	.extern ov07_0221C5C4
-	.extern ov07_0221C5C8
-	.extern ov07_0221C624
-	.extern ov07_0221C62C
-	.extern ov07_0221C634
-	.extern ov07_0221C674
-	.extern ov07_0221C69C
-	.extern ov07_0221C6B4
-	.extern ov07_0221C6EC
-	.extern ov07_0221C70C
-	.extern ov07_0221C72C
-	.extern ov07_0221C74C
-	.extern ov07_0221C8CC
-	.extern ov07_0221C910
-	.extern ov07_0221C934
-	.extern ov07_0221C974
-	.extern ov07_0221C9C0
-	.extern ov07_0221CBC0
-	.extern ov07_0221CC54
-	.extern ov07_0221CDA4
-	.extern ov07_0221CE5C
-	.extern ov07_0221CF14
-	.extern ov07_0221CF54
-	.extern ov07_0221CFA8
-	.extern ov07_0221D000
-	.extern ov07_0221D02C
-	.extern ov07_0221D05C
-	.extern ov07_0221D088
+	.extern BattleAnimSoundFunc_None
+	.extern BattleAnimSoundFunc_PanSweep
+	.extern BattleAnimSoundFunc_PanSweep2
+	.extern BattleAnimSoundFunc_PanSweep3
+	.extern BattleAnimSoundFunc_RepeatSE
+	.extern BattleAnimSoundFunc_DelayedSE
+	.extern BattleAnimSystem_InitBlend
+	.extern BattleAnimScriptCmd_WaitForButtonCombo
+	.extern BattleAnimScriptCmd_Wait
+	.extern BattleAnimScriptCmd_WaitForTasks
+	.extern BattleAnimScriptCmd_SetArg
+	.extern BattleAnimScriptCmd_ClearArgs
+	.extern BattleAnimScriptCmd_ChangeBattlerPic
+	.extern BattleAnimScriptCmd_RestoreBattlerPic
+	.extern BattleAnimScriptCmd_BeginLoop
+	.extern BattleAnimScriptCmd_EndLoop
+	.extern BattleAnimScriptCmd_End
+	.extern BattleAnimScriptCmd_CreateEmitter
+	.extern BattleAnimScriptCmd_CreateEmitterInSlot
+	.extern BattleAnimScriptCmd_CreateEmitterByPosition6
+	.extern BattleAnimScriptCmd_CreateEmitterByPosition4
+	.extern BattleAnimScriptCmd_WaitForParticles
+	.extern BattleAnimScriptCmd_LoadParticleSystem
+	.extern BattleAnimScriptCmd_LoadParticleSystemEx
+	.extern BattleAnimScriptCmd_FreeParticleSystem
+	.extern BattleAnimScriptCmd_Call
+	.extern BattleAnimScriptCmd_Return
+	.extern BattleAnimScriptCmd_JumpIfArgEqual
 	.extern ov07_0221D0C0
-	.extern ov07_0221D0E8
+	.extern BattleAnimScriptCmd_CallFunc
 	.extern ov07_0221D148
-	.extern ov07_0221D174
-	.extern ov07_0221D1B8
+	.extern BattleAnimScriptCmd_JumpBySide
+	.extern BattleAnimScriptCmd_JumpByWeather
 	.extern ov07_0221D214
 	.extern ov07_0221D23C
-	.extern ov07_0221D270
+	.extern BattleAnimScriptCmd_JumpIfSameSide
 	.extern ov07_0221D2B0
-	.extern ov07_0221D2E4
-	.extern ov07_0221D374
-	.extern ov07_0221D5A8
-	.extern ov07_0221D5AC
-	.extern ov07_0221D5B0
-	.extern ov07_0221D718
-	.extern ov07_0221D740
-	.extern ov07_0221D7B8
-	.extern ov07_0221D874
-	.extern ov07_0221DA74
-	.extern ov07_0221DAA0
-	.extern ov07_0221DAF4
-	.extern ov07_0221DCA8
-	.extern ov07_0221DCC0
-	.extern ov07_0221DCD4
-	.extern ov07_0221DCF0
-	.extern ov07_0221DD0C
-	.extern ov07_0221DD10
-	.extern ov07_0221DFB4
-	.extern ov07_0221E0B4
-	.extern ov07_0221E280
-	.extern ov07_0221E3B8
-	.extern ov07_0221E5E0
+	.extern BattleAnimScriptCmd_Jump
+	.extern BattleAnimScriptCmd_BrightnessFlash
+	.extern BattleAnimScriptCmd_Nop6
+	.extern BattleAnimScriptCmd_Nop7
+	.extern BattleAnimScriptCmd_CopyBattlerToBg
+	.extern BattleAnimScriptCmd_ClearBattlerBg
+	.extern BattleAnimScriptCmd_InitBattlerSpriteManager
+	.extern BattleAnimScriptCmd_LoadBattlerSpriteResources
+	.extern BattleAnimScriptCmd_CreateBattlerSprite
+	.extern BattleAnimScriptCmd_FreeBattlerSpriteManager
+	.extern BattleAnimScriptCmd_DeleteBattlerSprite
+	.extern BattleAnimScriptCmd_StartBattlerSpriteDraw
+	.extern BattleAnimScriptCmd_StopBattlerSpriteDraw
+	.extern BattleAnimScriptCmd_StopFollowTask
+	.extern BattleAnimScriptCmd_SetParticlePerspective
+	.extern BattleAnimScriptCmd_SetParticleFlipY
+	.extern BattleAnimScriptCmd_Nop40
+	.extern BattleAnimScriptCmd_Nop41
+	.extern BattleAnimBackground_BlendIn
+	.extern BattleAnimBackground_BlendOut
+	.extern BattleAnimBackground_FadeIn
+	.extern BattleAnimBackground_FadeOut
+	.extern BattleAnimBackground_StartEffectsOnly
 	.extern ov07_0221E5EC
-	.extern ov07_0221E6D0
-	.extern ov07_0221E6D4
-	.extern ov07_0221E788
-	.extern ov07_0221E868
-	.extern ov07_0221E9D4
-	.extern ov07_0221EB84
-	.extern ov07_0221ECE8
-	.extern ov07_0221ED00
-	.extern ov07_0221ED44
-	.extern ov07_0221ED94
-	.extern ov07_0221EE74
-	.extern ov07_0221EEC0
-	.extern ov07_0221EF14
-	.extern ov07_0221EF34
-	.extern ov07_0221EF54
-	.extern ov07_0221F024
-	.extern ov07_0221F084
-	.extern ov07_0221F088
-	.extern ov07_0221F08C
-	.extern ov07_0221F090
-	.extern ov07_0221F094
-	.extern ov07_0221F098
-	.extern ov07_0221F0B0
-	.extern ov07_0221F0CC
-	.extern ov07_0221F104
-	.extern ov07_0221F120
-	.extern ov07_0221F1C0
-	.extern ov07_0221F238
-	.extern ov07_0221F2DC
-	.extern ov07_0221F340
-	.extern ov07_0221F398
-	.extern ov07_0221F39C
-	.extern ov07_0221F3F4
-	.extern ov07_0221F424
-	.extern ov07_0221F42C
-	.extern ov07_0221F430
-	.extern ov07_0221F4CC
-	.extern ov07_0221F514
-	.extern ov07_0221F574
-	.extern ov07_0221F5BC
-	.extern ov07_0221F604
-	.extern ov07_0221F710
-	.extern ov07_0221F7C4
-	.extern ov07_0221F7F0
-	.extern ov07_0221F814
-	.extern ov07_0221F81C
-	.extern ov07_0221F880
-	.extern ov07_0221F8AC
-	.extern ov07_0221FE84
-	.extern ov07_0221FE88
-	.extern ov07_0221FF2C
+	.extern BattleAnimBackground_EffectNone
+	.extern BattleAnimBackground_StartScroll
+	.extern BattleAnimBackground_StartWave
+	.extern BattleAnimBackground_MarkWaveForStop
+	.extern BattleAnimBackground_StartPaletteCycle
+	.extern BattleAnimBackground_MarkPaletteCycleForStop
+	.extern BattleAnimBackground_MarkScrollForStop
+	.extern BattleAnimBackground_StopAllEffects
+	.extern BattleAnimScriptCmd_SwitchBackground
+	.extern BattleAnimScriptCmd_SwitchBackgroundWithFadeWait
+	.extern BattleAnimScriptCmd_SetBgScroll
+	.extern BattleAnimScriptCmd_RestoreBackground
+	.extern BattleAnimScriptCmd_WaitForBackgroundLoaded
+	.extern BattleAnimScriptCmd_WaitForBackgroundSwitch
+	.extern BattleAnimScriptCmd_SetBackground
+	.extern BattleAnimScriptCmd_SwitchBackgroundBySide
+	.extern BattleAnimScriptCmd_Nop37
+	.extern BattleAnimScriptCmd_Nop38
+	.extern BattleAnimScriptCmd_Nop39
+	.extern BattleAnimScriptCmd_Nop42
+	.extern BattleAnimScriptCmd_Nop43
+	.extern BattleAnimScriptCmd_PlaySE
+	.extern BattleAnimScriptCmd_StopSE
+	.extern BattleAnimScriptCmd_PlaySEWithPan
+	.extern BattleAnimScriptCmd_SetSEPan
+	.extern BattleAnimScriptCmd_PanSweepSE
+	.extern BattleAnimScriptCmd_PanSweepSERaw
+	.extern BattleAnimScriptCmd_PanSweepSEConverted
+	.extern BattleAnimScriptCmd_RepeatSE
+	.extern BattleAnimScriptCmd_DelayedSE
+	.extern BattleAnimScriptCmd_Nop28
+	.extern BattleAnimScriptCmd_WaitForSoundTasks
+	.extern BattleAnimScriptCmd_SetSubScreenBlend
+	.extern BattleAnimScriptCmd_ResetBlend
+	.extern BattleAnimScriptCmd_Nop27
+	.extern BattleAnimScriptCmd_InitSpriteManager
+	.extern BattleAnimScriptCmd_LoadCharResource
+	.extern BattleAnimScriptCmd_LoadPaletteResource
+	.extern BattleAnimScriptCmd_LoadCellResource
+	.extern BattleAnimScriptCmd_LoadAnimResource
+	.extern BattleAnimScriptCmd_CreateSpriteWithFunc
+	.extern BattleAnimScriptCmd_CreateSprite
+	.extern BattleAnimScriptCmd_FreeSpriteManager
+	.extern BattleAnimScriptCmd_SetBattlerSpriteVisible
+	.extern BattleAnimScriptCmd_Invalid55
+	.extern BattleAnimScriptCmd_PlayCry
+	.extern BattleAnimScriptCmd_WaitForCry
+	.extern BattleAnimScriptCmd_Nop54
+	.extern BattleAnimEmitterCb_None
+	.extern BattleAnimSystem_NewParticleSystem
+	.extern BattleAnimSystem_FreeParticleSystem
 	.extern ov07_0221FF74
 	.extern ov07_0221FF78
 	.extern ov07_02220030
@@ -494,58 +494,58 @@
 _02234B80:
 	.byte 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 
-ov07_02234B8C: ; 0x02234B8C
+sBattleAnimBgLayers: ; 0x02234B8C
 	.byte 0x01, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 
-ov07_02234B98: ; 0x02234B98
+sBattleAnimWeatherMasks: ; 0x02234B98
 	.byte 0x03, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00
 	.byte 0x30, 0x00, 0x00, 0x00, 0xC0, 0x00, 0x00, 0x00
 
-ov07_02234BA8: ; 0x02234BA8
+sBattleAnimBgEffectMasks: ; 0x02234BA8
 	.byte 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x04, 0x00
 	.byte 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x01
 
-ov07_02234BC0: ; 0x02234BC0
-	.word ov07_0221DFB4
-	.word ov07_0221E280
-	.word ov07_0221E5E0
-	.word ov07_0221E0B4
-	.word ov07_0221E3B8
+sBattleAnimBgSwitchFuncs: ; 0x02234BC0
+	.word BattleAnimBackground_BlendIn
+	.word BattleAnimBackground_FadeIn
+	.word BattleAnimBackground_StartEffectsOnly
+	.word BattleAnimBackground_BlendOut
+	.word BattleAnimBackground_FadeOut
 	.word ov07_0221E5EC
 
-ov07_02234BD8: ; 0x02234BD8
+sBattleAnimBattlerSpritePriorities: ; 0x02234BD8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x14, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x14, 0x00, 0x00, 0x00
 
-ov07_02234BF0: ; 0x02234BF0
+sBattleAnimBattlerSpriteCapacities: ; 0x02234BF0
 	.byte 0x05, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov07_02234C08: ; 0x02234C08
-	.word ov07_0221C5C4
-	.word ov07_0221C5C8
-	.word ov07_0221C624
-	.word ov07_0221C62C
-	.word ov07_0221C634
-	.word ov07_0221C674
+sBattleAnimSoundFuncs: ; 0x02234C08
+	.word BattleAnimSoundFunc_None
+	.word BattleAnimSoundFunc_PanSweep
+	.word BattleAnimSoundFunc_PanSweep2
+	.word BattleAnimSoundFunc_PanSweep3
+	.word BattleAnimSoundFunc_RepeatSE
+	.word BattleAnimSoundFunc_DelayedSE
 
-ov07_02234C20: ; 0x02234C20
+sBattleAnimBgWaveSteps: ; 0x02234C20
 	.byte 0x20, 0x00, 0x1C, 0x00, 0x18, 0x00, 0x14, 0x00, 0x10, 0x00, 0x0C, 0x00, 0x08, 0x00, 0x04, 0x00
 	.byte 0x04, 0x00, 0x08, 0x00, 0x0C, 0x00, 0x10, 0x00, 0x14, 0x00, 0x18, 0x00, 0x1C, 0x00, 0x20, 0x00
 
-ov07_02234C40: ; 0x02234C40
-	.word ov07_0221E6D0
-	.word ov07_0221E6D4
-	.word ov07_0221ECE8
-	.word ov07_0221ED00
-	.word ov07_0221E6D0
-	.word ov07_0221E788
-	.word ov07_0221E868
-	.word ov07_0221E9D4
-	.word ov07_0221EB84
+sBattleAnimBgEffectFuncs: ; 0x02234C40
+	.word BattleAnimBackground_EffectNone
+	.word BattleAnimBackground_StartScroll
+	.word BattleAnimBackground_MarkScrollForStop
+	.word BattleAnimBackground_StopAllEffects
+	.word BattleAnimBackground_EffectNone
+	.word BattleAnimBackground_StartWave
+	.word BattleAnimBackground_MarkWaveForStop
+	.word BattleAnimBackground_StartPaletteCycle
+	.word BattleAnimBackground_MarkPaletteCycleForStop
 
-ov07_02234C64: ; 0x02234C64
+sSecretPowerTerrainAnims: ; 0x02234C64
 	.byte 0xBD, 0x00, 0x00, 0x00, 0xBD, 0x00, 0x00, 0x00, 0x2E, 0x01, 0x00, 0x00
 	.byte 0x2E, 0x01, 0x00, 0x00, 0x58, 0x00, 0x00, 0x00, 0x58, 0x00, 0x00, 0x00, 0xA3, 0x01, 0x00, 0x00
 	.byte 0x60, 0x01, 0x00, 0x00, 0xA4, 0x01, 0x00, 0x00, 0x22, 0x00, 0x00, 0x00, 0x55, 0x01, 0x00, 0x00
@@ -554,7 +554,7 @@ ov07_02234C64: ; 0x02234C64
 	.byte 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 
-ov07_02234CC8: ; 0x02234CC8
+sBattleAnimEmitterSelect6: ; 0x02234CC8
 	.byte 0xFF, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00
 	.byte 0x04, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00
@@ -566,7 +566,7 @@ ov07_02234CC8: ; 0x02234CC8
 	.byte 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00
 	.byte 0x05, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00
 
-ov07_02234D58: ; 0x02234D58
+sBattleAnimEmitterSelect4: ; 0x02234D58
 	.byte 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00
 	.byte 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00
 	.byte 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00
@@ -578,97 +578,97 @@ ov07_02234D58: ; 0x02234D58
 	.byte 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00
 
-ov07_02234DE8: ; 0x02234DE8
-	.word ov07_0221C6EC
-	.word ov07_0221C70C
-	.word ov07_0221C934
-	.word ov07_0221C974
-	.word ov07_0221C9C0
-	.word ov07_0221F098
-	.word ov07_0221D5A8
-	.word ov07_0221D5AC
-	.word ov07_0221F3F4
-	.word ov07_0221F424
-	.word ov07_0221D02C
-	.word ov07_0221D05C
-	.word ov07_0221C72C
+sBattleAnimScriptCmdTable: ; 0x02234DE8
+	.word BattleAnimScriptCmd_Wait
+	.word BattleAnimScriptCmd_WaitForTasks
+	.word BattleAnimScriptCmd_BeginLoop
+	.word BattleAnimScriptCmd_EndLoop
+	.word BattleAnimScriptCmd_End
+	.word BattleAnimScriptCmd_PlaySE
+	.word BattleAnimScriptCmd_Nop6
+	.word BattleAnimScriptCmd_Nop7
+	.word BattleAnimScriptCmd_SetSubScreenBlend
+	.word BattleAnimScriptCmd_ResetBlend
+	.word BattleAnimScriptCmd_Call
+	.word BattleAnimScriptCmd_Return
+	.word BattleAnimScriptCmd_SetArg
 	.word ov07_0221D148
 	.word ov07_0221D2B0
-	.word ov07_0221D2E4
-	.word ov07_0221ED44
-	.word ov07_0221EE74
-	.word ov07_0221EEC0
-	.word ov07_0221EF14
-	.word ov07_0221EF34
-	.word ov07_0221EF54
-	.word ov07_0221F0CC
-	.word ov07_0221F104
-	.word ov07_0221F120
-	.word ov07_0221F2DC
-	.word ov07_0221F340
-	.word ov07_0221F42C
-	.word ov07_0221F398
-	.word ov07_0221F39C
-	.word ov07_0221D088
-	.word ov07_0221D5B0
-	.word ov07_0221D718
+	.word BattleAnimScriptCmd_Jump
+	.word BattleAnimScriptCmd_SwitchBackground
+	.word BattleAnimScriptCmd_SetBgScroll
+	.word BattleAnimScriptCmd_RestoreBackground
+	.word BattleAnimScriptCmd_WaitForBackgroundLoaded
+	.word BattleAnimScriptCmd_WaitForBackgroundSwitch
+	.word BattleAnimScriptCmd_SetBackground
+	.word BattleAnimScriptCmd_PlaySEWithPan
+	.word BattleAnimScriptCmd_SetSEPan
+	.word BattleAnimScriptCmd_PanSweepSE
+	.word BattleAnimScriptCmd_RepeatSE
+	.word BattleAnimScriptCmd_DelayedSE
+	.word BattleAnimScriptCmd_Nop27
+	.word BattleAnimScriptCmd_Nop28
+	.word BattleAnimScriptCmd_WaitForSoundTasks
+	.word BattleAnimScriptCmd_JumpIfArgEqual
+	.word BattleAnimScriptCmd_CopyBattlerToBg
+	.word BattleAnimScriptCmd_ClearBattlerBg
 	.word ov07_0221D0C0
-	.word ov07_0221F024
-	.word ov07_0221F1C0
-	.word ov07_0221F238
-	.word ov07_0221F084
-	.word ov07_0221F088
-	.word ov07_0221F08C
-	.word ov07_0221DD0C
-	.word ov07_0221DD10
-	.word ov07_0221F090
-	.word ov07_0221F094
-	.word ov07_0221F0B0
-	.word ov07_0221D0E8
-	.word ov07_0221CBC0
-	.word ov07_0221CC54
-	.word ov07_0221CDA4
-	.word ov07_0221CE5C
-	.word ov07_0221CF14
-	.word ov07_0221CF54
-	.word ov07_0221CFA8
-	.word ov07_0221D000
-	.word ov07_0221F8AC
-	.word ov07_0221F814
-	.word ov07_0221D740
-	.word ov07_0221D7B8
-	.word ov07_0221D874
-	.word ov07_0221DA74
-	.word ov07_0221DAA0
-	.word ov07_0221DCC0
-	.word ov07_0221DCD4
-	.word ov07_0221DCF0
-	.word ov07_0221D174
-	.word ov07_0221F81C
-	.word ov07_0221F880
-	.word ov07_0221C74C
-	.word ov07_0221C8CC
-	.word ov07_0221C910
-	.word ov07_0221D1B8
+	.word BattleAnimScriptCmd_SwitchBackgroundBySide
+	.word BattleAnimScriptCmd_PanSweepSERaw
+	.word BattleAnimScriptCmd_PanSweepSEConverted
+	.word BattleAnimScriptCmd_Nop37
+	.word BattleAnimScriptCmd_Nop38
+	.word BattleAnimScriptCmd_Nop39
+	.word BattleAnimScriptCmd_Nop40
+	.word BattleAnimScriptCmd_Nop41
+	.word BattleAnimScriptCmd_Nop42
+	.word BattleAnimScriptCmd_Nop43
+	.word BattleAnimScriptCmd_StopSE
+	.word BattleAnimScriptCmd_CallFunc
+	.word BattleAnimScriptCmd_CreateEmitter
+	.word BattleAnimScriptCmd_CreateEmitterInSlot
+	.word BattleAnimScriptCmd_CreateEmitterByPosition6
+	.word BattleAnimScriptCmd_CreateEmitterByPosition4
+	.word BattleAnimScriptCmd_WaitForParticles
+	.word BattleAnimScriptCmd_LoadParticleSystem
+	.word BattleAnimScriptCmd_LoadParticleSystemEx
+	.word BattleAnimScriptCmd_FreeParticleSystem
+	.word BattleAnimScriptCmd_Nop54
+	.word BattleAnimScriptCmd_Invalid55
+	.word BattleAnimScriptCmd_InitBattlerSpriteManager
+	.word BattleAnimScriptCmd_LoadBattlerSpriteResources
+	.word BattleAnimScriptCmd_CreateBattlerSprite
+	.word BattleAnimScriptCmd_FreeBattlerSpriteManager
+	.word BattleAnimScriptCmd_DeleteBattlerSprite
+	.word BattleAnimScriptCmd_StopFollowTask
+	.word BattleAnimScriptCmd_SetParticlePerspective
+	.word BattleAnimScriptCmd_SetParticleFlipY
+	.word BattleAnimScriptCmd_JumpBySide
+	.word BattleAnimScriptCmd_PlayCry
+	.word BattleAnimScriptCmd_WaitForCry
+	.word BattleAnimScriptCmd_ClearArgs
+	.word BattleAnimScriptCmd_ChangeBattlerPic
+	.word BattleAnimScriptCmd_RestoreBattlerPic
+	.word BattleAnimScriptCmd_JumpByWeather
 	.word ov07_0221D214
-	.word ov07_0221D270
-	.word ov07_0221F430
-	.word ov07_0221F4CC
-	.word ov07_0221F514
-	.word ov07_0221F574
-	.word ov07_0221F5BC
-	.word ov07_0221F604
-	.word ov07_0221F710
-	.word ov07_0221F7C4
-	.word ov07_0221F7F0
-	.word ov07_0221DAF4
-	.word ov07_0221DCA8
-	.word ov07_0221C6B4
-	.word ov07_0221D374
-	.word ov07_0221ED94
+	.word BattleAnimScriptCmd_JumpIfSameSide
+	.word BattleAnimScriptCmd_InitSpriteManager
+	.word BattleAnimScriptCmd_LoadCharResource
+	.word BattleAnimScriptCmd_LoadPaletteResource
+	.word BattleAnimScriptCmd_LoadCellResource
+	.word BattleAnimScriptCmd_LoadAnimResource
+	.word BattleAnimScriptCmd_CreateSpriteWithFunc
+	.word BattleAnimScriptCmd_CreateSprite
+	.word BattleAnimScriptCmd_FreeSpriteManager
+	.word BattleAnimScriptCmd_SetBattlerSpriteVisible
+	.word BattleAnimScriptCmd_StartBattlerSpriteDraw
+	.word BattleAnimScriptCmd_StopBattlerSpriteDraw
+	.word BattleAnimScriptCmd_WaitForButtonCombo
+	.word BattleAnimScriptCmd_BrightnessFlash
+	.word BattleAnimScriptCmd_SwitchBackgroundWithFadeWait
 	.word ov07_0221D23C
 
-ov07_02234F48: ; 0x02234F48
+sBattleAnimBackgroundFiles: ; 0x02234F48
 	.byte 0x3B, 0x00, 0x00, 0x00, 0x27, 0x01, 0x00, 0x00
 	.byte 0x38, 0x00, 0x00, 0x00, 0x39, 0x00, 0x00, 0x00, 0x3A, 0x00, 0x00, 0x00, 0x3B, 0x00, 0x00, 0x00
 	.byte 0x27, 0x01, 0x00, 0x00, 0x38, 0x00, 0x00, 0x00, 0x39, 0x00, 0x00, 0x00, 0x3A, 0x00, 0x00, 0x00
@@ -745,8 +745,8 @@ ov07_02234F48: ; 0x02234F48
 	.byte 0x62, 0x00, 0x00, 0x00, 0x35, 0x01, 0x00, 0x00, 0x60, 0x00, 0x00, 0x00, 0x61, 0x00, 0x00, 0x00
 	.byte 0x60, 0x00, 0x00, 0x00
 
-ov07_022353E4: ; 0x022353E4
-	.word ov07_0221FE84
+sBattleAnimEmitterCallbackTable: ; 0x022353E4
+	.word BattleAnimEmitterCb_None
 	.word ov07_0221FF78
 	.word ov07_02220030
 	.word ov07_022200D0

@@ -187,8 +187,8 @@
 .public ov00_021EC9D4
 .public ov05_0221BA00
 .public ov06_0221BAF0
-.public ov07_0221BEDC
-.public ov07_0221BFE0
+.public BattleAnimSystem_New
+.public BattleAnimSystem_Delete
 .public Battle_Run
 .public ov12_02237B0C
 .public ov12_02237B6C

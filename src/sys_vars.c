@@ -175,7 +175,7 @@ void Save_LCRNGAdvanceLotoID(SaveData *saveData, u16 var) {
 #pragma unused(var)
     SaveVarsFlags *state = Save_VarsFlags_Get(saveData);
     SAV_FRIEND_GRP *friend_groups = Save_FriendGroup_Get(saveData);
-    u32 rand_id = sub_0202C7DC(friend_groups) * 1103515245 + 12345;
+    u32 rand_id = Save_FriendGroup_GetCurrentSeed(friend_groups) * 1103515245 + 12345;
 
     Save_VarsFlags_SetLotoId(state, rand_id);
 }

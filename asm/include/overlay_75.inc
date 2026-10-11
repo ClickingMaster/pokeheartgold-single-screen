@@ -117,8 +117,8 @@
 .public Save_PlayerData_GetProfile
 .public Save_PlayerData_GetOptionsAddr
 .public Options_GetFrame
-.public sub_0202C08C
-.public sub_0202C6F4
+.public FriendRoster_GetUserData
+.public Save_FriendRoster_Get
 .public sub_02031734
 .public sub_02031744
 .public sub_0203175C

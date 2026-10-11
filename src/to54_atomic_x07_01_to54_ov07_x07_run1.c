@@ -63,7 +63,7 @@ void ov07_0222D60C(void *task, X07Group *work) {
         for (i = 0; i < 4; i++) {
             ov07_0222D56C(&work->sprites[i]);
         }
-        ov07_0221C448(work->owner, task);
+        BattleAnimSystem_DestroyTask(work->owner, task);
         Heap_Free(work);
         return;
     }

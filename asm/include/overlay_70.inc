@@ -188,7 +188,7 @@
 .public Pokedex_CheckMonSeenFlag
 .public Options_GetTextFrameDelay
 .public Options_GetFrame
-.public sub_0202C08C
+.public FriendRoster_GetUserData
 .public WifiHistory_GetPlayerCountry
 .public WiFiHistory_GetPlayerRegion
 .public Save_Chatot_Get

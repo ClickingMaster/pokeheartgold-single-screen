@@ -19,7 +19,7 @@ int SealOnCapsuleGetID(void *);
 int SealOnCapsuleGetX(void *);
 int SealOnCapsuleGetY(void *);
 void sub_0209109C(int);
-void *ov07_0221FEB0(int, int, int, int);
+void *BattleAnimSystem_NewParticleSystemFromNarc(int, int, int, int);
 void ov07_02232AC0(void *, u8 *);
 void ov07_02232C64(void *);
 void ov07_02232CD8(void *);

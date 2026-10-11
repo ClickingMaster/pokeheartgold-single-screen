@@ -65,9 +65,9 @@ void ov12_02261B80(BattleSystem *, void *, void *, void *);
 void ov12_02261CA8(BattleSystem *, W20BattleSource *, W20BattleParams *, u8);
 void ov07_0223494C(void *, int);
 void ov07_02234A20(void *, int);
-void ov07_0221C394(void *);
-BOOL ov07_0221C3B0(void *);
-void ov07_0221C3C0(void *);
+void BattleAnimSystem_Execute(void *);
+BOOL BattleAnimSystem_IsActive(void *);
+void BattleAnimSystem_EndMove(void *);
 void ov12_0225FCC0(SysTask *, W20TaskSmall *);
 void ov12_0225FD14(SysTask *, W20TaskLarge *);
 #endif

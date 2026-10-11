@@ -28,12 +28,12 @@ typedef struct Ov07SixSpriteWork {
 } Ov07SixSpriteWork;
 typedef char Ov07SixSpriteWorkSize[(sizeof(Ov07SixSpriteWork) == 132) ? 1 : -1];
 typedef char Ov07TemplateBridgeSize[(sizeof(union Ov07TemplateBridge) == 52) ? 1 : -1];
-void *ov07_0221BFD0(void *);
-u32 ov07_0221C4A8(void *, int);
-void ov07_0221F9E8(struct T *, struct Context *);
+void *BattleAnimSystem_GetHeapID(void *);
+u32 BattleAnimSystem_GetArg(void *, int);
+void BattleAnimSystem_GetSpriteTemplate(struct T *, struct Context *);
 void BattleAnimUtil_SetBlendWithBattleBg(void *, int, int);
-void ov07_0221C3F4(void *, void *, void *, u32);
-void ov07_0221C448(void *, void *);
+void BattleAnimSystem_CreateTask(void *, void *, void *, u32);
+void BattleAnimSystem_DestroyTask(void *, void *);
 void ov07_02222268(W02LinearMotion *, s16, s16, s16, s16, u16);
 BOOL ov07_022222F0(W02LinearMotion *, void *);
 void ov07_02229FC4(SysTask *, void *);

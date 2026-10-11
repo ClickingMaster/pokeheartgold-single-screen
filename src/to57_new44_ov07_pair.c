@@ -11,13 +11,13 @@ void ov07_0222D6E0(void *owner, void *spriteSystem, void *spriteManager, void *r
     work->owner = owner;
     work->spriteSystem = spriteSystem;
     work->spriteManager = spriteManager;
-    work->pokepic = ov07_0221FA48(work->owner, ov07_0221C470(owner));
+    work->pokepic = BattleAnimSystem_GetBattlerPokepic(work->owner, BattleAnimSystem_GetDefender(owner));
     work->x = Pokepic_GetAttr(work->pokepic, 0);
     work->y = Pokepic_GetAttr(work->pokepic, 1);
     ov07_022227A8(work->motion, 4, 0, 1, 1);
     y = work->y + 16;
     flip = 0;
-    ov07_0221F9E8(&template, work->owner);
+    BattleAnimSystem_GetSpriteTemplate(&template, work->owner);
     for (i = flip; i < 4; i++) {
         if (i == 0) {
             ov07_0222D4F4(&work->sprites[i], resource, work->x, y, flip);
@@ -28,7 +28,7 @@ void ov07_0222D6E0(void *owner, void *spriteSystem, void *spriteManager, void *r
         flip ^= 1;
         y -= 10;
     }
-    ov07_0221C410(work->owner, (void (*)(void *, void *))ov07_0222D60C, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->owner, (void (*)(void *, void *))ov07_0222D60C, work);
 }
 
 void ov07_0222D7A4(void *task, X07PairWork *work) {
@@ -82,7 +82,7 @@ void ov07_0222D7A4(void *task, X07PairWork *work) {
         break;
     case 6:
         Sprite_DeleteAndFreeResources(work->sprite);
-        ov07_0221C448(work->owner, task);
+        BattleAnimSystem_DestroyTask(work->owner, task);
         Heap_Free(work);
         return;
     }

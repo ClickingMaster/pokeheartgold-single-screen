@@ -29,33 +29,33 @@ int DWC_IsEqualFriendData(DWCFriendData *friendData0, DWCFriendData *friendData1
 
 #endif // POKEHEARTGOLD_DWCACCOUNT_H
 
-#ifndef POKEHEARTGOLD_UNK_0202C034_H
-#define POKEHEARTGOLD_UNK_0202C034_H
+#ifndef POKEHEARTGOLD_FRIEND_ROSTER_H
+#define POKEHEARTGOLD_FRIEND_ROSTER_H
 
 #include "pm_string.h"
 #include "save.h"
 
-typedef struct UnkStruct_021D2230 UnkStruct_021D2230;
-typedef UnkStruct_021D2230 WiFiList;
+typedef struct FriendRoster FriendRoster;
+typedef FriendRoster WiFiList;
 
-void sub_0202C6FC(SaveData *saveData);
-void sub_0202C714(SaveData *saveData);
-WiFiList *sub_0202C6F4(SaveData *saveData);
-int sub_0202C2F8(WiFiList *a0);
-DWCUserData *sub_0202C08C(WiFiList *a0);
+void Save_FriendRoster_LoadFromSave(SaveData *saveData);
+void Save_FriendRoster_StoreToSave(SaveData *saveData);
+WiFiList *Save_FriendRoster_Get(SaveData *saveData);
+int FriendRoster_CountFriends(WiFiList *a0);
+DWCUserData *FriendRoster_GetUserData(WiFiList *a0);
 u16 *sub_0202C254(WiFiList *a0, s32 a1);
 u16 *sub_0202C298(WiFiList *a0, s32 a1);
-s32 sub_0202C090(WiFiList *a0, s32 a1, s32 a2);
-void sub_0202C46C(WiFiList *a0);
-void sub_0202C4B0(WiFiList *a0, s32 a1);
-u16 sub_0202C318(WiFiList *a0);
-void sub_0202C190(WiFiList *a0, int a1, int a2, u32 a3);
-void sub_0202C03C(WiFiList *a0);
+s32 FriendRoster_GetEntryField(WiFiList *a0, s32 a1, s32 a2);
+void FriendRoster_Compact(WiFiList *a0);
+void FriendRoster_UpdateDate(WiFiList *a0, s32 a1);
+u16 FriendRoster_GetUsedSlotCount(WiFiList *a0);
+void FriendRoster_SetEntryField(WiFiList *a0, int a1, int a2, u32 a3);
+void Save_FriendRoster_Init(WiFiList *a0);
 void sub_0202C2B4(WiFiList *a0, int a1, String *a2);
 void sub_0202C270(WiFiList *a0, int a1, String *a2);
-DWCFriendData *sub_0202C23C(WiFiList *a0, int a1);
+DWCFriendData *FriendRoster_GetDwcFriendData(WiFiList *a0, int a1);
 
-#endif // POKEHEARTGOLD_UNK_0202C034_H
+#endif // POKEHEARTGOLD_FRIEND_ROSTER_H
 
 #ifndef POKEHEARTGOLD_PR488_PRIVATE_H
 #define POKEHEARTGOLD_PR488_PRIVATE_H
@@ -63,7 +63,7 @@ DWCFriendData *sub_0202C23C(WiFiList *a0, int a1);
 #include "overlay_44_02232E9C.h"
 #include "save.h"
 #include "save_wifi_history.h"
-#include "unk_0202C034.h"
+#include "friend_roster.h"
 
 BOOL Comm_IsNetIdConnected(u16 arg0);
 int Comm_CountConnected(void);

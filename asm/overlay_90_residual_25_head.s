@@ -225,7 +225,7 @@ PlazaGameResults_RecordFriendPlays: ; 0x0225B9A8
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	ldr r0, [r5, #0xc]
-	bl sub_0202C6F4
+	bl Save_FriendRoster_Get
 	add r4, r0, #0
 	ldrb r0, [r5, #0x14]
 	mov r6, #0

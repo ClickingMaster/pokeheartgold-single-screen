@@ -120,10 +120,10 @@
 .public ov45_0222A4A8
 .public ov45_0222A520
 .public ov45_0222A53C
-.public ov45_0222A578
-.public ov45_0222A5C0
+.public WiFiPlazaWork_GetPlayer
+.public WiFiPlazaWork_GetMyPlayer
 .public ov45_0222A7DC
-.public ov45_0222A844
+.public WiFiPlazaPlayer_CopyToProfile
 .public ov45_0222AA54
 .public ov45_0222AB0C
 .public ov45_0222AB28

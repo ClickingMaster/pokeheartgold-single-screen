@@ -235,8 +235,8 @@
 .public ov45_0222A330
 .public ov45_0222A4A8
 .public ov45_0222A520
-.public ov45_0222A578
-.public ov45_0222A844
+.public WiFiPlazaWork_GetPlayer
+.public WiFiPlazaPlayer_CopyToProfile
 .public ov45_0222AB28
 .public ov45_0222D844
 .public ov45_0222E9E0

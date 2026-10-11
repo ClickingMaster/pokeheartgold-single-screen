@@ -56,7 +56,7 @@ void ov07_02223A1C(void *task, void *data) {
         Pokepic_SetAttr(w->pic, 10, 0);
         Pokepic_SetAttr(w->pic, 11, 0);
         Pokepic_SetAttr(w->pic, 9, 0);
-        ov07_0221C448(w->owner, task);
+        BattleAnimSystem_DestroyTask(w->owner, task);
         Heap_Free(w);
         return;
     }

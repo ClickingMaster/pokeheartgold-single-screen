@@ -88,9 +88,9 @@ extern void BattleController_ReplySelectionMessageDone(void *battleSystem, u8 ba
 extern void BattleHpBar_BeginExpBarFullFlashEffect(void *hpBar, u8 *done);
 extern void PlaySE(u32 seqNo);
 extern void GF_AssertFail(void);
-extern void *ov07_0221FB90(void *battleSystem, int value, u8 battler);
+extern void *BattleAnimBattlerSprites_New(void *battleSystem, int value, u8 battler);
 extern int ov07_0221FE70(void *object);
-extern void ov07_0221FE3C(void *object, u8 battler);
+extern void BattleAnimBattlerSprites_Free2(void *object, u8 battler);
 extern int Pokepic_GetAttr(void *pokepic, int attr);
 extern void Pokepic_SetAttr(void *pokepic, int attr, int value);
 extern void ov12_02264DCC(MenuTaskData *data, void *menu);

@@ -32,7 +32,7 @@ void ov07_02222590(Scale07 *scale, int a1, int a2, int a3, int a4, int a5, int a
 BOOL ov07_0222260C(Scale07 *scale);
 void ov07_02222644(Scale07 *scale, f32 *x, f32 *y);
 void ov07_022226FC(ManagedSprite *sprite, s16 x, s16 y, int a3, int a4);
-void ov07_0221C448(void *ctx, void *task);
+void BattleAnimSystem_DestroyTask(void *ctx, void *task);
 void ov07_02228834(void *task, Squash07 *work);
 // @fn ov07_02228834
 void ov07_02228834(void *task, Squash07 *work) {
@@ -120,7 +120,7 @@ void ov07_02228834(void *task, Squash07 *work) {
     }
     default:
         Pokepic_SetAttr(work->pokepic, 14, 0);
-        ov07_0221C448(work->ctx, task);
+        BattleAnimSystem_DestroyTask(work->ctx, task);
         Heap_Free(work);
         return;
     }

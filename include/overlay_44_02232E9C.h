@@ -13,7 +13,7 @@
 #include "sprite.h"
 #include "unk_02009D48.h"
 #include "font_sprite.h"
-#include "unk_0202C034.h"
+#include "friend_roster.h"
 #include "yes_no_prompt.h"
 
 typedef struct UnkStruct_ov44_02232E80 {
@@ -159,7 +159,7 @@ typedef struct UnkStruct_ov44_0222AB24 {
 } UnkStruct_ov44_0222AB24;
 
 struct UnkStruct_ov44_022319EC {
-    UnkStruct_021D2230 *unk0;
+    FriendRoster *unk0;
     UnkStruct_ov44_0223197C *unk4;
     u8 unk8[4];
     u8 unkC[0x20];

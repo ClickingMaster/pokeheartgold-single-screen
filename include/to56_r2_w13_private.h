@@ -12,18 +12,18 @@ typedef struct R2W13Transition {
 void ov07_0222D050(void *, R2W13Transition *);
 BOOL ov07_0222CFCC(R2W13Transition *);
 BOOL ManagedSprite_GetDrawFlag(void *);
-int ov07_0221C470(void *);
-int ov07_0221FAC8(void *, int);
+int BattleAnimSystem_GetDefender(void *);
+int BattleAnimSystem_IsBattlerSemiInvulnerable(void *, int);
 void Pokepic_SetAttr(void *, int, int);
-int ov07_0221FAEC(void *, int);
-int ov07_0221FB04(void *, int);
+int BattleAnimSystem_GetBgLayer(void *, int);
+int BattleAnimSystem_GetBgPriority(void *, int);
 void SetBgPriority(int, int);
 int ov07_0221FAE8(void *);
-void *ov07_0221BFD0(void *);
+void *BattleAnimSystem_GetHeapID(void *);
 void BG_ClearCharDataRange(int, int, int, void *);
-void *ov07_0221C4A0(void *);
+void *BattleAnimSystem_GetBgConfig(void *);
 void BgClearTilemapBufferAndCommit(void *, int);
-void ov07_0221C448(void *, void *);
+void BattleAnimSystem_DestroyTask(void *, void *);
 void Heap_Free(void *);
 
 typedef struct R2W13Spin {
@@ -40,7 +40,7 @@ typedef struct R2W13Spin {
 } R2W13Spin;
 void ov07_0222D3BC(void *, void *, int, void *);
 void *BattleAnimUtil_AllocWork(void *, int);
-int ov07_0221C468(void *);
+int BattleAnimSystem_GetAttacker(void *);
 int ov07_02222004(void *, int);
 int ov07_0221FB78(void *, int);
 int ov07_02221F80(void *, int, int);
@@ -55,6 +55,6 @@ int BattleAnimUtil_GetBattlerSide(void *, int);
 void ManagedSprite_SetAnim(void *, int);
 void ov07_02222508(void *, int, int, int, int);
 void ov07_022223F0(void *, int, int, int);
-void ov07_0221C410(void *, void *, void *);
+void BattleAnimSystem_CreateTaskDefaultPriority(void *, void *, void *);
 void ov07_0222D2B0(void *, R2W13Spin *);
 #endif

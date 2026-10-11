@@ -16,7 +16,7 @@ void ov07_02230058(void *owner, void *p) {
             q += 4;
         } while (i < 15);
         Heap_Free(p);
-        ov07_0221C448(P(p, 0), owner);
+        BattleAnimSystem_DestroyTask(P(p, 0), owner);
     } else {
         SpriteSystem_DrawSprites(P(p, 8));
     }

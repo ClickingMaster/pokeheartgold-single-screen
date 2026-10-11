@@ -20,7 +20,7 @@ Ov07CallbackWork *ov07_02233DB8(Ov07Params *params) {
     work->unkC4 = 0;
     work->unk20 = 0x10;
     work->unk21 = 0;
-    ov07_0221C69C();
+    BattleAnimSystem_InitBlend();
     if (LCRandom() % 2) {
         work->unk22 = 1;
     } else {
@@ -287,7 +287,7 @@ void ov07_0223441C(Ov07CallbackWork *work) {
     ManagedSprite_SetAnimationFrame(work->sprite, 0);
     ManagedSprite_SetAnim(work->sprite, 0);
     ManagedSprite_TickFrame(work->sprite);
-    ov07_0221C69C();
+    BattleAnimSystem_InitBlend();
 }
 
 void ov07_0223449C(Ov07CallbackWork *work, int flag) {
@@ -355,7 +355,7 @@ Ov07EmitterManager *ov07_0223458C(enum HeapID heapId, s32 *a1) {
         GF_AssertFail();
         return NULL;
     }
-    ov07_0221C69C();
+    BattleAnimSystem_InitBlend();
     mgr->heapId = heapId;
     if (a1 != NULL) {
         mgr->unk04 = a1[0];
@@ -397,7 +397,7 @@ void ov07_02234628(Ov07EmitterManager *mgr) {
     int i;
     for (i = 0; i < 16; i++) {
         if (mgr->emitters[i] != NULL) {
-            ov07_0221FF2C(mgr->emitters[i]->emitter);
+            BattleAnimSystem_FreeParticleSystem(mgr->emitters[i]->emitter);
             if (mgr->emitters[i]->unk20 != 0 && mgr->emitters[i]->task != NULL) {
                 SysTask_Destroy(mgr->emitters[i]->task);
             }
@@ -414,7 +414,7 @@ Ov07Emitter *ov07_02234658(enum HeapID heapId, Ov07EmitterInit *init) {
     ptr->heapId = heapId;
     ptr->init = *init;
     ptr->unk1C = ov07_02234718(ptr->init.unk00);
-    ptr->emitter = ov07_0221FE88(ptr->heapId, ptr->init.unk00, 1);
+    ptr->emitter = BattleAnimSystem_NewParticleSystem(ptr->heapId, ptr->init.unk00, 1);
     return ptr;
 }
 
@@ -432,7 +432,7 @@ void ov07_022346C0(SysTask *task, void *data) {
     Ov07Emitter *emitter = data;
     if (!ParticleSystem_GetActiveEmitterCount(emitter->emitter)) {
         emitter->unk20 = 0;
-        ov07_0221FF2C(emitter->emitter);
+        BattleAnimSystem_FreeParticleSystem(emitter->emitter);
         SysTask_Destroy(task);
     }
 }

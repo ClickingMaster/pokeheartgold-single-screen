@@ -203,7 +203,7 @@ void PalPadFriendCode_Setup(PalPadFriendCode *friendCode, PalPadShared *shared, 
     FillWindowPixelBuffer(&friendCode->windows[2], 0);
     text = String_New(0x80, heapId);
     buffer = String_New(0x80, heapId);
-    ownCode = DWC_CreateFriendKey(sub_0202C08C(sub_0202C6F4(shared->saveData)));
+    ownCode = DWC_CreateFriendKey(FriendRoster_GetUserData(Save_FriendRoster_Get(shared->saveData)));
     if (ownCode) {
         ReadMsgDataIntoString(gfx->msgData, 53, text);
         x = (192 - FontID_String_GetWidthMultiline(0, text, 0)) / 2;

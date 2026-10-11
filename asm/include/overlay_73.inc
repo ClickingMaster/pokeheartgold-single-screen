@@ -147,8 +147,8 @@
 .public Save_FashionData_InsertEntries
 .public Save_FashionData_Get
 .public Save_FriendGroup_Get
-.public sub_0202C8C4
-.public sub_0202C8E4
+.public FriendGroup_IsEmpty
+.public FriendGroup_Equals
 .public GameStats_AddScore
 .public sub_0202D230
 .public sub_0202D488

@@ -10,7 +10,7 @@
 #include "launch_application.h"
 #include "save_trainer_card.h"
 #include "task.h"
-#include "unk_0202C730.h"
+#include "friend_group_access.h"
 #include "unk_0202D230.h"
 #include "unk_02030A98.h"
 #include "unk_02035900.h"

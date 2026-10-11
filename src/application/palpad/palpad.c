@@ -205,23 +205,23 @@ void PalPadShared_SetNameAndCode(PalPadShared *shared, const String *name, const
 int PalPadShared_RegisterFriendCode(PalPadShared *shared, String *code, String *name) {
     int i, valid, slot;
     u64 ownKey;
-    UnkStruct_021D2230 *wifiList;
+    FriendRoster *wifiList;
 
-    wifiList = sub_0202C6F4(shared->saveData);
-    ownKey = DWC_CreateFriendKey(sub_0202C08C(wifiList));
+    wifiList = Save_FriendRoster_Get(shared->saveData);
+    ownKey = DWC_CreateFriendKey(FriendRoster_GetUserData(wifiList));
     for (i = 0; i < PALPAD_FRIEND_MAX; i++) {
-        if (sub_0202C2DC(wifiList, i) == 0) {
+        if (FriendRoster_IsFriendValid(wifiList, i) == 0) {
             u64 key = String_atoi(code, &valid);
             if (valid == TRUE && key != ownKey) {
-                if (!DWC_CheckFriendKey(sub_0202C08C(wifiList), key)) {
+                if (!DWC_CheckFriendKey(FriendRoster_GetUserData(wifiList), key)) {
                     return 1;
                 }
                 if (!sub_0203A128(shared->saveData, key, &slot)) {
                     return 2;
                 }
-                DWC_CreateFriendKeyToken(sub_0202C23C(wifiList, i), key);
+                DWC_CreateFriendKeyToken(FriendRoster_GetDwcFriendData(wifiList, i), key);
                 sub_0202C270(wifiList, i, name);
-                sub_0202C190(wifiList, i, 8, 2);
+                FriendRoster_SetEntryField(wifiList, i, 8, 2);
                 return 0;
             }
             return 1;
@@ -245,16 +245,16 @@ void PalPadShared_SetSelectedFriend(PalPadShared *shared, int index) {
 #pragma force_active on
 
 void PalPadShared_ReadFriendList(PalPadShared *shared) {
-    UnkStruct_021D2230 *wifiList;
+    FriendRoster *wifiList;
     int i;
 
     memset(&shared->friends, 0, sizeof(shared->friends));
-    wifiList = sub_0202C6F4(shared->saveData);
+    wifiList = Save_FriendRoster_Get(shared->saveData);
     shared->friends.count = 0;
     for (i = 0; i < PALPAD_FRIEND_MAX; i++) {
-        if (sub_0202C2DC(wifiList, i) == 1) {
+        if (FriendRoster_IsFriendValid(wifiList, i) == 1) {
             shared->friends.slots[shared->friends.count] = i;
-            if (sub_0202C090(wifiList, i, 8) == 2) {
+            if (FriendRoster_GetEntryField(wifiList, i, 8) == 2) {
                 shared->friends.numbers[shared->friends.count] = 0xFF;
             } else {
                 shared->friends.numbers[shared->friends.count] = shared->friends.numberedCount++;
@@ -483,7 +483,7 @@ void PalPadGfx_BufferFriendCode(PalPadGfx *gfx, u64 friendCode) {
 #pragma force_active reset
 
 void PalPadGfx_BufferFriendName(PalPadGfx *gfx, SaveData *saveData, int slot, enum HeapID heapId) {
-    UnkStruct_021D2230 *wifiList = sub_0202C6F4(saveData);
+    FriendRoster *wifiList = Save_FriendRoster_Get(saveData);
     PlayerProfile *profile = PlayerProfile_New(heapId);
 
     Save_Profile_PlayerName_Set(profile, sub_0202C254(wifiList, slot));
@@ -493,7 +493,7 @@ void PalPadGfx_BufferFriendName(PalPadGfx *gfx, SaveData *saveData, int slot, en
 
 void ov43_0222AB5C(PalPadGfx *gfx, SaveData *saveData, int slot, enum HeapID heapId) {
     PlayerProfile *profile = PlayerProfile_New(heapId);
-    UnkStruct_021D2230 *wifiList = sub_0202C6F4(saveData);
+    FriendRoster *wifiList = Save_FriendRoster_Get(saveData);
 
     Save_Profile_PlayerName_Set(profile, sub_0202C298(wifiList, slot));
     BufferPlayersName(gfx->msgFormat, 0, profile);
@@ -504,16 +504,16 @@ void ov43_0222AB5C(PalPadGfx *gfx, SaveData *saveData, int slot, enum HeapID hea
 
 // Buffers the date of the last meeting; FALSE if the friend was never met.
 BOOL PalPadGfx_BufferLastDate(PalPadGfx *gfx, SaveData *saveData, int slot) {
-    UnkStruct_021D2230 *wifiList = sub_0202C6F4(saveData);
+    FriendRoster *wifiList = Save_FriendRoster_Get(saveData);
     BOOL met = TRUE;
-    int day = sub_0202C090(wifiList, slot, 6);
+    int day = FriendRoster_GetEntryField(wifiList, slot, 6);
 
     if (!day) {
         met = FALSE;
     }
     BufferIntegerAsString(gfx->msgFormat, 2, day, 2, PRINTING_MODE_LEFT_ALIGN, TRUE);
-    BufferIntegerAsString(gfx->msgFormat, 0, sub_0202C090(wifiList, slot, 4), 4, PRINTING_MODE_LEFT_ALIGN, TRUE);
-    BufferMonthNameAbbr(gfx->msgFormat, 1, sub_0202C090(wifiList, slot, 5));
+    BufferIntegerAsString(gfx->msgFormat, 0, FriendRoster_GetEntryField(wifiList, slot, 4), 4, PRINTING_MODE_LEFT_ALIGN, TRUE);
+    BufferMonthNameAbbr(gfx->msgFormat, 1, FriendRoster_GetEntryField(wifiList, slot, 5));
     return met;
 }
 

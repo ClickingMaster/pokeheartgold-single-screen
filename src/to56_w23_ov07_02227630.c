@@ -12,9 +12,9 @@ void Pokepic_StartPaletteFade(void *, int, int, int, int);
 void SpriteSystem_DrawSprites(void *);
 void Sprite_DeleteAndFreeResources(void *);
 void Sprite_TickFrame(void *);
-void ov07_0221C448(void *, int);
+void BattleAnimSystem_DestroyTask(void *, int);
 
-extern u32 ov07_0221C4A8(void *p, int i);
+extern u32 BattleAnimSystem_GetArg(void *p, int i);
 void ov07_02222508(void *, s16, int, s16, int);
 int ov07_02222558(void *);
 void ov07_02222590(void *, int, int, int, int, int, int);
@@ -84,9 +84,9 @@ void ov07_02227630(int task, W23B *work) {
         }
         work->timer++;
         if (work->timer >= 3) {
-            int a = ((s32)ov07_0221C4A8(work->ctx, 0));
-            int b = ((s32)ov07_0221C4A8(work->ctx, 1));
-            ov07_02222508(work->anim, (s16)a, 100, (s16)b, ((s32)ov07_0221C4A8(work->ctx, 3)));
+            int a = ((s32)BattleAnimSystem_GetArg(work->ctx, 0));
+            int b = ((s32)BattleAnimSystem_GetArg(work->ctx, 1));
+            ov07_02222508(work->anim, (s16)a, 100, (s16)b, ((s32)BattleAnimSystem_GetArg(work->ctx, 3)));
             work->state++;
             return;
         }
@@ -114,7 +114,7 @@ void ov07_02227630(int task, W23B *work) {
         work->state++;
         return;
     default:
-        ov07_0221C448(work->ctx, task);
+        BattleAnimSystem_DestroyTask(work->ctx, task);
         Heap_Free(work);
         break;
     }

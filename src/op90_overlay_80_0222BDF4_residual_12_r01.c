@@ -6,8 +6,8 @@
 
 u32 FrontierScript_ReadVar(FrontierScriptContext *ctx);
 FrontierMap *sub_0209680C(void *owner);
-ManagedSprite *ov80_0223968C(FrontierMap *map, u32 idx, u32 id);
-void ov80_02239708(FrontierMap *map, u32 idx, u32 on);
+ManagedSprite *FrontierMap_CreateSprite(FrontierMap *map, u32 idx, u32 id);
+void FrontierMap_SetSpriteAnimActive(FrontierMap *map, u32 idx, u32 on);
 BOOL FrtCmd_044(FrontierScriptContext *ctx);
 
 static inline u8 ReadByte(FrontierScriptContext *ctx) {
@@ -36,10 +36,10 @@ BOOL FrtCmd_044(FrontierScriptContext *ctx) {
         draw = FrontierScript_ReadVar(ctx);
         on = ReadByte(ctx);
         idx = ReadByte(ctx);
-        sprite = ov80_0223968C(map, idx, id);
+        sprite = FrontierMap_CreateSprite(map, idx, id);
         ManagedSprite_SetPositionXY(sprite, x, y);
         ManagedSprite_SetDrawFlag(sprite, draw);
-        ov80_02239708(map, idx, on);
+        FrontierMap_SetSpriteAnimActive(map, idx, on);
     }
     ctx->scriptPtr = saved;
     return FALSE;

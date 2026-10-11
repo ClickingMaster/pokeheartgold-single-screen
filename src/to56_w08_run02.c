@@ -20,9 +20,9 @@ void ov07_02224CB8(void *task, WorkMoveA *w) {
         if (++w->timer <= w->delay) {
             return;
         }
-        a = ((s32)ov07_0221C4A8(w->owner, 0));
-        b = ((s32)ov07_0221C4A8(w->owner, 1));
-        c = ((s32)ov07_0221C4A8(w->owner, 3));
+        a = ((s32)BattleAnimSystem_GetArg(w->owner, 0));
+        b = ((s32)BattleAnimSystem_GetArg(w->owner, 1));
+        c = ((s32)BattleAnimSystem_GetArg(w->owner, 3));
         ov07_02222508(&w->move, a, 100, b, c);
         w->state++;
         return;
@@ -48,7 +48,7 @@ void ov07_02224CB8(void *task, WorkMoveA *w) {
         w->state++;
         return;
     default:
-        ov07_0221C448(w->owner, task);
+        BattleAnimSystem_DestroyTask(w->owner, task);
         Heap_Free(w);
         return;
     }

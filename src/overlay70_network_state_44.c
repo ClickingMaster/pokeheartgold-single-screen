@@ -52,7 +52,7 @@ int ov70_02244A04(Ov70Work *work) {
     u32 id;
     u32 profileId;
 
-    id = sub_0202C08C(PTR(PTR(work, 0), 0x14));
+    id = FriendRoster_GetUserData(PTR(PTR(work, 0), 0x14));
     if (Save_SysInfo_GetDwcProfileId(PTR(PTR(work, 0), 4)) == 0) {
         Save_SysInfo_SetDwcProfileId(PTR(PTR(work, 0), 4), U32(PTR(work, 0), 0x34));
     }

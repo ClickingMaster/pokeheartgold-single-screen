@@ -17,11 +17,11 @@ typedef struct Work {
     s16 y;
 } Work;
 void *BattleAnimUtil_AllocWork(void *owner, u32 size);
-u32 ov07_0221C468(void *owner);
-u32 ov07_0221C470(void *owner);
+u32 BattleAnimSystem_GetAttacker(void *owner);
+u32 BattleAnimSystem_GetDefender(void *owner);
 int ov07_02222004(void *owner, u32 battler);
-Pokepic *ov07_0221FA48(void *owner, u32 battler);
-void ov07_0221C410(void *owner, void *func, void *data);
+Pokepic *BattleAnimSystem_GetBattlerPokepic(void *owner, u32 battler);
+void BattleAnimSystem_CreateTaskDefaultPriority(void *owner, void *func, void *data);
 void ov07_02223DC4(void *task, Work *work);
 void ov07_02223E08(void *owner, int a, int b, ManagedSprite *sprite);
 
@@ -38,9 +38,9 @@ void ov07_02223E08(void *owner, int a, int b, ManagedSprite *sprite) {
     ManagedSprite_SetAffineOverwriteMode(work->sprite, 2);
     ManagedSprite_SetDrawFlag(work->sprite, FALSE);
     work->frames = 4;
-    work->height = ov07_02222004(work->owner, ov07_0221C468(work->owner));
-    pic = ov07_0221FA48(work->owner, ov07_0221C470(owner));
+    work->height = ov07_02222004(work->owner, BattleAnimSystem_GetAttacker(work->owner));
+    pic = BattleAnimSystem_GetBattlerPokepic(work->owner, BattleAnimSystem_GetDefender(owner));
     work->x = Pokepic_GetAttr(pic, 0);
     work->y = Pokepic_GetAttr(pic, 1);
-    ov07_0221C410(work->owner, ov07_02223DC4, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->owner, ov07_02223DC4, work);
 }

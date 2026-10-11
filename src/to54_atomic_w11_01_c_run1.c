@@ -40,7 +40,7 @@ void ov07_0222A8EC(void *task, A8Work *work) {
         for (i = 0; i < 4; i++) {
             Sprite_DeleteAndFreeResources(work->sprite[i]);
         }
-        ov07_0221C448(work->owner, task);
+        BattleAnimSystem_DestroyTask(work->owner, task);
         Heap_Free(work);
     } else {
         SpriteSystem_DrawSprites(work->spriteSystem);
@@ -52,7 +52,7 @@ void ov07_0222A988(void *owner, int unused1, int unused2, ManagedSprite *first) 
     A8Work *work = BattleAnimUtil_AllocWork(owner, sizeof(A8Work));
     work->delay = 10;
     BattleAnimUtil_InitCommonWork(owner, work);
-    ov07_0221F9E8(template, work->owner);
+    BattleAnimSystem_GetSpriteTemplate(template, work->owner);
     work->sprite[0] = first;
     work->timer[0] = 0;
     for (int i = 1; i < 4; i++) {
@@ -65,7 +65,7 @@ void ov07_0222A988(void *owner, int unused1, int unused2, ManagedSprite *first) 
     ManagedSprite_OffsetPositionXY(work->sprite[1], -32, 32);
     ManagedSprite_OffsetPositionXY(work->sprite[2], 32, 0);
     ManagedSprite_OffsetPositionXY(work->sprite[3], 32, 32);
-    ov07_0221C410(work->owner, (void *)ov07_0222A8EC, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->owner, (void *)ov07_0222A8EC, work);
 }
 
 typedef struct AEWork {

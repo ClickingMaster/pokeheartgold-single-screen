@@ -74,14 +74,14 @@ void ov80_0222E328(void *p, int n, void *out);
 int FrtCmd_049(void *c) {
     u16 a = FrontierScript_ReadVar(c), b = FrontierScript_ReadVar(c);
     void *p = sub_0209680C(APP(c));
-    ManagedSprite_SetAnim(ov80_02239700(p, a), b);
-    ov80_02239708(p, a, 1);
+    ManagedSprite_SetAnim(FrontierMap_GetSprite(p, a), b);
+    FrontierMap_SetSpriteAnimActive(p, a, 1);
     return 0;
 }
 
 int FrtCmd_050(void *c) {
     u16 v = FrontierScript_ReadVar(c);
-    ov80_02239708(sub_0209680C(APP(c)), v, 0);
+    FrontierMap_SetSpriteAnimActive(sub_0209680C(APP(c)), v, 0);
     return 0;
 }
 

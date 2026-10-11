@@ -18,10 +18,10 @@ extern char gWifiMatchFilterFormat[];
 
 extern int sprintf(char *dest, const char *format, ...);
 
-extern void *sub_0202C08C(void *);
-extern void *sub_0202C23C(void *, int);
-extern void sub_0202C5E4(void *, int, int);
-extern void *sub_0202C6F4(void *);
+extern void *FriendRoster_GetUserData(void *);
+extern void *FriendRoster_GetDwcFriendData(void *, int);
+extern void FriendRoster_MergeFriend(void *, int, int);
+extern void *Save_FriendRoster_Get(void *);
 extern void sub_02031214(void *, int, int);
 extern void *Save_Frontier_GetStatic(void *);
 extern int sub_02034084(void);
@@ -119,8 +119,8 @@ int WifiConnection_Init(void *saveData, int heapId, u32 heapSize, int maxPlayers
     gWifiConnection->unk_10D0 = 1;
     gWifiConnection->unk_10D6 = 1;
     if (saveData != NULL) {
-        gWifiConnection->userData = sub_0202C08C(sub_0202C6F4(gWifiConnection->saveData));
-        gWifiConnection->friendList = sub_0202C23C(sub_0202C6F4(gWifiConnection->saveData), 0);
+        gWifiConnection->userData = FriendRoster_GetUserData(Save_FriendRoster_Get(gWifiConnection->saveData));
+        gWifiConnection->friendList = FriendRoster_GetDwcFriendData(Save_FriendRoster_Get(gWifiConnection->saveData), 0);
     }
     gWifiConnection->unk_10E5 = 1;
     gWifiConnection->friendStatusData = NULL;
@@ -432,7 +432,7 @@ void ov00_021E6298(void) {
 #pragma force_active on
 
 void ov00_021E629C(int index, int srcIndex) {
-    sub_0202C5E4(sub_0202C6F4(gWifiConnection->saveData), index, srcIndex);
+    FriendRoster_MergeFriend(Save_FriendRoster_Get(gWifiConnection->saveData), index, srcIndex);
     sub_02031214(Save_Frontier_GetStatic(gWifiConnection->saveData), index, srcIndex);
 }
 

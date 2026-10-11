@@ -389,7 +389,7 @@ _022589F2:
 	b _02258C28
 _02258A0A:
 	ldr r0, [r6, #4]
-	bl ov45_0222A5C0
+	bl WiFiPlazaWork_GetMyPlayer
 	add r1, r0, #0
 	ldr r0, [r5]
 	bl sub_0203976C

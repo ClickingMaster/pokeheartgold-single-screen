@@ -83,8 +83,8 @@ BOOL ov49_02264CA8(Ov49BattleConfig *config, void *object, s32 index) {
     config->index = index;
     config->unk8 = ov45_0222A53C(object);
     config->unkA = 1;
-    a = ov45_0222A5C0(object);
-    b = ov45_0222A578(object, config->index);
+    a = WiFiPlazaWork_GetMyPlayer(object);
+    b = WiFiPlazaWork_GetPlayer(object, config->index);
     if (b == NULL) {
         return FALSE;
     }

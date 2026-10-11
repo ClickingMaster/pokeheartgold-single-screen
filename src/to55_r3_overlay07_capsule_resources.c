@@ -38,8 +38,8 @@ void ov07_02232730(SysTask *task, Ov07Work *work);
 void ov07_022329B0(Ov07Work *work);
 
 extern void *ov07_022325F4(u32 species);
-extern void *ov07_0221FEB0(enum HeapID heapId, int narcId, void *data, int unused);
-extern void *ov07_0221FEE4(NARC *narc, enum HeapID heapId, u8 resourceId, int unused);
+extern void *BattleAnimSystem_NewParticleSystemFromNarc(enum HeapID heapId, int narcId, void *data, int unused);
+extern void *BattleAnimSystem_NewParticleSystemFromOpenNarc(NARC *narc, enum HeapID heapId, u8 resourceId, int unused);
 
 Ov07Work *ov07_02232670(enum HeapID heapId) {
     Ov07Work *work = Heap_Alloc(heapId, sizeof(Ov07Work));
@@ -100,7 +100,7 @@ void ov07_02232730(SysTask *task, Ov07Work *work) {
                     if (work->resource[work->count] != NULL) {
                         GF_AssertFail();
                     }
-                    work->resource[work->count] = ov07_0221FEE4(work->narc, work->heapId, resourceId0, 0);
+                    work->resource[work->count] = BattleAnimSystem_NewParticleSystemFromOpenNarc(work->narc, work->heapId, resourceId0, 0);
                     {
                         void *resource = work->resource[work->count];
                         if (resource == NULL) {
@@ -127,7 +127,7 @@ void ov07_02232730(SysTask *task, Ov07Work *work) {
                     if (work->resource[work->count] != NULL) {
                         GF_AssertFail();
                     }
-                    work->resource[work->count] = ov07_0221FEE4(work->narc, work->heapId, resourceId1, 0);
+                    work->resource[work->count] = BattleAnimSystem_NewParticleSystemFromOpenNarc(work->narc, work->heapId, resourceId1, 0);
                     {
                         void *resource = work->resource[work->count];
                         if (resource == NULL) {
@@ -154,7 +154,7 @@ void ov07_02232730(SysTask *task, Ov07Work *work) {
                     if (work->resource[work->count] != NULL) {
                         GF_AssertFail();
                     }
-                    work->resource[work->count] = ov07_0221FEE4(work->narc, work->heapId, resourceId2, 0);
+                    work->resource[work->count] = BattleAnimSystem_NewParticleSystemFromOpenNarc(work->narc, work->heapId, resourceId2, 0);
                     {
                         void *resource = work->resource[work->count];
                         if (resource == NULL) {
@@ -181,7 +181,7 @@ void ov07_02232730(SysTask *task, Ov07Work *work) {
                     if (work->resource[work->count] != NULL) {
                         GF_AssertFail();
                     }
-                    work->resource[work->count] = ov07_0221FEE4(work->narc, work->heapId, resourceId3, 0);
+                    work->resource[work->count] = BattleAnimSystem_NewParticleSystemFromOpenNarc(work->narc, work->heapId, resourceId3, 0);
                     {
                         void *resource = work->resource[work->count];
                         if (resource == NULL) {
@@ -205,7 +205,7 @@ void ov07_022329B0(Ov07Work *work) {
     if (work->useCapsule == 0) {
         void *data = ov07_022325F4(work->species);
         work->count = 1;
-        work->resource[0] = ov07_0221FEB0(work->heapId, 0x5F, data, 0);
+        work->resource[0] = BattleAnimSystem_NewParticleSystemFromNarc(work->heapId, 0x5F, data, 0);
         work->state = 0xFF;
     } else {
         SysTask *task;

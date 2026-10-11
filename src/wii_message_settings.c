@@ -42,7 +42,7 @@
 #include "title_screen.h"
 #include "oam_manager.h"
 #include "touchpad.h"
-#include "unk_0202C034.h"
+#include "friend_roster.h"
 #include "unk_0203170C.h"
 #include "unk_02034B0C.h"
 #include "unk_02037C94.h"
@@ -1722,9 +1722,9 @@ BOOL ov75_022488BC(WiiMessageSettingsScreen *screen) {
 }
 
 BOOL WiiMessageSettingsScreen_StartServerSession(WiiMessageSettingsScreen *screen) {
-    void *wifiList = sub_0202C6F4(screen->app->saveData);
+    void *wifiList = Save_FriendRoster_Get(screen->app->saveData);
     SysInfo *sysInfo = Save_SysInfo_Get(screen->app->saveData);
-    void *userData = sub_0202C08C(wifiList);
+    void *userData = FriendRoster_GetUserData(wifiList);
     u32 profileId;
     u64 friendKey;
 

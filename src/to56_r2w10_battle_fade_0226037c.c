@@ -40,9 +40,9 @@ void ov12_02261B80(BattleSystem *, void *, void *, void *);
 void ov12_02261CA8(BattleSystem *, void *, void *, int);
 void ov07_02234A20(void *, int);
 void ov07_0223494C(void *, int);
-BOOL ov07_0221C3B0(void *);
-void ov07_0221C3C0(void *);
-void ov07_0221C394(void);
+BOOL BattleAnimSystem_IsActive(void *);
+void BattleAnimSystem_EndMove(void *);
+void BattleAnimSystem_Execute(void);
 void ov12_02260418(SysTask *, void *);
 
 void ov12_0226037C(SysTask *task, void *arg) {

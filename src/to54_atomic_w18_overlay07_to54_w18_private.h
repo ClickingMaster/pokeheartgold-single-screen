@@ -6,11 +6,11 @@
 typedef void *Handle;
 
 void *BattleAnimUtil_AllocWork(void *, u32);
-void ov07_0221C410(void *, void (*)(void *, void *), void *);
-void ov07_0221C448(void *, void *);
-void *ov07_0221C468(void *);
-void *ov07_0221C470(void *);
-void *ov07_0221FA48(void *, void *);
+void BattleAnimSystem_CreateTaskDefaultPriority(void *, void (*)(void *, void *), void *);
+void BattleAnimSystem_DestroyTask(void *, void *);
+void *BattleAnimSystem_GetAttacker(void *);
+void *BattleAnimSystem_GetDefender(void *);
+void *BattleAnimSystem_GetBattlerPokepic(void *, void *);
 void *ov07_0221FAA0(void *, void *);
 void *ov07_02222004(void *, void *);
 void ov07_022220B8(void *, void *, s16, s16);

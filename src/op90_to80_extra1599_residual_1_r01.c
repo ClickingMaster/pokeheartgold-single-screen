@@ -18,9 +18,9 @@ typedef struct Work {
     u8 unk58[4];
 } Work;
 void *BattleAnimUtil_AllocWork(void *owner, u32 size);
-u32 ov07_0221C470(void *owner);
-Pokepic *ov07_0221FA48(void *owner, u32 battler);
-void ov07_0221C410(void *owner, void *func, void *data);
+u32 BattleAnimSystem_GetDefender(void *owner);
+Pokepic *BattleAnimSystem_GetBattlerPokepic(void *owner, u32 battler);
+void BattleAnimSystem_CreateTaskDefaultPriority(void *owner, void *func, void *data);
 void ov07_0222E108(void *task, Work *work);
 void ov07_0222E2EC(void *owner, int a, int b, ManagedSprite *sprite);
 
@@ -31,9 +31,9 @@ void ov07_0222E2EC(void *owner, int a, int b, ManagedSprite *sprite) {
     work->owner = owner;
     work->a = a;
     work->b = b;
-    work->pic = ov07_0221FA48(work->owner, ov07_0221C470(owner));
+    work->pic = BattleAnimSystem_GetBattlerPokepic(work->owner, BattleAnimSystem_GetDefender(owner));
     for (i = 0; i < 4; i++) {
-        work->pics[i] = ov07_0221FA48(work->owner, i);
+        work->pics[i] = BattleAnimSystem_GetBattlerPokepic(work->owner, i);
     }
     work->sprite = sprite;
     ManagedSprite_SetDrawPriority(work->sprite, 100);
@@ -45,5 +45,5 @@ void ov07_0222E2EC(void *owner, int a, int b, ManagedSprite *sprite) {
     ManagedSprite_SetOamMode(work->sprite, GX_OAM_MODE_XLU);
     work->alpha = -16;
     G2_SetBlendAlpha(0, GX_BLEND_PLANEMASK_BG0 | GX_BLEND_PLANEMASK_BG1 | GX_BLEND_PLANEMASK_BG2 | GX_BLEND_PLANEMASK_BG3 | GX_BLEND_PLANEMASK_OBJ | GX_BLEND_PLANEMASK_BD, 31, 26);
-    ov07_0221C410(work->owner, ov07_0222E108, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->owner, ov07_0222E108, work);
 }

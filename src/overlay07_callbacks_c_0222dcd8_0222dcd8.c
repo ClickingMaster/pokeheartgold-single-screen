@@ -14,7 +14,7 @@ void ov07_0222DCD8(void *owner, void *data) {
         break;
     case 1:
         Sprite_DeleteAndFreeResources(PTR(data, 0x3C));
-        ov07_0221C448(PTR(data, 0), owner);
+        BattleAnimSystem_DestroyTask(PTR(data, 0), owner);
         Heap_Free(data);
         return;
     }

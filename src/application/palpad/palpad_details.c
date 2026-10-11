@@ -432,8 +432,8 @@ void PalPadDetails_HideForFriendChange(PalPadDetails *details, PalPadGfx *gfx) {
 // Top screen: number, name (in the gender colour), group, last meeting and the Union Room avatar.
 void PalPadDetails_DrawProfile(PalPadDetails *details, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     UnkStruct_02070D3C avatar;
-    UnkStruct_021D2230 *wifiList = sub_0202C6F4(shared->saveData);
-    int gender = sub_0202C090(wifiList, shared->friends.slots[shared->selectedFriend], 8);
+    FriendRoster *wifiList = Save_FriendRoster_Get(shared->saveData);
+    int gender = FriendRoster_GetEntryField(wifiList, shared->friends.slots[shared->selectedFriend], 8);
     u32 i;
     u32 color;
     void *bitmap;
@@ -460,7 +460,7 @@ void PalPadDetails_DrawProfile(PalPadDetails *details, PalPadShared *shared, Pal
     if (PalPadGfx_BufferLastDate(gfx, shared->saveData, shared->friends.slots[shared->selectedFriend])) {
         PalPadDetails_PrintProfileText(&details->profileWindows[4], shared, gfx, 28, 0, 0, MAKE_TEXT_COLOR(1, 2, 0));
     }
-    sub_02070D84(GetUnionRoomAvatarAttrBySprite(gender, sub_0202C090(wifiList, shared->friends.slots[shared->selectedFriend], 7), 1), 2, &avatar);
+    sub_02070D84(GetUnionRoomAvatarAttrBySprite(gender, FriendRoster_GetEntryField(wifiList, shared->friends.slots[shared->selectedFriend], 7), 1), 2, &avatar);
     bitmap = Heap_Alloc(heapId, 80 * 80 / 2);
     sub_020141C4(avatar.narcId, avatar.ncbr_id, heapId, 0, 0, 10, 10, bitmap);
     BlitBitmapRectToWindow(&details->profileWindows[5], bitmap, 0, 0, 80, 80, 0, 0, 80, 80);
@@ -547,7 +547,7 @@ void PalPadDetails_ClearTabs(PalPadDetails *details, PalPadGfx *gfx) {
 
 // direction 0: previous, 1: next; skips friends that were never met
 BOOL PalPadDetails_SelectNextFriend(PalPadShared *shared, int direction) {
-    UnkStruct_021D2230 *wifiList = sub_0202C6F4(shared->saveData);
+    FriendRoster *wifiList = Save_FriendRoster_Get(shared->saveData);
     int current = shared->selectedFriend;
     u32 i;
 
@@ -557,7 +557,7 @@ BOOL PalPadDetails_SelectNextFriend(PalPadShared *shared, int direction) {
             if (current < 0) {
                 current += shared->friends.count;
             }
-            if (sub_0202C090(wifiList, shared->friends.slots[current], 8) != 2) {
+            if (FriendRoster_GetEntryField(wifiList, shared->friends.slots[current], 8) != 2) {
                 shared->selectedFriend = current;
                 return TRUE;
             }
@@ -565,7 +565,7 @@ BOOL PalPadDetails_SelectNextFriend(PalPadShared *shared, int direction) {
     } else {
         for (i = 0; i < shared->friends.count - 1; i++) {
             current = (current + 1) % shared->friends.count;
-            if (sub_0202C090(wifiList, shared->friends.slots[current], 8) != 2) {
+            if (FriendRoster_GetEntryField(wifiList, shared->friends.slots[current], 8) != 2) {
                 shared->selectedFriend = current;
                 return TRUE;
             }
@@ -699,7 +699,7 @@ void PalPadDetailsSlot_Clear(PalPadDetailsSlot *slot, PalPadGfx *gfx) {
 
 // Record pages: Union Room records, Wi-Fi Plaza, Battle Frontier facilities, return tab
 void ov43_0222DFB0(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx) {
-    UnkStruct_021D2230 *wifiList = sub_0202C6F4(shared->saveData);
+    FriendRoster *wifiList = Save_FriendRoster_Get(shared->saveData);
     u32 i;
     u32 y;
 
@@ -708,13 +708,13 @@ void ov43_0222DFB0(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx
     y = 0;
     do {
         PalPadDetailsSlot_Print(slot, 0, 2, shared, gfx, 0x14 + i, 0, (u8)y, 0x10200, gfx->pageText, gfx->pageBuffer, 0);
-        PalPadGfx_BufferNumber(gfx, sub_0202C090(wifiList, shared->friends.slots[shared->selectedFriend], i + 1));
+        PalPadGfx_BufferNumber(gfx, FriendRoster_GetEntryField(wifiList, shared->friends.slots[shared->selectedFriend], i + 1));
         PalPadDetailsSlot_Print(slot, 0, 2, shared, gfx, 0x16, 0, (u8)y, 0x10200, gfx->pageText, gfx->pageBuffer, 0);
         y += 0x18;
         i++;
     } while (i < 2);
     PalPadDetailsSlot_Print(slot, 0, 1, shared, gfx, 0x17, 0, 0, 0x10200, gfx->pageText, gfx->pageBuffer, 0);
-    PalPadGfx_BufferNumber(gfx, sub_0202C090(wifiList, shared->friends.slots[shared->selectedFriend], 3));
+    PalPadGfx_BufferNumber(gfx, FriendRoster_GetEntryField(wifiList, shared->friends.slots[shared->selectedFriend], 3));
     PalPadDetailsSlot_Print(slot, 0, 3, shared, gfx, 0x18, 0, 0, 0x10200, gfx->pageText, gfx->pageBuffer, 0);
     PalPadDetailsSlot_CopyWindowsToVram(slot, 0);
 }
@@ -848,26 +848,26 @@ void ov43_0222E904(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx
 }
 
 void PalPadDetails_PrintWiFiPlazaPage(PalPadDetailsSlot *slot, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
-    UnkStruct_021D2230 *wifiList;
+    FriendRoster *wifiList;
     String *raw;
     String *expanded;
 
     Save_Frontier_GetStatic(shared->saveData);
-    wifiList = sub_0202C6F4(shared->saveData);
+    wifiList = Save_FriendRoster_Get(shared->saveData);
     raw = String_New(0x80, heapId);
     expanded = String_New(0x80, heapId);
     PalPadDetailsSlot_Print(slot, 1, 0, shared, gfx, 0x2f, 0, 0, 0x10200, raw, expanded, 0);
     PalPadGfx_BufferActivityName(gfx, 0);
     PalPadDetailsSlot_Print(slot, 1, 0, shared, gfx, 0x30, 0, 0x18, 0x10200, raw, expanded, 0);
-    PalPadGfx_BufferNumber(gfx, sub_0202C090(wifiList, shared->friends.slots[shared->selectedFriend], 10));
+    PalPadGfx_BufferNumber(gfx, FriendRoster_GetEntryField(wifiList, shared->friends.slots[shared->selectedFriend], 10));
     PalPadDetailsSlot_Print(slot, 1, 0, shared, gfx, 0x31, 0x78, 0x18, 0x10200, raw, expanded, 0);
     PalPadGfx_BufferActivityName(gfx, 1);
     PalPadDetailsSlot_Print(slot, 1, 0, shared, gfx, 0x30, 0, 0x30, 0x10200, raw, expanded, 0);
-    PalPadGfx_BufferNumber(gfx, sub_0202C090(wifiList, shared->friends.slots[shared->selectedFriend], 11));
+    PalPadGfx_BufferNumber(gfx, FriendRoster_GetEntryField(wifiList, shared->friends.slots[shared->selectedFriend], 11));
     PalPadDetailsSlot_Print(slot, 1, 0, shared, gfx, 0x31, 0x78, 0x30, 0x10200, raw, expanded, 0);
     PalPadGfx_BufferActivityName(gfx, 2);
     PalPadDetailsSlot_Print(slot, 1, 0, shared, gfx, 0x30, 0, 0x48, 0x10200, raw, expanded, 0);
-    PalPadGfx_BufferNumber(gfx, sub_0202C090(wifiList, shared->friends.slots[shared->selectedFriend], 12));
+    PalPadGfx_BufferNumber(gfx, FriendRoster_GetEntryField(wifiList, shared->friends.slots[shared->selectedFriend], 12));
     PalPadDetailsSlot_Print(slot, 1, 0, shared, gfx, 0x31, 0x78, 0x48, 0x10200, raw, expanded, 0);
     PalPadDetailsSlot_CopyWindowsToVram(slot, 1);
     String_Delete(raw);

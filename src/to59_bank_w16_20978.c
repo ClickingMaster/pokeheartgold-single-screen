@@ -33,7 +33,7 @@ void ov07_02220978(void *emitter, Work *work) {
     case 8: ov07_02231DA0(work->context, work->indexA, &value); break;
     case 9: ov07_02231DA0(work->context, work->indexB, &value); break;
     case 3:
-        ov07_0221F9A8(work->context, &param, 4);
+        BattleAnimSystem_ReadScriptArgs(work->context, &param, 4);
         work->scale = ov07_02221664(work);
         value.x = param.value.x;
         value.y = param.value.y;

@@ -15,8 +15,8 @@ void ov07_0223049C(void *owner, Ov07FadeWork *work) {
         break;
     case 1:
         if (--work->timer < 0) {
-            palette = ov07_0221FA78(work->owner);
-            PaletteData_BeginPaletteFade(palette, 1, ov07_0221E6C8(work->owner), 0, 0, 0x10, 0xFFFF);
+            palette = BattleAnimSystem_GetPaletteData(work->owner);
+            PaletteData_BeginPaletteFade(palette, 1, BattleAnimSystem_GetBattleBgPaletteMask(work->owner), 0, 0, 0x10, 0xFFFF);
             work->state++;
         }
         break;
@@ -30,21 +30,21 @@ void ov07_0223049C(void *owner, Ov07FadeWork *work) {
         }
         break;
     case 3:
-        if (PaletteData_GetSelectedBuffersBitmask(ov07_0221FA78(work->owner)) == 0) {
+        if (PaletteData_GetSelectedBuffersBitmask(BattleAnimSystem_GetPaletteData(work->owner)) == 0) {
             work->state++;
             *(vu32 *)0x04000000 &= 0xFFFF1FFF;
-            PaletteData_BeginPaletteFade(ov07_0221FA78(work->owner), 1, ov07_0221E6C8(work->owner), 0, 0x10, 0, 0xFFFF);
+            PaletteData_BeginPaletteFade(BattleAnimSystem_GetPaletteData(work->owner), 1, BattleAnimSystem_GetBattleBgPaletteMask(work->owner), 0, 0x10, 0, 0xFFFF);
         }
         break;
     case 4:
-        palette = ov07_0221FA78(work->owner);
+        palette = BattleAnimSystem_GetPaletteData(work->owner);
         if (PaletteData_GetSelectedBuffersBitmask(palette) == 0) {
             work->state++;
         }
         break;
     case 5:
         Heap_Free(work);
-        ov07_0221C448(work->owner, owner);
+        BattleAnimSystem_DestroyTask(work->owner, owner);
         break;
     }
 }

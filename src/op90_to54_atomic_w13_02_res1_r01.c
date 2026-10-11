@@ -26,8 +26,8 @@ typedef struct Work0230 {
 extern OffsetTable ov07_02235440;
 extern OffsetTable ov07_02235488;
 void *ParticleSystem_GetEmitterParam(void);
-u32 ov07_0221C468(void *ctx);
-u32 ov07_0221C470(void *ctx);
+u32 BattleAnimSystem_GetAttacker(void *ctx);
+u32 BattleAnimSystem_GetDefender(void *ctx);
 int BattleAnimUtil_GetBattlerType(void *ctx, u32 battler);
 void ov07_02220230(Work0230 *work);
 
@@ -43,8 +43,8 @@ void ov07_02220230(Work0230 *work) {
     tableA = ov07_02235440;
     tableB = ov07_02235488;
     ctx = ParticleSystem_GetEmitterParam();
-    attacker = ov07_0221C468(ctx);
-    defender = ov07_0221C470(ctx);
+    attacker = BattleAnimSystem_GetAttacker(ctx);
+    defender = BattleAnimSystem_GetDefender(ctx);
     kindA = BattleAnimUtil_GetBattlerType(ctx, attacker);
     kindB = BattleAnimUtil_GetBattlerType(ctx, defender);
     offA = tableA.values[kindA][kindB] * sizeof(Entry0230);

@@ -235,7 +235,7 @@ u32 sub_020674B0(u32 value) {
 }
 
 u32 sub_020674BC(SaveData *saveData) {
-    u32 value = sub_020674B0(sub_0202C7DC(Save_FriendGroup_Get(saveData)));
+    u32 value = sub_020674B0(Save_FriendGroup_GetCurrentSeed(Save_FriendGroup_Get(saveData)));
     sub_0202D638(Save_FrontierData_Get(saveData), value);
     return value;
 }

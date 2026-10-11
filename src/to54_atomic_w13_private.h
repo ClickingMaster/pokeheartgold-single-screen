@@ -27,9 +27,9 @@ void ParticleEmitter_GetConvergencePos(SPLEmitter *, VecFx32 *);
 void ParticleEmitter_SetMagnetPos(SPLEmitter *, VecFx32 *);
 void ParticleEmitter_GetMagnetPos(SPLEmitter *, VecFx32 *);
 
-int ov07_0221C468(void *);
-int ov07_0221C470(void *);
-SPLEmitter *ov07_0221C478(void *);
+int BattleAnimSystem_GetAttacker(void *);
+int BattleAnimSystem_GetDefender(void *);
+SPLEmitter *BattleAnimSystem_GetCurrentParticleSystem(void *);
 void *ov07_0221BFC0(void *);
 int BattleAnimUtil_GetBattlerType(void *, int);
 int BattleAnimUtil_GetBattlerSide(void *, int);
@@ -37,8 +37,8 @@ int BattleAnimUtil_GetOpposingBattlerType(int);
 void ov07_02231AD0(int, VecFx32 *, void *, int);
 void ov07_02231B90(void *, int, VecFx32 *);
 void BattleAnimUtil_GetCameraUp(int, VecFx32 *);
-void ov07_0221F9A8(void *, void *, int);
-int ov07_0221FF34(void *, int, int);
+void BattleAnimSystem_ReadScriptArgs(void *, void *, int);
+int BattleAnimSystem_GetSideSign(void *, int, int);
 
 void ov07_0222036C(void *, SPLEmitter *, int, int, int, s8, VecFx32 *);
 void ov07_0222043C(void *, SPLEmitter *, int, int, int, s8, VecFx32 *);

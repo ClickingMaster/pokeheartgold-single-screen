@@ -51,7 +51,7 @@ void sub_02034434(void) {
 
     netId = Comm_GetLocalNetId();
     friends = Save_FriendGroup_Get(_021D4130->save);
-    r7 = sub_0202C6F4(_021D4130->save);
+    r7 = Save_FriendRoster_Get(_021D4130->save);
     wifi = Save_WiFiHistory_Get(_021D4130->save);
     profile = _021D4130->unk00;
     if (profile == NULL) {
@@ -59,11 +59,11 @@ void sub_02034434(void) {
     }
     PlayerProfile_Copy(profile, _021D4130->profiles[netId]);
     OS_GetMacAddress(_021D4130->entries[netId].mac);
-    MI_CpuCopy8(sub_0202C7E0(friends, 1, 0), _021D4130->entries[netId].unk4C, 0x10);
+    MI_CpuCopy8(Save_FriendGroup_GetName(friends, 1, 0), _021D4130->entries[netId].unk4C, 0x10);
     _021D4130->entries[netId].country = WifiHistory_GetPlayerCountry(wifi);
     _021D4130->entries[netId].region = WiFiHistory_GetPlayerRegion(wifi);
     _021D4130->entries[netId].unk65 = 0;
-    DWC_CreateExchangeToken(sub_0202C08C(r7), _021D4130->entries[netId].token);
+    DWC_CreateExchangeToken(FriendRoster_GetUserData(r7), _021D4130->entries[netId].token);
     MI_CpuFill8(&_021D4130->entries[netId], 0, 0x20);
     if (_021D4130->rules != NULL) {
         LinkBattleRuleset_Copy(_021D4130->rules, &_021D4130->entries[netId]);
@@ -331,7 +331,7 @@ void sub_02034A20(void *save) {
     int i;
     void *tok;
 
-    r = sub_0202C6F4(save);
+    r = Save_FriendRoster_Get(save);
     for (i = 0; i < Comm_CountConnected(); i++) {
         tok = sub_0203484C(i);
         if (tok != NULL) {

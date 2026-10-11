@@ -101,7 +101,7 @@ extern void sub_0203976C(SaveData *saveData, s32 profileId);
 extern void sub_020397C8(void);
 extern int sub_020397E4(void);
 extern BOOL sub_020397FC(void);
-extern void *ov45_0222A5C0(void *lobby);
+extern void *WiFiPlazaWork_GetMyPlayer(void *lobby);
 extern void ov45_0222B244(void *lobby);
 extern void ov45_0222B270(void *lobby);
 extern int ov45_0222D7CC(u32 errorCode, u32 errorType);
@@ -199,7 +199,7 @@ BOOL WiFiPlazaConnect_Main(OverlayManager *man, int *state) {
         break;
     }
     case 4:
-        sub_0203976C(work->saveData, (s32)ov45_0222A5C0(args->lobby));
+        sub_0203976C(work->saveData, (s32)WiFiPlazaWork_GetMyPlayer(args->lobby));
         WiFiPlazaConnect_PrintMessage(&work->statusBox, msg_0800_00023);
         WiFiPlazaConnect_StartWaitingIcon(&work->statusBox);
         (*state)++;

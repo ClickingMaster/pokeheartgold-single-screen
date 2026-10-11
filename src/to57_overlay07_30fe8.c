@@ -40,21 +40,21 @@ typedef struct Work30F98 {
     u8 motion[0x28];
 } Work30F98;
 
-extern u32 ov07_0221C4A8(void *p, int i);
+extern u32 BattleAnimSystem_GetArg(void *p, int i);
 extern void *BattleAnimUtil_AllocWork(void *, int);
 extern void BattleAnimUtil_InitCommonWork(void *, void *);
-extern void *ov07_0221C4E8(void *, int);
-extern int ov07_0221FB04(void *, int);
+extern void *BattleAnimSystem_GetBattlerSprite(void *, int);
+extern int BattleAnimSystem_GetBgPriority(void *, int);
 void ov07_022310E0(void *, void *, void *, void *);
-extern void *ov07_0221C468(void *);
-extern void *ov07_0221C470(void *);
+extern void *BattleAnimSystem_GetAttacker(void *);
+extern void *BattleAnimSystem_GetDefender(void *);
 extern int BattleAnimUtil_GetBattlerType(void *, void *);
 extern int ov07_0221BFC0(void *);
 extern void ManagedSprite_SetDrawPriority(void *, int);
 extern void ManagedSprite_SetPriority(void *, int);
 extern void ManagedSprite_SetDrawFlag(void *, int);
 extern void ManagedSprite_SetOamMode(void *, int);
-extern void ov07_0221C410(void *, void (*)(void *, void *), void *);
+extern void BattleAnimSystem_CreateTaskDefaultPriority(void *, void (*)(void *, void *), void *);
 extern void ov07_022222F0(void *, void *);
 extern int ov07_02222748(void *, void *);
 extern void ManagedSprite_GetPositionXY(void *, s16 *, s16 *);
@@ -67,7 +67,7 @@ extern void ov07_02222508(void *, int, int, int, int);
 extern void ov07_02230FE8(void *, void *);
 extern void Sprite_DeleteAndFreeResources(void *);
 extern void SpriteSystem_DrawSprites(void *);
-extern void ov07_0221C448(void *, void *);
+extern void BattleAnimSystem_DestroyTask(void *, void *);
 extern void Heap_Free(void *);
 
 void ov07_02230F0C(void *, void *, void *, int);
@@ -94,9 +94,9 @@ extern BOOL ManagedSprite_IsAnimated(void *);
 extern void BattleAnimUtil_SetBlendWithBattleBg(void *, int, int);
 
 void ov07_022310E0(void *, void *, void *, void *);
-extern void *ov07_0221C468(void *);
+extern void *BattleAnimSystem_GetAttacker(void *);
 extern int ov07_02222004(void *, void *);
-extern void ov07_0221F9E8(void *, void *);
+extern void BattleAnimSystem_GetSpriteTemplate(void *, void *);
 extern int ov07_02221F80(void *, void *, int);
 extern void *SpriteSystem_NewSprite(void *, void *, const void *);
 
@@ -131,7 +131,7 @@ void ov07_02230FE8(void *task, void *work_) {
         break;
     case 4:
         Sprite_DeleteAndFreeResources(work->sprite);
-        ov07_0221C448(work->owner, task);
+        BattleAnimSystem_DestroyTask(work->owner, task);
         Heap_Free(work);
         return;
     }
@@ -146,9 +146,9 @@ void ov07_022310E0(void *owner, void *spriteSystem, void *spriteManager, void *f
     int i;
     work->owner = owner;
     work->spriteSystem = spriteManager;
-    object = ov07_0221C468(work->owner);
+    object = BattleAnimSystem_GetAttacker(work->owner);
     multiplier = ov07_02222004(owner, object);
-    ov07_0221F9E8(&template, work->owner);
+    BattleAnimSystem_GetSpriteTemplate(&template, work->owner);
     *(s16 *)&template[0] = ov07_02221F80(owner, object, 0);
     *(s16 *)&template[2] = ov07_02221F80(owner, object, 1);
     for (i = 5; i >= 0; i--) {
@@ -163,7 +163,7 @@ void ov07_022310E0(void *owner, void *spriteSystem, void *spriteManager, void *f
         ManagedSprite_SetDrawFlag(work->sprites[i], 0);
         ov07_022311B0(work->sprites[i], &work->hide[i], &work->show[i], i, multiplier);
     }
-    ov07_0221C410(work->owner, (void (*)(void *, void *))ov07_02231234, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->owner, (void (*)(void *, void *))ov07_02231234, work);
 }
 
 void ov07_022311B0(void *sprite, int *a, int *b, int index, int mul) {

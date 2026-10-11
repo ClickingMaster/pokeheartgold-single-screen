@@ -4,8 +4,8 @@
 
 void ov07_02220884(void *arg) {
     void *p = ParticleSystem_GetEmitterParam(arg);
-    int a = ov07_0221C468(p);
-    int b = ov07_0221C470(p);
+    int a = BattleAnimSystem_GetAttacker(p);
+    int b = BattleAnimSystem_GetDefender(p);
     ov07_0222050C(p, (int)arg, b, a, 0, 0);
 }
 
@@ -27,9 +27,9 @@ void ov07_022208B4(void *a, void *p) {
 
 void ov07_022208F8(void *unused, void **pp, int x) {
     void *p = *pp;
-    ov07_0221C478(p);
+    BattleAnimSystem_GetCurrentParticleSystem(p);
     int d = ParticleSystem_GetPerspectiveType();
-    int a = ov07_0221C470(p);
+    int a = BattleAnimSystem_GetDefender(p);
     int n = BattleAnimUtil_GetBattlerSide(p, a) != 3;
     int b = ov07_0221BFC0(p);
     ov07_02231AD0(n, x, b, d);
@@ -37,9 +37,9 @@ void ov07_022208F8(void *unused, void **pp, int x) {
 
 void ov07_02220938(void *unused, void **pp, int x) {
     void *p = *pp;
-    ov07_0221C478(p);
+    BattleAnimSystem_GetCurrentParticleSystem(p);
     int d = ParticleSystem_GetPerspectiveType();
-    int a = ov07_0221C468(p);
+    int a = BattleAnimSystem_GetAttacker(p);
     int n = BattleAnimUtil_GetBattlerSide(p, a) != 3;
     int b = ov07_0221BFC0(p);
     ov07_02231AD0(n, x, b, d);

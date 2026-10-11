@@ -6,7 +6,7 @@ typedef struct {
 extern void *ov49_02259FE8(void*),*ov49_02259FF0(void*);
 extern State *ov49_0225EF84(void*),*ov49_0225EF40(void*,int);
 extern u32 ov45_0222B034(void*),ov45_0222B040(void*),ov45_0222B06C(void*),ov45_0222B020(void*),ov45_0222B028(void*),ov45_0222B0B0(void*);
-extern void *ov45_0222A5C0(void*),*ov45_0222A578(void*,int),*ov45_0222AAC8(void*);
+extern void *WiFiPlazaWork_GetMyPlayer(void*),*WiFiPlazaWork_GetPlayer(void*,int),*ov45_0222AAC8(void*);
 extern u32 ov49_0225EF88(void*),ov49_0225A0DC(void*),ov49_0225A1D4(void*),ov49_0225CB70(void*),ov49_02258DAC(void*);
 extern void ov49_0225EF8C(void*,int),ov49_0225A0CC(void*),ov49_0225A0BC(void*),ov49_0225A0EC(void*),ov49_0225A4D0(void*),ov49_0225EF68(void*);
 extern void ov45_0222A5E8(void*,int),ov45_0222B0E8(void*,u32),ov45_0222B118(void*,int),ov45_0222AED8(void*,u16),ov45_0222B0BC(void*),ov45_0222AFC4(void*),ov45_0222AE64(void*),ov45_0222B0D8(void*,int),ov45_0222A704(void*,u16,void*);
@@ -22,7 +22,7 @@ int ov49_02263B74(void *task,void *ctx){
  void *game=ov49_02259FE8(ctx);State*s=ov49_0225EF84(task);
  u32 status=ov45_0222B034(game),selection=ov45_0222B040(game);void *b,*a;
  if(ov45_0222B06C(game) && s && s->flagA==1){ov49_0225EF8C(task,26);ov49_0225A0CC(ctx);s->flagA=0;}
- if(s){b=ov45_0222A5C0(game);a=ov45_0222A578(game,s->active);}
+ if(s){b=WiFiPlazaWork_GetMyPlayer(game);a=WiFiPlazaWork_GetPlayer(game,s->active);}
  if(ov49_0225EF88(task)!=0 && s->flagA==1 && !a){ov49_0225EF8C(task,26);ov49_0225A0CC(ctx);s->flagA=0;}
  switch(ov49_0225EF88(task)){
  case 0:{u32 value;int result;s=ov49_0225EF40(task,80);s->special=0;s->specialValue=0;s->specialData=0;value=ov45_0222B020(game);result=ov49_02264CA8(s,game,value);PlaySE(1508);ov45_0222A5E8(game,9);if(result==1){ov49_0225A428(ctx,value,0);ov45_0222B0E8(game,value);ov49_0225EF8C(task,1);}else ov49_0225EF8C(task,26);break;}
@@ -38,7 +38,7 @@ int ov49_02263B74(void *task,void *ctx){
  case 10:ov49_0225A334(ctx,s->active,0);ov49_02264E90(s,game,ctx,1,1);ov49_0225A08C(ctx,ov49_02264C04(ctx,s->active,511));ov49_02264CFC(s,128,11,task,30);break;
  case 11:ov49_0225A334(ctx,s->active,0);ov49_02264E90(s,game,ctx,1,1);ov49_0225A08C(ctx,ov49_02264C04(ctx,s->active,512));ov49_02264CFC(s,128,12,task,30);break;
  case 12:ov49_0225A334(ctx,s->active,0);ov49_02264E90(s,game,ctx,1,1);ov49_0225A08C(ctx,ov49_02264C04(ctx,s->active,513));ov49_02264CFC(s,128,13,task,30);break;
- case 13:PlaySE(1471);ov49_0225A334(ctx,s->active,0);ov49_0225A08C(ctx,ov49_02264C04(ctx,s->active,514));ov49_02264CFC(s,128,8,task,30);ov45_0222AED8(game,2);ov49_0225A478(ctx,ov45_0222AAC8(ov45_0222A5C0(game)));break;
+ case 13:PlaySE(1471);ov49_0225A334(ctx,s->active,0);ov49_0225A08C(ctx,ov49_02264C04(ctx,s->active,514));ov49_02264CFC(s,128,8,task,30);ov45_0222AED8(game,2);ov49_0225A478(ctx,ov45_0222AAC8(WiFiPlazaWork_GetMyPlayer(game)));break;
  case 14:ov49_0225A334(ctx,s->active,0);ov49_02264E90(s,game,ctx,1,1);ov49_0225A08C(ctx,ov49_02264C04(ctx,s->active,507));ov49_02264CFC(s,128,27,task,30);ov45_0222AED8(game,2);break;
  case 15:ov49_0225A334(ctx,s->active,0);ov49_0225A08C(ctx,ov49_02264C04(ctx,s->active,687));ov49_02264CFC(s,128,16,task,30);break;
  case 16:switch(status){case 3:ov49_0225EF8C(task,17);ov49_0225A0CC(ctx);ov45_0222B0BC(game);s->flag=1;break;case 2:if(!ov49_0225A0DC(ctx))ov49_0225A0BC(ctx);ov49_02264EC8(s,ctx);break;case 0:case 1:case 4:default:ov49_0225EF8C(task,26);ov49_0225A0CC(ctx);break;}break;

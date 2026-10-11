@@ -35,16 +35,16 @@ typedef struct B320Work {
 
 void *BattleAnimUtil_AllocWork(void *owner, u32 size);
 void BattleAnimUtil_InitCommonWork(void *owner, void *work);
-void ov07_0221F9E8(ManagedSpriteTemplate *template, void *owner);
-u32 ov07_0221C468(void *owner);
-u32 ov07_0221C470(void *owner);
-Pokepic *ov07_0221FA48(void *owner, u32 battler);
+void BattleAnimSystem_GetSpriteTemplate(ManagedSpriteTemplate *template, void *owner);
+u32 BattleAnimSystem_GetAttacker(void *owner);
+u32 BattleAnimSystem_GetDefender(void *owner);
+Pokepic *BattleAnimSystem_GetBattlerPokepic(void *owner, u32 battler);
 void ov07_02222268(Motion *motion, s16 x0, s16 x1, s16 y0, s16 y1, int frames);
 u32 BattleAnimUtil_GetBattlerSide(void *owner, u32 battler);
 BOOL ov07_022222B4(Motion *motion);
-int ov07_0221FB04(void *owner, int a1);
+int BattleAnimSystem_GetBgPriority(void *owner, int a1);
 int ov07_0221BFC0(void *owner);
-void ov07_0221C410(void *owner, void *func, void *data);
+void BattleAnimSystem_CreateTaskDefaultPriority(void *owner, void *func, void *data);
 void ov07_0222B2A8(void *task, B320Work *work);
 void ov07_0222B320(void *owner, int a1, int a2, ManagedSprite *sprite);
 
@@ -65,7 +65,7 @@ void ov07_0222B320(void *owner, int a1, int a2, ManagedSprite *sprite) {
     work = BattleAnimUtil_AllocWork(owner, sizeof(B320Work));
     work->delay = 10;
     BattleAnimUtil_InitCommonWork(owner, work);
-    ov07_0221F9E8(&template, work->owner);
+    BattleAnimSystem_GetSpriteTemplate(&template, work->owner);
     work->sprites[0] = sprite;
     for (i = 1; i < 8; i++) {
         work->sprites[i] = SpriteSystem_NewSprite(work->spriteSystem, work->spriteManager, &template);
@@ -74,10 +74,10 @@ void ov07_0222B320(void *owner, int a1, int a2, ManagedSprite *sprite) {
         }
     }
 
-    pic = ov07_0221FA48(work->owner, ov07_0221C468(work->owner));
+    pic = BattleAnimSystem_GetBattlerPokepic(work->owner, BattleAnimSystem_GetAttacker(work->owner));
     x0 = Pokepic_GetAttr(pic, 0);
     y0 = Pokepic_GetAttr(pic, 1);
-    pic2 = ov07_0221FA48(work->owner, ov07_0221C470(work->owner));
+    pic2 = BattleAnimSystem_GetBattlerPokepic(work->owner, BattleAnimSystem_GetDefender(work->owner));
     x1 = Pokepic_GetAttr(pic2, 0);
     y1 = Pokepic_GetAttr(pic2, 1);
     ov07_02222268(&work->motion, x0, x1, y0, y1, 20);
@@ -85,7 +85,7 @@ void ov07_0222B320(void *owner, int a1, int a2, ManagedSprite *sprite) {
     frame = 0;
     count = 0;
     skip = FALSE;
-    if (BattleAnimUtil_GetBattlerSide(work->owner, ov07_0221C468(work->owner)) == 4) {
+    if (BattleAnimUtil_GetBattlerSide(work->owner, BattleAnimSystem_GetAttacker(work->owner)) == 4) {
         skip = TRUE;
     }
     do {
@@ -103,12 +103,12 @@ void ov07_0222B320(void *owner, int a1, int a2, ManagedSprite *sprite) {
         frame++;
     } while (running == TRUE);
 
-    prio1 = ov07_0221FB04(work->owner, 1);
-    prio2 = ov07_0221FB04(work->owner, 2);
+    prio1 = BattleAnimSystem_GetBgPriority(work->owner, 1);
+    prio2 = BattleAnimSystem_GetBgPriority(work->owner, 2);
     for (i = 0; i < 8; i++) {
         work->drawPriority[i] = (8 - i) * 4;
         if (ov07_0221BFC0(work->owner) == 0) {
-            if (BattleAnimUtil_GetBattlerSide(work->owner, ov07_0221C468(work->owner)) == 3) {
+            if (BattleAnimUtil_GetBattlerSide(work->owner, BattleAnimSystem_GetAttacker(work->owner)) == 3) {
                 if (i < 4) {
                     ManagedSprite_SetPriority(work->sprites[i], prio2);
                 } else {
@@ -127,5 +127,5 @@ void ov07_0222B320(void *owner, int a1, int a2, ManagedSprite *sprite) {
             ManagedSprite_SetPriority(work->sprites[i], prio2);
         }
     }
-    ov07_0221C410(work->owner, ov07_0222B2A8, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->owner, ov07_0222B2A8, work);
 }

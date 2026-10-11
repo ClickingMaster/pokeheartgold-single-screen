@@ -19,7 +19,7 @@ void ov01_021F7268(FieldFriendCtx *ctx);
 void ov01_021F729C(FieldSystem *fieldSystem);
 
 BOOL ov01_021F6CFC(FieldFriendCtx *ctx) {
-    sub_0202C23C(sub_0202C6F4(ctx->saveData), 0);
+    FriendRoster_GetDwcFriendData(Save_FriendRoster_Get(ctx->saveData), 0);
     if (!sub_0203A1C4(ctx->saveData, ctx->unk48, HEAP_ID_FIELD1)) {
         return TRUE;
     }
@@ -31,7 +31,7 @@ BOOL ov01_021F6CFC(FieldFriendCtx *ctx) {
 }
 
 BOOL ov01_021F6D78(FieldFriendCtx *ctx) {
-    UnkStruct_021D2230 *roster;
+    FriendRoster *roster;
     int i;
 
     ctx->unk88 = (u32)-1;
@@ -55,9 +55,9 @@ BOOL ov01_021F6D78(FieldFriendCtx *ctx) {
         ctx->state = 2;
         return FALSE;
     }
-    roster = sub_0202C6F4(ctx->saveData);
+    roster = Save_FriendRoster_Get(ctx->saveData);
     for (i = 0; i < 0x20; i++) {
-        if (!sub_0202C2DC(roster, i)) {
+        if (!FriendRoster_IsFriendValid(roster, i)) {
             sub_0203A280(ctx->saveData, ctx->unk88, i, 4, 0);
             break;
         }
@@ -76,13 +76,13 @@ BOOL ov01_021F6E44(FieldFriendCtx *ctx) {
 
 BOOL ov01_021F6E68(FieldFriendCtx *ctx) {
     int i;
-    UnkStruct_021D2230 *roster;
+    FriendRoster *roster;
 
     if (!ov01_021F6CA0(ctx)) {
         if (ctx->unk90 == 0) {
-            roster = sub_0202C6F4(ctx->saveData);
+            roster = Save_FriendRoster_Get(ctx->saveData);
             for (i = 0; i < 0x20; i++) {
-                if (!sub_0202C2DC(roster, i)) {
+                if (!FriendRoster_IsFriendValid(roster, i)) {
                     sub_0203A280(ctx->saveData, ctx->unk88, i, 4, 0);
                     break;
                 }
@@ -158,7 +158,7 @@ BOOL ov01_021F6F94(FieldFriendCtx *ctx) {
 }
 
 BOOL ov01_021F6FDC(FieldFriendCtx *ctx) {
-    UnkStruct_021D2230 *roster;
+    FriendRoster *roster;
     void *profile;
 
     switch (ctx->unk94) {
@@ -171,7 +171,7 @@ BOOL ov01_021F6FDC(FieldFriendCtx *ctx) {
         break;
     default:
         ctx->unk8c = ctx->unk94;
-        roster = sub_0202C6F4(ctx->saveData);
+        roster = Save_FriendRoster_Get(ctx->saveData);
         profile = PlayerProfile_New(HEAP_ID_FIELD1);
         Save_Profile_PlayerName_Set(profile, sub_0202C254(roster, ctx->unk8c));
         BufferPlayersName(ctx->msgFmt, 0, profile);
@@ -192,12 +192,12 @@ BOOL ov01_021F7060(FieldFriendCtx *ctx) {
 }
 
 BOOL ov01_021F7084(FieldFriendCtx *ctx) {
-    UnkStruct_021D2230 *roster = sub_0202C6F4(ctx->saveData);
+    FriendRoster *roster = Save_FriendRoster_Get(ctx->saveData);
 
     if (!ov01_021F6CA0(ctx)) {
         if (ctx->unk90 == 0) {
             sub_020311AC(Save_Frontier_GetStatic(ctx->saveData), ctx->unk8c);
-            sub_0202C338(roster, ctx->unk8c);
+            FriendRoster_RemoveFriend(roster, ctx->unk8c);
             sub_0203A280(ctx->saveData, ctx->unk88, 0x1F, 4, 0);
             ctx->state = 1;
         } else {

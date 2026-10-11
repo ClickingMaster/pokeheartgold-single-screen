@@ -17,14 +17,14 @@ typedef struct W10Work {
 
 BOOL ov07_022223CC(void *a, void *b, ManagedSprite *sprite);
 BOOL ov07_02222440(void *a);
-void ov07_0221C448(void *owner, int arg);
+void BattleAnimSystem_DestroyTask(void *owner, int arg);
 void BattleAnimUtil_FreeWork(void *work);
 void ov07_0222928C(int arg0, W10Work *work);
 
 void ov07_0222928C(int arg0, W10Work *work) {
     if (ov07_022223CC((u8 *)work + 0x8C, (u8 *)work + 0xB0, work->sprite38) == 0) {
         Sprite_DeleteAndFreeResources(work->sprite38);
-        ov07_0221C448(work->owner14, arg0);
+        BattleAnimSystem_DestroyTask(work->owner14, arg0);
         BattleAnimUtil_FreeWork(work);
         return;
     }
@@ -46,22 +46,22 @@ typedef struct W10EndWork {
 
 void *BattleAnimUtil_AllocWork(void *owner, u32 size);
 void BattleAnimUtil_InitCommonWork(void *owner, void *work);
-ManagedSprite *ov07_0221C4E8(void *owner, int index);
+ManagedSprite *BattleAnimSystem_GetBattlerSprite(void *owner, int index);
 void ov07_02222AC4(void *work, int a, int b, int c, int d, int e);
-void ov07_0221EB98(void *owner, int arg);
-void ov07_0221C410(void *owner, void (*callback)(int, void *), void *work);
+void BattleAnimBackground_LoadBattleBgToLayerDefault(void *owner, int arg);
+void BattleAnimSystem_CreateTaskDefaultPriority(void *owner, void (*callback)(int, void *), void *work);
 void ov07_0222A710(int arg0, void *work);
 void ov07_0222A838(void *owner);
 
 void ov07_0222A4B4(int arg0, void *arg1);
 
-Pokepic *ov07_0221FA48(void *owner, int index);
-int ov07_0221C468(void *owner);
+Pokepic *BattleAnimSystem_GetBattlerPokepic(void *owner, int index);
+int BattleAnimSystem_GetAttacker(void *owner);
 BOOL ov07_02222AF4(void *work);
 int ov07_0221FAF8(void *owner, int index);
 int ov07_02222D88(int a, int b);
-int ov07_0221BFD0(void *owner);
+int BattleAnimSystem_GetHeapID(void *owner);
 void *ov07_02222CCC(int a, int b, int c, int d, int e, int f, int g, int h, int i);
 void ov07_02222D3C(void *arg);
-void ov07_0221EC7C(void *owner, int arg);
+void BattleAnimBackground_ResetLayer(void *owner, int arg);
 void ov07_0222A710(int arg0, void *arg1);

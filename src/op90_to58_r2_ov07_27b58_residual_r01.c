@@ -30,7 +30,7 @@ extern const Tri07 ov07_02236734[];
 extern const Tri07 ov07_02236736[];
 void ov07_02222268(Move07 *move, s16 startX, s16 endX, s16 startY, s16 endY, u16 frames);
 BOOL ov07_022222B4(Move07 *move);
-void ov07_0221C448(void *ctx, void *task);
+void BattleAnimSystem_DestroyTask(void *ctx, void *task);
 void ov07_02227B58(void *task, Flash07 *flash);
 // @fn ov07_02227B58
 void ov07_02227B58(void *task, Flash07 *flash) {
@@ -83,7 +83,7 @@ void ov07_02227B58(void *task, Flash07 *flash) {
         reg_G2_BLDALPHA = flash->blendA | (flash->blendB << 8);
         break;
     default:
-        ov07_0221C448(flash->ctx, task);
+        BattleAnimSystem_DestroyTask(flash->ctx, task);
         Heap_Free(flash);
         return;
     }

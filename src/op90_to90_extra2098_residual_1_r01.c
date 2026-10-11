@@ -10,8 +10,8 @@ typedef struct Work {
 } Work;
 void *BattleAnimUtil_AllocWork(void *owner, u32 size);
 void BattleAnimUtil_InitCommonWork(void *owner, void *work);
-int ov07_0221FB04(void *owner, int a1);
-void ov07_0221C410(void *owner, void *func, void *data);
+int BattleAnimSystem_GetBgPriority(void *owner, int a1);
+void BattleAnimSystem_CreateTaskDefaultPriority(void *owner, void *func, void *data);
 void ov07_02226B2C(void *task, Work *work);
 void ov07_02226C4C(void *owner, int a1, int a2, ManagedSprite *sprite);
 
@@ -21,6 +21,6 @@ void ov07_02226C4C(void *owner, int a1, int a2, ManagedSprite *sprite) {
     BattleAnimUtil_InitCommonWork(owner, work);
     work->sprite = sprite;
     ManagedSprite_SetPositionXY(work->sprite, -30, 160);
-    ManagedSprite_SetPriority(work->sprite, ov07_0221FB04(work->owner, 2));
-    ov07_0221C410(work->owner, ov07_02226B2C, work);
+    ManagedSprite_SetPriority(work->sprite, BattleAnimSystem_GetBgPriority(work->owner, 2));
+    BattleAnimSystem_CreateTaskDefaultPriority(work->owner, ov07_02226B2C, work);
 }

@@ -13,7 +13,7 @@ typedef struct Config49 {
 
 void ov49_0225EF8C(void *, u8);
 BOOL ov49_0225A0AC(void *);
-u32 ov45_0222AA10(void *);
+u32 WiFiPlazaPlayer_GetLanguage(void *);
 void *ov49_0225A30C(void *, u32, u32);
 void ov49_0225A08C(void *, void *);
 void ov49_0225A3AC(void *, u32, void *);
@@ -22,9 +22,9 @@ void ov49_0225A3CC(void *, u32, void *);
 void ov49_0225A3DC(void *, u32, void *);
 void ov49_0225A3EC(void *, u32, void *);
 void ov49_0225A3FC(void *, u32, void *);
-void *ov45_0222A5C0(void *);
-void *ov45_0222A578(void *, u8);
-u32 ov45_0222AA28(void *);
+void *WiFiPlazaWork_GetMyPlayer(void *);
+void *WiFiPlazaWork_GetPlayer(void *, u8);
+u32 WiFiPlazaPlayer_IsLanguageValid(void *);
 void *ov45_0222AAC8(void *);
 void ov49_0225A39C(void *, void *, void *);
 void ov49_02259FE8(void *);

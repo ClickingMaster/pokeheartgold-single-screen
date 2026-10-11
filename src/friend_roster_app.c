@@ -27,7 +27,7 @@
 #include "unk_0200A090.h"
 #include "unk_02019BA4.h"
 #include "unk_02020A0C.h"
-#include "unk_0202C034.h"
+#include "friend_roster.h"
 
 // Field bottom-screen app 6: when the Friend Roster is full, the player picks the entry to delete
 // (field_friendship_exchange.c). *result: -1 while running, -2 = QUIT, otherwise the roster index.
@@ -68,7 +68,7 @@ typedef struct FriendRosterAppData {
     FieldSystem *fieldSystem;
     int *unk_0C;
     SysTask *task;
-    UnkStruct_021D2230 *roster;
+    FriendRoster *roster;
     GridInputHandler *gridInput;
     FriendRosterAppBlink blink;
     Window windows[FRIEND_ROSTER_APP_NUM_WINDOWS]; // 0 QUIT, 1 page number, 2-9 and 10-17 the two name sets
@@ -148,7 +148,7 @@ SysTask *FriendRosterApp_Init(BgConfig *bgConfig, void *a1, FieldSystem *fieldSy
     data->fieldSystem = fieldSystem;
     data->unk_0C = result;
     data->task = task;
-    data->roster = sub_0202C6F4(fieldSystem->saveData);
+    data->roster = Save_FriendRoster_Get(fieldSystem->saveData);
     data->result = result;
     *data->result = -1;
     FontID_Alloc(4, HEAP_ID_8);

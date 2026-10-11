@@ -54,7 +54,7 @@ void ov07_02221F04(int set, int idx, s16 *a, s16 *b) {
 void ov07_02221F38(void *p, int idx, s16 *a, s16 *b) {
     if (ov07_0221BFC0(p) == 1) {
         ov07_02221F04(0, idx + 2, a, b);
-    } else if (ov07_0221FAB0(p) == 1) {
+    } else if (BattleAnimSystem_IsDoubleBattle(p) == 1) {
         ov07_02221F04(1, idx - 2, a, b);
     } else {
         ov07_02221F04(0, idx, a, b);
@@ -63,7 +63,7 @@ void ov07_02221F38(void *p, int idx, s16 *a, s16 *b) {
 
 s16 ov07_02221F80(void *p, int unused, u32 which) {
     int idx = BattleAnimUtil_GetBattlerType(p);
-    int set = ov07_0221FAB0(p) == 1;
+    int set = BattleAnimSystem_IsDoubleBattle(p) == 1;
     if (ov07_0221BFC0(p) == 1) {
         idx += 2;
     }

@@ -34,11 +34,11 @@ typedef struct Spawn07 {
     s16 xRange;
 } Spawn07;
 extern const Spawn07 ov07_022367CE[];
-enum HeapID ov07_0221BFD0(void *ctx);
-void ov07_0221F9E8(ManagedSpriteTemplate *template, void *ctx);
+enum HeapID BattleAnimSystem_GetHeapID(void *ctx);
+void BattleAnimSystem_GetSpriteTemplate(ManagedSpriteTemplate *template, void *ctx);
 void BattleAnimUtil_SetBlendWithBattleBg(void *ctx, int a1, int a2);
-u8 ov07_0221C4A8(void *ctx, int a1);
-void ov07_0221C3F4(void *ctx, void *func, void *data, u32 priority);
+u8 BattleAnimSystem_GetArg(void *ctx, int a1);
+void BattleAnimSystem_CreateTask(void *ctx, void *func, void *data, u32 priority);
 void ov07_0222A328(void *ctx, Particle07 *particle);
 void ov07_0222A4B4(void *ctx, Effect07 *effect);
 void ov07_0222A58C(void *ctx, SpriteSystem *spriteSystem, SpriteManager *spriteManager, ManagedSprite *sprite);
@@ -50,16 +50,16 @@ void ov07_0222A58C(void *ctx, SpriteSystem *spriteSystem, SpriteManager *spriteM
     int j;
     s16 x;
     s16 y;
-    effect = Heap_Alloc(ov07_0221BFD0(ctx), sizeof(Effect07));
+    effect = Heap_Alloc(BattleAnimSystem_GetHeapID(ctx), sizeof(Effect07));
     GF_ASSERT(effect != NULL);
     effect->unk01 = 0;
     effect->unk00 = 0;
     effect->spriteSystem = spriteSystem;
     effect->spriteManager = spriteManager;
     effect->ctx = ctx;
-    ov07_0221F9E8(&template, ctx);
+    BattleAnimSystem_GetSpriteTemplate(&template, ctx);
     BattleAnimUtil_SetBlendWithBattleBg(effect->ctx, -1, -1);
-    effect->count = ov07_0221C4A8(effect->ctx, 0);
+    effect->count = BattleAnimSystem_GetArg(effect->ctx, 0);
     effect->count = 12;
     effect->particles[0].sprite = sprite;
     j = 0;
@@ -83,8 +83,8 @@ void ov07_0222A58C(void *ctx, SpriteSystem *spriteSystem, SpriteManager *spriteM
         ManagedSprite_SetAffineOverwriteMode(sprite, 2);
         ManagedSprite_SetAffineScale(sprite, effect->particles[i].scale, effect->particles[i].scale);
         ManagedSprite_SetDrawFlag(sprite, FALSE);
-        ov07_0221C3F4(ctx, ov07_0222A328, &effect->particles[i], 0x44B);
+        BattleAnimSystem_CreateTask(ctx, ov07_0222A328, &effect->particles[i], 0x44B);
         j = (j + 1) % 6;
     }
-    ov07_0221C3F4(ctx, ov07_0222A4B4, effect, 0x44D);
+    BattleAnimSystem_CreateTask(ctx, ov07_0222A4B4, effect, 0x44D);
 }

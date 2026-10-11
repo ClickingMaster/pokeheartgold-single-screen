@@ -18,16 +18,16 @@ typedef struct Work2554C {
 extern Work2554C *BattleAnimUtil_AllocWork(void *, int);
 extern void BattleAnimUtil_InitCommonWork(void *, Work2554C *);
 
-extern u32 ov07_0221C4A8(void *p, int i);
-extern void *ov07_0221C468(void *);
-extern void *ov07_0221C470(void *);
+extern u32 BattleAnimSystem_GetArg(void *p, int i);
+extern void *BattleAnimSystem_GetAttacker(void *);
+extern void *BattleAnimSystem_GetDefender(void *);
 extern void *BattleAnimUtil_GetPartnerBattler(void *, void *);
 extern void GF_AssertFail(void);
 extern void BattleAnimUtil_GetBattlerPosition(void *, void *, void *);
 extern void BattleAnimUtil_CollectPicsByFlags(void *, int, void *, void *);
 extern int BattleAnimUtil_GetBattlerSide(void *, void *);
 extern void ov07_02222268(void *, int, int, int, int, int);
-extern void ov07_0221C410(void *, void (*)(void *, void *), void *);
+extern void BattleAnimSystem_CreateTaskDefaultPriority(void *, void (*)(void *, void *), void *);
 extern void ov07_02225504(void *, void *);
 extern int ov07_02221F80(void *, void *, int);
 extern int ov07_0221FAA0(void *, void *);
@@ -45,20 +45,20 @@ void ov07_0222554C(void *owner) {
 
     work = BattleAnimUtil_AllocWork(owner, 0x5C);
     BattleAnimUtil_InitCommonWork(owner, work);
-    kind = ((s32)ov07_0221C4A8(owner, 0));
-    param = ((s32)ov07_0221C4A8(owner, 1));
+    kind = ((s32)BattleAnimSystem_GetArg(owner, 0));
+    param = ((s32)BattleAnimSystem_GetArg(owner, 1));
     switch (kind) {
     case 2:
-        *(void **)&slots[0] = ov07_0221C468(owner);
+        *(void **)&slots[0] = BattleAnimSystem_GetAttacker(owner);
         break;
     case 4:
-        *(void **)&slots[0] = BattleAnimUtil_GetPartnerBattler(owner, ov07_0221C468(owner));
+        *(void **)&slots[0] = BattleAnimUtil_GetPartnerBattler(owner, BattleAnimSystem_GetAttacker(owner));
         break;
     case 8:
-        *(void **)&slots[0] = ov07_0221C470(owner);
+        *(void **)&slots[0] = BattleAnimSystem_GetDefender(owner);
         break;
     case 16:
-        *(void **)&slots[0] = BattleAnimUtil_GetPartnerBattler(owner, ov07_0221C470(owner));
+        *(void **)&slots[0] = BattleAnimUtil_GetPartnerBattler(owner, BattleAnimSystem_GetDefender(owner));
         break;
     default:
         GF_AssertFail();
@@ -70,7 +70,7 @@ void ov07_0222554C(void *owner) {
     work->unk5A = 0;
     work->unk58 = BattleAnimUtil_GetBattlerSide(work->ptr04, *(void **)&slots[0]) == 3 ? -80 : 336;
     ov07_02222268(work->movement, work->x, work->unk58, work->y, work->y, (u16)param);
-    ov07_0221C410(work->ptr04, ov07_02225504, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->ptr04, ov07_02225504, work);
 }
 
 void ov07_02225640(void *owner) {
@@ -81,21 +81,21 @@ void ov07_02225640(void *owner) {
 
     work = BattleAnimUtil_AllocWork(owner, 0x5C);
     BattleAnimUtil_InitCommonWork(owner, work);
-    slots[1] = ((s32)ov07_0221C4A8(owner, 0));
-    kind = ((s32)ov07_0221C4A8(owner, 1));
-    param = ((s32)ov07_0221C4A8(owner, 2));
+    slots[1] = ((s32)BattleAnimSystem_GetArg(owner, 0));
+    kind = ((s32)BattleAnimSystem_GetArg(owner, 1));
+    param = ((s32)BattleAnimSystem_GetArg(owner, 2));
     switch (kind) {
     case 2:
-        *(void **)&slots[0] = ov07_0221C468(owner);
+        *(void **)&slots[0] = BattleAnimSystem_GetAttacker(owner);
         break;
     case 4:
-        *(void **)&slots[0] = BattleAnimUtil_GetPartnerBattler(owner, ov07_0221C468(owner));
+        *(void **)&slots[0] = BattleAnimUtil_GetPartnerBattler(owner, BattleAnimSystem_GetAttacker(owner));
         break;
     case 8:
-        *(void **)&slots[0] = ov07_0221C470(owner);
+        *(void **)&slots[0] = BattleAnimSystem_GetDefender(owner);
         break;
     case 16:
-        *(void **)&slots[0] = BattleAnimUtil_GetPartnerBattler(owner, ov07_0221C470(owner));
+        *(void **)&slots[0] = BattleAnimUtil_GetPartnerBattler(owner, BattleAnimSystem_GetDefender(owner));
         break;
     default:
         GF_AssertFail();
@@ -112,7 +112,7 @@ void ov07_02225640(void *owner) {
         int value = ov07_02221F80(owner, *(void **)&slots[0], 0);
         ov07_02222268(work->movement, work->unk58, value, work->y, work->y, (u16)param);
     }
-    ov07_0221C410(work->ptr04, ov07_02225504, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->ptr04, ov07_02225504, work);
 }
 
 void ov07_02225768(void *owner) {
@@ -124,20 +124,20 @@ void ov07_02225768(void *owner) {
     int count;
     s16 a[2];
     Slot b;
-    int kind = ((s32)ov07_0221C4A8(owner, 0));
+    int kind = ((s32)BattleAnimSystem_GetArg(owner, 0));
     void *selected;
     switch (kind) {
     case 2:
-        selected = ov07_0221C468(owner);
+        selected = BattleAnimSystem_GetAttacker(owner);
         break;
     case 4:
-        selected = BattleAnimUtil_GetPartnerBattler(owner, ov07_0221C468(owner));
+        selected = BattleAnimUtil_GetPartnerBattler(owner, BattleAnimSystem_GetAttacker(owner));
         break;
     case 8:
-        selected = ov07_0221C470(owner);
+        selected = BattleAnimSystem_GetDefender(owner);
         break;
     case 16:
-        selected = BattleAnimUtil_GetPartnerBattler(owner, ov07_0221C470(owner));
+        selected = BattleAnimUtil_GetPartnerBattler(owner, BattleAnimSystem_GetDefender(owner));
         break;
     default:
         GF_AssertFail();

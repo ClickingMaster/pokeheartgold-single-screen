@@ -9,11 +9,11 @@ typedef struct{int words[9];}H;
 typedef struct{void*list;H*header;V pos;int priority,vram,heap;}T;
 extern const R ov49_02269774[];extern const u16 ov49_02269704[],ov49_022696FC[];extern const V ov49_0226991C[];
 extern void*NARC_New(int,int),*AddPlttResObjFromOpenNarc(void*,void*,int,int,int,int,int,int),*AddCellOrAnimResObjFromOpenNarc(void*,void*,int,int,int,int,int),*AddCharResObjFromOpenNarc(void*,void*,int,int,int,int,int),*Sprite_Create(T*);extern I*ov49_0225C828(int,int,int,int);
-extern int ov45_0222A99C(void*),ov45_0222A9CC(void*),SpriteTransfer_CreatePlttTransferTask(void*),SpriteTransfer_CreateCharTransferTask_AllocAtEnd(void*),ov45_0222A92C(void*,int),ov45_0222A964(void*,int);
+extern int ov45_0222A99C(void*),WiFiPlazaPlayer_GetGender(void*),SpriteTransfer_CreatePlttTransferTask(void*),SpriteTransfer_CreateCharTransferTask_AllocAtEnd(void*),ov45_0222A92C(void*,int),ov45_0222A964(void*,int);
 extern void sub_0200A740(void*),CreateSpriteResourcesHeader(H*,int,int,int,int,int,int,int,int,void*,void*,void*,void*,void*,void*),Sprite_SetPalOffsetRespectVramOffset(void*,int),NARC_Delete(void*);
 void ov49_0225C4CC(O*,B*,void*,int,void*,void*);
 void ov49_0225C4CC(O*out,B*bg,void*input,int heap,void*net,void*other){void*narc=NARC_New(215,heap);int version;const V*pos;int ver=ov45_0222A99C(other);const R*r;const u16*cell,*anim;void*use;int i;O*cursor;T t;H h;
-version=ov45_0222A9CC(other);r=ov49_02269774;i=0;cell=ov49_02269704;cursor=out;anim=ov49_022696FC;
+version=WiFiPlazaPlayer_GetGender(other);r=ov49_02269774;i=0;cell=ov49_02269704;cursor=out;anim=ov49_022696FC;
 for(;i<4;i++){if(i==2){if(version==1){cursor->palette[0]=0;cursor->cell[0]=0;cursor->anim[0]=0;goto next;}}else if(i==3){if(version==0){cursor->palette[0]=0;cursor->cell[0]=0;cursor->anim[0]=0;goto next;}}
 use=r->narc==215?narc:input;cursor->palette[0]=AddPlttResObjFromOpenNarc(bg->palette,use,r->member,0,150+i,2,r->count,heap);if(!SpriteTransfer_CreatePlttTransferTask(cursor->palette[0]))GF_AssertFail();sub_0200A740(cursor->palette[0]);cursor->cell[0]=AddCellOrAnimResObjFromOpenNarc(bg->cell,use,*cell,0,150+i,2,heap);cursor->anim[0]=AddCellOrAnimResObjFromOpenNarc(bg->anim,use,*anim,0,150+i,3,heap);
 next:r++;cursor=(O*)((u8*)cursor+4);cell++;anim++;}

@@ -102,7 +102,7 @@ BOOL ov07_02222440(void *);
 void ov07_022223F0(void *, int, int, int);
 void ManagedSprite_SetAffineZRotation(void *, u16);
 void Sprite_DeleteAndFreeResources(void *);
-void ov07_0221C448(void *, void *);
+void BattleAnimSystem_DestroyTask(void *, void *);
 void Heap_Free(void *);
 void SpriteSystem_DrawSprites(void *);
 void ManagedSprite_SetAffineScale(void *, f32, f32);

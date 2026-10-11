@@ -49,7 +49,7 @@ typedef struct GlobalTerminalNetArgs {
     void *messageArg;                         // 0x3C
 } GlobalTerminalNetArgs;                      // size 0x40
 
-// login block handed to the server client (ov39_0222A110)
+// login block handed to the server client (GlobalTerminalServer_Init)
 typedef struct GlobalTerminalNetLogin {
     u32 dwcProfileId;     // 0x00
     u8 gameVersion;       // 0x04

@@ -34,13 +34,13 @@ extern void ov49_02258EEC(void *, void *, int);
 extern void ov49_0225A04C(void *, u8, u32);
 extern void ov49_0225A06C(void *, u8, u32);
 extern u32 ov45_0222B0B0(void *);
-extern void *ov45_0222A5C0(void *);
+extern void *WiFiPlazaWork_GetMyPlayer(void *);
 extern u8 ov45_0222A920(void *);
 extern void ov45_0222B0A4(void *);
 extern void ov49_02258E60(void *, u32);
 extern u32 ov42_022282A4(void);
 extern void ov49_02258EAC(void *, void *, u32, u32);
-extern void *ov45_0222A578(void *, u32);
+extern void *WiFiPlazaWork_GetPlayer(void *, u32);
 extern u32 ov45_0222AFF8(void *);
 extern u32 ov45_0222A2A0(void *, u32);
 extern u32 ov49_02258FDC(void *, u8, u8);
@@ -229,12 +229,12 @@ BOOL ov49_02261B74(void *state, void *ctx, u32 index) {
         break;
     case 5:
         shouldAdvance = FALSE;
-        if (((Ov49R60Input *)work)->mode == 1 && ov45_0222B0B0(field) == 0 && ov45_0222A920(ov45_0222A5C0(field)) == 9) {
+        if (((Ov49R60Input *)work)->mode == 1 && ov45_0222B0B0(field) == 0 && ov45_0222A920(WiFiPlazaWork_GetMyPlayer(field)) == 9) {
             ov45_0222B0A4(field);
             ov49_02258E60(object, 6);
             ov49_02258EAC(map, manager, 0, ov42_022282A4());
         }
-        object = ov45_0222A578(field, index);
+        object = WiFiPlazaWork_GetPlayer(field, index);
         if (object == NULL) {
             shouldAdvance = TRUE;
         } else if (((Ov49R60Input *)work)->mode == 1 && ov45_0222AFF8(field) == 0) {

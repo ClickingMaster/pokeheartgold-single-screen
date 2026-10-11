@@ -43,12 +43,12 @@ extern void *OverlayManager_New(const void *, void *, u32);
 extern void *Heap_Alloc(u32, u32);
 extern void Heap_Free(void *);
 extern void *PlayerProfile_New(u32);
-extern void *ov45_0222A5C0(void *);
+extern void *WiFiPlazaWork_GetMyPlayer(void *);
 extern void *ov45_0222AAC8(void *);
 extern void ov45_0222AB38(void *, void *);
 extern void ov45_0222A498(void *, void *);
-extern void *ov45_0222A578(void *, u8);
-extern void ov45_0222A844(void *, void *, u32);
+extern void *WiFiPlazaWork_GetPlayer(void *, u8);
+extern void WiFiPlazaPlayer_CopyToProfile(void *, void *, u32);
 extern void *ov45_0222AD2C(void *);
 extern void *ov45_0222AD3C(void *);
 extern void *ov45_0222A214(void *);
@@ -154,16 +154,16 @@ void ov45_0222CE94(R27Profiles *p) {
 }
 void ov45_0222CEB0(R27Profiles *p, void *ctx, u32 arg) {
     int i;
-    void *v = ov45_0222AAC8(ov45_0222A5C0(ctx));
+    void *v = ov45_0222AAC8(WiFiPlazaWork_GetMyPlayer(ctx));
     p->unk00 = (u32)v;
     ov45_0222AB38(ctx, &p->slotIds[4]);
     ov45_0222A498(ctx, p->slotIds);
     p->context = ctx;
     p->unk1C = 0;
     for (i = 0; i < 4; i++) {
-        void *x = ov45_0222A578(ctx, p->slotIds[i]);
+        void *x = WiFiPlazaWork_GetPlayer(ctx, p->slotIds[i]);
         if (x) {
-            ov45_0222A844(x, p->profiles[i], arg);
+            WiFiPlazaPlayer_CopyToProfile(x, p->profiles[i], arg);
         }
     }
 }

@@ -28,7 +28,7 @@
 #include "system.h"
 #include "text.h"
 #include "oam_manager.h"
-#include "unk_0202C034.h"
+#include "friend_roster.h"
 #include "unk_02033AE0.h"
 #include "unk_02034354.h"
 #include "unk_02035900.h"
@@ -44,9 +44,9 @@ u16 *DoubleBuffer_GetCurrent(struct DoubleBuffer *buffer);
 s16 *DoubleBuffer_GetOther(struct DoubleBuffer *buffer);
 void DoubleBuffer_SetEnabled(struct DoubleBuffer *buffer, u8 enabled);
 void DoubleBuffer_Swap(struct DoubleBuffer *buffer);
-void sub_0202C554(UnkStruct_021D2230 *data, s32 index, s32 value);
-void sub_0202C584(UnkStruct_021D2230 *data, s32 index, s32 value);
-void sub_0202C5B4(UnkStruct_021D2230 *data, s32 index, s32 value);
+void sub_0202C554(FriendRoster *data, s32 index, s32 value);
+void sub_0202C584(FriendRoster *data, s32 index, s32 value);
+void sub_0202C5B4(FriendRoster *data, s32 index, s32 value);
 void *sub_0203484C(int netId);
 u8 sub_020348A8(int netId);
 u8 sub_020348CC(int netId);
@@ -2385,7 +2385,7 @@ BOOL PlazaGameResults_IsFanfareDone(PlazaGameResults *results) {
 }
 
 void PlazaGameResults_RecordFriendPlays(PlazaGameResults *results) {
-    UnkStruct_021D2230 *friends = sub_0202C6F4(results->roster.saveData);
+    FriendRoster *friends = Save_FriendRoster_Get(results->roster.saveData);
     int i;
     for (i = 0; i < results->roster.count; i++) {
         u32 index;

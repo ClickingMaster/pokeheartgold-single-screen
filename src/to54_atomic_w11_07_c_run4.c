@@ -79,11 +79,11 @@ void ov07_0222B898(SysTask *task, void *data) {
                 work->prefix.state[0]++;
             } else {
                 if (!work->same) {
-                    ov07_0221C7B8(work->prefix.owner, temp, 3);
+                    BattleAnimSystem_BuildBattlerPicParams(work->prefix.owner, temp, 3);
                     if (work->index == 2) {
-                        ov07_0223494C(temp, ov07_0221BFD0(work->prefix.owner));
+                        ov07_0223494C(temp, BattleAnimSystem_GetHeapID(work->prefix.owner));
                     } else {
-                        ov07_0223475C(temp, ov07_0221BFD0(work->prefix.owner));
+                        ov07_0223475C(temp, BattleAnimSystem_GetHeapID(work->prefix.owner));
                     }
                 }
                 work->prefix.state[0] = 0;
@@ -95,7 +95,7 @@ void ov07_0222B898(SysTask *task, void *data) {
         break;
     default:
         Pokepic_SetAttr(work->slot.pokepic, 44, 0);
-        ov07_0221C448(work->prefix.owner, task);
+        BattleAnimSystem_DestroyTask(work->prefix.owner, task);
         Heap_Free(work);
         break;
     }
@@ -110,19 +110,19 @@ void ov07_0222B988(void *owner) {
     int delta;
     B8Work *work = BattleAnimUtil_AllocWork(owner, sizeof(B8Work));
     BattleAnimUtil_InitCommonWork(owner, work);
-    first = ov07_0221C468(work->prefix.owner);
-    BattleAnimUtil_GetBattlerPosition(work->prefix.owner, ov07_0221C468(work->prefix.owner), work->battlerXY[0]);
-    BattleAnimUtil_GetBattlerPosition(work->prefix.owner, ov07_0221C470(work->prefix.owner), work->battlerXY[1]);
+    first = BattleAnimSystem_GetAttacker(work->prefix.owner);
+    BattleAnimUtil_GetBattlerPosition(work->prefix.owner, BattleAnimSystem_GetAttacker(work->prefix.owner), work->battlerXY[0]);
+    BattleAnimUtil_GetBattlerPosition(work->prefix.owner, BattleAnimSystem_GetDefender(work->prefix.owner), work->battlerXY[1]);
     if (BattleAnimUtil_GetBattlerSide(work->prefix.owner, first) == 3) {
         work->animation.sign = 1;
     } else {
         work->animation.sign = -1;
     }
-    value1 = BattleAnimUtil_GetBattlerSide(work->prefix.owner, ov07_0221C468(work->prefix.owner));
-    value2 = BattleAnimUtil_GetBattlerSide(work->prefix.owner, ov07_0221C470(work->prefix.owner));
+    value1 = BattleAnimUtil_GetBattlerSide(work->prefix.owner, BattleAnimSystem_GetAttacker(work->prefix.owner));
+    value2 = BattleAnimUtil_GetBattlerSide(work->prefix.owner, BattleAnimSystem_GetDefender(work->prefix.owner));
     work->same = value1 == value2;
     work->index = 0;
-    BattleAnimUtil_CollectPicsByFlags(owner, (ov07_0221C4A8(owner, 0)), &work->slot, &out);
+    BattleAnimUtil_CollectPicsByFlags(owner, (BattleAnimSystem_GetArg(owner, 0)), &work->slot, &out);
     delta = Pokepic_GetAttr(work->slot.pokepic, 1) - work->battlerXY[0][1];
     if (work->animation.sign > 0) {
         work->yStart[0] = 335;
@@ -145,5 +145,5 @@ void ov07_0222B988(void *owner) {
         work->attr[1] = 10;
         work->attr[2] = Pokepic_GetAttr(work->slot.pokepic, 2);
     }
-    ov07_0221C410(work->prefix.owner, (void *)ov07_0222B898, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->prefix.owner, (void *)ov07_0222B898, work);
 }

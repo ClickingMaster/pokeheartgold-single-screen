@@ -90,9 +90,9 @@ void ov12_0225FD14(SysTask *task, W20TaskLarge *work) {
     case 5:
     case 7:
     case 9:
-        ov07_0221C394(work->object);
-        if (ov07_0221C3B0(work->object) == 0) {
-            ov07_0221C3C0(work->object);
+        BattleAnimSystem_Execute(work->object);
+        if (BattleAnimSystem_IsActive(work->object) == 0) {
+            BattleAnimSystem_EndMove(work->object);
             work->state++;
         }
         return;

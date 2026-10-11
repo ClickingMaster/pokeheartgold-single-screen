@@ -46,7 +46,7 @@ void ov07_02223B70(void *task, void *data) {
         Pokepic_SetAttr(w->pic, 0, w->x);
         Pokepic_SetAttr(w->pic, 1, w->y - 8);
         Pokepic_SetAttr(w->pic, 9, 0);
-        ov07_0221C448(w->owner, task);
+        BattleAnimSystem_DestroyTask(w->owner, task);
         Heap_Free(w);
     }
 }
@@ -55,26 +55,26 @@ void ov07_02223BC0(void *owner) {
     int kind;
     int value;
     PicMoveWork *w;
-    w = Heap_Alloc((enum HeapID)ov07_0221BFD0(owner), sizeof(PicMoveWork));
+    w = Heap_Alloc((enum HeapID)BattleAnimSystem_GetHeapID(owner), sizeof(PicMoveWork));
     w->owner = owner;
-    ov07_02222A44(w->anim, (int)(ov07_0221C4A8(owner, 0)), (int)(ov07_0221C4A8(owner, 1)));
-    kind = (int)(ov07_0221C4A8(owner, 2));
+    ov07_02222A44(w->anim, (int)(BattleAnimSystem_GetArg(owner, 0)), (int)(BattleAnimSystem_GetArg(owner, 1)));
+    kind = (int)(BattleAnimSystem_GetArg(owner, 2));
     switch (kind) {
     case 2:
-        w->pic = ov07_0221FA48(w->owner, ov07_0221C468(owner));
+        w->pic = BattleAnimSystem_GetBattlerPokepic(w->owner, BattleAnimSystem_GetAttacker(owner));
         *(int *)&w->anim[0xc] *= -1;
         break;
     case 4:
-        value = BattleAnimUtil_GetPartnerBattler(w->owner, ov07_0221C468(w->owner));
-        w->pic = ov07_0221FA48(w->owner, value);
+        value = BattleAnimUtil_GetPartnerBattler(w->owner, BattleAnimSystem_GetAttacker(w->owner));
+        w->pic = BattleAnimSystem_GetBattlerPokepic(w->owner, value);
         *(int *)&w->anim[0xc] *= -1;
         break;
     case 8:
-        w->pic = ov07_0221FA48(w->owner, ov07_0221C470(owner));
+        w->pic = BattleAnimSystem_GetBattlerPokepic(w->owner, BattleAnimSystem_GetDefender(owner));
         break;
     case 16:
-        value = BattleAnimUtil_GetPartnerBattler(w->owner, ov07_0221C470(w->owner));
-        w->pic = ov07_0221FA48(w->owner, value);
+        value = BattleAnimUtil_GetPartnerBattler(w->owner, BattleAnimSystem_GetDefender(w->owner));
+        w->pic = BattleAnimSystem_GetBattlerPokepic(w->owner, value);
         break;
     default:
         GF_AssertFail();
@@ -83,7 +83,7 @@ void ov07_02223BC0(void *owner) {
     w->x = Pokepic_GetAttr(w->pic, 0);
     w->y = Pokepic_GetAttr(w->pic, 1);
     w->y += 8;
-    ov07_0221C410(w->owner, ov07_02223B70, w);
+    BattleAnimSystem_CreateTaskDefaultPriority(w->owner, ov07_02223B70, w);
 }
 
 void ov07_02223CAC(void *data, s16 x, s16 y) {
@@ -148,7 +148,7 @@ void ov07_02223DC4(void *task, void *data) {
         break;
     case 1:
         Sprite_DeleteAndFreeResources(w->sprite);
-        ov07_0221C448(w->owner, task);
+        BattleAnimSystem_DestroyTask(w->owner, task);
         Heap_Free(w);
         return;
     }

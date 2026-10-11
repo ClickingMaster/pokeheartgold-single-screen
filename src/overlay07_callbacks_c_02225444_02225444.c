@@ -42,12 +42,12 @@ typedef struct Work2719C {
 } Work2719C;
 
 
-extern u32 ov07_0221C4A8(void *p, int i);
+extern u32 BattleAnimSystem_GetArg(void *p, int i);
 extern void ov07_02222FC4(void *);
 extern void ov07_02222FF4(void *);
 extern int ov07_02222EE8(void *);
 extern void ov07_02222EF8(void *);
-extern void ov07_0221C448(void *, void *);
+extern void BattleAnimSystem_DestroyTask(void *, void *);
 extern void Heap_Free(void *);
 extern int ManagedSprite_IsAnimated(void *);
 extern void Sprite_DeleteAndFreeResources(void *);
@@ -55,13 +55,13 @@ extern void ManagedSprite_TickFrame(void *);
 extern void SpriteSystem_DrawSprites(void *);
 extern void *BattleAnimUtil_AllocWork(void *, int);
 extern void BattleAnimUtil_InitCommonWork(void *, void *);
-extern void ov07_0221C410(void *, void *, void *);
+extern void BattleAnimSystem_CreateTaskDefaultPriority(void *, void *, void *);
 extern void ov07_02227248(void *, void *);
 extern BOOL ov07_02222240(W02SinMotion *, s16, s16, void *);
 extern int ov07_022222B4(void *);
 #include "pokepic.h"
-extern void *ov07_0221C468(void *);
-extern void *ov07_0221C470(void *);
+extern void *BattleAnimSystem_GetAttacker(void *);
+extern void *BattleAnimSystem_GetDefender(void *);
 extern void *BattleAnimUtil_GetPartnerBattler(void *, void *);
 extern void GF_AssertFail(void);
 
@@ -80,7 +80,7 @@ void ov07_02225444(SysTask *task, void *data) {
     if (ov07_02222240(&work->motion.updater, work->slot.xy[0], work->slot.xy[1], work->slot.pokepic) == 0) {
         Pokepic_SetAttr(work->slot.pokepic, 0, work->slot.xy[0]);
         Pokepic_SetAttr(work->slot.pokepic, 1, work->slot.xy[1] - 8);
-        ov07_0221C448(work->prefix.owner, task);
+        BattleAnimSystem_DestroyTask(work->prefix.owner, task);
         Heap_Free(work);
     }
 }

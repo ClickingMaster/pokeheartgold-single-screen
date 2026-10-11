@@ -209,7 +209,7 @@ BOOL WiFiPlazaSurveyResults_Run(WiFiPlazaSurveyResults *results, WiFiPlazaSurvey
         results->state = 22;
         break;
     case 4:
-        ov45_0222AB0C(ov45_0222A5C0(args->lobby), &record);
+        ov45_0222AB0C(WiFiPlazaWork_GetMyPlayer(args->lobby), &record);
         WiFiPlazaSurveyResults_PrintQuestion(results, &results->current, messages, work, &record, heapID, MAKE_TEXT_COLOR(9, 10, 0), MAKE_TEXT_COLOR(13, 14, 0), ov45_0222AB28(args->lobby, ov45_0222A53C(args->lobby)));
         WiFiPlazaSurveyResults_StartBars(results, &results->plazaTally, work, 1);
         PlaySE(SEQ_SE_PL_PINPON2);
@@ -518,7 +518,7 @@ void WiFiPlazaSurvey_CountPlazaAnswers(WiFiPlazaSurveyTally *tally, void *lobby)
     int i;
     memset(tally, 0, sizeof(WiFiPlazaSurveyTally));
     for (i = 0; i < 20; i++) {
-        void *player = ov45_0222A578(lobby, i);
+        void *player = WiFiPlazaWork_GetPlayer(lobby, i);
         if (player != NULL) {
             void *value = ov45_0222AA54(player);
             WiFiPlazaSurveyAnswerRecord record;

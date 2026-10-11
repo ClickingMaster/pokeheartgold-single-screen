@@ -22,7 +22,7 @@ typedef struct A4B4Work {
 } A4B4Work;
 void Sprite_DeleteAndFreeResources(ManagedSprite *sprite);
 void SpriteSystem_DrawSprites(SpriteSystem *spriteSystem);
-void ov07_0221C448(void *owner, void *task);
+void BattleAnimSystem_DestroyTask(void *owner, void *task);
 void ov07_0222A4B4(void *task, A4B4Work *work);
 
 // @fn ov07_0222A4B4
@@ -68,7 +68,7 @@ void ov07_0222A4B4(void *task, A4B4Work *work) {
         work->state++;
         break;
     default:
-        ov07_0221C448(work->owner, task);
+        BattleAnimSystem_DestroyTask(work->owner, task);
         Heap_Free(work);
         return;
     }

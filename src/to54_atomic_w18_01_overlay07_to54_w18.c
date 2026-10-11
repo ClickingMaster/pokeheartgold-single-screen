@@ -77,12 +77,12 @@ static void ov07_0222EBB0(void *, void *);
 void ov07_0222E6F4(void *owner) {
     WorkA *work = BattleAnimUtil_AllocWork(owner, sizeof(WorkA));
     work->owner = owner;
-    work->pic = ov07_0221FA48(work->owner, ov07_0221C468(owner));
+    work->pic = BattleAnimSystem_GetBattlerPokepic(work->owner, BattleAnimSystem_GetAttacker(owner));
     ov07_02222508(work->movement, 10, 10, 15, 8);
     work->count = 4;
-    work->other = ov07_0221FAA0(work->owner, ov07_0221C468(work->owner));
+    work->other = ov07_0221FAA0(work->owner, BattleAnimSystem_GetAttacker(work->owner));
     work->attr = Pokepic_GetAttr(work->pic, 1);
-    ov07_0221C410(work->owner, ov07_0222E6A8, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->owner, ov07_0222E6A8, work);
 }
 
 void ov07_0222E754(WorkB *work) {
@@ -198,7 +198,7 @@ static void ov07_0222E90C(void *task, void *data) {
         break;
     case 4:
         Sprite_DeleteAndFreeResources(work->sprite);
-        ov07_0221C448(work->owner, task);
+        BattleAnimSystem_DestroyTask(work->owner, task);
         Heap_Free(work);
         return;
     }
@@ -220,7 +220,7 @@ void ov07_0222EA48(void *owner, void *spriteSystem, void *arg, void *sprite) {
     work->duration = 400;
     work->x = 1500;
     work->y = 1000;
-    ov07_0221C410(work->owner, ov07_0222E90C, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->owner, ov07_0222E90C, work);
 }
 
 void ov07_0222EAB4(WorkC *work) {
@@ -256,7 +256,7 @@ static void ov07_0222EB00(void *task, void *data) {
         }
         break;
     case 2:
-        ov07_0221C448(work->owner, task);
+        BattleAnimSystem_DestroyTask(work->owner, task);
         Heap_Free(work);
         break;
     }
@@ -265,11 +265,11 @@ static void ov07_0222EB00(void *task, void *data) {
 void ov07_0222EB6C(void *owner) {
     WorkC *work = BattleAnimUtil_AllocWork(owner, sizeof(WorkC));
     work->owner = owner;
-    work->pic = ov07_0221FA48(work->owner, ov07_0221C468(owner));
+    work->pic = BattleAnimSystem_GetBattlerPokepic(work->owner, BattleAnimSystem_GetAttacker(owner));
     work->x = Pokepic_GetAttr(work->pic, 0);
     work->y = Pokepic_GetAttr(work->pic, 1);
     work->count = 0;
-    ov07_0221C410(work->owner, ov07_0222EB00, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->owner, ov07_0222EB00, work);
 }
 
 static void ov07_0222EBB0(void *task, void *data) {
@@ -326,7 +326,7 @@ static void ov07_0222EBB0(void *task, void *data) {
         work->state++;
         break;
     case 6:
-        ov07_0221C448(work->owner, task);
+        BattleAnimSystem_DestroyTask(work->owner, task);
         Heap_Free(work);
         break;
     }
@@ -335,12 +335,12 @@ static void ov07_0222EBB0(void *task, void *data) {
 void ov07_0222ED7C(void *owner) {
     WorkD *work = BattleAnimUtil_AllocWork(owner, sizeof(WorkD));
     work->owner = owner;
-    work->multiplier = (int)ov07_02222004(work->owner, ov07_0221C468(owner));
-    work->pic1 = ov07_0221FA48(work->owner, ov07_0221C468(owner));
+    work->multiplier = (int)ov07_02222004(work->owner, BattleAnimSystem_GetAttacker(owner));
+    work->pic1 = BattleAnimSystem_GetBattlerPokepic(work->owner, BattleAnimSystem_GetAttacker(owner));
     work->x1 = Pokepic_GetAttr(work->pic1, 0);
     work->y1 = Pokepic_GetAttr(work->pic1, 1);
-    work->pic2 = ov07_0221FA48(work->owner, ov07_0221C470(owner));
+    work->pic2 = BattleAnimSystem_GetBattlerPokepic(work->owner, BattleAnimSystem_GetDefender(owner));
     work->x2 = Pokepic_GetAttr(work->pic2, 0);
     work->y2 = Pokepic_GetAttr(work->pic2, 1);
-    ov07_0221C410(work->owner, ov07_0222EBB0, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->owner, ov07_0222EBB0, work);
 }

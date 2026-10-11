@@ -139,11 +139,11 @@ void ov49_0225A334(void *p, u32 i, u32 a) {
     PlayerProfile *q = PlayerProfile_New(0x77);
     PlayerProfile *src;
     if (i == ov45_0222A53C(W(p, 0x34))) {
-        src = ov45_0222A5C0(W(p, 0x34));
+        src = WiFiPlazaWork_GetMyPlayer(W(p, 0x34));
     } else {
-        src = ov45_0222A578(W(p, 0x34), i);
+        src = WiFiPlazaWork_GetPlayer(W(p, 0x34), i);
     }
-    ov45_0222A844(src, q, 0x77);
+    WiFiPlazaPlayer_CopyToProfile(src, q, 0x77);
     ov49_0225B3C8(P(p, 0x2dc), q, a);
     Heap_Free(q);
 }
@@ -202,7 +202,7 @@ void ov49_0225A478(void *p, u32 a) {
 void ov49_0225A490(void *p) {
     Ov49WorkView *w = p;
     if (ov49_0225B8FC(&w->sub184) != 0) {
-        ov49_0225BEA0(&w->sub184, &w->pad18C, &w->sub3C, 0x77, ov45_0222A578(w->unk34, ov49_0225B8F8(&w->sub184)));
+        ov49_0225BEA0(&w->sub184, &w->pad18C, &w->sub3C, 0x77, WiFiPlazaWork_GetPlayer(w->unk34, ov49_0225B8F8(&w->sub184)));
     }
 }
 

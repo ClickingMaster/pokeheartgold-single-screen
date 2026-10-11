@@ -3497,10 +3497,10 @@ ov49_02264D4C: ; 0x02264D4C
 	add r2, r4, #0
 	bl ov49_02264D9C
 	ldr r0, [sp, #0x10]
-	bl ov45_0222AA10
+	bl WiFiPlazaPlayer_GetLanguage
 	add r4, r0, #0
 	ldr r0, [sp, #0x14]
-	bl ov45_0222AA10
+	bl WiFiPlazaPlayer_GetLanguage
 	add r3, r0, #0
 	ldr r2, _02264D98 ; =ov49_02269E44
 	lsl r4, r4, #4
@@ -3526,7 +3526,7 @@ ov49_02264D9C: ; 0x02264D9C
 	add r0, r3, #0
 	add r5, r1, #0
 	add r6, r2, #0
-	bl ov45_0222AA10
+	bl WiFiPlazaPlayer_GetLanguage
 	cmp r0, #7
 	bhi _02264E12
 	add r0, r0, r0
@@ -3597,21 +3597,21 @@ ov49_02264E20: ; 0x02264E20
 	add r5, r0, #0
 	add r0, r6, #0
 	add r7, r2, #0
-	bl ov45_0222A5C0
+	bl WiFiPlazaWork_GetMyPlayer
 	str r0, [sp]
 	ldrb r1, [r5, #3]
 	add r0, r6, #0
-	bl ov45_0222A578
+	bl WiFiPlazaWork_GetPlayer
 	add r6, r0, #0
 	ldr r0, [sp]
-	bl ov45_0222AA28
+	bl WiFiPlazaPlayer_IsLanguageValid
 	cmp r0, #0
 	bne _02264E48
 	mov r0, #0
 	pop {r3, r4, r5, r6, r7, pc}
 _02264E48:
 	add r0, r6, #0
-	bl ov45_0222AA28
+	bl WiFiPlazaPlayer_IsLanguageValid
 	cmp r0, #0
 	bne _02264E56
 	mov r0, #0
@@ -3660,11 +3660,11 @@ ov49_02264E90: ; 0x02264E90
 	add r0, r4, #0
 	add r6, r2, #0
 	add r7, r3, #0
-	bl ov45_0222A5C0
+	bl WiFiPlazaWork_GetMyPlayer
 	str r0, [sp]
 	ldrb r1, [r5, #3]
 	add r0, r4, #0
-	bl ov45_0222A578
+	bl WiFiPlazaWork_GetPlayer
 	ldr r1, [sp, #0x18]
 	cmp r1, #0
 	bne _02264EB6

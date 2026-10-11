@@ -69,16 +69,16 @@ typedef struct MosaicCallbackWork {
 extern void Pokepic_SetAttr(void *, int, int);
 extern void Pokepic_SetVisible(void *, int, int, int, int);
 extern void ov07_02223224(void *);
-extern void ov07_0221C448(void *, void *);
+extern void BattleAnimSystem_DestroyTask(void *, void *);
 extern void Heap_Free(void *);
 extern void *BattleAnimUtil_AllocWork(void *, int);
-extern int ov07_0221C514(void *);
-extern int ov07_0221C4A0(void *);
+extern int BattleAnimSystem_GetBattlerSpriteManager(void *);
+extern int BattleAnimSystem_GetBgConfig(void *);
 
-extern u32 ov07_0221C4A8(void *p, int i);
-extern void *ov07_0221C410(void *, void (*)(void *, void *), void *);
+extern u32 BattleAnimSystem_GetArg(void *p, int i);
+extern void *BattleAnimSystem_CreateTaskDefaultPriority(void *, void (*)(void *, void *), void *);
 extern void BattleAnimUtil_InitCommonWork(void *, void *);
-extern void *ov07_0221C4E8(void *, int);
+extern void *BattleAnimSystem_GetBattlerSprite(void *, int);
 extern void ManagedSprite_SetDrawFlag(void *, int);
 extern void ManagedSprite_SetMosaicFlag(void *, int);
 extern void ov07_02225DC4(void *, void *);
@@ -91,13 +91,13 @@ void ov07_02225F94(void *owner) {
     int index;
 
     BattleAnimUtil_InitCommonWork(owner, work);
-    work->delta = ((s32)ov07_0221C4A8(work->owner, 1));
-    work->target = ((s32)ov07_0221C4A8(work->owner, 2));
-    work->unused28 = ((s32)ov07_0221C4A8(work->owner, 3));
-    index = ((s32)ov07_0221C4A8(work->owner, 0));
-    work->sprite = ov07_0221C4E8(work->owner, index);
+    work->delta = ((s32)BattleAnimSystem_GetArg(work->owner, 1));
+    work->target = ((s32)BattleAnimSystem_GetArg(work->owner, 2));
+    work->unused28 = ((s32)BattleAnimSystem_GetArg(work->owner, 3));
+    index = ((s32)BattleAnimSystem_GetArg(work->owner, 0));
+    work->sprite = BattleAnimSystem_GetBattlerSprite(work->owner, index);
     ManagedSprite_SetDrawFlag(work->sprite, TRUE);
     work->mosaic = work->delta < 0 ? 0 : 15;
     ManagedSprite_SetMosaicFlag(work->sprite, TRUE);
-    ov07_02225F18(ov07_0221C410(work->owner, (void (*)(void *, void *))ov07_02225F18, work), work);
+    ov07_02225F18(BattleAnimSystem_CreateTaskDefaultPriority(work->owner, (void (*)(void *, void *))ov07_02225F18, work), work);
 }

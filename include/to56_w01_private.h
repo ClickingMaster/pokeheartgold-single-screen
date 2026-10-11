@@ -35,12 +35,12 @@ void ov07_02222AC4(void *, int, int, int, int, int);
 BOOL ov07_02222AF4(void *);
 void ov07_02222D74(void *);
 void ov07_02222D3C(void *);
-BgConfig *ov07_0221C4A0(void *);
-int ov07_0221FAEC(void *, int);
-int ov07_0221FB04(void *, int);
+BgConfig *BattleAnimSystem_GetBgConfig(void *);
+int BattleAnimSystem_GetBgLayer(void *, int);
+int BattleAnimSystem_GetBgPriority(void *, int);
 int ov07_0221FAE8(void *);
-int ov07_0221BFD0(void *);
-void ov07_0221C448(void *, int);
+int BattleAnimSystem_GetHeapID(void *);
+void BattleAnimSystem_DestroyTask(void *, int);
 BOOL ov07_0222C870(To56W01Work *work);
 void ov07_0222C918(int task, To56W01Work *work);
 

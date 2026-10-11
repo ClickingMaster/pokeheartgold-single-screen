@@ -21,8 +21,8 @@ void ov07_0222C918(int task, To56W01Work *work) {
         }
         break;
     case 2:
-        BgSetPosTextAndCommit(ov07_0221C4A0(work->owner), 2, BG_POS_OP_SET_X, -work->x);
-        BgSetPosTextAndCommit(ov07_0221C4A0(work->owner), 2, BG_POS_OP_SET_Y, -work->y);
+        BgSetPosTextAndCommit(BattleAnimSystem_GetBgConfig(work->owner), 2, BG_POS_OP_SET_X, -work->x);
+        BgSetPosTextAndCommit(BattleAnimSystem_GetBgConfig(work->owner), 2, BG_POS_OP_SET_Y, -work->y);
         work->counter++;
         if (work->counter > 8) {
             ov07_02222AC4(&work->motion, 0, 31, 31, 0, 16);
@@ -39,13 +39,13 @@ void ov07_0222C918(int task, To56W01Work *work) {
         break;
     case 4:
         ov07_02222D3C(work->handle);
-        bg = ov07_0221FAEC(work->owner, 1);
-        SetBgPriority((u8)bg, (u8)ov07_0221FB04(work->owner, 1));
+        bg = BattleAnimSystem_GetBgLayer(work->owner, 1);
+        SetBgPriority((u8)bg, (u8)BattleAnimSystem_GetBgPriority(work->owner, 1));
         SetBgPriority(0, (u8)ov07_0221FAE8(work->owner));
-        bg = ov07_0221FAEC(work->owner, 1);
-        BG_ClearCharDataRange((u8)bg, 0x4000, 0, (enum HeapID)ov07_0221BFD0(work->owner));
-        BgClearTilemapBufferAndCommit(ov07_0221C4A0(work->owner), ov07_0221FAEC(work->owner, 1));
-        ov07_0221C448(work->owner, task);
+        bg = BattleAnimSystem_GetBgLayer(work->owner, 1);
+        BG_ClearCharDataRange((u8)bg, 0x4000, 0, (enum HeapID)BattleAnimSystem_GetHeapID(work->owner));
+        BgClearTilemapBufferAndCommit(BattleAnimSystem_GetBgConfig(work->owner), BattleAnimSystem_GetBgLayer(work->owner, 1));
+        BattleAnimSystem_DestroyTask(work->owner, task);
         Heap_Free(work);
         break;
     }

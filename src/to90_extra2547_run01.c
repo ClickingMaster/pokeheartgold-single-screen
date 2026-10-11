@@ -25,9 +25,9 @@ extern void sub_0200914C(void*,int);
 extern void *ov07_02233DB8(Descriptor*);
 extern int ov07_02233E88(void*);
 extern void ov07_02233ECC(void*);
-extern int ov07_0221C394(u8 *);
-extern int ov07_0221C3B0(void*);
-extern void ov07_0221C3C0(void*);
+extern int BattleAnimSystem_Execute(u8 *);
+extern int BattleAnimSystem_IsActive(void*);
+extern void BattleAnimSystem_EndMove(void*);
 extern int PokepicAnimManager_GetAnimState(void*,int);
 extern void ov12_02261F38(void*,int,int,void*,void*,int,int,int,u32);
 extern void BattleController_InitMoveAnimData(void*,int,Message*,int,int,int,int,int);
@@ -53,7 +53,7 @@ void ov12_0225C9BC(void *task,void *data) {
  state=work->state;switch(state) {
  case 0:if(work->personality){BattleController_InitMoveAnimData(work->system,0,&message1,1,15,work->battler,work->battler,0);ov12_02261B80(work->system,work->context,engine,&message1);work->state++;}else work->state=4;break;
  case 2:ov12_02261CA8(work->system,work->source,&source,work->battler);ov07_0223494C(&source,5);BattleController_InitMoveAnimData(work->system,0,&message2,1,16,work->battler,work->battler,0);ov12_02261B80(work->system,work->context,engine,&message2);work->context->flag=0;work->state++;break;
- case 1:case 3:ov07_0221C394((u8 *)engine);if(ov07_0221C3B0(engine)==0){ov07_0221C3C0(engine);work->state++;}break;
+ case 1:case 3:BattleAnimSystem_Execute((u8 *)engine);if(BattleAnimSystem_IsActive(engine)==0){BattleAnimSystem_EndMove(engine);work->state++;}break;
  case 4:{int type=work->type;if(type&1) {
  first.values[0]=ov12_0226D120[type];first.values[1]=5;first.values[2]=5;first.values[3]=work->battler;first.values[4]=work->species;
  first.values[7]=(int)BattleSystem_GetSpriteSystem(work->system);first.values[8]=(int)BattleSystem_GetPaletteData(work->system);first.values[5]=1;first.values[6]=0;work->object=ov07_02233DB8(&first);

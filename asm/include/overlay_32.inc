@@ -68,7 +68,7 @@
 .public PlayerProfile_New
 .public Save_Profile_PlayerName_Set
 .public sub_0202C254
-.public sub_0202C6F4
+.public Save_FriendRoster_Get
 .public GXS_SetGraphicsMode
 .public GX_SetBankForSubBG
 .public GX_SetBankForSubOBJ

@@ -7,5 +7,5 @@
 void ov07_02230600(void *owner) {
     void *data = BattleAnimUtil_AllocWork(owner, 0x34);
     WORD(data, 0) = (u32)owner;
-    ov07_0221C410(owner, ov07_0223049C, data);
+    BattleAnimSystem_CreateTaskDefaultPriority(owner, ov07_0223049C, data);
 }

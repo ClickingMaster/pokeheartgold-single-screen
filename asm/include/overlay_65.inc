@@ -153,10 +153,10 @@
 .public PlayerProfile_GetLanguage
 .public Options_GetFrame
 .public sub_0202C254
-.public sub_0202C2DC
-.public sub_0202C2F8
-.public sub_0202C338
-.public sub_0202C6F4
+.public FriendRoster_IsFriendValid
+.public FriendRoster_CountFriends
+.public FriendRoster_RemoveFriend
+.public Save_FriendRoster_Get
 .public Save_Chatot_Get
 .public Chatot_Invalidate
 .public GameStats_Inc

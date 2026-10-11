@@ -113,7 +113,7 @@ void PalPadRosterPage_HighlightSlot(PalPadRosterPage *page, PalPadGfx *gfx, int 
 void PalPadRosterPage_Draw(PalPadRosterPage *page, PalPadShared *shared, PalPadGfx *gfx, UnkStruct_ov42_02227060 *trainerIcons, PalPadScreens *screens, PalPadFriendList *friends, int pageNo, enum HeapID heapId);
 void PalPadRosterPage_Clear(PalPadRosterPage *page, PalPadGfx *gfx, PalPadScreens *screens);
 void PalPadRosterPage_DeleteIcons(PalPadRosterPage *page, PalPadGfx *gfx);
-void PalPadRosterPage_DrawFriend(PalPadRosterPage *page, UnkStruct_ov42_02227060 *trainerIcons, PalPadGfx *gfx, PalPadScreens *screens, int slot, UnkStruct_021D2230 *wifiList, int friendSlot, enum HeapID heapId);
+void PalPadRosterPage_DrawFriend(PalPadRosterPage *page, UnkStruct_ov42_02227060 *trainerIcons, PalPadGfx *gfx, PalPadScreens *screens, int slot, FriendRoster *wifiList, int friendSlot, enum HeapID heapId);
 void PalPadRosterPage_DrawEmptySlot(PalPadRosterPage *page, PalPadGfx *gfx, PalPadScreens *screens, int slot);
 
 static inline int Abs16(s16 value) {
@@ -133,7 +133,7 @@ void PalPadRoster_Init(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gf
 
 int PalPadRoster_Main(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     int index;
-    UnkStruct_021D2230 *wifiList;
+    FriendRoster *wifiList;
 
     switch (shared->subState) {
     case 0:
@@ -206,7 +206,7 @@ int PalPadRoster_Main(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx
     case 10: // rewrite name
         BeginNormalPaletteFade(FADE_BOTH_SCREENS, (enum FadeType)16, (enum FadeType)16, RGB_BLACK, 6, 1, heapId);
         index = PalPadRoster_GetSelectedIndex(roster);
-        wifiList = sub_0202C6F4(shared->saveData);
+        wifiList = Save_FriendRoster_Get(shared->saveData);
         PalPadShared_SetInitialName(shared, sub_0202C254(wifiList, shared->friends.slots[index]));
         shared->subState = 11;
         break;
@@ -219,7 +219,7 @@ int PalPadRoster_Main(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx
         break;
     case 12: // back from the naming screen with a new name
         index = PalPadRoster_GetSelectedIndex(roster);
-        wifiList = sub_0202C6F4(shared->saveData);
+        wifiList = Save_FriendRoster_Get(shared->saveData);
         sub_0202C270(wifiList, shared->friends.slots[index], shared->name);
         // fallthrough
     case 13:
@@ -261,9 +261,9 @@ int PalPadRoster_Main(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx
         break;
     case 19:
         if (PalPadRoster_UpdateDeleteEffect(roster, gfx) == TRUE) {
-            wifiList = sub_0202C6F4(shared->saveData);
+            wifiList = Save_FriendRoster_Get(shared->saveData);
             index = PalPadRoster_GetSelectedIndex(roster);
-            sub_0202C338(wifiList, shared->friends.slots[index]);
+            FriendRoster_RemoveFriend(wifiList, shared->friends.slots[index]);
             sub_020311AC(Save_Frontier_GetStatic(shared->saveData), shared->friends.slots[index]);
             PalPadShared_ReadFriendList(shared);
             PalPadRoster_DrawPage(roster, shared, gfx, roster->page, roster->cursor, 0, heapId);
@@ -633,15 +633,15 @@ BOOL PalPadRoster_UpdatePageScroll(PalPadRoster *roster, PalPadShared *shared, P
 }
 
 void PalPadRoster_OpenFriendMenu(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
-    UnkStruct_021D2230 *wifiList;
+    FriendRoster *wifiList;
     int index, codeState;
     TouchscreenListMenuHeader header;
     u8 *slots;
 
-    wifiList = sub_0202C6F4(shared->saveData);
+    wifiList = Save_FriendRoster_Get(shared->saveData);
     index = PalPadRoster_GetSelectedIndex(roster);
     slots = shared->friends.slots;
-    codeState = sub_0202C090(wifiList, slots[index], 8);
+    codeState = FriendRoster_GetEntryField(wifiList, slots[index], 8);
     MI_CpuFill8(&header, 0, sizeof(header));
     header.template = sPalPadRosterFriendMenuTemplate.template;
     if (codeState == 2) {
@@ -695,14 +695,14 @@ close:
 BOOL PalPadRoster_ShowFriendCode(PalPadRoster *roster, PalPadShared *shared, PalPadGfx *gfx, enum HeapID heapId) {
     int index;
     u8 *slots;
-    UnkStruct_021D2230 *wifiList;
+    FriendRoster *wifiList;
     u64 friendCode;
     int msgId;
 
-    wifiList = sub_0202C6F4(shared->saveData);
+    wifiList = Save_FriendRoster_Get(shared->saveData);
     index = PalPadRoster_GetSelectedIndex(roster);
     slots = shared->friends.slots;
-    friendCode = DWC_GetFriendKey(sub_0202C23C(wifiList, slots[index]));
+    friendCode = DWC_GetFriendKey(FriendRoster_GetDwcFriendData(wifiList, slots[index]));
     msgId = friendCode != 0 ? 60 : 66;
     PlaySE(SEQ_SE_DP_DECIDE);
     PalPadGfx_BufferFriendCode(gfx, friendCode);
@@ -935,9 +935,9 @@ void PalPadRosterPage_HighlightSlot(PalPadRosterPage *page, PalPadGfx *gfx, int 
 
 void PalPadRosterPage_Draw(PalPadRosterPage *page, PalPadShared *shared, PalPadGfx *gfx, UnkStruct_ov42_02227060 *trainerIcons, PalPadScreens *screens, PalPadFriendList *friends, int pageNo, enum HeapID heapId) {
     int first, i;
-    UnkStruct_021D2230 *wifiList;
+    FriendRoster *wifiList;
 
-    wifiList = sub_0202C6F4(shared->saveData);
+    wifiList = Save_FriendRoster_Get(shared->saveData);
     FillWindowPixelBuffer(&page->window, 0);
     PalPadRosterPage_DeleteIcons(page, gfx);
     first = pageNo * PALPAD_ROSTER_PAGE_SLOT;
@@ -976,14 +976,14 @@ void PalPadRosterPage_DeleteIcons(PalPadRosterPage *page, PalPadGfx *gfx) {
 
 #pragma force_active on
 
-void PalPadRosterPage_DrawFriend(PalPadRosterPage *page, UnkStruct_ov42_02227060 *trainerIcons, PalPadGfx *gfx, PalPadScreens *screens, int slot, UnkStruct_021D2230 *wifiList, int friendSlot, enum HeapID heapId) {
+void PalPadRosterPage_DrawFriend(PalPadRosterPage *page, UnkStruct_ov42_02227060 *trainerIcons, PalPadGfx *gfx, PalPadScreens *screens, int slot, FriendRoster *wifiList, int friendSlot, enum HeapID heapId) {
     int avatar, gender;
     s16 position[4];
     String *string;
     u8 *owner = (u8 *)page; // the original addresses the icons and the window through a byte pointer
 
-    avatar = sub_0202C090(wifiList, friendSlot, 7);
-    gender = sub_0202C090(wifiList, friendSlot, 8);
+    avatar = FriendRoster_GetEntryField(wifiList, friendSlot, 7);
+    gender = FriendRoster_GetEntryField(wifiList, friendSlot, 8);
     if (gender == 2) {
         PalPadRosterPage_DrawEmptySlot(page, gfx, screens, slot);
     } else {

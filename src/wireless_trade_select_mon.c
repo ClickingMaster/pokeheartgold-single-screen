@@ -58,7 +58,7 @@
 #include "oam_manager.h"
 #include "unk_0200FA24.h"
 #include "unk_02013FDC.h"
-#include "unk_0202C034.h"
+#include "friend_roster.h"
 #include "unk_02030A98.h"
 #include "unk_02034354.h"
 #include "unk_02035900.h"
@@ -209,7 +209,7 @@ struct WirelessTradeSelectMon {
     ListMenuItem *rosterItems;                                   // 0x3688
     ListMenu *rosterMenu;                                        // 0x368C
     Window rosterWindow;                                         // 0x3690
-    UnkStruct_021D2230 *roster;                                  // 0x36A0
+    FriendRoster *roster;                                  // 0x36A0
     u32 tradesDone;                                              // 0x36A4
     s32 unk_36A8;                                                // 0x36A8
     int lastSentValue;                                           // 0x36AC
@@ -252,8 +252,8 @@ void sub_0208F7E0(FieldSystem *fieldSystem, WirelessTradeSelectMon *work);
 
 // Defined in friend_roster.c, frontier_save.c, communication_player_state.c, communication_manager_9.c and
 // network_communication_state_full.c; not declared in their public headers.
-BOOL sub_0202C2DC(UnkStruct_021D2230 *roster, int index);
-void sub_0202C338(UnkStruct_021D2230 *roster, int index);
+BOOL FriendRoster_IsFriendValid(FriendRoster *roster, int index);
+void FriendRoster_RemoveFriend(FriendRoster *roster, int index);
 void sub_020311AC(FrontierSave *frontier, int row);
 void sub_02034AEC(SaveData *saveData, int a1);
 int sub_02036FD8(int command, void *data, int size);
@@ -1747,7 +1747,7 @@ int WirelessTradeSelectMon_HandleDeletePrompt(WirelessTradeSelectMon *work) {
     case YESNORESPONSE_YES:
     case YESNORESPONSE_YES_TOUCH:
         sub_020311AC(Save_Frontier_GetStatic(work->saveData), work->chosenRosterSlot);
-        sub_0202C338(work->roster, work->chosenRosterSlot);
+        FriendRoster_RemoveFriend(work->roster, work->chosenRosterSlot);
         sub_0203A280(work->saveData, work->friendNetId, 31, HEAP_ID_26, 0);
         work->callback = WirelessTradeSelectMon_RegisterNextFriend;
         break;
@@ -1795,11 +1795,11 @@ int WirelessTradeSelectMon_HandleRosterListInput(WirelessTradeSelectMon *work) {
 }
 
 int WirelessTradeSelectMon_ShowRosterList(WirelessTradeSelectMon *work) {
-    int count = sub_0202C2F8(work->roster);
+    int count = FriendRoster_CountFriends(work->roster);
     work->rosterItems = ListMenuItems_New(count + 1, HEAP_ID_26);
     String *name = String_New(100, HEAP_ID_26);
     for (int i = 0; i < 32; i++) {
-        if (sub_0202C2DC(work->roster, i) != FALSE) {
+        if (FriendRoster_IsFriendValid(work->roster, i) != FALSE) {
             CopyU16ArrayToString(name, sub_0202C254(work->roster, i));
             ListMenuItems_AddItem(work->rosterItems, name, i);
         }
@@ -1840,7 +1840,7 @@ int WirelessTradeSelectMon_HandleRegisterPrompt(WirelessTradeSelectMon *work) {
         int i;
         work->callback = WirelessTradeSelectMon_RegisterNextFriend;
         for (i = 0; i < 32; i++) {
-            if (!sub_0202C2DC(work->roster, i)) {
+            if (!FriendRoster_IsFriendValid(work->roster, i)) {
                 sub_0203A280(work->saveData, work->friendNetId, i, HEAP_ID_26, 0);
                 break;
             }
@@ -1867,7 +1867,7 @@ int WirelessTradeSelectMon_WaitQuitSync(WirelessTradeSelectMon *work) {
 int WirelessTradeSelectMon_RegisterNextFriend(WirelessTradeSelectMon *work) {
     int i;
     int j;
-    UnkStruct_021D2230 *roster;
+    FriendRoster *roster;
 
     work->friendNetId = -1;
     for (i = 0; i < Comm_CountConnected(); i++) {
@@ -1891,9 +1891,9 @@ int WirelessTradeSelectMon_RegisterNextFriend(WirelessTradeSelectMon *work) {
         work->callback = WirelessTradeSelectMon_HandleRegisterPrompt;
         return 0;
     }
-    roster = sub_0202C6F4(work->saveData);
+    roster = Save_FriendRoster_Get(work->saveData);
     for (j = 0; j < 32; j++) {
-        if (!sub_0202C2DC(roster, j)) {
+        if (!FriendRoster_IsFriendValid(roster, j)) {
             sub_0203A280(work->saveData, work->friendNetId, j, HEAP_ID_26, 0);
             break;
         }
@@ -1912,7 +1912,7 @@ int WirelessTradeSelectMon_StartFriendRegistration(WirelessTradeSelectMon *work)
     }
     work->rosterMsgFormat = MessageFormat_New(HEAP_ID_26);
     work->rosterMsgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0779_bin, HEAP_ID_26);
-    work->roster = sub_0202C6F4(work->saveData);
+    work->roster = Save_FriendRoster_Get(work->saveData);
     work->callback = WirelessTradeSelectMon_RegisterNextFriend;
     return 0;
 }

@@ -21,12 +21,12 @@ extern const BattleAnimBattlerTypePositions sBattleAnimBattlerTypePositions;
 extern const BattleAnimEmitterPositions sBattleAnimEmitterPositions;
 
 int BattleAnimUtil_GetBattlerType(BattleAnimSystem *system, int battler) {
-    return ov07_0221FA04(system, battler);
+    return BattleAnimSystem_GetBattlerType(system, battler);
 }
 
 int BattleAnimUtil_GetBattlerSide(BattleAnimSystem *system, int battler) {
     int side;
-    switch (ov07_0221FA04(system, battler)) {
+    switch (BattleAnimSystem_GetBattlerType(system, battler)) {
     case BATTLER_TYPE_SOLO_PLAYER:
     case BATTLER_TYPE_PLAYER_SIDE_SLOT_1:
     case BATTLER_TYPE_PLAYER_SIDE_SLOT_2:
@@ -44,7 +44,7 @@ int BattleAnimUtil_GetBattlerSide(BattleAnimSystem *system, int battler) {
 int BattleAnimUtil_FindBattlerByType(BattleAnimSystem *system, int battlerType) {
     int i;
     for (i = 0; i < 4; i++) {
-        int type = ov07_0221FA04(system, i);
+        int type = BattleAnimSystem_GetBattlerType(system, i);
         if (type != battlerType) {
             continue;
         }
@@ -55,12 +55,12 @@ int BattleAnimUtil_FindBattlerByType(BattleAnimSystem *system, int battlerType) 
 
 int BattleAnimUtil_GetPartnerBattler(BattleAnimSystem *system, int battler) {
     int i;
-    u32 battlerType = ov07_0221FA04(system, battler);
+    u32 battlerType = BattleAnimSystem_GetBattlerType(system, battler);
     if (battlerType <= BATTLER_TYPE_SOLO_ENEMY) {
         return battlerType;
     }
     for (i = 0; i < 4; i++) {
-        int type = ov07_0221FA04(system, i);
+        int type = BattleAnimSystem_GetBattlerType(system, i);
         switch (battlerType) {
         case BATTLER_TYPE_PLAYER_SIDE_SLOT_1:
             if (type == BATTLER_TYPE_PLAYER_SIDE_SLOT_2) {
@@ -140,7 +140,7 @@ void BattleAnimUtil_GetEmitterPosition(int battlerType, VecFx32 *pos, int unused
 // ... of a battler, for the current particle system's perspective type
 #define BATTLER_EMITTER_POSITION_FUNC(name, func)                                                     \
     void name(BattleAnimSystem *system, int battler, VecFx32 *pos) {                                  \
-        int perspective = ParticleSystem_GetPerspectiveType((ParticleSystem *)ov07_0221C478(system)); \
+        int perspective = ParticleSystem_GetPerspectiveType((ParticleSystem *)BattleAnimSystem_GetCurrentParticleSystem(system)); \
         int battlerType = BattleAnimUtil_GetBattlerType(system, battler);                             \
         int unk = ov07_0221BFC0(system);                                                              \
         func(battlerType, pos, unk, perspective);                                                     \
@@ -261,11 +261,11 @@ void BattleAnimUtil_InitCommonWork(BattleAnimSystem *system, BattleAnimCommonWor
     work->state[2] = 0;
     work->state[3] = 0;
     work->system = system;
-    work->spriteSystem = ov07_0221C530(system);
-    work->battlerSpriteManager = ov07_0221C514(system);
+    work->spriteSystem = BattleAnimSystem_GetSpriteSystem(system);
+    work->battlerSpriteManager = BattleAnimSystem_GetBattlerSpriteManager(system);
     work->unk_10 = ov07_0221C528(system);
-    work->bgConfig = ov07_0221C4A0(system);
-    work->paletteData = ov07_0221FA78(system);
+    work->bgConfig = BattleAnimSystem_GetBgConfig(system);
+    work->paletteData = BattleAnimSystem_GetPaletteData(system);
 }
 
 // flags: 0x40 all battlers, 0x20 all but the attacker, otherwise 0x02 attacker, 0x04 its partner, 0x08 defender,
@@ -278,8 +278,8 @@ void BattleAnimUtil_CollectPicsByFlags(BattleAnimSystem *system, u32 flags, Batt
 
     *count = 0;
     if ((flags & 0x40) == 0x40) {
-        attacker = ov07_0221C468(system);
-        targets[*count].pokepic = ov07_0221FA48(system, attacker);
+        attacker = BattleAnimSystem_GetAttacker(system);
+        targets[*count].pokepic = BattleAnimSystem_GetBattlerPokepic(system, attacker);
         if (targets[*count].pokepic != NULL) {
             targets[*count].battler = attacker;
             BattleAnimUtil_GetPicPosition(targets[*count].pokepic, targets[*count].pos);
@@ -287,15 +287,15 @@ void BattleAnimUtil_CollectPicsByFlags(BattleAnimSystem *system, u32 flags, Batt
         }
 
         partner = BattleAnimUtil_GetPartnerBattler(system, attacker);
-        targets[*count].pokepic = ov07_0221FA48(system, partner);
+        targets[*count].pokepic = BattleAnimSystem_GetBattlerPokepic(system, partner);
         if (targets[*count].pokepic != NULL) {
             targets[*count].battler = partner;
             BattleAnimUtil_GetPicPosition(targets[*count].pokepic, targets[*count].pos);
             (*count)++;
         }
 
-        opponent = BattleAnimUtil_FindBattlerByType(system, BattleAnimUtil_GetOpposingBattlerType(ov07_0221FA04(system, attacker)));
-        targets[*count].pokepic = ov07_0221FA48(system, opponent);
+        opponent = BattleAnimUtil_FindBattlerByType(system, BattleAnimUtil_GetOpposingBattlerType(BattleAnimSystem_GetBattlerType(system, attacker)));
+        targets[*count].pokepic = BattleAnimSystem_GetBattlerPokepic(system, opponent);
         if (targets[*count].pokepic != NULL) {
             targets[*count].battler = opponent;
             BattleAnimUtil_GetPicPosition(targets[*count].pokepic, targets[*count].pos);
@@ -303,7 +303,7 @@ void BattleAnimUtil_CollectPicsByFlags(BattleAnimSystem *system, u32 flags, Batt
         }
 
         opponentPartner = BattleAnimUtil_GetPartnerBattler(system, opponent);
-        targets[*count].pokepic = ov07_0221FA48(system, opponentPartner);
+        targets[*count].pokepic = BattleAnimSystem_GetBattlerPokepic(system, opponentPartner);
         if (targets[*count].pokepic != NULL) {
             targets[*count].battler = opponentPartner;
             BattleAnimUtil_GetPicPosition(targets[*count].pokepic, targets[*count].pos);
@@ -313,10 +313,10 @@ void BattleAnimUtil_CollectPicsByFlags(BattleAnimSystem *system, u32 flags, Batt
     }
 
     if ((flags & 0x20) == 0x20) {
-        attacker = ov07_0221C468(system);
+        attacker = BattleAnimSystem_GetAttacker(system);
         partner = BattleAnimUtil_GetPartnerBattler(system, attacker);
         if (partner != attacker) {
-            targets[*count].pokepic = ov07_0221FA48(system, partner);
+            targets[*count].pokepic = BattleAnimSystem_GetBattlerPokepic(system, partner);
             if (targets[*count].pokepic != NULL) {
                 targets[*count].battler = partner;
                 BattleAnimUtil_GetPicPosition(targets[*count].pokepic, targets[*count].pos);
@@ -324,9 +324,9 @@ void BattleAnimUtil_CollectPicsByFlags(BattleAnimSystem *system, u32 flags, Batt
             }
         }
 
-        opponent = BattleAnimUtil_FindBattlerByType(system, BattleAnimUtil_GetOpposingBattlerType(ov07_0221FA04(system, attacker)));
+        opponent = BattleAnimUtil_FindBattlerByType(system, BattleAnimUtil_GetOpposingBattlerType(BattleAnimSystem_GetBattlerType(system, attacker)));
         if (opponent != attacker) {
-            targets[*count].pokepic = ov07_0221FA48(system, opponent);
+            targets[*count].pokepic = BattleAnimSystem_GetBattlerPokepic(system, opponent);
             if (targets[*count].pokepic != NULL) {
                 targets[*count].battler = opponent;
                 BattleAnimUtil_GetPicPosition(targets[*count].pokepic, targets[*count].pos);
@@ -336,7 +336,7 @@ void BattleAnimUtil_CollectPicsByFlags(BattleAnimSystem *system, u32 flags, Batt
 
         opponentPartner = BattleAnimUtil_GetPartnerBattler(system, opponent);
         if (opponentPartner != attacker) {
-            targets[*count].pokepic = ov07_0221FA48(system, opponentPartner);
+            targets[*count].pokepic = BattleAnimSystem_GetBattlerPokepic(system, opponentPartner);
             if (targets[*count].pokepic != NULL) {
                 targets[*count].battler = opponentPartner;
                 BattleAnimUtil_GetPicPosition(targets[*count].pokepic, targets[*count].pos);
@@ -347,36 +347,36 @@ void BattleAnimUtil_CollectPicsByFlags(BattleAnimSystem *system, u32 flags, Batt
     }
 
     if ((flags & 0x02) == 0x02) {
-        targets[*count].pokepic = ov07_0221FA48(system, ov07_0221C468(system));
+        targets[*count].pokepic = BattleAnimSystem_GetBattlerPokepic(system, BattleAnimSystem_GetAttacker(system));
         if (targets[*count].pokepic != NULL) {
-            targets[*count].battler = ov07_0221C468(system);
+            targets[*count].battler = BattleAnimSystem_GetAttacker(system);
             BattleAnimUtil_GetPicPosition(targets[*count].pokepic, targets[*count].pos);
             (*count)++;
         }
     }
 
-    if (ov07_0221FAB0(system) == TRUE && (flags & 0x04) == 0x04) {
-        targets[*count].pokepic = ov07_0221FA48(system, BattleAnimUtil_GetPartnerBattler(system, ov07_0221C468(system)));
+    if (BattleAnimSystem_IsDoubleBattle(system) == TRUE && (flags & 0x04) == 0x04) {
+        targets[*count].pokepic = BattleAnimSystem_GetBattlerPokepic(system, BattleAnimUtil_GetPartnerBattler(system, BattleAnimSystem_GetAttacker(system)));
         if (targets[*count].pokepic != NULL) {
-            targets[*count].battler = BattleAnimUtil_GetPartnerBattler(system, ov07_0221C468(system));
+            targets[*count].battler = BattleAnimUtil_GetPartnerBattler(system, BattleAnimSystem_GetAttacker(system));
             BattleAnimUtil_GetPicPosition(targets[*count].pokepic, targets[*count].pos);
             (*count)++;
         }
     }
 
     if ((flags & 0x08) == 0x08) {
-        targets[*count].pokepic = ov07_0221FA48(system, ov07_0221C470(system));
+        targets[*count].pokepic = BattleAnimSystem_GetBattlerPokepic(system, BattleAnimSystem_GetDefender(system));
         if (targets[*count].pokepic != NULL) {
-            targets[*count].battler = ov07_0221C470(system);
+            targets[*count].battler = BattleAnimSystem_GetDefender(system);
             BattleAnimUtil_GetPicPosition(targets[*count].pokepic, targets[*count].pos);
             (*count)++;
         }
     }
 
-    if (ov07_0221FAB0(system) == TRUE && (flags & 0x10) == 0x10) {
-        targets[*count].pokepic = ov07_0221FA48(system, BattleAnimUtil_GetPartnerBattler(system, ov07_0221C470(system)));
+    if (BattleAnimSystem_IsDoubleBattle(system) == TRUE && (flags & 0x10) == 0x10) {
+        targets[*count].pokepic = BattleAnimSystem_GetBattlerPokepic(system, BattleAnimUtil_GetPartnerBattler(system, BattleAnimSystem_GetDefender(system)));
         if (targets[*count].pokepic != NULL) {
-            targets[*count].battler = BattleAnimUtil_GetPartnerBattler(system, ov07_0221C470(system));
+            targets[*count].battler = BattleAnimUtil_GetPartnerBattler(system, BattleAnimSystem_GetDefender(system));
             BattleAnimUtil_GetPicPosition(targets[*count].pokepic, targets[*count].pos);
             (*count)++;
         }
@@ -387,22 +387,22 @@ void BattleAnimUtil_CollectPicsByFlags(BattleAnimSystem *system, u32 flags, Batt
 void BattleAnimUtil_CollectSpritesByFlags(BattleAnimSystem *system, u32 flags, BattleAnimTarget *targets, int *count) {
     *count = 0;
     if ((flags & 0x02) == 0x02) {
-        targets[*count].sprite = ov07_0221C4E8(system, *count);
+        targets[*count].sprite = BattleAnimSystem_GetBattlerSprite(system, *count);
         BattleAnimUtil_GetSpritePosition(targets[*count].sprite, targets[*count].pos);
         (*count)++;
     }
     if ((flags & 0x04) == 0x04) {
-        targets[*count].sprite = ov07_0221C4E8(system, *count);
+        targets[*count].sprite = BattleAnimSystem_GetBattlerSprite(system, *count);
         BattleAnimUtil_GetSpritePosition(targets[*count].sprite, targets[*count].pos);
         (*count)++;
     }
     if ((flags & 0x08) == 0x08) {
-        targets[*count].sprite = ov07_0221C4E8(system, *count);
+        targets[*count].sprite = BattleAnimSystem_GetBattlerSprite(system, *count);
         BattleAnimUtil_GetSpritePosition(targets[*count].sprite, targets[*count].pos);
         (*count)++;
     }
     if ((flags & 0x10) == 0x10) {
-        targets[*count].sprite = ov07_0221C4E8(system, *count);
+        targets[*count].sprite = BattleAnimSystem_GetBattlerSprite(system, *count);
         BattleAnimUtil_GetSpritePosition(targets[*count].sprite, targets[*count].pos);
         (*count)++;
     }
@@ -411,7 +411,7 @@ void BattleAnimUtil_CollectSpritesByFlags(BattleAnimSystem *system, u32 flags, B
 void *BattleAnimUtil_AllocWork(BattleAnimSystem *system, u32 size) {
     void *work;
     GF_ASSERT(system != NULL);
-    work = Heap_Alloc(ov07_0221BFD0(system), size);
+    work = Heap_Alloc(BattleAnimSystem_GetHeapID(system), size);
     GF_ASSERT(work != NULL);
     memset(work, 0, size);
     return work;

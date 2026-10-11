@@ -265,8 +265,8 @@ String *WiFiPlazaSurvey_GetAnswerTextFromMsg(WiFiPlazaSurveyMessages *messages, 
 
 void WiFiPlazaSurvey_BufferPlayerName(WiFiPlazaSurveyMessages *messages, int index, enum HeapID heapID) {
     PlayerProfile *profile = PlayerProfile_New(heapID);
-    void *player = ov45_0222A5C0(messages->lobby);
-    ov45_0222A844(player, profile, heapID);
+    void *player = WiFiPlazaWork_GetMyPlayer(messages->lobby);
+    WiFiPlazaPlayer_CopyToProfile(player, profile, heapID);
     BufferPlayersName(messages->format, index, profile);
     Heap_Free(profile);
 }

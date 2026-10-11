@@ -1192,7 +1192,7 @@ static u32 SlotLuckiness(SaveData *saveData, u8 machineId, u8 city) {
     }
 
     rngSeed = GetLCRNGSeed();
-    SetLCRNGSeed(sub_0202C7DC(friendGroup));
+    SetLCRNGSeed(Save_FriendGroup_GetCurrentSeed(friendGroup));
 
     luckValues = Heap_AllocAtEnd(HEAP_ID_FIELD3, numMachines);
     MI_CpuFill8(luckValues, 0, numMachines);

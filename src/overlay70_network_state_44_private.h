@@ -26,7 +26,7 @@ BOOL GtsServer_IsRequestDone(void);
 int GtsServer_GetResult(void);
 void sub_0203189C(void *, void *);
 void GtsServer_RequestSetProfile(void *, void *);
-u32 sub_0202C08C(void *);
+u32 FriendRoster_GetUserData(void *);
 u32 Save_SysInfo_GetDwcProfileId(void *);
 void Save_SysInfo_SetDwcProfileId(void *, u32);
 u64 DWC_CreateFriendKey(u32);

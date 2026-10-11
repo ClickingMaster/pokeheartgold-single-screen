@@ -85,7 +85,7 @@ void ov07_02223240(void *task, Ov07Work23240 *work) {
         }
         return;
     default:
-        ov07_0221C448(work->owner, task);
+        BattleAnimSystem_DestroyTask(work->owner, task);
         Heap_Free(work);
         return;
     }
@@ -94,17 +94,17 @@ void ov07_02223240(void *task, Ov07Work23240 *work) {
 void ov07_02223350(void *owner) {
     Ov07Work23240 *work = BattleAnimUtil_AllocWork(owner, sizeof(Ov07Work23240));
     BattleAnimUtil_InitCommonWork(owner, work->init);
-    work->arg0 = ((s32)ov07_0221C4A8(owner, 0));
-    work->arg1 = ((s32)ov07_0221C4A8(owner, 1));
-    work->arg2 = ((s32)ov07_0221C4A8(owner, 2));
-    work->arg3 = ((s32)ov07_0221C4A8(owner, 3));
-    work->flags = ((s32)ov07_0221C4A8(owner, 4));
+    work->arg0 = ((s32)BattleAnimSystem_GetArg(owner, 0));
+    work->arg1 = ((s32)BattleAnimSystem_GetArg(owner, 1));
+    work->arg2 = ((s32)BattleAnimSystem_GetArg(owner, 2));
+    work->arg3 = ((s32)BattleAnimSystem_GetArg(owner, 3));
+    work->flags = ((s32)BattleAnimSystem_GetArg(owner, 4));
     if ((work->flags & 0x100) == 0x100) {
         BattleAnimUtil_CollectPicsByFlags(owner, work->flags, work->slots, work);
     } else if ((work->flags & 0x200) == 0x200) {
         BattleAnimUtil_CollectSpritesByFlags(owner, work->flags, work->slots, work);
     }
-    ov07_0221C410(work->owner, ov07_02223240, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->owner, ov07_02223240, work);
 }
 
 void ov07_022233D8(void *task, Ov07FadeWork *work) {
@@ -159,7 +159,7 @@ void ov07_022233D8(void *task, Ov07FadeWork *work) {
         break;
     default:
         ToggleBgLayer(2, 0);
-        ov07_0221C448(work->owner, task);
+        BattleAnimSystem_DestroyTask(work->owner, task);
         Heap_Free(work);
         return;
     }
@@ -193,15 +193,15 @@ void ov07_02223550(void *owner) {
     int member;
     Ov07FadeWork *work = BattleAnimUtil_AllocWork(owner, sizeof(Ov07FadeWork));
     BattleAnimUtil_InitCommonWork(owner, &work->state);
-    work->x = ((s32)ov07_0221C4A8(owner, 1));
-    work->y = ((s32)ov07_0221C4A8(owner, 2));
-    work->dx = ((s32)ov07_0221C4A8(owner, 3));
-    work->dy = ((s32)ov07_0221C4A8(owner, 4));
-    work->unk00 = ((s32)ov07_0221C4A8(owner, 5));
-    work->unk08 = ((s32)ov07_0221C4A8(owner, 6));
-    work->limit = ((s32)ov07_0221C4A8(owner, 7));
+    work->x = ((s32)BattleAnimSystem_GetArg(owner, 1));
+    work->y = ((s32)BattleAnimSystem_GetArg(owner, 2));
+    work->dx = ((s32)BattleAnimSystem_GetArg(owner, 3));
+    work->dy = ((s32)BattleAnimSystem_GetArg(owner, 4));
+    work->unk00 = ((s32)BattleAnimSystem_GetArg(owner, 5));
+    work->unk08 = ((s32)BattleAnimSystem_GetArg(owner, 6));
+    work->limit = ((s32)BattleAnimSystem_GetArg(owner, 7));
     work->counter = 0;
-    if (work->unk00 != 0 && BattleAnimUtil_GetBattlerSide(owner, ov07_0221C468(owner)) == 4) {
+    if (work->unk00 != 0 && BattleAnimUtil_GetBattlerSide(owner, BattleAnimSystem_GetAttacker(owner)) == 4) {
         work->x *= -1;
         work->y *= -1;
         work->dx *= -1;
@@ -214,23 +214,23 @@ void ov07_02223550(void *owner) {
     work->evb = 0x1f;
     work->done = 0;
     ToggleBgLayer(2, 0);
-    narc = ((s32)ov07_0221C4A8(owner, 0));
-    member = ov07_0221FB7C(narc, 0);
-    GfGfxLoader_LoadCharData(7, member, work->bgConfig, 2, 0, 0, 1, ov07_0221BFD0(owner));
-    member = ov07_0221FB7C(narc, 1);
-    PaletteData_LoadNarc(work->palette, 7, member, ov07_0221BFD0(owner), 0, 0x20, 0x90);
+    narc = ((s32)BattleAnimSystem_GetArg(owner, 0));
+    member = BattleAnimSystem_GetBackgroundFile(narc, 0);
+    GfGfxLoader_LoadCharData(7, member, work->bgConfig, 2, 0, 0, 1, BattleAnimSystem_GetHeapID(owner));
+    member = BattleAnimSystem_GetBackgroundFile(narc, 1);
+    PaletteData_LoadNarc(work->palette, 7, member, BattleAnimSystem_GetHeapID(owner), 0, 0x20, 0x90);
     BgClearTilemapBufferAndCommit(work->bgConfig, 2);
     member = 2;
     if (ov07_0221BFC0(owner) == 1) {
         member = 4;
-    } else if (BattleAnimUtil_GetBattlerSide(owner, ov07_0221C468(owner)) == 4) {
+    } else if (BattleAnimUtil_GetBattlerSide(owner, BattleAnimSystem_GetAttacker(owner)) == 4) {
         member = 3;
     }
-    member = ov07_0221FB7C(narc, member);
-    GfGfxLoader_LoadScrnData(7, member, work->bgConfig, 2, 0, 0, 1, ov07_0221BFD0(owner));
+    member = BattleAnimSystem_GetBackgroundFile(narc, member);
+    GfGfxLoader_LoadScrnData(7, member, work->bgConfig, 2, 0, 0, 1, BattleAnimSystem_GetHeapID(owner));
     BgSetPosTextAndCommit(work->bgConfig, 2, 0, work->x);
     BgSetPosTextAndCommit(work->bgConfig, 2, 3, work->y);
-    ov07_0221C410(work->owner, ov07_022233D8, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->owner, ov07_022233D8, work);
 }
 
 void ov07_022236F0(void *task, Ov07FadeWork *work) {
@@ -285,7 +285,7 @@ void ov07_022236F0(void *task, Ov07FadeWork *work) {
         break;
     default:
         ToggleBgLayer(2, 0);
-        ov07_0221C448(work->owner, task);
+        BattleAnimSystem_DestroyTask(work->owner, task);
         Heap_Free(work);
         return;
     }
@@ -319,15 +319,15 @@ void ov07_02223864(void *owner) {
     int member;
     Ov07FadeWork *work = BattleAnimUtil_AllocWork(owner, sizeof(Ov07FadeWork));
     BattleAnimUtil_InitCommonWork(owner, &work->state);
-    work->x = ((s32)ov07_0221C4A8(owner, 1));
-    work->y = ((s32)ov07_0221C4A8(owner, 2));
-    work->dx = ((s32)ov07_0221C4A8(owner, 3));
-    work->dy = ((s32)ov07_0221C4A8(owner, 4));
-    work->unk00 = ((s32)ov07_0221C4A8(owner, 5));
-    work->unk08 = ((s32)ov07_0221C4A8(owner, 6));
-    work->limit = ((s32)ov07_0221C4A8(owner, 7));
+    work->x = ((s32)BattleAnimSystem_GetArg(owner, 1));
+    work->y = ((s32)BattleAnimSystem_GetArg(owner, 2));
+    work->dx = ((s32)BattleAnimSystem_GetArg(owner, 3));
+    work->dy = ((s32)BattleAnimSystem_GetArg(owner, 4));
+    work->unk00 = ((s32)BattleAnimSystem_GetArg(owner, 5));
+    work->unk08 = ((s32)BattleAnimSystem_GetArg(owner, 6));
+    work->limit = ((s32)BattleAnimSystem_GetArg(owner, 7));
     work->counter = 0;
-    if (work->unk00 != 0 && BattleAnimUtil_GetBattlerSide(owner, ov07_0221C468(owner)) == 4) {
+    if (work->unk00 != 0 && BattleAnimUtil_GetBattlerSide(owner, BattleAnimSystem_GetAttacker(owner)) == 4) {
         work->x *= -1;
         work->y *= -1;
         work->dx *= -1;
@@ -345,21 +345,21 @@ void ov07_02223864(void *owner) {
     work->evb = 0x10;
     work->done = 0;
     ToggleBgLayer(2, 0);
-    narc = ((s32)ov07_0221C4A8(owner, 0));
-    member = ov07_0221FB7C(narc, 0);
-    GfGfxLoader_LoadCharData(7, member, work->bgConfig, 2, 0, 0, 1, ov07_0221BFD0(owner));
-    member = ov07_0221FB7C(narc, 1);
-    PaletteData_LoadNarc(work->palette, 7, member, ov07_0221BFD0(owner), 0, 0x20, 0x90);
+    narc = ((s32)BattleAnimSystem_GetArg(owner, 0));
+    member = BattleAnimSystem_GetBackgroundFile(narc, 0);
+    GfGfxLoader_LoadCharData(7, member, work->bgConfig, 2, 0, 0, 1, BattleAnimSystem_GetHeapID(owner));
+    member = BattleAnimSystem_GetBackgroundFile(narc, 1);
+    PaletteData_LoadNarc(work->palette, 7, member, BattleAnimSystem_GetHeapID(owner), 0, 0x20, 0x90);
     BgClearTilemapBufferAndCommit(work->bgConfig, 2);
     member = 2;
     if (ov07_0221BFC0(owner) == 1) {
         member = 4;
-    } else if (BattleAnimUtil_GetBattlerSide(owner, ov07_0221C468(owner)) == 4) {
+    } else if (BattleAnimUtil_GetBattlerSide(owner, BattleAnimSystem_GetAttacker(owner)) == 4) {
         member = 3;
     }
-    member = ov07_0221FB7C(narc, member);
-    GfGfxLoader_LoadScrnData(7, member, work->bgConfig, 2, 0, 0, 1, ov07_0221BFD0(owner));
+    member = BattleAnimSystem_GetBackgroundFile(narc, member);
+    GfGfxLoader_LoadScrnData(7, member, work->bgConfig, 2, 0, 0, 1, BattleAnimSystem_GetHeapID(owner));
     BgSetPosTextAndCommit(work->bgConfig, 2, 0, work->x);
     BgSetPosTextAndCommit(work->bgConfig, 2, 3, work->y);
-    ov07_0221C410(work->owner, ov07_022236F0, work);
+    BattleAnimSystem_CreateTaskDefaultPriority(work->owner, ov07_022236F0, work);
 }

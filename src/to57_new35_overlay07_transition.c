@@ -31,7 +31,7 @@ void ov07_0222CBFC(int task, W35 *w) {
         break;
     }
     case 3:
-        ov07_0221C448(w->owner, task);
+        BattleAnimSystem_DestroyTask(w->owner, task);
         Heap_Free(w);
         return;
     }
@@ -50,7 +50,7 @@ void ov07_0222CCBC(int task, W35Fade *w) {
             Pokepic_StartPaletteFade(w->pic, 16, 0, 0, 0);
             if (w->special == 1) {
                 u32 mask = 1 << ov07_02221FF0(w->sprite);
-                PaletteData_BeginPaletteFade(ov07_0221FA78(w->owner), 4, (u16)mask, 0, 16, 0, 0);
+                PaletteData_BeginPaletteFade(BattleAnimSystem_GetPaletteData(w->owner), 4, (u16)mask, 0, 16, 0, 0);
             }
             w->state++;
         }
@@ -65,7 +65,7 @@ void ov07_0222CCBC(int task, W35Fade *w) {
             Pokepic_SetAttr(w->pic, 0, w->x);
             Pokepic_SetAttr(w->pic, 1, w->y);
             if (w->special == 1) {
-                if (ov07_0221FAC8(w->owner, ov07_0221C470(w->owner)) == 0) {
+                if (BattleAnimSystem_IsBattlerSemiInvulnerable(w->owner, BattleAnimSystem_GetDefender(w->owner)) == 0) {
                     Pokepic_SetAttr(w->pic, 6, 0);
                 }
                 ManagedSprite_SetPositionXY(w->sprite, w->x, (s16)(w->y - w->delta));
@@ -74,7 +74,7 @@ void ov07_0222CCBC(int task, W35Fade *w) {
         }
         break;
     case 2:
-        ov07_0221C448(w->owner, task);
+        BattleAnimSystem_DestroyTask(w->owner, task);
         Heap_Free(w);
         break;
     }
@@ -82,12 +82,12 @@ void ov07_0222CCBC(int task, W35Fade *w) {
 
 void ov07_0222CE10(void *owner) {
     W35 *w;
-    w = Heap_Alloc((enum HeapID)ov07_0221BFD0(owner), sizeof(W35));
+    w = Heap_Alloc((enum HeapID)BattleAnimSystem_GetHeapID(owner), sizeof(W35));
     memset(w, 0, sizeof(W35));
     w->owner = owner;
-    w->spriteSystem = ov07_0221C514(owner);
+    w->spriteSystem = BattleAnimSystem_GetBattlerSpriteManager(owner);
     w->mirror = ov07_0221BFC0(owner);
-    w->sprite = ov07_0221C4E8(w->owner, 0);
+    w->sprite = BattleAnimSystem_GetBattlerSprite(w->owner, 0);
     ov07_02222508(&w->anim, 14, 10, 10, 8);
     ov07_02222418(&w->scalar, 0, 16, 8);
     ManagedSprite_SetOamMode(w->sprite, 1);
@@ -100,5 +100,5 @@ void ov07_0222CE10(void *owner) {
     }
     ManagedSprite_SetDrawPriority(w->sprite, 100);
     ManagedSprite_SetPriority(w->sprite, 1);
-    ov07_0221C410(w->owner, ov07_0222CBFC, w);
+    BattleAnimSystem_CreateTaskDefaultPriority(w->owner, ov07_0222CBFC, w);
 }

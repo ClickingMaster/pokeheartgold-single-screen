@@ -3,7 +3,7 @@
 
 #include "launch_application.h"
 #include "naming_screen.h"
-#include "unk_0202C034.h"
+#include "friend_roster.h"
 
 typedef enum PartyMenuMoveSelectState {
     PMMS_OPEN_PARTY_MENU,
@@ -130,7 +130,7 @@ typedef struct GtsArgs {
     Party *party;
     PCStorage *pcStorage;
     Pokedex *pokedex;
-    UnkStruct_021D2230 *unk14;
+    FriendRoster *unk14;
     SaveWiFiHistory *wifiHistory;
     PlayerProfile *profile;
     SaveData *saveData;

@@ -4,10 +4,10 @@
 .public Heap_Free
 .public Heap_FreeExplicit
 .public GF_AssertFail
-.public sub_0202C08C
-.public sub_0202C23C
-.public sub_0202C5E4
-.public sub_0202C6F4
+.public FriendRoster_GetUserData
+.public FriendRoster_GetDwcFriendData
+.public FriendRoster_MergeFriend
+.public Save_FriendRoster_Get
 .public Save_Frontier_GetStatic
 .public sub_02031214
 .public sub_02034084

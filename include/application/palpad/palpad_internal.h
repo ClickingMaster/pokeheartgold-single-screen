@@ -17,7 +17,7 @@
 #include "sprite.h"
 #include "touchscreen_list_menu.h"
 #include "unk_02009D48.h"
-#include "unk_0202C034.h"
+#include "friend_roster.h"
 #include "yes_no_prompt.h"
 
 // Pal Pad (OVY_43): friend roster, friend code registration and friend records.
@@ -209,10 +209,10 @@ typedef struct PalPadWork {
 } PalPadWork;
 
 // No public header declares these (friend list save, DWC friend keys).
-int sub_0202C2DC(UnkStruct_021D2230 *wifiList, int slot);
-void *sub_0202C23C(UnkStruct_021D2230 *wifiList, int slot);
-void sub_0202C270(UnkStruct_021D2230 *wifiList, int slot, String *name);
-void sub_0202C338(UnkStruct_021D2230 *wifiList, int slot);
+int FriendRoster_IsFriendValid(FriendRoster *wifiList, int slot);
+void *FriendRoster_GetDwcFriendData(FriendRoster *wifiList, int slot);
+void sub_0202C270(FriendRoster *wifiList, int slot, String *name);
+void FriendRoster_RemoveFriend(FriendRoster *wifiList, int slot);
 void sub_020311AC(void *frontier, int slot);
 int sub_0203A128(SaveData *saveData, u64 friendKey, int *slot);
 u64 DWC_CreateFriendKey(void *userData);

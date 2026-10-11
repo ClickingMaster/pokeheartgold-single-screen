@@ -1793,7 +1793,7 @@ s32 sub_02039FFC(enum HeapID heapID) {
 
 void sub_0203A01C(WiFiList *arg0) {
 
-    DWCUserData *userData = sub_0202C08C(arg0);
+    DWCUserData *userData = FriendRoster_GetUserData(arg0);
     if (!DWC_CheckUserData(userData)) {
         DWC_CreateUserData(userData, 0x4144414A);
         DWC_ClearDirtyFlag(userData);
@@ -1801,14 +1801,14 @@ void sub_0203A01C(WiFiList *arg0) {
 }
 
 int sub_0203A040(WiFiList *arg0) {
-    DWCUserData *userData = sub_0202C08C(arg0);
+    DWCUserData *userData = FriendRoster_GetUserData(arg0);
     DWCFriendData friendData;
     DWC_CreateExchangeToken(userData, &friendData);
     return DWC_GetGsProfileId(userData, &friendData);
 }
 
 BOOL sub_0203A05C(SaveData *saveData) {
-    DWCUserData *userData = sub_0202C08C(sub_0202C6F4(saveData));
+    DWCUserData *userData = FriendRoster_GetUserData(Save_FriendRoster_Get(saveData));
     if (DWC_CheckHasProfile(userData) && DWC_CheckValidConsole(userData)) {
         return TRUE;
     }
@@ -1817,8 +1817,8 @@ BOOL sub_0203A05C(SaveData *saveData) {
 
 s32 sub_0203A084(SaveData *saveData, DWCFriendData *arg1, s32 *arg2) {
     int i;
-    DWCUserData *userData = sub_0202C08C(sub_0202C6F4(saveData));
-    DWCFriendData *friendData = sub_0202C23C(sub_0202C6F4(saveData), 0);
+    DWCUserData *userData = FriendRoster_GetUserData(Save_FriendRoster_Get(saveData));
+    DWCFriendData *friendData = FriendRoster_GetDwcFriendData(Save_FriendRoster_Get(saveData), 0);
     *arg2 = -1;
     if (!DWC_IsValidFriendData(arg1)) {
         return 3;
@@ -1843,8 +1843,8 @@ s32 sub_0203A084(SaveData *saveData, DWCFriendData *arg1, s32 *arg2) {
 
 int sub_0203A128(SaveData *saveData, u64 arg1, int *arg2) {
     int i;
-    DWCUserData *userData = sub_0202C08C(sub_0202C6F4(saveData));
-    DWCFriendData *friendData = sub_0202C23C(sub_0202C6F4(saveData), 0);
+    DWCUserData *userData = FriendRoster_GetUserData(Save_FriendRoster_Get(saveData));
+    DWCFriendData *friendData = FriendRoster_GetDwcFriendData(Save_FriendRoster_Get(saveData), 0);
     if (!DWC_CheckFriendKey(userData, arg1)) {
         return 3;
     }
@@ -1868,7 +1868,7 @@ int sub_0203A128(SaveData *saveData, u64 arg1, int *arg2) {
 
 s32 sub_0203A1C4(SaveData *saveData, s32 *arg1, enum HeapID heapID) {
     s32 spC = 0;
-    DWCFriendData *friendData = sub_0202C23C(sub_0202C6F4(saveData), 0);
+    DWCFriendData *friendData = FriendRoster_GetDwcFriendData(Save_FriendRoster_Get(saveData), 0);
     for (int i = 0; i < Comm_CountConnected(); i++) {
         if (i != Comm_GetLocalNetId()) {
             DWCFriendData *temp_r0 = sub_0203484C(i);
@@ -1895,8 +1895,8 @@ s32 sub_0203A1C4(SaveData *saveData, s32 *arg1, enum HeapID heapID) {
 }
 
 void sub_0203A280(SaveData *saveData, s32 arg1, s32 arg2, enum HeapID heapID, u32 arg4) {
-    WiFiList *wifiList = sub_0202C6F4(saveData);
-    DWCFriendData *friendData = sub_0202C23C(wifiList, arg2);
+    WiFiList *wifiList = Save_FriendRoster_Get(saveData);
+    DWCFriendData *friendData = FriendRoster_GetDwcFriendData(wifiList, arg2);
     PlayerProfile *playerProfile = sub_02034818(arg1);
     if (arg4 != 2) {
         MI_CpuCopy8(sub_0203484C(arg1), friendData, 12);
@@ -1905,27 +1905,27 @@ void sub_0203A280(SaveData *saveData, s32 arg1, s32 arg2, enum HeapID heapID, u3
         String *string = PlayerProfile_GetPlayerName_NewString(playerProfile, heapID);
         sub_0202C270(wifiList, arg2, string);
         String_Delete(string);
-        sub_0202C190(wifiList, arg2, 8, PlayerProfile_GetTrainerGender(playerProfile));
-        sub_0202C190(wifiList, arg2, 0, PlayerProfile_GetTrainerID(playerProfile));
-    } else if (((arg4 - 1) <= 1) && (sub_0202C090(wifiList, arg2, 8) == 2)) {
-        sub_0202C190(wifiList, arg2, 8, PlayerProfile_GetTrainerGender(playerProfile));
-        sub_0202C190(wifiList, arg2, 0, PlayerProfile_GetTrainerID(playerProfile));
+        FriendRoster_SetEntryField(wifiList, arg2, 8, PlayerProfile_GetTrainerGender(playerProfile));
+        FriendRoster_SetEntryField(wifiList, arg2, 0, PlayerProfile_GetTrainerID(playerProfile));
+    } else if (((arg4 - 1) <= 1) && (FriendRoster_GetEntryField(wifiList, arg2, 8) == 2)) {
+        FriendRoster_SetEntryField(wifiList, arg2, 8, PlayerProfile_GetTrainerGender(playerProfile));
+        FriendRoster_SetEntryField(wifiList, arg2, 0, PlayerProfile_GetTrainerID(playerProfile));
     }
     String *string = String_New(120, heapID);
     CopyU16ArrayToString(string, sub_02034884(arg1));
     sub_0202C2B4(wifiList, arg2, string);
     String_Delete(string);
-    sub_0202C190(wifiList, arg2, 7, PlayerProfile_GetAvatar(playerProfile));
+    FriendRoster_SetEntryField(wifiList, arg2, 7, PlayerProfile_GetAvatar(playerProfile));
     sub_02034A20(saveData);
 }
 
 s32 sub_0203A378(SaveData *saveData, s32 arg1) {
     int i;
     DWCFriendData *friendData = sub_0203484C(arg1);
-    WiFiList *r5 = sub_0202C6F4(saveData);
+    WiFiList *r5 = Save_FriendRoster_Get(saveData);
 
     for (i = 0; i < 32; i++) {
-        if (DWC_IsEqualFriendData(friendData, sub_0202C23C(r5, i))) {
+        if (DWC_IsEqualFriendData(friendData, FriendRoster_GetDwcFriendData(r5, i))) {
             return i;
         }
     }

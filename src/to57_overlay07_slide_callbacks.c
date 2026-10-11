@@ -15,7 +15,7 @@ void ov07_02224998(void *task, WorkSlideA *w) {
         Pokepic_SetAttr(w->pic, 0, w->motion.x);
         break;
     default:
-        ov07_0221C448(w->owner, task);
+        BattleAnimSystem_DestroyTask(w->owner, task);
         Heap_Free(w);
         break;
     }
@@ -25,25 +25,25 @@ void ov07_02224A20(void *ctx) {
     WorkSlideA *w = BattleAnimUtil_AllocWork(ctx, sizeof(WorkSlideA));
     int kind, picno;
     w->owner = ctx;
-    w->param = ((s32)ov07_0221C4A8(ctx, 0));
-    w->delta = ((s32)ov07_0221C4A8(ctx, 1));
-    kind = ((s32)ov07_0221C4A8(ctx, 2));
+    w->param = ((s32)BattleAnimSystem_GetArg(ctx, 0));
+    w->delta = ((s32)BattleAnimSystem_GetArg(ctx, 1));
+    kind = ((s32)BattleAnimSystem_GetArg(ctx, 2));
     picno = 0xff;
     switch (kind) {
     case 0x102:
-        picno = ov07_0221C468(ctx);
+        picno = BattleAnimSystem_GetAttacker(ctx);
         break;
     case 0x104:
-        if (ov07_0221FAB0(ctx) == 1) {
-            picno = BattleAnimUtil_GetPartnerBattler(ctx, ov07_0221C468(ctx));
+        if (BattleAnimSystem_IsDoubleBattle(ctx) == 1) {
+            picno = BattleAnimUtil_GetPartnerBattler(ctx, BattleAnimSystem_GetAttacker(ctx));
         }
         break;
     case 0x108:
-        picno = ov07_0221C470(ctx);
+        picno = BattleAnimSystem_GetDefender(ctx);
         break;
     case 0x110:
-        if (ov07_0221FAB0(ctx) == 1) {
-            picno = BattleAnimUtil_GetPartnerBattler(ctx, ov07_0221C470(ctx));
+        if (BattleAnimSystem_IsDoubleBattle(ctx) == 1) {
+            picno = BattleAnimUtil_GetPartnerBattler(ctx, BattleAnimSystem_GetDefender(ctx));
         }
         break;
     default:
@@ -55,12 +55,12 @@ void ov07_02224A20(void *ctx) {
         return;
     }
     BattleAnimUtil_InitCommonWork(ctx, w->cfg);
-    w->pic = ov07_0221FA48(ctx, picno);
+    w->pic = BattleAnimSystem_GetBattlerPokepic(ctx, picno);
     BattleAnimUtil_GetPicPosition(w->pic, &w->x);
     if (ov07_02222004(ctx, picno) <= 0) {
         w->delta *= -1;
     }
-    ov07_0221C410(w->owner, (void (*)(void *, void *))ov07_02224998, w);
+    BattleAnimSystem_CreateTaskDefaultPriority(w->owner, (void (*)(void *, void *))ov07_02224998, w);
 }
 
 void ov07_02224B14(void *task, WorkSlideB *w) {
@@ -79,7 +79,7 @@ void ov07_02224B14(void *task, WorkSlideB *w) {
         Pokepic_SetAttr(w->pic, 0, w->motion.x);
         break;
     default:
-        ov07_0221C448(w->owner, task);
+        BattleAnimSystem_DestroyTask(w->owner, task);
         Heap_Free(w);
         break;
     }
@@ -89,26 +89,26 @@ void ov07_02224BAC(void *ctx) {
     WorkSlideB *w = BattleAnimUtil_AllocWork(ctx, sizeof(WorkSlideB));
     int kind, picno;
     w->owner = ctx;
-    w->param = ((s32)ov07_0221C4A8(ctx, 0));
-    w->delta = ((s32)ov07_0221C4A8(ctx, 1));
-    kind = ((s32)ov07_0221C4A8(ctx, 2));
+    w->param = ((s32)BattleAnimSystem_GetArg(ctx, 0));
+    w->delta = ((s32)BattleAnimSystem_GetArg(ctx, 1));
+    kind = ((s32)BattleAnimSystem_GetArg(ctx, 2));
     BattleAnimUtil_InitCommonWork(ctx, w->cfg);
     picno = 0xff;
     switch (kind) {
     case 0x102:
-        picno = ov07_0221C468(ctx);
+        picno = BattleAnimSystem_GetAttacker(ctx);
         break;
     case 0x104:
-        if (ov07_0221FAB0(ctx) == 1) {
-            picno = BattleAnimUtil_GetPartnerBattler(ctx, ov07_0221C468(ctx));
+        if (BattleAnimSystem_IsDoubleBattle(ctx) == 1) {
+            picno = BattleAnimUtil_GetPartnerBattler(ctx, BattleAnimSystem_GetAttacker(ctx));
         }
         break;
     case 0x108:
-        picno = ov07_0221C470(ctx);
+        picno = BattleAnimSystem_GetDefender(ctx);
         break;
     case 0x110:
-        if (ov07_0221FAB0(ctx) == 1) {
-            picno = BattleAnimUtil_GetPartnerBattler(ctx, ov07_0221C470(ctx));
+        if (BattleAnimSystem_IsDoubleBattle(ctx) == 1) {
+            picno = BattleAnimUtil_GetPartnerBattler(ctx, BattleAnimSystem_GetDefender(ctx));
         }
         break;
     default:
@@ -119,11 +119,11 @@ void ov07_02224BAC(void *ctx) {
         Heap_Free(w);
         return;
     }
-    w->pic = ov07_0221FA48(ctx, picno);
+    w->pic = BattleAnimSystem_GetBattlerPokepic(ctx, picno);
     BattleAnimUtil_GetPicPosition(w->pic, &w->x);
     if (ov07_02222004(ctx, picno) <= 0) {
         w->delta *= -1;
     }
     ov07_0221BFC0(ctx);
-    ov07_02224B14(ov07_0221C410(w->owner, (void (*)(void *, void *))ov07_02224B14, w), w);
+    ov07_02224B14(BattleAnimSystem_CreateTaskDefaultPriority(w->owner, (void (*)(void *, void *))ov07_02224B14, w), w);
 }

@@ -38,7 +38,7 @@ void ov07_0222C6A8(void *task, PicWork *w) {
         break;
     }
     case 2:
-        ov07_0221C448(w->owner, task);
+        BattleAnimSystem_DestroyTask(w->owner, task);
         Heap_Free(w);
         return;
     }
@@ -46,18 +46,18 @@ void ov07_0222C6A8(void *task, PicWork *w) {
 }
 
 void ov07_0222C780(void *owner) {
-    PicWork *w = Heap_Alloc(ov07_0221BFD0(owner), 0x68);
+    PicWork *w = Heap_Alloc(BattleAnimSystem_GetHeapID(owner), 0x68);
     w->owner = owner;
-    w->spriteSystem = ov07_0221C514(owner);
+    w->spriteSystem = BattleAnimSystem_GetBattlerSpriteManager(owner);
     w->state = 0;
     w->unkC = 0;
-    int idx = ov07_0221C470(w->owner);
-    w->pokepic = ov07_0221FA48(w->owner, (void *)idx);
+    int idx = BattleAnimSystem_GetDefender(w->owner);
+    w->pokepic = BattleAnimSystem_GetBattlerPokepic(w->owner, (void *)idx);
     w->baseX = Pokepic_GetAttr(w->pokepic, 0);
     w->baseY = Pokepic_GetAttr(w->pokepic, 1);
     w->deltaY = Pokepic_GetAttr(w->pokepic, 0x29);
     ov07_022227A8(&w->sin, 2, 0, 1, 6);
-    w->sprite = ov07_0221C4E8(w->owner, 0);
+    w->sprite = BattleAnimSystem_GetBattlerSprite(w->owner, 0);
     ManagedSprite_SetOamMode(w->sprite, 1);
     ManagedSprite_SetAffineOverwriteMode(w->sprite, 2);
     ManagedSprite_SetDrawPriority(w->sprite, 100);
@@ -65,5 +65,5 @@ void ov07_0222C780(void *owner) {
     ov07_02222590(&w->linear, 10, 12, 10, 15, 10, 7);
     w->pad64 = 1;
     BattleAnimUtil_SetBlendWithBattleBg(w->owner, 28, 15);
-    ov07_0221C410(w->owner, ov07_0222C6A8, w);
+    BattleAnimSystem_CreateTaskDefaultPriority(w->owner, ov07_0222C6A8, w);
 }
