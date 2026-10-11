@@ -19,7 +19,7 @@ u8 GetWindowX(void *window);
 u8 GetWindowY(void *window);
 u16 GetWindowBaseTile(void *window);
 void CopyWindowPixelsToVram_TextMode(void *window);
-u16 *sub_02019B08(void *, u32);
+u16 *BgCellManager_GetCellTilemap(void *, u32);
 void BufferIntegerAsString(void *fmt, u32 field, u32 value, u32 digits, u32 mode, u32 charset);
 void ov18_021EE3AC(void *, void *, u32, u32, s32, u32, u32, u32, u32);
 u16 ov18_021E7698(u32);
@@ -63,7 +63,7 @@ void ov18_021EFEC4(void *p);
 void ov18_021F006C(void *p, u32 index);
 
 void ov18_021EFFEC(void *p) {
-    sub_02019B08(PTR(p, 8), 0xf);
+    BgCellManager_GetCellTilemap(PTR(p, 8), 0xf);
     ov18_021EE44C(p, 0x5f, 0);
     ov18_021EE44C(p, 0x60, 1);
     ov18_021EE520(p, U8_(p, 0x185d) + 0x61, U16(p, 0x102c));

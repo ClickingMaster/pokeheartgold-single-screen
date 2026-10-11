@@ -11,10 +11,10 @@ extern const s32 ov70_02245E84[];
 extern const u8 ov70_02245D8A[];
 extern const u8 ov70_02245D8B[];
 
-void sub_02019688(void *, int, int, int, int);
-void sub_02019B08(void *, int);
-void sub_020196E8(void *, int, int, int);
-void sub_020198FC(void *, int, int, int, int);
+void BgCellManager_LoadCellTilemap(void *, int, int, int, int);
+void BgCellManager_GetCellTilemap(void *, int);
+void BgCellManager_DrawCellAt(void *, int, int, int);
+void BgCellManager_StartCellMove(void *, int, int, int, int);
 void ov70_0224190C(void *, int);
 int ov70_0223F904(void **, void *, int);
 void ov70_0224352C(void *, int, int);

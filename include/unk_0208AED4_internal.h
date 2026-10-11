@@ -38,7 +38,7 @@ typedef struct SummaryWork8AED4 {
 void Sprite_SetAnimCtrlSeq(void *, int);
 void Sprite_SetDrawFlag(void *, BOOL);
 void sub_0208BCB4(void *);
-void sub_020196E8(void *, int, int, int);
+void BgCellManager_DrawCellAt(void *, int, int, int);
 void sub_0208DC68(void *, int);
 void sub_0208DD20(void *, int);
 void FillBgTilemapRect(void *, int, u16, int, int, int, int, int);

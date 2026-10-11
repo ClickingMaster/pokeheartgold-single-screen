@@ -251,7 +251,7 @@ _021EE530:
 	ldr r1, [sp, #0x18]
 	ldr r0, [r0, #4]
 	add r2, r6, r7
-	bl sub_02019A60
+	bl BgCellManager_PutWindowTiles
 	add sp, #0x24
 	pop {r4, r5, r6, r7, pc}
 	nop

@@ -11,7 +11,7 @@ void ov18_021F0940(PokedexAppData *pokedexApp) {
             ov18_021EE3AC(pokedexApp, pokedexApp->msgData, i + 10, ov18_021F09D8(pokedexApp, idx), 0, 0, 4, 0xF0C00, 0);
         }
         CopyWindowPixelsToVram_TextMode(&pokedexApp->windows[i + 10]);
-        sub_020196E8(pokedexApp->unk_0008, i + 0x11, (s8)GetWindowX(&pokedexApp->windows[i + 10]), (s8)GetWindowY(&pokedexApp->windows[i + 10]));
+        BgCellManager_DrawCellAt(pokedexApp->unk_0008, i + 0x11, (s8)GetWindowX(&pokedexApp->windows[i + 10]), (s8)GetWindowY(&pokedexApp->windows[i + 10]));
     }
 }
 
@@ -67,19 +67,19 @@ void ov18_021F0B70(PokedexAppData *pokedexApp, int a1) {
     s8 y;
 
     for (i = 0; i < 6; i++) {
-        sub_02019B1C(pokedexApp->unk_0008, i + 0x11, &x, &y);
+        BgCellManager_GetCellPosition(pokedexApp->unk_0008, i + 0x11, &x, &y);
         if (y == -2 || y == 0x10) {
             break;
         }
     }
     FillWindowPixelBuffer(&pokedexApp->windows[i + 10], 0);
     if (a1 < 0) {
-        sub_020196E8(pokedexApp->unk_0008, i + 0x11, 8, 0x10);
+        BgCellManager_DrawCellAt(pokedexApp->unk_0008, i + 0x11, 8, 0x10);
         if (pokedexApp->unk_18C5 + 2 < pokedexApp->numSeenForms) {
             ov18_021EE3AC(pokedexApp, pokedexApp->msgData, i + 10, ov18_021F09D8(pokedexApp, pokedexApp->unk_18C5 + 2), 0, 0, 4, 0xF0C00, 0);
         }
     } else {
-        sub_020196E8(pokedexApp->unk_0008, i + 0x11, 8, -2);
+        BgCellManager_DrawCellAt(pokedexApp->unk_0008, i + 0x11, 8, -2);
         if (pokedexApp->unk_18C5 - 2 >= 0) {
             ov18_021EE3AC(pokedexApp, pokedexApp->msgData, i + 10, ov18_021F09D8(pokedexApp, pokedexApp->unk_18C5 - 2), 0, 0, 4, 0xF0C00, 0);
         }

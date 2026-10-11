@@ -26,7 +26,7 @@ sub_0208B118: ; 0x0208B118
 	ldr r0, [r4, r0]
 	mov r2, #0x18
 	add r3, r1, #0
-	bl sub_020196E8
+	bl BgCellManager_DrawCellAt
 	b _0208B162
 _0208B140:
 	mov r0, #5
@@ -58,7 +58,7 @@ _0208B162:
 	mov r1, #6
 	mov r2, #0x18
 	mov r3, #0xd
-	bl sub_020196E8
+	bl BgCellManager_DrawCellAt
 	add sp, #0x10
 	pop {r4, pc}
 _0208B186:

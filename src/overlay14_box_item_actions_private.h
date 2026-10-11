@@ -30,9 +30,9 @@ extern u32 Bag_AddItem(void *, u16, u16, u32);
 extern u32 GridInputHandler_GetNextInput(void *);
 extern u32 GridInputHandler_IsButtonInputMode(void *);
 extern void GridInputHandler_SetButtonInputMode(void *, u32);
-extern void sub_02019B1C(void *, u32, s8 *, s8 *);
-extern void sub_02019B44(void *, u32, u16 *, u16 *);
-extern u8 sub_02019B10(void *, u32);
+extern void BgCellManager_GetCellPosition(void *, u32, s8 *, s8 *);
+extern void BgCellManager_GetCellSize(void *, u32, u16 *, u16 *);
+extern u8 BgCellManager_GetCellBgId(void *, u32);
 
 extern int ov14_021E6070(void *, int, int, int);
 extern void *ov14_021E60C0(void *, int, int);

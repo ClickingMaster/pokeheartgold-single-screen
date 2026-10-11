@@ -1,119 +1,119 @@
 #include "overlay14_box_ui_actions_internal.h"
 
 void ov14_021E8294(void *p) {
-    sub_020198FC(p, 9, 0, 1, 3);
+    BgCellManager_StartCellMove(p, 9, 0, 1, 3);
 }
 
 void ov14_021E82A8(void *p) {
-    sub_020198FC(p, 9, 0, -1, 3);
+    BgCellManager_StartCellMove(p, 9, 0, -1, 3);
 }
 
 void ov14_021E82BC(void *p) {
     ov14_021F5EB4(p, 0);
-    sub_020196E8(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xa, 0x18, 0x15);
+    BgCellManager_DrawCellAt(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xa, 0x18, 0x15);
 }
 
 void ov14_021E82DC(void *p) {
     ov14_021F5EC4(p, 0);
-    sub_020196E8(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xa, 0x18, 0x15);
+    BgCellManager_DrawCellAt(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xa, 0x18, 0x15);
 }
 
 void ov14_021E82FC(void *p) {
-    sub_0201980C(p, 0xa);
-    sub_020196E8(p, 0xa, 0x18, 0x18);
+    BgCellManager_EraseCell(p, 0xa);
+    BgCellManager_DrawCellAt(p, 0xa, 0x18, 0x18);
 }
 
 void ov14_021E8314(void *p) {
-    sub_020198FC(p, 0xa, 0, 1, 3);
+    BgCellManager_StartCellMove(p, 0xa, 0, 1, 3);
 }
 
 void ov14_021E8328(void *p) {
-    sub_020196E8(p, 0xa, 0x18, 0x18);
-    sub_020198FC(p, 0xa, 0, -1, 3);
+    BgCellManager_DrawCellAt(p, 0xa, 0x18, 0x18);
+    BgCellManager_StartCellMove(p, 0xa, 0, -1, 3);
 }
 
 u32 ov14_021E834C(void *p) {
     s8 x;
     s8 y;
-    sub_02019B1C(p, 0xb, &x, &y);
+    BgCellManager_GetCellPosition(p, 0xb, &x, &y);
     return y == 0x15;
 }
 
 void ov14_021E8368(void *p) {
-    sub_0201980C(p, 8);
-    sub_0201980C(p, 9);
-    sub_020196E8(p, 8, 0, 0x18);
-    sub_020196E8(p, 9, 0xc, 0x18);
+    BgCellManager_EraseCell(p, 8);
+    BgCellManager_EraseCell(p, 9);
+    BgCellManager_DrawCellAt(p, 8, 0, 0x18);
+    BgCellManager_DrawCellAt(p, 9, 0xc, 0x18);
 }
 
 void ov14_021E8394(void *p) {
     u32 i;
     s32 v;
     for (i = 0, v = 5; i < 5; i++, v += 3) {
-        sub_020196E8(p, i + 3, 0x20, (s8)v);
+        BgCellManager_DrawCellAt(p, i + 3, 0x20, (s8)v);
     }
-    sub_020196E8(p, 0xb, 0x18, 0x18);
+    BgCellManager_DrawCellAt(p, 0xb, 0x18, 0x18);
 }
 
 void ov14_021E83C4(void *p) {
     u32 i;
     s32 v;
     for (i = 0, v = 5; i < 5; i++, v += 3) {
-        sub_020196E8(p, i + 3, 0x15, (s8)v);
+        BgCellManager_DrawCellAt(p, i + 3, 0x15, (s8)v);
     }
-    sub_020196E8(p, 0xb, 0x18, 0x15);
+    BgCellManager_DrawCellAt(p, 0xb, 0x18, 0x15);
 }
 
 void ov14_021E83F4(void *p) {
     u32 i;
     s32 v;
     for (i = 0, v = 5; i < 5; i++, v += 3) {
-        sub_0201980C(p, i + 3);
-        sub_020196E8(p, i + 3, 0x20, (s8)v);
+        BgCellManager_EraseCell(p, i + 3);
+        BgCellManager_DrawCellAt(p, i + 3, 0x20, (s8)v);
     }
-    sub_0201980C(p, 0xb);
-    sub_020196E8(p, 0xb, 0x18, 0x18);
+    BgCellManager_EraseCell(p, 0xb);
+    BgCellManager_DrawCellAt(p, 0xb, 0x18, 0x18);
 }
 
 void ov14_021E8434(void *p) {
     u16 i;
     s8 x;
     s8 y;
-    sub_02019B1C(p, 3, &x, &y);
+    BgCellManager_GetCellPosition(p, 3, &x, &y);
     if (x == 0x15) {
         return;
     }
     for (i = 0; i < 5; i++) {
-        sub_020198FC(p, i + 3, -1, 0, (u8)(x - 0x15));
+        BgCellManager_StartCellMove(p, i + 3, -1, 0, (u8)(x - 0x15));
     }
-    sub_02019B1C(p, 0xb, &x, &y);
-    sub_020198FC(p, 0xb, 0, -1, (u8)(y - 0x15));
+    BgCellManager_GetCellPosition(p, 0xb, &x, &y);
+    BgCellManager_StartCellMove(p, 0xb, 0, -1, (u8)(y - 0x15));
 }
 
 void ov14_021E84A4(void *p) {
     u16 i;
     s8 x;
     s8 y;
-    sub_02019B1C(p, 3, &x, &y);
+    BgCellManager_GetCellPosition(p, 3, &x, &y);
     if (x == 0x20) {
         return;
     }
     for (i = 0; i < 5; i++) {
-        sub_020198FC(p, i + 3, 1, 0, (u8)(0x20 - x));
+        BgCellManager_StartCellMove(p, i + 3, 1, 0, (u8)(0x20 - x));
     }
-    sub_02019B1C(p, 0xb, &x, &y);
-    sub_020198FC(p, 0xb, 0, 1, (u8)(0x18 - y));
+    BgCellManager_GetCellPosition(p, 0xb, &x, &y);
+    BgCellManager_StartCellMove(p, 0xb, 0, 1, (u8)(0x18 - y));
 }
 
 u32 ov14_021E8514(void *p) {
     u32 i;
     u32 ret = FALSE;
     for (i = 0; i < 5; i++) {
-        if (sub_02019978(p, i + 3) == TRUE) {
+        if (BgCellManager_UpdateCellMove(p, i + 3) == TRUE) {
             ret = TRUE;
         }
     }
-    if (sub_02019978(p, 0xb) == TRUE) {
+    if (BgCellManager_UpdateCellMove(p, 0xb) == TRUE) {
         ret = TRUE;
     }
     return ret;
@@ -122,69 +122,69 @@ u32 ov14_021E8514(void *p) {
 u32 ov14_021E8544(void *p) {
     s8 x;
     s8 y;
-    sub_02019B1C(p, 3, &x, &y);
+    BgCellManager_GetCellPosition(p, 3, &x, &y);
     return x != 0x20;
 }
 
 void ov14_021E8560(void *p) {
-    sub_020196E8(p, 0xc, 0x20, 0xe);
-    sub_020198FC(p, 0xc, -1, 0, 0xb);
+    BgCellManager_DrawCellAt(p, 0xc, 0x20, 0xe);
+    BgCellManager_StartCellMove(p, 0xc, -1, 0, 0xb);
 }
 
 void ov14_021E8588(void *p) {
-    sub_020196E8(p, 0xc, 0x15, 0xe);
-    sub_020198FC(p, 0xc, 1, 0, 0xb);
+    BgCellManager_DrawCellAt(p, 0xc, 0x15, 0xe);
+    BgCellManager_StartCellMove(p, 0xc, 1, 0, 0xb);
 }
 
 void ov14_021E85AC(void *p) {
-    sub_020196E8(p, 0xe, 0, 0x18);
+    BgCellManager_DrawCellAt(p, 0xe, 0, 0x18);
 }
 
 void ov14_021E85BC(void *p) {
-    sub_020198FC(p, 0xe, 0, -1, 3);
+    BgCellManager_StartCellMove(p, 0xe, 0, -1, 3);
 }
 
 void ov14_021E85D0(void *p) {
-    sub_020198FC(p, 0xe, 0, 1, 3);
+    BgCellManager_StartCellMove(p, 0xe, 0, 1, 3);
 }
 
 u32 ov14_021E85E4(void *p) {
     s8 x;
     s8 y;
-    sub_02019B1C(p, 0xe, &x, &y);
+    BgCellManager_GetCellPosition(p, 0xe, &x, &y);
     return y == 0x15;
 }
 
 void ov14_021E8600(void *p) {
-    sub_020196E8(p, 0xf, 0, 0x18);
+    BgCellManager_DrawCellAt(p, 0xf, 0, 0x18);
 }
 
 void ov14_021E8610(void *p) {
-    sub_020196E8(p, 0xf, 0, 0x15);
+    BgCellManager_DrawCellAt(p, 0xf, 0, 0x15);
 }
 
 void ov14_021E8620(void *p) {
-    sub_020198FC(p, 0xf, 0, -1, 3);
+    BgCellManager_StartCellMove(p, 0xf, 0, -1, 3);
 }
 
 void ov14_021E8634(void *p) {
-    sub_020198FC(p, 0xf, 0, 1, 3);
+    BgCellManager_StartCellMove(p, 0xf, 0, 1, 3);
 }
 
 u32 ov14_021E8648(void *p) {
     s8 x;
     s8 y;
-    sub_02019B1C(p, 0xf, &x, &y);
+    BgCellManager_GetCellPosition(p, 0xf, &x, &y);
     return y == 0x15;
 }
 
 void ov14_021E8664(void *p) {
     ov14_021E82DC(p);
-    sub_0201980C(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 8);
-    sub_0201980C(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9);
-    sub_020196E8(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 8, 0, 0x18);
-    sub_020196E8(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9, 0xc, 0x18);
-    sub_020196E8(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0, 0, 0);
+    BgCellManager_EraseCell(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 8);
+    BgCellManager_EraseCell(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9);
+    BgCellManager_DrawCellAt(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 8, 0, 0x18);
+    BgCellManager_DrawCellAt(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9, 0xc, 0x18);
+    BgCellManager_DrawCellAt(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0, 0, 0);
     ov14_021F57B8(p);
     ov14_021F4720(p);
     ov14_021F4848(p);
@@ -193,18 +193,18 @@ void ov14_021E8664(void *p) {
 }
 
 void ov14_021E86E0(void *p) {
-    sub_020196E8(p, 0, 0, -6);
-    sub_020198FC(p, 0, 0, 1, 6);
+    BgCellManager_DrawCellAt(p, 0, 0, -6);
+    BgCellManager_StartCellMove(p, 0, 0, 1, 6);
 }
 
 void ov14_021E8704(void *p) {
-    sub_020198FC(p, 0, 0, -1, 6);
+    BgCellManager_StartCellMove(p, 0, 0, -1, 6);
 }
 
 void ov14_021E8718(void *p) {
-    sub_020196E8(p, 0xc, 0x15, 8);
-    sub_020196E8(p, 6, 0x15, 0xe);
-    sub_020196E8(p, 7, 0x15, 0x11);
+    BgCellManager_DrawCellAt(p, 0xc, 0x15, 8);
+    BgCellManager_DrawCellAt(p, 6, 0x15, 0xe);
+    BgCellManager_DrawCellAt(p, 7, 0x15, 0x11);
 }
 
 void ov14_021E8740(void *p) {
@@ -214,77 +214,77 @@ void ov14_021E8740(void *p) {
 }
 
 void ov14_021E875C(void *p) {
-    sub_020196E8(p, 0xc, 0x20, 8);
-    sub_020196E8(p, 6, 0x20, 0xe);
-    sub_020196E8(p, 7, 0x20, 0x11);
-    sub_020198FC(p, 0xc, -1, 0, 0xb);
-    sub_020198FC(p, 6, -1, 0, 0xb);
-    sub_020198FC(p, 7, -1, 0, 0xb);
+    BgCellManager_DrawCellAt(p, 0xc, 0x20, 8);
+    BgCellManager_DrawCellAt(p, 6, 0x20, 0xe);
+    BgCellManager_DrawCellAt(p, 7, 0x20, 0x11);
+    BgCellManager_StartCellMove(p, 0xc, -1, 0, 0xb);
+    BgCellManager_StartCellMove(p, 6, -1, 0, 0xb);
+    BgCellManager_StartCellMove(p, 7, -1, 0, 0xb);
 }
 
 void ov14_021E87BC(void *p) {
-    sub_020198FC(p, 0xc, 1, 0, 0xb);
-    sub_020198FC(p, 6, 1, 0, 0xb);
-    sub_020198FC(p, 7, 1, 0, 0xb);
+    BgCellManager_StartCellMove(p, 0xc, 1, 0, 0xb);
+    BgCellManager_StartCellMove(p, 6, 1, 0, 0xb);
+    BgCellManager_StartCellMove(p, 7, 1, 0, 0xb);
 }
 
 void ov14_021E87F4(void *p) {
-    sub_0201980C(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 8);
-    sub_0201980C(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9);
+    BgCellManager_EraseCell(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 8);
+    BgCellManager_EraseCell(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9);
     ov14_021E821C(p);
     ov14_021E827C(p);
 }
 
 void ov14_021E8824(void *p) {
     if (((u32)U8_AT(p, 0x44e) << 25) >> 29) {
-        sub_020198FC(PTR_AT(p, 0x2f0), 0x10, -1, 0, 0xc);
+        BgCellManager_StartCellMove(PTR_AT(p, 0x2f0), 0x10, -1, 0, 0xc);
     }
 }
 
 void ov14_021E884C(void *p) {
     if (((u32)U8_AT(p, 0x44e) << 25) >> 29) {
-        sub_020198FC(PTR_AT(p, 0x2f0), 0x10, 1, 0, 0xc);
+        BgCellManager_StartCellMove(PTR_AT(p, 0x2f0), 0x10, 1, 0, 0xc);
     }
 }
 
 void ov14_021E8874(void *p) {
     if (((u32)U8_AT(p, 0x44e) << 25) >> 29) {
-        sub_0201980C(PTR_AT(p, 0x2f0), 0x10);
-        sub_020196E8(PTR_AT(p, 0x2f0), 0x10, 0x14, 0xc);
+        BgCellManager_EraseCell(PTR_AT(p, 0x2f0), 0x10);
+        BgCellManager_DrawCellAt(PTR_AT(p, 0x2f0), 0x10, 0x14, 0xc);
     }
 }
 
 void ov14_021E88A4(void *p) {
-    sub_0201980C(p, 0x10);
-    sub_020196E8(p, 0x10, 0x20, 0xc);
+    BgCellManager_EraseCell(p, 0x10);
+    BgCellManager_DrawCellAt(p, 0x10, 0x20, 0xc);
 }
 
 void ov14_021E88BC(void *p) {
     s8 x;
     s8 y;
-    sub_02019B1C(p, 0x10, &x, &y);
+    BgCellManager_GetCellPosition(p, 0x10, &x, &y);
     if (y != 0xf) {
-        sub_020198FC(p, 0x10, 0, -1, (u8)(9 - (0x18 - y)));
+        BgCellManager_StartCellMove(p, 0x10, 0, -1, (u8)(9 - (0x18 - y)));
     }
 }
 
 void ov14_021E88F8(void *p) {
     s8 x;
     s8 y;
-    sub_02019B1C(p, 0x10, &x, &y);
+    BgCellManager_GetCellPosition(p, 0x10, &x, &y);
     if (y != 0x18) {
-        sub_020198FC(p, 0x10, 0, 1, (u8)(0x18 - y));
+        BgCellManager_StartCellMove(p, 0x10, 0, 1, (u8)(0x18 - y));
     }
 }
 
 void ov14_021E892C(void *p) {
-    sub_0201980C(p, 0x10);
-    sub_020196E8(p, 0x10, 0, 0xf);
+    BgCellManager_EraseCell(p, 0x10);
+    BgCellManager_DrawCellAt(p, 0x10, 0, 0xf);
 }
 
 void ov14_021E8944(void *p) {
-    sub_0201980C(p, 0x10);
-    sub_020196E8(p, 0x10, 0, 0x18);
+    BgCellManager_EraseCell(p, 0x10);
+    BgCellManager_DrawCellAt(p, 0x10, 0, 0x18);
 }
 
 void ov14_021E895C(void *p, u32 mask) {
@@ -387,9 +387,9 @@ u32 ov14_021E8BA4(void *p) {
     u32 d;
     void *q = PTR_AT(p, 0x34);
     u32 a = ov14_021E8514(PTR_AT(q, 0x2f0));
-    u32 b = sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 8);
-    c = sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9);
-    d = sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xa);
+    u32 b = BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 8);
+    c = BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9);
+    d = BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xa);
     switch (U16_AT(q, 0x10)) {
     case 0:
         if (System_GetTouchHeldCoords(&x, &y) == 0) {
@@ -528,8 +528,8 @@ u32 ov14_021E8FD4(void *p) {
     u32 x;
     u32 y;
     void *q = PTR_AT(p, 0x34);
-    u32 a = sub_02019978(PTR_AT(q, 0x2f0), 0xe);
-    u32 b = sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xf);
+    u32 a = BgCellManager_UpdateCellMove(PTR_AT(q, 0x2f0), 0xe);
+    u32 b = BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xf);
     switch (U16_AT(q, 0x10)) {
     case 0:
         if (System_GetTouchHeldCoords(&x, &y) == 0) {
@@ -587,7 +587,7 @@ u32 ov14_021E8FD4(void *p) {
 
 u32 ov14_021E9194(void *p) {
     void *q = PTR_AT(p, 0x34);
-    sub_02019978(PTR_AT(q, 0x2f0), 0xa);
+    BgCellManager_UpdateCellMove(PTR_AT(q, 0x2f0), 0xa);
     switch (U16_AT(q, 0x10)) {
     case 0:
         ov14_021E70E0(p, U8_AT(p, 0x21));
@@ -668,13 +668,13 @@ u32 ov14_021E92AC(void *p) {
     }
     ScheduleSetBgPosText(PTR_AT(PTR_AT(p, 0x34), 0x14), 3, 2, 8);
     ov14_021F3210(p, 8);
-    sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xe);
-    sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xa);
-    sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 8);
-    sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9);
-    a = sub_020199E4(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xb);
+    BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xe);
+    BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xa);
+    BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 8);
+    BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9);
+    a = BgCellManager_IsCellMoving(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xb);
     ov14_021E8514(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
-    b = sub_020199E4(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xb);
+    b = BgCellManager_IsCellMoving(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xb);
     if (a == 1 && b == 0) {
         ov14_021E8328(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
     }
@@ -696,13 +696,13 @@ u32 ov14_021E9370(void *p) {
     }
     ScheduleSetBgPosText(PTR_AT(PTR_AT(p, 0x34), 0x14), 3, 1, 8);
     ov14_021F3210(p, -8);
-    sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xe);
-    sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xa);
-    sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 8);
-    sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9);
-    a = sub_020199E4(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xb);
+    BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xe);
+    BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xa);
+    BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 8);
+    BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9);
+    a = BgCellManager_IsCellMoving(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xb);
     ov14_021E8514(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
-    b = sub_020199E4(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xb);
+    b = BgCellManager_IsCellMoving(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xb);
     if (a == 1 && b == 0) {
         ov14_021E8328(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
     }
@@ -720,9 +720,9 @@ u32 ov14_021E9434(void *p) {
 
 u32 ov14_021E9450(void *p) {
     u32 a = ov14_021E8514(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
-    u32 b = sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 8);
-    u32 c = sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9);
-    u32 d = sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xa);
+    u32 b = BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 8);
+    u32 c = BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9);
+    u32 d = BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xa);
     if (a == 0 && b == 0 && c == 0 && d == 0) {
         return 0;
     }

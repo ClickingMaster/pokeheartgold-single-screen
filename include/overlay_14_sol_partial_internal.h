@@ -17,12 +17,12 @@ extern void PaletteData_Free(void *);
 extern u32 PaletteData_GetSelectedBuffersBitmask(void *);
 extern void GfGfx_SetBanks(const void *);
 extern u32 PCStorage_GetBoxWallpaper(void *);
-extern void sub_020195C0(void *);
-extern void sub_02019688(void *, u32, u32, u32, u32);
-extern void sub_020196E8(void *, u32, u32, u32);
-extern void sub_020198FC(void *, s32, s32, s32, s32);
-extern void sub_0201980C(void *, u32);
-extern void sub_02019978(void *, u32);
+extern void BgCellManager_Delete(void *);
+extern void BgCellManager_LoadCellTilemap(void *, u32, u32, u32, u32);
+extern void BgCellManager_DrawCellAt(void *, u32, u32, u32);
+extern void BgCellManager_StartCellMove(void *, s32, s32, s32, s32);
+extern void BgCellManager_EraseCell(void *, u32);
+extern void BgCellManager_UpdateCellMove(void *, u32);
 extern void GridInputHandler_SetButtonInputMode(void *, u32);
 extern void ManagedSprite_SetPositionXY(void *, s32, s32);
 extern u32 ManagedSprite_IsAnimated(void *);
@@ -91,7 +91,7 @@ extern void ov14_021F67B0(void *, u32, u32);
 extern void ov14_021F685C(void *, u32, u32, u32);
 extern void ov14_021F5BD8(void *, u32, u32, u32, u32);
 extern void ov14_021F6208(void *, u32, void *);
-extern void sub_02019A60(void *, u32, void *);
+extern void BgCellManager_PutWindowTiles(void *, u32, void *);
 extern void GridInputHandler_Free(void *);
 
 

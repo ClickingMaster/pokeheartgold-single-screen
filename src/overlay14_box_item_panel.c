@@ -66,15 +66,15 @@ void ov14_021F5EE4(void *p, BoxMenuEntry *list, u32 count) {
     u16 v[2];
     u32 i;
 
-    sub_02019B44(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 3, &v[1], &v[0]);
+    BgCellManager_GetCellSize(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 3, &v[1], &v[0]);
     for (i = 0; i < count; i++) {
         BoxMenuEntry *e = &list[count - 1 - i];
         if (e->kind == 0) {
             ov14_021F5950(p, 0x21 - i, e->msgId, 0);
-            sub_020199F4(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 7 - i, 0, 0, (u8)v[1], (u8)v[0], 0xc);
+            BgCellManager_SetCellPalette(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 7 - i, 0, 0, (u8)v[1], (u8)v[0], 0xc);
         } else {
             ov14_021F5C94(p, 0x21 - i, e->msgId);
-            sub_020199F4(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 7 - i, 0, 0, (u8)v[1], (u8)v[0], 2);
+            BgCellManager_SetCellPalette(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 7 - i, 0, 0, (u8)v[1], (u8)v[0], 2);
         }
     }
     for (; count < 5; count++) {

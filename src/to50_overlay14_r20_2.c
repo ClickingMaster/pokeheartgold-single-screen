@@ -19,7 +19,7 @@ u32 ov14_021E9A24(void *p) {
     }
     readyA = ov14_021E8514(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
     readyB = ov14_021E813C(p);
-    readyC = sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 10);
+    readyC = BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 10);
 
     switch (U16_AT(work, 0x10)) {
     case 0:
@@ -105,7 +105,7 @@ u32 ov14_021E9C88(void *p) {
     void *work = PTR_AT(p, 0x34);
     u32 readyA = ov14_021E8514(PTR_AT(work, 0x2f0));
     u32 readyB = ov14_021E80A8(p);
-    u32 readyC = sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 10);
+    u32 readyC = BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 10);
 
     switch (U16_AT(work, 0x10)) {
     case 0:

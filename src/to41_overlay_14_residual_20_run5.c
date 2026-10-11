@@ -46,9 +46,9 @@ u32 ov14_021EA674(void *p) {
         break;
     }
     case 2: {
-        u32 a = sub_02019978(PTR_AT(q, 0x2f0), 8);
-        u32 b = sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9);
-        u32 c = sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xa);
+        u32 a = BgCellManager_UpdateCellMove(PTR_AT(q, 0x2f0), 8);
+        u32 b = BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9);
+        u32 c = BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xa);
         if (a == 0 && b == 0 && c == 0) {
             if (U16_AT(PTR_AT(p, 0x34), 0x88c8) != 0) {
                 ov14_021F391C(PTR_AT(p, 0x34), 0);

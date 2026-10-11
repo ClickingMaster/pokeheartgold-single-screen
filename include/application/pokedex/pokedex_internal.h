@@ -10,7 +10,7 @@
 #include "overlay_18.h"
 #include "palette.h"
 #include "sprite_system.h"
-#include "unk_0201956C.h" // 0x0201956C
+#include "bg_cell_manager.h" // 0x0201956C
 #include "unk_02019BA4.h" // 0x02019BA4
 
 enum {
@@ -267,7 +267,7 @@ typedef struct PokedexAppData_UnkSub1850 {
 struct PokedexAppData {
     PokedexArgs *args;                              // 0x0000
     BgConfig *bgConfig;                             // 0x0004
-    UnkStruct_0201956C *unk_0008;                   // 0x0008
+    BgCellManager *unk_0008;                   // 0x0008
     Window windows[101];                            // 0x000C
     MsgData *msgData;                               // 0x065C
     MessageFormat *msgFormat;                       // 0x0660

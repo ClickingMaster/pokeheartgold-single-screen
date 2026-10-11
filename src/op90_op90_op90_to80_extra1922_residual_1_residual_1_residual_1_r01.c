@@ -8,7 +8,7 @@ typedef struct {
     u16 attr3;
 } Oam;
 
-extern u8 _02109414[4][4][2];
+extern u8 gCharShiftTable[4][4][2];
 u32 OBJSizeToShape(const u8 *p);
 int NNS_G2dArrangeOBJ1D(Oam *oam, int w, int h, int x, int y, int color, int charName, int vramMode);
 
@@ -25,7 +25,7 @@ static inline int ShiftOf(int n) {
 int NNS_G2dArrangeOBJ1D(Oam *oam, int w, int h, int x, int y, int color, int charName, int vramMode) {
     int sw = ShiftOf(w);
     int sh = ShiftOf(h);
-    const u8 *p = _02109414[sh][sw];
+    const u8 *p = gCharShiftTable[sh][sw];
     int objShW = p[0];
     int objShH = p[1];
     u32 areaW = w & (-1 << objShW);

@@ -8,12 +8,12 @@
 #define U32_AT(p, o) (*(u32 *)((u8 *)(p) + (o)))
 #define PTR_AT(p, o) (*(void **)((u8 *)(p) + (o)))
 
-extern void sub_020196E8(void *, int, int, int);
-extern void sub_0201980C(void *, int);
-extern void sub_020198FC(void *, int, int, int, u8);
-extern u32 sub_02019978(void *, int);
-extern u32 sub_020199E4(void *, int);
-extern void sub_02019B1C(void *, int, s8 *, s8 *);
+extern void BgCellManager_DrawCellAt(void *, int, int, int);
+extern void BgCellManager_EraseCell(void *, int);
+extern void BgCellManager_StartCellMove(void *, int, int, int, u8);
+extern u32 BgCellManager_UpdateCellMove(void *, int);
+extern u32 BgCellManager_IsCellMoving(void *, int);
+extern void BgCellManager_GetCellPosition(void *, int, s8 *, s8 *);
 extern void FillBgTilemapRect(void *, u32, u32, u32, u32, u32, u32, u32);
 extern void ScheduleBgTilemapBufferTransfer(void *, u8);
 extern void ScheduleSetBgPosText(void *, int, int, int);

@@ -21,7 +21,7 @@ u32 SealCaseInventory_GetSealQuantity(void *, u32);
 void SealCaseInventory_SetSealQuantity(void *, u32, u32);
 void CopyPokemonToPokemon(void *, void *);
 u32 GetMonData(void *, u32, void *);
-void sub_020196E8(void *, int, int, int);
+void BgCellManager_DrawCellAt(void *, int, int, int);
 void ManagedSprite_SetAnimationFrame(void *, u32);
 void GF_AssertFail(void);
 void sub_02013794(void *, s32 *, s32 *);

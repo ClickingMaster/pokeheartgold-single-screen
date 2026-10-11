@@ -24,7 +24,7 @@ extern u32 Mail_GetType(void *);
 extern u32 MailToItemId(u32);
 extern void ov103_021EDC68(void *, u32, u32, u32);
 extern u32 ov103_021EDA40(void *, u32);
-extern void sub_0201980C(void *, u32);
+extern void BgCellManager_EraseCell(void *, u32);
 extern void ov103_021EDB60(void *, u32);
 u32 ov103_021ED7E4(R40Ov103Work11 *);
 #endif

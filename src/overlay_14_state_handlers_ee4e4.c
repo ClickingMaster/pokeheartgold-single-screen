@@ -682,7 +682,7 @@ u32 ov14_021EF6FC(void *p) {
     void *blk = PTR_AT(PTR_AT(p, 0x34), 0xc);
     u16 prev;
     u16 held;
-    if (sub_020199E4(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0x10) != 0) {
+    if (BgCellManager_IsCellMoving(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0x10) != 0) {
         return 0x85;
     }
     if (U16_AT(blk, 0) == U8_AT(p, 0x21)) {
@@ -816,8 +816,8 @@ u32 ov14_021EF9CC(void *p) {
     ov14_021F39A0(PTR_AT(p, 0x34), U8_AT(PTR_AT(p, 0x34), 0x44c), 2);
     ov14_021F3844(PTR_AT(p, 0x34), U16_AT(PTR_AT(p, 0x34), 0x88c8));
     n = ov14_021F5564(p, U16_AT(PTR_AT(p, 0x34), 0x88c8));
-    sub_02019A60(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0x10, (u8 *)PTR_AT(p, 0x34) + 0x30 + n * 16);
-    sub_02019A60(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0x10, (u8 *)PTR_AT(p, 0x34) + 0x30 + (n + 1) * 16);
+    BgCellManager_PutWindowTiles(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0x10, (u8 *)PTR_AT(p, 0x34) + 0x30 + n * 16);
+    BgCellManager_PutWindowTiles(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0x10, (u8 *)PTR_AT(p, 0x34) + 0x30 + (n + 1) * 16);
     ov14_021F38B0(PTR_AT(p, 0x34), U16_AT(PTR_AT(p, 0x34), 0x88c8));
     ov14_021E88BC(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
     return ov14_021F0234(p, ov14_021EAA04, 0x88);
@@ -914,7 +914,7 @@ u32 ov14_021EFDF4(void *p) {
         if (U8_AT(PTR_AT(p, 0x34), 0x44a) == 0) {
             if (ItemIdIsMail(U16_AT(PTR_AT(p, 0x34), 0x88c8)) == 1 && prev != U8_AT(p, 0x21)) {
                 PlaySE(0x5f3);
-                sub_0201980C(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 7);
+                BgCellManager_EraseCell(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 7);
                 ov14_021F34C8(PTR_AT(p, 0x34), U8_AT(p, 0x21), 0);
                 ov14_021F68C0(p, 7, 0x28);
                 U32_AT(p, 0x30) = 0x92;
@@ -1016,7 +1016,7 @@ u32 ov14_021F0120(void *p) {
 }
 u32 ov14_021F0164(void *p) {
     ov14_021F6654(PTR_AT(p, 0x34), 0x28);
-    sub_020197F4(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 7);
+    BgCellManager_DrawCell(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 7);
     GridInputHandler_SetNextInput(PTR_AT(PTR_AT(p, 0x34), 0x2c), 8);
     GridInputHandler_SetButtonInputMode(PTR_AT(PTR_AT(p, 0x34), 0x2c), 1);
     return 0x8b;

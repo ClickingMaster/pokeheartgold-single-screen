@@ -12,7 +12,7 @@ void ov18_021F014C(void *p) {
 void ov18_021F0168(void *p) {
     u32 i;
     for (i = 0; i < 6; i++) {
-        sub_020195F4(PTR(p, 8), i + 0x11, 2, 0x12, 2);
+        BgCellManager_InitCell(PTR(p, 8), i + 0x11, 2, 0x12, 2);
     }
 }
 
@@ -22,7 +22,7 @@ void ov18_021F018C(void *p) {
     u16 base;
     u16 j;
     for (i = 0; i < 6; i++) {
-        dst = sub_02019B08(PTR(p, 8), i + 0x11);
+        dst = BgCellManager_GetCellTilemap(PTR(p, 8), i + 0x11);
         base = *(const u16 *)(ov18_021F9E4C + i * 8 + 0x46);
         for (j = 0; j < 0x24; j++) {
             dst[j] = (base + j) | 0x1000;
@@ -36,7 +36,7 @@ void ov18_021F01D4(void *p) {
     u16 base;
     u16 j;
     for (i = 0; i < 6; i++) {
-        dst = sub_02019B08(PTR(p, 8), i + 0x11);
+        dst = BgCellManager_GetCellTilemap(PTR(p, 8), i + 0x11);
         base = *(const u16 *)(ov18_021F9EBC + i * 8 + 0x56);
         for (j = 0; j < 0x24; j++) {
             dst[j] = (base + j) | 0x1000;

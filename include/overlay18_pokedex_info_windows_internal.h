@@ -2,7 +2,7 @@
 #define POKEHEARTGOLD_OVERLAY18_POKEDEX_INFO_WINDOWS_INTERNAL_H
 #include "global.h"
 
-#include "unk_0201956C.h"
+#include "bg_cell_manager.h"
 
 #define PTR(p, off) (*(void **)((u8 *)(p) + (off)))
 

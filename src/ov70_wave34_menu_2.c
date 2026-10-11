@@ -27,8 +27,8 @@ Ov70MenuState *ov70_02242014(void *input, int arg54, void *arg60) {
     state->cursor = 0;
     state->savedCursor = 0;
     state->cursorLimit = 0;
-    state->messageData = sub_0201956C(state->bg, 2, 1, 0x3d);
-    sub_020195F4(state->messageData, 0, 2, 0x20, 0x14);
+    state->messageData = BgCellManager_New(state->bg, 2, 1, 0x3d);
+    BgCellManager_InitCell(state->messageData, 0, 2, 0x20, 0x14);
     ov70_02238F9C(state->sprite, 0x88, 0x28);
     Sprite_SetAnimCtrlSeq(state->sprite, 0x2f);
     state->printer = MessagePrinter_New(0xf, 0xe, 2, 0x3d);
@@ -67,12 +67,12 @@ void ov70_022420C4(Ov70MenuState *state, int mode) {
 
 void ov70_0224212C(Ov70MenuState *state) {
     MessagePrinter_Delete(state->printer);
-    sub_020195C0(state->messageData);
+    BgCellManager_Delete(state->messageData);
     Heap_Free(state);
 }
 
 int ov70_02242144(Ov70MenuState *state) {
     int result = ov70_022466F8[state->cursorLimit](state);
-    sub_02019934(state->messageData);
+    BgCellManager_Update(state->messageData);
     return result;
 }

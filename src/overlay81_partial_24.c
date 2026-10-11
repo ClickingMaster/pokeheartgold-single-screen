@@ -17,7 +17,7 @@ extern void Sprite_SetPalIndexRespectVramOffset(void *, int);
 extern void *Sprite_GetMatrixPtr(void *);
 extern void Sprite_SetOamMode(void *, int);
 extern void ov81_0224276C(void *);
-extern void sub_020195C0(void *);
+extern void BgCellManager_Delete(void *);
 extern void ov81_02241A38(void *);
 extern void EraseFrameAndWindow1(void *, int);
 extern void ClearWindowTilemapAndScheduleTransfer(void *);

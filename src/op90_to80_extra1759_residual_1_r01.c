@@ -8,7 +8,7 @@ typedef struct {
     u32 rest : 16;
 } CharLayout;
 
-extern u8 _02109414[4][4][2];
+extern u8 gCharShiftTable[4][4][2];
 extern u8 _02109408[];
 void InitCharCanvas(void *cc, void *base, int w, int h, int bpp, const void *table, CharLayout layout);
 void NNS_G2dCharCanvasInitForOBJ1D(void *cc, void *base, int w, int h, int bpp);
@@ -27,7 +27,7 @@ void NNS_G2dCharCanvasInitForOBJ1D(void *cc, void *base, int w, int h, int bpp) 
     CharLayout layout;
     int sw = ShiftOf(w);
     int sh = ShiftOf(h);
-    const u8 *p = _02109414[sh][sw];
+    const u8 *p = gCharShiftTable[sh][sw];
     layout.charWidthShift = p[0];
     layout.charHeightShift = p[1];
     InitCharCanvas(cc, base, w, h, bpp, _02109408, layout);

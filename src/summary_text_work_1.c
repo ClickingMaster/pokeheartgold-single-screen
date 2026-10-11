@@ -30,19 +30,19 @@ void sub_0208895C(SummaryTextWork *work) {
 }
 
 void sub_020889D0(SummaryTextWork *work, NARC *narc) {
-    work->cellManager = sub_0201956C(work->bgConfig, 2, 7, HEAP_ID_19);
-    sub_020195F4(work->cellManager, 0, 6, 17, 6);
-    sub_020196B8(work->cellManager, 0, narc, 69, 0);
-    sub_020195F4(work->cellManager, 1, 6, 17, 6);
-    sub_020196B8(work->cellManager, 1, narc, 70, 0);
-    sub_020195F4(work->cellManager, 2, 6, 10, 4);
-    sub_020196B8(work->cellManager, 2, narc, 71, 0);
-    sub_020195F4(work->cellManager, 3, 6, 10, 4);
-    sub_020196B8(work->cellManager, 3, narc, 72, 0);
-    sub_020195F4(work->cellManager, 4, 6, 11, 14);
-    sub_020196B8(work->cellManager, 4, narc, 73, 0);
-    sub_020195F4(work->cellManager, 5, 6, 6, 3);
-    sub_020196B8(work->cellManager, 5, narc, 74, 0);
-    sub_020195F4(work->cellManager, 6, 6, 6, 3);
-    sub_020196B8(work->cellManager, 6, narc, 75, 0);
+    work->cellManager = BgCellManager_New(work->bgConfig, 2, 7, HEAP_ID_19);
+    BgCellManager_InitCell(work->cellManager, 0, 6, 17, 6);
+    BgCellManager_LoadCellTilemapFromOpenNarc(work->cellManager, 0, narc, 69, 0);
+    BgCellManager_InitCell(work->cellManager, 1, 6, 17, 6);
+    BgCellManager_LoadCellTilemapFromOpenNarc(work->cellManager, 1, narc, 70, 0);
+    BgCellManager_InitCell(work->cellManager, 2, 6, 10, 4);
+    BgCellManager_LoadCellTilemapFromOpenNarc(work->cellManager, 2, narc, 71, 0);
+    BgCellManager_InitCell(work->cellManager, 3, 6, 10, 4);
+    BgCellManager_LoadCellTilemapFromOpenNarc(work->cellManager, 3, narc, 72, 0);
+    BgCellManager_InitCell(work->cellManager, 4, 6, 11, 14);
+    BgCellManager_LoadCellTilemapFromOpenNarc(work->cellManager, 4, narc, 73, 0);
+    BgCellManager_InitCell(work->cellManager, 5, 6, 6, 3);
+    BgCellManager_LoadCellTilemapFromOpenNarc(work->cellManager, 5, narc, 74, 0);
+    BgCellManager_InitCell(work->cellManager, 6, 6, 6, 3);
+    BgCellManager_LoadCellTilemapFromOpenNarc(work->cellManager, 6, narc, 75, 0);
 }

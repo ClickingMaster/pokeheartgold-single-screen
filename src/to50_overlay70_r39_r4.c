@@ -2,8 +2,8 @@
 int ov70_02243928(Work39 *w) {
     int i;
     int win;
-    sub_02019688(PTR(w, 0x1c), 0, 0x64, 0x20, 1);
-    sub_02019B08(PTR(w, 0x1c), 0);
+    BgCellManager_LoadCellTilemap(PTR(w, 0x1c), 0, 0x64, 0x20, 1);
+    BgCellManager_GetCellTilemap(PTR(w, 0x1c), 0);
     ov70_0224190C(w, 5);
     MI_CpuFill8((u8 *)w + 0x64, 1, 0x1a);
     ov70_02243E8C(PTR(w, 0x1c), PTR(w, 0x24), PTR(w, 4), S16(w, 0x3c) + 0x6e, 2, 0xf0e02);
@@ -23,7 +23,7 @@ int ov70_02243928(Work39 *w) {
         win += 0x10;
     } while (i < 4);
     ov70_02243EB8(PTR(w, 0x1c), PTR(w, 0x24), (u8 *)PTR(w, 4) + 0xe0, 0x44);
-    sub_020196E8(PTR(w, 0x1c), 0, 0x10, 0);
+    BgCellManager_DrawCellAt(PTR(w, 0x1c), 0, 0x10, 0);
     Sprite_SetAnimCtrlSeq(PTR(w, 0xc), 0x2f);
     if (S16(w, 0x3e) < 0) {
         U32(w, 0x48) = 0;

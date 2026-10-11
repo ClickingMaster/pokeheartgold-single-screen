@@ -31,7 +31,7 @@ u32 ov103_021ED7E4(R40Ov103Work11 *work) {
     case -2:
         ov103_021ECFFC(work);
         ov103_021EE888(work);
-        sub_0201980C(PTR(work->ctx, 4), 10);
+        BgCellManager_EraseCell(PTR(work->ctx, 4), 10);
         ov103_021EDB60(work->ctx, 0);
         ov103_021EE0CC(work->ctx, 2, 1);
         return 9;

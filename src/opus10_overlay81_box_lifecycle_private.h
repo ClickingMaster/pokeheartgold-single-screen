@@ -39,7 +39,7 @@ extern void PaletteData_ScheduleFadeTaskEndIfNoSelectedBuffers(void *);
 extern void Pokepic_SetAttr(void *, int, int);
 extern void Pokepic_StartPaletteFadeAll(void *, int, int, int, int);
 extern void Pokepic_ResumePaletteFade(void *);
-extern void sub_020196E8(void *, int, int, int);
+extern void BgCellManager_DrawCellAt(void *, int, int, int);
 extern void sub_02037AC0(int);
 extern BOOL sub_02037B38(int);
 extern void sub_02037BEC(void);

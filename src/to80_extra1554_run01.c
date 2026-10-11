@@ -11,7 +11,7 @@ extern void PlaySE(int),ov81_02241C0C(void*),ov81_02242218(void*,void*,u32,int),
 extern int ov80_02237254(int),IsPaletteFadeFinished(void),PaletteData_GetSelectedBuffersBitmask(void*),ov81_02242F40(void*);
 extern u8 gOverlayTemplate_PokemonSummary[];
 extern void *OverlayManager_New(const void*,void*,int);
-extern void ov81_02240F38(void*,int),ov81_02241D38(void*),sub_020196E8(void*,int,int,int),sub_0201980C(void*,int),ov81_0224174C(void*),ov81_02242E08(void*,int),ov81_02242D88(void*,int),ClearWindowTilemapAndScheduleTransfer(void*),ov81_022425D8(void*,int,int,int),ScheduleWindowCopyToVram(void*),ov81_022417B4(void*),ov81_02241840(void*),ov81_0223F684(void*);
+extern void ov81_02240F38(void*,int),ov81_02241D38(void*),BgCellManager_DrawCellAt(void*,int,int,int),BgCellManager_EraseCell(void*,int),ov81_0224174C(void*),ov81_02242E08(void*,int),ov81_02242D88(void*,int),ClearWindowTilemapAndScheduleTransfer(void*),ov81_022425D8(void*,int,int,int),ScheduleWindowCopyToVram(void*),ov81_022417B4(void*),ov81_02241840(void*),ov81_0223F684(void*);
 extern int Options_GetFrame(void*),ov81_0224086C(void*,int),YesNoPrompt_HandleInput(void*);
 extern void ov81_02243028(void*,int),ov81_02241D94(void*),ov81_022424AC(void*,u32),ov81_02241980(void*),Pokepic_SetAttr(void*,int,int),ov81_022419E0(void*),ov81_02241A7C(void*),YesNoPrompt_Reset(void*),ov81_02242694(void*,int),ov81_0223FB64(void*),ov81_0223FB88(void*),ov81_02241A38(void*),ov81_0223FB3C(void*),ov81_02241BD0(void*,void*);
 #define U16(p,o) (*(u16*)((u8*)(p)+(o)))
@@ -25,7 +25,7 @@ ov81_02243228(PTR(w,0x464),6,&x,&y);PTR(w,0x38c)=ov81_02242D18(w+0x1c4,0,3,0,0,x
 ov81_02241CA0(w,&x,&y);PTR(w,0x390)=ov81_02242CBC(w+0x1c4,1,0,0,0,x,y);
 ov81_02241F50(w);ov81_02241FEC(w);ov81_022420B4(w);ov81_0224218C(w);
 PTR(w,0x394)=ov81_02242D18(w+0x1c4,4,0,0,0,80,12);PTR(w,0x398)=ov81_02242D18(w+0x1c4,5,0,0,0,80,12);
-ov81_02242218(w,PTR(w,0x3c0),U32(w,0x468),6);ov81_02242300(w,U32(w,0x468),6);sub_020196E8(PTR(w,0x474),0,7,0);ov81_022408C4(w,w+0x50,0,0,0);
+ov81_02242218(w,PTR(w,0x3c0),U32(w,0x468),6);ov81_02242300(w,U32(w,0x468),6);BgCellManager_DrawCellAt(PTR(w,0x474),0,7,0);ov81_022408C4(w,w+0x50,0,0,0);
 {i=0;if(i<w[17]){q=w;do{ov81_02242F48(PTR(w+U16(q,0x3c8)*4,0x360));ov81_02242FB0(PTR(w+U16(q,0x3c8)*4,0x360),0);ov81_02242F94(PTR(w+U16(q,0x3c8)*4,0x360),1);i++;q+=2;}while(i<w[17]);}}
 ov81_02243028(w+0xc0,Options_GetFrame(PTR(w,0x1b8)));ov81_022408A0(w,0,w[17]+1);w[16]=ov81_0224086C(w,0);
 if(F(w).b1==1){selected=ov81_02241D0C(w);{i=0;if(i<w[17]){q=w;do{Pokepic_SetAttr(PTR(q,0x1ac),6,0);q+=4;i++;}while(i<w[17]);}}Pokepic_SetAttr(PTR(w+selected*4,0x1ac),6,0);ov81_02241E68(w,selected,PTR(w,0x468),0);ov81_02241FEC(w);ov81_02241C84(selected,PTR(w,0x47c),&x,&y);ov81_02242D94(PTR(w,0x390),x,y);ov81_02240658(w,255);ov81_02241450(w);

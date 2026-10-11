@@ -37,8 +37,8 @@ struct Ov103Anim {
     u8 h;
 };
 
-extern void sub_02019B1C(void *, u32, s8 *, s8 *);
-extern void sub_02019B44(void *, u32, u16 *, u16 *);
+extern void BgCellManager_GetCellPosition(void *, u32, s8 *, s8 *);
+extern void BgCellManager_GetCellSize(void *, u32, u16 *, u16 *);
 u32 ov103_021EDA98(void *, u32, u32);
 u32 ov103_021EDB18(void *, u32, u32);
 
@@ -64,14 +64,14 @@ extern u32 Options_GetFrame(void *);
 extern void LoadUserFrameGfx2(void *, u32, u32, u32, u32, u32);
 extern void LoadFontPal1(u32, u32, u32);
 extern void LoadFontPal0(u32, u32, u32);
-extern void *sub_0201956C(void *, u32, u32, u32);
-extern void sub_020195C0(void *);
-extern void sub_020195F4(void *, u32, u32, u32, u32);
-extern void sub_02019688(void *, u32, u32, u32, u32);
-extern void *sub_02019B08(void *, u32);
-extern void sub_020196E8(void *, u32, s8, s8);
-extern void sub_0201980C(void *, u32);
-extern void sub_020197F4(void *, u32);
+extern void *BgCellManager_New(void *, u32, u32, u32);
+extern void BgCellManager_Delete(void *);
+extern void BgCellManager_InitCell(void *, u32, u32, u32, u32);
+extern void BgCellManager_LoadCellTilemap(void *, u32, u32, u32, u32);
+extern void *BgCellManager_GetCellTilemap(void *, u32);
+extern void BgCellManager_DrawCellAt(void *, u32, s8, s8);
+extern void BgCellManager_EraseCell(void *, u32);
+extern void BgCellManager_DrawCell(void *, u32);
 extern void *NewMsgDataFromNarc(u32, u32, u32, u32);
 extern void *MessageFormat_New(u32);
 extern void *String_New(u32, u32);
@@ -117,7 +117,7 @@ extern u32 TextPrinterCheckActive(u32);
 extern u32 System_GetTouchNew(void);
 extern void PlaySE(u32);
 extern void SpriteSystem_DrawSprites(void *);
-extern void sub_02019934(void *);
+extern void BgCellManager_Update(void *);
 extern u32 GridInputHandler_HandleInput_NoHold(void *);
 extern u32 GridInputHandler_GetNextInput(void *);
 extern void GridInputHandler_Free(void *);
@@ -324,7 +324,7 @@ u32 ov103_021ED8F8(void *a0) {
     ov103_021EDBC8(a0);
     ov103_021EEAC8(a0, GridInputHandler_GetNextInput(PAT(PAT(a0, W_SUB), S_GRID)));
     ov103_021EE628(PAT(a0, W_SUB));
-    sub_0201980C(PAT(PAT(a0, W_SUB), S_WINSET), 0xa);
+    BgCellManager_EraseCell(PAT(PAT(a0, W_SUB), S_WINSET), 0xa);
     ov103_021EDB60(PAT(a0, W_SUB), 0);
     return 9;
 }

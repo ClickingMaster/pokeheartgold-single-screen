@@ -1,11 +1,11 @@
 #pragma force_active on
 #include "global.h"
 #include "bg_window.h"
-#include "unk_0201956C.h"
-u16 *sub_02019B08(UnkStruct_0201956C *, int);
-void ov14_021F60BC(UnkStruct_0201956C *mgr, int id, Window *win);
+#include "bg_cell_manager.h"
+u16 *BgCellManager_GetCellTilemap(BgCellManager *, int);
+void ov14_021F60BC(BgCellManager *mgr, int id, Window *win);
 // @fn ov14_021F60BC
-void ov14_021F60BC(UnkStruct_0201956C *mgr, int id, Window *win) {
+void ov14_021F60BC(BgCellManager *mgr, int id, Window *win) {
     u16 size[2];
     u16 *map;
     u16 i;
@@ -14,8 +14,8 @@ void ov14_021F60BC(UnkStruct_0201956C *mgr, int id, Window *win) {
     u16 pal;
     u16 x;
 
-    map = sub_02019B08(mgr, id);
-    sub_02019B44(mgr, id, &size[1], &size[0]);
+    map = BgCellManager_GetCellTilemap(mgr, id);
+    BgCellManager_GetCellSize(mgr, id, &size[1], &size[0]);
     tile = GetWindowBaseTile(win);
     pal = win->paletteNum << 12;
     map[0] = pal + 1000;

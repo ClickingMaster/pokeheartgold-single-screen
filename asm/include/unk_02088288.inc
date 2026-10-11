@@ -40,11 +40,11 @@
 .public IsPaletteFadeFinished
 .public sub_02016EDC
 .public MenuInputStateMgr_SetState
-.public sub_0201956C
-.public sub_020195C0
-.public sub_020195F4
-.public sub_020196B8
-.public sub_020196E8
+.public BgCellManager_New
+.public BgCellManager_Delete
+.public BgCellManager_InitCell
+.public BgCellManager_LoadCellTilemapFromOpenNarc
+.public BgCellManager_DrawCellAt
 .public Main_SetVBlankIntrCB
 .public HBlankInterruptDisable
 .public SetKeyRepeatTimers

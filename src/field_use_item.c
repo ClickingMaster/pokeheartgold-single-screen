@@ -20,7 +20,7 @@
 #include "overlay_01.h"
 #include "overlay_01_021F1AFC.h"
 #include "overlay_02.h"
-#include "overlay_113.h"
+#include "unown_report.h"
 #include "overlay_43.h"
 #include "overlay_58.h"
 #include "party_menu.h"

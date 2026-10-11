@@ -16,7 +16,7 @@ typedef struct R40Ov103Work13 {
     u8 pad10[0x18];
     u32 out28;
 } R40Ov103Work13;
-extern void sub_02019B1C(void *, u32, s8 *, s8 *);
-extern void sub_02019B44(void *, u32, u16 *, u16 *);
+extern void BgCellManager_GetCellPosition(void *, u32, s8 *, s8 *);
+extern void BgCellManager_GetCellSize(void *, u32, u16 *, u16 *);
 u32 ov103_021EDA98(R40Ov103Work13 *, u32, u32);
 #endif

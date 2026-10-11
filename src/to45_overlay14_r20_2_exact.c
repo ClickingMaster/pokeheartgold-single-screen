@@ -3,7 +3,7 @@ u32 ov14_021E9F20(void *p) {
     s16 pos[2];
     Ov14Motion *motion = PTR_AT(PTR_AT(p, 0x34), 0xc);
 
-    sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 15);
+    BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 15);
     if (motion->frames == 0) {
         ManagedSprite_SetPositionXY(PTR_AT(PTR_AT(p, 0x34), 0x320), motion->x, motion->y);
         if (U8_AT(PTR_AT(p, 0x34), 0x44b) == 1) {

@@ -732,7 +732,7 @@
   {
    "function": "GetCharIndex1D",
    "cpu": "ARM9",
-   "source": "src/op90_to70_to65_nnsys_residual_34_residual_2_extra231_residual_1_r01.c",
+   "source": "lib/NitroSystem/src/g2d_char_canvas_util.c",
    "kind": "inline-asm",
    "reason": "inlines a clz helper written as inline asm; MWCC 2.0 has no clz intrinsic and never emits clz from C"
   },
@@ -1187,42 +1187,42 @@
   {
    "function": "__VENEER_MI_CpuFill8",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_1_residual_1_r01.c",
+   "source": "sub/lib/src/wmsp_indicate.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to MI_CpuFill8: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_MIi_CpuCopy16",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_1_residual_1_r01.c",
+   "source": "sub/lib/src/wmsp_indicate.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to MIi_CpuCopy16: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_OS_CancelAlarm",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_1_residual_1_r01.c",
+   "source": "sub/lib/src/wmsp_indicate.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_CancelAlarm: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_OS_ExitThread",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_1_residual_1_r01.c",
+   "source": "sub/lib/src/wmsp_indicate.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_ExitThread: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_OS_GetTick",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_1_residual_1_r01.c",
+   "source": "sub/lib/src/wmsp_indicate.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_GetTick: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_OS_SetAlarm",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_1_residual_1_r01.c",
+   "source": "sub/lib/src/wmsp_indicate.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_SetAlarm: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
@@ -1495,7 +1495,7 @@
   {
    "function": "__VENEER_OS_FreeToHeap",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_2_r01.c",
+   "source": "sub/lib/src/wmsp_indicate.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_FreeToHeap: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
@@ -1516,7 +1516,7 @@
   {
    "function": "__VENEER_OS_AllocFromHeap",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_3_r01.c",
+   "source": "sub/lib/src/wmsp_alarm.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_AllocFromHeap: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
@@ -1530,7 +1530,7 @@
   {
    "function": "__VENEER_OS_CreateAlarm",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_4_r01.c",
+   "source": "sub/lib/src/wmsp_alarm.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_CreateAlarm: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },

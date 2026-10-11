@@ -12,14 +12,14 @@ int ov70_022437C8(void *w) {
     }
     goto normal;
 cancel:
-    sub_020198FC(PTR(w, 0x1c), 0, 4, 0, 4);
+    BgCellManager_StartCellMove(PTR(w, 0x1c), 0, 4, 0, 4);
     Sprite_SetDrawFlag(PTR(w, 0xc), 0);
     U32(w, 0x4c) = 3;
     U32(w, 0x50) = 18;
     S16(w, 0x3c) = -1;
     goto done;
 ten:
-    sub_020198FC(PTR(w, 0x1c), 0, 4, 0, 4);
+    BgCellManager_StartCellMove(PTR(w, 0x1c), 0, 4, 0, 4);
     Sprite_SetDrawFlag(PTR(w, 0xc), 0);
     U32(w, 0x4c) = 3;
     U32(w, 0x50) = 18;

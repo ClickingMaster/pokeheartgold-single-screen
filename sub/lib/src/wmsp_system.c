@@ -1,82 +1,11 @@
 #pragma force_active on
-#include <nitro/types.h>
-// The SDK headers below expect <nitro/types.h> to be included first.
-#include <nitro/mi/memory.h>
-#include <nitro/os/message.h>
-#include <nitro/os/mutex.h>
-#include <nitro/os/system.h>
-#include <nitro/os/thread.h>
+#include "wmsp_internal.h"
+// The SDK headers below expect <nitro/types.h> (included by wmsp_internal.h) first.
 #include <nitro/os/valarm.h>
 #include <nitro/pxi.h>
 #include <nitro/pxi/fifo.h>
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
-
-// Wireless-manager state shared with the ARM9 (wmspW.status).
-typedef struct WmspStatus {
-    u8 unk_00[0x30];
-    u16 parentSize;
-    u16 childSize;
-    u16 parentMaxSize;
-    u16 childMaxSize;
-    u16 sendSize;
-    u16 recvSize;
-    u16 sendMaxSize;
-    u16 recvMaxSize;
-    u8 unk_40[0xc4 - 0x40];
-    u16 unk_c4;
-    u8 unk_c6[0xe0 - 0xc6];
-    u8 macAddress[6];
-    u16 unk_e6;
-    u8 unk_e8[0x188 - 0xe8];
-    u16 aid; // 0: this station is the parent
-    u8 unk_18a[0x196 - 0x18a];
-    u16 gameInfoLength;
-    u32 gameInfoValid;
-    u8 gameInfo[0x50];
-    u16 unk_1ec;
-    u16 unk_1ee;
-    u8 unk_1f0[0x1f4 - 0x1f0];
-    u16 unk_1f4;
-} WmspStatus;
-
-// Buffer set up by the ARM9; 0xD0: pool of 32 16-byte request buffers (bit 15 of the first word: free).
-typedef struct WmspArm9Buf {
-    u8 unk_00[0x53];
-    u8 unk_53; // 8: use the higher RSSI thresholds in WMSP_GetLinkLevel
-} WmspArm9Buf;
-
-// Thread priorities passed to WMSP_Init (config[1..6]).
-typedef struct WmspPriorities {
-    u32 indicateHigh;
-    u32 wlHigh;
-    u32 requestHigh;
-    u32 indicateLow;
-    u32 wlLow;
-    u32 requestLow;
-} WmspPriorities;
-
-typedef struct WmspWork {
-    OSMessageQueue requestQueue; // requests to the WL driver
-    OSMessage requestMsgs[2];
-    OSMessageQueue indicateQueue; // given to the WL driver
-    OSMessage indicateMsgs[4];
-    OSMessageQueue replyQueue; // replies of the WL driver
-    OSMessage replyMsgs[4];
-    OSMessageQueue pxiQueue; // commands received from the ARM9
-    OSMessage pxiMsgs[32];
-    u8 requestStack[0x1000];
-    u8 indicateStack[0x400];
-    OSMutex mutex;
-    u32 unk_1540;
-    u32 unk_1544;
-    u32 unk_1548;
-    WmspArm9Buf *arm9Buf;
-    WmspStatus *status;
-    u8 rssiList[32];
-    u32 rssiIndex;
-    WmspPriorities priorities;
-} WmspWork;
 
 // Parameter block of WMSP_WL_ParamSetAll.
 typedef struct WmspWlParams {
@@ -87,75 +16,22 @@ typedef struct WmspWlParams {
     u16 unk_1a;
     u16 unk_1c;
     u16 unk_1e;
-    u16 gameInfoLength;
-    u16 unk_22;
-    u8 gameInfo[0x50];
+    u16 wepMode;
+    u16 wepKeyId;
+    u8 wepKey[0x50];
     u16 unk_74;
     u16 unk_76;
     u16 unk_78;
     u16 unk_7a;
-    u16 wepKeys[16];
+    u16 unk_7c[16];
     u16 unk_9c;
-    u16 gameInfoValid;
+    u16 wepEnabled;
 } WmspWlParams;
-
-extern WmspWork wmspW;
-extern OSThread wmspIndicateThread;
-extern OSThread wmspRequestThread;
 
 void *WL_GetThreadStruct(void);
 void WL_InitDriver(void *driver);
-void WMSP_IndicateThread(void *arg);
-void WMSP_RequestThread(void *arg);
-u16 *WMSP_GetBuffer4Callback2Wm9(void);
-void WMSP_ReturnResult2Wm9(void *result);
-void *WMSP_WL_ParamSetAll(void *params);
 void SND_BeginSleep(void);
 void OS_Terminate(void);
-
-// ARM veneers (ldr pc) to the functions they are named after.
-void __VENEER_OS_InitMessageQueue(OSMessageQueue *mq, OSMessage *msgArray, s32 msgCount);
-void __VENEER_OS_InitMutex(OSMutex *mutex);
-void __VENEER_OS_CreateThread(OSThread *thread, void (*func)(void *), void *arg, void *stack, u32 stackSize, u32 prio);
-void __VENEER_OS_WakeupThreadDirect(OSThread *thread);
-BOOL __VENEER_OS_IsVAlarmAvailable(void);
-void __VENEER_OS_InitVAlarm(void);
-void __VENEER_PXI_Init(void);
-void __VENEER_PXI_SetFifoRecvCallback(int tag, void (*callback)(int, u16 *, BOOL));
-BOOL __VENEER_OS_SendMessage(OSMessageQueue *mq, OSMessage msg, s32 flags);
-BOOL __VENEER_OS_ReceiveMessage(OSMessageQueue *mq, OSMessage *msg, s32 flags);
-u16 *__VENEER_WMSP_GetBuffer4Callback2Wm9(void);
-void __VENEER_WMSP_ReturnResult2Wm9(void *result);
-void __VENEER_SND_BeginSleep(void);
-void __VENEER_OS_Terminate(void);
-void __VENEER_MI_CpuCopy8(const void *src, void *dest, u32 size);
-void __VENEER_MIi_CpuClear16(u16 data, void *dest, u32 size);
-OSIntrMode __VENEER_OS_DisableInterrupts(void);
-OSIntrMode __VENEER_OS_RestoreInterrupts(OSIntrMode state);
-u32 __VENEER_OS_DisableScheduler(void);
-u32 __VENEER_OS_EnableScheduler(void);
-BOOL __VENEER_OS_SetThreadPriority(OSThread *thread, u32 prio);
-
-void WMSP_Init(u8 *driver, u32 *config);
-void *WMSP_WlRequest(void *request);
-void WmspPxiCallback(int tag, u16 *request, BOOL error);
-BOOL WMSP_CheckMacAddress(const u8 *address);
-void WMSP_CopyParentParam(u8 *dest, const u8 *src);
-BOOL WMSP_SetAllParams(u32 command, u8 *buf);
-void WMSP_AddRssiToList(u32 rssi);
-void WMSP_FillRssiIntoList(u8 rssi);
-u32 WMSP_GetAverageLinkLevel(void);
-u32 WMSP_GetLinkLevel(u32 rssi);
-void WMSP_SetThreadPriorityLow(void);
-void WMSP_SetThreadPriorityHigh(void);
-OSThread *WMSP_GetRequestThread(void);
-OSThread *WMSP_GetIndicateThread(void);
-void *WMSP_GetInternalRequestBuf(void);
-void WMSP_ResetSizeVars(void);
-void WMSP_SetParentMaxSize(u16 size);
-void WMSP_SetChildMaxSize(u16 size);
-void WMSP_SetParentSize(u32 size);
-void WMSP_SetChildSize(u32 size);
 
 // -ipa file would otherwise inline the small functions of this file into their callers here.
 #pragma dont_inline on
@@ -165,8 +41,8 @@ void WMSP_SetChildSize(u32 size);
 void WMSP_Init(u8 *driver, u32 *config) {
     int i;
     wmspW.unk_1540 = config[0];
-    wmspW.unk_1544 = *(u32 *)(driver + 0x24);
-    wmspW.unk_1548 = *(u32 *)(driver + 0x28);
+    wmspW.heapArena = *(OSArenaId *)(driver + 0x24);
+    wmspW.heapHandle = *(OSHeapHandle *)(driver + 0x28);
     wmspW.arm9Buf = NULL;
     wmspW.status = NULL;
     __VENEER_OS_InitMessageQueue(&wmspW.requestQueue, wmspW.requestMsgs, 2);
@@ -354,32 +230,32 @@ BOOL WMSP_SetAllParams(u32 command, u8 *buf) {
     WmspWlParams *params = (WmspWlParams *)buf;
     __VENEER_MI_CpuCopy8(status->macAddress, params->macAddress, 6);
     params->unk_16 = 7;
-    params->unk_18 = status->unk_1f4;
+    params->unk_18 = status->enableChannel;
     params->unk_1e = status->unk_1ec;
     params->unk_1c = status->unk_e6;
-    if (!status->gameInfoValid) {
-        params->gameInfoLength = 0;
-        params->unk_22 = 0;
-        __VENEER_MIi_CpuClear16(0, params->gameInfo, 0x50);
-        params->gameInfoValid = 0;
+    if (!status->wepEnabled) {
+        params->wepMode = 0;
+        params->wepKeyId = 0;
+        __VENEER_MIi_CpuClear16(0, params->wepKey, 0x50);
+        params->wepEnabled = 0;
     } else {
-        params->gameInfoLength = status->gameInfoLength;
-        params->unk_22 = status->unk_c4;
-        __VENEER_MI_CpuCopy8(status->gameInfo, params->gameInfo, 0x50);
-        params->gameInfoValid = 1;
+        params->wepMode = status->wepMode;
+        params->wepKeyId = status->wepKeyId;
+        __VENEER_MI_CpuCopy8(status->wepKey, params->wepKey, 0x50);
+        params->wepEnabled = 1;
     }
     params->unk_74 = 1;
     params->unk_76 = 1;
     params->unk_78 = status->unk_e6 == 1 ? 0 : 16;
     params->unk_7a = 10;
     if (command == 0x26) {
-        __VENEER_MIi_CpuClear16(0, params->wepKeys, 32);
+        __VENEER_MIi_CpuClear16(0, params->unk_7c, 32);
     } else {
-        __VENEER_MIi_CpuClear16(0, params->wepKeys, 8);
-        __VENEER_MIi_CpuClear16(0xffff, params->wepKeys + 4, 24);
+        __VENEER_MIi_CpuClear16(0, params->unk_7c, 8);
+        __VENEER_MIi_CpuClear16(0xffff, params->unk_7c + 4, 24);
     }
     params->unk_9c = status->unk_1ee;
-    error = ((u16 *)WMSP_WL_ParamSetAll(buf))[2];
+    error = WMSP_WL_ParamSetAll(buf)[2];
     if (!error) {
         return TRUE;
     }

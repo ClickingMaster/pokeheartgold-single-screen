@@ -10,7 +10,7 @@
 
 extern void Pokepic_SetAttr(void *, int, int);
 extern u32 Options_GetFrame(void *options);
-extern void sub_020196E8(void *, int, int, int);
+extern void BgCellManager_DrawCellAt(void *, int, int, int);
 
 extern void ov81_02240F38(u8 *work, int value);
 extern void *ov81_02243370(void *, void *);

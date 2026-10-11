@@ -2,9 +2,9 @@
 typedef unsigned int u32;
 typedef unsigned short u16;
 typedef unsigned char u8;
-extern u8 _021DA470[];
-extern u8 _021DA47C[];
-extern u32 _021109FC;
+extern u8 gCellTransferStateManager[];
+extern u8 gOamSoftEmuState[];
+extern u32 gOamSoftEmuAutoZOffsetStep;
 void NNS_G2dSetRndCoreImageProxy(void *, const void *, const void *);
 void NNSi_G2dInitializeVRamLocation(void *);
 void NNSi_G2dSetVramLocation(void *, int, int);

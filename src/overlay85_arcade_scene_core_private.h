@@ -262,7 +262,7 @@ extern void sub_0205A904(int a0);
 extern void sub_02039EAC(void *p);
 extern const u8 ov85_021EA8D8[];
 extern const ObjCharTransferTemplate ov85_021EA904;
-extern void ov85_021E83C0(SysTask *task, void *data);
+extern void SpinTrade_HoverTask(SysTask *task, void *data);
 extern u32 NARC_GetMemberSize(NARC *narc, u32 member);
 extern u32 FontID_String_GetWidth(u32 fontId, String *str, u32 letterSpacing);
 extern void *sub_02097018(void *p, int idx);
@@ -270,7 +270,7 @@ extern void *sub_02097018(void *p, int idx);
 extern const GraphicsBanks ov85_021EA9B8;
 extern void *const ov85_021EA4F0[];
 extern const u16 ov85_021EA8E0[];
-extern void ov85_021E6EA8(void *p, s32 a1);
+extern void SpinTrade_SetSubBgFadeLevel(void *p, s32 a1);
 
 extern BOOL sub_02039EB4(void *a0, int a1, void *a2);
 extern void sub_02038C1C(int a0);

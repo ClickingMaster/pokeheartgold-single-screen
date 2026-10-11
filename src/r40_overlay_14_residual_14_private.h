@@ -3,11 +3,11 @@
 
 #include "global.h"
 
-#include "unk_0201956C.h"
+#include "bg_cell_manager.h"
 
 void ov14_021F5E94(void *p, int unused);
-void ov14_021E8234(UnkStruct_0201956C *p);
-void ov14_021E8248(UnkStruct_0201956C *p);
+void ov14_021E8234(BgCellManager *p);
+void ov14_021E8248(BgCellManager *p);
 void ov14_021E825C(void *p);
 
 #endif

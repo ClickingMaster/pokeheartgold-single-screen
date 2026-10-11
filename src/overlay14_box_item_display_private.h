@@ -9,7 +9,7 @@
 #define U32_AT(p, o) (*(u32 *)((u8 *)(p) + (o)))
 
 extern u32 ov14_021F5404(void *, void *);
-extern void sub_02019A60(void *, u32, void *);
+extern void BgCellManager_PutWindowTiles(void *, u32, void *);
 extern void ov14_021E88A4(void *);
 extern void ov14_021E8944(void *);
 extern void ov14_021F36DC(void *, void *, u32);

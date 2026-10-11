@@ -16,7 +16,7 @@ int ov70_02243848(void *w) {
         }
         if (ov70_02245F5C[S16(w, 0x3c)].a == 1) {
             S16(w, 0x3e) = 0;
-            sub_020198FC(PTR(w, 0x1c), 0, -4, 0, 3);
+            BgCellManager_StartCellMove(PTR(w, 0x1c), 0, -4, 0, 3);
             if (PTR(w, 0x18)) {
                 Sprite_SetDrawFlag(PTR(w, 0x18), 0);
             }

@@ -159,14 +159,14 @@ ov103_021EDA98: ; 0x021EDA98
 	add r2, #1
 	add r3, sp, #0
 	add r6, r1, #0
-	bl sub_02019B1C
+	bl BgCellManager_GetCellPosition
 	ldr r0, [r5, #0xc]
 	add r3, sp, #0
 	ldr r0, [r0, #4]
 	add r1, r6, #0
 	add r2, sp, #4
 	add r3, #2
-	bl sub_02019B44
+	bl BgCellManager_GetCellSize
 	mov r0, #0xb9
 	ldr r1, [r5, #0xc]
 	lsl r0, r0, #2

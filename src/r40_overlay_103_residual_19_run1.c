@@ -20,7 +20,7 @@ void ov103_021EE468(R40Ov103Work19 *work, u32 menuIndex, u32 column, u32 mailInd
         ov103_021EE3E4(window, PTR(work->ctx, 0x230), 0, 0, 4, 0x50400, 0);
     }
     CopyWindowPixelsToVram_TextMode((Window *)window);
-    sub_02019A60(PTR(work->ctx, 4), menuIndex, window);
+    BgCellManager_PutWindowTiles(PTR(work->ctx, 4), menuIndex, window);
 }
 
 void ov103_021EE550(R40Ov103Work19 *work) {

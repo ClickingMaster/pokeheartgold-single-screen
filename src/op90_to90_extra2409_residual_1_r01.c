@@ -28,9 +28,9 @@ extern int ov70_02245F5C[][2];
 extern int ov70_02245FA0[];
 extern u8 ov70_02245E26[][2];
 extern u8 ov70_02245E27[][2];
-extern void sub_02019688(void *, int, int, int, int);
-extern void sub_02019B08(void *, int);
-extern void sub_020196E8(void *, int, int, int);
+extern void BgCellManager_LoadCellTilemap(void *, int, int, int, int);
+extern void BgCellManager_GetCellTilemap(void *, int);
+extern void BgCellManager_DrawCellAt(void *, int, int, int);
 extern void ov70_0224190C(Work *, int);
 extern void ov70_02243E8C(void *, void *, void *, int, int, int);
 extern void ov70_02243EB8(void *, void *, void *, int);
@@ -44,8 +44,8 @@ int ov70_02243254(Work *work);
 int ov70_02243254(Work *work) {
     int i;
     int color;
-    sub_02019688(work->bgConfig, 0, 100, 32, 1);
-    sub_02019B08(work->bgConfig, 0);
+    BgCellManager_LoadCellTilemap(work->bgConfig, 0, 100, 32, 1);
+    BgCellManager_GetCellTilemap(work->bgConfig, 0);
     ov70_0224190C(work, 5);
     MI_CpuFill8(work->enabled, 1, 26);
     ov70_02243E8C(work->bgConfig, work->msgData, work->windows, work->page + 110, 2, 0xF0E02);
@@ -64,7 +64,7 @@ int ov70_02243254(Work *work) {
         } while (i <= ov70_02245F58[work->page].last);
     }
     ov70_02243EB8(work->bgConfig, work->msgData, work->windows + 224, 68);
-    sub_020196E8(work->bgConfig, 0, 16, 0);
+    BgCellManager_DrawCellAt(work->bgConfig, 0, 16, 0);
     Sprite_SetAnimCtrlSeq(work->sprite, 47);
     if (work->selection < 0) {
         work->selected = 0;

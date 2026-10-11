@@ -35,7 +35,7 @@ extern int TouchscreenHitbox_FindRectAtTouchNew(const void *hitboxes);
 extern BOOL TouchscreenHitbox_TouchNewIsIn(const void *hitbox);
 extern void FillBgTilemapRect(BgConfig *bg, int bgId, u16 fillValue, int x, int y, int width, int height, int palette);
 extern void ScheduleBgTilemapBufferTransfer(BgConfig *bg, int bgId);
-extern int sub_020195C0(void *p);
+extern int BgCellManager_Delete(void *p);
 extern int sub_0208A63C(void *data);
 extern int sub_0208A9C4(void *data);
 extern int sub_0208AA9C(void *data);

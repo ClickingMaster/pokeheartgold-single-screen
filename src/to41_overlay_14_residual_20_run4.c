@@ -28,7 +28,7 @@ u32 ov14_021EAB54(void *p);
 
 u32 ov14_021EA378(void *p) {
     void *q = PTR_AT(p, 0x34);
-    sub_02019978(PTR_AT(q, 0x2f0), 0xf);
+    BgCellManager_UpdateCellMove(PTR_AT(q, 0x2f0), 0xf);
     switch (U16_AT(q, 0x10)) {
     case 0: {
         u32 v;
@@ -68,9 +68,9 @@ u32 ov14_021EA408(void *p) {
         U16_AT(q, 0x10)
         ++;
     case 1: {
-        u32 a = sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 8);
-        u32 b = sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9);
-        u32 c = sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xa);
+        u32 a = BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 8);
+        u32 b = BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9);
+        u32 c = BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xa);
         if (a == 0 && b == 0 && c == 0) {
             U16_AT(q, 0x10)
             ++;

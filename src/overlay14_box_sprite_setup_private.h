@@ -42,7 +42,7 @@ extern void SpriteSystem_LoadAnimResObj(void *, void *, u32, u32, u32, u32);
 extern void *Sprite_GetImageProxy(void *);
 extern void Sprite_SetImageProxy(void *, void *);
 
-extern void sub_02019B1C(void *, u32, s8 *, s8 *);
+extern void BgCellManager_GetCellPosition(void *, u32, s8 *, s8 *);
 extern void *sub_020776B4(void *);
 extern u32 sub_02077678(void *);
 extern u32 sub_0207769C(void *);

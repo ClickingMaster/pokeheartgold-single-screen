@@ -65,7 +65,7 @@ extern void GridInputHandler_SetNextInput(void *, u32);
 extern void *GridInputHandler_GetDpadBox(void *, u32);
 extern void DpadMenuBox_GetPosition(const void *, u8 *, u8 *);
 extern void ManagedSprite_SetPositionXY(void *, s32, s32);
-extern void sub_020197F4(void *, u32);
+extern void BgCellManager_DrawCell(void *, u32);
 extern void ov14_021F6688(void *, u32);
 extern u32 ov14_021F2A04(void *, u32);
 extern void ov14_021F391C(void *, u32);
@@ -138,7 +138,7 @@ extern BOOL System_GetTouchNewCoords(u32 *x, u32 *y);
 
 extern u32 ov14_021F2A44(void *, u32);
 extern void ov14_021F5FBC(void *, u32);
-extern void sub_0201980C(void *, u32);
+extern void BgCellManager_EraseCell(void *, u32);
 extern void ov14_021E9450(void *);
 
 extern int ov14_021E6094(void *, int, int, void *);
@@ -147,13 +147,13 @@ extern u32 ov14_021E64D0(void);
 extern void ov14_021F2ED0(void *, u32, u32, u32);
 extern void ov14_021F3844(void *, u32);
 extern void ov14_021F39D0(void *);
-extern u32 sub_020199E4(void *, u32);
+extern u32 BgCellManager_IsCellMoving(void *, u32);
 extern void ov14_021EA728(void *);
 extern void ov14_021EA928(void *);
 
 extern void ov14_021F39A0(void *, u32, u32);
 extern u32 ov14_021F5564(void *, u32);
-extern void sub_02019A60(void *, u32, void *);
+extern void BgCellManager_PutWindowTiles(void *, u32, void *);
 extern void ov14_021F38B0(void *, u32);
 extern void ov14_021E88BC(void *);
 extern void ov14_021E7EE0(void *);

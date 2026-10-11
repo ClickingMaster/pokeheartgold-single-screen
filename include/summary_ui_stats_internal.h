@@ -26,7 +26,7 @@ int sub_0208B044(SummaryWork *, int);
 BOOL sub_0208A310(SummaryWork *, int);
 void ScheduleSetBgPosText(void *, int, int, int);
 void sub_0208AF70(SummaryWork *);
-void sub_020196E8(void *, int, int, int);
+void BgCellManager_DrawCellAt(void *, int, int, int);
 void sub_0208B118(SummaryWork *);
 extern const u32 _021039B8[][3];
 

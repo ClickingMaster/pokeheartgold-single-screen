@@ -89,7 +89,7 @@ void ov14_021F49C8(void *);
 
 #define CALL_196E8(name, a, b, c) \
     void name(void *p) {          \
-        sub_020196E8(p, a, b, c); \
+        BgCellManager_DrawCellAt(p, a, b, c); \
     }
 
 #define FREE_RETURN(name, value)                 \
@@ -116,7 +116,7 @@ void ov14_021F49C8(void *);
 
 #define CALL_198FC(name, a, b, c, d) \
     void name(void *p) {             \
-        sub_020198FC(p, a, b, c, d); \
+        BgCellManager_StartCellMove(p, a, b, c, d); \
     }
 
 #define CALL_67B0(name, a, next)   \
@@ -133,8 +133,8 @@ void ov14_021F49C8(void *);
 
 #define PREP_196E8(name, a, b, c) \
     void name(void *p) {          \
-        sub_0201980C(p, a);       \
-        sub_020196E8(p, a, b, c); \
+        BgCellManager_EraseCell(p, a);       \
+        BgCellManager_DrawCellAt(p, a, b, c); \
     }
 
 #define RESET_7AC4(name)                               \
@@ -144,9 +144,9 @@ void ov14_021F49C8(void *);
     }
 
 void ov14_021E7D7C(void *p) {
-    sub_020195C0(PTR_AT(p, 0x2f0));
+    BgCellManager_Delete(PTR_AT(p, 0x2f0));
 }
 
 void ov14_021E7D8C(void *p, u32 a1, u32 a2) {
-    sub_02019688(p, a1, 0x13, a2, 1);
+    BgCellManager_LoadCellTilemap(p, a1, 0x13, a2, 1);
 }

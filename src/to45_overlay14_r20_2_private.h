@@ -18,7 +18,7 @@ typedef struct Ov14Motion {
     u32 frames : 30;
 } Ov14Motion;
 
-extern u32 sub_02019978(void *, u32);
+extern u32 BgCellManager_UpdateCellMove(void *, u32);
 extern void ManagedSprite_GetPositionXY(void *, s32 *, s32 *);
 extern void ManagedSprite_SetPositionXY(void *, s32, s32);
 extern u32 ov14_021E8514(void *);

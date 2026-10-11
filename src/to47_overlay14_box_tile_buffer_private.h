@@ -125,7 +125,7 @@ extern void ov14_021F2A60(void *, u32, u32);
 extern void ov14_021F29E4(void *, u32, u32);
 extern void ov14_021F46F4(void *);
 extern void *ov14_021F6628(void);
-extern void sub_02019B44(void *, u32, u16 *, u16 *);
-extern void sub_020199F4(void *, u32, u32, u32, u32, u32, u32);
+extern void BgCellManager_GetCellSize(void *, u32, u16 *, u16 *);
+extern void BgCellManager_SetCellPalette(void *, u32, u32, u32, u32, u32, u32);
 
 #endif

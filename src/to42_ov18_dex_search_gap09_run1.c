@@ -19,7 +19,7 @@ u8 GetWindowX(void *window);
 u8 GetWindowY(void *window);
 u16 GetWindowBaseTile(void *window);
 void CopyWindowPixelsToVram_TextMode(void *window);
-u16 *sub_02019B08(void *, u32);
+u16 *BgCellManager_GetCellTilemap(void *, u32);
 void BufferIntegerAsString(void *fmt, u32 field, u32 value, u32 digits, u32 mode, u32 charset);
 void ov18_021EE3AC(void *, void *, u32, u32, s32, u32, u32, u32, u32);
 u16 ov18_021E7698(u32);

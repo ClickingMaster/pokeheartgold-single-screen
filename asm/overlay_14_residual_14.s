@@ -3080,7 +3080,7 @@ ov14_021E8234: ; 0x021E8234
 	mov r1, #8
 	mov r2, #0
 	mov r3, #1
-	bl sub_020198FC
+	bl BgCellManager_StartCellMove
 	pop {r3, pc}
 	.balign 4, 0
 	thumb_func_end ov14_021E8234
@@ -3094,7 +3094,7 @@ ov14_021E8248: ; 0x021E8248
 	str r1, [sp]
 	mov r1, #8
 	sub r3, r2, #1
-	bl sub_020198FC
+	bl BgCellManager_StartCellMove
 	pop {r3, pc}
 	.balign 4, 0
 	thumb_func_end ov14_021E8248
@@ -3113,7 +3113,7 @@ ov14_021E825C: ; 0x021E825C
 	mov r1, #9
 	mov r2, #0xc
 	mov r3, #0x15
-	bl sub_020196E8
+	bl BgCellManager_DrawCellAt
 	pop {r4, pc}
 	.balign 4, 0
 	thumb_func_end ov14_021E825C

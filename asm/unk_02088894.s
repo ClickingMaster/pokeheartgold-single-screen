@@ -150,7 +150,7 @@ sub_020889D0: ; 0x020889D0
 	mov r1, #2
 	mov r2, #7
 	mov r3, #0x13
-	bl sub_0201956C
+	bl BgCellManager_New
 	mov r1, #0x7d
 	lsl r1, r1, #4
 	str r0, [r5, r1]
@@ -159,7 +159,7 @@ sub_020889D0: ; 0x020889D0
 	ldr r0, [r5, r1]
 	mov r1, #0
 	mov r3, #0x11
-	bl sub_020195F4
+	bl BgCellManager_InitCell
 	mov r1, #0
 	mov r0, #0x7d
 	str r1, [sp]
@@ -167,7 +167,7 @@ sub_020889D0: ; 0x020889D0
 	ldr r0, [r5, r0]
 	add r2, r4, #0
 	mov r3, #0x45
-	bl sub_020196B8
+	bl BgCellManager_LoadCellTilemapFromOpenNarc
 	mov r2, #6
 	mov r0, #0x7d
 	str r2, [sp]
@@ -175,7 +175,7 @@ sub_020889D0: ; 0x020889D0
 	ldr r0, [r5, r0]
 	mov r1, #1
 	mov r3, #0x11
-	bl sub_020195F4
+	bl BgCellManager_InitCell
 	mov r0, #0
 	str r0, [sp]
 	mov r0, #0x7d
@@ -184,7 +184,7 @@ sub_020889D0: ; 0x020889D0
 	mov r1, #1
 	add r2, r4, #0
 	mov r3, #0x46
-	bl sub_020196B8
+	bl BgCellManager_LoadCellTilemapFromOpenNarc
 	mov r0, #4
 	str r0, [sp]
 	mov r0, #0x7d
@@ -193,7 +193,7 @@ sub_020889D0: ; 0x020889D0
 	mov r1, #2
 	mov r2, #6
 	mov r3, #0xa
-	bl sub_020195F4
+	bl BgCellManager_InitCell
 	mov r0, #0
 	str r0, [sp]
 	mov r0, #0x7d
@@ -202,7 +202,7 @@ sub_020889D0: ; 0x020889D0
 	mov r1, #2
 	add r2, r4, #0
 	mov r3, #0x47
-	bl sub_020196B8
+	bl BgCellManager_LoadCellTilemapFromOpenNarc
 	mov r0, #4
 	str r0, [sp]
 	mov r0, #0x7d
@@ -211,7 +211,7 @@ sub_020889D0: ; 0x020889D0
 	mov r1, #3
 	mov r2, #6
 	mov r3, #0xa
-	bl sub_020195F4
+	bl BgCellManager_InitCell
 	mov r0, #0
 	str r0, [sp]
 	mov r0, #0x7d
@@ -220,7 +220,7 @@ sub_020889D0: ; 0x020889D0
 	mov r1, #3
 	add r2, r4, #0
 	mov r3, #0x48
-	bl sub_020196B8
+	bl BgCellManager_LoadCellTilemapFromOpenNarc
 	mov r0, #0xe
 	str r0, [sp]
 	mov r0, #0x7d
@@ -229,7 +229,7 @@ sub_020889D0: ; 0x020889D0
 	mov r1, #4
 	mov r2, #6
 	mov r3, #0xb
-	bl sub_020195F4
+	bl BgCellManager_InitCell
 	mov r0, #0
 	str r0, [sp]
 	mov r0, #0x7d
@@ -238,7 +238,7 @@ sub_020889D0: ; 0x020889D0
 	mov r1, #4
 	add r2, r4, #0
 	mov r3, #0x49
-	bl sub_020196B8
+	bl BgCellManager_LoadCellTilemapFromOpenNarc
 	mov r0, #3
 	str r0, [sp]
 	mov r0, #0x7d
@@ -247,7 +247,7 @@ sub_020889D0: ; 0x020889D0
 	ldr r0, [r5, r0]
 	mov r1, #5
 	add r3, r2, #0
-	bl sub_020195F4
+	bl BgCellManager_InitCell
 	mov r0, #0
 	str r0, [sp]
 	mov r0, #0x7d
@@ -256,7 +256,7 @@ sub_020889D0: ; 0x020889D0
 	mov r1, #5
 	add r2, r4, #0
 	mov r3, #0x4a
-	bl sub_020196B8
+	bl BgCellManager_LoadCellTilemapFromOpenNarc
 	mov r1, #6
 	mov r0, #3
 	str r0, [sp]
@@ -265,7 +265,7 @@ sub_020889D0: ; 0x020889D0
 	ldr r0, [r5, r0]
 	add r2, r1, #0
 	add r3, r1, #0
-	bl sub_020195F4
+	bl BgCellManager_InitCell
 	mov r0, #0
 	str r0, [sp]
 	mov r0, #0x7d
@@ -274,6 +274,6 @@ sub_020889D0: ; 0x020889D0
 	mov r1, #6
 	add r2, r4, #0
 	mov r3, #0x4b
-	bl sub_020196B8
+	bl BgCellManager_LoadCellTilemapFromOpenNarc
 	pop {r3, r4, r5, pc}
 	thumb_func_end sub_020889D0

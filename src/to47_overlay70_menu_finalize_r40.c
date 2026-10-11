@@ -1,15 +1,15 @@
 #include "to47_overlay70_menu_finalize_r40_private.h"
 
 int ov70_02243B2C(void *work) {
-    sub_02019688(PTR(work, 0x1c), 0, 0x64, 0x1e, 1);
-    sub_02019B08(PTR(work, 0x1c), 0);
+    BgCellManager_LoadCellTilemap(PTR(work, 0x1c), 0, 0x64, 0x1e, 1);
+    BgCellManager_GetCellTilemap(PTR(work, 0x1c), 0);
     ov70_0224190C(work, 3);
     U32(work, 0x5c) = ov70_0223F904((void **)((u8 *)work + 0x34), PTR(work, 0x2c), S16(work, 0x3e) + ov70_02245E84[S16(work, 0x3c)]);
     ov70_0224352C(work, 0, U32(work, 0x5c));
     S16(work, 0x5a) = 0;
     ov70_02243F00(PTR(work, 0x1c), PTR(work, 0x38), (u8 *)PTR(work, 4) + 0x50, S16(work, 0x5a), ov70_02242508(U32(work, 0x5c), 5));
     ov70_02243EB8(PTR(work, 0x1c), PTR(work, 0x24), (u8 *)PTR(work, 4) + 0xe0, 0x44);
-    sub_020196E8(PTR(work, 0x1c), 0, 1, 0);
+    BgCellManager_DrawCellAt(PTR(work, 0x1c), 0, 1, 0);
     U32(work, 0x48) = 0;
     {
         u32 i = U32(work, 0x48) * 2;
@@ -28,7 +28,7 @@ int ov70_02243C08(void *work) {
     int result = ov70_02242C64(work);
     switch (result) {
     case -2:
-        sub_020198FC(PTR(work, 0x1c), 0, 4, 0, 4);
+        BgCellManager_StartCellMove(PTR(work, 0x1c), 0, 4, 0, 4);
         Sprite_SetDrawFlag(PTR(work, 0xc), 0);
         Sprite_SetDrawFlag(PTR(work, 0x10), 0);
         Sprite_SetDrawFlag(PTR(work, 0x14), 0);
@@ -38,7 +38,7 @@ int ov70_02243C08(void *work) {
     case -1:
         break;
     default:
-        sub_020198FC(PTR(work, 0x1c), 0, 6, 0, 6);
+        BgCellManager_StartCellMove(PTR(work, 0x1c), 0, 6, 0, 6);
         Sprite_SetDrawFlag(PTR(work, 0xc), 0);
         Sprite_SetDrawFlag(PTR(work, 0x10), 0);
         Sprite_SetDrawFlag(PTR(work, 0x14), 0);

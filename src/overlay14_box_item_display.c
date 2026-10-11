@@ -5,7 +5,7 @@ void ov14_021E7470(void *p, void *mon) {
     u32 i;
 
     for (i = 0; i < 4; i++) {
-        sub_02019A60(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0x10, (u8 *)PTR_AT(p, 0x34) + 0x30 + (base + i) * 0x10);
+        BgCellManager_PutWindowTiles(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0x10, (u8 *)PTR_AT(p, 0x34) + 0x30 + (base + i) * 0x10);
     }
     ov14_021E88A4(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
     ov14_021F36DC(p, mon, 2);
@@ -21,8 +21,8 @@ void ov14_021E74F0(void *p, void *mon) {
 
     if (U16_AT(mon, 6) != 0) {
         base = ov14_021F5564(p, U16_AT(mon, 6));
-        sub_02019A60(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0x10, (u8 *)PTR_AT(p, 0x34) + 0x30 + base * 0x10);
-        sub_02019A60(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0x10, (u8 *)PTR_AT(p, 0x34) + 0x30 + (base + 1) * 0x10);
+        BgCellManager_PutWindowTiles(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0x10, (u8 *)PTR_AT(p, 0x34) + 0x30 + base * 0x10);
+        BgCellManager_PutWindowTiles(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0x10, (u8 *)PTR_AT(p, 0x34) + 0x30 + (base + 1) * 0x10);
         ov14_021F38B0(PTR_AT(p, 0x34), U16_AT(mon, 6));
     }
     ov14_021E8944(PTR_AT(PTR_AT(p, 0x34), 0x2f0));

@@ -10,7 +10,7 @@ typedef struct SummaryWorkB118 {
 } SummaryWorkB118;
 
 int sub_0208A2E0(void *work, int direction);
-void sub_020196E8(void *anim, int sequence, int x, int y);
+void BgCellManager_DrawCellAt(void *anim, int sequence, int x, int y);
 void FillBgTilemapRect(void *bgConfig, int bgId, u32 fill, u8 x, u8 y, u8 width, u8 height, u8 palette);
 void ScheduleBgTilemapBufferTransfer(void *bgConfig, u8 bgId);
 void sub_0208B118(SummaryWorkB118 *work);

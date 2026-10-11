@@ -21,7 +21,7 @@ int ov70_02243750(void *w) {
 int ov70_02243768(void *w) {
     int n;
     ov70_02242D44(w, 6, 0x20);
-    sub_020198FC(PTR(w, 0x1c), 0, -4, 0, 4);
+    BgCellManager_StartCellMove(PTR(w, 0x1c), 0, -4, 0, 4);
     U32(w, 0x4c) = 1;
     U32(w, 0x50) = 17;
     U32(w, 0x48) = 10;

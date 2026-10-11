@@ -13,8 +13,8 @@ typedef struct W09Pokedex {
     int count;
 } W09Pokedex;
 
-extern void sub_02019B1C(void *, int, s8 *, s8 *);
-extern void sub_020196E8(void *, int, int, int);
+extern void BgCellManager_GetCellPosition(void *, int, s8 *, s8 *);
+extern void BgCellManager_DrawCellAt(void *, int, int, int);
 extern u32 ov18_021F04C0(void *, int);
 extern void ov18_021EE3AC(void *, void *, u32, u32, s32, u32, u32, u32, u32);
 void ov18_021F0504(W09Pokedex *p, int direction);
@@ -26,7 +26,7 @@ void ov18_021F0504(W09Pokedex *p, int direction) {
     W09Pokedex *work = p;
 
     do {
-        sub_02019B1C(work->grid, i + 0x11, &second, &first);
+        BgCellManager_GetCellPosition(work->grid, i + 0x11, &second, &first);
         if (first == 2 || first == 0x14) {
             break;
         }
@@ -36,14 +36,14 @@ void ov18_021F0504(W09Pokedex *p, int direction) {
     FillWindowPixelBuffer(&work->windows[i + 8], 0);
     if (direction < 0) {
         int next;
-        sub_020196E8(work->grid, i + 0x11, 10, 0x14);
+        BgCellManager_DrawCellAt(work->grid, i + 0x11, 10, 0x14);
         next = work->current + 2;
         if (next < work->count) {
             ov18_021EE3AC(work, work->msgData, i + 8, ov18_021F04C0(work, next), 0x48, 0, 4, 0xF0C00, 2);
         }
     } else {
         int previous;
-        sub_020196E8(work->grid, i + 0x11, 10, 2);
+        BgCellManager_DrawCellAt(work->grid, i + 0x11, 10, 2);
         previous = work->current;
         previous -= 2;
         if (previous >= 0) {

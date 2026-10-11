@@ -11,7 +11,7 @@
 #define S32_AT(p, o) (*(s32 *)((u8 *)(p) + (o)))
 #define PTR_AT(p, o) (*(void **)((u8 *)(p) + (o)))
 
-extern u32 sub_02019978(void *, u32);
+extern u32 BgCellManager_UpdateCellMove(void *, u32);
 extern void FillBgTilemapRect(void *, u32, u32, u32, u32, u32, u32, u32);
 extern void ScheduleBgTilemapBufferTransfer(void *, u32);
 extern void ManagedSprite_GetPositionXY(void *, s32 *, s32 *);

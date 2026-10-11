@@ -23,7 +23,7 @@ void ov81_0223E8BC(u8 *p) {
     PTR(p, 0x398) = ov81_02242D18(p + 0x1C4, 5, 0, 0, 0, 0x50, 12);
     ov81_02242218(p, PTR(p, 0x3C0), U32(p, 0x468), 4);
     ov81_022423D0(p, PTR(p, 0x3C0));
-    sub_020196E8(PTR(p, 0x474), 0, 7, 0);
+    BgCellManager_DrawCellAt(PTR(p, 0x474), 0, 7, 0);
     ov81_022408C4(p, p + 0x50, 0, 0, 0);
     ov81_02243028(p + 0xC0, Options_GetFrame(PTR(p, 0x1B8)));
     p[0x10] = ov81_0224086C(p, 9);
@@ -61,7 +61,7 @@ void ov81_0223EA98(u8 *p) {
     PTR(p, 0x398) = ov81_02242D18(p + 0x1C4, 5, 0, 0, 0, 0x50, 12);
     ov81_02242218(p, PTR(p, 0x3C4), 0, 4);
     ov81_02242420(p, 0);
-    sub_020196E8(PTR(p, 0x474), 0, 7, 0);
+    BgCellManager_DrawCellAt(PTR(p, 0x474), 0, 7, 0);
     ov81_022408C4(p, p + 0x50, 0, 0, 0);
     U32(p, 0x468) = 0;
     ov81_022419E0(p);

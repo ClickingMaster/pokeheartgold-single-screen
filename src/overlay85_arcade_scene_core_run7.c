@@ -1,68 +1,68 @@
 #include "overlay85_arcade_scene_core_private.h"
 
 // ---- callees implemented elsewhere in the overlay ----
-void ov85_021E7644(void *p);
-void ov85_021E78A4(ArcWork *work, u32 a1);
+void SpinTradeMachine_Rotate(void *p);
+void SpinTrade_RotateEggs(ArcWork *work, u32 a1);
 
 // ---- implemented here ----
-void ov85_021E8418(ArcWork *work);
-void ov85_021E8530(s32 *p, s32 delta);
-void ov85_021E8558(ArcWork *work, u32 a1);
-BOOL ov85_021E8570(ArcCounter *p);
+void SpinTrade_StopHoverTask(ArcWork *work);
+void SpinTrade_AddAngle(s32 *p, s32 delta);
+void SpinTrade_RotateAll(ArcWork *work, u32 a1);
+BOOL SpinTrade_TickSpinTimer(ArcCounter *p);
 void ov85_021E85C4(ArcWork *work, u32 data);
 void ov85_021E85CC(ArcWork *work, const u16 *data);
-void *ov85_021E85F0(ArcWork *work, u32 a1);
-void *ov85_021E8610(ArcWork *work);
-u32 ov85_021E8614(ArcWork *work, u32 a1);
-BOOL ov85_021E8628(ArcWork *work);
-int ov85_021E8660(ArcWork *work);
+void *SpinTrade_ClearScratch(ArcWork *work, u32 a1);
+void *SpinTrade_GetScratch(ArcWork *work);
+u32 SpinTrade_HasReceivedStatus(ArcWork *work, u32 a1);
+BOOL SpinTrade_HaveAllMembersJoined(ArcWork *work);
+int SpinTrade_CountMembers(ArcWork *work);
 void ov85_021E86AC(ArcWork *work, u32 data);
-BOOL ov85_021E86B0(ArcWork *work, u32 a1);
-int ov85_021E8720(ArcWork *work);
+BOOL SpinTrade_IsMemberPresent(ArcWork *work, u32 a1);
+int SpinTrade_CountReceivedParties(ArcWork *work);
 void ov85_021E8740(ArcWork *work, int sender, u32 data);
 void ov85_021E8748(ArcWork *work, const u16 *src);
-u32 ov85_021E8878(ArcWork *work);
-u32 ov85_021E8898(ArcWork *work);
-BOOL ov85_021E87F0(void *party);
+u32 SpinTrade_CountConfirmed(ArcWork *work);
+u32 SpinTrade_IsCancelled(ArcWork *work);
+BOOL SpinTrade_PartyHasBadEgg(void *party);
 void ov85_021E8E38(BgConfig *bgConfig);
 
-void ov85_021E8418(ArcWork *work);
+void SpinTrade_StopHoverTask(ArcWork *work);
 
-void ov85_021E8530(s32 *p, s32 delta);
+void SpinTrade_AddAngle(s32 *p, s32 delta);
 
-void ov85_021E8558(ArcWork *work, u32 a1);
+void SpinTrade_RotateAll(ArcWork *work, u32 a1);
 
-BOOL ov85_021E8570(ArcCounter *p);
+BOOL SpinTrade_TickSpinTimer(ArcCounter *p);
 
 void ov85_021E85C4(ArcWork *work, u32 data);
 
 void ov85_021E85CC(ArcWork *work, const u16 *data);
 
-void *ov85_021E85F0(ArcWork *work, u32 a1);
+void *SpinTrade_ClearScratch(ArcWork *work, u32 a1);
 
-void *ov85_021E8610(ArcWork *work);
+void *SpinTrade_GetScratch(ArcWork *work);
 
-u32 ov85_021E8614(ArcWork *work, u32 a1);
+u32 SpinTrade_HasReceivedStatus(ArcWork *work, u32 a1);
 
-BOOL ov85_021E8628(ArcWork *work);
+BOOL SpinTrade_HaveAllMembersJoined(ArcWork *work);
 
-int ov85_021E8660(ArcWork *work);
+int SpinTrade_CountMembers(ArcWork *work);
 
 void ov85_021E86AC(ArcWork *work, u32 data);
 
-BOOL ov85_021E86B0(ArcWork *work, u32 a1);
+BOOL SpinTrade_IsMemberPresent(ArcWork *work, u32 a1);
 
-int ov85_021E8720(ArcWork *work);
+int SpinTrade_CountReceivedParties(ArcWork *work);
 
 void ov85_021E8740(ArcWork *work, int sender, u32 data);
 
 void ov85_021E8748(ArcWork *work, const u16 *src);
 
-u32 ov85_021E8878(ArcWork *work);
+u32 SpinTrade_CountConfirmed(ArcWork *work);
 
-u32 ov85_021E8898(ArcWork *work);
+u32 SpinTrade_IsCancelled(ArcWork *work);
 
-BOOL ov85_021E87F0(void *party);
+BOOL SpinTrade_PartyHasBadEgg(void *party);
 
 void ov85_021E8E38(BgConfig *bgConfig);
 
@@ -116,25 +116,25 @@ void ov85_021E9288(ArcScene *work);
 void ov85_021EA368(ArcScene *work);
 void ov85_021E8E00(ArcScene *work);
 void ov85_021E8F58(void);
-void ov85_021E83E0(ArcWork *work);
-void ov85_021E8428(ArcWork *work, ArcMsg *msg);
+void SpinTrade_StartHoverTask(ArcWork *work);
+void SpinTrade_AddHover(ArcWork *work, ArcMsg *msg);
 
 void ov85_021E8E00(ArcScene *work);
 
-void ov85_021E83E0(ArcWork *work);
+void SpinTrade_StartHoverTask(ArcWork *work);
 
-void ov85_021E8428(ArcWork *work, ArcMsg *msg);
+void SpinTrade_AddHover(ArcWork *work, ArcMsg *msg);
 
 // ---- batch E ----
-void *ov85_021E8588(ArcScene *work, u32 member, int atStart);
+void *SpinTrade_LoadNarcMember(ArcScene *work, u32 member, int atStart);
 int ov85_021E9BA0(ArcScene *work, int state);
 int ov85_021E92B8(ArcScene *work, int state);
-BOOL ov85_021E8834(ArcWork *work);
+BOOL SpinTrade_AnyPartyHasBadEgg(ArcWork *work);
 void ov85_021E9244(Window *window, String *str, u32 speed);
 
-void *ov85_021E8588(ArcScene *work, u32 member, int atStart);
+void *SpinTrade_LoadNarcMember(ArcScene *work, u32 member, int atStart);
 
-BOOL ov85_021E8834(ArcWork *work);
+BOOL SpinTrade_AnyPartyHasBadEgg(ArcWork *work);
 
 void ov85_021E8F88(ArcScene *work, NARC *narc);
 
@@ -144,8 +144,8 @@ void ov85_021E9160(ArcScene *work);
 void ov85_021E9084(ArcScene *work);
 
 // ================= batch A =================
-void ov85_021E84A4(SysTask *task, void *data);
-void ov85_021E84EC(ArcWork *work, u32 a1);
+void SpinTrade_SubBgFadeTask(SysTask *task, void *data);
+void SpinTrade_StartSubBgFade(ArcWork *work, u32 a1);
 void ov85_021E8680(ArcWork *work, ArcPair *p);
 void ov85_021E8C3C(void);
 int ov85_021E9A1C(ArcScene *scene, int a1);
@@ -154,21 +154,21 @@ void ov85_021EA324(ArcGfxHolder *a0, ArcGfxHolder *a1, int a2, int a3, int a4);
 void ov85_021E9458(ArcScene *scene, u32 a1);
 void ov85_021E943C(ArcScene *scene);
 
-void ov85_021E84A4(SysTask *task, void *data);
+void SpinTrade_SubBgFadeTask(SysTask *task, void *data);
 
-void ov85_021E84EC(ArcWork *work, u32 a1);
+void SpinTrade_StartSubBgFade(ArcWork *work, u32 a1);
 
 void ov85_021E8680(ArcWork *work, ArcPair *p);
 
 void ov85_021E8C3C(void);
 
 // ================= batch B =================
-void ov85_021E86CC(ArcWork *work, int a1);
+void SpinTrade_ReceiveTradedMon(ArcWork *work, int a1);
 int ov85_021E9864(ArcScene *scene, int a1);
 int ov85_021E9B40(ArcScene *scene, int a1);
 void ov85_021EA39C(ArcScene *scene, int a1);
 
-void ov85_021E86CC(ArcWork *work, int a1);
+void SpinTrade_ReceiveTradedMon(ArcWork *work, int a1);
 
 // ================= batch C =================
 int ov85_021E962C(ArcScene *scene, int a1);

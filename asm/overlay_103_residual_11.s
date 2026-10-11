@@ -240,7 +240,7 @@ _021ED89E:
 	ldr r0, [r4, #0xc]
 	mov r1, #0xa
 	ldr r0, [r0, #4]
-	bl sub_0201980C
+	bl BgCellManager_EraseCell
 	ldr r0, [r4, #0xc]
 	mov r1, #0
 	bl ov103_021EDB60

@@ -118,58 +118,11 @@ Autoload EXT_WRAM
 	Object lib/asm/to90_arm7_WM_sp_anchor.o
 	Object lib/src/wmsp_system.o
 	Object asm/to90_arm7_sub_ext_wram_anchor.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_1_r01.o
-	Object lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_1_residual_1_r01.o
-	Object lib/src/to90_arm7_sub_ext_wram_run01.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_2_r01.o
-	Object lib/src/to90_arm7_sub_ext_wram_run02.o
-	Object lib/src/to90_arm7_sub_ext_wram_run03.o
-	Object lib/src/to90_arm7_sub_ext_wram_run04.o
-	Object lib/src/to90_arm7_sub_ext_wram_run05.o
-	Object lib/src/to90_arm7_sub_ext_wram_run06.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_3_r01.o
-	Object lib/src/to90_arm7_sub_ext_wram_run07.o
-	Object lib/src/to90_arm7_sub_ext_wram_run08.o
-	Object lib/src/to90_arm7_sub_ext_wram_run09.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_4_r01.o
-	Object lib/src/to90_arm7_sub_ext_wram_run10.o
-	Object lib/src/to90_arm7_sub_ext_wram_run380.o
-	Object lib/src/to90_arm7_sub_ext_wram_run11.o
-	Object lib/src/to90_arm7_sub_ext_wram_run12.o
-	Object lib/src/to91_w41446_power_scan.o
-	Object lib/src/to90_arm7_sub_ext_wram_run13.o
-	Object lib/src/to91_w41442_auth.o
-	Object lib/src/to90_arm7_sub_ext_wram_run14.o
-	Object lib/src/to90_arm7_sub_ext_wram_run15.o
-	Object lib/src/to91_w41450_start_measure.o
-	Object lib/src/to90_arm7_sub_ext_wram_run16.o
-	Object lib/src/to91_w41453_key_mp.o
-	Object lib/src/to90_arm7_sub_ext_wram_run17.o
-	Object lib/src/to90_arm7_sub_ext_wram_run18.o
-	Object lib/src/to90_arm7_sub_ext_wram_run19.o
-	Object lib/src/to90_arm7_sub_ext_wram_run20.o
-	Object lib/src/to90_arm7_sub_ext_wram_run21.o
-	Object lib/src/to90_arm7_sub_ext_wram_run22.o
-	Object lib/src/to91_w41439_lifetime.o
-	Object lib/src/to90_arm7_sub_ext_wram_run23.o
-	Object lib/src/to90_arm7_sub_ext_wram_run24.o
-	Object lib/src/to90_arm7_sub_ext_wram_run25.o
-	Object lib/src/to90_arm7_sub_ext_wram_run26.o
-	Object lib/src/to91_w41452_gameinfo.o
-	Object lib/src/to90_arm7_sub_ext_wram_run27.o
-	Object lib/src/to90_arm7_sub_ext_wram_run28.o
-	Object lib/src/to90_arm7_sub_ext_wram_run29.o
-	Object lib/src/to90_arm7_sub_ext_wram_run30.o
-	Object lib/src/to90_arm7_sub_ext_wram_run31.o
-	Object lib/src/to90_arm7_sub_ext_wram_run32.o
-	Object lib/src/to90_arm7_sub_ext_wram_run33.o
-	Object lib/src/to90_arm7_sub_ext_wram_run34.o
-	Object lib/src/to90_arm7_sub_ext_wram_run35.o
-	Object lib/src/to90_arm7_sub_ext_wram_run36.o
-	Object lib/src/to90_arm7_sub_ext_wram_run37.o
-	Object lib/src/to91_w41441_testsignal.o
-	Object lib/src/to90_arm7_sub_ext_wram_run38.o
-	Object lib/src/to90_arm7_sub_ext_wram_run39.o
+	Object lib/src/wmsp_indicate.o
+	Object lib/src/wmsp_alarm.o
+	Object lib/src/wmsp_request.o
+	Object lib/src/wmsp_wl_command.o
+	Object lib/src/wmsp_initialize.o
 	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_12_r01.o
 	Object lib/src/to90_arm7_sub_ext_wram_run40.o
 	Object lib/src/to90_arm7_sub_ext_wram_run41.o

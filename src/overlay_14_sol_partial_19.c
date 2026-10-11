@@ -89,7 +89,7 @@ void ov14_021F49C8(void *);
 
 #define CALL_196E8(name, a, b, c) \
     void name(void *p) {          \
-        sub_020196E8(p, a, b, c); \
+        BgCellManager_DrawCellAt(p, a, b, c); \
     }
 
 #define FREE_RETURN(name, value)                 \
@@ -116,7 +116,7 @@ void ov14_021F49C8(void *);
 
 #define CALL_198FC(name, a, b, c, d) \
     void name(void *p) {             \
-        sub_020198FC(p, a, b, c, d); \
+        BgCellManager_StartCellMove(p, a, b, c, d); \
     }
 
 #define CALL_67B0(name, a, next)   \
@@ -133,8 +133,8 @@ void ov14_021F49C8(void *);
 
 #define PREP_196E8(name, a, b, c) \
     void name(void *p) {          \
-        sub_0201980C(p, a);       \
-        sub_020196E8(p, a, b, c); \
+        BgCellManager_EraseCell(p, a);       \
+        BgCellManager_DrawCellAt(p, a, b, c); \
     }
 
 #define RESET_7AC4(name)                               \
@@ -144,5 +144,5 @@ void ov14_021F49C8(void *);
     }
 
 void ov14_021E9604(void *p) {
-    sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xc);
+    BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xc);
 }

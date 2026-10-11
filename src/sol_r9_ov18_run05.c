@@ -11,9 +11,9 @@ void ov18_021EEE58(void *work) {
 }
 
 void ov18_021EEE84(void *work) {
-    sub_02019A60(PTR(work, 8), 6, (u8 *)work + 0x11c);
-    sub_02019A60(PTR(work, 8), 6, (u8 *)work + 0x12c);
-    sub_02019A60(PTR(work, 8), 6, (u8 *)work + 0x13c);
-    sub_02019A60(PTR(work, 8), 7, (u8 *)work + 0x11c);
-    sub_02019A60(PTR(work, 8), 7, (u8 *)work + 0x13c);
+    BgCellManager_PutWindowTiles(PTR(work, 8), 6, (u8 *)work + 0x11c);
+    BgCellManager_PutWindowTiles(PTR(work, 8), 6, (u8 *)work + 0x12c);
+    BgCellManager_PutWindowTiles(PTR(work, 8), 6, (u8 *)work + 0x13c);
+    BgCellManager_PutWindowTiles(PTR(work, 8), 7, (u8 *)work + 0x11c);
+    BgCellManager_PutWindowTiles(PTR(work, 8), 7, (u8 *)work + 0x13c);
 }

@@ -60,7 +60,7 @@ extern void DoScheduledBgGpuUpdates(void *);
 extern void ov14_021F29C4(PCBoxInner *);
 extern void SpriteSystem_DrawSprites(void *);
 extern void SpriteSystem_TransferOam(void);
-extern void sub_02019978(void *, u32);
+extern void BgCellManager_UpdateCellMove(void *, u32);
 extern void ov14_021F3BC0(PCBoxInner *);
 
 BOOL PCBox_Init(OverlayManager *, int *);

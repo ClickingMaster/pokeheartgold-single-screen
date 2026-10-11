@@ -80,7 +80,7 @@ void sub_02089F98(SummaryWork *work) {
         sub_02089F50(work, work->bgConfig, 0x4e, 6);
     }
     if (((u8 *)work->monData)[0x11] == 2) {
-        sub_020196E8(*(void **)((u8 *)work + 0x7d0), 4, 0x14, 4);
+        BgCellManager_DrawCellAt(*(void **)((u8 *)work + 0x7d0), 4, 0x14, 4);
         sub_0208B118(work);
     }
     if (!((PackedFlags *)((u8 *)work + 0x280))->flag) {

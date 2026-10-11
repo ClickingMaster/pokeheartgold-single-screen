@@ -10,18 +10,18 @@ extern void PlaySE(int),ov81_02241C0C(void*),ov81_02242218(void*,void*,u32,int),
 extern int ov80_02237254(int),IsPaletteFadeFinished(void),PaletteData_GetSelectedBuffersBitmask(void*),ov81_02242F40(void*);
 extern u8 gOverlayTemplate_PokemonSummary[];
 extern void *OverlayManager_New(const void*,void*,int);
-extern void ov81_02240F38(void*,int),ov81_02241D38(void*),sub_020196E8(void*,int,int,int),sub_0201980C(void*,int),ov81_0224174C(void*),ov81_02242E08(void*,int),ov81_02242D88(void*,int),ClearWindowTilemapAndScheduleTransfer(void*),ov81_022425D8(void*,int,int,int),ScheduleWindowCopyToVram(void*),ov81_022417B4(void*),ov81_02241840(void*),ov81_0223F684(void*);
+extern void ov81_02240F38(void*,int),ov81_02241D38(void*),BgCellManager_DrawCellAt(void*,int,int,int),BgCellManager_EraseCell(void*,int),ov81_0224174C(void*),ov81_02242E08(void*,int),ov81_02242D88(void*,int),ClearWindowTilemapAndScheduleTransfer(void*),ov81_022425D8(void*,int,int,int),ScheduleWindowCopyToVram(void*),ov81_022417B4(void*),ov81_02241840(void*),ov81_0223F684(void*);
 int ov81_0223F38C(u8*);
 int ov81_0223F38C(u8*w){u32 input;
 switch(w[8]){
 case 0:ov81_02240F38(w,0);w[8]=1;F(w).b1=0;break;
 case 1:input=GridInputHandler_HandleInput_NoHold(PTR(w,0x464));switch(input){
-case 0:case 1:case 2:PlaySE(1500);U32(w,0x468)=input;ov81_02242218(w,PTR(w,0x3c0),U32(w,0x468),4);ov81_02241D38(w);sub_020196E8(PTR(w,0x474),0,7,0);ov81_0224174C(w);ov81_02242E08(PTR(w,0x388),1);break;
+case 0:case 1:case 2:PlaySE(1500);U32(w,0x468)=input;ov81_02242218(w,PTR(w,0x3c0),U32(w,0x468),4);ov81_02241D38(w);BgCellManager_DrawCellAt(PTR(w,0x474),0,7,0);ov81_0224174C(w);ov81_02242E08(PTR(w,0x388),1);break;
 case 4:PlaySE(1500);ov81_022425C4(w,2,12,7);w[8]=2;break;
 case 5:PlaySE(1500);ov81_022425C4(w,18,12,8);w[8]=2;break;
 case 6:PlaySE(1500);ov81_022425C4(w,10,15,9);w[8]=2;break;
-case 3:PlaySE(1500);ov81_02242D88(PTR(w,0x394),0);ov81_02242D88(PTR(w,0x398),0);ClearWindowTilemapAndScheduleTransfer(w+0xd0);sub_0201980C(PTR(w,0x474),0);ov81_02241D38(w);ov81_022425D8(w,23,15,6);w[8]=2;break;
-case -3:PlaySE(1500);{u32 next=GridInputHandler_GetNextInput(PTR(w,0x464));if(next==3){ov81_02242D88(PTR(w,0x394),0);ov81_02242D88(PTR(w,0x398),0);ClearWindowTilemapAndScheduleTransfer(w+0xd0);sub_0201980C(PTR(w,0x474),0);}else{ov81_02242218(w,PTR(w,0x3c0),next,3);ScheduleWindowCopyToVram(w+0xd0);sub_020196E8(PTR(w,0x474),0,7,0);}ov81_02241D38(w);}break;
+case 3:PlaySE(1500);ov81_02242D88(PTR(w,0x394),0);ov81_02242D88(PTR(w,0x398),0);ClearWindowTilemapAndScheduleTransfer(w+0xd0);BgCellManager_EraseCell(PTR(w,0x474),0);ov81_02241D38(w);ov81_022425D8(w,23,15,6);w[8]=2;break;
+case -3:PlaySE(1500);{u32 next=GridInputHandler_GetNextInput(PTR(w,0x464));if(next==3){ov81_02242D88(PTR(w,0x394),0);ov81_02242D88(PTR(w,0x398),0);ClearWindowTilemapAndScheduleTransfer(w+0xd0);BgCellManager_EraseCell(PTR(w,0x474),0);}else{ov81_02242218(w,PTR(w,0x3c0),next,3);ScheduleWindowCopyToVram(w+0xd0);BgCellManager_DrawCellAt(PTR(w,0x474),0,7,0);}ov81_02241D38(w);}break;
 case -2:if(GridInputHandler_GetNextInput(PTR(w,0x464))>=4){PlaySE(1500);ov81_022417B4(w);ov81_02242E08(PTR(w,0x388),0);}else{PlaySE(1500);ov81_02241840(w);ov81_02242E08(PTR(w,0x388),1);ov81_02240F38(w,1);return 1;}break;}break;
 case 2:ov81_022425EC(w);break;
 case 3:if(IsPaletteFadeFinished()==1){if(PaletteData_GetSelectedBuffersBitmask(PTR(w,0x1a0))!=0){PaletteData_ScheduleFadeTaskEndIfNoSelectedBuffers(PTR(w,0x1a0));U32(w,0x478)=255;}else{ov81_02240E78(w);ov81_02240BB0(w);PTR(w,4)=OverlayManager_New(gOverlayTemplate_PokemonSummary,PTR(w,0x1c0),100);F(w).b1=1;return 1;}}break;

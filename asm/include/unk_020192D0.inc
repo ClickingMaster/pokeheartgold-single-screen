@@ -13,26 +13,26 @@
 .public sub_020192D0
 .public sub_0201935C
 .public sub_02019490
-.public sub_0201956C
-.public sub_020195C0
-.public sub_020195F4
-.public sub_02019668
-.public sub_02019688
-.public sub_020196B8
-.public sub_020196E8
-.public sub_020197F4
-.public sub_0201980C
-.public sub_020198FC
-.public sub_02019934
-.public sub_02019978
-.public sub_020199E4
-.public sub_020199F4
-.public sub_02019A60
-.public sub_02019B08
-.public sub_02019B10
-.public sub_02019B1C
-.public sub_02019B44
-.public sub_02019B70
+.public BgCellManager_New
+.public BgCellManager_Delete
+.public BgCellManager_InitCell
+.public BgCellManager_SetCellTilemap
+.public BgCellManager_LoadCellTilemap
+.public BgCellManager_LoadCellTilemapFromOpenNarc
+.public BgCellManager_DrawCellAt
+.public BgCellManager_DrawCell
+.public BgCellManager_EraseCell
+.public BgCellManager_StartCellMove
+.public BgCellManager_Update
+.public BgCellManager_UpdateCellMove
+.public BgCellManager_IsCellMoving
+.public BgCellManager_SetCellPalette
+.public BgCellManager_PutWindowTiles
+.public BgCellManager_GetCellTilemap
+.public BgCellManager_GetCellBgId
+.public BgCellManager_GetCellPosition
+.public BgCellManager_GetCellSize
+.public BgCellManager_SetCellClipRect
 .public GridInputHandler_Create
 .public GridInputHandler_Free
 .public GridInputHandler_HandleInput_NoHold
@@ -88,8 +88,8 @@
 .public ov39_02228308
 .public ov39_02228370
 
-	.public sub_02019BA0
-	.public _020F6298
+	.public BgCellManager_NoTransfer
+	.public sBgCellTransferFuncs
 
 	.public sub_020194B4
 	.public sub_020194F8

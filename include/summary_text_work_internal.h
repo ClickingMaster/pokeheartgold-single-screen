@@ -9,7 +9,7 @@
 #include "message_printer.h"
 #include "msgdata.h"
 #include "pm_string.h"
-#include "unk_0201956C.h"
+#include "bg_cell_manager.h"
 
 typedef struct SummaryInputData {
     u8 pad00[8];
@@ -32,7 +32,7 @@ typedef struct SummaryTextWork {
     String *string7B0;
     MsgData *msgData750;
     u8 pad7B8[0x18];
-    UnkStruct_0201956C *cellManager;
+    BgCellManager *cellManager;
 } SummaryTextWork;
 
 void sub_02088894(SummaryTextWork *);

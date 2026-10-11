@@ -136,10 +136,10 @@ u32 ov14_021F2270(void *p, u32 a1, u32 a2) {
     s8 b;
     u16 c;
     u16 d;
-    sub_02019B1C(PTR_AT(PTR_AT(p, 0x34), 0x2f0), a1, &a, &b);
-    sub_02019B44(PTR_AT(PTR_AT(p, 0x34), 0x2f0), a1, &c, &d);
+    BgCellManager_GetCellPosition(PTR_AT(PTR_AT(p, 0x34), 0x2f0), a1, &a, &b);
+    BgCellManager_GetCellSize(PTR_AT(PTR_AT(p, 0x34), 0x2f0), a1, &c, &d);
     BF17(p, 0x88d4).lo = 1;
-    BF17(p, 0x88d4).hi = sub_02019B10(PTR_AT(PTR_AT(p, 0x34), 0x2f0), a1);
+    BF17(p, 0x88d4).hi = BgCellManager_GetCellBgId(PTR_AT(PTR_AT(p, 0x34), 0x2f0), a1);
     BF44(p, 0x88d5).lo = 0xd;
     BF44(p, 0x88d5).hi = 0xc;
     WQ8(p, 0x88d6) = 0;
@@ -157,10 +157,10 @@ u32 ov14_021F2330(void *p, u32 a1, u32 a2) {
     s8 b;
     u16 c;
     u16 d;
-    sub_02019B1C(PTR_AT(PTR_AT(p, 0x34), 0x2f0), a1, &a, &b);
-    sub_02019B44(PTR_AT(PTR_AT(p, 0x34), 0x2f0), a1, &c, &d);
+    BgCellManager_GetCellPosition(PTR_AT(PTR_AT(p, 0x34), 0x2f0), a1, &a, &b);
+    BgCellManager_GetCellSize(PTR_AT(PTR_AT(p, 0x34), 0x2f0), a1, &c, &d);
     BF17(p, 0x88d4).lo = 1;
-    BF17(p, 0x88d4).hi = sub_02019B10(PTR_AT(PTR_AT(p, 0x34), 0x2f0), a1);
+    BF17(p, 0x88d4).hi = BgCellManager_GetCellBgId(PTR_AT(PTR_AT(p, 0x34), 0x2f0), a1);
     BF44(p, 0x88d5).lo = 3;
     BF44(p, 0x88d5).hi = 2;
     WQ8(p, 0x88d6) = 0;
@@ -175,7 +175,7 @@ u32 ov14_021F2330(void *p, u32 a1, u32 a2) {
 
 u32 ov14_021F23F0(void *p, u32 a1, u32 a2) {
     BF17(p, 0x88d4).lo = 1;
-    BF17(p, 0x88d4).hi = sub_02019B10(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 2);
+    BF17(p, 0x88d4).hi = BgCellManager_GetCellBgId(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 2);
     BF44(p, 0x88d5).lo = 3;
     BF44(p, 0x88d5).hi = 2;
     WQ8(p, 0x88d6) = 0;
@@ -194,7 +194,7 @@ u32 ov14_021F23F0(void *p, u32 a1, u32 a2) {
 
 u32 ov14_021F2490(void *p, u32 a1, u32 a2) {
     BF17(p, 0x88d4).lo = 1;
-    BF17(p, 0x88d4).hi = sub_02019B10(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 1);
+    BF17(p, 0x88d4).hi = BgCellManager_GetCellBgId(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 1);
     BF44(p, 0x88d5).lo = 3;
     BF44(p, 0x88d5).hi = 2;
     WQ8(p, 0x88d6) = 0;

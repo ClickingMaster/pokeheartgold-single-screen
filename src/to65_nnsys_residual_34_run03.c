@@ -9,9 +9,9 @@
 #define S(p, o) (*(s8 *)((u8 *)(p) + (o)))
 extern void NNSi_G2dGetUnpackedFont(void *, void *);
 extern u16 NNSi_G2dSplitCharUTF16(void **);
-extern u32 _02109434[4][4];
+extern u32 gObjShapeSizeAttrs[4][4];
 extern void MIi_CpuClearFast(u32, u32 *, u32);
-extern u8 *_021DA498;
+extern u8 *gCurrentRndCore;
 extern void *NNSi_G2dGetCellTransferState(u32);
 extern void DrawCellToSurface3D_(void *, void *);
 extern void DrawCellToSurface2D_(void *, void *);

@@ -18,7 +18,7 @@ extern void ov81_02241EDC(void *, int, int, int);
 extern void Pokepic_Delete(void *);
 extern BOOL ov81_02240564(void *);
 extern void *ov81_02242EA4(void *);
-extern void sub_0201980C(void *, int);
+extern void BgCellManager_EraseCell(void *, int);
 typedef struct {
     u8 pad[0x1AC];
     void *pics[1];
@@ -47,7 +47,7 @@ BOOL ov81_0223FC74(u8 *p) {
         ClearWindowTilemapAndCopyToVram(p + 0x80);
         ClearWindowTilemapAndCopyToVram(p + 0x90);
         ClearWindowTilemapAndCopyToVram(p + 0xD0);
-        sub_0201980C(PTR(p, 0x474), 0);
+        BgCellManager_EraseCell(PTR(p, 0x474), 0);
         ClearFrameAndWindow2(p + 0xC0, 1);
         ClearWindowTilemapAndScheduleTransfer(p + 0xC0);
         ov81_0224300C(p + 0x50);

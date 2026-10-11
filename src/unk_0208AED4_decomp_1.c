@@ -10,13 +10,13 @@ int sub_0208AED4(SummaryWork8AED4 *work) {
 
 void sub_0208AF08(SummaryWork8AED4 *work, int value) {
     if (value == 1) {
-        sub_020196E8(work->anim7d0, 0, 0, 0x12);
+        BgCellManager_DrawCellAt(work->anim7d0, 0, 0, 0x12);
         Sprite_SetDrawFlag(work->sprite448, FALSE);
         sub_0208DC68(work, 1);
         return;
     }
     if (work->inner->unk18 != 0) {
-        sub_020196E8(work->anim7d0, 1, 0, 0x12);
+        BgCellManager_DrawCellAt(work->anim7d0, 1, 0, 0x12);
         Sprite_SetDrawFlag(work->sprite448, TRUE);
     } else {
         sub_0208AF70(work);
@@ -34,10 +34,10 @@ void sub_0208AFA0(SummaryWork8AED4 *work, int value) {
         return;
     }
     if (value == 1) {
-        sub_020196E8(work->anim7d0, 2, 1, 0x10);
+        BgCellManager_DrawCellAt(work->anim7d0, 2, 1, 0x10);
         sub_0208DD20(work, 1);
         return;
     }
-    sub_020196E8(work->anim7d0, 3, 1, 0x10);
+    BgCellManager_DrawCellAt(work->anim7d0, 3, 1, 0x10);
     sub_0208DD20(work, 0);
 }

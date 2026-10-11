@@ -156,7 +156,7 @@ ov103_021ECD68: ; 0x021ECD68
 	ldr r0, [r0]
 	mov r2, #0xb
 	mov r3, #0x9d
-	bl sub_0201956C
+	bl BgCellManager_New
 	ldr r1, [r5, #0xc]
 	mov r4, #0
 	str r0, [r1, #4]
@@ -169,7 +169,7 @@ _021ECD84:
 	ldr r0, [r0, #4]
 	add r2, r7, #0
 	mov r3, #0xe
-	bl sub_020195F4
+	bl BgCellManager_InitCell
 	add r4, r4, #1
 	cmp r4, #0xa
 	blo _021ECD84
@@ -180,7 +180,7 @@ _021ECD84:
 	ldr r0, [r0, #4]
 	mov r2, #1
 	mov r3, #0xe
-	bl sub_020195F4
+	bl BgCellManager_InitCell
 	mov r0, #1
 	str r0, [sp]
 	ldr r0, [r5, #0xc]
@@ -188,11 +188,11 @@ _021ECD84:
 	ldr r0, [r0, #4]
 	mov r2, #0xfc
 	mov r3, #3
-	bl sub_02019688
+	bl BgCellManager_LoadCellTilemap
 	ldr r0, [r5, #0xc]
 	mov r1, #0
 	ldr r0, [r0, #4]
-	bl sub_02019B08
+	bl BgCellManager_GetCellTilemap
 	add r6, r0, #0
 	mov r4, #1
 	mov r7, #0x70
@@ -200,7 +200,7 @@ _021ECDCE:
 	ldr r0, [r5, #0xc]
 	add r1, r4, #0
 	ldr r0, [r0, #4]
-	bl sub_02019B08
+	bl BgCellManager_GetCellTilemap
 	add r1, r0, #0
 	add r0, r6, #0
 	add r2, r7, #0
@@ -221,7 +221,7 @@ _021ECDEA:
 	add r1, r4, #0
 	asr r2, r2, #0x18
 	asr r3, r3, #0x18
-	bl sub_020196E8
+	bl BgCellManager_DrawCellAt
 	add r4, r4, #1
 	cmp r4, #0xa
 	blo _021ECDEA

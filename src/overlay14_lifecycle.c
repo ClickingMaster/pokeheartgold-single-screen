@@ -53,9 +53,9 @@ void ov14_021E59AC(void *task, PCBoxWork *work) {
 
 void ov14_021E5A14(PCBoxWork *work) {
     if (work->args->unk8 != 3) {
-        sub_02019978(work->inner->spriteSystem, 0x10);
+        BgCellManager_UpdateCellMove(work->inner->spriteSystem, 0x10);
         return;
     }
-    sub_02019978(work->inner->spriteSystem, 0x10);
+    BgCellManager_UpdateCellMove(work->inner->spriteSystem, 0x10);
     ov14_021F3BC0(work->inner);
 }

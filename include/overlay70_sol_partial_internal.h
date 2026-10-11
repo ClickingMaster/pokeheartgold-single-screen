@@ -72,14 +72,14 @@ extern BOOL ItemIdIsMail(u16 item);
 extern void SetAllPCBoxesModified(void *save);
 extern void Save_PrepareForAsyncWrite(void *save, int mode);
 extern BOOL sub_0202DB54(void *arg);
-extern BOOL sub_020199E4(void *arg, int value);
+extern BOOL BgCellManager_IsCellMoving(void *arg, int value);
 extern void sub_0203946C(void *arg);
 extern void ov00_021EC8D8(void);
 extern void TouchscreenListMenu_Destroy(void *menu);
 extern void TouchscreenListMenuSpawner_Destroy(void *spawner);
 extern void FreeBgTilemapBuffer(void *bg, int layer);
 extern int Save_WriteFileAsync(void *save);
-extern void sub_0201980C(void *arg, int value);
+extern void BgCellManager_EraseCell(void *arg, int value);
 extern int PlayerProfile_GetTrainerGender(void *profile);
 
 void ov70_02238D84(Ov70State *state, u32 a, u32 b);

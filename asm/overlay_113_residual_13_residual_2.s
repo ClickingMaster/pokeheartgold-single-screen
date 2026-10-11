@@ -19,26 +19,26 @@
 	.text
 	.public UnownReport_Exit
 	.public ov113_021E59F8
-	.public ov113_021E5A48
-	.public ov113_021E5B60
-	.public ov113_021E5B70
-	.public ov113_021E5BB0
-	.public ov113_021E5C60
-	.public ov113_021E5CF8
-	.public ov113_021E5D28
-	.public ov113_021E5D4C
-	.public ov113_021E5EC4
-	.public ov113_021E6274
-	.public ov113_021E629C
-	.public ov113_021E62E0
-	.public ov113_021E64DC
-	.public ov113_021E663C
-	.public ov113_021E66E4
-	.public ov113_021E6754
-	.public ov113_021E6930
-	.public ov113_021E6988
-	.public ov113_021E69A8
-	.public ov113_021E6B1C
+	.public UnownReport_GetSeenPunctuationForms
+	.public UnownReport_RestoreMenuInputState
+	.public UnownReport_SetupGraphics
+	.public UnownReport_Teardown
+	.public UnownReport_HandleInput
+	.public UnownReport_CreateGraphics
+	.public UnownReport_DestroyGraphics
+	.public UnownReport_DrawFirstPage
+	.public UnownReport_IsBookAnimating
+	.public UnownReport_PrintText
+	.public UnownReport_PrintTextFont0
+	.public UnownReport_SetVramBanks
+	.public UnownReport_LoadScreen
+	.public UnownReport_FreeScreens
+	.public UnownReport_FreeMessages
+	.public UnownReport_FreeWindows
+	.public UnownReport_FreeSpriteSystem
+	.public UnownReport_CreateSprites
+	.public UnownReport_DestroySprites
+	.public UnownReport_UpdateArrows
 	.rodata
 
 _021E6B6C:

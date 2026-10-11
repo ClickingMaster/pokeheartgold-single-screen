@@ -4,10 +4,10 @@
 #define P8(p, o)  (*(u8 *)((u8 *)(p) + (o)))
 #define P32(p, o) (*(u32 *)((u8 *)(p) + (o)))
 #define PP(p, o)  (*(void **)((u8 *)(p) + (o)))
-extern void sub_020196E8(void *, u32, u32, u32);
-extern void sub_020198FC(void *, s32, s32, s32, u8);
-extern void sub_02019B1C(void *, u32, s8 *, s8 *);
-extern u32 sub_02019978(void *, u32);
+extern void BgCellManager_DrawCellAt(void *, u32, u32, u32);
+extern void BgCellManager_StartCellMove(void *, s32, s32, s32, u8);
+extern void BgCellManager_GetCellPosition(void *, u32, s8 *, s8 *);
+extern u32 BgCellManager_UpdateCellMove(void *, u32);
 extern void FillBgTilemapRect(void *, u32, u32, u32, u32, u32, u32, u32);
 extern void ov14_021E7D9C(void *, u32);
 extern void ov14_021F32E0(void *);

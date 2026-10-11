@@ -13,7 +13,7 @@ typedef struct Ov70MenuWork {
     void *cellManager;
 } Ov70MenuWork;
 
-void sub_02019B1C(void *, int, s8 *, s8 *);
+void BgCellManager_GetCellPosition(void *, int, s8 *, s8 *);
 void FillWindowPixelBuffer(Ov70Window *, u8);
 void CopyWindowPixelsToVram_TextMode(Ov70Window *);
 void RemoveWindow(Ov70Window *);

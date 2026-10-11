@@ -67,7 +67,7 @@ u32 ov14_021EAB54(void *p) {
 
 u32 ov14_021EAC24(void *p) {
     void *q = PTR_AT(p, 0x34);
-    sub_02019978(PTR_AT(q, 0x2f0), 0xf);
+    BgCellManager_UpdateCellMove(PTR_AT(q, 0x2f0), 0xf);
     switch (U16_AT(q, 0x10)) {
     case 0:
         ov14_021F29E4(PTR_AT(p, 0x34), 9, 9);

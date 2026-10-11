@@ -6,7 +6,7 @@ int ov70_02243AC4(void *w) {
     if (S16(w, 0x3e) < 0) {
         U32(w, 0x4c) = 19;
     } else {
-        sub_020198FC(PTR(w, 0x1c), 0, -4, 0, 3);
+        BgCellManager_StartCellMove(PTR(w, 0x1c), 0, -4, 0, 3);
         if (PTR(w, 0x18)) {
             Sprite_SetDrawFlag(PTR(w, 0x18), 0);
         }

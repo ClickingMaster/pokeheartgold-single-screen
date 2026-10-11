@@ -31,7 +31,7 @@
 void ov70_02241DB4(Ov70MenuWork *work, int mode) {
     s8 coords[2];
 
-    sub_02019B1C(work->cellManager, 0, &coords[1], &coords[0]);
+    BgCellManager_GetCellPosition(work->cellManager, 0, &coords[1], &coords[0]);
     switch (mode) {
     case 4:
         CLEAN_WINDOWS(9);

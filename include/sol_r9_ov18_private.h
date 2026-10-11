@@ -26,7 +26,7 @@ void ov18_021EEED0(void *, u32);
 void ov18_021EF45C(void *);
 void ov18_021EF528(void *);
 void ov18_021EEE84(void *);
-void sub_02019A60(void *, u32, void *);
+void BgCellManager_PutWindowTiles(void *, u32, void *);
 
 void ov18_021EE388(Work18 *);
 void ov18_021EE508(void *, u32, u32);

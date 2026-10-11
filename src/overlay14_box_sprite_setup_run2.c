@@ -20,7 +20,7 @@ void ov14_021F3B5C(void *p) {
 
 void ov14_021F3BC0(void *p) {
     s8 pos[2];
-    sub_02019B1C(PTR_AT(p, 0x2f0), 0x10, &pos[1], &pos[0]);
+    BgCellManager_GetCellPosition(PTR_AT(p, 0x2f0), 0x10, &pos[1], &pos[0]);
     ManagedSprite_SetPositionXY(PTR_AT(p, 0x32c), 0x12, pos[0] * 8 + 0x168);
     ManagedSprite_SetDrawFlag(PTR_AT(p, 0x32c), TRUE);
 }

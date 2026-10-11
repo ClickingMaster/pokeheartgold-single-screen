@@ -30,7 +30,7 @@ u32 ov14_021EA068(void *p) {
     void *q = PTR_AT(p, 0x34);
     switch (U16_AT(q, 0x10)) {
     case 0:
-        if (sub_02019978(PTR_AT(q, 0x2f0), 0xa) == 0) {
+        if (BgCellManager_UpdateCellMove(PTR_AT(q, 0x2f0), 0xa) == 0) {
             U16_AT(q, 0x10)
             ++;
         }
@@ -52,9 +52,9 @@ u32 ov14_021EA0B8(void *p) {
     void *q = PTR_AT(p, 0x34);
     switch (U16_AT(q, 0x10)) {
     case 0: {
-        u32 a = sub_02019978(PTR_AT(q, 0x2f0), 8);
-        u32 b = sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9);
-        u32 c = sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xa);
+        u32 a = BgCellManager_UpdateCellMove(PTR_AT(q, 0x2f0), 8);
+        u32 b = BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9);
+        u32 c = BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xa);
         if (a == 0 && b == 0 && c == 0) {
             U16_AT(q, 0x10)
             ++;
@@ -87,7 +87,7 @@ u32 ov14_021EA130(void *p) {
         break;
     }
     case 1:
-        if (sub_02019978(PTR_AT(q, 0x2f0), 0xa) == 0) {
+        if (BgCellManager_UpdateCellMove(PTR_AT(q, 0x2f0), 0xa) == 0) {
             U16_AT(q, 0x10) = 0;
             return 0;
         }
@@ -109,9 +109,9 @@ u32 ov14_021EA180(void *p) {
         break;
     }
     case 1: {
-        u32 a = sub_02019978(PTR_AT(q, 0x2f0), 8);
-        u32 b = sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9);
-        u32 c = sub_02019978(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xa);
+        u32 a = BgCellManager_UpdateCellMove(PTR_AT(q, 0x2f0), 8);
+        u32 b = BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9);
+        u32 c = BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xa);
         if (a == 0 && b == 0 && c == 0) {
             U16_AT(q, 0x10) = 0;
             return 0;
