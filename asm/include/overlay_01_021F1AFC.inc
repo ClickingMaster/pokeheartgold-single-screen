@@ -96,7 +96,7 @@
 .public SaveArray_Party_Get
 .public memset
 .public FieldSystem_ProcessSoundplate
-.public ov01_021F1640
+.public FieldEffectManager_DestroyEffect
 .public Field_PlayerAvatar_OrrTransitionFlags
 .public Field_PlayerAvatar_ApplyTransitionFlags
 .public ov01_021F1D94

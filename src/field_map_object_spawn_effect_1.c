@@ -30,21 +30,21 @@ static const LocalSixWords sSpawnHeights = {
 static inline void LocalSpawn(void *obj, void *arg, const u32 *callbacks) {
     LocalSpawnArgs a;
     a.fieldSystem = MapObject_GetFieldSystem(obj);
-    a.manager = ov01_021F146C(obj);
-    a.resource = ov01_021F1450(a.manager, 1);
+    a.manager = FieldEffectManager_GetFromMapObject(obj);
+    a.resource = FieldEffectManager_GetRendererData(a.manager, 1);
     a.mapObject = obj;
     MapObject_CopyPositionVector(obj, &a.position);
-    ov01_021F1620(a.manager, callbacks, &a.position, arg, &a, MapObject_GetPriorityPlusValue(obj, 2));
+    FieldEffectManager_CreateEffect(a.manager, callbacks, &a.position, arg, &a, MapObject_GetPriorityPlusValue(obj, 2));
 }
 LocalTaskCtx *ov01_021FDA14(void *owner) {
-    LocalTaskCtx *ctx = ov01_021F1430(owner, 4, 0, 0);
+    LocalTaskCtx *ctx = FieldEffectManager_HeapAllocAndFill(owner, 4, 0, 0);
     ctx->owner = owner;
     ov01_021FDA40(ctx);
     return ctx;
 }
 void ov01_021FDA30(LocalTaskCtx *ctx) {
     ov01_021FDA5C(ctx);
-    ov01_021F1448(ctx);
+    FieldEffectManager_HeapFree(ctx);
 }
 void ov01_021FDA40(LocalTaskCtx *ctx) {
     ov01_021F18D4(ctx->owner, 2, 0x23);
@@ -85,7 +85,7 @@ void ov01_021FDB44(void *task, LocalEffectState *state) {
     VecFx32 pos;
     void *obj = state->mapObject;
     if (state->spriteId != MapObject_GetSpriteID(obj) || !sub_0205F0A8(obj, state->objectId, state->mapId) || !MapObject_CheckFlag24(obj)) {
-        ov01_021F1640(task);
+        FieldEffectManager_DestroyEffect(task);
         return;
     }
     state->scaleX += state->delta;
@@ -111,7 +111,7 @@ void ov01_021FDBCC(void *task, LocalEffectState *state) {
     void *source;
     BOOL hidden = FALSE;
     if (state->spriteId != MapObject_GetSpriteID(obj) || !sub_0205F0A8(obj, state->objectId, state->mapId) || !MapObject_CheckFlag24(obj)) {
-        ov01_021F1640(task);
+        FieldEffectManager_DestroyEffect(task);
         return;
     }
     if (state->active == 0) {
@@ -188,7 +188,7 @@ void ov01_021FDD48(void *task, LocalEffectState *state) {
     if (ov01_021F9744(MapObject_GetManager(state->mapObject), state->spriteId, local.args) && ov01_021FA2D4(state->mapObject) != 1) {
         *(void **)local.args = ov01_021F18F0((void *)state->data14[1], 2);
         sub_02068DB8(task, &local.pos);
-        state->effect = ov01_021F16EC((void *)state->data14[1], local.args, &local.pos);
+        state->effect = FieldEffectManager_CreateBillboard((void *)state->data14[1], local.args, &local.pos);
         state->active = 1;
     }
 }
@@ -201,7 +201,7 @@ void ov01_021FDD94(void *task, LocalExtendedEffectState *state) {
     *(LocalTenWords *)local.args = *(LocalTenWords *)((u8 *)state + 0x10);
     *(void **)local.args = ov01_021F18F0((void *)state->data04[1], 2);
     sub_02068DB8(task, &local.pos);
-    state->effect = ov01_021F16EC((void *)state->data04[1], local.args, &local.pos);
+    state->effect = FieldEffectManager_CreateBillboard((void *)state->data04[1], local.args, &local.pos);
     oldEffect = *(void **)((u8 *)state + 0x38);
     BillboardObject_SetSequence(state->effect, BillboardObject_GetSequence(oldEffect));
     BillboardObject_SetSequenceFrame(state->effect, BillboardObject_GetSequenceFrame(oldEffect));
@@ -229,12 +229,12 @@ void ov01_021FDE64(void *owner, const void *input, void *value, void *callbackAr
         LocalTenWords config;
         void *value;
     } local;
-    local.manager = ov01_021F1468(owner);
+    local.manager = FieldEffectManager_GetFieldSystem(owner);
     local.owner = owner;
-    local.resource = ov01_021F1450(owner, 1);
+    local.resource = FieldEffectManager_GetRendererData(owner, 1);
     local.config = *(const LocalTenWords *)input;
     local.value = value;
-    ov01_021F1620(owner, ov01_02208F9C, callbackArg, arg5, &local, arg6);
+    FieldEffectManager_CreateEffect(owner, ov01_02208F9C, callbackArg, arg5, &local, arg6);
 }
 BOOL ov01_021FDEAC(void *task, LocalExtendedEffectState *state) {
     VecFx32 pos;
@@ -303,7 +303,7 @@ void ov01_021FE058(void *task, LocalEffectState *state) {
     VecFx32 pos;
     void *obj = state->mapObject;
     if (state->spriteId != MapObject_GetSpriteID(obj) || !sub_0205F0A8(obj, state->objectId, state->mapId) || !MapObject_CheckFlag24(obj)) {
-        ov01_021F1640(task);
+        FieldEffectManager_DestroyEffect(task);
         return;
     }
     state->scaleX += state->delta;
@@ -326,7 +326,7 @@ void ov01_021FE0EC(void *task, LocalEffectState *state) {
     void *obj = state->mapObject;
     void *source;
     if (state->spriteId != MapObject_GetSpriteID(obj) || !sub_0205F0A8(obj, state->objectId, state->mapId) || !MapObject_CheckFlag24(obj)) {
-        ov01_021F1640(task);
+        FieldEffectManager_DestroyEffect(task);
         return;
     }
     if (state->active == 0) {
@@ -362,7 +362,7 @@ void ov01_021FE190(void *task, LocalEffectState *state) {
             ov01_02205870(1, state->mapObject, state->effect, local.args);
         }
         sub_02068DB8(task, &local.pos);
-        state->effect = ov01_021F16EC((void *)state->data14[1], local.args, &local.pos);
+        state->effect = FieldEffectManager_CreateBillboard((void *)state->data14[1], local.args, &local.pos);
         state->active = 1;
     }
 }

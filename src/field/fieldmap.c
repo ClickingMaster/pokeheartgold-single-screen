@@ -43,7 +43,7 @@
 #include "obj_pltt_transfer.h"
 #include "overlay_01.h"
 #include "overlay_01_021EA824.h"
-#include "overlay_01_021F1348.h"
+#include "field/field_effect_manager.h"
 #include "overlay_01_021F6830.h"
 #include "overlay_01_021F8D80.h"
 #include "overlay_01_021F944C.h"
@@ -708,7 +708,7 @@ static void ov01_021E64A4(FieldSystem *fieldSystem) {
 
     FieldEffectManager_InitAnimManagerList(fieldSystem->fieldEffectManager, 80);
 
-    ov01_021F1390(fieldSystem->fieldEffectManager, HEAP_ID_FIELD1, 32, 32, 32, 32, 0x500 * (32 / 2), 0x80 * (32 / 2), 0x800 * 32);
+    FieldEffectManager_InitGfx(fieldSystem->fieldEffectManager, HEAP_ID_FIELD1, 32, 32, 32, 32, 0x500 * (32 / 2), 0x80 * (32 / 2), 0x800 * 32);
 
     fieldSystem->unk4->unk18 = sub_02055680(fieldSystem, HEAP_ID_FIELD1);
     if (fieldSystem->mapLoadType == MAP_LOAD_TYPE_UNION) {

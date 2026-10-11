@@ -34,7 +34,7 @@ ov01_022051EC: ; 0x022051EC
 	mov r1, #0xc4
 	add r3, r2, #0
 	add r5, r0, #0
-	bl ov01_021F1430
+	bl FieldEffectManager_HeapAllocAndFill
 	add r4, r0, #0
 	str r5, [r4]
 	bl ov01_02205218
@@ -49,7 +49,7 @@ ov01_02205208: ; 0x02205208
 	add r4, r0, #0
 	bl ov01_022052A4
 	add r0, r4, #0
-	bl ov01_021F1448
+	bl FieldEffectManager_HeapFree
 	pop {r4, pc}
 	thumb_func_end ov01_02205208
 
@@ -143,7 +143,7 @@ ov01_022052C4: ; 0x022052C4
 	add r4, r1, #0
 	mov r1, #0x16
 	str r5, [sp, #8]
-	bl ov01_021F1450
+	bl FieldEffectManager_GetRendererData
 	str r0, [sp, #0xc]
 	add r0, sp, #8
 	str r0, [sp]
@@ -153,7 +153,7 @@ ov01_022052C4: ; 0x022052C4
 	add r0, r5, #0
 	add r2, r4, #0
 	mov r3, #0
-	bl ov01_021F1620
+	bl FieldEffectManager_CreateEffect
 	add sp, #0x10
 	pop {r3, r4, r5, pc}
 	nop

@@ -41,9 +41,9 @@ defaultFieldEffectRenderers: ; 0x02208BFC
 	.word 0x15
 	.word 0x17
 
-	.public ov01_02208C5C
-ov01_02208C5C: ; 0x02208C5C
-	.word 0x00000000, ov01_021FD41C, ov01_021FD440
+	.public gFieldEffectRenderers
+gFieldEffectRenderers: ; 0x02208C5C
+	.word 0x00000000, FieldShadow_New, FieldShadow_Free
 	.word 0x00000001, ov01_021FDA14, ov01_021FDA30
 	.word 0x00000002, ov01_021FE200, ov01_021FE220
 	.word 0x00000003, ov01_02200858, ov01_02200874

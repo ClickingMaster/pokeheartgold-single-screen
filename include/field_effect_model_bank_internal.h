@@ -5,13 +5,13 @@
 #include "global.h"
 
 #include "map_object.h"
-#include "overlay_01_021F1348.h"
+#include "field/field_effect_manager.h"
 #include "unk_020689C8.h"
 #include "render_model.h"
 #include "render_animation.h"
 
 // Per-module renderer bank. The tracked UnkOv01_021FFECC in
-// overlay_01_021F1348.h is the 4-renderer instantiation (0x1a4); this module
+// field/field_effect_manager.h is the 4-renderer instantiation (0x1a4); this module
 // allocates 0x824, i.e. the 10-renderer double-bank form. See report.md.
 #define OV01_021FE200_COUNT 10
 
@@ -46,7 +46,7 @@ typedef struct UnkOv01_021FE200_Callbacks {
     UnkOv01_021FE200_Cb2 unk10;
 } UnkOv01_021FE200_Callbacks;
 
-// 12-byte argument block passed as ov01_021F1620's a4 in ov01_021FE3F8.
+// 12-byte argument block passed as FieldEffectManager_CreateEffect's a4 in ov01_021FE3F8.
 typedef struct UnkOv01_021FE200_Args {
     u32 unk0;
     UnkOv01_021FFECC_sub *unk4;

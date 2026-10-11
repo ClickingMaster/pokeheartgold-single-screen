@@ -21,7 +21,7 @@ void ov01_021F1B38(PlayerAvatar *playerAvatar) {
     PlayerAvatar_ClearUnk24ClearFlag2(playerAvatar);
     unk34 = PlayerAvatar_GetUnk34(playerAvatar);
     if (unk34 != 0) {
-        ov01_021F1640(unk34);
+        FieldEffectManager_DestroyEffect(unk34);
     }
     PlayerAvatar_SetUnk34(playerAvatar, 0);
 }
@@ -33,7 +33,7 @@ void ov01_021F1B78(PlayerAvatar *playerAvatar) {
     PlayerAvatar_ClearUnk24ClearFlag2(playerAvatar);
     unk34 = PlayerAvatar_GetUnk34(playerAvatar);
     if (unk34 != 0) {
-        ov01_021F1640(unk34);
+        FieldEffectManager_DestroyEffect(unk34);
     }
     PlayerAvatar_SetUnk34(playerAvatar, 0);
     PlaySE(SEQ_SE_DP_JITENSYA);
@@ -48,7 +48,7 @@ void ov01_021F1BC0(PlayerAvatar *playerAvatar) {
     PlayerAvatar_ClearUnk24ClearFlag2(playerAvatar);
     unk34 = PlayerAvatar_GetUnk34(playerAvatar);
     if (unk34 != 0) {
-        ov01_021F1640(unk34);
+        FieldEffectManager_DestroyEffect(unk34);
     }
     PlayerAvatar_SetUnk34(playerAvatar, 0);
     direction = PlayerAvatar_GetFacingDirection(playerAvatar);
@@ -64,7 +64,7 @@ void ov01_021F1C30(PlayerAvatar *playerAvatar) {
     PlayerAvatar_ClearUnk24ClearFlag2(playerAvatar);
     unk34 = PlayerAvatar_GetUnk34(playerAvatar);
     if (unk34 != 0) {
-        ov01_021F1640(unk34);
+        FieldEffectManager_DestroyEffect(unk34);
     }
     PlayerAvatar_SetUnk34(playerAvatar, 0);
 }

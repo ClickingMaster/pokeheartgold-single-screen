@@ -7,7 +7,7 @@ void ov01_02203654(void *task, void *v) {
     void *mapObj, *model;
     u32 a, b, dir;
     if (!sub_0205F0F8(owner, *(u32 *)(p + 4), *(u32 *)(p + 8), *(u32 *)(p + 0xc))) {
-        ov01_021F1640(task);
+        FieldEffectManager_DestroyEffect(task);
         return;
     }
     if (*(u32 *)(p + 0x14) == 0) {
@@ -61,7 +61,7 @@ void ov01_02203654(void *task, void *v) {
         break;
     case 2:
         if (++*(s32 *)(p + 0x10) >= 4) {
-            ov01_021F1640(task);
+            FieldEffectManager_DestroyEffect(task);
         }
         break;
     }

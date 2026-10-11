@@ -23,7 +23,7 @@ const UnkOv01_02209280 ov01_022090DC = {
 };
 
 Ov01FE780Ctx *ov01_021FE780(void *a0) {
-    Ov01FE780Ctx *ctx = (Ov01FE780Ctx *)ov01_021F1430(a0, sizeof(Ov01FE780Ctx), 0, 0);
+    Ov01FE780Ctx *ctx = (Ov01FE780Ctx *)FieldEffectManager_HeapAllocAndFill(a0, sizeof(Ov01FE780Ctx), 0, 0);
     ctx->manager = a0;
     ov01_021FE7AC(ctx);
     return ctx;
@@ -31,7 +31,7 @@ Ov01FE780Ctx *ov01_021FE780(void *a0) {
 
 void ov01_021FE79C(Ov01FE780Ctx *ctx) {
     ov01_021FE7D0(ctx);
-    ov01_021F1448(ctx);
+    FieldEffectManager_HeapFree(ctx);
 }
 
 void ov01_021FE7AC(Ov01FE780Ctx *ctx) {
@@ -49,8 +49,8 @@ u32 ov01_021FE7DC(LocalMapObject *obj, u32 x, u32 y, u32 dir, u32 a4) {
     VecFx32 vec;
 
     args.dir = dir;
-    args.fieldSys = ov01_021F146C(obj);
-    args.ctx = (Ov01FE780Ctx *)ov01_021F1450(args.fieldSys, 4);
+    args.fieldSys = FieldEffectManager_GetFromMapObject(obj);
+    args.ctx = (Ov01FE780Ctx *)FieldEffectManager_GetRendererData(args.fieldSys, 4);
     args.object = obj;
     if (a4 == 0) {
         FieldSystem *fieldSystem = MapObject_GetFieldSystem(obj);
@@ -62,7 +62,7 @@ u32 ov01_021FE7DC(LocalMapObject *obj, u32 x, u32 y, u32 dir, u32 a4) {
         MapObject_CopyPositionVector(obj, &pos);
         sub_0205F9A0(obj, &vec);
     }
-    ov01_021F1620(args.fieldSys, &ov01_022090DC, &pos, a4, (UnkOv01_021FFF5C *)&args, MapObject_GetPriorityPlusValue(obj, 2));
+    FieldEffectManager_CreateEffect(args.fieldSys, &ov01_022090DC, &pos, a4, (UnkOv01_021FFF5C *)&args, MapObject_GetPriorityPlusValue(obj, 2));
 }
 
 BOOL ov01_021FE868(void *a0, Ov01FE780Work *work) {
@@ -94,7 +94,7 @@ void ov01_021FE8C8(void *a0, Ov01FE780Work *work) {
     fx32 t;
 
     if (!sub_0205F0A8(object, work->objId, work->mapId)) {
-        ov01_021F1640((int)a0);
+        FieldEffectManager_DestroyEffect((int)a0);
         return;
     }
     work->unk00 = 0;

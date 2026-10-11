@@ -7,13 +7,13 @@ typedef struct LocalFiveWords {
 } LocalFiveWords;
 extern const u32 ov01_02209084[], ov01_022090AC[];
 LocalManager *ov01_021FE590(void *owner) {
-    LocalManager *m = ov01_021F1430(owner, 12, 0, 0);
+    LocalManager *m = FieldEffectManager_HeapAllocAndFill(owner, 12, 0, 0);
     m->owner = owner;
     return m;
 }
 void ov01_021FE5A4(LocalManager *m) {
     ov01_021FE61C(m);
-    ov01_021F1448(m);
+    FieldEffectManager_HeapFree(m);
 }
 void ov01_021FE5B4(LocalManager *m) {
     m->refs++;
@@ -29,8 +29,8 @@ void ov01_021FE5CC(LocalManager *m) {
         m->active = 1;
         ov01_021F18D4(m->owner, 11, 0x80);
         ov01_021F1908(m->owner, 11, 0x95);
-        ov01_021F1930(m->owner, 12, 0x1a, 1);
-        ov01_021F1758(m->owner, 13, 11, 11, 12, 0, ov01_022090AC);
+        FieldEffectManager_LoadTexResource(m->owner, 12, 0x1a, 1);
+        FieldEffectManager_AddRecord(m->owner, 13, 11, 11, 12, 0, ov01_022090AC);
     }
 }
 void ov01_021FE61C(LocalManager *m) {
@@ -38,8 +38,8 @@ void ov01_021FE61C(LocalManager *m) {
         m->active = 0;
         ov01_021F18FC(m->owner, 11);
         ov01_021F1924(m->owner, 11);
-        ov01_021F1970(m->owner, 12);
-        ov01_021F18C8(m->owner, 13);
+        FieldEffectManager_FreeTexResource(m->owner, 12);
+        FieldEffectManager_ReleaseRecord(m->owner, 13);
     }
 }
 void ov01_021FE64C(LocalManager *m) {
@@ -59,19 +59,19 @@ void ov01_021FE66C(void *obj) {
         u32 pad10;
         VecFx32 pos;
     } local;
-    LocalManager *m = ov01_021F146C(obj);
+    LocalManager *m = FieldEffectManager_GetFromMapObject(obj);
     ov01_021F93AC(obj, &local.pos);
     local.pos.z += 2 << 14;
     local.manager = m;
-    local.resource = ov01_021F1450(m, 16);
-    ov01_021F1620(m, ov01_02209084, &local.pos, 0, &local, 0xff);
+    local.resource = FieldEffectManager_GetRendererData(m, 16);
+    FieldEffectManager_CreateEffect(m, ov01_02209084, &local.pos, 0, &local, 0xff);
 }
 BOOL ov01_021FE6B4(void *task, LocalState *s) {
     VecFx32 pos;
     *(LocalThreeWords *)&s->resource = *(LocalThreeWords *)sub_02068D98(task);
     ov01_021FE64C(s->manager);
     sub_02068DB8(task, &pos);
-    s->effect = ov01_021F1740(s->resource, 13, &pos);
+    s->effect = FieldEffectManager_CreateBillboardFromRecord(s->resource, 13, &pos);
     ov01_021FE5B4(s->manager);
     return TRUE;
 }
@@ -89,7 +89,7 @@ void ov01_021FE70C(void *task, LocalState *s) {
         s->finished = 0;
         s->index++;
         if (s->index >= 5) {
-            ov01_021F1640(task);
+            FieldEffectManager_DestroyEffect(task);
             return;
         }
         BillboardObject_SetFrame(s->effect, 0);

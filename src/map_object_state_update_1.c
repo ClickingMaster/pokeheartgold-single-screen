@@ -40,7 +40,7 @@ void sub_020603F8(LocalMapObject *object, int previous, u8 current, int effect) 
             return;
         }
         if (MapObject_GetFlagsBitsMask(object, MAPOBJECTFLAG_UNK15) == 0) {
-            ov01_021FD640(object);
+            FieldShadow_CreateMapObjectShadow(object);
             MapObject_SetFlagsBits(object, MAPOBJECTFLAG_UNK15);
         }
     }

@@ -1,7 +1,7 @@
 #include "field_effect_rotation_task_internal.h"
 
 void *ov01_021FEC38(u32 context) {
-    Ov01EffectManager *manager = ov01_021F1430(context, 0x3C, 0, 0);
+    Ov01EffectManager *manager = FieldEffectManager_HeapAllocAndFill(context, 0x3C, 0, 0);
     manager->context = (void *)context;
     ov01_021FEC64(manager);
     return manager;
@@ -9,7 +9,7 @@ void *ov01_021FEC38(u32 context) {
 
 void ov01_021FEC54(void *manager) {
     ov01_021FEC8C(manager);
-    ov01_021F1448(manager);
+    FieldEffectManager_HeapFree(manager);
 }
 
 void ov01_021FEC64(Ov01EffectManager *manager) {
@@ -29,12 +29,12 @@ void ov01_021FECA0(void *mapObject, void *arg, u32 variant, u32 direction) {
     if (MapObject_TestFlagsBits(mapObject, 0x200) == TRUE) {
         return;
     }
-    args.context = ov01_021F146C(mapObject);
-    args.renderer = ov01_021F1450(args.context, 6);
+    args.context = FieldEffectManager_GetFromMapObject(mapObject);
+    args.renderer = FieldEffectManager_GetRendererData(args.context, 6);
     sub_020611C8(arg, direction, &position);
     position.z += variant * 8 + 0x1000;
     position.y = (MapObject_GetPreviousYCoord(mapObject) << 15) - 0x8000;
-    ov01_021F1620(args.context, ov01_02209110, &position, 0, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
+    FieldEffectManager_CreateEffect(args.context, ov01_02209110, &position, 0, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
 }
 
 BOOL ov01_021FED14(void *task, Ov01EffectState *state) {
@@ -51,7 +51,7 @@ void ov01_021FED4C(void *unused, void *state) {
 
 void ov01_021FED58(void *task, void *state) {
     if (RenderAnimation_IsDone(state) == TRUE) {
-        ov01_021F1640(task);
+        FieldEffectManager_DestroyEffect(task);
         return;
     }
     RenderAnimation_Advance(state, 0x1000, 0);

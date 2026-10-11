@@ -84,7 +84,7 @@
 .public sub_02069EAC
 .public sub_02069EC0
 .public sub_02069ED4
-.public ov01_021F1640
+.public FieldEffectManager_DestroyEffect
 .public ov01_021FF070
 .public ov01_021FF0E4
 .public ov01_021FF8F0

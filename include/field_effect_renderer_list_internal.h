@@ -7,7 +7,7 @@
 #include "field/overlay_01_021FD1B8.h"
 
 #include "map_object.h"
-#include "overlay_01_021F1348.h"
+#include "field/field_effect_manager.h"
 #include "unk_020689C8.h"
 #include "render_model.h"
 #include "render_animation.h"
@@ -18,7 +18,7 @@ void GF_AssertFail(void);
 
 #define FIELD_EFFECT_RENDERER_SLOT_EMPTY 0xFFFF
 
-// The user-data block handed to ov01_021F1620 as a4 and recovered via sub_02068D98.
+// The user-data block handed to FieldEffectManager_CreateEffect as a4 and recovered via sub_02068D98.
 typedef struct FieldEffectRendererArgs {
     u32 unk0;
     FieldSystem *unk4;

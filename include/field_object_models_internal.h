@@ -49,7 +49,7 @@ int ov01_021FA44C(u32 direction);
 BOOL ov01_022055B0(LocalMapObject *object);
 void ov01_02205808(void *a0, LocalMapObject *object, Sprite *sprite);
 u32 ov01_021FA298(u32 spriteId);
-void ov01_021FD9CC(u32 direction, VecFx32 *vec);
+void FieldShadow_OffsetByFacing(u32 direction, VecFx32 *vec);
 void ov01_021F9610(Sprite *sprite, VecFx32 *vec);
 void ov01_021F9630(Sprite *sprite, VecFx32 *vec);
 void ov01_021F95A8(LocalMapObject *object, UnkObjExtra *extra);

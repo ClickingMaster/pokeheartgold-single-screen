@@ -394,7 +394,7 @@
 .public MapPropOneShotAnimationManager_IsAnimationLoopFinished
 .public AreaLightManager_New
 .public AreaLightManager_Free
-.public ov01_021F1448
+.public FieldEffectManager_HeapFree
 .public MapPropManager_RemoveMapPropByIndex
 .public MapProp_GetTranslation
 .public MapProp_GetRenderSurface

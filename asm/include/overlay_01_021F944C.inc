@@ -72,7 +72,7 @@
 .public NNS_G3dGetTex
 .public memset
 .public ov01_021EA3B0
-.public ov01_021F146C
+.public FieldEffectManager_GetFromMapObject
 .public ov01_021F72DC
 .public GetMoveModelNoBySpriteId
 .public ov01_021F9318

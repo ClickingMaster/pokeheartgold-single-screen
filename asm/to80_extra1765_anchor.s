@@ -1,65 +1,65 @@
-	.public ov01_02208C5C
+	.public gFieldEffectRenderers
 	.public FieldEffectManager_New
 	.public FieldEffectManager_InitAnimManagerList
-	.public ov01_021F1390
-	.public ov01_021F13B0
+	.public FieldEffectManager_InitGfx
+	.public FieldEffectManager_InitRenderer
 	.public FieldEffectManager_InitRenderers
 	.public FieldEffectManager_Render
 	.public FieldEffectManager_Free
-	.public ov01_021F141C
-	.public ov01_021F1430
-	.public ov01_021F1448
-	.public ov01_021F1450
-	.public ov01_021F1468
-	.public ov01_021F146C
-	.public ov01_021F1478
-	.public ov01_021F147C
-	.public ov01_021F1490
-	.public ov01_021F149C
-	.public ov01_021F14A8
-	.public ov01_021F14B4
-	.public ov01_021F14DC
-	.public ov01_021F14F4
-	.public ov01_021F151C
-	.public ov01_021F1538
-	.public ov01_021F1560
-	.public ov01_021F1588
-	.public ov01_021F15A0
-	.public ov01_021F15AC
-	.public ov01_021F15B4
-	.public ov01_021F15C4
-	.public ov01_021F15EC
-	.public ov01_021F15FC
-	.public ov01_021F1610
-	.public ov01_021F1620
-	.public ov01_021F1640
-	.public ov01_021F1648
-	.public ov01_021F16B8
-	.public ov01_021F16EC
-	.public ov01_021F1740
-	.public ov01_021F1758
-	.public ov01_021F17BC
-	.public ov01_021F17F0
-	.public ov01_021F1804
-	.public ov01_021F1824
-	.public ov01_021F18A8
-	.public ov01_021F18C8
+	.public FieldEffectManager_HeapAlloc
+	.public FieldEffectManager_HeapAllocAndFill
+	.public FieldEffectManager_HeapFree
+	.public FieldEffectManager_GetRendererData
+	.public FieldEffectManager_GetFieldSystem
+	.public FieldEffectManager_GetFromMapObject
+	.public FieldEffectManager_GetHeapID
+	.public FieldEffectManager_OpenNarc
+	.public FieldEffectManager_CloseNarc
+	.public FieldEffectManager_GetNarcMemberSize
+	.public FieldEffectManager_ReadNarcMember
+	.public FieldEffectManager_LoadNarcMember
+	.public FieldEffectManager_ClearRenderers
+	.public FieldEffectManager_AddRenderer
+	.public FieldEffectManager_FreeRenderer
+	.public FieldEffectManager_FreeRenderers
+	.public FieldEffectManager_GetFreeRendererEntry
+	.public FieldEffectManager_FindRendererEntry
+	.public FieldEffectRendererEntry_Clear
+	.public FieldEffectRendererEntry_Set
+	.public FieldEffectRendererEntry_IsFree
+	.public FieldEffect_GetRendererTemplate
+	.public FieldEffectManager_InitEffects
+	.public FieldEffectManager_FreeEffects
+	.public FieldEffectManager_DrawEffects
+	.public FieldEffectManager_CreateEffect
+	.public FieldEffectManager_DestroyEffect
+	.public FieldEffectManager_CreateGfx
+	.public FieldEffectManager_FreeGfx
+	.public FieldEffectManager_CreateBillboard
+	.public FieldEffectManager_CreateBillboardFromRecord
+	.public FieldEffectManager_AddRecord
+	.public FieldEffectGfx_InitRecords
+	.public FieldEffectGfx_FreeRecords
+	.public FieldEffectGfx_ReleaseRecord
+	.public FieldEffectGfx_AddRecord
+	.public FieldEffectGfx_GetRecord
+	.public FieldEffectManager_ReleaseRecord
 	.public ov01_021F18D4
 	.public ov01_021F18F0
 	.public ov01_021F18FC
 	.public ov01_021F1908
 	.public ov01_021F1924
-	.public ov01_021F1930
-	.public ov01_021F1970
-	.public ov01_021F197C
-	.public ov01_021F19B4
-	.public ov01_021F19D0
+	.public FieldEffectManager_LoadTexResource
+	.public FieldEffectManager_FreeTexResource
+	.public FieldEffectManager_ScheduleTexTransfer
+	.public FieldEffectTexTransfer_LoadVramTask
+	.public FieldEffectTexTransfer_FreeHeaderTask
 	.public ov01_021F19F4
 	.public ov01_021F1A18
 	.public ov01_021F1A34
-	.public ov01_021F1A48
-	.public ov01_021F1AB8
-	.public ov01_021F1AD4
+	.public FieldEffectManager_InitModel
+	.public FieldEffectManager_LoadModel
+	.public FieldEffectManager_GetTexture
 	.public _021F138C
 	.public _021F13C4
 	.public _021F13DC
@@ -131,58 +131,58 @@
 	.public FieldEffectManager_InitRenderers
 	.public FieldEffectManager_New
 	.public FieldEffectManager_Render
-	.public ov01_021F1390
-	.public ov01_021F13B0
-	.public ov01_021F141C
-	.public ov01_021F1430
-	.public ov01_021F1448
-	.public ov01_021F1450
-	.public ov01_021F1468
-	.public ov01_021F146C
-	.public ov01_021F1478
-	.public ov01_021F147C
-	.public ov01_021F1490
-	.public ov01_021F149C
-	.public ov01_021F14A8
-	.public ov01_021F14B4
-	.public ov01_021F14DC
-	.public ov01_021F14F4
-	.public ov01_021F151C
-	.public ov01_021F1538
-	.public ov01_021F1560
-	.public ov01_021F1588
-	.public ov01_021F15A0
-	.public ov01_021F15AC
-	.public ov01_021F15B4
-	.public ov01_021F15C4
-	.public ov01_021F15EC
-	.public ov01_021F15FC
-	.public ov01_021F1610
-	.public ov01_021F1620
-	.public ov01_021F1640
-	.public ov01_021F1648
-	.public ov01_021F16B8
-	.public ov01_021F16EC
-	.public ov01_021F1740
-	.public ov01_021F17BC
-	.public ov01_021F17F0
-	.public ov01_021F1804
-	.public ov01_021F18A8
-	.public ov01_021F18C8
+	.public FieldEffectManager_InitGfx
+	.public FieldEffectManager_InitRenderer
+	.public FieldEffectManager_HeapAlloc
+	.public FieldEffectManager_HeapAllocAndFill
+	.public FieldEffectManager_HeapFree
+	.public FieldEffectManager_GetRendererData
+	.public FieldEffectManager_GetFieldSystem
+	.public FieldEffectManager_GetFromMapObject
+	.public FieldEffectManager_GetHeapID
+	.public FieldEffectManager_OpenNarc
+	.public FieldEffectManager_CloseNarc
+	.public FieldEffectManager_GetNarcMemberSize
+	.public FieldEffectManager_ReadNarcMember
+	.public FieldEffectManager_LoadNarcMember
+	.public FieldEffectManager_ClearRenderers
+	.public FieldEffectManager_AddRenderer
+	.public FieldEffectManager_FreeRenderer
+	.public FieldEffectManager_FreeRenderers
+	.public FieldEffectManager_GetFreeRendererEntry
+	.public FieldEffectManager_FindRendererEntry
+	.public FieldEffectRendererEntry_Clear
+	.public FieldEffectRendererEntry_Set
+	.public FieldEffectRendererEntry_IsFree
+	.public FieldEffect_GetRendererTemplate
+	.public FieldEffectManager_InitEffects
+	.public FieldEffectManager_FreeEffects
+	.public FieldEffectManager_DrawEffects
+	.public FieldEffectManager_CreateEffect
+	.public FieldEffectManager_DestroyEffect
+	.public FieldEffectManager_CreateGfx
+	.public FieldEffectManager_FreeGfx
+	.public FieldEffectManager_CreateBillboard
+	.public FieldEffectManager_CreateBillboardFromRecord
+	.public FieldEffectGfx_InitRecords
+	.public FieldEffectGfx_FreeRecords
+	.public FieldEffectGfx_ReleaseRecord
+	.public FieldEffectGfx_GetRecord
+	.public FieldEffectManager_ReleaseRecord
 	.public ov01_021F18D4
 	.public ov01_021F18F0
 	.public ov01_021F18FC
 	.public ov01_021F1908
 	.public ov01_021F1924
-	.public ov01_021F1930
-	.public ov01_021F1970
-	.public ov01_021F197C
-	.public ov01_021F19B4
-	.public ov01_021F19D0
+	.public FieldEffectManager_LoadTexResource
+	.public FieldEffectManager_FreeTexResource
+	.public FieldEffectManager_ScheduleTexTransfer
+	.public FieldEffectTexTransfer_LoadVramTask
+	.public FieldEffectTexTransfer_FreeHeaderTask
 	.public ov01_021F19F4
 	.public ov01_021F1A18
 	.public ov01_021F1A34
-	.public ov01_021F1AB8
+	.public FieldEffectManager_LoadModel
 #include "constants/sndseq.h"
 #include "constants/moves.h"
 #include "constants/std_script.h"

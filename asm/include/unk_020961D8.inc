@@ -23,5 +23,5 @@
 .public sub_02090D40
 .public sub_02090D48
 .public sub_02090D60
-.public sub_020961D8
+.public CallTask_EditBattleGreeting
 .public FieldMap_FadeScreen

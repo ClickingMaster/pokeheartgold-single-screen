@@ -1,7 +1,7 @@
 #include "overlay_01_021FFECC.h"
 
 #include "map_object.h"
-#include "overlay_01_021F1348.h"
+#include "field/field_effect_manager.h"
 #include "player_avatar.h"
 #include "unk_0205FD20.h"
 #include "unk_020658D4.h"
@@ -22,7 +22,7 @@ static const UnkOv01_02209280 ov01_02209280 = {
 };
 
 UnkOv01_021FFECC *ov01_021FFECC(void *a0) {
-    UnkOv01_021FFECC *ptr = ov01_021F1430(a0, sizeof(UnkOv01_021FFECC), 0, 0);
+    UnkOv01_021FFECC *ptr = FieldEffectManager_HeapAllocAndFill(a0, sizeof(UnkOv01_021FFECC), 0, 0);
     ptr->unk0 = a0;
     ov01_021FFEF8(ptr);
     return ptr;
@@ -30,7 +30,7 @@ UnkOv01_021FFECC *ov01_021FFECC(void *a0) {
 
 void ov01_021FFEE8(UnkOv01_021FFECC *a0) {
     ov01_021FFF38(a0);
-    ov01_021F1448(a0);
+    FieldEffectManager_HeapFree(a0);
 }
 
 static void ov01_021FFEF8(UnkOv01_021FFECC *a0) {
@@ -54,8 +54,8 @@ void ov01_021FFF5C(LocalMapObject *mapObject, int a1) {
     VecFx32 temp;
     UnkOv01_021FFF5C temp2;
 
-    FieldSystem *fieldSystem = ov01_021F146C(mapObject);
-    TaskManager *taskman = ov01_021F1468(fieldSystem);
+    FieldSystem *fieldSystem = FieldEffectManager_GetFromMapObject(mapObject);
+    TaskManager *taskman = FieldEffectManager_GetFieldSystem(fieldSystem);
 
     int x = MapObject_GetXCoord(mapObject);
     int z = MapObject_GetZCoord(mapObject);
@@ -66,13 +66,13 @@ void ov01_021FFF5C(LocalMapObject *mapObject, int a1) {
     temp2.unk0 = a1;
     temp2.unk4 = fieldSystem;
 
-    UnkOv01_021FFECC *val1 = ov01_021F1450(fieldSystem, 0xe);
+    UnkOv01_021FFECC *val1 = FieldEffectManager_GetRendererData(fieldSystem, 0xe);
     temp2.unk8 = val1;
     temp2.unkC = mapObject;
     temp2.unk10 = ov01_021FFF50(val1, a1);
 
     int val3 = MapObject_GetPriorityPlusValue(mapObject, 2);
-    ov01_021F1620(fieldSystem, &ov01_02209280, &temp, 0, &temp2, val3);
+    FieldEffectManager_CreateEffect(fieldSystem, &ov01_02209280, &temp, 0, &temp2, val3);
 }
 
 static BOOL ov01_021FFFCC(void *a0, UnkOv01_021FFFCD *a1) {

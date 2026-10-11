@@ -5,7 +5,7 @@
 #include "global.h"
 
 #include "map_object.h"
-#include "overlay_01_021F1348.h"
+#include "field/field_effect_manager.h"
 #include "unk_020689C8.h"
 #include "render_model.h"
 #include "render_animation.h"
@@ -19,14 +19,14 @@ void sub_02068DA8(void *a0, VecFx32 *a1);
 BOOL sub_0206121C(void *fieldSystem, VecFx32 *position);
 
 // The 0x6c renderer context allocated by ov01_021FE780 and recovered through
-// ov01_021F1450(fieldSystem, 4). Same shape as FieldEffectRenderer.
+// FieldEffectManager_GetRendererData(fieldSystem, 4). Same shape as FieldEffectRenderer.
 typedef struct Ov01FE780Ctx {
     void *manager;             /* 0x00 */
     UnkOv01_021FFECC_sub unk4; /* 0x04 */
     NNSG3dRenderObj unk18;     /* 0x18 */
 } Ov01FE780Ctx;                /* 0x6c */
 
-// The 0x10-byte user-data block handed to ov01_021F1620 as a4 and recovered
+// The 0x10-byte user-data block handed to FieldEffectManager_CreateEffect as a4 and recovered
 // via sub_02068D98 in ov01_021FE868.
 typedef struct Ov01FE780Args {
     u32 dir;                /* 0x00 */

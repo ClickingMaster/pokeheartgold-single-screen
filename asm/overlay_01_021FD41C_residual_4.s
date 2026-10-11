@@ -11,52 +11,52 @@
 	.public ov01_02208EF0
 	.public ov01_02208F14
 	.public ov01_02208F38
-	.public ov01_021FD41C
-	.public ov01_021FD440
-	.public ov01_021FD458
-	.public ov01_021FD47C
-	.public ov01_021FD488
-	.public ov01_021FD498
-	.public ov01_021FD4A4
-	.public ov01_021FD4D0
-	.public ov01_021FD4F4
-	.public ov01_021FD5CC
-	.public ov01_021FD60C
-	.public ov01_021FD624
-	.public ov01_021FD640
+	.public FieldShadow_New
+	.public FieldShadow_Free
+	.public FieldShadow_StartTask
+	.public FieldShadow_StopTask
+	.public FieldShadow_GetScale
+	.public FieldShadow_FxToAlpha
+	.public FieldShadow_SetTimeOfDayParams
+	.public FieldShadow_StepTowards
+	.public FieldShadow_UpdateTask
+	.public FieldShadow_LoadModels
+	.public FieldShadow_FreeModels
+	.public FieldShadow_SetAlpha
+	.public FieldShadow_CreateMapObjectShadow
 	.public ov01_021FD684
-	.public ov01_021FD6C8
-	.public ov01_021FD714
-	.public ov01_021FD718
+	.public FieldShadowEffect_Init
+	.public FieldShadowEffect_Destroy
+	.public FieldShadowEffect_Update
 	.public ov01_021FD784
-	.public ov01_021FD7D4
+	.public FieldShadowEffect_Draw
 	.public ov01_021FD838
 	.public ov01_021FD8E8
 	.public ov01_021FD92C
 	.public ov01_021FD980
-	.public ov01_021FD9CC
+	.public FieldShadow_OffsetByFacing
 
-	.public ov01_021FD41C
-	.public ov01_021FD440
-	.public ov01_021FD47C
-	.public ov01_021FD488
-	.public ov01_021FD498
-	.public ov01_021FD4A4
-	.public ov01_021FD4D0
-	.public ov01_021FD4F4
-	.public ov01_021FD5CC
-	.public ov01_021FD60C
-	.public ov01_021FD624
-	.public ov01_021FD640
+	.public FieldShadow_New
+	.public FieldShadow_Free
+	.public FieldShadow_StopTask
+	.public FieldShadow_GetScale
+	.public FieldShadow_FxToAlpha
+	.public FieldShadow_SetTimeOfDayParams
+	.public FieldShadow_StepTowards
+	.public FieldShadow_UpdateTask
+	.public FieldShadow_LoadModels
+	.public FieldShadow_FreeModels
+	.public FieldShadow_SetAlpha
+	.public FieldShadow_CreateMapObjectShadow
 	.public ov01_021FD684
-	.public ov01_021FD6C8
-	.public ov01_021FD714
-	.public ov01_021FD718
+	.public FieldShadowEffect_Init
+	.public FieldShadowEffect_Destroy
+	.public FieldShadowEffect_Update
 	.public ov01_021FD784
-	.public ov01_021FD7D4
+	.public FieldShadowEffect_Draw
 	.public ov01_021FD8E8
 	.public ov01_021FD92C
-	.public ov01_021FD9CC
+	.public FieldShadow_OffsetByFacing
 	.public ov01_02208E90
 	.public ov01_02208EA0
 	.public ov01_02208EB4
@@ -76,10 +76,10 @@ ov01_02208E90: ; 0x02208E90
 
 ov01_02208EA0: ; 0x02208EA0
 	.word 0x00000020
-	.word ov01_021FD6C8
-	.word ov01_021FD714
-	.word ov01_021FD718
-	.word ov01_021FD7D4
+	.word FieldShadowEffect_Init
+	.word FieldShadowEffect_Destroy
+	.word FieldShadowEffect_Update
+	.word FieldShadowEffect_Draw
 
 ov01_02208EB4: ; 0x02208EB4
 	.byte 0x00, 0xE0, 0x00, 0x00, 0x00, 0x20, 0x01, 0x00, 0x00, 0x20, 0x01, 0x00
@@ -88,14 +88,14 @@ ov01_02208EB4: ; 0x02208EB4
 ov01_02208EC8: ; 0x02208EC8
 	.word 0x00000020
 	.word ov01_021FD784
-	.word ov01_021FD714
-	.word ov01_021FD718
+	.word FieldShadowEffect_Destroy
+	.word FieldShadowEffect_Update
 	.word ov01_021FD838
 
 ov01_02208EDC: ; 0x02208EDC
 	.word 0x00000020
-	.word ov01_021FD6C8
-	.word ov01_021FD714
+	.word FieldShadowEffect_Init
+	.word FieldShadowEffect_Destroy
 	.word ov01_021FD92C
 	.word ov01_021FD980
 

@@ -28,13 +28,13 @@ struct AnimWork {
     void *renderObj;
 };
 void *ov01_022001E4(void *arg) {
-    Work *w = ov01_021F1430(arg, 0x14, 0, 0);
+    Work *w = FieldEffectManager_HeapAllocAndFill(arg, 0x14, 0, 0);
     w->manager = arg;
     return w;
 }
 void ov01_022001F8(Work *w) {
     ov01_022002FC(w);
-    ov01_021F1448(w);
+    FieldEffectManager_HeapFree(w);
 }
 void ov01_02200208(Work *w) {
     w->count0++;
@@ -71,8 +71,8 @@ void ov01_02200260(Work *w) {
         w->active0 = 1;
         ov01_021F18D4(w->manager, 1, 0x76);
         ov01_021F1908(w->manager, 1, 0x8c);
-        ov01_021F1930(w->manager, 1, 0x11, 1);
-        ov01_021F1758(w->manager, 1, 1, 1, 1, 0, ov01_022092F0);
+        FieldEffectManager_LoadTexResource(w->manager, 1, 0x11, 1);
+        FieldEffectManager_AddRecord(w->manager, 1, 1, 1, 1, 0, ov01_022092F0);
     }
 }
 void ov01_022002AC(Work *w) {
@@ -80,8 +80,8 @@ void ov01_022002AC(Work *w) {
         w->active1 = 1;
         ov01_021F18D4(w->manager, 10, 0x7d);
         ov01_021F1908(w->manager, 10, 0x8c);
-        ov01_021F1930(w->manager, 11, 0x18, 1);
-        ov01_021F1758(w->manager, 12, 10, 10, 11, 0, ov01_022092F0);
+        FieldEffectManager_LoadTexResource(w->manager, 11, 0x18, 1);
+        FieldEffectManager_AddRecord(w->manager, 12, 10, 10, 11, 0, ov01_022092F0);
     }
 }
 void ov01_022002FC(Work *w) {
@@ -89,8 +89,8 @@ void ov01_022002FC(Work *w) {
         w->active0 = 0;
         ov01_021F18FC(w->manager, 1);
         ov01_021F1924(w->manager, 1);
-        ov01_021F1970(w->manager, 1);
-        ov01_021F18C8(w->manager, 1);
+        FieldEffectManager_FreeTexResource(w->manager, 1);
+        FieldEffectManager_ReleaseRecord(w->manager, 1);
     }
 }
 void ov01_0220032C(Work *w) {
@@ -98,8 +98,8 @@ void ov01_0220032C(Work *w) {
         w->active1 = 0;
         ov01_021F18FC(w->manager, 10);
         ov01_021F1924(w->manager, 10);
-        ov01_021F1970(w->manager, 11);
-        ov01_021F18C8(w->manager, 12);
+        FieldEffectManager_FreeTexResource(w->manager, 11);
+        FieldEffectManager_ReleaseRecord(w->manager, 12);
     }
 }
 void ov01_0220035C(Work *w) {
@@ -138,7 +138,7 @@ void ov01_022003B0(Work *w, int which) {
 }
 void *ov01_022003C4(void *manager, int which, Vec3 *pos) {
     int ids[2] = { 1, 12 };
-    void *obj = ov01_021F1740(manager, ids[which], pos);
+    void *obj = FieldEffectManager_CreateBillboardFromRecord(manager, ids[which], pos);
     void *mdl = BillboardObject_GetModel(obj);
     NNS_G3dMdlSetMdlFogEnableFlagAll(mdl, 0);
     return obj;
@@ -215,16 +215,16 @@ int ov01_02200540(void *obj, int a1, int a2) {
     u8 args[16];
     Vec3 pos;
     Vec3 facing;
-    void *manager = ov01_021F146C(obj);
+    void *manager = FieldEffectManager_GetFromMapObject(obj);
     *(int *)(args + 0) = a1;
     *(void **)(args + 4) = manager;
-    *(void **)(args + 8) = ov01_021F1450(manager, 9);
+    *(void **)(args + 8) = FieldEffectManager_GetRendererData(manager, 9);
     *(void **)(args + 12) = obj;
     MapObject_CopyPositionVector(obj, &pos);
     MapObject_CopyFacingVector(obj, &facing);
     VEC_Add(&pos, &facing, &pos);
     priority = MapObject_GetPriority(obj) + 1;
-    ov01_021F1620(manager, ov01_022092DC, &pos, a2, args, priority);
+    FieldEffectManager_CreateEffect(manager, ov01_022092DC, &pos, a2, args, priority);
 }
 int ov01_0220059C(void *task, AnimWork *w) {
     Vec3 pos;

@@ -4,11 +4,11 @@
 #include "global.h"
 
 #include "map_object.h"
-#include "overlay_01_021F1348.h"
+#include "field/field_effect_manager.h"
 #include "billboard_lists.h"
 #include "unk_020689C8.h"
 
-// The 0x24-byte argument block handed to ov01_021F1620 as a4 and recovered
+// The 0x24-byte argument block handed to FieldEffectManager_CreateEffect as a4 and recovered
 // inside the renderer via sub_02068D98.
 typedef struct {
     int unk00;               // 0x00
@@ -37,13 +37,13 @@ typedef struct {
 
 void ov01_021F18D4(void *a0, int a1, int a2);
 void ov01_021F1908(void *a0, int a1, int a2);
-void ov01_021F1930(void *a0, int a1, int a2, int a3);
-void ov01_021F1758(void *a0, int a1, int a2, int a3, int a4, int a5, const void *a6);
+void FieldEffectManager_LoadTexResource(void *a0, int a1, int a2, int a3);
+void FieldEffectManager_AddRecord(void *a0, int a1, int a2, int a3, int a4, int a5, const void *a6);
 void ov01_021F18FC(void *a0, int a1);
 void ov01_021F1924(void *a0, int a1);
-void ov01_021F1970(void *a0, int a1);
-void ov01_021F18C8(void *a0, int a1);
-Sprite *ov01_021F1740(FieldSystem *a0, int a1, VecFx32 *a2);
+void FieldEffectManager_FreeTexResource(void *a0, int a1);
+void FieldEffectManager_ReleaseRecord(void *a0, int a1);
+Sprite *FieldEffectManager_CreateBillboardFromRecord(FieldSystem *a0, int a1, VecFx32 *a2);
 
 // sub_02068D98 comes from the tracked include/unk_020689C8.h (returns UnkOv01_021FFFCC *)
 void *sub_02068D90(void *a0);

@@ -59,7 +59,7 @@ static const u32 ov01_02209044[4][4] = {
 };
 
 UnkOv01_021FE200 *ov01_021FE200(void *a0) {
-    UnkOv01_021FE200 *ptr = (UnkOv01_021FE200 *)ov01_021F1430(a0, sizeof(UnkOv01_021FE200), 0, 0);
+    UnkOv01_021FE200 *ptr = (UnkOv01_021FE200 *)FieldEffectManager_HeapAllocAndFill(a0, sizeof(UnkOv01_021FE200), 0, 0);
     ptr->unk0 = a0;
     ov01_021FE230(ptr);
     return ptr;
@@ -67,7 +67,7 @@ UnkOv01_021FE200 *ov01_021FE200(void *a0) {
 
 void ov01_021FE220(UnkOv01_021FE200 *a0) {
     ov01_021FE2B8(a0);
-    ov01_021F1448(a0);
+    FieldEffectManager_HeapFree(a0);
 }
 
 void ov01_021FE230(UnkOv01_021FE200 *a0) {
@@ -178,8 +178,8 @@ BOOL ov01_021FE3F8(LocalMapObject *a0, u32 a1) {
     direction = MapObject_GetFacingDirection(a0);
     prevDirection = MapObject_GetPreviousFacingDirection(a0);
     priority = MapObject_GetPriorityPlusValue(a0, 2);
-    fieldSystem = ov01_021F146C(a0);
-    manager = (UnkOv01_021FE200 *)ov01_021F1450(fieldSystem, 2);
+    fieldSystem = FieldEffectManager_GetFromMapObject(a0);
+    manager = (UnkOv01_021FE200 *)FieldEffectManager_GetRendererData(fieldSystem, 2);
     if (MapObject_TestFlagsBits(a0, MAPOBJECTFLAG_VISIBLE) == TRUE) {
         return FALSE;
     }
@@ -213,7 +213,7 @@ BOOL ov01_021FE3F8(LocalMapObject *a0, u32 a1) {
         break;
     }
 
-    ov01_021F1620(fieldSystem, (const UnkOv01_02209280 *)&ov01_02208FE0, &position, 0, (UnkOv01_021FFF5C *)&args, priority);
+    FieldEffectManager_CreateEffect(fieldSystem, (const UnkOv01_02209280 *)&ov01_02208FE0, &position, 0, (UnkOv01_021FFF5C *)&args, priority);
 }
 
 BOOL ov01_021FE4FC(void *a0, UnkOv01_021FE200_Work *a1) {
@@ -242,7 +242,7 @@ void ov01_021FE528(void *a0, UnkOv01_021FE200_Work *a1) {
     case 1:
         a1->unkC -= 2;
         if (a1->unkC < 0) {
-            ov01_021F1640((int)a0);
+            FieldEffectManager_DestroyEffect((int)a0);
         }
         break;
     }

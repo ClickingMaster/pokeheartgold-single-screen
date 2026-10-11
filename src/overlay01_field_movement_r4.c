@@ -47,7 +47,7 @@ BOOL ov01_021F23B8(TaskManager *taskManager) {
     case 1:
         if (MapObject_IsMovementPaused(work->mapObject)) {
             MapObject_ClearHeldMovementIfActive(work->mapObject);
-            ov01_021F1640(work->avatarEffect);
+            FieldEffectManager_DestroyEffect(work->avatarEffect);
             PlayerAvatar_SetUnk34(work->playerAvatar, 0);
             PlayerAvatar_SetState(work->playerAvatar, 0);
             FieldSystem_ProcessSoundplate(work->fieldSystem, 0);

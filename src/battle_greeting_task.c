@@ -1,3 +1,5 @@
+#include "battle_greeting_task.h"
+
 #include "global.h"
 
 #include "field_system.h"
@@ -9,7 +11,6 @@
 #include "save_misc_data.h"
 #include "screen_fade.h"
 #include "task.h"
-#include "unk_020961D8.h"
 
 extern void MessageFormat_Delete(MessageFormat *messageFormat);
 extern void FieldMap_FadeScreen(int type);
@@ -25,11 +26,11 @@ typedef struct BattleGreetingTask {
     u16 *result;
 } BattleGreetingTask;
 
-void sub_020961D8(TaskManager *taskManager, u16 *result);
-void sub_02096248(BattleGreetingTask *work);
-BOOL sub_02096260(TaskManager *taskManager);
+void CallTask_EditBattleGreeting(TaskManager *taskManager, u16 *result);
+void BattleGreetingTask_Free(BattleGreetingTask *work);
+BOOL Task_EditBattleGreeting(TaskManager *taskManager);
 
-void sub_020961D8(TaskManager *taskManager, u16 *result) {
+void CallTask_EditBattleGreeting(TaskManager *taskManager, u16 *result) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     BattleGreetingTask *work = Heap_Alloc(HEAP_ID_FIELD3, sizeof(BattleGreetingTask));
 
@@ -42,16 +43,16 @@ void sub_020961D8(TaskManager *taskManager, u16 *result) {
     SaveMisc_GetBattleGreeting(work->misc, &work->message);
     sub_02090D40(work->easyChat);
     work->state = 0;
-    TaskManager_Call(taskManager, sub_02096260, work);
+    TaskManager_Call(taskManager, Task_EditBattleGreeting, work);
 }
 
-void sub_02096248(BattleGreetingTask *work) {
+void BattleGreetingTask_Free(BattleGreetingTask *work) {
     EasyChat_FreeArgs(work->easyChat);
     MessageFormat_Delete(work->format);
     Heap_Free(work);
 }
 
-BOOL sub_02096260(TaskManager *taskManager) {
+BOOL Task_EditBattleGreeting(TaskManager *taskManager) {
     BattleGreetingTask *work = TaskManager_GetEnvironment(taskManager);
 
     switch (work->state) {
@@ -87,7 +88,7 @@ BOOL sub_02096260(TaskManager *taskManager) {
         }
         break;
     case 4:
-        sub_02096248(work);
+        BattleGreetingTask_Free(work);
         return TRUE;
     }
     return FALSE;

@@ -10,7 +10,7 @@ void HeapExp_FndInitAllocator(void *, u32, u32);
 void *AllocAtEndAndReadWholeNarcMemberByIdPair(u32, u32, u32);
 void ov01_021FBD38(void *, void *);
 void ov01_021FBDFC(void *);
-void ov01_021F1448(void *);
+void FieldEffectManager_HeapFree(void *);
 void Field3dObject_InitFromModel(void *, void *);
 void Field3dModelAnimation_LoadFromFilesystem(void *, void *, u32, u32, u32, void *);
 void Field3dObject_AddAnimation(void *, void *);

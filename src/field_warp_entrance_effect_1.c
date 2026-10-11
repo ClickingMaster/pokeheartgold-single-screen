@@ -14,7 +14,7 @@ int ov01_02200AB0(u8 tile);
 extern const UnkOv01_02209280 ov01_02209340;
 
 Ov01_02200858_Work *ov01_02200858(FieldEffectManager *a0) {
-    Ov01_02200858_Work *work = (Ov01_02200858_Work *)ov01_021F1430(a0, sizeof(Ov01_02200858_Work), 0, 0);
+    Ov01_02200858_Work *work = (Ov01_02200858_Work *)FieldEffectManager_HeapAllocAndFill(a0, sizeof(Ov01_02200858_Work), 0, 0);
     work->unk0 = a0;
     ov01_02200884(work);
     return work;
@@ -22,7 +22,7 @@ Ov01_02200858_Work *ov01_02200858(FieldEffectManager *a0) {
 
 void ov01_02200874(Ov01_02200858_Work *work) {
     ov01_022008A8(work);
-    ov01_021F1448(work);
+    FieldEffectManager_HeapFree(work);
 }
 
 void ov01_02200884(Ov01_02200858_Work *work) {
@@ -39,11 +39,11 @@ void ov01_022008B4(PlayerAvatar *a0) {
     VecFx32 position = { 0, 0, 0 };
 
     LocalMapObject *mapObject = PlayerAvatar_GetMapObject(a0);
-    FieldSystem *fieldSystem = ov01_021F146C(mapObject);
+    FieldSystem *fieldSystem = FieldEffectManager_GetFromMapObject(mapObject);
     args.unk0 = fieldSystem;
-    args.unk4 = (Ov01_02200858_Work *)ov01_021F1450(fieldSystem, 3);
+    args.unk4 = (Ov01_02200858_Work *)FieldEffectManager_GetRendererData(fieldSystem, 3);
     args.unk8 = a0;
-    ov01_021F1620(fieldSystem, &ov01_02209340, &position, 0, (UnkOv01_021FFF5C *)&args, MapObject_GetPriorityPlusValue(mapObject, 2));
+    FieldEffectManager_CreateEffect(fieldSystem, &ov01_02209340, &position, 0, (UnkOv01_021FFF5C *)&args, MapObject_GetPriorityPlusValue(mapObject, 2));
 }
 
 BOOL ov01_02200900(void *a0, Ov01_02200858_Inst *inst) {
@@ -66,7 +66,7 @@ void ov01_0220093C(void *a0, Ov01_02200858_Inst *inst) {
     PlayerAvatar *avatar = inst->unk24.unk8;
     LocalMapObject *mapObject = PlayerAvatar_GetMapObject(avatar);
     if (!sub_0205F0A8(mapObject, inst->unk14, inst->unk18)) {
-        ov01_021F1640((int)a0);
+        FieldEffectManager_DestroyEffect((int)a0);
         return;
     }
     int prevDir = inst->unk4;

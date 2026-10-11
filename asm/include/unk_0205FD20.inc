@@ -116,7 +116,7 @@
 .public sub_02063A14
 .public sub_02063A1C
 .public ov01_021F9318
-.public ov01_021FD640
+.public FieldShadow_CreateMapObjectShadow
 .public ov01_021FD684
 .public ov01_021FDA74
 .public ov01_021FDF88

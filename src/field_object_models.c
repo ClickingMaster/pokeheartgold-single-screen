@@ -134,7 +134,7 @@ void ov01_021F8F08(LocalMapObject *object, BOOL set) {
         p[1] = 0;
         p[2] = 0;
         extra->unk17 |= 4;
-        ov01_021FD9CC(MapObject_GetFacingDirection(object), &vec);
+        FieldShadow_OffsetByFacing(MapObject_GetFacingDirection(object), &vec);
         extra->unk12 = vec.x / (1 << 12);
         extra->unk13 = vec.z / (1 << 12);
     } else {

@@ -15,7 +15,7 @@ void *sub_0205F3E8(void *, int);
 void *sub_0205F40C(void *);
 u32 MapObject_GetSpriteID(void *);
 void *ov01_021FD2EC(void *, const LocalConfig *);
-void ov01_021F1640(void *);
+void FieldEffectManager_DestroyEffect(void *);
 void GF_AssertFail(void);
 s32 _s32_div_f(s32, s32);
 void ov01_021F8C00(void *, int);

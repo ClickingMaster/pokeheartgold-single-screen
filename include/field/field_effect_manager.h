@@ -1,5 +1,5 @@
-#ifndef POKEHEARTGOLD_OV_01_021F1348_H
-#define POKEHEARTGOLD_OV_01_021F1348_H
+#ifndef POKEHEARTGOLD_FIELD_FIELD_EFFECT_MANAGER_H
+#define POKEHEARTGOLD_FIELD_FIELD_EFFECT_MANAGER_H
 
 #include "map_object.h"
 #include "script.h"
@@ -10,10 +10,9 @@ typedef struct FieldEffectManager {
     u8 unk0[0x24];
 } FieldEffectManager;
 
-// (field_effect_manager?)
 FieldEffectManager *FieldEffectManager_New(FieldSystem *fieldSystem, u32 rendererCount, enum HeapID heapID);
 void FieldEffectManager_InitAnimManagerList(FieldEffectManager *fieldEffectManager, u32 animManagerCount);
-void ov01_021F1390(FieldEffectManager *fieldEffectManager, enum HeapID heapID, int, int, int, int, int, int, int);
+void FieldEffectManager_InitGfx(FieldEffectManager *fieldEffectManager, enum HeapID heapID, int, int, int, int, int, int, int);
 void FieldEffectManager_InitRenderers(FieldEffectManager *fieldEffectManager, const u32 *arg1);
 void FieldEffectManager_Render(FieldEffectManager *fieldEffectManager);
 void FieldEffectManager_Free(FieldEffectManager *fieldEffectManager);
@@ -58,13 +57,13 @@ typedef struct {
     NNSG3dRenderObj *unk10;
 } UnkOv01_021FFF5C;
 
-UnkOv01_021FFECC *ov01_021F1430(void *a0, int a1, int a2, int a3);
-FieldSystem *ov01_021F146C(LocalMapObject *mapObject);
-TaskManager *ov01_021F1468(FieldSystem *fieldSystem);
-UnkOv01_021FFECC *ov01_021F1450(FieldSystem *fieldSystem, int a1);
-void ov01_021F1620(FieldSystem *fieldSystem, const UnkOv01_02209280 *a1, VecFx32 *a2, int a3, UnkOv01_021FFF5C *a4, int a5);
-void ov01_021F1448(void *a0); // UnkOv01_021FFECC or NNSG3dResFileHeader?
+UnkOv01_021FFECC *FieldEffectManager_HeapAllocAndFill(void *a0, int a1, int a2, int a3);
+FieldSystem *FieldEffectManager_GetFromMapObject(LocalMapObject *mapObject);
+TaskManager *FieldEffectManager_GetFieldSystem(FieldSystem *fieldSystem);
+UnkOv01_021FFECC *FieldEffectManager_GetRendererData(FieldSystem *fieldSystem, int a1);
+void FieldEffectManager_CreateEffect(FieldSystem *fieldSystem, const UnkOv01_02209280 *a1, VecFx32 *a2, int a3, UnkOv01_021FFF5C *a4, int a5);
+void FieldEffectManager_HeapFree(void *a0); // UnkOv01_021FFECC or NNSG3dResFileHeader?
 void ov01_021F19F4(void *a0, UnkOv01_021FFECC_sub *a1, int a2, int a3, int a4);
-void ov01_021F1640(int a0);
+void FieldEffectManager_DestroyEffect(int a0);
 
-#endif // POKEHEARTGOLD_OV_01_021F1348_H
+#endif // POKEHEARTGOLD_FIELD_FIELD_EFFECT_MANAGER_H

@@ -20,7 +20,7 @@
 #include "math_util.h"
 #include "message_format.h"
 #include "msgdata.h"
-#include "overlay_01_021F1348.h"
+#include "field/field_effect_manager.h"
 #include "overlay_manager.h"
 #include "palette.h"
 #include "party.h"

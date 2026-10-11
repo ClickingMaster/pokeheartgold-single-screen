@@ -47,7 +47,7 @@
 .public MonIsShiny
 .public SaveArray_Party_Get
 .public _s32_div_f
-.public ov01_021F1640
+.public FieldEffectManager_DestroyEffect
 .public ov01_021F72DC
 .public ov01_021F73CC
 .public ov01_021F73F4

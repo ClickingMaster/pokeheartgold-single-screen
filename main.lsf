@@ -870,7 +870,7 @@ Static main
     Object src/slop_small_unk_02095DF4.o
     Object src/phonebook_dat.o
     Object src/choose_starter.o
-    Object src/battle_greeting_task_r46.o
+    Object src/battle_greeting_task.o
     Object src/error_message_reset.o
     Object src/sin_vcount.o
     Object src/frontier_runtime.o
@@ -2115,15 +2115,9 @@ Overlay field
     Object src/field_overlay_effects_18.o
     Object asm/op90_overlay_01_021EFB38_residual_19_anchor.o
     Object src/op90_overlay_01_021EFB38_residual_19_r01.o
-    Object src/field_effect_manager_1.o
-    Object src/to70_overlay_01_021F1348_extra737_run01.o
-    Object src/field_effect_manager_2.o
-    Object src/op90_overlay_01_021F1348_residual_2_r01.o
-    Object src/field_effect_manager_3.o
-    Object src/to70_overlay_01_021F1348_residual_3_extra738_run01.o
-    Object src/field_effect_manager_4.o
+    Object src/field/field_effect_manager.o
     Object asm/to80_extra1765_anchor.o
-    Object src/to80_extra1765_run01.o
+    Object src/field/field_effect_manager_texture.o
     Object src/ov01_21f1afc_opus_partial_1.o
     Object src/op90_overlay_01_021F1AFC_r01.o
     Object src/ov01_21f1afc_opus_partial_2.o
@@ -2296,13 +2290,7 @@ Overlay field
     Object asm/overlay_01_021FCD2C_residual_1.o
     Object src/field_sweet_scent_task.o
     Object src/field_effect_renderer_list.o
-    Object src/field_follow_shadow_1.o
-    Object src/field_follow_shadow_slop_r1_init.o
-    Object src/field_follow_shadow_2.o
-    Object src/field_follow_shadow_slop_r1_facing.o
-    Object src/field_follow_shadow_3.o
-    Object src/field_follow_shadow_slop_r1_indexed.o
-    Object src/field_follow_shadow_4.o
+    Object src/field/field_shadow.o
     Object asm/overlay_01_021FD41C_residual_4.o
     Object asm/overlay_01_021FDA14_residual_1.o
     Object src/field_map_object_spawn_effect_1.o

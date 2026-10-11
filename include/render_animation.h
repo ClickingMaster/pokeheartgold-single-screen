@@ -1,7 +1,7 @@
 #ifndef POKEHEARTGOLD_RENDER_ANIMATION_H
 #define POKEHEARTGOLD_RENDER_ANIMATION_H
 
-#include "overlay_01_021F1348.h"
+#include "field/field_effect_manager.h"
 #include "player_data.h"
 #include "pokemon_types_def.h"
 

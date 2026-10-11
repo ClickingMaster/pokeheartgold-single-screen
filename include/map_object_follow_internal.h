@@ -57,7 +57,7 @@ u32 sub_02069ED4(LocalMapObject *);
 void sub_02065FFC(LocalMapObject *);
 void sub_02066360(LocalMapObject *);
 int sub_02066150(LocalMapObject *, FollowState *);
-void ov01_021F1640(int);
+void FieldEffectManager_DestroyEffect(int);
 void sub_02065CFC(LocalMapObject *, FollowState *);
 int sub_02065CD0(LocalMapObject *, FollowState *);
 void sub_02065D58(LocalMapObject *, FollowState *);

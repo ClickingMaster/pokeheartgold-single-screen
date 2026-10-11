@@ -21,7 +21,7 @@ ov01_02200040: ; 0x02200040
 	mov r1, #4
 	add r3, r2, #0
 	add r5, r0, #0
-	bl ov01_021F1430
+	bl FieldEffectManager_HeapAllocAndFill
 	add r4, r0, #0
 	str r5, [r4]
 	bl ov01_0220006C
@@ -36,7 +36,7 @@ ov01_0220005C: ; 0x0220005C
 	add r4, r0, #0
 	bl ov01_022000B4
 	add r0, r4, #0
-	bl ov01_021F1448
+	bl FieldEffectManager_HeapFree
 	pop {r4, pc}
 	thumb_func_end ov01_0220005C
 
@@ -57,7 +57,7 @@ ov01_0220006C: ; 0x0220006C
 	mov r1, #0xa
 	mov r2, #0x17
 	mov r3, #1
-	bl ov01_021F1930
+	bl FieldEffectManager_LoadTexResource
 	mov r0, #0xa
 	str r0, [sp]
 	mov r0, #0
@@ -68,7 +68,7 @@ ov01_0220006C: ; 0x0220006C
 	ldr r0, [r4]
 	mov r1, #0xb
 	add r3, r2, #0
-	bl ov01_021F1758
+	bl FieldEffectManager_AddRecord
 	add sp, #0xc
 	pop {r3, r4, pc}
 	nop
@@ -87,10 +87,10 @@ ov01_022000B4: ; 0x022000B4
 	bl ov01_021F1924
 	ldr r0, [r4]
 	mov r1, #0xa
-	bl ov01_021F1970
+	bl FieldEffectManager_FreeTexResource
 	ldr r0, [r4]
 	mov r1, #0xb
-	bl ov01_021F18C8
+	bl FieldEffectManager_ReleaseRecord
 	pop {r4, pc}
 	.balign 4, 0
 	thumb_func_end ov01_022000B4
@@ -100,7 +100,7 @@ ov01_022000DC: ; 0x022000DC
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0x24
 	add r5, r0, #0
-	bl ov01_021F146C
+	bl FieldEffectManager_GetFromMapObject
 	add r4, r0, #0
 	add r0, r5, #0
 	bl MapObject_GetFieldSystem
@@ -108,7 +108,7 @@ ov01_022000DC: ; 0x022000DC
 	add r0, r4, #0
 	mov r1, #0xf
 	str r4, [sp, #0x18]
-	bl ov01_021F1450
+	bl FieldEffectManager_GetRendererData
 	str r0, [sp, #0x1c]
 	add r0, r5, #0
 	add r1, sp, #8
@@ -133,7 +133,7 @@ ov01_022000DC: ; 0x022000DC
 	add r0, r4, #0
 	add r2, sp, #8
 	mov r3, #0
-	bl ov01_021F1620
+	bl FieldEffectManager_CreateEffect
 	add sp, #0x24
 	pop {r3, r4, r5, r6, pc}
 	.balign 4, 0
@@ -166,7 +166,7 @@ ov01_02200140: ; 0x02200140
 	ldr r0, [r4, #0x14]
 	mov r1, #0xb
 	add r2, sp, #0
-	bl ov01_021F1740
+	bl FieldEffectManager_CreateBillboardFromRecord
 	str r0, [r4, #0x20]
 	mov r0, #1
 	add sp, #0xc
@@ -203,7 +203,7 @@ ov01_02200190: ; 0x02200190
 	cmp r0, #7
 	blt _022001BE
 	add r0, r5, #0
-	bl ov01_021F1640
+	bl FieldEffectManager_DestroyEffect
 _022001BE:
 	pop {r3, r4, r5, pc}
 	thumb_func_end ov01_02200190

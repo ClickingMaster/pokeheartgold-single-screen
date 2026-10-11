@@ -11,7 +11,7 @@
 #include "follow_mon.h"
 #include "gf_gfx_loader.h"
 #include "launch_application.h"
-#include "overlay_01_021F1348.h"
+#include "field/field_effect_manager.h"
 #include "overlay_01_021F72DC.h"
 #include "overlay_01_021F8D80.h"
 #include "overlay_01_021F944C.h"
@@ -830,7 +830,7 @@ static void sub_0206B82C(PlayerAvatar *playerAvatar, u8 state, u8 gender) {
     sub_0205E38C(mapObject, spriteId);
     int r0 = PlayerAvatar_GetUnk34(playerAvatar);
     if (r0 != 0) {
-        ov01_021F1640(r0);
+        FieldEffectManager_DestroyEffect(r0);
     }
     PlayerAvatar_SetUnk34(playerAvatar, 0);
 }

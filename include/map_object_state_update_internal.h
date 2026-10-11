@@ -27,7 +27,7 @@ BOOL MetatileBehavior_IsMud(int behavior);
 BOOL MetatileBehavior_IsReflective(int behavior);
 BOOL MetatileBehavior_IsIce(int behavior);
 
-void ov01_021FD640(LocalMapObject *object);
+void FieldShadow_CreateMapObjectShadow(LocalMapObject *object);
 void ov01_021FD684(LocalMapObject *object);
 void ov01_021FF74C(LocalMapObject *object);
 

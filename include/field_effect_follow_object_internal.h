@@ -5,11 +5,11 @@
 #include "global.h"
 
 #include "map_object.h"
-#include "overlay_01_021F1348.h"
+#include "field/field_effect_manager.h"
 
 /* ---- Not declared in any tracked header (private proposals) ---- */
 
-/* 0x24-byte user-data block handed to ov01_021F1620 as a4 for bank ov01_02209138
+/* 0x24-byte user-data block handed to FieldEffectManager_CreateEffect as a4 for bank ov01_02209138
  * and recovered via sub_02068D98 in ov01_021FF174. */
 typedef struct FieldEffectFollowArgs {
     int x;                   /* 0x00 */
@@ -67,14 +67,14 @@ typedef struct Ov01FieldEffectCtx {
 } Ov01FieldEffectCtx;
 
 void ov01_021F18D4(FieldEffectManager *manager, int a1, int a2);
-void ov01_021F18C8(FieldEffectManager *manager, int a1);
+void FieldEffectManager_ReleaseRecord(FieldEffectManager *manager, int a1);
 void ov01_021F18FC(FieldEffectManager *manager, int a1);
 void ov01_021F1908(FieldEffectManager *manager, int a1, int a2);
 void ov01_021F1924(FieldEffectManager *manager, int a1);
-void ov01_021F1930(FieldEffectManager *manager, int a1, int a2, int a3);
-void ov01_021F1970(FieldEffectManager *manager, int a1);
-void ov01_021F1758(FieldEffectManager *manager, int a1, int a2, int a3, int a4, int a5, const FieldEffectAnimSpec *a6);
-void *ov01_021F1740(void *a0, int a1, const VecFx32 *pos);
+void FieldEffectManager_LoadTexResource(FieldEffectManager *manager, int a1, int a2, int a3);
+void FieldEffectManager_FreeTexResource(FieldEffectManager *manager, int a1);
+void FieldEffectManager_AddRecord(FieldEffectManager *manager, int a1, int a2, int a3, int a4, int a5, const FieldEffectAnimSpec *a6);
+void *FieldEffectManager_CreateBillboardFromRecord(void *a0, int a1, const VecFx32 *pos);
 
 int sub_02068D90(void *a0);
 void sub_02068DA8(void *a0, VecFx32 *a1);

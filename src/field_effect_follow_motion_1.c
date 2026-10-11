@@ -1,12 +1,12 @@
 #include "field_effect_follow_motion_internal.h"
 void *ov01_021FEA0C(u32 arg) {
-    u8 *p = ov01_021F1430(arg, 0x7c, 0, 0);
+    u8 *p = FieldEffectManager_HeapAllocAndFill(arg, 0x7c, 0, 0);
     *(u32 *)(p + 0x10) = arg;
     return p;
 }
 void ov01_021FEA20(void *p) {
     ov01_021FEA7C(p);
-    ov01_021F1448(p);
+    FieldEffectManager_HeapFree(p);
 }
 void ov01_021FEA30(void *p) {
     ++*(s32 *)p;
@@ -44,12 +44,12 @@ void ov01_021FEAA0(void *p) {
 void ov01_021FEAB0(void *mapObj, s32 x, s32 z, u32 kind, u32 usePosition) {
     SpawnSmall a;
     Vec3 pos = { 0, 0, 0 };
-    void *ctx = ov01_021F146C(mapObj);
+    void *ctx = FieldEffectManager_GetFromMapObject(mapObj);
     s32 priority;
     a.kind = kind;
     a.ctx = ctx;
     a.fieldSystem = MapObject_GetFieldSystem(mapObj);
-    a.member = ov01_021F1450(ctx, 5);
+    a.member = FieldEffectManager_GetRendererData(ctx, 5);
     a.mapObj = mapObj;
     if (usePosition == 0) {
         pos.x = (x << 16) + 0x8000;
@@ -59,7 +59,7 @@ void ov01_021FEAB0(void *mapObj, s32 x, s32 z, u32 kind, u32 usePosition) {
         MapObject_CopyPositionVector(mapObj, &pos);
     }
     priority = MapObject_GetPriorityPlusValue(mapObj, 2);
-    ov01_021F1620(ctx, ov01_022090FC, &pos, usePosition, &a, priority);
+    FieldEffectManager_CreateEffect(ctx, ov01_022090FC, &pos, usePosition, &a, priority);
 }
 void ov01_021FEB30(void *task, void *v) {
     void *p = sub_02068D74(task);

@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "c06d83b5a764e139aace1c16c73d6f26dd70f7a0",
+  "commit": "d1796bb507e846d7a365c3dbff176ba382ae0021",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "b6adce4b66972ee0a94b333cc4bcd46239b1562f4a1486edccded91c7f8154ec",
+    "ARM9": "379ad585665938b1e7632612544de583c3098ab2a244cafec18d0eea5a938b58",
     "ARM7": "70f337c3cb1129f331ef6f387f36bab766ff5324c8f635f44bff1e1d5e24ad4b"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -31909,34 +31909,18 @@
     {
       "cpu": "ARM9",
       "module": "field",
-      "object": "field_effect_manager_1.o",
-      "bytes": 1016,
+      "object": "field_effect_manager.o",
+      "bytes": 1888,
       "status": "c",
-      "source": "src/field_effect_manager_1.c"
+      "source": "src/field/field_effect_manager.c"
     },
     {
       "cpu": "ARM9",
       "module": "field",
-      "object": "field_effect_manager_2.o",
-      "bytes": 98,
+      "object": "field_effect_manager_texture.o",
+      "bytes": 40,
       "status": "c",
-      "source": "src/field_effect_manager_2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
-      "object": "field_effect_manager_3.o",
-      "bytes": 406,
-      "status": "c",
-      "source": "src/field_effect_manager_3.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
-      "object": "field_effect_manager_4.o",
-      "bytes": 26,
-      "status": "c",
-      "source": "src/field_effect_manager_4.c"
+      "source": "src/field/field_effect_manager_texture.c"
     },
     {
       "cpu": "ARM9",
@@ -32057,62 +32041,6 @@
       "bytes": 88,
       "status": "c",
       "source": "src/field_follow_effect_3.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
-      "object": "field_follow_shadow_1.o",
-      "bytes": 56,
-      "status": "c",
-      "source": "src/field_follow_shadow_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
-      "object": "field_follow_shadow_2.o",
-      "bytes": 948,
-      "status": "c",
-      "source": "src/field_follow_shadow_2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
-      "object": "field_follow_shadow_3.o",
-      "bytes": 152,
-      "status": "c",
-      "source": "src/field_follow_shadow_3.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
-      "object": "field_follow_shadow_4.o",
-      "bytes": 72,
-      "status": "c",
-      "source": "src/field_follow_shadow_4.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
-      "object": "field_follow_shadow_slop_r1_facing.o",
-      "bytes": 176,
-      "status": "c",
-      "source": "src/field_follow_shadow_slop_r1_facing.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
-      "object": "field_follow_shadow_slop_r1_indexed.o",
-      "bytes": 74,
-      "status": "c",
-      "source": "src/field_follow_shadow_slop_r1_indexed.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
-      "object": "field_follow_shadow_slop_r1_init.o",
-      "bytes": 36,
-      "status": "c",
-      "source": "src/field_follow_shadow_slop_r1_init.c"
     },
     {
       "cpu": "ARM9",
@@ -32717,6 +32645,14 @@
     {
       "cpu": "ARM9",
       "module": "field",
+      "object": "field_shadow.o",
+      "bytes": 1514,
+      "status": "c",
+      "source": "src/field/field_shadow.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "field",
       "object": "field_sprite_manager.o",
       "bytes": 1892,
       "status": "c",
@@ -32833,14 +32769,6 @@
       "bytes": 56,
       "status": "c",
       "source": "src/op90_overlay_01_021EFB38_residual_19_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
-      "object": "op90_overlay_01_021F1348_residual_2_r01.o",
-      "bytes": 132,
-      "status": "c",
-      "source": "src/op90_overlay_01_021F1348_residual_2_r01.c"
     },
     {
       "cpu": "ARM9",
@@ -33741,22 +33669,6 @@
     {
       "cpu": "ARM9",
       "module": "field",
-      "object": "to70_overlay_01_021F1348_extra737_run01.o",
-      "bytes": 98,
-      "status": "c",
-      "source": "src/to70_overlay_01_021F1348_extra737_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
-      "object": "to70_overlay_01_021F1348_residual_3_extra738_run01.o",
-      "bytes": 112,
-      "status": "c",
-      "source": "src/to70_overlay_01_021F1348_residual_3_extra738_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
       "object": "to70_overlay_01_021F1AFC_residual_2_extra257_run01.o",
       "bytes": 120,
       "status": "c",
@@ -34105,14 +34017,6 @@
       "bytes": 668,
       "status": "c",
       "source": "src/to80_extra1686_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
-      "object": "to80_extra1765_run01.o",
-      "bytes": 40,
-      "status": "c",
-      "source": "src/to80_extra1765_run01.c"
     },
     {
       "cpu": "ARM9",
@@ -34665,10 +34569,10 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "battle_greeting_task_r46.o",
+      "object": "battle_greeting_task.o",
       "bytes": 320,
       "status": "c",
-      "source": "src/battle_greeting_task_r46.c"
+      "source": "src/battle_greeting_task.c"
     },
     {
       "cpu": "ARM9",

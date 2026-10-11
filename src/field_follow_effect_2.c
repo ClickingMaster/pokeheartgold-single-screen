@@ -4,7 +4,7 @@ void ov01_022037E8(void *task, void *v) {
     u8 pos[12];
     u8 *p = v;
     if (!sub_0205F0F8(*(void **)(p + 0x30), *(u32 *)(p + 4), *(u32 *)(p + 8), *(u32 *)(p + 0xc))) {
-        ov01_021F1640(task);
+        FieldEffectManager_DestroyEffect(task);
         return;
     }
     sub_02068DB8(task, pos);

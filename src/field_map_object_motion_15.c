@@ -72,7 +72,7 @@ void ov01_021F8D24(void) {
 void ov01_021F8D28(void *obj) {
     void **slot = sub_0205F40C(obj);
     if (*slot != NULL) {
-        ov01_021F1640(*slot);
+        FieldEffectManager_DestroyEffect(*slot);
         *slot = NULL;
     }
 }
@@ -80,7 +80,7 @@ void ov01_021F8D28(void *obj) {
 void ov01_021F8D40(void *obj) {
     void **slot = sub_0205F40C(obj);
     if (*slot != NULL) {
-        ov01_021F1640(*slot);
+        FieldEffectManager_DestroyEffect(*slot);
         *slot = NULL;
     }
 }

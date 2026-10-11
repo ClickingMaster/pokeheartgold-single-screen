@@ -42,7 +42,7 @@ static const Ov01_02203A18_FileIds ov01_02209544[14] = {
 };
 
 Ov01_02203A18_Work *ov01_02203A18(FieldEffectManager *a0) {
-    Ov01_02203A18_Work *work = (Ov01_02203A18_Work *)ov01_021F1430(a0, sizeof(Ov01_02203A18_Work), 0, 0);
+    Ov01_02203A18_Work *work = (Ov01_02203A18_Work *)FieldEffectManager_HeapAllocAndFill(a0, sizeof(Ov01_02203A18_Work), 0, 0);
     work->unk0 = a0;
     work->unk4 = FALSE;
     ov01_02203B28(work);
@@ -51,7 +51,7 @@ Ov01_02203A18_Work *ov01_02203A18(FieldEffectManager *a0) {
 
 void ov01_02203A38(Ov01_02203A18_Work *work) {
     ov01_02203B70(work);
-    ov01_021F1448(work);
+    FieldEffectManager_HeapFree(work);
 }
 
 BOOL ov01_02203A48(LocalMapObject *mapObject, int a1) {
@@ -59,9 +59,9 @@ BOOL ov01_02203A48(LocalMapObject *mapObject, int a1) {
     VecFx32 position;
     VecFx32 facing;
 
-    FieldSystem *fieldSystem = ov01_021F146C(mapObject);
+    FieldSystem *fieldSystem = FieldEffectManager_GetFromMapObject(mapObject);
     args.unk0 = fieldSystem;
-    Ov01_02203A18_Work *work = (Ov01_02203A18_Work *)ov01_021F1450(fieldSystem, 0x12);
+    Ov01_02203A18_Work *work = (Ov01_02203A18_Work *)FieldEffectManager_GetRendererData(fieldSystem, 0x12);
     args.unk4 = work;
     args.unk8 = mapObject;
     if (work->unk4) {
@@ -73,7 +73,7 @@ BOOL ov01_02203A48(LocalMapObject *mapObject, int a1) {
     facing.y = 0;
     VEC_Add(&position, &facing, &position);
     int priority = MapObject_GetPriority(mapObject) + 1;
-    ov01_021F1620(fieldSystem, &ov01_02209518, &position, a1, (UnkOv01_021FFF5C *)&args, priority);
+    FieldEffectManager_CreateEffect(fieldSystem, &ov01_02209518, &position, a1, (UnkOv01_021FFF5C *)&args, priority);
 }
 
 void ov01_02203AB4(FieldSystem *fieldSystem, LocalMapObject *mapObject, int a2) {
@@ -92,7 +92,7 @@ BOOL ov01_02203AD8(TaskManager *taskManager) {
         (*state)++;
         break;
     case 1: {
-        Ov01_02203A18_Work *work = (Ov01_02203A18_Work *)ov01_021F1450(ov01_021F146C(env->unk4), 0x12);
+        Ov01_02203A18_Work *work = (Ov01_02203A18_Work *)FieldEffectManager_GetRendererData(FieldEffectManager_GetFromMapObject(env->unk4), 0x12);
         if (!work->unk4) {
             Heap_Free(env);
             return TRUE;
@@ -106,19 +106,19 @@ BOOL ov01_02203AD8(TaskManager *taskManager) {
 void ov01_02203B28(Ov01_02203A18_Work *work) {
     ov01_021F18D4(work->unk0, 0xc, 0x82);
     ov01_021F1908(work->unk0, 0xc, 0x8c);
-    ov01_021F1930(work->unk0, 0xd, 0x1c, TRUE);
-    ov01_021F1758(work->unk0, 0xe, 0xc, 0xc, 0xd, 0, ov01_0220952C);
+    FieldEffectManager_LoadTexResource(work->unk0, 0xd, 0x1c, TRUE);
+    FieldEffectManager_AddRecord(work->unk0, 0xe, 0xc, 0xc, 0xd, 0, ov01_0220952C);
 }
 
 void ov01_02203B70(Ov01_02203A18_Work *work) {
     ov01_021F18FC(work->unk0, 0xc);
     ov01_021F1924(work->unk0, 0xc);
-    ov01_021F1970(work->unk0, 0xd);
-    ov01_021F18C8(work->unk0, 0xe);
+    FieldEffectManager_FreeTexResource(work->unk0, 0xd);
+    FieldEffectManager_ReleaseRecord(work->unk0, 0xe);
 }
 
 void *ov01_02203B98(FieldSystem *fieldSystem, const VecFx32 *position) {
-    void *ret = ov01_021F1740(fieldSystem, 0xe, position);
+    void *ret = FieldEffectManager_CreateBillboardFromRecord(fieldSystem, 0xe, position);
     NNS_G3dMdlSetMdlFogEnableFlagAll(BillboardObject_GetModel(ret), FALSE);
     return ret;
 }
@@ -131,13 +131,13 @@ BOOL ov01_02203BB4(void *a0, Ov01_02203A18_Inst *inst) {
     inst->unkC = MapObject_GetMapID(inst->unk30.unk8);
     inst->unk28 = FX32_CONST(6);
     u32 idx = (u32)sub_02068D90(a0);
-    inst->unk40.unk18 = ov01_021F14B4(inst->unk30.unk0, ov01_02209544[idx].unk0, 1);
-    inst->unk40.unk14 = ov01_021F14B4(inst->unk30.unk0, ov01_02209544[idx].unk4, 1);
+    inst->unk40.unk18 = FieldEffectManager_LoadNarcMember(inst->unk30.unk0, ov01_02209544[idx].unk0, 1);
+    inst->unk40.unk14 = FieldEffectManager_LoadNarcMember(inst->unk30.unk0, ov01_02209544[idx].unk4, 1);
     BillboardGfxSequence_Init(inst->unk40.unk14, &inst->unk40);
     inst->unk40.unk10 = NNS_G3dGetTex((const NNSG3dResFileHeader *)inst->unk40.unk18);
     inst->unk40.unk24 = 0;
     inst->unk40.unk26 = 0;
-    NNSG3dResTex *tex = ov01_021F1AD4(inst->unk30.unk0, 0xd);
+    NNSG3dResTex *tex = FieldEffectManager_GetTexture(inst->unk30.unk0, 0xd);
     inst->unk40.unk20 = Texture_GetImageSizeByIndex(tex, 0);
     inst->unk40.unk1C = Texture_GetImageVramOffsetByIndex(tex, 0);
     GF_CreateNewVramTransferTask((NNS_GFD_DST_TYPE)0, inst->unk40.unk1C, Texture_GetImageData(inst->unk40.unk10, 0), inst->unk40.unk20);
@@ -202,7 +202,7 @@ void ov01_02203CB8(void *a0, Ov01_02203A18_Inst *inst) {
         break;
     case 3:
         inst->unk30.unk4->unk4 = FALSE;
-        ov01_021F1640((int)a0);
+        FieldEffectManager_DestroyEffect((int)a0);
         return;
     }
     sub_02068DA8(a0, &result);

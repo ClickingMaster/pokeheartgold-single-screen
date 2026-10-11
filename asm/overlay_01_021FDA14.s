@@ -21,7 +21,7 @@ ov01_021FDA14: ; 0x021FDA14
 	mov r1, #4
 	add r3, r2, #0
 	add r5, r0, #0
-	bl ov01_021F1430
+	bl FieldEffectManager_HeapAllocAndFill
 	add r4, r0, #0
 	str r5, [r4]
 	bl ov01_021FDA40
@@ -36,7 +36,7 @@ ov01_021FDA30: ; 0x021FDA30
 	add r4, r0, #0
 	bl ov01_021FDA5C
 	add r0, r4, #0
-	bl ov01_021F1448
+	bl FieldEffectManager_HeapFree
 	pop {r4, pc}
 	thumb_func_end ov01_021FDA30
 
@@ -79,10 +79,10 @@ ov01_021FDA74: ; 0x021FDA74
 	bl MapObject_GetFieldSystem
 	str r0, [sp, #8]
 	add r0, r5, #0
-	bl ov01_021F146C
+	bl FieldEffectManager_GetFromMapObject
 	mov r1, #1
 	str r0, [sp, #0xc]
-	bl ov01_021F1450
+	bl FieldEffectManager_GetRendererData
 	str r0, [sp, #0x10]
 	add r0, r5, #0
 	add r1, sp, #0x18
@@ -98,7 +98,7 @@ ov01_021FDA74: ; 0x021FDA74
 	ldr r1, _021FDABC ; =ov01_02208F88
 	add r2, sp, #0x18
 	add r3, r4, #0
-	bl ov01_021F1620
+	bl FieldEffectManager_CreateEffect
 	add sp, #0x24
 	pop {r4, r5, pc}
 	nop
@@ -196,7 +196,7 @@ ov01_021FDB44: ; 0x021FDB44
 	bne _021FDB7C
 _021FDB72:
 	add r0, r5, #0
-	bl ov01_021F1640
+	bl FieldEffectManager_DestroyEffect
 	add sp, #0xc
 	pop {r3, r4, r5, r6, pc}
 _021FDB7C:
@@ -267,7 +267,7 @@ ov01_021FDBCC: ; 0x021FDBCC
 	bne _021FDC06
 _021FDBFC:
 	add r0, r7, #0
-	bl ov01_021F1640
+	bl FieldEffectManager_DestroyEffect
 	add sp, #0x18
 	pop {r3, r4, r5, r6, r7, pc}
 _021FDC06:
@@ -454,7 +454,7 @@ ov01_021FDD48: ; 0x021FDD48
 	ldr r0, [r4, #0x18]
 	add r1, sp, #0
 	add r2, sp, #0x28
-	bl ov01_021F16EC
+	bl FieldEffectManager_CreateBillboard
 	str r0, [r4, #0x24]
 	mov r0, #1
 	str r0, [r4, #0xc]
@@ -489,7 +489,7 @@ _021FDDA4:
 	ldr r0, [r4, #8]
 	add r1, sp, #0
 	add r2, sp, #0x28
-	bl ov01_021F16EC
+	bl FieldEffectManager_CreateBillboard
 	str r0, [r4, #0x3c]
 	ldr r5, [r4, #0x38]
 	add r0, r5, #0
@@ -573,12 +573,12 @@ ov01_021FDE64: ; 0x021FDE64
 	add r4, r1, #0
 	add r6, r2, #0
 	add r7, r3, #0
-	bl ov01_021F1468
+	bl FieldEffectManager_GetFieldSystem
 	str r0, [sp, #8]
 	add r0, r5, #0
 	mov r1, #1
 	str r5, [sp, #0xc]
-	bl ov01_021F1450
+	bl FieldEffectManager_GetRendererData
 	str r0, [sp, #0x10]
 	add r3, sp, #0x14
 	mov r2, #5
@@ -596,7 +596,7 @@ _021FDE86:
 	ldr r3, [sp, #0x58]
 	add r0, r5, #0
 	add r2, r7, #0
-	bl ov01_021F1620
+	bl FieldEffectManager_CreateEffect
 	add sp, #0x40
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
@@ -729,10 +729,10 @@ ov01_021FDF88: ; 0x021FDF88
 	bl MapObject_GetFieldSystem
 	str r0, [sp, #8]
 	add r0, r5, #0
-	bl ov01_021F146C
+	bl FieldEffectManager_GetFromMapObject
 	mov r1, #1
 	str r0, [sp, #0xc]
-	bl ov01_021F1450
+	bl FieldEffectManager_GetRendererData
 	str r0, [sp, #0x10]
 	add r0, r5, #0
 	add r1, sp, #0x18
@@ -748,7 +748,7 @@ ov01_021FDF88: ; 0x021FDF88
 	ldr r1, _021FDFD0 ; =ov01_02208F74
 	add r2, sp, #0x18
 	add r3, r4, #0
-	bl ov01_021F1620
+	bl FieldEffectManager_CreateEffect
 	add sp, #0x24
 	pop {r4, r5, pc}
 	nop
@@ -842,7 +842,7 @@ ov01_021FE058: ; 0x021FE058
 	bne _021FE090
 _021FE086:
 	add r0, r5, #0
-	bl ov01_021F1640
+	bl FieldEffectManager_DestroyEffect
 	add sp, #0xc
 	pop {r3, r4, r5, r6, pc}
 _021FE090:
@@ -917,7 +917,7 @@ ov01_021FE0EC: ; 0x021FE0EC
 	bne _021FE124
 _021FE11A:
 	add r0, r6, #0
-	bl ov01_021F1640
+	bl FieldEffectManager_DestroyEffect
 	add sp, #0xc
 	pop {r3, r4, r5, r6, pc}
 _021FE124:
@@ -1014,7 +1014,7 @@ _021FE1E2:
 	ldr r0, [r4, #0x18]
 	add r1, sp, #0
 	add r2, sp, #0x28
-	bl ov01_021F16EC
+	bl FieldEffectManager_CreateBillboard
 	str r0, [r4, #0x24]
 	mov r0, #1
 	str r0, [r4, #0xc]

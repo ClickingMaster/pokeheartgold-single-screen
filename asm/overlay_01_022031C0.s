@@ -54,7 +54,7 @@ ov01_02203654: ; 0x02203654
 	cmp r0, #0
 	bne _02203678
 	add r0, r4, #0
-	bl ov01_021F1640
+	bl FieldEffectManager_DestroyEffect
 	add sp, #0x28
 	pop {r3, r4, r5, r6, r7, pc}
 _02203678:
@@ -219,7 +219,7 @@ _022037C8:
 	cmp r0, #4
 	blt _022037D8
 	add r0, r4, #0
-	bl ov01_021F1640
+	bl FieldEffectManager_DestroyEffect
 _022037D8:
 	add sp, #0x28
 	pop {r3, r4, r5, r6, r7, pc}

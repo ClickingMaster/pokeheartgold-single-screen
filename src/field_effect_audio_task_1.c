@@ -1,13 +1,13 @@
 #include "field_effect_audio_task_internal.h"
 void *ov01_022051EC(u32 arg) {
-    u8 *p = ov01_021F1430(arg, 0xC4, 0, 0);
+    u8 *p = FieldEffectManager_HeapAllocAndFill(arg, 0xC4, 0, 0);
     *(u32 *)p = arg;
     ov01_02205218(p);
     return p;
 }
 void ov01_02205208(void *p) {
     ov01_022052A4(p);
-    ov01_021F1448(p);
+    FieldEffectManager_HeapFree(p);
 }
 void ov01_02205218(void *v) {
     u8 *p = v;
@@ -30,8 +30,8 @@ void ov01_022052A4(void *v) {
 void ov01_022052C4(void *ctx, void *arg) {
     SpawnArgs a;
     a.ctx = ctx;
-    a.renderer = ov01_021F1450(ctx, 0x16);
-    ov01_021F1620(ctx, ov01_022096CC, arg, 0, &a, 0xFF);
+    a.renderer = FieldEffectManager_GetRendererData(ctx, 0x16);
+    FieldEffectManager_CreateEffect(ctx, ov01_022096CC, arg, 0, &a, 0xFF);
 }
 void *ov01_022052F4(void *task) {
     return *(void **)sub_02068D74(task);

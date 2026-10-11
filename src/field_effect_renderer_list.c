@@ -39,7 +39,7 @@ static const FieldEffectRendererInit ov01_02208E30[12] = {
 };
 
 FieldEffectRendererList *ov01_021FD1B8(void *a0) {
-    FieldEffectRendererList *list = (FieldEffectRendererList *)ov01_021F1430(a0, sizeof(FieldEffectRendererList), 0, 0);
+    FieldEffectRendererList *list = (FieldEffectRendererList *)FieldEffectManager_HeapAllocAndFill(a0, sizeof(FieldEffectRendererList), 0, 0);
     list->unk0 = a0;
     return list;
 }
@@ -47,9 +47,9 @@ FieldEffectRendererList *ov01_021FD1B8(void *a0) {
 void ov01_021FD1CC(FieldEffectRendererList *list) {
     ov01_021FD21C(list);
     if (list->renderers != NULL) {
-        ov01_021F1448(list->renderers);
+        FieldEffectManager_HeapFree(list->renderers);
     }
-    ov01_021F1448(list);
+    FieldEffectManager_HeapFree(list);
 }
 
 void ov01_021FD1E8(FieldEffectRenderer *renderer, u32 id, int modelId, void *a3) {
@@ -88,12 +88,12 @@ FieldEffectRenderer *ov01_021FD244(FieldEffectRendererList *list, u32 id) {
 }
 
 void ov01_021FD258(FieldSystem *fieldSystem, u32 count) {
-    FieldEffectRendererList *list = (FieldEffectRendererList *)ov01_021F1450(fieldSystem, 0x14);
+    FieldEffectRendererList *list = (FieldEffectRendererList *)FieldEffectManager_GetRendererData(fieldSystem, 0x14);
     if (count == 0) {
         GF_AssertFail();
     }
     list->count = count;
-    FieldEffectRenderer *renderer = (FieldEffectRenderer *)ov01_021F1430(fieldSystem, count * sizeof(FieldEffectRenderer), 0, 0);
+    FieldEffectRenderer *renderer = (FieldEffectRenderer *)FieldEffectManager_HeapAllocAndFill(fieldSystem, count * sizeof(FieldEffectRenderer), 0, 0);
     list->renderers = renderer;
     do {
         renderer->unk0 = FIELD_EFFECT_RENDERER_SLOT_EMPTY;
@@ -102,7 +102,7 @@ void ov01_021FD258(FieldSystem *fieldSystem, u32 count) {
 }
 
 void ov01_021FD290(FieldSystem *fieldSystem, u32 id, int modelId) {
-    FieldEffectRendererList *list = (FieldEffectRendererList *)ov01_021F1450(fieldSystem, 0x14);
+    FieldEffectRendererList *list = (FieldEffectRendererList *)FieldEffectManager_GetRendererData(fieldSystem, 0x14);
     if (ov01_021FD244(list, id) == NULL) {
         FieldEffectRenderer *renderer = ov01_021FD244(list, FIELD_EFFECT_RENDERER_SLOT_EMPTY);
         if (renderer == NULL) {
@@ -114,7 +114,7 @@ void ov01_021FD290(FieldSystem *fieldSystem, u32 id, int modelId) {
 }
 
 NNSG3dRenderObj *ov01_021FD2CC(FieldSystem *fieldSystem, u32 id) {
-    FieldEffectRendererList *list = (FieldEffectRendererList *)ov01_021F1450(fieldSystem, 0x14);
+    FieldEffectRendererList *list = (FieldEffectRendererList *)FieldEffectManager_GetRendererData(fieldSystem, 0x14);
     FieldEffectRenderer *renderer = ov01_021FD244(list, id);
     if (renderer == NULL) {
         GF_AssertFail();
@@ -125,12 +125,12 @@ NNSG3dRenderObj *ov01_021FD2CC(FieldSystem *fieldSystem, u32 id) {
 void ov01_021FD2EC(LocalMapObject *mapObject, VecFx32 *a1) {
     FieldEffectRendererArgs args;
 
-    FieldSystem *fieldSystem = ov01_021F146C(mapObject);
+    FieldSystem *fieldSystem = FieldEffectManager_GetFromMapObject(mapObject);
     args.unk0 = MapObject_GetSpriteID(mapObject);
     args.unk4 = fieldSystem;
     args.unk8 = mapObject;
     u32 priority = MapObject_GetPriorityPlusValue(mapObject, 2);
-    ov01_021F1620(fieldSystem, &ov01_02208E1C, a1, 0, (UnkOv01_021FFF5C *)&args, priority);
+    FieldEffectManager_CreateEffect(fieldSystem, &ov01_02208E1C, a1, 0, (UnkOv01_021FFF5C *)&args, priority);
 }
 
 BOOL ov01_021FD328(void *a0, FieldEffectRendererWork *work) {
@@ -152,7 +152,7 @@ void ov01_021FD37C(void *a0, FieldEffectRendererWork *work) {
 
     LocalMapObject *mapObject = work->unk1C.unk8;
     if (!sub_0205F0A8(mapObject, work->unk4, work->unk8)) {
-        ov01_021F1640((int)a0);
+        FieldEffectManager_DestroyEffect((int)a0);
         return;
     }
     MapObject_CopyPositionVector(mapObject, &position);

@@ -1,7 +1,7 @@
 #include "field_follow_effect_internal.h"
 
 void *ov01_022031C0(void *arg) {
-    u8 *p = ov01_021F1430((u32)arg, 0x140, 0, 0);
+    u8 *p = FieldEffectManager_HeapAllocAndFill((u32)arg, 0x140, 0, 0);
     *(void **)p = arg;
     HeapExp_FndInitAllocator(p + 4, 4, 0x20);
     ov01_022031F8(p);
@@ -10,15 +10,15 @@ void *ov01_022031C0(void *arg) {
 
 void ov01_022031E8(void *p) {
     ov01_02203270(p);
-    ov01_021F1448(p);
+    FieldEffectManager_HeapFree(p);
 }
 
 void ov01_022031F8(void *v) {
     u8 *p = v;
-    *(void **)(p + 0x14) = ov01_021F14B4(*(void **)p, 0x81, 0);
+    *(void **)(p + 0x14) = FieldEffectManager_LoadNarcMember(*(void **)p, 0x81, 0);
     ov01_021FBD38(p + 0x1c, *(void **)(p + 0x14));
     Field3dObject_InitFromModel(p + 0x3c, p + 0x1c);
-    *(void **)(p + 0x18) = ov01_021F14B4(*(void **)p, 0x68, 0);
+    *(void **)(p + 0x18) = FieldEffectManager_LoadNarcMember(*(void **)p, 0x68, 0);
     ov01_021FBD38(p + 0x2c, *(void **)(p + 0x18));
     Field3dObject_InitFromModel(p + 0xb4, p + 0x2c);
     Field3dModelAnimation_LoadFromFilesystem(p + 0x12c, p + 0x2c, 0x67, 0xa4, 4, p + 4);
@@ -28,40 +28,40 @@ void ov01_022031F8(void *v) {
 void ov01_02203270(void *v) {
     u8 *p = v;
     ov01_021FBDFC(p + 0x1c);
-    ov01_021F1448(*(void **)(p + 0x14));
+    FieldEffectManager_HeapFree(*(void **)(p + 0x14));
     ov01_021FBDFC(p + 0x2c);
-    ov01_021F1448(*(void **)(p + 0x18));
+    FieldEffectManager_HeapFree(*(void **)(p + 0x18));
     Field3dModelAnimation_Unload(p + 0x12c, p + 4);
 }
 
 void ov01_0220329C(void *mapObj, u32 variant) {
     SpawnArgs a;
     s32 priority;
-    void *ctx = ov01_021F146C(mapObj);
+    void *ctx = FieldEffectManager_GetFromMapObject(mapObj);
     MapObject_CopyPositionVector(mapObj, &a.pos);
     a.pos.z += 6 << 12;
     a.h0 = 0;
     a.h1 = 0;
     a.byte = -1;
     a.ctx = ctx;
-    a.a = ov01_021F1468(ctx);
-    a.b = ov01_021F1450(ctx, 0x11);
+    a.a = FieldEffectManager_GetFieldSystem(ctx);
+    a.b = FieldEffectManager_GetRendererData(ctx, 0x11);
     a.mapObj = mapObj;
     MapObject_CopyPositionVector(mapObj, &a.mapPos);
     priority = MapObject_GetPriorityPlusValue(mapObj, 2);
     if (variant == 0) {
-        ov01_021F1620(ctx, ov01_022094DC, &a.mapPos, 1, &a, priority);
+        FieldEffectManager_CreateEffect(ctx, ov01_022094DC, &a.mapPos, 1, &a, priority);
         return;
     }
     if (variant == 1) {
-        ov01_021F1620(ctx, ov01_022094F0, &a.mapPos, 1, &a, priority);
+        FieldEffectManager_CreateEffect(ctx, ov01_022094F0, &a.mapPos, 1, &a, priority);
         return;
     }
     if (variant == 2) {
-        ov01_021F1620(ctx, ov01_02209504, &a.mapPos, 1, &a, priority);
+        FieldEffectManager_CreateEffect(ctx, ov01_02209504, &a.mapPos, 1, &a, priority);
         return;
     }
-    ov01_021F1620(ctx, ov01_022094C8, &a.mapPos, 1, &a, priority);
+    FieldEffectManager_CreateEffect(ctx, ov01_022094C8, &a.mapPos, 1, &a, priority);
 }
 
 BOOL ov01_0220335C(void *task, void *v) {
@@ -90,7 +90,7 @@ void ov01_022033E4(void *task, void *v) {
     void *mapObj = *(void **)(p + 0x30);
     Vec3 pos, temp;
     if (!sub_0205F0F8(mapObj, *(u32 *)(p + 4), *(u32 *)(p + 8), *(u32 *)(p + 0xc))) {
-        ov01_021F1640(task);
+        FieldEffectManager_DestroyEffect(task);
         return;
     }
     if (*(u32 *)(p + 0x14) == 0) {
@@ -117,7 +117,7 @@ void ov01_022033E4(void *task, void *v) {
         *(u32 *)p = 2;
     case 2:
         if (Field3dModelAnimation_FrameAdvanceAndCheck(*(u8 **)(p + 0x2c) + 0x12c, 1 << 12)) {
-            ov01_021F1640(task);
+            FieldEffectManager_DestroyEffect(task);
         }
         break;
     }
@@ -127,7 +127,7 @@ void ov01_022034B8(void *task, void *v) {
     u8 pos[12];
     u8 *p = v;
     if (!sub_0205F0F8(*(void **)(p + 0x30), *(u32 *)(p + 4), *(u32 *)(p + 8), *(u32 *)(p + 0xc))) {
-        ov01_021F1640(task);
+        FieldEffectManager_DestroyEffect(task);
         return;
     }
     sub_02068DB8(task, pos);
@@ -139,7 +139,7 @@ void ov01_022034F8(void *task, void *v) {
     u8 *p = v;
     Vec3 pos, temp;
     if (!sub_0205F0F8(*(void **)(p + 0x30), *(u32 *)(p + 4), *(u32 *)(p + 8), *(u32 *)(p + 0xc))) {
-        ov01_021F1640(task);
+        FieldEffectManager_DestroyEffect(task);
         return;
     }
     if (*(u32 *)(p + 0x14) == 0) {
@@ -159,7 +159,7 @@ void ov01_022034F8(void *task, void *v) {
         *(u32 *)p = 1;
     case 1:
         if (Field3dModelAnimation_FrameAdvanceAndCheck(*(u8 **)(p + 0x2c) + 0x12c, 1 << 12)) {
-            ov01_021F1640(task);
+            FieldEffectManager_DestroyEffect(task);
         }
         break;
     }
@@ -169,7 +169,7 @@ void ov01_022035A4(void *task, void *v) {
     u8 pos[12];
     u8 *p = v;
     if (!sub_0205F0F8(*(void **)(p + 0x30), *(u32 *)(p + 4), *(u32 *)(p + 8), *(u32 *)(p + 0xc))) {
-        ov01_021F1640(task);
+        FieldEffectManager_DestroyEffect(task);
         return;
     }
     sub_02068DB8(task, pos);

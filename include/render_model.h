@@ -1,7 +1,7 @@
 #ifndef POKEHEARTGOLD_RENDER_MODEL_H
 #define POKEHEARTGOLD_RENDER_MODEL_H
 
-#include "overlay_01_021F1348.h"
+#include "field/field_effect_manager.h"
 
 void RenderModel_Free(UnkOv01_021FFECC_sub *a0);
 

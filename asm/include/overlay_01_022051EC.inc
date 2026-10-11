@@ -5,10 +5,10 @@
 .public sub_02068D74
 .public sub_02068D98
 .public sub_02068DB8
-.public ov01_021F1430
-.public ov01_021F1448
-.public ov01_021F1450
-.public ov01_021F1620
+.public FieldEffectManager_HeapAllocAndFill
+.public FieldEffectManager_HeapFree
+.public FieldEffectManager_GetRendererData
+.public FieldEffectManager_CreateEffect
 .public Field3dModel_LoadFromFilesystem
 .public Field3dModel_Unload
 .public Field3dModelAnimation_LoadFromFilesystem

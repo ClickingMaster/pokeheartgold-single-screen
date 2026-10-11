@@ -7,7 +7,7 @@
 #include "field_system.h"
 #include "map_object.h"
 #include "metatile_behavior.h"
-#include "overlay_01_021F1348.h"
+#include "field/field_effect_manager.h"
 #include "player_avatar.h"
 #include "unk_0205FD20.h"
 #include "unk_020689C8.h"
@@ -20,14 +20,14 @@ void Math_CalcRotationMatrixXYZDeg(MtxFx33 *mtx, u16 x, u16 y, u16 z);
 void sub_02068DA8(void *a0, VecFx32 *a1);
 
 // The 0x6c module object allocated by ov01_02200858 and recovered from the
-// field-effect manager slot 3 by ov01_021F1450.
+// field-effect manager slot 3 by FieldEffectManager_GetRendererData.
 typedef struct Ov01_02200858_Work {
     FieldEffectManager *unk0;
     UnkOv01_021FFECC_sub unk4;
     NNSG3dRenderObj unk18;
 } Ov01_02200858_Work; // 0x6c
 
-// The user-data block handed to ov01_021F1620 as a4 and recovered via sub_02068D98.
+// The user-data block handed to FieldEffectManager_CreateEffect as a4 and recovered via sub_02068D98.
 typedef struct Ov01_02200858_Args {
     FieldSystem *unk0;
     Ov01_02200858_Work *unk4;

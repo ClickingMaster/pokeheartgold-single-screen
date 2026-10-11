@@ -7,7 +7,7 @@ typedef struct LocalNineWords {
 } LocalNineWords;
 extern const u32 ov01_022095B4[];
 LocalManager *ov01_02203E40(void *owner) {
-    LocalManager *m = ov01_021F1430(owner, 0x68, 0, 0);
+    LocalManager *m = FieldEffectManager_HeapAllocAndFill(owner, 0x68, 0, 0);
     m->owner = owner;
     m->task = NULL;
     m->scale = 0x3f800000;
@@ -16,13 +16,13 @@ LocalManager *ov01_02203E40(void *owner) {
 }
 void ov01_02203E64(LocalManager *m) {
     ov01_02203E94(m);
-    ov01_021F1448(m);
+    FieldEffectManager_HeapFree(m);
 }
 void ov01_02203E74(LocalManager *m) {
-    ov01_021F1AB8(m->owner, 0x6a, 0, (u8 *)m + 4, &m->value58, &m->resource);
+    FieldEffectManager_LoadModel(m->owner, 0x6a, 0, (u8 *)m + 4, &m->value58, &m->resource);
 }
 void ov01_02203E94(LocalManager *m) {
-    ov01_021F1448(m->resource);
+    FieldEffectManager_HeapFree(m->resource);
 }
 void *ov01_02203EA0(void *obj) {
     struct {
@@ -35,10 +35,10 @@ void *ov01_02203EA0(void *obj) {
             VecFx32 direction;
         } ctx;
     } local;
-    void *manager = ov01_021F146C(obj);
-    void *cameraOwner = ov01_021F1468(manager);
+    void *manager = FieldEffectManager_GetFromMapObject(obj);
+    void *cameraOwner = FieldEffectManager_GetFieldSystem(manager);
     local.ctx.manager = manager;
-    local.ctx.resource = ov01_021F1450(manager, 19);
+    local.ctx.resource = FieldEffectManager_GetRendererData(manager, 19);
     if (local.ctx.resource->task != NULL) {
         return local.ctx.resource->task;
     }
@@ -50,7 +50,7 @@ void *ov01_02203EA0(void *obj) {
     local.ctx.distance /= 3;
     VEC_Normalize(&local.ctx.direction, &local.ctx.direction);
     MapObject_CopyPositionVector(obj, &local.spawnPos);
-    local.ctx.resource->task = ov01_021F1620(manager, ov01_022095B4, &local.spawnPos, 0, &local.ctx, MapObject_GetPriorityPlusValue(obj, 2));
+    local.ctx.resource->task = FieldEffectManager_CreateEffect(manager, ov01_022095B4, &local.spawnPos, 0, &local.ctx, MapObject_GetPriorityPlusValue(obj, 2));
     return local.ctx.resource->task;
 }
 void ov01_02203F2C(void *task, u32 value) {

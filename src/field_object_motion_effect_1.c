@@ -4,7 +4,7 @@ typedef struct LocalNineWords {
 } LocalNineWords;
 extern const u32 ov01_02209258[];
 LocalCtx *ov01_021FFC0C(void *owner) {
-    LocalCtx *ctx = ov01_021F1430(owner, 4, 0, 0);
+    LocalCtx *ctx = FieldEffectManager_HeapAllocAndFill(owner, 4, 0, 0);
     ctx->owner = owner;
     ov01_021FFC38(ctx);
     return ctx;
@@ -12,21 +12,21 @@ LocalCtx *ov01_021FFC0C(void *owner) {
 
 void ov01_021FFC28(LocalCtx *ctx) {
     ov01_021FFC80(ctx);
-    ov01_021F1448(ctx);
+    FieldEffectManager_HeapFree(ctx);
 }
 
 void ov01_021FFC38(LocalCtx *ctx) {
     ov01_021F18D4(ctx->owner, 8, 0x7b);
     ov01_021F1908(ctx->owner, 8, 0x93);
-    ov01_021F1930(ctx->owner, 9, 0x16, 1);
-    ov01_021F1758(ctx->owner, 0xa, 8, 8, 9, 0, ov01_02209258);
+    FieldEffectManager_LoadTexResource(ctx->owner, 9, 0x16, 1);
+    FieldEffectManager_AddRecord(ctx->owner, 0xa, 8, 8, 9, 0, ov01_02209258);
 }
 
 void ov01_021FFC80(LocalCtx *ctx) {
     ov01_021F18FC(ctx->owner, 8);
     ov01_021F1924(ctx->owner, 8);
-    ov01_021F1970(ctx->owner, 9);
-    ov01_021F18C8(ctx->owner, 0xa);
+    FieldEffectManager_FreeTexResource(ctx->owner, 9);
+    FieldEffectManager_ReleaseRecord(ctx->owner, 0xa);
 }
 
 BOOL ov01_021FFCA8(void *task, LocalState *s) {
@@ -43,7 +43,7 @@ BOOL ov01_021FFCA8(void *task, LocalState *s) {
     pos.y -= 2 << 14;
     pos.z += 0xd << 12;
     sub_02068DA8(task, &pos);
-    s->effect = ov01_021F1740(s->resource, 0xa, &pos);
+    s->effect = FieldEffectManager_CreateBillboardFromRecord(s->resource, 0xa, &pos);
     if (MapObject_TestFlagsBits(s->mapObject, 2 << 8) == TRUE) {
         BillboardObject_SetVisible(s->effect, FALSE);
     }
@@ -65,7 +65,7 @@ void ov01_021FFD70(void *task, LocalState *s) {
     void *obj = s->mapObject;
     int x, z;
     if (!sub_0205F0F8(obj, s->sprite, s->id, s->mapId)) {
-        ov01_021F1640(task);
+        FieldEffectManager_DestroyEffect(task);
         return;
     }
     if (MapObject_TestFlagsBits(obj, 2 << 8) == TRUE) {
@@ -97,17 +97,17 @@ void ov01_021FFD70(void *task, LocalState *s) {
         s->stage = 2;
     case 2:
         if (!sub_0205F0F8(obj, s->sprite, s->id, s->mapId)) {
-            ov01_021F1640(task);
+            FieldEffectManager_DestroyEffect(task);
             return;
         }
         x = MapObject_GetXCoord(obj);
         z = MapObject_GetZCoord(obj);
         if (s->x != x || s->z != z) {
-            ov01_021F1640(task);
+            FieldEffectManager_DestroyEffect(task);
             return;
         }
         if (s->facing != -1 && s->facing != MapObject_GetFacingDirection(obj)) {
-            ov01_021F1640(task);
+            FieldEffectManager_DestroyEffect(task);
         }
         break;
     }
@@ -116,7 +116,7 @@ void ov01_021FFD70(void *task, LocalState *s) {
 void ov01_021FFE98(void *task, LocalState *s) {
     VecFx32 pos;
     if (!sub_0205F0A8(s->mapObject, s->id, s->mapId)) {
-        ov01_021F1640(task);
+        FieldEffectManager_DestroyEffect(task);
         return;
     }
     sub_02068DB8(task, &pos);

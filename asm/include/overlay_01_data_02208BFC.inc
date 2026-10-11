@@ -2,8 +2,8 @@
 #pragma once
 .public ov01_021FD1B8
 .public ov01_021FD1CC
-.public ov01_021FD41C
-.public ov01_021FD440
+.public FieldShadow_New
+.public FieldShadow_Free
 .public ov01_021FDA14
 .public ov01_021FDA30
 .public ov01_021FE200
@@ -47,4 +47,4 @@
 .public ov01_022051EC
 .public ov01_02205208
 .public defaultFieldEffectRenderers
-.public ov01_02208C5C
+.public gFieldEffectRenderers

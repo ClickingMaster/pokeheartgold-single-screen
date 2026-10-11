@@ -82,8 +82,8 @@ void CallFieldTask_RockClimb(TaskManager *taskManager, int playerDirection, int 
 void CallFieldTask_Surf(TaskManager *taskManager, int playerDirection, int partySlot);
 void CallFieldTask_Waterfall(TaskManager *taskManager, int playerDirection, int partySlot);
 void CallFieldTask_Whirlpool(TaskManager *taskManager, int playerDirection, int partySlot);
-u32 ov01_021F149C(FieldEffectManager *fieldEffectManager, int);
-void ov01_021F14A8(FieldEffectManager *fieldEffectManager, int, void *);
+u32 FieldEffectManager_GetNarcMemberSize(FieldEffectManager *fieldEffectManager, int);
+void FieldEffectManager_ReadNarcMember(FieldEffectManager *fieldEffectManager, int, void *);
 int MapNumToFloorNo(u32 mapId);
 void PrintCurFloorInNewWindow(FieldSystem *fieldSystem, u8 x, u8 y, u16 *p_ret, MessageFormat *msgFmt, u16 floor);
 int Field_SaveGameNormal(FieldSystem *fieldSystem);

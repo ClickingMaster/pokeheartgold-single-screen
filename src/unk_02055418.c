@@ -11,7 +11,7 @@
 #include "gf_3d_render.h"
 #include "map_object.h"
 #include "overlay_01.h"
-#include "overlay_01_021F1348.h"
+#include "field/field_effect_manager.h"
 #include "roamer.h"
 #include "sav_system_info.h"
 #include "save_misc_data.h"
@@ -160,13 +160,13 @@ void sub_020556B8(FieldSystem *fieldSystem) {
 
 void sub_020556C8(FieldSystem *fieldSystem, UnkStruct_020556FC *unkPtrB) {
     FieldEffectManager *fieldEffectManager = fieldSystem->fieldEffectManager;
-    unkPtrB->unk5c = Heap_Alloc(unkPtrB->heapID, ov01_021F149C(fieldEffectManager, 31));
-    ov01_021F14A8(fieldEffectManager, 31, unkPtrB->unk5c);
+    unkPtrB->unk5c = Heap_Alloc(unkPtrB->heapID, FieldEffectManager_GetNarcMemberSize(fieldEffectManager, 31));
+    FieldEffectManager_ReadNarcMember(fieldEffectManager, 31, unkPtrB->unk5c);
     GF3dRender_InitObjFromHeader(&unkPtrB->unk4, &unkPtrB->unk58, &unkPtrB->unk5c);
 }
 
 void sub_020556FC(UnkStruct_020556FC *unkPtr) {
-    ov01_021F1448(unkPtr->unk5c); // function frees unk5c to heap
+    FieldEffectManager_HeapFree(unkPtr->unk5c); // function frees unk5c to heap
 }
 
 BOOL sub_02055708(FieldSystem *fieldSystem, LocalMapObject *mapObject) {

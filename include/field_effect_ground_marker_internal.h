@@ -11,7 +11,7 @@
 #include "field_system.h"
 #include "heap.h"
 #include "map_object.h"
-#include "overlay_01_021F1348.h"
+#include "field/field_effect_manager.h"
 #include "task.h"
 #include "billboard_lists.h"
 #include "unk_020689C8.h"
@@ -19,18 +19,18 @@
 
 // Not declared in any tracked header (field_effect_manager_4.c declares these
 // locally; field_effect_animation_internal.h has only K&R `extern void f();`
-// forms which conflict with overlay_01_021F1348.h, so we re-declare here).
+// forms which conflict with field/field_effect_manager.h, so we re-declare here).
 void ov01_021F18D4(FieldEffectManager *manager, int a1, int a2);
 void ov01_021F1908(FieldEffectManager *manager, int a1, int a2);
-void ov01_021F1930(FieldEffectManager *manager, int id, u32 fileId, BOOL copyWithoutTex);
-void *ov01_021F1758(FieldEffectManager *manager, u32 key, int a2, int a3, int objId, int a5, const void *a6);
+void FieldEffectManager_LoadTexResource(FieldEffectManager *manager, int id, u32 fileId, BOOL copyWithoutTex);
+void *FieldEffectManager_AddRecord(FieldEffectManager *manager, u32 key, int a2, int a3, int objId, int a5, const void *a6);
 void *ov01_021F18FC(FieldEffectManager *manager, int a1);
 void *ov01_021F1924(FieldEffectManager *manager, int a1);
-void ov01_021F1970(FieldEffectManager *manager, int id);
-void ov01_021F18C8(FieldEffectManager *manager, u32 id);
-void *ov01_021F1740(FieldSystem *fieldSystem, u32 id, const VecFx32 *position);
-void *ov01_021F14B4(FieldSystem *fieldSystem, u32 fileId, int atEnd);
-NNSG3dResTex *ov01_021F1AD4(FieldSystem *fieldSystem, int id);
+void FieldEffectManager_FreeTexResource(FieldEffectManager *manager, int id);
+void FieldEffectManager_ReleaseRecord(FieldEffectManager *manager, u32 id);
+void *FieldEffectManager_CreateBillboardFromRecord(FieldSystem *fieldSystem, u32 id, const VecFx32 *position);
+void *FieldEffectManager_LoadNarcMember(FieldSystem *fieldSystem, u32 fileId, int atEnd);
+NNSG3dResTex *FieldEffectManager_GetTexture(FieldSystem *fieldSystem, int id);
 
 void *BillboardObject_Delete(void *a0);
 void BillboardObject_SetPosition(void *a0, const VecFx32 *a1);
@@ -45,13 +45,13 @@ void GF_AssertFail(void);
 void PlaySE(u16 seq);
 
 // The 8-byte module object, allocated by ov01_02203A18 and recovered from the
-// field-effect manager slot 0x12 by ov01_021F1450.
+// field-effect manager slot 0x12 by FieldEffectManager_GetRendererData.
 typedef struct Ov01_02203A18_Work {
     FieldEffectManager *unk0;
     BOOL unk4;
 } Ov01_02203A18_Work;
 
-// The user-data block handed to ov01_021F1620 as a4 and recovered via sub_02068D98.
+// The user-data block handed to FieldEffectManager_CreateEffect as a4 and recovered via sub_02068D98.
 typedef struct Ov01_02203A18_Args {
     FieldSystem *unk0;
     Ov01_02203A18_Work *unk4;

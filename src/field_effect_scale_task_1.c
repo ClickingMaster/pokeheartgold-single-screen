@@ -1,7 +1,7 @@
 #include "field_effect_scale_task_internal.h"
 
 void *ov01_021FED9C(void *owner) {
-    void *work = ov01_021F1430(owner, 0x3c, 0, 0);
+    void *work = FieldEffectManager_HeapAllocAndFill(owner, 0x3c, 0, 0);
     *(void **)work = owner;
     ov01_021FEDC8(work);
     return work;
@@ -9,7 +9,7 @@ void *ov01_021FED9C(void *owner) {
 
 void ov01_021FEDB8(void *work) {
     ov01_021FEDF0(work);
-    ov01_021F1448(work);
+    FieldEffectManager_HeapFree(work);
 }
 
 void ov01_021FEDC8(void *work) {
@@ -27,12 +27,12 @@ void ov01_021FEDF0(void *work) {
 void ov01_021FEE04(void *mapObject, s32 x, s32 offset, s32 z) {
     EffectContextPrivate context;
     VecFx32Private position;
-    context.manager = ov01_021F146C(mapObject);
-    context.work = ov01_021F1450(context.manager, 7);
+    context.manager = FieldEffectManager_GetFromMapObject(mapObject);
+    context.work = FieldEffectManager_GetRendererData(context.manager, 7);
     sub_020611C8(x, z, &position);
     position.z += offset * 8;
     position.y = MapObject_GetPreviousYCoord(mapObject) * 0x8000 - 0x8000;
-    ov01_021F1620(context.manager, ov01_02209124, &position, 0, &context, MapObject_GetPriorityPlusValue(mapObject, 2));
+    FieldEffectManager_CreateEffect(context.manager, ov01_02209124, &position, 0, &context, MapObject_GetPriorityPlusValue(mapObject, 2));
 }
 
 BOOL ov01_021FEE64(void *object, void *data) {
@@ -50,7 +50,7 @@ void ov01_021FEE9C(void *unused, void *data) {
 
 void ov01_021FEEA8(void *task, void *data) {
     if (RenderAnimation_IsDone(data) == 1) {
-        ov01_021F1640(task);
+        FieldEffectManager_DestroyEffect(task);
     } else {
         RenderAnimation_Advance(data, 0x1000, 0);
     }

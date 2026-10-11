@@ -82,7 +82,7 @@
 .public ov01_021FA2D4
 .public ov01_021FA3E8
 .public ov01_021FA44C
-.public ov01_021FD9CC
+.public FieldShadow_OffsetByFacing
 .public ov01_022054E0
 .public ov01_02205564
 .public ov01_022055B0

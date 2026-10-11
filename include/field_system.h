@@ -27,7 +27,7 @@
 #include "map_matrix.h"
 #include "menu_input_state.h"
 #include "overlay_01_021EA824.h" // replace with field/fog.h
-#include "overlay_01_021F1348.h"
+#include "field/field_effect_manager.h"
 #include "overlay_manager.h"
 #include "photo_types_def.h"
 #include "save_pokegear.h"

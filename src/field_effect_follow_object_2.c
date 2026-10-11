@@ -14,7 +14,7 @@ BOOL ov01_021FF174(void *a0, FieldEffectFollowWork *work) {
     pos.x = pos.x + (2 << 14);
     pos.z = pos.z + (0x12 << 12);
     sub_02068DA8(a0, &pos);
-    work->sprite = ov01_021F1740(work->args.fieldSys, 0, &pos);
+    work->sprite = FieldEffectManager_CreateBillboardFromRecord(work->args.fieldSys, 0, &pos);
     if (MapObject_TestFlagsBits(work->args.object, MAPOBJECTFLAG_VISIBLE) == 1) {
         BillboardObject_SetVisible(work->sprite, 0);
     }
@@ -37,7 +37,7 @@ void ov01_021FF234(void *a0, FieldEffectFollowWork *work) {
     int z;
 
     if (!sub_0205F0F8(object, work->spriteId, work->objId, work->mapId)) {
-        ov01_021F1640((int)a0);
+        FieldEffectManager_DestroyEffect((int)a0);
         return;
     }
     if (MapObject_TestFlagsBits(object, MAPOBJECTFLAG_VISIBLE) == 1) {
@@ -69,13 +69,13 @@ void ov01_021FF234(void *a0, FieldEffectFollowWork *work) {
         work->state = 2;
     case 2:
         if (!sub_0205F0F8(object, work->spriteId, work->objId, work->mapId)) {
-            ov01_021F1640((int)a0);
+            FieldEffectManager_DestroyEffect((int)a0);
             return;
         }
         x = MapObject_GetXCoord(object) - work->args.dx;
         z = MapObject_GetZCoord(object) - work->args.dz;
         if (work->args.x != x || work->args.z != z) {
-            ov01_021F1640((int)a0);
+            FieldEffectManager_DestroyEffect((int)a0);
             return;
         }
         if (work->args.dir == -1) {
@@ -84,7 +84,7 @@ void ov01_021FF234(void *a0, FieldEffectFollowWork *work) {
         if (work->args.dir == MapObject_GetFacingDirection(object)) {
             return;
         }
-        ov01_021F1640((int)a0);
+        FieldEffectManager_DestroyEffect((int)a0);
         return;
     }
 }
@@ -93,7 +93,7 @@ void ov01_021FF35C(void *a0, FieldEffectFollowWork *work) {
     VecFx32 pos;
 
     if (!sub_0205F0F8(work->args.object, work->spriteId, work->objId, work->mapId)) {
-        ov01_021F1640((int)a0);
+        FieldEffectManager_DestroyEffect((int)a0);
         return;
     }
     sub_02068DB8(a0, &pos);

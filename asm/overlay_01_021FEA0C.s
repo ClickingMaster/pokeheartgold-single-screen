@@ -37,7 +37,7 @@ ov01_021FEA0C: ; 0x021FEA0C
 	mov r1, #0x7c
 	add r3, r2, #0
 	add r4, r0, #0
-	bl ov01_021F1430
+	bl FieldEffectManager_HeapAllocAndFill
 	str r4, [r0, #0x10]
 	pop {r4, pc}
 	.balign 4, 0
@@ -49,7 +49,7 @@ ov01_021FEA20: ; 0x021FEA20
 	add r4, r0, #0
 	bl ov01_021FEA7C
 	add r0, r4, #0
-	bl ov01_021F1448
+	bl FieldEffectManager_HeapFree
 	pop {r4, pc}
 	thumb_func_end ov01_021FEA20
 
@@ -153,7 +153,7 @@ ov01_021FEAB0: ; 0x021FEAB0
 	str r3, [sp, #8]
 	add r5, r0, #0
 	str r1, [r2, #8]
-	bl ov01_021F146C
+	bl FieldEffectManager_GetFromMapObject
 	add r4, r0, #0
 	ldr r0, [sp, #8]
 	str r4, [sp, #0x1c]
@@ -163,7 +163,7 @@ ov01_021FEAB0: ; 0x021FEAB0
 	str r0, [sp, #0x20]
 	add r0, r4, #0
 	mov r1, #5
-	bl ov01_021F1450
+	bl FieldEffectManager_GetRendererData
 	str r0, [sp, #0x24]
 	ldr r0, [sp, #0x40]
 	str r5, [sp, #0x28]
@@ -196,7 +196,7 @@ _021FEB0E:
 	ldr r3, [sp, #0x40]
 	add r0, r4, #0
 	add r2, sp, #0xc
-	bl ov01_021F1620
+	bl FieldEffectManager_CreateEffect
 	add sp, #0x2c
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0

@@ -15,11 +15,11 @@
 .public RenderModel_Free
 .public RenderObj_InitFromModel
 .public RenderObj_Draw
-.public ov01_021F1430
-.public ov01_021F1448
-.public ov01_021F1450
-.public ov01_021F146C
-.public ov01_021F1620
+.public FieldEffectManager_HeapAllocAndFill
+.public FieldEffectManager_HeapFree
+.public FieldEffectManager_GetRendererData
+.public FieldEffectManager_GetFromMapObject
+.public FieldEffectManager_CreateEffect
 .public ov01_021F19F4
 .public ov01_021FEA0C
 .public ov01_021FEA20

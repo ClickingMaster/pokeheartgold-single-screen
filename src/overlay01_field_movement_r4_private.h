@@ -97,7 +97,7 @@ BOOL ov01_021F24F4(FieldSystem *fieldSystem, PlayerAvatar *playerAvatar, int a2,
 BOOL ov01_021F2538(FieldSystem *fieldSystem, PlayerAvatar *playerAvatar, int a2);
 
 /* External helpers with no tracked prototype reachable from here. */
-void ov01_021F1640(int a0);
+void FieldEffectManager_DestroyEffect(int a0);
 u32 ov01_021FE7DC(LocalMapObject *obj, u32 x, u32 y, u32 dir, u32 a4);
 int sub_0205DEC0(PlayerAvatar *avatar, int direction);
 BOOL sub_0205DE38(PlayerAvatar *avatar);

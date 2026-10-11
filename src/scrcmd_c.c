@@ -101,7 +101,7 @@
 #include "unk_02092BE8.h"
 #include "unk_020932A4.h"
 #include "unk_02095DF4.h"
-#include "unk_020961D8.h"
+#include "battle_greeting_task.h"
 #include "unk_02097024.h"
 #include "unk_02097268.h"
 #include "unk_020977CC.h"
@@ -1912,7 +1912,7 @@ BOOL ScrCmd_454(ScriptContext *ctx) {
 
 BOOL ScrCmd_681(ScriptContext *ctx) {
     u16 *var_p = ScriptGetVarPointer(ctx);
-    sub_020961D8(ctx->taskman, var_p);
+    CallTask_EditBattleGreeting(ctx->taskman, var_p);
     return TRUE;
 }
 

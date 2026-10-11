@@ -14,7 +14,7 @@ void ov02_0224B88C(void *p) {
 void ov02_0224B90C(void *p) {
     u8 *q = (u8 *)p + 0x228;
     ov01_021FBDFC(q + 0x14);
-    ov01_021F1448(PTR(q, 0x10));
+    FieldEffectManager_HeapFree(PTR(q, 0x10));
     Field3dModelAnimation_Unload(q + 0x9c, q);
     Field3dModelAnimation_Unload(q + 0xb0, q);
 }

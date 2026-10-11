@@ -19,7 +19,7 @@ int ov01_021F2894(struct RockClimbWork *work, TaskManager *taskManager) {
         return 0;
     }
     MapObject_ClearHeldMovementIfActive(work->obj);
-    ov01_021F1640(work->unk18);
+    FieldEffectManager_DestroyEffect(work->unk18);
     return 1;
 }
 

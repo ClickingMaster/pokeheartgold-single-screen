@@ -21,7 +21,7 @@ ov01_02203E40: ; 0x02203E40
 	mov r1, #0x68
 	add r3, r2, #0
 	add r5, r0, #0
-	bl ov01_021F1430
+	bl FieldEffectManager_HeapAllocAndFill
 	add r4, r0, #0
 	str r5, [r4]
 	mov r1, #0
@@ -40,7 +40,7 @@ ov01_02203E64: ; 0x02203E64
 	add r4, r0, #0
 	bl ov01_02203E94
 	add r0, r4, #0
-	bl ov01_021F1448
+	bl FieldEffectManager_HeapFree
 	pop {r4, pc}
 	thumb_func_end ov01_02203E64
 
@@ -58,18 +58,18 @@ ov01_02203E74: ; 0x02203E74
 	mov r1, #0x6a
 	mov r2, #0
 	add r3, r3, #4
-	bl ov01_021F1AB8
+	bl FieldEffectManager_LoadModel
 	add sp, #8
 	pop {r3, pc}
 	thumb_func_end ov01_02203E74
 
 	thumb_func_start ov01_02203E94
 ov01_02203E94: ; 0x02203E94
-	ldr r3, _02203E9C ; =ov01_021F1448
+	ldr r3, _02203E9C ; =FieldEffectManager_HeapFree
 	ldr r0, [r0, #0x5c]
 	bx r3
 	nop
-_02203E9C: .word ov01_021F1448
+_02203E9C: .word FieldEffectManager_HeapFree
 	thumb_func_end ov01_02203E94
 
 	thumb_func_start ov01_02203EA0
@@ -77,14 +77,14 @@ ov01_02203EA0: ; 0x02203EA0
 	push {r4, r5, r6, lr}
 	sub sp, #0x48
 	add r5, r0, #0
-	bl ov01_021F146C
+	bl FieldEffectManager_GetFromMapObject
 	add r4, r0, #0
-	bl ov01_021F1468
+	bl FieldEffectManager_GetFieldSystem
 	add r6, r0, #0
 	str r4, [sp, #0x2c]
 	add r0, r4, #0
 	mov r1, #0x13
-	bl ov01_021F1450
+	bl FieldEffectManager_GetRendererData
 	str r0, [sp, #0x30]
 	ldr r0, [r0, #0x60]
 	cmp r0, #0
@@ -123,7 +123,7 @@ ov01_02203EA0: ; 0x02203EA0
 	add r0, r4, #0
 	add r2, sp, #0x20
 	mov r3, #0
-	bl ov01_021F1620
+	bl FieldEffectManager_CreateEffect
 	ldr r1, [sp, #0x30]
 	str r0, [r1, #0x60]
 	ldr r0, [sp, #0x30]
