@@ -6,6 +6,7 @@
 #include "constants/species.h"
 
 #include "application/main_menu/main_menu_internal.h"
+#include "application/main_menu/ranger_link.h"
 #include "msgdata/msg.naix"
 #include "msgdata/msg/msg_0017.h"
 #include "msgdata/msg/msg_0247.h"
@@ -114,25 +115,6 @@ extern void sub_02034DE0(void);
 extern void sub_0203A930(int a0);
 
 // Wireless link with Pokemon Ranger (link_status part of this overlay)
-void ov74_02230A84(const u8 *gameInfo, void *work);
-void ov74_02230D28(void);
-void ov74_02230D6C(void);
-BOOL ov74_02230DB8(int index);
-void ov74_02230DF4(int index);
-int ov74_02230E7C(void);
-int ov74_02230E94(void);
-void ov74_02230EB4(void);
-void ov74_02230EE8(void);
-void ov74_02230F14(const u8 *data, int size, int command);
-BOOL ov74_02230F40(void);
-BOOL ov74_02230F6C(void);
-BOOL ov74_02230F98(void);
-BOOL ov74_02230FD4(void);
-void ov74_02231008(void);
-BOOL ov74_02231048(void);
-void ov74_022310B8(int a0);
-u32 ov74_022311F4(u8 *macAddress);
-void ov74_02231238(u32 code, u32 *high, u32 *low);
 void ov74_022360A0(SaveData *saveData);
 int ov74_022360B0(void);
 void ov74_02236128(void);
@@ -255,7 +237,7 @@ typedef struct RangerApplicationNo {
 
 static inline RangerApplicationNo GetApplicationNumber(u8 *macAddress) {
     RangerApplicationNo applicationNo;
-    applicationNo.value = ov74_022311F4(macAddress);
+    applicationNo.value = RangerLink_ReadMacAddressTail(macAddress);
     return applicationNo;
 }
 
@@ -278,7 +260,7 @@ void ConnectToRanger_PrintPlayerInfo(ConnectToRangerApp *app) {
 
     OS_GetMacAddress(macAddress);
     applicationNo = GetApplicationNumber(macAddress);
-    ov74_02231238(applicationNo.value, &high, &low);
+    RangerLink_SplitDecimal(applicationNo.value, &high, &low);
     BufferIntegerAsString(msgFormat, 0, high, 4, PRINTING_MODE_LEADING_ZEROS, TRUE);
     BufferIntegerAsString(msgFormat, 1, low, 4, PRINTING_MODE_LEADING_ZEROS, TRUE);
     app->playerText.rightAlign = TRUE;
@@ -481,17 +463,17 @@ void ConnectToRanger_SetTimeout(ConnectToRangerApp *app, int frames) {
 BOOL ConnectToRanger_CheckTimeoutOrCancel(ConnectToRangerApp *app, u32 *connectState, BOOL checkLink, u32 cancelKeys) {
     app->timer--;
     if (app->timer == 0) {
-        ov74_02231008();
+        RangerLink_RequestEnd();
         *connectState = RANGER_CONNECT_TIMEOUT;
         return FALSE;
     }
-    if (checkLink && !ov74_02230FD4()) {
-        ov74_02231008();
+    if (checkLink && !RangerLink_IsConnected()) {
+        RangerLink_RequestEnd();
         *connectState = RANGER_CONNECT_LINK_LOST;
         return FALSE;
     }
     if (cancelKeys && (gSystem.newKeys & cancelKeys)) {
-        ov74_02231008();
+        RangerLink_RequestEnd();
         *connectState = RANGER_CONNECT_CANCEL;
         return TRUE;
     }
@@ -511,9 +493,9 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
 #define CONNECT_STATE (*(u32 *)((u8 *)app + stateOffset))
 
     if (*(BOOL *)((u8 *)app + linkInitialisedOffset) == TRUE) {
-        sub_0203A930(3 - ov74_02230E7C());
-        ov74_02230D28();
-        ov74_022310B8(1);
+        sub_0203A930(3 - RangerLink_GetLinkLevel());
+        RangerLink_Update();
+        RangerLink_SetChannel(1);
     }
 
     switch (CONNECT_STATE) {
@@ -525,20 +507,20 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
         break;
     case RANGER_CONNECT_WAIT_LINK:
         if (sub_02034DB8()) {
-            ov74_02230A84(ov74_0223BD5C, app->linkWork);
+            RangerLink_Init(ov74_0223BD5C, app->linkWork);
             app->linkInitialised = TRUE;
             WirelessStatusIcon_Create();
             CONNECT_STATE = RANGER_CONNECT_SEARCH;
         }
         break;
     case RANGER_CONNECT_SEARCH:
-        ov74_02230D6C();
+        RangerLink_StartChild();
         ConnectToRanger_SetTimeout(app, 1600);
         app->waitingIcon = WaitingIcon_New(&app->statusWindow, 10);
         CONNECT_STATE = RANGER_CONNECT_WAIT_PARTNER;
         break;
     case RANGER_CONNECT_WAIT_PARTNER: {
-        int index = ov74_02230E94();
+        int index = RangerLink_CountPeers();
         if (index) {
             app->partnerIndex = index - 1;
             ConnectToRanger_SetTimeout(app, 1800);
@@ -548,8 +530,8 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
         break;
     }
     case RANGER_CONNECT_CONNECT_PARTNER:
-        if (ov74_02230DB8(app->partnerIndex)) {
-            ov74_02230DF4(app->partnerIndex);
+        if (RangerLink_CanSelectParent(app->partnerIndex)) {
+            RangerLink_SelectParent(app->partnerIndex);
             CONNECT_STATE = RANGER_CONNECT_WAIT_CONNECTED;
             app->timer = 1800;
         }
@@ -557,7 +539,7 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
         break;
     case RANGER_CONNECT_WAIT_CONNECTED:
         ConnectToRanger_CheckTimeoutOrCancel(app, &CONNECT_STATE, FALSE, PAD_BUTTON_B);
-        if (ov74_02230FD4()) {
+        if (RangerLink_IsConnected()) {
             CONNECT_STATE = RANGER_CONNECT_FOUND;
         }
         break;
@@ -577,14 +559,14 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
         ConnectToRanger_CheckTimeoutOrCancel(app, &CONNECT_STATE, TRUE, PAD_BUTTON_B);
         break;
     case RANGER_CONNECT_SEND_REQUEST:
-        ov74_02230EB4();
+        RangerLink_StartSendList();
         CONNECT_STATE = RANGER_CONNECT_WAIT_REQUEST_SENT;
         app->timer = 1800;
         ConnectToRanger_CheckTimeoutOrCancel(app, &CONNECT_STATE, TRUE, PAD_BUTTON_B);
         break;
     case RANGER_CONNECT_WAIT_REQUEST_SENT:
-        if (ov74_02230F40()) {
-            ov74_02230EE8();
+        if (RangerLink_IsSendDone()) {
+            RangerLink_StartSendNames();
             CONNECT_STATE = RANGER_CONNECT_WAIT_TOUCH;
             app->timer = 3200;
             ov74_02235568(app->bgConfig, &app->statusText, 2, 19, msg_0247_00035);
@@ -595,7 +577,7 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
         ConnectToRanger_CheckTimeoutOrCancel(app, &CONNECT_STATE, TRUE, PAD_BUTTON_B);
         break;
     case RANGER_CONNECT_WAIT_TOUCH:
-        if (ov74_02230F40()) {
+        if (RangerLink_IsSendDone()) {
             ov74_02235568(app->bgConfig, &app->statusText, 2, 19, msg_0247_00073);
             Sprite_SetDrawFlag(app->sprite, TRUE);
             ConnectToRanger_PrintPlayerInfo(app);
@@ -604,12 +586,12 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
         ConnectToRanger_CheckTimeoutOrCancel(app, &CONNECT_STATE, TRUE, PAD_BUTTON_B);
         break;
     case RANGER_CONNECT_SEND_PLAYER:
-        ov74_02230F14(ov74_0223C1F4, 42, 1);
+        RangerLink_StartCommand(ov74_0223C1F4, 42, 1);
         CONNECT_STATE = RANGER_CONNECT_WAIT_PLAYER_SENT;
         app->timer = 3200;
         break;
     case RANGER_CONNECT_WAIT_PLAYER_SENT:
-        if (ov74_02230F6C()) {
+        if (RangerLink_IsCommandDone()) {
             CONNECT_STATE = RANGER_CONNECT_SAVE_DELAY;
             app->timer = 60;
             ov74_02235568(app->bgConfig, &app->statusText, 2, 19, msg_0247_00073);
@@ -637,23 +619,23 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
         }
         break;
     case RANGER_CONNECT_SEND_SAVED:
-        ov74_02230F14(ov74_0223C1F4, 42, 2);
+        RangerLink_StartCommand(ov74_0223C1F4, 42, 2);
         CONNECT_STATE = RANGER_CONNECT_WAIT_ACK;
         app->timer = 1200;
         break;
     case RANGER_CONNECT_WAIT_ACK:
-        if (ov74_02230F98()) {
+        if (RangerLink_IsCommandAcknowledged()) {
             ov74_02236128();
             CONNECT_STATE = RANGER_CONNECT_FINISH_SAVE;
             app->timer = 800;
         } else {
             if (--app->timer == 0) {
-                ov74_02231008();
+                RangerLink_RequestEnd();
                 CONNECT_STATE = RANGER_CONNECT_TIMEOUT;
                 app->timer = 120;
             }
-            if (!ov74_02230FD4()) {
-                ov74_02231008();
+            if (!RangerLink_IsConnected()) {
+                RangerLink_RequestEnd();
                 CONNECT_STATE = RANGER_CONNECT_LINK_LOST;
                 app->timer = 120;
             }
@@ -661,19 +643,19 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
         break;
     case RANGER_CONNECT_FINISH_SAVE:
         if (ov74_0223615C() == 3) {
-            ov74_02231008();
+            RangerLink_RequestEnd();
             CONNECT_STATE = RANGER_CONNECT_LINK_LOST;
             app->timer = 120;
         } else if (ov74_0223615C() != 2) {
             ov74_022360B0();
-        } else if (ov74_02230F6C() || !ov74_02230FD4()) {
+        } else if (RangerLink_IsCommandDone() || !RangerLink_IsConnected()) {
             CONNECT_STATE = RANGER_CONNECT_DONE_DELAY;
             app->timer = 1;
-            ov74_02231008();
+            RangerLink_RequestEnd();
             break;
         }
         if (--app->timer == 0) {
-            ov74_02231008();
+            RangerLink_RequestEnd();
             CONNECT_STATE = RANGER_CONNECT_TIMEOUT;
             app->timer = 10;
         }
@@ -689,7 +671,7 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
         }
         break;
     case RANGER_CONNECT_DONE:
-        if (ov74_02231048()) {
+        if (RangerLink_IsFinished()) {
             if (app->linkStarted == TRUE) {
                 sub_02034DE0();
                 WirelessStatusIcon_Destroy();
@@ -714,7 +696,7 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
         CONNECT_STATE = RANGER_CONNECT_ERROR;
         break;
     case RANGER_CONNECT_ERROR:
-        if (ov74_02231048()) {
+        if (RangerLink_IsFinished()) {
             if (app->linkStarted == TRUE) {
                 sub_02034DE0();
                 WirelessStatusIcon_Destroy();
@@ -726,7 +708,7 @@ int ConnectToRanger_RunTransfer(ConnectToRangerApp *app) {
         }
         break;
     case RANGER_CONNECT_CANCEL:
-        if (ov74_02231048() && app->linkStarted == TRUE) {
+        if (RangerLink_IsFinished() && app->linkStarted == TRUE) {
             sub_02034DE0();
             WirelessStatusIcon_Destroy();
             app->linkStarted = FALSE;

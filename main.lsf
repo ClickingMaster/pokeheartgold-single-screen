@@ -3214,7 +3214,6 @@ Overlay OVY_12
     Object src/battle/overlay_12_0224E4FC.o
     Object src/battle/battle_controller_opponent.o
     Object asm/battle_controller_opponent_data.o
-    Object src/to70_battle_controller_opponent_pr_residual_3_extra532_run01.o
     Object src/battle/battle_02261FD4.o
     Object src/battle/battle_controller.o
     Object src/battle/battle_hp_bar.o
@@ -5591,51 +5590,13 @@ Overlay OVY_71
     Object src/trade_sequence_depart.o
     Object src/trade_sequence_recede.o
     Object src/trade_sequence_exchange.o
-    Object src/overlay71_scene_alloc_r31.o
-    Object src/overlay71_opus_partial_31.o
-    Object src/r40_overlay_71_residual_32_run1.o
-    Object src/to90_extra2035_run01.o
-    Object src/overlay71_opus_partial_32.o
-    Object src/to70_overlay_71_residual_33_extra330_run01.o
-    Object src/overlay71_opus_partial_33.o
-    Object src/to70_overlay_71_residual_34_extra829_run01.o
-    Object src/overlay71_opus_partial_34.o
-    Object src/to70_overlay_71_residual_35_extra624_run01.o
-    Object src/overlay71_opus_partial_35.o
-    Object src/to47_overlay71_camera_motion_r36.o
-    Object src/overlay71_opus_partial_36.o
-    Object src/to70_overlay_71_residual_37_extra830_run01.o
-    Object src/overlay71_opus_partial_37.o
-    Object src/overlay71_render_step_r38.o
-    Object src/overlay71_opus_partial_38.o
-    Object src/to47_overlay71_scene_flow_r39.o
-    Object src/overlay71_opus_partial_39.o
+    Object src/trade_sequence_approach.o
+    Object src/trade_sequence_arrive.o
     Object asm/to70_overlay_71_residual_50_extra320_anchor_own1.o
-    Object src/op90_overlay_71_residual_40_r01.o
-    Object src/overlay71_opus_partial_40.o
-    Object src/to70_overlay_71_residual_41_extra504_run01.o
-    Object src/overlay71_opus_partial_41.o
-    Object src/to70_overlay_71_residual_42_extra625_run01.o
-    Object src/overlay71_opus_partial_42.o
-    Object src/to70_overlay_71_residual_43_extra831_run01.o
-    Object src/overlay71_opus_partial_43.o
-    Object src/to47_overlay71_scene_setup_r44.o
-    Object src/overlay71_opus_partial_44.o
-    Object src/to70_overlay_71_residual_45_extra89_run01.o
-    Object src/to70_to70_overlay_71_residual_45_extra89_residual_1_extra1299_run01.o
-    Object src/overlay71_opus_partial_45.o
-    Object src/to52_overlay71_3d_setup_r46.o
-    Object src/to70_to52_r5_overlay71_r46_middle_extra892_run01.o
-    Object src/to52_overlay71_sprite_setup_r46.o
-    Object src/overlay71_opus_partial_46.o
-    Object src/to70_overlay_71_residual_47_extra985_run01.o
-    Object src/overlay71_opus_partial_47.o
-    Object src/to91_w41414_ov71_b9cc.o
-    Object src/overlay71_opus_partial_48.o
-    Object src/overlay71_motion_step_r49.o
-    Object src/overlay71_opus_partial_49.o
+    Object src/trade_sequence_arrive_tasks.o
+    Object src/trade_sequence_receive.o
     Object asm/to70_overlay_71_residual_50_extra320_anchor.o
-    Object src/to70_overlay_71_residual_50_extra320_run01.o
+    Object src/trade_sequence_receive_bounce.o
 }
 Overlay OVY_72
 {
@@ -5715,53 +5676,7 @@ Object src/application/main_menu/mystery_gift_wireless.o
     Object src/application/main_menu/mystery_gift_app.o
     Object src/application/main_menu/wonder_card_album.o
     Object src/application/main_menu/lock_capsule_card.o
-    Object src/overlay74_thumb_c_0222fe4c_0222fe4c.o
-    Object src/to80_extra1763_run01.o
-    Object src/to80_extra1763_run02.o
-    Object src/overlay74_thumb_c_0222fe78_0222fe78.o
-    Object src/to59_overlay74_channel_flags.o
-    Object src/to70_overlay74_channel_select_residual_run01.o
-    Object src/overlay74_thumb_c_0222fffc_02230070.o
-    Object src/to70_overlay74_thumb_residual_022300a8_022300a8_extra731_run01.o
-    Object src/overlay74_thumb_c_02230110_02230110.o
-    Object src/op90_op90_to54_atomic_w09_01_overlay74_residual01_residual_1_r01.o
-    Object src/op90_to54_atomic_w09_01_overlay74_residual01_r01.o
-Object src/to54_atomic_w09_02_overlay74_run01.o
-Object src/to70_to54_atomic_w09_03_overlay74_residual02_extra530_run01.o
-Object src/to54_atomic_w09_04_overlay74_run02.o
-Object src/to80_extra1823_run01.o
-Object src/to54_atomic_w09_06_overlay74_run03.o
-Object src/to91_w41547_receive_run01.o
-Object src/to70_to70_to54_atomic_w09_07_overlay74_residual04_extra139_residual_1_extra1344_run01.o
-Object src/to70_to54_atomic_w09_07_overlay74_residual04_extra139_run01.o
-    Object src/overlay74_thumb_c_02230964_022309f0.o
-    Object src/to70_overlay74_thumb_residual_02230a14_02230a4c_extra732_run01.o
-    Object src/overlay74_thumb_c_02230a74_02230a7c.o
-    Object src/overlay74_wireless_update.o
-    Object src/overlay74_thumb_c_02230d18_02230d18.o
-    Object src/to70_overlay74_thumb_residual_02230d28_02230d28_extra918_run01.o
-    Object src/overlay74_thumb_c_02230d6c_02230d6c.o
-    Object src/to70_overlay74_thumb_residual_02230d80_02230e44_extra365_run01.o
-    Object src/overlay74_thumb_c_02230e7c_02230e7c.o
-    Object src/to57_overlay74_link_status.o
-    Object src/to41_overlay_74_thumb_run1.o
-    Object src/to80_extra1796_run01.o
-    Object src/to41_overlay_74_thumb_run2.o
-    Object src/to70_overlay_74_thumb_to41_residual_3_extra839_run01.o
-    Object src/to41_overlay_74_thumb_run3.o
-    Object src/op90_op90_to90_extra2094_residual_1_residual_1_r01.o
-    Object src/op90_to90_extra2094_residual_1_r01.o
-    Object src/to90_extra2094_run01.o
-    Object src/op90_to90_extra2094_residual_2_r01.o
-    Object src/to57_overlay_74_exact_001.o
-    Object src/to58_w14b_ov74_002.o
-    Object src/to57_overlay_74_exact_003.o
-    Object src/to58_w14b_ov74_004.o
-    Object src/to57_overlay_74_exact_005.o
-    Object src/to58_w14b_ov74_006.o
-    Object src/to57_overlay_74_exact_007.o
-    Object src/to58_w14b_ov74_008.o
-    Object src/to57_overlay_74_exact_009.o
+    Object src/application/main_menu/ranger_link.o
     Object src/to70_to58_overlay74_010_residual_00_extra154_run01.o
     Object src/to80_extra1357_run01.o
     Object src/to58_overlay74_010_run_00.o

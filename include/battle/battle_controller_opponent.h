@@ -24,6 +24,6 @@ int TrainerAI_GetMoveType(BattleSystem *battleSystem, BattleContext *ctx, Pokemo
 int TrainerAI_PostKOSwitchIn(BattleSystem *battleSystem, int battler);
 
 // Starts the pokepic animation and plays the cry of a battler that appeared (its own file, after the data asm).
-void ov12_02261F38(BattleSystem *battleSystem, int battlerId, int battlerType, Pokepic *pokepic, u32 *narc, int species, int form, int facing, int cryParam);
+void BattleControllerOpponent_PlayMonAnimAndCry(BattleSystem *battleSystem, int battlerId, int battlerType, Pokepic *pokepic, u32 *narc, int species, int form, int facing, int cryParam);
 
 #endif

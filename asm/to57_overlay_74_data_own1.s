@@ -60,41 +60,41 @@
 	.extern LockCapsuleCard_Init
 	.extern LockCapsuleCard_Main
 	.extern LockCapsuleCard_Exit
-	.extern ov74_02230018
-	.extern ov74_02230030
-	.extern ov74_02230070
-	.extern ov74_022300A8
-	.extern ov74_02230110
-	.extern ov74_02230138
-	.extern ov74_02230404
-	.extern ov74_02230520
-	.extern ov74_02230590
-	.extern ov74_022305E4
-	.extern ov74_022306C8
-	.extern ov74_022308E0
-	.extern ov74_02230964
-	.extern ov74_02230988
-	.extern ov74_022309AC
-	.extern ov74_022309F0
-	.extern ov74_02231054
-	.extern ov74_022310AC
-	.extern ov74_022310C4
-	.extern ov74_022310D0
-	.extern ov74_022310DC
-	.extern ov74_022310E8
-	.extern ov74_022310F4
-	.extern ov74_02231100
-	.extern ov74_02231154
-	.extern ov74_0223115C
-	.extern ov74_022311D8
-	.extern ov74_022311DC
-	.extern ov74_022311E8
-	.extern ov74_02231260
+	.extern RangerLink_SetMPDataCallback
+	.extern RangerLink_EnableCallback
+	.extern RangerLink_DisableCallback
+	.extern RangerLink_MeasureChannelCallback
+	.extern RangerLink_SetParentParameterCallback
+	.extern RangerLink_StartParentCallback
+	.extern RangerLink_ScanCallback
+	.extern RangerLink_ScanSelectedCallback
+	.extern RangerLink_EndScanCallback
+	.extern RangerLink_StartConnectCallback
+	.extern RangerLink_StartMPCallback
+	.extern RangerLink_PortCallback
+	.extern RangerLink_PowerOnCallback
+	.extern RangerLink_PowerOffCallback
+	.extern RangerLink_ResetCallback
+	.extern RangerLink_EndCallback
+	.extern RangerLink_GetParentParam
+	.extern RangerLink_GetPort
+	.extern RangerLink_GetScanParam
+	.extern RangerLink_GetSendSize
+	.extern RangerLink_GetRecvSize
+	.extern RangerLink_GetSendBuffer
+	.extern RangerLink_GetRecvBuffer
+	.extern RangerLink_GetBssDesc
+	.extern RangerLink_GetFoundParents
+	.extern RangerLink_GetChildren
+	.extern RangerLink_GetGameInfoLength
+	.extern RangerLink_GetGameInfo
+	.extern RangerLink_GetSsid
+	.extern RangerLink_GetPacketHeaderSize
 	.public sMysteryGiftCommWork
 	.public ov74_0223D0A8
 	.public ov74_0223D0BC
 	.public ov74_0223D0C0
-	.public ov74_0223D0C4
+	.public gRangerLinkWork
 	.public ov74_0223D338
 	.public ov74_0223D33C
 	.public ov74_0223D34C
@@ -113,8 +113,8 @@ ov74_0223D0BC: ; 0x0223D0BC
 ov74_0223D0C0: ; 0x0223D0C0
 	.space 0x4
 
-	.public ov74_0223D0C4
-ov74_0223D0C4: ; 0x0223D0C4
+	.public gRangerLinkWork
+gRangerLinkWork: ; 0x0223D0C4
 	.space 0x274
 
 ov74_0223D338: ; 0x0223D338

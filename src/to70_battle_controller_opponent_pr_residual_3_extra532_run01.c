@@ -1,4 +1,0 @@
-#pragma force_active on
-#include "global.h"
-extern int BattleSystem_AreBattleAnimationsOn(void*);extern void Pokepic_StartAnim(void*,int);extern void *ov12_0223B750(void*);extern void sub_0207294C(void*,void*,void*,u16,int,int,int);extern void sub_020729A4(void*,u8*,u16,u16);extern void *BattleSystem_GetChatotVoice(void*,int);extern void sub_0207204C(void*,int,u16,int,int,int,int,int,u8);void ov12_02261F38(void*,int,int,void*,void*,int,int,int,int);
-void ov12_02261F38(void*sys,int battler,int third,void*pic,void*arg,int species,int extra,int side,int last){u8 anim=0;int pan;if(BattleSystem_AreBattleAnimationsOn(sys)==1){Pokepic_StartAnim(pic,1);sub_0207294C(arg,ov12_0223B750(sys),pic,(u16)species,side,0,battler);sub_020729A4(arg,&anim,(u16)species,(u16)third);}if(side==2)pan=117;else pan=-117;if(anim==0)anim=8;sub_0207204C(BattleSystem_GetChatotVoice(sys,battler),last,(u16)species,extra,pan,127,0,5,anim);}

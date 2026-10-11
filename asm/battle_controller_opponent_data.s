@@ -281,7 +281,7 @@
 	.public ov12_02261EB8
 	.public ov12_02261ED4
 	.public BattleControllerOpponent_GetVersionTrainerClass
-	.public ov12_02261F38
+	.public BattleControllerOpponent_PlayMonAnimAndCry
 	.public sOpponentCommandHandlers
 	.public ov12_0226D120
 	.public ov12_0226D128

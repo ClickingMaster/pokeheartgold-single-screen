@@ -3139,7 +3139,7 @@ void Task_PokemonEncounter(SysTask *task, void *data) {
             Pokepic_SetAttr(work->pokepic, POKEPIC_SHADOW_YADJ_REQ, 0);
             Pokepic_SetAttr(work->pokepic, POKEPIC_SHADOW_AFFINE, 0);
             Pokepic_SetAttr(work->pokepic, POKEPIC_X, work->target);
-            ov12_02261F38(work->battleSystem, work->battlerId, work->battlerType, work->pokepic, work->opponentData->unk1A4, work->species, work->form, work->facing, work->unk_18);
+            BattleControllerOpponent_PlayMonAnimAndCry(work->battleSystem, work->battlerId, work->battlerType, work->pokepic, work->opponentData->unk1A4, work->species, work->form, work->facing, work->unk_18);
             if (work->battlerType == BATTLER_TYPE_SOLO_ENEMY || work->battlerType == BATTLER_TYPE_ENEMY_SIDE_SLOT_1) {
                 ManagedSprite_SetPositionXY(work->terrain->unk0, 192, 88);
             }
@@ -3172,7 +3172,7 @@ void Task_PokemonEncounter(SysTask *task, void *data) {
                 break;
             }
             Pokepic_SetAttr(work->pokepic, POKEPIC_X, targetX);
-            ov12_02261F38(work->battleSystem, work->battlerId, work->battlerType, work->pokepic, work->opponentData->unk1A4, work->species, work->form, work->facing, work->unk_18);
+            BattleControllerOpponent_PlayMonAnimAndCry(work->battleSystem, work->battlerId, work->battlerType, work->pokepic, work->opponentData->unk1A4, work->species, work->form, work->facing, work->unk_18);
             if (work->battlerType == BATTLER_TYPE_SOLO_PLAYER || work->battlerType == BATTLER_TYPE_PLAYER_SIDE_SLOT_1) {
                 ManagedSprite_SetPositionXY(work->terrain->unk0, 64, 136);
             }
@@ -3238,7 +3238,7 @@ void Task_GiratinaEncounter(SysTask *task, void *data) {
         Pokepic_SetAttr(work->pokepic, POKEPIC_SHADOW_YADJ_REQ, 0);
         Pokepic_SetAttr(work->pokepic, POKEPIC_SHADOW_AFFINE, 0);
         Pokepic_SetAttr(work->pokepic, POKEPIC_Y, work->target);
-        ov12_02261F38(work->battleSystem, work->battlerId, work->battlerType, work->pokepic, work->opponentData->unk1A4, work->species, work->form, work->facing, work->unk_18);
+        BattleControllerOpponent_PlayMonAnimAndCry(work->battleSystem, work->battlerId, work->battlerType, work->pokepic, work->opponentData->unk1A4, work->species, work->form, work->facing, work->unk_18);
         ManagedSprite_SetPositionXY(work->terrain->unk0, 192, 88);
         Pokepic_StartPaletteFade(work->pokepic, 8, 0, 0, 0);
         work->state++;
@@ -3349,7 +3349,7 @@ void ov12_0225B960(SysTask *task, void *data) {
             if (work->facing == 2) {
                 Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_SHADOW_AFFINE, 0);
             }
-            ov12_02261F38(work->battleSystem, work->battlerId, work->battlerType, work->opponentData->pokepic, work->opponentData->unk1A4, work->species, work->form, work->facing, work->unk_88);
+            BattleControllerOpponent_PlayMonAnimAndCry(work->battleSystem, work->battlerId, work->battlerType, work->opponentData->pokepic, work->opponentData->unk1A4, work->species, work->form, work->facing, work->unk_88);
             Pokepic_StartPaletteFade(work->opponentData->pokepic, 16, 0, 0, sBallColors[work->ball]);
             work->state = 5;
             return;
@@ -3360,7 +3360,7 @@ void ov12_0225B960(SysTask *task, void *data) {
             if (work->facing == 2) {
                 Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_SHADOW_AFFINE, 0);
             }
-            ov12_02261F38(work->battleSystem, work->battlerId, work->battlerType, work->opponentData->pokepic, work->opponentData->unk1A4, work->species, work->form, work->facing, work->unk_88);
+            BattleControllerOpponent_PlayMonAnimAndCry(work->battleSystem, work->battlerId, work->battlerType, work->opponentData->pokepic, work->opponentData->unk1A4, work->species, work->form, work->facing, work->unk_88);
             Pokepic_StartPaletteFade(work->opponentData->pokepic, 16, 0, 1, sBallColors[work->ball]);
             work->state = 5;
             return;
@@ -3474,7 +3474,7 @@ void ov12_0225BE38(SysTask *task, void *data) {
         if (work->facing == 2) {
             Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_SHADOW_AFFINE, 0);
         }
-        ov12_02261F38(work->battleSystem, work->battlerId, work->battlerType, work->opponentData->pokepic, work->opponentData->unk1A4, work->species, work->form, work->facing, work->unk_88);
+        BattleControllerOpponent_PlayMonAnimAndCry(work->battleSystem, work->battlerId, work->battlerType, work->opponentData->pokepic, work->opponentData->unk1A4, work->species, work->form, work->facing, work->unk_88);
         work->state = 5;
         return;
     case 5:
@@ -3587,7 +3587,7 @@ void ov12_0225C18C(SysTask *task, void *data) {
             if (work->facing == 2) {
                 Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_SHADOW_AFFINE, 0);
             }
-            ov12_02261F38(work->battleSystem, work->battlerId, work->battlerType, work->opponentData->pokepic, work->opponentData->unk1A4, work->species, work->form, work->facing, work->unk_88);
+            BattleControllerOpponent_PlayMonAnimAndCry(work->battleSystem, work->battlerId, work->battlerType, work->opponentData->pokepic, work->opponentData->unk1A4, work->species, work->form, work->facing, work->unk_88);
             Pokepic_StartPaletteFade(work->opponentData->pokepic, 16, 0, 0, sBallColors[work->ball]);
             work->state = 5;
         } else if (Pokepic_GetAttr(work->opponentData->pokepic, POKEPIC_AFFINEW) >= 0x100) {
@@ -3596,7 +3596,7 @@ void ov12_0225C18C(SysTask *task, void *data) {
             if (work->facing == 2) {
                 Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_SHADOW_AFFINE, 0);
             }
-            ov12_02261F38(work->battleSystem, work->battlerId, work->battlerType, work->opponentData->pokepic, work->opponentData->unk1A4, work->species, work->form, work->facing, work->unk_88);
+            BattleControllerOpponent_PlayMonAnimAndCry(work->battleSystem, work->battlerId, work->battlerType, work->opponentData->pokepic, work->opponentData->unk1A4, work->species, work->form, work->facing, work->unk_88);
             Pokepic_StartPaletteFade(work->opponentData->pokepic, 16, 0, 1, sBallColors[work->ball]);
             work->state = 5;
         } else {
@@ -3690,7 +3690,7 @@ void ov12_0225C6C8(SysTask *task, void *data) {
         if (work->facing == 2) {
             Pokepic_SetAttr(work->opponentData->pokepic, POKEPIC_SHADOW_AFFINE, 0);
         }
-        ov12_02261F38(work->battleSystem, work->battlerId, work->battlerType, work->opponentData->pokepic, work->opponentData->unk1A4, work->species, work->form, work->facing, work->unk_88);
+        BattleControllerOpponent_PlayMonAnimAndCry(work->battleSystem, work->battlerId, work->battlerType, work->opponentData->pokepic, work->opponentData->unk1A4, work->species, work->form, work->facing, work->unk_88);
         work->state = 4;
         break;
     case 4:
@@ -7295,3 +7295,31 @@ u8 BattleControllerOpponent_GetVersionTrainerClass(BattleSystem *battleSystem, i
     }
     return newTrainerClass;
 }
+
+// Pokepic_StartAnim takes a second argument here; pokepic.h declares it with one.
+#define POKEPIC_START_ANIM(pokepic, arg) ((void (*)(Pokepic *, int))Pokepic_StartAnim)(pokepic, arg)
+
+#pragma force_active on
+
+// Starts the battler's pokepic animation (when battle animations are on) and plays its cry, panned towards its side.
+void BattleControllerOpponent_PlayMonAnimAndCry(BattleSystem *battleSystem, int battlerId, int battlerType, Pokepic *pokepic, u32 *narc, int species, int form, int facing, int cryParam) {
+    u8 cryDelay = 0;
+    int pan;
+
+    if (BattleSystem_AreBattleAnimationsOn(battleSystem) == TRUE) {
+        POKEPIC_START_ANIM(pokepic, 1);
+        sub_0207294C((NARC *)narc, ov12_0223B750(battleSystem), pokepic, species, facing, 0, battlerId);
+        sub_020729A4((NARC *)narc, &cryDelay, species, battlerType);
+    }
+    if (facing == 2) {
+        pan = 117;
+    } else {
+        pan = -117;
+    }
+    if (cryDelay == 0) {
+        cryDelay = 8;
+    }
+    sub_0207204C(BattleSystem_GetChatotVoice(battleSystem, battlerId), cryParam, species, form, pan, 127, 0, HEAP_ID_BATTLE, cryDelay);
+}
+
+#pragma force_active reset

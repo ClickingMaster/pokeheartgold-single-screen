@@ -1,6 +1,0 @@
-#pragma force_active on
-#include "global.h"
-typedef struct {u32 value:8,nibble:4,rest:20;u32 low:16,high:16;} Bits;
-typedef struct {u8 p[0x44];int id;u8 q[8];Bits bits;} Packet;typedef struct {void *first;u8 p[0x34];} Entry;typedef struct {Entry entries[8];u16 flag;volatile u8 counter;} State;typedef struct {u8 p[0x36];u16 length;} Work;
-extern Packet *ov74_02231100(void);extern State *ov74_02231154(void);extern int ov74_0222FE78(void),ov74_0223161C(void),ov74_022311A0(void),ov74_022311AC(void),ov74_022311BC(void),ov74_022311CC(void),ov74_0223026C(Work *,Packet *);extern void ov74_0222FE4C(void),ov74_02231454(State *);int ov74_02230320(Work *);
-int ov74_02230320(Work *w){Packet *p=ov74_02231100();State *s=ov74_02231154();int found,i;Entry *entry;if(ov74_0222FE78())return 1;found=0;i=0;entry=s->entries;for(;i<8;i++,entry++){if(entry->first){found=1;break;}}if(found&&!s->flag){if(!ov74_0223161C())ov74_0222FE4C();return 1;}DC_InvalidateRange(p,192);ov74_02231454(ov74_02231154());if(w->length>=8&&ov74_022311A0()==p->id){Bits *bits=&p->bits;if(ov74_022311AC()==bits->value&&bits->nibble<=ov74_022311BC()&&ov74_022311CC()==bits->high){if(ov74_0223026C(w,p)){s=ov74_02231154();++s->counter;if(s->counter>28&&!ov74_0223161C()){ov74_0222FE4C();return 1;}}else{if(!ov74_0223161C())ov74_0222FE4C();return 1;}}}return 0;}

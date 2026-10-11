@@ -24,29 +24,29 @@
 	.extern TradeSequenceExchange_Main
 	.extern TradeSequenceExchange_SetupScreens
 	.extern TradeSequenceExchange_Slide
-	.extern ov71_0224A0F0
-	.extern ov71_0224A12C
-	.extern ov71_0224A15C
-	.extern ov71_0224A18C
-	.extern ov71_0224A1C4
-	.extern ov71_0224A920
-	.extern ov71_0224A954
-	.extern ov71_0224A98C
-	.extern ov71_0224A9F8
-	.extern ov71_0224AA28
-	.extern ov71_0224AAF8
-	.extern ov71_0224B138
-	.extern ov71_0224B198
-	.extern ov71_0224B1FC
-	.extern ov71_0224B280
-	.extern ov71_0224B450
-	.extern ov71_0224B47C
-	.extern ov71_0224B57C
-	.extern ov71_0224B910
-	.extern ov71_0224B960
-	.extern ov71_0224BA48
-	.extern ov71_0224BA64
-	.extern ov71_0224BAA0
+	.extern TradeSequenceApproach_Init
+	.extern TradeSequenceApproach_Exit
+	.extern TradeSequenceApproach_Main
+	.extern TradeSequenceApproach_SetupScreens
+	.extern TradeSequenceApproach_Run
+	.extern TradeSequenceArrive_Init
+	.extern TradeSequenceArrive_Exit
+	.extern TradeSequenceArrive_Main
+	.extern TradeSequenceArrive_SetupScreens
+	.extern TradeSequenceArrive_LowerAndFade
+	.extern TradeSequenceArrive_ZoomOut
+	.extern TradeSequenceReceive_Init
+	.extern TradeSequenceReceive_Exit
+	.extern TradeSequenceReceive_Main
+	.extern TradeSequenceReceive_SetupScreens
+	.extern TradeSequenceReceive_WaitFadeIn
+	.extern TradeSequenceReceive_ShowMon
+	.extern TradeSequenceReceive_ShowMessages
+	.extern TradeSequenceReceive_StartBrightness
+	.extern TradeSequenceReceive_IsBrightnessDone
+	.extern TradeSequenceReceive_StopBounce
+	.extern TradeSequenceReceive_UpdateSpin
+	.extern TradeSequenceReceive_SetSpin
 	.public TradeSequence_Exit
 	.public TradeSequence_Init
 	.public TradeSequence_Main
@@ -778,68 +778,68 @@
 	.public TradeSequenceExchange_InitBgs
 	.public TradeSequenceExchange_FreeBgs
 	.public TradeSequenceExchange_SetMonPicPositions
-	.public ov71_0224A0F0
-	.public ov71_0224A12C
-	.public ov71_0224A15C
-	.public ov71_0224A18C
-	.public ov71_0224A1C4
-	.public ov71_0224A278
-	.public ov71_0224A3D8
-	.public ov71_0224A3F0
-	.public ov71_0224A500
-	.public ov71_0224A510
-	.public ov71_0224A590
-	.public ov71_0224A5A8
-	.public ov71_0224A5B0
-	.public ov71_0224A5C4
-	.public ov71_0224A684
-	.public ov71_0224A694
-	.public ov71_0224A6D8
-	.public ov71_0224A7D0
-	.public ov71_0224A8A8
-	.public ov71_0224A8B0
-	.public ov71_0224A920
-	.public ov71_0224A954
-	.public ov71_0224A98C
-	.public ov71_0224A9C4
-	.public ov71_0224A9F8
-	.public ov71_0224AA28
-	.public ov71_0224AAF8
-	.public ov71_0224AB7C
-	.public ov71_0224ADB0
-	.public ov71_0224ADE4
-	.public ov71_0224AEF4
-	.public ov71_0224AF08
-	.public ov71_0224AF58
-	.public ov71_0224AFB8
-	.public ov71_0224AFD4
-	.public ov71_0224B028
-	.public ov71_0224B068
-	.public ov71_0224B084
-	.public ov71_0224B0E8
-	.public ov71_0224B11C
-	.public ov71_0224B138
-	.public ov71_0224B198
-	.public ov71_0224B1FC
-	.public ov71_0224B234
-	.public ov71_0224B280
-	.public ov71_0224B450
-	.public ov71_0224B47C
-	.public ov71_0224B57C
-	.public ov71_0224B6F0
-	.public ov71_0224B720
-	.public ov71_0224B7EC
-	.public ov71_0224B848
-	.public ov71_0224B8EC
-	.public ov71_0224B910
-	.public ov71_0224B960
-	.public ov71_0224B970
-	.public ov71_0224B990
-	.public ov71_0224B9CC
-	.public ov71_0224BA48
-	.public ov71_0224BA64
-	.public ov71_0224BAA0
-	.public ov71_0224BABC
+	.public TradeSequenceApproach_Init
+	.public TradeSequenceApproach_Exit
+	.public TradeSequenceApproach_Main
+	.public TradeSequenceApproach_SetupScreens
+	.public TradeSequenceApproach_Run
+	.public TradeSequenceApproach_InitBgs
+	.public TradeSequenceApproach_FreeBgs
+	.public TradeSequenceApproach_Init3D
+	.public TradeSequenceApproach_Free3D
+	.public TradeSequenceApproach_CreateSprite
+	.public TradeSequenceApproach_DeleteSprite
+	.public TradeSequenceApproach_InitFlight
+	.public TradeSequenceApproach_StopFlight
+	.public TradeSequenceApproach_StartFlight
+	.public TradeSequenceApproach_IsFlightDone
+	.public TradeSequenceApproach_SetFlightTargets
+	.public TradeSequenceApproach_UpdateFlight
+	.public TradeSequenceApproach_FlightTask
+	.public TradeSequenceApproach_RequestScreenSwap
+	.public TradeSequenceApproach_VBlankCallback
+	.public TradeSequenceArrive_Init
+	.public TradeSequenceArrive_Exit
+	.public TradeSequenceArrive_Main
+	.public TradeSequenceArrive_Draw
+	.public TradeSequenceArrive_SetupScreens
+	.public TradeSequenceArrive_LowerAndFade
+	.public TradeSequenceArrive_ZoomOut
+	.public TradeSequenceArrive_InitBgs
+	.public TradeSequenceArrive_FreeBgs
+	.public TradeSequenceArrive_Init3D
+	.public TradeSequenceArrive_Free3D
+	.public TradeSequenceArrive_StartScroll
+	.public TradeSequenceArrive_ScrollTask
+	.public TradeSequenceArrive_StopScroll
+	.public TradeSequenceArrive_StartLower
+	.public TradeSequenceArrive_LowerTask
+	.public TradeSequenceArrive_StopLower
+	.public TradeSequenceArrive_StartAlphaFade
+	.public TradeSequenceArrive_AlphaFadeTask
+	.public TradeSequenceArrive_StopAlphaFade
+	.public TradeSequenceReceive_Init
+	.public TradeSequenceReceive_Exit
+	.public TradeSequenceReceive_Main
+	.public TradeSequenceReceive_Draw
+	.public TradeSequenceReceive_SetupScreens
+	.public TradeSequenceReceive_WaitFadeIn
+	.public TradeSequenceReceive_ShowMon
+	.public TradeSequenceReceive_ShowMessages
+	.public TradeSequenceReceive_WaitFramesAndFanfare
+	.public TradeSequenceReceive_Init3D
+	.public TradeSequenceReceive_CreateMonPic
+	.public TradeSequenceReceive_CreateSprites
+	.public TradeSequenceReceive_DeleteSprites
+	.public TradeSequenceReceive_StartBrightness
+	.public TradeSequenceReceive_IsBrightnessDone
+	.public TradeSequenceReceive_StopBrightness
+	.public TradeSequenceReceive_BrightnessTask
+	.public TradeSequenceReceive_StartBounce
+	.public TradeSequenceReceive_StopBounce
+	.public TradeSequenceReceive_UpdateSpin
+	.public TradeSequenceReceive_SetSpin
+	.public TradeSequenceReceive_BounceTask
 	.public sTradeSequenceMonPicSettings
 	.public sTradeSequenceSceneInit
 	.public sTradeSequenceSceneMain
@@ -869,28 +869,28 @@
 	.public sTradeSequenceExchangeBgTemplate_ReceivedMon
 	.public sTradeSequenceExchangeBgTemplate_Background
 	.public sTradeSequenceExchangeGraphicsBanks
-	.public ov71_0224BE7C
-	.public ov71_0224BE84
-	.public ov71_0224BE94
-	.public ov71_0224BEA4
-	.public ov71_0224BEC0
-	.public ov71_0224BEE8
-	.public ov71_0224BEF0
-	.public ov71_0224BEFC
-	.public ov71_0224BF0C
-	.public ov71_0224BF1C
-	.public ov71_0224BF38
-	.public ov71_0224BF54
-	.public ov71_0224BF7C
-	.public ov71_0224BF84
-	.public ov71_0224BF94
-	.public ov71_0224BFA4
-	.public ov71_0224BFC0
-	.public ov71_0224BFDC
+	.public sTradeSequenceApproachStates
+	.public sTradeSequenceApproachGraphicsModes
+	.public sTradeSequenceApproachEdgeColors
+	.public sTradeSequenceApproachBgTemplate
+	.public sTradeSequenceApproachGraphicsBanks
+	.public sTradeSequenceArrivePaletteOffsets
+	.public sTradeSequenceArriveStates
+	.public sTradeSequenceArriveGraphicsModes
+	.public sTradeSequenceArriveEdgeColors
+	.public sTradeSequenceArriveBgTemplate_Layer2
+	.public sTradeSequenceArriveBgTemplate_Layer3
+	.public sTradeSequenceArriveGraphicsBanks
+	.public sTradeSequenceReceiveModelRotation
+	.public sTradeSequenceReceiveStates
+	.public sTradeSequenceReceiveGraphicsModes
+	.public sTradeSequenceReceiveBgTemplate_Text
+	.public sTradeSequenceReceiveBgTemplate_Background
+	.public sTradeSequenceReceiveGraphicsBanks
 	.public sTradeSequenceDeferredFrees
 	.public ov71_0224C0C4
 	.public sTradeSequenceDepartCameraAngle
-	.public ov71_0224C0D0
+	.public sTradeSequenceArriveCameraAngle
 	.public TradeSequence_BoxMonCantFlip
 	.public TradeSequence_StopPulses
 	.public TradeSequence_SetPulseColor
@@ -958,33 +958,33 @@
 	.public TradeSequenceExchange_SetupScreens
 	.public TradeSequenceExchange_FreeBgs
 	.public TradeSequenceExchange_SetMonPicPositions
-	.public ov71_0224A12C
-	.public ov71_0224A15C
-	.public ov71_0224A3D8
-	.public ov71_0224A500
-	.public ov71_0224A590
-	.public ov71_0224A5A8
-	.public ov71_0224A5B0
-	.public ov71_0224A684
-	.public ov71_0224A8A8
-	.public ov71_0224A920
-	.public ov71_0224A954
-	.public ov71_0224A98C
-	.public ov71_0224A9F8
-	.public ov71_0224ADB0
-	.public ov71_0224AEF4
-	.public ov71_0224AFB8
-	.public ov71_0224B068
-	.public ov71_0224B0E8
-	.public ov71_0224B11C
-	.public ov71_0224B450
-	.public ov71_0224B6F0
-	.public ov71_0224B8EC
-	.public ov71_0224B960
-	.public ov71_0224B970
-	.public ov71_0224B990
-	.public ov71_0224BA48
-	.public ov71_0224BAA0
+	.public TradeSequenceApproach_Exit
+	.public TradeSequenceApproach_Main
+	.public TradeSequenceApproach_FreeBgs
+	.public TradeSequenceApproach_Free3D
+	.public TradeSequenceApproach_DeleteSprite
+	.public TradeSequenceApproach_InitFlight
+	.public TradeSequenceApproach_StopFlight
+	.public TradeSequenceApproach_IsFlightDone
+	.public TradeSequenceApproach_RequestScreenSwap
+	.public TradeSequenceArrive_Init
+	.public TradeSequenceArrive_Exit
+	.public TradeSequenceArrive_Main
+	.public TradeSequenceArrive_SetupScreens
+	.public TradeSequenceArrive_FreeBgs
+	.public TradeSequenceArrive_Free3D
+	.public TradeSequenceArrive_StopScroll
+	.public TradeSequenceArrive_StopLower
+	.public TradeSequenceArrive_AlphaFadeTask
+	.public TradeSequenceArrive_StopAlphaFade
+	.public TradeSequenceReceive_WaitFadeIn
+	.public TradeSequenceReceive_WaitFramesAndFanfare
+	.public TradeSequenceReceive_DeleteSprites
+	.public TradeSequenceReceive_IsBrightnessDone
+	.public TradeSequenceReceive_StopBrightness
+	.public TradeSequenceReceive_BrightnessTask
+	.public TradeSequenceReceive_StopBounce
+	.public TradeSequenceReceive_SetSpin
 	.include "asm/macros.inc"
 	.include "overlay_71.inc"
 	.include "global.inc"
@@ -1022,17 +1022,17 @@ sTradeSequenceSceneModes: ; 0x0224BBF8
 	.word TradeSequenceExchange_Main
 	.word TradeSequenceExchange_Exit
 	.byte 0x01, 0x00, 0x00, 0x00
-	.word ov71_0224A0F0
-	.word ov71_0224A15C
-	.word ov71_0224A12C
+	.word TradeSequenceApproach_Init
+	.word TradeSequenceApproach_Main
+	.word TradeSequenceApproach_Exit
 	.byte 0x05, 0x00, 0x00, 0x00
-	.word ov71_0224A920
-	.word ov71_0224A98C
-	.word ov71_0224A954
+	.word TradeSequenceArrive_Init
+	.word TradeSequenceArrive_Main
+	.word TradeSequenceArrive_Exit
 	.byte 0x05, 0x00, 0x00, 0x00
-	.word ov71_0224B138
-	.word ov71_0224B1FC
-	.word ov71_0224B198
+	.word TradeSequenceReceive_Init
+	.word TradeSequenceReceive_Main
+	.word TradeSequenceReceive_Exit
 	.byte 0x05, 0x00, 0x00, 0x00
 
 sTradeSequenceSendModelRotation: ; 0x0224BC5C
@@ -1142,81 +1142,81 @@ sTradeSequenceExchangeGraphicsBanks: ; 0x0224BE54
 	.byte 0x80, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00
 
-ov71_0224BE7C: ; 0x0224BE7C
-	.word ov71_0224A18C
-	.word ov71_0224A1C4
+sTradeSequenceApproachStates: ; 0x0224BE7C
+	.word TradeSequenceApproach_SetupScreens
+	.word TradeSequenceApproach_Run
 
-ov71_0224BE84: ; 0x0224BE84
+sTradeSequenceApproachGraphicsModes: ; 0x0224BE84
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00
 
-ov71_0224BE94: ; 0x0224BE94
+sTradeSequenceApproachEdgeColors: ; 0x0224BE94
 	.byte 0x84, 0x10, 0x84, 0x10, 0x84, 0x10, 0x84, 0x10, 0x84, 0x10, 0x84, 0x10
 	.byte 0x84, 0x10, 0x84, 0x10
 
-ov71_0224BEA4: ; 0x0224BEA4
+sTradeSequenceApproachBgTemplate: ; 0x0224BEA4
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x1E, 0x00, 0x00, 0x03, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov71_0224BEC0: ; 0x0224BEC0
+sTradeSequenceApproachGraphicsBanks: ; 0x0224BEC0
 	.byte 0x02, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00
 	.byte 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00
 
-ov71_0224BEE8: ; 0x0224BEE8
+sTradeSequenceArrivePaletteOffsets: ; 0x0224BEE8
 	.byte 0x20, 0x00, 0x60, 0x00, 0xA0, 0x00, 0xE0, 0x00
 
-ov71_0224BEF0: ; 0x0224BEF0
-	.word ov71_0224A9F8
-	.word ov71_0224AA28
-	.word ov71_0224AAF8
+sTradeSequenceArriveStates: ; 0x0224BEF0
+	.word TradeSequenceArrive_SetupScreens
+	.word TradeSequenceArrive_LowerAndFade
+	.word TradeSequenceArrive_ZoomOut
 
-ov71_0224BEFC: ; 0x0224BEFC
+sTradeSequenceArriveGraphicsModes: ; 0x0224BEFC
 	.byte 0x01, 0x00, 0x00, 0x00
 	.byte 0x04, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 
-ov71_0224BF0C: ; 0x0224BF0C
+sTradeSequenceArriveEdgeColors: ; 0x0224BF0C
 	.byte 0x84, 0x10, 0x84, 0x10
 	.byte 0x84, 0x10, 0x84, 0x10, 0x84, 0x10, 0x84, 0x10, 0x84, 0x10, 0x84, 0x10
 
-ov71_0224BF1C: ; 0x0224BF1C
+sTradeSequenceArriveBgTemplate_Layer2: ; 0x0224BF1C
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x01, 0x16, 0x00
 	.byte 0x00, 0x02, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov71_0224BF38: ; 0x0224BF38
+sTradeSequenceArriveBgTemplate_Layer3: ; 0x0224BF38
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x1E, 0x04, 0x00, 0x03, 0x01, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov71_0224BF54: ; 0x0224BF54
+sTradeSequenceArriveGraphicsBanks: ; 0x0224BF54
 	.byte 0x02, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00
 	.byte 0x80, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00
 
-ov71_0224BF7C: ; 0x0224BF7C
+sTradeSequenceReceiveModelRotation: ; 0x0224BF7C
 	.byte 0x00, 0x00, 0x00, 0xF0
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov71_0224BF84: ; 0x0224BF84
-	.word ov71_0224B280
-	.word ov71_0224B450
-	.word ov71_0224B47C
-	.word ov71_0224B57C
+sTradeSequenceReceiveStates: ; 0x0224BF84
+	.word TradeSequenceReceive_SetupScreens
+	.word TradeSequenceReceive_WaitFadeIn
+	.word TradeSequenceReceive_ShowMon
+	.word TradeSequenceReceive_ShowMessages
 
-ov71_0224BF94: ; 0x0224BF94
+sTradeSequenceReceiveGraphicsModes: ; 0x0224BF94
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00
 
-ov71_0224BFA4: ; 0x0224BFA4
+sTradeSequenceReceiveBgTemplate_Text: ; 0x0224BFA4
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov71_0224BFC0: ; 0x0224BFC0
+sTradeSequenceReceiveBgTemplate_Background: ; 0x0224BFC0
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x1E, 0x01, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov71_0224BFDC: ; 0x0224BFDC
+sTradeSequenceReceiveGraphicsBanks: ; 0x0224BFDC
 	.byte 0x02, 0x00, 0x00, 0x00
 	.byte 0x40, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
