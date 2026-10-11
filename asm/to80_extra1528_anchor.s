@@ -749,9 +749,9 @@ ov45_02254B44: ; 0x02254B44
 	.word FS_OVERLAY_ID(OVY_47)
 
 ov45_02254B54: ; 0x02254B54
-	.word ov91_0225C540
-	.word ov91_0225C58C
-	.word ov91_0225C9EC
+	.word SwalotPlop_Init
+	.word SwalotPlop_Main
+	.word SwalotPlop_Exit
 	.word FS_OVERLAY_ID(OVY_91)
 
 ov45_02254B64: ; 0x02254B64
@@ -779,9 +779,9 @@ ov45_02254B94: ; 0x02254B94
 	.word FS_OVERLAY_ID(OVY_49)
 
 ov45_02254BA4: ; 0x02254BA4
-	.word ov92_0225CAB4
-	.word ov92_0225CDF4
-	.word ov92_0225D36C
+	.word MimeJrTop_Init
+	.word MimeJrTop_Main
+	.word MimeJrTop_Exit
 	.word FS_OVERLAY_ID(OVY_92)
 
 ov45_02254BB4: ; 0x02254BB4

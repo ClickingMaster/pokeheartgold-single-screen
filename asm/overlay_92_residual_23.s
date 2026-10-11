@@ -900,138 +900,138 @@
 	.public _0226383C
 	.public _02264020
 	.public _02264160
-	.public ov92_0225C540
-	.public ov92_0225C558
-	.public ov92_0225C564
-	.public ov92_0225C578
+	.public MimeJrTop_ReceiveStart
+	.public MimeJrTop_ReceiveFinish
+	.public MimeJrTop_ReceivePlayerState
+	.public MimeJrTop_ReceiveFinalScore
 	.public ov92_0225C584
-	.public ov92_0225C588
-	.public ov92_0225C58C
-	.public ov92_0225C590
-	.public ov92_0225C594
+	.public MimeJrTop_GetFinishSize
+	.public MimeJrTop_GetStartSize
+	.public MimeJrTop_GetPlayerStateSize
+	.public MimeJrTop_GetFinalScoreSize
 	.public ov92_0225C598
-	.public ov92_0225C59C
-	.public ov92_0225C5A4
-	.public ov92_0225C5A8
-	.public ov92_0225C5C4
-	.public ov92_0225CAB4
-	.public ov92_0225CB2C
-	.public ov92_0225CC6C
-	.public ov92_0225CDF4
-	.public ov92_0225D1FC
-	.public ov92_0225D344
-	.public ov92_0225D36C
-	.public ov92_0225D3CC
-	.public ov92_0225D49C
-	.public ov92_0225D594
-	.public ov92_0225D7CC
-	.public ov92_0225D868
-	.public ov92_0225D88C
-	.public ov92_0225D894
-	.public ov92_0225D8C4
-	.public ov92_0225D8D4
-	.public ov92_0225D8DC
-	.public ov92_0225D8E4
-	.public ov92_0225D970
-	.public ov92_0225D9A8
-	.public ov92_0225D9B4
-	.public ov92_0225DA2C
-	.public ov92_0225DA40
-	.public ov92_0225DD48
-	.public ov92_0225DD88
-	.public ov92_0225DDD8
-	.public ov92_0225DE08
-	.public ov92_0225DE70
-	.public ov92_0225DEF0
-	.public ov92_0225DF0C
-	.public ov92_0225DF28
-	.public ov92_0225DF40
-	.public ov92_0225DF58
-	.public ov92_0225DFA4
-	.public ov92_0225E008
-	.public ov92_0225E03C
-	.public ov92_0225E070
-	.public ov92_0225E100
-	.public ov92_0225E130
-	.public ov92_0225E188
-	.public ov92_0225E1A8
-	.public ov92_0225E360
-	.public ov92_0225E3C4
-	.public ov92_0225E6A4
-	.public ov92_0225E7E4
-	.public ov92_0225E820
-	.public ov92_0225E918
-	.public ov92_0225E93C
-	.public ov92_0225E9A8
-	.public ov92_0225E9B4
-	.public ov92_0225EB40
-	.public ov92_0225EB68
-	.public ov92_0225EB70
-	.public ov92_0225EB88
-	.public ov92_0225EBE0
-	.public ov92_0225ED60
-	.public ov92_0225ED68
-	.public ov92_0225ED80
-	.public ov92_0225EDB4
-	.public ov92_0225EE04
-	.public ov92_0225EE60
-	.public ov92_0225EEBC
-	.public ov92_0225EF4C
-	.public ov92_0225F254
-	.public ov92_0225F338
-	.public ov92_0225F530
-	.public ov92_0225F878
-	.public ov92_0225F8B0
-	.public ov92_0225F8EC
-	.public ov92_0225F968
-	.public ov92_0225F9C4
-	.public ov92_0225FAB8
-	.public ov92_0225FC2C
-	.public ov92_0225FC9C
-	.public ov92_0225FEB4
-	.public ov92_0225FEE4
-	.public ov92_0225FF1C
-	.public ov92_02260428
-	.public ov92_02260628
-	.public ov92_0226077C
-	.public ov92_02260798
-	.public ov92_022607F8
-	.public ov92_02260860
-	.public ov92_02260870
-	.public ov92_022608B8
-	.public ov92_02260A38
-	.public ov92_02260AE0
-	.public ov92_022610E8
-	.public ov92_02261118
-	.public ov92_02261208
-	.public ov92_0226135C
-	.public ov92_022613F0
-	.public ov92_02261448
-	.public ov92_0226156C
-	.public ov92_022616D8
-	.public ov92_02261850
-	.public ov92_022619C4
-	.public ov92_02261A18
-	.public ov92_02261B18
-	.public ov92_02261BA0
-	.public ov92_02261E80
-	.public ov92_02261E88
-	.public ov92_02261F60
-	.public ov92_02262018
-	.public ov92_022620D0
-	.public ov92_022621A4
-	.public ov92_02262548
-	.public ov92_022628F0
-	.public ov92_02262CEC
-	.public ov92_022630E8
-	.public ov92_022630F8
-	.public ov92_02263108
-	.public ov92_02263218
-	.public ov92_0226325C
-	.public ov92_022632B4
-	.public ov92_022632E8
-	.public ov92_022634F8
-	.public ov92_02263824
+	.public MimeJrTop_GetCommandTable
+	.public MimeJrTop_GetCommandCount
+	.public MimeJrTop_RegisterCommands
+	.public MimeJrTop_InitGame
+	.public MimeJrTop_Init
+	.public MimeJrTopGame_RubDemo
+	.public MimeJrTopGame_RunDemo
+	.public MimeJrTop_Main
+	.public MimeJrTop_FreeGame
+	.public MimeJrTop_ResetRound
+	.public MimeJrTop_Exit
+	.public MimeJrTop_InitGraphics
+	.public MimeJrTop_FreeGraphics
+	.public MimeJrTop_InitBgs
+	.public MimeJrTop_InitSprites
+	.public MimeJrTop_StartFade
+	.public MimeJrTop_SetStateIf
+	.public MimeJrTop_VBlank
+	.public MimeJrTop_IsParent
+	.public MimeJrTop_SetStartReceived
+	.public MimeJrTop_SetFinishReceived
+	.public MimeJrTop_HandleConnectionLost
+	.public MimeJrTopModel_Draw
+	.public MimeJrTopModel_Load
+	.public MimeJrTopModel_Init
+	.public MimeJrTopModel_Free
+	.public MimeJrTop_DrawScene
+	.public MimeJrTopGame_SetMimeJrAnimation
+	.public MimeJrTop_InitCamera
+	.public MimeJrTop_InitSpriteTemplate
+	.public MimeJrTopGame_CreateStars
+	.public MimeJrTopGame_CreatePopups
+	.public MimeJrTopGame_FreePopups
+	.public MimeJrTopGame_SetStarsVisible
+	.public MimeJrTopGame_UpdateStars
+	.public MimeJrTopGame_FreeStars
+	.public MimeJrTopGame_SetRivalAnim
+	.public MimeJrTopGame_GetRivalAnim
+	.public MimeJrTopGame_UpdateRivalSprites
+	.public MimeJrTopGame_FreeRivalSprites
+	.public MimeJrTopGame_ShowInstructions
+	.public MimeJrTopGame_HideInstructions
+	.public MimeJrTop_LoadPlayerPalettes
+	.public MimeJrTop_GetCenteredX
+	.public MimeJrTopGame_ShowRivalNames
+	.public MimeJrTopGame_HideRivalNames
+	.public MimeJrTop_LoadSpriteResources
+	.public MimeJrTopGame_CreateRivalSprites
+	.public MimeJrTopGame_NewSpark
+	.public MimeJrTopGame_CreateDancerSprites
+	.public MimeJrTopGame_FreeDancerSprites
+	.public MimeJrTopGame_CreateDemoHand
+	.public MimeJrTopGame_FreeDemoHand
+	.public MimeJrTop_LoadBgGraphics
+	.public MimeJrTopClock_New
+	.public MimeJrTopClock_Free
+	.public MimeJrTopClock_Tick
+	.public MimeJrTopGame_New
+	.public MimeJrTopGame_ResetBalance
+	.public MimeJrTopGame_Free
+	.public MimeJrTopGame_HasFallen
+	.public MimeJrTopGame_UpdateMimeJrAnimation
+	.public MimeJrTopGame_StartRivalFall
+	.public MimeJrTopGame_StartRivalTier
+	.public MimeJrTopGame_StartTierModels
+	.public MimeJrTopGame_StartFall
+	.public MimeJrTopFall_Task
+	.public MimeJrTopRivalFall_Task
+	.public MimeJrTopRivalTier_Task
+	.public MimeJrTopTierModels_Task
+	.public MimeJrTopGame_AddTierScore
+	.public MimeJrTopGame_AddTierBonus
+	.public MimeJrTopGame_UpdateTier
+	.public MimeJrTop_GetTier
+	.public MimeJrTopGame_UpdateRivals
+	.public MimeJrTopGame_UpdateLocalPlayer
+	.public MimeJrTopGame_Update
+	.public MimeJrTopGame_HandleTouch
+	.public MimeJrTopGame_ResetMotion
+	.public MimeJrTopGame_UpdateLevel
+	.public MimeJrTopGame_UpdateWobble
+	.public MimeJrTopModel_Turn
+	.public MimeJrTopModel_ContinueSpin
+	.public MimeJrTop_GetPlayerIndex
+	.public MimeJrTopTween_InitAccel
+	.public MimeJrTopTween_UpdateAccel
+	.public MimeJrTopTween_Init
+	.public MimeJrTopTween_Update
+	.public MimeJrTopBurst_Task
+	.public MimeJrTopGame_StartBurst
+	.public MimeJrTopStars_Task
+	.public MimeJrTopGame_StartStars
+	.public MimeJrTopStage_UpdateFlash
+	.public MimeJrTopStage_UpdatePopups
+	.public MimeJrTopStage_UpdateAudience
+	.public MimeJrTopStage_UpdateStars
+	.public MimeJrTopStage_Task
+	.public MimeJrTopGame_StartStage
+	.public MimeJrTopDance_SlideIn
+	.public MimeJrTopDance_SlideOut
+	.public MimeJrTop_GetDanceStepFrames
+	.public MimeJrTopDance_Task
+	.public MimeJrTopGame_StartDance
+	.public MimeJrTopDance_Routine1
+	.public MimeJrTopDancer_Reset
+	.public MimeJrTopDancer_Slide
+	.public MimeJrTopDancer_EnterLow
+	.public MimeJrTopDancer_EnterHigh
+	.public MimeJrTopDancer_Circle
+	.public MimeJrTopDance_Routine2
+	.public MimeJrTopDance_Routine3
+	.public MimeJrTopDance_Routine4
+	.public MimeJrTopDance_Routine5
+	.public MimeJrTop_QuatIdentity
+	.public MimeJrTop_QuatCopy
+	.public MimeJrTop_QuatMul
+	.public MimeJrTop_QuatLengthSq
+	.public MimeJrTop_QuatLength
+	.public MimeJrTop_QuatDivide
+	.public MimeJrTop_QuatToMatrix
+	.public MimeJrTop_FloatMatrixToFx44
+	.public MimeJrTop_FloatMatrixToFx43
 	.public ov92_02263878
 	.public ov92_02263884
 	.public ov92_02263890
@@ -1080,59 +1080,59 @@
 	.include "global.inc"
 
 	.text
-	.public ov92_0225C558
-	.public ov92_0225C564
-	.public ov92_0225C578
+	.public MimeJrTop_ReceiveFinish
+	.public MimeJrTop_ReceivePlayerState
+	.public MimeJrTop_ReceiveFinalScore
 	.public ov92_0225C584
-	.public ov92_0225C588
-	.public ov92_0225C58C
-	.public ov92_0225C590
-	.public ov92_0225C594
+	.public MimeJrTop_GetFinishSize
+	.public MimeJrTop_GetStartSize
+	.public MimeJrTop_GetPlayerStateSize
+	.public MimeJrTop_GetFinalScoreSize
 	.public ov92_0225C598
-	.public ov92_0225C59C
-	.public ov92_0225C5A4
-	.public ov92_0225D344
-	.public ov92_0225D868
-	.public ov92_0225D88C
-	.public ov92_0225D894
-	.public ov92_0225D8C4
-	.public ov92_0225D8D4
-	.public ov92_0225D8DC
-	.public ov92_0225D970
-	.public ov92_0225D9A8
-	.public ov92_0225DA2C
-	.public ov92_0225DDD8
-	.public ov92_0225DEF0
-	.public ov92_0225DF0C
-	.public ov92_0225DF28
-	.public ov92_0225DF40
-	.public ov92_0225E100
-	.public ov92_0225E188
-	.public ov92_0225E918
-	.public ov92_0225E9A8
-	.public ov92_0225EB68
-	.public ov92_0225EB70
-	.public ov92_0225ED60
-	.public ov92_0225ED68
-	.public ov92_0225ED80
-	.public ov92_0225FEB4
-	.public ov92_0225FEE4
-	.public ov92_0226077C
-	.public ov92_02260860
-	.public ov92_022610E8
-	.public ov92_02261E80
-	.public ov92_022630E8
-	.public ov92_022630F8
-	.public ov92_02263218
-	.public ov92_022632B4
-	.public ov92_02263824
+	.public MimeJrTop_GetCommandTable
+	.public MimeJrTop_GetCommandCount
+	.public MimeJrTop_ResetRound
+	.public MimeJrTop_StartFade
+	.public MimeJrTop_SetStateIf
+	.public MimeJrTop_VBlank
+	.public MimeJrTop_IsParent
+	.public MimeJrTop_SetStartReceived
+	.public MimeJrTop_SetFinishReceived
+	.public MimeJrTopModel_Draw
+	.public MimeJrTopModel_Load
+	.public MimeJrTopModel_Free
+	.public MimeJrTop_InitSpriteTemplate
+	.public MimeJrTopGame_FreePopups
+	.public MimeJrTopGame_SetStarsVisible
+	.public MimeJrTopGame_UpdateStars
+	.public MimeJrTopGame_FreeStars
+	.public MimeJrTopGame_HideInstructions
+	.public MimeJrTop_GetCenteredX
+	.public MimeJrTopGame_FreeDancerSprites
+	.public MimeJrTopGame_FreeDemoHand
+	.public MimeJrTopClock_Free
+	.public MimeJrTopClock_Tick
+	.public MimeJrTopGame_Free
+	.public MimeJrTopGame_HasFallen
+	.public MimeJrTopGame_UpdateMimeJrAnimation
+	.public MimeJrTopGame_ResetMotion
+	.public MimeJrTopGame_UpdateLevel
+	.public MimeJrTop_GetPlayerIndex
+	.public MimeJrTopTween_Init
+	.public MimeJrTopGame_StartStars
+	.public MimeJrTopDancer_Reset
+	.public MimeJrTop_QuatIdentity
+	.public MimeJrTop_QuatCopy
+	.public MimeJrTop_QuatLengthSq
+	.public MimeJrTop_QuatDivide
+	.public MimeJrTop_FloatMatrixToFx43
 	.rodata
 
 _0226383C:
-	.word ov92_0225C540, ov92_0225C58C, 0
-	.word ov92_0225C558, ov92_0225C588, 0
-	.word ov92_0225C564, ov92_0225C590, 0
-	.word ov92_0225C578, ov92_0225C594, 0
+	.word MimeJrTop_ReceiveStart, MimeJrTop_GetStartSize, 0
+	.word MimeJrTop_ReceiveFinish, MimeJrTop_GetFinishSize, 0
+	.word MimeJrTop_ReceivePlayerState, MimeJrTop_GetPlayerStateSize, 0
+	.word MimeJrTop_ReceiveFinalScore, MimeJrTop_GetFinalScoreSize, 0
 	.word ov92_0225C584, ov92_0225C598, 0
 
 ov92_02263878: ; 0x02263878
@@ -1361,35 +1361,35 @@ ov92_02263EC4: ; 0x02263EC4
 	.byte 0x00, 0x00, 0x00, 0x00, 0x96, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.word ov92_02261BA0
+	.word MimeJrTopDance_Routine1
 	.byte 0x96, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
-	.word ov92_022621A4
+	.word MimeJrTopDance_Routine2
 	.byte 0x96, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.word ov92_022621A4
+	.word MimeJrTopDance_Routine2
 	.byte 0x96, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
-	.word ov92_02262548
+	.word MimeJrTopDance_Routine3
 	.byte 0x96, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 	.byte 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.word ov92_02262548
+	.word MimeJrTopDance_Routine3
 	.byte 0x96, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
-	.word ov92_022628F0
+	.word MimeJrTopDance_Routine4
 	.byte 0x96, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 	.byte 0x05, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.word ov92_02262CEC
+	.word MimeJrTopDance_Routine5
 	.byte 0x96, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
-	.word ov92_02262CEC
+	.word MimeJrTopDance_Routine5
 
 	.data
 

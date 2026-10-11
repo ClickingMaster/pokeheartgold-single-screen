@@ -739,7 +739,7 @@
   {
    "function": "vct_flush_send_buffer",
    "cpu": "ARM9",
-   "source": "src/op90_to80_extra1474_residual_2_r01.c",
+   "source": "lib/libVCT/src/vct_audio_send.c",
    "kind": "inline-asm",
    "reason": "inlines a clz helper written as inline asm; MWCC 2.0 has no clz intrinsic and never emits clz from C"
   },

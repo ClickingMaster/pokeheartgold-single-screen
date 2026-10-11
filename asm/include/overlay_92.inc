@@ -216,6 +216,6 @@
 .public PlazaGameSign_StartCountdown
 .public PlazaGameSign_StartFinish
 .public PlazaGameSign_IsDone
-.public ov92_0225CAB4
-.public ov92_0225CDF4
-.public ov92_0225D36C
+.public MimeJrTop_Init
+.public MimeJrTop_Main
+.public MimeJrTop_Exit

@@ -226,6 +226,6 @@
 .public PlazaGameSign_StartCountdown
 .public PlazaGameSign_StartFinish
 .public PlazaGameSign_IsDone
-.public ov91_0225C540
-.public ov91_0225C58C
-.public ov91_0225C9EC
+.public SwalotPlop_Init
+.public SwalotPlop_Main
+.public SwalotPlop_Exit

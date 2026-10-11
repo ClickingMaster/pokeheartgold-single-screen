@@ -1,5 +1,0 @@
-#pragma force_active on
-#include "global.h"
-#pragma force_active on
-typedef struct S{u32 fields[13];}S;typedef struct C{u8 pad[8];void*system,*manager;}C;typedef struct W{u8 pad[20];C*ctx;u8 gap[40];void*sprites[36];void*extras[4];}W;extern const u16 ov92_02263B54[4];extern void ov92_0225DDD8(S*,s16,int,int,int,int),ManagedSprite_SetPaletteOverrideOffset(void*,int),ManagedSprite_SetAnim(void*,int),ManagedSprite_TickTwoFrames(void*),ov92_0225DF0C(W*,int,int);extern void*SpriteSystem_NewSprite(void*,void*,S*);void ov92_0225DE08(W*),ov92_0225DE70(W*);
-void ov92_0225DE70(W*w){S s;u16 positions[4];void*system=w->ctx->system;void*manager=w->ctx->manager;int i;s16*pos=(s16*)positions;positions[0]=ov92_02263B54[0];positions[1]=ov92_02263B54[1];positions[2]=ov92_02263B54[2];positions[3]=ov92_02263B54[3];for(i=0;i<4;i++,pos++,w=(W*)((u8*)w+4)){ov92_0225DDD8(&s,*pos,224,1,1,9004);s.fields[11]=0;s.fields[2]=1;w->extras[0]=SpriteSystem_NewSprite(system,manager,&s);ManagedSprite_TickTwoFrames(w->extras[0]);ManagedSprite_SetPaletteOverrideOffset(w->extras[0],1);}}
