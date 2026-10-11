@@ -2,21 +2,21 @@
 #pragma once
 .public SysTask_CreateOnMainQueue
 .public SysTask_Destroy
-.public sub_02014A08
-.public sub_02014A38
-.public sub_02014A4C
-.public sub_02014A60
-.public sub_02014A78
-.public sub_02014A8C
-.public sub_02014AA0
-.public sub_02014AB0
-.public sub_02014AD8
-.public sub_02014B08
-.public sub_02014B9C
-.public sub_02014BD8
-.public sub_02014BF8
-.public sub_02014C08
-.public sub_02014C40
+.public DoubleBuffer_New
+.public DoubleBuffer_Delete
+.public DoubleBuffer_GetCurrent
+.public DoubleBuffer_GetOther
+.public DoubleBuffer_SetEnabled
+.public DoubleBuffer_Swap
+.public HBlankDma_Stop
+.public HBlankDma_Start
+.public ScanlineEffect_New
+.public ScanlineEffect_StartWave
+.public ScanlineEffect_Stop
+.public ScanlineEffect_Delete
+.public ScanlineEffect_GetBuffer
+.public ScanlineEffect_SwapBuffers
+.public ScanlineEffect_RestartDma
 .public Heap_Alloc
 .public Heap_Free
 .public GF_AssertFail
@@ -31,7 +31,7 @@
 .public _s32_div_f
 .public FX_SinCosTable_
 
-	.public sub_02014C60
-	.public sub_02014CBC
-	.public sub_02014D68
-	.public sub_02014D70
+	.public ScanlineEffect_BuildWaveTable
+	.public ScanlineEffect_WaveTask
+	.public ScanlineEffect_StopDma
+	.public ScanlineEffect_StartDma

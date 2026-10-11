@@ -40,21 +40,21 @@ SysTask *ov80_0223B3EC(void *data) {
 void ov80_0223B400(SysTask *task, void *data) {
     Ov80RenderState *state = data;
     if (state->counter >= 2) {
-        sub_02014C08(state->object);
+        ScanlineEffect_SwapBuffers(state->object);
         state->counter = 0;
     }
-    sub_02014C40(state->object);
+    ScanlineEffect_RestartDma(state->object);
     state->counter++;
 }
 
 void ov80_0223B424(Ov80RenderState *state, void *arg) {
-    state->object = sub_02014AD8(arg);
+    state->object = ScanlineEffect_New(arg);
     state->counter = 0;
     state->task = ov80_0223B3EC(state);
 }
 
 void ov80_0223B440(Ov80RenderState *state, u32 a1, u32 a2, u32 a3, u32 a4, s16 a5, u32 a6, u32 a7, u32 a8) {
-    sub_02014B08(state->object, a1, a2, a3, a4, a5, a6, a7, a8);
+    ScanlineEffect_StartWave(state->object, a1, a2, a3, a4, a5, a6, a7, a8);
 }
 
 void ov80_0223B468(SysTask *task, void *data) {
@@ -63,7 +63,7 @@ void ov80_0223B468(SysTask *task, void *data) {
         state->pending = 1;
         state->start(state->arg);
     } else {
-        sub_02014AA0();
+        HBlankDma_Stop();
     }
 }
 
@@ -94,17 +94,17 @@ void ov80_0223B4E0(Ov80TaskState *state) {
     if (state->vblankTask != NULL) {
         SysTask_Destroy(state->vblankTask);
     }
-    sub_02014AA0();
+    HBlankDma_Stop();
 }
 
 void ov80_0223B504(Ov80TaskState *state) {
-    void *obj = sub_02014A60(state->object);
-    sub_02014AA0();
-    sub_02014AB0(obj, state->pixels, 0x20, 1);
+    void *obj = DoubleBuffer_GetOther(state->object);
+    HBlankDma_Stop();
+    HBlankDma_Start(obj, state->pixels, 0x20, 1);
 }
 
 void ov80_0223B528(Ov80TaskState *state) {
-    sub_02014A8C(state->object);
+    DoubleBuffer_Swap(state->object);
     ov80_0223B504(state);
 }
 
@@ -117,7 +117,7 @@ Ov80TaskState *ov80_0223B544(void *pixels, const Ov80Row *rows, u32 heapId) {
     int i;
     memset(state, 0, sizeof(Ov80TaskState));
     GF_ASSERT(state != NULL);
-    state->object = sub_02014A08(heapId, state->rows1, state->rows2);
+    state->object = DoubleBuffer_New(heapId, state->rows1, state->rows2);
     GF_ASSERT(state->object != NULL);
     state->pixels = pixels;
     for (i = 0; i < 192; i++) {
@@ -132,12 +132,12 @@ void ov80_0223B5E8(Ov80TaskState *state) {
     GF_ASSERT(state != NULL);
     ov80_0223B4E0(state);
     if (state->object != NULL) {
-        sub_02014A38(state->object);
+        DoubleBuffer_Delete(state->object);
     }
     Heap_Free(state);
 }
 
 void ov80_0223B60C(Ov80TaskState *state) {
     GF_ASSERT(state != NULL);
-    sub_02014A4C(state->object);
+    DoubleBuffer_GetCurrent(state->object);
 }

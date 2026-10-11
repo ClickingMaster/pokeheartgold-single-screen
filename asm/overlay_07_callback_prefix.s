@@ -15093,7 +15093,7 @@ ov07_02222AF8: ; 0x02222AF8
 	blx r1
 	pop {r3, pc}
 _02222B0C:
-	bl sub_02014AA0
+	bl HBlankDma_Stop
 	pop {r3, pc}
 	.balign 4, 0
 	thumb_func_end ov07_02222AF8
@@ -15167,7 +15167,7 @@ _02222B84:
 	beq _02222B8E
 	bl SysTask_Destroy
 _02222B8E:
-	bl sub_02014AA0
+	bl HBlankDma_Stop
 	pop {r4, pc}
 	thumb_func_end ov07_02222B70
 
@@ -15188,16 +15188,16 @@ ov07_02222BA4: ; 0x02222BA4
 	push {r3, r4, r5, lr}
 	add r4, r0, #0
 	ldr r0, [r4, #0x1c]
-	bl sub_02014A60
+	bl DoubleBuffer_GetOther
 	add r5, r0, #0
-	bl sub_02014AA0
+	bl HBlankDma_Stop
 	mov r1, #0x62
 	lsl r1, r1, #4
 	ldr r1, [r4, r1]
 	add r0, r5, #0
 	mov r2, #4
 	mov r3, #1
-	bl sub_02014AB0
+	bl HBlankDma_Start
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 	thumb_func_end ov07_02222BA4
@@ -15207,7 +15207,7 @@ ov07_02222BC8: ; 0x02222BC8
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, [r4, #0x1c]
-	bl sub_02014A8C
+	bl DoubleBuffer_Swap
 	add r0, r4, #0
 	bl ov07_02222BA4
 	pop {r4, pc}
@@ -15245,7 +15245,7 @@ _02222C06:
 	add r0, r7, #0
 	add r1, #0x20
 	add r2, r4, r2
-	bl sub_02014A08
+	bl DoubleBuffer_New
 	str r0, [r4, #0x1c]
 	cmp r0, #0
 	bne _02222C20
@@ -15291,7 +15291,7 @@ _02222C6A:
 	ldr r0, [r4, #0x1c]
 	cmp r0, #0
 	beq _02222C7A
-	bl sub_02014A38
+	bl DoubleBuffer_Delete
 _02222C7A:
 	add r0, r4, #0
 	bl Heap_Free
@@ -15307,7 +15307,7 @@ ov07_02222C84: ; 0x02222C84
 	bl GF_AssertFail
 _02222C8E:
 	ldr r0, [r4, #0x1c]
-	bl sub_02014A4C
+	bl DoubleBuffer_GetCurrent
 	pop {r4, pc}
 	.balign 4, 0
 	thumb_func_end ov07_02222C84
@@ -15330,20 +15330,20 @@ ov07_02222CAC: ; 0x02222CAC
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, [r4, #0x1c]
-	bl sub_02014C08
+	bl ScanlineEffect_SwapBuffers
 	ldr r0, [r4, #0x1c]
-	bl sub_02014C40
+	bl ScanlineEffect_RestartDma
 	pop {r4, pc}
 	.balign 4, 0
 	thumb_func_end ov07_02222CAC
 
 	thumb_func_start ov07_02222CC0
 ov07_02222CC0: ; 0x02222CC0
-	ldr r3, _02222CC8 ; =sub_02014C40
+	ldr r3, _02222CC8 ; =ScanlineEffect_RestartDma
 	ldr r0, [r0, #0x1c]
 	bx r3
 	nop
-_02222CC8: .word sub_02014C40
+_02222CC8: .word ScanlineEffect_RestartDma
 	thumb_func_end ov07_02222CC0
 
 	thumb_func_start ov07_02222CCC
@@ -15369,7 +15369,7 @@ _02222CE8:
 	bl ov07_02222D90
 	add r6, r0, #0
 	ldr r0, [sp, #0x40]
-	bl sub_02014AD8
+	bl ScanlineEffect_New
 	str r0, [r4, #0x1c]
 	str r5, [sp]
 	add r1, sp, #0x20
@@ -15385,7 +15385,7 @@ _02222CE8:
 	ldr r0, [r4, #0x1c]
 	ldr r2, [sp, #0x14]
 	ldr r3, [sp, #0x18]
-	bl sub_02014B08
+	bl ScanlineEffect_StartWave
 	ldr r2, _02222D34 ; =ov07_02222CAC
 	ldr r3, _02222D38 ; =ov07_02222CC0
 	add r0, r4, #0
@@ -15411,7 +15411,7 @@ _02222D46:
 	ldr r0, [r4, #0x1c]
 	cmp r0, #0
 	beq _02222D56
-	bl sub_02014BD8
+	bl ScanlineEffect_Delete
 _02222D56:
 	add r0, r4, #0
 	bl Heap_Free
@@ -15427,7 +15427,7 @@ ov07_02222D60: ; 0x02222D60
 	bl GF_AssertFail
 _02222D6A:
 	ldr r0, [r4, #0x1c]
-	bl sub_02014BF8
+	bl ScanlineEffect_GetBuffer
 	pop {r4, pc}
 	.balign 4, 0
 	thumb_func_end ov07_02222D60

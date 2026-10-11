@@ -16,7 +16,7 @@ int ov74_0222F598(void *manager) {
 }
 void ov74_0222F600(void *task, void *data) {
     void *p;
-    sub_02014AA0();
-    p = sub_02014A60((void *)U32AT(data, 0xc00));
-    sub_02014AB0(p, (void *)0x04000010, 8, 1);
+    HBlankDma_Stop();
+    p = DoubleBuffer_GetOther((void *)U32AT(data, 0xc00));
+    HBlankDma_Start(p, (void *)0x04000010, 8, 1);
 }

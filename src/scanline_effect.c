@@ -1,46 +1,50 @@
-#include "scanline_effect_internal.h"
+#include "scanline_effect.h"
 
-DoubleBuffer *sub_02014A08(enum HeapID heap, void *first, void *second) {
-    DoubleBuffer *p = Heap_Alloc(heap, sizeof(DoubleBuffer));
-    memset(p, 0, sizeof(DoubleBuffer));
-    p->enabled = 1;
-    p->buffers[0] = first;
-    p->buffers[1] = second;
-    return p;
+// not declared in lib/include/nitro/mi/dma.h
+void MI_HBlankDmaCopy32(u32 dmaNo, const void *src, void *dest, u32 size);
+void MI_HBlankDmaCopy16(u32 dmaNo, const void *src, void *dest, u32 size);
+
+DoubleBuffer *DoubleBuffer_New(enum HeapID heap, void *first, void *second) {
+    DoubleBuffer *doubleBuffer = Heap_Alloc(heap, sizeof(DoubleBuffer));
+    memset(doubleBuffer, 0, sizeof(DoubleBuffer));
+    doubleBuffer->enabled = 1;
+    doubleBuffer->buffers[0] = first;
+    doubleBuffer->buffers[1] = second;
+    return doubleBuffer;
 }
 
-void sub_02014A38(DoubleBuffer *p) {
-    GF_ASSERT(p);
-    Heap_Free(p);
+void DoubleBuffer_Delete(DoubleBuffer *doubleBuffer) {
+    GF_ASSERT(doubleBuffer);
+    Heap_Free(doubleBuffer);
 }
 
-void *sub_02014A4C(DoubleBuffer *p) {
-    GF_ASSERT(p);
-    return p->buffers[p->current];
+void *DoubleBuffer_GetCurrent(DoubleBuffer *doubleBuffer) {
+    GF_ASSERT(doubleBuffer);
+    return doubleBuffer->buffers[doubleBuffer->current];
 }
 
-void *sub_02014A60(DoubleBuffer *p) {
-    GF_ASSERT(p);
-    return p->buffers[1 ^ p->current];
+void *DoubleBuffer_GetOther(DoubleBuffer *doubleBuffer) {
+    GF_ASSERT(doubleBuffer);
+    return doubleBuffer->buffers[1 ^ doubleBuffer->current];
 }
 
-void sub_02014A78(DoubleBuffer *p, u8 enabled) {
-    GF_ASSERT(p);
-    p->enabled = enabled;
+void DoubleBuffer_SetEnabled(DoubleBuffer *doubleBuffer, u8 enabled) {
+    GF_ASSERT(doubleBuffer);
+    doubleBuffer->enabled = enabled;
 }
 
-void sub_02014A8C(DoubleBuffer *p) {
-    if (p && p->enabled) {
-        p->current ^= 1;
+void DoubleBuffer_Swap(DoubleBuffer *doubleBuffer) {
+    if (doubleBuffer && doubleBuffer->enabled) {
+        doubleBuffer->current ^= 1;
     }
 }
 
-void sub_02014AA0(void) {
+void HBlankDma_Stop(void) {
     MI_StopDma(0);
     MI_WaitDma(0);
 }
 
-void sub_02014AB0(void *src, void *dst, u32 size, int wide) {
+void HBlankDma_Start(void *src, void *dst, u32 size, int wide) {
     if (wide == 1) {
         MI_HBlankDmaCopy32(0, src, dst, size);
     } else {
@@ -48,65 +52,65 @@ void sub_02014AB0(void *src, void *dst, u32 size, int wide) {
     }
 }
 
-Scanline *sub_02014AD8(enum HeapID heap) {
-    Scanline *p = Heap_Alloc(heap, sizeof(Scanline));
-    memset(p, 0, sizeof(Scanline));
-    p->doubleBuffer = sub_02014A08(heap, p->buffers[0], p->buffers[1]);
-    return p;
+ScanlineEffect *ScanlineEffect_New(enum HeapID heap) {
+    ScanlineEffect *effect = Heap_Alloc(heap, sizeof(ScanlineEffect));
+    memset(effect, 0, sizeof(ScanlineEffect));
+    effect->doubleBuffer = DoubleBuffer_New(heap, effect->buffers[0], effect->buffers[1]);
+    return effect;
 }
 
-void sub_02014B08(Scanline *p, u8 first, u8 last, u32 step, fx32 amplitude, s16 speed, void *destination, u32 fill, u32 priority) {
-    GF_ASSERT(p);
-    GF_ASSERT(p->task == NULL);
-    p->first = first;
-    p->last = last;
-    p->phase = 0;
-    p->speed = speed;
-    p->destination = destination;
-    p->fill = fill;
-    sub_02014C60(p->wave, 192, step, amplitude);
-    p->task = SysTask_CreateOnMainQueue(sub_02014CBC, p, priority);
-    MIi_CpuClear32(p->fill, p->buffers[0], 0x300);
-    MIi_CpuClear32(p->fill, p->buffers[1], 0x300);
+void ScanlineEffect_StartWave(ScanlineEffect *effect, u8 first, u8 last, u32 step, fx32 amplitude, s16 speed, void *destination, u32 fill, u32 priority) {
+    GF_ASSERT(effect);
+    GF_ASSERT(effect->task == NULL);
+    effect->first = first;
+    effect->last = last;
+    effect->phase = 0;
+    effect->speed = speed;
+    effect->destination = destination;
+    effect->fill = fill;
+    ScanlineEffect_BuildWaveTable(effect->wave, 192, step, amplitude);
+    effect->task = SysTask_CreateOnMainQueue(ScanlineEffect_WaveTask, effect, priority);
+    MIi_CpuClear32(effect->fill, effect->buffers[0], sizeof(effect->buffers[0]));
+    MIi_CpuClear32(effect->fill, effect->buffers[1], sizeof(effect->buffers[1]));
 }
 
-void sub_02014B9C(Scanline *p) {
-    GF_ASSERT(p);
-    if (p->task) {
-        SysTask_Destroy(p->task);
-        p->task = NULL;
-        memset(sub_02014A4C(p->doubleBuffer), p->fill, 0x300);
+void ScanlineEffect_Stop(ScanlineEffect *effect) {
+    GF_ASSERT(effect);
+    if (effect->task) {
+        SysTask_Destroy(effect->task);
+        effect->task = NULL;
+        memset(DoubleBuffer_GetCurrent(effect->doubleBuffer), effect->fill, sizeof(effect->buffers[0]));
     }
 }
 
-void sub_02014BD8(Scanline *p) {
-    sub_02014B9C(p);
-    sub_02014D68();
-    sub_02014A38(p->doubleBuffer);
-    Heap_Free(p);
+void ScanlineEffect_Delete(ScanlineEffect *effect) {
+    ScanlineEffect_Stop(effect);
+    ScanlineEffect_StopDma();
+    DoubleBuffer_Delete(effect->doubleBuffer);
+    Heap_Free(effect);
 }
 
-void *sub_02014BF8(Scanline *p) {
-    return sub_02014A4C(p->doubleBuffer);
+void *ScanlineEffect_GetBuffer(ScanlineEffect *effect) {
+    return DoubleBuffer_GetCurrent(effect->doubleBuffer);
 }
 
-void sub_02014C08(Scanline *p) {
-    if (p && p->task) {
+void ScanlineEffect_SwapBuffers(ScanlineEffect *effect) {
+    if (effect && effect->task) {
         void *buffer;
-        sub_02014A8C(p->doubleBuffer);
-        buffer = sub_02014A4C(p->doubleBuffer);
-        MIi_CpuClear32(p->fill, buffer, 0x300);
+        DoubleBuffer_Swap(effect->doubleBuffer);
+        buffer = DoubleBuffer_GetCurrent(effect->doubleBuffer);
+        MIi_CpuClear32(effect->fill, buffer, sizeof(effect->buffers[0]));
     }
 }
 
-void sub_02014C40(Scanline *p) {
-    if (p && p->task) {
-        sub_02014D68();
-        sub_02014D70(p);
+void ScanlineEffect_RestartDma(ScanlineEffect *effect) {
+    if (effect && effect->task) {
+        ScanlineEffect_StopDma();
+        ScanlineEffect_StartDma(effect);
     }
 }
 
-void sub_02014C60(s16 *out, u32 count, u32 step, fx32 amplitude) {
+void ScanlineEffect_BuildWaveTable(s16 *out, u32 count, u32 step, fx32 amplitude) {
     u16 angle = 0;
     u32 i;
     for (i = 0; i < count; i++) {
@@ -116,34 +120,34 @@ void sub_02014C60(s16 *out, u32 count, u32 step, fx32 amplitude) {
     }
 }
 
-void sub_02014CBC(SysTask *task, void *data) {
-    Scanline *p = data;
-    u32 *buffer = sub_02014A4C(p->doubleBuffer);
-    u8 pos = p->phase / 100;
+void ScanlineEffect_WaveTask(SysTask *task, void *data) {
+    ScanlineEffect *effect = data;
+    u32 *buffer = DoubleBuffer_GetCurrent(effect->doubleBuffer);
+    u8 pos = effect->phase / 100;
     int i;
-    for (i = p->first; i <= p->last; i++) {
+    for (i = effect->first; i <= effect->last; i++) {
         s16 x = (s16)buffer[i];
         u16 y = (u16)(buffer[i] >> 16);
-        x += p->wave[pos];
+        x += effect->wave[pos];
         buffer[i] = (y << 16) | (u16)x;
         pos = (pos + 1) % 192;
     }
-    p->phase += p->speed;
-    if (p->phase >= 19200) {
-        p->phase %= 19200;
-    } else if (p->phase < 0) {
-        p->phase += 19200;
+    effect->phase += effect->speed;
+    if (effect->phase >= 19200) {
+        effect->phase %= 19200;
+    } else if (effect->phase < 0) {
+        effect->phase += 19200;
     }
 }
 
-void sub_02014D68(void) {
-    sub_02014AA0();
+void ScanlineEffect_StopDma(void) {
+    HBlankDma_Stop();
 }
 
-void sub_02014D70(Scanline *p) {
+void ScanlineEffect_StartDma(ScanlineEffect *effect) {
     void *buffer;
-    GF_ASSERT(p);
-    buffer = sub_02014A60(p->doubleBuffer);
-    DC_FlushRange(buffer, 0x300);
-    sub_02014AB0(buffer, p->destination, 4, 1);
+    GF_ASSERT(effect);
+    buffer = DoubleBuffer_GetOther(effect->doubleBuffer);
+    DC_FlushRange(buffer, sizeof(effect->buffers[0]));
+    HBlankDma_Start(buffer, effect->destination, 4, 1);
 }

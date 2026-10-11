@@ -15,16 +15,16 @@ typedef struct Work {
     void *owner;
 } Work;
 
-extern void sub_02014AA0(void);
-extern void *sub_02014A60(void *);
-extern void sub_02014A8C(void *);
-extern void sub_02014AB0(void *, void *, int, int);
-extern void sub_02014C08(void *);
-extern void sub_02014C40(void *);
-extern void sub_02014A38(void *);
-extern void sub_02014A4C(void *);
-extern void sub_02014BD8(void *);
-extern void sub_02014BF8(void *);
+extern void HBlankDma_Stop(void);
+extern void *DoubleBuffer_GetOther(void *);
+extern void DoubleBuffer_Swap(void *);
+extern void HBlankDma_Start(void *, void *, int, int);
+extern void ScanlineEffect_SwapBuffers(void *);
+extern void ScanlineEffect_RestartDma(void *);
+extern void DoubleBuffer_Delete(void *);
+extern void DoubleBuffer_GetCurrent(void *);
+extern void ScanlineEffect_Delete(void *);
+extern void ScanlineEffect_GetBuffer(void *);
 extern void SysTask_Destroy(void *);
 extern void Heap_Free(void *);
 extern const void *ov07_02236520[];
@@ -93,7 +93,7 @@ void ov07_02222AF8(void *task, Work *work) {
         work->ready = 1;
         work->vwait(work->arg);
     } else {
-        sub_02014AA0();
+        HBlankDma_Stop();
     }
 }
 void ov07_02222B14(void *task, Work *work) {

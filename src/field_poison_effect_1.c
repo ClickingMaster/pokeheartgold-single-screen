@@ -17,7 +17,7 @@ void *ov01_021FB5D4(enum HeapID heapID, HBlankSystem *hBlankSystem) {
     PoisonEffect *effect = Heap_Alloc(heapID, sizeof(PoisonEffect));
     memset(effect, 0, sizeof(PoisonEffect));
     effect->state = 0;
-    effect->doubleBuffer = sub_02014A08(heapID, effect->buffers[0], effect->buffers[1]);
+    effect->doubleBuffer = DoubleBuffer_New(heapID, effect->buffers[0], effect->buffers[1]);
     effect->hBlankSystem = hBlankSystem;
     return effect;
 }
@@ -27,7 +27,7 @@ void ov01_021FB610(void *unk20) {
     if (effect->state == 1) {
         ov01_021FB82C(effect);
     }
-    sub_02014A38(effect->doubleBuffer);
+    DoubleBuffer_Delete(effect->doubleBuffer);
     Heap_Free(effect);
 }
 
@@ -54,7 +54,7 @@ void ov01_021FB6C4(SysTask *task, void *data) {
         break;
     case 1:
         effect->counter--;
-        ov01_021FB788(sub_02014A4C(effect->doubleBuffer), 3 - effect->counter, 3);
+        ov01_021FB788(DoubleBuffer_GetCurrent(effect->doubleBuffer), 3 - effect->counter, 3);
         if (effect->counter <= 0) {
             effect->counter = 3;
             effect->seqNo++;
@@ -62,7 +62,7 @@ void ov01_021FB6C4(SysTask *task, void *data) {
         break;
     case 2:
         effect->counter--;
-        ov01_021FB788(sub_02014A4C(effect->doubleBuffer), effect->counter, 3);
+        ov01_021FB788(DoubleBuffer_GetCurrent(effect->doubleBuffer), effect->counter, 3);
         if (effect->counter <= 0) {
             effect->seqNo++;
         }
@@ -76,7 +76,7 @@ void ov01_021FB6C4(SysTask *task, void *data) {
 
 void ov01_021FB750(PoisonEffect *effect) {
     s32 vcount = GX_GetVCount();
-    u16 *buffer = sub_02014A60(effect->doubleBuffer);
+    u16 *buffer = DoubleBuffer_GetOther(effect->doubleBuffer);
     if (vcount < 192) {
         s32 line = vcount + 1;
         if (line >= 192) {

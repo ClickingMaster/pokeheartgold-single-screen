@@ -15,16 +15,16 @@ typedef struct Work {
     void *owner;
 } Work;
 
-extern void sub_02014AA0(void);
-extern void *sub_02014A60(void *);
-extern void sub_02014A8C(void *);
-extern void sub_02014AB0(void *, void *, int, int);
-extern void sub_02014C08(void *);
-extern void sub_02014C40(void *);
-extern void sub_02014A38(void *);
-extern void sub_02014A4C(void *);
-extern void sub_02014BD8(void *);
-extern void sub_02014BF8(void *);
+extern void HBlankDma_Stop(void);
+extern void *DoubleBuffer_GetOther(void *);
+extern void DoubleBuffer_Swap(void *);
+extern void HBlankDma_Start(void *, void *, int, int);
+extern void ScanlineEffect_SwapBuffers(void *);
+extern void ScanlineEffect_RestartDma(void *);
+extern void DoubleBuffer_Delete(void *);
+extern void DoubleBuffer_GetCurrent(void *);
+extern void ScanlineEffect_Delete(void *);
+extern void ScanlineEffect_GetBuffer(void *);
 extern void SysTask_Destroy(void *);
 extern void Heap_Free(void *);
 extern const void *ov07_02236520[];
@@ -91,7 +91,7 @@ void ov07_02222D3C(Work *work) {
     }
     ov07_02222B70(work);
     if (work->manager != NULL) {
-        sub_02014BD8(work->manager);
+        ScanlineEffect_Delete(work->manager);
     }
     Heap_Free(work);
 }
@@ -99,7 +99,7 @@ void ov07_02222D60(Work *work) {
     if (work == NULL) {
         GF_AssertFail();
     }
-    sub_02014BF8(work->manager);
+    ScanlineEffect_GetBuffer(work->manager);
 }
 void ov07_02222D74(Work *work) {
     if (work == NULL) {

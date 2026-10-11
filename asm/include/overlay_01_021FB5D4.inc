@@ -4,11 +4,11 @@
 .public SysTask_CreateOnMainQueue
 .public SysTask_CreateOnVBlankQueue
 .public SysTask_Destroy
-.public sub_02014A08
-.public sub_02014A38
-.public sub_02014A4C
-.public sub_02014A60
-.public sub_02014A8C
+.public DoubleBuffer_New
+.public DoubleBuffer_Delete
+.public DoubleBuffer_GetCurrent
+.public DoubleBuffer_GetOther
+.public DoubleBuffer_Swap
 .public Heap_Alloc
 .public Heap_Free
 .public GF_AssertFail

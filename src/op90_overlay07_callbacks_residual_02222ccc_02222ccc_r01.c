@@ -1,9 +1,9 @@
 #pragma force_active on
 #include "global.h"
 #include "heap.h"
-#include "scanline_effect_internal.h"
+#include "scanline_effect.h"
 #include <string.h>
-typedef struct { u8 pad[28]; Scanline *scanline; } Work;
+typedef struct { u8 pad[28]; ScanlineEffect *scanline; } Work;
 extern void *ov07_02222D90(int);
 extern void ov07_02222CAC(void *, void *);
 extern void ov07_02222CC0(void *, void *);
@@ -17,8 +17,8 @@ Work *ov07_02222CCC(u8 first, u8 last, u8 step, fx32 amplitude, s16 speed, int m
     GF_ASSERT(w != NULL);
     memset(w, 0, sizeof(Work));
     dest = ov07_02222D90(mode);
-    w->scanline = sub_02014AD8(heap);
-    sub_02014B08(w->scanline, first, last, step, amplitude, speed, dest, fill, priority);
+    w->scanline = ScanlineEffect_New(heap);
+    ScanlineEffect_StartWave(w->scanline, first, last, step, amplitude, speed, dest, fill, priority);
     ov07_02222B30(w, w, ov07_02222CAC, ov07_02222CC0);
     return w;
 }

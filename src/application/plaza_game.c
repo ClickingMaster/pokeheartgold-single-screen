@@ -38,12 +38,12 @@
 #include "vram_transfer_manager.h"
 
 // These are declared only in other modules' private headers.
-struct DoubleBuffer *sub_02014A08(enum HeapID heapId, void *first, void *second);
-void sub_02014A38(struct DoubleBuffer *buffer);
-u16 *sub_02014A4C(struct DoubleBuffer *buffer);
-s16 *sub_02014A60(struct DoubleBuffer *buffer);
-void sub_02014A78(struct DoubleBuffer *buffer, u8 enabled);
-void sub_02014A8C(struct DoubleBuffer *buffer);
+struct DoubleBuffer *DoubleBuffer_New(enum HeapID heapId, void *first, void *second);
+void DoubleBuffer_Delete(struct DoubleBuffer *buffer);
+u16 *DoubleBuffer_GetCurrent(struct DoubleBuffer *buffer);
+s16 *DoubleBuffer_GetOther(struct DoubleBuffer *buffer);
+void DoubleBuffer_SetEnabled(struct DoubleBuffer *buffer, u8 enabled);
+void DoubleBuffer_Swap(struct DoubleBuffer *buffer);
 void sub_0202C554(UnkStruct_021D2230 *data, s32 index, s32 value);
 void sub_0202C584(UnkStruct_021D2230 *data, s32 index, s32 value);
 void sub_0202C5B4(UnkStruct_021D2230 *data, s32 index, s32 value);
@@ -1218,15 +1218,15 @@ void PlazaGameLineScroll_Init(PlazaGameLineScroll *lineScroll, PlazaGameBg *bg, 
     for (i = 0; i < 2; i++) {
         MIi_CpuClear16(0xFF01, lineScroll->buffers[i], sizeof(lineScroll->buffers[i]));
     }
-    lineScroll->buffer = sub_02014A08(heapId, lineScroll->buffers[0], lineScroll->buffers[1]);
-    sub_02014A78(lineScroll->buffer, 0);
+    lineScroll->buffer = DoubleBuffer_New(heapId, lineScroll->buffers[0], lineScroll->buffers[1]);
+    DoubleBuffer_SetEnabled(lineScroll->buffer, 0);
     Main_SetHBlankIntrCB(PlazaGameLineScroll_HBlank, lineScroll);
 }
 
 void PlazaGameLineScroll_Free(PlazaGameLineScroll *lineScroll) {
     if (lineScroll->buffer != NULL) {
         Main_SetHBlankIntrCB(NULL, NULL);
-        sub_02014A38(lineScroll->buffer);
+        DoubleBuffer_Delete(lineScroll->buffer);
         lineScroll->buffer = NULL;
     }
 }
@@ -1238,7 +1238,7 @@ void PlazaGameLineScroll_SetPlayer(PlazaGameLineScroll *lineScroll, PlazaGamePla
     int i;
     int stride;
     GF_ASSERT(lineScroll->buffer);
-    lines = sub_02014A4C(lineScroll->buffer);
+    lines = DoubleBuffer_GetCurrent(lineScroll->buffer);
     stride = 12;
     for (i = 0; i < 48; i++) {
         int offset = i - 1;
@@ -1248,7 +1248,7 @@ void PlazaGameLineScroll_SetPlayer(PlazaGameLineScroll *lineScroll, PlazaGamePla
         }
         lines[line] = player->motion.current >> FX32_SHIFT;
     }
-    sub_02014A78(lineScroll->buffer, 1);
+    DoubleBuffer_SetEnabled(lineScroll->buffer, 1);
 }
 
 #pragma force_active reset
@@ -1256,8 +1256,8 @@ void PlazaGameLineScroll_SetPlayer(PlazaGameLineScroll *lineScroll, PlazaGamePla
 void PlazaGameLineScroll_Swap(PlazaGameLineScroll *lineScroll) {
     struct DoubleBuffer *buffer = lineScroll->buffer;
     if (buffer != NULL) {
-        sub_02014A8C(buffer);
-        sub_02014A78(lineScroll->buffer, 0);
+        DoubleBuffer_Swap(buffer);
+        DoubleBuffer_SetEnabled(lineScroll->buffer, 0);
     }
 }
 
@@ -1267,7 +1267,7 @@ void PlazaGameLineScroll_HBlank(void *data) {
     s32 line = reg_GX_VCOUNT;
 
     if (line < 192) {
-        values = sub_02014A60(lineScroll->buffer);
+        values = DoubleBuffer_GetOther(lineScroll->buffer);
         if ((reg_GX_DISPSTAT & REG_GX_DISPSTAT_HBLK_MASK) != 0) {
             BgSetPosTextAndCommit(lineScroll->bg->bgConfig, GF_BG_LYR_MAIN_0, BG_POS_OP_SET_X, values[line]);
             BgSetPosTextAndCommit(lineScroll->bg->bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_SET_X, values[line]);

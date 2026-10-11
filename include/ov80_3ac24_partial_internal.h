@@ -79,16 +79,16 @@ SysTask *SysTask_CreateOnMainQueue(void (*func)(SysTask *, void *), void *data, 
 void SysTask_Destroy(SysTask *task);
 void GXx_SetMasterBrightness_(volatile u16 *reg, s32 brightness);
 void FillWindowPixelRect(Window *window, u32 fill, u32 x, u32 y, u32 width, u32 height);
-void *sub_02014AD8(void *arg);
-void *sub_02014A08(u32 heapId, void *buf1, void *buf2);
-void sub_02014A38(void *obj);
-void sub_02014A4C(void *obj);
-void *sub_02014A60(void *obj);
-void sub_02014A8C(void *obj);
-void sub_02014AA0(void);
-void sub_02014AB0(void *obj, void *pixels, u32 size, u32 arg);
-void sub_02014C08(void *obj);
-void sub_02014C40(void *obj);
-void sub_02014B08(void *obj, u32, u32, u32, u32, s16, u32, u32, u32);
+void *ScanlineEffect_New(void *arg);
+void *DoubleBuffer_New(u32 heapId, void *buf1, void *buf2);
+void DoubleBuffer_Delete(void *obj);
+void DoubleBuffer_GetCurrent(void *obj);
+void *DoubleBuffer_GetOther(void *obj);
+void DoubleBuffer_Swap(void *obj);
+void HBlankDma_Stop(void);
+void HBlankDma_Start(void *obj, void *pixels, u32 size, u32 arg);
+void ScanlineEffect_SwapBuffers(void *obj);
+void ScanlineEffect_RestartDma(void *obj);
+void ScanlineEffect_StartWave(void *obj, u32, u32, u32, u32, s16, u32, u32, u32);
 
 #endif

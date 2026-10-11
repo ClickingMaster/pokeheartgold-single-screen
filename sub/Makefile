@@ -73,4 +73,4 @@ $(BUILD_DIR)/lib/src/nvram_command.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/src/mic_command.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/src/op90_op90_to91_w41568_rx_suffix_residual_1_r01.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/src/op90_to90_arm7_sub_ext_wram_residual_43_r01.o: private MWCCVER := 2.0/sp1
-$(BUILD_DIR)/lib/src/op90_op90_op90_to90_arm7_sub_ext_wram_residual_21_residual_2_residual_2_r01.o: private OPTFLAGS := -O4,p
+$(BUILD_DIR)/lib/src/wmsp_get_tmptt.o: private OPTFLAGS := -O4,p

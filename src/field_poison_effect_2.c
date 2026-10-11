@@ -35,7 +35,7 @@ void ov01_021FB800(SysTask *task, void *data) {
 
 void ov01_021FB80C(PoisonEffect *effect) {
     if (effect->state == 1) {
-        sub_02014A8C(effect->doubleBuffer);
+        DoubleBuffer_Swap(effect->doubleBuffer);
         effect->hblankReady = 1;
     }
 }

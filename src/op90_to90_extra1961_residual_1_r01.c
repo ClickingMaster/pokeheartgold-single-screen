@@ -13,8 +13,8 @@ typedef struct Work74 {
     u8 unk0000[0x30E8];
     Wipe74 wipe;
 } Work74;
-u16 *sub_02014A4C(void *);
-void sub_02014A8C(void *);
+u16 *DoubleBuffer_GetCurrent(void *);
+void DoubleBuffer_Swap(void *);
 BOOL ov74_0222F6C4(Work74 *work);
 // @fn ov74_0222F6C4
 BOOL ov74_0222F6C4(Work74 *work) {
@@ -44,7 +44,7 @@ BOOL ov74_0222F6C4(Work74 *work) {
             wipe->accel = 0;
         }
     }
-    buf = sub_02014A4C(wipe->hblank);
+    buf = DoubleBuffer_GetCurrent(wipe->hblank);
     for (i = 84; i < 168; i++) {
         x = pos / FX32_ONE;
         if (x < 0) {
@@ -60,6 +60,6 @@ BOOL ov74_0222F6C4(Work74 *work) {
         pos += wipe->speed;
     }
     DC_FlushRange(buf, 0x600);
-    sub_02014A8C(wipe->hblank);
+    DoubleBuffer_Swap(wipe->hblank);
     return FALSE;
 }

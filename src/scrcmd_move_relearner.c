@@ -81,7 +81,7 @@ BOOL ScrCmd_MoveRelearnerGetResult(ScriptContext *ctx) {
     MoveRelearnerArgs *moveRelearner = *moveRelearnerPtr;
     GF_ASSERT(moveRelearner != NULL);
 
-    if (moveRelearner->padding_1A[0] == 0) {
+    if (moveRelearner->cancelled == 0) {
         *retPtr = 0;
     } else {
         *retPtr = 255;

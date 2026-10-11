@@ -6,111 +6,111 @@
 	.public MoveRelearner_Exit
 	.public MoveRelearner_Init
 	.public MoveRelearner_Main
-	.public _021E7BE8
-	.public ov68_021E5A58
-	.public ov68_021E5BA0
-	.public ov68_021E5BC0
-	.public ov68_021E5D24
-	.public ov68_021E5E48
-	.public ov68_021E5F68
-	.public ov68_021E6078
-	.public ov68_021E60D8
-	.public ov68_021E614C
-	.public ov68_021E61B8
-	.public ov68_021E6234
-	.public ov68_021E62D4
-	.public ov68_021E6320
-	.public ov68_021E66A0
-	.public ov68_021E66F0
-	.public ov68_021E67E0
-	.public ov68_021E6820
-	.public ov68_021E68D4
-	.public ov68_021E6A2C
-	.public ov68_021E6C14
-	.public ov68_021E6DDC
-	.public ov68_021E6EB8
-	.public ov68_021E7028
-	.public ov68_021E70BC
-	.public ov68_021E7124
-	.public ov68_021E7178
-	.public ov68_021E71C4
-	.public ov68_021E7224
-	.public ov68_021E7288
-	.public ov68_021E734C
-	.public ov68_021E73A4
-	.public ov68_021E7424
-	.public ov68_021E74D8
-	.public ov68_021E7568
-	.public ov68_021E75C0
-	.public ov68_021E7618
-	.public ov68_021E773C
-	.public ov68_021E7898
-	.public ov68_021E7910
-	.public ov68_021E797C
-	.public ov68_021E7A18
-	.public ov68_021E7AD8
-	.public ov68_021E7BC8
-	.public ov68_021E7BEC
-	.public ov68_021E7BF8
-	.public ov68_021E7C08
-	.public ov68_021E7C18
-	.public ov68_021E7C2C
-	.public ov68_021E7C44
-	.public ov68_021E7C60
-	.public ov68_021E7C7C
-	.public ov68_021E7C98
-	.public ov68_021E7CB4
-	.public ov68_021E7CD0
-	.public ov68_021E7CF0
-	.public ov68_021E7D14
-	.public ov68_021E7D3C
-	.public ov68_021E7D40
-	.public ov68_021E7D64
-	.public ov68_021E7DA4
-	.public ov68_021E7DFC
-	.public ov68_021E7E74
-	.public ov68_021E5B14
-	.public ov68_021E5B6C
-	.public ov68_021E5CD8
-	.public ov68_021E5E38
-	.public ov68_021E5E94
-	.public ov68_021E5EBC
-	.public ov68_021E5F18
-	.public ov68_021E5F50
-	.public ov68_021E6058
-	.public ov68_021E61A0
-	.public ov68_021E61EC
-	.public ov68_021E6204
-	.public ov68_021E6678
-	.public ov68_021E68C4
-	.public ov68_021E6BEC
-	.public ov68_021E6BFC
-	.public ov68_021E6C74
-	.public ov68_021E6C8C
-	.public ov68_021E6CD8
-	.public ov68_021E6D00
-	.public ov68_021E6D20
-	.public ov68_021E6D40
-	.public ov68_021E6D4C
-	.public ov68_021E6D58
-	.public ov68_021E6D64
-	.public ov68_021E6D80
-	.public ov68_021E6D9C
-	.public ov68_021E6DB8
-	.public ov68_021E6DD0
-	.public ov68_021E6E84
-	.public ov68_021E7388
-	.public ov68_021E74C0
-	.public ov68_021E7604
-	.public ov68_021E7614
-	.public ov68_021E7A90
-	.public ov68_021E7AB4
-	.public ov68_021E7B6C
-	.public ov68_021E7B8C
-	.public ov68_021E7B94
+	.public sMoveRelearnerSummaryPages
+	.public MoveRelearner_Setup
+	.public MoveRelearner_SetGfxBanks
+	.public MoveRelearner_InitBgs
+	.public MoveRelearner_LoadBgGraphics
+	.public MoveRelearner_AddWindows
+	.public MoveRelearner_HandleInput
+	.public MoveRelearner_ShowYesNo
+	.public MoveRelearner_HandleYesNo
+	.public MoveRelearner_TeachMove
+	.public MoveRelearner_AskAfterSummary
+	.public MoveRelearner_PrintString
+	.public MoveRelearner_FormatNumber
+	.public MoveRelearner_PrintStaticTexts
+	.public MoveRelearner_CopyButtonTiles
+	.public MoveRelearner_PrintListRow
+	.public MoveRelearner_PrintMoveList
+	.public MoveRelearner_InitMoveList
+	.public MoveRelearner_PrintMoveInfo
+	.public MoveRelearner_FormatMessage
+	.public MoveRelearner_PrintMessage
+	.public MoveRelearner_InitSpriteSystem
+	.public MoveRelearner_LoadSpriteResources
+	.public MoveRelearner_SetTypeIcon
+	.public MoveRelearner_UpdateListTypeIcons
+	.public MoveRelearner_SetCategoryIcon
+	.public MoveRelearner_InitSprites
+	.public MoveRelearner_CreateCamera
+	.public MoveRelearner_CreatePokepic
+	.public MoveRelearner_Init3D
+	.public MoveRelearner_Draw3D
+	.public MoveRelearner_SetCursorPos
+	.public MoveRelearner_UpdateScrollArrows
+	.public MoveRelearner_OpenSummary
+	.public MoveRelearner_RunSummary
+	.public MoveRelearner_CreateGridInput
+	.public MoveRelearner_GridOnKeyMove
+	.public MoveRelearner_GridOnTouch
+	.public MoveRelearner_SetLearnButtonActive
+	.public MoveRelearner_UpdateScrollButtons
+	.public MoveRelearner_AnimateScrollArrows
+	.public MoveRelearner_DrawListRows
+	.public MoveRelearner_UpdateButtonFlash
+	.public MoveRelearner_DimSubScreen
+	.public sMoveRelearnerCameraPos
+	.public sMoveRelearnerGraphicsModes
+	.public sMoveRelearnerGridCallbacks
+	.public sMoveRelearnerOamCharTransferParam
+	.public sMoveRelearnerSpriteResourceCounts
+	.public sMoveRelearnerBgTemplate_Main3
+	.public sMoveRelearnerBgTemplate_Main2
+	.public sMoveRelearnerBgTemplate_Sub0
+	.public sMoveRelearnerBgTemplate_Sub2
+	.public sMoveRelearnerBgTemplate_Sub3
+	.public sMoveRelearnerOamManagerParam
+	.public sMoveRelearnerGridHitboxes
+	.public sMoveRelearnerGraphicsBanks
+	.public sMoveRelearnerYesActions
+	.public sMoveRelearnerNoActions
+	.public sMoveRelearnerGridDpadBoxes
+	.public sMoveRelearnerMessageIds
+	.public sMoveRelearnerWindowTemplates
+	.public sMoveRelearnerSpriteTemplates
+	.public MoveRelearner_Teardown
+	.public MoveRelearner_VBlankCB
+	.public MoveRelearner_FreeBgs
+	.public MoveRelearner_FreeScreenFile
+	.public MoveRelearner_RemoveWindows
+	.public MoveRelearner_InitStrings
+	.public MoveRelearner_FreeStrings
+	.public MoveRelearner_WaitFade
+	.public MoveRelearner_WaitMessage
+	.public MoveRelearner_PrintLearned
+	.public MoveRelearner_FadeOut
+	.public MoveRelearner_PrintSelectedMove
+	.public MoveRelearner_CountEligibleMoves
+	.public MoveRelearner_FreeMoveList
+	.public MoveRelearner_GetSelectedMove
+	.public MoveRelearner_GetMoveToReplace
+	.public MoveRelearner_ClearMessage
+	.public MoveRelearner_TextPrinterCallback
+	.public MoveRelearner_CountKnownMoves
+	.public MoveRelearner_OnTeachYes
+	.public MoveRelearner_OnTeachNo
+	.public MoveRelearner_OnGiveUpYes
+	.public MoveRelearner_OnGiveUpNo
+	.public MoveRelearner_OnDeleteMoveYes
+	.public MoveRelearner_OnDeleteMoveNo
+	.public MoveRelearner_OnStopTeachingYes
+	.public MoveRelearner_OnStopTeachingNo
+	.public MoveRelearner_OnForgetMoveYes
+	.public MoveRelearner_OnForgetMoveNo
+	.public MoveRelearner_FreeSprites
+	.public MoveRelearner_Free3D
+	.public MoveRelearner_FadeOutToSummary
+	.public MoveRelearner_FreeGridInput
+	.public MoveRelearner_GridNoop
+	.public MoveRelearner_StartReturnButtonFlash
+	.public MoveRelearner_StartLearnButtonFlash
+	.public MoveRelearner_AskGiveUp
+	.public MoveRelearner_AskTeachAfterFlash
+	.public MoveRelearner_AskTeach
 
-	thumb_func_start ov68_021E68D4
-ov68_021E68D4: ; 0x021E68D4
+	thumb_func_start MoveRelearner_PrintMoveInfo
+MoveRelearner_PrintMoveInfo: ; 0x021E68D4
 	push {r4, r5, r6, lr}
 	sub sp, #8
 	add r5, r0, #0
@@ -156,7 +156,7 @@ _021E692E:
 	add r0, r5, #0
 	mov r1, #0x1d
 	mov r3, #3
-	bl ov68_021E62D4
+	bl MoveRelearner_FormatNumber
 _021E693C:
 	mov r0, #1
 	str r0, [sp]
@@ -165,7 +165,7 @@ _021E693C:
 	add r0, r5, #0
 	mov r1, #3
 	str r2, [sp, #4]
-	bl ov68_021E6234
+	bl MoveRelearner_PrintString
 	add r0, r4, #0
 	mov r1, #4
 	bl GetMoveAttr
@@ -186,7 +186,7 @@ _021E696E:
 	add r0, r5, #0
 	mov r1, #0x1e
 	mov r3, #3
-	bl ov68_021E62D4
+	bl MoveRelearner_FormatNumber
 _021E697C:
 	mov r0, #1
 	str r0, [sp]
@@ -195,7 +195,7 @@ _021E697C:
 	add r0, r5, #0
 	mov r1, #4
 	str r2, [sp, #4]
-	bl ov68_021E6234
+	bl MoveRelearner_PrintString
 	ldr r2, _021E6A28 ; =0x000002ED
 	mov r0, #1
 	mov r1, #0x1b
@@ -213,13 +213,13 @@ _021E697C:
 	add r0, r5, #0
 	mov r1, #5
 	str r2, [sp, #4]
-	bl ov68_021E6234
+	bl MoveRelearner_PrintString
 	add r0, r6, #0
 	bl DestroyMsgData
 	lsl r1, r4, #0x10
 	add r0, r5, #0
 	lsr r1, r1, #0x10
-	bl ov68_021E7124
+	bl MoveRelearner_SetCategoryIcon
 	mov r0, #0x13
 	lsl r0, r0, #4
 	ldr r0, [r5, r0]
@@ -260,11 +260,11 @@ _021E6A06:
 	nop
 _021E6A24: .word 0x00010200
 _021E6A28: .word 0x000002ED
-	thumb_func_end ov68_021E68D4
+	thumb_func_end MoveRelearner_PrintMoveInfo
 
 
-	thumb_func_start ov68_021E6A2C
-ov68_021E6A2C: ; 0x021E6A2C
+	thumb_func_start MoveRelearner_FormatMessage
+MoveRelearner_FormatMessage: ; 0x021E6A2C
 	push {r3, r4, r5, lr}
 	add r5, r1, #0
 	add r4, r0, #0
@@ -302,7 +302,7 @@ _021E6A5A:
 	bl BufferBoxMonNickname
 	b _021E6BB0
 _021E6A72:
-	bl ov68_021E6BEC
+	bl MoveRelearner_GetSelectedMove
 	add r2, r0, #0
 	add r0, r4, #0
 	add r0, #0xfc
@@ -332,7 +332,7 @@ _021E6A9E:
 	mov r1, #0
 	bl BufferBoxMonNickname
 	add r0, r4, #0
-	bl ov68_021E6BEC
+	bl MoveRelearner_GetSelectedMove
 	add r2, r0, #0
 	add r0, r4, #0
 	add r0, #0xfc
@@ -351,7 +351,7 @@ _021E6ACA:
 	mov r1, #0
 	bl BufferBoxMonNickname
 	add r0, r4, #0
-	bl ov68_021E6BEC
+	bl MoveRelearner_GetSelectedMove
 	add r2, r0, #0
 	add r0, r4, #0
 	add r0, #0xfc
@@ -370,7 +370,7 @@ _021E6AF6:
 	mov r1, #0
 	bl BufferBoxMonNickname
 	add r0, r4, #0
-	bl ov68_021E6BFC
+	bl MoveRelearner_GetMoveToReplace
 	add r2, r0, #0
 	add r0, r4, #0
 	add r0, #0xfc
@@ -389,7 +389,7 @@ _021E6B22:
 	mov r1, #0
 	bl BufferBoxMonNickname
 	add r0, r4, #0
-	bl ov68_021E6BEC
+	bl MoveRelearner_GetSelectedMove
 	add r2, r0, #0
 	add r0, r4, #0
 	add r0, #0xfc
@@ -398,7 +398,7 @@ _021E6B22:
 	bl BufferMoveName
 	b _021E6BB0
 _021E6B4E:
-	bl ov68_021E6BEC
+	bl MoveRelearner_GetSelectedMove
 	add r2, r0, #0
 	add r0, r4, #0
 	add r0, #0xfc
@@ -417,7 +417,7 @@ _021E6B62:
 	mov r1, #0
 	bl BufferBoxMonNickname
 	add r0, r4, #0
-	bl ov68_021E6BEC
+	bl MoveRelearner_GetSelectedMove
 	add r2, r0, #0
 	add r0, r4, #0
 	add r0, #0xfc
@@ -434,7 +434,7 @@ _021E6B8E:
 	bl BufferPlayersName
 	b _021E6BB0
 _021E6B9E:
-	bl ov68_021E6BFC
+	bl MoveRelearner_GetMoveToReplace
 	add r2, r0, #0
 	add r0, r4, #0
 	add r0, #0xfc
@@ -449,7 +449,7 @@ _021E6BB0:
 	mov r1, #0x2c
 	add r3, r2, #0
 	mul r3, r1
-	ldr r1, _021E6BE8 ; =ov68_021E7DA4
+	ldr r1, _021E6BE8 ; =sMoveRelearnerMessageIds
 	lsl r2, r5, #2
 	add r1, r1, r3
 	ldr r0, [r0]
@@ -468,5 +468,5 @@ _021E6BB0:
 	bl String_Delete
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-_021E6BE8: .word ov68_021E7DA4
-	thumb_func_end ov68_021E6A2C
+_021E6BE8: .word sMoveRelearnerMessageIds
+	thumb_func_end MoveRelearner_FormatMessage

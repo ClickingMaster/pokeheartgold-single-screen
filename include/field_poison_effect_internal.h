@@ -11,7 +11,7 @@
 #include "assert.h"
 #include "heap.h"
 #include "overlay_01_021FB5D4.h"
-#include "scanline_effect_internal.h"
+#include "scanline_effect.h"
 #include "sys_task.h"
 #include "sys_task_api.h"
 

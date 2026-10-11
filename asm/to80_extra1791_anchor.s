@@ -1,121 +1,121 @@
-	.extern ov68_021E6D00
-	.extern ov68_021E6D20
-	.extern ov68_021E6D40
-	.extern ov68_021E6D4C
-	.extern ov68_021E6D58
-	.extern ov68_021E6D64
-	.extern ov68_021E6D80
-	.extern ov68_021E6D9C
-	.extern ov68_021E6DB8
-	.extern ov68_021E6DD0
-	.extern ov68_021E7614
-	.extern ov68_021E7618
-	.extern ov68_021E773C
+	.extern MoveRelearner_OnTeachYes
+	.extern MoveRelearner_OnTeachNo
+	.extern MoveRelearner_OnGiveUpYes
+	.extern MoveRelearner_OnGiveUpNo
+	.extern MoveRelearner_OnDeleteMoveYes
+	.extern MoveRelearner_OnDeleteMoveNo
+	.extern MoveRelearner_OnStopTeachingYes
+	.extern MoveRelearner_OnStopTeachingNo
+	.extern MoveRelearner_OnForgetMoveYes
+	.extern MoveRelearner_OnForgetMoveNo
+	.extern MoveRelearner_GridNoop
+	.extern MoveRelearner_GridOnKeyMove
+	.extern MoveRelearner_GridOnTouch
 	.public MoveRelearner_Exit
 	.public MoveRelearner_Init
 	.public MoveRelearner_Main
-	.public _021E7BE8
-	.public ov68_021E5A58
-	.public ov68_021E5BA0
-	.public ov68_021E5BC0
-	.public ov68_021E5D24
-	.public ov68_021E5E48
-	.public ov68_021E5F68
-	.public ov68_021E6078
-	.public ov68_021E60D8
-	.public ov68_021E614C
-	.public ov68_021E61B8
-	.public ov68_021E6234
-	.public ov68_021E62D4
-	.public ov68_021E6320
-	.public ov68_021E66A0
-	.public ov68_021E66F0
-	.public ov68_021E67E0
-	.public ov68_021E6820
-	.public ov68_021E68D4
-	.public ov68_021E6A2C
-	.public ov68_021E6C14
-	.public ov68_021E6DDC
-	.public ov68_021E6EB8
-	.public ov68_021E7028
-	.public ov68_021E70BC
-	.public ov68_021E7124
-	.public ov68_021E7178
-	.public ov68_021E71C4
-	.public ov68_021E7224
-	.public ov68_021E7288
-	.public ov68_021E734C
-	.public ov68_021E73A4
-	.public ov68_021E7424
-	.public ov68_021E74D8
-	.public ov68_021E7568
-	.public ov68_021E75C0
-	.public ov68_021E7618
-	.public ov68_021E773C
-	.public ov68_021E7898
-	.public ov68_021E7910
-	.public ov68_021E797C
-	.public ov68_021E7A18
-	.public ov68_021E7AD8
-	.public ov68_021E7BC8
-	.public ov68_021E7BEC
-	.public ov68_021E7BF8
-	.public ov68_021E7C08
-	.public ov68_021E7C18
-	.public ov68_021E7C2C
-	.public ov68_021E7C44
-	.public ov68_021E7C60
-	.public ov68_021E7C7C
-	.public ov68_021E7C98
-	.public ov68_021E7CB4
-	.public ov68_021E7CD0
-	.public ov68_021E7CF0
-	.public ov68_021E7D14
-	.public ov68_021E7D3C
-	.public ov68_021E7D40
-	.public ov68_021E7D64
-	.public ov68_021E7DA4
-	.public ov68_021E7DFC
-	.public ov68_021E7E74
-	.public ov68_021E5B14
-	.public ov68_021E5B6C
-	.public ov68_021E5CD8
-	.public ov68_021E5E38
-	.public ov68_021E5E94
-	.public ov68_021E5EBC
-	.public ov68_021E5F18
-	.public ov68_021E5F50
-	.public ov68_021E6058
-	.public ov68_021E61A0
-	.public ov68_021E61EC
-	.public ov68_021E6204
-	.public ov68_021E6678
-	.public ov68_021E68C4
-	.public ov68_021E6BEC
-	.public ov68_021E6BFC
-	.public ov68_021E6C74
-	.public ov68_021E6C8C
-	.public ov68_021E6CD8
-	.public ov68_021E6D00
-	.public ov68_021E6D20
-	.public ov68_021E6D40
-	.public ov68_021E6D4C
-	.public ov68_021E6D58
-	.public ov68_021E6D64
-	.public ov68_021E6D80
-	.public ov68_021E6D9C
-	.public ov68_021E6DB8
-	.public ov68_021E6DD0
-	.public ov68_021E6E84
-	.public ov68_021E7388
-	.public ov68_021E74C0
-	.public ov68_021E7604
-	.public ov68_021E7614
-	.public ov68_021E7A90
-	.public ov68_021E7AB4
-	.public ov68_021E7B6C
-	.public ov68_021E7B8C
-	.public ov68_021E7B94
+	.public sMoveRelearnerSummaryPages
+	.public MoveRelearner_Setup
+	.public MoveRelearner_SetGfxBanks
+	.public MoveRelearner_InitBgs
+	.public MoveRelearner_LoadBgGraphics
+	.public MoveRelearner_AddWindows
+	.public MoveRelearner_HandleInput
+	.public MoveRelearner_ShowYesNo
+	.public MoveRelearner_HandleYesNo
+	.public MoveRelearner_TeachMove
+	.public MoveRelearner_AskAfterSummary
+	.public MoveRelearner_PrintString
+	.public MoveRelearner_FormatNumber
+	.public MoveRelearner_PrintStaticTexts
+	.public MoveRelearner_CopyButtonTiles
+	.public MoveRelearner_PrintListRow
+	.public MoveRelearner_PrintMoveList
+	.public MoveRelearner_InitMoveList
+	.public MoveRelearner_PrintMoveInfo
+	.public MoveRelearner_FormatMessage
+	.public MoveRelearner_PrintMessage
+	.public MoveRelearner_InitSpriteSystem
+	.public MoveRelearner_LoadSpriteResources
+	.public MoveRelearner_SetTypeIcon
+	.public MoveRelearner_UpdateListTypeIcons
+	.public MoveRelearner_SetCategoryIcon
+	.public MoveRelearner_InitSprites
+	.public MoveRelearner_CreateCamera
+	.public MoveRelearner_CreatePokepic
+	.public MoveRelearner_Init3D
+	.public MoveRelearner_Draw3D
+	.public MoveRelearner_SetCursorPos
+	.public MoveRelearner_UpdateScrollArrows
+	.public MoveRelearner_OpenSummary
+	.public MoveRelearner_RunSummary
+	.public MoveRelearner_CreateGridInput
+	.public MoveRelearner_GridOnKeyMove
+	.public MoveRelearner_GridOnTouch
+	.public MoveRelearner_SetLearnButtonActive
+	.public MoveRelearner_UpdateScrollButtons
+	.public MoveRelearner_AnimateScrollArrows
+	.public MoveRelearner_DrawListRows
+	.public MoveRelearner_UpdateButtonFlash
+	.public MoveRelearner_DimSubScreen
+	.public sMoveRelearnerCameraPos
+	.public sMoveRelearnerGraphicsModes
+	.public sMoveRelearnerGridCallbacks
+	.public sMoveRelearnerOamCharTransferParam
+	.public sMoveRelearnerSpriteResourceCounts
+	.public sMoveRelearnerBgTemplate_Main3
+	.public sMoveRelearnerBgTemplate_Main2
+	.public sMoveRelearnerBgTemplate_Sub0
+	.public sMoveRelearnerBgTemplate_Sub2
+	.public sMoveRelearnerBgTemplate_Sub3
+	.public sMoveRelearnerOamManagerParam
+	.public sMoveRelearnerGridHitboxes
+	.public sMoveRelearnerGraphicsBanks
+	.public sMoveRelearnerYesActions
+	.public sMoveRelearnerNoActions
+	.public sMoveRelearnerGridDpadBoxes
+	.public sMoveRelearnerMessageIds
+	.public sMoveRelearnerWindowTemplates
+	.public sMoveRelearnerSpriteTemplates
+	.public MoveRelearner_Teardown
+	.public MoveRelearner_VBlankCB
+	.public MoveRelearner_FreeBgs
+	.public MoveRelearner_FreeScreenFile
+	.public MoveRelearner_RemoveWindows
+	.public MoveRelearner_InitStrings
+	.public MoveRelearner_FreeStrings
+	.public MoveRelearner_WaitFade
+	.public MoveRelearner_WaitMessage
+	.public MoveRelearner_PrintLearned
+	.public MoveRelearner_FadeOut
+	.public MoveRelearner_PrintSelectedMove
+	.public MoveRelearner_CountEligibleMoves
+	.public MoveRelearner_FreeMoveList
+	.public MoveRelearner_GetSelectedMove
+	.public MoveRelearner_GetMoveToReplace
+	.public MoveRelearner_ClearMessage
+	.public MoveRelearner_TextPrinterCallback
+	.public MoveRelearner_CountKnownMoves
+	.public MoveRelearner_OnTeachYes
+	.public MoveRelearner_OnTeachNo
+	.public MoveRelearner_OnGiveUpYes
+	.public MoveRelearner_OnGiveUpNo
+	.public MoveRelearner_OnDeleteMoveYes
+	.public MoveRelearner_OnDeleteMoveNo
+	.public MoveRelearner_OnStopTeachingYes
+	.public MoveRelearner_OnStopTeachingNo
+	.public MoveRelearner_OnForgetMoveYes
+	.public MoveRelearner_OnForgetMoveNo
+	.public MoveRelearner_FreeSprites
+	.public MoveRelearner_Free3D
+	.public MoveRelearner_FadeOutToSummary
+	.public MoveRelearner_FreeGridInput
+	.public MoveRelearner_GridNoop
+	.public MoveRelearner_StartReturnButtonFlash
+	.public MoveRelearner_StartLearnButtonFlash
+	.public MoveRelearner_AskGiveUp
+	.public MoveRelearner_AskTeachAfterFlash
+	.public MoveRelearner_AskTeach
 	.include "asm/macros.inc"
 	.include "overlay_68.inc"
 	.include "global.inc"
@@ -123,90 +123,90 @@
 .text
 	.rodata
 
-_021E7BE8:
+sMoveRelearnerSummaryPages:
 	.byte 0x01, 0x04, 0x00, 0x00
 
-ov68_021E7BEC: ; 0x021E7BEC
+sMoveRelearnerCameraPos: ; 0x021E7BEC
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00
 
-ov68_021E7BF8: ; 0x021E7BF8
+sMoveRelearnerGraphicsModes: ; 0x021E7BF8
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 
-ov68_021E7C08: ; 0x021E7C08
-	.word ov68_021E7614
-	.word ov68_021E7614
-	.word ov68_021E7618
-	.word ov68_021E773C
+sMoveRelearnerGridCallbacks: ; 0x021E7C08
+	.word MoveRelearner_GridNoop
+	.word MoveRelearner_GridNoop
+	.word MoveRelearner_GridOnKeyMove
+	.word MoveRelearner_GridOnTouch
 
-ov68_021E7C18: ; 0x021E7C18
+sMoveRelearnerOamCharTransferParam: ; 0x021E7C18
 	.byte 0x0C, 0x00, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00
 	.byte 0x00, 0x40, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00
 
-ov68_021E7C2C: ; 0x021E7C2C
+sMoveRelearnerSpriteResourceCounts: ; 0x021E7C2C
 	.byte 0x0B, 0x00, 0x00, 0x00
 	.byte 0x03, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov68_021E7C44: ; 0x021E7C44
+sMoveRelearnerBgTemplate_Main3: ; 0x021E7C44
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1E, 0x01, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov68_021E7C60: ; 0x021E7C60
+sMoveRelearnerBgTemplate_Main2: ; 0x021E7C60
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x1F, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov68_021E7C7C: ; 0x021E7C7C
+sMoveRelearnerBgTemplate_Sub0: ; 0x021E7C7C
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1F, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov68_021E7C98: ; 0x021E7C98
+sMoveRelearnerBgTemplate_Sub2: ; 0x021E7C98
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1E, 0x00, 0x00, 0x02, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov68_021E7CB4: ; 0x021E7CB4
+sMoveRelearnerBgTemplate_Sub3: ; 0x021E7CB4
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x1C, 0x04, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov68_021E7CD0: ; 0x021E7CD0
+sMoveRelearnerOamManagerParam: ; 0x021E7CD0
 	.byte 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00
 
-ov68_021E7CF0: ; 0x021E7CF0
+sMoveRelearnerGridHitboxes: ; 0x021E7CF0
 	.byte 0x20, 0x3F, 0x00, 0x7F, 0x40, 0x5F, 0x00, 0x7F, 0x60, 0x7F, 0x00, 0x7F, 0x80, 0x9F, 0x00, 0x7F
 	.byte 0xA8, 0xBF, 0x00, 0x27, 0xA8, 0xBF, 0x28, 0x4F, 0xA6, 0xBF, 0xC0, 0xFF, 0xA6, 0xBF, 0x78, 0xB7
 	.byte 0xFF, 0x00, 0x00, 0x00
 
-ov68_021E7D14: ; 0x021E7D14
+sMoveRelearnerGraphicsBanks: ; 0x021E7D14
 	.byte 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00
 
-ov68_021E7D3C: ; 0x021E7D3C
-	.word ov68_021E6D00
+sMoveRelearnerYesActions: ; 0x021E7D3C
+	.word MoveRelearner_OnTeachYes
 
-ov68_021E7D40: ; 0x021E7D40
-	.word ov68_021E6D20
-	.word ov68_021E6D40
-	.word ov68_021E6D4C
-	.word ov68_021E6D58
-	.word ov68_021E6D64
-	.word ov68_021E6D80
-	.word ov68_021E6D9C
-	.word ov68_021E6DB8
-	.word ov68_021E6DD0
+sMoveRelearnerNoActions: ; 0x021E7D40
+	.word MoveRelearner_OnTeachNo
+	.word MoveRelearner_OnGiveUpYes
+	.word MoveRelearner_OnGiveUpNo
+	.word MoveRelearner_OnDeleteMoveYes
+	.word MoveRelearner_OnDeleteMoveNo
+	.word MoveRelearner_OnStopTeachingYes
+	.word MoveRelearner_OnStopTeachingNo
+	.word MoveRelearner_OnForgetMoveYes
+	.word MoveRelearner_OnForgetMoveNo
 
-ov68_021E7D64: ; 0x021E7D64
+sMoveRelearnerGridDpadBoxes: ; 0x021E7D64
 	.byte 0x28, 0x34, 0x00, 0x00, 0x06, 0x01, 0x00, 0x00, 0x50, 0x3C, 0x00, 0x00
 	.byte 0x00, 0x02, 0x01, 0x01, 0x28, 0x54, 0x00, 0x00, 0x01, 0x03, 0x02, 0x02, 0x50, 0x5C, 0x00, 0x00
 	.byte 0x02, 0x06, 0x03, 0x03, 0x28, 0x74, 0x00, 0x00, 0x04, 0x04, 0x04, 0x04, 0x50, 0x7C, 0x00, 0x00
 	.byte 0x05, 0x05, 0x05, 0x05, 0xE0, 0xA8, 0x00, 0x00, 0x03, 0x06, 0x06, 0x06, 0xE0, 0xA8, 0x00, 0x00
 	.byte 0x07, 0x07, 0x07, 0x07
 
-ov68_021E7DA4: ; 0x021E7DA4
+sMoveRelearnerMessageIds: ; 0x021E7DA4
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 	.byte 0x03, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00
 	.byte 0x07, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x09, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00
@@ -214,7 +214,7 @@ ov68_021E7DA4: ; 0x021E7DA4
 	.byte 0x0F, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00, 0x12, 0x00, 0x00, 0x00
 	.byte 0x13, 0x00, 0x00, 0x00, 0x14, 0x00, 0x00, 0x00, 0x15, 0x00, 0x00, 0x00
 
-ov68_021E7DFC: ; 0x021E7DFC
+sMoveRelearnerWindowTemplates: ; 0x021E7DFC
 	.byte 0x06, 0x11, 0x04, 0x06
 	.byte 0x02, 0x0F, 0x5B, 0x00, 0x06, 0x11, 0x06, 0x06, 0x02, 0x0F, 0x67, 0x00, 0x06, 0x11, 0x08, 0x08
 	.byte 0x02, 0x0F, 0x73, 0x00, 0x06, 0x1C, 0x06, 0x03, 0x02, 0x0F, 0x83, 0x00, 0x06, 0x1C, 0x08, 0x03
@@ -225,7 +225,7 @@ ov68_021E7DFC: ; 0x021E7DFC
 	.byte 0x03, 0x0F, 0x01, 0x00, 0x02, 0x13, 0x05, 0x0A, 0x10, 0x0F, 0x3D, 0x00, 0x02, 0x02, 0x05, 0x09
 	.byte 0x08, 0x0F, 0xDD, 0x00
 
-ov68_021E7E74: ; 0x021E7E74
+sMoveRelearnerSpriteTemplates: ; 0x021E7E74
 	.byte 0x00, 0x00, 0xA8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0xA8, 0xB8, 0x00, 0x00, 0xA8, 0xB8, 0x00, 0x00
 	.byte 0xA8, 0xB8, 0x00, 0x00, 0xA8, 0xB8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00

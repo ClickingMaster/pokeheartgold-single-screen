@@ -46,7 +46,7 @@
 #include "hall_of_fame_showcase.h"
 #include "wireless_trade_select_mon.h"
 #include "battle_room_results.h"
-#include "overlay_68.h"
+#include "move_relearner_app.h"
 #include "geonet_globe_app.h"
 #include "overlay_70.h"
 #include "overlay_71.h"

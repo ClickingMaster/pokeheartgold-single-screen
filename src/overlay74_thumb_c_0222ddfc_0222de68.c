@@ -22,10 +22,10 @@ extern int SaveMysteryGift_CardTagIsValid(void *, int);
 extern void *OverlayManager_GetData(void *);
 extern int ListMenu_ProcessInput(void *);
 extern void PlaySE(u32);
-extern int sub_02014AA0(void);
-extern void *sub_02014A60(void *);
-extern void sub_02014AB0(void *, u32, int, int);
-extern void sub_02014A38(void *);
+extern int HBlankDma_Stop(void);
+extern void *DoubleBuffer_GetOther(void *);
+extern void HBlankDma_Start(void *, u32, int, int);
+extern void DoubleBuffer_Delete(void *);
 extern void SysTask_Destroy(void *);
 extern int ov74_022360B0(void *);
 extern void ov74_0223563C(void);
@@ -121,7 +121,7 @@ int ov74_0222DDFC(void *manager, int *state) {
 }
 void ov74_0222DE68(void *task, void *p) {
     void *x;
-    sub_02014AA0();
-    x = sub_02014A60(PTR(p, 0xc00));
-    sub_02014AB0(x, 0x04000010, 8, 1);
+    HBlankDma_Stop();
+    x = DoubleBuffer_GetOther(PTR(p, 0xc00));
+    HBlankDma_Start(x, 0x04000010, 8, 1);
 }
