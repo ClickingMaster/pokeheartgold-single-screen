@@ -27,11 +27,11 @@
 .public MI_CpuCopy8
 .public gOverlayTemplate_PartyMenu
 .public gOverlayTemplate_PokemonSummary
-.public ov80_02235FC8
-.public ov80_02235FEC
-.public ov80_02235FF8
-.public ov80_02236040
+.public FrontierLinkLobby_New
+.public FrontierLinkLobby_Free
+.public FrontierLinkLobby_Send
+.public FrontierLinkLobby_RunPartyApp
 .public ov80_0223C040
 .public ov80_0223D4C0
-.public ov80_0223DD50
+.public gFrontierLinkLobby
 .public ov80_0223C040

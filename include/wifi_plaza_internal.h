@@ -44,7 +44,7 @@ typedef struct WiFiPlazaPlayer {
     u32 trainerId;
     u16 name[8];
     u32 unk_18;   // ov45_0222D500 of the entry time (WiFiPlaza_OnPlayerEnter)
-    void *unk_1c; // ov45_02230F94 of country, region and unk_18 (4 bytes)
+    void *unk_1c; // WiFiPlazaTime: local time of the location (ov45_02230F94)
     u16 species[6];
     u8 forms[6];
     u8 isEgg[6];
@@ -359,10 +359,28 @@ typedef struct WiFiPlazaWork {
     u32 unk_52c; // error flag
 } WiFiPlazaWork;
 
-// Result of ov45_02230F94, kept in WiFiPlazaPlayer.unk_1c.
-typedef struct WiFiPlazaPlayerUnk1C {
-    u32 value;
-} WiFiPlazaPlayerUnk1C;
+// Location tables of the earth place NARC (as in geonet_globe_app.c); y is the longitude angle.
+typedef struct WiFiPlazaEarthCountry {
+    u16 kind; // 2: the country has regions
+    s16 x;
+    s16 y;
+} WiFiPlazaEarthCountry;
+
+typedef struct WiFiPlazaEarthRegion {
+    s16 x;
+    s16 y;
+} WiFiPlazaEarthRegion;
+
+// Same layout as the box test bounds of model_box_test.c.
+typedef struct WiFiPlazaBoxTestBounds {
+    s16 width;
+    s16 height;
+    s16 depth;
+    s16 pad06;
+    fx32 scaleX;
+    fx32 scaleY;
+    fx32 scaleZ;
+} WiFiPlazaBoxTestBounds;
 
 // Lobby callbacks given to WiFiPlazaLobbyClient_Init (with the work as the last argument).
 typedef struct WiFiPlazaCallbacks {
@@ -1116,6 +1134,13 @@ void ov45_02230DF4(WiFiPlazaPlayerObject *object);
 void ov45_02230E28(WiFiPlazaPlayerObject *object);
 void ov45_02230E64(void *sprite, WiFiPlazaPlayerObject *object);
 
+// wifi_plaza_sprite_culling.c
+BOOL ov45_02230E78(void *sprite);
+
+// wifi_plaza_time_zone.c
+WiFiPlazaTime ov45_02230F94(int country, u16 region, u32 time, enum HeapID heapID);
+void ov45_02231018(NARC *narc, enum HeapID heapID, int country, u16 region, s32 *longitude);
+
 // data (asm)
 extern const WiFiPlazaTimerPhase _02254A28[5];
 extern const u8 ov45_02254BB4[];
@@ -1157,7 +1182,6 @@ extern const u8 ov45_02254C30[4]; // room per channel
 extern const char *ov45_02254EF0; // lobby data key of the location list
 extern const u8 ov45_02254F04[];
 extern const u8 ov45_02254F14[];
-WiFiPlazaPlayerUnk1C ov45_02230F94(u16 country, u8 region, u32 time, enum HeapID heapID);
 void ov45_022320C4(void *a0);
 
 extern const WiFiPlazaAvatarEntry ov45_02254A84[16];
@@ -1174,7 +1198,6 @@ extern void (*const ov45_02254F28[])(WiFiPlazaPlayerObject *object); // per play
 // defined in other overlays / the ARM9 static part
 void WiFiPlazaMap_PosToVecFx32(const s16 *gridPos, s32 *position);
 void WiFiPlazaMap_LoadModelFile(NNSG3dResFileHeader **file, NARC *narc, int fileId, enum HeapID heapID);
-BOOL ov45_02230E78(void *sprite);
 // billboards
 void *Billboard_Create(WiFiPlazaBillboardParams *params);
 void Billboard_Delete(void *billboards);
@@ -1189,6 +1212,8 @@ void BillboardObject_AdvanceFrame(void *sprite, fx32 frames);
 u8 BillboardObject_GetSequence(void *sprite);
 u32 BillboardObject_GetSequenceFrame(void *sprite);
 void *BillboardObject_GetModelNoCast(void *sprite);
+const VecFx32 *BillboardObject_GetScale(void *sprite);
+BOOL GF3d_BoundsBoxTest(const VecFx32 *translation, const WiFiPlazaBoxTestBounds *bounds);
 void BillboardGfxSequence_Init(const void *data, WiFiPlazaBillboardSequence *sequence);
 void BillboardResource_Init(WiFiPlazaBillboardResource *resource, void *modelFile, NNSG3dResTex *texture, const void *ranges, WiFiPlazaBillboardSequence *sequence);
 void BillboardResource_InitWithKeys(WiFiPlazaBillboardResource *resource, void *modelFile, NNSG3dResTex *texture, const void *ranges, WiFiPlazaBillboardSequence *sequence, NNSG3dTexKey texKey, NNSG3dTexKey tex4x4Key, NNSG3dPlttKey plttKey);

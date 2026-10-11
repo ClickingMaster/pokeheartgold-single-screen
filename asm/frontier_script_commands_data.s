@@ -688,19 +688,19 @@ gFrontierCommandTable: ; 0x0223BA04
 	.word FrtCmd_167
 	.word FrtCmd_168
 	.word FrtCmd_169
-	.word FrtCmd_170
-	.word FrtCmd_171
-	.word FrtCmd_172
-	.word FrtCmd_173
-	.word FrtCmd_174
-	.word FrtCmd_175
-	.word FrtCmd_176
-	.word FrtCmd_177
-	.word FrtCmd_178
-	.word FrtCmd_179
-	.word FrtCmd_180
-	.word FrtCmd_181
-	.word FrtCmd_182
+	.word FrtCmd_LinkLobbyAlloc
+	.word FrtCmd_LinkLobbyFree
+	.word FrtCmd_LinkLobbySend
+	.word FrtCmd_LinkLobbyWaitReceive
+	.word FrtCmd_LinkLobbyCheckPartnerFacility
+	.word FrtCmd_LinkLobbyRunPartyApp
+	.word FrtCmd_LinkLobbyGetPartyMenuResult
+	.word FrtCmd_LinkLobbyGetPartnerChoice
+	.word FrtCmd_LinkLobbyAction
+	.word FrtCmd_LinkLobbyStartTower
+	.word FrtCmd_TowerLinkSendTrainers
+	.word FrtCmd_TowerLinkWaitReceive
+	.word FrtCmd_TowerFree
 	.word FrtCmd_183
 	.word FrtCmd_ArcadeAlloc
 	.word FrtCmd_ArcadeInit
@@ -720,7 +720,7 @@ gFrontierCommandTable: ; 0x0223BA04
 	.word FrtCmd_199
 	.word FrtCmd_200
 	.word FrtCmd_201
-	.word FrtCmd_202
+	.word FrtCmd_LinkLobbyWaitReceiveOrAbort
 	.word FrtCmd_203
 	.word FrtCmd_204
 	.word FrtCmd_205

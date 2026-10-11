@@ -174,7 +174,7 @@ void WiFiPlaza_OnPlayerEnter(int id, WiFiPlazaPlayer *player, WiFiPlazaWork *wor
         region = WiFiPlazaPlayer_GetRegion(&work->profile.player);
         valid = WiFiPlazaPlayer_IsLanguageValid(&work->profile.player);
         if (country && valid == TRUE) {
-            *(WiFiPlazaPlayerUnk1C *)&work->profile.player.unk_1c = ov45_02230F94((u16)country, (u8)region, work->profile.player.unk_18, work->heapID);
+            *(WiFiPlazaTime *)&work->profile.player.unk_1c = ov45_02230F94((u16)country, (u8)region, work->profile.player.unk_18, work->heapID);
         } else {
             ((u8 *)&work->profile.player.unk_1c)[0] = 12;
             ((u8 *)&work->profile.player.unk_1c)[1] = 0;

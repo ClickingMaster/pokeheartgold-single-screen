@@ -210,7 +210,7 @@ $(BUILD_DIR)/lib/MSL_C/src/msl_file_io.o: private MWCCVER := 2.0/sp2p3
 
 $(BUILD_DIR)/lib/MSL_C/src/msl_printf_formatter.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/lib/MSL_C/src/msl_wprintf_swprintf.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_wprintf_formatter.o: private MWCCVER := 2.0/sp2p3
 
 $(BUILD_DIR)/lib/MSL_C/src/msl_fp_ansi_rounddec.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/MSL_C/src/msl_fp_ansi_str2dec.o: private MWCCVER := 2.0/sp2p3
@@ -236,7 +236,6 @@ $(BUILD_DIR)/lib/MSL_C/src/msl_abort_exit_core.o: private MWCCVER := 2.0/sp2p3
 
 
 
-$(BUILD_DIR)/lib/MSL_C/src/msl_wprintf_round_decimal.o: private MWCCVER := 2.0/sp2p3
 
 $(BUILD_DIR)/lib/MSL_C/src/msl_fp_ansi_compare_dec.o: private MWCCVER := 2.0/sp2p3
 
@@ -247,7 +246,6 @@ $(BUILD_DIR)/lib/MSL_C/src/msl_fp_ansi_compare_dec.o: private MWCCVER := 2.0/sp2
 
 
 
-$(BUILD_DIR)/lib/MSL_C/src/msl_wprintf_parse_format.o: private MWCCVER := 2.0/sp2p3
 
 $(BUILD_DIR)/lib/MSL_C/src/msl_fp_ansi_num2dec_internal.o: private MWCCVER := 2.0/sp2p3
 
@@ -257,11 +255,9 @@ $(BUILD_DIR)/lib/MSL_C/src/msl_fp_ansi_num2dec_internal.o: private MWCCVER := 2.
 $(BUILD_DIR)/lib/MSL_C/src/msl_fp_ansi_dec2num.o: private MWCCVER := 2.0/sp2p3
 
 
-$(BUILD_DIR)/lib/MSL_C/src/msl_wprintf_wpformatter.o: private MWCCVER := 2.0/sp2p3
 
 $(BUILD_DIR)/lib/MSL_C/src/msl_fp_ansi_two_exp.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/lib/MSL_C/src/msl_wprintf_longlong2str.o: private MWCCVER := 2.0/sp2p3
 
 
 $(BUILD_DIR)/lib/MSL_C/src/msl_direct_io_write.o: private MWCCVER := 2.0/sp2p3
@@ -311,7 +307,6 @@ $(BUILD_DIR)/src/wifi_setup_keyboard_slide_in.o: private MWCCVER := 2.0/base
 $(BUILD_DIR)/lib/NitroSystem/src/g3d_cgtool_xsi_texmtx.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSDK/src/mb/mb_parent_send_block.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/lib/MSL_C/src/msl_wprintf_long2str.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/application/footprint_stamp_sprites.o: private OPTFLAGS := -O2
 $(BUILD_DIR)/src/op90_overlay_40_residual_31_residual_4_to45_residual_r01.o: private OPTFLAGS := -O2
 $(BUILD_DIR)/lib/NitroSDK/src/mb/mb_beacon_fixed.o: private MWCCVER := 2.0/sp2p3
@@ -322,8 +317,6 @@ $(BUILD_DIR)/src/wifi_setup_result.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/src/wifi_setup_md5.o: private MWCCVER := 2.0/sp2
 $(BUILD_DIR)/src/wifi_setup_ap_select.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/src/wifi_setup_session.o: private MWCCVER := 2.0/sp1
-$(BUILD_DIR)/lib/MSL_C/src/msl_wprintf_float2str.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/lib/MSL_C/src/msl_wprintf_double2hex.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSDK/src/mb/mb_parent_recv_child.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/MSL_C/src/msl_ansi_files.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/MSL_C/src/msl_ansi_files.o: private EXCCFLAGS := -Cpp_exceptions on

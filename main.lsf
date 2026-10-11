@@ -1426,14 +1426,7 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object lib/MSL_C/asm/to70_MSL_Common_wmem_extra120_anchor.o
     Object lib/MSL_C/src/msl_wmem.o
     Object lib/MSL_C/asm/to70_MSL_Common_wprintf_extra111_anchor.o
-    Object lib/MSL_C/src/msl_wprintf_parse_format.o
-    Object lib/MSL_C/src/msl_wprintf_long2str.o
-    Object lib/MSL_C/src/msl_wprintf_longlong2str.o
-    Object lib/MSL_C/src/msl_wprintf_double2hex.o
-    Object lib/MSL_C/src/msl_wprintf_round_decimal.o
-    Object lib/MSL_C/src/msl_wprintf_float2str.o
-    Object lib/MSL_C/src/msl_wprintf_wpformatter.o
-    Object lib/MSL_C/src/msl_wprintf_swprintf.o
+    Object lib/MSL_C/src/msl_wprintf_formatter.o
     Object lib/MSL_C/src/msl_wstring_wcslen.o
     Object lib/MSL_C/src/msl_wstring_wcscpy.o
     Object lib/MSL_C/src/msl_wstring_wcschr.o
@@ -3426,8 +3419,8 @@ Overlay OVY_45
     Object src/wifi_plaza_lobby_matches.o
     Object src/wifi_plaza_player_objects.o
     Object asm/to80_extra1528_anchor.o
-    Object src/to80_extra1528_run01.o
-    Object src/op90_to80_extra1528_residual_1_r01.o
+    Object src/wifi_plaza_sprite_culling.o
+    Object src/wifi_plaza_time_zone.o
     Object lib/NitroDWC/asm/to60_overlay_45_arm_anchor.o
     Object src/to70_ov45_extra04_run01.o
     Object src/to90_extra1946_run01.o
@@ -4298,10 +4291,8 @@ Overlay OVY_80
     Object src/frontier/frontier_cmd_sound.o
     Object src/frontier/frontier_script_commands_misc.o
     Object src/frontier/frontier_save_data_helpers.o
-    Object src/ov80_35900_partial_1.o
-    Object src/overlay80_arcade_commands.o
-    Object src/ov80_35900_partial_2.o
-    Object src/overlay80_frontier_party_summary_r4.o
+    Object src/frontier/frontier_cmd_link_lobby.o
+    Object src/frontier/frontier_link_lobby.o
     Object src/overlay_80_02236450_opus_partial_1.o
     Object src/op90_overlay_80_02236450_r01.o
     Object src/overlay_80_02236450_opus_partial_2.o
