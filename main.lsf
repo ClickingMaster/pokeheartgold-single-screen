@@ -6096,15 +6096,7 @@ Overlay OVY_73
 {
     After main
     Object src/record_mixing.o
-    Object src/overlay73_helpers_13.o
-    Object src/to58_r3b_ov73_14.o
-    Object src/overlay73_helpers_14.o
-    Object src/op90_overlay_73_residual_15_r01.o
-    Object src/overlay73_effect_1.o
-    Object src/op90_overlay_73_residual_15_residual_2_r01.o
-    Object src/overlay73_helpers_15.o
-    Object src/op90_overlay_73_residual_16_r01.o
-    Object src/r40_overlay_73_residual_16_run1.o
+    Object src/record_mixing_records.o
     Object src/to52_r2_w02/to52_r2_w02_overlay73_r16_exact.o
     Object src/to70_to52_r2_w02_overlay73_r16_residual_extra446_run01.o
     Object src/r40_overlay_73_residual_16_run2.o

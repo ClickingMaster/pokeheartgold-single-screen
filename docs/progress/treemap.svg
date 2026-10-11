@@ -4,7 +4,7 @@
 <rect width="1200" height="780" rx="16" fill="#101722"/>
 <g font-family="system-ui, sans-serif" fill="#edf2fa">
 <text x="28" y="42" font-size="25" font-weight="700">HeartGold · decompilation</text>
-<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · 4140b830e · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
+<text x="28" y="71" font-size="14" fill="#b9c7da">Matching US ROM verified · a30903eb6 · ARM9 + ARM7 · 4,075,354 mapped code bytes</text>
 <text x="1172" y="44" text-anchor="end" font-size="30" font-weight="700">100% of source in C/C++</text>
 <text x="1172" y="71" text-anchor="end" font-size="14" fill="#b9c7da">100% compiled code in C/C++ · 99.25% C + C++ source</text>
 <rect x="28" y="91" width="12" height="12" rx="2" fill="#35b85a"/>
@@ -23470,222 +23470,198 @@ src/application/safari_decoration.c</title></rect>
 19,544 bytes · C-only source
 src/battle/trainer_ai.c</title></rect>
 <rect x="759.994" y="644.575" width="43.178" height="72.425" fill="none" stroke="#101722" stroke-width="2"/>
-<rect x="803.171" y="644.575" width="36.926" height="35.731" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / record_mixing.o
+<rect x="803.171" y="644.575" width="37.237" height="35.432" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / record_mixing.o
 8,246 bytes · C-only source
 src/record_mixing.c</title></rect>
-<rect x="840.098" y="644.575" width="5.929" height="18.027" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to45_overlay73_r20_exact.o
+<rect x="840.409" y="644.575" width="5.618" height="35.432" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / record_mixing_records.o
+1,244 bytes · C-only source
+src/record_mixing_records.c</title></rect>
+<rect x="803.171" y="680.007" width="11.727" height="9.114" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to45_overlay73_r20_exact.o
 668 bytes · C-only source
 src/to45_overlay73_r20_exact.c</title></rect>
-<rect x="840.098" y="662.602" width="5.929" height="17.704" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / r40_overlay_73_residual_19_run1.o
+<rect x="803.171" y="689.121" width="11.727" height="8.950" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / r40_overlay_73_residual_19_run1.o
 656 bytes · C-only source
 src/r40_overlay_73_residual_19_run1.c</title></rect>
-<rect x="803.171" y="680.306" width="9.702" height="9.235" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / op90_overlay_73_residual_20_residual_r01.o
+<rect x="814.899" y="680.007" width="9.389" height="9.544" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / op90_overlay_73_residual_20_residual_r01.o
 560 bytes · C-only source
 src/op90_overlay_73_residual_20_residual_r01.c</title></rect>
-<rect x="803.171" y="689.541" width="9.702" height="8.246" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_text_1.o
+<rect x="814.899" y="689.551" width="9.389" height="8.521" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_text_1.o
 500 bytes · C-only source
 src/overlay73_text_1.c</title></rect>
-<rect x="812.874" y="680.306" width="11.917" height="6.122" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to52_r2_w19_overlay73_r27_exact.o
+<rect x="803.171" y="698.072" width="10.634" height="6.861" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to52_r2_w19_overlay73_r27_exact.o
 456 bytes · C-only source
 src/to52_r2_w19/to52_r2_w19_overlay73_r27_exact.c</title></rect>
-<rect x="812.874" y="686.428" width="6.170" height="11.359" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_32.o
+<rect x="803.171" y="704.933" width="10.634" height="6.590" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_32.o
 438 bytes · C-only source
 src/overlay73_helpers_32.c</title></rect>
-<rect x="819.043" y="686.428" width="5.747" height="11.359" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_effect_1.o
-408 bytes · C-only source
-src/overlay73_effect_1.c</title></rect>
-<rect x="803.171" y="697.787" width="5.801" height="10.039" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to52_r2_w02_overlay73_r16_exact.o
+<rect x="803.171" y="711.523" width="10.634" height="5.477" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to52_r2_w02_overlay73_r16_exact.o
 364 bytes · C-only source
 src/to52_r2_w02/to52_r2_w02_overlay73_r16_exact.c</title></rect>
-<rect x="808.973" y="697.787" width="5.291" height="10.039" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / op90_overlay_73_residual_41_remaining_r01.o
+<rect x="813.805" y="698.072" width="5.337" height="9.953" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / op90_overlay_73_residual_41_remaining_r01.o
 332 bytes · C-only source
 src/op90_overlay_73_residual_41_remaining_r01.c</title></rect>
-<rect x="803.171" y="707.826" width="5.581" height="9.174" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to50_overlay73_scene_states_r34.o
+<rect x="819.143" y="698.072" width="5.145" height="9.953" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to50_overlay73_scene_states_r34.o
 320 bytes · C-only source
 src/to50_overlay73_scene_states_r34.c</title></rect>
-<rect x="808.753" y="707.826" width="5.512" height="9.174" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to90_extra2386_run01.o
+<rect x="813.805" y="708.024" width="5.633" height="8.976" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to90_extra2386_run01.o
 316 bytes · C-only source
 src/to90_extra2386_run01.c</title></rect>
-<rect x="814.264" y="697.787" width="5.263" height="8.269" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to90_extra2387_run01.o
+<rect x="819.439" y="708.024" width="4.849" height="8.976" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to90_extra2387_run01.o
 272 bytes · C-only source
 src/to90_extra2387_run01.c</title></rect>
-<rect x="819.527" y="697.787" width="5.263" height="8.269" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to90_extra2418_run01.o
+<rect x="824.287" y="680.007" width="5.364" height="8.114" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to90_extra2418_run01.o
 272 bytes · C-only source
 src/to90_extra2418_run01.c</title></rect>
-<rect x="814.264" y="706.056" width="10.527" height="4.074" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to58_r3b_ov73_14.o
-268 bytes · C-only source
-src/to58_r3b_ov73_14.c</title></rect>
-<rect x="814.264" y="710.130" width="5.496" height="6.870" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to70_overlay_73_residual_32_extra437_run01.o
+<rect x="829.651" y="680.007" width="4.654" height="8.114" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to70_overlay_73_residual_32_extra437_run01.o
 236 bytes · C-only source
 src/to70_overlay_73_residual_32_extra437_run01.c</title></rect>
-<rect x="819.760" y="710.130" width="5.030" height="6.870" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to70_overlay_73_residual_24_extra358_run01.o
+<rect x="824.287" y="688.121" width="10.017" height="3.450" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to70_overlay_73_residual_24_extra358_run01.o
 216 bytes · C-only source
 src/to70_overlay_73_residual_24_extra358_run01.c</title></rect>
-<rect x="824.791" y="680.306" width="3.622" height="9.543" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to70_to58_r3b_ov73_31.residual_extra363_run01.o
+<rect x="824.287" y="691.571" width="5.055" height="6.836" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to70_to58_r3b_ov73_31.residual_extra363_run01.o
 216 bytes · C-only source
 src/to70_to58_r3b_ov73_31.residual_extra363_run01.c</title></rect>
-<rect x="828.413" y="680.306" width="7.109" height="4.771" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to70_to52_r2_w02_overlay73_r16_residual_extra446_run01.o
+<rect x="829.343" y="691.571" width="4.962" height="6.836" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to70_to52_r2_w02_overlay73_r16_residual_extra446_run01.o
 212 bytes · C-only source
 src/to70_to52_r2_w02_overlay73_r16_residual_extra446_run01.c</title></rect>
-<rect x="828.413" y="685.077" width="7.109" height="4.771" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to70_to58_r3b_ov73_29.residual_extra459_run01.o
+<rect x="834.305" y="680.007" width="4.034" height="8.409" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to70_to58_r3b_ov73_29.residual_extra459_run01.o
 212 bytes · C-only source
 src/to70_to58_r3b_ov73_29.residual_extra459_run01.c</title></rect>
-<rect x="824.791" y="689.848" width="3.843" height="8.827" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to70_to58_r3b_ov73_30.residual_extra427_run01.o
+<rect x="838.339" y="680.007" width="7.688" height="4.412" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to70_to58_r3b_ov73_30.residual_extra427_run01.o
 212 bytes · C-only source
 src/to70_to58_r3b_ov73_30.residual_extra427_run01.c</title></rect>
-<rect x="828.634" y="689.848" width="6.888" height="4.460" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_20.o
+<rect x="838.339" y="684.420" width="7.688" height="3.996" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_20.o
 192 bytes · C-only source
 src/overlay73_helpers_20.c</title></rect>
-<rect x="828.634" y="694.308" width="6.888" height="4.367" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / r40_overlay_73_residual_16_run2.o
+<rect x="834.305" y="688.416" width="6.021" height="4.996" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / r40_overlay_73_residual_16_run2.o
 188 bytes · C-only source
 src/r40_overlay_73_residual_16_run2.c</title></rect>
-<rect x="835.522" y="680.306" width="3.630" height="8.286" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to70_to58_r3b_ov73_18.residual_extra705_run01.o
+<rect x="834.305" y="693.412" width="6.021" height="4.996" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to70_to58_r3b_ov73_18.residual_extra705_run01.o
 188 bytes · C-only source
 src/to70_to58_r3b_ov73_18.residual_extra705_run01.c</title></rect>
-<rect x="839.152" y="680.306" width="6.874" height="4.190" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to70_to58_r3b_ov73_23.residual_extra706_run01.o
+<rect x="840.326" y="688.416" width="5.701" height="5.052" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to70_to58_r3b_ov73_23.residual_extra706_run01.o
 180 bytes · C-only source
 src/to70_to58_r3b_ov73_23.residual_extra706_run01.c</title></rect>
-<rect x="839.152" y="684.495" width="6.874" height="4.097" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to70_overlay_73_residual_26_extra505_run01.o
+<rect x="840.326" y="693.468" width="5.701" height="4.940" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to70_overlay_73_residual_26_extra505_run01.o
 176 bytes · C-only source
 src/to70_overlay_73_residual_26_extra505_run01.c</title></rect>
-<rect x="835.522" y="688.592" width="5.522" height="5.042" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / op90_overlay_73_residual_15_r01.o
-174 bytes · C-only source
-src/op90_overlay_73_residual_15_r01.c</title></rect>
-<rect x="835.522" y="693.634" width="5.522" height="5.042" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / op90_overlay_73_residual_16_r01.o
-174 bytes · C-only source
-src/op90_overlay_73_residual_16_r01.c</title></rect>
-<rect x="841.044" y="688.592" width="4.983" height="5.202" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_18.o
+<rect x="824.287" y="698.408" width="5.882" height="4.407" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_18.o
 162 bytes · C-only source
 src/overlay73_helpers_18.c</title></rect>
-<rect x="841.044" y="693.794" width="4.983" height="4.881" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_31.o
+<rect x="824.287" y="702.815" width="5.882" height="4.135" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_31.o
 152 bytes · C-only source
 src/overlay73_helpers_31.c</title></rect>
-<rect x="824.791" y="698.675" width="4.618" height="4.851" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to70_overlay_73_residual_22_extra630_run01.o
+<rect x="830.169" y="698.408" width="4.945" height="4.530" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to70_overlay_73_residual_22_extra630_run01.o
 140 bytes · C-only source
 src/to70_overlay_73_residual_22_extra630_run01.c</title></rect>
-<rect x="824.791" y="703.526" width="4.618" height="4.296" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to70_to58_r3_ov73_37_prefix_extra908_run01.o
+<rect x="830.169" y="702.938" width="4.945" height="4.012" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to70_to58_r3_ov73_37_prefix_extra908_run01.o
 124 bytes · C-only source
 src/to70_to58_r3_ov73_37_prefix_extra908_run01.c</title></rect>
-<rect x="829.409" y="698.675" width="6.052" height="3.225" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / op90_overlay_73_residual_15_residual_2_r01.o
-122 bytes · C-only source
-src/op90_overlay_73_residual_15_residual_2_r01.c</title></rect>
-<rect x="829.409" y="701.901" width="3.026" height="5.922" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_28.o
+<rect x="824.287" y="706.950" width="5.286" height="3.390" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_28.o
 112 bytes · C-only source
 src/overlay73_helpers_28.c</title></rect>
-<rect x="832.435" y="701.901" width="3.026" height="5.922" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_36.o
+<rect x="824.287" y="710.340" width="5.286" height="3.390" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_36.o
 112 bytes · C-only source
 src/overlay73_helpers_36.c</title></rect>
-<rect x="824.791" y="707.823" width="5.161" height="3.348" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_29.o
+<rect x="824.287" y="713.731" width="5.286" height="3.269" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_29.o
 108 bytes · C-only source
 src/overlay73_helpers_29.c</title></rect>
-<rect x="824.791" y="711.171" width="5.161" height="2.976" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_27.o
+<rect x="829.573" y="706.950" width="2.829" height="5.429" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_27.o
 96 bytes · C-only source
 src/overlay73_helpers_27.c</title></rect>
-<rect x="824.791" y="714.148" width="5.161" height="2.852" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to50_overlay73_resource_copy.o
+<rect x="832.403" y="706.950" width="2.711" height="5.429" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to50_overlay73_resource_copy.o
 92 bytes · C-only source
 src/to50_overlay73_resource_copy.c</title></rect>
-<rect x="829.952" y="707.823" width="2.755" height="4.647" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to58_r3_ov73_21.o
+<rect x="829.573" y="712.379" width="2.770" height="4.621" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to58_r3_ov73_21.o
 80 bytes · C-only source
 src/to58_r3_ov73_21.c</title></rect>
-<rect x="832.706" y="707.823" width="2.755" height="4.647" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to58_r3b_ov73_30.o
+<rect x="832.344" y="712.379" width="2.770" height="4.621" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to58_r3b_ov73_30.o
 80 bytes · C-only source
 src/to58_r3b_ov73_30.c</title></rect>
-<rect x="829.952" y="712.469" width="2.825" height="4.531" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to58_r3b_ov73_31.o
+<rect x="835.114" y="698.408" width="2.612" height="4.901" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to58_r3b_ov73_31.o
 80 bytes · C-only source
 src/to58_r3b_ov73_31.c</title></rect>
-<rect x="832.777" y="712.469" width="2.684" height="4.531" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to58_r3b_ov73_29.o
+<rect x="837.725" y="698.408" width="2.481" height="4.901" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to58_r3b_ov73_29.o
 76 bytes · C-only source
 src/to58_r3b_ov73_29.c</title></rect>
-<rect x="835.461" y="698.675" width="2.792" height="4.011" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to58_r3_ov73_39.o
+<rect x="835.114" y="703.309" width="2.583" height="4.336" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to58_r3_ov73_39.o
 70 bytes · C-only source
 src/to58_r3_ov73_39.c</title></rect>
-<rect x="838.253" y="698.675" width="2.713" height="4.011" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to58_r3_ov73_37.o
+<rect x="837.697" y="703.309" width="2.509" height="4.336" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to58_r3_ov73_37.o
 68 bytes · C-only source
 src/to58_r3_ov73_37.c</title></rect>
-<rect x="835.461" y="702.687" width="2.034" height="5.348" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to58_r3b_ov73_18.o
+<rect x="840.206" y="698.408" width="2.151" height="5.059" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to58_r3b_ov73_18.o
 68 bytes · C-only source
 src/to58_r3b_ov73_18.c</title></rect>
-<rect x="837.495" y="702.687" width="3.471" height="2.951" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to58_r3b_ov73_23.o
+<rect x="842.357" y="698.408" width="3.669" height="2.791" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to58_r3b_ov73_23.o
 64 bytes · C-only source
 src/to58_r3b_ov73_23.c</title></rect>
-<rect x="837.495" y="705.637" width="3.471" height="2.397" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_24.o
+<rect x="842.357" y="701.199" width="3.669" height="2.268" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_24.o
 52 bytes · C-only source
 src/overlay73_helpers_24.c</title></rect>
-<rect x="840.966" y="698.675" width="1.731" height="4.806" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_35.o
+<rect x="840.206" y="703.466" width="1.991" height="4.179" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_35.o
 52 bytes · C-only source
 src/overlay73_helpers_35.c</title></rect>
-<rect x="842.697" y="698.675" width="3.329" height="2.499" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to58_r3_ov73_35.o
+<rect x="842.198" y="703.466" width="3.829" height="2.173" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to58_r3_ov73_35.o
 52 bytes · C-only source
 src/to58_r3_ov73_35.c</title></rect>
-<rect x="842.697" y="701.175" width="3.329" height="2.307" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_26.o
+<rect x="842.198" y="705.639" width="3.829" height="2.006" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_26.o
 48 bytes · C-only source
 src/overlay73_helpers_26.c</title></rect>
-<rect x="840.966" y="703.482" width="1.687" height="4.553" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_30.o
+<rect x="835.114" y="707.645" width="1.756" height="4.374" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_30.o
 48 bytes · C-only source
 src/overlay73_helpers_30.c</title></rect>
-<rect x="842.653" y="703.482" width="3.374" height="2.277" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to58_r3_ov73_33.o
+<rect x="836.870" y="707.645" width="3.512" height="2.187" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to58_r3_ov73_33.o
 48 bytes · C-only source
 src/to58_r3_ov73_33.c</title></rect>
-<rect x="842.653" y="705.758" width="3.374" height="2.277" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to58_r3b_ov73_17.o
+<rect x="836.870" y="709.832" width="3.512" height="2.187" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to58_r3b_ov73_17.o
 48 bytes · C-only source
 src/to58_r3b_ov73_17.c</title></rect>
-<rect x="835.461" y="708.035" width="1.761" height="3.999" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_17.o
+<rect x="835.114" y="712.019" width="2.698" height="2.609" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_17.o
 44 bytes · C-only source
 src/overlay73_helpers_17.c</title></rect>
-<rect x="837.222" y="708.035" width="3.201" height="1.999" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_33.o
+<rect x="835.114" y="714.628" width="2.698" height="2.372" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_33.o
 40 bytes · C-only source
 src/overlay73_helpers_33.c</title></rect>
-<rect x="837.222" y="710.034" width="3.201" height="1.999" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_40.o
+<rect x="837.812" y="712.019" width="2.570" height="2.491" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_40.o
 40 bytes · C-only source
 src/overlay73_helpers_40.c</title></rect>
-<rect x="835.461" y="712.034" width="2.481" height="2.580" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / r40_overlay_73_residual_16_run1.o
-40 bytes · C-only source
-src/r40_overlay_73_residual_16_run1.c</title></rect>
-<rect x="837.942" y="712.034" width="2.481" height="2.580" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to58_r3_ov73_38.o
+<rect x="837.812" y="714.509" width="2.570" height="2.491" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to58_r3_ov73_38.o
 40 bytes · C-only source
 src/to58_r3_ov73_38.c</title></rect>
-<rect x="835.461" y="714.614" width="2.548" height="2.386" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_39.o
+<rect x="840.382" y="707.645" width="2.295" height="2.649" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_39.o
 38 bytes · C-only source
 src/overlay73_helpers_39.c</title></rect>
-<rect x="838.009" y="714.614" width="2.414" height="2.386" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_19.o
+<rect x="840.382" y="710.295" width="2.295" height="2.510" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_19.o
 36 bytes · C-only source
 src/overlay73_helpers_19.c</title></rect>
-<rect x="840.422" y="708.035" width="2.346" height="2.455" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_25.o
+<rect x="842.677" y="707.645" width="3.349" height="1.720" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_25.o
 36 bytes · C-only source
 src/overlay73_helpers_25.c</title></rect>
-<rect x="840.422" y="710.490" width="2.346" height="2.455" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_38.o
+<rect x="842.677" y="709.365" width="3.349" height="1.720" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_38.o
 36 bytes · C-only source
 src/overlay73_helpers_38.c</title></rect>
-<rect x="842.768" y="708.035" width="3.258" height="1.768" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to58_r3_ov73_40.o
+<rect x="842.677" y="711.085" width="3.349" height="1.720" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / to58_r3_ov73_40.o
 36 bytes · C-only source
 src/to58_r3_ov73_40.c</title></rect>
-<rect x="842.768" y="709.803" width="1.629" height="3.143" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_15.o
-32 bytes · C-only source
-src/overlay73_helpers_15.c</title></rect>
-<rect x="844.397" y="709.803" width="1.629" height="3.143" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_21.o
+<rect x="840.382" y="712.805" width="2.441" height="2.098" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_21.o
 32 bytes · C-only source
 src/overlay73_helpers_21.c</title></rect>
-<rect x="840.422" y="712.946" width="2.368" height="2.162" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_34.o
+<rect x="840.382" y="714.902" width="2.441" height="2.098" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_34.o
 32 bytes · C-only source
 src/overlay73_helpers_34.c</title></rect>
-<rect x="840.422" y="715.108" width="2.368" height="1.892" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_16.o
+<rect x="842.823" y="712.805" width="3.204" height="1.398" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_16.o
 28 bytes · C-only source
 src/overlay73_helpers_16.c</title></rect>
-<rect x="842.790" y="712.946" width="1.970" height="2.274" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_23.o
+<rect x="842.823" y="714.203" width="1.602" height="2.797" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_23.o
 28 bytes · C-only source
 src/overlay73_helpers_23.c</title></rect>
-<rect x="844.760" y="712.946" width="1.266" height="2.274" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_14.o
-18 bytes · C-only source
-src/overlay73_helpers_14.c</title></rect>
-<rect x="842.790" y="715.220" width="1.438" height="1.780" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_22.o
+<rect x="844.425" y="714.203" width="1.602" height="1.598" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_22.o
 16 bytes · C-only source
 src/overlay73_helpers_22.c</title></rect>
-<rect x="844.229" y="715.220" width="1.079" height="1.780" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_37.o
+<rect x="844.425" y="715.801" width="1.602" height="1.199" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_37.o
 12 bytes · C-only source
 src/overlay73_helpers_37.c</title></rect>
-<rect x="845.307" y="715.220" width="0.719" height="1.780" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_73 / overlay73_helpers_13.o
-8 bytes · C-only source
-src/overlay73_helpers_13.c</title></rect>
 <rect x="803.171" y="644.575" width="42.855" height="72.425" fill="none" stroke="#101722" stroke-width="2"/>
 <rect x="846.026" y="644.575" width="42.661" height="45.450" fill="#35b85a" stroke="#101722" stroke-width="0.6"><title>ARM9 / OVY_85 / spin_trade_app.o
 12,118 bytes · C-only source

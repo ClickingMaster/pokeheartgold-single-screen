@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "4140b830ec7c3380ae0412d03c3cbca67d4c2f61",
+  "commit": "a30903eb6878d37ae9bdb9503039639f9f8b18ab",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "683274cc1ab4cde2bc95b1b3b5109b7bd527e8198edb27587c6532c67635783a",
+    "ARM9": "60519bbe577293d112ab018c523ca5826b266844f7f7912c32cba9a0db8540d5",
     "ARM7": "72614f19bcc02b7ccbf0b30c55a2652f6047778b370a530e4eb2783603e57dfa"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -30188,30 +30188,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_73",
-      "object": "op90_overlay_73_residual_15_r01.o",
-      "bytes": 174,
-      "status": "c",
-      "source": "src/op90_overlay_73_residual_15_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_73",
-      "object": "op90_overlay_73_residual_15_residual_2_r01.o",
-      "bytes": 122,
-      "status": "c",
-      "source": "src/op90_overlay_73_residual_15_residual_2_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_73",
-      "object": "op90_overlay_73_residual_16_r01.o",
-      "bytes": 174,
-      "status": "c",
-      "source": "src/op90_overlay_73_residual_16_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_73",
       "object": "op90_overlay_73_residual_20_residual_r01.o",
       "bytes": 560,
       "status": "c",
@@ -30224,38 +30200,6 @@
       "bytes": 332,
       "status": "c",
       "source": "src/op90_overlay_73_residual_41_remaining_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_73",
-      "object": "overlay73_effect_1.o",
-      "bytes": 408,
-      "status": "c",
-      "source": "src/overlay73_effect_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_73",
-      "object": "overlay73_helpers_13.o",
-      "bytes": 8,
-      "status": "c",
-      "source": "src/overlay73_helpers_13.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_73",
-      "object": "overlay73_helpers_14.o",
-      "bytes": 18,
-      "status": "c",
-      "source": "src/overlay73_helpers_14.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_73",
-      "object": "overlay73_helpers_15.o",
-      "bytes": 32,
-      "status": "c",
-      "source": "src/overlay73_helpers_15.c"
     },
     {
       "cpu": "ARM9",
@@ -30468,14 +30412,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_73",
-      "object": "r40_overlay_73_residual_16_run1.o",
-      "bytes": 40,
-      "status": "c",
-      "source": "src/r40_overlay_73_residual_16_run1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_73",
       "object": "r40_overlay_73_residual_16_run2.o",
       "bytes": 188,
       "status": "c",
@@ -30496,6 +30432,14 @@
       "bytes": 8246,
       "status": "c",
       "source": "src/record_mixing.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_73",
+      "object": "record_mixing_records.o",
+      "bytes": 1244,
+      "status": "c",
+      "source": "src/record_mixing_records.c"
     },
     {
       "cpu": "ARM9",
@@ -30592,14 +30536,6 @@
       "bytes": 36,
       "status": "c",
       "source": "src/to58_r3_ov73_40.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_73",
-      "object": "to58_r3b_ov73_14.o",
-      "bytes": 268,
-      "status": "c",
-      "source": "src/to58_r3b_ov73_14.c"
     },
     {
       "cpu": "ARM9",

@@ -2,8 +2,8 @@
 void ov73_021E66F0(void);
 void ov73_021E7468(void);
 int RecordMixing_GetTextSpeed(void);
-int ov73_021E795C(void *unused);
-void *ov73_021E7960(void *p);
+int RecordMixing_GetGroupRecordSize(void *unused);
+void *RecordMixing_GetGroupRecord(void *p);
 void ov73_021E8164(void);
 int ov73_021E9D10(void);
 void ov73_021EA370(void);
@@ -102,7 +102,7 @@ void *ov73_021E83F4(void *, u32, s32);
 void ov73_021E841C(void *, void *);
 
 void ov73_021EA290(void *p) {
-    ov73_021E79F4(PTR(p, 8), PTR(p, 0xc), Save_FriendGroup_Get(PTR(p, 4)), PTR(p, 0x10));
+    RecordMixing_MergeGroups(PTR(p, 8), PTR(p, 0xc), Save_FriendGroup_Get(PTR(p, 4)), PTR(p, 0x10));
 }
 
 void *ov73_021EA2A8(void *p) {

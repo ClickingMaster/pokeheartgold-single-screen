@@ -67,9 +67,9 @@
 	.public RecordMixing_LoadAvatar
 	.public ov73_021E781C
 	.public ov73_021E7870
-	.public ov73_021E7964
-	.public ov73_021E79A8
-	.public ov73_021E79F4
+	.public RecordMixing_InsertGroup
+	.public RecordMixing_RemoveGroup
+	.public RecordMixing_MergeGroups
 	.public ov73_021E7A8C
 	.public ov73_021E7AC0
 	.public ov73_021E7B3C
@@ -189,8 +189,8 @@
 	.public RecordMixing_ClearMessageWindow
 	.public RecordMixing_FreeAvatarGraphics
 	.public RecordMixing_GetTextSpeed
-	.public ov73_021E795C
-	.public ov73_021E7960
+	.public RecordMixing_GetGroupRecordSize
+	.public RecordMixing_GetGroupRecord
 	.public ov73_021E7A74
 	.public ov73_021E7A7C
 	.public ov73_021E7A84

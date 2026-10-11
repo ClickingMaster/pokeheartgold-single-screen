@@ -19,7 +19,7 @@ extern void RecordMixing_ShowYesNo(void *);
 extern int YesNoPrompt_HandleInput(void *);
 extern void YesNoPrompt_Destroy(void *);
 extern void Save_PrepareForAsyncWrite(void *, u32);
-extern void ov73_021E79F4(void *, void *, void *, void *);
+extern void RecordMixing_MergeGroups(void *, void *, void *, void *);
 extern void *sub_02034818(u32);
 extern void *OverlayManager_GetArgs(void *);
 extern void NintendoWfcHttp_RequestInfo(void *);

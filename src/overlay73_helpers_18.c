@@ -2,8 +2,8 @@
 void ov73_021E66F0(void);
 void ov73_021E7468(void);
 int RecordMixing_GetTextSpeed(void);
-int ov73_021E795C(void *unused);
-void *ov73_021E7960(void *p);
+int RecordMixing_GetGroupRecordSize(void *unused);
+void *RecordMixing_GetGroupRecord(void *p);
 void ov73_021E8164(void);
 int ov73_021E9D10(void);
 void ov73_021EA370(void);
