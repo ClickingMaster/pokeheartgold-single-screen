@@ -182,8 +182,8 @@ _0203BB3C:
 _0203BB4C: .word sSpawnMaps
 	thumb_func_end MapHeader_GetSpawnIdForDeathWarp
 
-	thumb_func_start sub_0203BB50
-sub_0203BB50: ; 0x0203BB50
+	thumb_func_start GetSpawnIdForFlyMap
+GetSpawnIdForFlyMap: ; 0x0203BB50
 	ldr r3, _0203BB6C ; =sSpawnMaps
 	mov r2, #0
 _0203BB54:
@@ -201,7 +201,7 @@ _0203BB5E:
 	bx lr
 	nop
 _0203BB6C: .word sSpawnMaps
-	thumb_func_end sub_0203BB50
+	thumb_func_end GetSpawnIdForFlyMap
 
 	thumb_func_start FlypointFlagAction
 FlypointFlagAction: ; 0x0203BB70

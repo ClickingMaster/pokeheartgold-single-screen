@@ -16,7 +16,7 @@
 #include "system.h"
 #include "text.h"
 #include "oam_manager.h"
-#include "unk_0203BA5C.h"
+#include "spawn_warp.h"
 #include "unk_020552A4.h"
 #include "unk_0206793C.h"
 #include "use_item_on_mon.h"

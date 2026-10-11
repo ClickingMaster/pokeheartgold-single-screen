@@ -35,5 +35,5 @@ void GetFlyWarpData(s32, WarpDataPrivate *);
 void GetDeathWarpData(s32, WarpDataPrivate *);
 void GetSpecialSpawnWarpData(s32, WarpDataPrivate *);
 u32 MapHeader_GetSpawnIdForDeathWarp(u32);
-u32 sub_0203BB50(u32);
+u32 GetSpawnIdForFlyMap(u32);
 void FlypointFlagAction(void *, u32);

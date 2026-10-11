@@ -50,7 +50,7 @@ u32 MapHeader_GetSpawnIdForDeathWarp(u32 mapId) {
     return 0;
 }
 
-u32 sub_0203BB50(u32 mapId) {
+u32 GetSpawnIdForFlyMap(u32 mapId) {
     u32 i;
     for (i = 0; i < 30; i++) {
         if (sSpawnMaps[i][3] == mapId) {

@@ -25,7 +25,7 @@
 #include "task.h"
 #include "terrain_attributes.h"
 #include "sound_playback.h"
-#include "unk_0203BA5C.h"
+#include "spawn_warp.h"
 #include "unk_02054648.h"
 #include "unk_02055244.h"
 #include "unk_020552A4.h"

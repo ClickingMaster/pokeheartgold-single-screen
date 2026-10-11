@@ -78,7 +78,7 @@ extern int PlayerAvatar_GetGender();
 extern void *ov02_02249458();
 extern int ov02_0224953C();
 extern void ov02_02249548();
-extern int sub_0203BB50();
+extern int GetSpawnIdForFlyMap();
 extern void GetFlyWarpData();
 extern void *LocalFieldData_GetSpecialSpawnWarpPtr();
 extern void GetSpecialSpawnWarpData();

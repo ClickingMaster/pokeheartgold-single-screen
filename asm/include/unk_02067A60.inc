@@ -15,7 +15,7 @@
 .public Save_LocalFieldData_Get
 .public GetFlyWarpData
 .public GetSpecialSpawnWarpData
-.public sub_0203BB50
+.public GetSpawnIdForFlyMap
 .public FlypointFlagAction
 .public Save_VarsFlags_Get
 .public TaskManager_Call

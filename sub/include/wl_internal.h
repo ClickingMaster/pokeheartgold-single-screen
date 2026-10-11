@@ -97,8 +97,36 @@ typedef struct WlRateSet {
 } WlRateSet;
 
 // Driver parameters (the WSet* setters), cleared by InitializeParam.
+// Station table entry (CAM): index 0 is the broadcast entry.
+typedef struct WlStation {
+    u16 state; // 0: free, 0x20: authenticated, 0x40: associated
+    u16 aid;
+    u16 macAdrs[3];
+    u16 rssi;
+    u16 capaInfo;
+    u16 authSeed;
+    u16 supRate;
+    u16 unk_12;
+    u16 lastSeqCtrl;
+    u16 frameCount; // frames queued for the station
+    u16 timer;      // CAM_TimerTask counts it down and drops the station at 0 (0xFFFF: never)
+    u16 lifeTime;   // reload value of timer
+} WlStation;
+
+// Station table state (InitCAM / InitializeCAM).
+typedef struct WlCam {
+    u16 numSta;      // used entries, the broadcast entry included
+    u16 powerMgtMap; // stations in power save mode (bit per entry)
+    u16 activeMap;   // stations awake (CAM_SetAwake / CAM_SetDoze)
+    u16 unk_06;      // bit per entry: state below 0x40 (CAM_SetStaState)
+    u16 unk_08;      // bit per entry: CAM_SetTIMElementBitmap leaves the entry alone, timer not reloaded
+    u16 unk_0a;
+    u16 aidCount; // AIDs handed out
+    u16 aidMap;   // AIDs in use (bit 0: reserved)
+} WlCam;
+
 typedef struct WlParam {
-    void *camTable;
+    WlStation *camTable;
     u16 camTableSize; // stations
     u16 maxSta;
     u16 macAddress[3];
@@ -149,9 +177,10 @@ typedef struct WlBss {
     u16 unk_8c; // WSetFrameLifeTime: life time * beaconPeriod / 100 (0xFFFF: none)
     u8 unk_8e[4];
     u16 ssidOffset; // offset of the SSID in the beacon frame
-    u8 unk_94[2];
-    u16 timOffset; // offset of the TIM in the beacon frame
-    u8 unk_98[4];
+    u16 unk_94;     // offset of the beacon's TIM element (MAC memory 0x0480425C + unk_94)
+    u16 timOffset;  // offset of the TIM in the beacon frame
+    u16 unk_98;
+    u16 unk_9a;   // DMA_Read: MAC memory reads past 0x04805F60 continue this many bytes lower
     u8 *gameInfo; // 129-byte buffer (InitializeHeapBuf)
     u16 gameInfoLength;
     u16 unk_a2;            // bit 0: WSetGameInfo writes gameInfo byte by byte (WL_WriteByte)
@@ -159,9 +188,29 @@ typedef struct WlBss {
     u16 tmpttPowerSaveOff; // WDisableTmpttPowerSave / WEnableTmpttPowerSave
     u32 intervalCount;     // WIntervalTimer calls (every 100 ms in state 0x40)
     u8 unk_ac[4];
-    u16 unk_b0; // WIntervalTimer queues task 21 while set
-    u8 unk_b2[0xc0 - 0xb2];
+    u16 fatalErr; // SetFatalErr bits; WIntervalTimer queues task 21 (SendFatalErrMsgTask) while set
+    u8 unk_b2[4];
+    u16 txBufRepairCount;  // WCheckTxBufIdBeforeFrame rewrote a frame's id words
+    u16 txFrameRetryCount; // RestoreTxFrame / WCheckTxBuf copied a frame to the MAC again
+    u8 unk_ba[6];
 } WlBss;
+
+// A frame waiting in the MAC memory (WlWork.txDesc / beaconDesc).
+typedef struct WlTxDesc {
+    u16 active;
+    u8 unk_02[6];
+    u8 *frame;  // the frame's place in the MAC memory
+    u32 unk_0c; // the frame in the driver heap (+16)
+    u8 unk_10[4];
+} WlTxDesc;
+
+// Random number generator state (RND_Init / RND_seed / RND_rand).
+typedef struct WlRandom {
+    u16 mul;
+    u16 add;
+    u16 seed;
+    u16 unk_06;
+} WlRandom;
 
 // RF chip description from the flash (WConfigDevice: flash bytes 0x40..0x43), used by InitRF and WSetChannel.
 typedef struct WlRf {
@@ -195,16 +244,16 @@ typedef struct WlWork {
     u32 unk_318;
     WlParam param;
     WlBss bss;
-    u16 unk_404; // 0x13: WCheckSSID accepts an SSID that starts with the own one
-    u8 unk_406[0x468 - 0x406];
-    u16 unk_468; // WDisableTmpttPowerSave leaves the hardware alone while set
-    u8 unk_46a[0x4a4 - 0x46a];
-    u16 beaconActive;
-    u8 unk_4a6[6];
-    u8 *beaconFrame;
-    u8 unk_4b0[0x53c - 0x4b0];
+    u16 unk_404; // pending MLME request (0x13: WCheckSSID accepts an SSID that starts with the own one)
+    u8 unk_406[0x420 - 0x406];
+    u8 *unk_420; // MLME confirm message (IssueMlmeConfirm)
+    u8 unk_424[8];
+    WlTxDesc txDesc[6]; // [3].active: WDisableTmpttPowerSave leaves the hardware alone while set; [5]: PS-Poll
+    WlTxDesc beaconDesc;
+    u8 unk_4b8[0x52c - 0x4b8];
+    WlCam cam;
     u32 counter[45]; // statistics: WUpdateCounter adds the hardware counters, WInitCounter clears
-    u8 unk_5f0[8];
+    WlRandom rnd;
     WlRf rf;
     OSAlarm periodicTimeOutAlarm; // SetupPeriodicTimeOut
     OSAlarm timeOutAlarm;         // SetupTimeOut
@@ -345,6 +394,68 @@ void SetupUsTimeOut(u32 us, OSAlarmHandler handler);
 // wl_set_channel.c
 int WSetChannel(u16 channel, int direct);
 
+// wl_mac_memory.c
+void ClearTimeOut(void);
+void DMA_Read(void *dest, const void *src, u32 size);
+void DMA_Write(void *dest, const void *src, u32 size);
+void DMA_WriteHeaderData(void *dest, const void *header, const void *data, u32 size);
+void DMA_WepWriteHeaderData(void *dest, const void *header, const void *data, u32 size);
+void WL_WriteByte(void *dest, u32 value);
+u8 WL_ReadByte(const void *src);
+
+// wl_random.c
+void RND_Init(u32 mul, u32 add);
+void RND_seed(u32 seed);
+u16 RND_rand(void);
+u16 calc_NextCRC(int data, int crc);
+
+// wl_tx_check.c
+int WCheckTxBufIdBeforeFrame(WlTxDesc *desc);
+void WaitMacStop(void);
+void RestoreTxFrame(WlTxDesc *desc);
+void WCheckTxBuf(void);
+
+// wl_fatal_err.c
+void SetFatalErr(u32 bits);
+void SendFatalErrMsgTask(void);
+void TerminateWlTask(void);
+void ReleaseWlTask(void);
+
+// wl_cam.c
+u32 CAM_Search(const u16 *addr);
+u32 CAM_SearchAdd(const u16 *addr);
+void CAM_AddBcFrame(WlHeapBufMan *from, WlHeapBuf *frame);
+void CAM_IncFrameCount(void *frame);
+void CAM_DecFrameCount(void *frame);
+void CAM_SetStaState(u16 aid, u16 state);
+void CAM_SetRSSI(u32 index, u32 rssi);
+void CAM_SetPowerMgtMode(u32 index, u16 mode);
+void CAM_SetDoze(u32 index);
+void CAM_SetAwake(u32 index);
+void CAM_SetCapaInfo(u32 index, u16 capaInfo);
+void CAM_SetSupRate(u32 index, u16 supRate);
+void CAM_SetLastSeqCtrl(u32 index, u16 seqCtrl);
+void CAM_SetAuthSeed(u32 index, u16 seed);
+void CAM_UpdateLifeTime(u32 index);
+u32 CAM_AllocateAID(u32 index);
+void CAM_ReleaseAID(u32 index);
+u16 CAM_GetStaState(u32 index);
+u32 CAM_IsActive(u32 index);
+u32 CAM_GetPowerMgtMode(u32 index);
+u16 *CAM_GetMacAdrs(u32 index);
+u16 CAM_GetAuthSeed(u32 index);
+u16 CAM_GetLastSeqCtrl(u32 index);
+u16 CAM_GetTxRate(u32 index);
+u16 CAM_GetAID(u32 index);
+u16 CAM_GetFrameCount(u32 index);
+void CAM_SetTIMElementBitmap(u32 index);
+void CAM_ClrTIMElementBitmap(u32 index);
+void CAM_TimerTask(void);
+void CAM_Delete(u32 index);
+void InitializeCAM(void);
+void InitCAM(void);
+void CAM_InitElement(u32 index, const u8 *addr);
+
 // veneers defined in other ARM7 files
 void __VENEER_OS_CancelAlarm(OSAlarm *alarm);
 void __VENEER_OS_CreateAlarm(OSAlarm *alarm);
@@ -359,28 +470,24 @@ void __VENEER_MIi_CpuClear16(u16 data, void *dest, u32 size);
 void __VENEER_MIi_CpuCopy16(const void *src, void *dest, u32 size);
 void *__VENEER_OS_AllocFromHeap(u32 id, u32 heap, u32 size);
 void __VENEER_OS_FreeToHeap(u32 id, u32 heap, void *ptr);
+void __VENEER_OS_ExitThread(void);
 
 // defined in the later WL files
-void ClearTimeOut(void);
 void WaitLoop_Waitus(u32 us, OSAlarmHandler handler);
 int WaitLoop_BbpAccess(void);
 int WaitLoop_RfAccess(void);
 void StopBeaconFrame(void);
 void StartBeaconFrame(void);
-void InitCAM(void);
 void InitApList(void);
 void InitTxCtrl(void);
 void InitRxCtrl(void);
 void WaitLoop_Rxpe(void);
 void DeleteAllTxFrames(void);
-u16 calc_NextCRC(int data, int crc);
 void WaitLoop_ClrAid(void);
 void DeleteTxFrames(u32 station);
-void CAM_SetStaState(u16 aid, u16 state);
 void FLASH_DirectRead(u32 addr, u32 size, void *dest);
 void InitializeCmdIf(void);
 void InitializeMLME(void);
-void InitializeCAM(void);
 void InitializeIntr(void);
 void DiagMacRegister(void);
 void DiagMacMemory(void);
@@ -388,8 +495,18 @@ void DiagBaseBand(void);
 void FLASH_MakeImage(void);
 void FLASH_Read(u32 addr, u32 size, void *dest);
 u32 FLASH_VerifyCheckSum(u32 *checksum);
-void WL_WriteByte(void *dest, u32 value);
-u8 WL_ReadByte(const void *src);
-void RND_Init(u32 mul, u32 add);
+void CopyTxFrmToMacBuf(void *frame, void *src);
+void MakeBeaconFrame(void);
+void MakePsPollFrame(u16 aid);
+void SendMessageToWmDirect(WlHeapBufMan *man, void *msg);
+void IssueMlmeConfirm(void);
+void ReleaseIntr(void);
+u16 *MakeDeAuthFrame(void *macAdrs, u16 reason, u16 unk);
+void TxManCtrlFrame(u16 *frame);
+void MLME_IssueDeAuthIndication(void *macAdrs, u16 reason);
+
+extern const u8 BC_ADRS[];
+
+extern const u16 crc16_table[16];
 
 #endif // WL_INTERNAL_H

@@ -6,7 +6,7 @@
 .public GetDeathWarpData
 .public GetSpecialSpawnWarpData
 .public MapHeader_GetSpawnIdForDeathWarp
-.public sub_0203BB50
+.public GetSpawnIdForFlyMap
 .public FlypointFlagAction
 .public Save_VarsFlags_Get
 .public Save_VarsFlags_FlypointFlagAction

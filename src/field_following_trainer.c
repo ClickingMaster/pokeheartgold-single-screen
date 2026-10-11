@@ -163,7 +163,7 @@ BOOL sub_02067C30(void *task) {
             u16 map;
             ov02_02249548(env->effect);
             local = Save_LocalFieldData_Get(*(void **)(fs + 0xC));
-            map = sub_0203BB50(env->mapNo);
+            map = GetSpawnIdForFlyMap(env->mapNo);
             if (map == 0) {
                 GF_AssertFail();
             }

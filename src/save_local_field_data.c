@@ -8,7 +8,7 @@
 #include "map_object.h"
 #include "player_avatar.h"
 #include "script_pokemon_util.h"
-#include "unk_0203BA5C.h"
+#include "spawn_warp.h"
 
 struct LocalFieldData {
     Location currentPosition;

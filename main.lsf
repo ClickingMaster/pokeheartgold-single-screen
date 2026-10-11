@@ -290,8 +290,8 @@ Static main
     Object src/map_header.o
     Object src/map_events.o
     Object src/save_local_field_data.o
-    Object asm/unk_0203BA5C_data.o
-    Object src/spawn_warp_lookup_1.o
+    Object asm/spawn_warp_data.o
+    Object src/spawn_warp.o
     Object src/field_system_rtc_weather.o
     Object src/start_menu.o
     Object src/field_interaction.o
