@@ -5,7 +5,7 @@ void sub_02061648(LocalMapObject *object, u32 direction) {
     state[0] = direction;
     sub_0205F328(object, 0);
     MapObject_ClearSingleMovement(object);
-    sub_02060F78(object);
+    MapObject_SetPreviousCoordsToCurrent(object);
 }
 
 void sub_0206166C(LocalMapObject *object) {
@@ -41,7 +41,7 @@ void sub_020616C0(LocalMapObject *object, u32 value) {
     state[0] = value;
     sub_0205F328(object, 0);
     MapObject_ClearSingleMovement(object);
-    sub_02060F78(object);
+    MapObject_SetPreviousCoordsToCurrent(object);
 }
 
 void sub_020616E4(LocalMapObject *object) {

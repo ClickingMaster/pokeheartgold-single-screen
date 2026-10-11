@@ -11,7 +11,7 @@
 #include "player_avatar.h"
 #include "render_animation.h"
 #include "render_model.h"
-#include "unk_0205FD20.h"
+#include "map_object_movement_utilities.h"
 
 // The arrow shown on the tile ahead of the player while it stands on a warp entrance (door mat, cave exit,
 // ...) facing the way out (field effect renderer 3, created with the player avatar): a model turned to the
@@ -135,7 +135,7 @@ void WarpArrowEffect_Update(FieldEffect *effect, WarpArrowEffect *work) {
     int dx = GetDeltaXByFacingDirection(work->direction);
     int z = MapObject_GetZCoord(mapObject);
     int dz = GetDeltaYByFacingDirection(work->direction);
-    sub_020611C8(x + dx, z + dz, &position);
+    SetPositionToTileCenter(x + dx, z + dz, &position);
     MapObject_CopyPositionVector(mapObject, &objectPos);
     position.y = objectPos.y;
     FieldEffect_SetPosition(effect, &position);

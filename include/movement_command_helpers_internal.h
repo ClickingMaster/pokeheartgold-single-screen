@@ -18,13 +18,13 @@ extern void *EmoteMark_Spawn(void *, u32, u32);
 extern BOOL EmoteMark_IsDone(void *);
 extern void FieldEffect_Destroy(void *);
 extern void MapObject_IncrementMovementStep(void *);
-extern void sub_02060F24(void *, u32);
+extern void MapObject_MoveCoordsInDirection(void *, u32);
 extern void MapObject_SetOrQueueFacing(void *, u32);
 extern void sub_0205F328(void *, u32);
 extern void MapObject_SetFlagsBits(void *, u32);
-extern void sub_0206101C(void *, s32, u32);
-extern void sub_02061070(void *);
-extern void sub_02060F78(void *);
+extern void MapObject_OffsetPositionInDirection(void *, s32, u32);
+extern void MapObject_UpdateHeight(void *);
+extern void MapObject_SetPreviousCoordsToCurrent(void *);
 extern void sub_0205F484(void *);
 
 void sub_02062F48(void *, u32);

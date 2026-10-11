@@ -18,7 +18,7 @@
 #include "script_manager.h"
 #include "task.h"
 #include "unk_0205CB48.h"
-#include "unk_0205FD20.h"
+#include "map_object_movement_utilities.h"
 
 static BOOL Task_TryHeadbuttEncounter(TaskManager *taskManager);
 static s8 Headbutt_GetTreeTypeFromTable(u16 numRegularTrees, u16 numSecretTrees, u32 trainerId, u32 x, u32 y, s16 treeCoords[][2]);

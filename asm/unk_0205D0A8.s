@@ -63,7 +63,7 @@ _0205D10A:
 	add r0, r5, #0
 	bl sub_0205D1FC
 	add r0, r6, #0
-	bl sub_020611F4
+	bl GetOppositeDirection
 	add r6, r0, #0
 	add r0, r5, #0
 	add r1, r4, #0

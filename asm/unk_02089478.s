@@ -174,7 +174,7 @@ _02089584:
 	pop {r4, r5, r6, pc}
 _020895C8:
 	add r0, r5, #0
-	bl sub_0208E174
+	bl PokemonSummary_InitConditionChart
 	add r0, r5, #0
 	bl sub_0208BCD4
 	add r0, r5, #0

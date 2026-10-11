@@ -32,7 +32,7 @@ extern R123Unary ov96_0221D9C8[];
 extern void *PokeathlonCourseScoreList_GetRanked(void *, u8);
 extern void ov96_0221A730(void *);
 extern u32 MTRandom(void);
-extern u32 ov96_02215E68(void *, u8);
+extern u32 PokeathlonRingDrop_GetMonStaminaPercent(void *, u8);
 void ov96_02219FE4(void *);
 void ov96_0221A00C(R123Rec *, u8, void *);
 BOOL ov96_0221A034(const VecFx32 *, const VecFx32 *, fx32);

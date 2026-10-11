@@ -21,15 +21,15 @@
 .public NARC_ReadPokepicAnimScript
 .public sub_0207294C
 .public sub_0208A520
-.public sub_0208DE40
-.public sub_0208DEDC
-.public sub_0208DEFC
-.public sub_0208DF2C
-.public sub_0208E174
-.public sub_0208E3AC
-.public sub_0208E444
-.public sub_0208E4B4
-.public sub_0208E544
+.public PokemonSummary_Init3D
+.public PokemonSummary_DrawPokepic
+.public PokemonSummary_FreePokepicAndCamera
+.public PokemonSummary_CreateCamera
+.public PokemonSummary_InitConditionChart
+.public PokemonSummary_CreatePokepic
+.public PokemonSummary_StartPokepicAnim
+.public PokemonSummary_ReloadPokepic
+.public PokemonSummary_CheckTouchedButton
 .public NNS_G2dSetupSoftwareSpriteCamera
 .public NNS_G3dInit
 .public G3X_Init
@@ -46,9 +46,9 @@
 .public gOverlayTemplate_Battle
 .public gNatureStatMods
 
-	.public sub_0208DF9C
-	.public sub_0208DFF8
-	.public sub_0208E4DC
+	.public ConditionChart_GetVertex
+	.public ConditionChart_GetStep
+	.public PokemonSummary_GetTouchedButton
 	.public _02104EA4
 	.public _02104EB0
 	.public _02104EC2

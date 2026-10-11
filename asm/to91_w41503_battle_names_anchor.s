@@ -3508,20 +3508,20 @@
 	.public VsRecorder_PrintProfileButton
 	.public VsRecorder_CreateExitButton
 	.public VsRecorder_FreeExitButton
-	.public ov40_022330E0
-	.public ov40_0223311C
-	.public ov40_0223316C
-	.public ov40_0223320C
-	.public ov40_02233238
-	.public ov40_022334F8
-	.public ov40_02233550
-	.public ov40_022335F4
-	.public ov40_022338D0
-	.public ov40_022339CC
-	.public ov40_02233AEC
-	.public ov40_02233C3C
-	.public ov40_02233CAC
-	.public ov40_02233EE8
+	.public VsRecorder_PlaceFrontierExitButton
+	.public VsRecorder_LoadFrontierButtonGfx
+	.public VsRecorder_CreateFrontierButtons
+	.public VsRecorder_FreeFrontierButtons
+	.public VsRecorder_LoadFrontierGfx
+	.public VsRecorder_GrayscalePalette
+	.public VsRecorder_GrayFrontierPrints
+	.public VsRecorder_CreateFrontierSprites
+	.public VsRecorder_FreeFrontierSprites
+	.public VsRecorder_SpinInFrontierSprites
+	.public VsRecorder_SpinOutFrontierSprites
+	.public VsRecorder_PlaceFrontierSprites
+	.public VsRecorder_FrontierEnter
+	.public VsRecorder_FrontierMain
 	.public ov40_02233F28
 	.public ov40_0223414C
 	.public ov40_022341E0
@@ -4205,8 +4205,8 @@ ov40_02245140: ; 0x02245140
 	.word VsRecorder_SavedVideoResume
 
 ov40_02245168: ; 0x02245168
-	.word ov40_02233CAC
-	.word ov40_02233EE8
+	.word VsRecorder_FrontierEnter
+	.word VsRecorder_FrontierMain
 	.word ov40_02233F28
 
 ov40_02245174: ; 0x02245174

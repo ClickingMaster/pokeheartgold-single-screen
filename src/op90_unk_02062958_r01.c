@@ -4,12 +4,12 @@ typedef struct State {s32 speed,phase;u16 inc,angle;s8 dir,count,unused,kind;} S
 typedef struct Vec {s32 x,y,z;} Vec;
 extern s32 *_0210FACC[];
 State *sub_0205F3E4(void *);
-void sub_0206101C(void *,int,int);
-void sub_02061070(void *);
-void sub_02060F24(void *,int);
+void MapObject_OffsetPositionInDirection(void *,int,int);
+void MapObject_UpdateHeight(void *);
+void MapObject_MoveCoordsInDirection(void *,int);
 void MapObject_SetFlagsBits(void *,u32);
 void MapObject_SetFacingVector(void *,Vec *);
-void sub_02060F78(void *);
+void MapObject_SetPreviousCoordsToCurrent(void *);
 void sub_0205F484(void *);
 void sub_0205F328(void *,int);
 void MapObject_IncrementMovementStep(void *);
@@ -21,11 +21,11 @@ int MapObjectMovementCmd092_Step1(void *obj){
     State *s=sub_0205F3E4(obj);
     Vec face;
     if(s->speed){
-        sub_0206101C(obj,s->dir,s->speed);
-        sub_02061070(obj);
+        MapObject_OffsetPositionInDirection(obj,s->dir,s->speed);
+        MapObject_UpdateHeight(obj);
         if(s->phase>=65536){
             s->phase=0;
-            sub_02060F24(obj,s->dir);
+            MapObject_MoveCoordsInDirection(obj,s->dir);
             MapObject_SetFlagsBits(obj,4);
         }
         s->phase+=(s->speed<0)?-s->speed:s->speed;
@@ -50,7 +50,7 @@ int MapObjectMovementCmd092_Step1(void *obj){
     if(s->count>0) return 0;
     {Vec zero={0,0,0};MapObject_SetFacingVector(obj,&zero);}
     MapObject_SetFlagsBits(obj,0x20028);
-    sub_02060F78(obj);
+    MapObject_SetPreviousCoordsToCurrent(obj);
     sub_0205F484(obj);
     sub_0205F328(obj,0);
     MapObject_IncrementMovementStep(obj);

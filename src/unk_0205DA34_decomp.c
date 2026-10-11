@@ -37,7 +37,7 @@ u32 sub_0205DAA8(void *unused, LocalMapObject *object, int direction) {
 
     MapObject_CopyPositionVector(object, &position);
     result = 0;
-    if (sub_02060D94(object, x + dx, y, z + dz) == TRUE) {
+    if (MapObject_IsOutsideMovementRange(object, x + dx, y, z + dz) == TRUE) {
         result |= 1;
     }
     if (sub_020549F4(MapObject_GetFieldSystem(object), &position, x + dx, z + dz, &terrainFlag) == TRUE) {
@@ -46,7 +46,7 @@ u32 sub_0205DAA8(void *unused, LocalMapObject *object, int direction) {
             result |= 8;
         }
     }
-    if (sub_02060DEC(object, x + dx, z + dz, direction) == TRUE) {
+    if (MapObject_IsMoveBlockedByBehavior(object, x + dx, z + dz, direction) == TRUE) {
         result |= 2;
     }
     if (sub_02060BFC(object, x + dx, y, z + dz) == TRUE) {

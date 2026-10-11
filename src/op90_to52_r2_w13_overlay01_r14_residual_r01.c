@@ -60,7 +60,7 @@ void BillboardObject_SetVisible(void *obj, int v);
 void BillboardObject_UpdateTextureAnimation(void *obj);
 BOOL MapObject_CheckFlag24(void *object);
 s32 MapObject_GetPriorityPlusValue(void *object, s32 v);
-u32 sub_02060FA8(void *object, int v);
+u32 MapObject_GetMetatileBehaviorInDirection(void *object, int v);
 BOOL MetatileBehavior_IsReflective(u8 tile);
 BOOL MetatileBehavior_IsPuddle(u8 tile);
 void MapObject_CopyPositionVector(void *object, VecFx32 *pos);
@@ -151,7 +151,7 @@ void ov01_021FA97C(void *object, int mode) {
     BillboardObject_UpdateTextureAnimation(w->obj);
     if (MapObject_CheckFlag24(object) == TRUE) {
         priority = MapObject_GetPriorityPlusValue(object, 2);
-        behavior = sub_02060FA8(object, 1);
+        behavior = MapObject_GetMetatileBehaviorInDirection(object, 1);
         if (MetatileBehavior_IsReflective(behavior) == TRUE) {
             refl = 2;
         } else if (MetatileBehavior_IsPuddle(behavior) == TRUE) {

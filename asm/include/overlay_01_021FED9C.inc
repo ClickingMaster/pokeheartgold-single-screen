@@ -2,7 +2,7 @@
 #pragma once
 .public MapObject_GetPriorityPlusValue
 .public MapObject_GetPreviousYCoord
-.public sub_020611C8
+.public SetPositionToTileCenter
 .public FieldEffect_GetUserData
 .public FieldEffect_GetPosition
 .public RenderModel_Free

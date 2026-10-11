@@ -65,7 +65,7 @@ void sub_02061338(LocalMapObject *object) {
             MapObject_SetFacingDirection(object, direction);
         }
     }
-    sub_02060F78(object);
+    MapObject_SetPreviousCoordsToCurrent(object);
 }
 
 void sub_0206139C(LocalMapObject *object) {

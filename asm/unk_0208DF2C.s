@@ -8,8 +8,8 @@
 	.include "unk_0208DE40.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_0208DF2C
-sub_0208DF2C: ; 0x0208DF2C
+	thumb_func_start PokemonSummary_CreateCamera
+PokemonSummary_CreateCamera: ; 0x0208DF2C
 	push {r3, r4, lr}
 	sub sp, #0x1c
 	ldr r3, _0208DF94 ; =_02104EA4
@@ -59,4 +59,4 @@ sub_0208DF2C: ; 0x0208DF2C
 	nop
 _0208DF94: .word _02104EA4
 _0208DF98: .word 0x000005C1
-	thumb_func_end sub_0208DF2C
+	thumb_func_end PokemonSummary_CreateCamera

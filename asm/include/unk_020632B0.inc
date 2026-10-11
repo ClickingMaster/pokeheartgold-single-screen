@@ -64,12 +64,12 @@
 .public MapObject_SetFacingVector
 .public sub_0205F9A0
 .public sub_0205FC94
-.public sub_02060B90
+.public MapObject_CheckCollisionAt
 .public GetDeltaXByFacingDirection
 .public GetDeltaYByFacingDirection
-.public sub_02060F78
-.public sub_02061070
-.public sub_02061200
+.public MapObject_SetPreviousCoordsToCurrent
+.public MapObject_UpdateHeight
+.public GetDirectionTowards
 .public sub_02061248
 .public MapObject_AreBitsSetForMovementScriptInit
 .public MapObject_SetHeldMovement

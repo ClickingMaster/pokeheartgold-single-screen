@@ -59,9 +59,9 @@ BOOL MapObjectMovementCmd108_Step1(void *obj) {
     }
     vec.z = cmd->data->origin.z + (int)rounded;
     MapObject_SetPositionVector(obj, &vec);
-    sub_02061070(obj);
+    MapObject_UpdateHeight(obj);
     MapObject_SetFlagsBits(obj, 0x20008);
-    sub_02060F78(obj);
+    MapObject_SetPreviousCoordsToCurrent(obj);
     sub_0205F484(obj);
     sub_0205F328(obj, 0);
     MapObject_IncrementMovementStep(obj);

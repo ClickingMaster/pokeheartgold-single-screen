@@ -6,7 +6,7 @@ int ov01_021F2BC8(struct WaterfallWork *work, TaskManager *taskManager) {
     int x = MapObject_GetXCoord(work->obj) + (GetDeltaXByFacingDirection(1) << 1);
     int z = MapObject_GetZCoord(work->obj) + (GetDeltaYByFacingDirection(1) << 1);
 
-    sub_020611C8(x, z, (VecFx32 *)&work->stepX);
+    SetPositionToTileCenter(x, z, (VecFx32 *)&work->stepX);
     sub_0206121C(work->fieldSystem, (VecFx32 *)&work->stepX);
     work->progress = 0;
     work->targetX = x;
@@ -77,7 +77,7 @@ int ov01_021F2CD4(struct WaterfallWork *work, TaskManager *taskManager) {
     MapObject_SetCurrentX(work->obj, work->targetX);
     MapObject_SetCurrentY(work->obj, work->targetY);
     MapObject_SetCurrentZ(work->obj, work->targetZ);
-    sub_02060F78(work->obj);
+    MapObject_SetPreviousCoordsToCurrent(work->obj);
     ov02_0224D5AC(work->effect);
     return 1;
 }

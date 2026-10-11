@@ -105,7 +105,7 @@ sub_0205DAA8: ; 0x0205DAA8
 	add r1, r7, r1
 	add r3, r6, r3
 	mov r4, #0
-	bl sub_02060D94
+	bl MapObject_IsOutsideMovementRange
 	cmp r0, #1
 	bne _0205DAFC
 	mov r0, #1
@@ -141,7 +141,7 @@ _0205DB2C:
 	ldr r3, [sp, #4]
 	add r0, r5, #0
 	add r1, r7, r1
-	bl sub_02060DEC
+	bl MapObject_IsMoveBlockedByBehavior
 	cmp r0, #1
 	bne _0205DB46
 	mov r0, #2

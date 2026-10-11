@@ -12,8 +12,8 @@
 	.include "unk_0205FD20.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_02060AF4
-sub_02060AF4: ; 0x02060AF4
+	thumb_func_start MapObject_CheckCollision
+MapObject_CheckCollision: ; 0x02060AF4
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x10
 	ldr r7, [sp, #0x28]
@@ -25,7 +25,7 @@ sub_02060AF4: ; 0x02060AF4
 	add r3, r7, #0
 	add r6, r0, #0
 	mov r4, #0
-	bl sub_02060D94
+	bl MapObject_IsOutsideMovementRange
 	cmp r0, #1
 	bne _02060B16
 	mov r0, #1
@@ -55,7 +55,7 @@ _02060B40:
 	add r0, r6, #0
 	add r1, r5, #0
 	add r2, r7, #0
-	bl sub_02060DEC
+	bl MapObject_IsMoveBlockedByBehavior
 	cmp r0, #1
 	bne _02060B54
 	mov r0, #2
@@ -89,4 +89,4 @@ _02060B8A:
 	add r0, r4, #0
 	add sp, #0x10
 	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end sub_02060AF4
+	thumb_func_end MapObject_CheckCollision

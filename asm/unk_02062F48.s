@@ -80,7 +80,7 @@ sub_02062FAC: ; 0x02062FAC
 	strh r7, [r0, #4]
 	add r0, r5, #0
 	add r1, r4, #0
-	bl sub_02060F24
+	bl MapObject_MoveCoordsInDirection
 	add r0, r5, #0
 	add r1, r4, #0
 	bl MapObject_SetOrQueueFacing
@@ -109,9 +109,9 @@ sub_02062FEC: ; 0x02062FEC
 	lsl r2, r2, #2
 	ldr r2, [r6, r2]
 	add r0, r5, #0
-	bl sub_0206101C
+	bl MapObject_OffsetPositionInDirection
 	add r0, r5, #0
-	bl sub_02061070
+	bl MapObject_UpdateHeight
 	mov r0, #6
 	ldrsh r1, [r4, r0]
 	add r1, r1, #1
@@ -128,7 +128,7 @@ _02063026:
 	mov r1, #0x28
 	bl MapObject_SetFlagsBits
 	add r0, r5, #0
-	bl sub_02060F78
+	bl MapObject_SetPreviousCoordsToCurrent
 	add r0, r5, #0
 	bl sub_0205F484
 	add r0, r5, #0

@@ -50,7 +50,7 @@ extern void sub_0208A234(void *data, u8 value);
 extern int sub_0208A3F4(void *data, int value);
 extern int sub_0208A45C(void *data, int value);
 extern int sub_0208A4B8(void *data, int value);
-extern void sub_0208E444(void *data);
+extern void PokemonSummary_StartPokepicAnim(void *data);
 extern void sub_02089C50(void *data);
 extern void sub_0208BC78(void *data);
 extern void G2x_SetBlendAlpha_(u32 reg, int plane1, int plane2, int eva, int evb);

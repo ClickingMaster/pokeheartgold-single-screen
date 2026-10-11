@@ -248,10 +248,10 @@ ov96_0221A86C: ; 0x0221A86C
 	.word 0
 
 ov96_0221A880:
-	.word ov96_02215AC4
-	.word ov96_02215CD0
+	.word PokeathlonRingDrop_Init
+	.word PokeathlonRingDrop_Draw
 	.word ov96_02215CE8
-	.word ov96_02215D4C
+	.word PokeathlonRingDrop_Exit
 	.word 0
 
 ov96_0221A894: ; 0x0221A894

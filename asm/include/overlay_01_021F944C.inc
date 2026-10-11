@@ -65,7 +65,7 @@
 .public MapObject_CheckActive
 .public MapObject_CheckFlag24
 .public MapObject_CopyPositionVector
-.public sub_02060FA8
+.public MapObject_GetMetatileBehaviorInDirection
 .public FieldEffect_Destroy
 .public NNS_G3dMdlGetMdlFogEnableFlag
 .public NNS_G3dMdlSetMdlFogEnableFlagAll

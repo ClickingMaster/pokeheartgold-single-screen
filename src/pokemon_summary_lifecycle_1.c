@@ -33,20 +33,20 @@ BOOL PokemonSummary_Init(void *manager, u32 *state) {
     sub_02088630(*(void **)data);
     sub_020887C4(data, narc27, narcA2);
     sub_0208887C();
-    sub_0208DE40(data);
+    PokemonSummary_Init3D(data);
     FontID_Alloc(4, 0x13);
     sub_02088894(data);
     sub_020889D0(data, narcA2);
     sub_020897C0(data);
     sub_0208B1AC(data);
     sub_0208B2C0(data);
-    sub_0208E3AC(data);
+    PokemonSummary_CreatePokepic(data);
     sub_0208B48C(data);
     sub_0208B4EC(data);
     sub_0208BECC(data);
     sub_0208C3E4(data);
     sub_02089CB4(data);
-    sub_0208DF2C(data);
+    PokemonSummary_CreateCamera(data);
     Main_SetVBlankIntrCB(sub_020885DC, data);
     *(volatile u16 *)0x04000304 |= 0x8000;
     GfGfx_BothDispOn();
@@ -138,7 +138,7 @@ BOOL PokemonSummary_Main(void *manager, u32 *state) {
     sub_0208B278(data);
     sub_0208C3C0(data);
     SpriteSystem_DrawSprites(*(void **)(data + 0x400));
-    sub_0208DEDC(data);
+    PokemonSummary_DrawPokepic(data);
     return FALSE;
 }
 
@@ -146,7 +146,7 @@ BOOL PokemonSummary_Exit(void *manager, u32 *state) {
     u8 *data = OverlayManager_GetData(manager);
     (void)state;
     Main_SetVBlankIntrCB(NULL, NULL);
-    sub_0208DEFC(data);
+    PokemonSummary_FreePokepicAndCamera(data);
     sub_0208B258(data);
     sub_0208C560(data);
     sub_0208877C(*(void **)data);

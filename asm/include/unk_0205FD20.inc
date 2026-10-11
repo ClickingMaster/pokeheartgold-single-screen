@@ -89,27 +89,27 @@
 .public sub_0205F9C0
 .public sub_0205FD20
 .public sub_0205FD30
-.public sub_02060B90
-.public sub_02060BB8
+.public MapObject_CheckCollisionAt
+.public MapObject_CheckCollisionInDirection
 .public sub_02060BFC
-.public sub_02060D94
-.public sub_02060DEC
+.public MapObject_IsOutsideMovementRange
+.public MapObject_IsMoveBlockedByBehavior
 .public sub_02060E54
 .public sub_02060EBC
 .public sub_02060EEC
 .public GetDeltaXByFacingDirection
 .public GetDeltaYByFacingDirection
-.public sub_02060F24
-.public sub_02060F78
-.public sub_02060FA8
+.public MapObject_MoveCoordsInDirection
+.public MapObject_SetPreviousCoordsToCurrent
+.public MapObject_GetMetatileBehaviorInDirection
 .public sub_02060FE0
-.public sub_0206101C
-.public sub_02061070
-.public sub_02061190
-.public sub_020611C8
+.public MapObject_OffsetPositionInDirection
+.public MapObject_UpdateHeight
+.public OffsetPositionInDirection
+.public SetPositionToTileCenter
 .public sub_020611DC
-.public sub_020611F4
-.public sub_02061200
+.public GetOppositeDirection
+.public GetDirectionTowards
 .public sub_0206121C
 .public sub_02061248
 .public sub_02062400
@@ -152,32 +152,32 @@
 	.public sub_020601A4
 	.public sub_020601BC
 	.public sub_02060274
-	.public sub_02060328
-	.public sub_0206039C
-	.public sub_020603D0
+	.public MapObject_SpawnFootprints
+	.public MapObject_UpdateShallowWaterRipple
+	.public MapObject_ResetShallowWaterRipple
 	.public sub_020603DC
 	.public sub_020603F8
 	.public sub_02060530
-	.public sub_0206064C
+	.public MapObject_SpawnGroundDust
 	.public sub_02060698
 	.public sub_020606CC
 	.public sub_02060700
 	.public sub_02060704
-	.public sub_02060708
-	.public sub_0206073C
-	.public sub_02060770
-	.public sub_020607A4
-	.public sub_020607D8
-	.public sub_020609D4
+	.public MapObject_SpawnPuddleSplashAtPrevious
+	.public MapObject_SpawnPuddleSplash
+	.public MapObject_SpawnMudSplashAtPrevious
+	.public MapObject_SpawnMudSplash
+	.public MapObject_CreateReflection
+	.public MapObject_UpdateReflection
 	.public sub_02060AB8
 	.public sub_02060AF0
-	.public sub_02060AF4
+	.public MapObject_CheckCollision
 	.public sub_02060CA8
 	.public sub_02060EA4
 	.public sub_02060ED4
-	.public sub_02061108
-	.public _020FD49C
-	.public _020FD4AC
-	.public _020FD4BC
-	.public _020FD4CC
-	.public _020FD4DC
+	.public MapObject_UpdateMetatileBehaviors
+	.public gDirectionDeltaY
+	.public gDirectionDeltaX
+	.public gMetatileBlocksEntryTests
+	.public gMetatileBlocksExitTests
+	.public gOppositeDirections

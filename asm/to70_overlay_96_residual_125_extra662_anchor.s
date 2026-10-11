@@ -429,11 +429,11 @@
 	.public PokeathlonGoalRollDisplay_GetScore
 	.public PokeathlonGoalRollCpu_SetBalls
 	.public PokeathlonGoalRollCpu_Free
-	.public ov96_02215864
-	.public ov96_0221587C
-	.public ov96_022158D4
-	.public ov96_02215944
-	.public ov96_02215DBC
+	.public PokeathlonScreenShake_IsDone
+	.public PokeathlonScreenShake_Init
+	.public PokeathlonRingDrop_IsOnSwitchButton
+	.public PokeathlonRingDrop_DecayVelocity
+	.public PokeathlonRingDrop_GetMonState
 	.public ov96_02215FA0
 	.public ov96_02217890
 	.public ov96_02217DBC

@@ -45,7 +45,7 @@
 .public MapObject_SetPositionFromXYZAndDirection
 .public GetDeltaXByFacingDirection
 .public GetDeltaYByFacingDirection
-.public sub_02061200
+.public GetDirectionTowards
 .public MapObject_ForceSetHeldMovement
 .public sub_0206234C
 .public sub_020623C8

@@ -28,7 +28,7 @@ sub_020619FC: ; 0x020619FC
 	bne _02061A5A
 	add r0, r5, #0
 	bl MapObject_GetNextFacingDirection
-	bl sub_020611F4
+	bl GetOppositeDirection
 	add r4, r0, #0
 	add r0, r5, #0
 	add r1, r4, #0
@@ -49,18 +49,18 @@ _02061A5A:
 	add r4, r0, #0
 	add r0, r5, #0
 	add r1, r4, #0
-	bl sub_02060BB8
+	bl MapObject_CheckCollisionInDirection
 	mov r1, #1
 	add r2, r0, #0
 	tst r2, r1
 	beq _02061A84
 	add r0, r4, #0
 	strh r1, [r6, #2]
-	bl sub_020611F4
+	bl GetOppositeDirection
 	add r4, r0, #0
 	add r0, r5, #0
 	add r1, r4, #0
-	bl sub_02060BB8
+	bl MapObject_CheckCollisionInDirection
 _02061A84:
 	mov r1, #0xc
 	cmp r0, #0

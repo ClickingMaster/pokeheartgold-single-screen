@@ -4,7 +4,7 @@
 #include "global.h"
 
 int IsPaletteFadeFinished(void);
-void sub_0208E444(void *data);
+void PokemonSummary_StartPokepicAnim(void *data);
 void sub_02089C50(void *data);
 void sub_02089E30(void *data, int direction);
 int sub_02089E98(void *data);

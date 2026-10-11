@@ -30,7 +30,7 @@ void sub_020613F8(LocalMapObject *object) {
             state->state = 0;
             break;
         }
-        if (sub_02060BB8(object, direction)) {
+        if (MapObject_CheckCollisionInDirection(object, direction)) {
             state->state = 0;
             break;
         }

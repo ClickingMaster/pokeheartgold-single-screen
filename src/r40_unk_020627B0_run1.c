@@ -9,7 +9,7 @@ void sub_020627B0(LocalMapObject *object, int direction, int duration, int movem
     work->timer = duration + 1;
     MapObject_SetFacingDirection(object, direction);
     sub_0205F328(object, movement);
-    sub_02060F78(object);
+    MapObject_SetPreviousCoordsToCurrent(object);
     MapObject_IncrementMovementStep(object);
 }
 

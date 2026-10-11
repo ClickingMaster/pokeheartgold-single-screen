@@ -62,7 +62,7 @@ extern void GfGfx_EngineBTogglePlanes(int plane, int enable);
 extern void thunk_UpdateCellTransferStateManager(void);
 extern void PokeathlonResultsAnnouncement_HidePlate(void *ptr);
 extern void PokeathlonDiscCatch_Approach0(void *ptr, int value);
-extern void ov96_02215914(void *ptr, int value);
+extern void PokeathlonRingDrop_Decay(void *ptr, int value);
 extern void ov96_02219398(void *ptr);
 extern void ov96_02218A68(void *ptr);
 

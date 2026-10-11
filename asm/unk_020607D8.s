@@ -12,8 +12,8 @@
 	.include "unk_0205FD20.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_020607D8
-sub_020607D8: ; 0x020607D8
+	thumb_func_start MapObject_CreateReflection
+MapObject_CreateReflection: ; 0x020607D8
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x14
 	add r6, r1, #0
@@ -55,19 +55,19 @@ _0206081A:
 _02060828:
 	add r0, r5, #0
 	mov r1, #1
-	bl sub_02060FA8
+	bl MapObject_GetMetatileBehaviorInDirection
 	lsl r0, r0, #0x18
 	lsr r0, r0, #0x18
 	str r0, [sp, #0xc]
 	add r0, r5, #0
 	mov r1, #3
-	bl sub_02060FA8
+	bl MapObject_GetMetatileBehaviorInDirection
 	lsl r0, r0, #0x18
 	lsr r0, r0, #0x18
 	str r0, [sp, #8]
 	add r0, r5, #0
 	mov r1, #2
-	bl sub_02060FA8
+	bl MapObject_GetMetatileBehaviorInDirection
 	lsl r0, r0, #0x18
 	lsr r0, r0, #0x18
 	str r0, [sp, #4]
@@ -170,7 +170,7 @@ _02060902:
 _0206091A:
 	add r0, r5, #0
 	mov r1, #1
-	bl sub_02060FA8
+	bl MapObject_GetMetatileBehaviorInDirection
 	lsl r0, r0, #0x18
 	lsr r6, r0, #0x18
 	add r0, r6, #0
@@ -219,7 +219,7 @@ _0206096A:
 _02060982:
 	add r0, r5, #0
 	mov r1, #1
-	bl sub_02060FA8
+	bl MapObject_GetMetatileBehaviorInDirection
 	lsl r0, r0, #0x18
 	lsr r6, r0, #0x18
 	add r0, r6, #0
@@ -256,9 +256,9 @@ _020609CE:
 	add sp, #0x14
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end sub_020607D8
-	thumb_func_start sub_020609D4
-sub_020609D4: ; 0x020609D4
+	thumb_func_end MapObject_CreateReflection
+	thumb_func_start MapObject_UpdateReflection
+MapObject_UpdateReflection: ; 0x020609D4
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0xc
 	ldrh r1, [r3]
@@ -279,19 +279,19 @@ sub_020609D4: ; 0x020609D4
 	beq _02060A96
 	add r0, r5, #0
 	mov r1, #1
-	bl sub_02060FA8
+	bl MapObject_GetMetatileBehaviorInDirection
 	lsl r0, r0, #0x18
 	lsr r0, r0, #0x18
 	str r0, [sp, #8]
 	add r0, r5, #0
 	mov r1, #3
-	bl sub_02060FA8
+	bl MapObject_GetMetatileBehaviorInDirection
 	lsl r0, r0, #0x18
 	lsr r0, r0, #0x18
 	str r0, [sp, #4]
 	add r0, r5, #0
 	mov r1, #2
-	bl sub_02060FA8
+	bl MapObject_GetMetatileBehaviorInDirection
 	lsl r0, r0, #0x18
 	lsr r0, r0, #0x18
 	str r0, [sp]
@@ -350,7 +350,7 @@ _02060A86:
 _02060A96:
 	add r0, r5, #0
 	mov r1, #1
-	bl sub_02060FA8
+	bl MapObject_GetMetatileBehaviorInDirection
 	lsl r0, r0, #0x18
 	lsr r0, r0, #0x18
 	bl MetatileBehavior_HasReflectiveSurface
@@ -363,4 +363,4 @@ _02060AB2:
 	add sp, #0xc
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end sub_020609D4
+	thumb_func_end MapObject_UpdateReflection

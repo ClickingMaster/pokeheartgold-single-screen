@@ -15,7 +15,7 @@ void sub_0206199C(LocalMapObject *object) {
 void sub_020619C0(LocalMapObject *object, u8 *state) {
     u32 direction = MapObject_GetInitialFacingDirection(object);
     if (*(s16 *)(state + 2) == 1) {
-        direction = sub_020611F4(direction);
+        direction = GetOppositeDirection(direction);
     }
     MapObject_SetNextFacingDirection(object, direction);
     if (!sub_02062050(object)) {

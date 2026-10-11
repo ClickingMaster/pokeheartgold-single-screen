@@ -17,7 +17,7 @@
 .public MapObject_CopyPositionVector
 .public GetDeltaXByFacingDirection
 .public GetDeltaYByFacingDirection
-.public sub_020611C8
+.public SetPositionToTileCenter
 .public FieldEffect_GetUserData
 .public FieldEffect_SetPosition
 .public FieldEffect_GetPosition

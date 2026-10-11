@@ -241,7 +241,7 @@ typedef struct PokeathlonGoalRollCpu {
     u8 unk9F;                                                // 0x9F
 } PokeathlonGoalRollCpu;                                     // size: 0xA0
 
-// Screen shake task (used by the next event's code).
+// Screen shake (Ring Drop; the task is defined with the Goal Roll CPU code).
 typedef struct PokeathlonScreenShake {
     SpriteSystem *spriteSystem; // 0x00
     BgConfig *bgConfig;         // 0x04
@@ -250,7 +250,8 @@ typedef struct PokeathlonScreenShake {
     fx32 step;                  // 0x10
     s8 frame;                   // 0x14
     u8 duration;                // 0x15
-    u16 unk16;                  // 0x16
+    u8 magnitude;               // 0x16
+    u8 unk17;                   // 0x17
     u32 direction;              // 0x18
 } PokeathlonScreenShake;
 
@@ -425,6 +426,6 @@ BOOL ov96_02215650(int x1, int y1, int x2, int y2, int quadrantInput, int partic
 BOOL ov96_0221567C(int x1, int y1, int x2, int y2, int quadrantInput, int participantInput);
 BOOL PokeathlonGoalRollCpu_IsNearPoint(int x, int y, const u16 (*points)[2]);
 BOOL PokeathlonGoalRollCpu_CirclesTouch(const VecFx32 *a, fx32 radiusA, const VecFx32 *b, fx32 radiusB);
-void ov96_02215710(SysTask *task, PokeathlonScreenShake *shake);
+void PokeathlonScreenShake_Task(SysTask *task, PokeathlonScreenShake *shake);
 
 #endif // POKEHEARTGOLD_POKEATHLON_POKEATHLON_GOAL_ROLL_H

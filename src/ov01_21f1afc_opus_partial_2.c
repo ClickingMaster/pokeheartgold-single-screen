@@ -162,7 +162,7 @@ BOOL ov01_021F1E54(FieldSystem *fieldSystem, PlayerAvatar *playerAvatar, int a2,
     if (MapObject_GetSpriteID(obj) != 0x54) {
         return FALSE;
     }
-    if ((sub_02060BB8(obj, a2) & ~1) != 0) {
+    if ((MapObject_CheckCollisionInDirection(obj, a2) & ~1) != 0) {
         return FALSE;
     }
     ov01_021F1EA4(a2, fieldSystem, playerAvatar, obj);

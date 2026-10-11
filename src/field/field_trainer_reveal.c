@@ -5,7 +5,7 @@
 
 #include "field_effects.h"
 #include "map_object.h"
-#include "unk_0205FD20.h"
+#include "map_object_movement_utilities.h"
 
 // The burst a hidden trainer makes when it jumps out of its hiding place (field effect renderer 15;
 // movement command RevealTrainer): a billboard at the trainer's tile that plays its 7 frames once.
@@ -89,7 +89,7 @@ void TrainerReveal_Spawn(LocalMapObject *mapObject) {
     MapObject_CopyPositionVector(mapObject, &position);
     x = MapObject_GetXCoord(mapObject);
     z = MapObject_GetZCoord(mapObject);
-    sub_020611C8(x, z, &position);
+    SetPositionToTileCenter(x, z, &position);
     FieldEffectManager_CreateEffect(manager, &sTrainerRevealEffectTemplate, &position, 0, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
 }
 

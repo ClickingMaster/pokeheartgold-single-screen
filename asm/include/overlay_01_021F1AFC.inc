@@ -74,12 +74,12 @@
 .public MapObject_SetPositionVector
 .public MapObjectManager_GetFirstObjectWithXAndZ
 .public sub_0205FC94
-.public sub_02060BB8
+.public MapObject_CheckCollisionInDirection
 .public GetDeltaXByFacingDirection
 .public GetDeltaYByFacingDirection
-.public sub_02060F78
-.public sub_02060FA8
-.public sub_020611C8
+.public MapObject_SetPreviousCoordsToCurrent
+.public MapObject_GetMetatileBehaviorInDirection
+.public SetPositionToTileCenter
 .public sub_0206121C
 .public MapObject_AreBitsSetForMovementScriptInit
 .public MapObject_SetHeldMovement

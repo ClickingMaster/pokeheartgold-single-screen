@@ -12,7 +12,7 @@ int sub_020619FC(void *mapObject, Unk020619FCState *state) {
         int z = MapObject_GetZCoord(mapObject);
 
         if (initialX == x && initialZ == z) {
-            direction = sub_020611F4(MapObject_GetNextFacingDirection(mapObject));
+            direction = GetOppositeDirection(MapObject_GetNextFacingDirection(mapObject));
             MapObject_SetNextFacingDirection(mapObject, direction);
             if (sub_02062050(mapObject) == 0) {
                 MapObject_SetFacingDirection(mapObject, direction);
@@ -21,11 +21,11 @@ int sub_020619FC(void *mapObject, Unk020619FCState *state) {
         }
     }
     direction = MapObject_GetNextFacingDirection(mapObject);
-    result = sub_02060BB8(mapObject, direction);
+    result = MapObject_CheckCollisionInDirection(mapObject, direction);
     if (result & 1) {
         state->turn = 1;
-        direction = sub_020611F4(direction);
-        result = sub_02060BB8(mapObject, direction);
+        direction = GetOppositeDirection(direction);
+        result = MapObject_CheckCollisionInDirection(mapObject, direction);
     }
     kind = 0xc;
     if (result != 0) {

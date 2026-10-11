@@ -9,9 +9,9 @@ void sub_02062958(LocalMapObject *object, s8 direction, int distance, s8 speed, 
     data->extra = extra;
     data->limit = limit;
     if (distance == 0) {
-        sub_02060F78(object);
+        MapObject_SetPreviousCoordsToCurrent(object);
     } else {
-        sub_02060F24(object, direction);
+        MapObject_MoveCoordsInDirection(object, direction);
     }
     MapObject_SetFlagsBits(object, 0x10004);
     MapObject_SetOrQueueFacing(object, direction);

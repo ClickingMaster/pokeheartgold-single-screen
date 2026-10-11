@@ -37,7 +37,7 @@ sub_0205CC94: ; 0x0205CC94
 	b _0205CCD2
 _0205CCC8:
 	add r0, r4, #0
-	bl sub_02060FA8
+	bl MapObject_GetMetatileBehaviorInDirection
 	lsl r0, r0, #0x18
 	lsr r7, r0, #0x18
 _0205CCD2:

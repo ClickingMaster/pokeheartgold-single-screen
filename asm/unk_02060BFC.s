@@ -206,8 +206,8 @@ _02060D84:
 	add sp, #0x10
 	pop {r3, r4, r5, r6, r7, pc}
 	thumb_func_end sub_02060CA8
-	thumb_func_start sub_02060D94
-sub_02060D94: ; 0x02060D94
+	thumb_func_start MapObject_IsOutsideMovementRange
+MapObject_IsOutsideMovementRange: ; 0x02060D94
 	push {r3, r4, r5, r6, r7, lr}
 	add r6, r0, #0
 	add r5, r1, #0
@@ -252,9 +252,9 @@ _02060DE6:
 	mov r0, #0
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end sub_02060D94
-	thumb_func_start sub_02060DEC
-sub_02060DEC: ; 0x02060DEC
+	thumb_func_end MapObject_IsOutsideMovementRange
+	thumb_func_start MapObject_IsMoveBlockedByBehavior
+MapObject_IsMoveBlockedByBehavior: ; 0x02060DEC
 	push {r3, r4, r5, r6, r7, lr}
 	add r4, r0, #0
 	add r6, r1, #0
@@ -281,14 +281,14 @@ sub_02060DEC: ; 0x02060DEC
 	mov r0, #1
 	pop {r3, r4, r5, r6, r7, pc}
 _02060E28:
-	ldr r1, _02060E4C ; =_020FD4CC
+	ldr r1, _02060E4C ; =gMetatileBlocksExitTests
 	lsl r5, r5, #2
 	ldr r1, [r1, r5]
 	add r0, r4, #0
 	blx r1
 	cmp r0, #1
 	beq _02060E42
-	ldr r1, _02060E50 ; =_020FD4BC
+	ldr r1, _02060E50 ; =gMetatileBlocksEntryTests
 	add r0, r6, #0
 	ldr r1, [r1, r5]
 	blx r1
@@ -301,6 +301,6 @@ _02060E46:
 	mov r0, #0
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
-_02060E4C: .word _020FD4CC
-_02060E50: .word _020FD4BC
-	thumb_func_end sub_02060DEC
+_02060E4C: .word gMetatileBlocksExitTests
+_02060E50: .word gMetatileBlocksEntryTests
+	thumb_func_end MapObject_IsMoveBlockedByBehavior

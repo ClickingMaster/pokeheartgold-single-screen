@@ -5,7 +5,7 @@
 
 int GetDeltaXByFacingDirection(int direction);
 int GetDeltaYByFacingDirection(int direction);
-int sub_02060B90(LocalMapObject *object, int x, int y, int z, int direction);
+int MapObject_CheckCollisionAt(LocalMapObject *object, int x, int y, int z, int direction);
 int sub_02064468(LocalMapObject *object, int direction, int distance);
 
 #endif

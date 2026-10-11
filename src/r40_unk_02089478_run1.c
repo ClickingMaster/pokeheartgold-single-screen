@@ -52,7 +52,7 @@ u32 sub_02089478(void *data) {
         sub_0208DDA0(data, 0xfe);
         return 0x12;
     }
-    sub_0208E174(data);
+    PokemonSummary_InitConditionChart(data);
     sub_0208BCD4(data);
     sub_0208BDC8(data);
     return 0x11;

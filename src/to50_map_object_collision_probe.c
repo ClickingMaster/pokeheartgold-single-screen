@@ -15,13 +15,13 @@ int sub_02064468(LocalMapObject *object, int direction, int distance) {
     x += GetDeltaXByFacingDirection(direction);
     z += GetDeltaYByFacingDirection(direction);
     for (i = 0; i < distance - 1; i++) {
-        if ((sub_02060B90(object, x, y, z, direction) & ~1) != 0) {
+        if ((MapObject_CheckCollisionAt(object, x, y, z, direction) & ~1) != 0) {
             return TRUE;
         }
         x += GetDeltaXByFacingDirection(direction);
         z += GetDeltaYByFacingDirection(direction);
     }
-    if ((sub_02060B90(object, x, y, z, direction) & ~1) == 4) {
+    if ((MapObject_CheckCollisionAt(object, x, y, z, direction) & ~1) == 4) {
         return FALSE;
     }
     return TRUE;

@@ -36,7 +36,7 @@ BOOL sub_020618C8(LocalMapObject *object, MovementState618C8 *state) {
 
     direction = MapObject_GetFacingDirection(object);
     if (direction == MapObject_GetInitialFacingDirection(object)) {
-        state->state = sub_020611F4(state->state);
+        state->state = GetOppositeDirection(state->state);
     }
     state->flag = 0;
     return TRUE;

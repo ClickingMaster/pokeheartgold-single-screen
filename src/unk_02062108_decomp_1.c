@@ -202,6 +202,6 @@ BOOL MapObjectMovementCmd098_Step2(LocalMapObject *object) {
 void sub_0206247C(LocalMapObject *object, u32 direction) {
     MapObject_SetFacingDirection(object, direction);
     sub_0205F328(object, 0);
-    sub_02060F78(object);
+    MapObject_SetPreviousCoordsToCurrent(object);
     MapObject_IncrementMovementStep(object);
 }

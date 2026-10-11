@@ -223,11 +223,11 @@
 	.public PokeathlonGoalRollDisplay_GetScore
 	.public PokeathlonGoalRollCpu_SetBalls
 	.public PokeathlonGoalRollCpu_Free
-	.public ov96_02215864
-	.public ov96_0221587C
-	.public ov96_022158D4
-	.public ov96_02215944
-	.public ov96_02215DBC
+	.public PokeathlonScreenShake_IsDone
+	.public PokeathlonScreenShake_Init
+	.public PokeathlonRingDrop_IsOnSwitchButton
+	.public PokeathlonRingDrop_DecayVelocity
+	.public PokeathlonRingDrop_GetMonState
 	.public ov96_02215FA0
 	.public ov96_02217890
 	.public ov96_02217DBC
@@ -353,7 +353,7 @@ _0221819A:
 	mov r1, #2
 	ldrsh r0, [r5, r0]
 	ldrsh r1, [r5, r1]
-	bl ov96_022158D4
+	bl PokeathlonRingDrop_IsOnSwitchButton
 	cmp r0, #0
 	beq _022181CC
 	add r0, r4, #0
@@ -395,7 +395,7 @@ _022181F8:
 	add r4, #0x2c
 	add r0, r4, #0
 	add r1, sp, #0x18
-	bl ov96_022158EC
+	bl PokeathlonRingDrop_IsWithinDistance
 	cmp r0, #0
 	beq _022182FC
 	mov r0, #2
@@ -472,7 +472,7 @@ _0221828C:
 	add r0, sp, #0xc
 	add r1, sp, #0x18
 	lsl r2, r2, #0xe
-	bl ov96_022158EC
+	bl PokeathlonRingDrop_IsWithinDistance
 	cmp r0, #0
 	beq _022182C4
 	ldr r0, [r6]
@@ -493,7 +493,7 @@ _022182C4:
 	add r0, sp, #0xc
 	add r1, sp, #0x18
 	lsl r2, r2, #0xe
-	bl ov96_022158EC
+	bl PokeathlonRingDrop_IsWithinDistance
 	cmp r0, #0
 	bne _022182F4
 	ldr r0, [r6]

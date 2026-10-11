@@ -656,8 +656,8 @@ BOOL PokeathlonGoalRollCpu_CirclesTouch(const VecFx32 *a, fx32 radiusA, const Ve
     return VEC_Mag(&delta) < radiusA + radiusB;
 }
 
-// Screen shake task (started by ov96_02215884 in the next event's code).
-void ov96_02215710(SysTask *task, PokeathlonScreenShake *shake) {
+// Screen shake task (started by PokeathlonScreenShake_Start in the next event's code).
+void PokeathlonScreenShake_Task(SysTask *task, PokeathlonScreenShake *shake) {
     int sign;
     int x;
     int y;

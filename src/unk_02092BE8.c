@@ -69,7 +69,7 @@ static void FieldSystem_InitPokegearArgs(FieldSystem *sys, PokegearArgs *pokegea
         return;
     }
     if (GearPhoneRingManager_IsRinging(phoneRingMgr)) {
-        pokegearArgs->callerId = ov02_02251EE8(phoneRingMgr, &Unk_struct);
+        pokegearArgs->callerId = GearPhoneRingManager_GetCallerParams(phoneRingMgr, &Unk_struct);
         if (pokegearArgs->callerId >= NUM_PHONE_CONTACTS) {
             pokegearArgs->isScriptedLaunch = 0;
         } else {

@@ -14,7 +14,7 @@ int MapObject_GetZCoord(LocalMapObject *object);
 int PlayerAvatar_GetPreviousXCoord(PlayerAvatar *avatar);
 int PlayerAvatar_GetPreviousZCoord(PlayerAvatar *avatar);
 int sub_02065DB4(LocalMapObject *object);
-int sub_02061200(int x, int z, int previousX, int previousZ);
+int GetDirectionTowards(int x, int z, int previousX, int previousZ);
 int sub_0206234C(int direction, int movement);
 void MapObject_ForceSetHeldMovement(LocalMapObject *object, int movement);
 void GF_AssertFail(void);

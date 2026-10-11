@@ -11,7 +11,7 @@
 #include "safari_area_customizer.h"
 #include "safari_zone.h"
 #include "scrcmd.h"
-#include "unk_0205FD20.h"
+#include "map_object_movement_utilities.h"
 #include "unk_02097268.h"
 #include "unk_02097720.h"
 

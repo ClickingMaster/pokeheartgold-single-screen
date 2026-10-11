@@ -1287,58 +1287,58 @@
 	.public ov96_0221567C
 	.public PokeathlonGoalRollCpu_IsNearPoint
 	.public PokeathlonGoalRollCpu_CirclesTouch
-	.public ov96_02215710
-	.public ov96_02215864
-	.public ov96_0221587C
-	.public ov96_02215884
-	.public ov96_022158D4
-	.public ov96_022158EC
-	.public ov96_02215914
-	.public ov96_02215944
-	.public ov96_02215958
-	.public ov96_02215984
-	.public ov96_022159F0
-	.public ov96_02215A70
-	.public ov96_02215AC4
-	.public ov96_02215CD0
+	.public PokeathlonScreenShake_Task
+	.public PokeathlonScreenShake_IsDone
+	.public PokeathlonScreenShake_Init
+	.public PokeathlonScreenShake_Start
+	.public PokeathlonRingDrop_IsOnSwitchButton
+	.public PokeathlonRingDrop_IsWithinDistance
+	.public PokeathlonRingDrop_Decay
+	.public PokeathlonRingDrop_DecayVelocity
+	.public PokeathlonRingDrop_ClampVelocity
+	.public PokeathlonRingDrop_State_FadeIn
+	.public PokeathlonRingDrop_State_Play
+	.public PokeathlonRingDrop_State_Finish
+	.public PokeathlonRingDrop_Init
+	.public PokeathlonRingDrop_Draw
 	.public ov96_02215CE8
-	.public ov96_02215D4C
-	.public ov96_02215DBC
-	.public ov96_02215DD4
-	.public ov96_02215DEC
-	.public ov96_02215E2C
-	.public ov96_02215E48
-	.public ov96_02215E68
-	.public ov96_02215E94
+	.public PokeathlonRingDrop_Exit
+	.public PokeathlonRingDrop_GetMonState
+	.public PokeathlonRingDrop_GetMonPosition
+	.public PokeathlonRingDrop_GetMonScreenPosition
+	.public PokeathlonRingDrop_GetMonDirection
+	.public PokeathlonRingDrop_GetMonStamina
+	.public PokeathlonRingDrop_GetMonStaminaPercent
+	.public PokeathlonRingDrop_IsMonSwitching
 	.public ov96_02215EB0
 	.public ov96_02215ECC
-	.public ov96_02215EE8
+	.public PokeathlonRingDrop_SetMonTarget
 	.public ov96_02215F2C
 	.public ov96_02215F64
 	.public ov96_02215F80
 	.public ov96_02215FA0
-	.public ov96_02215FA8
-	.public ov96_02215FC8
-	.public ov96_02216200
-	.public ov96_02216234
-	.public ov96_022162F4
-	.public ov96_02216390
-	.public ov96_022163AC
-	.public ov96_022164EC
-	.public ov96_0221654C
-	.public ov96_022165FC
-	.public ov96_0221663C
-	.public ov96_02216770
-	.public ov96_02216934
-	.public ov96_02216A54
-	.public ov96_02216AA4
-	.public ov96_02216C00
-	.public ov96_02216C1C
-	.public ov96_02216C38
-	.public ov96_02217544
-	.public ov96_0221768C
-	.public ov96_022177D8
-	.public ov96_02217820
+	.public PokeathlonRingDrop_SetGfxBanks
+	.public PokeathlonRingDrop_Update
+	.public PokeathlonRingDrop_OnFinish
+	.public PokeathlonRingDrop_ReadInput
+	.public PokeathlonRingDrop_InitSprites
+	.public PokeathlonRingDrop_FreeSprites
+	.public PokeathlonRingDrop_LoadSpriteResources
+	.public PokeathlonRingDrop_NewSprite
+	.public PokeathlonRingDrop_InitBgs
+	.public PokeathlonRingDrop_FreeBgs
+	.public PokeathlonRingDrop_LoadBgGraphics
+	.public PokeathlonRingDropDisplay_SwitchOut
+	.public PokeathlonRingDropDisplay_SwitchIn
+	.public PokeathlonRingDropDisplay_EndSwitch
+	.public PokeathlonRingDropDisplay_UpdateSwitch
+	.public PokeathlonRingDropDisplay_CompareDepth
+	.public PokeathlonRingDropDisplay_CompareRanks
+	.public PokeathlonRingDropDisplay_ApplyFramePacket
+	.public PokeathlonRingDropDisplay_Init
+	.public PokeathlonRingDropDisplay_Update
+	.public PokeathlonRingDropDisplay_Free
+	.public PokeathlonRingDropDisplay_StopAnimations
 	.public ov96_0221785C
 	.public ov96_02217868
 	.public ov96_02217890

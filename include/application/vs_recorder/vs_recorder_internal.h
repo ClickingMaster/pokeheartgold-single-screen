@@ -271,6 +271,25 @@ typedef struct VsRecorderSavedVideo {
     u32 exitMode;                    // save prompt: 1 YES, 2 NO; resume: 1 the video still needs saving
 } VsRecorderSavedVideo;              // size 0x19C
 
+// VsRecorderWork.screenWork of the Frontier record screen
+typedef struct VsRecorderFrontierRecord {
+    int fade;
+    f32 scales[5]; // per print, while spinning
+    int radii[5];
+    int angles[5];
+    ManagedSprite *playerIcons[5];   // left of each print
+    ManagedSprite *facilityIcons[5]; // right of each print
+    ManagedSprite *prints[5];
+    ManagedSprite *digits[5]; // Battle Points: 4 digits and "BP"
+    int battlePoints;
+    u8 unk_94[4];
+    ManagedSprite *unk_98;
+    u8 unk_9C[0x1C];
+    VsRecorderTextSprite exitButton;
+    int eva; // top screen blend
+    int evb;
+} VsRecorderFrontierRecord; // size 0xDC
+
 struct VsRecorderWork {
     u32 mode;                                // 0x0000, 0 VS Recorder item, 1-6 Global Terminal
     u32 subState;                            // 0x0004, index into the screen's function table
@@ -560,11 +579,27 @@ void VsRecorder_RemoveProfileButton(VsRecorderWork *work);
 void VsRecorder_PrintProfileButton(VsRecorderWork *work, u32 msgId);
 void VsRecorder_CreateExitButton(VsRecorderWork *work);
 
+// vs_recorder_frontier_record.c
+void VsRecorder_FreeExitButton(VsRecorderWork *work);
+void VsRecorder_PlaceFrontierExitButton(VsRecorderWork *work, BOOL left);
+void VsRecorder_LoadFrontierButtonGfx(VsRecorderWork *work, u32 vram);
+void VsRecorder_CreateFrontierButtons(VsRecorderWork *work);
+void VsRecorder_FreeFrontierButtons(VsRecorderWork *work);
+void VsRecorder_LoadFrontierGfx(VsRecorderWork *work);
+void VsRecorder_GrayscalePalette(u16 *buf, int start, int count);
+void VsRecorder_GrayFrontierPrints(VsRecorderWork *work);
+void VsRecorder_CreateFrontierSprites(VsRecorderWork *work);
+void VsRecorder_FreeFrontierSprites(VsRecorderWork *work);
+BOOL VsRecorder_SpinInFrontierSprites(VsRecorderWork *work);
+BOOL VsRecorder_SpinOutFrontierSprites(VsRecorderWork *work);
+void VsRecorder_PlaceFrontierSprites(VsRecorderWork *work);
+BOOL VsRecorder_FrontierEnter(VsRecorderWork *work);
+BOOL VsRecorder_FrontierMain(VsRecorderWork *work);
+
 // other OVY_40 modules (still address-named)
 GlobalTerminalNet *ov40_0223D540(VsRecorderWork *work);
 u32 ov40_02244AB0(SaveData *save, u32 a1, u32 a2, u16 *a3, void *a4);
 int ov40_02244BBC(SaveData *save, int index);
-void VsRecorder_FreeExitButton(VsRecorderWork *work);
 void ov40_0223D544(VsRecorderWork *work);
 void ov40_0223D5E8(VsRecorderWork *work);
 void ov40_0223D600(VsRecorderWork *work);

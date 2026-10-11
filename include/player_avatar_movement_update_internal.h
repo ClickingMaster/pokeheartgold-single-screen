@@ -18,7 +18,7 @@ typedef struct FootstepEntry {
 
 u16 sub_0205F504(LocalMapObject *);
 int sub_02062390(int);
-int sub_02060FA8(LocalMapObject *, int);
+int MapObject_GetMetatileBehaviorInDirection(LocalMapObject *, int);
 int sub_02060FE0(LocalMapObject *, int);
 BOOL sub_0205DE64(int);
 BOOL sub_0205DE98(PlayerAvatar *);

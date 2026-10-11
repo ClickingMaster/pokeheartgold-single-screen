@@ -109,7 +109,7 @@ PokemonSummary_Init: ; 0x02088298
 	bl sub_020887C4
 	bl sub_0208887C
 	add r0, r4, #0
-	bl sub_0208DE40
+	bl PokemonSummary_Init3D
 	mov r0, #4
 	mov r1, #0x13
 	bl FontID_Alloc
@@ -125,7 +125,7 @@ PokemonSummary_Init: ; 0x02088298
 	add r0, r4, #0
 	bl sub_0208B2C0
 	add r0, r4, #0
-	bl sub_0208E3AC
+	bl PokemonSummary_CreatePokepic
 	add r0, r4, #0
 	bl sub_0208B48C
 	add r0, r4, #0
@@ -137,7 +137,7 @@ PokemonSummary_Init: ; 0x02088298
 	add r0, r4, #0
 	bl sub_02089CB4
 	add r0, r4, #0
-	bl sub_0208DF2C
+	bl PokemonSummary_CreateCamera
 	ldr r0, _0208841C ; =sub_020885DC
 	add r1, r4, #0
 	bl Main_SetVBlankIntrCB
@@ -326,7 +326,7 @@ _0208854A:
 	ldr r0, [r5, r0]
 	bl SpriteSystem_DrawSprites
 	add r0, r5, #0
-	bl sub_0208DEDC
+	bl PokemonSummary_DrawPokepic
 	mov r0, #0
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
@@ -341,7 +341,7 @@ PokemonSummary_Exit: ; 0x0208856C
 	add r1, r0, #0
 	bl Main_SetVBlankIntrCB
 	add r0, r4, #0
-	bl sub_0208DEFC
+	bl PokemonSummary_FreePokepicAndCamera
 	add r0, r4, #0
 	bl sub_0208B258
 	add r0, r4, #0

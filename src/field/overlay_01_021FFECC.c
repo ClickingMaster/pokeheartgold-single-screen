@@ -3,7 +3,7 @@
 #include "map_object.h"
 #include "field/field_effect_manager.h"
 #include "player_avatar.h"
-#include "unk_0205FD20.h"
+#include "map_object_movement_utilities.h"
 #include "unk_020658D4.h"
 #include "field_effects.h"
 #include "render_model.h"
@@ -86,8 +86,8 @@ void ov01_021FFF5C(LocalMapObject *mapObject, int a1) {
     int x = MapObject_GetXCoord(mapObject);
     int z = MapObject_GetZCoord(mapObject);
 
-    sub_020611C8(x, z, &temp);
-    sub_0206121C((TaskManager *)fieldSystem, &temp);
+    SetPositionToTileCenter(x, z, &temp);
+    sub_0206121C(fieldSystem, &temp);
 
     temp2.unk0 = a1;
     temp2.manager = manager;

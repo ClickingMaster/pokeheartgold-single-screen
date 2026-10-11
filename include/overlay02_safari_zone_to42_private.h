@@ -9,7 +9,7 @@
 #include "overlay_02.h"
 #include "player_avatar.h"
 #include "safari_zone.h"
-#include "unk_0205FD20.h"
+#include "map_object_movement_utilities.h"
 #include "unk_02097268.h"
 
 int ov02_0224E4CC(void *fieldSystem, u32 behavior);

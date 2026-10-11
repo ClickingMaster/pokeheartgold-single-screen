@@ -19,7 +19,7 @@ BOOL sub_0205D0A8(PlayerAvatar *avatar, int unused) {
     }
     if (sub_0205D2A0(avatar, vertical) == FALSE) {
         sub_0205D1FC(avatar);
-        direction = sub_020611F4(direction);
+        direction = GetOppositeDirection(direction);
         if (sub_0205DA34(avatar, mapObject, direction) != 0) {
             return FALSE;
         }

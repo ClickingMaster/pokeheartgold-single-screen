@@ -14,7 +14,7 @@ typedef struct LocalMovementBounds {
     s32 maxX;
     s32 maxZ;
 } LocalMovementBounds;
-BOOL sub_02060BB8(LocalMapObject *, int);
+BOOL MapObject_CheckCollisionInDirection(LocalMapObject *, int);
 int GetDeltaXByFacingDirection(int);
 int GetDeltaYByFacingDirection(int);
 void sub_020613F8(LocalMapObject *);

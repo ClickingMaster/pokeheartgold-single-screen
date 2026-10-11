@@ -10,6 +10,6 @@ typedef struct MovementPathState {
     u8 saved[4];
 } MovementPathState;
 BOOL sub_02061C40(LocalMapObject *object, MovementPathState *state);
-u32 sub_02060BB8(LocalMapObject *object, int direction);
+u32 MapObject_CheckCollisionInDirection(LocalMapObject *object, int direction);
 void sub_0206207C(LocalMapObject *object, u8 *state);
 #endif

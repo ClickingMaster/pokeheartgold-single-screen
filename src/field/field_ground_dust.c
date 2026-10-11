@@ -4,7 +4,7 @@
 #include "field/field_effect_manager.h"
 
 #include "map_object.h"
-#include "unk_0205FD20.h"
+#include "map_object_movement_utilities.h"
 #include "field_effects.h"
 
 // The dust a map object raises when it lands on plain ground (field effect renderer 11): a billboard
@@ -96,7 +96,7 @@ void GroundDust_Spawn(LocalMapObject *mapObject) {
     MapObject_CopyPositionVector(mapObject, &position);
     x = MapObject_GetXCoord(mapObject);
     z = MapObject_GetZCoord(mapObject);
-    sub_020611C8(x, z, &position);
+    SetPositionToTileCenter(x, z, &position);
     FieldEffectManager_CreateEffect(manager, &sGroundDustEffectTemplate, &position, 0, &args, MapObject_GetPriorityPlusValue(mapObject, 2));
 }
 

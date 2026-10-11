@@ -10,7 +10,7 @@
 #include "player_avatar.h"
 #include "script_manager.h"
 #include "sys_task_api.h"
-#include "unk_0205FD20.h"
+#include "map_object_movement_utilities.h"
 
 extern UnkLMOCallbackStruct *_020FD1F4[57];
 extern UnkLMOCallbackStruct2 *ov01_02209A38[20];
@@ -22,7 +22,7 @@ extern void ov01_021FA2B8(LocalMapObject *object, BOOL set);
 extern void sub_0205FD30(LocalMapObject *object);
 extern void ov01_021F92A0(LocalMapObject *object);
 extern ObjectEventGraphicsInfo *ObjectEvent_GetGraphicsInfo(u32 spriteId);
-extern void sub_02060F78(LocalMapObject *object);
+extern void MapObject_SetPreviousCoordsToCurrent(LocalMapObject *object);
 extern void sub_0205FD20(LocalMapObject *object);
 
 static MapObjectManager *MapObjectManager_New(u32 objectCount);
@@ -450,7 +450,7 @@ static void SavedMapObject_InitFromLocalMapObject(FieldSystem *fieldSystem, Loca
     savedObject->currentZ = MapObject_GetZCoord(localObject);
 
     VecFx32 coords;
-    sub_020611C8(savedObject->currentX, savedObject->currentZ, &coords); // some kind of x y vec copy with convertion between int and fx32
+    SetPositionToTileCenter(savedObject->currentX, savedObject->currentZ, &coords); // some kind of x y vec copy with convertion between int and fx32
     coords.y = MapObject_GetPositionVectorYCoord(localObject);
 
     if (!sub_02061248(fieldSystem, &coords, MapObject_CheckFlag29(localObject))) {
@@ -804,7 +804,7 @@ static u32 FieldSystem_ResolveObjectSpriteID(FieldSystem *fieldSystem, s32 sprit
 
 static void sub_0205EF8C(LocalMapObject *object) {
     if (MapObject_GetFlagsBitsMask(object, MAPOBJECTFLAG_UNK12) != 0) {
-        sub_02061070(object);
+        MapObject_UpdateHeight(object);
     }
 }
 
@@ -1979,7 +1979,7 @@ void MapObject_SetPositionFromVectorAndDirection(LocalMapObject *object, VecFx32
     MapObject_SetCurrentY(object, (positionVector->y >> 3) / FX32_ONE);
     MapObject_SetCurrentZ(object, (positionVector->z >> 4) / FX32_ONE);
     MapObject_SetPositionVector(object, positionVector);
-    sub_02060F78(object);
+    MapObject_SetPreviousCoordsToCurrent(object);
     MapObject_SetFacingDirectionDirect(object, direction);
     MapObject_ClearHeldMovement(object);
     MapObject_SetFlagsBits(object, MAPOBJECTFLAG_START_MOVEMENT);
@@ -1996,7 +1996,7 @@ void MapObject_SetPositionFromXYZAndDirection(LocalMapObject *object, u32 x, u32
     MapObject_SetCurrentZ(object, z);
 
     MapObject_SetPositionVector(object, &positionVector);
-    sub_02060F78(object);
+    MapObject_SetPreviousCoordsToCurrent(object);
     MapObject_SetFacingDirectionDirect(object, direction);
     MapObject_SetFlagsBits(object, MAPOBJECTFLAG_START_MOVEMENT);
     MapObject_ClearFlagsBits(object, (MapObjectFlagBits)(MAPOBJECTFLAG_END_MOVEMENT | MAPOBJECTFLAG_SINGLE_MOVEMENT));

@@ -22,7 +22,7 @@ sub_0206008C: ; 0x0206008C
 	add r0, r5, #0
 	bl sub_0205F51C
 	add r0, r5, #0
-	bl sub_02061108
+	bl MapObject_UpdateMetatileBehaviors
 	add r0, r5, #0
 	bl sub_0205F73C
 	cmp r0, #1
@@ -47,22 +47,22 @@ sub_0206008C: ; 0x0206008C
 	add r1, r6, #0
 	add r2, r4, #0
 	add r3, r7, #0
-	bl sub_0206073C
+	bl MapObject_SpawnPuddleSplash
 	add r0, r5, #0
 	add r1, r6, #0
 	add r2, r4, #0
 	add r3, r7, #0
-	bl sub_020607A4
+	bl MapObject_SpawnMudSplash
 	add r0, r5, #0
 	add r1, r6, #0
 	add r2, r4, #0
 	add r3, r7, #0
-	bl sub_0206039C
+	bl MapObject_UpdateShallowWaterRipple
 	add r0, r5, #0
 	add r1, r6, #0
 	add r2, r4, #0
 	add r3, r7, #0
-	bl sub_020609D4
+	bl MapObject_UpdateReflection
 	add r0, r5, #0
 	add r1, r6, #0
 	add r2, r4, #0
@@ -75,7 +75,7 @@ _02060112:
 sub_02060114: ; 0x02060114
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
-	bl sub_02061108
+	bl MapObject_UpdateMetatileBehaviors
 	add r0, r5, #0
 	bl sub_0205F73C
 	cmp r0, #1
@@ -100,22 +100,22 @@ sub_02060114: ; 0x02060114
 	add r1, r6, #0
 	add r2, r4, #0
 	add r3, r7, #0
-	bl sub_0206073C
+	bl MapObject_SpawnPuddleSplash
 	add r0, r5, #0
 	add r1, r6, #0
 	add r2, r4, #0
 	add r3, r7, #0
-	bl sub_020607A4
+	bl MapObject_SpawnMudSplash
 	add r0, r5, #0
 	add r1, r6, #0
 	add r2, r4, #0
 	add r3, r7, #0
-	bl sub_0206039C
+	bl MapObject_UpdateShallowWaterRipple
 	add r0, r5, #0
 	add r1, r6, #0
 	add r2, r4, #0
 	add r3, r7, #0
-	bl sub_020609D4
+	bl MapObject_UpdateReflection
 	add r0, r5, #0
 	add r1, r6, #0
 	add r2, r4, #0
@@ -130,7 +130,7 @@ sub_02060114: ; 0x02060114
 	add r1, r6, #0
 	add r2, r4, #0
 	add r3, r7, #0
-	bl sub_0206064C
+	bl MapObject_SpawnGroundDust
 _020601A2:
 	pop {r3, r4, r5, r6, r7, pc}
 	thumb_func_end sub_02060114

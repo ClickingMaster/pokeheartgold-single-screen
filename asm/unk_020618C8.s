@@ -81,7 +81,7 @@ _02061942:
 	bne _02061968
 	mov r0, #0
 	ldrsb r0, [r6, r0]
-	bl sub_020611F4
+	bl GetOppositeDirection
 	strb r0, [r6]
 _02061968:
 	mov r0, #0

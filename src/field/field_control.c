@@ -316,7 +316,7 @@ int FieldInput_Process(FieldInput *fieldInput, FieldSystem *fieldSystem) {
         return 2;
     }
 
-    if (fieldInput->unk0_8 && ov02_02251F20(FieldSystem_GetGearPhoneRingManager(fieldSystem))) {
+    if (fieldInput->unk0_8 && GearPhoneRingManager_TryStartCall(FieldSystem_GetGearPhoneRingManager(fieldSystem))) {
         return 2;
     }
 

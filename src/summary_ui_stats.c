@@ -7,7 +7,7 @@ int sub_02089E98(SummaryWork *arg) {
         u32 flag : 1;
         u32 high : 3;
     } PackedFlags;
-    u8 selection = sub_0208E544(work);
+    u8 selection = PokemonSummary_CheckTouchedButton(work);
     if (selection == 0xff) {
         return 2;
     }
@@ -166,7 +166,7 @@ void sub_0208A234(SummaryWork *work, u8 selection) {
     sub_0208C614(work);
     sub_0208C6B4(work);
     sub_02089F98(work);
-    sub_0208E4B4(work);
+    PokemonSummary_ReloadPokepic(work);
     sub_0208B448(work);
     sub_0208BA60(work);
     sub_0208B5A8(work);

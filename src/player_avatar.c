@@ -17,7 +17,7 @@
 #include "scrcmd.h"
 #include "communication_player_state.h"
 #include "unk_02035900.h"
-#include "unk_0205FD20.h"
+#include "map_object_movement_utilities.h"
 
 static PlayerAvatar *PlayerAvatar_Create(void);
 static void PlayerAvatar_Setup(PlayerAvatar *avatar, s32 state, u32 gender, PlayerSaveData *playerSaveData);
@@ -510,7 +510,7 @@ void PlayerAvatar_ToggleAutomaticHeightUpdatingImmediate(PlayerAvatar *avatar, B
     LocalMapObject *mapObject = PlayerAvatar_GetMapObject(avatar);
     if (flag == TRUE) {
         MapObject_SetIgnoreHeights(mapObject, FALSE);
-        sub_02061070(mapObject);
+        MapObject_UpdateHeight(mapObject);
     } else {
         MapObject_SetIgnoreHeights(mapObject, TRUE);
     }

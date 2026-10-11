@@ -5,7 +5,7 @@ int sub_02088B08(void *data) {
     u8 value;
 
     if (IsPaletteFadeFinished() == 1) {
-        sub_0208E444(data);
+        PokemonSummary_StartPokepicAnim(data);
         sub_02089C50(data);
         inner = *(u8 **)((u8 *)data + 0x22C);
         value = inner[0x12];

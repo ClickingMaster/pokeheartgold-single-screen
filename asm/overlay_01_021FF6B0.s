@@ -137,7 +137,7 @@ GroundDust_Spawn: ; 0x021FF74C
 	add r1, r0, #0
 	add r0, r6, #0
 	add r2, sp, #8
-	bl sub_020611C8
+	bl SetPositionToTileCenter
 	add r0, r5, #0
 	mov r1, #2
 	bl MapObject_GetPriorityPlusValue

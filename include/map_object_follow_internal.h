@@ -35,7 +35,7 @@ int sub_0206642C(LocalMapObject *);
 void sub_02066438(LocalMapObject *);
 BOOL sub_0206623C(LocalMapObject *, FollowState *);
 u32 sub_0206234C(u32, u32);
-int sub_02061200(int, int, int, int);
+int GetDirectionTowards(int, int, int, int);
 int GetDeltaXByFacingDirection(int);
 int GetDeltaYByFacingDirection(int);
 void MapObject_ForceSetHeldMovement(LocalMapObject *, u32);

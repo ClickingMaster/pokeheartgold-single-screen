@@ -54,7 +54,7 @@
 .public MapObject_SetCurrentZ
 .public MapObject_CopyPositionVector
 .public MapObject_SetPositionVector
-.public sub_02060F78
+.public MapObject_SetPreviousCoordsToCurrent
 .public MapObject_AreBitsSetForMovementScriptInit
 .public MapObject_SetHeldMovement
 .public MapObject_ClearHeldMovement

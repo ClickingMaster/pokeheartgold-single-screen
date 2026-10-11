@@ -103,7 +103,7 @@ MudSplash_Spawn: ; 0x021FEE04
 	add r0, r6, #0
 	add r1, r7, #0
 	add r2, sp, #0x10
-	bl sub_020611C8
+	bl SetPositionToTileCenter
 	ldr r1, [sp, #0x18]
 	lsl r0, r4, #3
 	add r0, r1, r0

@@ -7,7 +7,7 @@ int ov01_021F29E4(W18WaterfallWork *work, void *taskManager) {
     int x = MapObject_GetXCoord(work->mapObject) + (GetDeltaXByFacingDirection(0) << 1);
     int z = MapObject_GetZCoord(work->mapObject) + (GetDeltaYByFacingDirection(0) << 1);
 
-    sub_020611C8(x, z, (VecFx32 *)&work->stepX);
+    SetPositionToTileCenter(x, z, (VecFx32 *)&work->stepX);
     work->stepY = sub_02054790(work->fieldSystem, 1, work->stepY, work->stepX, work->stepZ, &kind);
     GF_ASSERT(kind != 0);
     work->targetX = x;
@@ -66,7 +66,7 @@ int ov01_021F2AF8(W18WaterfallWork *work, void *taskManager) {
     MapObject_SetCurrentX(work->mapObject, work->targetX);
     MapObject_SetCurrentY(work->mapObject, work->targetY);
     MapObject_SetCurrentZ(work->mapObject, work->targetZ);
-    sub_02060F78(work->mapObject);
+    MapObject_SetPreviousCoordsToCurrent(work->mapObject);
     ov02_0224D5AC(work->effect);
     return 1;
 }

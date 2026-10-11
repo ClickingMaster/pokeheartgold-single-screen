@@ -11,7 +11,7 @@
 #include "map_object.h"
 #include "render_animation.h"
 #include "render_model.h"
-#include "unk_0205FD20.h"
+#include "map_object_movement_utilities.h"
 #include "field_effects.h"
 
 // The rock the player climbs on with Rock Climb (field effect renderer 5): one model, loaded while any
@@ -131,7 +131,7 @@ FieldEffect *RockClimbEffect_Create(LocalMapObject *mapObject, int x, int z, int
     if (follow == FALSE) {
         position.x = (x << 16) + 0x8000;
         position.z = (z << 16) + 0x8000;
-        sub_0206121C((TaskManager *)args.fieldSystem, &position);
+        sub_0206121C(args.fieldSystem, &position);
     } else {
         MapObject_CopyPositionVector(mapObject, &position);
     }

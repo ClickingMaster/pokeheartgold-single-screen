@@ -386,7 +386,7 @@ sub_0206247C: ; 0x0206247C
 	mov r1, #0
 	bl sub_0205F328
 	add r0, r4, #0
-	bl sub_02060F78
+	bl MapObject_SetPreviousCoordsToCurrent
 	add r0, r4, #0
 	bl MapObject_IncrementMovementStep
 	pop {r4, pc}

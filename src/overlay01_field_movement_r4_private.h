@@ -102,7 +102,7 @@ u32 SurfMountEffect_Create(LocalMapObject *obj, u32 x, u32 y, u32 dir, u32 a4);
 int sub_0205DEC0(PlayerAvatar *avatar, int direction);
 BOOL sub_0205DE38(PlayerAvatar *avatar);
 u32 sub_0206234C(int direction, int a1);
-u32 sub_02060BB8(LocalMapObject *object, int direction);
+u32 MapObject_CheckCollisionInDirection(LocalMapObject *object, int direction);
 u32 sub_0205DA34(PlayerAvatar *playerAvatar, LocalMapObject *object, int direction);
 u32 sub_0205DFEC(PlayerAvatar *playerAvatar, int direction);
 int ov01_022062CC(FieldSystem *fieldSystem);

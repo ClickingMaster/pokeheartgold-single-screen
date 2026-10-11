@@ -31,7 +31,7 @@ sub_020627B0: ; 0x020627B0
 	add r1, r4, #0
 	bl sub_0205F328
 	add r0, r5, #0
-	bl sub_02060F78
+	bl MapObject_SetPreviousCoordsToCurrent
 	add r0, r5, #0
 	bl MapObject_IncrementMovementStep
 	pop {r3, r4, r5, r6, r7, pc}

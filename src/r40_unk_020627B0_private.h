@@ -8,5 +8,5 @@ typedef struct Movement040Work {
     s16 timer;
     u8 pad[8];
 } Movement040Work;
-void sub_02060F78(LocalMapObject *);
+void MapObject_SetPreviousCoordsToCurrent(LocalMapObject *);
 #endif

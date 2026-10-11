@@ -29,7 +29,7 @@ sub_020624CC: ; 0x020624CC
 	str r6, [r0, #8]
 	add r0, r5, #0
 	add r1, r4, #0
-	bl sub_02060F24
+	bl MapObject_MoveCoordsInDirection
 	add r0, r5, #0
 	add r1, r4, #0
 	bl MapObject_SetOrQueueFacing
@@ -54,9 +54,9 @@ MapObjectMovementCmd090_Step1: ; 0x02062514
 	ldr r1, [r4, #4]
 	ldr r2, [r4, #8]
 	add r0, r5, #0
-	bl sub_0206101C
+	bl MapObject_OffsetPositionInDirection
 	add r0, r5, #0
-	bl sub_02061070
+	bl MapObject_UpdateHeight
 	mov r0, #2
 	ldrsh r1, [r4, r0]
 	sub r1, r1, #1
@@ -71,7 +71,7 @@ _02062540:
 	mov r1, #0x28
 	bl MapObject_SetFlagsBits
 	add r0, r5, #0
-	bl sub_02060F78
+	bl MapObject_SetPreviousCoordsToCurrent
 	add r0, r5, #0
 	bl sub_0205F484
 	add r0, r5, #0

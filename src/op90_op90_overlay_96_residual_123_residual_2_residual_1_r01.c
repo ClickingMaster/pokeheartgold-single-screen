@@ -15,12 +15,12 @@ typedef struct {
     u32 copy:1;
     u32 rest:26;
 } Work;
-extern VecFx32 *ov96_02215DD4(void *, u8);
-extern u8 ov96_02215E2C(void *, u8);
-extern u8 ov96_02215E48(void *, u8);
-extern int ov96_02215DBC(void *, u8);
-extern int ov96_02215E94(void *, u8);
-extern void ov96_02215EE8(void *, u8, Pt16 *);
+extern VecFx32 *PokeathlonRingDrop_GetMonPosition(void *, u8);
+extern u8 PokeathlonRingDrop_GetMonDirection(void *, u8);
+extern u8 PokeathlonRingDrop_GetMonStamina(void *, u8);
+extern int PokeathlonRingDrop_GetMonState(void *, u8);
+extern int PokeathlonRingDrop_IsMonSwitching(void *, u8);
+extern void PokeathlonRingDrop_SetMonTarget(void *, u8, Pt16 *);
 extern void ov96_02215F2C(void *, u8);
 extern void ov96_02215F80(void *, u8, Pt16 *);
 extern BOOL ov96_0221A034(VecFx32 *, VecFx32 *, fx32);
@@ -53,13 +53,13 @@ void ov96_0221A08C(Work *w) {
     nearCount = 0;
     closeCount = 0;
     memset(kinds, 0, sizeof(kinds));
-    myPos = ov96_02215DD4(w->owner, w->id);
-    dir = ov96_02215E2C(w->owner, w->id);
+    myPos = PokeathlonRingDrop_GetMonPosition(w->owner, w->id);
+    dir = PokeathlonRingDrop_GetMonDirection(w->owner, w->id);
     for (i = 0; i < 4; i++) {
         if (i == w->id) {
             continue;
         }
-        pos = ov96_02215DD4(w->owner, i);
+        pos = PokeathlonRingDrop_GetMonPosition(w->owner, i);
         if (ov96_0221A034(myPos, pos, 2 * FX32_ONE * 16)) {
             if (ov96_0221A05C(myPos, pos, dir)) {
                 kinds[i] = 3;
@@ -85,10 +85,10 @@ void ov96_0221A08C(Work *w) {
     r = MTRandom() % 100;
     threshold += ov96_0221D97C[best[1]];
     if (r < threshold) {
-        pos = ov96_02215DD4(w->owner, best[0]);
+        pos = PokeathlonRingDrop_GetMonPosition(w->owner, best[0]);
         target.x = pos->x >> 12;
         target.y = pos->y >> 12;
-        ov96_02215EE8(w->owner, w->id, &target);
+        PokeathlonRingDrop_SetMonTarget(w->owner, w->id, &target);
         w->delay = 16;
         return;
     }
@@ -114,9 +114,9 @@ void ov96_0221A08C(Work *w) {
         second = -1;
         min = 999;
         for (i = 0; i < 4; i++) {
-            dist = ov96_02215E48(w->owner, i);
-            state = ov96_02215DBC(w->owner, i);
-            if (i != w->id && state != 3 && state != 4 && !ov96_02215E94(w->owner, w->other) && min > dist) {
+            dist = PokeathlonRingDrop_GetMonStamina(w->owner, i);
+            state = PokeathlonRingDrop_GetMonState(w->owner, i);
+            if (i != w->id && state != 3 && state != 4 && !PokeathlonRingDrop_IsMonSwitching(w->owner, w->other) && min > dist) {
                 second = first;
                 first = i;
                 min = dist;

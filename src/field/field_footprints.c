@@ -6,7 +6,7 @@
 #include "map_object.h"
 #include "render_animation.h"
 #include "render_model.h"
-#include "unk_0205FD20.h"
+#include "map_object_movement_utilities.h"
 #include "field_effects.h"
 
 // Footprints and tire tracks a map object leaves behind (field effect renderer 2): two banks of ten
@@ -234,7 +234,7 @@ BOOL Footprints_Spawn(LocalMapObject *mapObject, u32 kind) {
     args.kind = kind;
     args.renderObj = Footprints_GetRenderObj(footprints, kind, direction, prevDirection);
     args.model = Footprints_GetModel(footprints, kind, direction, prevDirection);
-    sub_020611C8(x, z, &position);
+    SetPositionToTileCenter(x, z, &position);
     position.y = y;
 
     switch (kind) {

@@ -11,7 +11,7 @@
 .public MapObject_GetXCoord
 .public MapObject_GetZCoord
 .public MapObject_CopyPositionVector
-.public sub_020611C8
+.public SetPositionToTileCenter
 .public FieldEffect_GetUserData
 .public FieldEffect_GetPosition
 .public FieldEffectManager_HeapAllocAndFill

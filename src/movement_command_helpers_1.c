@@ -36,7 +36,7 @@ void sub_02062FAC(void *mapObject, u32 facing, u32 count, u32 field2) {
     work->facing = facing;
     work->field2 = field2;
     work->count = count;
-    sub_02060F24(mapObject, facing);
+    MapObject_MoveCoordsInDirection(mapObject, facing);
     MapObject_SetOrQueueFacing(mapObject, facing);
     sub_0205F328(mapObject, field2);
     MapObject_SetFlagsBits(mapObject, 4);
@@ -45,14 +45,14 @@ void sub_02062FAC(void *mapObject, u32 facing, u32 count, u32 field2) {
 
 BOOL sub_02062FEC(void *mapObject, const u32 *values) {
     MovementPathWorkPrivate *work = sub_0205F3E4(mapObject);
-    sub_0206101C(mapObject, work->facing, values[work->index]);
-    sub_02061070(mapObject);
+    MapObject_OffsetPositionInDirection(mapObject, work->facing, values[work->index]);
+    MapObject_UpdateHeight(mapObject);
     work->index++;
     if (work->index < work->count) {
         return FALSE;
     }
     MapObject_SetFlagsBits(mapObject, 0x28);
-    sub_02060F78(mapObject);
+    MapObject_SetPreviousCoordsToCurrent(mapObject);
     sub_0205F484(mapObject);
     sub_0205F328(mapObject, 0);
     MapObject_IncrementMovementStep(mapObject);

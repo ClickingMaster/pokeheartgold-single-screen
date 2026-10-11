@@ -32,7 +32,7 @@ BOOL sub_02061C40(LocalMapObject *object, MovementPathState *state) {
     if (!sub_02062050(object)) {
         MapObject_SetFacingDirection(object, direction);
     }
-    collision = sub_02060BB8(object, direction);
+    collision = MapObject_CheckCollisionInDirection(object, direction);
     if (collision & 1) {
         state->index++;
         direction = list[state->index];
@@ -40,7 +40,7 @@ BOOL sub_02061C40(LocalMapObject *object, MovementPathState *state) {
         if (!sub_02062050(object)) {
             MapObject_SetFacingDirection(object, direction);
         }
-        collision = sub_02060BB8(object, direction);
+        collision = MapObject_CheckCollisionInDirection(object, direction);
     }
     movementKind = 12;
     if (collision != 0) {

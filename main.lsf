@@ -465,25 +465,8 @@ Static main
     Object src/player_avatar_movement_control_17.o
     Object src/map_object.o
     Object asm/unk_data_020FCBD8.o
+    Object src/map_object_update.o
     Object src/map_object_movement_utilities.o
-    Object src/to46_map_object_updates.o
-    Object src/map_object_movement_utilities_2.o
-    Object src/r40_unk_0206008C_run1.o
-    Object src/map_object_movement_utilities_3.o
-    Object src/unk_020601BC.o
-    Object src/map_object_movement_utilities_4.o
-    Object src/map_object_state_update_1.o
-    Object src/to90_extra2106_run01.o
-    Object src/map_object_state_update_2.o
-    Object src/map_object_movement_utilities_5.o
-    Object src/map_object_behavior_samples.o
-    Object src/map_object_movement_utilities_6.o
-    Object src/r40_unk_02060AF4_run1.o
-    Object src/map_object_movement_utilities_7.o
-    Object src/unk_02060BFC_decomp.o
-    Object src/map_object_movement_utilities_8.o
-    Object src/to50_map_object_height_adjust.o
-    Object src/map_object_movement_utilities_9.o
     Object src/map_object_movement.o
     Object src/map_object_movement_script_1.o
     Object asm/unk_02061284_residual_1.o
@@ -755,13 +738,8 @@ Static main
     Object src/to52_r2_w14_field_ui_move_details.o
     Object src/field_ui_8c3e4_6.o
     Object asm/unk_0208C3E4_residual_7.o
-    Object src/pokemon_picture_graphics_init.o
-    Object asm/unk_0208DE40.o
-    Object src/pokemon_picture_scene.o
-    Object src/r40_unk_0208DF2C_run1.o
-    Object src/pokemon_picture_scene_2.o
-    Object src/pokemon_picture_scene_vectors.o
-    Object src/pokemon_picture_scene_3.o
+    Object asm/pokemon_summary_scene_data.o
+    Object src/pokemon_summary_scene.o
     Object src/ribbon.o
     Object src/trainer_memo.o
     Object src/trade_communication.o
@@ -1352,11 +1330,11 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object lib/MSL_C/src/msl_pool_alloc.o
     Object lib/MSL_C/src/msl_string_extras.o
     Object lib/MSL_C/asm/to70_MSL_CPP_NITRO_Ai_LE_extra108_anchor.o
-    Object src/to70_MSL_CPP_NITRO_Ai_LE_extra108_run01.o
+    Object lib/MSL_C/src/msl_shared_ptr_create.o
     Object src/to91_msl_shared_ptr_char_d1.o
-    Object src/to70_MSL_CPP_NITRO_Ai_LE_extra108_run02.o
+    Object lib/MSL_C/src/msl_shared_ptr_destroy.o
     Object src/to91_msl_shared_ptr_release.o
-    Object src/to70_MSL_CPP_NITRO_Ai_LE_extra108_run03.o
+    Object lib/MSL_C/src/msl_shared_ptr_release_weak.o
     Object src/to70_MSL_CPP_NITRO_Ai_LE_extra108_residual_3_r01.o
     Object lib/asm/to90_msl_interval_demo_anchor.o
     Object src/op90_to90_w41415_fp_init4_prefix_r01.o
@@ -1967,9 +1945,7 @@ Overlay OVY_2
     Object src/overlay02_camera_scale_task.o
     Object asm/overlay_02_02248728_residual_61_data.o
     Object src/field/legend_cutscene_camera.o
-    Object src/field/to91_phone_prefix.o
-    Object src/field/to91_phone_retained.o
-    Object src/field/to91_phone_suffix.o
+    Object src/field/overlay_2_gear_phone.o
     Object src/field/event_cutscene_shaymin.o
     Object src/field/event_cutscene_celebi.o
     Object src/field/event_cutscene_sinjoh.o
@@ -2615,17 +2591,7 @@ Overlay OVY_40
     Object src/application/vs_recorder/vs_recorder_title.o
     Object src/application/vs_recorder/vs_recorder_menu.o
     Object src/application/vs_recorder/vs_recorder_saved_video.o
-    Object src/overlay40_pc_box_grid_run9.o
-    Object src/r40_overlay_40_residual_27_unmatched_10_run1.o
-    Object src/overlay40_pc_box_grid_run10.o
-    Object src/to70_overlay_40_residual_27_unmatched_11_extra1201_run01.o
-    Object src/overlay40_pc_box_grid_run11.o
-    Object src/op90_overlay_40_residual_27_unmatched_12_r01.o
-    Object src/op90_overlay_40_residual_27_unmatched_12_r02.o
-    Object src/to45_overlay40_r27_u12_exact.o
-    Object src/overlay40_pc_box_grid_run12.o
-    Object src/to70_overlay_40_residual_27_unmatched_13_extra35_run01.o
-    Object src/overlay40_pc_box_grid_run13.o
+    Object src/application/vs_recorder/vs_recorder_frontier_record.o
     Object src/to45_overlay40_r27_u14_exact.o
     Object src/overlay40_pc_box_grid_run14.o
     Object src/to70_overlay_40_residual_27_unmatched_15_prefix_extra1202_run01.o
@@ -3963,43 +3929,8 @@ Overlay OVY_96
     Object src/pokeathlon/pokeathlon_goal_roll_field.o
     Object src/pokeathlon/pokeathlon_goal_roll_display.o
     Object src/pokeathlon/pokeathlon_goal_roll_cpu.o
-    Object src/overlay96_exact_bank_111.o
-    Object src/to70_overlay_96_residual_112_extra1032_run01.o
-    Object src/overlay96_exact_bank_112.o
-    Object src/to70_overlay_96_residual_113_extra1033_run01.o
-    Object src/overlay96_exact_bank_113.o
-    Object src/overlay96_course_main_r114.o
-    Object src/overlay96_exact_bank_114.o
-    Object src/to70_overlay_96_residual_115_extra871_run01.o
-    Object src/overlay96_object_1.o
-    Object src/to80_extra1804_run01.o
-    Object src/to80_extra1804_run02.o
-    Object src/overlay96_object_2.o
-    Object src/to70_overlay_96_residual_115_residual_3_extra872_run01.o
-    Object src/overlay96_object_3.o
-    Object src/overlay96_exact_bank_115.o
-    Object src/sol_r9_ov96_exact_01_02215fa8.o
-    Object src/to80_extra1817_run01.o
-    Object src/sol_r9_ov96_exact_03_02216200.o
-    Object src/to70_to70_sol_r9_ov96_residual_04_02216234_extra229_residual_1_extra1333_run01.o
-    Object src/to70_sol_r9_ov96_residual_04_02216234_extra229_run01.o
-    Object src/sol_r9_ov96_exact_05_02216390.o
-    Object src/op90_sol_r9_ov96_r06_residual1_r01.o
-    Object src/sol_r9_ov96_r06_sprite_create.o
-    Object src/to70_sol_r9_ov96_r06_residual2_extra525_run01.o
-    Object src/sol_r9_ov96_exact_07_022165fc.o
-    Object src/sol_r9_ov96_r08_run1.o
-    Object src/to80_extra1715_run01.o
-    Object src/to80_extra1593_run01.o
-    Object src/sol_r9_ov96_r08_run2.o
-    Object src/op90_sol_r9_ov96_r08_residual2_r01.o
-    Object src/sol_r9_ov96_exact_09_02216c00.o
-    Object src/op90_sol_r9_ov96_residual_10_02216c38_r01.o
-    Object src/to47_ov96_results_r10.o
-    Object src/sol_r9_ov96_exact_11_022177d8.o
-    Object src/to90_extra1939_run01.o
-    Object src/to70_sol_r9_ov96_residual_12_02217820_extra1049_run01.o
-    Object src/sol_r9_ov96_exact_13_02217868.o
+    Object src/pokeathlon/pokeathlon_ring_drop.o
+    Object src/pokeathlon/pokeathlon_ring_drop_display.o
     Object src/overlay96_exact_bank_116.o
     Object src/to80_extra1703_run01.o
     Object src/overlay96_course_setup_r117.o

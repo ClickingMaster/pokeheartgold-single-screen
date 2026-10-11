@@ -33,12 +33,12 @@
 .public MapObject_GetXCoord
 .public MapObject_GetZCoord
 .public MapObject_GetPositionVectorYCoordUInt
-.public sub_02060BB8
+.public MapObject_CheckCollisionInDirection
 .public GetDeltaXByFacingDirection
 .public GetDeltaYByFacingDirection
-.public sub_02060F78
-.public sub_020611F4
-.public sub_02061200
+.public MapObject_SetPreviousCoordsToCurrent
+.public GetOppositeDirection
+.public GetDirectionTowards
 .public sub_020612B4
 .public sub_020612C0
 .public sub_020612CC

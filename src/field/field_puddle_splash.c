@@ -6,7 +6,7 @@
 #include "map_object.h"
 #include "render_animation.h"
 #include "render_model.h"
-#include "unk_0205FD20.h"
+#include "map_object_movement_utilities.h"
 #include "field_effects.h"
 
 // The splash a map object kicks up when it steps into a puddle (field effect renderer 6): one animated
@@ -79,7 +79,7 @@ void PuddleSplash_Spawn(LocalMapObject *mapObject, int x, int y, int z) {
     }
     args.manager = FieldEffectManager_GetFromMapObject(mapObject);
     args.splash = FieldEffectManager_GetRendererData(args.manager, 6);
-    sub_020611C8(x, z, &position);
+    SetPositionToTileCenter(x, z, &position);
     position.z += y * 8 + 0x1000;
     position.y = (MapObject_GetPreviousYCoord(mapObject) << 15) - 0x8000;
     FieldEffectManager_CreateEffect(args.manager, &sPuddleSplashEffectTemplate, &position, 0, &args, MapObject_GetPriorityPlusValue(mapObject, 2));

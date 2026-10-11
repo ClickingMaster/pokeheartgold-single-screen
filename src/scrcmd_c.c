@@ -89,7 +89,7 @@
 #include "union_room_objects.h"
 #include "unk_0205B3DC.h"
 #include "unk_0205BB1C.h"
-#include "unk_0205FD20.h"
+#include "map_object_movement_utilities.h"
 #include "unk_02062108.h"
 #include "unk_020658D4.h"
 #include "unk_02067A80.h"
@@ -1440,7 +1440,7 @@ BOOL ScrCmd_102(ScriptContext *ctx) {
     LocalMapObject **p_cameraObj = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_CAMERA_TARGET);
     VecFx32 *pos;
     *p_cameraObj = MapObject_Create(ctx->fieldSystem->mapObjectManager, x, y, 0, SPRITE_CAMERA_FOCUS, 0, ctx->fieldSystem->location->mapId);
-    sub_02061070(*p_cameraObj);
+    MapObject_UpdateHeight(*p_cameraObj);
     MapObject_SetVisible(*p_cameraObj, TRUE);
     MapObject_ClearFlag18(*p_cameraObj, FALSE);
     pos = MapObject_GetPositionVector(*p_cameraObj);
@@ -1464,7 +1464,7 @@ BOOL ScrCmd_678(ScriptContext *ctx) {
     u16 y = ScriptGetVar(ctx);
     LocalMapObject **p_cameraObj = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_CAMERA_TARGET);
     *p_cameraObj = MapObject_Create(ctx->fieldSystem->mapObjectManager, x, y, 0, SPRITE_CAMERA_FOCUS, 0, ctx->fieldSystem->location->mapId);
-    sub_02061070(*p_cameraObj);
+    MapObject_UpdateHeight(*p_cameraObj);
     MapObject_SetVisible(*p_cameraObj, TRUE);
     MapObject_ClearFlag18(*p_cameraObj, FALSE);
     return FALSE;
@@ -1478,7 +1478,7 @@ BOOL ScrCmd_679(ScriptContext *ctx) {
 
 BOOL ScrCmd_FacePlayer(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
-    u32 rvsDir = sub_020611F4(PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
+    u32 rvsDir = GetOppositeDirection(PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
     LocalMapObject **p_lastInteracted = FieldSysGetAttrAddr(fieldSystem, SCRIPTENV_LAST_INTERACTED);
     u32 oldDir;
     int x, y;
@@ -2990,7 +2990,7 @@ BOOL ScrCmd_MovePersonFacing(ScriptContext *ctx) {
     u16 direction = ScriptGetVar(ctx);
     LocalMapObject *object = MapObjectManager_GetFirstActiveObjectByID(ctx->fieldSystem->mapObjectManager, objectId);
     MapObject_SetPositionFromXYZAndDirection(object, x, y, z, direction);
-    sub_02061070(object);
+    MapObject_UpdateHeight(object);
     return FALSE;
 }
 

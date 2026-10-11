@@ -129,7 +129,7 @@ _0206147E:
 _020614AA:
 	add r0, r5, #0
 	add r1, r6, #0
-	bl sub_02060BB8
+	bl MapObject_CheckCollisionInDirection
 	cmp r0, #0
 	beq _020614BC
 	mov r0, #0

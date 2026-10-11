@@ -11,7 +11,7 @@ void LoadFontPal1(int, int, int);
 u32 Options_GetFrame(void *);
 void LoadUserFrameGfx2(void *, int, int, int, int, int);
 void sub_0208DDA0(void *, int);
-void sub_0208E174(void *);
+void PokemonSummary_InitConditionChart(void *);
 void sub_0208BCD4(void *);
 void sub_0208BDC8(void *);
 u32 sub_02089478(void *);

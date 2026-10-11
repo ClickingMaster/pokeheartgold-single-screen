@@ -40,6 +40,6 @@ BOOL sub_02062428(LocalMapObject *);
 BOOL MapObject_RunMovementCommand(LocalMapObject *, u32, u32);
 BOOL MapObjectMovementCmd098_Step2(LocalMapObject *);
 void sub_0206247C(LocalMapObject *, u32);
-void sub_02060F78(LocalMapObject *);
+void MapObject_SetPreviousCoordsToCurrent(LocalMapObject *);
 
 #endif

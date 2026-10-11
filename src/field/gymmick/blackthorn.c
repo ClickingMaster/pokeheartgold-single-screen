@@ -3,7 +3,7 @@
 #include "overlay_04.h"
 #include "sound_playback.h"
 #include "unk_02054648.h"
-#include "unk_0205FD20.h"
+#include "map_object_movement_utilities.h"
 
 #define PLATFORM_TYPE_0_W    5
 #define PLATFORM_TYPE_0_H    7
@@ -767,7 +767,7 @@ static void SysTask_BlackthornGymmick_MovePlatform(SysTask *task, void *data) {
                 MapObject_CopyPositionVector(playerObject, &sp1C);
                 MapObject_SetCurrentX(playerObject, sp1C.x / (16 * FX32_ONE));
                 MapObject_SetCurrentZ(playerObject, sp1C.z / (16 * FX32_ONE));
-                sub_02060F78(playerObject);
+                MapObject_SetPreviousCoordsToCurrent(playerObject);
                 SysTask_Destroy(task);
                 taskData->state = STATE_MOVE_APPLY;
             } else {

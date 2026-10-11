@@ -526,8 +526,8 @@
 .public LegendCutscene_LugiaArrivesEffectCameraPan
 .public GetPhoneBookEntryName
 .public GearPhoneRingManager_SetCallerParams
-.public ov02_02251EE8
-.public ov02_02251F20
+.public GearPhoneRingManager_GetCallerParams
+.public GearPhoneRingManager_TryStartCall
 .public GetRadioMusicPlayingSeq
 .public ov02_02252334
 .public ov02_022523B4

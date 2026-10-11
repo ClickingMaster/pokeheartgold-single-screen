@@ -9,7 +9,7 @@ BOOL sub_02065F44(LocalMapObject *object) {
 
     if (x != previousX || z != previousZ) {
         int movement = sub_02065DB4(object);
-        int direction = sub_02061200(x, z, previousX, previousZ);
+        int direction = GetDirectionTowards(x, z, previousX, previousZ);
         if (movement == 0xff) {
             GF_AssertFail();
             return FALSE;

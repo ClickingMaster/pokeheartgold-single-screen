@@ -10,7 +10,7 @@ void sub_0205DFD4(PlayerAvatar *avatar, int movement) {
 }
 
 void sub_0205DFEC(PlayerAvatar *avatar, int value) {
-    sub_02060FA8(PlayerAvatar_GetMapObject(avatar), value);
+    MapObject_GetMetatileBehaviorInDirection(PlayerAvatar_GetMapObject(avatar), value);
 }
 
 void sub_0205DFFC(PlayerAvatar *avatar, int direction, int *x, int *z) {

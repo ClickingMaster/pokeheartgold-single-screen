@@ -8,7 +8,7 @@
 .public MapObject_GetPreviousXCoord
 .public MapObject_GetPreviousZCoord
 .public MapObject_GetPositionVectorYCoord
-.public sub_020611C8
+.public SetPositionToTileCenter
 .public FieldEffect_GetParam
 .public FieldEffect_GetUserData
 .public FieldEffect_GetPosition

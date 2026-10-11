@@ -26,7 +26,7 @@ typedef struct TrainerApproachWork {
 } TrainerApproachWork;
 
 u32 sub_0206234C(u32, u32);
-int sub_02061200(int, int, int, int);
+int GetDirectionTowards(int, int, int, int);
 void sub_020632B0(LocalMapObject *, int, int, int, int, int, int);
 BOOL MapObject_IsMovementPaused(LocalMapObject *);
 BOOL MapObject_AreBitsSetForMovementScriptInit(LocalMapObject *);

@@ -8,7 +8,7 @@
 #include "overlay_04.h"
 #include "task.h"
 #include "sound_playback.h"
-#include "unk_0205FD20.h"
+#include "map_object_movement_utilities.h"
 #include "unk_02062108.h"
 
 typedef struct AzaleaGymmickSpinarakRouteNode {
@@ -594,14 +594,14 @@ static void SysTask_DoSpinarakRide(SysTask *sysTask, void *taskData) {
         MapObject_SetCurrentX(playerObject, localData->node->x);
         MapObject_SetCurrentY(playerObject, 0);
         MapObject_SetCurrentZ(playerObject, localData->node->z + localData->playerZOffset);
-        sub_02060F78(playerObject);
+        MapObject_SetPreviousCoordsToCurrent(playerObject);
         MapObject_SetHeldMovement(playerObject, MOVEMENT_UNK_74);
         if (FollowMon_IsActive(fieldSystem)) {
             LocalMapObject *followMonObject = FollowMon_GetMapObject(fieldSystem);
             MapObject_SetCurrentX(followMonObject, localData->node->x);
             MapObject_SetCurrentY(followMonObject, 0);
             MapObject_SetCurrentZ(followMonObject, localData->node->z + (1 - localData->playerZOffset));
-            sub_02060F78(followMonObject);
+            MapObject_SetPreviousCoordsToCurrent(followMonObject);
         }
         localData->shakeCount = 0;
         localData->shakeFrame = 0;

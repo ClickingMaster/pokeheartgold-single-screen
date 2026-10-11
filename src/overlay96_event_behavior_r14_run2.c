@@ -5,7 +5,7 @@
 BOOL ov96_0221A3AC(R123Rec *r) {
     s32 roll = MTRandom() % 100;
     s32 chance = 0;
-    u32 v = ov96_02215E68(r->ctx, (u8)r->bits.index);
+    u32 v = PokeathlonRingDrop_GetMonStaminaPercent(r->ctx, (u8)r->bits.index);
     if (v < 10) {
         chance = 100;
     } else if (v < 20) {

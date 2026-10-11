@@ -190,9 +190,9 @@ $(BUILD_DIR)/lib/MSL_C/src/msl_wstring_wcscpy.o: private MWCCVER := 2.0/sp2p3
 
 $(BUILD_DIR)/lib/MSL_C/src/msl_abort_exit.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/src/to70_MSL_CPP_NITRO_Ai_LE_extra108_run01.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/to70_MSL_CPP_NITRO_Ai_LE_extra108_run02.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/to70_MSL_CPP_NITRO_Ai_LE_extra108_run03.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_shared_ptr_create.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_shared_ptr_destroy.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_shared_ptr_release_weak.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/to70_MSL_CPP_NITRO_Ai_LE_extra108_residual_3_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/to70_MSL_CPP_NITRO_Ai_LE_extra108_residual_3_r01.o: private EXCCFLAGS := -Cpp_exceptions on
 $(BUILD_DIR)/src/to91_msl_shared_ptr_release.o: private MWCCVER := 2.0/sp2p3

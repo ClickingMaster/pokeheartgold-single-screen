@@ -39,9 +39,9 @@ void *ov01_021F30D0(u32 size);
 int ov01_021F2DD0(TaskManager *taskManager);
 void ov02_0224D5AC(void *effect);
 void *ov02_0224D598(FieldSystem *fieldSystem);
-void sub_020611C8(int x, int z, VecFx32 *position);
+void SetPositionToTileCenter(int x, int z, VecFx32 *position);
 void sub_0206121C(FieldSystem *fieldSystem, VecFx32 *position);
-void sub_02060F78(LocalMapObject *object);
+void MapObject_SetPreviousCoordsToCurrent(LocalMapObject *object);
 int GetDeltaXByFacingDirection(int direction);
 int GetDeltaYByFacingDirection(int direction);
 

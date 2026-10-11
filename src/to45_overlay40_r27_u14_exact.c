@@ -13,7 +13,7 @@ int ov40_02233F28(void *p) {
         }
         PaletteData_BlendPalettes(PTR(p, 0x28), 3, 0x1C, (u8)*inner, (u16)WORD(p, 0x58));
         PaletteData_BlendPalettes(PTR(p, 0x28), 1, 0x4018, (u8)*inner, (u16)WORD(p, 0x58));
-        if (!ov40_02233AEC(p)) {
+        if (!VsRecorder_SpinOutFrontierSprites(p)) {
             *inner = 0;
             WORD(p, 8)
             ++;
@@ -24,8 +24,8 @@ int ov40_02233F28(void *p) {
         ++;
     case 2:
         VsRecorder_SetVBlankPaused(p, 1);
-        ov40_022338D0(p);
-        ov40_0223320C(p);
+        VsRecorder_FreeFrontierSprites(p);
+        VsRecorder_FreeFrontierButtons(p);
         VsRecorder_SetVBlankPaused(p, 0);
         GfGfx_EngineATogglePlanes(8, 0);
         GfGfx_EngineATogglePlanes(4, 0);

@@ -6,7 +6,7 @@ BOOL sub_02064824(TrainerApproachWork *work) {
     int z = MapObject_GetZCoord(obj);
     int tx = MapObject_GetXCoord(work->trainer);
     int tz = MapObject_GetZCoord(work->trainer);
-    int direction = sub_02061200(x, z, tx, tz);
+    int direction = GetDirectionTowards(x, z, tx, tz);
     if (direction != PlayerAvatar_GetFacingDirection(work->player) && (work->unk18 == 0 || work->unk14 == 2)) {
         if (MapObject_AreBitsSetForMovementScriptInit(obj) == TRUE) {
             MapObject_ClearFlagsBits(obj, (MapObjectFlagBits)0x80);

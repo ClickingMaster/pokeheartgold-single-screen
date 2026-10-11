@@ -7,7 +7,7 @@ void sub_0205CFBC(PlayerAvatar *avatar, int direction) {
     mapObject = PlayerAvatar_GetMapObject(avatar);
     MapObject_SetFacingDirection(mapObject, direction);
     sub_0205F328(mapObject, 0);
-    sub_02060F78(mapObject);
+    MapObject_SetPreviousCoordsToCurrent(mapObject);
     MapObject_ClearHeldMovement(mapObject);
     MapObject_SetHeldMovement(mapObject, sub_0206234C(direction, 0));
 }

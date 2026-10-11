@@ -19,7 +19,7 @@ int sub_0205D240(PlayerAvatar *avatar, void *arg) {
     VecFx32 position;
     MapObject_CopyPositionVector(mapObject, &original);
     position = original;
-    sub_02061190(arg, &position, 1 << 14);
+    OffsetPositionInDirection(arg, &position, 1 << 14);
     if (!sub_0206121C(fieldSystem, &position) || original.y == position.y) {
         return 0;
     }

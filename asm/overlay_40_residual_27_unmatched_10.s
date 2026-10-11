@@ -8,21 +8,21 @@
 	.public VsRecorder_CreateTextSprite
 	.public VsRecorder_SetTextSpriteMsg
 	.public ov40_0222D800
-	.public ov40_022330E0
-	.public ov40_0223311C
-	.public ov40_0223316C
+	.public VsRecorder_PlaceFrontierExitButton
+	.public VsRecorder_LoadFrontierButtonGfx
+	.public VsRecorder_CreateFrontierButtons
 	.public TextOBJ_SetPosition
 	.text
 
-	thumb_func_start ov40_0223316C
-ov40_0223316C: ; 0x0223316C
+	thumb_func_start VsRecorder_CreateFrontierButtons
+VsRecorder_CreateFrontierButtons: ; 0x0223316C
 	push {r3, r4, r5, lr}
 	mov r1, #0x86
 	add r5, r0, #0
 	lsl r1, r1, #4
 	ldr r4, [r5, r1]
 	mov r1, #2
-	bl ov40_0223311C
+	bl VsRecorder_LoadFrontierButtonGfx
 	add r0, r5, #0
 	mov r1, #2
 	bl ov40_0222D800
@@ -82,6 +82,6 @@ ov40_0223316C: ; 0x0223316C
 	bl ManagedSprite_SetDrawFlag
 	add r0, r5, #0
 	mov r1, #1
-	bl ov40_022330E0
+	bl VsRecorder_PlaceFrontierExitButton
 	pop {r3, r4, r5, pc}
-	thumb_func_end ov40_0223316C
+	thumb_func_end VsRecorder_CreateFrontierButtons

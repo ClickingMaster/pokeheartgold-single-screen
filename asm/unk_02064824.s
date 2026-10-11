@@ -33,7 +33,7 @@ sub_02064824: ; 0x02064824
 	ldr r2, [sp]
 	add r0, r6, #0
 	add r1, r7, #0
-	bl sub_02061200
+	bl GetDirectionTowards
 	add r6, r0, #0
 	ldr r0, [r5, #0x28]
 	bl PlayerAvatar_GetFacingDirection

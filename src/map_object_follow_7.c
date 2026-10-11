@@ -31,7 +31,7 @@ BOOL sub_0206623C(LocalMapObject *object, FollowState *state) {
     if (x == ox && z == oz) {
         return FALSE;
     }
-    direction = sub_02061200(x, z, opx, opz);
+    direction = GetDirectionTowards(x, z, opx, opz);
     x += GetDeltaXByFacingDirection(direction);
     z += GetDeltaYByFacingDirection(direction);
     if (x != ox || z != oz) {

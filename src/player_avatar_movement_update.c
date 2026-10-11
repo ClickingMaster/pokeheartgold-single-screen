@@ -15,7 +15,7 @@ void sub_0205CC94(PlayerAvatar *avatar) {
     if (movement == -1) {
         previous = behavior;
     } else {
-        previous = sub_02060FA8(object, movement);
+        previous = MapObject_GetMetatileBehaviorInDirection(object, movement);
     }
 
     if (MetatileBehavior_IsPuddle(behavior) == TRUE) {
