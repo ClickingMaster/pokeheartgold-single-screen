@@ -157,7 +157,10 @@ typedef struct WlBss {
     u16 unk_a2;            // bit 0: WSetGameInfo writes gameInfo byte by byte (WL_WriteByte)
     u16 unk_a4;            // set by WSetGameInfo
     u16 tmpttPowerSaveOff; // WDisableTmpttPowerSave / WEnableTmpttPowerSave
-    u8 unk_a8[0xc0 - 0xa8];
+    u32 intervalCount;     // WIntervalTimer calls (every 100 ms in state 0x40)
+    u8 unk_ac[4];
+    u16 unk_b0; // WIntervalTimer queues task 21 while set
+    u8 unk_b2[0xc0 - 0xb2];
 } WlBss;
 
 // RF chip description from the flash (WConfigDevice: flash bytes 0x40..0x43), used by InitRF and WSetChannel.
@@ -308,11 +311,45 @@ u32 CheckEnableChannel(u32 channel);
 void WElement2RateSet(const u8 *element, WlRateSet *rateSet);
 u32 WCalcManRate(void);
 
+// wl_device.c
+u64 __VENEER__ll_udiv(u64 dividend, u64 divisor);
+void WStop(void);
+u32 BBP_Read(u32 reg);
+int BBP_Write(u32 reg, u32 value);
+int RF_Write(u32 value);
+u32 CalcBbpCRC(void);
+void WConfigDevice(void);
+void InitMac(void);
+void InitBaseBand(void);
+void InitRF(void);
+void InitializeAlarm(void);
+BOOL __VENEER_OS_IsAlarmAvailable(void);
+void TimeoutDummy(void *arg);
+void WWaitus(u32 us);
+
+// wl_start.c
+void WStart(void);
+
+// wl_timeout_periodic.c
+void SetupPeriodicTimeOut(u32 ms, OSAlarmHandler handler);
+
+// wl_timer.c
+void __VENEER_OS_SetPeriodicAlarm(OSAlarm *alarm, OSTick start, OSTick period, OSAlarmHandler handler, void *arg);
+void ClearPeriodicTimeOut(void);
+void WIntervalTimer(void);
+
+// wl_timeout.c
+void SetupTimeOut(u32 ms, OSAlarmHandler handler);
+void SetupUsTimeOut(u32 us, OSAlarmHandler handler);
+
 // wl_set_channel.c
 int WSetChannel(u16 channel, int direct);
 
 // veneers defined in other ARM7 files
 void __VENEER_OS_CancelAlarm(OSAlarm *alarm);
+void __VENEER_OS_CreateAlarm(OSAlarm *alarm);
+void __VENEER_OS_SetAlarm(OSAlarm *alarm, OSTick tick, OSAlarmHandler handler, void *arg);
+OSTick __VENEER_OS_GetTick(void);
 u32 __VENEER__u32_div_f(u32 dividend, u32 divisor);
 void __VENEER_OS_CreateThread(OSThread *thread, void (*func)(void *), void *arg, void *stack, u32 stackSize, u32 prio);
 void __VENEER_OS_WakeupThreadDirect(OSThread *thread);
@@ -325,35 +362,34 @@ void __VENEER_OS_FreeToHeap(u32 id, u32 heap, void *ptr);
 
 // defined in the later WL files
 void ClearTimeOut(void);
-void WStop(void);
-void WIntervalTimer(void);
-void SetupPeriodicTimeOut(u32 ms, OSAlarmHandler handler);
-void TimeoutDummy(void *arg);
 void WaitLoop_Waitus(u32 us, OSAlarmHandler handler);
 int WaitLoop_BbpAccess(void);
+int WaitLoop_RfAccess(void);
+void StopBeaconFrame(void);
+void StartBeaconFrame(void);
+void InitCAM(void);
+void InitApList(void);
+void InitTxCtrl(void);
+void InitRxCtrl(void);
+void WaitLoop_Rxpe(void);
+void DeleteAllTxFrames(void);
+u16 calc_NextCRC(int data, int crc);
 void WaitLoop_ClrAid(void);
 void DeleteTxFrames(u32 station);
 void CAM_SetStaState(u16 aid, u16 state);
-int RF_Write(u32 value);
 void FLASH_DirectRead(u32 addr, u32 size, void *dest);
-void InitMac(void);
 void InitializeCmdIf(void);
 void InitializeMLME(void);
 void InitializeCAM(void);
-void InitializeAlarm(void);
 void InitializeIntr(void);
-void WConfigDevice(void);
 void DiagMacRegister(void);
 void DiagMacMemory(void);
 void DiagBaseBand(void);
-void InitRF(void);
-void InitBaseBand(void);
 void FLASH_MakeImage(void);
 void FLASH_Read(u32 addr, u32 size, void *dest);
 u32 FLASH_VerifyCheckSum(u32 *checksum);
 void WL_WriteByte(void *dest, u32 value);
 u8 WL_ReadByte(const void *src);
-int BBP_Write(u32 reg, u32 value);
 void RND_Init(u32 mul, u32 add);
 
 #endif // WL_INTERNAL_H

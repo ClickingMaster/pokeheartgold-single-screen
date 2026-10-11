@@ -31,7 +31,7 @@ extern void PokepicManager_HandleLoadImgAndOrPltt(void *manager);
 extern void PokepicManager_DrawAll(void *manager);
 extern void RequestSwap3DBuffers(u32, u32);
 
-extern void *ov71_02247384(void *ctx);
+extern void *TradeSequence_GetBgConfig(void *ctx);
 extern void ov71_02247498(void *camera);
 extern void ov71_022474CC(void *camera);
 extern void ov71_0224B970(void *work);
@@ -51,7 +51,7 @@ extern void GfGfx_EngineATogglePlanes(u8 planes, u8 enable);
 extern void GfGfx_EngineBTogglePlanes(u8 planes, u8 enable);
 extern void BG_FillCharDataRange(void *bg, u32 layer, u32 value, u32 count, u32 offset);
 extern void FillBgTilemapRect(void *bg, u32 layer, u32 value, u32 x, u32 y, u32 width, u32 height, u32 palette);
-extern u32 ov71_022473D0(void *ctx);
+extern u32 TradeSequence_GetFrameType(void *ctx);
 extern void LoadUserFrameGfx2(void *bg, u32 layer, u32 tile, u32 palette, u8 frame, u32 heapId);
 extern void AddWindowParameterized(void *bg, void *window, u32 layer, u32 palette, u32 x, u32 y, u32 width, u32 height, u32 baseTile);
 extern void FillWindowPixelBuffer(void *window, u32 value);

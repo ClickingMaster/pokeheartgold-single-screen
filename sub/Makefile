@@ -41,9 +41,9 @@ $(BUILD_DIR)/lib/src/OS_reset.o: lib/src/OS_reset.c $(BUILD_DIR)/lib/src/OS_rese
 	@mv "$@.reset-aliases" "$@"
 	@$(call fixdep,$(BUILD_DIR)/lib/src/OS_reset.d)
 $(BUILD_DIR)/lib/src/op90_to90_arm7_wram160_r8_residual_1_r01.o: private MWCCVER := 2.0/sp1
-$(BUILD_DIR)/lib/src/op90_to90_arm7_sub_ext_wram_residual_37_r01.o: private MWCCVER := 2.0/sp1
-$(BUILD_DIR)/lib/src/op90_to90_arm7_sub_ext_wram_residual_32_r01.o: private MWCCVER := 2.0/sp1
-$(BUILD_DIR)/lib/src/op90_to90_arm7_sub_ext_wram_residual_36_r01.o: private MWCCVER := 2.0/sp1
+$(BUILD_DIR)/lib/src/wl_timeout.o: private MWCCVER := 2.0/sp1
+$(BUILD_DIR)/lib/src/wl_start.o: private MWCCVER := 2.0/sp1
+$(BUILD_DIR)/lib/src/wl_timeout_periodic.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/src/op90_to90_arm7_sub_ext_wram_residual_51_r01.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/src/op90_to90_arm7_sub_ext_wram_residual_62_r01.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/src/op90_to90_arm7_sub_ext_wram_residual_62_r02.o: private MWCCVER := 2.0/sp1

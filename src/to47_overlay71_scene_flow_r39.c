@@ -29,11 +29,11 @@ extern BOOL IsPaletteFadeFinished(void);
 extern void BeginNormalPaletteFade(u32 a0, u32 a1, u32 a2, u32 a3, u32 a4, u32 a5, u32 a6);
 extern void ov71_0224AFD4(Ov71SceneWorkR39 *work, u32 *arg);
 extern void ov71_0224AF08(Ov71SceneWorkR39 *work, u32 *arg);
-extern void *ov71_02246C6C(u32 *arg, s32 a1);
-extern void ov71_02246D40(void *arg);
+extern void *TradeSequence_CreatePulses(u32 *arg, s32 a1);
+extern void TradeSequence_StopPulses(void *arg);
 extern void ov71_0224B084(void *a0, s32 a1, s32 a2, s32 a3, u32 *a4);
-extern void *ov71_02247000(void *a0, u32 a1, u32 a2, u32 a3, u32 a4, u32 a5, u32 *a6);
-extern u32 ov71_022473A0(void *ctx);
+extern void *TradeSequence_StartBgZoom(void *a0, u32 a1, u32 a2, u32 a3, u32 a4, u32 a5, u32 *a6);
+extern u32 TradeSequence_GetTimeOfDay(void *ctx);
 
 extern void GfGfx_SetBanks(const void *banks);
 extern void SetBothScreensModesAndDisable(const void *modes);
@@ -84,7 +84,7 @@ BOOL ov71_0224AA28(Ov71SceneWorkR39 *work, u32 *state) {
         }
         break;
     case 3:
-        work->unk_10 = ov71_02246C6C(&work->unk_14, -1);
+        work->unk_10 = TradeSequence_CreatePulses(&work->unk_14, -1);
         work->unk_08 = 0;
         (*state)++;
         break;
@@ -97,7 +97,7 @@ BOOL ov71_0224AA28(Ov71SceneWorkR39 *work, u32 *state) {
         break;
     case 5:
         if (work->unk_38 == 0) {
-            ov71_02246D40(work->unk_10);
+            TradeSequence_StopPulses(work->unk_10);
             (*state)++;
         }
         break;
@@ -113,7 +113,7 @@ BOOL ov71_0224AA28(Ov71SceneWorkR39 *work, u32 *state) {
 BOOL ov71_0224AAF8(Ov71SceneWorkR39 *work, u32 *state) {
     switch (*state) {
     case 0:
-        work->unk_18 = ov71_02247000(work->unk_0C, 0x1000, 0x400, 1, 0x128, 1, &work->unk_1C);
+        work->unk_18 = TradeSequence_StartBgZoom(work->unk_0C, 0x1000, 0x400, 1, 0x128, 1, &work->unk_1C);
         work->unk_08 = 0;
         (*state)++;
         break;
@@ -154,7 +154,7 @@ void ov71_0224AB7C(Ov71SceneWorkR39 *work) {
     GfGfxLoader_LoadCharData(0x59, 2, work->unk_0C, 6, 0, 0, 1, 0x39);
     GfGfxLoader_LoadScrnData(0x59, 1, work->unk_0C, 2, 0, 0, 1, 0x39);
     GfGfxLoader_LoadScrnData(0x59, 1, work->unk_0C, 6, 0, 0, 1, 0x39);
-    idx = ov71_022473A0(work->unk_00);
+    idx = TradeSequence_GetTimeOfDay(work->unk_00);
     GfGfxLoader_GXLoadPal(0x59, 3, 0, 0, 0x20, 0x39);
     GfGfxLoader_GXLoadPal(0x59, 3, 4, 0, 0x20, 0x39);
     srcOffset = ov71_0224BEE8[idx];

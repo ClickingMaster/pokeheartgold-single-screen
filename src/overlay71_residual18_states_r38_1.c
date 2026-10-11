@@ -22,8 +22,8 @@ extern BOOL IsPaletteFadeFinished(void);
 extern void BeginNormalPaletteFade(u32, u32, u32, u16, u32, u32, u32);
 extern void FreeBgTilemapBuffer(void *, u32);
 extern void PlaySE(u16);
-extern void ov71_02246D40(void *);
-extern void ov71_02246D54(void *);
+extern void TradeSequence_StopPulses(void *);
+extern void TradeSequence_DestroyPulses(void *);
 extern void ov71_02247704(void *, u32);
 extern void ov71_02247708(void *, u32);
 extern void ov71_02248604(Ov71Work18 *);
@@ -113,7 +113,7 @@ BOOL ov71_02248530(Ov71Work18 *work, u32 *state) {
     case 1:
         if (++work->timer > 2) {
             work->timer = 0;
-            ov71_02246D40(work->unk_C4);
+            TradeSequence_StopPulses(work->unk_C4);
             (*state)++;
         }
         break;

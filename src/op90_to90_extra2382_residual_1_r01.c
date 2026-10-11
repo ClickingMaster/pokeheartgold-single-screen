@@ -14,16 +14,16 @@ typedef struct Work {
     u8 unk3C[0x44];
     NARC *narc;
 } Work;
-BoxPokemon *ov71_02247390(void *context);
-u16 ov71_022473A8(void *context);
+BoxPokemon *TradeSequence_GetSentBoxMon(void *context);
+u16 TradeSequence_GetSentSpecies(void *context);
 Pokepic *ov71_02247F9C(Work *work);
 
 // @fn ov71_02247F9C
 Pokepic *ov71_02247F9C(Work *work) {
     PokepicTemplate template;
-    BoxPokemon *boxMon = ov71_02247390(work->context);
+    BoxPokemon *boxMon = TradeSequence_GetSentBoxMon(work->context);
     GetBoxmonSpriteCharAndPlttNarcIds(&template, boxMon, 2, FALSE);
-    NARC_ReadPokepicAnimScript(work->narc, work->animScript, ov71_022473A8(work->context), 1);
+    NARC_ReadPokepicAnimScript(work->narc, work->animScript, TradeSequence_GetSentSpecies(work->context), 1);
     {
         int y = sub_02070854(boxMon, 2, FALSE) + 80;
         return PokepicManager_CreatePokepic(work->manager, &template, 128, y, 0, 0, work->animScript, NULL);

@@ -629,43 +629,43 @@
 	.public _0224BA86
 	.public _0224BA9C
 	.public _0224BAB8
-	.public _0224BBD4
+	.public sTradeSequenceBgZoomCenterY
 	.public _0224C020
-	.public _0224C040
-	.public ov71_02246B28
-	.public ov71_02246C48
-	.public ov71_02246C6C
-	.public ov71_02246D40
-	.public ov71_02246D54
-	.public ov71_02246D9C
-	.public ov71_02246E84
-	.public ov71_02246EAC
-	.public ov71_02246F60
-	.public ov71_02246F90
-	.public ov71_02247000
-	.public ov71_02247068
-	.public ov71_022470DC
-	.public ov71_02247124
-	.public ov71_02247230
-	.public ov71_022472C4
-	.public ov71_022472FC
-	.public ov71_02247320
-	.public ov71_02247340
-	.public ov71_02247384
-	.public ov71_02247388
-	.public ov71_0224738C
-	.public ov71_02247390
-	.public ov71_02247398
-	.public ov71_022473A0
-	.public ov71_022473A8
-	.public ov71_022473B0
-	.public ov71_022473BC
-	.public ov71_022473C4
-	.public ov71_022473D0
-	.public ov71_022473DC
-	.public ov71_022473E4
-	.public ov71_022473F0
-	.public ov71_02247424
+	.public sTradeSequenceDeferredFreeCount
+	.public TradeSequence_BoxMonCantFlip
+	.public TradeSequence_DrawSpritesTask
+	.public TradeSequence_CreatePulses
+	.public TradeSequence_StopPulses
+	.public TradeSequence_DestroyPulses
+	.public TradeSequence_PulsesTask
+	.public TradeSequence_SetPulseColor
+	.public TradeSequence_StartPulse
+	.public TradeSequence_DestroyPulse
+	.public TradeSequence_PulseTask
+	.public TradeSequence_StartBgZoom
+	.public TradeSequence_BgZoomTask
+	.public TradeSequence_ApplyBgZoom
+	.public TradeSequence_LoadMonPicToBg
+	.public TradeSequence_LoadMonPicTilemap
+	.public TradeSequence_LoadCellAnim
+	.public TradeSequence_FreeCellAnim
+	.public TradeSequence_InitSpriteHeader
+	.public TradeSequence_CreateSprite
+	.public TradeSequence_GetBgConfig
+	.public TradeSequence_GetMsgFormat
+	.public TradeSequence_GetMsgData
+	.public TradeSequence_GetSentBoxMon
+	.public TradeSequence_GetReceivedBoxMon
+	.public TradeSequence_GetTimeOfDay
+	.public TradeSequence_GetSentSpecies
+	.public TradeSequence_GetSentForm
+	.public TradeSequence_GetReceivedSpecies
+	.public TradeSequence_GetReceivedForm
+	.public TradeSequence_GetFrameType
+	.public TradeSequence_GetTradeMode
+	.public TradeSequence_ResetDeferredFrees
+	.public TradeSequence_FlushDeferredFrees
+	.public TradeSequence_DeferFree
 	.public ov71_0224744C
 	.public ov71_02247498
 	.public ov71_022474CC
@@ -840,11 +840,11 @@
 	.public ov71_0224BA64
 	.public ov71_0224BAA0
 	.public ov71_0224BABC
-	.public ov71_0224BBDC
-	.public ov71_0224BBEC
-	.public ov71_0224BBF0
-	.public ov71_0224BBF4
-	.public ov71_0224BBF8
+	.public sTradeSequenceMonPicSettings
+	.public sTradeSequenceSceneInit
+	.public sTradeSequenceSceneMain
+	.public sTradeSequenceSceneExit
+	.public sTradeSequenceSceneModes
 	.public ov71_0224BC5C
 	.public ov71_0224BC64
 	.public ov71_0224BC74
@@ -887,30 +887,30 @@
 	.public ov71_0224BFA4
 	.public ov71_0224BFC0
 	.public ov71_0224BFDC
-	.public ov71_0224C044
+	.public sTradeSequenceDeferredFrees
 	.public ov71_0224C0C4
 	.public ov71_0224C0C8
 	.public ov71_0224C0D0
-	.public ov71_02246B28
-	.public ov71_02246D40
-	.public ov71_02246E84
-	.public ov71_02246F60
-	.public ov71_022472FC
-	.public ov71_02247384
-	.public ov71_02247388
-	.public ov71_0224738C
-	.public ov71_02247390
-	.public ov71_02247398
-	.public ov71_022473A0
-	.public ov71_022473A8
-	.public ov71_022473B0
-	.public ov71_022473BC
-	.public ov71_022473C4
-	.public ov71_022473D0
-	.public ov71_022473DC
-	.public ov71_022473E4
-	.public ov71_022473F0
-	.public ov71_02247424
+	.public TradeSequence_BoxMonCantFlip
+	.public TradeSequence_StopPulses
+	.public TradeSequence_SetPulseColor
+	.public TradeSequence_DestroyPulse
+	.public TradeSequence_FreeCellAnim
+	.public TradeSequence_GetBgConfig
+	.public TradeSequence_GetMsgFormat
+	.public TradeSequence_GetMsgData
+	.public TradeSequence_GetSentBoxMon
+	.public TradeSequence_GetReceivedBoxMon
+	.public TradeSequence_GetTimeOfDay
+	.public TradeSequence_GetSentSpecies
+	.public TradeSequence_GetSentForm
+	.public TradeSequence_GetReceivedSpecies
+	.public TradeSequence_GetReceivedForm
+	.public TradeSequence_GetFrameType
+	.public TradeSequence_GetTradeMode
+	.public TradeSequence_ResetDeferredFrees
+	.public TradeSequence_FlushDeferredFrees
+	.public TradeSequence_DeferFree
 	.public ov71_022475F8
 	.public ov71_022476B4
 	.public ov71_022476C4
@@ -992,23 +992,23 @@
 .text
 	.rodata
 
-_0224BBD4:
+sTradeSequenceBgZoomCenterY:
 	.byte 0x90, 0x00, 0x00, 0x00, 0x38, 0x00, 0x00, 0x00
 
-ov71_0224BBDC: ; 0x0224BBDC
+sTradeSequenceMonPicSettings: ; 0x0224BBDC
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00
 
-ov71_0224BBEC: ; 0x0224BBEC
+sTradeSequenceSceneInit: ; 0x0224BBEC
 	.word ov71_022478C8
 
-ov71_0224BBF0: ; 0x0224BBF0
+sTradeSequenceSceneMain: ; 0x0224BBF0
 	.word ov71_02247990
 
-ov71_0224BBF4: ; 0x0224BBF4
+sTradeSequenceSceneExit: ; 0x0224BBF4
 	.word ov71_02247924
 
-ov71_0224BBF8: ; 0x0224BBF8
+sTradeSequenceSceneModes: ; 0x0224BBF8
 	.byte 0x03, 0x00, 0x00, 0x00
 	.word ov71_022482EC
 	.word ov71_022483AC

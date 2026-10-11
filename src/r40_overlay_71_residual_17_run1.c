@@ -9,7 +9,7 @@ void *ov71_022482EC(void *arg) {
     if (p != NULL) {
         PTR(p, 0) = arg;
         PTR(p, 4) = NULL;
-        PTR(p, 0xC0) = ov71_02247384(arg);
+        PTR(p, 0xC0) = TradeSequence_GetBgConfig(arg);
         U32(p, 0xD4) = 0;
         U32(p, 0xC4) = 0;
         U32(p, 0xCC) = 0;

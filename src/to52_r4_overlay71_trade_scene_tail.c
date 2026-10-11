@@ -38,7 +38,7 @@ extern const u32 ov71_0224BDA4[];
 extern void GfGfx_SetBanks(const void *);
 extern void SetBothScreensModesAndDisable(const void *);
 extern void InitBgFromTemplate(void *, int, const void *, int);
-extern int ov71_022473A0(void *);
+extern int TradeSequence_GetTimeOfDay(void *);
 extern void GfGfxLoader_LoadCharData(int, int, void *, int, int, int, int, int);
 extern void GfGfxLoader_LoadScrnData(int, int, void *, int, int, int, int, int);
 extern void GfGfxLoader_GXLoadPalWithSrcOffset(int, int, int, int, int, int, int);
@@ -113,7 +113,7 @@ void ov71_02249670(Ov71Work *work) {
     InitBgFromTemplate(work->bgConfig, 3, ov71_0224BDA4, 0);
     InitBgFromTemplate(work->bgConfig, 7, ov71_0224BDA4, 0);
 
-    switch (ov71_022473A0(*(void **)work)) {
+    switch (TradeSequence_GetTimeOfDay(*(void **)work)) {
     default:
     case 0:
         scrn = 0xF;

@@ -147,26 +147,11 @@ Autoload EXT_WRAM
 	Object lib/src/wl_set_channel.o
 	Object lib/src/wl_state.o
 	Object lib/src/wl_util.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_32_r01.o
-	Object lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_32_residual_1_r01.o
-	Object lib/src/to90_arm7_sub_ext_wram_run160.o
-	Object lib/src/to90_arm7_sub_ext_wram_run161.o
-	Object lib/src/to90_arm7_sub_ext_wram_run162.o
-	Object lib/src/to90_arm7_sub_ext_wram_run163.o
-	Object lib/src/to91_w41526_calc_bbpcrc.o
-	Object lib/src/to90_arm7_sub_ext_wram_run164.o
-	Object lib/src/to90_arm7_sub_ext_wram_run381.o
-	Object lib/src/to90_arm7_sub_ext_wram_run165.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_34_r01.o
-	Object lib/src/to90_arm7_sub_ext_wram_run166.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_35_r01.o
-	Object lib/src/to90_arm7_sub_ext_wram_run167.o
-	Object lib/src/to90_arm7_sub_ext_wram_run168.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_36_r01.o
-	Object lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_36_residual_1_r01.o
-	Object lib/src/to90_arm7_sub_ext_wram_run169.o
-	Object lib/src/to90_arm7_sub_ext_wram_run170.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_37_r01.o
+	Object lib/src/wl_start.o
+	Object lib/src/wl_device.o
+	Object lib/src/wl_timeout_periodic.o
+	Object lib/src/wl_timer.o
+	Object lib/src/wl_timeout.o
 	Object lib/src/to90_arm7_sub_ext_wram_run171.o
 	Object lib/src/to90_arm7_sub_ext_wram_run172.o
 	Object lib/src/to90_arm7_sub_ext_wram_run173.o

@@ -49,7 +49,7 @@
 #include "move_relearner_app.h"
 #include "geonet_globe_app.h"
 #include "overlay_70.h"
-#include "overlay_71.h"
+#include "trade_sequence.h"
 #include "nintendo_wfc_connect.h"
 #include "record_mixing.h"
 #include "overlay_86.h"

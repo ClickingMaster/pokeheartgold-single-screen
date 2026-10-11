@@ -7,7 +7,7 @@ void *ov71_0224B138(void *ctx)
     if (work != NULL) {
         PTR_AT(work, 0) = ctx;
         U32_AT(work, 4) = 0;
-        PTR_AT(work, 0x58) = ov71_02247384(ctx);
+        PTR_AT(work, 0x58) = TradeSequence_GetBgConfig(ctx);
         PTR_AT(work, 0x10) = PokepicManager_Create(0x39);
         PTR_AT(work, 0x14) = NULL;
         PTR_AT(work, 0x6c) = String_New(0x12c, 0x39);
@@ -89,7 +89,7 @@ BOOL ov71_0224B280(void *work)
     *reg = (*reg & ~3) | 1;
     BG_FillCharDataRange(PTR_AT(work, 0x58), 1, 0, 1, 0);
     FillBgTilemapRect(PTR_AT(work, 0x58), 1, 0, 0, 0, 0x20, 0x20, 0);
-    LoadUserFrameGfx2(PTR_AT(work, 0x58), 1, 0x6d, 2, (u8)ov71_022473D0(PTR_AT(work, 0)), 0x39);
+    LoadUserFrameGfx2(PTR_AT(work, 0x58), 1, 0x6d, 2, (u8)TradeSequence_GetFrameType(PTR_AT(work, 0)), 0x39);
     AddWindowParameterized(PTR_AT(work, 0x58), (u8 *)work + 0x5c, 1, 2, 0x13, 0x1b, 4, 1, 1);
     FillWindowPixelBuffer((u8 *)work + 0x5c, 0xf);
     GfGfxLoader_GXLoadPal(0x10, 8, 0, 0x20, 0x20, 0x39);

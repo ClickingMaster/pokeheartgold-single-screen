@@ -1264,14 +1264,14 @@
   {
    "function": "__VENEER__ll_udiv",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_32_residual_1_r01.c",
+   "source": "sub/lib/src/wl_device.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to _ll_udiv: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_OS_SetPeriodicAlarm",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_36_residual_1_r01.c",
+   "source": "sub/lib/src/wl_timer.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_SetPeriodicAlarm: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
@@ -1509,7 +1509,7 @@
   {
    "function": "__VENEER_OS_IsAlarmAvailable",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_35_r01.c",
+   "source": "sub/lib/src/wl_device.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to OS_IsAlarmAvailable: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },

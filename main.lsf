@@ -6104,21 +6104,7 @@ Overlay OVY_70
 Overlay OVY_71
 {
     After OVY_70
-    Object src/to90_extra2034_run01.o
-    Object src/overlay71_opus_partial_1.o
-    Object src/r40_overlay_71_residual_2_run1.o
-    Object src/to47_overlay71_trade_sequence_tail_r2.o
-    Object src/overlay71_opus_partial_2.o
-    Object src/to70_overlay_71_residual_3_extra291_run01.o
-    Object src/overlay71_opus_partial_3.o
-    Object src/to70_overlay_71_residual_4_extra503_run01.o
-    Object src/overlay71_opus_partial_4.o
-    Object src/overlay71_fade_r6_run1.o
-    Object src/to91_w41460_ov71_02247124_run01.o
-    Object src/overlay71_fade_r6_run2.o
-    Object src/overlay71_opus_partial_5.o
-    Object src/r40_overlay_71_residual_6_run1.o
-    Object src/overlay71_opus_partial_6.o
+    Object src/trade_sequence.o
     Object src/overlay71_model_manager.o
     Object src/overlay71_opus_partial_7.o
     Object src/to70_overlay_71_residual_8_extra626_run01.o

@@ -6,7 +6,7 @@
 
 #include "heap.h"
 #include "npc_trade.h"
-#include "overlay_71.h"
+#include "trade_sequence.h"
 #include "task.h"
 #include "unk_02055244.h"
 extern u8 SDK_OVERLAY_OVY_71_ID;

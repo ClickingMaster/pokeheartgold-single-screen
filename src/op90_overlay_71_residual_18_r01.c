@@ -18,9 +18,9 @@ extern const GraphicsModes ov71_0224BCEC;
 extern const BgTemplate ov71_0224BD1C;
 extern const BgTemplate ov71_0224BD38;
 extern const u16 ov71_0224BCE4[];
-int ov71_022473A0(void *a0);
-void *ov71_02246C6C(void *a0, int a1);
-void *ov71_02247000(BgConfig *bgConfig, int a1, int a2, int a3, int a4, int a5, int *a6);
+int TradeSequence_GetTimeOfDay(void *a0);
+void *TradeSequence_CreatePulses(void *a0, int a1);
+void *TradeSequence_StartBgZoom(BgConfig *bgConfig, int a1, int a2, int a3, int a4, int a5, int *a6);
 void ov71_02248604(Work71 *work);
 // @fn ov71_02248604
 void ov71_02248604(Work71 *work) {
@@ -40,7 +40,7 @@ void ov71_02248604(Work71 *work) {
     GfGfxLoader_LoadCharData(NARC_a_0_8_9, 2, work->bgConfig, GF_BG_LYR_SUB_2, 0, 0, TRUE, (enum HeapID)0x39);
     GfGfxLoader_LoadScrnData(NARC_a_0_8_9, 0, work->bgConfig, GF_BG_LYR_MAIN_2, 0, 0, TRUE, (enum HeapID)0x39);
     GfGfxLoader_LoadScrnData(NARC_a_0_8_9, 0, work->bgConfig, GF_BG_LYR_SUB_2, 0, 0, TRUE, (enum HeapID)0x39);
-    srcOffset = ov71_022473A0(work->unk00);
+    srcOffset = TradeSequence_GetTimeOfDay(work->unk00);
     GfGfxLoader_GXLoadPal(NARC_a_0_8_9, 3, GF_PAL_LOCATION_MAIN_BG, GF_PAL_SLOT_0_OFFSET, 0x20, (enum HeapID)0x39);
     GfGfxLoader_GXLoadPal(NARC_a_0_8_9, 3, GF_PAL_LOCATION_SUB_BG, GF_PAL_SLOT_0_OFFSET, 0x20, (enum HeapID)0x39);
     srcOffset = ov71_0224BCE4[srcOffset];
@@ -67,6 +67,6 @@ void ov71_02248604(Work71 *work) {
     GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     GfGfx_EngineBTogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
     BgSetPosTextAndCommit(work->bgConfig, GF_BG_LYR_MAIN_3, BG_POS_OP_SET_Y, 0);
-    work->unkC4 = ov71_02246C6C(work->unkC8, 1);
-    work->unkCC = ov71_02247000(work->bgConfig, 0x480, 0x1000, 1, 0x128, 0, &work->unkD0);
+    work->unkC4 = TradeSequence_CreatePulses(work->unkC8, 1);
+    work->unkCC = TradeSequence_StartBgZoom(work->bgConfig, 0x480, 0x1000, 1, 0x128, 0, &work->unkD0);
 }

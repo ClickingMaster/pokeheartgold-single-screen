@@ -3,7 +3,7 @@
 #include "global.h"
 void *Heap_Alloc(int, u32);
 void Heap_Free(void *);
-void *ov71_02247384(void *);
+void *TradeSequence_GetBgConfig(void *);
 u32 MTRandom(void);
 void *SysTask_CreateOnVWaitQueue(void (*)(void *, void *), void *, u32);
 void ov71_02248B60(void *, void *);

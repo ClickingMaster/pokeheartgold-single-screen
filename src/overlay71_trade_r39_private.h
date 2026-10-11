@@ -25,8 +25,8 @@ typedef struct Ov71TradeWorkR39 {
     NARC *narc;
 } Ov71TradeWorkR39;
 
-BoxPokemon *ov71_02247390(void *ctx);
-u16 ov71_022473A8(void *ctx);
+BoxPokemon *TradeSequence_GetSentBoxMon(void *ctx);
+u16 TradeSequence_GetSentSpecies(void *ctx);
 Pokepic *ov71_02247F9C(Ov71TradeWorkR39 *work);
 BOOL ov71_02247DEC(Ov71TradeWorkR39 *work, u32 *state);
 void PlaySE(u16 seqNo);
@@ -39,9 +39,9 @@ s32 ov71_022481D8(Ov71TradeWorkR39 *work);
 BOOL ov71_022481C8(Ov71TradeWorkR39 *work);
 void BeginNormalPaletteFade(u32, u32, u32, u16, u16, u8, u32);
 BOOL IsPaletteFadeFinished(void);
-void ov71_022472C4(void *dst, s32 narcId, s32 a2, s32 a3);
-void ov71_02247320(void *dst, void *src, NNSG2dImageProxy *image, NNSG2dImagePaletteProxy *palette, u8 a4);
-Sprite *ov71_02247340(void *ctx, void *config, s32 x, s32 y, s32 a4, s32 a5);
+void TradeSequence_LoadCellAnim(void *dst, s32 narcId, s32 a2, s32 a3);
+void TradeSequence_InitSpriteHeader(void *dst, void *src, NNSG2dImageProxy *image, NNSG2dImagePaletteProxy *palette, u8 a4);
+Sprite *TradeSequence_CreateSprite(void *ctx, void *config, s32 x, s32 y, s32 a4, s32 a5);
 void ov71_02247FF8(Ov71TradeWorkR39 *work);
 void ov71_02247ED0(Ov71TradeWorkR39 *work);
 
