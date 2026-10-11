@@ -1,20 +1,22 @@
-#ifndef POKEHEARTGOLD_FIELD_OVERLAY_01_021EAFD4_H
-#define POKEHEARTGOLD_FIELD_OVERLAY_01_021EAFD4_H
+#ifndef POKEHEARTGOLD_FIELD_FIELD_TEXTURE_MANAGER_H
+#define POKEHEARTGOLD_FIELD_FIELD_TEXTURE_MANAGER_H
 
 #include "field_types_def.h"
 
 #define MAX_TEXTURE_KEYS 16
 
+// One animated texture listed in member 0 of NARC a/1/3/9: the texture image name and up to 18 frames
+// (image index, duration). An image index of 0xFF loops back to frame 0.
 typedef struct {
     char name[16];
-    u8 animationData[18][2];
+    u8 frames[18][2];
 } TextureAnimationData;
 
 typedef struct TextureSlot {
-    u8 *textureData;
-    int textureSize;
+    u32 vramOffset;
+    u32 vramSize;
     NNSG3dResTex *textureResource;
-    void *narcData;
+    void *fileData; // NARC member holding the frames' texture images
     TextureAnimationData *animationData;
     u16 currentFrame;
     u16 frameCounter;
@@ -33,9 +35,9 @@ struct FieldTextureManager {
 };
 
 FieldTextureManager *FieldTextureManager_Init();
-void FieldTextureManager_LoadTexture(FieldTextureManager *textureManager, NNSG3dResTex *textureResource);
+u32 FieldTextureManager_LoadTexture(FieldTextureManager *textureManager, NNSG3dResTex *textureResource);
 void FieldTextureManager_Free(FieldTextureManager *textureManager);
 void FieldTextureManager_FreeAllSlots(FieldTextureManager *textureManager);
 void FieldTextureManager_Destroy(FieldTextureManager *textureManager);
 
-#endif // POKEHEARTGOLD_FIELD_OVERLAY_01_021EAFD4_H
+#endif // POKEHEARTGOLD_FIELD_FIELD_TEXTURE_MANAGER_H

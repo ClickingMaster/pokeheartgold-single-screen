@@ -17,6 +17,6 @@
 .public _s32_div_f
 .public ov01_021FB530
 .public ov01_021FB554
-.public ov01_021FB5D4
-.public ov01_021FB610
+.public PoisonEffect_New
+.public PoisonEffect_Delete
 .public FieldSystem_DoPoisonEffect

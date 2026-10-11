@@ -9,9 +9,9 @@
 #include "msgdata/msg/msg_0096_D31R0201.h"
 #include "msgdata/msg/msg_0066_D23R0102.h"
 	.include "asm/macros.inc"
-	.public ov01_021EB058
-	.public ov01_021EB18C
-	.public ov01_02209898
+	.public FieldTextureManager_AddAnimatedTexture
+	.public FieldTextureManager_FreeSlot
+	.public gAnimatedTextureFileFormat
 	.include "overlay_01_021EAFD4.inc"
 	.include "global.inc"
 
@@ -22,8 +22,8 @@
 	.public FieldTextureManager_Init
 	.public FieldTextureManager_LoadTexture
 
-	thumb_func_start ov01_021EB18C
-ov01_021EB18C: ; 0x021EB18C
+	thumb_func_start FieldTextureManager_FreeSlot
+FieldTextureManager_FreeSlot: ; 0x021EB18C
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	beq _021EB1BA
@@ -50,4 +50,4 @@ _021EB1B2:
 	strh r1, [r0, #0x1e]
 _021EB1BA:
 	pop {r3, r4, r5, pc}
-	thumb_func_end ov01_021EB18C
+	thumb_func_end FieldTextureManager_FreeSlot

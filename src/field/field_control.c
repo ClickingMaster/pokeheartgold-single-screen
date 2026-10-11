@@ -37,7 +37,7 @@
 #include "overlay_01_021F1AFC.h"
 #include "overlay_01_021F3114.h"
 #include "overlay_01_021F6830.h"
-#include "overlay_01_021FB5D4.h"
+#include "field_poison_effect.h"
 #include "overlay_04.h"
 #include "player_avatar.h"
 #include "safari_zone.h"

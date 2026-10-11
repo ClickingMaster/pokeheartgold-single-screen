@@ -10,7 +10,7 @@
 #include "field/map_prop.h"
 #include "field/map_prop_animation.h"
 #include "field/model_attributes.h"
-#include "field/overlay_01_021EAFD4.h"
+#include "field/field_texture_manager.h"
 #include "field/overlay_01_02204004.h"
 #include "field/signpost.h"
 #include "field/weather_manager.h"

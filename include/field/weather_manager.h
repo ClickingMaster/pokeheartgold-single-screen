@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-#include "field/overlay_01_021EAFD4.h"
+#include "field/field_texture_manager.h"
 
 #include "overlay_01_021EA824.h"
 #include "sprite.h"

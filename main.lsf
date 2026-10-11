@@ -2160,11 +2160,7 @@ Overlay field
     Object src/field_camera_manager_2.o
     Object asm/overlay_01_021EABA8_residual_2.o
     Object src/bottom_screen_dispatch_1.o
-    Object src/field_texture_manager_1.o
-    Object src/slop_small_overlay_01_021EAFD4.o
-    Object src/field_texture_manager_2.o
-    Object src/r40_overlay_01_021EAFD4_residual_2_run1.o
-    Object src/field_texture_manager_3.o
+    Object src/field/field_texture_manager.o
     Object src/field/weather_manager.o
     Object src/field_move_tutor_menu_1.o
     Object src/to58_ov01_edafc_live.o
@@ -2400,9 +2396,7 @@ Overlay field
     Object src/field_resource_stream.o
     Object src/dynamic_terrain_height_manager_1.o
     Object src/hblank_system_1.o
-    Object src/field_poison_effect_1.o
-    Object src/slop_small_overlay_01_021FB5D4.o
-    Object src/field_poison_effect_2.o
+    Object src/field/field_poison_effect.o
     Object src/area_data_manager_1.o
     Object src/to80_extra1686_run01.o
     Object src/area_data_manager_2.o

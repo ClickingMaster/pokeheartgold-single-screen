@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "3512f0a8751524268d21fc64d1c6c960dd3378d1",
+  "commit": "5c734b02f59ef326a81dabedfb4ef8f890cf0768",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "b4b9d7c563f31ce1b8c79904ce01b1714b43bd3bdcc638097a4254d30838771d",
+    "ARM9": "e53089d88038f3c4878cabc8aa957cf9861a39413584a489179c1dc4c601de38",
     "ARM7": "041cd831059a607c3024fb52a1c23ac0386deeb07d13d5249a72069997cfeb7d"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -41717,18 +41717,10 @@
     {
       "cpu": "ARM9",
       "module": "field",
-      "object": "field_poison_effect_1.o",
-      "bytes": 434,
+      "object": "field_poison_effect.o",
+      "bytes": 670,
       "status": "c",
-      "source": "src/field_poison_effect_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
-      "object": "field_poison_effect_2.o",
-      "bytes": 168,
-      "status": "c",
-      "source": "src/field_poison_effect_2.c"
+      "source": "src/field/field_poison_effect.c"
     },
     {
       "cpu": "ARM9",
@@ -41789,26 +41781,10 @@
     {
       "cpu": "ARM9",
       "module": "field",
-      "object": "field_texture_manager_1.o",
-      "bytes": 132,
+      "object": "field_texture_manager.o",
+      "bytes": 530,
       "status": "c",
-      "source": "src/field_texture_manager_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
-      "object": "field_texture_manager_2.o",
-      "bytes": 120,
-      "status": "c",
-      "source": "src/field_texture_manager_2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
-      "object": "field_texture_manager_3.o",
-      "bytes": 42,
-      "status": "c",
-      "source": "src/field_texture_manager_3.c"
+      "source": "src/field/field_texture_manager.c"
     },
     {
       "cpu": "ARM9",
@@ -42405,14 +42381,6 @@
     {
       "cpu": "ARM9",
       "module": "field",
-      "object": "r40_overlay_01_021EAFD4_residual_2_run1.o",
-      "bytes": 48,
-      "status": "c",
-      "source": "src/r40_overlay_01_021EAFD4_residual_2_run1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
       "object": "r40_overlay_01_021EDAFC_residual_6_run1.o",
       "bytes": 280,
       "status": "c",
@@ -42501,26 +42469,10 @@
     {
       "cpu": "ARM9",
       "module": "field",
-      "object": "slop_small_overlay_01_021EAFD4.o",
-      "bytes": 188,
-      "status": "c",
-      "source": "src/slop_small_overlay_01_021EAFD4.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
       "object": "slop_small_overlay_01_021FAC44.o",
       "bytes": 112,
       "status": "c",
       "source": "src/slop_small_overlay_01_021FAC44.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "field",
-      "object": "slop_small_overlay_01_021FB5D4.o",
-      "bytes": 68,
-      "status": "c",
-      "source": "src/slop_small_overlay_01_021FB5D4.c"
     },
     {
       "cpu": "ARM9",

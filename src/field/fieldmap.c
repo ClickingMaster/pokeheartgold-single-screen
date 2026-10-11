@@ -17,7 +17,7 @@
 #include "field/model_attributes.h"
 #include "field/overlay_01_021EABA8.h"
 #include "field/overlay_01_021EAF00.h"
-#include "field/overlay_01_021EAFD4.h"
+#include "field/field_texture_manager.h"
 #include "field/overlay_01_021FD1B8.h"
 #include "field/overlay_01_02204004.h"
 #include "field/signpost.h"
@@ -47,7 +47,7 @@
 #include "overlay_01_021F6830.h"
 #include "overlay_01_021F8D80.h"
 #include "overlay_01_021F944C.h"
-#include "overlay_01_021FB5D4.h"
+#include "field_poison_effect.h"
 #include "overlay_01_022053EC.h"
 #include "player_avatar.h"
 #include "poke_overlay.h"
@@ -214,7 +214,7 @@ BOOL FieldMap_Init(OverlayManager *man, int *state) {
 
         fieldSystem->unk4->hBlankSystem = HBlankSystem_New(HEAP_ID_FIELD1);
         HBlankSystem_Start(fieldSystem->unk4->hBlankSystem);
-        fieldSystem->unk4->unk20 = ov01_021FB5D4(HEAP_ID_FIELD1, fieldSystem->unk4->hBlankSystem);
+        fieldSystem->unk4->unk20 = PoisonEffect_New(HEAP_ID_FIELD1, fieldSystem->unk4->hBlankSystem);
         break;
     case FIELD_MAP_INIT_STATE_BOTTOM_SCREEN:
         FieldSystem_InitBottomScreen(fieldSystem);
@@ -326,7 +326,7 @@ BOOL FieldMap_Exit(OverlayManager *man, int *state) {
             Signpost_Free(fieldSystem->signpost);
             FieldDrawMapNameInfo_Destroy(fieldSystem->unk4->drawMapNameInfo);
             WeatherManager_Delete(fieldSystem->unk4->weatherManager);
-            ov01_021FB610(fieldSystem->unk4->unk20);
+            PoisonEffect_Delete(fieldSystem->unk4->unk20);
             HBlankSystem_Delete(fieldSystem->unk4->hBlankSystem);
             sub_020556A8(fieldSystem->unk4->unk18);
             Fog_Free(&fieldSystem->fog);
