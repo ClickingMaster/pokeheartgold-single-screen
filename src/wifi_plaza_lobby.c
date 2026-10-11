@@ -3,7 +3,7 @@
 #include "wifi_plaza_internal.h"
 
 void *ov45_0222AB1C(WiFiPlazaWork *work) {
-    return work->unk_508.unk_00;
+    return work->unk_508.profile;
 }
 
 int ov45_0222AB28(WiFiPlazaWork *work, int a1) {
@@ -15,11 +15,11 @@ void ov45_0222AB38(WiFiPlazaWork *work, void *dest) {
 }
 
 int ov45_0222AB48(WiFiPlazaWork *work, int a1) {
-    return ov45_0222C9D0(work->wordSet, a1);
+    return ov45_0222C9D0(&work->wordSet, a1);
 }
 
-int ov45_0222AB58(WiFiPlazaWork *work, int a1) {
-    return ov45_0222C9EC(work->wordSet, a1);
+u16 *ov45_0222AB58(WiFiPlazaWork *work, int a1) {
+    return ov45_0222C9EC(&work->wordSet, a1);
 }
 
 u32 ov45_0222AB68(void) {
@@ -48,7 +48,7 @@ void ov45_0222AB94(void *unused, u32 slot0, u32 slot1) {
     msg.type = 0;
     msg.ids[0] = ov45_0222EC90(slot0);
     msg.ids[1] = ov45_0222EC90(slot1);
-    msg.unk_10 = 2;
+    msg.count = 2;
     ov45_0222EEF0(4, &msg, sizeof(msg));
 }
 
@@ -57,7 +57,7 @@ void ov45_0222ABD0(void *unused, u32 slot0, u32 slot1, u8 value) {
     msg.type = 1;
     msg.ids[0] = ov45_0222EC90(slot1);
     msg.ids[1] = ov45_0222EC90(slot0);
-    msg.unk_10 = 2;
+    msg.count = 2;
     msg.unk_12 = value;
     ov45_0222EEF0(4, &msg, sizeof(msg));
 }
@@ -92,7 +92,7 @@ void ov45_0222AC14(void *unused, int selector, int count, int slot0, int slot1, 
     msg.ids[1] = ov45_0222EC90(slot1);
     msg.ids[2] = ov45_0222EC90(slot2);
     msg.ids[3] = ov45_0222EC90(slot3);
-    msg.unk_10 = count;
+    msg.count = count;
     msg.unk_13_0 = selector;
     msg.unk_13_7 = flag;
     ov45_0222EEF0(4, &msg, 20);
@@ -117,7 +117,7 @@ void ov45_0222ACB8(void *unused, int mode, u8 kind, u32 slot0, u32 slot1, u32 sl
         msg.ids[1] = ov45_0222EC90(slot1);
         msg.ids[2] = ov45_0222EC90(slot2);
         msg.ids[3] = ov45_0222EC90(slot3);
-        msg.unk_10 = kind;
+        msg.count = kind;
         msg.unk_13_0 = mode;
         msg.unk_13_7 = 0;
         ov45_0222EEF0(4, &msg, sizeof(msg));
@@ -141,7 +141,7 @@ int ov45_0222AD3C(void) {
     return value;
 }
 
-int ov45_0222AD4C(void) {
+int ov45_0222AD4C(WiFiPlazaWork *work) {
     return ov45_0222ECDC(5) + 30;
 }
 
@@ -159,11 +159,11 @@ void ov45_0222AD70(void *unused, u32 value) {
 }
 
 int ov45_0222AD80(WiFiPlazaWork *work, int a1) {
-    return ov45_0222C4E4(work->unk_20c, a1);
+    return ov45_0222C4E4(&work->unk_20c, a1);
 }
 
 int ov45_0222AD90(WiFiPlazaWork *work, int a1) {
-    return ov45_0222C4FC(work->unk_20c, a1);
+    return ov45_0222C4FC(&work->unk_20c, a1);
 }
 
 int ov45_0222ADA0(void) {
@@ -171,27 +171,27 @@ int ov45_0222ADA0(void) {
 }
 
 int ov45_0222ADA8(WiFiPlazaWork *work, int a1) {
-    return ov45_0222C5B4(work->unk_20c, a1);
+    return ov45_0222C5B4(&work->unk_20c, a1);
 }
 
 void ov45_0222ADB8(WiFiPlazaWork *work, int a1, int a2) {
-    ov45_0222C408(work->unk_20c, a1, a2);
+    ov45_0222C408(&work->unk_20c, a1, a2);
 }
 
 void ov45_0222ADC8(WiFiPlazaWork *work, int a1) {
-    ov45_0222C480(work->unk_20c, a1);
+    ov45_0222C480(&work->unk_20c, a1);
 }
 
 void ov45_0222ADD8(WiFiPlazaWork *work, int a1) {
-    ov45_0222C514(work->unk_20c, a1);
+    ov45_0222C514(&work->unk_20c, a1);
 }
 
 void ov45_0222ADE8(WiFiPlazaWork *work, int a1) {
-    ov45_0222C54C(work->unk_20c, a1);
+    ov45_0222C54C(&work->unk_20c, a1);
 }
 
 void ov45_0222ADF8(WiFiPlazaWork *work, int a1) {
-    ov45_0222C580(work->unk_20c, a1);
+    ov45_0222C580(&work->unk_20c, a1);
 }
 
 void ov45_0222AE08(u32 value, u32 *quotient, u32 *remainder) {
@@ -200,11 +200,11 @@ void ov45_0222AE08(u32 value, u32 *quotient, u32 *remainder) {
 }
 
 void ov45_0222AE24(WiFiPlazaWork *work, int a1, int a2) {
-    ov45_0222C5E8(work->unk_20c, a1, a2);
+    ov45_0222C5E8(&work->unk_20c, a1, a2);
 }
 
 void ov45_0222AE34(WiFiPlazaWork *work, int a1) {
-    ov45_0222C658(work->unk_20c, a1);
+    ov45_0222C658(&work->unk_20c, a1);
 }
 
 void ov45_0222AE44(void) {

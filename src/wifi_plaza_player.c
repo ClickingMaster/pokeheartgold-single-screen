@@ -83,25 +83,25 @@ void ov45_0222A5E8(WiFiPlazaWork *work, int value) {
     }
     switch (work->profile.player.unk_43) {
     case 2:
-        ov45_0222CB74(work->unk_4bc, 0x10, -1);
+        ov45_0222CB74(&work->history, 0x10, -1);
         break;
     case 3:
-        ov45_0222CB74(work->unk_4bc, 0x11, -1);
+        ov45_0222CB74(&work->history, 0x11, -1);
         break;
     case 4:
-        ov45_0222CB74(work->unk_4bc, 0x12, -1);
+        ov45_0222CB74(&work->history, 0x12, -1);
         break;
     case 5:
-        ov45_0222CB74(work->unk_4bc, 0x13, -1);
+        ov45_0222CB74(&work->history, 0x13, -1);
         break;
     case 6:
-        ov45_0222CB74(work->unk_4bc, 0x14, -1);
+        ov45_0222CB74(&work->history, 0x14, -1);
         break;
     case 7:
-        ov45_0222CB74(work->unk_4bc, 0x15, -1);
+        ov45_0222CB74(&work->history, 0x15, -1);
         break;
     case 8:
-        ov45_0222CB74(work->unk_4bc, 0x16, -1);
+        ov45_0222CB74(&work->history, 0x16, -1);
         break;
     }
     work->profile.player.unk_43 = value;
@@ -113,7 +113,7 @@ void ov45_0222A704(WiFiPlazaWork *work, int index, int value) {
     if (index >= 24) {
         GF_AssertFail();
     }
-    ov45_0222CB74(work->unk_4bc, index, value);
+    ov45_0222CB74(&work->history, index, value);
     ov45_0222BA3C(work);
 }
 

@@ -95,11 +95,11 @@ WiFiPlazaWork *WiFiPlazaWork_New(SaveData *save, enum HeapID heapID) {
     memset(work, 0, sizeof(WiFiPlazaWork));
     work->save = save;
     work->heapID = heapID;
-    callbacks.func0 = ov45_0222B2B4;
-    callbacks.func1 = ov45_0222B470;
-    callbacks.func2 = ov45_0222B530;
-    callbacks.func3 = ov45_0222B5A0;
-    callbacks.func4 = ov45_0222B75C;
+    callbacks.onPlayerEnter = WiFiPlaza_OnPlayerEnter;
+    callbacks.onPlayerLeave = WiFiPlaza_OnPlayerLeave;
+    callbacks.onPlayerUpdate = WiFiPlaza_OnPlayerUpdate;
+    callbacks.onLobbyEvent = WiFiPlaza_OnLobbyEvent;
+    callbacks.onOwnRecord = ov45_0222B75C;
     ov45_0222E5D4(heapID, work->save, 0x94, &callbacks, work);
     work->unk_04 = ov45_0222D860(heapID);
     for (i = 0; i < 4; i++) {
@@ -110,11 +110,11 @@ WiFiPlazaWork *WiFiPlazaWork_New(SaveData *save, enum HeapID heapID) {
     ov45_0222BD30(work->unk_1e8);
     ov45_0222EE20(ov45_02254AC4, 8, work);
     ov45_0222BC3C(&work->unk_1fc);
-    ov45_0222C388(work->unk_20c);
-    ov45_0222C8AC(work->unk_3ac);
-    WiFiPlazaWordSet_Init(work->wordSet, heapID);
-    ov45_0222CB44(work->unk_4bc, work->save);
-    ov45_0222BCC8(&work->unk_508, heapID);
+    ov45_0222C388(&work->unk_20c);
+    ov45_0222C8AC(&work->groupWeights);
+    WiFiPlazaWordSet_Init(&work->wordSet, heapID);
+    ov45_0222CB44(&work->history, work->save);
+    ov45_0222BCC8(&work->unk_508.profile, heapID);
     return work;
 }
 
@@ -128,8 +128,8 @@ void WiFiPlazaWork_Delete(WiFiPlazaWork *work) {
     x = Save_PlazaSurvey_Get(work->save);
     PlazaSurvey_SetSurveyId(x, vals.unk_00);
     PlazaSurvey_SetAnswer(x, vals.unk_04);
-    ov45_0222BCD8(&work->unk_508);
-    WiFiPlazaWordSet_Free(work->wordSet);
+    ov45_0222BCD8(&work->unk_508.profile);
+    WiFiPlazaWordSet_Free(&work->wordSet);
     ov45_0222EE80();
     ov45_0222D890(work->unk_04);
     for (i = 0; i < 4; i++) {
@@ -152,11 +152,11 @@ void WiFiPlazaWork_Update(WiFiPlazaWork *work) {
     ov45_0222BE5C(&work->unk_1c0);
     ov45_0222BD30(work->unk_1e8);
     ov45_0222BB58(work->unk_f8);
-    ov45_0222BB60(&work->unk_1fc, work->unk_f8, work->unk_20c, work->unk_49c);
-    ov45_0222BCB8(work->unk_3a0);
-    ov45_0222C3B0(work->unk_20c);
-    ov45_0222CAA0(work->unk_49c);
-    if (ov45_0222CCDC(work->unk_4bc) == 1) {
+    ov45_0222BB60(&work->unk_1fc, work->unk_f8, &work->unk_20c, &work->timer);
+    ov45_0222BCB8(&work->unk_3a0);
+    ov45_0222C3B0(&work->unk_20c);
+    ov45_0222CAA0(&work->timer);
+    if (ov45_0222CCDC(&work->history) == 1) {
         work->unk_52c = 1;
     }
 }

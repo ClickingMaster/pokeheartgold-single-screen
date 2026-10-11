@@ -117,10 +117,10 @@
 	.public ov45_0222B244
 	.public ov45_0222B270
 	.public ov45_0222B28C
-	.public ov45_0222B2B4
-	.public ov45_0222B470
-	.public ov45_0222B530
-	.public ov45_0222B5A0
+	.public WiFiPlaza_OnPlayerEnter
+	.public WiFiPlaza_OnPlayerLeave
+	.public WiFiPlaza_OnPlayerUpdate
+	.public WiFiPlaza_OnLobbyEvent
 	.public ov45_0222B75C
 	.public ov45_0222B79C
 	.public ov45_0222B840

@@ -4149,49 +4149,12 @@ Overlay OVY_45
     Object src/wifi_plaza_work.o
     Object src/wifi_plaza_player.o
     Object src/wifi_plaza_lobby.o
-    Object src/overlay45_lobby_state_r15_run1.o
-    Object src/to90_extra2022_run01.o
-    Object src/overlay45_lobby_state_r15_run2.o
-    Object src/to90_extra2023_run01.o
-    Object src/overlay45_lobby_state_r15_run3.o
-    Object src/to80_extra1865_run01.o
-    Object src/overlay45_wireless_profile/overlay45_wireless_profile.o
-    Object src/overlay45_lobby_state_r15_run4.o
-    Object src/to70_overlay_45_thumb_r15_gap_4_extra963_run01.o
-    Object src/overlay45_helpers_15.o
-    Object src/overlay45_state_timers/overlay45_state_timers.o
-    Object src/overlay45_helpers_16.o
-    Object src/r40_overlay_45_thumb_residual_17_run1.o
-    Object src/overlay45_helpers_17.o
-    Object src/to58_r3_overlay_45_thumb_residual_18.o
-    Object src/overlay45_helpers_18.o
-    Object src/to45_overlay45_r19.o
-    Object src/overlay45_helpers_19.o
-    Object src/to58_r3_overlay_45_thumb_residual_20.o
-    Object src/overlay45_helpers_20.o
-    Object src/to58_r3_overlay_45_thumb_residual_21.o
-    Object src/overlay45_helpers_21.o
-    Object src/r40_overlay_45_thumb_residual_22_run1.o
-    Object src/overlay45_helpers_22.o
-    Object src/to58_r3_overlay_45_thumb_residual_23.o
-    Object src/overlay45_helpers_23.o
-    Object src/to42_overlay_45_thumb_residual_24_run1.o
-    Object src/to90_extra2488_run01.o
-    Object src/to42_overlay_45_thumb_residual_24_run2.o
-    Object src/op90_overlay_45_thumb_residual_24_to42_residual_2_r01.o
-    Object src/to42_overlay_45_thumb_residual_24_run3.o
-    Object src/to80_extra1523_run01.o
-    Object src/to42_overlay_45_thumb_residual_24_run4.o
-    Object src/op90_overlay_45_thumb_residual_24_to42_residual_4_r01.o
-    Object src/op90_op90_overlay_45_thumb_residual_24_to42_residual_4_residual_1_r01.o
-    Object src/to42_overlay_45_thumb_residual_24_run5.o
-    Object src/to80_extra1781_run01.o
-    Object src/to42_overlay_45_thumb_residual_24_run6.o
-    Object src/to70_overlay_45_thumb_residual_24_to42_residual_6_extra796_run01.o
-    Object src/to42_overlay_45_thumb_residual_24_run7.o
-    Object src/overlay45_helpers_24.o
-    Object src/to46_overlay_45_history.o
-    Object src/overlay45_helpers_25.o
+    Object src/wifi_plaza_state.o
+    Object src/wifi_plaza_requests.o
+    Object src/wifi_plaza_groups.o
+    Object src/wifi_plaza_receive.o
+    Object src/wifi_plaza_word_set.o
+    Object src/wifi_plaza_history.o
     Object src/overlay45_lobby_object_lifecycle_r26.o
     Object src/overlay45_helpers_26.o
     Object src/overlay45_lobby_flow_handlers.o
