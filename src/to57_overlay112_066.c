@@ -1,8 +1,8 @@
 #include "to57_overlay112_066_private.h"
 
 int ov112_021EB5DC(Ov112State *p) {
-    ov112_021E7CA4(p, 2, 12);
-    ov112_021E7CA4(p, 5, 16);
+    PokewalkerApp_LoadTilemap(p, 2, 12);
+    PokewalkerApp_LoadTilemap(p, 5, 16);
     ov112_021E9FA4(p, 3, P(p, 0x1e45c), 4, 0xf0100);
     ov112_021E9FA4(p, 4, P(p, 0x1e460), 4, 0xf0100);
     ov112_021E9FA4(p, 5, P(p, 0x1e464), 4, 0xf0100);

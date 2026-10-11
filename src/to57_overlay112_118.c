@@ -23,7 +23,7 @@ int ov112_021EDF4C(Ov112R118 *w) {
         printer = (int)ov112_021EA08C(w, 2, 0x20);
     }
     U32(w, 0x1E524) = printer;
-    ov112_021E7464();
+    PokewalkerIr_Stop();
     String_Delete(s);
     return 0x26;
 }

@@ -817,7 +817,7 @@ Static main
     Object src/application/check_savedata.o
     Object src/save_data_read_error.o
     Object src/save_data_write_error.o
-    Object src/bag_view_tasks_1.o
+    Object src/mart_bag_task.o
     Object src/unk_02092BB8.o
     Object src/unk_02092BE8.o
     Object src/mom_gift.o
@@ -1555,117 +1555,117 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object lib/NitroSDK/src/math/MATH_dgt.o
     Object lib/NitroSDK/src/math/MATH_crc.o
     Object lib/MSL_C/asm/to70_MSL_ARM_abort_exit_extra102_anchor.o
-    Object src/to70_MSL_ARM_abort_exit_extra102_run01.o
-    Object src/to80_extra1377_run01.o
+    Object lib/MSL_C/src/msl_abort_exit.o
+    Object lib/MSL_C/src/msl_abort_exit_core.o
     Object lib/MSL_c/asm/MSL_ARM_critical_regions_NITRO.o
     Object lib/MSL_C/asm/to90_extra2309_anchor.o
-    Object src/to90_extra2309_run01.o
+    Object lib/MSL_C/src/msl_arm_math.o
     Object lib/MSL_C/asm/to70_MSL_Common_alloc_extra116_anchor.o
-    Object src/to70_MSL_Common_alloc_extra116_run01.o
+    Object lib/MSL_C/src/msl_alloc.o
     Object lib/MSL_C/asm/op90_MSL_Common_ansi_files_anchor.o
-    Object src/op90_MSL_Common_ansi_files_r01.o
+    Object lib/MSL_C/src/msl_ansi_files.o
     Object lib/MSL_C/src/arith.o
     Object lib/MSL_C/asm/to70_MSL_Common_assert_extra117_anchor.o
-    Object src/to70_MSL_Common_assert_extra117_run01.o
+    Object lib/MSL_C/src/msl_assert.o
     Object lib/MSL_C/asm/to59_msl_buffer_exception.o
-    Object lib/MSL_C/src/to59_msl_buffer.o
+    Object lib/MSL_C/src/msl_buffer_io.o
     Object lib/MSL_C/asm/MSL_Common_ctype.o
-    Object lib/MSL_C/src/to59_msl_fread.o
+    Object lib/MSL_C/src/msl_direct_io_fread.o
     Object lib/MSL_C/asm/to90_extra1964_anchor.o
-    Object src/op90_to90_extra1964_residual_1_r01.o
-    Object src/to90_extra1964_run01.o
+    Object lib/MSL_C/src/msl_direct_io_read.o
+    Object lib/MSL_C/src/msl_direct_io_write.o
     Object lib/MSL_C/asm/MSL_Common_errno.o
     Object lib/MSL_C/asm/to70_MSL_Common_file_io_extra109_anchor.o
-    Object src/to70_MSL_Common_file_io_extra109_run01.o
+    Object lib/MSL_C/src/msl_file_io.o
     Object lib/MSL_C/src/msl_filepos_ftell_core.o
     Object lib/MSL_C/src/msl_filepos_ftell.o
     Object lib/MSL_C/asm/to90_extra2110_anchor.o
-    Object src/to90_extra2110_run01.o
+    Object lib/MSL_C/src/msl_filepos_fseek_core.o
     Object lib/MSL_C/src/msl_filepos_fseek.o
     Object lib/MSL_C/src/msl_filepos_rewind.o
     Object lib/MSL_C/asm/MSL_Common_float.o
-    Object lib/MSL_C/src/to59_msl_mbstring_prefix.o
+    Object lib/MSL_C/src/msl_mbstring.o
     Object lib/MSL_C/asm/to70_msl_mbstring_residual_anchor.o
-    Object src/to70_msl_mbstring_residual_run01.o
-    Object lib/MSL_C/src/to59_msl_mbstring_suffix.o
+    Object lib/MSL_C/src/msl_mbstring_mbstowcs.o
+    Object lib/MSL_C/src/msl_mbstring_wcstombs.o
     Object lib/MSL_C/asm/to59_msl_mem_exception.o
-    Object lib/MSL_C/src/to59_msl_mem.o
-    Object src/to70_MSL_Common_mem_funcs_extra79_run01.o
+    Object lib/MSL_C/src/msl_mem.o
+    Object lib/MSL_C/src/msl_mem_funcs.o
     Object lib/MSL_C/asm/to70_MSL_Common_printf_extra110_anchor.o
-    Object src/to80_extra1615_run01.o
-    Object src/op90_to80_extra1719_residual_1_r01.o
-    Object src/to80_extra1719_run01.o
-    Object src/op90_to80_extra1719_residual_2_r01.o
-    Object src/to80_extra1378_run01.o
-    Object src/op90_op90_to80_extra1378_residual_2_residual_1_r01.o
-    Object src/op90_to80_extra1378_residual_2_r01.o
-    Object src/to70_MSL_Common_printf_extra110_run01.o
-    Object src/to80_extra1379_run01.o
-    Object src/to70_MSL_Common_printf_extra110_run02.o
-    Object src/op90_MSL_Common_qsort_r01.o
+    Object lib/MSL_C/src/msl_printf_parse_format.o
+    Object lib/MSL_C/src/msl_printf_long2str.o
+    Object lib/MSL_C/src/msl_printf_longlong2str.o
+    Object lib/MSL_C/src/msl_printf_double2hex.o
+    Object lib/MSL_C/src/msl_printf_round_decimal.o
+    Object lib/MSL_C/src/msl_printf_float2str.o
+    Object lib/MSL_C/src/msl_printf_pformatter.o
+    Object lib/MSL_C/src/msl_printf_write.o
+    Object lib/MSL_C/src/msl_printf.o
+    Object lib/MSL_C/src/msl_printf_sprintf.o
+    Object lib/MSL_C/src/msl_qsort.o
     Object lib/MSL_C/src/rand.o
     Object lib/asm/to90_scanf_interval_v5_anchor.o
     Object lib/asm/op90_to91_w41418_StringRead_prefix_anchor.o
-    Object src/op90_to91_w41418_StringRead_prefix_r01.o
-    Object src/to91_w41418_StringRead_run01.o
-    Object src/to90_scanf_interval_v5_run01.o
-    Object src/to90_scanf_interval_v5_run02.o
+    Object lib/MSL_C/src/msl_scanf_sformatter.o
+    Object lib/MSL_C/src/msl_scanf_string_read.o
+    Object lib/MSL_C/src/msl_scanf_vsscanf.o
+    Object lib/MSL_C/src/msl_scanf_sscanf.o
     Object lib/MSL_C/asm/to70_MSL_Common_signal_extra118_anchor.o
-    Object src/to70_MSL_Common_signal_extra118_run01.o
-    Object lib/MSL_C/src/msl_string_run0.o
-    Object src/op90_MSL_Common_string_residual0_r01.o
-    Object lib/MSL_C/src/msl_string_run1.o
-    Object src/to70_MSL_Common_string_residual1_extra80_run01.o
-    Object lib/MSL_C/src/msl_string_run2.o
+    Object lib/MSL_C/src/msl_signal.o
+    Object lib/MSL_C/src/msl_string_strlen.o
+    Object lib/MSL_C/src/msl_string_strcpy.o
+    Object lib/MSL_C/src/msl_string_strncpy_strcat.o
+    Object lib/MSL_C/src/msl_string_strcmp.o
+    Object lib/MSL_C/src/msl_string_strncmp_strchr.o
     Object lib/MSL_C/asm/to70_MSL_Common_string_residual2_extra81_anchor.o
-    Object src/to70_MSL_Common_string_residual2_extra81_run01.o
-    Object lib/MSL_C/src/msl_string_run3.o
+    Object lib/MSL_C/src/msl_string_strtok.o
+    Object lib/MSL_C/src/msl_string_strstr.o
     Object lib/MSL_C/asm/to70_MSL_Common_strtold_extra119_anchor.o
-    Object src/op90_to70_MSL_Common_strtold_extra119_residual_1_r01.o
-    Object src/to70_MSL_Common_strtold_extra119_run01.o
-    Object src/op90_to59_msl_strtoul_residual_r01.o
-    Object src/op90_to59_msl_strtoul_residual_r02.o
-    Object src/op90_to59_msl_strtoul_residual_r03.o
+    Object lib/MSL_C/src/msl_strtold_core.o
+    Object lib/MSL_C/src/msl_strtold.o
+    Object lib/MSL_C/src/msl_strtoul_core.o
+    Object lib/MSL_C/src/msl_strtoull_core.o
+    Object lib/MSL_C/src/msl_strtoul.o
     Object lib/MSL_C/asm/op90_to59_msl_strtoul_residual_residual_1.o
-    Object lib/MSL_C/src/to59_msl_strtoul_tail.o
-    Object src/op90_MSL_Common_wchar_io_r01.o
+    Object lib/MSL_C/src/msl_strtol.o
+    Object lib/MSL_C/src/msl_wchar_io.o
     Object lib/MSL_C/asm/MSL_Common_wctype.o
     Object lib/MSL_C/asm/to70_MSL_Common_wmem_extra120_anchor.o
-    Object src/to70_MSL_Common_wmem_extra120_run01.o
+    Object lib/MSL_C/src/msl_wmem.o
     Object lib/MSL_C/asm/to70_MSL_Common_wprintf_extra111_anchor.o
-    Object src/to80_extra1616_run01.o
-    Object src/op90_to80_extra1836_residual_1_r01.o
-    Object src/to80_extra1836_run01.o
-    Object src/op90_to80_extra1836_residual_2_r01.o
-    Object src/to80_extra1380_run01.o
-    Object src/op90_to80_extra1834_residual_1_r01.o
-    Object src/to80_extra1834_run01.o
-    Object src/to70_MSL_Common_wprintf_extra111_run01.o
-    Object lib/MSL_C/src/to59_msl_wstring_start.o
-    Object src/to70_msl_wstring_wcscpy_run01.o
-    Object lib/MSL_C/src/to59_msl_wstring_end.o
-    Object src/op90_MSL_DPMath_e_pow_r01.o
-    Object src/to70_MSL_DPMath_s_copysign_extra82_run01.o
-    Object src/to70_MSL_DPMath_s_fabs_extra83_run01.o
-    Object src/op90_MSL_DPMath_s_frexp_r01.o
-    Object src/op90_MSL_DPMath_s_ldexp_r01.o
+    Object lib/MSL_C/src/msl_wprintf_parse_format.o
+    Object lib/MSL_C/src/msl_wprintf_long2str.o
+    Object lib/MSL_C/src/msl_wprintf_longlong2str.o
+    Object lib/MSL_C/src/msl_wprintf_double2hex.o
+    Object lib/MSL_C/src/msl_wprintf_round_decimal.o
+    Object lib/MSL_C/src/msl_wprintf_float2str.o
+    Object lib/MSL_C/src/msl_wprintf_wpformatter.o
+    Object lib/MSL_C/src/msl_wprintf_swprintf.o
+    Object lib/MSL_C/src/msl_wstring_wcslen.o
+    Object lib/MSL_C/src/msl_wstring_wcscpy.o
+    Object lib/MSL_C/src/msl_wstring_wcschr.o
+    Object lib/MSL_C/src/msl_e_pow.o
+    Object lib/MSL_C/src/msl_s_copysign.o
+    Object lib/MSL_C/src/msl_s_fabs.o
+    Object lib/MSL_C/src/msl_s_frexp.o
+    Object lib/MSL_C/src/msl_s_ldexp.o
     Object lib/MSL_C/asm/to90_extra2310_anchor.o
-    Object src/to90_extra2310_run01.o
+    Object lib/MSL_C/src/msl_w_pow.o
     Object lib/MSL_C/asm/to70_MSL_fp_ansi_extra112_anchor.o
-    Object src/to70_MSL_fp_ansi_extra112_run01.o
-    Object src/op90_to70_MSL_fp_ansi_extra112_residual_1_r01.o
-    Object src/to70_MSL_fp_ansi_extra112_run02.o
-    Object src/to80_extra1835_run01.o
-    Object src/to80_extra1381_run01.o
-    Object src/op90_to80_extra1617_residual_1_r01.o
-    Object src/to80_extra1617_run01.o
-    Object src/to70_MSL_fp_ansi_extra112_run03.o
-    Object src/to80_extra1718_run01.o
+    Object lib/MSL_C/src/msl_fp_ansi_rounddec.o
+    Object lib/MSL_C/src/msl_fp_ansi_timesdec.o
+    Object lib/MSL_C/src/msl_fp_ansi_str2dec.o
+    Object lib/MSL_C/src/msl_fp_ansi_two_exp.o
+    Object lib/MSL_C/src/msl_fp_ansi_compare_dec.o
+    Object lib/MSL_C/src/msl_fp_ansi_minus_dec.o
+    Object lib/MSL_C/src/msl_fp_ansi_num2dec_internal.o
+    Object lib/MSL_C/src/msl_fp_ansi_num2dec.o
+    Object lib/MSL_C/src/msl_fp_ansi_dec2num.o
     Object lib/MSL_C/asm/to70_MSL_math_extra113_anchor.o
-    Object src/to70_MSL_math_extra113_run01.o
+    Object lib/MSL_C/src/msl_math.o
     Object lib/MSL_C/asm/to70_MSL_ARM_pool_alloc_NITRO_extra115_anchor.o
-    Object src/to70_MSL_ARM_pool_alloc_NITRO_extra115_run01.o
-    Object src/to70_MSL_string_extras_extra84_run01.o
+    Object lib/MSL_C/src/msl_pool_alloc.o
+    Object lib/MSL_C/src/msl_string_extras.o
     Object lib/MSL_C/asm/to70_MSL_CPP_NITRO_Ai_LE_extra108_anchor.o
     Object src/to70_MSL_CPP_NITRO_Ai_LE_extra108_run01.o
     Object src/to91_msl_shared_ptr_char_d1.o
@@ -6446,46 +6446,11 @@ Overlay OVY_111
 Overlay OVY_112
 {
     After main
-    Object src/to70_to53_overlay112_000_extra1052_run01.o
-Object src/to53_overlay112_001.o
-Object src/op90_to70_to53_overlay112_002_extra683_residual_1_r01.o
-Object src/to70_to53_overlay112_002_extra683_run01.o
-Object src/to53_overlay112_003.o
-Object src/op90_to53_overlay112_004_r01.o
-Object src/to53_overlay112_005.o
-Object src/to90_extra2410_run01.o
-Object src/op90_to90_extra2410_residual_1_r01.o
-Object src/to53_overlay112_007.o
-Object src/to70_to53_overlay112_008_extra684_run01.o
-Object src/to53_overlay112_009.o
-Object src/to70_to53_overlay112_010_extra685_run01.o
-Object src/to53_overlay112_011.o
-Object src/to57_overlay112_012.o
-Object src/to53_overlay112_013.o
-Object src/to80_extra1490_run01.o
-Object src/overlay112_014_ir_protocol.o
-Object src/to80_extra1491_run01.o
-Object src/overlay112_014_ir_thread.o
-Object src/to53_overlay112_015.o
-Object src/to57_r3_07_overlay112_016_head.o
+    Object src/application/pokewalker/pokewalker_ir.o
 Object asm/op90_to57_r3_07_overlay112_016_residual_bss_head.o
-Object src/op90_to57_r3_07_overlay112_016_residual_r01.o
-Object src/to57_r3_07_overlay112_016_tail.o
-Object src/to53_overlay112_017.o
-Object src/to58_w11b_ov112_018.o
-Object src/to53_overlay112_019.o
-Object src/to70_to58_w11b_ov112_020_prefix_extra707_run01.o
-    Object src/to58_w11b_ov112_020_tail.o
-Object src/to53_overlay112_021.o
-Object src/to80_extra1819_run01.o
-Object src/to53_overlay112_023.o
-Object src/to58_w11b_ov112_024.o
-Object src/to53_overlay112_025.o
-Object src/to70_to58_w11b_ov112_026_prefix_extra355_run01.o
-    Object src/to58_w11b_ov112_026_tail.o
-Object src/to53_overlay112_027.o
-Object src/to70_to53_overlay112_028_extra528_run01.o
-Object src/to53_overlay112_029.o
+Object src/application/pokewalker/pokewalker_ir_requests.o
+Object src/application/pokewalker/pokewalker_ir_status.o
+Object src/application/pokewalker/pokewalker_app.o
 Object src/to59_overlay112_030_7dfc.o
 Object src/op90_to55_overlay112_030_residual_8b74_r01.o
 Object src/to55_overlay112_030_exact.o

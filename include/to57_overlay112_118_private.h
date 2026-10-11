@@ -13,7 +13,7 @@ void BgCommitTilemapBufferToVram(void *bg, int layer);
 BOOL ov112_021ED610(void *p);
 BOOL ov112_021ED640(void *p);
 void *ov112_021EA08C(void *p, int a, int b);
-void ov112_021E7464(void);
+void PokewalkerIr_Stop(void);
 void ov112_021EAAE4(void *p, void *q);
 int TextPrinterCheckActive(u8 id);
 int IsFanfarePlaying(void);

@@ -47,7 +47,7 @@ void ov112_021E9934(u8 *, int, int, int);
 u32 GetBoxMonData(void *, int, void *);
 int _s32_div_f(int, int);
 void ov112_021E8C5C(const u8 *, void *, u16 *);
-void ov112_021E7CA4(void *, int, int);
+void PokewalkerApp_LoadTilemap(void *, int, int);
 void ov112_021EA51C(void *, int);
 void ov112_021E966C(void *, int);
 void ov112_021E96D0(void *, int);

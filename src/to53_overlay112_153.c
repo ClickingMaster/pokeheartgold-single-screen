@@ -10,7 +10,7 @@ typedef struct W12Work {
 #define PTR(w, n) (*(void **)((w)->raw + (n)))
 
 extern void FillBgTilemapRect(void *, int, int, int, int, int, int, int);
-extern void ov112_021E7CA4(W12Work *, int, int);
+extern void PokewalkerApp_LoadTilemap(W12Work *, int, int);
 extern void ov112_021E9FD8(W12Work *, int, void *, int);
 extern int IsPaletteFadeFinished(void);
 extern void BufferPokewalkerCourseName(void *, int, u8);

@@ -25,7 +25,7 @@ typedef struct WalkerFlags {
 } WalkerFlags;
 
 extern void FillBgTilemapRect(void *, int, int, int, int, int, int, int);
-extern void ov112_021E7CA4(W12Work *, int, int);
+extern void PokewalkerApp_LoadTilemap(W12Work *, int, int);
 extern void ov112_021E9FD8(W12Work *, int, void *, int);
 extern void ov112_021E9FA4(W12Work *, int, void *, int, u32);
 extern void *String_New(int, int);
@@ -49,7 +49,7 @@ int ov112_021EFDA8(W12Work *w) {
         return 0x24;
     }
     FillBgTilemapRect(PTR(w, 0x18), 1, 0, 0, 0, 0x20, 0x18, 0x10);
-    ov112_021E7CA4(w, 2, 0xF);
+    PokewalkerApp_LoadTilemap(w, 2, 0xF);
     ov112_021E9FD8(w, 1, PTR(w, 0x1E4A4), 0);
     MIi_CpuClearFast(0, (u32 *)items, sizeof(items));
     for (i = 0; i < 3; i++) {

@@ -675,6 +675,36 @@ typedef struct WlApEntry {
     u16 lifeTime; // UpdateApListTask counts it down
 } WlApEntry;
 
+// 802.11 capability information.
+typedef struct WlCapaBits {
+    u16 ess : 1;
+    u16 ibss : 1;
+    u16 poll : 2;
+    u16 wep : 1;
+    u16 shortPreamble : 1;
+    u16 unk_6 : 10;
+} WlCapaBits;
+
+// Elements of a received management frame body (ElementChecker).
+typedef struct WlElements {
+    u8 *elements;
+    u16 unk_04; // bit 15: BSSID check passes
+    u16 capaInfo;
+    u16 length;
+    u16 match; // 1: SSID, 2: channel, 4: rates, 8: BSSID, 16 / 32: capability bits
+    u16 found; // 1: SSID, 2: DS parameter, 4: rates, 0x100: TIM, 0x200: CF, 0x400: game information; 0x800 (in): empty SSID matches
+    u16 unk_0e;
+    u16 unk_10;
+    u16 channel;
+    WlRateSet rateSet;
+    u16 otherCount; // unknown elements
+    u16 otherLength;
+    u8 *ssid; // the elements (id, length, data)
+    u8 *cf;
+    u8 *tim;
+    u8 *gameInfo;
+} WlElements;
+
 // MAC register self test entry (DiagMacRegister): register offset and the bits that can be written.
 typedef struct WlTestReg {
     u16 offset;
@@ -1143,6 +1173,15 @@ void RxDataFrameTask(void);
 int RxMpFrame(WlRxFrame *frame);
 void RxKeyDataFrame(WlRxFrame *frame);
 int RxMpAckFrame(WlRxFrame *frame);
+
+// wl_rx_man.c
+void RxDisAssFrame(WlRxFrame *frame);
+void RxAssReqFrame(WlRxFrame *frame);
+void RxProbeReqFrame(WlRxFrame *frame);
+
+// wl_rx_deauth.c
+void RxDeAuthFrame(WlRxFrame *frame);
+void ElementChecker(WlElements *info);
 
 // wl_cam.c
 u32 CAM_Search(const u16 *addr);

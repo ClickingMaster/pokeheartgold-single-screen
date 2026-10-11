@@ -5,66 +5,66 @@
 	.public gApplication_TitleScreen
 
 	.text
-	.extern ov112_021E5900
+	.extern PokewalkerIr_Checksum
 	.extern ov112_021E5938
-	.extern ov112_021E594C
-	.extern ov112_021E5964
-	.extern ov112_021E59A8
-	.extern ov112_021E59B4
-	.extern ov112_021E5A14
-	.extern ov112_021E5A5C
-	.extern ov112_021E5A68
+	.extern PokewalkerIr_ResetLink
+	.extern PokewalkerIr_InitLink
+	.extern PokewalkerIr_IsConnected
+	.extern PokewalkerIr_SendPacket
+	.extern PokewalkerIr_CloseLink
+	.extern PokewalkerIr_Disconnect
+	.extern PokewalkerIr_Send
 	.extern ov112_021E5A80
 	.extern ov112_021E5A84
-	.extern ov112_021E5AD0
-	.extern ov112_021E5B28
-	.extern ov112_021E5B98
-	.extern ov112_021E5D38
-	.extern ov112_021E5D44
-	.extern ov112_021E5D50
+	.extern PokewalkerIr_CheckTimeout
+	.extern PokewalkerIr_VerifyPacket
+	.extern PokewalkerIr_Poll
+	.extern PokewalkerIr_SetConnectCallback
+	.extern PokewalkerIr_SetReceiveCallback
+	.extern PokewalkerIr_SetCloseCallback
 	.extern ov112_021E5D5C
-	.extern ov112_021E5D68
-	.extern ov112_021E5D8C
-	.extern ov112_021E5E18
-	.extern ov112_021E5E28
-	.extern ov112_021E5E48
-	.extern ov112_021E5EB8
-	.extern ov112_021E5EC4
-	.extern ov112_021E5EEC
-	.extern ov112_021E6004
-	.extern ov112_021E6134
-	.extern ov112_021E6164
-	.extern ov112_021E6A6C
-	.extern ov112_021E6BDC
-	.extern ov112_021E6BF8
-	.extern ov112_021E6F60
-	.extern ov112_021E7398
-	.extern ov112_021E73C8
-	.extern ov112_021E7464
+	.extern PokewalkerIr_SetCompressBuffer
+	.extern PokewalkerIr_CompressBlocks
+	.extern PokewalkerIr_SetError
+	.extern PokewalkerIr_StoreClock
+	.extern PokewalkerIr_StoreCurrentTime
+	.extern PokewalkerIr_SetIdentities
+	.extern PokewalkerIr_BeginTransfer
+	.extern PokewalkerIr_SendChunk
+	.extern PokewalkerIr_OnSendComplete
+	.extern PokewalkerIr_RequestChunk
+	.extern PokewalkerIr_OnReceiveComplete
+	.extern PokewalkerIr_OnConnect
+	.extern PokewalkerIr_RestartTransfer
+	.extern PokewalkerIr_ValidatePeer
+	.extern PokewalkerIr_OnReceive
+	.extern PokewalkerIr_ThreadMain
+	.extern PokewalkerIr_Start
+	.extern PokewalkerIr_Stop
 	.extern ov112_021E7484
 	.extern ov112_021E74A8
 	.extern ov112_021E7548
 	.extern ov112_021E7594
 	.extern ov112_021E7620
 	.extern ov112_021E7668
-	.extern ov112_021E7670
-	.extern ov112_021E768C
-	.extern ov112_021E76A8
-	.extern ov112_021E76CC
-	.extern ov112_021E7768
-	.extern ov112_021E77E4
-	.extern ov112_021E7830
-	.extern ov112_021E7910
-	.extern ov112_021E795C
-	.extern ov112_021E79A8
-	.extern ov112_021E79D0
-	.extern ov112_021E79F0
-	.extern ov112_021E7AC8
-	.extern ov112_021E7B18
-	.extern ov112_021E7C18
-	.extern ov112_021E7C6C
-	.extern ov112_021E7CA4
-	.extern ov112_021E7CC8
+	.extern PokewalkerIr_GetChunkProgress
+	.extern PokewalkerIr_GetTotalProgress
+	.extern PokewalkerIr_GetAndClearError
+	.extern PokewalkerApp_Init
+	.extern PokewalkerApp_Setup
+	.extern PokewalkerApp_Teardown
+	.extern PokewalkerApp_Main
+	.extern PokewalkerApp_Exit
+	.extern PokewalkerApp_GetSaveData
+	.extern PokewalkerApp_VBlankCB
+	.extern PokewalkerApp_SetGxBanks
+	.extern PokewalkerApp_InitBgs
+	.extern PokewalkerApp_FreeBgs
+	.extern PokewalkerApp_LoadBgGraphics
+	.extern PokewalkerApp_InitMessages
+	.extern PokewalkerApp_FreeMessages
+	.extern PokewalkerApp_LoadTilemap
+	.extern PokewalkerApp_StartLink
 	.extern ov112_021E7D7C
 	.extern ov112_021E7DA4
 	.extern ov112_021E7DC0
@@ -1536,7 +1536,7 @@ ov112_021F5718: ; 0x021F5718
 
 	.public ov112_App_MainMenu_SelectOption_ConnectToPokewalker
 ov112_App_MainMenu_SelectOption_ConnectToPokewalker:
-	.word ov112_021E76CC, ov112_021E7830, ov112_021E7910, 0xFFFFFFFF
+	.word PokewalkerApp_Init, PokewalkerApp_Main, PokewalkerApp_Exit, 0xFFFFFFFF
 ov112_021F5738:
 	.byte 0x00, 0x1C, 0x1C, 0x1C, 0x1C, 0x1C, 0x1C, 0x1C
 	.byte 0x1C, 0x1C, 0x1C, 0x1C, 0x1C, 0x1C, 0x00, 0x1C

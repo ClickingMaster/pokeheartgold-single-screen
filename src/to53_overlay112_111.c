@@ -13,7 +13,7 @@
 int ov112_021ED8DC(void *p) {
     MIi_CpuClearFast(0, (u32 *)((u8 *)p + 0xAABC), 0x6C8);
     ov112_021E7620((u8 *)p + 0x9D70, (u8 *)p + 0xB184);
-    ov112_021E7CC8(p);
+    PokewalkerApp_StartLink(p);
     ov112_021ED25C(p);
     return 29;
 }

@@ -9,7 +9,7 @@ int ov112_021ED1A0(Ov112State *p) {
     ov112_021E9C10(p,3);
     ov112_021E9A78(p,0);
     ov112_021E9A78(p,1);
-    ov112_021E7CA4(p,2,0xe);
+    PokewalkerApp_LoadTilemap(p,2,0xe);
     ov112_021E9F40(p,1);
     ov112_021EA688(p,3);
     ov112_021EA688(p,4);

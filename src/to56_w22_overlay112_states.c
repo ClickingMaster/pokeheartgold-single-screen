@@ -16,7 +16,7 @@ int ov112_021EA08C(Ov112State *, int, int);
 void BgCommitTilemapBufferToVram(void *, int);
 int TextPrinterCheckActive(u8);
 void ov112_021E9FA4(Ov112State *, int, void *, int, int);
-void ov112_021E7CA4(Ov112State *, int, int);
+void PokewalkerApp_LoadTilemap(Ov112State *, int, int);
 void ov112_021E9F40(Ov112State *, int);
 void ov112_021EA51C(Ov112State *, int);
 int ov112_021E9888(int);
@@ -57,7 +57,7 @@ int ov112_021EBC3C(Ov112State *p) {
 int ov112_021EBC7C(Ov112State *p) {
     if (!TextPrinterCheckActive((u8)W(p, 0x1e524))) {
         ov112_021E9FA4(p, 5, *(void **)(p->raw + 0x1e458), 4, 0x000f0100);
-        ov112_021E7CA4(p, 2, 10);
+        PokewalkerApp_LoadTilemap(p, 2, 10);
         ov112_021E9F40(p, 1);
         ov112_021EA51C(p, 2);
         return 5;

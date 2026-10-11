@@ -15,7 +15,7 @@ int ov112_021EDE1C(void *s) {
     }
     return 0x22;
 }
-extern void ov112_021E7464(void *);
+extern void PokewalkerIr_Stop(void *);
 extern int ov112_021ED640(void *);
 extern void BufferBoxMonNickname(void *, int, void *);
 extern int ov112_021EA08C(void *, int, int);
@@ -23,7 +23,7 @@ extern void PlayFanfare(int);
 int ov112_021EDE68(void *);
 int ov112_021EDE68(void *s) {
     void *box;
-    ov112_021E7464(s);
+    PokewalkerIr_Stop(s);
     if (!ov112_021ED640(s)) {
         MIi_CpuClearFast(0, (u32 *)((u8 *)s + 0xad00), 0x2fc);
         *(u8 *)((u8 *)s + 0xaabc) &= ~0x20;

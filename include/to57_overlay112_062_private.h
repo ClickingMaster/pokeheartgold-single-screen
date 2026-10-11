@@ -11,7 +11,7 @@ typedef struct Ov112State {
 void FillBgTilemapRect(void *, int, int, int, int, int, int, int);
 void BgCommitTilemapBufferToVram(void *, int);
 void ov112_021EC460(Ov112State *, int, int, int);
-void ov112_021E7CA4(Ov112State *, int, int);
+void PokewalkerApp_LoadTilemap(Ov112State *, int, int);
 void ov112_021E9FA4(Ov112State *, int, void *, int, int);
 void ov112_021E9F40(Ov112State *, int);
 void ov112_021EA51C(Ov112State *, int);

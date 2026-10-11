@@ -5,17 +5,17 @@
 
 extern u8 gSystem[];
 
-BOOL ov112_021E7670(void);
-BOOL ov112_021E768C(void);
+BOOL PokewalkerIr_GetChunkProgress(void);
+BOOL PokewalkerIr_GetTotalProgress(void);
 void ov112_021EA7D0(void *p);
 void ov112_021EA60C(void *p);
 void ov112_021ED314(int value);
-int ov112_021E76A8(void);
+int PokewalkerIr_GetAndClearError(void);
 BOOL ov112_021ED610(void *p);
 void ov112_021EAA98(void *p, void *q, int value);
 void ov112_021ED530(void *p);
 void ov112_021ED590(void *p);
-void ov112_021E7464(void);
+void PokewalkerIr_Stop(void);
 BOOL ov112_021E7668(void);
 void ov112_021E98E8(void *p, int value);
 int ov112_021E9888(int value);

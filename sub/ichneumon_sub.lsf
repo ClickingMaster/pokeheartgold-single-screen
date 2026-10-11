@@ -187,16 +187,13 @@ Autoload EXT_WRAM
 	Object lib/src/wl_man_frame.o
 	Object lib/src/wl_tx_init.o
 	Object lib/src/wl_rx_data.o
-Object lib/src/op90_op90_to91_w41568_rx_suffix_residual_1_r01.o
-	Object lib/src/to90_arm7_sub_ext_wram_run362.o
-	Object lib/src/to90_arm7_current1_rx_assreq_run01.o
-	Object lib/src/to90_arm7_sub_ext_wram_run363.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_62_r01.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_62_r02.o
-	Object lib/src/to90_arm7_sub_ext_wram_run364.o
-	Object lib/src/to90_arm7_sub_ext_wram_run382.o
-	Object lib/src/op90_to90_arm7_sub_ext_wram_residual_63_r01.o
-	Object lib/src/op90_op90_to90_arm7_sub_ext_wram_residual_63_residual_1_r01.o
+Object lib/src/wl_rx_beacon.o
+	Object lib/src/wl_rx_man.o
+	Object lib/src/wl_rx_probe_res.o
+	Object lib/src/wl_rx_auth.o
+	Object lib/src/wl_rx_deauth.o
+	Object lib/src/wl_rx_man_task.o
+	Object lib/src/wl_defrag.o
 	Object lib/src/wl_rx_init.o
 	Object lib/src/wl_ap_list.o
 	Object lib/src/wl_flash.o

@@ -22,7 +22,7 @@ int ov112_021EE12C(void *p) {
     *(void **)((u8 *)p + 0x1E524) = ov112_021EA08C(p, 2, 29);
     FillBgTilemapRect(*(void **)((u8 *)p + 0x18), 2, 0, 0, 0, 32, 24, 16);
     BgCommitTilemapBufferToVram(*(void **)((u8 *)p + 0x18), 2);
-    ov112_021E7464();
+    PokewalkerIr_Stop();
     PlayFanfare(0x4A1);
     return 42;
 }

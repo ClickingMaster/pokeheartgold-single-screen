@@ -3,7 +3,7 @@
 #define PTR(p, o) (*(void **)((u8 *)(p) + (o)))
 int ov112_021EE2D4(void *vp) {
     Ov112State *p = vp;
-    ov112_021E7CA4(p, 2, 10);
+    PokewalkerApp_LoadTilemap(p, 2, 10);
     ov112_021E9FA4(p, 5, p->field468, 4, 0xF0100);
     ov112_021E9F40(p, 1);
     p->selection = 0;

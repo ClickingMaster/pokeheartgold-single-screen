@@ -174,21 +174,21 @@ $(BUILD_DIR)/lib/src/spl_field.o: private MWCFLAGS := $(filter-out -ipa file,$(M
 $(BUILD_DIR)/lib/src/spl_list.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/lib/src/spl_random.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 
-$(BUILD_DIR)/src/to70_MSL_Common_mem_funcs_extra79_run01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_mem_funcs.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/src/to70_MSL_Common_string_residual1_extra80_run01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_string_strcmp.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/src/to70_MSL_Common_string_residual2_extra81_run01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_string_strtok.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/src/to70_MSL_DPMath_s_copysign_extra82_run01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_s_copysign.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/src/to70_MSL_DPMath_s_fabs_extra83_run01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_s_fabs.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/src/to70_MSL_string_extras_extra84_run01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_string_extras.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/src/to70_msl_wstring_wcscpy_run01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_wstring_wcscpy.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/src/to70_MSL_ARM_abort_exit_extra102_run01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_abort_exit.o: private MWCCVER := 2.0/sp2p3
 
 $(BUILD_DIR)/src/to70_MSL_CPP_NITRO_Ai_LE_extra108_run01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/to70_MSL_CPP_NITRO_Ai_LE_extra108_run02.o: private MWCCVER := 2.0/sp2p3
@@ -206,82 +206,82 @@ include tools/msl-d1-partition/d1.mk
 include tools/msl-new-partition/new.mk
 include tools/dwc-iterator-advance/iterator.mk
 
-$(BUILD_DIR)/src/to70_MSL_Common_file_io_extra109_run01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_file_io.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/src/to70_MSL_Common_printf_extra110_run01.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/to70_MSL_Common_printf_extra110_run02.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_printf_write.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_printf_sprintf.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/src/to70_MSL_Common_wprintf_extra111_run01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_wprintf_swprintf.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/src/to70_MSL_fp_ansi_extra112_run01.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/to70_MSL_fp_ansi_extra112_run02.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/to70_MSL_fp_ansi_extra112_run03.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_fp_ansi_rounddec.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_fp_ansi_str2dec.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_fp_ansi_num2dec.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/src/to70_MSL_math_extra113_run01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_math.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/src/to70_MSL_ARM_pool_alloc_NITRO_extra115_run01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_pool_alloc.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/src/to70_MSL_Common_alloc_extra116_run01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_alloc.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/src/to70_MSL_Common_assert_extra117_run01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_assert.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/src/to70_MSL_Common_signal_extra118_run01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_signal.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/src/to70_MSL_Common_strtold_extra119_run01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_strtold.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/src/to70_MSL_Common_wmem_extra120_run01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_wmem.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/src/to70_msl_mbstring_residual_run01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_mbstring_mbstowcs.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/src/to80_extra1377_run01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_abort_exit_core.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/src/to80_extra1378_run01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_printf_round_decimal.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/src/to80_extra1379_run01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_printf.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/src/to80_extra1380_run01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_wprintf_round_decimal.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/src/to80_extra1381_run01.o: private MWCCVER := 2.0/sp2p3
-
-
+$(BUILD_DIR)/lib/MSL_C/src/msl_fp_ansi_compare_dec.o: private MWCCVER := 2.0/sp2p3
 
 
 
 
 
-$(BUILD_DIR)/src/to80_extra1615_run01.o: private MWCCVER := 2.0/sp2p3
-
-$(BUILD_DIR)/src/to80_extra1616_run01.o: private MWCCVER := 2.0/sp2p3
-
-$(BUILD_DIR)/src/to80_extra1617_run01.o: private MWCCVER := 2.0/sp2p3
 
 
+$(BUILD_DIR)/lib/MSL_C/src/msl_printf_parse_format.o: private MWCCVER := 2.0/sp2p3
 
+$(BUILD_DIR)/lib/MSL_C/src/msl_wprintf_parse_format.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/src/to80_extra1718_run01.o: private MWCCVER := 2.0/sp2p3
-
-$(BUILD_DIR)/src/to80_extra1719_run01.o: private MWCCVER := 2.0/sp2p3
-
-$(BUILD_DIR)/src/to80_extra1834_run01.o: private MWCCVER := 2.0/sp2p3
-
-$(BUILD_DIR)/src/to80_extra1835_run01.o: private MWCCVER := 2.0/sp2p3
-
-$(BUILD_DIR)/src/to80_extra1836_run01.o: private MWCCVER := 2.0/sp2p3
-
-
-$(BUILD_DIR)/src/to90_extra1964_run01.o: private MWCCVER := 2.0/sp2p3
-
-$(BUILD_DIR)/src/to90_extra2110_run01.o: private MWCCVER := 2.0/sp2p3
-
-
-$(BUILD_DIR)/src/to90_extra2309_run01.o: private MWCCVER := 2.0/sp2p3
-
-$(BUILD_DIR)/src/to90_extra2310_run01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_fp_ansi_num2dec_internal.o: private MWCCVER := 2.0/sp2p3
 
 
 
-$(BUILD_DIR)/src/to90_scanf_interval_v5_run01.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/to90_scanf_interval_v5_run02.o: private MWCCVER := 2.0/sp2p3
+
+$(BUILD_DIR)/lib/MSL_C/src/msl_fp_ansi_dec2num.o: private MWCCVER := 2.0/sp2p3
+
+$(BUILD_DIR)/lib/MSL_C/src/msl_printf_longlong2str.o: private MWCCVER := 2.0/sp2p3
+
+$(BUILD_DIR)/lib/MSL_C/src/msl_wprintf_wpformatter.o: private MWCCVER := 2.0/sp2p3
+
+$(BUILD_DIR)/lib/MSL_C/src/msl_fp_ansi_two_exp.o: private MWCCVER := 2.0/sp2p3
+
+$(BUILD_DIR)/lib/MSL_C/src/msl_wprintf_longlong2str.o: private MWCCVER := 2.0/sp2p3
+
+
+$(BUILD_DIR)/lib/MSL_C/src/msl_direct_io_write.o: private MWCCVER := 2.0/sp2p3
+
+$(BUILD_DIR)/lib/MSL_C/src/msl_filepos_fseek_core.o: private MWCCVER := 2.0/sp2p3
+
+
+$(BUILD_DIR)/lib/MSL_C/src/msl_arm_math.o: private MWCCVER := 2.0/sp2p3
+
+$(BUILD_DIR)/lib/MSL_C/src/msl_w_pow.o: private MWCCVER := 2.0/sp2p3
+
+
+
+$(BUILD_DIR)/lib/MSL_C/src/msl_scanf_vsscanf.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_scanf_sscanf.o: private MWCCVER := 2.0/sp2p3
 
 include tools/alarm-partition/alarm.mk
 
@@ -294,9 +294,9 @@ $(BUILD_DIR)/lib/NitroSDK/src/os/to91_w41407_spin_retained.o: lib/NitroSDK/src/o
 
 $(BUILD_DIR)/src/to90_w41411_palette10_run01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 
-$(BUILD_DIR)/src/to91_w41418_StringRead_run01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_scanf_string_read.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSDK/src/mb/mb_task_thread.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_MSL_Common_wchar_io_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_wchar_io.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/src/nitrocrypto_rc4_init.o: private MWCCVER := 1.2/sp2p3
 $(BUILD_DIR)/lib/src/nitrocrypto_rc4_init.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/lib/NitroSDK/src/mb/mb_disconnect.o: private MWCCVER := 2.0/sp2p3
@@ -305,57 +305,55 @@ $(BUILD_DIR)/src/op90_to70_fx_trig_extra207_residual_1_r01.o: private MWCCVER :=
 $(BUILD_DIR)/src/op90_to80_extra1853_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_fx_vec_normalize_residual_r01.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to80_extra1442_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_MSL_Common_string_residual0_r01.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_to80_extra1378_residual_2_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_string_strcpy.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_printf_pformatter.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSDK/src/mb/mb_read_segment.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSystem/src/g3d_cgtool_maya_texmtx.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSystem/src/g3d_cgtool_maya_texmtx_r.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSystem/src/g3d_anm_btp_init.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_to90_extra1964_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_direct_io_read.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSystem/src/g3d_cgtool_3dsmax_texmtx.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/wifi_setup_keyboard_slide_in.o: private MWCCVER := 2.0/base
 $(BUILD_DIR)/lib/NitroSystem/src/g3d_cgtool_xsi_texmtx.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_to80_extra1719_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_printf_long2str.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSDK/src/mb/mb_parent_send_block.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_to80_extra1836_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_wprintf_long2str.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/application/footprint_stamp_sprites.o: private OPTFLAGS := -O2
 $(BUILD_DIR)/src/op90_overlay_40_residual_31_residual_4_to45_residual_r01.o: private OPTFLAGS := -O2
-$(BUILD_DIR)/src/op90_to53_overlay112_004_r01.o: private OPTFLAGS := -O1
 $(BUILD_DIR)/lib/NitroSDK/src/mb/mb_beacon_fixed.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_to70_to53_overlay112_002_extra683_residual_1_r01.o: private OPTFLAGS := -O2
 $(BUILD_DIR)/lib/NitroSDK/src/mb/mb_beacon_volat.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_to80_extra1617_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_fp_ansi_minus_dec.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_unk_02032B84_r01.o: private OPTFLAGS := -O2
 $(BUILD_DIR)/src/wifi_setup_result.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/src/wifi_setup_md5.o: private MWCCVER := 2.0/sp2
 $(BUILD_DIR)/src/wifi_setup_ap_select.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/src/wifi_setup_session.o: private MWCCVER := 2.0/sp1
-$(BUILD_DIR)/src/op90_to80_extra1719_residual_2_r01.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_to80_extra1834_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_to80_extra1836_residual_2_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_printf_double2hex.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_wprintf_float2str.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_wprintf_double2hex.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSDK/src/mb/mb_parent_recv_child.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_op90_to80_extra1378_residual_2_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_MSL_Common_ansi_files_r01.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_MSL_Common_ansi_files_r01.o: private EXCCFLAGS := -Cpp_exceptions on
-$(BUILD_DIR)/src/op90_MSL_Common_qsort_r01.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_MSL_Common_qsort_r01.o: private EXCCFLAGS := -Cpp_exceptions on
-$(BUILD_DIR)/src/op90_MSL_DPMath_s_frexp_r01.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_MSL_DPMath_s_frexp_r01.o: private EXCCFLAGS := -Cpp_exceptions on
-$(BUILD_DIR)/src/op90_MSL_DPMath_s_ldexp_r01.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_MSL_DPMath_s_ldexp_r01.o: private EXCCFLAGS := -Cpp_exceptions on
-$(BUILD_DIR)/src/op90_to59_msl_strtoul_residual_r01.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_to59_msl_strtoul_residual_r01.o: private EXCCFLAGS := -Cpp_exceptions on
-$(BUILD_DIR)/src/op90_to59_msl_strtoul_residual_r02.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_to59_msl_strtoul_residual_r02.o: private EXCCFLAGS := -Cpp_exceptions on
-$(BUILD_DIR)/src/op90_to59_msl_strtoul_residual_r03.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_to59_msl_strtoul_residual_r03.o: private EXCCFLAGS := -Cpp_exceptions on
+$(BUILD_DIR)/lib/MSL_C/src/msl_printf_float2str.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_ansi_files.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_ansi_files.o: private EXCCFLAGS := -Cpp_exceptions on
+$(BUILD_DIR)/lib/MSL_C/src/msl_qsort.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_qsort.o: private EXCCFLAGS := -Cpp_exceptions on
+$(BUILD_DIR)/lib/MSL_C/src/msl_s_frexp.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_s_frexp.o: private EXCCFLAGS := -Cpp_exceptions on
+$(BUILD_DIR)/lib/MSL_C/src/msl_s_ldexp.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_s_ldexp.o: private EXCCFLAGS := -Cpp_exceptions on
+$(BUILD_DIR)/lib/MSL_C/src/msl_strtoul_core.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_strtoul_core.o: private EXCCFLAGS := -Cpp_exceptions on
+$(BUILD_DIR)/lib/MSL_C/src/msl_strtoull_core.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_strtoull_core.o: private EXCCFLAGS := -Cpp_exceptions on
+$(BUILD_DIR)/lib/MSL_C/src/msl_strtoul.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_strtoul.o: private EXCCFLAGS := -Cpp_exceptions on
 $(BUILD_DIR)/src/op90_to65_nitro_unified_residual_26_r01.o: private MWCCVER := 2.0/sp2
 $(BUILD_DIR)/src/op90_to65_wifi_residual_11_residual_5_r01.o: private MWCCVER := 2.0/sp1p5
 $(BUILD_DIR)/src/g2d_cell_culling.o: private MWCCVER := 2.0/sp1
-$(BUILD_DIR)/src/op90_to70_MSL_Common_strtold_extra119_residual_1_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_strtold_core.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSystem/src/g3d_anm_bta_sincos.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_to91_w41418_StringRead_prefix_r01.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_scanf_sformatter.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to90_extra2155_residual_1_r01.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/src/op90_overlay_80_0222BDF4_residual_12_r01.o: private MWCCVER := 2.0/sp2
 $(BUILD_DIR)/lib/NitroSystem/src/g3d_anm_bca_trans.o: private MWCCVER := 2.0/sp1p5
@@ -364,8 +362,8 @@ $(BUILD_DIR)/src/op90_to65_wifi_residual_11_residual_2_r01.o: private MWCCVER :=
 $(BUILD_DIR)/lib/NitroSystem/src/gfd_linked_list_tex_vram_man_reset.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/op90_to70_overlay_93_thumb_1_to41_residual_6_extra219_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/wifi_plaza_survey_answer.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/op90_MSL_DPMath_e_pow_r01.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/src/op90_MSL_DPMath_e_pow_r01.o: private EXCCFLAGS := -Cpp_exceptions on
+$(BUILD_DIR)/lib/MSL_C/src/msl_e_pow.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_e_pow.o: private EXCCFLAGS := -Cpp_exceptions on
 $(BUILD_DIR)/src/op90_overlay_40_residual_5_gap_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/op90_overlay_96_residual_80_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/op90_to42_ov40_r33_a08_gap2_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))

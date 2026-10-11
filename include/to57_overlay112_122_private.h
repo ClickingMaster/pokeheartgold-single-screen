@@ -22,7 +22,7 @@ typedef struct Ov112State {
     u8 pad7[0x14];
     u8 box[0x88];
 } Ov112State;
-void ov112_021E7CA4(void *, int, int);
+void PokewalkerApp_LoadTilemap(void *, int, int);
 void ov112_021E9FA4(void *, int, void *, int, int);
 void ov112_021E9F40(void *, int);
 void ov112_021EA51C(void *, int);

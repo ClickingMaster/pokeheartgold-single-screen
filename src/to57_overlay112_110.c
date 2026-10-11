@@ -13,15 +13,15 @@ int ov112_021ED66C(void *p) {
     };
     int state;
 
-    ov112_021E7670();
-    state = ov112_021E768C();
+    PokewalkerIr_GetChunkProgress();
+    state = PokewalkerIr_GetTotalProgress();
     if (state != 0) {
         ov112_021EA7D0(p);
     }
     ov112_021EA60C(p);
     ov112_021ED314(state);
 
-    state = ov112_021E76A8();
+    state = PokewalkerIr_GetAndClearError();
     switch (state) {
     case 2:
         if (U16_AT(p, 0x16) == 1) {
@@ -55,7 +55,7 @@ int ov112_021ED66C(void *p) {
     if (U16_AT(p, 0x14) != 0) {
         ManagedSprite_SetDrawFlag(PTR_AT(p, 0x1E538), FALSE);
         U32_AT(p, 0xC) = 0x3C;
-        ov112_021E7464();
+        PokewalkerIr_Stop();
         return 0x20;
     }
     if (!ov112_021E7668()) {
@@ -63,7 +63,7 @@ int ov112_021ED66C(void *p) {
         if (ov112_021E9888(5) == 0 || (U32_AT(gSystem, 0x48) & 1) || (U32_AT(gSystem, 0x48) & 2)) {
             U16_AT(p, 0x14) = 0x21;
             U32_AT(p, 0xC) = 0x42;
-            ov112_021E7464();
+            PokewalkerIr_Stop();
             ov112_021EC440(p, 3, 3, 0x21);
             PlaySE(0x5DD);
             return 0x41;

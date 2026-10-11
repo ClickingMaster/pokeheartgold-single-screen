@@ -22,9 +22,9 @@ extern void ov112_021EA584(Ov112State *);
 extern void ov112_021EA64C(Ov112State *);
 extern void ov112_021EA688(Ov112State *, int);
 extern void ov112_021EA864(Ov112State *);
-extern void ov112_021E7CC8(Ov112State *);
+extern void PokewalkerApp_StartLink(Ov112State *);
 extern void ov112_021E7484(int);
-extern void ov112_021E7CA4(Ov112State *, int, int);
+extern void PokewalkerApp_LoadTilemap(Ov112State *, int, int);
 extern void ov112_021E966C(Ov112State *, int);
 extern void ov112_021E96D0(Ov112State *, int);
 extern void ov112_021E9A78(void *, int);
@@ -43,4 +43,4 @@ extern int (*ov112_021FF7CC[])(Ov112State *);
 
 int ov112_021EC000(Ov112State *p) { ov112_021E7484(1); MIi_CpuClearFast(0, (u32 *)(p->raw + 0xaabc), 0x6c8); MIi_CpuClearFast(0, (u32 *)(p->raw + 0x9d70), 0xd4c); return 16; }
 
-int ov112_021EC038(Ov112State *p) { ov112_021E7CC8(p); return 17; }
+int ov112_021EC038(Ov112State *p) { PokewalkerApp_StartLink(p); return 17; }

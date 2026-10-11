@@ -25,7 +25,7 @@
 #include "sound_playback.h"
 #include "unk_02058034.h"
 #include "unk_02091054.h"
-#include "unk_02092B04.h"
+#include "mart_bag_task.h"
 
 static void ov03_02256BA8(FieldSystem *fieldSystem, u8 index);
 static void MartTask_InitMartMessageData(MartData *data);
@@ -1522,7 +1522,7 @@ static void ov03_02258764(TaskManager *taskManager) {
         data->bagView = Bag_CreateView(Save_Bag_Get(fieldSystem->saveData), ov03_022597F0, HEAP_ID_FIELD2);
         sub_0207789C(data->bagView, fieldSystem->saveData, 2, fieldSystem->bagCursor, &fieldSystem->menuInputState);
         Bag_LaunchApp(fieldSystem, data->bagView);
-        TaskManager_Jump(taskManager, sub_02092B04, data);
+        TaskManager_Jump(taskManager, Task_MartBag, data);
         data->state = TASK_MART_24;
     }
 }

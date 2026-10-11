@@ -41,7 +41,7 @@ extern void ov112_021EC460(Ov112State *, int, int, int);
 extern void ov112_021EA688(Ov112State *, int);
 extern int ov112_021EA08C(Ov112State *, int, int);
 extern void BgClearTilemapBufferAndCommit(void *, int);
-extern void ov112_021E7CA4(Ov112State *, int, int);
+extern void PokewalkerApp_LoadTilemap(Ov112State *, int, int);
 extern void ov112_021E9F40(Ov112State *, int);
 extern void ov112_021ED2F4(Ov112State *);
 

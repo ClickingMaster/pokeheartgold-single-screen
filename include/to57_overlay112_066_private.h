@@ -11,7 +11,7 @@ typedef struct Ov112State {
 
 extern const int ov112_021FF09C[];
 
-void ov112_021E7CA4(Ov112State *, int, int);
+void PokewalkerApp_LoadTilemap(Ov112State *, int, int);
 void ov112_021E9FA4(Ov112State *, int, void *, int, int);
 void ov112_021E9F40(Ov112State *, int);
 void ov112_021EA51C(Ov112State *, int);

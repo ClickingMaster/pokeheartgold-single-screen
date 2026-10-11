@@ -14,8 +14,8 @@
 #define U32(p, o) (*(u32 *)((u8 *)(p) + (o)))
 #define PTR(p, o) (*(void **)((u8 *)(p) + (o)))
 
-extern int ov112_021E76A8(void);
-extern void ov112_021E7464(void);
+extern int PokewalkerIr_GetAndClearError(void);
+extern void PokewalkerIr_Stop(void);
 extern BOOL ov112_021E7668(void);
 extern void ov112_021E98E8(void *, int);
 extern int ov112_021E9888(int);
@@ -27,7 +27,7 @@ void ov112_021EC134(void *);
 
 int ov112_021EC044(void *work) {
     int result = 0x11;
-    switch (ov112_021E76A8()) {
+    switch (PokewalkerIr_GetAndClearError()) {
     case 2:
         result = 0x12;
         break;
@@ -58,16 +58,16 @@ int ov112_021EC044(void *work) {
         sub_02032624(PTR(work, 0x1E440));
         U32(work, 0x1D758) = 0;
         U32(work, 0x1D75C) = 0;
-        ov112_021E7464();
+        PokewalkerIr_Stop();
         return 0x14;
     }
     if (result != 0x11) {
-        ov112_021E7464();
+        PokewalkerIr_Stop();
     }
     if (!ov112_021E7668()) {
         ov112_021E98E8(work, 1);
         if (ov112_021E9888(5) == 0 || (gSystem.newKeys & 1) || (gSystem.newKeys & 2)) {
-            ov112_021E7464();
+            PokewalkerIr_Stop();
             ov112_021EC440(work, 1, 3, 0x12);
             PlaySE(0x5DC);
             return 0x21;

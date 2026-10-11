@@ -29,7 +29,7 @@ extern void ov112_021EA688(Ov112State *, int);
 extern void ov112_021EA6A0(Ov112State *, int, int);
 extern void *ov112_021EA08C(Ov112State *, int, int);
 extern void ov112_021EC440(Ov112State *, int, int, int);
-extern void ov112_021E7CA4(Ov112State *, int, int);
+extern void PokewalkerApp_LoadTilemap(Ov112State *, int, int);
 extern void ov112_021E9F40(Ov112State *, int);
 extern void ov112_021E9C10(Ov112State *, int);
 extern void ov112_021E9A78(void *, int);

@@ -6,8 +6,8 @@ int ov112_021EAF5C(W12Work *work) {
     ov112_021E9C10(work, 1);
     ov112_021E9A78(work, 3);
     FillBgTilemapRect(PTR(work, 0x18), 1, 0, 0, 0, 0x20, 0x18, 0x10);
-    ov112_021E7CA4(work, 5, 0x11);
-    ov112_021E7CA4(work, 2, 0x17);
+    PokewalkerApp_LoadTilemap(work, 5, 0x11);
+    PokewalkerApp_LoadTilemap(work, 2, 0x17);
     for (i = 0; i < 4; i++) {
         String *string = NewString_ReadMsgData(PTR(work, 0x1E44C), i + 0x98);
         ov112_021E9FA4(work, i, string, 4, 0xF0100);

@@ -31,14 +31,14 @@ extern const GraphicsModes ov112_021FF0DC;
 extern const ObjCharTransferTemplate ov112_021FF0EC;
 
 extern void ov112_021EA688(void *, int);
-extern void ov112_021E77E4(void *);
+extern void PokewalkerApp_Teardown(void *);
 extern void *ov112_021F039C(int);
 extern void ov112_021F03BC(void *, void *);
 extern void ov112_021F050C(void *);
 extern void ov112_021F051C(void *);
-extern void ov112_021E7768(void *);
+extern void PokewalkerApp_Setup(void *);
 extern void ov112_021EF31C(void *, void *);
-extern void ov112_021E77E4(void *);
+extern void PokewalkerApp_Teardown(void *);
 extern void ov112_021EF300(void *, void *, u32);
 extern void ov112_021EF310(void *);
 extern void ov112_021EF3F8(void);
@@ -113,7 +113,7 @@ int ov112_021EF100(void *p) {
     ObjCharTransfer_Destroy();
     ObjPlttTransfer_Destroy();
     Heap_Free(*(void **)((u8 *)p + 0x18));
-    ov112_021E7768(p);
+    PokewalkerApp_Setup(p);
     *(u32 *)((u8 *)p + 4) = *(u32 *)((u8 *)p + 0x1D778) == 1 ? 0 : 3;
     return 1;
 }

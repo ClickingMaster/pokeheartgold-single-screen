@@ -11,7 +11,7 @@
 
 
 int ov112_021EF62C(void *p) {
-    ov112_021E7768(p);
+    PokewalkerApp_Setup(p);
     *(u32 *)((u8 *)p + 8) = 0;
     *(u32 *)((u8 *)p + 4) = 10;
     return 1;

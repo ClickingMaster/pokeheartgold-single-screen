@@ -15,7 +15,7 @@ typedef struct Ov112Work {
     Ov112Setup setup;
 } Ov112Work;
 typedef void (*Ov112Cb)(void *);
-extern void ov112_021E77E4(void *);
+extern void PokewalkerApp_Teardown(void *);
 extern void *BgConfig_Alloc(int);
 extern void ov112_021EF15C(void);
 extern void *sub_020932E0(int, int, int);
@@ -43,7 +43,7 @@ int ov112_021EEF68(void *p) {
 
     switch (*(u32 *)work) {
     case 0:
-        ov112_021E77E4(p);
+        PokewalkerApp_Teardown(p);
         *(u32 *)work = 1;
         break;
     case 1:

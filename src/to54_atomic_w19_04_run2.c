@@ -2,8 +2,8 @@
 
 int ov112_021EC99C(Ov112State *p) {
     FillBgTilemapRect(P(p, 0x18), 1, 0, 0, 0x10, 0x20, 8, 0x10);
-    ov112_021E7CA4(p, 5, 0x11);
-    ov112_021E7CA4(p, 2, 0x17);
+    PokewalkerApp_LoadTilemap(p, 5, 0x11);
+    PokewalkerApp_LoadTilemap(p, 2, 0x17);
     H(p, 0x1ec76) = ov112_021EC950(p);
     ov112_021EC7D0(p);
     ov112_021E9F40(p, 6);

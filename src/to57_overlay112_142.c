@@ -5,7 +5,7 @@
 #include "sound.h"
 
 extern const OverlayManagerTemplate ov112_021FF124;
-extern void ov112_021E77E4(void *);
+extern void PokewalkerApp_Teardown(void *);
 extern int ov112_021F31D8(void *);
 int ov112_021EF568(void *);
 int ov112_021EF5AC(void *);
@@ -169,7 +169,7 @@ int ov112_021EF5AC(void *p) {
     switch (*(u32 *)((u8 *)p + 8)) {
     case 0:
         if (IsPaletteFadeFinished() == TRUE) {
-            ov112_021E77E4(p);
+            PokewalkerApp_Teardown(p);
             if (ov112_021F31D8((u8 *)p + 0x9DFC)) {
                 return 3;
             }

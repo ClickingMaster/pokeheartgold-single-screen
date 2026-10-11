@@ -9,8 +9,8 @@
 
 	.text
 
-	thumb_func_start sub_02092B04
-sub_02092B04: ; 0x02092B04
+	thumb_func_start Task_MartBag
+Task_MartBag: ; 0x02092B04
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
 	bl TaskManager_GetFieldSystem
@@ -28,22 +28,22 @@ sub_02092B04: ; 0x02092B04
 _02092B24:
 	add r0, r6, #0
 	add r1, r4, #0
-	bl sub_02092B40
+	bl MartBag_WaitBagViewExit
 	ldr r1, _02092B3C ; =0x00000272
 	strb r0, [r4, r1]
 	b _02092B38
 _02092B32:
 	add r0, r5, #0
-	bl sub_02092B7C
+	bl MartBag_ReturnToMart
 _02092B38:
 	mov r0, #0
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
 _02092B3C: .word 0x00000272
-	thumb_func_end sub_02092B04
+	thumb_func_end Task_MartBag
 
-	thumb_func_start sub_02092B40
-sub_02092B40: ; 0x02092B40
+	thumb_func_start MartBag_WaitBagViewExit
+MartBag_WaitBagViewExit: ; 0x02092B40
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	add r4, r1, #0
@@ -72,10 +72,10 @@ _02092B6A:
 	mov r0, #0x19
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end sub_02092B40
+	thumb_func_end MartBag_WaitBagViewExit
 
-	thumb_func_start sub_02092B7C
-sub_02092B7C: ; 0x02092B7C
+	thumb_func_start MartBag_ReturnToMart
+MartBag_ReturnToMart: ; 0x02092B7C
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
 	bl TaskManager_GetFieldSystem
@@ -101,4 +101,4 @@ _02092BAE:
 	.balign 4, 0
 _02092BB0: .word Task_Mart
 _02092BB4: .word 0x00000272
-	thumb_func_end sub_02092B7C
+	thumb_func_end MartBag_ReturnToMart
