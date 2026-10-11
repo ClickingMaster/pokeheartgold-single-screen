@@ -9,7 +9,7 @@
 
 BOOL TouchscreenHitbox_TouchNewIsIn(const void *hitbox);
 void ov40_02230944(void *work);
-void ov40_0222BF80(void *work, int state);
+void VsRecorder_SetSubState(void *work, int state);
 void Thunk_G3X_Reset(void);
 void AccessoryPortrait_Draw(void *p);
 void RequestSwap3DBuffers(int a, int b);

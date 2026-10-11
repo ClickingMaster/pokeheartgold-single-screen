@@ -67,8 +67,8 @@ int ov40_02233F28(void *p) {
             ov40_0222DD08(p);
             ov40_0222DAA8(inner);
             PaletteData_BlendPalettes(PTR(p, 0x28), 2, 0xC, 0x10, (u16)WORD(p, 0x58));
-            ov40_0222BF64(p, 1, 1, WORD(p, 0x10));
-            ov40_0222BF80(p, 5);
+            VsRecorder_SetScreenIfDone(p, 1, 1, WORD(p, 0x10));
+            VsRecorder_SetSubState(p, 5);
         } else {
             PaletteData_BlendPalettes(PTR(p, 0x28), 3, 0xC, (u8)*inner, (u16)WORD(p, 0x58));
             PaletteData_BlendPalettes(PTR(p, 0x28), 1, 2, (u8)*inner, (u16)WORD(p, 0x58));
@@ -94,7 +94,7 @@ int ov40_0223414C(void *p) {
     BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
     BgClearTilemapBufferAndCommit(PTR(p, 0x24), 7);
     ov40_0222D9E8(inner, (u8 *)inner + 4, 0);
-    ov40_0222BF80(p, 1);
+    VsRecorder_SetSubState(p, 1);
     return 0;
 }
 
@@ -139,7 +139,7 @@ int ov40_022341E0(void *p) {
             ov40_02230964(p, 0);
             GfGfxLoader_LoadCharDataFromOpenNarc(PTR(p, 0x14), 0x3E, PTR(p, 0x24), 3, 0, 0, 0, 0x6D);
             GfGfxLoader_LoadCharDataFromOpenNarc(PTR(p, 0x14), 0x3E, PTR(p, 0x24), 7, 0, 0, 0, 0x6D);
-            ov40_0222BF80(p, 2);
+            VsRecorder_SetSubState(p, 2);
         }
         break;
     }
@@ -186,7 +186,7 @@ int ov40_02234330(void *p) {
         PaletteData_BlendPalettes(PTR(p, 0x28), 3, 0xC, (u8)WORD(inner, 8), (u16)WORD(p, 0x58));
         break;
     default:
-        ov40_0222BF80(p, 3);
+        VsRecorder_SetSubState(p, 3);
         break;
     }
     if (PTR(inner, 0x228) != NULL) {

@@ -28,7 +28,7 @@ sub_02087E70: ; 0x02087E70
 	add r0, r4, #0
 	bl sub_02087A78
 	add r4, r0, #0
-	bl ov40_0222C480
+	bl VsRecorder_MenuPop
 	mov r0, #1
 	mov r1, #0x2a
 	bl GF_SndHandleSetPlayerVolume
@@ -133,15 +133,15 @@ _02087F48: ; jump table
 	.short _02087F74 - _02087F48 - 2 ; case 2
 	.short _02087F8A - _02087F48 - 2 ; case 3
 _02087F50:
-	bl ov40_0222CABC
+	bl VsRecorder_DestroyDecorTasks
 	ldr r0, [r4]
 	add r0, r0, #1
 	str r0, [r4]
 	b _02087FC2
 _02087F5C:
-	bl ov40_0222CA8C
+	bl VsRecorder_DeleteDecorSprites
 	add r0, r5, #0
-	bl ov40_0222CF94
+	bl VsRecorder_DeleteMenuRowSprites
 	add r0, r5, #0
 	bl ov40_0222D55C
 	ldr r0, [r4]

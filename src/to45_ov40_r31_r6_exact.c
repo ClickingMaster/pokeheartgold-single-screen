@@ -56,7 +56,7 @@ u32 ov40_02238838(void *p) {
         ov40_02230964(p, 0);
         GfGfx_EngineATogglePlanes(4, 1);
         GfGfx_EngineBTogglePlanes(4, 1);
-        ov40_0222BF80(p, 5);
+        VsRecorder_SetSubState(p, 5);
         break;
     }
     return 0;
@@ -102,7 +102,7 @@ u32 ov40_02238A50(void *p) {
         ov40_02237B7C(p, w->flag + 0x79);
         GfGfx_EngineBTogglePlanes(4, 1);
         GfGfx_EngineATogglePlanes(4, 1);
-        ov40_0222BF80(p, 5);
+        VsRecorder_SetSubState(p, 5);
         break;
     }
     return 0;
@@ -156,7 +156,7 @@ u32 ov40_02238BB0(void *p) {
         OrbitCursor_SetVisible(PTR_AT(p, 0x6F0), 1);
         GfGfx_EngineATogglePlanes(4, 1);
         ov40_02230964(p, 0);
-        ov40_0222BF80(p, 5);
+        VsRecorder_SetSubState(p, 5);
         break;
     }
     return 0;

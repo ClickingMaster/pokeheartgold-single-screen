@@ -72,7 +72,7 @@ int ov40_022376FC(void *work) {
     case 2:
         if (ov40_0222DA84((u8 *)inner + 0x1AC, 0)) {
             WORD_AT(inner, 0x344) = WORD_AT(inner, 0x330);
-            ov40_0222BF80(work, 3);
+            VsRecorder_SetSubState(work, 3);
         }
         PaletteData_BlendPalettes(PTR_AT(work, 0x28), 3, 0xC, (u8)WORD_AT(inner, 0x1AC), (u16)WORD_AT(work, 0x58));
         break;

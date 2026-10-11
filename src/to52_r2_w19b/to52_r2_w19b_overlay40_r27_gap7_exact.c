@@ -50,7 +50,7 @@ int ov40_022325B0(void *p) {
     default:
         WORD(w, 0xC) ^= 1;
         ov40_02232FEC(p, WORD(w, 0xC) + 0x79);
-        ov40_0222BF80(p, 3);
+        VsRecorder_SetSubState(p, 3);
         break;
     }
     return 0;

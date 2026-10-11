@@ -51,7 +51,7 @@ BOOL GlobalTerminalNet_GetError(void *p, void **result);
 void ov40_0222DFB0(void *p);
 void ov40_02230CDC(void *p, int kind, u32 a, u32 b);
 void MI_CpuCopy8(const void *src, void *dest, u32 size);
-void ov40_0222BF80(void *p, int state);
+void VsRecorder_SetSubState(void *p, int state);
 void ov40_0222FC40(void *p, int value);
 
 void ov40_0223A3BC(void *p);

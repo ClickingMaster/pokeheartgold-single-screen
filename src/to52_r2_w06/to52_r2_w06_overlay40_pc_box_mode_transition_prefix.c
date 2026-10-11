@@ -57,9 +57,9 @@ int ov40_02234A38(void *p) {
         break;
     default:
         if (S32(w, 0x1e4) == 1) {
-            ov40_0222BF80(p, 4);
+            VsRecorder_SetSubState(p, 4);
         } else {
-            ov40_0222BF80(p, 5);
+            VsRecorder_SetSubState(p, 5);
         }
         break;
     }
@@ -132,9 +132,9 @@ int ov40_02234BBC(void *p) {
     default:
         ov40_02235FA0(p);
         if (S32(w, 0x2e0) != 0) {
-            ov40_0222BF80(p, 6);
+            VsRecorder_SetSubState(p, 6);
         } else {
-            ov40_0222BF80(p, 3);
+            VsRecorder_SetSubState(p, 3);
         }
         break;
     }

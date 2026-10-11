@@ -46,7 +46,7 @@ void GfGfx_EngineBTogglePlanes(int plane, BOOL enable);
 void PaletteData_BlendPalettes(void *palette, int buffer, int count, int coeff, u16 color);
 void OrbitCursor_SetVisible(void *p, int a);
 void GfGfxLoader_LoadScrnDataFromOpenNarc(void *narc, int fileId, void *bgConfig, int bgId, int a, int b, int c, int heapId);
-void ov40_0222BF80(void *p, int state);
+void VsRecorder_SetSubState(void *p, int state);
 void ov40_0222D874(void *p);
 void ov40_0222FB90(void *p, int a);
 BOOL ov40_0222FBB4(void *p);

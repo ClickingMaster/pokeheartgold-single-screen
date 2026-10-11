@@ -217,17 +217,17 @@ void ov40_02239954(u32 sel, int flag, void *scene) {
         ov40_02230944(scene);
         S32(w, 0xC) = S32(w, 0xC) + 1;
         S32(w, 0xC) = S32(w, 0xC) % S32(w, 0x10);
-        ov40_0222BF80(scene, 4);
+        VsRecorder_SetSubState(scene, 4);
         break;
     case 1:
         ov40_02230944(scene);
         S32(w, 0x14) = S32(w, 0x14) + 1;
         S32(w, 0x14) = S32(w, 0x14) % S32(w, 0x18);
-        ov40_0222BF80(scene, 4);
+        VsRecorder_SetSubState(scene, 4);
         break;
     default:
         ov40_02230944(scene);
-        ov40_0222BF80(scene, 7);
+        VsRecorder_SetSubState(scene, 7);
         break;
     }
 }
@@ -250,7 +250,7 @@ int ov40_022399B8(void *p) {
     BgClearTilemapBufferAndCommit(PTR(p, 0x24), 7);
     ov40_0222D9E8(w, (u8 *)w + 4, 0);
     PTR(w, 0xDC) = TouchHitboxController_Create(ov40_022453AC, 3, ov40_02239954, p, 0x6D);
-    ov40_0222BF80(p, 1);
+    VsRecorder_SetSubState(p, 1);
     return 0;
 }
 
@@ -284,7 +284,7 @@ int ov40_02239A58(void *p) {
         break;
     default:
         if (ov40_0222FBB4(p) != NULL) {
-            ov40_0222BF80(p, 2);
+            VsRecorder_SetSubState(p, 2);
         }
         break;
     }

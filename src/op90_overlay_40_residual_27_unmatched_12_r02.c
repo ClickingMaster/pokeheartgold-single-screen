@@ -28,7 +28,7 @@ void ManagedSprite_SetAffineScale(ManagedSprite *sprite, f32 x, f32 y);
 void ManagedSprite_SetPaletteOverride(ManagedSprite *sprite, int pal);
 void ManagedSprite_SetDrawFlag(ManagedSprite *sprite, int flag);
 void ManagedSprite_SetAffineOverwriteMode(ManagedSprite *sprite, int mode);
-void ov40_0222D288(ManagedSprite *sprite, s16 x, s16 y);
+void VsRecorder_SetSpritePos(ManagedSprite *sprite, s16 x, s16 y);
 
 typedef struct {
     u8 unk0[4];
@@ -169,7 +169,7 @@ void ov40_022335F4(Ov40Work *work) {
             ManagedSprite_SetDrawFlag(data->digitSprites[i], FALSE);
         }
         ManagedSprite_SetAnim(data->digitSprites[i], digits[i]);
-        ov40_0222D288(data->digitSprites[i], 88 + i * 16, 72);
+        VsRecorder_SetSpritePos(data->digitSprites[i], 88 + i * 16, 72);
         ManagedSprite_TickFrame(data->digitSprites[i]);
     }
     ManagedSprite_SetDrawFlag(data->digitSprites[3], TRUE);

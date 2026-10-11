@@ -20,7 +20,7 @@ void ov40_022318C8(SysTask *task, void *arg) {
         BYTE(w, 0x1D)
         ++;
     case 1:
-        ov40_0222D294(PTR(w, 0x20), &x, &y);
+        VsRecorder_GetSpritePos(PTR(w, 0x20), &x, &y);
         BYTE(w, 0x1C)
         --;
         if (BYTE(w, 0x1C) == 0) {
@@ -38,7 +38,7 @@ void ov40_022318C8(SysTask *task, void *arg) {
                 WORD(PTR(w, 0x30), 0) = 1;
             }
         }
-        ov40_0222D288(PTR(w, 0x20), x, y);
+        VsRecorder_SetSpritePos(PTR(w, 0x20), x, y);
         TextOBJ_SetPosition(PTR(w, 0x24), 0x24, 0x24 - 0x2C);
         WORD(PTR(w, 0x2C), 0) = 1;
         break;

@@ -61,8 +61,8 @@ int ov40_02234D94(void *p) {
                 ov40_0222DD08(p);
                 ov40_0222DAA8((u8 *)w + 8);
                 PaletteData_BlendPalettes(PTR(p, 0x28), 2, 12, 0x10, (u16)U32(p, 0x58));
-                ov40_0222BF64(p, 1, 1, PTR(p, 0x10));
-                ov40_0222BF80(p, 5);
+                VsRecorder_SetScreenIfDone(p, 1, 1, PTR(p, 0x10));
+                VsRecorder_SetSubState(p, 5);
                 Heap_Free(w);
                 UnloadOverlayByID(FS_OVERLAY_ID(OVY_41));
                 Main_SetVBlankIntrCB(VsRecorder_VBlankCB, p);
@@ -106,7 +106,7 @@ int ov40_02234F98(void *p) {
             S32(w, 0x2e4) = 0;
             S32(p, 0xc) = 0;
             OrbitCursor_SetVisible(PTR(p, 0x6f0), 0);
-            ov40_0222BF80(p, 3);
+            VsRecorder_SetSubState(p, 3);
         } else {
             StopSE(0x57d, 0);
             PlaySE(0x577);
@@ -127,7 +127,7 @@ int ov40_02234F98(void *p) {
         if (S32(w, 0x2e4) != 0) {
             S32(w, 0x234) = 0;
             S32(w, 0x230) = 0;
-            ov40_0222BF80(p, 7);
+            VsRecorder_SetSubState(p, 7);
         } else {
             ov40_0222DED0(p, 0x125);
             S32(p, 8)
@@ -141,7 +141,7 @@ int ov40_02234F98(void *p) {
         if (S32(p, 0xc) >= 60 || System_GetTouchNew() == 1) {
             S32(p, 0xc) = 0;
             ov40_0222DFB0(p);
-            ov40_0222BF80(p, 3);
+            VsRecorder_SetSubState(p, 3);
         }
         break;
     }

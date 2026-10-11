@@ -3323,42 +3323,42 @@
 	.public VsRecorder_InitSpriteSystem
 	.public VsRecorder_VBlankCB
 	.public VsRecorder_Main
-	.public ov40_0222BF64
-	.public ov40_0222BF80
-	.public ov40_0222BF8C
-	.public ov40_0222BF94
-	.public ov40_0222BFB0
-	.public ov40_0222C018
-	.public ov40_0222C03C
-	.public ov40_0222C15C
-	.public ov40_0222C23C
-	.public ov40_0222C360
-	.public ov40_0222C39C
-	.public ov40_0222C434
-	.public ov40_0222C474
-	.public ov40_0222C480
-	.public ov40_0222C4B8
-	.public ov40_0222C4DC
-	.public ov40_0222C4E8
-	.public ov40_0222C4F8
+	.public VsRecorder_SetScreenIfDone
+	.public VsRecorder_SetSubState
+	.public VsRecorder_SetStep
+	.public VsRecorder_RefreshMenu
+	.public VsRecorder_MenuEnterChild
+	.public VsRecorder_MenuRestore
+	.public VsRecorder_MenuRunAction
+	.public VsRecorder_MenuCanSelect
+	.public VsRecorder_OnMenuTouch
+	.public VsRecorder_InitMenuHitboxes
+	.public VsRecorder_UpdateMenuHitboxes
+	.public VsRecorder_ClearMenuHitboxes
+	.public VsRecorder_UpdateMenuTouch
+	.public VsRecorder_MenuPop
+	.public VsRecorder_ClearResumeState
+	.public VsRecorder_HasResumeScreen
+	.public VsRecorder_SetResumeScreen
+	.public VsRecorder_LoadFrameBg
 	.public ov40_0222C6C8
 	.public ov40_0222C710
-	.public ov40_0222C750
-	.public ov40_0222C884
-	.public ov40_0222CA8C
-	.public ov40_0222CABC
-	.public ov40_0222CAD8
-	.public ov40_0222CBC0
-	.public ov40_0222CBE0
-	.public ov40_0222CCAC
-	.public ov40_0222CE7C
-	.public ov40_0222CED8
-	.public ov40_0222CF10
-	.public ov40_0222CF94
-	.public ov40_0222CFBC
-	.public ov40_0222D048
-	.public ov40_0222D288
-	.public ov40_0222D294
+	.public VsRecorder_LoadDecorGfx
+	.public VsRecorder_CreateDecorSprites
+	.public VsRecorder_DeleteDecorSprites
+	.public VsRecorder_DestroyDecorTasks
+	.public VsRecorder_LoadMenuRowGfx
+	.public VsRecorder_UnloadMenuRowChars
+	.public VsRecorder_LayoutMenuRows
+	.public VsRecorder_CreateMenuRowSprites
+	.public VsRecorder_RefreshChoiceRows
+	.public VsRecorder_AttachMenuRowText
+	.public VsRecorder_RefreshPathRows
+	.public VsRecorder_DeleteMenuRowSprites
+	.public VsRecorder_SetMenuRowsDrawFlag
+	.public VsRecorder_DecorTask
+	.public VsRecorder_SetSpritePos
+	.public VsRecorder_GetSpritePos
 	.public ov40_0222D2A0
 	.public ov40_0222D3E8
 	.public ov40_0222D55C
@@ -4006,15 +4006,15 @@
 	.include "global.inc"
 
 	.text
-	.public ov40_0222BF64
-	.public ov40_0222BF80
-	.public ov40_0222BF8C
-	.public ov40_0222BF94
-	.public ov40_0222C474
-	.public ov40_0222C4DC
-	.public ov40_0222C4E8
-	.public ov40_0222D288
-	.public ov40_0222D294
+	.public VsRecorder_SetScreenIfDone
+	.public VsRecorder_SetSubState
+	.public VsRecorder_SetStep
+	.public VsRecorder_RefreshMenu
+	.public VsRecorder_UpdateMenuTouch
+	.public VsRecorder_HasResumeScreen
+	.public VsRecorder_SetResumeScreen
+	.public VsRecorder_SetSpritePos
+	.public VsRecorder_GetSpritePos
 	.public ov40_0222D874
 	.public ov40_0222DAA8
 	.public ov40_0222DAB0
@@ -4277,7 +4277,7 @@ _0223FF34:
 	bl ov40_0222DFB0
 	ldr r1, [r5, #0xc]
 	add r0, r4, #0
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 	add r0, r4, #0
 	mov r1, #1
 	bl ov40_0222FC40
@@ -4287,7 +4287,7 @@ _0223FF5A:
 	bl ov40_0222DFB0
 	add r0, r4, #0
 	mov r1, #0x1f
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 _0223FF68:
 	mov r0, #0
 	add sp, #8
@@ -4588,10 +4588,10 @@ _022401E4:
 	add r1, r1, #1
 	str r1, [r4, r0]
 	add r0, r4, #0
-	bl ov40_0222C4B8
+	bl VsRecorder_ClearResumeState
 	add r0, r4, #0
 	mov r1, #0x12
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 _022401FA:
 	mov r0, #0
 	add sp, #0x10
@@ -4650,7 +4650,7 @@ ov40_02240238: ; 0x02240238
 	bl ov40_0222D9E8
 	add r0, r5, #0
 	mov r1, #1
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 	mov r0, #0
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
@@ -4772,17 +4772,17 @@ _02240372:
 	mov r1, #0
 	bl OrbitCursor_SetVisible
 	add r0, r5, #0
-	bl ov40_0222C4DC
+	bl VsRecorder_HasResumeScreen
 	cmp r0, #1
 	bne _02240398
 	add r0, r5, #0
 	mov r1, #6
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 	b _02240414
 _02240398:
 	add r0, r5, #0
 	mov r1, #2
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 	b _02240414
 _022403A2:
 	mov r1, #0
@@ -4793,30 +4793,30 @@ _022403A2:
 	mov r1, #0
 	bl OrbitCursor_SetVisible
 	add r0, r5, #0
-	bl ov40_0222C4DC
+	bl VsRecorder_HasResumeScreen
 	cmp r0, #1
 	bne _022403C8
 	add r0, r5, #0
 	mov r1, #0x1e
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 	b _02240414
 _022403C8:
 	add r0, r5, #0
 	mov r1, #2
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 	b _02240414
 _022403D2:
-	bl ov40_0222C4DC
+	bl VsRecorder_HasResumeScreen
 	cmp r0, #1
 	bne _022403E4
 	add r0, r5, #0
 	mov r1, #0x13
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 	b _022403EC
 _022403E4:
 	add r0, r5, #0
 	mov r1, #2
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 _022403EC:
 	mov r0, #0x6f
 	lsl r0, r0, #4
@@ -4834,7 +4834,7 @@ _022403FA:
 	bl OrbitCursor_SetVisible
 	add r0, r5, #0
 	mov r1, #2
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 _02240414:
 	mov r0, #0
 	pop {r3, r4, r5, pc}
@@ -4966,7 +4966,7 @@ _022404F6:
 	b _02240516
 _02240510:
 	mov r1, #3
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 _02240516:
 	mov r0, #0
 	add sp, #0x18
@@ -4993,7 +4993,7 @@ ov40_02240520: ; 0x02240520
 	bne _02240540
 	add r0, r4, #0
 	mov r1, #4
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 _02240540:
 	mov r0, #0
 	pop {r4, pc}
@@ -5075,11 +5075,11 @@ _022405D0:
 	cmp r1, #0
 	beq _022405E0
 	mov r1, #6
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 	b _022405E6
 _022405E0:
 	mov r1, #5
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 _022405E6:
 	mov r0, #0
 	add sp, #0xc
@@ -5141,10 +5141,10 @@ _02240626:
 	ldr r3, [r5, #0x10]
 	add r0, r5, #0
 	add r2, r1, #0
-	bl ov40_0222BF64
+	bl VsRecorder_SetScreenIfDone
 	add r0, r5, #0
 	mov r1, #5
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 	ldr r0, [r5, #0x24]
 	mov r1, #2
 	bl BgClearTilemapBufferAndCommit
@@ -5360,12 +5360,12 @@ _0224081A:
 	beq _0224082C
 	add r0, r4, #0
 	mov r1, #7
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 	b _02240834
 _0224082C:
 	add r0, r4, #0
 	mov r1, #5
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 _02240834:
 	mov r0, #0
 	add sp, #4
@@ -5716,7 +5716,7 @@ _02240AF6:
 _02240B10:
 	add r0, r4, #0
 	mov r1, #8
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 _02240B18:
 	mov r0, #0
 	add sp, #0x10

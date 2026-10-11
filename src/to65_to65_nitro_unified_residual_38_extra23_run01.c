@@ -8,9 +8,9 @@
 #define W(p,o) (*(u32*)((u8*)(p)+(o)))
 #define H(p,o) (*(u16*)((u8*)(p)+(o)))
 #define P(p,o) (*(u8**)((u8*)(p)+(o)))
-extern u8 _021E4088[],_021E4220[];
+extern u8 _021E4088[],gWmWork[];
 extern u16 _02110FBC;
-extern u32 _02110FC0;
+extern u32 gWmNextTgid;
 extern int RTC_GetTime(RTCTime*);
 extern int WMi_SendCommand(int,int,...);
 extern int WMi_SendCommandDirect(void*,int);

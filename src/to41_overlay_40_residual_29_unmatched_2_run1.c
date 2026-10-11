@@ -33,7 +33,7 @@ int ov40_022366CC(void *p) {
         }
         break;
     default:
-        ov40_0222BF80(p, 2);
+        VsRecorder_SetSubState(p, 2);
         break;
     }
     return 0;

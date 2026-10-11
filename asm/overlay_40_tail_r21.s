@@ -3323,42 +3323,42 @@
 	.public VsRecorder_InitSpriteSystem
 	.public VsRecorder_VBlankCB
 	.public VsRecorder_Main
-	.public ov40_0222BF64
-	.public ov40_0222BF80
-	.public ov40_0222BF8C
-	.public ov40_0222BF94
-	.public ov40_0222BFB0
-	.public ov40_0222C018
-	.public ov40_0222C03C
-	.public ov40_0222C15C
-	.public ov40_0222C23C
-	.public ov40_0222C360
-	.public ov40_0222C39C
-	.public ov40_0222C434
-	.public ov40_0222C474
-	.public ov40_0222C480
-	.public ov40_0222C4B8
-	.public ov40_0222C4DC
-	.public ov40_0222C4E8
-	.public ov40_0222C4F8
+	.public VsRecorder_SetScreenIfDone
+	.public VsRecorder_SetSubState
+	.public VsRecorder_SetStep
+	.public VsRecorder_RefreshMenu
+	.public VsRecorder_MenuEnterChild
+	.public VsRecorder_MenuRestore
+	.public VsRecorder_MenuRunAction
+	.public VsRecorder_MenuCanSelect
+	.public VsRecorder_OnMenuTouch
+	.public VsRecorder_InitMenuHitboxes
+	.public VsRecorder_UpdateMenuHitboxes
+	.public VsRecorder_ClearMenuHitboxes
+	.public VsRecorder_UpdateMenuTouch
+	.public VsRecorder_MenuPop
+	.public VsRecorder_ClearResumeState
+	.public VsRecorder_HasResumeScreen
+	.public VsRecorder_SetResumeScreen
+	.public VsRecorder_LoadFrameBg
 	.public ov40_0222C6C8
 	.public ov40_0222C710
-	.public ov40_0222C750
-	.public ov40_0222C884
-	.public ov40_0222CA8C
-	.public ov40_0222CABC
-	.public ov40_0222CAD8
-	.public ov40_0222CBC0
-	.public ov40_0222CBE0
-	.public ov40_0222CCAC
-	.public ov40_0222CE7C
-	.public ov40_0222CED8
-	.public ov40_0222CF10
-	.public ov40_0222CF94
-	.public ov40_0222CFBC
-	.public ov40_0222D048
-	.public ov40_0222D288
-	.public ov40_0222D294
+	.public VsRecorder_LoadDecorGfx
+	.public VsRecorder_CreateDecorSprites
+	.public VsRecorder_DeleteDecorSprites
+	.public VsRecorder_DestroyDecorTasks
+	.public VsRecorder_LoadMenuRowGfx
+	.public VsRecorder_UnloadMenuRowChars
+	.public VsRecorder_LayoutMenuRows
+	.public VsRecorder_CreateMenuRowSprites
+	.public VsRecorder_RefreshChoiceRows
+	.public VsRecorder_AttachMenuRowText
+	.public VsRecorder_RefreshPathRows
+	.public VsRecorder_DeleteMenuRowSprites
+	.public VsRecorder_SetMenuRowsDrawFlag
+	.public VsRecorder_DecorTask
+	.public VsRecorder_SetSpritePos
+	.public VsRecorder_GetSpritePos
 	.public ov40_0222D2A0
 	.public ov40_0222D3E8
 	.public ov40_0222D55C
@@ -4076,7 +4076,7 @@ _0222BD70:
 	mov r1, #1
 	add r2, r6, #0
 	add r3, r5, #0
-	bl ov40_0222BF64
+	bl VsRecorder_SetScreenIfDone
 	cmp r6, #0
 	bne _0222BD8E
 	b _0222BF0E
@@ -4086,12 +4086,12 @@ _0222BD8E:
 	bne _0222BD9E
 	add r0, r4, #0
 	mov r1, #0
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 	b _0222BF0E
 _0222BD9E:
 	add r0, r4, #0
 	mov r1, #1
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 	b _0222BF0E
 _0222BDA8:
 	ldr r1, [r4, #4]
@@ -4103,7 +4103,7 @@ _0222BDA8:
 	add r0, r4, #0
 	mov r1, #0x10
 	add r3, r5, #0
-	bl ov40_0222BF64
+	bl VsRecorder_SetScreenIfDone
 	b _0222BF0E
 _0222BDC0:
 	ldr r1, [r4, #4]
@@ -4115,7 +4115,7 @@ _0222BDC0:
 	add r0, r4, #0
 	mov r1, #0x10
 	add r3, r5, #0
-	bl ov40_0222BF64
+	bl VsRecorder_SetScreenIfDone
 	b _0222BF0E
 _0222BDD8:
 	ldr r1, [r4, #4]
@@ -4127,7 +4127,7 @@ _0222BDD8:
 	add r0, r4, #0
 	mov r1, #0x10
 	add r3, r5, #0
-	bl ov40_0222BF64
+	bl VsRecorder_SetScreenIfDone
 	b _0222BF0E
 _0222BDF0:
 	ldr r1, [r4, #4]
@@ -4139,7 +4139,7 @@ _0222BDF0:
 	add r0, r4, #0
 	mov r1, #0x10
 	add r3, r5, #0
-	bl ov40_0222BF64
+	bl VsRecorder_SetScreenIfDone
 	b _0222BF0E
 _0222BE08:
 	ldr r1, [r4, #4]
@@ -4151,7 +4151,7 @@ _0222BE08:
 	add r0, r4, #0
 	mov r1, #0x10
 	add r3, r5, #0
-	bl ov40_0222BF64
+	bl VsRecorder_SetScreenIfDone
 	b _0222BF0E
 _0222BE20:
 	ldr r1, [r4, #4]
@@ -4163,7 +4163,7 @@ _0222BE20:
 	add r0, r4, #0
 	mov r1, #0x10
 	add r3, r5, #0
-	bl ov40_0222BF64
+	bl VsRecorder_SetScreenIfDone
 	b _0222BF0E
 _0222BE38:
 	ldr r1, [r4, #4]
@@ -4175,7 +4175,7 @@ _0222BE38:
 	add r0, r4, #0
 	mov r1, #0x10
 	add r3, r5, #0
-	bl ov40_0222BF64
+	bl VsRecorder_SetScreenIfDone
 	b _0222BF0E
 _0222BE50:
 	ldr r1, [r4, #4]
@@ -4187,7 +4187,7 @@ _0222BE50:
 	add r0, r4, #0
 	mov r1, #0x10
 	add r3, r5, #0
-	bl ov40_0222BF64
+	bl VsRecorder_SetScreenIfDone
 	b _0222BF0E
 _0222BE68:
 	ldr r1, [r4, #4]
@@ -4199,7 +4199,7 @@ _0222BE68:
 	add r0, r4, #0
 	mov r1, #0x10
 	add r3, r5, #0
-	bl ov40_0222BF64
+	bl VsRecorder_SetScreenIfDone
 	b _0222BF0E
 _0222BE80:
 	ldr r1, [r4, #4]
@@ -4211,7 +4211,7 @@ _0222BE80:
 	add r0, r4, #0
 	mov r1, #0x10
 	add r3, r5, #0
-	bl ov40_0222BF64
+	bl VsRecorder_SetScreenIfDone
 	b _0222BF0E
 _0222BE98:
 	ldr r1, [r4, #4]
@@ -4223,7 +4223,7 @@ _0222BE98:
 	add r0, r4, #0
 	mov r1, #0x10
 	add r3, r5, #0
-	bl ov40_0222BF64
+	bl VsRecorder_SetScreenIfDone
 	b _0222BF0E
 _0222BEB0:
 	ldr r1, [r4, #4]
@@ -4235,7 +4235,7 @@ _0222BEB0:
 	add r0, r4, #0
 	mov r1, #0x10
 	add r3, r5, #0
-	bl ov40_0222BF64
+	bl VsRecorder_SetScreenIfDone
 	b _0222BF0E
 _0222BEC8:
 	ldr r1, [r4, #4]
@@ -4247,13 +4247,13 @@ _0222BEC8:
 	add r0, r4, #0
 	mov r1, #0x10
 	add r3, r5, #0
-	bl ov40_0222BF64
+	bl VsRecorder_SetScreenIfDone
 	b _0222BF0E
 _0222BEE0:
 	mov r1, #0xff
 	mov r2, #1
 	add r3, r5, #0
-	bl ov40_0222BF64
+	bl VsRecorder_SetScreenIfDone
 	b _0222BF0E
 _0222BEEC:
 	ldr r1, [r4, #4]
@@ -4265,7 +4265,7 @@ _0222BEEC:
 	add r0, r4, #0
 	mov r1, #0x10
 	add r3, r5, #0
-	bl ov40_0222BF64
+	bl VsRecorder_SetScreenIfDone
 	b _0222BF0E
 _0222BF04:
 	bl ov40_02230D20

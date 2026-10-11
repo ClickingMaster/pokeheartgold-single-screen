@@ -19,7 +19,7 @@ int ov40_02231C78(void *p) {
         do {
             e = Heap_Alloc(0x6D, 0x34);
             memset(e, 0, 0x34);
-            ov40_0222D294(PTR(q, 0x534), (s16 *)e, (s16 *)((u8 *)e + 2));
+            VsRecorder_GetSpritePos(PTR(q, 0x534), (s16 *)e, (s16 *)((u8 *)e + 2));
             PTR(e, 0x20) = PTR(q, 0x534);
             PTR(e, 0x24) = PTR(q, 0x548);
             PTR(e, 0x2C) = (u8 *)w + 4;
@@ -53,7 +53,7 @@ int ov40_02231C78(void *p) {
                 do {
                     e = Heap_Alloc(0x6D, 0x34);
                     memset(e, 0, 0x34);
-                    ov40_0222D294(PTR(q, 0x5FC), (s16 *)e, (s16 *)((u8 *)e + 2));
+                    VsRecorder_GetSpritePos(PTR(q, 0x5FC), (s16 *)e, (s16 *)((u8 *)e + 2));
                     PTR(e, 0x20) = PTR(q, 0x5FC);
                     PTR(e, 0x24) = PTR(q, 0x610);
                     PTR(e, 0x2C) = (u8 *)w + 4;
@@ -102,9 +102,9 @@ int ov40_02231C78(void *p) {
         WORD(w, 4) = 0;
         break;
     default:
-        ov40_0222C018(p);
+        VsRecorder_MenuRestore(p);
         Heap_Free(PTR(p, 0x860));
-        ov40_0222BF80(p, 5);
+        VsRecorder_SetSubState(p, 5);
         break;
     }
     return 0;

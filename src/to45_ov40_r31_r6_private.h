@@ -47,7 +47,7 @@ void ov40_0222FA88(void *);
 void ov40_0222F5EC(void *, s16);
 void ov40_0222EFD8(void *, void *, void *);
 void ov40_02237B7C(void *, u32);
-void ov40_0222BF80(void *, u32);
+void VsRecorder_SetSubState(void *, u32);
 void BgClearTilemapBufferAndCommit(void *, u32);
 void GfGfxLoader_LoadCharDataFromOpenNarc(void *, u32, void *, u32, u32, u32, u32, u32);
 void GfGfxLoader_LoadScrnDataFromOpenNarc(void *, u32, void *, u32, u32, u32, u32, u32);

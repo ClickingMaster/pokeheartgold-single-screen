@@ -24,8 +24,8 @@ void BgClearTilemapBufferAndCommit(void *, int);
 int ov40_0222DA84(void *, int);
 void ov40_0222DD08(void *);
 void PaletteData_BlendPalettes(void *, int, int, int, u16);
-void ov40_0222BF64(void *, int, int, void *);
-void ov40_0222BF80(void *, int);
+void VsRecorder_SetScreenIfDone(void *, int, int, void *);
+void VsRecorder_SetSubState(void *, int);
 void FrontierCard_Delete(void *);
 void Heap_Free(void *);
 #endif

@@ -44,7 +44,7 @@ void ov40_022306A0(void *obj, int value);
 int ov40_02230410(void *obj);
 void GfGfx_EngineBTogglePlanes(int plane, BOOL enable);
 void ov40_0223CCBC(void *p, int msgId);
-void ov40_0222BF80(void *p, int state);
+void VsRecorder_SetSubState(void *p, int state);
 void BeginNormalPaletteFade(int a0, int a1, int a2, int a3, int a4, int a5, int heapId);
 BOOL IsPaletteFadeFinished(void);
 void TouchHitboxController_Destroy(void *controller);
@@ -52,7 +52,7 @@ void ov40_0223A83C(void *p);
 void ov40_0223CCA0(void *p);
 void ov40_0223D504(void *p);
 void ov40_0222D8C8(void *p);
-void ov40_0222C4E8(void *p, u32 value);
+void VsRecorder_SetResumeScreen(void *p, u32 value);
 void sub_02087A84(void *p, int a, int b);
 void Heap_Free(void *p);
 void ov40_02230738(void *p);
@@ -65,7 +65,7 @@ void ov40_0223CFA8(void *p);
 int ov40_0222DA84(int *p, int direction);
 void ov40_0223CD14(void *p);
 void PaletteData_BlendPalettes(void *palette, int buffer, int mask, int coeff, int color);
-void ov40_0222C4B8(void *p);
+void VsRecorder_ClearResumeState(void *p);
 void *BattleRecord_GetHeader(void);
 u64 BattleRecordHeader_GetField(void *p, int a, int b);
 BOOL ov40_02230D94(void *p, u64 value);
@@ -141,7 +141,7 @@ int ov40_0223C258(void *p) {
     default:
         WORD(w, 0x10) = 1 ^ WORD(w, 0x10);
         ov40_0223CCBC(p, WORD(w, 0x10) + 0x79);
-        ov40_0222BF80(p, 7);
+        VsRecorder_SetSubState(p, 7);
         break;
     }
     return 0;
@@ -178,7 +178,7 @@ int ov40_0223C3A4(void *p) {
         ov40_02230964(p, (void *)1);
         ov40_0222D8C8(p);
         ov40_02230964(p, NULL);
-        ov40_0222C4E8(p, WORD(PTR(p, 0x10), 0));
+        VsRecorder_SetResumeScreen(p, WORD(PTR(p, 0x10), 0));
         sub_02087A84(PTR(p, 0x868), 1, 0);
         WORD(p, 8)
         ++;
@@ -262,8 +262,8 @@ int ov40_0223C498(Ov40Work *p) {
     default:
         WORD(p, 0x6D8)
         ++;
-        ov40_0222C4B8(p);
-        ov40_0222BF80(p, 7);
+        VsRecorder_ClearResumeState(p);
+        VsRecorder_SetSubState(p, 7);
         break;
     }
     return 0;
@@ -410,7 +410,7 @@ int ov40_0223C80C(Ov40Work *p) {
             for (i = 0; i < p->count; i++) {
                 p->ptrs[i] = &p->entries[i];
             }
-            ov40_0222BF80(p, 7);
+            VsRecorder_SetSubState(p, 7);
             break;
         }
         }
@@ -456,7 +456,7 @@ int ov40_0223C80C(Ov40Work *p) {
             PaletteData_BlendPalettes(PTR(p, 0x28), 3, 0xC, (u8)WORD(w, 8), (u16)WORD(p, 0x58));
             break;
         default:
-            ov40_0222BF80(p, 0xC);
+            VsRecorder_SetSubState(p, 0xC);
             break;
         }
     }

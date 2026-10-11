@@ -61,7 +61,7 @@ void ov40_0222DED0(void *p, int value);
 void ov40_0223DBD4(void *p, int value);
 void PaletteData_BlendPalettes(void *data, int bufferID, u16 selectedBuffer, u8 cur, u16 target);
 
-void ov40_0222BF80(void *p, int value);
+void VsRecorder_SetSubState(void *p, int value);
 BOOL ov40_0222DA84(void *p, int value);
 BOOL ov40_0222DA00(void *a0, void *a1, int a2, int a3);
 void *ov40_0222DAB0(u32 heapId);
@@ -147,7 +147,7 @@ void ov40_0222FB90(void *p, int value);
 void *ov40_0222FBB4(void *p);
 void ov40_0222DD08(void *p);
 void ov40_0222DAA8(void *p);
-void ov40_0222BF64(void *p, u32 value, BOOL valid, u32 *out);
+void VsRecorder_SetScreenIfDone(void *p, u32 value, BOOL valid, u32 *out);
 void ov40_022408AC(void *p);
 void ov40_02230638(void *p, void *a1);
 int ov40_02230410(void *p);

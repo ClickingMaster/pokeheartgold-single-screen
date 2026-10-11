@@ -14,7 +14,7 @@
 #define STEP_FN(name, check, state)  \
     int name(void *p) {              \
         if (check(p)) {              \
-            ov40_0222BF80(p, state); \
+            VsRecorder_SetSubState(p, state); \
         }                            \
         return 0;                    \
     }

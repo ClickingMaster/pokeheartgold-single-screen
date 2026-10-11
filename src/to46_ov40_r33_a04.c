@@ -69,7 +69,7 @@ int ov40_0223AF3C(void *p) {
         for (i = 0; i < outer->count; i++) {
             outer->ptrs[i] = &outer->entries[i];
         }
-        ov40_0222BF80(p, 7);
+        VsRecorder_SetSubState(p, 7);
         break;
     }
     }
@@ -112,7 +112,7 @@ int ov40_0223B190(void *p) {
         PaletteData_BlendPalettes(PTR(p, 0x28), 3, 0xc, (u8)WORD(w, 8), (u16)WORD(p, 0x58));
         break;
     default:
-        ov40_0222BF80(p, 3);
+        VsRecorder_SetSubState(p, 3);
         break;
     }
     return 0;

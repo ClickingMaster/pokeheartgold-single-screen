@@ -104,7 +104,7 @@ void VsRecorder_InitResources(VsRecorderWork *work) {
     GF_TouchpadResetSampling();
     GF_TouchpadStartSampling(4);
     work->unk_0044 = 1;
-    ov40_0222C360(work);
+    VsRecorder_InitMenuHitboxes(work);
     TextFlags_SetCanTouchSpeedUpPrint(TRUE);
     Main_SetVBlankIntrCB(VsRecorder_VBlankCB, work);
     if (work->mode != 0) {
@@ -142,7 +142,7 @@ void VsRecorder_InitResources(VsRecorderWork *work) {
     work->recordMsgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0026_bin, HEAP_ID_109);
     ov40_0222FCCC(work);
     sub_02088030(work);
-    ov40_0222C4F8(work);
+    VsRecorder_LoadFrameBg(work);
     ov40_0222FBF8(work);
 }
 
@@ -298,76 +298,76 @@ BOOL VsRecorder_Main(VsRecorderWork *work, int *screen) {
     switch (*screen) {
     case VS_RECORDER_SCREEN_TITLE:
         done = ov40_022450F0[work->subState](work);
-        ov40_0222BF64(work, VS_RECORDER_SCREEN_MENU, done, screen);
+        VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_MENU, done, screen);
         if (done == FALSE) {
             break;
         }
         if (work->unk_0044 == 1) {
-            ov40_0222BF80(work, 0);
+            VsRecorder_SetSubState(work, 0);
         } else {
-            ov40_0222BF80(work, 1);
+            VsRecorder_SetSubState(work, 1);
         }
         break;
     case VS_RECORDER_SCREEN_MENU:
         done = ov40_02245108[work->subState](work);
-        ov40_0222BF64(work, 0x10, done, screen);
+        VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_SAVED_VIDEO:
         done = ov40_02245140[work->subState](work);
-        ov40_0222BF64(work, 0x10, done, screen);
+        VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_FRONTIER:
         done = ov40_02245168[work->subState](work);
-        ov40_0222BF64(work, 0x10, done, screen);
+        VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_DRESS_UP_SEND:
         done = ov40_02245220[work->subState](work);
-        ov40_0222BF64(work, 0x10, done, screen);
+        VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_DRESS_UP_VIEW:
         done = ov40_02245238[work->subState](work);
-        ov40_0222BF64(work, 0x10, done, screen);
+        VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_BOX_DATA_SEND:
         done = ov40_0224533C[work->subState](work);
-        ov40_0222BF64(work, 0x10, done, screen);
+        VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_BOX_DATA_VIEW:
         done = ov40_02245368[work->subState](work);
-        ov40_0222BF64(work, 0x10, done, screen);
+        VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_RANKINGS:
     case VS_RECORDER_SCREEN_RANKINGS_LAST:
         done = ov40_02245470[work->subState](work);
-        ov40_0222BF64(work, 0x10, done, screen);
+        VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_COLOSSEUM_TOP:
     case VS_RECORDER_SCREEN_FRONTIER_TOP:
         done = ov40_022455F4[work->subState](work);
-        ov40_0222BF64(work, 0x10, done, screen);
+        VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_NEWEST:
         done = ov40_022455F4[work->subState](work);
-        ov40_0222BF64(work, 0x10, done, screen);
+        VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_SEARCH:
         done = ov40_02245B98[work->subState](work);
-        ov40_0222BF64(work, 0x10, done, screen);
+        VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_SEARCH_NUMBER:
         done = ov40_02245B44[work->subState](work);
-        ov40_0222BF64(work, 0x10, done, screen);
+        VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_SEND_VIDEO:
         done = ov40_02245B30[work->subState](work);
-        ov40_0222BF64(work, 0x10, done, screen);
+        VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_EXIT:
-        ov40_0222BF64(work, VS_RECORDER_SCREEN_NONE, TRUE, screen);
+        VsRecorder_SetScreenIfDone(work, VS_RECORDER_SCREEN_NONE, TRUE, screen);
         break;
     case VS_RECORDER_SCREEN_DELETE:
         done = ov40_02245CA8[work->subState](work);
-        ov40_0222BF64(work, 0x10, done, screen);
+        VsRecorder_SetScreenIfDone(work, 0x10, done, screen);
         break;
     case VS_RECORDER_SCREEN_MESSAGE:
         ov40_02230D20(work);

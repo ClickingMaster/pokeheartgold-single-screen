@@ -1,4 +1,4 @@
 #include "overlay40_blend_helpers_private.h"
-#define BODY(p) do { ov40_0222CAD8(p);ov40_0222C480(p);sub_02088030(p);ov40_0222CCAC(p);ov40_0222CFBC(p,1);ov40_0222CE7C(p);ov40_0222CED8(p);ov40_0222CBE0(p);ov40_0222CF10(p); } while(0)
+#define BODY(p) do { VsRecorder_LoadMenuRowGfx(p);VsRecorder_MenuPop(p);sub_02088030(p);VsRecorder_CreateMenuRowSprites(p);VsRecorder_SetMenuRowsDrawFlag(p,1);VsRecorder_RefreshChoiceRows(p);VsRecorder_AttachMenuRowText(p);VsRecorder_LayoutMenuRows(p);VsRecorder_RefreshPathRows(p); } while(0)
 
 void ov40_0222D9E8(int *a,int *b,int mode) { ov40_0222D910(a,b,8,18,8,18,mode); }

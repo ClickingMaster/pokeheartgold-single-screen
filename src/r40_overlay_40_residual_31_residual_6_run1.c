@@ -37,8 +37,8 @@ int ov40_02238D5C(void *p) {
             ov40_0222DD08(p);
             ov40_0222DAA8((u8 *)ctx + 0x1AC);
             PaletteData_BlendPalettes(PTR(p, 0x28), 2, 0xC, 0x10, (u16)U32(p, 0x58));
-            ov40_0222BF64(p, 1, 1, PTR(p, 0x10));
-            ov40_0222BF80(p, 5);
+            VsRecorder_SetScreenIfDone(p, 1, 1, PTR(p, 0x10));
+            VsRecorder_SetSubState(p, 5);
             FrontierCard_Delete(PTR(ctx, 0x384));
             Heap_Free(ctx);
         } else {

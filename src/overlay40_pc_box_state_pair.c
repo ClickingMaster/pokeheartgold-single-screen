@@ -22,7 +22,7 @@ int ov40_02236D60(void *p) {
         BLEND2(p, w);
         break;
     case 2:
-        ov40_0222BF80(p, 0xA);
+        VsRecorder_SetSubState(p, 0xA);
         break;
     }
     return 0;
@@ -45,7 +45,7 @@ int ov40_02236E18(void *p) {
         BLEND2(p, w);
         break;
     case 2:
-        ov40_0222BF80(p, 0xD);
+        VsRecorder_SetSubState(p, 0xD);
         break;
     }
     return 0;

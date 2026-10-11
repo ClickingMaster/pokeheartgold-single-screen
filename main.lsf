@@ -1319,67 +1319,10 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object src/to90_extra2137_run04.o
     Object lib/asm/op90_to90_extra2137_residual_2_anchor.o
     Object src/op90_to90_extra2137_residual_2_r01.o
-    Object src/to65_to65_nitro_unified_residual_38_extra23_run02.o
-    Object lib/asm/to90_extra2140_anchor.o
-    Object lib/asm/to90_extra2536_anchor.o
-    Object src/to90_extra2536_run01.o
-    Object src/to90_extra2140_run01.o
-    Object src/to65_to65_nitro_unified_residual_38_extra23_run03.o
-    Object lib/asm/to90_extra2141_anchor.o
-    Object src/to90_extra2141_run01.o
-    Object lib/asm/op90_to90_extra2141_residual_1_anchor.o
-    Object src/op90_to90_extra2141_residual_1_r01.o
-    Object src/to90_extra2141_run02.o
-    Object src/to65_to65_nitro_unified_residual_38_extra23_run04.o
-    Object lib/asm/to90_extra2142_anchor.o
-    Object src/to90_extra2142_run01.o
-    Object src/to65_to65_nitro_unified_residual_38_extra23_run05.o
-    Object lib/asm/to90_extra2143_anchor.o
-    Object src/to90_extra2143_run01.o
-    Object src/to65_to65_nitro_unified_residual_38_extra23_run06.o
-    Object lib/asm/to90_extra2144_anchor.o
-    Object src/to90_extra2144_run01.o
-    Object src/to90_extra2144_run02.o
-    Object src/to65_to65_nitro_unified_residual_38_extra23_run07.o
-    Object lib/asm/to90_extra2145_anchor.o
-    Object src/to90_extra2145_run01.o
-    Object src/to90_extra2145_run02.o
-    Object lib/asm/op90_to90_extra2145_residual_1_anchor.o
-    Object src/op90_to90_extra2145_residual_1_r01.o
-    Object src/to65_to65_nitro_unified_residual_38_extra23_run08.o
-    Object lib/asm/to90_extra2146_anchor.o
-    Object src/to90_extra2146_run01.o
-    Object lib/asm/to90_extra2554_anchor.o
-    Object src/to90_extra2554_run01.o
-    Object src/to65_to65_nitro_unified_residual_38_extra23_run09.o
-    Object lib/asm/to90_extra2147_anchor.o
-    Object src/to90_extra2147_run01.o
-    Object src/to90_extra2147_run02.o
-    Object src/to90_extra2147_run03.o
-    Object src/to90_extra2147_run04.o
-    Object src/to90_extra2147_run05.o
-    Object src/to90_extra2147_run06.o
-    Object src/to65_to65_nitro_unified_residual_38_extra23_run10.o
-    Object lib/asm/op90_to65_to65_nitro_unified_residual_38_extra23_residual_10_anchor.o
-    Object src/op90_to65_to65_nitro_unified_residual_38_extra23_residual_10_r01.o
-    Object src/to65_to65_nitro_unified_residual_38_extra23_run11.o
-    Object lib/asm/op90_to65_to65_nitro_unified_residual_38_extra23_residual_11_anchor.o
-    Object src/op90_to65_to65_nitro_unified_residual_38_extra23_residual_11_r01.o
-    Object src/to65_to65_nitro_unified_residual_38_extra23_run12.o
-    Object lib/asm/to90_extra2138_anchor.o
-    Object lib/asm/op90_to90_extra2138_residual_1_anchor.o
-    Object src/op90_to90_extra2138_residual_1_r01.o
-    Object src/to90_extra2138_run01.o
-    Object src/to90_extra2138_run02.o
-    Object src/to90_extra2138_run03.o
-    Object src/to90_extra2138_run04.o
-    Object src/to90_extra2138_run05.o
-    Object src/to90_extra2138_run06.o
-    Object src/to90_extra2138_run07.o
-    Object src/to65_to65_nitro_unified_residual_38_extra23_run13.o
-    Object lib/asm/to90_extra2139_anchor.o
-    Object src/to90_extra2139_run01.o
-    Object src/to65_to65_nitro_unified_residual_38_extra23_run14.o
+    Object lib/NitroSDK/src/wm_core.o
+    Object lib/NitroSDK/src/wm_requests.o
+    Object lib/NitroSDK/src/wm_data_sharing.o
+    Object lib/NitroSDK/src/wm_settings.o
     Object lib/asm/to65_to65_nitro_unified_residual_40_extra24_anchor.o
     Object src/to65_to65_nitro_unified_residual_40_extra24_run01.o
     Object lib/asm/to65_to65_nitro_unified_residual_40_extra24_residual_1.o
@@ -1748,11 +1691,8 @@ Overlay OVY_0
     Object src/to65_overlay_00_arm_residual_7_run11.o
     Object src/to70_to65_overlay_00_arm_residual_7_residual_11_extra1135_run01.o
     Object src/op90_to70_to65_overlay_00_arm_residual_7_residual_11_extra1135_residual_1_r01.o
-    Object src/to60_ov00_run08.o
-    Object src/op90_to60_overlay_00_arm_residual_8_r01.o
-    Object src/to60_ov00_run09.o
-    Object src/to90_extra2313_run01.o
-    Object src/to60_ov00_run10.o
+    Object lib/NitroDWC/src/gp_utility.o
+    Object lib/NitroDWC/src/persist_data.o
     Object lib/NitroDWC/src/gt_buffer.o
     Object lib/NitroDWC/src/gt_socket.o
     Object src/to65_ov00_extra01_run01.o
@@ -3263,28 +3203,7 @@ Overlay OVY_40
 {
     After OVY_39
     Object src/application/vs_recorder/vs_recorder.o
-    Object src/overlay_40_sol_partial_1.o
-    Object src/overlay40_box_flow_r2_run1.o
-    Object src/to90_extra2372_run01.o
-    Object src/overlay40_box_flow_r2_run2.o
-    Object src/overlay_40_sol_partial_2.o
-    Object src/to70_overlay_40_residual_3_extra784_run01.o
-    Object src/overlay_40_sol_partial_3.o
-    Object src/to70_overlay_40_residual_4_part1_extra147_run01.o
-    Object src/overlay40_pc_display_r4_run1.o
-    Object src/to54_atomic_h06_01_to54_overlay40_r4_part2_c750.o
-Object src/op90_to54_atomic_h06_02_overlay_40_residual_4_part2_c884_r01.o
-    Object src/overlay40_pc_display_r4_run2.o
-    Object src/to70_overlay_40_residual_4_part3_extra430_run01.o
-    Object src/overlay40_pc_display_r4_run3.o
-    Object src/to53_overlay40_transition.o
-    Object src/op90_to91_w41511_choice_row_prefix_r01.o
-Object src/to91_w41511_choice_row_run01.o
-    Object src/overlay40_pc_display_r4_run4.o
-    Object src/to91_w41506_choice_run01.o
-    Object src/overlay40_pc_display_r4_run5.o
-    Object src/to80_extra1696_run01.o
-    Object src/overlay_40_sol_partial_4.o
+    Object src/application/vs_recorder/vs_recorder_ui.o
     Object asm/to91_w41503_battle_names_anchor_own1.o
     Object src/op90_overlay_40_residual_5_gap_1_r01.o
     Object src/r40_overlay_40_residual_5_gap_1_run1.o

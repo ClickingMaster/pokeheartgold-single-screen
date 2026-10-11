@@ -6,8 +6,8 @@
 int ov40_02230ED8(void *work) {
     switch (S32(work, 8)) {
     case 0:
-        if (ov40_0222C4DC(work) == TRUE) {
-            ov40_0222BF80(work, 1);
+        if (VsRecorder_HasResumeScreen(work) == TRUE) {
+            VsRecorder_SetSubState(work, 1);
             break;
         }
         BeginNormalPaletteFade(0, 1, 1, 0, 6, 1, 0x6D);
@@ -87,7 +87,7 @@ int ov40_02230ED8(void *work) {
         }
         break;
     default:
-        ov40_0222BF80(work, 1);
+        VsRecorder_SetSubState(work, 1);
         break;
     }
     return 0;
@@ -97,15 +97,15 @@ int ov40_02231100(void *work) {
     switch (S32(work, 8)) {
     case 0:
         ov40_02230964(work, 1);
-        ov40_0222C750(work);
-        ov40_0222C884(work);
-        ov40_0222CAD8(work);
-        ov40_0222CCAC(work);
+        VsRecorder_LoadDecorGfx(work);
+        VsRecorder_CreateDecorSprites(work);
+        VsRecorder_LoadMenuRowGfx(work);
+        VsRecorder_CreateMenuRowSprites(work);
         ov40_0222D2A0(work);
-        ov40_0222CE7C(work);
-        ov40_0222CF10(work);
+        VsRecorder_RefreshChoiceRows(work);
+        VsRecorder_RefreshPathRows(work);
         ov40_02230964(work, 0);
-        if (ov40_0222C4DC(work) == TRUE) {
+        if (VsRecorder_HasResumeScreen(work) == TRUE) {
             if (S32(work, 0) == 0) {
                 GfGfxLoader_LoadScrnDataFromOpenNarc(PTR(work, 0x14), 0x45, PTR(work, 0x24), 5, 0, 0, 0, 0x6D);
             } else {
@@ -115,7 +115,7 @@ int ov40_02231100(void *work) {
             OrbitCursor_SetTarget(PTR(work, 0x6F0), 0x80, 0xE0);
             OrbitCursor_SetVisible(PTR(work, 0x6F0), 0);
             OrbitCursor_SetActive(PTR(work, 0x6F0), 1);
-            ov40_0222BF64(work, PTR(work, 0x83C), 1, PTR(work, 0x10));
+            VsRecorder_SetScreenIfDone(work, PTR(work, 0x83C), 1, PTR(work, 0x10));
             break;
         }
         PlaySE(0x573);
@@ -124,7 +124,7 @@ int ov40_02231100(void *work) {
         ++;
         break;
     case 1:
-        if (ov40_0222C4DC(work) == TRUE) {
+        if (VsRecorder_HasResumeScreen(work) == TRUE) {
             if (IsPaletteFadeFinished() == TRUE) {
                 S32(work, 8)
                 ++;
@@ -155,7 +155,7 @@ int ov40_02231100(void *work) {
         break;
     default:
         if (S32(work, 0x724) >= 3) {
-            ov40_0222BF80(work, 2);
+            VsRecorder_SetSubState(work, 2);
         }
         break;
     }
@@ -193,7 +193,7 @@ int ov40_0223131C(void *work) {
         }
         break;
     default:
-        ov40_0222BF80(work, 3);
+        VsRecorder_SetSubState(work, 3);
         break;
     }
     return 0;

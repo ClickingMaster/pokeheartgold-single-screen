@@ -53,9 +53,9 @@ BOOL OrbitCursor_SetVisible(void *p, int flag);
 void AccessoryPortrait_Draw(void *p);
 void AccessoryPortrait_VBlank(void *p);
 
-void ov40_0222BF80(void *p, int value);
-void ov40_0222C474(void *p);
-void ov40_0222D294(void *p, s16 *x, s16 *y);
+void VsRecorder_SetSubState(void *p, int value);
+void VsRecorder_UpdateMenuTouch(void *p);
+void VsRecorder_GetSpritePos(void *p, s16 *x, s16 *y);
 void ov40_0222D6D0(void *p);
 void ov40_0222D7DC(void *p);
 void ov40_0222DE40(void *p);

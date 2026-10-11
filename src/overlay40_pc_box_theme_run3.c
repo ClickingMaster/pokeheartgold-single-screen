@@ -51,7 +51,7 @@ int ov40_0223A080(void *p) {
         PaletteData_BlendPalettes(PTR(p, 0x28), 2, 0xC, WORD(w, 8), WORD(p, 0x58));
         break;
     default:
-        ov40_0222BF80(p, 8);
+        VsRecorder_SetSubState(p, 8);
         break;
     }
     return 0;
@@ -87,8 +87,8 @@ int ov40_0223A158(void *p) {
                 ov40_0222DD08(p);
                 ov40_0222DAA8((u8 *)w + 8);
                 PaletteData_BlendPalettes(PTR(p, 0x28), 2, 0xC, 0x10, WORD(p, 0x58));
-                ov40_0222BF64(p, 1, TRUE, (u32 *)PTR(p, 0x10));
-                ov40_0222BF80(p, 5);
+                VsRecorder_SetScreenIfDone(p, 1, TRUE, (u32 *)PTR(p, 0x10));
+                VsRecorder_SetSubState(p, 5);
                 Heap_Free(w);
             } else {
                 PaletteData_BlendPalettes(PTR(p, 0x28), 1, 2, WORD(w, 8), WORD(p, 0x58));

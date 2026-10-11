@@ -43,7 +43,7 @@ void AccessoryPortrait_Destroy(void);
 void VsRecorder_ResetBg2(void *);
 void ov40_02235994(void);
 void ov40_0222DD08(void *);
-void ov40_0222BF64(void *, int, int, void *);
+void VsRecorder_SetScreenIfDone(void *, int, int, void *);
 void UnloadOverlayByID(int);
 void Main_SetVBlankIntrCB(void (*)(void *), void *);
 void VsRecorder_VBlankCB(void *);
@@ -60,7 +60,7 @@ void ov40_0222DFB0(void *);
 int GlobalTerminalNet_GetError(void *, void **);
 void StopSE(int, int);
 void ov40_02230CDC(void *, int, void *, void *);
-void ov40_0222BF80(void *, int);
+void VsRecorder_SetSubState(void *, int);
 BOOL System_GetTouchNew(void);
 
 #endif

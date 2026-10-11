@@ -15,8 +15,8 @@
 	.public TouchHitboxController_Destroy
 	.public ov39_0222774C
 	.public GlobalTerminalNet_GetError
-	.public ov40_0222BF64
-	.public ov40_0222BF80
+	.public VsRecorder_SetScreenIfDone
+	.public VsRecorder_SetSubState
 	.public ov40_0222D66C
 	.public ov40_0222D88C
 	.public ov40_0222DA00
@@ -143,7 +143,7 @@ _0223A8FE:
 	b _0223A91E
 _0223A918:
 	mov r1, #0xc
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 _0223A91E:
 	mov r0, #0
 	pop {r3, r4, r5, pc}
@@ -429,10 +429,10 @@ _0223AB4A:
 	ldr r3, [r4, #0x10]
 	add r0, r4, #0
 	add r2, r1, #0
-	bl ov40_0222BF64
+	bl VsRecorder_SetScreenIfDone
 	add r0, r4, #0
 	mov r1, #5
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 	ldr r0, [r4, #0x24]
 	mov r1, #2
 	bl BgClearTilemapBufferAndCommit
@@ -568,7 +568,7 @@ _0223AC9A:
 	b _0223ACC6
 _0223ACC0:
 	mov r1, #0xf
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 _0223ACC6:
 	mov r0, #0
 	add sp, #0x10
@@ -852,7 +852,7 @@ _0223AF02:
 _0223AF10:
 	add r0, r4, #0
 	mov r1, #7
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 _0223AF18:
 	mov r0, #0
 	add sp, #0x10

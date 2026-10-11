@@ -26,7 +26,7 @@ void OrbitCursor_SetRadius(void *p, int a, int b);
 
 void GlobalTerminalNet_PackBoxData(void *a, void *b, u32 c, void *d, int heapId);
 
-void ov40_0222BF80(void *p, int value);
+void VsRecorder_SetSubState(void *p, int value);
 void ov40_0222D73C(void *p, int a);
 void ov40_0222D7DC(void *p);
 void ov40_0222D9E8(int *a, int *b, int c);

@@ -46,7 +46,7 @@ BOOL System_GetTouchNew(void);
 void ov40_0222C710(void *, int);
 void ov40_02237030(void *, int);
 void ov40_02236F38(void *);
-void ov40_0222BF80(void *, int);
+void VsRecorder_SetSubState(void *, int);
 void ov40_02237C9C(void *);
 void ov40_02238290(void *);
 void ov40_0222F9E0(void *, void *, int);

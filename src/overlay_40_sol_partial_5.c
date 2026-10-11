@@ -14,13 +14,13 @@
 #define STEP_FN(name, check, state)  \
     int name(void *p) {              \
         if (check(p)) {              \
-            ov40_0222BF80(p, state); \
+            VsRecorder_SetSubState(p, state); \
         }                            \
         return 0;                    \
     }
 
 void ov40_0222D874(void *p) {
-    ov40_0222CFBC(p, 0);
-    ov40_0222CF94(p);
-    ov40_0222CBC0(p);
+    VsRecorder_SetMenuRowsDrawFlag(p, 0);
+    VsRecorder_DeleteMenuRowSprites(p);
+    VsRecorder_UnloadMenuRowChars(p);
 }

@@ -119,7 +119,7 @@ int ov40_02237D94(void *p) {
             ov40_02236F38(p);
             GfGfx_EngineATogglePlanes(4, 1);
             GfGfx_EngineBTogglePlanes(4, 1);
-            ov40_0222BF80(p, 3);
+            VsRecorder_SetSubState(p, 3);
         }
         PaletteData_BlendPalettes(PTR(p, 0x28), 3, 0xC, (u8)WORD(inner, 0x1AC), (u16)WORD(p, 0x58));
         break;
@@ -144,7 +144,7 @@ int ov40_02237D94(void *p) {
             ov40_0223077C(p, PTR(p, 0x6F0), 0x10, (s16)(WORD(p, 0x4D8) * 24 + 0x44));
             OrbitCursor_SetVisible(PTR(p, 0x6F0), 1);
             OrbitCursor_SetRadius(PTR(p, 0x6F0), 0xC, 0xC);
-            ov40_0222BF80(p, 5);
+            VsRecorder_SetSubState(p, 5);
         }
         PaletteData_BlendPalettes(PTR(p, 0x28), 3, 0xC, (u8)WORD(inner, 0x1AC), (u16)WORD(p, 0x58));
         PaletteData_BlendPalettes(PTR(p, 0x28), 2, 0xC, (u8)WORD(inner, 0x1AC), (u16)WORD(p, 0x58));

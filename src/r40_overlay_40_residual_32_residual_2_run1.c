@@ -43,7 +43,7 @@ int ov40_02239EFC(void *p) {
         PaletteData_BlendPalettes(PTR(p, 0x28), 2, 0xC, WORD(w, 8), WORD(p, 0x58));
         break;
     default:
-        ov40_0222BF80(p, 6);
+        VsRecorder_SetSubState(p, 6);
         break;
     }
     return 0;

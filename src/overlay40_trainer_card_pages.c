@@ -92,8 +92,8 @@ int ov40_02241488(void *p) {
     default:
         WORD(p, 0x6D8)
         ++;
-        ov40_0222C4B8(p);
-        ov40_0222BF80(p, 8);
+        VsRecorder_ClearResumeState(p);
+        VsRecorder_SetSubState(p, 8);
         break;
     }
     return 0;
@@ -103,7 +103,7 @@ int ov40_022417A4(void *p) {
     ov40_0223077C(p, PTR(p, 0x6F0), 0x80, 0x60);
     OrbitCursor_SetVisible(PTR(p, 0x6F0), 1);
     OrbitCursor_SetRadius(PTR(p, 0x6F0), 0x18, 0x18);
-    ov40_0222BF80(p, 3);
+    VsRecorder_SetSubState(p, 3);
     return 0;
 }
 
@@ -163,7 +163,7 @@ int ov40_022417DC(void *p) {
         OrbitCursor_SetVisible(PTR(p, 0x6F0), 0);
         OrbitCursor_SetRadius(PTR(p, 0x6F0), 0, 0);
         ov40_0222FB28(p, 0x23);
-        ov40_0222BF80(p, 4);
+        VsRecorder_SetSubState(p, 4);
         break;
     }
     return 0;
@@ -173,7 +173,7 @@ int ov40_02241948(void *p) {
     void *w = PTR(p, 0x860);
     if (WORD(p, 8) == 0) {
         ov40_0222DAA8((u8 *)w + 8);
-        ov40_0222C480(p);
+        VsRecorder_MenuPop(p);
         ov40_02230964(p, (void *)1);
         ov40_0222D88C(p);
         ov40_02230964(p, NULL);
@@ -185,8 +185,8 @@ int ov40_02241948(void *p) {
             ov40_0222DD08(p);
             ov40_0222DAA8((u8 *)w + 8);
             PaletteData_BlendPalettes(PTR(p, 0x28), 2, 0xC, 0x10, (u16)WORD(p, 0x58));
-            ov40_0222BF64(p, 1, 1, (u32 *)PTR(p, 0x10));
-            ov40_0222BF80(p, 5);
+            VsRecorder_SetScreenIfDone(p, 1, 1, (u32 *)PTR(p, 0x10));
+            VsRecorder_SetSubState(p, 5);
             Heap_Free(w);
             BgClearTilemapBufferAndCommit(PTR(p, 0x24), 2);
             BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
@@ -259,19 +259,19 @@ void ov40_02241C10(u32 a, int b, void *p) {
         switch (a) {
         case 0:
             ov40_02230944(p);
-            ov40_0222BF80(p, 9);
+            VsRecorder_SetSubState(p, 9);
             break;
         case 1:
             ov40_02230944(p);
-            ov40_0222BF80(p, 0xA);
+            VsRecorder_SetSubState(p, 0xA);
             break;
         case 2:
             ov40_02230944(p);
-            ov40_0222BF80(p, 0xC);
+            VsRecorder_SetSubState(p, 0xC);
             break;
         case 3:
             ov40_02230944(p);
-            ov40_0222BF80(p, 0xB);
+            VsRecorder_SetSubState(p, 0xB);
             break;
         }
     }
@@ -286,15 +286,15 @@ void ov40_02241C70(u32 a, int b, void *p) {
         case 2:
             WORD(w, 0x1C8) = a + 1;
             if (WORD(p, 0x88C + WORD(w, 0x1C8) * 4) != 0) {
-                ov40_0222BF80(p, 0xF);
+                VsRecorder_SetSubState(p, 0xF);
             } else {
-                ov40_0222BF80(p, 0x12);
+                VsRecorder_SetSubState(p, 0x12);
             }
             ov40_02230944(p);
             break;
         case 3:
             ov40_02230944(p);
-            ov40_0222BF80(p, 0xE);
+            VsRecorder_SetSubState(p, 0xE);
             break;
         }
     }
@@ -306,11 +306,11 @@ void ov40_02241CD8(u32 a, int b, void *p) {
         case 0:
             ov40_02230944(p);
             ov40_02241BDC(p);
-            ov40_0222BF80(p, 0x12);
+            VsRecorder_SetSubState(p, 0x12);
             break;
         case 1:
             ov40_02230944(p);
-            ov40_0222BF80(p, 0x11);
+            VsRecorder_SetSubState(p, 0x11);
             break;
         }
     }
@@ -323,12 +323,12 @@ void ov40_02241D10(u32 a, int b, void *p) {
         case 0:
             ov40_02230944(p);
             BYTE(w, 0x4C5) = a;
-            ov40_0222BF80(p, 5);
+            VsRecorder_SetSubState(p, 5);
             break;
         case 1:
             ov40_02230944(p);
             BYTE(w, 0x4C5) = a;
-            ov40_0222BF80(p, 5);
+            VsRecorder_SetSubState(p, 5);
             break;
         case 2: {
             u32 v = FrontierCard_GetCountry(PTR(p, 0x88C));
@@ -351,7 +351,7 @@ void ov40_02241D10(u32 a, int b, void *p) {
         }
         case 3:
             ov40_02230944(p);
-            ov40_0222BF80(p, 4);
+            VsRecorder_SetSubState(p, 4);
             break;
         case 4:
             ov40_02230944(p);
@@ -359,7 +359,7 @@ void ov40_02241D10(u32 a, int b, void *p) {
                 PlaySE(0x57C);
                 ov40_0222DF60(p, 0x74);
             } else {
-                ov40_0222BF80(p, 0xC);
+                VsRecorder_SetSubState(p, 0xC);
             }
             break;
         }
@@ -382,29 +382,29 @@ void ov40_02241E40(u32 a, int b, void *p) {
         switch (a) {
         case 0:
             ov40_02230944(p);
-            ov40_0222BF80(p, 0x13);
+            VsRecorder_SetSubState(p, 0x13);
             break;
         case 1:
             ov40_02230944(p);
             if (BattleRecord_Exists()) {
-                ov40_0222BF80(p, 0x14);
+                VsRecorder_SetSubState(p, 0x14);
             } else {
                 WORD(w, 0xC) = 0x14;
-                ov40_0222BF80(p, 0x1D);
+                VsRecorder_SetSubState(p, 0x1D);
             }
             break;
         case 2:
             ov40_02230944(p);
             if (BattleRecord_Exists()) {
-                ov40_0222BF80(p, 0x16);
+                VsRecorder_SetSubState(p, 0x16);
             } else {
                 WORD(w, 0xC) = 0x16;
-                ov40_0222BF80(p, 0x1D);
+                VsRecorder_SetSubState(p, 0x1D);
             }
             break;
         case 3:
             ov40_02230944(p);
-            ov40_0222BF80(p, 0x15);
+            VsRecorder_SetSubState(p, 0x15);
             break;
         }
     }
@@ -419,15 +419,15 @@ void ov40_02241ED4(u32 a, int b, void *p) {
         case 2:
             WORD(w, 0x1C8) = a + 1;
             if (WORD(p, 0x88C + WORD(w, 0x1C8) * 4) != 0) {
-                ov40_0222BF80(p, 0x19);
+                VsRecorder_SetSubState(p, 0x19);
             } else {
-                ov40_0222BF80(p, 0x1C);
+                VsRecorder_SetSubState(p, 0x1C);
             }
             ov40_02230944(p);
             break;
         case 3:
             ov40_02230944(p);
-            ov40_0222BF80(p, 0x18);
+            VsRecorder_SetSubState(p, 0x18);
             break;
         }
     }
@@ -439,11 +439,11 @@ void ov40_02241F3C(u32 a, int b, void *p) {
         case 0:
             ov40_02230944(p);
             ov40_02241BDC(p);
-            ov40_0222BF80(p, 0x1C);
+            VsRecorder_SetSubState(p, 0x1C);
             break;
         case 1:
             ov40_02230944(p);
-            ov40_0222BF80(p, 0x1B);
+            VsRecorder_SetSubState(p, 0x1B);
             break;
         }
     }
@@ -803,8 +803,8 @@ int ov40_022425E8(void *p) {
                 ov40_0222DD08(p);
                 ov40_0222DAA8((u8 *)w + 8);
                 PaletteData_BlendPalettes(PTR(p, 0x28), 2, 0xC, 0x10, (u16)WORD(p, 0x58));
-                ov40_0222BF64(p, 1, TRUE, (u32 *)PTR(p, 0x10));
-                ov40_0222BF80(p, 5);
+                VsRecorder_SetScreenIfDone(p, 1, TRUE, (u32 *)PTR(p, 0x10));
+                VsRecorder_SetSubState(p, 5);
                 Heap_Free(w);
                 BgClearTilemapBufferAndCommit(PTR(p, 0x24), 2);
                 BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
@@ -990,7 +990,7 @@ BOOL ov40_02242CFC(void *p) {
         ov40_022421FC(p);
         ov40_0222D8C8(p);
         ov40_02230964(p, NULL);
-        ov40_0222C4E8(p, WORD(PTR(p, 0x10), 0));
+        VsRecorder_SetResumeScreen(p, WORD(PTR(p, 0x10), 0));
         sub_02087A84(PTR(p, 0x868), 1, 0);
         WORD(p, 8)
         ++;

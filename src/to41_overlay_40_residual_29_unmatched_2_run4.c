@@ -25,7 +25,7 @@ int ov40_02236C64(void *p) {
         ov40_0222DA84((u8 *)w + 0x1AC, 0);
         if (ov40_0222DA00((u8 *)w + 0x1A4, (u8 *)w + 0x1A8, 0, 2)) {
             ov40_02237030(p, 0x10E);
-            ov40_0222BF80(p, 3);
+            VsRecorder_SetSubState(p, 3);
         }
         BLEND(p, w);
         break;

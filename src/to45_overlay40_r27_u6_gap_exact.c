@@ -51,7 +51,7 @@ int ov40_02231EA4(void *p) {
         PaletteData_BlendPalettes(PTR(p, 0x28), 1, 0xFFFF, WORD(p, 0x54), WORD(p, 0x58));
         break;
     default:
-        ov40_0222BF80(p, 0);
+        VsRecorder_SetSubState(p, 0);
         break;
     }
     return 0;

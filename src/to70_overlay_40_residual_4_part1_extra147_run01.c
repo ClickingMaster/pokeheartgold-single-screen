@@ -1,7 +1,0 @@
-#pragma force_active on
-#include "global.h"
-#pragma force_active on
-typedef struct Work{int mode;u8 pad4[16];void*narc;u8 pad18[12];void*bg,*pal;u8 pad2c[0x2c];u32 color;}Work;
-extern void GfGfxLoader_LoadCharDataFromOpenNarc(void*,int,void*,int,int,int,int,int),GfGfxLoader_LoadScrnDataFromOpenNarc(void*,int,void*,int,int,int,int,int),PaletteData_LoadNarc(void*,int,int,int,int,int,int),PaletteData_BlendPalettes(void*,int,int,int,u16);extern int ov40_0222DB30(Work*,int);
-void ov40_0222C4F8(Work*);
-void ov40_0222C4F8(Work*w){void*n=w->narc;void*bg=w->bg;void*pal=w->pal;if(w->mode==0){GfGfxLoader_LoadCharDataFromOpenNarc(n,67,bg,1,0,0,0,109);GfGfxLoader_LoadCharDataFromOpenNarc(n,67,bg,5,0,0,0,109);GfGfxLoader_LoadScrnDataFromOpenNarc(n,69,bg,5,0,0,0,109);PaletteData_LoadNarc(pal,191,ov40_0222DB30(w,3),109,0,288,0);PaletteData_LoadNarc(pal,191,ov40_0222DB30(w,3),109,1,288,0);PaletteData_LoadNarc(pal,191,ov40_0222DB30(w,0),109,0,32,224);PaletteData_LoadNarc(pal,191,ov40_0222DB30(w,0),109,1,32,224);}else{GfGfxLoader_LoadCharDataFromOpenNarc(n,54,bg,1,0,0,0,109);GfGfxLoader_LoadCharDataFromOpenNarc(n,54,bg,5,0,0,0,109);GfGfxLoader_LoadScrnDataFromOpenNarc(n,55,bg,5,0,0,0,109);PaletteData_LoadNarc(pal,191,53,109,0,288,0);PaletteData_LoadNarc(pal,191,53,109,1,288,0);PaletteData_LoadNarc(pal,191,52,109,0,32,224);PaletteData_LoadNarc(pal,191,52,109,1,32,224);}GfGfxLoader_LoadScrnDataFromOpenNarc(n,70,bg,5,0,0,0,109);GfGfxLoader_LoadScrnDataFromOpenNarc(n,70,bg,1,0,0,0,109);PaletteData_BlendPalettes(pal,1,2,16,(u16)w->color);}

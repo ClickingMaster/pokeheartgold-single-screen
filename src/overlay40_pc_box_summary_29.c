@@ -11,7 +11,7 @@ void ov40_02236230(u32 a, int b, void *p) {
             } else {
                 WORD(w, 0x1A0) = 0x11;
             }
-            ov40_0222BF80(p, 4);
+            VsRecorder_SetSubState(p, 4);
         }
         break;
     case 1:
@@ -20,20 +20,20 @@ void ov40_02236230(u32 a, int b, void *p) {
             WORD(w, 0x1A0)
             ++;
             WORD(w, 0x1A0) = WORD(w, 0x1A0) % 0x12;
-            ov40_0222BF80(p, 4);
+            VsRecorder_SetSubState(p, 4);
         }
         break;
     case 2:
         if (b == 0) {
             ov40_02230944(p);
-            ov40_0222BF80(p, 9);
+            VsRecorder_SetSubState(p, 9);
         }
         break;
     case 3:
         if (b == 0) {
             ov40_02230944(p);
             if (ov40_022361C8((u8 *)w + 4) != 0) {
-                ov40_0222BF80(p, 5);
+                VsRecorder_SetSubState(p, 5);
             } else {
                 ov40_02237030(p, 0x10F);
             }
@@ -48,10 +48,10 @@ void ov40_022362E4(u32 a, int b, void *p) {
         if (a != 6) {
             ov40_02230944(p);
             WORD(w, 0x380) = a;
-            ov40_0222BF80(p, 8);
+            VsRecorder_SetSubState(p, 8);
         } else {
             ov40_02230944(p);
-            ov40_0222BF80(p, 7);
+            VsRecorder_SetSubState(p, 7);
         }
     }
 }
@@ -62,10 +62,10 @@ void ov40_02236320(u32 a, int b, void *p) {
         if (a != 6) {
             ov40_02230944(p);
             WORD(w, 0x380) = a;
-            ov40_0222BF80(p, 4);
+            VsRecorder_SetSubState(p, 4);
         } else {
             ov40_02230944(p);
-            ov40_0222BF80(p, 0xC);
+            VsRecorder_SetSubState(p, 0xC);
         }
     }
 }
@@ -78,18 +78,18 @@ void ov40_0223635C(u32 a, int b, void *p) {
         default:
             ov40_02230944(p);
             if (WORD(w, 0x2F64) == 0) {
-                ov40_0222BF80(p, 7);
+                VsRecorder_SetSubState(p, 7);
             } else {
-                ov40_0222BF80(p, 8);
+                VsRecorder_SetSubState(p, 8);
             }
             break;
         case 1:
             ov40_02230944(p);
-            ov40_0222BF80(p, 9);
+            VsRecorder_SetSubState(p, 9);
             break;
         case 2:
             ov40_02230944(p);
-            ov40_0222BF80(p, 6);
+            VsRecorder_SetSubState(p, 6);
             break;
         }
     }
@@ -126,7 +126,7 @@ void ov40_022363BC(u32 a, int b, void *p) {
             ov40_02230944(p);
             OrbitCursor_SetVisible(PTR(p, 0x6F0), 0);
             OrbitCursor_SetRadius(PTR(p, 0x6F0), 0, 0);
-            ov40_0222BF80(p, 0xB);
+            VsRecorder_SetSubState(p, 0xB);
             break;
         }
     }
@@ -181,6 +181,6 @@ int ov40_022365A0(void *p) {
     PTR(w, 0x340) = TouchHitboxController_Create(ov40_0224526C, 2, ov40_022363BC, p, 0x6D);
     PTR(w, 0x384) = FrontierCard_New(0x6D);
     FrontierCard_InitFromSave(PTR(w, 0x384), PTR(p, 0x830));
-    ov40_0222BF80(p, 1);
+    VsRecorder_SetSubState(p, 1);
     return 0;
 }

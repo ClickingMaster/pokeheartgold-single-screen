@@ -29,7 +29,7 @@ int ov40_02232A48(void *p) {
     default:
         ov40_0222DFB0();
         ov40_02233044(p);
-        ov40_0222BF80(p, 9);
+        VsRecorder_SetSubState(p, 9);
         break;
     }
     return 0;
@@ -66,7 +66,7 @@ int ov40_02232AF8(void *p) {
         ov40_02230964(p, 1);
         ov40_0222D8C8(p);
         ov40_02230964(p, 0);
-        ov40_0222C4E8(p, *(void **)PTR(p, 0x10));
+        VsRecorder_SetResumeScreen(p, *(void **)PTR(p, 0x10));
         sub_02087A84(PTR(p, 0x868), 1, 0);
         WORD(p, 8)
         ++;
@@ -122,8 +122,8 @@ int ov40_02232BD8(void *p) {
                 ov40_0222DD08(p);
                 ov40_0222DAA8((u8 *)w + 8);
                 PaletteData_BlendPalettes(PTR(p, 0x28), 2, 0xC, 0x10, WORD(p, 0x58));
-                ov40_0222BF64(p, 1, 1, PTR(p, 0x10));
-                ov40_0222BF80(p, 5);
+                VsRecorder_SetScreenIfDone(p, 1, 1, PTR(p, 0x10));
+                VsRecorder_SetSubState(p, 5);
                 Heap_Free(w);
             } else {
                 PaletteData_BlendPalettes(PTR(p, 0x28), 3, 0xC, WORD(w, 8), WORD(p, 0x58));
@@ -196,8 +196,8 @@ int ov40_02232D44(void *p) {
     default:
         WORD(p, 0x6D8)
         ++;
-        ov40_0222C4B8(p);
-        ov40_0222BF80(p, 3);
+        VsRecorder_ClearResumeState(p);
+        VsRecorder_SetSubState(p, 3);
         break;
     }
     return 0;
@@ -212,19 +212,19 @@ void ov40_02232ED4(int hitbox, int event, void *p) {
     switch (hitbox) {
     case 0:
         ov40_02230944(p);
-        ov40_0222BF80(p, 4);
+        VsRecorder_SetSubState(p, 4);
         break;
     case 1:
         ov40_02230944(p);
         if (WORD(p, 0x86C) == 0 || BattleRecordHeader_GetField(PTR(w, 0xA0), 5, 0) == 1) {
-            ov40_0222BF80(p, 7);
+            VsRecorder_SetSubState(p, 7);
         } else {
-            ov40_0222BF80(p, 5);
+            VsRecorder_SetSubState(p, 5);
         }
         break;
     case 2:
         ov40_02230944(p);
-        ov40_0222BF80(p, 8);
+        VsRecorder_SetSubState(p, 8);
         break;
     }
 }

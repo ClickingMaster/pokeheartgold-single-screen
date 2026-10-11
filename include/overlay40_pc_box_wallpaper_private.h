@@ -37,7 +37,7 @@ int sub_02027134(void *save, void *a, int b);
 int SaveGameNormal(void *save);
 void sub_0201A728(int a);
 void sub_0201A738(int a);
-void ov40_0222BF80(void *p, int value);
+void VsRecorder_SetSubState(void *p, int value);
 void ov40_0222C6C8(void *p, int a, int b);
 void ov40_0222D9E8(void *a, void *b, int c);
 

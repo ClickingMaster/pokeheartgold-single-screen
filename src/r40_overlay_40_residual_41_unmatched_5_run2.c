@@ -25,8 +25,8 @@ int ov40_0224483C(void *p) {
                 ov40_0222DD08(p);
                 ov40_0222DAA8((u8 *)w + 8);
                 PaletteData_BlendPalettes(PTR(p, 0x28), 2, 0xC, 0x10, (u16)WORD(p, 0x58));
-                ov40_0222BF64(p, 1, TRUE, PTR(p, 0x10));
-                ov40_0222BF80(p, 5);
+                VsRecorder_SetScreenIfDone(p, 1, TRUE, PTR(p, 0x10));
+                VsRecorder_SetSubState(p, 5);
                 Heap_Free(w);
             } else {
                 PaletteData_BlendPalettes(PTR(p, 0x28), 1, 2, (u8)WORD(w, 8), (u16)WORD(p, 0x58));

@@ -4,11 +4,11 @@ int ov40_02234470(void *p) {
     void *w = PTR(p, 0x860);
     if (TouchscreenHitbox_TouchNewIsIn(ov40_022451C8)) {
         ov40_02230944(p);
-        ov40_0222BF80(p, 5);
+        VsRecorder_SetSubState(p, 5);
     }
     if (TouchscreenHitbox_TouchNewIsIn(ov40_022451CC)) {
         ov40_02230944(p);
-        ov40_0222BF80(p, 4);
+        VsRecorder_SetSubState(p, 4);
     }
     if (PTR(w, 0x228) != NULL) {
         Thunk_G3X_Reset();

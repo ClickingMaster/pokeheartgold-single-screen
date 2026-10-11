@@ -6,7 +6,7 @@ int sub_02087E70(OverlayManager *manager, int *state, BOOL special) {
     StopAllSE(0);
     Heap_Create(HEAP_ID_3, HEAP_ID_109, 0x55000);
     work = sub_02087A78(manager);
-    ov40_0222C480(work);
+    VsRecorder_MenuPop(work);
     GF_SndHandleSetPlayerVolume(1, 0x2A);
     GF_SndHandleSetPlayerVolume(7, 0x2A);
     if (special != FALSE) {
@@ -47,12 +47,12 @@ int sub_02087F2C(OverlayManager *manager, int *state) {
 
     switch (*state) {
     case 0:
-        ov40_0222CABC(work);
+        VsRecorder_DestroyDecorTasks(work);
         (*state)++;
         break;
     case 1:
-        ov40_0222CA8C(work);
-        ov40_0222CF94(work);
+        VsRecorder_DeleteDecorSprites(work);
+        VsRecorder_DeleteMenuRowSprites(work);
         ov40_0222D55C(work);
         (*state)++;
         break;

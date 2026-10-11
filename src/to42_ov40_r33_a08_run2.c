@@ -21,7 +21,7 @@ void ManagedSprite_SetDrawFlag(void *sprite, BOOL draw);
 void ManagedSprite_SetDrawPriority(void *sprite, int priority);
 BOOL SpriteManager_UnloadCharObjById(void *manager, u32 id);
 void GlobalTerminalNet_CopyRequestHeader(const void *src, void *dst);
-void ov40_0222BF80(void *p, int state);
+void VsRecorder_SetSubState(void *p, int state);
 void ov40_0222DEAC(void *p);
 void *ov40_0222FEA0(void *p, void *a1, void *a2, u32 a3, u32 a4, int a5);
 void ov40_0222FF48(void *p, void *a1, void *a2);

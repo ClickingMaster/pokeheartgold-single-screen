@@ -22,7 +22,7 @@ void ov40_0223CE38(void *p);
 void BgClearTilemapBufferAndCommit(void *bgConfig, int bgId);
 void ov40_0223A510(void *p, int msgId, int arg);
 void PaletteData_BlendPalettes(void *palette, int buffer, int mask, int coeff, int color);
-void ov40_0222BF80(void *p, int state);
+void VsRecorder_SetSubState(void *p, int state);
 void GfGfxLoader_LoadScrnDataFromOpenNarc(void *narc, int memberNo, void *bgConfig, int layer, int tileStart, int size, int compressed, int heapId);
 void ov40_0223CD58(void *p);
 void ov40_0223CCA0(void *p);
@@ -66,7 +66,7 @@ void sub_0203A948(int a, int heapId);
 void ov40_0222FB90(void *p, int value);
 BOOL ov40_0222FBB4(void *p);
 void ov40_0222DD08(void *p);
-void ov40_0222BF64(void *p, int a1, int a2, void *a3);
+void VsRecorder_SetScreenIfDone(void *p, int a1, int a2, void *a3);
 void Heap_Free(void *p);
 BOOL BattleRecord_Exists(void);
 void BattleRecord_Delete(void);
@@ -104,7 +104,7 @@ int ov40_0223A874(void *p) {
         PaletteData_BlendPalettes(PTR(p, 0x28), 3, 0xC, (u8)WORD(w, 8), (u16)WORD(p, 0x58));
         break;
     default:
-        ov40_0222BF80(p, 0xC);
+        VsRecorder_SetSubState(p, 0xC);
         break;
     }
     return 0;
@@ -210,8 +210,8 @@ int ov40_0223A924(void *p) {
                 ov40_0222DD08(p);
                 ov40_0222DAA8((u8 *)w + 8);
                 PaletteData_BlendPalettes(PTR(p, 0x28), 2, 0xC, 0x10, (u16)WORD(p, 0x58));
-                ov40_0222BF64(p, 1, 1, PTR(p, 0x10));
-                ov40_0222BF80(p, 5);
+                VsRecorder_SetScreenIfDone(p, 1, 1, PTR(p, 0x10));
+                VsRecorder_SetSubState(p, 5);
                 BgClearTilemapBufferAndCommit(PTR(p, 0x24), 2);
                 BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
                 BgClearTilemapBufferAndCommit(PTR(p, 0x24), 3);
@@ -253,7 +253,7 @@ int ov40_0223AC24(void *p) {
         }
         break;
     default:
-        ov40_0222BF80(p, 0xF);
+        VsRecorder_SetSubState(p, 0xF);
         break;
     }
     return 0;
@@ -327,7 +327,7 @@ int ov40_0223ACD0(Ov40Work *p) {
         for (i = 0; i < p->count; i++) {
             p->ptrs[i] = &p->entries[i];
         }
-        ov40_0222BF80(p, 7);
+        VsRecorder_SetSubState(p, 7);
         break;
     }
     return 0;

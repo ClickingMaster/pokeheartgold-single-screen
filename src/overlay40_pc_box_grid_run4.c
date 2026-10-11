@@ -8,15 +8,15 @@ int ov40_0223169C(void *p) {
         switch (ov40_02231700()) {
         case 1:
             PlaySE(0x57B);
-            ov40_0222BF80(p, 7);
+            VsRecorder_SetSubState(p, 7);
             return 0;
         case 2:
             PlaySE(0x57B);
-            ov40_0222BF80(p, 8);
+            VsRecorder_SetSubState(p, 8);
             return 0;
         }
     }
-    ov40_0222C474(p);
+    VsRecorder_UpdateMenuTouch(p);
     return 0;
 }
 
@@ -33,6 +33,6 @@ int ov40_02231700(void) {
 int ov40_0223172C(void *p) {
     GF_AssertFail();
     WORD(p, 0x44) = 1;
-    ov40_0222BF80(p, 0);
+    VsRecorder_SetSubState(p, 0);
     return ov40_0223169C(p);
 }

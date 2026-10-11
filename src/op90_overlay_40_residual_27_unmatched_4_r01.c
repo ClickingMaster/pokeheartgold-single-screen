@@ -12,9 +12,9 @@ void TextOBJ_SetPosition(TextOBJ *textOBJ, int a1, int a2);
 BOOL OrbitCursor_SetPosition(void *p, s16 x, s16 y);
 BOOL OrbitCursor_SetTarget(void *p, s16 x, s16 y);
 BOOL OrbitCursor_SetVisible(void *p, int flag);
-void ov40_0222D288(ManagedSprite *sprite, s16 x, s16 y);
-void ov40_0222D294(ManagedSprite *sprite, s16 *x, s16 *y);
-void ov40_0222C39C(void *work);
+void VsRecorder_SetSpritePos(ManagedSprite *sprite, s16 x, s16 y);
+void VsRecorder_GetSpritePos(ManagedSprite *sprite, s16 *x, s16 *y);
+void VsRecorder_UpdateMenuHitboxes(void *work);
 
 typedef struct {
     int delay;
@@ -82,7 +82,7 @@ BOOL ov40_0223142C(Ov40Work *work) {
             data->anims[i].delay = i * 4;
             data->anims[i].angle = 90;
             data->anims[i].targetY = 25 + i * 36 + (5 - work->count) * 16;
-            ov40_0222D288(work->subChoices[i].sprite, 42, (5 - work->count) * 16 + 169);
+            VsRecorder_SetSpritePos(work->subChoices[i].sprite, 42, (5 - work->count) * 16 + 169);
             ManagedSprite_GetSpritePositionFxXY(work->subChoices[i].sprite, &data->anims[i].baseX, &posY);
             ManagedSprite_SetPositonFxXY(work->subChoices[i].sprite, data->anims[i].baseX, ((5 - work->count) * 16 + 169) * FX32_ONE);
             TextOBJ_SetPosition(work->subChoices[i].textObj, 36, -8);
@@ -102,7 +102,7 @@ BOOL ov40_0223142C(Ov40Work *work) {
                 data->anims[j].delay--;
                 continue;
             }
-            ov40_0222D294(work->subChoices[j].sprite, &x1, &y1);
+            VsRecorder_GetSpritePos(work->subChoices[j].sprite, &x1, &y1);
             if (y1 == data->anims[j].targetY) {
                 done++;
                 continue;
@@ -124,11 +124,11 @@ BOOL ov40_0223142C(Ov40Work *work) {
         break;
     default:
         data = work->slideData;
-        ov40_0222D294(work->subChoices[work->selected].sprite, &x2, &y2);
+        VsRecorder_GetSpritePos(work->subChoices[work->selected].sprite, &x2, &y2);
         OrbitCursor_SetPosition(work->motion, x2 + 16, y2);
         OrbitCursor_SetTarget(work->motion, x2 + 16, y2);
         OrbitCursor_SetVisible(work->motion, 0);
-        ov40_0222C39C(work);
+        VsRecorder_UpdateMenuHitboxes(work);
         Heap_Free(data);
         return TRUE;
     }

@@ -17,6 +17,6 @@ int ov40_022444C0(void *w) {
     BgClearTilemapBufferAndCommit(PTR(w, 0x24), 6);
     BgClearTilemapBufferAndCommit(PTR(w, 0x24), 7);
     ov40_0222D9E8(p, (u8 *)p + 4, 0);
-    ov40_0222BF80(w, 1);
+    VsRecorder_SetSubState(w, 1);
     return 0;
 }

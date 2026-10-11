@@ -328,10 +328,10 @@
 .public VsRecorder_InitResources
 .public VsRecorder_FreeResources
 .public VsRecorder_Main
-.public ov40_0222C480
-.public ov40_0222CA8C
-.public ov40_0222CABC
-.public ov40_0222CF94
+.public VsRecorder_MenuPop
+.public VsRecorder_DeleteDecorSprites
+.public VsRecorder_DestroyDecorTasks
+.public VsRecorder_DeleteMenuRowSprites
 .public ov40_0222D55C
 .public ov40_0222DAC0
 .public ov40_02244920

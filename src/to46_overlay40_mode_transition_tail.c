@@ -88,7 +88,7 @@ int ov40_02235434(void *p) {
     default:
         S32(w, 0xC) ^= 1;
         ov40_02235868(p, S32(w, 0xC) + 0x79);
-        ov40_0222BF80(p, 8);
+        VsRecorder_SetSubState(p, 8);
         break;
     }
     return 0;
@@ -174,7 +174,7 @@ int ov40_02235644(void *p) {
         }
         break;
     default:
-        ov40_0222BF80(p, 8);
+        VsRecorder_SetSubState(p, 8);
         break;
     }
     return 0;

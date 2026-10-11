@@ -82,7 +82,7 @@ int ov40_0223BB74(void *p) {
         BLEND(p, w, 2, 0xC);
         break;
     default:
-        ov40_0222BF80(p, 4);
+        VsRecorder_SetSubState(p, 4);
         break;
     }
     return 0;
@@ -148,7 +148,7 @@ int ov40_0223BD98(void *p) {
         BLEND(p, w, 2, 0xC);
         break;
     default:
-        ov40_0222BF80(p, WORD(w, 0x2034));
+        VsRecorder_SetSubState(p, WORD(w, 0x2034));
         break;
     }
     return 0;
@@ -189,8 +189,8 @@ int ov40_0223BF88(void *p) {
                 ov40_0222DD08(p);
                 ov40_0222DAA8((u8 *)w + 8);
                 PaletteData_BlendPalettes(PTR(p, 0x28), 2, 0xC, 0x10, (u16)WORD(p, 0x58));
-                ov40_0222BF64(p, 1, 1, PTR(p, 0x10));
-                ov40_0222BF80(p, 5);
+                VsRecorder_SetScreenIfDone(p, 1, 1, PTR(p, 0x10));
+                VsRecorder_SetSubState(p, 5);
                 BgClearTilemapBufferAndCommit(PTR(p, 0x24), 2);
                 BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
                 BgClearTilemapBufferAndCommit(PTR(p, 0x24), 3);
@@ -248,7 +248,7 @@ int ov40_0223C0D8(void *p) {
         BLEND(p, w, 3, 0xC);
         break;
     default:
-        ov40_0222BF80(p, 7);
+        VsRecorder_SetSubState(p, 7);
         break;
     }
     return 0;

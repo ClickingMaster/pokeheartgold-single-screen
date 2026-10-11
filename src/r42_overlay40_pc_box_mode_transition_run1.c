@@ -43,7 +43,7 @@ int ov40_0223512C(void *work) {
         PaletteData_BlendPalettes(PTR(work, 0x28), 3, 12, (u8)WORD(inner, 8), (u16)WORD(work, 0x58));
         break;
     default:
-        ov40_0222BF80(work, 8);
+        VsRecorder_SetSubState(work, 8);
         break;
     }
     if (PTR(inner, 0x228) != NULL) {
@@ -59,11 +59,11 @@ int ov40_0223527C(void *work) {
 
     if (TouchscreenHitbox_TouchNewIsIn(ov40_022451C4)) {
         ov40_02230944(work);
-        ov40_0222BF80(work, 9);
+        VsRecorder_SetSubState(work, 9);
     }
     if (TouchscreenHitbox_TouchNewIsIn(ov40_022451D0)) {
         ov40_02230944(work);
-        ov40_0222BF80(work, 10);
+        VsRecorder_SetSubState(work, 10);
     }
     if (TouchscreenHitbox_TouchNewIsIn(ov40_022451D4)) {
         if (S32(inner, 0x234) != 0) {
@@ -73,14 +73,14 @@ int ov40_0223527C(void *work) {
             S32(inner, 0x234) = S32(inner, 0x2E4) - 1;
         }
         ov40_02230944(work);
-        ov40_0222BF80(work, 11);
+        VsRecorder_SetSubState(work, 11);
     }
     if (TouchscreenHitbox_TouchNewIsIn(ov40_022451D8)) {
         S32(inner, 0x234)
         ++;
         S32(inner, 0x234) %= S32(inner, 0x2E4);
         ov40_02230944(work);
-        ov40_0222BF80(work, 11);
+        VsRecorder_SetSubState(work, 11);
     }
     if (PTR(inner, 0x228) != NULL) {
         Thunk_G3X_Reset();
@@ -128,7 +128,7 @@ int ov40_0223534C(void *work) {
         PaletteData_BlendPalettes(PTR(work, 0x28), 3, 12, (u8)WORD(inner, 8), (u16)WORD(work, 0x58));
         break;
     default:
-        ov40_0222BF80(work, 3);
+        VsRecorder_SetSubState(work, 3);
         break;
     }
     return 0;

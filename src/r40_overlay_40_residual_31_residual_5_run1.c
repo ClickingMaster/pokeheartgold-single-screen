@@ -50,7 +50,7 @@ u32 ov40_022383C8(void *p) {
         GfGfx_EngineBTogglePlanes(4, 1);
         ov40_02237030(p, 0x113);
         ov40_02236F38(p);
-        ov40_0222BF80(p, 3);
+        VsRecorder_SetSubState(p, 3);
         break;
     }
     return 0;

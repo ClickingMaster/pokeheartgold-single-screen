@@ -25,9 +25,9 @@
 	.public System_GetTouchNew
 	.public TouchHitboxController_Create
 	.public TouchHitboxController_Destroy
-	.public ov40_0222BF80
-	.public ov40_0222C4B8
-	.public ov40_0222C4E8
+	.public VsRecorder_SetSubState
+	.public VsRecorder_ClearResumeState
+	.public VsRecorder_SetResumeScreen
 	.public ov40_0222C6C8
 	.public ov40_0222D66C
 	.public ov40_0222D8C8
@@ -231,7 +231,7 @@ _0223C388:
 	bl ov40_0223CCBC
 	add r0, r5, #0
 	mov r1, #7
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 _0223C3A0:
 	mov r0, #0
 	pop {r3, r4, r5, pc}
@@ -329,7 +329,7 @@ _0223C416:
 	ldr r1, [r5, #0x10]
 	add r0, r5, #0
 	ldr r1, [r1]
-	bl ov40_0222C4E8
+	bl VsRecorder_SetResumeScreen
 	ldr r0, _0223C494 ; =0x00000868
 	mov r1, #1
 	ldr r0, [r5, r0]
@@ -621,10 +621,10 @@ _0223C6CC:
 	add r1, r1, #1
 	str r1, [r4, r0]
 	add r0, r4, #0
-	bl ov40_0222C4B8
+	bl VsRecorder_ClearResumeState
 	add r0, r4, #0
 	mov r1, #7
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 _0223C6E2:
 	mov r0, #0
 	add sp, #0x10
@@ -1150,7 +1150,7 @@ _0223CB54:
 _0223CB62:
 	add r0, r4, #0
 	mov r1, #7
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 	b _0223CC98
 _0223CB6C:
 	cmp r0, #0
@@ -1284,7 +1284,7 @@ _0223CC76:
 _0223CC90:
 	add r0, r4, #0
 	mov r1, #0xc
-	bl ov40_0222BF80
+	bl VsRecorder_SetSubState
 _0223CC98:
 	mov r0, #0
 	add sp, #0x10

@@ -16,7 +16,7 @@ int ov40_0223B5B0(void *p) {
     BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
     BgClearTilemapBufferAndCommit(PTR(p, 0x24), 7);
     ov40_0222D9E8(w, (u8 *)w + 4, 0);
-    ov40_0222BF80(p, 1);
+    VsRecorder_SetSubState(p, 1);
     return 0;
 }
 
@@ -59,10 +59,10 @@ int ov40_0223B62C(void *p) {
         }
         break;
     default:
-        if (ov40_0222C4DC() == 1) {
-            ov40_0222BF80(p, 0x13);
+        if (VsRecorder_HasResumeScreen() == 1) {
+            VsRecorder_SetSubState(p, 0x13);
         } else {
-            ov40_0222BF80(p, 2);
+            VsRecorder_SetSubState(p, 2);
         }
         break;
     }

@@ -61,8 +61,8 @@ u32 ov40_0223480C(void *p) {
                 ov40_0222DD08(p);
                 ov40_0222DAA8((u8 *)work + 8);
                 PaletteData_BlendPalettes(PTR(p, 0x28), 2, 0xc, 0x10, (u16)WORD(p, 0x58));
-                ov40_0222BF64(p, 1, 1, PTR(p, 0x10));
-                ov40_0222BF80(p, 5);
+                VsRecorder_SetScreenIfDone(p, 1, 1, PTR(p, 0x10));
+                VsRecorder_SetSubState(p, 5);
                 Heap_Free(work);
                 UnloadOverlayByID(FS_OVERLAY_ID(OVY_41));
                 Main_SetVBlankIntrCB(VsRecorder_VBlankCB, p);

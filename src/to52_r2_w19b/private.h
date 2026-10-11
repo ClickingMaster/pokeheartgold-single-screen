@@ -17,7 +17,7 @@ void ov40_022306A0(void *, int);
 int ov40_02230410(void *);
 void GfGfx_EngineBTogglePlanes(int, int);
 void ov40_02232FEC(void *, int);
-void ov40_0222BF80(void *, int);
+void VsRecorder_SetSubState(void *, int);
 void InitWindow(void *);
 void AddWindowParameterized(void *, void *, int, int, int, int, int, int, int);
 void FillWindowPixelBuffer(void *, int);

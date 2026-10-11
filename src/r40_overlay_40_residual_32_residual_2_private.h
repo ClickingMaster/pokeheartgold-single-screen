@@ -80,8 +80,8 @@ BOOL OrbitCursor_SetVisible(void *p, int flag);
 
 void *GlobalTerminalNet_GetBoxList(void *a, void *b, int c);
 
-void ov40_0222BF64(void *p, u32 value, BOOL valid, u32 *out);
-void ov40_0222BF80(void *p, int value);
+void VsRecorder_SetScreenIfDone(void *p, u32 value, BOOL valid, u32 *out);
+void VsRecorder_SetSubState(void *p, int value);
 void ov40_0222D5AC(void *dst, void *src, int a);
 void ov40_0222D66C(void *dst, void *src, int a);
 void ov40_0222D6D0(void *p);

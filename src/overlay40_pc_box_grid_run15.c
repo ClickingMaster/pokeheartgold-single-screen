@@ -5,7 +5,7 @@ int ov40_02234A14(void *p) {
         ov40_022359B4(p, 1);
         WORD(p, 8) = WORD(p, 8) + 1;
     } else {
-        ov40_0222BF80(p, 3);
+        VsRecorder_SetSubState(p, 3);
     }
     return 0;
 }

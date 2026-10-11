@@ -16,7 +16,7 @@ void ov40_0222D66C(void *, void *, int);
 void ManagedSprite_SetAnim(void *, int);
 void ov40_0223B4BC(void *, int);
 void PaletteData_BlendPalettes(void *, int, int, int, int);
-void ov40_0222BF80(void *, int);
+void VsRecorder_SetSubState(void *, int);
 void *NewString_ReadMsgData(void *, int);
 void *ov40_0222DAB0(int);
 void *FrontierCard_NewNameString(u32, int);

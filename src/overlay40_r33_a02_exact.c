@@ -139,10 +139,10 @@ int ov40_0223A640(void *p) {
     default:
         if (WORD(w, 0x2038) != 0) {
             PlaySE(0x577);
-            ov40_0222BF80(p, WORD(w, 0x2034));
+            VsRecorder_SetSubState(p, WORD(w, 0x2034));
             ov40_0222FC40(p, 1);
         } else {
-            ov40_0222BF80(p, 0x14);
+            VsRecorder_SetSubState(p, 0x14);
         }
         break;
     }
