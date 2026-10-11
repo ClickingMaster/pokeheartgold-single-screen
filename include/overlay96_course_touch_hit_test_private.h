@@ -6,8 +6,8 @@
 #define PTR(p, o) (*(void **)((u8 *)(p) + (o)))
 
 void GF_AssertFail(void);
-void ov96_021EB0A4(void *, int, int, int *, int *);
-BOOL ov96_021EB0CC(void *, int, int, int, int);
+void PokeathlonCourseObject_GroundToCenter(void *, int, int, int *, int *);
+BOOL PokeathlonCourseObject_IsInTouchRange(void *, int, int, int, int);
 
 BOOL ov96_021FDE08(u8 *, int, int, int);
 

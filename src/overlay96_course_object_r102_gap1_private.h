@@ -25,7 +25,7 @@ typedef struct Ov96R102Gap1Work {
 
 void *SpriteManager_GetSpriteList(void *);
 void *PokeathlonCourseMonObjects_Create(u32, u32, u32, void *, void *);
-void ov96_021EB138(void *);
+void PokeathlonCourseObjects_ShiftLargeUp(void *);
 void PokeathlonCourse_GetMonInfo(void *, int, int, Ov96R102Gap1ParticipantView *);
 void *PokeathlonCourse_GetPerformance(void *, int, int);
 int ov96_021E6108(const void *);

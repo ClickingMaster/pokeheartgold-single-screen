@@ -784,10 +784,8 @@ Static main
     Object asm/network_overlay_loader_data.o
     Object src/location_gmm_dat.o
     Object src/move_relearner.o
-    Object src/easy_chat_menu_lifecycle.o
-    Object src/op90_unk_02091880_residual_918d4_r01.o
-    Object src/easy_chat_menu_builders.o
-    Object asm/unk_02091880_rodata.o
+    Object src/easy_chat_menu.o
+    Object asm/easy_chat_menu_data.o
     Object src/application/delete_savedata.o
     Object src/application/check_savedata.o
     Object src/save_data_read_error.o
@@ -838,10 +836,8 @@ Static main
     Object src/to70_unk_020932E0_residual_14_extra715_run01.o
     Object src/unk020932e0_opus_partial_14.o
     Object asm/unk_020932E0_residual_15.o
+    Object asm/grid_cursor_data.o
     Object src/grid_cursor.o
-    Object src/r40_unk_020957B0_run1.o
-    Object asm/unk_020957B0_r40_residual_1.o
-    Object src/grid_cursor_2.o
     Object src/pokeathlon_course_task.o
     Object src/phonebook_dat.o
     Object src/choose_starter.o
@@ -927,38 +923,15 @@ Static main
     Object lib/libCPS/src/cps_dhcp.o
     Object lib/libCPS/src/cps_dns.o
     Object lib/libCPS/src/cps_resolve.o
-    Object src/to90_extra2350_run01.o
-    Object src/to65_wifi_residual_11_run25.o
-    Object src/to90_extra2465_run01.o
-    Object src/to70_to65_wifi_residual_11_residual_24_extra1166_run01.o
-    Object src/to65_wifi_residual_11_run26.o
-    Object src/op90_to65_wifi_residual_11_residual_25_r01.o
-    Object src/to65_wifi_residual_11_run27.o
-    Object src/to70_to65_wifi_residual_11_residual_26_extra1167_run01.o
-    Object src/to90_extra2533_run01.o
-    Object src/to70_to65_wifi_residual_11_residual_26_extra1167_run02.o
-    Object src/to65_wifi_residual_11_run28.o
-    Object src/to70_to65_wifi_residual_11_residual_27_extra1168_run01.o
-    Object src/op90_to70_to65_wifi_residual_11_residual_27_extra1168_residual_1_r01.o
-    Object src/to65_wifi_residual_11_run29.o
-    Object src/to70_to65_wifi_residual_11_residual_28_extra1169_run01.o
-    Object src/to80_extra1750_run01.o
-    Object src/to65_wifi_residual_11_run30.o
-    Object src/op90_to65_wifi_residual_11_residual_29_r01.o
-    Object src/to65_wifi_residual_11_run31.o
-    Object src/to65_wifi_residual_11_run32.o
-    Object src/to80_extra1863_run01.o
-    Object src/to70_to65_wifi_residual_11_residual_30_extra1170_run01.o
-    Object src/to90_extra2347_run01.o
-    Object src/to65_wifi_residual_11_run33.o
-    Object src/to80_extra1751_run01.o
-    Object src/to70_to65_wifi_residual_11_residual_31_extra1171_run01.o
-    Object src/op90_to70_to65_wifi_residual_11_residual_31_extra1171_residual_2_r01.o
-    Object src/to65_wifi_residual_11_run34.o
-    Object src/to70_to65_wifi_residual_11_residual_32_extra1172_run01.o
-    Object src/to65_wifi_residual_11_run35.o
-    Object src/to80_extra1857_run01.o
-    Object src/to65_wifi_residual_11_run36.o
+    Object lib/libCPS/src/cps_ssl_session.o
+    Object lib/libCPS/src/cps_ssl_util.o
+    Object lib/libCPS/src/cps_ssl_cert.o
+    Object lib/libCPS/src/cps_ssl_hello.o
+    Object lib/libCPS/src/cps_ssl_keys.o
+    Object lib/libCPS/src/cps_ssl_record.o
+    Object lib/libCPS/src/cps_ssl_random.o
+    Object lib/libCPS/src/cps_ssl_handshake.o
+    Object lib/libCPS/src/cps_ssl.o
     Object lib/libCPS/src/cps_md5.o
     Object lib/libCPS/src/cps_sha1.o
     Object lib/libCPS/src/cps_rc4.o
@@ -2653,16 +2626,8 @@ Overlay OVY_40
     Object src/application/vs_recorder/vs_recorder_list.o
     Object src/application/vs_recorder/vs_recorder_util.o
     Object src/application/vs_recorder/vs_recorder_screen.o
-    Object src/overlay40_pc_box_grid_gap3.o
-    Object src/overlay40_pc_box_grid_run3.o
-    Object src/op90_overlay_40_residual_27_unmatched_4_r01.o
-    Object src/overlay40_pc_box_grid_run4.o
-    Object src/to90_extra2016_run01.o
-    Object src/overlay40_pc_box_grid_run5.o
-    Object src/to42_overlay40_r27_u6_run1.o
-    Object src/to80_extra2566_run01.o
-    Object src/to52_r2_w15_overlay40_r27_u6_prefix_tail.o
-    Object src/to45_overlay40_r27_u6_gap_exact.o
+    Object src/application/vs_recorder/vs_recorder_title.o
+    Object src/application/vs_recorder/vs_recorder_menu.o
     Object src/to42_overlay40_r27_u6_run2.o
     Object src/overlay40_pc_box_grid_run6.o
     Object src/to52_r2_w19b/to52_r2_w19b_overlay40_r27_gap7_exact.o
@@ -3835,166 +3800,11 @@ Overlay OVY_96
     Object src/pokeathlon/pokeathlon_course_scores.o
     Object src/pokeathlon/pokeathlon_course_sprites.o
     Object src/to90_w41411_palette10_run01.o
-    Object src/overlay96_exact_bank_27.o
-    Object src/to80_extra1809_run01.o
-    Object src/overlay96_exact_bank_28.o
-    Object src/r40_overlay_96_residual_29_run1.o
-    Object src/op90_overlay_96_residual_29_r01.o
-    Object src/r40_overlay_96_residual_29_run2.o
-    Object src/overlay96_exact_bank_29.o
-    Object src/to80_extra1810_run01.o
-    Object src/overlay96_exact_bank_30.o
-    Object src/overlay96_sprite_helpers_1.o
-    Object src/to70_overlay_96_residual_31_extra664_run01.o
-    Object src/overlay96_sprite_helpers_2.o
-    Object src/op90_overlay_96_residual_31_residual_2_r01.o
-    Object src/overlay96_sprite_helpers_3.o
-    Object src/overlay96_exact_bank_31.o
-    Object src/to80_extra1811_run01.o
-    Object src/overlay96_exact_bank_32.o
-    Object src/to80_extra1892_run01.o
-    Object src/overlay96_exact_bank_33.o
-    Object src/to70_overlay_96_residual_34_extra1035_run01.o
-    Object src/overlay96_exact_bank_34.o
-    Object src/overlay96_course_scene_r35_run1.o
-    Object src/to80_extra1581_run01.o
-    Object src/overlay96_course_scene_r35_run2.o
-    Object src/to91_w41530_award.o
-    Object src/overlay96_course_scene_r35_run3.o
-    Object src/overlay96_exact_bank_35.o
-    Object src/to70_overlay_96_residual_36_unmatched1_extra418_run01.o
-    Object src/overlay96_course_bg_r36.o
-    Object src/overlay96_sprite_setup_r38_1.o
-    Object src/op90_to57_overlay96_r36_prefix_r01.o
-    Object src/to57_overlay96_r36_sprite_row.o
-    Object src/op90_to57_overlay96_r36_suffix_r01.o
-    Object src/op90_to57_overlay96_r36_suffix_r02.o
-    Object src/overlay96_course_sprite_load_r36_before.o
-    Object src/overlay96_course_sprite_load_r36.o
-    Object src/to80_extra1893_run01.o
-    Object src/overlay96_to46_r36_suffix.o
-    Object src/overlay96_exact_bank_36.o
-    Object src/to70_overlay_96_residual_37_extra1036_run01.o
-    Object src/overlay96_exact_bank_37.o
-    Object src/to52_r6_overlay96_rank_counter_r38.o
-    Object src/overlay96_exact_bank_38.o
-    Object src/overlay96_particle_manager_r39.o
-    Object src/to70_overlay_96_residual_39_tail_extra1037_run01.o
-    Object src/to80_extra1712_run01.o
-    Object src/overlay96_exact_bank_39.o
-    Object src/to70_overlay_96_residual_40_extra520_run01.o
-    Object src/overlay96_flag_helpers_1.o
-    Object src/overlay96_exact_bank_40.o
-    Object src/to70_overlay_96_residual_41_extra1039_run01.o
-    Object src/overlay96_exact_bank_41.o
-    Object src/overlay96_field_helpers_1.o
-    Object src/to45_overlay96_r42_random_field_exact.o
-    Object src/op90_to45_overlay96_r42_residual_r01.o
-    Object src/overlay96_field_helpers_2.o
-    Object src/to90_extra2238_run01.o
-    Object src/to90_extra2238_run02.o
-    Object src/overlay96_field_helpers_3.o
-    Object src/overlay96_exact_bank_42.o
-    Object src/to45_overlay96_r43_exact.o
-    Object src/to90_extra2250_run01.o
-    Object src/overlay96_ui_helpers_1.o
-    Object src/overlay96_rank_results.o
-    Object src/overlay96_ui_helpers_2.o
-    Object src/to52_r6_overlay96_results_graphics_r43_r3.o
-    Object src/overlay96_ui_helpers_3.o
-    Object src/to70_overlay_96_residual_43_residual_4_extra876_run01.o
-    Object src/overlay96_ui_helpers_4.o
-    Object src/to58_bank_ov96_textbox.o
-    Object src/overlay96_ui_helpers_5.o
-    Object src/to70_overlay_96_residual_43_residual_6_extra877_run01.o
-    Object src/overlay96_exact_bank_43.o
-    Object src/to70_overlay_96_residual_44_extra389_run01.o
-    Object src/to80_extra1610_run01.o
-    Object src/to70_overlay_96_residual_44_extra389_run02.o
-    Object src/overlay96_render_accessors_1.o
-    Object src/to90_extra2440_run01.o
-    Object src/to90_extra2239_run01.o
-    Object src/overlay96_render_accessors_2.o
-    Object src/overlay96_exact_bank_44.o
-    Object src/to52_r6_w05_overlay96_r45.o
-    Object src/overlay96_exact_bank_45.o
-    Object src/r40_overlay_96_residual_46_run1.o
-    Object src/overlay96_exact_bank_46.o
-    Object src/op90_overlay_96_residual_47_head_r01.o
-    Object src/overlay96_course_scene_gap47_tail.o
-    Object src/overlay96_exact_bank_47.o
-    Object src/overlay96_course_cleanup/overlay96_course_cleanup.o
-    Object src/overlay96_exact_bank_48.o
-    Object src/to90_extra2397_run01.o
-    Object src/overlay96_results_setup_gap1.o
-    Object src/overlay96_results_ui_r49_run1.o
-    Object src/to90_extra2398_run01.o
-    Object src/overlay96_results_ui_r49_run2.o
-    Object src/to70_overlay_96_residual_49_gap_3_extra665_run01.o
-    Object src/overlay96_results_ui_r49_run3.o
-    Object src/overlay96_results_ui_r49_run4.o
-    Object src/to91_w41576_results_sprite_anim.o
-    Object src/overlay96_exact_bank_49.o
-    Object src/to70_overlay_96_residual_50_extra666_run01.o
-    Object src/overlay96_exact_bank_50.o
-    Object src/overlay96_bg_affine/overlay96_bg_affine.o
-    Object src/overlay96_exact_bank_51.o
-    Object src/overlay96_results_transition_r52.o
-    Object src/op90_overlay_96_residual_52_tail_r01.o
-    Object src/overlay96_exact_bank_52.o
-    Object src/overlay96_pokeathlon_shop_ui_run1.o
-    Object src/to70_overlay_96_residual_53_unmatched_1_extra373_run01.o
-    Object src/overlay96_pokeathlon_shop_ui_run2.o
-    Object src/overlay96_shop_transition_state.o
-    Object src/to51_overlay96_r53_gap1.o
-    Object src/overlay96_shop_background_setup.o
-    Object src/overlay96_shop_assets_r53_run1.o
-    Object src/op90_overlay_96_residual_53_tail_gap1_r01.o
-    Object src/overlay96_shop_assets_r53_run2.o
-    Object src/to90_extra2502_run01.o
-    Object src/op90_to90_extra2502_residual_1_r01.o
-    Object src/to57_overlay96_r53_tail_exact.o
-    Object src/overlay96_pokeathlon_shop_ui_run3.o
-    Object src/op90_overlay_96_residual_53_unmatched_3_r01.o
-    Object src/overlay96_pokeathlon_shop_ui_run4.o
-    Object src/op90_overlay_96_residual_53_unmatched_4_r01.o
-    Object src/overlay96_pokeathlon_shop_ui_run5.o
-    Object src/op90_overlay_96_residual_53_unmatched_5_r01.o
-    Object src/overlay96_pokeathlon_shop_ui_run6.o
-    Object src/overlay96_exact_bank_53.o
-    Object src/to70_overlay_96_residual_54_extra878_run01.o
-    Object src/overlay96_task_helpers_1.o
-    Object src/to90_extra2405_run01.o
-    Object src/sol_r10_ov96_r54r2_run1.o
-    Object src/op90_sol_r10_ov96_r54r2_middle_r01.o
-    Object src/sol_r10_ov96_r54r2_run2.o
-    Object src/overlay96_task_helpers_2.o
-    Object src/r40_overlay_96_residual_54_residual_3_run1.o
-    Object src/overlay96_task_helpers_3.o
-    Object src/to70_overlay_96_residual_54_residual_4_extra667_run01.o
-    Object src/overlay96_task_helpers_4.o
-    Object src/overlay96_results_window_r54.o
-    Object src/overlay96_task_helpers_5.o
-    Object src/to70_overlay_96_residual_54_residual_6_extra470_run01.o
-    Object src/overlay96_task_helpers_6.o
-    Object src/overlay96_exact_bank_54.o
-    Object src/ov96_wave40_a.o
-    Object src/overlay96_exact_bank_55.o
-    Object src/overlay96_grid_logic_controller_r56.o
-    Object asm/op90_overlay_96_residual_56_gap1_anchor.o
-    Object src/op90_overlay_96_residual_56_gap1_r01.o
-    Object src/overlay96_grid_logic_grid_r56.o
-    Object asm/to90_extra1932_anchor.o
-    Object src/to90_extra1932_run01.o
-    Object src/to90_extra1932_run02.o
-    Object src/overlay96_grid_logic_hit_r56.o
-    Object asm/to90_extra1933_anchor.o
-    Object src/to90_extra1933_run01.o
-    Object src/overlay96_grid_logic_ui_r56.o
-    Object asm/to90_extra1958_anchor.o
-    Object src/to90_extra1958_run01.o
-    Object src/overlay96_exact_bank_56.o
-    Object src/overlay96_ui_resources_head_57.o
+    Object src/pokeathlon/pokeathlon_course_objects.o
+    Object src/pokeathlon/pokeathlon_course_ceremony.o
+    Object src/pokeathlon/pokeathlon_course_ui.o
+    Object src/pokeathlon/pokeathlon_event_intro.o
+    Object src/pokeathlon/pokeathlon_circle_push.o
     Object asm/to70_overlay_96_residual_125_extra662_anchor_own1.o
     Object src/op90_to80_extra1591_residual_1_r01.o
     Object asm/to70_overlay_96_residual_125_extra662_anchor_own2.o

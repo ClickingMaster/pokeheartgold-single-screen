@@ -13,7 +13,7 @@ extern void PlaySEOnPlayer(int,int);
 extern void SetPlayerPan(int,int);
 extern void PokeathlonCourseMonObject_SetAnimState(void *,int);
 extern void PokeathlonCourseMonObject_Move(void *,int,int,int,int);
-extern void *ov96_021EB5B8(void *);
+extern void *PokeathlonCourseSpritePoolSprite_GetSprite(void *);
 extern const VecFx32 *Sprite_GetMatrixPtr(void *);
 extern void Sprite_SetMatrix(void *,const VecFx32 *);
 extern void PokeathlonCourseMonObject_GetSpritePosition(void *,int *,int *);
@@ -45,6 +45,6 @@ void ov96_021FA83C(int index,Work *w){
  if(changed){w->top+=delta;w->bottom+=delta;PokeathlonCourseMonObject_Move(w->actor,0,delta,1,1);}break;}
  case 0:w->c3c=0;w->c3e=0;break;
  }
- {void *sprite=ov96_021EB5B8(w->sprite0);VecFx32 matrix=*Sprite_GetMatrixPtr(sprite);matrix.y=w->bottom<<12;Sprite_SetMatrix(sprite,&matrix);}
- {int x,y;void *sprite;VecFx32 matrix;PokeathlonCourseMonObject_GetSpritePosition(w->actor,&x,&y);sprite=ov96_021EB5B8(w->sprite2);matrix=*Sprite_GetMatrixPtr(sprite);matrix.y=y<<12;Sprite_SetMatrix(sprite,&matrix);}
+ {void *sprite=PokeathlonCourseSpritePoolSprite_GetSprite(w->sprite0);VecFx32 matrix=*Sprite_GetMatrixPtr(sprite);matrix.y=w->bottom<<12;Sprite_SetMatrix(sprite,&matrix);}
+ {int x,y;void *sprite;VecFx32 matrix;PokeathlonCourseMonObject_GetSpritePosition(w->actor,&x,&y);sprite=PokeathlonCourseSpritePoolSprite_GetSprite(w->sprite2);matrix=*Sprite_GetMatrixPtr(sprite);matrix.y=y<<12;Sprite_SetMatrix(sprite,&matrix);}
 }

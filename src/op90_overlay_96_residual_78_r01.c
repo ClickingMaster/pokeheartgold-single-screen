@@ -54,7 +54,7 @@ typedef struct Work {
 
 void *PokeathlonCourse_GetHeapAllocPtr4(void *course);
 void ov96_021FE538(void *course, Work *work, Actor *actor);
-int ov96_021EAF8C(void *sprite);
+int PokeathlonCourseObject_GetCollisionRadius(void *sprite);
 int ov96_021FF5A8(Work *work, int state, int a2, VecFx32 *prev, VecFx32 *pos, VecFx32 *out);
 BOOL ov96_021FF764(void *course, Actor *actors, VecFx32 *hit);
 void PokeathlonCourse_AddMonCounter(void *course, u8 owner, u8 current, u32 event, u32 value);
@@ -102,7 +102,7 @@ void ov96_021FDE7C(void *course) {
         } else if (actor->position.y > FX32_CONST(168)) {
             actor->position.y = FX32_CONST(168);
         }
-        result = ov96_021FF5A8(work, actor->state, ov96_021EAF8C(actor->sprites[actor->current]), &prev, &actor->position, &actor->position);
+        result = ov96_021FF5A8(work, actor->state, PokeathlonCourseObject_GetCollisionRadius(actor->sprites[actor->current]), &prev, &actor->position, &actor->position);
         hi = (u8)(result >> 8);
         result = (u8)result;
         if (hi == 1) {

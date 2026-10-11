@@ -19,10 +19,10 @@ void *PokeathlonCourseMonGfx_GetSprite(void *);
 BOOL PokeathlonCourseMonGfx_IsShiftedUp(void *);
 void PokeathlonCourseMonObject_SetPosition(Ov96PositionObject *, s32, s32, u32);
 void Sprite_SetMatrix(void *, VecFx32 *);
-void ov96_021EAF94(Ov96PositionObject *, s32, s32);
-void ov96_021EB01C(Ov96PositionObject *, s32, s32, u32);
-void ov96_021EB03C(Ov96PositionObject *, s32, s32, s32 *, s32 *);
-void ov96_021EB06C(Ov96PositionObject *, s32, s32, s32 *, s32 *);
-void ov96_021EB0A4(Ov96PositionObject *, s32, s32, s32 *, s32 *);
-BOOL ov96_021EB0CC(Ov96PositionObject *, fx32, fx32, s32, s32);
+void PokeathlonCourseObject_SetGroundPosition(Ov96PositionObject *, s32, s32);
+void PokeathlonCourseObject_SetCenterPosition(Ov96PositionObject *, s32, s32, u32);
+void PokeathlonCourseObject_GetCollisionCenter(Ov96PositionObject *, s32, s32, s32 *, s32 *);
+void PokeathlonCourseObject_CenterToGround(Ov96PositionObject *, s32, s32, s32 *, s32 *);
+void PokeathlonCourseObject_GroundToCenter(Ov96PositionObject *, s32, s32, s32 *, s32 *);
+BOOL PokeathlonCourseObject_IsInTouchRange(Ov96PositionObject *, fx32, fx32, s32, s32);
 #endif

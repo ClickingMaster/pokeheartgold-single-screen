@@ -15,9 +15,9 @@ typedef struct {
     Ent ents[30];
 } Work;
 void *PokeathlonCourse_GetHeapAllocPtr4(void *course);
-void ov96_021EB564(void *obj, int anim);
-void ov96_021EB52C(void *obj, int a, int b);
-void ov96_021EB588(void *obj, VecFx32 *pos);
+void PokeathlonCourseSpritePoolSprite_SetAnim(void *obj, int anim);
+void PokeathlonCourseSpritePoolSprite_Show(void *obj, int a, int b);
+void PokeathlonCourseSpritePoolSprite_SetPosition(void *obj, VecFx32 *pos);
 void ov96_021FFB44(Ent *ent);
 void ov96_021FEAEC(Work *work, int a);
 void PokeathlonCourse_SetStateTransitionType(void *course, int type);
@@ -41,12 +41,12 @@ BOOL ov96_021FD2E0(void *course, u8 *state) {
                 work->ents[i].kind = kind;
                 work->ents[i].x = x;
                 work->ents[i].y = y;
-                ov96_021EB564(work->ents[i].obj, kind - 1);
-                ov96_021EB52C(work->ents[i].obj, 1, 1);
+                PokeathlonCourseSpritePoolSprite_SetAnim(work->ents[i].obj, kind - 1);
+                PokeathlonCourseSpritePoolSprite_Show(work->ents[i].obj, 1, 1);
                 pos.z = 0;
                 pos.x = (x + 0x50) << FX32_SHIFT;
                 pos.y = (y + 0x20) << FX32_SHIFT;
-                ov96_021EB588(work->ents[i].obj, &pos);
+                PokeathlonCourseSpritePoolSprite_SetPosition(work->ents[i].obj, &pos);
                 ov96_021FFB44(&work->ents[i]);
             }
         }

@@ -12,7 +12,7 @@ extern void PlaySEOnPlayer(u32, u32);
 extern void SetPlayerPan(u32, s32);
 extern u32 ov96_021E5F24(void *);
 extern void PokeathlonCourse_AddMonCounter(void *, u32, u32, u32, u32);
-extern void *ov96_021EB5B8(void *);
+extern void *PokeathlonCourseSpritePoolSprite_GetSprite(void *);
 extern void PokeathlonCourseMonObject_SetAnimState(void *, u32);
 extern u8 ov96_0221DC2C[];
 extern const s8 ov96_0221DC28[];

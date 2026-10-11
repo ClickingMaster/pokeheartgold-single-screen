@@ -99,57 +99,57 @@
 	.public PokeathlonCourseMonObject_SetAnimStateRaw
 	.public PokeathlonCourseMonObject_IsAnimated
 	.public PokeathlonCourseMonObject_GetPosition
-	.public ov96_021EAF6C
-	.public ov96_021EAF70
-	.public ov96_021EAF8C
-	.public ov96_021EAF90
-	.public ov96_021EB10C
-	.public ov96_021EB138
-	.public ov96_021EB564
-	.public ov96_021EB570
-	.public ov96_021EB57C
-	.public ov96_021EB588
-	.public ov96_021EB594
-	.public ov96_021EB5A0
-	.public ov96_021EB5AC
-	.public ov96_021EB5B8
-	.public ov96_021EB5BC
-	.public ov96_021EB5E8
-	.public ov96_021EB630
-	.public ov96_021EB678
-	.public ov96_021EB680
-	.public ov96_021EB688
-	.public ov96_021EB690
-	.public ov96_021EB698
-	.public ov96_021EB6A0
-	.public ov96_021EC2E0
-	.public ov96_021ECBF4
-	.public ov96_021ECC38
-	.public ov96_021ECC4C
-	.public ov96_021ECDC4
-	.public ov96_021ECDD4
-	.public ov96_021ED47C
-	.public ov96_021ED6E8
-	.public ov96_021ED748
-	.public ov96_021ED74C
-	.public ov96_021ED750
-	.public ov96_021EDF7C
-	.public ov96_021EEA80
-	.public ov96_021EED64
-	.public ov96_021EEEBC
-	.public ov96_021EEEC0
-	.public ov96_021EEF98
-	.public ov96_021EF18C
-	.public ov96_021EF2A0
-	.public ov96_021EF2AC
-	.public ov96_021EF98C
-	.public ov96_021EFA28
-	.public ov96_021EFB50
-	.public ov96_021F08E4
-	.public ov96_021F27A8
-	.public ov96_021F30BC
-	.public ov96_021F3424
-	.public ov96_021F3E58
+	.public PokeathlonCourseObject_SetTouchRadius
+	.public PokeathlonCourseObject_SetCollision
+	.public PokeathlonCourseObject_GetCollisionRadius
+	.public PokeathlonCourseObject_GetCollisionOffsetY
+	.public PokeathlonCourseObject_SetScale
+	.public PokeathlonCourseObjects_ShiftLargeUp
+	.public PokeathlonCourseSpritePoolSprite_SetAnim
+	.public PokeathlonCourseSpritePoolSprite_TryChangeAnim
+	.public PokeathlonCourseSpritePoolSprite_IsAnimated
+	.public PokeathlonCourseSpritePoolSprite_SetPosition
+	.public PokeathlonCourseSpritePoolSprite_GetPosition
+	.public PokeathlonCourseSpritePoolSprite_SetScale
+	.public PokeathlonCourseSpritePoolSprite_SetRotation
+	.public PokeathlonCourseSpritePoolSprite_GetSprite
+	.public PokeathlonCourseSpritePool_Draw
+	.public PokeathlonCourseSpritePool_GetSpriteList
+	.public PokeathlonCourseSpritePoolSprite_SetDrawPriority
+	.public PokeathlonCourseOpening_Init
+	.public PokeathlonCourseOpening_Main
+	.public PokeathlonCourseOpening_Exit
+	.public PokeathlonCourseClosing_Init
+	.public PokeathlonCourseClosing_Main
+	.public PokeathlonCourseClosing_Exit
+	.public PokeathlonCourseCeremony_IsCryActive
+	.public PokeathlonCourseCeremony_FreeScores
+	.public PokeathlonCourseCeremony_AddPoints
+	.public PokeathlonCourseCeremony_GetPoints
+	.public PokeathlonCourseCeremonyScore_IsCounted
+	.public PokeathlonCourseCeremonyScore_Add
+	.public PokeathlonCourseCeremony_Main
+	.public PokeathlonCourseConfetti_GetRandomDelay
+	.public PokeathlonCourseCeremony_GetNoMissPoints
+	.public PokeathlonCourseCeremony_GetPointsLeaderPoints
+	.public PokeathlonCourseCeremony_GetEffortPrizePoints
+	.public PokeathlonCourseCeremony_GetIntroMsgBase
+	.public PokeathlonCourseMessageBox_IsBusy
+	.public PokeathlonCourse_LoadSpriteChars
+	.public PokeathlonCourseWait_Main
+	.public PokeathlonCourseWait_Exit
+	.public PokeathlonCourseWait_FreeBgs
+	.public PokeathlonEventIntro_Main
+	.public PokeathlonEventIntro_GetEvent
+	.public PokeathlonEventIntro_HasFlag0EF
+	.public PokeathlonEventIntro_ResetMascot
+	.public PokeathlonEventIntro_HideZoomBgs
+	.public PokeathlonEventIntro_IsFadeFinished
+	.public PokeathlonCirclePush_Main
+	.public PokeathlonCirclePushStack_Pop
+	.public PokeathlonCirclePushZoneMarkers_Free
+	.public PokeathlonCirclePushAi_Free
+	.public PokeathlonCirclePushDisplay_LoadPics
 	.public PokeathlonCirclePushDisplay_GetScore
 	.public PokeathlonLampJump_Draw
 	.public PokeathlonLampJump_FreeLamps
@@ -240,8 +240,8 @@
 	.public ov96_0221A720
 
 	.if 0
-	thumb_func_start ov96_021F342C
-ov96_021F342C: ; 0x021F342C
+	thumb_func_start PokeathlonCirclePushAi_Update
+PokeathlonCirclePushAi_Update: ; 0x021F342C
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	ldr r0, _021F34FC ; =0x000004EA
@@ -319,7 +319,7 @@ _021F34BA:
 	add r0, r5, #0
 	lsr r1, r1, #0x18
 	add r2, r7, #0
-	bl ov96_021F350C
+	bl PokeathlonCirclePushAi_ChooseTarget
 	lsl r0, r6, #0x18
 	lsr r4, r0, #0x18
 	ldr r0, _021F3504 ; =0x000004E5
@@ -351,13 +351,13 @@ _021F34FC: .word 0x000004EA
 _021F3500: .word 0x000004B4
 _021F3504: .word 0x000004E5
 _021F3508: .word 0x000004E8
-	thumb_func_end ov96_021F342C
+	thumb_func_end PokeathlonCirclePushAi_Update
 	.endif
 
 
 	.if R56_GAP == 1
-	thumb_func_start ov96_021F350C
-ov96_021F350C: ; 0x021F350C
+	thumb_func_start PokeathlonCirclePushAi_ChooseTarget
+PokeathlonCirclePushAi_ChooseTarget: ; 0x021F350C
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x198
 	lsl r1, r1, #5
@@ -421,7 +421,7 @@ _021F3574:
 	str r7, [sp, #4]
 	ldr r0, [r5, #0x1c]
 	ldmia r2!, {r1, r2}
-	bl ov96_021EAF78
+	bl PokeathlonCourseObject_GetCollisionCircle
 	ldr r1, [sp, #0x40]
 	asr r0, r1, #0xb
 	lsr r0, r0, #0x14
@@ -432,7 +432,7 @@ _021F3574:
 	lsr r2, r2, #0x14
 	add r2, r1, r2
 	asr r1, r2, #0xc
-	bl ov96_021F38FC
+	bl PokeathlonCirclePushAi_GetCell
 	b _021F35AA
 _021F35A6:
 	mov r0, #0
@@ -460,15 +460,15 @@ _021F35AA:
 	asr r1, r1, #0xc
 	asr r2, r2, #0xc
 	add r3, sp, #0x48
-	bl ov96_021EB06C
+	bl PokeathlonCourseObject_CenterToGround
 	ldr r0, [sp, #0x48]
 	ldr r1, [sp, #0x44]
-	bl ov96_021F38FC
+	bl PokeathlonCirclePushAi_GetCell
 	ldr r1, [sp, #0x20]
 	str r0, [r1]
 	ldr r0, [sp, #0xc]
 	add r1, sp, #0xb0
-	bl ov96_021F333C
+	bl PokeathlonCirclePush_GetZoneCircles
 	mov r6, #0
 	ldr r5, [sp, #8]
 	add r4, sp, #0xb0
@@ -479,7 +479,7 @@ _021F35F6:
 	ble _021F360C
 	ldrh r0, [r4, #4]
 	ldrh r1, [r4, #6]
-	bl ov96_021F38FC
+	bl PokeathlonCirclePushAi_GetCell
 	mov r1, #0x4a
 	lsl r1, r1, #4
 	str r0, [r5, r1]
@@ -503,7 +503,7 @@ _021F3612:
 	lsr r1, r1, #0x10
 	add r2, #2
 	add r3, sp, #0x24
-	bl ov96_021F3B04
+	bl PokeathlonCirclePushAi_GetColumnRow
 	cmp r0, #0
 	bne _021F363A
 	bl GF_AssertFail
@@ -629,7 +629,7 @@ _021F3716:
 _021F3720:
 	mov r0, #9
 	add r1, sp, #0x8c
-	bl ov96_021F380C
+	bl PokeathlonCirclePushAi_PlaceInCells
 	ldr r1, [sp, #0x48]
 	ldr r0, [sp, #0x9c]
 	ldr r3, [sp, #0x20]
@@ -642,11 +642,11 @@ _021F3720:
 	str r0, [sp]
 	ldr r0, [sp, #8]
 	mov r1, #9
-	bl ov96_021F3888
+	bl PokeathlonCirclePushAi_ScoreCells
 	mov r0, #9
 	add r1, sp, #0x8c
 	add r2, sp, #0xd0
-	bl ov96_021F3B38
+	bl PokeathlonCirclePushAi_SortCells
 	add r4, r0, #0
 	ldr r0, [sp, #0xd0]
 	ldr r0, [r0, #0x18]
@@ -666,7 +666,7 @@ _021F3720:
 	ldr r0, [r0, #0x1c]
 	ldr r2, [r2, #0xc]
 	add r3, sp, #0x34
-	bl ov96_021EB0A4
+	bl PokeathlonCourseObject_GroundToCenter
 	ldr r0, [sp, #0x34]
 	lsl r1, r0, #0xc
 	ldr r0, [sp, #0x20]
@@ -686,18 +686,18 @@ _021F3720:
 _021F379C:
 	mov r0, #0x10
 	add r1, sp, #0x4c
-	bl ov96_021F380C
+	bl PokeathlonCirclePushAi_PlaceInCells
 	add r0, sp, #0x134
 	str r0, [sp]
 	ldr r0, [sp, #8]
 	ldr r3, [sp, #0x20]
 	mov r1, #0x19
 	add r2, sp, #0xb0
-	bl ov96_021F3888
+	bl PokeathlonCirclePushAi_ScoreCells
 	mov r0, #0x19
 	add r1, sp, #0x134
 	add r2, sp, #0xd0
-	bl ov96_021F3B38
+	bl PokeathlonCirclePushAi_SortCells
 	add r4, r0, #0
 	bl LCRandom
 	add r1, r4, #0
@@ -713,7 +713,7 @@ _021F379C:
 	ldr r0, [r0, #0x1c]
 	ldr r2, [r2, #0xc]
 	add r3, sp, #0x2c
-	bl ov96_021EB0A4
+	bl PokeathlonCourseObject_GroundToCenter
 	ldr r0, [sp, #0x2c]
 	lsl r1, r0, #0xc
 	ldr r0, [sp, #0x20]
@@ -734,13 +734,13 @@ _021F3800:
 	.balign 4, 0
 _021F3804: .word 0x000004E8
 _021F3808: .word 0x000004B4
-	thumb_func_end ov96_021F350C
+	thumb_func_end PokeathlonCirclePushAi_ChooseTarget
 	.endif
 
 
 	.if 0
-	thumb_func_start ov96_021F380C
-ov96_021F380C: ; 0x021F380C
+	thumb_func_start PokeathlonCirclePushAi_PlaceInCells
+PokeathlonCirclePushAi_PlaceInCells: ; 0x021F380C
 	push {r3, r4, r5, r6, r7, lr}
 	str r0, [sp]
 	ldr r0, [sp]
@@ -805,11 +805,11 @@ _021F3878:
 _021F3884:
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov96_021F380C
+	thumb_func_end PokeathlonCirclePushAi_PlaceInCells
 
 
-	thumb_func_start ov96_021F3888
-ov96_021F3888: ; 0x021F3888
+	thumb_func_start PokeathlonCirclePushAi_ScoreCells
+PokeathlonCirclePushAi_ScoreCells: ; 0x021F3888
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x1c
 	str r1, [sp, #0xc]
@@ -842,7 +842,7 @@ _021F38B0:
 	str r0, [sp, #8]
 	ldr r2, [r2, #0x14]
 	add r0, r7, #0
-	bl ov96_021F3930
+	bl PokeathlonCirclePushAi_ScoreCell
 	ldr r1, [r5, r6]
 	str r0, [r1, #0x18]
 	ldr r0, [sp, #0x18]
@@ -858,7 +858,7 @@ _021F38B0:
 	lsl r2, r2, #0x18
 	lsr r2, r2, #0x18
 	add r3, #8
-	bl ov96_021F3AD8
+	bl PokeathlonCirclePushAi_SnapToZone
 _021F38EA:
 	add r0, r4, #1
 	lsl r0, r0, #0x18
@@ -870,11 +870,11 @@ _021F38F6:
 	add sp, #0x1c
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov96_021F3888
+	thumb_func_end PokeathlonCirclePushAi_ScoreCells
 
 
-	thumb_func_start ov96_021F38FC
-ov96_021F38FC: ; 0x021F38FC
+	thumb_func_start PokeathlonCirclePushAi_GetCell
+PokeathlonCirclePushAi_GetCell: ; 0x021F38FC
 	sub r0, #0x10
 	asr r2, r0, #4
 	lsr r2, r2, #0x1b
@@ -904,13 +904,13 @@ _021F391E:
 	sub r0, #8
 _021F392E:
 	bx lr
-	thumb_func_end ov96_021F38FC
+	thumb_func_end PokeathlonCirclePushAi_GetCell
 	.endif
 
 
 	.if R56_GAP == 2
-	thumb_func_start ov96_021F3930
-ov96_021F3930: ; 0x021F3930
+	thumb_func_start PokeathlonCirclePushAi_ScoreCell
+PokeathlonCirclePushAi_ScoreCell: ; 0x021F3930
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #8
 	add r5, r2, #0
@@ -939,7 +939,7 @@ _021F394A:
 	ldr r2, [sp, #0x24]
 	lsl r1, r1, #0xc
 	lsl r2, r2, #0xc
-	bl ov96_021F3A5C
+	bl PokeathlonCirclePushAi_IsInZone
 	cmp r0, #0
 	beq _021F3970
 	add r4, r4, #5
@@ -947,7 +947,7 @@ _021F3970:
 	lsl r1, r5, #0x18
 	ldr r0, [sp]
 	lsr r1, r1, #0x18
-	bl ov96_021F3AB0
+	bl PokeathlonCirclePushAi_IsZoneCell
 	cmp r0, #0
 	beq _021F3984
 	mov r0, #1
@@ -957,7 +957,7 @@ _021F3984:
 	ldr r0, [sp]
 	add r1, r6, #0
 	add r2, r5, #0
-	bl ov96_021F39F0
+	bl PokeathlonCirclePushAi_CountRivals
 	add r4, r4, r0
 	b _021F39E8
 _021F3992:
@@ -966,7 +966,7 @@ _021F3992:
 	ldr r0, [sp, #4]
 	lsl r1, r1, #0xc
 	lsl r2, r2, #0xc
-	bl ov96_021F3A5C
+	bl PokeathlonCirclePushAi_IsInZone
 	cmp r0, #0
 	beq _021F39A6
 	add r4, r4, #5
@@ -974,7 +974,7 @@ _021F39A6:
 	lsl r1, r5, #0x18
 	ldr r0, [sp]
 	lsr r1, r1, #0x18
-	bl ov96_021F3AB0
+	bl PokeathlonCirclePushAi_IsZoneCell
 	cmp r0, #0
 	beq _021F39BA
 	mov r0, #1
@@ -984,7 +984,7 @@ _021F39BA:
 	ldr r0, [sp]
 	add r1, r6, #0
 	add r2, r5, #0
-	bl ov96_021F39F0
+	bl PokeathlonCirclePushAi_CountRivals
 	cmp r0, #0
 	bne _021F39CA
 	add r4, r4, #2
@@ -1001,7 +1001,7 @@ _021F39D8:
 	ldr r2, [r6, #0xc]
 	ldr r0, [sp, #4]
 	ldmia r2!, {r1, r2}
-	bl ov96_021F3A5C
+	bl PokeathlonCirclePushAi_IsInZone
 	cmp r0, #0
 	beq _021F39E8
 	add r4, r4, #4
@@ -1010,11 +1010,11 @@ _021F39E8:
 	add sp, #8
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov96_021F3930
+	thumb_func_end PokeathlonCirclePushAi_ScoreCell
 
 
-	thumb_func_start ov96_021F39F0
-ov96_021F39F0: ; 0x021F39F0
+	thumb_func_start PokeathlonCirclePushAi_CountRivals
+PokeathlonCirclePushAi_CountRivals: ; 0x021F39F0
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0xc
 	add r5, r0, #0
@@ -1072,13 +1072,13 @@ _021F3A4C:
 	add sp, #0xc
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov96_021F39F0
+	thumb_func_end PokeathlonCirclePushAi_CountRivals
 	.endif
 
 
 	.if 0
-	thumb_func_start ov96_021F3A5C
-ov96_021F3A5C: ; 0x021F3A5C
+	thumb_func_start PokeathlonCirclePushAi_IsInZone
+PokeathlonCirclePushAi_IsInZone: ; 0x021F3A5C
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x18
 	mov r4, #0
@@ -1122,11 +1122,11 @@ _021F3AA8:
 	add sp, #0x18
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov96_021F3A5C
+	thumb_func_end PokeathlonCirclePushAi_IsInZone
 
 
-	thumb_func_start ov96_021F3AB0
-ov96_021F3AB0: ; 0x021F3AB0
+	thumb_func_start PokeathlonCirclePushAi_IsZoneCell
+PokeathlonCirclePushAi_IsZoneCell: ; 0x021F3AB0
 	push {r4, r5}
 	mov r5, #0
 	mov r2, #0x4a
@@ -1150,11 +1150,11 @@ _021F3AD2:
 	mov r0, #0
 	pop {r4, r5}
 	bx lr
-	thumb_func_end ov96_021F3AB0
+	thumb_func_end PokeathlonCirclePushAi_IsZoneCell
 
 
-	thumb_func_start ov96_021F3AD8
-ov96_021F3AD8: ; 0x021F3AD8
+	thumb_func_start PokeathlonCirclePushAi_SnapToZone
+PokeathlonCirclePushAi_SnapToZone: ; 0x021F3AD8
 	push {r3, r4, r5, r6}
 	mov r4, #0x4a
 	mov r6, #0
@@ -1179,11 +1179,11 @@ _021F3AF8:
 	blt _021F3AE0
 	pop {r3, r4, r5, r6}
 	bx lr
-	thumb_func_end ov96_021F3AD8
+	thumb_func_end PokeathlonCirclePushAi_SnapToZone
 
 
-	thumb_func_start ov96_021F3B04
-ov96_021F3B04: ; 0x021F3B04
+	thumb_func_start PokeathlonCirclePushAi_GetColumnRow
+PokeathlonCirclePushAi_GetColumnRow: ; 0x021F3B04
 	push {r3, r4}
 	sub r0, #0x10
 	asr r4, r0, #4
@@ -1212,13 +1212,13 @@ _021F3B32:
 	mov r0, #1
 	pop {r3, r4}
 	bx lr
-	thumb_func_end ov96_021F3B04
+	thumb_func_end PokeathlonCirclePushAi_GetColumnRow
 	.endif
 
 
 	.if R56_GAP == 3
-	thumb_func_start ov96_021F3B38
-ov96_021F3B38: ; 0x021F3B38
+	thumb_func_start PokeathlonCirclePushAi_SortCells
+PokeathlonCirclePushAi_SortCells: ; 0x021F3B38
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x13c
 	add r6, r0, #0
@@ -1320,13 +1320,13 @@ _021F3BEA:
 	ldr r0, [sp]
 	add sp, #0x13c
 	pop {r4, r5, r6, r7, pc}
-	thumb_func_end ov96_021F3B38
+	thumb_func_end PokeathlonCirclePushAi_SortCells
 	.endif
 
 
 	.if 0
-	thumb_func_start ov96_021F3BF0
-ov96_021F3BF0: ; 0x021F3BF0
+	thumb_func_start PokeathlonCirclePushDisplay_New
+PokeathlonCirclePushDisplay_New: ; 0x021F3BF0
 	push {r3, r4, r5, r6, r7, lr}
 	add r6, r1, #0
 	mov r1, #0x5d
@@ -1357,11 +1357,11 @@ ov96_021F3BF0: ; 0x021F3BF0
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
 _021F3C34: .word 0x00000135
-	thumb_func_end ov96_021F3BF0
+	thumb_func_end PokeathlonCirclePushDisplay_New
 
 
-	thumb_func_start ov96_021F3C38
-ov96_021F3C38: ; 0x021F3C38
+	thumb_func_start PokeathlonCirclePushDisplay_Free
+PokeathlonCirclePushDisplay_Free: ; 0x021F3C38
 	push {r3, r4, r5, r6, r7, lr}
 	add r7, r0, #0
 	mov r4, #0
@@ -1423,13 +1423,13 @@ _021F3CA4:
 	bl Heap_Free
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov96_021F3C38
+	thumb_func_end PokeathlonCirclePushDisplay_Free
 	.endif
 
 
 	.if R56_GAP == 4
-	thumb_func_start ov96_021F3CBC
-ov96_021F3CBC: ; 0x021F3CBC
+	thumb_func_start PokeathlonCirclePushDisplay_LoadScreens
+PokeathlonCirclePushDisplay_LoadScreens: ; 0x021F3CBC
 	push {r3, r4, r5, lr}
 	sub sp, #0x10
 	add r5, r0, #0
@@ -1613,5 +1613,5 @@ ov96_021F3CBC: ; 0x021F3CBC
 	bl ScheduleBgTilemapBufferTransfer
 	add sp, #0x10
 	pop {r3, r4, r5, pc}
-	thumb_func_end ov96_021F3CBC
+	thumb_func_end PokeathlonCirclePushDisplay_LoadScreens
 	.endif

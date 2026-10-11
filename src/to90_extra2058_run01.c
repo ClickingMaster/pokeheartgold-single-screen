@@ -9,7 +9,7 @@ typedef struct {int unk0,kind,unk8,state;u8 pad[12];Coordinate x,y;u8 pad2[28];F
 typedef struct {u32 unk;u8 y[12],x[12];Index index;Status status;} Data;
 extern void *PokeathlonCourse_GetDataCopyArea(void*);
 extern u8 *ov96_021E8A20(void *ptr);
-extern void ov96_021EB06C(int,int,int,int*,int*);
+extern void PokeathlonCourseObject_CenterToGround(int,int,int,int*,int*);
 void ov96_0220FA18(void*,void*);
 void ov96_0220FA18(void *work,void *course) {
  int y,x; Index *index; Data *data;int i,shift;Status *status;
@@ -24,7 +24,7 @@ void ov96_0220FA18(void *work,void *course) {
  work=(u8*)work+0x98;
  for(i=0,shift=0;i<12;i++,shift+=2) {
   int value;Row *row=(Row*)((u8*)work+(i/3)*228+(i%3)*72);
-  ov96_021EB06C(row->kind,row->x.b.coord,row->y.b.coord,&y,&x);
+  PokeathlonCourseObject_CenterToGround(row->kind,row->x.b.coord,row->y.b.coord,&y,&x);
   value=y;if(value>255)value=255;else if(value<0)value=0;
   data->y[i]=value;
   value=x;if(value>255)value=255;else if(value<0)value=0;

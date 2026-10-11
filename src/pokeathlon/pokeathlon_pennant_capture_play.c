@@ -14,18 +14,18 @@
 #include "touchscreen.h"
 
 // Course helpers of other OVY_96 parts that have no module header yet.
-void *ov96_021EB3E4(void *pool, int a1, int a2, int tag, int cell);
-void ov96_021EB564(void *sprite, int anim);
-void ov96_021EB630(void *sprite, int priority);
-void ov96_021EB52C(void *sprite, int a1, int a2);
-void ov96_021EB2BC(void *pool, int narc, int member, int tag, int a4);
-void ov96_021EB2F4(void *pool, int narc, int member, int tag, int a4, int a5);
-void ov96_021EB334(void *pool, int narc, int member, int tag);
-void ov96_021EB36C(void *pool, int narc, int member, int tag);
-void ov96_021EB0A4(void *object, int x, int y, int *outX, int *outY);
-BOOL ov96_021EB0CC(void *object, fx32 x, fx32 y, int touchX, int touchY);
-void ov96_021EB144(void *object, int a1);
-void ov96_021EB63C(void *object);
+void *PokeathlonCourseSpritePool_CreateAndTake(void *pool, int a1, int a2, int tag, int cell);
+void PokeathlonCourseSpritePoolSprite_SetAnim(void *sprite, int anim);
+void PokeathlonCourseSpritePoolSprite_SetDrawPriority(void *sprite, int priority);
+void PokeathlonCourseSpritePoolSprite_Show(void *sprite, int a1, int a2);
+void PokeathlonCourseSpritePool_LoadChar(void *pool, int narc, int member, int tag, int a4);
+void PokeathlonCourseSpritePool_LoadPltt(void *pool, int narc, int member, int tag, int a4, int a5);
+void PokeathlonCourseSpritePool_LoadCell(void *pool, int narc, int member, int tag);
+void PokeathlonCourseSpritePool_LoadAnim(void *pool, int narc, int member, int tag);
+void PokeathlonCourseObject_GroundToCenter(void *object, int x, int y, int *outX, int *outY);
+BOOL PokeathlonCourseObject_IsInTouchRange(void *object, fx32 x, fx32 y, int touchX, int touchY);
+void PokeathlonCourseObjects_PauseAnims(void *object, int a1);
+void PokeathlonCourseSpritePool_PauseAnims(void *object);
 u32 PokeathlonCourse_RunStartCountdown(PokeathlonCourseData *course);
 u32 PokeathlonCourse_RunFinish(PokeathlonCourseData *course);
 void PokeathlonCourse_UpdateTimeUpCountdown(PokeathlonCourseData *course, u16 timeLeft);
@@ -89,10 +89,10 @@ void PokeathlonPennantCapture_LoadBgGfx(PokeathlonPennantCapture *work) {
 #pragma force_active reset
 
 void PokeathlonPennantCapture_LoadSpriteResources(void *pool) {
-    ov96_021EB2BC(pool, 0xE2, 17, 0x68, 1);
-    ov96_021EB2F4(pool, 0xE2, 14, 0x68, 1, 2);
-    ov96_021EB334(pool, 0xE2, 16, 0x68);
-    ov96_021EB36C(pool, 0xE2, 15, 0x68);
+    PokeathlonCourseSpritePool_LoadChar(pool, 0xE2, 17, 0x68, 1);
+    PokeathlonCourseSpritePool_LoadPltt(pool, 0xE2, 14, 0x68, 1, 2);
+    PokeathlonCourseSpritePool_LoadCell(pool, 0xE2, 16, 0x68);
+    PokeathlonCourseSpritePool_LoadAnim(pool, 0xE2, 15, 0x68);
 }
 
 void PokeathlonPennantCapture_CreateSprites(PokeathlonPennantCapture *work, void *pool) {
@@ -104,57 +104,57 @@ void PokeathlonPennantCapture_CreateSprites(PokeathlonPennantCapture *work, void
     i = 0;
     cursor = work;
     do {
-        cursor->obstacles[0].sprite = ov96_021EB3E4(pool, 2, 1, 0x68, 6);
-        ov96_021EB564(cursor->obstacles[0].sprite, 1);
+        cursor->obstacles[0].sprite = PokeathlonCourseSpritePool_CreateAndTake(pool, 2, 1, 0x68, 6);
+        PokeathlonCourseSpritePoolSprite_SetAnim(cursor->obstacles[0].sprite, 1);
         i++;
         cursor = (PokeathlonPennantCapture *)((u8 *)cursor + sizeof(PokeathlonPennantCaptureObstacle));
     } while (i < 20);
 
     cursor = work;
     for (i = 0; i < 10; i++) {
-        cursor->fieldItems[0].sprite = ov96_021EB3E4(pool, 2, 1, 0x68, 17);
-        ov96_021EB564(cursor->fieldItems[0].sprite, 6);
-        cursor->fieldItems[0].shadowSprite = ov96_021EB3E4(pool, 2, 1, 0x68, 18);
-        ov96_021EB564(cursor->fieldItems[0].shadowSprite, 5);
+        cursor->fieldItems[0].sprite = PokeathlonCourseSpritePool_CreateAndTake(pool, 2, 1, 0x68, 17);
+        PokeathlonCourseSpritePoolSprite_SetAnim(cursor->fieldItems[0].sprite, 6);
+        cursor->fieldItems[0].shadowSprite = PokeathlonCourseSpritePool_CreateAndTake(pool, 2, 1, 0x68, 18);
+        PokeathlonCourseSpritePoolSprite_SetAnim(cursor->fieldItems[0].shadowSprite, 5);
         cursor = (PokeathlonPennantCapture *)((u8 *)cursor + sizeof(PokeathlonPennantCaptureFieldItem));
     }
 
     cursor = work;
     for (i = 0; i < 4; i++) {
-        cursor->players[0].carrySprite = ov96_021EB3E4(pool, 2, 1, 0x68, 9);
-        ov96_021EB564(cursor->players[0].carrySprite, 2);
+        cursor->players[0].carrySprite = PokeathlonCourseSpritePool_CreateAndTake(pool, 2, 1, 0x68, 9);
+        PokeathlonCourseSpritePoolSprite_SetAnim(cursor->players[0].carrySprite, 2);
         for (j = 0; j < 2; j++) {
             node = (u8 *)cursor + j * sizeof(void *);
-            ((PokeathlonPennantCapture *)node)->players[0].pointSprites[0] = ov96_021EB3E4(pool, 2, 1, 0x68, 23);
-            ov96_021EB564(((PokeathlonPennantCapture *)node)->players[0].pointSprites[0], 3);
-            ov96_021EB630(((PokeathlonPennantCapture *)node)->players[0].pointSprites[0], 2);
+            ((PokeathlonPennantCapture *)node)->players[0].pointSprites[0] = PokeathlonCourseSpritePool_CreateAndTake(pool, 2, 1, 0x68, 23);
+            PokeathlonCourseSpritePoolSprite_SetAnim(((PokeathlonPennantCapture *)node)->players[0].pointSprites[0], 3);
+            PokeathlonCourseSpritePoolSprite_SetDrawPriority(((PokeathlonPennantCapture *)node)->players[0].pointSprites[0], 2);
         }
-        cursor->players[0].pennantSprite = ov96_021EB3E4(pool, 2, 1, 0x68, 27);
-        ov96_021EB564(cursor->players[0].pennantSprite, 8);
+        cursor->players[0].pennantSprite = PokeathlonCourseSpritePool_CreateAndTake(pool, 2, 1, 0x68, 27);
+        PokeathlonCourseSpritePoolSprite_SetAnim(cursor->players[0].pennantSprite, 8);
         cursor = (PokeathlonPennantCapture *)((u8 *)cursor + sizeof(PokeathlonPennantCapturePlayer));
     }
 
     cursor = work;
     for (i = 0; i < 4; i++) {
-        cursor->pickupEffects[0] = ov96_021EB3E4(pool, 2, 1, 0x68, 14);
-        ov96_021EB564(cursor->pickupEffects[0], 7);
-        ov96_021EB630(cursor->pickupEffects[0], 4);
+        cursor->pickupEffects[0] = PokeathlonCourseSpritePool_CreateAndTake(pool, 2, 1, 0x68, 14);
+        PokeathlonCourseSpritePoolSprite_SetAnim(cursor->pickupEffects[0], 7);
+        PokeathlonCourseSpritePoolSprite_SetDrawPriority(cursor->pickupEffects[0], 4);
         cursor = (PokeathlonPennantCapture *)((u8 *)cursor + sizeof(void *));
     }
 
     cursor = work;
     for (i = 0; i < 4; i++) {
-        cursor->dropEffects[0] = ov96_021EB3E4(pool, 2, 1, 0x68, 25);
-        ov96_021EB564(cursor->dropEffects[0], 4);
+        cursor->dropEffects[0] = PokeathlonCourseSpritePool_CreateAndTake(pool, 2, 1, 0x68, 25);
+        PokeathlonCourseSpritePoolSprite_SetAnim(cursor->dropEffects[0], 4);
         cursor = (PokeathlonPennantCapture *)((u8 *)cursor + sizeof(void *));
     }
 
     cursor = work;
     for (i = 0; i < 5; i++) {
-        cursor->pennants.pennants[0].poleSprite = ov96_021EB3E4(pool, 2, 1, 0x68, 26);
-        cursor->pennants.pennants[0].sprite = ov96_021EB3E4(pool, 2, 1, 0x68, 16);
-        ov96_021EB564(cursor->pennants.pennants[0].sprite, 0);
-        ov96_021EB564(cursor->pennants.pennants[0].poleSprite, 4);
+        cursor->pennants.pennants[0].poleSprite = PokeathlonCourseSpritePool_CreateAndTake(pool, 2, 1, 0x68, 26);
+        cursor->pennants.pennants[0].sprite = PokeathlonCourseSpritePool_CreateAndTake(pool, 2, 1, 0x68, 16);
+        PokeathlonCourseSpritePoolSprite_SetAnim(cursor->pennants.pennants[0].sprite, 0);
+        PokeathlonCourseSpritePoolSprite_SetAnim(cursor->pennants.pennants[0].poleSprite, 4);
         cursor = (PokeathlonPennantCapture *)((u8 *)cursor + sizeof(PokeathlonPennantCapturePennant));
     }
 }
@@ -184,7 +184,7 @@ BOOL PokeathlonPennantCapture_State_Setup(PokeathlonCourseData *course, u8 *stat
                 work->obstacles[i].object = (void *)TRUE;
                 work->obstacles[i].x = x;
                 work->obstacles[i].y = y;
-                ov96_021EB52C(work->obstacles[i].sprite, 1, 1);
+                PokeathlonCourseSpritePoolSprite_Show(work->obstacles[i].sprite, 1, 1);
             }
         }
         for (i = 0; i < 10; fieldItem += 2, i++) {
@@ -196,8 +196,8 @@ BOOL PokeathlonPennantCapture_State_Setup(PokeathlonCourseData *course, u8 *stat
                 work->fieldItems[i].object = (void *)TRUE;
                 work->fieldItems[i].x = x;
                 work->fieldItems[i].y = y;
-                ov96_021EB52C(work->fieldItems[i].sprite, 1, 1);
-                ov96_021EB52C(work->fieldItems[i].shadowSprite, 1, 1);
+                PokeathlonCourseSpritePoolSprite_Show(work->fieldItems[i].sprite, 1, 1);
+                PokeathlonCourseSpritePoolSprite_Show(work->fieldItems[i].shadowSprite, 1, 1);
             }
         }
         for (i = 0; i < 20; i++, spot += 2) {
@@ -513,8 +513,8 @@ BOOL PokeathlonPennantCapture_SendInput(PokeathlonCourseData *course) {
         u8 finished = 1;
         finished &= frame->words[4] >> 31;
         if (finished) {
-            ov96_021EB63C(work->unk020);
-            ov96_021EB144(work->unk348, 1);
+            PokeathlonCourseSpritePool_PauseAnims(work->unk020);
+            PokeathlonCourseObjects_PauseAnims(work->unk348, 1);
             PokeathlonCourse_SetFinishCallback(course, PokeathlonPennantCapture_UpdateOwnScore);
             return TRUE;
         }
@@ -562,8 +562,8 @@ BOOL PokeathlonPennantCapture_IsTouchOnOwnMon(PokeathlonPennantCapture *work, in
         GF_AssertFail();
     }
     object = player->monObjects[player->member];
-    ov96_021EB0A4(object, 128, 96, &monX, &monY);
-    if (ov96_021EB0CC(object, monX << FX32_SHIFT, monY << FX32_SHIFT, x, y)) {
+    PokeathlonCourseObject_GroundToCenter(object, 128, 96, &monX, &monY);
+    if (PokeathlonCourseObject_IsInTouchRange(object, monX << FX32_SHIFT, monY << FX32_SHIFT, x, y)) {
         return TRUE;
     }
     return FALSE;

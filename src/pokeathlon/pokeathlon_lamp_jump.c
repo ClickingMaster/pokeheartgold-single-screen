@@ -59,23 +59,23 @@ void *PokeathlonCourseMonObjects_Get(void *manager, u8 index);
 void PokeathlonCourseMonObject_SetDrawFlag(void *sprite, int a1);
 void PokeathlonCourseMonObject_SetAnimState(void *sprite, int anim);
 void ov96_021EAD08(void *sprite, int a1);
-void ov96_021EAF6C(void *sprite, int a1);
-void ov96_021EAF70(void *sprite, int x, int y);
-void ov96_021EAF94(void *sprite, int x, int y);
-void ov96_021EB0A4(void *sprite, int x, int y, int *outX, int *outY);
-void ov96_021EB144(void *manager, int a1);
-void *ov96_021EB180(int heapId, PokeathlonLampJumpSceneConfig *config);
-void ov96_021EB21C(void *scene);
-void ov96_021EB29C(void *scene, int a1, int a2);
-void ov96_021EB3A4(void *scene);
-void ov96_021EB52C(void *sprite, int a1, int a2);
-void ov96_021EB564(void *sprite, int anim);
-BOOL ov96_021EB57C(void *sprite);
-void ov96_021EB588(void *sprite, VecFx32 *pos);
-void ov96_021EB5BC(void *scene);
-void ov96_021EB5C8(void *scene, int a1, int a2, int a3, int a4);
-void *ov96_021EB5E8(void *scene);
-void ov96_021EB63C(void *scene, int a1);
+void PokeathlonCourseObject_SetTouchRadius(void *sprite, int a1);
+void PokeathlonCourseObject_SetCollision(void *sprite, int x, int y);
+void PokeathlonCourseObject_SetGroundPosition(void *sprite, int x, int y);
+void PokeathlonCourseObject_GroundToCenter(void *sprite, int x, int y, int *outX, int *outY);
+void PokeathlonCourseObjects_PauseAnims(void *manager, int a1);
+void *PokeathlonCourseSpritePool_New(int heapId, PokeathlonLampJumpSceneConfig *config);
+void PokeathlonCourseSpritePool_Free(void *scene);
+void PokeathlonCourseSpritePool_SetResourceId(void *scene, int a1, int a2);
+void PokeathlonCourseSpritePool_TransferResources(void *scene);
+void PokeathlonCourseSpritePoolSprite_Show(void *sprite, int a1, int a2);
+void PokeathlonCourseSpritePoolSprite_SetAnim(void *sprite, int anim);
+BOOL PokeathlonCourseSpritePoolSprite_IsAnimated(void *sprite);
+void PokeathlonCourseSpritePoolSprite_SetPosition(void *sprite, VecFx32 *pos);
+void PokeathlonCourseSpritePool_Draw(void *scene);
+void PokeathlonCourseSpritePool_SetSurfaceCoords(void *scene, int a1, int a2, int a3, int a4);
+void *PokeathlonCourseSpritePool_GetSpriteList(void *scene);
+void PokeathlonCourseSpritePool_PauseAnims(void *scene, int a1);
 void ov96_0221A56C(void *gfx, u32 a1);
 void PokeathlonLampJump_InitCamera(PokeathlonLampJump *lampJump);
 void PokeathlonLampJump_Draw3D(PokeathlonLampJump *lampJump);
@@ -166,12 +166,12 @@ BOOL PokeathlonLampJump_Init(PokeathlonCourseData *course) {
         break;
     case 2:
         sceneConfig = ov96_0221C0B8;
-        lampJump->scene = ov96_021EB180(lampJump->heapId, &sceneConfig);
-        ov96_021EB5C8(lampJump->scene, 0, FX32_CONST(192), 0, 0);
-        lampJump->monSpriteManager = PokeathlonCourseMonObjects_Create(lampJump->heapId, (void *)3, (void *)10, NULL, ov96_021EB5E8(lampJump->scene));
-        ov96_021EB29C(lampJump->scene, 0, 101);
+        lampJump->scene = PokeathlonCourseSpritePool_New(lampJump->heapId, &sceneConfig);
+        PokeathlonCourseSpritePool_SetSurfaceCoords(lampJump->scene, 0, FX32_CONST(192), 0, 0);
+        lampJump->monSpriteManager = PokeathlonCourseMonObjects_Create(lampJump->heapId, (void *)3, (void *)10, NULL, PokeathlonCourseSpritePool_GetSpriteList(lampJump->scene));
+        PokeathlonCourseSpritePool_SetResourceId(lampJump->scene, 0, 101);
         PokeathlonLampJump_LoadSpriteResources(lampJump->scene);
-        ov96_021EB3A4(lampJump->scene);
+        PokeathlonCourseSpritePool_TransferResources(lampJump->scene);
         PokeathlonCourse_IncrementField1ED(course);
         break;
     case 3:
@@ -208,14 +208,14 @@ BOOL PokeathlonLampJump_Init(PokeathlonCourseData *course) {
             PokeathlonCourseMonObject_SetDrawFlag(sprite, 1);
             mon->sprite = sprite;
             count = ov96_021E6138(PokeathlonCourse_GetPerformance(course, 0, monIndex));
-            ov96_021EAF70(sprite, offsets[count - 1].x, offsets[count - 1].y);
+            PokeathlonCourseObject_SetCollision(sprite, offsets[count - 1].x, offsets[count - 1].y);
             PokeathlonCourseMonObject_SetAnimState(sprite, 2);
-            ov96_021EAF94(sprite, x, 288);
-            ov96_021EAF6C(sprite, ov96_021E6104());
+            PokeathlonCourseObject_SetGroundPosition(sprite, x, 288);
+            PokeathlonCourseObject_SetTouchRadius(sprite, ov96_021E6104());
             mon->drawX = (u32)x << FX32_SHIFT;
             mon->drawY = 288 << FX32_SHIFT;
             mon->x = (u32)x << FX32_SHIFT;
-            ov96_021EB0A4(sprite, x, 288, &screenX, &screenY);
+            PokeathlonCourseObject_GroundToCenter(sprite, x, 288, &screenX, &screenY);
             screenPos[monIndex].x = screenX;
             screenPos[monIndex].y = screenY;
         }
@@ -270,7 +270,7 @@ BOOL PokeathlonLampJump_Init(PokeathlonCourseData *course) {
 BOOL PokeathlonLampJump_Draw(PokeathlonCourseData *course) {
     PokeathlonLampJump *lampJump = PokeathlonCourse_GetHeapAllocPtr4(course);
 
-    ov96_021EB5BC(lampJump->scene);
+    PokeathlonCourseSpritePool_Draw(lampJump->scene);
     thunk_UpdateCellTransferStateManager();
     return TRUE;
 }
@@ -314,7 +314,7 @@ BOOL PokeathlonLampJump_Exit(PokeathlonCourseData *course) {
     }
     Heap_Free(lampJump->bgConfig);
     PokeathlonCourse_ResetField3A4(course);
-    ov96_021EB21C(lampJump->scene);
+    PokeathlonCourseSpritePool_Free(lampJump->scene);
     PokeathlonCourseMonObjects_Free(lampJump->monSpriteManager);
     PokeathlonCourseSprites_FreeResources(lampJump->unk188);
     PokeathlonLampJump_FreeCpuPlayers(lampJump->unk138);
@@ -492,8 +492,8 @@ BOOL PokeathlonLampJump_Update(PokeathlonCourseData *course) {
     if ((u8)(lampJump->timer <= 0)) {
         int score = 0, i;
 
-        ov96_021EB63C(lampJump->scene, 1);
-        ov96_021EB144(lampJump->monSpriteManager, 1);
+        PokeathlonCourseSpritePool_PauseAnims(lampJump->scene, 1);
+        PokeathlonCourseObjects_PauseAnims(lampJump->monSpriteManager, 1);
         for (i = 0; i < 3; i++) {
             score += lampJump->mons[i].score;
         }
@@ -604,7 +604,7 @@ void PokeathlonLampJump_UpdateMonSprites(PokeathlonCourseData *course) {
         lampJump->monColumns[i] = (u8)((mon->drawX / FX32_ONE) / 2);
         x = mon->drawX / FX32_ONE;
         y = mon->drawY / FX32_ONE;
-        ov96_021EAF94(mon->sprite, x, y);
+        PokeathlonCourseObject_SetGroundPosition(mon->sprite, x, y);
         {
             VecFx32 pos = { 0, 0, 0 };
             pos.x = x << FX32_SHIFT;
@@ -614,16 +614,16 @@ void PokeathlonLampJump_UpdateMonSprites(PokeathlonCourseData *course) {
             } else {
                 pos.y -= FX32_CONST(16);
             }
-            ov96_021EB588(mon->effectSprite, &pos);
+            PokeathlonCourseSpritePoolSprite_SetPosition(mon->effectSprite, &pos);
         }
         if (mon->unk26) {
-            ov96_021EB52C(mon->effectSprite, 1, 1);
+            PokeathlonCourseSpritePoolSprite_Show(mon->effectSprite, 1, 1);
             ov96_021EAD08(mon->sprite, 20);
             if (!sub_02006190(ov96_0221DC18[i])) {
                 PlaySEOnPlayer(SEQ_SE_GS_W146, ov96_0221DC18[i]);
             }
         } else {
-            ov96_021EB52C(mon->effectSprite, 1, 0);
+            PokeathlonCourseSpritePoolSprite_Show(mon->effectSprite, 1, 0);
             ov96_021EAD08(mon->sprite, 0);
             if (lampJump->jumps[i].jumping) {
                 PokeathlonCourseMonObject_SetAnimState(mon->sprite, 1);
@@ -635,9 +635,9 @@ void PokeathlonLampJump_UpdateMonSprites(PokeathlonCourseData *course) {
     for (i = 0; i < 3; i++) {
         if (lampJump->effectPending[i]) {
             lampJump->effectPending[i] = FALSE;
-            ov96_021EB52C(lampJump->effectSprites[i], 1, 1);
-            ov96_021EB588(lampJump->effectSprites[i], &lampJump->effectPositions[i]);
-            ov96_021EB564(lampJump->effectSprites[i], 9);
+            PokeathlonCourseSpritePoolSprite_Show(lampJump->effectSprites[i], 1, 1);
+            PokeathlonCourseSpritePoolSprite_SetPosition(lampJump->effectSprites[i], &lampJump->effectPositions[i]);
+            PokeathlonCourseSpritePoolSprite_SetAnim(lampJump->effectSprites[i], 9);
         }
     }
 }
@@ -653,11 +653,11 @@ void PokeathlonLampJump_UpdatePlayerSprites(PokeathlonCourseData *course) {
     lampJump = PokeathlonCourse_GetHeapAllocPtr4(course);
     for (i = 0; i < 4; i++) {
         if (i == ov96_021E5F24(course)) {
-            if (lampJump->unk142 != 0 && ov96_021EB57C(lampJump->playerSprites[i]) == FALSE) {
-                ov96_021EB564(lampJump->playerSprites[i], i + 13);
+            if (lampJump->unk142 != 0 && PokeathlonCourseSpritePoolSprite_IsAnimated(lampJump->playerSprites[i]) == FALSE) {
+                PokeathlonCourseSpritePoolSprite_SetAnim(lampJump->playerSprites[i], i + 13);
             }
-        } else if (received[i] != 0 && ov96_021EB57C(lampJump->playerSprites[i]) == FALSE) {
-            ov96_021EB564(lampJump->playerSprites[i], i + 13);
+        } else if (received[i] != 0 && PokeathlonCourseSpritePoolSprite_IsAnimated(lampJump->playerSprites[i]) == FALSE) {
+            PokeathlonCourseSpritePoolSprite_SetAnim(lampJump->playerSprites[i], i + 13);
         }
     }
 }
@@ -694,7 +694,7 @@ u8 PokeathlonLampJump_FindTouchedMon(PokeathlonLampJump *lampJump, u16 touchX, u
             inRange[i] = FALSE;
             distances[i] = 0;
         } else {
-            ov96_021EB0A4(mon->sprite, mon->x / FX32_ONE, (FX32_CONST(96) - (lampJump->jumps[i].height << 6)) / FX32_ONE, &x, &y);
+            PokeathlonCourseObject_GroundToCenter(mon->sprite, mon->x / FX32_ONE, (FX32_CONST(96) - (lampJump->jumps[i].height << 6)) / FX32_ONE, &x, &y);
             if (PokeathlonCourse_IsInRange(x, y, touchX, touchY, ov96_021E6104(), &distance)) {
                 distances[i] = distance;
                 inRange[i] = TRUE;

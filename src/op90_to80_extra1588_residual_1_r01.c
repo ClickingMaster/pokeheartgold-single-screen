@@ -30,8 +30,8 @@ int GetMonIconPaletteEx(int species, int form, BOOL isEgg);
 void GfGfxLoader_GXLoadPal(int narcId, int member, int location, int offset, int size, int heapId);
 BOOL NNS_G2dGetUnpackedBGCharacterData(void *pNcgrFile, NNSG2dCharacterData **ppCharData);
 void ov96_022004B4(Owner *owner, u8 idx, int arg);
-void ov96_021EB52C(void *obj, int a, int b);
-void ov96_021EB588(void *obj, VecFx32 *pos);
+void PokeathlonCourseSpritePoolSprite_Show(void *obj, int a, int b);
+void PokeathlonCourseSpritePoolSprite_SetPosition(void *obj, VecFx32 *pos);
 void ov96_022002F8(Owner *owner, u16 *mons);
 
 
@@ -57,12 +57,12 @@ void ov96_022002F8(Owner *owner, u16 *mons) {
     NARC_Delete(narc);
     for (i = 0; i < 4; i++) {
         ov96_022004B4(owner, i, 0);
-        ov96_021EB52C(owner->u.spr[i].a, 1, 1);
-        ov96_021EB52C(owner->u.spr[i].b, 1, 1);
+        PokeathlonCourseSpritePoolSprite_Show(owner->u.spr[i].a, 1, 1);
+        PokeathlonCourseSpritePoolSprite_Show(owner->u.spr[i].b, 1, 1);
         pos.z = 0;
         pos.x = 10 << 16;
         pos.y = 43 << 16;
-        ov96_021EB588(owner->u.spr[i].a, &pos);
-        ov96_021EB588(owner->u.spr[i].b, &pos);
+        PokeathlonCourseSpritePoolSprite_SetPosition(owner->u.spr[i].a, &pos);
+        PokeathlonCourseSpritePoolSprite_SetPosition(owner->u.spr[i].b, &pos);
     }
 }

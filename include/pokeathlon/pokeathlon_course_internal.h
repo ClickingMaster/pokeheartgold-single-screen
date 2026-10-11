@@ -476,8 +476,8 @@ extern const u16 ov96_0221AA20[];   // per NPC team
 extern const u16 ov96_0221AAE8[];   // performance file of each species' first form
 extern const PokeathlonCourseCmd ov96_0221AEC4[];
 
-SpriteList *ov96_021EB5E8(void *eventGfx);
-BOOL ov96_021EB120(PokeathlonCourseMonObject *object);
+SpriteList *PokeathlonCourseSpritePool_GetSpriteList(void *eventGfx);
+BOOL PokeathlonCourseObject_IsDrawn(PokeathlonCourseMonObject *object);
 
 // Declared by no header (defined in src/apricorn_box.c and the communication code).
 u32 ApricornJuiceRecord_sizeof(void);

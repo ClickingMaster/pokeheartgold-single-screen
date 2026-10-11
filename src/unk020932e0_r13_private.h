@@ -4,7 +4,7 @@
 #include "global.h"
 
 #include "sprite.h"
-#include "grid_cursor_internal.h"
+#include "grid_cursor.h"
 
 typedef struct Residual13Work {
     u8 filler_0000[0x0F];

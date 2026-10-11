@@ -99,57 +99,57 @@
 	.public PokeathlonCourseMonObject_SetAnimStateRaw
 	.public PokeathlonCourseMonObject_IsAnimated
 	.public PokeathlonCourseMonObject_GetPosition
-	.public ov96_021EAF6C
-	.public ov96_021EAF70
-	.public ov96_021EAF8C
-	.public ov96_021EAF90
-	.public ov96_021EB10C
-	.public ov96_021EB138
-	.public ov96_021EB564
-	.public ov96_021EB570
-	.public ov96_021EB57C
-	.public ov96_021EB588
-	.public ov96_021EB594
-	.public ov96_021EB5A0
-	.public ov96_021EB5AC
-	.public ov96_021EB5B8
-	.public ov96_021EB5BC
-	.public ov96_021EB5E8
-	.public ov96_021EB630
-	.public ov96_021EB678
-	.public ov96_021EB680
-	.public ov96_021EB688
-	.public ov96_021EB690
-	.public ov96_021EB698
-	.public ov96_021EB6A0
-	.public ov96_021EC2E0
-	.public ov96_021ECBF4
-	.public ov96_021ECC38
-	.public ov96_021ECC4C
-	.public ov96_021ECDC4
-	.public ov96_021ECDD4
-	.public ov96_021ED47C
-	.public ov96_021ED6E8
-	.public ov96_021ED748
-	.public ov96_021ED74C
-	.public ov96_021ED750
-	.public ov96_021EDF7C
-	.public ov96_021EEA80
-	.public ov96_021EED64
-	.public ov96_021EEEBC
-	.public ov96_021EEEC0
-	.public ov96_021EEF98
-	.public ov96_021EF18C
-	.public ov96_021EF2A0
-	.public ov96_021EF2AC
-	.public ov96_021EF98C
-	.public ov96_021EFA28
-	.public ov96_021EFB50
-	.public ov96_021F08E4
-	.public ov96_021F27A8
-	.public ov96_021F30BC
-	.public ov96_021F3424
-	.public ov96_021F3E58
+	.public PokeathlonCourseObject_SetTouchRadius
+	.public PokeathlonCourseObject_SetCollision
+	.public PokeathlonCourseObject_GetCollisionRadius
+	.public PokeathlonCourseObject_GetCollisionOffsetY
+	.public PokeathlonCourseObject_SetScale
+	.public PokeathlonCourseObjects_ShiftLargeUp
+	.public PokeathlonCourseSpritePoolSprite_SetAnim
+	.public PokeathlonCourseSpritePoolSprite_TryChangeAnim
+	.public PokeathlonCourseSpritePoolSprite_IsAnimated
+	.public PokeathlonCourseSpritePoolSprite_SetPosition
+	.public PokeathlonCourseSpritePoolSprite_GetPosition
+	.public PokeathlonCourseSpritePoolSprite_SetScale
+	.public PokeathlonCourseSpritePoolSprite_SetRotation
+	.public PokeathlonCourseSpritePoolSprite_GetSprite
+	.public PokeathlonCourseSpritePool_Draw
+	.public PokeathlonCourseSpritePool_GetSpriteList
+	.public PokeathlonCourseSpritePoolSprite_SetDrawPriority
+	.public PokeathlonCourseOpening_Init
+	.public PokeathlonCourseOpening_Main
+	.public PokeathlonCourseOpening_Exit
+	.public PokeathlonCourseClosing_Init
+	.public PokeathlonCourseClosing_Main
+	.public PokeathlonCourseClosing_Exit
+	.public PokeathlonCourseCeremony_IsCryActive
+	.public PokeathlonCourseCeremony_FreeScores
+	.public PokeathlonCourseCeremony_AddPoints
+	.public PokeathlonCourseCeremony_GetPoints
+	.public PokeathlonCourseCeremonyScore_IsCounted
+	.public PokeathlonCourseCeremonyScore_Add
+	.public PokeathlonCourseCeremony_Main
+	.public PokeathlonCourseConfetti_GetRandomDelay
+	.public PokeathlonCourseCeremony_GetNoMissPoints
+	.public PokeathlonCourseCeremony_GetPointsLeaderPoints
+	.public PokeathlonCourseCeremony_GetEffortPrizePoints
+	.public PokeathlonCourseCeremony_GetIntroMsgBase
+	.public PokeathlonCourseMessageBox_IsBusy
+	.public PokeathlonCourse_LoadSpriteChars
+	.public PokeathlonCourseWait_Main
+	.public PokeathlonCourseWait_Exit
+	.public PokeathlonCourseWait_FreeBgs
+	.public PokeathlonEventIntro_Main
+	.public PokeathlonEventIntro_GetEvent
+	.public PokeathlonEventIntro_HasFlag0EF
+	.public PokeathlonEventIntro_ResetMascot
+	.public PokeathlonEventIntro_HideZoomBgs
+	.public PokeathlonEventIntro_IsFadeFinished
+	.public PokeathlonCirclePush_Main
+	.public PokeathlonCirclePushStack_Pop
+	.public PokeathlonCirclePushZoneMarkers_Free
+	.public PokeathlonCirclePushAi_Free
+	.public PokeathlonCirclePushDisplay_LoadPics
 	.public PokeathlonCirclePushDisplay_GetScore
 	.public PokeathlonLampJump_Draw
 	.public PokeathlonLampJump_FreeLamps
@@ -238,17 +238,17 @@
 	.public ov96_0221A690
 	.public ov96_0221A69C
 	.public ov96_0221A720
-	.public ov96_021F2814
-	.public ov96_021F2AA4
-	.public ov96_021F2D68
-	.public ov96_021F2E2C
-	.public ov96_021F2E4C
-	.public ov96_021F2FBC
-	.public ov96_021F30A4
+	.public PokeathlonCirclePush_Cosine
+	.public PokeathlonCirclePush_RecoverStamina
+	.public PokeathlonCirclePush_ShakeTask
+	.public PokeathlonCirclePush_StartBounce
+	.public PokeathlonCirclePush_BounceTask
+	.public PokeathlonCirclePush_CompareDepth
+	.public PokeathlonCirclePushZoneMarkers_New
 
 
-	thumb_func_start ov96_021F2B24
-ov96_021F2B24: ; 0x021F2B24
+	thumb_func_start PokeathlonCirclePush_SetMonStats
+PokeathlonCirclePush_SetMonStats: ; 0x021F2B24
 	push {r3, r4, r5, lr}
 	add r5, r1, #0
 	add r1, r2, #0
@@ -282,25 +282,25 @@ ov96_021F2B24: ; 0x021F2B24
 	ldr r0, [r0, #0x28]
 	strb r0, [r4]
 	pop {r3, r4, r5, pc}
-	thumb_func_end ov96_021F2B24
+	thumb_func_end PokeathlonCirclePush_SetMonStats
 
 
 
 
-	thumb_func_start ov96_021F2B68
-ov96_021F2B68: ; 0x021F2B68
+	thumb_func_start PokeathlonCirclePush_StartLayoutChange
+PokeathlonCirclePush_StartLayoutChange: ; 0x021F2B68
 	push {r3, r4, r5, lr}
 	add r4, r0, #0
 	strh r1, [r4, #0x1c]
 	strh r2, [r4, #0x1e]
 	mov r2, #0
-	ldr r0, _021F2BA4 ; =ov96_021F2BB4
+	ldr r0, _021F2BA4 ; =PokeathlonCirclePush_LayoutChangeTask
 	strb r2, [r4]
 	add r1, r4, #0
 	add r5, r3, #0
 	bl SysTask_CreateOnMainQueue
 	str r0, [r4, #4]
-	ldr r0, _021F2BA8 ; =ov96_021F2C04
+	ldr r0, _021F2BA8 ; =PokeathlonCirclePush_LayoutFadeTask
 	add r1, r4, #0
 	mov r2, #1
 	bl SysTask_CreateOnMainQueue
@@ -310,24 +310,24 @@ ov96_021F2B68: ; 0x021F2B68
 	str r5, [r4, #0x30]
 	lsl r1, r1, #0x16
 	str r1, [r0]
-	ldr r0, _021F2BB0 ; =ov96_021F2CD0
+	ldr r0, _021F2BB0 ; =PokeathlonCirclePush_RingSlideTask
 	add r1, r4, #0
 	mov r2, #2
 	bl SysTask_CreateOnMainQueue
 	str r0, [r4, #8]
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-_021F2BA4: .word ov96_021F2BB4
-_021F2BA8: .word ov96_021F2C04
+_021F2BA4: .word PokeathlonCirclePush_LayoutChangeTask
+_021F2BA8: .word PokeathlonCirclePush_LayoutFadeTask
 _021F2BAC: .word 0x04000018
-_021F2BB0: .word ov96_021F2CD0
-	thumb_func_end ov96_021F2B68
+_021F2BB0: .word PokeathlonCirclePush_RingSlideTask
+	thumb_func_end PokeathlonCirclePush_StartLayoutChange
 
 
 
 
-	thumb_func_start ov96_021F2BB4
-ov96_021F2BB4: ; 0x021F2BB4
+	thumb_func_start PokeathlonCirclePush_LayoutChangeTask
+PokeathlonCirclePush_LayoutChangeTask: ; 0x021F2BB4
 	push {r3, r4, r5, lr}
 	add r4, r1, #0
 	add r5, r0, #0
@@ -341,7 +341,7 @@ _021F2BC6:
 	ldr r0, [r4, #8]
 	cmp r0, #0
 	bne _021F2BFE
-	ldr r0, _021F2C00 ; =ov96_021F2D68
+	ldr r0, _021F2C00 ; =PokeathlonCirclePush_ShakeTask
 	mov r2, #3
 	bl SysTask_CreateOnMainQueue
 	str r0, [r4, #0x10]
@@ -366,14 +366,14 @@ _021F2BDE:
 _021F2BFE:
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-_021F2C00: .word ov96_021F2D68
-	thumb_func_end ov96_021F2BB4
+_021F2C00: .word PokeathlonCirclePush_ShakeTask
+	thumb_func_end PokeathlonCirclePush_LayoutChangeTask
 
 
 
 
-	thumb_func_start ov96_021F2C04
-ov96_021F2C04: ; 0x021F2C04
+	thumb_func_start PokeathlonCirclePush_LayoutFadeTask
+PokeathlonCirclePush_LayoutFadeTask: ; 0x021F2C04
 	push {r3, r4, lr}
 	sub sp, #4
 	add r4, r1, #0
@@ -422,12 +422,12 @@ _021F2C5A:
 	ldr r0, [r4, #0x20]
 	lsl r1, r1, #0x18
 	lsr r1, r1, #0x18
-	bl ov96_021F31F0
+	bl PokeathlonCirclePushZoneMarkers_Show
 	ldrh r1, [r4, #0x1c]
 	ldr r0, [r4, #0x20]
 	lsl r1, r1, #0x18
 	lsr r1, r1, #0x18
-	bl ov96_021F3298
+	bl PokeathlonCirclePushZoneMarkers_Hide
 	mov r0, #0
 	strh r0, [r4, #0x18]
 	ldrb r0, [r4, #1]
@@ -472,13 +472,13 @@ _021F2CB8:
 	.balign 4, 0
 _021F2CC8: .word 0x04000050
 _021F2CCC: .word 0x0000089F
-	thumb_func_end ov96_021F2C04
+	thumb_func_end PokeathlonCirclePush_LayoutFadeTask
 
 
 
 
-	thumb_func_start ov96_021F2CD0
-ov96_021F2CD0: ; 0x021F2CD0
+	thumb_func_start PokeathlonCirclePush_RingSlideTask
+PokeathlonCirclePush_RingSlideTask: ; 0x021F2CD0
 	push {r3, r4, r5, lr}
 	add r4, r1, #0
 	add r5, r0, #0
@@ -555,4 +555,4 @@ _021F2D5E:
 	.balign 4, 0
 _021F2D60: .word 0x01FF0000
 _021F2D64: .word 0x04000018
-	thumb_func_end ov96_021F2CD0
+	thumb_func_end PokeathlonCirclePush_RingSlideTask

@@ -400,7 +400,7 @@ u32 VsRecorder_GetSchemeFileId(VsRecorderWork *work, u32 kind) {
     }
 }
 
-void VsRecorder_ReloadSchemePalettes(VsRecorderWork *work) {
+void VsRecorder_ReloadSchemePalettes(VsRecorderWork *work, u32 unused) {
     PaletteData *plttData = work->plttData;
     SpriteManager *spriteManager = work->spriteManager;
     NARC *narc = work->narc;

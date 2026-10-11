@@ -80,7 +80,7 @@ void ov96_021FB8B4(void *p, s32 x) {
         x = 0;
     }
     f = (f32)((100.0 + x * 2.0) / 100.0);
-    ov96_021EB10C(PAT(p, 0), f, f);
+    PokeathlonCourseObject_SetScale(PAT(p, 0), f, f);
 }
 
 void ov96_021FB8FC(u8 *p, u32 flag) {
@@ -94,5 +94,5 @@ void ov96_021FB8FC(u8 *p, u32 flag) {
         }
     }
     f = (f32)(f / 100.0);
-    ov96_021EB10C(PAT(p, 0), f, f);
+    PokeathlonCourseObject_SetScale(PAT(p, 0), f, f);
 }

@@ -13,10 +13,10 @@
 u32 LCRandom(void);
 
 // Course sprite and object helpers (OVY_96, not yet tidied).
-void ov96_021EB03C(void *object, int x, int y, int *outX, int *outY);
-void ov96_021EB0A4(void *object, int x, int y, int *outX, int *outY);
-void ov96_021EB52C(void *sprite, int a1, int show);
-void **ov96_021EB5EC(void *pool, int id, int kind);
+void PokeathlonCourseObject_GetCollisionCenter(void *object, int x, int y, int *outX, int *outY);
+void PokeathlonCourseObject_GroundToCenter(void *object, int x, int y, int *outX, int *outY);
+void PokeathlonCourseSpritePoolSprite_Show(void *sprite, int a1, int show);
+void **PokeathlonCourseSpritePool_GetResourceSlot(void *pool, int id, int kind);
 // the CPU's cell checks, next in link order (overlay96_course_scene_helpers.c)
 BOOL PokeathlonPennantCaptureCpu_IsNearCellTarget(PokeathlonPennantCaptureCpuCell *cell, s32 x, s32 y);
 BOOL PokeathlonPennantCaptureCpu_IsCellTargetOnField(PokeathlonPennantCaptureCpuCell *cell);
@@ -42,8 +42,8 @@ void PokeathlonPennantCaptureDisplay_GetPicVramOffsets(void *pool, PokeathlonPen
     u8 i;
     for (i = 0; i < 2; i++) {
         int id = ((int *)&ids)[i];
-        void *charResource = *ov96_021EB5EC(pool, id, 0);
-        void *plttResource = *ov96_021EB5EC(pool, id, 1);
+        void *charResource = *PokeathlonCourseSpritePool_GetResourceSlot(pool, id, 0);
+        void *plttResource = *PokeathlonCourseSpritePool_GetResourceSlot(pool, id, 1);
         NNSG2dImageProxy *image = SpriteTransfer_GetCharProxy(charResource);
         NNSG2dImagePaletteProxy *palette = SpriteTransfer_GetPaletteProxy(plttResource, image);
         display->picCharOffsets[i] = NNS_G2dGetImageLocation(image, NNS_G2D_VRAM_TYPE_2DSUB);
@@ -60,9 +60,9 @@ void PokeathlonPennantCaptureDisplay_InitWindow(PokeathlonPennantCaptureDisplay 
 }
 
 void PokeathlonPennantCaptureDisplay_ShowStatus(void **sprites, int show) {
-    ov96_021EB52C(sprites[0], 1, show);
-    ov96_021EB52C(sprites[2], 1, show);
-    ov96_021EB52C(sprites[1], 1, show);
+    PokeathlonCourseSpritePoolSprite_Show(sprites[0], 1, show);
+    PokeathlonCourseSpritePoolSprite_Show(sprites[2], 1, show);
+    PokeathlonCourseSpritePoolSprite_Show(sprites[1], 1, show);
 }
 
 PokeathlonPennantCaptureCpu *PokeathlonPennantCaptureCpu_New(enum HeapID heapId, int cpuCount) {
@@ -159,8 +159,8 @@ void PokeathlonPennantCaptureCpu_ChooseTarget(PokeathlonPennantCaptureCpu *cpu, 
         PokeathlonPennantCapturePlayer *other;
         players[i] = cpu->players[i];
         other = players[i].player;
-        ov96_021EB0A4(other->monObjects[other->member], other->position.x / 4096, other->position.y / 4096, &raw.x, &raw.y);
-        ov96_021EB03C(other->monObjects[other->member], raw.x << 12, raw.y << 12, &screen.x, &screen.y);
+        PokeathlonCourseObject_GroundToCenter(other->monObjects[other->member], other->position.x / 4096, other->position.y / 4096, &raw.x, &raw.y);
+        PokeathlonCourseObject_GetCollisionCenter(other->monObjects[other->member], raw.x << 12, raw.y << 12, &screen.x, &screen.y);
         players[i].x = screen.x / 4096;
         players[i].y = screen.y / 4096;
     }
@@ -255,7 +255,7 @@ void PokeathlonPennantCaptureCpu_ChooseTarget(PokeathlonPennantCaptureCpu *cpu, 
     best = PokeathlonPennantCaptureCpu_PickBestCell(cpu);
     if ((u32)who >= cpu->firstCpu) {
         PokeathlonPennantCapturePlayer *mon = self->player;
-        ov96_021EB0A4(mon->monObjects[mon->member], self->x, self->y, &chosen.x, &chosen.y);
+        PokeathlonCourseObject_GroundToCenter(mon->monObjects[mon->member], self->x, self->y, &chosen.x, &chosen.y);
         self->player->cpuFrom.x = chosen.x << 12;
         self->player->cpuFrom.y = chosen.y << 12;
         self->player->cpuFrom.z = 0;

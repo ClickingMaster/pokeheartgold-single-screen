@@ -9,8 +9,8 @@
 
 	.text
 
-	thumb_func_start sub_02095BF0
-sub_02095BF0: ; 0x02095BF0
+	thumb_func_start GridCursor_StepPosition
+GridCursor_StepPosition: ; 0x02095BF0
 	push {r4, r5, r6, r7}
 	add r7, r2, #0
 	ldrb r2, [r7, #1]
@@ -99,7 +99,7 @@ _02095C86:
 	bx lr
 	nop
 _02095C8C: .word FS_OVERLAY_ID(field)
-	thumb_func_end sub_02095BF0
+	thumb_func_end GridCursor_StepPosition
 
 	.rodata
 
@@ -116,11 +116,11 @@ _0210842C:
 	.byte 0x01, 0x01, 0x01, 0x01
 _02108430:
 	.byte 0x06, 0x05, 0x1E, 0x02
-	.public _02108434
-_02108434:
-	.word _02108430, sub_020957B0, sub_02095838
-	.word _0210842C, sub_020958C0, sub_02095920
-	.word _02108428, sub_0209592C, sub_020959D8
-	.word _02108420, sub_02095A34, sub_02095A78
-	.word _02108424, sub_02095A7C, sub_02095AF8
-	.word _0210841C, sub_02095B04, sub_02095B88
+	.public gGridCursorPanels
+gGridCursorPanels:
+	.word _02108430, GridPanel2_Move, GridPanel2_Enter
+	.word _0210842C, GridPanel1_Move, GridPanel1_Enter
+	.word _02108428, GridPanel3_Move, GridPanel3_Enter
+	.word _02108420, GridPanel4_Move, GridPanel4_Enter
+	.word _02108424, GridPanel5_Move, GridPanel5_Enter
+	.word _0210841C, GridPanel6_Move, GridPanel6_Enter

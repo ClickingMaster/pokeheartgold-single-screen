@@ -21,18 +21,18 @@
 
 // Course sprite helpers (OVY_96, not yet tidied).
 Sprite *ov96_021EA2C4(void *resources, void *spriteList, int a2, enum HeapID heapId);
-void ov96_021EB2BC(void *pool, int narc, int file, int id, int a4);
-void ov96_021EB2F4(void *pool, int narc, int file, int id, int a4, int a5);
-void ov96_021EB334(void *pool, int narc, int file, int id);
-void ov96_021EB36C(void *pool, int narc, int file, int id);
-void *ov96_021EB3E4(void *pool, int a1, int a2, int id, int anim);
-void ov96_021EB52C(void *sprite, int a1, int show);
-void ov96_021EB564(void *sprite, int anim);
-void ov96_021EB588(void *sprite, VecFx32 *position);
-VecFx32 *ov96_021EB594(void *sprite);
-Sprite *ov96_021EB5B8(void *sprite);
-void *ov96_021EB5E8(void *pool);
-void ov96_021EB630(void *sprite, int priority);
+void PokeathlonCourseSpritePool_LoadChar(void *pool, int narc, int file, int id, int a4);
+void PokeathlonCourseSpritePool_LoadPltt(void *pool, int narc, int file, int id, int a4, int a5);
+void PokeathlonCourseSpritePool_LoadCell(void *pool, int narc, int file, int id);
+void PokeathlonCourseSpritePool_LoadAnim(void *pool, int narc, int file, int id);
+void *PokeathlonCourseSpritePool_CreateAndTake(void *pool, int a1, int a2, int id, int anim);
+void PokeathlonCourseSpritePoolSprite_Show(void *sprite, int a1, int show);
+void PokeathlonCourseSpritePoolSprite_SetAnim(void *sprite, int anim);
+void PokeathlonCourseSpritePoolSprite_SetPosition(void *sprite, VecFx32 *position);
+VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(void *sprite);
+Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(void *sprite);
+void *PokeathlonCourseSpritePool_GetSpriteList(void *pool);
+void PokeathlonCourseSpritePoolSprite_SetDrawPriority(void *sprite, int priority);
 // monsters.c / pokemon_icon_idx.c, declared here with the argument types the calls were built with
 void *sub_0201457C(u16 charNarc, u16 charFile, u32 heapId, u32 personality, int a4, int a5, u16 species);
 void *sub_02014450(u16 plttNarc, u16 plttFile, u32 heapId);
@@ -124,16 +124,16 @@ void PokeathlonPennantCaptureDisplay_LoadSpriteResources(PokeathlonPennantCaptur
     ids[0] = ov96_0221CBCC[1].ids[0];
     ids[1] = ov96_0221CBCC[1].ids[1];
     for (i = 0; i < 2; i++) {
-        ov96_021EB2BC(pool, 0x5D, 9, *id, 2);
-        ov96_021EB2F4(pool, 0x5D, 6, *id, 2, 1);
-        ov96_021EB334(pool, 0x5D, 10, *id);
-        ov96_021EB36C(pool, 0x5D, 10, *id);
+        PokeathlonCourseSpritePool_LoadChar(pool, 0x5D, 9, *id, 2);
+        PokeathlonCourseSpritePool_LoadPltt(pool, 0x5D, 6, *id, 2, 1);
+        PokeathlonCourseSpritePool_LoadCell(pool, 0x5D, 10, *id);
+        PokeathlonCourseSpritePool_LoadAnim(pool, 0x5D, 10, *id);
         id++;
     }
-    ov96_021EB2BC(pool, 0xE2, 13, 0x65, 2);
-    ov96_021EB2F4(pool, 0xE2, 10, 0x65, 2, 8);
-    ov96_021EB334(pool, 0xE2, 12, 0x65);
-    ov96_021EB36C(pool, 0xE2, 11, 0x65);
+    PokeathlonCourseSpritePool_LoadChar(pool, 0xE2, 13, 0x65, 2);
+    PokeathlonCourseSpritePool_LoadPltt(pool, 0xE2, 10, 0x65, 2, 8);
+    PokeathlonCourseSpritePool_LoadCell(pool, 0xE2, 12, 0x65);
+    PokeathlonCourseSpritePool_LoadAnim(pool, 0xE2, 11, 0x65);
 }
 
 void PokeathlonPennantCaptureDisplay_CreateSprites(PokeathlonPennantCaptureDisplay *display, void *pool, void *resources) {
@@ -150,36 +150,36 @@ void PokeathlonPennantCaptureDisplay_CreateSprites(PokeathlonPennantCaptureDispl
     status = display->statusSprites[0];
     point = display->pointSprites[0];
     for (; participant < 4; participant++) {
-        row->u.mons[0].icon = ov96_021EB3E4(pool, 3, 2, 0x65, 2);
-        row->u.mons[0].frame = ov96_021EB3E4(pool, 3, 2, 0x65, 3);
-        row->u.mons[0].carryMark = ov96_021EB3E4(pool, 3, 2, 0x65, 10);
-        status[2] = ov96_021EB3E4(pool, 2, 2, 0x65, 19);
-        ov96_021EB564(status[2], 0);
-        ov96_021EB52C(status[2], 1, 1);
-        status[1] = ov96_021EB3E4(pool, 2, 2, 0x65, 21);
-        ov96_021EB564(status[1], 9);
-        ov96_021EB52C(status[1], 1, 1);
-        status[0] = ov96_021EB3E4(pool, 2, 2, 0x65, 20);
-        ov96_021EB564(row->u.mons[0].icon, participant + 19);
-        ov96_021EB564(row->u.mons[0].frame, participant + 5);
-        ov96_021EB564(status[0], 3);
-        ov96_021EB52C(status[0], 1, 1);
+        row->u.mons[0].icon = PokeathlonCourseSpritePool_CreateAndTake(pool, 3, 2, 0x65, 2);
+        row->u.mons[0].frame = PokeathlonCourseSpritePool_CreateAndTake(pool, 3, 2, 0x65, 3);
+        row->u.mons[0].carryMark = PokeathlonCourseSpritePool_CreateAndTake(pool, 3, 2, 0x65, 10);
+        status[2] = PokeathlonCourseSpritePool_CreateAndTake(pool, 2, 2, 0x65, 19);
+        PokeathlonCourseSpritePoolSprite_SetAnim(status[2], 0);
+        PokeathlonCourseSpritePoolSprite_Show(status[2], 1, 1);
+        status[1] = PokeathlonCourseSpritePool_CreateAndTake(pool, 2, 2, 0x65, 21);
+        PokeathlonCourseSpritePoolSprite_SetAnim(status[1], 9);
+        PokeathlonCourseSpritePoolSprite_Show(status[1], 1, 1);
+        status[0] = PokeathlonCourseSpritePool_CreateAndTake(pool, 2, 2, 0x65, 20);
+        PokeathlonCourseSpritePoolSprite_SetAnim(row->u.mons[0].icon, participant + 19);
+        PokeathlonCourseSpritePoolSprite_SetAnim(row->u.mons[0].frame, participant + 5);
+        PokeathlonCourseSpritePoolSprite_SetAnim(status[0], 3);
+        PokeathlonCourseSpritePoolSprite_Show(status[0], 1, 1);
         for (i = 0; i < 2; i++) {
-            point[i] = ov96_021EB3E4(pool, 2, 2, 0x65, 24);
-            ov96_021EB564(point[i], 2);
+            point[i] = PokeathlonCourseSpritePool_CreateAndTake(pool, 2, 2, 0x65, 24);
+            PokeathlonCourseSpritePoolSprite_SetAnim(point[i], 2);
         }
         row = DISPLAY_CURSOR_STEP(row, sizeof(PokeathlonPennantCaptureDisplayMon));
         status += 4;
         point += 2;
     }
     initialPosition = ov96_0221CBF4;
-    display->goalSprite = ov96_021EB3E4(pool, 3, 2, 0x65, 22);
-    ov96_021EB564(display->goalSprite, 4);
-    ov96_021EB52C(display->goalSprite, 1, 1);
-    ov96_021EB588(display->goalSprite, &initialPosition);
+    display->goalSprite = PokeathlonCourseSpritePool_CreateAndTake(pool, 3, 2, 0x65, 22);
+    PokeathlonCourseSpritePoolSprite_SetAnim(display->goalSprite, 4);
+    PokeathlonCourseSpritePoolSprite_Show(display->goalSprite, 1, 1);
+    PokeathlonCourseSpritePoolSprite_SetPosition(display->goalSprite, &initialPosition);
     ov96_02208914(pool, display);
     for (i = 0; i < 2; i++) {
-        display->timerDigits[i] = ov96_021EA2C4(resources, ov96_021EB5E8(pool), 3, display->heapId);
+        display->timerDigits[i] = ov96_021EA2C4(resources, PokeathlonCourseSpritePool_GetSpriteList(pool), 3, display->heapId);
         Sprite_SetDrawFlag(display->timerDigits[i], TRUE);
         digitPosition.x = ov96_0221CBC4[i] << FX32_SHIFT;
         digitPosition.y = 0x2C4000;
@@ -232,26 +232,26 @@ void PokeathlonPennantCaptureDisplay_LoadIcons(PokeathlonPennantCaptureDisplay *
     statusRow = display;
     for (; i < 4; i++) {
         PokeathlonPennantCaptureDisplay_SetIcon(display, (u8)i, 0);
-        ov96_021EB52C(monRow->u.mons[0].icon, 1, 1);
-        ov96_021EB52C(monRow->u.mons[0].frame, 1, 1);
+        PokeathlonCourseSpritePoolSprite_Show(monRow->u.mons[0].icon, 1, 1);
+        PokeathlonCourseSpritePoolSprite_Show(monRow->u.mons[0].frame, 1, 1);
         position.z = 0;
         position.x = x << FX32_SHIFT;
         position.y = 0x350000;
-        ov96_021EB588(monRow->u.mons[0].icon, &position);
-        ov96_021EB588(monRow->u.mons[0].frame, &position);
-        ov96_021EB588(monRow->u.mons[0].carryMark, &position);
+        PokeathlonCourseSpritePoolSprite_SetPosition(monRow->u.mons[0].icon, &position);
+        PokeathlonCourseSpritePoolSprite_SetPosition(monRow->u.mons[0].frame, &position);
+        PokeathlonCourseSpritePoolSprite_SetPosition(monRow->u.mons[0].carryMark, &position);
         {
             int j;
             PokeathlonPennantCaptureDisplay *point = pointRow;
             for (j = 0; j < 2; j++) {
-                ov96_021EB588(point->pointSprites[0][0], &position);
+                PokeathlonCourseSpritePoolSprite_SetPosition(point->pointSprites[0][0], &position);
                 point = DISPLAY_CURSOR_STEP(point, sizeof(void *));
             }
         }
         position.y -= 0x20000;
-        ov96_021EB588(statusRow->statusSprites[0][0], &position);
-        ov96_021EB588(statusRow->statusSprites[0][1], &position);
-        ov96_021EB588(statusRow->statusSprites[0][2], &position);
+        PokeathlonCourseSpritePoolSprite_SetPosition(statusRow->statusSprites[0][0], &position);
+        PokeathlonCourseSpritePoolSprite_SetPosition(statusRow->statusSprites[0][1], &position);
+        PokeathlonCourseSpritePoolSprite_SetPosition(statusRow->statusSprites[0][2], &position);
         monRow = DISPLAY_CURSOR_STEP(monRow, sizeof(PokeathlonPennantCaptureDisplayMon));
         x += 0x28;
         statusRow = DISPLAY_CURSOR_STEP(statusRow, sizeof(display->statusSprites[0]));
@@ -287,7 +287,7 @@ void PokeathlonPennantCaptureDisplay_SetIcon(PokeathlonPennantCaptureDisplay *di
     Sprite *sprite;
     int slot;
 
-    sprite = ov96_021EB5B8(display->u.mons[participant].icon);
+    sprite = PokeathlonCourseSpritePoolSprite_GetSprite(display->u.mons[participant].icon);
     slot = member + participant * 3;
     DC_FlushRange(display->iconChars[slot]->pRawData, 0x200);
     GXS_LoadOBJ(display->iconChars[slot]->pRawData, 0x1800 + participant * 0x200, 0x200);
@@ -324,12 +324,12 @@ BOOL PokeathlonPennantCaptureDisplay_SlideMonPic(PokeathlonPennantCaptureDisplay
 
     switch (*state) {
     case 0: {
-        VecFx32 position = *ov96_021EB594(display->picSprites[display->picSlot]);
+        VecFx32 position = *PokeathlonCourseSpritePoolSprite_GetPosition(display->picSprites[display->picSlot]);
         position.y += 0x20000;
-        ov96_021EB588(display->picSprites[display->picSlot], &position);
+        PokeathlonCourseSpritePoolSprite_SetPosition(display->picSprites[display->picSlot], &position);
         if (position.y >= 0x39C000) {
             position.y = 0x294000;
-            ov96_021EB588(display->picSprites[display->picSlot], &position);
+            PokeathlonCourseSpritePoolSprite_SetPosition(display->picSprites[display->picSlot], &position);
             (*state)++;
         }
         break;
@@ -340,24 +340,24 @@ BOOL PokeathlonPennantCaptureDisplay_SlideMonPic(PokeathlonPennantCaptureDisplay
         (*state)++;
         break;
     case 2: {
-        VecFx32 position = *ov96_021EB594(display->picSprites[display->picSlot]);
+        VecFx32 position = *PokeathlonCourseSpritePoolSprite_GetPosition(display->picSprites[display->picSlot]);
         position.y += 0x20000;
-        ov96_021EB588(display->picSprites[display->picSlot], &position);
+        PokeathlonCourseSpritePoolSprite_SetPosition(display->picSprites[display->picSlot], &position);
         if (position.y >= 0x344000) {
             position.y = 0x344000;
-            ov96_021EB588(display->picSprites[display->picSlot], &position);
+            PokeathlonCourseSpritePoolSprite_SetPosition(display->picSprites[display->picSlot], &position);
             display->picSlot = (display->picSlot + 1) % 2;
             (*state)++;
         }
         break;
     }
     case 3: {
-        VecFx32 position = *ov96_021EB594(display->picSprites[display->picSlot]);
+        VecFx32 position = *PokeathlonCourseSpritePoolSprite_GetPosition(display->picSprites[display->picSlot]);
         position.y += 0x20000;
-        ov96_021EB588(display->picSprites[display->picSlot], &position);
+        PokeathlonCourseSpritePoolSprite_SetPosition(display->picSprites[display->picSlot], &position);
         if (position.y >= 0x2EC000) {
             position.y = 0x2EC000;
-            ov96_021EB588(display->picSprites[display->picSlot], &position);
+            PokeathlonCourseSpritePoolSprite_SetPosition(display->picSprites[display->picSlot], &position);
             display->picSlot = (display->picSlot + 1) % 2;
             PokeathlonPennantCaptureDisplay_PrintName(display, (u8)((member + 2) % 3));
             *state = 0;
@@ -398,24 +398,24 @@ void PokeathlonPennantCaptureDisplay_UpdateMon(PokeathlonPennantCaptureDisplay *
         position.z = 0;
         position.x = (participant * 0x28 + 0x70) << 12;
         position.y = 0x350004;
-        ov96_021EB588(display->u.mons[participant].icon, &position);
-        ov96_021EB588(display->u.mons[participant].frame, &position);
+        PokeathlonCourseSpritePoolSprite_SetPosition(display->u.mons[participant].icon, &position);
+        PokeathlonCourseSpritePoolSprite_SetPosition(display->u.mons[participant].frame, &position);
         PokeathlonPennantCaptureDisplay_ShowStatus(display->statusSprites[participant], 0);
     } else {
         VecFx32 position;
         position.z = 0;
         position.x = (participant * 0x28 + 0x70) << 12;
         position.y = 0x350000;
-        ov96_021EB588(display->u.mons[participant].icon, &position);
-        ov96_021EB588(display->u.mons[participant].frame, &position);
+        PokeathlonCourseSpritePoolSprite_SetPosition(display->u.mons[participant].icon, &position);
+        PokeathlonCourseSpritePoolSprite_SetPosition(display->u.mons[participant].frame, &position);
         PokeathlonPennantCaptureDisplay_ShowStatus(display->statusSprites[participant], 1);
         if (active == 1) {
             if (display->u.mons[participant].active != active) {
-                ov96_021EB52C(display->u.mons[participant].carryMark, 1, 1);
-                ov96_021EB564(display->u.mons[participant].carryMark, 1);
+                PokeathlonCourseSpritePoolSprite_Show(display->u.mons[participant].carryMark, 1, 1);
+                PokeathlonCourseSpritePoolSprite_SetAnim(display->u.mons[participant].carryMark, 1);
             }
         } else {
-            ov96_021EB52C(display->u.mons[participant].carryMark, 1, 0);
+            PokeathlonCourseSpritePoolSprite_Show(display->u.mons[participant].carryMark, 1, 0);
         }
     }
     display->u.mons[participant].active = active;
@@ -439,7 +439,7 @@ void PokeathlonPennantCaptureDisplay_BringToFront(PokeathlonPennantCaptureDispla
         Sprite_SetDrawPriority(display->timerDigits[i], 2);
     }
     for (i = 0; i < 2; i++) {
-        Sprite_SetDrawPriority(ov96_021EB5B8(display->picSprites[i]), 2);
+        Sprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite_GetSprite(display->picSprites[i]), 2);
     }
     next = 1;
     for (i = 0; i < 4; i++) {
@@ -453,9 +453,9 @@ void PokeathlonPennantCaptureDisplay_BringToFront(PokeathlonPennantCaptureDispla
         }
     }
     for (i = 0; i < 4; i++) {
-        ov96_021EB630(display->u.mons[order[i]].carryMark, 3 + i * 2);
-        ov96_021EB630(display->u.mons[order[i]].icon, 4 + i * 2);
-        ov96_021EB630(display->u.mons[order[i]].frame, 11 + i);
+        PokeathlonCourseSpritePoolSprite_SetDrawPriority(display->u.mons[order[i]].carryMark, 3 + i * 2);
+        PokeathlonCourseSpritePoolSprite_SetDrawPriority(display->u.mons[order[i]].icon, 4 + i * 2);
+        PokeathlonCourseSpritePoolSprite_SetDrawPriority(display->u.mons[order[i]].frame, 11 + i);
     }
 }
 
@@ -463,12 +463,12 @@ void PokeathlonPennantCaptureDisplay_SetPennants(PokeathlonPennantCaptureDisplay
     if (pennants > 9) {
         GF_AssertFail();
     }
-    ov96_021EB564(display->statusSprites[participant][1], pennants + 9);
+    PokeathlonCourseSpritePoolSprite_SetAnim(display->statusSprites[participant][1], pennants + 9);
 }
 
 void PokeathlonPennantCaptureDisplay_ShowPoint(PokeathlonPennantCaptureDisplay *display, int participant) {
-    ov96_021EB564(display->pointSprites[participant][display->nextPointSprite], 2);
-    ov96_021EB52C(display->pointSprites[participant][display->nextPointSprite], 1, 1);
+    PokeathlonCourseSpritePoolSprite_SetAnim(display->pointSprites[participant][display->nextPointSprite], 2);
+    PokeathlonCourseSpritePoolSprite_Show(display->pointSprites[participant][display->nextPointSprite], 1, 1);
     display->nextPointSprite = (display->nextPointSprite + 1) % 2;
 }
 

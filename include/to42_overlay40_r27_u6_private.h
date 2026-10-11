@@ -58,10 +58,10 @@ void ov40_02233044(void *p);
 extern const u8 ov40_02245134[];
 extern const u8 ov40_02232ED4[];
 
-void ov40_022318C8(SysTask *task, void *arg);
-int ov40_022319A4(void *p);
-int ov40_02231C78(void *p);
-int ov40_02231EA4(void *p);
+void VsRecorder_RowMoveTask(SysTask *task, void *arg);
+int VsRecorder_MenuSelect(void *p);
+int VsRecorder_MenuBack(void *p);
+int VsRecorder_MenuPrevScheme(void *p);
 int ov40_02232094(void *p);
 int ov40_02232288(void *p);
 int ov40_022322E0(void *p);

@@ -67,12 +67,12 @@ void ov96_021FEE60(void *w, int unused, int i, void *p, BOOL flag, int x) {
     VecFx32 v;
     PokeathlonCourseMonObject_SetDrawFlag(PTR(w, i * 4), 1);
     WORD(w, 0xc8) = 0;
-    ov96_021EB52C(PTR(w, 0x70), 1, 1);
-    ov96_021EB564(PTR(w, 0x70), 8);
-    ov96_021EB52C(PTR(w, 0x74), 1, 0);
+    PokeathlonCourseSpritePoolSprite_Show(PTR(w, 0x70), 1, 1);
+    PokeathlonCourseSpritePoolSprite_SetAnim(PTR(w, 0x70), 8);
+    PokeathlonCourseSpritePoolSprite_Show(PTR(w, 0x74), 1, 0);
     if (flag) {
         BYTE(p, 8) = 0;
     }
-    v = *(VecFx32 *)ov96_021EB594(PTR(w, 0x70));
+    v = *(VecFx32 *)PokeathlonCourseSpritePoolSprite_GetPosition(PTR(w, 0x70));
     ov96_021FFE38(v.x / 0x1000, 0x8b6, x);
 }

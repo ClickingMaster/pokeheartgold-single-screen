@@ -3484,21 +3484,21 @@
 	.public VsRecorder_SetPlaceholderName
 	.public VsRecorder_ShowTouchHere
 	.public VsRecorder_HideTouchHere
-	.public ov40_02230ED8
-	.public ov40_02231100
-	.public ov40_0223131C
-	.public ov40_022313F0
-	.public ov40_0223142C
-	.public ov40_0223169C
-	.public ov40_02231700
-	.public ov40_0223172C
-	.public ov40_02231748
-	.public ov40_02231868
-	.public ov40_0223189C
-	.public ov40_022318C8
-	.public ov40_022319A4
-	.public ov40_02231C78
-	.public ov40_02231EA4
+	.public VsRecorder_TitleIntro
+	.public VsRecorder_TitleShowMenu
+	.public VsRecorder_TitleFlash
+	.public VsRecorder_TitleSlideInChoices
+	.public VsRecorder_SlideInChoiceRows
+	.public VsRecorder_MenuMain
+	.public VsRecorder_CheckSchemeArrowTouch
+	.public VsRecorder_MenuInvalid
+	.public VsRecorder_MenuExit
+	.public VsRecorder_MenuSlideIn
+	.public VsRecorder_MenuShow
+	.public VsRecorder_RowMoveTask
+	.public VsRecorder_MenuSelect
+	.public VsRecorder_MenuBack
+	.public VsRecorder_MenuPrevScheme
 	.public ov40_02232094
 	.public ov40_02232288
 	.public ov40_022322E0

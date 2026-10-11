@@ -24,7 +24,7 @@ typedef struct Overlay96R101Work {
     Overlay96R101Sprite sprites[12];
 } Overlay96R101Work;
 
-void ov96_021EB144(void *work, int value);
+void PokeathlonCourseObjects_PauseAnims(void *work, int value);
 void ov96_0221031C(void *work);
 void ManagedSprite_SetAnimateFlag(void *sprite, int value);
 void ov96_0220EAC4(void *work);

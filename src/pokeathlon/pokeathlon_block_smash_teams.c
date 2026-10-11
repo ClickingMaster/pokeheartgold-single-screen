@@ -27,8 +27,8 @@ void PokeathlonCourseMonObject_SetShadowDrawFlag(void *monPic, int a1);
 void PokeathlonCourseMonObject_SetDrawPriority(void *monPic, int priority);
 void PokeathlonCourseMonObject_SetAnimState(void *monPic, int a1);
 void PokeathlonCourseMonObject_SetAnim(void *monPic, int anim);
-void ov96_021EAF94(void *monPic, int x, int y);
-void ov96_021EEBE4(ManagedSprite *sprite, void *mon, int a2, int a3, enum HeapID heapId);
+void PokeathlonCourseObject_SetGroundPosition(void *monPic, int x, int y);
+void PokeathlonCourse_LoadMonPic(ManagedSprite *sprite, void *mon, int a2, int a3, enum HeapID heapId);
 
 extern u32 ov96_0221E5A4;
 extern const s32 ov96_0221CE08[3];
@@ -806,7 +806,7 @@ void PokeathlonBlockSmashMon_SetMonSprite(PokeathlonBlockSmashMon *mon, int spri
     heapId = mon->heapId;
     managedSprite = mon->sprites[sprite];
     PokeathlonCourse_GetMonInfo(mon->course, participant, member, info);
-    ov96_021EEBE4(managedSprite, info, a4, 0, heapId);
+    PokeathlonCourse_LoadMonPic(managedSprite, info, a4, 0, heapId);
 }
 
 void PokeathlonBlockSmashMon_SetMode(PokeathlonBlockSmashMon *mon, int mode) {
@@ -920,7 +920,7 @@ void PokeathlonBlockSmashRivals_InitMonPics(void *monPics, u32 self) {
         for (i = 0; i < 3; i++) {
             pic = PokeathlonCourseMonObjects_Get(monPics, (u8)(i + base));
             PokeathlonCourseMonObject_SetDrawPriority(pic, 32);
-            ov96_021EAF94(pic, x, 48);
+            PokeathlonCourseObject_SetGroundPosition(pic, x, 48);
             PokeathlonCourseMonObject_SetAnimState(pic, 2);
             PokeathlonCourseMonObject_SetDrawFlag(pic, (u8)(i == 0));
             PokeathlonCourseMonObject_SetShadowDrawFlag(pic, 0);

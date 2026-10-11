@@ -3,7 +3,7 @@
 u32 ov96_02201B18(void *course) {
     void *work = PokeathlonCourse_GetHeapAllocPtr4(course);
     ov96_02203CE4(PTR_AT(work, 0x5e0));
-    ov96_021EB5BC(PTR_AT(work, 0x48));
+    PokeathlonCourseSpritePool_Draw(PTR_AT(work, 0x48));
     return 1;
 }
 

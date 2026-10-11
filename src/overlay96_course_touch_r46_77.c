@@ -15,11 +15,11 @@ BOOL ov96_021FDB64(void *course) {
     {
         u8 flag = ((s32) * (u32 *)(copy + 0x14) >> 24) & 1;
         if (flag) {
-            ov96_021EB52C(PTR8(work, 0x28), 1, 0);
+            PokeathlonCourseSpritePoolSprite_Show(PTR8(work, 0x28), 1, 0);
             Sprite_SetDrawFlag(PTR8(work, 0x20), FALSE);
             Sprite_SetDrawFlag(PTR8(work, 0x24), FALSE);
-            ov96_021EB63C(PTR8(work, 0x18), 1);
-            ov96_021EB144(PTR8(work, 0x3c8), 1);
+            PokeathlonCourseSpritePool_PauseAnims(PTR8(work, 0x18), 1);
+            PokeathlonCourseObjects_PauseAnims(PTR8(work, 0x3c8), 1);
             PokeathlonCourse_SetFinishCallback(course, ov96_021FFEE8);
             if (!ov96_021E5F24(course)) {
                 for (i = 0; i < 4; i++) {

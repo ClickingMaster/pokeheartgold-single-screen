@@ -63,16 +63,16 @@
 	.extern PokeathlonCourseCmd_GetResultsBuffer
 	.extern ov96_021E9A54
 	.extern PokeathlonCourseCmd_GetJuiceRecordBuffer
-	.extern ov96_021EB678
-	.extern ov96_021EB680
-	.extern ov96_021EB688
-	.extern ov96_021EB690
-	.extern ov96_021EB698
-	.extern ov96_021EB6A0
-	.extern ov96_021EEEBC
-	.extern ov96_021EEEC0
-	.extern ov96_021EF18C
-	.extern ov96_021F08E4
+	.extern PokeathlonCourseOpening_Init
+	.extern PokeathlonCourseOpening_Main
+	.extern PokeathlonCourseOpening_Exit
+	.extern PokeathlonCourseClosing_Init
+	.extern PokeathlonCourseClosing_Main
+	.extern PokeathlonCourseClosing_Exit
+	.extern PokeathlonCourseWait_Main
+	.extern PokeathlonCourseWait_Exit
+	.extern PokeathlonEventIntro_Main
+	.extern PokeathlonCirclePush_Main
 	.extern PokeathlonLampJump_Draw
 	.extern PokeathlonHurdleDash_Start
 	.extern ov96_021FCD74

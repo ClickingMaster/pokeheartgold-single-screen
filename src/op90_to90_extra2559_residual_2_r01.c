@@ -7,8 +7,8 @@
 void *PokeathlonCourse_GetHeapAllocPtr4(void *course);
 void *PokeathlonCourse_GetDataCopyArea(void *course);
 u8 *ov96_021E8A20(void *ptr);
-void ov96_021EB63C(void *obj, int value);
-void ov96_021EB144(void *obj, int value);
+void PokeathlonCourseSpritePool_PauseAnims(void *obj, int value);
+void PokeathlonCourseObjects_PauseAnims(void *obj, int value);
 BOOL ov96_022038D4(void *course);
 void PokeathlonCourse_SetFinishCallback(void *course, BOOL (*func)(void *));
 int ov96_021E5F24(void *course);
@@ -32,8 +32,8 @@ BOOL ov96_022028BC(void *course) {
     {
         u8 flag = ((s32) * (u32 *)(copy + 0x20) >> 24) & 1;
         if (flag) {
-            ov96_021EB63C(PTR8(work, 0x48), 1);
-            ov96_021EB144(PTR8(work, 0x5d8), 1);
+            PokeathlonCourseSpritePool_PauseAnims(PTR8(work, 0x48), 1);
+            PokeathlonCourseObjects_PauseAnims(PTR8(work, 0x5d8), 1);
             PokeathlonCourse_SetFinishCallback(course, ov96_022038D4);
             return TRUE;
         }

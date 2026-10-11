@@ -11,9 +11,9 @@ extern void SpriteTransfer_CreateExtPlttTransferTask(void *);
 extern u32 sub_02074490(void);
 extern void GfGfxLoader_GXLoadPal(u32, u32, u32, u32, u32, u32);
 extern void *Heap_Alloc(u32 heapId, u32 size);
-extern void *ov96_021EB3E4(void *a0, int a1, int a2, int a3, u8 a4);
-extern void ov96_021EB52C(void *a0, u32 a1, u32 a2);
-extern void ov96_021EB630(void *a0, u32 a1);
+extern void *PokeathlonCourseSpritePool_CreateAndTake(void *a0, int a1, int a2, int a3, u8 a4);
+extern void PokeathlonCourseSpritePoolSprite_Show(void *a0, u32 a1, u32 a2);
+extern void PokeathlonCourseSpritePoolSprite_SetDrawPriority(void *a0, u32 a1);
 
 void ov96_021FC320(Ov96R75Work *work) {
     int i;

@@ -110,7 +110,7 @@ void ov96_02203970(Ov96CourseUiWork *w, u16 group) {
     Ov96AnimRec *rec;
 
     for (i = 0; i < 12; i++) {
-        rec = ov96_021EB594(w->slots[i].unk04);
+        rec = PokeathlonCourseSpritePoolSprite_GetPosition(w->slots[i].unk04);
         entries[i].index = w->slots[i].unk41;
         entries[i].score = rec->unk04;
         entries[i].group = group;
@@ -118,8 +118,8 @@ void ov96_02203970(Ov96CourseUiWork *w, u16 group) {
     MATH_QSort(entries, 12, sizeof(Ov96SortEntry), ov96_02203924, w->unk598);
     for (i = 0; i < 12; i++) {
         k = (u8)entries[i].index;
-        ov96_021EB630(w->slots[k].unk00, i + 0x14);
-        ov96_021EB630(w->slots[k].unk08, i + 5);
+        PokeathlonCourseSpritePoolSprite_SetDrawPriority(w->slots[k].unk00, i + 0x14);
+        PokeathlonCourseSpritePoolSprite_SetDrawPriority(w->slots[k].unk08, i + 5);
     }
 }
 
@@ -162,17 +162,17 @@ void ov96_02203A64(Ov96CourseUiGfx *gfx, u32 index) {
 
 void ov96_02203B44(Ov96CourseUiGfx *gfx, Ov96R31Work *sprites) {
 #pragma unused(gfx)
-    ov96_021EB2BC(sprites, NARC_a_2_1_7, 0xD, 0x65, 2);
-    ov96_021EB2F4(sprites, NARC_a_2_1_7, 0xA, 0x65, 2, 4);
-    ov96_021EB334(sprites, NARC_a_2_1_7, 0xC, 0x65);
-    ov96_021EB36C(sprites, NARC_a_2_1_7, 0xB, 0x65);
+    PokeathlonCourseSpritePool_LoadChar(sprites, NARC_a_2_1_7, 0xD, 0x65, 2);
+    PokeathlonCourseSpritePool_LoadPltt(sprites, NARC_a_2_1_7, 0xA, 0x65, 2, 4);
+    PokeathlonCourseSpritePool_LoadCell(sprites, NARC_a_2_1_7, 0xC, 0x65);
+    PokeathlonCourseSpritePool_LoadAnim(sprites, NARC_a_2_1_7, 0xB, 0x65);
 }
 
 void ov96_02203B8C(void *a, Ov96R31Work *sprites, void *b) {
     int i;
 
     for (i = 0; i < 3; i++) {
-        ov96_021EB408(sprites, 3, 2, 0x65, 5);
+        PokeathlonCourseSpritePool_CreateSprite(sprites, 3, 2, 0x65, 5);
     }
     ov96_02203E30(sprites, a, b);
 }

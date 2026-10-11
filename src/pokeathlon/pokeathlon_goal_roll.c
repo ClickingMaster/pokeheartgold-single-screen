@@ -59,34 +59,34 @@ void PokeathlonCourseMonObject_SetDrawPriority(void *object, int priority);
 void PokeathlonCourseMonObject_SetDrawPriorityStep(u8 *object, u32 a1);
 void PokeathlonCourseMonObject_SetAnimState(void *object, u8 anim);
 void PokeathlonCourseMonObject_SetAnim(void *object, int anim);
-void ov96_021EAF6C(u8 *object, u32 a1);
-void ov96_021EAF70(u8 *object, u32 width, u32 height);
-s32 ov96_021EAF8C(void *object);
-void ov96_021EAF94(void *object, s32 x, s32 y);
-void ov96_021EB01C(void *object, int x, int y, int a3);
-void ov96_021EB06C(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
-void ov96_021EB0A4(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
-void ov96_021EB144(PokeathlonGoalRollMonObjects *monObjects, int a1);
-PokeathlonGoalRollSpritePool *ov96_021EB180(enum HeapID heapId, const PokeathlonGoalRollSpritePoolConfig *config);
-void ov96_021EB21C(PokeathlonGoalRollSpritePool *pool);
-void ov96_021EB29C(PokeathlonGoalRollSpritePool *pool, int a1, int a2);
-void ov96_021EB2BC(PokeathlonGoalRollSpritePool *pool, NarcId narcId, int member, int a3, int a4);
-void ov96_021EB2F4(PokeathlonGoalRollSpritePool *pool, NarcId narcId, int member, int a3, int a4, u8 a5);
-void ov96_021EB334(PokeathlonGoalRollSpritePool *pool, NarcId narcId, int member, int a3);
-void ov96_021EB36C(PokeathlonGoalRollSpritePool *pool, NarcId narcId, int member, int a3);
-void ov96_021EB3A4(PokeathlonGoalRollSpritePool *pool);
-PokeathlonGoalRollSprite *ov96_021EB3E4(PokeathlonGoalRollSpritePool *pool, int a1, int a2, int a3, u8 a4);
-void ov96_021EB52C(PokeathlonGoalRollSprite *sprite, BOOL a1, BOOL show);
-void ov96_021EB564(PokeathlonGoalRollSprite *sprite, int anim);
-void ov96_021EB570(PokeathlonGoalRollSprite *sprite, int anim);
-BOOL ov96_021EB57C(PokeathlonGoalRollSprite *sprite);
-void ov96_021EB588(PokeathlonGoalRollSprite *sprite, const VecFx32 *position);
-void ov96_021EB5AC(PokeathlonGoalRollSprite *sprite, u16 palette, int a2);
-void ov96_021EB5BC(PokeathlonGoalRollSpritePool *pool);
-void ov96_021EB5C8(PokeathlonGoalRollSpritePool *pool, int a1, int a2, int a3, int a4);
-SpriteList *ov96_021EB5E8(void *pool);
-void ov96_021EB630(PokeathlonGoalRollSprite *sprite, int priority);
-void ov96_021EB63C(PokeathlonGoalRollSpritePool *pool);
+void PokeathlonCourseObject_SetTouchRadius(u8 *object, u32 a1);
+void PokeathlonCourseObject_SetCollision(u8 *object, u32 width, u32 height);
+s32 PokeathlonCourseObject_GetCollisionRadius(void *object);
+void PokeathlonCourseObject_SetGroundPosition(void *object, s32 x, s32 y);
+void PokeathlonCourseObject_SetCenterPosition(void *object, int x, int y, int a3);
+void PokeathlonCourseObject_CenterToGround(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
+void PokeathlonCourseObject_GroundToCenter(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
+void PokeathlonCourseObjects_PauseAnims(PokeathlonGoalRollMonObjects *monObjects, int a1);
+PokeathlonGoalRollSpritePool *PokeathlonCourseSpritePool_New(enum HeapID heapId, const PokeathlonGoalRollSpritePoolConfig *config);
+void PokeathlonCourseSpritePool_Free(PokeathlonGoalRollSpritePool *pool);
+void PokeathlonCourseSpritePool_SetResourceId(PokeathlonGoalRollSpritePool *pool, int a1, int a2);
+void PokeathlonCourseSpritePool_LoadChar(PokeathlonGoalRollSpritePool *pool, NarcId narcId, int member, int a3, int a4);
+void PokeathlonCourseSpritePool_LoadPltt(PokeathlonGoalRollSpritePool *pool, NarcId narcId, int member, int a3, int a4, u8 a5);
+void PokeathlonCourseSpritePool_LoadCell(PokeathlonGoalRollSpritePool *pool, NarcId narcId, int member, int a3);
+void PokeathlonCourseSpritePool_LoadAnim(PokeathlonGoalRollSpritePool *pool, NarcId narcId, int member, int a3);
+void PokeathlonCourseSpritePool_TransferResources(PokeathlonGoalRollSpritePool *pool);
+PokeathlonGoalRollSprite *PokeathlonCourseSpritePool_CreateAndTake(PokeathlonGoalRollSpritePool *pool, int a1, int a2, int a3, u8 a4);
+void PokeathlonCourseSpritePoolSprite_Show(PokeathlonGoalRollSprite *sprite, BOOL a1, BOOL show);
+void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonGoalRollSprite *sprite, int anim);
+void PokeathlonCourseSpritePoolSprite_TryChangeAnim(PokeathlonGoalRollSprite *sprite, int anim);
+BOOL PokeathlonCourseSpritePoolSprite_IsAnimated(PokeathlonGoalRollSprite *sprite);
+void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonGoalRollSprite *sprite, const VecFx32 *position);
+void PokeathlonCourseSpritePoolSprite_SetRotation(PokeathlonGoalRollSprite *sprite, u16 palette, int a2);
+void PokeathlonCourseSpritePool_Draw(PokeathlonGoalRollSpritePool *pool);
+void PokeathlonCourseSpritePool_SetSurfaceCoords(PokeathlonGoalRollSpritePool *pool, int a1, int a2, int a3, int a4);
+SpriteList *PokeathlonCourseSpritePool_GetSpriteList(void *pool);
+void PokeathlonCourseSpritePoolSprite_SetDrawPriority(PokeathlonGoalRollSprite *sprite, int priority);
+void PokeathlonCourseSpritePool_PauseAnims(PokeathlonGoalRollSpritePool *pool);
 void ov96_0221A56C(void *gfx, int a1);
 
 extern const VecFx32 ov96_0221D208;
@@ -160,7 +160,7 @@ static inline void PokeathlonGoalRoll_SetModelSize(PokeathlonCourseData *course,
     participant = index / 3;
     member = index % 3;
     size = ov96_021E6138(PokeathlonCourse_GetPerformance(course, participant, member));
-    ov96_021EAF70((u8 *)object, sizes[size - 1].width, sizes[size - 1].height);
+    PokeathlonCourseObject_SetCollision((u8 *)object, sizes[size - 1].width, sizes[size - 1].height);
 }
 
 // PokeathlonGoalRollCpu_New as this call was built: with an int count and the course mode as an
@@ -257,47 +257,47 @@ BOOL PokeathlonGoalRoll_Init(PokeathlonCourseData *course) {
     }
     case 2: {
         work.poolConfig = ov96_0221D238;
-        goalRoll->spritePool = ov96_021EB180(goalRoll->heapId, &work.poolConfig);
-        ov96_021EB5C8(goalRoll->spritePool, 0, 0, 0, 0x200000);
-        goalRoll->monObjects = PokeathlonCourseMonObjects_Create(goalRoll->heapId, 12, 8, goalRoll->resources, ov96_021EB5E8((u8 *)goalRoll->spritePool));
-        ov96_021EB29C(goalRoll->spritePool, 0, 101);
-        ov96_021EB29C(goalRoll->spritePool, 1, 102);
-        ov96_021EB2BC(goalRoll->spritePool, NARC_a_2_3_4, 18, 101, 1);
-        ov96_021EB2F4(goalRoll->spritePool, NARC_a_2_3_4, 15, 101, 1, 2);
-        ov96_021EB334(goalRoll->spritePool, NARC_a_2_3_4, 17, 101);
-        ov96_021EB36C(goalRoll->spritePool, NARC_a_2_3_4, 16, 101);
-        ov96_021EB2BC(goalRoll->spritePool, NARC_a_2_3_4, 14, 102, 2);
-        ov96_021EB2F4(goalRoll->spritePool, NARC_a_2_3_4, 11, 102, 2, 1);
-        ov96_021EB334(goalRoll->spritePool, NARC_a_2_3_4, 13, 102);
-        ov96_021EB36C(goalRoll->spritePool, NARC_a_2_3_4, 12, 102);
-        ov96_021EB3A4(goalRoll->spritePool);
+        goalRoll->spritePool = PokeathlonCourseSpritePool_New(goalRoll->heapId, &work.poolConfig);
+        PokeathlonCourseSpritePool_SetSurfaceCoords(goalRoll->spritePool, 0, 0, 0, 0x200000);
+        goalRoll->monObjects = PokeathlonCourseMonObjects_Create(goalRoll->heapId, 12, 8, goalRoll->resources, PokeathlonCourseSpritePool_GetSpriteList((u8 *)goalRoll->spritePool));
+        PokeathlonCourseSpritePool_SetResourceId(goalRoll->spritePool, 0, 101);
+        PokeathlonCourseSpritePool_SetResourceId(goalRoll->spritePool, 1, 102);
+        PokeathlonCourseSpritePool_LoadChar(goalRoll->spritePool, NARC_a_2_3_4, 18, 101, 1);
+        PokeathlonCourseSpritePool_LoadPltt(goalRoll->spritePool, NARC_a_2_3_4, 15, 101, 1, 2);
+        PokeathlonCourseSpritePool_LoadCell(goalRoll->spritePool, NARC_a_2_3_4, 17, 101);
+        PokeathlonCourseSpritePool_LoadAnim(goalRoll->spritePool, NARC_a_2_3_4, 16, 101);
+        PokeathlonCourseSpritePool_LoadChar(goalRoll->spritePool, NARC_a_2_3_4, 14, 102, 2);
+        PokeathlonCourseSpritePool_LoadPltt(goalRoll->spritePool, NARC_a_2_3_4, 11, 102, 2, 1);
+        PokeathlonCourseSpritePool_LoadCell(goalRoll->spritePool, NARC_a_2_3_4, 13, 102);
+        PokeathlonCourseSpritePool_LoadAnim(goalRoll->spritePool, NARC_a_2_3_4, 12, 102);
+        PokeathlonCourseSpritePool_TransferResources(goalRoll->spritePool);
         for (i = 0; i < 12; i++) {
-            goalRoll->mons[i / 3][i % 3].dashSprite = ov96_021EB3E4(goalRoll->spritePool, 1, 1, 101, 2);
-            ov96_021EB630(goalRoll->mons[i / 3][i % 3].dashSprite, 5);
+            goalRoll->mons[i / 3][i % 3].dashSprite = PokeathlonCourseSpritePool_CreateAndTake(goalRoll->spritePool, 1, 1, 101, 2);
+            PokeathlonCourseSpritePoolSprite_SetDrawPriority(goalRoll->mons[i / 3][i % 3].dashSprite, 5);
             for (j = 0; j < 3; j++) {
-                goalRoll->mons[i / 3][i % 3].trailSprites[j] = ov96_021EB3E4(goalRoll->spritePool, 1, 1, 101, 7);
-                ov96_021EB630(goalRoll->mons[i / 3][i % 3].trailSprites[j], 47);
+                goalRoll->mons[i / 3][i % 3].trailSprites[j] = PokeathlonCourseSpritePool_CreateAndTake(goalRoll->spritePool, 1, 1, 101, 7);
+                PokeathlonCourseSpritePoolSprite_SetDrawPriority(goalRoll->mons[i / 3][i % 3].trailSprites[j], 47);
             }
         }
         for (i = 0; i < 2; i++) {
             PokeathlonGoalRollBall *ball = &goalRoll->balls[i];
             memset(&work.ballPosition, 0, sizeof(VecFx32));
-            ball->sprite = ov96_021EB3E4(goalRoll->spritePool, 1, 1, 101, 3);
-            ball->effectSprite = ov96_021EB3E4(goalRoll->spritePool, 1, 1, 101, 8);
-            ov96_021EB564(ball->sprite, 10);
-            ov96_021EB564(ball->effectSprite, 13);
-            ov96_021EB630(ball->sprite, 46);
-            ov96_021EB630(ball->effectSprite, 45);
+            ball->sprite = PokeathlonCourseSpritePool_CreateAndTake(goalRoll->spritePool, 1, 1, 101, 3);
+            ball->effectSprite = PokeathlonCourseSpritePool_CreateAndTake(goalRoll->spritePool, 1, 1, 101, 8);
+            PokeathlonCourseSpritePoolSprite_SetAnim(ball->sprite, 10);
+            PokeathlonCourseSpritePoolSprite_SetAnim(ball->effectSprite, 13);
+            PokeathlonCourseSpritePoolSprite_SetDrawPriority(ball->sprite, 46);
+            PokeathlonCourseSpritePoolSprite_SetDrawPriority(ball->effectSprite, 45);
             PokeathlonGoalRoll_ResetBall(ball);
             ball->state = GOAL_ROLL_BALL_ROLLING;
             work.ballPosition.x = 0x80000;
             work.ballPosition.y = 0x68000;
-            ov96_021EB588(ball->sprite, &work.ballPosition);
-            ov96_021EB588(ball->effectSprite, &work.ballPosition);
+            PokeathlonCourseSpritePoolSprite_SetPosition(ball->sprite, &work.ballPosition);
+            PokeathlonCourseSpritePoolSprite_SetPosition(ball->effectSprite, &work.ballPosition);
             ball->position = work.ballPosition;
             ball->spawnPoint = 7;
             if (i == 0) {
-                ov96_021EB52C(ball->sprite, TRUE, TRUE);
+                PokeathlonCourseSpritePoolSprite_Show(ball->sprite, TRUE, TRUE);
                 ball->kind = GOAL_ROLL_BALL_SMALL;
             }
         }
@@ -309,25 +309,25 @@ BOOL PokeathlonGoalRoll_Init(PokeathlonCourseData *course) {
         {
             int n;
             for (n = 0, goal = goalRoll, goalPosition = work.goalPositions, goalPalette = goalPalettes, markAnim = 2, markPosition = ov96_0221D4B4[0], labelPosition = ov96_0221D3A8; n < 4; goal = GOAL_CURSOR_NEXT(goal), goalPosition++, goalPalette++, markAnim += 2, markPosition += 2, labelPosition++, n++) {
-                goal->goalSprites[0] = ov96_021EB3E4(goalRoll->spritePool, 1, 1, 101, 5);
-                ov96_021EB52C(goal->goalSprites[0], TRUE, TRUE);
-                ov96_021EB564(goal->goalSprites[0], 1);
-                ov96_021EB588(goal->goalSprites[0], goalPosition);
-                ov96_021EB5AC(goal->goalSprites[0], *goalPalette, 1);
-                ov96_021EB630(goal->goalSprites[0], 3);
+                goal->goalSprites[0] = PokeathlonCourseSpritePool_CreateAndTake(goalRoll->spritePool, 1, 1, 101, 5);
+                PokeathlonCourseSpritePoolSprite_Show(goal->goalSprites[0], TRUE, TRUE);
+                PokeathlonCourseSpritePoolSprite_SetAnim(goal->goalSprites[0], 1);
+                PokeathlonCourseSpritePoolSprite_SetPosition(goal->goalSprites[0], goalPosition);
+                PokeathlonCourseSpritePoolSprite_SetRotation(goal->goalSprites[0], *goalPalette, 1);
+                PokeathlonCourseSpritePoolSprite_SetDrawPriority(goal->goalSprites[0], 3);
                 for (j = 0; j < 2; j++) {
-                    sprite = ov96_021EB3E4(goalRoll->spritePool, 1, 1, 101, 6);
-                    ov96_021EB52C(sprite, TRUE, TRUE);
-                    ov96_021EB564(sprite, j + markAnim);
-                    ov96_021EB588(sprite, markPosition + j);
-                    ov96_021EB630(sprite, 103);
+                    sprite = PokeathlonCourseSpritePool_CreateAndTake(goalRoll->spritePool, 1, 1, 101, 6);
+                    PokeathlonCourseSpritePoolSprite_Show(sprite, TRUE, TRUE);
+                    PokeathlonCourseSpritePoolSprite_SetAnim(sprite, j + markAnim);
+                    PokeathlonCourseSpritePoolSprite_SetPosition(sprite, markPosition + j);
+                    PokeathlonCourseSpritePoolSprite_SetDrawPriority(sprite, 103);
                 }
-                goal->goalFlashSprites[0] = ov96_021EB3E4(goalRoll->spritePool, 1, 1, 101, 11);
-                ov96_021EB588(goal->goalFlashSprites[0], labelPosition);
-                ov96_021EB630(goal->goalFlashSprites[0], 2);
-                goal->goalLabelSprites[0] = ov96_021EB3E4(goalRoll->spritePool, 1, 1, 101, 12);
-                ov96_021EB588(goal->goalLabelSprites[0], goalPosition);
-                ov96_021EB630(goal->goalLabelSprites[0], 102);
+                goal->goalFlashSprites[0] = PokeathlonCourseSpritePool_CreateAndTake(goalRoll->spritePool, 1, 1, 101, 11);
+                PokeathlonCourseSpritePoolSprite_SetPosition(goal->goalFlashSprites[0], labelPosition);
+                PokeathlonCourseSpritePoolSprite_SetDrawPriority(goal->goalFlashSprites[0], 2);
+                goal->goalLabelSprites[0] = PokeathlonCourseSpritePool_CreateAndTake(goalRoll->spritePool, 1, 1, 101, 12);
+                PokeathlonCourseSpritePoolSprite_SetPosition(goal->goalLabelSprites[0], goalPosition);
+                PokeathlonCourseSpritePoolSprite_SetDrawPriority(goal->goalLabelSprites[0], 102);
             }
         }
         Sprite_SetDrawPriority(*ov96_021E6290(course, 0, goalRoll->resources, goalRoll->spritePool), 1);
@@ -373,16 +373,16 @@ BOOL PokeathlonGoalRoll_Init(PokeathlonCourseData *course) {
             row = i / 3;
             mon = &goalRoll->mons[row][member];
             mon->object = object;
-            mon->radius = ov96_021EAF8C(object);
+            mon->radius = PokeathlonCourseObject_GetCollisionRadius(object);
             mon->mode = GOAL_ROLL_MODE_WALK;
             PokeathlonCourseMonGfx_GetTopRow(image);
             x = ov96_0221D408[row][member][0];
             y = ov96_0221D408[row][member][1];
             mon->facing = 2;
             PokeathlonCourseMonObject_SetAnimState(object, 2);
-            ov96_021EAF94(object, x, y);
-            ov96_021EAF6C((u8 *)object, ov96_021E6104());
-            ov96_021EB0A4(object, x, y, &screen.x, &screen.y);
+            PokeathlonCourseObject_SetGroundPosition(object, x, y);
+            PokeathlonCourseObject_SetTouchRadius((u8 *)object, ov96_021E6104());
+            PokeathlonCourseObject_GroundToCenter(object, x, y, &screen.x, &screen.y);
             mon->startX = (s32)((u32)screen.x << 12);
             mon->startY = (s32)((u32)screen.y << 12);
             mon->position.x = (s32)((u32)screen.x << 12);
@@ -398,7 +398,7 @@ BOOL PokeathlonGoalRoll_Init(PokeathlonCourseData *course) {
             if (row == own) {
                 work.ownCoords[member][0] = screen.x;
                 work.ownCoords[member][1] = screen.y;
-                PokeathlonCourse_AddMarker(course, object, goalRoll->resources, ov96_021EB5E8((u8 *)goalRoll->spritePool), 1);
+                PokeathlonCourse_AddMarker(course, object, goalRoll->resources, PokeathlonCourseSpritePool_GetSpriteList((u8 *)goalRoll->spritePool), 1);
             }
         }
         ov96_021E634C(course, 0, goalRoll->resources, goalRoll->spritePool, 1, 3, work.ownCoords);
@@ -461,7 +461,7 @@ BOOL PokeathlonGoalRoll_Init(PokeathlonCourseData *course) {
 
 BOOL PokeathlonGoalRoll_Draw(PokeathlonCourseData *course) {
     PokeathlonGoalRoll *goalRoll = PokeathlonCourse_GetHeapAllocPtr4(course);
-    ov96_021EB5BC(goalRoll->spritePool);
+    PokeathlonCourseSpritePool_Draw(goalRoll->spritePool);
     return TRUE;
 }
 
@@ -509,7 +509,7 @@ BOOL PokeathlonGoalRoll_Exit(PokeathlonCourseData *course) {
         window++;
     }
     Heap_Free(goalRoll->bgConfig);
-    ov96_021EB21C(goalRoll->spritePool);
+    PokeathlonCourseSpritePool_Free(goalRoll->spritePool);
     PokeathlonCourseMonObjects_Free(goalRoll->monObjects);
     PokeathlonCourseSprites_FreeResources(goalRoll->resources);
     OamManager_Free();
@@ -643,8 +643,8 @@ BOOL PokeathlonGoalRoll_HandleInput(PokeathlonCourseData *course) {
     u8 timeUp = 1;
     timeUp &= frame->flags >> 24;
     if (timeUp) {
-        ov96_021EB63C(goalRoll->spritePool);
-        ov96_021EB144(goalRoll->monObjects, 1);
+        PokeathlonCourseSpritePool_PauseAnims(goalRoll->spritePool);
+        PokeathlonCourseObjects_PauseAnims(goalRoll->monObjects, 1);
         PokeathlonCourse_StopMarkerAnims(course);
         PokeathlonCourse_SetFinishCallback(course, PokeathlonGoalRoll_OnTimeUp);
         return TRUE;
@@ -870,16 +870,16 @@ void PokeathlonGoalRoll_ApplyFrame(PokeathlonCourseData *course) {
         PokeathlonCourseMonGfx_GetSprite(PokeathlonCourseMonObject_GetGfx(mon->object));
         mode = (frame->flags >> (i * 2)) & 3;
         if (mode == GOAL_ROLL_MODE_TIRED) {
-            ov96_021EB52C(mon->dashSprite, TRUE, TRUE);
-            ov96_021EB570(mon->dashSprite, 12);
+            PokeathlonCourseSpritePoolSprite_Show(mon->dashSprite, TRUE, TRUE);
+            PokeathlonCourseSpritePoolSprite_TryChangeAnim(mon->dashSprite, 12);
         } else if (mode == GOAL_ROLL_MODE_STUNNED) {
-            ov96_021EB52C(mon->dashSprite, TRUE, TRUE);
-            ov96_021EB570(mon->dashSprite, 16);
+            PokeathlonCourseSpritePoolSprite_Show(mon->dashSprite, TRUE, TRUE);
+            PokeathlonCourseSpritePoolSprite_TryChangeAnim(mon->dashSprite, 16);
             if (!IsSEPlaying(SEQ_SE_GS_W146)) {
                 PlaySE(SEQ_SE_GS_W146);
             }
         } else {
-            ov96_021EB52C(mon->dashSprite, TRUE, FALSE);
+            PokeathlonCourseSpritePoolSprite_Show(mon->dashSprite, TRUE, FALSE);
         }
         x = frame->monX[i];
         y = frame->monY[i];
@@ -902,7 +902,7 @@ void PokeathlonGoalRoll_ApplyFrame(PokeathlonCourseData *course) {
                 GF_AssertFail();
                 break;
             }
-            ov96_021EB588(mon->dashSprite, &position);
+            PokeathlonCourseSpritePoolSprite_SetPosition(mon->dashSprite, &position);
         }
         if (mode == GOAL_ROLL_MODE_DASH) {
             if (mon->trailCooldown == 0) {
@@ -911,12 +911,12 @@ void PokeathlonGoalRoll_ApplyFrame(PokeathlonCourseData *course) {
 
                 object = PokeathlonCourseMonObjects_Get(goalRoll->monObjects, i);
                 trail = mon->trailIndex;
-                ov96_021EB06C(object, frame->monX[i], frame->monY[i], &screenX, &screenY);
+                PokeathlonCourseObject_CenterToGround(object, frame->monX[i], frame->monY[i], &screenX, &screenY);
                 trailPosition.x = screenX << 12;
                 trailPosition.y = screenY << 12;
-                ov96_021EB588(mon->trailSprites[trail], &trailPosition);
-                ov96_021EB52C(mon->trailSprites[trail], TRUE, TRUE);
-                ov96_021EB564(mon->trailSprites[trail], 14);
+                PokeathlonCourseSpritePoolSprite_SetPosition(mon->trailSprites[trail], &trailPosition);
+                PokeathlonCourseSpritePoolSprite_Show(mon->trailSprites[trail], TRUE, TRUE);
+                PokeathlonCourseSpritePoolSprite_SetAnim(mon->trailSprites[trail], 14);
                 mon->trailIndex = (mon->trailIndex + 1) % 3;
                 mon->trailCooldown = 5;
                 if (participant == own) {
@@ -932,7 +932,7 @@ void PokeathlonGoalRoll_ApplyFrame(PokeathlonCourseData *course) {
         } else {
             PokeathlonCourseMonObject_SetAnimState(object, state + 1);
         }
-        ov96_021EB01C(object, x, y, 1);
+        PokeathlonCourseObject_SetCenterPosition(object, x, y, 1);
     }
     PokeathlonGoalRoll_SortOwnTeamOrder(goalRoll->mons[own], &frame->monY[own * 3]);
     PokeathlonGoalRoll_SortOtherMonsOrder(goalRoll, frame, own);
@@ -943,50 +943,50 @@ void PokeathlonGoalRoll_ApplyFrame(PokeathlonCourseData *course) {
         ball = &goalRoll->balls[i];
         state = ((u8)(frame->states >> 24) >> shift) & 3;
         if (state == GOAL_ROLL_BALL_SCORED) {
-            ov96_021EB52C(ball->sprite, TRUE, FALSE);
-            ov96_021EB52C(ball->effectSprite, TRUE, FALSE);
+            PokeathlonCourseSpritePoolSprite_Show(ball->sprite, TRUE, FALSE);
+            PokeathlonCourseSpritePoolSprite_Show(ball->effectSprite, TRUE, FALSE);
             PokeathlonGoalRoll_ShowGoal(goalRoll, i, (i == 0 && bigBall) ? 1 : 0, frame->ballX[i], frame->ballY[i], own);
         } else {
             ball->scored = 0;
             if (i == 1) {
                 if (secondBall) {
-                    ov96_021EB52C(ball->sprite, TRUE, TRUE);
+                    PokeathlonCourseSpritePoolSprite_Show(ball->sprite, TRUE, TRUE);
                 } else {
-                    ov96_021EB52C(ball->sprite, TRUE, FALSE);
+                    PokeathlonCourseSpritePoolSprite_Show(ball->sprite, TRUE, FALSE);
                 }
             } else {
-                ov96_021EB52C(ball->sprite, TRUE, TRUE);
+                PokeathlonCourseSpritePoolSprite_Show(ball->sprite, TRUE, TRUE);
             }
             if (state == GOAL_ROLL_BALL_KICKED) {
-                ov96_021EB52C(ball->effectSprite, TRUE, TRUE);
+                PokeathlonCourseSpritePoolSprite_Show(ball->effectSprite, TRUE, TRUE);
                 if (ball->shownState != GOAL_ROLL_BALL_KICKED) {
                     PlaySE(SEQ_SE_GS_SHOT);
                 }
             } else {
-                ov96_021EB52C(ball->effectSprite, TRUE, FALSE);
+                PokeathlonCourseSpritePoolSprite_Show(ball->effectSprite, TRUE, FALSE);
             }
             if (i == 0 && bigBall) {
-                ov96_021EB570(ball->sprite, 11);
+                PokeathlonCourseSpritePoolSprite_TryChangeAnim(ball->sprite, 11);
             } else {
-                ov96_021EB570(ball->sprite, 10);
+                PokeathlonCourseSpritePoolSprite_TryChangeAnim(ball->sprite, 10);
             }
         }
         ball->shownState = state;
         ballPosition.x = frame->ballX[i] << 12;
         ballPosition.y = PokeathlonGoalRoll_DecodeBallY(frame->ballY[i]);
         ((PokeathlonGoalRollPlayGoalAreaSEFunc)PokeathlonGoalRoll_PlayGoalAreaSE)(goalRoll, i, bigBall, frame->ballY[i]);
-        ov96_021EB588(ball->sprite, &ballPosition);
-        ov96_021EB588(ball->effectSprite, &ballPosition);
+        PokeathlonCourseSpritePoolSprite_SetPosition(ball->sprite, &ballPosition);
+        PokeathlonCourseSpritePoolSprite_SetPosition(ball->effectSprite, &ballPosition);
         if (frame->ballY[i] < 192) {
-            ov96_021EB630(ball->sprite, 46);
+            PokeathlonCourseSpritePoolSprite_SetDrawPriority(ball->sprite, 46);
         } else {
-            ov96_021EB630(ball->sprite, 4);
+            PokeathlonCourseSpritePoolSprite_SetDrawPriority(ball->sprite, 4);
         }
     }
 
     for (i = 0; i < 4; i++) {
-        if (!ov96_021EB57C(goalRoll->goalFlashSprites[i])) {
-            ov96_021EB52C(goalRoll->goalLabelSprites[i], TRUE, FALSE);
+        if (!PokeathlonCourseSpritePoolSprite_IsAnimated(goalRoll->goalFlashSprites[i])) {
+            PokeathlonCourseSpritePoolSprite_Show(goalRoll->goalLabelSprites[i], TRUE, FALSE);
         }
     }
     PokeathlonGoalRoll_ApplyFrameScore(course);

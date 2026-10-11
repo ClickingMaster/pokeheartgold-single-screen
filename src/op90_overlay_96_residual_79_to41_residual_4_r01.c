@@ -33,8 +33,8 @@ typedef struct Player {
     u8 padD1[3];
 } Player;
 
-void ov96_021EB0A4(void *sprite, int x, int y, int *outX, int *outY);
-void ov96_021EAF78(void *sprite, fx32 x, fx32 y, fx32 *outX, fx32 *outY, int *radius);
+void PokeathlonCourseObject_GroundToCenter(void *sprite, int x, int y, int *outX, int *outY);
+void PokeathlonCourseObject_GetCollisionCircle(void *sprite, fx32 x, fx32 y, fx32 *outX, fx32 *outY, int *radius);
 void PokeathlonCourse_AddMonCounter(void *course, u8 player, u8 type, u8 index, u32 value);
 BOOL ov96_021FF764(void *course, Player *players, VecFx32 *out);
 
@@ -64,7 +64,7 @@ BOOL ov96_021FF764(void *course, Player *players, VecFx32 *out) {
             continue;
         }
         spriteP = p->sprites[pIdx];
-        ov96_021EB0A4(spriteP, p->posX / FX32_ONE, p->posY / FX32_ONE, &px, &py);
+        PokeathlonCourseObject_GroundToCenter(spriteP, p->posX / FX32_ONE, p->posY / FX32_ONE, &px, &py);
         for (j = 0, q = players; j < 4; j++, q++) {
             if (i == j) {
                 continue;
@@ -74,7 +74,7 @@ BOOL ov96_021FF764(void *course, Player *players, VecFx32 *out) {
             }
             rawX = px;
             spriteQ = q->sprites[q->idx];
-            ov96_021EB0A4(spriteQ, q->posX / FX32_ONE, q->posY / FX32_ONE, &qx, &qy);
+            PokeathlonCourseObject_GroundToCenter(spriteQ, q->posX / FX32_ONE, q->posY / FX32_ONE, &qx, &qy);
             {
                 pRaw = p->posX;
 
@@ -94,8 +94,8 @@ BOOL ov96_021FF764(void *course, Player *players, VecFx32 *out) {
                 }
                 }
             }
-            ov96_021EAF78(spriteQ, qx << 12, qy << 12, &posQ.x, &posQ.y, &radQ);
-            ov96_021EAF78(spriteP, rawX << 12, py << 12, &posP.x, &posP.y, &radP);
+            PokeathlonCourseObject_GetCollisionCircle(spriteQ, qx << 12, qy << 12, &posQ.x, &posQ.y, &radQ);
+            PokeathlonCourseObject_GetCollisionCircle(spriteP, rawX << 12, py << 12, &posP.x, &posP.y, &radP);
             VEC_Subtract(&posQ, &posP, &d);
             if (VEC_Mag(&d) < (radQ + radP) << 12) {
                 if (p->hit[j] != 0) {

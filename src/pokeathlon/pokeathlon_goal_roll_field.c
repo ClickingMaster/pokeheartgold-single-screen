@@ -20,9 +20,9 @@ u8 *PokeathlonCourse_GetMonStats(PokeathlonCourseData *course, int participant, 
 int ov96_021E6104(void);
 void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, int event, int value);
 BOOL PokeathlonCourse_IsInRange(int x, int y, int touchX, int touchY, int radius, int *distance);
-void ov96_021EAF78(void *object, fx32 x, fx32 y, fx32 *outX, fx32 *outY, int *outRadius);
-void ov96_021EB52C(PokeathlonGoalRollSprite *sprite, BOOL a1, BOOL show);
-void ov96_021EB564(PokeathlonGoalRollSprite *sprite, int anim);
+void PokeathlonCourseObject_GetCollisionCircle(void *object, fx32 x, fx32 y, fx32 *outX, fx32 *outY, int *outRadius);
+void PokeathlonCourseSpritePoolSprite_Show(PokeathlonGoalRollSprite *sprite, BOOL a1, BOOL show);
+void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonGoalRollSprite *sprite, int anim);
 
 extern const VecFx32 ov96_0221D214;
 extern const VecFx32 ov96_0221D22C;
@@ -61,7 +61,7 @@ void PokeathlonGoalRoll_ShowGoal(PokeathlonGoalRoll *goalRoll, u8 ballIndex, int
     goal = code - 0xD8;
     GF_ASSERT(goal < 16);
     owner = goal / 4;
-    ov96_021EB564(goalRoll->goalSprites[owner], 15);
+    PokeathlonCourseSpritePoolSprite_SetAnim(goalRoll->goalSprites[owner], 15);
     scorer = goal % 4;
     if (scorer != owner) {
         int isBig = 0;
@@ -91,10 +91,10 @@ void PokeathlonGoalRoll_ShowGoal(PokeathlonGoalRoll *goalRoll, u8 ballIndex, int
             GF_AssertFail();
             return;
         }
-        ov96_021EB52C(goalRoll->goalFlashSprites[owner], TRUE, TRUE);
-        ov96_021EB564(goalRoll->goalFlashSprites[owner], anim);
-        ov96_021EB52C(goalRoll->goalLabelSprites[owner], TRUE, TRUE);
-        ov96_021EB564(goalRoll->goalLabelSprites[owner], owner + 19);
+        PokeathlonCourseSpritePoolSprite_Show(goalRoll->goalFlashSprites[owner], TRUE, TRUE);
+        PokeathlonCourseSpritePoolSprite_SetAnim(goalRoll->goalFlashSprites[owner], anim);
+        PokeathlonCourseSpritePoolSprite_Show(goalRoll->goalLabelSprites[owner], TRUE, TRUE);
+        PokeathlonCourseSpritePoolSprite_SetAnim(goalRoll->goalLabelSprites[owner], owner + 19);
         PlaySE(SEQ_SE_GS_WH02);
     } else {
         PlaySE(SEQ_SE_GS_WH01);
@@ -251,7 +251,7 @@ void PokeathlonGoalRoll_CollideBalls(PokeathlonCourseData *course) {
             member = i % 3;
             participant = i / 3;
             mon = &teams[participant][member];
-            ov96_021EAF78(mon->object, mon->position.x, mon->position.y, &center.x, &center.y, &monRadius);
+            PokeathlonCourseObject_GetCollisionCircle(mon->object, mon->position.x, mon->position.y, &center.x, &center.y, &monRadius);
             if (PokeathlonGoalRoll_CirclesOverlap(&center, monRadius * FX32_ONE, ballPosition, ballRadius)) {
                 if ((ball->touching[i] != 0 && ball->bounced != 0) || mon->motion == GOAL_ROLL_MOTION_KNOCKBACK || mon->motion == GOAL_ROLL_MOTION_2) {
                     continue;

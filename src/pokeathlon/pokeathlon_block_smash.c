@@ -55,8 +55,8 @@ void *PokeathlonCourseMonObjects_Create(enum HeapID heapId, int count, int a2, v
 void PokeathlonCourseMonObjects_Free(void *monPics);
 void PokeathlonCourseMonObjects_Load(void *monPics, int count, void *mons, void *params, int a4, int a5);
 BOOL PokeathlonCourseMonObjects_IsLoaded(void *monPics);
-void ov96_021EB144(void *monPics, int a1);
-void ov96_021EECB8(ManagedSprite *sprite, void *mon, u16 plttId, NARC *narc, u32 offset, enum HeapID heapId);
+void PokeathlonCourseObjects_PauseAnims(void *monPics, int a1);
+void PokeathlonCourse_LoadMonIcon(ManagedSprite *sprite, void *mon, u16 plttId, NARC *narc, u32 offset, enum HeapID heapId);
 void ov96_0221A56C(void *graphics, int a1);
 
 typedef struct PokeathlonBlockSmashBannerPosition {
@@ -181,7 +181,7 @@ BOOL PokeathlonBlockSmash_Intro(PokeathlonCourseData *course, u8 *state) {
         break;
     case 1:
         if (PokeathlonCourse_RunStartCountdown(course)) {
-            ov96_021EB144(work->monPics, 0);
+            PokeathlonCourseObjects_PauseAnims(work->monPics, 0);
             PokeathlonCourse_SetStateField07(course, 1);
         }
         break;
@@ -209,7 +209,7 @@ BOOL PokeathlonBlockSmash_UpdateGame(PokeathlonCourseData *course) {
         PokeathlonBlockSmashMon_SetAnimate(work->mon, 0);
         PokeathlonBlockSmashRivals_Pause(work->rivals);
         PokeathlonBlockSmashBlocks_Pause(work->blocks);
-        ov96_021EB144(work->monPics, 1);
+        PokeathlonCourseObjects_PauseAnims(work->monPics, 1);
         return TRUE;
     }
     if (System_GetTouchNew()) {
@@ -399,7 +399,7 @@ BOOL PokeathlonBlockSmash_Init(PokeathlonCourseData *course) {
     case 5:
         work->mon = PokeathlonBlockSmashMon_New(work->heapId, work->spriteSystem, work->spriteManager, course);
         work->rivals = PokeathlonBlockSmashRivals_New(work->heapId, work->spriteSystem, work->spriteManager, course, work->monPics);
-        ov96_021EB144(work->monPics, 1);
+        PokeathlonCourseObjects_PauseAnims(work->monPics, 1);
         if (ov96_021E5F24(course) == 0) {
             work->cpu = PokeathlonBlockSmashCpu_New(course, work->heapId);
         }
@@ -853,7 +853,7 @@ void PokeathlonBlockSmash_SetTeamRowIcon(PokeathlonCourseData *course, u32 parti
     PokeathlonBlockSmash *work = PokeathlonCourse_GetHeapAllocPtr4(course);
     PokeathlonBlockSmashTeamIcons *icons = &work->icons;
     PokeathlonCourse_GetMonInfo(course, participant, member, &info);
-    ov96_021EECB8(icons->rows[participant].icon, &info, icons->plttId, work->icons.narc, participant << 9, work->heapId);
+    PokeathlonCourse_LoadMonIcon(icons->rows[participant].icon, &info, icons->plttId, work->icons.narc, participant << 9, work->heapId);
 }
 
 #pragma force_active on

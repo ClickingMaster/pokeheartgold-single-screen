@@ -4,10 +4,10 @@
 #include "global.h"
 
 extern void PokeathlonCourseMonObject_SetDrawFlag(void *sprite, int value);
-extern void ov96_021EB52C(void *sprite, int a, int b);
-extern void ov96_021EB564(void *sprite, int value);
-extern void ov96_021EB588(void *sprite, const void *position);
-extern void *ov96_021EB594(void *sprite);
+extern void PokeathlonCourseSpritePoolSprite_Show(void *sprite, int a, int b);
+extern void PokeathlonCourseSpritePoolSprite_SetAnim(void *sprite, int value);
+extern void PokeathlonCourseSpritePoolSprite_SetPosition(void *sprite, const void *position);
+extern void *PokeathlonCourseSpritePoolSprite_GetPosition(void *sprite);
 extern void ov96_021FFE38(int position, int sound, int enabled);
 extern BOOL ov96_022006BC(void *course, int participant);
 extern BOOL ov96_02200900(void *course, u32 mode);

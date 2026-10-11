@@ -213,13 +213,13 @@ void ov96_022000E4(int unused, void *p) {
     v[0] = ov96_0221C728[4];
     v[1] = ov96_0221C728[5];
     for (i = 0; i < 2; i++, q++) {
-        ov96_021EB2BC(p, 0x5d, 9, *q, 2);
-        ov96_021EB2F4(p, 0x5d, 6, *q, 2, 1);
-        ov96_021EB334(p, 0x5d, 0xa, *q);
-        ov96_021EB36C(p, 0x5d, 0xa, *q);
+        PokeathlonCourseSpritePool_LoadChar(p, 0x5d, 9, *q, 2);
+        PokeathlonCourseSpritePool_LoadPltt(p, 0x5d, 6, *q, 2, 1);
+        PokeathlonCourseSpritePool_LoadCell(p, 0x5d, 0xa, *q);
+        PokeathlonCourseSpritePool_LoadAnim(p, 0x5d, 0xa, *q);
     }
-    ov96_021EB2BC(p, 0xb2, 0xd, 0x65, 2);
-    ov96_021EB2F4(p, 0xb2, 0xa, 0x65, 2, 5);
-    ov96_021EB334(p, 0xb2, 0xc, 0x65);
-    ov96_021EB36C(p, 0xb2, 0xb, 0x65);
+    PokeathlonCourseSpritePool_LoadChar(p, 0xb2, 0xd, 0x65, 2);
+    PokeathlonCourseSpritePool_LoadPltt(p, 0xb2, 0xa, 0x65, 2, 5);
+    PokeathlonCourseSpritePool_LoadCell(p, 0xb2, 0xc, 0x65);
+    PokeathlonCourseSpritePool_LoadAnim(p, 0xb2, 0xb, 0x65);
 }

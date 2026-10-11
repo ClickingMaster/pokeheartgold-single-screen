@@ -4,7 +4,7 @@ void ov96_021FBCB8(void *sys, u8 *p) {
     void *sprite;
 
     if (p[9] < 4) {
-        sprite = ov96_021EB5B8(PAT(p, 0x4C));
+        sprite = PokeathlonCourseSpritePoolSprite_GetSprite(PAT(p, 0x4C));
         p[9]++;
 
         if (p[9] == 1) {

@@ -203,8 +203,8 @@ typedef struct EasyChatInitialGridCell {
 // render_window.c
 void DrawFrame2AroundWindow(Window *window, u32 baseTile, u32 paletteNum);
 // easy chat save data (category / initial unlocked)
-u32 sub_02091C38(ECMenu *menu, u32 category);
-u32 sub_02091C74(ECMenu *menu, u32 group);
+u32 ECMenu_GetCategoryCount(ECMenu *menu, u32 category);
+u32 ECMenu_GetInitialCount(ECMenu *menu, u32 group);
 
 extern const WindowTemplate ov102_021EC808[3];
 extern const EasyChatInitialGridCell ov102_021EC820[EC_INITIAL_GRID_CELLS];
@@ -1220,7 +1220,7 @@ u32 EasyChatCategoryView_DrawCategories(EasyChatCategoryView *categories, BgConf
             y += 3;
             x = 1;
         }
-        if (sub_02091C38(categories->menu, i)) {
+        if (ECMenu_GetCategoryCount(categories->menu, i)) {
             string = NewString_ReadMsgData(msgData, i);
             color = MAKE_TEXT_COLOR(1, 2, 15);
         } else {
@@ -1259,7 +1259,7 @@ u32 EasyChatCategoryView_DrawInitials(EasyChatCategoryView *categories, BgConfig
         u32 color;
         EasyChatInitialGrid_GetLetter(i, string);
         EasyChatInitialGrid_GetPosition(i, &x, &y);
-        color = sub_02091C74(categories->menu, i) != 0 ? MAKE_TEXT_COLOR(1, 2, 15) : MAKE_TEXT_COLOR(3, 4, 15);
+        color = ECMenu_GetInitialCount(categories->menu, i) != 0 ? MAKE_TEXT_COLOR(1, 2, 15) : MAKE_TEXT_COLOR(3, 4, 15);
         AddTextPrinterParameterizedWithColor(&window, 0, string, x + 3, y, TEXT_SPEED_NOTRANSFER, color, NULL);
     }
     CopyWindowPixelsToVram_TextMode(&window);

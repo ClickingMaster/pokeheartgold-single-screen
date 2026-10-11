@@ -87,8 +87,8 @@ void AddTextPrinterParameterizedWithColor(Window *, int, String *, int, int, int
 void String_Delete(String *str);
 void PokeathlonCourse_SetRecordScore(void *course, u16 v);
 void ov96_0220337C(void *p, u16 v);
-Ov96AnimRec *ov96_021EB594(void *p);
-void ov96_021EB630(void *p, int v);
+Ov96AnimRec *PokeathlonCourseSpritePoolSprite_GetPosition(void *p);
+void PokeathlonCourseSpritePoolSprite_SetDrawPriority(void *p, int v);
 extern const u8 ov96_0221C95C[][12];
 
 void ov96_02203754(Ov96CourseUiWork *w);

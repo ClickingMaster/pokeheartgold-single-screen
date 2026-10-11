@@ -8,7 +8,7 @@
 #include "font.h"
 #include "gf_gfx_loader.h"
 #include "gf_gfx_planes.h"
-#include "grid_cursor_internal.h"
+#include "grid_cursor.h"
 #include "heap.h"
 #include "msgdata.h"
 #include "party.h"

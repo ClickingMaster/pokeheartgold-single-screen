@@ -3473,21 +3473,21 @@
 	.public VsRecorder_SetPlaceholderName
 	.public VsRecorder_ShowTouchHere
 	.public VsRecorder_HideTouchHere
-	.public ov40_02230ED8
-	.public ov40_02231100
-	.public ov40_0223131C
-	.public ov40_022313F0
-	.public ov40_0223142C
-	.public ov40_0223169C
-	.public ov40_02231700
-	.public ov40_0223172C
-	.public ov40_02231748
-	.public ov40_02231868
-	.public ov40_0223189C
-	.public ov40_022318C8
-	.public ov40_022319A4
-	.public ov40_02231C78
-	.public ov40_02231EA4
+	.public VsRecorder_TitleIntro
+	.public VsRecorder_TitleShowMenu
+	.public VsRecorder_TitleFlash
+	.public VsRecorder_TitleSlideInChoices
+	.public VsRecorder_SlideInChoiceRows
+	.public VsRecorder_MenuMain
+	.public VsRecorder_CheckSchemeArrowTouch
+	.public VsRecorder_MenuInvalid
+	.public VsRecorder_MenuExit
+	.public VsRecorder_MenuSlideIn
+	.public VsRecorder_MenuShow
+	.public VsRecorder_RowMoveTask
+	.public VsRecorder_MenuSelect
+	.public VsRecorder_MenuBack
+	.public VsRecorder_MenuPrevScheme
 	.public ov40_02232094
 	.public ov40_02232288
 	.public ov40_022322E0
@@ -4161,10 +4161,10 @@ ov40_02244FF0: ; 0x02244FF0
 	.byte 0x3F, 0x00, 0x00, 0x00, 0x21, 0x00, 0x00, 0x00, 0x2F, 0x00, 0x00, 0x00, 0x30, 0x00, 0x00, 0x00
 
 ov40_022450F0: ; 0x022450F0
-	.word ov40_02230ED8
-	.word ov40_02231100
-	.word ov40_0223131C
-	.word ov40_022313F0
+	.word VsRecorder_TitleIntro
+	.word VsRecorder_TitleShowMenu
+	.word VsRecorder_TitleFlash
+	.word VsRecorder_TitleSlideInChoices
 
 ov40_02245100: ; 0x02245100
 	.byte 0x00, 0xC0, 0x00, 0x08
@@ -4173,14 +4173,14 @@ ov40_02245104: ; 0x02245104
 	.byte 0x00, 0xC0, 0xF8, 0x00
 
 ov40_02245108: ; 0x02245108
-	.word ov40_0223169C
-	.word ov40_0223172C
-	.word ov40_02231748
-	.word ov40_022319A4
-	.word ov40_02231C78
-	.word ov40_02231868
-	.word ov40_0223189C
-	.word ov40_02231EA4
+	.word VsRecorder_MenuMain
+	.word VsRecorder_MenuInvalid
+	.word VsRecorder_MenuExit
+	.word VsRecorder_MenuSelect
+	.word VsRecorder_MenuBack
+	.word VsRecorder_MenuSlideIn
+	.word VsRecorder_MenuShow
+	.word VsRecorder_MenuPrevScheme
 	.word ov40_02232094
 
 ov40_0224512C: ; 0x0224512C

@@ -10,7 +10,7 @@ int ov96_0220DAA0(Ov96Object *object, s16 targetX, s16 targetY) {
     distances = ov96_0221CEF4;
     min = 1 << 20;
     for (i = 0; i < 3; i++) {
-        if (ov96_021EB0CC(object->sprite, object->position.x, object->position.y, targetX, targetY)) {
+        if (PokeathlonCourseObject_IsInTouchRange(object->sprite, object->position.x, object->position.y, targetX, targetY)) {
             VecFx32 delta = { 0, 0, 0 };
             fx32 difference;
             difference = (targetX << FX32_SHIFT) - object->position.x;

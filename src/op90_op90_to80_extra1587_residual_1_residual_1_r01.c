@@ -11,11 +11,11 @@ typedef struct {
     u8 pad[0x1d];
     u8 x1d;
 } Info;
-void ov96_021EB0A4(void *host, s32 x, s32 y, s32 *a, s32 *b);
+void PokeathlonCourseObject_GroundToCenter(void *host, s32 x, s32 y, s32 *a, s32 *b);
 void ov96_021FEBF0(void *course, Obj *obj, VecFx32 *pos, u8 a4, u8 a5, int a6, int flag, int a8);
 void ov96_021FED3C(Obj *obj, VecFx32 *pos, u8 a4, u8 a5, int a6, int flag, int a8);
 void ov96_021FEE60(Obj *obj, u8 a4, u8 a5, int a6, int flag, int a8);
-void ov96_021EB588(void *x, VecFx32 *pos);
+void PokeathlonCourseSpritePoolSprite_SetPosition(void *x, VecFx32 *pos);
 void ov96_021FEECC(void *course, Obj *obj, VecFx32 *in, Info *info, u8 a4, u8 a5, int a6, int a7, int a8, int a9);
 // @fn ov96_021FEECC
 void ov96_021FEECC(void *course, Obj *obj, VecFx32 *in, Info *info, u8 a4, u8 a5, int a6, int a7, int a8, int a9) {
@@ -29,7 +29,7 @@ void ov96_021FEECC(void *course, Obj *obj, VecFx32 *in, Info *info, u8 a4, u8 a5
         obj->xa0 = 0;
         changed = TRUE;
     }
-    ov96_021EB0A4(obj->x0[a5], in->x / FX32_ONE, in->y / FX32_ONE, &x, &y);
+    PokeathlonCourseObject_GroundToCenter(obj->x0[a5], in->x / FX32_ONE, in->y / FX32_ONE, &x, &y);
     pos.x = x << FX32_SHIFT;
     pos.y = y << FX32_SHIFT;
     pos.z = 0;
@@ -45,7 +45,7 @@ void ov96_021FEECC(void *course, Obj *obj, VecFx32 *in, Info *info, u8 a4, u8 a5
         if (changed) {
             ov96_021FEE60(obj, a4, a5, a6, (a7 && a9) | a8, a8);
         }
-        ov96_021EB588(obj->x70, &pos);
+        PokeathlonCourseSpritePoolSprite_SetPosition(obj->x70, &pos);
         break;
     }
 }

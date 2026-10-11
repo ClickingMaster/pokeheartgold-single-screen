@@ -44,8 +44,8 @@ void sub_02095238(WorkR13Prefix *work) {
     VecFx32 matrix;
     VecFx32 copy;
     int enabled = 0;
-    int type = sub_02095DD8(work->cursor);
-    int value = sub_02095DE8(work->cursor);
+    int type = GridCursor_GetPanel(work->cursor);
+    int value = GridCursor_GetIndex(work->cursor);
     matrix.z = 0;
     switch (type) {
     case 5:

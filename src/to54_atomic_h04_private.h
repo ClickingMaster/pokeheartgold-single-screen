@@ -90,7 +90,7 @@ extern void PokeathlonCourseScoreList_Rank(void *, u32);
 extern void PokeathlonCourseScoreList_AddPointsToTotals(void *);
 extern void PokeathlonCourseScoreList_SaveEventPoints(void *, u32);
 extern u32 PokeathlonCourseMonObjects_IsLoaded(void *);
-extern void *ov96_021EAF8C(void *);
+extern void *PokeathlonCourseObject_GetCollisionRadius(void *);
 
 extern u32 ov96_0220D408(void *);
 extern void ov96_0220D420(void *, void *, void *);
@@ -148,10 +148,10 @@ extern void ManagedSprite_SetPositionXYWithSubscreenOffset(void *, s16, s16, s32
 extern void ManagedSprite_SetDrawFlag(void *, u32);
 extern void ManagedSprite_ResetSpriteAnimCtrlState(void *);
 extern void *PokeathlonCourseMonObjects_Get(void *, u8);
-extern void ov96_021EB0A4(void *, u8, u8, s32 *, s32 *);
-extern void ov96_021EB06C(void *, u8, u8, s32 *, s32 *);
-extern void ov96_021EB01C(void *, s32, s32, u32);
-extern void ov96_021EB10C(void *, f32, f32);
+extern void PokeathlonCourseObject_GroundToCenter(void *, u8, u8, s32 *, s32 *);
+extern void PokeathlonCourseObject_CenterToGround(void *, u8, u8, s32 *, s32 *);
+extern void PokeathlonCourseObject_SetCenterPosition(void *, s32, s32, u32);
+extern void PokeathlonCourseObject_SetScale(void *, f32, f32);
 extern void PokeathlonCourseMonObject_SetDrawFlag(void *, u32);
 extern void PokeathlonCourseMonObject_SetAnimState(void *, u32);
 extern void PokeathlonCourseMonObject_SetDrawPriority(void *, u32);

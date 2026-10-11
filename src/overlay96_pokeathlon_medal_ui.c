@@ -4,10 +4,10 @@
 #define PTR(p, o) (*(void **)((u8 *)(p) + (o)))
 
 extern void GF_AssertFail(void);
-extern void ov96_021EB52C(void *p, int a, int b);
-extern void ov96_021EB564(void *p, int v);
-extern void *ov96_021EB5B8(void *p);
-extern void ov96_021EB630(void *p, int v);
+extern void PokeathlonCourseSpritePoolSprite_Show(void *p, int a, int b);
+extern void PokeathlonCourseSpritePoolSprite_SetAnim(void *p, int v);
+extern void *PokeathlonCourseSpritePoolSprite_GetSprite(void *p);
+extern void PokeathlonCourseSpritePoolSprite_SetDrawPriority(void *p, int v);
 extern void ov96_022004B4(void *w, int i, int j);
 extern void Sprite_SetAnimCtrlSeq(void *sprite, int seq);
 extern void Sprite_SetDrawPriority(void *sprite, int priority);
@@ -73,27 +73,27 @@ void ov96_02200950(void *w, int i, int a, int b, int c) {
         ov96_022004B4(w, i, a);
     }
     if (b != 0) {
-        ov96_021EB52C(A48(w)[i].p, 1, 0);
-        ov96_021EB52C(A50(w)[i].p, 1, 1);
-        ov96_021EB52C(A4C(w)[i].p, 1, 0);
+        PokeathlonCourseSpritePoolSprite_Show(A48(w)[i].p, 1, 0);
+        PokeathlonCourseSpritePoolSprite_Show(A50(w)[i].p, 1, 1);
+        PokeathlonCourseSpritePoolSprite_Show(A4C(w)[i].p, 1, 0);
     } else {
-        ov96_021EB52C(A48(w)[i].p, 1, 1);
-        ov96_021EB52C(A50(w)[i].p, 1, 0);
+        PokeathlonCourseSpritePoolSprite_Show(A48(w)[i].p, 1, 1);
+        PokeathlonCourseSpritePoolSprite_Show(A50(w)[i].p, 1, 0);
         switch (c) {
         case 1:
             if (c != A58(w)[i].b) {
-                ov96_021EB52C(A4C(w)[i].p, 1, 1);
-                ov96_021EB564(A4C(w)[i].p, 8);
+                PokeathlonCourseSpritePoolSprite_Show(A4C(w)[i].p, 1, 1);
+                PokeathlonCourseSpritePoolSprite_SetAnim(A4C(w)[i].p, 8);
             }
             break;
         case 2:
             if (c != A58(w)[i].b) {
-                ov96_021EB52C(A4C(w)[i].p, 1, 1);
-                ov96_021EB564(A4C(w)[i].p, 9);
+                PokeathlonCourseSpritePoolSprite_Show(A4C(w)[i].p, 1, 1);
+                PokeathlonCourseSpritePoolSprite_SetAnim(A4C(w)[i].p, 9);
             }
             break;
         default:
-            ov96_021EB52C(A4C(w)[i].p, 1, 0);
+            PokeathlonCourseSpritePoolSprite_Show(A4C(w)[i].p, 1, 0);
             break;
         }
     }
@@ -104,14 +104,14 @@ void ov96_02200950(void *w, int i, int a, int b, int c) {
 
 void ov96_02200A18(void *w, int a, int b) {
     if (a == 1) {
-        ov96_021EB52C(((WorkA18 *)w)->unk158, TRUE, TRUE);
+        PokeathlonCourseSpritePoolSprite_Show(((WorkA18 *)w)->unk158, TRUE, TRUE);
     } else {
-        ov96_021EB52C(((WorkA18 *)w)->unk158, TRUE, FALSE);
+        PokeathlonCourseSpritePoolSprite_Show(((WorkA18 *)w)->unk158, TRUE, FALSE);
     }
     if (b == 1) {
-        ov96_021EB52C(((WorkA18 *)w)->unk15C, TRUE, TRUE);
+        PokeathlonCourseSpritePoolSprite_Show(((WorkA18 *)w)->unk15C, TRUE, TRUE);
     } else {
-        ov96_021EB52C(((WorkA18 *)w)->unk15C, TRUE, FALSE);
+        PokeathlonCourseSpritePoolSprite_Show(((WorkA18 *)w)->unk15C, TRUE, FALSE);
     }
 }
 
@@ -138,7 +138,7 @@ void ov96_02200B04(void *w, int n) {
         p += 4;
     }
     for (i = 0, p = w; i < 2; i++) {
-        Sprite_SetDrawPriority(ov96_021EB5B8(PTR(p, 0x150)), 2);
+        Sprite_SetDrawPriority(PokeathlonCourseSpritePoolSprite_GetSprite(PTR(p, 0x150)), 2);
         p += 4;
     }
     k = 1;
@@ -153,9 +153,9 @@ void ov96_02200B04(void *w, int n) {
         }
     }
     for (i = 0; i < 4; i++) {
-        ov96_021EB630(PTR(U8P(w, buf[i] * 0x20), 0x4c), i * 2 + 3);
-        ov96_021EB630(PTR(U8P(w, buf[i] * 0x20), 0x50), i * 2 + 3);
-        ov96_021EB630(PTR(U8P(w, buf[i] * 0x20), 0x48), i * 2 + 4);
-        ov96_021EB630(PTR(U8P(w, buf[i] * 0x20), 0x54), i + 0xb);
+        PokeathlonCourseSpritePoolSprite_SetDrawPriority(PTR(U8P(w, buf[i] * 0x20), 0x4c), i * 2 + 3);
+        PokeathlonCourseSpritePoolSprite_SetDrawPriority(PTR(U8P(w, buf[i] * 0x20), 0x50), i * 2 + 3);
+        PokeathlonCourseSpritePoolSprite_SetDrawPriority(PTR(U8P(w, buf[i] * 0x20), 0x48), i * 2 + 4);
+        PokeathlonCourseSpritePoolSprite_SetDrawPriority(PTR(U8P(w, buf[i] * 0x20), 0x54), i + 0xb);
     }
 }

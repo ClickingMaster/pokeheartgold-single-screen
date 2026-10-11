@@ -8,7 +8,7 @@ void ov96_0220EAC4(void *arg) {
     BOOL animate0;
     BOOL animate1;
 
-    ov96_021EB144(work->unk20, 1);
+    PokeathlonCourseObjects_PauseAnims(work->unk20, 1);
     ov96_0221031C(work->unkC4);
 
     for (i = 0; i < 12; i++) {

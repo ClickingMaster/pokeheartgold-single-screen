@@ -1,9 +1,9 @@
 #include "to42_overlay40_r27_u6_private.h"
 
-void ov40_022318C8(SysTask *task, void *arg);
-int ov40_022319A4(void *p);
-int ov40_02231C78(void *p);
-int ov40_02231EA4(void *p);
+void VsRecorder_RowMoveTask(SysTask *task, void *arg);
+int VsRecorder_MenuSelect(void *p);
+int VsRecorder_MenuBack(void *p);
+int VsRecorder_MenuPrevScheme(void *p);
 
 int ov40_02232094(void *p) {
     switch (WORD(p, 8)) {

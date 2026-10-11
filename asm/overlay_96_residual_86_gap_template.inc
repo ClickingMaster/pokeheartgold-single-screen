@@ -100,57 +100,57 @@
 	.public PokeathlonCourseMonObject_SetAnimStateRaw
 	.public PokeathlonCourseMonObject_IsAnimated
 	.public PokeathlonCourseMonObject_GetPosition
-	.public ov96_021EAF6C
-	.public ov96_021EAF70
-	.public ov96_021EAF8C
-	.public ov96_021EAF90
-	.public ov96_021EB10C
-	.public ov96_021EB138
-	.public ov96_021EB564
-	.public ov96_021EB570
-	.public ov96_021EB57C
-	.public ov96_021EB588
-	.public ov96_021EB594
-	.public ov96_021EB5A0
-	.public ov96_021EB5AC
-	.public ov96_021EB5B8
-	.public ov96_021EB5BC
-	.public ov96_021EB5E8
-	.public ov96_021EB630
-	.public ov96_021EB678
-	.public ov96_021EB680
-	.public ov96_021EB688
-	.public ov96_021EB690
-	.public ov96_021EB698
-	.public ov96_021EB6A0
-	.public ov96_021EC2E0
-	.public ov96_021ECBF4
-	.public ov96_021ECC38
-	.public ov96_021ECC4C
-	.public ov96_021ECDC4
-	.public ov96_021ECDD4
-	.public ov96_021ED47C
-	.public ov96_021ED6E8
-	.public ov96_021ED748
-	.public ov96_021ED74C
-	.public ov96_021ED750
-	.public ov96_021EDF7C
-	.public ov96_021EEA80
-	.public ov96_021EED64
-	.public ov96_021EEEBC
-	.public ov96_021EEEC0
-	.public ov96_021EEF98
-	.public ov96_021EF18C
-	.public ov96_021EF2A0
-	.public ov96_021EF2AC
-	.public ov96_021EF98C
-	.public ov96_021EFA28
-	.public ov96_021EFB50
-	.public ov96_021F08E4
-	.public ov96_021F27A8
-	.public ov96_021F30BC
-	.public ov96_021F3424
-	.public ov96_021F3E58
+	.public PokeathlonCourseObject_SetTouchRadius
+	.public PokeathlonCourseObject_SetCollision
+	.public PokeathlonCourseObject_GetCollisionRadius
+	.public PokeathlonCourseObject_GetCollisionOffsetY
+	.public PokeathlonCourseObject_SetScale
+	.public PokeathlonCourseObjects_ShiftLargeUp
+	.public PokeathlonCourseSpritePoolSprite_SetAnim
+	.public PokeathlonCourseSpritePoolSprite_TryChangeAnim
+	.public PokeathlonCourseSpritePoolSprite_IsAnimated
+	.public PokeathlonCourseSpritePoolSprite_SetPosition
+	.public PokeathlonCourseSpritePoolSprite_GetPosition
+	.public PokeathlonCourseSpritePoolSprite_SetScale
+	.public PokeathlonCourseSpritePoolSprite_SetRotation
+	.public PokeathlonCourseSpritePoolSprite_GetSprite
+	.public PokeathlonCourseSpritePool_Draw
+	.public PokeathlonCourseSpritePool_GetSpriteList
+	.public PokeathlonCourseSpritePoolSprite_SetDrawPriority
+	.public PokeathlonCourseOpening_Init
+	.public PokeathlonCourseOpening_Main
+	.public PokeathlonCourseOpening_Exit
+	.public PokeathlonCourseClosing_Init
+	.public PokeathlonCourseClosing_Main
+	.public PokeathlonCourseClosing_Exit
+	.public PokeathlonCourseCeremony_IsCryActive
+	.public PokeathlonCourseCeremony_FreeScores
+	.public PokeathlonCourseCeremony_AddPoints
+	.public PokeathlonCourseCeremony_GetPoints
+	.public PokeathlonCourseCeremonyScore_IsCounted
+	.public PokeathlonCourseCeremonyScore_Add
+	.public PokeathlonCourseCeremony_Main
+	.public PokeathlonCourseConfetti_GetRandomDelay
+	.public PokeathlonCourseCeremony_GetNoMissPoints
+	.public PokeathlonCourseCeremony_GetPointsLeaderPoints
+	.public PokeathlonCourseCeremony_GetEffortPrizePoints
+	.public PokeathlonCourseCeremony_GetIntroMsgBase
+	.public PokeathlonCourseMessageBox_IsBusy
+	.public PokeathlonCourse_LoadSpriteChars
+	.public PokeathlonCourseWait_Main
+	.public PokeathlonCourseWait_Exit
+	.public PokeathlonCourseWait_FreeBgs
+	.public PokeathlonEventIntro_Main
+	.public PokeathlonEventIntro_GetEvent
+	.public PokeathlonEventIntro_HasFlag0EF
+	.public PokeathlonEventIntro_ResetMascot
+	.public PokeathlonEventIntro_HideZoomBgs
+	.public PokeathlonEventIntro_IsFadeFinished
+	.public PokeathlonCirclePush_Main
+	.public PokeathlonCirclePushStack_Pop
+	.public PokeathlonCirclePushZoneMarkers_Free
+	.public PokeathlonCirclePushAi_Free
+	.public PokeathlonCirclePushDisplay_LoadPics
 	.public PokeathlonCirclePushDisplay_GetScore
 	.public PokeathlonLampJump_Draw
 	.public PokeathlonLampJump_FreeLamps
@@ -324,7 +324,7 @@ ov96_02204E58: ; 0x02204E58
 	ldr r0, [r4]
 	bl Heap_Free
 	ldr r0, [r4, #0x20]
-	bl ov96_021EB21C
+	bl PokeathlonCourseSpritePool_Free
 	mov r0, #0xd2
 	lsl r0, r0, #2
 	ldr r0, [r4, r0]
@@ -572,7 +572,7 @@ PokeathlonPennantCapture_LoadSpriteResources: ; 0x022050B4
 	mov r2, #0x11
 	mov r3, #0x68
 	add r4, r0, #0
-	bl ov96_021EB2BC
+	bl PokeathlonCourseSpritePool_LoadChar
 	mov r0, #1
 	str r0, [sp]
 	mov r0, #2
@@ -581,17 +581,17 @@ PokeathlonPennantCapture_LoadSpriteResources: ; 0x022050B4
 	mov r1, #0xe2
 	mov r2, #0xe
 	mov r3, #0x68
-	bl ov96_021EB2F4
+	bl PokeathlonCourseSpritePool_LoadPltt
 	add r0, r4, #0
 	mov r1, #0xe2
 	mov r2, #0x10
 	mov r3, #0x68
-	bl ov96_021EB334
+	bl PokeathlonCourseSpritePool_LoadCell
 	add r0, r4, #0
 	mov r1, #0xe2
 	mov r2, #0xf
 	mov r3, #0x68
-	bl ov96_021EB36C
+	bl PokeathlonCourseSpritePool_LoadAnim
 	add sp, #8
 	pop {r4, pc}
 	thumb_func_end PokeathlonPennantCapture_LoadSpriteResources
@@ -614,14 +614,14 @@ _02205106:
 	mov r2, #1
 	mov r3, #0x68
 	str r7, [sp]
-	bl ov96_021EB3E4
+	bl PokeathlonCourseSpritePool_CreateAndTake
 	mov r1, #0xe
 	lsl r1, r1, #6
 	str r0, [r4, r1]
 	add r0, r1, #0
 	ldr r0, [r4, r0]
 	mov r1, #1
-	bl ov96_021EB564
+	bl PokeathlonCourseSpritePoolSprite_SetAnim
 	add r5, r5, #1
 	add r4, #0xc
 	cmp r5, #0x14
@@ -635,27 +635,27 @@ _02205132:
 	mov r2, #1
 	mov r3, #0x68
 	str r7, [sp]
-	bl ov96_021EB3E4
+	bl PokeathlonCourseSpritePool_CreateAndTake
 	mov r1, #0x47
 	lsl r1, r1, #4
 	str r0, [r4, r1]
 	add r0, r1, #0
 	ldr r0, [r4, r0]
 	mov r1, #6
-	bl ov96_021EB564
+	bl PokeathlonCourseSpritePoolSprite_SetAnim
 	mov r0, #0x12
 	str r0, [sp]
 	add r0, r6, #0
 	mov r1, #2
 	mov r2, #1
 	mov r3, #0x68
-	bl ov96_021EB3E4
+	bl PokeathlonCourseSpritePool_CreateAndTake
 	ldr r1, _022052A4 ; =0x00000474
 	str r0, [r4, r1]
 	add r0, r1, #0
 	ldr r0, [r4, r0]
 	mov r1, #5
-	bl ov96_021EB564
+	bl PokeathlonCourseSpritePoolSprite_SetAnim
 	add r5, r5, #1
 	add r4, #0x10
 	cmp r5, #0xa
@@ -670,10 +670,10 @@ _0220517C:
 	mov r1, #2
 	mov r2, #1
 	mov r3, #0x68
-	bl ov96_021EB3E4
+	bl PokeathlonCourseSpritePool_CreateAndTake
 	mov r1, #2
 	str r0, [r7, #0x6c]
-	bl ov96_021EB564
+	bl PokeathlonCourseSpritePoolSprite_SetAnim
 	mov r4, #0
 _02205196:
 	lsl r0, r4, #2
@@ -684,13 +684,13 @@ _02205196:
 	mov r1, #2
 	mov r2, #1
 	mov r3, #0x68
-	bl ov96_021EB3E4
+	bl PokeathlonCourseSpritePool_CreateAndTake
 	str r0, [r5, #0x70]
 	mov r1, #3
-	bl ov96_021EB564
+	bl PokeathlonCourseSpritePoolSprite_SetAnim
 	ldr r0, [r5, #0x70]
 	mov r1, #2
-	bl ov96_021EB630
+	bl PokeathlonCourseSpritePoolSprite_SetDrawPriority
 	add r0, r4, #1
 	lsl r0, r0, #0x18
 	lsr r4, r0, #0x18
@@ -702,10 +702,10 @@ _02205196:
 	mov r1, #2
 	mov r2, #1
 	mov r3, #0x68
-	bl ov96_021EB3E4
+	bl PokeathlonCourseSpritePool_CreateAndTake
 	mov r1, #8
 	str r0, [r7, #0x78]
-	bl ov96_021EB564
+	bl PokeathlonCourseSpritePoolSprite_SetAnim
 	ldr r0, [sp, #8]
 	add r7, #0xb8
 	add r0, r0, #1
@@ -721,19 +721,19 @@ _022051EE:
 	mov r2, #1
 	mov r3, #0x68
 	str r7, [sp]
-	bl ov96_021EB3E4
+	bl PokeathlonCourseSpritePool_CreateAndTake
 	mov r1, #0xd3
 	lsl r1, r1, #2
 	str r0, [r4, r1]
 	add r0, r1, #0
 	ldr r0, [r4, r0]
 	mov r1, #7
-	bl ov96_021EB564
+	bl PokeathlonCourseSpritePoolSprite_SetAnim
 	mov r0, #0xd3
 	lsl r0, r0, #2
 	ldr r0, [r4, r0]
 	mov r1, #4
-	bl ov96_021EB630
+	bl PokeathlonCourseSpritePoolSprite_SetDrawPriority
 	add r5, r5, #1
 	add r4, r4, #4
 	cmp r5, #4
@@ -747,14 +747,14 @@ _02205226:
 	mov r2, #1
 	mov r3, #0x68
 	str r7, [sp]
-	bl ov96_021EB3E4
+	bl PokeathlonCourseSpritePool_CreateAndTake
 	mov r1, #0xd7
 	lsl r1, r1, #2
 	str r0, [r4, r1]
 	add r0, r1, #0
 	ldr r0, [r4, r0]
 	mov r1, #4
-	bl ov96_021EB564
+	bl PokeathlonCourseSpritePoolSprite_SetAnim
 	add r5, r5, #1
 	add r4, r4, #4
 	cmp r5, #4
@@ -768,7 +768,7 @@ _02205252:
 	mov r2, #1
 	mov r3, #0x68
 	str r5, [sp]
-	bl ov96_021EB3E4
+	bl PokeathlonCourseSpritePool_CreateAndTake
 	ldr r2, [sp, #4]
 	ldr r1, _022052A8 ; =0x0000056C
 	mov r3, #0x68
@@ -777,7 +777,7 @@ _02205252:
 	mov r1, #2
 	mov r2, #1
 	str r7, [sp]
-	bl ov96_021EB3E4
+	bl PokeathlonCourseSpritePool_CreateAndTake
 	ldr r2, [sp, #4]
 	ldr r1, _022052AC ; =0x00000568
 	str r0, [r2, r1]
@@ -785,12 +785,12 @@ _02205252:
 	add r1, r2, #0
 	ldr r0, [r1, r0]
 	mov r1, #0
-	bl ov96_021EB564
+	bl PokeathlonCourseSpritePoolSprite_SetAnim
 	ldr r1, [sp, #4]
 	ldr r0, _022052A8 ; =0x0000056C
 	ldr r0, [r1, r0]
 	mov r1, #4
-	bl ov96_021EB564
+	bl PokeathlonCourseSpritePoolSprite_SetAnim
 	ldr r0, [sp, #4]
 	add r4, r4, #1
 	add r0, #0x14
@@ -876,7 +876,7 @@ _02205300:
 	sub r0, r0, #6
 	ldr r0, [r5, r0]
 	add r1, r3, #0
-	bl ov96_021EB52C
+	bl PokeathlonCourseSpritePoolSprite_Show
 _0220533C:
 	ldr r0, [sp, #0x1c]
 	add r4, r4, #2
@@ -917,12 +917,12 @@ _02205352:
 	sub r0, #0xa
 	ldr r0, [r4, r0]
 	add r1, r3, #0
-	bl ov96_021EB52C
+	bl PokeathlonCourseSpritePoolSprite_Show
 	ldr r0, _02205490 ; =0x00000474
 	mov r1, #1
 	ldr r0, [r4, r0]
 	add r2, r1, #0
-	bl ov96_021EB52C
+	bl PokeathlonCourseSpritePoolSprite_Show
 _02205398:
 	add r7, r7, #1
 	add r6, r6, #2
@@ -2085,12 +2085,12 @@ PokeathlonPennantCapture_SendInput: ; 0x02205C94
 	lsr r0, r0, #0x18
 	beq _02205CE4
 	ldr r0, [r6, #0x20]
-	bl ov96_021EB63C
+	bl PokeathlonCourseSpritePool_PauseAnims
 	mov r0, #0xd2
 	lsl r0, r0, #2
 	ldr r0, [r6, r0]
 	mov r1, #1
-	bl ov96_021EB144
+	bl PokeathlonCourseObjects_PauseAnims
 	ldr r1, _02205D28 ; =PokeathlonPennantCapture_UpdateOwnScore
 	add r0, r5, #0
 	bl PokeathlonCourse_SetFinishCallback
@@ -2237,7 +2237,7 @@ _02205DF2:
 	str r0, [sp]
 	add r0, r5, #0
 	add r3, sp, #8
-	bl ov96_021EB0A4
+	bl PokeathlonCourseObject_GroundToCenter
 	str r4, [sp]
 	ldr r1, [sp, #8]
 	ldr r2, [sp, #4]
@@ -2245,7 +2245,7 @@ _02205DF2:
 	lsl r1, r1, #0xc
 	lsl r2, r2, #0xc
 	add r3, r6, #0
-	bl ov96_021EB0CC
+	bl PokeathlonCourseObject_IsInTouchRange
 	cmp r0, #0
 	beq _02205E28
 	add sp, #0xc
@@ -2558,7 +2558,7 @@ _0220605A:
 	ldrb r0, [r0]
 	lsl r0, r0, #2
 	ldr r0, [r5, r0]
-	bl ov96_021EAF8C
+	bl PokeathlonCourseObject_GetCollisionRadius
 	add r2, r0, #0
 	add r0, r5, #0
 	add r0, #0x58

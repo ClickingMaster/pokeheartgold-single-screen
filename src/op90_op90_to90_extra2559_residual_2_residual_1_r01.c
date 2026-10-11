@@ -52,11 +52,11 @@ u8 *ov96_021E8A20(void *ptr);
 int ov96_021E5F24(void *course);
 void ov96_022038A0(Scene *scene, int time);
 void ov96_02203BD0(void *screen, u16 value);
-void ov96_021EB52C(void *sprite, int a, int b);
-void ov96_021EB564(void *sprite, int value);
-void ov96_021EB588(void *sprite, VecFx32 *pos);
-VecFx32 *ov96_021EB594(void *sprite);
-void ov96_021EB5A0(void *sprite, VecFx32 *scale, int type);
+void PokeathlonCourseSpritePoolSprite_Show(void *sprite, int a, int b);
+void PokeathlonCourseSpritePoolSprite_SetAnim(void *sprite, int value);
+void PokeathlonCourseSpritePoolSprite_SetPosition(void *sprite, VecFx32 *pos);
+VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(void *sprite);
+void PokeathlonCourseSpritePoolSprite_SetScale(void *sprite, VecFx32 *scale, int type);
 void ov96_02204134(f32 x, f32 z, int *sx, int *sy);
 void ov96_02203BC0(void *screen, u8 index, int value);
 void ov96_02203CA4(void *screen, u8 index, int value);
@@ -117,8 +117,8 @@ void ov96_02202958(void *course) {
     ov96_02203BD0(scene->screen, input->header[current] & 0x3FF);
     for (i = 0; i < 12; i++) {
         if ((u8)((input->entries[i] >> 13) & 1) && current == i / 3) {
-            ov96_021EB52C(scene->local[(u8)(i % 3)], 1, 1);
-            ov96_021EB564(scene->local[(u8)(i % 3)], 6);
+            PokeathlonCourseSpritePoolSprite_Show(scene->local[(u8)(i % 3)], 1, 1);
+            PokeathlonCourseSpritePoolSprite_SetAnim(scene->local[(u8)(i % 3)], 6);
             x = input->entries[i] & 0x3F;
             z = (input->entries[i] >> 6) & 0x3F;
             x++;
@@ -143,7 +143,7 @@ void ov96_02202958(void *course) {
             pos1.y = sy1 << FX32_SHIFT;
             pos1.z = 0;
             pos1.y = (sy1 - 8 - sy1 / 20) << FX32_SHIFT;
-            ov96_021EB588(scene->local[(u8)(i % 3)], &pos1);
+            PokeathlonCourseSpritePoolSprite_SetPosition(scene->local[(u8)(i % 3)], &pos1);
             PlaySE(0x88F);
         }
     }
@@ -151,13 +151,13 @@ void ov96_02202958(void *course) {
         slot = current * 3 + k;
         state = (input->entries[slot] >> 14) & 3;
         if (state == 1) {
-            ov96_021EB52C(scene->slots[slot].sprite, 1, 1);
+            PokeathlonCourseSpritePoolSprite_Show(scene->slots[slot].sprite, 1, 1);
             ov96_02203BC0(scene->screen, k, 0);
         } else if (state == 2) {
-            ov96_021EB52C(scene->slots[slot].sprite, 1, 0);
+            PokeathlonCourseSpritePoolSprite_Show(scene->slots[slot].sprite, 1, 0);
             ov96_02203BC0(scene->screen, k, 1);
         } else {
-            ov96_021EB52C(scene->slots[slot].sprite, 1, 0);
+            PokeathlonCourseSpritePoolSprite_Show(scene->slots[slot].sprite, 1, 0);
             ov96_02203BC0(scene->screen, k, 0);
         }
         flash = (input->entries[slot] >> 12) & 1;
@@ -206,14 +206,14 @@ void ov96_02202958(void *course) {
         slot = ((u8)(((current + 1) * 3) % 12) + k) % 12;
         state = (input->entries[slot] >> 14) & 3;
         if (state == 1) {
-            ov96_021EB52C(scene->slots[slot].sprite, 1, 1);
-            ov96_021EB52C(scene->remote[k], 1, 0);
+            PokeathlonCourseSpritePoolSprite_Show(scene->slots[slot].sprite, 1, 1);
+            PokeathlonCourseSpritePoolSprite_Show(scene->remote[k], 1, 0);
         } else if (state == 2) {
-            ov96_021EB52C(scene->slots[slot].sprite, 1, 0);
-            ov96_021EB52C(scene->remote[k], 1, 1);
+            PokeathlonCourseSpritePoolSprite_Show(scene->slots[slot].sprite, 1, 0);
+            PokeathlonCourseSpritePoolSprite_Show(scene->remote[k], 1, 1);
         } else {
-            ov96_021EB52C(scene->slots[slot].sprite, 1, 0);
-            ov96_021EB52C(scene->remote[k], 1, 0);
+            PokeathlonCourseSpritePoolSprite_Show(scene->slots[slot].sprite, 1, 0);
+            PokeathlonCourseSpritePoolSprite_Show(scene->remote[k], 1, 0);
         }
         flash = (input->entries[slot] >> 12) & 1;
         phase = (input->flags >> (slot * 2)) & 3;
@@ -252,11 +252,11 @@ void ov96_02202958(void *course) {
         if (mode == 1 || mode == 2) {
             scene->particles[i].dead = FALSE;
             if (mode != 2) {
-                ov96_021EB52C(scene->particles[i].body, 1, 1);
+                PokeathlonCourseSpritePoolSprite_Show(scene->particles[i].body, 1, 1);
             } else {
-                ov96_021EB52C(scene->particles[i].body, 1, 0);
+                PokeathlonCourseSpritePoolSprite_Show(scene->particles[i].body, 1, 0);
             }
-            ov96_021EB52C(scene->particles[i].shadow, 1, 1);
+            PokeathlonCourseSpritePoolSprite_Show(scene->particles[i].shadow, 1, 1);
             owner = i / 3;
             member = i % 3;
             stage = ((u8)((input->header[i / 3] >> 10) & 0x3F) >> (member * 2)) & 3;
@@ -281,29 +281,29 @@ void ov96_02202958(void *course) {
             pos2.x = sx2 << FX32_SHIFT;
             pos2.y = sy2 << FX32_SHIFT;
             pos2.z = 0;
-            ov96_021EB588(scene->particles[i].body, &pos2);
+            PokeathlonCourseSpritePoolSprite_SetPosition(scene->particles[i].body, &pos2);
             y = sy2;
             pos2.y = (y - 8 - y / 20) << FX32_SHIFT;
-            ov96_021EB588(scene->particles[i].shadow, &pos2);
+            PokeathlonCourseSpritePoolSprite_SetPosition(scene->particles[i].shadow, &pos2);
             scale = ov96_0221C7C4;
             factor = ((f32)sy2 + 312.0) / 752.0 * (1.0 + (f32)stage / 3.0);
             scale.x = 4096.0f * factor;
             scale.y = 4096.0f * factor;
-            ov96_021EB5A0(scene->particles[i].body, &scale, 2);
-            ov96_021EB5A0(scene->particles[i].shadow, &scale, 2);
-            ov96_021EB5A0(scene->particles[i].effect, &scale, 2);
+            PokeathlonCourseSpritePoolSprite_SetScale(scene->particles[i].body, &scale, 2);
+            PokeathlonCourseSpritePoolSprite_SetScale(scene->particles[i].shadow, &scale, 2);
+            PokeathlonCourseSpritePoolSprite_SetScale(scene->particles[i].effect, &scale, 2);
             if (owner == current && stage != scene->stage[member]) {
                 PlaySE(0x8B1);
                 scene->stage[member] = stage;
             }
         } else {
-            ov96_021EB52C(scene->particles[i].body, 1, 0);
-            ov96_021EB52C(scene->particles[i].shadow, 1, 0);
+            PokeathlonCourseSpritePoolSprite_Show(scene->particles[i].body, 1, 0);
+            PokeathlonCourseSpritePoolSprite_Show(scene->particles[i].shadow, 1, 0);
             if (mode == 3 && !scene->particles[i].dead) {
                 scene->particles[i].dead = TRUE;
-                ov96_021EB588(scene->particles[i].effect, ov96_021EB594(scene->particles[i].shadow));
-                ov96_021EB564(scene->particles[i].effect, 3);
-                ov96_021EB52C(scene->particles[i].effect, 1, 1);
+                PokeathlonCourseSpritePoolSprite_SetPosition(scene->particles[i].effect, PokeathlonCourseSpritePoolSprite_GetPosition(scene->particles[i].shadow));
+                PokeathlonCourseSpritePoolSprite_SetAnim(scene->particles[i].effect, 3);
+                PokeathlonCourseSpritePoolSprite_Show(scene->particles[i].effect, 1, 1);
                 if (i / 3 == current) {
                     PlaySE(0x8B3);
                     scene->flash[i % 3] = 0;

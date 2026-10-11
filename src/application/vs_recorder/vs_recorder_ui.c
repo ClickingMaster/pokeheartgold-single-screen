@@ -596,7 +596,7 @@ void VsRecorder_LayoutMenuRows(VsRecorderWork *work) {
     int j;
 
     for (i = 0, pathRow = work->pathRows, row = (u8 *)work; i < 5; i++, pathRow++, row += sizeof(VsRecorderMenuRow)) {
-        VsRecorder_SetSpritePos(pathRow->sprite, 0x32, (5 - work->unk_06E0) * 16 + 0xD9);
+        VsRecorder_SetSpritePos(pathRow->sprite, 0x32, (5 - work->choiceCount) * 16 + 0xD9);
         TextOBJ_SetPosition(((VsRecorderWork *)row)->pathRows[0].text, 0x24, 0x24 - 0x2C);
     }
 
@@ -637,9 +637,9 @@ void VsRecorder_CreateMenuRowSprites(VsRecorderWork *work) {
     spriteManager = work->spriteManager;
     plttData = work->plttData;
     template.x = 42;
-    template.y = (5 - work->unk_06E0) * 16 + 201;
-    if (work->unk_06E0 == 2) {
-        template.y = (4 - work->unk_06E0) * 16 + 201;
+    template.y = (5 - work->choiceCount) * 16 + 201;
+    if (work->choiceCount == 2) {
+        template.y = (4 - work->choiceCount) * 16 + 201;
     }
     template.z = 0;
     template.animation = 0;

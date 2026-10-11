@@ -59,18 +59,18 @@ void ov96_0220D468(void *task, void *raw) {
             data->state++;
             return;
         }
-        ov96_021EB10C(data->sprite, 1.0f, data->scale);
+        PokeathlonCourseObject_SetScale(data->sprite, 1.0f, data->scale);
         data->counter++;
         return;
     case 1:
         data->scale = 1.0 + (double)data->counter * 0.3;
         if (data->counter > 1) {
             data->task = NULL;
-            ov96_021EB10C(data->sprite, 1.0f, 1.0f);
+            PokeathlonCourseObject_SetScale(data->sprite, 1.0f, 1.0f);
             SysTask_Destroy(task);
             return;
         }
-        ov96_021EB10C(data->sprite, 1.0f, data->scale);
+        PokeathlonCourseObject_SetScale(data->sprite, 1.0f, data->scale);
         data->counter++;
         return;
     default:

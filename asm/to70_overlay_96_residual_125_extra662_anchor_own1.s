@@ -63,16 +63,16 @@
 	.extern PokeathlonCourseCmd_GetResultsBuffer
 	.extern ov96_021E9A54
 	.extern PokeathlonCourseCmd_GetJuiceRecordBuffer
-	.extern ov96_021EB678
-	.extern ov96_021EB680
-	.extern ov96_021EB688
-	.extern ov96_021EB690
-	.extern ov96_021EB698
-	.extern ov96_021EB6A0
-	.extern ov96_021EEEBC
-	.extern ov96_021EEEC0
-	.extern ov96_021EF18C
-	.extern ov96_021F08E4
+	.extern PokeathlonCourseOpening_Init
+	.extern PokeathlonCourseOpening_Main
+	.extern PokeathlonCourseOpening_Exit
+	.extern PokeathlonCourseClosing_Init
+	.extern PokeathlonCourseClosing_Main
+	.extern PokeathlonCourseClosing_Exit
+	.extern PokeathlonCourseWait_Main
+	.extern PokeathlonCourseWait_Exit
+	.extern PokeathlonEventIntro_Main
+	.extern PokeathlonCirclePush_Main
 	.extern PokeathlonLampJump_Draw
 	.extern PokeathlonHurdleDash_Start
 	.extern ov96_021FCD74
@@ -199,17 +199,17 @@ subOverlayTemplate: ; 0x0221A7E4
 	.word FS_OVERLAY_ID(OVY_97)
 
 ov96_0221A7F4:
-	.word ov96_021F010C
-	.word ov96_021F08E4
-	.word ov96_021F08F4
-	.word ov96_021F095C
+	.word PokeathlonCirclePush_Init
+	.word PokeathlonCirclePush_Main
+	.word PokeathlonCirclePush_CalcResults
+	.word PokeathlonCirclePush_Exit
 	.word 0
 
 ov96_0221A808: ; 0x0221A808
-	.word ov96_021EB678
-	.word ov96_021EB680
+	.word PokeathlonCourseOpening_Init
+	.word PokeathlonCourseOpening_Main
 	.word 0
-	.word ov96_021EB688
+	.word PokeathlonCourseOpening_Exit
 	.word 0
 
 ov96_0221A81C:
@@ -227,10 +227,10 @@ ov96_0221A830:
 	.word 1
 
 ov96_0221A844: ; 0x0221A844
-	.word ov96_021EB690
-	.word ov96_021EB698
+	.word PokeathlonCourseClosing_Init
+	.word PokeathlonCourseClosing_Main
 	.word 0
-	.word ov96_021EB6A0
+	.word PokeathlonCourseClosing_Exit
 	.word 0
 
 ov96_0221A858:
@@ -266,10 +266,10 @@ ov96_0221A8A8:
 	.word 0
 
 ov96_0221A8BC: ; 0x0221A8BC
-	.word ov96_021EEE0C
-	.word ov96_021EEEBC
+	.word PokeathlonCourseWait_Init
+	.word PokeathlonCourseWait_Main
 	.word 0
-	.word ov96_021EEEC0
+	.word PokeathlonCourseWait_Exit
 	.word 0
 
 ov96_0221A8D0:
@@ -280,10 +280,10 @@ ov96_0221A8D0:
 	.word 0
 
 ov96_0221A8E4: ; 0x0221A8E4
-	.word ov96_021EF0FC
-	.word ov96_021EF18C
+	.word PokeathlonEventIntro_Init
+	.word PokeathlonEventIntro_Main
 	.word 0
-	.word ov96_021EF19C
+	.word PokeathlonEventIntro_Exit
 	.word 0
 
 ov96_0221A8F8:

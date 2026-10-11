@@ -79,20 +79,20 @@ void ov96_021FFAEC(void *w, const VecFx32 *src, void *sprite) {
         GF_AssertFail();
         break;
     }
-    ov96_021EB588(sprite, &v);
+    PokeathlonCourseSpritePoolSprite_SetPosition(sprite, &v);
 }
 
 void ov96_021FFB44(void *w) {
     int v;
     if (BYTE(w, 0xb) == 3) {
-        ov96_021EB630((void *)WORD(w, 4), 0x96 * 4);
+        PokeathlonCourseSpritePoolSprite_SetDrawPriority((void *)WORD(w, 4), 0x96 * 4);
         return;
     }
     v = 0xa0 - (BYTE(w, 0xa) + 0x20);
     if (v < 0) {
         v = 0;
     }
-    ov96_021EB630((void *)WORD(w, 4), 0x1e * (v / 8 + 1) + 3);
+    PokeathlonCourseSpritePoolSprite_SetDrawPriority((void *)WORD(w, 4), 0x1e * (v / 8 + 1) + 3);
 }
 
 void ov96_021FFB7C(u8 *w, int a, int b) {
@@ -107,10 +107,10 @@ void ov96_021FFB7C(u8 *w, int a, int b) {
     } else {
         n = 0x1e * v + 7;
     }
-    ov96_021EB630(PTR(w, 0x70), n);
-    ov96_021EB630(PTR(w, 0x78), n + 1);
-    ov96_021EB630(PTR(w, 0x6c), n + 1);
-    ov96_021EB630(PTR(w, 0x74), n + 2);
+    PokeathlonCourseSpritePoolSprite_SetDrawPriority(PTR(w, 0x70), n);
+    PokeathlonCourseSpritePoolSprite_SetDrawPriority(PTR(w, 0x78), n + 1);
+    PokeathlonCourseSpritePoolSprite_SetDrawPriority(PTR(w, 0x6c), n + 1);
+    PokeathlonCourseSpritePoolSprite_SetDrawPriority(PTR(w, 0x74), n + 2);
     {
         int i;
         for (i = 0; i < 3; i++) {

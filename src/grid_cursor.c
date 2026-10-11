@@ -1,32 +1,43 @@
-#include "grid_cursor_internal.h"
+#include "grid_cursor.h"
 
-void sub_020957B0(GridCursor *cursor, GridPosition *position, const u8 *dimensions, s8 dx, s8 dy) {
+#include <nitro/fs/overlay.h>
+
+#include "global.h"
+
+#include "heap.h"
+
+// StepPosition reads position->y and returns 1 through the field overlay's id (1): kept, it is how the code matches.
+FS_EXTERN_OVERLAY(field);
+
+extern void GF_AssertFail(void);
+
+void GridPanel2_Move(GridCursor *cursor, GridPosition *position, const u8 *dimensions, s8 dx, s8 dy) {
     GridMove move;
 
-    move.type = sub_02095BF0(cursor, position, dimensions, dx, dy);
+    move.type = GridCursor_StepPosition(cursor, position, dimensions, dx, dy);
     switch (move.type) {
     default:
         break;
     case 1:
         move.value = position->y;
-        sub_02095CB8(cursor, 3, (int)&move);
+        GridCursor_EnterPanel(cursor, 3, (int)&move);
         return;
     case 2:
         move.value = position->y;
-        sub_02095CB8(cursor, 3, (int)&move);
+        GridCursor_EnterPanel(cursor, 3, (int)&move);
         return;
     case 3:
         move.value = position->x;
-        sub_02095CB8(cursor, 5, (int)&move);
+        GridCursor_EnterPanel(cursor, 5, (int)&move);
         return;
     case 4:
         move.value = position->x;
-        sub_02095CB8(cursor, 5, (int)&move);
+        GridCursor_EnterPanel(cursor, 5, (int)&move);
         return;
     }
 }
 
-void sub_02095838(GridCursor *cursor, GridPosition *position, const u8 *dimensions, const GridMove *move) {
+void GridPanel2_Enter(GridCursor *cursor, GridPosition *position, const u8 *dimensions, const GridMove *move) {
     switch (move->type) {
     case 4:
         position->x = 2;
@@ -51,40 +62,40 @@ void sub_02095838(GridCursor *cursor, GridPosition *position, const u8 *dimensio
     }
 }
 
-void sub_020958C0(GridCursor *cursor, GridPosition *position, const u8 *dimensions, s8 dx, s8 dy) {
+void GridPanel1_Move(GridCursor *cursor, GridPosition *position, const u8 *dimensions, s8 dx, s8 dy) {
     GridMove move;
 
-    move.type = sub_02095BF0(cursor, position, dimensions, dx, dy);
+    move.type = GridCursor_StepPosition(cursor, position, dimensions, dx, dy);
     move.value = position->x;
     if (move.type != 1) {
         if (move.type == 3) {
             move.value = 0;
-            sub_02095CB8(cursor, 3, (int)&move);
+            GridCursor_EnterPanel(cursor, 3, (int)&move);
             return;
         }
     } else {
         if (*(u8 *)cursor->userData == 0x12) {
             move.value = 0;
-            sub_02095CB8(cursor, 6, (int)&move);
+            GridCursor_EnterPanel(cursor, 6, (int)&move);
             return;
         }
         move.value = 4;
-        sub_02095CB8(cursor, 2, (int)&move);
+        GridCursor_EnterPanel(cursor, 2, (int)&move);
         return;
     }
 }
 
-void sub_02095920(void *unused, GridPosition *position) {
+void GridPanel1_Enter(void *unused, GridPosition *position) {
     position->x = 0;
     position->y = 0;
     position->index = 0;
 }
 
-void sub_0209592C(GridCursor *cursor, GridPosition *position, const u8 *dimensions, s8 dx, s8 dy) {
+void GridPanel3_Move(GridCursor *cursor, GridPosition *position, const u8 *dimensions, s8 dx, s8 dy) {
     GridMove move;
     int type;
 
-    type = sub_02095BF0(cursor, position, dimensions, dx, dy);
+    type = GridCursor_StepPosition(cursor, position, dimensions, dx, dy);
     move.type = type;
     if (position->y == 0) {
         move.value = 0;
@@ -97,28 +108,28 @@ void sub_0209592C(GridCursor *cursor, GridPosition *position, const u8 *dimensio
     case 1:
         if (*(u8 *)cursor->userData == 0x12) {
             move.value = 0;
-            sub_02095CB8(cursor, 6, (int)&move);
+            GridCursor_EnterPanel(cursor, 6, (int)&move);
             return;
         }
-        sub_02095CB8(cursor, 2, (int)&move);
+        GridCursor_EnterPanel(cursor, 2, (int)&move);
         return;
     case 2:
         if (*(u8 *)cursor->userData == 0x12) {
             move.value = 0;
-            sub_02095CB8(cursor, 6, (int)&move);
+            GridCursor_EnterPanel(cursor, 6, (int)&move);
             return;
         }
-        sub_02095CB8(cursor, 2, (int)&move);
+        GridCursor_EnterPanel(cursor, 2, (int)&move);
         return;
     case 4:
         if (cursor->unk_02 != 0) {
-            sub_02095CB8(cursor, 1, (int)&move);
+            GridCursor_EnterPanel(cursor, 1, (int)&move);
         }
         return;
     }
 }
 
-void sub_020959D8(GridCursor *cursor, GridPosition *position, const u8 *dimensions, const GridMove *move) {
+void GridPanel3_Enter(GridCursor *cursor, GridPosition *position, const u8 *dimensions, const GridMove *move) {
     switch (move->type) {
     case 3:
         position->index = ((dimensions[2] - 1) / dimensions[0]) * dimensions[0];
@@ -140,30 +151,30 @@ void sub_020959D8(GridCursor *cursor, GridPosition *position, const u8 *dimensio
     }
 }
 
-void sub_02095A34(GridCursor *cursor, GridPosition *position, const u8 *dimensions, s8 dx, s8 dy) {
+void GridPanel4_Move(GridCursor *cursor, GridPosition *position, const u8 *dimensions, s8 dx, s8 dy) {
     GridMove move;
 
-    move.type = sub_02095BF0(cursor, position, dimensions, dx, dy);
+    move.type = GridCursor_StepPosition(cursor, position, dimensions, dx, dy);
     move.value = 0;
     switch (move.type) {
     default:
         break;
     case 3:
-        sub_02095CB8(cursor, 4, (int)&move);
+        GridCursor_EnterPanel(cursor, 4, (int)&move);
         return;
     case 4:
-        sub_02095CB8(cursor, 4, (int)&move);
+        GridCursor_EnterPanel(cursor, 4, (int)&move);
         return;
     }
 }
 
-void sub_02095A78(void) {
+void GridPanel4_Enter(void) {
 }
 
-void sub_02095A7C(GridCursor *cursor, GridPosition *position, const u8 *dimensions, s8 dx, s8 dy) {
+void GridPanel5_Move(GridCursor *cursor, GridPosition *position, const u8 *dimensions, s8 dx, s8 dy) {
     GridMove move;
 
-    move.type = sub_02095BF0(cursor, position, dimensions, dx, dy);
+    move.type = GridCursor_StepPosition(cursor, position, dimensions, dx, dy);
     move.value = position->x;
     switch (move.type) {
     default:
@@ -176,55 +187,55 @@ void sub_02095A7C(GridCursor *cursor, GridPosition *position, const u8 *dimensio
         break;
     case 3:
         if (*(u8 *)cursor->userData == 0x12) {
-            sub_02095CB8(cursor, 6, (int)&move);
+            GridCursor_EnterPanel(cursor, 6, (int)&move);
             return;
         }
-        sub_02095CB8(cursor, 2, (int)&move);
+        GridCursor_EnterPanel(cursor, 2, (int)&move);
         return;
     case 4:
         if (*(u8 *)cursor->userData == 0x12) {
-            sub_02095CB8(cursor, 6, (int)&move);
+            GridCursor_EnterPanel(cursor, 6, (int)&move);
             return;
         }
-        sub_02095CB8(cursor, 2, (int)&move);
+        GridCursor_EnterPanel(cursor, 2, (int)&move);
         return;
     }
 }
 
-void sub_02095AF8(void *unused, GridPosition *position) {
+void GridPanel5_Enter(void *unused, GridPosition *position) {
     position->x = 0;
     position->y = 0;
     position->index = 0;
 }
 
-void sub_02095B04(GridCursor *cursor, GridPosition *position, const u8 *dimensions, s8 dx, s8 dy) {
+void GridPanel6_Move(GridCursor *cursor, GridPosition *position, const u8 *dimensions, s8 dx, s8 dy) {
     GridMove move;
 
-    move.type = sub_02095BF0(cursor, position, dimensions, dx, dy);
+    move.type = GridCursor_StepPosition(cursor, position, dimensions, dx, dy);
     move.value = position->x;
     switch (move.type) {
     default:
         break;
     case 1:
         move.value = position->y;
-        sub_02095CB8(cursor, 3, (int)&move);
+        GridCursor_EnterPanel(cursor, 3, (int)&move);
         return;
     case 2:
         move.value = position->y;
-        sub_02095CB8(cursor, 3, (int)&move);
+        GridCursor_EnterPanel(cursor, 3, (int)&move);
         return;
     case 3:
         move.value = position->x;
-        sub_02095CB8(cursor, 5, (int)&move);
+        GridCursor_EnterPanel(cursor, 5, (int)&move);
         return;
     case 4:
         move.value = position->x;
-        sub_02095CB8(cursor, 5, (int)&move);
+        GridCursor_EnterPanel(cursor, 5, (int)&move);
         return;
     }
 }
 
-void sub_02095B88(GridCursor *cursor, GridPosition *position, const u8 *dimensions, const GridMove *move) {
+void GridPanel6_Enter(GridCursor *cursor, GridPosition *position, const u8 *dimensions, const GridMove *move) {
     switch (move->type) {
     case 3:
     case 4:
@@ -243,4 +254,137 @@ void sub_02095B88(GridCursor *cursor, GridPosition *position, const u8 *dimensio
         position->index = position->y * dimensions[0];
         break;
     }
+}
+
+int GridCursor_StepPosition(GridCursor *cursor, GridPosition *position, const u8 *dimensions, s8 dx, s8 dy) {
+    s8 x;
+    s8 y;
+    int result = 0;
+    u8 width = dimensions[0];
+    u8 height = dimensions[1];
+
+    if (dx != 0) {
+        x = position->x + dx;
+        y = ((s8 *)position)[FS_OVERLAY_ID(field)];
+        if (x < 0) {
+            result = FS_OVERLAY_ID(field);
+        } else if (x >= width) {
+            result = 2;
+        } else if ((u8)(x + y * width) >= dimensions[2]) {
+            result = 2;
+        }
+        if (result != 0) {
+            goto done;
+        }
+        position->x = x;
+        position->index = x + y * width;
+    }
+
+    if (dy != 0) {
+        x = position->x;
+        y = position->y + dy;
+        if (y < 0) {
+            result = 3;
+        } else if (y >= height) {
+            result = 4;
+        } else if ((u8)(x + y * width) >= dimensions[2]) {
+            result = 4;
+        }
+        if (result != 0) {
+            goto done;
+        }
+        position->y = y;
+        position->index = x + y * width;
+    }
+    return 0;
+
+done:
+    return result;
+}
+
+void GridCursor_SelectPanel(GridCursor *cursor, u8 type) {
+    int i;
+
+    for (i = 0; i < cursor->count; i++) {
+        if (cursor->entries[i].dimensions[3] == type) {
+            cursor->current = i;
+            return;
+        }
+    }
+}
+
+void GridCursor_EnterPanel(GridCursor *cursor, u8 type, int arg) {
+    GridCursor_SelectPanel(cursor, type);
+    cursor->entries[cursor->current].select(cursor, &cursor->positions[cursor->current], cursor->entries[cursor->current].dimensions, arg);
+}
+
+GridCursor *GridCursor_New(enum HeapID heapId, void *userData) {
+    GridCursor *cursor = Heap_Alloc(heapId, sizeof(GridCursor));
+    u32 i;
+
+    {
+        u8 *p = (u8 *)cursor;
+        for (i = sizeof(GridCursor); i != 0; i--) {
+            *p++ = 0;
+        }
+    }
+    cursor->count = 6;
+    cursor->positions = Heap_Alloc(heapId, cursor->count * sizeof(GridPosition));
+    memset(cursor->positions, 0, cursor->count * sizeof(GridPosition));
+    cursor->userData = userData;
+    return cursor;
+}
+
+void GridCursor_Init(GridCursor *cursor, u8 value) {
+    cursor->current = 0;
+    cursor->entries = gGridCursorPanels;
+    cursor->unk_02 = value;
+}
+
+void GridCursor_Delete(GridCursor *cursor) {
+    Heap_Free(cursor->positions);
+    Heap_Free(cursor);
+}
+
+void GridCursor_SetPosition(GridCursor *cursor, u8 type, u8 index) {
+    GridPosition *position;
+    const u8 *dimensions;
+
+    GridCursor_SelectPanel(cursor, type);
+    position = &cursor->positions[cursor->current];
+    dimensions = cursor->entries[cursor->current].dimensions;
+    if (index >= dimensions[2]) {
+        GF_AssertFail();
+    }
+    position->index = index;
+    if (position->index >= dimensions[2]) {
+        position->index = 0;
+    }
+    position->x = position->index % dimensions[0];
+    position->y = position->index / dimensions[0];
+}
+
+BOOL GridCursor_Move(GridCursor *cursor, int arg1, int arg2) {
+    volatile int savedArg2 = arg2;
+    u8 oldCurrent = ((volatile GridCursor *)cursor)->current;
+    GridPosition *position = &cursor->positions[oldCurrent];
+    const GridEntry *entry = &cursor->entries[oldCurrent];
+    u8 oldIndex = position->index;
+
+    entry->move(cursor, position, entry->dimensions, arg1, savedArg2);
+    if (oldCurrent != cursor->current) {
+        return TRUE;
+    }
+    if (oldIndex != position->index) {
+        return TRUE;
+    }
+    return FALSE;
+}
+
+u8 GridCursor_GetPanel(GridCursor *cursor) {
+    return cursor->entries[cursor->current].dimensions[3];
+}
+
+u8 GridCursor_GetIndex(GridCursor *cursor) {
+    return cursor->positions[cursor->current].index;
 }

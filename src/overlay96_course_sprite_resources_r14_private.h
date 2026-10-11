@@ -44,8 +44,8 @@ extern const WindowTemplate ov96_0221CA28;
 extern void LoadFontPal0(int, int, enum HeapID);
 extern u16 LCRandom(void);
 extern void MTX_MultVec43(const VecFx32 *, const MtxFx43 *, VecFx32 *);
-extern void ov96_021EB588(void *, const VecFx32 *);
-extern void ov96_021EB564(void *, int);
+extern void PokeathlonCourseSpritePoolSprite_SetPosition(void *, const VecFx32 *);
+extern void PokeathlonCourseSpritePoolSprite_SetAnim(void *, int);
 extern void ov96_021E634C(void *, int, int, void *, u32, u8, u32);
 
 void ov96_02203CE4(void *);

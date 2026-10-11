@@ -259,8 +259,8 @@ typedef struct VsRecorderTouchIndicator {
 struct VsRecorderWork {
     u32 mode;                                // 0x0000, 0 VS Recorder item, 1-6 Global Terminal
     u32 subState;                            // 0x0004, index into the screen's function table
-    u32 step;                                // 0x0008
-    u32 counter;                             // 0x000C
+    int step;                                // 0x0008, step of the current substate
+    int counter;                             // 0x000C, frame / fade counter of the current step
     int *screenPtr;                          // 0x0010, OverlayManager state = current screen
     NARC *narc;                              // 0x0014, NARC_a_1_9_1
     SpriteSystem *spriteSystem;              // 0x0018
@@ -274,7 +274,7 @@ struct VsRecorderWork {
     MsgData *msgData;                        // 0x0048, msg_0013
     MsgData *recordMsgData;                  // 0x004C, msg_0026 (frontier record)
     FontSystem *fontSystem;                  // 0x0050
-    u8 unk_0054[4];                          // 0x0054
+    int fade;                                // 0x0054, colour scheme change / exit fade
     u32 blendColor;                          // 0x0058
     u8 colorScheme;                          // 0x005C, Save_Misc
     GF3DVramMan *vramMan;                    // 0x0060
@@ -290,7 +290,7 @@ struct VsRecorderWork {
     const VsRecorderMenuEntry *menuPath[5];  // 0x06C4, entry chosen at each depth
     int menuDepth;                           // 0x06D8
     u32 unk_06DC;                            // 0x06DC
-    int unk_06E0;                            // 0x06E0, row layout
+    int choiceCount;                         // 0x06E0, rows of the current choices
     u32 menuCursor;                          // 0x06E4
     u8 unk_06E8[8];                          // 0x06E8
     struct OrbitCursor *orbitCursors[2];     // 0x06F0, touch cursors (orbit_cursor.h)
@@ -395,7 +395,7 @@ MessageFormat *VsRecorder_NewMessageFormat(enum HeapID heapID);
 u32 VsRecorder_GetBlendColor(VsRecorderWork *work);
 u32 ov40_0222DAF0(VsRecorderWork *work);
 u32 VsRecorder_GetSchemeFileId(VsRecorderWork *work, u32 kind);
-void VsRecorder_ReloadSchemePalettes(VsRecorderWork *work);
+void VsRecorder_ReloadSchemePalettes(VsRecorderWork *work, u32 unused);
 void VsRecorder_ClearPaletteBlend(VsRecorderWork *work);
 u16 *ov40_0222DD68(enum HeapID heapID, int unused, int *count);
 void ov40_0222DD8C(VsRecorderWork *work, u32 value);
@@ -504,6 +504,25 @@ void VsRecorder_SanitizeName(VsRecorderWork *work, String *str);
 void VsRecorder_SetPlaceholderName(String *str, enum HeapID heapID);
 void VsRecorder_ShowTouchHere(VsRecorderWork *work);
 void VsRecorder_HideTouchHere(VsRecorderWork *work);
+
+// vs_recorder_title.c
+BOOL VsRecorder_TitleIntro(VsRecorderWork *work);
+BOOL VsRecorder_TitleShowMenu(VsRecorderWork *work);
+BOOL VsRecorder_TitleFlash(VsRecorderWork *work);
+BOOL VsRecorder_TitleSlideInChoices(VsRecorderWork *work);
+BOOL VsRecorder_SlideInChoiceRows(VsRecorderWork *work);
+
+// vs_recorder_menu.c
+BOOL VsRecorder_MenuMain(VsRecorderWork *work);
+int VsRecorder_CheckSchemeArrowTouch(void);
+BOOL VsRecorder_MenuInvalid(VsRecorderWork *work);
+BOOL VsRecorder_MenuExit(VsRecorderWork *work);
+BOOL VsRecorder_MenuSlideIn(VsRecorderWork *work);
+BOOL VsRecorder_MenuShow(VsRecorderWork *work);
+void VsRecorder_RowMoveTask(SysTask *task, void *data);
+BOOL VsRecorder_MenuSelect(VsRecorderWork *work);
+BOOL VsRecorder_MenuBack(VsRecorderWork *work);
+BOOL VsRecorder_MenuPrevScheme(VsRecorderWork *work);
 
 // other OVY_40 modules (still address-named)
 GlobalTerminalNet *ov40_0223D540(VsRecorderWork *work);

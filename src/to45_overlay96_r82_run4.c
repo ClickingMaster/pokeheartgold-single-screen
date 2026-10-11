@@ -8,12 +8,12 @@ void ov96_02201E10(void *work, u32 index) {
 }
 
 void ov96_02201E70(void *p) {
-    ov96_021EB2BC(p, 0xdb, 0x15, 0x6a, 3);
-    ov96_021EB2F4(p, 0xdb, 0x12, 0x6a, 3, 2);
-    ov96_021EB334(p, 0xdb, 0x14, 0x6a);
-    ov96_021EB36C(p, 0xdb, 0x13, 0x6a);
-    ov96_021EB2BC(p, 0xdb, 0x11, 0x69, 1);
-    ov96_021EB2F4(p, 0xdb, 0xe, 0x69, 1, 3);
-    ov96_021EB334(p, 0xdb, 0x10, 0x69);
-    ov96_021EB36C(p, 0xdb, 0xf, 0x69);
+    PokeathlonCourseSpritePool_LoadChar(p, 0xdb, 0x15, 0x6a, 3);
+    PokeathlonCourseSpritePool_LoadPltt(p, 0xdb, 0x12, 0x6a, 3, 2);
+    PokeathlonCourseSpritePool_LoadCell(p, 0xdb, 0x14, 0x6a);
+    PokeathlonCourseSpritePool_LoadAnim(p, 0xdb, 0x13, 0x6a);
+    PokeathlonCourseSpritePool_LoadChar(p, 0xdb, 0x11, 0x69, 1);
+    PokeathlonCourseSpritePool_LoadPltt(p, 0xdb, 0xe, 0x69, 1, 3);
+    PokeathlonCourseSpritePool_LoadCell(p, 0xdb, 0x10, 0x69);
+    PokeathlonCourseSpritePool_LoadAnim(p, 0xdb, 0xf, 0x69);
 }

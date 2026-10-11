@@ -42,14 +42,14 @@ extern u32 PokeathlonCourse_GetMode(void *);
 extern void *ov96_02200E3C(u32,int,int);
 extern void *PokeathlonCourseSprites_CreateResources(u32,int,int);
 extern VecFx32 ov96_0221C5E4;
-extern void *ov96_021EB180(u32,VecFx32 *);
-extern void ov96_021EB5C8(void *,int,int,int,int);
-extern void *ov96_021EB5E8(void *);
+extern void *PokeathlonCourseSpritePool_New(u32,VecFx32 *);
+extern void PokeathlonCourseSpritePool_SetSurfaceCoords(void *,int,int,int,int);
+extern void *PokeathlonCourseSpritePool_GetSpriteList(void *);
 extern void *PokeathlonCourseMonObjects_Create(u32,int,int,void *,void *);
-extern void ov96_021EB29C(void *,int,int);
+extern void PokeathlonCourseSpritePool_SetResourceId(void *,int,int);
 extern void ov96_022000E4(void *,void *);
 extern void ov96_021FD0E4(void *);
-extern void ov96_021EB3A4(void *);
+extern void PokeathlonCourseSpritePool_TransferResources(void *);
 extern void **ov96_021E6290(void *,int,void *,void *);
 extern void Sprite_SetDrawPriority(void *,int);
 extern void ov96_021FD128(State *,void *);
@@ -72,12 +72,12 @@ extern void ReadWholeNarcMemberByIdPair(void *,int,int);
 extern void *PokeathlonCourseMonObjects_Get(void *,u8);
 extern void PokeathlonCourseMonObject_SetDrawFlag(void *,int);
 extern int ov96_021E6138(void *);
-extern void ov96_021EAF70(void *,int,int);
+extern void PokeathlonCourseObject_SetCollision(void *,int,int);
 extern void PokeathlonCourseMonObject_SetAnimState(void *,int);
-extern void ov96_021EAF94(void *,int,int);
+extern void PokeathlonCourseObject_SetGroundPosition(void *,int,int);
 extern int ov96_021E6104(void);
-extern void ov96_021EAF6C(void *,int);
-extern void ov96_021EB0A4(void *,int,int,int *,int *);
+extern void PokeathlonCourseObject_SetTouchRadius(void *,int);
+extern void PokeathlonCourseObject_GroundToCenter(void *,int,int,int *,int *);
 extern void ov96_021FFB7C(Actor *,u8,int);
 extern void ov96_02200A64(void *,int);
 extern void ov96_021FEFE8(void *,void *,u8,u8,Actor *);
@@ -111,10 +111,10 @@ int ov96_021FC768(void *course){
  Config config;config.file=151;config.size=0x40000;config.size2=0x4000;config.heap=144;PokeathlonCourse_InitObjTransfer(&config,22,144,0x300010,16);
  NNS_G2dInitOamManagerModule();OamManager_Create(0,126,0,32,0,126,0,32,144);data->heap=144;FontID_Alloc(4,144);ov96_021FCF00(data->bg);ov96_021FFD4C(data);gSystem[0x69]=1;GfGfx_SwapDisplay();PokeathlonCourse_IncrementField1ED(course);break;}
  case 1:{s->screen=ov96_021FFF3C(s->heap,s->bg,course);int count=PokeathlonCourse_GetParticipantCount(course);int mode=PokeathlonCourse_GetMode(course);s->secondary=ov96_02200E3C(s->heap,4-count,mode);s->resource=PokeathlonCourseSprites_CreateResources(s->heap,0x2bf,1);PokeathlonCourse_IncrementField1ED(course);break;}
- case 2:{VecFx32 pos=ov96_0221C5E4;s->renderer=ov96_021EB180(s->heap,&pos);ov96_021EB5C8(s->renderer,0,0,0,0x200000);
- s->icons=PokeathlonCourseMonObjects_Create(s->heap,12,4,s->resource,ov96_021EB5E8(s->renderer));
- ov96_021EB29C(s->renderer,0,101);ov96_021EB29C(s->renderer,1,102);ov96_021EB29C(s->renderer,2,103);ov96_021EB29C(s->renderer,3,104);
- ov96_022000E4(s->screen,s->renderer);ov96_021FD0E4(s->renderer);ov96_021EB3A4(s->renderer);Sprite_SetDrawPriority(*ov96_021E6290(course,0,s->resource,s->renderer),1);
+ case 2:{VecFx32 pos=ov96_0221C5E4;s->renderer=PokeathlonCourseSpritePool_New(s->heap,&pos);PokeathlonCourseSpritePool_SetSurfaceCoords(s->renderer,0,0,0,0x200000);
+ s->icons=PokeathlonCourseMonObjects_Create(s->heap,12,4,s->resource,PokeathlonCourseSpritePool_GetSpriteList(s->renderer));
+ PokeathlonCourseSpritePool_SetResourceId(s->renderer,0,101);PokeathlonCourseSpritePool_SetResourceId(s->renderer,1,102);PokeathlonCourseSpritePool_SetResourceId(s->renderer,2,103);PokeathlonCourseSpritePool_SetResourceId(s->renderer,3,104);
+ ov96_022000E4(s->screen,s->renderer);ov96_021FD0E4(s->renderer);PokeathlonCourseSpritePool_TransferResources(s->renderer);Sprite_SetDrawPriority(*ov96_021E6290(course,0,s->resource,s->renderer),1);
  ov96_021FD128(s,s->renderer);ov96_02200180(s->screen,s->renderer,s->resource);PokeathlonCourse_IncrementField1ED(course);break;}
  case 3:{
  MonInfo info[12];
@@ -160,7 +160,7 @@ int ov96_021FC768(void *course){
   int team;
   int y;
   if(slot==0)PokeathlonCourseMonObject_SetDrawFlag(sprite,1);
-  {MemberCoordinates *mc=&memberCoords[ov96_021E6138(PokeathlonCourse_GetPerformance(course,TeamNum(i),SlotNum(i)))];ov96_021EAF70(sprite,mc[-1].x,mc[-1].y);}
+  {MemberCoordinates *mc=&memberCoords[ov96_021E6138(PokeathlonCourse_GetPerformance(course,TeamNum(i),SlotNum(i)))];PokeathlonCourseObject_SetCollision(sprite,mc[-1].x,mc[-1].y);}
   sprite=PokeathlonCourseMonObjects_Get(s->icons,i);
   team=TeamNum(i);
   a=&s->actors[team];
@@ -168,12 +168,12 @@ int ov96_021FC768(void *course){
   y=(team+1)*27+40;
   a->mode=4;
   PokeathlonCourseMonObject_SetAnimState(sprite,4);
-  ov96_021EAF94(sprite,80,y);
-  ov96_021EAF6C(sprite,ov96_021E6104());
+  PokeathlonCourseObject_SetGroundPosition(sprite,80,y);
+  PokeathlonCourseObject_SetTouchRadius(sprite,ov96_021E6104());
   a->x=0;
   a->y=y<<12;
   if(team==own&&slot==0){
-   ov96_021EB0A4(sprite,80,y,&x1,&y1);
+   PokeathlonCourseObject_GroundToCenter(sprite,80,y,&x1,&y1);
    selected.x=x1;
    selected.y=y1;
   }

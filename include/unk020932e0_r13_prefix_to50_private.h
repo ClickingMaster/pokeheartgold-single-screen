@@ -3,7 +3,7 @@
 #include "global.h"
 
 #include "sprite.h"
-#include "grid_cursor_internal.h"
+#include "grid_cursor.h"
 typedef struct Entry34R13 {
     Sprite *sprite;
     u8 pad[0x30];

@@ -17,12 +17,12 @@ extern void *ov96_021FA340(void *, s32);
 extern BOOL ov96_021FBEA0(void);
 extern void ov96_021FBEA4(void *);
 extern void ov96_021FBF5C(void *, Ov96R71Rect *);
-extern s32 ov96_021EAF8C(void *);
-extern s32 ov96_021EAF90(void *);
+extern s32 PokeathlonCourseObject_GetCollisionRadius(void *);
+extern s32 PokeathlonCourseObject_GetCollisionOffsetY(void *);
 extern u32 ov96_021FAB04(s32, const Ov96R71Rect *);
 extern u32 ov96_021FAAE0(s32, s32, const Ov96R71Rect *);
 extern void ov96_021FBCB8(void *, void *);
-extern void *ov96_021EB5B8(void *);
+extern void *PokeathlonCourseSpritePoolSprite_GetSprite(void *);
 extern void Sprite_SetDrawFlag(void *, u32);
 extern void Sprite_SetAnimCtrlSeq(void *, u32);
 extern void ov96_021FB6B4(void *, u32, u32);
@@ -65,7 +65,7 @@ void ov96_021FA34C(void *sys, void *work, void *node, void *sel) {
                 spr = ov96_021FA340(node, i);
                 if (ov96_021FBEA0()) {
                     ov96_021FBF5C(spr, &r1);
-                    if (ov96_021FAB04(S32AT(node, 0x3C) + 0x110 - ov96_021EAF8C(PAT(node, 0x24)), &r1)) {
+                    if (ov96_021FAB04(S32AT(node, 0x3C) + 0x110 - PokeathlonCourseObject_GetCollisionRadius(PAT(node, 0x24)), &r1)) {
                         hit = TRUE;
                         ov96_021FBCB8(sys, node);
                         break;
@@ -73,7 +73,7 @@ void ov96_021FA34C(void *sys, void *work, void *node, void *sel) {
                 }
             }
         }
-        spr = ov96_021EB5B8(PAT(node, 0x44));
+        spr = PokeathlonCourseSpritePoolSprite_GetSprite(PAT(node, 0x44));
         Sprite_SetDrawFlag(spr, 1);
         if (hit) {
             Sprite_SetAnimCtrlSeq(spr, 0);
@@ -120,7 +120,7 @@ void ov96_021FA34C(void *sys, void *work, void *node, void *sel) {
                 U32AT(node, 0xC) = 0x3F800000;
                 S32AT(node, 0x10) = 0;
                 PokeathlonCourseMonObject_SetAnimState(PAT(node, 0x24), 1);
-                Sprite_SetAnimCtrlSeq(ov96_021EB5B8(PAT(node, 0x4C)), 0);
+                Sprite_SetAnimCtrlSeq(PokeathlonCourseSpritePoolSprite_GetSprite(PAT(node, 0x4C)), 0);
             }
         }
         ov96_021FAB24(PAT(work, 4), node);
@@ -139,7 +139,7 @@ void ov96_021FA34C(void *sys, void *work, void *node, void *sel) {
                 if (ov96_021FBEA0()) {
                     void *ref = PAT(node, 0x24);
                     ov96_021FBF5C(spr, &r2);
-                    if (ov96_021FAAE0(S32AT(node, 0x3C) + 0x110 - ov96_021EAF90(ref), (u8)ov96_021EAF8C(ref), &r2)) {
+                    if (ov96_021FAAE0(S32AT(node, 0x3C) + 0x110 - PokeathlonCourseObject_GetCollisionOffsetY(ref), (u8)PokeathlonCourseObject_GetCollisionRadius(ref), &r2)) {
                         ov96_021FBEA4(spr);
                         PlaySEOnPlayer(0x8A5, ov96_0221DC2C[U8AT(node, 0x18)]);
                         SetPlayerPan(ov96_0221DC2C[U8AT(node, 0x18)], ov96_0221DC28[U8AT(node, 0x18)]);
@@ -155,7 +155,7 @@ void ov96_021FA34C(void *sys, void *work, void *node, void *sel) {
                             U8AT(node, 0x31) = 0;
                             U8AT(node, 0x32) = 1;
                             S32AT(node, 0x2C) = 4;
-                            Sprite_SetAnimCtrlSeq(ov96_021EB5B8(PAT(node, 0x4C)), 0);
+                            Sprite_SetAnimCtrlSeq(PokeathlonCourseSpritePoolSprite_GetSprite(PAT(node, 0x4C)), 0);
                             PokeathlonCourse_AddMonCounter(sys, (u8)ov96_021E5F24(sys), U8AT(node, 0x18), 1, 1);
                         }
                         U16AT(node, 0x60) = 0;

@@ -47,17 +47,17 @@ BOOL ov96_021E5F24(void *course);
 u8 *PokeathlonCourse_GetMonStats(void *course, int a, int b);
 void *PokeathlonCourse_GetPerformance(void *course, int a, u8 b);
 int ov96_021E6138(void *a);
-void ov96_021EAF70(void *h, u32 a, u32 b);
+void PokeathlonCourseObject_SetCollision(void *h, u32 a, u32 b);
 int ov96_021E6104();
-void ov96_021EAF6C(void *h, u32 v);
-void ov96_021EAF94(void *h, int x, int y);
+void PokeathlonCourseObject_SetTouchRadius(void *h, u32 v);
+void PokeathlonCourseObject_SetGroundPosition(void *h, int x, int y);
 void PokeathlonCourseMonObject_SetAnimState(void *h, u32 v);
 void PokeathlonCourseMonObject_SetDrawPriority(void *h, u32 v);
 void PokeathlonCourseMonObject_SetAffineOverwriteMode(void *h, int v);
 void PokeathlonCourseMonObject_SetAffineMatrix(void *h, const VecFx32 *v);
-void *ov96_021EB4F4(void *mgr, u8 a, u8 b);
-Sprite *ov96_021EB5B8(void *obj);
-void ov96_021EB52C(void *obj, int a, int b);
+void *PokeathlonCourseSpritePool_Take(void *mgr, u8 a, u8 b);
+Sprite *PokeathlonCourseSpritePoolSprite_GetSprite(void *obj);
+void PokeathlonCourseSpritePoolSprite_Show(void *obj, int a, int b);
 void ov96_021FA0E8(void *course, Params *params, u32 (*table)[2], void *a3, void *mgr, void *a5, u8 slot, Obj *obj);
 // @fn ov96_021FA0E8
 void ov96_021FA0E8(void *course, Params *params, u32 (*table)[2], void *a3, void *mgr, void *a5, u8 slot, Obj *obj) {
@@ -122,8 +122,8 @@ void ov96_021FA0E8(void *course, Params *params, u32 (*table)[2], void *a3, void
     obj->x5e = params->a[1][info[2]];
     obj->x58 = info[2];
     n = ov96_021E6138(PokeathlonCourse_GetPerformance(course, ov96_021E5F24(course), slot)) - 1;
-    ov96_021EAF70(h, table[n][0], table[n][1]);
-    ov96_021EAF6C(h, ov96_021E6104());
+    PokeathlonCourseObject_SetCollision(h, table[n][0], table[n][1]);
+    PokeathlonCourseObject_SetTouchRadius(h, ov96_021E6104());
     obj->x50 = params->a[3][info[1]] / 10.0f;
     obj->x54 = params->a[2][info[4]] / 100.0f;
     if (data->big) {
@@ -132,22 +132,22 @@ void ov96_021FA0E8(void *course, Params *params, u32 (*table)[2], void *a3, void
         scale.y = scale.x = 0x10000;
     }
     obj->x3c = 0x78;
-    ov96_021EAF94(h, x, obj->x3c + 0x110);
+    PokeathlonCourseObject_SetGroundPosition(h, x, obj->x3c + 0x110);
     PokeathlonCourseMonObject_SetAnimState(h, 1);
     PokeathlonCourseMonObject_SetDrawPriority(h, 4);
     PokeathlonCourseMonObject_SetAffineOverwriteMode(h, 2);
     PokeathlonCourseMonObject_SetAffineMatrix(h, &scale);
-    obj->x44 = ov96_021EB4F4(mgr, 0x66, 5);
-    sprite = ov96_021EB5B8(obj->x44);
+    obj->x44 = PokeathlonCourseSpritePool_Take(mgr, 0x66, 5);
+    sprite = PokeathlonCourseSpritePoolSprite_GetSprite(obj->x44);
     obj->x40 = obj->x3c + 0x120;
     pos.z = 0;
     pos.x = x << FX32_SHIFT;
     pos.y = obj->x40 << FX32_SHIFT;
     Sprite_SetMatrix(sprite, &pos);
-    ov96_021EB52C(obj->x44, 1, 0);
+    PokeathlonCourseSpritePoolSprite_Show(obj->x44, 1, 0);
     Sprite_SetDrawPriority(sprite, 3);
-    obj->x48 = ov96_021EB4F4(mgr, 0x68, 7);
-    sprite = ov96_021EB5B8(obj->x48);
+    obj->x48 = PokeathlonCourseSpritePool_Take(mgr, 0x68, 7);
+    sprite = PokeathlonCourseSpritePoolSprite_GetSprite(obj->x48);
     Sprite_SetAnimCtrlSeq(sprite, 0);
     pos2.z = 0;
     pos2.y = 0x1ac000;
@@ -155,14 +155,14 @@ void ov96_021FA0E8(void *course, Params *params, u32 (*table)[2], void *a3, void
     Sprite_SetMatrix(sprite, &pos2);
     Sprite_SetDrawPriority(sprite, 4);
     Sprite_SetAffineOverwriteMode(sprite, 2);
-    obj->x4c = ov96_021EB4F4(mgr, 0x69, 8);
-    sprite = ov96_021EB5B8(obj->x4c);
+    obj->x4c = PokeathlonCourseSpritePool_Take(mgr, 0x69, 8);
+    sprite = PokeathlonCourseSpritePoolSprite_GetSprite(obj->x4c);
     Sprite_SetAnimCtrlSeq(sprite, 0);
     pos3.z = 0;
     pos3.y = 0x188000;
     pos3.x = x << FX32_SHIFT;
     Sprite_SetMatrix(sprite, &pos3);
-    ov96_021EB52C(obj->x4c, 1, 1);
+    PokeathlonCourseSpritePoolSprite_Show(obj->x4c, 1, 1);
     Sprite_SetDrawPriority(sprite, 2);
     obj->xc = 1.0f;
 }

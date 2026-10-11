@@ -30,7 +30,7 @@ int ov96_02204E58(void *course) {
     FreeBgTilemapBuffer(PTR(p, 0), 6);
     RemoveWindow(p + 4);
     Heap_Free(PTR(p, 0));
-    ov96_021EB21C(PTR(p, 0x20));
+    PokeathlonCourseSpritePool_Free(PTR(p, 0x20));
     PokeathlonCourseMonObjects_Free(PTR(p, 0x348));
     PokeathlonCourseSprites_FreeResources(PTR(p, 0x344));
     OamManager_Free();

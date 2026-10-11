@@ -3,8 +3,8 @@
 #include "overlay96_course_sprite_resources_r14_private.h"
 
 void ov96_02203F50(Ov96R31Work *sprites, void *p) {
-    void *chr = *ov96_021EB5EC(sprites, 0x65, 0);
-    void *pal = *ov96_021EB5EC(sprites, 0x65, 1);
+    void *chr = *PokeathlonCourseSpritePool_GetResourceSlot(sprites, 0x65, 0);
+    void *pal = *PokeathlonCourseSpritePool_GetResourceSlot(sprites, 0x65, 1);
     void *image = SpriteTransfer_GetCharProxy(chr);
     void *palette = SpriteTransfer_GetPaletteProxy(pal, image);
     u8 i;

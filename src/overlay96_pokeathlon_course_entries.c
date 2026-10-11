@@ -73,7 +73,7 @@ extern void PokeathlonCourseScoreList_Rank(void *, u32);
 extern void PokeathlonCourseScoreList_AddPointsToTotals(void *);
 extern void PokeathlonCourseScoreList_SaveEventPoints(void *, u32);
 extern u32 PokeathlonCourseMonObjects_IsLoaded(void *);
-extern void *ov96_021EAF8C(void *);
+extern void *PokeathlonCourseObject_GetCollisionRadius(void *);
 
 extern u32 ov96_0220D408(void *);
 extern void ov96_0220D420(void *, void *, void *);
@@ -384,7 +384,7 @@ void ov96_0220E770(void *w, u32 i, u32 j, s16 *out, void **out2) {
     p = (u8 *)w + 0x164 + i * 0xe4 + j * 0x48;
     out[0] = (s16)(S32(p, 0x1c) >> 0xc);
     out[1] = (s16)(S32(p, 0x20) >> 0xc);
-    *out2 = ov96_021EAF8C(PTR(p, 4));
+    *out2 = PokeathlonCourseObject_GetCollisionRadius(PTR(p, 4));
 }
 
 u8 ov96_0220E7BC(void *course, u32 idx) {

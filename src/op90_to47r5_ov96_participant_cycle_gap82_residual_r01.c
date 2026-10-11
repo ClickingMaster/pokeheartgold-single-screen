@@ -68,8 +68,8 @@ typedef struct CycleWork {
 
 extern const s32 ov96_0221C770[16];
 
-void ov96_021EB0A4(void *sprite, int x, int y, int *outX, int *outY);
-void ov96_021EB03C(void *sprite, fx32 x, fx32 y, fx32 *outX, fx32 *outY);
+void PokeathlonCourseObject_GroundToCenter(void *sprite, int x, int y, int *outX, int *outY);
+void PokeathlonCourseObject_GetCollisionCenter(void *sprite, fx32 x, fx32 y, fx32 *outX, fx32 *outY);
 void ov96_0220144C(int *value, int delta);
 Goal *ov96_0220146C(CycleWork *work);
 void PokeathlonCourse_AddMonCounter(void *course, u8 participant, u8 current, int a, int b);
@@ -105,8 +105,8 @@ void ov96_02200F84(void *course, CycleWork *work, u8 selected, s32 time) {
 
         entries[i] = work->entries[i];
         member = entries[i].actor;
-        ov96_021EB0A4(member->sprites[member->current], member->x / FX32_ONE, member->y / FX32_ONE, &sampledX, &sampledY);
-        ov96_021EB03C(member->sprites[member->current], sampledX << 12, sampledY << 12, &convX, &convY);
+        PokeathlonCourseObject_GroundToCenter(member->sprites[member->current], member->x / FX32_ONE, member->y / FX32_ONE, &sampledX, &sampledY);
+        PokeathlonCourseObject_GetCollisionCenter(member->sprites[member->current], sampledX << 12, sampledY << 12, &convX, &convY);
         entries[i].x = convX / FX32_ONE;
         entries[i].y = convY / FX32_ONE;
         work->lanes[i] = (entries[i].y - 32) / 40;
@@ -207,7 +207,7 @@ void ov96_02200F84(void *course, CycleWork *work, u8 selected, s32 time) {
         if (selected < work->excluded) {
             return;
         }
-        ov96_021EB0A4(entry->actor->sprites[entry->actor->current], entry->x, entry->y, &originX, &originY);
+        PokeathlonCourseObject_GroundToCenter(entry->actor->sprites[entry->actor->current], entry->x, entry->y, &originX, &originY);
         entry->actor->origin.x = originX << 12;
         entry->actor->origin.y = originY << 12;
         entry->actor->origin.z = 0;

@@ -30,7 +30,7 @@ void ov96_0220DEAC(void *a, void *b, void *course) {
             GF_AssertFail();
         }
         key = U8((u8 *)b + (u32)i, 0x10);
-        ov96_021EB0A4(spr, U8((u8 *)b + (u32)i, 4), key, &x, &y);
+        PokeathlonCourseObject_GroundToCenter(spr, U8((u8 *)b + (u32)i, 4), key, &x, &y);
         rp->key = key;
         rp->spr = spr;
         flag = (u8)((BITS(b, 0x20).m.m12 >> i) & 1);
@@ -45,7 +45,7 @@ void ov96_0220DEAC(void *a, void *b, void *course) {
             ManagedSprite_SetDrawFlag(PTR(e, 0), 1);
             ManagedSprite_ResetSpriteAnimCtrlState(PTR(e, 0));
             ov96_0220D554(spr, 0);
-            ov96_021EB10C(spr, 1.0f, 1.0f);
+            PokeathlonCourseObject_SetScale(spr, 1.0f, 1.0f);
             PokeathlonCourseMonObject_SetDrawFlag(spr, 1);
             BITS(e, 0x18).e.f18 = 0;
             PlaySE(0x8B6);
@@ -59,18 +59,18 @@ void ov96_0220DEAC(void *a, void *b, void *course) {
                 f32 t;
                 S32(e, 0x14) -= 0x19A;
                 t = (f32)S32(e, 0x14) / 4096.0f;
-                ov96_021EB10C(spr, t, t);
-                ov96_021EB06C(spr, U8((u8 *)b + (u32)i, 4), U8((u8 *)b + (u32)i, 0x10), &u, &v);
+                PokeathlonCourseObject_SetScale(spr, t, t);
+                PokeathlonCourseObject_CenterToGround(spr, U8((u8 *)b + (u32)i, 4), U8((u8 *)b + (u32)i, 0x10), &u, &v);
                 if (v >= 180) {
                     u32 bb = (6 - BITS(e, 0x18).e.b) * 4;
                     u32 sum = key;
                     sum += bb;
-                    ov96_021EB01C(spr, x, sum, 1);
+                    PokeathlonCourseObject_SetCenterPosition(spr, x, sum, 1);
                 }
             }
         } else {
             u8 g = (u8)((BITS(b, 0x1c).n.w24 >> sh) & 3);
-            ov96_021EB01C(spr, x, y, 1);
+            PokeathlonCourseObject_SetCenterPosition(spr, x, y, 1);
             PokeathlonCourseMonObject_SetAnimState(spr, g + 1);
             if ((BITS(b, 0x20).m.n12 >> i) & 1) {
                 void *rec;
@@ -97,15 +97,15 @@ void ov96_0220DEAC(void *a, void *b, void *course) {
                 void *rec2;
                 u32 n;
                 rec2 = ov96_0220F378(course, (u8)(i / 3), (u8)(i % 3));
-                ov96_021EB01C(spr, x, y + ov96_0220E8C0(rec2, BITS(e, 0x18).e.a, &f), 0);
-                ov96_021EB10C(spr, f, f);
+                PokeathlonCourseObject_SetCenterPosition(spr, x, y + ov96_0220E8C0(rec2, BITS(e, 0x18).e.a, &f), 0);
+                PokeathlonCourseObject_SetScale(spr, f, f);
                 n = ov96_0220F3B4(rec2);
                 BITS(e, 0x18).e.a++;
                 if (BITS(e, 0x18).e.a > n) {
                     BITS(e, 0x18).e.f16 = 0;
                     BITS(e, 0x18).e.a = 0;
-                    ov96_021EB01C(spr, x, y, 0);
-                    ov96_021EB10C(spr, 1.0f, 1.0f);
+                    PokeathlonCourseObject_SetCenterPosition(spr, x, y, 0);
+                    PokeathlonCourseObject_SetScale(spr, 1.0f, 1.0f);
                 }
             }
         }

@@ -14,11 +14,11 @@ typedef struct Ov96EffectPoolRow {
 } Ov96EffectPoolRow;
 
 extern void GF_AssertFail(void);
-extern void ov96_021EB52C(void *handle, u32 a1, u32 a2);
-extern void ov96_021EB564(void *handle, u32 value);
-extern void ov96_021EB588(void *handle, const VecFx32 *position);
-extern VecFx32 *ov96_021EB594(void *handle);
-extern u32 ov96_021EB57C(void *handle);
+extern void PokeathlonCourseSpritePoolSprite_Show(void *handle, u32 a1, u32 a2);
+extern void PokeathlonCourseSpritePoolSprite_SetAnim(void *handle, u32 value);
+extern void PokeathlonCourseSpritePoolSprite_SetPosition(void *handle, const VecFx32 *position);
+extern VecFx32 *PokeathlonCourseSpritePoolSprite_GetPosition(void *handle);
+extern u32 PokeathlonCourseSpritePoolSprite_IsAnimated(void *handle);
 
 void ov96_021FC698(Ov96EffectPoolRow *rows, u32 row, const VecFx32 *position);
 void ov96_021FC6EC(Ov96EffectPoolRow *rows, u32 row, u32 yOffset);

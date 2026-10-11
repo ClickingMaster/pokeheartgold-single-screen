@@ -8,9 +8,9 @@ typedef struct {
     Entry entries[5];
     u8 pad[4];
 } Row;
-void *ov96_021EB3E4(void *g, int index, int a, int b, int c);
-void ov96_021EB52C(void *obj, int a, int b);
-void ov96_021EB630(void *obj, int a);
+void *PokeathlonCourseSpritePool_CreateAndTake(void *g, int index, int a, int b, int c);
+void PokeathlonCourseSpritePoolSprite_Show(void *obj, int a, int b);
+void PokeathlonCourseSpritePoolSprite_SetDrawPriority(void *obj, int a);
 void ov96_021FC630(Row *rows, void *g, u16 index);
 // @fn ov96_021FC630
 void ov96_021FC630(Row *rows, void *g, u16 index) {
@@ -20,9 +20,9 @@ void ov96_021FC630(Row *rows, void *g, u16 index) {
         Row *row = &rows[i];
         for (j = 0; j < 5; j++) {
             Entry *entry = &row->entries[j];
-            entry->obj = ov96_021EB3E4(g, index, 1, 0x6a, 10);
-            ov96_021EB52C(entry->obj, 1, 0);
-            ov96_021EB630(entry->obj, 5);
+            entry->obj = PokeathlonCourseSpritePool_CreateAndTake(g, index, 1, 0x6a, 10);
+            PokeathlonCourseSpritePoolSprite_Show(entry->obj, 1, 0);
+            PokeathlonCourseSpritePoolSprite_SetDrawPriority(entry->obj, 5);
         }
     }
 }

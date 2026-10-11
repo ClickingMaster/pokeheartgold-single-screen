@@ -20,7 +20,7 @@ typedef struct CourseHeap {
     CourseObject objects[1];
 } CourseHeap;
 CourseHeap *PokeathlonCourse_GetHeapAllocPtr4(Course *course);
-void ov96_021EB06C(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
+void PokeathlonCourseObject_CenterToGround(void *object, s32 x, s32 y, s32 *outX, s32 *outY);
 void ov96_02218688(void *object);
 void ov96_0221910C(void *object);
 void ov96_022186B8(void *object, void *arg);

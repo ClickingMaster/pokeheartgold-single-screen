@@ -13,12 +13,12 @@
 
 extern void GF_AssertFail(void);
 extern void PlaySEOnPlayer(u16 a, int b);
-extern void ov96_021EB630(void *p, int v);
-extern void ov96_021EB52C(void *p, int a, int b);
-extern void ov96_021EB564(void *p, int v);
-extern void ov96_021EB588(void *p, const void *v);
-extern void *ov96_021EB594(void *p);
-extern void *ov96_021EB5B8(void *p);
+extern void PokeathlonCourseSpritePoolSprite_SetDrawPriority(void *p, int v);
+extern void PokeathlonCourseSpritePoolSprite_Show(void *p, int a, int b);
+extern void PokeathlonCourseSpritePoolSprite_SetAnim(void *p, int v);
+extern void PokeathlonCourseSpritePoolSprite_SetPosition(void *p, const void *v);
+extern void *PokeathlonCourseSpritePoolSprite_GetPosition(void *p);
+extern void *PokeathlonCourseSpritePoolSprite_GetSprite(void *p);
 extern void PokeathlonCourseMonObject_SetDrawPriority(void *p, u32 v);
 extern void PokeathlonCourseMonObject_SetDrawFlag(void *p, int v);
 extern void AddWindow(void *bgConfig, void *window, const void *tmpl);
@@ -45,10 +45,10 @@ extern void GfGfxLoader_LoadCharData(int narcId, s32 memberNo, void *bgConfig, u
 extern void GfGfxLoader_LoadScrnData(int narcId, s32 memberNo, void *bgConfig, u32 layer, u32 tileStart, u32 szByte, BOOL isCompressed, u32 heapId);
 extern void *GfGfxLoader_GetScrnData(int narcId, s32 memberNo, BOOL isCompressed, void *ppScrnData, u32 heapId);
 extern void GfGfxLoader_GXLoadPal(int narcId, s32 memberNo, u32 location, u32 palSlotOffset, u32 szByte, u32 heapId);
-extern void ov96_021EB2BC(void *p, s32 a, s32 b, s32 c, s32 d);
-extern void ov96_021EB2F4(void *p, s32 a, s32 b, s32 c, s32 d, s32 e);
-extern void ov96_021EB334(void *p, s32 a, s32 b, s32 c);
-extern void ov96_021EB36C(void *p, s32 a, s32 b, s32 c);
+extern void PokeathlonCourseSpritePool_LoadChar(void *p, s32 a, s32 b, s32 c, s32 d);
+extern void PokeathlonCourseSpritePool_LoadPltt(void *p, s32 a, s32 b, s32 c, s32 d, s32 e);
+extern void PokeathlonCourseSpritePool_LoadCell(void *p, s32 a, s32 b, s32 c);
+extern void PokeathlonCourseSpritePool_LoadAnim(void *p, s32 a, s32 b, s32 c);
 extern u32 ov96_0221C728[];
 extern fx32 FX_Sqrt(fx32 x);
 extern fx32 VEC_DotProduct(const VecFx32 *a, const VecFx32 *b);

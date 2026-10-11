@@ -17,14 +17,14 @@
 #include "touchscreen.h"
 
 // Word menus of the easy chat word picker (ARM9, easy_chat_menu_*.c).
-ECMenu *sub_02091880(enum HeapID heapID, EasyChatArgs *args);
-void sub_020918C0(ECMenu *menu);
-u32 sub_02091C38(ECMenu *menu, u32 category);
-void sub_02091C40(ECMenu *menu, u32 category, u32 index, String *dest);
-u16 sub_02091C60(ECMenu *menu, u32 category, u32 index);
-u32 sub_02091C74(ECMenu *menu, u32 group);
-void sub_02091C84(ECMenu *menu, u32 group, u32 index, String *dest);
-u16 sub_02091CAC(ECMenu *menu, u32 group, u32 index);
+ECMenu *ECMenu_New(enum HeapID heapID, EasyChatArgs *args);
+void ECMenu_Delete(ECMenu *menu);
+u32 ECMenu_GetCategoryCount(ECMenu *menu, u32 category);
+void ECMenu_GetCategoryWordString(ECMenu *menu, u32 category, u32 index, String *dest);
+u16 ECMenu_GetCategoryWord(ECMenu *menu, u32 category, u32 index);
+u32 ECMenu_GetInitialCount(ECMenu *menu, u32 group);
+void ECMenu_GetInitialWordString(ECMenu *menu, u32 group, u32 index, String *dest);
+u16 ECMenu_GetInitialWord(ECMenu *menu, u32 group, u32 index);
 
 // The message cursor passes its signed bank/number without narrowing them to the u16 parameters.
 #define SetMsgBankAndNum ((void (*)(MailMessage *, s32, s32))MailMsg_SetMsgBankAndNum)
@@ -264,7 +264,7 @@ EasyChatApp *EasyChatApp_Create(OverlayManager *man) {
     if (app->type == 2) {
         EasyChatMessageCursor_Init(&app->messageCursor, &app->message);
     }
-    app->menu = sub_02091880(HEAP_ID_34, app->args);
+    app->menu = ECMenu_New(HEAP_ID_34, app->args);
     app->view = EasyChatAppView_Create(app, app->menu);
     app->touchHitboxes = TouchHitboxController_Create(ov102_021EC648, 5, EasyChatApp_OnTouchButton, app, HEAP_ID_34);
     app->unk_44 = 0;
@@ -329,7 +329,7 @@ void EasyChatApp_Delete(EasyChatApp *app, OverlayManager *man) {
     sub_02090E5C(app->args, app->menuInputState);
     TouchHitboxController_Destroy(app->touchHitboxes);
     EasyChatAppView_Delete(app->view);
-    sub_020918C0(app->menu);
+    ECMenu_Delete(app->menu);
     OverlayManager_FreeData(man);
 }
 
@@ -966,12 +966,12 @@ BOOL EasyChatApp_CategoryHasWords(ECMenu *menu, u8 listMode, u16 category) {
         return FALSE;
     }
     if (listMode == 0) {
-        if (sub_02091C38(menu, category)) {
+        if (ECMenu_GetCategoryCount(menu, category)) {
             return TRUE;
         }
         return FALSE;
     }
-    if (sub_02091C74(menu, category)) {
+    if (ECMenu_GetInitialCount(menu, category)) {
         return TRUE;
     }
     return FALSE;
@@ -1396,9 +1396,9 @@ void EasyChatApp_SetSelectedWord(EasyChatApp *app) {
         index = EasyChatWordPage_GetWordIndex(&app->wordPage);
     }
     if (app->listMode == 0) {
-        word = sub_02091C60(app->menu, app->category, index);
+        word = ECMenu_GetCategoryWord(app->menu, app->category, index);
     } else {
-        word = sub_02091CAC(app->menu, app->category, index);
+        word = ECMenu_GetInitialWord(app->menu, app->category, index);
     }
     switch (app->type) {
     case 0:
@@ -1619,17 +1619,17 @@ u16 EasyChatApp_GetCategory(EasyChatApp *app) {
 
 u32 EasyChatApp_GetCategoryWordCount(EasyChatApp *app) {
     if (app->listMode == 0) {
-        return sub_02091C38(app->menu, app->category);
+        return ECMenu_GetCategoryCount(app->menu, app->category);
     } else {
-        return sub_02091C74(app->menu, app->category);
+        return ECMenu_GetInitialCount(app->menu, app->category);
     }
 }
 
 void EasyChatApp_GetCategoryWord(EasyChatApp *app, u32 index, String *dest) {
     if (app->listMode == 0) {
-        sub_02091C40(app->menu, app->category, index, dest);
+        ECMenu_GetCategoryWordString(app->menu, app->category, index, dest);
     } else {
-        sub_02091C84(app->menu, app->category, index, dest);
+        ECMenu_GetInitialWordString(app->menu, app->category, index, dest);
     }
 }
 

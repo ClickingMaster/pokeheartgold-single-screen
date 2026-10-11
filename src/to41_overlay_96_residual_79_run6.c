@@ -89,7 +89,7 @@ void ov96_02200454(void *w, u32 a, u32 b) {
 }
 
 void ov96_022004B4(void *w, int i, int j) {
-    void *sprite = ov96_021EB5B8(PTR(U8P(w, i * 0x20), 0x48));
+    void *sprite = PokeathlonCourseSpritePoolSprite_GetSprite(PTR(U8P(w, i * 0x20), 0x48));
     int idx = j + i * 3;
     DC_FlushRange(PTR(PTR(U8P(w, 0xec), idx * 4), 0x14), 0x200);
     GXS_LoadOBJ(PTR(PTR(U8P(w, 0xec), idx * 4), 0x14), i * 0x200 + 0x600, 0x200);

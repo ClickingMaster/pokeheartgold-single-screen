@@ -168,7 +168,7 @@ Sprite **PokeathlonCourse_CreateHudSprites(PokeathlonCourseData *course, int bas
 #pragma force_active reset
 
 Sprite **ov96_021E6290(PokeathlonCourseData *course, int baseY, PokeathlonCourseSpriteResources *resources, void *eventGfx) {
-    return PokeathlonCourse_CreateHudSprites(course, baseY, resources, ov96_021EB5E8(eventGfx));
+    return PokeathlonCourse_CreateHudSprites(course, baseY, resources, PokeathlonCourseSpritePool_GetSpriteList(eventGfx));
 }
 
 #pragma force_active on
@@ -195,7 +195,7 @@ void PokeathlonCourse_CreateStartSprites(PokeathlonCourseData *course, int baseY
 #pragma force_active reset
 
 void ov96_021E634C(PokeathlonCourseData *course, int baseY, PokeathlonCourseSpriteResources *resources, void *eventGfx, NNS_G2D_VRAM_TYPE whichScreen, u8 count, PokeathlonCoursePoint *positions) {
-    PokeathlonCourse_CreateStartSprites(course, baseY, resources, ov96_021EB5E8(eventGfx), whichScreen, count, positions);
+    PokeathlonCourse_CreateStartSprites(course, baseY, resources, PokeathlonCourseSpritePool_GetSpriteList(eventGfx), whichScreen, count, positions);
 }
 
 #pragma force_active on
@@ -1665,7 +1665,7 @@ void PokeathlonCourse_MarkerTask(SysTask *task, void *data) {
     position.x = x << FX32_SHIFT;
     position.y = y << FX32_SHIFT;
     Sprite_SetMatrix(marker->sprite, &position);
-    if (ov96_021EB120(marker->object)) {
+    if (PokeathlonCourseObject_IsDrawn(marker->object)) {
         Sprite_SetDrawFlag(marker->sprite, TRUE);
     } else {
         Sprite_SetDrawFlag(marker->sprite, FALSE);

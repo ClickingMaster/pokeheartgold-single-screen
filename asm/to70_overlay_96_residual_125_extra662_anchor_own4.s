@@ -92,16 +92,16 @@
 	.extern PokeathlonCourseCmd_GetResultsBuffer
 	.extern ov96_021E9A54
 	.extern PokeathlonCourseCmd_GetJuiceRecordBuffer
-	.extern ov96_021EB678
-	.extern ov96_021EB680
-	.extern ov96_021EB688
-	.extern ov96_021EB690
-	.extern ov96_021EB698
-	.extern ov96_021EB6A0
-	.extern ov96_021EEEBC
-	.extern ov96_021EEEC0
-	.extern ov96_021EF18C
-	.extern ov96_021F08E4
+	.extern PokeathlonCourseOpening_Init
+	.extern PokeathlonCourseOpening_Main
+	.extern PokeathlonCourseOpening_Exit
+	.extern PokeathlonCourseClosing_Init
+	.extern PokeathlonCourseClosing_Main
+	.extern PokeathlonCourseClosing_Exit
+	.extern PokeathlonCourseWait_Main
+	.extern PokeathlonCourseWait_Exit
+	.extern PokeathlonEventIntro_Main
+	.extern PokeathlonCirclePush_Main
 	.extern PokeathlonLampJump_Draw
 	.extern PokeathlonHurdleDash_Start
 	.extern ov96_021FCD74
@@ -157,24 +157,24 @@ ov96_0221DA28: ; 0x0221DA28
 	.word ov96_0221A81C
 
 ov96_0221DA50: ; 0x0221DA50
-	.word ov96_021EB6C8
-	.word ov96_021EB730
-	.word ov96_021EBA98
+	.word PokeathlonCourseOpening_FadeIn
+	.word PokeathlonCourseOpening_Introduce
+	.word PokeathlonCourseOpening_FadeOut
 
 ov96_0221DA5C: ; 0x0221DA5C
-	.word ov96_021EBAFC
-	.word ov96_021EBB64
-	.word ov96_021EC1B0
+	.word PokeathlonCourseClosing_FadeIn
+	.word PokeathlonCourseClosing_Awards
+	.word PokeathlonCourseClosing_FadeOut
 
 ov96_0221DA68: ; 0x0221DA68
-	.word ov96_021EF094
+	.word PokeathlonCourseWait_FadeOut
 
 ov96_0221DA6C: ; 0x0221DA6C
-	.word ov96_021EFD9C
-	.word ov96_021EFEB8
-	.word ov96_021EFF3C
-	.word ov96_021EFFE4
-	.word ov96_021F008C
+	.word PokeathlonEventIntro_Appear
+	.word PokeathlonEventIntro_DetailsPage
+	.word PokeathlonEventIntro_RulesPage
+	.word PokeathlonEventIntro_ControlsPage
+	.word PokeathlonEventIntro_FadeOut
 
 ov96_0221DA80: ; 0x0221DA80
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00
@@ -192,9 +192,9 @@ ov96_0221DA80: ; 0x0221DA80
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
 ov96_0221DB50:
-	.word ov96_021F0A7C
-	.word ov96_021F0AE0
-	.word ov96_021F0B58
+	.word PokeathlonCirclePush_FadeIn
+	.word PokeathlonCirclePush_Play
+	.word PokeathlonCirclePush_End
 
 ov96_0221DB5C: ; 0x0221DB5C
 	.byte 0xFC, 0xFF, 0xFF, 0xFF

@@ -10,8 +10,8 @@ void ov96_021FD060(u8 *p) {
 }
 
 void ov96_021FD0E4(void *p) {
-    ov96_021EB2BC(p, 0xb2, 0x11, 0x68, 1);
-    ov96_021EB2F4(p, 0xb2, 0xe, 0x68, 1, 2);
-    ov96_021EB334(p, 0xb2, 0x10, 0x68);
-    ov96_021EB36C(p, 0xb2, 0xf, 0x68);
+    PokeathlonCourseSpritePool_LoadChar(p, 0xb2, 0x11, 0x68, 1);
+    PokeathlonCourseSpritePool_LoadPltt(p, 0xb2, 0xe, 0x68, 1, 2);
+    PokeathlonCourseSpritePool_LoadCell(p, 0xb2, 0x10, 0x68);
+    PokeathlonCourseSpritePool_LoadAnim(p, 0xb2, 0xf, 0x68);
 }

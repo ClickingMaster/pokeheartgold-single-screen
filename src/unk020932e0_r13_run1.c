@@ -3,7 +3,7 @@
 int sub_020954CC(Residual13Work *work) {
     VecFx32 matrix;
     int result = 0;
-    switch (sub_02095DD8(work->cursor)) {
+    switch (GridCursor_GetPanel(work->cursor)) {
     case 4:
         PlaySE(0x5DC);
         sub_02094A90(work, result);
@@ -14,7 +14,7 @@ int sub_020954CC(Residual13Work *work) {
         break;
     default:
         if (work->enabled != 0) {
-            sub_02095D40(work->cursor, 1, result);
+            GridCursor_SetPosition(work->cursor, 1, result);
             matrix.x = 0xE0000;
             matrix.y = 0xB0000;
             matrix.z = 0;

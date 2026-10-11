@@ -21,11 +21,11 @@ u8 *ov96_021E8A20(void *ptr);
 void PokeathlonCourse_SetRecordScore(PokeathlonCourseData *course, u32 score);
 Sprite *ov96_021EA2C4(PokeathlonGoalRollResources *resources, SpriteList *spriteList, int a2, enum HeapID heapId);
 void PokeathlonCourseMonObject_SetDrawPriority(void *object, u32 priority);
-PokeathlonGoalRollSprite *ov96_021EB3E4(PokeathlonGoalRollSpritePool *pool, int a1, int a2, int a3, u8 a4);
-void ov96_021EB52C(PokeathlonGoalRollSprite *sprite, BOOL a1, BOOL show);
-void ov96_021EB564(PokeathlonGoalRollSprite *sprite, int anim);
-void ov96_021EB588(PokeathlonGoalRollSprite *sprite, const VecFx32 *position);
-SpriteList *ov96_021EB5E8(PokeathlonGoalRollSpritePool *pool);
+PokeathlonGoalRollSprite *PokeathlonCourseSpritePool_CreateAndTake(PokeathlonGoalRollSpritePool *pool, int a1, int a2, int a3, u8 a4);
+void PokeathlonCourseSpritePoolSprite_Show(PokeathlonGoalRollSprite *sprite, BOOL a1, BOOL show);
+void PokeathlonCourseSpritePoolSprite_SetAnim(PokeathlonGoalRollSprite *sprite, int anim);
+void PokeathlonCourseSpritePoolSprite_SetPosition(PokeathlonGoalRollSprite *sprite, const VecFx32 *position);
+SpriteList *PokeathlonCourseSpritePool_GetSpriteList(PokeathlonGoalRollSpritePool *pool);
 
 // declared writable here: the plate task was built so (the loads stay in order with the stores)
 extern PokeathlonGoalRollPaletteData ov96_0221D1F4;
@@ -341,20 +341,20 @@ void PokeathlonGoalRollDisplay_CreateSprites(PokeathlonGoalRollSpritePool *pool,
     PokeathlonGoalRollSprite *sprite;
     u8 i;
 
-    sprite = ov96_021EB3E4(pool, 0, 2, 102, 9);
-    ov96_021EB52C(sprite, TRUE, TRUE);
-    ov96_021EB588(sprite, &numberPosition);
-    ov96_021EB564(sprite, ov96_021E5F24(display->course) + 1);
+    sprite = PokeathlonCourseSpritePool_CreateAndTake(pool, 0, 2, 102, 9);
+    PokeathlonCourseSpritePoolSprite_Show(sprite, TRUE, TRUE);
+    PokeathlonCourseSpritePoolSprite_SetPosition(sprite, &numberPosition);
+    PokeathlonCourseSpritePoolSprite_SetAnim(sprite, ov96_021E5F24(display->course) + 1);
 
-    sprite = ov96_021EB3E4(pool, 0, 2, 102, 10);
-    ov96_021EB52C(sprite, TRUE, TRUE);
-    ov96_021EB588(sprite, &labelPosition);
-    ov96_021EB564(sprite, 5);
+    sprite = PokeathlonCourseSpritePool_CreateAndTake(pool, 0, 2, 102, 10);
+    PokeathlonCourseSpritePoolSprite_Show(sprite, TRUE, TRUE);
+    PokeathlonCourseSpritePoolSprite_SetPosition(sprite, &labelPosition);
+    PokeathlonCourseSpritePoolSprite_SetAnim(sprite, 5);
     display->timerLabelSprite = sprite;
 
     for (i = 0; i < 2; i++) {
         VecFx32 position;
-        display->timerDigits[i] = ov96_021EA2C4(resources, ov96_021EB5E8(pool), 0, display->heapId);
+        display->timerDigits[i] = ov96_021EA2C4(resources, PokeathlonCourseSpritePool_GetSpriteList(pool), 0, display->heapId);
         Sprite_SetDrawFlag(display->timerDigits[i], TRUE);
         position.x = ov96_0221D648[i] << 12;
         position.y = 10 << 18;

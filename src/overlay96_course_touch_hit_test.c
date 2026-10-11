@@ -10,8 +10,8 @@ BOOL ov96_021FDE08(u8 *p, int index, int c, int d) {
         GF_AssertFail();
     }
     obj = PTR(item, item[0x8b] * 4);
-    ov96_021EB0A4(obj, 0x50, *(s32 *)(item + 0x80) / 4096, &y, &x);
-    if (ov96_021EB0CC(obj, y << 12, x << 12, c, d)) {
+    PokeathlonCourseObject_GroundToCenter(obj, 0x50, *(s32 *)(item + 0x80) / 4096, &y, &x);
+    if (PokeathlonCourseObject_IsInTouchRange(obj, y << 12, x << 12, c, d)) {
         return TRUE;
     }
     return FALSE;

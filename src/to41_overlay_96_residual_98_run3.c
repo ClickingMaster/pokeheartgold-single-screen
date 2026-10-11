@@ -37,7 +37,7 @@ BOOL ov96_0220D8C4(void *data, fx32 x, fx32 y) {
     s32 outY;
     s32 outX;
 
-    ov96_021EB06C(PTR(data, 4), x >> FX32_SHIFT, y >> FX32_SHIFT, &outY, &outX);
+    PokeathlonCourseObject_CenterToGround(PTR(data, 4), x >> FX32_SHIFT, y >> FX32_SHIFT, &outY, &outX);
     if (outY <= 0 || outX <= 0 || outY >= 0xFF || outX >= 0xFF) {
         return TRUE;
     }

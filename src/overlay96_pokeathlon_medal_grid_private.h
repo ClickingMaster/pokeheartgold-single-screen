@@ -48,7 +48,7 @@ extern u32 ov96_021E5F24(void *);
 extern void PokeathlonCourse_AddMonCounter(void *, u32, u32, u32, u32);
 extern void PokeathlonCourseMonObject_GetSpritePosition(void *, void *, void *);
 extern void ov96_021FC0FC(void *, void *);
-extern void ov96_021EB10C(void *, f32, f32);
+extern void PokeathlonCourseObject_SetScale(void *, f32, f32);
 extern void *NewMsgDataFromNarc(u32, u32, u32, void *);
 extern void *MessageFormat_New(void *);
 extern void BufferIntegerAsString(void *, u32, s32, u32, u32, u32);

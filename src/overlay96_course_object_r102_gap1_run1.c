@@ -9,7 +9,7 @@ void ov96_0220F3FC(Ov96R102Gap1Work *work) {
     saved.p = work;
     sprites = SpriteManager_GetSpriteList(saved.p->spriteManager);
     saved.p->objectManager = PokeathlonCourseMonObjects_Create(saved.p->heapId, 12, 7, saved.p->field1C, sprites);
-    ov96_021EB138(saved.p->objectManager);
+    PokeathlonCourseObjects_ShiftLargeUp(saved.p->objectManager);
     {
         Ov96R102Gap1ParticipantView views[12];
         u32 values[17] = { 0 };

@@ -7,8 +7,8 @@ void ov96_02200D7C(void *resources, void *work) {
     for (i = 0; i < 2; i++) {
         u32 offset = i * 4;
         u32 id = *(u32 *)((u8 *)ids + offset);
-        void *character = *ov96_021EB5EC(resources, id, 0);
-        void *palette = *ov96_021EB5EC(resources, id, 1);
+        void *character = *PokeathlonCourseSpritePool_GetResourceSlot(resources, id, 0);
+        void *palette = *PokeathlonCourseSpritePool_GetResourceSlot(resources, id, 1);
         void *charProxy = SpriteTransfer_GetCharProxy(character);
         void *paletteProxy = SpriteTransfer_GetPaletteProxy(palette, charProxy);
         u8 *cursor = (u8 *)work + offset;

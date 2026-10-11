@@ -29,7 +29,7 @@ void ov96_021FE550(void *course, u8 me, void *a, void *area);
 void ov96_021FEAEC(Work *work, u16 pos);
 void ov96_021FFC34(void *a, u8 v);
 void ov96_02200A64(void *w, u16 v);
-void ov96_021EB570(void *obj, int anim);
+void PokeathlonCourseSpritePoolSprite_TryChangeAnim(void *obj, int anim);
 void PlaySE(u16 se);
 void ov96_021FFBD8(BgConfig *bg, u16 v);
 void PokeathlonCourse_UpdateTimeUpCountdown(void *course, u16 v);
@@ -59,29 +59,29 @@ void ov96_021FDC7C(void *course) {
     switch (data->x1e[me]) {
     case 0:
         work->x642 = 0;
-        ov96_021EB570(work->x1c, 11);
+        PokeathlonCourseSpritePoolSprite_TryChangeAnim(work->x1c, 11);
         break;
     case 3:
         work->x642 = 0;
-        ov96_021EB570(work->x1c, 13);
+        PokeathlonCourseSpritePoolSprite_TryChangeAnim(work->x1c, 13);
         break;
     case 2:
         if (work->x642 == 0) {
             work->x642 = 1;
             PlaySE(0x89b);
         }
-        ov96_021EB570(work->x1c, 12);
+        PokeathlonCourseSpritePoolSprite_TryChangeAnim(work->x1c, 12);
         break;
     case 4:
         if (work->x642 == 0) {
             work->x642 = 1;
             PlaySE(0x89c);
         }
-        ov96_021EB570(work->x1c, 14);
+        PokeathlonCourseSpritePoolSprite_TryChangeAnim(work->x1c, 14);
         break;
     case 1:
         work->x642 = 0;
-        ov96_021EB570(work->x1c, 15);
+        PokeathlonCourseSpritePoolSprite_TryChangeAnim(work->x1c, 15);
         break;
     }
     ov96_021FFBD8(work->bg, data->pos[me]);

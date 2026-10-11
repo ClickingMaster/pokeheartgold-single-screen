@@ -11,8 +11,8 @@
 
 // Course helpers and the sprite pool (OVY_96, not yet tidied).
 void PokeathlonCourse_AddMonCounter(PokeathlonCourseData *course, u8 participant, u8 member, int event, int value);
-s32 ov96_021EAF8C(void *object);
-void ov96_021EB52C(PokeathlonGoalRollSprite *sprite, BOOL a1, BOOL show);
+s32 PokeathlonCourseObject_GetCollisionRadius(void *object);
+void PokeathlonCourseSpritePoolSprite_Show(PokeathlonGoalRollSprite *sprite, BOOL a1, BOOL show);
 
 // Per goal (indexed by participant - 1 or by 3 - quadrant): three guard points (x, y) in front of it.
 extern const u16 ov96_0221D678[][3][2];
@@ -27,7 +27,7 @@ void PokeathlonGoalRollDisplay_UpdateTimer(PokeathlonGoalRollDisplay *display, s
     if (timer <= 900) {
         Sprite_SetDrawFlag(display->timerDigits[0], FALSE);
         Sprite_SetDrawFlag(display->timerDigits[1], FALSE);
-        ov96_021EB52C(display->timerLabelSprite, TRUE, FALSE);
+        PokeathlonCourseSpritePoolSprite_Show(display->timerLabelSprite, TRUE, FALSE);
         if (display->secondWindShown == FALSE) {
             PokeathlonGoalRollDisplay_PrintSecondWind(display);
             display->secondWindShown = TRUE;
@@ -211,7 +211,7 @@ int ov96_02214C3C(PokeathlonCourseData *course, u8 participant, u8 member, Pokea
             } else {
                 GF_AssertFail();
             }
-            if (PokeathlonGoalRollCpu_CirclesTouch(position, (u32)ov96_021EAF8C(mon->object) << 12, &ball->position, radius << 12)) {
+            if (PokeathlonGoalRollCpu_CirclesTouch(position, (u32)PokeathlonCourseObject_GetCollisionRadius(mon->object) << 12, &ball->position, radius << 12)) {
                 decisions.values[i] = 1;
             } else if (quadrant == ballQuadrant) {
                 if (ov96_02215650(ball->position.x / 4096, ball->position.y / 4096, mon->position.x / 4096, mon->position.y / 4096, quadrant, participant)) {
@@ -447,7 +447,7 @@ int ov96_02215184(PokeathlonCourseData *course, u8 participant, u8 member, Pokea
         } else {
             GF_AssertFail();
         }
-        if (PokeathlonGoalRollCpu_CirclesTouch(&mon->position, ov96_021EAF8C(mon->object) << 12, &ball->position, radius << 12)) {
+        if (PokeathlonGoalRollCpu_CirclesTouch(&mon->position, PokeathlonCourseObject_GetCollisionRadius(mon->object) << 12, &ball->position, radius << 12)) {
             decisions[i] = 8;
         } else if (quadrant == ballQuadrant) {
             if (ov96_02215650(ball->position.x / FX32_ONE, ball->position.y / FX32_ONE, mon->position.x / FX32_ONE, mon->position.y / FX32_ONE, quadrant, participant)) {
