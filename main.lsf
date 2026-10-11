@@ -1797,47 +1797,10 @@ Overlay OVY_0
     Object lib/NitroDWC/asm/to60_overlay_00_arm_anchor.o
     Object lib/NitroDWC/src/auth_client.o
     Object lib/NitroDWC/asm/to60_overlay_00_arm_anchor_own2.o
-    Object src/to91_w41491_auth692.o
-    Object src/to90_extra2114_run01.o
-    Object src/op90_to90_extra2114_residual_2_r01.o
-    Object src/to65_ov00_extra14_run03.o
-    Object src/to90_extra1949_run01.o
-    Object src/to80_extra1413_run01.o
-    Object src/to65_ov00_extra14_run04.o
-    Object src/to70_to65_ov00_extra14_residual_4_extra1110_run01.o
-    Object src/to65_ov00_extra14_run05.o
-    Object src/to80_extra1440_run01.o
-    Object src/to90_extra1967_run01.o
-    Object src/to70_to65_ov00_extra14_residual_5_extra339_run01.o
-    Object src/to70_to70_to65_ov00_extra14_residual_5_extra339_residual_2_extra1154_run01.o
-    Object src/to70_to65_ov00_extra14_residual_5_extra339_run02.o
-    Object src/to65_ov00_extra14_run06.o
-    Object src/op90_to65_ov00_extra14_residual_6_r01.o
-    Object src/to65_ov00_extra14_run07.o
-    Object src/to80_extra1844_run01.o
-    Object src/to70_to70_ov00_extra01_residual_1_extra1145_run01.o
-    Object src/op90_to70_to70_ov00_extra01_residual_1_extra1145_residual_2_r01.o
-    Object src/to70_ov00_extra01_run01.o
-    Object src/op90_to70_ov00_extra01_residual_2_r01.o
-    Object src/to70_ov00_extra01_run02.o
-    Object src/to80_extra1426_run01.o
-    Object src/to70_ov00_extra01_run03.o
-    Object src/op90_to70_ov00_extra01_residual_4_r01.o
-    Object src/to70_ov00_extra01_run04.o
-    Object src/to61_overlay_00_arm_residual_1_run01.o
-    Object src/op90_to61_overlay_00_arm_residual_1_residual_2_r01.o
-    Object src/to61_overlay_00_arm_residual_1_run02.o
-    Object src/to70_to61_overlay_00_arm_residual_1_residual_3_extra1091_run01.o
-    Object src/to61_overlay_00_arm_residual_1_run03.o
-    Object src/to80_extra1838_run01.o
-    Object src/to61_overlay_00_arm_residual_1_run04.o
-    Object src/to90_extra2316_run01.o
-    Object src/to61_overlay_00_arm_residual_1_run05.o
-    Object src/to91_w41493_auth440.o
-    Object src/to70_to61_overlay_00_arm_residual_1_residual_6_extra1093_run01.o
-    Object src/to61_overlay_00_arm_residual_1_run06.o
-    Object src/to70_to61_overlay_00_arm_residual_1_residual_7_extra1094_run01.o
-    Object src/op90_to70_to61_overlay_00_arm_residual_1_residual_7_extra1094_residual_1_r01.o
+    Object lib/NitroDWC/src/auth_request.o
+    Object lib/NitroDWC/src/auth_http.o
+    Object lib/NitroDWC/src/auth_netcheck.o
+    Object lib/NitroDWC/src/net_common.o
     Object lib/NitroDWC/asm/to60_overlay_00_arm_anchor_own1.o
     Object src/to61_overlay_00_arm_residual_1_run07.o
     Object src/to80_extra1400_run01.o
@@ -1950,14 +1913,8 @@ Object src/op90_to91_w41563_friend_callback_suffix_r01.o
     Object src/to61_overlay_00_arm_residual_1_run33.o
     Object src/to70_to61_overlay_00_arm_residual_1_residual_34_extra1092_run01.o
     Object src/to61_overlay_00_arm_residual_1_run34.o
-    Object src/to60_ov00_run01.o
-    Object src/to90_extra1943_run01.o
-    Object src/to60_ov00_run02.o
-    Object src/to60_ov00_run03.o
-    Object src/op90_to60_overlay_00_arm_residual_3_r01.o
-    Object src/to60_ov00_run04.o
-    Object src/op90_to60_overlay_00_arm_residual_4_r01.o
-    Object src/to60_ov00_run05.o
+    Object lib/NitroDWC/src/ap_connect_control.o
+    Object lib/NitroDWC/src/ap_connect.o
     Object src/op90_to60_overlay_00_arm_residual_5_r01.o
     Object lib/NitroDWC/asm/to60_overlay_00_arm_anchor_own1_own1.o
     Object src/to60_ov00_run06.o
@@ -2834,89 +2791,7 @@ Object src/to54_atomic_w11_07_c_run4.o
     Object src/to55_r2_t13_run01.o
     Object src/to57_new13_ov07_c4c0.o
     Object src/to55_r2_t13_run02.o
-    Object src/overlay07_callbacks_c_0222c850_0222c850.o
-    Object src/to56_w01_ov07_c870.o
-    Object src/to56_w01_ov07_c918.o
-    Object src/to90_extra2093_run01.o
-    Object src/to57_new35_overlay07_transition.o
-    Object src/to91_w41484_palette_run01.o
-    Object src/to55_bank_w15_run_01.o
-    Object src/to56_r2_w13_ov07_c00.o
-    Object src/to80_extra1354_run01.o
-    Object src/to70_to56_r2_w13_ov07_asm01_extra77_run01.o
-    Object src/to56_r2_w13_ov07_c02.o
-    Object src/to55_bank_w15_run_02.o
-    Object src/overlay07_callbacks_c_0222d56c_0222d578.o
-    Object src/to54_atomic_x07_01_to54_ov07_x07_run1.o
-Object src/to57_new44_ov07_pair.o
-Object src/op90_to57_new44_residual_r01.o
-Object src/to54_atomic_x07_03_to54_ov07_x07_run2.o
-Object src/to70_to54_atomic_x07_04_to54_ov07_x07_residual_2_extra696_run01.o
-Object src/to54_atomic_x07_05_to54_ov07_x07_run3.o
-    Object src/overlay07_callbacks_c_0222dcd8_0222dcd8.o
-    Object src/to90_extra2081_run01.o
-Object src/to54_atomic_x06_02_run02_ov07_0222DE30.o
-Object src/to90_extra2082_run01.o
-Object src/op90_to90_extra2082_residual_1_r01.o
-Object src/to54_atomic_x06_04_run04_ov07_0222E07C.o
-Object src/to80_extra1599_run01.o
-Object src/op90_to80_extra1599_residual_1_r01.o
-Object src/to54_atomic_x06_06_run06_ov07_0222E3A4.o
-Object src/to70_to54_atomic_x06_07_residual07_ov07_0222E3E8_ov07_0222E3E8_extra337_run01.o
-    Object src/overlay07_callbacks_c_0222e4f8_0222e4f8.o
-    Object src/to70_to70_overlay07_callbacks_residual_0222e54c_0222e5e8_extra225_residual_1_extra1247_run01.o
-    Object src/to70_overlay07_callbacks_residual_0222e54c_0222e5e8_extra225_run01.o
-    Object src/overlay07_callbacks_c_0222e6a8_0222e6a8.o
-    Object src/to54_atomic_w18_01_overlay07_to54_w18.o
-    Object src/overlay07_callbacks_c_0222edf0_0222edf0.o
-    Object src/to70_overlay07_callbacks_residual_0222ee14_0222ee14_extra394_run01.o
-    Object src/overlay07_callbacks_c_0222ef0c_0222ef58.o
-    Object src/to54_atomic_x08_01_run01.o
-Object src/to90_extra2414_run01.o
-Object src/to54_atomic_x08_03_run02.o
-Object src/op90_to54_atomic_x08_04_residual2_r01.o
-    Object src/overlay07_callbacks_c_0222f408_0222f408.o
-    Object src/to55_w05_run_01.o
-    Object src/to80_extra1352_run01.o
-    Object src/to70_to55_w05_residual_01_extra166_run01.o
-    Object src/to55_w05_run_02.o
-    Object src/to70_to55_w05_residual_02_extra76_run01.o
-    Object src/to80_extra1353_run01.o
-    Object src/to55_w05_run_03.o
-    Object src/to70_to55_w05_residual_03_extra223_run01.o
-    Object src/to55_w05_run_04.o
-    Object src/to91_w41510_motion_run01.o
-    Object src/to57_new36.o
-    Object src/op90_to57_new36_residual_post_r01.o
-    Object src/op90_op90_to57_new36_residual_post_residual_1_r01.o
-    Object src/to56_r2_w16_ffd0.o
-    Object src/to55_w05_run_05.o
-    Object src/to70_to55_w05_residual_05_extra699_run01.o
-    Object src/overlay07_callbacks_c_02230170_02230170.o
-    Object src/op90_to55_r2_t14_residual_301c4_r01.o
-    Object src/to55_r2_t14_302a8.o
-    Object src/to70_to55_r2_t14_residual_303a4_extra392_run01.o
-    Object src/to55_r2_t14_3049c.o
-    Object src/overlay07_callbacks_c_02230600_02230600.o
-    Object src/to55_ov07_3061c_run1.o
-    Object src/op90_to55_ov07_306d8_residual_r01.o
-    Object src/to55_ov07_3061c_run2.o
-    Object src/overlay07_callbacks_c_02230960_02230960.o
-    Object src/to55_r3_ov07_30994.o
-    Object src/overlay07_callbacks_c_02230d1c_02230d1c.o
-    Object src/to70_to70_to54_atomic_w03_01_res01_extra165_residual_1_extra1340_run01.o
-    Object src/to70_to54_atomic_w03_01_res01_extra165_run01.o
-Object src/to54_atomic_w03_02_run01.o
-Object src/op90_to54_atomic_w03_03_res02_residual_r01.o
-Object src/to57_overlay07_30fe8.o
-Object src/to54_atomic_w03_04_run02.o
-Object src/to57_r2_03_overlay07_motion_group.o
-Object src/to54_atomic_w03_06_run03.o
-Object src/to70_to54_atomic_w03_07_res04_extra129_run01.o
-Object src/to70_to70_to54_atomic_w03_07_res04_extra129_residual_1_extra1341_run01.o
-Object src/to54_atomic_w03_08_run04.o
-Object src/to91_obj_window41517_run01.o
-Object src/to54_atomic_w03_10_run05.o
+    Object src/battle/battle_anim_effects.o
     Object src/battle/battle_anim_battler_util.o
     Object src/battle/battle_anim_ball.o
     Object asm/overlay_07_callback_suffix_opus10_residual_2.o

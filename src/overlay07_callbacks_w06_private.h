@@ -63,11 +63,11 @@ BOOL BattleAnimUtil_IsBlendAlphaMotionDone(void *anim);
 void ov07_0222BADC(void *pokepic, int arg1, int arg2, int arg3, int arg4);
 void ov07_0222C1FC(W06Sprite *work);
 void ov07_0222C208(W06Sprite *work, BOOL draw);
-void ov07_0222C850(W06Point *point, u32 *dest);
-void ov07_0222D56C(W06Sprite *work);
-void ov07_0222D578(W06Sprite *work);
-void ov07_0222D4F4(W06ScaleSprite *work, void *sprite, s16 x, s16 y, BOOL flip);
-BOOL ov07_0222DBD8(W06PicPulse *work);
-BOOL ov07_0222DC54(W06SpritePulse *work);
+void BattleAnimTask_SkewSlideAttackerBgResetScroll(W06Point *point, u32 *dest);
+void BattleAnimScaleSprite_Delete(W06Sprite *work);
+void BattleAnimScaleSprite_Show(W06Sprite *work);
+void BattleAnimScaleSprite_Init(W06ScaleSprite *work, void *sprite, s16 x, s16 y, BOOL flip);
+BOOL BattleAnimTask_RisingSpriteStretchAttackerPic(W06PicPulse *work);
+BOOL BattleAnimTask_RisingSpriteStretchAttackerSprite(W06SpritePulse *work);
 
 #endif

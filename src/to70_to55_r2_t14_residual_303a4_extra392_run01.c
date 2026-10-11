@@ -1,9 +1,0 @@
-#pragma force_active on
-#include "global.h"
-#pragma force_active on
-typedef struct {void *owner,*obj;int pad;void *pic;int y,start,pad2[2],active,pad3[3];int handle;} State;
-extern State *BattleAnimUtil_AllocWork(void *,int);extern int BattleAnimSystem_GetDefender(void *),Pokepic_GetAttr(void *,int),BattleAnimSystem_IsBattlerSemiInvulnerable(void *,int),BattleAnimUtil_PackXY(u16,u16),BattleAnimSystem_GetHeapID(void *),BattleAnimUtil_GetBattlerType(void *,int),BattleAnimSystem_GetBgLayer(void *,int),ov07_0221FAE8(void *);
-extern void *BattleAnimSystem_GetBattlerPokepic(void *,int),*BattleAnimUtil_GetBgOffsetRegister(void),*BattleAnimScanline_New(void *,int,int);
-extern void Pokepic_SetAttr(void *,int,int),ov07_0221FAF8(void *,int),SetBgPriority(u8,u8),BattleAnimSystem_CreateTaskDefaultPriority(void *,void *,void *);extern void ov07_022302A8(void);
-void ov07_022303A4(void *);
-void ov07_022303A4(void *owner){State *s=BattleAnimUtil_AllocWork(owner,52);s16 x;int y;void *manager;int priority;s->owner=owner;s->pic=BattleAnimSystem_GetBattlerPokepic(s->owner,BattleAnimSystem_GetDefender(owner));x=Pokepic_GetAttr(s->pic,0);y=(s16)Pokepic_GetAttr(s->pic,1);y=(s16)(y-Pokepic_GetAttr(s->pic,41));if(BattleAnimSystem_IsBattlerSemiInvulnerable(s->owner,BattleAnimSystem_GetDefender(s->owner))==0)Pokepic_SetAttr(s->pic,6,1);x-=40;s->start=y;y-=40;s->y=y;s->handle=BattleAnimUtil_PackXY(-x,-y);ov07_0221FAF8(s->owner,1);manager=BattleAnimUtil_GetBgOffsetRegister();s->obj=BattleAnimScanline_New(manager,s->handle,BattleAnimSystem_GetHeapID(s->owner));s->active=1;{int n=BattleAnimUtil_GetBattlerType(s->owner,BattleAnimSystem_GetDefender(owner));if(n==3||n==4){priority=BattleAnimSystem_GetBgLayer(s->owner,1);SetBgPriority(priority,ov07_0221FAE8(s->owner));SetBgPriority(0,ov07_0221FAE8(s->owner)+1);}}BattleAnimSystem_CreateTaskDefaultPriority(s->owner,ov07_022302A8,s);}

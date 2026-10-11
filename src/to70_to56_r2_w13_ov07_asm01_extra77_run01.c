@@ -1,8 +1,0 @@
-#pragma force_active on
-#include "global.h"
-#pragma force_active on
-typedef struct {void *owner,*pad4,*sys;int state;void *sprite;u8 scale[0x24];int angle;u8 rotation[0x10];int count,last,sign;} Work;
-extern int BattleAnimUtil_UpdateScaleMotion(void *),BattleAnimUtil_UpdateValueMotion(void *);
-extern void BattleAnimUtil_GetScaleFloat(void *,float *,float *),ManagedSprite_SetAffineScale(void *,float,float),BattleAnimUtil_InitScaleMotion(void *,int,int,int,int),ManagedSprite_SetAffineZRotation(void *,u16),BattleAnimUtil_InitValueMotion(void *,int,int,int),Sprite_DeleteAndFreeResources(void *),BattleAnimSystem_DestroyTask(void *,void *),Heap_Free(void *),SpriteSystem_DrawSprites(void *);
-void ov07_0222D2B0(void *,Work *);
-void ov07_0222D2B0(void *task,Work *w){float x,y;int active;switch(w->state){case 0:if(BattleAnimUtil_UpdateScaleMotion(w->scale)==1){BattleAnimUtil_GetScaleFloat(w->scale,&x,&y);ManagedSprite_SetAffineScale(w->sprite,x*(float)w->sign,y);}else{w->state++;w->count=5;BattleAnimUtil_InitScaleMotion(w->scale,10,10,1,8);}break;case 1:active=BattleAnimUtil_UpdateValueMotion(&w->angle);ManagedSprite_SetAffineZRotation(w->sprite,w->angle);if(!active){if(w->count>0){int current,last;w->count--;current=w->angle;last=w->last;w->last=current;BattleAnimUtil_InitValueMotion(&w->angle,current,last,4);}else w->state++;}break;case 2:if(BattleAnimUtil_UpdateScaleMotion(w->scale)==1){BattleAnimUtil_GetScaleFloat(w->scale,&x,&y);ManagedSprite_SetAffineScale(w->sprite,x*(float)w->sign,y);}else w->state++;break;case 3:Sprite_DeleteAndFreeResources(w->sprite);BattleAnimSystem_DestroyTask(w->owner,task);Heap_Free(w);return;}SpriteSystem_DrawSprites(w->sys);}
