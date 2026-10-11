@@ -1,10 +1,16 @@
-// ARM7 runtime 64/32-bit integer division (_ll_mod.._u32_div_not_0_f, 0x03806054, 1528 B).
-// Hand-written ARM assembly (shared entry points that branch into a common body, carry-chain
-// shift/subtract loops on register pairs), kept as one MWCC asm function. The other 8 entry
-// points are added as aliases by tools/object_aliases.py (op90_to90_arm7_sub_wram_2_residual_24_r01.alias-map.json).
 #include <nitro/types.h>
-void _ll_mod(void);
+
+// The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
+
+// ARM7 runtime 64-bit and 32-bit integer division (_ll_mod .. _u32_div_not_0_f): hand-written assembly with
+// shared entry points that branch into a common body and carry-chain shift/subtract loops on register pairs,
+// kept as one MWCC asm function. tools/object_aliases.py adds the other 8 entry points as aliases
+// (long_long_div.alias-map.json).
+
+void _ll_mod(void);
+
+// clang-format off
 asm void _ll_mod(void)
 {
 @ll_mod:
@@ -421,4 +427,4 @@ asm void _ll_mod(void)
     mov r1, r3
     bx lr
 }
-#include <nitro/codereset.h>
+// clang-format on

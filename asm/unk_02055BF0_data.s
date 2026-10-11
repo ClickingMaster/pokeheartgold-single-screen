@@ -10,9 +10,9 @@
 
 .public sub_02056530
 .public sub_020565FC
-.public sub_02056680
-.public sub_020566F8
-.public sub_020567B4
+.public FieldTransition_EnterThroughSideDoor
+.public FieldTransition_EnterFromWarpStairs
+.public FieldTransition_EnterWithDoorExit
 .public sub_02056004
 .public sub_02056040
 .public sub_020560C4
@@ -25,13 +25,13 @@
 sMapEnterRoutines:
 	.word sub_02056530
 	.word sub_020565FC
-	.word sub_02056680
-	.word sub_020566F8
+	.word FieldTransition_EnterThroughSideDoor
+	.word FieldTransition_EnterFromWarpStairs
 	.word sub_020565FC
-	.word sub_020567B4
+	.word FieldTransition_EnterWithDoorExit
 	.word sub_020565FC
-	.word sub_0205681C
-	.word sub_02056938
+	.word FieldTransition_EnterRising
+	.word FieldTransition_EnterSinking
 sMapExitRoutines:
 	.word sub_02056004
 	.word sub_02056040
@@ -45,12 +45,12 @@ sMapExitRoutines:
 _020FC76C:
 	.word 0
 	.word 0
-	.word sub_02056A54
-	.word sub_02056AEC
+	.word FieldTransition_PlaceInsideSideDoor
+	.word FieldTransition_PlaceOffWarpStairs
 	.word 0
 	.word 0
 	.word 0
-	.word sub_02056BC8
-	.word sub_02056C64
+	.word FieldTransition_PlaceBelowFloor
+	.word FieldTransition_PlaceAboveFloor
 
 	.text

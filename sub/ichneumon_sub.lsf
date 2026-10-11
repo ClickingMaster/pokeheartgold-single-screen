@@ -75,22 +75,13 @@ Autoload WRAM
 	Object asm/to90_arm7_wram160_r8_anchor_own3.o
 	Object lib/src/nvram_driver.o
 	Object lib/src/rtc_driver.o
-	Object lib/src/to90_arm7_sub_wram_2_run63.o
-	Object lib/src/to90_arm7_sub_wram_2_run64.o
-	Object lib/src/op90_to90_arm7_sub_wram_2_residual_22_r01.o
-	Object lib/src/op90_op90_to90_arm7_sub_wram_2_residual_22_residual_1_r01.o
-	Object lib/src/to90_arm7_sub_wram_2_run65.o
-	Object lib/src/to90_arm7_sub_wram_2_run66.o
-	Object lib/src/to90_arm7_sub_wram_2_run93.o
-	Object lib/src/to90_arm7_sub_wram_2_run94.o
-	Object lib/src/to90_arm7_sub_wram_2_run95.o
-	Object lib/src/op90_to90_arm7_sub_wram_2_residual_23_r01.o
-	Object lib/src/to90_arm7_sub_wram_2_run67.o
-	Object lib/src/op90_to90_arm7_sub_wram_2_residual_24_r01.o
+	Object lib/src/wvr_driver.o
+	Object lib/src/math_count_population.o
+	Object lib/src/long_long_div.o
 	Object lib/src/OS_reset.o (.wram)
-	Object lib/src/to90_arm7_wram160_r8_run01.o (.wram)
-	Object lib/src/to90_arm7_wram160_r8_run02.o (.wram)
-	Object lib/src/op90_to90_arm7_wram160_r8_residual_1_r01.o (.wram)
+	Object lib/src/wmsp_return_result.o (.wram)
+	Object lib/src/wmsp_result_buffer.o (.wram)
+	Object lib/src/wmsp_allowed_channel.o (.wram)
 }
 
 Autoload EXT_WRAM

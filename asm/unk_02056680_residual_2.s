@@ -3,28 +3,28 @@
 	.include "global.inc"
 
 	.text
-	.public sub_02056680
-	.public sub_020566F8
-	.public sub_020567B4
-	.public sub_0205681C
-	.public sub_02056938
-	.public sub_02056A54
-	.public sub_02056AEC
-	.public sub_02056BC8
-	.public sub_02056C64
-	.public sub_02056D00
-	.public sub_02056D30
-	.public sub_020566F8
-	.public sub_020567B4
-	.public sub_0205681C
-	.public sub_02056938
-	.public sub_02056BC8
-	.public sub_02056C64
-	.public sub_02056D00
-	.public sub_02056D30
+	.public FieldTransition_EnterThroughSideDoor
+	.public FieldTransition_EnterFromWarpStairs
+	.public FieldTransition_EnterWithDoorExit
+	.public FieldTransition_EnterRising
+	.public FieldTransition_EnterSinking
+	.public FieldTransition_PlaceInsideSideDoor
+	.public FieldTransition_PlaceOffWarpStairs
+	.public FieldTransition_PlaceBelowFloor
+	.public FieldTransition_PlaceAboveFloor
+	.public CallTask_WiFiPlaza
+	.public Task_WiFiPlaza
+	.public FieldTransition_EnterFromWarpStairs
+	.public FieldTransition_EnterWithDoorExit
+	.public FieldTransition_EnterRising
+	.public FieldTransition_EnterSinking
+	.public FieldTransition_PlaceBelowFloor
+	.public FieldTransition_PlaceAboveFloor
+	.public CallTask_WiFiPlaza
+	.public Task_WiFiPlaza
 
-	thumb_func_start sub_02056A54
-sub_02056A54: ; 0x02056A54
+	thumb_func_start FieldTransition_PlaceInsideSideDoor
+FieldTransition_PlaceInsideSideDoor: ; 0x02056A54
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0x34
 	add r4, r0, #0
@@ -91,11 +91,11 @@ _02056AAC:
 	bl Camera_OffsetLookAtPosAndTarget
 	add sp, #0x34
 	pop {r3, r4, r5, r6, pc}
-	thumb_func_end sub_02056A54
+	thumb_func_end FieldTransition_PlaceInsideSideDoor
 
 
-	thumb_func_start sub_02056AEC
-sub_02056AEC: ; 0x02056AEC
+	thumb_func_start FieldTransition_PlaceOffWarpStairs
+FieldTransition_PlaceOffWarpStairs: ; 0x02056AEC
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0x34
 	add r5, r0, #0
@@ -189,4 +189,4 @@ _02056BC2:
 	add sp, #0x34
 	pop {r3, r4, r5, r6, pc}
 	.balign 4, 0
-	thumb_func_end sub_02056AEC
+	thumb_func_end FieldTransition_PlaceOffWarpStairs

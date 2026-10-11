@@ -3,28 +3,28 @@
 	.include "global.inc"
 
 	.text
-	.public sub_02056680
-	.public sub_020566F8
-	.public sub_020567B4
-	.public sub_0205681C
-	.public sub_02056938
-	.public sub_02056A54
-	.public sub_02056AEC
-	.public sub_02056BC8
-	.public sub_02056C64
-	.public sub_02056D00
-	.public sub_02056D30
-	.public sub_020566F8
-	.public sub_020567B4
-	.public sub_0205681C
-	.public sub_02056938
-	.public sub_02056BC8
-	.public sub_02056C64
-	.public sub_02056D00
-	.public sub_02056D30
+	.public FieldTransition_EnterThroughSideDoor
+	.public FieldTransition_EnterFromWarpStairs
+	.public FieldTransition_EnterWithDoorExit
+	.public FieldTransition_EnterRising
+	.public FieldTransition_EnterSinking
+	.public FieldTransition_PlaceInsideSideDoor
+	.public FieldTransition_PlaceOffWarpStairs
+	.public FieldTransition_PlaceBelowFloor
+	.public FieldTransition_PlaceAboveFloor
+	.public CallTask_WiFiPlaza
+	.public Task_WiFiPlaza
+	.public FieldTransition_EnterFromWarpStairs
+	.public FieldTransition_EnterWithDoorExit
+	.public FieldTransition_EnterRising
+	.public FieldTransition_EnterSinking
+	.public FieldTransition_PlaceBelowFloor
+	.public FieldTransition_PlaceAboveFloor
+	.public CallTask_WiFiPlaza
+	.public Task_WiFiPlaza
 
-	thumb_func_start sub_02056680
-sub_02056680: ; 0x02056680
+	thumb_func_start FieldTransition_EnterThroughSideDoor
+FieldTransition_EnterThroughSideDoor: ; 0x02056680
 	push {r4, r5, r6, lr}
 	add r4, r0, #0
 	bl TaskManager_GetFieldSystem
@@ -80,4 +80,4 @@ _020566F0:
 _020566F4:
 	mov r0, #0
 	pop {r4, r5, r6, pc}
-	thumb_func_end sub_02056680
+	thumb_func_end FieldTransition_EnterThroughSideDoor

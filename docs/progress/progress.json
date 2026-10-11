@@ -1,12 +1,12 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "533e4cde5446bb4080c556ce9116a68a4f542d5f",
+  "commit": "f698ab7aabd4816757936776ee0ecfc4ec2364a9",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "ed1747a9541ff97fd168d0052f45db63e5efed0d5d3837d15b7bc1cb32b7ce82",
-    "ARM7": "1a2c9e55e483b7bc8aba4fe9dfbf1717fdeaecbf23c265fec35de1e7b462228f"
+    "ARM9": "96876720b2d2e6abebe617fc97042da4390621523053cb91d885d3a0bebd04c4",
+    "ARM7": "be22cb9746a7577a1db9d8a3882c5a5041b7624254e1c01c0ed9dc2e73b0fd16"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
   "totals": {
@@ -31294,6 +31294,14 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "cps_bignum_char.o",
+      "bytes": 160,
+      "status": "c",
+      "source": "lib/libCPS/src/cps_bignum_char.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "cps_md5.o",
       "bytes": 1412,
       "status": "c",
@@ -31893,14 +31901,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "field_transition_camera_fixups.o",
-      "bytes": 370,
-      "status": "c",
-      "source": "src/field_transition_camera_fixups.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "field_transition_finish_1.o",
       "bytes": 472,
       "status": "c",
@@ -31909,18 +31909,10 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "field_transition_tasks_1.o",
-      "bytes": 858,
+      "object": "field_transition_tasks.o",
+      "bytes": 1784,
       "status": "c",
-      "source": "src/field_transition_tasks_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "field_transition_tasks_2.o",
-      "bytes": 436,
-      "status": "c",
-      "source": "src/field_transition_tasks_2.c"
+      "source": "src/field_transition_tasks.c"
     },
     {
       "cpu": "ARM9",
@@ -35215,17 +35207,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "op90_op90_to65_wifi_residual_11_residual_49_residual_1_r01.o",
-      "bytes": 44,
-      "status": "original_asm",
-      "source": "src/op90_op90_to65_wifi_residual_11_residual_49_residual_1_r01.c",
-      "functions": [
-        "WcmCountBits"
-      ]
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "op90_op90_to90_extra2123_residual_1_residual_1_r01.o",
       "bytes": 400,
       "status": "c",
@@ -35427,29 +35408,10 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "op90_to65_wifi_residual_11_residual_49_r01.o",
-      "bytes": 8,
-      "status": "original_asm",
-      "source": "src/op90_to65_wifi_residual_11_residual_49_r01.c",
-      "functions": [
-        "WcmCountLeadingZero"
-      ]
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "op90_to65_wifi_residual_11_residual_4_r01.o",
       "bytes": 260,
       "status": "c",
       "source": "src/op90_to65_wifi_residual_11_residual_4_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to65_wifi_residual_11_residual_53_r01.o",
-      "bytes": 204,
-      "status": "c",
-      "source": "src/op90_to65_wifi_residual_11_residual_53_r01.c"
     },
     {
       "cpu": "ARM9",
@@ -38445,6 +38407,14 @@
     {
       "cpu": "ARM9",
       "module": "main",
+      "object": "stubsmd5.o",
+      "bytes": 36,
+      "status": "c",
+      "source": "lib/NitroWiFi/src/stubsmd5.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
       "object": "summary_field_renderer_1.o",
       "bytes": 184,
       "status": "c",
@@ -39549,134 +39519,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to65_wifi_residual_11_run45.o",
-      "bytes": 528,
-      "status": "c",
-      "source": "src/to65_wifi_residual_11_run45.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_wifi_residual_11_run46.o",
-      "bytes": 272,
-      "status": "c",
-      "source": "src/to65_wifi_residual_11_run46.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_wifi_residual_11_run47.o",
-      "bytes": 164,
-      "status": "c",
-      "source": "src/to65_wifi_residual_11_run47.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_wifi_residual_11_run48.o",
-      "bytes": 284,
-      "status": "c",
-      "source": "src/to65_wifi_residual_11_run48.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_wifi_residual_11_run49.o",
-      "bytes": 508,
-      "status": "c",
-      "source": "src/to65_wifi_residual_11_run49.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_wifi_residual_11_run50.o",
-      "bytes": 32,
-      "status": "c",
-      "source": "src/to65_wifi_residual_11_run50.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_wifi_residual_11_run51.o",
-      "bytes": 436,
-      "status": "c",
-      "source": "src/to65_wifi_residual_11_run51.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_wifi_residual_11_run52.o",
-      "bytes": 212,
-      "status": "c",
-      "source": "src/to65_wifi_residual_11_run52.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_wifi_residual_11_run53.o",
-      "bytes": 120,
-      "status": "c",
-      "source": "src/to65_wifi_residual_11_run53.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_wifi_residual_11_run54.o",
-      "bytes": 756,
-      "status": "c",
-      "source": "src/to65_wifi_residual_11_run54.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_wifi_residual_11_run55.o",
-      "bytes": 524,
-      "status": "c",
-      "source": "src/to65_wifi_residual_11_run55.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_wifi_residual_11_run56.o",
-      "bytes": 156,
-      "status": "c",
-      "source": "src/to65_wifi_residual_11_run56.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_wifi_residual_11_run57.o",
-      "bytes": 612,
-      "status": "c",
-      "source": "src/to65_wifi_residual_11_run57.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_wifi_residual_11_run58.o",
-      "bytes": 332,
-      "status": "c",
-      "source": "src/to65_wifi_residual_11_run58.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_wifi_residual_11_run59.o",
-      "bytes": 52,
-      "status": "c",
-      "source": "src/to65_wifi_residual_11_run59.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to65_wifi_residual_11_run60.o",
-      "bytes": 36,
-      "status": "c",
-      "source": "src/to65_wifi_residual_11_run60.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to70_MSL_CPP_NITRO_Ai_LE_extra108_residual_3_r01.o",
       "bytes": 144,
       "status": "cpp",
@@ -39825,54 +39667,6 @@
       "bytes": 324,
       "status": "c",
       "source": "src/to70_to65_wifi_residual_11_residual_32_extra1172_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_to65_wifi_residual_11_residual_43_extra1174_run01.o",
-      "bytes": 516,
-      "status": "c",
-      "source": "src/to70_to65_wifi_residual_11_residual_43_extra1174_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_to65_wifi_residual_11_residual_44_extra1175_run01.o",
-      "bytes": 376,
-      "status": "c",
-      "source": "src/to70_to65_wifi_residual_11_residual_44_extra1175_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_to65_wifi_residual_11_residual_45_extra1176_run01.o",
-      "bytes": 516,
-      "status": "c",
-      "source": "src/to70_to65_wifi_residual_11_residual_45_extra1176_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_to65_wifi_residual_11_residual_46_extra1177_run01.o",
-      "bytes": 528,
-      "status": "c",
-      "source": "src/to70_to65_wifi_residual_11_residual_46_extra1177_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_to65_wifi_residual_11_residual_47_extra1178_run01.o",
-      "bytes": 408,
-      "status": "c",
-      "source": "src/to70_to65_wifi_residual_11_residual_47_extra1178_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_to65_wifi_residual_11_residual_55_extra1179_run01.o",
-      "bytes": 392,
-      "status": "c",
-      "source": "src/to70_to65_wifi_residual_11_residual_55_extra1179_run01.c"
     },
     {
       "cpu": "ARM9",
@@ -40221,22 +40015,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to80_extra1467_run01.o",
-      "bytes": 740,
-      "status": "c",
-      "source": "src/to80_extra1467_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to80_extra1468_run01.o",
-      "bytes": 612,
-      "status": "c",
-      "source": "src/to80_extra1468_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to80_extra1612_run01.o",
       "bytes": 232,
       "status": "c",
@@ -40253,42 +40031,10 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to80_extra1676_run01.o",
-      "bytes": 144,
-      "status": "c",
-      "source": "src/to80_extra1676_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to80_extra1677_run01.o",
-      "bytes": 80,
-      "status": "c",
-      "source": "src/to80_extra1677_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to80_extra1678_run01.o",
-      "bytes": 128,
-      "status": "c",
-      "source": "src/to80_extra1678_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to80_extra1679_run01.o",
       "bytes": 628,
       "status": "c",
       "source": "src/to80_extra1679_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to80_extra1684_run01.o",
-      "bytes": 700,
-      "status": "c",
-      "source": "src/to80_extra1684_run01.c"
     },
     {
       "cpu": "ARM9",
@@ -40321,14 +40067,6 @@
       "bytes": 308,
       "status": "c",
       "source": "src/to80_extra1857_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to80_extra1859_run01.o",
-      "bytes": 812,
-      "status": "c",
-      "source": "src/to80_extra1859_run01.c"
     },
     {
       "cpu": "ARM9",
@@ -41429,14 +41167,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to90_rssi41434_run01.o",
-      "bytes": 96,
-      "status": "c",
-      "source": "src/to90_rssi41434_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to90_spin_run01.o",
       "bytes": 396,
       "status": "c",
@@ -42075,14 +41805,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "unk_02056680.o",
-      "bytes": 120,
-      "status": "c",
-      "source": "src/unk_02056680.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "unk_0205B3DC.o",
       "bytes": 270,
       "status": "c",
@@ -42426,6 +42148,58 @@
       "bytes": 304,
       "status": "c",
       "source": "src/vram_transfer_manager.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "wcm.o",
+      "bytes": 3244,
+      "status": "c",
+      "source": "lib/NitroWiFi/src/wcm.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "wcm_aplist.o",
+      "bytes": 1152,
+      "status": "c",
+      "source": "lib/NitroWiFi/src/wcm_aplist.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "wcm_callback.o",
+      "bytes": 3952,
+      "status": "c",
+      "source": "lib/NitroWiFi/src/wcm_callback.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "wcm_control.o",
+      "bytes": 1308,
+      "status": "c",
+      "source": "lib/NitroWiFi/src/wcm_control.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "wcm_control.o",
+      "bytes": 52,
+      "status": "original_asm",
+      "source": "lib/NitroWiFi/src/wcm_control.c",
+      "functions": [
+        "WcmCountBits",
+        "WcmCountLeadingZero"
+      ]
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "wcm_cpsif.o",
+      "bytes": 1424,
+      "status": "c",
+      "source": "lib/NitroWiFi/src/wcm_cpsif.c"
     },
     {
       "cpu": "ARM9",
@@ -44248,6 +44022,25 @@
     {
       "cpu": "ARM7",
       "module": "WRAM",
+      "object": "long_long_div.o",
+      "bytes": 1528,
+      "status": "original_asm",
+      "source": "sub/lib/src/long_long_div.c",
+      "functions": [
+        "_ll_mod"
+      ]
+    },
+    {
+      "cpu": "ARM7",
+      "module": "WRAM",
+      "object": "math_count_population.o",
+      "bytes": 68,
+      "status": "c",
+      "source": "sub/lib/src/math_count_population.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "WRAM",
       "object": "mi_dma_arm7.o",
       "bytes": 236,
       "status": "c",
@@ -44339,59 +44132,6 @@
       "bytes": 40,
       "status": "c",
       "source": "sub/lib/src/nvram_init.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "WRAM",
-      "object": "op90_op90_to90_arm7_sub_wram_2_residual_22_residual_1_r01.o",
-      "bytes": 8,
-      "status": "veneer",
-      "source": "sub/lib/src/op90_op90_to90_arm7_sub_wram_2_residual_22_residual_1_r01.c",
-      "functions": [
-        "__VENEER_WMSP_Init"
-      ]
-    },
-    {
-      "cpu": "ARM7",
-      "module": "WRAM",
-      "object": "op90_to90_arm7_sub_wram_2_residual_22_r01.o",
-      "bytes": 164,
-      "status": "c",
-      "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_22_r01.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "WRAM",
-      "object": "op90_to90_arm7_sub_wram_2_residual_23_r01.o",
-      "bytes": 40,
-      "status": "veneer",
-      "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_23_r01.c",
-      "functions": [
-        "__VENEER_WL_Terminate",
-        "__VENEER_WMSP_CancelAllAlarms",
-        "__VENEER_WMSP_CancelVAlarm",
-        "__VENEER_WMSP_GetIndicateThread",
-        "__VENEER_WMSP_GetRequestThread"
-      ]
-    },
-    {
-      "cpu": "ARM7",
-      "module": "WRAM",
-      "object": "op90_to90_arm7_sub_wram_2_residual_24_r01.o",
-      "bytes": 1528,
-      "status": "original_asm",
-      "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_24_r01.c",
-      "functions": [
-        "_ll_mod"
-      ]
-    },
-    {
-      "cpu": "ARM7",
-      "module": "WRAM",
-      "object": "op90_to90_arm7_wram160_r8_residual_1_r01.o",
-      "bytes": 268,
-      "status": "c",
-      "source": "sub/lib/src/op90_to90_arm7_wram160_r8_residual_1_r01.c"
     },
     {
       "cpu": "ARM7",
@@ -44653,90 +44393,58 @@
     {
       "cpu": "ARM7",
       "module": "WRAM",
-      "object": "to90_arm7_sub_wram_2_run63.o",
-      "bytes": 84,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_wram_2_run63.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "WRAM",
-      "object": "to90_arm7_sub_wram_2_run64.o",
-      "bytes": 48,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_wram_2_run64.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "WRAM",
-      "object": "to90_arm7_sub_wram_2_run65.o",
-      "bytes": 80,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_wram_2_run65.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "WRAM",
-      "object": "to90_arm7_sub_wram_2_run66.o",
-      "bytes": 96,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_wram_2_run66.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "WRAM",
-      "object": "to90_arm7_sub_wram_2_run67.o",
-      "bytes": 68,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_wram_2_run67.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "WRAM",
-      "object": "to90_arm7_sub_wram_2_run93.o",
-      "bytes": 420,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_wram_2_run93.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "WRAM",
-      "object": "to90_arm7_sub_wram_2_run94.o",
-      "bytes": 112,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_wram_2_run94.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "WRAM",
-      "object": "to90_arm7_sub_wram_2_run95.o",
-      "bytes": 524,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_wram_2_run95.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "WRAM",
-      "object": "to90_arm7_wram160_r8_run01.o",
-      "bytes": 76,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_wram160_r8_run01.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "WRAM",
-      "object": "to90_arm7_wram160_r8_run02.o",
-      "bytes": 84,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_wram160_r8_run02.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "WRAM",
       "object": "touch_panel_driver.o",
       "bytes": 2888,
       "status": "c",
       "source": "sub/lib/src/touch_panel_driver.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "WRAM",
+      "object": "wmsp_allowed_channel.o",
+      "bytes": 268,
+      "status": "c",
+      "source": "sub/lib/src/wmsp_allowed_channel.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "WRAM",
+      "object": "wmsp_result_buffer.o",
+      "bytes": 84,
+      "status": "c",
+      "source": "sub/lib/src/wmsp_result_buffer.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "WRAM",
+      "object": "wmsp_return_result.o",
+      "bytes": 76,
+      "status": "c",
+      "source": "sub/lib/src/wmsp_return_result.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "WRAM",
+      "object": "wvr_driver.o",
+      "bytes": 1528,
+      "status": "c",
+      "source": "sub/lib/src/wvr_driver.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "WRAM",
+      "object": "wvr_driver.o",
+      "bytes": 48,
+      "status": "veneer",
+      "source": "sub/lib/src/wvr_driver.c",
+      "functions": [
+        "__VENEER_WL_Terminate",
+        "__VENEER_WMSP_CancelAllAlarms",
+        "__VENEER_WMSP_CancelVAlarm",
+        "__VENEER_WMSP_GetIndicateThread",
+        "__VENEER_WMSP_GetRequestThread",
+        "__VENEER_WMSP_Init"
+      ]
     },
     {
       "cpu": "ARM7",

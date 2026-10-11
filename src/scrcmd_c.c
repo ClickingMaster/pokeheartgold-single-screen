@@ -81,7 +81,7 @@
 #include "field_overworld_transition.h"
 #include "unk_020552A4.h"
 #include "unk_02055418.h"
-#include "unk_02056680.h"
+#include "field_transition_tasks.h"
 #include "unk_02056D7C.h"
 #include "unk_02058034.h"
 #include "unk_02058AEC.h"
@@ -4223,7 +4223,7 @@ BOOL ScrCmd_662(ScriptContext *ctx) {
 BOOL ScrCmd_663(ScriptContext *ctx) {
     u16 *p_var = ScriptGetVarPointer(ctx);
     if (sub_0203A05C(ctx->fieldSystem->saveData)) {
-        sub_02056D00(ctx->taskman, *p_var);
+        CallTask_WiFiPlaza(ctx->taskman, *p_var);
     }
     return TRUE;
 }

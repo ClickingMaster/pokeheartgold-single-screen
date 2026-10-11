@@ -40,7 +40,7 @@ $(BUILD_DIR)/lib/src/OS_reset.o: lib/src/OS_reset.c $(BUILD_DIR)/lib/src/OS_rese
 	@python3 $(WORK_DIR)/tools/nitro-section-renames/add_arm7_reset_aliases.py "$@" "$@.reset-aliases"
 	@mv "$@.reset-aliases" "$@"
 	@$(call fixdep,$(BUILD_DIR)/lib/src/OS_reset.d)
-$(BUILD_DIR)/lib/src/op90_to90_arm7_wram160_r8_residual_1_r01.o: private MWCCVER := 2.0/sp1
+$(BUILD_DIR)/lib/src/wmsp_allowed_channel.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/src/wl_timeout.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/src/wl_start.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/src/wl_timeout_periodic.o: private MWCCVER := 2.0/sp1

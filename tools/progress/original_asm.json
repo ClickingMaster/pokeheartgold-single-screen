@@ -711,7 +711,7 @@
   {
    "function": "WcmCountBits",
    "cpu": "ARM9",
-   "source": "src/op90_op90_to65_wifi_residual_11_residual_49_residual_1_r01.c",
+   "source": "lib/NitroWiFi/src/wcm_control.c",
    "kind": "asm",
    "reason": "b<cc> over unconditional b (expanded conditional insn; 0 occurrences in MWCC output); clz (inline-asm only)"
   },
@@ -725,7 +725,7 @@
   {
    "function": "WcmCountLeadingZero",
    "cpu": "ARM9",
-   "source": "src/op90_to65_wifi_residual_11_residual_49_r01.c",
+   "source": "lib/NitroWiFi/src/wcm_control.c",
    "kind": "asm",
    "reason": "clz (inline-asm only)"
   },
@@ -1278,7 +1278,7 @@
   {
    "function": "__VENEER_WMSP_Init",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_op90_to90_arm7_sub_wram_2_residual_22_residual_1_r01.c",
+   "source": "sub/lib/src/wvr_driver.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to WMSP_Init: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
@@ -1607,42 +1607,42 @@
   {
    "function": "__VENEER_WL_Terminate",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_23_r01.c",
+   "source": "sub/lib/src/wvr_driver.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to WL_Terminate: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_WMSP_CancelAllAlarms",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_23_r01.c",
+   "source": "sub/lib/src/wvr_driver.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to WMSP_CancelAllAlarms: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_WMSP_CancelVAlarm",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_23_r01.c",
+   "source": "sub/lib/src/wvr_driver.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to WMSP_CancelVAlarm: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_WMSP_GetIndicateThread",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_23_r01.c",
+   "source": "sub/lib/src/wvr_driver.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to WMSP_GetIndicateThread: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "__VENEER_WMSP_GetRequestThread",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_23_r01.c",
+   "source": "sub/lib/src/wvr_driver.c",
    "kind": "veneer",
    "reason": "interworking/long-branch trampoline to WMSP_GetRequestThread: ldr pc,[pc,#-4] plus the target address word; no frame, not compiled code"
   },
   {
    "function": "_ll_mod",
    "cpu": "ARM7",
-   "source": "sub/lib/src/op90_to90_arm7_sub_wram_2_residual_24_r01.c",
+   "source": "sub/lib/src/long_long_div.c",
    "kind": "asm",
    "reason": "long-long and 32-bit division runtime assembled as one module: ip saved in the prologue (non-AAPCS), entry stubs branching into shared bodies, fall-through entry points, computed add pc into unrolled division"
   },
