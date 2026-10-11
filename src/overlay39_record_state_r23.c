@@ -66,7 +66,7 @@ void ov39_0222915C(const Ov39LargeRec *src, Ov39SmallRec *dst) {
 
 void ov39_02229224(const Ov39SmallRec *src, Ov39LargeRec *dst) {
     int i;
-    MI_CpuFill8(dst, 0, sub_0202B994((void *)src));
+    MI_CpuFill8(dst, 0, FashionEntry_sizeof((void *)src));
     dst->word00 = src->word00;
     dst->word04 = src->word04;
     dst->word08 = src->word08;

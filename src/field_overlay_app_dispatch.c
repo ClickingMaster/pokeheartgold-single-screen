@@ -274,12 +274,12 @@ void ov01_021F6B64(FieldSys *fieldSystem, int a1) {
 }
 
 void *ov01_021F6B88(void *a0, void *a1, FieldSys *fieldSystem, void *a3) {
-    fieldSystem->unkDC = ov34_0225D7A8(fieldSystem);
+    fieldSystem->unkDC = UnionChatLog_Init(fieldSystem);
     return fieldSystem->unkDC;
 }
 
 void ov01_021F6BA0(void *a0, void *a1) {
-    ov34_0225D87C(a1);
+    UnionChatLog_Exit(a1);
 }
 
 BOOL ov01_021F6BAC(void *a0) {

@@ -26,8 +26,8 @@ void BufferString(void *fmt, u32 idx, void *str, u32 a, u32 b, u32 c);
 void BufferECWord(void *fmt, u32 idx, void *word);
 void StringExpandPlaceholders(void *fmt, void *dst, void *src);
 void MessageFormat_Delete(void *fmt);
-void sub_0202BE60(void *src, void *dst);
-void *sub_0202BE98(void *src);
+void FashionEntry_GetMonSecondText(void *src, void *dst);
+void *FashionEntry_GetMailMessageWord(void *src);
 
 void *Save_Pokedex_Get(void *save);
 BOOL Pokedex_CheckMonSeenFlag(void *pokedex, u32 species);

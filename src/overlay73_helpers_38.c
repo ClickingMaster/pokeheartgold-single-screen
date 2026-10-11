@@ -106,5 +106,5 @@ void ov73_021EA290(void *p) {
 }
 
 void *ov73_021EA2A8(void *p) {
-    return sub_0202B994(Save_FashionData_Get(p));
+    return FashionEntry_sizeof(Save_FashionData_Get(p));
 }

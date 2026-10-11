@@ -37,12 +37,12 @@ void *PlayerProfile_GetPlayerName_NewString(void *profile, enum HeapID heapId);
 u8 PlayerProfile_GetTrainerGender(void *profile);
 void String_Delete(void *string);
 
-void sub_0202BC38(void *entry);
-void sub_0202BC60(void *entry);
-void sub_0202BC88(void *entry, void *mon, void *value);
-void sub_0202BCAC(void *entry, void *source, int index);
+void FashionEntry_MarkSaved(void *entry);
+void FashionEntry_Clear(void *entry);
+void FashionEntry_SetMon(void *entry, void *mon, void *value);
+void FashionEntry_PlaceItem(void *entry, void *source, int index);
 void sub_0202BD60(void *entry, u8 value);
-void sub_0202BDC8(void *entry, void *string, u8 value);
+void FashionEntry_SetMonSecondText(void *entry, void *string, u8 value);
 
 /* --- in-module callees not transcribed in this candidate --- */
 void ov41_02247414(Ov41Work *w);

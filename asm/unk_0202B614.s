@@ -5,8 +5,8 @@
 
 	.text
 
-	thumb_func_start sub_0202BCAC
-sub_0202BCAC: ; 0x0202BCAC
+	thumb_func_start FashionEntry_PlaceItem
+FashionEntry_PlaceItem: ; 0x0202BCAC
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x14
 	add r4, r1, #0
@@ -62,7 +62,7 @@ _0202BD0C:
 	bl GF_AssertFail
 _0202BD1C:
 	ldr r0, [r5]
-	bl sub_0202B614
+	bl IsValidFashionMagic
 	cmp r0, #0
 	bne _0202BD2A
 	bl GF_AssertFail
@@ -85,7 +85,7 @@ _0202BD2A:
 	lsr r1, r1, #0x18
 	lsr r2, r2, #0x18
 	lsr r3, r3, #0x18
-	bl sub_0202B770
+	bl SetFashionItemPlacement
 	ldr r1, [r5, #0x3c]
 	ldr r0, [sp, #4]
 	orr r0, r1
@@ -93,4 +93,4 @@ _0202BD2A:
 	add sp, #0x14
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end sub_0202BCAC
+	thumb_func_end FashionEntry_PlaceItem

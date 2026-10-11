@@ -31,8 +31,8 @@
 	.public ov40_02235DAC
 	.public ov40_02235E34
 	.public ov40_02245CD4
-	.public sub_0202BE60
-	.public sub_0202BE98
+	.public FashionEntry_GetMonSecondText
+	.public FashionEntry_GetMailMessageWord
 	.text
 
 	thumb_func_start ov40_02235B4C
@@ -92,14 +92,14 @@ _02235B66:
 	lsl r0, r0, #2
 	ldr r0, [r6, r0]
 	add r1, r4, #0
-	bl sub_0202BE60
+	bl FashionEntry_GetMonSecondText
 	add r0, r5, #0
 	add r1, r4, #0
 	bl ov40_02230DCC
 	mov r0, #0x8b
 	lsl r0, r0, #2
 	ldr r0, [r6, r0]
-	bl sub_0202BE98
+	bl FashionEntry_GetMailMessageWord
 	add r5, r0, #0
 	mov r0, #1
 	str r0, [sp]
@@ -229,14 +229,14 @@ _02235C96:
 	lsl r0, r0, #2
 	ldr r0, [r6, r0]
 	add r1, r4, #0
-	bl sub_0202BE60
+	bl FashionEntry_GetMonSecondText
 	add r0, r5, #0
 	add r1, r4, #0
 	bl ov40_02230DCC
 	mov r0, #0x8e
 	lsl r0, r0, #2
 	ldr r0, [r6, r0]
-	bl sub_0202BE98
+	bl FashionEntry_GetMailMessageWord
 	add r5, r0, #0
 	mov r0, #1
 	str r0, [sp]

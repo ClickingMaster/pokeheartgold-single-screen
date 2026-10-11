@@ -98,10 +98,11 @@ typedef struct WmspStatus {
     WmspParentParam parentParam; // copied from the ARM9 by WMSP_SetParentParam
     u8 childMacAddress[15][6];
     u16 childBitmap; // bit n: child n (aid) is connected
-    u8 unk_184[0x188 - 0x184];
-    u16 aid; // 0: this station is the parent
+    void *scanBuf;   // WMSP_StartScan: ARM9 buffer for the BSS description found
+    u16 aid;         // 0: this station is the parent
     u8 bssid[6];
-    u8 unk_190[0x196 - 0x190];
+    u16 scanChannel;
+    u8 unk_192[0x196 - 0x192];
     u16 wepMode; // WMSP_SetWEPKey: 0 none, 1-3 enabled
     u32 wepEnabled;
     u8 wepKey[0x50];
@@ -287,7 +288,41 @@ u16 *WMSPi_WL_NoArg(u16 *buf, u16 command, u16 replyLength);
 // wmsp_initialize.c
 void WMSP_Initialize(u32 *request);
 
+// wmsp_end.c
+void WmspError_06002FC0(u16 command, u16 result);
+void WMSP_End(void *request);
+void __VENEER_PM_SetLEDPattern(int pattern);
+void PM_SetLEDPattern(int pattern);
+void WMSP_SetParentParam(u32 *request);
+
+// wmsp_scan.c
+void WmspError_060033F4(u16 command, u16 result);
+void WMSP_EndParent(void *request);
+void WmspError_060035F4(u16 command, u16 result);
+void WMSP_StartScan(void *request);
+u32 WMSP_GetRssi8_06003988(int rssi);
+void WMSP_AddRssiToRandomPool(u32 rssi);
+
+// wmsp_end_scan.c
+void __VENEER__u32_div_f(void);
+void _u32_div_f(void);
+void WmspError_06003ED4(u16 command, u16 result, BOOL scanEx);
+void WMSP_EndScan(void *request);
+void WmspError_06003FF0(u16 command, u16 result);
+
+// wmsp_disconnect.c
+void __VENEER__s32_div_f(void);
+void _s32_div_f(void);
+void WmspError_060045D0(u16 command, u16 result, u16 detail);
+void WMSP_Disconnect(u32 *request);
+
+// wmsp_disconnect_ind.c
+void WMSP_IndicateDisconnectionFromMyself(BOOL parent, u16 aid, void *mac);
+void WmspError_06004CB4(u16 command, u16 result, u16 aidBitmap, u16 disconnected);
+void WmspIndError(u16 a, u16 b, u16 c, u16 d);
+
 // defined in the later WMSP files
+BOOL WMSP_DisconnectCore(u32 *request, BOOL unk, u16 *result);
 u16 *WMSP_GetBuffer4Callback2Wm9(void);
 void WMSP_ReturnResult2Wm9(void *result);
 void WMSP_CleanSendQueue(u16 aidBitmap);

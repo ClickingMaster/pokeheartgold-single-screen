@@ -1808,11 +1808,11 @@ BOOL ScrCmd_436(ScriptContext *ctx) {
 static BOOL sub_02042A30(FieldSystem *fieldSystem, int a1, int a2) {
     SaveFashionData *fashionData = Save_FashionData_Get(fieldSystem->saveData);
     if (a1 == 0) {
-        if (!sub_0202B9EC(fashionData, a2)) {
+        if (!Save_FashionData_IsEntrySaved(fashionData, a2)) {
             return FALSE;
         }
     } else {
-        if (!sub_0202BA08(fashionData, a2)) {
+        if (!Save_FashionData_IsLargeEntrySaved(fashionData, a2)) {
             return FALSE;
         }
     }
@@ -1954,7 +1954,7 @@ BOOL ScrCmd_255(ScriptContext *ctx) {
 
 BOOL ScrCmd_256(ScriptContext *ctx) {
     u16 r4 = ScriptGetVar(ctx);
-    sub_0202BD7C(sub_0202B9B8(Save_FashionData_Get(ctx->fieldSystem->saveData), 0), r4);
+    FashionEntry_SetMailMessageWord(Save_FashionData_GetEntry(Save_FashionData_Get(ctx->fieldSystem->saveData), 0), r4);
     return TRUE;
 }
 
@@ -3278,7 +3278,7 @@ BOOL ScrCmd_404(ScriptContext *ctx) {
     u16 r4 = ScriptGetVar(ctx);
     u16 r6 = ScriptGetVar(ctx);
     u16 *p_ret = ScriptGetVarPointer(ctx);
-    *p_ret = sub_0202BA2C(Save_FashionData_GetFashionCase(Save_FashionData_Get(ctx->fieldSystem->saveData)), r4, r6);
+    *p_ret = FashionCase_CanGiveAccessory(Save_FashionData_GetFashionCase(Save_FashionData_Get(ctx->fieldSystem->saveData)), r4, r6);
     return FALSE;
 }
 
@@ -3286,7 +3286,7 @@ BOOL ScrCmd_405(ScriptContext *ctx) {
     u16 r7 = ScriptGetVar(ctx);
     u16 r6 = ScriptGetVar(ctx);
     u16 *p_ret = ScriptGetVarPointer(ctx);
-    *p_ret = r6 <= sub_0202BA70(Save_FashionData_GetFashionCase(Save_FashionData_Get(ctx->fieldSystem->saveData)), r7);
+    *p_ret = r6 <= FashionCase_GetAccessoryCount(Save_FashionData_GetFashionCase(Save_FashionData_Get(ctx->fieldSystem->saveData)), r7);
     return FALSE;
 }
 
@@ -3299,7 +3299,7 @@ BOOL ScrCmd_406(ScriptContext *ctx) {
 BOOL ScrCmd_407(ScriptContext *ctx) {
     u16 r6 = ScriptGetVar(ctx);
     u16 *p_ret = ScriptGetVarPointer(ctx);
-    *p_ret = sub_0202BA5C(Save_FashionData_GetFashionCase(Save_FashionData_Get(ctx->fieldSystem->saveData)), r6);
+    *p_ret = FashionCase_HasWallpaper(Save_FashionData_GetFashionCase(Save_FashionData_Get(ctx->fieldSystem->saveData)), r6);
     return FALSE;
 }
 
@@ -3806,7 +3806,7 @@ BOOL ScrCmd_526(ScriptContext *ctx) {
     // (though unlikely) that some element could randomly
     // be equal to 1 unintentionally on entry.
     for (i = 0; i < 16; i++) {
-        if (sub_0202BA2C(fashionCase, i + 34, 1) == TRUE) {
+        if (FashionCase_CanGiveAccessory(fashionCase, i + 34, 1) == TRUE) {
             sp4[i] = 1;
             n++;
         }
@@ -3864,7 +3864,7 @@ BOOL ScrCmd_534(ScriptContext *ctx) {
 BOOL ScrCmd_536(ScriptContext *ctx) {
     u16 r4 = ScriptGetVar(ctx);
     u16 r6 = ScriptGetVar(ctx);
-    sub_0202BB7C(Save_FashionData_GetFashionCase(Save_FashionData_Get(ctx->fieldSystem->saveData)), r4, r6);
+    FashionCase_TakeAccessory(Save_FashionData_GetFashionCase(Save_FashionData_Get(ctx->fieldSystem->saveData)), r4, r6);
     return FALSE;
 }
 

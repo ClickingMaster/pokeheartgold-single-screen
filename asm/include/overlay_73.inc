@@ -142,9 +142,9 @@
 .public PlayerProfile_GetAvatar
 .public PlayerProfile_GetVersion
 .public Options_GetFrame
-.public sub_0202B994
-.public sub_0202B9B8
-.public sub_0202BF80
+.public FashionEntry_sizeof
+.public Save_FashionData_GetEntry
+.public Save_FashionData_InsertEntries
 .public Save_FashionData_Get
 .public Save_FriendGroup_Get
 .public sub_0202C8C4

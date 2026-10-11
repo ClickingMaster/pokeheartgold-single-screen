@@ -2,7 +2,7 @@
 
 #include "get_egg.h"
 #include "naming_screen.h"
-#include "overlay_95.h"
+#include "hatch_egg_app.h"
 #include "trainer_memo.h"
 #include "unk_02055244.h"
 #include "unk_020552A4.h"

@@ -4,41 +4,41 @@
 	.public HatchEggApp_Exit
 	.public HatchEggApp_Init
 	.public HatchEggApp_Main
-	.public ov95_021E5954
-	.public ov95_021E5974
-	.public ov95_021E59F8
-	.public ov95_021E5A38
-	.public ov95_021E5BBC
-	.public ov95_021E5C44
-	.public ov95_021E5CAC
-	.public ov95_021E5D44
-	.public ov95_021E5D98
-	.public ov95_021E5DB4
-	.public ov95_021E5DD0
-	.public ov95_021E5E18
-	.public ov95_021E5E90
-	.public ov95_021E5EC0
-	.public ov95_021E5EF8
-	.public ov95_021E6000
-	.public ov95_021E60A4
-	.public ov95_021E619C
-	.public ov95_021E623C
-	.public ov95_021E62A4
-	.public ov95_021E6314
-	.public ov95_021E65A0
-	.public ov95_021E6838
-	.public ov95_021E68A8
-	.public ov95_021E6900
-	.public ov95_021E6964
-	.public ov95_021E6B74
-	.public ov95_021E7020
-	.public ov95_021E70BC
-	.public ov95_021E7258
-	.public ov95_021E7308
-	.public ov95_021E7328
-	.public ov95_021E7388
-	.public ov95_021E7410
-	.public ov95_021E7450
+	.public HatchEggApp_Create3DVramMan
+	.public HatchEggApp_Init3D
+	.public HatchEggApp_InitParticleVram
+	.public HatchEggApp_InitBgs
+	.public HatchEggApp_LoadWindowGfx
+	.public HatchEggApp_CreateMessageWindow
+	.public HatchEggApp_PrintMessage
+	.public HatchEggApp_LoadBackground
+	.public HatchEggApp_AllocParticleTexVram
+	.public HatchEggApp_AllocParticlePlttVram
+	.public HatchEggApp_CreateParticleSystem
+	.public HatchEggApp_CreateParticleSystemFromNarc
+	.public HatchEggParticles_New
+	.public HatchEggParticles_Emit
+	.public HatchEggApp_LoadSpriteResources
+	.public HatchEggApp_CreateSprites
+	.public HatchEggApp_StepEggShake
+	.public HatchEggApp_InitSpriteSystem
+	.public HatchEggApp_CreatePokepic
+	.public HatchEggApp_StartPokepicAnim
+	.public HatchEggApp_RunEggScene
+	.public HatchEggApp_RunManaphyEggScene
+	.public HatchEggApp_ShakeEggOnce
+	.public HatchEggApp_ShakeEggTwice
+	.public HatchEggApp_ShakeEggCrack
+	.public HatchEggApp_HatchEgg
+	.public HatchEggApp_HatchManaphyEgg
+	.public HatchEggYesNoMenu_New
+	.public HatchEggYesNoMenu_LoadGfx
+	.public HatchEggYesNoMenu_Run
+	.public HatchEggYesNoMenu_RemoveWindows
+	.public HatchEggYesNoMenu_PrintButton
+	.public HatchEggYesNoMenu_CreateCursor
+	.public HatchEggYesNoMenu_UpdateCursor
+	.public HatchEggYesNoMenu_HandleInput
 	.public ov95_021E7548
 	.public ov95_021E755C
 	.public ov95_021E7574
@@ -55,30 +55,30 @@
 
 
 	.text
-	.public ov95_021E5900
-	.public ov95_021E5928
-	.public ov95_021E5B24
-	.public ov95_021E5B58
-	.public ov95_021E5B7C
-	.public ov95_021E5B9C
-	.public ov95_021E5D34
-	.public ov95_021E5E40
-	.public ov95_021E5E58
-	.public ov95_021E5EDC
-	.public ov95_021E5EF0
-	.public ov95_021E6150
-	.public ov95_021E6184
-	.public ov95_021E6228
-	.public ov95_021E62E4
-	.public ov95_021E62F0
-	.public ov95_021E6300
-	.public ov95_021E67F0
-	.public ov95_021E6FC4
-	.public ov95_021E7078
-	.public ov95_021E7208
-	.public ov95_021E72B8
-	.public ov95_021E7404
-	.public ov95_021E7514
+	.public HatchEggApp_HideLayers
+	.public HatchEggApp_InitBlend
+	.public HatchEggApp_VBlankCB
+	.public HatchEggApp_Draw3D
+	.public HatchEggApp_FadeIn
+	.public HatchEggApp_FadeOut
+	.public HatchEggApp_RemoveMessageWindow
+	.public HatchEggApp_DestroyParticleSystem
+	.public HatchEggParticles_EmitterCB
+	.public HatchEggParticles_IsRunning
+	.public HatchEggParticles_Free
+	.public HatchEggApp_UpdateEggShake
+	.public HatchEggApp_DeleteSprites
+	.public HatchEggApp_FreeSpriteSystem
+	.public HatchEggApp_DeletePokepic
+	.public HatchEggApp_SetPokepicVanished
+	.public HatchEggApp_RunScene
+	.public HatchEggApp_WaitBeforeShake
+	.public HatchEggYesNoMenu_InitBgs
+	.public HatchEggYesNoMenu_Free
+	.public HatchEggYesNoMenu_Show
+	.public HatchEggYesNoMenu_AddWindows
+	.public HatchEggYesNoMenu_DeleteCursor
+	.public HatchEggYesNoMenu_IsPressAnimFinished
 	.rodata
 
 	.public ov95_021E7538
@@ -200,8 +200,8 @@ ov95_021E7770: ; 0x021E7770
 	.byte 0xCD, 0xCC, 0x4C, 0x3F, 0x66, 0x66, 0x66, 0x3F, 0x00, 0x00, 0x80, 0x3F, 0x00, 0x00, 0x80, 0x3F
 
 ov95_021E7810: ; 0x021E7810
-	.word ov95_021E6314
-	.word ov95_021E65A0
+	.word HatchEggApp_RunEggScene
+	.word HatchEggApp_RunManaphyEggScene
 
 ov95_021E7818: ; 0x021E7818
 	.short 0x0080, 0x0048

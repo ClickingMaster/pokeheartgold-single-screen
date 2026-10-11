@@ -213,7 +213,7 @@ extern void ClearFrameAndWindow2(Window *window, BOOL dont_copy_to_vram);       
 extern void RemoveWindow(Window *window);                                                                                   // render_window.h, not included
 extern void *Save_FashionData_Get(SaveData *saveData);                                                                      // fashion_case.h, not included
 extern void *Save_FashionData_GetFashionCase(void *fashionData);                                                            // fashion_case.h, not included
-extern int sub_0202BA2C(void *fashionCase, int a1, int a2);                                                                 // fashion_case.h, not included
+extern int FashionCase_CanGiveAccessory(void *fashionCase, int a1, int a2);                                                                 // fashion_case.h, not included
 extern void FashionCase_GiveFashionItem(void *fashionCase, int id, int quantity);                                           // fashion_case.h, not included
 extern void SetFlag99C(void *state);                                                                                        // sys_flags.h, not included
 extern BOOL DialogBox_IsPrintFinished(u8 printerId);                                                                        // text_0205B4EC.h, not included

@@ -90,8 +90,8 @@ extern void ov35_02259D80(void *, int, int);
 extern void ov27_0225C41C(void *, void *, void *);
 extern void ov27_0225A2CC(void *);
 extern void ov27_0225A2EC(void *, int);
-extern void *ov34_0225D7A8(FieldSys *);
-extern void ov34_0225D87C(void *);
+extern void *UnionChatLog_Init(FieldSys *);
+extern void UnionChatLog_Exit(void *);
 
 extern void *ov27_02259F80(void *, void *, FieldSys *, void *);
 extern void ov27_0225A19C(void *, void *);

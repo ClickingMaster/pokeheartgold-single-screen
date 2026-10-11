@@ -87,5 +87,5 @@
 .public gSystem
 .public ov01_021F6A9C
 .public ov01_021F6B10
-.public ov34_0225D7A8
-.public ov34_0225D87C
+.public UnionChatLog_Init
+.public UnionChatLog_Exit

@@ -150,11 +150,11 @@ void ov41_022479A8(void *dst, Ov41Work *w, void *profile) {
     Ov41ListNode *node;
     int count;
 
-    sub_0202BC60(dst);
-    sub_0202BC88(dst, (void *)W(w, 0x84), AT(w, 0x78));
+    FashionEntry_Clear(dst);
+    FashionEntry_SetMon(dst, (void *)W(w, 0x84), AT(w, 0x78));
     if (profile != NULL) {
         void *name = PlayerProfile_GetPlayerName_NewString(profile, HEAP_ID_13);
-        sub_0202BDC8(dst, name, PlayerProfile_GetTrainerGender(profile));
+        FashionEntry_SetMonSecondText(dst, name, PlayerProfile_GetTrainerGender(profile));
         String_Delete(name);
     }
     count = 0;
@@ -162,19 +162,19 @@ void ov41_022479A8(void *dst, Ov41Work *w, void *profile) {
     list = (Ov41ListNode *)AT(w, 0x14);
     for (; node != list; node = node->next) {
         if (node->flag == 0) {
-            sub_0202BCAC(dst, node->data, count);
+            FashionEntry_PlaceItem(dst, node->data, count);
             count++;
         }
     }
     list = (Ov41ListNode *)AT(w, 4);
     for (node = (Ov41ListNode *)W(w, 0xc); node != list; node = node->next) {
         if (node->flag == 0) {
-            sub_0202BCAC(dst, node->data, count);
+            FashionEntry_PlaceItem(dst, node->data, count);
             count++;
         }
     }
     sub_0202BD60(dst, (u8)W(w, 0x74));
-    sub_0202BC38(dst);
+    FashionEntry_MarkSaved(dst);
 }
 
 BOOL ov41_02247A48(Ov41TransitionTask *env, int x, int y, int limit) {

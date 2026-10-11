@@ -195,11 +195,11 @@
 .public sub_0202AC1C
 .public sub_0202AC38
 .public sub_0202AC60
-.public sub_0202B998
-.public sub_0202B9B8
-.public sub_0202BC10
-.public sub_0202BE60
-.public sub_0202BE98
+.public FashionEntry_New
+.public Save_FashionData_GetEntry
+.public FashionEntry_IsSaved
+.public FashionEntry_GetMonSecondText
+.public FashionEntry_GetMailMessageWord
 .public Save_FashionData_Get
 .public GetIGTHours
 .public GetIGTMinutes

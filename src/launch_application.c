@@ -800,7 +800,7 @@ static UnkStruct_0203F0D0 *sub_0203F0D0(enum HeapID heapID, SaveData *saveData, 
     memset(ptr, 0, sizeof(UnkStruct_0203F0D0));
     ptr->mon = Party_GetMonByIndex(SaveArray_Party_Get(saveData), partyIdx);
     SaveFashionData *fashionSave = Save_FashionData_Get(saveData);
-    SaveFashionDataSub *var1 = sub_0202B9B8(fashionSave, 0);
+    SaveFashionDataSub *var1 = Save_FashionData_GetEntry(fashionSave, 0);
     FashionCase *fashionCase = Save_FashionData_GetFashionCase(fashionSave);
     ptr->unk4 = var1;
     ptr->fashionCase = fashionCase;

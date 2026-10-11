@@ -45,7 +45,7 @@ void *ov41_0224B630(void *args) {
     memset(work, 0, 0x268);
     S32_AT(work, 0x238) = S32_AT(args, 0x68);
     PTR_AT(work, 0x234) = AllocMonZeroed(S32_AT(args, 0x68));
-    sub_0202BEF4(PTR_AT(args, 0), PTR_AT(work, 0x234));
+    FashionMon_ToPokemon(PTR_AT(args, 0), PTR_AT(work, 0x234));
     ov41_0224B6CC(work, args);
     ov41_02246544(work, PTR_AT(args, 0x58), S32_AT(args, 0x68));
     ov41_022499B4((u8 *)work + 0x184, 0x15, S32_AT(args, 0x68));
@@ -101,8 +101,8 @@ void ov41_0224B780(void *work, void *rawArgs) {
     bundle.unk1C = (u8 *)work + 0x184;
     bundle.unk20 = (void *)0x15;
     ov41_02247F3C((u8 *)work + 0x190, &bundle);
-    ov41_02247FAC((u8 *)work + 0x190, PTR_AT(work, 0x234), temporary, sub_0202BEE4(args->base), sub_0202BEEC(args->base), sub_0202BEDC(args->base), args->heapId);
+    ov41_02247FAC((u8 *)work + 0x190, PTR_AT(work, 0x234), temporary, FashionMon_GetX(args->base), FashionMon_GetY(args->base), FashionMon_GetZ(args->base), args->heapId);
     for (i = 0; i < args->count; i++) {
-        ov41_02248044((u8 *)work + 0x190, sub_0202BEFC(args->mons[i]), sub_0202BF00(args->mons[i]), sub_0202BF04(args->mons[i]), sub_0202BF08(args->mons[i]));
+        ov41_02248044((u8 *)work + 0x190, FashionItem_GetId(args->mons[i]), FashionItem_GetX(args->mons[i]), FashionItem_GetY(args->mons[i]), FashionItem_GetZ(args->mons[i]));
     }
 }

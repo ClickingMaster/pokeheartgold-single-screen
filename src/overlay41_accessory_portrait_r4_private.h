@@ -60,11 +60,11 @@ typedef struct Ov41PortraitConfig {
     enum HeapID heapId;
 } Ov41PortraitConfig;
 
-BOOL sub_0202BDEC(SaveFashionDataSub *fashionData, int index);
-SaveFashionMon *sub_0202BE14(SaveFashionDataSub *fashionData);
-u8 *sub_0202BE2C(SaveFashionDataSub *fashionData, int index);
+BOOL FashionEntry_IsItemPlaced(SaveFashionDataSub *fashionData, int index);
+SaveFashionMon *FashionEntry_GetMon(SaveFashionDataSub *fashionData);
+u8 *FashionEntry_GetItem(SaveFashionDataSub *fashionData, int index);
 u8 sub_0202BE80(SaveFashionDataSub *fashionData);
-u8 sub_0202BEFC(u8 *item);
+u8 FashionItem_GetId(u8 *item);
 
 void ov41_02246130(void);
 void ov41_02246150(void);

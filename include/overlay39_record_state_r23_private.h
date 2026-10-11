@@ -69,5 +69,5 @@ void ov39_02228B04(Ov39AppR23 *, void *, int, u32, u32);
 void ov00_021EC8D8(void);
 void sub_0203946C(void);
 void WirelessStatusIcon_Destroy(void);
-u32 sub_0202B994(void *);
+u32 FashionEntry_sizeof(void *);
 #endif

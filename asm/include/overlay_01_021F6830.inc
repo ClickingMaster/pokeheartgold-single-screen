@@ -55,6 +55,6 @@
 .public CommClubButtons_Init
 .public CommClubButtons_Exit
 .public CommClubButtons_IsExitDone
-.public ov34_0225D7A8
-.public ov34_0225D87C
+.public UnionChatLog_Init
+.public UnionChatLog_Exit
 .public ov35_02259D80

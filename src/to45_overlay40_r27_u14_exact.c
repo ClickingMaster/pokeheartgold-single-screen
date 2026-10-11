@@ -87,7 +87,7 @@ int ov40_0223414C(void *p) {
     WORD(inner, 0x21C) = 0x48;
     WORD(inner, 0x220) = 0x10;
     WORD(inner, 0x224) = 0x6D;
-    PTR(inner, 0x238) = sub_0202B998(0x6D);
+    PTR(inner, 0x238) = FashionEntry_New(0x6D);
     PTR(inner, 0x250) = sub_020314A4(0x6D);
     BgClearTilemapBufferAndCommit(PTR(p, 0x24), 2);
     BgClearTilemapBufferAndCommit(PTR(p, 0x24), 3);
@@ -157,7 +157,7 @@ int ov40_02234330(void *p) {
         GfGfx_EngineBTogglePlanes(8, 1);
         GfGfx_EngineATogglePlanes(8, 1);
         ov40_02230964(p, 1);
-        PTR(inner, 0x22C) = sub_0202B9B8(Save_FashionData_Get(PTR(p, 0x830)), 0);
+        PTR(inner, 0x22C) = Save_FashionData_GetEntry(Save_FashionData_Get(PTR(p, 0x830)), 0);
         if (PTR(inner, 0x228) == NULL) {
             PTR(inner, 0x228) = ov41_0224B530((u8 *)inner + 0x218, PTR(inner, 0x22C));
             ov41_0224B5D0(PTR(inner, 0x228), 1);

@@ -214,12 +214,7 @@ Static main
     Object src/save_gymmick.o
     Object src/save_palpad.o
     Object src/mail.o
-    Object src/fashion_save.o
-    Object src/fashion_case.o
-    Object src/fashion_inventory.o
-    Object src/r40_unk_0202B614_run1.o
-    Object src/fashion_records.o
-    Object src/fashion_save_access.o
+    Object src/save_fashion.o
     Object src/friend_roster.o
     Object asm/unk_0202C034.o
     Object src/friend_group.o
@@ -1301,27 +1296,11 @@ Static main
     Object lib/NitroSystem/src/g2d_node.o
     Object lib/NitroSystem/src/g2d_cell_animation.o
     Object lib/NitroSystem/src/g2d_mc_animation.o
-    Object src/to70_nnsys_residual_24_run01.o
-    Object src/op90_op90_to80_extra1758_residual_1_residual_1_r01.o
-    Object src/op90_to80_extra1758_residual_1_r01.o
-    Object src/op90_to80_extra1758_residual_1_r02.o
-    Object src/to80_extra1758_run01.o
-    Object src/op90_to80_extra1758_residual_2_r01.o
-    Object src/op90_op90_to80_extra1758_residual_2_residual_1_r01.o
-    Object src/to80_extra1476_run01.o
-    Object src/to70_nnsys_residual_24_run02.o
-    Object src/to59_nnsys_run36.o
-    Object src/to70_nnsys_residual_25_run01.o
-    Object src/to59_nnsys_run37.o
-    Object src/to80_extra1855_run01.o
-    Object src/to59_nnsys_run38.o
-    Object src/op90_op90_to59_nnsys_residual_27_residual_1_r01.o
-    Object src/op90_to59_nnsys_residual_27_r01.o
-    Object src/op90_op90_to59_nnsys_residual_27_residual_2_r01.o
-    Object src/op90_op90_to59_nnsys_residual_27_residual_2_r02.o
-    Object src/op90_op90_to59_nnsys_residual_27_residual_2_r03.o
-    Object src/to59_nnsys_run39.o
-    Object src/to70_nnsys_residual_28_run01.o
+    Object lib/NitroSystem/src/g2d_renderer_identity.o
+    Object lib/NitroSystem/src/g2d_renderer_mtx_cache.o
+    Object lib/NitroSystem/src/g2d_renderer.o
+    Object lib/NitroSystem/src/g2d_renderer_mtx_stack.o
+    Object lib/NitroSystem/src/g2d_renderer_transform.o
     Object lib/NitroSystem/src/g2d_cell_transfer_manager.o
     Object lib/NitroSystem/src/g2d_oam_soft_emu.o
     Object lib/NitroSystem/src/g2d_renderer_core.o
@@ -4796,27 +4775,9 @@ Overlay OVY_33
 Overlay OVY_34
 {
     After OVY_27
-    Object src/overlay34_helpers_1.o
-    Object src/overlay34_remaining_1.o
-    Object src/overlay34_helpers_2.o
-    Object src/r40_overlay_34_residual_2_run1.o
-    Object src/overlay34_helpers_3.o
-    Object src/r40_overlay_34_residual_3_run1.o
-    Object src/overlay34_helpers_4.o
-    Object src/r40_overlay_34_residual_4_run1.o
-    Object src/overlay34_helpers_5.o
-    Object src/r40_overlay_34_residual_5_run1.o
-    Object src/to90_extra2483_run01.o
-    Object src/r40_overlay_34_residual_5_run2.o
-    Object src/overlay34_helpers_6.o
-    Object src/r40_overlay_34_residual_6_run1.o
-    Object src/to70_overlay_34_residual_6_extra398_run01.o
-    Object src/r40_overlay_34_residual_6_run2.o
-    Object src/op90_overlay_34_residual_6_r40_residual_2_r01.o
-    Object src/r40_overlay_34_residual_6_run3.o
-    Object src/overlay34_helpers_7.o
-    Object asm/to70_overlay_34_residual_7_extra779_anchor.o
-    Object src/to70_overlay_34_residual_7_extra779_run01.o
+    Object src/union_chat_log.o
+    Object asm/union_chat_log_data.o
+    Object src/ov34_0225e630.o
 }
 Overlay OVY_35
 {
@@ -8891,40 +8852,7 @@ Overlay OVY_94
 Overlay OVY_95
 {
     After main
-    Object src/overlay95_helpers_1.o
-    Object src/overlay95_lifecycle_1.o
-    Object src/overlay95_helpers_2.o
-    Object src/overlay95_window_1.o
-    Object src/overlay95_helpers_3.o
-    Object src/to70_overlay_95_residual_3_extra1028_run01.o
-    Object src/overlay95_accessors_1.o
-    Object src/overlay95_helpers_4.o
-    Object src/to70_overlay_95_residual_4_extra1029_run01.o
-    Object src/overlay95_helpers_5.o
-    Object src/overlay95_sprite_resources_r5.o
-    Object src/to90_extra2500_run01.o
-    Object src/overlay95_sprite_motion_r5.o
-    Object src/overlay95_helpers_6.o
-    Object src/to70_overlay_95_residual_6_extra655_run01.o
-    Object src/overlay95_helpers_7.o
-    Object src/overlay95_pokepic_setup.o
-    Object src/overlay95_helpers_8.o
-    Object src/to47r5_ov95_hatch_state_r8.o
-    Object src/overlay95_helpers_9.o
-    Object src/overlay95_hatch_lifecycle_r9_run1.o
-    Object src/to58_ov95_hatch_gap.o
-    Object src/overlay95_hatch_lifecycle_r9_run2.o
-    Object src/overlay95_helpers_10.o
-    Object src/to70_overlay_95_residual_10_extra1027_run01.o
-    Object src/overlay95_helpers_11.o
-    Object src/to90_extra2056_run01.o
-    Object src/overlay95_helpers_12.o
-    Object src/to70_overlay_95_residual_12_extra868_run01.o
-    Object src/overlay95_helpers_13.o
-    Object src/r40_overlay_95_residual_13_run1.o
-    Object src/overlay95_helpers_14.o
-    Object src/to70_overlay_95_residual_14_extra350_run01.o
-    Object src/overlay95_helpers_15.o
+    Object src/hatch_egg_app.o
     Object asm/overlay_95_residual_15.o
 }
 Overlay OVY_96

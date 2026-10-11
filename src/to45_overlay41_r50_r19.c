@@ -37,11 +37,11 @@ void *MessageFormat_New(int);
 void Sprite_SetAnimCtrlSeq(void *, int);
 void Sprite_SetMatrix(void *, void *);
 void *String_New(int, int);
-void sub_0202BE60(void *, void *);
+void FashionEntry_GetMonSecondText(void *, void *);
 int FontID_String_GetWidth(int, void *, int);
 void AddTextPrinterParameterizedWithColor(void *, int, void *, int, int, int, int, int);
 void String_Delete(void *);
-int sub_0202BE98(void *);
+int FashionEntry_GetMailMessageWord(void *);
 void BufferECWord(void *, int, int);
 void *NewString_ReadMsgData(void *, int);
 void StringExpandPlaceholders(void *, void *, void *);
@@ -132,12 +132,12 @@ void ov41_0224BE80(void *work) {
     Sprite_SetMatrix(PTR_AT(work, 0x198), matrix);
 
     string = String_New(0xC, 0xD);
-    sub_0202BE60(PTR_AT(work, 0), string);
+    FashionEntry_GetMonSecondText(PTR_AT(work, 0), string);
     width = FontID_String_GetWidth(0, string, 0);
     AddTextPrinterParameterizedWithColor(PTR_AT(work, 0x19C), 0, string, 0x80 - width / 2, 7, 0, 0x10200, 0);
     String_Delete(string);
 
-    BufferECWord(format, 0, sub_0202BE98(PTR_AT(work, 0)));
+    BufferECWord(format, 0, FashionEntry_GetMailMessageWord(PTR_AT(work, 0)));
     string = String_New(0xC8, 0xD);
     message = NewString_ReadMsgData(msgData, 0x2D);
     StringExpandPlaceholders(format, string, message);

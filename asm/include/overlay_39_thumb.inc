@@ -90,7 +90,7 @@
 .public Save_PlayerData_GetIGTAddr
 .public Options_GetTextFrameDelay
 .public Options_GetFrame
-.public sub_0202B994
+.public FashionEntry_sizeof
 .public sub_0202C08C
 .public sub_0202C6F4
 .public sub_0202FBCC

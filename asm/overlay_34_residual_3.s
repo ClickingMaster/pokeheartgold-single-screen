@@ -1,60 +1,60 @@
 	.include "asm/macros.inc"
-	.public ov34_0225D520
-	.public ov34_0225D558
-	.public ov34_0225D5A0
-	.public ov34_0225D5F8
-	.public ov34_0225D650
-	.public ov34_0225D77C
-	.public ov34_0225D7A8
-	.public ov34_0225D87C
-	.public ov34_0225D900
-	.public ov34_0225D924
-	.public ov34_0225DA50
-	.public ov34_0225DB20
-	.public ov34_0225DC00
-	.public ov34_0225DC0C
-	.public ov34_0225DC18
-	.public ov34_0225DD04
-	.public ov34_0225DDB8
-	.public ov34_0225DE04
-	.public ov34_0225DE94
-	.public ov34_0225E020
-	.public ov34_0225E0E4
-	.public ov34_0225E164
-	.public ov34_0225E1C4
-	.public ov34_0225E2BC
-	.public ov34_0225E348
-	.public ov34_0225E428
-	.public ov34_0225E4A8
-	.public ov34_0225E4F8
-	.public ov34_0225E560
-	.public ov34_0225E56C
-	.public ov34_0225E58C
-	.public ov34_0225E5D4
-	.public ov34_0225E5DC
-	.public ov34_0225E5E4
-	.public ov34_0225E5EC
-	.public ov34_0225E630
-	.public _0225E694
-	.public ov34_0225E6A0
-	.public ov34_0225E6AC
-	.public ov34_0225E6C0
-	.public ov34_0225E6DC
-	.public ov34_0225E6F8
-	.public ov34_0225E714
-	.public ov34_0225E730
+	.public UnionChatLog_PrintMenuButton
+	.public UnionChatLog_Update
+	.public UnionChatLog_Task
+	.public UnionChatLog_InitText
+	.public UnionChatLog_AddWindows
+	.public UnionChatLog_RemoveWindows
+	.public UnionChatLog_Init
+	.public UnionChatLog_Exit
+	.public UnionChatLog_FreeBgs
+	.public UnionChatLog_InitBgs
+	.public UnionChatLog_InitSpriteResources
+	.public UnionChatLog_CreateSprites
+	.public UnionChatLog_NextLogIndex
+	.public UnionChatLog_AddLogIndex
+	.public UnionChatLog_DrawRow
+	.public UnionChatLog_DrawRows
+	.public UnionChatLog_SetThumbY
+	.public UnionChatLog_UpdateScrollbar
+	.public UnionChatLog_HandleTouchButtons
+	.public UnionChatLog_HandleTouchScrollbar
+	.public UnionChatLog_HandleScrollKeys
+	.public UnionChatLog_HandleInput
+	.public UnionChatLog_UpdateRowPress
+	.public UnionChatLog_GetFriendOfText
+	.public UnionChatLog_AddEntry
+	.public UnionChatLog_IsNewMessage
+	.public UnionChatLog_AppendMessage
+	.public UnionChatLog_CollectMessages
+	.public UnionChatLog_RequestRedraw
+	.public UnionChatLog_InitTouchRepeat
+	.public UnionChatLog_UpdateTouchRepeat
+	.public UnionChatLog_IsTouchRepeatTick
+	.public UnionChatLog_SetThumbFollowsScroll
+	.public UnionChatLog_GetThumbFollowsScroll
+	.public UnionChatLog_PressArrow
+	.public UnionChatLog_UpdateArrows
+	.public sUnionChatLogRowPressBgOffsets
+	.public sUnionChatLogSpriteYOffsets
+	.public sUnionChatLogScrollbarHitboxes
+	.public sUnionChatLogBgTemplateSub2
+	.public sUnionChatLogBgTemplateSub3
+	.public sUnionChatLogBgTemplateSub1
+	.public sUnionChatLogBgTemplateSub0
+	.public sUnionChatLogButtonHitboxes
 	.include "overlay_34.inc"
 	.include "global.inc"
 
 	.text
 
-	thumb_func_start ov34_0225D924
-ov34_0225D924: ; 0x0225D924
+	thumb_func_start UnionChatLog_InitBgs
+UnionChatLog_InitBgs: ; 0x0225D924
 	push {r3, r4, r5, lr}
 	sub sp, #0x80
 	add r4, r0, #0
-	bl ov34_0225D900
-	ldr r5, _0225DA40 ; =ov34_0225E714
+	bl UnionChatLog_FreeBgs
+	ldr r5, _0225DA40 ; =sUnionChatLogBgTemplateSub0
 	add r3, sp, #0x64
 	ldmia r5!, {r0, r1}
 	add r2, r3, #0
@@ -75,7 +75,7 @@ ov34_0225D924: ; 0x0225D924
 	mov r0, #1
 	mov r1, #0
 	bl GfGfx_EngineBTogglePlanes
-	ldr r5, _0225DA44 ; =ov34_0225E6F8
+	ldr r5, _0225DA44 ; =sUnionChatLogBgTemplateSub1
 	add r3, sp, #0x48
 	ldmia r5!, {r0, r1}
 	add r2, r3, #0
@@ -96,7 +96,7 @@ ov34_0225D924: ; 0x0225D924
 	mov r0, #2
 	mov r1, #0
 	bl GfGfx_EngineBTogglePlanes
-	ldr r5, _0225DA48 ; =ov34_0225E6C0
+	ldr r5, _0225DA48 ; =sUnionChatLogBgTemplateSub2
 	add r3, sp, #0x2c
 	ldmia r5!, {r0, r1}
 	add r2, r3, #0
@@ -117,7 +117,7 @@ ov34_0225D924: ; 0x0225D924
 	mov r0, #4
 	mov r1, #0
 	bl GfGfx_EngineBTogglePlanes
-	ldr r5, _0225DA4C ; =ov34_0225E6DC
+	ldr r5, _0225DA4C ; =sUnionChatLogBgTemplateSub3
 	add r3, sp, #0x10
 	ldmia r5!, {r0, r1}
 	add r2, r3, #0
@@ -176,15 +176,15 @@ ov34_0225D924: ; 0x0225D924
 	add sp, #0x80
 	pop {r3, r4, r5, pc}
 	nop
-_0225DA40: .word ov34_0225E714
-_0225DA44: .word ov34_0225E6F8
-_0225DA48: .word ov34_0225E6C0
-_0225DA4C: .word ov34_0225E6DC
-	thumb_func_end ov34_0225D924
+_0225DA40: .word sUnionChatLogBgTemplateSub0
+_0225DA44: .word sUnionChatLogBgTemplateSub1
+_0225DA48: .word sUnionChatLogBgTemplateSub2
+_0225DA4C: .word sUnionChatLogBgTemplateSub3
+	thumb_func_end UnionChatLog_InitBgs
 
 
-	thumb_func_start ov34_0225DA50
-ov34_0225DA50: ; 0x0225DA50
+	thumb_func_start UnionChatLog_InitSpriteResources
+UnionChatLog_InitSpriteResources: ; 0x0225DA50
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x10
 	add r6, r0, #0
@@ -281,11 +281,11 @@ _0225DA6C:
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
 _0225DB1C: .word 0x000003E7
-	thumb_func_end ov34_0225DA50
+	thumb_func_end UnionChatLog_InitSpriteResources
 
 
-	thumb_func_start ov34_0225DB20
-ov34_0225DB20: ; 0x0225DB20
+	thumb_func_start UnionChatLog_CreateSprites
+UnionChatLog_CreateSprites: ; 0x0225DB20
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x5c
 	ldr r1, _0225DBF8 ; =0x000003E7
@@ -339,7 +339,7 @@ ov34_0225DB20: ; 0x0225DB20
 	mov r0, #2
 	str r0, [sp, #0x54]
 	mov r0, #4
-	ldr r6, _0225DBFC ; =ov34_0225E6A0
+	ldr r6, _0225DBFC ; =sUnionChatLogSpriteYOffsets
 	str r4, [sp, #0x50]
 	str r0, [sp, #0x58]
 	lsl r7, r7, #0x18
@@ -390,5 +390,5 @@ _0225DBBC:
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
 _0225DBF8: .word 0x000003E7
-_0225DBFC: .word ov34_0225E6A0
-	thumb_func_end ov34_0225DB20
+_0225DBFC: .word sUnionChatLogSpriteYOffsets
+	thumb_func_end UnionChatLog_CreateSprites

@@ -10,8 +10,8 @@ void sub_02087A84(void *, u32, u32);
 void ov40_0222DD9C(void *, u32);
 BOOL ov40_0222DD94(void);
 void *Save_FashionData_Get(void *);
-void *sub_0202B9B8(void *, u32);
-BOOL sub_0202BC10(void *);
+void *Save_FashionData_GetEntry(void *, u32);
+BOOL FashionEntry_IsSaved(void *);
 void PlaySE(u32);
 void ov40_0222C23C(u32, u32, void *);
 TouchHitboxController *TouchHitboxController_Create(const void *, u32, TouchCallback, void *, u32);
@@ -122,7 +122,7 @@ BOOL ov40_0222C15C(void *p) {
     case 5:
         if (value == 0) {
             void *fashion = Save_FashionData_Get(PTR_AT(p, 0x830));
-            result = sub_0202BC10(sub_0202B9B8(fashion, value));
+            result = FashionEntry_IsSaved(Save_FashionData_GetEntry(fashion, value));
             if (!result) {
                 ov40_0222DD9C(p, 0x122);
             }

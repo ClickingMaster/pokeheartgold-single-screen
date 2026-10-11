@@ -3,11 +3,11 @@
 void ov41_0224B8F0(Ov41AccessoryList *list, SaveFashionDataSub *fashionData) {
     int i;
 
-    list->mon = sub_0202BE14(fashionData);
+    list->mon = FashionEntry_GetMon(fashionData);
     list->count = 0;
     for (i = 0; i < 10; i++) {
-        if (sub_0202BDEC(fashionData, i)) {
-            list->items[list->count] = sub_0202BE2C(fashionData, i);
+        if (FashionEntry_IsItemPlaced(fashionData, i)) {
+            list->items[list->count] = FashionEntry_GetItem(fashionData, i);
             list->count++;
         }
     }
@@ -25,7 +25,7 @@ void ov41_0224B958(Ov41Work *work, Ov41GfxManagers *managers, Ov41AccessoryList 
     void *raw;
 
     for (i = 0; i < list->count; i++) {
-        id = sub_0202BEFC(list->items[i]);
+        id = FashionItem_GetId(list->items[i]);
         if (GF2dGfxRawResMan_DoesNotHaveObjWithId(managers->charManager, id) == TRUE) {
             raw = GfGfxLoader_LoadFromOpenNarc(work->narc, id + 1, FALSE, heapId, TRUE);
             GF2dGfxRawResMan_AllocObj(managers->charManager, raw, id);
@@ -52,7 +52,7 @@ BOOL AccessoryPortrait_Init(OverlayManager *man, int *state) {
     Main_SetVBlankIntrCB(ov41_0224BBF0, work);
     HBlankInterruptDisable();
     args = OverlayManager_GetArgs(man);
-    work->fashionData = sub_0202B9B8(args->saveFashionData, args->unk_4);
+    work->fashionData = Save_FashionData_GetEntry(args->saveFashionData, args->unk_4);
     work->selection = args->unk_4;
     work->mode = args->unk_8;
     ov41_02246130();

@@ -59,7 +59,7 @@ extern void SetMonData(void *, int, void *);
 extern int MapHeader_GetMapSec(int);
 extern void *Save_FashionData_Get(void *);
 extern void *Save_FashionData_GetFashionCase(void *);
-extern int sub_0202BA2C(void *, int, int);
+extern int FashionCase_CanGiveAccessory(void *, int, int);
 extern void FashionCase_GiveFashionItem(void *, int, int);
 extern void *Save_VarsFlags_Get(void *);
 extern void SetFlag99C(void *);
