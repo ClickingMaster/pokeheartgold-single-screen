@@ -23,6 +23,6 @@
 .public FieldEffectManager_LoadTexResource
 .public FieldEffectManager_FreeTexResource
 .public ov01_021F93AC
-.public ov01_021FE590
-.public ov01_021FE5A4
-.public ov01_021FE66C
+.public ApricornRegrowth_New
+.public ApricornRegrowth_Free
+.public ApricornRegrowth_Spawn

@@ -49,7 +49,7 @@
 .public MIi_CpuClearFast
 .public _020FC824
 .public ov01_021FD8E8
-.public ov01_02200730
+.public UnionChatMarker_Spawn
 
 	.public UnionRoomObjects_Task
 	.public UnionRoomObjects_UpdateGroup

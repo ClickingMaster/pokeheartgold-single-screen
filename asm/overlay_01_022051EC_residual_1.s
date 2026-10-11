@@ -14,23 +14,23 @@
 	.include "global.inc"
 
 	.text
-	.public ov01_022051EC
-	.public ov01_02205208
-	.public ov01_02205218
-	.public ov01_022052A4
-	.public ov01_022052C4
-	.public ov01_022052F4
-	.public ov01_02205300
-	.public ov01_02205350
-	.public ov01_02205354
-	.public ov01_02205364
-	.public ov01_02205388
-	.public ov01_022053C4
+	.public ShayminFormChange_New
+	.public ShayminFormChange_Free
+	.public ShayminFormChange_LoadModel
+	.public ShayminFormChange_FreeModel
+	.public ShayminFormChange_Spawn
+	.public ShayminFormChange_IsDone
+	.public ShayminFormChangeEffect_Init
+	.public ShayminFormChangeEffect_Update
+	.public ShayminFormChangeEffect_Destroy
+	.public ShayminFormChangeEffect_Draw
+	.public ShayminFormChange_AdvanceAnimations
+	.public ShayminFormChange_SetAnimationsFrame
 	.rodata
 
 ov01_022096CC: ; 0x022096CC
 	.word 0x00000008
-	.word ov01_02205300
-	.word ov01_02205354
-	.word ov01_02205350
-	.word ov01_02205364
+	.word ShayminFormChangeEffect_Init
+	.word ShayminFormChangeEffect_Destroy
+	.word ShayminFormChangeEffect_Update
+	.word ShayminFormChangeEffect_Draw

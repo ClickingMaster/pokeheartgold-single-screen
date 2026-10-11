@@ -3,6 +3,6 @@
 
 #include "player_avatar.h"
 
-void ov01_022008B4(PlayerAvatar *avatar);
+void WarpArrow_Spawn(PlayerAvatar *avatar);
 
 #endif // POKEHEARTGOLD_OVERLAY_01_02200858_H

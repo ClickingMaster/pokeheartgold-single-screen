@@ -12,16 +12,16 @@
 	.include "overlay_01_02203E40.inc"
 	.include "global.inc"
 
-	.public ov01_02203E40
-	.public ov01_02203E64
-	.public ov01_02203E74
-	.public ov01_02203E94
-	.public ov01_02203EA0
-	.public ov01_02203F2C
-	.public ov01_02203F3C
-	.public ov01_02203F68
-	.public ov01_02203F6C
-	.public ov01_02203F98
+	.public FlashDarkness_New
+	.public FlashDarkness_Free
+	.public FlashDarkness_LoadModel
+	.public FlashDarkness_FreeModel
+	.public FlashDarkness_Show
+	.public FlashDarkness_SetScale
+	.public FlashDarknessEffect_Init
+	.public FlashDarknessEffect_Destroy
+	.public FlashDarknessEffect_Update
+	.public FlashDarknessEffect_Draw
 	.public ov01_022095B4
 	.public ov01_022095C8
 
@@ -29,7 +29,7 @@
 
 ov01_022095B4: ; 0x022095B4
 	.word 0x00000020
-	.word ov01_02203F3C
-	.word ov01_02203F68
-	.word ov01_02203F6C
-	.word ov01_02203F98
+	.word FlashDarknessEffect_Init
+	.word FlashDarknessEffect_Destroy
+	.word FlashDarknessEffect_Update
+	.word FlashDarknessEffect_Draw

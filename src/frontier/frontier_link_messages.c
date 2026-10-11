@@ -27,7 +27,7 @@
 // Partner Pokemon are sent as raw Pokemon structs through a large-data command (up to 0x200 bytes).
 BOOL sub_02036FD8(int command, void *data, int size);
 u32 ov80_02237B24(u8 type, int a1);
-u32 ov80_02236DD4(u8 type);
+u32 BattleFactory_GetPartySize(u8 type);
 
 // Battle Hall script work (view).
 struct HallLinkWork {
@@ -374,7 +374,7 @@ BOOL BattleFactoryLink_SendPartyMons(BattleFactoryData *work) {
     buffer = work->linkBuffer;
     pos = 0;
 
-    count = ov80_02236DD4(work->type);
+    count = BattleFactory_GetPartySize(work->type);
     for (i = 0; i < count; i++) {
         mon = Party_GetMonByIndex(work->playerParty, i);
         ivs[i] = GetMonData(mon, MON_DATA_ATK_IV, NULL);
@@ -407,7 +407,7 @@ void BattleFactoryLink_ReceivePartyMons(int netId, int size, u16 *data, BattleFa
     if (netId == Comm_GetLocalNetId()) {
         return;
     }
-    count = ov80_02236DD4(work->type);
+    count = BattleFactory_GetPartySize(work->type);
     for (i = 0; i < count; i++) {
         work->partnerRentals.setIds[i] = data[i];
     }

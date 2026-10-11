@@ -105,7 +105,7 @@
 .public ov01_021FC5A4
 .public ov01_021FC5B8
 .public ov01_021FC5CC
-.public ov01_021FDE64
+.public Reflection_SpawnForBillboard
 .public ov01_02206CF0
 .public ov01_02207260
 .public ov01_02207294

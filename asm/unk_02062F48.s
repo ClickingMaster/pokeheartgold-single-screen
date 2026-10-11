@@ -24,7 +24,7 @@ sub_02062F48: ; 0x02062F48
 	add r0, r5, #0
 	add r1, r6, #0
 	mov r2, #1
-	bl ov01_02200540
+	bl EmoteMark_Spawn
 	str r0, [r4, #4]
 	add r0, r5, #0
 	bl MapObject_IncrementMovementStep
@@ -37,7 +37,7 @@ MapObjectMovementCmd075_Step1: ; 0x02062F6C
 	bl sub_0205F3E4
 	add r4, r0, #0
 	ldr r0, [r4, #4]
-	bl ov01_022003F4
+	bl EmoteMark_IsDone
 	cmp r0, #1
 	bne _02062F90
 	ldr r0, [r4, #4]

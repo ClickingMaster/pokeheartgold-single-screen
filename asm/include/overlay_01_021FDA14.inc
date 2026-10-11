@@ -46,10 +46,10 @@
 .public ov01_021F72DC
 .public ov01_021F9744
 .public ov01_021FA2D4
-.public ov01_021FDA14
-.public ov01_021FDA30
-.public ov01_021FDA74
-.public ov01_021FDE64
-.public ov01_021FDF88
+.public Reflection_New
+.public Reflection_Free
+.public Reflection_Spawn
+.public Reflection_SpawnForBillboard
+.public Reflection_SpawnForFollower
 .public ov01_0220553C
 .public ov01_02205870

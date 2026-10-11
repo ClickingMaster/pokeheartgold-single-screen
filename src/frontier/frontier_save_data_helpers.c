@@ -14,12 +14,12 @@ void ov80_022357B4(void *data, void *saveData) {
     switch (p[0xF]) {
     case 4:
     case 5:
-        ov80_02236698(saveData, p + 0x78, (u8)(p[0xC] - 1));
+        BattleTower_GetRoomTrainer(saveData, p + 0x78, (u8)(p[0xC] - 1));
         return;
     case 2:
     case 3:
     case 6:
-        ov80_02236450(data, p + 0x78, *(u16 *)(p + 0x3E + (p[0xC] - 1) * 4), p[0xE], NULL, NULL, 0, *(u32 *)(p + 4));
+        BattleTower_GenerateTrainerMons(data, p + 0x78, *(u16 *)(p + 0x3E + (p[0xC] - 1) * 4), p[0xE], NULL, NULL, 0, *(u32 *)(p + 4));
         index = 0;
         if (index < p[0xE]) {
             source = (u16 *)(p + 0xA8);
@@ -37,10 +37,10 @@ void ov80_022357B4(void *data, void *saveData) {
                 index++;
             } while (index < p[0xE]);
         }
-        ov80_02236450(data, p + 0x188, *(u16 *)(p + 0x3E + (((p[0xC] - 1) * 2 + 1) * 2)), p[0xE], values1, values2, 0, *(u32 *)(p + 4));
+        BattleTower_GenerateTrainerMons(data, p + 0x188, *(u16 *)(p + 0x3E + (((p[0xC] - 1) * 2 + 1) * 2)), p[0xE], values1, values2, 0, *(u32 *)(p + 4));
         return;
     default:
-        ov80_02236450(data, p + 0x78, *(u16 *)(p + 0x3E + (p[0xC] - 1) * 2), p[0xE], NULL, NULL, 0, *(u32 *)(p + 4));
+        BattleTower_GenerateTrainerMons(data, p + 0x78, *(u16 *)(p + 0x3E + (p[0xC] - 1) * 2), p[0xE], NULL, NULL, 0, *(u32 *)(p + 4));
         return;
     }
 }

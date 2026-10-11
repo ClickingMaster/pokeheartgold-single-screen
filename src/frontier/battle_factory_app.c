@@ -238,8 +238,8 @@ extern const DpadMenuBox ov81_022437C8[];
 extern const DpadMenuBox ov81_02243808[];
 
 // Frontier overlay (80) helpers
-int ov80_02236DD4(int frontierType);
-BOOL ov80_02237254(int frontierType);
+int BattleFactory_GetPartySize(int frontierType);
+BOOL BattleFactory_IsMultiType(int frontierType);
 void Frontier_BufferPartnerName(void *a0, u32 a1);
 
 // text.h (and render_text.h, which includes it) are not included: text.h declares fontId as u8
@@ -474,7 +474,7 @@ BOOL BattleFactoryApp_Init(OverlayManager *man, int *state) {
     if (BattleFactoryApp_IsScreen(app, FACTORY_SCREEN_RENTAL) == TRUE) {
         app->numBalls = 6;
         app->grid = BattleFactoryApp_CreateRentalGrid(app, 0);
-    } else if (ov80_02237254(app->frontierType) == TRUE) {
+    } else if (BattleFactory_IsMultiType(app->frontierType) == TRUE) {
         app->numBalls = 2;
         app->unk_01A = 3;
         app->unk_01B = 6;
@@ -485,7 +485,7 @@ BOOL BattleFactoryApp_Init(OverlayManager *man, int *state) {
         app->unk_01B = 5;
         app->grid = BattleFactoryApp_CreateSwapOutGrid(app, 0);
     }
-    if (ov80_02237254(app->frontierType) == TRUE) {
+    if (BattleFactory_IsMultiType(app->frontierType) == TRUE) {
         app->numPokepics = 2;
     } else {
         app->numPokepics = 3;
@@ -493,7 +493,7 @@ BOOL BattleFactoryApp_Init(OverlayManager *man, int *state) {
     BattleFactoryApp_CreateYesNo(&app->yesNoPrompt);
     BattleFactoryApp_InitGraphics(app);
     TextFlags_SetCanTouchSpeedUpPrint(TRUE);
-    if (ov80_02237254(app->frontierType) == TRUE) {
+    if (BattleFactory_IsMultiType(app->frontierType) == TRUE) {
         sub_02096910(app);
     }
     *state = 0;
@@ -584,7 +584,7 @@ BOOL BattleFactoryApp_Main(OverlayManager *man, int *state) {
             if (BattleFactoryApp_IsCancelRequested(app) == TRUE) {
                 BattleFactoryApp_SetCancelRequested(app, FALSE);
                 BattleFactoryApp_SetMainState(app, state, FACTORY_STATE_SELECT_SWAP_OUT);
-            } else if (ov80_02237254(app->frontierType) == TRUE) {
+            } else if (BattleFactory_IsMultiType(app->frontierType) == TRUE) {
                 app->swapAccepted = FALSE;
                 BattleFactoryApp_SetMainState(app, state, FACTORY_STATE_LINK_SEND_SWAP);
             } else {
@@ -599,7 +599,7 @@ BOOL BattleFactoryApp_Main(OverlayManager *man, int *state) {
                 BattleFactoryApp_SetMainState(app, state, FACTORY_STATE_CANCEL_SWAP_IN);
             } else if (app->numPicked == 0) {
                 BattleFactoryApp_SetMainState(app, state, FACTORY_STATE_SWITCH_PAGE);
-            } else if (ov80_02237254(app->frontierType) == TRUE) {
+            } else if (BattleFactory_IsMultiType(app->frontierType) == TRUE) {
                 BattleFactoryApp_SetMainState(app, state, FACTORY_STATE_LINK_SEND_SWAP);
             } else {
                 BattleFactoryApp_SetMainState(app, state, FACTORY_STATE_FADE_OUT);
@@ -611,7 +611,7 @@ BOOL BattleFactoryApp_Main(OverlayManager *man, int *state) {
             if (BattleFactoryApp_IsCancelRequested(app) == TRUE) {
                 BattleFactoryApp_SetCancelRequested(app, FALSE);
                 BattleFactoryApp_SetMainState(app, state, FACTORY_STATE_SELECT_SWAP_IN);
-            } else if (ov80_02237254(app->frontierType) == TRUE) {
+            } else if (BattleFactory_IsMultiType(app->frontierType) == TRUE) {
                 app->swapAccepted = FALSE;
                 BattleFactoryApp_SetMainState(app, state, FACTORY_STATE_LINK_SEND_SWAP);
             } else {
@@ -702,14 +702,14 @@ BOOL BattleFactoryApp_SlideIn(BattleFactoryApp *app) {
 
     switch (app->subState) {
     case 0:
-        if (ov80_02237254(app->frontierType) == TRUE) {
+        if (BattleFactory_IsMultiType(app->frontierType) == TRUE) {
             LinkSync_ClearPackets();
             LinkSync_StartSync(237);
         }
         app->subState++;
         break;
     case 1:
-        if (ov80_02237254(app->frontierType) == TRUE) {
+        if (BattleFactory_IsMultiType(app->frontierType) == TRUE) {
             if (LinkSync_IsSynced(237) == TRUE) {
                 LinkSync_ClearPackets();
                 app->subState++;
@@ -791,7 +791,7 @@ BOOL BattleFactoryApp_ShowScreen(BattleFactoryApp *app) {
         } else {
             BattleFactoryApp_SetupSwapOutScreen(app);
         }
-        if (ov80_02237254(app->frontierType) == TRUE) {
+        if (BattleFactory_IsMultiType(app->frontierType) == TRUE) {
             BattleFactoryApp_PrintPartnerName(app, &app->windows[1], 0, 0, 0);
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_BG2, GF_PLANE_TOGGLE_ON);
         }
@@ -815,7 +815,7 @@ void BattleFactoryApp_SetupRentalScreen(BattleFactoryApp *app) {
     int x;
     int y;
     int slot;
-    int maxPartnerMons = ov80_02236DD4(app->frontierType);
+    int maxPartnerMons = BattleFactory_GetPartySize(app->frontierType);
     int i;
 
     BattleFactoryApp_SetCancelRequested(app, FALSE);
@@ -1046,7 +1046,7 @@ BOOL BattleFactoryApp_SelectRentals(BattleFactoryApp *app) {
             if (app->numPicked != 0) {
                 PlaySE(SEQ_SE_DP_SELECT);
                 BattleFactoryApp_UndoLastRental(app);
-                if (ov80_02237254(app->frontierType) == TRUE) {
+                if (BattleFactory_IsMultiType(app->frontierType) == TRUE) {
                     BattleFactoryApp_SendLinkCommand(app, FACTORY_LINK_RENTALS, 0);
                 }
                 return TRUE;
@@ -1093,7 +1093,7 @@ BOOL BattleFactoryApp_SelectRentals(BattleFactoryApp *app) {
         } else {
             BattleFactoryApp_RemoveRental(app);
         }
-        if (ov80_02237254(app->frontierType) == TRUE) {
+        if (BattleFactory_IsMultiType(app->frontierType) == TRUE) {
             BattleFactoryApp_SendLinkCommand(app, FACTORY_LINK_RENTALS, 0);
         }
         return TRUE;
@@ -1167,7 +1167,7 @@ void BattleFactoryApp_RemoveRental(BattleFactoryApp *app) {
 
 #pragma force_active on
 BOOL BattleFactoryApp_ConfirmRentals(BattleFactoryApp *app) {
-    int result = ov80_02236DD4(app->frontierType);
+    int result = BattleFactory_GetPartySize(app->frontierType);
 
     switch (app->subState) {
     case 0:
@@ -1210,14 +1210,14 @@ BOOL BattleFactoryApp_ConfirmRentals(BattleFactoryApp *app) {
             BattleFactorySprite_SetVisible(app->picCursor, TRUE);
             app->numPicked--;
             app->picked[app->numPicked] = 0;
-            if (ov80_02237254(app->frontierType) == TRUE) {
+            if (BattleFactory_IsMultiType(app->frontierType) == TRUE) {
                 BattleFactoryApp_SendLinkCommand(app, FACTORY_LINK_RENTALS, 0);
             }
             return TRUE;
         }
         break;
     case 6:
-        if (ov80_02237254(app->frontierType) == FALSE) {
+        if (BattleFactory_IsMultiType(app->frontierType) == FALSE) {
             return TRUE;
         }
         if (BattleFactoryApp_SendLinkCommand(app, FACTORY_LINK_RENTALS, 0) == TRUE) {
@@ -1244,7 +1244,7 @@ BOOL BattleFactoryApp_CancelLastRental(BattleFactoryApp *app) {
 }
 
 void BattleFactoryApp_DeselectCursorRental(BattleFactoryApp *app) {
-    ov80_02236DD4(app->frontierType);
+    BattleFactory_GetPartySize(app->frontierType);
     BattleFactoryBall_Deselect(app->balls[app->cursorPos]);
     BattleFactoryBall_SetPaletteOverride(app->balls[app->cursorPos], 1);
     BattleFactoryBall_SetAnim(app->balls[app->cursorPos], 0);
@@ -1406,7 +1406,7 @@ BOOL BattleFactoryApp_ConfirmCancelSwap(BattleFactoryApp *app) {
         case YESNORESPONSE_YES:
             YesNoPrompt_Reset(app->yesNoPrompt);
             BattleFactoryApp_SetBallsTranslucent(app, FALSE);
-            if (ov80_02237254(app->frontierType) == TRUE) {
+            if (BattleFactory_IsMultiType(app->frontierType) == TRUE) {
                 app->printerId = BattleFactoryApp_ShowMessage(app, msg_0194_00002);
             }
             app->subState++;
@@ -1537,7 +1537,7 @@ BOOL BattleFactoryApp_SelectSwapIn(BattleFactoryApp *app) {
             YesNoPrompt_Reset(app->yesNoPrompt);
             BattleFactoryApp_SetBallsTranslucent(app, FALSE);
             BattleFactoryApp_PickSwapIn(app);
-            if (ov80_02237254(app->frontierType) == TRUE) {
+            if (BattleFactory_IsMultiType(app->frontierType) == TRUE) {
                 app->printerId = BattleFactoryApp_ShowMessage(app, msg_0194_00002);
             }
             app->subState++;
@@ -1618,7 +1618,7 @@ BOOL BattleFactoryApp_ConfirmCancelSwapIn(BattleFactoryApp *app) {
             YesNoPrompt_Reset(app->yesNoPrompt);
             BattleFactoryApp_SetBallsTranslucent(app, FALSE);
             app->swapAccepted = FALSE;
-            if (ov80_02237254(app->frontierType) == TRUE) {
+            if (BattleFactory_IsMultiType(app->frontierType) == TRUE) {
                 app->printerId = BattleFactoryApp_ShowMessage(app, msg_0194_00002);
             }
             app->subState++;
@@ -1648,7 +1648,7 @@ BOOL BattleFactoryApp_SwitchPage(BattleFactoryApp *app) {
     int count;
     int i;
 
-    ov80_02236DD4(app->frontierType);
+    BattleFactory_GetPartySize(app->frontierType);
     switch (app->subState) {
     case 0:
         app->switchingPage = TRUE;
@@ -1713,7 +1713,7 @@ BOOL BattleFactoryApp_SwitchPage(BattleFactoryApp *app) {
             app->balls[count] = BattleFactoryBall_Delete(app->balls[count]);
             app->balls[count] = NULL;
         }
-        if (ov80_02237254(app->frontierType) == TRUE) {
+        if (BattleFactory_IsMultiType(app->frontierType) == TRUE) {
             if (app->numBalls == 2) {
                 app->numBalls = 4;
             } else {
@@ -1775,7 +1775,7 @@ BOOL BattleFactoryApp_SwitchPage(BattleFactoryApp *app) {
         }
         BattleFactoryApp_InitWindows(app);
         app->switchingPage = FALSE;
-        if (ov80_02237254(app->frontierType) == TRUE) {
+        if (BattleFactory_IsMultiType(app->frontierType) == TRUE) {
             app->partnerUpdated = TRUE;
             BattleFactoryApp_PrintPartnerRentals(app);
         }
@@ -2371,7 +2371,7 @@ void BattleFactoryApp_CreatePokepic(BattleFactoryApp *app, int index, Pokemon *m
 BOOL BattleFactoryApp_SendLinkCommand(BattleFactoryApp *app, int command, int arg) {
     int linkCommand;
 
-    if (!ov80_02237254(app->frontierType)) {
+    if (!BattleFactory_IsMultiType(app->frontierType)) {
         return FALSE;
     }
     switch (command) {
@@ -2428,7 +2428,7 @@ void BattleFactory_ReceiveRentals(int netId, int size, const u16 *data, BattleFa
     int i;
     int pos = 0;
 
-    ov80_02236DD4(app->frontierType);
+    BattleFactory_GetPartySize(app->frontierType);
     if (netId == Comm_GetLocalNetId()) {
         return;
     }
@@ -2451,7 +2451,7 @@ void BattleFactory_ReceiveUnused(void) {
 
 #pragma force_active on
 void BattleFactoryApp_PrintPartnerRentals(BattleFactoryApp *app) {
-    int count = ov80_02236DD4(app->frontierType);
+    int count = BattleFactory_GetPartySize(app->frontierType);
 
     if (app->switchingPage == TRUE) {
         ClearWindowTilemapAndScheduleTransfer(&app->windows[1]);
@@ -2513,7 +2513,7 @@ BattleFactoryBall *BattleFactoryApp_CreateBall(BattleFactoryApp *app, int index)
     if (BattleFactoryApp_IsScreen(app, FACTORY_SCREEN_RENTAL) == TRUE) {
         x = ov81_02243490[index * 2];
         y = ov81_02243492[index * 2];
-    } else if (ov80_02237254(app->frontierType) == FALSE) {
+    } else if (BattleFactory_IsMultiType(app->frontierType) == FALSE) {
         x = ov81_02243464[index * 2];
         y = ov81_02243466[index * 2];
     } else if (app->numBalls == 2) {
@@ -3233,11 +3233,11 @@ void BattleFactoryApp_SetBallsTranslucent(BattleFactoryApp *app, int enable) {
 #pragma force_active reset
 
 BOOL BattleFactory_IsLinkMode(int frontierType) {
-    return ov80_02237254((u8)frontierType);
+    return BattleFactory_IsMultiType((u8)frontierType);
 }
 
 BOOL BattleFactoryApp_IsLinkMode(BattleFactoryApp *app) {
-    return ov80_02237254(app->frontierType);
+    return BattleFactory_IsMultiType(app->frontierType);
 }
 
 #pragma force_active on

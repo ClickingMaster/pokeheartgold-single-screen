@@ -12,19 +12,19 @@
 	.include "overlay_01_021FE590.inc"
 	.include "global.inc"
 
-	.public ov01_021FE590
-	.public ov01_021FE5A4
-	.public ov01_021FE5B4
-	.public ov01_021FE5BC
-	.public ov01_021FE5CC
-	.public ov01_021FE61C
-	.public ov01_021FE64C
-	.public ov01_021FE65C
-	.public ov01_021FE66C
-	.public ov01_021FE6B4
-	.public ov01_021FE6F4
-	.public ov01_021FE70C
-	.public ov01_021FE768
+	.public ApricornRegrowth_New
+	.public ApricornRegrowth_Free
+	.public ApricornRegrowth_Retain
+	.public ApricornRegrowth_Release
+	.public ApricornRegrowth_LoadGfx
+	.public ApricornRegrowth_FreeGfx
+	.public ApricornRegrowth_LoadGfxIfUnused
+	.public ApricornRegrowth_FreeGfxIfUnused
+	.public ApricornRegrowth_Spawn
+	.public ApricornRegrowthEffect_Init
+	.public ApricornRegrowthEffect_Destroy
+	.public ApricornRegrowthEffect_Update
+	.public ApricornRegrowthEffect_Draw
 	.public ov01_02209084
 	.public ov01_02209098
 	.public ov01_022090AC

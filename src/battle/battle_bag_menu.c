@@ -190,22 +190,22 @@ extern const WindowTemplate sBattleBagItemListWindows[];
 extern const WindowTemplate sBattleBagUseItemWindows[];
 // The tables below are still assembly data; some members are addressed through their own labels.
 extern const u32 sBattleBagItemEntryMsgIds[][2];
-extern const u32 ov08_02225BE4[][2];
+extern const u32 sBattleBagItemEntryQuantityMsgIds[][2];
 extern const SpriteResourceCountsListUnion sBattleBagSpriteCapacities;
 extern const int sBattleBagSpriteTemplates[][5];
-extern const int ov08_02225DE0[][5];
-extern const int ov08_02225DE4[][5];
-extern const int ov08_02225DE8[][5];
-extern const int ov08_02225DEC[][5];
+extern const int sBattleBagSpriteTemplatesPltt[][5];
+extern const int sBattleBagSpriteTemplatesCell[][5];
+extern const int sBattleBagSpriteTemplatesAnim[][5];
+extern const int sBattleBagSpriteTemplatesPriority[][5];
 extern const u8 sBattleBagPocketOrder[];
 extern const s32 sBattleBagItemListIconPos[][2];
 extern const DpadMenuBox *const sBattleBagPageCursorBoxes[];
 extern const s32 sBattleBagTutorialFingerPos[][2];
-extern const s32 ov08_02225D30[][2];
+extern const s32 sBattleBagTutorialFingerPosY[][2];
 extern const BattleBagButtonRect sBattleBagButtonRects[];
-extern const u8 ov08_02225E9D[];
-extern const u8 ov08_02225E9E[];
-extern const u8 ov08_02225E9F[];
+extern const u8 sBattleBagButtonRectsY[];
+extern const u8 sBattleBagButtonRectsWidth[];
+extern const u8 sBattleBagButtonRectsHeight[];
 extern const u8 *const sBattleBagButtonWindowLists[];
 
 void BattleBagMenu_Create(BattleBagContext *context) {
@@ -919,7 +919,7 @@ void BattleBagMenu_PrintItemQuantity(BattleBagMenu *menu, int slot, int entry, i
 
     FillWindowPixelBuffer(&windows[window], 0);
     if (menu->pocketItems[menu->pocket][slot].quantity) {
-        string = NewString_ReadMsgData(menu->msgData, ov08_02225BE4[entry][0]);
+        string = NewString_ReadMsgData(menu->msgData, sBattleBagItemEntryQuantityMsgIds[entry][0]);
         BufferIntegerAsString(menu->msgFormat, 0, menu->pocketItems[menu->pocket][slot].quantity, 3, PRINTING_MODE_LEFT_ALIGN, TRUE);
         StringExpandPlaceholders(menu->msgFormat, menu->string, string);
         ((AddTextPrinterWithColorFunc)AddTextPrinterParameterizedWithColor)(&windows[window], fontId, menu->string, 0, y, TEXT_SPEED_NOTRANSFER, color, NULL);
@@ -1186,13 +1186,13 @@ ManagedSprite *BattleBagMenu_CreateSprite(BattleBagMenu *menu, int index) {
     template.y = 0;
     template.z = 0;
     template.animation = 0;
-    template.drawPriority = ov08_02225DEC[index][0];
+    template.drawPriority = sBattleBagSpriteTemplatesPriority[index][0];
     template.pal = 0;
     template.vram = NNS_G2D_VRAM_TYPE_2DSUB;
     template.resIdList[GF_GFX_RES_TYPE_CHAR] = sBattleBagSpriteTemplates[index][0];
-    template.resIdList[GF_GFX_RES_TYPE_PLTT] = ov08_02225DE0[index][0];
-    template.resIdList[GF_GFX_RES_TYPE_CELL] = ov08_02225DE4[index][0];
-    template.resIdList[GF_GFX_RES_TYPE_ANIM] = ov08_02225DE8[index][0];
+    template.resIdList[GF_GFX_RES_TYPE_PLTT] = sBattleBagSpriteTemplatesPltt[index][0];
+    template.resIdList[GF_GFX_RES_TYPE_CELL] = sBattleBagSpriteTemplatesCell[index][0];
+    template.resIdList[GF_GFX_RES_TYPE_ANIM] = sBattleBagSpriteTemplatesAnim[index][0];
     template.bgPriority = 1;
     template.vramTransfer = FALSE;
     return SpriteSystem_NewSprite(spriteSystem, menu->spriteManager, &template);
@@ -1323,7 +1323,7 @@ void BattleBagMenu_FreeFinger(BattleBagMenu *menu) {
 
 void BattleBagMenu_UpdateTutorialFinger(BattleBagMenu *menu, int page) {
     if (menu->context->isTutorial == 1) {
-        ov12_0226BD2C(menu->finger, sBattleBagTutorialFingerPos[page][0], ov08_02225D30[page][0]);
+        ov12_0226BD2C(menu->finger, sBattleBagTutorialFingerPos[page][0], sBattleBagTutorialFingerPosY[page][0]);
         ov12_0226BD4C(menu->finger, 60);
     } else {
         BattleFinger_Disable(menu->finger);
@@ -1486,11 +1486,11 @@ void BattleBagMenu_BuildButtonTilemap(BattleBagMenu *menu, u16 *dst, u8 button, 
 void BattleBagMenu_DrawButton(BattleBagMenu *menu, u8 button, u8 frame, u8 page) {
     // the table is read here as bytes, through labels on its members
     int index = button * 4;
-    int height = ov08_02225E9F[index];
-    int width = ov08_02225E9E[index];
+    int height = sBattleBagButtonRectsHeight[index];
+    int width = sBattleBagButtonRectsWidth[index];
     u16 *buffer = Heap_Alloc(menu->context->heapID, width * height * 2);
     BattleBagMenu_BuildButtonTilemap(menu, buffer, button, frame, page);
-    LoadRectToBgTilemapRect(menu->bgConfig, 6, buffer, ((const u8 *)sBattleBagButtonRects)[index], ov08_02225E9D[index], width, height);
+    LoadRectToBgTilemapRect(menu->bgConfig, 6, buffer, ((const u8 *)sBattleBagButtonRects)[index], sBattleBagButtonRectsY[index], width, height);
     ScheduleBgTilemapBufferTransfer(menu->bgConfig, 6);
     Heap_Free(buffer);
 }

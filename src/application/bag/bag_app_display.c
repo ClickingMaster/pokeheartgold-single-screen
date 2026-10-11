@@ -31,21 +31,21 @@
 // Bag application, part 2: item list, message boxes, quantity and money windows, sprites (cursor, item icons,
 // pocket tabs, buttons).
 
-// Data still in asm (asm/overlay_15_suffix_to42_data.s). The cursor position tables are {x, y, anim, palette} per
-// position; the ov15_* labels point into them.
+// Data still in asm (asm/bag_app_data.s). The cursor position tables are {x, y, anim, palette} per
+// position; the *Y/*Anim/*Palette labels point at the later columns.
 extern const u8 sListPocketCapacities[];
 extern const u8 sCursorPositions[];
-extern const u8 ov15_02200AB9[];
-extern const u8 ov15_02200ABA[];
-extern const u8 ov15_02200ABB[];
+extern const u8 sCursorPositionsY[];
+extern const u8 sCursorPositionsAnim[];
+extern const u8 sCursorPositionsPalette[];
 extern const u8 sMoveCursorPositions[];
-extern const u8 ov15_02200A35[];
-extern const u8 ov15_02200A36[];
-extern const u8 ov15_02200A37[];
+extern const u8 sMoveCursorPositionsY[];
+extern const u8 sMoveCursorPositionsAnim[];
+extern const u8 sMoveCursorPositionsPalette[];
 extern const u8 sQuantityCursorPositions[];
-extern const u8 ov15_022009D5[];
-extern const u8 ov15_022009D6[];
-extern const u8 ov15_022009D7[];
+extern const u8 sQuantityCursorPositionsY[];
+extern const u8 sQuantityCursorPositionsAnim[];
+extern const u8 sQuantityCursorPositionsPalette[];
 extern const SpriteResourceCountsListUnion sBagSpriteResourceCounts;
 extern const OamManagerParam sBagOamManagerParam;
 extern const OamCharTransferParam sBagOamCharTransferParam;
@@ -706,9 +706,9 @@ void ov15_021FFEC0(BagApp *app) {
 
 void BagApp_SetCursorPosition(BagApp *app, s32 button) {
     u32 offset = button * 4;
-    ManagedSprite_SetPositionXYWithSubscreenOffset(app->sprites[20], sCursorPositions[offset], ov15_02200AB9[offset], FX32_CONST(256));
-    ManagedSprite_SetAnim(app->sprites[20], ov15_02200ABA[offset]);
-    ManagedSprite_SetPaletteOverride(app->sprites[20], ov15_02200ABB[offset]);
+    ManagedSprite_SetPositionXYWithSubscreenOffset(app->sprites[20], sCursorPositions[offset], sCursorPositionsY[offset], FX32_CONST(256));
+    ManagedSprite_SetAnim(app->sprites[20], sCursorPositionsAnim[offset]);
+    ManagedSprite_SetPaletteOverride(app->sprites[20], sCursorPositionsPalette[offset]);
     ManagedSprite_SetDrawFlag(app->sprites[20], TRUE);
 }
 
@@ -721,7 +721,7 @@ void BagApp_HideCursor(BagApp *app) {
 void BagApp_SetMoveCursorPosition(BagApp *app, int slot) {
     GF_ASSERT(slot < 9);
     if (slot == 8) {
-        ManagedSprite_SetAnim(app->sprites[20], ov15_02200A36[slot * 4]);
+        ManagedSprite_SetAnim(app->sprites[20], sMoveCursorPositionsAnim[slot * 4]);
     } else {
         BagView *bagView = app->bagView;
         BagViewPocket *pocket = &bagView->pockets[bagView->unk64];
@@ -734,8 +734,8 @@ void BagApp_SetMoveCursorPosition(BagApp *app, int slot) {
             ManagedSprite_SetAnim(app->sprites[20], 20);
         }
     }
-    ManagedSprite_SetPositionXYWithSubscreenOffset(app->sprites[20], sMoveCursorPositions[slot * 4], ov15_02200A35[slot * 4], FX32_CONST(256));
-    ManagedSprite_SetPaletteOverride(app->sprites[20], ov15_02200A37[slot * 4]);
+    ManagedSprite_SetPositionXYWithSubscreenOffset(app->sprites[20], sMoveCursorPositions[slot * 4], sMoveCursorPositionsY[slot * 4], FX32_CONST(256));
+    ManagedSprite_SetPaletteOverride(app->sprites[20], sMoveCursorPositionsPalette[slot * 4]);
 }
 
 #pragma force_active reset
@@ -743,9 +743,9 @@ void BagApp_SetMoveCursorPosition(BagApp *app, int slot) {
 void BagApp_SetQuantityCursorPosition(BagApp *app, s32 index) {
     GF_ASSERT(index < 8);
     index <<= 2;
-    ManagedSprite_SetPositionXYWithSubscreenOffset(app->sprites[20], sQuantityCursorPositions[index], ov15_022009D5[index], FX32_CONST(256));
-    ManagedSprite_SetAnim(app->sprites[20], ov15_022009D6[index]);
-    ManagedSprite_SetPaletteOverride(app->sprites[20], ov15_022009D7[index]);
+    ManagedSprite_SetPositionXYWithSubscreenOffset(app->sprites[20], sQuantityCursorPositions[index], sQuantityCursorPositionsY[index], FX32_CONST(256));
+    ManagedSprite_SetAnim(app->sprites[20], sQuantityCursorPositionsAnim[index]);
+    ManagedSprite_SetPaletteOverride(app->sprites[20], sQuantityCursorPositionsPalette[index]);
 }
 
 #pragma force_active on

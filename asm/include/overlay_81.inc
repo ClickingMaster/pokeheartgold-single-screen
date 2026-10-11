@@ -205,8 +205,8 @@
 .public memset
 .public gOverlayTemplate_PokemonSummary
 .public Frontier_BufferPartnerName
-.public ov80_02236DD4
-.public ov80_02237254
+.public BattleFactory_GetPartySize
+.public BattleFactory_IsMultiType
 .public BattleFactoryApp_Init
 .public BattleFactoryApp_Main
 .public BattleFactoryApp_Exit

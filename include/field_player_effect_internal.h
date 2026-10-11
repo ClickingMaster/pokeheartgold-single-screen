@@ -80,7 +80,7 @@ extern void GF_AssertFail(void);
 extern void sub_0205FC94(LocalMapObject *, u32);
 extern void sub_0205E3AC(LocalMapObject *, u32);
 extern void *ov01_021FD8E8(LocalMapObject *, int);
-extern void *ov01_02200730(LocalMapObject *);
+extern void *UnionChatMarker_Spawn(LocalMapObject *);
 extern BOOL sub_02037FCC(void);
 extern BOOL sub_02037F94(void);
 extern RemoteState *sub_0205A1F0(void *);

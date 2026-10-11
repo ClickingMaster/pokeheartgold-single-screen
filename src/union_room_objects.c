@@ -43,7 +43,7 @@ UnionRoomPlayerRecord *sub_0205A1F4(struct UnkStruct_02059E1C *unionRoom, int in
 s32 sub_02037F94(void);
 s32 sub_02037FCC(void);
 UnkStruct_0206793C *ov01_021FD8E8(LocalMapObject *object, int index);
-UnkStruct_0206793C *ov01_02200730(LocalMapObject *object);
+UnkStruct_0206793C *UnionChatMarker_Spawn(LocalMapObject *object);
 
 extern const u16 _020FC824[];
 
@@ -365,7 +365,7 @@ void UnionRoomSlot_Leave(UnionRoomSlot *slot, LocalMapObject *object) {
 
 void UnionRoomSlot_StartEmote(UnionRoomSlot *slot, LocalMapObject *object) {
     if (slot->emoteRequest == 1 && slot->emoteActive == 0) {
-        slot->emote = ov01_02200730(object);
+        slot->emote = UnionChatMarker_Spawn(object);
         slot->emoteTimer = 30;
         slot->emoteRequest = 0;
         slot->emoteActive = 1;

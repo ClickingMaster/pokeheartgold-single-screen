@@ -7,5 +7,5 @@
 .public ov80_022358B0
 .public ov80_022358C4
 .public ov80_022358E8
-.public ov80_02236450
-.public ov80_02236698
+.public BattleTower_GenerateTrainerMons
+.public BattleTower_GetRoomTrainer

@@ -3,7 +3,7 @@
 void sub_02062F48(void *mapObject, u32 parameter) {
     Movement075WorkPrivate *work = sub_0205F3C0(mapObject, 8);
     work->parameter = parameter;
-    work->effect = ov01_02200540(mapObject, parameter, 1);
+    work->effect = EmoteMark_Spawn(mapObject, parameter, 1);
     MapObject_IncrementMovementStep(mapObject);
 }
 
@@ -11,7 +11,7 @@ BOOL MapObjectMovementCmd075_Step1(void *mapObject, void *unused) {
     Movement075WorkPrivate *work;
     (void)unused;
     work = sub_0205F3E4(mapObject);
-    if (ov01_022003F4(work->effect) == TRUE) {
+    if (EmoteMark_IsDone(work->effect) == TRUE) {
         FieldEffect_Destroy(work->effect);
         MapObject_IncrementMovementStep(mapObject);
         return TRUE;

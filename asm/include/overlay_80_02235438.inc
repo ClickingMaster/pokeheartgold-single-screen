@@ -44,9 +44,9 @@
 .public ov80_022358B0
 .public ov80_022358C4
 .public ov80_022358E8
-.public ov80_0223690C
+.public BattleTower_NewBattleSetup
 .public ov80_02236ABC
 .public ov80_02236AD8
-.public ov80_02236B18
+.public BattleTower_GetTrainerMessageBank
 .public ov80_0223C034
 .public ov80_0223C034

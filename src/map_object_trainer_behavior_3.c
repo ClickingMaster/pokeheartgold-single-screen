@@ -24,7 +24,7 @@ void sub_02063E70(LMO *obj) {
         MapObject_SetSpriteID(obj, state->unk0);
         if (state->unk0 != 0xFFFF) {
             if (apricorn == 1) {
-                ov01_021FE66C(obj);
+                ApricornRegrowth_Spawn(obj);
             }
             ov01_021F94C0(obj, &state->unk8, state->unk0);
         } else {

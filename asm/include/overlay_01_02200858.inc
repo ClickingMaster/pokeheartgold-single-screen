@@ -31,6 +31,6 @@
 .public FieldEffectManager_CreateEffect
 .public FieldEffectManager_DestroyEffect
 .public FieldEffectManager_LoadRenderModel
-.public ov01_02200858
-.public ov01_02200874
-.public ov01_022008B4
+.public WarpArrow_New
+.public WarpArrow_Free
+.public WarpArrow_Spawn

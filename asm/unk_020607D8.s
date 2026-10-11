@@ -153,7 +153,7 @@ _020608F6:
 	mov r1, #4
 _020608F8:
 	add r0, r5, #0
-	bl ov01_021FDF88
+	bl Reflection_SpawnForFollower
 	add sp, #0x14
 	pop {r4, r5, r6, r7, pc}
 _02060902:
@@ -202,7 +202,7 @@ _0206095E:
 	mov r1, #1
 _02060960:
 	add r0, r5, #0
-	bl ov01_021FDF88
+	bl Reflection_SpawnForFollower
 	add sp, #0x14
 	pop {r4, r5, r6, r7, pc}
 _0206096A:
@@ -251,7 +251,7 @@ _020609C6:
 	mov r1, #1
 _020609C8:
 	add r0, r5, #0
-	bl ov01_021FDA74
+	bl Reflection_Spawn
 _020609CE:
 	add sp, #0x14
 	pop {r4, r5, r6, r7, pc}

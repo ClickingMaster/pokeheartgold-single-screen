@@ -23,7 +23,7 @@
 .public FieldEffectManager_GetFromMapObject
 .public FieldEffectManager_CreateEffect
 .public FieldEffectManager_LoadModel
-.public ov01_02203E40
-.public ov01_02203E64
-.public ov01_02203EA0
-.public ov01_02203F2C
+.public FlashDarkness_New
+.public FlashDarkness_Free
+.public FlashDarkness_Show
+.public FlashDarkness_SetScale

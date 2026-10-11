@@ -168,9 +168,9 @@
 .public FieldEffect_Destroy
 .public _020FD198
 .public gMovementCmdTable
-.public ov01_022000DC
-.public ov01_022003F4
-.public ov01_02200540
+.public TrainerReveal_Spawn
+.public EmoteMark_IsDone
+.public EmoteMark_Spawn
 
 	.public MovementScriptMachine
 	.public MovementScriptMachineSub_Init

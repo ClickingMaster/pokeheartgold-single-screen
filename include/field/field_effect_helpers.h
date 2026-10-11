@@ -27,6 +27,7 @@ void RenderObj_Draw(NNSG3dRenderObj *object, const VecFx32 *position, const VecF
 void *FieldEffect_GetState(FieldEffect *effect);
 int FieldEffect_GetParam(FieldEffect *effect);
 void FieldEffect_SetPosition(FieldEffect *effect, const VecFx32 *position);
+void FieldEffect_RunUpdate(FieldEffect *effect);
 
 BOOL BillboardObject_Delete(void *billboard);
 void BillboardObject_SetPosition(void *billboard, const VecFx32 *position);
@@ -34,6 +35,12 @@ void BillboardObject_SetPosition(void *billboard, const VecFx32 *position);
 // it ends with (billboard_lists.c types it void).
 BOOL BillboardObject_AdvanceFrame(void *billboard, fx32 delta);
 void BillboardObject_SetFrame(void *billboard, fx32 frame);
+fx32 BillboardObject_GetFrame(void *billboard);
+void BillboardObject_SetSequenceFrame(void *billboard, fx32 frame);
 fx32 BillboardObject_GetSequenceFrame(void *billboard);
+void BillboardObject_SetSequence(void *billboard, u32 sequence);
+u32 BillboardObject_GetSequence(void *billboard);
+void BillboardObject_SetScale(void *billboard, VecFx32 *scale);
+void BillboardObject_UpdateTextureAnimation(void *billboard);
 
 #endif // POKEHEARTGOLD_FIELD_FIELD_EFFECT_HELPERS_H

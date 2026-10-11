@@ -184,7 +184,7 @@ void PlayerAvatar_InitMapFeatures(PlayerAvatar *avatar) {
     LocalMapObject *mapObject = PlayerAvatar_GetMapObject(avatar);
     GF_ASSERT(mapObject != NULL);
     MapObject_GetManager(mapObject);
-    ov01_022008B4(avatar);
+    WarpArrow_Spawn(avatar);
     if (PlayerAvatar_GetState(avatar) == PLAYER_STATE_SURFING) {
         u32 x = PlayerAvatar_GetXCoord(avatar);
         u32 z = PlayerAvatar_GetZCoord(avatar);

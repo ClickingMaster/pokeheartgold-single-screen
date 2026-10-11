@@ -59,13 +59,13 @@ BOOL sub_02064714(TrainerApproachWork *work) {
 }
 
 BOOL sub_02064730(TrainerApproachWork *work) {
-    work->effect = ov01_02200540(work->trainer, 0, 0);
+    work->effect = EmoteMark_Spawn(work->trainer, 0, 0);
     work->state = 6;
     return FALSE;
 }
 
 BOOL sub_02064748(TrainerApproachWork *work) {
-    if (ov01_022003F4(work->effect) == TRUE) {
+    if (EmoteMark_IsDone(work->effect) == TRUE) {
         FieldEffect_Destroy(work->effect);
         work->state = 9;
     }

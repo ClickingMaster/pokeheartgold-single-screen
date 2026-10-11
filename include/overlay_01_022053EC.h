@@ -3,8 +3,8 @@
 
 #include "field_system.h"
 
-u32 ov01_022052C4(FieldEffectManager *fieldEffectManager, VecFx32 *a1);
-BOOL ov01_022052F4();
+u32 ShayminFormChange_Spawn(FieldEffectManager *fieldEffectManager, VecFx32 *a1);
+BOOL ShayminFormChange_IsDone();
 void ov01_02205424(FieldSystem *fieldSystem);
 BOOL ov01_0220553C(LocalMapObject *mapObject);
 void ov01_022057D0(FieldSystem *fieldSystem);

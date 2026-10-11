@@ -102,9 +102,9 @@ typedef struct BagApp {
     String *itemNames[165];
     String *msgBuf;
     String *unk_5E8;
-    String *unk_5EC;
+    String *quantityTemplate;
     u8 unk_5F0[4];
-    String *unk_5F4[8];
+    String *unusedStrings[8];
     u8 numPockets;
     u8 trainerGender;
     u8 printerId;

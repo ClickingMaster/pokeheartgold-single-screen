@@ -28,14 +28,14 @@ extern const OverlayManagerTemplate ov80_0223BDC4;
 
 u32 FactoryChallenge_GetSaved(void *challenge);
 void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
-int ov80_02236DD4(int type);
-int ov80_02236DF8(int type, int a1);
-BattleSetup *ov80_02236F24(BattleFactoryData *data, FrontierLaunchArgs *args);
-int ov80_02237120(BattleFactoryData *data);
-void ov80_02237130(BattleFactoryData *data);
-void ov80_022371B0(BattleFactoryData *data);
-BOOL ov80_02237254(int type);
-u16 ov80_022372B4(BattleFactoryData *data);
+int BattleFactory_GetPartySize(int type);
+int BattleFactory_GetOpponentMonCount(int type, int a1);
+BattleSetup *BattleFactory_NewBattleSetup(BattleFactoryData *data, FrontierLaunchArgs *args);
+int BattleFactory_GetMonLevel(BattleFactoryData *data);
+void BattleFactory_SetPartyToRentals(BattleFactoryData *data);
+void BattleFactory_AddPartnerMonsToParty(BattleFactoryData *data);
+BOOL BattleFactory_IsMultiType(int type);
+u16 BattleFactory_GetRound(BattleFactoryData *data);
 
 void BattleFactory_OnAppExit(void *args);
 void BattleFactory_BgScrollTask(SysTask *task, void *map);
@@ -86,7 +86,7 @@ BOOL FrtCmd_FactoryEndBattle(FrontierScriptContext *ctx) {
 BOOL FrtCmd_FactoryStartBattle(FrontierScriptContext *ctx) {
     FrontierLaunchArgs *launchArgs = Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork);
     BattleFactoryData *data = Frontier_GetData(ctx->frontierSystem->frontierWork);
-    BattleSetup *setup = ov80_02236F24(data, launchArgs);
+    BattleSetup *setup = BattleFactory_NewBattleSetup(data, launchArgs);
     data->battleSetup = setup;
     Frontier_LaunchApplication(ctx->frontierSystem->frontierWork, &gOverlayTemplate_Battle, setup, 0, NULL);
     return TRUE;
@@ -200,7 +200,7 @@ BOOL FrtCmd_FactoryAction(FrontierScriptContext *ctx) {
         break;
     case 17: {
         Pokemon *mon = AllocMonZeroed(HEAP_ID_FIELD2);
-        FrontierMon_ToPokemon(&data->opponentMons[arg], mon, ov80_02237120(data));
+        FrontierMon_ToPokemon(&data->opponentMons[arg], mon, BattleFactory_GetMonLevel(data));
         *var = GetMonData(mon, MON_DATA_TYPE_1, NULL);
         Heap_Free(mon);
         break;
@@ -218,7 +218,7 @@ BOOL FrtCmd_FactoryAction(FrontierScriptContext *ctx) {
         int type2;
         int best;
 
-        count = ov80_02236DF8(data->type, 1);
+        count = BattleFactory_GetOpponentMonCount(data->type, 1);
         j = 0;
         zero = j;
         p = types;
@@ -229,7 +229,7 @@ BOOL FrtCmd_FactoryAction(FrontierScriptContext *ctx) {
         } while (j < 18);
         mon = AllocMonZeroed(HEAP_ID_FIELD2);
         for (i = 0; i < count; i++) {
-            FrontierMon_ToPokemon(&data->opponentMons[i], mon, ov80_02237120(data));
+            FrontierMon_ToPokemon(&data->opponentMons[i], mon, BattleFactory_GetMonLevel(data));
             type1 = GetMonData(mon, MON_DATA_TYPE_1, NULL);
             type2 = GetMonData(mon, MON_DATA_TYPE_2, NULL);
             if (type1 == type2) {
@@ -255,7 +255,7 @@ BOOL FrtCmd_FactoryAction(FrontierScriptContext *ctx) {
         break;
     }
     case 19:
-        *var = ov80_022372B4(data);
+        *var = BattleFactory_GetRound(data);
         break;
     case 20:
         *var = ov80_02230794(data, arg);
@@ -279,7 +279,7 @@ BOOL FrtCmd_FactoryAction(FrontierScriptContext *ctx) {
         sub_02096910(data);
         break;
     case 28:
-        *var = ov80_02237254(data->type);
+        *var = BattleFactory_IsMultiType(data->type);
         break;
     case 29:
         *var = data->type;
@@ -302,7 +302,7 @@ BOOL FrtCmd_FactoryAction(FrontierScriptContext *ctx) {
         FrontierTrainer_LoadRecord(&data->trainers[1], data->trainerIds[data->battleNo + 7], HEAP_ID_FIELD2, NARC_a_2_0_2);
         break;
     case 34: {
-        int count = ov80_02236DD4(data->type);
+        int count = BattleFactory_GetPartySize(data->type);
         int i;
         for (i = 0; i < count; i++) {
             BufferBoxMonSpeciesName(ctx->frontierSystem->msgFormat, i, Mon_GetBoxMon(Party_GetMonByIndex(data->playerParty, i)));
@@ -328,13 +328,13 @@ BOOL FrtCmd_FactoryAction(FrontierScriptContext *ctx) {
         }
         break;
     case 38:
-        ov80_022371B0(data);
+        BattleFactory_AddPartnerMonsToParty(data);
         break;
     case 39:
         FrontierMon_GenerateList(data->opponentMons, data->opponentSetIds, data->opponentIVs, data->opponentPersonalities, NULL, 4, HEAP_ID_FIELD2, NARC_a_2_0_3);
         break;
     case 40:
-        ov80_02237130(data);
+        BattleFactory_SetPartyToRentals(data);
         break;
     case 41:
         *var = data->unk_00B;

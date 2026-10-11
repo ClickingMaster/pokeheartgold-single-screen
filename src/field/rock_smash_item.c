@@ -189,11 +189,11 @@ static BOOL Task_GetRockSmashItem(TaskManager *taskman) {
         } else {
             obj = PlayerAvatar_GetMapObject(fieldSystem->playerAvatar);
         }
-        env->unk14 = ov01_02200540(obj, 0, 1);
+        env->unk14 = EmoteMark_Spawn(obj, 0, 1);
         ++(*state_p);
         break;
     case 1:
-        if (ov01_022003F4(env->unk14)) {
+        if (EmoteMark_IsDone(env->unk14)) {
             FieldEffect_Destroy(env->unk14);
             ++(*state_p);
         }

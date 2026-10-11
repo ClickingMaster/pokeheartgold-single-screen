@@ -140,9 +140,9 @@
 .public ov01_021FA2D4
 .public ov01_021FA3E8
 .public ov01_021FA40C
-.public ov01_021FE66C
-.public ov01_022003F4
-.public ov01_02200540
+.public ApricornRegrowth_Spawn
+.public EmoteMark_IsDone
+.public EmoteMark_Spawn
 .public ov01_02207274
 
 	.public sub_020632B0

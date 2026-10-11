@@ -108,7 +108,7 @@ BOOL FrtCmd_133(void *ctx) {
     if (data == NULL) {
         return FALSE;
     }
-    FrontierScript_PrintMessageEntryFromBank(ctx, data + 0x90 + arg * 0x110, ov80_02236B18(data[0xF]));
+    FrontierScript_PrintMessageEntryFromBank(ctx, data + 0x90 + arg * 0x110, BattleTower_GetTrainerMessageBank(data[0xF]));
     return TRUE;
 }
 
@@ -121,7 +121,7 @@ BOOL FrtCmd_135(void *ctx) {
     u8 *script = ctx;
     void *args = Frontier_GetLaunchArgs(**(void ***)ctx);
     u8 *data = Frontier_GetData(**(void ***)ctx);
-    void *setup = ov80_0223690C(data, args);
+    void *setup = BattleTower_NewBattleSetup(data, args);
     *(void **)(data + 0x8D0) = setup;
     Sound_SetSceneAndPlayBGM(5, 0x45D, 1);
     Frontier_LaunchApplication(**(void ***)script, gOverlayTemplate_Battle, setup, 0, 0);

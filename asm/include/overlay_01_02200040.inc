@@ -29,6 +29,6 @@
 .public FieldEffectManager_FreeBillboardSequence
 .public FieldEffectManager_LoadTexResource
 .public FieldEffectManager_FreeTexResource
-.public ov01_02200040
-.public ov01_0220005C
-.public ov01_022000DC
+.public TrainerReveal_New
+.public TrainerReveal_Free
+.public TrainerReveal_Spawn

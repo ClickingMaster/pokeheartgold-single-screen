@@ -55,7 +55,7 @@ _020631B6:
 	add r0, r4, #0
 	bl MapObject_SetFacingVector
 	add r0, r4, #0
-	bl ov01_022000DC
+	bl TrainerReveal_Spawn
 	ldr r1, _020631EC ; =0x00010004
 	add r0, r4, #0
 	bl MapObject_SetFlagsBits

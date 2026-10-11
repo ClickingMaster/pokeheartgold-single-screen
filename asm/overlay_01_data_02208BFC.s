@@ -44,26 +44,26 @@ defaultFieldEffectRenderers: ; 0x02208BFC
 	.public gFieldEffectRenderers
 gFieldEffectRenderers: ; 0x02208C5C
 	.word 0x00000000, FieldShadow_New, FieldShadow_Free
-	.word 0x00000001, ov01_021FDA14, ov01_021FDA30
+	.word 0x00000001, Reflection_New, Reflection_Free
 	.word 0x00000002, Footprints_New, Footprints_Free
-	.word 0x00000003, ov01_02200858, ov01_02200874
+	.word 0x00000003, WarpArrow_New, WarpArrow_Free
 	.word 0x00000004, SurfMount_New, SurfMount_Free
 	.word 0x00000005, RockClimb_New, RockClimb_Free
 	.word 0x00000006, PuddleSplash_New, PuddleSplash_Free
 	.word 0x00000007, MudSplash_New, MudSplash_Free
 	.word 0x00000008, TallGrass_New, TallGrass_Free
-	.word 0x00000009, ov01_022001E4, ov01_022001F8
+	.word 0x00000009, EmoteMark_New, EmoteMark_Free
 	.word 0x0000000A, ShallowWaterRipple_New, ShallowWaterRipple_Free
 	.word 0x0000000B, GroundDust_New, GroundDust_Free
 	.word 0x0000000C, VeryTallGrass_New, VeryTallGrass_Free
 	.word 0x0000000D, ov01_021FFC0C, ov01_021FFC28
 	.word 0x0000000E, ov01_021FFECC, ov01_021FFEE8
-	.word 0x0000000F, ov01_02200040, ov01_0220005C
-	.word 0x00000010, ov01_021FE590, ov01_021FE5A4
+	.word 0x0000000F, TrainerReveal_New, TrainerReveal_Free
+	.word 0x00000010, ApricornRegrowth_New, ApricornRegrowth_Free
 	.word 0x00000011, ov01_022031C0, ov01_022031E8
 	.word 0x00000012, EmoteBubble_New, EmoteBubble_Free
-	.word 0x00000013, ov01_02203E40, ov01_02203E64
+	.word 0x00000013, FlashDarkness_New, FlashDarkness_Free
 	.word 0x00000014, MapObjectModelList_New, MapObjectModelList_Free
-	.word 0x00000015, ov01_022006A8, ov01_022006C4
-	.word 0x00000016, ov01_022051EC, ov01_02205208
+	.word 0x00000015, UnionChatMarker_New, UnionChatMarker_Free
+	.word 0x00000016, ShayminFormChange_New, ShayminFormChange_Free
 	.word 0x00000017, 0x00000000, 0x00000000

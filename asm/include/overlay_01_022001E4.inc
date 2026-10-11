@@ -34,8 +34,8 @@
 .public FieldEffectManager_LoadTexResource
 .public FieldEffectManager_FreeTexResource
 .public ov01_021F93AC
-.public ov01_022001E4
-.public ov01_022001F8
-.public ov01_022003F4
-.public ov01_02200400
-.public ov01_02200540
+.public EmoteMark_New
+.public EmoteMark_Free
+.public EmoteMark_IsDone
+.public EmoteMark_Hide
+.public EmoteMark_Spawn

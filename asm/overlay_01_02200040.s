@@ -14,8 +14,8 @@
 
 	.text
 
-	thumb_func_start ov01_02200040
-ov01_02200040: ; 0x02200040
+	thumb_func_start TrainerReveal_New
+TrainerReveal_New: ; 0x02200040
 	push {r3, r4, r5, lr}
 	mov r2, #0
 	mov r1, #4
@@ -24,24 +24,24 @@ ov01_02200040: ; 0x02200040
 	bl FieldEffectManager_HeapAllocAndFill
 	add r4, r0, #0
 	str r5, [r4]
-	bl ov01_0220006C
+	bl TrainerReveal_LoadGfx
 	add r0, r4, #0
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov01_02200040
+	thumb_func_end TrainerReveal_New
 
-	thumb_func_start ov01_0220005C
-ov01_0220005C: ; 0x0220005C
+	thumb_func_start TrainerReveal_Free
+TrainerReveal_Free: ; 0x0220005C
 	push {r4, lr}
 	add r4, r0, #0
-	bl ov01_022000B4
+	bl TrainerReveal_FreeGfx
 	add r0, r4, #0
 	bl FieldEffectManager_HeapFree
 	pop {r4, pc}
-	thumb_func_end ov01_0220005C
+	thumb_func_end TrainerReveal_Free
 
-	thumb_func_start ov01_0220006C
-ov01_0220006C: ; 0x0220006C
+	thumb_func_start TrainerReveal_LoadGfx
+TrainerReveal_LoadGfx: ; 0x0220006C
 	push {r3, r4, lr}
 	sub sp, #0xc
 	add r4, r0, #0
@@ -62,7 +62,7 @@ ov01_0220006C: ; 0x0220006C
 	str r0, [sp]
 	mov r0, #0
 	str r0, [sp, #4]
-	ldr r0, _022000B0 ; =ov01_022092A8
+	ldr r0, _022000B0 ; =sTrainerRevealRecordParams
 	mov r2, #9
 	str r0, [sp, #8]
 	ldr r0, [r4]
@@ -72,11 +72,11 @@ ov01_0220006C: ; 0x0220006C
 	add sp, #0xc
 	pop {r3, r4, pc}
 	nop
-_022000B0: .word ov01_022092A8
-	thumb_func_end ov01_0220006C
+_022000B0: .word sTrainerRevealRecordParams
+	thumb_func_end TrainerReveal_LoadGfx
 
-	thumb_func_start ov01_022000B4
-ov01_022000B4: ; 0x022000B4
+	thumb_func_start TrainerReveal_FreeGfx
+TrainerReveal_FreeGfx: ; 0x022000B4
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, [r4]
@@ -93,10 +93,10 @@ ov01_022000B4: ; 0x022000B4
 	bl FieldEffectManager_ReleaseRecord
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov01_022000B4
+	thumb_func_end TrainerReveal_FreeGfx
 
-	thumb_func_start ov01_022000DC
-ov01_022000DC: ; 0x022000DC
+	thumb_func_start TrainerReveal_Spawn
+TrainerReveal_Spawn: ; 0x022000DC
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0x24
 	add r5, r0, #0
@@ -129,7 +129,7 @@ ov01_022000DC: ; 0x022000DC
 	add r1, sp, #0x14
 	str r1, [sp]
 	str r0, [sp, #4]
-	ldr r1, _0220013C ; =ov01_02209294
+	ldr r1, _0220013C ; =sTrainerRevealEffectTemplate
 	add r0, r4, #0
 	add r2, sp, #8
 	mov r3, #0
@@ -137,11 +137,11 @@ ov01_022000DC: ; 0x022000DC
 	add sp, #0x24
 	pop {r3, r4, r5, r6, pc}
 	.balign 4, 0
-_0220013C: .word ov01_02209294
-	thumb_func_end ov01_022000DC
+_0220013C: .word sTrainerRevealEffectTemplate
+	thumb_func_end TrainerReveal_Spawn
 
-	thumb_func_start ov01_02200140
-ov01_02200140: ; 0x02200140
+	thumb_func_start TrainerRevealEffect_Init
+TrainerRevealEffect_Init: ; 0x02200140
 	push {r4, r5, lr}
 	sub sp, #0xc
 	add r4, r1, #0
@@ -171,19 +171,19 @@ ov01_02200140: ; 0x02200140
 	mov r0, #1
 	add sp, #0xc
 	pop {r4, r5, pc}
-	thumb_func_end ov01_02200140
+	thumb_func_end TrainerRevealEffect_Init
 
-	thumb_func_start ov01_02200184
-ov01_02200184: ; 0x02200184
+	thumb_func_start TrainerRevealEffect_Destroy
+TrainerRevealEffect_Destroy: ; 0x02200184
 	ldr r3, _0220018C ; =BillboardObject_Delete
 	ldr r0, [r1, #0x20]
 	bx r3
 	nop
 _0220018C: .word BillboardObject_Delete
-	thumb_func_end ov01_02200184
+	thumb_func_end TrainerRevealEffect_Destroy
 
-	thumb_func_start ov01_02200190
-ov01_02200190: ; 0x02200190
+	thumb_func_start TrainerRevealEffect_Update
+TrainerRevealEffect_Update: ; 0x02200190
 	push {r3, r4, r5, lr}
 	add r4, r1, #0
 	add r5, r0, #0
@@ -206,10 +206,10 @@ ov01_02200190: ; 0x02200190
 	bl FieldEffectManager_DestroyEffect
 _022001BE:
 	pop {r3, r4, r5, pc}
-	thumb_func_end ov01_02200190
+	thumb_func_end TrainerRevealEffect_Update
 
-	thumb_func_start ov01_022001C0
-ov01_022001C0: ; 0x022001C0
+	thumb_func_start TrainerRevealEffect_Draw
+TrainerRevealEffect_Draw: ; 0x022001C0
 	push {r3, r4, lr}
 	sub sp, #0xc
 	add r4, r1, #0
@@ -226,17 +226,17 @@ ov01_022001C0: ; 0x022001C0
 	add sp, #0xc
 	pop {r3, r4, pc}
 	.balign 4, 0
-	thumb_func_end ov01_022001C0
+	thumb_func_end TrainerRevealEffect_Draw
 
 	.rodata
 
-ov01_02209294: ; 0x02209294
+sTrainerRevealEffectTemplate: ; 0x02209294
 	.word 0x00000024
-	.word ov01_02200140
-	.word ov01_02200184
-	.word ov01_02200190
-	.word ov01_022001C0
+	.word TrainerRevealEffect_Init
+	.word TrainerRevealEffect_Destroy
+	.word TrainerRevealEffect_Update
+	.word TrainerRevealEffect_Draw
 
-ov01_022092A8: ; 0x022092A8
+sTrainerRevealRecordParams: ; 0x022092A8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00

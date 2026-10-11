@@ -443,8 +443,8 @@
 .public VeryTallGrass_SpawnAt
 .public FieldSystem_ShowEmoteBubble
 .public Field3dObjectList_GetRenderObjectByID
-.public ov01_022052C4
-.public ov01_022052F4
+.public ShayminFormChange_Spawn
+.public ShayminFormChange_IsDone
 .public ov01_022055DC
 .public ov01_02205A60
 .public ov01_02205D68

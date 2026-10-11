@@ -65,7 +65,7 @@ BOOL MetatileBehavior_IsReflective(u8 tile);
 BOOL MetatileBehavior_IsPuddle(u8 tile);
 void MapObject_CopyPositionVector(void *object, VecFx32 *pos);
 void *FieldEffectManager_GetFromMapObject(void *object);
-void *ov01_021FDE64(void *field, void *resource, void *obj, VecFx32 *pos, int kind, int priority);
+void *Reflection_SpawnForBillboard(void *field, void *resource, void *obj, VecFx32 *pos, int kind, int priority);
 void sub_0205E420(void *object);
 void ov01_021FA108(void *manager, u32 sprite, void *object);
 void sub_0205E38C(void *object, int mode);
@@ -160,7 +160,7 @@ void ov01_021FA97C(void *object, int mode) {
             refl = 1;
         }
         MapObject_CopyPositionVector(object, &pos);
-        w->reflection = ov01_021FDE64(FieldEffectManager_GetFromMapObject(object), w->resource, w->obj, &pos, refl, priority);
+        w->reflection = Reflection_SpawnForBillboard(FieldEffectManager_GetFromMapObject(object), w->resource, w->obj, &pos, refl, priority);
     }
     sub_0205E420(object);
     ov01_021FA108(system->manager, sprite, object);

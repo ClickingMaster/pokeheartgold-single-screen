@@ -20,7 +20,7 @@
 .public Field3dObject_Draw
 .public Field3dObject_SetActiveFlag
 .public Field3dObject_SetPosEx
-.public ov01_022051EC
-.public ov01_02205208
-.public ov01_022052C4
-.public ov01_022052F4
+.public ShayminFormChange_New
+.public ShayminFormChange_Free
+.public ShayminFormChange_Spawn
+.public ShayminFormChange_IsDone

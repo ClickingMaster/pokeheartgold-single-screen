@@ -9,8 +9,8 @@
 u8 ov01_022055DC(LocalMapObject *object);
 u32 ov01_022056C4(LocalMapObject *object, u32 direction);
 int sub_02060FA8(LocalMapObject *object, int direction);
-void ov01_021FDF88(LocalMapObject *object, int kind);
-void ov01_021FDA74(LocalMapObject *object, int kind);
+void Reflection_SpawnForFollower(LocalMapObject *object, int kind);
+void Reflection_Spawn(LocalMapObject *object, int kind);
 
 typedef struct MovementEffect {
     u16 padding : 11;

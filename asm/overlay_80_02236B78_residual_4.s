@@ -91,43 +91,43 @@
 	.public _022372B0
 	.public _022372D0
 	.public _022372D4
-	.public ov80_02236B78
-	.public ov80_02236BE4
-	.public ov80_02236C2C
-	.public ov80_02236C78
-	.public ov80_02236C9C
-	.public ov80_02236DD4
-	.public ov80_02236DF8
-	.public ov80_02236E24
-	.public ov80_02236E90
-	.public ov80_02236F24
-	.public ov80_022370F4
-	.public ov80_02237120
-	.public ov80_02237130
-	.public ov80_022371B0
-	.public ov80_02237254
-	.public ov80_02237264
-	.public ov80_022372B4
-	.public ov80_0223DD38
+	.public BattleFactory_GetRandomTrainerId
+	.public BattleFactory_GetRoundTrainerIds
+	.public BattleFactory_GetTrainerSetRange
+	.public BattleFactory_GetRentalSetRange
+	.public BattleFactory_PickSetIds
+	.public BattleFactory_GetPartySize
+	.public BattleFactory_GetOpponentMonCount
+	.public BattleFactory_GenerateRentalSets
+	.public BattleFactory_GenerateTrainerSets
+	.public BattleFactory_NewBattleSetup
+	.public BattleFactory_GetBattleType
+	.public BattleFactory_GetMonLevel
+	.public BattleFactory_SetPartyToRentals
+	.public BattleFactory_AddPartnerMonsToParty
+	.public BattleFactory_IsMultiType
+	.public BattleFactory_GetTrainerAIFlags
+	.public BattleFactory_GetRound
+	.public gBattleFactoryTrainerSetRanges
     .include "asm/macros.inc"
 	.include "overlay_80_02236B78.inc"
 	.include "global.inc"
 
     .text
-	.public ov80_02236B78
-	.public ov80_02236BE4
-	.public ov80_02236C2C
-	.public ov80_02236C78
-	.public ov80_02236DD4
-	.public ov80_02236DF8
-	.public ov80_02236E24
-	.public ov80_022370F4
-	.public ov80_02237120
-	.public ov80_02237130
-	.public ov80_022371B0
-	.public ov80_02237254
-	.public ov80_022372B4
+	.public BattleFactory_GetRandomTrainerId
+	.public BattleFactory_GetRoundTrainerIds
+	.public BattleFactory_GetTrainerSetRange
+	.public BattleFactory_GetRentalSetRange
+	.public BattleFactory_GetPartySize
+	.public BattleFactory_GetOpponentMonCount
+	.public BattleFactory_GenerateRentalSets
+	.public BattleFactory_GetBattleType
+	.public BattleFactory_GetMonLevel
+	.public BattleFactory_SetPartyToRentals
+	.public BattleFactory_AddPartnerMonsToParty
+	.public BattleFactory_IsMultiType
+	.public BattleFactory_GetRound
     .data
 
-ov80_0223DD38: ; 0x0223DD38
+gBattleFactoryTrainerSetRanges: ; 0x0223DD38
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00

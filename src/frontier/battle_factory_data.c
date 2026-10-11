@@ -43,17 +43,17 @@ void *FrontierTrainer_Load(BattleFactoryTrainer *trainer, int trainerId, enum He
 int ov80_0222A30C(int trainerClass);
 void FrontierMon_ToPokemon(FrontierMon *frontierMon, Pokemon *mon, int level);
 void ov80_0222A3BC(SaveData *saveData, Party *party, Pokemon *mon);
-int ov80_02236DD4(int type);
+int BattleFactory_GetPartySize(int type);
 // opponent Pokemon count of a type (defined returning int; the count is read as a u8 here)
-u8 ov80_02236DF8(int type, int a1);
-void ov80_02236BE4(u8 type, u16 a1, u16 *trainerIds, int count);
-void ov80_02236E24(u16 a0, u8 levelMode, u16 *setIds, FrontierMon *mons, u8 *ivs, u32 *personalities, u16 tradeCount, u16 *excludedSetIds, u16 *excludedItems);
-void ov80_02236E90(int count, u16 trainerId, u8 levelMode, FrontierMon *candidates, u16 *setIds, FrontierMon *mons, u8 *ivs, u32 *personalities, int candidateCount);
-const void *ov80_02236C2C(u16 trainerId, u8 levelMode);
-int ov80_02236C9C(const u16 *species, const u16 *items, int count, int num, u16 *out, enum HeapID heapId, const void *range, u16 a7, u8 *ivs);
-int ov80_02237120(BattleFactoryData *data);
-BOOL ov80_02237254(int type);
-u16 ov80_022372B4(BattleFactoryData *data);
+u8 BattleFactory_GetOpponentMonCount(int type, int a1);
+void BattleFactory_GetRoundTrainerIds(u8 type, u16 a1, u16 *trainerIds, int count);
+void BattleFactory_GenerateRentalSets(u16 a0, u8 levelMode, u16 *setIds, FrontierMon *mons, u8 *ivs, u32 *personalities, u16 tradeCount, u16 *excludedSetIds, u16 *excludedItems);
+void BattleFactory_GenerateTrainerSets(int count, u16 trainerId, u8 levelMode, FrontierMon *candidates, u16 *setIds, FrontierMon *mons, u8 *ivs, u32 *personalities, int candidateCount);
+const void *BattleFactory_GetTrainerSetRange(u16 trainerId, u8 levelMode);
+int BattleFactory_PickSetIds(const u16 *species, const u16 *items, int count, int num, u16 *out, enum HeapID heapId, const void *range, u16 a7, u8 *ivs);
+int BattleFactory_GetMonLevel(BattleFactoryData *data);
+BOOL BattleFactory_IsMultiType(int type);
+u16 BattleFactory_GetRound(BattleFactoryData *data);
 
 #pragma force_active on
 
@@ -130,7 +130,7 @@ BattleFactoryData *BattleFactoryData_Alloc(SaveData *saveData, int resume, u8 ty
     }
     data = gBattleFactoryData;
     data->round = data->winStreak / 7;
-    if (ov80_02237254(data->type) == TRUE) {
+    if (BattleFactory_IsMultiType(data->type) == TRUE) {
         ov80_0222A840(gBattleFactoryData->saveData);
     }
     return gBattleFactoryData;
@@ -155,8 +155,8 @@ void BattleFactoryData_InitNew(BattleFactoryData *data) {
     int count;
     int i;
 
-    ov80_02236BE4(data->type, ov80_022372B4(data), data->trainerIds, 14);
-    ov80_02236E24(ov80_022372B4(data), data->levelMode, data->rentals.setIds, data->rentals.mons, data->rentals.ivs, data->rentals.personalities, data->tradeCount, NULL, NULL);
+    BattleFactory_GetRoundTrainerIds(data->type, BattleFactory_GetRound(data), data->trainerIds, 14);
+    BattleFactory_GenerateRentalSets(BattleFactory_GetRound(data), data->levelMode, data->rentals.setIds, data->rentals.mons, data->rentals.ivs, data->rentals.personalities, data->tradeCount, NULL, NULL);
     BattleFactory_SwapRentalWithRandom(data, 4, 0);
     BattleFactory_SwapRentalWithRandom(data, 5, 0);
     count = FACTORY_RENTAL_COUNT;
@@ -170,7 +170,7 @@ void BattleFactoryData_InitNew(BattleFactoryData *data) {
         }
     }
     // Link multi battles: the partner's rentals are generated here too, without the player's species and items.
-    if (ov80_02237254(data->type) == TRUE) {
+    if (BattleFactory_IsMultiType(data->type) == TRUE) {
         struct {
             FrontierMon *mon;
             u16 *setId;
@@ -188,7 +188,7 @@ void BattleFactoryData_InitNew(BattleFactoryData *data) {
             v.mon++;
             v.item = (BattleFactoryData *)((u8 *)v.item + sizeof(FrontierMon));
         }
-        ov80_02236E24(ov80_022372B4(data), data->levelMode, data->partnerRentals.setIds, data->partnerRentals.mons, data->partnerRentals.ivs, data->partnerRentals.personalities, data->partnerTradeCount, setIds, items);
+        BattleFactory_GenerateRentalSets(BattleFactory_GetRound(data), data->levelMode, data->partnerRentals.setIds, data->partnerRentals.mons, data->partnerRentals.ivs, data->partnerRentals.personalities, data->partnerTradeCount, setIds, items);
         BattleFactory_SwapRentalWithRandom(data, 4, 1);
         BattleFactory_SwapRentalWithRandom(data, 5, 1);
         count = 12;
@@ -202,10 +202,10 @@ void BattleFactoryData_InitNew(BattleFactoryData *data) {
             }
         }
     }
-    ov80_02236E90(ov80_02236DF8(data->type, 1), data->trainerIds[data->battleNo], data->levelMode, candidates, data->opponentSetIds, data->opponentMons, data->opponentIVs, data->opponentPersonalities, count);
+    BattleFactory_GenerateTrainerSets(BattleFactory_GetOpponentMonCount(data->type, 1), data->trainerIds[data->battleNo], data->levelMode, candidates, data->opponentSetIds, data->opponentMons, data->opponentIVs, data->opponentPersonalities, count);
     for (i = 0; i < FACTORY_RENTAL_COUNT; i++) {
         Pokemon *mon = AllocMonZeroed(HEAP_ID_FIELD2);
-        FrontierMon_ToPokemon(&data->rentals.mons[i], mon, ov80_02237120(data));
+        FrontierMon_ToPokemon(&data->rentals.mons[i], mon, BattleFactory_GetMonLevel(data));
         ov80_0222A3BC(data->saveData, data->playerParty, mon);
         Heap_Free(mon);
     }
@@ -263,7 +263,7 @@ void BattleFactoryData_InitResume(BattleFactoryData *data) {
     u16 *trainerId;
     int i;
 
-    ov80_02236DD4(data->type);
+    BattleFactory_GetPartySize(data->type);
     i = 0;
     trainerId = (u16 *)data;
     do {
@@ -281,7 +281,7 @@ void BattleFactoryData_InitResume(BattleFactoryData *data) {
     FrontierMon_GenerateList(mons, setIds, ivs, personalities, NULL, 4, HEAP_ID_FIELD2, NARC_a_2_0_3);
     mon = AllocMonZeroed(HEAP_ID_FIELD2);
     for (i = 0; i < FACTORY_OPPONENT_COUNT; i++) {
-        FrontierMon_ToPokemon(&mons[i], mon, ov80_02237120(data));
+        FrontierMon_ToPokemon(&mons[i], mon, BattleFactory_GetMonLevel(data));
         ov80_0222A3BC(data->saveData, data->playerParty, mon);
     }
     Heap_Free(mon);
@@ -295,7 +295,7 @@ void BattleFactoryData_InitResume(BattleFactoryData *data) {
     FrontierMon_GenerateList(mons, setIds, ivs, personalities, NULL, 4, HEAP_ID_FIELD2, NARC_a_2_0_3);
     mon = AllocMonZeroed(HEAP_ID_FIELD2);
     for (i = 0; i < FACTORY_OPPONENT_COUNT; i++) {
-        FrontierMon_ToPokemon(&mons[i], mon, ov80_02237120(data));
+        FrontierMon_ToPokemon(&mons[i], mon, BattleFactory_GetMonLevel(data));
         ov80_0222A3BC(data->saveData, data->opponentParty, mon);
     }
     Heap_Free(mon);
@@ -348,8 +348,8 @@ void BattleFactoryData_SaveRecord(BattleFactoryData *data, int mode) {
     u16 i;
     u32 count;
 
-    ov80_02236DD4(data->type);
-    ov80_02236DF8(data->type, 1);
+    BattleFactory_GetPartySize(data->type);
+    BattleFactory_GetOpponentMonCount(data->type, 1);
 
     value.byte = data->levelMode;
     FactoryChallenge_SetField(data->challenge, 0, 0, &value.byte);
@@ -445,8 +445,8 @@ void BattleFactory_CompleteRound(BattleFactoryData *data) {
 
 void BattleFactory_SetRentalParty(BattleFactoryData *data) {
     FrontierMon *rentals;
-    int count = ov80_02236DD4(data->type);
-    int opponentCount = ov80_02236DF8(data->type, 1);
+    int count = BattleFactory_GetPartySize(data->type);
+    int opponentCount = BattleFactory_GetOpponentMonCount(data->type, 1);
     Pokemon *mon;
     int i;
     u8 *p;
@@ -458,7 +458,7 @@ void BattleFactory_SetRentalParty(BattleFactoryData *data) {
         p = (u8 *)data;
         rentals = data->rentals.mons;
         do {
-            FrontierMon_ToPokemon(&rentals[((BattleFactoryData *)p)->selection[0]], mon, ov80_02237120(data));
+            FrontierMon_ToPokemon(&rentals[((BattleFactoryData *)p)->selection[0]], mon, BattleFactory_GetMonLevel(data));
             ov80_0222A3BC(data->saveData, data->playerParty, mon);
             ((BattleFactoryData *)p)->partySetIds[0] = data->rentals.setIds[((BattleFactoryData *)p)->selection[0]];
             i++;
@@ -469,7 +469,7 @@ void BattleFactory_SetRentalParty(BattleFactoryData *data) {
     if (opponentCount > 0) {
         FrontierMon *opponent = data->opponentMons;
         do {
-            FrontierMon_ToPokemon(opponent, mon, ov80_02237120(data));
+            FrontierMon_ToPokemon(opponent, mon, BattleFactory_GetMonLevel(data));
             ov80_0222A3BC(data->saveData, data->opponentParty, mon);
             i++;
             opponent++;
@@ -491,7 +491,7 @@ void BattleFactory_GenerateOpponentMons(BattleFactoryData *data) {
         species[i] = 0;
         items[i] = 0;
     }
-    num = ov80_02236DF8(data->type, 1);
+    num = BattleFactory_GetOpponentMonCount(data->type, 1);
     playerCount = Party_GetCount(data->playerParty);
     for (i = 0; i < playerCount; i++) {
         mon = Party_GetMonByIndex(data->playerParty, i);
@@ -505,7 +505,7 @@ void BattleFactory_GenerateOpponentMons(BattleFactoryData *data) {
         items[playerCount + i] = GetMonData(opponentMon, MON_DATA_HELD_ITEM, NULL);
         data->rentals.setIds[i] = data->opponentSetIds[i];
     }
-    ov80_02236C9C(species, items, playerCount + opponentCount, num, data->opponentSetIds, HEAP_ID_FIELD2, ov80_02236C2C(data->trainerIds[data->battleNo], data->levelMode), 0, data->opponentIVs);
+    BattleFactory_PickSetIds(species, items, playerCount + opponentCount, num, data->opponentSetIds, HEAP_ID_FIELD2, BattleFactory_GetTrainerSetRange(data->trainerIds[data->battleNo], data->levelMode), 0, data->opponentIVs);
     // no personalities given: new ones are generated and returned through the last array
     FrontierMon_GenerateList(data->opponentMons, data->opponentSetIds, data->opponentIVs, NULL, data->opponentPersonalities, num, HEAP_ID_FIELD2, NARC_a_2_0_3);
 }
@@ -528,15 +528,15 @@ void BattleFactory_SetOpponentParty(BattleFactoryData *data) {
     int i;
     Pokemon *mon;
 
-    ov80_02236DD4(data->type);
-    count = ov80_02236DF8(data->type, 1);
+    BattleFactory_GetPartySize(data->type);
+    count = BattleFactory_GetOpponentMonCount(data->type, 1);
     SaveArray_Party_Init(data->opponentParty);
     mon = AllocMonZeroed(HEAP_ID_FIELD2);
     i = 0;
     if (count > 0) {
         opponent = data->opponentMons;
         do {
-            FrontierMon_ToPokemon(opponent, mon, ov80_02237120(data));
+            FrontierMon_ToPokemon(opponent, mon, BattleFactory_GetMonLevel(data));
             ov80_0222A3BC(data->saveData, data->opponentParty, mon);
             opponent++;
             i++;

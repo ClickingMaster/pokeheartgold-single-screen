@@ -363,10 +363,10 @@ extern const BattlePartyMenuPos sBattlePartyListStatusIconPos[];
 extern const SpriteResourceCountsListUnion sBattlePartySpriteCapacities;
 // {char, palette, cell, anim, draw priority} per sprite; the interior labels collapse once the table moves to C
 extern const int sBattlePartySpriteTemplates[][5];
-extern const int ov08_02225648[][5];
-extern const int ov08_0222564C[][5];
-extern const int ov08_02225650[][5];
-extern const int ov08_02225654[][5];
+extern const int sBattlePartySpriteTemplatesPltt[][5];
+extern const int sBattlePartySpriteTemplatesCell[][5];
+extern const int sBattlePartySpriteTemplatesAnim[][5];
+extern const int sBattlePartySpriteTemplatesPriority[][5];
 extern const u8 sBattlePartyButtonScrollAmounts[];
 extern const u8 sBattlePartySlotButtonScrollAmounts[];
 extern const s16 sBattlePartyButtonSpriteOffsets[];
@@ -374,9 +374,9 @@ extern const s16 sBattlePartySlotButtonSpriteOffsets[];
 extern const u8 *const sBattlePartyButtonWindowLists[];
 // {x, y, width, height} per button, read as bytes through labels on its members
 extern const u8 sBattlePartyButtonRects[];
-extern const u8 ov08_02225A55[];
-extern const u8 ov08_02225A56[];
-extern const u8 ov08_02225A57[];
+extern const u8 sBattlePartyButtonRectsY[];
+extern const u8 sBattlePartyButtonRectsWidth[];
+extern const u8 sBattlePartyButtonRectsHeight[];
 extern const DpadMenuBox *const sBattlePartyPageCursorBoxes[];
 
 #pragma force_active on
@@ -2821,13 +2821,13 @@ ManagedSprite *BattlePartyMenu_CreateSprite(BattlePartyMenu *menu, int index) {
     template.y = 0;
     template.z = 0;
     template.animation = 0;
-    template.drawPriority = ov08_02225654[index][0];
+    template.drawPriority = sBattlePartySpriteTemplatesPriority[index][0];
     template.pal = 0;
     template.vram = NNS_G2D_VRAM_TYPE_2DSUB;
     template.resIdList[GF_GFX_RES_TYPE_CHAR] = sBattlePartySpriteTemplates[index][0];
-    template.resIdList[GF_GFX_RES_TYPE_PLTT] = ov08_02225648[index][0];
-    template.resIdList[GF_GFX_RES_TYPE_CELL] = ov08_0222564C[index][0];
-    template.resIdList[GF_GFX_RES_TYPE_ANIM] = ov08_02225650[index][0];
+    template.resIdList[GF_GFX_RES_TYPE_PLTT] = sBattlePartySpriteTemplatesPltt[index][0];
+    template.resIdList[GF_GFX_RES_TYPE_CELL] = sBattlePartySpriteTemplatesCell[index][0];
+    template.resIdList[GF_GFX_RES_TYPE_ANIM] = sBattlePartySpriteTemplatesAnim[index][0];
     template.bgPriority = 1;
     template.vramTransfer = FALSE;
     return SpriteSystem_NewSprite(spriteSystem, menu->spriteManager, &template);
@@ -3402,8 +3402,8 @@ u16 *BattlePartyMenu_GetButtonTilemap(BattlePartyMenu *menu, int button, int fra
 // blue for a partner's mon; button 27 (the move to learn) uses palette 10.
 void BattlePartyMenu_BuildButtonTilemap(BattlePartyMenu *menu, u16 *dst, int button, int frame, u8 palette) {
     const u16 *src = BattlePartyMenu_GetButtonTilemap(menu, button, frame, palette);
-    u8 width = ov08_02225A56[button * 4];
-    u8 height = ov08_02225A57[button * 4];
+    u8 width = sBattlePartyButtonRectsWidth[button * 4];
+    u8 height = sBattlePartyButtonRectsHeight[button * 4];
     int size = width * height;
     u16 tiles[2];
     u8 i, j;
@@ -3448,12 +3448,12 @@ void BattlePartyMenu_BuildButtonTilemap(BattlePartyMenu *menu, u16 *dst, int but
 void BattlePartyMenu_DrawButton(BattlePartyMenu *menu, u8 button, u8 frame, u8 palette) {
     // the table is read here as bytes, through labels on its members
     int index = button * 4;
-    int height = ov08_02225A57[index];
-    int width = ov08_02225A56[index];
+    int height = sBattlePartyButtonRectsHeight[index];
+    int width = sBattlePartyButtonRectsWidth[index];
     u16 *buffer = Heap_Alloc(menu->context->heapID, width * height * 2);
 
     BattlePartyMenu_BuildButtonTilemap(menu, buffer, button, frame, palette);
-    LoadRectToBgTilemapRect(menu->bgConfig, 6, buffer, sBattlePartyButtonRects[index], ov08_02225A55[index], width, height);
+    LoadRectToBgTilemapRect(menu->bgConfig, 6, buffer, sBattlePartyButtonRects[index], sBattlePartyButtonRectsY[index], width, height);
     ScheduleBgTilemapBufferTransfer(menu->bgConfig, 6);
     Heap_Free(buffer);
 }

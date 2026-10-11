@@ -61,7 +61,7 @@ void sub_020607D8(LocalMapObject *object, u8 behavior, int unused, const Movemen
                     } else {
                         kind = 4;
                     }
-                    ov01_021FDF88(object, kind);
+                    Reflection_SpawnForFollower(object, kind);
                 } else {
                     int kind;
                     if (MapObject_CheckFlag24(object) != FALSE) {
@@ -86,7 +86,7 @@ void sub_020607D8(LocalMapObject *object, u8 behavior, int unused, const Movemen
                     } else {
                         kind = 1;
                     }
-                    ov01_021FDF88(object, kind);
+                    Reflection_SpawnForFollower(object, kind);
                 }
             } else {
                 int kind;
@@ -112,7 +112,7 @@ void sub_020607D8(LocalMapObject *object, u8 behavior, int unused, const Movemen
                 } else {
                     kind = 1;
                 }
-                ov01_021FDA74(object, kind);
+                Reflection_Spawn(object, kind);
             }
         }
     }

@@ -1089,20 +1089,16 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     ### NitroSDK ###
     Object lib/NitroSDK/asm/fx_sincos.o
     Object lib/NitroSDK/src/fx/fx_mtx22.o
-    Object lib/NitroSDK/src/fx/fx_mtx22_rot_scale.o
     Object lib/NitroSDK/src/fx/fx_mtx33_identity.o
-    Object lib/NitroSDK/src/fx/fx_mtx33_scale.o
-    Object lib/NitroSDK/src/fx/fx_mtx33_rot_x.o
+    Object lib/NitroSDK/src/fx/fx_mtx33_scale_rot_x.o
     Object lib/NitroSDK/src/fx/fx_mtx33_rot_yz.o
-    Object lib/NitroSDK/src/fx/fx_mtx33_inverse.o
-    Object lib/NitroSDK/src/fx/fx_mtx33_concat.o
+    Object lib/NitroSDK/src/fx/fx_mtx33_inverse_concat.o
     Object lib/NitroSDK/src/fx/fx_mtx43_identity.o
     Object lib/NitroSDK/src/fx/fx_mtx43_trans_apply.o
     Object lib/NitroSDK/src/fx/fx_mtx43_scale.o
     Object lib/NitroSDK/src/fx/fx_mtx43_scale_apply.o
     Object lib/NitroSDK/src/fx/fx_mtx43_rot.o
     Object lib/NitroSDK/src/fx/fx_mtx43_inverse_concat.o
-    Object lib/NitroSDK/src/fx/fx_mtx43_look_at.o
     Object lib/NitroSDK/src/fx/fx_mtx44_identity.o
     Object lib/NitroSDK/src/fx/fx_mtx44_trans_apply.o
     Object lib/NitroSDK/src/fx/fx_mtx44_rot.o
@@ -1503,9 +1499,8 @@ Overlay OVY_0
     Object lib/NitroDWC/src/ap_connect.o
     Object lib/NitroDWC/src/available_check_poll.o
     Object lib/NitroDWC/asm/to60_overlay_00_arm_anchor_own1_own1.o
-    Object src/to60_ov00_run06.o
-    Object src/to80_extra1618_run01.o
-    Object src/to60_ov00_run07.o
+    Object lib/NitroDWC/src/gs_platform.o
+    Object lib/NitroDWC/src/gp_api.o
     Object lib/NitroDWC/src/gp_main.o
     Object lib/NitroDWC/src/gp_buffer.o
     Object lib/NitroDWC/src/gp_connect.o
@@ -1806,10 +1801,10 @@ Overlay field
     Object src/field/field_shadow.o
     Object asm/overlay_01_021FD41C_residual_4.o
     Object asm/overlay_01_021FDA14_residual_1.o
-    Object src/field_map_object_spawn_effect_1.o
+    Object src/field/field_reflection.o
     Object src/field/field_footprints.o
     Object asm/overlay_01_021FE590_residual_1.o
-    Object src/field_effect_speed_sequence_1.o
+    Object src/field/field_apricorn_regrowth.o
     Object asm/overlay_01_021FE590_residual_2.o
     Object src/field/field_surf_mount.o
     Object src/field/field_rock_climb_effect.o
@@ -1823,14 +1818,11 @@ Overlay field
     Object src/field/field_very_tall_grass.o
     Object src/field/field_unused_billboard_effect.o
     Object src/field/overlay_01_021FFECC.o
-    Object src/field_effect_pair_task_1.o
-    Object src/field_effect_animation.o
+    Object src/field/field_trainer_reveal.o
+    Object src/field/field_emote_mark.o
     Object asm/overlay_01_022001E4.o
-    Object src/field_effect_variant_task_1.o
-    Object asm/overlay_01_022006A8_residual_1.o
-    Object src/field_warp_entrance_effect_1.o
-    Object src/op90_overlay_01_02200858_r01.o
-    Object src/field_warp_entrance_effect_2.o
+    Object src/field/field_union_chat_marker.o
+    Object src/field/field_warp_arrow.o
     Object asm/overlay_01_02200858_residual_2.o
     Object src/field/scrcmd_pokemon_misc.o
     Object src/field/scrcmd_move_tutor.o
@@ -1843,12 +1835,12 @@ Overlay field
     Object asm/overlay_01_022031C0_residual_3.o
     Object src/field/field_emote_bubble.o
     Object asm/overlay_01_02203E40_residual_1.o
-    Object src/field_camera_matrix_effect_1.o
+    Object src/field/field_flash_darkness.o
     Object src/field/overlay_01_02204004.o
     Object src/field/apricorn_tree_anim.o
     Object src/field/rock_smash_item.o
     Object src/field/headbutt.o
-    Object src/field_effect_audio_task_1.o
+    Object src/field/field_shaymin_form_change.o
     Object asm/overlay_01_022051EC_residual_1.o
     Object src/field_effect_dispatch_1.o
     Object src/overlay_01_022053EC.o
@@ -2101,7 +2093,7 @@ Overlay OVY_8
     Object src/battle/battle_party_menu.o
     Object src/battle/battle_bag_menu.o
     Object src/battle/battle_dpad_cursor.o
-    Object asm/op90_to56_overlay08_bank42_residual_anchor.o
+    Object asm/battle_menu_data.o
     Object src/battle/battle_dpad_cursor_input.o
 }
 Overlay OVY_9
@@ -2441,7 +2433,7 @@ Overlay OVY_15
 {
     After OVY_14
     Object src/application/bag/bag_app.o
-    Object asm/overlay_15_suffix_to42_data.o
+    Object asm/bag_app_data.o
     Object src/application/bag/bag_app_display.o
 }
 Overlay OVY_16
@@ -3765,17 +3757,8 @@ Overlay OVY_80
     Object src/frontier/frontier_save_data_helpers.o
     Object src/frontier/frontier_cmd_link_lobby.o
     Object src/frontier/frontier_link_lobby.o
-    Object src/overlay_80_02236450_opus_partial_1.o
-    Object src/op90_overlay_80_02236450_r01.o
-    Object src/overlay_80_02236450_opus_partial_2.o
-    Object src/overlay_80_02236B78_opus_partial_1.o
-    Object src/op90_overlay_80_02236B78_r01.o
-    Object src/overlay_80_02236B78_opus_partial_2.o
-    Object src/op90_to80_extra1552_residual_1_r01.o
-    Object src/to80_extra1552_run01.o
-    Object src/overlay_80_02236B78_opus_partial_3.o
-    Object src/to70_overlay_80_02236B78_residual_3_extra990_run01.o
-    Object src/overlay_80_02236B78_opus_partial_4.o
+    Object src/frontier/battle_tower_setup.o
+    Object src/frontier/battle_factory_setup.o
     Object asm/overlay_80_02236B78_residual_4.o
     Object src/overlay80_frontier_setup_r22_run1.o
     Object src/to56_r2_w03_overlay80_37334.o

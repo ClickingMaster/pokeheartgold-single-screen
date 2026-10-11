@@ -14,8 +14,8 @@
 
 	.text
 
-	thumb_func_start ov01_021FDA14
-ov01_021FDA14: ; 0x021FDA14
+	thumb_func_start Reflection_New
+Reflection_New: ; 0x021FDA14
 	push {r3, r4, r5, lr}
 	mov r2, #0
 	mov r1, #4
@@ -24,24 +24,24 @@ ov01_021FDA14: ; 0x021FDA14
 	bl FieldEffectManager_HeapAllocAndFill
 	add r4, r0, #0
 	str r5, [r4]
-	bl ov01_021FDA40
+	bl Reflection_LoadGfx
 	add r0, r4, #0
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FDA14
+	thumb_func_end Reflection_New
 
-	thumb_func_start ov01_021FDA30
-ov01_021FDA30: ; 0x021FDA30
+	thumb_func_start Reflection_Free
+Reflection_Free: ; 0x021FDA30
 	push {r4, lr}
 	add r4, r0, #0
-	bl ov01_021FDA5C
+	bl Reflection_FreeGfx
 	add r0, r4, #0
 	bl FieldEffectManager_HeapFree
 	pop {r4, pc}
-	thumb_func_end ov01_021FDA30
+	thumb_func_end Reflection_Free
 
-	thumb_func_start ov01_021FDA40
-ov01_021FDA40: ; 0x021FDA40
+	thumb_func_start Reflection_LoadGfx
+Reflection_LoadGfx: ; 0x021FDA40
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, [r4]
@@ -54,10 +54,10 @@ ov01_021FDA40: ; 0x021FDA40
 	bl FieldEffectManager_LoadBillboardResource
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FDA40
+	thumb_func_end Reflection_LoadGfx
 
-	thumb_func_start ov01_021FDA5C
-ov01_021FDA5C: ; 0x021FDA5C
+	thumb_func_start Reflection_FreeGfx
+Reflection_FreeGfx: ; 0x021FDA5C
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, [r4]
@@ -68,10 +68,10 @@ ov01_021FDA5C: ; 0x021FDA5C
 	bl FieldEffectManager_FreeBillboardResource
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FDA5C
+	thumb_func_end Reflection_FreeGfx
 
-	thumb_func_start ov01_021FDA74
-ov01_021FDA74: ; 0x021FDA74
+	thumb_func_start Reflection_Spawn
+Reflection_Spawn: ; 0x021FDA74
 	push {r4, r5, lr}
 	sub sp, #0x24
 	add r5, r0, #0
@@ -103,10 +103,10 @@ ov01_021FDA74: ; 0x021FDA74
 	pop {r4, r5, pc}
 	nop
 _021FDABC: .word ov01_02208F88
-	thumb_func_end ov01_021FDA74
+	thumb_func_end Reflection_Spawn
 
-	thumb_func_start ov01_021FDAC0
-ov01_021FDAC0: ; 0x021FDAC0
+	thumb_func_start ReflectionEffect_Init
+ReflectionEffect_Init: ; 0x021FDAC0
 	push {r4, r5, lr}
 	sub sp, #0xc
 	add r4, r1, #0
@@ -147,21 +147,21 @@ _021FDB12:
 	ldr r1, [r4, #0x20]
 	add r0, r4, #0
 	add r2, sp, #0
-	bl ov01_021FDC7C
+	bl ReflectionEffect_CalcPosition
 	add r0, r5, #0
 	add r1, sp, #0
 	bl FieldEffect_SetPosition
 	add r0, r5, #0
 	add r1, r4, #0
-	bl ov01_021FDD48
+	bl ReflectionEffect_CreateBillboard
 	mov r0, #1
 	add sp, #0xc
 	pop {r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FDAC0
+	thumb_func_end ReflectionEffect_Init
 
-	thumb_func_start ov01_021FDB34
-ov01_021FDB34: ; 0x021FDB34
+	thumb_func_start ReflectionEffect_Destroy
+ReflectionEffect_Destroy: ; 0x021FDB34
 	push {r3, lr}
 	ldr r0, [r1, #0xc]
 	cmp r0, #1
@@ -170,10 +170,10 @@ ov01_021FDB34: ; 0x021FDB34
 	bl BillboardObject_Delete
 _021FDB42:
 	pop {r3, pc}
-	thumb_func_end ov01_021FDB34
+	thumb_func_end ReflectionEffect_Destroy
 
-	thumb_func_start ov01_021FDB44
-ov01_021FDB44: ; 0x021FDB44
+	thumb_func_start ReflectionEffect_Update
+ReflectionEffect_Update: ; 0x021FDB44
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0xc
 	add r4, r1, #0
@@ -226,7 +226,7 @@ _021FDBA6:
 	add r0, r4, #0
 	add r1, r6, #0
 	add r2, sp, #0
-	bl ov01_021FDC7C
+	bl ReflectionEffect_CalcPosition
 	add r0, r5, #0
 	add r1, sp, #0
 	bl FieldEffect_SetPosition
@@ -235,15 +235,15 @@ _021FDBA6:
 	bne _021FDBC6
 	add r0, r5, #0
 	add r1, r4, #0
-	bl ov01_021FDD48
+	bl ReflectionEffect_CreateBillboard
 _021FDBC6:
 	add sp, #0xc
 	pop {r3, r4, r5, r6, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FDB44
+	thumb_func_end ReflectionEffect_Update
 
-	thumb_func_start ov01_021FDBCC
-ov01_021FDBCC: ; 0x021FDBCC
+	thumb_func_start ReflectionEffect_Draw
+ReflectionEffect_Draw: ; 0x021FDBCC
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x18
 	add r5, r1, #0
@@ -323,10 +323,10 @@ _021FDC3C:
 _021FDC78:
 	add sp, #0x18
 	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end ov01_021FDBCC
+	thumb_func_end ReflectionEffect_Draw
 
-	thumb_func_start ov01_021FDC7C
-ov01_021FDC7C: ; 0x021FDC7C
+	thumb_func_start ReflectionEffect_CalcPosition
+ReflectionEffect_CalcPosition: ; 0x021FDC7C
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x2c
 	ldr r3, _021FDD44 ; =ov01_02208FC8
@@ -425,10 +425,10 @@ _021FDD36:
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
 _021FDD44: .word ov01_02208FC8
-	thumb_func_end ov01_021FDC7C
+	thumb_func_end ReflectionEffect_CalcPosition
 
-	thumb_func_start ov01_021FDD48
-ov01_021FDD48: ; 0x021FDD48
+	thumb_func_start ReflectionEffect_CreateBillboard
+ReflectionEffect_CreateBillboard: ; 0x021FDD48
 	push {r4, r5, lr}
 	sub sp, #0x34
 	add r4, r1, #0
@@ -462,10 +462,10 @@ _021FDD8E:
 	add sp, #0x34
 	pop {r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FDD48
+	thumb_func_end ReflectionEffect_CreateBillboard
 
-	thumb_func_start ov01_021FDD94
-ov01_021FDD94: ; 0x021FDD94
+	thumb_func_start BillboardReflectionEffect_CreateBillboard
+BillboardReflectionEffect_CreateBillboard: ; 0x021FDD94
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0x34
 	add r4, r1, #0
@@ -514,10 +514,10 @@ _021FDDA4:
 	bl BillboardObject_UpdateTextureAnimation
 	add sp, #0x34
 	pop {r3, r4, r5, r6, pc}
-	thumb_func_end ov01_021FDD94
+	thumb_func_end BillboardReflectionEffect_CreateBillboard
 
-	thumb_func_start ov01_021FDE08
-ov01_021FDE08: ; 0x021FDE08
+	thumb_func_start BillboardReflectionEffect_CalcPosition
+BillboardReflectionEffect_CalcPosition: ; 0x021FDE08
 	push {r3, r4, r5, lr}
 	sub sp, #0x18
 	ldr r3, _021FDE60 ; =ov01_02208FB0
@@ -563,10 +563,10 @@ _021FDE4C:
 	pop {r3, r4, r5, pc}
 	nop
 _021FDE60: .word ov01_02208FB0
-	thumb_func_end ov01_021FDE08
+	thumb_func_end BillboardReflectionEffect_CalcPosition
 
-	thumb_func_start ov01_021FDE64
-ov01_021FDE64: ; 0x021FDE64
+	thumb_func_start Reflection_SpawnForBillboard
+Reflection_SpawnForBillboard: ; 0x021FDE64
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x40
 	add r5, r0, #0
@@ -601,10 +601,10 @@ _021FDE86:
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
 _021FDEA8: .word ov01_02208F9C
-	thumb_func_end ov01_021FDE64
+	thumb_func_end Reflection_SpawnForBillboard
 
-	thumb_func_start ov01_021FDEAC
-ov01_021FDEAC: ; 0x021FDEAC
+	thumb_func_start BillboardReflectionEffect_Init
+BillboardReflectionEffect_Init: ; 0x021FDEAC
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0xc
 	add r5, r0, #0
@@ -640,31 +640,31 @@ _021FDEE6:
 	bl FieldEffect_GetPosition
 	add r0, r4, #0
 	add r1, sp, #0
-	bl ov01_021FDE08
+	bl BillboardReflectionEffect_CalcPosition
 	add r0, r5, #0
 	add r1, sp, #0
 	bl FieldEffect_SetPosition
 	add r0, r5, #0
 	add r1, r4, #0
-	bl ov01_021FDD94
+	bl BillboardReflectionEffect_CreateBillboard
 	add r0, r5, #0
 	bl FieldEffect_RunUpdate
 	mov r0, #1
 	add sp, #0xc
 	pop {r3, r4, r5, r6, pc}
-	thumb_func_end ov01_021FDEAC
+	thumb_func_end BillboardReflectionEffect_Init
 
-	thumb_func_start ov01_021FDF14
-ov01_021FDF14: ; 0x021FDF14
+	thumb_func_start BillboardReflectionEffect_Destroy
+BillboardReflectionEffect_Destroy: ; 0x021FDF14
 	ldr r3, _021FDF1C ; =BillboardObject_Delete
 	ldr r0, [r1, #0x3c]
 	bx r3
 	nop
 _021FDF1C: .word BillboardObject_Delete
-	thumb_func_end ov01_021FDF14
+	thumb_func_end BillboardReflectionEffect_Destroy
 
-	thumb_func_start ov01_021FDF20
-ov01_021FDF20: ; 0x021FDF20
+	thumb_func_start BillboardReflectionEffect_Update
+BillboardReflectionEffect_Update: ; 0x021FDF20
 	push {r3, r4, lr}
 	sub sp, #0xc
 	add r4, r0, #0
@@ -693,16 +693,16 @@ _021FDF40:
 _021FDF50:
 	add r0, r1, #0
 	add r1, sp, #0
-	bl ov01_021FDE08
+	bl BillboardReflectionEffect_CalcPosition
 	add r0, r4, #0
 	add r1, sp, #0
 	bl FieldEffect_SetPosition
 	add sp, #0xc
 	pop {r3, r4, pc}
-	thumb_func_end ov01_021FDF20
+	thumb_func_end BillboardReflectionEffect_Update
 
-	thumb_func_start ov01_021FDF64
-ov01_021FDF64: ; 0x021FDF64
+	thumb_func_start BillboardReflectionEffect_Draw
+BillboardReflectionEffect_Draw: ; 0x021FDF64
 	push {r3, r4, lr}
 	sub sp, #0xc
 	add r4, r1, #0
@@ -718,10 +718,10 @@ ov01_021FDF64: ; 0x021FDF64
 	add sp, #0xc
 	pop {r3, r4, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FDF64
+	thumb_func_end BillboardReflectionEffect_Draw
 
-	thumb_func_start ov01_021FDF88
-ov01_021FDF88: ; 0x021FDF88
+	thumb_func_start Reflection_SpawnForFollower
+Reflection_SpawnForFollower: ; 0x021FDF88
 	push {r4, r5, lr}
 	sub sp, #0x24
 	add r5, r0, #0
@@ -753,10 +753,10 @@ ov01_021FDF88: ; 0x021FDF88
 	pop {r4, r5, pc}
 	nop
 _021FDFD0: .word ov01_02208F74
-	thumb_func_end ov01_021FDF88
+	thumb_func_end Reflection_SpawnForFollower
 
-	thumb_func_start ov01_021FDFD4
-ov01_021FDFD4: ; 0x021FDFD4
+	thumb_func_start FollowerReflectionEffect_Init
+FollowerReflectionEffect_Init: ; 0x021FDFD4
 	push {r4, r5, lr}
 	sub sp, #0xc
 	add r4, r1, #0
@@ -800,7 +800,7 @@ _021FE02A:
 	ldr r1, [r4, #0x20]
 	add r0, r4, #0
 	add r2, sp, #0
-	bl ov01_021FDC7C
+	bl ReflectionEffect_CalcPosition
 	ldr r1, [sp, #4]
 	ldr r0, _021FE054 ; =0x00000514
 	sub r0, r1, r0
@@ -810,16 +810,16 @@ _021FE02A:
 	bl FieldEffect_SetPosition
 	add r0, r5, #0
 	add r1, r4, #0
-	bl ov01_021FE190
+	bl FollowerReflectionEffect_CreateBillboard
 	mov r0, #1
 	add sp, #0xc
 	pop {r4, r5, pc}
 	nop
 _021FE054: .word 0x00000514
-	thumb_func_end ov01_021FDFD4
+	thumb_func_end FollowerReflectionEffect_Init
 
-	thumb_func_start ov01_021FE058
-ov01_021FE058: ; 0x021FE058
+	thumb_func_start FollowerReflectionEffect_Update
+FollowerReflectionEffect_Update: ; 0x021FE058
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0xc
 	add r4, r1, #0
@@ -872,7 +872,7 @@ _021FE0BA:
 	add r0, r4, #0
 	add r1, r6, #0
 	add r2, sp, #0
-	bl ov01_021FDC7C
+	bl ReflectionEffect_CalcPosition
 	ldr r1, [sp, #4]
 	ldr r0, _021FE0E8 ; =0x00000514
 	sub r0, r1, r0
@@ -885,16 +885,16 @@ _021FE0BA:
 	bne _021FE0E2
 	add r0, r5, #0
 	add r1, r4, #0
-	bl ov01_021FE190
+	bl FollowerReflectionEffect_CreateBillboard
 _021FE0E2:
 	add sp, #0xc
 	pop {r3, r4, r5, r6, pc}
 	nop
 _021FE0E8: .word 0x00000514
-	thumb_func_end ov01_021FE058
+	thumb_func_end FollowerReflectionEffect_Update
 
-	thumb_func_start ov01_021FE0EC
-ov01_021FE0EC: ; 0x021FE0EC
+	thumb_func_start FollowerReflectionEffect_Draw
+FollowerReflectionEffect_Draw: ; 0x021FE0EC
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0xc
 	add r5, r1, #0
@@ -967,10 +967,10 @@ _021FE18A:
 	add sp, #0xc
 	pop {r3, r4, r5, r6, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FE0EC
+	thumb_func_end FollowerReflectionEffect_Draw
 
-	thumb_func_start ov01_021FE190
-ov01_021FE190: ; 0x021FE190
+	thumb_func_start FollowerReflectionEffect_CreateBillboard
+FollowerReflectionEffect_CreateBillboard: ; 0x021FE190
 	push {r4, r5, lr}
 	sub sp, #0x34
 	add r4, r1, #0
@@ -1022,30 +1022,30 @@ _021FE1FA:
 	add sp, #0x34
 	pop {r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov01_021FE190
+	thumb_func_end FollowerReflectionEffect_CreateBillboard
 
 	.rodata
 
 ov01_02208F74: ; 0x02208F74
 	.word 0x00000038
-	.word ov01_021FDFD4
-	.word ov01_021FDB34
-	.word ov01_021FE058
-	.word ov01_021FE0EC
+	.word FollowerReflectionEffect_Init
+	.word ReflectionEffect_Destroy
+	.word FollowerReflectionEffect_Update
+	.word FollowerReflectionEffect_Draw
 
 ov01_02208F88: ; 0x02208F88
 	.word 0x00000038
-	.word ov01_021FDAC0
-	.word ov01_021FDB34
-	.word ov01_021FDB44
-	.word ov01_021FDBCC
+	.word ReflectionEffect_Init
+	.word ReflectionEffect_Destroy
+	.word ReflectionEffect_Update
+	.word ReflectionEffect_Draw
 
 ov01_02208F9C: ; 0x02208F9C
 	.word 0x00000038
-	.word ov01_021FDEAC
-	.word ov01_021FDF14
-	.word ov01_021FDF20
-	.word ov01_021FDF64
+	.word BillboardReflectionEffect_Init
+	.word BillboardReflectionEffect_Destroy
+	.word BillboardReflectionEffect_Update
+	.word BillboardReflectionEffect_Draw
 
 ov01_02208FB0: ; 0x02208FB0
 	.byte 0x00, 0xE0, 0x00, 0x00, 0x00, 0x40, 0x01, 0x00, 0x00, 0xE0, 0x00, 0x00, 0x00, 0xE0, 0x00, 0x00

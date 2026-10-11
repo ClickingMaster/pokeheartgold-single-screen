@@ -118,8 +118,8 @@
 .public ov01_021F9318
 .public FieldShadow_CreateMapObjectShadow
 .public ov01_021FD684
-.public ov01_021FDA74
-.public ov01_021FDF88
+.public Reflection_Spawn
+.public Reflection_SpawnForFollower
 .public Footprints_SpawnInSand
 .public Footprints_SpawnTracksInSand
 .public ov01_021FE3DC

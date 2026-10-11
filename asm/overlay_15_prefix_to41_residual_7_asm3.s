@@ -10,7 +10,7 @@
 	.public BagApp_State_HandleInput
 	.public BagApp_State_OpenItemMenu
 	.public BagApp_State_ChangePage
-	.public ov15_021FA620
+	.public BagApp_CalcPocketIconSpacing
 	.public BagApp_FindPocketIndex
 	.public BagApp_GetAdjacentPocket
 	.public BagApp_PressButton
@@ -26,7 +26,7 @@
 	.extern BagApp_SetPocketPositionFromButton
 	.extern BagApp_ShouldMoveCursorToButton
 	.extern BagApp_GetTouchedButton
-	.extern ov15_021FAC40
+	.extern BagApp_GetTouchedPocket
 	.extern BagApp_RedrawMovePage
 	.extern BagApp_SetupItemMenu
 	.extern BagApp_ItemAction_Use
@@ -78,8 +78,8 @@
 	.public BagApp_PrintItemDescription
 	.public BagApp_PrintTMHMMoveInfo
 	.extern sDefaultItemMenuChoices
-	.extern _02201300
-	.extern _02201480
+	.extern sDebugSubScreenLayoutCount
+	.extern sDebugSubScreenLayout
 	.extern BagApp_LoadItemMenuStrings
 	.extern BagApp_FreeItemMenuStrings
 	.extern BagApp_PrintItemSelectedMessage
@@ -135,20 +135,20 @@
 	.extern sBagModelPosition
 	.extern sBagGraphicsModes
 	.extern sItemMenuNavTable
-	.extern ov15_02200529
-	.extern ov15_0220052A
-	.extern ov15_0220052B
+	.extern sItemMenuNavTableDown
+	.extern sItemMenuNavTableLeft
+	.extern sItemMenuNavTableRight
 	.extern sCameraSetup
 	.extern sMoveNavTable
-	.extern ov15_02200585
-	.extern ov15_02200586
-	.extern ov15_02200587
+	.extern sMoveNavTableDown
+	.extern sMoveNavTableLeft
+	.extern sMoveNavTableRight
 	.extern sBagModelRotation
 	.extern sBagGraphicsBanks
 	.extern sButtonNavTable
-	.extern ov15_02200641
-	.extern ov15_02200642
-	.extern ov15_02200643
+	.extern sButtonNavTableDown
+	.extern sButtonNavTableLeft
+	.extern sButtonNavTableRight
 	.extern sBgTemplate_Main1
 	.extern sBgTemplate_Main2
 	.extern sBgTemplate_Main3
@@ -432,7 +432,7 @@ BagApp_State_PocketSwitch: ; 0x021FA93C
 	strb r0, [r4, #7]
 _021FA958:
 	add r0, r5, #0
-	bl ov15_021FAC40
+	bl BagApp_GetTouchedPocket
 	add r6, r0, #0
 	mov r0, #0
 	mvn r0, r0

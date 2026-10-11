@@ -9,24 +9,24 @@
 #include "msgdata/msg/msg_0096_D31R0201.h"
 #include "msgdata/msg/msg_0066_D23R0102.h"
 	.include "asm/macros.inc"
-	.public ov01_022006A8
-	.public ov01_022006C4
-	.public ov01_022006D4
-	.public ov01_02200710
-	.public ov01_02200730
-	.public ov01_02200780
-	.public ov01_022007D0
-	.public ov01_022007DC
-	.public ov01_022007F8
-	.public ov01_02209308
-	.public ov01_0220931C
+	.public UnionChatMarker_New
+	.public UnionChatMarker_Free
+	.public UnionChatMarker_LoadGfx
+	.public UnionChatMarker_FreeGfx
+	.public UnionChatMarker_Spawn
+	.public UnionChatMarkerEffect_Init
+	.public UnionChatMarkerEffect_Destroy
+	.public UnionChatMarkerEffect_Update
+	.public UnionChatMarkerEffect_Draw
+	.public sUnionChatMarkerEffectTemplate
+	.public sUnionChatMarkerRecordParams
 	.include "overlay_01_022006A8.inc"
 	.include "global.inc"
 
 	.text
 
-	thumb_func_start ov01_022006A8
-ov01_022006A8: ; 0x022006A8
+	thumb_func_start UnionChatMarker_New
+UnionChatMarker_New: ; 0x022006A8
 	push {r3, r4, r5, lr}
 	mov r2, #0
 	mov r1, #4
@@ -35,24 +35,24 @@ ov01_022006A8: ; 0x022006A8
 	bl FieldEffectManager_HeapAllocAndFill
 	add r4, r0, #0
 	str r5, [r4]
-	bl ov01_022006D4
+	bl UnionChatMarker_LoadGfx
 	add r0, r4, #0
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov01_022006A8
+	thumb_func_end UnionChatMarker_New
 
-	thumb_func_start ov01_022006C4
-ov01_022006C4: ; 0x022006C4
+	thumb_func_start UnionChatMarker_Free
+UnionChatMarker_Free: ; 0x022006C4
 	push {r4, lr}
 	add r4, r0, #0
-	bl ov01_02200710
+	bl UnionChatMarker_FreeGfx
 	add r0, r4, #0
 	bl FieldEffectManager_HeapFree
 	pop {r4, pc}
-	thumb_func_end ov01_022006C4
+	thumb_func_end UnionChatMarker_Free
 
-	thumb_func_start ov01_022006D4
-ov01_022006D4: ; 0x022006D4
+	thumb_func_start UnionChatMarker_LoadGfx
+UnionChatMarker_LoadGfx: ; 0x022006D4
 	push {r3, r4, lr}
 	sub sp, #0xc
 	add r4, r0, #0
@@ -69,7 +69,7 @@ ov01_022006D4: ; 0x022006D4
 	str r0, [sp]
 	mov r3, #0
 	mov r1, #4
-	ldr r0, _0220070C ; =ov01_0220931C
+	ldr r0, _0220070C ; =sUnionChatMarkerRecordParams
 	str r3, [sp, #4]
 	str r0, [sp, #8]
 	ldr r0, [r4]
@@ -78,11 +78,11 @@ ov01_022006D4: ; 0x022006D4
 	add sp, #0xc
 	pop {r3, r4, pc}
 	nop
-_0220070C: .word ov01_0220931C
-	thumb_func_end ov01_022006D4
+_0220070C: .word sUnionChatMarkerRecordParams
+	thumb_func_end UnionChatMarker_LoadGfx
 
-	thumb_func_start ov01_02200710
-ov01_02200710: ; 0x02200710
+	thumb_func_start UnionChatMarker_FreeGfx
+UnionChatMarker_FreeGfx: ; 0x02200710
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, [r4]
@@ -96,10 +96,10 @@ ov01_02200710: ; 0x02200710
 	bl FieldEffectManager_ReleaseRecord
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov01_02200710
+	thumb_func_end UnionChatMarker_FreeGfx
 
-	thumb_func_start ov01_02200730
-ov01_02200730: ; 0x02200730
+	thumb_func_start UnionChatMarker_Spawn
+UnionChatMarker_Spawn: ; 0x02200730
 	push {r4, r5, lr}
 	sub sp, #0x24
 	add r5, r0, #0
@@ -125,7 +125,7 @@ ov01_02200730: ; 0x02200730
 	add r1, sp, #0x14
 	str r1, [sp]
 	str r0, [sp, #4]
-	ldr r1, _0220077C ; =ov01_02209308
+	ldr r1, _0220077C ; =sUnionChatMarkerEffectTemplate
 	add r0, r4, #0
 	add r2, sp, #8
 	mov r3, #0
@@ -133,11 +133,11 @@ ov01_02200730: ; 0x02200730
 	add sp, #0x24
 	pop {r4, r5, pc}
 	nop
-_0220077C: .word ov01_02209308
-	thumb_func_end ov01_02200730
+_0220077C: .word sUnionChatMarkerEffectTemplate
+	thumb_func_end UnionChatMarker_Spawn
 
-	thumb_func_start ov01_02200780
-ov01_02200780: ; 0x02200780
+	thumb_func_start UnionChatMarkerEffect_Init
+UnionChatMarkerEffect_Init: ; 0x02200780
 	push {r4, r5, lr}
 	sub sp, #0xc
 	add r4, r1, #0
@@ -173,19 +173,19 @@ ov01_02200780: ; 0x02200780
 	add sp, #0xc
 	pop {r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov01_02200780
+	thumb_func_end UnionChatMarkerEffect_Init
 
-	thumb_func_start ov01_022007D0
-ov01_022007D0: ; 0x022007D0
+	thumb_func_start UnionChatMarkerEffect_Destroy
+UnionChatMarkerEffect_Destroy: ; 0x022007D0
 	ldr r3, _022007D8 ; =BillboardObject_Delete
 	ldr r0, [r1, #0x20]
 	bx r3
 	nop
 _022007D8: .word BillboardObject_Delete
-	thumb_func_end ov01_022007D0
+	thumb_func_end UnionChatMarkerEffect_Destroy
 
-	thumb_func_start ov01_022007DC
-ov01_022007DC: ; 0x022007DC
+	thumb_func_start UnionChatMarkerEffect_Update
+UnionChatMarkerEffect_Update: ; 0x022007DC
 	push {r4, lr}
 	add r2, r1, #0
 	add r4, r0, #0
@@ -199,10 +199,10 @@ ov01_022007DC: ; 0x022007DC
 	bl FieldEffectManager_DestroyEffect
 _022007F6:
 	pop {r4, pc}
-	thumb_func_end ov01_022007DC
+	thumb_func_end UnionChatMarkerEffect_Update
 
-	thumb_func_start ov01_022007F8
-ov01_022007F8: ; 0x022007F8
+	thumb_func_start UnionChatMarkerEffect_Draw
+UnionChatMarkerEffect_Draw: ; 0x022007F8
 	push {r4, r5, r6, lr}
 	sub sp, #0x18
 	add r5, r1, #0
@@ -247,18 +247,18 @@ _0220081A:
 	add sp, #0x18
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
-	thumb_func_end ov01_022007F8
+	thumb_func_end UnionChatMarkerEffect_Draw
 
 	.rodata
 
-ov01_02209308: ; 0x02209308
+sUnionChatMarkerEffectTemplate: ; 0x02209308
 	.word 0x00000024
-	.word ov01_02200780
-	.word ov01_022007D0
-	.word ov01_022007DC
-	.word ov01_022007F8
+	.word UnionChatMarkerEffect_Init
+	.word UnionChatMarkerEffect_Destroy
+	.word UnionChatMarkerEffect_Update
+	.word UnionChatMarkerEffect_Draw
 
-ov01_0220931C: ; 0x0220931C
+sUnionChatMarkerRecordParams: ; 0x0220931C
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00

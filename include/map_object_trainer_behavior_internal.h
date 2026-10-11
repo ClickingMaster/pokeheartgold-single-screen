@@ -81,7 +81,7 @@ extern void ov01_021F94C0(LMO *obj, void *a1, u32 a2);
 extern void ov01_021F95CC(LMO *obj, void *a1, u32 a2);
 extern void ov01_021F9610(void *a0, void *a1);
 extern void ov01_021F9630(void *a0, void *a1);
-extern void ov01_021FE66C(LMO *obj);
+extern void ApricornRegrowth_Spawn(LMO *obj);
 extern void ov01_021FA3E8(LMO *obj, void *a1);
 extern int ov01_021F9344(LMO *obj);
 extern void ov01_021FA40C(LMO *obj, void *a1);

@@ -8,7 +8,7 @@
 #include "gf_gfx_planes.h"
 #include "heap.h"
 #include "math_util.h"
-#include "overlay_01_02203E40.h"
+#include "field/field_flash_darkness.h"
 #include "sprite_transfer.h"
 #include "sound_playback.h"
 #include "oam_manager.h"
@@ -2216,7 +2216,7 @@ static void ov01_021ED710(SysTask *task, void *data) {
 
     switch (v0->unkF62) {
     case 0:
-        v1->unk62C = ov01_02203EA0(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar));
+        v1->unk62C = FlashDarkness_Show(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar));
         ov01_021EA864(fieldSystem->fog, -1, TRUE, GX_FOGBLEND_COLOR_ALPHA, GX_FOGSLOPE_0x0020, 0);
         ov01_021EA89C(fieldSystem->fog, -1, 0, 0);
         {
@@ -2233,7 +2233,7 @@ static void ov01_021ED710(SysTask *task, void *data) {
         v0->unkF62 = 3;
         break;
     case 2:
-        v1->unk62C = ov01_02203EA0(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar));
+        v1->unk62C = FlashDarkness_Show(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar));
         ov01_021EA864(fieldSystem->fog, -1, TRUE, GX_FOGBLEND_COLOR_ALPHA, GX_FOGSLOPE_0x0020, 0);
         ov01_021EA89C(fieldSystem->fog, -1, 0, 0);
         {
@@ -2272,7 +2272,7 @@ static void ov01_021ED710(SysTask *task, void *data) {
         case 3:
             v1->unk630++;
             float v3 = 1.0 + (v1->unk630 * 3.0) / 24.0;
-            ov01_02203F2C(v1->unk62C, v3);
+            FlashDarkness_SetScale(v1->unk62C, v3);
             if (v3 >= 4.0) {
                 v0->unkF62 = 5;
             }
@@ -2293,7 +2293,7 @@ static void ov01_021ED924(SysTask *task, void *data) {
 
     switch (v0->unkF62) {
     case 0:
-        v1->unk62C = ov01_02203EA0(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar));
+        v1->unk62C = FlashDarkness_Show(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar));
         ov01_021EA864(fieldSystem->fog, -1, TRUE, GX_FOGBLEND_COLOR_ALPHA, GX_FOGSLOPE_0x0020, 0);
         ov01_021EA89C(fieldSystem->fog, -1, 0, 0);
         {
@@ -2303,14 +2303,14 @@ static void ov01_021ED924(SysTask *task, void *data) {
             }
             ov01_021EA8C4(fieldSystem->fog, v2);
         }
-        ov01_02203F2C(v1->unk62C, 4);
+        FlashDarkness_SetScale(v1->unk62C, 4);
         v0->unkF62 = 1;
         break;
     case 1:
         v0->unkF62 = 3;
         break;
     case 2:
-        v1->unk62C = ov01_02203EA0(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar));
+        v1->unk62C = FlashDarkness_Show(PlayerAvatar_GetMapObject(fieldSystem->playerAvatar));
         ov01_021EA864(fieldSystem->fog, -1, TRUE, GX_FOGBLEND_COLOR_ALPHA, GX_FOGSLOPE_0x0020, 0);
         ov01_021EA89C(fieldSystem->fog, -1, 0, 0);
         {
@@ -2320,7 +2320,7 @@ static void ov01_021ED924(SysTask *task, void *data) {
             }
             ov01_021EA8C4(fieldSystem->fog, v2);
         }
-        ov01_02203F2C(v1->unk62C, 4);
+        FlashDarkness_SetScale(v1->unk62C, 4);
         v0->unkF62 = 3;
         break;
     case 3:

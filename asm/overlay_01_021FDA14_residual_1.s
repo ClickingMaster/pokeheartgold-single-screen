@@ -12,29 +12,29 @@
 	.include "overlay_01_021FDA14.inc"
 	.include "global.inc"
 
-	.public ov01_021FDA14
-	.public ov01_021FDA30
-	.public ov01_021FDA40
-	.public ov01_021FDA5C
-	.public ov01_021FDA74
-	.public ov01_021FDAC0
-	.public ov01_021FDB34
-	.public ov01_021FDB44
-	.public ov01_021FDBCC
-	.public ov01_021FDC7C
-	.public ov01_021FDD48
-	.public ov01_021FDD94
-	.public ov01_021FDE08
-	.public ov01_021FDE64
-	.public ov01_021FDEAC
-	.public ov01_021FDF14
-	.public ov01_021FDF20
-	.public ov01_021FDF64
-	.public ov01_021FDF88
-	.public ov01_021FDFD4
-	.public ov01_021FE058
-	.public ov01_021FE0EC
-	.public ov01_021FE190
+	.public Reflection_New
+	.public Reflection_Free
+	.public Reflection_LoadGfx
+	.public Reflection_FreeGfx
+	.public Reflection_Spawn
+	.public ReflectionEffect_Init
+	.public ReflectionEffect_Destroy
+	.public ReflectionEffect_Update
+	.public ReflectionEffect_Draw
+	.public ReflectionEffect_CalcPosition
+	.public ReflectionEffect_CreateBillboard
+	.public BillboardReflectionEffect_CreateBillboard
+	.public BillboardReflectionEffect_CalcPosition
+	.public Reflection_SpawnForBillboard
+	.public BillboardReflectionEffect_Init
+	.public BillboardReflectionEffect_Destroy
+	.public BillboardReflectionEffect_Update
+	.public BillboardReflectionEffect_Draw
+	.public Reflection_SpawnForFollower
+	.public FollowerReflectionEffect_Init
+	.public FollowerReflectionEffect_Update
+	.public FollowerReflectionEffect_Draw
+	.public FollowerReflectionEffect_CreateBillboard
 	.public ov01_02208F74
 	.public ov01_02208F88
 	.public ov01_02208F9C
@@ -45,21 +45,21 @@
 
 ov01_02208F74: ; 0x02208F74
 	.word 0x00000038
-	.word ov01_021FDFD4
-	.word ov01_021FDB34
-	.word ov01_021FE058
-	.word ov01_021FE0EC
+	.word FollowerReflectionEffect_Init
+	.word ReflectionEffect_Destroy
+	.word FollowerReflectionEffect_Update
+	.word FollowerReflectionEffect_Draw
 
 ov01_02208F88: ; 0x02208F88
 	.word 0x00000038
-	.word ov01_021FDAC0
-	.word ov01_021FDB34
-	.word ov01_021FDB44
-	.word ov01_021FDBCC
+	.word ReflectionEffect_Init
+	.word ReflectionEffect_Destroy
+	.word ReflectionEffect_Update
+	.word ReflectionEffect_Draw
 
 ov01_02208F9C: ; 0x02208F9C
 	.word 0x00000038
-	.word ov01_021FDEAC
-	.word ov01_021FDF14
-	.word ov01_021FDF20
-	.word ov01_021FDF64
+	.word BillboardReflectionEffect_Init
+	.word BillboardReflectionEffect_Destroy
+	.word BillboardReflectionEffect_Update
+	.word BillboardReflectionEffect_Draw

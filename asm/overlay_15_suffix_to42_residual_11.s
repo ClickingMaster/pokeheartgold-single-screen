@@ -8,8 +8,8 @@
 	.text
 
 	.public sDefaultItemMenuChoices
-	.public _02201300
-	.public _02201480
+	.public sDebugSubScreenLayoutCount
+	.public sDebugSubScreenLayout
 	.public BagApp_LoadItemMenuStrings
 	.public BagApp_FreeItemMenuStrings
 	.public BagApp_PrintItemSelectedMessage
@@ -65,20 +65,20 @@
 	.public sBagModelPosition
 	.public sBagGraphicsModes
 	.public sItemMenuNavTable
-	.public ov15_02200529
-	.public ov15_0220052A
-	.public ov15_0220052B
+	.public sItemMenuNavTableDown
+	.public sItemMenuNavTableLeft
+	.public sItemMenuNavTableRight
 	.public sCameraSetup
 	.public sMoveNavTable
-	.public ov15_02200585
-	.public ov15_02200586
-	.public ov15_02200587
+	.public sMoveNavTableDown
+	.public sMoveNavTableLeft
+	.public sMoveNavTableRight
 	.public sBagModelRotation
 	.public sBagGraphicsBanks
 	.public sButtonNavTable
-	.public ov15_02200641
-	.public ov15_02200642
-	.public ov15_02200643
+	.public sButtonNavTableDown
+	.public sButtonNavTableLeft
+	.public sButtonNavTableRight
 	.public sBgTemplate_Main1
 	.public sBgTemplate_Main2
 	.public sBgTemplate_Main3
@@ -190,24 +190,24 @@
 	.extern sBagModelPosition
 	.extern sBagGraphicsModes
 	.extern sItemMenuNavTable
-	.extern ov15_02200529
-	.extern ov15_0220052A
-	.extern ov15_0220052B
+	.extern sItemMenuNavTableDown
+	.extern sItemMenuNavTableLeft
+	.extern sItemMenuNavTableRight
 	.extern sCameraSetup
 	.extern sTouchHitboxes_ItemMenu
 	.extern sTouchHitboxes_SellQuantity
 	.extern sMoveNavTable
-	.extern ov15_02200585
-	.extern ov15_02200586
-	.extern ov15_02200587
+	.extern sMoveNavTableDown
+	.extern sMoveNavTableLeft
+	.extern sMoveNavTableRight
 	.extern sTouchHitboxes_TrashQuantity
 	.extern sBagModelRotation
 	.extern sTouchHitboxes_MoveItem
 	.extern sBagGraphicsBanks
 	.extern sButtonNavTable
-	.extern ov15_02200641
-	.extern ov15_02200642
-	.extern ov15_02200643
+	.extern sButtonNavTableDown
+	.extern sButtonNavTableLeft
+	.extern sButtonNavTableRight
 	.extern sTouchHitboxes_Main
 	.extern sBgTemplate_Main1
 	.extern sBgTemplate_Main2
@@ -228,23 +228,23 @@
 	.extern sBagOamCharTransferParam
 	.extern sBagSpriteResourceCounts
 	.extern sQuantityCursorPositions
-	.extern ov15_022009D5
-	.extern ov15_022009D6
-	.extern ov15_022009D7
+	.extern sQuantityCursorPositionsY
+	.extern sQuantityCursorPositionsAnim
+	.extern sQuantityCursorPositionsPalette
 	.extern sBagOamManagerParam
 	.extern sHiddenQuantityButtons
 	.extern sMoveCursorPositions
-	.extern ov15_02200A35
-	.extern ov15_02200A36
-	.extern ov15_02200A37
+	.extern sMoveCursorPositionsY
+	.extern sMoveCursorPositionsAnim
+	.extern sMoveCursorPositionsPalette
 	.extern sQuantityButtonSprites
 	.extern sQuantityButtonAnims
 	.extern sCursorPositions
-	.extern ov15_02200AB9
-	.extern ov15_02200ABA
-	.extern ov15_02200ABB
+	.extern sCursorPositionsY
+	.extern sCursorPositionsAnim
+	.extern sCursorPositionsPalette
 	.extern sBagSpriteTemplates
-	.extern _02201300
+	.extern sDebugSubScreenLayoutCount
 	.extern sBagEdgeColorTable
 	.extern sTouchHitboxTables
 	.extern sItemSlotRects
@@ -252,7 +252,7 @@
 	.extern sItemActionFuncs
 	.extern sSubScreenTilemapCommands
 	.extern sItemMenuCursorButtons
-	.extern _02201480
+	.extern sDebugSubScreenLayout
 
 thumb_func_start BagApp_ShowTMHMTypeIcons
 BagApp_ShowTMHMTypeIcons: ; 0x021FF97C

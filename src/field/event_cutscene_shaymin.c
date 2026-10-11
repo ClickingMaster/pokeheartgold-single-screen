@@ -62,7 +62,7 @@ static BOOL ov02_022523D0(TaskManager *taskMan) {
         MapObject_CopyPositionVector(FollowMon_GetMapObject(fieldSystem), &pos);
         u32 res;
         if (FollowMon_IsVisible(fieldSystem)) {
-            env->unk4 = ov01_022052C4(fieldSystem->fieldEffectManager, &pos);
+            env->unk4 = ShayminFormChange_Spawn(fieldSystem->fieldEffectManager, &pos);
             res = 1;
         } else {
             env->unk4 = 0;
@@ -98,7 +98,7 @@ static BOOL ov02_022523D0(TaskManager *taskMan) {
         u32 var = 0;
         if (env->unk4 == 0) {
             var = 1;
-        } else if (ov01_022052F4()) {
+        } else if (ShayminFormChange_IsDone()) {
             FieldEffect_Destroy(env->unk4);
             var = 1;
         }

@@ -24,6 +24,6 @@
 .public FieldEffectManager_FreeBillboardResource
 .public FieldEffectManager_LoadTexResource
 .public FieldEffectManager_FreeTexResource
-.public ov01_022006A8
-.public ov01_022006C4
-.public ov01_02200730
+.public UnionChatMarker_New
+.public UnionChatMarker_Free
+.public UnionChatMarker_Spawn

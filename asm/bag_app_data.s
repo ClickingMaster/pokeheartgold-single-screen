@@ -8,8 +8,8 @@
 	.text
 
 	.public sDefaultItemMenuChoices
-	.public _02201300
-	.public _02201480
+	.public sDebugSubScreenLayoutCount
+	.public sDebugSubScreenLayout
 	.public BagApp_LoadItemMenuStrings
 	.public BagApp_FreeItemMenuStrings
 	.public BagApp_PrintItemSelectedMessage
@@ -65,20 +65,20 @@
 	.public sBagModelPosition
 	.public sBagGraphicsModes
 	.public sItemMenuNavTable
-	.public ov15_02200529
-	.public ov15_0220052A
-	.public ov15_0220052B
+	.public sItemMenuNavTableDown
+	.public sItemMenuNavTableLeft
+	.public sItemMenuNavTableRight
 	.public sCameraSetup
 	.public sMoveNavTable
-	.public ov15_02200585
-	.public ov15_02200586
-	.public ov15_02200587
+	.public sMoveNavTableDown
+	.public sMoveNavTableLeft
+	.public sMoveNavTableRight
 	.public sBagModelRotation
 	.public sBagGraphicsBanks
 	.public sButtonNavTable
-	.public ov15_02200641
-	.public ov15_02200642
-	.public ov15_02200643
+	.public sButtonNavTableDown
+	.public sButtonNavTableLeft
+	.public sButtonNavTableRight
 	.public sBgTemplate_Main1
 	.public sBgTemplate_Main2
 	.public sBgTemplate_Main3
@@ -128,24 +128,24 @@
 	.public sBagModelPosition
 	.public sBagGraphicsModes
 	.public sItemMenuNavTable
-	.public ov15_02200529
-	.public ov15_0220052A
-	.public ov15_0220052B
+	.public sItemMenuNavTableDown
+	.public sItemMenuNavTableLeft
+	.public sItemMenuNavTableRight
 	.public sCameraSetup
 	.public sTouchHitboxes_ItemMenu
 	.public sTouchHitboxes_SellQuantity
 	.public sMoveNavTable
-	.public ov15_02200585
-	.public ov15_02200586
-	.public ov15_02200587
+	.public sMoveNavTableDown
+	.public sMoveNavTableLeft
+	.public sMoveNavTableRight
 	.public sTouchHitboxes_TrashQuantity
 	.public sBagModelRotation
 	.public sTouchHitboxes_MoveItem
 	.public sBagGraphicsBanks
 	.public sButtonNavTable
-	.public ov15_02200641
-	.public ov15_02200642
-	.public ov15_02200643
+	.public sButtonNavTableDown
+	.public sButtonNavTableLeft
+	.public sButtonNavTableRight
 	.public sTouchHitboxes_Main
 	.public sBgTemplate_Main1
 	.public sBgTemplate_Main2
@@ -166,23 +166,23 @@
 	.public sBagOamCharTransferParam
 	.public sBagSpriteResourceCounts
 	.public sQuantityCursorPositions
-	.public ov15_022009D5
-	.public ov15_022009D6
-	.public ov15_022009D7
+	.public sQuantityCursorPositionsY
+	.public sQuantityCursorPositionsAnim
+	.public sQuantityCursorPositionsPalette
 	.public sBagOamManagerParam
 	.public sHiddenQuantityButtons
 	.public sMoveCursorPositions
-	.public ov15_02200A35
-	.public ov15_02200A36
-	.public ov15_02200A37
+	.public sMoveCursorPositionsY
+	.public sMoveCursorPositionsAnim
+	.public sMoveCursorPositionsPalette
 	.public sQuantityButtonSprites
 	.public sQuantityButtonAnims
 	.public sCursorPositions
-	.public ov15_02200AB9
-	.public ov15_02200ABA
-	.public ov15_02200ABB
+	.public sCursorPositionsY
+	.public sCursorPositionsAnim
+	.public sCursorPositionsPalette
 	.public sBagSpriteTemplates
-	.public _02201300
+	.public sDebugSubScreenLayoutCount
 	.public sBagEdgeColorTable
 	.public sTouchHitboxTables
 	.public sItemSlotRects
@@ -190,7 +190,7 @@
 	.public sItemActionFuncs
 	.public sSubScreenTilemapCommands
 	.public sItemMenuCursorButtons
-	.public _02201480
+	.public sDebugSubScreenLayout
 
 
 	.rodata
@@ -216,13 +216,13 @@ sBagGraphicsModes: ; 0x02200518
 sItemMenuNavTable: ; 0x02200528
 	.byte 0x02
 
-ov15_02200529: ; 0x02200529
+sItemMenuNavTableDown: ; 0x02200529
 	.byte 0x02
 
-ov15_0220052A: ; 0x0220052A
+sItemMenuNavTableLeft: ; 0x0220052A
 	.byte 0x01
 
-ov15_0220052B: ; 0x0220052B
+sItemMenuNavTableRight: ; 0x0220052B
 	.byte 0x01, 0x03, 0x03, 0x00, 0x00
 	.byte 0x00, 0x00, 0x04, 0x03, 0x01, 0x01, 0x02, 0x04, 0x04, 0x04, 0x03, 0x02
 
@@ -242,13 +242,13 @@ sTouchHitboxes_SellQuantity:
 sMoveNavTable: ; 0x02200584
 	.byte 0x0C
 
-ov15_02200585: ; 0x02200585
+sMoveNavTableDown: ; 0x02200585
 	.byte 0x0A
 
-ov15_02200586: ; 0x02200586
+sMoveNavTableLeft: ; 0x02200586
 	.byte 0x0E
 
-ov15_02200587: ; 0x02200587
+sMoveNavTableRight: ; 0x02200587
 	.byte 0x09, 0x10, 0x0B, 0x08, 0x0F, 0x08, 0x0C, 0x0E, 0x0B
 	.byte 0x09, 0x0D, 0x0A, 0x0F, 0x0A, 0x08, 0x0E, 0x0D, 0x0B, 0x10, 0x0C, 0x0F, 0x0C, 0x08, 0x10, 0x10
 	.byte 0x0C, 0x08, 0x10, 0x10, 0x0D, 0x09, 0x10, 0x10
@@ -276,13 +276,13 @@ sBagGraphicsBanks: ; 0x02200618
 sButtonNavTable: ; 0x02200640
 	.byte 0x0C
 
-ov15_02200641: ; 0x02200641
+sButtonNavTableDown: ; 0x02200641
 	.byte 0x08
 
-ov15_02200642: ; 0x02200642
+sButtonNavTableLeft: ; 0x02200642
 	.byte 0x07
 
-ov15_02200643: ; 0x02200643
+sButtonNavTableRight: ; 0x02200643
 	.byte 0x01, 0x0C, 0x08, 0x00, 0x02, 0x0C, 0x08, 0x01, 0x03, 0x0C, 0x08, 0x02, 0x04
 	.byte 0x10, 0x09, 0x03, 0x05, 0x10, 0x09, 0x04, 0x06, 0x10, 0x09, 0x05, 0x07, 0x10, 0x09, 0x06, 0x00
 	.byte 0x11, 0x0A, 0x0E, 0x09, 0x11, 0x0B, 0x08, 0x0F, 0x08, 0x0C, 0x0E, 0x0B, 0x09, 0x0D, 0x0A, 0x0F
@@ -396,13 +396,13 @@ sBagSpriteResourceCounts: ; 0x022009BC
 sQuantityCursorPositions: ; 0x022009D4
 	.byte 0x88
 
-ov15_022009D5: ; 0x022009D5
+sQuantityCursorPositionsY: ; 0x022009D5
 	.byte 0x68
 
-ov15_022009D6: ; 0x022009D6
+sQuantityCursorPositionsAnim: ; 0x022009D6
 	.byte 0x1D
 
-ov15_022009D7: ; 0x022009D7
+sQuantityCursorPositionsPalette: ; 0x022009D7
 	.byte 0x09, 0xA8, 0x68, 0x1D, 0x09, 0xC8, 0x68, 0x1D, 0x09
 	.byte 0x88, 0xA0, 0x1D, 0x09, 0xA8, 0xA0, 0x1D, 0x09, 0xC8, 0xA0, 0x1D, 0x09, 0xA0, 0xB0, 0x11, 0x09
 	.byte 0xE0, 0xB0, 0x11, 0x09
@@ -420,13 +420,13 @@ sHiddenQuantityButtons: ; 0x02200A14
 sMoveCursorPositions: ; 0x02200A34
 	.byte 0x30
 
-ov15_02200A35: ; 0x02200A35
+sMoveCursorPositionsY: ; 0x02200A35
 	.byte 0x38
 
-ov15_02200A36: ; 0x02200A36
+sMoveCursorPositionsAnim: ; 0x02200A36
 	.byte 0x14
 
-ov15_02200A37: ; 0x02200A37
+sMoveCursorPositionsPalette: ; 0x02200A37
 	.byte 0x09, 0xB0, 0x38, 0x14, 0x09, 0x30, 0x60, 0x14, 0x09
 	.byte 0xB0, 0x60, 0x14, 0x09, 0x30, 0x88, 0x14, 0x09, 0xB0, 0x88, 0x14, 0x09, 0x18, 0xB0, 0x0E, 0x09
 	.byte 0x40, 0xB0, 0x0E, 0x09, 0xE0, 0xB0, 0x11, 0x09
@@ -446,13 +446,13 @@ sQuantityButtonAnims: ; 0x02200A88
 sCursorPositions: ; 0x02200AB8
 	.byte 0x10
 
-ov15_02200AB9: ; 0x02200AB9
+sCursorPositionsY: ; 0x02200AB9
 	.byte 0x10
 
-ov15_02200ABA: ; 0x02200ABA
+sCursorPositionsAnim: ; 0x02200ABA
 	.byte 0x08
 
-ov15_02200ABB: ; 0x02200ABB
+sCursorPositionsPalette: ; 0x02200ABB
 	.byte 0x09, 0x30, 0x10, 0x08, 0x09
 	.byte 0x50, 0x10, 0x08, 0x09, 0x70, 0x10, 0x08, 0x09, 0x90, 0x10, 0x08, 0x09, 0xB0, 0x10, 0x08, 0x09
 	.byte 0xD0, 0x10, 0x08, 0x09, 0xF0, 0x10, 0x08, 0x09, 0x30, 0x38, 0x0A, 0x09, 0xB0, 0x38, 0x0A, 0x09
@@ -592,7 +592,7 @@ sBagSpriteTemplates: ; 0x02200B0C
 
 	.data
 
-_02201300:
+sDebugSubScreenLayoutCount:
 	.byte 0x01, 0x00, 0x00, 0x00
 
 sBagEdgeColorTable: ; 0x02201304
@@ -675,5 +675,5 @@ sItemMenuCursorButtons: ; 0x02201468
 
 	.bss
 
-_02201480:
+sDebugSubScreenLayout:
 	.space 0x20

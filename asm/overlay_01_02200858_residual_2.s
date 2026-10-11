@@ -9,7 +9,7 @@
 #include "msgdata/msg/msg_0096_D31R0201.h"
 #include "msgdata/msg/msg_0066_D23R0102.h"
 	.include "asm/macros.inc"
-	.public ov01_02200A08
+	.public WarpArrowEffect_Draw
 	.include "overlay_01_02200858.inc"
 	.include "global.inc"
 
@@ -17,15 +17,15 @@
 	.public ov01_02209334
 	.public ov01_02209340
 	.public ov01_02209354
-	.public ov01_02200858
-	.public ov01_02200874
-	.public ov01_02200884
-	.public ov01_022008A8
-	.public ov01_022008B4
-	.public ov01_02200900
-	.public ov01_02200938
-	.public ov01_0220093C
-	.public ov01_02200AB0
+	.public WarpArrow_New
+	.public WarpArrow_Free
+	.public WarpArrow_LoadModel
+	.public WarpArrow_FreeModel
+	.public WarpArrow_Spawn
+	.public WarpArrowEffect_Init
+	.public WarpArrowEffect_Destroy
+	.public WarpArrowEffect_Update
+	.public WarpArrow_GetWarpDirection
 	.public ov01_02209334
 	.public ov01_02209340
 	.public ov01_02209354
@@ -36,10 +36,10 @@ ov01_02209334: ; 0x02209334
 
 ov01_02209340: ; 0x02209340
 	.word 0x00000030
-	.word ov01_02200900
-	.word ov01_02200938
-	.word ov01_0220093C
-	.word ov01_02200A08
+	.word WarpArrowEffect_Init
+	.word WarpArrowEffect_Destroy
+	.word WarpArrowEffect_Update
+	.word WarpArrowEffect_Draw
 
 ov01_02209354: ; 0x02209354
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00

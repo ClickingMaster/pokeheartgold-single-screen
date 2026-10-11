@@ -5,7 +5,7 @@ BOOL MapObjectMovementCmd100_Step1(LocalMapObject *obj) {
 }
 
 BOOL MapObjectMovementCmd101_Step0(LocalMapObject *obj) {
- sub_0205F3C0(obj,4);if(sub_0206642C(obj))FieldEffect_Destroy();VecFx32 v={0,0,0};MapObject_SetFacingVector(obj,&v);ov01_022000DC(obj);MapObject_SetFlagsBits(obj,(MapObjectFlagBits)0x10004);MapObject_ClearFlagsBits(obj,(MapObjectFlagBits)0x100000);MapObject_IncrementMovementStep(obj);return FALSE;
+ sub_0205F3C0(obj,4);if(sub_0206642C(obj))FieldEffect_Destroy();VecFx32 v={0,0,0};MapObject_SetFacingVector(obj,&v);TrainerReveal_Spawn(obj);MapObject_SetFlagsBits(obj,(MapObjectFlagBits)0x10004);MapObject_ClearFlagsBits(obj,(MapObjectFlagBits)0x100000);MapObject_IncrementMovementStep(obj);return FALSE;
 }
 
 BOOL MapObjectMovementCmd101_Step1(LocalMapObject *obj) {

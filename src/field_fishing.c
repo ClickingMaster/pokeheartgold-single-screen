@@ -209,9 +209,9 @@ int ov01_021FC88C(FishingRodEnv *env, PlayerAvatar *avatar, LocalMapObject *obj)
     }
     sub_0205F328(obj, 2);
     if (ov01_021FCC2C(env)) {
-        env->effect = ov01_02200540(FollowMon_GetMapObject(env->fieldSystem), 0, 1);
+        env->effect = EmoteMark_Spawn(FollowMon_GetMapObject(env->fieldSystem), 0, 1);
     } else {
-        env->effect = ov01_02200540(obj, 0, 1);
+        env->effect = EmoteMark_Spawn(obj, 0, 1);
     }
     env->state = 5;
     return 1;
@@ -231,7 +231,7 @@ int ov01_021FC8E8(FishingRodEnv *env, PlayerAvatar *avatar, LocalMapObject *obj)
 }
 
 int ov01_021FC914(FishingRodEnv *env, PlayerAvatar *avatar, LocalMapObject *obj) {
-    ov01_02200400(env->effect);
+    EmoteMark_Hide(env->effect);
     sub_0205F328(obj, 3);
     env->timer = 0;
     env->state = 7;
@@ -320,7 +320,7 @@ int ov01_021FCA2C(FishingRodEnv *env, PlayerAvatar *avatar, LocalMapObject *obj)
 
 int ov01_021FCA58(FishingRodEnv *env, PlayerAvatar *avatar, LocalMapObject *obj) {
     if (env->effect != 0) {
-        ov01_02200400(env->effect);
+        EmoteMark_Hide(env->effect);
     }
     ov01_021FCB4C(env);
     Field_PlayerAvatar_OrrTransitionFlags(avatar, PlayerAvatar_GetTransitionBits(PlayerAvatar_GetState(avatar)));

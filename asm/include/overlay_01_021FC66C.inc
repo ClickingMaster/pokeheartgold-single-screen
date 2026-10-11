@@ -54,6 +54,6 @@
 .public Field_PlayerAvatar_ApplyTransitionFlags
 .public CreateFishingRodTaskEnv
 .public Task_OverworldFish
-.public ov01_02200400
-.public ov01_02200540
+.public EmoteMark_Hide
+.public EmoteMark_Spawn
 .public FieldSystem_PerformFishEncounterCheck
