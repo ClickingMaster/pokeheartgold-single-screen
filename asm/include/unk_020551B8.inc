@@ -6,7 +6,7 @@
 .public TaskManager_Call
 .public TaskManager_GetFieldSystem
 .public TaskManager_GetEnvironment
-.public sub_02055218
+.public CallTask_BattleTransition
 .public ov01_021EFB64
 .public ov01_021EFC04
 .public ov01_021EFC94

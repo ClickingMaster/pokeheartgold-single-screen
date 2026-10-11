@@ -4,10 +4,10 @@
 .public sub_0203DB70
 .public sub_0203DB74
 .public FieldSystem_GetFacingObject
-.public sub_0203DC64
+.public FieldSystem_GetInteractableFacingObject
 .public GetInteractedBackgroundEventScript
-.public sub_0203DDA4
-.public sub_0203DE04
+.public GetFacingSignScript
+.public GetTriggeredCoordEventScript
 .public FieldSystem_VarGet
 .public FieldSystem_FlagCheck
 .public HiddenItemScriptNoToFlagId
@@ -22,6 +22,6 @@
 .public MapObjectManager_GetFirstObjectWithXAndZ
 
 	.public _GetCoordsOfFacingTile
-	.public sub_0203DBD4
+	.public PlayerAvatar_IsAtSameHeightAs
 	.public BgEventIsUncollectedHiddenItem
 	.public BgEventDirectionIsCompatibleWithPlayerFacing

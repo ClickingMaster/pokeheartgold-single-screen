@@ -11,7 +11,7 @@ typedef struct Ov112CourseEntry {
     u8 raw04[0xbc];
 } Ov112CourseEntry;
 extern const u16 ov112_021F397E[][2];
-extern const Ov112CourseEntry ov112_021F4138[];
+extern const Ov112CourseEntry sPokewalkerCourses[];
 int sub_02070438(u16, u8);
 void sub_02032674(void *, u32 *, u32 *);
 void *Save_Pokedex_Get(void *);

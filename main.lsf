@@ -347,7 +347,7 @@ Static main
     Object src/field_terrain_dispatch_extended_2.o
     Object src/unk_02054E00.o
     Object src/field_bgm.o
-    Object src/slop_small_unk_020551B8.o
+    Object src/battle_transition_task.o
     Object src/field_overworld_transition.o
     Object src/unk_02055418.o
     Object src/catching_show.o
@@ -6109,16 +6109,7 @@ Object asm/op90_to57_r3_07_overlay112_016_residual_bss_head.o
 Object src/application/pokewalker/pokewalker_ir_requests.o
 Object src/application/pokewalker/pokewalker_ir_status.o
 Object src/application/pokewalker/pokewalker_app.o
-Object src/to59_overlay112_030_7dfc.o
-Object src/op90_to55_overlay112_030_residual_8b74_r01.o
-Object src/to55_overlay112_030_exact.o
-Object src/op90_to55_overlay112_030_residual_8cb8_r01.o
-Object src/to53_overlay112_031.o
-Object src/to70_to70_to53_overlay112_032_extra164_residual_1_extra1338_run01.o
-Object src/to70_to53_overlay112_032_extra164_run01.o
-Object src/to53_overlay112_033.o
-Object src/to90_extra2411_run01.o
-Object src/op90_to90_extra2411_residual_1_r01.o
+Object src/application/pokewalker/pokewalker_upload.o
 Object src/to53_overlay112_035.o
 Object src/to57_overlay112_036.o
 Object src/to53_overlay112_037.o

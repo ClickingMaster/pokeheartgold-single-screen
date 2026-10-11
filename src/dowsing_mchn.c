@@ -34,7 +34,7 @@
 #include "touchscreen.h"
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
-#include "unk_0203DB6C.h"
+#include "field_interaction.h"
 
 // Field bottom-screen app 4: the Dowsing Machine (field_use_item.c Task_ActivateDowsingMchnUI).
 // While the stylus is held in the search circle, four indicators turn toward the nearest hidden

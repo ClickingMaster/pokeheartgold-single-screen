@@ -68,16 +68,16 @@
 	.extern ov112_021E7D7C
 	.extern ov112_021E7DA4
 	.extern ov112_021E7DC0
-	.extern ov112_021E7DFC
-	.extern ov112_021E8B74
-	.extern ov112_021E8C5C
-	.extern ov112_021E8CB8
-	.extern ov112_021E90FC
-	.extern ov112_021E9148
-	.extern ov112_021E9290
+	.extern PokewalkerApp_BuildUploadImage
+	.extern PokewalkerApp_PickRouteMons
+	.extern PokewalkerApp_ApplyAdvantageTypes
+	.extern PokewalkerApp_BuildStrollData
+	.extern PokewalkerApp_PrintPlayerName
+	.extern PokewalkerApp_PrintStrollTexts
+	.extern PokewalkerApp_LoadMonPicture
 	.extern ov112_021E9338
-	.extern ov112_021E935C
-	.extern ov112_021E93BC
+	.extern PokewalkerApp_GetPixel4bpp
+	.extern PokewalkerApp_ConvertTo2bpp
 	.extern ov112_021E9464
 	.extern ov112_021E9470
 	.extern ov112_021E9480
@@ -537,9 +537,9 @@
 	.extern ov112_021F387E
 	.extern ov112_021F38E8
 	.extern ov112_021F397E
-	.extern ov112_021F4138
-	.extern ov112_021F413C
-	.extern ov112_021F5578
+	.extern sPokewalkerCourses
+	.extern sPokewalkerCourseRouteImageIds
+	.extern sStrollTextWindowWidths
 	.extern ov112_021F5588
 	.extern ov112_021F5598
 	.extern ov112_021F55A8
@@ -714,7 +714,7 @@
 	.extern ov112_021FDE98
 	.extern ov112_021FE018
 	.extern ov112_021FE198
-	.extern ov112_021FE498
+	.extern sSpindaSpotMask
 	.extern ov112_021FEA98
 	.extern ov112_021FEAA0
 	.extern ov112_021FEAA8
@@ -834,7 +834,7 @@
 	.extern _021FF500
 	.extern ov112_021FF504
 	.extern ov112_021FF514
-	.extern ov112_021FF528
+	.extern sPokewalkerRouteImages
 	.extern ov112_021FF54C
 	.extern ov112_021FF550
 	.extern ov112_021FF554

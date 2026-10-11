@@ -1,4 +1,22 @@
-#include "field_interaction_internal.h"
+#include "field_interaction.h"
+
+#include "global.h"
+
+#include "field_system.h"
+#include "map_events_internal.h"
+#include "map_object.h"
+#include "metatile_behavior.h"
+#include "player_avatar.h"
+#include "script_manager.h"
+#include "unk_02054648.h"
+
+void sub_0203DB6C(void);
+void sub_0203DB70(void);
+BOOL sub_0203DB74(void);
+u32 _GetCoordsOfFacingTile(FieldSystem *fieldSystem, int *x, int *z);
+u8 PlayerAvatar_IsAtSameHeightAs(PlayerAvatar *avatar, LocalMapObject *object);
+u8 BgEventIsUncollectedHiddenItem(FieldSystem *fieldSystem, BgEvent *bgEvent);
+BOOL BgEventDirectionIsCompatibleWithPlayerFacing(FieldSystem *fieldSystem, BgEvent *bgEvent);
 
 void sub_0203DB6C(void) {
 }
@@ -31,7 +49,7 @@ u32 _GetCoordsOfFacingTile(FieldSystem *fieldSystem, int *x, int *z) {
     return dir;
 }
 
-u8 sub_0203DBD4(PlayerAvatar *avatar, LocalMapObject *object) {
+u8 PlayerAvatar_IsAtSameHeightAs(PlayerAvatar *avatar, LocalMapObject *object) {
     u32 y = MapObject_GetPositionVectorYCoordUInt(PlayerAvatar_GetMapObject(avatar));
     if (y == MapObject_GetPositionVectorYCoordUInt(object)) {
         return TRUE;
@@ -62,9 +80,10 @@ void FieldSystem_GetFacingObject(FieldSystem *fieldSystem, LocalMapObject **ret_
     *ret_p = MapObjectManager_GetFirstObjectWithXAndZ(fieldSystem->mapObjectManager, (u32)x, (u32)z, FALSE);
 }
 
-BOOL sub_0203DC64(FieldSystem *fieldSystem, LocalMapObject **localMapObject) {
+// The object on the facing tile, if it can be talked to (flag 19 clear) and stands at the player's height.
+BOOL FieldSystem_GetInteractableFacingObject(FieldSystem *fieldSystem, LocalMapObject **localMapObject) {
     FieldSystem_GetFacingObject(fieldSystem, localMapObject);
-    if (*localMapObject != NULL && MapObject_CheckFlag19Disabled(*localMapObject) == TRUE && sub_0203DBD4(fieldSystem->playerAvatar, *localMapObject) == TRUE) {
+    if (*localMapObject != NULL && MapObject_CheckFlag19Disabled(*localMapObject) == TRUE && PlayerAvatar_IsAtSameHeightAs(fieldSystem->playerAvatar, *localMapObject) == TRUE) {
         return TRUE;
     }
     return FALSE;
@@ -135,7 +154,8 @@ BOOL BgEventDirectionIsCompatibleWithPlayerFacing(FieldSystem *fieldSystem, BgEv
     return FALSE;
 }
 
-u32 sub_0203DDA4(FieldSystem *fieldSystem, BgEvent *bgEvents, int numEvents) {
+// Script of a sign (BG event type 1) on the facing tile; signs are only read while facing north.
+u32 GetFacingSignScript(FieldSystem *fieldSystem, BgEvent *bgEvents, int numEvents) {
     int x;
     int z;
     int i;
@@ -151,7 +171,8 @@ u32 sub_0203DDA4(FieldSystem *fieldSystem, BgEvent *bgEvents, int numEvents) {
     return 0xFFFF;
 }
 
-u16 sub_0203DE04(FieldSystem *fieldSystem, const CoordEvent *coordEvents, int numEvents) {
+// Script of the coord event whose rectangle contains the player and whose variable holds its trigger value.
+u16 GetTriggeredCoordEventScript(FieldSystem *fieldSystem, const CoordEvent *coordEvents, int numEvents) {
     int i;
     int x = (int)PlayerAvatar_GetXCoord(fieldSystem->playerAvatar);
     int z = (int)PlayerAvatar_GetZCoord(fieldSystem->playerAvatar);

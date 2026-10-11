@@ -53,7 +53,7 @@
 #include "communication_player_state.h"
 #include "unk_02035900.h"
 #include "unk_02037C94.h"
-#include "unk_0203DB6C.h"
+#include "field_interaction.h"
 #include "unk_02054648.h"
 #include "unk_02054E00.h"
 #include "unk_02055BF0.h"
@@ -254,7 +254,7 @@ int FieldInput_Process(FieldInput *fieldInput, FieldSystem *fieldSystem) {
 
     if (fieldInput->interact) {
         LocalMapObject *mapObject;
-        if (sub_0203DC64(fieldSystem, &mapObject) == TRUE) {
+        if (FieldSystem_GetInteractableFacingObject(fieldSystem, &mapObject) == TRUE) {
             if (sub_0205CF60(fieldSystem->playerAvatar) == TRUE) {
                 sub_0205CFBC(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
             }
@@ -324,7 +324,7 @@ int FieldInput_Process(FieldInput *fieldInput, FieldSystem *fieldSystem) {
 }
 
 static BOOL FieldSystem_CheckSign(FieldSystem *fieldSystem) {
-    u32 script = sub_0203DDA4(fieldSystem, Field_GetBgEvents(fieldSystem), Field_GetNumBgEvents(fieldSystem));
+    u32 script = GetFacingSignScript(fieldSystem, Field_GetBgEvents(fieldSystem), Field_GetNumBgEvents(fieldSystem));
     if (script != 0xFFFF) {
         StartMapSceneScript(fieldSystem, script, NULL);
         return TRUE;
@@ -346,7 +346,7 @@ BOOL FieldInput_Process_Colosseum(FieldInput *input, FieldSystem *fieldSystem) {
 
     if (input->interact) {
         LocalMapObject *facingObject;
-        if (sub_0203DC64(fieldSystem, &facingObject) == TRUE && MapObject_GetMovement(facingObject) != MOVEMENT_FACE_DOWN) {
+        if (FieldSystem_GetInteractableFacingObject(fieldSystem, &facingObject) == TRUE && MapObject_GetMovement(facingObject) != MOVEMENT_FACE_DOWN) {
             if (sub_0205CF60(fieldSystem->playerAvatar) == TRUE) {
                 sub_0205CFBC(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
             }
@@ -390,7 +390,7 @@ BOOL FieldInput_Process_UnionRoom(FieldInput *input, FieldSystem *fieldSystem) {
     }
 
     LocalMapObject *mapObject;
-    if (input->interact && sub_0203DC64(fieldSystem, &mapObject) == TRUE) {
+    if (input->interact && FieldSystem_GetInteractableFacingObject(fieldSystem, &mapObject) == TRUE) {
         if (sub_0205CF60(fieldSystem->playerAvatar) == TRUE) {
             sub_0205CFBC(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
         }
@@ -421,7 +421,7 @@ int FieldInput_Process_BattleTower(FieldInput *fieldInput, FieldSystem *fieldSys
 
     if (fieldInput->interact) {
         LocalMapObject *mapObject;
-        if (sub_0203DC64(fieldSystem, &mapObject) == TRUE) {
+        if (FieldSystem_GetInteractableFacingObject(fieldSystem, &mapObject) == TRUE) {
             if (sub_0205CF60(fieldSystem->playerAvatar) == TRUE) {
                 sub_0205CFBC(fieldSystem->playerAvatar, PlayerAvatar_GetFacingDirection(fieldSystem->playerAvatar));
             }
@@ -692,7 +692,7 @@ static BOOL FieldSystem_ProcessStep(FieldSystem *fieldSystem) {
 }
 
 static BOOL FieldSystem_CheckCoordEvent(FieldSystem *fieldSystem) {
-    u16 script = sub_0203DE04(fieldSystem, Field_GetCoordEvents(fieldSystem), Field_GetNumCoordEvents(fieldSystem));
+    u16 script = GetTriggeredCoordEventScript(fieldSystem, Field_GetCoordEvents(fieldSystem), Field_GetNumCoordEvents(fieldSystem));
     if (script != 0xFFFF) {
         StartMapSceneScript(fieldSystem, script, NULL);
         return TRUE;
@@ -1139,7 +1139,7 @@ static u16 GetInteractedHeadbuttTreeScript(FieldSystem *fieldSystem) {
 
 u32 ov01_021E7F54(FieldSystem *fieldSystem) {
     LocalMapObject *facingObject;
-    if (sub_0203DC64(fieldSystem, &facingObject) == TRUE) {
+    if (FieldSystem_GetInteractableFacingObject(fieldSystem, &facingObject) == TRUE) {
         switch (MapObject_GetType(facingObject)) {
         case 3:
             return 0;

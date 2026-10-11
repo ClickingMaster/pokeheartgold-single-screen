@@ -22,7 +22,7 @@
 #include "script.h"
 #include "start_menu.h"
 #include "sys_flags.h"
-#include "unk_0203DB6C.h"
+#include "field_interaction.h"
 #include "unk_02054648.h"
 #include "unk_0205CB48.h"
 

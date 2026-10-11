@@ -55,7 +55,7 @@
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
 #include "unk_02035900.h"
-#include "unk_0203DB6C.h"
+#include "field_interaction.h"
 #include "unk_02056D7C.h"
 #include "unk_02058034.h"
 #include "unk_02066EDC.h"

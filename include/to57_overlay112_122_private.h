@@ -36,7 +36,7 @@ void BgCommitTilemapBufferToVram(void *, int);
 void *Pokewalker_TryGetBoxMon(void *, void *);
 void ov112_021EA5A4(void *, int);
 void BufferBoxMonNickname(void *, int, void *);
-void ov112_021E9290(void *, void *, void *, int);
+void PokewalkerApp_LoadMonPicture(void *, void *, void *, int);
 void ov112_021EC460(void *, int, int, int);
 void ov112_021EA688(void *, int);
 u32 MTRandom(void);

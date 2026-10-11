@@ -35,7 +35,7 @@
 #include "system.h"
 #include "task.h"
 #include "text.h"
-#include "unk_0203DB6C.h"
+#include "field_interaction.h"
 #include "unk_02054648.h"
 #include "unk_02062108.h"
 #include "unk_02066EDC.h"

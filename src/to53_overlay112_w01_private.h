@@ -29,8 +29,8 @@ void DestroyMsgData(void *msgData);
 void MessageFormat_Delete(void *fmt);
 void GfGfxLoader_LoadScrnData(int narcId, int member, void *bg, int bgId, int a4, int a5, int a6, int heapId);
 
-void ov112_021E7DFC(void *state, void *dst);
-void ov112_021E8CB8(void *ptr, void *state);
+void PokewalkerApp_BuildUploadImage(void *state, void *dst);
+void PokewalkerApp_BuildStrollData(void *ptr, void *state);
 void ov112_021E7DC0(void *state);
 void ov112_021F3244(void *save, void *dst);
 void *sub_02032728(void *pokewalker);

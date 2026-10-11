@@ -61,7 +61,7 @@ int ov112_021EE464(void *p) {
     Pokewalker_TryGetBoxMon(PTR(p, 0x1E440), box);
     ov112_021EA5A4(p, 0);
     BufferBoxMonNickname(PTR(p, 0x1E448), 1, box);
-    ov112_021E9290(box, (u8 *)p + 0x1D7AC, (u8 *)p + 0x1D79C, 0);
+    PokewalkerApp_LoadMonPicture(box, (u8 *)p + 0x1D7AC, (u8 *)p + 0x1D79C, 0);
     ov112_021EC460(p, 2, 0x1A, 0x35);
     return 0x40;
 }

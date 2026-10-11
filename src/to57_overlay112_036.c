@@ -48,7 +48,7 @@ void ov112_021E95A0(Ov112State *p) {
         count = 8;
     }
     for (i = 0; i < count; i++) {
-        if (ov112_021F4138[i].requirement <= points && !Pokewalker_CourseIsUnlocked(P(p, 0x1e440), i)) {
+        if (sPokewalkerCourses[i].requirement <= points && !Pokewalker_CourseIsUnlocked(P(p, 0x1e440), i)) {
             Pokewalker_UnlockCourse(P(p, 0x1e440), i);
             W(p, 0x1ec78) = i;
             return;
@@ -66,8 +66,8 @@ int ov112_021E9610(Ov112State *p, int points) {
     }
     for (i = 0; i < count; i++) {
         if (!Pokewalker_CourseIsUnlocked(P(p, 0x1e440), i)) {
-            if (ov112_021F4138[i].requirement > points) {
-                return ov112_021F4138[i].requirement - points;
+            if (sPokewalkerCourses[i].requirement > points) {
+                return sPokewalkerCourses[i].requirement - points;
             }
             return 0;
         }

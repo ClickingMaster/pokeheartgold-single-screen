@@ -31,7 +31,7 @@
 #include "battle_recording.h"
 #include "communication_player_state.h"
 #include "unk_020517A4.h"
-#include "unk_020551B8.h"
+#include "battle_transition_task.h"
 #include "field_overworld_transition.h"
 #include "unk_020552A4.h"
 #include "unk_02058034.h"
@@ -121,7 +121,7 @@ static BOOL Task_StartEncounter(TaskManager *taskManager) { // todo: better name
     switch (*state) {
     case 0:
         MapObjectManager_PauseAllMovement(fieldSystem->mapObjectManager);
-        sub_02055218(taskManager, encounter->effect, encounter->bgm);
+        CallTask_BattleTransition(taskManager, encounter->effect, encounter->bgm);
         (*state)++;
         break;
     case 1:
@@ -197,7 +197,7 @@ static BOOL Task_020508B8(TaskManager *taskManager) {
 
     switch (*state) {
     case 0:
-        sub_02055218(taskManager, encounter->effect, encounter->bgm);
+        CallTask_BattleTransition(taskManager, encounter->effect, encounter->bgm);
         (*state)++;
         break;
     case 1:
@@ -258,7 +258,7 @@ static BOOL Task_020509F0(TaskManager *taskManager) {
 
     switch (*state) {
     case 0:
-        sub_02055218(taskManager, encounter->effect, encounter->bgm);
+        CallTask_BattleTransition(taskManager, encounter->effect, encounter->bgm);
         (*state)++;
         break;
     case 1:
@@ -354,7 +354,7 @@ static BOOL Task_WildEncounter(TaskManager *taskManager) {
     case 0:
         MapObjectManager_PauseAllMovement(fieldSystem->mapObjectManager);
         GameStats_Inc(Save_GameStats_Get(fieldSystem->saveData), GAME_STAT_WILD_ENCOUNTERS);
-        sub_02055218(taskManager, encounter->effect, encounter->bgm);
+        CallTask_BattleTransition(taskManager, encounter->effect, encounter->bgm);
         encounter->state++;
         break;
     case 1:
@@ -408,7 +408,7 @@ static BOOL Task_SafariEncounter(TaskManager *taskManager) {
     case 0:
         MapObjectManager_PauseAllMovement(fieldSystem->mapObjectManager);
         GameStats_Inc(Save_GameStats_Get(fieldSystem->saveData), GAME_STAT_WILD_ENCOUNTERS);
-        sub_02055218(taskManager, encounter->effect, encounter->bgm);
+        CallTask_BattleTransition(taskManager, encounter->effect, encounter->bgm);
         (*state)++;
         break;
     case 1:
@@ -485,7 +485,7 @@ static BOOL Task_BugContestEncounter(TaskManager *taskManager) {
     case 0:
         MapObjectManager_PauseAllMovement(fieldSystem->mapObjectManager);
         GameStats_Inc(Save_GameStats_Get(fieldSystem->saveData), GAME_STAT_WILD_ENCOUNTERS);
-        sub_02055218(taskManager, encounter->effect, encounter->bgm);
+        CallTask_BattleTransition(taskManager, encounter->effect, encounter->bgm);
         (*state)++;
         break;
     case 1:
@@ -584,7 +584,7 @@ static BOOL Task_PalParkEncounter(TaskManager *taskManager) {
     case 0:
         MapObjectManager_PauseAllMovement(fieldSystem->mapObjectManager);
         GameStats_Inc(Save_GameStats_Get(fieldSystem->saveData), GAME_STAT_WILD_ENCOUNTERS);
-        sub_02055218(taskManager, encounter->effect, encounter->bgm);
+        CallTask_BattleTransition(taskManager, encounter->effect, encounter->bgm);
         (*state)++;
         break;
     case 1:
@@ -652,7 +652,7 @@ static BOOL Task_TutorialBattle(TaskManager *taskManager) {
     switch (*state) {
     case 0:
         MapObjectManager_PauseAllMovement(fieldSystem->mapObjectManager);
-        sub_02055218(taskManager, encounter->effect, encounter->bgm);
+        CallTask_BattleTransition(taskManager, encounter->effect, encounter->bgm);
         (*state)++;
         break;
     case 1:

@@ -231,14 +231,14 @@ void PokewalkerApp_LoadBgGraphics(PokewalkerApp *app) {
 
 void PokewalkerApp_InitMessages(PokewalkerApp *app) {
     app->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, 0x112, HEAP_ID_154);
-    app->msgDataCourses = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 0xDE, HEAP_ID_154);
+    app->msgDataItemNames = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, 0xDE, HEAP_ID_154);
     app->msgFormat = MessageFormat_New_Custom(16, 32, HEAP_ID_154);
     app->string = String_New(400, HEAP_ID_154);
 }
 
 void PokewalkerApp_FreeMessages(PokewalkerApp *app) {
     String_Delete(app->string);
-    DestroyMsgData(app->msgDataCourses);
+    DestroyMsgData(app->msgDataItemNames);
     DestroyMsgData(app->msgData);
     MessageFormat_Delete(app->msgFormat);
 }
@@ -270,13 +270,13 @@ void PokewalkerApp_StartLink(PokewalkerApp *app) {
 #pragma force_active reset
 
 void ov112_021E7D7C(PokewalkerApp *app) {
-    ov112_021E7DFC(app, app->uploadImage);
-    ov112_021E8CB8(app->unk_C910, app);
+    PokewalkerApp_BuildUploadImage(app, app->uploadImage);
+    PokewalkerApp_BuildStrollData(&app->strollData, app);
     ov112_021E7DC0(app);
 }
 
 void ov112_021E7DA4(PokewalkerApp *app) {
-    ov112_021E8CB8(app->unk_C910, app);
+    PokewalkerApp_BuildStrollData(&app->strollData, app);
     ov112_021E7DC0(app);
 }
 

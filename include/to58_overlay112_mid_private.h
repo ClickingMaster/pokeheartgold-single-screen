@@ -60,7 +60,7 @@ extern void ov112_021EA5A4(Ov112State *, int);
 
 
 extern void BufferBoxMonNickname(void *, int, void *);
-extern void ov112_021E9290(void *, void *, void *, int);
+extern void PokewalkerApp_LoadMonPicture(void *, void *, void *, int);
 extern void ov112_021EA670(Ov112State *, int);
 extern u32 MTRandom(void);
 extern void ov112_021EA7D0(Ov112State *);

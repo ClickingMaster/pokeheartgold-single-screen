@@ -9,7 +9,7 @@ void ov112_021ED13C(void *task, Ov112Blend *p);
 void ov112_021ED0C8(Ov112State *p) { ov112_021ED0D0(p); }
 
 void ov112_021ED0D0(Ov112State *p) {
-    ov112_021E9290((void *)W(p,0x1e430),(u8 *)p+0x1d7ac,(u8 *)p+0x1d79c,0);
+    PokewalkerApp_LoadMonPicture((void *)W(p,0x1e430),(u8 *)p+0x1d7ac,(u8 *)p+0x1d79c,0);
     ManagedSprite_SetOamMode((void *)W(p,0x1e550),1);
     ov112_021EA670(p,8);
     H(p,0x1f2d6)=0;
