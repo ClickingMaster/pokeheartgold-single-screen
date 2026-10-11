@@ -761,9 +761,9 @@ ov80_0223BDE0: ; 0x0223BDE0
 	.byte 0x00, 0x0A, 0x0B, 0x0C, 0x0D, 0x10, 0x11, 0x13, 0x15, 0x00, 0x00, 0x00
 
 ov80_0223BDEC: ; 0x0223BDEC
-	.word ov82_0223DD60
-	.word ov82_0223DE20
-	.word ov82_0223DF74
+	.word BattleHallApp_Init
+	.word BattleHallApp_Main
+	.word BattleHallApp_Exit
 	.word FS_OVERLAY_ID(OVY_82)
 
 ov80_0223BDFC: ; 0x0223BDFC

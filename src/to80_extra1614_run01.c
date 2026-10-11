@@ -10,7 +10,7 @@ extern void Pokepic_SetAttr(void *,int,int);
 extern void PaletteData_BeginPaletteFade(void *,int,u16,int,int,int,int);
 extern u8 gSystem[];
 extern void SetMasterBrightnessNeutral(int);
-extern void sub_0201649C(void *,int);
+extern void PaletteBlink_SetState(void *,int);
 extern int PaletteData_GetSelectedBuffersBitmask(void *);
 extern u8 sub_020772F8(Work *,int);
 extern int TextPrinterCheckActive(u8);
@@ -71,13 +71,13 @@ void sub_02075E14(Work *w){
  if((w->flags&1)&&w->state==8&&(*(u32 *)&gSystem[0x48]&2)){PaletteData_BeginPaletteFade(w->palette,15,0xf3ff,0,0,16,0x7fff);w->state=41;}
  switch(w->state){
  case 0:if(--w->timer==0)w->state++;break;
- case 1:SetMasterBrightnessNeutral(0);SetMasterBrightnessNeutral(1);sub_0201649C(w->gfx,0);if(w->flags&2)w->state=2;else w->state=4;break;
+ case 1:SetMasterBrightnessNeutral(0);SetMasterBrightnessNeutral(1);PaletteBlink_SetState(w->gfx,0);if(w->flags&2)w->state=2;else w->state=4;break;
  case 2:if(PaletteData_GetSelectedBuffersBitmask(w->palette)==0){w->printer=sub_020772F8(w,0x394);w->state++;}break;
  case 3:if(TextPrinterCheckActive(w->printer))break;w->state=4;break;
  default:break;
  case 4:if(PaletteData_GetSelectedBuffersBitmask(w->palette)==0){
  u32 script[10];sub_0207294C(w->narc,w->anim,w->pic0,w->species,2,0,0);NARC_ReadPokepicAnimScript(w->narc,script,w->species,1);Pokepic_SetAnimScript(w->pic0,script);Pokepic_StartAnim(w->pic0,0);PlayCry(w->species,w->cryMode);BufferBoxMonNickname(w->format,0,Mon_GetBoxMon(w->mon));if(w->flags&2)w->printer=sub_020772F8(w,0x395);else w->printer=sub_020772F8(w,0x393);w->state=5;}break;
- case 5:if(!TextPrinterCheckActive(w->printer)&&!IsCryFinished()&&sub_02017068(w->anim,0)==1&&!Pokepic_IsAnimFinished(w->pic0)){sub_0201649C(w->gfx,1);sub_02005D10(0x3f3);w->timer=20;w->state=6;}break;
+ case 5:if(!TextPrinterCheckActive(w->printer)&&!IsCryFinished()&&sub_02017068(w->anim,0)==1&&!Pokepic_IsAnimFinished(w->pic0)){PaletteBlink_SetState(w->gfx,1);sub_02005D10(0x3f3);w->timer=20;w->state=6;}break;
  case 6:if(--w->timer==0){ParticleConfig cfg;cfg.heap=w->heap;cfg.resource=0;w->scene=sub_02077604(&cfg);sub_02077634(w->scene,0);Pokepic_StartPaletteFade(w->pic0,0,16,4,0x7fff);Pokepic_StartPaletteFade(w->pic1,0,16,4,0x7fff);GF_ASSERT(HeapExp_FndGetTotalFreeSize(w->heap)>0x8000);PlaySE(0x5f8);w->timer=40;w->state++;}break;
  case 7:if(w->y0<40){w->y0+=2;w->y1-=2;}if(--w->timer==0){sub_02077634(w->scene,1);sub_02077634(w->scene,2);sub_02077634(w->scene,7);sub_02077634(w->scene,8);sub_02077634(w->scene,9);sub_02077634(w->scene,11);PlaySE(0x5f9);w->oscillate=16;w->step=8;w->state++;}break;
  case 8:if(!sub_02077650(w->scene)){sub_02077634(w->scene,3);sub_02077634(w->scene,4);sub_02077634(w->scene,5);sub_02077634(w->scene,6);sub_02077634(w->scene,10);PaletteData_BeginPaletteFade(w->palette,15,0xf3ff,2,0,16,0x7fff);Pokepic_SetAttr(w->pic0,12,0);Pokepic_SetAttr(w->pic0,13,0);Pokepic_SetAttr(w->pic1,12,256);Pokepic_SetAttr(w->pic1,13,256);PlaySE(0x5fa);w->oscillate=0;w->timer=8;w->state++;}break;

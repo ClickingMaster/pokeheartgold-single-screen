@@ -145,8 +145,8 @@ typedef struct ScratchOffCardsBounds {
 } ScratchOffCardsBounds;
 
 // Palette fade helper (no public header declares the heap argument).
-void *sub_020163E0(PaletteData *paletteData, u32 buffer, u32 palette, enum HeapID heapID);
-void sub_020164C4(void *task);
+void *PaletteBlink_New(PaletteData *paletteData, u32 buffer, u32 palette, enum HeapID heapID);
+void PaletteBlink_Delete(void *task);
 
 extern const TouchscreenHitbox ov87_021E8184[2];
 extern const TouchscreenHitbox ov87_021E818C[2];
@@ -981,7 +981,7 @@ void ScratchOffCards_FreeResources(ScratchOffCardsWork *work) {
     PaletteData_Free(work->paletteData);
     work->paletteData = NULL;
     ScratchOffCardsSpriteGfx_Free(&work->spriteGfx);
-    sub_020164C4(work->paletteFadeTask);
+    PaletteBlink_Delete(work->paletteFadeTask);
     DestroyMsgData(work->msgData);
     MessageFormat_Delete(work->msgFormat);
     String_Delete(work->string);
@@ -1023,7 +1023,7 @@ void ScratchOffCards_InitResources(ScratchOffCardsWork *work) {
     FontID_Alloc(2, HEAP_ID_122);
     work->messagePrinter = MessagePrinter_New(15, 14, 0, HEAP_ID_122);
     ScratchOffCards_AddWindows(work->bgConfig, work->windows);
-    work->paletteFadeTask = sub_020163E0(NULL, 1, 12, HEAP_ID_122);
+    work->paletteFadeTask = PaletteBlink_New(NULL, 1, 12, HEAP_ID_122);
     ScratchOffCards_LoadScratchLayer(work);
     ScratchOffCards_AllocScratchPixels(work);
     ScratchOffCards_ResetScratchPixels(work);

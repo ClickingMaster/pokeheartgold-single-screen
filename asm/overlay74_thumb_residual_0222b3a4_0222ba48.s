@@ -28,26 +28,26 @@
 	.public MysteryGiftComm_GetRecvBuffer
 	.public ov74_02229DE0
 	.public ov74_02229E60
-	.public ov74_02229F90
-	.public ov74_02229FF4
+	.public MysteryGiftApp_StartSearch
+	.public MysteryGiftApp_AcceptGift
 	.public ov74_0222A2A4
-	.public ov74_0222A2E0
-	.public ov74_0222A35C
-	.public ov74_0222A3CC
+	.public MysteryGiftApp_SelectGetFromFriend
+	.public MysteryGiftApp_SelectGetViaWfc
+	.public MysteryGiftApp_SelectGetViaWireless
 	.public ov74_0222A494
 	.public ov74_0222A4CC
 	.public ov74_0222A504
 	.public ov74_0222A538
 	.public ov74_0222A560
-	.public ov74_0222A5AC
-	.public ov74_0222A5CC
-	.public ov74_0222A650
-	.public ov74_0222A688
-	.public ov74_0222A6C0
-	.public ov74_0222ACD8
-	.public ov74_0222AE6C
-	.public ov74_0222C2EC
-	.public ov74_0222CD94
+	.public MysteryGiftApp_CancelReceiveMenu
+	.public MysteryGiftApp_SelectReceiveGift
+	.public MysteryGiftApp_SelectCheckCard
+	.public MysteryGiftApp_SelectViewLockCapsuleCard
+	.public MysteryGiftApp_SelectExit
+	.public MysteryGiftApp_ShowWfcError
+	.public MysteryGiftApp_Init
+	.public MysteryGiftApp_Main
+	.public MysteryGiftApp_Exit
 	.public ov74_0222D2D4
 	.public ov74_0222D308
 	.public ov74_0222D358
@@ -96,7 +96,7 @@
 	.extern sMysteryGiftCommCommands
 	.extern _0223B390
 	.extern _0223B3A0
-	.extern _0223B3BC
+	.extern sMysteryGiftSparkleDelays
 	.extern _0223B410
 	.extern _0223B420
 	.extern _0223B430
@@ -267,80 +267,80 @@
 	.extern ov74_02229DE0
 	.extern MysteryGiftComm_Free
 	.extern MysteryGiftComm_RegisterCommands
-	.extern ov74_02229E28
+	.extern MysteryGiftApp_SetWaitingIconVisible
 	.extern ov74_02229E60
-	.extern ov74_02229E68
-	.extern ov74_02229F04
-	.extern ov74_02229F28
-	.extern ov74_02229F60
-	.extern ov74_02229F78
-	.extern ov74_02229F90
-	.extern ov74_02229FF4
-	.extern ov74_0222A078
+	.extern MysteryGiftApp_FreeGraphics
+	.extern MysteryGiftApp_InitSprites
+	.extern MysteryGiftApp_SetSpriteAnim
+	.extern MysteryGiftApp_EraseWindowIfInUse
+	.extern MysteryGiftApp_ClearWindowIfInUse
+	.extern MysteryGiftApp_StartSearch
+	.extern MysteryGiftApp_AcceptGift
+	.extern MysteryGiftApp_GetReceivedCard
 	.extern ov74_0222A0E4
-	.extern ov74_0222A130
-	.extern ov74_0222A174
-	.extern ov74_0222A240
+	.extern MysteryGiftApp_WaitForSave
+	.extern MysteryGiftApp_SaveReceivedGift
+	.extern MysteryGiftApp_ShowReceivePrompt
 	.extern ov74_0222A2A4
-	.extern ov74_0222A2E0
-	.extern ov74_0222A35C
-	.extern ov74_0222A3CC
+	.extern MysteryGiftApp_SelectGetFromFriend
+	.extern MysteryGiftApp_SelectGetViaWfc
+	.extern MysteryGiftApp_SelectGetViaWireless
 	.extern ov74_0222A43C
 	.extern ov74_0222A494
 	.extern ov74_0222A4CC
 	.extern ov74_0222A504
 	.extern ov74_0222A538
 	.extern ov74_0222A560
-	.extern ov74_0222A5AC
-	.extern ov74_0222A5CC
-	.extern ov74_0222A650
-	.extern ov74_0222A688
-	.extern ov74_0222A6C0
-	.extern ov74_0222A6F8
-	.extern ov74_0222A744
-	.extern ov74_0222A7A0
-	.extern ov74_0222A81C
-	.extern ov74_0222A89C
-	.extern ov74_0222A94C
-	.extern ov74_0222AA18
-	.extern ov74_0222AAAC
-	.extern ov74_0222AB0C
-	.extern ov74_0222AB70
-	.extern ov74_0222AC1C
-	.extern ov74_0222ACD8
-	.extern ov74_0222AD6C
-	.extern ov74_0222ADBC
-	.extern ov74_0222AE3C
-	.extern ov74_0222AE6C
-	.extern ov74_0222AF28
-	.extern ov74_0222B0C8
-	.extern ov74_0222B144
-	.extern ov74_0222B19C
-	.extern ov74_0222B1F4
-	.extern ov74_0222B20C
-	.extern ov74_0222B224
-	.extern ov74_0222B288
+	.extern MysteryGiftApp_CancelReceiveMenu
+	.extern MysteryGiftApp_SelectReceiveGift
+	.extern MysteryGiftApp_SelectCheckCard
+	.extern MysteryGiftApp_SelectViewLockCapsuleCard
+	.extern MysteryGiftApp_SelectExit
+	.extern MysteryGiftApp_InitBgLayer
+	.extern MysteryGiftApp_InitBgLayers
+	.extern MysteryGiftApp_LoadSubScreenBg
+	.extern MysteryGiftApp_LoadMainScreenBg
+	.extern MysteryGiftApp_CreateListMenu
+	.extern MysteryGiftApp_ShowMainMenu
+	.extern MysteryGiftApp_PrintMessage
+	.extern MysteryGiftApp_PrintGiftTitle
+	.extern MysteryGiftApp_HandleListMenuInput
+	.extern MysteryGiftApp_SetupScreen
+	.extern MysteryGiftApp_RunWfcDownload
+	.extern MysteryGiftApp_ShowWfcError
+	.extern MysteryGiftApp_ShowCannotReceiveMessage
+	.extern MysteryGiftApp_PrintMessageAndWait
+	.extern MysteryGiftApp_StopReceiving
+	.extern MysteryGiftApp_Init
+	.extern MysteryGiftAnim_LoadResources
+	.extern MysteryGiftAnim_CreateSprite
+	.extern MysteryGiftAnim_CreateGiftMainSprite
+	.extern MysteryGiftAnim_CreateGiftSubSprite
+	.extern MysteryGiftAnim_DeleteGiftMainSprite
+	.extern MysteryGiftAnim_DeleteGiftSubSprite
+	.extern MysteryGiftAnim_UpdateSprites
+	.extern MysteryGiftAnim_CreateSparkles
 	.extern ov74_0222B2C4
-	.extern ov74_0222B30C
-	.extern ov74_0222B344
-	.extern ov74_0222B374
+	.extern MysteryGiftAnim_CreateRibbons
+	.extern MysteryGiftAnim_DeleteSparkles
+	.extern MysteryGiftAnim_DeleteRibbons
 	.extern ov74_0222B3A4
 	.extern ov74_0222B5F8
 	.extern ov74_0222B760
-	.extern ov74_0222B950
-	.extern ov74_0222BA48
-	.extern ov74_0222BED8
-	.extern ov74_0222BEF0
-	.extern ov74_0222BF08
+	.extern MysteryGiftAnim_StepTowards
+	.extern MysteryGiftAnim_UpdateParticle
+	.extern MysteryGiftAnim_ApplyBrightnessMain
+	.extern MysteryGiftAnim_ApplyBrightnessSub
+	.extern MysteryGiftAnim_ApplyBrightness
 	.extern ov74_0222BF18
-	.extern ov74_0222BF2C
-	.extern ov74_0222BFA0
-	.extern ov74_0222C014
-	.extern ov74_0222C04C
-	.extern ov74_0222C2EC
-	.extern ov74_0222CD7C
-	.extern ov74_0222CD88
-	.extern ov74_0222CD94
+	.extern MysteryGiftAnim_StepBrightness
+	.extern MysteryGiftAnim_StepBrightnessMain
+	.extern MysteryGiftAnim_Init
+	.extern MysteryGiftAnim_Task
+	.extern MysteryGiftApp_Main
+	.extern MysteryGiftApp_GetOverlayManager
+	.extern MysteryGiftApp_SetOverlayManager
+	.extern MysteryGiftApp_Exit
 	.extern ov74_0222CE10
 	.extern ov74_0222CE6C
 	.extern ov74_0222CEC0
@@ -496,7 +496,7 @@ ov74_0222B3A4: ; 0x0222B3A4
 	add r5, r0, #0
 	str r0, [sp]
 	add r0, #0x88
-	ldr r3, _0222B5E8 ; =_0223B3BC
+	ldr r3, _0222B5E8 ; =sMysteryGiftSparkleDelays
 	mov r4, #0
 	add r7, sp, #0x64
 	str r0, [sp]
@@ -742,7 +742,7 @@ _0222B5A0:
 	ldr r0, [r0]
 	mov r1, #0
 	bl Sprite_SetDrawFlag
-	ldr r0, _0222B5F4 ; =ov74_0222BA48
+	ldr r0, _0222B5F4 ; =MysteryGiftAnim_UpdateParticle
 	ldr r1, [sp]
 	mov r2, #6
 	bl SysTask_CreateOnMainQueue
@@ -762,10 +762,10 @@ _0222B5E4:
 	add sp, #0xb8
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-_0222B5E8: .word _0223B3BC
+_0222B5E8: .word sMysteryGiftSparkleDelays
 _0222B5EC: .word 0x66666666
 _0222B5F0: .word 0x3FE66666
-_0222B5F4: .word ov74_0222BA48
+_0222B5F4: .word MysteryGiftAnim_UpdateParticle
 	thumb_func_end ov74_0222B3A4
 
 
@@ -923,7 +923,7 @@ _0222B6AC:
 	ldr r0, [r0]
 	mov r1, #0
 	bl Sprite_SetDrawFlag
-	ldr r0, _0222B75C ; =ov74_0222BA48
+	ldr r0, _0222B75C ; =MysteryGiftAnim_UpdateParticle
 	add r1, r7, #0
 	mov r2, #6
 	bl SysTask_CreateOnMainQueue
@@ -941,7 +941,7 @@ _0222B758:
 	add sp, #0x10
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-_0222B75C: .word ov74_0222BA48
+_0222B75C: .word MysteryGiftAnim_UpdateParticle
 	thumb_func_end ov74_0222B5F8
 
 
@@ -1146,7 +1146,7 @@ _0222B8C0:
 	mov r1, #1
 	ldr r0, [r5, r0]
 	bl Sprite_SetDrawFlag
-	ldr r0, _0222B948 ; =ov74_0222BA48
+	ldr r0, _0222B948 ; =MysteryGiftAnim_UpdateParticle
 	add r1, r6, #0
 	mov r2, #6
 	bl SysTask_CreateOnMainQueue
@@ -1170,13 +1170,13 @@ _0222B938: .word 0x0000184C
 _0222B93C: .word 0x00001884
 _0222B940: .word 0x00001878
 _0222B944: .word 0x00001854
-_0222B948: .word ov74_0222BA48
+_0222B948: .word MysteryGiftAnim_UpdateParticle
 _0222B94C: .word 0x00001890
 	thumb_func_end ov74_0222B760
 
 
-	thumb_func_start ov74_0222B950
-ov74_0222B950: ; 0x0222B950
+	thumb_func_start MysteryGiftAnim_StepTowards
+MysteryGiftAnim_StepTowards: ; 0x0222B950
 	push {r4, r5, r6, lr}
 	sub sp, #0x18
 	add r5, r1, #0
@@ -1278,11 +1278,11 @@ _0222BA04:
 	pop {r4, r5, r6, pc}
 	nop
 _0222BA44: .word 0x45800000
-	thumb_func_end ov74_0222B950
+	thumb_func_end MysteryGiftAnim_StepTowards
 
 
-	thumb_func_start ov74_0222BA48
-ov74_0222BA48: ; 0x0222BA48
+	thumb_func_start MysteryGiftAnim_UpdateParticle
+MysteryGiftAnim_UpdateParticle: ; 0x0222BA48
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x24
 	add r5, r1, #0
@@ -1342,7 +1342,7 @@ _0222BA66:
 	asr r1, r1, #0x10
 	add r2, r6, #0
 	add r3, r7, #0
-	bl ov74_0222B950
+	bl MysteryGiftAnim_StepTowards
 	cmp r0, #0
 	beq _0222BB5A
 	ldr r0, [r5, #0x24]
@@ -1747,7 +1747,7 @@ _0222BDE6:
 	asr r1, r1, #0x10
 	add r2, r4, #0
 	add r3, r6, #0
-	bl ov74_0222B950
+	bl MysteryGiftAnim_StepTowards
 	cmp r0, #0
 	beq _0222BEB8
 	ldr r0, [sp, #0x14]
@@ -1816,4 +1816,4 @@ _0222BEBC:
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
 _0222BED4: .word 0x45800000
-	thumb_func_end ov74_0222BA48
+	thumb_func_end MysteryGiftAnim_UpdateParticle

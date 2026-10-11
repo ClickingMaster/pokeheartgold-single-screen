@@ -49,12 +49,12 @@ typedef struct AccessPointInfo {
     int mode;
 } AccessPointInfo;
 
-BOOL ov13_022236B8(BOOL (*callback)(void *), void *allocation, u32 size);
-BOOL ov13_022235DC(void);
-BOOL ov13_022235A4(void);
-BOOL ov13_02223478(u32, u32, u32, u32);
-int ov13_02223434(void *, u32);
-BOOL ov13_02223568(void);
+BOOL WifiSetupWcm_Init(BOOL (*callback)(void *), void *allocation, u32 size);
+BOOL WifiSetupWcm_StartCleanup(void);
+BOOL WifiSetupWcm_StartDisconnect(void);
+BOOL WifiSetupWcm_StartSearch(u32, u32, u32, u32);
+int WifiSetupWcm_CopyApList(void *, u32);
+BOOL WifiSetupWcm_StopSearch(void);
 
 void *WifiSetup_SocketAlloc(s32 unused, s32 size) {
     void *(*alloc)(s32);
@@ -287,7 +287,7 @@ int ov13_02222C1C(WifiSetupAllocFunc alloc, WifiSetupFreeFunc free) {
     if (gWifiSetupRuntime.allocation == NULL) {
         return -1;
     }
-    if (!ov13_022236B8(ov13_02222BF4, gWifiSetupRuntime.allocation, 0x5890)) {
+    if (!WifiSetupWcm_Init(ov13_02222BF4, gWifiSetupRuntime.allocation, 0x5890)) {
         running = FALSE;
     }
 
@@ -330,7 +330,7 @@ int ov13_02222CE0(void) {
     if (gWifiSetupRuntime.free == NULL) {
         return -1;
     }
-    if (!ov13_022235DC()) {
+    if (!WifiSetupWcm_StartCleanup()) {
         return -1;
     }
 
@@ -381,7 +381,7 @@ int ov13_02222D78(void) {
     int result = -1;
     BOOL running;
 
-    if (ov13_022235A4()) {
+    if (WifiSetupWcm_StartDisconnect()) {
         do {
             OS_ReceiveMessage(&gWifiSetupMessageQueue, &message, OS_MESSAGE_BLOCK);
             if ((u32)message == 14) {
@@ -421,7 +421,7 @@ int ov13_02222DB0(void **output) {
         return -1;
     }
     base = buffer;
-    if (ov13_02223478(0, 0, 0, 0x0030BFFE) != 0) {
+    if (WifiSetupWcm_StartSearch(0, 0, 0, 0x0030BFFE) != 0) {
         goto started;
     }
     goto cleanup;
@@ -436,9 +436,9 @@ started:
         case 19:
             if (state == 0) {
                 if (count != 0) {
-                    records = ov13_02223434(buffer, 0x40);
+                    records = WifiSetupWcm_CopyApList(buffer, 0x40);
                 }
-                if (ov13_02223568()) {
+                if (WifiSetupWcm_StopSearch()) {
                     state = 1;
                 } else {
                     goto finish;
@@ -450,8 +450,8 @@ started:
                 if (count < 8) {
                     count++;
                 } else {
-                    records = ov13_02223434(buffer, 0x40);
-                    if (ov13_02223568()) {
+                    records = WifiSetupWcm_CopyApList(buffer, 0x40);
+                    if (WifiSetupWcm_StopSearch()) {
                         state = 1;
                     } else {
                         goto finish;

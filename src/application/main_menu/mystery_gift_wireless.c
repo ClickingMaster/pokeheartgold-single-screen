@@ -43,7 +43,7 @@ extern int sub_02037088(int a0, void *a1, void *a2);
 extern void sub_02038114(void *a0, void *a1);
 extern void sub_02038148(void *a0, int a1);
 extern void *sub_020358D0(int a0);
-extern OverlayManager *ov74_0222CD7C(void);
+extern OverlayManager *MysteryGiftApp_GetOverlayManager(void);
 
 // The pieces of this module that poll the work pointer read it as volatile.
 #define VOLATILE_WORK (*(MysteryGiftCommWork *volatile *)&sMysteryGiftCommWork)
@@ -143,7 +143,7 @@ int ov74_02229D0C(void *a0, void *a1) {
 
 void ov74_02229D1C(void *owner, int a1) {
     if (!sub_02037474()) {
-        void **args = OverlayManager_GetArgs(ov74_0222CD7C());
+        void **args = OverlayManager_GetArgs(MysteryGiftApp_GetOverlayManager());
         sub_02038148(args[2], a1);
         MysteryGiftComm_Start(owner);
         MysteryGiftComm_SetState(ov74_02229C44, 0);

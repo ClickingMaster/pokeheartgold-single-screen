@@ -52,9 +52,9 @@
 .public ov81_022410C8
 .public ov81_0224113C
 .public ov81_02241238
-.public ov82_0223F764
-.public ov82_0223F7B4
-.public ov82_0223F814
+.public BattleHall_ReceivePing
+.public BattleHall_ReceiveChoice
+.public BattleHall_ReceiveAnswer
 .public ov83_0224140C
 .public ov83_02241474
 .public ov83_022414DC

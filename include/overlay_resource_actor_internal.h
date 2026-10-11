@@ -118,7 +118,7 @@ extern void GF_3DVramMan_Delete(void *);
 extern void DestroyMsgData(void *);
 extern void MessageFormat_Delete(void *);
 extern void Heap_Free(void *);
-extern void sub_020164C4(void *);
+extern void PaletteBlink_Delete(void *);
 extern void NARC_Delete(void *);
 extern void TextFlags_SetCanABSpeedUpPrint(int);
 extern void TextFlags_SetCanTouchSpeedUpPrint(int);

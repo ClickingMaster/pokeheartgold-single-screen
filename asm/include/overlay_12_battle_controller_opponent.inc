@@ -55,7 +55,7 @@
 .public WaitingIcon_New
 .public WaitingIcon_Delete
 .public sub_02014540
-.public sub_0201649C
+.public PaletteBlink_SetState
 .public sub_02017068
 .public Heap_Alloc
 .public Heap_Free

@@ -40,7 +40,7 @@ void sub_02075D4C(Work *work) {
     MessageFormat_Delete(work->msgFmt);
     Heap_Free(work->string);
     Heap_Free(work->summaryArgs);
-    sub_020164C4(work->unk58);
+    PaletteBlink_Delete(work->unk58);
     Heap_Free(work->bg);
     NARC_Delete(*(void **)((u8 *)work + 0x84));
     Heap_Free(work);

@@ -1,8 +1,8 @@
 	.include "asm/macros.inc"
 	.public _021E7E98
-	.public ov86_021E5900
-	.public ov86_021E5A40
-	.public ov86_021E5AA4
+	.public FrontierRecordsApp_Init
+	.public FrontierRecordsApp_Main
+	.public FrontierRecordsApp_Exit
 	.public FrontierRecordsApp_FadeIn
 	.public FrontierRecordsApp_Run
 	.public FrontierRecordsApp_FadeOut

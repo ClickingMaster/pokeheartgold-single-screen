@@ -57,8 +57,8 @@
 .public ClearFrameAndWindow2
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
-.public sub_020163E0
-.public sub_020164C4
+.public PaletteBlink_New
+.public PaletteBlink_Delete
 .public GridInputHandler_Create
 .public GridInputHandler_Free
 .public GridInputHandler_HandleInput_NoHold
@@ -135,6 +135,6 @@
 .public _s32_div_f
 .public _u32_div_f
 .public gSystem
-.public ov86_021E5900
-.public ov86_021E5A40
-.public ov86_021E5AA4
+.public FrontierRecordsApp_Init
+.public FrontierRecordsApp_Main
+.public FrontierRecordsApp_Exit

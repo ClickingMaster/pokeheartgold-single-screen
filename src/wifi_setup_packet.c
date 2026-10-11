@@ -5,19 +5,6 @@
 // Swaps the two bytes of a 16-bit value (network byte order).
 #define Swap16(value) ((u16)((u8)((value) >> 8) | (((value) << 8) & 0xff00)))
 
-typedef struct WifiSetupApEntry {
-    u32 ssidLength;
-    char ssid[32];
-    u8 unk_24[4];
-    u8 bssid[6];
-    u16 privacy;
-} WifiSetupApEntry;
-
-typedef struct WifiSetupApEntryList {
-    u32 count;
-    WifiSetupApEntry entries[];
-} WifiSetupApEntryList;
-
 typedef struct WifiSetupMacPair {
     u8 first[6];
     u8 second[6];
@@ -60,11 +47,6 @@ extern u8 ov13_0224E0B0[];
 extern u8 ov13_0224E0C4[];
 extern WifiSetupSettings64 ov13_0224E144;
 
-int ov13_02223AE4(WifiSetupApInfo *list, u32 count);
-int ov13_02223B28(int a, int b, int c, u32 d);
-u32 ov13_02223E6C(void);
-void ov13_02223ED4(void *arg);
-int ov13_02224164(const WifiSetupApEntryList *current, const WifiSetupApEntryList *previous, u32 *selected);
 int SOC_SendTo(int socket, const void *data, int length, int flags, const void *address);
 u32 SOCL_GetHostID(void);
 void SOC_U32to4U8(u32 value, void *out);
@@ -124,12 +106,12 @@ int ov13_02224330(void) {
         if (ov13_02226CBC() >= ov13_02245A58.deadline) {
             break;
         }
-        if (!ov13_02223B28(0, 0, 0, 0x30BFFE)) {
+        if (!WifiSetupLink_StartSearch(0, 0, 0, 0x30BFFE)) {
             result = -2;
             goto done;
         }
         OS_CreateAlarm(&alarm);
-        OS_SetAlarm(&alarm, 0xFFB10, (OSAlarmHandler)ov13_02223ED4, (void *)19);
+        OS_SetAlarm(&alarm, 0xFFB10, (OSAlarmHandler)WifiSetupLink_PostEvent, (void *)19);
         running = TRUE;
         result = 0;
         do {
@@ -137,17 +119,17 @@ int ov13_02224330(void) {
             if (ov13_02226CBC() >= ov13_02245A58.deadline || ov13_0224DF30.stop) {
                 break;
             }
-            while ((event = ov13_02223E6C()) != 0) {
+            while ((event = WifiSetupLink_PopEvent()) != 0) {
                 switch (event) {
                 case 19:
                     running = FALSE;
                     break;
                 case 5:
-                    found = ov13_02223AE4(ov13_0224DF30.apList, ov13_0224DF30.apListCount);
+                    found = WifiSetupLink_CopyApList(ov13_0224DF30.apList, ov13_0224DF30.apListCount);
                     if (found > result) {
                         result = found;
                         OS_CancelAlarm(&alarm);
-                        OS_SetAlarm(&alarm, 0xFFB10, (OSAlarmHandler)ov13_02223ED4, (void *)19);
+                        OS_SetAlarm(&alarm, 0xFFB10, (OSAlarmHandler)WifiSetupLink_PostEvent, (void *)19);
                     }
                     break;
                 case 10:
@@ -168,7 +150,7 @@ int ov13_02224330(void) {
             }
         } while (running);
         OS_CancelAlarm(&alarm);
-        while (ov13_02223E6C() != 0) {
+        while (WifiSetupLink_PopEvent() != 0) {
         }
         if (ov13_0224DF30.stop) {
             break;

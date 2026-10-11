@@ -60,8 +60,8 @@
 .public ClearFrameAndWindow2
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
-.public sub_020163E0
-.public sub_020164C4
+.public PaletteBlink_New
+.public PaletteBlink_Delete
 .public YesNoPrompt_Create
 .public YesNoPrompt_Destroy
 .public YesNoPrompt_InitFromTemplate

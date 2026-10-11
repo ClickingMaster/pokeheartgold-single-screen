@@ -182,7 +182,7 @@ typedef struct PaletteTaskWork {
 extern void *BattleSystem_GetPaletteData(void *);
 extern void *BattleSystem_GetPokepicManager(void *);
 extern void *BattleSystem_GetMessageIcon(void *);
-extern void sub_0201649C(void *, int);
+extern void PaletteBlink_SetState(void *, int);
 extern void Pokepic_StartPaletteFadeAll(void *, int, int, int, u16);
 extern void GF_SndStartFadeOutBGM(int, int);
 extern void PaletteData_BlendPalette(void *, int, int, int, int, u16);
@@ -195,7 +195,7 @@ void ov12_02260D84(void *task, PaletteTaskWork *work) {
     switch (work->state) {
     case 0:
         if (work->mode == 0) {
-            sub_0201649C(BattleSystem_GetMessageIcon(work->battleSystem), 1);
+            PaletteBlink_SetState(BattleSystem_GetMessageIcon(work->battleSystem), 1);
             Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, 0xFFFF);
         } else {
             GF_SndStartFadeOutBGM(0, 0x10);

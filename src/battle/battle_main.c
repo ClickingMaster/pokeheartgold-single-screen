@@ -46,7 +46,7 @@
 #include "sound_playback.h"
 #include "unk_0200FA24.h"
 #include "particle_system.h"
-#include "unk_020163E0.h"
+#include "palette_blink.h"
 #include "unk_020210A0.h"
 #include "unk_02026E30.h"
 #include "unk_02026E84.h"
@@ -209,8 +209,8 @@ void Battle_BattleInit(OverlayManager *manager) {
     PaletteData_FillPaletteInBuffer(battleSystem->palette, PLTTBUF_MAIN_BG, PLTTSEL_TRANSPARENT, 0, 160, 192);
     PaletteData_FillPaletteInBuffer(battleSystem->palette, PLTTBUF_SUB_BG, PLTTSEL_TRANSPARENT, 0, 0, 255);
     PaletteData_FillPaletteInBuffer(battleSystem->palette, PLTTBUF_SUB_OBJ, PLTTSEL_TRANSPARENT, 65535, 0, 255);
-    battleSystem->msgIcon = sub_020163E0(battleSystem->palette, (PMLCDTarget)0, 11, HEAP_ID_BATTLE);
-    sub_0201649C(battleSystem->msgIcon, 1);
+    battleSystem->msgIcon = PaletteBlink_New(battleSystem->palette, (PMLCDTarget)0, 11, HEAP_ID_BATTLE);
+    PaletteBlink_SetState(battleSystem->msgIcon, 1);
     battleSystem->unk1C = (u32)SysTask_CreateOnMainQueue(Task_DrawBattleGraphics, battleSystem, 60000);
     battleSystem->unk20 = (u32)SysTask_CreateOnMainQueue(Task_UpdateCriticalHpMusic, battleSystem, 50000);
     battleSystem->unk24 = (u32)SysTask_CreateOnVBlankQueue(VBlankTask_ScrollBattleBackground, battleSystem, 1200);
@@ -298,7 +298,7 @@ void Battle_BattleExit(OverlayManager *man) {
         PlayerProfile_Copy(battleSystem->playerProfile[i], setup->profile[i]);
         Heap_Free(battleSystem->playerProfile[i]);
     }
-    sub_020164C4(battleSystem->msgIcon);
+    PaletteBlink_Delete(battleSystem->msgIcon);
     Save_Bag_Copy(battleSystem->bag, setup->bag);
     Heap_Free(battleSystem->bag);
     Pokedex_Copy(battleSystem->pokedex, setup->pokedex);

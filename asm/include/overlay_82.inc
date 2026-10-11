@@ -161,9 +161,9 @@
 .public ov80_0222A7CC
 .public ov80_02237920
 .public ov80_0223792C
-.public ov82_0223DD60
-.public ov82_0223DE20
-.public ov82_0223DF74
-.public ov82_0223F764
-.public ov82_0223F7B4
-.public ov82_0223F814
+.public BattleHallApp_Init
+.public BattleHallApp_Main
+.public BattleHallApp_Exit
+.public BattleHall_ReceivePing
+.public BattleHall_ReceiveChoice
+.public BattleHall_ReceiveAnswer

@@ -13,26 +13,26 @@
 	.extern MysteryGiftComm_GetRecvBuffer
 	.extern ov74_02229DE0
 	.extern ov74_02229E60
-	.extern ov74_02229F90
-	.extern ov74_02229FF4
+	.extern MysteryGiftApp_StartSearch
+	.extern MysteryGiftApp_AcceptGift
 	.extern ov74_0222A2A4
-	.extern ov74_0222A2E0
-	.extern ov74_0222A35C
-	.extern ov74_0222A3CC
+	.extern MysteryGiftApp_SelectGetFromFriend
+	.extern MysteryGiftApp_SelectGetViaWfc
+	.extern MysteryGiftApp_SelectGetViaWireless
 	.extern ov74_0222A494
 	.extern ov74_0222A4CC
 	.extern ov74_0222A504
 	.extern ov74_0222A538
 	.extern ov74_0222A560
-	.extern ov74_0222A5AC
-	.extern ov74_0222A5CC
-	.extern ov74_0222A650
-	.extern ov74_0222A688
-	.extern ov74_0222A6C0
-	.extern ov74_0222ACD8
-	.extern ov74_0222AE6C
-	.extern ov74_0222C2EC
-	.extern ov74_0222CD94
+	.extern MysteryGiftApp_CancelReceiveMenu
+	.extern MysteryGiftApp_SelectReceiveGift
+	.extern MysteryGiftApp_SelectCheckCard
+	.extern MysteryGiftApp_SelectViewLockCapsuleCard
+	.extern MysteryGiftApp_SelectExit
+	.extern MysteryGiftApp_ShowWfcError
+	.extern MysteryGiftApp_Init
+	.extern MysteryGiftApp_Main
+	.extern MysteryGiftApp_Exit
 	.extern ov74_0222D2D4
 	.extern ov74_0222D308
 	.extern ov74_0222D358

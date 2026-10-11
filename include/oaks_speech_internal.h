@@ -7,7 +7,7 @@
 #include "options.h"
 #include "overlay_manager.h"
 #include "sprite_system.h"
-#include "unk_020163E0.h"
+#include "palette_blink.h"
 
 #define GENDER_CURSOR_MALE    0
 #define GENDER_CURSOR_FEMALE  1
@@ -56,7 +56,7 @@ typedef struct OakSpeechData {
     int printAndFadeFullScreenTextState;
     u32 textPrinter;
     String *string;
-    UnkStruct_020163E0 *unk_114;
+    PaletteBlink *unk_114;
     MessageFormat *msgFormat;
     u8 filler_11C[0x4];
     NamingScreenArgs *namingScreenArgs_Player;

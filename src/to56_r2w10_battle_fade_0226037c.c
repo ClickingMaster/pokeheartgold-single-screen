@@ -9,7 +9,7 @@
 #include "sound.h"
 #include "sys_task_api.h"
 #include "sound_playback.h"
-#include "unk_020163E0.h"
+#include "palette_blink.h"
 
 #define BATTLE(w) (*(BattleSystem **)(w))
 
@@ -52,7 +52,7 @@ void ov12_0226037C(SysTask *task, void *arg) {
 
     switch (work->state) {
     case 0:
-        sub_0201649C(BattleSystem_GetMessageIcon(work->battleSystem), 1);
+        PaletteBlink_SetState(BattleSystem_GetMessageIcon(work->battleSystem), 1);
         PaletteData_BeginPaletteFade(palette, 0xF, 0xFFFF, 1, 0, 16, 0);
         Pokepic_StartPaletteFadeAll(pokepic, 0, 16, 0, 0);
         GF_SndStartFadeOutBGM(0, 16);

@@ -458,9 +458,9 @@
 .public ov81_0223DD60
 .public ov81_0223DEA8
 .public ov81_0223E234
-.public ov82_0223DD60
-.public ov82_0223DE20
-.public ov82_0223DF74
+.public BattleHallApp_Init
+.public BattleHallApp_Main
+.public BattleHallApp_Exit
 .public ov83_0223DD60
 .public ov83_0223DE60
 .public ov83_0223DFBC

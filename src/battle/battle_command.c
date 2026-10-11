@@ -48,7 +48,7 @@
 #include "touchscreen.h"
 #include "sound_playback.h"
 #include "unk_02013534.h"
-#include "unk_020163E0.h"
+#include "palette_blink.h"
 #include "unk_0208805C.h"
 
 int BattleScriptReadWord(BattleContext *ctx);
@@ -6791,7 +6791,7 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
             Pokemon *mon = BattleSystem_GetPartyMon(data->battleSystem, battlerId, data->ctx->selectedMonIndex[battlerId]); // Get the data of the caught Pokemon.
             if (BattleSystem_GetBattleType(data->battleSystem) & (BATTLE_TYPE_PAL_PARK | BATTLE_TYPE_TUTORIAL)) {           // If this was the Catching Demo or a Pal Park encounter...
                 ov12_022567D4(data->battleSystem, data->ctx, BattleSystem_GetPartyMon(data->battleSystem, battlerId, data->ctx->selectedMonIndex[battlerId]));
-                sub_0201649C(BattleSystem_GetMessageIcon(data->battleSystem), 1);
+                PaletteBlink_SetState(BattleSystem_GetMessageIcon(data->battleSystem), 1);
                 PaletteData_BeginPaletteFade(paletteData, 0xF, 0xFFFF, 1, 0, 0x10, RGB_BLACK);
                 Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, RGB_BLACK);
                 data->state = STATE_GET_POKEMON_DONE_CAUGHT;
@@ -6800,14 +6800,14 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
             }
             if (BattleSystem_CheckMonCaught(data->battleSystem, GetMonData(mon, MON_DATA_SPECIES, 0))) { // If this was already caught...
                 if (BattleSystem_GetBattleType(data->battleSystem) & BATTLE_TYPE_BUG_CONTEST) {          // If this was the Bug Catching Contest...
-                    sub_0201649C(BattleSystem_GetMessageIcon(data->battleSystem), 1);
+                    PaletteBlink_SetState(BattleSystem_GetMessageIcon(data->battleSystem), 1);
                     PaletteData_BeginPaletteFade(paletteData, 0xF, 0xFFFF, 1, 0, 0x10, RGB_BLACK);
                     Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, RGB_BLACK);
                     data->state = STATE_GET_POKEMON_STORE_MON_NO_NAMING_SCREEN;
                     data->tempData[DATA_GET_POKEMON_NEEDS_EXTRA_DISPOSAL_CHECK] = TRUE;
                     break;
                 }
-                sub_0201649C(BattleSystem_GetMessageIcon(data->battleSystem), 1);
+                PaletteBlink_SetState(BattleSystem_GetMessageIcon(data->battleSystem), 1);
                 PaletteData_BeginPaletteFade(paletteData, 5, 0xFFFF, 1, 0, 0x10, RGB_BLACK);
                 Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, RGB_BLACK);
                 data->state = STATE_GET_POKEMON_ALREADY_CAUGHT;
@@ -6831,7 +6831,7 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
                 data->state = STATE_GET_POKEMON_POKEDEX_ENTRY;
                 PaletteData_BeginPaletteFade(paletteData, 5, 0xFFFF, 1, 0, 16, RGB_BLACK);
                 Pokepic_StartPaletteFadeAll(pokepicManager, 0, 16, 0, RGB_BLACK);
-                sub_0201649C(BattleSystem_GetMessageIcon(data->battleSystem), 1);
+                PaletteBlink_SetState(BattleSystem_GetMessageIcon(data->battleSystem), 1);
             }
         }
         break;
@@ -6912,7 +6912,7 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
     case STATE_GET_POKEMON_FADE_TO_NICKNAME_ASK:
         if (!PaletteData_GetSelectedBuffersBitmask(paletteData)) {
             data->state = STATE_GET_POKEMON_ASK_FOR_NICKNAME;
-            sub_0201649C(BattleSystem_GetMessageIcon(data->battleSystem), 0);
+            PaletteBlink_SetState(BattleSystem_GetMessageIcon(data->battleSystem), 0);
             PaletteData_SetAutoTransparent(paletteData, 1);
         }
         break;
@@ -6926,7 +6926,7 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
                 data->state = STATE_GET_POKEMON_STORE_MON_NO_NAMING_SCREEN;
                 break;
             }
-            sub_0201649C(BattleSystem_GetMessageIcon(data->battleSystem), 1);
+            PaletteBlink_SetState(BattleSystem_GetMessageIcon(data->battleSystem), 1);
             PaletteData_BeginPaletteFade(paletteData, 0xF, 0xFFFF, 1, 0, 0x10, RGB_BLACK);
             Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, RGB_BLACK);
             data->state = STATE_GET_POKEMON_PREPARE_NAMING_SCREEN;
@@ -6995,14 +6995,14 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
                 }
                 CopyPokemonToPokemon(mon, BattleSystem_GetBugContestCaughtMon(data->battleSystem));
                 if (data->state == STATE_GET_POKEMON_STORE_MON_NO_NAMING_SCREEN) {
-                    sub_0201649C(BattleSystem_GetMessageIcon(data->battleSystem), 1);
+                    PaletteBlink_SetState(BattleSystem_GetMessageIcon(data->battleSystem), 1);
                 }
                 data->state = STATE_GET_POKEMON_DONE_CAUGHT;
                 break;
             }
             if (Party_AddMon(party, mon) == TRUE) {
                 if (data->state == STATE_GET_POKEMON_STORE_MON_NO_NAMING_SCREEN) {
-                    sub_0201649C(BattleSystem_GetMessageIcon(data->battleSystem), 1);
+                    PaletteBlink_SetState(BattleSystem_GetMessageIcon(data->battleSystem), 1);
                     PaletteData_BeginPaletteFade(paletteData, 0xF, 0xFFFF, 1, 0, 0x10, RGB_BLACK);
                     Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, RGB_BLACK);
                 }
@@ -7051,7 +7051,7 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
         if (!TextPrinterCheckActive(data->tempData[DATA_GET_POKEMON_PRINTER_ID])) {
             data->tempData[DATA_GET_POKEMON_FRAME_COUNTER]--;
             if (data->tempData[DATA_GET_POKEMON_FRAME_COUNTER] == 0) { // After 30 frames have passed...
-                sub_0201649C(BattleSystem_GetMessageIcon(data->battleSystem), 1);
+                PaletteBlink_SetState(BattleSystem_GetMessageIcon(data->battleSystem), 1);
                 PaletteData_BeginPaletteFade(paletteData, 0xF, 0xFFFF, 1, 0, 0x10, RGB_BLACK);
                 Pokepic_StartPaletteFadeAll(pokepicManager, 0, 0x10, 0, RGB_BLACK);
                 data->state = STATE_GET_POKEMON_DONE_CAUGHT;

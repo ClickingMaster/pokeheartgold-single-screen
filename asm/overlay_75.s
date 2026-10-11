@@ -4,130 +4,130 @@
 	.public gApplication_TitleScreen
 
 	.text
-	.public _02249B20
+	.public sWiiMessageSettingsRegisterChoicePositions
 	.public _02249BE0
-	.public ov75_02246960
-	.public ov75_022469D8
-	.public ov75_02246B00
-	.public ov75_02246B48
-	.public ov75_02246B98
-	.public ov75_02246C3C
-	.public ov75_02246D08
-	.public ov75_02246D40
-	.public ov75_02246DB4
-	.public ov75_02246DFC
-	.public ov75_02246E3C
-	.public ov75_02246E78
-	.public ov75_02246F0C
-	.public ov75_02247118
-	.public ov75_02247180
-	.public ov75_0224725C
-	.public ov75_02247450
-	.public ov75_022476E8
-	.public ov75_02247790
-	.public ov75_02247890
-	.public ov75_022478E0
-	.public ov75_02247A98
-	.public ov75_02247B98
-	.public ov75_02247C70
-	.public ov75_02247D24
-	.public ov75_02248034
-	.public ov75_022480B8
-	.public ov75_022483EC
-	.public ov75_02248584
+	.public WiiMessageSettings_Init
+	.public WiiMessageSettings_Main
+	.public WiiMessageSettings_Exit
+	.public WiiMessageSettings_LoadNetworkOverlays
+	.public WiiMessageSettings_UnloadNetworkOverlays
+	.public WiiMessageSettings_SaveWiiAddress
+	.public WiiMessageSettings_CreateWiiNumberEntryArgs
+	.public WiiMessageSettings_FinishWiiNumberEntry
+	.public WiiMessageSettings_CreateRegistrationCodeEntryArgs
+	.public WiiMessageSettings_FinishRegistrationCodeEntry
+	.public WiiMessageSettings_CreatePasswordEntryArgs
+	.public WiiMessageSettings_FinishPasswordEntry
+	.public WiiMessageSettingsScreen_Init
+	.public WiiMessageSettingsScreen_Main
+	.public WiiMessageSettingsScreen_Exit
+	.public WiiMessageSettingsScreen_InitBgs
+	.public WiiMessageSettingsScreen_LoadGraphics
+	.public WiiMessageSettingsScreen_AnimatePaletteTask
+	.public WiiMessageSettingsScreen_AddWindows
+	.public WiiMessageSettingsScreen_CreateYesNoPrompt
+	.public WiiMessageSettingsScreen_MainMenu
+	.public WiiMessageSettingsScreen_SetMessageReception
+	.public WiiMessageSettingsScreen_DeleteSettings
+	.public WiiMessageSettingsScreen_PrintRegisterChoice
+	.public WiiMessageSettingsScreen_AnimateScrollArrows
+	.public WiiMessageSettingsScreen_PrintExplanation
+	.public WiiMessageSettingsScreen_RunExplanation
+	.public WiiMessageSettingsScreen_RegisterWiiNumber
+	.public WiiMessageSettingsScreen_ConfirmConnect
 	.public ov75_02248684
-	.public ov75_022486EC
-	.public ov75_0224874C
-	.public ov75_02248774
-	.public ov75_02248800
+	.public WiiMessageSettingsScreen_PrintDisconnecting
+	.public WiiMessageSettingsScreen_PrintDisconnected
+	.public WiiMessageSettingsScreen_StartConnect
+	.public WiiMessageSettingsScreen_WaitConnect
 	.public ov75_022488BC
-	.public ov75_02248994
-	.public ov75_02248A20
-	.public ov75_02248B8C
-	.public ov75_02248C84
-	.public ov75_02248D2C
-	.public ov75_02248F18
-	.public ov75_02248F7C
-	.public ov75_02248FE8
-	.public ov75_022490D8
-	.public ov75_022491CC
-	.public ov75_022491F0
-	.public ov75_02249278
-	.public ov75_0224937C
-	.public ov75_02249478
-	.public ov75_022494CC
-	.public ov75_02249534
-	.public ov75_02249550
-	.public ov75_022495B0
-	.public ov75_0224964C
-	.public ov75_02249684
-	.public ov75_022496B8
-	.public ov75_0224971C
-	.public ov75_02249780
-	.public ov75_02249838
-	.public ov75_02249884
+	.public WiiMessageSettingsScreen_StartServerSession
+	.public WiiMessageSettingsScreen_WaitRegistrationResponse
+	.public WiiMessageSettingsScreen_RegistrationCodeSent
+	.public WiiMessageSettingsScreen_ConfirmCancelRegistration
+	.public WiiMessageSettingsScreen_ConfirmRegistrationCode
+	.public WiiMessageSettingsScreen_StartPasswordEntry
+	.public WiiMessageSettingsScreen_SaveSettings
+	.public WiiMessageSettingsScreen_SaveGame
+	.public WiiMessageSettingsScreen_DisconnectAndWait
+	.public WiiMessageSettingsScreen_ShowConnectionError
+	.public WiiMessageSettingsScreen_WaitCloseError
+	.public WiiMessageSettingsScreen_ShowRegistrationError
+	.public WiiMessageSettingsScreen_DisconnectAndQuit
+	.public WiiMessageSettingsScreen_WaitMessageAndDelay
+	.public WiiMessageSettingsScreen_PrintMessage
+	.public WiiMessageSettingsScreen_IsPrinterActive
+	.public WiiMessageSettingsScreen_PrintWiiNumberReentry
+	.public WiiMessageSettingsScreen_CheckPassword
+	.public WiiMessageSettingsScreen_GetAlignedX
+	.public WiiMessageSettingsScreen_PrintAligned
+	.public WiiMessageSettingsScreen_PrintError
+	.public WiiMessageSettingsScreen_PrintErrorCode
+	.public WiiNumber_ToWiiAddress
+	.public WiiNumber_IsZero
+	.public WiiNumber_ParseDigitGroups
 	.public ov75_022498E4
-	.public ov75_022498F4
-	.public ov75_02249904
-	.public ov75_02249974
-	.public ov75_02249978
-	.public ov75_0224997C
-	.public ov75_0224998C
-	.public ov75_0224999C
-	.public ov75_022499BC
-	.public ov75_022499DC
-	.public ov75_022499FC
-	.public ov75_02249A24
-	.public ov75_02249A5C
-	.public ov75_02249ACC
-	.public ov75_02249AD0
-	.public ov75_02249ADC
+	.public sWiiMessageSettingsScreenTemplate
+	.public sWiiMessageSettingsApps
+	.public sWiiMessageSettingsRegisteredMenuWindow
+	.public sWiiMessageSettingsUnregisteredMenuWindow
+	.public sWiiMessageSettingsGraphicsModes
+	.public sWiiMessageSettingsUnregisteredMenuItems
+	.public sWiiMessageSettingsUnregisteredMenuTemplate
+	.public sWiiMessageSettingsRegisteredMenuItems
+	.public sWiiMessageSettingsRegisteredMenuTemplate
+	.public sWiiMessageSettingsGraphicsBanks
+	.public sWiiMessageSettingsSubBgTemplates
+	.public sWiiMessageSettingsMainBgTemplates
+	.public sWiiAddressPrefix
+	.public sWiiAddressDomain
+	.public sWiiNumberDigitChars
 	.public ov75_02249B24
-	.public ov75_02249B30
+	.public sWiiMessageSettingsScreenStates
 	.public ov75_App_MainMenu_SelectOption_WiiMessageSettings
-	.public ov75_02246BCC
-	.public ov75_02246BD8
-	.public ov75_02246BE0
-	.public ov75_02246BE8
-	.public ov75_02246BF0
-	.public ov75_02246C18
-	.public ov75_02246C68
-	.public ov75_02246C8C
-	.public ov75_02246CA0
-	.public ov75_02246CB8
-	.public ov75_02246CCC
-	.public ov75_02246CD8
-	.public ov75_02246CE0
-	.public ov75_02246CE8
-	.public ov75_02246CF0
-	.public ov75_02246CF8
-	.public ov75_02246D00
-	.public ov75_02246D04
+	.public WiiMessageSettings_SetNextApp
+	.public WiiMessageSettings_Quit
+	.public WiiMessageSettings_SetScreenStartState
+	.public WiiMessageSettings_GetScreenStartState
+	.public WiiMessageSettings_Alloc
+	.public WiiMessageSettings_Free
+	.public WiiMessageSettings_SaveRegistrationCode
+	.public WiiMessageSettings_SavePassword
+	.public WiiMessageSettings_InitRequest
+	.public WiiMessageSettings_SetRequestWiiAddress
+	.public WiiMessageSettings_SetRequestRegistrationCode
+	.public WiiMessageSettings_SetRegistrationCodePrefix
+	.public WiiMessageSettings_GetRegistrationCode
+	.public WiiMessageSettings_GetPassword
+	.public WiiMessageSettings_SetWiiNumberEntryState
+	.public WiiMessageSettings_GetWiiNumberEntryState
+	.public WiiMessageSettings_CreateScreenArgs
+	.public WiiMessageSettings_DestroyScreenArgs
 	.public ov75_02246EAC
 	.public ov75_02246EDC
-	.public ov75_02247234
-	.public ov75_0224741C
-	.public ov75_02247838
-	.public ov75_02247854
-	.public ov75_0224785C
-	.public ov75_02247878
-	.public ov75_02247A78
-	.public ov75_02247D0C
-	.public ov75_0224852C
-	.public ov75_0224854C
-	.public ov75_02248714
+	.public WiiMessageSettingsScreen_VBlankCB
+	.public WiiMessageSettingsScreen_FreeBgs
+	.public WiiMessageSettingsScreen_RemoveWindows
+	.public WiiMessageSettingsScreen_SetState
+	.public WiiMessageSettingsScreen_ShowWaitingIcon
+	.public WiiMessageSettingsScreen_HideWaitingIcon
+	.public WiiMessageSettingsScreen_StartCheckWiiNumber
+	.public WiiMessageSettingsScreen_ClearRegisterChoice
+	.public WiiMessageSettingsScreen_StartWiiNumberEntry
+	.public WiiMessageSettingsScreen_CheckWiiNumberEntry
+	.public WiiMessageSettingsScreen_Disconnect
 	.public ov75_022488AC
-	.public ov75_022489F8
-	.public ov75_02248C64
-	.public ov75_0224921C
-	.public ov75_02249258
-	.public ov75_02249460
-	.public ov75_022494A4
-	.public ov75_02249758
-	.public ov75_0224976C
+	.public WiiMessageSettingsScreen_SendRegistrationRequest
+	.public WiiMessageSettingsScreen_StartRegistrationCodeEntry
+	.public WiiMessageSettingsScreen_FadeOut
+	.public WiiMessageSettingsScreen_ShowYesNoPrompt
+	.public WiiMessageSettingsScreen_WaitMessage
+	.public WiiMessageSettingsScreen_WaitMessageAndShowYesNo
+	.public WiiMessageSettingsScreen_RegisteredMenuMoveCursor
+	.public WiiMessageSettingsScreen_UnregisteredMenuMoveCursor
 
-	thumb_func_start ov75_02246960
-ov75_02246960: ; 0x02246960
+	thumb_func_start WiiMessageSettings_Init
+WiiMessageSettings_Init: ; 0x02246960
 	push {r3, r4, r5, lr}
 	mov r2, #0xa
 	add r5, r0, #0
@@ -179,11 +179,11 @@ ov75_02246960: ; 0x02246960
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 _022469D4: .word 0x0000047D
-	thumb_func_end ov75_02246960
+	thumb_func_end WiiMessageSettings_Init
 
 
-	thumb_func_start ov75_022469D8
-ov75_022469D8: ; 0x022469D8
+	thumb_func_start WiiMessageSettings_Main
+WiiMessageSettings_Main: ; 0x022469D8
 	push {r3, r4, r5, lr}
 	add r5, r1, #0
 	bl OverlayManager_GetData
@@ -215,7 +215,7 @@ _02246A0E: ; jump table
 	.short _02246ADA - _02246A0E - 2 ; case 4
 _02246A18:
 	add r0, r4, #0
-	bl ov75_02246B48
+	bl WiiMessageSettings_LoadNetworkOverlays
 	mov r0, #1
 	str r0, [r5]
 	b _02246ADE
@@ -226,8 +226,8 @@ _02246A24:
 	ldr r1, [r4, #0x10]
 	ldr r0, _02246AE4 ; =_02249BE0
 	str r1, [r0]
-	ldr r0, _02246AE8 ; =ov75_02246BF0
-	ldr r1, _02246AEC ; =ov75_02246C18
+	ldr r0, _02246AE8 ; =WiiMessageSettings_Alloc
+	ldr r1, _02246AEC ; =WiiMessageSettings_Free
 	bl ov00_021EC294
 	mov r0, #1
 	str r0, [r4, #0x7c]
@@ -240,7 +240,7 @@ _02246A44:
 	ldr r1, [r1]
 	add r0, r4, #0
 	lsl r2, r1, #4
-	ldr r1, _02246AF0 ; =ov75_02249904
+	ldr r1, _02246AF0 ; =sWiiMessageSettingsApps
 	ldr r1, [r1, r2]
 	blx r1
 	add r1, r0, #0
@@ -248,7 +248,7 @@ _02246A44:
 	add r0, #0x88
 	ldr r0, [r0]
 	lsl r2, r0, #4
-	ldr r0, _02246AF4 ; =ov75_02249904 + 8
+	ldr r0, _02246AF4 ; =sWiiMessageSettingsApps + 8
 	ldr r0, [r0, r2]
 	mov r2, #0x73
 	bl OverlayManager_New
@@ -275,7 +275,7 @@ _02246A82:
 	ldr r1, [r1]
 	add r0, r4, #0
 	lsl r2, r1, #4
-	ldr r1, _02246AF8 ; =ov75_02249904 + 4
+	ldr r1, _02246AF8 ; =sWiiMessageSettingsApps + 4
 	ldr r1, [r1, r2]
 	blx r1
 	ldr r0, [r4]
@@ -290,12 +290,12 @@ _02246A82:
 	b _02246ADE
 _02246AB2:
 	lsl r1, r0, #4
-	ldr r0, _02246AFC ; =ov75_02249904 + 12
+	ldr r0, _02246AFC ; =sWiiMessageSettingsApps + 12
 	ldr r0, [r0, r1]
 	cmp r0, #1
 	bne _02246AC8
 	add r0, r4, #0
-	bl ov75_02246B98
+	bl WiiMessageSettings_UnloadNetworkOverlays
 	mov r0, #2
 	str r0, [r5]
 	b _02246ADE
@@ -318,22 +318,22 @@ _02246ADE:
 	pop {r3, r4, r5, pc}
 	nop
 _02246AE4: .word _02249BE0
-_02246AE8: .word ov75_02246BF0
-_02246AEC: .word ov75_02246C18
-_02246AF0: .word ov75_02249904
-_02246AF4: .word ov75_02249904 + 8
-_02246AF8: .word ov75_02249904 + 4
-_02246AFC: .word ov75_02249904 + 12
-	thumb_func_end ov75_022469D8
+_02246AE8: .word WiiMessageSettings_Alloc
+_02246AEC: .word WiiMessageSettings_Free
+_02246AF0: .word sWiiMessageSettingsApps
+_02246AF4: .word sWiiMessageSettingsApps + 8
+_02246AF8: .word sWiiMessageSettingsApps + 4
+_02246AFC: .word sWiiMessageSettingsApps + 12
+	thumb_func_end WiiMessageSettings_Main
 
 
-	thumb_func_start ov75_02246B00
-ov75_02246B00: ; 0x02246B00
+	thumb_func_start WiiMessageSettings_Exit
+WiiMessageSettings_Exit: ; 0x02246B00
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	bl OverlayManager_GetData
 	add r4, r0, #0
-	bl ov75_02246B98
+	bl WiiMessageSettings_UnloadNetworkOverlays
 	mov r0, #0x45
 	lsl r0, r0, #2
 	ldr r0, [r4, r0]
@@ -356,11 +356,11 @@ ov75_02246B00: ; 0x02246B00
 	.balign 4, 0
 _02246B40: .word FS_OVERLAY_ID(intro_title)
 _02246B44: .word gApplication_TitleScreen
-	thumb_func_end ov75_02246B00
+	thumb_func_end WiiMessageSettings_Exit
 
 
-	thumb_func_start ov75_02246B48
-ov75_02246B48: ; 0x02246B48
+	thumb_func_start WiiMessageSettings_LoadNetworkOverlays
+WiiMessageSettings_LoadNetworkOverlays: ; 0x02246B48
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, [r4, #0x7c]
@@ -393,11 +393,11 @@ _02246B8E:
 	.balign 4, 0
 _02246B90: .word FS_OVERLAY_ID(OVY_70)
 _02246B94: .word 0x00020020
-	thumb_func_end ov75_02246B48
+	thumb_func_end WiiMessageSettings_LoadNetworkOverlays
 
 
-	thumb_func_start ov75_02246B98
-ov75_02246B98: ; 0x02246B98
+	thumb_func_start WiiMessageSettings_UnloadNetworkOverlays
+WiiMessageSettings_UnloadNetworkOverlays: ; 0x02246B98
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, [r4, #0x7c]
@@ -418,4 +418,4 @@ _02246BC4:
 	pop {r4, pc}
 	nop
 _02246BC8: .word FS_OVERLAY_ID(OVY_70)
-	thumb_func_end ov75_02246B98
+	thumb_func_end WiiMessageSettings_UnloadNetworkOverlays

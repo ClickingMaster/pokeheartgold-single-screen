@@ -25,7 +25,7 @@
 	.public sMysteryGiftCommCommands
 	.public _0223B390
 	.public _0223B3A0
-	.public _0223B3BC
+	.public sMysteryGiftSparkleDelays
 	.public _0223B410
 	.public _0223B420
 	.public _0223B430
@@ -131,26 +131,26 @@
 	.extern MysteryGiftComm_GetRecvBuffer
 	.extern ov74_02229DE0
 	.extern ov74_02229E60
-	.extern ov74_02229F90
-	.extern ov74_02229FF4
+	.extern MysteryGiftApp_StartSearch
+	.extern MysteryGiftApp_AcceptGift
 	.extern ov74_0222A2A4
-	.extern ov74_0222A2E0
-	.extern ov74_0222A35C
-	.extern ov74_0222A3CC
+	.extern MysteryGiftApp_SelectGetFromFriend
+	.extern MysteryGiftApp_SelectGetViaWfc
+	.extern MysteryGiftApp_SelectGetViaWireless
 	.extern ov74_0222A494
 	.extern ov74_0222A4CC
 	.extern ov74_0222A504
 	.extern ov74_0222A538
 	.extern ov74_0222A560
-	.extern ov74_0222A5AC
-	.extern ov74_0222A5CC
-	.extern ov74_0222A650
-	.extern ov74_0222A688
-	.extern ov74_0222A6C0
-	.extern ov74_0222ACD8
-	.extern ov74_0222AE6C
-	.extern ov74_0222C2EC
-	.extern ov74_0222CD94
+	.extern MysteryGiftApp_CancelReceiveMenu
+	.extern MysteryGiftApp_SelectReceiveGift
+	.extern MysteryGiftApp_SelectCheckCard
+	.extern MysteryGiftApp_SelectViewLockCapsuleCard
+	.extern MysteryGiftApp_SelectExit
+	.extern MysteryGiftApp_ShowWfcError
+	.extern MysteryGiftApp_Init
+	.extern MysteryGiftApp_Main
+	.extern MysteryGiftApp_Exit
 	.extern ov74_0222D2D4
 	.extern ov74_0222D308
 	.extern ov74_0222D358
@@ -224,7 +224,7 @@
 	.public sMysteryGiftCommCommands
 	.public _0223B390
 	.public _0223B3A0
-	.public _0223B3BC
+	.public sMysteryGiftSparkleDelays
 	.public _0223B410
 	.public _0223B420
 	.public _0223B430
@@ -530,13 +530,13 @@ sMysteryGiftCommCommands:
 	.word sub_020342C0
 	.word 0
 gApp_MainMenu_SelectOption_MysteryGift:
-	.word ov74_0222AE6C, ov74_0222C2EC, ov74_0222CD94, 0xFFFFFFFF
+	.word MysteryGiftApp_Init, MysteryGiftApp_Main, MysteryGiftApp_Exit, 0xFFFFFFFF
 _0223B390:
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 _0223B3A0:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x1C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-_0223B3BC:
+sMysteryGiftSparkleDelays:
 	.byte 0x01, 0x00, 0x00, 0x00
 	.byte 0x1E, 0x00, 0x00, 0x00, 0x3C, 0x00, 0x00, 0x00, 0x5A, 0x00, 0x00, 0x00, 0x5A, 0x00, 0x00, 0x00
 	.byte 0x78, 0x00, 0x00, 0x00, 0x78, 0x00, 0x00, 0x00, 0x78, 0x00, 0x00, 0x00, 0x96, 0x00, 0x00, 0x00
@@ -907,11 +907,11 @@ ov74_0223C240: ; 0x0223C240
 	.word 0x00000013, ov74_0222A538
 
 ov74_0223C250: ; 0x0223C250
-	.word 0x00000012, ov74_02229F90
+	.word 0x00000012, MysteryGiftApp_StartSearch
 	.word 0x00000013, ov74_0222A2A4
 
 ov74_0223C260: ; 0x0223C260
-	.word 0x00000012, ov74_02229FF4
+	.word 0x00000012, MysteryGiftApp_AcceptGift
 	.word 0x00000013, ov74_0222A494
 
 ov74_0223C270: ; 0x0223C270
@@ -919,18 +919,18 @@ ov74_0223C270: ; 0x0223C270
 	.word ov74_02235FF8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x03, 0x00, 0x00, 0x0C, 0x00, 0x10, 0x2F, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00
-	.word msg_0247_00012, ov74_0222A5CC
-	.word msg_0247_00013, ov74_0222A650
+	.word msg_0247_00012, MysteryGiftApp_SelectReceiveGift
+	.word msg_0247_00013, MysteryGiftApp_SelectCheckCard
 
 ov74_0223C2A0: ; 0x0223C2A0
-	.word msg_0247_00021, ov74_0222A688
-	.word msg_0247_00014, ov74_0222A6C0
+	.word msg_0247_00021, MysteryGiftApp_SelectViewLockCapsuleCard
+	.word msg_0247_00014, MysteryGiftApp_SelectExit
 
 ov74_0223C2B0: ; 0x0223C2B0
-	.word msg_0247_00015, ov74_0222A2E0
-	.word msg_0247_00020, ov74_0222A3CC
-	.word msg_0247_00016, ov74_0222A35C
-	.word msg_0247_00017, ov74_0222A5AC
+	.word msg_0247_00015, MysteryGiftApp_SelectGetFromFriend
+	.word msg_0247_00020, MysteryGiftApp_SelectGetViaWireless
+	.word msg_0247_00016, MysteryGiftApp_SelectGetViaWfc
+	.word msg_0247_00017, MysteryGiftApp_CancelReceiveMenu
 
 ov74_0223C2D0: ; 0x0223C2D0
 	.word msg_0247_00065, ov74_0222D358

@@ -1,8 +1,8 @@
 	.include "asm/macros.inc"
 	.public _021E7E98
-	.public ov86_021E5900
-	.public ov86_021E5A40
-	.public ov86_021E5AA4
+	.public FrontierRecordsApp_Init
+	.public FrontierRecordsApp_Main
+	.public FrontierRecordsApp_Exit
 	.public FrontierRecordsApp_FadeIn
 	.public FrontierRecordsApp_Run
 	.public FrontierRecordsApp_FadeOut
@@ -138,8 +138,8 @@
 	.public FrontierRecordsApp_AddReturnButtonWindow
 	.public FrontierRecordsApp_RemoveReturnButtonWindow
 
-	thumb_func_start ov86_021E5900
-ov86_021E5900: ; 0x021E5900
+	thumb_func_start FrontierRecordsApp_Init
+FrontierRecordsApp_Init: ; 0x021E5900
 	push {r4, r5, r6, lr}
 	add r4, r0, #0
 	mov r0, #0
@@ -271,11 +271,11 @@ _021E5A30: .word 0x04001000
 _021E5A34: .word 0x04000304
 _021E5A38: .word 0xFFFF7FFF
 _021E5A3C: .word FrontierRecordsApp_VBlankCallback
-	thumb_func_end ov86_021E5900
+	thumb_func_end FrontierRecordsApp_Init
 
 
-	thumb_func_start ov86_021E5A40
-ov86_021E5A40: ; 0x021E5A40
+	thumb_func_start FrontierRecordsApp_Main
+FrontierRecordsApp_Main: ; 0x021E5A40
 	push {r3, r4, r5, lr}
 	add r5, r1, #0
 	bl OverlayManager_GetData
@@ -322,11 +322,11 @@ _021E5A8E:
 	mov r0, #0
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov86_021E5A40
+	thumb_func_end FrontierRecordsApp_Main
 
 
-	thumb_func_start ov86_021E5AA4
-ov86_021E5AA4: ; 0x021E5AA4
+	thumb_func_start FrontierRecordsApp_Exit
+FrontierRecordsApp_Exit: ; 0x021E5AA4
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	bl OverlayManager_GetData
@@ -385,7 +385,7 @@ ov86_021E5AA4: ; 0x021E5AA4
 	mov r0, #1
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov86_021E5AA4
+	thumb_func_end FrontierRecordsApp_Exit
 
 
 	thumb_func_start FrontierRecordsApp_FadeIn

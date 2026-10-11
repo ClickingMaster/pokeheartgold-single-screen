@@ -4,9 +4,9 @@
 .public PaletteData_GetUnfadedBuf
 .public CreateSysTaskAndEnvironment
 .public DestroySysTaskAndEnvironment
-.public sub_020163E0
-.public sub_0201649C
-.public sub_020164C4
+.public PaletteBlink_New
+.public PaletteBlink_SetState
+.public PaletteBlink_Delete
 .public BG_LoadPlttData
 .public SysTask_GetData
 .public GetMainBgPlttAddr

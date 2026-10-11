@@ -28,9 +28,9 @@ _02108594:
 	.word ov80_0222AFEC, sub_020342B8, 0
 	.word ov80_0222B048, sub_020342B8, 0
 	.word ov80_0222B0B8, sub_020342B8, ov80_0222B0E8
-	.word ov82_0223F764, sub_020342B8, 0
-	.word ov82_0223F7B4, sub_020342B8, 0
-	.word ov82_0223F814, sub_020342B8, 0
+	.word BattleHall_ReceivePing, sub_020342B8, 0
+	.word BattleHall_ReceiveChoice, sub_020342B8, 0
+	.word BattleHall_ReceiveAnswer, sub_020342B8, 0
 	.word ov80_0222B628, sub_020342B8, 0
 	.word ov80_0222B690, sub_020342B8, 0
 	.word ov80_0222B740, sub_020342B8, 0

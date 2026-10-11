@@ -4,9 +4,9 @@
 
 	.text
 	.public _0223FE20
-	.public ov82_0223DD60
-	.public ov82_0223DE20
-	.public ov82_0223DF74
+	.public BattleHallApp_Init
+	.public BattleHallApp_Main
+	.public BattleHallApp_Exit
 	.public BattleHallApp_FadeIn
 	.public BattleHallApp_PrintTypeGrid
 	.public BattleHallApp_PrintTitle
@@ -70,11 +70,11 @@
 	.public BattleHallApp_IsMatronMode
 	.public BattleHallApp_SendLinkCommand
 	.public BattleHallApp_PrepareLinkPing
-	.public ov82_0223F764
+	.public BattleHall_ReceivePing
 	.public BattleHallApp_PrepareLinkChoice
-	.public ov82_0223F7B4
+	.public BattleHall_ReceiveChoice
 	.public BattleHallApp_PrepareLinkAnswer
-	.public ov82_0223F814
+	.public BattleHall_ReceiveAnswer
 	.public BattleHallApp_ResetYesNo
 	.public BattleHallApp_CancelConfirm
 	.public BattleHallApp_ClearMessage

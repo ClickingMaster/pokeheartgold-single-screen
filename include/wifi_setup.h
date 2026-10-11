@@ -10,10 +10,10 @@ typedef void *(*WifiSetupAllocFunc)(u32 size);
 typedef void (*WifiSetupFreeFunc)(void *ptr);
 
 typedef struct WifiSetupRuntime {
-    WifiSetupAllocFunc alloc; // 0x00
-    void *unk_04;             // 0x04
-    void *allocation;         // 0x08, wireless work buffer
-    WifiSetupFreeFunc free;   // 0x0C, also addressed through its own label gWifiSetupFreeHook
+    WifiSetupAllocFunc alloc;   // 0x00
+    s32 (*callback)(s32 event); // 0x04, see ov13_02223100
+    void *allocation;           // 0x08, wireless work buffer
+    WifiSetupFreeFunc free;     // 0x0C, also addressed through its own label gWifiSetupFreeHook
 } WifiSetupRuntime;
 
 typedef struct WifiSetupState {

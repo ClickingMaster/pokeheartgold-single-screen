@@ -19,12 +19,12 @@ extern void sub_020394F4(void);
 extern void UnloadOVY38(void);
 extern void UnloadDwcOverlay(void);
 extern void *Heap_Alloc(u32, u32);
-extern void ov74_02229E28(void);
+extern void MysteryGiftApp_SetWaitingIconVisible(void);
 extern void *ov74_02233B04(u32);
 extern void *ov74_022358C8(u32);
 
-extern void ov74_0222BED8(void *);
-extern void ov74_0222BEF0(void *);
+extern void MysteryGiftAnim_ApplyBrightnessMain(void *);
+extern void MysteryGiftAnim_ApplyBrightnessSub(void *);
 extern Ov74WmState *ov74_0223105C(void);
 extern void *ov74_02231054(void);
 
@@ -38,7 +38,7 @@ extern u32 ov74_0223D454[];
 extern void *ov74_0223E2FC;
 extern u32 ov74_0223E304[];
 
-void *ov74_0222CD7C(void);
+void *MysteryGiftApp_GetOverlayManager(void);
 void *MysteryGiftComm_GetRecvBuffer(void);
 void *ov74_02231148(void);
 void *ov74_02231184(void);

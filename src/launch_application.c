@@ -1287,7 +1287,7 @@ CertificatesArgs *Certificates_LaunchApp(FieldSystem *fieldSystem, enum HeapID h
 }
 
 UnkStruct_0203FAB4 *sub_0203FAB4(FieldSystem *fieldSystem, u8 a1, u8 a2, u16 a3, enum HeapID heapID) {
-    static OverlayManagerTemplate _0210F9BC = { ov86_021E5900, ov86_021E5A40, ov86_021E5AA4, FS_OVERLAY_ID(OVY_86) };
+    static OverlayManagerTemplate _0210F9BC = { FrontierRecordsApp_Init, FrontierRecordsApp_Main, FrontierRecordsApp_Exit, FS_OVERLAY_ID(OVY_86) };
     UnkStruct_0203FAB4 *args = Heap_Alloc(heapID, sizeof(UnkStruct_0203FAB4));
     args->unk4 = a1;
     args->unk5 = a2;

@@ -772,7 +772,7 @@ static void OakSpeech_CleanupBgs(OakSpeechData *data) {
 static void OakSpeech_InitMsgPrinter(OakSpeechData *data) {
     data->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_LAZY, NARC_msgdata_msg, NARC_msg_msg_0219_bin, data->heapID);
     ResetAllTextPrinters();
-    data->unk_114 = sub_020163E0(NULL, PM_LCD_TOP, 6, data->heapID);
+    data->unk_114 = PaletteBlink_New(NULL, PM_LCD_TOP, 6, data->heapID);
     data->msgFormat = MessageFormat_New(data->heapID);
     data->printDialogMsgState = 0;
     data->printAndFadeFullScreenTextState = 0;
@@ -781,7 +781,7 @@ static void OakSpeech_InitMsgPrinter(OakSpeechData *data) {
 
 static void OakSpeech_CleanupMsgPrinter(OakSpeechData *data) {
     MessageFormat_Delete(data->msgFormat);
-    sub_020164C4(data->unk_114);
+    PaletteBlink_Delete(data->unk_114);
     DestroyMsgData(data->msgData);
 }
 

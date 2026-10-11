@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#include "wifi_setup_wcm.h"
+
 // Access-point setup client, second module (OVY_13 Thumb 0x022230F8-0x02226F58): worker thread,
 // access-point scan, packet records, AES key wrap, MD5. Shared by src/wifi_setup_packet.c,
 // src/wifi_setup_crypto.c and src/wifi_setup_api.c.
@@ -20,36 +22,51 @@ typedef struct WifiSetupApInfo {
     u8 unk_2E[0x92]; // 0x2E
 } WifiSetupApInfo;
 
+// Scan result as compared by ov13_02224164 (0x30 bytes)
+typedef struct WifiSetupApEntry {
+    u32 ssidLength;
+    char ssid[32];
+    u8 unk_24[4];
+    u8 bssid[6];
+    u16 privacy;
+} WifiSetupApEntry;
+
+typedef struct WifiSetupApEntryList {
+    u32 count;
+    WifiSetupApEntry entries[];
+} WifiSetupApEntryList;
+
 // ov13_0224DF30 (0x80 bytes, up to ov13_0224DFB0)
 typedef struct WifiSetupWork {
-    u32 unk_00;                          // 0x00
+    u8 unk_00;                           // 0x00, sent as record 0x301
+    u8 unk_01[3];                        // 0x01
     WifiSetupWorkAllocFunc alloc;        // 0x04
-    u32 unk_08;                          // 0x08
+    WifiSetupWcmConfig *wcmConfig;       // 0x08
     WifiSetupWorkFreeFunc free;          // 0x0C
     u32 stop;                            // 0x10, set to make the worker thread finish
-    u32 unk_14;                          // 0x14
+    int packetLength;                    // 0x14
     u32 selection;                       // 0x18, index of the chosen access point
-    u32 unk_1C;                          // 0x1C
-    u32 unk_20;                          // 0x20
-    u32 unk_24;                          // 0x24
-    u32 unk_28;                          // 0x28
-    u32 unk_2C;                          // 0x2C
+    int step;                            // 0x1C, WifiSetup_RunSession state machine
+    u32 connected;                       // 0x20
+    u32 socketStarted;                   // 0x24
+    void *connectKey;                    // 0x28, key description (0x60 bytes)
+    int wcmState;                        // 0x2C, see wifi_setup_wcm.h
     void *threadStack;                   // 0x30
-    u32 unk_34;                          // 0x34
+    u32 recordLength;                    // 0x34
     s32 state;                           // 0x38, 1-5 while the worker thread runs
-    u32 unk_3C;                          // 0x3C
-    u32 unk_40;                          // 0x40
-    u32 unk_44;                          // 0x44
-    u32 unk_48;                          // 0x48
-    u32 unk_4C;                          // 0x4C
+    void *wcmWork;                       // 0x3C, WCM_Init work area
+    void *buffer;                        // 0x40, aligned start of allocation
+    void *searchBssid;                   // 0x44
+    void *searchSsid;                    // 0x48
+    void *connectAp;                     // 0x4C, access point description (0xC0 bytes)
     int extendedRequest;                 // 0x50, also send records 4 and 5
-    u32 unk_54;                          // 0x54
-    u32 unk_58;                          // 0x58
+    void *allocation;                    // 0x54
+    int connectOption;                   // 0x58
     WifiSetupApInfo *apList;             // 0x5C, room for apListCount entries
-    u32 unk_60;                          // 0x60
+    int searchOption;                    // 0x60
     s32 active;                          // 0x64
-    u32 unk_68;                          // 0x68
-    u32 unk_6C;                          // 0x6C
+    int eventWrite;                      // 0x68, ov13_0224DFB4 queue
+    int eventRead;                       // 0x6C
     int apListCount;                     // 0x70
     s32 resultReady;                     // 0x74
     s32 error;                           // 0x78
@@ -58,11 +75,11 @@ typedef struct WifiSetupWork {
 
 // ov13_02245A58
 typedef struct WifiSetupConfig {
-    u8 *packetBuffer;     // 0x00
-    BOOL debug;           // 0x04
-    u32 threadStackSize;  // 0x08
-    s32 deadline;         // 0x0C, ms tick, -1 = none
-    volatile u32 count;   // 0x10
+    u8 *packetBuffer;    // 0x00
+    BOOL debug;          // 0x04
+    u32 threadStackSize; // 0x08
+    s32 deadline;        // 0x0C, ms tick, -1 = none
+    volatile u32 count;  // 0x10
 } WifiSetupConfig;
 
 typedef struct WifiSetupMd5Context {
@@ -75,6 +92,7 @@ typedef struct WifiSetupMd5Context {
 extern WifiSetupWork ov13_0224DF30;
 extern WifiSetupConfig ov13_02245A58;
 extern OSThread ov13_0224DFDC;
+
 // result block handed to the caller (ov13_02226F28)
 typedef struct WifiSetupResult {
     u32 words[58];
@@ -84,10 +102,32 @@ extern WifiSetupResult ov13_0224E09C;
 
 extern const u8 ov13_02245AD8[]; // MD5 padding
 
-int ov13_02223EE0(u32 count);
-int ov13_02223F84(void);
-void ov13_02224100(void);
-int ov13_02224F3C(void);
+// wifi_setup_link.c
+void WifiSetupLink_HandleEvent(WifiSetupWcmEvent *event);
+int WifiSetupLink_ReturnToIdle(void);
+int WifiSetupLink_CopyApList(WifiSetupApInfo *dst, int max);
+int WifiSetupLink_StartSearch(const u8 *bssid, const u8 *ssid, int len, int option);
+int WifiSetupLink_StartDisconnect(void);
+int WifiSetupLink_StartCleanup(void);
+int WifiSetupLink_StartConnect(void *ap, void *key, int option);
+int WifiSetupLink_Init(void (*eventCallback)(u32 event, int arg), u8 *buffer, int size);
+int WifiSetupLink_GetState(void);
+void *WifiSetupLink_Alloc(int unused, int size);
+void WifiSetupLink_Free(int unused, void *ptr, int size);
+void WifiSetupLink_ClearEvents(void);
+u32 WifiSetupLink_PopEvent(void);
+void WifiSetupLink_PushEvent(u32 event, int unused);
+void WifiSetupLink_PostEvent(u32 event);
+int WifiSetupLink_Open(u32 count);
+int WifiSetupLink_Close(void);
+int WifiSetupLink_ConnectSelectedAp(void);
+void WifiSetupLink_DisconnectAp(void);
+
+// wifi_setup_worker.c
+int WifiSetup_RunSession(void);
+
+// wifi_setup_ap_select.c
+int ov13_02224164(const WifiSetupApEntryList *current, const WifiSetupApEntryList *previous, u32 *selected);
 
 // wifi_setup_crypto.c
 void ov13_02225320(void *arg);

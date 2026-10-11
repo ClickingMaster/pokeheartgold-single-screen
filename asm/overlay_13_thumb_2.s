@@ -4664,7 +4664,7 @@ _02222C3C:
 _02222C5E:
 	ldr r0, _02222CDC ; =ov13_02222BF4
 	ldr r2, _02222CD8 ; =0x00005890
-	bl ov13_022236B8
+	bl WifiSetupWcm_Init
 	cmp r0, #0
 	bne _02222C6C
 	mov r4, #0
@@ -4741,7 +4741,7 @@ ov13_02222CE0: ; 0x02222CE0
 	add r0, r5, #0
 	pop {r3, r4, r5, r6, r7, pc}
 _02222CF2:
-	bl ov13_022235DC
+	bl WifiSetupWcm_StartCleanup
 	cmp r0, #0
 	bne _02222CFE
 	sub r0, r4, #2
@@ -4815,7 +4815,7 @@ ov13_02222D78: ; 0x02222D78
 	push {r3, r4, r5, r6, r7, lr}
 	mov r5, #0
 	mvn r5, r5
-	bl ov13_022235A4
+	bl WifiSetupWcm_StartDisconnect
 	cmp r0, #0
 	beq _02222DA8
 	ldr r4, _02222DAC ; =gWifiSetupMessageQueue
@@ -4884,7 +4884,7 @@ _02222DEC:
 	add r1, r0, #0
 	add r2, r0, #0
 	str r4, [sp, #8]
-	bl ov13_02223478
+	bl WifiSetupWcm_StartSearch
 	cmp r0, #0
 	bne _02222E00
 	b _02222F04
@@ -4940,10 +4940,10 @@ _02222E5A:
 	beq _02222E6C
 	add r0, r4, #0
 	mov r1, #0x40
-	bl ov13_02223434
+	bl WifiSetupWcm_CopyApList
 	add r7, r0, #0
 _02222E6C:
-	bl ov13_02223568
+	bl WifiSetupWcm_StopSearch
 	cmp r0, #0
 	beq _02222EEA
 	mov r6, #1
@@ -4958,9 +4958,9 @@ _02222E78:
 _02222E84:
 	add r0, r4, #0
 	mov r1, #0x40
-	bl ov13_02223434
+	bl WifiSetupWcm_CopyApList
 	add r7, r0, #0
-	bl ov13_02223568
+	bl WifiSetupWcm_StopSearch
 	cmp r0, #0
 	beq _02222EEA
 	mov r6, #1
@@ -5108,7 +5108,7 @@ _02222F88:
 	ldr r3, _022230E0 ; =0x0030BFFE
 	mov r0, #0
 	add r1, r7, #4
-	bl ov13_02223478
+	bl WifiSetupWcm_StartSearch
 	cmp r0, #0
 	bne _02222FB4
 	b _022230C2
@@ -5173,7 +5173,7 @@ _0222301C:
 	bl OS_CancelAlarm
 	ldr r0, _022230F0 ; =ov13_0224DDC0
 	mov r1, #1
-	bl ov13_02223434
+	bl WifiSetupWcm_CopyApList
 	cmp r0, #1
 	beq _02223036
 	mov r4, #0
@@ -5194,7 +5194,7 @@ _02223048:
 	ldr r0, _022230F0 ; =ov13_0224DDC0
 	ldr r1, _022230DC ; =ov13_0224DE80
 	add r2, r5, #0
-	bl ov13_02223634
+	bl WifiSetupWcm_StartConnect
 	cmp r0, #0
 	bne _0222305E
 	mov r4, #0
@@ -5209,7 +5209,7 @@ _02223062:
 	ldr r0, _022230F0 ; =ov13_0224DDC0
 	ldr r1, _022230DC ; =ov13_0224DE80
 	add r2, r5, #0
-	bl ov13_02223634
+	bl WifiSetupWcm_StartConnect
 	cmp r0, #0
 	bne _022230A4
 	mov r4, #0
@@ -5227,7 +5227,7 @@ _02223082:
 	ldr r0, _022230F0 ; =ov13_0224DDC0
 	ldr r1, _022230DC ; =ov13_0224DE80
 	add r2, r5, #0
-	bl ov13_02223634
+	bl WifiSetupWcm_StartConnect
 	cmp r0, #0
 	bne _022230A4
 	mov r4, #0
@@ -5300,8 +5300,8 @@ _0222310C:
 _02223110: .word gWifiSetupRuntime
 	thumb_func_end ov13_02223100
 
-	thumb_func_start ov13_02223114
-ov13_02223114: ; 0x02223114
+	thumb_func_start WifiSetupWcm_HandleEvent
+WifiSetupWcm_HandleEvent: ; 0x02223114
 	push {r3, lr}
 	cmp r0, #0
 	bne _0222311C
@@ -5671,10 +5671,10 @@ _022233C4:
 	pop {r3, pc}
 	nop
 _022233C8: .word ov13_0224DEE0
-	thumb_func_end ov13_02223114
+	thumb_func_end WifiSetupWcm_HandleEvent
 
-	thumb_func_start ov13_022233CC
-ov13_022233CC: ; 0x022233CC
+	thumb_func_start WifiSetupWcm_ReturnToIdle
+WifiSetupWcm_ReturnToIdle: ; 0x022233CC
 	push {r3, lr}
 	ldr r1, _0222342C ; =ov13_0224DEE0
 	ldr r0, [r1, #0x18]
@@ -5713,7 +5713,7 @@ _02223406:
 	pop {r3, pc}
 _02223412:
 	ldr r0, [r1, #8]
-	ldr r1, _02223430 ; =ov13_02223114
+	ldr r1, _02223430 ; =WifiSetupWcm_HandleEvent
 	bl WCM_StartupAsync
 	cmp r0, #3
 	beq _02223426
@@ -5727,11 +5727,11 @@ _02223426:
 	pop {r3, pc}
 	nop
 _0222342C: .word ov13_0224DEE0
-_02223430: .word ov13_02223114
-	thumb_func_end ov13_022233CC
+_02223430: .word WifiSetupWcm_HandleEvent
+	thumb_func_end WifiSetupWcm_ReturnToIdle
 
-	thumb_func_start ov13_02223434
-ov13_02223434: ; 0x02223434
+	thumb_func_start WifiSetupWcm_CopyApList
+WifiSetupWcm_CopyApList: ; 0x02223434
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	mov r0, #1
@@ -5763,10 +5763,10 @@ _0222346C:
 	add r0, r6, #0
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov13_02223434
+	thumb_func_end WifiSetupWcm_CopyApList
 
-	thumb_func_start ov13_02223478
-ov13_02223478: ; 0x02223478
+	thumb_func_start WifiSetupWcm_StartSearch
+WifiSetupWcm_StartSearch: ; 0x02223478
 	push {r3, r4, r5, r6, r7, lr}
 	str r3, [sp]
 	add r5, r0, #0
@@ -5864,7 +5864,7 @@ _0222350A:
 	mov r0, #1
 	pop {r3, r4, r5, r6, r7, pc}
 _02223530:
-	bl ov13_022233CC
+	bl WifiSetupWcm_ReturnToIdle
 	cmp r0, #1
 	bne _02223548
 	ldr r0, _02223554 ; =ov13_0224DEE0
@@ -5885,10 +5885,10 @@ _02223558: .word ov13_0224DF08
 _0222355C: .word _02108FC0
 _02223560: .word ov13_0224DF10
 _02223564: .word _02108FC8
-	thumb_func_end ov13_02223478
+	thumb_func_end WifiSetupWcm_StartSearch
 
-	thumb_func_start ov13_02223568
-ov13_02223568: ; 0x02223568
+	thumb_func_start WifiSetupWcm_StopSearch
+WifiSetupWcm_StopSearch: ; 0x02223568
 	push {r4, lr}
 	bl OS_DisableInterrupts
 	add r4, r0, #0
@@ -5916,10 +5916,10 @@ _02223596:
 	pop {r4, pc}
 	.balign 4, 0
 _022235A0: .word ov13_0224DEE0
-	thumb_func_end ov13_02223568
+	thumb_func_end WifiSetupWcm_StopSearch
 
-	thumb_func_start ov13_022235A4
-ov13_022235A4: ; 0x022235A4
+	thumb_func_start WifiSetupWcm_StartDisconnect
+WifiSetupWcm_StartDisconnect: ; 0x022235A4
 	push {r4, lr}
 	bl OS_DisableInterrupts
 	add r4, r0, #0
@@ -5944,10 +5944,10 @@ _022235CC:
 	pop {r4, pc}
 	nop
 _022235D8: .word ov13_0224DEE0
-	thumb_func_end ov13_022235A4
+	thumb_func_end WifiSetupWcm_StartDisconnect
 
-	thumb_func_start ov13_022235DC
-ov13_022235DC: ; 0x022235DC
+	thumb_func_start WifiSetupWcm_StartCleanup
+WifiSetupWcm_StartCleanup: ; 0x022235DC
 	push {r4, lr}
 	bl OS_DisableInterrupts
 	add r4, r0, #0
@@ -5971,7 +5971,7 @@ _022235FE:
 	mov r0, #1
 	pop {r4, pc}
 _0222360E:
-	bl ov13_022233CC
+	bl WifiSetupWcm_ReturnToIdle
 	cmp r0, #1
 	bne _02223626
 	ldr r0, _02223630 ; =ov13_0224DEE0
@@ -5988,10 +5988,10 @@ _02223626:
 	pop {r4, pc}
 	.balign 4, 0
 _02223630: .word ov13_0224DEE0
-	thumb_func_end ov13_022235DC
+	thumb_func_end WifiSetupWcm_StartCleanup
 
-	thumb_func_start ov13_02223634
-ov13_02223634: ; 0x02223634
+	thumb_func_start WifiSetupWcm_StartConnect
+WifiSetupWcm_StartConnect: ; 0x02223634
 	push {r3, r4, r5, r6, r7, lr}
 	add r7, r0, #0
 	add r5, r1, #0
@@ -6018,7 +6018,7 @@ _02223660:
 	ldr r1, [r1, #0x20]
 	mov r2, #0xc0
 	bl MIi_CpuCopy32
-	bl ov13_022233CC
+	bl WifiSetupWcm_ReturnToIdle
 	cmp r0, #1
 	bne _02223684
 	ldr r0, _022236B4 ; =ov13_0224DEE0
@@ -6053,10 +6053,10 @@ _022236AA:
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
 _022236B4: .word ov13_0224DEE0
-	thumb_func_end ov13_02223634
+	thumb_func_end WifiSetupWcm_StartConnect
 
-	thumb_func_start ov13_022236B8
-ov13_022236B8: ; 0x022236B8
+	thumb_func_start WifiSetupWcm_Init
+WifiSetupWcm_Init: ; 0x022236B8
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r1, #0
 	add r7, r0, #0
@@ -6118,7 +6118,7 @@ _0222372A:
 	cmp r1, #1
 	bne _02223758
 	ldr r0, [r0, #8]
-	ldr r1, _0222376C ; =ov13_02223114
+	ldr r1, _0222376C ; =WifiSetupWcm_HandleEvent
 	bl WCM_StartupAsync
 	cmp r0, #3
 	beq _02223748
@@ -6142,11 +6142,11 @@ _02223758:
 	nop
 _02223764: .word ov13_0224DEE0
 _02223768: .word 0x0000231F
-_0222376C: .word ov13_02223114
-	thumb_func_end ov13_022236B8
+_0222376C: .word WifiSetupWcm_HandleEvent
+	thumb_func_end WifiSetupWcm_Init
 
-	thumb_func_start ov13_02223770
-ov13_02223770: ; 0x02223770
+	thumb_func_start WifiSetupLink_HandleEvent
+WifiSetupLink_HandleEvent: ; 0x02223770
 	push {r3, lr}
 	cmp r0, #0
 	bne _02223778
@@ -6560,10 +6560,10 @@ _02223A72:
 	.balign 4, 0
 _02223A74: .word ov13_0224DF30
 _02223A78: .word ov13_0224DFB0
-	thumb_func_end ov13_02223770
+	thumb_func_end WifiSetupLink_HandleEvent
 
-	thumb_func_start ov13_02223A7C
-ov13_02223A7C: ; 0x02223A7C
+	thumb_func_start WifiSetupLink_ReturnToIdle
+WifiSetupLink_ReturnToIdle: ; 0x02223A7C
 	push {r3, lr}
 	ldr r1, _02223ADC ; =ov13_0224DF30
 	ldr r0, [r1, #0x2c]
@@ -6602,7 +6602,7 @@ _02223AB6:
 	pop {r3, pc}
 _02223AC2:
 	ldr r0, [r1, #8]
-	ldr r1, _02223AE0 ; =ov13_02223770
+	ldr r1, _02223AE0 ; =WifiSetupLink_HandleEvent
 	bl WCM_StartupAsync
 	cmp r0, #3
 	beq _02223AD6
@@ -6616,11 +6616,11 @@ _02223AD6:
 	pop {r3, pc}
 	nop
 _02223ADC: .word ov13_0224DF30
-_02223AE0: .word ov13_02223770
-	thumb_func_end ov13_02223A7C
+_02223AE0: .word WifiSetupLink_HandleEvent
+	thumb_func_end WifiSetupLink_ReturnToIdle
 
-	thumb_func_start ov13_02223AE4
-ov13_02223AE4: ; 0x02223AE4
+	thumb_func_start WifiSetupLink_CopyApList
+WifiSetupLink_CopyApList: ; 0x02223AE4
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	mov r0, #1
@@ -6652,10 +6652,10 @@ _02223B1C:
 	add r0, r6, #0
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov13_02223AE4
+	thumb_func_end WifiSetupLink_CopyApList
 
-	thumb_func_start ov13_02223B28
-ov13_02223B28: ; 0x02223B28
+	thumb_func_start WifiSetupLink_StartSearch
+WifiSetupLink_StartSearch: ; 0x02223B28
 	push {r3, r4, r5, r6, r7, lr}
 	str r3, [sp]
 	add r5, r0, #0
@@ -6748,7 +6748,7 @@ _02223BB2:
 	mov r0, #1
 	pop {r3, r4, r5, r6, r7, pc}
 _02223BD8:
-	bl ov13_02223A7C
+	bl WifiSetupLink_ReturnToIdle
 	cmp r0, #1
 	bne _02223BF0
 	ldr r0, _02223BFC ; =ov13_0224DF30
@@ -6769,10 +6769,10 @@ _02223C00: .word ov13_0224E3E8
 _02223C04: .word _02108FC0
 _02223C08: .word ov13_0224E420
 _02223C0C: .word _02108FC8
-	thumb_func_end ov13_02223B28
+	thumb_func_end WifiSetupLink_StartSearch
 
-	thumb_func_start ov13_02223C10
-ov13_02223C10: ; 0x02223C10
+	thumb_func_start WifiSetupLink_StartDisconnect
+WifiSetupLink_StartDisconnect: ; 0x02223C10
 	push {r4, lr}
 	bl OS_DisableInterrupts
 	add r4, r0, #0
@@ -6797,10 +6797,10 @@ _02223C38:
 	pop {r4, pc}
 	nop
 _02223C44: .word ov13_0224DF30
-	thumb_func_end ov13_02223C10
+	thumb_func_end WifiSetupLink_StartDisconnect
 
-	thumb_func_start ov13_02223C48
-ov13_02223C48: ; 0x02223C48
+	thumb_func_start WifiSetupLink_StartCleanup
+WifiSetupLink_StartCleanup: ; 0x02223C48
 	push {r4, lr}
 	bl OS_DisableInterrupts
 	add r4, r0, #0
@@ -6824,7 +6824,7 @@ _02223C6A:
 	mov r0, #1
 	pop {r4, pc}
 _02223C7A:
-	bl ov13_02223A7C
+	bl WifiSetupLink_ReturnToIdle
 	cmp r0, #1
 	bne _02223C92
 	ldr r0, _02223C9C ; =ov13_0224DF30
@@ -6841,10 +6841,10 @@ _02223C92:
 	pop {r4, pc}
 	.balign 4, 0
 _02223C9C: .word ov13_0224DF30
-	thumb_func_end ov13_02223C48
+	thumb_func_end WifiSetupLink_StartCleanup
 
-	thumb_func_start ov13_02223CA0
-ov13_02223CA0: ; 0x02223CA0
+	thumb_func_start WifiSetupLink_StartConnect
+WifiSetupLink_StartConnect: ; 0x02223CA0
 	push {r3, r4, r5, r6, r7, lr}
 	add r7, r0, #0
 	add r5, r1, #0
@@ -6871,7 +6871,7 @@ _02223CCC:
 	ldr r1, [r1, #0x4c]
 	mov r2, #0xc0
 	bl MIi_CpuCopy32
-	bl ov13_02223A7C
+	bl WifiSetupLink_ReturnToIdle
 	cmp r0, #1
 	bne _02223CF0
 	ldr r0, _02223D20 ; =ov13_0224DF30
@@ -6906,10 +6906,10 @@ _02223D16:
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
 _02223D20: .word ov13_0224DF30
-	thumb_func_end ov13_02223CA0
+	thumb_func_end WifiSetupLink_StartConnect
 
-	thumb_func_start ov13_02223D24
-ov13_02223D24: ; 0x02223D24
+	thumb_func_start WifiSetupLink_Init
+WifiSetupLink_Init: ; 0x02223D24
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r1, #0
 	add r7, r0, #0
@@ -6972,7 +6972,7 @@ _02223D98:
 	cmp r1, #1
 	bne _02223DC6
 	ldr r0, [r0, #8]
-	ldr r1, _02223DDC ; =ov13_02223770
+	ldr r1, _02223DDC ; =WifiSetupLink_HandleEvent
 	bl WCM_StartupAsync
 	cmp r0, #3
 	beq _02223DB6
@@ -6997,20 +6997,20 @@ _02223DC6:
 _02223DD0: .word ov13_0224DF30
 _02223DD4: .word 0x0000231F
 _02223DD8: .word ov13_0224DFB0
-_02223DDC: .word ov13_02223770
-	thumb_func_end ov13_02223D24
+_02223DDC: .word WifiSetupLink_HandleEvent
+	thumb_func_end WifiSetupLink_Init
 
-	thumb_func_start ov13_02223DE0
-ov13_02223DE0: ; 0x02223DE0
+	thumb_func_start WifiSetupLink_GetState
+WifiSetupLink_GetState: ; 0x02223DE0
 	ldr r0, _02223DE8 ; =ov13_0224DF30
 	ldr r0, [r0, #0x2c]
 	bx lr
 	nop
 _02223DE8: .word ov13_0224DF30
-	thumb_func_end ov13_02223DE0
+	thumb_func_end WifiSetupLink_GetState
 
-	thumb_func_start ov13_02223DEC
-ov13_02223DEC: ; 0x02223DEC
+	thumb_func_start WifiSetupLink_Alloc
+WifiSetupLink_Alloc: ; 0x02223DEC
 	push {r4, lr}
 	add r4, r1, #0
 	cmp r4, #0
@@ -7032,10 +7032,10 @@ _02223E0E:
 	nop
 _02223E14: .word ov13_0224DFC4
 _02223E18: .word ov13_0224DF30
-	thumb_func_end ov13_02223DEC
+	thumb_func_end WifiSetupLink_Alloc
 
-	thumb_func_start ov13_02223E1C
-ov13_02223E1C: ; 0x02223E1C
+	thumb_func_start WifiSetupLink_Free
+WifiSetupLink_Free: ; 0x02223E1C
 	push {r4, lr}
 	add r4, r1, #0
 	beq _02223E3A
@@ -7054,10 +7054,10 @@ _02223E3A:
 	.balign 4, 0
 _02223E3C: .word ov13_0224DFC4
 _02223E40: .word ov13_0224DF30
-	thumb_func_end ov13_02223E1C
+	thumb_func_end WifiSetupLink_Free
 
-	thumb_func_start ov13_02223E44
-ov13_02223E44: ; 0x02223E44
+	thumb_func_start WifiSetupLink_ClearEvents
+WifiSetupLink_ClearEvents: ; 0x02223E44
 	push {r3, lr}
 	bl OS_DisableInterrupts
 	ldr r1, _02223E64 ; =ov13_0224DF30
@@ -7076,10 +7076,10 @@ _02223E56:
 	.balign 4, 0
 _02223E64: .word ov13_0224DF30
 _02223E68: .word ov13_0224DFB4
-	thumb_func_end ov13_02223E44
+	thumb_func_end WifiSetupLink_ClearEvents
 
-	thumb_func_start ov13_02223E6C
-ov13_02223E6C: ; 0x02223E6C
+	thumb_func_start WifiSetupLink_PopEvent
+WifiSetupLink_PopEvent: ; 0x02223E6C
 	push {r3, r4, r5, lr}
 	bl OS_DisableInterrupts
 	ldr r1, _02223E9C ; =ov13_0224DF30
@@ -7106,10 +7106,10 @@ _02223E92:
 	nop
 _02223E9C: .word ov13_0224DF30
 _02223EA0: .word ov13_0224DFB4
-	thumb_func_end ov13_02223E6C
+	thumb_func_end WifiSetupLink_PopEvent
 
-	thumb_func_start ov13_02223EA4
-ov13_02223EA4: ; 0x02223EA4
+	thumb_func_start WifiSetupLink_PushEvent
+WifiSetupLink_PushEvent: ; 0x02223EA4
 	push {r3, r4}
 	ldr r1, _02223ECC ; =ov13_0224DF30
 	ldr r3, [r1, #0x68]
@@ -7134,25 +7134,25 @@ _02223EC8:
 	.balign 4, 0
 _02223ECC: .word ov13_0224DF30
 _02223ED0: .word ov13_0224DFB4
-	thumb_func_end ov13_02223EA4
+	thumb_func_end WifiSetupLink_PushEvent
 
-	thumb_func_start ov13_02223ED4
-ov13_02223ED4: ; 0x02223ED4
-	ldr r3, _02223EDC ; =ov13_02223EA4
+	thumb_func_start WifiSetupLink_PostEvent
+WifiSetupLink_PostEvent: ; 0x02223ED4
+	ldr r3, _02223EDC ; =WifiSetupLink_PushEvent
 	mov r1, #0
 	bx r3
 	nop
-_02223EDC: .word ov13_02223EA4
-	thumb_func_end ov13_02223ED4
+_02223EDC: .word WifiSetupLink_PushEvent
+	thumb_func_end WifiSetupLink_PostEvent
 
-	thumb_func_start ov13_02223EE0
-ov13_02223EE0: ; 0x02223EE0
+	thumb_func_start WifiSetupLink_Open
+WifiSetupLink_Open: ; 0x02223EE0
 	push {r3, r4, r5, r6, r7, lr}
 	add r6, r0, #0
 	ldr r0, _02223F74 ; =ov13_0224DF30
 	mov r4, #1
 	str r6, [r0, #0x70]
-	bl ov13_02223E44
+	bl WifiSetupLink_ClearEvents
 	mov r0, #0xd0
 	add r7, r6, #0
 	mul r7, r0
@@ -7185,9 +7185,9 @@ _02223F10:
 	sub r1, #0x3f
 	and r0, r1
 	str r0, [r6, #0x5c]
-	ldr r0, _02223F80 ; =ov13_02223EA4
+	ldr r0, _02223F80 ; =WifiSetupLink_PushEvent
 	add r1, r3, #0
-	bl ov13_02223D24
+	bl WifiSetupLink_Init
 	cmp r0, #0
 	bne _02223F3C
 	sub r0, r4, #3
@@ -7198,7 +7198,7 @@ _02223F3C:
 _02223F40:
 	mov r0, #0xa
 	bl OS_Sleep
-	bl ov13_02223E6C
+	bl WifiSetupLink_PopEvent
 	cmp r0, #0
 	beq _02223F6C
 _02223F4E:
@@ -7215,7 +7215,7 @@ _02223F60:
 	mov r4, #0
 	sub r5, r4, #2
 _02223F64:
-	bl ov13_02223E6C
+	bl WifiSetupLink_PopEvent
 	cmp r0, #0
 	bne _02223F4E
 _02223F6C:
@@ -7227,14 +7227,14 @@ _02223F6C:
 _02223F74: .word ov13_0224DF30
 _02223F78: .word 0x000024D0
 _02223F7C: .word 0x00002490
-_02223F80: .word ov13_02223EA4
-	thumb_func_end ov13_02223EE0
+_02223F80: .word WifiSetupLink_PushEvent
+	thumb_func_end WifiSetupLink_Open
 
-	thumb_func_start ov13_02223F84
-ov13_02223F84: ; 0x02223F84
+	thumb_func_start WifiSetupLink_Close
+WifiSetupLink_Close: ; 0x02223F84
 	push {r3, r4, r5, r6, r7, lr}
 	mov r5, #1
-	bl ov13_02223C48
+	bl WifiSetupLink_StartCleanup
 	cmp r0, #0
 	beq _02223FC2
 	mov r6, #0
@@ -7243,7 +7243,7 @@ ov13_02223F84: ; 0x02223F84
 _02223F96:
 	add r0, r7, #0
 	bl OS_Sleep
-	bl ov13_02223E6C
+	bl WifiSetupLink_PopEvent
 	cmp r0, #0
 	beq _02223FBE
 _02223FA4:
@@ -7258,7 +7258,7 @@ _02223FA4:
 _02223FB4:
 	add r5, r6, #0
 _02223FB6:
-	bl ov13_02223E6C
+	bl WifiSetupLink_PopEvent
 	cmp r0, #0
 	bne _02223FA4
 _02223FBE:
@@ -7279,10 +7279,10 @@ _02223FD4:
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
 _02223FD8: .word ov13_0224DF30
-	thumb_func_end ov13_02223F84
+	thumb_func_end WifiSetupLink_Close
 
-	thumb_func_start ov13_02223FDC
-ov13_02223FDC: ; 0x02223FDC
+	thumb_func_start WifiSetupLink_ConnectSelectedAp
+WifiSetupLink_ConnectSelectedAp: ; 0x02223FDC
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x30
 	ldr r0, _022240EC ; =ov13_0224DF30
@@ -7302,7 +7302,7 @@ _02223FFA:
 	add r0, r6, #0
 	mov r1, #0
 	lsl r2, r2, #0xa
-	bl ov13_02223CA0
+	bl WifiSetupLink_StartConnect
 	cmp r0, #0
 	bne _0222400E
 	add sp, #0x30
@@ -7314,7 +7314,7 @@ _0222400E:
 	mov r0, #0x12
 	str r0, [sp]
 	ldr r1, _022240F0 ; =0x003FEC42
-	ldr r3, _022240F4 ; =ov13_02223ED4
+	ldr r3, _022240F4 ; =WifiSetupLink_PostEvent
 	add r0, sp, #4
 	mov r2, #0
 	bl OS_SetAlarm
@@ -7339,7 +7339,7 @@ _02224038:
 _02224046:
 	mov r0, #0xa
 	bl OS_Sleep
-	bl ov13_02223E6C
+	bl WifiSetupLink_PopEvent
 	cmp r0, #0
 	beq _022240B4
 _02224054:
@@ -7383,7 +7383,7 @@ _02224094:
 	add r0, r6, #0
 	mov r1, #0
 	lsl r2, r2, #0x10
-	bl ov13_02223CA0
+	bl WifiSetupLink_StartConnect
 	cmp r0, #0
 	bne _022240AC
 	add sp, #0x30
@@ -7392,7 +7392,7 @@ _02224094:
 _022240AA:
 	mov r4, #0
 _022240AC:
-	bl ov13_02223E6C
+	bl WifiSetupLink_PopEvent
 	cmp r0, #0
 	bne _02224054
 _022240B4:
@@ -7402,7 +7402,7 @@ _022240B8:
 	add r0, sp, #4
 	bl OS_CancelAlarm
 _022240BE:
-	bl ov13_02223E6C
+	bl WifiSetupLink_PopEvent
 	cmp r0, #0
 	bne _022240BE
 	cmp r5, #0
@@ -7428,20 +7428,20 @@ _022240E6:
 	.balign 4, 0
 _022240EC: .word ov13_0224DF30
 _022240F0: .word 0x003FEC42
-_022240F4: .word ov13_02223ED4
+_022240F4: .word WifiSetupLink_PostEvent
 _022240F8: .word ov13_02245A58
 _022240FC: .word ov13_02245A6C
-	thumb_func_end ov13_02223FDC
+	thumb_func_end WifiSetupLink_ConnectSelectedAp
 
-	thumb_func_start ov13_02224100
-ov13_02224100: ; 0x02224100
+	thumb_func_start WifiSetupLink_DisconnectAp
+WifiSetupLink_DisconnectAp: ; 0x02224100
 	push {r3, r4, r5, r6, r7, lr}
 	ldr r0, _02224160 ; =ov13_0224DF30
 	mov r5, #1
 	ldr r0, [r0, #0x20]
 	cmp r0, #0
 	beq _0222414C
-	bl ov13_02223C10
+	bl WifiSetupLink_StartDisconnect
 	cmp r0, #0
 	beq _02224146
 	mov r6, #0
@@ -7450,7 +7450,7 @@ ov13_02224100: ; 0x02224100
 _0222411A:
 	add r0, r7, #0
 	bl OS_Sleep
-	bl ov13_02223E6C
+	bl WifiSetupLink_PopEvent
 	cmp r0, #0
 	beq _02224142
 _02224128:
@@ -7465,7 +7465,7 @@ _02224128:
 _02224138:
 	add r5, r6, #0
 _0222413A:
-	bl ov13_02223E6C
+	bl WifiSetupLink_PopEvent
 	cmp r0, #0
 	bne _02224128
 _02224142:
@@ -7487,7 +7487,7 @@ _0222415C:
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
 _02224160: .word ov13_0224DF30
-	thumb_func_end ov13_02224100
+	thumb_func_end WifiSetupLink_DisconnectAp
 
 	thumb_func_start ov13_02224164
 ov13_02224164: ; 0x02224164
@@ -7770,7 +7770,7 @@ _02224370:
 	ldr r3, _022245B0 ; =0x0030BFFE
 	add r1, r0, #0
 	add r2, r0, #0
-	bl ov13_02223B28
+	bl WifiSetupLink_StartSearch
 	cmp r0, #0
 	bne _02224392
 	mov r4, #1
@@ -7782,7 +7782,7 @@ _02224392:
 	mov r0, #0x13
 	str r0, [sp]
 	ldr r1, _022245B4 ; =0x000FFB10
-	ldr r3, _022245B8 ; =ov13_02223ED4
+	ldr r3, _022245B8 ; =WifiSetupLink_PostEvent
 	add r0, sp, #0x24
 	mov r2, #0
 	bl OS_SetAlarm
@@ -7801,7 +7801,7 @@ _022243B0:
 	ldr r0, [r7, #0x10]
 	cmp r0, #0
 	bne _02224444
-	bl ov13_02223E6C
+	bl WifiSetupLink_PopEvent
 	cmp r0, #0
 	beq _02224440
 _022243D0:
@@ -7840,7 +7840,7 @@ _02224408:
 _0222440C:
 	ldr r0, [r7, #0x5c]
 	ldr r1, [r7, #0x70]
-	bl ov13_02223AE4
+	bl WifiSetupLink_CopyApList
 	cmp r0, r4
 	ble _02224438
 	add r4, r0, #0
@@ -7849,7 +7849,7 @@ _0222440C:
 	mov r0, #0x13
 	str r0, [sp]
 	ldr r1, _022245B4 ; =0x000FFB10
-	ldr r3, _022245B8 ; =ov13_02223ED4
+	ldr r3, _022245B8 ; =WifiSetupLink_PostEvent
 	add r0, r6, #0
 	mov r2, #0
 	bl OS_SetAlarm
@@ -7860,7 +7860,7 @@ _02224432:
 _02224436:
 	mov r5, #0
 _02224438:
-	bl ov13_02223E6C
+	bl WifiSetupLink_PopEvent
 	cmp r0, #0
 	bne _022243D0
 _02224440:
@@ -7870,7 +7870,7 @@ _02224444:
 	add r0, sp, #0x24
 	bl OS_CancelAlarm
 _0222444A:
-	bl ov13_02223E6C
+	bl WifiSetupLink_PopEvent
 	cmp r0, #0
 	bne _0222444A
 	ldr r1, _022245A8 ; =ov13_0224DF30
@@ -8056,7 +8056,7 @@ _022245A8: .word ov13_0224DF30
 _022245AC: .word ov13_02245A58
 _022245B0: .word 0x0030BFFE
 _022245B4: .word 0x000FFB10
-_022245B8: .word ov13_02223ED4
+_022245B8: .word WifiSetupLink_PostEvent
 _022245BC: .word ov13_0224E440
 _022245C0: .word ov13_0224E3E0
 	thumb_func_end ov13_02224330
@@ -9364,8 +9364,8 @@ _02224F34: .word ov13_0224E144
 _02224F38: .word ov13_0224E380
 	thumb_func_end ov13_02224DB4
 
-	thumb_func_start ov13_02224F3C
-ov13_02224F3C: ; 0x02224F3C
+	thumb_func_start WifiSetup_RunSession
+WifiSetup_RunSession: ; 0x02224F3C
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x2c
 	mov r4, #0
@@ -9423,7 +9423,7 @@ _02224F96:
 	str r1, [r0, #0x1c]
 	b _022252EE
 _02224FA8:
-	bl ov13_02223FDC
+	bl WifiSetupLink_ConnectSelectedAp
 	str r0, [sp, #8]
 	cmp r0, #1
 	beq _02224FB6
@@ -9748,7 +9748,7 @@ _02225226:
 	bl ov13_02224718
 	ldr r1, _02225284 ; =ov13_0224DF30
 	str r0, [r1, #0x14]
-	bl ov13_02223DE0
+	bl WifiSetupLink_GetState
 	cmp r0, #7
 	beq _02225268
 	bl ov13_02226CBC
@@ -9839,16 +9839,16 @@ _02225314:
 	pop {r4, r5, r6, r7, pc}
 	nop
 _0222531C: .word ov13_0224DF30
-	thumb_func_end ov13_02224F3C
+	thumb_func_end WifiSetup_RunSession
 
 	thumb_func_start ov13_02225320
 ov13_02225320: ; 0x02225320
 	push {r4, lr}
-	bl ov13_02224F3C
+	bl WifiSetup_RunSession
 	add r4, r0, #0
 	ldr r0, _02225350 ; =ov13_0224DF30
 	str r4, [r0, #0x78]
-	bl ov13_02224100
+	bl WifiSetupLink_DisconnectAp
 	cmp r4, #1
 	bne _0222533A
 	mov r1, #6
@@ -13273,7 +13273,7 @@ _02226D8E:
 	ldr r0, [sp, #0x1c]
 	str r0, [r5, #8]
 	add r0, r1, #0
-	bl ov13_02223EE0
+	bl WifiSetupLink_Open
 	mov r2, #1
 	ldr r1, _02226E44 ; =ov13_0224DF30
 	cmp r0, #0
@@ -13421,7 +13421,7 @@ _02226ECC:
 	ldr r0, [r0, #0x74]
 	cmp r0, #0
 	ble _02226EE0
-	bl ov13_02223F84
+	bl WifiSetupLink_Close
 	ldr r1, _02226EE8 ; =ov13_0224DF30
 	mov r2, #0
 	str r2, [r1, #0x74]
@@ -14208,8 +14208,8 @@ ov13_02245A58: ; 0x02245A58
 
 ov13_02245A6C: ; 0x02245A6C
 	.byte 0x00, 0x00, 0x00, 0x01
-	.word ov13_02223DEC
-	.word ov13_02223E1C
+	.word WifiSetupLink_Alloc
+	.word WifiSetupLink_Free
 	.byte 0x00, 0x00, 0x00, 0x00, 0xC0, 0xA8, 0x00, 0xB0
 	.byte 0xFF, 0xFF, 0xFF, 0x00, 0xC0, 0xA8, 0x00, 0xC8, 0xC0, 0xA8, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00

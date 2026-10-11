@@ -28,7 +28,7 @@
 #include "touchscreen.h"
 #include "sound_playback.h"
 #include "unk_0200FA24.h"
-#include "unk_020163E0.h"
+#include "palette_blink.h"
 #include "unk_02019BA4.h"
 #include "unk_0202D230.h"
 #include "unk_02030A98.h"
@@ -130,7 +130,7 @@ typedef struct FrontierRecordsApp {
     s8 lastPage;                                     // 0x25D
     u16 speciesWindowBank;                           // 0x25E
     FrontierRecordsSpeciesGroup groups[NUM_LETTERS]; // 0x260
-    UnkStruct_020163E0 *scrollArrows;                // 0x330
+    PaletteBlink *scrollArrows;                // 0x330
     u16 pageArrowTiles[3][16];                       // 0x334
 } FrontierRecordsApp;
 
@@ -243,7 +243,7 @@ void FrontierRecordsApp_RemoveWindows(Window *windows, int set);
 void FrontierRecordsApp_AddReturnButtonWindow(BgConfig *bgConfig, Window *window);
 void FrontierRecordsApp_RemoveReturnButtonWindow(Window *window);
 
-BOOL ov86_021E5900(OverlayManager *man, int *state) {
+BOOL FrontierRecordsApp_Init(OverlayManager *man, int *state) {
     FrontierRecordsApp *app;
     UnkStruct_0203FAB4 *args;
 
@@ -282,7 +282,7 @@ BOOL ov86_021E5900(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-BOOL ov86_021E5A40(OverlayManager *man, int *state) {
+BOOL FrontierRecordsApp_Main(OverlayManager *man, int *state) {
     FrontierRecordsApp *app = OverlayManager_GetData(man);
 
     switch (*state) {
@@ -307,7 +307,7 @@ BOOL ov86_021E5A40(OverlayManager *man, int *state) {
     return FALSE;
 }
 
-BOOL ov86_021E5AA4(OverlayManager *man, int *state) {
+BOOL FrontierRecordsApp_Exit(OverlayManager *man, int *state) {
 #pragma unused(state)
     FrontierRecordsApp *app = OverlayManager_GetData(man);
 
@@ -1039,11 +1039,11 @@ void FrontierRecordsApp_InitHallPicker(FrontierRecordsApp *app) {
     FrontierRecordsApp_InitSpeciesGroups(app);
     FrontierRecordsApp_PrintLetters(app);
     FrontierRecordsApp_ShowHallPage(app, HALL_PAGE_LETTERS);
-    app->scrollArrows = sub_020163E0(NULL, PM_LCD_BOTTOM, 13, HEAP_ID_121);
+    app->scrollArrows = PaletteBlink_New(NULL, PM_LCD_BOTTOM, 13, HEAP_ID_121);
 }
 
 void FrontierRecordsApp_FreeHallPicker(FrontierRecordsApp *app) {
-    sub_020164C4(app->scrollArrows);
+    PaletteBlink_Delete(app->scrollArrows);
     FrontierRecordsApp_FreeSpeciesGroups(app);
     FrontierRecordsApp_FreeGridInput(app);
 }

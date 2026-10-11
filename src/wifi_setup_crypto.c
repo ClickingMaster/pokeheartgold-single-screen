@@ -42,10 +42,10 @@ extern const u32 ov13_02244AB0[];
 
 // Worker thread: runs the setup session, then reports the final state.
 void ov13_02225320(void *arg) {
-    int result = ov13_02224F3C();
+    int result = WifiSetup_RunSession();
 
     ov13_0224DF30.error = result;
-    ov13_02224100();
+    WifiSetupLink_DisconnectAp();
     if (result == 1) {
         ov13_0224DF30.state = 6;
     } else {

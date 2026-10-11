@@ -106,34 +106,34 @@
 	.extern ov13_02222F28
 	.extern WifiSetup_Sleep
 	.extern ov13_02223100
-	.extern ov13_02223114
-	.extern ov13_022233CC
-	.extern ov13_02223434
-	.extern ov13_02223478
-	.extern ov13_02223568
-	.extern ov13_022235A4
-	.extern ov13_022235DC
-	.extern ov13_02223634
-	.extern ov13_022236B8
-	.extern ov13_02223770
-	.extern ov13_02223A7C
-	.extern ov13_02223AE4
-	.extern ov13_02223B28
-	.extern ov13_02223C10
-	.extern ov13_02223C48
-	.extern ov13_02223CA0
-	.extern ov13_02223D24
-	.extern ov13_02223DE0
-	.extern ov13_02223DEC
-	.extern ov13_02223E1C
-	.extern ov13_02223E44
-	.extern ov13_02223E6C
-	.extern ov13_02223EA4
-	.extern ov13_02223ED4
-	.extern ov13_02223EE0
-	.extern ov13_02223F84
-	.extern ov13_02223FDC
-	.extern ov13_02224100
+	.extern WifiSetupWcm_HandleEvent
+	.extern WifiSetupWcm_ReturnToIdle
+	.extern WifiSetupWcm_CopyApList
+	.extern WifiSetupWcm_StartSearch
+	.extern WifiSetupWcm_StopSearch
+	.extern WifiSetupWcm_StartDisconnect
+	.extern WifiSetupWcm_StartCleanup
+	.extern WifiSetupWcm_StartConnect
+	.extern WifiSetupWcm_Init
+	.extern WifiSetupLink_HandleEvent
+	.extern WifiSetupLink_ReturnToIdle
+	.extern WifiSetupLink_CopyApList
+	.extern WifiSetupLink_StartSearch
+	.extern WifiSetupLink_StartDisconnect
+	.extern WifiSetupLink_StartCleanup
+	.extern WifiSetupLink_StartConnect
+	.extern WifiSetupLink_Init
+	.extern WifiSetupLink_GetState
+	.extern WifiSetupLink_Alloc
+	.extern WifiSetupLink_Free
+	.extern WifiSetupLink_ClearEvents
+	.extern WifiSetupLink_PopEvent
+	.extern WifiSetupLink_PushEvent
+	.extern WifiSetupLink_PostEvent
+	.extern WifiSetupLink_Open
+	.extern WifiSetupLink_Close
+	.extern WifiSetupLink_ConnectSelectedAp
+	.extern WifiSetupLink_DisconnectAp
 	.extern ov13_02224164
 	.extern ov13_02224330
 	.extern ov13_022245C4
@@ -153,7 +153,7 @@
 	.extern ov13_02224B2C
 	.extern ov13_02224D00
 	.extern ov13_02224DB4
-	.extern ov13_02224F3C
+	.extern WifiSetup_RunSession
 	.extern ov13_02225320
 	.extern ov13_02225358
 	.extern ov13_02225510
@@ -970,8 +970,8 @@ ov13_02245A58: ; 0x02245A58
 
 ov13_02245A6C: ; 0x02245A6C
 	.byte 0x00, 0x00, 0x00, 0x01
-	.word ov13_02223DEC
-	.word ov13_02223E1C
+	.word WifiSetupLink_Alloc
+	.word WifiSetupLink_Free
 	.byte 0x00, 0x00, 0x00, 0x00, 0xC0, 0xA8, 0x00, 0xB0
 	.byte 0xFF, 0xFF, 0xFF, 0x00, 0xC0, 0xA8, 0x00, 0xC8, 0xC0, 0xA8, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00

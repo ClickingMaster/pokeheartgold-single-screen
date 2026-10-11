@@ -11,8 +11,8 @@ typedef struct UnkStruct_0203FAB4 {
     u16 unk6;
 } UnkStruct_0203FAB4;
 
-BOOL ov86_021E5900(OverlayManager *man, int *state);
-BOOL ov86_021E5A40(OverlayManager *man, int *state);
-BOOL ov86_021E5AA4(OverlayManager *man, int *state);
+BOOL FrontierRecordsApp_Init(OverlayManager *man, int *state);
+BOOL FrontierRecordsApp_Main(OverlayManager *man, int *state);
+BOOL FrontierRecordsApp_Exit(OverlayManager *man, int *state);
 
 #endif // POKEHEARTGOLD_OVY_86_H

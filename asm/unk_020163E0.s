@@ -4,14 +4,14 @@
 
 	.text
 
-	thumb_func_start sub_020163E0
-sub_020163E0: ; 0x020163E0
+	thumb_func_start PaletteBlink_New
+PaletteBlink_New: ; 0x020163E0
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0xc
 	add r5, r0, #0
 	add r6, r1, #0
 	add r7, r2, #0
-	ldr r0, _02016488 ; =sub_020164D0
+	ldr r0, _02016488 ; =PaletteBlink_Task
 	mov r1, #0x50
 	mov r2, #0
 	bl CreateSysTaskAndEnvironment
@@ -26,7 +26,7 @@ sub_020163E0: ; 0x020163E0
 	mov r1, #0
 	bl PaletteData_GetUnfadedBuf
 	str r0, [sp]
-	ldr r0, _0201648C ; =sub_020165D4
+	ldr r0, _0201648C ; =PaletteBlink_LoadMainBgBuffer
 	str r0, [r4, #4]
 	b _0201643E
 _02016414:
@@ -34,7 +34,7 @@ _02016414:
 	mov r1, #1
 	bl PaletteData_GetUnfadedBuf
 	str r0, [sp]
-	ldr r0, _02016490 ; =sub_020165F0
+	ldr r0, _02016490 ; =PaletteBlink_LoadSubBgBuffer
 	str r0, [r4, #4]
 	b _0201643E
 _02016424:
@@ -42,13 +42,13 @@ _02016424:
 	bne _02016434
 	bl GetMainBgPlttAddr
 	str r0, [sp]
-	ldr r0, _02016494 ; =sub_020165A4
+	ldr r0, _02016494 ; =PaletteBlink_LoadMainBgPltt
 	str r0, [r4, #4]
 	b _0201643E
 _02016434:
 	bl GetSubBgPlttAddr
 	str r0, [sp]
-	ldr r0, _02016498 ; =sub_020165BC
+	ldr r0, _02016498 ; =PaletteBlink_LoadSubBgPltt
 	str r0, [r4, #4]
 _0201643E:
 	ldr r1, [sp]
@@ -87,15 +87,15 @@ _0201643E:
 	add sp, #0xc
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
-_02016488: .word sub_020164D0
-_0201648C: .word sub_020165D4
-_02016490: .word sub_020165F0
-_02016494: .word sub_020165A4
-_02016498: .word sub_020165BC
-	thumb_func_end sub_020163E0
+_02016488: .word PaletteBlink_Task
+_0201648C: .word PaletteBlink_LoadMainBgBuffer
+_02016490: .word PaletteBlink_LoadSubBgBuffer
+_02016494: .word PaletteBlink_LoadMainBgPltt
+_02016498: .word PaletteBlink_LoadSubBgPltt
+	thumb_func_end PaletteBlink_New
 
-	thumb_func_start sub_0201649C
-sub_0201649C: ; 0x0201649C
+	thumb_func_start PaletteBlink_SetState
+PaletteBlink_SetState: ; 0x0201649C
 	cmp r1, #0
 	beq _020164AA
 	cmp r1, #1
@@ -119,19 +119,19 @@ _020164BA:
 	strb r1, [r0]
 	bx lr
 	.balign 4, 0
-	thumb_func_end sub_0201649C
+	thumb_func_end PaletteBlink_SetState
 
-	thumb_func_start sub_020164C4
-sub_020164C4: ; 0x020164C4
+	thumb_func_start PaletteBlink_Delete
+PaletteBlink_Delete: ; 0x020164C4
 	ldr r3, _020164CC ; =DestroySysTaskAndEnvironment
 	ldr r0, [r0]
 	bx r3
 	nop
 _020164CC: .word DestroySysTaskAndEnvironment
-	thumb_func_end sub_020164C4
+	thumb_func_end PaletteBlink_Delete
 
-	thumb_func_start sub_020164D0
-sub_020164D0: ; 0x020164D0
+	thumb_func_start PaletteBlink_Task
+PaletteBlink_Task: ; 0x020164D0
 	push {r3, r4, r5, lr}
 	add r4, r1, #0
 	add r5, r0, #0
@@ -162,7 +162,7 @@ _020164F4:
 	pop {r3, r4, r5, pc}
 _02016504:
 	add r0, r4, #0
-	bl sub_02016548
+	bl PaletteBlink_UpdateColors
 	cmp r0, #1
 	bne _02016518
 	add r1, r4, #0
@@ -196,10 +196,10 @@ _02016538:
 	bl DestroySysTaskAndEnvironment
 _02016546:
 	pop {r3, r4, r5, pc}
-	thumb_func_end sub_020164D0
+	thumb_func_end PaletteBlink_Task
 
-	thumb_func_start sub_02016548
-sub_02016548: ; 0x02016548
+	thumb_func_start PaletteBlink_UpdateColors
+PaletteBlink_UpdateColors: ; 0x02016548
 	push {r4, r5}
 	add r1, r0, #0
 	add r1, #0x4f
@@ -252,10 +252,10 @@ _0201659E:
 	mov r0, #0
 	pop {r4, r5}
 	bx lr
-	thumb_func_end sub_02016548
+	thumb_func_end PaletteBlink_UpdateColors
 
-	thumb_func_start sub_020165A4
-sub_020165A4: ; 0x020165A4
+	thumb_func_start PaletteBlink_LoadMainBgPltt
+PaletteBlink_LoadMainBgPltt: ; 0x020165A4
 	push {r3, lr}
 	add r3, r0, #0
 	add r3, #0x4d
@@ -267,10 +267,10 @@ sub_020165A4: ; 0x020165A4
 	bl BG_LoadPlttData
 	pop {r3, pc}
 	.balign 4, 0
-	thumb_func_end sub_020165A4
+	thumb_func_end PaletteBlink_LoadMainBgPltt
 
-	thumb_func_start sub_020165BC
-sub_020165BC: ; 0x020165BC
+	thumb_func_start PaletteBlink_LoadSubBgPltt
+PaletteBlink_LoadSubBgPltt: ; 0x020165BC
 	push {r3, lr}
 	add r3, r0, #0
 	add r3, #0x4d
@@ -282,10 +282,10 @@ sub_020165BC: ; 0x020165BC
 	bl BG_LoadPlttData
 	pop {r3, pc}
 	.balign 4, 0
-	thumb_func_end sub_020165BC
+	thumb_func_end PaletteBlink_LoadSubBgPltt
 
-	thumb_func_start sub_020165D4
-sub_020165D4: ; 0x020165D4
+	thumb_func_start PaletteBlink_LoadMainBgBuffer
+PaletteBlink_LoadMainBgBuffer: ; 0x020165D4
 	push {r3, lr}
 	add r3, r0, #0
 	mov r0, #0x20
@@ -299,10 +299,10 @@ sub_020165D4: ; 0x020165D4
 	bl PaletteData_LoadPalette
 	pop {r3, pc}
 	.balign 4, 0
-	thumb_func_end sub_020165D4
+	thumb_func_end PaletteBlink_LoadMainBgBuffer
 
-	thumb_func_start sub_020165F0
-sub_020165F0: ; 0x020165F0
+	thumb_func_start PaletteBlink_LoadSubBgBuffer
+PaletteBlink_LoadSubBgBuffer: ; 0x020165F0
 	push {r3, lr}
 	add r3, r0, #0
 	mov r0, #0x20
@@ -316,4 +316,4 @@ sub_020165F0: ; 0x020165F0
 	bl PaletteData_LoadPalette
 	pop {r3, pc}
 	.balign 4, 0
-	thumb_func_end sub_020165F0
+	thumb_func_end PaletteBlink_LoadSubBgBuffer

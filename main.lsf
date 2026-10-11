@@ -117,7 +117,7 @@ Static main
     Object src/mail_message.o
     Object src/easy_chat.o
     Object src/graphics_object_manager.o
-    Object src/palette_fade_task_1.o
+    Object src/palette_blink.o
     Object src/yes_no_prompt.o
     Object src/pokepic_animation.o
     Object asm/to91_w41438_pic_data_anchor.o
@@ -3706,25 +3706,13 @@ Overlay OVY_13
     Object src/wifi_setup_protocol.o
     Object src/wifi_setup_platform.o
     Object src/wifi_setup_connect.o
-    Object src/to53_overlay13/to53_overlay13_c15_w10.o
-    Object src/to70_to55_overlay13_r15_residual1_extra1232_run01.o
-    Object src/to55_overlay13_r15_run1.o
-    Object src/to57_overlay13_r15_b6b8.o
-    Object src/to70_to57_overlay13_r15_residual_extra1236_run01.o
-    Object src/to55_overlay13_r15_run2.o
-    Object src/to53_overlay13/to53_overlay13_c16_w11.o
-    Object src/to70_to53_overlay13_r16_extra284_run01.o
-    Object src/to53_overlay13/to53_overlay13_c17_w11.o
-    Object src/to55_overlay13_r17_run01.o
-    Object src/op90_to56_w16_residual01_r01.o
-    Object src/to56_w16_f84.o
-    Object src/to90_extra2416_run01.o
-    Object src/to56_w16_24100.o
-    Object src/op90_to56_w16_residual03_r01.o
+    Object src/wifi_setup_wcm.o
+    Object src/wifi_setup_link.o
+    Object src/wifi_setup_ap_select.o
     Object src/wifi_setup_packet.o
-    Object src/op90_to58_overlay13_r18_residual02_suffix_r01.o
+    Object src/wifi_setup_worker.o
     Object src/wifi_setup_crypto.o
-    Object src/op90_to53_overlay13_r20_r01.o
+    Object src/wifi_setup_md5.o
     Object src/wifi_setup_api.o
     Object asm/to53_overlay13_r24_data.o
     Object lib/NitroDWC/asm/to60_overlay_13_arm_2_anchor.o
@@ -6782,50 +6770,7 @@ Overlay OVY_74
     Object src/application/main_menu/main_menu.o
     Object src/application/main_menu/connect_to_ranger.o
 Object src/application/main_menu/mystery_gift_wireless.o
-    Object src/to80_extra1493_run01.o
-    Object src/overlay74_thumb_c_02229e60_02229e60.o
-    Object src/to91_w41543_cleanup_run01.o
-    Object src/overlay74_thumb_c_02229f04_02229f78.o
-    Object src/to56_r2_w08_run01.o
-    Object src/to70_to56_r2_w08_residual01_extra904_run01.o
-    Object src/to56_r2_w08_run02.o
-    Object src/to70_to56_r2_w08_residual02_extra701_run01.o
-    Object src/to56_r2_w08_run03.o
-    Object src/overlay74_thumb_c_0222a2a4_0222a2a4.o
-    Object src/to70_overlay74_thumb_residual_0222a2e0_0222a43c_extra184_run01.o
-    Object src/overlay74_thumb_c_0222a494_0222a494.o
-    Object src/to80_extra1494_run01.o
-    Object src/overlay74_thumb_c_0222a504_0222a504.o
-    Object src/to80_extra1762_run01.o
-    Object src/overlay74_thumb_c_0222a560_0222a5ac.o
-    Object src/to90_extra2168_run01.o
-    Object src/overlay74_thumb_c_0222a650_0222a6c0.o
-    Object src/to54_atomic_w06_01_run_00.o
-Object src/to70_to54_atomic_w06_02_run_01_extra138_run01.o
-Object src/to54_atomic_w06_03_run_02.o
-Object src/to70_to54_atomic_w06_04_run_03_extra130_run01.o
-Object src/to70_to70_to54_atomic_w06_04_run_03_extra130_residual_1_extra1343_run01.o
-Object src/to54_atomic_w06_05_run_04.o
-Object src/to90_extra2075_run01.o
-Object src/to54_atomic_w06_07_run_06.o
-    Object src/overlay74_thumb_c_0222b144_0222b20c.o
-    Object src/to70_overlay74_thumb_residual_0222b224_0222b288_extra537_run01.o
-    Object src/overlay74_thumb_c_0222b2c4_0222b2c4.o
-    Object src/to80_extra1495_run01.o
-    Object src/overlay74_thumb_c_0222b344_0222b374.o
-    Object src/to90_extra2167_run01.o
-    Object src/overlay74_b3a4_run1.o
-    Object src/overlay74_b3a4_run2.o
-    Object src/overlay74_b3a4_run3.o
-    Object src/to70_overlay74_b3a4_residual3_extra1191_run01.o
-    Object src/overlay74_thumb_c_0222bed8_0222bfa0.o
-    Object src/overlay74_thumb_c_0222c014_0222c04c.o
-    Object src/to80_extra1496_run01.o
-    Object src/overlay74_thumb_c_0222cd7c_0222cd88.o
-    Object src/to70_to70_overlay74_thumb_residual_0222cd94_0222ce6c_extra286_residual_1_extra1249_run01.o
-    Object src/to70_overlay74_thumb_residual_0222cd94_0222ce6c_extra286_run01.o
-    Object src/overlay74_thumb_c_0222cec0_0222cec0.o
-    Object src/to90_extra2169_run01.o
+    Object src/application/main_menu/mystery_gift_app.o
     Object src/overlay74_thumb_c_0222cffc_0222cffc.o
     Object src/to70_overlay74_thumb_residual_0222d024_0222d024_extra727_run01.o
     Object src/overlay74_thumb_c_0222d098_0222d104.o
@@ -7083,62 +7028,9 @@ Object src/to54_atomic_w17_16_nitrocrypto_residual03_run16.o
 Overlay OVY_75
 {
     After OVY_70
-    Object src/overlay75_lifecycle_1.o
-    Object src/overlay75_helpers_1.o
-    Object src/to80_extra1549_run01.o
-    Object src/overlay75_helpers_2.o
-    Object src/to45_overlay75_text_entry_states.o
-    Object src/overlay75_helpers_3.o
-    Object src/to91_w41518_ov75_init.o
-    Object src/to52_r4_overlay75_lifecycle_tail.o
-    Object src/overlay75_helpers_4.o
-    Object src/to90_extra2040_run01.o
-    Object src/overlay75_helpers_5.o
-    Object src/to70_to47r5_ov75_palette_windows_residual_extra1229_run01.o
-    Object src/to47r5_ov75_palette_windows.o
-    Object src/overlay75_helpers_6.o
-    Object src/to70_overlay_75_residual_7_extra160_run01.o
-    Object src/to70_to70_overlay_75_residual_7_extra160_residual_1_extra1307_run01.o
-    Object src/overlay75_helpers_7.o
-    Object src/to52_r4_overlay75_confirm_states.o
-    Object src/op90_to52_r4_overlay75_r8_residual_r01.o
-    Object src/overlay75_helpers_8.o
-    Object src/to70_overlay_75_residual_9_extra1220_run01.o
-    Object src/overlay75_flow_r39_1.o
-    Object src/to70_overlay_75_residual_9_r39_residual_2_extra1221_run01.o
-    Object src/overlay75_flow_r39_2.o
-    Object src/overlay75_helpers_9.o
-    Object src/r40_overlay_75_residual_10_run1.o
-    Object src/overlay75_helpers_10.o
-    Object src/r40_overlay_75_residual_11_run1.o
-    Object src/to90_extra2434_run01.o
-    Object src/to90_extra2218_run01.o
-    Object src/overlay75_helpers_11.o
-    Object src/to90_extra2435_run01.o
-    Object src/to90_extra2219_run01.o
-    Object src/overlay75_helpers_12.o
-    Object src/to70_to70_overlay_75_residual_13_extra98_residual_1_extra1303_run01.o
-    Object src/to70_overlay_75_residual_13_extra98_run01.o
-    Object src/overlay75_helpers_13.o
-    Object src/overlay75_residual14_flow_r38_1.o
-    Object src/to90_extra2039_run01.o
-    Object src/overlay75_residual14_flow_r38_2.o
-    Object src/overlay75_helpers_14.o
-    Object src/to70_to70_overlay_75_residual_15_extra149_residual_1_extra1304_run01.o
-    Object src/to70_overlay_75_residual_15_extra149_run01.o
-    Object src/overlay75_helpers_15.o
-    Object src/to80_extra1547_run01.o
-    Object src/overlay75_helpers_16.o
-    Object src/overlay75_message_helpers_1.o
-    Object src/to70_overlay_75_residual_17_extra372_run01.o
-    Object src/overlay75_message_helpers_2.o
-    Object src/to80_extra1548_run01.o
-    Object src/overlay75_message_helpers_3.o
-    Object src/overlay75_helpers_17.o
+    Object src/wii_message_settings.o
     Object asm/to70_overlay_75_residual_18_extra240_anchor.o
-    Object src/to70_to70_overlay_75_residual_18_extra240_residual_1_extra1305_run01.o
-    Object src/to70_overlay_75_residual_18_extra240_run01.o
-    Object src/to70_to70_overlay_75_residual_18_extra240_residual_2_extra1306_run01.o
+    Object src/wii_number.o
 }
 Overlay credits
 {

@@ -30,7 +30,7 @@
 #include "sound_playback.h"
 #include "unk_0200B150.h"
 #include "unk_02013534.h"
-#include "unk_020163E0.h"
+#include "palette_blink.h"
 #include "vram_transfer_manager.h"
 
 #define NAME_SCREEN_CONTROL_DAKU            0xD001 // unused
@@ -133,7 +133,7 @@ typedef struct NamingScreenAppData {
     void *plttDataRaw;
     NNSG2dPaletteData *plttData;
     u8 charBuf[0x100];
-    UnkStruct_020163E0 *unk_5C4;
+    PaletteBlink *unk_5C4;
     BOOL isTouchInput;
     int delayCounter;
     MenuInputStateMgr *pMenuInputState;
@@ -520,7 +520,7 @@ BOOL NamingScreenApp_Init(OverlayManager *ovyMan, int *pState) {
             NamingScreen_LoadMonIcon(data->monIconCharData, data->plttData, data->playerGenderOrMonSpecies, data->monForm);
         }
         sAppData = data;
-        data->unk_5C4 = sub_020163E0(NULL, PM_LCD_BOTTOM, 12, HEAP_ID_NAMING_SCREEN);
+        data->unk_5C4 = PaletteBlink_New(NULL, PM_LCD_BOTTOM, 12, HEAP_ID_NAMING_SCREEN);
         *pState = NS_MAIN_STATE_WAIT_FADE_IN;
         return TRUE;
     }
@@ -1709,7 +1709,7 @@ static NamingScreenMainState NamingScreen_HandleCharacterInput(NamingScreenAppDa
         }
         break;
     case NAME_SCREEN_BUTTON_OK:
-        sub_020164C4(data->unk_5C4);
+        PaletteBlink_Delete(data->unk_5C4);
         if (!data->printedFromBattleGMM) {
             PlaySE(SEQ_SE_DP_PIRORIRO);
             ++data->spriteAnimUpdateReq[6];

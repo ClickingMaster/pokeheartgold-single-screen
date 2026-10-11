@@ -31,7 +31,7 @@ void MI_CpuFill8(void *dest, u8 value, u32 size);
 void MI_CpuCopy8(const void *src, void *dst, u32 size);
 void WCM_ClearApList(void);
 void ov13_02222BC0(ConnectParam *param, ApInfo *info);
-BOOL ov13_02223634(ApInfo *info, ConnectSetting *setting, u32 mode);
+BOOL WifiSetupWcm_StartConnect(ApInfo *info, ConnectSetting *setting, u32 mode);
 void ov13_02222BE4(void *out, ApInfo *info, BOOL failed);
 int ov13_02222F28(ConnectParam *param, void *out);
 #define APINFO2 ((ApInfo *)((u8 *)&gWifiSetupRuntime + 0x40))
@@ -69,7 +69,7 @@ int ov13_02222F28(ConnectParam *param, void *out) {
     ov13_0224DE80.keyIndex = connected;
     MI_CpuCopy8(param->key, (u8 *)&ov13_0224DE80 + (connected * sizeof(ConnectKey) + 2), param->keyLength);
     WCM_ClearApList();
-    if (ov13_02223478(0, (u32)param->unk04, param->unk00, 0x0030BFFE)) {
+    if (WifiSetupWcm_StartSearch(0, (u32)param->unk04, param->unk00, 0x0030BFFE)) {
         retries = 0;
         OS_CreateAlarm(&alarm);
         OS_SetAlarm(&alarm, 0x003FEC42, (OSAlarmHandler)ov13_02222C08, (void *)0x12);
@@ -89,7 +89,7 @@ int ov13_02222F28(ConnectParam *param, void *out) {
             case 5:
                 if (!connected) {
                     OS_CancelAlarm(&alarm);
-                    if (ov13_02223434(&ov13_0224DDC0, 1) != 1) {
+                    if (WifiSetupWcm_CopyApList(&ov13_0224DDC0, 1) != 1) {
                         running = FALSE;
                     } else {
                         ov13_02222BC0(param, &ov13_0224DDC0);
@@ -97,7 +97,7 @@ int ov13_02222F28(ConnectParam *param, void *out) {
                         n = APINFO2->count;
                         for (; i < n; i++) {
                         }
-                        if (!ov13_02223634(&ov13_0224DDC0, &ov13_0224DE80, mode)) {
+                        if (!WifiSetupWcm_StartConnect(&ov13_0224DDC0, &ov13_0224DE80, mode)) {
                             running = FALSE;
                         } else {
                             connected = 1;
@@ -107,7 +107,7 @@ int ov13_02222F28(ConnectParam *param, void *out) {
                 break;
             case 10:
                 ov13_02222BC0(param, &ov13_0224DDC0);
-                if (!ov13_02223634(&ov13_0224DDC0, &ov13_0224DE80, mode)) {
+                if (!WifiSetupWcm_StartConnect(&ov13_0224DDC0, &ov13_0224DE80, mode)) {
                     running = FALSE;
                 }
                 break;
@@ -117,7 +117,7 @@ int ov13_02222F28(ConnectParam *param, void *out) {
                 break;
             case 13:
                 if (++retries < 3) {
-                    if (!ov13_02223634(&ov13_0224DDC0, &ov13_0224DE80, mode)) {
+                    if (!WifiSetupWcm_StartConnect(&ov13_0224DDC0, &ov13_0224DE80, mode)) {
                         running = FALSE;
                     }
                 } else {

@@ -124,7 +124,7 @@ int ov13_02226D74(u32 priority, u32 count, void (*statusCallback)(s32 *), WifiSe
     ov13_0224DF30.alloc = alloc;
     ov13_0224DF30.free = free;
     ov13_02245A58.threadStackSize = stackSize;
-    result = ov13_02223EE0(count);
+    result = WifiSetupLink_Open(count);
     ov13_0224DF30.resultReady = 1;
     if (result < 0) {
         ov13_0224DF30.error = result;
@@ -177,7 +177,7 @@ int ov13_02226E5C(void) {
         }
     }
     if (ov13_0224DF30.resultReady > 0) {
-        int result = ov13_02223F84();
+        int result = WifiSetupLink_Close();
         ov13_0224DF30.resultReady = 0;
         return result;
     }

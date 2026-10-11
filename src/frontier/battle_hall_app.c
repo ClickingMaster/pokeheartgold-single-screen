@@ -175,9 +175,9 @@ u8 AddTextPrinterParameterizedWithColor(Window *window, int fontId, String *stri
 u8 TextPrinterCheckActive(u8 printerId);
 void TextFlags_SetCanTouchSpeedUpPrint(BOOL enable);
 
-BOOL ov82_0223DD60(OverlayManager *man, int *state);
-BOOL ov82_0223DE20(OverlayManager *man, int *state);
-BOOL ov82_0223DF74(OverlayManager *man);
+BOOL BattleHallApp_Init(OverlayManager *man, int *state);
+BOOL BattleHallApp_Main(OverlayManager *man, int *state);
+BOOL BattleHallApp_Exit(OverlayManager *man);
 BOOL BattleHallApp_FadeIn(BattleHallApp *app);
 void BattleHallApp_PrintTypeGrid(BattleHallApp *app);
 void BattleHallApp_PrintTitle(BattleHallApp *app);
@@ -225,11 +225,11 @@ BOOL BattleHallApp_IsMatronBattle(BattleHallApp *app);
 u8 BattleHallApp_IsMatronMode(BattleHallApp *app);
 BOOL BattleHallApp_SendLinkCommand(BattleHallApp *app, u16 command, u16 arg);
 void BattleHallApp_PrepareLinkPing(BattleHallApp *app, u16 command);
-void ov82_0223F764(u32 netId);
+void BattleHall_ReceivePing(u32 netId);
 void BattleHallApp_PrepareLinkChoice(BattleHallApp *app, u16 command, u16 choice);
-void ov82_0223F7B4(u32 netId, u32 unused, const u16 *msg, BattleHallApp *app);
+void BattleHall_ReceiveChoice(u32 netId, u32 unused, const u16 *msg, BattleHallApp *app);
 void BattleHallApp_PrepareLinkAnswer(BattleHallApp *app, u16 command, u16 answer);
-void ov82_0223F814(u32 netId, u32 unused, const u16 *msg, BattleHallApp *app);
+void BattleHall_ReceiveAnswer(u32 netId, u32 unused, const u16 *msg, BattleHallApp *app);
 void BattleHallApp_ResetYesNo(BattleHallApp *app);
 void BattleHallApp_ShowConfirmPrompt(BattleHallApp *app);
 void BattleHallApp_CancelConfirm(BattleHallApp *app);
@@ -253,7 +253,7 @@ void BattleHallApp_DestroyYesNo(YesNoPrompt *prompt);
 void BattleHallApp_InitYesNo(YesNoPrompt *prompt, BgConfig *bgConfig, u8 ignoreTouch);
 u32 BattleHallApp_HandleYesNo(YesNoPrompt *prompt);
 
-BOOL ov82_0223DD60(OverlayManager *man, int *state) {
+BOOL BattleHallApp_Init(OverlayManager *man, int *state) {
     BattleHallApp *app;
     BattleHallAppArgs *args;
 
@@ -286,7 +286,7 @@ BOOL ov82_0223DD60(OverlayManager *man, int *state) {
     return TRUE;
 }
 
-BOOL ov82_0223DE20(OverlayManager *man, int *state) {
+BOOL BattleHallApp_Main(OverlayManager *man, int *state) {
     BattleHallApp *app = OverlayManager_GetData(man);
 
     if (app->linkChoice != NO_LINK_CHOICE && *state == HALL_STATE_SELECT && app->summaryPending == 0) {
@@ -351,7 +351,7 @@ BOOL ov82_0223DE20(OverlayManager *man, int *state) {
     return FALSE;
 }
 
-BOOL ov82_0223DF74(OverlayManager *man) {
+BOOL BattleHallApp_Exit(OverlayManager *man) {
     BattleHallApp *app = OverlayManager_GetData(man);
 
     *app->resultOut = app->cursor;
@@ -1349,7 +1349,7 @@ void BattleHallApp_PrepareLinkPing(BattleHallApp *app, u16 command) {
     app->linkCommand = command;
 }
 
-void ov82_0223F764(u32 netId) {
+void BattleHall_ReceivePing(u32 netId) {
     if (netId == Comm_GetLocalNetId()) {
         return;
     }
@@ -1368,7 +1368,7 @@ void BattleHallApp_PrepareLinkChoice(BattleHallApp *app, u16 command, u16 choice
     app->linkLevel = (u16)GetMonData(mon, MON_DATA_LEVEL, NULL);
 }
 
-void ov82_0223F7B4(u32 netId, u32 unused, const u16 *msg, BattleHallApp *app) {
+void BattleHall_ReceiveChoice(u32 netId, u32 unused, const u16 *msg, BattleHallApp *app) {
     app->recvCount++;
     if (netId == Comm_GetLocalNetId()) {
         return;
@@ -1391,7 +1391,7 @@ void BattleHallApp_PrepareLinkAnswer(BattleHallApp *app, u16 command, u16 answer
     app->linkArg = answer;
 }
 
-void ov82_0223F814(u32 netId, u32 unused, const u16 *msg, BattleHallApp *app) {
+void BattleHall_ReceiveAnswer(u32 netId, u32 unused, const u16 *msg, BattleHallApp *app) {
     u16 answer;
 
     if (netId == Comm_GetLocalNetId()) {
