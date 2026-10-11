@@ -166,7 +166,7 @@ void WiFiPlaza_OnPlayerEnter(int id, WiFiPlazaPlayer *player, WiFiPlazaWork *wor
         if (!WiFiPlazaProfile_IsChecksumValid(&work->profile, work->save)) {
             work->unk_52c = 1;
         }
-        ov45_0222D8C8(work->unk_04, ov45_0222EC68(id), work->profile.player.gender, 3);
+        ov45_0222D8C8(work->news, ov45_0222EC68(id), work->profile.player.gender, 3);
         work->profile.player.unk_00 = id;
         ov45_0222EA4C(id, &time);
         ov45_0222D500(&work->profile.player.unk_18, &time);
@@ -185,9 +185,9 @@ void WiFiPlaza_OnPlayerEnter(int id, WiFiPlazaPlayer *player, WiFiPlazaWork *wor
     } else {
         country = ov45_0222EA78(id);
         region = ov45_0222EC68(id);
-        ov45_0222D8C8(work->unk_04, region, WiFiPlazaPlayer_GetGender(player), 0);
+        ov45_0222D8C8(work->news, region, WiFiPlazaPlayer_GetGender(player), 0);
         if (country == id) {
-            ov45_0222D8F0(work->unk_04, region);
+            ov45_0222D8F0(work->news, region);
         }
         if (ov45_0222CBD0(&work->history, id, -1)) {
             ov45_0222BA3C(work);
@@ -198,7 +198,7 @@ void WiFiPlaza_OnPlayerEnter(int id, WiFiPlazaPlayer *player, WiFiPlazaWork *wor
     if (ov45_0222F484(id) == TRUE) {
         ov45_0222C944(work->unk_3cc, index, 1);
         slot = index;
-        ov45_0222DC08(work->unk_04, &slot, work->unk_3cc);
+        ov45_0222DC08(work->news, &slot, work->unk_3cc);
         country = ov45_0222F4AC(id);
         if (country) {
             ov45_0222C9A0(&work->wordSet, index, 1, country);
@@ -223,8 +223,8 @@ void WiFiPlaza_OnPlayerLeave(int id, WiFiPlazaWork *work) {
     if (ov45_0222AFF8(work) == TRUE && slot == ov45_0222B020(work)) {
         ov45_0222BD5C(&work->unk_1c0);
     }
-    if (ov45_0222D8D4(work->unk_04, slot) != 0) {
-        ov45_0222D8F0(work->unk_04, ov45_0222EC68(ov45_0222EAD4(id)));
+    if (ov45_0222D8D4(work->news, slot) != 0) {
+        ov45_0222D8F0(work->news, ov45_0222EC68(ov45_0222EAD4(id)));
     }
     ov45_0222C944(work->unk_3cc, slot, 0);
     ov45_0222BDE8(&work->unk_1c0, slot);
@@ -268,7 +268,7 @@ void WiFiPlaza_OnLobbyEvent(u32 event, WiFiPlazaWork *work) {
     work->unk_d8 = now.time;
     switch (event) {
     case 0:
-        ov45_0222D8BC(work->unk_04, &work->unk_d4);
+        ov45_0222D8BC(work->news, &work->unk_d4);
         work->unk_e0 = work->unk_d8;
         work->unk_1fc.flag0 = 1;
         work->unk_f8[2] |= 1;

@@ -83,7 +83,7 @@ void WlIntrTbtt(void) {
     switch (bss->mode) {
     case 1: {
         u32 timestamp = *(vu16 *)0x0380FFF0;
-        frame = txCtrl->beacon.frame + 0x24 + bss->timOffset;
+        frame = txCtrl->beacon.frame + 0x24 + bss->gameInfoOffset;
         WL_WriteByte(frame + 8, timestamp & 255);
         WL_WriteByte(frame + 9, (timestamp >> 8) & 255);
         if (bss->powerMgtMode == 1) {

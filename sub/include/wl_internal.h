@@ -161,9 +161,9 @@ typedef struct WlBss {
     u16 powerState; // WSetPowerState: hardware power state >> 1
     u16 unk_12;
     u16 receiveDtims; // MLME_PwrMgtReqCmd: wake up for the DTIM beacons
-    u16 unk_16;
-    u16 unk_18;
-    u16 unk_1a; // 1 -> 2 -> 0 on the next two WlIntrActEnd; WlIntrTbtt sets power state 2 while it is 2
+    u16 unk_16;       // DEV_TestSignalReqCmd: rate of the test signal
+    u16 unk_18;       // carrier suppression test running
+    u16 unk_1a;       // 1 -> 2 -> 0 on the next two WlIntrActEnd; WlIntrTbtt sets power state 2 while it is 2
     u16 unk_1c;
     u16 ssidLength;
     u8 ssid[32];
@@ -186,10 +186,11 @@ typedef struct WlBss {
     u16 unk_88;    // station whose frames and CAM state WClearAids drops
     u16 unk_8a;    // bit 14 set while WEP is on
     u16 unk_8c;    // WSetFrameLifeTime: life time * beaconPeriod / 100 (0xFFFF: none)
-    u8 unk_8e[4];
-    u16 ssidOffset; // offset of the SSID in the beacon frame
-    u16 unk_94;     // offset of the beacon's TIM element (MAC memory 0x0480425C + unk_94)
-    u16 timOffset;  // offset of the TIM in the beacon frame
+    u16 unk_8e;    // TxqEndData: no own power save while set
+    u16 unk_90;
+    u16 ssidOffset;     // offset of the SSID in the beacon frame
+    u16 unk_94;         // offset of the beacon's TIM element (MakeBeaconFrame; MAC memory 0x0480425C + unk_94)
+    u16 gameInfoOffset; // offset of the beacon's game information element (MakeBeaconFrame)
     u16 unk_98;
     u16 unk_9a;   // DMA_Read: MAC memory reads past 0x04805F60 continue this many bytes lower
     u8 *gameInfo; // 129-byte buffer (InitializeHeapBuf)
@@ -198,7 +199,8 @@ typedef struct WlBss {
     u16 unk_a4;            // set by WSetGameInfo
     u16 tmpttPowerSaveOff; // WDisableTmpttPowerSave / WEnableTmpttPowerSave
     u32 intervalCount;     // WIntervalTimer calls (every 100 ms in state 0x40)
-    u8 unk_ac[4];
+    u16 unk_ac;            // DEV_TestSignalReqCmd: BBP register 6 during the carrier suppression test
+    u16 unk_ae;
     u16 fatalErr; // SetFatalErr bits; WIntervalTimer queues task 21 (SendFatalErrMsgTask) while set
     u16 unk_b2;
     u16 rxDropCount;       // WlIntrRxEnd dropped a received frame (bad length, status or rate)
@@ -209,13 +211,34 @@ typedef struct WlBss {
     u16 keyRestoreCount;   // WlIntrStartRx stopped the TX of a key data frame
 } WlBss;
 
+// 802.11 frame control.
+typedef struct WlFrameCtrlBits {
+    u16 version : 2;
+    u16 type : 2; // 0: management, 1: control, 2: data
+    u16 subtype : 4;
+    u16 toDs : 1;
+    u16 fromDs : 1;
+    u16 moreFrag : 1;
+    u16 retry : 1;
+    u16 pwrMgt : 1;
+    u16 moreData : 1;
+    u16 wep : 1;
+    u16 order : 1;
+} WlFrameCtrlBits;
+
+// 802.11 sequence control.
+typedef struct WlSeqCtrlBits {
+    u16 fragNo : 4;
+    u16 seqNo : 12;
+} WlSeqCtrlBits;
+
 // TX frame in the MAC memory: hardware TX header, then the 802.11 header.
 typedef struct WlTxFrame {
     u16 status;
     u16 unk_02; // MP: stations still to answer (bit per AID)
     u16 retry;  // low byte: retry count
-    u16 unk_06;
-    u16 unk_08;
+    u16 unk_06; // MA_DataReqCmd: rate requested (0: the station's rate)
+    u16 rate;   // 10: 1 Mbps, 20: 2 Mbps
     u16 length;
     u16 frameCtrl; // 0x4000: WEP
     u16 duration;
@@ -223,27 +246,44 @@ typedef struct WlTxFrame {
     u16 addr2[3];
     u16 addr3[3];
     u16 seqCtrl;
-    u16 unk_24;
+    u16 unk_24; // the body: MP frame: time per answer; key data frame: its header
+    u16 unk_26;
+    u16 unk_28;
 } WlTxFrame;
 
 // TX frame in the driver heap (after its WlHeapBuf): queue data, then the frame as copied to the MAC memory.
 typedef struct WlTxHeapFrame {
     u16 unk_00;
-    u16 unk_02;
-    u16 time; // low half of WlBss.intervalCount when queued (CheckFrameTimeout)
-    u16 unk_06;
+    u16 station; // CAM index
+    u16 time;    // low half of WlBss.intervalCount when queued (CheckFrameTimeout)
+    u16 bodyLength;
     WlTxFrame frame;
 } WlTxHeapFrame;
 
-// MP sequence state (WlTxCtrl.mpState).
+// Indication to the WMSP (MLME_Issue*Indication): heap buffer, command (0x84 ..), parameter length in halfwords.
+typedef struct WlIndHeader {
+    WlHeapBuf buf;
+    u16 command;
+    u16 length;
+} WlIndHeader;
+
+// Entry of a station in the MP state.
+typedef struct WlMpEntry {
+    u16 unk_00;
+    u16 unk_02;
+    u16 aid;
+    u16 missCount; // MP answers missing (WlIntrTxEnd)
+} WlMpEntry;
+
+// MP sequence state (WlTxCtrl.mpState): an indication (0x184) sent to the WMSP when the sequence ends.
 typedef struct WlMpState {
-    u8 unk_00[0x10];
-    u16 unk_10; // stations that answered (bit per AID)
-    u16 unk_12; // WlIntrMpEndTask: stations addressed that did not answer
-    u16 unk_14;
-    u16 entrySize; // bytes per entry
+    WlIndHeader header;
+    u16 unk_10; // stations addressed (bit per AID)
+    u16 unk_12; // WlIntrMpEndTask: stations addressed that answered
+    u16 count;  // stations
+    u16 entrySize;
     u16 unk_18;    // WlIntrTxEnd: MP frame retried up to the threshold
-    u8 entries[8]; // entrySize bytes per station (+6: u16 missing answers); the table continues past the struct
+    u8 entries[8]; // WlMpEntry, entrySize bytes per station; the table continues past the struct
 } WlMpState;
 
 // Received frame in the driver heap (TakeoutRxFrame): driver data, then the hardware RX header and the
@@ -280,7 +320,7 @@ typedef struct WlTxDesc {
     u16 unk_06;
     u8 *frame;                                 // the frame's place in the MAC memory
     WlTxHeapFrame *heapFrame;                  // the frame in the driver heap (-16 bytes: its WlHeapBuf)
-    void (*callback)(void *frame, int result); // WlIntrTxEndTask: 1 timed out, 2 sent, 3 sent (no heap frame)
+    void (*callback)(void *frame, u32 result); // WlIntrTxEndTask: 1 timed out, 2 sent, 3 sent (no heap frame)
 } WlTxDesc;
 
 // TX side of the MAC (WlWork+0x42C).
@@ -289,7 +329,8 @@ typedef struct WlTxCtrl {
     WlTxDesc beacon;
     u32 unk_8c; // bit 1: SetParentTbttTxq is due at the next TX end
     WlMpState *mpState;
-    u32 unk_94;
+    u16 unk_94; // MA_MpReqCmd: interval
+    u16 unk_96; // MA_MpReqCmd: period
     u16 unk_98; // MP: stations addressed (bit per AID)
     u16 unk_9a;
     u16 unk_9c;
@@ -512,12 +553,68 @@ typedef struct WlMlme {
     } cfm;
 } WlMlme;
 
-// Indication to the WMSP (MLME_Issue*Indication): heap buffer, command (0x84 ..), parameter length in halfwords.
-typedef struct WlIndHeader {
-    WlHeapBuf buf;
-    u16 command;
-    u16 length;
-} WlIndHeader;
+// Generic request and confirm (PARAMSET / PARAMGET, DEV ...): the parameters follow the headers.
+typedef struct WlParamReq {
+    WlCmdRequest header;
+    u16 param[72];
+} WlParamReq;
+
+typedef struct WlParamCfm {
+    WlCmdCfm header;
+    u16 param[64];
+} WlParamCfm;
+
+typedef struct WlParamSetAllReq {
+    WlCmdRequest header;
+    u16 macAdrs[3];
+    u16 retryLimit;
+    u16 enableChannel;
+    u16 unk_1a;
+    u16 mode;
+    u16 rate;
+    u16 wepMode;
+    u16 wepKeyId;
+    u8 wepKey[80];
+    u16 beaconType;
+    u16 bcSsidResponse;
+    u16 beaconLostThreshold;
+    u16 activeZoneTime;
+    u16 ssidMask[16];
+    u16 preambleType;
+    u16 authAlgo;
+} WlParamSetAllReq;
+
+// MA data request: the message itself is the TX frame.
+typedef struct WlMaDataReq {
+    WlCmdRequest header;
+    WlTxHeapFrame frame;
+} WlMaDataReq;
+
+typedef struct WlMaDataConfirm {
+    u8 unk_00[16];
+    WlCmdCfm cfm;
+    u16 status;
+} WlMaDataConfirm;
+
+typedef struct WlMaKeyDataReq {
+    WlCmdRequest header;
+    u16 length; // bytes of data
+    u16 unk_12; // key data header
+    void *data;
+} WlMaKeyDataReq;
+
+typedef struct WlMaMpReq {
+    WlCmdRequest header;
+    u16 flags;      // bit 15: keep the values of the last sequence for the fields whose bit (1..4) is clear
+    u16 retryLimit; // WlTxCtrl.unk_9e
+    u16 interval;   // bit 15: in microseconds, else in slots
+    u16 bitmap;     // stations addressed (bit per AID)
+    u16 period;     // 0: send now
+    u16 offset;
+    u16 payloadBytes;
+    u16 sequence;
+    void *payload;
+} WlMaMpReq;
 
 // Auth (0x84), DeAuth (0x85), DisAss (0x88): the peer and the algorithm / reason code.
 typedef struct WlMlmePeerInd {
@@ -857,6 +954,144 @@ int MLME_IssueBeaconSendIndication(void);
 int MLME_IssueBeaconRecvIndication(WlRxFrame *frame);
 void InitializeMLME(void);
 
+// wl_paramset_cmd.c
+int PARAMSET_AllReqCmd(WlParamSetAllReq *req, WlCmdCfm *cfm);
+int PARAMSET_MacAdrsReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+u32 PARAMSET_RetryReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+u32 PARAMSET_EnableChannelReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+u32 PARAMSET_ModeReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+u32 PARAMSET_RateReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+u32 PARAMSET_WepModeReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+u32 PARAMSET_WepKeyIdReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+u32 PARAMSET_WepKeyReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+u32 PARAMSET_BeaconTypeReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+u32 PARAMSET_ResBcSsidReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+u32 PARAMSET_BeaconLostThReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+u32 PARAMSET_ActiveZoneReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+u32 PARAMSET_SSIDMaskReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+u32 PARAMSET_PreambleTypeReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+u32 PARAMSET_AuthAlgoReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+u32 PARAMSET_CCAModeEDThReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+u32 PARAMSET_LifeTimeReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+u32 PARAMSET_MaxConnReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+u32 PARAMSET_MainAntennaReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+u32 PARAMSET_DiversityReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+u32 PARAMSET_BcnSendRecvIndReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+u32 PARAMSET_NullKeyModeReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+u32 PARAMSET_BSSIDReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+u32 PARAMSET_SSIDReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+u32 PARAMSET_BeaconPeriodReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+int PARAMSET_DTIMPeriodReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+int PARAMSET_ListenIntervalReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+int PARAMSET_GameInfoReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+
+// wl_paramget_cmd.c
+int PARAMGET_AllReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int PARAMGET_MacAdrsReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int PARAMGET_RetryReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int PARAMGET_EnableChannelReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int PARAMGET_ModeReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int PARAMGET_RateReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int PARAMGET_WepModeReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int PARAMGET_WepKeyIdReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int PARAMGET_BeaconTypeReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int PARAMGET_ResBcSsidReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int PARAMGET_BeaconLostThReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int PARAMGET_ActiveZoneReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int PARAMGET_SSIDMaskReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int PARAMGET_PreambleTypeReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int PARAMGET_AuthAlgoReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int PARAMGET_CCAModeEDThReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int PARAMGET_MaxConnReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int PARAMGET_MainAntennaReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int PARAMGET_DiversityReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int PARAMGET_BcnSendRecvIndReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int PARAMGET_NullKeyModeReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int PARAMGET_BSSIDReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int PARAMGET_SSIDReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int PARAMGET_BeaconPeriodReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int PARAMGET_DTIMPeriodReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int PARAMGET_ListenIntervalReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int PARAMGET_GameInfoReqCmd(WlParamReq *req, WlParamCfm *cfm);
+
+// wl_dev_cmd.c
+int DEV_ShutdownReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int DEV_IdleReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int DEV_Class1ReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int DEV_RebootReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int DEV_ClearWlInfoReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int DEV_GetVerInfoReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int DEV_GetWlInfoReqCmd(WlParamReq *req, WlParamCfm *cfm);
+void __VENEER_MIi_CpuCopy32(const void *src, void *dest, u32 size);
+int DEV_GetStateReqCmd(WlParamReq *req, WlParamCfm *cfm);
+int DEV_TestSignalReqCmd(WlParamReq *req, WlParamCfm *cfm);
+void IntrCarrierSuppresionSignal(void);
+int DEV_TestRxReqCmd(WlParamReq *req, WlParamCfm *cfm);
+
+// wl_ma_cmd.c
+int MA_DataReqCmd(WlMaDataReq *req, WlCmdCfm *cfm);
+int MA_KeyDataReqCmd(WlMaKeyDataReq *req, WlCmdCfm *cfm);
+
+// wl_ma_mp_cmd.c
+int MA_MpReqCmd(WlMaMpReq *req, WlCmdCfm *cfm);
+
+// wl_ma_data.c
+int MA_TestDataReqCmd(WlMaDataReq *req, WlCmdCfm *cfm);
+int MA_ClrDataReqCmd(WlParamReq *req, WlCmdCfm *cfm);
+void IssueMaDataConfirm(WlHeapBufMan *man, WlMaDataReq *req);
+
+// wl_txq.c
+void TxqPri(u32 pri);
+
+// wl_tx_ctrl.c
+void CopyTxFrmToMacBuf(void *dest, void *source);
+int CheckFrameTimeout(WlTxHeapFrame *frame);
+void TxqEndData(void *arg, u32 next);
+void TxqEndManCtrl(void *arg, u32 schedule);
+void TxqEndPsPoll(void *arg, u32 next);
+void TxqEndBroadCast(void *arg, u32 next);
+void TxEndKeyData(WlTxDesc *desc);
+void ClearTxKeyData(void);
+void ClearTxMp(void);
+void ClearTxData(void);
+void ClearQueuedPri(u32 pri);
+void ResetTxqPri(u32 pri);
+void DeleteTxFrames(u32 station);
+void DeleteTxFrameByAdrs(const u16 *macAdrs);
+void DeleteAllTxFrames(void);
+void MessageDeleteTx(u32 pri, u32 confirm);
+
+// wl_tx_frame.c
+void TxManCtrlFrame(WlTxHeapFrame *frame);
+void SetManCtrlFrame(WlTxHeapFrame *frame);
+void TxPsPollFrame(void);
+void StartBeaconFrame(void);
+void StopBeaconFrame(void);
+void MakeBeaconFrame(void);
+void UpdateGameInfoElement(void);
+int IsEnableManagement(void);
+WlTxHeapFrame *MakeDisAssFrame(const u16 *macAdrs, u32 reason);
+WlTxHeapFrame *MakeAssReqFrame(const u16 *macAdrs);
+WlTxHeapFrame *MakeReAssReqFrame(const u16 *macAdrs);
+WlTxHeapFrame *MakeAssResFrame(u32 station, u32 status, const u8 *element);
+WlTxHeapFrame *MakeReAssResFrame(u32 station, u32 status, const u8 *extra);
+WlTxHeapFrame *MakeProbeReqFrame(const u16 *bssid);
+
+// wl_probe_res.c
+WlTxHeapFrame *MakeProbeResFrame(const u16 *macAdrs);
+
+// wl_man_frame.c
+WlTxHeapFrame *MakeAuthFrame(const u16 *macAdrs, u16 length, u32 test);
+WlTxHeapFrame *MakeDeAuthFrame(const u16 *macAdrs, u16 reason, u32 test);
+void MakePsPollFrame(u16 aid);
+void InitManHeader(WlTxHeapFrame *frame, const u16 *macAdrs);
+int IsExistManFrame(const u16 *macAdrs, u16 control);
+u32 SetSSIDElement(u8 *dest);
+u32 SetSupRateSet(u8 *dest);
+
+// wl_tx_init.c
+void InitTxCtrl(void);
+
 // wl_cam.c
 u32 CAM_Search(const u16 *addr);
 u32 CAM_SearchAdd(const u16 *addr);
@@ -915,42 +1150,22 @@ void __VENEER_OS_FreeToHeap(u32 id, u32 heap, void *ptr);
 void __VENEER_OS_ExitThread(void);
 
 // defined in the later WL files
-void StopBeaconFrame(void);
-void StartBeaconFrame(void);
 void InitApList(void);
-void InitTxCtrl(void);
 void InitRxCtrl(void);
-void DeleteAllTxFrames(void);
-void DeleteTxFrames(u32 station);
 void FLASH_DirectRead(u32 addr, u32 size, void *dest);
 void FLASH_MakeImage(void);
 void FLASH_Read(u32 addr, u32 size, void *dest);
 u32 FLASH_VerifyCheckSum(u32 *checksum);
-void CopyTxFrmToMacBuf(void *frame, void *src);
-void MakeBeaconFrame(void);
-void MakePsPollFrame(u16 aid);
-WlTxHeapFrame *MakeDeAuthFrame(const u16 *macAdrs, u16 reason, u32 unk);
-void TxManCtrlFrame(WlTxHeapFrame *frame);
-int CheckFrameTimeout(WlTxHeapFrame *frame);
-void ResetTxqPri(u32 priority);
-void IntrCarrierSuppresionSignal(void);
-void TxEndKeyData(WlTxDesc *desc);
-void UpdateGameInfoElement(void);
-void TxqPri(u32 priority);
-WlTxHeapFrame *MakeProbeReqFrame(const u16 *bssid);
-WlTxHeapFrame *MakeAuthFrame(const u16 *macAdrs, u16 length, u32 test);
-WlTxHeapFrame *MakeAssReqFrame(const u16 *macAdrs);
-WlTxHeapFrame *MakeReAssReqFrame(const u16 *macAdrs);
-void ClearQueuedPri(u32 priority);
-void MessageDeleteTx(u32 priority, u32 confirm);
-WlTxHeapFrame *MakeDisAssFrame(const u16 *macAdrs, u32 reason);
-void DeleteTxFrameByAdrs(const u16 *macAdrs);
+OSIntrMode __VENEER_OS_DisableInterrupts(void);
+OSIntrMode __VENEER_OS_RestoreInterrupts(OSIntrMode state);
 void RxBeaconFrame(WlRxFrame *frame);
 void RxKeyDataFrame(WlRxFrame *frame);
 u32 RxMpFrame(WlRxFrame *frame);
 u32 RxMpAckFrame(WlRxFrame *frame);
 
 extern const u8 BC_ADRS[];
+extern const u8 MP_ADRS[];
+extern const u8 MPKEY_ADRS[];
 
 extern const u16 crc16_table[16];
 

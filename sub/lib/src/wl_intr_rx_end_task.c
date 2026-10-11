@@ -3,19 +3,6 @@
 // The code below is compiled as ARM (32-bit) code.
 #include <nitro/code32.h>
 
-// 802.11 frame control: bit 10 = more fragments.
-typedef struct WlFrameCtrlBits {
-    u16 unk_0 : 10;
-    u16 moreFrag : 1;
-    u16 unk_b : 5;
-} WlFrameCtrlBits;
-
-// 802.11 sequence control: bits 0..3 = fragment number.
-typedef struct WlSeqCtrlBits {
-    u16 fragNo : 4;
-    u16 seqNo : 12;
-} WlSeqCtrlBits;
-
 #pragma force_active off
 
 static inline void QueueRxPacket(WlHeapBufMan *from, WlHeapBufMan *to, WlHeapBuf *packet, u32 priority, u32 task) {

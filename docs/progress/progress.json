@@ -1,12 +1,12 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "5771ce4b582b617ea43201a696e04724742f7246",
+  "commit": "4feddeb930679e720bb060ebad73950c0f65eced",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "dc56f0759d56ca3039e2f812bdf587786df3283fa1c11e50e5f4f5b3f80da3dd",
-    "ARM7": "c9e58a62237246aaea1cf21712d50bf8995eaa1bcfbdb0acd603c3f215d708d6"
+    "ARM9": "f7af5a59e21faca28a12fca9130b05138504bcb147ed71358261a19e4024beaa",
+    "ARM7": "d5e55f44b3cb2a0e2cf6f01285ad43a6447d76870fa6a85b5e66cd3097c1a0c7"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
   "totals": {
@@ -15772,14 +15772,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_45",
-      "object": "overlay45_effect_spawners_29.o",
-      "bytes": 1038,
-      "status": "c",
-      "source": "src/overlay45_effect_spawners_29.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
       "object": "overlay45_entry_render_run1.o",
       "bytes": 368,
       "status": "c",
@@ -15792,46 +15784,6 @@
       "bytes": 340,
       "status": "c",
       "source": "src/overlay45_entry_render_run2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "overlay45_event_messages.o",
-      "bytes": 1584,
-      "status": "c",
-      "source": "src/overlay45_event_messages.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "overlay45_helpers_28.o",
-      "bytes": 10,
-      "status": "c",
-      "source": "src/overlay45_helpers_28.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "overlay45_helpers_29.o",
-      "bytes": 92,
-      "status": "c",
-      "source": "src/overlay45_helpers_29.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "overlay45_helpers_30.o",
-      "bytes": 6,
-      "status": "c",
-      "source": "src/overlay45_helpers_30.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "overlay45_helpers_31.o",
-      "bytes": 8,
-      "status": "c",
-      "source": "src/overlay45_helpers_31.c"
     },
     {
       "cpu": "ARM9",
@@ -16128,14 +16080,6 @@
       "bytes": 854,
       "status": "c",
       "source": "src/to45_overlay45_resource_manager_36.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
-      "object": "to45_overlay45_state_accessors.o",
-      "bytes": 508,
-      "status": "c",
-      "source": "src/to45_overlay45_state_accessors.c"
     },
     {
       "cpu": "ARM9",
@@ -17500,14 +17444,6 @@
     {
       "cpu": "ARM9",
       "module": "OVY_45",
-      "object": "to80_extra1782_run01.o",
-      "bytes": 10,
-      "status": "c",
-      "source": "src/to80_extra1782_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "OVY_45",
       "object": "to80_extra1842_run01.o",
       "bytes": 544,
       "status": "c",
@@ -17904,6 +17840,22 @@
       "bytes": 1428,
       "status": "c",
       "source": "src/wifi_plaza_lobby.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_45",
+      "object": "wifi_plaza_news.o",
+      "bytes": 1664,
+      "status": "c",
+      "source": "src/wifi_plaza_news.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "OVY_45",
+      "object": "wifi_plaza_news_events.o",
+      "bytes": 1592,
+      "status": "c",
+      "source": "src/wifi_plaza_news_events.c"
     },
     {
       "cpu": "ARM9",
@@ -47801,33 +47753,6 @@
     {
       "cpu": "ARM7",
       "module": "EXT_WRAM",
-      "object": "op90_to90_arm7_sub_ext_wram_residual_52_r01.o",
-      "bytes": 8,
-      "status": "veneer",
-      "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_52_r01.c",
-      "functions": [
-        "__VENEER_MIi_CpuCopy32"
-      ]
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "op90_to90_arm7_sub_ext_wram_residual_54_r01.o",
-      "bytes": 1204,
-      "status": "c",
-      "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_54_r01.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "op90_to90_arm7_sub_ext_wram_residual_58_r01.o",
-      "bytes": 544,
-      "status": "c",
-      "source": "sub/lib/src/op90_to90_arm7_sub_ext_wram_residual_58_r01.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
       "object": "op90_to90_arm7_sub_ext_wram_residual_62_r01.o",
       "bytes": 976,
       "status": "c",
@@ -47893,770 +47818,10 @@
     {
       "cpu": "ARM7",
       "module": "EXT_WRAM",
-      "object": "op90_to91_w41574_txq_prefix_r01.o",
-      "bytes": 544,
-      "status": "c",
-      "source": "sub/lib/src/op90_to91_w41574_txq_prefix_r01.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
       "object": "to90_arm7_current1_rx_assreq_run01.o",
       "bytes": 464,
       "status": "c",
       "source": "sub/lib/src/to90_arm7_current1_rx_assreq_run01.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_current1_sup_rates_run01.o",
-      "bytes": 164,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_current1_sup_rates_run01.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run269.o",
-      "bytes": 236,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run269.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run270.o",
-      "bytes": 64,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run270.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run271.o",
-      "bytes": 24,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run271.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run272.o",
-      "bytes": 64,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run272.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run273.o",
-      "bytes": 80,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run273.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run274.o",
-      "bytes": 24,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run274.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run275.o",
-      "bytes": 24,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run275.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run276.o",
-      "bytes": 24,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run276.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run277.o",
-      "bytes": 24,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run277.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run278.o",
-      "bytes": 64,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run278.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run279.o",
-      "bytes": 24,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run279.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run280.o",
-      "bytes": 24,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run280.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run281.o",
-      "bytes": 28,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run281.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run282.o",
-      "bytes": 24,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run282.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run283.o",
-      "bytes": 24,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run283.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run284.o",
-      "bytes": 24,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run284.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run285.o",
-      "bytes": 76,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run285.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run286.o",
-      "bytes": 264,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run286.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run287.o",
-      "bytes": 88,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run287.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run288.o",
-      "bytes": 64,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run288.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run289.o",
-      "bytes": 64,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run289.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run290.o",
-      "bytes": 64,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run290.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run291.o",
-      "bytes": 64,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run291.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run292.o",
-      "bytes": 24,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run292.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run293.o",
-      "bytes": 32,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run293.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run294.o",
-      "bytes": 60,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run294.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run295.o",
-      "bytes": 60,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run295.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run296.o",
-      "bytes": 64,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run296.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run297.o",
-      "bytes": 100,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run297.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run298.o",
-      "bytes": 312,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run298.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run299.o",
-      "bytes": 48,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run299.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run300.o",
-      "bytes": 40,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run300.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run301.o",
-      "bytes": 56,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run301.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run302.o",
-      "bytes": 40,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run302.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run303.o",
-      "bytes": 40,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run303.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run304.o",
-      "bytes": 40,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run304.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run305.o",
-      "bytes": 40,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run305.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run306.o",
-      "bytes": 48,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run306.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run307.o",
-      "bytes": 48,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run307.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run308.o",
-      "bytes": 40,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run308.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run309.o",
-      "bytes": 40,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run309.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run310.o",
-      "bytes": 60,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run310.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run311.o",
-      "bytes": 48,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run311.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run312.o",
-      "bytes": 40,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run312.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run313.o",
-      "bytes": 64,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run313.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run314.o",
-      "bytes": 44,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run314.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run315.o",
-      "bytes": 60,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run315.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run316.o",
-      "bytes": 96,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run316.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run317.o",
-      "bytes": 60,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run317.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run318.o",
-      "bytes": 60,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run318.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run319.o",
-      "bytes": 48,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run319.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run320.o",
-      "bytes": 76,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run320.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run321.o",
-      "bytes": 40,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run321.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run322.o",
-      "bytes": 40,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run322.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run323.o",
-      "bytes": 40,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run323.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run324.o",
-      "bytes": 216,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run324.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run325.o",
-      "bytes": 64,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run325.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run326.o",
-      "bytes": 84,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run326.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run327.o",
-      "bytes": 60,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run327.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run328.o",
-      "bytes": 56,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run328.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run329.o",
-      "bytes": 92,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run329.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run330.o",
-      "bytes": 40,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run330.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run331.o",
-      "bytes": 124,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run331.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run332.o",
-      "bytes": 460,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run332.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run333.o",
-      "bytes": 96,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run333.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run334.o",
-      "bytes": 76,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run334.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run335.o",
-      "bytes": 56,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run335.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run336.o",
-      "bytes": 128,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run336.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run337.o",
-      "bytes": 72,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run337.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run338.o",
-      "bytes": 116,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run338.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run339.o",
-      "bytes": 84,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run339.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run340.o",
-      "bytes": 168,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run340.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run341.o",
-      "bytes": 248,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run341.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run342.o",
-      "bytes": 176,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run342.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run343.o",
-      "bytes": 232,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run343.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run344.o",
-      "bytes": 140,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run344.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run345.o",
-      "bytes": 24,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run345.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run346.o",
-      "bytes": 116,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run346.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run347.o",
-      "bytes": 148,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run347.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run348.o",
-      "bytes": 64,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run348.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run349.o",
-      "bytes": 40,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run349.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run350.o",
-      "bytes": 252,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run350.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run351.o",
-      "bytes": 48,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run351.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run352.o",
-      "bytes": 124,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run352.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run353.o",
-      "bytes": 168,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run353.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run354.o",
-      "bytes": 180,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run354.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run355.o",
-      "bytes": 140,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run355.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run356.o",
-      "bytes": 192,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run356.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run357.o",
-      "bytes": 148,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run357.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run358.o",
-      "bytes": 88,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run358.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run359.o",
-      "bytes": 76,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run359.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run360.o",
-      "bytes": 104,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run360.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run361.o",
-      "bytes": 116,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run361.c"
     },
     {
       "cpu": "ARM7",
@@ -48749,106 +47914,10 @@
     {
       "cpu": "ARM7",
       "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run379.o",
-      "bytes": 800,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run379.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
       "object": "to90_arm7_sub_ext_wram_run382.o",
       "bytes": 804,
       "status": "c",
       "source": "sub/lib/src/to90_arm7_sub_ext_wram_run382.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run383.o",
-      "bytes": 164,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run383.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run384.o",
-      "bytes": 420,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run384.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run385.o",
-      "bytes": 140,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run385.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run389.o",
-      "bytes": 884,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run389.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run392.o",
-      "bytes": 380,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run392.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run393.o",
-      "bytes": 104,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run393.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run394.o",
-      "bytes": 268,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run394.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run395.o",
-      "bytes": 1228,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run395.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run396.o",
-      "bytes": 860,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run396.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to90_arm7_sub_ext_wram_run402.o",
-      "bytes": 92,
-      "status": "c",
-      "source": "sub/lib/src/to90_arm7_sub_ext_wram_run402.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to91_w41417_clearqueued_run01.o",
-      "bytes": 100,
-      "status": "c",
-      "source": "sub/lib/src/to91_w41417_clearqueued_run01.c"
     },
     {
       "cpu": "ARM7",
@@ -48861,14 +47930,6 @@
     {
       "cpu": "ARM7",
       "module": "EXT_WRAM",
-      "object": "to91_w41424_testrx.o",
-      "bytes": 176,
-      "status": "c",
-      "source": "sub/lib/src/to91_w41424_testrx.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
       "object": "to91_w41425_flashwait.o",
       "bytes": 64,
       "status": "c",
@@ -48877,26 +47938,10 @@
     {
       "cpu": "ARM7",
       "module": "EXT_WRAM",
-      "object": "to91_w41538_ass_responses.o",
-      "bytes": 724,
-      "status": "c",
-      "source": "sub/lib/src/to91_w41538_ass_responses.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
       "object": "to91_w41568_rx_data_frame.o",
       "bytes": 720,
       "status": "c",
       "source": "sub/lib/src/to91_w41568_rx_data_frame.c"
-    },
-    {
-      "cpu": "ARM7",
-      "module": "EXT_WRAM",
-      "object": "to91_w41574_copy_tx_frame.o",
-      "bytes": 360,
-      "status": "c",
-      "source": "sub/lib/src/to91_w41574_copy_tx_frame.c"
     },
     {
       "cpu": "ARM7",
@@ -48913,6 +47958,25 @@
       "bytes": 988,
       "status": "c",
       "source": "sub/lib/src/wl_cmd_if.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
+      "object": "wl_dev_cmd.o",
+      "bytes": 1812,
+      "status": "c",
+      "source": "sub/lib/src/wl_dev_cmd.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
+      "object": "wl_dev_cmd.o",
+      "bytes": 8,
+      "status": "veneer",
+      "source": "sub/lib/src/wl_dev_cmd.c",
+      "functions": [
+        "__VENEER_MIi_CpuCopy32"
+      ]
     },
     {
       "cpu": "ARM7",
@@ -49044,10 +48108,42 @@
     {
       "cpu": "ARM7",
       "module": "EXT_WRAM",
+      "object": "wl_ma_cmd.o",
+      "bytes": 880,
+      "status": "c",
+      "source": "sub/lib/src/wl_ma_cmd.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
+      "object": "wl_ma_data.o",
+      "bytes": 228,
+      "status": "c",
+      "source": "sub/lib/src/wl_ma_data.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
+      "object": "wl_ma_mp_cmd.o",
+      "bytes": 1204,
+      "status": "c",
+      "source": "sub/lib/src/wl_ma_mp_cmd.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
       "object": "wl_mac_memory.o",
       "bytes": 396,
       "status": "c",
       "source": "sub/lib/src/wl_mac_memory.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
+      "object": "wl_man_frame.o",
+      "bytes": 888,
+      "status": "c",
+      "source": "sub/lib/src/wl_man_frame.c"
     },
     {
       "cpu": "ARM7",
@@ -49080,6 +48176,30 @@
       "bytes": 2852,
       "status": "c",
       "source": "sub/lib/src/wl_param.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
+      "object": "wl_paramget_cmd.o",
+      "bytes": 1784,
+      "status": "c",
+      "source": "sub/lib/src/wl_paramget_cmd.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
+      "object": "wl_paramset_cmd.o",
+      "bytes": 1800,
+      "status": "c",
+      "source": "sub/lib/src/wl_paramset_cmd.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
+      "object": "wl_probe_res.o",
+      "bytes": 544,
+      "status": "c",
+      "source": "sub/lib/src/wl_probe_res.c"
     },
     {
       "cpu": "ARM7",
@@ -49179,6 +48299,38 @@
       "bytes": 516,
       "status": "c",
       "source": "sub/lib/src/wl_tx_check.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
+      "object": "wl_tx_ctrl.o",
+      "bytes": 3944,
+      "status": "c",
+      "source": "sub/lib/src/wl_tx_ctrl.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
+      "object": "wl_tx_frame.o",
+      "bytes": 2912,
+      "status": "c",
+      "source": "sub/lib/src/wl_tx_frame.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
+      "object": "wl_tx_init.o",
+      "bytes": 800,
+      "status": "c",
+      "source": "sub/lib/src/wl_tx_init.c"
+    },
+    {
+      "cpu": "ARM7",
+      "module": "EXT_WRAM",
+      "object": "wl_txq.o",
+      "bytes": 544,
+      "status": "c",
+      "source": "sub/lib/src/wl_txq.c"
     },
     {
       "cpu": "ARM7",

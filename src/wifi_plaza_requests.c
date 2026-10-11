@@ -2,52 +2,6 @@
 
 #include "wifi_plaza_internal.h"
 
-// What the lobby request handlers below pass on (with the player profiles in WiFiPlazaWork.profiles).
-typedef struct WiFiPlazaPairRequest {
-    PlayerProfile *profiles[2];
-    u16 slots[2];
-} WiFiPlazaPairRequest;
-
-typedef struct WiFiPlazaPairOptionRequest {
-    PlayerProfile *profiles[2];
-    u16 slots[2];
-    u32 option;
-} WiFiPlazaPairOptionRequest;
-
-typedef struct WiFiPlazaGroupRequest {
-    u32 count;
-    PlayerProfile *profiles[4];
-    u16 slots[4];
-} WiFiPlazaGroupRequest;
-
-typedef struct WiFiPlazaGroupFlagRequest {
-    u32 option;
-    u32 count;
-    PlayerProfile *profiles[4];
-    u16 slots[4];
-    u32 flag;
-} WiFiPlazaGroupFlagRequest;
-
-typedef struct WiFiPlazaSingleRequest {
-    u32 option;
-    u32 count;
-    PlayerProfile *profile;
-    u16 slot;
-} WiFiPlazaSingleRequest;
-
-typedef struct WiFiPlazaGroupOptionRequest {
-    u32 option;
-    u32 count;
-    PlayerProfile *profiles[4];
-    u16 slots[4];
-} WiFiPlazaGroupOptionRequest;
-
-// What ov45_0222C370 passes to ov45_0222DB98.
-typedef struct WiFiPlazaLobbyNotice {
-    u32 *time;
-    u32 which;
-} WiFiPlazaLobbyNotice;
-
 // Clears the 20 bytes one at a time.
 void ov45_0222BD30(volatile u8 *a0) {
     u32 count = 20;
@@ -172,7 +126,7 @@ void ov45_0222BE9C(WiFiPlazaWork *work, WiFiPlazaLobbyMessage *msg) {
     req.profiles[1] = work->profiles[1];
     req.slots[0] = ov45_0222EC68(msg->ids[0]);
     req.slots[1] = ov45_0222EC68(msg->ids[1]);
-    ov45_0222D940(work->unk_04, &req);
+    ov45_0222D940(work->news, &req);
 }
 
 // Lobby message type 1: two players and an option.
@@ -195,7 +149,7 @@ void ov45_0222BF18(WiFiPlazaWork *work, WiFiPlazaLobbyMessage *msg) {
     req.slots[0] = ov45_0222EC68(msg->ids[0]);
     req.slots[1] = ov45_0222EC68(msg->ids[1]);
     req.option = msg->unk_12;
-    ov45_0222D990(work->unk_04, &req);
+    ov45_0222D990(work->news, &req);
 }
 
 // Up to four players; without the flag only the first one gets a profile.
@@ -245,7 +199,7 @@ void ov45_0222BF98(WiFiPlazaWork *work, WiFiPlazaLobbyMessage *msg) {
     req.slots[2] = ov45_0222EC68(msg->ids[2]);
     req.slots[3] = ov45_0222EC68(msg->ids[3]);
     req.flag = msg->unk_13_7;
-    ov45_0222D9EC(work->unk_04, &req);
+    ov45_0222D9EC(work->news, &req);
 }
 
 // Up to eight players; only the first one gets a profile.
@@ -264,7 +218,7 @@ void ov45_0222C0CC(WiFiPlazaWork *work, WiFiPlazaLobbyMessage *msg) {
     req.count = msg->count;
     req.profile = work->profiles[0];
     req.slot = ov45_0222EC68(msg->ids[0]);
-    ov45_0222DA80(work->unk_04, &req);
+    ov45_0222DA80(work->news, &req);
 }
 
 void ov45_0222C130(WiFiPlazaWork *work, WiFiPlazaLobbyMessage *msg) {
@@ -296,7 +250,7 @@ void ov45_0222C130(WiFiPlazaWork *work, WiFiPlazaLobbyMessage *msg) {
     req.slots[1] = ov45_0222EC68(msg->ids[1]);
     req.slots[2] = ov45_0222EC68(msg->ids[2]);
     req.slots[3] = ov45_0222EC68(msg->ids[3]);
-    ov45_0222DAE0(work->unk_04, &req);
+    ov45_0222DAE0(work->news, &req);
 }
 
 void ov45_0222C1EC(WiFiPlazaWork *work, WiFiPlazaLobbyMessage *msg) {
@@ -328,7 +282,7 @@ void ov45_0222C1EC(WiFiPlazaWork *work, WiFiPlazaLobbyMessage *msg) {
     req.slots[1] = ov45_0222EC68(msg->ids[1]);
     req.slots[2] = ov45_0222EC68(msg->ids[2]);
     req.slots[3] = ov45_0222EC68(msg->ids[3]);
-    ov45_0222DB3C(work->unk_04, &req);
+    ov45_0222DB3C(work->news, &req);
 }
 
 void ov45_0222C2A8(WiFiPlazaWork *work, WiFiPlazaLobbyMessage *msg) {
@@ -361,7 +315,7 @@ void ov45_0222C2A8(WiFiPlazaWork *work, WiFiPlazaLobbyMessage *msg) {
     req.slots[1] = ov45_0222EC68(msg->ids[1]);
     req.slots[2] = ov45_0222EC68(msg->ids[2]);
     req.slots[3] = ov45_0222EC68(msg->ids[3]);
-    ov45_0222DC64(work->unk_04, &req);
+    ov45_0222DC64(work->news, &req);
 }
 
 void ov45_0222C36C(void) {
@@ -371,7 +325,7 @@ void ov45_0222C370(WiFiPlazaWork *work, int which) {
     WiFiPlazaLobbyNotice notice;
     notice.time = &work->unk_d4;
     notice.which = which;
-    ov45_0222DB98(work->unk_04, &notice);
+    ov45_0222DB98(work->news, &notice);
 }
 
 void ov45_0222C388(WiFiPlazaUnk20C *a0) {

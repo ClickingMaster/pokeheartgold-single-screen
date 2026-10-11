@@ -181,7 +181,7 @@ u32 WSetActiveZoneTime(u16 time, u32 write) {
     }
     w = wlWork;
     if (w->txCtrl.beacon.active) {
-        tim = w->txCtrl.beacon.frame + 0x24 + w->bss.timOffset;
+        tim = w->txCtrl.beacon.frame + 0x24 + w->bss.gameInfoOffset;
         if (w->bss.powerMgtMode == 1) {
             WL_WriteByte(tim + 6, time & 0xFF);
             WL_WriteByte(tim + 7, (time >> 8) & 0xFF);

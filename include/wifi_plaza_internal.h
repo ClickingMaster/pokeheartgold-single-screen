@@ -7,8 +7,11 @@
 
 #include "easy_chat.h"
 #include "heap.h"
+#include "message_format.h"
+#include "msgdata.h"
 #include "overlay_manager.h"
 #include "player_data.h"
+#include "pm_string.h"
 #include "save.h"
 #include "sys_task_api.h"
 
@@ -234,9 +237,95 @@ typedef struct WiFiPlazaApps {
     void *unk_44;
 } WiFiPlazaApps;
 
+// What the lobby request handlers (wifi_plaza_requests.c) pass to the plaza news (with the player profiles in
+// WiFiPlazaWork.profiles).
+typedef struct WiFiPlazaPairRequest {
+    PlayerProfile *profiles[2];
+    u16 slots[2];
+} WiFiPlazaPairRequest;
+
+typedef struct WiFiPlazaPairOptionRequest {
+    PlayerProfile *profiles[2];
+    u16 slots[2];
+    u32 option;
+} WiFiPlazaPairOptionRequest;
+
+typedef struct WiFiPlazaGroupRequest {
+    u32 count;
+    PlayerProfile *profiles[4];
+    u16 slots[4];
+} WiFiPlazaGroupRequest;
+
+typedef struct WiFiPlazaGroupFlagRequest {
+    u32 option;
+    u32 count;
+    PlayerProfile *profiles[4];
+    u16 slots[4];
+    u32 flag;
+} WiFiPlazaGroupFlagRequest;
+
+typedef struct WiFiPlazaSingleRequest {
+    u32 option;
+    u32 count;
+    PlayerProfile *profile;
+    u16 slot;
+} WiFiPlazaSingleRequest;
+
+typedef struct WiFiPlazaGroupOptionRequest {
+    u32 option;
+    u32 count;
+    PlayerProfile *profiles[4];
+    u16 slots[4];
+} WiFiPlazaGroupOptionRequest;
+
+// What ov45_0222C370 passes to ov45_0222DB98.
+typedef struct WiFiPlazaLobbyNotice {
+    u32 *time;
+    u32 which;
+} WiFiPlazaLobbyNotice;
+
+// A lobby slot in the plaza news.
+typedef struct WiFiPlazaNewsSlot {
+    u16 state; // 2: empty
+    u16 flags; // bit 1: the slot of ov45_0222D8F0
+} WiFiPlazaNewsSlot;
+
+typedef struct WiFiPlazaNewsSlots {
+    WiFiPlazaNewsSlot slots[20];
+    u16 change;   // 1: a player came, 2: a player left (ov45_0222DEA4)
+    u16 lastSlot; // ov45_0222DEB8
+} WiFiPlazaNewsSlots;
+
+// An event (topic) of the plaza news: type 0-8 (message ov45_02254C0C[type]), up to four player names and slots.
+typedef struct WiFiPlazaNewsEvent {
+    u8 type;
+    u32 a;
+    u32 b;
+    u32 c;
+    String *names[4];
+    u16 slots[4];
+    u16 rank;
+    s16 timer;
+    struct WiFiPlazaNewsEvent *next;
+    struct WiFiPlazaNewsEvent *prev;
+} WiFiPlazaNewsEvent;
+
+typedef struct WiFiPlazaNewsEventList {
+    WiFiPlazaNewsEvent events[8];
+    WiFiPlazaNewsEvent head; // of the list ordered by rank
+} WiFiPlazaNewsEventList;
+
+// The plaza news (WiFiPlazaWork.news, ov45_0222D860), handed to the plaza news app.
+typedef struct WiFiPlazaNews {
+    u32 openTime; // WiFiPlazaTime of the lobby opening (ov45_0222D8BC)
+    u32 isOpen;
+    WiFiPlazaNewsSlots slots;
+    WiFiPlazaNewsEventList events;
+} WiFiPlazaNews;
+
 typedef struct WiFiPlazaWork {
     SaveData *save;
-    void *unk_04; // ov45_0222D860
+    WiFiPlazaNews *news;
     u32 unk_08;
     WiFiPlazaPlace places[50]; // filled by ov45_0222B79C from the profile
     u32 unk_d4;
@@ -558,37 +647,94 @@ u8 ov45_0222D7C0(u32 index);
 int ov45_0222D7CC(u32 errorCode, u32 context);
 BOOL ov45_0222D7FC(u32 errorCode, u32 context);
 BOOL ov45_0222D844(void);
-void *ov45_0222D860(enum HeapID heapID);
-void ov45_0222D890(void *view);
-void ov45_0222D8A4(void *view);
+WiFiPlazaNews *ov45_0222D860(enum HeapID heapID);
+void ov45_0222D890(WiFiPlazaNews *news);
+void ov45_0222D8A4(WiFiPlazaNews *news);
+
+// wifi_plaza_news.c
+void ov45_0222D8BC(WiFiPlazaNews *news, u32 *openTime);
+void ov45_0222D8C8(WiFiPlazaNews *news, int slot, int state, int flags);
+BOOL ov45_0222D8D4(WiFiPlazaNews *news, int slot);
+void ov45_0222D8F0(WiFiPlazaNews *news, int slot);
+void ov45_0222D940(WiFiPlazaNews *news, WiFiPlazaPairRequest *req);
+void ov45_0222D990(WiFiPlazaNews *news, WiFiPlazaPairOptionRequest *req);
+void ov45_0222D9EC(WiFiPlazaNews *news, WiFiPlazaGroupFlagRequest *req);
+void ov45_0222DA80(WiFiPlazaNews *news, WiFiPlazaSingleRequest *req);
+void ov45_0222DAE0(WiFiPlazaNews *news, WiFiPlazaGroupRequest *req);
+void ov45_0222DB3C(WiFiPlazaNews *news, WiFiPlazaGroupRequest *req);
+void ov45_0222DB98(WiFiPlazaNews *news, WiFiPlazaLobbyNotice *notice);
+void ov45_0222DC08(WiFiPlazaNews *news, int *slot, const u8 *flags);
+void ov45_0222DC64(WiFiPlazaNews *news, WiFiPlazaGroupOptionRequest *req);
+void ov45_0222DCE8(WiFiPlazaNews *news);
+u32 ov45_0222DCF4(WiFiPlazaNews *news, u32 *openTime);
+BOOL ov45_0222DCFC(WiFiPlazaNews *news, int slot);
+int ov45_0222DD08(WiFiPlazaNews *news, int slot);
+BOOL ov45_0222DD14(WiFiPlazaNews *news, int slot);
+BOOL ov45_0222DD20(WiFiPlazaNews *news, int slot);
+BOOL ov45_0222DD2C(WiFiPlazaNews *news, int slot);
+u16 ov45_0222DD38(WiFiPlazaNews *news);
+BOOL ov45_0222DD44(WiFiPlazaNews *news);
+u8 ov45_0222DD5C(WiFiPlazaNews *news);
+BOOL ov45_0222DD78(WiFiPlazaNews *news, const u8 *flags, int unused, String *out, enum HeapID heapID);
+int ov45_0222DDE4(WiFiPlazaNews *news, int unused, int index);
+void ov45_0222DE1C(WiFiPlazaNewsSlots *slots);
+void ov45_0222DE3C(WiFiPlazaNewsSlots *slots, int slot, int state, int flags);
+void ov45_0222DE58(WiFiPlazaNewsSlots *slots, int slot, int state, int flags);
+void ov45_0222DE74(WiFiPlazaNewsSlots *slots, int slot);
+void ov45_0222DE8C(WiFiPlazaNewsSlots *slots, int slot, int flags);
+void ov45_0222DEA4(WiFiPlazaNewsSlots *slots, int change);
+void ov45_0222DEB8(WiFiPlazaNewsSlots *slots, int slot);
+BOOL ov45_0222DECC(WiFiPlazaNewsSlots *slots, int slot);
+int ov45_0222DEE0(WiFiPlazaNewsSlots *slots, int slot);
+BOOL ov45_0222DEF4(WiFiPlazaNewsSlots *slots, int slot);
+BOOL ov45_0222DF14(WiFiPlazaNewsSlots *slots, int slot);
+int ov45_0222DF38(WiFiPlazaNewsSlots *slots, int slot);
+u16 ov45_0222DF50(WiFiPlazaNewsSlots *slots);
+
+// wifi_plaza_news_events.c
+BOOL ov45_0222DF58(WiFiPlazaNewsSlots *slots, u32 slot);
+void ov45_0222DF78(WiFiPlazaNewsEventList *list, enum HeapID heapID);
+void ov45_0222DFD0(WiFiPlazaNewsEventList *list);
+void ov45_0222E000(WiFiPlazaNewsEventList *list);
+void ov45_0222E03C(WiFiPlazaNewsEventList *list);
+WiFiPlazaNewsEvent *ov45_0222E04C(WiFiPlazaNewsEventList *list, u16 rank);
+void ov45_0222E094(WiFiPlazaNewsEvent *at, WiFiPlazaNewsEvent *event);
+void ov45_0222E0A4(WiFiPlazaNewsEventList *list, WiFiPlazaNewsEvent *event);
+void ov45_0222E0CC(WiFiPlazaNewsEventList *list, WiFiPlazaNewsEvent *event);
+void ov45_0222E0E0(WiFiPlazaNewsEvent *event, u32 a, u32 b, u32 c, const PlayerProfile *player0, const PlayerProfile *player1, const PlayerProfile *player2, const PlayerProfile *player3, u16 slot0, u16 slot1, u16 slot2, u16 slot3, u32 timer, u32 rank, u32 type);
+BOOL ov45_0222E14C(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out);
+BOOL ov45_0222E1A0(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out);
+BOOL ov45_0222E200(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out);
+BOOL ov45_0222E33C(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out);
+BOOL ov45_0222E39C(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out);
+BOOL ov45_0222E414(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out);
+BOOL ov45_0222E484(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out);
+BOOL ov45_0222E4A8(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out);
+u16 ov45_0222E540(WiFiPlazaNewsEvent *event, u32 index);
+u16 ov45_0222E550(WiFiPlazaNewsEvent *event, u32 index);
+u16 ov45_0222E560(WiFiPlazaNewsEvent *event, u32 index);
+u16 ov45_0222E574(WiFiPlazaNewsEvent *event, u32 index);
+u16 ov45_0222E584(WiFiPlazaNewsEvent *event, u32 index);
+u16 ov45_0222E598(WiFiPlazaNewsEvent *event, u32 index);
+u16 ov45_0222E59C(WiFiPlazaNewsEvent *event, u32 index);
 
 // data (asm)
 extern const WiFiPlazaTimerPhase _02254A28[5];
 extern const u8 ov45_02254BB4[];
+extern const u8 ov45_02254BC8[];  // news event rank per type of ov45_0222DC64
+extern const u16 ov45_02254BCA[]; // message per player count (ov45_0222E4A8)
+extern const u16 ov45_02254BD2[];
+extern const u32 ov45_02254BDC[]; // news event rank per type of ov45_0222D9EC
+// slot getter / message of a news event per type
+extern u16 (*const ov45_02254BE8[9])(WiFiPlazaNewsEvent *event, u32 index);
+extern BOOL (*const ov45_02254C0C[9])(WiFiPlazaNewsEvent *event, const u8 *flags, MessageFormat *format, MsgData *msgData, String *out, enum HeapID heapID);
 // start time of each group
 extern const s32 ov45_02254A3C[9];
 // handlers per lobby message type
 extern void (*const ov45_02254A60[9])(WiFiPlazaWork *work, WiFiPlazaLobbyMessage *msg);
 
 // defined in the other overlay 45 files
-void ov45_0222DE1C(void *a0);
-void ov45_0222DEA4(void *a0, u32 a1);
-void ov45_0222DF78(void *a0, enum HeapID heapID);
-void ov45_0222DFD0(void *a0);
-void ov45_0222E000(void *a0);
-void ov45_0222D8BC(void *a0, u32 *a1);
-void ov45_0222D8C8(void *a0, int slot, int gender, int a3);
-int ov45_0222D8D4(void *a0, int slot);
-void ov45_0222D8F0(void *a0, int slot);
-void ov45_0222D940(void *a0, void *request);
-void ov45_0222D990(void *a0, void *request);
-void ov45_0222D9EC(void *a0, void *request);
-void ov45_0222DA80(void *a0, void *request);
-void ov45_0222DAE0(void *a0, void *request);
-void ov45_0222DB3C(void *a0, void *request);
-void ov45_0222DB98(void *a0, void *notice);
-void ov45_0222DC08(void *a0, int *slot, void *a2);
-void ov45_0222DC64(void *a0, void *request);
+BOOL ov45_0222E5B4(u32 activity, u32 count);
 void ov45_0222E5D4(enum HeapID heapID, SaveData *save, u32 a2, WiFiPlazaCallbacks *callbacks, void *arg);
 void ov45_0222E688(void);
 int ov45_0222E96C(void);

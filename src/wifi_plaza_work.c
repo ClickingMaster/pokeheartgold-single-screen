@@ -18,7 +18,7 @@ void ov45_0222A208(void *a0, void *a1, void *a2) {
 #pragma force_active reset
 
 void *ov45_0222A210(WiFiPlazaWork *work) {
-    return work->unk_04;
+    return work->news;
 }
 
 void *ov45_0222A214(WiFiPlazaWork *work) {

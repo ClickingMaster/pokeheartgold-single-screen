@@ -200,20 +200,20 @@ BOOL ov45_0222D844(void) {
     return FALSE;
 }
 
-void *ov45_0222D860(enum HeapID heapID) {
-    u8 *view = Heap_Alloc(heapID, 0x230);
-    memset(view, 0, 0x230);
-    ov45_0222DE1C(view + 8);
-    ov45_0222DF78(view + 0x5c, heapID);
-    return view;
+WiFiPlazaNews *ov45_0222D860(enum HeapID heapID) {
+    WiFiPlazaNews *news = Heap_Alloc(heapID, sizeof(WiFiPlazaNews));
+    memset(news, 0, sizeof(WiFiPlazaNews));
+    ov45_0222DE1C(&news->slots);
+    ov45_0222DF78(&news->events, heapID);
+    return news;
 }
 
-void ov45_0222D890(void *view) {
-    ov45_0222DFD0((u8 *)view + 0x5c);
-    Heap_Free(view);
+void ov45_0222D890(WiFiPlazaNews *news) {
+    ov45_0222DFD0(&news->events);
+    Heap_Free(news);
 }
 
-void ov45_0222D8A4(void *view) {
-    ov45_0222E000((u8 *)view + 0x5c);
-    ov45_0222DEA4((u8 *)view + 8, 0);
+void ov45_0222D8A4(WiFiPlazaNews *news) {
+    ov45_0222E000(&news->events);
+    ov45_0222DEA4(&news->slots, 0);
 }

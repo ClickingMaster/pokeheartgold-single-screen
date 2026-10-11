@@ -101,7 +101,7 @@ WiFiPlazaWork *WiFiPlazaWork_New(SaveData *save, enum HeapID heapID) {
     callbacks.onLobbyEvent = WiFiPlaza_OnLobbyEvent;
     callbacks.onOwnRecord = ov45_0222B75C;
     ov45_0222E5D4(heapID, work->save, 0x94, &callbacks, work);
-    work->unk_04 = ov45_0222D860(heapID);
+    work->news = ov45_0222D860(heapID);
     for (i = 0; i < 4; i++) {
         work->profiles[i] = PlayerProfile_New(heapID);
     }
@@ -131,7 +131,7 @@ void WiFiPlazaWork_Delete(WiFiPlazaWork *work) {
     ov45_0222BCD8(&work->unk_508.profile);
     WiFiPlazaWordSet_Free(&work->wordSet);
     ov45_0222EE80();
-    ov45_0222D890(work->unk_04);
+    ov45_0222D890(work->news);
     for (i = 0; i < 4; i++) {
         Heap_Free(work->profiles[i]);
     }
@@ -144,7 +144,7 @@ void WiFiPlazaWork_Delete(WiFiPlazaWork *work) {
 
 void WiFiPlazaWork_Update(WiFiPlazaWork *work) {
     s64 time;
-    ov45_0222D8A4(work->unk_04);
+    ov45_0222D8A4(work->news);
     ov45_0222ECB8(&time);
     work->unk_d8 = time;
     ov45_0222D500(&work->unk_d4, &time);

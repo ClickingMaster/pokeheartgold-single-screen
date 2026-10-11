@@ -4141,14 +4141,8 @@ Overlay OVY_45
     Object src/wifi_plaza_history.o
     Object src/wifi_plaza_apps.o
     Object src/wifi_plaza_util.o
-    Object src/overlay45_helpers_28.o
-    Object src/to80_extra1782_run01.o
-    Object src/overlay45_effect_spawners_29.o
-    Object src/overlay45_helpers_29.o
-    Object src/to45_overlay45_state_accessors.o
-    Object src/overlay45_helpers_30.o
-    Object src/overlay45_event_messages.o
-    Object src/overlay45_helpers_31.o
+    Object src/wifi_plaza_news.o
+    Object src/wifi_plaza_news_events.o
     Object src/r40_overlay_45_thumb_residual_32_run1.o
     Object src/to70_overlay_45_thumb_residual_32_extra490_run01.o
     Object src/r40_overlay_45_thumb_residual_32_run2.o
