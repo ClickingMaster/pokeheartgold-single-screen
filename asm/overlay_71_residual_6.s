@@ -630,28 +630,28 @@
 	.public TradeSequence_ResetDeferredFrees
 	.public TradeSequence_FlushDeferredFrees
 	.public TradeSequence_DeferFree
-	.public ov71_0224744C
-	.public ov71_02247498
-	.public ov71_022474CC
-	.public ov71_02247514
-	.public ov71_022475C4
-	.public ov71_022475F8
-	.public ov71_02247610
-	.public ov71_022476B4
-	.public ov71_022476C4
-	.public ov71_022476D4
-	.public ov71_022476EC
-	.public ov71_02247704
-	.public ov71_02247708
-	.public ov71_02247730
-	.public ov71_02247738
-	.public ov71_022477EC
-	.public ov71_0224780C
-	.public ov71_0224781C
-	.public ov71_0224782C
-	.public ov71_0224783C
-	.public ov71_0224784C
-	.public ov71_022478B8
+	.public TradeSequence_CreateModels
+	.public TradeSequence_DestroyModels
+	.public TradeSequence_DrawModels
+	.public TradeSequence_DrawModel
+	.public TradeSequence_InitModel
+	.public TradeSequence_FreeModel
+	.public TradeSequence_LoadModel
+	.public TradeSequence_GetModelPosition
+	.public TradeSequence_SetModelPosition
+	.public TradeSequence_GetModelRotation
+	.public TradeSequence_SetModelRotation
+	.public TradeSequence_SetModelVisible
+	.public TradeSequence_SetModelAlpha
+	.public TradeSequence_SetModelScale
+	.public TradeSequence_IsModelInView
+	.public TradeSequence_GetCameraPos
+	.public TradeSequence_SetCameraAngle
+	.public TradeSequence_AdjustCameraAngle
+	.public TradeSequence_SetCameraPerspectiveType
+	.public TradeSequence_SetCameraPerspectiveAngle
+	.public TradeSequence_InitCamera
+	.public TradeSequence_FreeCamera
 	.public ov71_022478C8
 	.public ov71_02247924
 	.public ov71_02247990
@@ -879,19 +879,19 @@
 	.public TradeSequence_ResetDeferredFrees
 	.public TradeSequence_FlushDeferredFrees
 	.public TradeSequence_DeferFree
-	.public ov71_022475F8
-	.public ov71_022476B4
-	.public ov71_022476C4
-	.public ov71_022476D4
-	.public ov71_022476EC
-	.public ov71_02247704
-	.public ov71_02247730
-	.public ov71_022477EC
-	.public ov71_0224780C
-	.public ov71_0224781C
-	.public ov71_0224782C
-	.public ov71_0224783C
-	.public ov71_022478B8
+	.public TradeSequence_FreeModel
+	.public TradeSequence_GetModelPosition
+	.public TradeSequence_SetModelPosition
+	.public TradeSequence_GetModelRotation
+	.public TradeSequence_SetModelRotation
+	.public TradeSequence_SetModelVisible
+	.public TradeSequence_SetModelScale
+	.public TradeSequence_GetCameraPos
+	.public TradeSequence_SetCameraAngle
+	.public TradeSequence_AdjustCameraAngle
+	.public TradeSequence_SetCameraPerspectiveType
+	.public TradeSequence_SetCameraPerspectiveAngle
+	.public TradeSequence_FreeCamera
 	.public ov71_02247990
 	.public ov71_02247C34
 	.public ov71_0224809C

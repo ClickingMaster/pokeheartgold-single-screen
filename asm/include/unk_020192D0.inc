@@ -10,9 +10,9 @@
 .public OverlayManager_Run
 .public GfGfxLoader_GetScrnData
 .public GfGfxLoader_GetScrnDataFromOpenNarc
-.public sub_020192D0
-.public sub_0201935C
-.public sub_02019490
+.public GlobalTerminalApp_Init
+.public GlobalTerminalApp_Main
+.public GlobalTerminalApp_Exit
 .public BgCellManager_New
 .public BgCellManager_Delete
 .public BgCellManager_InitCell
@@ -91,9 +91,9 @@
 	.public BgCellManager_NoTransfer
 	.public sBgCellTransferFuncs
 
-	.public sub_020194B4
-	.public sub_020194F8
-	.public sub_02019520
-	.public sub_02019548
-	.public _020F6288
+	.public GlobalTerminalApp_LoadWifi
+	.public GlobalTerminalApp_UnloadWifi
+	.public GlobalTerminalApp_DwcAlloc
+	.public GlobalTerminalApp_DwcFree
+	.public sOverlayTemplate_GlobalTerminalConnect
 	.public _021D1108

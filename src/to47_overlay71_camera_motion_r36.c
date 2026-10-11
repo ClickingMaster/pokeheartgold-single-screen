@@ -39,7 +39,7 @@ void ov71_0224A6D8(Ov71MoveStateR36 *work) {
                 work->currentY = work->targetY;
                 work->currentZ = work->targetZ;
             }
-            ov71_02247730(work->camera, work->currentZ);
+            TradeSequence_SetModelScale(work->camera, work->currentZ);
         }
 
         currentX = work->currentX;
@@ -52,7 +52,7 @@ void ov71_0224A6D8(Ov71MoveStateR36 *work) {
         work->rotated.y = (product + 0x800) >> FX32_SHIFT;
         work->rotated.z = 0;
         work->angle.x -= 0x300;
-        ov71_022476EC(work->camera, &work->angle);
+        TradeSequence_SetModelRotation(work->camera, &work->angle);
         VEC_Add(&work->rotated, &work->base, &work->position);
     } else {
         work->position = work->base;
@@ -67,7 +67,7 @@ void ov71_0224A7D0(SysTask *task, Ov71MoveStateR36 *work) {
     switch (work->state) {
     case 0:
         ov71_0224A6D8(work);
-        ov71_022476C4(work->camera, &work->position);
+        TradeSequence_SetModelPosition(work->camera, &work->position);
         work->frame++;
         if (work->frame >= 12) {
             work->frame = 0;
@@ -75,23 +75,23 @@ void ov71_0224A7D0(SysTask *task, Ov71MoveStateR36 *work) {
         }
         break;
     case 1:
-        if (!ov71_02247738(work->camera)) {
+        if (!TradeSequence_IsModelInView(work->camera)) {
             ov71_0224A8A8(work->owner);
             work->state++;
         } else {
             work->base.y += work->baseStepX;
             work->base.z += work->baseStepY;
             ov71_0224A6D8(work);
-            ov71_022476C4(work->camera, &work->position);
+            TradeSequence_SetModelPosition(work->camera, &work->position);
         }
         break;
     case 2:
         work->base.y += work->baseStepX;
         work->base.z += work->baseStepY;
         ov71_0224A6D8(work);
-        ov71_022476C4(work->camera, &work->position);
+        TradeSequence_SetModelPosition(work->camera, &work->position);
         if (work->frame >= 70) {
-            ov71_02247704(work->camera, 0);
+            TradeSequence_SetModelVisible(work->camera, 0);
             work->waitFrames = 0;
             work->state++;
         }

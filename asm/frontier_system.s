@@ -112,7 +112,7 @@ _0222A8FC:
 	blt _0222A8DA
 	ldr r0, [sp]
 	ldr r0, [r0]
-	bl ov80_02239C54
+	bl FrontierMap_RunObjectMovements
 _0222A90C:
 	ldr r0, [sp]
 	mov r1, #0x51

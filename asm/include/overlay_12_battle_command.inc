@@ -107,10 +107,10 @@
 .public gOverlayTemplate_NamingScreen
 .public gSystem
 .public UnkBallData_SetBallAnimation
-.public ov07_02232F60
-.public ov07_02233DB8
-.public ov07_02233ECC
-.public ov07_02233F20
+.public UnkBallData_IsBallAnimationPlaying
+.public UnkBallData_New
+.public UnkBallData_Delete
+.public UnkBallData_GetMode
 .public ov12_02237B6C
 .public ov12_02237CC4
 .public ov12_02237D00

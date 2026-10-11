@@ -24,8 +24,8 @@ extern void FreeBgTilemapBuffer(void *, u32);
 extern void PlaySE(u16);
 extern void TradeSequence_StopPulses(void *);
 extern void TradeSequence_DestroyPulses(void *);
-extern void ov71_02247704(void *, u32);
-extern void ov71_02247708(void *, u32);
+extern void TradeSequence_SetModelVisible(void *, u32);
+extern void TradeSequence_SetModelAlpha(void *, u32);
 extern void ov71_02248604(Ov71Work18 *);
 extern void ov71_022488E4(Ov71Work18 *);
 extern void ov71_02248A08(Ov71Work18 *);
@@ -81,8 +81,8 @@ BOOL ov71_02248484(Ov71Work18 *work, u32 *state) {
         if (++work->timer > 8) {
             ov71_02248E30(work->unk_D8, 0, 31, 24);
             work->unk_160 = ov71_02248EB4(work);
-            ov71_02247708(work->unk_D8, 0);
-            ov71_02247704(work->unk_D8, 1);
+            TradeSequence_SetModelAlpha(work->unk_D8, 0);
+            TradeSequence_SetModelVisible(work->unk_D8, 1);
             (*state)++;
         }
         break;

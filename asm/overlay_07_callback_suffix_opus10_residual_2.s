@@ -1,5 +1,5 @@
-	.public ov07_02237784
-	.public ov07_0223777C
+	.public sBattleAnimEmitterCounts
+	.public sBallSealEmitDelays
 	.include "asm/macros.inc"
 	.include "overlay_07.inc"
 	.include "global.inc"
@@ -112,14 +112,14 @@
 	.public sBattleAnimFlippedCameraUp
 	.public sBattleAnimBattlerTypePositions
 	.public sBattleAnimEmitterPositions
-	.public ov07_0223717C
-	.public ov07_02237188
-	.public ov07_022371A0
-	.public ov07_022371B8
-	.public ov07_02237200
-	.public ov07_02237228
-	.public ov07_02237254
-	.public ov07_0223729C
+	.public sUnkBallDataStaticSpriteKinds
+	.public sUnkBallDataFlashingKinds
+	.public sUnkBallDataModeFuncs
+	.public sUnkBallDataBallAnimFuncs
+	.public sUnkBallDataBounceSounds
+	.public sUnkBallDataSpinningKinds
+	.public sUnkBallDataShakeOffsets
+	.public sUnkBallDataCaptureStateFuncs
 	.public ov07_0223730E
 	.public ov07_02237310
 	.public ov07_0223738C
@@ -127,7 +127,7 @@
 	.public ov07_0223746C
 	.public ov07_02237470
 	.public ov07_02237474
-	.public ov07_022375BC
+	.public sBallSpriteResources
 	.public ov07_02237870
 	.public ov07_0223789C
 	.public ov07_022378B0
@@ -406,88 +406,88 @@
 	.extern ov07_022318A0
 	.extern ov07_022318CC
 	.extern ov07_022318F8
-	.extern ov07_022325BC
-	.extern ov07_02232658
-	.extern ov07_02232E18
-	.extern ov07_02232E40
-	.extern ov07_02232E68
-	.extern ov07_02232E90
-	.extern ov07_02232EB8
+	.extern UnkBallData_ShouldAnimateSprite
+	.extern BallAnim_GetSpriteResource
+	.extern UnkBallData_BallAnimThrow
+	.extern UnkBallData_BallAnimOpen
+	.extern UnkBallData_BallAnimDeflect
+	.extern UnkBallData_BallAnimFall
+	.extern UnkBallData_BallAnimShake
 	.extern ov07_02232EE0
-	.extern ov07_02232F08
-	.extern ov07_02232F30
+	.extern UnkBallData_BallAnimClick
+	.extern UnkBallData_BallAnimFade
 	.extern ov07_02232F80
-	.extern ov07_02232F84
+	.extern UnkBallData_CaptureStateThrow
 	.extern ov07_02232F9C
-	.extern ov07_02232FA8
+	.extern UnkBallData_CaptureStateOpen
 	.extern ov07_02233088
-	.extern ov07_0223308C
+	.extern UnkBallData_CaptureStateDeflect
 	.extern ov07_022330E0
 	.extern ov07_022330E4
 	.extern ov07_022330F0
-	.extern ov07_022330FC
+	.extern UnkBallData_CaptureStateFlash
 	.extern ov07_022331A4
-	.extern ov07_022331B0
+	.extern UnkBallData_CaptureStateDrop
 	.extern ov07_02233224
-	.extern ov07_02233228
+	.extern UnkBallData_CaptureStateBounce
 	.extern ov07_022332C4
-	.extern ov07_022332C8
+	.extern UnkBallData_CaptureStateShakeWait
 	.extern ov07_022332E8
-	.extern ov07_022332F4
+	.extern UnkBallData_CaptureStateShake
 	.extern ov07_0223338C
 	.extern ov07_02233390
 	.extern ov07_0223339C
-	.extern ov07_022333A8
+	.extern UnkBallData_CaptureStateClick
 	.extern ov07_02233498
-	.extern ov07_0223349C
+	.extern UnkBallData_CaptureStateRestorePalette
 	.extern ov07_02233500
-	.extern ov07_0223350C
+	.extern UnkBallData_CaptureStateFadeOut
 	.extern ov07_02233590
-	.extern ov07_0223359C
-	.extern ov07_022335A0
-	.extern ov07_022335B4
+	.extern UnkBallData_CaptureStateEnd
+	.extern UnkBallData_RunCaptureState
+	.extern UnkBallData_RunThrowArc
 	.extern ov07_02233874
-	.extern ov07_02233B04
-	.extern ov07_02233C98
-	.extern ov07_02233D24
-	.extern ov07_02233D60
+	.extern UnkBallData_OpenInPlace
+	.extern UnkBallData_Wobble
+	.extern UnkBallData_TrackPosition
+	.extern UnkBallData_Task
 
 	.text
-	.public ov07_02233DB8
-	.public ov07_02233E88
-	.public ov07_02233EA0
-	.public ov07_02233EB8
-	.public ov07_02233EBC
-	.public ov07_02233ECC
-	.public ov07_02233EFC
-	.public ov07_02233F20
-	.public ov07_02233F30
-	.public ov07_022341A4
-	.public ov07_022342E4
-	.public ov07_0223441C
-	.public ov07_0223449C
-	.public ov07_022344A8
-	.public ov07_022344B4
-	.public ov07_022344C0
-	.public ov07_022344C4
-	.public ov07_022344D0
-	.public ov07_022344DC
-	.public ov07_022344E4
-	.public ov07_02234510
-	.public ov07_02234530
-	.public ov07_0223458C
-	.public ov07_022345C8
-	.public ov07_02234604
-	.public ov07_02234628
-	.public ov07_02234658
-	.public ov07_02234694
-	.public ov07_022346BC
-	.public ov07_022346C0
-	.public ov07_022346E4
+	.public UnkBallData_New
+	.public UnkBallData_IsActive
+	.public UnkBallData_HasOpened
+	.public UnkBallData_SetCaptureState
+	.public UnkBallData_IsCaptureState
+	.public UnkBallData_Delete
+	.public UnkBallData_SetMode
+	.public UnkBallData_GetMode
+	.public UnkBallData_InitThrowTarget
+	.public UnkBallData_GetStartPosition
+	.public UnkBallData_LoadResources
+	.public UnkBallData_CreateSprite
+	.public UnkBallData_SetDrawFlag
+	.public UnkBallData_SetPosition
+	.public UnkBallData_SetRotation
+	.public UnkBallData_SetAnimateSprite
+	.public UnkBallData_SetDrawPriority
+	.public UnkBallData_SetPriority
+	.public UnkBallData_SetDelay
+	.public BallSealEffect_GetDistance
+	.public BallSealEffect_GetSealDistance
+	.public BallSealEffect_GetSealEmitDelay
+	.public BattleAnimEmitterManager_New
+	.public BattleAnimEmitterManager_AddEmitter
+	.public BattleAnimEmitterManager_Free
+	.public BattleAnimEmitterManager_StopAll
+	.public BattleAnimEmitter_New
+	.public BattleAnimEmitter_Start
+	.public BattleAnimEmitter_IsActive
+	.public BattleAnimEmitter_WaitTask
+	.public BattleAnimEmitter_CreateEmitters
 	.public ov07_02234710
-	.public ov07_02234718
-	.public ov07_0223474C
-	.public ov07_0223475C
+	.public BattleAnimEmitter_GetEmitterCount
+	.public BattleAnimUtil_LoadMonIntoPicSameFacing
+	.public BattleAnimUtil_LoadMonIntoPicOppositeFacing
 	.public ov07_02234B5C
 	.rodata
 
@@ -1592,82 +1592,82 @@ sBattleAnimEmitterPositions: ; 0x0223687C
 	.byte 0xA8, 0x0A, 0x00, 0x00, 0xFC, 0xF6, 0xFF, 0xFF, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x58, 0xF4, 0xFF, 0xFF, 0x48, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov07_0223717C: ; 0x0223717C
+sUnkBallDataStaticSpriteKinds: ; 0x0223717C
 	.byte 0x03, 0x00, 0x00, 0x00
 	.byte 0x05, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00
 
-ov07_02237188: ; 0x02237188
+sUnkBallDataFlashingKinds: ; 0x02237188
 	.byte 0x06, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00
 	.byte 0x08, 0x00, 0x00, 0x00, 0x09, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x0B, 0x00, 0x00, 0x00
 
-ov07_022371A0: ; 0x022371A0
-	.word ov07_022335B4
+sUnkBallDataModeFuncs: ; 0x022371A0
+	.word UnkBallData_RunThrowArc
 	.word ov07_02233874
-	.word ov07_02233C98
-	.word ov07_022335A0
-	.word ov07_02233D24
-	.word ov07_02233B04
+	.word UnkBallData_Wobble
+	.word UnkBallData_RunCaptureState
+	.word UnkBallData_TrackPosition
+	.word UnkBallData_OpenInPlace
 
-ov07_022371B8: ; 0x022371B8
-	.word ov07_02232E18
-	.word ov07_02232E40
-	.word ov07_02232E68
-	.word ov07_02232E90
-	.word ov07_02232EB8
+sUnkBallDataBallAnimFuncs: ; 0x022371B8
+	.word UnkBallData_BallAnimThrow
+	.word UnkBallData_BallAnimOpen
+	.word UnkBallData_BallAnimDeflect
+	.word UnkBallData_BallAnimFall
+	.word UnkBallData_BallAnimShake
 	.word ov07_02232EE0
-	.word ov07_02232F08
-	.word ov07_02232F30
+	.word UnkBallData_BallAnimClick
+	.word UnkBallData_BallAnimFade
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00
 
-ov07_02237200: ; 0x02237200
+sUnkBallDataBounceSounds: ; 0x02237200
 	.byte 0x01, 0x00, 0x00, 0x00, 0xE6, 0x05, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0xE6, 0x05, 0x00, 0x00
 	.byte 0x0E, 0x00, 0x00, 0x00, 0xE7, 0x05, 0x00, 0x00, 0x12, 0x00, 0x00, 0x00, 0xE8, 0x05, 0x00, 0x00
 	.byte 0x14, 0x00, 0x00, 0x00, 0xE9, 0x05, 0x00, 0x00
 
-ov07_02237228: ; 0x02237228
+sUnkBallDataSpinningKinds: ; 0x02237228
 	.byte 0x06, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00
 	.byte 0x08, 0x00, 0x00, 0x00, 0x09, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x0B, 0x00, 0x00, 0x00
 	.byte 0x0C, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x0F, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00
 	.byte 0x11, 0x00, 0x00, 0x00
 
-ov07_02237254: ; 0x02237254
+sUnkBallDataShakeOffsets: ; 0x02237254
 	.byte 0xFE, 0xFF, 0x00, 0x00, 0x02, 0x00, 0x02, 0x00, 0x00, 0x00, 0xFE, 0xFF
 	.byte 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00
 	.byte 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0xFF, 0xFF
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x00
 
-ov07_0223729C: ; 0x0223729C
+sUnkBallDataCaptureStateFuncs: ; 0x0223729C
 	.word ov07_02232F80
-	.word ov07_02232F84
+	.word UnkBallData_CaptureStateThrow
 	.word ov07_02232F9C
-	.word ov07_02232FA8
+	.word UnkBallData_CaptureStateOpen
 	.word ov07_02233088
-	.word ov07_0223308C
+	.word UnkBallData_CaptureStateDeflect
 	.word ov07_022330E0
 	.word ov07_022330E4
 	.word ov07_022330F0
-	.word ov07_022330FC
+	.word UnkBallData_CaptureStateFlash
 	.word ov07_022331A4
-	.word ov07_022331B0
+	.word UnkBallData_CaptureStateDrop
 	.word ov07_02233224
-	.word ov07_02233228
+	.word UnkBallData_CaptureStateBounce
 	.word ov07_022332C4
-	.word ov07_022332C8
+	.word UnkBallData_CaptureStateShakeWait
 	.word ov07_022332E8
-	.word ov07_022332F4
+	.word UnkBallData_CaptureStateShake
 	.word ov07_0223338C
 	.word ov07_02233390
 	.word ov07_0223339C
-	.word ov07_022333A8
+	.word UnkBallData_CaptureStateClick
 	.word ov07_02233498
-	.word ov07_0223349C
+	.word UnkBallData_CaptureStateRestorePalette
 	.word ov07_02233500
-	.word ov07_0223350C
+	.word UnkBallData_CaptureStateFadeOut
 	.word ov07_02233590
-	.word ov07_0223359C
+	.word UnkBallData_CaptureStateEnd
 
 ov07_0223730C:
 	.byte 0x00, 0x00
@@ -1733,7 +1733,7 @@ ov07_02237474: ; 0x02237474
 	.byte 0x05, 0x00, 0x00, 0x00, 0x1B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00
 	.byte 0x34, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 
-ov07_022375BC: ; 0x022375BC
+sBallSpriteResources: ; 0x022375BC
 	.byte 0x05, 0x01, 0x00, 0x00
 	.byte 0x53, 0x00, 0x00, 0x00, 0x04, 0x01, 0x00, 0x00, 0x03, 0x01, 0x00, 0x00, 0x08, 0x01, 0x00, 0x00
 	.byte 0x54, 0x00, 0x00, 0x00, 0x07, 0x01, 0x00, 0x00, 0x06, 0x01, 0x00, 0x00, 0x0B, 0x01, 0x00, 0x00
@@ -1764,11 +1764,11 @@ ov07_022375BC: ; 0x022375BC
 	.byte 0x6D, 0x00, 0x00, 0x00, 0x52, 0x01, 0x00, 0x00, 0x51, 0x01, 0x00, 0x00, 0x53, 0x01, 0x00, 0x00
 	.byte 0x6D, 0x00, 0x00, 0x00, 0x52, 0x01, 0x00, 0x00, 0x51, 0x01, 0x00, 0x00
 
-ov07_0223777C: ; 0x0223777C
+sBallSealEmitDelays: ; 0x0223777C
 	.byte 0x00, 0x08, 0x0E, 0x14
 	.byte 0x14, 0x10, 0x10, 0x00
 
-ov07_02237784: ; 0x02237784
+sBattleAnimEmitterCounts: ; 0x02237784
 	.byte 0x05, 0x00, 0x00, 0x00, 0x0B, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00
 	.byte 0x07, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00

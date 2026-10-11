@@ -128,8 +128,8 @@ Static main
     Object src/menu_input_state.o
     Object src/touchscreen_list_menu.o
     Object src/camera_translation.o
-    Object src/overlay_app_manager.o
-    Object asm/unk_020192D0.o
+    Object src/global_terminal_app.o
+    Object asm/global_terminal_app_data.o
     Object asm/bg_cell_manager_data.o
     Object src/bg_cell_manager.o
     Object src/unk_02019BA4.o
@@ -219,7 +219,7 @@ Static main
     Object src/frontier_card.o
     Object asm/unk_02030A98.o
     Object src/unk_0203170C.o
-    Object src/save_block_32.o
+    Object src/save_plaza_survey.o
     Object src/pokeathlon/pokeathlon_save.o
     Object asm/apricorn_box_data.o
     Object src/apricorn_box.o
@@ -3045,47 +3045,7 @@ Object src/to54_atomic_w03_08_run04.o
 Object src/to91_obj_window41517_run01.o
 Object src/to54_atomic_w03_10_run05.o
     Object src/battle/battle_anim_battler_util.o
-    Object src/overlay07_callbacks_c_0223251c_0223251c.o
-    Object src/to58_w09b_ov07_03_0.o
-    Object src/overlay07_callbacks_c_022325f4_02232658.o
-    Object src/to55_r3_overlay07_capsule_resources.o
-    Object src/overlay07_callbacks_c_02232a04_02232a04.o
-    Object src/to70_to55_old_overlay07_03_a01_extra1056_run01.o
-    Object src/to55_old_overlay07_03_c01.o
-    Object src/to70_to55_old_overlay07_03_a02_extra900_run01.o
-    Object src/overlay07_callbacks_c_02232ab8_02232ab8.o
-    Object src/to55_r3_w03_run1.o
-    Object src/to90_extra2269_run01.o
-    Object src/to90_extra2269_run02.o
-    Object src/to55_r3_w03_run2.o
-    Object src/to70_to55_r3_w03_residual2_extra902_run01.o
-    Object src/to55_r3_w03_run3.o
-    Object src/overlay07_callbacks_c_02232df4_02232f9c.o
-    Object src/to58_w09b_ov07_04_0.o
-    Object src/overlay07_callbacks_c_02233088_022330f0.o
-    Object src/to58_w09b_ov07_05_0.o
-    Object src/overlay07_callbacks_c_022331a4_022331a4.o
-    Object src/to58_w09b_ov07_06_0.o
-    Object src/overlay07_callbacks_c_02233224_02233224.o
-    Object src/to58_w09b_ov07_07_0.o
-    Object src/overlay07_callbacks_c_022332c4_022332c4.o
-    Object src/to58_w09b_ov07_08_0.o
-    Object src/overlay07_callbacks_c_022332e8_022332e8.o
-    Object src/to58_w09b_ov07_09_0.o
-    Object src/overlay07_callbacks_c_0223338c_0223339c.o
-    Object src/to58_w09b_ov07_10_0.o
-    Object src/overlay07_callbacks_c_02233498_02233498.o
-    Object src/to58_w09b_ov07_11_0.o
-    Object src/overlay07_callbacks_c_02233500_02233500.o
-    Object src/to58_w09b_ov07_12_0.o
-    Object src/overlay07_callbacks_c_02233590_022335a0.o
-    Object src/to54_atomic_x02_01_landing.o
-    Object src/overlay07_callback_state.o
-    Object src/opus10_overlay07_callback_suffix_run1.o
-    Object src/to80_extra1831_run01.o
-    Object src/to90_extra2426_run01.o
-    Object src/to80_extra1504_run01.o
-    Object src/opus10_overlay07_callback_suffix_run2.o
+    Object src/battle/battle_anim_ball.o
     Object asm/overlay_07_callback_suffix_opus10_residual_2.o
 }
 Overlay OVY_8
@@ -4789,18 +4749,7 @@ Overlay OVY_45
     Object src/wifi_plaza.o
     Object src/wifi_plaza_work.o
     Object src/wifi_plaza_player.o
-    Object src/overlay45_helpers_11.o
-    Object src/ov45_r12_run1.o
-    Object src/to91_w41513_run01.o
-    Object src/ov45_r12_run2.o
-    Object src/overlay45_helpers_12.o
-    Object src/overlay45_state_transition_r13_run1.o
-    Object src/to70_overlay_45_thumb_residual_13_gap_extra317_run01.o
-    Object src/to70_to70_overlay_45_thumb_residual_13_gap_extra317_residual_1_extra1280_run01.o
-    Object src/overlay45_state_transition_r13_run2.o
-    Object src/overlay45_helpers_13.o
-    Object src/r40_overlay_45_thumb_residual_14_run1.o
-    Object src/overlay45_helpers_14.o
+    Object src/wifi_plaza_lobby.o
     Object src/overlay45_lobby_state_r15_run1.o
     Object src/to90_extra2022_run01.o
     Object src/overlay45_lobby_state_r15_run2.o
@@ -5826,16 +5775,7 @@ Overlay OVY_71
 {
     After OVY_70
     Object src/trade_sequence.o
-    Object src/overlay71_model_manager.o
-    Object src/overlay71_opus_partial_7.o
-    Object src/to70_overlay_71_residual_8_extra626_run01.o
-    Object src/overlay71_opus_partial_8.o
-    Object src/overlay71_polygon_attr_r9.o
-    Object src/overlay71_opus_partial_9.o
-    Object src/to70_overlay_71_residual_10_extra500_run01.o
-    Object src/overlay71_opus_partial_10.o
-    Object src/to70_overlay_71_residual_11_extra826_run01.o
-    Object src/overlay71_opus_partial_11.o
+    Object src/trade_sequence_models.o
     Object src/to70_overlay_71_residual_12_extra501_run01.o
     Object src/overlay71_opus_partial_12.o
     Object src/to70_overlay_71_residual_13_extra74_run01.o
@@ -6478,23 +6418,16 @@ Overlay OVY_80
     Object src/to70_overlay_80_02238034_residual_3_extra846_run01.o
     Object src/ov80_2238034_partial_4.o
     Object asm/overlay_80_02238034_residual_4.o
-    Object src/overlay80_tile_blink_1.o
-    Object src/slop_small_overlay_80_022384D8.o
-    Object src/overlay80_tile_blink_2.o
+    Object src/frontier/frontier_map_tile_blink.o
     Object src/frontier/frontier_map.o
     Object asm/frontier_map_data.o
     Object src/frontier/frontier_resource_manager.o
-    Object src/overlay80_sprite_resources_1.o
-    Object asm/overlay_80_02239AF8_residual_1.o
-    Object src/overlay80_object_updates_1.o
-    Object src/slop_small_overlay_80_02239BF0.o
-    Object asm/slop_small_overlay_80_02239BF0_residual.o
-    Object src/overlay80_palette_effect_1.o
-    Object src/to70_overlay_80_02239D74_extra402_run01.o
-    Object src/overlay80_palette_effect_2.o
-    Object src/r40_overlay_80_02239D74_residual_2_run1.o
-    Object src/overlay80_palette_effect_3.o
-    Object asm/overlay_80_02239D74_residual_3.o
+    Object src/frontier/frontier_map_sprites.o
+    Object asm/frontier_map_sprites_data.o
+    Object src/frontier/frontier_map_object_movement.o
+    Object asm/frontier_map_object_movement_data.o
+    Object src/frontier/frontier_map_bg_animation.o
+    Object asm/frontier_map_bg_animation_data.o
     Object src/ov80_3a00c_partial_1.o
     Object src/to70_overlay_80_0223A00C_extra993_run01.o
     Object src/ov80_3a00c_partial_2.o

@@ -16,8 +16,8 @@ void SetMTRNGSeed(u32);
 void *ov71_022482EC(void *);
 void ov71_02248358(void *);
 void PlaySE(int);
-void ov71_022476EC(void *, void *);
-void ov71_022476C4(void *, void *);
+void TradeSequence_SetModelRotation(void *, void *);
+void TradeSequence_SetModelPosition(void *, void *);
 void ov71_022481EC(void *);
 void ov71_0224820C(void *, void *);
 #endif

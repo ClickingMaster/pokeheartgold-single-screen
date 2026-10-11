@@ -4,8 +4,8 @@
 
     .text
 
-	thumb_func_start ov80_02239AF8
-ov80_02239AF8: ; 0x02239AF8
+	thumb_func_start FrontierMapSprite_LoadResources
+FrontierMapSprite_LoadResources: ; 0x02239AF8
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x1c
 	add r6, r0, #0
@@ -67,10 +67,10 @@ _02239B10:
 	pop {r4, r5, r6, r7, pc}
 	nop
 _02239B78: .word ov80_0223DA54
-	thumb_func_end ov80_02239AF8
+	thumb_func_end FrontierMapSprite_LoadResources
 
-	thumb_func_start ov80_02239B7C
-ov80_02239B7C: ; 0x02239B7C
+	thumb_func_start FrontierMapSprite_UnloadResources
+FrontierMapSprite_UnloadResources: ; 0x02239B7C
 	push {r3, r4, r5, lr}
 	add r4, r1, #0
 	add r5, r0, #0
@@ -97,10 +97,10 @@ _02239B8A:
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 _02239BB4: .word ov80_0223DA54
-	thumb_func_end ov80_02239B7C
+	thumb_func_end FrontierMapSprite_UnloadResources
 
-	thumb_func_start ov80_02239BB8
-ov80_02239BB8: ; 0x02239BB8
+	thumb_func_start FrontierMapSprite_Create
+FrontierMapSprite_Create: ; 0x02239BB8
 	push {r4, r5, r6, lr}
 	add r4, r2, #0
 	add r5, r0, #0
@@ -123,15 +123,15 @@ _02239BC8:
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
 _02239BE4: .word ov80_0223DA54
-	thumb_func_end ov80_02239BB8
+	thumb_func_end FrontierMapSprite_Create
 
-	thumb_func_start ov80_02239BE8
-ov80_02239BE8: ; 0x02239BE8
+	thumb_func_start FrontierMapSprite_Delete
+FrontierMapSprite_Delete: ; 0x02239BE8
 	ldr r3, _02239BEC ; =Sprite_DeleteAndFreeResources
 	bx r3
 	.balign 4, 0
 _02239BEC: .word Sprite_DeleteAndFreeResources
-	thumb_func_end ov80_02239BE8
+	thumb_func_end FrontierMapSprite_Delete
 
     .rodata
 

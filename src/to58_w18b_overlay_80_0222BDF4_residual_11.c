@@ -6,7 +6,7 @@ extern int FrontierScriptContext_ReadWord(void *);
 extern int FrontierScript_ReadVar(void *);
 extern void *NARC_New(int, int);
 extern void NARC_Delete(void *);
-extern void ov80_02239AF8(u32, u32, void *, u32, u32);
+extern void FrontierMapSprite_LoadResources(u32, u32, void *, u32, u32);
 extern void FrontierMap_AddLoadedResource(u8 *, int);
 int FrtCmd_042(u8 *);
 int FrtCmd_042(u8 *ctx) {
@@ -19,7 +19,7 @@ int FrtCmd_042(u8 *ctx) {
     for (;;) {
         int value = FrontierScript_ReadVar(ctx);
         if (value == 0xfd13) break;
-        ov80_02239AF8(*(u32 *)(p + 0x34), *(u32 *)(p + 0x38), narc, *(u32 *)(p + 4), value);
+        FrontierMapSprite_LoadResources(*(u32 *)(p + 0x34), *(u32 *)(p + 0x38), narc, *(u32 *)(p + 4), value);
         FrontierMap_AddLoadedResource(p, value);
     }
     NARC_Delete(narc);

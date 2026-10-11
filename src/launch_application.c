@@ -68,7 +68,7 @@
 #include "start_menu.h"
 #include "sys_flags.h"
 #include "trainer_data.h"
-#include "unk_020192D0.h"
+#include "global_terminal_app.h"
 #include "friend_roster.h"
 #include "friend_group_access.h"
 #include "unk_0202D230.h"
@@ -1356,7 +1356,7 @@ PokemonSummaryArgs *PokemonSummary_LaunchApp(enum HeapID heapID, FieldSystem *fi
 }
 
 void sub_0203FC14(FieldSystem *fieldSystem, u16 a1, u16 a2) {
-    static const OverlayManagerTemplate _020FA1C4 = { sub_020192D0, sub_0201935C, sub_02019490, FS_OVERLAY_ID(OVY_39) };
+    static const OverlayManagerTemplate _020FA1C4 = { GlobalTerminalApp_Init, GlobalTerminalApp_Main, GlobalTerminalApp_Exit, FS_OVERLAY_ID(OVY_39) };
     OverlayManagerTemplate template = _020FA1C4;
 
     UnkStruct_0203FC14 *args = Heap_AllocAtEnd(HEAP_ID_FIELD2, sizeof(UnkStruct_0203FC14));

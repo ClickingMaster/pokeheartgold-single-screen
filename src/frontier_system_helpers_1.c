@@ -28,7 +28,7 @@ BOOL FrontierSystem_Main(FrontierSystem *system) {
                 system->taskCount--;
             }
         }
-        ov80_02239C54(system->parent);
+        FrontierMap_RunObjectMovements(system->parent);
     }
     return system->taskCount == 0;
 }

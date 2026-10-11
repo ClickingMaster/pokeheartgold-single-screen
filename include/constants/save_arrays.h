@@ -35,7 +35,7 @@
 #define SAVE_POKEATHLON_FRIENDSHIP_RECORDS 29
 #define SAVE_EASY_CHAT                     30
 #define SAVE_UNK_31                        31
-#define SAVE_UNK_32                        32
+#define SAVE_PLAZA_SURVEY                        32
 #define SAVE_FOLLOW_MON                    33
 #define SAVE_POKEGEAR                      34
 #define SAVE_SAFARI_ZONE                   35

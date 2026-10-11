@@ -11,13 +11,13 @@ extern int _s32_div_f(int lhs, int rhs);
 fx32 GF_SinDegNoWrap(u16 deg);
 fx32 GF_CosDegNoWrap(u16 deg);
 
-void ov71_022476B4(Ov71Cam *cam, Ov71Vec3 *dst);
-void ov71_022476C4(Ov71Cam *cam, const Ov71Vec3 *src);
-void ov71_022476D4(Ov71Cam *cam, Ov71S16Vec3 *dst);
-void ov71_022476EC(Ov71Cam *cam, const Ov71S16Vec3 *src);
-void ov71_02247704(Ov71Cam *cam, void *value);
-void ov71_02247708(Ov71Cam *cam, u32 value);
-BOOL ov71_02247738(Ov71Cam *cam);
+void TradeSequence_GetModelPosition(Ov71Cam *cam, Ov71Vec3 *dst);
+void TradeSequence_SetModelPosition(Ov71Cam *cam, const Ov71Vec3 *src);
+void TradeSequence_GetModelRotation(Ov71Cam *cam, Ov71S16Vec3 *dst);
+void TradeSequence_SetModelRotation(Ov71Cam *cam, const Ov71S16Vec3 *src);
+void TradeSequence_SetModelVisible(Ov71Cam *cam, void *value);
+void TradeSequence_SetModelAlpha(Ov71Cam *cam, u32 value);
+BOOL TradeSequence_IsModelInView(Ov71Cam *cam);
 
 void ov71_02248E30(Ov71Cam *cam, s32 from, s32 to, s32 frames);
 void ov71_02248E78(void *task, Ov71Zoom *w);
@@ -37,7 +37,7 @@ void ov71_02248E30(Ov71Cam *cam, s32 from, s32 to, s32 frames) {
         w->unk_04 = _s32_div_f(w->unk_08 - w->unk_00, frames);
         w->unk_0C = frames;
         w->unk_10 = cam;
-        ov71_02247708(cam, from);
+        TradeSequence_SetModelAlpha(cam, from);
         SysTask_CreateOnMainQueue((Ov71TaskFunc)ov71_02248E78, w, 0);
     }
 }
@@ -46,10 +46,10 @@ void ov71_02248E78(void *task, Ov71Zoom *w) {
     w->unk_0C--;
     if (w->unk_0C > 0) {
         w->unk_00 += w->unk_04;
-        ov71_02247708(w->unk_10, w->unk_00 >> 12);
+        TradeSequence_SetModelAlpha(w->unk_10, w->unk_00 >> 12);
         return;
     }
-    ov71_02247708(w->unk_10, w->unk_08 >> 12);
+    TradeSequence_SetModelAlpha(w->unk_10, w->unk_08 >> 12);
     Heap_Free(w);
     SysTask_Destroy(task);
 }
@@ -57,8 +57,8 @@ void ov71_02248E78(void *task, Ov71Zoom *w) {
 void ov71_02248EB4(Ov71Orbiter *s) {
     Ov71Orbit *w = &s->unk_DC;
     int i;
-    ov71_022476B4(s->unk_D8, &w->unk_08);
-    ov71_022476D4(s->unk_D8, &w->unk_20);
+    TradeSequence_GetModelPosition(s->unk_D8, &w->unk_08);
+    TradeSequence_GetModelRotation(s->unk_D8, &w->unk_20);
     w->unk_14 = w->unk_08;
     w->unk_04 = s->unk_D4;
     w->unk_00 = s->unk_D8;
@@ -183,8 +183,8 @@ void ov71_02249184(void *task, Ov71Orbit *w) {
         }
     }
     ov71_0224903C(w);
-    ov71_022476C4(w->unk_00, &w->unk_14);
-    ov71_022476EC(w->unk_00, &w->unk_20);
+    TradeSequence_SetModelPosition(w->unk_00, &w->unk_14);
+    TradeSequence_SetModelRotation(w->unk_00, &w->unk_20);
 }
 
 void ov71_02249208(void *task, Ov71Orbit *w) {
@@ -194,10 +194,10 @@ void ov71_02249208(void *task, Ov71Orbit *w) {
         w->unk_28 += w->unk_2C;
         w->unk_14.y = w->unk_28;
         ov71_0224903C(w);
-        ov71_022476C4(w->unk_00, &w->unk_14);
-        ov71_022476EC(w->unk_00, &w->unk_20);
-        if (!ov71_02247738(w->unk_00)) {
-            ov71_02247704(w->unk_00, NULL);
+        TradeSequence_SetModelPosition(w->unk_00, &w->unk_14);
+        TradeSequence_SetModelRotation(w->unk_00, &w->unk_20);
+        if (!TradeSequence_IsModelInView(w->unk_00)) {
+            TradeSequence_SetModelVisible(w->unk_00, NULL);
             w->unk_78 = 1;
         }
     }

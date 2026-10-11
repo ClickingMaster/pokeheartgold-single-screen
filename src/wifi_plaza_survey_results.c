@@ -19,9 +19,9 @@
 #define WIFI_PLAZA_SURVEY_BAR_FRAMES 20
 
 // save_block_32.c has no public header: the player's last Plaza Survey answer.
-extern void *sub_020318E8(SaveData *saveData);
-extern u32 sub_020318F4(void *data);
-extern u32 sub_020318F8(void *data);
+extern void *Save_PlazaSurvey_Get(SaveData *saveData);
+extern u32 PlazaSurvey_GetSurveyId(void *data);
+extern u32 PlazaSurvey_GetAnswer(void *data);
 
 extern const WindowTemplate sWiFiPlazaSurveyYesNoTemplate;
 extern const VecFx32 sWiFiPlazaSurveyCursorPositions[WIFI_PLAZA_SURVEY_NUM_ANSWERS];
@@ -288,9 +288,9 @@ BOOL WiFiPlazaSurveyResults_Run(WiFiPlazaSurveyResults *results, WiFiPlazaSurvey
         results->state = 22;
         break;
     case 17:
-        saveBlock = sub_020318E8(args->saveData);
-        savedRecord.surveyId = sub_020318F4(saveBlock);
-        savedRecord.answer = sub_020318F8(saveBlock);
+        saveBlock = Save_PlazaSurvey_Get(args->saveData);
+        savedRecord.surveyId = PlazaSurvey_GetSurveyId(saveBlock);
+        savedRecord.answer = PlazaSurvey_GetAnswer(saveBlock);
         WiFiPlazaSurveyResults_PrintQuestion(results, &results->lastWeek, messages, work, &savedRecord, heapID, MAKE_TEXT_COLOR(11, 12, 0), MAKE_TEXT_COLOR(15, 14, 0), ov45_0222AB28(args->lobby, ov45_0222A53C(args->lobby)));
         WiFiPlazaSurveyResults_StartBars(results, &results->lastWeekTally, work, 2);
         PlaySE(SEQ_SE_PL_PINPON2);

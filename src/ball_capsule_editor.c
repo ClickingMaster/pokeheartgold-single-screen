@@ -125,7 +125,7 @@ typedef struct BallCapsuleEditor {
     u8 filler_D1[3];                                         // 0x0D1
     BallCapsuleEditorDisplay display;                        // 0x0D4
     TouchscreenListMenu *menu;                               // 0x24C
-    void *pokepicEffect;                                     // 0x250, ov07_02232694
+    void *pokepicEffect;                                     // 0x250, BallSealEffect_New
     UnkBallData *ballData;                                   // 0x254
     GF3DVramMan *vramMan;                                    // 0x258
     FontSystem *fontSystem;                          // 0x25C
@@ -211,15 +211,15 @@ typedef void (*BallCapsuleEditorSetDrawPriorityFunc)(ManagedSprite *managedSprit
 typedef void (*BallCapsuleEditorSetFlipModeFunc)(ManagedSprite *managedSprite, int flipMode);
 
 // Defined in OVY_7; not declared in a header.
-void *ov07_02232694(enum HeapID heapID, void *params);
-void ov07_022329B0(void *effect);
-BOOL ov07_02232A04(void *effect);
-void ov07_02232A44(void *effect);
-BOOL ov07_02232A54(void *effect);
-void ov07_02232AB8(void *effect);
-BOOL ov07_02233E88(UnkBallData *data);
-BOOL ov07_02233EA0(UnkBallData *data);
-s32 ov07_022344E4(s32 x1, s32 y1, s32 x2, s32 y2);
+void *BallSealEffect_New(enum HeapID heapID, void *params);
+void BallSealEffect_LoadResources(void *effect);
+BOOL BallSealEffect_IsLoaded(void *effect);
+void BallSealEffect_Start(void *effect);
+BOOL BallSealEffect_IsActive(void *effect);
+void BallSealEffect_Free(void *effect);
+BOOL UnkBallData_IsActive(UnkBallData *data);
+BOOL UnkBallData_HasOpened(UnkBallData *data);
+s32 BallSealEffect_GetDistance(s32 x1, s32 y1, s32 x2, s32 y2);
 
 // Defined in pokepic_animation.c / render_window.c; not declared in a public header.
 void *PokepicAnimManager_New(enum HeapID heapID, int count, int flag);
@@ -227,7 +227,7 @@ void PokepicAnimManager_Delete(void *mgr);
 BOOL PokepicAnimManager_GetAnimState(void *mgr, int index);
 u32 GetUserFrameGfx2PaletteMember(u32 frame);
 
-// ov07_02232694 argument
+// BallSealEffect_New argument
 typedef struct BallCapsuleEditorPokepicEffectParams {
     s32 kind;
     s32 unused;
@@ -916,7 +916,7 @@ BOOL BallCapsuleEditor_IsSealOnCapsule(BallCapsuleEditor *editor, s32 index) {
         return TRUE;
     }
     ManagedSprite_GetPositionXY(editor->seals[index].sprite, &x, &y);
-    if (ov07_022344E4(x, y, 190, 70) <= 60) {
+    if (BallSealEffect_GetDistance(x, y, 190, 70) <= 60) {
         return TRUE;
     }
     return FALSE;
@@ -2446,7 +2446,7 @@ int BallCapsuleEditor_PreviewCapsule(BallCapsuleEditor *editor) {
             ballParams.spriteSystem = editor->display.spriteSystem;
             ballParams.paletteData = editor->display.paletteData;
             ballParams.ball = GetMonData(editor->previewMon, MON_DATA_POKEBALL, NULL);
-            editor->ballData = ov07_02233DB8(&ballParams);
+            editor->ballData = UnkBallData_New(&ballParams);
             editor->subState++;
         }
         break;
@@ -2462,15 +2462,15 @@ int BallCapsuleEditor_PreviewCapsule(BallCapsuleEditor *editor) {
         BallCapsuleEditor_GetSealData(capsule.seals, editor);
         SetMonData(editor->previewMon, MON_DATA_BALL_CAPSULE_ID, &capsuleId);
         SetMonData(editor->previewMon, MON_DATA_BALL_CAPSULE, &capsule);
-        editor->pokepicEffect = ov07_02232694(HEAP_ID_52, &effectParams);
-        ov07_022329B0(editor->pokepicEffect);
+        editor->pokepicEffect = BallSealEffect_New(HEAP_ID_52, &effectParams);
+        BallSealEffect_LoadResources(editor->pokepicEffect);
         editor->subState++;
         editor->subStateValue = 0;
         break;
     case 3:
-        if (ov07_02232A04(editor->pokepicEffect) == TRUE && ov07_02233EA0(editor->ballData) == TRUE) {
+        if (BallSealEffect_IsLoaded(editor->pokepicEffect) == TRUE && UnkBallData_HasOpened(editor->ballData) == TRUE) {
             BallCapsuleEditor_GrowPreviewPokepic(editor);
-            ov07_02232A44(editor->pokepicEffect);
+            BallSealEffect_Start(editor->pokepicEffect);
             BallCapsuleEditor_SetPreviewPokepicHidden(editor, FALSE);
             BallCapsuleEditor_ClearPreviewPokepicScale(editor);
             PlaySE(SEQ_SE_DP_CUSTOM05);
@@ -2479,8 +2479,8 @@ int BallCapsuleEditor_PreviewCapsule(BallCapsuleEditor *editor) {
         break;
     case 4:
         result = BallCapsuleEditor_GrowPreviewPokepic(editor);
-        if (ov07_02233E88(editor->ballData) == FALSE && result == FALSE) {
-            ov07_02233ECC(editor->ballData);
+        if (UnkBallData_IsActive(editor->ballData) == FALSE && result == FALSE) {
+            UnkBallData_Delete(editor->ballData);
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_OFF);
             BallCapsuleEditor_StartPreviewPokepicAnim(editor);
             editor->subStateValue = 0;
@@ -2488,8 +2488,8 @@ int BallCapsuleEditor_PreviewCapsule(BallCapsuleEditor *editor) {
         }
         break;
     case 5:
-        if (ov07_02232A54(editor->pokepicEffect) == FALSE && PokepicAnimManager_GetAnimState(editor->pokepicAnim, 0) == TRUE && Pokepic_IsAnimFinished(editor->display.pokepic) == FALSE) {
-            ov07_02232AB8(editor->pokepicEffect);
+        if (BallSealEffect_IsActive(editor->pokepicEffect) == FALSE && PokepicAnimManager_GetAnimState(editor->pokepicAnim, 0) == TRUE && Pokepic_IsAnimFinished(editor->display.pokepic) == FALSE) {
+            BallSealEffect_Free(editor->pokepicEffect);
             editor->subState++;
         }
         break;
@@ -2506,7 +2506,7 @@ int BallCapsuleEditor_PreviewCapsule(BallCapsuleEditor *editor) {
             ballParams2.spriteSystem = editor->display.spriteSystem;
             ballParams2.paletteData = editor->display.paletteData;
             ballParams2.ball = GetMonData(editor->previewMon, MON_DATA_POKEBALL, NULL);
-            editor->ballData = ov07_02233DB8(&ballParams2);
+            editor->ballData = UnkBallData_New(&ballParams2);
             BallCapsuleEditor_ResetBlend();
             GfGfx_EngineATogglePlanes(GX_PLANEMASK_OBJ, GF_PLANE_TOGGLE_ON);
             editor->subState++;
@@ -2514,12 +2514,12 @@ int BallCapsuleEditor_PreviewCapsule(BallCapsuleEditor *editor) {
         break;
     case 7:
         result = BallCapsuleEditor_ShrinkPreviewPokepic(editor);
-        if (ov07_02233E88(editor->ballData) == FALSE && result == FALSE) {
+        if (UnkBallData_IsActive(editor->ballData) == FALSE && result == FALSE) {
             PaletteData_BeginPaletteFade(editor->display.paletteData, 2, 0x80B, 0, 10, 0, RGB_BLACK);
             PaletteData_BeginPaletteFade(editor->display.paletteData, 8, 0xFFFF, 0, 10, 0, RGB_BLACK);
             BallCapsuleEditor_SetPreviewPokepicHidden(editor, TRUE);
             BallCapsuleEditor_DeletePreviewPokepic(editor);
-            ov07_02233ECC(editor->ballData);
+            UnkBallData_Delete(editor->ballData);
             editor->subState++;
         }
         break;

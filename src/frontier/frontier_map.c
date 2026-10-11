@@ -48,10 +48,6 @@ int ov80_0222A7EC(void *profile);
 u32 ov80_02239960(enum HeapID heapID);
 void ov80_02239980(u32 resourceManager);
 void ov80_02239A38(void);
-void ov80_02239AF8(SpriteSystem *spriteSystem, SpriteManager *spriteManager, NARC *narc, PaletteData *paletteData, u16 resourceId);
-void ov80_02239B7C(SpriteManager *spriteManager, u32 resourceId);
-ManagedSprite *ov80_02239BB8(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u32 resourceId);
-void ov80_02239BE8(ManagedSprite *sprite);
 
 // Not in frontier/frontier_map.h: the script commands declare these with u32 indexes (their code depends on it).
 ManagedSprite *FrontierMap_CreateSprite(FrontierMap *map, u16 index, u16 resourceId);
@@ -560,12 +556,12 @@ void FrontierMap_FreeSpriteSystem(FrontierMap *map) {
 
     for (i = 0; i < FRONTIER_MAP_SPRITE_MAX; i++) {
         if (map->spriteSet.sprites[i] != NULL) {
-            ov80_02239BE8(map->spriteSet.sprites[i]);
+            FrontierMapSprite_Delete(map->spriteSet.sprites[i]);
         }
     }
     for (i = 0; i < FRONTIER_MAP_SPRITE_MAX; i++) {
         if (map->spriteSet.loadedResourceIds[i] != FRONTIER_MAP_NO_ID) {
-            ov80_02239B7C(map->spriteManager, map->spriteSet.loadedResourceIds[i]);
+            FrontierMapSprite_UnloadResources(map->spriteManager, map->spriteSet.loadedResourceIds[i]);
         }
     }
     for (i = 0; i < 4; i++) {
@@ -727,7 +723,7 @@ ManagedSprite *FrontierMap_CreateSprite(FrontierMap *map, u16 index, u16 resourc
     if (map->spriteSet.sprites[index] != NULL) {
         GF_AssertFail();
     }
-    sprite = ov80_02239BB8(map->spriteSystem, map->spriteManager, resourceId);
+    sprite = FrontierMapSprite_Create(map->spriteSystem, map->spriteManager, resourceId);
     map->spriteSet.sprites[index] = sprite;
     map->spriteSet.resourceIds[index] = resourceId;
     FrontierMap_SetSpriteAnimActive(map, index, FALSE);
@@ -741,7 +737,7 @@ void FrontierMap_DeleteSprite(FrontierMap *map, u32 index) {
     if (map->spriteSet.sprites[index] == NULL) {
         GF_AssertFail();
     }
-    ov80_02239BE8(map->spriteSet.sprites[index]);
+    FrontierMapSprite_Delete(map->spriteSet.sprites[index]);
     map->spriteSet.sprites[index] = NULL;
 }
 
@@ -795,7 +791,7 @@ void FrontierMap_RestoreSprites(FrontierMap *map) {
 
     for (i = 0; i < FRONTIER_MAP_SPRITE_MAX; i++) {
         if (state->resourceIds[i] != FRONTIER_MAP_NO_ID) {
-            ov80_02239AF8(map->spriteSystem, map->spriteManager, narc, map->paletteData, state->resourceIds[i]);
+            FrontierMapSprite_LoadResources(map->spriteSystem, map->spriteManager, narc, map->paletteData, state->resourceIds[i]);
             FrontierMap_AddLoadedResource(map, state->resourceIds[i]);
         }
     }

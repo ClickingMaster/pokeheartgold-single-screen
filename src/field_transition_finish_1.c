@@ -7,7 +7,7 @@
 #include "field_system.h"
 #include "game_stats.h"
 #include "heap.h"
-#include "overlay_app_manager_internal.h"
+#include "global_terminal_app_internal.h"
 #include "overlay_manager.h"
 #include "poke_overlay.h"
 #include "sound_system.h"

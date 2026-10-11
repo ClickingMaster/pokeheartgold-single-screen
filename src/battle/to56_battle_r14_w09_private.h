@@ -54,13 +54,13 @@ void ov12_0225D644(SysTask *, TrainerThrowBallData *);
 void PlaySE(u16);
 void BattleController_EmitCommandComplete(BattleSystem *, int, int);
 BOOL ov12_02261DC8(TrainerEncounterData *, ManagedSprite *);
-void ov07_0223449C(UnkBallData *, int);
-void ov07_022344A8(UnkBallData *, s16, s16);
-void ov07_022344C0(UnkBallData *, u32);
-void ov07_022344C4(UnkBallData *, u16);
-void ov07_022344D0(UnkBallData *, int);
-void ov07_022344DC(UnkBallData *, s32);
-void ov07_02233EFC(UnkBallData *, u32);
-BOOL ov07_02233E88(UnkBallData *);
+void UnkBallData_SetDrawFlag(UnkBallData *, int);
+void UnkBallData_SetPosition(UnkBallData *, s16, s16);
+void UnkBallData_SetAnimateSprite(UnkBallData *, u32);
+void UnkBallData_SetDrawPriority(UnkBallData *, u16);
+void UnkBallData_SetPriority(UnkBallData *, int);
+void UnkBallData_SetDelay(UnkBallData *, s32);
+void UnkBallData_SetMode(UnkBallData *, u32);
+BOOL UnkBallData_IsActive(UnkBallData *);
 
 #endif

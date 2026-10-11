@@ -153,10 +153,10 @@ void ov12_0225D138(SysTask *task, TrainerThrowBallData *work) {
         ball.paletteData = BattleSystem_GetPaletteData(work->battleSystem);
         ball.unk18 = 0;
         ball.battleSystem = work->battleSystem;
-        work->opponentData->ballData = ov07_02233DB8(&ball);
-        ov07_022344C4(work->opponentData->ballData, 100);
-        ov07_022344D0(work->opponentData->ballData, 2);
-        ov07_022344C0(work->opponentData->ballData, 0);
+        work->opponentData->ballData = UnkBallData_New(&ball);
+        UnkBallData_SetDrawPriority(work->opponentData->ballData, 100);
+        UnkBallData_SetPriority(work->opponentData->ballData, 2);
+        UnkBallData_SetAnimateSprite(work->opponentData->ballData, 0);
         ManagedSprite_SetAnimationFrame(work->opponentData->managedSprite, 0);
         ManagedSprite_SetAnim(work->opponentData->managedSprite, 1);
         ManagedSprite_SetAnimateFlag(work->opponentData->managedSprite, TRUE);
@@ -166,14 +166,14 @@ void ov12_0225D138(SysTask *task, TrainerThrowBallData *work) {
         if (work->face == 2) {
             ManagedSprite_OffsetPositionXY(work->opponentData->managedSprite, 5, 0);
             ManagedSprite_GetPositionXY(work->opponentData->managedSprite, &x, &y);
-            if (x >= 160 && ov07_02233F20(work->opponentData->ballData) != 0) {
-                ov07_0223449C(work->opponentData->ballData, 1);
-                ov07_02233EFC(work->opponentData->ballData, 0);
+            if (x >= 160 && UnkBallData_GetMode(work->opponentData->ballData) != 0) {
+                UnkBallData_SetDrawFlag(work->opponentData->ballData, 1);
+                UnkBallData_SetMode(work->opponentData->ballData, 0);
                 if ((battleType & 2) && !(battleType & 8)) {
                     OpponentData *partner = BattleSystem_GetOpponentData(work->battleSystem, BattleSystem_GetBattlerIdPartner(work->battleSystem, work->battlerId));
-                    ov07_0223449C(partner->ballData, 1);
-                    ov07_02233EFC(partner->ballData, 0);
-                    ov07_022344DC(partner->ballData, 12);
+                    UnkBallData_SetDrawFlag(partner->ballData, 1);
+                    UnkBallData_SetMode(partner->ballData, 0);
+                    UnkBallData_SetDelay(partner->ballData, 12);
                 }
             } else if (x >= 296) {
                 SpriteManager *mgr = BattleSystem_GetSpriteManager(work->battleSystem);
@@ -198,17 +198,17 @@ void ov12_0225D138(SysTask *task, TrainerThrowBallData *work) {
         if (work->opponentData->ballData) {
             animFrame = ManagedSprite_GetAnimationFrame(work->opponentData->managedSprite);
             if (ov12_0226D1E8[work->backSpriteIdx][animFrame][0] != 0x7FFF) {
-                ov07_0223449C(work->opponentData->ballData, 1);
-                ov07_022344A8(work->opponentData->ballData, x + ov12_0226D1E8[work->backSpriteIdx][animFrame][0], y + ov12_0226D1EA[work->backSpriteIdx][animFrame][0]);
-                if (animFrame == 3 && ov07_02233F20(work->opponentData->ballData) != 0) {
-                    ov07_02233EFC(work->opponentData->ballData, 0);
-                    ov07_022344C0(work->opponentData->ballData, 1);
+                UnkBallData_SetDrawFlag(work->opponentData->ballData, 1);
+                UnkBallData_SetPosition(work->opponentData->ballData, x + ov12_0226D1E8[work->backSpriteIdx][animFrame][0], y + ov12_0226D1EA[work->backSpriteIdx][animFrame][0]);
+                if (animFrame == 3 && UnkBallData_GetMode(work->opponentData->ballData) != 0) {
+                    UnkBallData_SetMode(work->opponentData->ballData, 0);
+                    UnkBallData_SetAnimateSprite(work->opponentData->ballData, 1);
                     if ((battleType & 2) && !(battleType & 8)) {
                         OpponentData *partner = BattleSystem_GetOpponentData(work->battleSystem, BattleSystem_GetBattlerIdPartner(work->battleSystem, work->battlerId));
-                        ov07_022344A8(partner->ballData, x + ov12_0226D1E8[work->backSpriteIdx][animFrame][0], y + ov12_0226D1EA[work->backSpriteIdx][animFrame][0]);
-                        ov07_0223449C(partner->ballData, 1);
-                        ov07_02233EFC(partner->ballData, 0);
-                        ov07_022344C0(partner->ballData, 1);
+                        UnkBallData_SetPosition(partner->ballData, x + ov12_0226D1E8[work->backSpriteIdx][animFrame][0], y + ov12_0226D1EA[work->backSpriteIdx][animFrame][0]);
+                        UnkBallData_SetDrawFlag(partner->ballData, 1);
+                        UnkBallData_SetMode(partner->ballData, 0);
+                        UnkBallData_SetAnimateSprite(partner->ballData, 1);
                     }
                 }
             }
@@ -231,11 +231,11 @@ void ov12_0225D138(SysTask *task, TrainerThrowBallData *work) {
             work->delay = 8;
             work->state = 4;
         } else if (work->opponentData->ballData && ov12_0226D1E8[work->backSpriteIdx][animFrame][0] != 0x7FFF) {
-            ov07_022344A8(work->opponentData->ballData, x + ov12_0226D1E8[work->backSpriteIdx][animFrame][0], y + ov12_0226D1EA[work->backSpriteIdx][animFrame][0]);
-            if (animFrame == 3 && ov07_02233F20(work->opponentData->ballData) != work->ballTargetState) {
-                ov07_02233EFC(work->opponentData->ballData, work->ballTargetState);
-                ov07_022344D0(work->opponentData->ballData, 1);
-                ov07_022344C0(work->opponentData->ballData, 1);
+            UnkBallData_SetPosition(work->opponentData->ballData, x + ov12_0226D1E8[work->backSpriteIdx][animFrame][0], y + ov12_0226D1EA[work->backSpriteIdx][animFrame][0]);
+            if (animFrame == 3 && UnkBallData_GetMode(work->opponentData->ballData) != work->ballTargetState) {
+                UnkBallData_SetMode(work->opponentData->ballData, work->ballTargetState);
+                UnkBallData_SetPriority(work->opponentData->ballData, 1);
+                UnkBallData_SetAnimateSprite(work->opponentData->ballData, 1);
                 if (work->ballTargetState != 3) {
                     PlaySE(0x70A);
                 }
@@ -252,8 +252,8 @@ void ov12_0225D138(SysTask *task, TrainerThrowBallData *work) {
         }
         break;
     case 5:
-        if (ov07_02233E88(work->opponentData->ballData) != 1) {
-            ov07_02233ECC(work->opponentData->ballData);
+        if (UnkBallData_IsActive(work->opponentData->ballData) != 1) {
+            UnkBallData_Delete(work->opponentData->ballData);
             work->opponentData->ballData = NULL;
             work->state = 6;
         }
@@ -299,12 +299,12 @@ void ov12_0225D644(SysTask *task, TrainerThrowBallData *work) {
             int frame = ManagedSprite_GetAnimationFrame(work->opponentData->managedSprite);
             if (ov12_0226D1E8[work->backSpriteIdx][frame][0] != 0x7FFF) {
                 OpponentData *partner = BattleSystem_GetOpponentData(work->battleSystem, BattleSystem_GetBattlerIdPartner(work->battleSystem, work->battlerId));
-                if (frame == 3 && ov07_02233F20(partner->ballData) != 0) {
-                    ov07_022344A8(partner->ballData, x + ov12_0226D1E8[work->backSpriteIdx][frame][0], y + ov12_0226D1EA[work->backSpriteIdx][frame][0]);
-                    ov07_0223449C(partner->ballData, 1);
-                    ov07_02233EFC(partner->ballData, 0);
-                    ov07_022344C0(partner->ballData, 1);
-                    ov07_022344D0(partner->ballData, 1);
+                if (frame == 3 && UnkBallData_GetMode(partner->ballData) != 0) {
+                    UnkBallData_SetPosition(partner->ballData, x + ov12_0226D1E8[work->backSpriteIdx][frame][0], y + ov12_0226D1EA[work->backSpriteIdx][frame][0]);
+                    UnkBallData_SetDrawFlag(partner->ballData, 1);
+                    UnkBallData_SetMode(partner->ballData, 0);
+                    UnkBallData_SetAnimateSprite(partner->ballData, 1);
+                    UnkBallData_SetPriority(partner->ballData, 1);
                 }
             }
         }

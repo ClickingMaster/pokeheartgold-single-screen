@@ -4,10 +4,10 @@
 #include "battle/battle.h"
 
 void UnkBallData_SetBallAnimation(UnkBallData *data, s32 ballAnim);
-BOOL ov07_02232F60(UnkBallData *data, s32 ballAnim_Unused); // IsBallAnimationPlaying?
-UnkBallData *ov07_02233DB8(UnkStruct_134 *unkStruct_134);   // unkBallData_Init?
-void ov07_02233ECC(UnkBallData *data);                      // unkBallData_Destroy?
-s32 ov07_02233F20(UnkBallData *data);
+BOOL UnkBallData_IsBallAnimationPlaying(UnkBallData *data, s32 ballAnim_Unused); // IsBallAnimationPlaying?
+UnkBallData *UnkBallData_New(UnkStruct_134 *unkStruct_134);                      // unkBallData_Init?
+void UnkBallData_Delete(UnkBallData *data);                                      // unkBallData_Destroy?
+s32 UnkBallData_GetMode(UnkBallData *data);
 
 // src/battle/battle_anim_system.c: the move animation system
 

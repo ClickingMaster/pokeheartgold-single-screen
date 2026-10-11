@@ -305,7 +305,7 @@ _0223AC04:
 	bl GetMonData
 	str r0, [sp, #0x6c]
 	add r0, sp, #0x5c
-	bl ov07_02233DB8
+	bl UnkBallData_New
 	mov r1, #0x95
 	lsl r1, r1, #2
 	str r0, [r4, r1]
@@ -345,12 +345,12 @@ _0223AC4A:
 	bl SetMonData
 	mov r0, #0x34
 	add r1, sp, #0x38
-	bl ov07_02232694
+	bl BallSealEffect_New
 	mov r1, #0x25
 	lsl r1, r1, #4
 	str r0, [r4, r1]
 	ldr r0, [r4, r1]
-	bl ov07_022329B0
+	bl BallSealEffect_LoadResources
 	ldr r0, _0223AE90 ; =0x00000404
 	ldr r1, [r4, r0]
 	add r1, r1, #1
@@ -363,13 +363,13 @@ _0223ACAC:
 	mov r0, #0x25
 	lsl r0, r0, #4
 	ldr r0, [r4, r0]
-	bl ov07_02232A04
+	bl BallSealEffect_IsLoaded
 	cmp r0, #1
 	bne _0223AD64
 	mov r0, #0x95
 	lsl r0, r0, #2
 	ldr r0, [r4, r0]
-	bl ov07_02233EA0
+	bl UnkBallData_HasOpened
 	cmp r0, #1
 	bne _0223AD64
 	add r0, r4, #0
@@ -377,7 +377,7 @@ _0223ACAC:
 	mov r0, #0x25
 	lsl r0, r0, #4
 	ldr r0, [r4, r0]
-	bl ov07_02232A44
+	bl BallSealEffect_Start
 	add r0, r4, #0
 	mov r1, #0
 	bl BallCapsuleEditor_SetPreviewPokepicHidden
@@ -396,7 +396,7 @@ _0223ACF6:
 	mov r0, #0x95
 	lsl r0, r0, #2
 	ldr r0, [r4, r0]
-	bl ov07_02233E88
+	bl UnkBallData_IsActive
 	cmp r0, #0
 	bne _0223AD64
 	cmp r5, #0
@@ -404,7 +404,7 @@ _0223ACF6:
 	mov r0, #0x95
 	lsl r0, r0, #2
 	ldr r0, [r4, r0]
-	bl ov07_02233ECC
+	bl UnkBallData_Delete
 	mov r0, #0x10
 	mov r1, #0
 	bl GfGfx_EngineATogglePlanes
@@ -423,7 +423,7 @@ _0223AD38:
 	mov r0, #0x25
 	lsl r0, r0, #4
 	ldr r0, [r4, r0]
-	bl ov07_02232A54
+	bl BallSealEffect_IsActive
 	cmp r0, #0
 	bne _0223AD64
 	mov r0, #0xa1
@@ -445,7 +445,7 @@ _0223AD66:
 	mov r0, #0x25
 	lsl r0, r0, #4
 	ldr r0, [r4, r0]
-	bl ov07_02232AB8
+	bl BallSealEffect_Free
 	ldr r0, _0223AE90 ; =0x00000404
 	ldr r1, [r4, r0]
 	add r1, r1, #1
@@ -487,7 +487,7 @@ _0223AD7A:
 	bl GetMonData
 	str r0, [sp, #0x20]
 	add r0, sp, #0x10
-	bl ov07_02233DB8
+	bl UnkBallData_New
 	mov r1, #0x95
 	lsl r1, r1, #2
 	str r0, [r4, r1]
@@ -506,7 +506,7 @@ _0223ADE2:
 	mov r0, #0x95
 	lsl r0, r0, #2
 	ldr r0, [r4, r0]
-	bl ov07_02233E88
+	bl UnkBallData_IsActive
 	cmp r0, #0
 	bne _0223AE88
 	cmp r5, #0
@@ -541,7 +541,7 @@ _0223ADE2:
 	mov r0, #0x95
 	lsl r0, r0, #2
 	ldr r0, [r4, r0]
-	bl ov07_02233ECC
+	bl UnkBallData_Delete
 	ldr r0, _0223AE90 ; =0x00000404
 	ldr r1, [r4, r0]
 	add r1, r1, #1

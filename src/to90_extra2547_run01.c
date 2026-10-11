@@ -22,9 +22,9 @@ extern int Pokepic_IsAnimFinished(void*);
 extern int Pokepic_ResumePaletteFade(void*);
 extern void Pokepic_Delete(void*);
 extern void sub_0200914C(void*,int);
-extern void *ov07_02233DB8(Descriptor*);
-extern int ov07_02233E88(void*);
-extern void ov07_02233ECC(void*);
+extern void *UnkBallData_New(Descriptor*);
+extern int UnkBallData_IsActive(void*);
+extern void UnkBallData_Delete(void*);
 extern int BattleAnimSystem_Execute(u8 *);
 extern int BattleAnimSystem_IsActive(void*);
 extern void BattleAnimSystem_EndMove(void*);
@@ -34,7 +34,7 @@ extern void BattleController_InitMoveAnimData(void*,int,Message*,int,int,int,int
 extern void ov12_02261B80(void*,void*,void*,Message*);
 extern void ov12_02261CA8(void*,void*,Source*,int);
 extern void ov07_02234A20(Source*,int);
-extern void ov07_0223494C(Source*,int);
+extern void BattleAnimUtil_RestorePic(Source*,int);
 extern void BattleController_EmitCommandComplete(void*,int,int);
 extern void Heap_Free(void*);
 extern void SysTask_Destroy(void*);
@@ -52,19 +52,19 @@ void ov12_0225C9BC(void *task,void *data) {
  u8 state;engine=ov12_0223A8DC(work->system);
  state=work->state;switch(state) {
  case 0:if(work->personality){BattleController_InitMoveAnimData(work->system,0,&message1,1,15,work->battler,work->battler,0);ov12_02261B80(work->system,work->context,engine,&message1);work->state++;}else work->state=4;break;
- case 2:ov12_02261CA8(work->system,work->source,&source,work->battler);ov07_0223494C(&source,5);BattleController_InitMoveAnimData(work->system,0,&message2,1,16,work->battler,work->battler,0);ov12_02261B80(work->system,work->context,engine,&message2);work->context->flag=0;work->state++;break;
+ case 2:ov12_02261CA8(work->system,work->source,&source,work->battler);BattleAnimUtil_RestorePic(&source,5);BattleController_InitMoveAnimData(work->system,0,&message2,1,16,work->battler,work->battler,0);ov12_02261B80(work->system,work->context,engine,&message2);work->context->flag=0;work->state++;break;
  case 1:case 3:BattleAnimSystem_Execute((u8 *)engine);if(BattleAnimSystem_IsActive(engine)==0){BattleAnimSystem_EndMove(engine);work->state++;}break;
  case 4:{int type=work->type;if(type&1) {
  first.values[0]=ov12_0226D120[type];first.values[1]=5;first.values[2]=5;first.values[3]=work->battler;first.values[4]=work->species;
- first.values[7]=(int)BattleSystem_GetSpriteSystem(work->system);first.values[8]=(int)BattleSystem_GetPaletteData(work->system);first.values[5]=1;first.values[6]=0;work->object=ov07_02233DB8(&first);
+ first.values[7]=(int)BattleSystem_GetSpriteSystem(work->system);first.values[8]=(int)BattleSystem_GetPaletteData(work->system);first.values[5]=1;first.values[6]=0;work->object=UnkBallData_New(&first);
  }else {table=ov12_0226D128;second.values[0]=table.values[type];second.values[1]=5;second.values[2]=5;second.values[3]=work->battler;second.values[4]=work->species;
- second.values[7]=(int)BattleSystem_GetSpriteSystem(work->system);second.values[8]=(int)BattleSystem_GetPaletteData(work->system);second.values[5]=1;second.values[6]=0;work->object=ov07_02233DB8(&second);}
+ second.values[7]=(int)BattleSystem_GetSpriteSystem(work->system);second.values[8]=(int)BattleSystem_GetPaletteData(work->system);second.values[5]=1;second.values[6]=0;work->object=UnkBallData_New(&second);}
  work->state=5;Pokepic_StartPaletteFade(work->pic,0,16,0,ov12_0226D15A[work->species]);
  switch(work->type){case 0:case 2:case 4:PlaySE_SetPan(1798,-117);break;case 1:case 3:case 5:PlaySE_SetPan(1798,117);break;}
  }break;
  case 5:if(Pokepic_ResumePaletteFade(work->pic)==0)work->state++;break;
  case 6:Pokepic_AddAttr(work->pic,12,-32);Pokepic_AddAttr(work->pic,13,-32);sub_0200914C(work->pic,work->height);if(Pokepic_GetAttr(work->pic,12)<=0){Pokepic_Delete(work->pic);work->state=7;}break;
- case 7:if(ov07_02233E88(work->object)==0){ov07_02233ECC(work->object);work->state=8;}break;
+ case 7:if(UnkBallData_IsActive(work->object)==0){UnkBallData_Delete(work->object);work->state=8;}break;
  case 8:BattleController_EmitCommandComplete(work->system,work->battler,work->command);Heap_Free(work);SysTask_Destroy(task);break;
  }
 }

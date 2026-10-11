@@ -25,7 +25,7 @@ extern void RequestSwap3DBuffers(int a, int b);
 extern void Main_SetVBlankIntrCB(void *cb, void *arg);
 
 extern void ov71_022479C8(Ov71Sub2 *w);
-extern void ov71_022474CC(void *arg);
+extern void TradeSequence_DrawModels(void *arg);
 
 extern s32 sTradeSequenceDeferredFreeCount;
 extern void *sTradeSequenceDeferredFrees[0x20];
@@ -57,20 +57,20 @@ u32 TradeSequence_GetTradeMode(Ov71Ctx *ctx);
 void TradeSequence_ResetDeferredFrees(void);
 void TradeSequence_FlushDeferredFrees(void);
 void TradeSequence_DeferFree(void *ptr);
-void ov71_022475F8(Ov71Cam *cam);
-void ov71_022476B4(Ov71Cam *cam, Ov71Vec3 *dst);
-void ov71_022476C4(Ov71Cam *cam, const Ov71Vec3 *src);
-void ov71_022476D4(Ov71Cam *cam, Ov71S16Vec3 *dst);
-void ov71_022476EC(Ov71Cam *cam, const Ov71S16Vec3 *src);
-void ov71_02247704(Ov71Cam *cam, void *value);
-void ov71_02247730(Ov71Cam2 *cam, u32 value);
-void ov71_022477EC(Ov71Cam *cam, Ov71Vec3 *dst);
-void ov71_0224780C(Ov71Cam *cam, void *arg0);
-void ov71_0224781C(Ov71Cam *cam, void *arg0);
-void ov71_0224782C(Ov71Cam *cam, void *arg0);
-void ov71_0224783C(Ov71Cam *cam, void *arg0);
-void ov71_022478B8(Ov71Cam *cam);
-void ov71_02247498(Ov71CamSet *set);
+void TradeSequence_FreeModel(Ov71Cam *cam);
+void TradeSequence_GetModelPosition(Ov71Cam *cam, Ov71Vec3 *dst);
+void TradeSequence_SetModelPosition(Ov71Cam *cam, const Ov71Vec3 *src);
+void TradeSequence_GetModelRotation(Ov71Cam *cam, Ov71S16Vec3 *dst);
+void TradeSequence_SetModelRotation(Ov71Cam *cam, const Ov71S16Vec3 *src);
+void TradeSequence_SetModelVisible(Ov71Cam *cam, void *value);
+void TradeSequence_SetModelScale(Ov71Cam2 *cam, u32 value);
+void TradeSequence_GetCameraPos(Ov71Cam *cam, Ov71Vec3 *dst);
+void TradeSequence_SetCameraAngle(Ov71Cam *cam, void *arg0);
+void TradeSequence_AdjustCameraAngle(Ov71Cam *cam, void *arg0);
+void TradeSequence_SetCameraPerspectiveType(Ov71Cam *cam, void *arg0);
+void TradeSequence_SetCameraPerspectiveAngle(Ov71Cam *cam, void *arg0);
+void TradeSequence_FreeCamera(Ov71Cam *cam);
+void TradeSequence_DestroyModels(Ov71CamSet *set);
 BOOL ov71_02247990(Ov71Sub2 *w, u32 *state);
 BOOL ov71_022483AC(Ov71D4 *w, u32 *state);
 extern void *ov71_0224BC64[4];
@@ -97,7 +97,7 @@ extern BOOL ov71_0224ADE4(Ov71Sub2 *w);
 extern void *ov71_0224BDE8[2];
 extern void *ov71_0224BE7C[2];
 
-void ov71_02247708(Ov71Cam *cam, u32 value);
+void TradeSequence_SetModelAlpha(Ov71Cam *cam, u32 value);
 BOOL ov71_02247C34(Ov71Spr *w, const u32 *state);
 void ov71_022483E4(Ov71D4 *w);
 void ov71_022489F8(Ov71D4 *w);
@@ -163,6 +163,6 @@ void ov71_0224A0B8(void *bgConfig, u32 y, u32 x);
 
 void ov71_0224A500(Ov71Scene *sc) {
     if (sc->unk_28 != NULL) {
-        ov71_02247498((Ov71CamSet *)sc->unk_28);
+        TradeSequence_DestroyModels((Ov71CamSet *)sc->unk_28);
     }
 }

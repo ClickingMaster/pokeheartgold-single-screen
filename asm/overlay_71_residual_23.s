@@ -630,28 +630,28 @@
 	.public TradeSequence_ResetDeferredFrees
 	.public TradeSequence_FlushDeferredFrees
 	.public TradeSequence_DeferFree
-	.public ov71_0224744C
-	.public ov71_02247498
-	.public ov71_022474CC
-	.public ov71_02247514
-	.public ov71_022475C4
-	.public ov71_022475F8
-	.public ov71_02247610
-	.public ov71_022476B4
-	.public ov71_022476C4
-	.public ov71_022476D4
-	.public ov71_022476EC
-	.public ov71_02247704
-	.public ov71_02247708
-	.public ov71_02247730
-	.public ov71_02247738
-	.public ov71_022477EC
-	.public ov71_0224780C
-	.public ov71_0224781C
-	.public ov71_0224782C
-	.public ov71_0224783C
-	.public ov71_0224784C
-	.public ov71_022478B8
+	.public TradeSequence_CreateModels
+	.public TradeSequence_DestroyModels
+	.public TradeSequence_DrawModels
+	.public TradeSequence_DrawModel
+	.public TradeSequence_InitModel
+	.public TradeSequence_FreeModel
+	.public TradeSequence_LoadModel
+	.public TradeSequence_GetModelPosition
+	.public TradeSequence_SetModelPosition
+	.public TradeSequence_GetModelRotation
+	.public TradeSequence_SetModelRotation
+	.public TradeSequence_SetModelVisible
+	.public TradeSequence_SetModelAlpha
+	.public TradeSequence_SetModelScale
+	.public TradeSequence_IsModelInView
+	.public TradeSequence_GetCameraPos
+	.public TradeSequence_SetCameraAngle
+	.public TradeSequence_AdjustCameraAngle
+	.public TradeSequence_SetCameraPerspectiveType
+	.public TradeSequence_SetCameraPerspectiveAngle
+	.public TradeSequence_InitCamera
+	.public TradeSequence_FreeCamera
 	.public ov71_022478C8
 	.public ov71_02247924
 	.public ov71_02247990
@@ -879,19 +879,19 @@
 	.public TradeSequence_ResetDeferredFrees
 	.public TradeSequence_FlushDeferredFrees
 	.public TradeSequence_DeferFree
-	.public ov71_022475F8
-	.public ov71_022476B4
-	.public ov71_022476C4
-	.public ov71_022476D4
-	.public ov71_022476EC
-	.public ov71_02247704
-	.public ov71_02247730
-	.public ov71_022477EC
-	.public ov71_0224780C
-	.public ov71_0224781C
-	.public ov71_0224782C
-	.public ov71_0224783C
-	.public ov71_022478B8
+	.public TradeSequence_FreeModel
+	.public TradeSequence_GetModelPosition
+	.public TradeSequence_SetModelPosition
+	.public TradeSequence_GetModelRotation
+	.public TradeSequence_SetModelRotation
+	.public TradeSequence_SetModelVisible
+	.public TradeSequence_SetModelScale
+	.public TradeSequence_GetCameraPos
+	.public TradeSequence_SetCameraAngle
+	.public TradeSequence_AdjustCameraAngle
+	.public TradeSequence_SetCameraPerspectiveType
+	.public TradeSequence_SetCameraPerspectiveAngle
+	.public TradeSequence_FreeCamera
 	.public ov71_02247990
 	.public ov71_02247C34
 	.public ov71_0224809C
@@ -970,10 +970,10 @@ ov71_0224926C: ; 0x0224926C
 	strh r1, [r0]
 	ldr r0, [r4, #4]
 	mov r1, #1
-	bl ov71_0224782C
+	bl TradeSequence_SetCameraPerspectiveType
 	ldr r0, [r4, #4]
 	add r1, sp, #0
-	bl ov71_0224780C
+	bl TradeSequence_SetCameraAngle
 	ldr r1, _022492F4 ; =0x000058CC
 	mov r0, #2
 	lsl r0, r0, #0x12
@@ -1006,10 +1006,10 @@ ov71_0224926C: ; 0x0224926C
 	mov r1, #2
 	ldr r0, [r4]
 	lsl r1, r1, #0xc
-	bl ov71_02247730
+	bl TradeSequence_SetModelScale
 	ldr r0, [r4]
 	mov r1, #1
-	bl ov71_02247704
+	bl TradeSequence_SetModelVisible
 	ldr r1, _022492F8 ; =ov71_022492FC
 	add r0, r5, #0
 	bl SysTask_SetFunc
@@ -1057,11 +1057,11 @@ _0224933C:
 	add r1, r4, #0
 	ldr r0, [r4]
 	add r1, #0x14
-	bl ov71_022476C4
+	bl TradeSequence_SetModelPosition
 	ldr r0, [r4]
 	add r4, #0x20
 	add r1, r4, #0
-	bl ov71_022476EC
+	bl TradeSequence_SetModelRotation
 	pop {r3, r4, r5, pc}
 	nop
 _02249354: .word ov71_02249358
@@ -1104,11 +1104,11 @@ _0224939A:
 	add r1, r4, #0
 	ldr r0, [r4]
 	add r1, #0x14
-	bl ov71_022476C4
+	bl TradeSequence_SetModelPosition
 	ldr r0, [r4]
 	add r4, #0x20
 	add r1, r4, #0
-	bl ov71_022476EC
+	bl TradeSequence_SetModelRotation
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 _022493B0: .word 0xFFFC5800
@@ -1152,11 +1152,11 @@ _022493F8:
 	add r1, r4, #0
 	ldr r0, [r4]
 	add r1, #0x14
-	bl ov71_022476C4
+	bl TradeSequence_SetModelPosition
 	ldr r0, [r4]
 	add r4, #0x20
 	add r1, r4, #0
-	bl ov71_022476EC
+	bl TradeSequence_SetModelRotation
 	pop {r3, r4, r5, pc}
 	nop
 _02249410: .word ov71_02249414
@@ -1192,11 +1192,11 @@ _02249446:
 	add r1, r4, #0
 	ldr r0, [r4]
 	add r1, #0x14
-	bl ov71_022476C4
+	bl TradeSequence_SetModelPosition
 	ldr r0, [r4]
 	add r4, #0x20
 	add r1, r4, #0
-	bl ov71_022476EC
+	bl TradeSequence_SetModelRotation
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 _0224945C: .word ov71_02249460
@@ -1220,13 +1220,13 @@ ov71_02249460: ; 0x02249460
 	add r1, r4, #0
 	ldr r0, [r4]
 	add r1, #0x14
-	bl ov71_022476C4
+	bl TradeSequence_SetModelPosition
 	add r1, r4, #0
 	ldr r0, [r4]
 	add r1, #0x20
-	bl ov71_022476EC
+	bl TradeSequence_SetModelRotation
 	ldr r0, [r4]
-	bl ov71_02247738
+	bl TradeSequence_IsModelInView
 	cmp r0, #0
 	bne _0224949C
 	mov r0, #1

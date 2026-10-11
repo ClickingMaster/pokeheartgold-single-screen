@@ -27,11 +27,19 @@ typedef struct FrontierMapObjectTemplate {
 } FrontierMapObjectTemplate;
 
 // One of the 32 map objects kept in the frontier app's work (survives a map rebuild)
+// Scripted movement of a map object (type 0: none)
+typedef struct FrontierMapObjectMovement {
+    u8 type;
+    u8 state;
+    s16 data[7];
+} FrontierMapObjectMovement;
+
 typedef struct FrontierMapObject {
     UnkStruct_ov42_02228110 *object;
     UnkStruct_ov42_0222903C *objectSprite;
     FrontierMapObjectTemplate template;
-    u8 unk_26[0x12];
+    FrontierMapObjectMovement movement;
+    u8 unk_36[2];
     void *unk_38;
 } FrontierMapObject;
 
@@ -136,5 +144,26 @@ void FrontierMap_GetCameraPos(FrontierMap *map, u16 *x, u16 *y);
 void FrontierMapObject_GetTemplate(FrontierMapObject *object, u16 *dest);
 void FrontierMap_SetObject(void *frontier, u32 index, UnkStruct_ov42_02228110 *object, UnkStruct_ov42_0222903C *objectSprite, const FrontierMapObjectTemplate *template);
 FrontierMapObject *FrontierMap_FindObject(void *frontier, u32 id);
+
+typedef struct FrontierMapTileBlink FrontierMapTileBlink;
+typedef struct FrontierMapBgAnim FrontierMapBgAnim;
+
+FrontierMapTileBlink *FrontierMapTileBlink_Create(BgConfig *bgConfig);
+void FrontierMapTileBlink_Free(FrontierMapTileBlink *blink);
+u32 ov80_022385D8(u32 value);
+u32 ov80_02238610(u32 value);
+
+void FrontierMapSprite_LoadResources(SpriteSystem *spriteSystem, SpriteManager *spriteManager, NARC *narc, PaletteData *paletteData, u16 kind);
+void FrontierMapSprite_UnloadResources(SpriteManager *spriteManager, u32 kind);
+ManagedSprite *FrontierMapSprite_Create(SpriteSystem *spriteSystem, SpriteManager *spriteManager, u32 kind);
+void FrontierMapSprite_Delete(ManagedSprite *sprite);
+
+void FrontierMap_SetObjectMovement(void *frontier, u32 id, u32 type, const s16 *params, s32 count);
+void FrontierMap_RunObjectMovement(void *frontier, FrontierMapObject *object);
+void FrontierMap_RunObjectMovements(void *frontier);
+BOOL FrontierMapMovement_LookAround(void *frontier, FrontierMapObject *object);
+
+FrontierMapBgAnim *FrontierMapBgAnim_Create(BgConfig *bgConfig, PaletteData *paletteData);
+void FrontierMapBgAnim_Free(FrontierMapBgAnim *anim);
 
 #endif

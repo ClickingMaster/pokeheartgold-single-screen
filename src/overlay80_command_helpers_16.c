@@ -73,7 +73,7 @@ void ov80_0222E328(void *p, int n, void *out);
 
 int FrtCmd_083(void *c) {
     u16 v = FrontierScript_ReadVar(c);
-    ov80_02239BF0(APP(c), v, 0, 0, 0);
+    FrontierMap_SetObjectMovement(APP(c), v, 0, 0, 0);
     return 0;
 }
 

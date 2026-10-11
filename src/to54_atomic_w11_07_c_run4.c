@@ -81,9 +81,9 @@ void ov07_0222B898(SysTask *task, void *data) {
                 if (!work->same) {
                     BattleAnimSystem_BuildBattlerPicParams(work->prefix.owner, temp, 3);
                     if (work->index == 2) {
-                        ov07_0223494C(temp, BattleAnimSystem_GetHeapID(work->prefix.owner));
+                        BattleAnimUtil_RestorePic(temp, BattleAnimSystem_GetHeapID(work->prefix.owner));
                     } else {
-                        ov07_0223475C(temp, BattleAnimSystem_GetHeapID(work->prefix.owner));
+                        BattleAnimUtil_LoadMonIntoPicOppositeFacing(temp, BattleAnimSystem_GetHeapID(work->prefix.owner));
                     }
                 }
                 work->prefix.state[0] = 0;

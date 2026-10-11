@@ -13,11 +13,11 @@ void ov12_0225FF80(SysTask *, void *); void ov12_0226037C(SysTask *, void *);
 void ov12_02260584(SysTask *, void *); void ov12_022609F8(SysTask *, void *);
 void ov12_02260B30(SysTask *, void *); void ov12_02260D84(SysTask *, void *);
 void ov12_02261CA8(BattleSystem *, void *, void *, int);
-void ov07_0223494C(void *, int); void ov07_02234A20(void *, int);
+void BattleAnimUtil_RestorePic(void *, int); void ov07_02234A20(void *, int);
 void ov12_0225A9B0(BattleSystem *, void *); void ov12_0225ABE8(BattleSystem *, void *);
 void ov12_0225AEA0(BattleSystem *, void *); void ov12_0225B028(BattleSystem *, void *, void *);
 void ov12_0225B060(BattleSystem *, void *, void *); void ov12_0225B200(BattleSystem *, void *, void *);
 void ov12_0225B3A0(BattleSystem *, void *, void *); void ov12_0225B434(BattleSystem *, void *, void *);
 void ov12_0225B454(BattleSystem *, void *, void *);
 
-void ov12_0225B200(BattleSystem *b, void *c, void *m) { u8 w[80]; ov12_02261CA8(b,m,w,U8(c,0x194)); ov07_0223494C(w,5); BattleController_EmitCommandComplete(b,U8(c,0x194),U8(m,0)); }
+void ov12_0225B200(BattleSystem *b, void *c, void *m) { u8 w[80]; ov12_02261CA8(b,m,w,U8(c,0x194)); BattleAnimUtil_RestorePic(w,5); BattleController_EmitCommandComplete(b,U8(c,0x194),U8(m,0)); }

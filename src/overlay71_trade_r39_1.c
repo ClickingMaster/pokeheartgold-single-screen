@@ -17,7 +17,7 @@ BOOL ov71_02247DEC(Ov71TradeWorkR39 *work, u32 *state) {
         break;
     case 2:
         if (!Sprite_IsAnimated(work->sprite1)) {
-            ov71_02247704(work->camera, 1);
+            TradeSequence_SetModelVisible(work->camera, 1);
             ov71_022480C0(work, 0x10, 0, 0x10);
             ov71_0224817C(work);
             (*state)++;

@@ -36,7 +36,7 @@ void ov12_0225FD14(SysTask *task, W20TaskLarge *work) {
         return;
     case 2:
         ov12_02261CA8(work->battleSystem, &work->source, &params2, work->battlerId);
-        ov07_0223494C(&params2, 5);
+        BattleAnimUtil_RestorePic(&params2, 5);
         battlerId = work->battlerId;
         BattleController_InitMoveAnimData(work->battleSystem, NULL, &source2, 1, 16, battlerId, battlerId, 0);
         ov12_02261B80(work->battleSystem, work->context, work->object, &source2);

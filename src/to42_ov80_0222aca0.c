@@ -59,7 +59,7 @@ void ov80_0222ADDC(void *unused, void **dest) {
 }
 
 void ov80_0222ADE8(void **args, void **dest) {
-    *dest = ov80_02239D74(args[0], args[1]);
+    *dest = FrontierMapBgAnim_Create(args[0], args[1]);
     SetBgPriority(0, 1);
     SetBgPriority(2, 2);
     SetBgPriority(3, 3);
@@ -67,7 +67,7 @@ void ov80_0222ADE8(void **args, void **dest) {
 }
 
 void ov80_0222AE1C(void *unused, void **dest) {
-    ov80_02239DB8(*dest);
+    FrontierMapBgAnim_Free(*dest);
 }
 void ov80_0222AE28(void) {
 }
@@ -101,11 +101,11 @@ void ov80_0222AE9C(void) {
 }
 
 void ov80_0222AEA0(void **args, void **dest) {
-    *dest = ov80_022384D8(args[0]);
+    *dest = FrontierMapTileBlink_Create(args[0]);
 }
 
 void ov80_0222AEB0(void *unused, void **dest) {
-    ov80_022385B0(*dest);
+    FrontierMapTileBlink_Free(*dest);
 }
 
 void ov80_0222AEBC(void) {

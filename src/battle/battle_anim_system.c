@@ -696,9 +696,9 @@ void BattleAnimScriptCmd_ChangeBattlerPic(BattleAnimSystem *system) {
     if (mode == 2) {
         ov07_02234A20(&params, system->heapId);
     } else if (mode == 3) {
-        ov07_0223475C(&params, system->heapId);
+        BattleAnimUtil_LoadMonIntoPicOppositeFacing(&params, system->heapId);
     } else {
-        ov07_0223474C(&params, system->heapId);
+        BattleAnimUtil_LoadMonIntoPicSameFacing(&params, system->heapId);
     }
 }
 
@@ -709,7 +709,7 @@ void BattleAnimScriptCmd_RestoreBattlerPic(BattleAnimSystem *system) {
     mode = *system->scriptPtr;
     system->scriptPtr++;
     BattleAnimSystem_BuildBattlerPicParams(system, &params, mode);
-    ov07_0223494C(&params, system->heapId);
+    BattleAnimUtil_RestorePic(&params, system->heapId);
 }
 
 void BattleAnimScriptCmd_BeginLoop(BattleAnimSystem *system) {

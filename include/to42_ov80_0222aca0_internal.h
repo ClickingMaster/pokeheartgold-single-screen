@@ -21,10 +21,10 @@ void *Heap_Alloc(u32 heapId, u32 size);
 void Heap_Free(void *ptr);
 void SetBgPriority(u32 bg, u32 priority);
 void GfGfx_EngineATogglePlanes(u32 plane, u32 enable);
-void *ov80_02239D74(void *, void *);
-void ov80_02239DB8(void *);
-void *ov80_022384D8(void *);
-void ov80_022385B0(void *);
+void *FrontierMapBgAnim_Create(void *, void *);
+void FrontierMapBgAnim_Free(void *);
+void *FrontierMapTileBlink_Create(void *);
+void FrontierMapTileBlink_Free(void *);
 
 u32 ov80_0222ACA0(u32 index, u32 field);
 void ov80_0222AD9C(void *a, void *b, u32 index);

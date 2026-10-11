@@ -168,7 +168,7 @@
 .public ov80_02239960
 .public ov80_02239980
 .public ov80_02239A38
-.public ov80_02239AF8
-.public ov80_02239B7C
-.public ov80_02239BB8
-.public ov80_02239BE8
+.public FrontierMapSprite_LoadResources
+.public FrontierMapSprite_UnloadResources
+.public FrontierMapSprite_Create
+.public FrontierMapSprite_Delete

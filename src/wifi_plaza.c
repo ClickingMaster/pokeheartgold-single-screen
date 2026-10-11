@@ -125,9 +125,9 @@ void WiFiPlazaWork_Delete(WiFiPlazaWork *work) {
     int i;
     void *x;
     ov45_0222AB0C(&work->profile.player, &vals);
-    x = sub_020318E8(work->save);
-    sub_020318FC(x, vals.unk_00);
-    sub_02031900(x, vals.unk_04);
+    x = Save_PlazaSurvey_Get(work->save);
+    PlazaSurvey_SetSurveyId(x, vals.unk_00);
+    PlazaSurvey_SetAnswer(x, vals.unk_04);
     ov45_0222BCD8(&work->unk_508);
     WiFiPlazaWordSet_Free(work->wordSet);
     ov45_0222EE80();

@@ -39,7 +39,7 @@ void BattleController_InitMoveAnimData(BattleSystem *, void *, void *, int, int,
 void ov12_02261B80(BattleSystem *, void *, void *, void *);
 void ov12_02261CA8(BattleSystem *, void *, void *, int);
 void ov07_02234A20(void *, int);
-void ov07_0223494C(void *, int);
+void BattleAnimUtil_RestorePic(void *, int);
 BOOL BattleAnimSystem_IsActive(void *);
 void BattleAnimSystem_EndMove(void *);
 void BattleAnimSystem_Execute(void);

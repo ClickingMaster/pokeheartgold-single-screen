@@ -20,16 +20,16 @@ extern void Heap_Free(void *);
 extern void GF_AssertFail(void);
 extern int ParticleSystem_GetActiveEmitterCount(void *);
 extern void BattleAnimSystem_FreeParticleSystem(void *);
-extern void ov07_02233EB8(void *, int);
-extern int ov07_02233EBC(void *, int);
-extern int ov07_022335B4(void *);
+extern void UnkBallData_SetCaptureState(void *, int);
+extern int UnkBallData_IsCaptureState(void *, int);
+extern int UnkBallData_RunThrowArc(void *);
 extern void *BattleAnimSystem_GetDefender(void *); extern void *BattleAnimSystem_GetBattlerPokepic(void*,void*); extern int Pokepic_GetAttr(void*,int);
 extern int ov07_02222004(void*,void*); extern int ov07_0222202C(void*,void*); extern void BattleAnimSystem_CreateTaskDefaultPriority(void*,void*,void*);
 extern void ManagedSprite_SetOamMode(void*,int); extern void ManagedSprite_SetDrawPriority(void*,int); extern void ManagedSprite_SetPriority(void*,int);
 extern int ManagedSprite_GetPaletteOverrideOffset(void*); extern int ov07_0221FAF8(void*,int); extern int Pokepic_IsActive(void*);
 extern int BattleAnimSystem_GetSpriteSystem(void*); extern int BattleAnimSystem_GetBattlerSpriteManager(void*); extern int ov07_0221C528(void*); extern int BattleAnimSystem_GetBgConfig(void*); extern int BattleAnimSystem_GetPaletteData(void*);
 extern void ParticleSystem_CreateEmitterWithParam(void*,int,void*,void*); extern void ParticleSystem_SetPerspectiveType(void*,int); extern void SysTask_Destroy(void*);
-extern void BattleAnimSystem_InitBlend(void*); extern void ov07_02232AFC(void*,void*); extern void *SysTask_CreateOnMainQueue(void*,void*,int); extern void ov07_02232A5C(void*,void*);
+extern void BattleAnimSystem_InitBlend(void*); extern void BallSealEffect_Emit(void*,void*); extern void *SysTask_CreateOnMainQueue(void*,void*,int); extern void BallSealEffect_WaitTask(void*,void*);
 extern void ov07_02230BF8(void);
 void *BattleAnimUtil_AllocWork(void *, int);
 
@@ -37,12 +37,12 @@ void *BattleAnimUtil_AllocWork(void *, int);
 
 #define BIGWRAP(n,fn) void n(void *p,int q,int x){int z=BattleAnimSystem_GetCurrentParticleSystem(p);int d=ParticleSystem_GetPerspectiveType();int a=BattleAnimUtil_GetBattlerType(p,q);int b=ov07_0221BFC0(p); fn(a,x,b,d);}
 
-extern const u32 ov07_0223738C[][2]; extern const u32 ov07_02237390[][2]; extern const u32 ov07_0223746C[][3]; extern const u32 ov07_02237470[][3]; extern const u32 ov07_02237474[][3]; extern const u32 ov07_022375BC[][4];
+extern const u32 ov07_0223738C[][2]; extern const u32 ov07_02237390[][2]; extern const u32 ov07_0223746C[][3]; extern const u32 ov07_02237470[][3]; extern const u32 ov07_02237474[][3]; extern const u32 sBallSpriteResources[][4];
 
-#define STEP(n,a,b) int n(u8 *p){int *state=(int*)(p+4);if(*state==0){(*state)++;ov07_02233EB8(p,a);}if(ov07_02233EBC(p,b)==1)return 0;return 1;}
+#define STEP(n,a,b) int n(u8 *p){int *state=(int*)(p+4);if(*state==0){(*state)++;UnkBallData_SetCaptureState(p,a);}if(UnkBallData_IsCaptureState(p,b)==1)return 0;return 1;}
 
-extern Fn ov07_022371B8[]; extern Fn ov07_0223729C[];
+extern Fn sUnkBallDataBallAnimFuncs[]; extern Fn sUnkBallDataCaptureStateFuncs[];
 #define RET1(n) int n(void){return 1;}
-#define SETRET(n,v) int n(u8*p){ov07_02232F74(p,v);return 1;}
+#define SETRET(n,v) int n(u8*p){UnkBallData_GoToCaptureState(p,v);return 1;}
 
 void ov07_02230D1C(u8 *p){u8 *q=BattleAnimUtil_AllocWork(p,0x60);void *x;*(void**)q=p;x=BattleAnimSystem_GetDefender(p);*(void**)(q+0x10)=BattleAnimSystem_GetBattlerPokepic(p,x);*(u16*)(q+0x14)=Pokepic_GetAttr(*(void**)(q+0x10),0);*(u16*)(q+0x16)=Pokepic_GetAttr(*(void**)(q+0x10),1);*(int*)(q+8)=ov07_02222004(p,x);*(int*)(q+0xc)=ov07_0222202C(p,x);BattleAnimSystem_CreateTaskDefaultPriority(*(void**)q,ov07_02230BF8,q);}

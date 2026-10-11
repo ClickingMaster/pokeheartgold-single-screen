@@ -6,7 +6,7 @@ extern void ov71_0224A3F0(void *work);
 extern void ov71_0224A510(void *work);
 extern BOOL Sprite_IsAnimated(Sprite *sprite);
 extern void ov71_0224A5C4(void *work, void *sub);
-extern void ov71_02247704(void *camera, int value);
+extern void TradeSequence_SetModelVisible(void *camera, int value);
 extern BOOL ov71_0224A684(void *sub);
 extern void PlaySE(int seqNo);
 extern void BeginNormalPaletteFade(int, int, int, int, int, int, int);
@@ -35,7 +35,7 @@ BOOL ov71_0224A1C4(void *work, u32 *state) {
         if (!Sprite_IsAnimated(*(Sprite **)(p + 0x20))) {
             PlaySE(0x6AA);
             ov71_0224A5C4(work, p + 0x34);
-            ov71_02247704(*(void **)(p + 0x2C), 1);
+            TradeSequence_SetModelVisible(*(void **)(p + 0x2C), 1);
             (*state)++;
         }
         break;

@@ -54,7 +54,7 @@ enum GlobalTerminalConnectState {
     GTC_STATE_DISCONNECT,
 };
 
-// view of UnkStruct_020192D0 (include/overlay_app_manager_internal.h defines a file-scope static, so it is not included)
+// view of GlobalTerminalApp (include/overlay_app_manager_internal.h defines a file-scope static, so it is not included)
 typedef struct GlobalTerminalConnectArgs {
     UnkStruct_0203FC14 *launchArgs; // 0x00
     BOOL disconnect;                // 0x04, second run after the VS Recorder: only disconnect

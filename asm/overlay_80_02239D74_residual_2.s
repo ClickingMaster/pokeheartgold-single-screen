@@ -1,21 +1,21 @@
 	.include "asm/macros.inc"
 	.include "overlay_80_02239D74.inc"
 	.include "global.inc"
-	.public ov80_02239DD0
-	.public ov80_02239ED8
+	.public FrontierMapBgAnim_CreateTileAnim
+	.public FrontierMapBgAnim_TileTask
 	.public ov80_0223DB2C
 
 
     .text
-	.public ov80_02239D74
-	.public ov80_02239DB8
-	.public ov80_02239EC4
-	.public ov80_02239F48
-	.public ov80_02239F94
-	.public ov80_02239FA8
+	.public FrontierMapBgAnim_Create
+	.public FrontierMapBgAnim_Free
+	.public FrontierMapBgAnim_DestroyTileAnim
+	.public FrontierMapBgAnim_CreatePaletteAnim
+	.public FrontierMapBgAnim_DestroyPaletteAnim
+	.public FrontierMapBgAnim_PaletteTask
 
-	thumb_func_start ov80_02239ED8
-ov80_02239ED8: ; 0x02239ED8
+	thumb_func_start FrontierMapBgAnim_TileTask
+FrontierMapBgAnim_TileTask: ; 0x02239ED8
 	push {r3, r4, lr}
 	sub sp, #4
 	ldr r3, _02239F3C ; =0x00022008
@@ -67,4 +67,4 @@ _02239EEE:
 _02239F3C: .word 0x00022008
 _02239F40: .word 0x00002008
 _02239F44: .word 0x00022009
-	thumb_func_end ov80_02239ED8
+	thumb_func_end FrontierMapBgAnim_TileTask

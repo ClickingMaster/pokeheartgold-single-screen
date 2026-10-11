@@ -7,5 +7,5 @@
 .public ov42_022299C0
 .public ov80_0222EFD0
 .public FrontierMap_FindObject
-.public ov80_02239BF0
-.public ov80_02239C54
+.public FrontierMap_SetObjectMovement
+.public FrontierMap_RunObjectMovements

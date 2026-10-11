@@ -13,7 +13,7 @@ extern u16 FrontierScript_ReadVar(void *);
 extern void *Heap_Alloc(u32, u32);
 extern void Heap_Free(void *);
 extern void GF_AssertFail(void);
-extern void ov80_02239BF0(void *, u16, u32, u16 *, u32);
+extern void FrontierMap_SetObjectMovement(void *, u16, u32, u16 *, u32);
 BOOL ov80_0222CA94(void *);
 void ov80_0222CAD0(void *, int, int);
 #endif

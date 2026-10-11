@@ -106,9 +106,9 @@
 .public PlayerProfile_New
 .public Options_GetTextFrameDelay
 .public Options_GetFrame
-.public sub_020318E8
-.public sub_020318F4
-.public sub_020318F8
+.public Save_PlazaSurvey_Get
+.public PlazaSurvey_GetSurveyId
+.public PlazaSurvey_GetAnswer
 .public WirelessStatusIcon_Create
 .public NNS_G2dInitOamManagerModule
 .public memset

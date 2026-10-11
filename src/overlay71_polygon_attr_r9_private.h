@@ -9,5 +9,5 @@ typedef struct Ov71CamR9 {
     u8 pad60[0x88 - 0x60];
     u32 polygonId;
 } Ov71CamR9;
-void ov71_02247708(Ov71CamR9 *cam, u32 value);
+void TradeSequence_SetModelAlpha(Ov71CamR9 *cam, u32 value);
 #endif

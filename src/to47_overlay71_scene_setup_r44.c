@@ -29,7 +29,7 @@ void ov71_0224B198(void *work)
         String_Delete(PTR_AT(work, 0x6c));
         String_Delete(PTR_AT(work, 0x70));
         if (PTR_AT(work, 0x74) != NULL) {
-            ov71_02247498(PTR_AT(work, 0x74));
+            TradeSequence_DestroyModels(PTR_AT(work, 0x74));
         }
         FreeBgTilemapBuffer(PTR_AT(work, 0x58), 1);
         RemoveWindow((u8 *)work + 0x5c);
@@ -68,7 +68,7 @@ void ov71_0224B234(void *work)
     value = 1;
     NNS_G3dGeBufferOP_N(0x12, &value, 1);
     if (PTR_AT(work, 0x74) != NULL) {
-        ov71_022474CC(PTR_AT(work, 0x74));
+        TradeSequence_DrawModels(PTR_AT(work, 0x74));
     }
     RequestSwap3DBuffers(0, 0);
 }
@@ -98,12 +98,12 @@ BOOL ov71_0224B280(void *work)
     GfGfxLoader_LoadScrnData(0x59, 0x15, PTR_AT(work, 0x58), 2, 0, 0, 1, 0x39);
     GfGfxLoader_GXLoadPal(0x59, 0x17, 0, 0, 0x20, 0x39);
     ov71_0224B720(work);
-    PTR_AT(work, 0x74) = ov71_0224744C(1, 0, 0, 0);
+    PTR_AT(work, 0x74) = TradeSequence_CreateModels(1, 0, 0, 0);
     PTR_AT(work, 0x14) = ov71_0224B7EC(work);
     Pokepic_SetAttr(PTR_AT(work, 0x14), 6, 1);
-    PTR_AT(work, 0x78) = ov71_02247610(PTR_AT(work, 0x74), 0, 0x59, 0x1b, 0, 0x13000, 0x78000, 0);
+    PTR_AT(work, 0x78) = TradeSequence_LoadModel(PTR_AT(work, 0x74), 0, 0x59, 0x1b, 0, 0x13000, 0x78000, 0);
     rotation = ov71_0224BF7C;
-    ov71_022476EC(PTR_AT(work, 0x78), &rotation);
+    TradeSequence_SetModelRotation(PTR_AT(work, 0x78), &rotation);
     ov71_0224B848(work);
     GfGfx_EngineATogglePlanes(0x10, 1);
     GfGfx_EngineBTogglePlanes(0x10, 1);

@@ -326,9 +326,9 @@
 .public ov80_02239A1C
 .public ov80_02239A60
 .public ov80_02239A74
-.public ov80_02239AF8
-.public ov80_02239B7C
-.public ov80_02239BF0
+.public FrontierMapSprite_LoadResources
+.public FrontierMapSprite_UnloadResources
+.public FrontierMap_SetObjectMovement
 .public ov80_0223A00C
 .public ov80_0223AC24
 .public ov80_0223AF30

@@ -17,5 +17,5 @@
 .public MIi_CpuCopy16
 .public MIi_CpuCopy32
 .public MI_CpuFill8
-.public ov80_02239D74
-.public ov80_02239DB8
+.public FrontierMapBgAnim_Create
+.public FrontierMapBgAnim_Free

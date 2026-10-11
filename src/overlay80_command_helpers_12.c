@@ -74,7 +74,7 @@ void ov80_0222E328(void *p, int n, void *out);
 int FrtCmd_043(void *c) {
     void *p = sub_0209680C(APP(c));
     u16 v = FrontierScript_ReadVar(c);
-    ov80_02239B7C(PTR(p, 0x38), v);
+    FrontierMapSprite_UnloadResources(PTR(p, 0x38), v);
     FrontierMap_RemoveLoadedResource(p, v);
     return 0;
 }

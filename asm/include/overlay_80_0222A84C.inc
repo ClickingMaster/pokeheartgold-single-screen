@@ -26,7 +26,7 @@
 .public FrontierScriptContext_Run
 .public FrontierScriptContext_ReadWord
 .public ov80_0222ACA0
-.public ov80_02239C54
+.public FrontierMap_RunObjectMovements
 .public ov80_0223B9CC
 .public gFrontierCommandTable
 .public ov80_0223B9CC

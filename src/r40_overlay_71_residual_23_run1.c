@@ -5,8 +5,8 @@
 
 #define DRAW(p)                                     \
     do {                                            \
-        ov71_022476C4(PTR(p, 0), (u8 *)(p) + 0x14); \
-        ov71_022476EC(PTR(p, 0), (u8 *)(p) + 0x20); \
+        TradeSequence_SetModelPosition(PTR(p, 0), (u8 *)(p) + 0x14); \
+        TradeSequence_SetModelRotation(PTR(p, 0), (u8 *)(p) + 0x20); \
     } while (0)
 
 void ov71_0224926C(void *task) {
@@ -16,8 +16,8 @@ void ov71_0224926C(void *task) {
     v[2] = 0;
     v[1] = v[2];
     v[0] = v[1];
-    ov71_0224782C(PTR(p, 4), 1);
-    ov71_0224780C(PTR(p, 4), v);
+    TradeSequence_SetCameraPerspectiveType(PTR(p, 4), 1);
+    TradeSequence_SetCameraAngle(PTR(p, 4), v);
     U32(p, 0x2C) = 0x58CC;
     U32(p, 0x28) = U32(p, 0x2C) - 0x80000;
     U32(p, 0x80) = 20;
@@ -25,8 +25,8 @@ void ov71_0224926C(void *task) {
     ov71_02248FC8(p, 0, 0, 20);
     ov71_02249004(p, 1, -(s16) * (s16 *)((u8 *)p + 0x56), 30);
     ov71_02249004(p, 2, 0x100, 50);
-    ov71_02247730(PTR(p, 0), 0x2000);
-    ov71_02247704(PTR(p, 0), 1);
+    TradeSequence_SetModelScale(PTR(p, 0), 0x2000);
+    TradeSequence_SetModelVisible(PTR(p, 0), 1);
     SysTask_SetFunc(task, ov71_022492FC);
 }
 
@@ -87,7 +87,7 @@ void ov71_02249460(void *task, void *p) {
         U32(p, 0x28) += U32(p, 0x2C);
         U32(p, 0x18) = U32(p, 0x28);
         DRAW(p);
-        if (ov71_02247738(PTR(p, 0)) == 0) {
+        if (TradeSequence_IsModelInView(PTR(p, 0)) == 0) {
             U32(p, 0x78) = 1;
         }
     }

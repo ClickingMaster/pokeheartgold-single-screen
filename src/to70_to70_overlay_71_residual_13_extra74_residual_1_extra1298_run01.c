@@ -12,10 +12,10 @@ typedef struct {u16 a,b,c;} Triple;
 extern const Triple ov71_0224BC5C;
 extern u32 TradeSequence_GetFrameType(void *);
 extern void ov71_02247ED0(void *),ov71_02247FF8(void *);
-extern void *ov71_0224744C(int,int,int,int);
+extern void *TradeSequence_CreateModels(int,int,int,int);
 extern void *ov71_02247F9C(void *);
-extern void *ov71_02247610(void *,int,int,int,int,int,int,int);
-extern void ov71_022476EC(void *,Triple *);
+extern void *TradeSequence_LoadModel(void *,int,int,int,int,int,int,int);
+extern void TradeSequence_SetModelRotation(void *,Triple *);
 extern void WirelessStatusIcon_Create(void),sub_0203A948(int,int);
 int ov71_02247A10(u8 *);
 #define P(x) (*(void **)(p+(x)))
@@ -43,9 +43,9 @@ int ov71_02247A10(u8 *p){
  GfGfxLoader_GXLoadPal((NarcId)0x59,23,(enum GFPalLoadLocation)4,(enum GFPalSlotOffset)0,32,(enum HeapID)0x39);
  BgCommitTilemapBufferToVram(P(0x54),1);
  ov71_02247ED0(p);
- P(0x70)=ov71_0224744C(1,0,0,0);P(0x10)=ov71_02247F9C(p);
- P(0x74)=ov71_02247610(P(0x70),0,0x59,27,0,0x1a800,0x73800,0);
- vec=ov71_0224BC5C;ov71_022476EC(P(0x74),&vec);
+ P(0x70)=TradeSequence_CreateModels(1,0,0,0);P(0x10)=ov71_02247F9C(p);
+ P(0x74)=TradeSequence_LoadModel(P(0x70),0,0x59,27,0,0x1a800,0x73800,0);
+ vec=ov71_0224BC5C;TradeSequence_SetModelRotation(P(0x74),&vec);
  GfGfx_EngineATogglePlanes(16,1);GfGfx_EngineBTogglePlanes(16,1);
  ov71_02247FF8(p);*(volatile u16 *)0x04000050=0;
  WirelessStatusIcon_Create();sub_0203A948(1,0x38);

@@ -32,8 +32,8 @@ extern void PokepicManager_DrawAll(void *manager);
 extern void RequestSwap3DBuffers(u32, u32);
 
 extern void *TradeSequence_GetBgConfig(void *ctx);
-extern void ov71_02247498(void *camera);
-extern void ov71_022474CC(void *camera);
+extern void TradeSequence_DestroyModels(void *camera);
+extern void TradeSequence_DrawModels(void *camera);
 extern void ov71_0224B970(void *work);
 extern void ov71_0224B8EC(void *work);
 extern void ov71_0224BA48(void *task);
@@ -60,11 +60,11 @@ extern void BgCommitTilemapBufferToVram(void *bg, u32 layer);
 extern void GfGfxLoader_LoadCharData(u32 narc, u32 member, void *bg, u32 layer, u32 tileStart, u32 size, u32 compressed, u32 heapId);
 extern void GfGfxLoader_LoadScrnData(u32 narc, u32 member, void *bg, u32 layer, u32 tileStart, u32 size, u32 compressed, u32 heapId);
 extern void ov71_0224B720(void *work);
-extern void *ov71_0224744C(u32, u32, u32, u32);
+extern void *TradeSequence_CreateModels(u32, u32, u32, u32);
 extern void *ov71_0224B7EC(void *work);
 extern void Pokepic_SetAttr(void *pic, u32 attr, u32 value);
-extern void *ov71_02247610(void *camera, u32, u32, u32, u32, u32, u32, u32);
-extern void ov71_022476EC(void *camera, const void *rotation);
+extern void *TradeSequence_LoadModel(void *camera, u32, u32, u32, u32, u32, u32, u32);
+extern void TradeSequence_SetModelRotation(void *camera, const void *rotation);
 extern void ov71_0224B848(void *work);
 extern void BeginNormalPaletteFade(u32, u32, u32, u32, u32, u32, u32);
 

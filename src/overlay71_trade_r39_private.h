@@ -33,7 +33,7 @@ void PlaySE(u16 seqNo);
 void ov71_022480C0(Ov71TradeWorkR39 *work, s32 a1, s32 a2, s32 a3);
 BOOL ov71_02248110(Ov71TradeWorkR39 *work);
 void Pokepic_Delete(Pokepic *pokepic);
-void ov71_02247704(void *camera, s32 value);
+void TradeSequence_SetModelVisible(void *camera, s32 value);
 void ov71_0224817C(Ov71TradeWorkR39 *work);
 s32 ov71_022481D8(Ov71TradeWorkR39 *work);
 BOOL ov71_022481C8(Ov71TradeWorkR39 *work);

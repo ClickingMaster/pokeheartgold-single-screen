@@ -6677,14 +6677,14 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
             } else { // This is a single battle.
                 unkStruct.unk0 = 15;
             }
-            data->ballData = ov07_02233DB8(&unkStruct); // Initializes whatever this is and gets it all ready to go.
+            data->ballData = UnkBallData_New(&unkStruct); // Initializes whatever this is and gets it all ready to go.
             data->state = STATE_GET_POKEMON_CHECK_IF_TRAINER;
             PlaySE(SEQ_SE_DP_THROW);
             data->battleSystem->unk2422++;
             UnkBallData_SetBallAnimation(data->ballData, BALL_ANIM_THROW);
         } else { // CAPTURE_SAFARI
             OpponentData *opponentData = BattleSystem_GetOpponentData(data->battleSystem, BATTLER_PLAYER);
-            if (ov07_02233F20(opponentData->ballData) != 4) { // Checks ballData->unk90.unk8.
+            if (UnkBallData_GetMode(opponentData->ballData) != 4) { // Checks ballData->unk90.unk8.
                 data->ballData = opponentData->ballData;
                 opponentData->ballData = NULL;
                 data->state = STATE_GET_POKEMON_CHECK_IF_TRAINER;
@@ -6696,7 +6696,7 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
         data->tempData[DATA_GET_POKEMON_NEEDS_EXTRA_DISPOSAL_CHECK] = FALSE;
         break;
     case STATE_GET_POKEMON_CHECK_IF_TRAINER:
-        if (!ov07_02232F60(data->ballData, BALL_ANIM_THROW)) { // Likely checking if the current ball animation is still active. The second parameter is unused, as the same data is contained in unk8.
+        if (!UnkBallData_IsBallAnimationPlaying(data->ballData, BALL_ANIM_THROW)) { // Likely checking if the current ball animation is still active. The second parameter is unused, as the same data is contained in unk8.
             if (BattleSystem_GetBattleType(data->battleSystem) & BATTLE_TYPE_TRAINER) {
                 PlaySE_SetPan(SEQ_SE_DP_KON, 0x75);
                 UnkBallData_SetBallAnimation(data->ballData, BALL_ANIM_DEFLECT);
@@ -6724,13 +6724,13 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
         }
         break;
     case STATE_GET_POKEMON_BALL_FALL:
-        if (!ov07_02232F60(data->ballData, BALL_ANIM_OPEN) && Link_QueueNotEmpty(data->ctx)) {
+        if (!UnkBallData_IsBallAnimationPlaying(data->ballData, BALL_ANIM_OPEN) && Link_QueueNotEmpty(data->ctx)) {
             UnkBallData_SetBallAnimation(data->ballData, BALL_ANIM_FALL);
             data->state = STATE_GET_POKEMON_WAIT_FOR_BALL_FALL;
         }
         break;
     case STATE_GET_POKEMON_WAIT_FOR_BALL_FALL:
-        if (!ov07_02232F60(data->ballData, BALL_ANIM_FALL)) {
+        if (!UnkBallData_IsBallAnimationPlaying(data->ballData, BALL_ANIM_FALL)) {
             data->state = STATE_GET_POKEMON_BALL_SHAKE;
         }
         break;
@@ -6749,7 +6749,7 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
         data->tempData[DATA_GET_POKEMON_FRAME_COUNTER] = 12;
         break;
     case STATE_GET_POKEMON_BALL_SHAKE_DECREMENT:
-        if (!ov07_02232F60(data->ballData, BALL_ANIM_SHAKE)) {
+        if (!UnkBallData_IsBallAnimationPlaying(data->ballData, BALL_ANIM_SHAKE)) {
             data->tempData[DATA_GET_POKEMON_FRAME_COUNTER]--;
             if (data->tempData[DATA_GET_POKEMON_FRAME_COUNTER] == 0) { // After 12 frames have passed...
                 data->tempData[DATA_GET_POKEMON_BALL_SHAKE_ANIMATIONS]--;
@@ -6766,7 +6766,7 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
         }
         break;
     case STATE_GET_POKEMON_GOTCHA:
-        if (!ov07_02232F60(data->ballData, BALL_ANIM_CLICK)) {
+        if (!UnkBallData_IsBallAnimationPlaying(data->ballData, BALL_ANIM_CLICK)) {
             BattleMessage msg;
             // "Gotcha! {0} was caught!"
             msg.id = msg_0197_00867;
@@ -6786,7 +6786,7 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
         }
         break;
     case STATE_GET_POKEMON_CHECK_MON_DATA:
-        if (!ov07_02232F60(data->ballData, BALL_ANIM_FADE) && !(data->tempData[DATA_GET_POKEMON_FRAME_COUNTER]--, data->tempData[DATA_GET_POKEMON_FRAME_COUNTER])) {
+        if (!UnkBallData_IsBallAnimationPlaying(data->ballData, BALL_ANIM_FADE) && !(data->tempData[DATA_GET_POKEMON_FRAME_COUNTER]--, data->tempData[DATA_GET_POKEMON_FRAME_COUNTER])) {
             ov12_0223BD8C(data->battleSystem, battlerId);
             Pokemon *mon = BattleSystem_GetPartyMon(data->battleSystem, battlerId, data->ctx->selectedMonIndex[battlerId]); // Get the data of the caught Pokemon.
             if (BattleSystem_GetBattleType(data->battleSystem) & (BATTLE_TYPE_PAL_PARK | BATTLE_TYPE_TUTORIAL)) {           // If this was the Catching Demo or a Pal Park encounter...
@@ -6837,7 +6837,7 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
         break;
     case STATE_GET_POKEMON_POKEDEX_ENTRY:
         if (!PaletteData_GetSelectedBuffersBitmask(paletteData)) {
-            ov07_02233ECC(data->ballData);
+            UnkBallData_Delete(data->ballData);
             PokepicManager_DeleteAllPics(pokepicManager);
             ov12_02237CC4(data->battleSystem);
             ov12_02265FC4(ov12_0223A8F4(data->battleSystem, 0), 0);
@@ -6896,7 +6896,7 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
     case STATE_GET_POKEMON_ALREADY_CAUGHT:
         if (!PaletteData_GetSelectedBuffersBitmask(paletteData)) {
             Pokemon *mon = BattleSystem_GetPartyMon(data->battleSystem, battlerId, data->ctx->selectedMonIndex[battlerId]);
-            ov07_02233ECC(data->ballData);
+            UnkBallData_Delete(data->ballData);
             PokepicManager_DeleteAllPics(pokepicManager);
             ov12_02261294(BattleSystem_GetOpponentData(data->battleSystem, BATTLER_PLAYER), 0);
             ov12_02237CC4(data->battleSystem);
@@ -7059,8 +7059,8 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
         }
         break;
     case STATE_GET_POKEMON_BALL_BLOCKED:
-        if (!ov07_02232F60(data->ballData, BALL_ANIM_DEFLECT)) {
-            ov07_02233ECC(data->ballData);
+        if (!UnkBallData_IsBallAnimationPlaying(data->ballData, BALL_ANIM_DEFLECT)) {
+            UnkBallData_Delete(data->ballData);
             BattleMessage msg;
             // "The Trainer blocked the Ball!"
             msg.id = msg_0197_00859;
@@ -7100,7 +7100,7 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
     case STATE_GET_POKEMON_BREAK_OUT_CLEANUP:
         data->tempData[DATA_GET_POKEMON_FRAME_COUNTER]--;
         if (data->tempData[DATA_GET_POKEMON_FRAME_COUNTER] == 0) { // After 2 frames have passed...
-            ov07_02233ECC(data->ballData);
+            UnkBallData_Delete(data->ballData);
             data->state = STATE_GET_POKEMON_BREAK_OUT_MESSAGE;
         }
         break;
@@ -7128,7 +7128,7 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
     case STATE_GET_POKEMON_DONE_CAUGHT:
         if (PaletteData_GetSelectedBuffersBitmask(paletteData) == 0) {
             if (data->tempData[DATA_GET_POKEMON_NEEDS_EXTRA_DISPOSAL_CHECK]) {
-                ov07_02233ECC(data->ballData);
+                UnkBallData_Delete(data->ballData);
                 PokepicManager_DeleteAllPics(pokepicManager);
             }
             data->battleSystem->battleOutcomeFlag = BATTLE_OUTCOME_MON_CAUGHT;

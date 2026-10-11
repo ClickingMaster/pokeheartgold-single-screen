@@ -11,7 +11,7 @@ typedef struct Ov71R49 {
     s16 target;
     u32 frames;
 } Ov71R49;
-void ov71_022476EC(void *, void *);
+void TradeSequence_SetModelRotation(void *, void *);
 void ov71_0224BA64(Ov71R49 *work);
 void ov71_0224BA64(Ov71R49 *work) {
     if (work->frames != 0) {
@@ -22,5 +22,5 @@ void ov71_0224BA64(Ov71R49 *work) {
         }
     }
     work->base += work->delta;
-    ov71_022476EC(work->object, &work->vector);
+    TradeSequence_SetModelRotation(work->object, &work->vector);
 }

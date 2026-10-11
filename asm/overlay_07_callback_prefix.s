@@ -4,14 +4,14 @@
 
 	.extern _02234B80
 	.extern _02237840
-	.extern ov07_02233EB8
-	.extern ov07_02233EBC
-	.extern ov07_022344B4
-	.extern ov07_022344C0
-	.extern ov07_02234530
-	.extern ov07_0223474C
-	.extern ov07_0223475C
-	.extern ov07_0223494C
+	.extern UnkBallData_SetCaptureState
+	.extern UnkBallData_IsCaptureState
+	.extern UnkBallData_SetRotation
+	.extern UnkBallData_SetAnimateSprite
+	.extern BallSealEffect_GetSealEmitDelay
+	.extern BattleAnimUtil_LoadMonIntoPicSameFacing
+	.extern BattleAnimUtil_LoadMonIntoPicOppositeFacing
+	.extern BattleAnimUtil_RestorePic
 	.extern ov07_02234A20
 	.extern sBattleAnimBgLayers
 	.extern sBattleAnimWeatherMasks
@@ -119,13 +119,13 @@
 	.extern sBattleAnimFlippedCameraUp
 	.extern sBattleAnimBattlerTypePositions
 	.extern sBattleAnimEmitterPositions
-	.extern ov07_0223717C
-	.extern ov07_02237188
-	.extern ov07_022371B8
-	.extern ov07_02237200
-	.extern ov07_02237228
-	.extern ov07_02237254
-	.extern ov07_0223729C
+	.extern sUnkBallDataStaticSpriteKinds
+	.extern sUnkBallDataFlashingKinds
+	.extern sUnkBallDataBallAnimFuncs
+	.extern sUnkBallDataBounceSounds
+	.extern sUnkBallDataSpinningKinds
+	.extern sUnkBallDataShakeOffsets
+	.extern sUnkBallDataCaptureStateFuncs
 	.extern ov07_0223730E
 	.extern ov07_02237310
 	.extern ov07_0223738C
@@ -133,7 +133,7 @@
 	.extern ov07_0223746C
 	.extern ov07_02237470
 	.extern ov07_02237474
-	.extern ov07_022375BC
+	.extern sBallSpriteResources
 	.extern ov07_02237870
 	.extern ov07_0223789C
 	.extern ov07_022378B0
@@ -1731,12 +1731,12 @@ _0221C8F6:
 	cmp r4, #3
 	bne _0221C904
 	ldr r1, [r5]
-	bl ov07_0223475C
+	bl BattleAnimUtil_LoadMonIntoPicOppositeFacing
 	add sp, #0x50
 	pop {r3, r4, r5, pc}
 _0221C904:
 	ldr r1, [r5]
-	bl ov07_0223474C
+	bl BattleAnimUtil_LoadMonIntoPicSameFacing
 	add sp, #0x50
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
@@ -1757,7 +1757,7 @@ BattleAnimScriptCmd_RestoreBattlerPic: ; 0x0221C910
 	bl BattleAnimSystem_BuildBattlerPicParams
 	ldr r1, [r4]
 	add r0, sp, #0
-	bl ov07_0223494C
+	bl BattleAnimUtil_RestorePic
 	add sp, #0x50
 	pop {r4, pc}
 	thumb_func_end BattleAnimScriptCmd_RestoreBattlerPic
@@ -32750,13 +32750,13 @@ _0222B910:
 	bl BattleAnimSystem_GetHeapID
 	add r1, r0, #0
 	add r0, sp, #8
-	bl ov07_0223494C
+	bl BattleAnimUtil_RestorePic
 	b _0222B942
 _0222B936:
 	bl BattleAnimSystem_GetHeapID
 	add r1, r0, #0
 	add r0, sp, #8
-	bl ov07_0223475C
+	bl BattleAnimUtil_LoadMonIntoPicOppositeFacing
 _0222B942:
 	mov r0, #0
 	strb r0, [r4]
@@ -46235,8 +46235,8 @@ _02232512:
 	.balign 4, 0
 	thumb_func_end BattleAnimUtil_FreeWork
 
-	thumb_func_start ov07_0223251C
-ov07_0223251C: ; 0x0223251C
+	thumb_func_start BallAnim_GetBallTableIndex
+BallAnim_GetBallTableIndex: ; 0x0223251C
 	cmp r0, #1
 	blt _02232528
 	cmp r0, #0x18
@@ -46257,13 +46257,13 @@ _02232528:
 _0223253C:
 	mov r0, #3
 	bx lr
-	thumb_func_end ov07_0223251C
+	thumb_func_end BallAnim_GetBallTableIndex
 
-	thumb_func_start ov07_02232540
-ov07_02232540: ; 0x02232540
+	thumb_func_start UnkBallData_IsSpinningKind
+UnkBallData_IsSpinningKind: ; 0x02232540
 	push {r3, r4, r5}
 	sub sp, #0x2c
-	ldr r5, _0223257C ; =ov07_02237228
+	ldr r5, _0223257C ; =sUnkBallDataSpinningKinds
 	add r2, r0, #0
 	add r4, sp, #0
 	mov r3, #5
@@ -46294,14 +46294,14 @@ _0223256C:
 	pop {r3, r4, r5}
 	bx lr
 	nop
-_0223257C: .word ov07_02237228
-	thumb_func_end ov07_02232540
+_0223257C: .word sUnkBallDataSpinningKinds
+	thumb_func_end UnkBallData_IsSpinningKind
 
-	thumb_func_start ov07_02232580
-ov07_02232580: ; 0x02232580
+	thumb_func_start UnkBallData_IsFlashingKind
+UnkBallData_IsFlashingKind: ; 0x02232580
 	push {r4, r5}
 	sub sp, #0x18
-	ldr r3, _022325B8 ; =ov07_02237188
+	ldr r3, _022325B8 ; =sUnkBallDataFlashingKinds
 	add r2, sp, #0
 	add r5, r0, #0
 	add r4, r2, #0
@@ -46330,14 +46330,14 @@ _022325AA:
 	pop {r4, r5}
 	bx lr
 	.balign 4, 0
-_022325B8: .word ov07_02237188
-	thumb_func_end ov07_02232580
+_022325B8: .word sUnkBallDataFlashingKinds
+	thumb_func_end UnkBallData_IsFlashingKind
 
-	thumb_func_start ov07_022325BC
-ov07_022325BC: ; 0x022325BC
+	thumb_func_start UnkBallData_ShouldAnimateSprite
+UnkBallData_ShouldAnimateSprite: ; 0x022325BC
 	push {r3, r4, r5}
 	sub sp, #0xc
-	ldr r5, _022325F0 ; =ov07_0223717C
+	ldr r5, _022325F0 ; =sUnkBallDataStaticSpriteKinds
 	add r3, r0, #0
 	ldmia r5!, {r0, r1}
 	add r4, sp, #0
@@ -46364,37 +46364,37 @@ _022325E2:
 	pop {r3, r4, r5}
 	bx lr
 	.balign 4, 0
-_022325F0: .word ov07_0223717C
-	thumb_func_end ov07_022325BC
+_022325F0: .word sUnkBallDataStaticSpriteKinds
+	thumb_func_end UnkBallData_ShouldAnimateSprite
 
-	thumb_func_start ov07_022325F4
-ov07_022325F4: ; 0x022325F4
+	thumb_func_start BallAnim_GetSealParticleResource
+BallAnim_GetSealParticleResource: ; 0x022325F4
 	push {r3, lr}
-	bl ov07_0223251C
+	bl BallAnim_GetBallTableIndex
 	lsl r1, r0, #3
 	ldr r0, _02232604 ; =ov07_0223738C
 	ldr r0, [r0, r1]
 	pop {r3, pc}
 	nop
 _02232604: .word ov07_0223738C
-	thumb_func_end ov07_022325F4
+	thumb_func_end BallAnim_GetSealParticleResource
 
-	thumb_func_start ov07_02232608
-ov07_02232608: ; 0x02232608
+	thumb_func_start BallAnim_GetSealParticleEmitterCount
+BallAnim_GetSealParticleEmitterCount: ; 0x02232608
 	push {r3, lr}
-	bl ov07_0223251C
+	bl BallAnim_GetBallTableIndex
 	lsl r1, r0, #3
 	ldr r0, _02232618 ; =ov07_02237390
 	ldr r0, [r0, r1]
 	pop {r3, pc}
 	nop
 _02232618: .word ov07_02237390
-	thumb_func_end ov07_02232608
+	thumb_func_end BallAnim_GetSealParticleEmitterCount
 
-	thumb_func_start ov07_0223261C
-ov07_0223261C: ; 0x0223261C
+	thumb_func_start BallAnim_GetBurstParticleResource
+BallAnim_GetBurstParticleResource: ; 0x0223261C
 	push {r3, lr}
-	bl ov07_0223251C
+	bl BallAnim_GetBallTableIndex
 	mov r1, #0xc
 	mul r1, r0
 	ldr r0, _0223262C ; =ov07_0223746C
@@ -46402,12 +46402,12 @@ ov07_0223261C: ; 0x0223261C
 	pop {r3, pc}
 	.balign 4, 0
 _0223262C: .word ov07_0223746C
-	thumb_func_end ov07_0223261C
+	thumb_func_end BallAnim_GetBurstParticleResource
 
-	thumb_func_start ov07_02232630
-ov07_02232630: ; 0x02232630
+	thumb_func_start BallAnim_GetBurstParticleEmitterCount
+BallAnim_GetBurstParticleEmitterCount: ; 0x02232630
 	push {r3, lr}
-	bl ov07_0223251C
+	bl BallAnim_GetBallTableIndex
 	mov r1, #0xc
 	mul r1, r0
 	ldr r0, _02232640 ; =ov07_02237474
@@ -46415,12 +46415,12 @@ ov07_02232630: ; 0x02232630
 	pop {r3, pc}
 	.balign 4, 0
 _02232640: .word ov07_02237474
-	thumb_func_end ov07_02232630
+	thumb_func_end BallAnim_GetBurstParticleEmitterCount
 
-	thumb_func_start ov07_02232644
-ov07_02232644: ; 0x02232644
+	thumb_func_start BallAnim_GetBurstSkippedEmitter
+BallAnim_GetBurstSkippedEmitter: ; 0x02232644
 	push {r3, lr}
-	bl ov07_0223251C
+	bl BallAnim_GetBallTableIndex
 	mov r1, #0xc
 	mul r1, r0
 	ldr r0, _02232654 ; =ov07_02237470
@@ -46428,25 +46428,25 @@ ov07_02232644: ; 0x02232644
 	pop {r3, pc}
 	.balign 4, 0
 _02232654: .word ov07_02237470
-	thumb_func_end ov07_02232644
+	thumb_func_end BallAnim_GetBurstSkippedEmitter
 
-	thumb_func_start ov07_02232658
-ov07_02232658: ; 0x02232658
+	thumb_func_start BallAnim_GetSpriteResource
+BallAnim_GetSpriteResource: ; 0x02232658
 	push {r4, lr}
 	add r4, r1, #0
-	bl ov07_0223251C
+	bl BallAnim_GetBallTableIndex
 	lsl r2, r0, #4
-	ldr r0, _0223266C ; =ov07_022375BC
+	ldr r0, _0223266C ; =sBallSpriteResources
 	lsl r1, r4, #2
 	add r0, r0, r2
 	ldr r0, [r1, r0]
 	pop {r4, pc}
 	.balign 4, 0
-_0223266C: .word ov07_022375BC
-	thumb_func_end ov07_02232658
+_0223266C: .word sBallSpriteResources
+	thumb_func_end BallAnim_GetSpriteResource
 
-	thumb_func_start ov07_02232670
-ov07_02232670: ; 0x02232670
+	thumb_func_start BallSealEffect_Alloc
+BallSealEffect_Alloc: ; 0x02232670
 	push {r4, lr}
 	mov r1, #0xb8
 	add r4, r0, #0
@@ -46464,16 +46464,16 @@ _02232686:
 	str r2, [r1]
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02232670
+	thumb_func_end BallSealEffect_Alloc
 
-	thumb_func_start ov07_02232694
-ov07_02232694: ; 0x02232694
+	thumb_func_start BallSealEffect_New
+BallSealEffect_New: ; 0x02232694
 	push {r3, r4, r5, lr}
 	add r5, r1, #0
-	bl ov07_02232670
+	bl BallSealEffect_Alloc
 	add r1, r5, #0
 	add r4, r0, #0
-	bl ov07_022326C0
+	bl BallSealEffect_ReadMon
 	mov r1, #0
 	str r1, [r4, #0x10]
 	add r2, r4, #0
@@ -46489,10 +46489,10 @@ _022326AC:
 	add r0, r4, #0
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02232694
+	thumb_func_end BallSealEffect_New
 
-	thumb_func_start ov07_022326C0
-ov07_022326C0: ; 0x022326C0
+	thumb_func_start BallSealEffect_ReadMon
+BallSealEffect_ReadMon: ; 0x022326C0
 	push {r4, lr}
 	add r3, r1, #0
 	add r4, r0, #0
@@ -46548,10 +46548,10 @@ _0223271A:
 	add r2, r4, #0
 	bl GetMonData
 	pop {r4, pc}
-	thumb_func_end ov07_022326C0
+	thumb_func_end BallSealEffect_ReadMon
 
-	thumb_func_start ov07_02232730
-ov07_02232730: ; 0x02232730
+	thumb_func_start BallSealEffect_LoadSealParticlesTask
+BallSealEffect_LoadSealParticlesTask: ; 0x02232730
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x24
 	add r4, r1, #0
@@ -46868,10 +46868,10 @@ _02232990:
 _022329AC:
 	add sp, #0x24
 	pop {r4, r5, r6, r7, pc}
-	thumb_func_end ov07_02232730
+	thumb_func_end BallSealEffect_LoadSealParticlesTask
 
-	thumb_func_start ov07_022329B0
-ov07_022329B0: ; 0x022329B0
+	thumb_func_start BallSealEffect_LoadResources
+BallSealEffect_LoadResources: ; 0x022329B0
 	push {r4, lr}
 	add r4, r0, #0
 	add r0, #0x94
@@ -46881,7 +46881,7 @@ ov07_022329B0: ; 0x022329B0
 	add r0, r4, #0
 	add r0, #0x98
 	ldr r0, [r0]
-	bl ov07_022325F4
+	bl BallAnim_GetSealParticleResource
 	add r2, r0, #0
 	mov r0, #1
 	str r0, [r4, #0x10]
@@ -46901,19 +46901,19 @@ _022329E0:
 	str r1, [r4, #0x10]
 	add r0, #0x90
 	str r1, [r0]
-	ldr r0, _02232A00 ; =ov07_02232730
+	ldr r0, _02232A00 ; =BallSealEffect_LoadSealParticlesTask
 	add r1, r4, #0
 	lsl r2, r2, #2
 	bl SysTask_CreateOnMainQueue
 	add r1, r4, #0
-	bl ov07_02232730
+	bl BallSealEffect_LoadSealParticlesTask
 	pop {r4, pc}
 	nop
-_02232A00: .word ov07_02232730
-	thumb_func_end ov07_022329B0
+_02232A00: .word BallSealEffect_LoadSealParticlesTask
+	thumb_func_end BallSealEffect_LoadResources
 
-	thumb_func_start ov07_02232A04
-ov07_02232A04: ; 0x02232A04
+	thumb_func_start BallSealEffect_IsLoaded
+BallSealEffect_IsLoaded: ; 0x02232A04
 	add r0, #0x90
 	ldr r0, [r0]
 	cmp r0, #0xff
@@ -46923,10 +46923,10 @@ ov07_02232A04: ; 0x02232A04
 _02232A10:
 	mov r0, #0
 	bx lr
-	thumb_func_end ov07_02232A04
+	thumb_func_end BallSealEffect_IsLoaded
 
-	thumb_func_start ov07_02232A14
-ov07_02232A14: ; 0x02232A14
+	thumb_func_start BallSealEffect_StartWithCallback
+BallSealEffect_StartWithCallback: ; 0x02232A14
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	add r4, r1, #0
@@ -46936,9 +46936,9 @@ ov07_02232A14: ; 0x02232A14
 	bl BattleAnimSystem_InitBlend
 	add r0, r5, #0
 	add r1, r4, #0
-	bl ov07_02232AFC
+	bl BallSealEffect_Emit
 	mov r2, #0xfa
-	ldr r0, _02232A40 ; =ov07_02232A5C
+	ldr r0, _02232A40 ; =BallSealEffect_WaitTask
 	add r1, r5, #0
 	lsl r2, r2, #2
 	bl SysTask_CreateOnMainQueue
@@ -46946,29 +46946,29 @@ ov07_02232A14: ; 0x02232A14
 	str r0, [r5]
 	pop {r3, r4, r5, pc}
 	nop
-_02232A40: .word ov07_02232A5C
-	thumb_func_end ov07_02232A14
+_02232A40: .word BallSealEffect_WaitTask
+	thumb_func_end BallSealEffect_StartWithCallback
 
-	thumb_func_start ov07_02232A44
-ov07_02232A44: ; 0x02232A44
-	ldr r3, _02232A4C ; =ov07_02232A14
-	ldr r1, _02232A50 ; =ov07_02232C28
+	thumb_func_start BallSealEffect_Start
+BallSealEffect_Start: ; 0x02232A44
+	ldr r3, _02232A4C ; =BallSealEffect_StartWithCallback
+	ldr r1, _02232A50 ; =BallSealEffect_SetEmitterPosition
 	bx r3
 	nop
-_02232A4C: .word ov07_02232A14
-_02232A50: .word ov07_02232C28
-	thumb_func_end ov07_02232A44
+_02232A4C: .word BallSealEffect_StartWithCallback
+_02232A50: .word BallSealEffect_SetEmitterPosition
+	thumb_func_end BallSealEffect_Start
 
-	thumb_func_start ov07_02232A54
-ov07_02232A54: ; 0x02232A54
+	thumb_func_start BallSealEffect_IsActive
+BallSealEffect_IsActive: ; 0x02232A54
 	add r0, #0x88
 	ldr r0, [r0]
 	bx lr
 	.balign 4, 0
-	thumb_func_end ov07_02232A54
+	thumb_func_end BallSealEffect_IsActive
 
-	thumb_func_start ov07_02232A5C
-ov07_02232A5C: ; 0x02232A5C
+	thumb_func_start BallSealEffect_WaitTask
+BallSealEffect_WaitTask: ; 0x02232A5C
 	push {r3, r4, r5, r6, r7, lr}
 	add r6, r1, #0
 	str r0, [sp]
@@ -47017,18 +47017,18 @@ _02232AA6:
 	bl SysTask_Destroy
 _02232AB6:
 	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end ov07_02232A5C
+	thumb_func_end BallSealEffect_WaitTask
 
-	thumb_func_start ov07_02232AB8
-ov07_02232AB8: ; 0x02232AB8
+	thumb_func_start BallSealEffect_Free
+BallSealEffect_Free: ; 0x02232AB8
 	ldr r3, _02232ABC ; =Heap_Free
 	bx r3
 	.balign 4, 0
 _02232ABC: .word Heap_Free
-	thumb_func_end ov07_02232AB8
+	thumb_func_end BallSealEffect_Free
 
-	thumb_func_start ov07_02232AC0
-ov07_02232AC0: ; 0x02232AC0
+	thumb_func_start BallSealEffect_DelayedEmitTask
+BallSealEffect_DelayedEmitTask: ; 0x02232AC0
 	push {r3, r4, r5, lr}
 	add r4, r1, #0
 	add r5, r0, #0
@@ -47056,10 +47056,10 @@ _02232AF4:
 	str r0, [r4, #4]
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02232AC0
+	thumb_func_end BallSealEffect_DelayedEmitTask
 
-	thumb_func_start ov07_02232AFC
-ov07_02232AFC: ; 0x02232AFC
+	thumb_func_start BallSealEffect_Emit
+BallSealEffect_Emit: ; 0x02232AFC
 	push {r3, r4, r5, r6, r7, lr}
 	add r6, r0, #0
 	add r0, #0x94
@@ -47070,7 +47070,7 @@ ov07_02232AFC: ; 0x02232AFC
 	add r0, r6, #0
 	add r0, #0x98
 	ldr r0, [r0]
-	bl ov07_02232608
+	bl BallAnim_GetSealParticleEmitterCount
 	add r5, r0, #0
 	mov r4, #0
 	cmp r5, #0
@@ -47111,7 +47111,7 @@ _02232B5C:
 	str r7, [r4]
 	ldr r0, [r6, #4]
 	str r0, [r4, #8]
-	ldr r0, _02232BA4 ; =ov07_02232C64
+	ldr r0, _02232BA4 ; =BallSealEffect_SetEmitterPositionFromSeal
 	str r0, [r4, #0x18]
 	mov r0, #0
 	str r0, [r5, #0x5c]
@@ -47126,9 +47126,9 @@ _02232B5C:
 	bl GF_AssertFail
 _02232B7E:
 	ldr r0, [r4, #0x14]
-	bl ov07_02234530
+	bl BallSealEffect_GetSealEmitDelay
 	str r0, [r4, #4]
-	ldr r0, _02232BA8 ; =ov07_02232AC0
+	ldr r0, _02232BA8 ; =BallSealEffect_DelayedEmitTask
 	ldr r2, _02232BAC ; =0x000003E9
 	add r1, r4, #0
 	bl SysTask_CreateOnMainQueue
@@ -47143,13 +47143,13 @@ _02232B7E:
 _02232BA0:
 	pop {r3, r4, r5, r6, r7, pc}
 	nop
-_02232BA4: .word ov07_02232C64
-_02232BA8: .word ov07_02232AC0
+_02232BA4: .word BallSealEffect_SetEmitterPositionFromSeal
+_02232BA8: .word BallSealEffect_DelayedEmitTask
 _02232BAC: .word 0x000003E9
-	thumb_func_end ov07_02232AFC
+	thumb_func_end BallSealEffect_Emit
 
-	thumb_func_start ov07_02232BB0
-ov07_02232BB0: ; 0x02232BB0
+	thumb_func_start BallSealEffect_GetBasePosition
+BallSealEffect_GetBasePosition: ; 0x02232BB0
 	push {r3, r4, r5, lr}
 	mov r2, #0
 	mov r3, #1
@@ -47217,17 +47217,17 @@ _02232C0E:
 	sub r0, r2, r1
 	str r0, [r4, #4]
 	pop {r3, r4, r5, pc}
-	thumb_func_end ov07_02232BB0
+	thumb_func_end BallSealEffect_GetBasePosition
 
-	thumb_func_start ov07_02232C28
-ov07_02232C28: ; 0x02232C28
+	thumb_func_start BallSealEffect_SetEmitterPosition
+BallSealEffect_SetEmitterPosition: ; 0x02232C28
 	push {r3, r4, lr}
 	sub sp, #0xc
 	add r4, r0, #0
 	bl ParticleSystem_GetEmitterParam
 	ldr r0, [r0, #4]
 	add r1, sp, #0
-	bl ov07_02232BB0
+	bl BallSealEffect_GetBasePosition
 	ldr r0, [r4, #0x20]
 	ldr r1, [sp]
 	ldr r0, [r0]
@@ -47249,10 +47249,10 @@ ov07_02232C28: ; 0x02232C28
 	add sp, #0xc
 	pop {r3, r4, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02232C28
+	thumb_func_end BallSealEffect_SetEmitterPosition
 
-	thumb_func_start ov07_02232C64
-ov07_02232C64: ; 0x02232C64
+	thumb_func_start BallSealEffect_SetEmitterPositionFromSeal
+BallSealEffect_SetEmitterPositionFromSeal: ; 0x02232C64
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0xc
 	add r5, r0, #0
@@ -47260,7 +47260,7 @@ ov07_02232C64: ; 0x02232C64
 	add r4, r0, #0
 	ldr r0, [r4, #8]
 	add r1, sp, #0
-	bl ov07_02232BB0
+	bl BallSealEffect_GetBasePosition
 	ldr r0, [r4, #0x14]
 	bl SealOnCapsuleGetID
 	bl sub_0209109C
@@ -47305,10 +47305,10 @@ ov07_02232C64: ; 0x02232C64
 	str r0, [r5, #0x30]
 	add sp, #0xc
 	pop {r3, r4, r5, r6, pc}
-	thumb_func_end ov07_02232C64
+	thumb_func_end BallSealEffect_SetEmitterPositionFromSeal
 
-	thumb_func_start ov07_02232CD8
-ov07_02232CD8: ; 0x02232CD8
+	thumb_func_start BallBurstEffect_SetEmitterPosition
+BallBurstEffect_SetEmitterPosition: ; 0x02232CD8
 	push {r4, lr}
 	add r4, r0, #0
 	bl ParticleSystem_GetEmitterParam
@@ -47344,10 +47344,10 @@ ov07_02232CD8: ; 0x02232CD8
 	str r0, [r4, #0x30]
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02232CD8
+	thumb_func_end BallBurstEffect_SetEmitterPosition
 
-	thumb_func_start ov07_02232D20
-ov07_02232D20: ; 0x02232D20
+	thumb_func_start BallBurstEffect_New
+BallBurstEffect_New: ; 0x02232D20
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	ldr r0, [r5, #8]
@@ -47368,17 +47368,17 @@ _02232D34:
 	cmp r0, #0
 	beq _02232D58
 	ldr r0, _02232D7C ; =0x00000403
-	bl ov07_0223261C
+	bl BallAnim_GetBurstParticleResource
 	str r0, [r4, #0x20]
 	ldr r0, _02232D7C ; =0x00000403
-	bl ov07_02232630
+	bl BallAnim_GetBurstParticleEmitterCount
 	b _02232D66
 _02232D58:
 	ldr r0, [r4, #4]
-	bl ov07_0223261C
+	bl BallAnim_GetBurstParticleResource
 	str r0, [r4, #0x20]
 	ldr r0, [r4, #4]
-	bl ov07_02232630
+	bl BallAnim_GetBurstParticleEmitterCount
 _02232D66:
 	str r0, [r4, #0x1c]
 	ldr r0, [r4, #8]
@@ -47391,10 +47391,10 @@ _02232D66:
 	pop {r3, r4, r5, pc}
 	nop
 _02232D7C: .word 0x00000403
-	thumb_func_end ov07_02232D20
+	thumb_func_end BallBurstEffect_New
 
-	thumb_func_start ov07_02232D80
-ov07_02232D80: ; 0x02232D80
+	thumb_func_start BallBurstEffect_Start
+BallBurstEffect_Start: ; 0x02232D80
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
 	ldr r1, [r5, #0xc]
@@ -47407,7 +47407,7 @@ ov07_02232D80: ; 0x02232D80
 	mov r4, #0
 	cmp r0, #0
 	ble _02232DE4
-	ldr r6, _02232DF0 ; =ov07_02232CD8
+	ldr r6, _02232DF0 ; =BallBurstEffect_SetEmitterPosition
 _02232D9A:
 	ldr r0, [r5, #0x18]
 	add r1, r4, #0
@@ -47424,10 +47424,10 @@ _02232DB0:
 	mov r4, #0
 	cmp r0, #0
 	ble _02232DE4
-	ldr r6, _02232DF0 ; =ov07_02232CD8
+	ldr r6, _02232DF0 ; =BallBurstEffect_SetEmitterPosition
 _02232DBA:
 	ldr r0, [r5, #4]
-	bl ov07_02232644
+	bl BallAnim_GetBurstSkippedEmitter
 	cmp r4, r0
 	beq _02232DD0
 	ldr r0, [r5, #0x18]
@@ -47443,7 +47443,7 @@ _02232DD0:
 	b _02232DE4
 _02232DDA:
 	ldr r0, [r5, #0x18]
-	ldr r2, _02232DF0 ; =ov07_02232CD8
+	ldr r2, _02232DF0 ; =BallBurstEffect_SetEmitterPosition
 	add r3, r5, #0
 	bl ParticleSystem_CreateEmitterWithParam
 _02232DE4:
@@ -47452,11 +47452,11 @@ _02232DE4:
 	bl ParticleSystem_SetPerspectiveType
 	pop {r4, r5, r6, pc}
 	nop
-_02232DF0: .word ov07_02232CD8
-	thumb_func_end ov07_02232D80
+_02232DF0: .word BallBurstEffect_SetEmitterPosition
+	thumb_func_end BallBurstEffect_Start
 
-	thumb_func_start ov07_02232DF4
-ov07_02232DF4: ; 0x02232DF4
+	thumb_func_start BallBurstEffect_IsRunning
+BallBurstEffect_IsRunning: ; 0x02232DF4
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, [r4, #0x18]
@@ -47470,18 +47470,18 @@ ov07_02232DF4: ; 0x02232DF4
 _02232E0C:
 	mov r0, #1
 	pop {r4, pc}
-	thumb_func_end ov07_02232DF4
+	thumb_func_end BallBurstEffect_IsRunning
 
-	thumb_func_start ov07_02232E10
-ov07_02232E10: ; 0x02232E10
+	thumb_func_start BallBurstEffect_Free
+BallBurstEffect_Free: ; 0x02232E10
 	ldr r3, _02232E14 ; =Heap_Free
 	bx r3
 	.balign 4, 0
 _02232E14: .word Heap_Free
-	thumb_func_end ov07_02232E10
+	thumb_func_end BallBurstEffect_Free
 
-	thumb_func_start ov07_02232E18
-ov07_02232E18: ; 0x02232E18
+	thumb_func_start UnkBallData_BallAnimThrow
+UnkBallData_BallAnimThrow: ; 0x02232E18
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r1, [r4, #4]
@@ -47490,11 +47490,11 @@ ov07_02232E18: ; 0x02232E18
 	add r1, r1, #1
 	str r1, [r4, #4]
 	mov r1, #1
-	bl ov07_02233EB8
+	bl UnkBallData_SetCaptureState
 _02232E2C:
 	add r0, r4, #0
 	mov r1, #2
-	bl ov07_02233EBC
+	bl UnkBallData_IsCaptureState
 	cmp r0, #1
 	bne _02232E3C
 	mov r0, #0
@@ -47502,10 +47502,10 @@ _02232E2C:
 _02232E3C:
 	mov r0, #1
 	pop {r4, pc}
-	thumb_func_end ov07_02232E18
+	thumb_func_end UnkBallData_BallAnimThrow
 
-	thumb_func_start ov07_02232E40
-ov07_02232E40: ; 0x02232E40
+	thumb_func_start UnkBallData_BallAnimOpen
+UnkBallData_BallAnimOpen: ; 0x02232E40
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r1, [r4, #4]
@@ -47514,11 +47514,11 @@ ov07_02232E40: ; 0x02232E40
 	add r1, r1, #1
 	str r1, [r4, #4]
 	mov r1, #3
-	bl ov07_02233EB8
+	bl UnkBallData_SetCaptureState
 _02232E54:
 	add r0, r4, #0
 	mov r1, #4
-	bl ov07_02233EBC
+	bl UnkBallData_IsCaptureState
 	cmp r0, #1
 	bne _02232E64
 	mov r0, #0
@@ -47526,10 +47526,10 @@ _02232E54:
 _02232E64:
 	mov r0, #1
 	pop {r4, pc}
-	thumb_func_end ov07_02232E40
+	thumb_func_end UnkBallData_BallAnimOpen
 
-	thumb_func_start ov07_02232E68
-ov07_02232E68: ; 0x02232E68
+	thumb_func_start UnkBallData_BallAnimDeflect
+UnkBallData_BallAnimDeflect: ; 0x02232E68
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r1, [r4, #4]
@@ -47538,11 +47538,11 @@ ov07_02232E68: ; 0x02232E68
 	add r1, r1, #1
 	str r1, [r4, #4]
 	mov r1, #5
-	bl ov07_02233EB8
+	bl UnkBallData_SetCaptureState
 _02232E7C:
 	add r0, r4, #0
 	mov r1, #6
-	bl ov07_02233EBC
+	bl UnkBallData_IsCaptureState
 	cmp r0, #1
 	bne _02232E8C
 	mov r0, #0
@@ -47550,10 +47550,10 @@ _02232E7C:
 _02232E8C:
 	mov r0, #1
 	pop {r4, pc}
-	thumb_func_end ov07_02232E68
+	thumb_func_end UnkBallData_BallAnimDeflect
 
-	thumb_func_start ov07_02232E90
-ov07_02232E90: ; 0x02232E90
+	thumb_func_start UnkBallData_BallAnimFall
+UnkBallData_BallAnimFall: ; 0x02232E90
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r1, [r4, #4]
@@ -47562,11 +47562,11 @@ ov07_02232E90: ; 0x02232E90
 	add r1, r1, #1
 	str r1, [r4, #4]
 	mov r1, #7
-	bl ov07_02233EB8
+	bl UnkBallData_SetCaptureState
 _02232EA4:
 	add r0, r4, #0
 	mov r1, #0xe
-	bl ov07_02233EBC
+	bl UnkBallData_IsCaptureState
 	cmp r0, #1
 	bne _02232EB4
 	mov r0, #0
@@ -47574,10 +47574,10 @@ _02232EA4:
 _02232EB4:
 	mov r0, #1
 	pop {r4, pc}
-	thumb_func_end ov07_02232E90
+	thumb_func_end UnkBallData_BallAnimFall
 
-	thumb_func_start ov07_02232EB8
-ov07_02232EB8: ; 0x02232EB8
+	thumb_func_start UnkBallData_BallAnimShake
+UnkBallData_BallAnimShake: ; 0x02232EB8
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r1, [r4, #4]
@@ -47586,11 +47586,11 @@ ov07_02232EB8: ; 0x02232EB8
 	add r1, r1, #1
 	str r1, [r4, #4]
 	mov r1, #0xf
-	bl ov07_02233EB8
+	bl UnkBallData_SetCaptureState
 _02232ECC:
 	add r0, r4, #0
 	mov r1, #0x12
-	bl ov07_02233EBC
+	bl UnkBallData_IsCaptureState
 	cmp r0, #1
 	bne _02232EDC
 	mov r0, #0
@@ -47598,7 +47598,7 @@ _02232ECC:
 _02232EDC:
 	mov r0, #1
 	pop {r4, pc}
-	thumb_func_end ov07_02232EB8
+	thumb_func_end UnkBallData_BallAnimShake
 
 	thumb_func_start ov07_02232EE0
 ov07_02232EE0: ; 0x02232EE0
@@ -47610,11 +47610,11 @@ ov07_02232EE0: ; 0x02232EE0
 	add r1, r1, #1
 	str r1, [r4, #4]
 	mov r1, #0x13
-	bl ov07_02233EB8
+	bl UnkBallData_SetCaptureState
 _02232EF4:
 	add r0, r4, #0
 	mov r1, #0x1b
-	bl ov07_02233EBC
+	bl UnkBallData_IsCaptureState
 	cmp r0, #1
 	bne _02232F04
 	mov r0, #0
@@ -47624,8 +47624,8 @@ _02232F04:
 	pop {r4, pc}
 	thumb_func_end ov07_02232EE0
 
-	thumb_func_start ov07_02232F08
-ov07_02232F08: ; 0x02232F08
+	thumb_func_start UnkBallData_BallAnimClick
+UnkBallData_BallAnimClick: ; 0x02232F08
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r1, [r4, #4]
@@ -47634,11 +47634,11 @@ ov07_02232F08: ; 0x02232F08
 	add r1, r1, #1
 	str r1, [r4, #4]
 	mov r1, #0x15
-	bl ov07_02233EB8
+	bl UnkBallData_SetCaptureState
 _02232F1C:
 	add r0, r4, #0
 	mov r1, #0x16
-	bl ov07_02233EBC
+	bl UnkBallData_IsCaptureState
 	cmp r0, #1
 	bne _02232F2C
 	mov r0, #0
@@ -47646,10 +47646,10 @@ _02232F1C:
 _02232F2C:
 	mov r0, #1
 	pop {r4, pc}
-	thumb_func_end ov07_02232F08
+	thumb_func_end UnkBallData_BallAnimClick
 
-	thumb_func_start ov07_02232F30
-ov07_02232F30: ; 0x02232F30
+	thumb_func_start UnkBallData_BallAnimFade
+UnkBallData_BallAnimFade: ; 0x02232F30
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r1, [r4, #4]
@@ -47658,11 +47658,11 @@ ov07_02232F30: ; 0x02232F30
 	add r1, r1, #1
 	str r1, [r4, #4]
 	mov r1, #0x17
-	bl ov07_02233EB8
+	bl UnkBallData_SetCaptureState
 _02232F44:
 	add r0, r4, #0
 	mov r1, #0x1b
-	bl ov07_02233EBC
+	bl UnkBallData_IsCaptureState
 	cmp r0, #1
 	bne _02232F54
 	mov r0, #0
@@ -47670,7 +47670,7 @@ _02232F44:
 _02232F54:
 	mov r0, #1
 	pop {r4, pc}
-	thumb_func_end ov07_02232F30
+	thumb_func_end UnkBallData_BallAnimFade
 
 	thumb_func_start UnkBallData_SetBallAnimation
 UnkBallData_SetBallAnimation: ; 0x02232F58
@@ -47680,28 +47680,28 @@ UnkBallData_SetBallAnimation: ; 0x02232F58
 	bx lr
 	thumb_func_end UnkBallData_SetBallAnimation
 
-	thumb_func_start ov07_02232F60
-ov07_02232F60: ; 0x02232F60
+	thumb_func_start UnkBallData_IsBallAnimationPlaying
+UnkBallData_IsBallAnimationPlaying: ; 0x02232F60
 	push {r3, lr}
 	ldr r1, [r0]
 	lsl r2, r1, #2
-	ldr r1, _02232F70 ; =ov07_022371B8
+	ldr r1, _02232F70 ; =sUnkBallDataBallAnimFuncs
 	ldr r1, [r1, r2]
 	blx r1
 	pop {r3, pc}
 	nop
-_02232F70: .word ov07_022371B8
-	thumb_func_end ov07_02232F60
+_02232F70: .word sUnkBallDataBallAnimFuncs
+	thumb_func_end UnkBallData_IsBallAnimationPlaying
 
-	thumb_func_start ov07_02232F74
-ov07_02232F74: ; 0x02232F74
+	thumb_func_start UnkBallData_GoToCaptureState
+UnkBallData_GoToCaptureState: ; 0x02232F74
 	str r1, [r0, #0x14]
 	mov r1, #0
 	str r1, [r0, #8]
 	str r1, [r0, #0xc]
 	str r1, [r0, #0x10]
 	bx lr
-	thumb_func_end ov07_02232F74
+	thumb_func_end UnkBallData_GoToCaptureState
 
 	thumb_func_start ov07_02232F80
 ov07_02232F80: ; 0x02232F80
@@ -47709,32 +47709,32 @@ ov07_02232F80: ; 0x02232F80
 	bx lr
 	thumb_func_end ov07_02232F80
 
-	thumb_func_start ov07_02232F84
-ov07_02232F84: ; 0x02232F84
+	thumb_func_start UnkBallData_CaptureStateThrow
+UnkBallData_CaptureStateThrow: ; 0x02232F84
 	push {r4, lr}
 	add r4, r0, #0
-	bl ov07_022335B4
+	bl UnkBallData_RunThrowArc
 	cmp r0, #0
 	bne _02232F98
 	add r0, r4, #0
 	mov r1, #2
-	bl ov07_02232F74
+	bl UnkBallData_GoToCaptureState
 _02232F98:
 	mov r0, #1
 	pop {r4, pc}
-	thumb_func_end ov07_02232F84
+	thumb_func_end UnkBallData_CaptureStateThrow
 
 	thumb_func_start ov07_02232F9C
 ov07_02232F9C: ; 0x02232F9C
 	push {r3, lr}
 	mov r1, #3
-	bl ov07_02232F74
+	bl UnkBallData_GoToCaptureState
 	mov r0, #1
 	pop {r3, pc}
 	thumb_func_end ov07_02232F9C
 
-	thumb_func_start ov07_02232FA8
-ov07_02232FA8: ; 0x02232FA8
+	thumb_func_start UnkBallData_CaptureStateOpen
+UnkBallData_CaptureStateOpen: ; 0x02232FA8
 	push {r3, r4, lr}
 	sub sp, #0x14
 	add r4, r0, #0
@@ -47784,7 +47784,7 @@ _02232FC8:
 	add r1, #0xd8
 	str r0, [r1]
 	add r0, sp, #0
-	bl ov07_02232D20
+	bl BallBurstEffect_New
 	add r1, r4, #0
 	add r1, #0xd0
 	str r0, [r1]
@@ -47807,7 +47807,7 @@ _02233034:
 	add r0, r4, #0
 	add r0, #0xd0
 	ldr r0, [r0]
-	bl ov07_02232D80
+	bl BallBurstEffect_Start
 	add r0, r4, #0
 	add r0, #0xd8
 	ldr r0, [r0]
@@ -47820,7 +47820,7 @@ _02233050:
 	add r0, r4, #0
 	add r0, #0xd0
 	ldr r0, [r0]
-	bl ov07_02232DF4
+	bl BallBurstEffect_IsRunning
 	cmp r0, #0
 	bne _02233080
 	ldr r0, [r4, #0x30]
@@ -47829,7 +47829,7 @@ _02233050:
 	add r0, r4, #0
 	add r0, #0xd0
 	ldr r0, [r0]
-	bl ov07_02232E10
+	bl BallBurstEffect_Free
 	ldr r0, [r4, #8]
 	add r0, r0, #1
 	str r0, [r4, #8]
@@ -47837,13 +47837,13 @@ _02233050:
 _02233078:
 	add r0, r4, #0
 	mov r1, #4
-	bl ov07_02232F74
+	bl UnkBallData_GoToCaptureState
 _02233080:
 	mov r0, #1
 	add sp, #0x14
 	pop {r3, r4, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02232FA8
+	thumb_func_end UnkBallData_CaptureStateOpen
 
 	thumb_func_start ov07_02233088
 ov07_02233088: ; 0x02233088
@@ -47851,8 +47851,8 @@ ov07_02233088: ; 0x02233088
 	bx lr
 	thumb_func_end ov07_02233088
 
-	thumb_func_start ov07_0223308C
-ov07_0223308C: ; 0x0223308C
+	thumb_func_start UnkBallData_CaptureStateDeflect
+UnkBallData_CaptureStateDeflect: ; 0x0223308C
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r1, [r4, #0xc]
@@ -47885,16 +47885,16 @@ ov07_0223308C: ; 0x0223308C
 	str r0, [r4, #0xc]
 	b _022330DC
 _022330CC:
-	bl ov07_022335B4
+	bl UnkBallData_RunThrowArc
 	cmp r0, #0
 	bne _022330DC
 	add r0, r4, #0
 	mov r1, #6
-	bl ov07_02232F74
+	bl UnkBallData_GoToCaptureState
 _022330DC:
 	mov r0, #1
 	pop {r4, pc}
-	thumb_func_end ov07_0223308C
+	thumb_func_end UnkBallData_CaptureStateDeflect
 
 	thumb_func_start ov07_022330E0
 ov07_022330E0: ; 0x022330E0
@@ -47906,7 +47906,7 @@ ov07_022330E0: ; 0x022330E0
 ov07_022330E4: ; 0x022330E4
 	push {r3, lr}
 	mov r1, #8
-	bl ov07_02232F74
+	bl UnkBallData_GoToCaptureState
 	mov r0, #1
 	pop {r3, pc}
 	thumb_func_end ov07_022330E4
@@ -47915,13 +47915,13 @@ ov07_022330E4: ; 0x022330E4
 ov07_022330F0: ; 0x022330F0
 	push {r3, lr}
 	mov r1, #9
-	bl ov07_02232F74
+	bl UnkBallData_GoToCaptureState
 	mov r0, #1
 	pop {r3, pc}
 	thumb_func_end ov07_022330F0
 
-	thumb_func_start ov07_022330FC
-ov07_022330FC: ; 0x022330FC
+	thumb_func_start UnkBallData_CaptureStateFlash
+UnkBallData_CaptureStateFlash: ; 0x022330FC
 	push {r4, r5, lr}
 	sub sp, #0xc
 	add r4, r0, #0
@@ -47996,26 +47996,26 @@ _02233184:
 	bne _0223319A
 	add r0, r4, #0
 	mov r1, #0xa
-	bl ov07_02232F74
+	bl UnkBallData_GoToCaptureState
 _0223319A:
 	mov r0, #1
 	add sp, #0xc
 	pop {r4, r5, pc}
 	.balign 4, 0
 _022331A0: .word 0x0000037F
-	thumb_func_end ov07_022330FC
+	thumb_func_end UnkBallData_CaptureStateFlash
 
 	thumb_func_start ov07_022331A4
 ov07_022331A4: ; 0x022331A4
 	push {r3, lr}
 	mov r1, #0xb
-	bl ov07_02232F74
+	bl UnkBallData_GoToCaptureState
 	mov r0, #1
 	pop {r3, pc}
 	thumb_func_end ov07_022331A4
 
-	thumb_func_start ov07_022331B0
-ov07_022331B0: ; 0x022331B0
+	thumb_func_start UnkBallData_CaptureStateDrop
+UnkBallData_CaptureStateDrop: ; 0x022331B0
 	push {r3, r4, lr}
 	sub sp, #0xc
 	add r4, r0, #0
@@ -48068,12 +48068,12 @@ _02233202:
 	add r0, r0, #1
 	str r0, [r4, #8]
 	add r0, r4, #0
-	bl ov07_02232F74
+	bl UnkBallData_GoToCaptureState
 _0223321E:
 	mov r0, #1
 	add sp, #0xc
 	pop {r3, r4, pc}
-	thumb_func_end ov07_022331B0
+	thumb_func_end UnkBallData_CaptureStateDrop
 
 	thumb_func_start ov07_02233224
 ov07_02233224: ; 0x02233224
@@ -48081,8 +48081,8 @@ ov07_02233224: ; 0x02233224
 	bx lr
 	thumb_func_end ov07_02233224
 
-	thumb_func_start ov07_02233228
-ov07_02233228: ; 0x02233228
+	thumb_func_start UnkBallData_CaptureStateBounce
+UnkBallData_CaptureStateBounce: ; 0x02233228
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	ldr r1, [r5, #8]
@@ -48114,7 +48114,7 @@ _0223324E:
 	ldr r0, [r5, #0x30]
 	bl ManagedSprite_SetAnimationFrame
 	ldr r0, [r5, #0xc]
-	ldr r4, _022332C0 ; =ov07_02237200
+	ldr r4, _022332C0 ; =sUnkBallDataBounceSounds
 	add r0, r0, #1
 	str r0, [r5, #0xc]
 	mov r6, #0
@@ -48153,15 +48153,15 @@ _022332A2:
 	b _022332B4
 _022332AE:
 	mov r1, #0xe
-	bl ov07_02232F74
+	bl UnkBallData_GoToCaptureState
 _022332B4:
 	mov r0, #1
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
 _022332B8: .word ov07_0223730E
 _022332BC: .word ov07_02237310
-_022332C0: .word ov07_02237200
-	thumb_func_end ov07_02233228
+_022332C0: .word sUnkBallDataBounceSounds
+	thumb_func_end UnkBallData_CaptureStateBounce
 
 	thumb_func_start ov07_022332C4
 ov07_022332C4: ; 0x022332C4
@@ -48169,8 +48169,8 @@ ov07_022332C4: ; 0x022332C4
 	bx lr
 	thumb_func_end ov07_022332C4
 
-	thumb_func_start ov07_022332C8
-ov07_022332C8: ; 0x022332C8
+	thumb_func_start UnkBallData_CaptureStateShakeWait
+UnkBallData_CaptureStateShakeWait: ; 0x022332C8
 	push {r3, lr}
 	ldr r1, [r0, #0xc]
 	add r1, r1, #1
@@ -48183,23 +48183,23 @@ ov07_022332C8: ; 0x022332C8
 	mov r1, #0
 	str r1, [r0, #0xc]
 	mov r1, #0x10
-	bl ov07_02232F74
+	bl UnkBallData_GoToCaptureState
 _022332E4:
 	mov r0, #1
 	pop {r3, pc}
-	thumb_func_end ov07_022332C8
+	thumb_func_end UnkBallData_CaptureStateShakeWait
 
 	thumb_func_start ov07_022332E8
 ov07_022332E8: ; 0x022332E8
 	push {r3, lr}
 	mov r1, #0x11
-	bl ov07_02232F74
+	bl UnkBallData_GoToCaptureState
 	mov r0, #1
 	pop {r3, pc}
 	thumb_func_end ov07_022332E8
 
-	thumb_func_start ov07_022332F4
-ov07_022332F4: ; 0x022332F4
+	thumb_func_start UnkBallData_CaptureStateShake
+UnkBallData_CaptureStateShake: ; 0x022332F4
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
 	ldr r0, [r5, #8]
@@ -48222,7 +48222,7 @@ _02233314:
 	mov r0, #0x18
 	add r3, r1, #0
 	mul r3, r0
-	ldr r0, _02233380 ; =ov07_02237254
+	ldr r0, _02233380 ; =sUnkBallDataShakeOffsets
 	ldr r1, [r5, #0xc]
 	add r0, r0, r3
 	lsl r2, r1, #1
@@ -48245,7 +48245,7 @@ _02233332:
 	bl ManagedSprite_SetAffineZRotation
 	add r0, r5, #0
 	mov r1, #0x12
-	bl ov07_02232F74
+	bl UnkBallData_GoToCaptureState
 	mov r0, #1
 	pop {r3, r4, r5, pc}
 _02233352:
@@ -48271,10 +48271,10 @@ _0223337C:
 	mov r0, #1
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-_02233380: .word ov07_02237254
+_02233380: .word sUnkBallDataShakeOffsets
 _02233384: .word 0x000005FD
 _02233388: .word 0x0001FFFE
-	thumb_func_end ov07_022332F4
+	thumb_func_end UnkBallData_CaptureStateShake
 
 	thumb_func_start ov07_0223338C
 ov07_0223338C: ; 0x0223338C
@@ -48286,7 +48286,7 @@ ov07_0223338C: ; 0x0223338C
 ov07_02233390: ; 0x02233390
 	push {r3, lr}
 	mov r1, #0x14
-	bl ov07_02232F74
+	bl UnkBallData_GoToCaptureState
 	mov r0, #1
 	pop {r3, pc}
 	thumb_func_end ov07_02233390
@@ -48295,13 +48295,13 @@ ov07_02233390: ; 0x02233390
 ov07_0223339C: ; 0x0223339C
 	push {r3, lr}
 	mov r1, #0x1b
-	bl ov07_02232F74
+	bl UnkBallData_GoToCaptureState
 	mov r0, #1
 	pop {r3, pc}
 	thumb_func_end ov07_0223339C
 
-	thumb_func_start ov07_022333A8
-ov07_022333A8: ; 0x022333A8
+	thumb_func_start UnkBallData_CaptureStateClick
+UnkBallData_CaptureStateClick: ; 0x022333A8
 	push {r3, r4, r5, lr}
 	sub sp, #0x20
 	add r4, r0, #0
@@ -48358,7 +48358,7 @@ _022333FA:
 	add r1, #0x94
 	ldr r1, [r1]
 	str r1, [sp, #0x14]
-	bl ov07_02232644
+	bl BallAnim_GetBurstSkippedEmitter
 	str r0, [sp, #0x18]
 	mov r0, #0
 	str r0, [sp, #0x1c]
@@ -48368,7 +48368,7 @@ _022333FA:
 	add r2, #2
 	bl ManagedSprite_GetPositionXY
 	add r0, sp, #0xc
-	bl ov07_02232D20
+	bl BallBurstEffect_New
 	add r1, r4, #0
 	add r1, #0xd0
 	str r0, [r1]
@@ -48380,7 +48380,7 @@ _02233442:
 	add r0, r4, #0
 	add r0, #0xd0
 	ldr r0, [r0]
-	bl ov07_02232D80
+	bl BallBurstEffect_Start
 	ldr r0, [r4, #8]
 	add r0, r0, #1
 	str r0, [r4, #8]
@@ -48389,7 +48389,7 @@ _02233454:
 	add r0, r4, #0
 	add r0, #0xd0
 	ldr r0, [r0]
-	bl ov07_02232DF4
+	bl BallBurstEffect_IsRunning
 	cmp r0, #0
 	bne _02233492
 	ldr r0, [r4, #0x30]
@@ -48398,7 +48398,7 @@ _02233454:
 	add r0, r4, #0
 	add r0, #0xd0
 	ldr r0, [r0]
-	bl ov07_02232E10
+	bl BallBurstEffect_Free
 	ldr r0, [r4, #8]
 	add r0, r0, #1
 	str r0, [r4, #8]
@@ -48412,12 +48412,12 @@ _0223347C:
 	bne _02233492
 	add r0, r4, #0
 	mov r1, #0x16
-	bl ov07_02232F74
+	bl UnkBallData_GoToCaptureState
 _02233492:
 	mov r0, #1
 	add sp, #0x20
 	pop {r3, r4, r5, pc}
-	thumb_func_end ov07_022333A8
+	thumb_func_end UnkBallData_CaptureStateClick
 
 	thumb_func_start ov07_02233498
 ov07_02233498: ; 0x02233498
@@ -48425,8 +48425,8 @@ ov07_02233498: ; 0x02233498
 	bx lr
 	thumb_func_end ov07_02233498
 
-	thumb_func_start ov07_0223349C
-ov07_0223349C: ; 0x0223349C
+	thumb_func_start UnkBallData_CaptureStateRestorePalette
+UnkBallData_CaptureStateRestorePalette: ; 0x0223349C
 	push {r4, r5, lr}
 	sub sp, #0xc
 	add r4, r0, #0
@@ -48472,24 +48472,24 @@ _022334E0:
 	b _022334FA
 _022334F4:
 	mov r1, #0x18
-	bl ov07_02232F74
+	bl UnkBallData_GoToCaptureState
 _022334FA:
 	mov r0, #1
 	add sp, #0xc
 	pop {r4, r5, pc}
-	thumb_func_end ov07_0223349C
+	thumb_func_end UnkBallData_CaptureStateRestorePalette
 
 	thumb_func_start ov07_02233500
 ov07_02233500: ; 0x02233500
 	push {r3, lr}
 	mov r1, #0x19
-	bl ov07_02232F74
+	bl UnkBallData_GoToCaptureState
 	mov r0, #1
 	pop {r3, pc}
 	thumb_func_end ov07_02233500
 
-	thumb_func_start ov07_0223350C
-ov07_0223350C: ; 0x0223350C
+	thumb_func_start UnkBallData_CaptureStateFadeOut
+UnkBallData_CaptureStateFadeOut: ; 0x0223350C
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r1, [r4, #8]
@@ -48553,44 +48553,44 @@ _0223356E:
 	b _02233588
 _02233582:
 	mov r1, #0x1a
-	bl ov07_02232F74
+	bl UnkBallData_GoToCaptureState
 _02233588:
 	mov r0, #1
 	pop {r4, pc}
 	.balign 4, 0
 _0223358C: .word 0x04000052
-	thumb_func_end ov07_0223350C
+	thumb_func_end UnkBallData_CaptureStateFadeOut
 
 	thumb_func_start ov07_02233590
 ov07_02233590: ; 0x02233590
 	push {r3, lr}
 	mov r1, #0x1b
-	bl ov07_02232F74
+	bl UnkBallData_GoToCaptureState
 	mov r0, #1
 	pop {r3, pc}
 	thumb_func_end ov07_02233590
 
-	thumb_func_start ov07_0223359C
-ov07_0223359C: ; 0x0223359C
+	thumb_func_start UnkBallData_CaptureStateEnd
+UnkBallData_CaptureStateEnd: ; 0x0223359C
 	mov r0, #0
 	bx lr
-	thumb_func_end ov07_0223359C
+	thumb_func_end UnkBallData_CaptureStateEnd
 
-	thumb_func_start ov07_022335A0
-ov07_022335A0: ; 0x022335A0
+	thumb_func_start UnkBallData_RunCaptureState
+UnkBallData_RunCaptureState: ; 0x022335A0
 	push {r3, lr}
 	ldr r1, [r0, #0x14]
 	lsl r2, r1, #2
-	ldr r1, _022335B0 ; =ov07_0223729C
+	ldr r1, _022335B0 ; =sUnkBallDataCaptureStateFuncs
 	ldr r1, [r1, r2]
 	blx r1
 	pop {r3, pc}
 	nop
-_022335B0: .word ov07_0223729C
-	thumb_func_end ov07_022335A0
+_022335B0: .word sUnkBallDataCaptureStateFuncs
+	thumb_func_end UnkBallData_RunCaptureState
 
-	thumb_func_start ov07_022335B4
-ov07_022335B4: ; 0x022335B4
+	thumb_func_start UnkBallData_RunThrowArc
+UnkBallData_RunThrowArc: ; 0x022335B4
 	push {r3, r4, lr}
 	sub sp, #0x1c
 	add r4, r0, #0
@@ -48650,7 +48650,7 @@ _022335D6:
 	add r0, r4, #0
 	add r0, #0x90
 	ldr r0, [r0]
-	bl ov07_02232540
+	bl UnkBallData_IsSpinningKind
 	cmp r0, #1
 	bne _0223372C
 	bl LCRandom
@@ -48665,7 +48665,7 @@ _02233644:
 	add r0, r4, #0
 	add r0, #0x90
 	ldr r0, [r0]
-	bl ov07_02232540
+	bl UnkBallData_IsSpinningKind
 	cmp r0, #1
 	bne _022336E2
 	mov r1, #2
@@ -48692,7 +48692,7 @@ _0223367E:
 	add r0, r4, #0
 	add r0, #0x90
 	ldr r0, [r0]
-	bl ov07_02232580
+	bl UnkBallData_IsFlashingKind
 	cmp r0, #1
 	bne _022336E2
 	add r0, r4, #0
@@ -48779,7 +48779,7 @@ _0223372C:
 _0223372E:
 	add r0, r4, #0
 	mov r1, #0
-	bl ov07_022344B4
+	bl UnkBallData_SetRotation
 	ldr r0, [r4, #8]
 	add r0, r0, #1
 	str r0, [r4, #8]
@@ -48788,7 +48788,7 @@ _0223373E:
 	add r0, r4, #0
 	add r0, #0x90
 	ldr r0, [r0]
-	bl ov07_02232580
+	bl UnkBallData_IsFlashingKind
 	cmp r0, #1
 	bne _02233772
 	add r0, r4, #0
@@ -48840,7 +48840,7 @@ _022337A2:
 	bl ManagedSprite_SetAnim
 	add r0, r4, #0
 	mov r1, #1
-	bl ov07_022344C0
+	bl UnkBallData_SetAnimateSprite
 	add r0, r4, #0
 	mov r1, #0
 	add r0, #0xc4
@@ -48936,7 +48936,7 @@ _02233864: .word 0x0000FFFF
 _02233868: .word 0x000003EA
 _0223386C: .word 0x00000401
 _02233870: .word 0x000007E8
-	thumb_func_end ov07_022335B4
+	thumb_func_end UnkBallData_RunThrowArc
 
 	thumb_func_start ov07_02233874
 ov07_02233874: ; 0x02233874
@@ -48999,7 +48999,7 @@ _02233896:
 	add r0, r4, #0
 	add r0, #0x90
 	ldr r0, [r0]
-	bl ov07_02232540
+	bl UnkBallData_IsSpinningKind
 	cmp r0, #1
 	bne _022339EC
 	bl LCRandom
@@ -49014,7 +49014,7 @@ _02233904:
 	add r0, r4, #0
 	add r0, #0x90
 	ldr r0, [r0]
-	bl ov07_02232540
+	bl UnkBallData_IsSpinningKind
 	cmp r0, #1
 	bne _022339A2
 	mov r1, #2
@@ -49041,7 +49041,7 @@ _0223393E:
 	add r0, r4, #0
 	add r0, #0x90
 	ldr r0, [r0]
-	bl ov07_02232580
+	bl UnkBallData_IsFlashingKind
 	cmp r0, #1
 	bne _022339A2
 	add r0, r4, #0
@@ -49128,7 +49128,7 @@ _022339EC:
 _022339EE:
 	add r0, r4, #0
 	mov r1, #0
-	bl ov07_022344B4
+	bl UnkBallData_SetRotation
 	ldr r0, [r4, #8]
 	add r0, r0, #1
 	str r0, [r4, #8]
@@ -49137,7 +49137,7 @@ _022339FE:
 	add r0, r4, #0
 	add r0, #0x90
 	ldr r0, [r0]
-	bl ov07_02232580
+	bl UnkBallData_IsFlashingKind
 	cmp r0, #1
 	bne _02233A32
 	add r0, r4, #0
@@ -49179,7 +49179,7 @@ _02233A4E:
 	bl ManagedSprite_SetAnim
 	add r0, r4, #0
 	mov r1, #0
-	bl ov07_022344C0
+	bl UnkBallData_SetAnimateSprite
 	add r0, r4, #0
 	mov r1, #0
 	add r0, #0xc4
@@ -49262,8 +49262,8 @@ _02233AFC: .word 0x0000FFFF
 _02233B00: .word 0x000003EA
 	thumb_func_end ov07_02233874
 
-	thumb_func_start ov07_02233B04
-ov07_02233B04: ; 0x02233B04
+	thumb_func_start UnkBallData_OpenInPlace
+UnkBallData_OpenInPlace: ; 0x02233B04
 	push {r3, r4, lr}
 	sub sp, #0x14
 	add r4, r0, #0
@@ -49289,7 +49289,7 @@ _02233B1E: ; jump table
 	.short _02233C6C - _02233B1E - 2 ; case 7
 _02233B2E:
 	mov r1, #0
-	bl ov07_022344C0
+	bl UnkBallData_SetAnimateSprite
 	ldr r0, [r4, #0x30]
 	mov r1, #1
 	bl ManagedSprite_SetAnim
@@ -49360,7 +49360,7 @@ _02233B9C:
 	add r2, #2
 	bl ManagedSprite_GetPositionXY
 	add r0, sp, #0
-	bl ov07_02232D20
+	bl BallBurstEffect_New
 	add r1, r4, #0
 	add r1, #0xd0
 	str r0, [r1]
@@ -49371,7 +49371,7 @@ _02233B9C:
 _02233BD2:
 	add r0, #0xd0
 	ldr r0, [r0]
-	bl ov07_02232D80
+	bl BallBurstEffect_Start
 	ldr r0, [r4, #8]
 	add r0, r0, #1
 	str r0, [r4, #8]
@@ -49448,13 +49448,13 @@ _02233C3E:
 _02233C6C:
 	add r0, #0xd0
 	ldr r0, [r0]
-	bl ov07_02232DF4
+	bl BallBurstEffect_IsRunning
 	cmp r0, #0
 	bne _02233C90
 	add r0, r4, #0
 	add r0, #0xd0
 	ldr r0, [r0]
-	bl ov07_02232E10
+	bl BallBurstEffect_Free
 	ldr r0, [r4, #8]
 	add r0, r0, #1
 	str r0, [r4, #8]
@@ -49468,10 +49468,10 @@ _02233C90:
 	add sp, #0x14
 	pop {r3, r4, pc}
 	.balign 4, 0
-	thumb_func_end ov07_02233B04
+	thumb_func_end UnkBallData_OpenInPlace
 
-	thumb_func_start ov07_02233C98
-ov07_02233C98: ; 0x02233C98
+	thumb_func_start UnkBallData_Wobble
+UnkBallData_Wobble: ; 0x02233C98
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, [r4, #8]
@@ -49543,4 +49543,4 @@ _02233D16:
 	nop
 _02233D1C: .word 0xFFFFE001
 _02233D20: .word 0x00001FFF
-	thumb_func_end ov07_02233C98
+	thumb_func_end UnkBallData_Wobble

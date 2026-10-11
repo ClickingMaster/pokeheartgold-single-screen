@@ -9,7 +9,7 @@
 .public ov80_0222ACA0
 .public ov80_0222AD9C
 .public ov80_0222ADB4
-.public ov80_022384D8
-.public ov80_022385B0
-.public ov80_02239D74
-.public ov80_02239DB8
+.public FrontierMapTileBlink_Create
+.public FrontierMapTileBlink_Free
+.public FrontierMapBgAnim_Create
+.public FrontierMapBgAnim_Free

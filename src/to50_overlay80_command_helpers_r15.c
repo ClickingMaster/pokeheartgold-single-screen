@@ -29,6 +29,6 @@ void ov80_0222CAD0(void *c, int unused, int count) {
     for (i = 0; i < 3; i++) {
         values[i] = FrontierScript_ReadVar(c);
     }
-    ov80_02239BF0(PTR(sys, 0), var, 1, values, 3);
+    FrontierMap_SetObjectMovement(PTR(sys, 0), var, 1, values, 3);
     Heap_Free(values);
 }

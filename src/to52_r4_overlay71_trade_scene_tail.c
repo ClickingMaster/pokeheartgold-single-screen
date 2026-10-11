@@ -25,7 +25,7 @@ extern void *SysTask_CreateOnVWaitQueue(void (*)(void *), void *, u32);
 extern void BeginNormalPaletteFade(u32, s32, s32, u16, s32, s32, u32);
 extern void PlaySE(u16);
 extern void ov71_022499A4(Ov71Work *, void *);
-extern void ov71_02247704(void *, int);
+extern void TradeSequence_SetModelVisible(void *, int);
 extern int ov71_02249A50(void *);
 extern void Sprite_SetAnimCtrlSeq(void *, int);
 extern void Sprite_SetDrawFlag(void *, int);
@@ -70,7 +70,7 @@ int ov71_022495A0(Ov71Work *work, Ov71State *state) {
         if (work->timer > 10) {
             PlaySE(0x6AB);
             ov71_022499A4(work, work->sub34);
-            ov71_02247704(work->unk2C, 1);
+            TradeSequence_SetModelVisible(work->unk2C, 1);
             state->state++;
         }
         break;

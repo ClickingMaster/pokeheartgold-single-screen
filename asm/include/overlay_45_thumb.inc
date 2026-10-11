@@ -122,9 +122,9 @@
 .public WiFiHistory_GetPlayerRegion
 .public Save_GameStats_Get
 .public GameStats_Inc
-.public sub_020318E8
-.public sub_020318FC
-.public sub_02031900
+.public Save_PlazaSurvey_Get
+.public PlazaSurvey_SetSurveyId
+.public PlazaSurvey_SetAnswer
 .public sub_020393C8
 .public sub_020397FC
 .public sub_02039FD8
