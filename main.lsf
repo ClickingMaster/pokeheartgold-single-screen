@@ -1587,24 +1587,8 @@ Overlay OVY_0
     Object lib/NitroDWC/src/nat_negotiate.o
     Object lib/NitroDWC/src/query_report_init.o
     Object lib/NitroDWC/src/server_report.o
-    Object src/to61_overlay_00_arm_residual_13_run09.o
-    Object src/to80_extra1622_run01.o
-    Object src/to61_overlay_00_arm_residual_13_run10.o
-    Object src/to80_extra1385_run01.o
-    Object src/to61_overlay_00_arm_residual_13_run11.o
-    Object src/to70_to61_overlay_00_arm_residual_13_residual_12_extra1079_run01.o
-    Object src/to61_overlay_00_arm_residual_13_run12.o
-    Object src/to80_extra1386_run01.o
-    Object src/to61_overlay_00_arm_residual_13_run13.o
-    Object src/to80_extra1623_run01.o
-    Object src/to61_overlay_00_arm_residual_13_run14.o
-    Object src/to80_extra1727_run01.o
-    Object src/to70_to61_overlay_00_arm_residual_13_residual_15_extra1080_run01.o
-    Object src/to61_overlay_00_arm_residual_13_run15.o
-    Object src/to70_to61_overlay_00_arm_residual_13_residual_16_extra1081_run01.o
-    Object src/to61_overlay_00_arm_residual_13_run16.o
-    Object src/to80_extra1387_run01.o
-    Object src/to61_overlay_00_arm_residual_13_run17.o
+    Object lib/NitroDWC/src/sb_query_engine.o
+    Object lib/NitroDWC/src/sb_server.o
     Object lib/NitroDWC/src/sb_serverlist.o
 }
 Overlay field
@@ -2673,46 +2657,7 @@ Overlay OVY_18
     Object src/application/pokedex/ov18_021E5AA0.o
     Object src/application/pokedex/ov18_021E5C40.o
     Object src/application/pokedex/ov18_021E8BF4.o
-    Object src/sol_r9_ov18_run01.o
-    Object src/to90_extra2244_run01.o
-    Object src/to90_extra2244_run02.o
-    Object src/sol_r9_ov18_run01b.o
-    Object src/to90_extra2245_run01.o
-    Object src/sol_r9_ov18_run02.o
-    Object src/op90_sol_r9_ov18_gap03_r01.o
-    Object src/sol_r9_ov18_run03.o
-    Object src/to90_extra2246_run01.o
-    Object src/sol_r9_ov18_run03b.o
-    Object src/sol_r9_ov18_gap05.o
-    Object src/sol_r9_ov18_run04.o
-    Object src/to52_overlay18_dex_measurement_text.o
-    Object src/sol_r9_ov18_run04b.o
-    Object src/overlay18_pokedex_entries/overlay18_pokedex_entries.o
-    Object src/sol_r9_ov18_run05.o
-    Object src/to90_extra1959_run01.o
-    Object src/sol_r9_ov18_run06.o
-    Object src/to90_extra2247_run01.o
-    Object src/to42_ov18_dex_search_gap09_run1.o
-    Object src/to90_extra2248_run01.o
-    Object src/to42_ov18_dex_search_gap09_run2.o
-    Object src/to90_extra2249_run01.o
-    Object src/to42_ov18_dex_search_gap09_run3.o
-    Object src/to90_extra2066_run01.o
-    Object src/to42_ov18_dex_search_gap09_run4.o
-    Object src/op90_to42_ov18_dex_search_gap09_asm5_r01.o
-    Object src/overlay18_sol_partial_1.o
-    Object src/overlay18_pokedex_info_windows_run1.o
-    Object src/to90_extra2009_run01.o
-    Object src/overlay18_pokedex_info_windows_run2.o
-    Object src/to90_extra2200_run01.o
-    Object src/overlay18_pokedex_info_windows_run3.o
-    Object src/to53_overlay18_pokedex_form.o
-    Object src/to70_to53_overlay18_residual_2_gap_3_tail_extra36_run01.o
-    Object src/overlay18_pokedex_info_windows_run4.o
-    Object src/overlay18_sol_partial_2.o
-    Object src/to42_overlay18_dex_area_r3.o
-    Object src/overlay18_sol_partial_3.o
-    Object src/to90_extra2204_run01.o
+    Object src/application/pokedex/pokedex_windows.o
     Object src/overlay18_sol_partial_4.o
     Object src/to90_extra2205_run01.o
     Object src/to90_extra2205_run02.o
@@ -2783,67 +2728,12 @@ Overlay OVY_18
     Object src/application/pokedex/pokedex_area_sprites.o
     Object src/application/pokedex/pokedex_size_check.o
     Object src/application/pokedex/pokedex_forms.o
-    Object src/to53_overlay18_pokedex_input.o
-    Object src/overlay18_pokedex_search_ui_run5.o
-    Object src/to91_w41456_input_r2_run01.o
-    Object src/overlay18_pokedex_search_ui_run6.o
-    Object src/overlay18_sol_partial_25.o
-    Object src/to90_extra2198_run01.o
-    Object src/to90_extra2198_run02.o
-    Object src/to90_extra2198_run03.o
-    Object src/overlay18_sol_partial_26.o
-    Object src/overlay18_pokedex_grid/overlay18_pokedex_grid.o
-    Object src/overlay18_sol_partial_27.o
-    Object src/overlay18_pokedex_grid_navigation_r28.o
-    Object src/overlay18_sol_partial_28.o
-    Object src/to90_extra2199_run01.o
-    Object src/to90_extra2199_run02.o
-    Object src/to90_extra2199_run03.o
-    Object src/overlay18_sol_partial_29.o
-    Object src/to90_extra2201_run01.o
-    Object src/to90_extra2201_run02.o
-    Object src/to90_extra2201_run03.o
-    Object src/overlay18_sol_partial_30.o
-    Object src/to90_extra2202_run01.o
-    Object src/to90_extra2202_run02.o
-    Object src/to90_extra2202_run03.o
-    Object src/to90_extra2202_run04.o
-    Object src/overlay18_sol_partial_31.o
-    Object src/overlay18_pokedex_search_controls.o
-    Object src/overlay18_sol_partial_32.o
-    Object src/overlay18_pokedex_list_input_r47.o
-    Object src/overlay18_sol_partial_33.o
-    Object src/overlay18_filter_input_run1.o
-    Object src/to90_extra2203_run01.o
-    Object src/overlay18_filter_input_run2.o
+    Object src/application/pokedex/pokedex_input.o
     Object asm/overlay_18_residual_34_gap_2_module03_residual.o
     Object src/application/pokedex/pokedex_search.o
     Object asm/overlay_18_residual_36_module03_residual.o
-    Object src/overlay_18_pokedex_entry_popup_alloc.o
-    Object src/overlay18_sol_partial_36.o
-    Object src/overlay18_mon_intro_setup.o
-    Object src/overlay18_sol_partial_37.o
-    Object asm/slop_r1_ov18_residual_38.o
-    Object src/slop_r1_overlay18_8c0c.o
-    Object src/overlay18_sol_partial_38.o
-    Object src/overlay18_dex_palette_timer.o
-    Object src/slop_r1_overlay18_8ccc.o
-    Object src/overlay18_dex_window_resources.o
-    Object src/overlay18_sol_partial_39.o
-    Object src/overlay18_resource_groups.o
-    Object src/overlay18_sol_partial_40.o
-    Object src/overlay18_sprite_resource_setup_r41.o
-    Object src/overlay18_sol_partial_41.o
-    Object asm/slop_r1_ov18_residual_42.o
-    Object src/slop_r1_overlay18_94bc.o
-    Object src/overlay18_sol_partial_42.o
-    Object asm/slop_r1_ov18_residual_43.o
-    Object src/slop_r1_overlay18_9518.o
-    Object src/overlay18_sol_partial_43.o
-    Object asm/slop_r1_ov18_residual_44.o
-    Object src/slop_r1_overlay18_95cc.o
-    Object src/overlay18_sol_partial_44.o
-    Object src/r40_overlay_18_residual_45_run1.o
+    Object src/application/pokedex/pokedex_entry_popup.o
+    Object src/application/pokedex/pokedex_text_util.o
     Object asm/overlay_18_residual_45_r40_residual_1.o
 }
 Overlay OVY_19

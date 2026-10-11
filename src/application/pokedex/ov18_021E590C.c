@@ -6,6 +6,11 @@
 #include "msgdata.h"
 #include "unk_02091278.h"
 
+// Callers see these through pokedex_text_util.h with a 32-bit species (as their calls were compiled).
+String *ov18_021E590C(u16 species, int language, enum HeapID heapId);
+String *ov18_021E595C(u16 species, int language, enum HeapID heapId);
+String *ov18_021E59A8(u16 species, int language, int a2, enum HeapID heapId);
+
 #if defined(HEARTGOLD)
 #define ZUKAN_FLAVOR_GMM (NARC_msg_msg_0803_bin)
 #elif defined(SOULSILVER)
