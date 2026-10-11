@@ -152,7 +152,7 @@ _02087F74:
 	mov r0, #0x6f
 	lsl r0, r0, #4
 	ldr r0, [r5, r0]
-	bl sub_02087988
+	bl OrbitCursor_Delete
 	cmp r0, #0
 	bne _02087FC2
 	ldr r0, [r4]
@@ -162,7 +162,7 @@ _02087F74:
 _02087F8A:
 	ldr r0, _02087FC8 ; =0x000006F4
 	ldr r0, [r5, r0]
-	bl sub_02087988
+	bl OrbitCursor_Delete
 	cmp r0, #0
 	bne _02087FC2
 	ldr r0, [r4]

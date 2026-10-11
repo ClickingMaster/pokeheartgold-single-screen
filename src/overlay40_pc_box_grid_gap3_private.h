@@ -29,10 +29,10 @@ void ov40_0222CE7C(void *);
 void ov40_0222CF10(void *);
 void ov40_0222BF64(void *, void *, int, void *);
 
-void sub_02087948(void *, s16, s16);
-void sub_020878B8(void *, s16, s16);
-void sub_020879E0(void *, int);
-void sub_020878B0(void *, int);
+void OrbitCursor_SetPosition(void *, s16, s16);
+void OrbitCursor_SetTarget(void *, s16, s16);
+void OrbitCursor_SetVisible(void *, int);
+void OrbitCursor_SetActive(void *, int);
 void sub_02087A30(void *);
 void sub_02087A54(void *);
 

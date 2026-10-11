@@ -28,7 +28,7 @@ void ManagedSprite_SetPaletteOverrideOffset(void *sprite, int offset);
 void TextOBJ_SetSpritesDrawFlag(void *obj, BOOL draw);
 void *TouchHitboxController_Create(const void *hitboxes, int count, const void *callbacks, void *arg, u32 heapId);
 void TextOBJ_SetPosition(void *p, int x, int y);
-void sub_020878B8(void *p, s16 x, s16 y);
+void OrbitCursor_SetTarget(void *p, s16 x, s16 y);
 u64 BattleRecordHeader_GetField(void *summary, int field, int index);
 
 void ov40_0222BF80(void *p, int value);

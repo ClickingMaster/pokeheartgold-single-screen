@@ -4164,13 +4164,13 @@ _0223FE34:
 	lsl r0, r0, #4
 	ldr r0, [r4, r0]
 	mov r1, #1
-	bl sub_020879E0
+	bl OrbitCursor_SetVisible
 	mov r0, #0x6f
 	lsl r0, r0, #4
 	mov r1, #0x18
 	ldr r0, [r4, r0]
 	add r2, r1, #0
-	bl sub_02087A08
+	bl OrbitCursor_SetRadius
 	ldr r0, _0223FF70 ; =0x000004B8
 	mov r1, #0
 	str r1, [r5, r0]
@@ -4258,13 +4258,13 @@ _0223FF18:
 	lsl r0, r0, #4
 	ldr r0, [r4, r0]
 	mov r1, #0
-	bl sub_020879E0
+	bl OrbitCursor_SetVisible
 	mov r0, #0x6f
 	lsl r0, r0, #4
 	mov r1, #0
 	ldr r0, [r4, r0]
 	add r2, r1, #0
-	bl sub_02087A08
+	bl OrbitCursor_SetRadius
 	b _0223FF68
 _0223FF34:
 	ldr r0, _0223FF70 ; =0x000004B8
@@ -4770,7 +4770,7 @@ _02240372:
 	lsl r0, r0, #4
 	ldr r0, [r5, r0]
 	mov r1, #0
-	bl sub_020879E0
+	bl OrbitCursor_SetVisible
 	add r0, r5, #0
 	bl ov40_0222C4DC
 	cmp r0, #1
@@ -4791,7 +4791,7 @@ _022403A2:
 	lsl r0, r0, #4
 	ldr r0, [r5, r0]
 	mov r1, #0
-	bl sub_020879E0
+	bl OrbitCursor_SetVisible
 	add r0, r5, #0
 	bl ov40_0222C4DC
 	cmp r0, #1
@@ -4822,7 +4822,7 @@ _022403EC:
 	lsl r0, r0, #4
 	ldr r0, [r5, r0]
 	mov r1, #0
-	bl sub_020879E0
+	bl OrbitCursor_SetVisible
 	b _02240414
 _022403FA:
 	mov r1, #0
@@ -4831,7 +4831,7 @@ _022403FA:
 	lsl r0, r0, #4
 	ldr r0, [r5, r0]
 	mov r1, #0
-	bl sub_020879E0
+	bl OrbitCursor_SetVisible
 	add r0, r5, #0
 	mov r1, #2
 	bl ov40_0222BF80
@@ -5232,12 +5232,12 @@ _022406F8:
 	ldr r0, _0224083C ; =0x000006F4
 	mov r1, #1
 	ldr r0, [r4, r0]
-	bl sub_020879E0
+	bl OrbitCursor_SetVisible
 	ldr r0, _0224083C ; =0x000006F4
 	mov r1, #0x18
 	ldr r0, [r4, r0]
 	add r2, r1, #0
-	bl sub_02087A08
+	bl OrbitCursor_SetRadius
 	ldr r0, _02240840 ; =0x000004B8
 	mov r1, #0
 	str r1, [r5, r0]
@@ -5335,12 +5335,12 @@ _022407EE:
 	ldr r0, _0224083C ; =0x000006F4
 	mov r1, #0
 	ldr r0, [r4, r0]
-	bl sub_020879E0
+	bl OrbitCursor_SetVisible
 	ldr r0, _0224083C ; =0x000006F4
 	mov r1, #0
 	ldr r0, [r4, r0]
 	add r2, r1, #0
-	bl sub_02087A08
+	bl OrbitCursor_SetRadius
 	b _02240834
 _02240806:
 	mov r1, #1

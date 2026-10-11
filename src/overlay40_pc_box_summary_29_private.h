@@ -20,9 +20,9 @@ BOOL PlayCry(u16 species, u8 form);
 
 void *FrontierCard_New(int heapId);
 void FrontierCard_InitFromSave(void *a, void *b);
-BOOL sub_020878B8(void *p, s16 x, s16 y);
-void sub_020879E0(void *p, int a);
-void sub_02087A08(void *p, int a, int b);
+BOOL OrbitCursor_SetTarget(void *p, s16 x, s16 y);
+void OrbitCursor_SetVisible(void *p, int a);
+void OrbitCursor_SetRadius(void *p, int a, int b);
 
 void GlobalTerminalNet_PackBoxData(void *a, void *b, u32 c, void *d, int heapId);
 

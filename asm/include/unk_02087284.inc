@@ -27,16 +27,16 @@
 .public Heap_Free
 .public GF_SinDeg
 .public GF_CosDeg
-.public sub_02087284
-.public sub_0208763C
-.public sub_02087878
-.public sub_020878B0
-.public sub_020878B8
-.public sub_020878EC
-.public sub_02087948
-.public sub_02087988
-.public sub_020879E0
-.public sub_02087A08
+.public OrbitCursor_New
+.public OrbitCursor_ReloadPalette
+.public OrbitCursor_Start
+.public OrbitCursor_SetActive
+.public OrbitCursor_SetTarget
+.public OrbitCursor_MoveTarget
+.public OrbitCursor_SetPosition
+.public OrbitCursor_Delete
+.public OrbitCursor_SetVisible
+.public OrbitCursor_SetRadius
 .public sub_02087A30
 .public sub_02087A54
 .public FX_Sqrt
@@ -54,10 +54,10 @@
 .public gOverlayTemplate_Battle
 .public gNatureStatMods
 
-	.public sub_020872DC
-	.public sub_020873D4
-	.public sub_020876B0
-	.public sub_020877B4
-	.public sub_02087830
-	.public sub_02087930
-	.public _02102814
+	.public OrbitCursor_StepToward
+	.public OrbitCursor_Task
+	.public OrbitCursor_LoadResources
+	.public OrbitCursor_CreateSprites
+	.public OrbitCursor_DeleteSprites
+	.public OrbitCursor_IsNewTarget
+	.public gOrbitCursorPaletteMembers

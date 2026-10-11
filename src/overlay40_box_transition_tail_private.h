@@ -50,8 +50,8 @@ void SpriteSystem_LoadAnimResObjFromOpenNarc(void *system, void *manager, void *
 void Thunk_G3X_Reset(void);
 void RequestSwap3DBuffers(int a, int b);
 u64 BattleRecordHeader_GetField(void *summary, int field, int index);
-void sub_020878B8(void *p, s16 x, s16 y);
-BOOL sub_020879E0(void *p, int flag);
+void OrbitCursor_SetTarget(void *p, s16 x, s16 y);
+BOOL OrbitCursor_SetVisible(void *p, int flag);
 void AccessoryPortrait_Draw(void *p);
 void AccessoryPortrait_VBlank(void *p);
 

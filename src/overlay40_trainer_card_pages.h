@@ -31,8 +31,8 @@ u64 BattleRecordHeader_GetField(void *a, int b, int c);
 void sub_0203A948(int a, int b);
 int BattleRecord_Exists(void);
 void BattleRecord_Delete(void);
-void sub_020879E0(void *p, int a);
-void sub_02087A08(void *p, int a, int b);
+void OrbitCursor_SetVisible(void *p, int a);
+void OrbitCursor_SetRadius(void *p, int a, int b);
 void sub_02087A84(void *p, int a, int b);
 
 int ov39_0222774C(void *p, u32 lo, u32 hi);

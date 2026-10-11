@@ -598,10 +598,7 @@ Static main
     Object src/field_effects.o
     Object src/gymmick_init.o
     Object src/map_landmark_name.o
-    Object src/op90_unk_02068FC8_r01.o
-    Object src/field_context_access_1.o
-    Object src/r40_unk_02068FC8_residual_2_run1.o
-    Object src/field_context_access_2.o
+    Object src/trainer_card_data.o
     Object src/unk_02069528.o
     Object src/render_model.o
     Object src/render_animation.o
@@ -678,10 +675,7 @@ Static main
     Object src/op90_unk_020863F4_residual_4_r01.o
     Object src/field_ui_863f4_5.o
     Object asm/unk_020863F4_residual_5.o
-    Object src/touch_sprite_motion_alloc.o
-    Object src/touch_motion_vector.o
-    Object src/op90_unk_020873D4_r01.o
-    Object src/touch_sprite_motion.o
+    Object src/orbit_cursor.o
     Object src/battle_transition_application.o
     Object src/field_transition_finish_1.o
     Object asm/unk_02087A78_residual_1.o
@@ -1682,45 +1676,9 @@ Overlay OVY_0
     Object lib/NitroDWC/src/auth_netcheck.o
     Object lib/NitroDWC/src/net_common.o
     Object lib/NitroDWC/asm/to60_overlay_00_arm_anchor_own1.o
-    Object src/to61_overlay_00_arm_residual_1_run07.o
-    Object src/to80_extra1400_run01.o
-    Object src/to61_overlay_00_arm_residual_1_run08.o
-    Object src/to70_to61_overlay_00_arm_residual_1_residual_9_extra1095_run01.o
-    Object src/to61_overlay_00_arm_residual_1_run09.o
-    Object src/to70_to61_overlay_00_arm_residual_1_residual_10_extra1088_run01.o
-    Object src/to61_overlay_00_arm_residual_1_run10.o
-    Object src/to80_extra1389_run01.o
-    Object src/to61_overlay_00_arm_residual_1_run11.o
-    Object src/to80_extra1629_run01.o
-    Object src/to61_overlay_00_arm_residual_1_run12.o
-    Object src/to90_extra2558_run01.o
-    Object src/to61_overlay_00_arm_residual_1_run13.o
-    Object src/to80_extra1390_run01.o
-    Object src/to61_overlay_00_arm_residual_1_run14.o
-    Object src/to70_to61_overlay_00_arm_residual_1_residual_15_extra1089_run01.o
-    Object src/to61_overlay_00_arm_residual_1_run15.o
-    Object src/op90_to61_overlay_00_arm_residual_1_residual_16_r01.o
-    Object src/to61_overlay_00_arm_residual_1_run16.o
-    Object src/op90_to61_overlay_00_arm_residual_1_residual_17_r01.o
-    Object src/to61_overlay_00_arm_residual_1_run17.o
-    Object src/to80_extra1391_run01.o
-    Object src/to61_overlay_00_arm_residual_1_run18.o
-    Object src/to80_extra2567_run01.o
-    Object src/to61_overlay_00_arm_residual_1_run19.o
-    Object src/op90_to90_extra2111_residual_1_r01.o
-    Object src/to90_extra2111_run01.o
-    Object src/to90_extra2111_run02.o
-    Object src/to61_overlay_00_arm_residual_1_run20.o
-    Object src/to80_extra1392_run01.o
-    Object src/to61_overlay_00_arm_residual_1_run21.o
-    Object src/to70_to61_overlay_00_arm_residual_1_residual_22_extra1090_run01.o
-    Object src/to61_overlay_00_arm_residual_1_run22.o
-    Object src/to80_extra1630_run01.o
-    Object src/to61_overlay_00_arm_residual_1_run23.o
-    Object src/to80_extra1393_run01.o
-    Object src/to61_overlay_00_arm_residual_1_run24.o
-    Object src/to80_extra1394_run01.o
-    Object src/to61_overlay_00_arm_residual_1_run25.o
+    Object lib/NitroDWC/src/dwc_main.o
+    Object lib/NitroDWC/src/dwc_login.o
+    Object lib/NitroDWC/src/friend_manager.o
     Object lib/NitroDWC/src/friend_list.o
     Object lib/NitroDWC/src/friend_callback.o
     Object lib/NitroDWC/src/match_setup.o
@@ -2170,11 +2128,11 @@ Overlay field
     Object asm/overlay_01_021FD41C_residual_4.o
     Object asm/overlay_01_021FDA14_residual_1.o
     Object src/field_map_object_spawn_effect_1.o
-    Object src/field_effect_model_bank.o
+    Object src/field/field_footprints.o
     Object asm/overlay_01_021FE590_residual_1.o
     Object src/field_effect_speed_sequence_1.o
     Object asm/overlay_01_021FE590_residual_2.o
-    Object src/field_effect_object_variant.o
+    Object src/field/field_surf_mount.o
     Object src/field/field_rock_climb_effect.o
     Object src/field/field_puddle_splash.o
     Object src/field/field_mud_splash.o
@@ -5728,20 +5686,7 @@ Object src/to90_extra2516_run01.o
 Object src/to54_atomic_w20_03_run2.o
 Object src/op90_to54_atomic_w20_04_res2_r01.o
 Object src/to53_overlay112_133.o
-Object src/to70_to58_w16b_ov112_134_0_extra409_run01.o
-    Object src/to58_w16b_ov112_134_1.o
-Object src/to53_overlay112_135.o
-Object src/to58_w16b_ov112_136_0.o
-Object src/to53_overlay112_137.o
-Object src/to58_w16b_ov112_138_0.o
-Object src/to53_overlay112_139.o
-Object src/to55_r3_w02_run1.o
-Object src/op90_to55_r3_w02_residual_r01.o
-Object src/to55_r3_w02_run2.o
-Object src/to53_overlay112_141.o
-Object src/to57_overlay112_142.o
-Object src/to53_overlay112_143.o
-Object src/to58_w16b_ov112_144_0.o
+Object src/application/pokewalker/pokewalker_app_modes.o
 Object src/to53_overlay112_145.o
 Object src/to70_to53_overlay112_146_extra250_run01.o
 Object src/to53_overlay112_147.o

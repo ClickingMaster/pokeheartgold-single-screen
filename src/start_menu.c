@@ -42,7 +42,7 @@
 #include "unk_0205CB48.h"
 #include "unk_02066EDC.h"
 #include "field_warp_state.h"
-#include "unk_02068FC8.h"
+#include "trainer_card_data.h"
 #include "unk_020755E8.h"
 #include "unk_02092BE8.h"
 
@@ -1105,9 +1105,9 @@ static BOOL sub_0203D1CC(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
 
-    startMenu->exitTaskEnvironment = sub_020691C4(HEAP_ID_FIELD2);
+    startMenu->exitTaskEnvironment = TrainerCardAppArgs_New(HEAP_ID_FIELD2);
     TrainerCardAppArgs *trainerCard = startMenu->exitTaskEnvironment;
-    sub_02068FC8(1, 1, 0, 255, fieldSystem, trainerCard);
+    TrainerCardData_Build(1, 1, 0, 255, fieldSystem, trainerCard);
     TrainerCard_LaunchApp(fieldSystem, trainerCard);
     startMenu->exitTaskFunc = sub_0203D218;
     return FALSE;
@@ -1117,7 +1117,7 @@ static BOOL sub_0203D218(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
     StartMenuTaskData *startMenu = (StartMenuTaskData *)TaskManager_GetEnvironment(taskManager);
 
-    sub_020691E0(startMenu->exitTaskEnvironment);
+    TrainerCardData_Free(startMenu->exitTaskEnvironment);
     FieldSystem_LoadFieldOverlay(fieldSystem);
     startMenu->state = START_MENU_STATE_RETURN;
     return FALSE;

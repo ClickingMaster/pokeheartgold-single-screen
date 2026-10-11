@@ -89,7 +89,7 @@ _0205821E:
 	mov r0, #0
 	add r1, r0, #0
 	add r2, r0, #0
-	bl sub_02068FC8
+	bl TrainerCardData_Build
 	mov r0, #0x5f
 	bl LinkSync_StartSync
 	ldr r0, _02058254 ; =CommClubLink_SendCard

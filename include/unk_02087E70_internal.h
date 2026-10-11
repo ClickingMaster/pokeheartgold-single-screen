@@ -36,7 +36,7 @@ void ov40_0222CABC(BattleAppWork *);
 void ov40_0222CA8C(BattleAppWork *);
 void ov40_0222CF94(BattleAppWork *);
 void ov40_0222D55C(BattleAppWork *);
-BOOL sub_02087988(void *);
+BOOL OrbitCursor_Delete(void *);
 void VsRecorder_FreeResources(BattleAppWork *);
 void UnloadOverlayByID(FSOverlayID);
 void GfGfx_SwapDisplay(void);

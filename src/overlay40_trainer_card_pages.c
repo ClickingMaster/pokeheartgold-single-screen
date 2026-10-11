@@ -101,8 +101,8 @@ int ov40_02241488(void *p) {
 
 int ov40_022417A4(void *p) {
     ov40_0223077C(p, PTR(p, 0x6F0), 0x80, 0x60);
-    sub_020879E0(PTR(p, 0x6F0), 1);
-    sub_02087A08(PTR(p, 0x6F0), 0x18, 0x18);
+    OrbitCursor_SetVisible(PTR(p, 0x6F0), 1);
+    OrbitCursor_SetRadius(PTR(p, 0x6F0), 0x18, 0x18);
     ov40_0222BF80(p, 3);
     return 0;
 }
@@ -140,8 +140,8 @@ int ov40_022417DC(void *p) {
         if (GlobalTerminalNet_GetError(ov40_0223D540(p), (u32 *)&q) == 1) {
             StopSE(0x57D, 0);
             ov40_02230CDC(p, 6, WORD(q, 0xC), WORD(q, 4));
-            sub_020879E0(PTR(p, 0x6F0), 0);
-            sub_02087A08(PTR(p, 0x6F0), 0, 0);
+            OrbitCursor_SetVisible(PTR(p, 0x6F0), 0);
+            OrbitCursor_SetRadius(PTR(p, 0x6F0), 0, 0);
             WORD(p, 8) = 0xFF;
         } else {
             ov40_0222DED0(p, 0x77);
@@ -160,8 +160,8 @@ int ov40_022417DC(void *p) {
         }
         break;
     default:
-        sub_020879E0(PTR(p, 0x6F0), 0);
-        sub_02087A08(PTR(p, 0x6F0), 0, 0);
+        OrbitCursor_SetVisible(PTR(p, 0x6F0), 0);
+        OrbitCursor_SetRadius(PTR(p, 0x6F0), 0, 0);
         ov40_0222FB28(p, 0x23);
         ov40_0222BF80(p, 4);
         break;
@@ -735,8 +735,8 @@ int ov40_022425E8(void *p) {
         break;
     case 3:
         ov40_0223077C(p, PTR(p, 0x6F0), 0x80, 0x60);
-        sub_020879E0(PTR(p, 0x6F0), 1);
-        sub_02087A08(PTR(p, 0x6F0), 0x18, 0x18);
+        OrbitCursor_SetVisible(PTR(p, 0x6F0), 1);
+        OrbitCursor_SetRadius(PTR(p, 0x6F0), 0x18, 0x18);
         PlaySE(0x57D);
         WORD(p, 8)
         ++;
@@ -774,8 +774,8 @@ int ov40_022425E8(void *p) {
         if (System_GetTouchNew()) {
             ov40_0222DEAC(p);
             ov40_02241114(p);
-            sub_020879E0(PTR(p, 0x6F0), 0);
-            sub_02087A08(PTR(p, 0x6F0), 0, 0);
+            OrbitCursor_SetVisible(PTR(p, 0x6F0), 0);
+            OrbitCursor_SetRadius(PTR(p, 0x6F0), 0, 0);
             ov40_0222FDC4(p);
             ov40_0222FCCC(p);
             ov40_0222F734((u8 *)p + 0x49C);

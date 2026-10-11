@@ -120,7 +120,7 @@ int ov40_022341E0(void *p) {
         SetBgPriority(6, 1);
         SetBgPriority(5, 3);
         SetBgPriority(7, 2);
-        sub_020879E0(PTR(p, 0x6F0), 0);
+        OrbitCursor_SetVisible(PTR(p, 0x6F0), 0);
         WORD(p, 8)
         ++;
         break;

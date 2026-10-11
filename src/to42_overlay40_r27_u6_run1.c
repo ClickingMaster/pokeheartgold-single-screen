@@ -33,7 +33,7 @@ void ov40_022318C8(SysTask *task, void *arg) {
             y = y + SHALF(w, 0xA);
         }
         if (PTR(w, 0x28) != NULL) {
-            sub_020878B8(PTR(w, 0x28), x + 0x10, y);
+            OrbitCursor_SetTarget(PTR(w, 0x28), x + 0x10, y);
             if (BYTE(w, 0x1C) == 2) {
                 WORD(PTR(w, 0x30), 0) = 1;
             }

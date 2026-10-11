@@ -85,8 +85,8 @@ int ov40_02234F98(void *p) {
     switch (S32(p, 8)) {
     case 0:
         ov40_0223077C(p, PTR(p, 0x6f0), 0x80, 0x60);
-        sub_020879E0(PTR(p, 0x6f0), 1);
-        sub_02087A08(PTR(p, 0x6f0), 0x18, 0x18);
+        OrbitCursor_SetVisible(PTR(p, 0x6f0), 1);
+        OrbitCursor_SetRadius(PTR(p, 0x6f0), 0x18, 0x18);
         ov40_0222DED0(p, 0x11f);
         PlaySE(0x57d);
         S32(p, 8)
@@ -105,7 +105,7 @@ int ov40_02234F98(void *p) {
             ov40_02230CDC(p, 1, PTR(q, 0xc), PTR(q, 4));
             S32(w, 0x2e4) = 0;
             S32(p, 0xc) = 0;
-            sub_020879E0(PTR(p, 0x6f0), 0);
+            OrbitCursor_SetVisible(PTR(p, 0x6f0), 0);
             ov40_0222BF80(p, 3);
         } else {
             StopSE(0x57d, 0);
@@ -118,8 +118,8 @@ int ov40_02234F98(void *p) {
         GfGfx_EngineATogglePlanes(1, 0);
         GfGfx_EngineATogglePlanes(4, 0);
         GfGfx_EngineBTogglePlanes(4, 0);
-        sub_020879E0(PTR(p, 0x6f0), 0);
-        sub_02087A08(PTR(p, 0x6f0), 0, 0);
+        OrbitCursor_SetVisible(PTR(p, 0x6f0), 0);
+        OrbitCursor_SetRadius(PTR(p, 0x6f0), 0, 0);
         S32(p, 8)
         ++;
         break;

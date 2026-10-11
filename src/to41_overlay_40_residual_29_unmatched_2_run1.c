@@ -19,7 +19,7 @@ int ov40_022366CC(void *p) {
         ov40_0222D874(p);
         ov40_02230964(p, 0);
         ov40_0222FB90(p, 0);
-        sub_020879E0(PTR(p, 0x6F0), 0);
+        OrbitCursor_SetVisible(PTR(p, 0x6F0), 0);
         WORD(p, 8)
         ++;
         break;

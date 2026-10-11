@@ -75,9 +75,9 @@ extern const u32 _020FC934[][2];
 extern const u32 _020FC95C[][2];
 
 PlayerProfile *sub_02035798(int objId);
-void *sub_020691A8(int a0);
+void *TrainerCardData_New(int a0);
 u8 GetUnionRoomAvatarAttrBySprite(int gender, u32 avatar, int a2);
-void sub_02068FC8(int a0, int a1, int a2, u8 a3, u32 a4, void *a5);
+void TrainerCardData_Build(int a0, int a1, int a2, u8 a3, u32 a4, void *a5);
 void sub_020398D4(int a0, int a1);
 void sub_02039AD8(int a0);
 

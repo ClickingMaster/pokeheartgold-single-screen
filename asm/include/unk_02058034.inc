@@ -68,7 +68,7 @@
 .public CommClubLink_GetCard
 .public sub_02058AA0
 .public sub_02059538
-.public sub_02068FC8
+.public TrainerCardData_Build
 .public SaveArray_Party_Alloc
 .public Party_Copy
 .public sub_02091574

@@ -27,7 +27,7 @@
 
 // VS Recorder app core: resources, BG / sprite setup, V-blank and the screen dispatcher.
 
-// arguments of the banner object (sub_02087284), passed by value
+// arguments of the banner object (OrbitCursor_New), passed by value
 typedef struct VsRecorderBannerArgs {
     int count;
     enum HeapID heapID;
@@ -36,10 +36,10 @@ typedef struct VsRecorderBannerArgs {
     fx32 yOffset;
 } VsRecorderBannerArgs;
 
-void *sub_02087284(VsRecorderBannerArgs args, SpriteSystem *spriteSystem, SpriteManager *spriteManager, PaletteData *plttData);
-BOOL sub_02087878(void *banner, int colorScheme);
-BOOL sub_020878B0(void *banner, int a1);
-BOOL sub_020879E0(void *banner, int a1);
+void *OrbitCursor_New(VsRecorderBannerArgs args, SpriteSystem *spriteSystem, SpriteManager *spriteManager, PaletteData *plttData);
+BOOL OrbitCursor_Start(void *banner, int colorScheme);
+BOOL OrbitCursor_SetActive(void *banner, int a1);
+BOOL OrbitCursor_SetVisible(void *banner, int a1);
 void sub_0203A948(int a0, enum HeapID heapID);
 void *sub_0203A4AC(enum HeapID heapID);
 void sub_02088030(VsRecorderWork *work);
@@ -127,16 +127,16 @@ void VsRecorder_InitResources(VsRecorderWork *work) {
     args.resBase = 1;
     args.mode = work->mode;
     args.yOffset = FX32_CONST(256);
-    work->banners[0] = sub_02087284(args, work->spriteSystem, work->spriteManager, work->plttData);
-    sub_02087878(work->banners[0], work->colorScheme);
-    sub_020878B0(work->banners[0], 0);
-    sub_020879E0(work->banners[0], 0);
+    work->banners[0] = OrbitCursor_New(args, work->spriteSystem, work->spriteManager, work->plttData);
+    OrbitCursor_Start(work->banners[0], work->colorScheme);
+    OrbitCursor_SetActive(work->banners[0], 0);
+    OrbitCursor_SetVisible(work->banners[0], 0);
     args.resBase = 2;
     args.yOffset = FX32_CONST(256);
-    work->banners[1] = sub_02087284(args, work->spriteSystem, work->spriteManager, work->plttData);
-    sub_02087878(work->banners[1], work->colorScheme);
-    sub_020878B0(work->banners[1], 0);
-    sub_020879E0(work->banners[1], 0);
+    work->banners[1] = OrbitCursor_New(args, work->spriteSystem, work->spriteManager, work->plttData);
+    OrbitCursor_Start(work->banners[1], work->colorScheme);
+    OrbitCursor_SetActive(work->banners[1], 0);
+    OrbitCursor_SetVisible(work->banners[1], 0);
     work->fontSystem = FontSystem_NewInit(20, HEAP_ID_109);
     work->msgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0013_bin, HEAP_ID_109);
     work->recordMsgData = NewMsgDataFromNarc(MSGDATA_LOAD_DIRECT, NARC_msgdata_msg, NARC_msg_msg_0026_bin, HEAP_ID_109);

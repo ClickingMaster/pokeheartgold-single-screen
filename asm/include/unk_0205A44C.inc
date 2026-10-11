@@ -60,8 +60,8 @@
 .public sub_0205AC4C
 .public sub_0205AC70
 .public GetUnionRoomAvatarAttrBySprite
-.public sub_02068FC8
-.public sub_020691A8
+.public TrainerCardData_Build
+.public TrainerCardData_New
 .public MI_CpuFill8
 .public _020FC824
 

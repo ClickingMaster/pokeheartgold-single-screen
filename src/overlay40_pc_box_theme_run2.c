@@ -279,7 +279,7 @@ int ov40_02239A58(void *p) {
         SetBgPriority(6, 0);
         SetBgPriority(7, 2);
         ov40_0222FB90(p, 0);
-        sub_020879E0(PTR(p, 0x6F0), 0);
+        OrbitCursor_SetVisible(PTR(p, 0x6F0), 0);
         WORD(p, 8) = WORD(p, 8) + 1;
         break;
     default:

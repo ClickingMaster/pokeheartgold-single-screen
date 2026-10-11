@@ -4,31 +4,31 @@
 	.include "global.inc"
 
 	.text
-	.public sub_02068FC8
-	.public sub_020691A8
-	.public sub_020691C4
-	.public sub_020691E0
-	.public sub_020691E8
-	.public sub_020692A0
-	.public sub_020692C4
-	.public sub_02069308
-	.public sub_020693AC
-	.public sub_0206940C
-	.public sub_02069464
-	.public sub_02069498
-	.public sub_020691A8
-	.public sub_020691C4
-	.public sub_020691E0
-	.public sub_020692A0
-	.public sub_020692C4
-	.public sub_02069308
-	.public sub_020693AC
-	.public sub_0206940C
-	.public sub_02069464
-	.public sub_02069498
+	.public TrainerCardData_Build
+	.public TrainerCardData_New
+	.public TrainerCardAppArgs_New
+	.public TrainerCardData_Free
+	.public FieldSystem_GetTrainerCardStars
+	.public TrainerCardData_SetHeader
+	.public TrainerCardData_SetProfile
+	.public TrainerCardData_SetTimes
+	.public TrainerCardData_SetRecords
+	.public TrainerCardData_SetBadges
+	.public LinkTrainerCard_StartTask
+	.public Task_LinkTrainerCard
+	.public TrainerCardData_New
+	.public TrainerCardAppArgs_New
+	.public TrainerCardData_Free
+	.public TrainerCardData_SetHeader
+	.public TrainerCardData_SetProfile
+	.public TrainerCardData_SetTimes
+	.public TrainerCardData_SetRecords
+	.public TrainerCardData_SetBadges
+	.public LinkTrainerCard_StartTask
+	.public Task_LinkTrainerCard
 
-	thumb_func_start sub_020691E8
-sub_020691E8: ; 0x020691E8
+	thumb_func_start FieldSystem_GetTrainerCardStars
+FieldSystem_GetTrainerCardStars: ; 0x020691E8
 	push {r3, r4, r5, r6, r7, lr}
 	bl FieldSystem_GetSaveData
 	add r7, r0, #0
@@ -113,4 +113,4 @@ _02069288:
 _0206929C:
 	add r0, r4, #0
 	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end sub_020691E8
+	thumb_func_end FieldSystem_GetTrainerCardStars

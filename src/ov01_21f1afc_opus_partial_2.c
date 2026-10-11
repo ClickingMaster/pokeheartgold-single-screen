@@ -54,7 +54,7 @@ void ov01_021F1BC0(PlayerAvatar *playerAvatar) {
     direction = PlayerAvatar_GetFacingDirection(playerAvatar);
     obj = PlayerAvatar_GetMapObject(playerAvatar);
     MapObject_GetFieldSystem(obj);
-    PlayerAvatar_SetUnk34(playerAvatar, ov01_021FE7DC(obj, 0, 0, direction, 1));
+    PlayerAvatar_SetUnk34(playerAvatar, SurfMountEffect_Create(obj, 0, 0, direction, 1));
 }
 
 void ov01_021F1C30(PlayerAvatar *playerAvatar) {

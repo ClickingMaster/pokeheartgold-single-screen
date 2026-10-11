@@ -4235,14 +4235,14 @@ ov40_0222DBEC: ; 0x0222DBEC
 	lsl r0, r0, #4
 	ldrb r1, [r1]
 	ldr r0, [r5, r0]
-	bl sub_0208763C
+	bl OrbitCursor_ReloadPalette
 	add r1, r5, #0
 	mov r0, #0x6f
 	add r1, #0x5c
 	lsl r0, r0, #4
 	ldrb r1, [r1]
 	ldr r0, [r5, r0]
-	bl sub_0208763C
+	bl OrbitCursor_ReloadPalette
 	ldr r1, _0222DD00 ; =0x0000270F
 	add r0, r7, #0
 	bl SpriteManager_UnloadPlttObjById

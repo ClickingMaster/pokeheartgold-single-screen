@@ -76,7 +76,7 @@ void *Save_GameStats_Get(void *saveData);
 u32 GameStats_GetCapped(void *gameStats, int statIdx);
 
 int sub_02087E1C(void *p);
-BOOL sub_020879E0(void *p, int flag);
+BOOL OrbitCursor_SetVisible(void *p, int flag);
 
 void *GlobalTerminalNet_GetBoxList(void *a, void *b, int c);
 

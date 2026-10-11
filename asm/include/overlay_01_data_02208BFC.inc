@@ -6,12 +6,12 @@
 .public FieldShadow_Free
 .public ov01_021FDA14
 .public ov01_021FDA30
-.public ov01_021FE200
-.public ov01_021FE220
+.public Footprints_New
+.public Footprints_Free
 .public ov01_021FE590
 .public ov01_021FE5A4
-.public ov01_021FE780
-.public ov01_021FE79C
+.public SurfMount_New
+.public SurfMount_Free
 .public RockClimb_New
 .public RockClimb_Free
 .public PuddleSplash_New

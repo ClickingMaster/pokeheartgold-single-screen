@@ -36,7 +36,7 @@ u32 ov40_02238838(void *p) {
             break;
         }
         ov40_02230964(p, 1);
-        sub_020879E0(PTR_AT(p, 0x6F0), 1);
+        OrbitCursor_SetVisible(PTR_AT(p, 0x6F0), 1);
         ov40_02237C9C(p);
         ov40_02237AC0(p);
         ov40_0222F9E0((u8 *)p + 0x47C, p, 2);
@@ -45,13 +45,13 @@ u32 ov40_02238838(void *p) {
         ov40_0222F740((u8 *)p + 0x49C, p, 1);
         ov40_0222F858((u8 *)p + 0x49C, 0x38, 0xB0);
         ov40_0223077C(p, PTR_AT(p, 0x6F0), 0x10, (s16)(U32_AT(p, 0x4D8) * 24 + 0x44));
-        sub_020879E0(PTR_AT(p, 0x6F0), 1);
-        sub_02087A08(PTR_AT(p, 0x6F0), 0xC, 0xC);
+        OrbitCursor_SetVisible(PTR_AT(p, 0x6F0), 1);
+        OrbitCursor_SetRadius(PTR_AT(p, 0x6F0), 0xC, 0xC);
         if (w->flag == 0) {
             ov40_0222FA88((u8 *)p + 0x47C);
             ov40_0222F5EC((u8 *)p + 0x49C, S16_AT(p, 0x48C));
             ov40_0222EFD8((u8 *)p + 0x49C, p, w->strings);
-            sub_020878EC(PTR_AT(p, 0x6F0), 0x10, (s16)(U32_AT(p, 0x4D8) * 24 + 0x44));
+            OrbitCursor_MoveTarget(PTR_AT(p, 0x6F0), 0x10, (s16)(U32_AT(p, 0x4D8) * 24 + 0x44));
         }
         ov40_02230964(p, 0);
         GfGfx_EngineATogglePlanes(4, 1);
@@ -66,7 +66,7 @@ u32 ov40_02238A50(void *p) {
     Ov40R31R6Work *w = PTR_AT(p, 0x860);
     switch (U32_AT(p, 8)) {
     case 0:
-        sub_020879E0(PTR_AT(p, 0x6F0), 0);
+        OrbitCursor_SetVisible(PTR_AT(p, 0x6F0), 0);
         if (w->flag == 0) {
             ov40_02237D6C(p);
         }
@@ -151,9 +151,9 @@ u32 ov40_02238BB0(void *p) {
             ov40_0222FA88((u8 *)p + 0x47C);
             ov40_0222F5EC((u8 *)p + 0x49C, S16_AT(p, 0x48C));
             ov40_0222EFD8((u8 *)p + 0x49C, p, w->strings);
-            sub_020878EC(PTR_AT(p, 0x6F0), 0x10, (s16)(U32_AT(p, 0x4D8) * 24 + 0x44));
+            OrbitCursor_MoveTarget(PTR_AT(p, 0x6F0), 0x10, (s16)(U32_AT(p, 0x4D8) * 24 + 0x44));
         }
-        sub_020879E0(PTR_AT(p, 0x6F0), 1);
+        OrbitCursor_SetVisible(PTR_AT(p, 0x6F0), 1);
         GfGfx_EngineATogglePlanes(4, 1);
         ov40_02230964(p, 0);
         ov40_0222BF80(p, 5);

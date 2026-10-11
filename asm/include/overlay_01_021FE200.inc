@@ -24,10 +24,10 @@
 .public FieldEffectManager_CreateEffect
 .public FieldEffectManager_DestroyEffect
 .public FieldEffectManager_LoadRenderModel
-.public ov01_021FE200
-.public ov01_021FE220
-.public ov01_021FE3C4
-.public ov01_021FE3D0
+.public Footprints_New
+.public Footprints_Free
+.public Footprints_SpawnInSand
+.public Footprints_SpawnTracksInSand
 .public ov01_021FE3DC
 .public ov01_021FE3E8
 .public ov01_021FE3F4

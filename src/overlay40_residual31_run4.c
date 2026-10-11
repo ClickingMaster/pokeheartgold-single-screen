@@ -10,7 +10,7 @@ void ov40_02230DCC(void *p, void *str);
 void ov40_0222FA88(void *p);
 void ov40_0222F5EC(void *p, int value);
 void ov40_0222EFD8(void *p, void *owner, void *data);
-void sub_020878EC(void *p, int a1, int a2);
+void OrbitCursor_MoveTarget(void *p, int a1, int a2);
 
 void ov40_02238290(void *p) {
     void *inner = PTR(p, 0x860);
@@ -69,7 +69,7 @@ int ov40_02238358(void *p) {
         ov40_0222FA88((u8 *)p + 0x47C);
         ov40_0222F5EC((u8 *)p + 0x49C, *(s16 *)((u8 *)p + 0x48C));
         ov40_0222EFD8((u8 *)p + 0x49C, p, (u8 *)inner + 0x2E0C);
-        sub_020878EC(PTR(p, 0x6F0), 0x10, (s16)(WORD(p, 0x4D8) * 24 + 0x44));
+        OrbitCursor_MoveTarget(PTR(p, 0x6F0), 0x10, (s16)(WORD(p, 0x4D8) * 24 + 0x44));
     }
     TouchHitboxController_IsTriggered(PTR(inner, 0x33C));
     return 0;

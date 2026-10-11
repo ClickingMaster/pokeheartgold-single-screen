@@ -3,7 +3,7 @@
 #include "communication_club_link_internal.h"
 #include "communication_player_state.h"
 #include "script_manager.h"
-#include "unk_02068FC8.h"
+#include "trainer_card_data.h"
 
 // Declared with the types their call sites were matched against (no header, or a header with other types).
 void sub_0200FC60(int screen, u16 color);
@@ -95,7 +95,7 @@ void CommClubLink_StartCardExchange(FieldSystem *fieldSystem) {
                 gCommClubLink->cards[i] = Heap_Alloc((enum HeapID)0, 0x66C);
             }
         }
-        sub_02068FC8(0, 0, 0, 0xFF, gCommClubLink->fieldSystem, gCommClubLink->cards[netId]);
+        TrainerCardData_Build(0, 0, 0, 0xFF, gCommClubLink->fieldSystem, gCommClubLink->cards[netId]);
         LinkSync_StartSync(0x5F);
         CommClubLink_SetState(CommClubLink_SendCard, 0);
     }

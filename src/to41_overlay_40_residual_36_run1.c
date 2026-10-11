@@ -36,8 +36,8 @@ int ov40_0223FD8C(void *p) {
     case 2:
         ov40_0222DED0(p, 0x75);
         ov40_0223077C(p, PTR(p, 0x6f0), 0x80, 0x60);
-        sub_020879E0(PTR(p, 0x6f0), 1);
-        sub_02087A08(PTR(p, 0x6f0), 0x18, 0x18);
+        OrbitCursor_SetVisible(PTR(p, 0x6f0), 1);
+        OrbitCursor_SetRadius(PTR(p, 0x6f0), 0x18, 0x18);
         WORD(w, 0x4b8) = 0;
         PlaySE(0x57d);
         WORD(p, 8)
@@ -70,8 +70,8 @@ int ov40_0223FD8C(void *p) {
             PTR(w, 0x4bc) = PTR(p, 0x8b4);
             MI_CpuCopy8(PTR(w, 0x4bc), (u8 *)p + 0x8b8, 0x1d4c);
         }
-        sub_020879E0(PTR(p, 0x6f0), 0);
-        sub_02087A08(PTR(p, 0x6f0), 0, 0);
+        OrbitCursor_SetVisible(PTR(p, 0x6f0), 0);
+        OrbitCursor_SetRadius(PTR(p, 0x6f0), 0, 0);
         break;
     default:
         if (WORD(w, 0x4b8) != 0) {
@@ -221,7 +221,7 @@ int ov40_02240290(void *p) {
         switch (WORD(p, 0x86c)) {
         case 0xc8:
             ov40_0222FB90(p, 0);
-            sub_020879E0(PTR(p, 0x6f0), 0);
+            OrbitCursor_SetVisible(PTR(p, 0x6f0), 0);
             if (ov40_0222C4DC(p) == 1) {
                 ov40_0222BF80(p, 6);
             } else {
@@ -230,7 +230,7 @@ int ov40_02240290(void *p) {
             break;
         case 0xd2:
             ov40_0222FB90(p, 0);
-            sub_020879E0(PTR(p, 0x6f0), 0);
+            OrbitCursor_SetVisible(PTR(p, 0x6f0), 0);
             if (ov40_0222C4DC(p) == 1) {
                 ov40_0222BF80(p, 0x1e);
             } else {
@@ -243,11 +243,11 @@ int ov40_02240290(void *p) {
             } else {
                 ov40_0222BF80(p, 2);
             }
-            sub_020879E0(PTR(p, 0x6f0), 0);
+            OrbitCursor_SetVisible(PTR(p, 0x6f0), 0);
             break;
         default:
             ov40_0222FB90(p, 0);
-            sub_020879E0(PTR(p, 0x6f0), 0);
+            OrbitCursor_SetVisible(PTR(p, 0x6f0), 0);
             ov40_0222BF80(p, 2);
             break;
         }
@@ -377,8 +377,8 @@ int ov40_022406C8(void *p) {
     case 0:
         ov40_0222DD9C(p, 0x75);
         ov40_0223077C(p, PTR(p, 0x6f4), 0x80, 0x60);
-        sub_020879E0(PTR(p, 0x6f4), 1);
-        sub_02087A08(PTR(p, 0x6f4), 0x18, 0x18);
+        OrbitCursor_SetVisible(PTR(p, 0x6f4), 1);
+        OrbitCursor_SetRadius(PTR(p, 0x6f4), 0x18, 0x18);
         WORD(w, 0x4b8) = 0;
         PlaySE(0x57d);
         WORD(p, 8)
@@ -415,8 +415,8 @@ int ov40_022406C8(void *p) {
             PTR(w, 0x4bc) = PTR(p, 0x8b4);
             MI_CpuCopy8(PTR(w, 0x4bc), (u8 *)p + 0x8b8, 0x1d4c);
         }
-        sub_020879E0(PTR(p, 0x6f4), 0);
-        sub_02087A08(PTR(p, 0x6f4), 0, 0);
+        OrbitCursor_SetVisible(PTR(p, 0x6f4), 0);
+        OrbitCursor_SetRadius(PTR(p, 0x6f4), 0, 0);
         break;
     case 3:
         ov40_0222FB90(p, 1);

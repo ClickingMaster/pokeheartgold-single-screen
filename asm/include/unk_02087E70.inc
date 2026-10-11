@@ -10,7 +10,7 @@
 .public sub_0202AC0C
 .public Field_SetEnvironmentSoundState_None_Unk2
 .public sub_02055198
-.public sub_02087988
+.public OrbitCursor_Delete
 .public sub_02087A78
 .public gOverlayTemplate_Battle
 .public gNatureStatMods

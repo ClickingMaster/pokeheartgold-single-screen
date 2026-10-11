@@ -7,10 +7,10 @@ int ov40_02238D5C(void *p) {
         ov40_02230964(p, 1);
         ov40_02237008(p);
         ov40_02236534(p);
-        sub_020878B0(PTR(p, 0x6F4), 0);
-        sub_020879E0(PTR(p, 0x6F4), 0);
-        sub_020878B0(PTR(p, 0x6F0), 1);
-        sub_020879E0(PTR(p, 0x6F0), 0);
+        OrbitCursor_SetActive(PTR(p, 0x6F4), 0);
+        OrbitCursor_SetVisible(PTR(p, 0x6F4), 0);
+        OrbitCursor_SetActive(PTR(p, 0x6F0), 1);
+        OrbitCursor_SetVisible(PTR(p, 0x6F0), 0);
         ov40_02230964(p, 0);
         ov40_0222FB90(p, 1);
         U32(p, 8)

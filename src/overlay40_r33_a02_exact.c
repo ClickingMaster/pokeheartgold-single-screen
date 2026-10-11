@@ -94,8 +94,8 @@ int ov40_0223A640(void *p) {
     case 2:
         ov40_0222DED0(p, 0x75);
         ov40_0223077C(p, PTR(p, 0x6F0), 0x80, 0x60);
-        sub_020879E0(PTR(p, 0x6F0), 1);
-        sub_02087A08(PTR(p, 0x6F0), 0x18, 0x18);
+        OrbitCursor_SetVisible(PTR(p, 0x6F0), 1);
+        OrbitCursor_SetRadius(PTR(p, 0x6F0), 0x18, 0x18);
         WORD(w, 0x2038) = 0;
         PlaySE(0x57D);
         WORD(p, 8)
@@ -132,8 +132,8 @@ int ov40_0223A640(void *p) {
             PTR(w, 0x184) = PTR(p, 0x8B4);
             MI_CpuCopy8(PTR(w, 0x184), (u8 *)p + 0x8B8, 0x1D4C);
         }
-        sub_020879E0(PTR(p, 0x6F0), 0);
-        sub_02087A08(PTR(p, 0x6F0), 0, 0);
+        OrbitCursor_SetVisible(PTR(p, 0x6F0), 0);
+        OrbitCursor_SetRadius(PTR(p, 0x6F0), 0, 0);
         break;
     }
     default:

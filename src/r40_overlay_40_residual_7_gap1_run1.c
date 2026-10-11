@@ -33,8 +33,8 @@ void ov40_0222DBEC(u8 *work) {
     PaletteData_LoadNarc(paletteData, 0xBF, ov40_0222DB30(work, 0), 0x6D, 0, 0x20, 0xE0);
     PaletteData_LoadNarc(paletteData, 0xBF, ov40_0222DB30(work, 0), 0x6D, 1, 0x20, 0xE0);
 
-    sub_0208763C(*(void **)(work + 0x6F0), work[0x5C]);
-    sub_0208763C(*(void **)(work + 0x6F0), work[0x5C]);
+    OrbitCursor_ReloadPalette(*(void **)(work + 0x6F0), work[0x5C]);
+    OrbitCursor_ReloadPalette(*(void **)(work + 0x6F0), work[0x5C]);
     SpriteManager_UnloadPlttObjById(spriteManager, 0x270F);
     SpriteManager_UnloadPlttObjById(spriteManager, 0x2710);
 

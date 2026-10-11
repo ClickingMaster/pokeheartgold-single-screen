@@ -53,9 +53,9 @@ void GfGfxLoader_LoadCharDataFromOpenNarc(void *, u32, void *, u32, u32, u32, u3
 void GfGfxLoader_LoadScrnDataFromOpenNarc(void *, u32, void *, u32, u32, u32, u32, u32);
 void GfGfx_EngineATogglePlanes(u32, u32);
 void GfGfx_EngineBTogglePlanes(u32, u32);
-void sub_020879E0(void *, u32);
-void sub_02087A08(void *, u32, u32);
-void sub_020878EC(void *, u32, s16);
+void OrbitCursor_SetVisible(void *, u32);
+void OrbitCursor_SetRadius(void *, u32, u32);
+void OrbitCursor_MoveTarget(void *, u32, s16);
 u32 ov40_02238838(void *);
 u32 ov40_02238A50(void *);
 u32 ov40_02238BB0(void *);

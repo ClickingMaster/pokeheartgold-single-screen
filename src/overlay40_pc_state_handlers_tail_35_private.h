@@ -133,9 +133,9 @@ void BgClearTilemapBufferAndCommit(void *bgConfig, u32 layer);
 void GfGfxLoader_LoadCharDataFromOpenNarc(void *narc, u32 memberNo, void *bgConfig, u32 layer, u32 tileStart, u32 szByte, u32 isCompressed, u32 heapId);
 BOOL BattleRecord_Exists(void);
 void BattleRecord_Delete(void);
-BOOL sub_020878EC(void *p, int x, int y);
-BOOL sub_020879E0(void *p, int flag);
-void sub_02087A08(void *p, int a1, int a2);
+BOOL OrbitCursor_MoveTarget(void *p, int x, int y);
+BOOL OrbitCursor_SetVisible(void *p, int flag);
+void OrbitCursor_SetRadius(void *p, int a1, int a2);
 
 void ov40_02230944(void *p);
 void ov40_02230738(void *p);

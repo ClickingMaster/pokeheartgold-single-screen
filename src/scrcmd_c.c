@@ -93,7 +93,7 @@
 #include "unk_02062108.h"
 #include "unk_020658D4.h"
 #include "unk_02067A80.h"
-#include "unk_02068FC8.h"
+#include "trainer_card_data.h"
 #include "unk_0206B910.h"
 #include "unk_0206D494.h"
 #include "unk_02078834.h"
@@ -2004,7 +2004,7 @@ BOOL ScrCmd_159(ScriptContext *ctx) {
 }
 
 BOOL ScrCmd_160(ScriptContext *ctx) {
-    sub_02069464(ctx->fieldSystem);
+    LinkTrainerCard_StartTask(ctx->fieldSystem);
     return TRUE;
 }
 
@@ -4119,7 +4119,7 @@ BOOL ScrCmd_583(ScriptContext *ctx) {
 BOOL ScrCmd_GetTrcardStars(ScriptContext *ctx) {
     FieldSystem *fieldSystem = ctx->fieldSystem;
     u16 *p_ret = ScriptGetVarPointer(ctx);
-    *p_ret = sub_020691E8(fieldSystem);
+    *p_ret = FieldSystem_GetTrainerCardStars(fieldSystem);
     return FALSE;
 }
 

@@ -41,11 +41,11 @@
 .public sub_0205AC4C
 .public sub_0205AC70
 .public CheckGameClearFlag
-.public sub_02068FC8
-.public sub_020691A8
-.public sub_020691C4
-.public sub_020691E0
-.public sub_020691E8
-.public sub_02069464
+.public TrainerCardData_Build
+.public TrainerCardData_New
+.public TrainerCardAppArgs_New
+.public TrainerCardData_Free
+.public FieldSystem_GetTrainerCardStars
+.public LinkTrainerCard_StartTask
 .public MI_CpuCopy8
 .public memset

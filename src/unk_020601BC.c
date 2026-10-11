@@ -85,10 +85,10 @@ void sub_02060328(LocalMapObject *object, int unused, u32 value, const u16 *data
     if (sub_02060EA4(object, value) == TRUE) {
         kind = ((u32)*data << 21) >> 28;
         if (kind == 1) {
-            ov01_021FE3C4(object);
+            Footprints_SpawnInSand(object);
             return;
         } else if (kind == 2) {
-            ov01_021FE3D0(object);
+            Footprints_SpawnTracksInSand(object);
             return;
         }
     } else if (sub_02060ED4(object, value) == TRUE) {

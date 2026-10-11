@@ -57,12 +57,12 @@ int sub_02087F2C(OverlayManager *manager, int *state) {
         (*state)++;
         break;
     case 2:
-        if (!sub_02087988(work->obj6F0)) {
+        if (!OrbitCursor_Delete(work->obj6F0)) {
             (*state)++;
         }
         break;
     case 3:
-        if (!sub_02087988(work->obj6F4)) {
+        if (!OrbitCursor_Delete(work->obj6F4)) {
             (*state)++;
         }
         break;

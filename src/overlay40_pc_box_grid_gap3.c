@@ -24,10 +24,10 @@ int ov40_02230ED8(void *work) {
         if (!IsPaletteFadeFinished()) {
             break;
         }
-        sub_02087948(PTR(work, 0x6F4), 0x80, 0x10);
-        sub_020878B8(PTR(work, 0x6F4), 0x80, 0xD8);
-        sub_020879E0(PTR(work, 0x6F4), 1);
-        sub_020878B0(PTR(work, 0x6F4), 1);
+        OrbitCursor_SetPosition(PTR(work, 0x6F4), 0x80, 0x10);
+        OrbitCursor_SetTarget(PTR(work, 0x6F4), 0x80, 0xD8);
+        OrbitCursor_SetVisible(PTR(work, 0x6F4), 1);
+        OrbitCursor_SetActive(PTR(work, 0x6F4), 1);
         PlaySE(0x576);
         S32(work, 8)
         ++;
@@ -39,10 +39,10 @@ int ov40_02230ED8(void *work) {
             break;
         }
         S32(work, 0xC) = 0;
-        sub_02087948(PTR(work, 0x6F0), 0x80, -0x10);
-        sub_020878B8(PTR(work, 0x6F0), 0x80, 0x60);
-        sub_020879E0(PTR(work, 0x6F0), 1);
-        sub_020878B0(PTR(work, 0x6F0), 1);
+        OrbitCursor_SetPosition(PTR(work, 0x6F0), 0x80, -0x10);
+        OrbitCursor_SetTarget(PTR(work, 0x6F0), 0x80, 0x60);
+        OrbitCursor_SetVisible(PTR(work, 0x6F0), 1);
+        OrbitCursor_SetActive(PTR(work, 0x6F0), 1);
         S32(work, 8)
         ++;
         break;
@@ -53,7 +53,7 @@ int ov40_02230ED8(void *work) {
             break;
         }
         ov40_02230E34(work);
-        sub_020879E0(PTR(work, 0x6F4), 0);
+        OrbitCursor_SetVisible(PTR(work, 0x6F4), 0);
         S32(work, 0xC) = 0;
         S32(work, 8)
         ++;
@@ -79,7 +79,7 @@ int ov40_02230ED8(void *work) {
     case 6:
         if (System_GetTouchHeld() == TRUE) {
             ov40_02230EB4(work);
-            sub_020879E0(PTR(work, 0x6F0), 0);
+            OrbitCursor_SetVisible(PTR(work, 0x6F0), 0);
             sub_02087A54(PTR(work, 0x6F4));
             sub_02087A54(PTR(work, 0x6F0));
             S32(work, 8)
@@ -111,10 +111,10 @@ int ov40_02231100(void *work) {
             } else {
                 GfGfxLoader_LoadScrnDataFromOpenNarc(PTR(work, 0x14), 0x37, PTR(work, 0x24), 5, 0, 0, 0, 0x6D);
             }
-            sub_02087948(PTR(work, 0x6F0), 0x80, 0xE0);
-            sub_020878B8(PTR(work, 0x6F0), 0x80, 0xE0);
-            sub_020879E0(PTR(work, 0x6F0), 0);
-            sub_020878B0(PTR(work, 0x6F0), 1);
+            OrbitCursor_SetPosition(PTR(work, 0x6F0), 0x80, 0xE0);
+            OrbitCursor_SetTarget(PTR(work, 0x6F0), 0x80, 0xE0);
+            OrbitCursor_SetVisible(PTR(work, 0x6F0), 0);
+            OrbitCursor_SetActive(PTR(work, 0x6F0), 1);
             ov40_0222BF64(work, PTR(work, 0x83C), 1, PTR(work, 0x10));
             break;
         }
@@ -165,10 +165,10 @@ int ov40_02231100(void *work) {
 int ov40_0223131C(void *work) {
     switch (S32(work, 8)) {
     case 0:
-        sub_02087948(PTR(work, 0x6F0), 0x80, 0x60);
-        sub_020878B8(PTR(work, 0x6F0), 0x80, 0x60);
-        sub_020879E0(PTR(work, 0x6F0), 1);
-        sub_020878B0(PTR(work, 0x6F0), 1);
+        OrbitCursor_SetPosition(PTR(work, 0x6F0), 0x80, 0x60);
+        OrbitCursor_SetTarget(PTR(work, 0x6F0), 0x80, 0x60);
+        OrbitCursor_SetVisible(PTR(work, 0x6F0), 1);
+        OrbitCursor_SetActive(PTR(work, 0x6F0), 1);
         S32(work, 0xC)
         ++;
         BLEND(work, 1, 2, (u8)(0x10 - S32(work, 0xC)));

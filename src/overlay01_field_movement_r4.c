@@ -40,7 +40,7 @@ BOOL ov01_021F23B8(TaskManager *taskManager) {
         if (MapObject_AreBitsSetForMovementScriptInit(work->mapObject) == TRUE) {
             ov01_021F3084(work->playerAvatar, PlayerAvatar_GetSpriteByStateAndGender(0, PlayerAvatar_GetGender(work->playerAvatar)));
             MapObject_SetHeldMovement(work->mapObject, sub_0206234C(work->direction, 0x34));
-            ov01_021FE9F4(work->avatarEffect, 0);
+            SurfMountEffect_SetBobbing(work->avatarEffect, 0);
             work->state++;
         }
         break;

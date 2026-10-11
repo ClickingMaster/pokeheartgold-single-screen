@@ -25,7 +25,7 @@
 .public FieldEffectManager_CreateEffect
 .public FieldEffectManager_DestroyEffect
 .public FieldEffectManager_LoadRenderModel
-.public ov01_021FE780
-.public ov01_021FE79C
-.public ov01_021FE7DC
-.public ov01_021FE9F4
+.public SurfMount_New
+.public SurfMount_Free
+.public SurfMountEffect_Create
+.public SurfMountEffect_SetBobbing

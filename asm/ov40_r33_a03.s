@@ -59,8 +59,8 @@
 	.public BattleRecord_GetHeader
 	.public BattleRecordHeader_GetField
 	.public sub_0203A948
-	.public sub_020879E0
-	.public sub_02087A08
+	.public OrbitCursor_SetVisible
+	.public OrbitCursor_SetRadius
 	.text
 
 	thumb_func_start ov40_0223A874
@@ -250,13 +250,13 @@ _0223A9D4:
 	lsl r0, r0, #4
 	ldr r0, [r4, r0]
 	mov r1, #1
-	bl sub_020879E0
+	bl OrbitCursor_SetVisible
 	mov r0, #0x6f
 	lsl r0, r0, #4
 	mov r1, #0x18
 	ldr r0, [r4, r0]
 	add r2, r1, #0
-	bl sub_02087A08
+	bl OrbitCursor_SetRadius
 	ldr r0, [r4, #8]
 	add r0, r0, #1
 	str r0, [r4, #8]
@@ -346,13 +346,13 @@ _0223AA9E:
 	lsl r0, r0, #4
 	ldr r0, [r4, r0]
 	mov r1, #0
-	bl sub_020879E0
+	bl OrbitCursor_SetVisible
 	mov r0, #0x6f
 	lsl r0, r0, #4
 	mov r1, #0
 	ldr r0, [r4, r0]
 	add r2, r1, #0
-	bl sub_02087A08
+	bl OrbitCursor_SetRadius
 	add r0, r4, #0
 	bl ov40_0222FDC4
 	add r0, r4, #0

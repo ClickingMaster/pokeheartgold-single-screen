@@ -6,7 +6,7 @@ int ov40_02236C64(void *p) {
     void *w = PTR(p, 0x860);
     switch (WORD(p, 8)) {
     case 0:
-        sub_020879E0(PTR(p, 0x6F4), 0);
+        OrbitCursor_SetVisible(PTR(p, 0x6F4), 0);
         ov40_02236FE0(p);
         GfGfx_EngineBTogglePlanes(4, 0);
         WORD(p, 8)

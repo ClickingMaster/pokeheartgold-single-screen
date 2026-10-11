@@ -13,8 +13,8 @@ typedef struct SolCtx40 {
 void ov40_02230964(void *, int);
 void ov40_02237008(void *);
 void ov40_02236534(void *);
-void sub_020878B0(void *, int);
-void sub_020879E0(void *, int);
+void OrbitCursor_SetActive(void *, int);
+void OrbitCursor_SetVisible(void *, int);
 void ov40_0222FB90(void *, int);
 int ov40_0222FBB4(void);
 void TouchHitboxController_Destroy(void *);

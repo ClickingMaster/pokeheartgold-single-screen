@@ -108,7 +108,7 @@ void ov40_022363BC(u32 a, int b, void *p) {
             ov40_022361E0(w);
             WORD(w, 0x2F68) = WORD(w, 0x1B0) % 6;
             WORD(w, 0x2F6C) = WORD(w, 0x1B0) / 6;
-            sub_020878B8(PTR(p, 0x6F0), (s16)(WORD(w, 0x2F68) * 0x18 + 0x6E), (s16)(WORD(w, 0x2F6C) * 0x16 + 0x34));
+            OrbitCursor_SetTarget(PTR(p, 0x6F0), (s16)(WORD(w, 0x2F68) * 0x18 + 0x6E), (s16)(WORD(w, 0x2F6C) * 0x16 + 0x34));
             ov40_02230964(p, 1);
             ov40_02237564(p);
             ov40_02237474(p);
@@ -124,8 +124,8 @@ void ov40_022363BC(u32 a, int b, void *p) {
         }
         case 1:
             ov40_02230944(p);
-            sub_020879E0(PTR(p, 0x6F0), 0);
-            sub_02087A08(PTR(p, 0x6F0), 0, 0);
+            OrbitCursor_SetVisible(PTR(p, 0x6F0), 0);
+            OrbitCursor_SetRadius(PTR(p, 0x6F0), 0, 0);
             ov40_0222BF80(p, 0xB);
             break;
         }

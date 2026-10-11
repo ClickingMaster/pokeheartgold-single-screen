@@ -20,7 +20,8 @@ typedef struct PokewalkerIrIdentity {
     u8 unk_38[0x23];
     u8 unk_5B_0 : 1;
     u8 unk_5B_1 : 1;
-    u8 unk_5B_2 : 6;
+    u8 unk_5B_2 : 1;
+    u8 unk_5B_3 : 5;
     u8 unk_5C;
     u8 unk_5D;
     u8 unk_5E[2];

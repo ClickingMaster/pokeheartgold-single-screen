@@ -189,7 +189,7 @@ void PlayerAvatar_InitMapFeatures(PlayerAvatar *avatar) {
         u32 x = PlayerAvatar_GetXCoord(avatar);
         u32 z = PlayerAvatar_GetZCoord(avatar);
         u32 direction = PlayerAvatar_GetFacingDirection(avatar);
-        PlayerAvatar_SetUnk34(avatar, ov01_021FE7DC(mapObject, x, z, direction, 1));
+        PlayerAvatar_SetUnk34(avatar, SurfMountEffect_Create(mapObject, x, z, direction, 1));
     }
 }
 

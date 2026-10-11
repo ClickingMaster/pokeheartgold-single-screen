@@ -69,7 +69,7 @@ struct VsRecorderWork {
     GF3DVramMan *vramMan;                    // 0x0060
     PokepicManager *pokepicManager;          // 0x0064
     u8 unk_0068[0x6F0 - 0x68];               // 0x0068, starts with the OVY_39 client work
-    void *banners[2];                        // 0x06F0, top / bottom screen banner (sub_02087284)
+    void *banners[2];                        // 0x06F0, top / bottom screen banner (OrbitCursor_New)
     u8 unk_06F8[0x830 - 0x6F8];              // 0x06F8
     SaveData *saveData;                      // 0x0830
     u8 unk_0834[0x87C - 0x834];              // 0x0834

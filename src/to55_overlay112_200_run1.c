@@ -25,7 +25,7 @@ void ov112_021F33D8(void *dst, void *party);
 int ov112_021F35A4(u8 *p);
 int ov112_021F35C8(u8 *p, void *trainer, int *found);
 
-int ov112_021F31D8(u8 *p) {
+int PokewalkerApp_IsEventLogInvalid(u8 *p) {
     u16 limit = 493;
     u16 delta = 0xfff9;
     int i;

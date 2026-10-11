@@ -37,7 +37,7 @@ int ov40_0223A080(void *p) {
         }
         ov40_0222F920((u8 *)p + 0x49C, p);
         ov40_02230964(p, 0);
-        sub_020879E0(PTR(p, 0x6F4), 0);
+        OrbitCursor_SetVisible(PTR(p, 0x6F4), 0);
         GfGfx_EngineBTogglePlanes(4, 0);
         GfGfx_EngineATogglePlanes(4, 0);
         WORD(p, 8) = WORD(p, 8) + 1;

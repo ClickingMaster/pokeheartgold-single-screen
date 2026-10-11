@@ -18,8 +18,8 @@ BOOL sub_02060EA4(LocalMapObject *object, u32 value);
 BOOL sub_02060ED4(LocalMapObject *object, u32 value);
 void ov01_021FE3E8(LocalMapObject *object);
 void ov01_021FE3F4(LocalMapObject *object);
-void ov01_021FE3C4(LocalMapObject *object);
-void ov01_021FE3D0(LocalMapObject *object);
+void Footprints_SpawnInSand(LocalMapObject *object);
+void Footprints_SpawnTracksInSand(LocalMapObject *object);
 void ov01_021FE3DC(LocalMapObject *object);
 
 void sub_020601BC(LocalMapObject *object, u8 behavior);

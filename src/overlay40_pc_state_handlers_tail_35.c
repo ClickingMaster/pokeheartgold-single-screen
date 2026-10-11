@@ -897,8 +897,8 @@ int ov40_0223F200(void *p) {
             GfGfx_EngineBTogglePlanes(4, 1);
             ov40_0223D830(p, 1);
             ov40_0223077C(p, PTR(p, 0x6F0), 0x10, (s16)(WORD(p, 0x4D8) * 0x18 + 0x4C));
-            sub_020879E0(PTR(p, 0x6F0), 1);
-            sub_02087A08(PTR(p, 0x6F0), 0xC, 0xC);
+            OrbitCursor_SetVisible(PTR(p, 0x6F0), 1);
+            OrbitCursor_SetRadius(PTR(p, 0x6F0), 0xC, 0xC);
             WORD(p, 8)
             ++;
         }
@@ -919,7 +919,7 @@ int ov40_0223F3E4(void *p) {
         ov40_0222FA88((u8 *)p + 0x47C);
         ov40_0222F5EC((u8 *)p + 0x49C, *(s16 *)((u8 *)p + 0x48C));
         ov40_0222F488((u8 *)p + 0x49C, p);
-        sub_020878EC(PTR(p, 0x6F0), 0x10, (s16)(WORD(p, 0x4D8) * 0x18 + 0x4C));
+        OrbitCursor_MoveTarget(PTR(p, 0x6F0), 0x10, (s16)(WORD(p, 0x4D8) * 0x18 + 0x4C));
         ov40_0223D8D4(p);
         if (TouchscreenHitbox_TouchNewIsIn(ov40_0224564C)) {
             ov40_02230944(p);
@@ -943,8 +943,8 @@ int ov40_0223F3E4(void *p) {
         ov40_0222FE68(p);
         ov40_0223E024(p);
         ov40_0223E064(p);
-        sub_020879E0(PTR(p, 0x6F0), 0);
-        sub_02087A08(PTR(p, 0x6F0), 0, 0);
+        OrbitCursor_SetVisible(PTR(p, 0x6F0), 0);
+        OrbitCursor_SetRadius(PTR(p, 0x6F0), 0, 0);
         if (WORD(inner, 0xC) == 0x10) {
             ov40_0222FA18((u8 *)p + 0x47C);
             ov40_0222F734((u8 *)p + 0x49C);

@@ -111,8 +111,8 @@
 .public Field_PlayerMovementSavingSet
 .public Field_PlayerMovementSavingClear
 .public ov01_021FA930
-.public ov01_021FE7DC
-.public ov01_021FE9F4
+.public SurfMountEffect_Create
+.public SurfMountEffect_SetBobbing
 .public RockClimbEffect_Create
 .public RockClimbEffect_SetFollow
 .public ov01_02205790

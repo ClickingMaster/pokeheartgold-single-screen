@@ -24,13 +24,13 @@ void ov40_02230738(void) {
     SetBgPriority(7, 1);
 }
 
-void ov40_0223077C(void *p, UnkStruct02087284 *motion, s16 x, s16 y) {
+void ov40_0223077C(void *p, OrbitCursor *motion, s16 x, s16 y) {
     if (U32(p, 0x44) == 0) {
-        sub_020879E0(motion, 1);
+        OrbitCursor_SetVisible(motion, 1);
     }
-    sub_020878B0(motion, 1);
-    sub_02087948(motion, x, y);
-    sub_020878B8(motion, x, y);
+    OrbitCursor_SetActive(motion, 1);
+    OrbitCursor_SetPosition(motion, x, y);
+    OrbitCursor_SetTarget(motion, x, y);
 }
 
 int ov40_022307B0(u64 value) {
@@ -54,12 +54,12 @@ void ov40_022307FC(SysTask *task, Ov40TouchIndicatorWork *p) {
         p->counter = 0;
         p->active = 0;
         sub_02087A54(p->motion);
-        sub_02087A08(p->motion, 0, 0);
-        sub_020878B0(p->motion, 0);
-        sub_020879E0(p->motion, 0);
+        OrbitCursor_SetRadius(p->motion, 0, 0);
+        OrbitCursor_SetActive(p->motion, 0);
+        OrbitCursor_SetVisible(p->motion, 0);
     } else {
         position = (s16)(p->counter * 2 + 6);
-        sub_02087A08(p->motion, position, position);
+        OrbitCursor_SetRadius(p->motion, position, position);
     }
 }
 
@@ -81,16 +81,16 @@ void ov40_02230864(Ov40TouchIndicatorWork *p) {
     p->counter = 0;
     System_GetTouchNewCoords(&x, &y);
     sub_02087A30(p->motion);
-    sub_020878B0(p->motion, 1);
-    sub_020879E0(p->motion, 1);
-    sub_020878B8(p->motion, (s16)x, (s16)y);
-    sub_02087948(p->motion, (s16)x, (s16)y);
+    OrbitCursor_SetActive(p->motion, 1);
+    OrbitCursor_SetVisible(p->motion, 1);
+    OrbitCursor_SetTarget(p->motion, (s16)x, (s16)y);
+    OrbitCursor_SetPosition(p->motion, (s16)x, (s16)y);
     p->task = SysTask_CreateOnMainQueue((SysTaskFunc)ov40_022307FC, p, 0x1000);
     if (p->task != NULL) {
         ov40_022307FC(p->task, p);
     } else {
         p->active = 0;
-        sub_020879E0(p->motion, 0);
+        OrbitCursor_SetVisible(p->motion, 0);
         GF_AssertFail();
     }
 }

@@ -45,9 +45,9 @@ defaultFieldEffectRenderers: ; 0x02208BFC
 gFieldEffectRenderers: ; 0x02208C5C
 	.word 0x00000000, FieldShadow_New, FieldShadow_Free
 	.word 0x00000001, ov01_021FDA14, ov01_021FDA30
-	.word 0x00000002, ov01_021FE200, ov01_021FE220
+	.word 0x00000002, Footprints_New, Footprints_Free
 	.word 0x00000003, ov01_02200858, ov01_02200874
-	.word 0x00000004, ov01_021FE780, ov01_021FE79C
+	.word 0x00000004, SurfMount_New, SurfMount_Free
 	.word 0x00000005, RockClimb_New, RockClimb_Free
 	.word 0x00000006, PuddleSplash_New, PuddleSplash_Free
 	.word 0x00000007, MudSplash_New, MudSplash_Free

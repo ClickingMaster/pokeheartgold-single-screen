@@ -120,8 +120,8 @@
 .public ov01_021FD684
 .public ov01_021FDA74
 .public ov01_021FDF88
-.public ov01_021FE3C4
-.public ov01_021FE3D0
+.public Footprints_SpawnInSand
+.public Footprints_SpawnTracksInSand
 .public ov01_021FE3DC
 .public ov01_021FE3E8
 .public ov01_021FE3F4

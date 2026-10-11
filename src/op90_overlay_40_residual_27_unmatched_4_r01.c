@@ -9,9 +9,9 @@
 void ManagedSprite_SetPositonFxXY(ManagedSprite *managedSprite, fx32 x, fx32 y);
 void ManagedSprite_GetSpritePositionFxXY(ManagedSprite *managedSprite, fx32 *x, fx32 *y);
 void TextOBJ_SetPosition(TextOBJ *textOBJ, int a1, int a2);
-BOOL sub_02087948(void *p, s16 x, s16 y);
-BOOL sub_020878B8(void *p, s16 x, s16 y);
-BOOL sub_020879E0(void *p, int flag);
+BOOL OrbitCursor_SetPosition(void *p, s16 x, s16 y);
+BOOL OrbitCursor_SetTarget(void *p, s16 x, s16 y);
+BOOL OrbitCursor_SetVisible(void *p, int flag);
 void ov40_0222D288(ManagedSprite *sprite, s16 x, s16 y);
 void ov40_0222D294(ManagedSprite *sprite, s16 *x, s16 *y);
 void ov40_0222C39C(void *work);
@@ -125,9 +125,9 @@ BOOL ov40_0223142C(Ov40Work *work) {
     default:
         data = work->slideData;
         ov40_0222D294(work->subChoices[work->selected].sprite, &x2, &y2);
-        sub_02087948(work->motion, x2 + 16, y2);
-        sub_020878B8(work->motion, x2 + 16, y2);
-        sub_020879E0(work->motion, 0);
+        OrbitCursor_SetPosition(work->motion, x2 + 16, y2);
+        OrbitCursor_SetTarget(work->motion, x2 + 16, y2);
+        OrbitCursor_SetVisible(work->motion, 0);
         ov40_0222C39C(work);
         Heap_Free(data);
         return TRUE;

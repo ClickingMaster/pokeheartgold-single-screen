@@ -122,8 +122,8 @@ typedef struct PokewalkerApp {
     int nextState; // state to go to after a message or the cursor animation
     int unk_10;
     u8 unk_14[4];
-    BgConfig *bgConfig; // 0x18
-    u8 unk_1C[4];
+    BgConfig *bgConfig;                // 0x18
+    OverlayManager *childApp;          // 0x1C, Pokewalker event log app (mode 8)
     SaveData *saveData;                // 0x20
     u8 irThreadStack[0x1000];          // 0x24
     PokewalkerIrIdentity identity;     // 0x1024
@@ -137,14 +137,20 @@ typedef struct PokewalkerApp {
     u32 unk_F1D0;
     u16 unk_F1D4;
     u8 unk_F1D6[2];
-    PokewalkerIrClock unk_F1D8;  // copied from the Pokewalker save data
-    u8 unk_F200[0x1634];         // 0xF200, filled by ov112_021F3244
-    u8 irCompressBuffer[0xCF1C]; // 0x10834
-    void *childArgs[2];          // 0x1D750, arguments of the mode 8 child application
+    PokewalkerIrClock unk_F1D8;          // copied from the Pokewalker save data
+    u8 unk_F200[0x1634];                 // 0xF200, filled by ov112_021F3244
+    u8 irCompressBuffer[0xCF1C];         // 0x10834
+    SaveData *eventLogSaveData;          // 0x1D750, arguments of the Pokewalker event log app (mode 8)
+    PokewalkerIrRecord *eventLogRecords; // 0x1D754
     u32 unk_1D758;
     u32 unk_1D75C;
     u8 unk_1D760[4];
-    u8 boxSelectWork[0x18]; // 0x1D764, work of mode 7 (PC box selection)
+    int selectMonState;     // 0x1D764, PC box selection (mode 7)
+    void *boxSelector;      // 0x1D768
+    void *boxDisplay;       // 0x1D76C
+    u32 selectedBox;        // 0x1D770, 18 = party
+    u32 selectedSlot;       // 0x1D774
+    u32 selectMonCancelled; // 0x1D778
     u16 strollMonSpecies;   // 0x1D77C
     u8 unk_1D77E[0x16];
     u8 strollMonForm; // 0x1D794

@@ -10,7 +10,7 @@ int ov40_02237D94(void *p) {
 
     switch (WORD(p, 8)) {
     case 0:
-        sub_020879E0(PTR(p, 0x6F4), 0);
+        OrbitCursor_SetVisible(PTR(p, 0x6F4), 0);
         ov40_02237008(p);
         ov40_02236FE0(p);
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 2);
@@ -32,8 +32,8 @@ int ov40_02237D94(void *p) {
         break;
     case 2:
         ov40_0223077C(p, PTR(p, 0x6F0), 0x80, 0x60);
-        sub_020879E0(PTR(p, 0x6F0), 1);
-        sub_02087A08(PTR(p, 0x6F0), 0x18, 0x18);
+        OrbitCursor_SetVisible(PTR(p, 0x6F0), 1);
+        OrbitCursor_SetRadius(PTR(p, 0x6F0), 0x18, 0x18);
         ov40_0222DED0(p, 0x121);
         PlaySE(0x57D);
         WORD(p, 8)
@@ -54,10 +54,10 @@ int ov40_02237D94(void *p) {
             WORD(inner, 0x2F64) = 0;
             ov40_02230964(p, 1);
             ov40_02236EB4(p);
-            sub_020879E0(PTR(p, 0x6F4), 0);
-            sub_020878B0(PTR(p, 0x6F0), 0);
-            sub_020879E0(PTR(p, 0x6F0), 0);
-            sub_02087A08(PTR(p, 0x6F0), 0, 0);
+            OrbitCursor_SetVisible(PTR(p, 0x6F4), 0);
+            OrbitCursor_SetActive(PTR(p, 0x6F0), 0);
+            OrbitCursor_SetVisible(PTR(p, 0x6F0), 0);
+            OrbitCursor_SetRadius(PTR(p, 0x6F0), 0, 0);
             GfGfx_EngineATogglePlanes(4, 0);
             BgClearTilemapBufferAndCommit(PTR(p, 0x24), 3);
             ov40_02230964(p, 0);
@@ -70,8 +70,8 @@ int ov40_02237D94(void *p) {
         }
         break;
     case 5:
-        sub_020879E0(PTR(p, 0x6F0), 0);
-        sub_02087A08(PTR(p, 0x6F0), 0, 0);
+        OrbitCursor_SetVisible(PTR(p, 0x6F0), 0);
+        OrbitCursor_SetRadius(PTR(p, 0x6F0), 0, 0);
         if (WORD(inner, 0x388) == 0) {
             WORD(p, 8)
             ++;
@@ -90,10 +90,10 @@ int ov40_02237D94(void *p) {
             WORD(inner, 0x2F64) = 0;
             ov40_02230964(p, 1);
             ov40_02236EB4(p);
-            sub_020879E0(PTR(p, 0x6F4), 0);
-            sub_020878B0(PTR(p, 0x6F0), 0);
-            sub_020879E0(PTR(p, 0x6F0), 0);
-            sub_02087A08(PTR(p, 0x6F0), 0, 0);
+            OrbitCursor_SetVisible(PTR(p, 0x6F4), 0);
+            OrbitCursor_SetActive(PTR(p, 0x6F0), 0);
+            OrbitCursor_SetVisible(PTR(p, 0x6F0), 0);
+            OrbitCursor_SetRadius(PTR(p, 0x6F0), 0, 0);
             GfGfx_EngineATogglePlanes(4, 0);
             BgClearTilemapBufferAndCommit(PTR(p, 0x24), 3);
             ov40_02230964(p, 0);
@@ -142,8 +142,8 @@ int ov40_02237D94(void *p) {
             GfGfx_EngineBTogglePlanes(4, 1);
             GfGfx_EngineATogglePlanes(4, 1);
             ov40_0223077C(p, PTR(p, 0x6F0), 0x10, (s16)(WORD(p, 0x4D8) * 24 + 0x44));
-            sub_020879E0(PTR(p, 0x6F0), 1);
-            sub_02087A08(PTR(p, 0x6F0), 0xC, 0xC);
+            OrbitCursor_SetVisible(PTR(p, 0x6F0), 1);
+            OrbitCursor_SetRadius(PTR(p, 0x6F0), 0xC, 0xC);
             ov40_0222BF80(p, 5);
         }
         PaletteData_BlendPalettes(PTR(p, 0x28), 3, 0xC, (u8)WORD(inner, 0x1AC), (u16)WORD(p, 0x58));

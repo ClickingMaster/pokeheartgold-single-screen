@@ -23,10 +23,10 @@ u32 ov40_022383C8(void *p) {
         ov40_02230964(p, 1);
         ov40_02236EB4(p);
         ov40_0223707C(p, 0xff);
-        sub_020879E0(PTR_AT(p, 0x6f4), 0);
-        sub_020878B0(PTR_AT(p, 0x6f0), 0);
-        sub_020879E0(PTR_AT(p, 0x6f0), 0);
-        sub_02087A08(PTR_AT(p, 0x6f0), 0, 0);
+        OrbitCursor_SetVisible(PTR_AT(p, 0x6f4), 0);
+        OrbitCursor_SetActive(PTR_AT(p, 0x6f0), 0);
+        OrbitCursor_SetVisible(PTR_AT(p, 0x6f0), 0);
+        OrbitCursor_SetRadius(PTR_AT(p, 0x6f0), 0, 0);
         GfGfx_EngineATogglePlanes(4, 0);
         BgClearTilemapBufferAndCommit(PTR_AT(p, 0x24), 3);
         ov40_02230964(p, 0);

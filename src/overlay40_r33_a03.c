@@ -42,8 +42,8 @@ void ov40_0222D66C(void *dst, void *src, int id);
 int ov40_0222FC14(void *a0, void *a1, u8 value);
 void ov40_022306E0(void *p);
 void ov40_0223077C(void *a0, void *a1, int a2, int a3);
-void sub_020879E0(void *p, int value);
-void sub_02087A08(void *p, int a, int b);
+void OrbitCursor_SetVisible(void *p, int value);
+void OrbitCursor_SetRadius(void *p, int a, int b);
 void PlaySE(int seqNo);
 void StopSE(int seqNo, int fadeFrames);
 BOOL ov40_0223D5CC(void);
@@ -140,8 +140,8 @@ int ov40_0223A924(void *p) {
     }
     case 3:
         ov40_0223077C(p, PTR(p, 0x6F0), 0x80, 0x60);
-        sub_020879E0(PTR(p, 0x6F0), 1);
-        sub_02087A08(PTR(p, 0x6F0), 0x18, 0x18);
+        OrbitCursor_SetVisible(PTR(p, 0x6F0), 1);
+        OrbitCursor_SetRadius(PTR(p, 0x6F0), 0x18, 0x18);
         WORD(p, 8)
         ++;
         PlaySE(0x57D);
@@ -181,8 +181,8 @@ int ov40_0223A924(void *p) {
             ov40_02230964(p, (void *)1);
             ov40_0223B44C(p);
             ov40_02230964(p, NULL);
-            sub_020879E0(PTR(p, 0x6F0), 0);
-            sub_02087A08(PTR(p, 0x6F0), 0, 0);
+            OrbitCursor_SetVisible(PTR(p, 0x6F0), 0);
+            OrbitCursor_SetRadius(PTR(p, 0x6F0), 0, 0);
             ov40_0222FDC4(p);
             ov40_0222FCCC(p);
             ov40_0222F734((u8 *)p + 0x49C);

@@ -98,7 +98,7 @@ BOOL ov01_021F2538(FieldSystem *fieldSystem, PlayerAvatar *playerAvatar, int a2)
 
 /* External helpers with no tracked prototype reachable from here. */
 void FieldEffectManager_DestroyEffect(int a0);
-u32 ov01_021FE7DC(LocalMapObject *obj, u32 x, u32 y, u32 dir, u32 a4);
+u32 SurfMountEffect_Create(LocalMapObject *obj, u32 x, u32 y, u32 dir, u32 a4);
 int sub_0205DEC0(PlayerAvatar *avatar, int direction);
 BOOL sub_0205DE38(PlayerAvatar *avatar);
 u32 sub_0206234C(int direction, int a1);
@@ -167,7 +167,7 @@ void ov01_02205EE0(TaskManager *taskManager);
 void MapObject_SetHeldMovement(LocalMapObject *obj, u32 movement);
 BOOL MapObject_IsMovementPaused(LocalMapObject *obj);
 void MapObject_ClearHeldMovementIfActive(LocalMapObject *obj);
-void ov01_021FE9F4(u32 a0, int a1);
+void SurfMountEffect_SetBobbing(u32 a0, int a1);
 void ov01_0220609C(FieldSystem *fieldSystem, int a1);
 void sub_02069DC8(LocalMapObject *obj, BOOL enable);
 BOOL CheckFlag99A(void *varsFlags);

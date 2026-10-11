@@ -339,42 +339,42 @@
 	.extern ov112_021EEA7C
 	.extern ov112_021EEAF0
 	.extern ov112_021EECF0
-	.extern ov112_021EED08
-	.extern ov112_021EEDFC
-	.extern ov112_021EEE20
-	.extern ov112_021EEE2C
-	.extern ov112_021EEE4C
-	.extern ov112_021EEE8C
-	.extern ov112_021EEEA0
-	.extern ov112_021EEEAC
-	.extern ov112_021EEEC0
-	.extern ov112_021EEEE0
-	.extern ov112_021EEF08
-	.extern ov112_021EEF1C
-	.extern ov112_021EEF28
-	.extern ov112_021EEF30
-	.extern ov112_021EEF68
-	.extern ov112_021EF03C
-	.extern ov112_021EF100
-	.extern ov112_021EF15C
-	.extern ov112_021EF17C
-	.extern ov112_021EF19C
-	.extern ov112_021EF1CC
-	.extern ov112_021EF1F0
-	.extern ov112_021EF298
-	.extern ov112_021EF300
-	.extern ov112_021EF310
-	.extern ov112_021EF31C
-	.extern ov112_021EF3F8
-	.extern ov112_021EF568
-	.extern ov112_021EF5AC
-	.extern ov112_021EF62C
-	.extern ov112_021EF640
-	.extern ov112_021EF644
-	.extern ov112_021EF660
-	.extern ov112_021EF664
-	.extern ov112_021EF67C
-	.extern ov112_021EF6A0
+	.extern PokewalkerApp_LinkSave_Enter
+	.extern PokewalkerApp_LinkSave_Update
+	.extern PokewalkerApp_LinkSave_Exit
+	.extern PokewalkerApp_LinkSave_PrintSaving
+	.extern PokewalkerApp_LinkSave_WaitSaving
+	.extern PokewalkerApp_LinkSave_Save
+	.extern PokewalkerApp_LinkSave_EndSave
+	.extern PokewalkerApp_LinkSave_SetNextMode
+	.extern PokewalkerApp_LinkSave_PrintSaving2
+	.extern PokewalkerApp_LinkSave_WaitSaving2
+	.extern PokewalkerApp_LinkSave_Save2
+	.extern PokewalkerApp_LinkSave_EndSave2
+	.extern PokewalkerApp_LinkSave_SetNextMode2
+	.extern PokewalkerApp_LinkSave_End
+	.extern PokewalkerApp_SelectMon_Enter
+	.extern PokewalkerApp_SelectMon_Update
+	.extern PokewalkerApp_SelectMon_Exit
+	.extern PokewalkerApp_SelectMon_SetGxBanks
+	.extern PokewalkerApp_SelectMon_SetGraphicsModes
+	.extern PokewalkerApp_SelectMon_InitObjTransfer
+	.extern PokewalkerApp_SelectMon_InitOam
+	.extern PokewalkerApp_SelectMon_GetBoxMon
+	.extern PokewalkerApp_SelectMon_GetBoxMonIcon
+	.extern PokewalkerApp_SelectMon_GetBoxName
+	.extern PokewalkerApp_SelectMon_VBlankCB
+	.extern PokewalkerApp_SelectMon_StoreSelection
+	.extern PokewalkerApp_SelectMon_ShowMonInfo
+	.extern PokewalkerApp_EventLog_Enter
+	.extern PokewalkerApp_EventLog_Update
+	.extern PokewalkerApp_EventLog_Exit
+	.extern PokewalkerApp_WaitKey_Enter
+	.extern PokewalkerApp_WaitKey_Update
+	.extern PokewalkerApp_WaitKey_Exit
+	.extern PokewalkerApp_StrollReport_Enter
+	.extern PokewalkerApp_StrollReport_Update
+	.extern PokewalkerApp_StrollReport_Exit
 	.extern ov112_021EF700
 	.extern ov112_021EF758
 	.extern ov112_021EF8C0
@@ -518,7 +518,7 @@
 	.extern ov112_021F30BC
 	.extern ov112_021F3140
 	.extern ov112_021F31BC
-	.extern ov112_021F31D8
+	.extern PokewalkerApp_IsEventLogInvalid
 	.extern ov112_021F3244
 	.extern ov112_021F328C
 	.extern ov112_021F336C
@@ -801,10 +801,10 @@
 	.public ov112_021FF09C
 	.public ov112_021FF0AC
 	.public ov112_021FF0C4
-	.public ov112_021FF0DC
-	.public ov112_021FF0EC
-	.public ov112_021FF0FC
-	.public ov112_021FF124
+	.public sSelectMonGraphicsModes
+	.public sSelectMonObjCharTransferTemplate
+	.public sSelectMonGraphicsBanks
+	.public sEventLogAppTemplate
 	.public ov112_021FF134
 	.public ov112_021FF150
 	.public ov112_021FF16C
@@ -859,8 +859,8 @@
 	.public sEraseRecordsStates
 	.public ov112_021FF7CC
 	.public ov112_021FF8D8
-	.public ov112_021FF8F8
-	.public ov112_021FF924
+	.public sLinkSaveStates
+	.public sStrollReportStates
 	.public ov112_021FF9B8
 	.public ov112_021FFBD8
 	.public ov112_App_MainMenu_SelectOption_ConnectToPokewalker
@@ -4638,21 +4638,21 @@ ov112_021FF0C4: ; 0x021FF0C4
 	.byte 0x06, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00
 	.byte 0x09, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 
-ov112_021FF0DC: ; 0x021FF0DC
+sSelectMonGraphicsModes: ; 0x021FF0DC
 	.byte 0x01, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov112_021FF0EC: ; 0x021FF0EC
+sSelectMonObjCharTransferTemplate: ; 0x021FF0EC
 	.byte 0x28, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x01, 0x00, 0x00, 0x40, 0x00, 0x00, 0x9A, 0x00, 0x00, 0x00
 
-ov112_021FF0FC: ; 0x021FF0FC
+sSelectMonGraphicsBanks: ; 0x021FF0FC
 	.byte 0x01, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 	.byte 0x60, 0x00, 0x00, 0x00
 
-ov112_021FF124: ; 0x021FF124
+sEventLogAppTemplate: ; 0x021FF124
 	.word ov112_021F2EF4, ov112_021F3018, ov112_021F2FAC, 0xFFFFFFFF
 
 ov112_021FF134: ; 0x021FF134
@@ -4875,21 +4875,21 @@ ov112_021FF554: ; 0x021FF554
 	.word ov112_021EE628
 	.word ov112_021EE688
 	.word ov112_021EE6AC
-	.word ov112_021EED08
-	.word ov112_021EEDFC
-	.word ov112_021EEE20
-	.word ov112_021EEF68
-	.word ov112_021EF03C
-	.word ov112_021EF100
-	.word ov112_021EF568
-	.word ov112_021EF5AC
-	.word ov112_021EF62C
-	.word ov112_021EF640
-	.word ov112_021EF644
-	.word ov112_021EF660
-	.word ov112_021EF664
-	.word ov112_021EF67C
-	.word ov112_021EF6A0
+	.word PokewalkerApp_LinkSave_Enter
+	.word PokewalkerApp_LinkSave_Update
+	.word PokewalkerApp_LinkSave_Exit
+	.word PokewalkerApp_SelectMon_Enter
+	.word PokewalkerApp_SelectMon_Update
+	.word PokewalkerApp_SelectMon_Exit
+	.word PokewalkerApp_EventLog_Enter
+	.word PokewalkerApp_EventLog_Update
+	.word PokewalkerApp_EventLog_Exit
+	.word PokewalkerApp_WaitKey_Enter
+	.word PokewalkerApp_WaitKey_Update
+	.word PokewalkerApp_WaitKey_Exit
+	.word PokewalkerApp_StrollReport_Enter
+	.word PokewalkerApp_StrollReport_Update
+	.word PokewalkerApp_StrollReport_Exit
 
 ov112_021FF5D0: ; 0x021FF5D0
 	.word ov112_021FEC30
@@ -5119,20 +5119,20 @@ ov112_021FF8D8: ; 0x021FF8D8
 	.word ov112_021EE754
 	.word ov112_021EE778
 
-ov112_021FF8F8: ; 0x021FF8F8
-	.word ov112_021EEE2C
-	.word ov112_021EEE4C
-	.word ov112_021EEE8C
-	.word ov112_021EEEA0
-	.word ov112_021EEEAC
-	.word ov112_021EEEC0
-	.word ov112_021EEEE0
-	.word ov112_021EEF08
-	.word ov112_021EEF1C
-	.word ov112_021EEF28
-	.word ov112_021EEF30
+sLinkSaveStates: ; 0x021FF8F8
+	.word PokewalkerApp_LinkSave_PrintSaving
+	.word PokewalkerApp_LinkSave_WaitSaving
+	.word PokewalkerApp_LinkSave_Save
+	.word PokewalkerApp_LinkSave_EndSave
+	.word PokewalkerApp_LinkSave_SetNextMode
+	.word PokewalkerApp_LinkSave_PrintSaving2
+	.word PokewalkerApp_LinkSave_WaitSaving2
+	.word PokewalkerApp_LinkSave_Save2
+	.word PokewalkerApp_LinkSave_EndSave2
+	.word PokewalkerApp_LinkSave_SetNextMode2
+	.word PokewalkerApp_LinkSave_End
 
-ov112_021FF924: ; 0x021FF924
+sStrollReportStates: ; 0x021FF924
 	.word ov112_021EF700
 	.word ov112_021EF758
 	.word ov112_021EF8C0

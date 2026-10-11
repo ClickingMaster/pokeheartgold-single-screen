@@ -50,7 +50,7 @@ void AccessoryPortrait_SetMonVisible(void *, int);
 void *FashionEntry_New(int);
 void *Save_FashionData_GetEntry(void *, int);
 void *FrontierCard_New(int);
-void sub_020879E0(void *, int);
+void OrbitCursor_SetVisible(void *, int);
 extern u32 SDK_OVERLAY_OVY_41_ID;
 
 int ov40_02233F28(void *);
