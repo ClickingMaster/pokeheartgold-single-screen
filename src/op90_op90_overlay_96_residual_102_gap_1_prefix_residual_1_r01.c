@@ -68,7 +68,7 @@ int ov96_021E6138(void *p);
 void PokeathlonCourseObject_SetCollision(void *obj, int a, int b);
 void *PokeathlonCourseMonObject_GetGfx(void *obj);
 Info *PokeathlonCourseMonGfx_GetInfo(void *p);
-void ov96_0220D554(void *obj, int v);
+void PokeathlonDiscCatch_SetMonScaleCenter(void *obj, int v);
 void PokeathlonCourseObject_SetScale(void *obj, f32 a, f32 b);
 void PokeathlonCourseMonObject_SetAnimState(void *obj);
 void PokeathlonCourseObject_SetGroundPosition(void *obj, int x, int y);
@@ -125,7 +125,7 @@ void ov96_0220F4A0(Work *w) {
         }
         obj2 = PokeathlonCourseMonObjects_Get(w->objs, i);
         info = PokeathlonCourseMonGfx_GetInfo(PokeathlonCourseMonObject_GetGfx(obj2));
-        ov96_0220D554(obj2, 0);
+        PokeathlonDiscCatch_SetMonScaleCenter(obj2, 0);
         PokeathlonCourseObject_SetScale(obj2, 1.0f, 1.0f);
         x = ov96_0221CFBC[group][slot].x;
         y = ov96_0221CFBC[group][slot].y;

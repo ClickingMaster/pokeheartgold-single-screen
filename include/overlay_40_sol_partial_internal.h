@@ -132,7 +132,7 @@ void ov40_0223CCA0(void *p);
 BOOL ov40_0223D5CC(void *p);
 void VsRecorder_RemoveProfileWindows(void *p);
 void VsRecorder_RemoveVideoInfoWindows(void *p);
-void ov40_02232FCC(void *p);
+void VsRecorder_RemoveProfileButton(void *p);
 void ov40_02237C54(void *p);
 void ov40_02241A34(void *p);
 void ov40_0223610C(void *p);

@@ -3,7 +3,7 @@
 #include "global.h"
 
 #include "frontier/overlay_80_022340E8.h"
-#include "frontier/overlay_80_02238034.h"
+#include "frontier/battle_arcade_setup.h"
 
 #include "heap.h"
 #include "party.h"
@@ -26,7 +26,7 @@
 
 // Partner Pokemon are sent as raw Pokemon structs through a large-data command (up to 0x200 bytes).
 BOOL sub_02036FD8(int command, void *data, int size);
-u32 ov80_02237B24(u8 type, int a1);
+u32 BattleCastle_GetPartySize(u8 type, int a1);
 u32 BattleFactory_GetPartySize(u8 type);
 
 // Battle Hall script work (view).
@@ -621,7 +621,7 @@ void ov80_0222B940(int netId, int size, const u16 *data, BattleCastleData *work)
 }
 
 BOOL BattleCastleLink_SendPartyMons(BattleCastleData *work) {
-    s32 count = ov80_02237B24(work->type, 0);
+    s32 count = BattleCastle_GetPartySize(work->type, 0);
     u32 size = SizeOfStructPokemon();
     s32 i;
     i = 0;
@@ -650,7 +650,7 @@ void BattleCastleLink_ReceivePartyMons(int netId, int size, void *data, BattleCa
     if (netId == Comm_GetLocalNetId()) {
         return;
     }
-    count = ov80_02237B24(work->type, 0);
+    count = BattleCastle_GetPartySize(work->type, 0);
     monSize = SizeOfStructPokemon();
     mon = AllocMonZeroed(HEAP_ID_FIELD2);
     for (i = 0; i < count; i++) {

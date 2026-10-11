@@ -204,11 +204,11 @@
 	.public PokeathlonBlockSmashMon_IsGaugeFull
 	.public PokeathlonBlockSmashMon_IsTired
 	.public PokeathlonBlockSmashCpu_Delete
-	.public ov96_0220D408
-	.public ov96_0220D420
-	.public ov96_0220E850
-	.public ov96_0220E888
-	.public ov96_0220E960
+	.public PokeathlonDiscCatchShake_IsDone
+	.public PokeathlonDiscCatchShake_Init
+	.public PokeathlonDiscCatch_GetTeamScore
+	.public PokeathlonDiscCatch_Square
+	.public PokeathlonDiscCatch_SlowDown
 	.public ov96_0220F3B4
 	.public ov96_0220FF64
 	.public ov96_0221022C

@@ -17,8 +17,8 @@
 
 	.rodata
 
-	.public _020FE4B0
-	.public _020FE4B0
-_020FE4B0:
+	.public gFrontierSummaryPages
+	.public gFrontierSummaryPages
+gFrontierSummaryPages:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04
 	.balign 4, 0

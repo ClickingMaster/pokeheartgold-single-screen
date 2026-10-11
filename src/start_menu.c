@@ -40,7 +40,7 @@
 #include "unk_0205A44C.h"
 #include "union_room_objects.h"
 #include "unk_0205CB48.h"
-#include "unk_02066EDC.h"
+#include "frontier_field_support.h"
 #include "field_warp_state.h"
 #include "trainer_card_data.h"
 #include "unk_020755E8.h"

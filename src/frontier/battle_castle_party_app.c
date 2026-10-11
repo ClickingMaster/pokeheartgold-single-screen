@@ -263,8 +263,8 @@ extern const GraphicsBanks ov83_02247E88;
 // Frontier overlay (80) helpers
 u32 Frontier_GetHpGaugeFrame(u16 hp, u16 maxHp);
 void Frontier_BufferPartnerName(MessageFormat *msgFormat, int value);
-int ov80_02237B24(u8 frontierType, int kind);
-void ov80_02237FA4(FrontierSave *frontierSave, int frontierType, int points);
+int BattleCastle_GetPartySize(u8 frontierType, int kind);
+void BattleCastle_SpendPoints(FrontierSave *frontierSave, int frontierType, int points);
 
 // Entry points and link receive callbacks (their names are referenced from asm)
 BOOL BattleCastlePartyApp_Init(OverlayManager *manager, int *state);
@@ -417,7 +417,7 @@ BOOL BattleCastlePartyApp_Init(OverlayManager *manager, int *state) {
     for (i = 0; i < 3; i++) {
         app->partnerRanks[i] = 1;
     }
-    if (ov80_02237D8C(app->frontierType) == FALSE) {
+    if (BattleCastle_IsMultiType(app->frontierType) == FALSE) {
         app->numMons = 3;
     } else {
         app->numMons = 4;
@@ -426,7 +426,7 @@ BOOL BattleCastlePartyApp_Init(OverlayManager *manager, int *state) {
     app->prevCursorPos = app->unk_015 - 1;
     BattleCastle_ClearBgToggleRequests(&app->bgToggleRequests);
     BattleCastlePartyApp_InitGraphics(app);
-    if (ov80_02237D8C(app->frontierType) == TRUE) {
+    if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
         sub_02096910(app);
     }
     return TRUE;
@@ -466,7 +466,7 @@ int BattleCastlePartyApp_Main(OverlayManager *manager, int *state) {
         if (BattleCastlePartyApp_HandleMenu(app) == TRUE) {
             if (app->flags.bits.linkSyncPending == TRUE) {
                 BattleCastlePartyApp_SetMainState(app, state, CASTLE_PARTY_MAIN_LINK_ACTION);
-            } else if (ov80_02237D8C(app->frontierType) == TRUE) {
+            } else if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
                 BattleCastlePartyApp_SetMainState(app, state, CASTLE_PARTY_MAIN_LINK_EXIT);
             } else {
                 BattleCastlePartyApp_SetMainState(app, state, CASTLE_PARTY_MAIN_FADE_OUT);
@@ -514,14 +514,14 @@ BOOL BattleCastlePartyApp_Exit(OverlayManager *manager) {
 BOOL BattleCastlePartyApp_FadeIn(BattleCastlePartyApp *app) {
     switch (app->subState) {
     case 0:
-        if (ov80_02237D8C(app->frontierType) == TRUE) {
+        if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
             LinkSync_ClearPackets();
             LinkSync_StartSync(CASTLE_PARTY_SYNC_START);
         }
         app->subState++;
         break;
     case 1:
-        if (ov80_02237D8C(app->frontierType) == TRUE) {
+        if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
             if (LinkSync_IsSynced(CASTLE_PARTY_SYNC_START) == TRUE) {
                 LinkSync_ClearPackets();
                 app->subState++;
@@ -531,7 +531,7 @@ BOOL BattleCastlePartyApp_FadeIn(BattleCastlePartyApp *app) {
         }
         break;
     case 2:
-        if (ov80_02237D8C(app->frontierType) == TRUE) {
+        if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
             if (BattleCastlePartyApp_SendLinkCommand(app, CASTLE_LINK_CMD_START, 0) == TRUE) {
                 app->subState++;
             }
@@ -542,7 +542,7 @@ BOOL BattleCastlePartyApp_FadeIn(BattleCastlePartyApp *app) {
         }
         break;
     case 3:
-        if (ov80_02237D8C(app->frontierType) == TRUE) {
+        if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
             if (app->linkRecvCount >= 2) {
                 app->linkRecvCount = 0;
                 BattleCastlePartyApp_DrawScreen(app);
@@ -739,8 +739,8 @@ BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
                     break;
                 }
             }
-            if (!ov80_02237D8C(app->frontierType)) {
-                ov80_02237FA4(app->frontierSave, app->frontierType, ov83_02247D18[app->action - 1]);
+            if (!BattleCastle_IsMultiType(app->frontierType)) {
+                BattleCastle_SpendPoints(app->frontierSave, app->frontierType, ov83_02247D18[app->action - 1]);
                 BattleCastlePartyApp_PrintCastlePoints(app, &app->windows[0]);
                 BattleCastlePartyApp_HealMon(app, app->cursorPos, app->action);
                 app->subState = CASTLE_PARTY_STATE_APPLY_ACTION;
@@ -770,7 +770,7 @@ BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
                 app->subState = CASTLE_PARTY_STATE_HEAL_MENU_MESSAGE;
                 break;
             }
-            if (!ov80_02237D8C(app->frontierType)) {
+            if (!BattleCastle_IsMultiType(app->frontierType)) {
                 BattleCastlePartyApp_RankUp(app, app->cursorPos, CASTLE_PARTY_ACTION_HEAL_RANK_UP);
                 app->subState = CASTLE_PARTY_STATE_HEAL_RANK_UP;
             } else {
@@ -952,10 +952,10 @@ BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
             }
             mon = app->summary.mon;
             if (!GetMonData(mon, MON_DATA_HELD_ITEM, NULL)) {
-                if (!ov80_02237D8C(app->frontierType)) {
+                if (!BattleCastle_IsMultiType(app->frontierType)) {
                     BattleCastlePartyApp_CloseItemGrid(app);
                     BattleCastle_DrawWindowFrame(&app->windows[CASTLE_PARTY_WIN_MESSAGE], Options_GetFrame(app->options));
-                    ov80_02237FA4(app->frontierSave, app->frontierType, BattleCastlePartyApp_GetRentalCost(app, app->unk_860, app->action));
+                    BattleCastle_SpendPoints(app->frontierSave, app->frontierType, BattleCastlePartyApp_GetRentalCost(app, app->unk_860, app->action));
                     BattleCastlePartyApp_PrintCastlePoints(app, &app->windows[0]);
                     BattleCastlePartyApp_GiveRentalItem(app, app->cursorPos, BattleCastlePartyApp_GetRentalItemId(app, app->unk_860, app->action));
                     app->subState = CASTLE_PARTY_STATE_APPLY_ACTION;
@@ -995,7 +995,7 @@ BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
                 app->subState = CASTLE_PARTY_STATE_RENTAL_MENU_MESSAGE;
                 break;
             }
-            if (!ov80_02237D8C(app->frontierType)) {
+            if (!BattleCastle_IsMultiType(app->frontierType)) {
                 BattleCastlePartyApp_RankUp(app, app->cursorPos, CASTLE_PARTY_ACTION_RENTAL_RANK_UP);
                 app->subState = CASTLE_PARTY_STATE_RENTAL_RANK_UP;
             } else {
@@ -1052,10 +1052,10 @@ BOOL BattleCastlePartyApp_HandleMenu(BattleCastlePartyApp *app) {
         case YESNORESPONSE_YES:
             BattleCastlePrompt_Hide(&app->yesNoPrompt);
             BattleCastlePartyApp_PrintItemNames(app);
-            if (!ov80_02237D8C(app->frontierType)) {
+            if (!BattleCastle_IsMultiType(app->frontierType)) {
                 BattleCastlePartyApp_CloseItemGrid(app);
                 BattleCastle_DrawWindowFrame(&app->windows[CASTLE_PARTY_WIN_MESSAGE], Options_GetFrame(app->options));
-                ov80_02237FA4(app->frontierSave, app->frontierType, BattleCastlePartyApp_GetRentalCost(app, app->unk_860, app->action));
+                BattleCastle_SpendPoints(app->frontierSave, app->frontierType, BattleCastlePartyApp_GetRentalCost(app, app->unk_860, app->action));
                 BattleCastlePartyApp_PrintCastlePoints(app, &app->windows[0]);
                 BattleCastlePartyApp_GiveRentalItem(app, app->cursorPos, BattleCastlePartyApp_GetRentalItemId(app, app->unk_860, app->action));
                 app->subState = CASTLE_PARTY_STATE_APPLY_ACTION;
@@ -1232,7 +1232,7 @@ void BattleCastlePartyApp_FreeResources(BattleCastlePartyApp *app) {
     BattleCastleSprite_Delete(app->itemCursor);
     BattleCastleSprite_Delete(app->monPic);
     BattleCastleSprite_Delete(app->selectedItemIcon);
-    numMons = ov80_02237B24(app->frontierType, 1);
+    numMons = BattleCastle_GetPartySize(app->frontierType, 1);
     for (i = 0; i < numMons; i++) {
         BattleCastleSprite_Delete(app->monIcons[i]);
         BattleCastleSprite_Delete(app->heldItemIcons[i]);
@@ -1307,14 +1307,14 @@ void BattleCastlePartyApp_InitGraphics(BattleCastlePartyApp *app) {
     app->unk_738 = BattleCastleSprite_New(&app->spriteGfx, 0, 0, 0, 5, 160, 124, 0, 0);
     BattleCastleSprite_SetDrawFlag(app->unk_734, FALSE);
     BattleCastleSprite_SetDrawFlag(app->unk_738, FALSE);
-    if (ov80_02237D8C(app->frontierType) == FALSE) {
+    if (BattleCastle_IsMultiType(app->frontierType) == FALSE) {
         iconX = 64;
         itemX = 72;
     } else {
         iconX = 32;
         itemX = 40;
     }
-    numMons = ov80_02237B24(app->frontierType, 1);
+    numMons = BattleCastle_GetPartySize(app->frontierType, 1);
     for (i = 0; i < numMons; i++, itemX += 64, iconX += 64) {
         app->heldItemIcons[i] = BattleCastleSprite_New(&app->spriteGfx, 1, 1, 1, 0, itemX, 62, 2, 0);
         mon = Party_GetMonByIndex(app->party, i);
@@ -1338,7 +1338,7 @@ void BattleCastlePartyApp_InitGraphics(BattleCastlePartyApp *app) {
     BattleCastlePartyApp_GetCursorPos(app, &cursorX, &cursorY, 0);
     app->cursor = BattleCastleSprite_New(&app->spriteGfx, 0, 0, 0, 1, cursorX, cursorY, 2, 0);
     app->partnerCursor = BattleCastleSprite_New(&app->spriteGfx, 0, 0, 0, 2, cursorX, cursorY, 2, 0);
-    if (ov80_02237D8C(app->frontierType) == FALSE) {
+    if (BattleCastle_IsMultiType(app->frontierType) == FALSE) {
         BattleCastleSprite_SetDrawFlag(app->partnerCursor, FALSE);
     }
     app->unk_778 = BattleCastleSprite_New(&app->spriteGfx, 0, 0, 0, 11, 20, 20, 0, 0);
@@ -1378,7 +1378,7 @@ void BattleCastlePartyApp_InitBgGraphics(BattleCastlePartyApp *app) {
 }
 
 void BattleCastlePartyApp_InitSpriteGfx(BattleCastlePartyApp *app) {
-    BattleCastle_InitSpriteGfx(&app->spriteGfx, app->party, ov80_02237D8C(app->frontierType));
+    BattleCastle_InitSpriteGfx(&app->spriteGfx, app->party, BattleCastle_IsMultiType(app->frontierType));
 }
 
 void BattleCastlePartyApp_FreeBgLayers(BgConfig *bgConfig) {
@@ -1468,7 +1468,7 @@ void BattleCastlePartyApp_InitBgLayers(BgConfig *bgConfig) {
 
 void BattleCastlePartyApp_LoadPartyBg(BattleCastlePartyApp *app, GFBgLayer bgId) {
     GfGfxLoader_LoadCharDataFromOpenNarc(app->narc, 0x22, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_107);
-    if (ov80_02237D8C(app->frontierType) == FALSE) {
+    if (BattleCastle_IsMultiType(app->frontierType) == FALSE) {
         GfGfxLoader_LoadScrnDataFromOpenNarc(app->narc, 0x23, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_107);
     } else {
         GfGfxLoader_LoadScrnDataFromOpenNarc(app->narc, 0x24, app->bgConfig, bgId, 0, 0, TRUE, HEAP_ID_107);
@@ -1618,7 +1618,7 @@ void BattleCastlePartyApp_PrintPartyHp(BattleCastlePartyApp *app, Window *window
     int i;
 
     FillWindowPixelBuffer(window, 0);
-    numMons = ov80_02237B24(app->frontierType, 1);
+    numMons = BattleCastle_GetPartySize(app->frontierType, 1);
     for (i = 0; i < numMons; i++) {
         // the slot is narrowed to u8 at this call site
         BattleCastlePartyApp_PrintMonHp(app, window, (u8)i, 0);
@@ -1638,7 +1638,7 @@ void BattleCastlePartyApp_PrintMonHp(BattleCastlePartyApp *app, Window *window, 
 
     mon = Party_GetMonByIndex(app->party, slot);
 
-    if (ov80_02237D8C(app->frontierType) == FALSE) {
+    if (BattleCastle_IsMultiType(app->frontierType) == FALSE) {
         baseX = 36;
     } else {
         baseX = 4;
@@ -1661,7 +1661,7 @@ void BattleCastlePartyApp_PrintMonHp(BattleCastlePartyApp *app, Window *window, 
 #pragma force_active reset
 
 void BattleCastlePartyApp_PrintPartyLevels(BattleCastlePartyApp *app, Window *window) {
-    int numMons = ov80_02237B24(app->frontierType, 1);
+    int numMons = BattleCastle_GetPartySize(app->frontierType, 1);
     int i;
 
     for (i = 0; i < numMons; i++) {
@@ -1679,7 +1679,7 @@ void BattleCastlePartyApp_PrintMonLevelAndGender(BattleCastlePartyApp *app, Wind
     unsigned int y;
     Pokemon *mon;
 
-    if (ov80_02237D8C(app->frontierType) == FALSE) {
+    if (BattleCastle_IsMultiType(app->frontierType) == FALSE) {
         levelBaseX = 40;
         genderX = 80;
     } else {
@@ -1703,7 +1703,7 @@ void BattleCastlePartyApp_PrintMonLevelAndGender(BattleCastlePartyApp *app, Wind
 
 // Redraws the current HP of the mon in the party panel column of the slot
 void BattleCastlePartyApp_RedrawMonHp(BattleCastlePartyApp *app, Window *window, int slot, int hp) {
-    int x = ov80_02237D8C(app->frontierType) == FALSE ? 36 : 4;
+    int x = BattleCastle_IsMultiType(app->frontierType) == FALSE ? 36 : 4;
 
     x += slot * CASTLE_PARTY_COLUMN_WIDTH;
     FillWindowPixelRect(window, 0, (u16)x, 0, 24, 9);
@@ -2076,7 +2076,7 @@ void BattleCastlePartyApp_SetMainState(BattleCastlePartyApp *app, int *state, u3
 
 void BattleCastlePartyApp_MoveCursor(BattleCastlePartyApp *app) {
     PlaySE(SEQ_SE_DP_SELECT);
-    if (ov80_02237D8C(app->frontierType) == TRUE) {
+    if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
         BattleCastlePartyApp_SendLinkCommand(app, CASTLE_LINK_CMD_CURSOR, app->cursorPos);
     }
     BattleCastlePartyApp_DrawCursor(app, app->cursorPos, FALSE);
@@ -2121,7 +2121,7 @@ void BattleCastlePartyApp_DrawCursor(BattleCastlePartyApp *app, u32 index, int i
 }
 
 void BattleCastlePartyApp_GetCursorPos(BattleCastlePartyApp *app, int *x, int *y, u32 index) {
-    if (ov80_02237D8C(app->frontierType) == TRUE) {
+    if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
         if (index == 0) {
             *x = 40;
         } else if (index == 1) {
@@ -2180,7 +2180,7 @@ u16 BattleCastlePartyApp_GetRentalItemId(BattleCastlePartyApp *app, int index, i
 
 // Positions of the player's and the partner's name
 void BattleCastlePartyApp_GetTrainerNamePositions(BattleCastlePartyApp *app, u16 *x1, u16 *y1, u16 *x2, u16 *y2) {
-    if (ov80_02237D8C(app->frontierType) == FALSE) {
+    if (BattleCastle_IsMultiType(app->frontierType) == FALSE) {
         *x1 = 40;
         *y1 = 0;
         *x2 = 0;
@@ -2221,7 +2221,7 @@ int BattleCastlePartyApp_PlayActionEffect(BattleCastlePartyApp *app, u32 selecte
             s16 x;
 
             app->flags.bits.effectActive = TRUE;
-            if (ov80_02237D8C(app->frontierType) == FALSE) {
+            if (BattleCastle_IsMultiType(app->frontierType) == FALSE) {
                 x = 64;
             } else {
                 x = 32;
@@ -2251,7 +2251,7 @@ int BattleCastlePartyApp_PlayActionEffect(BattleCastlePartyApp *app, u32 selecte
             s16 x;
 
             app->flags.bits.effectActive = TRUE;
-            if (ov80_02237D8C(app->frontierType) == FALSE) {
+            if (BattleCastle_IsMultiType(app->frontierType) == FALSE) {
                 x = 64;
             } else {
                 x = 32;
@@ -2505,7 +2505,7 @@ void BattleCastlePartyApp_PrintTrainerNames(BattleCastlePartyApp *app, Window *w
     u16 y2;
 
     BattleCastlePartyApp_GetTrainerNamePositions(app, &x1, &y1, &x2, &y2);
-    if (!ov80_02237D8C(app->frontierType)) {
+    if (!BattleCastle_IsMultiType(app->frontierType)) {
         BattleCastlePartyApp_PrintPlayerName(app, window, (u16)(x1 + 4), (u16)(y1 + 1), 0);
     } else if (!Comm_GetLocalNetId()) {
         int y = y1; // widened copy of y1 keeps the original register allocation
@@ -2587,7 +2587,7 @@ void BattleCastlePartyApp_PrintCastlePoints(BattleCastlePartyApp *app, Window *w
     u16 x;
 
     BattleCastlePartyApp_GetTrainerNamePositions(app, &x1, &y1, &x2, &y2);
-    if (ov80_02237D8C(app->frontierType) == FALSE) {
+    if (BattleCastle_IsMultiType(app->frontierType) == FALSE) {
         x = x1 + 72;
         FillWindowPixelRect(window, 0, x, y = y1 + 1, 48, 16);
         points = sub_0205C1F0(app->frontierType);
@@ -2646,7 +2646,7 @@ void BattleCastlePartyApp_ApplyAction(BattleCastlePartyApp *app, u32 slot, u8 ac
     if (Comm_GetLocalNetId() == 0) {
         if (slot < numOwnMons) {
             BattleCastlePartyApp_BufferPlayerName(app, 5);
-            ov80_02237FA4(app->frontierSave, app->frontierType, cost);
+            BattleCastle_SpendPoints(app->frontierSave, app->frontierType, cost);
         } else {
             BattleCastle_BufferPartnerName(app->msgFormat, 5);
             app->partnerPoints -= cost;
@@ -2657,7 +2657,7 @@ void BattleCastlePartyApp_ApplyAction(BattleCastlePartyApp *app, u32 slot, u8 ac
             app->partnerPoints -= cost;
         } else {
             BattleCastlePartyApp_BufferPlayerName(app, 5);
-            ov80_02237FA4(app->frontierSave, app->frontierType, cost);
+            BattleCastle_SpendPoints(app->frontierSave, app->frontierType, cost);
         }
     }
 
@@ -2718,7 +2718,7 @@ void BattleCastlePartyApp_HideSummaryPanel(BattleCastlePartyApp *app) {
 }
 
 void BattleCastlePartyApp_UpdateMonIcons(BattleCastlePartyApp *app) {
-    int count = ov80_02237B24(app->frontierType, 1);
+    int count = BattleCastle_GetPartySize(app->frontierType, 1);
     int i;
 
     for (i = 0; i < count; i++) {
@@ -2745,7 +2745,7 @@ void BattleCastlePartyApp_RankUp(BattleCastlePartyApp *app, u8 slot, u16 action)
     u8 numOwnMons;
     int rank;
 
-    ov80_02237B24(app->frontierType, 0);
+    BattleCastle_GetPartySize(app->frontierType, 0);
     kind = action != CASTLE_PARTY_ACTION_HEAL_RANK_UP ? CASTLE_RANK_RENTAL : CASTLE_RANK_HEAL;
     numOwnMons = app->unk_015;
     BattleCastle_GetSideSlot(numOwnMons, slot);
@@ -2756,12 +2756,12 @@ void BattleCastlePartyApp_RankUp(BattleCastlePartyApp *app, u8 slot, u16 action)
 
             BattleCastlePartyApp_BufferPlayerName(app, 5);
             rank = BattleCastle_GetRank(app->saveData, app->frontierType, kind);
-            ov80_02237FA4(app->frontierSave, app->frontierType, ov83_02247D48[kind][rank]);
+            BattleCastle_SpendPoints(app->frontierSave, app->frontierType, ov83_02247D48[kind][rank]);
             rank = BattleCastle_GetRank(app->saveData, app->frontierType, kind);
             frontierSave = Save_Frontier_GetStatic(app->saveData);
             stat = sub_0205C174(app->frontierType, kind);
             FrontierSave_SetStat(frontierSave, stat, sub_0205C268(sub_0205C174(app->frontierType, kind)), (u16)(rank + 1));
-            if (ov80_02237D8C(app->frontierType) == TRUE) {
+            if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
                 if (action == CASTLE_PARTY_ACTION_HEAL_RANK_UP) {
                     app->flags.bits.linkResume = 1;
                 } else {
@@ -2786,12 +2786,12 @@ void BattleCastlePartyApp_RankUp(BattleCastlePartyApp *app, u8 slot, u16 action)
 
             BattleCastlePartyApp_BufferPlayerName(app, 5);
             rank = BattleCastle_GetRank(app->saveData, app->frontierType, kind);
-            ov80_02237FA4(app->frontierSave, app->frontierType, ov83_02247D48[kind][rank]);
+            BattleCastle_SpendPoints(app->frontierSave, app->frontierType, ov83_02247D48[kind][rank]);
             rank = BattleCastle_GetRank(app->saveData, app->frontierType, kind);
             frontierSave = Save_Frontier_GetStatic(app->saveData);
             stat = sub_0205C174(app->frontierType, kind);
             FrontierSave_SetStat(frontierSave, stat, sub_0205C268(sub_0205C174(app->frontierType, kind)), (u16)(rank + 1));
-            if (ov80_02237D8C(app->frontierType) == TRUE) {
+            if (BattleCastle_IsMultiType(app->frontierType) == TRUE) {
                 if (action == CASTLE_PARTY_ACTION_HEAL_RANK_UP) {
                     app->flags.bits.linkResume = 1;
                 } else {
@@ -3146,7 +3146,7 @@ void BattleCastlePartyApp_CreateListMenu(BattleCastlePartyApp *app, int count, u
     header.numWindows = count;
     app->listMenu = BattleCastle_CreateListMenu(app->listMenuSpawner, &header, x, y, width);
     app->flags.bits.listMenuOpen = TRUE;
-    numMons = ov80_02237B24(app->frontierType, 1);
+    numMons = BattleCastle_GetPartySize(app->frontierType, 1);
     BattleCastle_SetSpritesTranslucent(app->monIcons, numMons, 1);
     BattleCastle_SetSpritesTranslucent(app->heldItemIcons, numMons, 1);
 }
@@ -3229,7 +3229,7 @@ void BattleCastlePartyApp_CreateRentalMenuList(BattleCastlePartyApp *app) {
 }
 
 void BattleCastlePartyApp_DestroyListMenu(BattleCastlePartyApp *app) {
-    int numMons = ov80_02237B24(app->frontierType, 1);
+    int numMons = BattleCastle_GetPartySize(app->frontierType, 1);
 
     BattleCastle_SetSpritesTranslucent(app->monIcons, numMons, 0);
     BattleCastle_SetSpritesTranslucent(app->heldItemIcons, numMons, 0);

@@ -256,6 +256,21 @@ typedef struct VsRecorderTouchIndicator {
     SysTask *task;
 } VsRecorderTouchIndicator;
 
+// VsRecorderWork.screenWork of the saved video screen
+typedef struct VsRecorderSavedVideo {
+    int eva; // top screen blend
+    int evb;
+    int fade;
+    u32 showProfile; // top screen: 0 video info, 1 owner's profile
+    VsRecorderProfile profile;
+    VsRecorderVideoInfo info;
+    u8 unk_128[0x30];
+    VsRecorderTextSprite exitButton;
+    TouchHitboxController *hitboxes; // profile, play, exit
+    Window windows[2];               // profile button / YES, NO
+    u32 exitMode;                    // save prompt: 1 YES, 2 NO; resume: 1 the video still needs saving
+} VsRecorderSavedVideo;              // size 0x19C
+
 struct VsRecorderWork {
     u32 mode;                                // 0x0000, 0 VS Recorder item, 1-6 Global Terminal
     u32 subState;                            // 0x0004, index into the screen's function table
@@ -524,9 +539,32 @@ BOOL VsRecorder_MenuSelect(VsRecorderWork *work);
 BOOL VsRecorder_MenuBack(VsRecorderWork *work);
 BOOL VsRecorder_MenuPrevScheme(VsRecorderWork *work);
 
+// vs_recorder_saved_video.c
+BOOL VsRecorder_MenuNextScheme(VsRecorderWork *work);
+BOOL VsRecorder_SavedVideoInit(VsRecorderWork *work);
+BOOL VsRecorder_SavedVideoEnter(VsRecorderWork *work);
+BOOL VsRecorder_SavedVideoShow(VsRecorderWork *work);
+BOOL VsRecorder_SavedVideoMain(VsRecorderWork *work);
+BOOL VsRecorder_SavedVideoToggleProfile(VsRecorderWork *work);
+void VsRecorder_ShowYesNoWindows(VsRecorderWork *work);
+void VsRecorder_HideYesNoWindows(VsRecorderWork *work);
+BOOL VsRecorder_SavedVideoSavePrompt(VsRecorderWork *work);
+BOOL ov40_02232A48(VsRecorderWork *work);
+BOOL VsRecorder_SavedVideoPlay(VsRecorderWork *work);
+BOOL VsRecorder_SavedVideoExit(VsRecorderWork *work);
+BOOL VsRecorder_SavedVideoResume(VsRecorderWork *work);
+void VsRecorder_OnSavedVideoTouch(u32 index, u32 event, void *arg);
+void VsRecorder_SetSavedVideoSlot(VsRecorderWork *work);
+void VsRecorder_ShowProfileButton(VsRecorderWork *work);
+void VsRecorder_RemoveProfileButton(VsRecorderWork *work);
+void VsRecorder_PrintProfileButton(VsRecorderWork *work, u32 msgId);
+void VsRecorder_CreateExitButton(VsRecorderWork *work);
+
 // other OVY_40 modules (still address-named)
 GlobalTerminalNet *ov40_0223D540(VsRecorderWork *work);
 u32 ov40_02244AB0(SaveData *save, u32 a1, u32 a2, u16 *a3, void *a4);
+int ov40_02244BBC(SaveData *save, int index);
+void VsRecorder_FreeExitButton(VsRecorderWork *work);
 void ov40_0223D544(VsRecorderWork *work);
 void ov40_0223D5E8(VsRecorderWork *work);
 void ov40_0223D600(VsRecorderWork *work);

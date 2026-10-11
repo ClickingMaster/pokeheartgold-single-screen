@@ -21,7 +21,7 @@
 #include "frontier_data_access.h"
 #include "frontier_save_access.h"
 #include "unk_0204B538.h"
-#include "unk_02066EDC.h"
+#include "frontier_field_support.h"
 
 typedef struct SpeciesAndItem {
     u16 species;
@@ -216,7 +216,7 @@ u32 sub_0204A764(SaveData *saveData) {
     FrontierData_TowerRoundAction(frontierData, towerMode, 2);
     FrontierSave_SetStat(Save_Frontier_GetStatic(saveData), sub_0205C310(towerMode), sub_0205C268(sub_0205C310(towerMode)), 0);
     if (towerMode != TOWER_MODE_WIFI && towerMode != TOWER_MODE_6) {
-        sub_020674E0(saveData);
+        BattleTower_AdvanceSeed(saveData);
     }
     return towerMode;
 }
@@ -309,7 +309,7 @@ void FrontierFieldSystem_Free(FrontierFieldSystem *frontierFsys) {
 }
 
 void FrontierFieldSystem_0204AA58(FrontierFieldSystem *frontierFsys, TaskManager *taskManager, void *a2) {
-    sub_02067118(taskManager, a2, 17, 0, frontierFsys->numMons, frontierFsys->numMons, 100, 0);
+    TaskManager_CallFrontierPartySelect(taskManager, a2, 17, 0, frontierFsys->numMons, frontierFsys->numMons, 100, 0);
 }
 
 BOOL FrontierFieldSystem_0204AA78(FrontierFieldSystem *frontierFsys, void **a1, SaveData *saveData) {
@@ -655,9 +655,9 @@ u16 FrontierFieldSystem_0204B258(FrontierFieldSystem *frontierFsys, SaveData *sa
         unk = FrontierData_FlagAction(frontierFsys->frontierData, frontierFsys->towerMode + 8, 0);
     }
     if (unk == 0) {
-        frontierFsys->unk08 = sub_020674E0(saveData);
+        frontierFsys->unk08 = BattleTower_AdvanceSeed(saveData);
     } else {
-        frontierFsys->unk08 = sub_0206751C(saveData);
+        frontierFsys->unk08 = BattleTower_RestoreRandom(saveData);
     }
     return frontierFsys->unk08 / 0xffff; // unk08 is a u32, so this should return between 0-3.
 }
@@ -752,6 +752,6 @@ u16 FrontierFieldSystem_0204B510(FrontierFieldSystem *frontierFsys) {
     if (frontierFsys->towerMode == TOWER_MODE_6) {
         return LCRandom();
     }
-    frontierFsys->unk08 = sub_020674A4(frontierFsys->unk08);
+    frontierFsys->unk08 = BattleTower_NextRandom(frontierFsys->unk08);
     return frontierFsys->unk08 / 0xffff; // unk08 is a u32, so this should return between 0-3.
 }

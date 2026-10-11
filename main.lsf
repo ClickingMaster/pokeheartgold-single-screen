@@ -580,10 +580,8 @@ Static main
     Object src/r40_unk_02066444_run1.o
     Object src/sys_flags.o
     Object src/sys_vars.o
-    Object src/frontier_party_application.o
-    Object asm/unk_02066EDC.o
+    Object asm/frontier_field_support_data.o
     Object src/frontier_field_support.o
-    Object src/slop_small_unk_0206759C.o
     Object src/field_roamer.o
     Object src/npc_trade_task.o
     Object src/field_warp_state.o
@@ -877,18 +875,18 @@ Static main
     Object lib/src/spl_field.o
     Object lib/src/spl_list.o
     Object lib/src/spl_random.o
-    Object lib/NitroSDK/asm/to70_wvr_extra02_anchor.o
+    Object lib/NitroSDK/asm/wvr_data.o
     Object lib/NitroSDK/src/wvr.o
-    Object lib/NitroDWC/asm/to59_dwcbm_anchor.o
+    Object lib/NitroDWC/asm/dwc_bm_data.o
     Object lib/NitroDWC/src/dwc_bm.o
     Object lib/NitroDWC/src/dwc_nvram.o
     Object lib/NitroDWC/src/dwc_bm_init.o
     Object lib/NitroDWC/src/dwc_auth_wifi_id.o
-    Object lib/NitroDWC/asm/to59_dwcaccount_anchor.o
+    Object lib/NitroDWC/asm/dwc_account_data.o
     Object lib/NitroDWC/src/dwc_account.o
     Object lib/src/nitrocrypto_rc4_init.o
     Object lib/src/nitrocrypto_rc4_fast.o
-    Object lib/asm/to59_wifi_anchor.o
+    Object lib/asm/wifi_data.o
     Object lib/NitroWiFi/src/socl_startup.o
     Object lib/NitroWiFi/src/socl_command.o
     Object lib/NitroWiFi/src/socl_socket.o
@@ -900,7 +898,7 @@ Static main
     Object lib/NitroWiFi/src/socl_list.o
     Object lib/NitroWiFi/src/soc.o
     Object lib/NitroWiFi/src/soc_gethostbyname.o
-    Object lib/asm/to59_wifi_anchor_own1.o
+    Object lib/asm/wifi_bss.o
     Object lib/NitroWiFi/src/soc_inet.o
     Object lib/NitroWiFi/src/socl_ssl.o
     Object lib/libCPS/src/cps_reset.o
@@ -943,10 +941,10 @@ Static main
     Object lib/NitroWiFi/src/wcm_aplist.o
     Object lib/NitroWiFi/src/wcm_cpsif.o
     Object lib/NitroWiFi/src/stubsmd5.o
-    Object lib/asm/to70_libVCT_extra08_anchor.o
+    Object lib/asm/vct_data.o
     Object lib/libVCT/src/vct_adpcm.o
     Object lib/libVCT/src/vct_audio.o
-    Object lib/asm/to70_libVCT_extra08_anchor_tail.o
+    Object lib/asm/vct_bss.o
     Object lib/libVCT/src/vct_audio_send.o
     Object lib/libVCT/src/vct_decoder.o
     Object lib/libVCT/src/vct_codec.o
@@ -955,7 +953,7 @@ Static main
     Object lib/libVCT/src/vct_packet_buffer.o
     Object lib/libVCT/src/vct_vad.o
     Object lib/libVCT/src/vct_fir.o
-    Object lib/asm/to70_libVCT_extra08_anchor_tail_own1.o
+    Object lib/asm/vct_control_bss.o
     Object lib/libVCT/src/vct_mix.o
     Object lib/libVCT/src/vct_main.o
     Object lib/asm/to59_nnsys_anchor.o
@@ -1366,30 +1364,18 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object lib/asm/op90_to90_w41415_fp_init4_suffix_anchor.o
     Object src/op90_to90_w41415_fp_init4_suffix_r01.o
     Object lib/MSL_C/src/msl_console_io.o
-    Object src/to90_msl_interval_demo_run04.o
-    Object src/to90_msl_interval_demo_run05.o
-    Object src/to90_msl_interval_demo_run06.o
-    Object src/to90_msl_interval_demo_run07.o
-    Object src/to90_msl_interval_demo_run08.o
-    Object src/to90_msl_interval_demo_run09.o
+    Object lib/MSL_C/src/msl_exception_table.o
     Object src/to90_msl_interval_demo_residual_11_r01.o
     Object lib/asm/to90_msl_interval_demo_eh_mid.o
-    Object src/to90_msl_interval_demo_run10.o
-    Object src/to90_msl_interval_demo_run11.o
+    Object lib/MSL_C/src/msl_exception_lookup.o
     Object src/to90_msl_interval_demo_residual_14_r01.o
-    Object src/to90_msl_interval_demo_run12.o
+    Object lib/MSL_C/src/msl_bad_exception_dtor.o
     Object src/to90_msl_interval_demo_residual_16_r01.o
     Object lib/asm/to90_msl_interval_demo_eh_tail.o
-    Object src/to90_msl_interval_demo_run13.o
-    Object src/to90_msl_interval_demo_run14.o
-    Object src/to90_msl_interval_demo_run15.o
-    Object src/to90_msl_interval_demo_run16.o
-    Object src/to90_msl_interval_demo_run17.o
-    Object src/to90_msl_interval_demo_run18.o
-    Object src/to90_msl_interval_demo_run19.o
-    Object src/to90_msl_interval_demo_run20.o
+    Object lib/MSL_C/src/msl_exception_throw.o
+    Object lib/MSL_C/src/msl_std_exception_classes.o
     Object src/to91_msl_scalar_new.o
-    Object src/to90_msl_interval_demo_run21.o
+    Object lib/MSL_C/src/msl_delete.o
     Object src/to91_msl_array_new.o
     Object lib/MSL_C/src/msl_new_bad_alloc.o
     Object lib/MSL_C/src/msl_static_init.o
@@ -2628,14 +2614,7 @@ Overlay OVY_40
     Object src/application/vs_recorder/vs_recorder_screen.o
     Object src/application/vs_recorder/vs_recorder_title.o
     Object src/application/vs_recorder/vs_recorder_menu.o
-    Object src/to42_overlay40_r27_u6_run2.o
-    Object src/overlay40_pc_box_grid_run6.o
-    Object src/to52_r2_w19b/to52_r2_w19b_overlay40_r27_gap7_exact.o
-    Object src/overlay40_pc_box_grid_run7.o
-    Object src/to90_extra1956_run01.o
-    Object src/to45_overlay40_r27_u8_exact.o
-    Object src/overlay40_pc_box_grid_run8.o
-    Object src/r40_overlay_40_residual_27_unmatched_9_run1.o
+    Object src/application/vs_recorder/vs_recorder_saved_video.o
     Object src/overlay40_pc_box_grid_run9.o
     Object src/r40_overlay_40_residual_27_unmatched_10_run1.o
     Object src/overlay40_pc_box_grid_run10.o
@@ -3568,7 +3547,7 @@ Object src/application/main_menu/mystery_gift_wireless.o
     Object src/application/main_menu/mystery_gift_wfc.o
     Object src/application/main_menu/agb_string.o
     Object asm/to57_overlay_74_data.o
-    Object asm/op90_nitrocrypto_residual00_anchor.o
+    Object asm/nitrocrypto_data.o
     Object lib/src/nitrocrypto_rc4.o
     Object lib/src/nitrocrypto_sign.o
     Object lib/src/nitrocrypto_bn_exp.o
@@ -3660,22 +3639,9 @@ Overlay OVY_80
     Object src/op90_to56_r2_w03_overlay80_37448_residual_r01.o
     Object src/op90_op90_to56_r2_w03_overlay80_37448_residual_residual_1_r01.o
     Object src/overlay80_frontier_setup_r22_run2.o
-    Object src/ov80_2237a70_partial_1.o
-    Object src/to70_overlay_80_02237A70_extra991_run01.o
-    Object src/ov80_2237a70_partial_2.o
-    Object src/to90_extra2046_run01.o
-    Object src/ov80_2237a70_partial_3.o
-    Object src/op90_overlay_80_02237A70_residual_3_r01.o
-    Object src/ov80_2237a70_partial_4.o
+    Object src/frontier/battle_castle_setup.o
     Object asm/overlay_80_02237A70_residual_4.o
-    Object src/ov80_2238034_partial_1.o
-    Object src/to70_overlay_80_02238034_extra992_run01.o
-    Object src/ov80_2238034_partial_2.o
-    Object src/op90_slop_small_overlay_80_02238034_residual_r01.o
-    Object src/slop_small_overlay_80_02238034.o
-    Object src/ov80_2238034_partial_3.o
-    Object src/to70_overlay_80_02238034_residual_3_extra846_run01.o
-    Object src/ov80_2238034_partial_4.o
+    Object src/frontier/battle_arcade_setup.o
     Object asm/overlay_80_02238034_residual_4.o
     Object src/frontier/frontier_map_tile_blink.o
     Object src/frontier/frontier_map.o
@@ -3955,37 +3921,7 @@ Overlay OVY_96
     Object src/pokeathlon/pokeathlon_pennant_capture_cpu.o
     Object src/pokeathlon/pokeathlon_block_smash.o
     Object src/pokeathlon/pokeathlon_block_smash_teams.o
-    Object src/to70_overlay_96_residual_97_residual_4_extra677_run01.o
-    Object src/overlay96_exact_bank_97.o
-    Object src/to41_overlay_96_residual_98_run1.o
-    Object src/to70_overlay_96_residual_98_extra282_run01.o
-    Object src/to41_overlay_96_residual_98_run2.o
-    Object src/to70_overlay_96_residual_98_to41_residual_2_extra127_run01.o
-    Object src/to90_extra2288_run01.o
-    Object src/to41_overlay_96_residual_98_run3.o
-    Object src/to55_old_ov96_d9_01_c01.o
-    Object src/op90_to55_old_ov96_d9_01_a01_r01.o
-    Object src/to55_old_ov96_d9_01_c02.o
-    Object src/to41_overlay_96_residual_98_run4.o
-    Object src/op90_overlay_96_residual_98_to41_residual_4_r01.o
-    Object src/to41_overlay_96_residual_98_run5.o
-    Object src/to54_atomic_h04_01_candidate.o
-    Object src/overlay96_pokeathlon_course_entries.o
-    Object src/overlay96_exact_bank_98.o
-    Object src/to80_extra1816_run01.o
-    Object src/overlay96_exact_bank_99.o
-    Object src/to70_overlay_96_residual_100_extra656_run01.o
-    Object src/overlay96_exact_bank_100.o
-    Object src/overlay96_course_ui_r101_1.o
-    Object src/to70_overlay_96_residual_101_unmatched1_extra351_run01.o
-    Object src/overlay96_course_ui_r101_2.o
-    Object src/to45_overlay96_r101_sprite_flags.o
-    Object src/op90_overlay_96_residual_101_unmatched2_head_r01.o
-    Object src/to52_overlay96_r101_sprite_helpers.o
-    Object src/overlay96_course_ui_r101_3.o
-    Object src/to70_overlay_96_residual_101_unmatched3_extra281_run01.o
-    Object src/overlay96_course_ui_r101_4.o
-    Object src/to90_extra2057_run01.o
+    Object src/pokeathlon/pokeathlon_disc_catch.o
     Object src/overlay96_r101_tail.o
     Object src/overlay96_exact_bank_101.o
     Object src/overlay96_course_object_r102_run1.o

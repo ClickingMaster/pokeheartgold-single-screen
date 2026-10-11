@@ -37,18 +37,18 @@
 .public FieldSystem_ApplicationIsRunning
 .public TaskManager_GetFieldSystem
 .public TaskManager_GetEnvironment
-.public sub_02067118
-.public sub_02067200
-.public sub_020672A4
+.public TaskManager_CallFrontierPartySelect
+.public TaskManager_CallFrontierWifiConnection
+.public TaskManager_CallFrontierLinkPartnerCheck
 .public sub_020672D8
 .public sub_02067398
 .public sub_02067484
-.public sub_020674A4
-.public sub_020674BC
-.public sub_020674E0
-.public sub_0206751C
+.public BattleTower_NextRandom
+.public BattleTower_InitSeed
+.public BattleTower_AdvanceSeed
+.public BattleTower_RestoreRandom
 .public FieldSystem_MapIsBattleTowerMultiPartnerSelectRoom
-.public sub_0206759C
+.public Save_DullBadges
 .public Party_GetCount
 .public SaveArray_Party_Get
 .public SaveArray_IsNatDexEnabled
@@ -62,14 +62,14 @@
 .public gOverlayTemplate_PartyMenu
 .public gOverlayTemplate_PokemonSummary
 
-	.public sub_02066EDC
-	.public sub_02066F90
-	.public sub_02066FEC
-	.public sub_02067088
-	.public sub_020670B0
-	.public sub_02067164
-	.public sub_0206718C
-	.public sub_020671B0
-	.public sub_02067238
-	.public sub_020674B0
-	.public _020FE4B0
+	.public FrontierPartySelect_LaunchPartyMenu
+	.public FrontierPartySelect_WaitPartyMenu
+	.public FrontierPartySelect_LaunchSummary
+	.public FrontierPartySelect_WaitSummary
+	.public Task_FrontierPartySelect
+	.public FrontierWifiConnection_Launch
+	.public FrontierWifiConnection_Wait
+	.public Task_FrontierWifiConnection
+	.public Task_FrontierLinkPartnerCheck
+	.public BattleTower_NextSeed
+	.public gFrontierSummaryPages

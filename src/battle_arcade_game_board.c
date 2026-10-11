@@ -4,7 +4,7 @@
 
 #include "constants/sndseq.h"
 
-#include "frontier/overlay_80_02238034.h"
+#include "frontier/battle_arcade_setup.h"
 #include "msgdata/msg.naix"
 
 #include "filesystem.h"
@@ -1068,13 +1068,13 @@ static void ov84_0223EFE0(GAME_BOARD_WORK *work) {
     work->unk11 = i;
 
     for (i = 0; i < work->unk64; i++) {
-        if (ov80_022384BC(work->unk44[i]) == 0) {
+        if (BattleArcade_GetEventColor(work->unk44[i]) == 0) {
             work->unk30[0]++;
-        } else if (ov80_022384BC(work->unk44[i]) == 1) {
+        } else if (BattleArcade_GetEventColor(work->unk44[i]) == 1) {
             work->unk30[1]++;
-        } else if (ov80_022384BC(work->unk44[i]) == 2) {
+        } else if (BattleArcade_GetEventColor(work->unk44[i]) == 2) {
             work->unk30[2]++;
-        } else if (ov80_022384BC(work->unk44[i]) == 3) {
+        } else if (BattleArcade_GetEventColor(work->unk44[i]) == 3) {
             work->unk30[3]++;
         }
     }
@@ -1117,7 +1117,7 @@ static void ov84_0223F094(GAME_BOARD_WORK *work) {
                 break;
             }
 
-            if (ov80_022384BC(work->unk44[rand]) == color) {
+            if (BattleArcade_GetEventColor(work->unk44[rand]) == color) {
                 work->unk34[i] = work->unk44[rand];
                 break;
             }

@@ -62,18 +62,18 @@
 	.public _022384C4
 	.public _022384CC
 	.public _022384D4
-	.public ov80_02238034
-	.public ov80_022380A0
-	.public ov80_02238344
-	.public ov80_02238370
-	.public ov80_02238384
-	.public ov80_022383A8
-	.public ov80_022383C0
+	.public BattleArcade_GetRandomTrainerId
+	.public BattleArcade_GetRoundTrainerIds
+	.public BattleArcade_GetBattleType
+	.public BattleArcade_GetMonLevel
+	.public BattleArcade_SetMonOriginalTrainer
+	.public BattleArcade_AddMonToParty
+	.public BattleArcade_SetOpponentParty
 	.public ov80_02238430
-	.public ov80_02238444
-	.public ov80_02238498
-	.public ov80_022384BC
-	.public ov80_0223D514
+	.public BattleArcade_GetTrainerAIFlags
+	.public BattleArcade_GetRound
+	.public BattleArcade_GetEventColor
+	.public gBattleArcadeRoundTrainerRanges
 	.public ov80_0223D516
 	.public ov80_0223D518
 	.public ov80_0223D51A
@@ -84,17 +84,17 @@
 	.public BattleArcade_GetMonCount
 	.public BattleArcade_GetOpponentMonCount
 	.public BattleArcade_MultiplayerCheck
-	.public ov80_02238034
-	.public ov80_02238370
-	.public ov80_02238384
-	.public ov80_022383A8
+	.public BattleArcade_GetRandomTrainerId
+	.public BattleArcade_GetMonLevel
+	.public BattleArcade_SetMonOriginalTrainer
+	.public BattleArcade_AddMonToParty
 	.public ov80_02238430
-	.public ov80_02238444
-	.public ov80_02238498
-	.public ov80_022384BC
+	.public BattleArcade_GetTrainerAIFlags
+	.public BattleArcade_GetRound
+	.public BattleArcade_GetEventColor
     .rodata
 
-ov80_0223D514: ; 0x0223D514
+gBattleArcadeRoundTrainerRanges: ; 0x0223D514
 	.byte 0x00, 0x00
 
 ov80_0223D516: ; 0x0223D516

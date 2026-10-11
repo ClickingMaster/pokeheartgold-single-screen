@@ -1,8 +1,8 @@
 #include "pokeathlon/pokeathlon.h"
 
-extern void ov96_0220E22C(void);
-extern void ov96_0220E2DC(void);
-extern void ov96_0220E394(void);
+extern void PokeathlonDiscCatch_Intro(void);
+extern void PokeathlonDiscCatch_Play(void);
+extern void PokeathlonDiscCatch_Finish(void);
 extern void PokeathlonGoalRoll_State_Play(void);
 extern void PokeathlonGoalRoll_State_Finish(void);
 extern void ov96_02215984(void);

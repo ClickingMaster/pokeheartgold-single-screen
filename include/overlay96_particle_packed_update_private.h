@@ -25,7 +25,7 @@ typedef struct Ov96R102Packed {
 
 BOOL ov96_0220FBEC(Ov96R102Particle *particle, void *context, s16 *point);
 void ov96_0220FD28(Ov96R102Particle *particle, void *context, const s16 *point);
-s16 ov96_0220E6DC(s16 value, u8 type);
+s16 PokeathlonDiscCatch_GetDiscX(s16 value, u8 type);
 void ov96_0220FBDC(Ov96R102Particle *particle);
 void ov96_0220FE38(Ov96R102Particle *particle, Ov96R102Packed *packed, void *context);
 

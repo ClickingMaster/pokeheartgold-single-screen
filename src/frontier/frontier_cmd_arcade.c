@@ -7,7 +7,7 @@
 #include "frontier/frontier_script_context.h"
 #include "frontier/overlay_80_02229EE0.h"
 #include "frontier/overlay_80_022340E8.h"
-#include "frontier/overlay_80_02238034.h"
+#include "frontier/battle_arcade_setup.h"
 #include "frontier/overlay_80_02239960.h"
 #include "library/spl_emitter.h"
 
@@ -86,7 +86,7 @@ BOOL FrtCmd_187(FrontierScriptContext *ctx) {
     BattleArcade_CopyMonHeldItem(setup->party[index1], arcadeData->playerParty, 0, 0);
     BattleArcade_CopyMonHeldItem(setup->party[index1], arcadeData->playerParty, 1, 1);
 
-    if (ov80_02237D8C(arcadeData->type) == 0) {
+    if (BattleCastle_IsMultiType(arcadeData->type) == 0) {
         BattleArcade_CopyMonHeldItem(setup->party[index1], arcadeData->playerParty, 2, 2);
     } else {
         BattleArcade_CopyMonHeldItem(setup->party[index2], arcadeData->playerParty, 0, 2);
@@ -142,7 +142,7 @@ BOOL FrtCmd_ArcadeStartBattle(FrontierScriptContext *ctx) {
 
 static void GameBoardArgs_Set(GAME_BOARD_ARGS *args, ArcadeContext *data) {
     args->type = data->type;
-    args->unk1E = ov80_02238498(data);
+    args->unk1E = BattleArcade_GetRound(data);
 
     args->unk14 = &data->unk20;
     args->unk10 = &data->eventId;
@@ -256,7 +256,7 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
         }
         break;
     case 19:
-        *out = ov80_02238498(arcadeCtx);
+        *out = BattleArcade_GetRound(arcadeCtx);
         break;
     case 20:
         *out = ov80_02234774(arcadeCtx, var0);
@@ -356,7 +356,7 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
         }
         break;
     case 38:
-        if (ov80_022384BC(arcadeCtx->eventId) == 0) {
+        if (BattleArcade_GetEventColor(arcadeCtx->eventId) == 0) {
             BufferFrontierOpponentName(ctx->frontierSystem->msgFormat, var0, arcadeCtx->trainerIds[BattleArcade_GetTrainerIndex(arcadeCtx, var1)]);
         } else {
             if (BattleArcade_MultiplayerCheck(arcadeCtx->type) == FALSE) {
@@ -414,10 +414,10 @@ BOOL FrtCmd_ArcadeAction(FrontierScriptContext *ctx) {
         }
         break;
     case 49:
-        FrontierMon_GenerateList(arcadeCtx->unk330, arcadeCtx->unk314, arcadeCtx->unk31C, arcadeCtx->unk320, NULL, 4, 0xb, 0xcd);
+        FrontierMon_GenerateList(arcadeCtx->opponentMons, arcadeCtx->unk314, arcadeCtx->unk31C, arcadeCtx->unk320, NULL, 4, 0xb, 0xcd);
         break;
     case 50:
-        ov80_022383C0(arcadeCtx);
+        BattleArcade_SetOpponentParty(arcadeCtx);
         break;
     case 51:
         *out = arcadeCtx->unk1E;

@@ -1,33 +1,193 @@
-#include "frontier_field_support_internal.h"
+#include "global.h"
 
-u32 sub_02067088(SummaryWaitEnv *env, FieldSystem *fieldSystem) {
-    u8 *args;
+#include "constants/maps.h"
+
+#include "bag.h"
+#include "field_system.h"
+#include "friend_group.h"
+#include "friend_group_access.h"
+#include "frontier_data_access.h"
+#include "frontier_save_access.h"
+#include "heap.h"
+#include "launch_application.h"
+#include "link_synchronization.h"
+#include "party.h"
+#include "party_menu.h"
+#include "player_data.h"
+#include "pokedex_util.h"
+#include "save_special_ribbons.h"
+#include "save_trainer_card.h"
+#include "task.h"
+#include "unk_02035900.h"
+#include "unk_0204B538.h"
+#include "unk_02088288.h"
+
+// Party menu + summary for a Battle Frontier entry (TaskManager_CallFrontierPartySelect).
+typedef struct FrontierPartySelectEnv {
+    u32 result;
+    u32 state;
+    u8 context;
+    u8 summaryMode;
+    u8 minMons;
+    u8 maxMons;
+    u8 maxLevel;
+    u8 partySlot;
+    u8 selectedOrder[6];
+    void **runningApp;
+} FrontierPartySelectEnv;
+
+typedef struct FrontierWifiConnectionEnv {
+    u32 result;
+    u32 state;
+    void *app;
+    u8 filler_C[4];
+    u16 outputVar;
+    u16 arg1;
+    u16 arg2;
+} FrontierWifiConnectionEnv;
+
+typedef struct FrontierLinkPartnerCheckEnv {
+    u16 kind;
+    u16 outputVar;
+} FrontierLinkPartnerCheckEnv;
+
+typedef struct Unk67484Inner {
+    u8 filler[0x24];
+    u16 x;
+    u16 z;
+    u16 y;
+} Unk67484Inner;
+
+typedef struct Unk67484Outer {
+    u8 filler[0xA0];
+    Unk67484Inner *inner;
+} Unk67484Outer;
+
+extern const u8 gFrontierSummaryPages[];
+
+extern FrontierData *Save_FrontierData_Get(SaveData *saveData);
+extern void sub_0202D638(FrontierData *frontierData, u32 value);
+extern u32 sub_0202D63C(FrontierData *frontierData);
+extern BOOL sub_0203A05C(SaveData *saveData);
+
+u32 FrontierPartySelect_LaunchPartyMenu(FrontierPartySelectEnv *env, FieldSystem *fieldSystem, enum HeapID heapId);
+u32 FrontierPartySelect_WaitPartyMenu(FrontierPartySelectEnv *env, FieldSystem *fieldSystem);
+u32 FrontierPartySelect_LaunchSummary(FrontierPartySelectEnv *env, FieldSystem *fieldSystem, enum HeapID heapId);
+u32 FrontierPartySelect_WaitSummary(FrontierPartySelectEnv *env, FieldSystem *fieldSystem);
+BOOL Task_FrontierPartySelect(TaskManager *taskManager);
+void TaskManager_CallFrontierPartySelect(TaskManager *taskManager, void **runningApp, u8 context, u8 summaryMode, u8 minMons, u8 maxMons, u8 maxLevel, u8 partySlot);
+u32 FrontierWifiConnection_Launch(FrontierWifiConnectionEnv *env, FieldSystem *fieldSystem);
+u32 FrontierWifiConnection_Wait(FrontierWifiConnectionEnv *env, FieldSystem *fieldSystem);
+BOOL Task_FrontierWifiConnection(TaskManager *taskManager);
+void TaskManager_CallFrontierWifiConnection(TaskManager *taskManager, u16 arg1, u16 outputVar, u16 arg2);
+BOOL Task_FrontierLinkPartnerCheck(TaskManager *taskManager);
+void TaskManager_CallFrontierLinkPartnerCheck(TaskManager *taskManager, u16 kind, u16 outputVar);
+u32 sub_020672D8(SaveData *saveData);
+u32 sub_02067398(SaveData *saveData);
+void sub_02067484(Unk67484Outer *outer, const int *delta);
+u32 BattleTower_NextRandom(u32 value);
+u32 BattleTower_NextSeed(u32 value);
+u32 BattleTower_InitSeed(SaveData *saveData);
+u32 BattleTower_AdvanceSeed(SaveData *saveData);
+u32 BattleTower_RestoreRandom(SaveData *saveData);
+BOOL FieldSystem_MapIsBattleTowerMultiPartnerSelectRoom(FieldSystem *fieldSystem);
+void Save_DullBadges(SaveData *saveData, int days);
+
+u32 FrontierPartySelect_LaunchPartyMenu(FrontierPartySelectEnv *env, FieldSystem *fieldSystem, enum HeapID heapId) {
+    PartyMenuArgs *args = Heap_AllocAtEnd(heapId, sizeof(PartyMenuArgs));
+    SaveData *saveData = fieldSystem->saveData;
+    u8 i;
+    MI_CpuFill8(args, 0, sizeof(PartyMenuArgs));
+    args->options = Save_PlayerData_GetOptionsAddr(saveData);
+    args->party = SaveArray_Party_Get(saveData);
+    args->bag = Save_Bag_Get(saveData);
+    args->unk_25 = 0;
+    args->context = env->context;
+    args->minMonsToSelect = env->minMons;
+    args->maxMonsToSelect = env->maxMons;
+    args->maxLevel = env->maxLevel;
+    args->partySlot = env->partySlot;
+    args->menuInputStatePtr = &fieldSystem->menuInputState;
+    for (i = 0; i < 6; i++) {
+        args->selectedOrder[i] = env->selectedOrder[i];
+    }
+    FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_PartyMenu, args);
+    *env->runningApp = args;
+    return 1;
+}
+
+u32 FrontierPartySelect_WaitPartyMenu(FrontierPartySelectEnv *env, FieldSystem *fieldSystem) {
+    PartyMenuArgs *args;
+    if (FieldSystem_ApplicationIsRunning(fieldSystem)) {
+        return 1;
+    }
+    args = *env->runningApp;
+    switch (args->partySlot) {
+    case 7:
+        env->result = 0;
+        return 4;
+    case 6:
+        env->result = 1;
+        return 4;
+    }
+    MI_CpuCopy8(args->selectedOrder, env->selectedOrder, 6);
+    env->partySlot = args->partySlot;
+    Heap_Free(args);
+    *env->runningApp = NULL;
+    return 2;
+}
+
+u32 FrontierPartySelect_LaunchSummary(FrontierPartySelectEnv *env, FieldSystem *fieldSystem, enum HeapID heapId) {
+    SaveData *saveData = fieldSystem->saveData;
+    PokemonSummaryArgs *args = Heap_AllocAtEnd(heapId, sizeof(PokemonSummaryArgs));
+    MI_CpuFill8(args, 0, sizeof(PokemonSummaryArgs));
+    args->options = Save_PlayerData_GetOptionsAddr(saveData);
+    args->party = SaveArray_Party_Get(saveData);
+    args->natDexEnabled = SaveArray_IsNatDexEnabled(saveData);
+    args->unk2C = sub_02088288(saveData);
+    args->unk11 = 1;
+    args->partySlot = env->partySlot;
+    args->partyCount = Party_GetCount(args->party);
+    args->moveToLearn = 0;
+    args->unk12 = env->summaryMode;
+    args->ribbons = Save_SpecialRibbons_Get(saveData);
+    args->menuInputStatePtr = &fieldSystem->menuInputState;
+    args->isFlag982Set = sub_0208828C(saveData);
+    sub_02089D40(args, gFrontierSummaryPages);
+    sub_0208AD34(args, Save_PlayerData_GetProfile(saveData));
+    FieldSystem_LaunchApplication(fieldSystem, &gOverlayTemplate_PokemonSummary, args);
+    *env->runningApp = args;
+    return 3;
+}
+
+u32 FrontierPartySelect_WaitSummary(FrontierPartySelectEnv *env, FieldSystem *fieldSystem) {
+    PokemonSummaryArgs *args;
     if (FieldSystem_ApplicationIsRunning(fieldSystem)) {
         return 3;
     }
-    args = *env->app;
-    env->selected = args[0x14];
+    args = *env->runningApp;
+    env->partySlot = args->partySlot;
     Heap_Free(args);
-    *env->app = NULL;
+    *env->runningApp = NULL;
     return 0;
 }
 
-BOOL sub_020670B0(TaskManager *taskManager) {
+BOOL Task_FrontierPartySelect(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    SummaryWaitEnv *env = TaskManager_GetEnvironment(taskManager);
-    u32 *state = (u32 *)((u8 *)env + 4);
+    FrontierPartySelectEnv *env = TaskManager_GetEnvironment(taskManager);
+    u32 *state = &env->state;
     switch (*state) {
     case 0:
-        *state = sub_02066EDC(env, fieldSystem, HEAP_ID_FIELD2);
+        *state = FrontierPartySelect_LaunchPartyMenu(env, fieldSystem, HEAP_ID_FIELD2);
         break;
     case 1:
-        *state = sub_02066F90(env, fieldSystem);
+        *state = FrontierPartySelect_WaitPartyMenu(env, fieldSystem);
         break;
     case 2:
-        *state = sub_02066FEC(env, fieldSystem, HEAP_ID_FIELD2);
+        *state = FrontierPartySelect_LaunchSummary(env, fieldSystem, HEAP_ID_FIELD2);
         break;
     case 3:
-        *state = sub_02067088(env, fieldSystem);
+        *state = FrontierPartySelect_WaitSummary(env, fieldSystem);
         break;
     case 4:
         Heap_Free(env);
@@ -36,21 +196,21 @@ BOOL sub_020670B0(TaskManager *taskManager) {
     return FALSE;
 }
 
-void sub_02067118(TaskManager *taskManager, void **app, u8 a0, u8 a1, u8 a2, u8 a3, u8 a4, u8 a5) {
+void TaskManager_CallFrontierPartySelect(TaskManager *taskManager, void **runningApp, u8 context, u8 summaryMode, u8 minMons, u8 maxMons, u8 maxLevel, u8 partySlot) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    SummaryWaitEnv *env = Heap_Alloc(HEAP_ID_FIELD2, 0x18);
-    MI_CpuClear8(env, 0x18);
-    ((u8 *)env)[8] = a0;
-    ((u8 *)env)[9] = a1;
-    ((u8 *)env)[10] = a2;
-    ((u8 *)env)[11] = a3;
-    ((u8 *)env)[12] = a4;
-    ((u8 *)env)[13] = a5;
-    env->app = app;
-    TaskManager_Call(fieldSystem->taskman, sub_020670B0, env);
+    FrontierPartySelectEnv *env = Heap_Alloc(HEAP_ID_FIELD2, sizeof(FrontierPartySelectEnv));
+    MI_CpuClear8(env, sizeof(FrontierPartySelectEnv));
+    env->context = context;
+    env->summaryMode = summaryMode;
+    env->minMons = minMons;
+    env->maxMons = maxMons;
+    env->maxLevel = maxLevel;
+    env->partySlot = partySlot;
+    env->runningApp = runningApp;
+    TaskManager_Call(fieldSystem->taskman, Task_FrontierPartySelect, env);
 }
 
-u32 sub_02067164(AppWaitEnv *env, FieldSystem *fieldSystem) {
+u32 FrontierWifiConnection_Launch(FrontierWifiConnectionEnv *env, FieldSystem *fieldSystem) {
     if (sub_0203A05C(fieldSystem->saveData)) {
         env->app = NintendoWifiConnection_LaunchApp(fieldSystem, env->arg1, env->arg2);
         return 1;
@@ -59,7 +219,7 @@ u32 sub_02067164(AppWaitEnv *env, FieldSystem *fieldSystem) {
     return 2;
 }
 
-u32 sub_0206718C(AppWaitEnv *env, FieldSystem *fieldSystem) {
+u32 FrontierWifiConnection_Wait(FrontierWifiConnectionEnv *env, FieldSystem *fieldSystem) {
     if (FieldSystem_ApplicationIsRunning(fieldSystem)) {
         return 1;
     }
@@ -68,15 +228,15 @@ u32 sub_0206718C(AppWaitEnv *env, FieldSystem *fieldSystem) {
     return 2;
 }
 
-BOOL sub_020671B0(TaskManager *taskManager) {
+BOOL Task_FrontierWifiConnection(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    AppWaitEnv *env = TaskManager_GetEnvironment(taskManager);
+    FrontierWifiConnectionEnv *env = TaskManager_GetEnvironment(taskManager);
     switch (env->state) {
     case 0:
-        env->state = sub_02067164(env, fieldSystem);
+        env->state = FrontierWifiConnection_Launch(env, fieldSystem);
         break;
     case 1:
-        env->state = sub_0206718C(env, fieldSystem);
+        env->state = FrontierWifiConnection_Wait(env, fieldSystem);
         break;
     case 2:
         *GetVarPointer(fieldSystem, env->outputVar) = env->result;
@@ -86,19 +246,19 @@ BOOL sub_020671B0(TaskManager *taskManager) {
     return FALSE;
 }
 
-void sub_02067200(TaskManager *taskManager, u16 arg1, u16 outputVar, u16 arg2) {
+void TaskManager_CallFrontierWifiConnection(TaskManager *taskManager, u16 arg1, u16 outputVar, u16 arg2) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    AppWaitEnv *env = Heap_Alloc(HEAP_ID_FIELD2, sizeof(AppWaitEnv));
-    MI_CpuClear8(env, sizeof(AppWaitEnv));
+    FrontierWifiConnectionEnv *env = Heap_Alloc(HEAP_ID_FIELD2, sizeof(FrontierWifiConnectionEnv));
+    MI_CpuClear8(env, sizeof(FrontierWifiConnectionEnv));
     env->arg1 = arg1;
     env->arg2 = arg2;
     env->outputVar = outputVar;
-    TaskManager_Call(fieldSystem->taskman, sub_020671B0, env);
+    TaskManager_Call(fieldSystem->taskman, Task_FrontierWifiConnection, env);
 }
 
-BOOL sub_02067238(TaskManager *taskManager) {
+BOOL Task_FrontierLinkPartnerCheck(TaskManager *taskManager) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    SmallTaskEnv *env = TaskManager_GetEnvironment(taskManager);
+    FrontierLinkPartnerCheckEnv *env = TaskManager_GetEnvironment(taskManager);
     u16 *linkData = LinkSync_GetPacket(1 - Comm_GetLocalNetId());
     u16 *output;
     if (linkData == NULL) {
@@ -120,13 +280,13 @@ BOOL sub_02067238(TaskManager *taskManager) {
     return TRUE;
 }
 
-void sub_020672A4(TaskManager *taskManager, u16 kind, u16 outputVar) {
+void TaskManager_CallFrontierLinkPartnerCheck(TaskManager *taskManager, u16 kind, u16 outputVar) {
     FieldSystem *fieldSystem = TaskManager_GetFieldSystem(taskManager);
-    SmallTaskEnv *env = Heap_Alloc(HEAP_ID_FIELD2, sizeof(SmallTaskEnv));
-    MI_CpuClear8(env, sizeof(SmallTaskEnv));
+    FrontierLinkPartnerCheckEnv *env = Heap_Alloc(HEAP_ID_FIELD2, sizeof(FrontierLinkPartnerCheckEnv));
+    MI_CpuClear8(env, sizeof(FrontierLinkPartnerCheckEnv));
     env->kind = kind;
     env->outputVar = outputVar;
-    TaskManager_Call(fieldSystem->taskman, sub_02067238, env);
+    TaskManager_Call(fieldSystem->taskman, Task_FrontierLinkPartnerCheck, env);
 }
 
 u32 sub_020672D8(SaveData *saveData) {
@@ -226,40 +386,40 @@ void sub_02067484(Unk67484Outer *outer, const int *delta) {
     inner->z += delta[2];
 }
 
-u32 sub_020674A4(u32 value) {
+u32 BattleTower_NextRandom(u32 value) {
     return value * 0x02E90EDD + 1;
 }
 
-u32 sub_020674B0(u32 value) {
+u32 BattleTower_NextSeed(u32 value) {
     return value * 0x5D588B65 + 1;
 }
 
-u32 sub_020674BC(SaveData *saveData) {
-    u32 value = sub_020674B0(Save_FriendGroup_GetCurrentSeed(Save_FriendGroup_Get(saveData)));
+u32 BattleTower_InitSeed(SaveData *saveData) {
+    u32 value = BattleTower_NextSeed(Save_FriendGroup_GetCurrentSeed(Save_FriendGroup_Get(saveData)));
     sub_0202D638(Save_FrontierData_Get(saveData), value);
     return value;
 }
 
-u32 sub_020674E0(SaveData *saveData) {
+u32 BattleTower_AdvanceSeed(SaveData *saveData) {
     FrontierData *frontierData = Save_FrontierData_Get(saveData);
-    u32 value = sub_020674B0(sub_0202D63C(frontierData));
+    u32 value = BattleTower_NextSeed(sub_0202D63C(frontierData));
     u32 next;
     sub_0202D638(frontierData, value);
-    next = sub_020674A4(value);
+    next = BattleTower_NextRandom(value);
     BattleTowerChallenge_SetField(Save_BattleTowerChallenge_Get(saveData), 10, &next);
     return next;
 }
 
-u32 sub_0206751C(SaveData *saveData) {
+u32 BattleTower_RestoreRandom(SaveData *saveData) {
     FrontierData *frontierData = Save_FrontierData_Get(saveData);
     u32 unk = Save_BattleTowerChallenge_Get(saveData);
-    u32 value = sub_020674A4(sub_0202D63C(frontierData));
+    u32 value = BattleTower_NextRandom(sub_0202D63C(frontierData));
     s32 i;
     s32 count;
     count = FrontierData_TowerRoundAction(frontierData, (u16)BattleTowerChallenge_GetField(unk, 0, 0), 0) * 24;
     i = 0;
     for (i = 0; i < count; i++) {
-        value = sub_020674A4(value);
+        value = BattleTower_NextRandom(value);
     }
     BattleTowerChallenge_SetField(Save_BattleTowerChallenge_Get(saveData), 10, &value);
     return value;
@@ -267,4 +427,32 @@ u32 sub_0206751C(SaveData *saveData) {
 
 BOOL FieldSystem_MapIsBattleTowerMultiPartnerSelectRoom(FieldSystem *fieldSystem) {
     return fieldSystem->location->mapId == MAP_BATTLE_TOWER_PARTNER_ROOM;
+}
+
+void Save_DullBadges(SaveData *saveData, int days) {
+    int *arr;
+    PlayerProfile *profile;
+    u8 i;
+    if (days <= 0) {
+        return;
+    }
+    arr = TrainerCard_GetBadgeShininessArr(Save_TrainerCard_Get(saveData));
+    profile = Save_PlayerData_GetProfile(saveData);
+    for (i = 0; i < 8; i++) {
+        int shininess;
+        if (!PlayerProfile_TestBadgeFlag(profile, i)) {
+            continue;
+        }
+        shininess = GetShininessOfBadgeI(i, arr);
+        if (shininess > 0 && shininess < 0xc8) {
+            shininess = shininess - days * 10;
+        } else {
+            GF_ASSERT(shininess < 0xc8);
+            shininess = 0;
+        }
+        if (shininess < 0) {
+            shininess = 0;
+        }
+        SetShininessOfBadgeI(i, shininess, arr);
+    }
 }

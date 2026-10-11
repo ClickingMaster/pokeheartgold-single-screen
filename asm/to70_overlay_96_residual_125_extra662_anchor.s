@@ -413,11 +413,11 @@
 	.public PokeathlonBlockSmashMon_IsGaugeFull
 	.public PokeathlonBlockSmashMon_IsTired
 	.public PokeathlonBlockSmashCpu_Delete
-	.public ov96_0220D408
-	.public ov96_0220D420
-	.public ov96_0220E850
-	.public ov96_0220E888
-	.public ov96_0220E960
+	.public PokeathlonDiscCatchShake_IsDone
+	.public PokeathlonDiscCatchShake_Init
+	.public PokeathlonDiscCatch_GetTeamScore
+	.public PokeathlonDiscCatch_Square
+	.public PokeathlonDiscCatch_SlowDown
 	.public ov96_0220F3B4
 	.public ov96_0220FF64
 	.public ov96_0221022C
@@ -1098,9 +1098,9 @@ ov96_0221DC68: ; 0x0221DC68
 	.word ov96_0221CDA4
 
 ov96_0221DC74:
-	.word ov96_0220E22C
-	.word ov96_0220E2DC
-	.word ov96_0220E394
+	.word PokeathlonDiscCatch_Intro
+	.word PokeathlonDiscCatch_Play
+	.word PokeathlonDiscCatch_Finish
 
 
 	.bss

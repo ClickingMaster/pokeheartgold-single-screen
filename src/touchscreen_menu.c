@@ -58,7 +58,7 @@
 #include "field_interaction.h"
 #include "unk_02056D7C.h"
 #include "communication_club_link.h"
-#include "unk_02066EDC.h"
+#include "frontier_field_support.h"
 #include "unk_0206D494.h"
 #include "unk_02092BE8.h"
 

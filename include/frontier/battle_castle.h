@@ -90,7 +90,7 @@ typedef struct BattleCastlePartyApp {
     OverlayManager *manager;                     // 0x000
     FrontierSave *frontierSave;                  // 0x004
     u8 subState;                                 // 0x008
-    u8 frontierType;                             // 0x009 (args 0x04; ov80_02237D8C() == TRUE for the link challenge)
+    u8 frontierType;                             // 0x009 (args 0x04; BattleCastle_IsMultiType() == TRUE for the link challenge)
     u8 printerId;                                // 0x00A
     u8 timer;                                    // 0x00B
     u8 prevCursorPos;                            // 0x00C

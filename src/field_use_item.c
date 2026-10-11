@@ -38,7 +38,7 @@
 #include "field_interaction.h"
 #include "unk_02054648.h"
 #include "unk_02062108.h"
-#include "unk_02066EDC.h"
+#include "frontier_field_support.h"
 
 struct ItemUseFuncDat {
     ItemMenuUseFunc menu;

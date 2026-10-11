@@ -259,10 +259,10 @@ ov96_0221A894: ; 0x0221A894
 	.byte 0x00, 0x30, 0x46, 0x00, 0x1E, 0x00, 0x03, 0x00
 
 ov96_0221A8A8:
-	.word ov96_0220E3F0
-	.word ov96_0220E5F4
+	.word PokeathlonDiscCatch_Init
+	.word PokeathlonDiscCatch_Draw
 	.word ov96_0220E60C
-	.word ov96_0220E670
+	.word PokeathlonDiscCatch_Exit
 	.word 0
 
 ov96_0221A8BC: ; 0x0221A8BC

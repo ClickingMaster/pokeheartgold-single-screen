@@ -6,6 +6,7 @@
 
 #include "battle_arcade_game_board.h"
 #include "save.h"
+#include "scrcmd_9.h"
 
 typedef struct ArcadeContext {
     u32 heapId;
@@ -46,8 +47,8 @@ typedef struct ArcadeContext {
     u16 unk314[4];
     u8 unk31C[4];
     u32 unk320[4];
-    void *unk330[1];
-    u8 unk334[0xDE];
+    FrontierMon opponentMons[4]; // 0x330
+    u8 filler_410[2];
     u16 heldItems[3]; // held items of the entered Pokemon, restored afterwards
     u16 unk418[6];
     u16 linkBuffer[20];      // 0x424, outgoing link message
@@ -69,7 +70,7 @@ void BattleArcadeData_Init(ArcadeContext *ctx, u32 resume);
 void BattleArcadeData_Free(ArcadeContext *ctx);
 u32 BattleArcade_GetWonBattlePoints(ArcadeContext *ctx, Party *playerParty, Party *opponentParty, int rank);
 void BattleArcade_CopyMonHeldItem(Party *srcParty, Party *dstParty, int srcSlot, int dstSlot);
-int ov80_02237D8C(u8 a0);
+int BattleCastle_IsMultiType(u8 a0);
 void ov80_02234550(ArcadeContext *ctx, GAME_BOARD_ARGS *args);
 void BattleArcade_SetPartyBeforeBattle(ArcadeContext *ctx);
 void BattleArcade_SetPartyAfterBattle(ArcadeContext *ctx);

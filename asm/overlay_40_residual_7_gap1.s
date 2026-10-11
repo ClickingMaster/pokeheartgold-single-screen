@@ -3499,26 +3499,26 @@
 	.public VsRecorder_MenuSelect
 	.public VsRecorder_MenuBack
 	.public VsRecorder_MenuPrevScheme
-	.public ov40_02232094
-	.public ov40_02232288
-	.public ov40_022322E0
-	.public ov40_02232470
-	.public ov40_02232598
-	.public ov40_022325B0
-	.public ov40_022326DC
-	.public ov40_022327BC
-	.public ov40_022327F0
+	.public VsRecorder_MenuNextScheme
+	.public VsRecorder_SavedVideoInit
+	.public VsRecorder_SavedVideoEnter
+	.public VsRecorder_SavedVideoShow
+	.public VsRecorder_SavedVideoMain
+	.public VsRecorder_SavedVideoToggleProfile
+	.public VsRecorder_ShowYesNoWindows
+	.public VsRecorder_HideYesNoWindows
+	.public VsRecorder_SavedVideoSavePrompt
 	.public ov40_02232A48
-	.public ov40_02232AF8
-	.public ov40_02232BD8
-	.public ov40_02232D44
-	.public ov40_02232ED4
-	.public ov40_02232F50
-	.public ov40_02232F88
-	.public ov40_02232FCC
-	.public ov40_02232FEC
-	.public ov40_02233044
-	.public ov40_022330B8
+	.public VsRecorder_SavedVideoPlay
+	.public VsRecorder_SavedVideoExit
+	.public VsRecorder_SavedVideoResume
+	.public VsRecorder_OnSavedVideoTouch
+	.public VsRecorder_SetSavedVideoSlot
+	.public VsRecorder_ShowProfileButton
+	.public VsRecorder_RemoveProfileButton
+	.public VsRecorder_PrintProfileButton
+	.public VsRecorder_CreateExitButton
+	.public VsRecorder_FreeExitButton
 	.public ov40_022330E0
 	.public ov40_0223311C
 	.public ov40_0223316C

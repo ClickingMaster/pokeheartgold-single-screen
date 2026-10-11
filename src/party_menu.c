@@ -26,7 +26,7 @@
 #include "sound_playback.h"
 #include "touchpad.h"
 #include "wireless_status_icon.h"
-#include "unk_02066EDC.h"
+#include "frontier_field_support.h"
 #include "unk_0208805C.h"
 #include "unk_02088288.h"
 #include "use_item_on_mon.h"

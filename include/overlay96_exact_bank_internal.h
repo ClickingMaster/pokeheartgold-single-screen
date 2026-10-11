@@ -61,7 +61,7 @@ extern BOOL Save_VarsFlags_CheckFlagInArray(void *varsFlags, u16 flag);
 extern void GfGfx_EngineBTogglePlanes(int plane, int enable);
 extern void thunk_UpdateCellTransferStateManager(void);
 extern void PokeathlonResultsAnnouncement_HidePlate(void *ptr);
-extern void ov96_0220E890(void *ptr, int value);
+extern void PokeathlonDiscCatch_Approach0(void *ptr, int value);
 extern void ov96_02215914(void *ptr, int value);
 extern void ov96_02219398(void *ptr);
 extern void ov96_02218A68(void *ptr);

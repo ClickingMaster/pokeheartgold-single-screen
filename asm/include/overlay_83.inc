@@ -228,10 +228,10 @@
 .public Frontier_SetSpritePosition
 .public Frontier_GetHpGaugeFrame
 .public Frontier_BufferPartnerName
-.public ov80_02237B24
-.public ov80_02237B58
-.public ov80_02237D8C
-.public ov80_02237FA4
+.public BattleCastle_GetPartySize
+.public BattleCastle_GetOpponentMonCount
+.public BattleCastle_IsMultiType
+.public BattleCastle_SpendPoints
 .public BattleCastlePartyApp_Init
 .public BattleCastlePartyApp_Main
 .public BattleCastlePartyApp_Exit

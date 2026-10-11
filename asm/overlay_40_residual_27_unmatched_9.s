@@ -8,12 +8,12 @@
 	.public VsRecorder_SetTextSpriteMsg
 	.public ov40_0222D6EC
 	.public ov40_0222D800
-	.public ov40_02233044
+	.public VsRecorder_CreateExitButton
 	.public TextOBJ_SetPosition
 	.text
 
-	thumb_func_start ov40_02233044
-ov40_02233044: ; 0x02233044
+	thumb_func_start VsRecorder_CreateExitButton
+VsRecorder_CreateExitButton: ; 0x02233044
 	push {r3, r4, r5, lr}
 	mov r1, #0x86
 	add r5, r0, #0
@@ -64,4 +64,4 @@ ov40_02233044: ; 0x02233044
 	mov r1, #1
 	bl TextOBJ_SetSpritesDrawFlag
 	pop {r3, r4, r5, pc}
-	thumb_func_end ov40_02233044
+	thumb_func_end VsRecorder_CreateExitButton

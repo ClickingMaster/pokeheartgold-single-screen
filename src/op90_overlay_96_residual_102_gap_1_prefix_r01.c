@@ -38,10 +38,10 @@ typedef struct Work {
     Group groups[4];
 } Work;
 
-BOOL ov96_0220D694(Obj *obj);
-BOOL ov96_0220D5D0(Obj *a, Obj *b);
-int ov96_0220D6CC(VecFx32 *v);
-void ov96_0220E974(VecFx32 *v, fx32 scale);
+BOOL PokeathlonDiscCatchMon_IsInPlay(Obj *obj);
+BOOL PokeathlonDiscCatchMon_IsTouching(Obj *a, Obj *b);
+int PokeathlonDiscCatch_GetFacing(VecFx32 *v);
+void PokeathlonDiscCatch_ClampVelocity(VecFx32 *v, fx32 scale);
 void ov96_0220F710(PokeathlonCourseData *data);
 
 // @fn ov96_0220F710
@@ -56,7 +56,7 @@ void ov96_0220F710(PokeathlonCourseData *data) {
         a = &work->groups[i / 3].objs[i % 3];
         for (j = i + 1; j < 12; j++) {
             b = &work->groups[j / 3].objs[j % 3];
-            if (ov96_0220D694(a) && ov96_0220D694(b) && ov96_0220D5D0(a, b) && !contact[i][j]) {
+            if (PokeathlonDiscCatchMon_IsInPlay(a) && PokeathlonDiscCatchMon_IsInPlay(b) && PokeathlonDiscCatchMon_IsTouching(a, b) && !contact[i][j]) {
                 VecFx32 dir = { 0, 0, 0 };
                 contact[i][j] = contact[j][i] = TRUE;
                 VEC_Subtract(&a->pos, &b->pos, &dir);
@@ -73,9 +73,9 @@ void ov96_0220F710(PokeathlonCourseData *data) {
                 VEC_MultAdd(mass, &dir, &b->prev, &b->vel);
                 b->vel.x *= -1;
                 b->vel.y *= -1;
-                ov96_0220E974(&a->vel, FX32_CONST(8));
-                ov96_0220E974(&b->vel, FX32_CONST(8));
-                b->dir = ov96_0220D6CC(&dir);
+                PokeathlonDiscCatch_ClampVelocity(&a->vel, FX32_CONST(8));
+                PokeathlonDiscCatch_ClampVelocity(&b->vel, FX32_CONST(8));
+                b->dir = PokeathlonDiscCatch_GetFacing(&dir);
                 b->hit = TRUE;
                 a->hit = TRUE;
             } else {

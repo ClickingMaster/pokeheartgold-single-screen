@@ -1,6 +1,6 @@
 #include <nitro/fs/overlay.h>
 #pragma once
-.public sub_020674A4
+.public BattleTower_NextRandom
 .public ov80_0222A30C
 .public ov80_022357B4
 .public ov80_02235898

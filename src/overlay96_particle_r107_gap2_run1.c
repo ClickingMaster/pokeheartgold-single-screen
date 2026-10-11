@@ -39,13 +39,13 @@ extern const s16 ov96_0221D1C4[][3][2];
 
 extern void *PokeathlonCourse_GetHeapAllocPtr4(void *course);
 
-s16 ov96_0220E6DC(s16 a0, int a1);
-u32 ov96_0220E70C(void *w, u8 i, u8 j);
-void *ov96_0220E74C(void *w, u8 i);
-void ov96_0220E770(void *w, u8 i, u8 j, s16 *out, void **out2);
-u8 ov96_0220E7BC(void *course, u8 idx);
-void ov96_0220E818(void *w, s16 *a1, u8 i, u8 j);
-u32 ov96_0220E834(void *w, u8 i, u8 j);
+s16 PokeathlonDiscCatch_GetDiscX(s16 a0, int a1);
+u32 PokeathlonDiscCatch_IsMonInPlay(void *w, u8 i, u8 j);
+void *PokeathlonDiscCatch_GetDisc(void *w, u8 i);
+void PokeathlonDiscCatch_GetMonPosition(void *w, u8 i, u8 j, s16 *out, void **out2);
+u8 PokeathlonDiscCatch_CountTeamsAhead(void *course, u8 idx);
+void PokeathlonDiscCatch_SetMonTarget(void *w, s16 *a1, u8 i, u8 j);
+u32 PokeathlonDiscCatch_MakeMonJump(void *w, u8 i, u8 j);
 
 void ov96_0221090C(Ov96ParticleUpdateR107 *p);
 void ov96_02210980(Ov96ParticleUpdateR107 *p, void *owner, u8 index);
@@ -82,13 +82,13 @@ void ov96_022109D8(Ov96ParticleUpdateR107 *p) {
     void *e;
     int i;
 
-    ov96_0220E7BC(p->owner, p->group);
+    PokeathlonDiscCatch_CountTeamsAhead(p->owner, p->group);
     switch (p->state) {
     case 0:
         GF_ASSERT(p->active == 0);
         p->unk04 = p->y;
         for (i = 0; i < 2; i++) {
-            if (BIT(U32(ov96_0220E74C(w, i), 4), 5)) {
+            if (BIT(U32(PokeathlonDiscCatch_GetDisc(w, i), 4), 5)) {
                 if (ov96_02210BD0(p, i, 0x38)) {
                     p->target = i;
                     p->active = 1;
@@ -100,9 +100,9 @@ void ov96_022109D8(Ov96ParticleUpdateR107 *p) {
     case 1:
         GF_ASSERT(p->active == 1);
         if (p->active) {
-            e = ov96_0220E74C(w, p->target);
+            e = PokeathlonDiscCatch_GetDisc(w, p->target);
             if (BIT(U32(e, 4), 5)) {
-                p->unk04 = ov96_0220E6DC(p->x + 0x120, U8(e, 9));
+                p->unk04 = PokeathlonDiscCatch_GetDiscX(p->x + 0x120, U8(e, 9));
             } else {
                 p->active = 0;
                 p->state = 0;
@@ -113,7 +113,7 @@ void ov96_022109D8(Ov96ParticleUpdateR107 *p) {
         GF_ASSERT(FALSE);
         break;
     }
-    ov96_0220E818(w, &p->unk04, p->group, p->lane);
+    PokeathlonDiscCatch_SetMonTarget(w, &p->unk04, p->group, p->lane);
 }
 
 void ov96_02210AE0(Ov96ParticleUpdateR107 *p, u16 average, u16 value) {
@@ -123,7 +123,7 @@ void ov96_02210AE0(Ov96ParticleUpdateR107 *p, u16 average, u16 value) {
     int rnd;
     int threshold;
 
-    if (ov96_0220E70C(w, p->group, p->lane) == 0) {
+    if (PokeathlonDiscCatch_IsMonInPlay(w, p->group, p->lane) == 0) {
         return;
     }
     p->timer--;
@@ -143,14 +143,14 @@ void ov96_02210AE0(Ov96ParticleUpdateR107 *p, u16 average, u16 value) {
         return;
     }
     rnd = MTRandom() % 100;
-    ov96_0220E770(w, p->group, p->lane, pos, &val);
+    PokeathlonDiscCatch_GetMonPosition(w, p->group, p->lane, pos, &val);
     if (average + 20 < value) {
         threshold = 0;
     } else {
         threshold = ov96_0221D1B8[p->lane];
     }
     if (rnd < threshold) {
-        ov96_0220E834(w, p->group, p->lane);
+        PokeathlonDiscCatch_MakeMonJump(w, p->group, p->lane);
     }
 }
 
@@ -158,12 +158,12 @@ BOOL ov96_02210BD0(Ov96ParticleUpdateR107 *p, int idx, int radius) {
     s16 pos[2];
     void *val;
     void *w = PokeathlonCourse_GetHeapAllocPtr4(p->owner);
-    void *e = ov96_0220E74C(w, idx);
+    void *e = PokeathlonDiscCatch_GetDisc(w, idx);
 
     if (S16(e, 2) < 0x120) {
         return FALSE;
     }
-    ov96_0220E770(w, p->group, p->lane, pos, &val);
+    PokeathlonDiscCatch_GetMonPosition(w, p->group, p->lane, pos, &val);
     return ov96_02210C48(pos[0], pos[1], (int)val, S16(e, 0), S16(e, 2) - 0x120, radius);
 }
 

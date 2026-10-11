@@ -65,25 +65,25 @@
 	.public _02237FA2
 	.public _0223800E
 	.public _02238030
-	.public ov80_02237A70
-	.public ov80_02237ADC
-	.public ov80_02237B24
-	.public ov80_02237B58
-	.public ov80_02237B8C
-	.public ov80_02237D5C
-	.public ov80_02237D88
-	.public ov80_02237D8C
-	.public ov80_02237D9C
-	.public ov80_02237DF4
-	.public ov80_02237E18
-	.public ov80_02237E30
-	.public ov80_02237E88
-	.public ov80_02237ED8
-	.public ov80_02237EFC
-	.public ov80_02237F3C
-	.public ov80_02237F9C
-	.public ov80_02237FA4
-	.public ov80_0223D4D4
+	.public BattleCastle_GetRandomTrainerId
+	.public BattleCastle_GetRoundTrainerIds
+	.public BattleCastle_GetPartySize
+	.public BattleCastle_GetOpponentMonCount
+	.public BattleCastle_NewBattleSetup
+	.public BattleCastle_GetBattleType
+	.public BattleCastle_GetMonLevel
+	.public BattleCastle_IsMultiType
+	.public BattleCastle_ReviveParty
+	.public BattleCastle_SetMonOriginalTrainer
+	.public BattleCastle_AddMonToParty
+	.public BattleCastle_SetOpponentParty
+	.public BattleCastle_GetTrainerAIFlags
+	.public BattleCastle_GetRound
+	.public BattleCastle_DrawRoundTiles
+	.public BattleCastle_BuildRoundTilemap
+	.public BattleCastle_ClampRound
+	.public BattleCastle_SpendPoints
+	.public gBattleCastleRoundTrainerRanges
 	.public ov80_0223D4D6
 	.public ov80_0223D4D8
 	.public ov80_0223D4DA
@@ -91,24 +91,24 @@
 	.include "global.inc"
 
     .text
-	.public ov80_02237A70
-	.public ov80_02237B24
-	.public ov80_02237B58
-	.public ov80_02237D5C
-	.public ov80_02237D88
-	.public ov80_02237D8C
-	.public ov80_02237D9C
-	.public ov80_02237DF4
-	.public ov80_02237E18
-	.public ov80_02237E30
-	.public ov80_02237E88
-	.public ov80_02237ED8
-	.public ov80_02237EFC
-	.public ov80_02237F9C
-	.public ov80_02237FA4
+	.public BattleCastle_GetRandomTrainerId
+	.public BattleCastle_GetPartySize
+	.public BattleCastle_GetOpponentMonCount
+	.public BattleCastle_GetBattleType
+	.public BattleCastle_GetMonLevel
+	.public BattleCastle_IsMultiType
+	.public BattleCastle_ReviveParty
+	.public BattleCastle_SetMonOriginalTrainer
+	.public BattleCastle_AddMonToParty
+	.public BattleCastle_SetOpponentParty
+	.public BattleCastle_GetTrainerAIFlags
+	.public BattleCastle_GetRound
+	.public BattleCastle_DrawRoundTiles
+	.public BattleCastle_ClampRound
+	.public BattleCastle_SpendPoints
     .rodata
 
-ov80_0223D4D4: ; 0x0223D4D4
+gBattleCastleRoundTrainerRanges: ; 0x0223D4D4
 	.byte 0x00, 0x00
 
 ov80_0223D4D6: ; 0x0223D4D6

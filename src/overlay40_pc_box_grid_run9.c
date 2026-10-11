@@ -1,6 +1,6 @@
 #include "overlay40_pc_box_grid_private.h"
 
-void ov40_022330B8(void *p) {
+void VsRecorder_FreeExitButton(void *p) {
     void *w = PTR(p, 0x860);
     VsRecorder_FreeTextSprite((u8 *)w + 0x158);
     Sprite_DeleteAndFreeResources(PTR(w, 0x15C));

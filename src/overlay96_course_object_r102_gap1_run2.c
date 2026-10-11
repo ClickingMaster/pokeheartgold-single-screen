@@ -12,7 +12,7 @@ void ov96_0220F8C8(Ov96ObjectGroup *groups, void *course) {
             clear[group].flags &= ~0x08000000;
         }
         if (groups->flags.bits.flag14) {
-            u8 direction = ov96_0220DAA0(groups->objects, groups->x, groups->y);
+            u8 direction = PokeathlonDiscCatch_FindTouchedMon(groups->objects, groups->x, groups->y);
             if (direction != 12) {
                 groups->flags.bits.flag29 = 1;
                 groups->flags.bits.group = direction;
@@ -26,8 +26,8 @@ void ov96_0220F8C8(Ov96ObjectGroup *groups, void *course) {
                     if (object->state == 3) {
                         groups->flags.bits.flag29 = 0;
                     } else if ((groups->x - objectX < 0 ? -(groups->x - objectX) : groups->x - objectX) > 8 || (groups->y - objectY < 0 ? -(groups->y - objectY) : groups->y - objectY) > 8) {
-                        ov96_0220D6B0(object, (s16 *)groups);
-                        object->flags = (object->flags & 0xDFFFFFFF) | (((u32)ov96_0220D8C4(object, object->position.x, object->position.y) << 31) >> 2);
+                        PokeathlonDiscCatchMon_SetTarget(object, (s16 *)groups);
+                        object->flags = (object->flags & 0xDFFFFFFF) | (((u32)PokeathlonDiscCatchMon_IsOffField(object, object->position.x, object->position.y) << 31) >> 2);
                     }
                 }
             }
@@ -35,9 +35,9 @@ void ov96_0220F8C8(Ov96ObjectGroup *groups, void *course) {
             if (groups->flags.bits.flag29 == 1) {
                 u8 direction;
                 object = &groups->objects[groups->flags.bits.group];
-                direction = ov96_0220DAA0(groups->objects, groups->x, groups->y);
+                direction = PokeathlonDiscCatch_FindTouchedMon(groups->objects, groups->x, groups->y);
                 if (object->state == 2 && direction == groups->flags.bits.group && groups->flags.bits.counter <= 5) {
-                    ov96_0220D630(object);
+                    PokeathlonDiscCatchMon_Jump(object);
                 }
             }
             groups->flags.raw &= ~0x20000000;
@@ -46,7 +46,7 @@ void ov96_0220F8C8(Ov96ObjectGroup *groups, void *course) {
         i = 0;
         object = (Ov96Object *)((u8 *)object + 8);
         for (; i < 3; i++, object++) {
-            ov96_0220D9A4(object, course);
+            PokeathlonDiscCatchMon_Update(object, course);
         }
     }
     ov96_0220F710(course);

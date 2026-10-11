@@ -58,7 +58,7 @@ u32 ov80_022358C4(void *data) {
     u8 *p = data;
     p[0xD]++;
     if (p[0xF] != 6) {
-        *(u32 *)(p + 8) = sub_020674A4(*(u32 *)(p + 8));
+        *(u32 *)(p + 8) = BattleTower_NextRandom(*(u32 *)(p + 8));
     }
     p[0xC]++;
     return p[0xC];

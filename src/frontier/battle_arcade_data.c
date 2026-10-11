@@ -7,7 +7,7 @@
 #include "constants/items.h"
 #include "constants/pokemon.h"
 
-#include "frontier/overlay_80_02238034.h"
+#include "frontier/battle_arcade_setup.h"
 
 #include "error_handling.h"
 #include "filesystem.h"
@@ -70,11 +70,11 @@ void ArcadeChallenge_Clear(void *record);
 void ArcadeChallenge_SetSaved(void *record, int a1);
 void ArcadeChallenge_SetField(void *record, int kind, u8 index, int a3, void *src);
 void ov80_0222A840(SaveData *saveData);
-void ov80_022380A0(u32 type, u32 rank, u16 *trainerIds, u32 count);
+void BattleArcade_GetRoundTrainerIds(u32 type, u32 rank, u16 *trainerIds, u32 count);
 void FrontierTrainer_GenerateMons(u32 count, u16 trainerId, u16 partnerTrainerId, u16 *monIds, void *a4, u8 *a5, u32 *a6, u8 multiplayer);
-int ov80_02238370(ArcadeContext *ctx);
+int BattleArcade_GetMonLevel(ArcadeContext *ctx);
 void FrontierMon_ToPokemon(ArcadeFrontierMon *frontierMon, Pokemon *mon, int level);
-void ov80_022383A8(ArcadeContext *ctx, Party *party, Pokemon *mon);
+void BattleArcade_AddMonToParty(ArcadeContext *ctx, Party *party, Pokemon *mon);
 void *FrontierTrainer_Load(void *trainer, u16 trainerId, u32 heapId, u32 a3);
 void ov80_0222A30C(u8 a0);
 ManagedSprite *FrontierMap_CreateMonIcon(FrontierMap *map, Pokemon *mon, int index, int x, int y);
@@ -243,21 +243,21 @@ void BattleArcadeData_Init(ArcadeContext *ctx, u32 resume) {
 }
 
 void BattleArcadeData_InitNew(ArcadeContext *ctx) {
-    s32 rank = ov80_02238498(ctx);
+    s32 rank = BattleArcade_GetRound(ctx);
     u8 battleNo;
     u32 count;
     u32 multiplayer;
     u32 *unk320;
     u32 i;
 
-    ov80_022380A0(ctx->type, rank, ctx->trainerIds, 14);
+    BattleArcade_GetRoundTrainerIds(ctx->type, rank, ctx->trainerIds, 14);
     battleNo = ctx->unk11;
     count = BattleArcade_GetOpponentMonCount(ctx->type, 1);
     multiplayer = BattleArcade_MultiplayerCheck(ctx->type);
     unk320 = ctx->unk320;
-    FrontierTrainer_GenerateMons(count, ctx->trainerIds[battleNo], ctx->trainerIds[battleNo + 7], ctx->unk314, ctx->unk330, ctx->unk31C, unk320, multiplayer);
+    FrontierTrainer_GenerateMons(count, ctx->trainerIds[battleNo], ctx->trainerIds[battleNo + 7], ctx->unk314, ctx->opponentMons, ctx->unk31C, unk320, multiplayer);
 
-    rank = ov80_02238498(ctx);
+    rank = BattleArcade_GetRound(ctx);
     for (i = 0; i < 3; i++) {
         if (rank >= ov80_0223BE98[i * 2]) {
             ctx->cursorSpeed = ov80_0223BE98[i * 2 + 1];
@@ -286,8 +286,8 @@ void BattleArcadeData_InitResume(ArcadeContext *ctx) {
     FrontierMon_GenerateList(frontierMons, monIds, (u8 *)unkFlags, NULL, unkValues, 4, HEAP_ID_FIELD2, 205);
     mon = AllocMonZeroed(HEAP_ID_FIELD2);
     for (i = 0; i < 4; i++) {
-        FrontierMon_ToPokemon(&frontierMons[i], mon, ov80_02238370(ctx));
-        ov80_022383A8(ctx, ctx->opponentParty, mon);
+        FrontierMon_ToPokemon(&frontierMons[i], mon, BattleArcade_GetMonLevel(ctx));
+        BattleArcade_AddMonToParty(ctx, ctx->opponentParty, mon);
     }
     Heap_Free(mon);
 }
@@ -439,7 +439,7 @@ void ov80_022347C4(ArcadeContext *ctx) {
 }
 
 void BattleArcade_SetPartyBeforeBattle(ArcadeContext *ctx) {
-    ov80_022383C0(ctx);
+    BattleArcade_SetOpponentParty(ctx);
 }
 
 void BattleArcade_SetPartyAfterBattle(ArcadeContext *ctx) {
@@ -450,8 +450,8 @@ void BattleArcade_SetPartyAfterBattle(ArcadeContext *ctx) {
 
     multiplayer = BattleArcade_MultiplayerCheck(ctx->type);
     unk320 = ctx->unk320;
-    FrontierTrainer_GenerateMons(count, ctx->trainerIds[battleNo], ctx->trainerIds[battleNo + 7], ctx->unk314, ctx->unk330, ctx->unk31C, unk320, multiplayer);
-    ov80_022383C0(ctx);
+    FrontierTrainer_GenerateMons(count, ctx->trainerIds[battleNo], ctx->trainerIds[battleNo + 7], ctx->unk314, ctx->opponentMons, ctx->unk31C, unk320, multiplayer);
+    BattleArcade_SetOpponentParty(ctx);
 }
 
 u32 BattleArcade_GetWonBattlePoints(ArcadeContext *ctx, Party *playerParty, Party *opponentParty, int rank) {
@@ -897,7 +897,7 @@ void BattleArcade_Event_Freeze(ArcadeContext *ctx, Party *party, int count) {
 }
 
 void ov80_022351AC(ArcadeContext *ctx, Party *party, int count) {
-    u32 rank = ov80_02238498(ctx);
+    u32 rank = BattleArcade_GetRound(ctx);
     const u16 *items;
     s32 itemCount;
     u16 item;
@@ -920,7 +920,7 @@ void ov80_022351AC(ArcadeContext *ctx, Party *party, int count) {
 }
 
 void ov80_02235208(ArcadeContext *ctx, Party *party, int count) {
-    u32 rank = ov80_02238498(ctx);
+    u32 rank = BattleArcade_GetRound(ctx);
     const u16 *items;
     s32 itemCount;
     u16 item;

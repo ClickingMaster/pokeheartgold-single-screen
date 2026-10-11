@@ -35,7 +35,7 @@
 #include "field_overworld_transition.h"
 #include "unk_020552A4.h"
 #include "communication_club_link.h"
-#include "unk_02066EDC.h"
+#include "frontier_field_support.h"
 #include "unk_0206D494.h"
 #include "unk_02087E70.h"
 #include "unk_02092BE8.h"

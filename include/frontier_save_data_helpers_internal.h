@@ -17,7 +17,7 @@ typedef struct Overlay80Counter {
 } Overlay80Counter;
 
 u32 ov80_0222A30C(u8 value);
-u32 sub_020674A4(u32 value);
+u32 BattleTower_NextRandom(u32 value);
 void BattleTower_GenerateTrainerMons(void *data, void *array, u32 value, u32 count, void *values1, void *values2, u32 zero, u32 word);
 void BattleTower_GetRoomTrainer(void *saveData, void *array, u32 index);
 

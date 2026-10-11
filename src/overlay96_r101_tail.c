@@ -15,9 +15,9 @@ u32 ov96_0220F1CC(void *course) {
     u32 *remote = (void *)ov96_021E8A20(copy + 0xf0);
     u32 *local = (void *)ov96_021E8A20(copy);
     if (remote[8] >> 31 == 1) {
-        ov96_0220EAC4(work);
+        PokeathlonDiscCatch_StopAnims(work);
         PokeathlonCourse_StopMarkerAnims(course);
-        ov96_0220E2A8(course);
+        PokeathlonDiscCatch_EndGame(course);
         return 1;
     }
     if (System_GetTouchNew()) {

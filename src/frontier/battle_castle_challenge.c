@@ -43,15 +43,15 @@ void FrontierTrainer_GenerateMons(int a0, u16 trainerId, u16 partnerTrainerId, u
 void FrontierMon_ToPokemon(void *frontierMon, void *mon, int level);
 void *CommPlayerInfo_GetProfile(int netId);
 u32 Comm_GetLocalNetId(void);
-int ov80_02237B24(u8 type, int a1);
-int ov80_02237B58(int type, int a1);
-int ov80_02237D88(void *data);
-BOOL ov80_02237D8C(int type);
-void ov80_02237D9C(void *party);
-void ov80_02237ADC(u32 type, u32 round, u16 *trainerIds, int count);
-void ov80_02237E18(void *data, void *party, void *mon);
-void ov80_02237E30(void *data);
-u16 ov80_02237ED8(void *data);
+int BattleCastle_GetPartySize(u8 type, int a1);
+int BattleCastle_GetOpponentMonCount(int type, int a1);
+int BattleCastle_GetMonLevel(void *data);
+BOOL BattleCastle_IsMultiType(int type);
+void BattleCastle_ReviveParty(void *party);
+void BattleCastle_GetRoundTrainerIds(u32 type, u32 round, u16 *trainerIds, int count);
+void BattleCastle_AddMonToParty(void *data, void *party, void *mon);
+void BattleCastle_SetOpponentParty(void *data);
+u16 BattleCastle_GetRound(void *data);
 BOOL ov80_0222B5C8(BattleCastleData *data);
 BOOL BattleCastleLink_SendTrainerIds(BattleCastleData *data);
 BOOL ov80_0222B6C8(BattleCastleData *data);
@@ -160,7 +160,7 @@ BattleCastleData *BattleCastleData_Alloc(SaveData *saveData, BOOL resume, u8 typ
         data->heldItems[i] = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
     }
     party = SaveArray_Party_Get(data->saveData);
-    count = ov80_02237B24(sBattleCastleData->type, 0);
+    count = BattleCastle_GetPartySize(sBattleCastleData->type, 0);
     for (i = 0; i < count; i++) {
         mon = Party_GetMonByIndex(party, sBattleCastleData->partySlots[i]);
         Party_AddMon(sBattleCastleData->playerParty, mon);
@@ -173,7 +173,7 @@ BattleCastleData *BattleCastleData_Alloc(SaveData *saveData, BOOL resume, u8 typ
             CalcMonLevelAndStats(mon);
         }
     }
-    if (ov80_02237D8C(sBattleCastleData->type) == TRUE) {
+    if (BattleCastle_IsMultiType(sBattleCastleData->type) == TRUE) {
         ov80_0222A840(sBattleCastleData->saveData);
     }
     return sBattleCastleData;
@@ -210,10 +210,10 @@ void BattleCastleData_SetupNewChallenge(BattleCastleData *data) {
             cursor += sizeof(data->startPP[0]);
         } while (i < count);
     }
-    ov80_02237ADC(data->type, ov80_02237ED8(data), data->trainerIds, 14);
+    BattleCastle_GetRoundTrainerIds(data->type, BattleCastle_GetRound(data), data->trainerIds, 14);
     battleNo = data->battleNo;
-    a0 = ov80_02237B58(data->type, 1);
-    isLink = ov80_02237D8C(data->type);
+    a0 = BattleCastle_GetOpponentMonCount(data->type, 1);
+    isLink = BattleCastle_IsMultiType(data->type);
     FrontierTrainer_GenerateMons(a0, data->trainerIds[battleNo], data->trainerIds[battleNo + 7], data->opponentSetIds, data->opponentMons, data->opponentIVs, (void **)data->opponentPersonalities, (u8)isLink);
 }
 #pragma force_active reset
@@ -249,8 +249,8 @@ void BattleCastleData_RestoreChallenge(BattleCastleData *data) {
     k = 0;
     frontierMon = (u8 *)opponents.mons;
     for (; k < 4; k++, frontierMon += sizeof(FrontierMon)) {
-        FrontierMon_ToPokemon(frontierMon, mon, ov80_02237D88(data));
-        ov80_02237E18(data, data->opponentParty, mon);
+        FrontierMon_ToPokemon(frontierMon, mon, BattleCastle_GetMonLevel(data));
+        BattleCastle_AddMonToParty(data, data->opponentParty, mon);
     }
     Heap_Free(mon);
 }
@@ -334,7 +334,7 @@ void BattleCastleData_Save(BattleCastleData *data, int mode) {
     u16 i;
     u32 best;
     u32 oldBest, points, stat;
-    ov80_02237B58(data->type, 1);
+    BattleCastle_GetOpponentMonCount(data->type, 1);
     value.byte = data->type;
     CastleChallenge_SetField(data->challenge, 0, 0, 0, &value.byte);
     CastleChallenge_SetSaved(data->challenge, 1);
@@ -437,15 +437,15 @@ void BattleCastleData_EndRound(BattleCastleData *data) {
 }
 
 void ov80_02232F00(BattleCastleData *data) {
-    ov80_02237E30(data);
+    BattleCastle_SetOpponentParty(data);
 }
 
 void BattleCastleData_GenerateOpponents(BattleCastleData *data) {
     int a0;
     int isLink;
     int battleNo = data->battleNo;
-    a0 = ov80_02237B58(data->type, 1);
-    isLink = ov80_02237D8C(data->type);
+    a0 = BattleCastle_GetOpponentMonCount(data->type, 1);
+    isLink = BattleCastle_IsMultiType(data->type);
     FrontierTrainer_GenerateMons(a0,
         data->trainerIds[battleNo],
         data->trainerIds[battleNo + 7],
@@ -454,12 +454,12 @@ void BattleCastleData_GenerateOpponents(BattleCastleData *data) {
         data->opponentIVs,
         (void **)data->opponentPersonalities,
         (u8)isLink);
-    ov80_02237E30(data);
+    BattleCastle_SetOpponentParty(data);
 }
 
 void BattleCastleData_RecordLinkPartyPP(BattleCastleData *data) {
     s32 start = Comm_GetLocalNetId() == 0 ? 0 : 2;
-    s32 count = ov80_02237B24(data->type, 0);
+    s32 count = BattleCastle_GetPartySize(data->type, 0);
     s32 end;
     s32 i;
     Party_GetCount(data->playerParty);
@@ -473,7 +473,7 @@ void BattleCastleData_RecordLinkPartyPP(BattleCastleData *data) {
         ((BattleCastleData *)dst)->startPP[0][2] = GetMonData(mon, MON_DATA_MOVE3_PP, NULL);
         ((BattleCastleData *)dst)->startPP[0][3] = GetMonData(mon, MON_DATA_MOVE4_PP, NULL);
     }
-    ov80_02237D9C(data->playerParty);
+    BattleCastle_ReviveParty(data->playerParty);
     for (i = 0; i < 4; i++) {
         data->unk_370[i] = 0;
         data->unk_374[i] = 0;
@@ -509,8 +509,8 @@ int BattleCastleData_CalcPointsEarned(BattleCastleData *data) {
     } else {
         start = 2;
     }
-    numMons = ov80_02237B24(data->type, 0);
-    numOpponents = ov80_02237B58(data->type, 1);
+    numMons = BattleCastle_GetPartySize(data->type, 0);
+    numOpponents = BattleCastle_GetOpponentMonCount(data->type, 1);
     end = numMons + start;
     for (i = start; i < end; i++) {
         mon = Party_GetMonByIndex(data->playerParty, i);
@@ -631,7 +631,7 @@ void BattleCastle_ShowPointsWindows(FrontierSystem *system, BattleCastleData *da
     if (system->castlePointsWindows[1] != NULL) {
         GF_AssertFail();
     }
-    if (ov80_02237D8C(data->type) == FALSE) {
+    if (BattleCastle_IsMultiType(data->type) == FALSE) {
         system->castlePointsWindows[0] = AllocWindows(HEAP_ID_FIELD2, 1);
         AddWindowParameterized(map->bgConfig, system->castlePointsWindows[0], GF_BG_LYR_MAIN_1, 1, 1, 10, 4, 14, 595);
         BattleCastle_DrawPointsWindowFrame(map->bgConfig, system->castlePointsWindows[0]);
@@ -655,7 +655,7 @@ void BattleCastle_DrawPointsWindowFrame(BgConfig *bgConfig, Window *window) {
 void BattleCastle_HidePointsWindows(FrontierSystem *system, BattleCastleData *data) {
     Window *first;
     Window *second;
-    if (ov80_02237D8C(data->type) == FALSE) {
+    if (BattleCastle_IsMultiType(data->type) == FALSE) {
         GF_ASSERT(system->castlePointsWindows[0] != NULL);
         first = system->castlePointsWindows[0];
         EraseFrameAndWindow1(first, FALSE);
@@ -684,7 +684,7 @@ void BattleCastle_PrintPoints(FrontierSystem *system, BattleCastleData *data) {
     FrontierSave *frontierSave;
     int stat;
     u16 points, partnerPoints;
-    if (!ov80_02237D8C(data->type)) {
+    if (!BattleCastle_IsMultiType(data->type)) {
         GF_ASSERT(system->castlePointsWindows[0]);
         frontierSave = Save_Frontier_GetStatic(data->saveData);
         stat = sub_0205C1F0(data->type);

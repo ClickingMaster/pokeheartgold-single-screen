@@ -325,7 +325,7 @@ BOOL CRYPTO_VerifySignature(const void *data, u32 dataLength, const u8 *sign, co
 // RC4 (nitrocrypto_rc4.c)
 void CRYPTO_RC4Encrypt(void *context, const void *in, u32 length, void *out);
 
-// tables in asm/op90_nitrocrypto_residual00_anchor.s
+// tables in asm/nitrocrypto_data.s
 extern const u8 gNitroCryptoExpP16[];
 extern const u8 gNitroCryptoExpP2[];
 extern const u8 gNitroCryptoExpP4[];

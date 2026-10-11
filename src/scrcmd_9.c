@@ -32,7 +32,7 @@
 #include "link_synchronization.h"
 #include "unk_0204A3F4.h"
 #include "unk_0204B538.h"
-#include "unk_02066EDC.h"
+#include "frontier_field_support.h"
 #include "unk_02096910.h"
 
 static BOOL sub_0204A1E8(ScriptContext *ctx);
@@ -110,7 +110,7 @@ BOOL ScrCmd_412(ScriptContext *ctx) {
         *result = sub_0204A800(ctx->fieldSystem->saveData);
         break;
     case 16:
-        sub_02067200(ctx->taskman, arg, resultVarId, *result);
+        TaskManager_CallFrontierWifiConnection(ctx->taskman, arg, resultVarId, *result);
         return TRUE;
     case 30:
         unk = FieldSysGetAttrAddr(ctx->fieldSystem, SCRIPTENV_RUNNING_APP_DATA);
@@ -259,7 +259,7 @@ BOOL ScrCmd_417(ScriptContext *ctx) {
     u16 unk6 = ScriptGetVar(ctx);
     u16 unk7 = ScriptReadHalfword(ctx);
     if (sub_0205C298(ctx->fieldSystem->saveData) == 1) {
-        sub_020672A4(ctx->fieldSystem->taskman, unk6, unk7);
+        TaskManager_CallFrontierLinkPartnerCheck(ctx->fieldSystem->taskman, unk6, unk7);
     } else {
         frontierFsys->unk8DA = unk7;
         frontierFsys->unk8D5 = unk6;

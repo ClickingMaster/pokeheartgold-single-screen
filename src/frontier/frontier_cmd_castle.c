@@ -34,12 +34,12 @@ u32 sub_0205C268(u32 stat);
 u32 CastleChallenge_GetSaved(void *challenge);
 void OS_ResetSystem(u32 parameter);
 u32 Comm_GetLocalNetId(void);
-BattleSetup *ov80_02237B8C(BattleCastleData *data, FrontierLaunchArgs *args);
-BOOL ov80_02237D8C(u8 type);
-void ov80_02237E30(BattleCastleData *data);
-u16 ov80_02237ED8(BattleCastleData *data);
-void ov80_02237EFC(BgConfig *bgConfig, BattleCastleData *data, int a2);
-void ov80_02237FA4(FrontierSave *frontierSave, u8 type, int points);
+BattleSetup *BattleCastle_NewBattleSetup(BattleCastleData *data, FrontierLaunchArgs *args);
+BOOL BattleCastle_IsMultiType(u8 type);
+void BattleCastle_SetOpponentParty(BattleCastleData *data);
+u16 BattleCastle_GetRound(BattleCastleData *data);
+void BattleCastle_DrawRoundTiles(BgConfig *bgConfig, BattleCastleData *data, int a2);
+void BattleCastle_SpendPoints(FrontierSave *frontierSave, u8 type, int points);
 
 void BattleCastle_FillAppArgs(BattleCastleAppArgs *args, BattleCastleData *data);
 void BattleCastle_OnAppExit(void *args);
@@ -117,7 +117,7 @@ BOOL FrtCmd_CastleEndBattle(FrontierScriptContext *ctx) {
     BattleSetup *setup = data->battleSetup;
     Party_SafeCopyMonToSlot_ResetAprijuiceModifiers(data->playerParty, 0, Party_GetMonByIndex(setup->party[0], 0));
     Party_SafeCopyMonToSlot_ResetAprijuiceModifiers(data->playerParty, 1, Party_GetMonByIndex(setup->party[0], 1));
-    if (!ov80_02237D8C(data->type)) {
+    if (!BattleCastle_IsMultiType(data->type)) {
         Party_SafeCopyMonToSlot_ResetAprijuiceModifiers(data->playerParty, 2, Party_GetMonByIndex(setup->party[0], 2));
     } else {
         Party_SafeCopyMonToSlot_ResetAprijuiceModifiers(data->playerParty, 2, Party_GetMonByIndex(setup->party[2], 0));
@@ -131,7 +131,7 @@ BOOL FrtCmd_CastleEndBattle(FrontierScriptContext *ctx) {
 BOOL FrtCmd_CastleStartBattle(FrontierScriptContext *ctx) {
     FrontierLaunchArgs *args = Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork);
     BattleCastleData *data = Frontier_GetData(ctx->frontierSystem->frontierWork);
-    BattleSetup *setup = ov80_02237B8C(data, args);
+    BattleSetup *setup = BattleCastle_NewBattleSetup(data, args);
     data->battleSetup = setup;
     Frontier_LaunchApplication(ctx->frontierSystem->frontierWork, &gOverlayTemplate_Battle, setup, 0, NULL);
     return TRUE;
@@ -230,7 +230,7 @@ BOOL FrtCmd_CastleAction(FrontierScriptContext *ctx) {
         break;
     }
     case 19:
-        *result = ov80_02237ED8(data);
+        *result = BattleCastle_GetRound(data);
         break;
     case 20:
         *result = ov80_02232E68(data, arg);
@@ -285,7 +285,7 @@ BOOL FrtCmd_CastleAction(FrontierScriptContext *ctx) {
             spend = 1;
         }
         if (spend == 1) {
-            ov80_02237FA4(Save_Frontier_GetStatic(launchArgs->saveData), data->type, 50);
+            BattleCastle_SpendPoints(Save_Frontier_GetStatic(launchArgs->saveData), data->type, 50);
         } else {
             data->partnerPoints -= 50;
         }
@@ -293,7 +293,7 @@ BOOL FrtCmd_CastleAction(FrontierScriptContext *ctx) {
     }
     case 34:
         *result = 0;
-        if (ov80_02237D8C(data->type) == TRUE) {
+        if (BattleCastle_IsMultiType(data->type) == TRUE) {
             if (data->decidedChoice >= 6) {
                 if (Comm_GetLocalNetId() == 0) {
                     *result = 1;
@@ -304,7 +304,7 @@ BOOL FrtCmd_CastleAction(FrontierScriptContext *ctx) {
         }
         break;
     case 35:
-        *result = ov80_02237D8C(data->type);
+        *result = BattleCastle_IsMultiType(data->type);
         break;
     case 17:
         *result = data->type;
@@ -313,7 +313,7 @@ BOOL FrtCmd_CastleAction(FrontierScriptContext *ctx) {
         *result = data->monFainted;
         break;
     case 36:
-        ov80_02237EFC(FrontierSystem_GetFrontierMap(ctx->frontierSystem)->bgConfig, data, 3);
+        BattleCastle_DrawRoundTiles(FrontierSystem_GetFrontierMap(ctx->frontierSystem)->bgConfig, data, 3);
         break;
     case 37:
         FrontierTrainer_LoadRecord(&data->trainers[0], data->trainerIds[data->battleNo], HEAP_ID_FIELD2, 204);
@@ -342,7 +342,7 @@ BOOL FrtCmd_CastleAction(FrontierScriptContext *ctx) {
         FrontierMon_GenerateList(data->opponentMons, data->opponentSetIds, data->opponentIVs, data->opponentPersonalities, NULL, 4, HEAP_ID_FIELD2, 205);
         break;
     case 42:
-        ov80_02237E30(data);
+        BattleCastle_SetOpponentParty(data);
         break;
     case 43:
         *result = data->unk_013;
@@ -448,7 +448,7 @@ BOOL FrtCmd_CastleSpendPoints(FrontierScriptContext *ctx) {
     u32 type = FrontierScript_ReadVar(ctx);
     u32 points = FrontierScript_ReadVar(ctx);
     FrontierLaunchArgs *args = Frontier_GetLaunchArgs(ctx->frontierSystem->frontierWork);
-    ov80_02237FA4(Save_Frontier_GetStatic(args->saveData), (u8)type, points);
+    BattleCastle_SpendPoints(Save_Frontier_GetStatic(args->saveData), (u8)type, points);
     return FALSE;
 }
 

@@ -3488,26 +3488,26 @@
 	.public VsRecorder_MenuSelect
 	.public VsRecorder_MenuBack
 	.public VsRecorder_MenuPrevScheme
-	.public ov40_02232094
-	.public ov40_02232288
-	.public ov40_022322E0
-	.public ov40_02232470
-	.public ov40_02232598
-	.public ov40_022325B0
-	.public ov40_022326DC
-	.public ov40_022327BC
-	.public ov40_022327F0
+	.public VsRecorder_MenuNextScheme
+	.public VsRecorder_SavedVideoInit
+	.public VsRecorder_SavedVideoEnter
+	.public VsRecorder_SavedVideoShow
+	.public VsRecorder_SavedVideoMain
+	.public VsRecorder_SavedVideoToggleProfile
+	.public VsRecorder_ShowYesNoWindows
+	.public VsRecorder_HideYesNoWindows
+	.public VsRecorder_SavedVideoSavePrompt
 	.public ov40_02232A48
-	.public ov40_02232AF8
-	.public ov40_02232BD8
-	.public ov40_02232D44
-	.public ov40_02232ED4
-	.public ov40_02232F50
-	.public ov40_02232F88
-	.public ov40_02232FCC
-	.public ov40_02232FEC
-	.public ov40_02233044
-	.public ov40_022330B8
+	.public VsRecorder_SavedVideoPlay
+	.public VsRecorder_SavedVideoExit
+	.public VsRecorder_SavedVideoResume
+	.public VsRecorder_OnSavedVideoTouch
+	.public VsRecorder_SetSavedVideoSlot
+	.public VsRecorder_ShowProfileButton
+	.public VsRecorder_RemoveProfileButton
+	.public VsRecorder_PrintProfileButton
+	.public VsRecorder_CreateExitButton
+	.public VsRecorder_FreeExitButton
 	.public ov40_022330E0
 	.public ov40_0223311C
 	.public ov40_0223316C
@@ -4181,7 +4181,7 @@ ov40_02245108: ; 0x02245108
 	.word VsRecorder_MenuSlideIn
 	.word VsRecorder_MenuShow
 	.word VsRecorder_MenuPrevScheme
-	.word ov40_02232094
+	.word VsRecorder_MenuNextScheme
 
 ov40_0224512C: ; 0x0224512C
 	.byte 0x28, 0x48, 0x20, 0x78
@@ -4193,16 +4193,16 @@ ov40_02245134: ; 0x02245134
 	.byte 0x10, 0x30, 0x40, 0xC8, 0x40, 0x70, 0x58, 0xA8, 0x98, 0xB8, 0x50, 0xB0
 
 ov40_02245140: ; 0x02245140
-	.word ov40_02232288
-	.word ov40_022322E0
-	.word ov40_02232470
-	.word ov40_02232598
-	.word ov40_022325B0
-	.word ov40_022327F0
+	.word VsRecorder_SavedVideoInit
+	.word VsRecorder_SavedVideoEnter
+	.word VsRecorder_SavedVideoShow
+	.word VsRecorder_SavedVideoMain
+	.word VsRecorder_SavedVideoToggleProfile
+	.word VsRecorder_SavedVideoSavePrompt
 	.word ov40_02232A48
-	.word ov40_02232AF8
-	.word ov40_02232BD8
-	.word ov40_02232D44
+	.word VsRecorder_SavedVideoPlay
+	.word VsRecorder_SavedVideoExit
+	.word VsRecorder_SavedVideoResume
 
 ov40_02245168: ; 0x02245168
 	.word ov40_02233CAC

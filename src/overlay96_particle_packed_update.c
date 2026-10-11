@@ -17,7 +17,7 @@ enabled: {
             particle->state = 2;
         } else {
             particle->counter += particle->speed;
-            particle->value = ov96_0220E6DC(particle->counter, particle->type);
+            particle->value = PokeathlonDiscCatch_GetDiscX(particle->counter, particle->type);
         }
         break;
     case 2:
