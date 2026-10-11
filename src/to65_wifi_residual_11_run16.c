@@ -43,10 +43,10 @@ typedef struct {
     u64 rng, mul, add;
 } N;
 
-extern N _021D4620;
-extern u8 _021D4B08[];
+extern N gCpsState;
+extern u8 gCpsMacAddress[];
 extern u8 _0211069C[];
-extern u8 _021D4888[];
+extern u8 gCpsTcpipThread[];
 extern void OS_YieldThread__(void);
 #pragma warn_uninitializedvar off
 extern int CPSi_SslClose();
@@ -128,8 +128,8 @@ u8 *dhcp_setcommon(u8 *p, int a, u32 *out);
 void dispatch_tcp(u8 *a, u8 *b, u32 n);
 
 u32 get_seqno(void) {
-    _021D4620.rng = _021D4620.mul * _021D4620.rng + _021D4620.add;
-    return _021D4620.rng >> 32;
+    gCpsState.rng = gCpsState.mul * gCpsState.rng + gCpsState.add;
+    return gCpsState.rng >> 32;
 }
 
 void CPS_SocRegister(S *s) {
@@ -155,7 +155,7 @@ void CPS_SocBind(u16 a, u16 b, u32 ip) {
         return;
     }
     if (ip == 0x7f000001) {
-        ip = _021D4620.ip;
+        ip = gCpsState.ip;
     }
     s->backupPort = b;
     s->remotePort = s->backupPort;

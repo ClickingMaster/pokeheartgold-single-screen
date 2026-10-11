@@ -909,36 +909,20 @@ Static main
     Object lib/asm/to59_wifi_anchor_own1.o
     Object lib/NitroWiFi/src/soc_inet.o
     Object lib/NitroWiFi/src/socl_ssl.o
-    Object src/op90_to65_wifi_residual_11_residual_4_r01.o
-    Object src/to65_wifi_residual_11_run05.o
-    Object src/op90_to65_wifi_residual_11_residual_5_r01.o
-    Object src/to65_wifi_residual_11_run06.o
-    Object src/to70_to65_wifi_residual_11_residual_6_extra1180_run01.o
-    Object src/to65_wifi_residual_11_run07.o
-    Object src/to70_to65_wifi_residual_11_residual_7_extra1181_run01.o
-    Object src/to90_extra2348_run01.o
-    Object src/op90_to90_extra2348_residual_1_r01.o
-    Object src/to65_wifi_residual_11_run08.o
-    Object src/to70_to65_wifi_residual_11_residual_8_extra1182_run01.o
-    Object src/to65_wifi_residual_11_run09.o
-    Object src/op90_to90_extra2157_residual_1_r01.o
-    Object src/to90_extra2157_run01.o
-    Object src/op90_to90_extra2157_residual_2_r01.o
-    Object src/to90_extra2157_run02.o
-    Object src/to80_extra1679_run01.o
-    Object src/to65_wifi_residual_11_run10.o
-    Object src/to70_to65_wifi_residual_11_residual_10_extra1160_run01.o
-    Object src/to65_wifi_residual_11_run11.o
-    Object src/to70_to65_wifi_residual_11_residual_11_extra1161_run01.o
-    Object src/to65_wifi_residual_11_run12.o
-    Object src/to70_to65_wifi_residual_11_residual_12_extra1162_run01.o
-    Object src/to65_wifi_residual_11_run13.o
-    Object src/to80_extra1459_run01.o
-    Object src/to65_wifi_residual_11_run14.o
-    Object src/to70_to65_wifi_residual_11_residual_14_extra1163_run01.o
-    Object src/op90_to70_to65_wifi_residual_11_residual_14_extra1163_residual_1_r01.o
-    Object src/to70_to65_wifi_residual_11_residual_14_extra1163_run02.o
-    Object src/to65_wifi_residual_11_run15.o
+    Object lib/libCPS/src/cps_reset.o
+    Object lib/libCPS/src/cps_util.o
+    Object lib/libCPS/src/cps_startup.o
+    Object lib/libCPS/src/cps_control.o
+    Object lib/libCPS/src/cps_link.o
+    Object lib/libCPS/src/cps_arp.o
+    Object lib/libCPS/src/cps_send.o
+    Object lib/libCPS/src/cps_ping.o
+    Object lib/libCPS/src/cps_send_transport.o
+    Object lib/libCPS/src/cps_recv.o
+    Object lib/libCPS/src/cps_tcp.o
+    Object lib/libCPS/src/cps_udp.o
+    Object lib/libCPS/src/cps_ip_frag.o
+    Object lib/libCPS/src/cps_ip.o
     Object src/to90_extra2464_run01.o
     Object src/to65_wifi_residual_11_run16.o
     Object src/to80_extra1460_run01.o
@@ -1410,16 +1394,7 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object lib/MSL_C/src/msl_mem.o
     Object lib/MSL_C/src/msl_mem_funcs.o
     Object lib/MSL_C/asm/to70_MSL_Common_printf_extra110_anchor.o
-    Object lib/MSL_C/src/msl_printf_parse_format.o
-    Object lib/MSL_C/src/msl_printf_long2str.o
-    Object lib/MSL_C/src/msl_printf_longlong2str.o
-    Object lib/MSL_C/src/msl_printf_double2hex.o
-    Object lib/MSL_C/src/msl_printf_round_decimal.o
-    Object lib/MSL_C/src/msl_printf_float2str.o
-    Object lib/MSL_C/src/msl_printf_pformatter.o
-    Object lib/MSL_C/src/msl_printf_write.o
-    Object lib/MSL_C/src/msl_printf.o
-    Object lib/MSL_C/src/msl_printf_sprintf.o
+    Object lib/MSL_C/src/msl_printf_formatter.o
     Object lib/MSL_C/src/msl_qsort.o
     Object lib/MSL_C/src/rand.o
     Object lib/asm/to90_scanf_interval_v5_anchor.o
@@ -5523,12 +5498,7 @@ Object src/to55_overlay112_198_head.o
 Object src/to70_to55_overlay112_198_residual_extra472_run01.o
 Object src/to55_overlay112_198_tail.o
 Object src/to53_overlay112_199.o
-Object src/to55_overlay112_200_run1.o
-Object src/to70_to55_overlay112_200_residual1_extra698_run01.o
-Object src/to55_overlay112_200_run2.o
-Object src/to90_extra2084_run01.o
-Object src/to55_overlay112_200_run3.o
-Object src/to53_overlay112_201.o
+Object src/application/pokewalker/pokewalker_trainer_house.o
 Object asm/to53_overlay112_202.o
 }
 Overlay OVY_113

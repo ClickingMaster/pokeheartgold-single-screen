@@ -2,7 +2,7 @@
 #include "global.h"
 #include <nitro/code32.h>
 typedef struct NetState { u8 pad[0x20]; u32 dhcpServer; } NetState;
-extern NetState _021D4620;
+extern NetState gCpsState;
 extern u8 _021D4B76[];
 void CPS_SocUse(void);
 void CPS_SocDatagramMode(void);
@@ -18,7 +18,7 @@ void dhcp_release_server(void) {
     u8 *p;
     CPS_SocUse();
     CPS_SocDatagramMode();
-    CPS_SocBind(0x44, 0x43, _021D4620.dhcpServer);
+    CPS_SocBind(0x44, 0x43, gCpsState.dhcpServer);
     base = (u32)_021D4B76;
     p = dhcp_setcommon((u8 *)base, 7, NULL);
     *p++ = 0xff;

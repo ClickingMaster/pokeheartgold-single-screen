@@ -11,15 +11,15 @@
 #define V(p, o) (*(void **)((u8 *)(p) + (o)))
 extern u8 _021D5E68[];
 extern u32 _021D4680[];
-extern u8 _021D4620[];
+extern u8 gCpsState[];
 extern int rawip(char *, u32 *);
 extern u32 resolve_sub(char *, u32, u16);
 u32 CPS_Resolve(char *);
 void find_session_from_id(u8 *);
 
 static inline u64 randomValue(void) {
-    *(u64 *)(_021D4620 + 0x68) = *(u64 *)(_021D4620 + 0x70) * *(u64 *)(_021D4620 + 0x68) + *(u64 *)(_021D4620 + 0x78);
-    return *(u64 *)(_021D4620 + 0x68) >> 32;
+    *(u64 *)(gCpsState + 0x68) = *(u64 *)(gCpsState + 0x70) * *(u64 *)(gCpsState + 0x68) + *(u64 *)(gCpsState + 0x78);
+    return *(u64 *)(gCpsState + 0x68) >> 32;
 }
 
 u32 CPS_Resolve(char *s) {

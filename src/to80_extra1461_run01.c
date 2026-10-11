@@ -42,12 +42,12 @@ typedef struct {
     void *buffer;
 } Frag;
 
-extern Global _021D4620;
+extern Global gCpsState;
 extern u8 _021D4700[];
 extern u8 _021D4CCC[];
 extern u8 _021D4B4C[];
-extern Entry _021D46A0[8];
-extern Frag _021D4948[8];
+extern Entry gCpsArpCache[8];
+extern Frag gCpsFragments[8];
 extern void CPS_SocRegister(void *);
 extern void CPS_SocUnRegister(void);
 extern void set_fixed_ip(void);
@@ -63,27 +63,27 @@ void scavenger(void *unused) {
     int timer, arp, first, state;
     int now;
     int i;
-    _021D4620.words[17] = 0;
+    gCpsState.words[17] = 0;
     MI_CpuFill8(_021D4700, 0, 100);
-    _021D4620.words[71] = 384;
-    _021D4620.words[72] = (u32)_021D4CCC;
-    _021D4620.words[74] = 384;
-    _021D4620.words[75] = (u32)_021D4B4C;
+    gCpsState.words[71] = 384;
+    gCpsState.words[72] = (u32)_021D4CCC;
+    gCpsState.words[74] = 384;
+    gCpsState.words[75] = (u32)_021D4B4C;
     CPS_SocRegister(_021D4700);
     arp = 1;
     first = 1;
     timer = 1;
-    _021D4620.words[3] = 1;
+    gCpsState.words[3] = 1;
     state = 0;
     for (;;) {
         OS_Sleep(1000);
-        if (_021D4620.words[17]) {
+        if (gCpsState.words[17]) {
             break;
         }
         now = OS_GetTick() >> 16;
-        if (((int (*)(void))_021D4620.words[18])()) {
+        if (((int (*)(void))gCpsState.words[18])()) {
             if (--timer == 0) {
-                if (_021D4620.words[4] & 1) {
+                if (gCpsState.words[4] & 1) {
                     if (!state) {
                         set_fixed_ip();
                         state = 1;
@@ -92,7 +92,7 @@ void scavenger(void *unused) {
                     switch (state) {
                     case 0:
                         if (first) {
-                            _021D4620.words[3] = 2;
+                            gCpsState.words[3] = 2;
                             first = 0;
                         }
                         if (!dhcp_discover_server() || !dhcp_request_server(&timer, 0)) {
@@ -131,11 +131,11 @@ void scavenger(void *unused) {
             state = 0;
         }
         for (i = 0; i < 8; i++) {
-            if (_021D46A0[i].addr && ((s16)(now - _021D46A0[i].tick) > 957)) {
-                _021D46A0[i].addr = 0;
+            if (gCpsArpCache[i].addr && ((s16)(now - gCpsArpCache[i].tick) > 957)) {
+                gCpsArpCache[i].addr = 0;
             }
         }
-        if (_021D4620.words[11] && !--arp) {
+        if (gCpsState.words[11] && !--arp) {
             send_arprequest();
             arp = 105;
         }
@@ -162,17 +162,17 @@ void scavenger(void *unused) {
             }
         }
         for (i = 0; i < 8; i++) {
-            if (_021D4948[i].active && now - _021D4948[i].tick > 239) {
-                ((void (*)(void *))_021D4620.words[16])(_021D4948[i].buffer);
-                _021D4948[i].active = 0;
+            if (gCpsFragments[i].active && now - gCpsFragments[i].tick > 239) {
+                ((void (*)(void *))gCpsState.words[16])(gCpsFragments[i].buffer);
+                gCpsFragments[i].active = 0;
             }
         }
         CPSi_SslPeriodical(now);
-        if (_021D4620.words[15]) {
-            ((void (*)(void))_021D4620.words[15])();
+        if (gCpsState.words[15]) {
+            ((void (*)(void))gCpsState.words[15])();
         }
     }
-    if (!(_021D4620.words[4] & 1) && state != 3) {
+    if (!(gCpsState.words[4] & 1) && state != 3) {
         dhcp_release_server();
     }
     CPS_SocUnRegister();

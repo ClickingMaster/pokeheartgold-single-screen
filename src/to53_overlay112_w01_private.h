@@ -32,7 +32,7 @@ void GfGfxLoader_LoadScrnData(int narcId, int member, void *bg, int bgId, int a4
 void PokewalkerApp_BuildUploadImage(void *state, void *dst);
 void PokewalkerApp_BuildStrollData(void *ptr, void *state);
 void ov112_021E7DC0(void *state);
-void ov112_021F3244(void *save, void *dst);
+void PokewalkerApp_BuildTrainerHouseData(void *save, void *dst);
 void *sub_02032728(void *pokewalker);
 void PokewalkerIr_Stop(void);
 void *ov112_021E7668(void);

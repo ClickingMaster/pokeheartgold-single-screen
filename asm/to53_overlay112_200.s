@@ -518,8 +518,8 @@
 	.extern ov112_021F30BC
 	.extern ov112_021F3140
 	.extern ov112_021F31BC
-	.extern ov112_021F3608
-	.extern ov112_021F3630
+	.extern PokewalkerApp_GetTrainerHouseDailyFlags
+	.extern PokewalkerApp_SetTrainerHouseDailyFlags
 	.extern ov112_021F3664
 	.extern ov112_021F366C
 	.extern ov112_021F3678
@@ -832,7 +832,7 @@
 	.extern ov112_021FF434
 	.extern ov112_021FF4C0
 	.extern ov112_021FF4C8
-	.extern ov112_021FF4D4
+	.extern sTrainerHouseDailyFlags
 	.extern _021FF500
 	.extern sSpindaSpotPixels
 	.extern sTouchButtons
@@ -933,8 +933,8 @@ _021F323C: .word 0x000001ED
 _021F3240: .word 0x0000FFF9
 	thumb_func_end PokewalkerApp_IsEventLogInvalid
 
-	thumb_func_start ov112_021F3244
-ov112_021F3244: ; 0x021F3244
+	thumb_func_start PokewalkerApp_BuildTrainerHouseData
+PokewalkerApp_BuildTrainerHouseData: ; 0x021F3244
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
 	add r4, r1, #0
@@ -951,11 +951,11 @@ ov112_021F3244: ; 0x021F3244
 	bl TrainerHouseSet_SetZero
 	add r0, r4, #0
 	add r1, r5, #0
-	bl ov112_021F336C
+	bl PokewalkerApp_FillTrainerHouseTrainer
 	add r0, r4, #0
 	add r0, #0x30
 	add r1, r6, #0
-	bl ov112_021F33D8
+	bl PokewalkerApp_FillTrainerHouseParty
 	ldr r1, _021F3288 ; =0x000001F2
 	add r0, r4, #0
 	bl GF_CalcCRC16
@@ -964,10 +964,10 @@ ov112_021F3244: ; 0x021F3244
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
 _021F3288: .word 0x000001F2
-	thumb_func_end ov112_021F3244
+	thumb_func_end PokewalkerApp_BuildTrainerHouseData
 
-	thumb_func_start ov112_021F328C
-ov112_021F328C: ; 0x021F328C
+	thumb_func_start PokewalkerApp_SaveTrainerHouseData
+PokewalkerApp_SaveTrainerHouseData: ; 0x021F328C
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0x24
 	str r1, [sp, #4]
@@ -983,7 +983,7 @@ ov112_021F328C: ; 0x021F328C
 	cmp r0, #0
 	bne _021F32B6
 	ldr r0, [sp, #8]
-	bl ov112_021F35A4
+	bl PokewalkerApp_CountTrainerHouseSets
 	add sp, #0x24
 	pop {r4, r5, r6, r7, pc}
 _021F32B6:
@@ -996,15 +996,15 @@ _021F32B6:
 	cmp r1, r0
 	bne _021F3364
 	ldr r0, [sp, #8]
-	bl ov112_021F35A4
+	bl PokewalkerApp_CountTrainerHouseSets
 	str r0, [sp, #0xc]
 	ldr r0, [sp]
 	add r1, sp, #0x18
-	bl ov112_021F3608
+	bl PokewalkerApp_GetTrainerHouseDailyFlags
 	ldr r0, [sp, #8]
 	ldr r1, [sp, #4]
 	add r2, sp, #0x14
-	bl ov112_021F35C8
+	bl PokewalkerApp_FindTrainerHouseSet
 	add r4, r0, #0
 	ldr r0, [sp, #0xc]
 	cmp r0, #0xa
@@ -1072,16 +1072,16 @@ _021F3342:
 	add r1, sp, #0x18
 	strb r2, [r1, r0]
 	ldr r0, [sp]
-	bl ov112_021F3630
+	bl PokewalkerApp_SetTrainerHouseDailyFlags
 _021F3364:
 	add sp, #0x24
 	pop {r4, r5, r6, r7, pc}
 	.balign 4, 0
 _021F3368: .word 0x000001F2
-	thumb_func_end ov112_021F328C
+	thumb_func_end PokewalkerApp_SaveTrainerHouseData
 
-	thumb_func_start ov112_021F336C
-ov112_021F336C: ; 0x021F336C
+	thumb_func_start PokewalkerApp_FillTrainerHouseTrainer
+PokewalkerApp_FillTrainerHouseTrainer: ; 0x021F336C
 	push {r4, r5, r6, lr}
 	add r6, r1, #0
 	add r5, r0, #0
@@ -1126,10 +1126,10 @@ _021F33B6:
 	cmp r4, #3
 	blt _021F33B6
 	pop {r4, r5, r6, pc}
-	thumb_func_end ov112_021F336C
+	thumb_func_end PokewalkerApp_FillTrainerHouseTrainer
 
-	thumb_func_start ov112_021F33D8
-ov112_021F33D8: ; 0x021F33D8
+	thumb_func_start PokewalkerApp_FillTrainerHouseParty
+PokewalkerApp_FillTrainerHouseParty: ; 0x021F33D8
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x38
 	add r6, r0, #0
@@ -1347,10 +1347,10 @@ _021F3598:
 	.balign 4, 0
 _021F359C: .word 0xFFFFF800
 _021F35A0: .word 0xFFFF07FF
-	thumb_func_end ov112_021F33D8
+	thumb_func_end PokewalkerApp_FillTrainerHouseParty
 
-	thumb_func_start ov112_021F35A4
-ov112_021F35A4: ; 0x021F35A4
+	thumb_func_start PokewalkerApp_CountTrainerHouseSets
+PokewalkerApp_CountTrainerHouseSets: ; 0x021F35A4
 	push {r3, r4, r5, r6, r7, lr}
 	mov r4, #0
 	mov r7, #6
@@ -1370,10 +1370,10 @@ _021F35B0:
 _021F35C4:
 	add r0, r6, #0
 	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end ov112_021F35A4
+	thumb_func_end PokewalkerApp_CountTrainerHouseSets
 
-	thumb_func_start ov112_021F35C8
-ov112_021F35C8: ; 0x021F35C8
+	thumb_func_start PokewalkerApp_FindTrainerHouseSet
+PokewalkerApp_FindTrainerHouseSet: ; 0x021F35C8
 	push {r3, r4, r5, r6, r7, lr}
 	mov r7, #6
 	add r5, r0, #0
@@ -1406,4 +1406,4 @@ _021F35F6:
 	str r0, [r1]
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end ov112_021F35C8
+	thumb_func_end PokewalkerApp_FindTrainerHouseSet

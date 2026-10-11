@@ -9,7 +9,7 @@ typedef struct {
     int (*active)(void);
 } Context;
 
-extern Context _021D4620;
+extern Context gCpsState;
 
 typedef union {
     u16 words[30];
@@ -82,7 +82,7 @@ int resolve_common(u8 *name, u32 type, int id, void *out, u32 cap) {
     }
     result = 0;
     start = OS_GetTick() >> 16;
-    while (_021D4620.active() && !result && (int)((u32)(OS_GetTick() >> 16) - start) < 15) {
+    while (gCpsState.active() && !result && (int)((u32)(OS_GetTick() >> 16) - start) < 15) {
         u8 *p, *end;
         u32 n;
         if (!CPS_SocGetLength()) {

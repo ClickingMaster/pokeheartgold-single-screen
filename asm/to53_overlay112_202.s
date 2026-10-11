@@ -519,14 +519,14 @@
 	.extern ov112_021F3140
 	.extern ov112_021F31BC
 	.extern PokewalkerApp_IsEventLogInvalid
-	.extern ov112_021F3244
-	.extern ov112_021F328C
-	.extern ov112_021F336C
-	.extern ov112_021F33D8
-	.extern ov112_021F35A4
-	.extern ov112_021F35C8
-	.extern ov112_021F3608
-	.extern ov112_021F3630
+	.extern PokewalkerApp_BuildTrainerHouseData
+	.extern PokewalkerApp_SaveTrainerHouseData
+	.extern PokewalkerApp_FillTrainerHouseTrainer
+	.extern PokewalkerApp_FillTrainerHouseParty
+	.extern PokewalkerApp_CountTrainerHouseSets
+	.extern PokewalkerApp_FindTrainerHouseSet
+	.extern PokewalkerApp_GetTrainerHouseDailyFlags
+	.extern PokewalkerApp_SetTrainerHouseDailyFlags
 	.public _021FF500
 	.public ov112_021F3664
 	.public ov112_021F366C
@@ -839,7 +839,7 @@
 	.public ov112_021FF434
 	.public ov112_021FF4C0
 	.public ov112_021FF4C8
-	.public ov112_021FF4D4
+	.public sTrainerHouseDailyFlags
 	.public sSpindaSpotPixels
 	.public sTouchButtons
 	.public sPokewalkerRouteImages
@@ -4819,7 +4819,7 @@ ov112_021FF4C8: ; 0x021FF4C8
 	.byte 0x00, 0x08, 0x0E, 0x12, 0x14, 0x12, 0x0E, 0x08
 	.byte 0x00, 0x6F, 0x00, 0x00
 
-ov112_021FF4D4: ; 0x021FF4D4
+sTrainerHouseDailyFlags: ; 0x021FF4D4
 	.byte 0xAA, 0x0A, 0xAB, 0x0A, 0xAC, 0x0A, 0xAD, 0x0A, 0xAE, 0x0A, 0xAF, 0x0A
 	.byte 0xB0, 0x0A, 0xB1, 0x0A, 0xB2, 0x0A, 0xB3, 0x0A
 

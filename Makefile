@@ -208,8 +208,7 @@ include tools/dwc-iterator-advance/iterator.mk
 
 $(BUILD_DIR)/lib/MSL_C/src/msl_file_io.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/lib/MSL_C/src/msl_printf_write.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/lib/MSL_C/src/msl_printf_sprintf.o: private MWCCVER := 2.0/sp2p3
+$(BUILD_DIR)/lib/MSL_C/src/msl_printf_formatter.o: private MWCCVER := 2.0/sp2p3
 
 $(BUILD_DIR)/lib/MSL_C/src/msl_wprintf_swprintf.o: private MWCCVER := 2.0/sp2p3
 
@@ -235,9 +234,7 @@ $(BUILD_DIR)/lib/MSL_C/src/msl_mbstring_mbstowcs.o: private MWCCVER := 2.0/sp2p3
 
 $(BUILD_DIR)/lib/MSL_C/src/msl_abort_exit_core.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/lib/MSL_C/src/msl_printf_round_decimal.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/lib/MSL_C/src/msl_printf.o: private MWCCVER := 2.0/sp2p3
 
 $(BUILD_DIR)/lib/MSL_C/src/msl_wprintf_round_decimal.o: private MWCCVER := 2.0/sp2p3
 
@@ -249,7 +246,6 @@ $(BUILD_DIR)/lib/MSL_C/src/msl_fp_ansi_compare_dec.o: private MWCCVER := 2.0/sp2
 
 
 
-$(BUILD_DIR)/lib/MSL_C/src/msl_printf_parse_format.o: private MWCCVER := 2.0/sp2p3
 
 $(BUILD_DIR)/lib/MSL_C/src/msl_wprintf_parse_format.o: private MWCCVER := 2.0/sp2p3
 
@@ -260,7 +256,6 @@ $(BUILD_DIR)/lib/MSL_C/src/msl_fp_ansi_num2dec_internal.o: private MWCCVER := 2.
 
 $(BUILD_DIR)/lib/MSL_C/src/msl_fp_ansi_dec2num.o: private MWCCVER := 2.0/sp2p3
 
-$(BUILD_DIR)/lib/MSL_C/src/msl_printf_longlong2str.o: private MWCCVER := 2.0/sp2p3
 
 $(BUILD_DIR)/lib/MSL_C/src/msl_wprintf_wpformatter.o: private MWCCVER := 2.0/sp2p3
 
@@ -306,7 +301,6 @@ $(BUILD_DIR)/lib/NitroSDK/src/mi/mi_compress_search.o: private MWCCVER := 2.0/sp
 $(BUILD_DIR)/lib/NitroSDK/src/fx/fx_vec_normalize.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSDK/src/fx/fx_mtx44_perspective.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/MSL_C/src/msl_string_strcpy.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/lib/MSL_C/src/msl_printf_pformatter.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSDK/src/mb/mb_read_segment.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSystem/src/g3d_cgtool_maya_texmtx.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSystem/src/g3d_cgtool_maya_texmtx_r.o: private MWCCVER := 2.0/sp2p3
@@ -316,7 +310,6 @@ $(BUILD_DIR)/lib/NitroSystem/src/g3d_cgtool_3dsmax_texmtx.o: private MWCCVER := 
 $(BUILD_DIR)/src/wifi_setup_keyboard_slide_in.o: private MWCCVER := 2.0/base
 $(BUILD_DIR)/lib/NitroSystem/src/g3d_cgtool_xsi_texmtx.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/lib/MSL_C/src/msl_printf_long2str.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSDK/src/mb/mb_parent_send_block.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/MSL_C/src/msl_wprintf_long2str.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/src/application/footprint_stamp_sprites.o: private OPTFLAGS := -O2
@@ -329,11 +322,9 @@ $(BUILD_DIR)/src/wifi_setup_result.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/src/wifi_setup_md5.o: private MWCCVER := 2.0/sp2
 $(BUILD_DIR)/src/wifi_setup_ap_select.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/src/wifi_setup_session.o: private MWCCVER := 2.0/sp1
-$(BUILD_DIR)/lib/MSL_C/src/msl_printf_double2hex.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/MSL_C/src/msl_wprintf_float2str.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/MSL_C/src/msl_wprintf_double2hex.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSDK/src/mb/mb_parent_recv_child.o: private MWCCVER := 2.0/sp2p3
-$(BUILD_DIR)/lib/MSL_C/src/msl_printf_float2str.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/MSL_C/src/msl_ansi_files.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/MSL_C/src/msl_ansi_files.o: private EXCCFLAGS := -Cpp_exceptions on
 $(BUILD_DIR)/lib/MSL_C/src/msl_qsort.o: private MWCCVER := 2.0/sp2p3
@@ -349,7 +340,7 @@ $(BUILD_DIR)/lib/MSL_C/src/msl_strtoull_core.o: private EXCCFLAGS := -Cpp_except
 $(BUILD_DIR)/lib/MSL_C/src/msl_strtoul.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/MSL_C/src/msl_strtoul.o: private EXCCFLAGS := -Cpp_exceptions on
 $(BUILD_DIR)/src/op90_to65_nitro_unified_residual_26_r01.o: private MWCCVER := 2.0/sp2
-$(BUILD_DIR)/src/op90_to65_wifi_residual_11_residual_5_r01.o: private MWCCVER := 2.0/sp1p5
+$(BUILD_DIR)/lib/libCPS/src/cps_startup.o: private MWCCVER := 2.0/sp1p5
 $(BUILD_DIR)/src/g2d_cell_culling.o: private MWCCVER := 2.0/sp1
 $(BUILD_DIR)/lib/MSL_C/src/msl_strtold_core.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSystem/src/g3d_anm_bta_sincos.o: private MWCCVER := 2.0/sp2p3
@@ -401,8 +392,8 @@ $(BUILD_DIR)/src/wifi_setup_connect.o: private MWCFLAGS := $(filter-out -ipa fil
 $(BUILD_DIR)/src/application/footprint_stamp_texture.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/op90_overlay_80_022310C4_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/lib/NitroSystem/src/g2d_renderer_mtx_cache.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/op90_to65_wifi_residual_11_residual_4_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
-$(BUILD_DIR)/src/op90_to70_to65_wifi_residual_11_residual_14_extra1163_residual_1_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/lib/libCPS/src/cps_reset.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
+$(BUILD_DIR)/lib/libCPS/src/cps_ip_frag.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/src/op90_unk_0203A3B0_r01.o: private MWCFLAGS := $(filter-out -ipa file,$(MWCFLAGS))
 $(BUILD_DIR)/lib/NitroSDK/src/mb/mb_init.o: private MWCCVER := 2.0/sp2p3
 $(BUILD_DIR)/lib/NitroSystem/src/g3d_anm_bca_scale.o: private MWCCVER := 2.0/sp1p5

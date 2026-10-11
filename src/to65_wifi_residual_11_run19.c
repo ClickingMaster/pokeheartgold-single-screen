@@ -43,10 +43,10 @@ typedef struct {
     u64 rng, mul, add;
 } N;
 
-extern N _021D4620;
-extern u8 _021D4B08[];
+extern N gCpsState;
+extern u8 gCpsMacAddress[];
 extern u8 _0211069C[];
-extern u8 _021D4888[];
+extern u8 gCpsTcpipThread[];
 extern void OS_YieldThread__(void);
 #pragma warn_uninitializedvar off
 extern int CPSi_SslClose();
@@ -152,7 +152,7 @@ u32 CPSi_SocWrite2(void *p, u32 a, void *q, u32 b) {
         } else {
             r = CPSi_TcpWrite2Raw(p, a, q, b, s);
         }
-        if (!_021D4620.down) {
+        if (!gCpsState.down) {
             return r;
         }
     }
@@ -207,16 +207,16 @@ void CPS_SocFlush(void) {
 
 void set_fixed_ip(void) {
     int tick;
-    _021D4620.fixed();
-    if (!_021D4620.ip) {
+    gCpsState.fixed();
+    if (!gCpsState.ip) {
         return;
     }
-    send_arprequest(_021D4620.ip);
+    send_arprequest(gCpsState.ip);
     OS_Sleep(100);
-    send_arprequest(_021D4620.ip);
+    send_arprequest(gCpsState.ip);
     tick = OS_GetTick() >> 16;
-    while (_021D4620.active() && ((int)(OS_GetTick() >> 16) - tick) < 23) {
-        if (_021D4620.error) {
+    while (gCpsState.active() && ((int)(OS_GetTick() >> 16) - tick) < 23) {
+        if (gCpsState.error) {
             reset_network_vars(4);
             return;
         }

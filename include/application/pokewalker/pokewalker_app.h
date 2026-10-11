@@ -127,7 +127,7 @@ typedef struct PokewalkerApp {
     u16 unk_F1D4;
     u8 unk_F1D6[2];
     PokewalkerIrClock unk_F1D8;          // copied from the Pokewalker save data
-    u8 unk_F200[0x1634];                 // 0xF200, filled by ov112_021F3244
+    u8 unk_F200[0x1634];                 // 0xF200, filled by PokewalkerApp_BuildTrainerHouseData
     u8 irCompressBuffer[0xCF1C];         // 0x10834
     SaveData *eventLogSaveData;          // 0x1D750, arguments of the Pokewalker event log app (mode 8)
     PokewalkerIrRecord *eventLogRecords; // 0x1D754
@@ -469,6 +469,6 @@ int PokewalkerApp_Link_UpdateUpload(PokewalkerApp *app);
 int PokewalkerApp_Link_StartReceive(PokewalkerApp *app);
 void ov112_021EDAF4(PokewalkerApp *app, int frame);
 void PokewalkerApp_SetMonIconGraphics(NNSG2dCharacterData *charData, int species, int form, int isEgg, int slot, ManagedSprite *sprite);
-void ov112_021F3244(SaveData *saveData, void *dst);
+void PokewalkerApp_BuildTrainerHouseData(SaveData *saveData, void *dst);
 
 #endif // POKEHEARTGOLD_APPLICATION_POKEWALKER_POKEWALKER_APP_H

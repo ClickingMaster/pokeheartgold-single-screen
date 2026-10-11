@@ -95,12 +95,19 @@ typedef struct PokewalkerIrBlocks {
 
 typedef struct PokewalkerIrRecord {
     u32 value;
-    u8 unk_04[0x74];
+    u8 unk_04[4];
+    u16 unk_08;
+    u16 unk_0A; // species
+    u16 unk_0C; // species when unk_08 is 7 or 8
+    u8 unk_0E[0x68];
+    u8 unk_76;
+    u8 unk_77;
     u16 unk_78;
     u16 unk_7A;
     u32 unk_7C;
     u32 unk_80;
-    u8 unk_84[4];
+    u8 eventType; // 1-29, 0 = empty entry
+    u8 unk_85[3];
 } PokewalkerIrRecord; // size=0x88
 
 // Data read from Pokewalker address 0xCE80 (0xD4C bytes).

@@ -6,9 +6,9 @@
 
 extern struct {
     u32 words[26];
-} _021D4620;
+} gCpsState;
 
-extern u8 _021D4B08[];
+extern u8 gCpsMacAddress[];
 extern u32 CPS_SocGetLength(void);
 extern u8 *CPS_SocRead(u32 *);
 extern void CPS_SocConsume(u32);
@@ -24,7 +24,7 @@ int dhcp_analyze_response(u32 id, int attempt) {
     u32 start = OS_GetTick() >> 16;
     {
         int result = 0;
-        while (((int (*)(void))_021D4620.words[18])() && !result && (int)((u32)(OS_GetTick() >> 16) - start) < timeout) {
+        while (((int (*)(void))gCpsState.words[18])() && !result && (int)((u32)(OS_GetTick() >> 16) - start) < timeout) {
             u8 *p, *end, *opt;
             u32 address;
             if (!CPS_SocGetLength()) {
@@ -38,7 +38,7 @@ int dhcp_analyze_response(u32 id, int attempt) {
             if ((((u32)SWAP(*(u16 *)(p + 4)) << 16) | SWAP(*(u16 *)(p + 6))) != id) {
                 goto consume;
             }
-            if (maccmp(p + 28, _021D4B08)) {
+            if (maccmp(p + 28, gCpsMacAddress)) {
                 goto consume;
             }
             address = READ(p + 16);
@@ -57,36 +57,36 @@ option_body:
                 }
                 switch (code) {
                 case 1:
-                    _021D4620.words[7] = READ(opt + 1);
+                    gCpsState.words[7] = READ(opt + 1);
                     break;
                 case 3:
-                    _021D4620.words[11] = READ(opt + 1);
+                    gCpsState.words[11] = READ(opt + 1);
                     break;
                 case 6:
                     if (opt[0] < 8) {
-                        _021D4620.words[25] = 0;
+                        gCpsState.words[25] = 0;
                     } else {
-                        _021D4620.words[25] = READ(opt + 5);
+                        gCpsState.words[25] = READ(opt + 5);
                     }
-                    _021D4620.words[24] = READ(opt + 1);
+                    gCpsState.words[24] = READ(opt + 1);
                     break;
                 case 51:
-                    _021D4620.words[19] = READ(opt + 1);
+                    gCpsState.words[19] = READ(opt + 1);
                     break;
                 case 53:
                     switch (opt[1]) {
                     case 2:
                         result = one;
-                        _021D4620.words[13] = address;
+                        gCpsState.words[13] = address;
                         break;
                     case 5:
                         result = two;
-                        _021D4620.words[20] = address;
+                        gCpsState.words[20] = address;
                         break;
                     }
                     break;
                 case 54:
-                    _021D4620.words[8] = READ(opt + 1);
+                    gCpsState.words[8] = READ(opt + 1);
                     break;
                 }
                 opt += opt[0] + 1;

@@ -19,7 +19,7 @@ typedef struct {
     int (*alive)(void);
 } Network;
 
-extern Network _021D4620;
+extern Network gCpsState;
 extern void tcp_write_do2(const u8 *, u32, const u8 *, u32, Socket *, int);
 u32 CPSi_TcpWrite2Raw(const u8 *, u32, const u8 *, u32, Socket *);
 
@@ -28,13 +28,13 @@ u32 CPSi_TcpWrite2Raw(const u8 *first, u32 len, const u8 *second, u32 len2, Sock
     int forced = 0;
     s->pending = 0;
     start = (u32)(OS_GetTick() >> 16);
-    while (_021D4620.alive() && len && s->state == 4 && (s32)((u32)(OS_GetTick() >> 16) - start) < 159) {
+    while (gCpsState.alive() && len && s->state == 4 && (s32)((u32)(OS_GetTick() >> 16) - start) < 159) {
         old = s->sent;
         tcp_write_do2(first, len, second, len2, s, forced);
         wait = (u32)(OS_GetTick() >> 16);
         do {
             OS_YieldThread__();
-        } while (_021D4620.alive() && s->state == 4 && s->sent != s->ack && (s32)((u32)(OS_GetTick() >> 16) - wait) < 15 && (!forced || s->window == 0));
+        } while (gCpsState.alive() && s->state == 4 && s->sent != s->ack && (s32)((u32)(OS_GetTick() >> 16) - wait) < 15 && (!forced || s->window == 0));
         done = s->ack - old;
         if (done > s->sent - old) {
             done = 0;
@@ -47,7 +47,7 @@ u32 CPSi_TcpWrite2Raw(const u8 *first, u32 len, const u8 *second, u32 len2, Sock
         if (s->state == 4 && s->window == 0 && done == 0) {
             if (!forced) {
                 wait = (u32)(OS_GetTick() >> 16);
-                while (_021D4620.alive() && (s32)((u32)(OS_GetTick() >> 16) - wait) < 15) {
+                while (gCpsState.alive() && (s32)((u32)(OS_GetTick() >> 16) - wait) < 15) {
                     OS_YieldThread__();
                     if (s->window) {
                         break;

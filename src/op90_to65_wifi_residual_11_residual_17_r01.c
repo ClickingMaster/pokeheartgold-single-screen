@@ -13,7 +13,7 @@ typedef struct {
     u32 position;
 } Socket;
 
-extern u16 _021D4620[];
+extern u16 gCpsState[];
 extern void send_tcp(void *, u32, Socket *, int, int);
 u32 tcp_write_do(void *, u32, Socket *, int);
 
@@ -37,8 +37,8 @@ u32 tcp_write_do(void *data, u32 len, Socket *s, int flag) {
         if (count >= limit) {
             count = limit;
         }
-        if (_021D4620[1] < count) {
-            count = _021D4620[1];
+        if (gCpsState[1] < count) {
+            count = gCpsState[1];
         }
         if (!flag) {
             count &= ~1u;

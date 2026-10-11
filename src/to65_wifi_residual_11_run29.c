@@ -11,7 +11,7 @@
 #define A(p, o) ((char *)(p) + (o))
 extern RTCResult RTC_GetDate(RTCDate *);
 extern RTCResult RTC_GetTime(RTCTime *);
-extern u8 _021D4620[];
+extern u8 gCpsState[];
 extern u8 _021D4B76[];
 extern u8 _021D5E68[];
 extern u8 _02110708[];

@@ -1,7 +1,0 @@
-#pragma force_active on
-#include "global.h"
-#pragma force_active on
-typedef struct {u16 species:11;u16 form:5;u16 item;u16 moves[4];u32 trainer,personality,ivs;u8 evs[6],ppUps,language,ability,friendship,level,pad;u16 name[10];} Slot;
-int Party_GetCount(void*);void*Party_GetMonByIndex(void*,int);u32 GetMonData(void*,int,void*);void Mon_UpdateShayminForm(void*,int);u16*CopyU16StringArrayN(u16*,const u16*,u32);
-void ov112_021F33D8(Slot*,void*);
-void ov112_021F33D8(Slot *out,void*party){int i,count=Party_GetCount(party),written=0;int j;void*mon;u32 bits;int restore;u16 name[11];u8 *move;int k;for(i=0;i<count;i++){restore=0;mon=Party_GetMonByIndex(party,i);if(GetMonData(mon,3,NULL)||GetMonData(mon,0x4c,NULL))continue;out->species=(u16)GetMonData(mon,5,NULL);out->form=(u16)GetMonData(mon,0x70,NULL);if(out->species==492&&out->form==1){Mon_UpdateShayminForm(mon,0);out->form=0;restore=1;}out->item=GetMonData(mon,6,NULL);out->trainer=GetMonData(mon,7,NULL);out->personality=GetMonData(mon,0,NULL);out->language=GetMonData(mon,12,NULL);out->ability=GetMonData(mon,10,NULL);out->friendship=GetMonData(mon,9,NULL);out->level=GetMonData(mon,0xa1,NULL);GetMonData(mon,0x75,name);CopyU16StringArrayN(out->name,name,10);j=0;bits=0;move=(u8*)out;k=j;for(;j<4;j++,k+=2,move+=2){*(u16*)(move+4)=GetMonData(mon,j+0x36,NULL);bits|=GetMonData(mon,j+0x3e,NULL)<<k;}out->ppUps=bits;bits=0;for(j=0,k=0;j<6;j++,k+=5){bits|=GetMonData(mon,j+0x46,NULL)<<k;out->evs[j]=GetMonData(mon,j+13,NULL);}out->ivs=bits;if(restore)Mon_UpdateShayminForm(mon,1);out++;if(++written>=6)break;}}

@@ -18,7 +18,7 @@ extern void *Save_VarsFlags_Get(void *);
 extern int Save_VarsFlags_CheckFlagInArray(void *, u16);
 extern void Save_VarsFlags_SetFlagInArray(void *, u16);
 extern void Save_VarsFlags_ClearFlagInArray(void *, u16);
-extern const u16 ov112_021FF4D4[];
+extern const u16 sTrainerHouseDailyFlags[];
 
 typedef struct Flag148 {
     u8 pad[0x148];

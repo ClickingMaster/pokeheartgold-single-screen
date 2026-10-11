@@ -11,7 +11,7 @@
 #define A(p, o) ((char *)(p) + (o))
 extern RTCResult RTC_GetDate(RTCDate *);
 extern RTCResult RTC_GetTime(RTCTime *);
-extern u8 _021D4620[];
+extern u8 gCpsState[];
 extern u8 _021D4B76[];
 extern u8 _021D5E68[];
 extern u8 _02110708[];
@@ -89,13 +89,13 @@ int dhcp_send_discover(void) {
     int val;
     u8 *base = _021D4B76;
     u8 *p = dhcp_setcommon(base, 1, &val);
-    if (W(_021D4620, 0x34)) {
+    if (W(gCpsState, 0x34)) {
         p[0] = 50;
         p[1] = 4;
-        p[2] = (int)(u16)(W(_021D4620, 0x34) >> 16) >> 8;
-        p[3] = W(_021D4620, 0x34) >> 16;
-        p[4] = (int)(u16)W(_021D4620, 0x34) >> 8;
-        p[5] = W(_021D4620, 0x34);
+        p[2] = (int)(u16)(W(gCpsState, 0x34) >> 16) >> 8;
+        p[3] = W(gCpsState, 0x34) >> 16;
+        p[4] = (int)(u16)W(gCpsState, 0x34) >> 8;
+        p[5] = W(gCpsState, 0x34);
         p += 6;
     }
     *p++ = 255;
@@ -111,16 +111,16 @@ int dhcp_send_request(int flag) {
     if (!flag) {
         p[0] = 50;
         p[1] = 4;
-        p[2] = (int)(u16)(W(_021D4620, 52) >> 16) >> 8;
-        p[3] = W(_021D4620, 52) >> 16;
-        p[4] = (int)(u16)W(_021D4620, 52) >> 8;
-        p[5] = W(_021D4620, 52);
+        p[2] = (int)(u16)(W(gCpsState, 52) >> 16) >> 8;
+        p[3] = W(gCpsState, 52) >> 16;
+        p[4] = (int)(u16)W(gCpsState, 52) >> 8;
+        p[5] = W(gCpsState, 52);
         p[6] = 54;
         p[7] = 4;
-        p[8] = (int)(u16)(W(_021D4620, 32) >> 16) >> 8;
-        p[9] = W(_021D4620, 32) >> 16;
-        p[10] = (int)(u16)W(_021D4620, 32) >> 8;
-        p[11] = W(_021D4620, 32);
+        p[8] = (int)(u16)(W(gCpsState, 32) >> 16) >> 8;
+        p[9] = W(gCpsState, 32) >> 16;
+        p[10] = (int)(u16)W(gCpsState, 32) >> 8;
+        p[11] = W(gCpsState, 32);
         p += 12;
     }
     *p++ = 255;

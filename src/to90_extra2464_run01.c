@@ -16,7 +16,7 @@ typedef struct {
     u16 port;
 } Global;
 
-extern Global _021D4620;
+extern Global gCpsState;
 u16 CPS_SocGetEport(void);
 
 static inline BOOL inuse(OSThread *head, Global *global) {
@@ -36,18 +36,18 @@ u16 CPS_SocGetEport(void) {
     BOOL used;
     do {
         OSThread *thread;
-        _021D4620.port++;
+        gCpsState.port++;
         used = FALSE;
-        if (_021D4620.port < 1024 || _021D4620.port >= 5000) {
-            _021D4620.port = 1024;
+        if (gCpsState.port < 1024 || gCpsState.port >= 5000) {
+            gCpsState.port = 1024;
         }
         for (thread = OSi_ThreadInfo.list; thread; thread = thread->next) {
             Socket *socket = thread->specific[0];
-            if (socket && socket->active && socket->port == _021D4620.port) {
+            if (socket && socket->active && socket->port == gCpsState.port) {
                 used = TRUE;
                 break;
             }
         }
     } while (used);
-    return _021D4620.port;
+    return gCpsState.port;
 }

@@ -43,10 +43,10 @@ typedef struct {
     u64 rng, mul, add;
 } N;
 
-extern N _021D4620;
-extern u8 _021D4B08[];
+extern N gCpsState;
+extern u8 gCpsMacAddress[];
 extern u8 _0211069C[];
-extern u8 _021D4888[];
+extern u8 gCpsTcpipThread[];
 extern void OS_YieldThread__(void);
 #pragma warn_uninitializedvar off
 extern int CPSi_SslClose();
@@ -186,7 +186,7 @@ void CPS_TcpClose(void) {
         CPSi_SslClose(s);
     }
     tick = OS_GetTick() >> 16;
-    while (_021D4620.active() && s->state && ((int)(OS_GetTick() >> 16) - tick) < 39) {
+    while (gCpsState.active() && s->state && ((int)(OS_GetTick() >> 16) - tick) < 39) {
         OS_YieldThread__();
     }
     s->state = 0;

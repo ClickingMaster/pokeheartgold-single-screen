@@ -14,7 +14,7 @@ typedef struct {
     u32 seq;
 } Socket;
 
-extern u8 _021D4620[];
+extern u8 gCpsState[];
 u32 get_seqno(void);
 void tcp_send_handshake(Socket *, int, int);
 int CPSi_TcpConnectRaw(Socket *);
@@ -30,7 +30,7 @@ int CPSi_TcpConnectRaw(Socket *s) {
         s->tick = OS_GetTick() >> 16;
         tcp_send_handshake(s, 2, 24);
         saved = OS_DisableInterrupts();
-        if (s->state == 2 && *(int *)(_021D4620 + 0x50)) {
+        if (s->state == 2 && *(int *)(gCpsState + 0x50)) {
             s->sleep = 1;
             OS_SleepThread(NULL);
         }
@@ -38,7 +38,7 @@ int CPSi_TcpConnectRaw(Socket *s) {
         if (s->state == 4) {
             return 0;
         }
-        if (!*(int *)(_021D4620 + 0x50)) {
+        if (!*(int *)(gCpsState + 0x50)) {
             break;
         }
         attempt++;

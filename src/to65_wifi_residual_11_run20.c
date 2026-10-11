@@ -43,10 +43,10 @@ typedef struct {
     u64 rng, mul, add;
 } N;
 
-extern N _021D4620;
-extern u8 _021D4B08[];
+extern N gCpsState;
+extern u8 gCpsMacAddress[];
 extern u8 _0211069C[];
-extern u8 _021D4888[];
+extern u8 gCpsTcpipThread[];
 extern void OS_YieldThread__(void);
 #pragma warn_uninitializedvar off
 extern int CPSi_SslClose();
@@ -132,16 +132,16 @@ u8 *dhcp_setcommon(u8 *p, int a, u32 *out) {
     MI_CpuFill8(p, 0, 236);
     H(p, 0) = 257;
     p[2] = 6;
-    _021D4620.rng = _021D4620.mul * _021D4620.rng + _021D4620.add;
-    id = _021D4620.rng >> 32;
+    gCpsState.rng = gCpsState.mul * gCpsState.rng + gCpsState.add;
+    id = gCpsState.rng >> 32;
     if (out) {
         *out = id;
     }
     H(p, 4) = SWAP((u16)(id >> 16));
     H(p, 6) = SWAP((u16)id);
-    H(p, 12) = SWAP((u16)(_021D4620.ip >> 16));
-    H(p, 14) = SWAP((u16)_021D4620.ip);
-    MI_CpuCopy8(_021D4B08, p + 28, 6);
+    H(p, 12) = SWAP((u16)(gCpsState.ip >> 16));
+    H(p, 14) = SWAP((u16)gCpsState.ip);
+    MI_CpuCopy8(gCpsMacAddress, p + 28, 6);
     H(p, 236) = 0x8263;
     H(p, 238) = 0x6353;
     H(p, 240) = 0x135;
@@ -149,7 +149,7 @@ u8 *dhcp_setcommon(u8 *p, int a, u32 *out) {
     p[243] = 61;
     p[244] = 7;
     p[245] = 1;
-    MI_CpuCopy8(_021D4B08, p + 246, 6);
+    MI_CpuCopy8(gCpsMacAddress, p + 246, 6);
     p[252] = 12;
     p[253] = 10;
     MI_CpuCopy8(_0211069C, p + 254, 10);

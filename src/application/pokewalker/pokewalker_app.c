@@ -282,7 +282,7 @@ void ov112_021E7DA4(PokewalkerApp *app) {
 
 void ov112_021E7DC0(PokewalkerApp *app) {
     void *p;
-    ov112_021F3244(app->saveData, app->unk_F200);
+    PokewalkerApp_BuildTrainerHouseData(app->saveData, app->unk_F200);
     app->unk_F1D0 = 1;
     app->unk_F1D4 = GAME_VERSION;
     p = sub_02032728(app->pokewalker);

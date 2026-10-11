@@ -12,7 +12,7 @@ struct State {
     u8 z[0x10];
     u32 lease;
 };
-extern struct State _021D4620;
+extern struct State gCpsState;
 extern u8 _021D4B76[];
 extern void CPS_SocUse(void);
 extern void CPS_SocDatagramMode(void);
@@ -40,7 +40,7 @@ int dhcp_request_server(u32 *out, int mode) {
     CPS_SocUse();
     CPS_SocDatagramMode();
     if (mode == 1) {
-        CPS_SocBind(68, 67, _021D4620.server);
+        CPS_SocBind(68, 67, gCpsState.server);
     } else {
         CPS_SocBind(68, 67, -1);
     }
@@ -52,18 +52,18 @@ int dhcp_request_server(u32 *out, int mode) {
     }
     CPS_SocRelease();
     if (result == 2) {
-        *out = _021D4620.lease >> 1;
-        _021D4620.retry = (_021D4620.lease * 3) >> 3;
+        *out = gCpsState.lease >> 1;
+        gCpsState.retry = (gCpsState.lease * 3) >> 3;
         return 1;
     }
-    retry = _021D4620.retry >> 1;
-    _021D4620.retry = retry;
+    retry = gCpsState.retry >> 1;
+    gCpsState.retry = retry;
     *out = retry;
     switch (mode) {
     case 1:
         if (retry < 60) {
             *out = 1;
-            _021D4620.retry = _021D4620.lease >> 3;
+            gCpsState.retry = gCpsState.lease >> 3;
         }
         break;
     case 2:
