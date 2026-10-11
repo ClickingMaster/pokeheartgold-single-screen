@@ -34,13 +34,13 @@ NNSG3dResTex *ov01_021F1AD4(FieldSystem *fieldSystem, int id);
 
 void *sub_02023DA4(void *a0);
 void sub_02023E50(void *a0, const VecFx32 *a1);
-void sub_02026E18(void *a0, void *a1);
+void BillboardGfxSequence_Init(void *a0, void *a1);
 void *sub_02068D90(void *a0);
 void sub_02068DA8(void *a0, VecFx32 *a1);
-void *sub_02020838(NNSG3dResTex *tex, int a1);
-void *sub_02020888(NNSG3dResTex *tex, int a1);
-u32 sub_02020910(NNSG3dResTex *tex, int a1);
-u32 sub_020209AC(NNSG3dResTex *tex, int a1);
+void *Texture_GetImageData(NNSG3dResTex *tex, int a1);
+void *Texture_GetPaletteData(NNSG3dResTex *tex, int a1);
+u32 Texture_GetImageVramOffsetByIndex(NNSG3dResTex *tex, int a1);
+u32 Texture_GetImageSizeByIndex(NNSG3dResTex *tex, int a1);
 void GF_AssertFail(void);
 void PlaySE(u16 seq);
 
@@ -64,7 +64,7 @@ typedef struct Ov01_02203A18_TaskEnv {
     LocalMapObject *unk4;
 } Ov01_02203A18_TaskEnv; // 0x8
 
-// Texture-animation state, initialised by sub_02026E18.
+// Texture-animation state, initialised by BillboardGfxSequence_Init.
 typedef struct Ov01_02203A18_TexAnim {
     u16 *unk0;
     u8 *unk4;

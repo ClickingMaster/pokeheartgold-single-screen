@@ -3553,7 +3553,7 @@ ov49_022588A0: ; 0x022588A0
 	add r1, sp, #0x54
 	add r2, sp, #0x24
 	add r3, sp, #0x48
-	bl sub_0201F990
+	bl GF3d_ModelBoxTest
 	add sp, #0x60
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0

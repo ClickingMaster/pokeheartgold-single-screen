@@ -91,12 +91,12 @@ u32 ov45_0222C95C(Ov45WordSet *p, u32 i) {
     return 0;
 }
 
-void ov45_0222C978(Ov45WordSet *p, enum HeapID heap) {
+void WiFiPlazaWordSet_Init(Ov45WordSet *p, enum HeapID heap) {
     MI_CpuFill8(p, 0, 0xB8);
     p->bank = WallpaperPasswordBank_Create(heap);
 }
 
-void ov45_0222C994(Ov45WordSet *p) {
+void WiFiPlazaWordSet_Free(Ov45WordSet *p) {
     WallpaperPasswordBank_Delete(p->bank);
 }
 

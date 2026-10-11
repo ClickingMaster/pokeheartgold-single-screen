@@ -22,13 +22,13 @@ typedef struct {
 #define IH(p, i)  (((IndexMap *)(p))->ids[i])
 #define MUL(a, b) ((s32)(((s64)(a) * (b)) >> 12))
 extern void *gAnmCalcFuncNsBca;
-extern void *_02110A04;
+extern void *gAnmCalcFuncNsBva;
 
 extern void FX_DivAsync(fx32, fx32);
 extern fx32 FX_GetDivResult(void);
-extern void *_02110A14;
-extern void *_02110A0C;
-extern void *_02110A10;
+extern void *gAnmCalcFuncNsBma;
+extern void *gAnmCalcFuncNsBta;
+extern void *gAnmCalcFuncNsBtp;
 extern void GetTexSRTAnm_(void *, u16, int, void *);
 extern void *NNSi_G3dGetTexPatAnmFV(void *, u16, u16);
 extern void *NNSi_G3dGetTexPatAnmTexNameByIdx(void *, int);
@@ -73,9 +73,9 @@ void NNS_SndInit(void);
 extern void PM_PrependPreSleepCallback(void *);
 extern void PM_AppendPostSleepCallback(void *);
 typedef void (*TexCalc)(void *, void *);
-extern TexCalc _02110C1C[];
-extern TexCalc _02110C3C[];
-extern TexCalc _02110C5C[];
+extern TexCalc gTexMtxCalcFuncsMaya[];
+extern TexCalc gTexMtxCalcFuncs3dsMax[];
+extern TexCalc gTexMtxCalcFuncsXsi[];
 void NNSi_G3dSendTexSRTMaya(void *);
 void NNSi_G3dSendTexSRT3dsMax(void *);
 void NNSi_G3dSendTexSRTXsi(void *);

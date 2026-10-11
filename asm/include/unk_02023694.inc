@@ -5,11 +5,11 @@
 .public Heap_Free
 .public HeapExp_FndInitAllocator
 .public GF3dRender_DrawModel
-.public sub_0202068C
-.public sub_020206C8
-.public sub_020206E0
-.public sub_02020738
-.public sub_02020764
+.public TextureAnimationPool_New
+.public TextureAnimationPool_Free
+.public TextureAnimationPool_Add
+.public TextureAnimation_Remove
+.public TextureAnimation_SetFrame
 .public BillboardLists_Create
 .public BillboardLists_Delete
 .public BillboardLists_Draw
@@ -96,7 +96,7 @@
 .public Sprite_GetCurrentAnimFrameExAttr
 .public Sprite_GetCellAnim
 .public GF_AssertFail
-.public sub_02026DE0
+.public BillboardGfxSequence_GetTexPlttIndex
 .public NNS_G2dGetUnpackedAnimBank
 .public NNS_G2dGetAnimSequenceByIdx
 .public NNS_G2dGetAnimCtrlCurrentFrame

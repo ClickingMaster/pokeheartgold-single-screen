@@ -145,7 +145,7 @@
 .public ScheduleSetBgPosText
 .public GF3dRender_BindModelSet
 .public GF3dRender_AllocAndLoadTexResources
-.public sub_0201F990
+.public GF3d_ModelBoxTest
 .public GF_SinDegNoWrap
 .public GF_DegreeToSinCosIdx
 .public MTRandom

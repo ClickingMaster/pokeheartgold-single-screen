@@ -24,7 +24,7 @@ u16 ov45_0222CD04(u32 i) {
     }
     return 0xffff;
 }
-Obj *ov45_0222CD1C(int a, u32 b, u32 c, void *d, u32 heap) {
+Obj *WiFiPlazaApps_New(int a, u32 b, u32 c, void *d, u32 heap) {
     Obj *p = Heap_Alloc(heap, 0x48);
     int i;
     memset(p, 0, 0x48);
@@ -38,17 +38,17 @@ Obj *ov45_0222CD1C(int a, u32 b, u32 c, void *d, u32 heap) {
     }
     return p;
 }
-void ov45_0222CD68(void *p) {
+void WiFiPlazaApps_Delete(void *p) {
     int i;
     for (i = 0; i < 13; i++) {
         ov45_0222CE0C(p, i);
     }
     Heap_Free(p);
 }
-int ov45_0222CD84(void *p) {
+int WiFiPlazaApps_StartFirst(void *p) {
     return ov45_0222CE2C(p, 5);
 }
-int ov45_0222CD90(void *v) {
+int WiFiPlazaApps_Run(void *v) {
     Obj *p = v;
     int ret = 0;
     if (*(void **)p && OverlayManager_Run(*(void **)p)) {

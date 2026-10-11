@@ -20,5 +20,5 @@ void ov01_02205808(BOOL select, void *obj, void *model) {
 void ov01_02205870(BOOL select, void *obj, void *unused, void *data) {
     void *fs = sub_0205F1A0(MapObject_GetManager(obj));
     void *entry = ov01_021FC5A4(*(void **)((u8 *)fs + 0xfc), select ? 0x16 : 0x15);
-    sub_02026E18(entry, (u8 *)data + 0xc);
+    BillboardGfxSequence_Init(entry, (u8 *)data + 0xc);
 }

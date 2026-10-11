@@ -4,51 +4,51 @@
 
 	.text
 	.public _021EA720
-	.public ov108_021E5C54
-	.public ov108_021E5D0C
-	.public ov108_021E5DB8
-	.public ov108_021E5E68
-	.public ov108_021E5F38
-	.public ov108_021E6090
-	.public ov108_021E62B4
-	.public ov108_021E63B8
-	.public ov108_021E6450
-	.public ov108_021E64C0
-	.public ov108_021E66AC
-	.public ov108_021E6894
-	.public ov108_021E69A0
-	.public ov108_021E6A58
-	.public ov108_021E6B00
-	.public ov108_021E6BA0
-	.public ov108_021E6C68
-	.public ov108_021E6D24
-	.public ov108_021E6D80
-	.public ov108_021E6F74
-	.public ov108_021E7014
-	.public ov108_021E7080
-	.public ov108_021E7224
-	.public ov108_021E733C
-	.public ov108_021E756C
+	.public SafariAreaCustomizer_Setup
+	.public SafariAreaCustomizer_Teardown
+	.public SafariAreaCustomizer_HandleSlotMenu
+	.public SafariAreaCustomizer_ScrollPages
+	.public SafariAreaCustomizer_HandleConfirmArea
+	.public SafariAreaCustomizer_SwapAreas
+	.public SafariAreaCustomizer_HandleSlotButtons
+	.public SafariAreaCustomizer_HandleSlotTouch
+	.public SafariAreaCustomizer_ChooseArea
+	.public SafariAreaCustomizer_HandleAreaButtons
+	.public SafariAreaCustomizer_HandleAreaTouch
+	.public SafariAreaCustomizer_HandleMoveButtons
+	.public SafariAreaCustomizer_HandleMoveTouch
+	.public SafariAreaCustomizer_OpenSlotMenu
+	.public SafariAreaCustomizer_AskConfirmArea
+	.public SafariAreaCustomizer_VBlankCB
+	.public SafariAreaCustomizer_InitBgLayers
+	.public SafariAreaCustomizer_FreeBgLayers
+	.public SafariAreaCustomizer_LoadBgGraphics
+	.public SafariAreaCustomizer_CreateStrings
+	.public SafariAreaCustomizer_DeleteStrings
+	.public SafariAreaCustomizer_AddWindows
+	.public SafariAreaCustomizer_CreateMenuItems
+	.public SafariAreaCustomizer_CreateSprites
+	.public SafariAreaCustomizer_CreateCancelTextObj
 	.public ov108_021E767C
-	.public ov108_021E7700
-	.public ov108_021E77D4
-	.public ov108_021E78F4
-	.public ov108_021E79A8
-	.public ov108_021E7ADC
-	.public ov108_021E7B74
-	.public ov108_021E7BB4
-	.public ov108_021E7C5C
-	.public ov108_021E7CD8
-	.public ov108_021E7EB0
-	.public ov108_021E7F7C
-	.public ov108_021E80F4
-	.public ov108_021E81A8
-	.public ov108_021E8270
-	.public ov108_021E82E0
-	.public ov108_021E84F8
-	.public ov108_021E8540
-	.public ov108_021E867C
-	.public ov108_021E8758
+	.public SafariAreaCustomizer_PrintWindowText
+	.public SafariAreaCustomizer_PrintPageNumber
+	.public SafariAreaCustomizer_MoveCursor
+	.public SafariAreaCustomizer_DrawSelectFrame
+	.public SafariAreaCustomizer_InitSlotTilemaps
+	.public SafariAreaCustomizer_LoadAreaPictureFromNarc
+	.public SafariAreaCustomizer_LoadAreaPicture
+	.public SafariAreaCustomizer_PrintObjectTypeLabels
+	.public SafariAreaCustomizer_PrintSlotInfo
+	.public SafariAreaCustomizer_PrintAreaNames
+	.public SafariAreaCustomizer_StartPageScroll
+	.public SafariAreaCustomizer_RunPageScroll
+	.public SafariAreaCustomizer_StartPageChange
+	.public SafariAreaCustomizer_RunPageChange
+	.public SafariAreaCustomizer_RunSwapAnim
+	.public SafariAreaCustomizerSpriteRes_SetAreaPicture
+	.public SafariAreaCustomizerSpriteRes_CreateAreaSprite
+	.public SafariAreaCustomizerSpriteRes_Init
+	.public SafariAreaCustomizerSpriteRes_LoadResources
 	.public ov108_021EA724
 	.public ov108_021EA738
 	.public ov108_021EA748
@@ -70,49 +70,49 @@
 	.public SafariAreaCustomizer_Exit
 	.public SafariAreaCustomizer_Init
 	.public SafariAreaCustomizer_Main
-	.public ov108_021E59E4
-	.public ov108_021E5A48
-	.public ov108_021E5A78
-	.public ov108_021E5A8C
-	.public ov108_021E5AA0
-	.public ov108_021E5AF0
-	.public ov108_021E5B48
-	.public ov108_021E5B98
-	.public ov108_021E5BFC
-	.public ov108_021E5D90
-	.public ov108_021E5F10
-	.public ov108_021E6010
-	.public ov108_021E6068
-	.public ov108_021E61E8
+	.public SafariAreaCustomizer_InitFromArgs
+	.public SafariAreaCustomizer_SaveResults
+	.public SafariAreaCustomizer_State_Setup
+	.public SafariAreaCustomizer_State_Teardown
+	.public SafariAreaCustomizer_State_SelectSlot
+	.public SafariAreaCustomizer_State_SelectArea
+	.public SafariAreaCustomizer_State_MoveArea
+	.public SafariAreaCustomizer_State_FadeIn
+	.public SafariAreaCustomizer_State_FadeOut
+	.public SafariAreaCustomizer_HandleSlotInput
+	.public SafariAreaCustomizer_HandleAreaInput
+	.public SafariAreaCustomizer_ChangePage
+	.public SafariAreaCustomizer_HandleMoveInput
+	.public SafariAreaCustomizer_ShowCursors
 	.public ov108_021E6238
-	.public ov108_021E6240
-	.public ov108_021E6804
-	.public ov108_021E6850
-	.public ov108_021E6C48
-	.public ov108_021E6F58
-	.public ov108_021E71EC
-	.public ov108_021E72A4
-	.public ov108_021E72CC
-	.public ov108_021E730C
-	.public ov108_021E7510
-	.public ov108_021E7650
-	.public ov108_021E78C0
-	.public ov108_021E7BFC
-	.public ov108_021E838C
-	.public ov108_021E83C8
-	.public ov108_021E83F0
-	.public ov108_021E844C
-	.public ov108_021E846C
-	.public ov108_021E8490
-	.public ov108_021E84A4
-	.public ov108_021E84DC
-	.public ov108_021E852C
-	.public ov108_021E853C
-	.public ov108_021E8674
-	.public ov108_021E8718
+	.public SafariAreaCustomizer_CheckInputModeSwitch
+	.public SafariAreaCustomizer_StartMove
+	.public SafariAreaCustomizer_EndMove
+	.public SafariAreaCustomizer_SetGfxBanks
+	.public SafariAreaCustomizer_FreeScreenData
+	.public SafariAreaCustomizer_RemoveWindows
+	.public SafariAreaCustomizer_DeleteMenuItems
+	.public SafariAreaCustomizer_InitSprites
+	.public SafariAreaCustomizer_FreeSprites
+	.public SafariAreaCustomizer_DeleteSprites
+	.public SafariAreaCustomizer_DeleteCancelTextObj
+	.public SafariAreaCustomizer_SetCursorAnim
+	.public SafariAreaCustomizer_InitScreen
+	.public SafariAreaCustomizer_InitSpriteSystem
+	.public SafariAreaCustomizer_FreeSpriteSystem
+	.public SafariAreaCustomizer_CreateSpriteManager
+	.public SafariAreaCustomizer_DestroySpriteManager
+	.public SafariAreaCustomizer_DrawSprites
+	.public SafariAreaCustomizer_TransferOam
+	.public SafariAreaCustomizerSpriteRes_New
+	.public SafariAreaCustomizerSpriteRes_Delete
+	.public SafariAreaCustomizerSpriteRes_DrawSprites
+	.public SafariAreaCustomizerSpriteRes_SetSpriteList
+	.public SafariAreaCustomizer_DeleteAreaSprite
+	.public SafariAreaCustomizerSpriteRes_Free
 
-	thumb_func_start ov108_021E867C
-ov108_021E867C: ; 0x021E867C
+	thumb_func_start SafariAreaCustomizerSpriteRes_Init
+SafariAreaCustomizerSpriteRes_Init: ; 0x021E867C
 	push {r4, r5, r6, r7, lr}
 	sub sp, #0xc
 	ldr r1, _021E8714 ; =ov108_021EA978
@@ -184,9 +184,9 @@ _021E86FA:
 	cmp r0, #4
 	blo _021E86B8
 	ldr r0, [sp]
-	bl ov108_021E8758
+	bl SafariAreaCustomizerSpriteRes_LoadResources
 	add sp, #0xc
 	pop {r4, r5, r6, r7, pc}
 	nop
 _021E8714: .word ov108_021EA978
-	thumb_func_end ov108_021E867C
+	thumb_func_end SafariAreaCustomizerSpriteRes_Init

@@ -53,7 +53,7 @@ void *ov45_0222A578(Ov45Work *w, u32 idx) {
 }
 
 void *ov45_0222A5C0(Ov45Work *w) {
-    if (!ov45_0222BADC(w->data + 0x108, (void *)U32(w, 0))) {
+    if (!WiFiPlazaProfile_IsChecksumValid(w->data + 0x108, (void *)U32(w, 0))) {
         U32(w, 0x52c) = 1;
     }
     return w->data + 0x128;
@@ -63,7 +63,7 @@ void ov45_0222A5E8(Ov45Work *w, int value) {
     if (value >= 15) {
         GF_AssertFail();
     }
-    if (!ov45_0222BADC(w->data + 0x108, (void *)U32(w, 0))) {
+    if (!WiFiPlazaProfile_IsChecksumValid(w->data + 0x108, (void *)U32(w, 0))) {
         U32(w, 0x52c) = 1;
         return;
     }
@@ -101,7 +101,7 @@ void ov45_0222A5E8(Ov45Work *w, int value) {
         break;
     }
     U8(w, 0x16b) = value;
-    ov45_0222BAC4(w->data + 0x108, (void *)U32(w, 0));
+    WiFiPlazaProfile_UpdateChecksum(w->data + 0x108, (void *)U32(w, 0));
     ov45_0222BA3C(w);
 }
 
@@ -117,12 +117,12 @@ void ov45_0222A72C(Ov45Work *w, u8 value) {
     if (value >= 27) {
         GF_AssertFail();
     }
-    if (!ov45_0222BADC(w->data + 0x108, (void *)U32(w, 0))) {
+    if (!WiFiPlazaProfile_IsChecksumValid(w->data + 0x108, (void *)U32(w, 0))) {
         U32(w, 0x52c) = 1;
         return;
     }
     U8(w, 0x169) = value;
-    ov45_0222BAC4(w->data + 0x108, (void *)U32(w, 0));
+    WiFiPlazaProfile_UpdateChecksum(w->data + 0x108, (void *)U32(w, 0));
     ov45_0222BA3C(w);
 }
 
@@ -133,7 +133,7 @@ void ov45_0222A770(Ov45Work *w, int a, int b) {
     if (b >= 18) {
         GF_AssertFail();
     }
-    if (!ov45_0222BADC(w->data + 0x108, (void *)U32(w, 0))) {
+    if (!WiFiPlazaProfile_IsChecksumValid(w->data + 0x108, (void *)U32(w, 0))) {
         U32(w, 0x52c) = 1;
         return;
     }
@@ -145,7 +145,7 @@ void ov45_0222A770(Ov45Work *w, int a, int b) {
             U16(w, 0x1b0) = a;
             U16(w, 0x1b2) = b;
         }
-        ov45_0222BAC4(w->data + 0x108, (void *)U32(w, 0));
+        WiFiPlazaProfile_UpdateChecksum(w->data + 0x108, (void *)U32(w, 0));
         ov45_0222BA3C(w);
     }
 }
@@ -154,7 +154,7 @@ void ov45_0222A7DC(Ov45Work *w, u32 a, u32 b) {
     if (b >= 3) {
         GF_AssertFail();
     }
-    if (!ov45_0222BADC(w->data + 0x108, (void *)U32(w, 0))) {
+    if (!WiFiPlazaProfile_IsChecksumValid(w->data + 0x108, (void *)U32(w, 0))) {
         U32(w, 0x52c) = 1;
         return;
     }
@@ -163,7 +163,7 @@ void ov45_0222A7DC(Ov45Work *w, u32 a, u32 b) {
         U32(w, 0x1b8) = b;
         U8(w, 0x20b) = (U8(w, 0x20b) & ~0xf) | 1;
         ov45_0222B118(w, 6);
-        ov45_0222BAC4(w->data + 0x108, (void *)U32(w, 0));
+        WiFiPlazaProfile_UpdateChecksum(w->data + 0x108, (void *)U32(w, 0));
         ov45_0222BA3C(w);
     }
 }

@@ -88,7 +88,7 @@
 .public GF3dRender_AllocAndLoadTexResources
 .public SysTask_SetFunc
 .public SysTask_GetData
-.public sub_0201F990
+.public GF3d_ModelBoxTest
 .public GF_SinDegNoWrap
 .public GF_CosDegNoWrap
 .public SetMTRNGSeed

@@ -102,7 +102,7 @@ void *ov73_021E83F4(void *, u32, s32);
 void ov73_021E841C(void *, void *);
 
 int ov73_021E8EBC(void *p) {
-    ov72_02237CB0(p);
+    NintendoWfcHttp_RequestInfo(p);
     U32(p, 0x1c) = 8;
     U32(p, 0xf94) = 0;
     return 3;

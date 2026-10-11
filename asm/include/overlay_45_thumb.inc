@@ -48,7 +48,7 @@
 .public Heap_Alloc
 .public Heap_Free
 .public GF3dRender_BindModelSet
-.public sub_0201FA34
+.public GF3d_BoundsBoxTest
 .public MTRandom
 .public BillboardLists_Create
 .public BillboardLists_Delete
@@ -94,7 +94,7 @@
 .public String_New
 .public String_Delete
 .public CopyStringToU16Array
-.public sub_02026E18
+.public BillboardGfxSequence_Init
 .public SaveArray_CalcCRC16
 .public Save_SysInfo_RTC_Get
 .public Save_PlayerData_GetProfile
@@ -173,9 +173,9 @@
 .public ov42_02228188
 .public ov42_022282DC
 .public ov42_022282F4
-.public ov45_02229EE0
-.public ov45_02229F70
-.public ov45_02229F94
+.public WiFiPlaza_Init
+.public WiFiPlaza_Main
+.public WiFiPlaza_Exit
 .public ov45_0222A1FC
 .public ov45_0222A208
 .public ov45_0222A230

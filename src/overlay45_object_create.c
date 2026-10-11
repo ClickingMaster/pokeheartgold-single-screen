@@ -72,7 +72,7 @@ extern void *GF3dGfxRawResObj_GetTex(void *);
 extern u32 GF3dGfxRawResObj_GetTexKey(void *);
 extern u32 GF3dGfxRawResObj_GetTex4x4Key(void *);
 extern u32 GF3dGfxRawResObj_GetPlttKey(void *);
-extern void sub_02026E18(void *, ResourceData *);
+extern void BillboardGfxSequence_Init(void *, ResourceData *);
 extern void sub_02023E2C(BillboardResource *, void *, void *, const void *, ResourceData *);
 extern void sub_02023E04(BillboardResource *, void *, void *, const void *, ResourceData *, u32, u32, u32);
 extern Coord ov42_022282DC(void *);
@@ -119,7 +119,7 @@ Obj *ov45_0223070C(Manager *manager, void *ctx) {
     } else {
         texKey = 0x118;
     }
-    sub_02026E18(GF2dGfxRawResObj_GetData(GF2dGfxRawResMan_GetObjById(manager->animation2d, texKey)), &data);
+    BillboardGfxSequence_Init(GF2dGfxRawResObj_GetData(GF2dGfxRawResMan_GetObjById(manager->animation2d, texKey)), &data);
     if (config->embeddedTexture == 1) {
         sub_02023E2C(&resource, file0, texture, &ov45_02254C98, &data);
     } else {

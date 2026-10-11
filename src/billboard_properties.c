@@ -28,8 +28,8 @@ void sub_02023FEC(BillboardObject *);
 void sub_02024380(BillboardObject *, u32);
 void sub_020243A4(BillboardObject *, fx32);
 fx32 sub_02024394(BillboardObject *, u32);
-void sub_02020764(void *, fx32);
-u32 sub_02026DE0(BillboardResourceData *, u32);
+void TextureAnimation_SetFrame(void *, fx32);
+u32 BillboardGfxSequence_GetTexPlttIndex(BillboardResourceData *, u32);
 void sub_0202403C(NNSG3dResMdl *, void *, u8);
 void sub_02024140(NNSG3dResMdl *, void *, u8);
 void sub_020240C4(void *, void *, u32);
@@ -174,7 +174,7 @@ NNSG3dPlttKey sub_02023FB0(BillboardObject *object) {
 
 void sub_02023FC0(BillboardObject *object) {
     if (object->type == 2) {
-        sub_02020764(object->unk_B0, object->unk_B8);
+        TextureAnimation_SetFrame(object->unk_B0, object->unk_B8);
     }
 }
 
@@ -189,7 +189,7 @@ void sub_02023FE4(BillboardObject *object, BillboardCallback callback, void *cal
 
 void sub_02023FEC(BillboardObject *object) {
     volatile u8 data[4];
-    u32 value = sub_02026DE0(&object->resourceData, (object->unk_B8 << 4) >> 16);
+    u32 value = BillboardGfxSequence_GetTexPlttIndex(&object->resourceData, (object->unk_B8 << 4) >> 16);
     data[0] = value;
     data[1] = value >> 8;
     data[2] = data[0];

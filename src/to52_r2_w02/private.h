@@ -33,7 +33,7 @@ void LoadDwcOverlay(void);
 void LoadOVY38(void);
 void sub_02034D8C(void);
 void ov00_021ECB40(void);
-void ov72_022378DC(void);
+void NintendoWfcHttp_Update(void);
 int sub_02034DB8(void);
 void *ov73_021E83F4(void *, u32, s32);
 void ov73_021E841C(void *, void *);

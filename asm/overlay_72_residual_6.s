@@ -7,38 +7,38 @@
 	.public NintendoWfc_Init
 	.public NintendoWfc_Main
 	.public _0223B330
-	.public _0223B4E0
-	.public _0223B820
-	.public ov72_022378DC
-	.public ov72_02237B54
-	.public ov72_02237B80
-	.public ov72_02237BD0
-	.public ov72_02237C30
-	.public ov72_02237CB0
-	.public ov72_02237CF4
-	.public ov72_02237D50
-	.public ov72_02237D88
-	.public ov72_022380FC
-	.public ov72_02238124
-	.public ov72_02238164
-	.public ov72_02238194
-	.public ov72_02238408
-	.public ov72_02238688
-	.public ov72_022386F4
-	.public ov72_02238730
-	.public ov72_02238750
-	.public ov72_02238778
-	.public ov72_022387D8
-	.public ov72_02238800
-	.public ov72_0223886C
-	.public ov72_0223894C
-	.public ov72_0223897C
-	.public ov72_022389C8
-	.public ov72_02238B18
-	.public ov72_02238BEC
-	.public ov72_02238E3C
-	.public ov72_02238EE4
-	.public ov72_02239040
+	.public sNintendoWfcRoomNumUrl
+	.public sNintendoWfcHttp
+	.public NintendoWfcHttp_Update
+	.public NintendoWfcHttp_IsDone
+	.public NintendoWfcHttp_RequestRoomCount
+	.public NintendoWfcHttp_RequestDownload
+	.public NintendoWfcHttp_RequestUpload
+	.public NintendoWfcHttp_RequestInfo
+	.public NintendoWfcHttp_RequestSetProfile
+	.public NintendoWfcHttp_StartRequest
+	.public NintendoWfcHttp_ConvertError
+	.public NintendoWfc_VBlankCB
+	.public NintendoWfc_SetGfxBanks
+	.public NintendoWfc_InitObjTransfer
+	.public NintendoWfc_InitSpriteResources
+	.public NintendoWfc_CreateSprites
+	.public NintendoWfc_SetSpritePosition
+	.public NintendoWfc_MovePadCursor
+	.public NintendoWfc_MoveDigitCursor
+	.public NintendoWfc_SetDigitSpritePosition
+	.public NintendoWfc_Alloc
+	.public NintendoWfc_InitGraphics
+	.public NintendoWfc_FreeGraphics
+	.public NintendoWfc_SessionInit
+	.public NintendoWfc_SessionMain
+	.public NintendoWfc_SessionExit
+	.public NintendoWfc_InitBgs
+	.public NintendoWfc_LoadSubScreenBg
+	.public NintendoWfc_LoadBgGraphics
+	.public NintendoWfc_PaletteCycleTask
+	.public NintendoWfc_AddWindows
+	.public NintendoWfc_InitStrings
 	.public ov72_02239108
 	.public ov72_02239198
 	.public ov72_022391E8
@@ -66,65 +66,65 @@
 	.public ov72_02239F60
 	.public ov72_02239F8C
 	.public ov72_02239FD8
-	.public ov72_0223A014
+	.public NintendoWfc_StartExit
 	.public ov72_0223A044
-	.public ov72_0223A06C
-	.public ov72_0223A0E0
-	.public ov72_0223A1AC
-	.public ov72_0223A1CC
-	.public ov72_0223A200
-	.public ov72_0223A280
-	.public ov72_0223A2E8
-	.public ov72_0223A314
-	.public ov72_0223A350
-	.public ov72_0223A3A8
-	.public ov72_0223A3E0
-	.public ov72_0223A420
-	.public ov72_0223A460
-	.public ov72_0223A4DC
-	.public ov72_0223A520
-	.public ov72_0223A588
-	.public ov72_0223A5B4
-	.public ov72_0223A5E0
-	.public ov72_0223A680
-	.public ov72_0223A738
-	.public ov72_0223A760
-	.public ov72_0223A7F4
-	.public ov72_0223A8A0
-	.public ov72_0223A8F0
-	.public ov72_0223AA9C
-	.public ov72_0223AB84
-	.public ov72_0223ABB0
-	.public ov72_0223AC00
-	.public ov72_0223AC2C
-	.public ov72_0223ACA8
-	.public ov72_0223AD20
-	.public ov72_0223AD64
-	.public ov72_0223AD94
-	.public ov72_0223AE20
-	.public ov72_0223AE6C
-	.public ov72_0223AED0
-	.public ov72_0223AF1C
-	.public ov72_0223AF48
-	.public ov72_0223AF7C
-	.public ov72_0223B088
-	.public ov72_0223B0C4
-	.public ov72_0223B1C8
-	.public ov72_0223B2C0
-	.public ov72_0223B2FC
+	.public NintendoWfc_ShowHttpError
+	.public NintendoWfc_Disconnect
+	.public NintendoWfc_WaitMessage
+	.public NintendoWfc_WaitMessageAndDelay
+	.public NintendoWfc_OpenYesNoMenu
+	.public NintendoWfc_PrintFormattedMessage
+	.public NintendoWfc_ShowDwcError
+	.public NintendoWfc_WaitErrorDismiss
+	.public NintendoWfc_PrintMessage
+	.public NintendoWfc_GetAlignedTextX
+	.public NintendoWfc_PrintAlignedText
+	.public NintendoWfc_ShowWaitingIcon
+	.public NintendoWfc_PrintErrorMessage
+	.public NintendoWfc_ShowErrorMessage
+	.public NintendoWfc_StartNumberInput
+	.public NintendoWfc_RunNumberInput
+	.public NintendoWfc_NumberInput_FadeOut
+	.public NintendoWfc_NumberInput_Setup
+	.public NintendoWfc_ShowNumberInputSprites
+	.public NintendoWfc_GetTouchedPadKey
+	.public NintendoWfc_GetPadNeighbor
+	.public NintendoWfc_GetEnteredNumber
+	.public NintendoWfc_AreDigitsComplete
+	.public NintendoWfc_PressPadKey
+	.public NintendoWfc_HandlePadButtons
+	.public NintendoWfc_NumberInput_Main
+	.public NintendoWfc_UpdateDigitSprites
+	.public NintendoWfc_NumberInput_StartFadeOut
+	.public NintendoWfc_NumberInput_Teardown
+	.public NintendoWfc_AddNumberInputWindows
+	.public NintendoWfc_PrintButtonLabel
+	.public NintendoWfc_RemoveNumberInputWindows
+	.public NintendoWfc_HideNumberInput
+	.public NintendoWfc_SetButtonFlashPltt
+	.public NintendoWfc_UpdateButtonFlash
+	.public NintendoWfc_StartButtonFlash
+	.public NintendoWfcYesNo_Init
+	.public NintendoWfcYesNo_Run
+	.public NintendoWfcYesNo_HandleInput
+	.public NintendoWfcYesNo_WaitClose
+	.public NintendoWfcYesNo_LoadGraphics
+	.public NintendoWfcYesNo_AddWindows
+	.public NintendoWfcYesNo_RemoveWindows
+	.public NintendoWfcYesNo_MoveCursor
 	.public ov72_0223B338
-	.public ov72_0223B344
-	.public ov72_0223B354
+	.public sNintendoWfcObjCharTransferTemplate
+	.public sNintendoWfcGraphicsModes
 	.public ov72_0223B364
 	.public ov72_0223B366
-	.public ov72_0223B37C
+	.public sNintendoWfcGraphicsBanks
 	.public ov72_0223B3A4
 	.public ov72_0223B3A6
-	.public ov72_0223B3D8
-	.public ov72_0223B3F4
-	.public ov72_0223B410
-	.public ov72_0223B42C
-	.public ov72_0223B448
+	.public sNintendoWfcBgTemplate_Sub1
+	.public sNintendoWfcBgTemplate_Sub2
+	.public sNintendoWfcBgTemplate_Main1
+	.public sNintendoWfcBgTemplate_Main0
+	.public sNintendoWfcBgTemplate_Sub0
 	.public ov72_0223B464
 	.public ov72_0223B466
 	.public ov72_0223B468
@@ -136,39 +136,39 @@
 	.public ov72_0223B4C0
 	.public ov72_0223B4C2
 	.public ov72_0223B4C8
-	.public ov72_0223B52C
-	.public ov72_0223B578
-	.public ov72_0223B5C4
-	.public ov72_0223B60C
-	.public ov72_0223B654
-	.public ov72_0223B658
-	.public ov72_0223B65C
-	.public ov72_0223B660
-	.public ov72_0223B744
+	.public sNintendoWfcDownloadUrl
+	.public sNintendoWfcUploadUrl
+	.public sNintendoWfcInfoUrl
+	.public sNintendoWfcSetProfileUrl
+	.public sNintendoWfcModeInit
+	.public sNintendoWfcModeMain
+	.public sNintendoWfcModeExit
+	.public sNintendoWfcStates
+	.public sNintendoWfcNumberInputStates
 	.public ov72_0223B774
 	.public ov72_0223B7B8
-	.public ov72_0223B7FC
+	.public sNintendoWfcYesNoStates
 	.public ov72_0223B82C
 	.public ov72_0223B834
 	.public ov72_0223B900
 	.public ov72_0223B91B
 	.public ov72_0223B920
 	.public ov72_0223B923
-	.public ov72_0223B92C
+	.public sNintendoWfcGlobal
 
-	.public ov72_022378C0
-	.public ov72_02237B74
-	.public ov72_02238144
+	.public NintendoWfcHttp_Init
+	.public NintendoWfcHttp_GetResult
+	.public NintendoWfc_InitArgs
 	.public ov72_02238160
-	.public ov72_022383DC
-	.public ov72_02238668
-	.public ov72_02238680
-	.public ov72_022387A0
-	.public ov72_022387C4
-	.public ov72_022387D0
-	.public ov72_02238AEC
-	.public ov72_02238FFC
-	.public ov72_02239098
+	.public NintendoWfc_InitSpriteTemplate
+	.public NintendoWfc_HandleYesNoPrompt
+	.public NintendoWfc_SetState
+	.public NintendoWfc_Free
+	.public NintendoWfc_GetWifiIconLevel
+	.public NintendoWfc_SetNextMode
+	.public NintendoWfc_FreeBgs
+	.public NintendoWfc_RemoveWindows
+	.public NintendoWfc_FreeStrings
 	.public ov72_022390D8
 	.public ov72_02239168
 	.public ov72_022392AC
@@ -184,48 +184,48 @@
 	.public ov72_02239C8C
 	.public ov72_02239D3C
 	.public ov72_02239E94
-	.public ov72_02239E9C
-	.public ov72_02239EB4
+	.public NintendoWfc_StartSave
+	.public NintendoWfc_Save
 	.public ov72_02239ED4
 	.public ov72_02239F30
 	.public ov72_02239FBC
 	.public ov72_0223A010
 	.public ov72_0223A414
 	.public ov72_0223A41C
-	.public ov72_0223A444
-	.public ov72_0223A71C
-	.public ov72_0223A8DC
+	.public NintendoWfc_HideWaitingIcon
+	.public NintendoWfc_NumberInput_WaitFadeIn
+	.public NintendoWfc_GetCursorAfterDigit
 	.public ov72_0223ABF4
 	.public ov72_0223ABF8
 	.public ov72_0223ABFC
-	.public ov72_0223AC6C
-	.public ov72_0223AC88
-	.public ov72_0223ACA4
-	.public ov72_0223AF70
+	.public NintendoWfc_NumberInput_WaitButtonFlash
+	.public NintendoWfc_NumberInput_WaitFadeOut
+	.public NintendoWfc_NumberInput_Finish
+	.public NintendoWfcYesNo_Start
 	.public ov72_0223B084
-	.public ov72_0223B2E4
+	.public NintendoWfcYesNo_ShowCursor
 
-	thumb_func_start ov72_022387D8
-ov72_022387D8: ; 0x022387D8
+	thumb_func_start NintendoWfc_InitGraphics
+NintendoWfc_InitGraphics: ; 0x022387D8
 	push {r4, lr}
 	add r4, r0, #0
-	bl ov72_02238124
-	bl ov72_02238164
+	bl NintendoWfc_SetGfxBanks
+	bl NintendoWfc_InitObjTransfer
 	add r0, r4, #0
-	bl ov72_02238194
+	bl NintendoWfc_InitSpriteResources
 	add r0, r4, #0
-	bl ov72_02238408
-	ldr r0, _022387FC ; =ov72_022380FC
+	bl NintendoWfc_CreateSprites
+	ldr r0, _022387FC ; =NintendoWfc_VBlankCB
 	add r1, r4, #0
 	bl Main_SetVBlankIntrCB
 	pop {r4, pc}
 	nop
-_022387FC: .word ov72_022380FC
-	thumb_func_end ov72_022387D8
+_022387FC: .word NintendoWfc_VBlankCB
+	thumb_func_end NintendoWfc_InitGraphics
 
 
-	thumb_func_start ov72_02238800
-ov72_02238800: ; 0x02238800
+	thumb_func_start NintendoWfc_FreeGraphics
+NintendoWfc_FreeGraphics: ; 0x02238800
 	push {r3, r4, r5, r6, r7, lr}
 	add r6, r0, #0
 	ldr r0, _02238854 ; =0x00000D34
@@ -267,15 +267,15 @@ _0223885C: .word 0x00000D38
 _02238860: .word 0x00000D48
 _02238864: .word 0x00000D24
 _02238868: .word 0x00000BF8
-	thumb_func_end ov72_02238800
+	thumb_func_end NintendoWfc_FreeGraphics
 
 
-	thumb_func_start ov72_0223886C
-ov72_0223886C: ; 0x0223886C
+	thumb_func_start NintendoWfc_SessionInit
+NintendoWfc_SessionInit: ; 0x0223886C
 	push {r3, r4, lr}
 	sub sp, #0xc
 	add r4, r0, #0
-	bl ov72_02239040
+	bl NintendoWfc_InitStrings
 	mov r0, #8
 	str r0, [sp]
 	mov r1, #1
@@ -287,11 +287,11 @@ ov72_0223886C: ; 0x0223886C
 	add r3, r0, #0
 	bl BeginNormalPaletteFade
 	ldr r0, [r4, #4]
-	bl ov72_022389C8
+	bl NintendoWfc_InitBgs
 	add r0, r4, #0
-	bl ov72_02238BEC
+	bl NintendoWfc_LoadBgGraphics
 	add r0, r4, #0
-	bl ov72_02238EE4
+	bl NintendoWfc_AddWindows
 	mov r0, #1
 	add r1, r0, #0
 	bl GfGfx_EngineATogglePlanes
@@ -340,13 +340,13 @@ ov72_0223886C: ; 0x0223886C
 	add r0, r4, #0
 	ldr r1, [r4, r1]
 	add r3, r2, #0
-	bl ov72_0223A350
+	bl NintendoWfc_PrintMessage
 	add r0, r4, #0
 	mov r1, #0x2f
 	mov r2, #2
-	bl ov72_02238680
+	bl NintendoWfc_SetState
 	add r0, r4, #0
-	bl ov72_0223A420
+	bl NintendoWfc_ShowWaitingIcon
 	b _0223893A
 _02238922:
 	mov r0, #4
@@ -368,17 +368,17 @@ _0223893A:
 _02238940: .word 0x00000F4C
 _02238944: .word 0x00000F0F
 _02238948: .word 0x00000BD8
-	thumb_func_end ov72_0223886C
+	thumb_func_end NintendoWfc_SessionInit
 
 
-	thumb_func_start ov72_0223894C
-ov72_0223894C: ; 0x0223894C
+	thumb_func_start NintendoWfc_SessionMain
+NintendoWfc_SessionMain: ; 0x0223894C
 	push {r3, r4, r5, lr}
 	add r5, r0, #0
-	bl ov72_022387C4
+	bl NintendoWfc_GetWifiIconLevel
 	bl sub_0203A930
 	ldr r4, [r5, #0x1c]
-	ldr r1, _02238978 ; =ov72_0223B660
+	ldr r1, _02238978 ; =sNintendoWfcStates
 	lsl r2, r4, #2
 	ldr r1, [r1, r2]
 	add r0, r5, #0
@@ -395,12 +395,12 @@ ov72_0223894C: ; 0x0223894C
 _02238976:
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-_02238978: .word ov72_0223B660
-	thumb_func_end ov72_0223894C
+_02238978: .word sNintendoWfcStates
+	thumb_func_end NintendoWfc_SessionMain
 
 
-	thumb_func_start ov72_0223897C
-ov72_0223897C: ; 0x0223897C
+	thumb_func_start NintendoWfc_SessionExit
+NintendoWfc_SessionExit: ; 0x0223897C
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, _022389C0 ; =0x00000FD8
@@ -415,11 +415,11 @@ ov72_0223897C: ; 0x0223897C
 	str r1, [r4, r0]
 _02238996:
 	add r0, r4, #0
-	bl ov72_02239098
+	bl NintendoWfc_FreeStrings
 	add r0, r4, #0
-	bl ov72_02238FFC
+	bl NintendoWfc_RemoveWindows
 	ldr r0, [r4, #4]
-	bl ov72_02238AEC
+	bl NintendoWfc_FreeBgs
 	ldr r0, _022389C4 ; =0x00000FDC
 	mov r1, #0
 	str r1, [r4, r0]
@@ -435,14 +435,14 @@ _022389BA:
 	nop
 _022389C0: .word 0x00000FD8
 _022389C4: .word 0x00000FDC
-	thumb_func_end ov72_0223897C
+	thumb_func_end NintendoWfc_SessionExit
 
 
-	thumb_func_start ov72_022389C8
-ov72_022389C8: ; 0x022389C8
+	thumb_func_start NintendoWfc_InitBgs
+NintendoWfc_InitBgs: ; 0x022389C8
 	push {r4, r5, lr}
 	sub sp, #0x8c
-	ldr r5, _02238AD8 ; =ov72_0223B42C
+	ldr r5, _02238AD8 ; =sNintendoWfcBgTemplate_Main0
 	add r4, r0, #0
 	ldmia r5!, {r0, r1}
 	add r3, sp, #0x70
@@ -464,7 +464,7 @@ ov72_022389C8: ; 0x022389C8
 	add r0, r4, #0
 	mov r1, #0
 	bl BgClearTilemapBufferAndCommit
-	ldr r5, _02238ADC ; =ov72_0223B410
+	ldr r5, _02238ADC ; =sNintendoWfcBgTemplate_Main1
 	add r3, sp, #0x54
 	ldmia r5!, {r0, r1}
 	add r2, r3, #0
@@ -482,7 +482,7 @@ ov72_022389C8: ; 0x022389C8
 	mov r0, #2
 	mov r1, #0
 	bl GfGfx_EngineATogglePlanes
-	ldr r5, _02238AE0 ; =ov72_0223B448
+	ldr r5, _02238AE0 ; =sNintendoWfcBgTemplate_Sub0
 	add r3, sp, #0x38
 	ldmia r5!, {r0, r1}
 	add r2, r3, #0
@@ -503,7 +503,7 @@ ov72_022389C8: ; 0x022389C8
 	add r0, r4, #0
 	mov r1, #4
 	bl BgClearTilemapBufferAndCommit
-	ldr r5, _02238AE4 ; =ov72_0223B3D8
+	ldr r5, _02238AE4 ; =sNintendoWfcBgTemplate_Sub1
 	add r3, sp, #0x1c
 	ldmia r5!, {r0, r1}
 	add r2, r3, #0
@@ -521,7 +521,7 @@ ov72_022389C8: ; 0x022389C8
 	mov r0, #2
 	mov r1, #0
 	bl GfGfx_EngineBTogglePlanes
-	ldr r5, _02238AE8 ; =ov72_0223B3F4
+	ldr r5, _02238AE8 ; =sNintendoWfcBgTemplate_Sub2
 	add r3, sp, #0
 	ldmia r5!, {r0, r1}
 	add r2, r3, #0
@@ -560,9 +560,9 @@ ov72_022389C8: ; 0x022389C8
 	add sp, #0x8c
 	pop {r4, r5, pc}
 	nop
-_02238AD8: .word ov72_0223B42C
-_02238ADC: .word ov72_0223B410
-_02238AE0: .word ov72_0223B448
-_02238AE4: .word ov72_0223B3D8
-_02238AE8: .word ov72_0223B3F4
-	thumb_func_end ov72_022389C8
+_02238AD8: .word sNintendoWfcBgTemplate_Main0
+_02238ADC: .word sNintendoWfcBgTemplate_Main1
+_02238AE0: .word sNintendoWfcBgTemplate_Sub0
+_02238AE4: .word sNintendoWfcBgTemplate_Sub1
+_02238AE8: .word sNintendoWfcBgTemplate_Sub2
+	thumb_func_end NintendoWfc_InitBgs

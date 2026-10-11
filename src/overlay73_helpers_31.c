@@ -111,7 +111,7 @@ int ov73_021E99D4(void *p) {
 }
 
 int ov73_021E9A3C(void *p) {
-    ov72_02237BD0(PTR(p, 0x94), PTR(p, 0x9c), (u8 *)p + 0xa0);
+    NintendoWfcHttp_RequestDownload(PTR(p, 0x94), PTR(p, 0x9c), (u8 *)p + 0xa0);
     U32(p, 0x1c) = 0x25;
     U32(p, 0xf94) = 0;
     ov73_021EA15C(p);

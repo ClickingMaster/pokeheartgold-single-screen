@@ -12,10 +12,10 @@ typedef struct BillboardGfxSequence {
     u32 seqCount;
 } BillboardGfxSequence;
 
-BillboardTexPlttIndex sub_02026DE0(const BillboardGfxSequence *gfxSequence, const u16 index);
-void sub_02026E18(const void *data, BillboardGfxSequence *gfxSequence);
+BillboardTexPlttIndex BillboardGfxSequence_GetTexPlttIndex(const BillboardGfxSequence *gfxSequence, const u16 index);
+void BillboardGfxSequence_Init(const void *data, BillboardGfxSequence *gfxSequence);
 
-BillboardTexPlttIndex sub_02026DE0(const BillboardGfxSequence *gfxSequence, const u16 index) {
+BillboardTexPlttIndex BillboardGfxSequence_GetTexPlttIndex(const BillboardGfxSequence *gfxSequence, const u16 index) {
     int i;
     for (i = 0; i < gfxSequence->seqCount - 1; i++) {
         if (gfxSequence->startFrame[i + 1] > index) {
@@ -29,7 +29,7 @@ BillboardTexPlttIndex sub_02026DE0(const BillboardGfxSequence *gfxSequence, cons
     return outIndexes;
 }
 
-void sub_02026E18(const void *data, BillboardGfxSequence *gfxSequence) {
+void BillboardGfxSequence_Init(const void *data, BillboardGfxSequence *gfxSequence) {
     const u8 *u8DataPtr = data;
     gfxSequence->seqCount = *((u32 *)u8DataPtr);
     u8DataPtr += sizeof(u32);

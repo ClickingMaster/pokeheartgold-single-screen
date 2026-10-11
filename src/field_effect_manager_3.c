@@ -15,7 +15,7 @@ void *sub_020237EC(const FieldEffectAnimReq *req);
 void sub_02023874(void *a0);
 void *sub_02023D44(const FieldEffectModelReq *req);
 NNSG3dResMdl *sub_02023F90(void *a0);
-void sub_02026E18(void *a0, FieldEffectMtx *out);
+void BillboardGfxSequence_Init(void *a0, FieldEffectMtx *out);
 void *ov01_021FC4C4(enum HeapID heapID, int a1, int a2, int a3);
 void ov01_021FC520(void *a0);
 void *ov01_021FC5A4(void *a0, int a1);

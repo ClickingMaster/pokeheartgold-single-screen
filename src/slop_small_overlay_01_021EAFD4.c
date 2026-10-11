@@ -3,8 +3,8 @@
 #include "filesystem.h"
 #include "heap.h"
 
-extern u32 sub_020208DC(void *a0, void *a1);
-extern u32 sub_020209E0(void *a0, void *a1);
+extern u32 Texture_GetImageVramOffsetByName(void *a0, void *a1);
+extern u32 Texture_GetImageSizeByName(void *a0, void *a1);
 extern int sprintf(char *str, const char *format, ...);
 
 typedef struct {
@@ -41,11 +41,11 @@ int ov01_021EB058(UnkStruct_ov01_021EAFD4 *work, void *a1, int memberIdx, NARC *
     if (slot == 16 || a1 == NULL) {
         return -1;
     }
-    work->entries[slot].unk0 = sub_020208DC(a1, (u8 *)work->unk4 + 4 + memberIdx * 0x34);
+    work->entries[slot].unk0 = Texture_GetImageVramOffsetByName(a1, (u8 *)work->unk4 + 4 + memberIdx * 0x34);
     if (work->entries[slot].unk0 == 0) {
         return -1;
     }
-    work->entries[slot].unk4 = sub_020209E0(a1, (u8 *)work->unk4 + 4 + memberIdx * 0x34);
+    work->entries[slot].unk4 = Texture_GetImageSizeByName(a1, (u8 *)work->unk4 + 4 + memberIdx * 0x34);
     sprintf(buf, ov01_02209898, memberIdx);
     work->entries[slot].unk10 = (u8 *)work->unk4 + 4 + memberIdx * 0x34;
     work->entries[slot].unkc = NARC_AllocAndReadWholeMember(narc, memberIdx + 1, HEAP_ID_FIELD1);

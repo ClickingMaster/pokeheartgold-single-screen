@@ -8,8 +8,8 @@
 .public SysTask_SetFunc
 .public SysTask_GetData
 .public SysTask_GetPriority
-.public sub_0201F990
-.public sub_0201FA34
+.public GF3d_ModelBoxTest
+.public GF3d_BoundsBoxTest
 .public GF_AssertFail
 .public NNS_G3dGlbFlushP
 .public NNS_G3dGlbSetBaseTrans

@@ -51,16 +51,16 @@ void NNSi_G3dGetJointScaleBasic(MdlJointResult*,const fx32*,const u8*,u32);
 void NNSi_G3dGetJointScaleMaya(MdlJointResult*,const fx32*,const u8*,u32);
 void NNSi_G3dGetJointScaleSi3d(MdlJointResult*,const fx32*,const u8*,u32);
 /* These ASM-owned aliases are interior positions in ONE 1536-byte backing. */
-extern MdlScaleCache _021DB504;
-extern fx32 _021DB508[383],_021DB50C[382];
-extern MdlScaleTriple _021DB510[127];
-extern fx32 _021DB514[380],_021DB518[379];
+extern MdlScaleCache gScaleCache;
+extern fx32 gScaleCacheScaleY[383],gScaleCacheScaleZ[382];
+extern MdlScaleTriple gScaleCacheInvScale[127];
+extern fx32 gScaleCacheInvScaleY[380],gScaleCacheInvScaleZ[379];
 /* Preserve the old Si3d access qualifiers without qualifying Maya's accesses. */
-#define MdlCache504Vol ((volatile fx32 *)&_021DB504)
-#define MdlCache508Vol ((volatile fx32 *)_021DB508)
-#define MdlCache50CVol ((volatile fx32 *)_021DB50C)
-#define MdlCache510Vol ((volatile fx32 *)_021DB510)
-#define MdlCache514Vol ((volatile fx32 *)_021DB514)
-#define MdlCache518Vol ((volatile fx32 *)_021DB518)
+#define MdlCache504Vol ((volatile fx32 *)&gScaleCache)
+#define MdlCache508Vol ((volatile fx32 *)gScaleCacheScaleY)
+#define MdlCache50CVol ((volatile fx32 *)gScaleCacheScaleZ)
+#define MdlCache510Vol ((volatile fx32 *)gScaleCacheInvScale)
+#define MdlCache514Vol ((volatile fx32 *)gScaleCacheInvScaleY)
+#define MdlCache518Vol ((volatile fx32 *)gScaleCacheInvScaleZ)
 extern void *gSendJointSRTFuncs[3],*gSendTexSRTFuncs[4];
 #endif

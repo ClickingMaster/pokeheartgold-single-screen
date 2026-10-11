@@ -1,9 +1,9 @@
 #include "field_transition_tasks_internal.h"
 
 static const void *const sApplicationTemplate[] = {
-    ov45_02229EE0,
-    ov45_02229F70,
-    ov45_02229F94,
+    WiFiPlaza_Init,
+    WiFiPlaza_Main,
+    WiFiPlaza_Exit,
     &SDK_OVERLAY_OVY_45_ID,
 };
 

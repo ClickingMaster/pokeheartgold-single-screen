@@ -86,13 +86,13 @@
 	.public _02254A28
 	.public _02254E20
 	.public _022577C0
-	.public ov45_02229EE0
-	.public ov45_02229F70
-	.public ov45_02229F94
-	.public ov45_02229FE0
-	.public ov45_02229FF4
-	.public ov45_0222A0F0
-	.public ov45_0222A15C
+	.public WiFiPlaza_Init
+	.public WiFiPlaza_Main
+	.public WiFiPlaza_Exit
+	.public WiFiPlaza_VBlankTask
+	.public WiFiPlazaWork_New
+	.public WiFiPlazaWork_Delete
+	.public WiFiPlazaWork_Update
 	.public ov45_0222A208
 	.public ov45_0222A214
 	.public ov45_0222A230
@@ -201,10 +201,10 @@
 	.public ov45_0222B75C
 	.public ov45_0222B79C
 	.public ov45_0222B840
-	.public ov45_0222B8A0
+	.public WiFiPlazaProfile_InitFromSave
 	.public ov45_0222BA3C
-	.public ov45_0222BAC4
-	.public ov45_0222BADC
+	.public WiFiPlazaProfile_UpdateChecksum
+	.public WiFiPlazaProfile_IsChecksumValid
 	.public ov45_0222BB00
 	.public ov45_0222BB60
 	.public ov45_0222BC3C
@@ -259,8 +259,8 @@
 	.public ov45_0222C900
 	.public ov45_0222C944
 	.public ov45_0222C95C
-	.public ov45_0222C978
-	.public ov45_0222C994
+	.public WiFiPlazaWordSet_Init
+	.public WiFiPlazaWordSet_Free
 	.public ov45_0222C9A0
 	.public ov45_0222C9D0
 	.public ov45_0222C9EC
@@ -278,10 +278,10 @@
 	.public ov45_0222CCB8
 	.public ov45_0222CCE4
 	.public ov45_0222CD04
-	.public ov45_0222CD1C
-	.public ov45_0222CD68
-	.public ov45_0222CD84
-	.public ov45_0222CD90
+	.public WiFiPlazaApps_New
+	.public WiFiPlazaApps_Delete
+	.public WiFiPlazaApps_StartFirst
+	.public WiFiPlazaApps_Run
 	.public ov45_0222CDC4
 	.public ov45_0222CDE4
 	.public ov45_0222CE0C
@@ -639,7 +639,7 @@
 	.public ov45_0222CB3C
 	.public ov45_0222CB40
 	.public ov45_0222CCDC
-	.public ov45_0222CDC0
+	.public WiFiPlazaApps_VBlank
 	.public ov45_0222D448
 	.public ov45_0222D8BC
 	.public ov45_0222DCE8

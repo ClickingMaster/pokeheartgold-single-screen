@@ -103,7 +103,7 @@ void ov73_021E841C(void *, void *);
 
 int ov73_021E8FB0(void *p) {
     sub_0203189C(PTR(PTR(p, 0), 0xc), (u8 *)p + 0xf24);
-    ov72_02237CF4((u8 *)p + 0xf24, (u8 *)p + 0xf88);
+    NintendoWfcHttp_RequestSetProfile((u8 *)p + 0xf24, (u8 *)p + 0xf88);
     U32(p, 0x1c) = 0xa;
     U32(p, 0xf94) = 0;
     return 3;

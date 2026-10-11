@@ -23,10 +23,10 @@ extern void GF_AssertFail(void);
 extern void *NARC_New(u32, u32);
 extern void NARC_Delete(void *);
 extern void *NARC_AllocAndReadWholeMember(void *, u32, u32);
-extern void *sub_02020838(void *, u32);
+extern void *Texture_GetImageData(void *, u32);
 extern void GF_CreateNewVramTransferTask(u32, void *, void *, void *);
-extern void *sub_020208DC(void *, void *);
-extern void *sub_020209E0(void *, void *);
+extern void *Texture_GetImageVramOffsetByName(void *, void *);
+extern void *Texture_GetImageSizeByName(void *, void *);
 extern int sprintf(char *, const char *, ...);
 extern const char ov01_02209898[];
 

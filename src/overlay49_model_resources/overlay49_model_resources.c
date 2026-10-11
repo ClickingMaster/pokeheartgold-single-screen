@@ -7,7 +7,7 @@
 #include "gf_gfx_loader.h"
 #include "heap.h"
 #include "overlay_42.h"
-#include "unk_0201F990.h"
+#include "model_box_test.h"
 
 typedef struct ModelInstance {
     NNSG3dRenderObj render;
@@ -77,7 +77,7 @@ BOOL ov49_022588A0(Ov49Model *model, ModelInstance *instance) {
     MTX_Concat33(&part, &rotation, &rotation);
     MTX_RotY33_(&part, FX_SinIdx(y), FX_CosIdx(y));
     MTX_Concat33(&part, &rotation, &rotation);
-    return sub_0201F990(model->model, &position, &rotation, &scale);
+    return GF3d_ModelBoxTest(model->model, &position, &rotation, &scale);
 }
 
 Ov49Resource *ov49_02258958(enum HeapID heapId) {

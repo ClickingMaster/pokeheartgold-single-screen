@@ -6,7 +6,7 @@
 
 #include "field_system.h"
 #include "gf_3d_render.h"
-#include "unk_0201F990.h"
+#include "model_box_test.h"
 #include "geometry_math.h"
 #include "unk_02097268.h"
 
@@ -195,7 +195,7 @@ void ov01_021F3A3C(const VecFx32 *position, AreaDataManager *areaDataManager, BO
         translation = mapProp->translation;
         translation.x += position->x;
         translation.z += position->z;
-        if (!sub_0201F990(mapProp->render->model, &translation, &rotation, &mapProp->scale)) {
+        if (!GF3d_ModelBoxTest(mapProp->render->model, &translation, &rotation, &mapProp->scale)) {
             continue;
         }
         AreaDataManager_Sub8AC *r4 = ov01_021FB9F4(areaDataManager);

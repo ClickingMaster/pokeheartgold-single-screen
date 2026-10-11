@@ -26,7 +26,7 @@ typedef struct {
 extern SolBanks ov73_021EA6AC;
 void GfGfx_SetBanks(void *);
 void ov00_021ECB40(void);
-void ov72_022378DC(void);
+void NintendoWfcHttp_Update(void);
 int sub_02034DB8(void);
 extern void *_021EA940[];
 void *ov73_021E83F4(void *, u32, s32);

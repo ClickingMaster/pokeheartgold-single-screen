@@ -22,7 +22,7 @@ typedef struct Ov45Unk {
 } Ov45Unk;
 
 u32 ov45_0222EC68(void *obj);
-BOOL ov45_0222BADC(void *a0, u32 a1);
+BOOL WiFiPlazaProfile_IsChecksumValid(void *a0, u32 a1);
 BOOL ov45_0222A920(void *a0);
 BOOL ov45_0222AFF8(Ov45Unk *data);
 BOOL ov45_0222B048(Ov45Unk *data, u32 id);
@@ -37,7 +37,7 @@ void ov45_0222C688(void *obj, u16 *cmd, void *unused, Ov45Unk *data) {
     BOOL a;
     BOOL b;
 
-    if (ov45_0222BADC(data->unk108, data->unk0) == FALSE) {
+    if (WiFiPlazaProfile_IsChecksumValid(data->unk108, data->unk0) == FALSE) {
         data->unk52C = 1;
     }
     a = ov45_0222A920(data->unk128);

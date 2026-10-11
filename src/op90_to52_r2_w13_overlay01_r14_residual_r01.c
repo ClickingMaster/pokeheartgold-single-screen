@@ -44,7 +44,7 @@ u32 MapObject_GetSpriteID(void *object);
 u8 ov01_021FA28C(u32 sprite);
 u8 ov01_021FA2A0(u32 sprite);
 u32 ov01_021FA2AC(u32 sprite);
-void sub_02026E18(void *model, void *anim);
+void BillboardGfxSequence_Init(void *model, void *anim);
 int GetMoveModelNoBySpriteId(u32 sprite);
 void sub_02023E2C(void *resource, void *model, NNSG3dResTex *tex, u32 a3, void *anim);
 VecFx32 *sub_02023E68(void *obj);
@@ -128,7 +128,7 @@ void ov01_021FA97C(void *object, int mode) {
     } while (p->sprite != 0xff);
     GF_ASSERT(p->sprite != 0xff);
     w->modelB = FldObjSys_ReadMModelFromNarc(system, p->model, 0);
-    sub_02026E18(w->modelB, w->anim);
+    BillboardGfxSequence_Init(w->modelB, w->anim);
     id = GetMoveModelNoBySpriteId(sprite);
     if (id < 0) {
         GF_AssertFail();

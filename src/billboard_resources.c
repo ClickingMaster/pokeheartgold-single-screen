@@ -9,8 +9,8 @@ extern BillboardListManager _021D2208;
 
 void sub_02023694(Billboard *billboard);
 void sub_020236BC(BillboardObject *object);
-void *sub_0202068C(int count, enum HeapID heapId);
-void sub_020206C8(void *arg);
+void *TextureAnimationPool_New(int count, enum HeapID heapId);
+void TextureAnimationPool_Free(void *arg);
 Billboard *sub_020237EC(BillboardCreateParams *params);
 BOOL sub_02023874(Billboard *billboard);
 BOOL sub_020238BC(Billboard *billboard);
@@ -37,8 +37,8 @@ void sub_02023CF0(BillboardObject *object, BillboardResource *resource);
 void sub_02023D24(BillboardObject *object, BillboardResource *resource);
 NNSG3dResMdlSet *sub_02024328(BillboardResource *resource, NNSG3dResMdl **model, NNSG3dResTex **texture);
 void *sub_02024374(BillboardResource *resource);
-void *sub_020206E0(void *ctx, BillboardResourceData *resourceData, void *resourceHeader, NNSG3dTexKey texKey, NNSG3dPlttKey paletteKey, u32 unkB8);
-void sub_02020738(void *arg);
+void *TextureAnimationPool_Add(void *ctx, BillboardResourceData *resourceData, void *resourceHeader, NNSG3dTexKey texKey, NNSG3dPlttKey paletteKey, u32 unkB8);
+void TextureAnimation_Remove(void *arg);
 BillboardObject *sub_02023D44(BillboardObjectCreateParams *params);
 BOOL sub_02023DA4(BillboardObject *object);
 BillboardObject *sub_02024280(Billboard *billboard);
@@ -63,7 +63,7 @@ Billboard *sub_020237EC(BillboardCreateParams *params) {
     sub_02024248(billboard);
     billboard->allocator = Heap_Alloc(params->heapId, sizeof(NNSFndAllocator));
     HeapExp_FndInitAllocator(billboard->allocator, params->heapId, 4);
-    billboard->unk_DC = sub_0202068C(params->count, params->heapId);
+    billboard->unk_DC = TextureAnimationPool_New(params->count, params->heapId);
     return billboard;
 }
 
@@ -77,7 +77,7 @@ BOOL sub_02023874(Billboard *billboard) {
         Heap_Free(billboard->objects);
         Heap_Free(billboard->unk_D0);
         Heap_Free(billboard->allocator);
-        sub_020206C8(billboard->unk_DC);
+        TextureAnimationPool_Free(billboard->unk_DC);
         sub_02023694(billboard);
     }
     return TRUE;
@@ -251,7 +251,7 @@ BOOL sub_02023BA4(NNSG3dResTex *a, NNSG3dResTex *b) {
 
 void sub_02023C04(Billboard *billboard, BillboardObject *object) {
     if (object->unk_B0 != NULL) {
-        sub_02020738(object->unk_B0);
+        TextureAnimation_Remove(object->unk_B0);
         object->unk_B0 = NULL;
     }
 }
@@ -280,7 +280,7 @@ void sub_02023C9C(Billboard *billboard, BillboardObject *object, BillboardResour
     register Billboard *parent = billboard;
     obj->resourceHeader = sub_02024374(res);
     obj->resourceData = res->data;
-    obj->unk_B0 = sub_020206E0(parent->unk_DC, &obj->resourceData, obj->resourceHeader, obj->texKey, obj->paletteKey, obj->unk_B8);
+    obj->unk_B0 = TextureAnimationPool_Add(parent->unk_DC, &obj->resourceData, obj->resourceHeader, obj->texKey, obj->paletteKey, obj->unk_B8);
 }
 
 void sub_02023CF0(BillboardObject *object, BillboardResource *resource) {

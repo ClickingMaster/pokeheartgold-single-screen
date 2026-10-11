@@ -5,7 +5,7 @@
 typedef void (*To91TexCalc41566)(void *,void *);
 typedef void (*To91TexSend41566)(void *);
 extern To91TexSend41566 gSendTexSRTFuncs[];
-extern To91TexCalc41566 _02110C5C[];
+extern To91TexCalc41566 gTexMtxCalcFuncsXsi[];
 void texmtxCalc_flagR___xsi(void *,void *);
 void NNSi_G3dSendTexSRTXsi(void *);
 #define To91TexWord41566(p,offset) (*(const u32*)((const u8*)(p)+(offset)))

@@ -12,8 +12,8 @@
 .public Heap_Free
 .public GF_CreateNewVramTransferTask
 .public GF_GetNumPendingVramTransferTasks
-.public sub_02020838
-.public sub_02020888
+.public Texture_GetImageData
+.public Texture_GetPaletteData
 .public sub_02023E78
 .public sub_02023EC8
 .public sub_02023EE0
@@ -21,7 +21,7 @@
 .public sub_02023FA0
 .public sub_02023FB0
 .public GF_AssertFail
-.public sub_02026E18
+.public BillboardGfxSequence_Init
 .public ScriptReadHalfword
 .public FieldSystem_VarGet
 .public TaskManager_Call

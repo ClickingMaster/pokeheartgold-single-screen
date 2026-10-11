@@ -8,7 +8,7 @@
 #include "overlay_01.h"
 #include "overlay_02.h"
 #include "overlay_03.h"
-#include "overlay_108.h"
+#include "safari_area_customizer.h"
 #include "safari_zone.h"
 #include "scrcmd.h"
 #include "unk_0205FD20.h"

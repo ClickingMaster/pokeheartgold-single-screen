@@ -91,7 +91,7 @@ BOOL ov01_02205D68(void *);
 BOOL ov01_022060B8(void *, u32, u32);
 extern void *sub_0205F1A0(void *);
 extern Overlay01FlagData *ov01_021FC5A4(void *, u32);
-extern void sub_02026E18(void *, void *);
+extern void BillboardGfxSequence_Init(void *, void *);
 extern void *MapObject_GetManager(void *);
 extern void *TaskManager_GetFieldSystem(void *);
 extern u32 *TaskManager_GetStatePtr(void *);

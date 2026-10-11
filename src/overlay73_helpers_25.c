@@ -102,7 +102,7 @@ void *ov73_021E83F4(void *, u32, s32);
 void ov73_021E841C(void *, void *);
 
 int ov73_021E9120(void *p) {
-    ov72_02237B80(PTR(p, 0x94));
+    NintendoWfcHttp_RequestRoomCount(PTR(p, 0x94));
     U32(p, 0x1c) = 0xc;
     U32(p, 0xf94) = 0;
     ov73_021EA15C(p);

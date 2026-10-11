@@ -133,16 +133,16 @@ BOOL ov01_02203BB4(void *a0, Ov01_02203A18_Inst *inst) {
     u32 idx = (u32)sub_02068D90(a0);
     inst->unk40.unk18 = ov01_021F14B4(inst->unk30.unk0, ov01_02209544[idx].unk0, 1);
     inst->unk40.unk14 = ov01_021F14B4(inst->unk30.unk0, ov01_02209544[idx].unk4, 1);
-    sub_02026E18(inst->unk40.unk14, &inst->unk40);
+    BillboardGfxSequence_Init(inst->unk40.unk14, &inst->unk40);
     inst->unk40.unk10 = NNS_G3dGetTex((const NNSG3dResFileHeader *)inst->unk40.unk18);
     inst->unk40.unk24 = 0;
     inst->unk40.unk26 = 0;
     NNSG3dResTex *tex = ov01_021F1AD4(inst->unk30.unk0, 0xd);
-    inst->unk40.unk20 = sub_020209AC(tex, 0);
-    inst->unk40.unk1C = sub_02020910(tex, 0);
-    GF_CreateNewVramTransferTask((NNS_GFD_DST_TYPE)0, inst->unk40.unk1C, sub_02020838(inst->unk40.unk10, 0), inst->unk40.unk20);
+    inst->unk40.unk20 = Texture_GetImageSizeByIndex(tex, 0);
+    inst->unk40.unk1C = Texture_GetImageVramOffsetByIndex(tex, 0);
+    GF_CreateNewVramTransferTask((NNS_GFD_DST_TYPE)0, inst->unk40.unk1C, Texture_GetImageData(inst->unk40.unk10, 0), inst->unk40.unk20);
     u32 plttAddr = NNS_GfdGetTexKeyAddr(tex->plttInfo.vramKey);
-    GF_CreateNewVramTransferTask((NNS_GFD_DST_TYPE)1, plttAddr, sub_02020888(inst->unk40.unk10, 0), 0x20);
+    GF_CreateNewVramTransferTask((NNS_GFD_DST_TYPE)1, plttAddr, Texture_GetPaletteData(inst->unk40.unk10, 0), 0x20);
     sub_02068DB8(a0, &position);
     inst->unk3C = ov01_02203B98(inst->unk30.unk0, &position);
     sub_02023EA4(inst->unk3C, 0);
@@ -228,7 +228,7 @@ BOOL ov01_02203DF8(Ov01_02203A18_TexAnim *anim) {
         if (anim->unk26 >= anim->unkC) {
             return TRUE;
         }
-        GF_CreateNewVramTransferTask((NNS_GFD_DST_TYPE)0, anim->unk1C, sub_02020838(anim->unk10, anim->unk4[anim->unk26]), anim->unk20);
+        GF_CreateNewVramTransferTask((NNS_GFD_DST_TYPE)0, anim->unk1C, Texture_GetImageData(anim->unk10, anim->unk4[anim->unk26]), anim->unk20);
     }
     return FALSE;
 }

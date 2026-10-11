@@ -54,9 +54,9 @@ extern int ov45_0222A920();
 extern int ov45_0222AADC();
 extern int ov45_0222AAC8();
 extern void ov45_0222C8C8();
-extern int ov45_0222BADC();
+extern int WiFiPlazaProfile_IsChecksumValid();
 extern void ov45_0222BB00();
-extern void ov45_0222BAC4();
+extern void WiFiPlazaProfile_UpdateChecksum();
 extern int ov45_0222CC50();
 extern int ov45_0222CC7C();
 extern void ov45_0222E9F8();
@@ -93,8 +93,8 @@ void ov45_0222B75C(const u8 *, int, Ov45State *);
 void ov45_0222B79C(u8 *, u8 *);
 void ov45_0222B840(Ov45State *);
 void ov45_0222BA3C(Ov45State *);
-void ov45_0222BAC4(u8 *, void *);
-BOOL ov45_0222BADC(u8 *, void *);
+void WiFiPlazaProfile_UpdateChecksum(u8 *, void *);
+BOOL WiFiPlazaProfile_IsChecksumValid(u8 *, void *);
 void ov45_0222BB00(u8 *, const u8 *, u32);
 
 #endif // OVERLAY45_LOBBY_STATE_R15_PRIVATE_H

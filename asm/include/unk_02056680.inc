@@ -58,6 +58,6 @@
 .public Field_PlayerAvatar_OrrTransitionFlags
 .public Field_PlayerAvatar_ApplyTransitionFlags
 .public ov01_02205790
-.public ov45_02229EE0
-.public ov45_02229F70
-.public ov45_02229F94
+.public WiFiPlaza_Init
+.public WiFiPlaza_Main
+.public WiFiPlaza_Exit

@@ -10,7 +10,7 @@ void ov45_0222B840(Ov45State *state) {
     }
 }
 
-void ov45_0222B8A0(u8 *dst, void *save, int heapId) {
+void WiFiPlazaProfile_InitFromSave(u8 *dst, void *save, int heapId) {
     void *profile;
     void *party;
     void *history;
@@ -74,7 +74,7 @@ void ov45_0222B8A0(u8 *dst, void *save, int heapId) {
     }
     *(s32 *)&dst[0xac] = -1;
     *(u32 *)&dst[0xb0] = 3;
-    ov45_0222BAC4(dst, save);
+    WiFiPlazaProfile_UpdateChecksum(dst, save);
 }
 
 void ov45_0222BA3C(Ov45State *state) {
@@ -82,7 +82,7 @@ void ov45_0222BA3C(Ov45State *state) {
     u8 *p = state->data;
     int offset = 0x4bc;
     u8 *dst;
-    if (ov45_0222BADC(&p[0x108], *(void **)p) == 0) {
+    if (WiFiPlazaProfile_IsChecksumValid(&p[0x108], *(void **)p) == 0) {
         *(u32 *)&p[0x52c] = 1;
         return;
     }
@@ -97,5 +97,5 @@ void ov45_0222BA3C(Ov45State *state) {
     MI_CpuCopy8(&p[0x118], &p[0x130], 16);
     ov45_0222E9F8(&p[0x128]);
     MI_CpuCopy8(&p[0x108], &p[0x130], 16);
-    ov45_0222BAC4(&p[0x108], *(void **)p);
+    WiFiPlazaProfile_UpdateChecksum(&p[0x108], *(void **)p);
 }

@@ -45,7 +45,7 @@ void ov45_0222C3A8(u32 *);
 void *ov45_0222CB3C(Overlay45State *);
 void *ov45_0222CB40(Overlay45State *);
 u16 ov45_0222CCDC(u8 *);
-void ov45_0222CDC0(void);
+void WiFiPlazaApps_VBlank(void);
 
 void MI_CpuCopy8(const void *, void *, u32);
 void ov45_0222DE58(void *);
@@ -96,5 +96,5 @@ int ov45_02230994(u8 *);
 void *ov45_022309C4(int, void *);
 u32 ov45_02230A58(u8 *);
 
-void ov45_0222CDC0(void) {
+void WiFiPlazaApps_VBlank(void) {
 }

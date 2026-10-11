@@ -128,6 +128,6 @@ void *NNS_FndAllocFromAllocator(NNSFndAllocator *pAllocator, u32 size);
 typedef struct NNSG3dMatAnmResult NNSG3dMatAnmResult;
 typedef void (*NNSG3dFuncAnmMat)(NNSG3dMatAnmResult *, const NNSG3dAnmObj *, u32);
 // void NNSi_G3dAnmCalcNsBta(NNSG3dMatAnmResult *pResult, const NNSG3dAnmObj *pAnmObj, u32 dataIdx);
-extern NNSG3dFuncAnmMat _02110A0C; // NNS_G3dFuncAnmMatNsBtaDefault = &NNSi_G3dAnmCalcNsBta
+extern NNSG3dFuncAnmMat gAnmCalcFuncNsBta; // NNS_G3dFuncAnmMatNsBtaDefault = &NNSi_G3dAnmCalcNsBta
 
 #endif // POKEHEARTGOLD_FIELD_OVERLAY_01_02204004_H

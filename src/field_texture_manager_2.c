@@ -19,7 +19,7 @@ void FieldTextureManager_Free(FieldTextureManagerPrivate *manager) {
                     slot->frame = 0;
                 }
                 entry = (u8 *)slot->record + slot->frame * 2;
-                GF_CreateNewVramTransferTask(0, slot->textureData, sub_02020838(slot->texture, entry[0x10]), slot->paletteData);
+                GF_CreateNewVramTransferTask(0, slot->textureData, Texture_GetImageData(slot->texture, entry[0x10]), slot->paletteData);
             } else {
                 slot->timer++;
             }
