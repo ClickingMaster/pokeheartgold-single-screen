@@ -173,7 +173,7 @@ _02039D04: .word sub_02038EB0
 sub_02039D08: ; 0x02039D08
 	push {r4, lr}
 	mov r4, #1
-	bl ov45_0222E6C8
+	bl WiFiPlazaLobbyClient_Update
 	cmp r0, #4
 	bhi _02039D34
 	add r0, r0, r0

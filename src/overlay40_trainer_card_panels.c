@@ -23,7 +23,7 @@ void ov40_02240E28(void *p, int msgId, int unused) {
         void *name;
         void *s;
         str = String_New(0xFF, 0x6D);
-        s = sub_020315B8(v, 0x6D);
+        s = FrontierCard_NewNameString(v, 0x6D);
         ov40_02230DCC(p, s);
         name = NewString_ReadMsgData(PTR(p, 0x48), msgId);
         BufferString(fmt, 0, s, 0, 1, 2);
@@ -50,7 +50,7 @@ void ov40_02240F24(void *p, int msgId, int idx) {
         void *name;
         void *s;
         str = String_New(0xFF, 0x6D);
-        s = sub_020315B8(v, 0x6D);
+        s = FrontierCard_NewNameString(v, 0x6D);
         ov40_02230DCC(p, s);
         name = NewString_ReadMsgData(PTR(p, 0x48), msgId);
         BufferString(fmt, 0, s, 0, 1, 2);
@@ -64,7 +64,7 @@ void ov40_02240F24(void *p, int msgId, int idx) {
         void *name;
         void *s;
         str = String_New(0xFF, 0x6D);
-        s = sub_020315B8(v, 0x6D);
+        s = FrontierCard_NewNameString(v, 0x6D);
         ov40_02230DCC(p, s);
         name = NewString_ReadMsgData(PTR(p, 0x48), msgId);
         BufferString(fmt, 0, s, 0, 1, 2);

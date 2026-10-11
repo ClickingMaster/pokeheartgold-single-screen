@@ -5391,7 +5391,7 @@ ov40_0224085C: ; 0x0224085C
 	lsl r1, r1, #4
 	ldr r4, [r0, r1]
 	mov r0, #0x6d
-	bl sub_020314A4
+	bl FrontierCard_New
 	add r1, r4, #0
 	add r1, #0x80
 	str r0, [r1]
@@ -5434,7 +5434,7 @@ ov40_022408AC: ; 0x022408AC
 	lsl r0, r0, #4
 	ldr r4, [r5, r0]
 	mov r0, #0x6d
-	bl sub_020314A4
+	bl FrontierCard_New
 	add r1, r4, #0
 	add r1, #0x80
 	str r0, [r1]
@@ -5490,7 +5490,7 @@ ov40_02240910: ; 0x02240910
 	bl BattleRecordHeader_Free
 	add r4, #0x80
 	ldr r0, [r4]
-	bl sub_020314BC
+	bl FrontierCard_Delete
 	pop {r4, pc}
 	thumb_func_end ov40_02240910
 

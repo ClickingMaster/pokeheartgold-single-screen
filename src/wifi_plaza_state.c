@@ -183,7 +183,7 @@ void WiFiPlaza_OnPlayerEnter(int id, WiFiPlazaPlayer *player, WiFiPlazaWork *wor
         WiFiPlazaProfile_UpdateChecksum(&work->profile, work->save);
         ov45_0222BA3C(work);
     } else {
-        country = ov45_0222EA78(id);
+        country = WiFiPlazaLobbyClient_GetOldestPlayer();
         region = ov45_0222EC68(id);
         ov45_0222D8C8(work->news, region, WiFiPlazaPlayer_GetGender(player), 0);
         if (country == id) {
@@ -216,7 +216,7 @@ void WiFiPlaza_OnPlayerEnter(int id, WiFiPlazaPlayer *player, WiFiPlazaWork *wor
 // Lobby callback: a player left the plaza.
 void WiFiPlaza_OnPlayerLeave(int id, WiFiPlazaWork *work) {
     int slot;
-    if (id == (s32)ov45_0222E9E0()) {
+    if (id == WiFiPlazaLobbyClient_GetOwnId()) {
         return;
     }
     slot = ov45_0222EC68(id);
@@ -224,7 +224,7 @@ void WiFiPlaza_OnPlayerLeave(int id, WiFiPlazaWork *work) {
         ov45_0222BD5C(&work->unk_1c0);
     }
     if (ov45_0222D8D4(work->news, slot) != 0) {
-        ov45_0222D8F0(work->news, ov45_0222EC68(ov45_0222EAD4(id)));
+        ov45_0222D8F0(work->news, ov45_0222EC68(WiFiPlazaLobbyClient_GetOldestOtherPlayer(id)));
     }
     ov45_0222C944(work->unk_3cc, slot, 0);
     ov45_0222BDE8(&work->unk_1c0, slot);

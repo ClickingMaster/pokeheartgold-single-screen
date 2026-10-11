@@ -67,13 +67,13 @@ void ov45_0222BE00(WiFiPlazaUnk1C0 *a0, int value) {
 void ov45_0222BE08(WiFiPlazaWork *work, int id, u16 value) {
     work->unk_1c0.unk_22 = 2;
     work->unk_1c0.unk_20 = value;
-    ov45_0222EF4C(1, id, &work->unk_1c0.unk_20, 4);
+    WiFiPlazaLobbyClient_SendToPlayer(1, id, &work->unk_1c0.unk_20, 4);
 }
 
 void ov45_0222BE28(WiFiPlazaWork *work, int id) {
     work->unk_1c0.unk_06 = 4;
     work->unk_1c0.unk_22 = 4;
-    ov45_0222EF4C(2, id, &work->unk_1c0.unk_20, 4);
+    WiFiPlazaLobbyClient_SendToPlayer(2, id, &work->unk_1c0.unk_20, 4);
 }
 
 void ov45_0222BE48(WiFiPlazaUnk1C0 *a0) {

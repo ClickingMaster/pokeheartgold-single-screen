@@ -239,13 +239,13 @@
 .public WiFiPlazaPlayer_CopyToProfile
 .public ov45_0222AB28
 .public ov45_0222D844
-.public ov45_0222E9E0
+.public WiFiPlazaLobbyClient_GetOwnId
 .public ov45_0222EC3C
 .public ov45_0222EC68
 .public ov45_0222EC7C
-.public ov45_0222EE50
-.public ov45_0222EEB8
-.public ov45_0222EFAC
+.public WiFiPlazaLobbyClient_SetChannelCommands
+.public WiFiPlazaLobbyClient_ClearChannelCommands
+.public WiFiPlazaLobbyClient_SendToChannel
 .public FootprintStamp_Init
 .public FootprintStamp_Main
 .public FootprintStamp_Exit

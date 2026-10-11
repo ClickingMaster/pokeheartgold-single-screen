@@ -3,7 +3,7 @@
 #define PTR(p, off) (*(void **)((u8 *)(p) + (off)))
 
 void BattleRecordHeader_Free(void *p);
-void sub_020314BC(void *p);
+void FrontierCard_Delete(void *p);
 void TouchHitboxController_IsTriggered(void *controller);
 void ClearWindowTilemapAndCopyToVram(void *window);
 void RemoveWindow(void *window);
@@ -45,7 +45,7 @@ void ov40_0223CD14(void *p);
 void ov40_0223A83C(void *p) {
     void *inner = PTR(p, 0x860);
     BattleRecordHeader_Free(PTR(inner, 0x224));
-    sub_020314BC(PTR(inner, 0x194));
+    FrontierCard_Delete(PTR(inner, 0x194));
 }
 
 int ov40_0223A85C(void *p) {

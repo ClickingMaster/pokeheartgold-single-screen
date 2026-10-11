@@ -33,7 +33,7 @@ void ov45_0222A520(void *lobby, int a1);
 void ov45_0222A4A8(void *lobby);
 u32 ov45_0222A330(void *lobby);
 BOOL ov45_0222D844(void);
-void ov45_0222EEB8(void);
+void WiFiPlazaLobbyClient_ClearChannelCommands(void);
 void HBlankInterruptDisable(void);
 int GetUserFrameGfx2PaletteMember(int frame);
 
@@ -253,7 +253,7 @@ BOOL FootprintStamp_Main(OverlayManager *man, int *state) {
         }
         break;
     default:
-        ov45_0222EEB8();
+        WiFiPlazaLobbyClient_ClearChannelCommands();
         return TRUE;
     }
     FootprintStamp_UpdateSelectEffects(work);

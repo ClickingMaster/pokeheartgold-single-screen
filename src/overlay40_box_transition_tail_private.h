@@ -145,7 +145,7 @@ void ov40_0222BF64(void *, u32, u32, void *);
 void ov40_0222FB90(void *, u32);
 BOOL ov40_0222FBB4(void *);
 void ov41_0224B57C(void *);
-void sub_020314BC(void *);
+void FrontierCard_Delete(void *);
 void ov40_02230964(void *, u32);
 
 u32 ov40_0223480C(void *);

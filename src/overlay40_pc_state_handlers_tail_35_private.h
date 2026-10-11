@@ -188,8 +188,8 @@ extern const u8 ov40_02245784[];
 extern const u8 ov40_0224572C[];
 
 int sub_02087E1C(void *p);
-u32 sub_02031620(void *p);
-u32 sub_0203162C(void *p);
+u32 FrontierCard_GetCountry(void *p);
+u32 FrontierCard_GetRegion(void *p);
 void ov40_0222E8C4(void *a0, void *a1, const void *a2);
 void ov40_0222F6D0(void *p, s16 value);
 u16 ov40_0222F38C(void *p, void *a1);

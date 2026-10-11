@@ -4,7 +4,7 @@
 
 extern void *NewString_ReadMsgData(void *, int);
 extern void *ov40_0222DAB0(int);
-extern void *sub_020315B8(void *, int);
+extern void *FrontierCard_NewNameString(void *, int);
 extern void ov40_02230DCC(void *, void *);
 extern void *String_New(int, int);
 extern void BufferString(void *, int, void *, int, int, int);
@@ -58,7 +58,7 @@ void ov40_0222D3E8(u8 *work, u8 *entry, int msgId, u8 *selection) {
         } else {
             void *format = ov40_0222DAB0(0x6d);
             void *template = NewString_ReadMsgData(PTR(work, 0x48), 7);
-            void *name = sub_020315B8(PTR(work, 0x88c + *(u32 *)(selection + 0x18) * 4), 0x6d);
+            void *name = FrontierCard_NewNameString(PTR(work, 0x88c + *(u32 *)(selection + 0x18) * 4), 0x6d);
             ov40_02230DCC(work, name);
             str = String_New(0xff, 0x6d);
             BufferString(format, 0, name, 0, 1, 2);
@@ -74,7 +74,7 @@ void ov40_0222D3E8(u8 *work, u8 *entry, int msgId, u8 *selection) {
         } else {
             void *format = ov40_0222DAB0(0x6d);
             void *template = NewString_ReadMsgData(PTR(work, 0x48), 7);
-            void *name = sub_020315B8(PTR(work, 0x88c + *(u32 *)(selection + 0x18) * 4), 0x6d);
+            void *name = FrontierCard_NewNameString(PTR(work, 0x88c + *(u32 *)(selection + 0x18) * 4), 0x6d);
             ov40_02230DCC(work, name);
             str = String_New(0xff, 0x6d);
             BufferString(format, 0, name, 0, 1, 2);

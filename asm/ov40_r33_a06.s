@@ -71,7 +71,7 @@
 	.public ov40_022454E0
 	.public BattleRecord_GetHeader
 	.public BattleRecordHeader_GetField
-	.public sub_020315B8
+	.public FrontierCard_NewNameString
 	.public sub_02087A84
 	.text
 
@@ -692,7 +692,7 @@ ov40_0223C710: ; 0x0223C710
 	add r6, r0, #0
 	ldr r0, [sp, #0x14]
 	mov r1, #0x6d
-	bl sub_020315B8
+	bl FrontierCard_NewNameString
 	str r0, [sp, #0x18]
 	ldr r1, [sp, #0x18]
 	add r0, r5, #0

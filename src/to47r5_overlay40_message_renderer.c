@@ -48,7 +48,7 @@ void ov40_0222E09C(void *windowData, void *owner) {
     save = OV40_PTR(windowData, 0);
     fmt = ov40_0222DAB0(0x6D);
     window = (u8 *)windowData + 0x0C;
-    nameStr = sub_020315B8(save, 0x6D);
+    nameStr = FrontierCard_NewNameString(save, 0x6D);
     ov40_02230DCC(owner, nameStr);
     nameTemplate = NewString_ReadMsgData(OV40_PTR(owner, 0x48), 13);
     str = String_New(0xFF, 0x6D);
@@ -62,10 +62,10 @@ void ov40_0222E09C(void *windowData, void *owner) {
     String_Delete(str);
     MessageFormat_ResetBuffers(fmt);
 
-    month = sub_020316F0(save);
+    month = FrontierCard_GetBirthdayMonth(save);
     window = (u8 *)windowData + 0x2C;
     monthTemplate = NewString_ReadMsgData(OV40_PTR(owner, 0x48), 15);
-    dateStr = sub_020315B8(save, 0x6D);
+    dateStr = FrontierCard_NewNameString(save, 0x6D);
     ov40_02230DCC(owner, dateStr);
     str = String_New(0xFF, 0x6D);
     BufferMonthNameAbbr(fmt, 0, month);
@@ -85,8 +85,8 @@ void ov40_0222E09C(void *windowData, void *owner) {
     ScheduleWindowCopyToVram(window);
     String_Delete(str);
 
-    country = sub_02031620(save);
-    city = sub_0203162C(save);
+    country = FrontierCard_GetCountry(save);
+    city = FrontierCard_GetRegion(save);
     window = (u8 *)windowData + 0x4C;
     FillWindowPixelBuffer(window, 0);
     if (country == 0) {
@@ -126,7 +126,7 @@ void ov40_0222E09C(void *windowData, void *owner) {
     String_Delete(str);
 
     window = (u8 *)windowData + 0x7C;
-    str = sub_0203164C(save, &mail, 0x6D);
+    str = FrontierCard_GetGreeting(save, &mail, 0x6D);
     if (str == NULL) {
         str = MailMsg_GetExpandedString(&mail, 0x6D);
     }

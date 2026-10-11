@@ -45,11 +45,11 @@ void BufferCityName(void *fmt, u32 idx, u32 country, u32 city);
 void StringExpandPlaceholders(void *fmt, void *dst, void *src);
 void MessageFormat_ResetBuffers(void *fmt);
 void MessageFormat_Delete(void *fmt);
-void *sub_020315B8(void *save, u32 heapId);
-u32 sub_02031620(void *save);
-u32 sub_0203162C(void *save);
-void *sub_0203164C(void *save, void *mail, u32 heapId);
-u32 sub_020316F0(void *save);
+void *FrontierCard_NewNameString(void *save, u32 heapId);
+u32 FrontierCard_GetCountry(void *save);
+u32 FrontierCard_GetRegion(void *save);
+void *FrontierCard_GetGreeting(void *save, void *mail, u32 heapId);
+u32 FrontierCard_GetBirthdayMonth(void *save);
 void *MailMsg_GetExpandedString(void *mail, u32 heapId);
 
 void ov40_0222E09C(void *windowData, void *owner);

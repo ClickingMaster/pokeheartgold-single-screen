@@ -6,6 +6,7 @@
 #include "global.h"
 
 #include "easy_chat.h"
+#include "friend_roster.h"
 #include "heap.h"
 #include "message_format.h"
 #include "msgdata.h"
@@ -13,6 +14,7 @@
 #include "player_data.h"
 #include "pm_string.h"
 #include "save.h"
+#include "save_wifi_history.h"
 #include "sys_task_api.h"
 
 // Arguments of the Wi-Fi Plaza overlay (field_transition_tasks_2.c).
@@ -87,13 +89,13 @@ typedef struct WiFiPlazaUnk1C0 {
     u8 unk_0a; // kind: 0 = none, 1 / 2 (ov45_0222AFF8 / ov45_0222B00C)
     u8 unk_0b;
     u8 unk_0c[20]; // per lobby slot, counts up to 6 (ov45_0222BDCC; ov45_0222B048)
-    u16 unk_20;    // sent with ov45_0222EF4C (4 bytes from here)
+    u16 unk_20;    // sent with WiFiPlazaLobbyClient_SendToPlayer (4 bytes from here)
     u16 unk_22;
     u16 unk_24; // ov45_0222BE48 sets it, ov45_0222BE54 clears it
     s16 unk_26; // counts up to 900 while unk_24 is set (ov45_0222BE5C)
 } WiFiPlazaUnk1C0;
 
-// A message to the lobby (ov45_0222EEF0 type 4).
+// A message to the lobby (WiFiPlazaLobbyClient_SendToLobby type 4).
 typedef struct WiFiPlazaLobbyMessage {
     u32 ids[4]; // ov45_0222EC90 of lobby slots
     u8 count;   // of ids
@@ -355,7 +357,7 @@ typedef struct WiFiPlazaPlayerUnk1C {
     u32 value;
 } WiFiPlazaPlayerUnk1C;
 
-// Lobby callbacks given to ov45_0222E5D4 (with the work as the last argument).
+// Lobby callbacks given to WiFiPlazaLobbyClient_Init (with the work as the last argument).
 typedef struct WiFiPlazaCallbacks {
     void (*onPlayerEnter)(int id, WiFiPlazaPlayer *player, WiFiPlazaWork *work, BOOL isOwn);
     void (*onPlayerLeave)(int id, WiFiPlazaWork *work);
@@ -363,6 +365,110 @@ typedef struct WiFiPlazaCallbacks {
     void (*onLobbyEvent)(u32 event, WiFiPlazaWork *work);
     void (*onOwnRecord)(const WiFiPlazaPlayer *data, u32 size, WiFiPlazaWork *work);
 } WiFiPlazaCallbacks;
+
+// The time a player entered the lobby (an s64 kept as two words, ov45_0222F954).
+typedef struct WiFiPlazaLobbyEntryTime {
+    u32 lo;
+    u32 hi;
+} WiFiPlazaLobbyEntryTime;
+
+// A message type of the lobby client (WiFiPlazaLobbyClient_SetLobbyCommands / _SetChannelCommands): its receive
+// callback and the size of its data.
+typedef struct WiFiPlazaLobbyCommand {
+    void *callback;
+    int size;
+} WiFiPlazaLobbyCommand;
+
+typedef struct WiFiPlazaLobbyCommandTable {
+    const WiFiPlazaLobbyCommand *commands;
+    u32 count;
+    void *arg;
+} WiFiPlazaLobbyCommandTable;
+
+// Country and region of a lobby slot (ov45_0222EDC4 / ov45_0222EDF0).
+typedef struct WiFiPlazaLobbyLocation {
+    u16 country;
+    u8 region;
+    u8 unk_03;
+} WiFiPlazaLobbyLocation;
+
+// A matchmaking session of the lobby client: ov45_0222F028 hosts it, ov45_0222F350 joins it (ov00_021E5CEC with its
+// name, its player count and timer / 30 seconds).
+typedef struct WiFiPlazaLobbyMatch {
+    int index;
+    int maxPlayers;
+    int playerCount;
+    int state; // ov00_021E7144, 1 once the host closed it (ov45_0222F1BC)
+    u8 unk_10[0x20];
+    char name[0x14];
+    u16 active;
+    u16 timer;  // frames left, 1800 at the start
+    int hostId; // own id when hosting (ov45_0222F028)
+} WiFiPlazaLobbyMatch;
+
+typedef struct WiFiPlazaLobbyClientUnk1B4 {
+    u32 unk_00;
+    u32 unk_04;
+    u32 unk_08; // bit 0: ov45_0222ECDC field 4
+    u8 unk_0c;
+    u8 unk_0d;
+    u8 unk_0e[0x3F6];
+} WiFiPlazaLobbyClientUnk1B4;
+
+// ov45_0222F544 / ov45_0222F628 / ov45_0222F6B0 read the two halves.
+typedef struct WiFiPlazaLobbyClientUnk6A4 {
+    u32 unk_00;
+    u32 unk_04;
+    s32 unk_08;
+    u8 unk_0c[0xDC];
+    u8 unk_e8[3][0x24];
+    u8 unk_154[12];
+} WiFiPlazaLobbyClientUnk6A4;
+
+typedef struct WiFiPlazaLobbyClientUnk6A0 {
+    u32 unk_00;
+    WiFiPlazaLobbyClientUnk6A4 unk_04[2];
+    u32 unk_2c4;
+    u32 unk_2c8[3];
+    u32 unk_2d4[3];
+} WiFiPlazaLobbyClientUnk6A0;
+
+// The lobby client (_022577C0, wifi_plaza_lobby_client.c).
+typedef struct WiFiPlazaLobbyClient {
+    SaveData *save;
+    FriendRoster *friendRoster;
+    SaveWiFiHistory *wifiHistory;
+    WiFiPlazaCallbacks callbacks;
+    void *callbackArg; // last argument of the callbacks
+    u32 unk_24;
+    void *unk_28;
+    u8 unk_2c[0xF0];
+    s16 unk_11c; // ov45_0222EC10
+    s32 *unk_120;
+    s16 unk_124; // ov45_0222EC3C
+    u32 unk_128;
+    u8 state;        // 0 = none, 1 = connecting, 2 = in the lobby, 3, 4 = error (WiFiPlazaLobbyClient_Update)
+    u8 channel;      // 4 = none (ov45_0222EB38)
+    u8 channelState; // 4 = error
+    u8 unk_12f;
+    u8 unk_130;
+    u8 unk_131;
+    u8 unk_132; // error
+    u8 unk_133; // error
+    WiFiPlazaLobbyLocation locations[20];
+    WiFiPlazaLobbyCommandTable lobbyCommands;
+    WiFiPlazaLobbyCommandTable channelCommands;
+    s64 time; // lobby time, refreshed every frame
+    u8 unk_1a4[0x10];
+    WiFiPlazaLobbyClientUnk1B4 unk_1b4;
+    WiFiPlazaLobbyMatch matches[3];
+    u16 currentMatch; // 3 = none
+    u8 unk_69e;
+    u8 unk_69f;
+    WiFiPlazaLobbyClientUnk6A0 unk_6a0;
+    u32 unk_980;
+    int initResult; // ov45_022310C0
+} WiFiPlazaLobbyClient;
 
 // wifi_plaza_work.c
 void ov45_0222A1F8(WiFiPlazaWork *work);
@@ -395,7 +501,7 @@ int ov45_0222A414(WiFiPlazaWork *work);
 void *ov45_0222A424(WiFiPlazaWork *work);
 void ov45_0222A430(WiFiPlazaWork *work, void *value);
 void ov45_0222A43C(WiFiPlazaWork *work);
-void ov45_0222A450(WiFiPlazaWork *work, void *player, u32 index);
+void ov45_0222A450(WiFiPlazaWork *work, int id, u32 index);
 void ov45_0222A480(WiFiPlazaWork *work, u32 index);
 void ov45_0222A498(WiFiPlazaWork *work, void *dest);
 void ov45_0222A4A8(WiFiPlazaWork *work);
@@ -718,6 +824,78 @@ u16 ov45_0222E584(WiFiPlazaNewsEvent *event, u32 index);
 u16 ov45_0222E598(WiFiPlazaNewsEvent *event, u32 index);
 u16 ov45_0222E59C(WiFiPlazaNewsEvent *event, u32 index);
 
+// wifi_plaza_lobby_client.c
+extern WiFiPlazaLobbyClient *_022577C0;
+u16 ov45_0222E5A0(WiFiPlazaNewsEvent *event, u32 index);
+BOOL ov45_0222E5B4(u32 activity, u32 count);
+void WiFiPlazaLobbyClient_Init(enum HeapID heapID, SaveData *save, u32 count, WiFiPlazaCallbacks *callbacks, void *callbackArg);
+void WiFiPlazaLobbyClient_Free(void);
+int WiFiPlazaLobbyClient_Update(void);
+void ov45_0222E7CC(void);
+void ov45_0222E7FC(void);
+void ov45_0222E804(int value);
+void ov45_0222E810(int value, int mode);
+BOOL ov45_0222E8F4(void);
+void ov45_0222E91C(void);
+BOOL ov45_0222E944(void);
+int ov45_0222E96C(void);
+u8 ov45_0222E9BC(void);
+int WiFiPlazaLobbyClient_GetOwnId(void);
+void ov45_0222E9F8(WiFiPlazaPlayer *player);
+WiFiPlazaPlayer *ov45_0222EA2C(int id);
+void ov45_0222EA4C(int id, s64 *time);
+int WiFiPlazaLobbyClient_GetOldestPlayer(void);
+int WiFiPlazaLobbyClient_GetOldestOtherPlayer(int excluded);
+BOOL ov45_0222EB38(int channel);
+u8 ov45_0222EB74(void);
+BOOL ov45_0222EB94(void);
+BOOL ov45_0222EBC4(void);
+BOOL ov45_0222EBF0(int channel);
+void ov45_0222EC10(WiFiPlazaPlayerList *list);
+void ov45_0222EC3C(u32 *out);
+int ov45_0222EC68(int id);
+int ov45_0222EC7C(int id);
+int ov45_0222EC90(int slot);
+int ov45_0222ECA4(int slot);
+void ov45_0222ECB8(s64 *time);
+u32 ov45_0222ECDC(int field);
+int ov45_0222ED7C(void);
+BOOL ov45_0222EDA8(void);
+u32 ov45_0222EDC4(u8 slot);
+u8 ov45_0222EDF0(u8 slot);
+void WiFiPlazaLobbyClient_SetLobbyCommands(const void *commands, u32 count, void *arg);
+void WiFiPlazaLobbyClient_SetChannelCommands(const void *commands, u32 count, void *arg);
+void WiFiPlazaLobbyClient_ClearLobbyCommands(void);
+void WiFiPlazaLobbyClient_ClearChannelCommands(void);
+void WiFiPlazaLobbyClient_SendToLobby(int type, const void *data, int size);
+void WiFiPlazaLobbyClient_SendToPlayer(int type, int id, const void *data, int size);
+void WiFiPlazaLobbyClient_SendToChannel(int type, const void *data, int size);
+BOOL ov45_0222F028(int index, int maxPlayers);
+void ov45_0222F154(void);
+void ov45_0222F1BC(void);
+BOOL ov45_0222F218(void);
+u8 ov45_0222F254(void);
+BOOL ov45_0222F274(int index);
+BOOL ov45_0222F294(int index);
+int ov45_0222F2D4(int index);
+u32 ov45_0222F314(int index);
+BOOL ov45_0222F350(int index);
+u32 ov45_0222F3E8(int index);
+int ov45_0222F430(void);
+u8 ov45_0222F464(void);
+int ov45_0222F484(int id);
+int ov45_0222F4AC(int id);
+void ov45_0222F4D4(int index);
+u32 ov45_0222F524(void);
+u32 ov45_0222F544(int field);
+void *ov45_0222F628(int field);
+u8 ov45_0222F6B0(int which, int index);
+void ov45_0222F70C(void);
+BOOL WiFiPlazaLobbyClient_CheckResult(int result);
+void ov45_0222F78C(void);
+int ov45_0222F7A8(int libChannel);
+int ov45_0222F7B0(int channel);
+
 // data (asm)
 extern const WiFiPlazaTimerPhase _02254A28[5];
 extern const u8 ov45_02254BB4[];
@@ -734,32 +912,68 @@ extern const s32 ov45_02254A3C[9];
 extern void (*const ov45_02254A60[9])(WiFiPlazaWork *work, WiFiPlazaLobbyMessage *msg);
 
 // defined in the other overlay 45 files
-BOOL ov45_0222E5B4(u32 activity, u32 count);
-void ov45_0222E5D4(enum HeapID heapID, SaveData *save, u32 a2, WiFiPlazaCallbacks *callbacks, void *arg);
-void ov45_0222E688(void);
-int ov45_0222E96C(void);
-u8 ov45_0222E9BC(void);
-void *ov45_0222E9E0(void);
-void ov45_0222E9F8(WiFiPlazaPlayer *player);
-WiFiPlazaPlayer *ov45_0222EA2C(int id);
-void ov45_0222EA4C(int id, s64 *time);
-int ov45_0222EA78(int id);
-int ov45_0222EAD4(int id);
-void ov45_0222EC10(WiFiPlazaPlayerList *list);
-void ov45_0222EC3C(u32 *out);
-int ov45_0222EC68(int a0);
-int ov45_0222EC90(int slot);
-int ov45_0222ECA4(int a0);
-void ov45_0222ECB8(s64 *a0);
-void ov45_0222EE20(void *a0, u32 a1, void *a2);
-void ov45_0222EE80(void);
-void ov45_0222EEF0(int type, const void *data, int size);
-void ov45_0222EF4C(int type, int id, void *data, int size);
-u32 ov45_0222ECDC(int field);
-u32 ov45_0222EDC4(u8 index);
-u8 ov45_0222EDF0(u8 index);
-int ov45_0222F484(int id);
-int ov45_0222F4AC(int id);
+int ov45_0222F7B4(WiFiPlazaLobbyClient *client);
+void ov45_0222F848(WiFiPlazaLobbyClient *client, u32 count, enum HeapID heapID);
+void ov45_0222F878(WiFiPlazaLobbyClient *client);
+void ov45_0222F88C(WiFiPlazaLobbyClient *client, int id, WiFiPlazaPlayer *player);
+WiFiPlazaPlayer *ov45_0222F8D8(WiFiPlazaLobbyClient *client, int id);
+WiFiPlazaLobbyEntryTime *ov45_0222F954(WiFiPlazaLobbyClient *client, int id);
+void ov45_0222F9B8(WiFiPlazaLobbyClient *client, int a1, int a2, enum HeapID heapID);
+void ov45_0222FA10(WiFiPlazaLobbyClient *client);
+int ov45_0222FB24(WiFiPlazaLobbyClient *client, int id, int kind);
+int ov45_0222FB5C(WiFiPlazaLobbyClient *client, int slot, int kind);
+BOOL ov45_0222FBD8(WiFiPlazaLobbyClient *client, int channel);
+// lobby library callbacks (ov45_0222E810)
+void ov45_0222FC44(void);
+void ov45_0222FCE0(void);
+void ov45_0222FD50(void);
+void ov45_0222FDD4(void);
+void ov45_0222FDD8(void);
+void ov45_0222FE84(void);
+void ov45_0222FEC4(void);
+void ov45_0222FF40(void);
+void ov45_0222FF7C(void);
+void ov45_02230008(void);
+void ov45_02230050(void);
+void ov45_02230064(void);
+void ov45_02230090(void);
+void ov45_022300B0(void);
+void ov45_022300DC(void);
+void ov45_02230108(void);
+void ov45_02230130(void);
+void ov45_02230144(WiFiPlazaLobbyClient *client);
+BOOL ov45_022301E0(WiFiPlazaLobbyClient *client, int index, int ownId);
+BOOL ov45_0223021C(WiFiPlazaLobbyClient *client, int index);
+WiFiPlazaLobbyMatch *ov45_022302B0(WiFiPlazaLobbyClient *client, int index);
+void ov45_022302E4(WiFiPlazaLobbyClient *client);
+void ov45_02230378(WiFiPlazaLobbyMatch *match, s64 *time);
+void ov45_02230390(int result, void *arg);
+void ov45_02230394(int result, void *arg);
+u32 ov45_022303BC(WiFiPlazaLobbyClientUnk1B4 *unk, int bit);
+void ov45_022303E4(WiFiPlazaLobbyClientUnk6A0 *unk, int count, enum HeapID heapID);
+void ov45_022303FC(WiFiPlazaLobbyClientUnk6A0 *unk);
+int ov45_02230434(WiFiPlazaLobbyClientUnk6A0 *unk, int id);
+int ov45_0223045C(WiFiPlazaLobbyClientUnk6A0 *unk, int id);
+// lobby library
+int ov45_022310C0(const void *a0, const void *a1, int mode, void (**callbacks)(void), void *userData, int value, void *a6);
+int ov45_02231490(void);
+int ov45_02231514(void);
+int ov45_02231C8C(int channel);
+int ov45_02231EC0(void);
+int ov45_022321E0(void);
+int ov45_0223247C(int channel, int type, const void *data, int size);
+int ov45_02232500(int id, int type, const void *data, int size);
+int ov45_02232580(void);
+void ov45_022325B0(WiFiPlazaPlayer *player, void *a1, int a2);
+int ov45_0223285C(WiFiPlazaLobbyMatch *match);
+int ov45_02232BB0(WiFiPlazaLobbyMatch *match);
+int ov45_02232CA4(void);
+int ov45_02232E60(int index);
+void ov45_022331E8(void);
+void ov45_02233204(void);
+void ov45_02233220(void);
+extern const u8 ov45_02254F04[];
+extern const u8 ov45_02254F14[];
 WiFiPlazaPlayerUnk1C ov45_02230F94(u16 country, u8 region, u32 time, enum HeapID heapID);
 void ov45_022320C4(void *a0);
 

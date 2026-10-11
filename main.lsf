@@ -3857,30 +3857,7 @@ Overlay OVY_45
     Object src/wifi_plaza_util.o
     Object src/wifi_plaza_news.o
     Object src/wifi_plaza_news_events.o
-    Object src/r40_overlay_45_thumb_residual_32_run1.o
-    Object src/to70_overlay_45_thumb_residual_32_extra490_run01.o
-    Object src/r40_overlay_45_thumb_residual_32_run2.o
-    Object src/to90_extra2024_run01.o
-    Object src/r40_overlay_45_thumb_residual_32_run3.o
-    Object src/overlay45_helpers_32.o
-    Object src/to41_overlay_45_thumb_residual_33_run1.o
-    Object src/to80_extra1524_run01.o
-    Object src/to41_overlay_45_thumb_residual_33_run2.o
-    Object src/to80_extra1525_run01.o
-    Object src/to41_overlay_45_thumb_residual_33_run3.o
-    Object src/to70_overlay_45_thumb_residual_33_to41_residual_3_extra965_run01.o
-    Object src/to41_overlay_45_thumb_residual_33_run4.o
-    Object src/to80_extra1526_run01.o
-    Object src/to41_overlay_45_thumb_residual_33_run5.o
-    Object src/to80_extra1527_run01.o
-    Object src/to41_overlay_45_thumb_residual_33_run6.o
-    Object src/op90_overlay_45_thumb_residual_33_to41_residual_6_r01.o
-    Object src/to41_overlay_45_thumb_residual_33_run7.o
-    Object src/to70_overlay_45_thumb_residual_33_to41_residual_7_extra797_run01.o
-    Object src/to41_overlay_45_thumb_residual_33_run8.o
-    Object src/to90_extra2489_run01.o
-    Object src/to41_overlay_45_thumb_residual_33_run9.o
-    Object src/overlay45_helpers_33.o
+    Object src/wifi_plaza_lobby_client.o
     Object src/to70_overlay_45_thumb_residual_34_to42_prefix_extra599_run01.o
     Object src/to42_overlay_45_thumb_residual_34_run1.o
     Object src/to46_overlay45_index_slots.o

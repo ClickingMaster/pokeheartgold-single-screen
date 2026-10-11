@@ -88,7 +88,7 @@ int ov40_0223414C(void *p) {
     WORD(inner, 0x220) = 0x10;
     WORD(inner, 0x224) = 0x6D;
     PTR(inner, 0x238) = FashionEntry_New(0x6D);
-    PTR(inner, 0x250) = sub_020314A4(0x6D);
+    PTR(inner, 0x250) = FrontierCard_New(0x6D);
     BgClearTilemapBufferAndCommit(PTR(p, 0x24), 2);
     BgClearTilemapBufferAndCommit(PTR(p, 0x24), 3);
     BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);

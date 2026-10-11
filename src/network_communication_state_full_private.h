@@ -134,7 +134,7 @@ BOOL sub_02034BE4(void);
 int sub_02033974(void);
 void sub_020378E4(int arg0);
 int ov45_0222E8F4(void);
-int ov45_0222E6C8(void);
+int WiFiPlazaLobbyClient_Update(void);
 int ov45_0222E944(void);
 int CommPlayerInfo_GetCountry(int arg0);
 int CommPlayerInfo_GetRegion(int arg0);

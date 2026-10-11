@@ -4,8 +4,8 @@
 
 void GF_AssertFail(void);
 typedef struct FrontierCard FrontierCard;
-u32 sub_020315D0(FrontierCard *);
-u32 sub_02031700(FrontierCard *);
+u32 FrontierCard_GetGender(FrontierCard *);
+u32 FrontierCard_GetAvatar(FrontierCard *);
 extern u32 ov40_02244FF0[][4];
 
 void ov40_0222E624(void *, void *);
@@ -39,7 +39,7 @@ void ov40_0222E690(void *p, void *work) {
     PaletteData *palette;
     int charFile = 14;
     int palFile = 13;
-    int mode = sub_020315D0(*(FrontierCard **)p);
+    int mode = FrontierCard_GetGender(*(FrontierCard **)p);
     SpriteSystem *system = *(SpriteSystem **)((u8 *)work + 0x18);
     SpriteManager *manager = *(SpriteManager **)((u8 *)work + 0x1C);
     palette = *(PaletteData **)((u8 *)work + 0x28);
@@ -50,7 +50,7 @@ void ov40_0222E690(void *p, void *work) {
             charFile = 16;
         }
     } else {
-        int value = sub_02031700(*(FrontierCard **)p);
+        int value = FrontierCard_GetAvatar(*(FrontierCard **)p);
         if (value >= 16) {
             value = 0;
         }

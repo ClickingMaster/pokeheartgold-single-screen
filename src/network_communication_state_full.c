@@ -1603,7 +1603,7 @@ s32 sub_02039C6C(s32 arg0) {
 
 s32 sub_02039D08(void) {
     s32 var_r4 = 1;
-    u32 temp_r0 = ov45_0222E6C8();
+    u32 temp_r0 = WiFiPlazaLobbyClient_Update();
     switch (temp_r0) {
     case 0:
     case 1:

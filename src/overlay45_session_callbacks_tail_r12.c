@@ -14,7 +14,7 @@ extern void GF_AssertFail(void);
 extern u32 ov45_0222F7B0(u32);
 extern s32 ov45_0222FB5C(FWork *, s32, s32);
 extern void ov45_02232170(void *, void *);
-extern FWork *ov45_0222F74C(void);
+extern FWork *WiFiPlazaLobbyClient_CheckResult(void);
 extern void ov45_02232304(s32, s32, u32, s32);
 extern u32 ov45_0222F7A8(u32);
 extern void ov45_0222FB84(FWork *, u32);
@@ -67,7 +67,7 @@ void ov45_0222FC44(int selected, u32 state) {
     if (state == 0) {
         U32(_022577C0, 0x5b4) = 0x400;
         ov45_02232170(_022577C0->data + 0x1b4, _022577C0->data + 0x5b4);
-        work = ov45_0222F74C();
+        work = WiFiPlazaLobbyClient_CheckResult();
         if (work == NULL) {
             GF_AssertFail();
         }

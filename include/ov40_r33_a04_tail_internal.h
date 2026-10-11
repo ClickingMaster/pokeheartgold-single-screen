@@ -19,7 +19,7 @@ void PaletteData_BlendPalettes(void *, int, int, int, int);
 void ov40_0222BF80(void *, int);
 void *NewString_ReadMsgData(void *, int);
 void *ov40_0222DAB0(int);
-void *sub_020315B8(u32, int);
+void *FrontierCard_NewNameString(u32, int);
 void ov40_02230DCC(void *, void *);
 void *String_New(int, int);
 void BufferString(void *, int, void *, int, int, int);

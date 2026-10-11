@@ -13,6 +13,8 @@
 #include "string_util.h"
 #include "unk_0205B3DC.h"
 
+// Player profile card built from the save (name, trainer ID, favorite Pokemon, greeting, country/region, CRC). The
+// getters return safe defaults for out-of-range fields, i.e. for cards received from other players.
 typedef struct FrontierCard {
     u16 name[8];
     u32 trainerId;
@@ -33,29 +35,32 @@ typedef struct FrontierCard {
     u8 unk_7E[2];
 } FrontierCard;
 
-FrontierCard *sub_020314A4(enum HeapID heapId);
-void sub_020314BC(FrontierCard *card);
-void sub_020314C4(FrontierCard *card, SaveData *saveData);
-String *sub_020315B8(const u16 *name, enum HeapID heapId);
-u32 sub_020315D0(FrontierCard *card);
-u32 sub_020315E0(FrontierCard *card);
+FrontierCard *FrontierCard_New(enum HeapID heapId);
+void FrontierCard_Delete(FrontierCard *card);
+void FrontierCard_InitFromSave(FrontierCard *card, SaveData *saveData);
+String *FrontierCard_NewNameString(const u16 *name, enum HeapID heapId);
+u32 FrontierCard_GetGender(FrontierCard *card);
+u32 FrontierCard_GetSpecies(FrontierCard *card);
 u32 sub_020315F0(FrontierCard *card);
-u32 sub_02031610(FrontierCard *card);
-u32 sub_02031620(FrontierCard *card);
-u32 sub_0203162C(FrontierCard *card);
+u32 FrontierCard_IsEgg(FrontierCard *card);
+u32 FrontierCard_GetCountry(FrontierCard *card);
+u32 FrontierCard_GetRegion(FrontierCard *card);
+String *FrontierCard_GetGreeting(FrontierCard *card, MailMessage *message, enum HeapID heapId);
+u32 FrontierCard_GetBirthdayMonth(FrontierCard *card);
+u32 FrontierCard_GetAvatar(FrontierCard *card);
 u8 sub_02070438(u16 species, u8 form);
 
-FrontierCard *sub_020314A4(enum HeapID heapId) {
+FrontierCard *FrontierCard_New(enum HeapID heapId) {
     FrontierCard *ret = Heap_Alloc(heapId, sizeof(FrontierCard));
     MI_CpuFill8(ret, 0, sizeof(FrontierCard));
     return ret;
 }
 
-void sub_020314BC(FrontierCard *card) {
+void FrontierCard_Delete(FrontierCard *card) {
     Heap_Free(card);
 }
 
-void sub_020314C4(FrontierCard *card, SaveData *saveData) {
+void FrontierCard_InitFromSave(FrontierCard *card, SaveData *saveData) {
     PlayerProfile *profile = Save_PlayerData_GetProfile(saveData);
     SaveWiFiHistory *wifiHistory = Save_WiFiHistory_Get(saveData);
     Save_SysInfo_Get(saveData);
@@ -88,20 +93,20 @@ void sub_020314C4(FrontierCard *card, SaveData *saveData) {
     card->crc = SaveArray_CalcCRC16(saveData, card, 0x7C);
 }
 
-String *sub_020315B8(const u16 *name, enum HeapID heapId) {
+String *FrontierCard_NewNameString(const u16 *name, enum HeapID heapId) {
     String *ret = String_New(15, heapId);
     CopyU16ArrayToStringN(ret, name, 15);
     return ret;
 }
 
-u32 sub_020315D0(FrontierCard *card) {
+u32 FrontierCard_GetGender(FrontierCard *card) {
     if (card->gender != 0 && card->gender != 1) {
         return 0;
     }
     return card->gender;
 }
 
-u32 sub_020315E0(FrontierCard *card) {
+u32 FrontierCard_GetSpecies(FrontierCard *card) {
     if (card->species >= 495) {
         return 0;
     }
@@ -115,7 +120,7 @@ u32 sub_020315F0(FrontierCard *card) {
     return sub_02070438(card->species, card->form);
 }
 
-u32 sub_02031610(FrontierCard *card) {
+u32 FrontierCard_IsEgg(FrontierCard *card) {
     u32 ret = card->isEgg;
     if (ret > 1) {
         ret = 1;
@@ -123,14 +128,14 @@ u32 sub_02031610(FrontierCard *card) {
     return ret;
 }
 
-u32 sub_02031620(FrontierCard *card) {
+u32 FrontierCard_GetCountry(FrontierCard *card) {
     if (card->country >= 234) {
         return 0;
     }
     return card->country;
 }
 
-u32 sub_0203162C(FrontierCard *card) {
+u32 FrontierCard_GetRegion(FrontierCard *card) {
     u32 country = card->country;
     u32 region;
     if (country >= 234) {
@@ -143,11 +148,8 @@ u32 sub_0203162C(FrontierCard *card) {
     return region;
 }
 
-String *sub_0203164C(FrontierCard *, MailMessage *, enum HeapID);
-u32 sub_020316F0(FrontierCard *);
-u32 sub_02031700(FrontierCard *);
-
-String *sub_0203164C(FrontierCard *card, MailMessage *message, enum HeapID heapId) {
+// Easy chat greeting (validated into message, returns NULL), or the free-text greeting as a new String.
+String *FrontierCard_GetGreeting(FrontierCard *card, MailMessage *message, enum HeapID heapId) {
     int invalid = 0;
     u32 category, msgNo;
     if (card->unk_1E[0] == 0) {
@@ -175,14 +177,16 @@ String *sub_0203164C(FrontierCard *card, MailMessage *message, enum HeapID heapI
         return result;
     }
 }
-u32 sub_020316F0(FrontierCard *card) {
+
+u32 FrontierCard_GetBirthdayMonth(FrontierCard *card) {
     u32 month = card->birthdayMonth;
     if (month < 1 || month > 12) {
         month = 1;
     }
     return month;
 }
-u32 sub_02031700(FrontierCard *card) {
+
+u32 FrontierCard_GetAvatar(FrontierCard *card) {
     u32 avatar = card->avatar;
     if (avatar > 15) {
         avatar = 0;

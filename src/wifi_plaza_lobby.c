@@ -49,7 +49,7 @@ void ov45_0222AB94(void *unused, u32 slot0, u32 slot1) {
     msg.ids[0] = ov45_0222EC90(slot0);
     msg.ids[1] = ov45_0222EC90(slot1);
     msg.count = 2;
-    ov45_0222EEF0(4, &msg, sizeof(msg));
+    WiFiPlazaLobbyClient_SendToLobby(4, &msg, sizeof(msg));
 }
 
 void ov45_0222ABD0(void *unused, u32 slot0, u32 slot1, u8 value) {
@@ -59,7 +59,7 @@ void ov45_0222ABD0(void *unused, u32 slot0, u32 slot1, u8 value) {
     msg.ids[1] = ov45_0222EC90(slot0);
     msg.count = 2;
     msg.unk_12 = value;
-    ov45_0222EEF0(4, &msg, sizeof(msg));
+    WiFiPlazaLobbyClient_SendToLobby(4, &msg, sizeof(msg));
 }
 
 #pragma force_active on
@@ -95,7 +95,7 @@ void ov45_0222AC14(void *unused, int selector, int count, int slot0, int slot1, 
     msg.count = count;
     msg.unk_13_0 = selector;
     msg.unk_13_7 = flag;
-    ov45_0222EEF0(4, &msg, 20);
+    WiFiPlazaLobbyClient_SendToLobby(4, &msg, 20);
 }
 
 #pragma force_active reset
@@ -120,7 +120,7 @@ void ov45_0222ACB8(void *unused, int mode, u8 kind, u32 slot0, u32 slot1, u32 sl
         msg.count = kind;
         msg.unk_13_0 = mode;
         msg.unk_13_7 = 0;
-        ov45_0222EEF0(4, &msg, sizeof(msg));
+        WiFiPlazaLobbyClient_SendToLobby(4, &msg, sizeof(msg));
         break;
     }
 }
@@ -155,7 +155,7 @@ u8 ov45_0222AD58(WiFiPlazaWork *work, u32 index) {
 void ov45_0222AD70(void *unused, u32 value) {
     u32 data[1];
     data[0] = value;
-    ov45_0222EEF0(5, data, sizeof(data));
+    WiFiPlazaLobbyClient_SendToLobby(5, data, sizeof(data));
 }
 
 int ov45_0222AD80(WiFiPlazaWork *work, int a1) {
@@ -209,12 +209,12 @@ void ov45_0222AE34(WiFiPlazaWork *work, int a1) {
 
 void ov45_0222AE44(void) {
     u32 data;
-    ov45_0222EEF0(6, &data, 4);
+    WiFiPlazaLobbyClient_SendToLobby(6, &data, 4);
 }
 
 void ov45_0222AE54(void) {
     u32 data;
-    ov45_0222EEF0(7, &data, 4);
+    WiFiPlazaLobbyClient_SendToLobby(7, &data, 4);
 }
 
 void ov45_0222AE64(WiFiPlazaWork *work) {
@@ -234,7 +234,7 @@ int ov45_0222AE74(WiFiPlazaWork *work, int slot) {
     work->unk_1c0.unk_06 = 1;
     work->unk_1c0.unk_0a = 1;
     ov45_0222BE00(&work->unk_1c0, 0);
-    ov45_0222EF4C(0, ov45_0222EC90(slot), &work->unk_1c0.unk_20, 4);
+    WiFiPlazaLobbyClient_SendToPlayer(0, ov45_0222EC90(slot), &work->unk_1c0.unk_20, 4);
     ov45_0222BE48(&work->unk_1c0);
     return 1;
 }
@@ -266,7 +266,7 @@ void ov45_0222AED8(WiFiPlazaWork *work, int a1) {
         return;
     }
     ov45_0222BE00(&work->unk_1c0, a1);
-    ov45_0222EF4C(2, ov45_0222EC90(work->unk_1c0.unk_04), &work->unk_1c0.unk_20, 4);
+    WiFiPlazaLobbyClient_SendToPlayer(2, ov45_0222EC90(work->unk_1c0.unk_04), &work->unk_1c0.unk_20, 4);
     ov45_0222BE48(&work->unk_1c0);
 }
 
@@ -278,7 +278,7 @@ void ov45_0222AF80(WiFiPlazaWork *work) {
     if (work->unk_1c0.unk_06 != 0 && work->unk_1c0.unk_0a == 1) {
         work->unk_1c0.unk_22 = 0;
         id = ov45_0222EC90(work->unk_1c0.unk_04);
-        ov45_0222EF4C(3, id, &work->unk_1c0.unk_20, 4);
+        WiFiPlazaLobbyClient_SendToPlayer(3, id, &work->unk_1c0.unk_20, 4);
         ov45_0222BD4C(&work->unk_1c0);
     }
 }
@@ -290,7 +290,7 @@ void ov45_0222AFC4(WiFiPlazaWork *work) {
         id = ov45_0222EC90(work->unk_1c0.unk_04);
         work->unk_1c0.unk_06 = 4;
         work->unk_1c0.unk_22 = 4;
-        ov45_0222EF4C(2, id, &work->unk_1c0.unk_20, 4);
+        WiFiPlazaLobbyClient_SendToPlayer(2, id, &work->unk_1c0.unk_20, 4);
     }
 }
 

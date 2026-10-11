@@ -26,6 +26,6 @@ void ov40_0222DD08(void *);
 void PaletteData_BlendPalettes(void *, int, int, int, u16);
 void ov40_0222BF64(void *, int, int, void *);
 void ov40_0222BF80(void *, int);
-void sub_020314BC(void *);
+void FrontierCard_Delete(void *);
 void Heap_Free(void *);
 #endif

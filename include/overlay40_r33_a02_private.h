@@ -22,7 +22,7 @@ void ov40_0223B4BC(void *p, int value);
 
 void *ov40_0222DAB0(int heapId);
 void *String_New(u32 maxLength, int heapId);
-void *sub_020315B8(u32 value, int heapId);
+void *FrontierCard_NewNameString(u32 value, int heapId);
 void ov40_02230DCC(void *p, void *value);
 void *NewString_ReadMsgData(void *msgData, int msgId);
 void BufferString(void *messageFormat, u32 idx, void *string, u32 a3, u32 a4, u32 a5);

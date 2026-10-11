@@ -22,7 +22,7 @@ void InitWindow(void *window);
 void AddWindowParameterized(void *bgConfig, void *window, int bgId, int x, int y, int width, int height, int palette, int baseTile);
 void *ov40_0222DAB0(int heapId);
 void *String_New(u32 maxLength, int heapId);
-void *sub_020315B8(u32 p, int heapId);
+void *FrontierCard_NewNameString(u32 p, int heapId);
 void ov40_02230DCC(void *p, u32 value);
 void *NewString_ReadMsgData(void *msgData, int msgId);
 void BufferString(void *messageFormat, u32 idx, void *string, u32 a3, u32 a4, u32 a5);
@@ -284,7 +284,7 @@ void ov40_0223C710(void *p, int msgId, int unused) {
         void *name;
         void *s;
         str = String_New(0xFF, 0x6D);
-        s = sub_020315B8(v, 0x6D);
+        s = FrontierCard_NewNameString(v, 0x6D);
         ov40_02230DCC(p, (u32)s);
         name = NewString_ReadMsgData(PTR(p, 0x48), msgId);
         BufferString(fmt, 0, s, 0, 1, 2);

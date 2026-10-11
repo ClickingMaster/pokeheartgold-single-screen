@@ -14,7 +14,7 @@ u32 ov40_0223480C(void *p) {
         SetBgPriority(6, 2);
         SetBgPriority(7, 1);
         Heap_Free(PTR(work, 0x238));
-        sub_020314BC(PTR(work, 0x250));
+        FrontierCard_Delete(PTR(work, 0x250));
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 2);
         BgClearTilemapBufferAndCommit(PTR(p, 0x24), 6);
         ov40_02236130(p);

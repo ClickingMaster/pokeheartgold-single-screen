@@ -13,31 +13,31 @@ void ov40_0222FCCC(void *p) {
             PTR(q, 0x87C) = NULL;
             PTR(q, 0x88C) = NULL;
             if (i == 0) {
-                PTR(q, 0x88C) = sub_020314A4(0x6D);
-                sub_020314C4(PTR(q, 0x88C), PTR(p, 0x830));
+                PTR(q, 0x88C) = FrontierCard_New(0x6D);
+                FrontierCard_InitFromSave(PTR(q, 0x88C), PTR(p, 0x830));
             }
             break;
         case 2:
             PTR(q, 0x87C) = NULL;
             PTR(q, 0x88C) = NULL;
             if (i == 0) {
-                PTR(q, 0x88C) = sub_020314A4(0x6D);
-                sub_020314C4(PTR(q, 0x88C), PTR(p, 0x830));
+                PTR(q, 0x88C) = FrontierCard_New(0x6D);
+                FrontierCard_InitFromSave(PTR(q, 0x88C), PTR(p, 0x830));
             }
             break;
         case 3:
             PTR(q, 0x87C) = NULL;
             PTR(q, 0x88C) = NULL;
             if (i == 0) {
-                PTR(q, 0x88C) = sub_020314A4(0x6D);
-                sub_020314C4(PTR(q, 0x88C), PTR(p, 0x830));
+                PTR(q, 0x88C) = FrontierCard_New(0x6D);
+                FrontierCard_InitFromSave(PTR(q, 0x88C), PTR(p, 0x830));
             }
             break;
         case 1:
             PTR(q, 0x87C) = BattleRecord_CopyHeader(0x6D);
             if (i == 0) {
-                PTR(q, 0x88C) = sub_020314A4(0x6D);
-                sub_020314C4(PTR(q, 0x88C), PTR(p, 0x830));
+                PTR(q, 0x88C) = FrontierCard_New(0x6D);
+                FrontierCard_InitFromSave(PTR(q, 0x88C), PTR(p, 0x830));
             } else {
                 PTR(q, 0x88C) = BattleRecord_CopyProfile(0x6D);
             }

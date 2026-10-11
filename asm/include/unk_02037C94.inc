@@ -230,7 +230,7 @@
 .public ov00_021EC11C
 .public ov00_021EC210
 .public ov00_021EC9D4
-.public ov45_0222E6C8
+.public WiFiPlazaLobbyClient_Update
 .public ov45_0222E804
 .public ov45_0222E8F4
 .public ov45_0222E91C

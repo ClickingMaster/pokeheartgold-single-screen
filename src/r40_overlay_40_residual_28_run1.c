@@ -14,11 +14,11 @@ void ov40_02236184(void *p, int index) {
     void *inner = PTR(p, 0x860);
     void *entry;
 
-    PTR(inner, 0x2ED8) = sub_020314A4(0x6D);
+    PTR(inner, 0x2ED8) = FrontierCard_New(0x6D);
     entry = (u8 *)inner + index * 4;
     GlobalTerminalNet_CopyRequestHeader(PTR(entry, 0x38C), PTR(inner, 0x2ED8));
 }
 
 void ov40_022361B0(void *p) {
-    sub_020314BC(PTR(PTR(p, 0x860), 0x2ED8));
+    FrontierCard_Delete(PTR(PTR(p, 0x860), 0x2ED8));
 }

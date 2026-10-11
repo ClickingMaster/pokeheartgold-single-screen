@@ -30,7 +30,7 @@ void ov40_0223A510(void *p, int msgId, int index) {
         u32 value = WORD(w, 0x194);
         void *fmt = ov40_0222DAB0(0x6D);
         void *out = String_New(0xFF, 0x6D);
-        void *name = sub_020315B8(value, 0x6D);
+        void *name = FrontierCard_NewNameString(value, 0x6D);
         void *message;
 
         ov40_02230DCC(p, name);
@@ -45,7 +45,7 @@ void ov40_0223A510(void *p, int msgId, int index) {
         u32 value = WORD((u8 *)p + index * 4, 0x88C);
         void *fmt = ov40_0222DAB0(0x6D);
         void *out = String_New(0xFF, 0x6D);
-        void *name = sub_020315B8(value, 0x6D);
+        void *name = FrontierCard_NewNameString(value, 0x6D);
         void *message;
 
         ov40_02230DCC(p, name);

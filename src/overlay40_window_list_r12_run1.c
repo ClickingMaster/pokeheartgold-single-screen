@@ -4,8 +4,8 @@ void ov40_0222E7F0(void *windowData, void *owner) {
     void *fmt;
     void *template;
     void *str;
-    u32 country = sub_02031620(OV40_PTR(owner, 0x88C));
-    u32 city = sub_0203162C(OV40_PTR(owner, 0x88C));
+    u32 country = FrontierCard_GetCountry(OV40_PTR(owner, 0x88C));
+    u32 city = FrontierCard_GetRegion(OV40_PTR(owner, 0x88C));
     void *window = (u8 *)windowData + 0x18;
 
     if (country == 0 && city == 0) {

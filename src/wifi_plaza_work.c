@@ -165,17 +165,17 @@ void ov45_0222A43C(WiFiPlazaWork *work) {
     MIi_CpuClear32(0, (u32 *)work->unk_3e0, 4);
 }
 
-void ov45_0222A450(WiFiPlazaWork *work, void *player, u32 index) {
+void ov45_0222A450(WiFiPlazaWork *work, int id, u32 index) {
     int value;
     GF_ASSERT(index < 4);
-    value = ov45_0222EC68((int)player);
+    value = ov45_0222EC68(id);
     GF_ASSERT(value != -1);
     work->unk_3e0[index] = value;
 }
 
 void ov45_0222A480(WiFiPlazaWork *work, u32 index) {
-    void *player = ov45_0222E9E0();
-    ov45_0222A450(work, player, index);
+    int id = WiFiPlazaLobbyClient_GetOwnId();
+    ov45_0222A450(work, id, index);
 }
 
 void ov45_0222A498(WiFiPlazaWork *work, void *dest) {

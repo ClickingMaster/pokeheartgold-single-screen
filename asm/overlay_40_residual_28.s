@@ -4095,7 +4095,7 @@ ov40_02236184: ; 0x02236184
 	lsl r1, r1, #4
 	ldr r4, [r0, r1]
 	mov r0, #0x6d
-	bl sub_020314A4
+	bl FrontierCard_New
 	ldr r1, _022361AC ; =0x00002ED8
 	str r0, [r4, r1]
 	lsl r0, r5, #2
@@ -4117,10 +4117,10 @@ ov40_022361B0: ; 0x022361B0
 	lsl r1, r1, #4
 	ldr r1, [r0, r1]
 	ldr r0, _022361C0 ; =0x00002ED8
-	ldr r3, _022361C4 ; =sub_020314BC
+	ldr r3, _022361C4 ; =FrontierCard_Delete
 	ldr r0, [r1, r0]
 	bx r3
 	nop
 _022361C0: .word 0x00002ED8
-_022361C4: .word sub_020314BC
+_022361C4: .word FrontierCard_Delete
 	thumb_func_end ov40_022361B0

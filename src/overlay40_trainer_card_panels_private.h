@@ -52,7 +52,7 @@ void TextOBJ_SetPosition(void *p, s32 a, s32 b);
 
 void *BattleRecord_GetHeader(void);
 u64 BattleRecordHeader_GetField(void *a, int b, int c);
-void *sub_020315B8(u32 a, int heapId);
+void *FrontierCard_NewNameString(u32 a, int heapId);
 int BattleRecord_Exists(void);
 void BattleRecord_Delete(void);
 

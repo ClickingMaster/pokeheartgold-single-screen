@@ -8,7 +8,7 @@
 
 void *ov40_0222DAB0(u32 heapId);
 void *String_New(u32 size, u32 heapId);
-void *sub_020315B8(u32 value, u32 heapId);
+void *FrontierCard_NewNameString(u32 value, u32 heapId);
 void ov40_02230DCC(void *work, void *string);
 void *NewString_ReadMsgData(void *msgData, int msgId);
 void BufferString(void *format, u32 index, void *string, int a3, int a4, int a5);

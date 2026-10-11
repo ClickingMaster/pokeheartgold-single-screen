@@ -15,7 +15,7 @@ extern Ov40Tbl ov40_0224554C;
 
 BOOL BattleRecord_Exists(void);
 void *BattleRecordHeader_New(int heapId);
-void *sub_020314A4(int heapId);
+void *FrontierCard_New(int heapId);
 void MI_CpuCopy8(const void *src, void *dest, u32 size);
 void ManagedSprite_SetDrawFlag(void *sprite, BOOL draw);
 void ManagedSprite_SetDrawPriority(void *sprite, int priority);
@@ -128,7 +128,7 @@ void ov40_0223CF70(u32 a, int b, void *p) {
 void ov40_0223CFA8(void *p) {
     void *inner = PTR(p, 0x860);
 
-    PTR(inner, 0x194) = sub_020314A4(0x6d);
+    PTR(inner, 0x194) = FrontierCard_New(0x6d);
     GlobalTerminalNet_CopyRequestHeader(PTR((u8 *)p + WORD(p, 0x4d4) * 4, 0x2608), PTR(inner, 0x194));
     PTR(inner, 0x220) = PTR(inner, 0x194);
     PTR(inner, 0x224) = BattleRecordHeader_New(0x6d);

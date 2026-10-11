@@ -28,7 +28,7 @@ extern const u8 ov40_02245708[];
 extern const u8 ov40_022451C4[];
 void SetBgPriority(int, int);
 void Heap_Free(void *);
-void sub_020314BC(void *);
+void FrontierCard_Delete(void *);
 void BgClearTilemapBufferAndCommit(void *, int);
 int ov40_0222DA84(void *, int);
 int ov40_0222DA00(void *, void *, int, int);

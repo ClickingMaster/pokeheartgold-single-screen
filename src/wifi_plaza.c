@@ -100,7 +100,7 @@ WiFiPlazaWork *WiFiPlazaWork_New(SaveData *save, enum HeapID heapID) {
     callbacks.onPlayerUpdate = WiFiPlaza_OnPlayerUpdate;
     callbacks.onLobbyEvent = WiFiPlaza_OnLobbyEvent;
     callbacks.onOwnRecord = ov45_0222B75C;
-    ov45_0222E5D4(heapID, work->save, 0x94, &callbacks, work);
+    WiFiPlazaLobbyClient_Init(heapID, work->save, 0x94, &callbacks, work);
     work->news = ov45_0222D860(heapID);
     for (i = 0; i < 4; i++) {
         work->profiles[i] = PlayerProfile_New(heapID);
@@ -108,7 +108,7 @@ WiFiPlazaWork *WiFiPlazaWork_New(SaveData *save, enum HeapID heapID) {
     WiFiPlazaProfile_InitFromSave(&work->profile, work->save, heapID);
     ov45_0222BD40(&work->unk_1c0);
     ov45_0222BD30(work->unk_1e8);
-    ov45_0222EE20(ov45_02254AC4, 8, work);
+    WiFiPlazaLobbyClient_SetLobbyCommands(ov45_02254AC4, 8, work);
     ov45_0222BC3C(&work->unk_1fc);
     ov45_0222C388(&work->unk_20c);
     ov45_0222C8AC(&work->groupWeights);
@@ -130,12 +130,12 @@ void WiFiPlazaWork_Delete(WiFiPlazaWork *work) {
     PlazaSurvey_SetAnswer(x, vals.unk_04);
     ov45_0222BCD8(&work->unk_508.profile);
     WiFiPlazaWordSet_Free(&work->wordSet);
-    ov45_0222EE80();
+    WiFiPlazaLobbyClient_ClearLobbyCommands();
     ov45_0222D890(work->news);
     for (i = 0; i < 4; i++) {
         Heap_Free(work->profiles[i]);
     }
-    ov45_0222E688();
+    WiFiPlazaLobbyClient_Free();
     Heap_Free(work);
 }
 

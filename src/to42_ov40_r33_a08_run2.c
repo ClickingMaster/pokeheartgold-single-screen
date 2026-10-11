@@ -15,7 +15,7 @@ extern Ov40Tbl ov40_0224554C;
 
 BOOL BattleRecord_Exists(void);
 void *BattleRecordHeader_New(int heapId);
-void *sub_020314A4(int heapId);
+void *FrontierCard_New(int heapId);
 void MI_CpuCopy8(const void *src, void *dest, u32 size);
 void ManagedSprite_SetDrawFlag(void *sprite, BOOL draw);
 void ManagedSprite_SetDrawPriority(void *sprite, int priority);

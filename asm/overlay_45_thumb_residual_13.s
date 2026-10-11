@@ -326,9 +326,9 @@
 	.public ov45_0222E584
 	.public ov45_0222E5A0
 	.public ov45_0222E5B4
-	.public ov45_0222E5D4
-	.public ov45_0222E688
-	.public ov45_0222E6C8
+	.public WiFiPlazaLobbyClient_Init
+	.public WiFiPlazaLobbyClient_Free
+	.public WiFiPlazaLobbyClient_Update
 	.public ov45_0222E7CC
 	.public ov45_0222E804
 	.public ov45_0222E810
@@ -337,12 +337,12 @@
 	.public ov45_0222E944
 	.public ov45_0222E96C
 	.public ov45_0222E9BC
-	.public ov45_0222E9E0
+	.public WiFiPlazaLobbyClient_GetOwnId
 	.public ov45_0222E9F8
 	.public ov45_0222EA2C
 	.public ov45_0222EA4C
-	.public ov45_0222EA78
-	.public ov45_0222EAD4
+	.public WiFiPlazaLobbyClient_GetOldestPlayer
+	.public WiFiPlazaLobbyClient_GetOldestOtherPlayer
 	.public ov45_0222EB38
 	.public ov45_0222EB74
 	.public ov45_0222EB94
@@ -360,13 +360,13 @@
 	.public ov45_0222EDA8
 	.public ov45_0222EDC4
 	.public ov45_0222EDF0
-	.public ov45_0222EE20
-	.public ov45_0222EE50
-	.public ov45_0222EE80
-	.public ov45_0222EEB8
-	.public ov45_0222EEF0
-	.public ov45_0222EF4C
-	.public ov45_0222EFAC
+	.public WiFiPlazaLobbyClient_SetLobbyCommands
+	.public WiFiPlazaLobbyClient_SetChannelCommands
+	.public WiFiPlazaLobbyClient_ClearLobbyCommands
+	.public WiFiPlazaLobbyClient_ClearChannelCommands
+	.public WiFiPlazaLobbyClient_SendToLobby
+	.public WiFiPlazaLobbyClient_SendToPlayer
+	.public WiFiPlazaLobbyClient_SendToChannel
 	.public ov45_0222F028
 	.public ov45_0222F154
 	.public ov45_0222F1BC
@@ -388,7 +388,7 @@
 	.public ov45_0222F628
 	.public ov45_0222F6B0
 	.public ov45_0222F70C
-	.public ov45_0222F74C
+	.public WiFiPlazaLobbyClient_CheckResult
 	.public ov45_0222F78C
 	.public ov45_0222F7B4
 	.public ov45_0222F848
@@ -709,7 +709,7 @@ ov45_0222AE44: ; 0x0222AE44
 	mov r0, #6
 	add r1, sp, #0
 	mov r2, #4
-	bl ov45_0222EEF0
+	bl WiFiPlazaLobbyClient_SendToLobby
 	pop {r3, pc}
 	.balign 4, 0
 	thumb_func_end ov45_0222AE44
@@ -721,7 +721,7 @@ ov45_0222AE54: ; 0x0222AE54
 	mov r0, #7
 	add r1, sp, #0
 	mov r2, #4
-	bl ov45_0222EEF0
+	bl WiFiPlazaLobbyClient_SendToLobby
 	pop {r3, pc}
 	.balign 4, 0
 	thumb_func_end ov45_0222AE54
@@ -778,7 +778,7 @@ _0222AE96:
 	mov r0, #0
 	add r2, r5, r2
 	mov r3, #4
-	bl ov45_0222EF4C
+	bl WiFiPlazaLobbyClient_SendToPlayer
 	mov r0, #7
 	lsl r0, r0, #6
 	add r0, r5, r0
@@ -864,7 +864,7 @@ _0222AF46:
 	mov r0, #2
 	add r2, r4, r2
 	mov r3, #4
-	bl ov45_0222EF4C
+	bl WiFiPlazaLobbyClient_SendToPlayer
 	mov r0, #7
 	lsl r0, r0, #6
 	add r0, r4, r0
@@ -901,7 +901,7 @@ ov45_0222AF80: ; 0x0222AF80
 	mov r0, #3
 	add r2, r4, r2
 	mov r3, #4
-	bl ov45_0222EF4C
+	bl WiFiPlazaLobbyClient_SendToPlayer
 	mov r0, #7
 	lsl r0, r0, #6
 	add r0, r4, r0
@@ -934,7 +934,7 @@ ov45_0222AFC4: ; 0x0222AFC4
 	strh r3, [r4, r0]
 	mov r0, #2
 	add r2, r4, r2
-	bl ov45_0222EF4C
+	bl WiFiPlazaLobbyClient_SendToPlayer
 _0222AFF0:
 	pop {r4, pc}
 	nop

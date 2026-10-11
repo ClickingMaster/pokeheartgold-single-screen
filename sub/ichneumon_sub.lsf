@@ -69,18 +69,7 @@ Autoload WRAM
 	Object asm/op90_to90_arm7_sub_wram_2_residual_6_own1.o
 	Object asm/to90_arm7_wram160_r8_anchor_own2.o
 	Object lib/src/mic_driver.o
-	Object lib/src/to90_arm7_sub_wram_2_run87.o
-	Object lib/src/op90_to90_arm7_sub_wram_2_residual_11_r01.o
-	Object lib/src/to90_arm7_sub_wram_2_run15.o
-	Object lib/src/op90_to90_arm7_sub_wram_2_residual_12_r01.o
-	Object lib/src/to90_arm7_sub_wram_2_run16.o
-	Object lib/src/to90_arm7_sub_wram_2_run17.o
-	Object lib/src/to90_arm7_sub_wram_2_run18.o
-	Object lib/src/to90_arm7_sub_wram_2_run19.o
-	Object lib/src/to90_arm7_sub_wram_2_run20.o
-	Object lib/src/to90_arm7_sub_wram_2_run21.o
-	Object lib/src/op90_to90_arm7_sub_wram_2_residual_13_r01.o
-	Object lib/src/to90_arm7_sub_wram_2_run24.o
+	Object lib/src/cartridge_driver.o
 	Object lib/src/nvram_init.o
 	Object lib/src/nvram_command.o
 	Object asm/to90_arm7_wram160_r8_anchor_own3.o

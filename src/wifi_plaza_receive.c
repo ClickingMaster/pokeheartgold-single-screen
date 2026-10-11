@@ -2,7 +2,7 @@
 
 #include "wifi_plaza_internal.h"
 
-// Receive callbacks of the exchange with one other player (WiFiPlazaWork.unk_1c0; ov45_0222EF4C sends its messages):
+// Receive callbacks of the exchange with one other player (WiFiPlazaWork.unk_1c0; WiFiPlazaLobbyClient_SendToPlayer sends its messages):
 // id is the sender, data the received words.
 
 #pragma force_active on

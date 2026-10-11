@@ -18,8 +18,8 @@ void *TouchHitboxController_Create(const void *hitboxes, int count, HitboxCallba
 void *SaveArray_PCStorage_Get(void *saveData);
 BOOL PlayCry(u16 species, u8 form);
 
-void *sub_020314A4(int heapId);
-void sub_020314C4(void *a, void *b);
+void *FrontierCard_New(int heapId);
+void FrontierCard_InitFromSave(void *a, void *b);
 BOOL sub_020878B8(void *p, s16 x, s16 y);
 void sub_020879E0(void *p, int a);
 void sub_02087A08(void *p, int a, int b);

@@ -4133,7 +4133,7 @@ ov40_0222E690: ; 0x0222E690
 	ldr r0, [r5]
 	str r1, [sp, #0x18]
 	mov r7, #0xd
-	bl sub_020315D0
+	bl FrontierCard_GetGender
 	ldr r1, [sp, #0x18]
 	ldr r2, _0222E794 ; =0x0000086C
 	ldr r6, [r1, #0x18]
@@ -4152,7 +4152,7 @@ ov40_0222E690: ; 0x0222E690
 	b _0222E6E8
 _0222E6C4:
 	ldr r0, [r5]
-	bl sub_02031700
+	bl FrontierCard_GetAvatar
 	str r0, [sp, #0x1c]
 	cmp r0, #0x10
 	blt _0222E6D4

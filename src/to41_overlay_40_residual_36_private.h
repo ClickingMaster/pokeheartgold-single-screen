@@ -56,7 +56,7 @@ void TextOBJ_SetPosition(void *p, s32 a, s32 b);
 
 void *BattleRecord_GetHeader(void);
 u64 BattleRecordHeader_GetField(void *a, int b, int c);
-void *sub_020315B8(u32 a, int heapId);
+void *FrontierCard_NewNameString(u32 a, int heapId);
 int BattleRecord_Exists(void);
 void BattleRecord_Delete(void);
 
@@ -97,10 +97,10 @@ BOOL ov40_02242CFC(void *p);
 extern const Ov40Quad ov40_02245684;
 extern const Ov40Quad ov40_02245694;
 
-void *sub_020314A4(int heapId);
+void *FrontierCard_New(int heapId);
 void *BattleRecordHeader_New(int heapId);
 void BattleRecordHeader_Free(void *p);
-void sub_020314BC(void *p);
+void FrontierCard_Delete(void *p);
 void GlobalTerminalNet_CopyRequestHeader(const void *src, void *dst);
 void ov40_0222D9E8(void *a, void *b, int c);
 int ov40_02243538(void *p);

@@ -441,7 +441,7 @@ int ov40_022406C8(void *p) {
 void ov40_0224085C(void *p) {
     void *w = PTR(p, 0x860);
 
-    PTR(w, 0x80) = sub_020314A4(0x6d);
+    PTR(w, 0x80) = FrontierCard_New(0x6d);
     GlobalTerminalNet_CopyRequestHeader(PTR(w, 0x4bc), PTR(w, 0x80));
     PTR(w, 0x10c) = PTR(w, 0x80);
     PTR(w, 0x110) = BattleRecordHeader_New(0x6d);
@@ -451,7 +451,7 @@ void ov40_0224085C(void *p) {
 void ov40_022408AC(void *p) {
     void *w = PTR(p, 0x860);
 
-    PTR(w, 0x80) = sub_020314A4(0x6d);
+    PTR(w, 0x80) = FrontierCard_New(0x6d);
     GlobalTerminalNet_CopyRequestHeader(PTR(p, 0x2608 + WORD(p, 0x4d4) * 4), PTR(w, 0x80));
     PTR(w, 0x10c) = PTR(w, 0x80);
     PTR(w, 0x110) = BattleRecordHeader_New(0x6d);
@@ -462,7 +462,7 @@ void ov40_02240910(void *p) {
     void *w = PTR(p, 0x860);
 
     BattleRecordHeader_Free(PTR(w, 0x110));
-    sub_020314BC(PTR(w, 0x80));
+    FrontierCard_Delete(PTR(w, 0x80));
 }
 
 int ov40_0224092C(void *p) {

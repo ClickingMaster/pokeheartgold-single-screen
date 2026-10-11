@@ -26,11 +26,11 @@ void ov45_0222A520(WiFiPlazaWork *work, int value) {
 }
 
 int ov45_0222A53C(void *unused) {
-    return ov45_0222EC68((s32)ov45_0222E9E0());
+    return ov45_0222EC68(WiFiPlazaLobbyClient_GetOwnId());
 }
 
 void ov45_0222A548(void) {
-    ov45_0222E9E0();
+    WiFiPlazaLobbyClient_GetOwnId();
 }
 
 BOOL ov45_0222A550(void *unused, int index) {
@@ -50,7 +50,7 @@ WiFiPlazaPlayer *WiFiPlazaWork_GetPlayer(WiFiPlazaWork *work, u32 index) {
     if (id == -1) {
         return NULL;
     }
-    if (id == (s32)ov45_0222E9E0()) {
+    if (id == WiFiPlazaLobbyClient_GetOwnId()) {
         return &work->profile.player;
     }
     return ov45_0222EA2C(id);

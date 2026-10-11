@@ -24,7 +24,7 @@ void PlaySE(u16 seqNo);
 void *Save_GameStats_Get(void *saveData);
 void GameStats_AddScore(void *stats, int score);
 void Pokepic_Delete(void *pic);
-void sub_020314BC(void *ptr);
+void FrontierCard_Delete(void *ptr);
 void GlobalTerminalNet_Update(void *ptr);
 void GlobalTerminalNet_Free(void *ptr);
 

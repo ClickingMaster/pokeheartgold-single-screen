@@ -123,10 +123,10 @@ int ov40_022417DC(void *p) {
             return 0;
         }
         BattleRecord_Load(PTR(p, 0x830), 0x6D, &a, 0, 0);
-        PTR(w, 0x1D0) = sub_020314A4(0x6D);
-        sub_020314C4(PTR(w, 0x1D0), PTR(p, 0x830));
+        PTR(w, 0x1D0) = FrontierCard_New(0x6D);
+        FrontierCard_InitFromSave(PTR(w, 0x1D0), PTR(p, 0x830));
         if (GlobalTerminalNet_RequestVideoUpload(ov40_0223D540(p), PTR(w, 0x1D0)) == 1) {
-            sub_020314BC(PTR(w, 0x1D0));
+            FrontierCard_Delete(PTR(w, 0x1D0));
             WORD(p, 8)
             ++;
         }
@@ -331,15 +331,15 @@ void ov40_02241D10(u32 a, int b, void *p) {
             ov40_0222BF80(p, 5);
             break;
         case 2: {
-            u32 v = sub_02031620(PTR(p, 0x88C));
+            u32 v = FrontierCard_GetCountry(PTR(p, 0x88C));
             ov40_02230944(p);
             if (v == 0) {
                 PlaySE(0x57C);
                 ov40_0222DF60(p, 0x80);
             } else {
                 if (BYTE(w, 0x4C3) == 0xFF) {
-                    BYTE(w, 0x4C3) = sub_02031620(PTR(p, 0x88C));
-                    BYTE(w, 0x4C4) = sub_0203162C(PTR(p, 0x88C));
+                    BYTE(w, 0x4C3) = FrontierCard_GetCountry(PTR(p, 0x88C));
+                    BYTE(w, 0x4C4) = FrontierCard_GetRegion(PTR(p, 0x88C));
                 } else {
                     BYTE(w, 0x4C3) = 0xFF;
                     BYTE(w, 0x4C4) = 0xFF;

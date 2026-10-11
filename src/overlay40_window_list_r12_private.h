@@ -7,8 +7,8 @@
 #define OV40_S32(p, off) (*(s32 *)((u8 *)(p) + (off)))
 #define OV40_S16(p, off) (*(s16 *)((u8 *)(p) + (off)))
 
-u32 sub_02031620(void *p);
-u32 sub_0203162C(void *p);
+u32 FrontierCard_GetCountry(void *p);
+u32 FrontierCard_GetRegion(void *p);
 void *NewString_ReadMsgData(void *msgData, int msgId);
 void *ov40_0222DAB0(u32 heapId);
 void *String_New(u32 size, u32 heapId);

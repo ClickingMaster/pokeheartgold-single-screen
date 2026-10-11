@@ -326,9 +326,9 @@
 	.public ov45_0222E584
 	.public ov45_0222E5A0
 	.public ov45_0222E5B4
-	.public ov45_0222E5D4
-	.public ov45_0222E688
-	.public ov45_0222E6C8
+	.public WiFiPlazaLobbyClient_Init
+	.public WiFiPlazaLobbyClient_Free
+	.public WiFiPlazaLobbyClient_Update
 	.public ov45_0222E7CC
 	.public ov45_0222E804
 	.public ov45_0222E810
@@ -337,12 +337,12 @@
 	.public ov45_0222E944
 	.public ov45_0222E96C
 	.public ov45_0222E9BC
-	.public ov45_0222E9E0
+	.public WiFiPlazaLobbyClient_GetOwnId
 	.public ov45_0222E9F8
 	.public ov45_0222EA2C
 	.public ov45_0222EA4C
-	.public ov45_0222EA78
-	.public ov45_0222EAD4
+	.public WiFiPlazaLobbyClient_GetOldestPlayer
+	.public WiFiPlazaLobbyClient_GetOldestOtherPlayer
 	.public ov45_0222EB38
 	.public ov45_0222EB74
 	.public ov45_0222EB94
@@ -360,13 +360,13 @@
 	.public ov45_0222EDA8
 	.public ov45_0222EDC4
 	.public ov45_0222EDF0
-	.public ov45_0222EE20
-	.public ov45_0222EE50
-	.public ov45_0222EE80
-	.public ov45_0222EEB8
-	.public ov45_0222EEF0
-	.public ov45_0222EF4C
-	.public ov45_0222EFAC
+	.public WiFiPlazaLobbyClient_SetLobbyCommands
+	.public WiFiPlazaLobbyClient_SetChannelCommands
+	.public WiFiPlazaLobbyClient_ClearLobbyCommands
+	.public WiFiPlazaLobbyClient_ClearChannelCommands
+	.public WiFiPlazaLobbyClient_SendToLobby
+	.public WiFiPlazaLobbyClient_SendToPlayer
+	.public WiFiPlazaLobbyClient_SendToChannel
 	.public ov45_0222F028
 	.public ov45_0222F154
 	.public ov45_0222F1BC
@@ -388,7 +388,7 @@
 	.public ov45_0222F628
 	.public ov45_0222F6B0
 	.public ov45_0222F70C
-	.public ov45_0222F74C
+	.public WiFiPlazaLobbyClient_CheckResult
 	.public ov45_0222F78C
 	.public ov45_0222F7B4
 	.public ov45_0222F848

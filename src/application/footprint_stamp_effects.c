@@ -30,8 +30,8 @@ void *WiFiPlazaWork_GetPlayer(void *lobby, int slot);
 void WiFiPlazaPlayer_CopyToProfile(void *record, PlayerProfile *profile, enum HeapID heapId);
 int ov45_0222AB28(void *lobby, int slot);
 BOOL ov45_0222D844(void);
-int ov45_0222EE50(const void *commands, u32 count, void *data);
-void ov45_0222EFAC(int command, void *data, int size);
+int WiFiPlazaLobbyClient_SetChannelCommands(const void *commands, u32 count, void *data);
+void WiFiPlazaLobbyClient_SendToChannel(int command, void *data, int size);
 // Runtime 64-bit multiply, called by name in FootprintStamp_GetBounds (a plain `*` orders the operands differently).
 s64 _ll_mul(s64 a, s64 b);
 
@@ -1433,7 +1433,7 @@ u32 FootprintStamp_GetFootprintSize(u32 species, int form) {
 }
 
 int FootprintStamp_RegisterLinkCommands(FootprintStamp *work) {
-    return ov45_0222EE50(ov89_0225D64C, 3, work);
+    return WiFiPlazaLobbyClient_SetChannelCommands(ov89_0225D64C, 3, work);
 }
 
 BOOL FootprintStamp_IsFromOtherPlayer(u32 playerId, const FootprintStampLinkFilter *filter) {
@@ -1458,7 +1458,7 @@ BOOL FootprintStamp_SendStamp(FootprintStampMon *mon) {
     if (((BOOL(*)(FootprintStampMon *))ov45_0222D844)(mon) == TRUE) {
         return FALSE;
     }
-    ov45_0222EFAC(2, mon, sizeof(FootprintStampMon));
+    WiFiPlazaLobbyClient_SendToChannel(2, mon, sizeof(FootprintStampMon));
     return TRUE;
 }
 

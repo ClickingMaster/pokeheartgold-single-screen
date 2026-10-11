@@ -45,7 +45,7 @@ void ov40_0222F920(void *, void *);
 void ov40_02235FA0(void *);
 void SetBgPriority(int, int);
 void Heap_Free(void *);
-void sub_020314BC(void *);
+void FrontierCard_Delete(void *);
 void BgClearTilemapBufferAndCommit(void *, int);
 void ov40_02235B10(void *);
 void ov40_0222DAA8(void *);

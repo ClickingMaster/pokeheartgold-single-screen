@@ -179,8 +179,8 @@ int ov40_022365A0(void *p) {
     PTR(w, 0x338) = TouchHitboxController_Create(ov40_022452F4, 7, ov40_02236320, p, 0x6D);
     PTR(w, 0x33C) = TouchHitboxController_Create(ov40_02245284, 3, ov40_0223635C, p, 0x6D);
     PTR(w, 0x340) = TouchHitboxController_Create(ov40_0224526C, 2, ov40_022363BC, p, 0x6D);
-    PTR(w, 0x384) = sub_020314A4(0x6D);
-    sub_020314C4(PTR(w, 0x384), PTR(p, 0x830));
+    PTR(w, 0x384) = FrontierCard_New(0x6D);
+    FrontierCard_InitFromSave(PTR(w, 0x384), PTR(p, 0x830));
     ov40_0222BF80(p, 1);
     return 0;
 }

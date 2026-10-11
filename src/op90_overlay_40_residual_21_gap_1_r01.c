@@ -40,7 +40,7 @@ void BufferString(void *format, u32 index, void *str, u32 a3, u32 a4, u32 a5);
 void MessageFormat_ResetBuffers(void *format);
 void MessageFormat_Delete(void *format);
 
-void *sub_020315B8(u32 value, int heapId);
+void *FrontierCard_NewNameString(u32 value, int heapId);
 u64 BattleRecordHeader_GetField(void *summary, int field, int index);
 void ov40_02230DCC(void *p, void *str);
 int ov40_022306C0(void *window, void *str);
@@ -97,7 +97,7 @@ void ov40_0222FF74(void *work, void *p) {
     trainerId = WORD(work, 0);
     fmt = ov40_0222DAB0(0x6D);
     window = (u8 *)work + 0x3C;
-    nameStr = sub_020315B8(trainerId, 0x6D);
+    nameStr = FrontierCard_NewNameString(trainerId, 0x6D);
     ov40_02230DCC(p, nameStr);
     bodyStr = NewString_ReadMsgData(PTR(p, 0x48), 7);
     out = String_New(0xFF, 0x6D);

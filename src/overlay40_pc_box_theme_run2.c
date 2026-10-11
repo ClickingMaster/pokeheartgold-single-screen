@@ -116,24 +116,24 @@ void ov40_02239574(void *p) {
     AddTextPrinterParameterizedWithColor((u8 *)w + 0x34, 0, s, 0, 0, 0xFF, 0xF0D00, NULL);
     ScheduleWindowCopyToVram((u8 *)w + 0x34);
     String_Delete(s);
-    tn = sub_020315B8(PTR(p, 0x88C), 0x6D);
+    tn = FrontierCard_NewNameString(PTR(p, 0x88C), 0x6D);
     ov40_02230DCC(p, tn);
     switch (WORD(w, 0x14)) {
     case 0:
-        v20 = sub_02031700(PTR(p, 0x88C));
+        v20 = FrontierCard_GetAvatar(PTR(p, 0x88C));
         s = NewString_ReadMsgData(PTR(p, 0x48), 0x55);
         s2 = NewString_ReadMsgData(PTR(w, 0x744), ov40_0222E658(v20, 4));
         BufferString(mf, 0, s2, 0, 1, 2);
         break;
     case 1:
-        v24 = sub_020316F0(PTR(p, 0x88C));
+        v24 = FrontierCard_GetBirthdayMonth(PTR(p, 0x88C));
         s = NewString_ReadMsgData(PTR(p, 0x48), 0x56);
         s2 = String_New(0xFF, 0x6D);
         BufferMonthNameAbbr(mf, 0, v24);
         break;
     case 2:
-        species = sub_020315E0(PTR(p, 0x88C));
-        v28 = sub_02031610(PTR(p, 0x88C));
+        species = FrontierCard_GetSpecies(PTR(p, 0x88C));
+        v28 = FrontierCard_IsEgg(PTR(p, 0x88C));
         s = NewString_ReadMsgData(PTR(p, 0x48), 0x57);
         if (v28 != 0) {
             species = 0x1EE;

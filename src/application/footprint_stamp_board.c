@@ -23,7 +23,7 @@ void ModelInstance_Draw(FootprintStampModelInstance *instance);
 void ModelInstance_SetVisible(FootprintStampModelInstance *instance, BOOL visible);
 void ModelInstance_SetPosition(FootprintStampModelInstance *instance, fx32 x, fx32 y, fx32 z);
 void ModelInstance_SetScale(FootprintStampModelInstance *instance, fx32 x, fx32 y, fx32 z);
-u32 ov45_0222E9E0(void *unused);
+u32 WiFiPlazaLobbyClient_GetOwnId(void *unused);
 int ov45_0222EC7C(u32 playerId);
 void SetMasterBrightness(PMLCDTarget screen, int brightness);
 
@@ -275,7 +275,7 @@ void FootprintStamp_Free3DVramMan(GF3DVramMan *vramMan) {
 }
 
 void FootprintStamp_InitLinkFilter(FootprintStamp *work) {
-    work->linkFilter.myId = ov45_0222E9E0(work);
+    work->linkFilter.myId = WiFiPlazaLobbyClient_GetOwnId(work);
 }
 
 void FootprintStampMon_InitDummy(void *unused, FootprintStampMon *mon) {

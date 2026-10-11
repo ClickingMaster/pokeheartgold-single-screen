@@ -701,8 +701,8 @@ int ov40_0223EDE0(void *p) {
         ov40_0222FA88((u8 *)p + 0x47C);
         ov40_0222F6D0((u8 *)p + 0x49C, *(s16 *)((u8 *)p + 0x48C));
         if (ov40_0222F38C((u8 *)p + 0x49C, p)) {
-            BYTE(inner, 0x4C3) = sub_02031620(PTR(p, 0x88C));
-            BYTE(inner, 0x4C4) = sub_0203162C(PTR(p, 0x88C));
+            BYTE(inner, 0x4C3) = FrontierCard_GetCountry(PTR(p, 0x88C));
+            BYTE(inner, 0x4C4) = FrontierCard_GetRegion(PTR(p, 0x88C));
             ov40_0223DDE8(p, BYTE(inner, 0x4C3), BYTE(inner, 0x4C4));
             WORD(p, 8)
             ++;
