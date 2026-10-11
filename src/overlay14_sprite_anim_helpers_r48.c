@@ -3,7 +3,7 @@
 #include "overlay14_sprite_anim_helpers_r48_private.h"
 #include "sprite_system.h"
 
-void ov14_021F29C4(void *work) {
+void PCBox_TickSprites(void *work) {
     u8 *ptr = work;
     u32 i;
 
@@ -16,7 +16,7 @@ void ov14_021F29C4(void *work) {
     }
 }
 
-void ov14_021F29E4(void *work, u32 index, u32 anim) {
+void PCBox_SetSpriteAnim(void *work, u32 index, u32 anim) {
     ManagedSprite **sprites = (ManagedSprite **)((u8 *)work + 0x2FC);
 
     ManagedSprite_SetAnimationFrame(sprites[index], 0);

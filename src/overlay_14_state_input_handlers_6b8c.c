@@ -2,35 +2,35 @@
 
 #define RESET_7AC4(name)                       \
     void name(void *p, u32 a1, u32 a2) {       \
-        ov14_021F7AC4(WORK(p), a1, a2);        \
-        ov14_021E5A50(WORK(p), ov14_021E9F20); \
+        PCBox_StartCursorSlide(WORK(p), a1, a2);        \
+        PCBox_SetPendingUpdateFunc(WORK(p), PCBox_UpdateCursorSlide); \
     }
 
 #define SET_NOTIFY(name)                                \
     void name(void *p, u32 a1) {                        \
         GridInputHandler_SetNextInput(GRID(p), (u8)a1); \
-        ov14_021F6B28(p, a1);                           \
+        PCBox_PlaceCursorOnGridInput(p, a1);                           \
     }
 
 #define SET_NOTIFY2(name, k1, k2)                       \
     void name(void *p, u32 a1) {                        \
         GridInputHandler_SetNextInput(GRID(p), (u8)a1); \
         if (a1 != k1 && a1 != k2) {                     \
-            ov14_021F6B28(p, a1);                       \
+            PCBox_PlaceCursorOnGridInput(p, a1);                       \
         }                                               \
     }
 
 RESET_7AC4(ov14_021F6B8C)
 SET_NOTIFY(ov14_021F6BA4)
 
-u32 ov14_021F6BC0(void *p) {
+u32 PCBox_GetDepositMenuInput(void *p) {
     u32 nextInput = GridInputHandler_GetNextInput(GRID(p));
     u32 input = GridInputHandler_HandleInput_AllowHold(GRID(p));
     if (input < 12) {
-        if (ov14_021E8544(UNK2F0(p)) == 0) {
+        if (PCBox_IsActionMenuOpen(UNK2F0(p)) == 0) {
             if (input >= 7 && input <= 11) {
                 GridInputHandler_SetNextInput(GRID(p), nextInput);
-                ov14_021F6B28(p, nextInput);
+                PCBox_PlaceCursorOnGridInput(p, nextInput);
                 return -1;
             }
         } else if (input == 6) {
@@ -38,7 +38,7 @@ u32 ov14_021F6BC0(void *p) {
         }
         return input;
     }
-    if (ov14_021E8544(UNK2F0(p)) == 1) {
+    if (PCBox_IsActionMenuOpen(UNK2F0(p)) == 1) {
         if (input == 6 || input == -2) {
             return 11;
         }
@@ -49,7 +49,7 @@ u32 ov14_021F6BC0(void *p) {
 void ov14_021F6C3C(void *p, u32 a1, u32 a2) {
     u32 v = a1;
     if (a2 != -1) {
-        if (ov14_021E8544(UNK2F0(p)) == 0) {
+        if (PCBox_IsActionMenuOpen(UNK2F0(p)) == 0) {
             v = U8_AT(p, 0x21);
             if (v != 0xFF && v >= 30) {
                 v -= 30;
@@ -61,7 +61,7 @@ void ov14_021F6C3C(void *p, u32 a1, u32 a2) {
         }
     }
     GridInputHandler_SetNextInput(GRID(p), (u8)v);
-    ov14_021F6B28(p, v);
+    PCBox_PlaceCursorOnGridInput(p, v);
 }
 
 void ov14_021F6C94(void *p, u32 a1) {
@@ -73,19 +73,19 @@ void ov14_021F6C94(void *p, u32 a1) {
     GridInputHandler_SetNextInput(GRID(p), (u8)a1);
     DpadMenuBox_GetPosition(GridInputHandler_GetDpadBox(GRID(p), a1), &xy[1], &xy[0]);
     ManagedSprite_SetPositionXY(PTR_AT(WORK(p), 0x320), xy[1], xy[0]);
-    ov14_021F2A18(WORK(p), 9, 1);
+    PCBox_SetSpriteVisible(WORK(p), 9, 1);
     if ((s32)a1 >= 0 && (s32)a1 <= 5) {
-        ov14_021F29E4(WORK(p), 9, 14);
+        PCBox_SetSpriteAnim(WORK(p), 9, 14);
     } else {
-        ov14_021F29E4(WORK(p), 9, 8);
+        PCBox_SetSpriteAnim(WORK(p), 9, 8);
     }
 }
 
 void ov14_021F6D14(void *p, u32 a1, u32 a2) {
     if ((s32)a1 >= 0 && (s32)a1 <= 5) {
-        ov14_021F29E4(WORK(p), 9, 14);
+        PCBox_SetSpriteAnim(WORK(p), 9, 14);
     } else {
-        ov14_021F29E4(WORK(p), 9, 8);
+        PCBox_SetSpriteAnim(WORK(p), 9, 8);
     }
     if (a2 == 8 && a1 == 0) {
         a1 = U32_AT(WORK(p), 0x43c);
@@ -100,13 +100,13 @@ void ov14_021F6D14(void *p, u32 a1, u32 a2) {
         } else {
             U8_AT(p, 0x25) += 1;
         }
-        ov14_021F49E0(p);
-        ov14_021F48B4(p);
-        ov14_021F4848(p);
-        ov14_021F57B8(p);
-        ov14_021F29E4(WORK(p), 5, 4);
-        ov14_021F7AC4(WORK(p), a1, a2);
-        ov14_021E5A50(WORK(p), ov14_021E9F20);
+        PCBox_LoadTrayPageThumbnails(p);
+        PCBox_UpdateTrayCursor(p);
+        PCBox_UpdateCurrentBoxMarker(p);
+        PCBox_DrawTrayBoxNameAndCount(p);
+        PCBox_SetSpriteAnim(WORK(p), 5, 4);
+        PCBox_StartCursorSlide(WORK(p), a1, a2);
+        PCBox_SetPendingUpdateFunc(WORK(p), PCBox_UpdateCursorSlide);
         return;
     }
     if (a1 == 5 && a2 == 0) {
@@ -115,34 +115,34 @@ void ov14_021F6D14(void *p, u32 a1, u32 a2) {
         } else {
             U8_AT(p, 0x25) -= 1;
         }
-        ov14_021F49E0(p);
-        ov14_021F48B4(p);
-        ov14_021F4848(p);
-        ov14_021F57B8(p);
-        ov14_021F29E4(WORK(p), 4, 2);
-        ov14_021F7AC4(WORK(p), a1, a2);
-        ov14_021E5A50(WORK(p), ov14_021E9F20);
+        PCBox_LoadTrayPageThumbnails(p);
+        PCBox_UpdateTrayCursor(p);
+        PCBox_UpdateCurrentBoxMarker(p);
+        PCBox_DrawTrayBoxNameAndCount(p);
+        PCBox_SetSpriteAnim(WORK(p), 4, 2);
+        PCBox_StartCursorSlide(WORK(p), a1, a2);
+        PCBox_SetPendingUpdateFunc(WORK(p), PCBox_UpdateCursorSlide);
         return;
     }
     if ((s32)a1 >= 0 && (s32)a1 <= 5 && a2 != 8) {
         U8_AT(p, 0x25) = a1 + (U8_AT(p, 0x25) / 6) * 6;
-        ov14_021F48B4(p);
-        ov14_021F57B8(p);
+        PCBox_UpdateTrayCursor(p);
+        PCBox_DrawTrayBoxNameAndCount(p);
     }
-    ov14_021F7AC4(WORK(p), a1, a2);
-    ov14_021E5A50(WORK(p), ov14_021E9F20);
+    PCBox_StartCursorSlide(WORK(p), a1, a2);
+    PCBox_SetPendingUpdateFunc(WORK(p), PCBox_UpdateCursorSlide);
 }
 
 SET_NOTIFY2(ov14_021F6E68, 6, 7)
 
-u32 ov14_021F6E8C(void *p) {
+u32 PCBox_GetWithdrawMenuInput(void *p) {
     u32 nextInput = GridInputHandler_GetNextInput(GRID(p));
     u32 input = GridInputHandler_HandleInput_AllowHold(GRID(p));
     if (input < 39) {
-        if (ov14_021E8544(UNK2F0(p)) == 0) {
+        if (PCBox_IsActionMenuOpen(UNK2F0(p)) == 0) {
             if (input >= 34 && input <= 38) {
                 GridInputHandler_SetNextInput(GRID(p), nextInput);
-                ov14_021F6B28(p, nextInput);
+                PCBox_PlaceCursorOnGridInput(p, nextInput);
                 return -1;
             }
         } else if (input == 33) {
@@ -150,7 +150,7 @@ u32 ov14_021F6E8C(void *p) {
         }
         return input;
     }
-    if (ov14_021E8544(UNK2F0(p)) == 1) {
+    if (PCBox_IsActionMenuOpen(UNK2F0(p)) == 1) {
         if (input == 33 || input == -2) {
             return 38;
         }
@@ -161,7 +161,7 @@ u32 ov14_021F6E8C(void *p) {
 void ov14_021F6F08(void *p, u32 a1, u32 a2) {
     u32 v = a1;
     if (a2 != -1) {
-        if (ov14_021E8544(UNK2F0(p)) == 0) {
+        if (PCBox_IsActionMenuOpen(UNK2F0(p)) == 0) {
             if (v - 31 <= 1) {
                 v = 30;
             } else if (v != 30 && v != 33) {
@@ -175,24 +175,24 @@ void ov14_021F6F08(void *p, u32 a1, u32 a2) {
         }
     }
     GridInputHandler_SetNextInput(GRID(p), (u8)v);
-    ov14_021F6B28(p, v);
+    PCBox_PlaceCursorOnGridInput(p, v);
 }
 
 SET_NOTIFY2(ov14_021F6F70, 31, 32)
 
-u32 ov14_021F6F94(void *p) {
+u32 PCBox_GetMoveModeMenuInput(void *p) {
     u32 nextInput = GridInputHandler_GetNextInput(GRID(p));
     u32 input = GridInputHandler_HandleInput_AllowHold(GRID(p));
-    if (ov14_021E8544(UNK2F0(p)) == 0) {
+    if (PCBox_IsActionMenuOpen(UNK2F0(p)) == 0) {
         if (input >= 36 && input <= 40) {
             GridInputHandler_SetNextInput(GRID(p), nextInput);
-            ov14_021F6B28(p, nextInput);
+            PCBox_PlaceCursorOnGridInput(p, nextInput);
             return -1;
         }
     } else {
         if (input - 33 <= 1) {
             GridInputHandler_SetNextInput(GRID(p), nextInput);
-            ov14_021F6B28(p, nextInput);
+            PCBox_PlaceCursorOnGridInput(p, nextInput);
             return -1;
         }
         if (input == 35 || input == -2) {
@@ -205,7 +205,7 @@ u32 ov14_021F6F94(void *p) {
 void ov14_021F7010(void *p, u32 a1, u32 a2) {
     u32 v = a1;
     if (a2 != -1) {
-        if (ov14_021E8544(UNK2F0(p)) == 0) {
+        if (PCBox_IsActionMenuOpen(UNK2F0(p)) == 0) {
             switch (v) {
             case 31:
             case 32:
@@ -228,15 +228,15 @@ void ov14_021F7010(void *p, u32 a1, u32 a2) {
         }
     }
     GridInputHandler_SetNextInput(GRID(p), (u8)v);
-    ov14_021F6B28(p, v);
+    PCBox_PlaceCursorOnGridInput(p, v);
 }
 
 RESET_7AC4(ov14_021F708C)
 SET_NOTIFY(ov14_021F70A4)
 
-u32 ov14_021F70C0(void *p) {
+u32 PCBox_GetBoxTrayInput(void *p) {
     u32 input;
-    if (ov14_021E85E4(UNK2F0(p)) == 0) {
+    if (PCBox_IsChangeBoxButtonShown(UNK2F0(p)) == 0) {
         GridInputHandler_ClearEnabledFlag(GRID(p), 45);
     }
     input = GridInputHandler_HandleInput_AllowHold(GRID(p));
@@ -253,12 +253,12 @@ void ov14_021F70F4(void *p, u32 a1) {
     GridInputHandler_SetNextInput(GRID(p), (u8)a1);
     DpadMenuBox_GetPosition(GridInputHandler_GetDpadBox(GRID(p), a1), &xy[1], &xy[0]);
     ManagedSprite_SetPositionXY(PTR_AT(WORK(p), 0x320), xy[1], xy[0]);
-    ov14_021F2A18(WORK(p), 9, 1);
+    PCBox_SetSpriteVisible(WORK(p), 9, 1);
     if (U8_AT(WORK(p), 0x44b) == 0) {
         if ((s32)a1 >= 37 && (s32)a1 <= 42) {
-            ov14_021F29E4(WORK(p), 9, 14);
+            PCBox_SetSpriteAnim(WORK(p), 9, 14);
         } else {
-            ov14_021F29E4(WORK(p), 9, 8);
+            PCBox_SetSpriteAnim(WORK(p), 9, 8);
         }
     }
 }
@@ -266,9 +266,9 @@ void ov14_021F70F4(void *p, u32 a1) {
 void ov14_021F7184(void *p, u32 a1, u32 a2) {
     if (U8_AT(WORK(p), 0x44b) == 0) {
         if ((s32)a1 >= 37 && (s32)a1 <= 42) {
-            ov14_021F29E4(WORK(p), 9, 14);
+            PCBox_SetSpriteAnim(WORK(p), 9, 14);
         } else {
-            ov14_021F29E4(WORK(p), 9, 8);
+            PCBox_SetSpriteAnim(WORK(p), 9, 8);
         }
     }
     if (a1 == 37
@@ -285,13 +285,13 @@ void ov14_021F7184(void *p, u32 a1, u32 a2) {
         } else {
             U8_AT(p, 0x25) += 1;
         }
-        ov14_021F49E0(p);
-        ov14_021F48B4(p);
-        ov14_021F4848(p);
-        ov14_021F57B8(p);
-        ov14_021F29E4(WORK(p), 5, 4);
-        ov14_021F7AC4(WORK(p), a1, a2);
-        ov14_021E5A50(WORK(p), ov14_021E9F20);
+        PCBox_LoadTrayPageThumbnails(p);
+        PCBox_UpdateTrayCursor(p);
+        PCBox_UpdateCurrentBoxMarker(p);
+        PCBox_DrawTrayBoxNameAndCount(p);
+        PCBox_SetSpriteAnim(WORK(p), 5, 4);
+        PCBox_StartCursorSlide(WORK(p), a1, a2);
+        PCBox_SetPendingUpdateFunc(WORK(p), PCBox_UpdateCursorSlide);
         return;
     }
     if (a1 == 42 && a2 == 37) {
@@ -300,22 +300,22 @@ void ov14_021F7184(void *p, u32 a1, u32 a2) {
         } else {
             U8_AT(p, 0x25) -= 1;
         }
-        ov14_021F49E0(p);
-        ov14_021F48B4(p);
-        ov14_021F4848(p);
-        ov14_021F57B8(p);
-        ov14_021F29E4(WORK(p), 4, 2);
-        ov14_021F7AC4(WORK(p), a1, a2);
-        ov14_021E5A50(WORK(p), ov14_021E9F20);
+        PCBox_LoadTrayPageThumbnails(p);
+        PCBox_UpdateTrayCursor(p);
+        PCBox_UpdateCurrentBoxMarker(p);
+        PCBox_DrawTrayBoxNameAndCount(p);
+        PCBox_SetSpriteAnim(WORK(p), 4, 2);
+        PCBox_StartCursorSlide(WORK(p), a1, a2);
+        PCBox_SetPendingUpdateFunc(WORK(p), PCBox_UpdateCursorSlide);
         return;
     }
     if ((s32)a1 >= 37 && (s32)a1 <= 42 && (s32)a2 >= 37 && (s32)a2 <= 42) {
         U8_AT(p, 0x25) = a1 + (U8_AT(p, 0x25) / 6) * 6 - 37;
-        ov14_021F48B4(p);
-        ov14_021F57B8(p);
+        PCBox_UpdateTrayCursor(p);
+        PCBox_DrawTrayBoxNameAndCount(p);
     }
-    ov14_021F7AC4(WORK(p), a1, a2);
-    ov14_021E5A50(WORK(p), ov14_021E9F20);
+    PCBox_StartCursorSlide(WORK(p), a1, a2);
+    PCBox_SetPendingUpdateFunc(WORK(p), PCBox_UpdateCursorSlide);
 }
 
 void ov14_021F7308(void *p, u32 a1) {
@@ -324,13 +324,13 @@ void ov14_021F7308(void *p, u32 a1) {
     }
     if (a1 != 43 && a1 != 44) {
         GridInputHandler_SetNextInput(GRID(p), (u8)a1);
-        ov14_021F6B28(p, a1);
+        PCBox_PlaceCursorOnGridInput(p, a1);
     }
 }
 
 u32 ov14_021F7340(void *p) {
     u32 input;
-    if (ov14_021E85E4(UNK2F0(p)) == 0) {
+    if (PCBox_IsChangeBoxButtonShown(UNK2F0(p)) == 0) {
         GridInputHandler_ClearEnabledFlag(GRID(p), 45);
     }
     GridInputHandler_ClearEnabledFlag(GRID(p), 43);
@@ -340,13 +340,13 @@ u32 ov14_021F7340(void *p) {
     return input;
 }
 
-u32 ov14_021F7388(void *p) {
+u32 PCBox_GetMoveModePartyMenuInput(void *p) {
     u32 nextInput = GridInputHandler_GetNextInput(GRID(p));
     u32 input = GridInputHandler_HandleInput_AllowHold(GRID(p));
-    if (ov14_021E8544(UNK2F0(p)) == 0) {
+    if (PCBox_IsActionMenuOpen(UNK2F0(p)) == 0) {
         if (input >= 8 && input <= 12) {
             GridInputHandler_SetNextInput(GRID(p), nextInput);
-            ov14_021F6B28(p, nextInput);
+            PCBox_PlaceCursorOnGridInput(p, nextInput);
             return -1;
         }
     } else if (input == 7 || input == -2) {
@@ -358,7 +358,7 @@ u32 ov14_021F7388(void *p) {
 void ov14_021F73E4(void *p, u32 a1, u32 a2) {
     u32 v = a1;
     if (a2 != -1) {
-        if (ov14_021E8544(UNK2F0(p)) == 0) {
+        if (PCBox_IsActionMenuOpen(UNK2F0(p)) == 0) {
             if ((s32)v >= 8) {
                 v = U8_AT(p, 0x21);
                 if (v >= 30) {
@@ -372,38 +372,38 @@ void ov14_021F73E4(void *p, u32 a1, u32 a2) {
         }
     }
     GridInputHandler_SetNextInput(GRID(p), (u8)v);
-    ov14_021F6B28(p, v);
+    PCBox_PlaceCursorOnGridInput(p, v);
 }
 
 void ov14_021F7444(void *p, u32 a1, u32 a2) {
-    if (ov14_021E8544(UNK2F0(p)) == 1) {
+    if (PCBox_IsActionMenuOpen(UNK2F0(p)) == 1) {
         if ((s32)a1 <= 6 && (s32)a2 >= 7) {
-            ov14_021E76B8(p);
-            ov14_021F7AC4(WORK(p), a1, a2);
-            ov14_021E5A50(WORK(p), ov14_021EA180);
+            PCBox_ClearMonInfoAndSelection(p);
+            PCBox_StartCursorSlide(WORK(p), a1, a2);
+            PCBox_SetPendingUpdateFunc(WORK(p), ov14_021EA180);
             return;
         }
     } else if (a1 == 12 && a2 == 7) {
         GridInputHandler_SetNextInput(GRID(p), 7);
         a1 = 7;
     }
-    ov14_021F7AC4(WORK(p), a1, a2);
-    ov14_021E5A50(WORK(p), ov14_021E9F20);
+    PCBox_StartCursorSlide(WORK(p), a1, a2);
+    PCBox_SetPendingUpdateFunc(WORK(p), PCBox_UpdateCursorSlide);
 }
 
-u32 ov14_021F74B0(void *p) {
+u32 PCBox_GetItemModeMenuInput(void *p) {
     u32 nextInput = GridInputHandler_GetNextInput(GRID(p));
     u32 input = GridInputHandler_HandleInput_AllowHold(GRID(p));
-    if (ov14_021E8544(UNK2F0(p)) == 0) {
+    if (PCBox_IsActionMenuOpen(UNK2F0(p)) == 0) {
         if (input == 36) {
             GridInputHandler_SetNextInput(GRID(p), nextInput);
-            ov14_021F6B28(p, nextInput);
+            PCBox_PlaceCursorOnGridInput(p, nextInput);
             return -1;
         }
     } else {
         if (input - 33 <= 1) {
             GridInputHandler_SetNextInput(GRID(p), nextInput);
-            ov14_021F6B28(p, nextInput);
+            PCBox_PlaceCursorOnGridInput(p, nextInput);
             return -1;
         }
         if (input == 35 || input == -2) {
@@ -416,7 +416,7 @@ u32 ov14_021F74B0(void *p) {
 void ov14_021F7528(void *p, u32 a1, u32 a2) {
     u32 v = a1;
     if (a2 != -1) {
-        if (ov14_021E8544(UNK2F0(p)) == 0) {
+        if (PCBox_IsActionMenuOpen(UNK2F0(p)) == 0) {
             switch (v) {
             case 31:
             case 32:
@@ -439,19 +439,19 @@ void ov14_021F7528(void *p, u32 a1, u32 a2) {
         }
     }
     GridInputHandler_SetNextInput(GRID(p), (u8)v);
-    ov14_021F6B28(p, v);
+    PCBox_PlaceCursorOnGridInput(p, v);
 }
 
 RESET_7AC4(ov14_021F7594)
 SET_NOTIFY(ov14_021F75AC)
 
-u32 ov14_021F75C8(void *p) {
+u32 PCBox_GetItemModePartyMenuInput(void *p) {
     u32 nextInput = GridInputHandler_GetNextInput(GRID(p));
     u32 input = GridInputHandler_HandleInput_AllowHold(GRID(p));
-    if (ov14_021E8544(UNK2F0(p)) == 0) {
+    if (PCBox_IsActionMenuOpen(UNK2F0(p)) == 0) {
         if (input == 8) {
             GridInputHandler_SetNextInput(GRID(p), nextInput);
-            ov14_021F6B28(p, nextInput);
+            PCBox_PlaceCursorOnGridInput(p, nextInput);
             return -1;
         }
     } else if (input == 7 || input == -2) {
@@ -463,7 +463,7 @@ u32 ov14_021F75C8(void *p) {
 void ov14_021F7620(void *p, u32 a1, u32 a2) {
     u32 v = a1;
     if (a2 != -1) {
-        if (ov14_021E8544(UNK2F0(p)) == 0) {
+        if (PCBox_IsActionMenuOpen(UNK2F0(p)) == 0) {
             if ((s32)v >= 8) {
                 v = U8_AT(p, 0x21);
                 if (v >= 30) {
@@ -477,7 +477,7 @@ void ov14_021F7620(void *p, u32 a1, u32 a2) {
         }
     }
     GridInputHandler_SetNextInput(GRID(p), (u8)v);
-    ov14_021F6B28(p, v);
+    PCBox_PlaceCursorOnGridInput(p, v);
 }
 
 RESET_7AC4(ov14_021F7670)
@@ -492,17 +492,17 @@ void ov14_021F7688(void *p, u32 a1) {
     DpadMenuBox_GetPosition(GridInputHandler_GetDpadBox(GRID(p), a1), &xy[1], &xy[0]);
     ManagedSprite_SetPositionXY(PTR_AT(WORK(p), 0x320), xy[1], xy[0]);
     if ((s32)a1 >= 0 && (s32)a1 <= 5) {
-        ov14_021F29E4(WORK(p), 9, 14);
+        PCBox_SetSpriteAnim(WORK(p), 9, 14);
     } else {
-        ov14_021F29E4(WORK(p), 9, 8);
+        PCBox_SetSpriteAnim(WORK(p), 9, 8);
     }
 }
 
 void ov14_021F7700(void *p, u32 a1, u32 a2) {
     if ((s32)a1 >= 0 && (s32)a1 <= 5) {
-        ov14_021F29E4(WORK(p), 9, 14);
+        PCBox_SetSpriteAnim(WORK(p), 9, 14);
     } else {
-        ov14_021F29E4(WORK(p), 9, 8);
+        PCBox_SetSpriteAnim(WORK(p), 9, 8);
     }
     if (a2 == 8 && a1 == 0) {
         a1 = U32_AT(WORK(p), 0x43c);
@@ -517,13 +517,13 @@ void ov14_021F7700(void *p, u32 a1, u32 a2) {
         } else {
             U8_AT(p, 0x25) += 1;
         }
-        ov14_021F49E0(p);
-        ov14_021F48B4(p);
-        ov14_021F4848(p);
-        ov14_021F57B8(p);
-        ov14_021F29E4(WORK(p), 5, 4);
-        ov14_021F7AC4(WORK(p), a1, a2);
-        ov14_021E5A50(WORK(p), ov14_021E9F20);
+        PCBox_LoadTrayPageThumbnails(p);
+        PCBox_UpdateTrayCursor(p);
+        PCBox_UpdateCurrentBoxMarker(p);
+        PCBox_DrawTrayBoxNameAndCount(p);
+        PCBox_SetSpriteAnim(WORK(p), 5, 4);
+        PCBox_StartCursorSlide(WORK(p), a1, a2);
+        PCBox_SetPendingUpdateFunc(WORK(p), PCBox_UpdateCursorSlide);
         return;
     }
     if (a1 == 5 && a2 == 0) {
@@ -532,22 +532,22 @@ void ov14_021F7700(void *p, u32 a1, u32 a2) {
         } else {
             U8_AT(p, 0x25) -= 1;
         }
-        ov14_021F49E0(p);
-        ov14_021F48B4(p);
-        ov14_021F4848(p);
-        ov14_021F57B8(p);
-        ov14_021F29E4(WORK(p), 4, 2);
-        ov14_021F7AC4(WORK(p), a1, a2);
-        ov14_021E5A50(WORK(p), ov14_021E9F20);
+        PCBox_LoadTrayPageThumbnails(p);
+        PCBox_UpdateTrayCursor(p);
+        PCBox_UpdateCurrentBoxMarker(p);
+        PCBox_DrawTrayBoxNameAndCount(p);
+        PCBox_SetSpriteAnim(WORK(p), 4, 2);
+        PCBox_StartCursorSlide(WORK(p), a1, a2);
+        PCBox_SetPendingUpdateFunc(WORK(p), PCBox_UpdateCursorSlide);
         return;
     }
     if ((s32)a1 >= 0 && (s32)a1 <= 5 && a2 != 8) {
         U8_AT(p, 0x25) = a1 + (U8_AT(p, 0x25) / 6) * 6;
-        ov14_021F48B4(p);
-        ov14_021F57B8(p);
+        PCBox_UpdateTrayCursor(p);
+        PCBox_DrawTrayBoxNameAndCount(p);
     }
-    ov14_021F7AC4(WORK(p), a1, a2);
-    ov14_021E5A50(WORK(p), ov14_021E9F20);
+    PCBox_StartCursorSlide(WORK(p), a1, a2);
+    PCBox_SetPendingUpdateFunc(WORK(p), PCBox_UpdateCursorSlide);
 }
 
 SET_NOTIFY2(ov14_021F7854, 6, 7)
@@ -562,17 +562,17 @@ void ov14_021F7878(void *p, u32 a1) {
     DpadMenuBox_GetPosition(GridInputHandler_GetDpadBox(GRID(p), a1), &xy[1], &xy[0]);
     ManagedSprite_SetPositionXY(PTR_AT(WORK(p), 0x320), xy[1], xy[0]);
     if ((s32)a1 >= 0 && (s32)a1 <= 3) {
-        ov14_021F29E4(WORK(p), 9, 14);
+        PCBox_SetSpriteAnim(WORK(p), 9, 14);
     } else {
-        ov14_021F29E4(WORK(p), 9, 8);
+        PCBox_SetSpriteAnim(WORK(p), 9, 8);
     }
 }
 
 void ov14_021F78F8(void *p, u32 a1, u32 a2) {
     if ((s32)a1 >= 0 && (s32)a1 <= 3) {
-        ov14_021F29E4(WORK(p), 9, 14);
+        PCBox_SetSpriteAnim(WORK(p), 9, 14);
     } else {
-        ov14_021F29E4(WORK(p), 9, 8);
+        PCBox_SetSpriteAnim(WORK(p), 9, 8);
     }
     if (a2 == 6 && a1 == 0) {
         a1 = U32_AT(WORK(p), 0x43c);
@@ -587,13 +587,13 @@ void ov14_021F78F8(void *p, u32 a1, u32 a2) {
         } else {
             U8_AT(WORK(p), 0x44d) = U8_AT(WORK(p), 0x44d) + 1;
         }
-        ov14_021F462C(p);
-        ov14_021F4530(p);
-        ov14_021F459C(p);
-        ov14_021F58B8(p);
-        ov14_021F29E4(WORK(p), 5, 4);
-        ov14_021F7AC4(WORK(p), a1, a2);
-        ov14_021E5A50(WORK(p), ov14_021E9F20);
+        PCBox_LoadWallpaperThumbnails(p);
+        PCBox_UpdateCurrentWallpaperMarker(p);
+        PCBox_UpdateWallpaperCursor(p);
+        PCBox_DrawWallpaperName(p);
+        PCBox_SetSpriteAnim(WORK(p), 5, 4);
+        PCBox_StartCursorSlide(WORK(p), a1, a2);
+        PCBox_SetPendingUpdateFunc(WORK(p), PCBox_UpdateCursorSlide);
         return;
     }
     if (a1 == 3 && a2 == 0) {
@@ -602,22 +602,22 @@ void ov14_021F78F8(void *p, u32 a1, u32 a2) {
         } else {
             U8_AT(WORK(p), 0x44d) = U8_AT(WORK(p), 0x44d) - 1;
         }
-        ov14_021F462C(p);
-        ov14_021F4530(p);
-        ov14_021F459C(p);
-        ov14_021F58B8(p);
-        ov14_021F29E4(WORK(p), 4, 2);
-        ov14_021F7AC4(WORK(p), a1, a2);
-        ov14_021E5A50(WORK(p), ov14_021E9F20);
+        PCBox_LoadWallpaperThumbnails(p);
+        PCBox_UpdateCurrentWallpaperMarker(p);
+        PCBox_UpdateWallpaperCursor(p);
+        PCBox_DrawWallpaperName(p);
+        PCBox_SetSpriteAnim(WORK(p), 4, 2);
+        PCBox_StartCursorSlide(WORK(p), a1, a2);
+        PCBox_SetPendingUpdateFunc(WORK(p), PCBox_UpdateCursorSlide);
         return;
     }
     if ((s32)a1 >= 0 && (s32)a1 <= 3 && a2 != 6) {
         U8_AT(WORK(p), 0x44d) = a1 + (U8_AT(WORK(p), 0x44d) / 4) * 4;
-        ov14_021F459C(p);
-        ov14_021F58B8(p);
+        PCBox_UpdateWallpaperCursor(p);
+        PCBox_DrawWallpaperName(p);
     }
-    ov14_021F7AC4(WORK(p), a1, a2);
-    ov14_021E5A50(WORK(p), ov14_021E9F20);
+    PCBox_StartCursorSlide(WORK(p), a1, a2);
+    PCBox_SetPendingUpdateFunc(WORK(p), PCBox_UpdateCursorSlide);
 }
 
 SET_NOTIFY2(ov14_021F7A2C, 4, 5)
@@ -638,7 +638,7 @@ u32 ov14_021F7A50(void *p) {
     return input;
 }
 
-void ov14_021F7AC4(void *q, u32 a1, u32 a2) {
+void PCBox_StartCursorSlide(void *q, u32 a1, u32 a2) {
     u8 s[4];
     void *w;
     DpadMenuBox_GetPosition(GridInputHandler_GetDpadBox(PTR_AT(q, 0x2c), a1), &s[3], &s[2]);
@@ -666,8 +666,8 @@ void ov14_021F7AC4(void *q, u32 a1, u32 a2) {
     PTR_AT(q, 0xc) = w;
 }
 
-u32 ov14_021F7B7C(void *p) {
-    if (ov14_021E8648(UNK2F0(p)) == 0) {
+u32 PCBox_IsSummaryShortcutPressed(void *p) {
+    if (PCBox_IsSummaryButtonShown(UNK2F0(p)) == 0) {
         return 0;
     }
     if (gSystem[0x12] & 0x800) {

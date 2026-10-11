@@ -17,12 +17,12 @@ typedef struct CandidateApp {
     u8 national;
 } CandidateApp;
 
-u16 ov18_021F8838(void *p) {
-    int index = ov18_021F8824(p);
+u16 PokedexApp_GetCursorSpecies(void *p) {
+    int index = PokedexApp_GetListCursorIndex(p);
     return *(u16 *)((u8 *)p + 0x1030 + index * 4);
 }
 
-u32 ov18_021F8850(void *entry, u16 target) {
+u32 PokedexApp_FindSpeciesInResults(void *entry, u16 target) {
     u32 i;
     u16 first = 0;
     u16 count = *(u16 *)((u8 *)entry + 0x7B4);
@@ -37,7 +37,7 @@ u32 ov18_021F8850(void *entry, u16 target) {
     return first;
 }
 
-void ov18_021F8884(void *p, int mode) {
+void PokedexApp_BuildListEntries(void *p, int mode) {
     CandidateApp *app = p;
     u32 i;
     MI_CpuClear32(app->entries, sizeof(app->entries));
@@ -58,16 +58,16 @@ void ov18_021F8884(void *p, int mode) {
     }
 }
 
-u32 ov18_021F891C(void *p, int mode) {
+u32 PokedexApp_GetListLength(void *p, int mode) {
     if (mode == 0) {
         return *(u16 *)((u8 *)p + 0x102C);
     }
     return Pokedex_ConvertToCurrentDexNo(*((u8 *)p + 0x1858), *(u16 *)((u8 *)p + 0x878 + (*(u16 *)((u8 *)p + 0x102C) - 1) * 4));
 }
 
-u32 ov18_021F8950(void *p, int mode) {
+u32 PokedexApp_GetLastListPage(void *p, int mode) {
     if (mode == 0) {
-        return ov18_021F891C(p, mode) / 15;
+        return PokedexApp_GetListLength(p, mode) / 15;
     }
-    return (ov18_021F891C(p, mode) - 1) / 15;
+    return (PokedexApp_GetListLength(p, mode) - 1) / 15;
 }

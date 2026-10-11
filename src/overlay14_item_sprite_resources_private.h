@@ -43,8 +43,8 @@ extern void *GfGfxLoader_GetCharData(u32, s32, u32, void **, u32);
 extern void GfGfxLoader_GXLoadPal(u32, s32, u32, u32, u32, u32);
 extern void GetBoxmonSpriteCharAndPlttNarcIds(R53PokepicTemplate *, void *, u32, u32);
 extern void sub_02014510(u32, s32, u32, R53Dims *, void *, u32, u32, u32, u32);
-extern void ov14_021F2C1C(void *, u32, void *, u32);
-extern void ov14_021F2C50(void *, u32, void *, u32);
+extern void PCBox_LoadSpriteCharsMain(void *, u32, void *, u32);
+extern void PCBox_LoadSpriteCharsSub(void *, u32, void *, u32);
 
 extern const u8 ov14_021F8098[];
 extern const u8 ov14_021F8210[];
@@ -52,14 +52,14 @@ extern const u8 ov14_021F8244[];
 extern const u8 ov14_021F83E4[];
 extern const u8 ov14_021F8418[];
 
-void ov14_021F34EC(void *);
-void ov14_021F35BC(void *);
-void ov14_021F3614(void *, void *, u32);
-void ov14_021F36DC(void *, void *, u32);
-void ov14_021F3714(void *);
-void ov14_021F37F4(void *);
-void ov14_021F3844(void *, u32);
-void ov14_021F38B0(void *, u32);
+void PCBox_LoadMonPicResources(void *);
+void PCBox_CreateMonPicSprites(void *);
+void PCBox_LoadMonPic(void *, void *, u32);
+void PCBox_ShowMonPic(void *, void *, u32);
+void PCBox_LoadItemIconResources(void *);
+void PCBox_CreateItemIconSprites(void *);
+void PCBox_LoadHeldItemIcon(void *, u32);
+void PCBox_LoadInfoItemIcon(void *, u32);
 void ov14_021F391C(void *, u32);
 
 #endif

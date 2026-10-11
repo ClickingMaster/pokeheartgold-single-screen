@@ -9,39 +9,39 @@ typedef struct Ov14BoxWork {
     u8 *boxData;
 } Ov14BoxWork;
 
-void ov14_021F33FC(Ov14SpriteScale *work);
-void ov14_021F3420(Ov14BoxWork *work, u32 enabled, u32 first, u32 end, u32 check);
-void ov14_021F3488(Ov14BoxWork *work, u32 flags, u32 enabled);
+void PCBox_ResetSpriteAffine(Ov14SpriteScale *work);
+void PCBox_SetIconRangeTranslucent(Ov14BoxWork *work, u32 enabled, u32 first, u32 end, u32 check);
+void PCBox_SetIconsTranslucent(Ov14BoxWork *work, u32 flags, u32 enabled);
 
-void ov14_021F33FC(Ov14SpriteScale *work) {
+void PCBox_ResetSpriteAffine(Ov14SpriteScale *work) {
     ManagedSprite_SetAffineTranslation(work->sprite, 0, 0);
     ManagedSprite_SetAffineScale(work->sprite, 1.0f, 1.0f);
     ManagedSprite_SetAffineOverwriteMode(work->sprite, 0);
 }
 
-void ov14_021F3420(Ov14BoxWork *work, u32 enabled, u32 first, u32 end, u32 check) {
+void PCBox_SetIconRangeTranslucent(Ov14BoxWork *work, u32 enabled, u32 first, u32 end, u32 check) {
     if (check == 1) {
         for (; first < end; first++) {
-            if (ov14_021E6070(work, first, 6, 0) == 0) {
-                ov14_021F2A9C(work->boxData, work->boxData[0x4094 + first], 1);
+            if (PCBox_GetSlotMonData(work, first, 6, 0) == 0) {
+                PCBox_SetSpriteTranslucent(work->boxData, work->boxData[0x4094 + first], 1);
             } else {
-                ov14_021F2A9C(work->boxData, work->boxData[0x4094 + first], 0);
+                PCBox_SetSpriteTranslucent(work->boxData, work->boxData[0x4094 + first], 0);
             }
         }
     } else {
         for (; first < end; first++) {
-            ov14_021F2A9C(work->boxData, work->boxData[0x4094 + first], enabled);
+            PCBox_SetSpriteTranslucent(work->boxData, work->boxData[0x4094 + first], enabled);
         }
     }
 }
 
-void ov14_021F3488(Ov14BoxWork *work, u32 flags, u32 enabled) {
+void PCBox_SetIconsTranslucent(Ov14BoxWork *work, u32 flags, u32 enabled) {
     u32 check = (flags & 0x80) != 0;
 
     if (flags & 1) {
-        ov14_021F3420(work, enabled, 0, 0x1e, check);
+        PCBox_SetIconRangeTranslucent(work, enabled, 0, 0x1e, check);
     }
     if (flags & 2) {
-        ov14_021F3420(work, enabled, 0x1e, 0x24, check);
+        PCBox_SetIconRangeTranslucent(work, enabled, 0x1e, 0x24, check);
     }
 }

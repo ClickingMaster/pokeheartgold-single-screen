@@ -1,6 +1,6 @@
 #include "overlay14_box_sprite_controls_private.h"
 
-void ov14_021F40E8(void *p, u32 a1) {
+void PCBox_SetSelectedIconOutlineVisible(void *p, u32 a1) {
     u32 i;
     if (a1 == 1) {
         a1 = 1;
@@ -16,7 +16,7 @@ void ov14_021F40E8(void *p, u32 a1) {
                 if (box != 0xff) {
                     u32 idx = U8_AT((u8 *)PTR_AT(p, 0x34) + box, 0x4094) * 4;
                     u32 prio = ManagedSprite_GetDrawPriority(PTR_AT((u8 *)PTR_AT(p, 0x34) + idx, 0x2fc));
-                    ov14_021F2A74(PTR_AT(p, 0x34), i + 0x3d, prio + 1);
+                    PCBox_SetSpriteDrawPriority(PTR_AT(p, 0x34), i + 0x3d, prio + 1);
                     ManagedSprite_SetPriority(PTR_AT((u8 *)PTR_AT(p, 0x34) + i * 4, 0x3f0),
                         ManagedSprite_GetPriority(PTR_AT((u8 *)PTR_AT(p, 0x34) + idx, 0x2fc)));
                 }
@@ -25,7 +25,7 @@ void ov14_021F40E8(void *p, u32 a1) {
     }
 }
 
-void ov14_021F4174(void *p) {
+void PCBox_UpdateSelectedIconOutline(void *p) {
     void *q;
     u16 i;
     s16 x;
@@ -37,11 +37,11 @@ void ov14_021F4174(void *p) {
     q = PTR_AT(p, 0x34);
     ManagedSprite_GetPositionXY(PTR_AT((u8 *)q + U8_AT((u8 *)q + box, 0x4094) * 4, 0x2fc), &x, &y);
     for (i = 0; i < 8; i++) {
-        ManagedSprite_SetPositionXY(PTR_AT((u8 *)q + i * 4, 0x3f0), x + ov14_021F8070[i], y + ov14_021F8078[i]);
+        ManagedSprite_SetPositionXY(PTR_AT((u8 *)q + i * 4, 0x3f0), x + sPCBoxOutlineOffsetsX[i], y + sPCBoxOutlineOffsetsY[i]);
     }
 }
 
-void ov14_021F41E4(void *p) {
+void PCBox_LoadTrayBoxResources(void *p) {
     u32 i;
     for (i = 0; i < 6; i++) {
         SpriteSystem_LoadCharResObj(PTR_AT(p, 0x2f4), PTR_AT(p, 0x2f8), 0x13, 0x46, FALSE, 1, 0xc123 + i);
@@ -51,7 +51,7 @@ void ov14_021F41E4(void *p) {
     SpriteSystem_LoadAnimResObj(PTR_AT(p, 0x2f4), PTR_AT(p, 0x2f8), 0x13, 0x49, TRUE, 0xc0fd);
 }
 
-void ov14_021F4278(void *p) {
+void PCBox_CreateTrayBoxSprites(void *p) {
     SpriteTemplate tmpl[2];
     u32 i = 0;
     s32 dx = 0;
@@ -65,7 +65,7 @@ void ov14_021F4278(void *p) {
     }
 }
 
-void ov14_021F42EC(void *p) {
+void PCBox_LoadWallpaperListResources(void *p) {
     u32 i;
     for (i = 0; i < 4; i++) {
         SpriteSystem_LoadCharResObj(PTR_AT(p, 0x2f4), PTR_AT(p, 0x2f8), 0x13, 0x4a, FALSE, 1, 0xc129 + i);
@@ -75,7 +75,7 @@ void ov14_021F42EC(void *p) {
     SpriteSystem_LoadAnimResObj(PTR_AT(p, 0x2f4), PTR_AT(p, 0x2f8), 0x13, 0x4d, TRUE, 0xc0fe);
 }
 
-void ov14_021F4380(void *p) {
+void PCBox_CreateWallpaperListSprites(void *p) {
     SpriteTemplate tmpl[2];
     u32 i = 0;
     s32 dx = 0;
@@ -89,30 +89,30 @@ void ov14_021F4380(void *p) {
     }
 }
 
-void ov14_021F43F4(void *p, u32 a1) {
-    ov14_021F2A18(p, 0, a1);
-    ov14_021F2A18(p, 1, a1);
+void PCBox_SetBoxArrowsVisible(void *p, u32 a1) {
+    PCBox_SetSpriteVisible(p, 0, a1);
+    PCBox_SetSpriteVisible(p, 1, a1);
 }
 
 void ov14_021F4410(void *q) {
     TextOBJ_SetPosition(PTR_AT(q, 0x414), -0x30, -8);
 }
 
-void ov14_021F4428(void *p) {
+void PCBox_SetupWallpaperMenuSprites(void *p) {
     void *q = PTR_AT(p, 0x34);
     ManagedSprite_SetPositionXY(PTR_AT(q, 0x30c), 0xc, -0x15);
     ManagedSprite_SetPositionXY(PTR_AT(q, 0x310), 0xf4, -0x15);
     ManagedSprite_SetPositionXY(PTR_AT(q, 0x314), 0x2b, -0x15);
     ManagedSprite_SetPositionXY(PTR_AT(q, 0x318), 0x80, -0x28);
     ManagedSprite_SetPositionXY(PTR_AT(q, 0x31c), 0x80, -0x1c);
-    ov14_021F462C(p);
-    ov14_021F29E4(q, 7, 7);
+    PCBox_LoadWallpaperThumbnails(p);
+    PCBox_SetSpriteAnim(q, 7, 7);
     ov14_021F4410(q);
     TextOBJ_SetSpritesDrawFlag(PTR_AT(q, 0x414), 1);
     TextOBJ_SetSpritesDrawFlag(PTR_AT(q, 0x424), 0);
 }
 
-void ov14_021F44B4(void *q, s32 dy) {
+void PCBox_MoveWallpaperMenuSprites(void *q, s32 dy) {
     s16 x;
     s16 y;
     u32 i;
@@ -127,20 +127,20 @@ void ov14_021F44B4(void *q, s32 dy) {
     }
 }
 
-void ov14_021F4530(void *p) {
+void PCBox_UpdateCurrentWallpaperMarker(void *p) {
     s16 x;
     s16 y;
-    u32 v = ov14_021E7930(p, U8_AT(p, 0x25));
+    u32 v = PCBox_GetWallpaperGfxIndex(p, U8_AT(p, 0x25));
     if ((u32)U8_AT(PTR_AT(p, 0x34), 0x44d) >> 2 == v >> 2) {
-        ov14_021F2A18(PTR_AT(p, 0x34), 6, 1);
+        PCBox_SetSpriteVisible(PTR_AT(p, 0x34), 6, 1);
     } else {
-        ov14_021F2A18(PTR_AT(p, 0x34), 6, 0);
+        PCBox_SetSpriteVisible(PTR_AT(p, 0x34), 6, 0);
     }
     ManagedSprite_GetPositionXY(PTR_AT(PTR_AT(p, 0x34), 0x314), &x, &y);
     ManagedSprite_SetPositionXY(PTR_AT(PTR_AT(p, 0x34), 0x314), 0x2e * (v & 3) + 0x3b, y);
 }
 
-void ov14_021F459C(void *p) {
+void PCBox_UpdateWallpaperCursor(void *p) {
     s16 x2;
     s16 y;
     s16 x1;
@@ -153,7 +153,7 @@ void ov14_021F459C(void *p) {
     ov14_021F4410(PTR_AT(p, 0x34));
 }
 
-void ov14_021F462C(void *p) {
+void PCBox_LoadWallpaperThumbnails(void *p) {
     NNSG2dCharacterData *charData;
     void *narcBuf;
     u32 i;
@@ -166,8 +166,8 @@ void ov14_021F462C(void *p) {
     NNS_G2dGetUnpackedCharacterData(narcBuf, &charData);
     for (i = 0; i < 4; i++) {
         MI_CpuCopy8(charData->pRawData, buf, 0x240);
-        ov14_021F46B0(p, buf, wp, 0x1e, 0x240);
-        ov14_021F2C1C(PTR_AT(p, 0x34), res, buf, 0x240);
+        PCBox_ColorWallpaperThumbnail(p, buf, wp, 0x1e, 0x240);
+        PCBox_LoadSpriteCharsMain(PTR_AT(p, 0x34), res, buf, 0x240);
         res++;
         wp++;
     }
@@ -175,7 +175,7 @@ void ov14_021F462C(void *p) {
     Heap_Free(buf);
 }
 
-void ov14_021F46B0(void *p, u8 *buf, u32 wallpaper, u32 match, u32 size) {
+void PCBox_ColorWallpaperThumbnail(void *p, u8 *buf, u32 wallpaper, u32 match, u32 size) {
     u32 i;
     u8 v;
     if (wallpaper >= 0x10) {
@@ -199,20 +199,20 @@ void ov14_021F46F4(void *q) {
     TextOBJ_SetPosition(PTR_AT(q, 0x424), 0x20, -8);
 }
 
-void ov14_021F4720(void *p) {
+void PCBox_SetupBoxTraySprites(void *p) {
     ManagedSprite_SetPositionXY(PTR_AT(PTR_AT(p, 0x34), 0x30c), 0xc, -0x15);
     ManagedSprite_SetPositionXY(PTR_AT(PTR_AT(p, 0x34), 0x310), 0xf4, -0x15);
     ManagedSprite_SetPositionXY(PTR_AT(PTR_AT(p, 0x34), 0x314), 0x2b, -0x15);
     ManagedSprite_SetPositionXY(PTR_AT(PTR_AT(p, 0x34), 0x318), 0x80, -0x28);
     ManagedSprite_SetPositionXY(PTR_AT(PTR_AT(p, 0x34), 0x31c), 0x80, -0x1c);
-    ov14_021F49E0(p);
-    ov14_021F29E4(PTR_AT(p, 0x34), 7, 5);
+    PCBox_LoadTrayPageThumbnails(p);
+    PCBox_SetSpriteAnim(PTR_AT(p, 0x34), 7, 5);
     ov14_021F46F4(PTR_AT(p, 0x34));
     TextOBJ_SetSpritesDrawFlag(PTR_AT(PTR_AT(p, 0x34), 0x414), 1);
     TextOBJ_SetSpritesDrawFlag(PTR_AT(PTR_AT(p, 0x34), 0x424), 1);
 }
 
-void ov14_021F47B8(void *p, s32 dy) {
+void PCBox_MoveBoxTraySprites(void *p, s32 dy) {
     s16 x;
     s16 y;
     u32 i;
@@ -227,22 +227,22 @@ void ov14_021F47B8(void *p, s32 dy) {
     }
 }
 
-void ov14_021F4848(void *p) {
+void PCBox_UpdateCurrentBoxMarker(void *p) {
     s16 x;
     s16 y;
     s32 a = U8_AT(p, 0x25) / 6;
     s32 r;
     if (a == U8_AT(p, 0x1f) / 6) {
-        ov14_021F2A18(PTR_AT(p, 0x34), 6, 1);
+        PCBox_SetSpriteVisible(PTR_AT(p, 0x34), 6, 1);
     } else {
-        ov14_021F2A18(PTR_AT(p, 0x34), 6, 0);
+        PCBox_SetSpriteVisible(PTR_AT(p, 0x34), 6, 0);
     }
     r = U8_AT(p, 0x1f) % 6;
     ManagedSprite_GetPositionXY(PTR_AT(PTR_AT(p, 0x34), 0x314), &x, &y);
     ManagedSprite_SetPositionXY(PTR_AT(PTR_AT(p, 0x34), 0x314), 0x22 * r + 0x2b, y);
 }
 
-void ov14_021F48B4(void *p) {
+void PCBox_UpdateTrayCursor(void *p) {
     s16 x2;
     s16 y;
     s16 x1;

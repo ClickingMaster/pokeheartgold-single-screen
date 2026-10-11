@@ -15,11 +15,11 @@ typedef struct W09Pokedex {
 
 extern void BgCellManager_GetCellPosition(void *, int, s8 *, s8 *);
 extern void BgCellManager_DrawCellAt(void *, int, int, int);
-extern u32 ov18_021F04C0(void *, int);
-extern void ov18_021EE3AC(void *, void *, u32, u32, s32, u32, u32, u32, u32);
-void ov18_021F0504(W09Pokedex *p, int direction);
+extern u32 PokedexApp_GetAreaListEntryMsg(void *, int);
+extern void PokedexApp_PrintFormattedMessage(void *, void *, u32, u32, s32, u32, u32, u32, u32);
+void PokedexApp_ScrollAreaList(W09Pokedex *p, int direction);
 
-void ov18_021F0504(W09Pokedex *p, int direction) {
+void PokedexApp_ScrollAreaList(W09Pokedex *p, int direction) {
     u32 i = 0;
     s8 second;
     s8 first;
@@ -39,7 +39,7 @@ void ov18_021F0504(W09Pokedex *p, int direction) {
         BgCellManager_DrawCellAt(work->grid, i + 0x11, 10, 0x14);
         next = work->current + 2;
         if (next < work->count) {
-            ov18_021EE3AC(work, work->msgData, i + 8, ov18_021F04C0(work, next), 0x48, 0, 4, 0xF0C00, 2);
+            PokedexApp_PrintFormattedMessage(work, work->msgData, i + 8, PokedexApp_GetAreaListEntryMsg(work, next), 0x48, 0, 4, 0xF0C00, 2);
         }
     } else {
         int previous;
@@ -47,7 +47,7 @@ void ov18_021F0504(W09Pokedex *p, int direction) {
         previous = work->current;
         previous -= 2;
         if (previous >= 0) {
-            ov18_021EE3AC(work, work->msgData, i + 8, ov18_021F04C0(work, previous), 0x48, 0, 4, 0xF0C00, 2);
+            PokedexApp_PrintFormattedMessage(work, work->msgData, i + 8, PokedexApp_GetAreaListEntryMsg(work, previous), 0x48, 0, 4, 0xF0C00, 2);
         }
     }
     CopyWindowPixelsToVram_TextMode(&work->windows[i + 8]);

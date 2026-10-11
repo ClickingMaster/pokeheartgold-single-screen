@@ -19,12 +19,12 @@ typedef struct To57New22Work {
     u16 palette0[0x10];
     u16 palette1[0x10];
 } To57New22Work;
-extern int ov08_0221D5DC(u8 *work, int value);
-extern void ov08_02221E6C(void *work, int value, int zero, int flag);
-void ov08_02221B1C(u8 *work, const u16 *src);
-void ov08_022220AC(u8 *work, unsigned int value);
-void ov08_02222524(To57New22Work *work, int state);
-u8 ov08_02222564(To57New22Entry50 *entries);
-void ov08_022225A4(u8 *work);
-void ov08_02221BD0(u16 *dst, const u16 *src, int x, int y, u8 width, u8 height);
+extern int BattlePartyMenu_GetSlotType(u8 *work, int value);
+extern void BattlePartyMenu_DrawButton(void *work, int value, int zero, int flag);
+void BattlePartyMenu_StoreLargeButtonTilemaps(u8 *work, const u16 *src);
+void BattlePartyMenu_StartButtonAnim(u8 *work, unsigned int value);
+void BattlePartyMenu_LoadPagePalette(To57New22Work *work, int state);
+u8 BattlePartyMenu_HasMultipleNonEggMons(To57New22Entry50 *entries);
+void BattlePartyMenu_RedrawSelectedMonButton(u8 *work);
+void BattlePartyMenu_CopyTilemapRect(u16 *dst, const u16 *src, int x, int y, u8 width, u8 height);
 #endif

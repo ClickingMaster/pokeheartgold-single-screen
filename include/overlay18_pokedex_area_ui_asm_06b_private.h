@@ -5,6 +5,6 @@
 
 void ManagedSprite_SetDrawFlag(void *, int);
 int Pokedex_GetInternationalViewFlag(void *);
-void ov18_021F2A2C(void *, int, int);
+void PokedexApp_SetSpritePairVisibleIfInternationalView(void *, int, int);
 
 #endif

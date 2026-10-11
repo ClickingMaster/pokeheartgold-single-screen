@@ -12,16 +12,16 @@ typedef struct PartySlotInfo {
 typedef struct Ov08Work {
     PartySlotInfo slots[6];
 } Ov08Work;
-extern const PartyOrder _02224E2C;
-BOOL ov08_0221DB04(Ov08Work *work);
-BOOL ov08_0221D5DC(Ov08Work *work, int slot);
-u8 ov08_0221D614(Ov08Work *work, int pos, int dir);
+extern const PartyOrder sBattlePartyMultiBattleOrder;
+BOOL BattlePartyMenu_IsMultiBattle(Ov08Work *work);
+BOOL BattlePartyMenu_GetSlotType(Ov08Work *work, int slot);
+u8 BattlePartyMenu_FindNextMon(Ov08Work *work, int pos, int dir);
 
-// @fn ov08_0221D614
-u8 ov08_0221D614(Ov08Work *work, int pos, int dir) {
+// @fn BattlePartyMenu_FindNextMon
+u8 BattlePartyMenu_FindNextMon(Ov08Work *work, int pos, int dir) {
     int cur = pos;
-    if (ov08_0221DB04(work) == TRUE) {
-        PartyOrder order = _02224E2C;
+    if (BattlePartyMenu_IsMultiBattle(work) == TRUE) {
+        PartyOrder order = sBattlePartyMultiBattleOrder;
         for (pos = 0; pos < 6; pos++) {
             if (cur == order.slots[pos]) {
                 break;
@@ -37,7 +37,7 @@ u8 ov08_0221D614(Ov08Work *work, int pos, int dir) {
             if (cur == order.slots[pos]) {
                 break;
             }
-            if (ov08_0221D5DC(work, order.slots[pos]) && !work->slots[order.slots[pos]].isEgg) {
+            if (BattlePartyMenu_GetSlotType(work, order.slots[pos]) && !work->slots[order.slots[pos]].isEgg) {
                 return order.slots[pos];
             }
         }
@@ -52,7 +52,7 @@ u8 ov08_0221D614(Ov08Work *work, int pos, int dir) {
             if (cur == pos) {
                 break;
             }
-            if (ov08_0221D5DC(work, pos) && !work->slots[pos].isEgg) {
+            if (BattlePartyMenu_GetSlotType(work, pos) && !work->slots[pos].isEgg) {
                 return pos;
             }
         }

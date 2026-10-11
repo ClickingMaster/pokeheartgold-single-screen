@@ -9,12 +9,12 @@ void ov14_021E82A8(void *p) {
 }
 
 void ov14_021E82BC(void *p) {
-    ov14_021F5EB4(p, 0);
+    PCBox_DrawReturnButton(p, 0);
     BgCellManager_DrawCellAt(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xa, 0x18, 0x15);
 }
 
 void ov14_021E82DC(void *p) {
-    ov14_021F5EC4(p, 0);
+    PCBox_DrawExitButton(p, 0);
     BgCellManager_DrawCellAt(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xa, 0x18, 0x15);
 }
 
@@ -75,7 +75,7 @@ void ov14_021E83F4(void *p) {
     BgCellManager_DrawCellAt(p, 0xb, 0x18, 0x18);
 }
 
-void ov14_021E8434(void *p) {
+void PCBox_SlideInActionMenu(void *p) {
     u16 i;
     s8 x;
     s8 y;
@@ -90,7 +90,7 @@ void ov14_021E8434(void *p) {
     BgCellManager_StartCellMove(p, 0xb, 0, -1, (u8)(y - 0x15));
 }
 
-void ov14_021E84A4(void *p) {
+void PCBox_SlideOutActionMenu(void *p) {
     u16 i;
     s8 x;
     s8 y;
@@ -105,7 +105,7 @@ void ov14_021E84A4(void *p) {
     BgCellManager_StartCellMove(p, 0xb, 0, 1, (u8)(0x18 - y));
 }
 
-u32 ov14_021E8514(void *p) {
+u32 PCBox_UpdateActionMenuSlide(void *p) {
     u32 i;
     u32 ret = FALSE;
     for (i = 0; i < 5; i++) {
@@ -119,7 +119,7 @@ u32 ov14_021E8514(void *p) {
     return ret;
 }
 
-u32 ov14_021E8544(void *p) {
+u32 PCBox_IsActionMenuOpen(void *p) {
     s8 x;
     s8 y;
     BgCellManager_GetCellPosition(p, 3, &x, &y);
@@ -140,38 +140,38 @@ void ov14_021E85AC(void *p) {
     BgCellManager_DrawCellAt(p, 0xe, 0, 0x18);
 }
 
-void ov14_021E85BC(void *p) {
+void PCBox_SlideInChangeBoxButton(void *p) {
     BgCellManager_StartCellMove(p, 0xe, 0, -1, 3);
 }
 
-void ov14_021E85D0(void *p) {
+void PCBox_SlideOutChangeBoxButton(void *p) {
     BgCellManager_StartCellMove(p, 0xe, 0, 1, 3);
 }
 
-u32 ov14_021E85E4(void *p) {
+u32 PCBox_IsChangeBoxButtonShown(void *p) {
     s8 x;
     s8 y;
     BgCellManager_GetCellPosition(p, 0xe, &x, &y);
     return y == 0x15;
 }
 
-void ov14_021E8600(void *p) {
+void PCBox_HideSummaryButton(void *p) {
     BgCellManager_DrawCellAt(p, 0xf, 0, 0x18);
 }
 
-void ov14_021E8610(void *p) {
+void PCBox_ShowSummaryButton(void *p) {
     BgCellManager_DrawCellAt(p, 0xf, 0, 0x15);
 }
 
-void ov14_021E8620(void *p) {
+void PCBox_SlideInSummaryButton(void *p) {
     BgCellManager_StartCellMove(p, 0xf, 0, -1, 3);
 }
 
-void ov14_021E8634(void *p) {
+void PCBox_SlideOutSummaryButton(void *p) {
     BgCellManager_StartCellMove(p, 0xf, 0, 1, 3);
 }
 
-u32 ov14_021E8648(void *p) {
+u32 PCBox_IsSummaryButtonShown(void *p) {
     s8 x;
     s8 y;
     BgCellManager_GetCellPosition(p, 0xf, &x, &y);
@@ -185,19 +185,19 @@ void ov14_021E8664(void *p) {
     BgCellManager_DrawCellAt(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 8, 0, 0x18);
     BgCellManager_DrawCellAt(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9, 0xc, 0x18);
     BgCellManager_DrawCellAt(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0, 0, 0);
-    ov14_021F57B8(p);
-    ov14_021F4720(p);
-    ov14_021F4848(p);
-    ov14_021F48B4(p);
-    ov14_021F47B8(p, 0x30);
+    PCBox_DrawTrayBoxNameAndCount(p);
+    PCBox_SetupBoxTraySprites(p);
+    PCBox_UpdateCurrentBoxMarker(p);
+    PCBox_UpdateTrayCursor(p);
+    PCBox_MoveBoxTraySprites(p, 0x30);
 }
 
-void ov14_021E86E0(void *p) {
+void PCBox_SlideInBoxTray(void *p) {
     BgCellManager_DrawCellAt(p, 0, 0, -6);
     BgCellManager_StartCellMove(p, 0, 0, 1, 6);
 }
 
-void ov14_021E8704(void *p) {
+void PCBox_SlideOutBoxTray(void *p) {
     BgCellManager_StartCellMove(p, 0, 0, -1, 6);
 }
 
@@ -209,11 +209,11 @@ void ov14_021E8718(void *p) {
 
 void ov14_021E8740(void *p) {
     ov14_021E8664(p);
-    ov14_021F6070(p);
+    PCBox_DrawBoxMenu(p);
     ov14_021E8718(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
 }
 
-void ov14_021E875C(void *p) {
+void PCBox_SlideInBoxMenu(void *p) {
     BgCellManager_DrawCellAt(p, 0xc, 0x20, 8);
     BgCellManager_DrawCellAt(p, 6, 0x20, 0xe);
     BgCellManager_DrawCellAt(p, 7, 0x20, 0x11);
@@ -222,7 +222,7 @@ void ov14_021E875C(void *p) {
     BgCellManager_StartCellMove(p, 7, -1, 0, 0xb);
 }
 
-void ov14_021E87BC(void *p) {
+void PCBox_SlideOutBoxMenu(void *p) {
     BgCellManager_StartCellMove(p, 0xc, 1, 0, 0xb);
     BgCellManager_StartCellMove(p, 6, 1, 0, 0xb);
     BgCellManager_StartCellMove(p, 7, 1, 0, 0xb);
@@ -231,7 +231,7 @@ void ov14_021E87BC(void *p) {
 void ov14_021E87F4(void *p) {
     BgCellManager_EraseCell(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 8);
     BgCellManager_EraseCell(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9);
-    ov14_021E821C(p);
+    PCBox_HidePartyButton(p);
     ov14_021E827C(p);
 }
 
@@ -287,7 +287,7 @@ void ov14_021E8944(void *p) {
     BgCellManager_DrawCellAt(p, 0x10, 0, 0x18);
 }
 
-void ov14_021E895C(void *p, u32 mask) {
+void PCBox_DrawMarkings(void *p, u32 mask) {
     u16 i;
     u16 v;
     for (i = 0; i < 6; i++) {
@@ -301,12 +301,12 @@ void ov14_021E895C(void *p, u32 mask) {
     ScheduleBgTilemapBufferTransfer(PTR_AT(PTR_AT(p, 0x34), 0x14), 5);
 }
 
-u32 ov14_021E89B8(void *p) {
+u32 PCBox_StartSummaryApp(void *p) {
     void *w;
     PTR_AT(p, 0x18) = Heap_Alloc(9, 0x3c);
     w = PTR_AT(p, 0x18);
     if (U8_AT(p, 0x21) < 0x1e) {
-        PTR_AT(w, 0) = ov14_021E60C0(p, U8_AT(p, 0x1f), 0);
+        PTR_AT(w, 0) = PCBox_GetSlotBoxMon(p, U8_AT(p, 0x1f), 0);
         U8_AT(w, 0x11) = 2;
         U8_AT(w, 0x13) = 0x1e;
         U8_AT(w, 0x14) = U8_AT(p, 0x21);
@@ -334,7 +334,7 @@ u32 ov14_021E89B8(void *p) {
     return 0;
 }
 
-u32 ov14_021E8A7C(void *p) {
+u32 PCBox_EndSummaryApp(void *p) {
     void *w = PTR_AT(p, 0x18);
     if (U8_AT(p, 0x27) == 0) {
         if (U8_AT(p, 0x21) < 0x1e) {
@@ -350,29 +350,29 @@ u32 ov14_021E8A7C(void *p) {
     return 0;
 }
 
-u32 ov14_021E8ACC(void *p) {
+u32 PCBox_StartBagApp(void *p) {
     PTR_AT(p, 0x18) = Bag_CreateView(Save_Bag_Get(PTR_AT(PTR_AT(p, 0), 0)), ov14_021F7D14, 9);
     sub_0207789C(PTR_AT(p, 0x18), PTR_AT(PTR_AT(p, 0), 0), 1, 0, PTR_AT(PTR_AT(p, 0), 4));
     HandleLoadOverlay(FS_OVERLAY_ID(OVY_15), 2);
-    PTR_AT(p, 0x14) = OverlayManager_New(ov15_022008B8, PTR_AT(p, 0x18), 9);
+    PTR_AT(p, 0x14) = OverlayManager_New(gOverlayTemplate_Bag, PTR_AT(p, 0x18), 9);
     return 0;
 }
 
-u32 ov14_021E8B1C(void *p) {
+u32 PCBox_EndBagApp(void *p) {
     UnloadOverlayByID(FS_OVERLAY_ID(OVY_15));
     U16_AT(p, 0x1c) = BagView_GetItemId(PTR_AT(p, 0x18));
     Heap_Free(PTR_AT(p, 0x18));
     return 0;
 }
 
-u32 ov14_021E8B3C(void *p) {
+u32 PCBox_StartNamingScreenApp(void *p) {
     PTR_AT(p, 0x18) = NamingScreen_CreateArgs(9, 2, 0, 8, PTR_AT(p, 0x10), PTR_AT(PTR_AT(p, 0), 4));
     PCStorage_GetBoxName(PTR_AT(p, 4), U8_AT(p, 0x25), PTR_AT(PTR_AT(p, 0x18), 0x18));
     PTR_AT(p, 0x14) = OverlayManager_New(gOverlayTemplate_NamingScreen, PTR_AT(p, 0x18), 9);
     return 0;
 }
 
-u32 ov14_021E8B80(void *p) {
+u32 PCBox_EndNamingScreenApp(void *p) {
     void *w = PTR_AT(p, 0x18);
     PCStorage_SetBoxName(PTR_AT(p, 4), U8_AT(p, 0x25), PTR_AT(w, 0x18));
     U16_AT(p, 0x1c) = U32_AT(w, 0x14);
@@ -380,13 +380,13 @@ u32 ov14_021E8B80(void *p) {
     return 0;
 }
 
-u32 ov14_021E8BA4(void *p) {
+u32 PCBox_UpdateMoveModeBoxDrag(void *p) {
     u32 x;
     u32 y;
     u32 c;
     u32 d;
     void *q = PTR_AT(p, 0x34);
-    u32 a = ov14_021E8514(PTR_AT(q, 0x2f0));
+    u32 a = PCBox_UpdateActionMenuSlide(PTR_AT(q, 0x2f0));
     u32 b = BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 8);
     c = BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9);
     d = BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xa);
@@ -395,31 +395,31 @@ u32 ov14_021E8BA4(void *p) {
         if (System_GetTouchHeldCoords(&x, &y) == 0) {
             a = 0xff;
             if (U8_AT(p, 0x24) != 0) {
-                a = ov14_021E79D8(U32_AT(PTR_AT(p, 0x34), 0x40b8), U32_AT(PTR_AT(p, 0x34), 0x40bc));
+                a = PCBox_GetTouchedTrayBox(U32_AT(PTR_AT(p, 0x34), 0x40b8), U32_AT(PTR_AT(p, 0x34), 0x40bc));
             }
             if (a == 0xff) {
-                a = ov14_021E7960(U32_AT(PTR_AT(p, 0x34), 0x40b8), U32_AT(PTR_AT(p, 0x34), 0x40bc));
+                a = PCBox_GetTouchedBoxSlot(U32_AT(PTR_AT(p, 0x34), 0x40b8), U32_AT(PTR_AT(p, 0x34), 0x40bc));
             }
-            ov14_021E6CF8(p, U8_AT(p, 0x21), a);
-            ov14_021F40E8(p, 0);
+            PCBox_SetupMonMove(p, U8_AT(p, 0x21), a);
+            PCBox_SetSelectedIconOutlineVisible(p, 0);
             if (!(a & 0x80)) {
-                U8_AT(p, 0x21) = ov14_021E70B0(p, U8_AT(p, 0x21));
+                U8_AT(p, 0x21) = PCBox_GetMoveEntryTarget(p, U8_AT(p, 0x21));
             }
-            ov14_021E8434(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
+            PCBox_SlideInActionMenu(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
             ov14_021E8824(PTR_AT(p, 0x34));
             U16_AT(q, 0x10) = 1;
         } else {
             ManagedSprite_SetPositionXY(PTR_AT((u8 *)PTR_AT(p, 0x34) + U8_AT((u8 *)PTR_AT(p, 0x34) + U8_AT(p, 0x21), 0x4094) * 4, 0x2fc), x, (s16)y - 8);
-            ov14_021F4174(p);
+            PCBox_UpdateSelectedIconOutline(p);
             U32_AT(PTR_AT(p, 0x34), 0x40b8) = x;
             U32_AT(PTR_AT(p, 0x34), 0x40bc) = y;
         }
         break;
     case 1:
-        if (ov14_021E65C4(p) == 0 && a == 0 && b == 0 && c == 0 && d == 0) {
-            ov14_021E7148(p, PTR_AT(q, 0xc));
-            ov14_021F4174(p);
-            ov14_021F40E8(p, U32_AT(PTR_AT(p, 0x34), 0x40c4));
+        if (PCBox_AnimateMonMove(p) == 0 && a == 0 && b == 0 && c == 0 && d == 0) {
+            PCBox_ApplyMoveEntryIcons(p, PTR_AT(q, 0xc));
+            PCBox_UpdateSelectedIconOutline(p);
+            PCBox_SetSelectedIconOutlineVisible(p, U32_AT(PTR_AT(p, 0x34), 0x40c4));
             U16_AT(q, 0x10) = 0;
             return 0;
         }
@@ -428,53 +428,53 @@ u32 ov14_021E8BA4(void *p) {
     return 1;
 }
 
-u32 ov14_021E8D20(void *p) {
+u32 PCBox_UpdateMoveModePartyDrag(void *p) {
     s16 sx;
     s16 sy;
     u32 x;
     u32 y;
     void *q = PTR_AT(p, 0x34);
-    u32 a = ov14_021E8514(PTR_AT(q, 0x2f0));
+    u32 a = PCBox_UpdateActionMenuSlide(PTR_AT(q, 0x2f0));
     u32 b;
     if (U16_AT(q, 0x10) == 0) {
         ManagedSprite_GetPositionXY(PTR_AT((u8 *)PTR_AT(p, 0x34) + U8_AT((u8 *)PTR_AT(p, 0x34) + U8_AT(p, 0x21), 0x4094) * 4, 0x2fc), &sx, &sy);
     }
-    b = ov14_021E80A8(p);
+    b = PCBox_UpdatePartyPanelSlide(p);
     switch (U16_AT(q, 0x10)) {
     case 0:
         if (U8_AT(PTR_AT(p, 0x34), 0x44a) == 1 && b == 0) {
             U8_AT(PTR_AT(p, 0x34), 0x44a) = 2;
             ov14_021F69F0(p, 0x28);
-            ov14_021F3488(p, 1, 0);
+            PCBox_SetIconsTranslucent(p, 1, 0);
         }
         if (System_GetTouchHeldCoords(&x, &y) == 0) {
             u32 r;
             ManagedSprite_SetPositionXY(PTR_AT((u8 *)PTR_AT(p, 0x34) + U8_AT((u8 *)PTR_AT(p, 0x34) + U8_AT(p, 0x21), 0x4094) * 4, 0x2fc), sx, sy);
             if (U8_AT(PTR_AT(p, 0x34), 0x44a) == 2) {
-                r = ov14_021E7960(U32_AT(PTR_AT(p, 0x34), 0x40b8), U32_AT(PTR_AT(p, 0x34), 0x40bc));
+                r = PCBox_GetTouchedBoxSlot(U32_AT(PTR_AT(p, 0x34), 0x40b8), U32_AT(PTR_AT(p, 0x34), 0x40bc));
             } else {
-                r = ov14_021E79AC(U32_AT(PTR_AT(p, 0x34), 0x40b8), U32_AT(PTR_AT(p, 0x34), 0x40bc), ov14_021F7BF0);
+                r = PCBox_GetTouchedPartySlot(U32_AT(PTR_AT(p, 0x34), 0x40b8), U32_AT(PTR_AT(p, 0x34), 0x40bc), ov14_021F7BF0);
             }
-            ov14_021E6CF8(p, U8_AT(p, 0x21), r);
-            ov14_021F40E8(p, 0);
-            U8_AT(p, 0x21) = ov14_021E70B0(p, U8_AT(p, 0x21));
+            PCBox_SetupMonMove(p, U8_AT(p, 0x21), r);
+            PCBox_SetSelectedIconOutlineVisible(p, 0);
+            U8_AT(p, 0x21) = PCBox_GetMoveEntryTarget(p, U8_AT(p, 0x21));
             if (U8_AT(p, 0x21) < 0x1e) {
                 U32_AT(PTR_AT(p, 0x34), 0x40c4) = 0;
             } else {
                 U32_AT(PTR_AT(p, 0x34), 0x40c4) = 1;
             }
             if (U8_AT(p, 0x21) < 0x1e) {
-                if (ov14_021E6070(p, U8_AT(p, 0x21), 0xac, 0) == 0) {
+                if (PCBox_GetSlotMonData(p, U8_AT(p, 0x21), 0xac, 0) == 0) {
                     U16_AT(q, 0x10) = 3;
                     break;
                 }
-                ov14_021E7EE0(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
-                ov14_021E7588(p, 0xff);
+                PCBox_SlideInPartyPanel(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
+                PCBox_ShowSlotMonInfo(p, 0xff);
                 U16_AT(q, 0x10) = 1;
                 break;
             }
             ov14_021E7FEC(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
-            ov14_021E8434(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
+            PCBox_SlideInActionMenu(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
             ov14_021E8824(PTR_AT(p, 0x34));
             U16_AT(q, 0x10) = 1;
             break;
@@ -484,27 +484,27 @@ u32 ov14_021E8D20(void *p) {
             ov14_021E7FB8(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
         }
         ManagedSprite_SetPositionXY(PTR_AT((u8 *)PTR_AT(p, 0x34) + U8_AT((u8 *)PTR_AT(p, 0x34) + U8_AT(p, 0x21), 0x4094) * 4, 0x2fc), x, (s16)y - 8);
-        ov14_021F4174(p);
+        PCBox_UpdateSelectedIconOutline(p);
         U32_AT(PTR_AT(p, 0x34), 0x40b8) = x;
         U32_AT(PTR_AT(p, 0x34), 0x40bc) = y;
         break;
     case 1:
     case 2:
         if (ov14_021E6814(p) == 0 && a == 0 && b == 0) {
-            ov14_021E7148(p, PTR_AT(q, 0xc));
+            PCBox_ApplyMoveEntryIcons(p, PTR_AT(q, 0xc));
             if (U8_AT(p, 0x21) < 0x1e) {
                 U8_AT(p, 0x21) = 0xff;
             }
-            ov14_021F4174(p);
-            ov14_021F40E8(p, U32_AT(PTR_AT(p, 0x34), 0x40c4));
+            PCBox_UpdateSelectedIconOutline(p);
+            PCBox_SetSelectedIconOutlineVisible(p, U32_AT(PTR_AT(p, 0x34), 0x40c4));
             U16_AT(q, 0x10) = 5;
         }
         break;
     case 3:
         if (ov14_021E66F4(p) == 0) {
-            ov14_021E7148(p, PTR_AT(q, 0xc));
-            ov14_021E7EE0(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
-            ov14_021E7588(p, 0xff);
+            PCBox_ApplyMoveEntryIcons(p, PTR_AT(q, 0xc));
+            PCBox_SlideInPartyPanel(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
+            PCBox_ShowSlotMonInfo(p, 0xff);
             U8_AT(p, 0x21) = 0xff;
             U16_AT(q, 0x10)
             ++;
@@ -516,7 +516,7 @@ u32 ov14_021E8D20(void *p) {
         }
         break;
     case 5:
-        ov14_021F3488(p, 1, 1);
+        PCBox_SetIconsTranslucent(p, 1, 1);
         U8_AT(PTR_AT(p, 0x34), 0x44a) = 0;
         U16_AT(q, 0x10) = 0;
         return 0;
@@ -524,7 +524,7 @@ u32 ov14_021E8D20(void *p) {
     return 1;
 }
 
-u32 ov14_021E8FD4(void *p) {
+u32 PCBox_UpdateBoxTrayDrag(void *p) {
     u32 x;
     u32 y;
     void *q = PTR_AT(p, 0x34);
@@ -535,25 +535,25 @@ u32 ov14_021E8FD4(void *p) {
         if (System_GetTouchHeldCoords(&x, &y) == 0) {
             a = 0xff;
             if (U8_AT(p, 0x24) != 0) {
-                a = ov14_021E79D8(U32_AT(PTR_AT(p, 0x34), 0x40b8), U32_AT(PTR_AT(p, 0x34), 0x40bc));
+                a = PCBox_GetTouchedTrayBox(U32_AT(PTR_AT(p, 0x34), 0x40b8), U32_AT(PTR_AT(p, 0x34), 0x40bc));
             }
             if (a == 0xff) {
-                a = ov14_021E7960(U32_AT(PTR_AT(p, 0x34), 0x40b8), U32_AT(PTR_AT(p, 0x34), 0x40bc));
+                a = PCBox_GetTouchedBoxSlot(U32_AT(PTR_AT(p, 0x34), 0x40b8), U32_AT(PTR_AT(p, 0x34), 0x40bc));
             }
             if (a == 0xff) {
-                a = ov14_021E79AC(U32_AT(PTR_AT(p, 0x34), 0x40b8), U32_AT(PTR_AT(p, 0x34), 0x40bc), ov14_021F7C08);
+                a = PCBox_GetTouchedPartySlot(U32_AT(PTR_AT(p, 0x34), 0x40b8), U32_AT(PTR_AT(p, 0x34), 0x40bc), ov14_021F7C08);
             }
-            ov14_021E6CF8(p, U8_AT(p, 0x21), a);
-            ov14_021F40E8(p, 0);
+            PCBox_SetupMonMove(p, U8_AT(p, 0x21), a);
+            PCBox_SetSelectedIconOutlineVisible(p, 0);
             if (!(a & 0x80)) {
-                U8_AT(p, 0x21) = ov14_021E70B0(p, U8_AT(p, 0x21));
+                U8_AT(p, 0x21) = PCBox_GetMoveEntryTarget(p, U8_AT(p, 0x21));
             }
             ov14_021E884C(PTR_AT(p, 0x34));
             U16_AT(q, 0x10)
             ++;
         } else {
             ManagedSprite_SetPositionXY(PTR_AT((u8 *)PTR_AT(p, 0x34) + U8_AT((u8 *)PTR_AT(p, 0x34) + U8_AT(p, 0x21), 0x4094) * 4, 0x2fc), x, (s16)y - 8);
-            ov14_021F4174(p);
+            PCBox_UpdateSelectedIconOutline(p);
             U32_AT(PTR_AT(p, 0x34), 0x40b8) = x;
             U32_AT(PTR_AT(p, 0x34), 0x40bc) = y;
         }
@@ -563,20 +563,20 @@ u32 ov14_021E8FD4(void *p) {
             void *m = PTR_AT(q, 0xc);
             if (U32_AT(m, 0xe8) != 0xff && (U32_AT(m, 0xe8) & 0x80)) {
                 if (U32_AT(m, 0xe4) >= 0x1e && U32_AT(m, 0xe4) - 0x1e < (u32)(Party_GetCount(PTR_AT(p, 8)) - 1)) {
-                    ov14_021E8620(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
+                    PCBox_SlideInSummaryButton(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
                 }
             } else {
-                ov14_021E8620(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
+                PCBox_SlideInSummaryButton(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
             }
             U16_AT(q, 0x10)
             ++;
         }
         /* fallthrough */
     case 2:
-        if (ov14_021E65C4(p) == 0 && b == 0 && U16_AT(q, 0x10) == 2) {
-            ov14_021E7148(p, PTR_AT(q, 0xc));
-            ov14_021F4174(p);
-            ov14_021F40E8(p, 0);
+        if (PCBox_AnimateMonMove(p) == 0 && b == 0 && U16_AT(q, 0x10) == 2) {
+            PCBox_ApplyMoveEntryIcons(p, PTR_AT(q, 0xc));
+            PCBox_UpdateSelectedIconOutline(p);
+            PCBox_SetSelectedIconOutlineVisible(p, 0);
             U16_AT(q, 0x10) = 0;
             return 0;
         }
@@ -595,8 +595,8 @@ u32 ov14_021E9194(void *p) {
         ++;
         /* fallthrough */
     case 1:
-        if (ov14_021E65C4(p) == 0) {
-            ov14_021E7148(p, PTR_AT(q, 0xc));
+        if (PCBox_AnimateMonMove(p) == 0) {
+            PCBox_ApplyMoveEntryIcons(p, PTR_AT(q, 0xc));
             U16_AT(q, 0x10) = 0;
             return 0;
         }
@@ -605,20 +605,20 @@ u32 ov14_021E9194(void *p) {
     return 1;
 }
 
-u32 ov14_021E91E0(void *p) {
+u32 PCBox_AnimateMoveToPartyEnd(void *p) {
     void *q = PTR_AT(p, 0x34);
     switch (U16_AT(q, 0x10)) {
     case 0: {
         u32 n = Party_GetCount(PTR_AT(p, 8)) + 0x1e;
-        ov14_021E6CF8(p, U8_AT(p, 0x21), n);
-        ov14_021F40E8(p, 0);
+        PCBox_SetupMonMove(p, U8_AT(p, 0x21), n);
+        PCBox_SetSelectedIconOutlineVisible(p, 0);
         U16_AT(q, 0x10)
         ++;
         break;
     }
     case 1:
-        if (ov14_021E65C4(p) == 0) {
-            ov14_021E7148(p, PTR_AT(q, 0xc));
+        if (PCBox_AnimateMonMove(p) == 0) {
+            PCBox_ApplyMoveEntryIcons(p, PTR_AT(q, 0xc));
             U16_AT(q, 0x10) = 0;
             return 0;
         }
@@ -627,7 +627,7 @@ u32 ov14_021E91E0(void *p) {
     return 1;
 }
 
-u32 ov14_021E9234(void *p) {
+u32 PCBox_AnimateMoveToFirstEmptySlot(void *p) {
     int slotno;
     int boxno;
     void *q = PTR_AT(p, 0x34);
@@ -636,17 +636,17 @@ u32 ov14_021E9234(void *p) {
         boxno = U8_AT(p, 0x1f);
         slotno = 0;
         PCStorage_FindFirstEmptySlot(PTR_AT(p, 4), &boxno, &slotno);
-        ov14_021E6CF8(p, U8_AT(p, 0x21), slotno);
-        ov14_021F40E8(p, 0);
+        PCBox_SetupMonMove(p, U8_AT(p, 0x21), slotno);
+        PCBox_SetSelectedIconOutlineVisible(p, 0);
         U8_AT(p, 0x21) = 0xff;
         U16_AT(q, 0x10)
         ++;
         break;
     case 1:
-        if (ov14_021E65C4(p) == 0) {
+        if (PCBox_AnimateMonMove(p) == 0) {
             void *m = PTR_AT(q, 0xc);
-            ov14_021F34C8(PTR_AT(p, 0x34), U32_AT(m, 0xe4), 1);
-            ov14_021E7148(p, m);
+            PCBox_SetSlotIconTranslucent(PTR_AT(p, 0x34), U32_AT(m, 0xe4), 1);
+            PCBox_ApplyMoveEntryIcons(p, m);
             U16_AT(q, 0x10) = 0;
             return 0;
         }
@@ -655,7 +655,7 @@ u32 ov14_021E9234(void *p) {
     return 1;
 }
 
-u32 ov14_021E92AC(void *p) {
+u32 PCBox_UpdateScrollToPrevBox(void *p) {
     u32 a;
     u32 b;
     if (U16_AT(PTR_AT(p, 0x34), 0x12) == 0x17) {
@@ -667,13 +667,13 @@ u32 ov14_021E92AC(void *p) {
         return 0;
     }
     ScheduleSetBgPosText(PTR_AT(PTR_AT(p, 0x34), 0x14), 3, 2, 8);
-    ov14_021F3210(p, 8);
+    PCBox_ScrollBoxIcons(p, 8);
     BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xe);
     BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xa);
     BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 8);
     BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9);
     a = BgCellManager_IsCellMoving(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xb);
-    ov14_021E8514(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
+    PCBox_UpdateActionMenuSlide(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
     b = BgCellManager_IsCellMoving(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xb);
     if (a == 1 && b == 0) {
         ov14_021E8328(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
@@ -683,7 +683,7 @@ u32 ov14_021E92AC(void *p) {
     return 1;
 }
 
-u32 ov14_021E9370(void *p) {
+u32 PCBox_UpdateScrollToNextBox(void *p) {
     u32 a;
     u32 b;
     if (U16_AT(PTR_AT(p, 0x34), 0x12) == 0x17) {
@@ -695,13 +695,13 @@ u32 ov14_021E9370(void *p) {
         return 0;
     }
     ScheduleSetBgPosText(PTR_AT(PTR_AT(p, 0x34), 0x14), 3, 1, 8);
-    ov14_021F3210(p, -8);
+    PCBox_ScrollBoxIcons(p, -8);
     BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xe);
     BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xa);
     BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 8);
     BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9);
     a = BgCellManager_IsCellMoving(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xb);
-    ov14_021E8514(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
+    PCBox_UpdateActionMenuSlide(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
     b = BgCellManager_IsCellMoving(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xb);
     if (a == 1 && b == 0) {
         ov14_021E8328(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
@@ -712,14 +712,14 @@ u32 ov14_021E9370(void *p) {
 }
 
 u32 ov14_021E9434(void *p) {
-    if (ov14_021E8514(PTR_AT(PTR_AT(p, 0x34), 0x2f0))) {
+    if (PCBox_UpdateActionMenuSlide(PTR_AT(PTR_AT(p, 0x34), 0x2f0))) {
         return 1;
     }
     return 0;
 }
 
 u32 ov14_021E9450(void *p) {
-    u32 a = ov14_021E8514(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
+    u32 a = PCBox_UpdateActionMenuSlide(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
     u32 b = BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 8);
     u32 c = BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 9);
     u32 d = BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 0xa);

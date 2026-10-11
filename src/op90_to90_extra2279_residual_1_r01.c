@@ -24,23 +24,23 @@ typedef struct Work {
     u8 page[5];
 } Work;
 
-extern u8 ov08_02225CE0[];
+extern u8 sBattleBagPocketOrder[];
 ItemSlot *Bag_GetPocketSlotN(void *bag, u16 pocket, u16 slot);
-void ov08_02223BF4(Work *work);
+void BattleBagMenu_SortItemsIntoPockets(Work *work);
 
 static inline void AddItem(Work *work, ItemSlot *item) {
     u32 i;
     u32 mask = GetItemAttr(item->id, ITEMATTR_BATTLE_POCKET, work->root->heapID);
     for (i = 0; i < 5; i++) {
         if (mask & (1 << i)) {
-            work->groups[ov08_02225CE0[i]].entries[work->count[ov08_02225CE0[i]]] = *item;
-            work->count[ov08_02225CE0[i]]++;
+            work->groups[sBattleBagPocketOrder[i]].entries[work->count[sBattleBagPocketOrder[i]]] = *item;
+            work->count[sBattleBagPocketOrder[i]]++;
         }
     }
 }
 
-// @fn ov08_02223BF4
-void ov08_02223BF4(Work *work) {
+// @fn BattleBagMenu_SortItemsIntoPockets
+void BattleBagMenu_SortItemsIntoPockets(Work *work) {
     u32 pocket, slot, i;
     ItemSlot *item;
 

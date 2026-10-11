@@ -5,7 +5,7 @@
 #define U16(p, o) (*(u16 *)((u8 *)(p) + (o)))
 #define U8(p, o)  (*(u8 *)((u8 *)(p) + (o)))
 
-s32 ov15_021FC140(void *work) {
+s32 BagApp_State_WaitTrashResultMessage(void *work) {
     if (TextPrinterCheckActive(U8(work, 0x616))) {
         return 10;
     }

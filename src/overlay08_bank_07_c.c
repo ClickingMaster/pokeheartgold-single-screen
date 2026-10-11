@@ -2,6 +2,6 @@
 
 #pragma force_active on
 
-int ov08_0221D5D0(void *unused, const void *hitboxes) {
+int BattlePartyMenu_CheckTouchHitbox(void *unused, const void *hitboxes) {
     return TouchscreenHitbox_FindRectAtTouchNew(hitboxes);
 }

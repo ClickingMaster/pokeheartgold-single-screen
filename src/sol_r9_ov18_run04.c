@@ -6,9 +6,9 @@
         u8 *base = (u8 *)work + 0xc;                                                     \
         u32 offset = index * 0x10;                                                       \
         FillWindowPixelBuffer(base + offset, 0);                                         \
-        ov18_021F9648(base + offset, PTR(work, 0x65c), message, 0x14, 0, 0, 0x20100, 2); \
+        PokedexApp_PrintMessage(base + offset, PTR(work, 0x65c), message, 0x14, 0, 0, 0x20100, 2); \
         ScheduleWindowCopyToVram(base + offset);                                         \
     }
 
-DRAW_SCHEDULE(ov18_021EE9FC, 0xa)
-DRAW_SCHEDULE(ov18_021EEA40, 0xb)
+DRAW_SCHEDULE(PokedexApp_DrawHeightLabel, 0xa)
+DRAW_SCHEDULE(PokedexApp_DrawWeightLabel, 0xb)

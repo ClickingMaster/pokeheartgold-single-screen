@@ -2,16 +2,16 @@
 #define U8(p, o)  (*(u8 *)((u8 *)(p) + (o)))
 #define PTR(p, o) (*(void **)((u8 *)(p) + (o)))
 
-void ov15_021FD788(void *work, u32 mode) {
+void BagApp_ShowCancelButton(void *work, u32 mode) {
     if (mode == 1) {
-        ov15_022004DC(work, 1);
-        ov15_021FF29C(work, 0);
+        BagApp_SetCancelSpriteVisible(work, 1);
+        BagApp_PrintCancelButton(work, 0);
         ScheduleWindowCopyToVram((u8 *)work + 0x74);
         ManagedSprite_SetAnimationFrame(PTR(work, 0x29c), 0);
         ManagedSprite_SetAnim(PTR(work, 0x29c), 0x10);
     } else {
-        ov15_022004DC(work, 0);
-        ov15_021FF844(work);
+        BagApp_SetCancelSpriteVisible(work, 0);
+        BagApp_ClearCancelButtonText(work);
     }
 }
 
@@ -25,7 +25,7 @@ typedef struct Ov15Request {
     void *callback;
 } Ov15Request;
 
-int ov15_021FD7D0(void *work, u8 index, u8 palette, u8 cycle, void *callback) {
+int BagApp_StartButtonFlash(void *work, u8 index, u8 palette, u8 cycle, void *callback) {
     Ov15Request *state = (Ov15Request *)((u8 *)work + 0x940);
     state->active = 0;
     state->index = index;
@@ -37,7 +37,7 @@ int ov15_021FD7D0(void *work, u8 index, u8 palette, u8 cycle, void *callback) {
     return 0x23;
 }
 
-int ov15_021FD810(void *work, u8 index, u32 anim, void *callback) {
+int BagApp_StartButtonAnim(void *work, u8 index, u32 anim, void *callback) {
     Ov15Request *state = (Ov15Request *)((u8 *)work + 0x940);
     void **sprites = (void **)((u8 *)work + 0x250);
     state->active = 1;
@@ -50,7 +50,7 @@ int ov15_021FD810(void *work, u8 index, u32 anim, void *callback) {
     return 0x23;
 }
 
-int ov15_021FD850(void *work) {
+int BagApp_State_ButtonFeedback(void *work) {
     Ov15Request *state = (Ov15Request *)((u8 *)work + 0x940);
     void **sprites = (void **)((u8 *)work + 0x250);
     if (state->active == 1) {

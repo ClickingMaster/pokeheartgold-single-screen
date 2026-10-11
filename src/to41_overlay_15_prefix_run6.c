@@ -9,7 +9,7 @@ void ov15_021FA0D8(void *work) {
     U32(work, 0x348) = 0;
 }
 
-void ov15_021FA0E4(void *work, s32 value) {
+void BagApp_SetPocketPositionFromButton(void *work, s32 value) {
     u8 *state;
     u8 cur;
     if (value >= 8 && value < 14) {
@@ -19,7 +19,7 @@ void ov15_021FA0E4(void *work, s32 value) {
     }
 }
 
-BOOL ov15_021FA104(void *work, s32 value) {
+BOOL BagApp_ShouldMoveCursorToButton(void *work, s32 value) {
     if (value == 14 || value == 15) {
         return FALSE;
     }

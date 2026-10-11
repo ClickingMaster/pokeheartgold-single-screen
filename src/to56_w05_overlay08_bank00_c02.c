@@ -15,24 +15,24 @@ static inline void *RP(Ov08Ctx *p, u32 o) {
     return *(void **)&p->raw[o];
 }
 
-extern int ov08_0221D4B0(Ov08Ctx *);
-extern int ov08_0221D4F8(Ov08Ctx *);
-extern int ov08_0221D540(Ov08Ctx *);
-extern int ov08_0221D588(Ov08Ctx *);
-extern int ov08_0221D614(Ov08Ctx *, int, int);
-extern int ov08_0221D91C(void *);
-extern int ov08_0221DAC4(Ov08Ctx *);
-extern void ov08_022220AC(Ov08Ctx *, int);
+extern int BattlePartyMenu_GetMonMenuInput(Ov08Ctx *);
+extern int BattlePartyMenu_GetSummaryInput(Ov08Ctx *);
+extern int BattlePartyMenu_GetCheckMovesInput(Ov08Ctx *);
+extern int BattlePartyMenu_GetMoveDetailInput(Ov08Ctx *);
+extern int BattlePartyMenu_FindNextMon(Ov08Ctx *, int, int);
+extern int BattlePartyMenu_CanSwitchToSelectedMon(void *);
+extern int BattlePartyMenu_IsSelectedMonEgg(Ov08Ctx *);
+extern void BattlePartyMenu_StartButtonAnim(Ov08Ctx *, int);
 extern void PlaySE(int);
-int ov08_0221C318(Ov08Ctx *);
-int ov08_0221C3C8(Ov08Ctx *);
-int ov08_0221C488(Ov08Ctx *);
-int ov08_0221C58C(Ov08Ctx *);
+int BattlePartyMenu_HandleMonMenuInput(Ov08Ctx *);
+int BattlePartyMenu_HandleSummaryInput(Ov08Ctx *);
+int BattlePartyMenu_HandleCheckMovesInput(Ov08Ctx *);
+int BattlePartyMenu_HandleMoveDetailInput(Ov08Ctx *);
 
 extern u32 PaletteData_GetSelectedBuffersBitmask(void *);
-extern int ov08_0221D438(Ov08Ctx *);
-extern int ov08_0221C1C8(Ov08Ctx *);
-int ov08_0221C14C(Ov08Ctx *);
+extern int BattlePartyMenu_HandlePartyListSelection(Ov08Ctx *);
+extern int BattlePartyMenu_TryUseItemOnMon(Ov08Ctx *);
+int BattlePartyMenu_HandlePartyListInput(Ov08Ctx *);
 
 extern void *CreateSysTaskAndEnvironment(void *, u32, u32, u32);
 extern void *SysTask_GetData(void *);
@@ -40,29 +40,29 @@ extern void *BattleSystem_GetBgConfig(void *);
 extern void *BattleSystem_GetPaletteData(void *);
 extern u8 ov12_0223AB0C(void *, int);
 extern void *memset(void *, int, u32);
-extern void ov08_0221BE98(void *, void *);
-int ov08_0221BE20(void *);
+extern void BattlePartyMenu_Task(void *, void *);
+int BattlePartyMenu_Create(void *);
 
-extern void ov08_0221D184(Ov08Ctx *);
-extern void ov08_0221CDF8(Ov08Ctx *);
-extern void ov08_0221CF38(Ov08Ctx *);
-extern void ov08_0221D0F4(Ov08Ctx *);
+extern void BattlePartyMenu_LoadMonData(Ov08Ctx *);
+extern void BattlePartyMenu_InitBgs(Ov08Ctx *);
+extern void BattlePartyMenu_LoadBgGraphics(Ov08Ctx *);
+extern void BattlePartyMenu_InitText(Ov08Ctx *);
 extern void FontID_Alloc(int, int);
-extern void ov08_0221D8B0(Ov08Ctx *, int);
-extern void ov08_022221CC(Ov08Ctx *, int);
-extern void ov08_02222524(Ov08Ctx *, int);
-extern void ov08_022205E0(Ov08Ctx *);
-extern void ov08_02220C5C(Ov08Ctx *, int);
-extern void ov08_0221DC00(Ov08Ctx *);
-extern void ov08_0221DD70(Ov08Ctx *, int);
+extern void BattlePartyMenu_LoadPageTilemaps(Ov08Ctx *, int);
+extern void BattlePartyMenu_DrawPageButtons(Ov08Ctx *, int);
+extern void BattlePartyMenu_LoadPagePalette(Ov08Ctx *, int);
+extern void BattlePartyMenu_InitSprites(Ov08Ctx *);
+extern void BattlePartyMenu_ShowPageSprites(Ov08Ctx *, int);
+extern void BattlePartyMenu_AddWindows(Ov08Ctx *);
+extern void BattlePartyMenu_PrintPageText(Ov08Ctx *, int);
 extern void BattleDpadCursor_SetActive(void *, int);
-extern int ov08_0221DB24(void *, u32);
-extern void ov08_0222171C(Ov08Ctx *, int);
-extern void ov08_0221D6CC(Ov08Ctx *, int);
+extern int BattlePartyMenu_IsPartnerMon(void *, u32);
+extern void BattlePartyMenu_SetPageCursor(Ov08Ctx *, int);
+extern void BattlePartyMenu_DrawExpBar(Ov08Ctx *, int);
 extern u8 PaletteData_BeginPaletteFade(void *, u16, u16, s8, u8, u8, u16);
 extern void *BattleDpadCursor_New(int);
-int ov08_0221C048(Ov08Ctx *);
-int ov08_0221C048(Ov08Ctx *work_) {
+int BattlePartyMenu_Setup(Ov08Ctx *);
+int BattlePartyMenu_Setup(Ov08Ctx *work_) {
     typedef struct Owner048 {
         u8 pad00[8];
         void *battleSystem;
@@ -94,31 +94,31 @@ int ov08_0221C048(Ov08Ctx *work_) {
         ret = 1;
     }
     work->small = BattleDpadCursor_New(work->owner->heap);
-    ov08_0221D184(work_);
-    ov08_0221CDF8(work_);
-    ov08_0221CF38(work_);
-    ov08_0221D0F4(work_);
+    BattlePartyMenu_LoadMonData(work_);
+    BattlePartyMenu_InitBgs(work_);
+    BattlePartyMenu_LoadBgGraphics(work_);
+    BattlePartyMenu_InitText(work_);
     FontID_Alloc(4, work->owner->heap);
-    ov08_0221D8B0(work_, work->variant);
-    ov08_022221CC(work_, work->variant);
-    ov08_02222524(work_, work->variant);
-    ov08_022205E0(work_);
-    ov08_02220C5C(work_, work->variant);
-    ov08_0221DC00(work_);
-    ov08_0221DD70(work_, work->variant);
+    BattlePartyMenu_LoadPageTilemaps(work_, work->variant);
+    BattlePartyMenu_DrawPageButtons(work_, work->variant);
+    BattlePartyMenu_LoadPagePalette(work_, work->variant);
+    BattlePartyMenu_InitSprites(work_);
+    BattlePartyMenu_ShowPageSprites(work_, work->variant);
+    BattlePartyMenu_AddWindows(work_);
+    BattlePartyMenu_PrintPageText(work_, work->variant);
     if (work->owner->flag != 0) {
         BattleDpadCursor_SetActive(work->small, 1);
     }
-    if (work->variant == 0 && ov08_0221DB24(work_, 0) == 1) {
+    if (work->variant == 0 && BattlePartyMenu_IsPartnerMon(work_, 0) == 1) {
         work->owner->battler = 1;
     }
-    ov08_0222171C(work_, work->variant);
-    ov08_0221D6CC(work_, work->variant);
+    BattlePartyMenu_SetPageCursor(work_, work->variant);
+    BattlePartyMenu_DrawExpBar(work_, work->variant);
     PaletteData_BeginPaletteFade(work->palette, 10, 0xFFFF, -8, 0x10, 0, 0);
     return ret;
 }
 
-int ov08_0221C14C(Ov08Ctx *work_) {
+int BattlePartyMenu_HandlePartyListInput(Ov08Ctx *work_) {
     typedef struct Owner14 {
         u8 pad00[0x11];
         u8 battler;
@@ -137,18 +137,18 @@ int ov08_0221C14C(Ov08Ctx *work_) {
     if (PaletteData_GetSelectedBuffersBitmask(work->palette) != 0) {
         return 1;
     }
-    if (ov08_0221D438(work_) == 1) {
+    if (BattlePartyMenu_HandlePartyListSelection(work_) == 1) {
         if (work->owner->battler == 6) {
             if (work->owner->mode != 1) {
                 PlaySE(0x5DD);
-                ov08_022220AC(work_, 6);
+                BattlePartyMenu_StartButtonAnim(work_, 6);
                 return 0x19;
             }
         } else {
             PlaySE(0x5DD);
-            ov08_022220AC(work_, work->owner->battler);
+            BattlePartyMenu_StartButtonAnim(work_, work->owner->battler);
             if (work->owner->mode == 2) {
-                return ov08_0221C1C8(work_);
+                return BattlePartyMenu_TryUseItemOnMon(work_);
             }
             work->state = 7;
             return 0x16;

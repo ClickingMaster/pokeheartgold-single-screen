@@ -35,27 +35,27 @@ extern void SpriteSystem_FreeResourcesAndManager(void *, void *);
 extern void SpriteSystem_Free(void *);
 extern void Sprite_DeleteAndFreeResources(void *);
 
-extern void ov14_021F41E4(void *);
-extern void ov14_021F42EC(void *);
-extern void ov14_021F2C84(void *);
-extern void ov14_021F3DE8(void *);
-extern void ov14_021F3714(void *);
-extern void ov14_021F34EC(void *);
-extern void ov14_021F3C08(void *);
-extern void ov14_021F4278(void *);
-extern void ov14_021F4380(void *);
-extern void ov14_021F2D1C(void *);
-extern void ov14_021F3E70(void *);
-extern void ov14_021F37F4(void *);
-extern void ov14_021F35BC(void *);
-extern void ov14_021F3CB4(void *);
+extern void PCBox_LoadTrayBoxResources(void *);
+extern void PCBox_LoadWallpaperListResources(void *);
+extern void PCBox_LoadMonIconResources(void *);
+extern void PCBox_LoadUiSpriteResources(void *);
+extern void PCBox_LoadItemIconResources(void *);
+extern void PCBox_LoadMonPicResources(void *);
+extern void PCBox_LoadTypeIconResources(void *);
+extern void PCBox_CreateTrayBoxSprites(void *);
+extern void PCBox_CreateWallpaperListSprites(void *);
+extern void PCBox_CreateMonIconSprites(void *);
+extern void PCBox_CreateUiSprites(void *);
+extern void PCBox_CreateItemIconSprites(void *);
+extern void PCBox_CreateMonPicSprites(void *);
+extern void PCBox_CreateTypeIconSprites(void *);
 
-void ov14_021F2A74(void *, u32, u32);
-void ov14_021F2A9C(void *, u32, u32);
-void ov14_021F2AC8(void *);
-void ov14_021F2B68(void *);
-void ov14_021F2B88(void *);
-void ov14_021F2BB8(void *);
-void ov14_021F2BE8(void *, u32);
+void PCBox_SetSpriteDrawPriority(void *, u32, u32);
+void PCBox_SetSpriteTranslucent(void *, u32, u32);
+void PCBox_InitSpriteSystem(void *);
+void PCBox_FreeSpriteSystem(void *);
+void PCBox_LoadSpriteResources(void *);
+void PCBox_CreateSprites(void *);
+void PCBox_DeleteSprite(void *, u32);
 
 #endif

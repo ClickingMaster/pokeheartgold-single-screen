@@ -5,15 +5,15 @@
 #define P(p,o) (*(void**)((u8*)(p)+(o)))
 #define W(p,o) (*(u32*)((u8*)(p)+(o)))
 void *NARC_New(int,int),*NARC_AllocAndReadWholeMember(void*,int,int),*PaletteData_GetUnfadedBuf(void*,int),*Heap_Alloc(int,int);
-void NARC_Delete(void*),Heap_Free(void*),ov08_022217F0(void*,void*),ov08_02221B1C(void*,void*);
+void NARC_Delete(void*),Heap_Free(void*),BattlePartyMenu_StoreButtonTilemaps(void*,void*),BattlePartyMenu_StoreLargeButtonTilemaps(void*,void*);
 
 void GfGfxLoader_LoadCharDataFromOpenNarc(void*,int,void*,int,int,int,int,int),PaletteData_LoadNarc(void*,int,int,int,int,int,int),GfGfxLoader_LoadCharData(int,int,void*,int,int,int,int,int),PaletteData_LoadPalette(void*,void*,int,int,int);
 int BattleSystem_GetFrame(void*),GetUserFrameGfx2TilesMember(int),GetUserFrameGfx2PaletteMember(int);
-void ov08_0221CF38(void*);
-void ov08_0221CF38(void*w){void*n,*buf;NNSG2dScreenData *screen;u8*pal,*temp;int frame;
+void BattlePartyMenu_LoadBgGraphics(void*);
+void BattlePartyMenu_LoadBgGraphics(void*w){void*n,*buf;NNSG2dScreenData *screen;u8*pal,*temp;int frame;
  n=NARC_New(71,W(P(w,0),12));GfGfxLoader_LoadCharDataFromOpenNarc(n,22,P(w,0x1e4),7,0,0,0,W(P(w,0),12));
- buf=NARC_AllocAndReadWholeMember(n,20,W(P(w,0),12));NNS_G2dGetUnpackedScreenData(buf,&screen);ov08_022217F0(w,(u8*)screen+12);Heap_Free(buf);
- buf=NARC_AllocAndReadWholeMember(n,21,W(P(w,0),12));NNS_G2dGetUnpackedScreenData(buf,&screen);ov08_02221B1C(w,(u8*)screen+12);Heap_Free(buf);
+ buf=NARC_AllocAndReadWholeMember(n,20,W(P(w,0),12));NNS_G2dGetUnpackedScreenData(buf,&screen);BattlePartyMenu_StoreButtonTilemaps(w,(u8*)screen+12);Heap_Free(buf);
+ buf=NARC_AllocAndReadWholeMember(n,21,W(P(w,0),12));NNS_G2dGetUnpackedScreenData(buf,&screen);BattlePartyMenu_StoreLargeButtonTilemaps(w,(u8*)screen+12);Heap_Free(buf);
  PaletteData_LoadNarc(P(w,0x1e8),71,23,W(P(w,0),12),1,512,0);NARC_Delete(n);
  pal=PaletteData_GetUnfadedBuf(P(w,0x1e8),1);memcpy((u8*)w+0x1f60,pal+0x180,64);
  PaletteData_LoadNarc(P(w,0x1e8),16,7,W(P(w,0),12),1,32,208);PaletteData_LoadNarc(P(w,0x1e8),16,8,W(P(w,0),12),1,32,240);

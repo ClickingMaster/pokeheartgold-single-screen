@@ -18,13 +18,13 @@ typedef struct Ov08Work {
 } Ov08Work;
 
 extern u8 ov08_02225A56[], ov08_02225A57[];
-const u16 *ov08_02221C20(Ov08Work *work, int index, int mode, u8 flag);
-int ov08_0221DB24(Ov08Work *work, u8 index);
-void ov08_02221D2C(Ov08Work *work, u16 *buf, int index, int mode, u8 flag);
+const u16 *BattlePartyMenu_GetButtonTilemap(Ov08Work *work, int index, int mode, u8 flag);
+int BattlePartyMenu_IsPartnerMon(Ov08Work *work, u8 index);
+void BattlePartyMenu_BuildButtonTilemap(Ov08Work *work, u16 *buf, int index, int mode, u8 flag);
 
-// @fn ov08_02221D2C
-void ov08_02221D2C(Ov08Work *work, u16 *buf, int index, int mode, u8 flag) {
-    const u16 *src = ov08_02221C20(work, index, mode, flag);
+// @fn BattlePartyMenu_BuildButtonTilemap
+void BattlePartyMenu_BuildButtonTilemap(Ov08Work *work, u16 *buf, int index, int mode, u8 flag) {
+    const u16 *src = BattlePartyMenu_GetButtonTilemap(work, index, mode, flag);
     u8 width = ov08_02225A56[index * 4];
     u8 height = ov08_02225A57[index * 4];
     int size = width * height;
@@ -54,7 +54,7 @@ void ov08_02221D2C(Ov08Work *work, u16 *buf, int index, int mode, u8 flag) {
             for (i = 0; i < size; i++) {
                 buf[i] = (buf[i] & 0xFFF) | 0x2000;
             }
-        } else if (ov08_0221DB24(work, index) == 1) {
+        } else if (BattlePartyMenu_IsPartnerMon(work, index) == 1) {
             for (i = 0; i < size; i++) {
                 buf[i] = (buf[i] & 0xFFF) | 0x1000;
             }

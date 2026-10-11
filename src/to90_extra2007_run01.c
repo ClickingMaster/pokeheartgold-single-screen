@@ -8,9 +8,9 @@
 #define B(p,o) (*(u8*)((u8*)(p)+(o)))
 extern void SpriteSystem_LoadCharResObjFromOpenNarc(void*,void*,void*,int,int,int,int),SpriteSystem_LoadPaletteBufferFromOpenNarc(void*,int,void*,void*,void*,int,int,int,int,int),SpriteSystem_LoadCellResObjFromOpenNarc(void*,void*,void*,int,int,int),SpriteSystem_LoadAnimResObjFromOpenNarc(void*,void*,void*,int,int,int);
 extern int sub_02074490(void),sub_0207449C(void),sub_020744A8(void);
-void ov18_021F3E24(void*);
+void PokedexApp_LoadAreaSpriteResources(void*);
 #pragma force_active on
-void ov18_021F3E24(void *w){
+void PokedexApp_LoadAreaSpriteResources(void *w){
  SpriteSystem_LoadCharResObjFromOpenNarc(P(w,0x668),P(w,0x66c),P(w,0x854),76,1,2,0xc550);
  SpriteSystem_LoadPaletteBufferFromOpenNarc(P(w,0x850),3,P(w,0x668),P(w,0x66c),P(w,0x858),sub_02074490(),0,3,2,0xc551);
  SpriteSystem_LoadCellResObjFromOpenNarc(P(w,0x668),P(w,0x66c),P(w,0x858),sub_0207449C(),0,0xc550);

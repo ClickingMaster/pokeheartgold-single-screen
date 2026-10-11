@@ -14,7 +14,7 @@ void String_Delete(void *);
 void *BagApp_GetSaveRoamers(void *);
 BOOL RoamerSave_RepelNotInUse(void *);
 s32 GetItemAttr(u16, u16, int);
-void BagApp_GetRepelStepCountAddr(void *, u8);
+void BagApp_SetRepelStepCount(void *, u8);
 BOOL PlaySE(u16);
 BOOL BagApp_TryUseItemInPlace(void *, u16);
 #endif

@@ -6,18 +6,18 @@
 #include "sprite_system.h"
 #include "unk_0208805C.h"
 
-extern void ov08_022213E4(void *, u8);
-extern void ov08_02220A8C(void *, s32, s32);
+extern void BattlePartyMenu_SetSpriteAnim(void *, u8);
+extern void BattlePartyMenu_ShowSpriteAt(void *, s32, s32);
 extern void BattleDpadCursor_SetBattleCursor(void *, BattleCursor *);
 extern BattleCursor *BattleDpadCursor_GetBattleCursor(void *);
 extern SpriteSystem *BattleSystem_GetSpriteSystem(void *);
 
-int ov08_02221404(u8 *entry);
-void ov08_0222145C(u8 *work);
-s16 ov08_022214BC(u8 value, int target, int base);
-void ov08_02221500(u8 *work);
-void ov08_0222162C(u8 *work);
-void ov08_02221698(u8 *work);
+int BattlePartyMenu_GetMonIconAnim(u8 *entry);
+void BattlePartyMenu_UpdateMonIcons(u8 *work);
+s16 BattlePartyMenu_CalcConditionMarkerCoord(u8 value, int target, int base);
+void BattlePartyMenu_ShowConditionMarkers(u8 *work);
+void BattlePartyMenu_CreateCursor(u8 *work);
+void BattlePartyMenu_FreeCursor(u8 *work);
 
 static inline void *PTR(void *p, u32 off) {
     return *(void **)((u8 *)p + off);
@@ -69,7 +69,7 @@ typedef struct Ov08IconEntry {
     u8 high : 1;
 } Ov08IconEntry;
 
-int ov08_02221404(u8 *raw) {
+int BattlePartyMenu_GetMonIconAnim(u8 *raw) {
     Ov08IconEntry *entry = (Ov08IconEntry *)raw;
     if (entry->hp == 0) {
         return 0;
@@ -91,19 +91,19 @@ int ov08_02221404(u8 *raw) {
     }
 }
 
-void ov08_0222145C(u8 *work) {
+void BattlePartyMenu_UpdateMonIcons(u8 *work) {
     u16 i;
     for (i = 0; i < Party_GetCount(PTR(PTR(work, 0), 0)); i++) {
         if (*(u16 *)(work + 8 + i * 0x50) != 0) {
-            int anim = ov08_02221404(work + 4 + i * 0x50);
+            int anim = BattlePartyMenu_GetMonIconAnim(work + 4 + i * 0x50);
             ManagedSprite **sprite = (ManagedSprite **)(work + i * 4 + 0x1FD4);
-            ov08_022213E4(*sprite, (u8)anim);
+            BattlePartyMenu_SetSpriteAnim(*sprite, (u8)anim);
             ManagedSprite_TickNFrames(*sprite, 0x1000);
         }
     }
 }
 
-s16 ov08_022214BC(u8 value, int target, int base) {
+s16 BattlePartyMenu_CalcConditionMarkerCoord(u8 value, int target, int base) {
     u32 n;
     if (base > target) {
         n = ((u32)((base - target) * (value + 0x2C)) << 16) / 300;

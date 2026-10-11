@@ -1449,253 +1449,253 @@
 	.public _021F962A
 	.public _021F9684
 	.public _021F9690
-	.public ov18_021EE35C
-	.public ov18_021EE388
-	.public ov18_021EE3AC
-	.public ov18_021EE3FC
+	.public PokedexApp_AddWindows
+	.public PokedexApp_RemoveAllWindows
+	.public PokedexApp_PrintFormattedMessage
+	.public PokedexApp_SetupListWindows
 	.public ov18_021EE44C
 	.public ov18_021EE508
-	.public ov18_021EE520
-	.public ov18_021EE5E4
-	.public ov18_021EE5FC
-	.public ov18_021EE638
-	.public ov18_021EE6BC
-	.public ov18_021EE6EC
-	.public ov18_021EE71C
-	.public ov18_021EE75C
-	.public ov18_021EE7DC
-	.public ov18_021EE834
-	.public ov18_021EE8B8
-	.public ov18_021EE984
-	.public ov18_021EE9FC
-	.public ov18_021EEA40
-	.public ov18_021EEA84
-	.public ov18_021EEAE4
-	.public ov18_021EEB34
-	.public ov18_021EEB94
-	.public ov18_021EEBE4
-	.public ov18_021EEC34
-	.public ov18_021EECB0
-	.public ov18_021EED00
-	.public ov18_021EED70
-	.public ov18_021EEE58
+	.public PokedexApp_DrawCountNumber
+	.public PokedexApp_DrawCountNumberAndCopy
+	.public PokedexApp_DrawSeenAndCaughtCounts
+	.public PokedexApp_DrawCenteredSpeciesName
+	.public PokedexApp_DrawListEntryHeader
+	.public PokedexApp_DrawSearchEntryHeader
+	.public PokedexApp_DrawInfoLabel
+	.public PokedexApp_DrawDexNumber
+	.public PokedexApp_DrawSpeciesName
+	.public PokedexApp_DrawCategory
+	.public PokedexApp_DrawListEntryDetails
+	.public PokedexApp_DrawFlavorText
+	.public PokedexApp_DrawHeightLabel
+	.public PokedexApp_DrawWeightLabel
+	.public PokedexApp_PrintHeight
+	.public PokedexApp_DrawHeight
+	.public PokedexApp_PrintWeight
+	.public PokedexApp_DrawWeight
+	.public PokedexApp_DrawForeignDexLabel
+	.public PokedexApp_DrawForeignDexNumber
+	.public PokedexApp_DrawForeignSpeciesName
+	.public PokedexApp_DrawForeignCategory
+	.public PokedexApp_DrawSearchEntryDetails
+	.public PokedexApp_SetupSearchWindows
 	.public ov18_021EEE84
-	.public ov18_021EEED0
-	.public ov18_021EF1E4
-	.public ov18_021EF220
-	.public ov18_021EF25C
-	.public ov18_021EF298
-	.public ov18_021EF2D4
-	.public ov18_021EF310
-	.public ov18_021EF34C
-	.public ov18_021EF388
-	.public ov18_021EF45C
-	.public ov18_021EF528
-	.public ov18_021EF5D8
-	.public ov18_021EF764
-	.public ov18_021EF848
-	.public ov18_021EF91C
-	.public ov18_021EF9B4
-	.public ov18_021EFA50
-	.public ov18_021EFB88
-	.public ov18_021EFBE8
-	.public ov18_021EFC3C
-	.public ov18_021EFC9C
-	.public ov18_021EFD00
-	.public ov18_021EFDB4
-	.public ov18_021EFE70
-	.public ov18_021EFEC4
+	.public PokedexApp_DrawSearchMessage
+	.public PokedexApp_DrawSearchOrderLabel
+	.public PokedexApp_DrawSearchNameLabel
+	.public PokedexApp_DrawSearchTypeLabel
+	.public PokedexApp_DrawSearchHeightLabel
+	.public PokedexApp_DrawSearchWeightLabel
+	.public PokedexApp_DrawSearchAreaLabel
+	.public PokedexApp_DrawSearchFormLabel
+	.public PokedexApp_DrawSearchButton
+	.public PokedexApp_DrawSearchMenuPage
+	.public PokedexApp_DrawSearchCriteria
+	.public PokedexApp_DrawSearchOrderPage
+	.public PokedexApp_DrawSearchNamePage
+	.public PokedexApp_DrawSearchTypePage
+	.public PokedexApp_DrawSearchHeightPage
+	.public PokedexApp_DrawSearchWeightPage
+	.public PokedexApp_DrawSearchAreaPage
+	.public PokedexApp_DrawSearchFormPage
+	.public PokedexApp_DrawSearchOrderValue
+	.public PokedexApp_DrawSearchNameValue
+	.public PokedexApp_DrawSearchTypeValue
+	.public PokedexApp_DrawHeightValue
+	.public PokedexApp_DrawWeightValue
+	.public PokedexApp_DrawSearchAreaValue
+	.public PokedexApp_DrawSearchCriteriaSummary
 	.public ov18_021EFFEC
-	.public ov18_021F006C
-	.public ov18_021F0118
-	.public ov18_021F014C
+	.public PokedexApp_PutWindowTilemap
+	.public PokedexApp_SetSearchSummaryVisible
+	.public PokedexApp_ClearSearchEntryWindows
 	.public ov18_021F0168
 	.public ov18_021F018C
 	.public ov18_021F01D4
-	.public ov18_021F021C
-	.public ov18_021F03C0
-	.public ov18_021F03E0
-	.public ov18_021F0428
-	.public ov18_021F04C0
-	.public ov18_021F0504
-	.public ov18_021F05E8
-	.public ov18_021F0838
+	.public PokedexApp_SetupAreaWindows
+	.public PokedexApp_FreeAreaWindows
+	.public PokedexApp_DrawTimeOfDayLabel
+	.public PokedexApp_DrawAreaList
+	.public PokedexApp_GetAreaListEntryMsg
+	.public PokedexApp_ScrollAreaList
+	.public PokedexApp_SetupSizeCheckWindows
+	.public PokedexApp_FreeSizeCheckWindows
 	.public ov18_021F0858
 	.public ov18_021F08E0
-	.public ov18_021F0900
-	.public ov18_021F0918
-	.public ov18_021F0928
-	.public ov18_021F0940
-	.public ov18_021F09D8
+	.public PokedexApp_SetupFormsWindows
+	.public PokedexApp_FreeFormsWindows
+	.public PokedexApp_DrawFormsWindows
+	.public PokedexApp_DrawFormList
+	.public PokedexApp_GetFormNameMsg
 	.public ov18_021F0A06
 	.public ov18_021F0A16
 	.public ov18_021F0A1E
 	.public ov18_021F0A3E
 	.public ov18_021F0A5E
 	.public ov18_021F0A6E
-	.public ov18_021F0B70
-	.public ov18_021F0C50
-	.public ov18_021F0D2C
-	.public ov18_021F0D7C
-	.public ov18_021F0DD0
-	.public ov18_021F0F2C
-	.public ov18_021F0F68
-	.public ov18_021F0FC8
-	.public ov18_021F0FEC
-	.public ov18_021F1004
-	.public ov18_021F1024
-	.public ov18_021F10C8
-	.public ov18_021F10E8
-	.public ov18_021F1104
-	.public ov18_021F111C
-	.public ov18_021F1160
-	.public ov18_021F118C
-	.public ov18_021F11AC
-	.public ov18_021F11C0
-	.public ov18_021F11EC
-	.public ov18_021F121C
-	.public ov18_021F1294
-	.public ov18_021F12C8
-	.public ov18_021F12FC
-	.public ov18_021F1314
-	.public ov18_021F1324
-	.public ov18_021F13DC
-	.public ov18_021F1424
-	.public ov18_021F148C
-	.public ov18_021F14B4
-	.public ov18_021F14FC
-	.public ov18_021F1534
-	.public ov18_021F1598
-	.public ov18_021F1620
-	.public ov18_021F16C4
-	.public ov18_021F1760
-	.public ov18_021F17FC
-	.public ov18_021F18E0
+	.public PokedexApp_ScrollFormList
+	.public PokedexApp_DrawFormsTitle
+	.public PokedexApp_DrawSelectedFormName
+	.public PokedexApp_ClearFormsWindows
+	.public PokedexApp_DrawFormCompareWindows
+	.public PokedexApp_ClearFormCompareWindows
+	.public PokedexApp_DrawCenteredFormName
+	.public PokedexApp_InitSprites
+	.public PokedexApp_FreeSprites
+	.public PokedexApp_TickSprites
+	.public PokedexApp_CreateSpriteSystem
+	.public PokedexApp_DestroySpriteSystem
+	.public PokedexApp_DeleteSprite
+	.public PokedexApp_DeleteAllSprites
+	.public PokedexApp_LoadSpriteCharData
+	.public PokedexApp_SetSpriteTranslucent
+	.public PokedexApp_SetSpriteAnim
+	.public PokedexApp_IsSpriteAnimating
+	.public PokedexApp_SetSpriteVisible
+	.public PokedexApp_NewSprite
+	.public PokedexApp_MoveSprite
+	.public PokedexApp_SetSpritePos
+	.public PokedexApp_GetSpritePos
+	.public PokedexApp_OpenMonIconNarc
+	.public PokedexApp_CloseMonIconNarc
+	.public PokedexApp_LoadMonIconResources
+	.public PokedexApp_UnloadMonIconResources
+	.public PokedexApp_CreateMonIconSprites
+	.public PokedexApp_LoadMonIconCharData
+	.public PokedexApp_SetMonIconGraphics
+	.public PokedexApp_SetMonIcon
+	.public PokedexApp_SetMonIconSub
+	.public PokedexApp_SetListIcon
+	.public PokedexApp_DrawListIconGrid
+	.public PokedexApp_ScrollListIconsBackward
+	.public PokedexApp_ScrollListIconsForward
+	.public PokedexApp_LoadMonPicResources
+	.public PokedexApp_UnloadMonPicResources
 	.public ov18_021F193C
 	.public ov18_021F19EC
-	.public ov18_021F1A30
-	.public ov18_021F1A7C
-	.public ov18_021F1BC8
-	.public ov18_021F1CAC
-	.public ov18_021F1CB4
-	.public ov18_021F1D58
-	.public ov18_021F1D98
-	.public ov18_021F1DE4
-	.public ov18_021F1E70
-	.public ov18_021F1F74
-	.public ov18_021F1FDC
-	.public ov18_021F209C
-	.public ov18_021F21FC
-	.public ov18_021F2270
-	.public ov18_021F2308
-	.public ov18_021F2348
-	.public ov18_021F23E4
-	.public ov18_021F2424
-	.public ov18_021F2468
-	.public ov18_021F24E0
-	.public ov18_021F2530
+	.public PokedexApp_CreateMonPicSprites
+	.public PokedexApp_LoadMonPicToSprite
+	.public PokedexApp_SwapMonPic
+	.public PokedexApp_ShowMonPic
+	.public PokedexApp_LoadFootprintResources
+	.public PokedexApp_UnloadFootprintResources
+	.public PokedexApp_CreateFootprintSprite
+	.public PokedexApp_UpdateFootprintSprite
+	.public PokedexApp_LoadTypeIconResources
+	.public PokedexApp_UnloadTypeIconResources
+	.public PokedexApp_CreateTypeIconSprites
+	.public PokedexApp_UpdateTypeIcons
+	.public PokedexApp_SetTypeIconGraphics
+	.public PokedexApp_LoadLanguageIconResources
+	.public PokedexApp_UnloadLanguageIconResources
+	.public PokedexApp_LoadLanguageIconResourcesSub
+	.public PokedexApp_UnloadLanguageIconResourcesSub
+	.public PokedexApp_CreateSpriteInSlot
+	.public PokedexApp_CreateLanguageIconSprites
+	.public PokedexApp_UpdateCurrentLanguageIcon
+	.public PokedexApp_UpdateLanguageIcons
 	.public ov18_021F2648
 	.public ov18_021F26E4
 	.public ov18_021F2724
 	.public ov18_021F281C
-	.public ov18_021F2880
-	.public ov18_021F2964
+	.public PokedexApp_SetupListSprites
+	.public PokedexApp_LoadListSpriteResources
 	.public ov18_021F299C
-	.public ov18_021F2A2C
-	.public ov18_021F2A84
+	.public PokedexApp_SetSpritePairVisibleIfInternationalView
+	.public PokedexApp_SetSpriteVisibleIfInternationalView
 	.public ov18_021F2AC0
-	.public ov18_021F2AF8
-	.public ov18_021F2B3C
-	.public ov18_021F2B70
+	.public PokedexApp_IsTouchOnSprite0
+	.public PokedexApp_MoveSpriteX
+	.public PokedexApp_SetSpriteX
 	.public ov18_021F2B9C
-	.public ov18_021F2BB0
+	.public PokedexApp_MoveSpriteToListCursor
 	.public ov18_021F2BFC
-	.public ov18_021F2C10
-	.public ov18_021F2C5C
-	.public ov18_021F2C74
-	.public ov18_021F2C98
-	.public ov18_021F2CB4
-	.public ov18_021F2CC0
-	.public ov18_021F2CD0
-	.public ov18_021F2D24
-	.public ov18_021F2DD4
+	.public PokedexApp_UpdateListPageArrows
+	.public PokedexApp_UpdateListScrollbarSize
+	.public PokedexApp_GetListScrollbarSizeAnim
+	.public PokedexApp_GetListScrollbarLength
+	.public PokedexApp_GetListScrollbarMinY
+	.public PokedexApp_GetListScrollbarMaxY
+	.public PokedexApp_IsTouchOnListScrollbar
+	.public PokedexApp_DragListScrollbar
+	.public PokedexApp_GetListScrollbarYForPage
 	.public ov18_021F2E14
-	.public ov18_021F2E4C
-	.public ov18_021F2E80
-	.public ov18_021F2EC8
-	.public ov18_021F2F00
-	.public ov18_021F2F3C
-	.public ov18_021F2F4C
-	.public ov18_021F310C
-	.public ov18_021F3190
-	.public ov18_021F3294
-	.public ov18_021F32B8
-	.public ov18_021F3438
+	.public PokedexApp_MoveListScrollbar
+	.public PokedexApp_SyncListScrollbarToPage
+	.public PokedexApp_UpdateCaughtMarkSprite
+	.public PokedexApp_FreeListSprites
+	.public PokedexApp_SetupSearchSprites
+	.public PokedexApp_LoadSearchSpriteResources
+	.public PokedexApp_UnloadSearchSpriteResources
+	.public PokedexApp_CreateSearchEntrySprites
+	.public PokedexApp_UnloadSearchEntryResources
+	.public PokedexApp_CreateSearchSprites
+	.public PokedexApp_FreeSearchSprites
 	.public ov18_021F3448
-	.public ov18_021F3494
+	.public PokedexApp_UpdateBodyTypeSprite
 	.public ov18_021F34C4
 	.public ov18_021F34EC
-	.public ov18_021F3544
-	.public ov18_021F3560
-	.public ov18_021F3618
+	.public PokedexApp_SetSliderSpritesVisible
+	.public PokedexApp_UpdateSliderSprites
+	.public PokedexApp_UpdateSearchSprites
 	.public ov18_021F362C
 	.public ov18_021F3634
 	.public ov18_021F3644
 	.public ov18_021F3654
 	.public ov18_021F3688
-	.public ov18_021F36D4
-	.public ov18_021F37D4
-	.public ov18_021F38F0
-	.public ov18_021F39C4
-	.public ov18_021F3A64
-	.public ov18_021F3AB0
-	.public ov18_021F3AD0
+	.public PokedexApp_SetHeightSliderX
+	.public PokedexApp_SetWeightSliderX
+	.public PokedexApp_DrawHeightDigits
+	.public PokedexApp_DrawWeightDigits
+	.public PokedexApp_UpdateSliderLimitSprites
+	.public PokedexApp_GetSliderValue
+	.public PokedexApp_SliderValueToX
 	.public ov18_021F3AD8
 	.public ov18_021F3B2C
-	.public ov18_021F3B60
+	.public PokedexApp_SetSearchEntrySpritesVisible
 	.public ov18_021F3BA4
 	.public ov18_021F3BD4
 	.public ov18_021F3C30
 	.public ov18_021F3C54
 	.public ov18_021F3C88
-	.public ov18_021F3CA8
+	.public PokedexApp_GetSeenFormAndGender
 	.public ov18_021F3D34
 	.public ov18_021F3D6C
 	.public ov18_021F3D80
-	.public ov18_021F3D98
-	.public ov18_021F3E08
-	.public ov18_021F3E24
-	.public ov18_021F3FDC
-	.public ov18_021F4080
-	.public ov18_021F40A0
-	.public ov18_021F40E4
-	.public ov18_021F4134
-	.public ov18_021F4188
+	.public PokedexApp_SetupAreaSprites
+	.public PokedexApp_FreeAreaSprites
+	.public PokedexApp_LoadAreaSpriteResources
+	.public PokedexApp_UnloadAreaSpriteResources
+	.public PokedexApp_UpdateTimeOfDayCursor
+	.public PokedexApp_SetupAreaListScrollbar
+	.public PokedexApp_UpdatePlayerMarker
+	.public PokedexApp_UpdatePlayerMarkerVisibility
+	.public PokedexApp_CreateAreaMarkerSprites
 	.public ov18_021F41C4
 	.public ov18_021F42E4
-	.public ov18_021F4384
+	.public PokedexApp_UpdateAreaMarkers
 	.public ov18_021F4478
-	.public ov18_021F4620
+	.public PokedexApp_HideAreaMarkers
 	.public ov18_021F463C
 	.public ov18_021F46EC
 	.public ov18_021F47C0
 	.public ov18_021F47F8
 	.public ov18_021F48AC
 	.public ov18_021F4974
-	.public ov18_021F49F8
-	.public ov18_021F4A50
-	.public ov18_021F4A6C
-	.public ov18_021F4CC4
-	.public ov18_021F4D64
-	.public ov18_021F4DDC
-	.public ov18_021F4E28
+	.public PokedexApp_SetupSizeCheckSprites
+	.public PokedexApp_FreeSizeCheckSprites
+	.public PokedexApp_LoadSizeCheckResources
+	.public PokedexApp_UnloadSizeCheckResources
+	.public PokedexApp_SetSizeCheckMonIcons
+	.public PokedexApp_DrawSizeCheckMonPic
+	.public PokedexApp_ScaleSizeCheckTrainer
 	.public ov18_021F4EB0
 	.public ov18_021F4F98
 	.public ov18_021F4FC8
-	.public ov18_021F5000
-	.public ov18_021F504C
+	.public PokedexApp_UpdateScalePans
+	.public PokedexApp_InitWeightCheckAnim
 	.public ov18_021F50C0
-	.public ov18_021F516C
+	.public PokedexApp_RunWeightCheckAnim
 	.public ov18_021F5180
 	.public ov18_021F5198
 	.public ov18_021F51BC
@@ -1751,100 +1751,100 @@
 	.public ov18_021F5CFC
 	.public ov18_021F5D82
 	.public ov18_021F5DB4
-	.public ov18_021F5DC0
-	.public ov18_021F5DE0
-	.public ov18_021F5E0C
+	.public PokedexApp_SetupFormsSprites
+	.public PokedexApp_FreeFormsSprites
+	.public PokedexApp_CreateFormsSprites
 	.public ov18_021F5EF0
-	.public ov18_021F5EFC
-	.public ov18_021F5FFC
-	.public ov18_021F6038
-	.public ov18_021F609C
-	.public ov18_021F6178
-	.public ov18_021F619C
-	.public ov18_021F61DC
-	.public ov18_021F61F8
-	.public ov18_021F6214
-	.public ov18_021F6230
-	.public ov18_021F6244
-	.public ov18_021F6258
-	.public ov18_021F62B4
-	.public ov18_021F6310
-	.public ov18_021F63DC
-	.public ov18_021F64A4
-	.public ov18_021F64F4
+	.public PokedexApp_ShowFormMonPics
+	.public PokedexApp_SetFormListIcon
+	.public PokedexApp_DrawFormListIcons
+	.public PokedexApp_ScrollFormListIcons
+	.public PokedexApp_MoveFormListIcons
+	.public PokedexApp_UpdateScrollArrows
+	.public PokedexApp_SetScrollbarSizeAnim
+	.public PokedexApp_GetScrollbarSizeAnim
+	.public PokedexApp_GetScrollbarLength
+	.public PokedexApp_GetScrollbarMinY
+	.public PokedexApp_GetScrollbarMaxY
+	.public PokedexApp_IsTouchOnFormScrollbar
+	.public PokedexApp_IsTouchOnAreaScrollbar
+	.public PokedexApp_DragFormScrollbar
+	.public PokedexApp_DragAreaScrollbar
+	.public PokedexApp_GetFormScrollbarY
+	.public PokedexApp_GetAreaScrollbarY
 	.public ov18_021F6540
-	.public ov18_021F6578
-	.public ov18_021F65AC
-	.public ov18_021F65EC
-	.public ov18_021F662C
-	.public ov18_021F6684
-	.public ov18_021F6714
-	.public ov18_021F67D0
+	.public PokedexApp_MoveScrollbar
+	.public PokedexApp_SyncFormScrollbar
+	.public PokedexApp_SyncAreaScrollbar
+	.public PokedexApp_ShowFormListSprites
+	.public PokedexApp_HideFormListSprites
+	.public PokedexApp_ShowFormCompareSprites
+	.public PokedexApp_HideFormCompareSprites
 	.public ov18_021F6844
-	.public ov18_021F684C
+	.public PokedexApp_ShowFormCompareMonPic
 	.public ov18_021F6984
-	.public ov18_021F6990
-	.public ov18_021F69C0
-	.public ov18_021F69E8
-	.public ov18_021F6AB0
+	.public PokedexApp_UpdateFormCompareSelector
+	.public PokedexApp_SetPlayerMarkerAnim
+	.public PokedexApp_LoadMonPicToBg
+	.public PokedexApp_SetMonPicBgAffine
 	.public ov18_021F6B00
-	.public ov18_021F6BBC
-	.public ov18_021F6DE0
-	.public ov18_021F6E2C
-	.public ov18_021F6E58
-	.public ov18_021F6E98
-	.public ov18_021F6EAC
-	.public ov18_021F6EC0
-	.public ov18_021F6F08
-	.public ov18_021F6F38
-	.public ov18_021F6F78
-	.public ov18_021F6F8C
-	.public ov18_021F6FA0
-	.public ov18_021F6FE8
-	.public ov18_021F7018
-	.public ov18_021F7060
+	.public PokedexApp_HandleListInput
+	.public PokedexApp_CreateSearchMenuGrid
+	.public PokedexApp_HandleSearchMenuInput
+	.public PokedexApp_UpdateSearchMenuCursor
+	.public PokedexApp_OnSearchMenuGridMove
+	.public PokedexApp_OnSearchMenuGridTouch
+	.public PokedexApp_CreateSearchOrderGrid
+	.public PokedexApp_HandleSearchOrderInput
+	.public PokedexApp_UpdateSearchOrderCursor
+	.public PokedexApp_OnSearchOrderGridMove
+	.public PokedexApp_OnSearchOrderGridTouch
+	.public PokedexApp_CreateSearchNameGrid
+	.public PokedexApp_HandleSearchNameInput
+	.public PokedexApp_UpdateSearchNameCursor
+	.public PokedexApp_OnSearchNameGridMove
 	.public ov18_021F7086
-	.public ov18_021F7104
-	.public ov18_021F7124
-	.public ov18_021F716C
-	.public ov18_021F719C
-	.public ov18_021F71DC
-	.public ov18_021F7334
-	.public ov18_021F7354
-	.public ov18_021F739C
-	.public ov18_021F7444
-	.public ov18_021F74B0
-	.public ov18_021F74C4
-	.public ov18_021F74D8
-	.public ov18_021F7520
-	.public ov18_021F75C8
-	.public ov18_021F7634
-	.public ov18_021F7648
-	.public ov18_021F765C
-	.public ov18_021F7668
-	.public ov18_021F76B0
-	.public ov18_021F76E0
-	.public ov18_021F7720
-	.public ov18_021F7734
-	.public ov18_021F7748
-	.public ov18_021F7790
-	.public ov18_021F77C0
-	.public ov18_021F7800
-	.public ov18_021F7954
+	.public PokedexApp_OnSearchNameGridTouch
+	.public PokedexApp_CreateSearchTypeGrid
+	.public PokedexApp_HandleSearchTypeInput
+	.public PokedexApp_UpdateSearchTypeCursor
+	.public PokedexApp_OnSearchTypeGridMove
+	.public PokedexApp_OnSearchTypeGridTouch
+	.public PokedexApp_CreateSearchHeightGrid
+	.public PokedexApp_HandleSearchHeightInput
+	.public PokedexApp_UpdateSearchHeightCursor
+	.public PokedexApp_OnSearchHeightGridMove
+	.public PokedexApp_OnSearchHeightGridTouch
+	.public PokedexApp_CreateSearchWeightGrid
+	.public PokedexApp_HandleSearchWeightInput
+	.public PokedexApp_UpdateSearchWeightCursor
+	.public PokedexApp_OnSearchWeightGridMove
+	.public PokedexApp_OnSearchWeightGridTouch
+	.public PokedexApp_GetTouchHeldX
+	.public PokedexApp_CreateSearchAreaGrid
+	.public PokedexApp_HandleSearchAreaInput
+	.public PokedexApp_UpdateSearchAreaCursor
+	.public PokedexApp_OnSearchAreaGridMove
+	.public PokedexApp_OnSearchAreaGridTouch
+	.public PokedexApp_CreateSearchFormGrid
+	.public PokedexApp_HandleSearchFormInput
+	.public PokedexApp_UpdateSearchFormCursor
+	.public PokedexApp_OnSearchFormGridMove
+	.public PokedexApp_OnSearchFormGridTouch
 	.public ov18_021F7974
-	.public ov18_021F7B74
-	.public ov18_021F7B90
-	.public ov18_021F7B94
-	.public ov18_021F7C14
-	.public ov18_021F7D00
-	.public ov18_021F7D30
-	.public ov18_021F7DCC
+	.public PokedexApp_FreeGridInput
+	.public PokedexApp_DummyGridCallback
+	.public PokedexApp_HandleEntryTabTouch
+	.public PokedexApp_HandleAreaInput
+	.public PokedexApp_HandleSizeCheckInput
+	.public PokedexApp_HandleFormsInput
+	.public PokedexApp_HandleFormCompareInput
 	.public ov18_021F7E70
-	.public ov18_021F7ED4
-	.public ov18_021F8168
-	.public ov18_021F8198
-	.public ov18_021F81D8
-	.public ov18_021F822C
+	.public PokedexApp_RunSearch
+	.public PokedexApp_LoadSortData
+	.public PokedexApp_FilterSeen
+	.public PokedexApp_StoreSearchResults
+	.public PokedexApp_ApplySortOrder
 	.public ov18_021F8248
 	.public ov18_021F8254
 	.public ov18_021F8268
@@ -1852,8 +1852,8 @@
 	.public ov18_021F8282
 	.public ov18_021F828E
 	.public ov18_021F829A
-	.public ov18_021F82CC
-	.public ov18_021F831C
+	.public PokedexApp_FilterByLetter
+	.public PokedexApp_FilterByType
 	.public ov18_021F833C
 	.public ov18_021F8360
 	.public ov18_021F8372
@@ -1873,7 +1873,7 @@
 	.public ov18_021F841A
 	.public ov18_021F8426
 	.public ov18_021F8432
-	.public ov18_021F8468
+	.public PokedexApp_FilterByBodyType
 	.public ov18_021F8482
 	.public ov18_021F84A0
 	.public ov18_021F84B4
@@ -1890,92 +1890,92 @@
 	.public ov18_021F8538
 	.public ov18_021F8544
 	.public ov18_021F8550
-	.public ov18_021F8584
-	.public ov18_021F8640
-	.public ov18_021F86D0
-	.public ov18_021F8764
-	.public ov18_021F8824
-	.public ov18_021F8838
-	.public ov18_021F8850
-	.public ov18_021F8884
-	.public ov18_021F891C
-	.public ov18_021F8950
+	.public PokedexApp_FilterByArea
+	.public PokedexApp_FilterByHeight
+	.public PokedexApp_FilterByWeight
+	.public PokedexApp_IntersectSpeciesLists
+	.public PokedexApp_GetListCursorIndex
+	.public PokedexApp_GetCursorSpecies
+	.public PokedexApp_FindSpeciesInResults
+	.public PokedexApp_BuildListEntries
+	.public PokedexApp_GetListLength
+	.public PokedexApp_GetLastListPage
 	.public ov18_021F8970
-	.public ov18_021F8974
-	.public ov18_021F89C8
-	.public ov18_021F89D0
-	.public ov18_021F89F8
+	.public PokedexEntryPopup_Create
+	.public PokedexEntryPopup_IsDone
+	.public PokedexEntryPopup_Delete
+	.public PokedexEntryPopup_Task
 	.public ov18_021F8A14
 	.public ov18_021F8A1E
 	.public ov18_021F8A52
 	.public ov18_021F8A66
 	.public ov18_021F8A8A
-	.public ov18_021F8AB8
-	.public ov18_021F8B10
-	.public ov18_021F8BEC
-	.public ov18_021F8C0C
-	.public ov18_021F8C48
-	.public ov18_021F8C68
-	.public ov18_021F8CCC
-	.public ov18_021F8F10
-	.public ov18_021F8F28
-	.public ov18_021F8F58
-	.public ov18_021F8F60
-	.public ov18_021F8F84
-	.public ov18_021F8FA0
+	.public PokedexEntryPopup_ReadMonData
+	.public PokedexEntryPopup_InitBgs
+	.public PokedexEntryPopup_FreeBgs
+	.public PokedexEntryPopup_StartFadeIn
+	.public PokedexEntryPopup_IsFadeDone
+	.public PokedexEntryPopup_FlashBanner
+	.public PokedexEntryPopup_DrawWindows
+	.public PokedexEntryPopup_RemoveWindows
+	.public PokedexEntryPopup_InitObjCharTransfer
+	.public PokedexEntryPopup_DestroyObjCharTransfer
+	.public PokedexEntryPopup_CreateResourceManagers
+	.public PokedexEntryPopup_DestroyResourceManagers
+	.public PokedexEntryPopup_InitSprites
 	.public ov18_021F8FF8
 	.public ov18_021F9054
-	.public ov18_021F9068
-	.public ov18_021F9108
-	.public ov18_021F9150
-	.public ov18_021F91DC
-	.public ov18_021F91F0
-	.public ov18_021F922C
-	.public ov18_021F92AC
-	.public ov18_021F92DC
-	.public ov18_021F9310
-	.public ov18_021F9370
-	.public ov18_021F94A0
+	.public PokedexEntryPopup_LoadTypeIconResources
+	.public PokedexEntryPopup_UnloadTypeIconResources
+	.public PokedexEntryPopup_LoadFootprintResources
+	.public PokedexEntryPopup_UnloadFootprintResources
+	.public PokedexEntryPopup_FreeSprites
+	.public PokedexEntryPopup_LoadSpriteResources
+	.public PokedexEntryPopup_LoadPaletteResource
+	.public PokedexEntryPopup_FreeSpriteResources
+	.public PokedexEntryPopup_MakeResourcesHeader
+	.public PokedexEntryPopup_CreateTypeIconSprites
+	.public PokedexEntryPopup_DeleteTypeIconSprites
 	.public ov18_021F94BC
 	.public ov18_021F9508
-	.public ov18_021F9518
-	.public ov18_021F959C
-	.public ov18_021F95AC
-	.public ov18_021F95CC
-	.public ov18_021F95F8
-	.public ov18_021F95FC
-	.public ov18_021F9648
-	.public ov18_021F967C
-	.public ov18_021F9688
-	.public ov18_021F9694
+	.public PokedexEntryPopup_CreateFootprintSprite
+	.public PokedexEntryPopup_DeleteFootprintSprite
+	.public PokedexEntryPopup_HideSprites
+	.public PokedexEntryPopup_CreatePokepic
+	.public PokedexEntryPopup_GetPokepic
+	.public PokedexApp_PrintString
+	.public PokedexApp_PrintMessage
+	.public PokedexApp_GetTypeIconCharFile
+	.public PokedexApp_GetTypeIconPalette
+	.public PokedexApp_LoadFootprintGraphics
 	.public ov18_021F9DB0
-	.public ov18_021F9DC0
-	.public ov18_021F9DE4
-	.public ov18_021F9E4C
-	.public ov18_021F9EBC
-	.public ov18_021F9F3C
-	.public ov18_021F9FDC
+	.public sSearchTypeMsgIds
+	.public sSizeCheckWindowTemplates
+	.public sAreaWindowTemplates
+	.public sFormsWindowTemplates
+	.public sListWindowTemplates
+	.public sSearchWindowTemplates
 	.public ov18_021FA304
 	.public ov18_021FA310
 	.public ov18_021FA328
 	.public ov18_021FA338
 	.public ov18_021FA348
 	.public ov18_021FA35A
-	.public ov18_021FA36C
-	.public ov18_021FA380
-	.public ov18_021FA398
+	.public sPokedexOamCharTransferParam
+	.public sSpriteResourceCapacities
+	.public sListScrollbarSizeThresholds
 	.public ov18_021FA3B0
-	.public ov18_021FA3C8
-	.public ov18_021FA3E8
-	.public ov18_021FA41C
-	.public ov18_021FA450
-	.public ov18_021FA484
-	.public ov18_021FA4B8
+	.public sPokedexOamManagerParam
+	.public sMonIconSpriteTemplate
+	.public sTypeIconSpriteTemplate
+	.public sFootprintSpriteTemplate
+	.public sLanguageIconSpriteTemplate
+	.public sAreaMarkerSpriteTemplate
 	.public ov18_021FA4EC
 	.public ov18_021FA520
 	.public ov18_021FA554
-	.public ov18_021FA588
-	.public ov18_021FA5CC
+	.public sWeightCheckAnimFuncs
+	.public sWeightCheckDiffRanges
 	.public ov18_021FA610
 	.public ov18_021FA7B0
 	.public ov18_021FA984
@@ -1989,58 +1989,58 @@
 	.public ov18_021FB54C
 	.public ov18_021FB580
 	.public ov18_021FB5B4
-	.public ov18_021FB618
-	.public ov18_021FB61C
-	.public ov18_021FB620
-	.public ov18_021FB628
+	.public sSearchHeightCursorAnims
+	.public sSearchWeightCursorAnims
+	.public sSearchAreaCursorAnims
+	.public sSearchOrderCursorAnims
 	.public ov18_021FB630
-	.public ov18_021FB638
-	.public ov18_021FB648
-	.public ov18_021FB658
-	.public ov18_021FB668
-	.public ov18_021FB678
-	.public ov18_021FB688
+	.public sSearchTypeGridCallbacks
+	.public sSearchHeightGridCallbacks
+	.public sSearchFormGridCallbacks
+	.public sSearchOrderGridCallbacks
+	.public sSearchWeightGridCallbacks
+	.public sSearchMenuGridCallbacks
 	.public ov18_021FB698
-	.public ov18_021FB6A8
-	.public ov18_021FB6B8
-	.public ov18_021FB6C8
-	.public ov18_021FB6DC
+	.public sSearchNameGridCallbacks
+	.public sSearchAreaGridCallbacks
+	.public sSearchHeightHitboxes
+	.public sSearchWeightHitboxes
 	.public ov18_021FB6F0
 	.public ov18_021FB704
 	.public ov18_021FB718
 	.public ov18_021FB72C
-	.public ov18_021FB744
+	.public sSearchAreaHitboxes
 	.public ov18_021FB760
-	.public ov18_021FB780
-	.public ov18_021FB7A0
+	.public sSearchHeightDpadBoxes
+	.public sSearchWeightDpadBoxes
 	.public ov18_021FB7C0
 	.public ov18_021FB7E0
 	.public ov18_021FB804
-	.public ov18_021FB828
+	.public sSearchOrderHitboxes
 	.public ov18_021FB84C
-	.public ov18_021FB878
+	.public sSearchMenuHitboxes
 	.public ov18_021FB8A4
-	.public ov18_021FB8D4
+	.public sSearchAreaDpadBoxes
 	.public ov18_021FB904
 	.public ov18_021FB934
-	.public ov18_021FB968
-	.public ov18_021FB9A8
-	.public ov18_021FB9F0
-	.public ov18_021FBA40
-	.public ov18_021FBA94
-	.public ov18_021FBB0C
-	.public ov18_021FBB94
-	.public ov18_021FBC34
-	.public ov18_021FBD1C
-	.public ov18_021FBD28
-	.public ov18_021FBD3C
-	.public ov18_021FBD50
-	.public ov18_021FBD60
-	.public ov18_021FBD7C
-	.public ov18_021FBD98
-	.public ov18_021FBDB4
-	.public ov18_021FBDFC
-	.public ov18_021FBE10
+	.public sSearchOrderDpadBoxes
+	.public sSearchFormHitboxes
+	.public sSearchMenuDpadBoxes
+	.public sSearchTypeHitboxes
+	.public sSearchNameHitboxes
+	.public sSearchFormDpadBoxes
+	.public sSearchTypeDpadBoxes
+	.public sSearchNameDpadBoxes
+	.public sSearchMenuCursorAnims
+	.public sSearchFormCursorAnims
+	.public sSearchTypeCursorAnims
+	.public sEntryPopupObjCharTransferTemplate
+	.public sEntryPopupBg2Template
+	.public sEntryPopupBg1Template
+	.public sEntryPopupBg3Template
+	.public sEntryPopupWindowTemplates
+	.public sTypeIconPaletteNums
+	.public sTypeIconCharFiles
 	.include "overlay_18.inc"
 	.include "global.inc"
 
@@ -2064,67 +2064,67 @@
 	.text
 
 	.balign 4, 0
-	.public ov18_021F0118
-	.public ov18_021F0918
-	.public ov18_021F0928
-	.public ov18_021F0F2C
-	.public ov18_021F0FC8
-	.public ov18_021F0FEC
-	.public ov18_021F1104
-	.public ov18_021F118C
-	.public ov18_021F11AC
-	.public ov18_021F12FC
-	.public ov18_021F1314
-	.public ov18_021F1CAC
+	.public PokedexApp_SetSearchSummaryVisible
+	.public PokedexApp_FreeFormsWindows
+	.public PokedexApp_DrawFormsWindows
+	.public PokedexApp_ClearFormCompareWindows
+	.public PokedexApp_InitSprites
+	.public PokedexApp_FreeSprites
+	.public PokedexApp_DeleteAllSprites
+	.public PokedexApp_SetSpriteAnim
+	.public PokedexApp_IsSpriteAnimating
+	.public PokedexApp_OpenMonIconNarc
+	.public PokedexApp_CloseMonIconNarc
+	.public PokedexApp_ShowMonPic
 	.public ov18_021F2B9C
 	.public ov18_021F2BFC
-	.public ov18_021F2CB4
-	.public ov18_021F2CC0
-	.public ov18_021F2F00
-	.public ov18_021F2F3C
-	.public ov18_021F3294
-	.public ov18_021F3438
-	.public ov18_021F3544
-	.public ov18_021F3AD0
+	.public PokedexApp_GetListScrollbarMinY
+	.public PokedexApp_GetListScrollbarMaxY
+	.public PokedexApp_FreeListSprites
+	.public PokedexApp_SetupSearchSprites
+	.public PokedexApp_UnloadSearchEntryResources
+	.public PokedexApp_FreeSearchSprites
+	.public PokedexApp_SetSliderSpritesVisible
+	.public PokedexApp_SliderValueToX
 	.public ov18_021F3D6C
-	.public ov18_021F3E08
-	.public ov18_021F4620
-	.public ov18_021F4A50
+	.public PokedexApp_FreeAreaSprites
+	.public PokedexApp_HideAreaMarkers
+	.public PokedexApp_FreeSizeCheckSprites
 	.public ov18_021F51BC
-	.public ov18_021F5DC0
-	.public ov18_021F5DE0
-	.public ov18_021F6214
-	.public ov18_021F6244
-	.public ov18_021F6E98
-	.public ov18_021F6EAC
-	.public ov18_021F6F78
-	.public ov18_021F6F8C
-	.public ov18_021F7104
-	.public ov18_021F7334
-	.public ov18_021F74B0
-	.public ov18_021F74C4
-	.public ov18_021F7634
-	.public ov18_021F7648
-	.public ov18_021F7720
-	.public ov18_021F7734
-	.public ov18_021F7954
-	.public ov18_021F7B90
-	.public ov18_021F8824
+	.public PokedexApp_SetupFormsSprites
+	.public PokedexApp_FreeFormsSprites
+	.public PokedexApp_GetScrollbarLength
+	.public PokedexApp_GetScrollbarMaxY
+	.public PokedexApp_OnSearchMenuGridMove
+	.public PokedexApp_OnSearchMenuGridTouch
+	.public PokedexApp_OnSearchOrderGridMove
+	.public PokedexApp_OnSearchOrderGridTouch
+	.public PokedexApp_OnSearchNameGridTouch
+	.public PokedexApp_OnSearchTypeGridTouch
+	.public PokedexApp_OnSearchHeightGridMove
+	.public PokedexApp_OnSearchHeightGridTouch
+	.public PokedexApp_OnSearchWeightGridMove
+	.public PokedexApp_OnSearchWeightGridTouch
+	.public PokedexApp_OnSearchAreaGridMove
+	.public PokedexApp_OnSearchAreaGridTouch
+	.public PokedexApp_OnSearchFormGridTouch
+	.public PokedexApp_DummyGridCallback
+	.public PokedexApp_GetListCursorIndex
 	.public ov18_021F8970
-	.public ov18_021F89C8
-	.public ov18_021F89D0
-	.public ov18_021F8BEC
-	.public ov18_021F8C48
-	.public ov18_021F8F84
-	.public ov18_021F91F0
-	.public ov18_021F94A0
+	.public PokedexEntryPopup_IsDone
+	.public PokedexEntryPopup_Delete
+	.public PokedexEntryPopup_FreeBgs
+	.public PokedexEntryPopup_IsFadeDone
+	.public PokedexEntryPopup_DestroyResourceManagers
+	.public PokedexEntryPopup_FreeSprites
+	.public PokedexEntryPopup_DeleteTypeIconSprites
 	.public ov18_021F9508
-	.public ov18_021F959C
-	.public ov18_021F95AC
-	.public ov18_021F95F8
+	.public PokedexEntryPopup_DeleteFootprintSprite
+	.public PokedexEntryPopup_HideSprites
+	.public PokedexEntryPopup_GetPokepic
 
-	thumb_func_start ov18_021F95FC
-ov18_021F95FC: ; 0x021F95FC
+	thumb_func_start PokedexApp_PrintString
+PokedexApp_PrintString: ; 0x021F95FC
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #0x10
 	add r6, r0, #0
@@ -2162,11 +2162,11 @@ _021F962A:
 	bl AddTextPrinterParameterizedWithColor
 	add sp, #0x10
 	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end ov18_021F95FC
+	thumb_func_end PokedexApp_PrintString
 
 
-	thumb_func_start ov18_021F9648
-ov18_021F9648: ; 0x021F9648
+	thumb_func_start PokedexApp_PrintMessage
+PokedexApp_PrintMessage: ; 0x021F9648
 	push {r3, r4, r5, r6, lr}
 	sub sp, #0xc
 	add r5, r0, #0
@@ -2185,37 +2185,37 @@ ov18_021F9648: ; 0x021F9648
 	add r2, r6, #0
 	str r0, [sp, #8]
 	add r0, r5, #0
-	bl ov18_021F95FC
+	bl PokedexApp_PrintString
 	add r0, r4, #0
 	bl String_Delete
 	add sp, #0xc
 	pop {r3, r4, r5, r6, pc}
-	thumb_func_end ov18_021F9648
+	thumb_func_end PokedexApp_PrintMessage
 
 
-	thumb_func_start ov18_021F967C
-ov18_021F967C: ; 0x021F967C
+	thumb_func_start PokedexApp_GetTypeIconCharFile
+PokedexApp_GetTypeIconCharFile: ; 0x021F967C
 	lsl r1, r0, #2
-	ldr r0, _021F9684 ; =ov18_021FBE10
+	ldr r0, _021F9684 ; =sTypeIconCharFiles
 	ldr r0, [r0, r1]
 	bx lr
 	.balign 4, 0
-_021F9684: .word ov18_021FBE10
-	thumb_func_end ov18_021F967C
+_021F9684: .word sTypeIconCharFiles
+	thumb_func_end PokedexApp_GetTypeIconCharFile
 
 
-	thumb_func_start ov18_021F9688
-ov18_021F9688: ; 0x021F9688
-	ldr r1, _021F9690 ; =ov18_021FBDFC
+	thumb_func_start PokedexApp_GetTypeIconPalette
+PokedexApp_GetTypeIconPalette: ; 0x021F9688
+	ldr r1, _021F9690 ; =sTypeIconPaletteNums
 	ldrb r0, [r1, r0]
 	bx lr
 	nop
-_021F9690: .word ov18_021FBDFC
-	thumb_func_end ov18_021F9688
+_021F9690: .word sTypeIconPaletteNums
+	thumb_func_end PokedexApp_GetTypeIconPalette
 
 
-	thumb_func_start ov18_021F9694
-ov18_021F9694: ; 0x021F9694
+	thumb_func_start PokedexApp_LoadFootprintGraphics
+PokedexApp_LoadFootprintGraphics: ; 0x021F9694
 	push {r4, r5, r6, lr}
 	sub sp, #8
 	add r5, r0, #0
@@ -2256,7 +2256,7 @@ ov18_021F9694: ; 0x021F9694
 	add sp, #8
 	pop {r4, r5, r6, pc}
 	.balign 4, 0
-	thumb_func_end ov18_021F9694
+	thumb_func_end PokedexApp_LoadFootprintGraphics
 
 	.rodata
 	.balign 4, 0
@@ -2273,17 +2273,17 @@ ov18_021F9DB0:
 	.short 0x01E2
 	.size ov18_021F9DB0,.-ov18_021F9DB0
 
-	.global ov18_021F9DC0
+	.global sSearchTypeMsgIds
 	.balign 2, 0
-ov18_021F9DC0:
+sSearchTypeMsgIds:
 	.short 0x003A, 0x0032, 0x003C, 0x0038, 0x0036, 0x0030, 0x003F, 0x0035
 	.short 0x003B, 0x003D, 0x003E, 0x0033, 0x0037, 0x0031, 0x0034, 0x0039
 	.short 0x002F, 0x0040
-	.size ov18_021F9DC0,.-ov18_021F9DC0
+	.size sSearchTypeMsgIds,.-sSearchTypeMsgIds
 
-	.global ov18_021F9DE4
+	.global sSizeCheckWindowTemplates
 	.balign 2, 0
-ov18_021F9DE4:
+sSizeCheckWindowTemplates:
 	.byte 0x05, 0x02, 0x00, 0x09, 0x02, 0x02
 	.short 0x03EE
 	.byte 0x05, 0x04, 0x03, 0x08, 0x02, 0x01
@@ -2310,11 +2310,11 @@ ov18_021F9DE4:
 	.short 0x01C8
 	.byte 0x01, 0x16, 0x11, 0x08, 0x02, 0x01
 	.short 0x01B0
-	.size ov18_021F9DE4,.-ov18_021F9DE4
+	.size sSizeCheckWindowTemplates,.-sSizeCheckWindowTemplates
 
-	.global ov18_021F9E4C
+	.global sAreaWindowTemplates
 	.balign 2, 0
-ov18_021F9E4C:
+sAreaWindowTemplates:
 	.byte 0x05, 0x02, 0x00, 0x09, 0x02, 0x02, 0xEE, 0x01
 	.byte 0x05, 0x01, 0x03, 0x07, 0x02, 0x01, 0xE0, 0x01
 	.byte 0x05, 0x00, 0x10, 0x09, 0x02, 0x01, 0xCE, 0x01
@@ -2329,11 +2329,11 @@ ov18_021F9E4C:
 	.byte 0x02, 0x0A, 0x0E, 0x12, 0x02, 0x01, 0x70, 0x01
 	.byte 0x02, 0x0A, 0x11, 0x12, 0x02, 0x01, 0x4C, 0x01
 	.byte 0x02, 0x0A, 0x14, 0x12, 0x02, 0x01, 0x28, 0x01
-	.size ov18_021F9E4C,.-ov18_021F9E4C
+	.size sAreaWindowTemplates,.-sAreaWindowTemplates
 
-	.global ov18_021F9EBC
+	.global sFormsWindowTemplates
 	.balign 2, 0
-ov18_021F9EBC:
+sFormsWindowTemplates:
 	.byte 0x05, 0x02, 0x00, 0x09, 0x02, 0x02, 0xEE, 0x03
 	.byte 0x05, 0x04, 0x05, 0x09, 0x02, 0x01, 0xDC, 0x03
 	.byte 0x05, 0x0D, 0x05, 0x0F, 0x02, 0x01, 0xBE, 0x03
@@ -2350,11 +2350,11 @@ ov18_021F9EBC:
 	.byte 0x02, 0x08, 0x0A, 0x12, 0x02, 0x01, 0x70, 0x01
 	.byte 0x02, 0x08, 0x0D, 0x12, 0x02, 0x01, 0x4C, 0x01
 	.byte 0x02, 0x08, 0x10, 0x12, 0x02, 0x01, 0x28, 0x01
-	.size ov18_021F9EBC,.-ov18_021F9EBC
+	.size sFormsWindowTemplates,.-sFormsWindowTemplates
 
-	.global ov18_021F9F3C
+	.global sListWindowTemplates
 	.balign 2, 0
-ov18_021F9F3C:
+sListWindowTemplates:
 	.byte 0x00, 0x02, 0x09, 0x0C, 0x02, 0x09
 	.short 0x03E8
 	.byte 0x00, 0x12, 0x09, 0x0C, 0x02, 0x09
@@ -2395,11 +2395,11 @@ ov18_021F9F3C:
 	.short 0x02A0
 	.byte 0x05, 0x0F, 0x0D, 0x10, 0x02, 0x01
 	.short 0x0280
-	.size ov18_021F9F3C,.-ov18_021F9F3C
+	.size sListWindowTemplates,.-sListWindowTemplates
 
-	.global ov18_021F9FDC
+	.global sSearchWindowTemplates
 	.balign 2, 0
-ov18_021F9FDC:
+sSearchWindowTemplates:
 	.byte 0x05, 0x02, 0x13, 0x1C, 0x05, 0x02
 	.short 0x0174
 	.byte 0x05, 0x04, 0x01, 0x09, 0x02, 0x02
@@ -2602,7 +2602,7 @@ ov18_021F9FDC:
 	.short 0x03BE
 	.byte 0x00, 0x1B, 0x0B, 0x03, 0x02, 0x09
 	.short 0x03B8
-	.size ov18_021F9FDC,.-ov18_021F9FDC
+	.size sSearchWindowTemplates,.-sSearchWindowTemplates
 
 	; file boundary
 	.balign 4, 0
@@ -2642,23 +2642,23 @@ ov18_021FA35A:
 	.byte 0x0A, 0x00, 0x0D, 0x00, 0x10, 0x00, 0x14, 0x00, 0x18, 0x00, 0xFF, 0x00
 	.size ov18_021FA35A,.-ov18_021FA35A
 
-	.global ov18_021FA36C
-ov18_021FA36C:
+	.global sPokedexOamCharTransferParam
+sPokedexOamCharTransferParam:
 	.byte 0x00, 0x04, 0x00, 0x00
 	.byte 0x00, 0x00, 0x01, 0x00, 0x00, 0x40, 0x00, 0x00, 0x10, 0x00, 0x10, 0x00, 0x10, 0x00, 0x10, 0x00
-	.size ov18_021FA36C,.-ov18_021FA36C
+	.size sPokedexOamCharTransferParam,.-sPokedexOamCharTransferParam
 
-	.global ov18_021FA380
-ov18_021FA380:
+	.global sSpriteResourceCapacities
+sSpriteResourceCapacities:
 	.byte 0x51, 0x00, 0x00, 0x00, 0x12, 0x00, 0x00, 0x00, 0x0F, 0x00, 0x00, 0x00, 0x0F, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.size ov18_021FA380,.-ov18_021FA380
+	.size sSpriteResourceCapacities,.-sSpriteResourceCapacities
 
-	.global ov18_021FA398
-ov18_021FA398:
+	.global sListScrollbarSizeThresholds
+sListScrollbarSizeThresholds:
 	.byte 0x0F, 0x00, 0x2D, 0x00, 0x5A, 0x00, 0x87, 0x00
 	.byte 0xB4, 0x00, 0xE1, 0x00, 0x0E, 0x01, 0x3B, 0x01, 0x68, 0x01, 0x95, 0x01, 0xC2, 0x01, 0xEF, 0x01
-	.size ov18_021FA398,.-ov18_021FA398
+	.size sListScrollbarSizeThresholds,.-sListScrollbarSizeThresholds
 
 	.global ov18_021FA3B0
 ov18_021FA3B0:
@@ -2676,52 +2676,52 @@ ov18_021FA3B0:
 	.byte 0x18, 0x10
 	.size ov18_021FA3B0,.-ov18_021FA3B0
 
-	.global ov18_021FA3C8
-ov18_021FA3C8:
+	.global sPokedexOamManagerParam
+sPokedexOamManagerParam:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00
-	.size ov18_021FA3C8,.-ov18_021FA3C8
+	.size sPokedexOamManagerParam,.-sPokedexOamManagerParam
 
-	.global ov18_021FA3E8
-ov18_021FA3E8:
+	.global sMonIconSpriteTemplate
+sMonIconSpriteTemplate:
 	.byte 0x30, 0x00, 0x18, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x0A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x50, 0xC5, 0x00, 0x00
 	.byte 0x50, 0xC5, 0x00, 0x00, 0x50, 0xC5, 0x00, 0x00, 0x50, 0xC5, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF
 	.byte 0xFF, 0xFF, 0xFF, 0xFF, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.size ov18_021FA3E8,.-ov18_021FA3E8
+	.size sMonIconSpriteTemplate,.-sMonIconSpriteTemplate
 
-	.global ov18_021FA41C
-ov18_021FA41C:
+	.global sTypeIconSpriteTemplate
+sTypeIconSpriteTemplate:
 	.byte 0xA8, 0x00, 0x48, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
 	.byte 0x93, 0xC5, 0x00, 0x00, 0x58, 0xC5, 0x00, 0x00, 0x55, 0xC5, 0x00, 0x00, 0x55, 0xC5, 0x00, 0x00
 	.byte 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.size ov18_021FA41C,.-ov18_021FA41C
+	.size sTypeIconSpriteTemplate,.-sTypeIconSpriteTemplate
 
-	.global ov18_021FA450
-ov18_021FA450:
+	.global sFootprintSpriteTemplate
+sFootprintSpriteTemplate:
 	.byte 0x78, 0x00, 0x50, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x02, 0x00, 0x00, 0x00, 0x99, 0xC5, 0x00, 0x00, 0x5B, 0xC5, 0x00, 0x00, 0x58, 0xC5, 0x00, 0x00
 	.byte 0x58, 0xC5, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x03, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
-	.size ov18_021FA450,.-ov18_021FA450
+	.size sFootprintSpriteTemplate,.-sFootprintSpriteTemplate
 
-	.global ov18_021FA484
-ov18_021FA484:
+	.global sLanguageIconSpriteTemplate
+sLanguageIconSpriteTemplate:
 	.byte 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x98, 0xC5, 0x00, 0x00, 0x5A, 0xC5, 0x00, 0x00
 	.byte 0x57, 0xC5, 0x00, 0x00, 0x57, 0xC5, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 	.byte 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.size ov18_021FA484,.-ov18_021FA484
+	.size sLanguageIconSpriteTemplate,.-sLanguageIconSpriteTemplate
 
-	.global ov18_021FA4B8
-ov18_021FA4B8:
+	.global sAreaMarkerSpriteTemplate
+sAreaMarkerSpriteTemplate:
 	.byte 0xC0, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x9A, 0xC5, 0x00, 0x00
 	.byte 0x5C, 0xC5, 0x00, 0x00, 0x59, 0xC5, 0x00, 0x00, 0x59, 0xC5, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF
 	.byte 0xFF, 0xFF, 0xFF, 0xFF, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.size ov18_021FA4B8,.-ov18_021FA4B8
+	.size sAreaMarkerSpriteTemplate,.-sAreaMarkerSpriteTemplate
 
 	.global ov18_021FA4EC
 ov18_021FA4EC:
@@ -2747,8 +2747,8 @@ ov18_021FA554:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.size ov18_021FA554,.-ov18_021FA554
 
-	.global ov18_021FA588
-ov18_021FA588:
+	.global sWeightCheckAnimFuncs
+sWeightCheckAnimFuncs:
 	.word ov18_021F51BC
 	.word ov18_021F51CC
 	.word ov18_021F5238
@@ -2766,16 +2766,16 @@ ov18_021FA588:
 	.word ov18_021F5B14
 	.word ov18_021F5BEC
 	.word ov18_021F5CC4
-	.size ov18_021FA588,.-ov18_021FA588
+	.size sWeightCheckAnimFuncs,.-sWeightCheckAnimFuncs
 
-	.global ov18_021FA5CC
-ov18_021FA5CC:
+	.global sWeightCheckDiffRanges
+sWeightCheckDiffRanges:
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x01, 0x00, 0x02, 0x00, 0x02, 0x00, 0x03, 0x00, 0x03, 0x00, 0x04, 0x00, 0x04, 0x00
 	.byte 0x05, 0x00, 0x05, 0x00, 0x06, 0x00, 0x06, 0x00, 0x07, 0x00, 0x07, 0x00, 0x08, 0x00, 0x0F, 0x00
 	.byte 0x10, 0x00, 0x1E, 0x00, 0x1F, 0x00, 0x32, 0x00, 0x33, 0x00, 0x4B, 0x00, 0x4C, 0x00, 0x69, 0x00
 	.byte 0x6A, 0x00, 0x9B, 0x00, 0x9C, 0x00, 0xEB, 0x00, 0xEC, 0x00, 0x5E, 0x01, 0x5F, 0x01, 0xFF, 0xFF
-	.size ov18_021FA5CC,.-ov18_021FA5CC
+	.size sWeightCheckDiffRanges,.-sWeightCheckDiffRanges
 
 	.global ov18_021FA610
 ov18_021FA610:
@@ -3098,78 +3098,78 @@ ov18_021FB5B4:
 	; file boundary
 	.balign 4, 0
 
-	.global ov18_021FB618
-ov18_021FB618:
+	.global sSearchHeightCursorAnims
+sSearchHeightCursorAnims:
 	.byte 0x3E, 0x3E, 0x23, 0x23
-	.size ov18_021FB618,.-ov18_021FB618
+	.size sSearchHeightCursorAnims,.-sSearchHeightCursorAnims
 
-	.global ov18_021FB61C
-ov18_021FB61C:
+	.global sSearchWeightCursorAnims
+sSearchWeightCursorAnims:
 	.byte 0x3E, 0x3E, 0x23, 0x23
-	.size ov18_021FB61C,.-ov18_021FB61C
+	.size sSearchWeightCursorAnims,.-sSearchWeightCursorAnims
 
-	.global ov18_021FB620
-ov18_021FB620:
+	.global sSearchAreaCursorAnims
+sSearchAreaCursorAnims:
 	.byte 0x26, 0x26, 0x26, 0x26, 0x23, 0x23, 0x00, 0x00
-	.size ov18_021FB620,.-ov18_021FB620
+	.size sSearchAreaCursorAnims,.-sSearchAreaCursorAnims
 
-	.global ov18_021FB628
-ov18_021FB628:
+	.global sSearchOrderCursorAnims
+sSearchOrderCursorAnims:
 	.byte 0x27, 0x27, 0x27, 0x27, 0x27, 0x27, 0x23, 0x23
-	.size ov18_021FB628,.-ov18_021FB628
+	.size sSearchOrderCursorAnims,.-sSearchOrderCursorAnims
 
 	.global ov18_021FB630
 ov18_021FB630:
 	.byte 0x48, 0x67, 0x30, 0xCF, 0xFF, 0x00, 0x00, 0x00
 	.size ov18_021FB630,.-ov18_021FB630
 
-	.global ov18_021FB638
-ov18_021FB638:
-	.word ov18_021F7B90
-	.word ov18_021F7B90
-	.word ov18_021F71DC
-	.word ov18_021F7334
-	.size ov18_021FB638,.-ov18_021FB638
+	.global sSearchTypeGridCallbacks
+sSearchTypeGridCallbacks:
+	.word PokedexApp_DummyGridCallback
+	.word PokedexApp_DummyGridCallback
+	.word PokedexApp_OnSearchTypeGridMove
+	.word PokedexApp_OnSearchTypeGridTouch
+	.size sSearchTypeGridCallbacks,.-sSearchTypeGridCallbacks
 
-	.global ov18_021FB648
-ov18_021FB648:
-	.word ov18_021F7B90
-	.word ov18_021F7B90
-	.word ov18_021F74B0
-	.word ov18_021F74C4
-	.size ov18_021FB648,.-ov18_021FB648
+	.global sSearchHeightGridCallbacks
+sSearchHeightGridCallbacks:
+	.word PokedexApp_DummyGridCallback
+	.word PokedexApp_DummyGridCallback
+	.word PokedexApp_OnSearchHeightGridMove
+	.word PokedexApp_OnSearchHeightGridTouch
+	.size sSearchHeightGridCallbacks,.-sSearchHeightGridCallbacks
 
-	.global ov18_021FB658
-ov18_021FB658:
-	.word ov18_021F7B90
-	.word ov18_021F7B90
-	.word ov18_021F7800
-	.word ov18_021F7954
-	.size ov18_021FB658,.-ov18_021FB658
+	.global sSearchFormGridCallbacks
+sSearchFormGridCallbacks:
+	.word PokedexApp_DummyGridCallback
+	.word PokedexApp_DummyGridCallback
+	.word PokedexApp_OnSearchFormGridMove
+	.word PokedexApp_OnSearchFormGridTouch
+	.size sSearchFormGridCallbacks,.-sSearchFormGridCallbacks
 
-	.global ov18_021FB668
-ov18_021FB668:
-	.word ov18_021F7B90
-	.word ov18_021F7B90
-	.word ov18_021F6F78
-	.word ov18_021F6F8C
-	.size ov18_021FB668,.-ov18_021FB668
+	.global sSearchOrderGridCallbacks
+sSearchOrderGridCallbacks:
+	.word PokedexApp_DummyGridCallback
+	.word PokedexApp_DummyGridCallback
+	.word PokedexApp_OnSearchOrderGridMove
+	.word PokedexApp_OnSearchOrderGridTouch
+	.size sSearchOrderGridCallbacks,.-sSearchOrderGridCallbacks
 
-	.global ov18_021FB678
-ov18_021FB678:
-	.word ov18_021F7B90
-	.word ov18_021F7B90
-	.word ov18_021F7634
-	.word ov18_021F7648
-	.size ov18_021FB678,.-ov18_021FB678
+	.global sSearchWeightGridCallbacks
+sSearchWeightGridCallbacks:
+	.word PokedexApp_DummyGridCallback
+	.word PokedexApp_DummyGridCallback
+	.word PokedexApp_OnSearchWeightGridMove
+	.word PokedexApp_OnSearchWeightGridTouch
+	.size sSearchWeightGridCallbacks,.-sSearchWeightGridCallbacks
 
-	.global ov18_021FB688
-ov18_021FB688:
-	.word ov18_021F7B90
-	.word ov18_021F7B90
-	.word ov18_021F6E98
-	.word ov18_021F6EAC
-	.size ov18_021FB688,.-ov18_021FB688
+	.global sSearchMenuGridCallbacks
+sSearchMenuGridCallbacks:
+	.word PokedexApp_DummyGridCallback
+	.word PokedexApp_DummyGridCallback
+	.word PokedexApp_OnSearchMenuGridMove
+	.word PokedexApp_OnSearchMenuGridTouch
+	.size sSearchMenuGridCallbacks,.-sSearchMenuGridCallbacks
 
 	.global ov18_021FB698
 ov18_021FB698:
@@ -3177,33 +3177,33 @@ ov18_021FB698:
 	.byte 0x02, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00
 	.size ov18_021FB698,.-ov18_021FB698
 
-	.global ov18_021FB6A8
-ov18_021FB6A8:
-	.word ov18_021F7B90
-	.word ov18_021F7B90
-	.word ov18_021F7060
-	.word ov18_021F7104
-	.size ov18_021FB6A8,.-ov18_021FB6A8
+	.global sSearchNameGridCallbacks
+sSearchNameGridCallbacks:
+	.word PokedexApp_DummyGridCallback
+	.word PokedexApp_DummyGridCallback
+	.word PokedexApp_OnSearchNameGridMove
+	.word PokedexApp_OnSearchNameGridTouch
+	.size sSearchNameGridCallbacks,.-sSearchNameGridCallbacks
 
-	.global ov18_021FB6B8
-ov18_021FB6B8:
-	.word ov18_021F7B90
-	.word ov18_021F7B90
-	.word ov18_021F7720
-	.word ov18_021F7734
-	.size ov18_021FB6B8,.-ov18_021FB6B8
+	.global sSearchAreaGridCallbacks
+sSearchAreaGridCallbacks:
+	.word PokedexApp_DummyGridCallback
+	.word PokedexApp_DummyGridCallback
+	.word PokedexApp_OnSearchAreaGridMove
+	.word PokedexApp_OnSearchAreaGridTouch
+	.size sSearchAreaGridCallbacks,.-sSearchAreaGridCallbacks
 
-	.global ov18_021FB6C8
-ov18_021FB6C8:
+	.global sSearchHeightHitboxes
+sSearchHeightHitboxes:
 	.byte 0x2E, 0x49, 0x1A, 0xE5, 0x76, 0x91, 0x1A, 0xE5
 	.byte 0xA4, 0xBB, 0x04, 0x4B, 0xA4, 0xBB, 0xB4, 0xFB, 0xFF, 0x00, 0x00, 0x00
-	.size ov18_021FB6C8,.-ov18_021FB6C8
+	.size sSearchHeightHitboxes,.-sSearchHeightHitboxes
 
-	.global ov18_021FB6DC
-ov18_021FB6DC:
+	.global sSearchWeightHitboxes
+sSearchWeightHitboxes:
 	.byte 0x2E, 0x49, 0x1A, 0xE5
 	.byte 0x76, 0x91, 0x1A, 0xE5, 0xA4, 0xBB, 0x04, 0x4B, 0xA4, 0xBB, 0xB4, 0xFB, 0xFF, 0x00, 0x00, 0x00
-	.size ov18_021FB6DC,.-ov18_021FB6DC
+	.size sSearchWeightHitboxes,.-sSearchWeightHitboxes
 
 	.global ov18_021FB6F0
 ov18_021FB6F0:
@@ -3230,11 +3230,11 @@ ov18_021FB72C:
 	.byte 0xFF, 0x00, 0x00, 0x00
 	.size ov18_021FB72C,.-ov18_021FB72C
 
-	.global ov18_021FB744
-ov18_021FB744:
+	.global sSearchAreaHitboxes
+sSearchAreaHitboxes:
 	.byte 0x40, 0x4F, 0x30, 0x67, 0x40, 0x4F, 0x98, 0xCF, 0x78, 0x87, 0x30, 0x67
 	.byte 0x78, 0x87, 0x98, 0xCF, 0xA4, 0xBB, 0x04, 0x4B, 0xA4, 0xBB, 0xB4, 0xFB, 0xFF, 0x00, 0x00, 0x00
-	.size ov18_021FB744,.-ov18_021FB744
+	.size sSearchAreaHitboxes,.-sSearchAreaHitboxes
 
 	.global ov18_021FB760
 ov18_021FB760:
@@ -3242,17 +3242,17 @@ ov18_021FB760:
 	.byte 0x08, 0x00, 0x00, 0x00, 0x09, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x0B, 0x00, 0x00, 0x00
 	.size ov18_021FB760,.-ov18_021FB760
 
-	.global ov18_021FB780
-ov18_021FB780:
+	.global sSearchHeightDpadBoxes
+sSearchHeightDpadBoxes:
 	.byte 0x34, 0x3C, 0x00, 0x00, 0x02, 0x01, 0x00, 0x00, 0xCC, 0x84, 0x00, 0x00, 0x00, 0x82, 0x01, 0x01
 	.byte 0x28, 0xB0, 0x00, 0x00, 0x01, 0x00, 0x03, 0x03, 0xD8, 0xB0, 0x00, 0x00, 0x01, 0x00, 0x02, 0x02
-	.size ov18_021FB780,.-ov18_021FB780
+	.size sSearchHeightDpadBoxes,.-sSearchHeightDpadBoxes
 
-	.global ov18_021FB7A0
-ov18_021FB7A0:
+	.global sSearchWeightDpadBoxes
+sSearchWeightDpadBoxes:
 	.byte 0x34, 0x3C, 0x00, 0x00, 0x02, 0x01, 0x00, 0x00, 0xCC, 0x84, 0x00, 0x00, 0x00, 0x82, 0x01, 0x01
 	.byte 0x28, 0xB0, 0x00, 0x00, 0x01, 0x00, 0x03, 0x03, 0xD8, 0xB0, 0x00, 0x00, 0x01, 0x00, 0x02, 0x02
-	.size ov18_021FB7A0,.-ov18_021FB7A0
+	.size sSearchWeightDpadBoxes,.-sSearchWeightDpadBoxes
 
 	.global ov18_021FB7C0
 ov18_021FB7C0:
@@ -3274,12 +3274,12 @@ ov18_021FB804:
 	.byte 0x86, 0x9A, 0x86, 0xFF, 0xFF, 0x00, 0x00, 0x00
 	.size ov18_021FB804,.-ov18_021FB804
 
-	.global ov18_021FB828
-ov18_021FB828:
+	.global sSearchOrderHitboxes
+sSearchOrderHitboxes:
 	.byte 0x30, 0x3F, 0x18, 0x6F, 0x30, 0x3F, 0x90, 0xE7
 	.byte 0x50, 0x5F, 0x18, 0x6F, 0x50, 0x5F, 0x90, 0xE7, 0x70, 0x7F, 0x18, 0x6F, 0x70, 0x7F, 0x90, 0xE7
 	.byte 0xA4, 0xBB, 0x04, 0x4B, 0xA4, 0xBB, 0xB4, 0xFB, 0xFF, 0x00, 0x00, 0x00
-	.size ov18_021FB828,.-ov18_021FB828
+	.size sSearchOrderHitboxes,.-sSearchOrderHitboxes
 
 	.global ov18_021FB84C
 ov18_021FB84C:
@@ -3289,13 +3289,13 @@ ov18_021FB84C:
 	.byte 0x04, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00
 	.size ov18_021FB84C,.-ov18_021FB84C
 
-	.global ov18_021FB878
-ov18_021FB878:
+	.global sSearchMenuHitboxes
+sSearchMenuHitboxes:
 	.byte 0x08, 0x17, 0x80, 0xD7, 0x20, 0x2F, 0x38, 0x7F
 	.byte 0x38, 0x47, 0x38, 0xB1, 0x50, 0x5F, 0x38, 0xB7, 0x68, 0x77, 0x38, 0xEF, 0x80, 0x8F, 0x38, 0x6F
 	.byte 0x38, 0x57, 0xD0, 0xEF, 0xA4, 0xBB, 0x04, 0x4B, 0xA4, 0xBB, 0x5C, 0xA3, 0xA4, 0xBB, 0xB4, 0xFB
 	.byte 0xFF, 0x00, 0x00, 0x00
-	.size ov18_021FB878,.-ov18_021FB878
+	.size sSearchMenuHitboxes,.-sSearchMenuHitboxes
 
 	.global ov18_021FB8A4
 ov18_021FB8A4:
@@ -3305,13 +3305,13 @@ ov18_021FB8A4:
 	.byte 0xFF, 0x00, 0x00, 0x00
 	.size ov18_021FB8A4,.-ov18_021FB8A4
 
-	.global ov18_021FB8D4
-ov18_021FB8D4:
+	.global sSearchAreaDpadBoxes
+sSearchAreaDpadBoxes:
 	.byte 0x4C, 0x48, 0x00, 0x00, 0x04, 0x02, 0x01, 0x01, 0xB4, 0x48, 0x00, 0x00
 	.byte 0x05, 0x03, 0x00, 0x00, 0x4C, 0x80, 0x00, 0x00, 0x00, 0x04, 0x03, 0x03, 0xB4, 0x80, 0x00, 0x00
 	.byte 0x01, 0x05, 0x02, 0x02, 0x28, 0xB0, 0x00, 0x00, 0x02, 0x00, 0x05, 0x05, 0xD8, 0xB0, 0x00, 0x00
 	.byte 0x03, 0x01, 0x04, 0x04
-	.size ov18_021FB8D4,.-ov18_021FB8D4
+	.size sSearchAreaDpadBoxes,.-sSearchAreaDpadBoxes
 
 	.global ov18_021FB904
 ov18_021FB904:
@@ -3329,45 +3329,45 @@ ov18_021FB934:
 	.byte 0xFE, 0x21, 0x8D, 0x0D, 0xFF, 0x00, 0x00, 0x00
 	.size ov18_021FB934,.-ov18_021FB934
 
-	.global ov18_021FB968
-ov18_021FB968:
+	.global sSearchOrderDpadBoxes
+sSearchOrderDpadBoxes:
 	.byte 0x44, 0x38, 0x00, 0x00, 0x06, 0x02, 0x01, 0x01
 	.byte 0xBC, 0x38, 0x00, 0x00, 0x07, 0x03, 0x00, 0x00, 0x44, 0x58, 0x00, 0x00, 0x00, 0x04, 0x03, 0x03
 	.byte 0xBC, 0x58, 0x00, 0x00, 0x01, 0x05, 0x02, 0x02, 0x44, 0x78, 0x00, 0x00, 0x02, 0x06, 0x05, 0x05
 	.byte 0xBC, 0x78, 0x00, 0x00, 0x03, 0x07, 0x04, 0x04, 0x28, 0xB0, 0x00, 0x00, 0x04, 0x00, 0x07, 0x07
 	.byte 0xD8, 0xB0, 0x00, 0x00, 0x05, 0x01, 0x06, 0x06
-	.size ov18_021FB968,.-ov18_021FB968
+	.size sSearchOrderDpadBoxes,.-sSearchOrderDpadBoxes
 
-	.global ov18_021FB9A8
-ov18_021FB9A8:
+	.global sSearchFormHitboxes
+sSearchFormHitboxes:
 	.byte 0x28, 0x47, 0x10, 0x2F, 0x28, 0x47, 0x40, 0x5F
 	.byte 0x28, 0x47, 0x70, 0x8F, 0x28, 0x47, 0xA0, 0xBF, 0x28, 0x47, 0xD0, 0xEF, 0x50, 0x6F, 0x10, 0x2F
 	.byte 0x50, 0x6F, 0x40, 0x5F, 0x50, 0x6F, 0x70, 0x8F, 0x50, 0x6F, 0xA0, 0xBF, 0x50, 0x6F, 0xD0, 0xEF
 	.byte 0x78, 0x97, 0x10, 0x2F, 0x78, 0x97, 0x40, 0x5F, 0x78, 0x97, 0x70, 0x8F, 0x78, 0x97, 0xA0, 0xBF
 	.byte 0x78, 0x97, 0xD0, 0xEF, 0xA4, 0xBB, 0x04, 0x4B, 0xA4, 0xBB, 0xB4, 0xFB, 0xFF, 0x00, 0x00, 0x00
-	.size ov18_021FB9A8,.-ov18_021FB9A8
+	.size sSearchFormHitboxes,.-sSearchFormHitboxes
 
-	.global ov18_021FB9F0
-ov18_021FB9F0:
+	.global sSearchMenuDpadBoxes
+sSearchMenuDpadBoxes:
 	.byte 0xAC, 0x10, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x5C, 0x28, 0x00, 0x00, 0x00, 0x02, 0x01, 0x06
 	.byte 0x74, 0x40, 0x00, 0x00, 0x01, 0x03, 0x02, 0x06, 0x70, 0x58, 0x00, 0x00, 0x02, 0x04, 0x03, 0x06
 	.byte 0x88, 0x70, 0x00, 0x00, 0x03, 0x05, 0x04, 0x04, 0x54, 0x88, 0x00, 0x00, 0x04, 0x88, 0x05, 0x05
 	.byte 0xE0, 0x48, 0x00, 0x00, 0x00, 0x04, 0x81, 0x06, 0x28, 0xB0, 0x00, 0x00, 0x05, 0x07, 0x07, 0x08
 	.byte 0x80, 0xB0, 0x00, 0x00, 0x05, 0x08, 0x07, 0x09, 0xD8, 0xB0, 0x00, 0x00, 0x05, 0x09, 0x08, 0x09
-	.size ov18_021FB9F0,.-ov18_021FB9F0
+	.size sSearchMenuDpadBoxes,.-sSearchMenuDpadBoxes
 
-	.global ov18_021FBA40
-ov18_021FBA40:
+	.global sSearchTypeHitboxes
+sSearchTypeHitboxes:
 	.byte 0x28, 0x37, 0x03, 0x3C, 0x28, 0x37, 0x43, 0x7C, 0x28, 0x37, 0x83, 0xBC, 0x28, 0x37, 0xC3, 0xFC
 	.byte 0x40, 0x4F, 0x03, 0x3C, 0x40, 0x4F, 0x43, 0x7C, 0x40, 0x4F, 0x83, 0xBC, 0x40, 0x4F, 0xC3, 0xFC
 	.byte 0x58, 0x68, 0x03, 0x3C, 0x58, 0x68, 0x43, 0x7C, 0x58, 0x68, 0x83, 0xBC, 0x58, 0x68, 0xC3, 0xFC
 	.byte 0x70, 0x7F, 0x03, 0x3C, 0x70, 0x7F, 0x43, 0x7C, 0x70, 0x7F, 0x83, 0xBC, 0x70, 0x7F, 0xC3, 0xFC
 	.byte 0x88, 0x97, 0x03, 0x3C, 0x88, 0x97, 0x43, 0x7C, 0xA4, 0xBB, 0x04, 0x4B, 0xA4, 0xBB, 0xB4, 0xFB
 	.byte 0xFF, 0x00, 0x00, 0x00
-	.size ov18_021FBA40,.-ov18_021FBA40
+	.size sSearchTypeHitboxes,.-sSearchTypeHitboxes
 
-	.global ov18_021FBA94
-ov18_021FBA94:
+	.global sSearchNameHitboxes
+sSearchNameHitboxes:
 	.byte 0x28, 0x37, 0x18, 0x27
 	.byte 0x28, 0x37, 0x38, 0x47
 	.byte 0x28, 0x37, 0x58, 0x67
@@ -3398,10 +3398,10 @@ ov18_021FBA94:
 	.byte 0xA4, 0xBB, 0x04, 0x4B
 	.byte 0xA4, 0xBB, 0xB4, 0xFB
 	.byte 0xFF, 0x00, 0x00, 0x00
-	.size ov18_021FBA94,.-ov18_021FBA94
+	.size sSearchNameHitboxes,.-sSearchNameHitboxes
 
-	.global ov18_021FBB0C
-ov18_021FBB0C:
+	.global sSearchFormDpadBoxes
+sSearchFormDpadBoxes:
 	.byte 0x20, 0x38, 0x00, 0x00
 	.byte 0x0F, 0x05, 0x04, 0x01, 0x50, 0x38, 0x00, 0x00, 0x0F, 0x06, 0x00, 0x02, 0x80, 0x38, 0x00, 0x00
 	.byte 0x0F, 0x07, 0x01, 0x03, 0xB0, 0x38, 0x00, 0x00, 0x10, 0x08, 0x02, 0x04, 0xE0, 0x38, 0x00, 0x00
@@ -3412,10 +3412,10 @@ ov18_021FBB0C:
 	.byte 0x07, 0x0F, 0x0B, 0x0D, 0xB0, 0x88, 0x00, 0x00, 0x08, 0x10, 0x0C, 0x0E, 0xE0, 0x88, 0x00, 0x00
 	.byte 0x09, 0x10, 0x0D, 0x0A, 0x28, 0xB0, 0x00, 0x00, 0x0A, 0x00, 0x10, 0x10, 0xD8, 0xB0, 0x00, 0x00
 	.byte 0x0E, 0x04, 0x0F, 0x0F
-	.size ov18_021FBB0C,.-ov18_021FBB0C
+	.size sSearchFormDpadBoxes,.-sSearchFormDpadBoxes
 
-	.global ov18_021FBB94
-ov18_021FBB94:
+	.global sSearchTypeDpadBoxes
+sSearchTypeDpadBoxes:
 	.byte 0x20, 0x30, 0x00, 0x00, 0x12, 0x04, 0x03, 0x01, 0x60, 0x30, 0x00, 0x00
 	.byte 0x12, 0x05, 0x00, 0x02, 0xA0, 0x30, 0x00, 0x00, 0x13, 0x06, 0x01, 0x03, 0xE0, 0x30, 0x00, 0x00
 	.byte 0x13, 0x07, 0x02, 0x00, 0x20, 0x48, 0x00, 0x00, 0x00, 0x08, 0x07, 0x05, 0x60, 0x48, 0x00, 0x00
@@ -3427,10 +3427,10 @@ ov18_021FBB94:
 	.byte 0x0B, 0x13, 0x0E, 0x0C, 0x20, 0x90, 0x00, 0x00, 0x0C, 0x12, 0x11, 0x11, 0x60, 0x90, 0x00, 0x00
 	.byte 0x0D, 0x12, 0x10, 0x10, 0x28, 0xB0, 0x00, 0x00, 0x10, 0x00, 0x13, 0x13, 0xD8, 0xB0, 0x00, 0x00
 	.byte 0x0F, 0x03, 0x12, 0x12
-	.size ov18_021FBB94,.-ov18_021FBB94
+	.size sSearchTypeDpadBoxes,.-sSearchTypeDpadBoxes
 
-	.global ov18_021FBC34
-ov18_021FBC34:
+	.global sSearchNameDpadBoxes
+sSearchNameDpadBoxes:
 	.byte 0x20, 0x30, 0x00, 0x00, 0x1B, 0x07, 0x06, 0x01
 	.byte 0x40, 0x30, 0x00, 0x00, 0x1B, 0x08, 0x00, 0x02
 	.byte 0x60, 0x30, 0x00, 0x00, 0x1B, 0x09, 0x01, 0x03
@@ -3460,61 +3460,61 @@ ov18_021FBC34:
 	.byte 0xE0, 0x90, 0x00, 0x00, 0x14, 0x1C, 0x19, 0x15
 	.byte 0x28, 0xB0, 0x00, 0x00, 0x15, 0x00, 0x1C, 0x1C
 	.byte 0xD8, 0xB0, 0x00, 0x00, 0x1A, 0x06, 0x1B, 0x1B
-	.size ov18_021FBC34,.-ov18_021FBC34
+	.size sSearchNameDpadBoxes,.-sSearchNameDpadBoxes
 
 	; file boundary
 	.balign 4, 0
 
-	.global ov18_021FBD1C
-ov18_021FBD1C:
+	.global sSearchMenuCursorAnims
+sSearchMenuCursorAnims:
 	.byte 0x27, 0x23, 0x24, 0x3B
 	.byte 0x3C, 0x26, 0x22, 0x23, 0x23, 0x23, 0x00, 0x00
-	.size ov18_021FBD1C,.-ov18_021FBD1C
+	.size sSearchMenuCursorAnims,.-sSearchMenuCursorAnims
 
-	.global ov18_021FBD28
-ov18_021FBD28:
+	.global sSearchFormCursorAnims
+sSearchFormCursorAnims:
 	.byte 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22
 	.byte 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x23, 0x23, 0x00, 0x00, 0x00
-	.size ov18_021FBD28,.-ov18_021FBD28
+	.size sSearchFormCursorAnims,.-sSearchFormCursorAnims
 
-	.global ov18_021FBD3C
-ov18_021FBD3C:
+	.global sSearchTypeCursorAnims
+sSearchTypeCursorAnims:
 	.byte 0x26, 0x26, 0x26, 0x26
 	.byte 0x26, 0x26, 0x26, 0x26, 0x26, 0x26, 0x26, 0x26, 0x26, 0x26, 0x26, 0x26, 0x26, 0x26, 0x23, 0x23
-	.size ov18_021FBD3C,.-ov18_021FBD3C
+	.size sSearchTypeCursorAnims,.-sSearchTypeCursorAnims
 
-	.global ov18_021FBD50
-ov18_021FBD50:
+	.global sEntryPopupObjCharTransferTemplate
+sEntryPopupObjCharTransferTemplate:
 	.word 0x00000020, 0x00010000, 0x00004000, 0x00000000
-	.size ov18_021FBD50,.-ov18_021FBD50
+	.size sEntryPopupObjCharTransferTemplate,.-sEntryPopupObjCharTransferTemplate
 
-	.global ov18_021FBD60
+	.global sEntryPopupBg2Template
 	.balign 4, 0
-ov18_021FBD60:
+sEntryPopupBg2Template:
 	.word 0x00000000, 0x00000000, 0x00000800, 0x00000000
 	.byte 0x01, 0x00, 0x1E, 0x04, 0x00, 0x02, 0x00, 0x00
 	.word 0x00000000
-	.size ov18_021FBD60,.-ov18_021FBD60
+	.size sEntryPopupBg2Template,.-sEntryPopupBg2Template
 
-	.global ov18_021FBD7C
+	.global sEntryPopupBg1Template
 	.balign 4, 0
-ov18_021FBD7C:
+sEntryPopupBg1Template:
 	.word 0x00000000, 0x00000000, 0x00000800, 0x00000000
 	.byte 0x01, 0x00, 0x1F, 0x00, 0x00, 0x01, 0x00, 0x00
 	.word 0x00000000
-	.size ov18_021FBD7C,.-ov18_021FBD7C
+	.size sEntryPopupBg1Template,.-sEntryPopupBg1Template
 
-	.global ov18_021FBD98
+	.global sEntryPopupBg3Template
 	.balign 4, 0
-ov18_021FBD98:
+sEntryPopupBg3Template:
 	.word 0x00000000, 0x00000000, 0x00000800, 0x00000000
 	.byte 0x01, 0x00, 0x1D, 0x04, 0x00, 0x03, 0x00, 0x00
 	.word 0x00000000
-	.size ov18_021FBD98,.-ov18_021FBD98
+	.size sEntryPopupBg3Template,.-sEntryPopupBg3Template
 
-	.global ov18_021FBDB4
+	.global sEntryPopupWindowTemplates
 	.balign 2, 0
-ov18_021FBDB4:
+sEntryPopupWindowTemplates:
 	.byte 0x01, 0x02, 0x00, 0x1C, 0x02, 0x02
 	.short 0x03C8
 	.byte 0x01, 0x0F, 0x03, 0x04, 0x02, 0x00
@@ -3533,17 +3533,17 @@ ov18_021FBDB4:
 	.short 0x02BE
 	.byte 0x01, 0x17, 0x0D, 0x08, 0x02, 0x01
 	.short 0x02AE
-	.size ov18_021FBDB4,.-ov18_021FBDB4
+	.size sEntryPopupWindowTemplates,.-sEntryPopupWindowTemplates
 
-	.global ov18_021FBDFC
-ov18_021FBDFC:
+	.global sTypeIconPaletteNums
+sTypeIconPaletteNums:
 	.byte 0x00, 0x02, 0x00, 0x03
 	.byte 0x01, 0x01, 0x03, 0x02, 0x00, 0x00, 0x02, 0x02, 0x01, 0x01, 0x01, 0x00, 0x02, 0x03, 0x00, 0x00
-	.size ov18_021FBDFC,.-ov18_021FBDFC
+	.size sTypeIconPaletteNums,.-sTypeIconPaletteNums
 
-	.global ov18_021FBE10
+	.global sTypeIconCharFiles
 	.balign 4, 0
-ov18_021FBE10:
+sTypeIconCharFiles:
 	.word 0x00000024
 	.word 0x0000002A
 	.word 0x00000032
@@ -3562,4 +3562,4 @@ ov18_021FBE10:
 	.word 0x00000031
 	.word 0x00000034
 	.word 0x00000030
-	.size ov18_021FBE10,.-ov18_021FBE10
+	.size sTypeIconCharFiles,.-sTypeIconCharFiles

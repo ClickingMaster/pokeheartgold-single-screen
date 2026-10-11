@@ -28,13 +28,13 @@ typedef struct {
     u8 pad1FB0[0x2070 - 0x1FB0];
     Window *windows;
 } Work;
-extern const u32 ov08_02224FF4[];
+extern const u32 sBattlePartyMonNameMsgIds[];
 BoxPokemon *Mon_GetBoxMon(Pokemon *);
 u8 AddTextPrinterParameterizedWithColor(Window *, int, String *, int, int, int, u32, void *);
 int FontID_String_GetWidth(int, String *, int);
-void ov08_0221DDCC(Work *w, int winIdx, int fontId, u8 slot, u8 x, u8 y);
-// @fn ov08_0221DDCC
-void ov08_0221DDCC(Work *w, int winIdx, int fontId, u8 slot, u8 x, u8 y) {
+void BattlePartyMenu_PrintMonName(Work *w, int winIdx, int fontId, u8 slot, u8 x, u8 y);
+// @fn BattlePartyMenu_PrintMonName
+void BattlePartyMenu_PrintMonName(Work *w, int winIdx, int fontId, u8 slot, u8 x, u8 y) {
     MonEntry *entry;
     String *str;
     String *tmpl;
@@ -44,7 +44,7 @@ void ov08_0221DDCC(Work *w, int winIdx, int fontId, u8 slot, u8 x, u8 y) {
     win = &windows[winIdx];
     entry = &w->mons[slot];
     str = String_New(12, w->ctx->heapId);
-    tmpl = NewString_ReadMsgData(w->msgData, ov08_02224FF4[slot]);
+    tmpl = NewString_ReadMsgData(w->msgData, sBattlePartyMonNameMsgIds[slot]);
     BufferBoxMonNickname(w->msgFormat, 0, Mon_GetBoxMon(entry->mon));
     StringExpandPlaceholders(w->msgFormat, str, tmpl);
     if (fontId == 0) {

@@ -23,72 +23,72 @@ extern void sub_0203A964(void);
 extern void sub_020880CC(u32, u32);
 
 extern void BagApp_GetSaveStructPtrs(void *);
-extern void ov15_021F9984(void);
-extern void ov15_021F995C(void *);
-extern void ov15_021F99A4(void *);
-extern void ov15_021F9AE4(void *);
-extern void ov15_021F9CBC(void *);
-extern void ov15_021F9D28(void *);
-extern void ov15_021F9DB4(void *);
-extern void ov15_021F9F08(void *);
-extern void ov15_021FA008(void *);
-extern void ov15_021FA044(s16 *, u16 *, u32);
+extern void BagApp_SetGraphicsBanks(void);
+extern void BagApp_VBlankCallback(void *);
+extern void BagApp_InitBgLayers(void *);
+extern void BagApp_LoadBgGraphics(void *);
+extern void BagApp_CreateMessageData(void *);
+extern void BagApp_CountPockets(void *);
+extern void BagApp_LoadCursorPositions(void *);
+extern void BagApp_LoadPocketItemNames(void *);
+extern void BagApp_AllocItemNameStrings(void *);
+extern void BagApp_ClampPocketScroll(s16 *, u16 *, u32);
 extern void ov15_021FA070(s16 *, u16 *, u32, u32);
-extern u32 ov15_021FA074(void *);
-extern void ov15_021FA170(void *);
-extern s32 ov15_021FA1BC(void *);
-extern s32 ov15_021FA4F8(void *);
-extern s32 ov15_021FA578(void *, s32);
+extern u32 BagApp_GetPageItemCount(void *);
+extern void BagApp_PrintCursorDescription(void *);
+extern s32 BagApp_State_HandleInput(void *);
+extern s32 BagApp_State_OpenItemMenu(void *);
+extern s32 BagApp_State_ChangePage(void *, s32);
 extern void ov15_021FA620(void *);
-extern s32 ov15_021FA93C(void *);
-extern s32 ov15_021FAE48(void *);
-extern s32 ov15_021FAFFC(void *);
-extern s32 ov15_021FB060(void *);
-extern s32 ov15_021FB5AC(void *);
-extern s32 ov15_021FB604(void *);
-extern s32 ov15_021FB654(void *);
-extern s32 ov15_021FB700(void *);
-extern s32 ov15_021FB820(void *);
-extern s32 ov15_021FBD50(void *);
-extern s32 ov15_021FBF98(void *);
-extern s32 ov15_021FBFC0(void *);
-extern s32 ov15_021FBFF8(void *);
-extern s32 ov15_021FC01C(void *);
-extern s32 ov15_021FC140(void *);
-extern s32 ov15_021FC164(void *);
-extern s32 ov15_021FC2E0(void *);
-extern s32 ov15_021FC41C(void *);
-extern s32 ov15_021FC784(void *);
-extern s32 ov15_021FC7EC(void *);
-extern s32 ov15_021FCB64(void *);
-extern s32 ov15_021FCD80(void *);
-extern s32 ov15_021FCDE4(void *);
-extern s32 ov15_021FCFC8(void *);
-extern s32 ov15_021FD058(void *);
-extern s32 ov15_021FD0E8(void *);
-extern s32 ov15_021FD10C(void *);
-extern s32 ov15_021FD24C(void *);
-extern s32 ov15_021FD2FC(void *);
+extern s32 BagApp_State_PocketSwitch(void *);
+extern s32 BagApp_State_MoveItemInput(void *);
+extern s32 BagApp_State_DropMovedItem(void *);
+extern s32 BagApp_State_EndMoveItem(void *);
+extern s32 BagApp_State_ItemMenuInput(void *);
+extern s32 BagApp_State_CloseItemMenu(void *);
+extern s32 BagApp_State_RunItemAction(void *);
+extern s32 BagApp_State_WaitItemMessage(void *);
+extern s32 BagApp_State_RunUseItemTask(void *);
+extern s32 BagApp_State_TrashQuantityInput(void *);
+extern s32 BagApp_State_ShowTrashConfirm(void *);
+extern s32 BagApp_State_CancelTrash(void *);
+extern s32 BagApp_State_WaitTrashConfirmMessage(void *);
+extern s32 BagApp_State_TrashYesNo(void *);
+extern s32 BagApp_State_WaitTrashResultMessage(void *);
+extern s32 BagApp_State_FinishTrash(void *);
+extern s32 BagApp_State_WaitRegisterFailMessage(void *);
+extern s32 BagApp_State_HoldItemSelectInput(void *);
+extern s32 BagApp_State_WaitCantHoldMessage(void *);
+extern s32 BagApp_State_SellSelectInput(void *);
+extern s32 BagApp_State_StartSell(void *);
+extern s32 BagApp_State_SetupSellQuantity(void *);
+extern s32 BagApp_State_SellQuantityInput(void *);
+extern s32 BagApp_State_ShowSellPrice(void *);
+extern s32 BagApp_State_CancelSellQuantity(void *);
+extern s32 BagApp_State_WaitSellPriceMessage(void *);
+extern s32 BagApp_State_SellYesNo(void *);
+extern s32 BagApp_State_CompleteSale(void *);
+extern s32 BagApp_State_WaitSaleMessage(void *);
 extern s32 ov15_021FD3AC(void *);
-extern void ov15_021FD404(void *, u32, u32);
-extern void ov15_021FD574(void *, u32, u32, u32);
-extern s32 ov15_021FD850(void *);
-extern void ov15_021FD93C(void *);
-extern void ov15_021FDC88(void *);
-extern void ov15_021FE020(void *);
+extern void BagApp_LoadPocketSubBgPalette(void *, u32, u32);
+extern void BagApp_LoadSubScreenLayout(void *, u32, u32, u32);
+extern s32 BagApp_State_ButtonFeedback(void *);
+extern void BagApp_Init3D(void *);
+extern void BagApp_Draw3D(void *);
+extern void BagApp_AddWindows(void *);
 extern void ov15_021FE4C8(void *);
 extern void ov15_021FE528(void *);
 extern void ov15_021FE874(void *);
-extern void ov15_021FEA5C(void *);
+extern void BagApp_LoadItemMenuStrings(void *);
 extern void ov15_021FF1E0(void *);
-extern void ov15_021FF29C(void *, u32);
-extern void ov15_021FF364(void *, s32, s32, u32);
-extern void ov15_021FF6BC(void *, u32, s32, u32);
-extern void ov15_021FF850(void *);
-extern void ov15_021FF8D4(void *);
-extern void ov15_021FFECC(void *, u32);
-extern void ov15_02200030(void *, u32);
-extern void ov15_02200140(void *, void *, u32, u32);
+extern void BagApp_PrintCancelButton(void *, u32);
+extern void BagApp_DrawItemList(void *, s32, s32, u32);
+extern void BagApp_PrintPageNumber(void *, u32, s32, u32);
+extern void BagApp_InitSprites(void *);
+extern void BagApp_TickSprites(void *);
+extern void BagApp_SetCursorPosition(void *, u32);
+extern void BagApp_LoadPocketObjPalette(void *, u32);
+extern void BagApp_DrawItemIcons(void *, void *, u32, u32);
 
 #define ARGS (*(u8 **)(work + 0x234))
 #define SEL  (ARGS[0x64])
@@ -117,41 +117,41 @@ BOOL Bag_Init(OverlayManager *man, int *state) {
     work[0x615] = PlayerProfile_GetTrainerGender(*(void **)(work + 0x23C));
     BeginNormalPaletteFade(2, 3, 3, 0, 6, 1, HEAP_ID_6);
     SetKeyRepeatTimers(3, 8);
-    ov15_021F9DB4(work);
-    ov15_021F9CBC(work);
-    ov15_021FA008(work);
-    ov15_021F9D28(work);
+    BagApp_LoadCursorPositions(work);
+    BagApp_CreateMessageData(work);
+    BagApp_AllocItemNameStrings(work);
+    BagApp_CountPockets(work);
     ov15_021FA620(work);
-    ov15_021F9984();
-    ov15_021F99A4(*(void **)work);
-    ov15_021F9AE4(work);
+    BagApp_SetGraphicsBanks();
+    BagApp_InitBgLayers(*(void **)work);
+    BagApp_LoadBgGraphics(work);
     GF_TouchpadResetSampling();
     GF_TouchpadStartSampling(4);
-    ov15_021FE020(work);
+    BagApp_AddWindows(work);
     TextFlags_SetCanTouchSpeedUpPrint(TRUE);
     ov15_021FE4C8(work);
     ov15_021FE528(work);
-    ov15_021FEA5C(work);
+    BagApp_LoadItemMenuStrings(work);
     ov15_021FE874(work);
-    ov15_021F9F08(work);
-    ov15_021FF29C(work, 0);
-    ov15_021FA044((s16 *)(ARGS + 10 + 12 * SEL), (u16 *)(ARGS + 8 + 12 * SEL), *(ARGS + 12 * SEL + 13));
+    BagApp_LoadPocketItemNames(work);
+    BagApp_PrintCancelButton(work, 0);
+    BagApp_ClampPocketScroll((s16 *)(ARGS + 10 + 12 * SEL), (u16 *)(ARGS + 8 + 12 * SEL), *(ARGS + 12 * SEL + 13));
     ov15_021FA070((s16 *)(ARGS + 10 + 12 * SEL), (u16 *)(ARGS + 8 + 12 * SEL), *(ARGS + 12 * SEL + 13), HEAP_ID_6);
-    ov15_021FF850(work);
-    ov15_021FD574(work, 0, ov15_021FA074(work), 0);
-    ov15_021FF364(work, *(s16 *)(ARGS + 12 * SEL + 10), -1, 0);
-    ov15_02200030(work, ARGS[0x64]);
-    ov15_021FD404(work, 1, ARGS[0x64]);
-    ov15_021FF6BC(work, *(ARGS + 12 * SEL + 13), *(s16 *)(ARGS + 12 * SEL + 10), 0);
-    ov15_02200140(work, ARGS + 4 + 12 * SEL, ov15_021FA074(work), 1);
+    BagApp_InitSprites(work);
+    BagApp_LoadSubScreenLayout(work, 0, BagApp_GetPageItemCount(work), 0);
+    BagApp_DrawItemList(work, *(s16 *)(ARGS + 12 * SEL + 10), -1, 0);
+    BagApp_LoadPocketObjPalette(work, ARGS[0x64]);
+    BagApp_LoadPocketSubBgPalette(work, 1, ARGS[0x64]);
+    BagApp_PrintPageNumber(work, *(ARGS + 12 * SEL + 13), *(s16 *)(ARGS + 12 * SEL + 10), 0);
+    BagApp_DrawItemIcons(work, ARGS + 4 + 12 * SEL, BagApp_GetPageItemCount(work), 1);
     *(u32 *)(work + 0x644) = *(u16 *)(ARGS + 12 * SEL + 8) + 8;
-    ov15_021FFECC(work, *(u32 *)(work + 0x644));
-    ov15_021FA170(work);
+    BagApp_SetCursorPosition(work, *(u32 *)(work + 0x644));
+    BagApp_PrintCursorDescription(work);
     if (ARGS[0x65] == 4 || ARGS[0x65] == 5) {
         ov15_021FF1E0(work);
     }
-    ov15_021FD93C(work);
-    Main_SetVBlankIntrCB(ov15_021F995C, work);
+    BagApp_Init3D(work);
+    Main_SetVBlankIntrCB(BagApp_VBlankCallback, work);
     Sound_SetSceneAndPlayBGM(0x33, 0, 0);
     sub_0203A964();
     reg_GX_POWCNT |= 0x8000;
@@ -183,10 +183,10 @@ BOOL Bag_Main(OverlayManager *man, int *state) {
         }
         break;
     case 1:
-        *state = ov15_021FA1BC(work);
+        *state = BagApp_State_HandleInput(work);
         break;
     case 2:
-        if (ov15_021FA93C(work) == TRUE) {
+        if (BagApp_State_PocketSwitch(work) == TRUE) {
             if (ARGS[0x65] == 2) {
                 *state = 16;
             } else if (ARGS[0x65] == 1) {
@@ -199,103 +199,103 @@ BOOL Bag_Main(OverlayManager *man, int *state) {
         }
         break;
     case 3:
-        *state = ov15_021FAE48(work);
+        *state = BagApp_State_MoveItemInput(work);
         break;
     case 4:
-        *state = ov15_021FB5AC(work);
+        *state = BagApp_State_ItemMenuInput(work);
         break;
     case 5:
-        *state = ov15_021FBD50(work);
+        *state = BagApp_State_TrashQuantityInput(work);
         break;
     case 6:
-        *state = ov15_021FBF98(work);
+        *state = BagApp_State_ShowTrashConfirm(work);
         break;
     case 7:
-        *state = ov15_021FBFC0(work);
+        *state = BagApp_State_CancelTrash(work);
         break;
     case 8:
-        *state = ov15_021FBFF8(work);
+        *state = BagApp_State_WaitTrashConfirmMessage(work);
         break;
     case 9:
-        *state = ov15_021FC01C(work);
+        *state = BagApp_State_TrashYesNo(work);
         break;
     case 10:
-        *state = ov15_021FC140(work);
+        *state = BagApp_State_WaitTrashResultMessage(work);
         break;
     case 11:
-        *state = ov15_021FC164(work);
+        *state = BagApp_State_FinishTrash(work);
         break;
     case 12:
-        *state = ov15_021FB700(work);
+        *state = BagApp_State_WaitItemMessage(work);
         break;
     case 13:
-        *state = ov15_021FB820(work);
+        *state = BagApp_State_RunUseItemTask(work);
         break;
     case 14:
-        *state = ov15_021FC41C(work);
+        *state = BagApp_State_HoldItemSelectInput(work);
         break;
     case 15:
-        *state = ov15_021FC784(work);
+        *state = BagApp_State_WaitCantHoldMessage(work);
         break;
     case 16:
-        *state = ov15_021FC7EC(work);
+        *state = BagApp_State_SellSelectInput(work);
         break;
     case 17:
-        *state = ov15_021FCD80(work);
+        *state = BagApp_State_SetupSellQuantity(work);
         break;
     case 18:
-        *state = ov15_021FCDE4(work);
+        *state = BagApp_State_SellQuantityInput(work);
         break;
     case 19:
-        *state = ov15_021FCFC8(work);
+        *state = BagApp_State_ShowSellPrice(work);
         break;
     case 20:
-        *state = ov15_021FD058(work);
+        *state = BagApp_State_CancelSellQuantity(work);
         break;
     case 21:
-        *state = ov15_021FD0E8(work);
+        *state = BagApp_State_WaitSellPriceMessage(work);
         break;
     case 22:
-        *state = ov15_021FD10C(work);
+        *state = BagApp_State_SellYesNo(work);
         break;
     case 23:
-        *state = ov15_021FD24C(work);
+        *state = BagApp_State_CompleteSale(work);
         break;
     case 24:
-        *state = ov15_021FD2FC(work);
+        *state = BagApp_State_WaitSaleMessage(work);
         break;
     case 26:
         *state = ov15_021FD3AC(work);
         break;
     case 25:
-        *state = ov15_021FC2E0(work);
+        *state = BagApp_State_WaitRegisterFailMessage(work);
         break;
     case 27:
-        *state = ov15_021FA4F8(work);
+        *state = BagApp_State_OpenItemMenu(work);
         break;
     case 28:
-        *state = ov15_021FB604(work);
+        *state = BagApp_State_CloseItemMenu(work);
         break;
     case 29:
-        *state = ov15_021FB654(work);
+        *state = BagApp_State_RunItemAction(work);
         break;
     case 30:
-        *state = ov15_021FA578(work, 1);
+        *state = BagApp_State_ChangePage(work, 1);
         break;
     case 31:
-        *state = ov15_021FA578(work, -1);
+        *state = BagApp_State_ChangePage(work, -1);
         break;
     case 32:
-        *state = ov15_021FB060(work);
+        *state = BagApp_State_EndMoveItem(work);
         break;
     case 33:
-        *state = ov15_021FAFFC(work);
+        *state = BagApp_State_DropMovedItem(work);
         break;
     case 34:
-        *state = ov15_021FCB64(work);
+        *state = BagApp_State_StartSell(work);
         break;
     case 35:
-        *state = ov15_021FD850(work);
+        *state = BagApp_State_ButtonFeedback(work);
         break;
     case 36:
         sub_020880CC(1, HEAP_ID_6);
@@ -307,8 +307,8 @@ BOOL Bag_Main(OverlayManager *man, int *state) {
         }
         break;
     }
-    ov15_021FF8D4(work);
+    BagApp_TickSprites(work);
     SpriteSystem_DrawSprites(*(void **)(work + 0x24C));
-    ov15_021FDC88(work);
+    BagApp_Draw3D(work);
     return FALSE;
 }

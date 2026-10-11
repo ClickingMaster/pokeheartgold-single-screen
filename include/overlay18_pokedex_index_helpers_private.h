@@ -3,12 +3,12 @@
 
 #include "global.h"
 
-int ov18_021F8824(void *);
-u16 ov18_021F8838(void *);
-u32 ov18_021F8850(void *, u16);
-void ov18_021F8884(void *, int);
-u32 ov18_021F891C(void *, int);
-u32 ov18_021F8950(void *, int);
+int PokedexApp_GetListCursorIndex(void *);
+u16 PokedexApp_GetCursorSpecies(void *);
+u32 PokedexApp_FindSpeciesInResults(void *, u16);
+void PokedexApp_BuildListEntries(void *, int);
+u32 PokedexApp_GetListLength(void *, int);
+u32 PokedexApp_GetLastListPage(void *, int);
 int Pokedex_ConvertToCurrentDexNo(u8, u16);
 
 #endif

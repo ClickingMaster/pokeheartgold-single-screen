@@ -1,16 +1,16 @@
 #include "overlay_14_sol_partial_internal.h"
 
-void ov14_021E5A50(void *, void *);
-void ov14_021E5A44(void *, void *);
-void ov14_021E5A54(void *);
-void ov14_021E5A60(void);
-void ov14_021E7468(void *);
-u32 ov14_021E7930(void *);
+void PCBox_SetPendingUpdateFunc(void *, void *);
+void PCBox_SetUpdateFunc(void *, void *);
+void PCBox_StartPendingUpdateFunc(void *);
+void PCBox_SetGfxBanks(void);
+void PCBox_FreeMonInfo(void *);
+u32 PCBox_GetWallpaperGfxIndex(void *);
 void ov14_021E7AD4(void *, u32, u32, u32);
 u32 ov14_021E7B8C(void *);
 u32 ov14_021E7B98(void *);
-void ov14_021E7D7C(void *);
-void ov14_021E7D8C(void *, u32, u32);
+void PCBox_FreePanels(void *);
+void PCBox_LoadPanelTilemap(void *, u32, u32);
 void ov14_021E81A8(void *, u32);
 void ov14_021E954C(void *);
 void ov14_021EBDE0(void *);
@@ -24,7 +24,7 @@ u32 ov14_021EDA3C(void *);
 u32 ov14_021EDF90(void *);
 u32 ov14_021EE328(void *);
 u32 ov14_021EE4D8(void *);
-u32 ov14_021F0244(void *, u32);
+u32 PCBox_WaitForPendingUpdateFunc(void *, u32);
 u32 ov14_021F1534(void *);
 void ov14_021F1F38(void *);
 u32 ov14_021F2610(void *);
@@ -38,54 +38,54 @@ u32 ov14_021F276C(void *);
 void ov14_021F27CC(void *);
 void ov14_021F2810(void *);
 void ov14_021F2890(void *);
-void ov14_021F34DC(void *, u32);
-void ov14_021F395C(void *, s32, s32);
-u32 ov14_021F40DC(void *);
-void ov14_021F604C(void *);
+void PCBox_UpdateSlotIconItemTranslucency(void *, u32);
+void PCBox_SetHeldItemIconPosition(void *, s32, s32);
+u32 PCBox_HideSelectedIconOutline(void *);
+void PCBox_DrawChangeBoxButton(void *);
 void ov14_021F63A8(void *);
 void ov14_021F63B8(void *);
-void *ov14_021F6628(void);
+void *PCBox_LoadBoxMessages(void);
 void ov14_021F6678(void *, u32);
 void ov14_021F6688(void *, u32);
-s32 ov14_021F6A14(void);
-s32 ov14_021F6A24(void);
+s32 PCBox_FindTouchedBoxSlot(void);
+s32 PCBox_FindTouchedPartySlot(void);
 s32 ov14_021F6A34(void);
 void ov14_021F6B7C(void *);
-void ov14_021E5E94(void *);
-void ov14_021E5ED0(void *);
-void ov14_021E5EE8(void *);
-void ov14_021E7264(void *);
-void ov14_021E821C(void *);
+void PCBox_FreePaletteData(void *);
+void PCBox_CreateYesNoPrompt(void *);
+void PCBox_DestroyYesNoPrompt(void *);
+void PCBox_FreeReleaseMoveCheck(void *);
+void PCBox_HidePartyButton(void *);
 void ov14_021E827C(void *);
-void ov14_021E94A8(void *);
+void PCBox_UpdateMarkingMenuSlide(void *);
 u32 ov14_021E9518(void *);
 void ov14_021E95B4(void *);
 void ov14_021E9604(void *);
-u32 ov14_021EB18C(void *);
-u32 ov14_021EB27C(void *);
+u32 PCBox_State_WaitPaletteBuffers(void *);
+u32 PCBox_State_WaitPaletteFlash(void *);
 u32 ov14_021EBDCC(void *);
 u32 ov14_021ED2C8(void *);
 u32 ov14_021ED60C(void *);
 void ov14_021F1F24(void *);
-u32 ov14_021F2A04(void *, u32);
-void ov14_021F2A60(void *, u32, u32);
-void ov14_021F2C04(void *);
-void ov14_021F33E8(void *);
-void ov14_021F34C8(void *, u32, u32);
-void ov14_021F4940(void *, u32, s32 *, s32 *);
+u32 PCBox_IsSpriteAnimated(void *, u32);
+void PCBox_SetSpritePriority(void *, u32, u32);
+void PCBox_DeleteAllSprites(void *);
+void PCBox_EndReleaseShrink(void *);
+void PCBox_SetSlotIconTranslucent(void *, u32, u32);
+void PCBox_GetTrayBoxPosition(void *, u32, s32 *, s32 *);
 void ov14_021F62CC(void *);
 void ov14_021F62E4(void *);
 void ov14_021F62FC(void *);
 void ov14_021F63F0(void *);
-void ov14_021F6844(void *, u32, u32);
-void ov14_021F6B10(void *);
-void ov14_021E76B8(void *);
-void ov14_021E7DF8(void *);
+void PCBox_PrintMenuPrompt(void *, u32, u32);
+void PCBox_FreeGridInput(void *);
+void PCBox_ClearMonInfoAndSelection(void *);
+void PCBox_DrawMarkingMenu(void *);
 void ov14_021F2700(void *);
 void ov14_021F28FC(void *);
 void ov14_021F29AC(void *);
 void ov14_021EDE20(void *);
-void ov14_021F49C8(void *);
+void PCBox_DrawAllBoxThumbnails(void *);
 
 #define CALL_196E8(name, a, b, c) \
     void name(void *p) {          \
@@ -100,18 +100,18 @@ void ov14_021F49C8(void *);
 
 #define TWO_CALLS(name, second) \
     void name(void *p) {        \
-        ov14_021E76B8(p);       \
+        PCBox_ClearMonInfoAndSelection(p);       \
         second(p);              \
     }
 
 #define CALL_5950(name, a, b)      \
     void name(void *p, u32 v) {    \
-        ov14_021F5950(p, a, b, v); \
+        PCBox_DrawButtonWindow(p, a, b, v); \
     }
 
 #define CALL_6698(name, id)      \
     void name(void *p, u32 v) {  \
-        ov14_021F6698(p, id, v); \
+        PCBox_PrintMessage(p, id, v); \
     }
 
 #define CALL_198FC(name, a, b, c, d) \
@@ -121,7 +121,7 @@ void ov14_021F49C8(void *);
 
 #define CALL_67B0(name, a, next)   \
     u32 name(void *p) {            \
-        ov14_021F67B0(p, a, 0x25); \
+        PCBox_PrintReleaseMessage(p, a, 0x25); \
         U32_AT(p, 0x30) = next;    \
         return 6;                  \
     }
@@ -139,11 +139,11 @@ void ov14_021F49C8(void *);
 
 #define RESET_7AC4(name)                               \
     void name(void *p) {                               \
-        ov14_021F7AC4(PTR_AT(p, 0x34));                \
-        ov14_021E5A50(PTR_AT(p, 0x34), ov14_021E9F20); \
+        PCBox_StartCursorSlide(PTR_AT(p, 0x34));                \
+        PCBox_SetPendingUpdateFunc(PTR_AT(p, 0x34), PCBox_UpdateCursorSlide); \
     }
 
-void ov14_021E5E94(void *p) {
+void PCBox_FreePaletteData(void *p) {
     PaletteData_FreeBuffers(PTR_AT(PTR_AT(p, 0x34), 0x18), 0);
     PaletteData_Free(PTR_AT(PTR_AT(p, 0x34), 0x18));
 }

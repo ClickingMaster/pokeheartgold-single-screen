@@ -8,6 +8,6 @@ typedef struct {u8 beforeWindow[0x34];Window window;u8 beforeArgs[0x234-0x44];Ba
 typedef char AssertSale[(sizeof(SaleWork)==0x94c)?1:-1];
 extern BOOL PlaySE(u16);
 extern BOOL Pocket_TakeItem(ItemSlot *,u32,u16,u16,u32);
-extern void ov15_021F9F08(void *);
-s32 ov15_021FD24C(void *);
-s32 ov15_021FD24C(void *arg){SaleWork *w=arg;if(TextPrinterCheckActive(w->printer))return 23;PlaySE(0x643);PlayerProfile_AddMoney(w->profile,(u32)(s32)w->quantity*w->price);if(w->quantity==1){if(w->args->unk75!=255)w->args->unk75++;}else w->args->unk75=2;Pocket_TakeItem(w->args->pockets[w->args->unk64].slots,w->args->pockets[w->args->unk64].padding2[0],w->args->itemId,(u16)w->quantity,6);ov15_021F9F08(w);ScheduleWindowCopyToVram(&w->window);return 24;}
+extern void BagApp_LoadPocketItemNames(void *);
+s32 BagApp_State_CompleteSale(void *);
+s32 BagApp_State_CompleteSale(void *arg){SaleWork *w=arg;if(TextPrinterCheckActive(w->printer))return 23;PlaySE(0x643);PlayerProfile_AddMoney(w->profile,(u32)(s32)w->quantity*w->price);if(w->quantity==1){if(w->args->unk75!=255)w->args->unk75++;}else w->args->unk75=2;Pocket_TakeItem(w->args->pockets[w->args->unk64].slots,w->args->pockets[w->args->unk64].padding2[0],w->args->itemId,(u16)w->quantity,6);BagApp_LoadPocketItemNames(w);ScheduleWindowCopyToVram(&w->window);return 24;}

@@ -6,13 +6,13 @@
 #include "bg_cell_manager.h"
 #define PTR_AT(p, o) (*(void **)((u8 *)(p) + (o)))
 extern void ov14_021F5BD8(void *, u32, u32, u32, u32);
-extern void ov14_021F5950(void *, u32, u32, u32);
+extern void PCBox_DrawButtonWindow(void *, u32, u32, u32);
 extern void BgCellManager_PutWindowTiles(void *, u32, void *);
-void ov14_021F605C(void *);
-void ov14_021F6070(void *);
-void ov14_021F6094(void *);
-void ov14_021F60A8(void *);
-void ov14_021F60BC(BgCellManager *, int, Window *);
-void ov14_021F6208(BgCellManager *, int, Window *);
-void ov14_021F6244(void *);
+void PCBox_DrawChangeBoxTitle(void *);
+void PCBox_DrawBoxMenu(void *);
+void PCBox_DrawChangeWallpaperTitle(void *);
+void PCBox_DrawDepositTitle(void *);
+void PCBox_SetPanelWindowFrame(BgCellManager *, int, Window *);
+void PCBox_AttachWindowToPanel(BgCellManager *, int, Window *);
+void PCBox_AttachPanelWindows(void *);
 #endif

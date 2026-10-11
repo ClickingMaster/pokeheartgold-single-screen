@@ -12,14 +12,14 @@
 #include "system.h"
 #include "unk_02020A0C.h"
 
-extern const TouchscreenHitbox ov18_021FBA40[];
-extern const DpadMenuBox ov18_021FBB94[];
-extern const GridCallbacks ov18_021FB638[];
-extern const u8 ov18_021FBD3C[];
+extern const TouchscreenHitbox sSearchTypeHitboxes[];
+extern const DpadMenuBox sSearchTypeDpadBoxes[];
+extern const GridCallbacks sSearchTypeGridCallbacks[];
+extern const u8 sSearchTypeCursorAnims[];
 
 void PlaySE(u32 seqNo);
 
-void ov18_021F719C(PokedexAppData *pokedexApp, int index);
-void ov18_021F71DC(PokedexAppData *pokedexApp, int currentInput, int lastInput);
+void PokedexApp_UpdateSearchTypeCursor(PokedexAppData *pokedexApp, int index);
+void PokedexApp_OnSearchTypeGridMove(PokedexAppData *pokedexApp, int currentInput, int lastInput);
 
 #endif // POKEHEARTGOLD_OVERLAY18_POKEDEX_GRID_NAVIGATION_R28_PRIVATE_H

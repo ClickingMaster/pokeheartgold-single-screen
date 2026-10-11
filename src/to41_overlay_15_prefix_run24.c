@@ -5,12 +5,12 @@
 #define U16(p, o) (*(u16 *)((u8 *)(p) + (o)))
 #define U8(p, o)  (*(u8 *)((u8 *)(p) + (o)))
 
-void ov15_021FE584(void *work, u32 item, u32 slot) {
-    u16 value = ov15_021F9D60(work, (u16)item, FALSE);
+void BagApp_BufferSlotItemName(void *work, u32 item, u32 slot) {
+    u16 value = BagApp_GetCurrentPocketSlotValue(work, (u16)item, FALSE);
     BufferItemName(PTR(work, 0x2f4), slot, value);
 }
 
-void ov15_021FE5A4(void *work, u32 item, u32 slot) {
-    u16 value = ov15_021F9D60(work, (u16)item, FALSE);
+void BagApp_BufferSlotItemNamePlural(void *work, u32 item, u32 slot) {
+    u16 value = BagApp_GetCurrentPocketSlotValue(work, (u16)item, FALSE);
     BufferItemNamePlural(PTR(work, 0x2f4), slot, value);
 }

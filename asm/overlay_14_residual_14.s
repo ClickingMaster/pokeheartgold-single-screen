@@ -2201,117 +2201,117 @@
 	.public _021F7BB0
 	.public _021F7BB4
 	.public _021F7BB8
-	.public _021F7BBC
-	.public ov14_021E59AC
+	.public sPCBoxSlotGridRect
+	.public PCBox_VBlankCallback
 	.public ov14_021E5A14
-	.public ov14_021E5A44
-	.public ov14_021E5A50
-	.public ov14_021E5A54
-	.public ov14_021E5A60
-	.public ov14_021E5A70
-	.public ov14_021E5C00
-	.public ov14_021E5C54
-	.public ov14_021E5D78
-	.public ov14_021E5DB8
-	.public ov14_021E5DE0
-	.public ov14_021E5E74
-	.public ov14_021E5E94
-	.public ov14_021E5EAC
-	.public ov14_021E5ED0
-	.public ov14_021E5EE8
-	.public ov14_021E5EFC
-	.public ov14_021E5F4C
-	.public ov14_021E6048
-	.public ov14_021E6070
-	.public ov14_021E6094
-	.public ov14_021E60C0
-	.public ov14_021E6100
-	.public ov14_021E611C
-	.public ov14_021E6184
-	.public ov14_021E61BC
-	.public ov14_021E6210
-	.public ov14_021E627C
-	.public ov14_021E62C8
-	.public ov14_021E6318
-	.public ov14_021E637C
-	.public ov14_021E6464
-	.public ov14_021E6480
-	.public ov14_021E64D0
-	.public ov14_021E6548
-	.public ov14_021E65C4
+	.public PCBox_SetUpdateFunc
+	.public PCBox_SetPendingUpdateFunc
+	.public PCBox_StartPendingUpdateFunc
+	.public PCBox_SetGfxBanks
+	.public PCBox_InitBgLayers
+	.public PCBox_FreeBgLayers
+	.public PCBox_LoadBgGraphics
+	.public PCBox_CreateMsgResources
+	.public PCBox_DestroyMsgResources
+	.public PCBox_LoadWindowGraphics
+	.public PCBox_CreatePaletteData
+	.public PCBox_FreePaletteData
+	.public PCBox_SetBlendEnabled
+	.public PCBox_CreateYesNoPrompt
+	.public PCBox_DestroyYesNoPrompt
+	.public PCBox_ShowYesNoPrompt
+	.public PCBox_AnimatePaletteFlash
+	.public PCBox_SaveMenuInputState
+	.public PCBox_GetSlotMonData
+	.public PCBox_SetSlotMonData
+	.public PCBox_GetSlotBoxMon
+	.public PCBox_DeleteSlotMon
+	.public PCBox_SwapBoxAndPartyMon
+	.public PCBox_MoveBoxMonToParty
+	.public PCBox_MovePartyMonToBox
+	.public PCBox_SwapPartyMons
+	.public PCBox_MovePartyMonToEnd
+	.public PCBox_MoveBoxMonToOtherBox
+	.public PCBox_MovePartyMonToOtherBox
+	.public PCBox_ApplyMonMove
+	.public PCBox_GetTargetBoxId
+	.public PCBox_PartyHasOtherUsableMon
+	.public PCBox_UpdateArceusGiratinaForm
+	.public PCBox_RevertShayminFormOnMove
+	.public PCBox_AnimateMonMove
 	.public ov14_021E66F4
 	.public ov14_021E6814
-	.public ov14_021E690C
-	.public ov14_021E6A3C
-	.public ov14_021E6AA0
-	.public ov14_021E6B48
-	.public ov14_021E6C0C
-	.public ov14_021E6CC8
-	.public ov14_021E6CF8
+	.public PCBox_CanMoveMon
+	.public PCBox_CanMovePartyMonToEmptySlot
+	.public PCBox_CanSwapHeldItems
+	.public PCBox_SetupMoveEntryToSlot
+	.public PCBox_SetupMoveEntryToSprite
+	.public PCBox_SetupMonSwapEntries
+	.public PCBox_SetupMonMove
 	.public ov14_021E6F3C
-	.public ov14_021E7034
-	.public ov14_021E70B0
+	.public PCBox_SetupMonMoveToPartyEnd
+	.public PCBox_GetMoveEntryTarget
 	.public ov14_021E70E0
-	.public ov14_021E7148
-	.public ov14_021E71C8
-	.public ov14_021E71E8
-	.public ov14_021E7264
-	.public ov14_021E7278
-	.public ov14_021E7358
-	.public ov14_021E7468
-	.public ov14_021E7470
-	.public ov14_021E74F0
-	.public ov14_021E7588
-	.public ov14_021E75F4
-	.public ov14_021E765C
-	.public ov14_021E76B8
-	.public ov14_021E76D0
-	.public ov14_021E7720
-	.public ov14_021E7740
-	.public ov14_021E7808
-	.public ov14_021E783C
+	.public PCBox_ApplyMoveEntryIcons
+	.public PCBox_GetReleaseCheckMoveIndex
+	.public PCBox_StartReleaseMoveCheck
+	.public PCBox_FreeReleaseMoveCheck
+	.public PCBox_RunReleaseMoveCheck
+	.public PCBox_CreateMonInfo
+	.public PCBox_FreeMonInfo
+	.public PCBox_DrawMonInfo
+	.public PCBox_DrawMonItemInfo
+	.public PCBox_ShowSlotMonInfo
+	.public PCBox_RedrawSlotMonInfo
+	.public PCBox_ClearMonInfo
+	.public PCBox_ClearMonInfoAndSelection
+	.public PCBox_LoadWallpaperChars
+	.public PCBox_LoadWallpaperPalette
+	.public PCBox_LoadWallpaperTilemap
+	.public PCBox_LoadWallpaper
+	.public PCBox_LoadScrolledWallpaper
 	.public ov14_021E78AC
-	.public ov14_021E7930
-	.public ov14_021E7940
-	.public ov14_021E7960
-	.public ov14_021E79AC
-	.public ov14_021E79D8
-	.public ov14_021E7A08
+	.public PCBox_GetWallpaperGfxIndex
+	.public PCBox_IsPointInRect
+	.public PCBox_GetTouchedBoxSlot
+	.public PCBox_GetTouchedPartySlot
+	.public PCBox_GetTouchedTrayBox
+	.public PCBox_StartHeldItemMove
 	.public ov14_021E7AD4
 	.public ov14_021E7AE4
-	.public ov14_021E7B04
+	.public PCBox_UpdateHeldItemMove
 	.public ov14_021E7B8C
 	.public ov14_021E7B98
-	.public ov14_021E7BA4
-	.public ov14_021E7D7C
-	.public ov14_021E7D8C
-	.public ov14_021E7D9C
-	.public ov14_021E7DF8
-	.public ov14_021E7E10
-	.public ov14_021E7E40
-	.public ov14_021E7E64
+	.public PCBox_InitPanels
+	.public PCBox_FreePanels
+	.public PCBox_LoadPanelTilemap
+	.public PCBox_DrawMarkingMenuEntry
+	.public PCBox_DrawMarkingMenu
+	.public PCBox_ToggleMarking
+	.public PCBox_SlideInMarkingMenu
+	.public PCBox_SlideOutMarkingMenu
 	.public ov14_021E7E78
 	.public ov14_021E7E88
 	.public ov14_021E7E98
 	.public ov14_021E7EC0
 	.public ov14_021E7ED0
-	.public ov14_021E7EE0
-	.public ov14_021E7F4C
+	.public PCBox_SlideInPartyPanel
+	.public PCBox_SlideOutPartyPanel
 	.public ov14_021E7FB8
 	.public ov14_021E7FEC
 	.public ov14_021E8020
 	.public ov14_021E8048
 	.public ov14_021E805C
 	.public ov14_021E8094
-	.public ov14_021E80A8
+	.public PCBox_UpdatePartyPanelSlide
 	.public ov14_021E813C
 	.public ov14_021E81A8
-	.public ov14_021E81B4
-	.public ov14_021E81D8
-	.public ov14_021E81FC
-	.public ov14_021E821C
-	.public ov14_021E8234
-	.public ov14_021E8248
+	.public PCBox_SlideInWallpaperList
+	.public PCBox_SlideOutWallpaperList
+	.public PCBox_ShowPartyButton
+	.public PCBox_HidePartyButton
+	.public PCBox_SlideOutPartyButton
+	.public PCBox_SlideInPartyButton
 	.public ov14_021E825C
 	.public ov14_021E827C
 	.public ov14_021E8294
@@ -2326,28 +2326,28 @@
 	.public ov14_021E8394
 	.public ov14_021E83C4
 	.public ov14_021E83F4
-	.public ov14_021E8434
-	.public ov14_021E84A4
-	.public ov14_021E8514
-	.public ov14_021E8544
+	.public PCBox_SlideInActionMenu
+	.public PCBox_SlideOutActionMenu
+	.public PCBox_UpdateActionMenuSlide
+	.public PCBox_IsActionMenuOpen
 	.public ov14_021E8560
 	.public ov14_021E8588
 	.public ov14_021E85AC
-	.public ov14_021E85BC
-	.public ov14_021E85D0
-	.public ov14_021E85E4
-	.public ov14_021E8600
-	.public ov14_021E8610
-	.public ov14_021E8620
-	.public ov14_021E8634
-	.public ov14_021E8648
+	.public PCBox_SlideInChangeBoxButton
+	.public PCBox_SlideOutChangeBoxButton
+	.public PCBox_IsChangeBoxButtonShown
+	.public PCBox_HideSummaryButton
+	.public PCBox_ShowSummaryButton
+	.public PCBox_SlideInSummaryButton
+	.public PCBox_SlideOutSummaryButton
+	.public PCBox_IsSummaryButtonShown
 	.public ov14_021E8664
-	.public ov14_021E86E0
-	.public ov14_021E8704
+	.public PCBox_SlideInBoxTray
+	.public PCBox_SlideOutBoxTray
 	.public ov14_021E8718
 	.public ov14_021E8740
-	.public ov14_021E875C
-	.public ov14_021E87BC
+	.public PCBox_SlideInBoxMenu
+	.public PCBox_SlideOutBoxMenu
 	.public ov14_021E87F4
 	.public ov14_021E8824
 	.public ov14_021E884C
@@ -2357,34 +2357,34 @@
 	.public ov14_021E88F8
 	.public ov14_021E892C
 	.public ov14_021E8944
-	.public ov14_021E895C
-	.public ov14_021E89B8
-	.public ov14_021E8A7C
-	.public ov14_021E8ACC
-	.public ov14_021E8B1C
-	.public ov14_021E8B3C
-	.public ov14_021E8B80
-	.public ov14_021E8BA4
-	.public ov14_021E8D20
-	.public ov14_021E8FD4
+	.public PCBox_DrawMarkings
+	.public PCBox_StartSummaryApp
+	.public PCBox_EndSummaryApp
+	.public PCBox_StartBagApp
+	.public PCBox_EndBagApp
+	.public PCBox_StartNamingScreenApp
+	.public PCBox_EndNamingScreenApp
+	.public PCBox_UpdateMoveModeBoxDrag
+	.public PCBox_UpdateMoveModePartyDrag
+	.public PCBox_UpdateBoxTrayDrag
 	.public ov14_021E9194
-	.public ov14_021E91E0
-	.public ov14_021E9234
-	.public ov14_021E92AC
-	.public ov14_021E9370
+	.public PCBox_AnimateMoveToPartyEnd
+	.public PCBox_AnimateMoveToFirstEmptySlot
+	.public PCBox_UpdateScrollToPrevBox
+	.public PCBox_UpdateScrollToNextBox
 	.public ov14_021E9434
 	.public ov14_021E9450
-	.public ov14_021E94A8
+	.public PCBox_UpdateMarkingMenuSlide
 	.public ov14_021E94BC
 	.public ov14_021E9518
 	.public ov14_021E952C
 	.public ov14_021E954C
-	.public ov14_021E9554
-	.public ov14_021E9590
+	.public PCBox_UpdateBoxTraySlideIn
+	.public PCBox_UpdateBoxTraySlideOut
 	.public ov14_021E95B4
 	.public ov14_021E95C8
 	.public ov14_021E9604
-	.public ov14_021E9618
+	.public PCBox_UpdateBoxMenuSlide
 	.public ov14_021E9660
 	.public ov14_021E96A8
 	.public ov14_021E96C8
@@ -2393,9 +2393,9 @@
 	.public ov14_021E9970
 	.public ov14_021E99A0
 	.public ov14_021E99F0
-	.public ov14_021E9A24
-	.public ov14_021E9C88
-	.public ov14_021E9F20
+	.public PCBox_UpdateDepositDrag
+	.public PCBox_UpdateWithdrawDrag
+	.public PCBox_UpdateCursorSlide
 	.public ov14_021EA068
 	.public ov14_021EA0B8
 	.public ov14_021EA130
@@ -2414,49 +2414,49 @@
 	.public ov14_021EAC24
 	.public ov14_021EACD4
 	.public ov14_021EAF08
-	.public ov14_021EAF8C
-	.public ov14_021EAFAC
-	.public ov14_021EB0E4
-	.public ov14_021EB170
-	.public ov14_021EB18C
-	.public ov14_021EB1A4
-	.public ov14_021EB1C0
-	.public ov14_021EB1E0
-	.public ov14_021EB218
-	.public ov14_021EB27C
-	.public ov14_021EB290
-	.public ov14_021EB2A8
-	.public ov14_021EB2EC
-	.public ov14_021EB388
-	.public ov14_021EB7B0
+	.public PCBox_RunStateMachine
+	.public PCBox_State_Init
+	.public PCBox_State_Exit
+	.public PCBox_State_WaitFade
+	.public PCBox_State_WaitPaletteBuffers
+	.public PCBox_State_Delay
+	.public PCBox_State_WaitUpdateFunc
+	.public PCBox_State_WaitButton
+	.public PCBox_State_HandleYesNo
+	.public PCBox_State_WaitPaletteFlash
+	.public PCBox_State_StartSubApp
+	.public PCBox_State_RunSubApp
+	.public PCBox_State_Start
+	.public PCBox_State_MoveModeInput
+	.public PCBox_State_ApplyMonMove
 	.public ov14_021EB7E4
 	.public ov14_021EB8C0
 	.public ov14_021EBAEC
-	.public ov14_021EBB3C
+	.public PCBox_State_GiveItemFromBag
 	.public ov14_021EBDCC
 	.public ov14_021EBDE0
-	.public ov14_021EBDE8
+	.public PCBox_State_OpenMarkingMenu
 	.public ov14_021EBE2C
-	.public ov14_021EBE68
+	.public PCBox_State_MarkingMenuInput
 	.public ov14_021EBF8C
-	.public ov14_021EBF9C
-	.public ov14_021EC0EC
-	.public ov14_021EC128
-	.public ov14_021EC13C
-	.public ov14_021EC150
+	.public PCBox_State_TryRelease
+	.public PCBox_State_ReleaseMoveCheck
+	.public PCBox_State_PrintReleased
+	.public PCBox_State_PrintByeBye
+	.public PCBox_State_RemoveReleasedMon
 	.public ov14_021EC23C
-	.public ov14_021EC2A4
-	.public ov14_021EC2EC
+	.public PCBox_State_ReleaseCameBack
+	.public PCBox_State_PrintWorried
 	.public ov14_021EC300
 	.public ov14_021EC344
 	.public ov14_021EC354
 	.public ov14_021EC3A8
-	.public ov14_021EC3D8
+	.public PCBox_State_MoveModePartyInput
 	.public ov14_021EC710
 	.public ov14_021EC730
 	.public ov14_021EC7D4
 	.public ov14_021EC854
-	.public ov14_021EC8D0
+	.public PCBox_State_BoxTrayInput
 	.public ov14_021ECDA8
 	.public ov14_021ECF58
 	.public ov14_021ED1AC
@@ -2477,19 +2477,19 @@
 	.public ov14_021ED6A4
 	.public ov14_021ED6C4
 	.public ov14_021ED6D0
-	.public ov14_021ED760
+	.public PCBox_State_OpenWallpaperMenu
 	.public ov14_021ED7B8
-	.public ov14_021ED7DC
-	.public ov14_021ED820
+	.public PCBox_State_SetupWallpaperMenuInput
+	.public PCBox_State_WallpaperMenuInput
 	.public ov14_021ED920
 	.public ov14_021ED940
 	.public ov14_021ED960
-	.public ov14_021ED96C
-	.public ov14_021ED9AC
-	.public ov14_021ED9EC
+	.public PCBox_State_ApplyWallpaper
+	.public PCBox_State_WallpaperFadeOut
+	.public PCBox_State_WallpaperFadeIn
 	.public ov14_021EDA1C
 	.public ov14_021EDA3C
-	.public ov14_021EDA4C
+	.public PCBox_State_WithdrawInput
 	.public ov14_021EDE20
 	.public ov14_021EDE38
 	.public ov14_021EDE70
@@ -2497,8 +2497,8 @@
 	.public ov14_021EDF08
 	.public ov14_021EDF28
 	.public ov14_021EDF90
-	.public ov14_021EDFA0
-	.public ov14_021EE26C
+	.public PCBox_State_DepositInput
+	.public PCBox_State_TryDeposit
 	.public ov14_021EE328
 	.public ov14_021EE338
 	.public ov14_021EE35C
@@ -2511,7 +2511,7 @@
 	.public ov14_021EE538
 	.public ov14_021EE578
 	.public ov14_021EE5C8
-	.public ov14_021EE5E8
+	.public PCBox_State_SwitchBox
 	.public ov14_021EE664
 	.public ov14_021EE684
 	.public ov14_021EE6D0
@@ -2528,7 +2528,7 @@
 	.public ov14_021EE840
 	.public ov14_021EE850
 	.public ov14_021EE860
-	.public ov14_021EE87C
+	.public PCBox_State_ItemModeInput
 	.public ov14_021EEBFC
 	.public ov14_021EEC8C
 	.public ov14_021EEC9C
@@ -2538,10 +2538,10 @@
 	.public ov14_021EEED4
 	.public ov14_021EEF34
 	.public ov14_021EEF8C
-	.public ov14_021EF024
+	.public PCBox_State_SwapHeldItems
 	.public ov14_021EF190
 	.public ov14_021EF1EC
-	.public ov14_021EF248
+	.public PCBox_State_ItemModeBoxTrayInput
 	.public ov14_021EF6D4
 	.public ov14_021EF6E4
 	.public ov14_021EF6FC
@@ -2560,26 +2560,26 @@
 	.public ov14_021F0164
 	.public ov14_021F0198
 	.public ov14_021F01B8
-	.public ov14_021F01D8
-	.public ov14_021F0204
-	.public ov14_021F0234
-	.public ov14_021F0244
-	.public ov14_021F0254
-	.public ov14_021F027C
-	.public ov14_021F028C
-	.public ov14_021F0314
-	.public ov14_021F039C
-	.public ov14_021F0418
+	.public PCBox_StartFadeIn
+	.public PCBox_StartFadeOut
+	.public PCBox_WaitForUpdateFunc
+	.public PCBox_WaitForPendingUpdateFunc
+	.public PCBox_ShowYesNo
+	.public PCBox_StartSubApp
+	.public PCBox_ScrollToPrevBox
+	.public PCBox_ScrollToNextBox
+	.public PCBox_StartMoveModeBoxDrag
+	.public PCBox_StartWithdrawDrag
 	.public ov14_021F04D4
 	.public ov14_021F0530
-	.public ov14_021F0594
-	.public ov14_021F0660
+	.public PCBox_StartMoveModePartyDrag
+	.public PCBox_StartDepositDrag
 	.public ov14_021F0794
 	.public ov14_021F07F0
-	.public ov14_021F083C
-	.public ov14_021F08BC
-	.public ov14_021F08F0
-	.public ov14_021F0910
+	.public PCBox_StartBoxTrayDrag
+	.public PCBox_AllocMoveWork
+	.public PCBox_FreeMoveWork
+	.public PCBox_HandleItemCommand
 	.public ov14_021F09BC
 	.public ov14_021F0A80
 	.public ov14_021F0AAC
@@ -2592,23 +2592,23 @@
 	.public ov14_021F0C58
 	.public ov14_021F0C88
 	.public ov14_021F0CD8
-	.public ov14_021F0D34
+	.public PCBox_HideInfoPanelAndWait
 	.public ov14_021F0D58
 	.public ov14_021F0EE8
-	.public ov14_021F0F0C
-	.public ov14_021F1004
-	.public ov14_021F1058
-	.public ov14_021F1090
+	.public PCBox_JumpToTrayBox
+	.public PCBox_ChangeTrayPage
+	.public PCBox_OpenBoxTray
+	.public PCBox_CloseBoxTray
 	.public ov14_021F10B4
 	.public ov14_021F10DC
 	.public ov14_021F1100
 	.public ov14_021F1128
 	.public ov14_021F1170
 	.public ov14_021F11F8
-	.public ov14_021F1228
-	.public ov14_021F129C
-	.public ov14_021F131C
-	.public ov14_021F13B0
+	.public PCBox_ChangeWallpaperPage
+	.public PCBox_SelectWallpaperInPage
+	.public PCBox_ConfirmWallpaperChoice
+	.public PCBox_TryWithdraw
 	.public ov14_021F1414
 	.public ov14_021F1448
 	.public ov14_021F1504
@@ -2629,12 +2629,12 @@
 	.public ov14_021F1F38
 	.public ov14_021F1F44
 	.public ov14_021F2010
-	.public ov14_021F2020
-	.public ov14_021F20C4
-	.public ov14_021F20F4
-	.public ov14_021F21B4
-	.public ov14_021F21D0
-	.public ov14_021F2270
+	.public PCBox_TakeHeldItemToBag
+	.public PCBox_ConfirmRelease
+	.public PCBox_PutAwayHeldItem
+	.public PCBox_ConfirmExit
+	.public PCBox_CancelExit
+	.public PCBox_FlashPanel
 	.public ov14_021F2330
 	.public ov14_021F23F0
 	.public ov14_021F2490
@@ -2673,211 +2673,211 @@
 	.public ov14_021F2930
 	.public ov14_021F297C
 	.public ov14_021F29AC
-	.public ov14_021F29C4
-	.public ov14_021F29E4
-	.public ov14_021F2A04
-	.public ov14_021F2A18
-	.public ov14_021F2A44
-	.public ov14_021F2A60
-	.public ov14_021F2A74
-	.public ov14_021F2A9C
-	.public ov14_021F2AC8
-	.public ov14_021F2B68
-	.public ov14_021F2B88
-	.public ov14_021F2BB8
-	.public ov14_021F2BE8
-	.public ov14_021F2C04
-	.public ov14_021F2C1C
-	.public ov14_021F2C50
-	.public ov14_021F2C84
-	.public ov14_021F2D1C
-	.public ov14_021F2DC4
-	.public ov14_021F2DE8
-	.public ov14_021F2E78
-	.public ov14_021F2EA0
-	.public ov14_021F2ED0
-	.public ov14_021F2F20
-	.public ov14_021F2F3C
-	.public ov14_021F2F88
+	.public PCBox_TickSprites
+	.public PCBox_SetSpriteAnim
+	.public PCBox_IsSpriteAnimated
+	.public PCBox_SetSpriteVisible
+	.public PCBox_IsSpriteVisible
+	.public PCBox_SetSpritePriority
+	.public PCBox_SetSpriteDrawPriority
+	.public PCBox_SetSpriteTranslucent
+	.public PCBox_InitSpriteSystem
+	.public PCBox_FreeSpriteSystem
+	.public PCBox_LoadSpriteResources
+	.public PCBox_CreateSprites
+	.public PCBox_DeleteSprite
+	.public PCBox_DeleteAllSprites
+	.public PCBox_LoadSpriteCharsMain
+	.public PCBox_LoadSpriteCharsSub
+	.public PCBox_LoadMonIconResources
+	.public PCBox_CreateMonIconSprites
+	.public PCBox_LoadMonIconChars
+	.public PCBox_LoadBoxIconImages
+	.public PCBox_SetIconImage
+	.public PCBox_LoadMonIcon
+	.public PCBox_RefreshSlotIcon
+	.public PCBox_LoadBoxIcons
+	.public PCBox_LoadPartyIcons
+	.public PCBox_GetSlotPosition
 	.public ov14_021F2FDC
 	.public ov14_021F3044
 	.public ov14_021F30B0
 	.public ov14_021F311C
-	.public ov14_021F3190
+	.public PCBox_SetIconLayer
 	.public ov14_021F31E0
-	.public ov14_021F3210
-	.public ov14_021F32E0
-	.public ov14_021F3354
-	.public ov14_021F3380
-	.public ov14_021F33B0
-	.public ov14_021F33E8
-	.public ov14_021F33FC
-	.public ov14_021F3420
-	.public ov14_021F3488
-	.public ov14_021F34C8
-	.public ov14_021F34DC
-	.public ov14_021F34EC
-	.public ov14_021F35BC
-	.public ov14_021F3614
-	.public ov14_021F36DC
-	.public ov14_021F3714
-	.public ov14_021F37F4
-	.public ov14_021F3844
-	.public ov14_021F38B0
+	.public PCBox_ScrollBoxIcons
+	.public PCBox_UpdatePartyIconPositions
+	.public PCBox_StartReleaseScale
+	.public PCBox_UpdateReleaseShrink
+	.public PCBox_UpdateReleaseGrow
+	.public PCBox_EndReleaseShrink
+	.public PCBox_ResetSpriteAffine
+	.public PCBox_SetIconRangeTranslucent
+	.public PCBox_SetIconsTranslucent
+	.public PCBox_SetSlotIconTranslucent
+	.public PCBox_UpdateSlotIconItemTranslucency
+	.public PCBox_LoadMonPicResources
+	.public PCBox_CreateMonPicSprites
+	.public PCBox_LoadMonPic
+	.public PCBox_ShowMonPic
+	.public PCBox_LoadItemIconResources
+	.public PCBox_CreateItemIconSprites
+	.public PCBox_LoadHeldItemIcon
+	.public PCBox_LoadInfoItemIcon
 	.public ov14_021F391C
-	.public ov14_021F395C
-	.public ov14_021F396C
+	.public PCBox_SetHeldItemIconPosition
+	.public PCBox_MoveHeldItemIconToSlot
 	.public ov14_021F39A0
-	.public ov14_021F39D0
-	.public ov14_021F3B3C
-	.public ov14_021F3B5C
-	.public ov14_021F3BC0
-	.public ov14_021F3C08
-	.public ov14_021F3CB4
-	.public ov14_021F3D0C
-	.public ov14_021F3D70
-	.public ov14_021F3DE8
-	.public ov14_021F3E70
-	.public ov14_021F3F6C
-	.public ov14_021F40DC
-	.public ov14_021F40E8
-	.public ov14_021F4174
-	.public ov14_021F41E4
-	.public ov14_021F4278
-	.public ov14_021F42EC
-	.public ov14_021F4380
-	.public ov14_021F43F4
+	.public PCBox_CreateHeldItemIconOutline
+	.public PCBox_ShowHeldItemIconOutline
+	.public PCBox_UpdateHeldItemIconOutline
+	.public PCBox_UpdateInfoItemIconPosition
+	.public PCBox_LoadTypeIconResources
+	.public PCBox_CreateTypeIconSprites
+	.public PCBox_LoadTypeIcon
+	.public PCBox_DrawTypeIcons
+	.public PCBox_LoadUiSpriteResources
+	.public PCBox_CreateUiSprites
+	.public PCBox_CreateSelectedIconOutline
+	.public PCBox_HideSelectedIconOutline
+	.public PCBox_SetSelectedIconOutlineVisible
+	.public PCBox_UpdateSelectedIconOutline
+	.public PCBox_LoadTrayBoxResources
+	.public PCBox_CreateTrayBoxSprites
+	.public PCBox_LoadWallpaperListResources
+	.public PCBox_CreateWallpaperListSprites
+	.public PCBox_SetBoxArrowsVisible
 	.public ov14_021F4410
-	.public ov14_021F4428
-	.public ov14_021F44B4
-	.public ov14_021F4530
-	.public ov14_021F459C
-	.public ov14_021F462C
-	.public ov14_021F46B0
+	.public PCBox_SetupWallpaperMenuSprites
+	.public PCBox_MoveWallpaperMenuSprites
+	.public PCBox_UpdateCurrentWallpaperMarker
+	.public PCBox_UpdateWallpaperCursor
+	.public PCBox_LoadWallpaperThumbnails
+	.public PCBox_ColorWallpaperThumbnail
 	.public ov14_021F46F4
-	.public ov14_021F4720
-	.public ov14_021F47B8
-	.public ov14_021F4848
-	.public ov14_021F48B4
-	.public ov14_021F4940
-	.public ov14_021F4958
-	.public ov14_021F49C8
-	.public ov14_021F49E0
-	.public ov14_021F4A20
-	.public ov14_021F4A64
+	.public PCBox_SetupBoxTraySprites
+	.public PCBox_MoveBoxTraySprites
+	.public PCBox_UpdateCurrentBoxMarker
+	.public PCBox_UpdateTrayCursor
+	.public PCBox_GetTrayBoxPosition
+	.public PCBox_DrawBoxThumbnail
+	.public PCBox_DrawAllBoxThumbnails
+	.public PCBox_LoadTrayPageThumbnails
+	.public PCBox_RefreshTrayBoxThumbnail
+	.public PCBox_DrawBoxThumbnailMons
 	.public ov14_021F4B90
 	.public ov14_021F4BC0
-	.public ov14_021F4CA0
-	.public ov14_021F4D10
-	.public ov14_021F4E68
-	.public ov14_021F4EA0
-	.public ov14_021F4ED0
-	.public ov14_021F4F00
-	.public ov14_021F4F24
-	.public ov14_021F4F84
-	.public ov14_021F4FBC
-	.public ov14_021F5000
-	.public ov14_021F5054
-	.public ov14_021F50A0
-	.public ov14_021F5114
-	.public ov14_021F5190
-	.public ov14_021F521C
-	.public ov14_021F528C
-	.public ov14_021F52FC
-	.public ov14_021F5368
-	.public ov14_021F53C0
+	.public PCBox_HideBoxTraySprites
+	.public PCBox_CreateTrayTextObjs
+	.public PCBox_DestroyTrayTextObjs
+	.public PCBox_CopyWindowToTextObj
+	.public PCBox_AddWindows
+	.public PCBox_RemoveWindows
+	.public PCBox_PrintAligned
+	.public PCBox_PrintMsg
+	.public PCBox_PrintExpandedMsg
+	.public PCBox_PrintSpeciesName
+	.public PCBox_PrintNickname
+	.public PCBox_PrintLevel
+	.public PCBox_PrintGender
+	.public PCBox_PrintDexNumber
+	.public PCBox_PrintNature
+	.public PCBox_PrintAbility
+	.public PCBox_PrintHeldItem
+	.public PCBox_PrintMonInfo
+	.public PCBox_ClearMonInfoWindows
 	.public ov14_021F5404
-	.public ov14_021F5564
+	.public PCBox_PrintItemNameAndDesc
 	.public ov14_021F5620
-	.public ov14_021F566C
-	.public ov14_021F5718
-	.public ov14_021F57B8
-	.public ov14_021F58B8
-	.public ov14_021F5950
+	.public PCBox_PrintInfoLabels
+	.public PCBox_DrawBoxNameOnWallpaper
+	.public PCBox_DrawTrayBoxNameAndCount
+	.public PCBox_DrawWallpaperName
+	.public PCBox_DrawButtonWindow
 	.public ov14_021F5BD8
-	.public ov14_021F5C84
+	.public PCBox_DrawPartyButton
 	.public ov14_021F5C94
 	.public ov14_021F5E94
-	.public ov14_021F5EB4
-	.public ov14_021F5EC4
+	.public PCBox_DrawReturnButton
+	.public PCBox_DrawExitButton
 	.public ov14_021F5ED4
-	.public ov14_021F5EE4
-	.public ov14_021F5FBC
-	.public ov14_021F604C
-	.public ov14_021F605C
-	.public ov14_021F6070
-	.public ov14_021F6094
-	.public ov14_021F60A8
-	.public ov14_021F60BC
-	.public ov14_021F6208
-	.public ov14_021F6244
+	.public PCBox_DrawActionMenu
+	.public PCBox_DrawBagGiveButton
+	.public PCBox_DrawChangeBoxButton
+	.public PCBox_DrawChangeBoxTitle
+	.public PCBox_DrawBoxMenu
+	.public PCBox_DrawChangeWallpaperTitle
+	.public PCBox_DrawDepositTitle
+	.public PCBox_SetPanelWindowFrame
+	.public PCBox_AttachWindowToPanel
+	.public PCBox_AttachPanelWindows
 	.public ov14_021F62CC
 	.public ov14_021F62E4
 	.public ov14_021F62FC
 	.public ov14_021F6314
-	.public ov14_021F6338
-	.public ov14_021F638C
+	.public PCBox_PrintCenteredLabel
+	.public PCBox_DrawConfirmCancel
 	.public ov14_021F63A8
 	.public ov14_021F63B8
 	.public ov14_021F63C8
 	.public ov14_021F63F0
-	.public ov14_021F6408
-	.public ov14_021F6628
-	.public ov14_021F6638
-	.public ov14_021F6654
+	.public PCBox_DrawSummaryButton
+	.public PCBox_LoadBoxMessages
+	.public PCBox_DrawMessageFrame
+	.public PCBox_CloseMessageWindow
 	.public ov14_021F6678
 	.public ov14_021F6688
-	.public ov14_021F6698
-	.public ov14_021F66E8
-	.public ov14_021F6704
-	.public ov14_021F6724
-	.public ov14_021F6730
-	.public ov14_021F673C
-	.public ov14_021F675C
-	.public ov14_021F6768
-	.public ov14_021F67A4
-	.public ov14_021F67B0
-	.public ov14_021F6844
-	.public ov14_021F685C
-	.public ov14_021F68C0
-	.public ov14_021F6928
+	.public PCBox_PrintMessage
+	.public PCBox_PrintExitPrompt
+	.public PCBox_PrintTakeItemPrompt
+	.public PCBox_PrintMailCantBeTaken
+	.public PCBox_PrintMailCantBeMoved
+	.public PCBox_PrintTookItem
+	.public PCBox_PrintBagFull
+	.public PCBox_PrintItemHeld
+	.public PCBox_PrintTouchTheMark
+	.public PCBox_PrintReleaseMessage
+	.public PCBox_PrintMenuPrompt
+	.public PCBox_PrintMonActionMessage
+	.public PCBox_PrintItemActionMessage
+	.public PCBox_PrintPanelHint
 	.public ov14_021F69F0
-	.public ov14_021F6A14
-	.public ov14_021F6A24
+	.public PCBox_FindTouchedBoxSlot
+	.public PCBox_FindTouchedPartySlot
 	.public ov14_021F6A34
-	.public ov14_021F6A44
-	.public ov14_021F6AC0
-	.public ov14_021F6B10
-	.public ov14_021F6B28
+	.public PCBox_CreateModeGridInput
+	.public PCBox_CreateGridInput
+	.public PCBox_FreeGridInput
+	.public PCBox_PlaceCursorOnGridInput
 	.public ov14_021F6B60
 	.public ov14_021F6B7C
 	.public ov14_021F6B8C
 	.public ov14_021F6BA4
-	.public ov14_021F6BC0
+	.public PCBox_GetDepositMenuInput
 	.public ov14_021F6C3C
 	.public ov14_021F6C94
 	.public ov14_021F6D14
 	.public ov14_021F6E68
-	.public ov14_021F6E8C
+	.public PCBox_GetWithdrawMenuInput
 	.public ov14_021F6F08
 	.public ov14_021F6F70
-	.public ov14_021F6F94
+	.public PCBox_GetMoveModeMenuInput
 	.public ov14_021F7010
 	.public ov14_021F708C
 	.public ov14_021F70A4
-	.public ov14_021F70C0
+	.public PCBox_GetBoxTrayInput
 	.public ov14_021F70F4
 	.public ov14_021F7184
 	.public ov14_021F7308
 	.public ov14_021F7340
-	.public ov14_021F7388
+	.public PCBox_GetMoveModePartyMenuInput
 	.public ov14_021F73E4
 	.public ov14_021F7444
-	.public ov14_021F74B0
+	.public PCBox_GetItemModeMenuInput
 	.public ov14_021F7528
 	.public ov14_021F7594
 	.public ov14_021F75AC
-	.public ov14_021F75C8
+	.public PCBox_GetItemModePartyMenuInput
 	.public ov14_021F7620
 	.public ov14_021F7670
 	.public ov14_021F7688
@@ -2887,11 +2887,11 @@
 	.public ov14_021F78F8
 	.public ov14_021F7A2C
 	.public ov14_021F7A50
-	.public ov14_021F7AC4
-	.public ov14_021F7B7C
-	.public ov14_021F7BC0
+	.public PCBox_StartCursorSlide
+	.public PCBox_IsSummaryShortcutPressed
+	.public sPCBoxReleaseCheckMoves
 	.public ov14_021F7BC8
-	.public ov14_021F7BD8
+	.public sPCBoxTrayRects
 	.public ov14_021F7BF0
 	.public ov14_021F7C08
 	.public ov14_021F7C20
@@ -2901,24 +2901,24 @@
 	.public ov14_021F7C90
 	.public ov14_021F7CAC
 	.public ov14_021F7CC8
-	.public ov14_021F7CE4
+	.public sPCBoxGfxBanks
 	.public ov14_021F7D0C
 	.public ov14_021F7D14
 	.public ov14_021F7D1C
 	.public ov14_021F7D2C
 	.public ov14_021F7D3C
-	.public ov14_021F7D50
-	.public ov14_021F7D74
+	.public sPCBoxSubApps
+	.public sPCBoxYesNoHandlers
 	.public ov14_021F7D78
-	.public ov14_021F7D9C
+	.public sPCBoxStateTable
 	.public ov14_021F8068
-	.public ov14_021F8070
-	.public ov14_021F8078
+	.public sPCBoxOutlineOffsetsX
+	.public sPCBoxOutlineOffsetsY
 	.public ov14_021F8080
 	.public ov14_021F808C
 	.public ov14_021F8098
 	.public ov14_021F80A8
-	.public ov14_021F80BC
+	.public sPCBoxPartySlotPositions
 	.public ov14_021F80BE
 	.public ov14_021F80D4
 	.public ov14_021F80EC
@@ -2940,10 +2940,10 @@
 	.public ov14_021F8418
 	.public ov14_021F844C
 	.public ov14_021F8480
-	.public ov14_021F84B4
-	.public ov14_021F8614
+	.public sPCBoxWindowTemplates
+	.public sPCBoxPartyHitboxes
 	.public ov14_021F8630
-	.public ov14_021F864C
+	.public sPCBoxSlotHitboxes
 	.public ov14_021F86C8
 	.public ov14_021F86CC
 	.public ov14_021F86DC
@@ -2970,7 +2970,7 @@
 	.public ov14_021F89E0
 	.public ov14_021F8A40
 	.public ov14_021F8AA0
-	.public ov14_021F8B10
+	.public sPCBoxGridLayouts
 	.public ov14_021F8B94
 	.public ov14_021F8C30
 	.public ov14_021F8CD0
@@ -2983,33 +2983,33 @@
 	.include "global.inc"
 
 	.text
-	.public ov14_021E5A44
-	.public ov14_021E5A50
-	.public ov14_021E5A54
-	.public ov14_021E5A60
-	.public ov14_021E5E94
-	.public ov14_021E5ED0
-	.public ov14_021E5EE8
-	.public ov14_021E7264
-	.public ov14_021E7468
-	.public ov14_021E76B8
-	.public ov14_021E7930
+	.public PCBox_SetUpdateFunc
+	.public PCBox_SetPendingUpdateFunc
+	.public PCBox_StartPendingUpdateFunc
+	.public PCBox_SetGfxBanks
+	.public PCBox_FreePaletteData
+	.public PCBox_CreateYesNoPrompt
+	.public PCBox_DestroyYesNoPrompt
+	.public PCBox_FreeReleaseMoveCheck
+	.public PCBox_FreeMonInfo
+	.public PCBox_ClearMonInfoAndSelection
+	.public PCBox_GetWallpaperGfxIndex
 	.public ov14_021E7AD4
 	.public ov14_021E7B8C
 	.public ov14_021E7B98
-	.public ov14_021E7D7C
-	.public ov14_021E7D8C
-	.public ov14_021E7DF8
+	.public PCBox_FreePanels
+	.public PCBox_LoadPanelTilemap
+	.public PCBox_DrawMarkingMenu
 	.public ov14_021E81A8
-	.public ov14_021E821C
+	.public PCBox_HidePartyButton
 	.public ov14_021E827C
-	.public ov14_021E94A8
+	.public PCBox_UpdateMarkingMenuSlide
 	.public ov14_021E9518
 	.public ov14_021E954C
 	.public ov14_021E95B4
 	.public ov14_021E9604
-	.public ov14_021EB18C
-	.public ov14_021EB27C
+	.public PCBox_State_WaitPaletteBuffers
+	.public PCBox_State_WaitPaletteFlash
 	.public ov14_021EBDCC
 	.public ov14_021EBDE0
 	.public ov14_021EBF8C
@@ -3025,9 +3025,9 @@
 	.public ov14_021EDF90
 	.public ov14_021EE328
 	.public ov14_021EE4D8
-	.public ov14_021F0234
-	.public ov14_021F0244
-	.public ov14_021F027C
+	.public PCBox_WaitForUpdateFunc
+	.public PCBox_WaitForPendingUpdateFunc
+	.public PCBox_StartSubApp
 	.public ov14_021F1534
 	.public ov14_021F1F24
 	.public ov14_021F1F38
@@ -3045,35 +3045,35 @@
 	.public ov14_021F2890
 	.public ov14_021F28FC
 	.public ov14_021F29AC
-	.public ov14_021F2A04
-	.public ov14_021F2A60
-	.public ov14_021F2C04
-	.public ov14_021F33E8
-	.public ov14_021F34C8
-	.public ov14_021F34DC
-	.public ov14_021F395C
-	.public ov14_021F40DC
-	.public ov14_021F4940
-	.public ov14_021F49C8
-	.public ov14_021F604C
+	.public PCBox_IsSpriteAnimated
+	.public PCBox_SetSpritePriority
+	.public PCBox_DeleteAllSprites
+	.public PCBox_EndReleaseShrink
+	.public PCBox_SetSlotIconTranslucent
+	.public PCBox_UpdateSlotIconItemTranslucency
+	.public PCBox_SetHeldItemIconPosition
+	.public PCBox_HideSelectedIconOutline
+	.public PCBox_GetTrayBoxPosition
+	.public PCBox_DrawAllBoxThumbnails
+	.public PCBox_DrawChangeBoxButton
 	.public ov14_021F62CC
 	.public ov14_021F62E4
 	.public ov14_021F62FC
 	.public ov14_021F63A8
 	.public ov14_021F63B8
 	.public ov14_021F63F0
-	.public ov14_021F6628
+	.public PCBox_LoadBoxMessages
 	.public ov14_021F6678
 	.public ov14_021F6688
-	.public ov14_021F6844
-	.public ov14_021F6A14
-	.public ov14_021F6A24
+	.public PCBox_PrintMenuPrompt
+	.public PCBox_FindTouchedBoxSlot
+	.public PCBox_FindTouchedPartySlot
 	.public ov14_021F6A34
-	.public ov14_021F6B10
+	.public PCBox_FreeGridInput
 	.public ov14_021F6B7C
 
-	thumb_func_start ov14_021E8234
-ov14_021E8234: ; 0x021E8234
+	thumb_func_start PCBox_SlideOutPartyButton
+PCBox_SlideOutPartyButton: ; 0x021E8234
 	push {r3, lr}
 	mov r1, #3
 	str r1, [sp]
@@ -3083,11 +3083,11 @@ ov14_021E8234: ; 0x021E8234
 	bl BgCellManager_StartCellMove
 	pop {r3, pc}
 	.balign 4, 0
-	thumb_func_end ov14_021E8234
+	thumb_func_end PCBox_SlideOutPartyButton
 
 
-	thumb_func_start ov14_021E8248
-ov14_021E8248: ; 0x021E8248
+	thumb_func_start PCBox_SlideInPartyButton
+PCBox_SlideInPartyButton: ; 0x021E8248
 	push {r3, lr}
 	mov r1, #3
 	mov r2, #0
@@ -3097,7 +3097,7 @@ ov14_021E8248: ; 0x021E8248
 	bl BgCellManager_StartCellMove
 	pop {r3, pc}
 	.balign 4, 0
-	thumb_func_end ov14_021E8248
+	thumb_func_end PCBox_SlideInPartyButton
 
 
 	thumb_func_start ov14_021E825C

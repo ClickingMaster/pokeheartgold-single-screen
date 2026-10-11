@@ -5,17 +5,17 @@
 
 #define PTR_AT(p, o) (*(void **)((u8 *)(p) + (o)))
 
-extern void ov14_021E76B8(void *);
+extern void PCBox_ClearMonInfoAndSelection(void *);
 extern void ov14_021E8328(void *);
-extern void ov14_021E84A4(void *);
+extern void PCBox_SlideOutActionMenu(void *);
 extern void ov14_021E884C(void *);
 extern u32 ov14_021EA130(void *);
-extern u32 ov14_021F0234(void *, void *, u32);
+extern u32 PCBox_WaitForUpdateFunc(void *, void *, u32);
 extern u32 ov14_021F0AD8(void *);
 extern u32 ov14_021F0C88(void *);
-extern void ov14_021F3488(void *, u32, u32);
-extern void ov14_021F40E8(void *, u32);
-extern void ov14_021F5EB4(void *, u32);
+extern void PCBox_SetIconsTranslucent(void *, u32, u32);
+extern void PCBox_SetSelectedIconOutlineVisible(void *, u32);
+extern void PCBox_DrawReturnButton(void *, u32);
 
 void ov14_021F2818(void *);
 void ov14_021F2858(void *);

@@ -1,6 +1,6 @@
 #include "to42_overlay15_bag_residual8_private.h"
 
-int ov15_021FADE8(void *work, int value) {
+int BagApp_GetMoveTargetResult(void *work, int value) {
     int result = -1;
     switch (value) {
     case 0:
@@ -9,7 +9,7 @@ int ov15_021FADE8(void *work, int value) {
     case 3:
     case 4:
     case 5:
-        if (ov15_021FA074(work) > value) {
+        if (BagApp_GetPageItemCount(work) > value) {
             result = U32_AT(work, 0x66c);
             PlaySE(0x5dc);
         } else {

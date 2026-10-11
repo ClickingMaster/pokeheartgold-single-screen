@@ -1,6 +1,6 @@
 #include "to47_overlay15_windows_r23_private.h"
 
-void ov15_021FE17C(Ov15BagWorkR23 *work)
+void BagApp_AddItemListWindows(Ov15BagWorkR23 *work)
 {
     int i;
 
@@ -10,12 +10,12 @@ void ov15_021FE17C(Ov15BagWorkR23 *work)
 
     for (i = 0; i < 12; i++) {
         AddWindowParameterized(work->bgConfig, &work->windows[i], 4,
-            ov15_02200908[i].x, ov15_02200908[i].y, 11, 4, 11,
-            ov15_02200908[i].baseTile);
+            sItemListWindowTemplates[i].x, sItemListWindowTemplates[i].y, 11, 4, 11,
+            sItemListWindowTemplates[i].baseTile);
     }
 }
 
-void ov15_021FE1D0(Ov15BagWorkR23 *work)
+void BagApp_RemoveItemListWindows(Ov15BagWorkR23 *work)
 {
     int i;
 
@@ -30,7 +30,7 @@ void ov15_021FE1D0(Ov15BagWorkR23 *work)
     }
 }
 
-void ov15_021FE204(Ov15BagWorkR23 *work)
+void BagApp_AddItemActionWindows(Ov15BagWorkR23 *work)
 {
     int i;
     int baseTile;
@@ -44,7 +44,7 @@ void ov15_021FE204(Ov15BagWorkR23 *work)
     FillWindowPixelBuffer(&work->windows[12], 0);
 
     baseTile = 0x31B;
-    position = ov15_022008E8;
+    position = sItemMenuWindowPositions;
     for (i = 0; i < 4; i++) {
         AddWindowParameterized(work->bgConfig, &work->windows[i + 13], 4,
             position->x, position->y, 10, 2, 11, baseTile);
@@ -54,7 +54,7 @@ void ov15_021FE204(Ov15BagWorkR23 *work)
     }
 
     baseTile = 0x2FB;
-    position = ov15_022008D0;
+    position = sQuantityDigitWindowPositions;
     for (i = 0; i < 3; i++) {
         AddWindowParameterized(work->bgConfig, &work->windows[i + 17], 4,
             position->x, position->y, 2, 3, 11, baseTile);
@@ -73,7 +73,7 @@ void ov15_021FE204(Ov15BagWorkR23 *work)
     FillWindowPixelBuffer(&work->windows[23], 0);
 }
 
-void ov15_021FE3E0(Ov15BagWorkR23 *work)
+void BagApp_RemoveItemActionWindows(Ov15BagWorkR23 *work)
 {
     int i;
 

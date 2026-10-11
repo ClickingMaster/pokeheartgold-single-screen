@@ -2,27 +2,27 @@
 
 #pragma force_active on
 
-int ov08_0221C918(void *work) {
-    ov08_0221D840(work, 0);
+int BattlePartyMenu_ShowPartyListPage(void *work) {
+    BattlePartyMenu_ChangePage(work, 0);
     return 1;
 }
 
-int ov08_0221C924(void *work) {
-    ov08_0221D840(work, 1);
+int BattlePartyMenu_ShowMonMenuPage(void *work) {
+    BattlePartyMenu_ChangePage(work, 1);
     return 2;
 }
 
-int ov08_0221C930(void *work) {
-    ov08_0221D840(work, 2);
+int BattlePartyMenu_ShowSummaryPage(void *work) {
+    BattlePartyMenu_ChangePage(work, 2);
     return 3;
 }
 
-int ov08_0221C93C(void *work) {
-    ov08_0221D840(work, 3);
+int BattlePartyMenu_ShowCheckMovesPage(void *work) {
+    BattlePartyMenu_ChangePage(work, 3);
     return 4;
 }
 
-int ov08_0221C948(void *work) {
-    ov08_0221D840(work, 4);
+int BattlePartyMenu_ShowMoveDetailPage(void *work) {
+    BattlePartyMenu_ChangePage(work, 4);
     return 5;
 }

@@ -1,14 +1,14 @@
 #include "to57_new49_overlay08_bank00_input_private.h"
 
-int ov08_0221C604(Ov08N49Work *work) {
-    int result = ov08_0221D5D0(work, ov08_02224F3C);
+int BattlePartyMenu_HandleLearnMoveInput(Ov08N49Work *work) {
+    int result = BattlePartyMenu_CheckTouchHitbox(work, sBattlePartyLearnMoveHitboxes);
     if (result == -1) {
         result = BattleDpadCursor_HandleInput(work->smallState);
         if (result == -2) {
             result = 6;
         }
     } else {
-        ov08_022217C8(work);
+        BattlePartyMenu_DeactivateCursor(work);
     }
     switch (result) {
     case 0:
@@ -19,7 +19,7 @@ int ov08_0221C604(Ov08N49Work *work) {
         work->root->selected = result;
         work->result = result;
         PlaySE(0x5DD);
-        ov08_022220AC(work, (u8)(result + 0x17));
+        BattlePartyMenu_StartButtonAnim(work, (u8)(result + 0x17));
         work->state = 12;
         return 0x16;
     case 5:
@@ -29,43 +29,43 @@ int ov08_0221C604(Ov08N49Work *work) {
         work->modeLow ^= 1;
         work->result = result;
         PlaySE(0x5DD);
-        ov08_022220AC(work, 0x12);
+        BattlePartyMenu_StartButtonAnim(work, 0x12);
         work->state = 11;
         return 0x16;
     case 6:
         work->root->selected = 4;
         PlaySE(0x5DD);
-        ov08_022220AC(work, 6);
+        BattlePartyMenu_StartButtonAnim(work, 6);
         work->state = 0x19;
         return 0x16;
     }
     return 0x13;
 }
 
-int ov08_0221C6F8(Ov08N49Work *work) {
-    int result = ov08_0221D5D0(work, ov08_02224E44);
+int BattlePartyMenu_HandleForgetMoveInput(Ov08N49Work *work) {
+    int result = BattlePartyMenu_CheckTouchHitbox(work, sBattlePartyForgetMoveHitboxes);
     if (result == -1) {
         result = BattleDpadCursor_HandleInput(work->smallState);
         if (result == -2) {
             result = 2;
         }
     } else {
-        ov08_022217C8(work);
+        BattlePartyMenu_DeactivateCursor(work);
     }
     switch (result) {
     case 0:
         PlaySE(0x5DD);
         if (work->modeLow == 0) {
-            ov08_022220AC(work, 0x1C);
+            BattlePartyMenu_StartButtonAnim(work, 0x1C);
         } else {
-            ov08_022220AC(work, 0x1D);
+            BattlePartyMenu_StartButtonAnim(work, 0x1D);
         }
-        if (ov08_0221DB54(work) == 1) {
-            ov08_0221F220(work);
+        if (BattlePartyMenu_IsSelectedMoveHM(work) == 1) {
+            BattlePartyMenu_PrintHMCantBeForgotten(work);
             if (work->modeLow == 0) {
-                ov08_0221DB7C(work);
+                BattlePartyMenu_ClearBattleMoveInfo(work);
             } else {
-                ov08_0221DBB4(work);
+                BattlePartyMenu_ClearContestMoveInfo(work);
             }
             work->state = 0x14;
         } else {
@@ -77,14 +77,14 @@ int ov08_0221C6F8(Ov08N49Work *work) {
             break;
         }
         PlaySE(0x5DD);
-        ov08_022220AC(work, 0x12);
+        BattlePartyMenu_StartButtonAnim(work, 0x12);
         work->modeLow ^= 1;
         work->field208E = result;
         work->state = 0xC;
         return 0x16;
     case 2:
         PlaySE(0x5DD);
-        ov08_022220AC(work, 6);
+        BattlePartyMenu_StartButtonAnim(work, 6);
         work->field208E = 0;
         work->state = 0xB;
         return 0x16;
@@ -92,16 +92,16 @@ int ov08_0221C6F8(Ov08N49Work *work) {
     return 0x14;
 }
 
-int ov08_0221C814(Ov08N49Work *work) {
+int BattlePartyMenu_HandleRestorePPInput(Ov08N49Work *work) {
     Ov08N49Root *root = work->root;
-    int result = ov08_0221D5D0(work, ov08_02224E94);
+    int result = BattlePartyMenu_CheckTouchHitbox(work, sBattlePartyRestorePPHitboxes);
     if (result == -1) {
         result = BattleDpadCursor_HandleInput(work->smallState);
         if (result == -2) {
             result = 4;
         }
     } else {
-        ov08_022217C8(work);
+        BattlePartyMenu_DeactivateCursor(work);
     }
     switch (result) {
     case 0:
@@ -113,20 +113,20 @@ int ov08_0221C814(Ov08N49Work *work) {
         }
         work->root->selected = result;
         PlaySE(0x5DD);
-        ov08_022220AC(work, (u8)(result + 0x13));
+        BattlePartyMenu_StartButtonAnim(work, (u8)(result + 0x13));
         if (BattleSystem_RecoverStatus(root->unk08, (int)root->unk28, root->data2C[root->battler], result, root->item) == 1) {
             work->field207C = 0;
             work->state = 0x17;
             return 0x16;
         }
         ReadMsgDataIntoString(work->msgData, 0x51, work->string);
-        ov08_022201C0(work);
+        BattlePartyMenu_ShowMessage(work);
         work->root->battler = 6;
         work->state = 0x19;
         return 0x11;
     case 4:
         PlaySE(0x5DD);
-        ov08_022220AC(work, 6);
+        BattlePartyMenu_StartButtonAnim(work, 6);
         work->state = 6;
         return 0x16;
     }

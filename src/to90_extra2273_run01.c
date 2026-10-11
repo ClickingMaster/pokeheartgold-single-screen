@@ -6,6 +6,6 @@
 #define SH(p,o) (*(s16*)((u8*)(p)+(o)))
 #define U(p,o) (*(u32*)((u8*)(p)+(o)))
 #define P(p,o) (*(void**)((u8*)(p)+(o)))
-extern const u32 ov08_02225CF8[];void BattleDpadCursor_SetBoxes(void*,u32);void BattleDpadCursor_SetPosition(void*,u32);
-void ov08_02224134(u8*w,int mode);
-void ov08_02224134(u8*w,int mode){BattleDpadCursor_SetBoxes(P(w,0x34),ov08_02225CF8[mode]);switch(mode){case 0:BattleDpadCursor_SetPosition(P(w,0x34),B(w,0x114d));break;case 1:BattleDpadCursor_SetPosition(P(w,0x34),B((u8*)P(w,0)+B(w,0x114d),0x27));break;case 2:break;}}
+extern const u32 sBattleBagPageCursorBoxes[];void BattleDpadCursor_SetBoxes(void*,u32);void BattleDpadCursor_SetPosition(void*,u32);
+void BattleBagMenu_SetPageCursor(u8*w,int mode);
+void BattleBagMenu_SetPageCursor(u8*w,int mode){BattleDpadCursor_SetBoxes(P(w,0x34),sBattleBagPageCursorBoxes[mode]);switch(mode){case 0:BattleDpadCursor_SetPosition(P(w,0x34),B(w,0x114d));break;case 1:BattleDpadCursor_SetPosition(P(w,0x34),B((u8*)P(w,0)+B(w,0x114d),0x27));break;case 2:break;}}

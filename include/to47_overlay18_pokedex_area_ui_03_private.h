@@ -13,11 +13,11 @@ typedef struct Ov18AreaFlagsR3 {
     u8 toggle : 4;
 } Ov18AreaFlagsR3;
 
-u32 ov18_021F967C(u32 index);
-u8 ov18_021F9688(u32 index);
-void ov18_021F1FDC(void *p, int idx);
-void ov18_021F209C(void *p, u32 species, int index, int spriteIdx);
-void ov18_021F21FC(void *p, int idx, u32 resource);
-void ov18_021F2270(void *p);
+u32 PokedexApp_GetTypeIconCharFile(u32 index);
+u8 PokedexApp_GetTypeIconPalette(u32 index);
+void PokedexApp_CreateTypeIconSprites(void *p, int idx);
+void PokedexApp_UpdateTypeIcons(void *p, u32 species, int index, int spriteIdx);
+void PokedexApp_SetTypeIconGraphics(void *p, int idx, u32 resource);
+void PokedexApp_LoadLanguageIconResources(void *p);
 
 #endif

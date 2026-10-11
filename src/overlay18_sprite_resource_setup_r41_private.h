@@ -14,12 +14,12 @@ void SpriteTransfer_DeletePlttTransferTask(SpriteResource *resource);
 void sub_0200A740(SpriteResource *resource);
 int GF2DGfxResObj_GetResID(SpriteResource *resource);
 void DestroySingle2DGfxResObj(GF_2DGfxResMan *manager, SpriteResource *resource);
-int ov18_021F9688(void *value);
+int PokedexApp_GetTypeIconPalette(void *value);
 
-void ov18_021F922C(SpriteResource **resources, GF_2DGfxResMan **managers, enum HeapID heapId, NARC *narc, int charFileId, int plttFileId, int cellFileId, int animFileId, int plttNum, int charId, int plttId, int cellId, int animId);
-SpriteResource *ov18_021F92AC(GF_2DGfxResMan *manager, enum HeapID heapId, NARC *narc, int fileId, int plttNum, int id);
-void ov18_021F92DC(SpriteResource **resources, GF_2DGfxResMan **managers);
-void ov18_021F9310(SpriteResource **resources, GF_2DGfxResMan **managers, SpriteResourcesHeader *header, int priority);
-void ov18_021F9370(void *work);
+void PokedexEntryPopup_LoadSpriteResources(SpriteResource **resources, GF_2DGfxResMan **managers, enum HeapID heapId, NARC *narc, int charFileId, int plttFileId, int cellFileId, int animFileId, int plttNum, int charId, int plttId, int cellId, int animId);
+SpriteResource *PokedexEntryPopup_LoadPaletteResource(GF_2DGfxResMan *manager, enum HeapID heapId, NARC *narc, int fileId, int plttNum, int id);
+void PokedexEntryPopup_FreeSpriteResources(SpriteResource **resources, GF_2DGfxResMan **managers);
+void PokedexEntryPopup_MakeResourcesHeader(SpriteResource **resources, GF_2DGfxResMan **managers, SpriteResourcesHeader *header, int priority);
+void PokedexEntryPopup_CreateTypeIconSprites(void *work);
 
 #endif

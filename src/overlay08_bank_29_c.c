@@ -2,6 +2,6 @@
 
 #pragma force_active on
 
-void ov08_02223454(u8 *work) {
+void BattleBagMenu_RemovePageWindows(u8 *work) {
     WindowArray_Delete(*(void **)(work + 0x2C), work[0x30]);
 }

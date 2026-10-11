@@ -506,7 +506,7 @@ typedef struct BattlePartyMenuArgs {
     u8 filler_37;
 } BattlePartyMenuArgs;
 
-// Arguments of the battle bag (ov08_022225D4).
+// Arguments of the battle bag (BattleBagMenu_Create).
 typedef struct BattleBagMenuArgs {
     BattleSystem *battleSystem;
     PlayerProfile *playerProfile;
@@ -528,7 +528,7 @@ typedef struct BattleBagMenuArgs {
     u8 filler_27[13];
 } BattleBagMenuArgs;
 
-void ov08_022225D4(BattleBagMenuArgs *args);
+void BattleBagMenu_Create(BattleBagMenuArgs *args);
 
 // Task data of the command workers.
 typedef struct OpponentEncounterAnimWork {
@@ -4956,13 +4956,13 @@ void Task_PlayerSelectItem(SysTask *task, void *data) {
             work->bagMenu->targetSemiInvulnerable = work->targetSemiInvulnerable;
             work->bagMenu->targetSubstitute = work->targetSubstitute;
             work->bagMenu->embargoFlag = work->embargoFlag[work->battlerId];
-            ov08_022225D4(work->bagMenu);
+            BattleBagMenu_Create(work->bagMenu);
             work->state = 3;
         }
         break;
     case 2:
         work->bagMenu->key = work->key;
-        ov08_022225D4(work->bagMenu);
+        BattleBagMenu_Create(work->bagMenu);
         work->state++;
     case 3:
         if (work->bagMenu->done) {

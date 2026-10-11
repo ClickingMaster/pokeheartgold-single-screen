@@ -1,6 +1,6 @@
 #include "slop_r1_module_05_private.h"
 
-void ov18_021F95CC(SlopR1Module05Work *work) {
+void PokedexEntryPopup_CreatePokepic(SlopR1Module05Work *work) {
     PokepicTemplate template;
 
     GetPokemonSpriteCharAndPlttNarcIds(&template, work->mon, 2);

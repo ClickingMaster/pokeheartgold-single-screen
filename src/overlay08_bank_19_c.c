@@ -2,15 +2,15 @@
 
 #pragma force_active on
 
-void ov08_022213C8(Ov08WorkMode *work) {
+void BattlePartyMenu_ShowMoveIcons(Ov08WorkMode *work) {
     if (work->mode == 0) {
-        ov08_02221294(work);
+        BattlePartyMenu_ShowMoveTypeIcons(work);
     } else {
-        ov08_02221328(work);
+        BattlePartyMenu_ShowMoveContestTypeIcons(work);
     }
 }
 
-void ov08_022213E4(void *sprite, u32 anim) {
+void BattlePartyMenu_SetSpriteAnim(void *sprite, u32 anim) {
     if (anim != ManagedSprite_GetActiveAnim(sprite)) {
         ManagedSprite_SetAnimationFrame(sprite, 0);
         ManagedSprite_SetAnim(sprite, anim);

@@ -14,16 +14,16 @@ typedef struct Ov18MenuState {
     u8 raw[0x18a0];
 } Ov18MenuState;
 
-extern const TouchscreenHitbox ov18_021FB9A8[];
-extern const DpadMenuBox ov18_021FBB0C[];
-extern const GridCallbacks ov18_021FB658[];
-extern const u8 ov18_021FBD28[];
+extern const TouchscreenHitbox sSearchFormHitboxes[];
+extern const DpadMenuBox sSearchFormDpadBoxes[];
+extern const GridCallbacks sSearchFormGridCallbacks[];
+extern const u8 sSearchFormCursorAnims[];
 
-void ov18_021F11C0(Ov18MenuState *, int, int);
-void ov18_021F118C(Ov18MenuState *, int, int);
-void ov18_021F77C0(Ov18MenuState *, int);
-void ov18_021F7748(Ov18MenuState *);
-int ov18_021F7790(Ov18MenuState *);
-void ov18_021F7800(Ov18MenuState *, int, int);
+void PokedexApp_SetSpriteVisible(Ov18MenuState *, int, int);
+void PokedexApp_SetSpriteAnim(Ov18MenuState *, int, int);
+void PokedexApp_UpdateSearchFormCursor(Ov18MenuState *, int);
+void PokedexApp_CreateSearchFormGrid(Ov18MenuState *);
+int PokedexApp_HandleSearchFormInput(Ov18MenuState *);
+void PokedexApp_OnSearchFormGridMove(Ov18MenuState *, int, int);
 
 #endif

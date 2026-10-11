@@ -7,7 +7,7 @@ extern int GetMonData(void *, int, void *);
 extern void BufferIntegerAsString(void *, int, int, int, int, int);
 extern void ReadMsgDataIntoString(void *, int, void *);
 extern void Heap_Free(void *);
-void ov08_02220224(void *);
+void BattlePartyMenu_BufferItemResultMessage(void *);
 
 #define NICK_MSG(MSG) do { \
     string = NewString_ReadMsgData(work->msgData, MSG); \
@@ -16,7 +16,7 @@ void ov08_02220224(void *);
     String_Delete(string); \
 } while (0)
 
-void ov08_02220224(void *arg) {
+void BattlePartyMenu_BufferItemResultMessage(void *arg) {
     Ov08R2W11Work *work = arg;
     u8 *root = work->root;
     void *mon;

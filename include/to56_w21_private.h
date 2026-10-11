@@ -21,28 +21,28 @@ typedef struct Ov08Entry {
     u8 pad28[0x28];
 } Ov08Entry;
 
-extern BOOL ov08_0221DAE4(void *work);
-extern BOOL ov08_0221DB04(void *work);
-extern void ov08_02220C5C(void *work, int state);
-extern void ov08_0221DD28(void *work);
-extern void ov08_0221DC3C(void *work, int state);
-extern void ov08_0221DD70(void *work, int state);
-extern void ov08_0222171C(void *work, int state);
-extern void ov08_022221CC(void *work, int state);
-extern void ov08_02222524(void *work, int state);
+extern BOOL BattlePartyMenu_IsDoubleBattle(void *work);
+extern BOOL BattlePartyMenu_IsMultiBattle(void *work);
+extern void BattlePartyMenu_ShowPageSprites(void *work, int state);
+extern void BattlePartyMenu_RemovePageWindows(void *work);
+extern void BattlePartyMenu_AddPageWindows(void *work, int state);
+extern void BattlePartyMenu_PrintPageText(void *work, int state);
+extern void BattlePartyMenu_SetPageCursor(void *work, int state);
+extern void BattlePartyMenu_DrawPageButtons(void *work, int state);
+extern void BattlePartyMenu_LoadPagePalette(void *work, int state);
 extern BOOL NNS_G2dGetUnpackedScreenData(void *file, NNSG2dScreenData **screenData);
 extern void FillBgTilemapRect(BgConfig *, int, int, int, int, int, int, int);
-extern const u8 _02224E2C[6];
-extern const u32 ov08_02224F80[];
+extern const u8 sBattlePartyMultiBattleOrder[6];
+extern const u32 sBattlePartyPageScreenFiles[];
 
-int ov08_0221D5DC(u8 *work, int index);
-u8 ov08_0221D614(u8 *work, int index, int delta);
-void ov08_0221D6CC(u8 *work, int state);
-void ov08_0221D74C(u8 *work, int fill, u16 x, int y);
+int BattlePartyMenu_GetSlotType(u8 *work, int index);
+u8 BattlePartyMenu_FindNextMon(u8 *work, int index, int delta);
+void BattlePartyMenu_DrawExpBar(u8 *work, int state);
+void BattlePartyMenu_SetExpBarTile(u8 *work, int fill, u16 x, int y);
 void ov08_0221D77C(u8 *work, int fill, u8 row);
 void ov08_0221D81C(u8 *work);
-void ov08_0221D840(u8 *work, int state);
-void ov08_0221D8B0(u8 *work, int state);
-u8 ov08_0221DAC4(u8 *work);
+void BattlePartyMenu_ChangePage(u8 *work, int state);
+void BattlePartyMenu_LoadPageTilemaps(u8 *work, int state);
+u8 BattlePartyMenu_IsSelectedMonEgg(u8 *work);
 
 #endif

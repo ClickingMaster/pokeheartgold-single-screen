@@ -5,7 +5,7 @@
 #define U16(p, o) (*(u16 *)((u8 *)(p) + (o)))
 #define U8(p, o)  (*(u8 *)((u8 *)(p) + (o)))
 
-void ov15_021F9984(void) {
-    Ov15Banks banks = ov15_02200618;
+void BagApp_SetGraphicsBanks(void) {
+    Ov15Banks banks = sBagGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }

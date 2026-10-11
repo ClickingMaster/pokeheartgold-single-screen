@@ -12,16 +12,16 @@ s32 ov15_021FD3AC(void *work) {
     return 0x1a;
 }
 
-s32 ov15_021FD3C0(void *work) {
-    ov15_021FED3C(work);
-    ov15_021FD788(work, 0);
-    ov15_021FFF24(work);
+s32 BagApp_ItemAction_ChooseForBerryPatch(void *work) {
+    BagApp_CloseItemMenuWindows(work);
+    BagApp_ShowCancelButton(work, 0);
+    BagApp_HideCursor(work);
     sub_020880CC(1, 6);
     U16(PTR(work, 0x234), 0x68) = 4;
     return 0x25;
 }
 
-BOOL ov15_021FD3F0(u32 pocket, u32 item) {
+BOOL BagApp_IsBerryOrMulch(u32 pocket, u32 item) {
     if (pocket == 4 || (item >= 0x5f && item < 0x63)) {
         return TRUE;
     }

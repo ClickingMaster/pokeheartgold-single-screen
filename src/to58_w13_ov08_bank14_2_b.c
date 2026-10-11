@@ -2,11 +2,11 @@
 extern void *String_New(int, int);
 extern void BufferAbilityName(void *, int, int);
 extern void BufferItemName(void *, int, int);
-void ov08_0221E120(void *, int, int);
-void ov08_0221E1A8(void *, int, int);
-void ov08_0221E244(void *, int, int, int, u16, u16, u32);
+void BattlePartyMenu_PrintAbilityName(void *, int, int);
+void BattlePartyMenu_PrintHeldItemName(void *, int, int);
+void BattlePartyMenu_PrintMoveName(void *, int, int, int, u16, u16, u32);
 
-void ov08_0221E120(void *arg, int window, int mon) {
+void BattlePartyMenu_PrintAbilityName(void *arg, int window, int mon) {
     Ov08R2W11Work *work = arg;
     void *string = String_New(16, *(int *)((u8 *)work->root + 12));
     void *message = NewString_ReadMsgData(work->msgData, 8);
@@ -18,7 +18,7 @@ void ov08_0221E120(void *arg, int window, int mon) {
     ScheduleWindowCopyToVram((Window *)((u8 *)work->windowArray + window * 16));
 }
 
-void ov08_0221E1A8(void *arg, int window, int mon) {
+void BattlePartyMenu_PrintHeldItemName(void *arg, int window, int mon) {
     Ov08R2W11Work *work = arg;
     u8 *entry = (u8 *)work + 4 + mon * 0x50;
     void *string;
@@ -37,7 +37,7 @@ void ov08_0221E1A8(void *arg, int window, int mon) {
     ScheduleWindowCopyToVram((Window *)((u8 *)work->windowArray + window * 16));
 }
 
-void ov08_0221E244(void *arg, int move, int window, int msgNo, u16 font, u16 y, u32 color) {
+void BattlePartyMenu_PrintMoveName(void *arg, int move, int window, int msgNo, u16 font, u16 y, u32 color) {
     Ov08R2W11Work *work = arg;
     Window *windows = work->windowArray;
     int offset = window << 4;

@@ -4,9 +4,9 @@
 typedef struct { u8 prefix[0x2f0]; BgConfig *bg; u8 gap[0x40C0 - 0x2f4]; u32 bits; } Inner;
 typedef struct { u8 prefix[0x34]; Inner *inner; } Work;
 u16 *BgCellManager_GetCellTilemap(BgConfig *, int);
-void ov14_021E7D9C(Work *w, u32 index);
-// @fn ov14_021E7D9C
-void ov14_021E7D9C(Work *w, u32 index) {
+void PCBox_DrawMarkingMenuEntry(Work *w, u32 index);
+// @fn PCBox_DrawMarkingMenuEntry
+void PCBox_DrawMarkingMenuEntry(Work *w, u32 index) {
     u16 *map = BgCellManager_GetCellTilemap(w->inner->bg, 2);
     u8 row = (index / 2) * 3 + 2;
     u8 col = (index % 2) * 4 + 3;

@@ -1,5 +1,5 @@
 #include "to45_overlay14_r20_2_private.h"
-u32 ov14_021E9F20(void *p) {
+u32 PCBox_UpdateCursorSlide(void *p) {
     s16 pos[2];
     Ov14Motion *motion = PTR_AT(PTR_AT(p, 0x34), 0xc);
 

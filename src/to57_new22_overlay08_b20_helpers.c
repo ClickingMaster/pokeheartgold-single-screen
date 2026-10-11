@@ -1,12 +1,12 @@
 #include "to57_new22_overlay08_b20_private.h"
-void ov08_02222524(To57New22Work *work, int state) {
+void BattlePartyMenu_LoadPagePalette(To57New22Work *work, int state) {
     if (state == 3) {
         PaletteData_LoadPalette(work->palette, work->palette1, (PaletteBufferId)1, 0xC0, 0x20);
     } else {
         PaletteData_LoadPalette(work->palette, work->palette0, (PaletteBufferId)1, 0xC0, 0x20);
     }
 }
-u8 ov08_02222564(To57New22Entry50 *entries) {
+u8 BattlePartyMenu_HasMultipleNonEggMons(To57New22Entry50 *entries) {
     u16 i;
     u16 count = 0;
     for (i = 0; i < 6; i++) {
@@ -20,10 +20,10 @@ u8 ov08_02222564(To57New22Entry50 *entries) {
         return (u8)FALSE;
     }
 }
-void ov08_022225A4(u8 *work) {
-    if (ov08_0221D5DC(work, (*(u8 **)work)[0x11]) == 2) {
-        ov08_02221E6C(work, (*(u8 **)work)[0x11], 0, 1);
+void BattlePartyMenu_RedrawSelectedMonButton(u8 *work) {
+    if (BattlePartyMenu_GetSlotType(work, (*(u8 **)work)[0x11]) == 2) {
+        BattlePartyMenu_DrawButton(work, (*(u8 **)work)[0x11], 0, 1);
     } else {
-        ov08_02221E6C(work, (*(u8 **)work)[0x11], 0, 0);
+        BattlePartyMenu_DrawButton(work, (*(u8 **)work)[0x11], 0, 0);
     }
 }

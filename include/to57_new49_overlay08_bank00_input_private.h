@@ -39,23 +39,23 @@ typedef struct Ov08N49Work {
     u8 field208E;
 } Ov08N49Work;
 
-extern const u8 ov08_02224F3C[];
-extern const u8 ov08_02224E44[];
-extern const u8 ov08_02224E94[];
-int ov08_0221D5D0(void *, const void *);
+extern const u8 sBattlePartyLearnMoveHitboxes[];
+extern const u8 sBattlePartyForgetMoveHitboxes[];
+extern const u8 sBattlePartyRestorePPHitboxes[];
+int BattlePartyMenu_CheckTouchHitbox(void *, const void *);
 int BattleDpadCursor_HandleInput(void *);
-void ov08_022217C8(void *);
-void ov08_022220AC(void *, int);
+void BattlePartyMenu_DeactivateCursor(void *);
+void BattlePartyMenu_StartButtonAnim(void *, int);
 void PlaySE(int);
-int ov08_0221DB54(void *);
-void ov08_0221F220(void *);
-void ov08_0221DB7C(void *);
-void ov08_0221DBB4(void *);
+int BattlePartyMenu_IsSelectedMoveHM(void *);
+void BattlePartyMenu_PrintHMCantBeForgotten(void *);
+void BattlePartyMenu_ClearBattleMoveInfo(void *);
+void BattlePartyMenu_ClearContestMoveInfo(void *);
 int BattleSystem_RecoverStatus(void *, int, int, int, int);
 void ReadMsgDataIntoString(void *, int, void *);
-void ov08_022201C0(void *);
+void BattlePartyMenu_ShowMessage(void *);
 
-int ov08_0221C604(Ov08N49Work *);
-int ov08_0221C6F8(Ov08N49Work *);
-int ov08_0221C814(Ov08N49Work *);
+int BattlePartyMenu_HandleLearnMoveInput(Ov08N49Work *);
+int BattlePartyMenu_HandleForgetMoveInput(Ov08N49Work *);
+int BattlePartyMenu_HandleRestorePPInput(Ov08N49Work *);
 #endif

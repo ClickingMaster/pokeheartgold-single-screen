@@ -1,34 +1,34 @@
 #include "overlay18_pokedex_area_ui_private.h"
 
-void ov18_021F1D58(void *p);
-void ov18_021F1D98(void *p, int idx);
-void ov18_021F1DE4(void *p, int species, int idx, int spriteIdx);
-void ov18_021F1F74(void *p);
-void ov18_021F1FDC(void *p, int idx);
-void ov18_021F2308(void *p);
-void ov18_021F2348(void *p);
-void ov18_021F23E4(void *p);
-void ov18_021F2424(void *p, int idx, const ManagedSpriteTemplate *tmpl);
-void ov18_021F2468(void *p);
-void ov18_021F24E0(void *p, int a1, int idx);
-void ov18_021F2530(void *p, u16 species, int a2);
-void ov18_021F2270(void *p);
-void ov18_021F1CB4(void *p);
-void ov18_021F1E70(void *p);
-void ov18_021F209C(void *p, int a1, int a2, int a3);
+void PokedexApp_UnloadFootprintResources(void *p);
+void PokedexApp_CreateFootprintSprite(void *p, int idx);
+void PokedexApp_UpdateFootprintSprite(void *p, int species, int idx, int spriteIdx);
+void PokedexApp_UnloadTypeIconResources(void *p);
+void PokedexApp_CreateTypeIconSprites(void *p, int idx);
+void PokedexApp_UnloadLanguageIconResources(void *p);
+void PokedexApp_LoadLanguageIconResourcesSub(void *p);
+void PokedexApp_UnloadLanguageIconResourcesSub(void *p);
+void PokedexApp_CreateSpriteInSlot(void *p, int idx, const ManagedSpriteTemplate *tmpl);
+void PokedexApp_CreateLanguageIconSprites(void *p);
+void PokedexApp_UpdateCurrentLanguageIcon(void *p, int a1, int idx);
+void PokedexApp_UpdateLanguageIcons(void *p, u16 species, int a2);
+void PokedexApp_LoadLanguageIconResources(void *p);
+void PokedexApp_LoadFootprintResources(void *p);
+void PokedexApp_LoadTypeIconResources(void *p);
+void PokedexApp_UpdateTypeIcons(void *p, int a1, int a2, int a3);
 void ov18_021F2648(void *p);
 void ov18_021F26E4(void *p);
 void ov18_021F2724(void *p);
 void ov18_021F281C(void *p);
-void ov18_021F2880(void *p);
-void ov18_021F2964(void *p);
+void PokedexApp_SetupListSprites(void *p);
+void PokedexApp_LoadListSpriteResources(void *p);
 void ov18_021F299C(void *p);
-void ov18_021F2A2C(void *p, int idx, int draw);
-void ov18_021F2A84(void *p, int idx, int draw);
+void PokedexApp_SetSpritePairVisibleIfInternationalView(void *p, int idx, int draw);
+void PokedexApp_SetSpriteVisibleIfInternationalView(void *p, int idx, int draw);
 void ov18_021F2AC0(void *p, int idx);
-BOOL ov18_021F2AF8(void *p, u32 x, u32 y);
-void ov18_021F2B3C(void *p, int idx, s16 dx);
-void ov18_021F2B70(void *p, int idx, s16 x);
+BOOL PokedexApp_IsTouchOnSprite0(void *p, u32 x, u32 y);
+void PokedexApp_MoveSpriteX(void *p, int idx, s16 dx);
+void PokedexApp_SetSpriteX(void *p, int idx, s16 x);
 
 void ov18_021F2648(void *p) {
     SpriteSystem_LoadCharResObjFromOpenNarc(*(SpriteSystem **)((u8 *)p + 0x668), *(SpriteManager **)((u8 *)p + 0x66C), *(NARC **)((u8 *)p + 0x854), 12, 1, 1, 0xC590);
@@ -64,44 +64,44 @@ void ov18_021F281C(void *p) {
     SpriteManager_UnloadAnimObjById(*(SpriteManager **)((u8 *)p + 0x66C), 0xC554);
 }
 
-void ov18_021F2880(void *p) {
+void PokedexApp_SetupListSprites(void *p) {
     u16 a;
     int b;
-    ov18_021F2964(p);
-    ov18_021F1424(p, 24);
-    ov18_021F1620(p, 24);
+    PokedexApp_LoadListSpriteResources(p);
+    PokedexApp_CreateMonIconSprites(p, 24);
+    PokedexApp_DrawListIconGrid(p, 24);
     ov18_021F299C(p);
     if (*(int *)((u8 *)p + 0x1860) == 0) {
         ManagedSprite_SetDrawFlag(*(ManagedSprite **)((u8 *)p + 0x670), FALSE);
     } else {
         ov18_021F2AC0(p, 0);
     }
-    ov18_021F2BB0(p, 5);
-    ov18_021F2C10(p, 2, 1);
-    ov18_021F2C5C(p, 1, 1);
-    ov18_021F2E80(p, 1, 1);
-    a = ov18_021F8838(p);
-    b = ov18_021F8824(p);
-    ov18_021F1A30(p, 11);
-    ov18_021F1CAC(p, a, 11, 10);
-    ov18_021F1FDC(p, 14);
-    ov18_021F209C(p, a, b, 14);
-    ov18_021F1D98(p, 13);
-    ov18_021F1DE4(p, a, b, 13);
-    ov18_021F2EC8(p, b, 9);
-    ov18_021F2468(p);
-    ov18_021F2530(p, a, 18);
-    ov18_021F24E0(p, a, 8);
+    PokedexApp_MoveSpriteToListCursor(p, 5);
+    PokedexApp_UpdateListPageArrows(p, 2, 1);
+    PokedexApp_UpdateListScrollbarSize(p, 1, 1);
+    PokedexApp_SyncListScrollbarToPage(p, 1, 1);
+    a = PokedexApp_GetCursorSpecies(p);
+    b = PokedexApp_GetListCursorIndex(p);
+    PokedexApp_CreateMonPicSprites(p, 11);
+    PokedexApp_ShowMonPic(p, a, 11, 10);
+    PokedexApp_CreateTypeIconSprites(p, 14);
+    PokedexApp_UpdateTypeIcons(p, a, b, 14);
+    PokedexApp_CreateFootprintSprite(p, 13);
+    PokedexApp_UpdateFootprintSprite(p, a, b, 13);
+    PokedexApp_UpdateCaughtMarkSprite(p, b, 9);
+    PokedexApp_CreateLanguageIconSprites(p);
+    PokedexApp_UpdateLanguageIcons(p, a, 18);
+    PokedexApp_UpdateCurrentLanguageIcon(p, a, 8);
     ManagedSprite_SetDrawFlag(*(ManagedSprite **)((u8 *)p + 0x690), FALSE);
 }
 
-void ov18_021F2964(void *p) {
-    ov18_021F1324(p, 60);
+void PokedexApp_LoadListSpriteResources(void *p) {
+    PokedexApp_LoadMonIconResources(p, 60);
     ov18_021F2648(p);
-    ov18_021F2270(p);
-    ov18_021F17FC(p);
-    ov18_021F1CB4(p);
-    ov18_021F1E70(p);
+    PokedexApp_LoadLanguageIconResources(p);
+    PokedexApp_LoadMonPicResources(p);
+    PokedexApp_LoadFootprintResources(p);
+    PokedexApp_LoadTypeIconResources(p);
     ov18_021F2724(p);
-    ov18_021F2348(p);
+    PokedexApp_LoadLanguageIconResourcesSub(p);
 }

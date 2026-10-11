@@ -10,16 +10,16 @@
 #pragma require_prototypes off
 
 extern const u8 ov18_021FA35A[];
-extern const u8 ov18_021FA4B8[];
+extern const u8 sAreaMarkerSpriteTemplate[];
 
-void ov18_021F11C0(void *, u32, u32);
-void *ov18_021F11EC(void *, const void *);
-void ov18_021F1160(void *, u32, u32);
-void ov18_021F1294(void *, u32, s16, s16, u32);
-void ov18_021F61DC(void *, u32, s8, const void *, u32);
-void ov18_021F619C(void *, s8, s8, u32);
-void ov18_021F65EC(void *);
-void ov18_021F4134(void *);
+void PokedexApp_SetSpriteVisible(void *, u32, u32);
+void *PokedexApp_NewSprite(void *, const void *);
+void PokedexApp_SetSpriteTranslucent(void *, u32, u32);
+void PokedexApp_SetSpritePos(void *, u32, s16, s16, u32);
+void PokedexApp_SetScrollbarSizeAnim(void *, u32, s8, const void *, u32);
+void PokedexApp_UpdateScrollArrows(void *, s8, s8, u32);
+void PokedexApp_SyncAreaScrollbar(void *);
+void PokedexApp_UpdatePlayerMarkerVisibility(void *);
 u32 ov18_021E8B18(u32);
 
 #endif

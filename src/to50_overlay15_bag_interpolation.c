@@ -1,5 +1,5 @@
 #include "to50_overlay15_bag_interpolation_private.h"
-void ov15_021FDAF4(void *work, s32 next, s32 duration) {
+void BagApp_StartCameraTween(void *work, s32 next, s32 duration) {
     if (U16(work, 0x128) == U16(work, 0x12A)) {
         U32(work, 0x11C) = U32(work, 0x120);
         U32(work, 0x120) = next;
@@ -9,8 +9,8 @@ void ov15_021FDAF4(void *work, s32 next, s32 duration) {
         U32(work, 0x124) = next;
     }
 }
-void ov15_021FDB2C(void *work, s32 index) {
-    const u8 *table = ov15_02200790 + index * 0x90;
+void BagApp_UpdateCameraTween(void *work, s32 index) {
+    const u8 *table = sCameraTweenKeys + index * 0x90;
     u32 oldValue;
     u32 newValue;
     s32 delta;

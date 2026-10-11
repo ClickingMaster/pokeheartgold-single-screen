@@ -1,35 +1,35 @@
 #include "../include/to57_overlay08_bank14_private.h"
 #pragma force_active on
 
-void ov08_0221DD70(void *work, int mode) {
+void BattlePartyMenu_PrintPageText(void *work, int mode) {
     switch (mode) {
     case 0:
-        ov08_0221F4A4(work);
+        BattlePartyMenu_PrintPartyListPage(work);
         break;
     case 1:
-        ov08_0221F5D0(work);
+        BattlePartyMenu_PrintMonMenuPage(work);
         break;
     case 2:
-        ov08_0221F900(work);
+        BattlePartyMenu_PrintSummaryPage(work);
         break;
     case 3:
-        ov08_0221F7C0(work);
+        BattlePartyMenu_PrintCheckMovesPage(work);
         break;
     case 4:
-        ov08_0221FB18(work);
+        BattlePartyMenu_PrintMoveDetailPage(work);
         break;
     case 5:
-        ov08_0221FF70(work);
+        BattlePartyMenu_PrintRestorePPPage(work);
         break;
     case 6:
     case 8:
-        ov08_0221FC7C(work);
+        BattlePartyMenu_PrintLearnMovePage(work);
         break;
     case 7:
-        ov08_0221FDA4(work);
+        BattlePartyMenu_PrintForgetMovePage(work);
         break;
     case 9:
-        ov08_02220084(work);
+        BattlePartyMenu_PrintContestForgetMovePage(work);
         break;
     }
 }

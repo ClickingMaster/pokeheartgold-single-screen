@@ -4,7 +4,7 @@ void ov18_021F94BC(SlopR1Module05Work *work) {
     SimpleSpriteTemplate template;
     SpriteResourcesHeader header;
 
-    ov18_021F9310(work->objs[0].res, work->resMan, &header, 1);
+    PokedexEntryPopup_MakeResourcesHeader(work->objs[0].res, work->resMan, &header, 1);
     template.spriteList = work->spriteList;
     template.header = &header;
     template.whichScreen = NNS_G2D_VRAM_TYPE_2DMAIN;

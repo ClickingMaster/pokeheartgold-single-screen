@@ -39,7 +39,7 @@ typedef struct {
 } BoxMenuEntry;
 
 extern const u8 ov14_021F8080[];
-extern const u8 ov14_021F84B4[];
+extern const u8 sPCBoxWindowTemplates[];
 
 /* ---- heap / string / message ---- */
 extern void Heap_Free(void *);
@@ -119,12 +119,12 @@ extern u32 Pokedex_ConvertToCurrentDexNo(u32, u32);
 /* ---- sprites / overlay 14 neighbours ---- */
 extern void ManagedSprite_SetPositionXY(void *, s32, s32);
 extern void ManagedSprite_GetPositionXY(void *, s16 *, s16 *);
-extern void ov14_021F2C1C(void *, u32, void *, u32);
-extern void ov14_021F2A18(void *, u32, u32);
-extern void ov14_021F2A60(void *, u32, u32);
-extern void ov14_021F29E4(void *, u32, u32);
+extern void PCBox_LoadSpriteCharsMain(void *, u32, void *, u32);
+extern void PCBox_SetSpriteVisible(void *, u32, u32);
+extern void PCBox_SetSpritePriority(void *, u32, u32);
+extern void PCBox_SetSpriteAnim(void *, u32, u32);
 extern void ov14_021F46F4(void *);
-extern void *ov14_021F6628(void);
+extern void *PCBox_LoadBoxMessages(void);
 extern void BgCellManager_GetCellSize(void *, u32, u16 *, u16 *);
 extern void BgCellManager_SetCellPalette(void *, u32, u32, u32, u32, u32, u32);
 

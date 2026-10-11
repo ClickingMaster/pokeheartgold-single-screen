@@ -5,7 +5,7 @@
 #define U16(p, o) (*(u16 *)((u8 *)(p) + (o)))
 #define U8(p, o)  (*(u8 *)((u8 *)(p) + (o)))
 
-s32 ov15_021FBD28(s32 current, s32 maximum, s32 delta) {
+s32 BagApp_StepQuantity(s32 current, s32 maximum, s32 delta) {
     if (delta > 0) {
         if (current == maximum) {
             return 1;

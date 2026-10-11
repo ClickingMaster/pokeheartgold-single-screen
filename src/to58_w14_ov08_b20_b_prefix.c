@@ -1,7 +1,7 @@
 #include "global.h"
 
-void *ov08_02221C20(u8 *work, int type, int row, int alternate);
-void *ov08_02221C20(u8 *work, int type, int row, int alternate) {
+void *BattlePartyMenu_GetButtonTilemap(u8 *work, int type, int row, int alternate);
+void *BattlePartyMenu_GetButtonTilemap(u8 *work, int type, int row, int alternate) {
     switch (type) {
     case 0: case 1: case 2: case 3: case 4: case 5:
         if (alternate == 0) return work + 0x1EC + row * 0xC0;

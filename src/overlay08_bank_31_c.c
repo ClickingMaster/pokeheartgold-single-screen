@@ -2,8 +2,8 @@
 
 #pragma force_active on
 
-void ov08_022239B4(void *work) {
-    ov08_0222377C(work);
-    ov08_022238F4(work);
-    ov08_022237C4(work);
+void BattleBagMenu_PrintItemListPage(void *work) {
+    BattleBagMenu_PrintItemList(work);
+    BattleBagMenu_PrintPocketName(work);
+    BattleBagMenu_PrintPageNumber(work);
 }

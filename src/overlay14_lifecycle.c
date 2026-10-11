@@ -21,7 +21,7 @@ BOOL PCBox_Init(OverlayManager *manager, int *state) {
 BOOL PCBox_Main(OverlayManager *manager, int *state) {
     PCBoxWork *work = OverlayManager_GetData(manager);
 
-    if (ov14_021EAF8C(work, state) == 0) {
+    if (PCBox_RunStateMachine(work, state) == 0) {
         return TRUE;
     }
     return FALSE;
@@ -36,14 +36,14 @@ BOOL PCBox_Exit(OverlayManager *manager, int *state) {
     return TRUE;
 }
 
-void ov14_021E59AC(void *task, PCBoxWork *work) {
+void PCBox_VBlankCallback(void *task, PCBoxWork *work) {
     if (work->inner->callback != NULL && work->inner->callback(work) == 0) {
         work->inner->callback = NULL;
     }
     ov14_021E5A14(work);
     PaletteData_PushTransparentBuffers(work->inner->palette);
     DoScheduledBgGpuUpdates(work->inner->bgConfig);
-    ov14_021F29C4(work->inner);
+    PCBox_TickSprites(work->inner);
     if (work->inner->disableSpriteDraw == 0) {
         SpriteSystem_DrawSprites(((void **)work->inner)[0xBE]);
         SpriteSystem_TransferOam();
@@ -57,5 +57,5 @@ void ov14_021E5A14(PCBoxWork *work) {
         return;
     }
     BgCellManager_UpdateCellMove(work->inner->spriteSystem, 0x10);
-    ov14_021F3BC0(work->inner);
+    PCBox_UpdateInfoItemIconPosition(work->inner);
 }

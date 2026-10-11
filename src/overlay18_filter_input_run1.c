@@ -8,7 +8,7 @@ typedef struct Ov18Flags5 {
     u8 : 3;
 } Ov18Flags5;
 
-int ov18_021F7B94(void *work, int *touched) {
+int PokedexApp_HandleEntryTabTouch(void *work, int *touched) {
     int hit;
     u32 coords[2];
 
@@ -32,8 +32,8 @@ int ov18_021F7B94(void *work, int *touched) {
     return -1;
 }
 
-int ov18_021F7C14(void *work, int *touched) {
-    int ret = ov18_021F7B94(work, touched);
+int PokedexApp_HandleAreaInput(void *work, int *touched) {
+    int ret = PokedexApp_HandleEntryTabTouch(work, touched);
     if (ret != -1) {
         return ret;
     }

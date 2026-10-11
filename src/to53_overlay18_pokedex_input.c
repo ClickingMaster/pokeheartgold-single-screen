@@ -41,7 +41,7 @@ int ov18_021F6B00(PokedexAppData *pokedexApp) {
     return -1;
 }
 
-int ov18_021F6BBC(PokedexAppData *pokedexApp, int mode) {
+int PokedexApp_HandleListInput(PokedexAppData *pokedexApp, int mode) {
     u32 x;
     u32 y;
     u32 input;
@@ -112,7 +112,7 @@ int ov18_021F6BBC(PokedexAppData *pokedexApp, int mode) {
             PlaySE(0x8E8);
             return 0;
         }
-        if (pokedexApp->unk_1859 + 1 <= ov18_021F8950(pokedexApp, mode)) {
+        if (pokedexApp->unk_1859 + 1 <= PokedexApp_GetLastListPage(pokedexApp, mode)) {
             pokedexApp->unk_185A = 0;
             return 11;
         }

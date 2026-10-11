@@ -1,6 +1,6 @@
 #include "overlay14_background_setup_private.h"
 
-void ov14_021E5A70(void *p) {
+void PCBox_InitBgLayers(void *p) {
     R11GraphicsModes modes;
     R11BgTemplate bg0;
     R11BgTemplate bg1;
@@ -44,7 +44,7 @@ void ov14_021E5A70(void *p) {
     BG_ClearCharDataRange(6, 0x20, 0, 0xa);
 }
 
-void ov14_021E5C00(void *p) {
+void PCBox_FreeBgLayers(void *p) {
     FreeBgTilemapBuffer(PTR_AT(PTR_AT(p, 0x34), 0x14), 6);
     FreeBgTilemapBuffer(PTR_AT(PTR_AT(p, 0x34), 0x14), 5);
     FreeBgTilemapBuffer(PTR_AT(PTR_AT(p, 0x34), 0x14), 4);
@@ -55,7 +55,7 @@ void ov14_021E5C00(void *p) {
     Heap_Free(PTR_AT(PTR_AT(p, 0x34), 0x14));
 }
 
-void ov14_021E5C54(void *p) {
+void PCBox_LoadBgGraphics(void *p) {
     GfGfxLoader_LoadCharData(0x13, 0xe, PTR_AT(PTR_AT(p, 0x34), 0x14), 0, 0, 0, 1, 0xa);
     GfGfxLoader_LoadCharData(0x13, 0xe, PTR_AT(PTR_AT(p, 0x34), 0x14), 1, 0, 0, 1, 0xa);
     GfGfxLoader_LoadCharData(0x13, 3, PTR_AT(PTR_AT(p, 0x34), 0x14), 2, 0, 0, 1, 0xa);
@@ -69,21 +69,21 @@ void ov14_021E5C54(void *p) {
     GfGfxLoader_LoadCharData(0x13, 6, PTR_AT(PTR_AT(p, 0x34), 0x14), 6, 0, 0, 1, 0xa);
 }
 
-void ov14_021E5D78(void *p) {
+void PCBox_CreateMsgResources(void *p) {
     PTR_AT(PTR_AT(p, 0x34), 0x20) = NewMsgDataFromNarc(0, 0x1b, 0x18, 0xa);
     PTR_AT(PTR_AT(p, 0x34), 0x1c) = MessagePrinter_New(1, 2, 0, 0xa);
     PTR_AT(PTR_AT(p, 0x34), 0x24) = MessageFormat_New(0xa);
     PTR_AT(PTR_AT(p, 0x34), 0x28) = String_New(0x400, 0xa);
 }
 
-void ov14_021E5DB8(void *p) {
+void PCBox_DestroyMsgResources(void *p) {
     String_Delete(PTR_AT(PTR_AT(p, 0x34), 0x28));
     MessageFormat_Delete(PTR_AT(PTR_AT(p, 0x34), 0x24));
     MessagePrinter_Delete(PTR_AT(PTR_AT(p, 0x34), 0x1c));
     DestroyMsgData(PTR_AT(PTR_AT(p, 0x34), 0x20));
 }
 
-void ov14_021E5DE0(void *p) {
+void PCBox_LoadWindowGraphics(void *p) {
     void *work = PTR_AT(p, 0x34);
     GfGfxLoader_LoadCharData(0x13, 0x40, PTR_AT(work, 0x14), 0, 0x3e8, 0x300, 1, 0xa);
     GfGfxLoader_LoadCharData(0x13, 0x40, PTR_AT(work, 0x14), 1, 0x3e8, 0x300, 1, 0xa);
@@ -93,7 +93,7 @@ void ov14_021E5DE0(void *p) {
     LoadFontPal0(4, 0x1e0, 0xa);
 }
 
-void ov14_021E5E74(void *p) {
+void PCBox_CreatePaletteData(void *p) {
     void *palette = PaletteData_Init(0xa);
     PTR_AT(PTR_AT(p, 0x34), 0x18) = palette;
     PaletteData_AllocBuffers(PTR_AT(PTR_AT(p, 0x34), 0x18), 0, 0x200, 0xa);

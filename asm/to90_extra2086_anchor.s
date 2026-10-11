@@ -1,10 +1,10 @@
-	.public ov08_0221BE20
+	.public BattlePartyMenu_Create
 	.public _0221BE2E
 	.public _0221BE88
 	.public _0221BE8C
 	.public _0221BE90
 	.public _0221BE94
-	.public ov08_0221BE98
+	.public BattlePartyMenu_Task
 	.public _0221BEA6
 	.public _0221BEB2
 	.public _0221BEE8
@@ -38,7 +38,7 @@
 	.public _0221C03C
 	.public _0221C040
 	.public _0221C044
-	.public ov08_0221C048
+	.public BattlePartyMenu_Setup
 	.public _0221C068
 	.public _0221C06C
 	.public _0221C0EC
@@ -47,14 +47,14 @@
 	.public _0221C140
 	.public _0221C144
 	.public _0221C148
-	.public ov08_0221C14C
+	.public BattlePartyMenu_HandlePartyListInput
 	.public _0221C162
 	.public _0221C18E
 	.public _0221C1B0
 	.public _0221C1BA
 	.public _0221C1C0
 	.public _0221C1C4
-	.public ov08_0221C1C8
+	.public BattlePartyMenu_TryUseItemOnMon
 	.public _0221C1DA
 	.public _0221C1E4
 	.public _0221C200
@@ -66,7 +66,7 @@
 	.public _0221C30C
 	.public _0221C310
 	.public _0221C314
-	.public ov08_0221C318
+	.public BattlePartyMenu_HandleMonMenuInput
 	.public _0221C330
 	.public _0221C338
 	.public _0221C354
@@ -76,7 +76,7 @@
 	.public _0221C3BA
 	.public _0221C3C0
 	.public _0221C3C4
-	.public ov08_0221C3C8
+	.public BattlePartyMenu_HandleSummaryInput
 	.public _0221C3E0
 	.public _0221C3E8
 	.public _0221C416
@@ -86,7 +86,7 @@
 	.public _0221C47C
 	.public _0221C480
 	.public _0221C484
-	.public ov08_0221C488
+	.public BattlePartyMenu_HandleCheckMovesInput
 	.public _0221C4A2
 	.public _0221C4B2
 	.public _0221C4EA
@@ -97,7 +97,7 @@
 	.public _0221C580
 	.public _0221C584
 	.public _0221C588
-	.public ov08_0221C58C
+	.public BattlePartyMenu_HandleMoveDetailInput
 	.public _0221C5A6
 	.public _0221C5B0
 	.public _0221C5CE
@@ -105,7 +105,7 @@
 	.public _0221C5F6
 	.public _0221C5FC
 	.public _0221C600
-	.public ov08_0221C604
+	.public BattlePartyMenu_HandleLearnMoveInput
 	.public _0221C62E
 	.public _0221C634
 	.public _0221C644
@@ -119,7 +119,7 @@
 	.public _0221C6EC
 	.public _0221C6F0
 	.public _0221C6F4
-	.public ov08_0221C6F8
+	.public BattlePartyMenu_HandleForgetMoveInput
 	.public _0221C722
 	.public _0221C728
 	.public _0221C736
@@ -138,7 +138,7 @@
 	.public _0221C808
 	.public _0221C80C
 	.public _0221C810
-	.public ov08_0221C814
+	.public BattlePartyMenu_HandleRestorePPInput
 	.public _0221C842
 	.public _0221C848
 	.public _0221C858
@@ -152,40 +152,40 @@
 	.public _0221C90C
 	.public _0221C910
 	.public _0221C914
-	.public ov08_0221C918
-	.public ov08_0221C924
-	.public ov08_0221C930
-	.public ov08_0221C93C
-	.public ov08_0221C948
-	.public ov08_0221C954
+	.public BattlePartyMenu_ShowPartyListPage
+	.public BattlePartyMenu_ShowMonMenuPage
+	.public BattlePartyMenu_ShowSummaryPage
+	.public BattlePartyMenu_ShowCheckMovesPage
+	.public BattlePartyMenu_ShowMoveDetailPage
+	.public BattlePartyMenu_ShowLearnMovePage
 	.public _0221C968
 	.public _0221C96E
 	.public _0221C974
-	.public ov08_0221C978
+	.public BattlePartyMenu_ShowForgetMovePage
 	.public _0221C994
 	.public _0221C99C
 	.public _0221C9A0
-	.public ov08_0221C9A4
+	.public BattlePartyMenu_ShowRestorePPPage
 	.public _0221C9C2
-	.public ov08_0221C9C8
+	.public BattlePartyMenu_RefreshMonPage
 	.public _0221C9FE
 	.public _0221CA04
-	.public ov08_0221CA08
+	.public BattlePartyMenu_ShowPendingMessage
 	.public _0221CA1C
-	.public ov08_0221CA20
+	.public BattlePartyMenu_CloseMessage
 	.public _0221CA30
-	.public ov08_0221CA34
+	.public BattlePartyMenu_WaitMessage
 	.public _0221CA46
 	.public _0221CA4C
-	.public ov08_0221CA50
+	.public BattlePartyMenu_WaitMessageInput
 	.public _0221CA66
 	.public _0221CA6C
 	.public _0221CA70
 	.public _0221CA74
-	.public ov08_0221CA78
+	.public BattlePartyMenu_WaitButtonAnim
 	.public _0221CA88
 	.public _0221CA8C
-	.public ov08_0221CA90
+	.public BattlePartyMenu_AnimateItemEffect
 	.public _0221CAA0
 	.public _0221CAAC
 	.public _0221CAB6
@@ -204,7 +204,7 @@
 	.public _0221CC2C
 	.public _0221CC30
 	.public _0221CC34
-	.public ov08_0221CC38
+	.public BattlePartyMenu_AnimateRestoreAllPP
 	.public _0221CC54
 	.public _0221CC7C
 	.public _0221CCA0
@@ -218,31 +218,31 @@
 	.public _0221CD58
 	.public _0221CD5C
 	.public _0221CD60
-	.public ov08_0221CD64
+	.public BattlePartyMenu_StartFadeOut
 	.public _0221CD8C
-	.public ov08_0221CD90
+	.public BattlePartyMenu_Exit
 	.public _0221CDA8
 	.public _0221CDF4
-	.public ov08_0221CDF8
+	.public BattlePartyMenu_InitBgs
 	.public _0221CEF4
 	.public _0221CEF8
 	.public _0221CEFC
 	.public _0221CF00
 	.public _0221CF04
-	.public ov08_0221CF08
-	.public ov08_0221CF38
+	.public BattlePartyMenu_FreeBgs
+	.public BattlePartyMenu_LoadBgGraphics
 	.public _0221D0F0
-	.public ov08_0221D0F4
+	.public BattlePartyMenu_InitText
 	.public _0221D13C
 	.public _0221D140
 	.public _0221D144
 	.public _0221D148
-	.public ov08_0221D14C
+	.public BattlePartyMenu_FreeText
 	.public _0221D174
 	.public _0221D178
 	.public _0221D17C
 	.public _0221D180
-	.public ov08_0221D184
+	.public BattlePartyMenu_LoadMonData
 	.public _0221D19E
 	.public _0221D1C8
 	.public _0221D278
@@ -253,7 +253,7 @@
 	.public _0221D40C
 	.public _0221D416
 	.public _0221D432
-	.public ov08_0221D438
+	.public BattlePartyMenu_HandlePartyListSelection
 	.public _0221D462
 	.public _0221D46C
 	.public _0221D47C
@@ -262,38 +262,38 @@
 	.public _0221D4A2
 	.public _0221D4A8
 	.public _0221D4AC
-	.public ov08_0221D4B0
+	.public BattlePartyMenu_GetMonMenuInput
 	.public _0221D4DA
 	.public _0221D4E4
 	.public _0221D4EA
 	.public _0221D4F0
 	.public _0221D4F4
-	.public ov08_0221D4F8
+	.public BattlePartyMenu_GetSummaryInput
 	.public _0221D522
 	.public _0221D52C
 	.public _0221D532
 	.public _0221D538
 	.public _0221D53C
-	.public ov08_0221D540
+	.public BattlePartyMenu_GetCheckMovesInput
 	.public _0221D56A
 	.public _0221D574
 	.public _0221D57A
 	.public _0221D580
 	.public _0221D584
-	.public ov08_0221D588
+	.public BattlePartyMenu_GetMoveDetailInput
 	.public _0221D5B2
 	.public _0221D5BC
 	.public _0221D5C2
 	.public _0221D5C8
 	.public _0221D5CC
-	.public ov08_0221D5D0
+	.public BattlePartyMenu_CheckTouchHitbox
 	.public _0221D5D8
-	.public ov08_0221D5DC
+	.public BattlePartyMenu_GetSlotType
 	.public _0221D5F2
 	.public _0221D608
 	.public _0221D60C
 	.public _0221D610
-	.public ov08_0221D614
+	.public BattlePartyMenu_FindNextMon
 	.public _0221D648
 	.public _0221D656
 	.public _0221D65E
@@ -303,7 +303,7 @@
 	.public _0221D69A
 	.public _0221D6C0
 	.public _0221D6C8
-	.public ov08_0221D6CC
+	.public BattlePartyMenu_DrawExpBar
 	.public _0221D6F6
 	.public _0221D6FA
 	.public _0221D706
@@ -312,17 +312,17 @@
 	.public _0221D72E
 	.public _0221D734
 	.public _0221D74A
-	.public ov08_0221D74C
+	.public BattlePartyMenu_SetExpBarTile
 	.public ov08_0221D77C
 	.public ov08_0221D81C
 	.public _0221D824
 	.public _0221D83C
-	.public ov08_0221D840
+	.public BattlePartyMenu_ChangePage
 	.public _0221D8AC
-	.public ov08_0221D8B0
+	.public BattlePartyMenu_LoadPageTilemaps
 	.public _0221D8BE
 	.public _0221D918
-	.public ov08_0221D91C
+	.public BattlePartyMenu_CanSwitchToSelectedMon
 	.public _0221D978
 	.public _0221D9B4
 	.public _0221D9CA
@@ -333,34 +333,34 @@
 	.public _0221DAB8
 	.public _0221DABC
 	.public _0221DAC0
-	.public ov08_0221DAC4
+	.public BattlePartyMenu_IsSelectedMonEgg
 	.public _0221DADA
 	.public _0221DADC
-	.public ov08_0221DAE4
+	.public BattlePartyMenu_IsDoubleBattle
 	.public _0221DB00
-	.public ov08_0221DB04
+	.public BattlePartyMenu_IsMultiBattle
 	.public _0221DB20
-	.public ov08_0221DB24
+	.public BattlePartyMenu_IsPartnerMon
 	.public _0221DB44
 	.public _0221DB4C
 	.public _0221DB4E
 	.public _0221DB50
-	.public ov08_0221DB54
+	.public BattlePartyMenu_IsSelectedMoveHM
 	.public _0221DB64
 	.public _0221DB72
 	.public _0221DB78
-	.public ov08_0221DB7C
+	.public BattlePartyMenu_ClearBattleMoveInfo
 	.public _0221DBAC
 	.public _0221DBB0
-	.public ov08_0221DBB4
-	.public ov08_0221DBCC
+	.public BattlePartyMenu_ClearContestMoveInfo
+	.public BattlePartyMenu_ConsumeItem
 	.public _0221DBF0
-	.public ov08_0221DC00
+	.public BattlePartyMenu_AddWindows
 	.public _0221DC0C
 	.public _0221DC30
 	.public _0221DC34
 	.public _0221DC38
-	.public ov08_0221DC3C
+	.public BattlePartyMenu_AddPageWindows
 	.public _0221DC50
 	.public _0221DC64
 	.public _0221DC6E
@@ -385,14 +385,14 @@
 	.public _0221DD1C
 	.public _0221DD20
 	.public _0221DD24
-	.public ov08_0221DD28
+	.public BattlePartyMenu_RemovePageWindows
 	.public _0221DD38
 	.public _0221DD3C
-	.public ov08_0221DD40
+	.public BattlePartyMenu_RemoveWindows
 	.public _0221DD56
 	.public _0221DD68
 	.public _0221DD6C
-	.public ov08_0221DD70
+	.public BattlePartyMenu_PrintPageText
 	.public _0221DD82
 	.public _0221DD96
 	.public _0221DD9C
@@ -404,7 +404,7 @@
 	.public _0221DDC0
 	.public _0221DDC6
 	.public _0221DDCA
-	.public ov08_0221DDCC
+	.public BattlePartyMenu_PrintMonName
 	.public _0221DE4E
 	.public _0221DE6A
 	.public _0221DED2
@@ -422,12 +422,12 @@
 	.public _0221DF74
 	.public _0221DF78
 	.public _0221DF7C
-	.public ov08_0221DF80
+	.public BattlePartyMenu_PrintMonLevel
 	.public _0221DFC4
-	.public ov08_0221DFC8
+	.public BattlePartyMenu_PrintMonHP
 	.public _0221E040
 	.public _0221E044
-	.public ov08_0221E048
+	.public BattlePartyMenu_DrawHPBar
 	.public _0221E082
 	.public _0221E08C
 	.public _0221E09E
@@ -435,36 +435,36 @@
 	.public _0221E0A4
 	.public _0221E0A6
 	.public _0221E11C
-	.public ov08_0221E120
+	.public BattlePartyMenu_PrintAbilityName
 	.public _0221E198
 	.public _0221E19C
 	.public _0221E1A0
 	.public _0221E1A4
-	.public ov08_0221E1A8
+	.public BattlePartyMenu_PrintHeldItemName
 	.public _0221E1CC
 	.public _0221E202
 	.public _0221E234
 	.public _0221E238
 	.public _0221E23C
 	.public _0221E240
-	.public ov08_0221E244
+	.public BattlePartyMenu_PrintMoveName
 	.public _0221E2A8
 	.public _0221E2AA
 	.public _0221E2DC
 	.public _0221E2E0
 	.public _0221E2E4
-	.public ov08_0221E2E8
+	.public BattlePartyMenu_PrintPPLabel
 	.public _0221E334
 	.public _0221E338
 	.public _0221E33C
-	.public ov08_0221E340
+	.public BattlePartyMenu_PrintPrompt
 	.public _0221E398
 	.public _0221E39C
 	.public _0221E3A0
-	.public ov08_0221E3A4
+	.public BattlePartyMenu_PrintButtonLabel
 	.public _0221E400
 	.public _0221E404
-	.public ov08_0221E408
+	.public BattlePartyMenu_PrintLevelAndNextExp
 	.public _0221E528
 	.public _0221E53C
 	.public _0221E5C4
@@ -473,126 +473,126 @@
 	.public _0221E5D0
 	.public _0221E5D4
 	.public _0221E5D8
-	.public ov08_0221E5DC
+	.public BattlePartyMenu_PrintAttack
 	.public _0221E6C0
 	.public _0221E6C4
 	.public _0221E6C8
 	.public _0221E6CC
 	.public _0221E6D0
 	.public _0221E6D4
-	.public ov08_0221E6D8
+	.public BattlePartyMenu_PrintDefense
 	.public _0221E7BC
 	.public _0221E7C0
 	.public _0221E7C4
 	.public _0221E7C8
 	.public _0221E7CC
 	.public _0221E7D0
-	.public ov08_0221E7D4
+	.public BattlePartyMenu_PrintSpeed
 	.public _0221E8BC
 	.public _0221E8C0
 	.public _0221E8C4
 	.public _0221E8C8
 	.public _0221E8CC
 	.public _0221E8D0
-	.public ov08_0221E8D4
+	.public BattlePartyMenu_PrintSpAttack
 	.public _0221E9BC
 	.public _0221E9C0
 	.public _0221E9C4
 	.public _0221E9C8
 	.public _0221E9CC
 	.public _0221E9D0
-	.public ov08_0221E9D4
+	.public BattlePartyMenu_PrintSpDefense
 	.public _0221EABC
 	.public _0221EAC0
 	.public _0221EAC4
 	.public _0221EAC8
 	.public _0221EACC
 	.public _0221EAD0
-	.public ov08_0221EAD4
+	.public BattlePartyMenu_PrintHPStat
 	.public _0221EC54
 	.public _0221EC58
 	.public _0221EC5C
 	.public _0221EC60
 	.public _0221EC64
 	.public _0221EC68
-	.public ov08_0221EC6C
+	.public BattlePartyMenu_PrintAbilityDescription
 	.public _0221ECD8
 	.public _0221ECDC
 	.public _0221ECE0
 	.public _0221ECE4
-	.public ov08_0221ECE8
+	.public BattlePartyMenu_PrintAccuracyLabel
 	.public _0221ED28
 	.public _0221ED2C
-	.public ov08_0221ED30
+	.public BattlePartyMenu_PrintMoveAccuracy
 	.public _0221ED8A
 	.public _0221EE00
 	.public _0221EE0C
 	.public _0221EE10
 	.public _0221EE14
-	.public ov08_0221EE18
+	.public BattlePartyMenu_PrintPowerLabel
 	.public _0221EE58
 	.public _0221EE5C
-	.public ov08_0221EE60
+	.public BattlePartyMenu_PrintMovePower
 	.public _0221EEBA
 	.public _0221EF30
 	.public _0221EF3C
 	.public _0221EF40
 	.public _0221EF44
-	.public ov08_0221EF48
+	.public BattlePartyMenu_PrintMoveDescription
 	.public _0221EF9C
 	.public _0221EFA0
 	.public _0221EFA4
-	.public ov08_0221EFA8
+	.public BattlePartyMenu_PrintCategoryLabel
 	.public _0221F004
 	.public _0221F008
-	.public ov08_0221F00C
+	.public BattlePartyMenu_PrintMoveCategory
 	.public _0221F024
 	.public _0221F032
 	.public _0221F040
 	.public _0221F04C
 	.public _0221F074
 	.public _0221F078
-	.public ov08_0221F07C
+	.public BattlePartyMenu_PrintMovePP
 	.public _0221F1A0
 	.public _0221F1A4
 	.public _0221F1A8
 	.public _0221F1AC
-	.public ov08_0221F1B0
+	.public BattlePartyMenu_PrintForgetButtonLabel
 	.public _0221F1D0
 	.public _0221F1DA
 	.public _0221F218
 	.public _0221F21C
-	.public ov08_0221F220
+	.public BattlePartyMenu_PrintHMCantBeForgotten
 	.public _0221F236
 	.public _0221F23C
 	.public _0221F278
 	.public _0221F27C
 	.public _0221F280
-	.public ov08_0221F284
+	.public BattlePartyMenu_PrintMoveListPP
 	.public _0221F3C0
 	.public _0221F3C4
 	.public _0221F3C8
 	.public _0221F3CC
-	.public ov08_0221F3D0
+	.public BattlePartyMenu_UpdateMoveListPP
 	.public _0221F494
 	.public _0221F498
 	.public _0221F49C
 	.public _0221F4A0
-	.public ov08_0221F4A4
+	.public BattlePartyMenu_PrintPartyListPage
 	.public _0221F4C2
 	.public _0221F4FE
 	.public _0221F512
 	.public _0221F52A
 	.public _0221F540
 	.public _0221F54C
-	.public ov08_0221F550
+	.public BattlePartyMenu_PrintMonHPAndBar
 	.public _0221F5AC
-	.public ov08_0221F5B0
+	.public BattlePartyMenu_PrintPartyMonLevel
 	.public _0221F5CC
-	.public ov08_0221F5D0
+	.public BattlePartyMenu_PrintMonMenuPage
 	.public _0221F63E
 	.public _0221F654
-	.public ov08_0221F658
+	.public BattlePartyMenu_PrintMonNameCentered
 	.public _0221F6DC
 	.public _0221F6EC
 	.public _0221F704
@@ -607,54 +607,54 @@
 	.public _0221F7B4
 	.public _0221F7B8
 	.public _0221F7BC
-	.public ov08_0221F7C0
+	.public BattlePartyMenu_PrintCheckMovesPage
 	.public _0221F85A
 	.public _0221F89C
 	.public _0221F8F0
 	.public _0221F8F4
 	.public _0221F8F8
 	.public _0221F8FC
-	.public ov08_0221F900
+	.public BattlePartyMenu_PrintSummaryPage
 	.public _0221FB10
 	.public _0221FB14
-	.public ov08_0221FB18
+	.public BattlePartyMenu_PrintMoveDetailPage
 	.public _0221FC6C
 	.public _0221FC70
 	.public _0221FC74
 	.public _0221FC78
-	.public ov08_0221FC7C
+	.public BattlePartyMenu_PrintLearnMovePage
 	.public _0221FCE8
 	.public _0221FD20
 	.public _0221FD98
 	.public _0221FD9C
 	.public _0221FDA0
-	.public ov08_0221FDA4
+	.public BattlePartyMenu_PrintForgetMovePage
 	.public _0221FEE0
 	.public _0221FF56
 	.public _0221FF64
 	.public _0221FF68
 	.public _0221FF6C
-	.public ov08_0221FF70
+	.public BattlePartyMenu_PrintRestorePPPage
 	.public _0221FFD0
 	.public _02220008
 	.public _0222002A
 	.public _02220058
 	.public _0222005C
 	.public _02220060
-	.public ov08_02220064
-	.public ov08_02220084
+	.public BattlePartyMenu_UpdateMovePP
+	.public BattlePartyMenu_PrintContestForgetMovePage
 	.public _02220176
 	.public _022201A4
 	.public _022201B0
 	.public _022201B4
 	.public _022201B8
 	.public _022201BC
-	.public ov08_022201C0
+	.public BattlePartyMenu_ShowMessage
 	.public _022201E4
-	.public ov08_022201E8
+	.public BattlePartyMenu_PrintMessage
 	.public _0222021C
 	.public _02220220
-	.public ov08_02220224
+	.public BattlePartyMenu_BufferItemResultMessage
 	.public _02220278
 	.public _0222028C
 	.public _022202A0
@@ -676,31 +676,31 @@
 	.public _0222056A
 	.public _02220574
 	.public _02220578
-	.public ov08_0222057C
+	.public BattlePartyMenu_BufferEmbargoMessage
 	.public _022205D4
 	.public _022205D8
 	.public _022205DC
-	.public ov08_022205E0
-	.public ov08_0222061C
+	.public BattlePartyMenu_InitSprites
+	.public BattlePartyMenu_CreateSpriteManager
 	.public _02220660
 	.public _02220664
-	.public ov08_02220668
+	.public BattlePartyMenu_LoadMonIconResources
 	.public _022206E4
 	.public _0222070E
 	.public _02220734
 	.public _02220748
 	.public _0222074C
-	.public ov08_02220750
+	.public BattlePartyMenu_LoadStatusIconResources
 	.public _022207F4
 	.public _022207F8
 	.public _022207FC
-	.public ov08_02220800
+	.public BattlePartyMenu_LoadTypeIconResources
 	.public _0222083C
 	.public _02220868
 	.public _0222086C
 	.public _02220870
 	.public _02220874
-	.public ov08_02220878
+	.public BattlePartyMenu_LoadHeldItemIconResources
 	.public _0222091C
 	.public _02220920
 	.public _02220924
@@ -708,45 +708,45 @@
 	.public _022209AC
 	.public _022209B0
 	.public _022209B4
-	.public ov08_022209B8
+	.public BattlePartyMenu_CreateSprite
 	.public _02220A10
 	.public _02220A14
 	.public _02220A18
 	.public _02220A1C
 	.public _02220A20
 	.public _02220A24
-	.public ov08_02220A28
+	.public BattlePartyMenu_CreateSprites
 	.public _02220A32
 	.public _02220A4C
-	.public ov08_02220A50
+	.public BattlePartyMenu_FreeSprites
 	.public _02220A64
 	.public _02220A84
 	.public _02220A88
-	.public ov08_02220A8C
-	.public ov08_02220AAC
+	.public BattlePartyMenu_ShowSpriteAt
+	.public BattlePartyMenu_SetMonIconPalettes
 	.public _02220AB8
 	.public _02220AD8
 	.public _02220AE8
-	.public ov08_02220AEC
+	.public BattlePartyMenu_SetTypeIcon
 	.public _02220B38
-	.public ov08_02220B3C
+	.public BattlePartyMenu_SetMoveCategoryIcon
 	.public _02220B88
 	.public _02220B8C
-	.public ov08_02220B90
+	.public BattlePartyMenu_ShowStatusIcon
 	.public _02220BB0
-	.public ov08_02220BB4
+	.public BattlePartyMenu_ShowMonTypeIcons
 	.public _02220BF4
 	.public _02220BF8
 	.public _02220BFC
 	.public _02220C00
 	.public _02220C04
-	.public ov08_02220C08
+	.public BattlePartyMenu_ShowHeldItemIcon
 	.public _02220C26
 	.public _02220C2E
 	.public _02220C38
-	.public ov08_02220C3C
+	.public BattlePartyMenu_ShowCapsuleIcon
 	.public _02220C5A
-	.public ov08_02220C5C
+	.public BattlePartyMenu_ShowPageSprites
 	.public _02220C68
 	.public _02220C8A
 	.public _02220C9E
@@ -761,7 +761,7 @@
 	.public _02220CE6
 	.public _02220CEC
 	.public _02220CF0
-	.public ov08_02220CF4
+	.public BattlePartyMenu_ShowPartyListSprites
 	.public _02220D0C
 	.public _02220D5A
 	.public _02220D78
@@ -770,13 +770,13 @@
 	.public _02220D84
 	.public _02220D88
 	.public _02220D8C
-	.public ov08_02220D90
+	.public BattlePartyMenu_ShowMonMenuSprites
 	.public _02220DE4
-	.public ov08_02220DE8
+	.public BattlePartyMenu_ShowSummarySprites
 	.public _02220E74
 	.public _02220E78
 	.public _02220E7C
-	.public ov08_02220E80
+	.public BattlePartyMenu_ShowCheckMovesSprites
 	.public _02220F10
 	.public _02220F36
 	.public _02220F44
@@ -784,27 +784,27 @@
 	.public _02220F4C
 	.public _02220F50
 	.public _02220F54
-	.public ov08_02220F58
+	.public BattlePartyMenu_ShowMoveDetailSprites
 	.public _02221010
 	.public _02221014
 	.public _02221018
-	.public ov08_0222101C
+	.public BattlePartyMenu_ShowLearnMoveSprites
 	.public _02221080
 	.public _02221084
-	.public ov08_02221088
+	.public BattlePartyMenu_ShowForgetMoveSprites
 	.public _0222111E
 	.public _02221132
 	.public _02221140
 	.public _02221144
 	.public _02221148
-	.public ov08_0222114C
+	.public BattlePartyMenu_ShowRestorePPSprites
 	.public _022211B0
 	.public _022211B4
-	.public ov08_022211B8
+	.public BattlePartyMenu_ShowContestForgetMoveSprites
 	.public _0222122C
-	.public ov08_02221230
+	.public BattlePartyMenu_ShowContestLearnMoveSprites
 	.public _02221290
-	.public ov08_02221294
+	.public BattlePartyMenu_ShowMoveTypeIcons
 	.public _022212A8
 	.public _022212DC
 	.public _02221312
@@ -813,7 +813,7 @@
 	.public _0222131C
 	.public _02221320
 	.public _02221324
-	.public ov08_02221328
+	.public BattlePartyMenu_ShowMoveContestTypeIcons
 	.public _0222133C
 	.public _0222137A
 	.public _022213B2
@@ -822,12 +822,12 @@
 	.public _022213BC
 	.public _022213C0
 	.public _022213C4
-	.public ov08_022213C8
+	.public BattlePartyMenu_ShowMoveIcons
 	.public _022213DA
 	.public _022213E0
-	.public ov08_022213E4
+	.public BattlePartyMenu_SetSpriteAnim
 	.public _02221402
-	.public ov08_02221404
+	.public BattlePartyMenu_GetMonIconAnim
 	.public _02221412
 	.public _02221424
 	.public _0222143C
@@ -836,35 +836,35 @@
 	.public _0222144E
 	.public _02221452
 	.public _02221456
-	.public ov08_0222145C
+	.public BattlePartyMenu_UpdateMonIcons
 	.public _02221470
 	.public _022214A2
 	.public _022214B4
 	.public _022214B8
-	.public ov08_022214BC
+	.public BattlePartyMenu_CalcConditionMarkerCoord
 	.public _022214E2
-	.public ov08_02221500
+	.public BattlePartyMenu_ShowConditionMarkers
 	.public _02221618
 	.public _0222161C
 	.public _02221620
 	.public _02221624
 	.public _02221628
-	.public ov08_0222162C
+	.public BattlePartyMenu_CreateCursor
 	.public _02221688
 	.public _0222168C
 	.public _02221690
 	.public _02221694
-	.public ov08_02221698
+	.public BattlePartyMenu_FreeCursor
 	.public _022216C0
 	.public _022216C4
 	.public _022216C8
-	.public ov08_022216CC
+	.public BattlePartyMenu_SetLearnMoveCursorMask
 	.public _022216E4
 	.public _022216F0
-	.public ov08_022216F4
+	.public BattlePartyMenu_SetForgetMoveCursorMask
 	.public _0222170C
 	.public _02221718
-	.public ov08_0222171C
+	.public BattlePartyMenu_SetPageCursor
 	.public _02221740
 	.public _02221754
 	.public _0222176E
@@ -875,9 +875,9 @@
 	.public _022217BC
 	.public _022217C0
 	.public _022217C4
-	.public ov08_022217C8
+	.public BattlePartyMenu_DeactivateCursor
 	.public _022217EC
-	.public ov08_022217F0
+	.public BattlePartyMenu_StoreButtonTilemaps
 	.public _02221AB0
 	.public _02221AB4
 	.public _02221AB8
@@ -905,16 +905,16 @@
 	.public _02221B10
 	.public _02221B14
 	.public _02221B18
-	.public ov08_02221B1C
+	.public BattlePartyMenu_StoreLargeButtonTilemaps
 	.public _02221BC4
 	.public _02221BC8
 	.public _02221BCC
-	.public ov08_02221BD0
+	.public BattlePartyMenu_CopyTilemapRect
 	.public _02221BE8
 	.public _02221C00
 	.public _02221C10
 	.public _02221C1C
-	.public ov08_02221C20
+	.public BattlePartyMenu_GetButtonTilemap
 	.public _02221C30
 	.public _02221C74
 	.public _02221C86
@@ -936,7 +936,7 @@
 	.public _02221D20
 	.public _02221D24
 	.public _02221D28
-	.public ov08_02221D2C
+	.public BattlePartyMenu_BuildButtonTilemap
 	.public _02221D6E
 	.public _02221D7A
 	.public _02221D82
@@ -952,12 +952,12 @@
 	.public _02221E60
 	.public _02221E64
 	.public _02221E68
-	.public ov08_02221E6C
+	.public BattlePartyMenu_DrawButton
 	.public _02221ED8
 	.public _02221EDC
 	.public _02221EE0
 	.public _02221EE4
-	.public ov08_02221EE8
+	.public BattlePartyMenu_ScrollButtonWindows
 	.public _02221F02
 	.public _02221F08
 	.public _02221F16
@@ -971,7 +971,7 @@
 	.public _02221F8C
 	.public _02221F90
 	.public _02221F94
-	.public ov08_02221F98
+	.public BattlePartyMenu_OffsetButtonSprites
 	.public _02221FAE
 	.public _02221FE6
 	.public _02222024
@@ -982,11 +982,11 @@
 	.public _022220A0
 	.public _022220A4
 	.public _022220A8
-	.public ov08_022220AC
+	.public BattlePartyMenu_StartButtonAnim
 	.public _022220D6
 	.public _022220F4
 	.public _022220F8
-	.public ov08_022220FC
+	.public BattlePartyMenu_UpdateButtonAnim
 	.public _0222211C
 	.public _02222150
 	.public _02222184
@@ -994,7 +994,7 @@
 	.public _022221C0
 	.public _022221C4
 	.public _022221C8
-	.public ov08_022221CC
+	.public BattlePartyMenu_DrawPageButtons
 	.public _022221D6
 	.public _022221E2
 	.public _022221F6
@@ -1027,23 +1027,23 @@
 	.public _022224F0
 	.public _0222251E
 	.public _02222520
-	.public ov08_02222524
+	.public BattlePartyMenu_LoadPagePalette
 	.public _02222546
 	.public _02222560
-	.public ov08_02222564
+	.public BattlePartyMenu_HasMultipleNonEggMons
 	.public _0222256C
 	.public _02222586
 	.public _02222598
 	.public _0222259A
-	.public ov08_022225A4
+	.public BattlePartyMenu_RedrawSelectedMonButton
 	.public _022225C4
-	.public ov08_022225D4
+	.public BattleBagMenu_Create
 	.public _02222614
 	.public _02222662
 	.public _02222664
 	.public _02222668
 	.public _0222266C
-	.public ov08_02222670
+	.public BattleBagMenu_Task
 	.public _02222688
 	.public _022226A6
 	.public _022226B2
@@ -1063,14 +1063,14 @@
 	.public _02222756
 	.public _02222766
 	.public _02222768
-	.public ov08_0222276C
+	.public BattleBagMenu_Setup
 	.public _022227F0
 	.public _0222282A
 	.public _02222830
 	.public _02222834
 	.public _02222838
 	.public _0222283C
-	.public ov08_02222840
+	.public BattleBagMenu_HandlePocketMenuInput
 	.public _02222852
 	.public _02222878
 	.public _0222287E
@@ -1082,7 +1082,7 @@
 	.public _0222290C
 	.public _02222910
 	.public _02222914
-	.public ov08_02222918
+	.public BattleBagMenu_HandleItemListInput
 	.public _02222956
 	.public _02222974
 	.public _02222976
@@ -1100,13 +1100,13 @@
 	.public _02222A6C
 	.public _02222A70
 	.public _02222A74
-	.public ov08_02222A78
+	.public BattleBagMenu_ChangeItemPage
 	.public _02222AAE
 	.public _02222ABC
 	.public _02222AC2
 	.public _02222AE8
 	.public _02222AEC
-	.public ov08_02222AF0
+	.public BattleBagMenu_HandleUseItemInput
 	.public _02222B18
 	.public _02222B1E
 	.public _02222B28
@@ -1116,7 +1116,7 @@
 	.public _02222B80
 	.public _02222B84
 	.public _02222B88
-	.public ov08_02222B8C
+	.public BattleBagMenu_TryUseItem
 	.public _02222B9C
 	.public _02222C0E
 	.public _02222C34
@@ -1130,28 +1130,28 @@
 	.public _02222D6C
 	.public _02222D70
 	.public _02222D74
-	.public ov08_02222D78
-	.public ov08_02222D84
-	.public ov08_02222D90
-	.public ov08_02222D9C
-	.public ov08_02222DAC
+	.public BattleBagMenu_ShowPocketMenuPage
+	.public BattleBagMenu_ShowItemListPage
+	.public BattleBagMenu_ShowUseItemPage
+	.public BattleBagMenu_CloseMessage
+	.public BattleBagMenu_WaitMessage
 	.public _02222DBE
-	.public ov08_02222DC4
+	.public BattleBagMenu_WaitMessageInput
 	.public _02222DDA
 	.public _02222DE0
 	.public _02222DE4
 	.public _02222DE8
-	.public ov08_02222DEC
+	.public BattleBagMenu_WaitButtonAnim
 	.public _02222DFA
 	.public _02222E00
-	.public ov08_02222E04
+	.public BattleBagMenu_StartFadeOut
 	.public _02222E28
-	.public ov08_02222E2C
+	.public BattleBagMenu_Exit
 	.public _02222E40
 	.public _02222E82
 	.public _02222EAC
 	.public _02222EC0
-	.public ov08_02222EC4
+	.public BattleBagMenu_RunTutorial
 	.public _02222ED6
 	.public _02222EE0
 	.public _02222EEC
@@ -1168,33 +1168,33 @@
 	.public _02222FF4
 	.public _02222FF8
 	.public _02222FFC
-	.public ov08_02223000
+	.public BattleBagMenu_InitBgs
 	.public _022230BC
 	.public _022230C0
 	.public _022230C4
 	.public _022230C8
-	.public ov08_022230CC
-	.public ov08_022230F4
+	.public BattleBagMenu_FreeBgs
+	.public BattleBagMenu_LoadBgGraphics
 	.public _022231E4
-	.public ov08_022231E8
-	.public ov08_02223228
-	.public ov08_02223248
+	.public BattleBagMenu_InitText
+	.public BattleBagMenu_FreeText
+	.public BattleBagMenu_SetPageBgOffset
 	.public _0222325A
 	.public _02223274
 	.public _02223290
-	.public ov08_022232AC
+	.public BattleBagMenu_SetUseItemPagePalette
 	.public _022232F6
 	.public _022232FC
-	.public ov08_02223300
+	.public BattleBagMenu_ChangePage
 	.public _02223364
-	.public ov08_02223368
+	.public BattleBagMenu_CheckTouchHitbox
 	.public _02223370
-	.public ov08_02223374
-	.public ov08_02223390
-	.public ov08_022233B8
+	.public BattleBagMenu_GetBattlerSelectedMonIndex
+	.public BattleBagMenu_ConsumeItem
+	.public BattleBagMenu_AddWindows
 	.public _022233D4
 	.public _022233D8
-	.public ov08_022233DC
+	.public BattleBagMenu_AddPageWindows
 	.public _022233EE
 	.public _022233F8
 	.public _02223402
@@ -1204,36 +1204,36 @@
 	.public _02223448
 	.public _0222344C
 	.public _02223450
-	.public ov08_02223454
+	.public BattleBagMenu_RemovePageWindows
 	.public _02223460
-	.public ov08_02223464
-	.public ov08_02223480
+	.public BattleBagMenu_RemoveWindows
+	.public BattleBagMenu_PrintPageText
 	.public _02223490
 	.public _02223496
 	.public _0222349C
-	.public ov08_022234A4
-	.public ov08_022234FC
+	.public BattleBagMenu_PrintCenteredText
+	.public BattleBagMenu_PrintPocketMenuPage
 	.public _02223508
 	.public _022235CC
 	.public _022235D0
-	.public ov08_022235D4
+	.public BattleBagMenu_PrintItemName
 	.public _02223666
 	.public _02223670
 	.public _02223674
-	.public ov08_02223678
+	.public BattleBagMenu_PrintItemQuantity
 	.public _022236FA
 	.public _02223704
 	.public _02223708
-	.public ov08_0222370C
+	.public BattleBagMenu_PrintItemListEntry
 	.public _02223734
 	.public _02223736
 	.public _02223770
 	.public _02223774
 	.public _02223778
-	.public ov08_0222377C
+	.public BattleBagMenu_PrintItemList
 	.public _0222379E
-	.public ov08_022237C4
-	.public ov08_022238F4
+	.public BattleBagMenu_PrintPageNumber
+	.public BattleBagMenu_PrintPocketName
 	.public _0222391C
 	.public _02223924
 	.public _02223950
@@ -1242,29 +1242,29 @@
 	.public _022239A8
 	.public _022239AC
 	.public _022239B0
-	.public ov08_022239B4
-	.public ov08_022239CC
+	.public BattleBagMenu_PrintItemListPage
+	.public BattleBagMenu_PrintUseItemName
 	.public _02223A34
 	.public _02223A38
-	.public ov08_02223A3C
+	.public BattleBagMenu_PrintItemDescription
 	.public _02223A98
 	.public _02223A9C
-	.public ov08_02223AA0
+	.public BattleBagMenu_PrintUseItemPage
 	.public _02223AAC
 	.public _02223B14
 	.public _02223B18
 	.public _02223B1C
-	.public ov08_02223B20
+	.public BattleBagMenu_ShowMessage
 	.public _02223B44
-	.public ov08_02223B48
-	.public ov08_02223B78
+	.public BattleBagMenu_PrintMessage
+	.public BattleBagMenu_ValidateLastUsedItem
 	.public _02223B88
 	.public _02223BA2
-	.public ov08_02223BA8
+	.public BattleBagMenu_SelectLastUsedItem
 	.public _02223BBC
 	.public _02223BE6
 	.public _02223BF0
-	.public ov08_02223BF4
+	.public BattleBagMenu_SortItemsIntoPockets
 	.public _02223BFE
 	.public _02223C0A
 	.public _02223C3A
@@ -1278,64 +1278,64 @@
 	.public _02223CC8
 	.public _02223CCC
 	.public _02223CD0
-	.public ov08_02223CD4
+	.public BattleBagMenu_GetItemOnPage
 	.public _02223CFE
 	.public _02223D00
 	.public _02223D04
-	.public ov08_02223D08
-	.public ov08_02223D34
+	.public BattleBagMenu_InitSprites
+	.public BattleBagMenu_CreateSpriteManager
 	.public _02223D7C
-	.public ov08_02223D80
+	.public BattleBagMenu_LoadItemIconResources
 	.public _02223D9E
 	.public _02223E38
-	.public ov08_02223E3C
-	.public ov08_02223E74
-	.public ov08_02223EA4
+	.public BattleBagMenu_SetItemIconGraphics
+	.public BattleBagMenu_SetItemIconPalette
+	.public BattleBagMenu_CreateSprite
 	.public _02223F00
 	.public _02223F04
 	.public _02223F08
 	.public _02223F0C
 	.public _02223F10
-	.public ov08_02223F14
+	.public BattleBagMenu_CreateSprites
 	.public _02223F20
-	.public ov08_02223F34
+	.public BattleBagMenu_FreeSprites
 	.public _02223F4A
-	.public ov08_02223F74
-	.public ov08_02223F94
+	.public BattleBagMenu_ShowSpriteAt
+	.public BattleBagMenu_ShowPageSprites
 	.public _02223FA2
 	.public _02223FC0
 	.public _02223FC8
 	.public _02223FD0
-	.public ov08_02223FD8
+	.public BattleBagMenu_ShowLastUsedItemIcon
 	.public _02224006
 	.public _02224008
-	.public ov08_0222400C
+	.public BattleBagMenu_ShowItemListIcons
 	.public _02224016
 	.public _0222404E
 	.public _0222405C
 	.public _02224060
-	.public ov08_02224064
+	.public BattleBagMenu_ShowUseItemIcon
 	.public _022240A0
 	.public _022240A4
-	.public ov08_022240A8
+	.public BattleBagMenu_CreateCursor
 	.public _02224104
-	.public ov08_02224108
+	.public BattleBagMenu_FreeCursor
 	.public _02224130
-	.public ov08_02224134
+	.public BattleBagMenu_SetPageCursor
 	.public _02224152
 	.public _0222415E
 	.public _02224174
 	.public _02224178
-	.public ov08_0222417C
-	.public ov08_0222419C
+	.public BattleBagMenu_DeactivateCursor
+	.public BattleBagMenu_CreateFinger
 	.public _022241F0
-	.public ov08_022241F4
+	.public BattleBagMenu_FreeFinger
 	.public _02224218
-	.public ov08_0222421C
+	.public BattleBagMenu_UpdateTutorialFinger
 	.public _02224242
 	.public _0222424C
 	.public _02224250
-	.public ov08_02224254
+	.public BattleBagMenu_StoreButtonTilemaps
 	.public _02224510
 	.public _02224514
 	.public _02224518
@@ -1367,12 +1367,12 @@
 	.public _02224580
 	.public _02224584
 	.public _02224588
-	.public ov08_0222458C
+	.public BattleBagMenu_CopyTilemapRect
 	.public _022245A4
 	.public _022245BC
 	.public _022245CC
 	.public _022245D8
-	.public ov08_022245DC
+	.public BattleBagMenu_GetButtonTilemap
 	.public _022245EC
 	.public _0222460E
 	.public _0222461E
@@ -1387,7 +1387,7 @@
 	.public _02224678
 	.public _0222467C
 	.public _02224680
-	.public ov08_02224684
+	.public BattleBagMenu_GetButtonPalette
 	.public _0222468C
 	.public _0222469C
 	.public _022246BE
@@ -1398,7 +1398,7 @@
 	.public _022246E6
 	.public _022246EA
 	.public _022246F0
-	.public ov08_022246F4
+	.public BattleBagMenu_CopyPocketIconTiles
 	.public _02224704
 	.public _02224712
 	.public _02224720
@@ -1410,19 +1410,19 @@
 	.public _0222475C
 	.public _02224760
 	.public _02224764
-	.public ov08_02224768
+	.public BattleBagMenu_BuildButtonTilemap
 	.public _022247AA
 	.public _022247C4
 	.public _022247D4
 	.public _022247D8
 	.public _022247DC
 	.public _022247E0
-	.public ov08_022247E4
+	.public BattleBagMenu_DrawButton
 	.public _02224848
 	.public _0222484C
 	.public _02224850
 	.public _02224854
-	.public ov08_02224858
+	.public BattleBagMenu_ScrollButtonWindows
 	.public _02224876
 	.public _0222487C
 	.public _0222488C
@@ -1431,23 +1431,23 @@
 	.public _0222489C
 	.public _022248C8
 	.public _022248CC
-	.public ov08_022248D0
+	.public BattleBagMenu_OffsetButtonSprite
 	.public _022248EC
 	.public _022248F6
 	.public _02224910
 	.public _0222491E
 	.public _0222492A
 	.public _02224934
-	.public ov08_02224938
+	.public BattleBagMenu_StartButtonAnim
 	.public _02224970
-	.public ov08_02224974
+	.public BattleBagMenu_UpdateButtonAnim
 	.public _02224994
 	.public _022249CC
 	.public _02224A04
 	.public _02224A44
 	.public _02224A48
 	.public _02224A4C
-	.public ov08_02224A50
+	.public BattleBagMenu_DrawPageButtons
 	.public _02224A62
 	.public _02224AA6
 	.public _02224AB2
@@ -1508,53 +1508,53 @@
 	.public _02224E20
 	.public _02224E24
 	.public _02224E28
-	.public _02224E2C
-	.public ov08_02224E34
-	.public ov08_02224E44
-	.public ov08_02224E54
-	.public ov08_02224E68
-	.public ov08_02224E7C
-	.public ov08_02224E94
-	.public ov08_02224EAC
-	.public ov08_02224EC8
-	.public ov08_02224EE4
-	.public ov08_02224F00
-	.public ov08_02224F1C
-	.public ov08_02224F3C
-	.public ov08_02224F5C
-	.public ov08_02224F80
-	.public ov08_02224FD0
-	.public ov08_02224FE0
-	.public ov08_02224FF4
-	.public ov08_0222500C
-	.public ov08_0222502C
-	.public ov08_02225054
-	.public ov08_02225084
-	.public ov08_022250B4
-	.public ov08_022250EC
-	.public ov08_02225144
-	.public ov08_022251A4
-	.public ov08_0222522C
-	.public ov08_022253B4
-	.public ov08_022253C4
-	.public ov08_022253D4
-	.public ov08_022253E4
-	.public ov08_022253F4
+	.public sBattlePartyMultiBattleOrder
+	.public sBattlePartyGraphicsModes
+	.public sBattlePartyForgetMoveHitboxes
+	.public sBattlePartyMonMenuHitboxes
+	.public sBattlePartySummaryHitboxes
+	.public sBattlePartyMoveDetailHitboxes
+	.public sBattlePartyRestorePPHitboxes
+	.public sBattlePartyBgTemplateSub3
+	.public sBattlePartyBgTemplateSub0
+	.public sBattlePartyBgTemplateSub2
+	.public sBattlePartyBgTemplateSub1
+	.public sBattlePartyPartyListHitboxes
+	.public sBattlePartyLearnMoveHitboxes
+	.public sBattlePartyCheckMovesHitboxes
+	.public sBattlePartyPageScreenFiles
+	.public sBattlePartyWindowTemplates
+	.public sBattlePartyMoveNameMsgIds
+	.public sBattlePartyMonNameMsgIds
+	.public sBattlePartyMonMenuWindows
+	.public sBattlePartyRestorePPWindows
+	.public sBattlePartyLearnMoveWindows
+	.public sBattlePartyPartyListWindows
+	.public sBattlePartyContestForgetMoveWindows
+	.public sBattlePartyCheckMovesWindows
+	.public sBattlePartyForgetMoveWindows
+	.public sBattlePartyMoveDetailWindows
+	.public sBattlePartySummaryWindows
+	.public sBattlePartyForgetMoveTypeIconPos
+	.public sBattlePartyLearnMoveTypeIconPos
+	.public sBattlePartyCheckMovesTypeIconPos
+	.public sBattlePartyMoveDetailTypeIconPos
+	.public sBattlePartySummaryTypeIconPos
 	.public ov08_02225404
-	.public ov08_0222541C
+	.public sBattlePartySpriteCapacities
 	.public ov08_02225434
-	.public ov08_02225454
+	.public sBattlePartyCheckMovesMoveIconPos
 	.public ov08_02225474
 	.public ov08_02225494
-	.public ov08_022254BC
+	.public sBattlePartyPageCursorBoxes
 	.public ov08_022254E4
-	.public ov08_0222550C
-	.public ov08_02225534
-	.public ov08_02225564
+	.public sBattlePartyLearnMoveMoveIconPos
+	.public sBattlePartyListIconPos
+	.public sBattlePartyListStatusIconPos
 	.public ov08_02225594
 	.public ov08_022255CC
 	.public ov08_02225604
-	.public ov08_02225644
+	.public sBattlePartySpriteTemplates
 	.public ov08_02225648
 	.public ov08_0222564C
 	.public ov08_02225650
@@ -1582,42 +1582,42 @@
 	.public ov08_022259A0
 	.public ov08_022259A4
 	.public ov08_022259A8
-	.public ov08_022259AC
+	.public sBattlePartyButtonScrollAmounts
 	.public ov08_022259B0
 	.public ov08_022259B4
 	.public ov08_022259B8
-	.public ov08_022259BC
-	.public ov08_022259C0
-	.public ov08_022259C6
-	.public ov08_022259CC
-	.public ov08_02225A54
+	.public sBattlePartySlotButtonScrollAmounts
+	.public sBattlePartyButtonSpriteOffsets
+	.public sBattlePartySlotButtonSpriteOffsets
+	.public sBattlePartyButtonWindowLists
+	.public sBattlePartyButtonRects
 	.public ov08_02225A55
 	.public ov08_02225A56
 	.public ov08_02225A57
-	.public ov08_02225ADC
-	.public ov08_02225AE8
-	.public ov08_02225AF8
-	.public ov08_02225B14
-	.public ov08_02225B30
-	.public ov08_02225B4C
-	.public ov08_02225B68
-	.public ov08_02225B90
-	.public ov08_02225B98
-	.public ov08_02225BB8
-	.public ov08_02225BE0
+	.public sBattleBagUseItemHitboxes
+	.public sBattleBagGraphicsModes
+	.public sBattleBagBgTemplateSub0
+	.public sBattleBagBgTemplateSub1
+	.public sBattleBagBgTemplateSub2
+	.public sBattleBagPocketMenuHitboxes
+	.public sBattleBagItemListHitboxes
+	.public sBattleBagMessageWindowTemplate
+	.public sBattleBagUseItemWindows
+	.public sBattleBagPocketMenuWindows
+	.public sBattleBagItemEntryMsgIds
 	.public ov08_02225BE4
-	.public ov08_02225C10
-	.public ov08_02225CE0
+	.public sBattleBagItemListWindows
+	.public sBattleBagPocketOrder
 	.public ov08_02225CE8
-	.public ov08_02225CF8
+	.public sBattleBagPageCursorBoxes
 	.public ov08_02225D04
-	.public ov08_02225D14
-	.public ov08_02225D2C
+	.public sBattleBagSpriteCapacities
+	.public sBattleBagTutorialFingerPos
 	.public ov08_02225D30
 	.public ov08_02225D44
-	.public ov08_02225D74
+	.public sBattleBagItemListIconPos
 	.public ov08_02225DA4
-	.public ov08_02225DDC
+	.public sBattleBagSpriteTemplates
 	.public ov08_02225DE0
 	.public ov08_02225DE4
 	.public ov08_02225DE8
@@ -1640,11 +1640,11 @@
 	.public ov08_02225E90
 	.public ov08_02225E94
 	.public ov08_02225E98
-	.public ov08_02225E9C
+	.public sBattleBagButtonRects
 	.public ov08_02225E9D
 	.public ov08_02225E9E
 	.public ov08_02225E9F
-	.public ov08_02225EE0
+	.public sBattleBagButtonWindowLists
 #include "constants/moves.h"
 	.include "asm/macros.inc"
 	.include "overlay_08.inc"

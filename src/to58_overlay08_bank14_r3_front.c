@@ -1,6 +1,6 @@
 #include "to57_overlay08_bank14_private.h"
 #pragma force_active on
-void ov08_0221E3A4(void *arg, int window, int msgNo) {
+void BattlePartyMenu_PrintButtonLabel(void *arg, int window, int msgNo) {
     Ov08R2W11Work *work = arg;
     Window *windows = work->windowArray;
     Window *target = &windows[window];

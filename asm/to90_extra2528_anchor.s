@@ -1,12 +1,12 @@
-	.extern ov08_022234A4
-	.extern ov08_02223678
+	.extern BattleBagMenu_PrintCenteredText
+	.extern BattleBagMenu_PrintItemQuantity
 #include "constants/moves.h"
 	.include "asm/macros.inc"
 	.include "overlay_08.inc"
 	.include "global.inc"
-	.extern ov08_022234A4
-	.extern ov08_02223678
-	.public ov08_022239CC
+	.extern BattleBagMenu_PrintCenteredText
+	.extern BattleBagMenu_PrintItemQuantity
+	.public BattleBagMenu_PrintUseItemName
 
 .text
 	.force_active on

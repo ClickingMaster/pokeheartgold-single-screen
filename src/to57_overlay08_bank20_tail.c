@@ -6,18 +6,18 @@
 #include "sprite_system.h"
 #include "unk_0208805C.h"
 
-extern void ov08_022213E4(void *, u8);
-extern void ov08_02220A8C(void *, s32, s32);
+extern void BattlePartyMenu_SetSpriteAnim(void *, u8);
+extern void BattlePartyMenu_ShowSpriteAt(void *, s32, s32);
 extern void BattleDpadCursor_SetBattleCursor(void *, BattleCursor *);
 extern BattleCursor *BattleDpadCursor_GetBattleCursor(void *);
 extern SpriteSystem *BattleSystem_GetSpriteSystem(void *);
 
-int ov08_02221404(u8 *entry);
-void ov08_0222145C(u8 *work);
-s16 ov08_022214BC(u8 value, int target, int base);
-void ov08_02221500(u8 *work);
-void ov08_0222162C(u8 *work);
-void ov08_02221698(u8 *work);
+int BattlePartyMenu_GetMonIconAnim(u8 *entry);
+void BattlePartyMenu_UpdateMonIcons(u8 *work);
+s16 BattlePartyMenu_CalcConditionMarkerCoord(u8 value, int target, int base);
+void BattlePartyMenu_ShowConditionMarkers(u8 *work);
+void BattlePartyMenu_CreateCursor(u8 *work);
+void BattlePartyMenu_FreeCursor(u8 *work);
 
 static inline void *PTR(void *p, u32 off) {
     return *(void **)((u8 *)p + off);
@@ -69,7 +69,7 @@ typedef struct Ov08IconEntry {
     u8 high : 1;
 } Ov08IconEntry;
 
-void ov08_0222162C(u8 *work) {
+void BattlePartyMenu_CreateCursor(u8 *work) {
     SpriteSystem *spriteSystem = BattleSystem_GetSpriteSystem(PTR(PTR(work, 0), 8));
     BattleCursor *cursor;
     BattleCursor_LoadResources(spriteSystem, PTR(work, 0x1FB4), PTR(work, 0x1E8), (enum HeapID) * (u32 *)((u8 *)PTR(work, 0) + 0xC), 0xB018, 0xB00C, 0xB00C, 0xB00C);
@@ -77,7 +77,7 @@ void ov08_0222162C(u8 *work) {
     BattleDpadCursor_SetBattleCursor(PTR(work, 0x2088), cursor);
 }
 
-void ov08_02221698(u8 *work) {
+void BattlePartyMenu_FreeCursor(u8 *work) {
     BattleCursor_Delete(BattleDpadCursor_GetBattleCursor(PTR(work, 0x2088)));
     BattleCursor_FreeResources(PTR(work, 0x1FB4), 0xB018, 0xB00C, 0xB00C, 0xB00C);
 }

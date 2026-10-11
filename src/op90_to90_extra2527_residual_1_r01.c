@@ -30,11 +30,11 @@ typedef struct MsgEntry {
     int unused;
 } MsgEntry;
 
-extern const MsgEntry ov08_02225BE0[];
-void ov08_022235D4(Work *work, int slot, int msg, int win, int font, u32 color);
+extern const MsgEntry sBattleBagItemEntryMsgIds[];
+void BattleBagMenu_PrintItemName(Work *work, int slot, int msg, int win, int font, u32 color);
 
-// @fn ov08_022235D4
-void ov08_022235D4(Work *work, int slot, int msg, int win, int font, u32 color) {
+// @fn BattleBagMenu_PrintItemName
+void BattleBagMenu_PrintItemName(Work *work, int slot, int msg, int win, int font, u32 color) {
     Window *windows = work->windows;
     String *str;
     u32 width;
@@ -42,7 +42,7 @@ void ov08_022235D4(Work *work, int slot, int msg, int win, int font, u32 color) 
 
     FillWindowPixelBuffer(&windows[win], 0);
     if (work->groups[work->sel].entries[slot].id != 0) {
-        str = NewString_ReadMsgData(work->msgData, ov08_02225BE0[msg].msgId);
+        str = NewString_ReadMsgData(work->msgData, sBattleBagItemEntryMsgIds[msg].msgId);
         BufferItemName(work->msgFmt, 0, work->groups[work->sel].entries[slot].id);
         StringExpandPlaceholders(work->msgFmt, work->strbuf, str);
         width = FontID_String_GetWidth(font, work->strbuf, 0);

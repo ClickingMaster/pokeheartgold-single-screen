@@ -32,9 +32,9 @@ typedef struct Ov15RectR18 {
     u8 height;
 } Ov15RectR18;
 
-extern const Ov15TileCommandR18 ov15_022013A8[][4];
-extern const Ov15RectR18 ov15_02201340[][2];
-extern const Ov15RectR18 ov15_02201328[];
+extern const Ov15TileCommandR18 sSubScreenTilemapCommands[][4];
+extern const Ov15RectR18 sUnusedSlotRects[][2];
+extern const Ov15RectR18 sItemSlotRects[];
 
 extern void GXS_LoadBGPltt(const void *, u32, u32);
 extern void *GetBgTilemapBuffer(void *, u8);
@@ -46,13 +46,13 @@ extern void ScheduleBgTilemapBufferTransfer(void *, u8);
 extern void DC_FlushRange(const void *, u32);
 extern void Heap_Free(void *);
 extern void GF_AssertFail(void);
-extern void ov15_0220005C(void *, s32, s32, BOOL);
-extern void ov15_02200294(void *);
-extern s32 ov15_021FA098(void *);
+extern void BagApp_ShowMoveSlotSprites(void *, s32, s32, BOOL);
+extern void BagApp_HideItemMenuSprites(void *);
+extern s32 BagApp_GetMovingItemPageSlot(void *);
 
-void ov15_021FD404(void *, s32, s32);
-void ov15_021FD43C(void *, s32, s32);
-void ov15_021FD4C0(void *, s32, u32, u32);
-void ov15_021FD574(void *, u32, s32, s32);
+void BagApp_LoadPocketSubBgPalette(void *, s32, s32);
+void BagApp_ApplyTilemapCommands(void *, s32, s32);
+void BagApp_DrawItemSlotFrames(void *, s32, u32, u32);
+void BagApp_LoadSubScreenLayout(void *, u32, s32, s32);
 
 #endif

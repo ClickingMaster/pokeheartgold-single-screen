@@ -15,22 +15,22 @@ typedef struct BagWorkRaw {
 #define U16(p, o) (*(u16 *)((p)->raw + (o)))
 #define S16(p, o) (*(s16 *)((p)->raw + (o)))
 #define U8(p, o)  (*(u8 *)((p)->raw + (o)))
-void ov15_021FD574(BagWorkRaw *, s32, s32, s32);
-void ov15_021FD43C(void *, int, int);
+void BagApp_LoadSubScreenLayout(BagWorkRaw *, s32, s32, s32);
+void BagApp_ApplyTilemapCommands(void *, int, int);
 void ScheduleBgTilemapBufferTransfer(void *, int);
 void ManagedSprite_SetDrawFlag(void *, BOOL);
-void ov15_02200458(BagWorkRaw *, BOOL);
-void ov15_021FD788(BagWorkRaw *, u32);
-void ov15_021FF4EC(BagWorkRaw *, s32, s32);
-void ov15_022002B4(BagWorkRaw *, s32);
-void ov15_021FECA0(BagWorkRaw *, void *, u32);
-void ov15_021FFF24(BagWorkRaw *);
+void BagApp_ShowPocketTabSprites(BagWorkRaw *, BOOL);
+void BagApp_ShowCancelButton(BagWorkRaw *, u32);
+void BagApp_DrawSelectedItemEntry(BagWorkRaw *, s32, s32);
+void BagApp_ShowSelectedItemIcon(BagWorkRaw *, s32);
+void BagApp_ShowItemDescription(BagWorkRaw *, void *, u32);
+void BagApp_HideCursor(BagWorkRaw *);
 String *NewString_ReadMsgData(void *, u32);
 void StringExpandPlaceholders(MessageFormat *, String *, String *);
 void String_Delete(String *);
-u8 ov15_021FEF48(BagWorkRaw *, BOOL);
-void ov15_021FF0FC(BagWorkRaw *, BOOL);
-void ov15_021FF068(BagWorkRaw *);
-void ov15_021FEDEC(BagWorkRaw *, u32);
-int ov15_021FCB64(BagWorkRaw *);
+u8 BagApp_PrintMessage(BagWorkRaw *, BOOL);
+void BagApp_PrintMoney(BagWorkRaw *, BOOL);
+void BagApp_PrintSellPrice(BagWorkRaw *);
+void BagApp_PrintQuantityDigits(BagWorkRaw *, u32);
+int BagApp_State_StartSell(BagWorkRaw *);
 #endif

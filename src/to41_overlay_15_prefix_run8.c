@@ -5,7 +5,7 @@
 #define U16(p, o) (*(u16 *)((u8 *)(p) + (o)))
 #define U8(p, o)  (*(u8 *)((u8 *)(p) + (o)))
 
-s32 ov15_021FB820(void *work) {
+s32 BagApp_State_RunUseItemTask(void *work) {
     s32 (*func)(void *) = (s32 (*)(void *))PTR(work, 0x67c);
     return func(work);
 }

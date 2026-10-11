@@ -5,10 +5,10 @@
 #define U16(p, o) (*(u16 *)((u8 *)(p) + (o)))
 #define U8(p, o)  (*(u8 *)((u8 *)(p) + (o)))
 
-void ov15_021F9D8C(void *msgData, void *dest, u32 msgId) {
+void BagApp_ReadItemName(void *msgData, void *dest, u32 msgId) {
     ReadMsgDataIntoString(msgData, msgId, dest);
 }
 
-void ov15_021F9D9C(void *msgData, void *dest, u32 itemId) {
+void BagApp_ReadTMHMMoveName(void *msgData, void *dest, u32 itemId) {
     ReadMsgDataIntoString(msgData, TMHMGetMove(itemId), dest);
 }

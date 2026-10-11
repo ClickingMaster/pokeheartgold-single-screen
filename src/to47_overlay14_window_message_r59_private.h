@@ -11,7 +11,7 @@ typedef struct Ov14R59Context {
     Window windows[];
 } Ov14R59Context;
 
-void ov14_021F4F84(void *ctx, void *msgData, u32 windowIndex, u32 messageId, s32 x, s32 y, u32 font, u32 color, u32 alignment);
-void ov14_021F6338(Ov14R59Context *ctx, u32 windowIndex, u32 messageId, u32 unused);
+void PCBox_PrintMsg(void *ctx, void *msgData, u32 windowIndex, u32 messageId, s32 x, s32 y, u32 font, u32 color, u32 alignment);
+void PCBox_PrintCenteredLabel(Ov14R59Context *ctx, u32 windowIndex, u32 messageId, u32 unused);
 
 #endif

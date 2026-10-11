@@ -20,7 +20,7 @@ u32 sub_02074490(void);
 u32 sub_0207449C(void);
 u32 sub_020744A8(void);
 
-void ov14_021F2C84(BoxSpriteWork *work);
-void ov14_021F2D1C(BoxSpriteWork *work);
+void PCBox_LoadMonIconResources(BoxSpriteWork *work);
+void PCBox_CreateMonIconSprites(BoxSpriteWork *work);
 
 #endif // POKEHEARTGOLD_TO47_OVERLAY14_ICON_BATCH_SETUP_PRIVATE_H

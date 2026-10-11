@@ -8,13 +8,13 @@
 
 #define TWO_CALLS(name, second) \
     void name(void *p) {        \
-        ov14_021E76B8(p);       \
+        PCBox_ClearMonInfoAndSelection(p);       \
         second(p);              \
     }
 
 u32 ov14_021F1F44(void *p) {
     u32 v;
-    if (ov14_021F7B7C(p) == 1) {
+    if (PCBox_IsSummaryShortcutPressed(p) == 1) {
         PlaySE(0x5dd);
         U8_AT(p, 0x26) = 1;
         U8_AT(p, 0x27) = 1;
@@ -28,7 +28,7 @@ u32 ov14_021F1F44(void *p) {
     switch (v) {
     case (u32)-3:
         PlaySE(0x5dc);
-        return ov14_021F0244(p, 0x74);
+        return PCBox_WaitForPendingUpdateFunc(p, 0x74);
     case (u32)-2:
     case 0x24:
         return ov14_021F15C8(p, 0xff);
@@ -48,90 +48,90 @@ u32 ov14_021F1F44(void *p) {
 
 FREE_RETURN(ov14_021F2010, 0x73)
 
-u32 ov14_021F2020(void *p) {
+u32 PCBox_TakeHeldItemToBag(void *p) {
     int item;
     void *boxmon;
-    item = ov14_021E6070(p, U8_AT(p, 0x21), 6, 0);
+    item = PCBox_GetSlotMonData(p, U8_AT(p, 0x21), 6, 0);
     if (Bag_AddItem(PTR_AT(p, 0xc), item, 1, 0xa) == 1) {
-        boxmon = ov14_021E60C0(p, U8_AT(p, 0x1f), U8_AT(p, 0x21));
-        ov14_021F673C(p, item, 0x25);
+        boxmon = PCBox_GetSlotBoxMon(p, U8_AT(p, 0x1f), U8_AT(p, 0x21));
+        PCBox_PrintTookItem(p, item, 0x25);
         item = 0;
-        ov14_021E6094(p, U8_AT(p, 0x21), 6, &item);
-        if (ov14_021E64D0(boxmon) == 1) {
-            ov14_021F2ED0(p, U8_AT(p, 0x1f), U8_AT(p, 0x21), *((u8 *)PTR_AT(p, 0x34) + U8_AT(p, 0x21) + 0x4094));
+        PCBox_SetSlotMonData(p, U8_AT(p, 0x21), 6, &item);
+        if (PCBox_UpdateArceusGiratinaForm(boxmon) == 1) {
+            PCBox_RefreshSlotIcon(p, U8_AT(p, 0x1f), U8_AT(p, 0x21), *((u8 *)PTR_AT(p, 0x34) + U8_AT(p, 0x21) + 0x4094));
         }
-        ov14_021E75F4(p, U8_AT(p, 0x21));
+        PCBox_RedrawSlotMonInfo(p, U8_AT(p, 0x21));
     } else {
         PlaySE(0x5f3);
-        ov14_021F675C(p, 0x25);
+        PCBox_PrintBagFull(p, 0x25);
     }
     U32_AT(p, 0x30) = 0xe;
     return 6;
 }
 
-u32 ov14_021F20C4(void *p) {
-    ov14_021F40DC(p);
-    ov14_021F6654(PTR_AT(p, 0x34), 0x25);
-    ov14_021E71E8(p);
-    ov14_021F3354(PTR_AT(PTR_AT(p, 0x34), 0x88dc));
+u32 PCBox_ConfirmRelease(void *p) {
+    PCBox_HideSelectedIconOutline(p);
+    PCBox_CloseMessageWindow(PTR_AT(p, 0x34), 0x25);
+    PCBox_StartReleaseMoveCheck(p);
+    PCBox_StartReleaseScale(PTR_AT(PTR_AT(p, 0x34), 0x88dc));
     ov14_021E884C(PTR_AT(p, 0x34));
     return 0x1a;
 }
 
-u32 ov14_021F20F4(void *p) {
+u32 PCBox_PutAwayHeldItem(void *p) {
     u16 v;
     if (Bag_AddItem(Save_Bag_Get(PTR_AT(PTR_AT(p, 0), 0)), U16_AT(PTR_AT(p, 0x34), 0x88c8), 1, 0xa) == 0) {
         PlaySE(0x5f3);
-        ov14_021F68C0(p, 6, 0x25);
+        PCBox_PrintItemActionMessage(p, 6, 0x25);
         U32_AT(p, 0x30) = 0x7a;
         return 6;
     }
     v = 0;
-    ov14_021E6094(p, U8_AT(p, 0x21), 6, &v);
-    if (ov14_021E64D0(ov14_021E60C0(p, U8_AT(p, 0x1f), U8_AT(p, 0x21))) == 1) {
-        ov14_021F2ED0(p, U8_AT(p, 0x1f), U8_AT(p, 0x21), *((u8 *)PTR_AT(p, 0x34) + U8_AT(p, 0x21) + 0x4094));
+    PCBox_SetSlotMonData(p, U8_AT(p, 0x21), 6, &v);
+    if (PCBox_UpdateArceusGiratinaForm(PCBox_GetSlotBoxMon(p, U8_AT(p, 0x1f), U8_AT(p, 0x21))) == 1) {
+        PCBox_RefreshSlotIcon(p, U8_AT(p, 0x1f), U8_AT(p, 0x21), *((u8 *)PTR_AT(p, 0x34) + U8_AT(p, 0x21) + 0x4094));
     }
-    ov14_021E7588(p, U8_AT(p, 0x21));
-    ov14_021F40DC(p);
-    ov14_021F6654(PTR_AT(p, 0x34), 0x25);
+    PCBox_ShowSlotMonInfo(p, U8_AT(p, 0x21));
+    PCBox_HideSelectedIconOutline(p);
+    PCBox_CloseMessageWindow(PTR_AT(p, 0x34), 0x25);
     ov14_021F391C(PTR_AT(p, 0x34), 1);
-    ov14_021F29E4(PTR_AT(p, 0x34), 0xb, 2);
+    PCBox_SetSpriteAnim(PTR_AT(p, 0x34), 0xb, 2);
     ov14_021E88F8(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
     return 0x79;
 }
 
-u32 ov14_021F21B4(void *p) {
+u32 PCBox_ConfirmExit(void *p) {
     PlaySE(0x60d);
     U32_AT(p, 0x30) = 0xb3;
-    return ov14_021F0204(p, 1);
+    return PCBox_StartFadeOut(p, 1);
 }
 
-u32 ov14_021F21D0(void *p) {
-    ov14_021F6654(PTR_AT(p, 0x34), 0x25);
+u32 PCBox_CancelExit(void *p) {
+    PCBox_CloseMessageWindow(PTR_AT(p, 0x34), 0x25);
     GridInputHandler_SetButtonInputMode(PTR_AT(PTR_AT(p, 0x34), 0x2c), 1);
     switch (U32_AT(PTR_AT(p, 0), 8)) {
     case 0:
-        ov14_021F685C(p, 0, 0, 0x27);
-        ov14_021F3488(p, 2, 0);
+        PCBox_PrintMonActionMessage(p, 0, 0, 0x27);
+        PCBox_SetIconsTranslucent(p, 2, 0);
         return 0x5b;
     case 1:
-        ov14_021F685C(p, 0, 0, 0x27);
-        ov14_021F43F4(PTR_AT(p, 0x34), 1);
-        ov14_021F3488(p, 1, 0);
+        PCBox_PrintMonActionMessage(p, 0, 0, 0x27);
+        PCBox_SetBoxArrowsVisible(PTR_AT(p, 0x34), 1);
+        PCBox_SetIconsTranslucent(p, 1, 0);
         return 0x51;
     case 2:
-        ov14_021F43F4(PTR_AT(p, 0x34), 1);
-        ov14_021F3488(p, 1, 0);
+        PCBox_SetBoxArrowsVisible(PTR_AT(p, 0x34), 1);
+        PCBox_SetIconsTranslucent(p, 1, 0);
         return 0xc;
     case 3:
-        ov14_021F43F4(PTR_AT(p, 0x34), 1);
-        ov14_021F3488(p, 0x81, 0);
+        PCBox_SetBoxArrowsVisible(PTR_AT(p, 0x34), 1);
+        PCBox_SetIconsTranslucent(p, 0x81, 0);
         return 0x75;
     }
     return 0xc;
 }
 
-u32 ov14_021F2270(void *p, u32 a1, u32 a2) {
+u32 PCBox_FlashPanel(void *p, u32 a1, u32 a2) {
     s8 a;
     s8 b;
     u16 c;
@@ -214,29 +214,29 @@ u32 ov14_021F2490(void *p, u32 a1, u32 a2) {
 void ov14_021F2534(void *p) {
     switch (U32_AT(PTR_AT(p, 0), 8)) {
     case 0:
-        ov14_021F3488(p, 2, 1);
+        PCBox_SetIconsTranslucent(p, 2, 1);
         break;
     case 1:
     case 2:
     case 3:
-        ov14_021F43F4(PTR_AT(p, 0x34), 0);
-        ov14_021F3488(p, 1, 1);
+        PCBox_SetBoxArrowsVisible(PTR_AT(p, 0x34), 0);
+        PCBox_SetIconsTranslucent(p, 1, 1);
         break;
     }
 }
 
 u32 ov14_021F2574(void *p) {
-    ov14_021F2A18(PTR_AT(p, 0x34), 9, 0);
-    ov14_021F66E8(p, 0x25, 1);
+    PCBox_SetSpriteVisible(PTR_AT(p, 0x34), 9, 0);
+    PCBox_PrintExitPrompt(p, 0x25, 1);
     ov14_021F2534(p);
-    return ov14_021F0254(p, 3);
+    return PCBox_ShowYesNo(p, 3);
 }
 
 u32 ov14_021F259C(void *p) {
-    ov14_021F2A18(PTR_AT(p, 0x34), 9, 0);
-    ov14_021F66E8(p, 0x25, 0);
+    PCBox_SetSpriteVisible(PTR_AT(p, 0x34), 9, 0);
+    PCBox_PrintExitPrompt(p, 0x25, 0);
     ov14_021F2534(p);
-    return ov14_021F0254(p, 4);
+    return PCBox_ShowYesNo(p, 4);
 }
 
 TWO_CALLS(ov14_021F25C4, ov14_021F0AD8)
@@ -244,9 +244,9 @@ TWO_CALLS(ov14_021F25C4, ov14_021F0AD8)
 TWO_CALLS(ov14_021F25D4, ov14_021F0C88)
 
 u32 ov14_021F25E4(void *p) {
-    ov14_021F40E8(p, 0);
+    PCBox_SetSelectedIconOutlineVisible(p, 0);
     U8_AT(p, 0x24) = 1;
     U8_AT(p, 0x29) = 0;
-    ov14_021F2A18(PTR_AT(p, 0x34), 9, 0);
+    PCBox_SetSpriteVisible(PTR_AT(p, 0x34), 9, 0);
     return ov14_021F1100(p, 0x2f);
 }

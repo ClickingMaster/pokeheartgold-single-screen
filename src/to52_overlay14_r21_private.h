@@ -17,8 +17,8 @@ typedef struct Ov14HandlerPair {
     Ov14Handler other;
 } Ov14HandlerPair;
 
-extern Ov14Handler ov14_021F7D9C[];
-extern Ov14HandlerPair ov14_021F7D74[];
+extern Ov14Handler sPCBoxStateTable[];
+extern Ov14HandlerPair sPCBoxYesNoHandlers[];
 extern Ov14HandlerPair ov14_021F7D78[];
 extern u8 gSystem[];
 
@@ -27,7 +27,7 @@ void PlaySE(int seqNo);
 int YesNoPrompt_HandleInput(void *prompt);
 void YesNoPrompt_Reset(void *prompt);
 
-int ov14_021EB1A4(Ov14Context *ctx);
-int ov14_021EB1C0(Ov14Context *ctx);
-int ov14_021EB1E0(Ov14Context *ctx);
-int ov14_021EB218(Ov14Context *ctx);
+int PCBox_State_Delay(Ov14Context *ctx);
+int PCBox_State_WaitUpdateFunc(Ov14Context *ctx);
+int PCBox_State_WaitButton(Ov14Context *ctx);
+int PCBox_State_HandleYesNo(Ov14Context *ctx);

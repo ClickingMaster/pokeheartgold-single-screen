@@ -11,16 +11,16 @@
 #include "overlay_manager.h"
 #include "pm_string.h"
 
-void ov15_021FDC6C(void *work);
-void ov15_021FF894(void *work);
+void BagApp_Free3D(void *work);
+void BagApp_FreeSprites(void *work);
 void ov15_021FA0D8(void *work);
-void ov15_021F9EA8(void *work);
-void ov15_021FE154(void *work);
-void ov15_021F9A8C(void *bgConfig);
-void ov15_021FEB64(void *work);
+void BagApp_SaveCursorPositions(void *work);
+void BagApp_RemoveWindows(void *work);
+void BagApp_FreeBgLayers(void *bgConfig);
+void BagApp_FreeItemMenuStrings(void *work);
 void ov15_021FE504(void *work);
 void ov15_021FE8A4(void *work);
-void ov15_021FA028(void *work);
+void BagApp_FreeItemNameStrings(void *work);
 void GF_TouchpadStopSampling(void);
 void GF_DestroyVramTransferManager(void);
 void sub_02004B10(void);

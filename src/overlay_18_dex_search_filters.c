@@ -1,6 +1,6 @@
 #include "overlay_18_dex_search_private.h"
 
-void ov18_021F8584(PokedexAppData *pokedexApp, u32 areaMask, u16 *dst, u32 *count, u16 *src, u32 srcCount, Pokedex *pokedex) {
+void PokedexApp_FilterByArea(PokedexAppData *pokedexApp, u32 areaMask, u16 *dst, u32 *count, u16 *src, u32 srcCount, Pokedex *pokedex) {
     if (areaMask & (1 << DEX_SEARCH_AREA_ALL)) {
         memcpy(dst, src, srcCount * sizeof(u16));
         *count = srcCount;
@@ -25,7 +25,7 @@ void ov18_021F8584(PokedexAppData *pokedexApp, u32 areaMask, u16 *dst, u32 *coun
     }
 }
 
-void ov18_021F8640(PokedexAppData *pokedexApp, u16 min, u16 max, u16 *dst, u32 *count, u16 *src, u32 srcCount, Pokedex *pokedex) {
+void PokedexApp_FilterByHeight(PokedexAppData *pokedexApp, u16 min, u16 max, u16 *dst, u32 *count, u16 *src, u32 srcCount, Pokedex *pokedex) {
     u32 i;
     if (min == 0 && max == DEX_SEARCH_SLIDER_MAX) {
         memcpy(dst, src, srcCount * sizeof(u16));
@@ -41,7 +41,7 @@ void ov18_021F8640(PokedexAppData *pokedexApp, u16 min, u16 max, u16 *dst, u32 *
     }
 }
 
-void ov18_021F86D0(PokedexAppData *pokedexApp, u16 min, u16 max, u16 *dst, u32 *count, u16 *src, u32 srcCount, Pokedex *pokedex) {
+void PokedexApp_FilterByWeight(PokedexAppData *pokedexApp, u16 min, u16 max, u16 *dst, u32 *count, u16 *src, u32 srcCount, Pokedex *pokedex) {
     u32 i;
     if (min == 0 && max == DEX_SEARCH_SLIDER_MAX) {
         memcpy(dst, src, srcCount * sizeof(u16));
@@ -57,7 +57,7 @@ void ov18_021F86D0(PokedexAppData *pokedexApp, u16 min, u16 max, u16 *dst, u32 *
     }
 }
 
-void ov18_021F8764(u16 *dst, u32 *count, u16 *lookup, u32 lookupCount, u16 *src, u32 srcCount, BOOL skipCaughtCheck, Pokedex *pokedex) {
+void PokedexApp_IntersectSpeciesLists(u16 *dst, u32 *count, u16 *lookup, u32 lookupCount, u16 *src, u32 srcCount, BOOL skipCaughtCheck, Pokedex *pokedex) {
     u32 i;
     u32 j;
     *count = 0;

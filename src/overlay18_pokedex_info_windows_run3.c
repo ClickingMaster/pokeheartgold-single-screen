@@ -1,6 +1,6 @@
 #include "overlay18_pokedex_info_windows_internal.h"
 
-u32 ov18_021F04C0(void *p, int idx) {
+u32 PokedexApp_GetAreaListEntryMsg(void *p, int idx) {
     int value = ((int *)PTR(p, 0x18FC))[idx];
     if (value == -2) {
         return *((s8 *)p + 0x18C8) == 0 ? 0x86 : 0x87;

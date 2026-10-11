@@ -3,14 +3,14 @@
 
 #include "global.h"
 
-void ov18_021F118C(void *, int, int);
-void ov18_021F121C(void *, int, int, int, int);
-void ov18_021F5EFC(void *, int, int);
+void PokedexApp_SetSpriteAnim(void *, int, int);
+void PokedexApp_MoveSprite(void *, int, int, int, int);
+void PokedexApp_ShowFormMonPics(void *, int, int);
 
 void ov18_021F5EF0(void *, int);
-void ov18_021F6178(void *, int);
-void ov18_021F619C(void *, int, int, int);
-void ov18_021F61DC(void *, int, int, const u16 *, u32);
-int ov18_021F61F8(void *, int, const u16 *, u32);
+void PokedexApp_MoveFormListIcons(void *, int);
+void PokedexApp_UpdateScrollArrows(void *, int, int, int);
+void PokedexApp_SetScrollbarSizeAnim(void *, int, int, const u16 *, u32);
+int PokedexApp_GetScrollbarSizeAnim(void *, int, const u16 *, u32);
 
 #endif

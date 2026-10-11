@@ -8,7 +8,7 @@ typedef struct Ov18Flags5 {
     u8 : 3;
 } Ov18Flags5;
 
-void ov18_021F8468(u32 index, u16 *dst, u32 *dstCount, const u16 *filter, u32 filterCount, const Pokedex *pokedex) {
+void PokedexApp_FilterByBodyType(u32 index, u16 *dst, u32 *dstCount, const u16 *filter, u32 filterCount, const Pokedex *pokedex) {
     u16 *resource;
     u32 resourceCount;
     switch (index) {
@@ -17,51 +17,51 @@ void ov18_021F8468(u32 index, u16 *dst, u32 *dstCount, const u16 *filter, u32 fi
         *dstCount = filterCount;
         return;
     case 7:
-        resource = ov18_021F8168(0x44, &resourceCount);
+        resource = PokedexApp_LoadSortData(0x44, &resourceCount);
         break;
     case 13:
-        resource = ov18_021F8168(0x45, &resourceCount);
+        resource = PokedexApp_LoadSortData(0x45, &resourceCount);
         break;
     case 11:
-        resource = ov18_021F8168(0x46, &resourceCount);
+        resource = PokedexApp_LoadSortData(0x46, &resourceCount);
         break;
     case 5:
-        resource = ov18_021F8168(0x47, &resourceCount);
+        resource = PokedexApp_LoadSortData(0x47, &resourceCount);
         break;
     case 4:
-        resource = ov18_021F8168(0x48, &resourceCount);
+        resource = PokedexApp_LoadSortData(0x48, &resourceCount);
         break;
     case 12:
-        resource = ov18_021F8168(0x49, &resourceCount);
+        resource = PokedexApp_LoadSortData(0x49, &resourceCount);
         break;
     case 9:
-        resource = ov18_021F8168(0x4A, &resourceCount);
+        resource = PokedexApp_LoadSortData(0x4A, &resourceCount);
         break;
     case 6:
-        resource = ov18_021F8168(0x4B, &resourceCount);
+        resource = PokedexApp_LoadSortData(0x4B, &resourceCount);
         break;
     case 1:
-        resource = ov18_021F8168(0x4C, &resourceCount);
+        resource = PokedexApp_LoadSortData(0x4C, &resourceCount);
         break;
     case 2:
-        resource = ov18_021F8168(0x4D, &resourceCount);
+        resource = PokedexApp_LoadSortData(0x4D, &resourceCount);
         break;
     case 3:
-        resource = ov18_021F8168(0x4E, &resourceCount);
+        resource = PokedexApp_LoadSortData(0x4E, &resourceCount);
         break;
     case 10:
-        resource = ov18_021F8168(0x4F, &resourceCount);
+        resource = PokedexApp_LoadSortData(0x4F, &resourceCount);
         break;
     case 0:
-        resource = ov18_021F8168(0x50, &resourceCount);
+        resource = PokedexApp_LoadSortData(0x50, &resourceCount);
         break;
     case 8:
-        resource = ov18_021F8168(0x51, &resourceCount);
+        resource = PokedexApp_LoadSortData(0x51, &resourceCount);
         break;
     default:
         GF_ASSERT(FALSE);
         break;
     }
-    ov18_021F8764(dst, dstCount, resource, resourceCount, filter, filterCount, TRUE, pokedex);
+    PokedexApp_IntersectSpeciesLists(dst, dstCount, resource, resourceCount, filter, filterCount, TRUE, pokedex);
     Heap_Free(resource);
 }

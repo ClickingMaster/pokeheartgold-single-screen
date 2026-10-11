@@ -1,6 +1,6 @@
 #include "overlay14_item_sprite_resources_private.h"
 
-void ov14_021F34EC(void *p) {
+void PCBox_LoadMonPicResources(void *p) {
     SpriteSystem_LoadCharResObj(PTR_AT(p, 0x2f4), PTR_AT(p, 0x2f8), 8, 0x4c, 0, 2, 0xc11d);
     SpriteSystem_LoadCharResObj(PTR_AT(p, 0x2f4), PTR_AT(p, 0x2f8), 8, 0x4c, 0, 2, 0xc11e);
     SpriteSystem_LoadPlttResObj(PTR_AT(p, 0x2f4), PTR_AT(p, 0x2f8), 8, 0x4b, 0, 1, 2, 0xc0fa);
@@ -9,7 +9,7 @@ void ov14_021F34EC(void *p) {
     SpriteSystem_LoadAnimResObj(PTR_AT(p, 0x2f4), PTR_AT(p, 0x2f8), 8, 0x4e, 0, 0xc0fa);
 }
 
-void ov14_021F35BC(void *p) {
+void PCBox_CreateMonPicSprites(void *p) {
     void *q = PTR_AT(p, 0x34);
     PTR_AT(q, 0x304) = SpriteSystem_NewSpriteWithYOffset(PTR_AT(q, 0x2f4), PTR_AT(q, 0x2f8), ov14_021F8210, 2 << 20);
     PTR_AT(q, 0x308) = SpriteSystem_NewSpriteWithYOffset(PTR_AT(q, 0x2f4), PTR_AT(q, 0x2f8), ov14_021F8244, 2 << 20);
@@ -17,7 +17,7 @@ void ov14_021F35BC(void *p) {
     ManagedSprite_SetDrawFlag(PTR_AT(q, 0x308), 0);
 }
 
-void ov14_021F3614(void *p, void *monData, u32 slot) {
+void PCBox_LoadMonPic(void *p, void *monData, u32 slot) {
     R53PokepicTemplate pic;
     R53Dims dims = *(const R53Dims *)ov14_021F8098;
     void *buf;
@@ -43,14 +43,14 @@ void ov14_021F3614(void *p, void *monData, u32 slot) {
     Heap_Free(buf);
 }
 
-void ov14_021F36DC(void *p, void *boxmon, u32 slot) {
+void PCBox_ShowMonPic(void *p, void *boxmon, u32 slot) {
     slot += U16_AT(PTR_AT(p, 0x34), 0x88d0);
-    ov14_021F3614(PTR_AT(p, 0x34), boxmon, slot);
+    PCBox_LoadMonPic(PTR_AT(p, 0x34), boxmon, slot);
     ManagedSprite_SetDrawFlag(PTR_AT(PTR_AT(p, 0x34), 0x2fc + slot * 4), 1);
     U16_AT(PTR_AT(p, 0x34), 0x88d0) ^= 1;
 }
 
-void ov14_021F3714(void *p) {
+void PCBox_LoadItemIconResources(void *p) {
     u32 map;
     SpriteSystem_LoadCharResObj(PTR_AT(p, 0x2f4), PTR_AT(p, 0x2f8), 0x13, 0x4f, 1, 1, 0xc11f);
     map = GetItemIndexMapping(0, 2);
@@ -62,30 +62,30 @@ void ov14_021F3714(void *p) {
     SpriteSystem_LoadAnimResObj(PTR_AT(p, 0x2f4), PTR_AT(p, 0x2f8), 0x13, 0x51, 1, 0xc0fb);
 }
 
-void ov14_021F37F4(void *p) {
+void PCBox_CreateItemIconSprites(void *p) {
     PTR_AT(p, 0x328) = SpriteSystem_NewSprite(PTR_AT(p, 0x2f4), PTR_AT(p, 0x2f8), ov14_021F83E4);
     ManagedSprite_SetDrawFlag(PTR_AT(p, 0x328), 0);
     PTR_AT(p, 0x32c) = SpriteSystem_NewSpriteWithYOffset(PTR_AT(p, 0x2f4), PTR_AT(p, 0x2f8), ov14_021F8418, 2 << 20);
     ManagedSprite_SetDrawFlag(PTR_AT(p, 0x32c), 0);
 }
 
-void ov14_021F3844(void *p, u32 item) {
+void PCBox_LoadHeldItemIcon(void *p, u32 item) {
     void *charData;
     void *buf;
     u32 pal;
     buf = GfGfxLoader_GetCharData(0x12, GetItemIndexMapping(item, 1), 0, &charData, 0xa);
-    ov14_021F2C1C(p, 11, PTR_AT(charData, 0x14), 0x200);
+    PCBox_LoadSpriteCharsMain(p, 11, PTR_AT(charData, 0x14), 0x200);
     Heap_Free(buf);
     pal = NNS_G2dGetImagePaletteLocation(Sprite_GetPaletteProxy(PTR_AT(PTR_AT(p, 0x328), 0)), (NNS_G2D_VRAM_TYPE)1);
     GfGfxLoader_GXLoadPal(0x12, GetItemIndexMapping(item, 2), 1, pal, 0x20, 0xa);
 }
 
-void ov14_021F38B0(void *p, u32 item) {
+void PCBox_LoadInfoItemIcon(void *p, u32 item) {
     void *charData;
     void *buf;
     u32 pal;
     buf = GfGfxLoader_GetCharData(0x12, GetItemIndexMapping(item, 1), 0, &charData, 0xa);
-    ov14_021F2C50(p, 12, PTR_AT(charData, 0x14), 0x200);
+    PCBox_LoadSpriteCharsSub(p, 12, PTR_AT(charData, 0x14), 0x200);
     Heap_Free(buf);
     pal = NNS_G2dGetImagePaletteLocation(Sprite_GetPaletteProxy(PTR_AT(PTR_AT(p, 0x32c), 0)), (NNS_G2D_VRAM_TYPE)2);
     GfGfxLoader_GXLoadPal(0x12, GetItemIndexMapping(item, 2), 5, pal, 0x20, 0xa);

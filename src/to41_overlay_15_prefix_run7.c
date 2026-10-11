@@ -5,8 +5,8 @@
 #define U16(p, o) (*(u16 *)((u8 *)(p) + (o)))
 #define U8(p, o)  (*(u8 *)((u8 *)(p) + (o)))
 
-s32 ov15_021FAC2C(void *work, u32 index) {
-    return TouchscreenHitbox_FindRectAtTouchNew(ov15_02201314[index]);
+s32 BagApp_GetTouchedButton(void *work, u32 index) {
+    return TouchscreenHitbox_FindRectAtTouchNew(sTouchHitboxTables[index]);
 }
 
 s32 ov15_021FAC40(void) {

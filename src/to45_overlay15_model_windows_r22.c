@@ -30,12 +30,12 @@ typedef struct BagWorkR22 {
     Window listWindows[24];
 } BagWorkR22;
 
-void ov15_021FDD70(void *work);
-void ov15_021FDF20(void *work);
-void ov15_021FDF88(void *work);
-void ov15_021FE020(BagWorkR22 *work);
+void BagApp_LoadBagModel(void *work);
+void BagApp_FreeBagModel(void *work);
+void BagApp_SetBagModelPocketAnim(void *work);
+void BagApp_AddWindows(BagWorkR22 *work);
 
-void ov15_021FDD70(void *work) {
+void BagApp_LoadBagModel(void *work) {
     NARC *narc = NARC_New((NarcId)0xF, (enum HeapID)6);
     BagModelR22 *model;
     NNSG3dResTex *tex;
@@ -89,7 +89,7 @@ void ov15_021FDD70(void *work) {
     NARC_Delete(narc);
 }
 
-void ov15_021FDF20(void *work) {
+void BagApp_FreeBagModel(void *work) {
     BagModelR22 *model = (BagModelR22 *)((u8 *)work + 0x81C);
     u32 i;
 
@@ -104,7 +104,7 @@ void ov15_021FDF20(void *work) {
     Heap_Free(model->modelData);
 }
 
-void ov15_021FDF88(void *work) {
+void BagApp_SetBagModelPocketAnim(void *work) {
     BagModelR22 *model = (BagModelR22 *)((u8 *)work + 0x81C);
 
     NNS_G3dRenderObjRemoveAnmObj(&model->render, model->anim2[model->current]);
@@ -117,7 +117,7 @@ void ov15_021FDF88(void *work) {
     NNS_G3dRenderObjAddAnmObj(&model->render, model->anim2[model->current]);
 }
 
-void ov15_021FE020(BagWorkR22 *work) {
+void BagApp_AddWindows(BagWorkR22 *work) {
     int i;
 
     AddWindowParameterized(work->bgConfig, &work->windows[0], 1, 0, 0x12, 0x20, 6, 4, 1);

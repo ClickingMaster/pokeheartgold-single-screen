@@ -1,6 +1,6 @@
 #include "overlay18_pokedex_info_windows_internal.h"
 
-void ov18_021F014C(void *p) {
+void PokedexApp_ClearSearchEntryWindows(void *p) {
     u32 i;
     u8 *window = (u8 *)p + 0x51C;
     for (i = 0x51; i <= 0x5D; i++) {
@@ -23,7 +23,7 @@ void ov18_021F018C(void *p) {
     u16 j;
     for (i = 0; i < 6; i++) {
         dst = BgCellManager_GetCellTilemap(PTR(p, 8), i + 0x11);
-        base = *(const u16 *)(ov18_021F9E4C + i * 8 + 0x46);
+        base = *(const u16 *)(sAreaWindowTemplates + i * 8 + 0x46);
         for (j = 0; j < 0x24; j++) {
             dst[j] = (base + j) | 0x1000;
         }
@@ -37,7 +37,7 @@ void ov18_021F01D4(void *p) {
     u16 j;
     for (i = 0; i < 6; i++) {
         dst = BgCellManager_GetCellTilemap(PTR(p, 8), i + 0x11);
-        base = *(const u16 *)(ov18_021F9EBC + i * 8 + 0x56);
+        base = *(const u16 *)(sFormsWindowTemplates + i * 8 + 0x56);
         for (j = 0; j < 0x24; j++) {
             dst[j] = (base + j) | 0x1000;
         }

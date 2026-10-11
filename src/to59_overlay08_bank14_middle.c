@@ -2,16 +2,16 @@
 #pragma force_active on
 void *String_New(int, int);
 void BufferIntegerAsString(void *, int, int, int, int, int);
-void ov08_0221E408(void *, int);
-void ov08_0221E5DC(void *, int);
-void ov08_0221E6D8(void *, int);
-void ov08_0221E7D4(void *, int);
-void ov08_0221E8D4(void *, int);
-void ov08_0221E9D4(void *, int);
-void ov08_0221EAD4(void *, int);
+void BattlePartyMenu_PrintLevelAndNextExp(void *, int);
+void BattlePartyMenu_PrintAttack(void *, int);
+void BattlePartyMenu_PrintDefense(void *, int);
+void BattlePartyMenu_PrintSpeed(void *, int);
+void BattlePartyMenu_PrintSpAttack(void *, int);
+void BattlePartyMenu_PrintSpDefense(void *, int);
+void BattlePartyMenu_PrintHPStat(void *, int);
 typedef struct Ov08ItemBits { u8 count : 7; u8 flag : 1; } Ov08ItemBits;
 
-void ov08_0221E408(void *arg, int battler) {
+void BattlePartyMenu_PrintLevelAndNextExp(void *arg, int battler) {
     Ov08R2W11Work *work = arg;
     u8 *item = (u8 *)work + 4 + battler * 0x50;
     u16 selector = *((u8 *)work + 0x2075) * 22;
@@ -52,7 +52,7 @@ void ov08_0221E408(void *arg, int battler) {
     ScheduleWindowCopyToVram((Window *)((u8 *)work->windowArray + 0x140));
     ScheduleWindowCopyToVram((Window *)((u8 *)work->windowArray + offset));
 }
-void ov08_0221E5DC(void *arg, int battler) {
+void BattlePartyMenu_PrintAttack(void *arg, int battler) {
     Ov08R2W11Work *work = arg;
     u16 selector = *((u8 *)work + 0x2075) * 22;
     void *label = NewString_ReadMsgData(work->msgData, 0x20);
@@ -73,7 +73,7 @@ void ov08_0221E5DC(void *arg, int battler) {
     ScheduleWindowCopyToVram((Window *)((u8 *)work->windowArray + 0xE0));
     ScheduleWindowCopyToVram((Window *)((u8 *)work->windowArray + offset));
 }
-void ov08_0221E6D8(void *arg, int battler) {
+void BattlePartyMenu_PrintDefense(void *arg, int battler) {
     Ov08R2W11Work *work = arg;
     u16 selector = *((u8 *)work + 0x2075) * 22;
     void *label = NewString_ReadMsgData(work->msgData, 0x22);
@@ -94,7 +94,7 @@ void ov08_0221E6D8(void *arg, int battler) {
     ScheduleWindowCopyToVram((Window *)((u8 *)work->windowArray + 0xF0));
     ScheduleWindowCopyToVram((Window *)((u8 *)work->windowArray + offset));
 }
-void ov08_0221E7D4(void *arg, int battler) {
+void BattlePartyMenu_PrintSpeed(void *arg, int battler) {
     Ov08R2W11Work *work = arg;
     u16 selector = *((u8 *)work + 0x2075) * 22;
     void *label = NewString_ReadMsgData(work->msgData, 0x28);
@@ -115,7 +115,7 @@ void ov08_0221E7D4(void *arg, int battler) {
     ScheduleWindowCopyToVram((Window *)((u8 *)work->windowArray + 0x100));
     ScheduleWindowCopyToVram((Window *)((u8 *)work->windowArray + offset));
 }
-void ov08_0221E8D4(void *arg, int battler) {
+void BattlePartyMenu_PrintSpAttack(void *arg, int battler) {
     Ov08R2W11Work *work = arg;
     u16 selector = *((u8 *)work + 0x2075) * 22;
     void *label = NewString_ReadMsgData(work->msgData, 0x24);
@@ -136,7 +136,7 @@ void ov08_0221E8D4(void *arg, int battler) {
     ScheduleWindowCopyToVram((Window *)((u8 *)work->windowArray + 0x110));
     ScheduleWindowCopyToVram((Window *)((u8 *)work->windowArray + offset));
 }
-void ov08_0221E9D4(void *arg, int battler) {
+void BattlePartyMenu_PrintSpDefense(void *arg, int battler) {
     Ov08R2W11Work *work = arg;
     u16 selector = *((u8 *)work + 0x2075) * 22;
     void *label = NewString_ReadMsgData(work->msgData, 0x26);
@@ -157,7 +157,7 @@ void ov08_0221E9D4(void *arg, int battler) {
     ScheduleWindowCopyToVram((Window *)((u8 *)work->windowArray + 0x120));
     ScheduleWindowCopyToVram((Window *)((u8 *)work->windowArray + offset));
 }
-void ov08_0221EAD4(void *arg, int battler) {
+void BattlePartyMenu_PrintHPStat(void *arg, int battler) {
     Ov08R2W11Work *work = arg;
     u8 *item = (u8 *)work + 4 + battler * 0x50;
     u16 selector = *((u8 *)work + 0x2075) * 22;

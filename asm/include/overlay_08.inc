@@ -163,7 +163,7 @@
 .public _s32_div_f
 .public _u32_div_f
 .public gSystem
-.public ov08_022225D4
+.public BattleBagMenu_Create
 .public BattleSystem_GetBgConfig
 .public BattleSystem_GetBattleType
 .public BattleSystem_GetBattleContext

@@ -23,17 +23,17 @@ extern void GfGfxLoader_GXLoadPal(u32, s32, u32, u32, u32, u32);
 extern void *GfGfxLoader_GetScrnData(u32, s32, u32, GfxScreenData **, u32);
 extern void BG_LoadCharTilesData(void *, u32, void *, u32, u32);
 extern void Heap_Free(void *);
-extern void ov14_021F5718(void *, void *, u32, u32, u32);
+extern void PCBox_DrawBoxNameOnWallpaper(void *, void *, u32, u32, u32);
 extern void ScheduleBgTilemapBufferTransfer(void *, u32);
 extern void PaletteData_LoadNarc(void *, u32, s32, u32, u32, u32, u32);
 extern void LoadRectToBgTilemapRect(void *, u32, const void *, u32, u32, u32, u32);
 extern void FillBgTilemapRect(void *, u32, u32, u32, u32, u32, u32, u32);
 
-void ov14_021E76D0(void *, s32, u32, u32);
-void ov14_021E7720(void *, s32, u32);
-void ov14_021E7740(void *, s32, u32, u32, u32);
-void ov14_021E7808(void *, s32, u32, u32, u32);
-void ov14_021E783C(void *, s32, u32);
+void PCBox_LoadWallpaperChars(void *, s32, u32, u32);
+void PCBox_LoadWallpaperPalette(void *, s32, u32);
+void PCBox_LoadWallpaperTilemap(void *, s32, u32, u32, u32);
+void PCBox_LoadWallpaper(void *, s32, u32, u32, u32);
+void PCBox_LoadScrolledWallpaper(void *, s32, u32);
 void ov14_021E78AC(void *, s32);
 
 #endif

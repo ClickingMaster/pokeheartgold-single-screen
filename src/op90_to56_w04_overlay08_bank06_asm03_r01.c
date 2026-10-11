@@ -46,9 +46,9 @@ typedef struct {
     MonSummary mons[6];
 } SummaryWork;
 u32 Pokemon_GetStatusIconId(Pokemon *mon);
-void ov08_0221D184(SummaryWork *w);
-// @fn ov08_0221D184
-void ov08_0221D184(SummaryWork *w) {
+void BattlePartyMenu_LoadMonData(SummaryWork *w);
+// @fn BattlePartyMenu_LoadMonData
+void BattlePartyMenu_LoadMonData(SummaryWork *w) {
     u16 i, j;
     for (i = 0; i < Party_GetCount(w->ctx->party); i++) {
         w->mons[i].mon = Party_GetMonByIndex(w->ctx->party, i);

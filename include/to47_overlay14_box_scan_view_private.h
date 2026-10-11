@@ -30,10 +30,10 @@ u32 GetBoxMonData(void *, u32, void *);
 u32 GetBoxMonNature(void *);
 u8 GetBoxMonGender(void *);
 
-void *ov14_021E60C0(void *p, u32 boxId, u32 idx);
-s32 ov14_021E71C8(u16 v);
+void *PCBox_GetSlotBoxMon(void *p, u32 boxId, u32 idx);
+s32 PCBox_GetReleaseCheckMoveIndex(u16 v);
 
-u32 ov14_021E7278(void *);
-Ov14BoxView *ov14_021E7358(void *);
+u32 PCBox_RunReleaseMoveCheck(void *);
+Ov14BoxView *PCBox_CreateMonInfo(void *);
 
 #endif

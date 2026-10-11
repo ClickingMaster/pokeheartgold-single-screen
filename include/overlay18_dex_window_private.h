@@ -15,10 +15,10 @@ typedef struct {
     u16 paletteTimer;
 } Ov18Work;
 
-extern const ObjCharTransferTemplate ov18_021FBD50;
+extern const ObjCharTransferTemplate sEntryPopupObjCharTransferTemplate;
 void *Create2DGfxResObjMan(int num, int type, enum HeapID heapID);
-void ov18_021F8C68(Ov18Work *work);
-void ov18_021F8F10(Ov18Work *work);
-void ov18_021F8F28(Ov18Work *work);
-void ov18_021F8F58(void);
-void ov18_021F8F60(Ov18Work *work);
+void PokedexEntryPopup_FlashBanner(Ov18Work *work);
+void PokedexEntryPopup_RemoveWindows(Ov18Work *work);
+void PokedexEntryPopup_InitObjCharTransfer(Ov18Work *work);
+void PokedexEntryPopup_DestroyObjCharTransfer(void);
+void PokedexEntryPopup_CreateResourceManagers(Ov18Work *work);

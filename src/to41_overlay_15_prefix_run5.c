@@ -8,7 +8,7 @@
 void ov15_021FA070(void) {
 }
 
-s32 ov15_021FA074(void *work) {
+s32 BagApp_GetPageItemCount(void *work) {
     u8 *state = PTR(work, 0x234);
     u8 cur = U8(state, 0x64);
     s32 n = U8(state + cur * 12, 13) - (s16)U16(state + cur * 12, 10);

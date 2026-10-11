@@ -14,33 +14,33 @@ struct ItemSlot;
 extern u8 gSystem[];
 
 extern u32 YesNoPrompt_HandleInput(void *);
-extern void ov15_021FF058(void *);
+extern void BagApp_DestroyYesNoPrompt(void *);
 extern void *NewString_ReadMsgData(void *, s32);
 extern void BufferItemNamePlural(void *, u32, u16);
 extern void BufferItemName(void *, u32, u16);
 extern void BufferIntegerAsString(void *, u32, s32, u32, u32, u32);
 extern void StringExpandPlaceholders(void *, void *, void *);
 extern void String_Delete(void *);
-extern s32 ov15_021FEF48(void *, s32);
+extern s32 BagApp_PrintMessage(void *, s32);
 extern void EraseFrameAndWindow1(void *, s32);
 extern void FillWindowPixelBuffer(void *, u32);
 extern void ClearFrameAndWindow2(void *, BOOL);
 extern void ClearWindowTilemapAndScheduleTransfer(void *);
 extern void ScheduleWindowCopyToVram(void *);
-extern s32 ov15_021FA074(void *);
-extern void ov15_02200140(void *, void *, s32, BOOL);
-extern void ov15_021FE868(void *);
-extern void ov15_021FED3C(void *);
-extern void ov15_021FB518(void *);
-extern void ov15_02200458(void *, s32);
-extern void ov15_021FD788(void *, s32);
+extern s32 BagApp_GetPageItemCount(void *);
+extern void BagApp_DrawItemIcons(void *, void *, s32, BOOL);
+extern void BagApp_ClearMoveInfoWindow(void *);
+extern void BagApp_CloseItemMenuWindows(void *);
+extern void BagApp_RedrawPocket(void *);
+extern void BagApp_ShowPocketTabSprites(void *, s32);
+extern void BagApp_ShowCancelButton(void *, s32);
 extern BOOL TextPrinterCheckActive(u8);
 extern void PlaySE(u32);
 extern void PlayerProfile_AddMoney(void *, u32);
 extern BOOL Pocket_TakeItem(struct ItemSlot *, u32, u16, u16, u32);
-extern void ov15_021F9F08(void *);
-extern void ov15_021FA170(void *);
+extern void BagApp_LoadPocketItemNames(void *);
+extern void BagApp_PrintCursorDescription(void *);
 
-s32 ov15_021FC01C(void *);
+s32 BagApp_State_TrashYesNo(void *);
 
 #endif

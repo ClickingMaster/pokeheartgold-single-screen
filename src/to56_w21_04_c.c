@@ -7,26 +7,26 @@ void ov08_0221D81C(u8 *work) {
     }
 }
 
-void ov08_0221D840(u8 *work, int state) {
-    extern void ov08_0221D8B0(u8 *, int);
-    extern void ov08_0221D6CC(u8 *, int);
-    ov08_0221D8B0(work, state);
+void BattlePartyMenu_ChangePage(u8 *work, int state) {
+    extern void BattlePartyMenu_LoadPageTilemaps(u8 *, int);
+    extern void BattlePartyMenu_DrawExpBar(u8 *, int);
+    BattlePartyMenu_LoadPageTilemaps(work, state);
     BgFillTilemapBufferAndSchedule(*(BgConfig **)(work + 0x1e4), 4, 0);
     BgFillTilemapBufferAndSchedule(*(BgConfig **)(work + 0x1e4), 5, 0);
-    ov08_02220C5C(work, state);
-    ov08_0221DD28(work);
-    ov08_0221DC3C(work, state);
-    ov08_0221DD70(work, state);
-    ov08_0221D6CC(work, state);
-    ov08_0222171C(work, state);
-    ov08_022221CC(work, state);
-    ov08_02222524(work, state);
+    BattlePartyMenu_ShowPageSprites(work, state);
+    BattlePartyMenu_RemovePageWindows(work);
+    BattlePartyMenu_AddPageWindows(work, state);
+    BattlePartyMenu_PrintPageText(work, state);
+    BattlePartyMenu_DrawExpBar(work, state);
+    BattlePartyMenu_SetPageCursor(work, state);
+    BattlePartyMenu_DrawPageButtons(work, state);
+    BattlePartyMenu_LoadPagePalette(work, state);
     work[0x207a] = state;
 }
 
-void ov08_0221D8B0(u8 *work, int state) {
+void BattlePartyMenu_LoadPageTilemaps(u8 *work, int state) {
     u32 i;
-    const u32 *ids = &ov08_02224F80[state * 2];
+    const u32 *ids = &sBattlePartyPageScreenFiles[state * 2];
     for (i = 0; i < 2; i++) {
         NNSG2dScreenData *screen;
         void *file = AllocAndReadWholeNarcMemberByIdPair((NarcId)0x47, ids[i], (enum HeapID) * (u32 *)(*(u8 **)work + 0xc));

@@ -2,17 +2,17 @@
 #pragma force_active on
 void *String_New(int, int);
 void BufferIntegerAsString(void *, int, int, int, int, int);
-void ov08_0221F220(void *);
-void ov08_0221F284(void *, void *, int);
-void ov08_0221F4A4(void *);
+void BattlePartyMenu_PrintHMCantBeForgotten(void *);
+void BattlePartyMenu_PrintMoveListPP(void *, void *, int);
+void BattlePartyMenu_PrintPartyListPage(void *);
 int Party_GetCount(void *);
 int Pokemon_GetStatusIconId(void *);
-void ov08_0221DDCC(void *, int, int, int, int, int);
-void ov08_0221ED30(void *, int, int);
-void ov08_0221EE60(void *, int, u32);
-void ov08_0221F07C(void *, int, int, int);
-void ov08_0221EC6C(void *, int);
-void ov08_0221EC6C(void *arg, int battler) {
+void BattlePartyMenu_PrintMonName(void *, int, int, int, int, int);
+void BattlePartyMenu_PrintMoveAccuracy(void *, int, int);
+void BattlePartyMenu_PrintMovePower(void *, int, u32);
+void BattlePartyMenu_PrintMovePP(void *, int, int, int);
+void BattlePartyMenu_PrintAbilityDescription(void *, int);
+void BattlePartyMenu_PrintAbilityDescription(void *arg, int battler) {
     Ov08R2W11Work *work = arg;
     int selector = *((u8 *)work + 0x2075) * 22;
     void *msgData = NewMsgDataFromNarc(1, 0x1B, 0x2D2, *(int *)((u8 *)work->root + 0xC));
@@ -25,7 +25,7 @@ void ov08_0221EC6C(void *arg, int battler) {
     ScheduleWindowCopyToVram((Window *)((u8 *)work->windowArray + selector));
 }
 
-void ov08_0221ECE8(void *arg, int window) {
+void BattlePartyMenu_PrintAccuracyLabel(void *arg, int window) {
     Ov08R2W11Work *work = arg;
     Window *windows = work->windowArray;
     Window *target = &windows[window];
@@ -35,10 +35,10 @@ void ov08_0221ECE8(void *arg, int window) {
     ScheduleWindowCopyToVram(target);
 }
 
-void ov08_0221ED30(void *, int, int);
+void BattlePartyMenu_PrintMoveAccuracy(void *, int, int);
 void *String_New(int, int);
 void BufferIntegerAsString(void *, int, int, int, int, int);
-void ov08_0221ED30(void *arg, int windowIndex, int value) {
+void BattlePartyMenu_PrintMoveAccuracy(void *arg, int windowIndex, int value) {
     Ov08R2W11Work *work = arg;
     Window *windows = work->windowArray;
     Window *target = &windows[windowIndex];
@@ -62,7 +62,7 @@ void ov08_0221ED30(void *arg, int windowIndex, int value) {
     ScheduleWindowCopyToVram(target);
 }
 
-void ov08_0221EE18(void *arg, int window) {
+void BattlePartyMenu_PrintPowerLabel(void *arg, int window) {
     Ov08R2W11Work *work = arg;
     Window *windows = work->windowArray;
     Window *target = &windows[window];
@@ -72,10 +72,10 @@ void ov08_0221EE18(void *arg, int window) {
     ScheduleWindowCopyToVram(target);
 }
 
-void ov08_0221EE60(void *, int, u32);
+void BattlePartyMenu_PrintMovePower(void *, int, u32);
 void *String_New(int, int);
 void BufferIntegerAsString(void *, int, int, int, int, int);
-void ov08_0221EE60(void *arg, int windowIndex, u32 value) {
+void BattlePartyMenu_PrintMovePower(void *arg, int windowIndex, u32 value) {
     Ov08R2W11Work *work = arg;
     Window *windows = work->windowArray;
     Window *target = &windows[windowIndex];
@@ -99,7 +99,7 @@ void ov08_0221EE60(void *arg, int windowIndex, u32 value) {
     ScheduleWindowCopyToVram(target);
 }
 
-void ov08_0221EF48(void *arg, int window, int msgNo) {
+void BattlePartyMenu_PrintMoveDescription(void *arg, int window, int msgNo) {
     Ov08R2W11Work *work = arg;
     Window *windows = work->windowArray;
     Window *target = &windows[window];
@@ -112,7 +112,7 @@ void ov08_0221EF48(void *arg, int window, int msgNo) {
 }
 
 
-void ov08_0221EFA8(void *arg, int window) {
+void BattlePartyMenu_PrintCategoryLabel(void *arg, int window) {
     Ov08R2W11Work *work = arg;
     Window *windows = work->windowArray;
     Window *target = &windows[window];
@@ -124,7 +124,7 @@ void ov08_0221EFA8(void *arg, int window) {
     ScheduleWindowCopyToVram(target);
 }
 
-void ov08_0221F00C(void *arg, int window, int kind) {
+void BattlePartyMenu_PrintMoveCategory(void *arg, int window, int kind) {
     Ov08R2W11Work *work = arg;
     Window *windows = work->windowArray;
     Window *target = &windows[window];
@@ -139,10 +139,10 @@ void ov08_0221F00C(void *arg, int window, int kind) {
     ScheduleWindowCopyToVram(target);
 }
 
-void ov08_0221F07C(void *, int, int, int);
+void BattlePartyMenu_PrintMovePP(void *, int, int, int);
 void *String_New(int, int);
 void BufferIntegerAsString(void *, int, int, int, int, int);
-void ov08_0221F07C(void *arg, int windowIndex, int left, int right) {
+void BattlePartyMenu_PrintMovePP(void *arg, int windowIndex, int left, int right) {
     Ov08R2W11Work *work = arg;
     Window *windows = work->windowArray;
     Window *target = &windows[windowIndex];
@@ -169,7 +169,7 @@ void ov08_0221F07C(void *arg, int windowIndex, int left, int right) {
     ScheduleWindowCopyToVram(target);
 }
 
-void ov08_0221F1B0(void *arg, int window) {
+void BattlePartyMenu_PrintForgetButtonLabel(void *arg, int window) {
     Ov08R2W11Work *work = arg;
     Window *windows = work->windowArray;
     Window *target = &windows[window];
@@ -183,8 +183,8 @@ void ov08_0221F1B0(void *arg, int window) {
     ScheduleWindowCopyToVram(target);
 }
 
-void ov08_0221F220(void *);
-void ov08_0221F220(void *arg) {
+void BattlePartyMenu_PrintHMCantBeForgotten(void *);
+void BattlePartyMenu_PrintHMCantBeForgotten(void *arg) {
     Ov08R2W11Work *work = arg;
     Window *window;
     void *string;
@@ -200,10 +200,10 @@ void ov08_0221F220(void *arg) {
     ScheduleWindowCopyToVram(window);
 }
 
-void ov08_0221F284(void *, void *, int);
+void BattlePartyMenu_PrintMoveListPP(void *, void *, int);
 void *String_New(int, int);
 void BufferIntegerAsString(void *, int, int, int, int, int);
-void ov08_0221F284(void *arg, void *value, int windowIndex) {
+void BattlePartyMenu_PrintMoveListPP(void *arg, void *value, int windowIndex) {
     Ov08R2W11Work *work = arg;
     Window *windows = work->windowArray;
     Window *target = &windows[windowIndex];
@@ -231,11 +231,11 @@ void ov08_0221F284(void *arg, void *value, int windowIndex) {
     ScheduleWindowCopyToVram(target);
 }
 
-void ov08_0221F3D0(void *, void *, int);
+void BattlePartyMenu_UpdateMoveListPP(void *, void *, int);
 void *String_New(int, int);
 void BufferIntegerAsString(void *, int, int, int, int, int);
 
-void ov08_0221F3D0(void *arg, void *value, int windowIndex) {
+void BattlePartyMenu_UpdateMoveListPP(void *arg, void *value, int windowIndex) {
     Ov08R2W11Work *work = arg;
     Window *windows = work->windowArray;
     Window *window = &windows[windowIndex];
@@ -255,11 +255,11 @@ void ov08_0221F3D0(void *arg, void *value, int windowIndex) {
     ScheduleWindowCopyToVram(window);
 }
 
-void ov08_0221F4A4(void *);
+void BattlePartyMenu_PrintPartyListPage(void *);
 int Party_GetCount(void *);
 int Pokemon_GetStatusIconId(void *);
-void ov08_0221DDCC(void *, int, int, int, int, int);
-void ov08_0221F4A4(void *arg) {
+void BattlePartyMenu_PrintMonName(void *, int, int, int, int, int);
+void BattlePartyMenu_PrintPartyListPage(void *arg) {
     Ov08R2W11Work *work = arg;
     int i = 0;
     if (Party_GetCount(*(void **)work->root) > 0) {
@@ -269,12 +269,12 @@ void ov08_0221F4A4(void *arg) {
         do {
             FillWindowPixelBuffer((Window *)((u8 *)work->windowArray + windowOffset), 0);
             if (*(u16 *)(mon + 8) != 0) {
-                ov08_0221DDCC(work, i, 4, (u16)i, 0x20, 7);
+                BattlePartyMenu_PrintMonName(work, i, 4, (u16)i, 0x20, 7);
                 if ((u32)(*flag << 24) >> 31 == 0) {
-                    ov08_0221F550(work, (u8)i);
+                    BattlePartyMenu_PrintMonHPAndBar(work, (u8)i);
                 }
                 if (Pokemon_GetStatusIconId(*(void **)(mon + 4)) == 7) {
-                    ov08_0221F5B0(work, (u8)i);
+                    BattlePartyMenu_PrintPartyMonLevel(work, (u8)i);
                 }
             }
             mon += 0x50;
@@ -284,8 +284,8 @@ void ov08_0221F4A4(void *arg) {
         } while (i < Party_GetCount(*(void **)work->root));
     }
     if (*((u8 *)work->root + 0x35) == 2) {
-        ov08_0221E340(work, 7);
+        BattlePartyMenu_PrintPrompt(work, 7);
     } else {
-        ov08_0221E340(work, 6);
+        BattlePartyMenu_PrintPrompt(work, 6);
     }
 }

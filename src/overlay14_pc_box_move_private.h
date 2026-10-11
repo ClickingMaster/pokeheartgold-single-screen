@@ -99,16 +99,16 @@ extern void PCStorage_SwapMonsInBoxByIndexPair(void *, u32, u32, u32);
 extern void PCStorage_SetBoxModified(void *, u32);
 extern u32 PCStorage_CountMonsAndEggsInBox(void *, u32);
 
-extern const u16 ov14_021F7BC0[];
+extern const u16 sPCBoxReleaseCheckMoves[];
 
-extern u32 ov14_021E7588(void *, u32);
-extern void ov14_021F2A18(void *, u32, u32);
-extern void ov14_021F2ED0(void *, u32, u32, u32);
-extern void ov14_021F2F88(u32, s16 *, s16 *, u32);
-extern void ov14_021F3190(void *, u32, u32);
+extern u32 PCBox_ShowSlotMonInfo(void *, u32);
+extern void PCBox_SetSpriteVisible(void *, u32, u32);
+extern void PCBox_RefreshSlotIcon(void *, u32, u32, u32);
+extern void PCBox_GetSlotPosition(u32, s16 *, s16 *, u32);
+extern void PCBox_SetIconLayer(void *, u32, u32);
 extern void ov14_021F31E0(void *, u32, u32);
-extern void ov14_021F4940(void *, u32, s16 *, s16 *);
-extern void ov14_021F4958(void *, u32);
-extern void ov14_021F4A20(void *, u32);
+extern void PCBox_GetTrayBoxPosition(void *, u32, s16 *, s16 *);
+extern void PCBox_DrawBoxThumbnail(void *, u32);
+extern void PCBox_RefreshTrayBoxThumbnail(void *, u32);
 
 #endif

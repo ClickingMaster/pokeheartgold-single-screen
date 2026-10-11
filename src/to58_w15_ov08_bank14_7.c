@@ -14,8 +14,8 @@ typedef struct SpriteTemplate {
 typedef struct WorkWithManager { u8 pad[0x1FB4]; void *manager; } WorkWithManager;
 
 typedef struct SixCounts { int n[6]; } SixCounts;
-extern const SixCounts ov08_0222541C;
-extern const int ov08_02225644[];
+extern const SixCounts sBattlePartySpriteCapacities;
+extern const int sBattlePartySpriteTemplates[];
 extern const int ov08_02225648[];
 extern const int ov08_0222564C[];
 extern const int ov08_02225650[];
@@ -56,16 +56,16 @@ extern void *SpriteSystem_NewSprite(void *, void *, const SpriteTemplate *);
 #define ROOT(w) (*(void **)(w))
 #define AT(w, n) (*(void **)((u8 *)(w) + (n)))
 
-void ov08_0222061C(void *);
-void ov08_02220668(void *);
-void ov08_02220750(void *);
-void ov08_02220800(void *);
-void ov08_02220878(void *);
+void BattlePartyMenu_CreateSpriteManager(void *);
+void BattlePartyMenu_LoadMonIconResources(void *);
+void BattlePartyMenu_LoadStatusIconResources(void *);
+void BattlePartyMenu_LoadTypeIconResources(void *);
+void BattlePartyMenu_LoadHeldItemIconResources(void *);
 void ov08_02220928(void *);
-void *ov08_022209B8(void *, int);
+void *BattlePartyMenu_CreateSprite(void *, int);
 
-void ov08_0222061C(void *work) {
-    SixCounts capacities = ov08_0222541C;
+void BattlePartyMenu_CreateSpriteManager(void *work) {
+    SixCounts capacities = sBattlePartySpriteCapacities;
     void *system;
     void *manager;
     system = BattleSystem_GetSpriteSystem(AT(ROOT(work), 8));
@@ -75,7 +75,7 @@ void ov08_0222061C(void *work) {
     SpriteSystem_InitManagerWithCapacities(system, AT(work, 0x1FB4), &capacities);
 }
 
-void ov08_02220668(void *work) {
+void BattlePartyMenu_LoadMonIconResources(void *work) {
     void *narc = NARC_New(20, *(int *)((u8 *)ROOT(work) + 12));
     void *system = BattleSystem_GetSpriteSystem(AT(ROOT(work), 8));
     u32 i;
@@ -93,7 +93,7 @@ void ov08_02220668(void *work) {
     NARC_Delete(narc);
 }
 
-void ov08_02220750(void *work) {
+void BattlePartyMenu_LoadStatusIconResources(void *work) {
     void *system = BattleSystem_GetSpriteSystem(AT(ROOT(work), 8));
     void *narc = NARC_New(39, *(int *)((u8 *)ROOT(work) + 12));
     SpriteSystem_LoadPaletteBufferFromOpenNarc(AT(work, 0x1E8), 3, system, AT(work, 0x1FB4), narc, sub_0208AD58(), 0, 1, 2, 0xB008);
@@ -103,7 +103,7 @@ void ov08_02220750(void *work) {
     NARC_Delete(narc);
 }
 
-void ov08_02220800(void *work) {
+void BattlePartyMenu_LoadTypeIconResources(void *work) {
     void *system = BattleSystem_GetSpriteSystem(AT(ROOT(work), 8));
     u32 id;
     u32 end;
@@ -116,7 +116,7 @@ void ov08_02220800(void *work) {
     sub_02077834(system, ((WorkWithManager *)work)->manager, 2, 0, 0xB015);
 }
 
-void ov08_02220878(void *work) {
+void BattlePartyMenu_LoadHeldItemIconResources(void *work) {
     void *narc = NARC_New(21, *(int *)((u8 *)ROOT(work) + 12));
     void *system = BattleSystem_GetSpriteSystem(AT(ROOT(work), 8));
     SpriteSystem_LoadPaletteBufferFromOpenNarc(AT(work, 0x1E8), 3, system, AT(work, 0x1FB4), narc, sub_0207CAA0(), 0, 1, 2, 0xB00A);
@@ -134,7 +134,7 @@ void ov08_02220928(void *work) {
     SpriteSystem_LoadCharResObj(system, AT(work, 0x1FB4), 0x47, 0x1A, 0, 2, 0xB017);
 }
 
-void *ov08_022209B8(void *work, int index) {
+void *BattlePartyMenu_CreateSprite(void *work, int index) {
     SpriteTemplate tmpl;
     int off;
     void *system = BattleSystem_GetSpriteSystem(AT(ROOT(work), 8));
@@ -144,7 +144,7 @@ void *ov08_022209B8(void *work, int index) {
     tmpl.priority = *(int *)((u8 *)ov08_02225654 + off);
     tmpl.pal = 0;
     tmpl.vram = 2;
-    tmpl.resources[0] = *(int *)((u8 *)ov08_02225644 + off);
+    tmpl.resources[0] = *(int *)((u8 *)sBattlePartySpriteTemplates + off);
     tmpl.resources[1] = *(int *)((u8 *)ov08_02225648 + off);
     tmpl.resources[2] = *(int *)((u8 *)ov08_0222564C + off);
     tmpl.resources[3] = *(int *)((u8 *)ov08_02225650 + off);

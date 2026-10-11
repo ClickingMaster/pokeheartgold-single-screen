@@ -5,9 +5,9 @@
 #define U16(p, o) (*(u16 *)((u8 *)(p) + (o)))
 #define U8(p, o)  (*(u8 *)((u8 *)(p) + (o)))
 
-s32 ov15_021FD0E8(void *work) {
+s32 BagApp_State_WaitSellPriceMessage(void *work) {
     if (!TextPrinterCheckActive(U8(work, 0x616))) {
-        ov15_021FF004(work);
+        BagApp_CreateYesNoPrompt(work);
         return 22;
     }
     return 21;

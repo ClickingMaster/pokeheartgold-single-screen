@@ -16,26 +16,26 @@ typedef struct R21State {
     s32 z;
 } R21State;
 
-void ov18_021F13DC(void *, u32);
-void ov18_021F14FC(void *, u32, u32, int);
-void ov18_021F1534(void *, u32, u32, int);
-void ov18_021F1294(void *, int, s16, s16, int);
-void ov18_021F12C8(void *, int, s16 *, s16 *, int);
+void PokedexApp_UnloadMonIconResources(void *, u32);
+void PokedexApp_SetMonIcon(void *, u32, u32, int);
+void PokedexApp_SetMonIconSub(void *, u32, u32, int);
+void PokedexApp_SetSpritePos(void *, int, s16, s16, int);
+void PokedexApp_GetSpritePos(void *, int, s16 *, s16 *, int);
 void ov18_021F4EB0(u16, s16 *, s16 *);
 void ov18_021F4F98(void *, int, u16, s16, s16);
 void ov18_021F4FC8(void *, int, int);
-void ov18_021F3CA8(void *, int, u8 *, u8 *);
-void ov18_021F69E8(void *, u16, u8, u8, int);
-void ov18_021F6AB0(void *, s16, s16);
+void PokedexApp_GetSeenFormAndGender(void *, int, u8 *, u8 *);
+void PokedexApp_LoadMonPicToBg(void *, u16, u8, u8, int);
+void PokedexApp_SetMonPicBgAffine(void *, s16, s16);
 
-void ov18_021F4CC4(void *);
-void ov18_021F4D64(void *);
-void ov18_021F4DDC(void *);
+void PokedexApp_UnloadSizeCheckResources(void *);
+void PokedexApp_SetSizeCheckMonIcons(void *);
+void PokedexApp_DrawSizeCheckMonPic(void *);
 void ov18_021F4F98(void *, int, u16, s16, s16);
 void ov18_021F4FC8(void *, int, int);
-void ov18_021F5000(void *, u16);
-void ov18_021F516C(R21State *);
+void PokedexApp_UpdateScalePans(void *, u16);
+void PokedexApp_RunWeightCheckAnim(R21State *);
 void ov18_021F5180(R21State *, s32, s32);
 void ov18_021F5198(R21State *, s32, s32, s32);
-extern void (*const ov18_021FA588[])(R21State *);
+extern void (*const sWeightCheckAnimFuncs[])(R21State *);
 #endif

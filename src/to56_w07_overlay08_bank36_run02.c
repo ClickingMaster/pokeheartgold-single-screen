@@ -6,12 +6,12 @@
 #include "battle/battle_system.h"
 
 #include "sprite_system.h"
-extern const s32 ov08_02225D2C[];
+extern const s32 sBattleBagTutorialFingerPos[];
 extern const s32 ov08_02225D30[];
-void ov08_0222419C(u8 *);
-void ov08_022241F4(u8 *);
-void ov08_0222421C(u8 *, int);
-void ov08_0222458C(u16 *, const u16 *, u16, u16, u8, u8);
+void BattleBagMenu_CreateFinger(u8 *);
+void BattleBagMenu_FreeFinger(u8 *);
+void BattleBagMenu_UpdateTutorialFinger(u8 *, int);
+void BattleBagMenu_CopyTilemapRect(u16 *, const u16 *, u16, u16, u8, u8);
 
 typedef struct Ov08StateTail {
     u8 pad[0x113e];
@@ -19,9 +19,9 @@ typedef struct Ov08StateTail {
     u8 low : 4;
     u8 high : 4;
 } Ov08StateTail;
-void ov08_02224938(Ov08StateTail *, u8, u8);
+void BattleBagMenu_StartButtonAnim(Ov08StateTail *, u8, u8);
 
-void ov08_0222458C(u16 *dst, const u16 *src, u16 x, u16 y, u8 width, u8 height) {
+void BattleBagMenu_CopyTilemapRect(u16 *dst, const u16 *src, u16 x, u16 y, u8 width, u8 height) {
     u16 i, j;
     for (i = 0; i < height; i++) {
         for (j = 0; j < width; j++) {
@@ -29,8 +29,8 @@ void ov08_0222458C(u16 *dst, const u16 *src, u16 x, u16 y, u8 width, u8 height) 
         }
     }
 }
-void *ov08_022245DC(u8 *work, u32 type, u32 i);
-void *ov08_022245DC(u8 *work, u32 type, u32 i) {
+void *BattleBagMenu_GetButtonTilemap(u8 *work, u32 type, u32 i);
+void *BattleBagMenu_GetButtonTilemap(u8 *work, u32 type, u32 i) {
     switch (type) {
     case 0:
     case 1:
@@ -60,8 +60,8 @@ void *ov08_022245DC(u8 *work, u32 type, u32 i) {
         return NULL;
     }
 }
-u16 ov08_02224684(u8 *work, u32 type, u32 a2, u32 a3);
-u16 ov08_02224684(u8 *work, u32 type, u32 a2, u32 a3) {
+u16 BattleBagMenu_GetButtonPalette(u8 *work, u32 type, u32 a2, u32 a3);
+u16 BattleBagMenu_GetButtonPalette(u8 *work, u32 type, u32 a2, u32 a3) {
     if (a2 == 3) {
         return 5;
     }
@@ -95,8 +95,8 @@ u16 ov08_02224684(u8 *work, u32 type, u32 a2, u32 a3) {
         return 0;
     }
 }
-void ov08_022246F4(u8 *work, u8 *dst, u32 which, u32 idx);
-void ov08_022246F4(u8 *work, u8 *dst, u32 which, u32 idx) {
+void BattleBagMenu_CopyPocketIconTiles(u8 *work, u8 *dst, u32 which, u32 idx);
+void BattleBagMenu_CopyPocketIconTiles(u8 *work, u8 *dst, u32 which, u32 idx) {
     u16 *src;
     u16(*d)[16] = (u16(*)[16])dst;
     u16 i, j;

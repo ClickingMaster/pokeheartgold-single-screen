@@ -2,18 +2,18 @@
 
 #pragma force_active on
 
-void ov08_02223B20(W13Work *w) {
+void BattleBagMenu_ShowMessage(W13Work *w) {
     DrawFrameAndWindow2((u8 *)w + 0x1C, TRUE, 0x3E2, 14);
     FillWindowPixelBuffer((u8 *)w + 0x1C, 15);
-    ov08_02223B48(w);
+    BattleBagMenu_PrintMessage(w);
 }
 
-void ov08_02223B48(W13Work *w) {
+void BattleBagMenu_PrintMessage(W13Work *w) {
     TextFlags_SetCanABSpeedUpPrint(TRUE);
     *((u8 *)w + 0x32) = AddTextPrinterParameterized((u8 *)w + 0x1C, 1, w->string, 0, 0, BattleSystem_GetTextFrameDelay(w->root->battleSystem), NULL);
 }
 
-BOOL ov08_02223B78(W13Work *w) {
+BOOL BattleBagMenu_ValidateLastUsedItem(W13Work *w) {
     if (w->root->item == 0) {
         return FALSE;
     }

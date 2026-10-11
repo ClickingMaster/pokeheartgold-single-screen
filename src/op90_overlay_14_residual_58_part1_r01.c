@@ -3,9 +3,9 @@
 #include "bg_window.h"
 #include "bg_cell_manager.h"
 u16 *BgCellManager_GetCellTilemap(BgCellManager *, int);
-void ov14_021F60BC(BgCellManager *mgr, int id, Window *win);
-// @fn ov14_021F60BC
-void ov14_021F60BC(BgCellManager *mgr, int id, Window *win) {
+void PCBox_SetPanelWindowFrame(BgCellManager *mgr, int id, Window *win);
+// @fn PCBox_SetPanelWindowFrame
+void PCBox_SetPanelWindowFrame(BgCellManager *mgr, int id, Window *win) {
     u16 size[2];
     u16 *map;
     u16 i;

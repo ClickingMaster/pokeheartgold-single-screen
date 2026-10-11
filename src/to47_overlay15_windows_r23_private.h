@@ -24,14 +24,14 @@ typedef struct Ov15BagWorkR23 {
     String *strings[8];
 } Ov15BagWorkR23;
 
-extern const Ov15WindowConfigR23 ov15_02200908[];
-extern const Ov15PositionR23 ov15_022008E8[];
-extern const Ov15PositionR23 ov15_022008D0[];
+extern const Ov15WindowConfigR23 sItemListWindowTemplates[];
+extern const Ov15PositionR23 sItemMenuWindowPositions[];
+extern const Ov15PositionR23 sQuantityDigitWindowPositions[];
 
-void ov15_021FE17C(Ov15BagWorkR23 *work);
-void ov15_021FE1D0(Ov15BagWorkR23 *work);
-void ov15_021FE204(Ov15BagWorkR23 *work);
-void ov15_021FE3E0(Ov15BagWorkR23 *work);
+void BagApp_AddItemListWindows(Ov15BagWorkR23 *work);
+void BagApp_RemoveItemListWindows(Ov15BagWorkR23 *work);
+void BagApp_AddItemActionWindows(Ov15BagWorkR23 *work);
+void BagApp_RemoveItemActionWindows(Ov15BagWorkR23 *work);
 void ov15_021FE4C8(Ov15BagWorkR23 *work);
 
 #endif

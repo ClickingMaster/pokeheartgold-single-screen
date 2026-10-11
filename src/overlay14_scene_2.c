@@ -19,7 +19,7 @@ void ov14_021E8094(void *p) {
     BgCellManager_StartCellMove(p, 1, -1, 0, 0x13);
 }
 
-u32 ov14_021E80A8(void *p) {
+u32 PCBox_UpdatePartyPanelSlide(void *p) {
     s8 a[4];
     u32 x, y;
     BgCellManager_GetCellPosition(PP(PP(p, 0x34), 0x2F0), 1, &a[3], &a[2]);
@@ -28,7 +28,7 @@ u32 ov14_021E80A8(void *p) {
     BgCellManager_UpdateCellMove(PP(PP(p, 0x34), 0x2F0), 15);
     BgCellManager_GetCellPosition(PP(PP(p, 0x34), 0x2F0), 1, &a[1], &a[0]);
     if (a[3] != a[1] || a[2] != a[0]) {
-        ov14_021F32E0(p);
+        PCBox_UpdatePartyIconPositions(p);
     }
     if (x == 0 && y == 0) {
         return 0;
@@ -43,7 +43,7 @@ u32 ov14_021E813C(void *p) {
     x = BgCellManager_UpdateCellMove(PP(PP(p, 0x34), 0x2F0), 1);
     BgCellManager_GetCellPosition(PP(PP(p, 0x34), 0x2F0), 1, &a[1], &a[0]);
     if (a[3] != a[1] || a[2] != a[0]) {
-        ov14_021F32E0(p);
+        PCBox_UpdatePartyIconPositions(p);
     }
     if (x != 0) {
         return 1;

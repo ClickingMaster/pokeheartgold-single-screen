@@ -21,55 +21,55 @@ u16 GetWindowBaseTile(void *window);
 void CopyWindowPixelsToVram_TextMode(void *window);
 u16 *BgCellManager_GetCellTilemap(void *, u32);
 void BufferIntegerAsString(void *fmt, u32 field, u32 value, u32 digits, u32 mode, u32 charset);
-void ov18_021EE3AC(void *, void *, u32, u32, s32, u32, u32, u32, u32);
+void PokedexApp_PrintFormattedMessage(void *, void *, u32, u32, s32, u32, u32, u32, u32);
 u16 ov18_021E7698(u32);
 
-void ov18_021EF5D8(void *);
-void ov18_021EF764(void *);
-void ov18_021EF848(void *);
-void ov18_021EF91C(void *);
-void ov18_021EF9B4(void *);
-void ov18_021EFA50(void *);
-void ov18_021EFBE8(void *, u32);
-void ov18_021EFC3C(void *, u32);
-void ov18_021EFC9C(void *, u32, u32, s32);
-void ov18_021EFD00(void *, u32, u32);
-void ov18_021EFDB4(void *, u32, u32);
-void ov18_021EFE70(void *, u32);
-void ov18_021EFEC4(void *);
+void PokedexApp_DrawSearchOrderPage(void *);
+void PokedexApp_DrawSearchNamePage(void *);
+void PokedexApp_DrawSearchTypePage(void *);
+void PokedexApp_DrawSearchHeightPage(void *);
+void PokedexApp_DrawSearchWeightPage(void *);
+void PokedexApp_DrawSearchAreaPage(void *);
+void PokedexApp_DrawSearchOrderValue(void *, u32);
+void PokedexApp_DrawSearchNameValue(void *, u32);
+void PokedexApp_DrawSearchTypeValue(void *, u32, u32, s32);
+void PokedexApp_DrawHeightValue(void *, u32, u32);
+void PokedexApp_DrawWeightValue(void *, u32, u32);
+void PokedexApp_DrawSearchAreaValue(void *, u32);
+void PokedexApp_DrawSearchCriteriaSummary(void *);
 void ov18_021EFFEC(void *);
-void ov18_021F006C(void *, u32);
+void PokedexApp_PutWindowTilemap(void *, u32);
 
-extern const u8 ov18_021F9DC0[];
-extern const u8 ov18_021F9DE4[];
+extern const u8 sSearchTypeMsgIds[];
+extern const u8 sSizeCheckWindowTemplates[];
 
-void ov18_021EF388(void *p, u32 index, u32 message);
-void ov18_021EF45C(void *p);
-void ov18_021EF528(void *p);
-void ov18_021EF5D8(void *p);
-void ov18_021EF764(void *p);
-void ov18_021EF848(void *p);
-void ov18_021EF91C(void *p);
-void ov18_021EF9B4(void *p);
-void ov18_021EFA50(void *p);
-void ov18_021EFB88(void *p);
-void ov18_021EFBE8(void *p, u32 index);
-void ov18_021EFC3C(void *p, u32 index);
-void ov18_021EFEC4(void *p);
+void PokedexApp_DrawSearchButton(void *p, u32 index, u32 message);
+void PokedexApp_DrawSearchMenuPage(void *p);
+void PokedexApp_DrawSearchCriteria(void *p);
+void PokedexApp_DrawSearchOrderPage(void *p);
+void PokedexApp_DrawSearchNamePage(void *p);
+void PokedexApp_DrawSearchTypePage(void *p);
+void PokedexApp_DrawSearchHeightPage(void *p);
+void PokedexApp_DrawSearchWeightPage(void *p);
+void PokedexApp_DrawSearchAreaPage(void *p);
+void PokedexApp_DrawSearchFormPage(void *p);
+void PokedexApp_DrawSearchOrderValue(void *p, u32 index);
+void PokedexApp_DrawSearchNameValue(void *p, u32 index);
+void PokedexApp_DrawSearchCriteriaSummary(void *p);
 void ov18_021EFFEC(void *p);
-void ov18_021F006C(void *p, u32 index);
+void PokedexApp_PutWindowTilemap(void *p, u32 index);
 
-void ov18_021EFC9C(void *p, u32 entry, u32 index, s32 x) {
+void PokedexApp_DrawSearchTypeValue(void *p, u32 entry, u32 index, s32 x) {
     u8 *base = (u8 *)p + 0xc;
     u32 offset = index * 0x10;
     FillWindowPixelBuffer(base + offset, 0);
     if (x == -1) {
         x = GetWindowWidth(base + offset) * 8 / 2;
     }
-    ov18_021F9648(base + offset, PTR(p, 0x65c), ((const u16 *)ov18_021F9DC0)[entry], x, 0, 4, 0x20100, 2);
+    PokedexApp_PrintMessage(base + offset, PTR(p, 0x65c), ((const u16 *)sSearchTypeMsgIds)[entry], x, 0, 4, 0x20100, 2);
 }
 
-void ov18_021EFD00(void *p, u32 height, u32 index) {
+void PokedexApp_DrawHeightValue(void *p, u32 height, u32 index) {
     u32 value;
     u8 *base;
     u32 offset;
@@ -83,10 +83,10 @@ void ov18_021EFD00(void *p, u32 height, u32 index) {
     FillWindowPixelBuffer(base + offset, 0);
     BufferIntegerAsString(PTR(p, 0x660), 0, value / 12, 3, 0, 1);
     BufferIntegerAsString(PTR(p, 0x660), 1, value % 12, 2, 2, 1);
-    ov18_021EE3AC(p, PTR(p, 0x65c), index, 0xaf, GetWindowWidth(base + offset) * 8 / 2, 0, 4, 0x20100, 2);
+    PokedexApp_PrintFormattedMessage(p, PTR(p, 0x65c), index, 0xaf, GetWindowWidth(base + offset) * 8 / 2, 0, 4, 0x20100, 2);
 }
 
-void ov18_021EFDB4(void *p, u32 weight, u32 index) {
+void PokedexApp_DrawWeightValue(void *p, u32 weight, u32 index) {
     u32 value;
     u8 *base;
     u32 offset;
@@ -100,12 +100,12 @@ void ov18_021EFDB4(void *p, u32 weight, u32 index) {
     FillWindowPixelBuffer(base + offset, 0);
     BufferIntegerAsString(PTR(p, 0x660), 0, value / 10, 4, 0, 1);
     BufferIntegerAsString(PTR(p, 0x660), 1, value % 10, 1, 2, 1);
-    ov18_021EE3AC(p, PTR(p, 0x65c), index, 0x26, GetWindowWidth(base + offset) * 8 / 2, 0, 4, 0x20100, 2);
+    PokedexApp_PrintFormattedMessage(p, PTR(p, 0x65c), index, 0x26, GetWindowWidth(base + offset) * 8 / 2, 0, 4, 0x20100, 2);
 }
 
-void ov18_021EFE70(void *p, u32 index) {
+void PokedexApp_DrawSearchAreaValue(void *p, u32 index) {
     u8 *base = (u8 *)p + 0xc;
     u32 offset = index * 0x10;
     FillWindowPixelBuffer(base + offset, 0);
-    ov18_021F9648(base + offset, PTR(p, 0x65c), U32(p, 0x1888) + 0x41, GetWindowWidth(base + offset) * 8 / 2, 0, 4, 0x20100, 2);
+    PokedexApp_PrintMessage(base + offset, PTR(p, 0x65c), U32(p, 0x1888) + 0x41, GetWindowWidth(base + offset) * 8 / 2, 0, 4, 0x20100, 2);
 }

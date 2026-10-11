@@ -1,12 +1,12 @@
 #include "overlay18_pokedex_grid_navigation_r28_private.h"
 
-void ov18_021F7124(PokedexAppData *pokedexApp) {
-    pokedexApp->unk_1864 = GridInputHandler_Create(ov18_021FBA40, ov18_021FBB94, ov18_021FB638, pokedexApp, TRUE, 0, HEAP_ID_POKEDEX_APP);
-    ov18_021F11C0(pokedexApp, 0, 1);
-    ov18_021F719C(pokedexApp, 0);
+void PokedexApp_CreateSearchTypeGrid(PokedexAppData *pokedexApp) {
+    pokedexApp->unk_1864 = GridInputHandler_Create(sSearchTypeHitboxes, sSearchTypeDpadBoxes, sSearchTypeGridCallbacks, pokedexApp, TRUE, 0, HEAP_ID_POKEDEX_APP);
+    PokedexApp_SetSpriteVisible(pokedexApp, 0, 1);
+    PokedexApp_UpdateSearchTypeCursor(pokedexApp, 0);
 }
 
-u32 ov18_021F716C(PokedexAppData *pokedexApp) {
+u32 PokedexApp_HandleSearchTypeInput(PokedexAppData *pokedexApp) {
     MenuInputStateMgr_SetState(*(MenuInputStateMgr **)((u8 *)pokedexApp->args + 0xC), (MenuInputState)0);
     if (gSystem.newKeys & 8) {
         return 0x12;
@@ -14,16 +14,16 @@ u32 ov18_021F716C(PokedexAppData *pokedexApp) {
     return GridInputHandler_HandleInput_AllowHold(pokedexApp->unk_1864);
 }
 
-void ov18_021F719C(PokedexAppData *pokedexApp, int index) {
+void PokedexApp_UpdateSearchTypeCursor(PokedexAppData *pokedexApp, int index) {
     u8 position[2];
     const DpadMenuBox *box = GridInputHandler_GetDpadBox(pokedexApp->unk_1864, index);
 
     DpadMenuBox_GetPosition(box, &position[1], &position[0]);
     ManagedSprite_SetPositionXY(*(ManagedSprite **)((u8 *)pokedexApp + 0x670), position[1], position[0]);
-    ov18_021F118C(pokedexApp, 0, ov18_021FBD3C[index]);
+    PokedexApp_SetSpriteAnim(pokedexApp, 0, sSearchTypeCursorAnims[index]);
 }
 
-void ov18_021F71DC(PokedexAppData *pokedexApp, int currentInput, int lastInput) {
+void PokedexApp_OnSearchTypeGridMove(PokedexAppData *pokedexApp, int currentInput, int lastInput) {
     if (lastInput == 0x12) {
         if (currentInput == 0) {
             s32 previousInput = *(s32 *)pokedexApp->filler_189C;
@@ -69,7 +69,7 @@ void ov18_021F71DC(PokedexAppData *pokedexApp, int currentInput, int lastInput) 
             }
         }
     }
-    ov18_021F719C(pokedexApp, currentInput);
+    PokedexApp_UpdateSearchTypeCursor(pokedexApp, currentInput);
     *(s32 *)pokedexApp->filler_189C = lastInput;
     PlaySE(SEQ_SE_GS_ZKN03);
 }

@@ -8,7 +8,7 @@ typedef struct Ov18Flags5 {
     u8 : 3;
 } Ov18Flags5;
 
-void *ov18_021F8168(u32 index, u32 *count) {
+void *PokedexApp_LoadSortData(u32 index, u32 *count) {
     u32 size;
     void *ret;
     GF_ASSERT(index < 82);
@@ -17,7 +17,7 @@ void *ov18_021F8168(u32 index, u32 *count) {
     return ret;
 }
 
-void ov18_021F8198(u16 *dst, u32 *count, const Pokedex *pokedex, const u16 *src, u32 length) {
+void PokedexApp_FilterSeen(u16 *dst, u32 *count, const Pokedex *pokedex, const u16 *src, u32 length) {
     u32 i;
     *count = 0;
     i = 0;

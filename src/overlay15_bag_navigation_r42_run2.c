@@ -1,6 +1,6 @@
 #include "overlay15_bag_navigation_r42_private.h"
 
-s32 ov15_021FA578(BagWorkRaw *work, s32 direction) {
+s32 BagApp_State_ChangePage(BagWorkRaw *work, s32 direction) {
     BagContextRaw *ctx = PTR(BagContextRaw, work, 0x234);
     BagPocketEntryRaw *entry = &ctx->pockets[ctx->pocket];
     if (direction > 0) {
@@ -19,12 +19,12 @@ s32 ov15_021FA578(BagWorkRaw *work, s32 direction) {
         }
     }
     if (U8(work, 0x671) == 1) {
-        ov15_021FAD80(work, entry);
-        ov15_021FFF34(work, PTR(void, work, 0x66c));
+        BagApp_RedrawMovePage(work, entry);
+        BagApp_SetMoveCursorPosition(work, PTR(void, work, 0x66c));
         return 3;
     }
-    ov15_021FA6F4(work, entry);
-    ov15_021FA170(work);
+    BagApp_RedrawPocketPage(work, entry);
+    BagApp_PrintCursorDescription(work);
     switch (U8(PTR(void, work, 0x234), 0x65)) {
     case 2:
         return 16;
@@ -49,7 +49,7 @@ s32 ov15_021FA650(BagWorkRaw *work) {
         if (value >= _02201300) {
             _02201480 = 0;
         }
-        ov15_021FD574(work, 1, _02201300, _02201480);
+        BagApp_LoadSubScreenLayout(work, 1, _02201300, _02201480);
     }
     return 0;
 }

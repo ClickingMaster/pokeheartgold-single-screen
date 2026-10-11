@@ -1,7 +1,7 @@
 #include "to47_overlay18_pokedex_area_ui_03_private.h"
 
-void ov18_021F1FDC(void *p, int idx) {
-    ManagedSpriteTemplate template = ov18_021FA41C;
+void PokedexApp_CreateTypeIconSprites(void *p, int idx) {
+    ManagedSpriteTemplate template = sTypeIconSpriteTemplate;
 
     *(ManagedSprite **)((u8 *)p + 0x670 + idx * 4) = SpriteSystem_NewSpriteWithYOffset(
         *(SpriteSystem **)((u8 *)p + 0x668), *(SpriteManager **)((u8 *)p + 0x66C), &template, 0x200000);

@@ -1,6 +1,6 @@
 #include "to50_overlay14_r20_2_private.h"
 
-u32 ov14_021E9A24(void *p) {
+u32 PCBox_UpdateDepositDrag(void *p) {
     struct {
         s16 pos[2];
         u32 touchX;
@@ -17,7 +17,7 @@ u32 ov14_021E9A24(void *p) {
             (s32 *)&coords.pos[1],
             (s32 *)&coords.pos[0]);
     }
-    readyA = ov14_021E8514(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
+    readyA = PCBox_UpdateActionMenuSlide(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
     readyB = ov14_021E813C(p);
     readyC = BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 10);
 
@@ -36,18 +36,18 @@ u32 ov14_021E9A24(void *p) {
                 coords.pos[0]);
             u32 value = 0xff;
             if (U8_AT(PTR_AT(p, 0x34), 0x44a) == 2) {
-                value = ov14_021E7960((s16)U32_AT(PTR_AT(p, 0x34), 0x40b8),
+                value = PCBox_GetTouchedBoxSlot((s16)U32_AT(PTR_AT(p, 0x34), 0x40b8),
                     (s16)U32_AT(PTR_AT(p, 0x34), 0x40bc));
             }
             ov14_021E6F3C(p, U8_AT(p, 0x21), value);
-            ov14_021F40E8(p, 0);
-            U8_AT(p, 0x21) = (u8)ov14_021E70B0(p, U8_AT(p, 0x21));
+            PCBox_SetSelectedIconOutlineVisible(p, 0);
+            U8_AT(p, 0x21) = (u8)PCBox_GetMoveEntryTarget(p, U8_AT(p, 0x21));
             if (U8_AT(p, 0x21) < 30) {
                 U16_AT(work, 0x10) = 5;
                 break;
             }
             ov14_021E7FEC(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
-            ov14_021E8434(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
+            PCBox_SlideInActionMenu(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
             ov14_021E8824(PTR_AT(p, 0x34));
             U16_AT(work, 0x10) = 2;
             break;
@@ -60,25 +60,25 @@ u32 ov14_021E9A24(void *p) {
             PTR_AT((u8 *)PTR_AT(p, 0x34) + U8_AT((u8 *)PTR_AT(p, 0x34) + U8_AT(p, 0x21), 0x4094) * 4, 0x2fc),
             (s16)coords.touchY,
             (s16)((s16)coords.touchX - 8));
-        ov14_021F4174(p);
+        PCBox_UpdateSelectedIconOutline(p);
         U32_AT(PTR_AT(p, 0x34), 0x40b8) = coords.touchY;
         U32_AT(PTR_AT(p, 0x34), 0x40bc) = coords.touchX;
         break;
     case 2:
     case 3:
     case 4:
-        if (ov14_021E65C4(p) == 0 && readyB == 0 && readyA == 0) {
-            ov14_021E7148(p, PTR_AT(work, 0xc));
-            ov14_021F4174(p);
-            ov14_021F40E8(p, U32_AT(PTR_AT(p, 0x34), 0x40c4));
+        if (PCBox_AnimateMonMove(p) == 0 && readyB == 0 && readyA == 0) {
+            PCBox_ApplyMoveEntryIcons(p, PTR_AT(work, 0xc));
+            PCBox_UpdateSelectedIconOutline(p);
+            PCBox_SetSelectedIconOutlineVisible(p, U32_AT(PTR_AT(p, 0x34), 0x40c4));
             U16_AT(work, 0x10) = 7;
         }
         break;
     case 5:
         if (ov14_021E66F4(p) == 0) {
-            ov14_021E7148(p, PTR_AT(work, 0xc));
-            ov14_021E765C(p);
-            ov14_021E7EE0(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
+            PCBox_ApplyMoveEntryIcons(p, PTR_AT(work, 0xc));
+            PCBox_ClearMonInfo(p);
+            PCBox_SlideInPartyPanel(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
             U8_AT(p, 0x21) = 0xff;
             U16_AT(work, 0x10) = 6;
         }
@@ -89,8 +89,8 @@ u32 ov14_021E9A24(void *p) {
         }
         break;
     case 7:
-        ov14_021F3488(p, 1, 1);
-        ov14_021F3488(p, 2, 0);
+        PCBox_SetIconsTranslucent(p, 1, 1);
+        PCBox_SetIconsTranslucent(p, 2, 0);
         U8_AT(PTR_AT(p, 0x34), 0x44a) = 0;
         U16_AT(work, 0x10) = 0;
         return 0;
@@ -98,13 +98,13 @@ u32 ov14_021E9A24(void *p) {
     return 1;
 }
 
-u32 ov14_021E9C88(void *p) {
+u32 PCBox_UpdateWithdrawDrag(void *p) {
     u32 touchY;
     u32 touchX;
     s16 pos[2];
     void *work = PTR_AT(p, 0x34);
-    u32 readyA = ov14_021E8514(PTR_AT(work, 0x2f0));
-    u32 readyB = ov14_021E80A8(p);
+    u32 readyA = PCBox_UpdateActionMenuSlide(PTR_AT(work, 0x2f0));
+    u32 readyB = PCBox_UpdatePartyPanelSlide(p);
     u32 readyC = BgCellManager_UpdateCellMove(PTR_AT(PTR_AT(p, 0x34), 0x2f0), 10);
 
     switch (U16_AT(work, 0x10)) {
@@ -118,51 +118,51 @@ u32 ov14_021E9C88(void *p) {
         if (!System_GetTouchHeldCoords(&touchY, &touchX)) {
             u32 value = 0xff;
             if (U8_AT(PTR_AT(p, 0x34), 0x44a) == 2) {
-                value = ov14_021E79AC((s16)U32_AT(PTR_AT(p, 0x34), 0x40b8),
+                value = PCBox_GetTouchedPartySlot((s16)U32_AT(PTR_AT(p, 0x34), 0x40b8),
                     (s16)U32_AT(PTR_AT(p, 0x34), 0x40bc),
                     ov14_021F7C08);
             }
-            ov14_021E7034(p, U8_AT(p, 0x21), value);
-            ov14_021F40E8(p, 0);
-            U8_AT(p, 0x21) = (u8)ov14_021E70B0(p, U8_AT(p, 0x21));
+            PCBox_SetupMonMoveToPartyEnd(p, U8_AT(p, 0x21), value);
+            PCBox_SetSelectedIconOutlineVisible(p, 0);
+            U8_AT(p, 0x21) = (u8)PCBox_GetMoveEntryTarget(p, U8_AT(p, 0x21));
             if (U8_AT(p, 0x21) >= 30) {
                 U16_AT(work, 0x10) = 5;
                 break;
             }
             if (U8_AT(PTR_AT(p, 0x34), 0x44a) != 0) {
-                ov14_021E7F4C(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
+                PCBox_SlideOutPartyPanel(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
             }
             U16_AT(work, 0x10) = 2;
             break;
         }
         if (U8_AT(PTR_AT(p, 0x34), 0x44a) == 0 && readyA == 0 && readyC == 0) {
-            ov14_021F2F88(U8_AT(p, 0x21), &pos[1], &pos[0], U8_AT(p, 0x22));
+            PCBox_GetSlotPosition(U8_AT(p, 0x21), &pos[1], &pos[0], U8_AT(p, 0x22));
             if (touchY < (u32)(pos[1] - 16) || touchY >= (u32)(pos[1] + 16) || touchX < (u32)(pos[0] - 16) || touchX >= (u32)(pos[0] + 16)) {
                 U8_AT(PTR_AT(p, 0x34), 0x44a) = 1;
                 ov14_021E7ED0(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
-                ov14_021E7EE0(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
+                PCBox_SlideInPartyPanel(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
             }
         }
         ManagedSprite_SetPositionXY(
             PTR_AT((u8 *)PTR_AT(p, 0x34) + U8_AT((u8 *)PTR_AT(p, 0x34) + U8_AT(p, 0x21), 0x4094) * 4, 0x2fc),
             (s16)touchY,
             (s16)((s16)touchX - 8));
-        ov14_021F4174(p);
+        PCBox_UpdateSelectedIconOutline(p);
         U32_AT(PTR_AT(p, 0x34), 0x40b8) = touchY;
         U32_AT(PTR_AT(p, 0x34), 0x40bc) = touchX;
         break;
     case 2:
         if (readyB == 0) {
-            ov14_021E8434(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
+            PCBox_SlideInActionMenu(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
             ov14_021E8824(PTR_AT(p, 0x34));
             U16_AT(work, 0x10) = 3;
         }
     case 3:
     case 4:
-        if (ov14_021E65C4(p) == 0 && U16_AT(work, 0x10) == 4 && readyA == 0) {
-            ov14_021E7148(p, PTR_AT(work, 0xc));
-            ov14_021F4174(p);
-            ov14_021F40E8(p, U32_AT(PTR_AT(p, 0x34), 0x40c4));
+        if (PCBox_AnimateMonMove(p) == 0 && U16_AT(work, 0x10) == 4 && readyA == 0) {
+            PCBox_ApplyMoveEntryIcons(p, PTR_AT(work, 0xc));
+            PCBox_UpdateSelectedIconOutline(p);
+            PCBox_SetSelectedIconOutlineVisible(p, U32_AT(PTR_AT(p, 0x34), 0x40c4));
             U16_AT(work, 0x10) = 8;
             break;
         }
@@ -171,17 +171,17 @@ u32 ov14_021E9C88(void *p) {
         }
         break;
     case 5:
-        if (ov14_021E65C4(p) == 0) {
-            ov14_021E7148(p, PTR_AT(work, 0xc));
+        if (PCBox_AnimateMonMove(p) == 0) {
+            PCBox_ApplyMoveEntryIcons(p, PTR_AT(work, 0xc));
             U8_AT(p, 0x21) = 0xff;
-            ov14_021E7F4C(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
+            PCBox_SlideOutPartyPanel(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
             U16_AT(work, 0x10)
             ++;
         }
         break;
     case 6:
         if (readyB == 0) {
-            ov14_021E765C(p);
+            PCBox_ClearMonInfo(p);
             ov14_021E8328(PTR_AT(PTR_AT(p, 0x34), 0x2f0));
             U16_AT(work, 0x10)
             ++;
@@ -193,8 +193,8 @@ u32 ov14_021E9C88(void *p) {
         }
         break;
     case 8:
-        ov14_021F3488(p, 1, 0);
-        ov14_021F3488(p, 2, 0);
+        PCBox_SetIconsTranslucent(p, 1, 0);
+        PCBox_SetIconsTranslucent(p, 2, 0);
         U8_AT(PTR_AT(p, 0x34), 0x44a) = 0;
         U16_AT(work, 0x10) = 0;
         return 0;

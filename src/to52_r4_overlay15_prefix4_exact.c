@@ -1,6 +1,6 @@
 #include "to52_r4_overlay15_prefix4_private.h"
 
-void ov15_021F9DB4(void *work) {
+void BagApp_LoadCursorPositions(void *work) {
     u8 *entries;
     u16 i;
     (*(u8 **)((u8 *)work + 0x234))[0x64] = 0;
@@ -51,7 +51,7 @@ void ov15_021F9DB4(void *work) {
     }
 }
 
-void ov15_021F9EA8(void *work) {
+void BagApp_SaveCursorPositions(void *work) {
     u8 *state = *(u8 **)((u8 *)work + 0x234);
     u8 *entries;
     u32 i;

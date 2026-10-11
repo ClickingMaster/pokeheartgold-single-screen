@@ -5,7 +5,7 @@
 #define U16(p, o) (*(u16 *)((u8 *)(p) + (o)))
 #define U8(p, o)  (*(u8 *)((u8 *)(p) + (o)))
 
-void ov15_021FDAD0(void *work) {
+void BagApp_InitCameraTween(void *work) {
     U32(work, 0x11c) = 0;
     U32(work, 0x120) = 0;
     U32(work, 0x124) = -1;

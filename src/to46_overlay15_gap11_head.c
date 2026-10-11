@@ -1,6 +1,6 @@
 #include "to46_overlay15_gap11_private.h"
 
-void ov15_021FF97C(BagWorkRaw *work, u16 item, BOOL draw) {
+void BagApp_ShowTMHMTypeIcons(BagWorkRaw *work, u16 item, BOOL draw) {
     u16 move;
     u16 type;
     u16 category;
@@ -21,12 +21,12 @@ void ov15_021FF97C(BagWorkRaw *work, u16 item, BOOL draw) {
     }
 }
 
-void ov15_021FFA40(BagWorkRaw *work) {
-    SpriteResourceCountsListUnion counts = ov15_022009BC;
+void BagApp_CreateSpriteSystem(BagWorkRaw *work) {
+    SpriteResourceCountsListUnion counts = sBagSpriteResourceCounts;
     *(SpriteSystem **)&work->raw[0x248] = SpriteSystem_Alloc(HEAP_ID_6);
     *(SpriteManager **)&work->raw[0x24C] = SpriteManager_New(*(SpriteSystem **)&work->raw[0x248]);
-    OamManagerParam oam = ov15_022009F4;
-    OamCharTransferParam transfer = ov15_022009A8;
+    OamManagerParam oam = sBagOamManagerParam;
+    OamCharTransferParam transfer = sBagOamCharTransferParam;
     SpriteSystem_Init(*(SpriteSystem **)&work->raw[0x248], &oam, &transfer, 0x20);
     SpriteSystem_InitSprites(*(SpriteSystem **)&work->raw[0x248], *(SpriteManager **)&work->raw[0x24C], 0x27);
     SpriteSystem_InitManagerWithCapacities(*(SpriteSystem **)&work->raw[0x248], *(SpriteManager **)&work->raw[0x24C], &counts);

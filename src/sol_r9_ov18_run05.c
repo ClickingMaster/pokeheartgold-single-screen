@@ -2,11 +2,11 @@
 
 #define PTR(p, o) (*(void **)((u8 *)(p) + (o)))
 
-void ov18_021EEE58(void *work) {
-    ov18_021EE35C(work, ov18_021F9FDC, 0x65);
-    ov18_021EEED0(work, 0);
-    ov18_021EF45C(work);
-    ov18_021EF528(work);
+void PokedexApp_SetupSearchWindows(void *work) {
+    PokedexApp_AddWindows(work, sSearchWindowTemplates, 0x65);
+    PokedexApp_DrawSearchMessage(work, 0);
+    PokedexApp_DrawSearchMenuPage(work);
+    PokedexApp_DrawSearchCriteria(work);
     ov18_021EEE84(work);
 }
 

@@ -1,12 +1,12 @@
 #include "overlay14_sprite_manager_private.h"
 
-void ov14_021F2A74(void *p, u32 slot, u32 priority) {
+void PCBox_SetSpriteDrawPriority(void *p, u32 slot, u32 priority) {
     U16_AT(p, 0x88d2) = 1;
     ManagedSprite_SetDrawPriority(PTR_AT(p, 0x2fc + slot * 4), priority);
     U16_AT(p, 0x88d2) = 0;
 }
 
-void ov14_021F2A9C(void *p, u32 slot, u32 enabled) {
+void PCBox_SetSpriteTranslucent(void *p, u32 slot, u32 enabled) {
     if (enabled == 1) {
         ManagedSprite_SetOamMode(PTR_AT(p, 0x2fc + slot * 4), 1);
     } else {
@@ -14,7 +14,7 @@ void ov14_021F2A9C(void *p, u32 slot, u32 enabled) {
     }
 }
 
-void ov14_021F2AC8(void *p) {
+void PCBox_InitSpriteSystem(void *p) {
     R50Counts counts;
     R50Transfer transfer;
     R50Oam oam;
@@ -30,32 +30,32 @@ void ov14_021F2AC8(void *p) {
     G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(PTR_AT(p, 0x2f4)), 0, 2 << 20);
 }
 
-void ov14_021F2B68(void *p) {
+void PCBox_FreeSpriteSystem(void *p) {
     SpriteSystem_FreeResourcesAndManager(PTR_AT(p, 0x2f4), PTR_AT(p, 0x2f8));
     SpriteSystem_Free(PTR_AT(p, 0x2f4));
 }
 
-void ov14_021F2B88(void *p) {
-    ov14_021F41E4(p);
-    ov14_021F42EC(p);
-    ov14_021F2C84(p);
-    ov14_021F3DE8(p);
-    ov14_021F3714(p);
-    ov14_021F34EC(p);
-    ov14_021F3C08(p);
+void PCBox_LoadSpriteResources(void *p) {
+    PCBox_LoadTrayBoxResources(p);
+    PCBox_LoadWallpaperListResources(p);
+    PCBox_LoadMonIconResources(p);
+    PCBox_LoadUiSpriteResources(p);
+    PCBox_LoadItemIconResources(p);
+    PCBox_LoadMonPicResources(p);
+    PCBox_LoadTypeIconResources(p);
 }
 
-void ov14_021F2BB8(void *p) {
-    ov14_021F4278(PTR_AT(p, 0x34));
-    ov14_021F4380(PTR_AT(p, 0x34));
-    ov14_021F2D1C(PTR_AT(p, 0x34));
-    ov14_021F3E70(PTR_AT(p, 0x34));
-    ov14_021F37F4(PTR_AT(p, 0x34));
-    ov14_021F35BC(p);
-    ov14_021F3CB4(PTR_AT(p, 0x34));
+void PCBox_CreateSprites(void *p) {
+    PCBox_CreateTrayBoxSprites(PTR_AT(p, 0x34));
+    PCBox_CreateWallpaperListSprites(PTR_AT(p, 0x34));
+    PCBox_CreateMonIconSprites(PTR_AT(p, 0x34));
+    PCBox_CreateUiSprites(PTR_AT(p, 0x34));
+    PCBox_CreateItemIconSprites(PTR_AT(p, 0x34));
+    PCBox_CreateMonPicSprites(p);
+    PCBox_CreateTypeIconSprites(PTR_AT(p, 0x34));
 }
 
-void ov14_021F2BE8(void *p, u32 slot) {
+void PCBox_DeleteSprite(void *p, u32 slot) {
     u32 offset = slot * 4;
     void **sprites = (void **)((u8 *)p + 0x2fc);
 

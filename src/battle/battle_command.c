@@ -6851,12 +6851,12 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
             unkStruct.mon = BattleSystem_GetPartyMon(data->battleSystem, battlerId, data->ctx->selectedMonIndex[battlerId]);
             unkStruct.natDexEnabled = Pokedex_IsNatDexEnabled(BattleSystem_GetPokedex(data->battleSystem));
             data->tempPointers[POINTER_GET_POKEMON_TASK_MANAGER] = ObjCharTransfer_PopTaskManager();
-            data->tempPointers[POINTER_GET_POKEMON_OVERLAY_MANAGER] = ov18_021F8974(&unkStruct);
+            data->tempPointers[POINTER_GET_POKEMON_OVERLAY_MANAGER] = PokedexEntryPopup_Create(&unkStruct);
             data->state = STATE_GET_POKEMON_DISMISS_POKEDEX_ENTRY;
         }
         break;
     case STATE_GET_POKEMON_DISMISS_POKEDEX_ENTRY:
-        if (ov18_021F89C8(data->tempPointers[POINTER_GET_POKEMON_OVERLAY_MANAGER]) == 1) {
+        if (PokedexEntryPopup_IsDone(data->tempPointers[POINTER_GET_POKEMON_OVERLAY_MANAGER]) == 1) {
             if (PAD_BUTTON_A & gSystem.newKeys) { // If the A button is pressed...
                 data->state = STATE_GET_POKEMON_MOVE_POKEPIC_TO_CENTER;
             } else if (System_GetTouchNew()) { // If the touch screen is pressed...
@@ -6878,16 +6878,16 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
             data->state = STATE_GET_POKEMON_STORE_NEW_MON_BUG_CONTEST;
             break;
         }
-        Pokepic *pic = ov18_021F95F8(data->tempPointers[POINTER_GET_POKEMON_OVERLAY_MANAGER]);
+        Pokepic *pic = PokedexEntryPopup_GetPokepic(data->tempPointers[POINTER_GET_POKEMON_OVERLAY_MANAGER]);
         Pokepic_AddAttr(pic, POKEPIC_X, 4);           // Move the Pokepic 4 pixels to the right each frame.
         if (Pokepic_GetAttr(pic, POKEPIC_X) >= 128) { // Stop when the Pokepic has reached the center of the screen.
             Pokepic_SetAttr(pic, POKEPIC_X, 128);
-            ov18_021F95AC(data->tempPointers[POINTER_GET_POKEMON_OVERLAY_MANAGER]);
+            PokedexEntryPopup_HideSprites(data->tempPointers[POINTER_GET_POKEMON_OVERLAY_MANAGER]);
             data->state = STATE_GET_POKEMON_15;
         }
         break;
     case STATE_GET_POKEMON_15:
-        ov18_021F89D0(data->tempPointers[POINTER_GET_POKEMON_OVERLAY_MANAGER]);
+        PokedexEntryPopup_Delete(data->tempPointers[POINTER_GET_POKEMON_OVERLAY_MANAGER]);
         ObjCharTransfer_PushTaskManager(data->tempPointers[POINTER_GET_POKEMON_TASK_MANAGER]);
         ov12_02237D00(data->battleSystem);
         PaletteData_BeginPaletteFade(paletteData, 5, 0xFFFF, 1, 16, 0, RGB_BLACK);
@@ -6989,7 +6989,7 @@ static void Task_GetPokemon(SysTask *task, void *inData) {
             BattleController_EmitIncrementGameStat(data->battleSystem, BATTLER_PLAYER, 0, GAME_STAT_CAUGHT_MON);
             if (BattleSystem_GetBattleType(data->battleSystem) & BATTLE_TYPE_BUG_CONTEST) {
                 if (data->state == STATE_GET_POKEMON_STORE_NEW_MON_BUG_CONTEST) {
-                    ov18_021F89D0(data->tempPointers[POINTER_GET_POKEMON_OVERLAY_MANAGER]);                // We have not overwritten our original OverlayManager if we arrive here through this state.
+                    PokedexEntryPopup_Delete(data->tempPointers[POINTER_GET_POKEMON_OVERLAY_MANAGER]);                // We have not overwritten our original OverlayManager if we arrive here through this state.
                     ObjCharTransfer_PushTaskManager(data->tempPointers[POINTER_GET_POKEMON_TASK_MANAGER]); // Nor our TaskManager.
                     ov12_02237D00(data->battleSystem);
                 }

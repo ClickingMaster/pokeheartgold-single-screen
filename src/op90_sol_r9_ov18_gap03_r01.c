@@ -5,9 +5,9 @@
 #include "message_printer.h"
 #include "heap.h"
 typedef struct { u8 p[0xc]; Window windows[101]; u8 p2[0x854 - 0x65C]; NARC *narc; } Dex;
-void ov18_021EE520(Dex *d, u32 win, u32 value);
-// @fn ov18_021EE520
-void ov18_021EE520(Dex *d, u32 win, u32 value) {
+void PokedexApp_DrawCountNumber(Dex *d, u32 win, u32 value);
+// @fn PokedexApp_DrawCountNumber
+void PokedexApp_DrawCountNumber(Dex *d, u32 win, u32 value) {
     NNSG2dCharacterData *chr;
     void *buf;
     u8 *pix;

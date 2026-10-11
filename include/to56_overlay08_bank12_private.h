@@ -7,7 +7,7 @@ void *BattleSystem_GetBag(void *);
 void *BattleSystem_GetBagCursor(void *);
 BOOL Bag_TakeItem(void *, u16, u16, enum HeapID);
 void BagCursor_Battle_SetLastUsedItem(void *, u16, u8);
-void ov08_0221DBCC(void *, u16, u8, enum HeapID);
+void BattlePartyMenu_ConsumeItem(void *, u16, u8, enum HeapID);
 #endif
 #include "bg_window.h"
 typedef struct Ov08Bank12Owner {
@@ -25,16 +25,16 @@ typedef struct Ov08Bank12Work {
     u8 pad2075[5];
     u8 windowType;
 } Ov08Bank12Work;
-extern const WindowTemplate ov08_02224FD0[];
-void ov08_0221DC00(Ov08Bank12Work *);
-void ov08_0221DC3C(Ov08Bank12Work *, u8);
+extern const WindowTemplate sBattlePartyWindowTemplates[];
+void BattlePartyMenu_AddWindows(Ov08Bank12Work *);
+void BattlePartyMenu_AddPageWindows(Ov08Bank12Work *, u8);
 
-extern const WindowTemplate ov08_02225084[];
-extern const WindowTemplate ov08_0222500C[];
-extern const WindowTemplate ov08_0222522C[];
-extern const WindowTemplate ov08_022250EC[];
-extern const WindowTemplate ov08_022251A4[];
-extern const WindowTemplate ov08_0222502C[];
-extern const WindowTemplate ov08_02225054[];
-extern const WindowTemplate ov08_02225144[];
-extern const WindowTemplate ov08_022250B4[];
+extern const WindowTemplate sBattlePartyPartyListWindows[];
+extern const WindowTemplate sBattlePartyMonMenuWindows[];
+extern const WindowTemplate sBattlePartySummaryWindows[];
+extern const WindowTemplate sBattlePartyCheckMovesWindows[];
+extern const WindowTemplate sBattlePartyMoveDetailWindows[];
+extern const WindowTemplate sBattlePartyRestorePPWindows[];
+extern const WindowTemplate sBattlePartyLearnMoveWindows[];
+extern const WindowTemplate sBattlePartyForgetMoveWindows[];
+extern const WindowTemplate sBattlePartyContestForgetMoveWindows[];

@@ -4,5 +4,5 @@
 extern void DoScheduledBgGpuUpdates(void *);
 extern void GF_RunVramTransferTasks(void);
 extern void SpriteSystem_TransferOam(void);
-void ov15_021F995C(void **);
+void BagApp_VBlankCallback(void **);
 #endif

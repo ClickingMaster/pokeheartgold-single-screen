@@ -2,7 +2,7 @@
 
 #pragma force_active on
 
-void ov08_0222417C(u8 *work) {
+void BattleBagMenu_DeactivateCursor(u8 *work) {
     BattleDpadCursor *state = *(BattleDpadCursor **)(work + 0x34);
     BattleDpadCursor_SetActive(state, 0);
     BattleDpadCursor_ResetPosition(*(BattleDpadCursor **)(work + 0x34));

@@ -1,5 +1,5 @@
 #include "to50_overlay15_vblank_tasks_private.h"
-void ov15_021F995C(void **work) {
+void BagApp_VBlankCallback(void **work) {
     DoScheduledBgGpuUpdates(*work);
     GF_RunVramTransferTasks();
     SpriteSystem_TransferOam();

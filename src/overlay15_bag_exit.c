@@ -4,20 +4,20 @@ BOOL Bag_Exit(OverlayManager *manager, int *state) {
     u8 *work;
 
     work = OverlayManager_GetData(manager);
-    ov15_021FDC6C(work);
-    ov15_021FF894(work);
+    BagApp_Free3D(work);
+    BagApp_FreeSprites(work);
     Heap_Free(*(void **)(work + 0x68C));
     Heap_Free(*(void **)(work + 0x690));
     ov15_021FA0D8(work);
-    ov15_021F9EA8(work);
-    ov15_021FE154(work);
-    ov15_021F9A8C(*(void **)work);
+    BagApp_SaveCursorPositions(work);
+    BagApp_RemoveWindows(work);
+    BagApp_FreeBgLayers(*(void **)work);
     GF_TouchpadStopSampling();
     GF_DestroyVramTransferManager();
-    ov15_021FEB64(work);
+    BagApp_FreeItemMenuStrings(work);
     ov15_021FE504(work);
     ov15_021FE8A4(work);
-    ov15_021FA028(work);
+    BagApp_FreeItemNameStrings(work);
     String_Delete(*(String **)(work + 0x5E4));
     DestroyMsgData(*(MsgData **)(work + 0x2FC));
     DestroyMsgData(*(MsgData **)(work + 0x2F8));

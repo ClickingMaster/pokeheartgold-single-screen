@@ -1,6 +1,6 @@
 #include "to56_w21_private.h"
 
-void ov08_0221D6CC(u8 *work, int state) {
+void BattlePartyMenu_DrawExpBar(u8 *work, int state) {
     u8 pixels;
     u8 i;
     u8 *entry;
@@ -29,7 +29,7 @@ void ov08_0221D6CC(u8 *work, int state) {
         } else {
             fill = pixels + 0x16;
         }
-        ov08_0221D74C(work, fill, i + 10, 8);
+        BattlePartyMenu_SetExpBarTile(work, fill, i + 10, 8);
         if (pixels < 8) {
             pixels = 0;
         } else {
@@ -39,6 +39,6 @@ void ov08_0221D6CC(u8 *work, int state) {
     ScheduleBgTilemapBufferTransfer(*(BgConfig **)(work + 0x1e4), 7);
 }
 
-void ov08_0221D74C(u8 *work, int fill, u16 x, int y) {
+void BattlePartyMenu_SetExpBarTile(u8 *work, int fill, u16 x, int y) {
     FillBgTilemapRect(*(BgConfig **)(work + 0x1e4), 7, fill, (u8)x, (u8)y, 1, 1, 0x10);
 }

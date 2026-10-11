@@ -9,9 +9,9 @@ int GetDexHeightMsgBank(void);
 int GetDexWeightMsgBank(void);
 void FillWindowPixelBuffer(void *, u32);
 void ScheduleWindowCopyToVram(void *);
-void ov18_021F95FC(void *, void *, u32, u32, u32, u32, u32);
-void ov18_021EEA84(void *, u32, u32, u32, u32, u32, u32, u32);
-void ov18_021EEAE4(void *, u32, u32, u32);
-void ov18_021EEB34(void *, u32, u32, u32, u32, u32, u32, u32);
-void ov18_021EEB94(void *, u32, u32, u32);
+void PokedexApp_PrintString(void *, void *, u32, u32, u32, u32, u32);
+void PokedexApp_PrintHeight(void *, u32, u32, u32, u32, u32, u32, u32);
+void PokedexApp_DrawHeight(void *, u32, u32, u32);
+void PokedexApp_PrintWeight(void *, u32, u32, u32, u32, u32, u32, u32);
+void PokedexApp_DrawWeight(void *, u32, u32, u32);
 #endif

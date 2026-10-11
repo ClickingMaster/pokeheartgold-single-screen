@@ -8,7 +8,7 @@ typedef struct Ov18Flags5 {
     u8 : 3;
 } Ov18Flags5;
 
-void ov18_021F822C(u32 index, u16 *dst, u32 *dstCount, const u16 *filter, u32 filterCount, const Pokedex *pokedex) {
+void PokedexApp_ApplySortOrder(u32 index, u16 *dst, u32 *dstCount, const u16 *filter, u32 filterCount, const Pokedex *pokedex) {
     u16 *resource;
     u32 resourceCount;
     BOOL seenOnly = FALSE;
@@ -19,30 +19,30 @@ void ov18_021F822C(u32 index, u16 *dst, u32 *dstCount, const u16 *filter, u32 fi
         *dstCount = filterCount;
         return;
     case 1:
-        resource = ov18_021F8168(2, &resourceCount);
+        resource = PokedexApp_LoadSortData(2, &resourceCount);
         seenOnly = TRUE;
         break;
     case 2:
-        resource = ov18_021F8168(3, &resourceCount);
+        resource = PokedexApp_LoadSortData(3, &resourceCount);
         break;
     case 3:
-        resource = ov18_021F8168(4, &resourceCount);
+        resource = PokedexApp_LoadSortData(4, &resourceCount);
         break;
     case 4:
-        resource = ov18_021F8168(5, &resourceCount);
+        resource = PokedexApp_LoadSortData(5, &resourceCount);
         break;
     case 5:
-        resource = ov18_021F8168(6, &resourceCount);
+        resource = PokedexApp_LoadSortData(6, &resourceCount);
         break;
     default:
         GF_ASSERT(FALSE);
         break;
     }
-    ov18_021F8764(dst, dstCount, filter, filterCount, resource, resourceCount, seenOnly, pokedex);
+    PokedexApp_IntersectSpeciesLists(dst, dstCount, filter, filterCount, resource, resourceCount, seenOnly, pokedex);
     Heap_Free(resource);
 }
 
-void ov18_021F82CC(u32 index, u16 *dst, u32 *dstCount, const u16 *filter, u32 filterCount, const Pokedex *pokedex) {
+void PokedexApp_FilterByLetter(u32 index, u16 *dst, u32 *dstCount, const u16 *filter, u32 filterCount, const Pokedex *pokedex) {
     u16 *resource;
     u32 resourceCount;
 
@@ -51,7 +51,7 @@ void ov18_021F82CC(u32 index, u16 *dst, u32 *dstCount, const u16 *filter, u32 fi
         *dstCount = filterCount;
         return;
     }
-    resource = ov18_021F8168(index + 7, &resourceCount);
-    ov18_021F8764(dst, dstCount, resource, resourceCount, filter, filterCount, TRUE, pokedex);
+    resource = PokedexApp_LoadSortData(index + 7, &resourceCount);
+    PokedexApp_IntersectSpeciesLists(dst, dstCount, resource, resourceCount, filter, filterCount, TRUE, pokedex);
     Heap_Free(resource);
 }

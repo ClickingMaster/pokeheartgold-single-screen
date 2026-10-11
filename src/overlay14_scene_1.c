@@ -1,11 +1,11 @@
 #include "overlay14_scene_internal.h"
 
-void ov14_021E7E40(void *p) {
+void PCBox_SlideInMarkingMenu(void *p) {
     BgCellManager_DrawCellAt(p, 2, 0x15, 0x18);
     BgCellManager_StartCellMove(p, 2, 0, -1, 0x12);
 }
 
-void ov14_021E7E64(void *p) {
+void PCBox_SlideOutMarkingMenu(void *p) {
     BgCellManager_StartCellMove(p, 2, 0, 1, 0x12);
 }
 
@@ -30,7 +30,7 @@ void ov14_021E7ED0(void *p) {
     BgCellManager_DrawCellAt(p, 1, 0x15, 0x18);
 }
 
-void ov14_021E7EE0(void *p) {
+void PCBox_SlideInPartyPanel(void *p) {
     s8 xy[2];
     BgCellManager_GetCellPosition(p, 1, &xy[1], &xy[0]);
     if (xy[0] != 6) {
@@ -42,7 +42,7 @@ void ov14_021E7EE0(void *p) {
     }
 }
 
-void ov14_021E7F4C(void *p) {
+void PCBox_SlideOutPartyPanel(void *p) {
     s8 xy[2];
     BgCellManager_GetCellPosition(p, 1, &xy[1], &xy[0]);
     if (xy[0] != 0x18) {

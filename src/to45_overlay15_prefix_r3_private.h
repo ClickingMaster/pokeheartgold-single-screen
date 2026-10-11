@@ -22,14 +22,14 @@ typedef struct BagSlotTable {
     u8 selected;
 } BagSlotTable;
 
-extern const ScreenModes ov15_02200518;
-extern const u8 ov15_022006CC[];
-extern const u8 ov15_022006E8[];
-extern const u8 ov15_02200704[];
-extern const u8 ov15_02200720[];
-extern const u8 ov15_0220073C[];
-extern const u8 ov15_02200758[];
-extern const u8 ov15_02200774[];
+extern const ScreenModes sBagGraphicsModes;
+extern const u8 sBgTemplate_Main1[];
+extern const u8 sBgTemplate_Main2[];
+extern const u8 sBgTemplate_Main3[];
+extern const u8 sBgTemplate_Sub0[];
+extern const u8 sBgTemplate_Sub1[];
+extern const u8 sBgTemplate_Sub2[];
+extern const u8 sBgTemplate_Sub3[];
 
 void SetBothScreensModesAndDisable(const ScreenModes *);
 void InitBgFromTemplate(void *, int, const void *, int);
@@ -54,12 +54,12 @@ void LoadUserFrameGfx2(void *, int, int, int, int, int);
 int Options_GetFrame(void *);
 void *GfGfxLoader_GetPlttData(int, int, void *, int);
 
-void ov15_021F99A4(void *);
-void ov15_021F9A8C(void *);
-void ov15_021F9AE4(void *);
-void ov15_021F9C78(void *, int);
-void ov15_021F9CBC(void *);
-void ov15_021F9D28(void *);
-u16 ov15_021F9D60(void *, u16, BOOL);
+void BagApp_InitBgLayers(void *);
+void BagApp_FreeBgLayers(void *);
+void BagApp_LoadBgGraphics(void *);
+void BagApp_LoadInfoPanelTilemap(void *, int);
+void BagApp_CreateMessageData(void *);
+void BagApp_CountPockets(void *);
+u16 BagApp_GetCurrentPocketSlotValue(void *, u16, BOOL);
 
 #endif

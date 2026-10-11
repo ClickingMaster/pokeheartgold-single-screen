@@ -1,19 +1,19 @@
-	.extern ov08_0221DDCC
-	.extern ov08_0221E244
-	.extern ov08_0221E3A4
-	.extern ov08_0221F284
-	.extern ov08_02224FE0
-	.extern ov08_02224FF4
+	.extern BattlePartyMenu_PrintMonName
+	.extern BattlePartyMenu_PrintMoveName
+	.extern BattlePartyMenu_PrintButtonLabel
+	.extern BattlePartyMenu_PrintMoveListPP
+	.extern sBattlePartyMoveNameMsgIds
+	.extern sBattlePartyMonNameMsgIds
 #include "constants/moves.h"
 	.include "asm/macros.inc"
 	.include "overlay_08.inc"
 	.include "global.inc"
-	.extern ov08_0221DDCC
-	.extern ov08_0221E244
-	.extern ov08_0221E3A4
-	.extern ov08_0221F284
-	.extern ov08_02224FE0
-	.extern ov08_02224FF4
+	.extern BattlePartyMenu_PrintMonName
+	.extern BattlePartyMenu_PrintMoveName
+	.extern BattlePartyMenu_PrintButtonLabel
+	.extern BattlePartyMenu_PrintMoveListPP
+	.extern sBattlePartyMoveNameMsgIds
+	.extern sBattlePartyMonNameMsgIds
 
 .text
 	.force_active on

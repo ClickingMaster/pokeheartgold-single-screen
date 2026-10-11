@@ -8,8 +8,8 @@ typedef struct Ov18Flags5 {
     u8 : 3;
 } Ov18Flags5;
 
-int ov18_021F7D30(void *work, int *touched) {
-    int ret = ov18_021F7B94(work, touched);
+int PokedexApp_HandleFormsInput(void *work, int *touched) {
+    int ret = PokedexApp_HandleEntryTabTouch(work, touched);
     if (ret != -1) {
         return ret;
     }
@@ -43,7 +43,7 @@ int ov18_021F7D30(void *work, int *touched) {
     return -1;
 }
 
-int ov18_021F7DCC(void *work, int *touched) {
+int PokedexApp_HandleFormCompareInput(void *work, int *touched) {
     int ret;
     if (System_GetTouchNew() == TRUE) {
         ret = TouchscreenHitbox_FindRectAtTouchNew(ov18_021FB7E0);
@@ -82,7 +82,7 @@ int ov18_021F7DCC(void *work, int *touched) {
 }
 
 int ov18_021F7E70(void *work, int *touched) {
-    int ret = ov18_021F7B94(work, touched);
+    int ret = PokedexApp_HandleEntryTabTouch(work, touched);
     if (ret != -1) {
         return ret;
     }

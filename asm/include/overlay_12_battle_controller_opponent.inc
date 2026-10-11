@@ -139,7 +139,7 @@
 .public ov07_02234B5C
 .public ov07_022377DC
 .public ov07_022377F4
-.public ov08_022225D4
+.public BattleBagMenu_Create
 .public ov10_0221BE20
 .public ov10_0221BEF4
 .public ov10_022205BC

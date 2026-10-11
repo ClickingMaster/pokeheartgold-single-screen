@@ -6,171 +6,171 @@
 	.include "global.inc"
 
 	.text
-	.public ov15_021FA170
-	.public ov15_021FA1BC
-	.public ov15_021FA4F8
-	.public ov15_021FA578
+	.public BagApp_PrintCursorDescription
+	.public BagApp_State_HandleInput
+	.public BagApp_State_OpenItemMenu
+	.public BagApp_State_ChangePage
 	.public ov15_021FA620
-	.public ov15_021FA68C
-	.public ov15_021FA6C0
-	.public ov15_021FA73C
-	.public ov15_021FA93C
+	.public BagApp_FindPocketIndex
+	.public BagApp_GetAdjacentPocket
+	.public BagApp_PressButton
+	.public BagApp_State_PocketSwitch
 	.extern Bag_Exit
 	.extern Bag_Init
 	.extern Bag_Main
-	.extern ov15_021F9C78
-	.extern ov15_021F9F08
-	.extern ov15_021FA044
+	.extern BagApp_LoadInfoPanelTilemap
+	.extern BagApp_LoadPocketItemNames
+	.extern BagApp_ClampPocketScroll
 	.extern ov15_021FA070
-	.extern ov15_021FA074
-	.extern ov15_021FA0E4
-	.extern ov15_021FA104
-	.extern ov15_021FAC2C
+	.extern BagApp_GetPageItemCount
+	.extern BagApp_SetPocketPositionFromButton
+	.extern BagApp_ShouldMoveCursorToButton
+	.extern BagApp_GetTouchedButton
 	.extern ov15_021FAC40
-	.extern ov15_021FAD80
-	.extern ov15_021FB14C
-	.extern ov15_021FB680
+	.extern BagApp_RedrawMovePage
+	.extern BagApp_SetupItemMenu
+	.extern BagApp_ItemAction_Use
 	.extern ov15_021FBC6C
-	.extern ov15_021FBC8C
-	.extern ov15_021FBCAC
-	.extern ov15_021FC224
-	.extern ov15_021FC37C
-	.extern ov15_021FC3E0
-	.extern ov15_021FC3EC
-	.extern ov15_021FD3C0
-	.extern ov15_021FD3F0
-	.extern ov15_021FD404
-	.extern ov15_021FD574
-	.extern ov15_021FD774
-	.extern ov15_021FD7D0
-	.extern ov15_021FD810
-	.extern ov15_021FDAF4
-	.extern ov15_021FDF88
-	.extern ov15_021FE17C
-	.extern ov15_021FE1D0
-	.extern ov15_021FE204
-	.extern ov15_021FE3E0
-	.extern ov15_021FE584
-	.extern ov15_021FE5A4
-	.extern ov15_021FE5C4
-	.extern ov15_021FE620
+	.extern BagApp_ItemAction_Confirm
+	.extern BagApp_ItemAction_Trash
+	.extern BagApp_ItemAction_Register
+	.extern BagApp_ItemAction_Deselect
+	.extern BagApp_ItemAction_Move
+	.extern BagApp_ItemAction_Give
+	.extern BagApp_ItemAction_ChooseForBerryPatch
+	.extern BagApp_IsBerryOrMulch
+	.extern BagApp_LoadPocketSubBgPalette
+	.extern BagApp_LoadSubScreenLayout
+	.extern BagApp_SetMenuInputState
+	.extern BagApp_StartButtonFlash
+	.extern BagApp_StartButtonAnim
+	.extern BagApp_StartCameraTween
+	.extern BagApp_SetBagModelPocketAnim
+	.extern BagApp_AddItemListWindows
+	.extern BagApp_RemoveItemListWindows
+	.extern BagApp_AddItemActionWindows
+	.extern BagApp_RemoveItemActionWindows
+	.extern BagApp_BufferSlotItemName
+	.extern BagApp_BufferSlotItemNamePlural
+	.extern BagApp_PrintItemDescription
+	.extern BagApp_PrintTMHMMoveInfo
 
 	.public Bag_Exit
 	.public Bag_Init
 	.public Bag_Main
-	.public ov15_021F9C78
-	.public ov15_021FB680
+	.public BagApp_LoadInfoPanelTilemap
+	.public BagApp_ItemAction_Use
 	.public ov15_021FBC6C
-	.public ov15_021FBC8C
-	.public ov15_021FBCAC
-	.public ov15_021FC224
-	.public ov15_021FC37C
-	.public ov15_021FC3E0
-	.public ov15_021FC3EC
-	.public ov15_021FD3C0
-	.public ov15_021FD3F0
-	.public ov15_021FE17C
-	.public ov15_021FE1D0
-	.public ov15_021FE204
-	.public ov15_021FE3E0
-	.public ov15_021FE584
-	.public ov15_021FE5A4
-	.public ov15_021FE5C4
-	.public ov15_021FE620
-	.extern _022004EC
+	.public BagApp_ItemAction_Confirm
+	.public BagApp_ItemAction_Trash
+	.public BagApp_ItemAction_Register
+	.public BagApp_ItemAction_Deselect
+	.public BagApp_ItemAction_Move
+	.public BagApp_ItemAction_Give
+	.public BagApp_ItemAction_ChooseForBerryPatch
+	.public BagApp_IsBerryOrMulch
+	.public BagApp_AddItemListWindows
+	.public BagApp_RemoveItemListWindows
+	.public BagApp_AddItemActionWindows
+	.public BagApp_RemoveItemActionWindows
+	.public BagApp_BufferSlotItemName
+	.public BagApp_BufferSlotItemNamePlural
+	.public BagApp_PrintItemDescription
+	.public BagApp_PrintTMHMMoveInfo
+	.extern sDefaultItemMenuChoices
 	.extern _02201300
 	.extern _02201480
-	.extern ov15_021FEA5C
-	.extern ov15_021FEB64
-	.extern ov15_021FEB84
-	.extern ov15_021FECA0
-	.extern ov15_021FECC4
-	.extern ov15_021FECD8
-	.extern ov15_021FED24
-	.extern ov15_021FED3C
-	.extern ov15_021FED58
-	.extern ov15_021FED60
-	.extern ov15_021FEDEC
-	.extern ov15_021FEEA4
-	.extern ov15_021FEF48
-	.extern ov15_021FF004
-	.extern ov15_021FF058
-	.extern ov15_021FF068
-	.extern ov15_021FF0FC
+	.extern BagApp_LoadItemMenuStrings
+	.extern BagApp_FreeItemMenuStrings
+	.extern BagApp_PrintItemSelectedMessage
+	.extern BagApp_ShowItemDescription
+	.extern BagApp_ClearDescriptionWindow
+	.extern BagApp_ShowPocketDescription
+	.extern BagApp_CloseItemPromptWindow
+	.extern BagApp_CloseItemMenuWindows
+	.extern BagApp_CloseItemActionWindows
+	.extern BagApp_PrintMoveItemPrompt
+	.extern BagApp_PrintQuantityDigits
+	.extern BagApp_PrintTrashConfirmMessage
+	.extern BagApp_PrintMessage
+	.extern BagApp_CreateYesNoPrompt
+	.extern BagApp_DestroyYesNoPrompt
+	.extern BagApp_PrintSellPrice
+	.extern BagApp_PrintMoney
 	.extern ov15_021FF1E0
-	.extern ov15_021FF29C
-	.extern ov15_021FF364
-	.extern ov15_021FF4EC
-	.extern ov15_021FF560
-	.extern ov15_021FF6BC
-	.extern ov15_021FF758
-	.extern ov15_021FF7AC
-	.extern ov15_021FF7C4
-	.extern ov15_021FF7FC
-	.extern ov15_021FF834
-	.extern ov15_021FF844
-	.extern ov15_021FF850
-	.extern ov15_021FF894
-	.extern ov15_021FF8D4
+	.extern BagApp_PrintCancelButton
+	.extern BagApp_DrawItemList
+	.extern BagApp_DrawSelectedItemEntry
+	.extern BagApp_ClearSelectedItemEntry
+	.extern BagApp_PrintPageNumber
+	.extern BagApp_PrintItemMenuLabel
+	.extern BagApp_ClearItemMenuLabels
+	.extern BagApp_PrintTrashLabel
+	.extern BagApp_PrintSellLabel
+	.extern BagApp_ClearQuantityLabel
+	.extern BagApp_ClearCancelButtonText
+	.extern BagApp_InitSprites
+	.extern BagApp_FreeSprites
+	.extern BagApp_TickSprites
 	.extern ov15_021FF950
 	.extern ov15_021FF964
-	.extern ov15_021FFECC
-	.extern ov15_021FFF24
-	.extern ov15_021FFF34
-	.extern ov15_021FFFDC
-	.extern ov15_02200030
-	.extern ov15_0220005C
-	.extern ov15_02200140
-	.extern ov15_022001C4
-	.extern ov15_0220023C
-	.extern ov15_02200294
-	.extern ov15_022002B4
-	.extern ov15_022002EC
-	.extern ov15_02200300
-	.extern ov15_02200428
-	.extern ov15_02200458
-	.extern ov15_022004DC
-	.extern ov15_022004F4
-	.extern ov15_02200500
-	.extern ov15_0220050C
-	.extern ov15_02200518
-	.extern ov15_02200528
+	.extern BagApp_SetCursorPosition
+	.extern BagApp_HideCursor
+	.extern BagApp_SetMoveCursorPosition
+	.extern BagApp_SetQuantityCursorPosition
+	.extern BagApp_LoadPocketObjPalette
+	.extern BagApp_ShowMoveSlotSprites
+	.extern BagApp_DrawItemIcons
+	.extern BagApp_ShowMovingItemIcon
+	.extern BagApp_ShowItemMenuSprites
+	.extern BagApp_HideItemMenuSprites
+	.extern BagApp_ShowSelectedItemIcon
+	.extern BagApp_GetUnusedDigitCount
+	.extern BagApp_ShowQuantityButtons
+	.extern BagApp_HideQuantityButtons
+	.extern BagApp_ShowPocketTabSprites
+	.extern BagApp_SetCancelSpriteVisible
+	.extern sBagModelScale
+	.extern sCameraTarget
+	.extern sBagModelPosition
+	.extern sBagGraphicsModes
+	.extern sItemMenuNavTable
 	.extern ov15_02200529
 	.extern ov15_0220052A
 	.extern ov15_0220052B
-	.extern ov15_0220053C
-	.extern ov15_02200584
+	.extern sCameraSetup
+	.extern sMoveNavTable
 	.extern ov15_02200585
 	.extern ov15_02200586
 	.extern ov15_02200587
-	.extern ov15_022005CC
-	.extern ov15_02200618
-	.extern ov15_02200640
+	.extern sBagModelRotation
+	.extern sBagGraphicsBanks
+	.extern sButtonNavTable
 	.extern ov15_02200641
 	.extern ov15_02200642
 	.extern ov15_02200643
-	.extern ov15_022006CC
-	.extern ov15_022006E8
-	.extern ov15_02200704
-	.extern ov15_02200720
-	.extern ov15_0220073C
-	.extern ov15_02200758
-	.extern ov15_02200774
-	.extern ov15_02200790
-	.extern ov15_022008B0
-	.extern ov15_022008D0
-	.extern ov15_022008E8
-	.extern ov15_02200908
-	.extern ov15_02201304
-	.extern ov15_02201314
-	.extern ov15_02201328
-	.extern ov15_02201340
-	.extern ov15_02201368
-	.extern ov15_022013A8
-	.extern ov15_02201468
+	.extern sBgTemplate_Main1
+	.extern sBgTemplate_Main2
+	.extern sBgTemplate_Main3
+	.extern sBgTemplate_Sub0
+	.extern sBgTemplate_Sub1
+	.extern sBgTemplate_Sub2
+	.extern sBgTemplate_Sub3
+	.extern sCameraTweenKeys
+	.extern sPocketCapacities
+	.extern sQuantityDigitWindowPositions
+	.extern sItemMenuWindowPositions
+	.extern sItemListWindowTemplates
+	.extern sBagEdgeColorTable
+	.extern sTouchHitboxTables
+	.extern sItemSlotRects
+	.extern sUnusedSlotRects
+	.extern sItemActionFuncs
+	.extern sSubScreenTilemapCommands
+	.extern sItemMenuCursorButtons
 
-	thumb_func_start ov15_021FA73C
-ov15_021FA73C: ; 0x021FA73C
+	thumb_func_start BagApp_PressButton
+BagApp_PressButton: ; 0x021FA73C
 	push {r3, r4, r5, r6, r7, lr}
 	add r4, r0, #0
 	add r7, r2, #0
@@ -204,7 +204,7 @@ _021FA756: ; jump table
 	.short _021FA892 - _021FA756 - 2 ; case 15
 	.short _021FA8F6 - _021FA756 - 2 ; case 16
 _021FA778:
-	bl ov15_021FA68C
+	bl BagApp_FindPocketIndex
 	sub r1, r6, #2
 	cmp r0, r1
 	bne _021FA786
@@ -228,7 +228,7 @@ _021FA7A0:
 	add r2, #0x64
 	strb r0, [r2]
 	add r0, r4, #0
-	bl ov15_021F9F08
+	bl BagApp_LoadPocketItemNames
 	mov r0, #0x8d
 	lsl r0, r0, #2
 	ldr r0, [r4, r0]
@@ -239,38 +239,38 @@ _021FA7A0:
 	mul r0, r1
 	add r5, r2, r0
 	add r0, r4, #0
-	bl ov15_021FA074
+	bl BagApp_GetPageItemCount
 	mov r1, #0
 	add r2, r0, #0
 	add r0, r4, #0
 	add r3, r1, #0
-	bl ov15_021FD574
+	bl BagApp_LoadSubScreenLayout
 	mov r2, #6
 	ldrsh r1, [r5, r2]
 	add r0, r4, #0
 	sub r2, r2, #7
 	mov r3, #0
-	bl ov15_021FF364
+	bl BagApp_DrawItemList
 	mov r1, #0x8d
 	lsl r1, r1, #2
 	ldr r1, [r4, r1]
 	add r0, r4, #0
 	add r1, #0x64
 	ldrb r1, [r1]
-	bl ov15_02200030
+	bl BagApp_LoadPocketObjPalette
 	mov r2, #6
 	ldrb r1, [r5, #9]
 	ldrsh r2, [r5, r2]
 	add r0, r4, #0
 	mov r3, #0
-	bl ov15_021FF6BC
+	bl BagApp_PrintPageNumber
 	add r0, r4, #0
-	bl ov15_021FA074
+	bl BagApp_GetPageItemCount
 	add r2, r0, #0
 	add r0, r4, #0
 	add r1, r5, #0
 	mov r3, #1
-	bl ov15_02200140
+	bl BagApp_DrawItemIcons
 	mov r2, #0x8d
 	lsl r2, r2, #2
 	ldr r2, [r4, r2]
@@ -278,20 +278,20 @@ _021FA7A0:
 	add r2, #0x64
 	ldrb r2, [r2]
 	mov r1, #1
-	bl ov15_021FD404
+	bl BagApp_LoadPocketSubBgPalette
 	ldr r0, _021FA930 ; =0x000005DC
 	bl PlaySE
 	add r0, r4, #0
-	bl ov15_021FA170
+	bl BagApp_PrintCursorDescription
 	ldr r0, _021FA934 ; =0x00000644
 	ldr r1, [r4, r0]
 	cmp r1, #8
 	blt _021FA838
 	add r0, r4, #0
-	bl ov15_021FA0E4
+	bl BagApp_SetPocketPositionFromButton
 _021FA838:
 	add r0, r4, #0
-	bl ov15_021FDF88
+	bl BagApp_SetBagModelPocketAnim
 	mov r1, #0x8d
 	lsl r1, r1, #2
 	ldr r1, [r4, r1]
@@ -301,7 +301,7 @@ _021FA838:
 	add r0, r4, r0
 	mov r2, #7
 	add r1, r1, #1
-	bl ov15_021FDAF4
+	bl BagApp_StartCameraTween
 	b _021FA92A
 _021FA856:
 	mov r0, #0x8d
@@ -331,7 +331,7 @@ _021FA856:
 	bl PlaySE
 _021FA88A:
 	add r0, r4, #0
-	bl ov15_021FA170
+	bl BagApp_PrintCursorDescription
 	b _021FA92A
 _021FA892:
 	mov r0, #0x8d
@@ -354,7 +354,7 @@ _021FA892:
 	mov r1, #0x12
 	mov r2, #9
 	mov r3, #8
-	bl ov15_021FD7D0
+	bl BagApp_StartButtonFlash
 	add r6, r0, #0
 	b _021FA92A
 _021FA8C4:
@@ -378,7 +378,7 @@ _021FA8C4:
 	mov r1, #0x11
 	mov r2, #9
 	mov r3, #8
-	bl ov15_021FD7D0
+	bl BagApp_StartButtonFlash
 	add r6, r0, #0
 	b _021FA92A
 _021FA8F6:
@@ -393,7 +393,7 @@ _021FA8F6:
 	add r1, #0x68
 	strh r2, [r1]
 	ldr r1, [sp, #0x1c]
-	bl ov15_021FD774
+	bl BagApp_SetMenuInputState
 	mov r0, #SEQ_SE_GS_GEARCANCEL>>6
 	lsl r0, r0, #6
 	bl PlaySE
@@ -403,7 +403,7 @@ _021FA8F6:
 	mov r1, #0x13
 	mov r2, #9
 	mov r3, #8
-	bl ov15_021FD7D0
+	bl BagApp_StartButtonFlash
 	add r6, r0, #0
 _021FA92A:
 	add r0, r6, #0
@@ -412,11 +412,11 @@ _021FA92A:
 _021FA930: .word 0x000005DC
 _021FA934: .word 0x00000644
 _021FA938: .word 0x00000808
-	thumb_func_end ov15_021FA73C
+	thumb_func_end BagApp_PressButton
 
 
-	thumb_func_start ov15_021FA93C
-ov15_021FA93C: ; 0x021FA93C
+	thumb_func_start BagApp_State_PocketSwitch
+BagApp_State_PocketSwitch: ; 0x021FA93C
 	push {r4, r5, r6, lr}
 	add r5, r0, #0
 	ldr r0, _021FAA10 ; =0x00000619
@@ -450,7 +450,7 @@ _021FA96E:
 	strb r0, [r4, #7]
 _021FA97A:
 	add r0, r5, #0
-	bl ov15_021FAA18
+	bl BagApp_HandlePocketSwitchDpad
 	cmp r0, #0
 	bne _021FA9FE
 	ldrb r0, [r4, #7]
@@ -514,10 +514,10 @@ _021FA9C6:
 	mov r2, #7
 	add r0, r5, r0
 	add r1, r1, #1
-	bl ov15_021FDAF4
+	bl BagApp_StartCameraTween
 _021FA9FE:
 	add r0, r5, #0
-	bl ov15_021FAB34
+	bl BagApp_RunPocketSwitch
 	add r0, r5, #0
 	bl ov15_021FF964
 	mov r0, #0
@@ -525,11 +525,11 @@ _021FA9FE:
 	nop
 _021FAA10: .word 0x00000619
 _021FAA14: .word 0x00000808
-	thumb_func_end ov15_021FA93C
+	thumb_func_end BagApp_State_PocketSwitch
 
 
-	thumb_func_start ov15_021FAA18
-ov15_021FAA18: ; 0x021FAA18
+	thumb_func_start BagApp_HandlePocketSwitchDpad
+BagApp_HandlePocketSwitchDpad: ; 0x021FAA18
 	push {r3, r4, r5, lr}
 	ldr r1, _021FAB28 ; =gSystem
 	add r5, r0, #0
@@ -676,11 +676,11 @@ _021FAB24:
 _021FAB28: .word gSystem
 _021FAB2C: .word 0x00000619
 _021FAB30: .word 0x00000614
-	thumb_func_end ov15_021FAA18
+	thumb_func_end BagApp_HandlePocketSwitchDpad
 
 
-	thumb_func_start ov15_021FAB34
-ov15_021FAB34: ; 0x021FAB34
+	thumb_func_start BagApp_RunPocketSwitch
+BagApp_RunPocketSwitch: ; 0x021FAB34
 	push {r3, r4, r5, lr}
 	ldr r1, _021FAC28 ; =0x00000619
 	add r5, r0, #0
@@ -714,7 +714,7 @@ _021FAB64:
 	ldrb r2, [r4]
 	add r1, #0x64
 	strb r2, [r1]
-	bl ov15_021F9F08
+	bl BagApp_LoadPocketItemNames
 	mov r0, #0x8d
 	lsl r0, r0, #2
 	ldr r1, [r5, r0]
@@ -729,21 +729,21 @@ _021FAB64:
 	ldrsh r1, [r1, r2]
 	sub r2, #0xb
 	mov r3, #0
-	bl ov15_021FF364
+	bl BagApp_DrawItemList
 	add r0, r5, #0
-	bl ov15_021FA074
+	bl BagApp_GetPageItemCount
 	mov r1, #0
 	add r2, r0, #0
 	add r0, r5, #0
 	add r3, r1, #0
-	bl ov15_021FD574
+	bl BagApp_LoadSubScreenLayout
 	mov r1, #0x8d
 	lsl r1, r1, #2
 	ldr r1, [r5, r1]
 	add r0, r5, #0
 	add r1, #0x64
 	ldrb r1, [r1]
-	bl ov15_02200030
+	bl BagApp_LoadPocketObjPalette
 	mov r2, #0x8d
 	lsl r2, r2, #2
 	ldr r2, [r5, r2]
@@ -751,7 +751,7 @@ _021FAB64:
 	add r2, #0x64
 	ldrb r2, [r2]
 	mov r1, #1
-	bl ov15_021FD404
+	bl BagApp_LoadPocketSubBgPalette
 	mov r0, #0x8d
 	lsl r0, r0, #2
 	ldr r3, [r5, r0]
@@ -769,7 +769,7 @@ _021FAB64:
 	add r1, r1, r2
 	add r2, r3, r2
 	ldrb r2, [r2, #0xd]
-	bl ov15_021FA044
+	bl BagApp_ClampPocketScroll
 	mov r0, #0x8d
 	lsl r0, r0, #2
 	ldr r3, [r5, r0]
@@ -802,4 +802,4 @@ _021FAC24:
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
 _021FAC28: .word 0x00000619
-	thumb_func_end ov15_021FAB34
+	thumb_func_end BagApp_RunPocketSwitch

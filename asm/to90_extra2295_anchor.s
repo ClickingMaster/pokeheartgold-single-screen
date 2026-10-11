@@ -1,31 +1,31 @@
-	.extern ov08_02223368
-	.extern ov08_0222377C
-	.extern ov08_022237C4
-	.extern ov08_02223CD4
-	.extern ov08_02223F94
-	.extern ov08_0222417C
-	.extern ov08_02224938
-	.extern ov08_02224A50
+	.extern BattleBagMenu_CheckTouchHitbox
+	.extern BattleBagMenu_PrintItemList
+	.extern BattleBagMenu_PrintPageNumber
+	.extern BattleBagMenu_GetItemOnPage
+	.extern BattleBagMenu_ShowPageSprites
+	.extern BattleBagMenu_DeactivateCursor
+	.extern BattleBagMenu_StartButtonAnim
+	.extern BattleBagMenu_DrawPageButtons
 	.extern BattleDpadCursor_GetPosition
 	.extern BattleDpadCursor_IsActive
 	.extern BattleDpadCursor_HandleInput
-	.extern ov08_02225B68
+	.extern sBattleBagItemListHitboxes
 #include "constants/moves.h"
 	.include "asm/macros.inc"
 	.include "overlay_08.inc"
 	.include "global.inc"
-	.extern ov08_02223368
-	.extern ov08_0222377C
-	.extern ov08_022237C4
-	.extern ov08_02223CD4
-	.extern ov08_02223F94
-	.extern ov08_0222417C
-	.extern ov08_02224938
-	.extern ov08_02224A50
+	.extern BattleBagMenu_CheckTouchHitbox
+	.extern BattleBagMenu_PrintItemList
+	.extern BattleBagMenu_PrintPageNumber
+	.extern BattleBagMenu_GetItemOnPage
+	.extern BattleBagMenu_ShowPageSprites
+	.extern BattleBagMenu_DeactivateCursor
+	.extern BattleBagMenu_StartButtonAnim
+	.extern BattleBagMenu_DrawPageButtons
 	.extern BattleDpadCursor_GetPosition
 	.extern BattleDpadCursor_IsActive
 	.extern BattleDpadCursor_HandleInput
-	.extern ov08_02225B68
+	.extern sBattleBagItemListHitboxes
 
 .text
 	.force_active on

@@ -4,9 +4,9 @@
 
 NarcId ov18_021E5900(void);
 int ov18_021E5908(void);
-void ov18_021F1CB4(void *p);
+void PokedexApp_LoadFootprintResources(void *p);
 
-void ov18_021F1CB4(void *p) {
+void PokedexApp_LoadFootprintResources(void *p) {
     NarcId narcId = ov18_021E5900();
 
     SpriteSystem_LoadCharResObjFromOpenNarc(*(SpriteSystem **)((u8 *)p + 0x668), *(SpriteManager **)((u8 *)p + 0x66C), *(NARC **)((u8 *)p + 0x854), 77, TRUE, 2, 0xC599);

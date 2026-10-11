@@ -1,6 +1,6 @@
 #include "overlay_18_dex_search_private.h"
 
-void ov18_021F81D8(PokedexAppData_UnkSub0878 *result, Pokedex *pokedex, u16 *src, u32 count) {
+void PokedexApp_StoreSearchResults(PokedexAppData_UnkSub0878 *result, Pokedex *pokedex, u16 *src, u32 count) {
     u32 i;
     result->unk_7B4 = count;
     result->unk_7B6 = 0;

@@ -1,6 +1,6 @@
 #include "to47_overlay14_box_message_actions_private.h"
 
-void ov14_021F685C(void *p, u32 a, u32 kind, u32 v) {
+void PCBox_PrintMonActionMessage(void *p, u32 a, u32 kind, u32 v) {
     u32 id;
 
     switch (kind) {
@@ -9,7 +9,7 @@ void ov14_021F685C(void *p, u32 a, u32 kind, u32 v) {
         break;
     case 1:
         id = 0;
-        BufferBoxMonNickname(PTR_AT(PTR_AT(p, 0x34), 0x24), 0, ov14_021E60C0(p, U8_AT(p, 0x1f), U8_AT(p, 0x21)));
+        BufferBoxMonNickname(PTR_AT(PTR_AT(p, 0x34), 0x24), 0, PCBox_GetSlotBoxMon(p, U8_AT(p, 0x1f), U8_AT(p, 0x21)));
         break;
     case 2:
         id = 5;
@@ -28,10 +28,10 @@ void ov14_021F685C(void *p, u32 a, u32 kind, u32 v) {
         break;
     }
 
-    ov14_021F6698(p, id, v);
+    PCBox_PrintMessage(p, id, v);
 }
 
-void ov14_021F68C0(void *p, u32 kind, u32 v) {
+void PCBox_PrintItemActionMessage(void *p, u32 kind, u32 v) {
     u32 id;
 
     switch (kind) {
@@ -61,11 +61,11 @@ void ov14_021F68C0(void *p, u32 kind, u32 v) {
         break;
     }
 
-    ov14_021F6698(p, id, v);
+    PCBox_PrintMessage(p, id, v);
 }
 
-void ov14_021F6928(void *p, u32 idx, u32 kind) {
-    void *msgData = ov14_021F6628();
+void PCBox_PrintPanelHint(void *p, u32 idx, u32 kind) {
+    void *msgData = PCBox_LoadBoxMessages();
     void *str;
 
     switch (kind) {

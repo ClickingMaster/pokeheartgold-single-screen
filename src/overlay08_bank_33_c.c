@@ -2,7 +2,7 @@
 
 #pragma force_active on
 
-void ov08_02223F74(void *sprite, int x, int y) {
+void BattleBagMenu_ShowSpriteAt(void *sprite, int x, int y) {
     ManagedSprite_SetDrawFlag(sprite, TRUE);
     ManagedSprite_SetPositionXY(sprite, (s16)x, (s16)y);
 }

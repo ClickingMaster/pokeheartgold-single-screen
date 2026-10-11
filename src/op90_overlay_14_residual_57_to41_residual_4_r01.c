@@ -7,7 +7,7 @@
 #include "heap.h"
 typedef struct { u8 pad[0x20]; MsgData *msgData; u8 pad2[0xc]; Window windows[1]; } Inner;
 typedef struct { u8 pad[0x34]; Inner *inner; } Work;
-void ov14_021F4F24(Window *window, String *str, s32 x, s32 y, u32 font, u32 color, u32 align);
+void PCBox_PrintAligned(Window *window, String *str, s32 x, s32 y, u32 font, u32 color, u32 align);
 void ov14_021F5C94(Work *p, u32 win, u32 msgId);
 // @fn ov14_021F5C94
 void ov14_021F5C94(Work *p, u32 win, u32 msgId) {
@@ -25,7 +25,7 @@ BlitBitmapRect(w, pix + 0xB40, 0, 0, 8, 8, i * 8, 16, 8, 8, 0xFF);
 }
 Heap_Free(buf);
 str = NewString_ReadMsgData(p->inner->msgData, msgId);
-ov14_021F4F24(w, str, width * 8 / 2, 4, 4, 0x90A00, 2);
+PCBox_PrintAligned(w, str, width * 8 / 2, 4, 4, 0x90A00, 2);
 String_Delete(str);
 CopyWindowPixelsToVram_TextMode(w);
 }

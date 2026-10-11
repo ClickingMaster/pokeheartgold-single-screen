@@ -35,14 +35,14 @@ typedef struct {
     u16 ppMax[4];
 } Work;
 extern Pokemon *BattleSystem_GetPartyMon(void *, int, int);
-extern void ov08_02220224(Work *);
-extern void ov08_02220064(Work *, u16, u16);
-extern void ov08_0221DBCC(void *, u16, u8, void *);
-extern void ov08_022201C0(Work *);
+extern void BattlePartyMenu_BufferItemResultMessage(Work *);
+extern void BattlePartyMenu_UpdateMovePP(Work *, u16, u16);
+extern void BattlePartyMenu_ConsumeItem(void *, u16, u8, void *);
+extern void BattlePartyMenu_ShowMessage(Work *);
 extern void PlaySE(int);
-int ov08_0221CC38(Work *w);
-// @fn ov08_0221CC38
-int ov08_0221CC38(Work *w) {
+int BattlePartyMenu_AnimateRestoreAllPP(Work *w);
+// @fn BattlePartyMenu_AnimateRestoreAllPP
+int BattlePartyMenu_AnimateRestoreAllPP(Work *w) {
     BattleCtx *ctx = w->ctx;
     u32 i;
     u32 cnt;
@@ -54,7 +54,7 @@ int ov08_0221CC38(Work *w) {
                 w->ppMax[i] = GetMonData(w->mons[ctx->idx].mon, MON_DATA_MOVE1_PP + i, NULL);
             }
         }
-        ov08_02220224(w);
+        BattlePartyMenu_BufferItemResultMessage(w);
         PlaySE(1516);
         w->state = 1;
         break;
@@ -65,7 +65,7 @@ int ov08_0221CC38(Work *w) {
                 cnt++;
             } else if (w->ppMax[i] != w->mons[ctx->idx].moves[i].pp) {
                 w->mons[ctx->idx].moves[i].pp++;
-                ov08_02220064(w, i + 1, i);
+                BattlePartyMenu_UpdateMovePP(w, i + 1, i);
             } else {
                 cnt++;
             }
@@ -75,8 +75,8 @@ int ov08_0221CC38(Work *w) {
         }
         break;
     case 2:
-        ov08_0221DBCC(ctx->bsys, ctx->unk22, ctx->unk33, ctx->unkC);
-        ov08_022201C0(w);
+        BattlePartyMenu_ConsumeItem(ctx->bsys, ctx->unk22, ctx->unk33, ctx->unkC);
+        BattlePartyMenu_ShowMessage(w);
         w->unk2079 = 25;
         return 17;
     }

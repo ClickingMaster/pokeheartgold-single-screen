@@ -16,14 +16,14 @@ typedef struct Ov15PocketState {
     u8 current;
 } Ov15PocketState;
 
-s32 ov15_021FC784(void *work) {
+s32 BagApp_State_WaitCantHoldMessage(void *work) {
     if (!TextPrinterCheckActive(U8(work, 0x616))) {
         if ((U32(gSystem, 0x48) & 3) || U16(gSystem, 0x64)) {
             Ov15PocketState *state;
             ClearFrameAndWindow2((u8 *)work + 0x34, TRUE);
             ClearWindowTilemapAndScheduleTransfer((u8 *)work + 0x34);
             state = PTR(work, 0x234);
-            ov15_021FF364(work, state->entries[state->current].cursor, -1, 0);
+            BagApp_DrawItemList(work, state->entries[state->current].cursor, -1, 0);
             return 14;
         }
     }

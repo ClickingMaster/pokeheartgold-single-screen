@@ -53,19 +53,19 @@ extern void PCStorage_SetActiveBox(void *, u32);
 extern void *SaveArray_Party_Get(SaveData *);
 extern void *Save_Bag_Get(SaveData *);
 extern void *Save_PlayerData_GetOptionsAddr(SaveData *);
-extern BOOL ov14_021EAF8C(PCBoxWork *, int *);
+extern BOOL PCBox_RunStateMachine(PCBoxWork *, int *);
 extern void ov14_021E5A14(PCBoxWork *);
 extern void PaletteData_PushTransparentBuffers(void *);
 extern void DoScheduledBgGpuUpdates(void *);
-extern void ov14_021F29C4(PCBoxInner *);
+extern void PCBox_TickSprites(PCBoxInner *);
 extern void SpriteSystem_DrawSprites(void *);
 extern void SpriteSystem_TransferOam(void);
 extern void BgCellManager_UpdateCellMove(void *, u32);
-extern void ov14_021F3BC0(PCBoxInner *);
+extern void PCBox_UpdateInfoItemIconPosition(PCBoxInner *);
 
 BOOL PCBox_Init(OverlayManager *, int *);
 BOOL PCBox_Main(OverlayManager *, int *);
 BOOL PCBox_Exit(OverlayManager *, int *);
-void ov14_021E59AC(void *, PCBoxWork *);
+void PCBox_VBlankCallback(void *, PCBoxWork *);
 
 #endif

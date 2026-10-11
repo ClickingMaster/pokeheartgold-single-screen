@@ -21,10 +21,10 @@ typedef struct Position18 {
 
 void PlaySE(u16 seqNo);
 
-void ov18_021F11C0(void *root, u32 idx, u32 draw);
-void ov18_021F1294(void *root, u32 idx, s16 x, s16 y, u32 a4);
-void ov18_021F12C8(void *root, u32 idx, s16 *x, s16 *y, u32 a4);
-void ov18_021F5000(void *root, u32 rotation);
+void PokedexApp_SetSpriteVisible(void *root, u32 idx, u32 draw);
+void PokedexApp_SetSpritePos(void *root, u32 idx, s16 x, s16 y, u32 a4);
+void PokedexApp_GetSpritePos(void *root, u32 idx, s16 *x, s16 *y, u32 a4);
+void PokedexApp_UpdateScalePans(void *root, u32 rotation);
 void ov18_021F5180(void *p, u32 a1, u32 a2);
 void ov18_021F5198(void *p, u32 a1, int a2, int a3);
 

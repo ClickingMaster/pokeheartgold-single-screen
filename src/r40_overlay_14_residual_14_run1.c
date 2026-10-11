@@ -1,10 +1,10 @@
 #include "r40_overlay_14_residual_14_private.h"
 
-void ov14_021E8234(BgCellManager *p) {
+void PCBox_SlideOutPartyButton(BgCellManager *p) {
     BgCellManager_StartCellMove(p, 8, 0, 1, 3);
 }
 
-void ov14_021E8248(BgCellManager *p) {
+void PCBox_SlideInPartyButton(BgCellManager *p) {
     BgCellManager_StartCellMove(p, 8, 0, -1, 3);
 }
 

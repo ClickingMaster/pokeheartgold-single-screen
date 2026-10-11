@@ -17,25 +17,25 @@ typedef struct TouchpadState {
 } TouchpadState;
 
 extern s32 ov15_021FAC40(BagWorkRaw *);
-extern BOOL ov15_021FAA18(BagWorkRaw *);
-extern BOOL ov15_021FAB34(BagWorkRaw *);
+extern BOOL BagApp_HandlePocketSwitchDpad(BagWorkRaw *);
+extern BOOL BagApp_RunPocketSwitch(BagWorkRaw *);
 extern void ov15_021FF950(BagWorkRaw *);
 extern void ov15_021FF964(BagWorkRaw *);
-extern void ov15_021FDAF4(void *, s32, s32);
-extern void ov15_021F9F08(BagWorkRaw *);
-extern s32 ov15_021FA074(BagWorkRaw *);
-extern void ov15_021FF364(BagWorkRaw *, s32, s32, s32);
-extern void ov15_021FD574(BagWorkRaw *, s32, s32, s32);
-extern void ov15_02200030(BagWorkRaw *, s32);
-extern void ov15_021FD404(BagWorkRaw *, s32, s32);
-extern void ov15_021FA044(s16 *, u16 *, u8);
+extern void BagApp_StartCameraTween(void *, s32, s32);
+extern void BagApp_LoadPocketItemNames(BagWorkRaw *);
+extern s32 BagApp_GetPageItemCount(BagWorkRaw *);
+extern void BagApp_DrawItemList(BagWorkRaw *, s32, s32, s32);
+extern void BagApp_LoadSubScreenLayout(BagWorkRaw *, s32, s32, s32);
+extern void BagApp_LoadPocketObjPalette(BagWorkRaw *, s32);
+extern void BagApp_LoadPocketSubBgPalette(BagWorkRaw *, s32, s32);
+extern void BagApp_ClampPocketScroll(s16 *, u16 *, u8);
 extern void ov15_021FA070(s16 *, u16 *, u8, s32);
 extern void PlaySE(u16);
-s32 ov15_021FA93C(BagWorkRaw *);
-BOOL ov15_021FAA18(BagWorkRaw *);
-BOOL ov15_021FAB34(BagWorkRaw *);
+s32 BagApp_State_PocketSwitch(BagWorkRaw *);
+BOOL BagApp_HandlePocketSwitchDpad(BagWorkRaw *);
+BOOL BagApp_RunPocketSwitch(BagWorkRaw *);
 
-s32 ov15_021FA93C(BagWorkRaw *work) {
+s32 BagApp_State_PocketSwitch(BagWorkRaw *work) {
     TouchpadState *state = (TouchpadState *)&work->raw[0x619];
     s32 pocket;
 
@@ -46,7 +46,7 @@ s32 ov15_021FA93C(BagWorkRaw *work) {
     if (pocket == -1 || pocket != state->pocket) {
         state->flags = (state->flags & ~0xF) | 1;
     }
-    if (!ov15_021FAA18(work) && (((u32)state->flags << 25) >> 29) == 1 && pocket != -1) {
+    if (!BagApp_HandlePocketSwitchDpad(work) && (((u32)state->flags << 25) >> 29) == 1 && pocket != -1) {
         u8 current;
         (*(u8 **)&work->raw[0x234])[0x64] = state->pocket;
         current = state->pocket;
@@ -65,14 +65,14 @@ s32 ov15_021FA93C(BagWorkRaw *work) {
         state->unk4 = 0;
         work->raw[0x670] = pocket;
         ov15_021FF950(work);
-        ov15_021FDAF4(&work->raw[0x808], work->raw[0x670] + 1, 7);
+        BagApp_StartCameraTween(&work->raw[0x808], work->raw[0x670] + 1, 7);
     }
-    ov15_021FAB34(work);
+    BagApp_RunPocketSwitch(work);
     ov15_021FF964(work);
     return 0;
 }
 
-BOOL ov15_021FAA18(BagWorkRaw *work) {
+BOOL BagApp_HandlePocketSwitchDpad(BagWorkRaw *work) {
     TouchpadState *state = (TouchpadState *)&work->raw[0x619];
 
     if (gSystem.newKeys & PAD_KEY_LEFT) {

@@ -16,18 +16,18 @@ typedef struct Ov18State {
     u8 raw[0x258];
 } Ov18State;
 
-extern const BgTemplate ov18_021FBD60;
-extern const BgTemplate ov18_021FBD7C;
-extern const BgTemplate ov18_021FBD98;
+extern const BgTemplate sEntryPopupBg2Template;
+extern const BgTemplate sEntryPopupBg1Template;
+extern const BgTemplate sEntryPopupBg3Template;
 
-void ov18_021F89F8(void *, Ov18State *);
-void ov18_021F8AB8(Ov18State *);
-void ov18_021F8B10(Ov18State *);
-void ov18_021F8CCC(Ov18State *);
-void ov18_021F8FA0(Ov18State *);
-void ov18_021F95CC(Ov18State *);
-void ov18_021F8C0C(Ov18State *);
-BOOL ov18_021F8C48(Ov18State *);
-void ov18_021F8C68(Ov18State *);
+void PokedexEntryPopup_Task(void *, Ov18State *);
+void PokedexEntryPopup_ReadMonData(Ov18State *);
+void PokedexEntryPopup_InitBgs(Ov18State *);
+void PokedexEntryPopup_DrawWindows(Ov18State *);
+void PokedexEntryPopup_InitSprites(Ov18State *);
+void PokedexEntryPopup_CreatePokepic(Ov18State *);
+void PokedexEntryPopup_StartFadeIn(Ov18State *);
+BOOL PokedexEntryPopup_IsFadeDone(Ov18State *);
+void PokedexEntryPopup_FlashBanner(Ov18State *);
 
 #endif

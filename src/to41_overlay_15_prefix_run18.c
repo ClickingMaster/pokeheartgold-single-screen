@@ -5,7 +5,7 @@
 #define U16(p, o) (*(u16 *)((u8 *)(p) + (o)))
 #define U8(p, o)  (*(u8 *)((u8 *)(p) + (o)))
 
-void ov15_021FD774(void *work, u32 state) {
+void BagApp_SetMenuInputState(void *work, u32 state) {
     void *input = PTR(PTR(work, 0x234), 0x78);
     if (input != NULL) {
         MenuInputStateMgr_SetState(input, state);

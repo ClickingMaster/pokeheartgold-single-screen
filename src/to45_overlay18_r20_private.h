@@ -9,13 +9,13 @@
 
 #define PTR_AT(p, o) (*(void **)((u8 *)(p) + (o)))
 
-void ov18_021F1294(PokedexAppData *, int, int, int, int);
-void ov18_021F12C8(PokedexAppData *, int, s16 *, s16 *, int);
-void *ov18_021F11EC(PokedexAppData *, const void *);
-void ov18_021F4A6C(PokedexAppData *);
-void ov18_021F4D64(PokedexAppData *);
-void ov18_021F4DDC(PokedexAppData *);
-void ov18_021F4E28(PokedexAppData *);
+void PokedexApp_SetSpritePos(PokedexAppData *, int, int, int, int);
+void PokedexApp_GetSpritePos(PokedexAppData *, int, s16 *, s16 *, int);
+void *PokedexApp_NewSprite(PokedexAppData *, const void *);
+void PokedexApp_LoadSizeCheckResources(PokedexAppData *);
+void PokedexApp_SetSizeCheckMonIcons(PokedexAppData *);
+void PokedexApp_DrawSizeCheckMonPic(PokedexAppData *);
+void PokedexApp_ScaleSizeCheckTrainer(PokedexAppData *);
 
 extern u8 ov18_021FA3B0[];
 typedef struct Ov18SpriteTemplate {

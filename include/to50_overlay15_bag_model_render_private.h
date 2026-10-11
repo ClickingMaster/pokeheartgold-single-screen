@@ -8,14 +8,14 @@
 #define U16(p, o) (*(u16 *)((u8 *)(p) + (o)))
 #define U32(p, o) (*(u32 *)((u8 *)(p) + (o)))
 #define PTR(p, o) (*(void **)((u8 *)(p) + (o)))
-extern const VecFx32 ov15_022004F4;
-extern const MtxFx33 ov15_022005CC;
-extern void ov15_021FDB2C(void *, s32);
+extern const VecFx32 sBagModelScale;
+extern const MtxFx33 sBagModelRotation;
+extern void BagApp_UpdateCameraTween(void *, s32);
 extern void Camera_Init_FromTargetDistanceAndAngle(void *, void *, void *, u16, u8, BOOL, fx32);
 extern void Thunk_G3X_Reset(void);
 extern void Camera_PushLookAtToNNSGlb(void);
-extern void ov15_021FDD54(void *);
+extern void BagApp_AdvanceAnimLoop(void *);
 extern void GF3dRender_DrawModel(void *, const VecFx32 *, const MtxFx33 *, const VecFx32 *);
 extern void RequestSwap3DBuffers(u32, u32);
-void ov15_021FDC88(void *);
+void BagApp_Draw3D(void *);
 #endif

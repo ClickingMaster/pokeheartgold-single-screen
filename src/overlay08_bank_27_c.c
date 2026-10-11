@@ -2,6 +2,6 @@
 
 #pragma force_active on
 
-int ov08_02223368(void *unused, const void *hitboxes) {
+int BattleBagMenu_CheckTouchHitbox(void *unused, const void *hitboxes) {
     return TouchscreenHitbox_FindRectAtTouchNew(hitboxes);
 }

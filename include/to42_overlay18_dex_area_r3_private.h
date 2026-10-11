@@ -10,11 +10,11 @@
 void String_Delete(String *str);
 void BgCellManager_GetCellPosition(BgCellManager *a0, int a1, s8 *a2, s8 *a3);
 
-void ov18_021EE3AC(PokedexAppData *pokedexApp, MsgData *msgData, u32 a2, u32 a3, u32 a4, u32 a5, u32 a6, u32 a7, u32 a8);
-void ov18_021F9648(Window *window, MsgData *msgData, u32 a2, u32 a3, u32 a4, u32 a5, u32 a6, u32 a7);
+void PokedexApp_PrintFormattedMessage(PokedexAppData *pokedexApp, MsgData *msgData, u32 a2, u32 a3, u32 a4, u32 a5, u32 a6, u32 a7, u32 a8);
+void PokedexApp_PrintMessage(Window *window, MsgData *msgData, u32 a2, u32 a3, u32 a4, u32 a5, u32 a6, u32 a7);
 
-u32 ov18_021F09D8(PokedexAppData *pokedexApp, int idx);
-void ov18_021F0C50(PokedexAppData *pokedexApp);
-void ov18_021F0D7C(PokedexAppData *pokedexApp);
+u32 PokedexApp_GetFormNameMsg(PokedexAppData *pokedexApp, int idx);
+void PokedexApp_DrawFormsTitle(PokedexAppData *pokedexApp);
+void PokedexApp_ClearFormsWindows(PokedexAppData *pokedexApp);
 
 #endif

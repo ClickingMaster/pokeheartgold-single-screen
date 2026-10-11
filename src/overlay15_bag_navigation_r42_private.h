@@ -40,37 +40,37 @@ typedef struct BagWorkRaw {
 #define U16(p, o)       (*(u16 *)((u8 *)(p) + (o)))
 #define U8(p, o)        (*(u8 *)((u8 *)(p) + (o)))
 
-extern const u8 ov15_02200640[];
+extern const u8 sButtonNavTable[];
 extern const u8 ov15_02200641[];
 extern const u8 ov15_02200642[];
 extern const u8 ov15_02200643[];
-extern const u8 ov15_022008B0[];
+extern const u8 sPocketCapacities[];
 extern s32 _02201300;
 extern s32 _02201480;
 
 void PlaySE(u16);
 BOOL System_GetTouchHeld(void);
-void ov15_021FECA0(BagWorkRaw *, void *, u32);
-void ov15_021FECC4(BagWorkRaw *, void *);
-void ov15_021FECD8(BagWorkRaw *, void *, u32);
-void ov15_021FD574(BagWorkRaw *, s32, s32, s32);
-void ov15_021FF4EC(BagWorkRaw *, s32, s32);
-void ov15_022002B4(BagWorkRaw *, s32);
+void BagApp_ShowItemDescription(BagWorkRaw *, void *, u32);
+void BagApp_ClearDescriptionWindow(BagWorkRaw *, void *);
+void BagApp_ShowPocketDescription(BagWorkRaw *, void *, u32);
+void BagApp_LoadSubScreenLayout(BagWorkRaw *, s32, s32, s32);
+void BagApp_DrawSelectedItemEntry(BagWorkRaw *, s32, s32);
+void BagApp_ShowSelectedItemIcon(BagWorkRaw *, s32);
 
-void ov15_021FAD80(BagWorkRaw *, BagPocketEntryRaw *);
-void ov15_021FFF34(BagWorkRaw *, void *);
-s32 ov15_021FA074(BagWorkRaw *);
-void ov15_021FF364(BagWorkRaw *, s32, s32, s32);
-void ov15_021FF6BC(BagWorkRaw *, s32, s32, s32);
-void ov15_02200140(BagWorkRaw *, BagPocketEntryRaw *, s32, s32);
-s32 ov15_021FA12C(BagWorkRaw *);
-void ov15_021FA170(BagWorkRaw *);
-s32 ov15_021FA68C(BagWorkRaw *, s32);
-s32 ov15_021FA6C0(BagWorkRaw *, s32, s32);
-void ov15_021FA6F4(BagWorkRaw *, BagPocketEntryRaw *);
+void BagApp_RedrawMovePage(BagWorkRaw *, BagPocketEntryRaw *);
+void BagApp_SetMoveCursorPosition(BagWorkRaw *, void *);
+s32 BagApp_GetPageItemCount(BagWorkRaw *);
+void BagApp_DrawItemList(BagWorkRaw *, s32, s32, s32);
+void BagApp_PrintPageNumber(BagWorkRaw *, s32, s32, s32);
+void BagApp_DrawItemIcons(BagWorkRaw *, BagPocketEntryRaw *, s32, s32);
+s32 BagApp_GetCursorItemId(BagWorkRaw *);
+void BagApp_PrintCursorDescription(BagWorkRaw *);
+s32 BagApp_FindPocketIndex(BagWorkRaw *, s32);
+s32 BagApp_GetAdjacentPocket(BagWorkRaw *, s32, s32);
+void BagApp_RedrawPocketPage(BagWorkRaw *, BagPocketEntryRaw *);
 void ov15_021FA620(BagWorkRaw *);
 s32 ov15_021FA650(BagWorkRaw *);
-s32 ov15_021FA4F8(BagWorkRaw *);
-s32 ov15_021FA578(BagWorkRaw *, s32);
+s32 BagApp_State_OpenItemMenu(BagWorkRaw *);
+s32 BagApp_State_ChangePage(BagWorkRaw *, s32);
 
 #endif

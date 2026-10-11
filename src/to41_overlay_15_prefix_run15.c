@@ -5,15 +5,15 @@
 #define U16(p, o) (*(u16 *)((u8 *)(p) + (o)))
 #define U8(p, o)  (*(u8 *)((u8 *)(p) + (o)))
 
-s32 ov15_021FC3E0(void *work) {
-    ov15_021FAC48(work);
+s32 BagApp_ItemAction_Move(void *work) {
+    BagApp_StartMoveItem(work);
     return 3;
 }
 
-s32 ov15_021FC3EC(void *work) {
-    ov15_021FED3C(work);
-    ov15_021FD788(work, 0);
-    ov15_021FFF24(work);
+s32 BagApp_ItemAction_Give(void *work) {
+    BagApp_CloseItemMenuWindows(work);
+    BagApp_ShowCancelButton(work, 0);
+    BagApp_HideCursor(work);
     sub_020880CC(1, 6);
     U16(PTR(work, 0x234), 0x68) = 2;
     return 0x25;

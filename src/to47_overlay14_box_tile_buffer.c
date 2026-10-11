@@ -5,9 +5,9 @@ typedef union BoxTilePtrSlot {
     u32 raw;
 } BoxTilePtrSlot;
 
-void ov14_021F4A64(void *p, u32 box, void *dst);
+void PCBox_DrawBoxThumbnailMons(void *p, u32 box, void *dst);
 
-void ov14_021F4A64(void *p, u32 box, void *dst) {
+void PCBox_DrawBoxThumbnailMons(void *p, u32 box, void *dst) {
     BoxTilePtrSlot mon;
     u32 lock;
     u8 row;

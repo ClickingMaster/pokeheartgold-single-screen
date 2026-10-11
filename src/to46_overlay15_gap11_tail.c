@@ -1,7 +1,7 @@
 #include "to46_overlay15_gap11_private.h"
 
-void ov15_021FFDD8(BagWorkRaw *work) {
-    const ManagedSpriteTemplate *template = ov15_02200B0C;
+void BagApp_CreateSprites(BagWorkRaw *work) {
+    const ManagedSpriteTemplate *template = sBagSpriteTemplates;
     u32 i;
     BagWorkRaw *walker;
     i = 0;
@@ -32,7 +32,7 @@ void ov15_021FFDD8(BagWorkRaw *work) {
             p = (BagWorkRaw *)((u8 *)p + 4);
         }
     }
-    ov15_02200458(work, TRUE);
+    BagApp_ShowPocketTabSprites(work, TRUE);
     ManagedSprite_SetDrawFlag(*(ManagedSprite **)&work->raw[0x250], FALSE);
     ManagedSprite_SetDrawFlag(*(ManagedSprite **)&work->raw[0x26C], FALSE);
     ManagedSprite_SetDrawFlag(*(ManagedSprite **)&work->raw[0x270], FALSE);

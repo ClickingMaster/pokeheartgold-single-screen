@@ -14,11 +14,11 @@ u32 ov18_021E5904(u32 species);
 void *GfGfxLoader_GetCharData(u32 narcId, s32 member, BOOL compressed, Ov18CharDataR45 **charData, u32 heapId);
 void *Heap_AllocAtEnd(u32 heapId, u32 size);
 void Heap_Free(void *ptr);
-extern const u32 ov18_021FBE10[];
-extern const u8 ov18_021FBDFC[];
-void ov18_021F95FC(void *window, void *str, u32 x, u32 y, u32 fontId, u32 color, u32 align);
-void ov18_021F9648(void *window, void *msgData, u32 msgId, u32 x, u32 y, u32 fontId, u32 color, u32 align);
-u32 ov18_021F967C(u32 index);
-u8 ov18_021F9688(u32 index);
-void *ov18_021F9694(u32 species, u32 heapId);
+extern const u32 sTypeIconCharFiles[];
+extern const u8 sTypeIconPaletteNums[];
+void PokedexApp_PrintString(void *window, void *str, u32 x, u32 y, u32 fontId, u32 color, u32 align);
+void PokedexApp_PrintMessage(void *window, void *msgData, u32 msgId, u32 x, u32 y, u32 fontId, u32 color, u32 align);
+u32 PokedexApp_GetTypeIconCharFile(u32 index);
+u8 PokedexApp_GetTypeIconPalette(u32 index);
+void *PokedexApp_LoadFootprintGraphics(u32 species, u32 heapId);
 #endif

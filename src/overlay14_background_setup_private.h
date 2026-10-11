@@ -28,7 +28,7 @@ extern void InitBgFromTemplate(void *, u32, const R11BgTemplate *, u32);
 extern void BgClearTilemapBufferAndCommit(void *, u32);
 extern void BG_ClearCharDataRange(u32, u32, u32, u32);
 
-void ov14_021E5A70(void *);
+void PCBox_InitBgLayers(void *);
 
 extern void FreeBgTilemapBuffer(void *, u32);
 extern void Heap_Free(void *);
@@ -51,11 +51,11 @@ extern void LoadUserFrameGfx2(void *, u32, u32, u32, u32, u32);
 extern void LoadFontPal1(u32, u32, u32);
 extern void LoadFontPal0(u32, u32, u32);
 
-void ov14_021E5C00(void *);
-void ov14_021E5C54(void *);
-void ov14_021E5D78(void *);
-void ov14_021E5DB8(void *);
-void ov14_021E5DE0(void *);
-void ov14_021E5E74(void *);
+void PCBox_FreeBgLayers(void *);
+void PCBox_LoadBgGraphics(void *);
+void PCBox_CreateMsgResources(void *);
+void PCBox_DestroyMsgResources(void *);
+void PCBox_LoadWindowGraphics(void *);
+void PCBox_CreatePaletteData(void *);
 
 #endif

@@ -11,7 +11,7 @@ typedef struct Ov15InterpRec {
     s32 c;
     s32 d;
 } Ov15InterpRec;
-extern const u8 ov15_02200790[];
-void ov15_021FDAF4(void *, s32, s32);
-void ov15_021FDB2C(void *, s32);
+extern const u8 sCameraTweenKeys[];
+void BagApp_StartCameraTween(void *, s32, s32);
+void BagApp_UpdateCameraTween(void *, s32);
 #endif

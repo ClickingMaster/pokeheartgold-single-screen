@@ -2,8 +2,8 @@
 
 #pragma force_active on
 
-BOOL ov08_0221D438(void *work) {
-    int result = ov08_0221D5D0(work, ov08_02224F1C);
+BOOL BattlePartyMenu_HandlePartyListSelection(void *work) {
+    int result = BattlePartyMenu_CheckTouchHitbox(work, sBattlePartyPartyListHitboxes);
     if (result == -1) {
         result = BattleDpadCursor_HandleInput(*(void **)((u8 *)work + 0x2088));
         if (result == -2) {
@@ -11,17 +11,17 @@ BOOL ov08_0221D438(void *work) {
         } else if (result == -1) {
             return FALSE;
         }
-        if (result != 6 && !ov08_0221D5DC(work, result)) {
+        if (result != 6 && !BattlePartyMenu_GetSlotType(work, result)) {
             goto fail;
         }
         (*(u8 **)work)[0x11] = result;
         return TRUE;
     }
-    if (result != 6 && !ov08_0221D5DC(work, result)) {
+    if (result != 6 && !BattlePartyMenu_GetSlotType(work, result)) {
         goto fail;
     }
     (*(u8 **)work)[0x11] = result;
-    ov08_022217C8(work);
+    BattlePartyMenu_DeactivateCursor(work);
     return TRUE;
 fail:
     return FALSE;
@@ -29,7 +29,7 @@ fail:
 
 #define DEFINE_TOUCH_FN(name, table, fallback)                       \
     u8 name(void *work) {                                            \
-        int result = ov08_0221D5D0(work, table);                     \
+        int result = BattlePartyMenu_CheckTouchHitbox(work, table);                     \
         if (result == -1) {                                          \
             result = BattleDpadCursor_HandleInput(*(void **)((u8 *)work + 0x2088)); \
             if (result == -2) {                                      \
@@ -38,12 +38,12 @@ fail:
                 return 0xFF;                                         \
             }                                                        \
         } else {                                                     \
-            ov08_022217C8(work);                                     \
+            BattlePartyMenu_DeactivateCursor(work);                                     \
         }                                                            \
         return result;                                               \
     }
 
-DEFINE_TOUCH_FN(ov08_0221D4B0, ov08_02224E54, 3)
-DEFINE_TOUCH_FN(ov08_0221D4F8, ov08_02224E68, 3)
-DEFINE_TOUCH_FN(ov08_0221D540, ov08_02224F5C, 7)
-DEFINE_TOUCH_FN(ov08_0221D588, ov08_02224E7C, 4)
+DEFINE_TOUCH_FN(BattlePartyMenu_GetMonMenuInput, sBattlePartyMonMenuHitboxes, 3)
+DEFINE_TOUCH_FN(BattlePartyMenu_GetSummaryInput, sBattlePartySummaryHitboxes, 3)
+DEFINE_TOUCH_FN(BattlePartyMenu_GetCheckMovesInput, sBattlePartyCheckMovesHitboxes, 7)
+DEFINE_TOUCH_FN(BattlePartyMenu_GetMoveDetailInput, sBattlePartyMoveDetailHitboxes, 4)

@@ -1,6 +1,6 @@
 #include "overlay18_pokedex_info_windows_internal.h"
 
-void ov18_021F0838(void *p) {
+void PokedexApp_FreeSizeCheckWindows(void *p) {
     u32 i;
     u8 *window = p;
     i = 0;
@@ -9,13 +9,13 @@ void ov18_021F0838(void *p) {
         ClearWindowTilemapAndScheduleTransfer((Window *)window);
         window += 0x10;
     }
-    ov18_021EE388(p);
+    PokedexApp_RemoveAllWindows(p);
 }
 
 void ov18_021F0858(void *p) {
     u32 i;
     u8 *window;
-    ov18_021EE35C(p, ov18_021F9DB0, 2);
+    PokedexApp_AddWindows(p, ov18_021F9DB0, 2);
     i = 0;
     window = p;
     window += 0xC;
@@ -23,8 +23,8 @@ void ov18_021F0858(void *p) {
         FillWindowPixelBuffer((Window *)window, 0);
         window += 0x10;
     }
-    ov18_021F9648((u8 *)p + 0xC, PTR(p, 0x65C), 0xAD, 0, 0, 4, 0x20100, 0);
-    ov18_021F9648((u8 *)p + 0x1C, PTR(p, 0x65C), 0xAE, 0x3C, 0, 4, 0xF0C00, 2);
+    PokedexApp_PrintMessage((u8 *)p + 0xC, PTR(p, 0x65C), 0xAD, 0, 0, 4, 0x20100, 0);
+    PokedexApp_PrintMessage((u8 *)p + 0x1C, PTR(p, 0x65C), 0xAE, 0x3C, 0, 4, 0xF0C00, 2);
     i = 0;
     window = p;
     window += 0xC;
@@ -43,10 +43,10 @@ void ov18_021F08E0(void *p) {
         ClearWindowTilemapAndScheduleTransfer((Window *)window);
         window += 0x10;
     }
-    ov18_021EE388(p);
+    PokedexApp_RemoveAllWindows(p);
 }
 
-void ov18_021F0900(void *p) {
-    ov18_021EE35C(p, ov18_021F9EBC, 0x10);
-    ov18_021F0928(p);
+void PokedexApp_SetupFormsWindows(void *p) {
+    PokedexApp_AddWindows(p, sFormsWindowTemplates, 0x10);
+    PokedexApp_DrawFormsWindows(p);
 }

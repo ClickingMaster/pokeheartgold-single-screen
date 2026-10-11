@@ -5,7 +5,7 @@
 #define U16(p, o) (*(u16 *)((u8 *)(p) + (o)))
 #define U8(p, o)  (*(u8 *)((u8 *)(p) + (o)))
 
-void ov15_021FE868(void *work) {
+void BagApp_ClearMoveInfoWindow(void *work) {
     ClearWindowTilemapAndScheduleTransfer((u8 *)work + 0x14);
 }
 

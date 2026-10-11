@@ -32,7 +32,7 @@ void *BagApp_TryUseRepel(void *work, u16 item) {
         U16(work, 0x680) = 0;
         return NewString_ReadMsgData(PTR(work, 0x2f0), 63);
     }
-    BagApp_GetRepelStepCountAddr(work, (u8)GetItemAttr(item, 2, 6));
+    BagApp_SetRepelStepCount(work, (u8)GetItemAttr(item, 2, 6));
     U16(work, 0x680) = 1;
     PlaySE(SEQ_SE_DP_CARD2);
     return NewString_ReadMsgData(PTR(work, 0x2f0), 62);

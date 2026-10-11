@@ -59,7 +59,7 @@ BOOL Pokedex_Exit(OverlayManager *man, int *state) {
     if (DSProt_DetectEmulator(ov18_021E5C1C)) {
         Heap_AllocAtEnd(HEAP_ID_3, 1000);
     }
-    UnkStruct_02092BB8_Set(appData->args->unk_08, ov18_021F8838(appData), appData->unk_1858);
+    UnkStruct_02092BB8_Set(appData->args->unk_08, PokedexApp_GetCursorSpecies(appData), appData->unk_1858);
     if (DSProt_DetectFlashcart(ov18_021E5C2C)) {
         Heap_AllocAtEnd(HEAP_ID_3, 1000);
     }

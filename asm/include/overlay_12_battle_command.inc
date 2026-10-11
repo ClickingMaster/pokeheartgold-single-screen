@@ -423,8 +423,8 @@
 .public sPickupWeightTable
 .public sHoneyGatherChanceTable
 .public sCamouflageTypeTable
-.public ov18_021F8974
-.public ov18_021F89C8
-.public ov18_021F89D0
-.public ov18_021F95AC
-.public ov18_021F95F8
+.public PokedexEntryPopup_Create
+.public PokedexEntryPopup_IsDone
+.public PokedexEntryPopup_Delete
+.public PokedexEntryPopup_HideSprites
+.public PokedexEntryPopup_GetPokepic

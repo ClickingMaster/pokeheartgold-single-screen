@@ -18,7 +18,7 @@ void *BagApp_GetSaveRoamers(void *work) {
     return Save_Roamers_Get(PTR(PTR(work, 0x234), 0));
 }
 
-void BagApp_GetRepelStepCountAddr(void *work, u8 value) {
+void BagApp_SetRepelStepCount(void *work, u8 value) {
     *RoamerSave_GetRepelAddr(BagApp_GetSaveRoamers(work)) = value;
 }
 

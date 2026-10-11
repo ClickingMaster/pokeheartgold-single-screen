@@ -2,7 +2,7 @@
 
 #pragma force_active on
 
-int ov08_02222DEC(const u8 *work) {
+int BattleBagMenu_WaitButtonAnim(const u8 *work) {
     if (work[0x113E] == 2) {
         return work[0x114B];
     }

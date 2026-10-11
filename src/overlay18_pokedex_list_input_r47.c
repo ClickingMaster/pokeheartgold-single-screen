@@ -71,7 +71,7 @@ u32 ov18_021F7974(PokedexAppData *pokedexApp, int mode) {
             PlaySE(0x8E8);
             return 0;
         }
-        if (pokedexApp->unk_1859 + 1 <= ov18_021F8950(pokedexApp, mode)) {
+        if (pokedexApp->unk_1859 + 1 <= PokedexApp_GetLastListPage(pokedexApp, mode)) {
             pokedexApp->unk_185A = 0;
             return 11;
         }
@@ -103,7 +103,7 @@ u32 ov18_021F7974(PokedexAppData *pokedexApp, int mode) {
     return -1;
 }
 
-void ov18_021F7B74(PokedexAppData *work) {
+void PokedexApp_FreeGridInput(PokedexAppData *work) {
     if (work->unk_1864 != NULL) {
         GridInputHandler_Free(work->unk_1864);
         work->unk_1864 = NULL;

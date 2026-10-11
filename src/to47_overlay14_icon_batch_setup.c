@@ -1,6 +1,6 @@
 #include "to47_overlay14_icon_batch_setup_private.h"
 
-void ov14_021F2C84(BoxSpriteWork *work) {
+void PCBox_LoadMonIconResources(BoxSpriteWork *work) {
     u32 i;
 
     for (i = 0; i < 36; i++) {
@@ -11,7 +11,7 @@ void ov14_021F2C84(BoxSpriteWork *work) {
     SpriteSystem_LoadAnimResObj(work->spriteSystem, work->spriteManager, NARC_poketool_icongra_poke_icon, sub_020744A8(), FALSE, 0xC0F9);
 }
 
-void ov14_021F2D1C(BoxSpriteWork *work) {
+void PCBox_CreateMonIconSprites(BoxSpriteWork *work) {
     ManagedSpriteTemplate template;
     ManagedSpriteTemplate base;
     int priority;

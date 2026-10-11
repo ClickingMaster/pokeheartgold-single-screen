@@ -2,7 +2,7 @@
 
 #define PTR(p, o) (*(void **)((u8 *)(p) + (o)))
 
-void ov18_021EEC34(void *work, u32 species, u32 index, u32 language)
+void PokedexApp_DrawForeignDexNumber(void *work, u32 species, u32 index, u32 language)
 {
     u8 *windowBase = (u8 *)work + 0xC;
     u32 offset = index << 4;
@@ -19,11 +19,11 @@ void ov18_021EEC34(void *work, u32 species, u32 index, u32 language)
     }
     BufferIntegerAsString(PTR(work, 0x660), 0,
         Pokedex_ConvertToCurrentDexNo(*((u8 *)work + 0x1858), species), 3, 2, mode);
-    ov18_021EE3AC(work, PTR(work, 0x65C), index, 9, 0, 0, 0, 0x20100, 0);
+    PokedexApp_PrintFormattedMessage(work, PTR(work, 0x65C), index, 9, 0, 0, 0, 0x20100, 0);
     ScheduleWindowCopyToVram(windowBase + offset);
 }
 
-void ov18_021EECB0(void *work, u32 species, u32 index)
+void PokedexApp_DrawForeignSpeciesName(void *work, u32 species, u32 index)
 {
     u8 *windowBase = (u8 *)work + 0xC;
     u32 offset = index << 4;
@@ -31,12 +31,12 @@ void ov18_021EECB0(void *work, u32 species, u32 index)
 
     FillWindowPixelBuffer(windowBase + offset, 0);
     string = ov18_021E590C(species, *((u8 *)work + 0x185C), 0x25);
-    ov18_021F95FC(windowBase + offset, string, 0, 0, 0, 0x20100, 0);
+    PokedexApp_PrintString(windowBase + offset, string, 0, 0, 0, 0x20100, 0);
     String_Delete(string);
     ScheduleWindowCopyToVram(windowBase + offset);
 }
 
-void ov18_021EED00(void *work, u32 species, u32 slot, u32 index)
+void PokedexApp_DrawForeignCategory(void *work, u32 species, u32 slot, u32 index)
 {
     u8 *windowBase = work;
     u32 offset = index << 4;
@@ -49,12 +49,12 @@ void ov18_021EED00(void *work, u32 species, u32 slot, u32 index)
     } else {
         string = ov18_021E595C(0, *((u8 *)work + 0x185C), 0x25);
     }
-    ov18_021F95FC(windowBase + offset, string, 0x7C, 0, 0, 0x20100, 1);
+    PokedexApp_PrintString(windowBase + offset, string, 0x7C, 0, 0, 0x20100, 1);
     String_Delete(string);
     ScheduleWindowCopyToVram(windowBase + offset);
 }
 
-void ov18_021EED70(To47Work18 *work, u32 species, u32 slot)
+void PokedexApp_DrawSearchEntryDetails(To47Work18 *work, u32 species, u32 slot)
 {
     ClearWindowTilemapAndScheduleTransfer(&work->windows[86]);
     ClearWindowTilemapAndScheduleTransfer(&work->windows[88]);
@@ -67,17 +67,17 @@ void ov18_021EED70(To47Work18 *work, u32 species, u32 slot)
     ClearWindowTilemapAndScheduleTransfer(&work->windows[93]);
 
     if (species != 0) {
-        ov18_021EE984(work, species, slot, 0x55);
+        PokedexApp_DrawFlavorText(work, species, slot, 0x55);
         if (work->language == 2) {
-            ov18_021EE9FC(work, 0x56);
-            ov18_021EEA40(work, 0x58);
-            ov18_021EEAE4(work, species, slot, 0x57);
-            ov18_021EEB94(work, species, slot, 0x59);
+            PokedexApp_DrawHeightLabel(work, 0x56);
+            PokedexApp_DrawWeightLabel(work, 0x58);
+            PokedexApp_DrawHeight(work, species, slot, 0x57);
+            PokedexApp_DrawWeight(work, species, slot, 0x59);
         } else {
-            ov18_021EEBE4(work, 0x5A);
-            ov18_021EEC34(work, species, 0x5B, work->language);
-            ov18_021EECB0(work, species, 0x5C);
-            ov18_021EED00(work, species, slot, 0x5D);
+            PokedexApp_DrawForeignDexLabel(work, 0x5A);
+            PokedexApp_DrawForeignDexNumber(work, species, 0x5B, work->language);
+            PokedexApp_DrawForeignSpeciesName(work, species, 0x5C);
+            PokedexApp_DrawForeignCategory(work, species, slot, 0x5D);
         }
     }
 }

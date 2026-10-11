@@ -24,9 +24,9 @@ typedef struct Work18CA8 {
     u8 forms[1];
 } Work18CA8;
 
-void ov18_021F11C0(void *, u32, u32);
+void PokedexApp_SetSpriteVisible(void *, u32, u32);
 void ov18_021F2AC0(void *, u32);
-void ov18_021F118C(void *, u32, u32);
+void PokedexApp_SetSpriteAnim(void *, u32, u32);
 void ManagedSprite_GetPositionXY(void *, s16 *, s16 *);
 void ManagedSprite_SetPositionXY(void *, s16, s16);
 void ManagedSprite_SetPaletteOverride(void *, u32);
@@ -37,13 +37,13 @@ extern const u8 ov18_021FA554[];
 
 void ov18_021F3AD8(void *);
 void ov18_021F3B2C(void *, s32);
-void ov18_021F3B60(void *, u32);
+void PokedexApp_SetSearchEntrySpritesVisible(void *, u32);
 void ov18_021F3BA4(void *);
 void ov18_021F3BD4(void *, s32);
 void ov18_021F3C30(void *);
 void ov18_021F3C54(void *, s32);
 void ov18_021F3C88(void *);
-void ov18_021F3CA8(void *, u32, u8 *, u8 *);
+void PokedexApp_GetSeenFormAndGender(void *, u32, u8 *, u8 *);
 void ov18_021F3D34(void *);
 
 #endif

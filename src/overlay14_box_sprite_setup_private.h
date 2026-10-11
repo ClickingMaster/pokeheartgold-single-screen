@@ -19,11 +19,11 @@ typedef struct SpriteTemplate {
     s32 vramTransfer;
 } SpriteTemplate;
 
-extern void ov14_021F2F88(u32, s16 *, s16 *, u32);
-extern void ov14_021F395C(void *, s32, s32);
-extern void ov14_021F2A18(void *, u32, u32);
-extern void ov14_021F2A74(void *, u32, u32);
-extern void ov14_021F2C50(void *, u32, void *, u32);
+extern void PCBox_GetSlotPosition(u32, s16 *, s16 *, u32);
+extern void PCBox_SetHeldItemIconPosition(void *, s32, s32);
+extern void PCBox_SetSpriteVisible(void *, u32, u32);
+extern void PCBox_SetSpriteDrawPriority(void *, u32, u32);
+extern void PCBox_LoadSpriteCharsSub(void *, u32, void *, u32);
 
 extern void ManagedSprite_GetPositionXY(void *, s16 *, s16 *);
 extern void ManagedSprite_SetPositionXY(void *, s16, s16);
@@ -49,8 +49,8 @@ extern u32 sub_0207769C(void *);
 extern void *GfGfxLoader_GetCharData(void *, u32, u32, void **, u32);
 extern void Heap_Free(void *);
 
-extern const s8 ov14_021F8070[];
-extern const s8 ov14_021F8078[];
+extern const s8 sPCBoxOutlineOffsetsX[];
+extern const s8 sPCBoxOutlineOffsetsY[];
 extern const u8 ov14_021F810C[];
 extern const u8 ov14_021F81A8[];
 extern const u8 ov14_021F81DC[];
@@ -65,18 +65,18 @@ extern const u8 ov14_021F83E4[];
 extern const u8 ov14_021F844C[];
 extern const u8 ov14_021F8480[];
 
-void ov14_021F396C(void *, u32, u32);
+void PCBox_MoveHeldItemIconToSlot(void *, u32, u32);
 void ov14_021F39A0(void *, u32, u32);
-void ov14_021F39D0(void *);
-void ov14_021F3B3C(void *);
-void ov14_021F3B5C(void *);
-void ov14_021F3BC0(void *);
-void ov14_021F3C08(void *);
-void ov14_021F3CB4(void *);
-void ov14_021F3D0C(void *, u32, u32, u32);
-void ov14_021F3D70(void *, void *);
-void ov14_021F3DE8(void *);
-void ov14_021F3E70(void *);
-void ov14_021F3F6C(void *);
+void PCBox_CreateHeldItemIconOutline(void *);
+void PCBox_ShowHeldItemIconOutline(void *);
+void PCBox_UpdateHeldItemIconOutline(void *);
+void PCBox_UpdateInfoItemIconPosition(void *);
+void PCBox_LoadTypeIconResources(void *);
+void PCBox_CreateTypeIconSprites(void *);
+void PCBox_LoadTypeIcon(void *, u32, u32, u32);
+void PCBox_DrawTypeIcons(void *, void *);
+void PCBox_LoadUiSpriteResources(void *);
+void PCBox_CreateUiSprites(void *);
+void PCBox_CreateSelectedIconOutline(void *);
 
 #endif

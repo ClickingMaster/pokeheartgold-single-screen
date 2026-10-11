@@ -1,5 +1,5 @@
 #include "to50_overlay15_bag_item_move_text_private.h"
-void ov15_021FE5C4(void *work, u16 item) {
+void BagApp_PrintItemDescription(void *work, u16 item) {
     void *str;
     if (item != 0xFFFF) {
         str = String_New(0x82, 6);
@@ -11,7 +11,7 @@ void ov15_021FE5C4(void *work, u16 item) {
     String_Delete(str);
 }
 
-void ov15_021FE620(void *work, u16 tmhm) {
+void BagApp_PrintTMHMMoveInfo(void *work, u16 tmhm) {
     void *window = (u8 *)work + 0x14;
     u16 move = TMHMGetMove(tmhm);
     void *str;

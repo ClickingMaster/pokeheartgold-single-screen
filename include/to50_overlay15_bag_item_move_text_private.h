@@ -13,6 +13,6 @@ extern u32 GetMoveAttr(u16, u32);
 extern void BufferIntegerAsString(void *, u32, s32, u32, u32, u32);
 extern void StringExpandPlaceholders(void *, void *, void *);
 extern void ScheduleWindowCopyToVram(void *);
-void ov15_021FE5C4(void *, u16);
-void ov15_021FE620(void *, u16);
+void BagApp_PrintItemDescription(void *, u16);
+void BagApp_PrintTMHMMoveInfo(void *, u16);
 #endif

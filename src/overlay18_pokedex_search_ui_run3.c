@@ -1,55 +1,55 @@
 #include "overlay18_pokedex_search_ui_private.h"
 
-BOOL ov18_021F6258(void *p, u32 x, u32 y);
-BOOL ov18_021F62B4(void *p, u32 x, u32 y);
-BOOL ov18_021F6310(void *p, int unused, u32 v);
-BOOL ov18_021F63DC(void *p, int unused, u32 v);
+BOOL PokedexApp_IsTouchOnFormScrollbar(void *p, u32 x, u32 y);
+BOOL PokedexApp_IsTouchOnAreaScrollbar(void *p, u32 x, u32 y);
+BOOL PokedexApp_DragFormScrollbar(void *p, int unused, u32 v);
+BOOL PokedexApp_DragAreaScrollbar(void *p, int unused, u32 v);
 u32 ov18_021F6540(void *p, int idx, u32 v, u32 div);
-void ov18_021F6578(void *p, int idx, s16 dy);
-void ov18_021F662C(void *p);
-void ov18_021F6684(void *p);
-void ov18_021F6714(void *p);
-void ov18_021F67D0(void *p);
+void PokedexApp_MoveScrollbar(void *p, int idx, s16 dy);
+void PokedexApp_ShowFormListSprites(void *p);
+void PokedexApp_HideFormListSprites(void *p);
+void PokedexApp_ShowFormCompareSprites(void *p);
+void PokedexApp_HideFormCompareSprites(void *p);
 void ov18_021F6984(void *p, int a1, int a2);
-void ov18_021F69C0(void *p, int variant);
-void ov18_021F6AB0(void *p, int a1, int a2);
-void ov18_021F6DE0(void *p, int a1);
-void ov18_021F6E2C(void *p);
+void PokedexApp_SetPlayerMarkerAnim(void *p, int variant);
+void PokedexApp_SetMonPicBgAffine(void *p, int a1, int a2);
+void PokedexApp_CreateSearchMenuGrid(void *p, int a1);
+void PokedexApp_HandleSearchMenuInput(void *p);
 
-BOOL ov18_021F6258(void *p, u32 x, u32 y);
-BOOL ov18_021F62B4(void *p, u32 x, u32 y);
-BOOL ov18_021F6310(void *p, int unused, u32 v);
-BOOL ov18_021F63DC(void *p, int unused, u32 v);
-u32 ov18_021F64A4(void *p, int idx);
-u32 ov18_021F64F4(void *p, int idx);
+BOOL PokedexApp_IsTouchOnFormScrollbar(void *p, u32 x, u32 y);
+BOOL PokedexApp_IsTouchOnAreaScrollbar(void *p, u32 x, u32 y);
+BOOL PokedexApp_DragFormScrollbar(void *p, int unused, u32 v);
+BOOL PokedexApp_DragAreaScrollbar(void *p, int unused, u32 v);
+u32 PokedexApp_GetFormScrollbarY(void *p, int idx);
+u32 PokedexApp_GetAreaScrollbarY(void *p, int idx);
 u32 ov18_021F6540(void *p, int idx, u32 v, u32 div);
-void ov18_021F6578(void *p, int idx, s16 dy);
-void ov18_021F65AC(void *p);
-void ov18_021F65EC(void *p);
-void ov18_021F662C(void *p);
-void ov18_021F6684(void *p);
-void ov18_021F6714(void *p);
-void ov18_021F67D0(void *p);
+void PokedexApp_MoveScrollbar(void *p, int idx, s16 dy);
+void PokedexApp_SyncFormScrollbar(void *p);
+void PokedexApp_SyncAreaScrollbar(void *p);
+void PokedexApp_ShowFormListSprites(void *p);
+void PokedexApp_HideFormListSprites(void *p);
+void PokedexApp_ShowFormCompareSprites(void *p);
+void PokedexApp_HideFormCompareSprites(void *p);
 void ov18_021F6844(void *p, int idx, int value);
-void ov18_021F684C(void *p, int a1, int a2, int a3);
-void ov18_021F6AB0(void *p, int a1, int a2);
-void ov18_021F6DE0(void *p, int a1);
-void ov18_021F6E2C(void *p);
-void ov18_021F6E58(void *p, int a1);
+void PokedexApp_ShowFormCompareMonPic(void *p, int a1, int a2, int a3);
+void PokedexApp_SetMonPicBgAffine(void *p, int a1, int a2);
+void PokedexApp_CreateSearchMenuGrid(void *p, int a1);
+void PokedexApp_HandleSearchMenuInput(void *p);
+void PokedexApp_UpdateSearchMenuCursor(void *p, int a1);
 
 void ov18_021F6984(void *p, int a1, int a2) {
-    ov18_021F684C(p, a1, a2, 0);
+    PokedexApp_ShowFormCompareMonPic(p, a1, a2, 0);
 }
 
-void ov18_021F6990(void *p) {
+void PokedexApp_UpdateFormCompareSelector(void *p) {
     if (((Ov18Bits18C7 *)((u8 *)p + 0x18C7))->unk_0 == 0) {
-        ov18_021F1294(p, 13, 0x40, 0x58, 0);
+        PokedexApp_SetSpritePos(p, 13, 0x40, 0x58, 0);
     } else {
-        ov18_021F1294(p, 13, 0xC0, 0x58, 0);
+        PokedexApp_SetSpritePos(p, 13, 0xC0, 0x58, 0);
     }
 }
 
-void ov18_021F69C0(void *p, int variant) {
+void PokedexApp_SetPlayerMarkerAnim(void *p, int variant) {
     int anim;
     if (PlayerProfile_GetTrainerGender(*(void **)((u8 *)*(void **)p + 4)) == 0) {
         anim = 0;
@@ -59,5 +59,5 @@ void ov18_021F69C0(void *p, int variant) {
     if (variant == 1) {
         anim += 2;
     }
-    ov18_021F118C(p, 2, anim);
+    PokedexApp_SetSpriteAnim(p, 2, anim);
 }

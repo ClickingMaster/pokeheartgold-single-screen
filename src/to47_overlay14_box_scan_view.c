@@ -4,7 +4,7 @@
 
 #include "to47_overlay14_box_scan_view_private.h"
 
-u32 ov14_021E7278(void *p) {
+u32 PCBox_RunReleaseMoveCheck(void *p) {
     void *r;
     u16 idx;
     u32 count;
@@ -27,19 +27,19 @@ u32 ov14_021E7278(void *p) {
             if (boxId == U8_AT(p, 0x1F) && slot == U8_AT(p, 0x21)) {
                 boxmon = NULL;
             } else {
-                boxmon = ov14_021E60C0(p, boxId, slot);
+                boxmon = PCBox_GetSlotBoxMon(p, boxId, slot);
             }
         } else {
             slot = idx - 0x21C;
             if (slot == U8_AT(p, 0x21) - 30) {
                 boxmon = NULL;
             } else {
-                boxmon = ov14_021E60C0(p, 0xFF, slot);
+                boxmon = PCBox_GetSlotBoxMon(p, 0xFF, slot);
             }
         }
         if (boxmon != NULL && GetBoxMonData(boxmon, 0xAC, NULL) != 0) {
             for (i = 0; i < 4; i++) {
-                bit = ov14_021E71C8((u16)GetBoxMonData(boxmon, i + 0x36, NULL));
+                bit = PCBox_GetReleaseCheckMoveIndex((u16)GetBoxMonData(boxmon, i + 0x36, NULL));
                 if (bit != -1) {
                     U8_AT(r, 6) &= 0xFF ^ (1 << bit);
                 }
@@ -56,7 +56,7 @@ u32 ov14_021E7278(void *p) {
     return 1;
 }
 
-Ov14BoxView *ov14_021E7358(void *boxMon) {
+Ov14BoxView *PCBox_CreateMonInfo(void *boxMon) {
     Ov14BoxView *view;
     u32 i;
 

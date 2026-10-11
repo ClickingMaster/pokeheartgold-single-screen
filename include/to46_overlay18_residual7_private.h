@@ -5,10 +5,10 @@
 
 #include "sprite_system.h"
 
-void ov18_021F11C0(void *, int, int);
-ManagedSprite *ov18_021F11EC(void *, const ManagedSpriteTemplate *);
-void ov18_021F121C(void *, int, int, int, int);
-void ov18_021F1294(void *, int, s16, s16, int);
-void ov18_021F12C8(void *, int, s16 *, s16 *, int);
+void PokedexApp_SetSpriteVisible(void *, int, int);
+ManagedSprite *PokedexApp_NewSprite(void *, const ManagedSpriteTemplate *);
+void PokedexApp_MoveSprite(void *, int, int, int, int);
+void PokedexApp_SetSpritePos(void *, int, s16, s16, int);
+void PokedexApp_GetSpritePos(void *, int, s16 *, s16 *, int);
 
 #endif

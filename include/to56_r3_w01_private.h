@@ -13,7 +13,7 @@ extern void BattleDpadCursor_SetActive(void *state, u8 value);
 extern void BattleDpadCursor_ResetPosition(void *state);
 extern void BattleDpadCursor_SetEnabledMask(void *state, s32 value);
 extern void BattleCursor_Disable(void *cursor);
-void ov08_022216CC(u8 *work);
-void ov08_022216F4(u8 *work);
-void ov08_022217C8(u8 *work);
+void BattlePartyMenu_SetLearnMoveCursorMask(u8 *work);
+void BattlePartyMenu_SetForgetMoveCursorMask(u8 *work);
+void BattlePartyMenu_DeactivateCursor(u8 *work);
 #endif

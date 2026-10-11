@@ -1,6 +1,6 @@
 #include "to50_overlay15_bag_bg_layout_private.h"
 
-void ov15_021FD404(void *work, s32 slot, s32 palette) {
+void BagApp_LoadPocketSubBgPalette(void *work, s32 slot, s32 palette) {
     const u8 *data = PTR(PTR(work, 0x694 + slot * 4), 0xC);
 
     if (palette <= 7) {
@@ -11,7 +11,7 @@ void ov15_021FD404(void *work, s32 slot, s32 palette) {
     }
 }
 
-void ov15_021FD43C(void *bgConfig, s32 bgId, s32 mode) {
+void BagApp_ApplyTilemapCommands(void *bgConfig, s32 bgId, s32 mode) {
     void *buffer = GetBgTilemapBuffer(bgConfig, (u8)bgId);
     const Ov15TileCommandR18 *command;
     s32 i;
@@ -19,7 +19,7 @@ void ov15_021FD43C(void *bgConfig, s32 bgId, s32 mode) {
     if (mode == 6) {
         return;
     }
-    command = ov15_022013A8[mode];
+    command = sSubScreenTilemapCommands[mode];
     for (i = 0; i < 4; i++, command++) {
         if (command->type == 1) {
             LoadRectToBgTilemapRect(bgConfig, (u8)bgId, (u8 *)buffer + (command->x + (command->y << 5)) * 2, command->bgId, command->destY, command->width, command->height);
@@ -29,18 +29,18 @@ void ov15_021FD43C(void *bgConfig, s32 bgId, s32 mode) {
     }
 }
 
-void ov15_021FD4C0(void *bgConfig, s32 bgId, u32 mode, u32 selection) {
+void BagApp_DrawItemSlotFrames(void *bgConfig, s32 bgId, u32 mode, u32 selection) {
     s32 i;
     void *buffer = GetBgTilemapBuffer(bgConfig, (u8)bgId);
     const Ov15RectR18 *rect;
 
     i = 0;
-    rect = ov15_02201340[mode - 1];
+    rect = sUnusedSlotRects[mode - 1];
     for (; i < 2; i++, rect++) {
         FillBgTilemapRect(bgConfig, (u8)bgId, 0, rect->x, rect->y, rect->width, rect->height, 0);
     }
     if (selection != (u32)-1) {
-        rect = &ov15_02201328[selection];
+        rect = &sItemSlotRects[selection];
         if (selection <= 1) {
             LoadRectToBgTilemapRect(bgConfig, (u8)bgId, (u8 *)buffer + 0x600, rect->x, rect->y, rect->width, rect->height);
         } else {
@@ -49,7 +49,7 @@ void ov15_021FD4C0(void *bgConfig, s32 bgId, u32 mode, u32 selection) {
     }
 }
 
-void ov15_021FD574(void *work, u32 mode, s32 value, s32 selection) {
+void BagApp_LoadSubScreenLayout(void *work, u32 mode, s32 value, s32 selection) {
     Ov15ScreenDataR18 *screen;
     void *allocation;
 
@@ -59,7 +59,7 @@ void ov15_021FD574(void *work, u32 mode, s32 value, s32 selection) {
         allocation = GfGfxLoader_GetScrnData(0xF, 0x2B, FALSE, &screen, 6);
         BG_LoadScreenTilemapData(PTR(work, 0), 5, screen->raw, screen->size);
         DC_FlushRange(GetBgTilemapBuffer(PTR(work, 0), 5), screen->size);
-        ov15_021FD43C(PTR(work, 0), 5, value);
+        BagApp_ApplyTilemapCommands(PTR(work, 0), 5, value);
         ScheduleBgTilemapBufferTransfer(PTR(work, 0), 5);
         Heap_Free(allocation);
 
@@ -67,13 +67,13 @@ void ov15_021FD574(void *work, u32 mode, s32 value, s32 selection) {
         BG_LoadScreenTilemapData(PTR(work, 0), 6, screen->raw, screen->size);
         ScheduleBgTilemapBufferTransfer(PTR(work, 0), 6);
         Heap_Free(allocation);
-        ov15_0220005C(work, 0, 0, FALSE);
+        BagApp_ShowMoveSlotSprites(work, 0, 0, FALSE);
         break;
     case 1:
         allocation = GfGfxLoader_GetScrnData(0xF, 0x2C, FALSE, &screen, 6);
         BG_LoadScreenTilemapData(PTR(work, 0), 5, screen->raw, screen->size);
         DC_FlushRange(GetBgTilemapBuffer(PTR(work, 0), 5), screen->size);
-        ov15_021FD4C0(PTR(work, 0), 5, value, selection);
+        BagApp_DrawItemSlotFrames(PTR(work, 0), 5, value, selection);
         ScheduleBgTilemapBufferTransfer(PTR(work, 0), 5);
         Heap_Free(allocation);
 
@@ -81,15 +81,15 @@ void ov15_021FD574(void *work, u32 mode, s32 value, s32 selection) {
         BG_LoadScreenTilemapData(PTR(work, 0), 6, screen->raw, screen->size);
         ScheduleBgTilemapBufferTransfer(PTR(work, 0), 6);
         Heap_Free(allocation);
-        ov15_02200294(work);
-        ov15_0220005C(work, value, ov15_021FA098(work), FALSE);
+        BagApp_HideItemMenuSprites(work);
+        BagApp_ShowMoveSlotSprites(work, value, BagApp_GetMovingItemPageSlot(work), FALSE);
         break;
     case 2:
         allocation = GfGfxLoader_GetScrnData(0xF, 0x2D, FALSE, &screen, 6);
         BG_LoadScreenTilemapData(PTR(work, 0), 6, screen->raw, screen->size);
         ScheduleBgTilemapBufferTransfer(PTR(work, 0), 6);
         Heap_Free(allocation);
-        ov15_021FD43C(PTR(work, 0), 5, value);
+        BagApp_ApplyTilemapCommands(PTR(work, 0), 5, value);
         ScheduleBgTilemapBufferTransfer(PTR(work, 0), 5);
         break;
     case 3:

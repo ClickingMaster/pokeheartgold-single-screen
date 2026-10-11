@@ -2,18 +2,18 @@
 
 #pragma force_active on
 
-int ov08_0221CD64(Ov08W04State *work) {
+int BattlePartyMenu_StartFadeOut(Ov08W04State *work) {
     PaletteData_BeginPaletteFade(work->paletteData, 0xA, 0xFFFF, -8, 0, 0x10, 0);
     return 0x1A;
 }
-int ov08_0221CD90(void *task, Ov08W04State *work) {
+int BattlePartyMenu_Exit(void *task, Ov08W04State *work) {
     if (PaletteData_GetSelectedBuffersBitmask(work->paletteData) != 0) {
         return 0;
     }
-    ov08_0221D14C(work);
-    ov08_02220A50(work);
-    ov08_0221DD40(work);
-    ov08_0221CF08(work->bgConfig);
+    BattlePartyMenu_FreeText(work);
+    BattlePartyMenu_FreeSprites(work);
+    BattlePartyMenu_RemoveWindows(work);
+    BattlePartyMenu_FreeBgs(work->bgConfig);
     *(u8 *)((u8 *)*(void **)work + 0x32) = BattleDpadCursor_IsActive(work->smallState);
     BattleDpadCursor_Free(work->smallState);
     FontID_Release(4);
@@ -21,22 +21,22 @@ int ov08_0221CD90(void *task, Ov08W04State *work) {
     DestroySysTaskAndEnvironment(task);
     return 1;
 }
-void ov08_0221CDF8(Ov08W04State *work) {
+void BattlePartyMenu_InitBgs(Ov08W04State *work) {
     struct GraphicsModes modes;
     struct BgTemplate bg7;
     struct BgTemplate bg6;
     struct BgTemplate bg5;
     struct BgTemplate bg4;
-    modes = ov08_02224E34;
+    modes = sBattlePartyGraphicsModes;
     SetScreenModeAndDisable(&modes, SCREEN_SUB);
-    bg7 = ov08_02224EAC;
+    bg7 = sBattlePartyBgTemplateSub3;
     InitBgFromTemplate(work->bgConfig, 7, &bg7, 0);
-    bg6 = ov08_02224EE4;
+    bg6 = sBattlePartyBgTemplateSub2;
     InitBgFromTemplate(work->bgConfig, 6, &bg6, 0);
-    bg5 = ov08_02224F00;
+    bg5 = sBattlePartyBgTemplateSub1;
     InitBgFromTemplate(work->bgConfig, 5, &bg5, 0);
     BgClearTilemapBufferAndCommit(work->bgConfig, 5);
-    bg4 = ov08_02224EC8;
+    bg4 = sBattlePartyBgTemplateSub0;
     InitBgFromTemplate(work->bgConfig, 4, &bg4, 0);
     BgClearTilemapBufferAndCommit(work->bgConfig, 4);
     BG_ClearCharDataRange(5, 0x20, 0, (enum HeapID)(*(Ov08W04Root **)work)->heapId);
@@ -44,7 +44,7 @@ void ov08_0221CDF8(Ov08W04State *work) {
     ScheduleBgTilemapBufferTransfer(work->bgConfig, 5);
     ScheduleBgTilemapBufferTransfer(work->bgConfig, 4);
 }
-void ov08_0221CF08(void *bgConfig) {
+void BattlePartyMenu_FreeBgs(void *bgConfig) {
     GfGfx_EngineBTogglePlanes(0x1F, 0);
     FreeBgTilemapBuffer(bgConfig, 4);
     FreeBgTilemapBuffer(bgConfig, 5);

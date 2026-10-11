@@ -13,11 +13,11 @@ typedef struct Entry {
     int value;
     int unused[4];
 } Entry;
-extern const Entry ov08_02225DEC[], ov08_02225DDC[], ov08_02225DE0[], ov08_02225DE4[], ov08_02225DE8[];
-ManagedSprite *ov08_02223EA4(W13Work *work, int index);
+extern const Entry ov08_02225DEC[], sBattleBagSpriteTemplates[], ov08_02225DE0[], ov08_02225DE4[], ov08_02225DE8[];
+ManagedSprite *BattleBagMenu_CreateSprite(W13Work *work, int index);
 
-// @fn ov08_02223EA4
-ManagedSprite *ov08_02223EA4(W13Work *work, int index) {
+// @fn BattleBagMenu_CreateSprite
+ManagedSprite *BattleBagMenu_CreateSprite(W13Work *work, int index) {
     ManagedSpriteTemplate tmpl;
     SpriteSystem *system = BattleSystem_GetSpriteSystem(*work->root);
     tmpl.x = 0;
@@ -27,7 +27,7 @@ ManagedSprite *ov08_02223EA4(W13Work *work, int index) {
     tmpl.drawPriority = ov08_02225DEC[index].value;
     tmpl.pal = 0;
     tmpl.vram = NNS_G2D_VRAM_TYPE_2DSUB;
-    tmpl.resIdList[0] = ov08_02225DDC[index].value;
+    tmpl.resIdList[0] = sBattleBagSpriteTemplates[index].value;
     tmpl.resIdList[1] = ov08_02225DE0[index].value;
     tmpl.resIdList[2] = ov08_02225DE4[index].value;
     tmpl.resIdList[3] = ov08_02225DE8[index].value;

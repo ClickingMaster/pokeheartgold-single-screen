@@ -5,7 +5,7 @@
 #define U16(p, o) (*(u16 *)((u8 *)(p) + (o)))
 #define U8(p, o)  (*(u8 *)((u8 *)(p) + (o)))
 
-void ov15_021FDD54(void *anim) {
+void BagApp_AdvanceAnimLoop(void *anim) {
     s32 value = U32(anim, 0) + 0x1000;
     if (value < (U16(PTR(anim, 8), 4) << 12)) {
         U32(anim, 0) = value;

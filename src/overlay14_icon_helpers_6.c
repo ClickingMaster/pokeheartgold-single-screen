@@ -7,6 +7,6 @@ typedef struct {u8 pad[0x4094];u8 ids[64];} IdCtx;
 
 typedef struct {void *sprite;u8 pad[3];u8 counter;u32 scale;} ScaleWork;
 
-void ov14_021F3190(void *p,u32 i,int active){int id=U8((u8 *)p+i,0x4094);if(!active){ov14_021F2A60(p,id,0);ov14_021F2A74(p,id,0x14);return;}if(i<30)ov14_021F2A60(p,id,3);else ov14_021F2A60(p,id,1);ov14_021F2A74(p,id,0x74-2*i);}
+void PCBox_SetIconLayer(void *p,u32 i,int active){int id=U8((u8 *)p+i,0x4094);if(!active){PCBox_SetSpritePriority(p,id,0);PCBox_SetSpriteDrawPriority(p,id,0x14);return;}if(i<30)PCBox_SetSpritePriority(p,id,3);else PCBox_SetSpritePriority(p,id,1);PCBox_SetSpriteDrawPriority(p,id,0x74-2*i);}
 
-void ov14_021F31E0(void *p,int i,u32 which){int id=U8((u8 *)p+i,0x4094);if(which<30)ov14_021F2A60(p,id,3);else ov14_021F2A60(p,id,1);ov14_021F2A74(p,id,0x14);}
+void ov14_021F31E0(void *p,int i,u32 which){int id=U8((u8 *)p+i,0x4094);if(which<30)PCBox_SetSpritePriority(p,id,3);else PCBox_SetSpritePriority(p,id,1);PCBox_SetSpriteDrawPriority(p,id,0x14);}

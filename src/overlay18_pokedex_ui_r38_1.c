@@ -4,68 +4,68 @@
 
 #include "sprite_system.h"
 
-void ov18_021F118C(PokedexAppData *pokedexApp, int index, int animation);
-void ov18_021F11C0(PokedexAppData *pokedexApp, int index, int draw);
-void ov18_021F38F0(PokedexAppData *pokedexApp, int index, u16 value);
-void ov18_021F39C4(PokedexAppData *pokedexApp, int index, u16 value);
-void ov18_021F3A64(PokedexAppData *pokedexApp, u32 value, int index);
-u32 ov18_021F3AB0(PokedexAppData *pokedexApp, int index);
-void ov18_021F3560(PokedexAppData *pokedexApp, u32 first, u32 second, int weight);
-void ov18_021F3618(PokedexAppData *pokedexApp, int state);
+void PokedexApp_SetSpriteAnim(PokedexAppData *pokedexApp, int index, int animation);
+void PokedexApp_SetSpriteVisible(PokedexAppData *pokedexApp, int index, int draw);
+void PokedexApp_DrawHeightDigits(PokedexAppData *pokedexApp, int index, u16 value);
+void PokedexApp_DrawWeightDigits(PokedexAppData *pokedexApp, int index, u16 value);
+void PokedexApp_UpdateSliderLimitSprites(PokedexAppData *pokedexApp, u32 value, int index);
+u32 PokedexApp_GetSliderValue(PokedexAppData *pokedexApp, int index);
+void PokedexApp_UpdateSliderSprites(PokedexAppData *pokedexApp, u32 first, u32 second, int weight);
+void PokedexApp_UpdateSearchSprites(PokedexAppData *pokedexApp, int state);
 void ov18_021F34C4(PokedexAppData *pokedexApp, int state);
 void ov18_021F34EC(PokedexAppData *pokedexApp, int state);
-void ov18_021F3544(PokedexAppData *pokedexApp, int draw);
+void PokedexApp_SetSliderSpritesVisible(PokedexAppData *pokedexApp, int draw);
 
 #define SPRITE_AT(app, offset, index) (*(ManagedSprite **)((u8 *)(app) + (offset) + (index) * 4))
 
-void ov18_021F3560(PokedexAppData *pokedexApp, u32 first, u32 second, int weight) {
+void PokedexApp_UpdateSliderSprites(PokedexAppData *pokedexApp, u32 first, u32 second, int weight) {
     if (weight == FALSE) {
-        ov18_021F36D4(pokedexApp, ov18_021F3AD0(pokedexApp, second), 5, TRUE);
-        ov18_021F36D4(pokedexApp, ov18_021F3AD0(pokedexApp, first), 11, FALSE);
-        ov18_021F38F0(pokedexApp, 6, pokedexApp->unk_1850[second].unk_0);
-        ov18_021F38F0(pokedexApp, 12, pokedexApp->unk_1850[first].unk_0);
+        PokedexApp_SetHeightSliderX(pokedexApp, PokedexApp_SliderValueToX(pokedexApp, second), 5, TRUE);
+        PokedexApp_SetHeightSliderX(pokedexApp, PokedexApp_SliderValueToX(pokedexApp, first), 11, FALSE);
+        PokedexApp_DrawHeightDigits(pokedexApp, 6, pokedexApp->unk_1850[second].unk_0);
+        PokedexApp_DrawHeightDigits(pokedexApp, 12, pokedexApp->unk_1850[first].unk_0);
     } else {
-        ov18_021F37D4(pokedexApp, ov18_021F3AD0(pokedexApp, second), 5, TRUE);
-        ov18_021F37D4(pokedexApp, ov18_021F3AD0(pokedexApp, first), 11, FALSE);
-        ov18_021F39C4(pokedexApp, 6, pokedexApp->unk_1850[second].unk_2);
-        ov18_021F39C4(pokedexApp, 12, pokedexApp->unk_1850[first].unk_2);
+        PokedexApp_SetWeightSliderX(pokedexApp, PokedexApp_SliderValueToX(pokedexApp, second), 5, TRUE);
+        PokedexApp_SetWeightSliderX(pokedexApp, PokedexApp_SliderValueToX(pokedexApp, first), 11, FALSE);
+        PokedexApp_DrawWeightDigits(pokedexApp, 6, pokedexApp->unk_1850[second].unk_2);
+        PokedexApp_DrawWeightDigits(pokedexApp, 12, pokedexApp->unk_1850[first].unk_2);
     }
-    ov18_021F3A64(pokedexApp, second, 1);
-    ov18_021F3A64(pokedexApp, first, 3);
+    PokedexApp_UpdateSliderLimitSprites(pokedexApp, second, 1);
+    PokedexApp_UpdateSliderLimitSprites(pokedexApp, first, 3);
 }
 
-void ov18_021F3618(PokedexAppData *pokedexApp, int state) {
+void PokedexApp_UpdateSearchSprites(PokedexAppData *pokedexApp, int state) {
     switch (state) {
     case 0:
         ov18_021F34EC(pokedexApp, TRUE);
-        ov18_021F3544(pokedexApp, FALSE);
+        PokedexApp_SetSliderSpritesVisible(pokedexApp, FALSE);
         break;
     case 1:
         ov18_021F34EC(pokedexApp, FALSE);
-        ov18_021F3544(pokedexApp, FALSE);
+        PokedexApp_SetSliderSpritesVisible(pokedexApp, FALSE);
         break;
     case 2:
         ov18_021F34C4(pokedexApp, TRUE);
-        ov18_021F3544(pokedexApp, TRUE);
-        ov18_021F118C(pokedexApp, 5, 0x43);
-        ov18_021F118C(pokedexApp, 11, 0x44);
-        ov18_021F3560(pokedexApp, pokedexApp->dexSearchCriteria[4], pokedexApp->dexSearchCriteria[5], FALSE);
+        PokedexApp_SetSliderSpritesVisible(pokedexApp, TRUE);
+        PokedexApp_SetSpriteAnim(pokedexApp, 5, 0x43);
+        PokedexApp_SetSpriteAnim(pokedexApp, 11, 0x44);
+        PokedexApp_UpdateSliderSprites(pokedexApp, pokedexApp->dexSearchCriteria[4], pokedexApp->dexSearchCriteria[5], FALSE);
         break;
     case 3:
         ov18_021F34C4(pokedexApp, TRUE);
-        ov18_021F3544(pokedexApp, TRUE);
-        ov18_021F118C(pokedexApp, 5, 0x29);
-        ov18_021F118C(pokedexApp, 11, 0x2A);
-        ov18_021F3560(pokedexApp, pokedexApp->dexSearchCriteria[6], pokedexApp->dexSearchCriteria[7], TRUE);
+        PokedexApp_SetSliderSpritesVisible(pokedexApp, TRUE);
+        PokedexApp_SetSpriteAnim(pokedexApp, 5, 0x29);
+        PokedexApp_SetSpriteAnim(pokedexApp, 11, 0x2A);
+        PokedexApp_UpdateSliderSprites(pokedexApp, pokedexApp->dexSearchCriteria[6], pokedexApp->dexSearchCriteria[7], TRUE);
         break;
     default:
         ov18_021F34C4(pokedexApp, TRUE);
-        ov18_021F3544(pokedexApp, FALSE);
+        PokedexApp_SetSliderSpritesVisible(pokedexApp, FALSE);
         break;
     }
 }
 
-void ov18_021F36D4(PokedexAppData *pokedexApp, int xPos, int index, int moveCursor) {
+void PokedexApp_SetHeightSliderX(PokedexAppData *pokedexApp, int xPos, int index, int moveCursor) {
     s16 x;
     s16 y;
 
@@ -92,7 +92,7 @@ void ov18_021F36D4(PokedexAppData *pokedexApp, int xPos, int index, int moveCurs
     }
 }
 
-void ov18_021F37D4(PokedexAppData *pokedexApp, int xPos, int index, int moveCursor) {
+void PokedexApp_SetWeightSliderX(PokedexAppData *pokedexApp, int xPos, int index, int moveCursor) {
     s16 x;
     s16 y;
 
@@ -120,7 +120,7 @@ void ov18_021F37D4(PokedexAppData *pokedexApp, int xPos, int index, int moveCurs
     }
 }
 
-void ov18_021F38F0(PokedexAppData *pokedexApp, int index, u16 value) {
+void PokedexApp_DrawHeightDigits(PokedexAppData *pokedexApp, int index, u16 value) {
     u32 display;
     u32 integral;
     u32 fractional;
@@ -134,16 +134,16 @@ void ov18_021F38F0(PokedexAppData *pokedexApp, int index, u16 value) {
     integral = display / 12;
     fractional = display % 12;
     if (integral >= 10) {
-        ov18_021F118C(pokedexApp, index, integral / 10 + 0x2B);
-        ov18_021F11C0(pokedexApp, index, TRUE);
+        PokedexApp_SetSpriteAnim(pokedexApp, index, integral / 10 + 0x2B);
+        PokedexApp_SetSpriteVisible(pokedexApp, index, TRUE);
     } else {
-        ov18_021F11C0(pokedexApp, index, FALSE);
+        PokedexApp_SetSpriteVisible(pokedexApp, index, FALSE);
     }
-    ov18_021F118C(pokedexApp, index + 1, integral % 10 + 0x2B);
-    ov18_021F11C0(pokedexApp, index + 1, TRUE);
-    ov18_021F118C(pokedexApp, index + 2, fractional / 10 + 0x2B);
-    ov18_021F11C0(pokedexApp, index + 2, TRUE);
-    ov18_021F118C(pokedexApp, index + 3, fractional % 10 + 0x2B);
-    ov18_021F11C0(pokedexApp, index + 3, TRUE);
-    ov18_021F11C0(pokedexApp, index + 4, FALSE);
+    PokedexApp_SetSpriteAnim(pokedexApp, index + 1, integral % 10 + 0x2B);
+    PokedexApp_SetSpriteVisible(pokedexApp, index + 1, TRUE);
+    PokedexApp_SetSpriteAnim(pokedexApp, index + 2, fractional / 10 + 0x2B);
+    PokedexApp_SetSpriteVisible(pokedexApp, index + 2, TRUE);
+    PokedexApp_SetSpriteAnim(pokedexApp, index + 3, fractional % 10 + 0x2B);
+    PokedexApp_SetSpriteVisible(pokedexApp, index + 3, TRUE);
+    PokedexApp_SetSpriteVisible(pokedexApp, index + 4, FALSE);
 }

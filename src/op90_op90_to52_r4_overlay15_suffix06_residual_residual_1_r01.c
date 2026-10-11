@@ -29,13 +29,13 @@ typedef struct {
     u8 gap673[0x17];
     u8 phase;
 } State;
-extern const u8 ov15_022008C8[];
-void ov15_021FE17C(State *);
-int ov15_021FF320(Slot *, int, int);
-void ov15_021FF570(State *, Window *, String *, Slot *, int);
-void ov15_021FF364(State *s, int start, void *unused, int dim);
-// @fn ov15_021FF364
-void ov15_021FF364(State *s, int start, void *unused, int dim) {
+extern const u8 sListPocketCapacities[];
+void BagApp_AddItemListWindows(State *);
+int BagApp_GetNthItemSlotIndex(Slot *, int, int);
+void BagApp_PrintItemListEntry(State *, Window *, String *, Slot *, int);
+void BagApp_DrawItemList(State *s, int start, void *unused, int dim);
+// @fn BagApp_DrawItemList
+void BagApp_DrawItemList(State *s, int start, void *unused, int dim) {
     int i, k, count;
     Slot *slot;
     int limit;
@@ -53,19 +53,19 @@ void ov15_021FF364(State *s, int start, void *unused, int dim) {
         last = 0;
     }
     s->phase ^= 1;
-    ov15_021FE17C(s);
+    BagApp_AddItemListWindows(s);
     for (i = 0; i < 6; i++) {
         FillWindowPixelBuffer(&s->windows[first + i], 0);
         ClearWindowTilemapAndScheduleTransfer(&s->windows[last + i]);
     }
     count = 0;
-    k = ov15_021FF320(slot, s->bag->category, start);
-    for (; k < ov15_022008C8[s->bag->category]; k++) {
+    k = BagApp_GetNthItemSlotIndex(slot, s->bag->category, start);
+    for (; k < sListPocketCapacities[s->bag->category]; k++) {
         if (slot->items[k].id != 0 && slot->items[k].quantity != 0) {
             if (dim == 0) {
-                ov15_021FF570(s, &s->windows[first + count], s->strings[k], slot, k);
+                BagApp_PrintItemListEntry(s, &s->windows[first + count], s->strings[k], slot, k);
             } else if (k == s->selected) {
-                ov15_021FF570(s, &s->windows[first + count], s->strings[k], slot, k);
+                BagApp_PrintItemListEntry(s, &s->windows[first + count], s->strings[k], slot, k);
             } else {
                 AddTextPrinterParameterizedWithColor(&s->windows[first + count], 0, s->strings[k], 0, 16, 255, 0x10200, NULL);
             }

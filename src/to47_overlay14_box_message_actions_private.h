@@ -8,9 +8,9 @@
 #define U32_AT(p, o) (*(u32 *)((u8 *)(p) + (o)))
 #define PTR_AT(p, o) (*(void **)((u8 *)(p) + (o)))
 
-extern void *ov14_021E60C0(void *, u32, u32);
-extern void ov14_021F6698(void *, u32, u32);
-extern void *ov14_021F6628(void);
+extern void *PCBox_GetSlotBoxMon(void *, u32, u32);
+extern void PCBox_PrintMessage(void *, u32, u32);
+extern void *PCBox_LoadBoxMessages(void);
 
 extern void BufferBoxMonNickname(void *, u32, void *);
 extern void BufferItemName(void *, u32, u32);
@@ -23,8 +23,8 @@ extern void DestroyMsgData(void *);
 extern void FillWindowPixelBuffer(void *, u32);
 extern void AddTextPrinterParameterizedWithColor(void *, u32, void *, s32, s32, u32, u32, void *);
 
-void ov14_021F685C(void *, u32, u32, u32);
-void ov14_021F68C0(void *, u32, u32);
-void ov14_021F6928(void *, u32, u32);
+void PCBox_PrintMonActionMessage(void *, u32, u32, u32);
+void PCBox_PrintItemActionMessage(void *, u32, u32);
+void PCBox_PrintPanelHint(void *, u32, u32);
 
 #endif

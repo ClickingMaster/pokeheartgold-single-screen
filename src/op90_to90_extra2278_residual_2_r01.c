@@ -16,14 +16,14 @@ typedef struct Work {
     u8 sel;
 } Work;
 
-void ov08_022239CC(Work *, u32);
-void ov08_02223678(Work *, u32, u32, u32, u32, u32, u32);
-void ov08_02223A3C(Work *, u32);
-void ov08_022234A4(Work *, u32, u32, u32, u32, u32);
-void ov08_02223AA0(Work *work);
+void BattleBagMenu_PrintUseItemName(Work *, u32);
+void BattleBagMenu_PrintItemQuantity(Work *, u32, u32, u32, u32, u32, u32);
+void BattleBagMenu_PrintItemDescription(Work *, u32);
+void BattleBagMenu_PrintCenteredText(Work *, u32, u32, u32, u32, u32);
+void BattleBagMenu_PrintUseItemPage(Work *work);
 
-// @fn ov08_02223AA0
-void ov08_02223AA0(Work *work) {
+// @fn BattleBagMenu_PrintUseItemPage
+void BattleBagMenu_PrintUseItemPage(Work *work) {
     u32 i;
     u8 col, row;
     for (i = 0; i < 4; i++) {
@@ -31,8 +31,8 @@ void ov08_02223AA0(Work *work) {
     }
     col = work->root->col[work->sel];
     row = work->root->row[work->sel];
-    ov08_022239CC(work, col + row * 6);
-    ov08_02223678(work, col + row * 6, 0, 1, 0, 0, 0x10200);
-    ov08_02223A3C(work, col + row * 6);
-    ov08_022234A4(work, 3, 31, 4, 5, 0x30201);
+    BattleBagMenu_PrintUseItemName(work, col + row * 6);
+    BattleBagMenu_PrintItemQuantity(work, col + row * 6, 0, 1, 0, 0, 0x10200);
+    BattleBagMenu_PrintItemDescription(work, col + row * 6);
+    BattleBagMenu_PrintCenteredText(work, 3, 31, 4, 5, 0x30201);
 }

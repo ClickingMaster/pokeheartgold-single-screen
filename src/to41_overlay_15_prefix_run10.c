@@ -6,14 +6,14 @@
 #define U8(p, o)  (*(u8 *)((u8 *)(p) + (o)))
 
 s32 ov15_021FBC6C(void *work) {
-    ov15_021FED3C(work);
+    BagApp_CloseItemMenuWindows(work);
     sub_020880CC(1, 6);
     U16(PTR(work, 0x234), 0x68) = 1;
     return 0x25;
 }
 
-s32 ov15_021FBC8C(void *work) {
-    ov15_021FED3C(work);
+s32 BagApp_ItemAction_Confirm(void *work) {
+    BagApp_CloseItemMenuWindows(work);
     sub_020880CC(1, 6);
     U16(PTR(work, 0x234), 0x68) = 3;
     return 0x25;

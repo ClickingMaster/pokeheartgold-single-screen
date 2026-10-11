@@ -1,19 +1,19 @@
 #include "overlay14_box_tilemap_loader_r7_private.h"
 
-void ov14_021E76D0(void *work, s32 member, u32 unused, u32 offset) {
+void PCBox_LoadWallpaperChars(void *work, s32 member, u32 unused, u32 offset) {
     GfxCharData *data;
     void *allocation = GfGfxLoader_GetCharData(0x13, member + 0x10, 1, &data, 0xa);
 
     BG_LoadCharTilesData(PTR_AT(PTR_AT(work, 0x34), 0x14), 3, data->raw, data->size, offset);
-    ov14_021F5718(work, (u8 *)data->raw + 0x2a0, offset + 0x15, 0x15, 3);
+    PCBox_DrawBoxNameOnWallpaper(work, (u8 *)data->raw + 0x2a0, offset + 0x15, 0x15, 3);
     Heap_Free(allocation);
 }
 
-void ov14_021E7720(void *unused, s32 member, u32 palette) {
+void PCBox_LoadWallpaperPalette(void *unused, s32 member, u32 palette) {
     GfGfxLoader_GXLoadPal(0x13, member + 0x28, 0, palette << 5, 0x20, 0xa);
 }
 
-void ov14_021E7740(void *work, s32 unused, u32 tile, u32 addend, u32 palette) {
+void PCBox_LoadWallpaperTilemap(void *work, s32 unused, u32 tile, u32 addend, u32 palette) {
     GfxScreenData *screen;
     void *allocation;
     u16 *raw;
@@ -46,14 +46,14 @@ void ov14_021E7740(void *work, s32 unused, u32 tile, u32 addend, u32 palette) {
     FillBgTilemapRect(PTR_AT(PTR_AT(work, 0x34), 0x14), 3, 0x1001, (u8)x, 0, 2, 0x14, 0x11);
 }
 
-void ov14_021E7808(void *work, s32 member, u32 a2, u32 a3, u32 a4) {
-    ov14_021E76D0(work, member, a2, a3);
-    ov14_021E7720(work, member, a4);
-    ov14_021E7740(work, member, a2, a3, a4);
+void PCBox_LoadWallpaper(void *work, s32 member, u32 a2, u32 a3, u32 a4) {
+    PCBox_LoadWallpaperChars(work, member, a2, a3);
+    PCBox_LoadWallpaperPalette(work, member, a4);
+    PCBox_LoadWallpaperTilemap(work, member, a2, a3, a4);
     ScheduleBgTilemapBufferTransfer(PTR_AT(PTR_AT(work, 0x34), 0x14), 3);
 }
 
-void ov14_021E783C(void *work, s32 member, u32 direction) {
+void PCBox_LoadScrolledWallpaper(void *work, s32 member, u32 direction) {
     u32 x;
     u32 tile;
 
@@ -76,7 +76,7 @@ void ov14_021E783C(void *work, s32 member, u32 direction) {
         tile = 0xf;
     }
     U8_AT(PTR_AT(work, 0x34), 0x449) ^= 1;
-    ov14_021E7808(work, member, S8_AT(PTR_AT(work, 0x34), 0x448), x, tile);
+    PCBox_LoadWallpaper(work, member, S8_AT(PTR_AT(work, 0x34), 0x448), x, tile);
 }
 
 void ov14_021E78AC(void *work, s32 member) {
@@ -91,8 +91,8 @@ void ov14_021E78AC(void *work, s32 member) {
         tile = 0xf;
     }
     U8_AT(PTR_AT(work, 0x34), 0x449) ^= 1;
-    ov14_021E76D0(work, member, S8_AT(PTR_AT(work, 0x34), 0x448), x);
+    PCBox_LoadWallpaperChars(work, member, S8_AT(PTR_AT(work, 0x34), 0x448), x);
     PaletteData_LoadNarc(PTR_AT(PTR_AT(work, 0x34), 0x18), 0x13, member + 0x28, 0xa, 0, 0x20, (tile << 20) >> 16);
-    ov14_021E7740(work, member, S8_AT(PTR_AT(work, 0x34), 0x448), x, tile);
+    PCBox_LoadWallpaperTilemap(work, member, S8_AT(PTR_AT(work, 0x34), 0x448), x, tile);
     ScheduleBgTilemapBufferTransfer(PTR_AT(PTR_AT(work, 0x34), 0x14), 3);
 }

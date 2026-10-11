@@ -1,27 +1,27 @@
-	.extern ov08_02222B8C
-	.extern ov08_02222D84
-	.extern ov08_02222D90
-	.extern ov08_022230CC
-	.extern ov08_02223228
-	.extern ov08_02223464
-	.extern ov08_02223CD4
-	.extern ov08_02223F34
-	.extern ov08_02224938
+	.extern BattleBagMenu_TryUseItem
+	.extern BattleBagMenu_ShowItemListPage
+	.extern BattleBagMenu_ShowUseItemPage
+	.extern BattleBagMenu_FreeBgs
+	.extern BattleBagMenu_FreeText
+	.extern BattleBagMenu_RemoveWindows
+	.extern BattleBagMenu_GetItemOnPage
+	.extern BattleBagMenu_FreeSprites
+	.extern BattleBagMenu_StartButtonAnim
 	.extern BattleDpadCursor_Free
 	.extern BattleDpadCursor_IsActive
 #include "constants/moves.h"
 	.include "asm/macros.inc"
 	.include "overlay_08.inc"
 	.include "global.inc"
-	.extern ov08_02222B8C
-	.extern ov08_02222D84
-	.extern ov08_02222D90
-	.extern ov08_022230CC
-	.extern ov08_02223228
-	.extern ov08_02223464
-	.extern ov08_02223CD4
-	.extern ov08_02223F34
-	.extern ov08_02224938
+	.extern BattleBagMenu_TryUseItem
+	.extern BattleBagMenu_ShowItemListPage
+	.extern BattleBagMenu_ShowUseItemPage
+	.extern BattleBagMenu_FreeBgs
+	.extern BattleBagMenu_FreeText
+	.extern BattleBagMenu_RemoveWindows
+	.extern BattleBagMenu_GetItemOnPage
+	.extern BattleBagMenu_FreeSprites
+	.extern BattleBagMenu_StartButtonAnim
 	.extern BattleDpadCursor_Free
 	.extern BattleDpadCursor_IsActive
 

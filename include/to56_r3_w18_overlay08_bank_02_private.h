@@ -15,15 +15,15 @@ typedef struct Ov08OwnerR3W18 {
     u8 pad10[0x12];
     u16 item;
 } Ov08OwnerR3W18;
-extern void ov08_0221D840(void *work, int state);
-extern void ov08_022213C8(void *work);
+extern void BattlePartyMenu_ChangePage(void *work, int state);
+extern void BattlePartyMenu_ShowMoveIcons(void *work);
 extern s32 GetItemAttr(u16 item, u16 attr, int heapID);
-extern void ov08_02220C5C(void *work, u8 selection);
-extern void ov08_0221DD70(void *work, u8 selection);
-extern void ov08_022221CC(void *work, u8 selection);
-extern void ov08_0221D6CC(void *work, u8 selection);
-int ov08_0221C954(Ov08WorkR3W18 *work);
-int ov08_0221C978(Ov08WorkR3W18 *work);
-int ov08_0221C9A4(Ov08OwnerR3W18 **work);
-int ov08_0221C9C8(Ov08WorkR3W18 *work);
+extern void BattlePartyMenu_ShowPageSprites(void *work, u8 selection);
+extern void BattlePartyMenu_PrintPageText(void *work, u8 selection);
+extern void BattlePartyMenu_DrawPageButtons(void *work, u8 selection);
+extern void BattlePartyMenu_DrawExpBar(void *work, u8 selection);
+int BattlePartyMenu_ShowLearnMovePage(Ov08WorkR3W18 *work);
+int BattlePartyMenu_ShowForgetMovePage(Ov08WorkR3W18 *work);
+int BattlePartyMenu_ShowRestorePPPage(Ov08OwnerR3W18 **work);
+int BattlePartyMenu_RefreshMonPage(Ov08WorkR3W18 *work);
 #endif

@@ -1,6 +1,6 @@
 #include "../include/overlay18_dex_window_private.h"
 
-void ov18_021F8C68(Ov18Work *work) {
+void PokedexEntryPopup_FlashBanner(Ov18Work *work) {
     work->paletteTimer++;
     if (work->paletteTimer == 16) {
         BgTilemapRectChangePalette(work->bgConfig, 2, 0, 0, 32, 2, 7);

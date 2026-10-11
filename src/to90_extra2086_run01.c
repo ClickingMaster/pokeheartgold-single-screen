@@ -8,8 +8,8 @@
 typedef struct {u8 pad[0x2c];u8 values[4];} Parent;
 typedef struct {Parent *parent;u8 pad4[12];MsgData *messages;MessageFormat *formatter;String *string;u8 pad1c[16];Window *windows;u8 pad30[0x111d];u8 selected;u8 pad114e[6];u8 values[4];} View;
 u32 FontID_String_GetWidth(int,const String*,int);
-void ov08_022237C4(View*);
-void ov08_022237C4(View *v){
+void BattleBagMenu_PrintPageNumber(View*);
+void BattleBagMenu_PrintPageNumber(View *v){
  Window *windows;String *first,*second,*third;u32 width,center;
  FillWindowPixelBuffer(&v->windows[25],0);
  windows=v->windows;first=NewString_ReadMsgData(v->messages,28);

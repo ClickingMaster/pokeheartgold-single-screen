@@ -5,7 +5,7 @@
 #define U16(p, o) (*(u16 *)((u8 *)(p) + (o)))
 #define U8(p, o)  (*(u8 *)((u8 *)(p) + (o)))
 
-void ov15_021FA008(void *work) {
+void BagApp_AllocItemNameStrings(void *work) {
     u32 i;
     u8 *ptr = work;
     for (i = 0; i < 0xa5; i++) {
@@ -14,7 +14,7 @@ void ov15_021FA008(void *work) {
     }
 }
 
-void ov15_021FA028(void *work) {
+void BagApp_FreeItemNameStrings(void *work) {
     u32 i;
     u8 *ptr = work;
     for (i = 0; i < 0xa5; i++) {
