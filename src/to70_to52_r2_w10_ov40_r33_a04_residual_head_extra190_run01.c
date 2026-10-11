@@ -10,5 +10,5 @@ void ov40_0223B29C(Icon*icon,Work*w,int index){u8 window[16];void*text;void*slot
 
 typedef struct Container{u8 pad[0x114];struct {u8 pad[4];void*sprite,*text;u8 tail[16];} icons[4];}Container;
 typedef struct Four{int val[4];}Four;extern const Four ov40_022454C0,ov40_022454D0;
-extern void ov40_0222D78C(Work*,int),ov40_0222D5AC(Icon*,void*,int),ov40_0222D66C(Icon*,void*,int),ManagedSprite_SetPositionXY(void*,s16,s16),ManagedSprite_SetAnim(void*,int),sub_020136B4(void*,int,int),TextOBJ_SetSpritesDrawFlag(void*,int);extern void*ov40_0222D800(Work*,int);
+extern void ov40_0222D78C(Work*,int),ov40_0222D5AC(Icon*,void*,int),ov40_0222D66C(Icon*,void*,int),ManagedSprite_SetPositionXY(void*,s16,s16),ManagedSprite_SetAnim(void*,int),TextOBJ_SetPosition(void*,int,int),TextOBJ_SetSpritesDrawFlag(void*,int);extern void*ov40_0222D800(Work*,int);
 void ov40_0223B374(Work*);

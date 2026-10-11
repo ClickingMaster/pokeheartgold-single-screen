@@ -1,11 +1,11 @@
 {
   "schema_version": 3,
   "game": "heartgold.us",
-  "commit": "458ba8394c050f00f88ccfde18f86cd6449f000d",
+  "commit": "37dc08e8cb646021e0077820d4b3ef93b9d10fd6",
   "rom_sha1": "4fcded0e2713dc03929845de631d0932ea2b5a37",
   "tracked_worktree_dirty": true,
   "map_sha256": {
-    "ARM9": "0d11f5cdf43a54ec589a54896a11fe2531e75b91f5baa8ec7eb11887c054561d",
+    "ARM9": "3bb2e051ef1f3160d85b1d381638adf4e97e339aab995bf05fad417fef7decd7",
     "ARM7": "72614f19bcc02b7ccbf0b30c55a2652f6047778b370a530e4eb2783603e57dfa"
   },
   "metric": "Mapped code-section bytes classified by source language; mixed objects excluded from clean C, C++, and combined source coverage. Functions listed in tools/progress/original_asm.json are split out of mixed objects by linker-map symbol: original hand-written assembly, build-tool generated code and linker-style veneers are excluded from the compiled-code denominator, and C functions with original inline asm count as compiled C.",
@@ -53023,14 +53023,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "motion_state_update.o",
-      "bytes": 940,
-      "status": "c",
-      "source": "src/motion_state_update.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "move.o",
       "bytes": 190,
       "status": "c",
@@ -53938,22 +53930,6 @@
       "bytes": 116,
       "status": "c",
       "source": "src/op90_to80_extra1465_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to80_extra1469_residual_1_r01.o",
-      "bytes": 888,
-      "status": "c",
-      "source": "src/op90_to80_extra1469_residual_1_r01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "op90_to80_extra1470_residual_1_r01.o",
-      "bytes": 2120,
-      "status": "c",
-      "source": "src/op90_to80_extra1470_residual_1_r01.c"
     },
     {
       "cpu": "ARM9",
@@ -55464,82 +55440,10 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "pokepic_animation.o",
-      "bytes": 98,
+      "object": "pokepic_anim.o",
+      "bytes": 4256,
       "status": "c",
-      "source": "src/pokepic_animation.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "pokepic_animation_2.o",
-      "bytes": 146,
-      "status": "c",
-      "source": "src/pokepic_animation_2.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "pokepic_animation_3.o",
-      "bytes": 42,
-      "status": "c",
-      "source": "src/pokepic_animation_3.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "pokepic_animation_4.o",
-      "bytes": 90,
-      "status": "c",
-      "source": "src/pokepic_animation_4.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "pokepic_animation_5.o",
-      "bytes": 224,
-      "status": "c",
-      "source": "src/pokepic_animation_5.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "pokepic_animation_6.o",
-      "bytes": 312,
-      "status": "c",
-      "source": "src/pokepic_animation_6.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "pokepic_animation_7.o",
-      "bytes": 174,
-      "status": "c",
-      "source": "src/pokepic_animation_7.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "pokepic_animation_commands_1.o",
-      "bytes": 820,
-      "status": "c",
-      "source": "src/pokepic_animation_commands_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "pokepic_animation_decode_1.o",
-      "bytes": 256,
-      "status": "c",
-      "source": "src/pokepic_animation_decode_1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "pokepic_animation_decode_2.o",
-      "bytes": 144,
-      "status": "c",
-      "source": "src/pokepic_animation_decode_2.c"
+      "source": "src/pokepic_anim.c"
     },
     {
       "cpu": "ARM9",
@@ -55620,38 +55524,6 @@
       "bytes": 236,
       "status": "c",
       "source": "src/r40_unk_020127B8_residual_2_run1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "r40_unk_020170FC_run1.o",
-      "bytes": 248,
-      "status": "c",
-      "source": "src/r40_unk_020170FC_run1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "r40_unk_02017220_run1.o",
-      "bytes": 76,
-      "status": "c",
-      "source": "src/r40_unk_02017220_run1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "r40_unk_020172C8_run1.o",
-      "bytes": 166,
-      "status": "c",
-      "source": "src/r40_unk_020172C8_run1.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "r40_unk_020175EC_run1.o",
-      "bytes": 224,
-      "status": "c",
-      "source": "src/r40_unk_020175EC_run1.c"
     },
     {
       "cpu": "ARM9",
@@ -56956,6 +56828,30 @@
       "bytes": 344,
       "status": "c",
       "source": "src/spawn_warp_lookup_1.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "spl_draw.o",
+      "bytes": 592,
+      "status": "c",
+      "source": "lib/src/spl_draw.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "spl_emitter.o",
+      "bytes": 2836,
+      "status": "c",
+      "source": "lib/src/spl_emitter.c"
+    },
+    {
+      "cpu": "ARM9",
+      "module": "main",
+      "object": "spl_manager.o",
+      "bytes": 2816,
+      "status": "c",
+      "source": "lib/src/spl_manager.c"
     },
     {
       "cpu": "ARM9",
@@ -58832,110 +58728,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to70_jn_spl_extra07_run01.o",
-      "bytes": 68,
-      "status": "c",
-      "source": "src/to70_jn_spl_extra07_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_jn_spl_extra07_run02.o",
-      "bytes": 148,
-      "status": "c",
-      "source": "src/to70_jn_spl_extra07_run02.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_jn_spl_extra07_run03.o",
-      "bytes": 148,
-      "status": "c",
-      "source": "src/to70_jn_spl_extra07_run03.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_jn_spl_extra07_run04.o",
-      "bytes": 116,
-      "status": "c",
-      "source": "src/to70_jn_spl_extra07_run04.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_jn_spl_extra07_run05.o",
-      "bytes": 200,
-      "status": "c",
-      "source": "src/to70_jn_spl_extra07_run05.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_jn_spl_extra07_run06.o",
-      "bytes": 20,
-      "status": "c",
-      "source": "src/to70_jn_spl_extra07_run06.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_jn_spl_extra07_run07.o",
-      "bytes": 20,
-      "status": "c",
-      "source": "src/to70_jn_spl_extra07_run07.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_jn_spl_extra07_run08.o",
-      "bytes": 180,
-      "status": "c",
-      "source": "src/to70_jn_spl_extra07_run08.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_jn_spl_extra07_run09.o",
-      "bytes": 204,
-      "status": "c",
-      "source": "src/to70_jn_spl_extra07_run09.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_jn_spl_extra07_run10.o",
-      "bytes": 56,
-      "status": "c",
-      "source": "src/to70_jn_spl_extra07_run10.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_jn_spl_extra07_run11.o",
-      "bytes": 56,
-      "status": "c",
-      "source": "src/to70_jn_spl_extra07_run11.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_jn_spl_extra07_run12.o",
-      "bytes": 124,
-      "status": "c",
-      "source": "src/to70_jn_spl_extra07_run12.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to70_jn_spl_extra07_run13.o",
-      "bytes": 232,
-      "status": "c",
-      "source": "src/to70_jn_spl_extra07_run13.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to70_jn_spl_extra07_run14.o",
       "bytes": 4,
       "status": "c",
@@ -59920,30 +59712,6 @@
     {
       "cpu": "ARM9",
       "module": "main",
-      "object": "to80_extra1469_run01.o",
-      "bytes": 400,
-      "status": "c",
-      "source": "src/to80_extra1469_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to80_extra1470_run01.o",
-      "bytes": 236,
-      "status": "c",
-      "source": "src/to80_extra1470_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to80_extra1470_run02.o",
-      "bytes": 716,
-      "status": "c",
-      "source": "src/to80_extra1470_run02.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
       "object": "to80_extra1471_run01.o",
       "bytes": 220,
       "status": "c",
@@ -60244,14 +60012,6 @@
       "bytes": 812,
       "status": "c",
       "source": "src/to80_extra1859_run01.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to80_extra1860_run01.o",
-      "bytes": 312,
-      "status": "c",
-      "source": "src/to80_extra1860_run01.c"
     },
     {
       "cpu": "ARM9",
@@ -61746,14 +61506,6 @@
       "bytes": 264,
       "status": "c",
       "source": "src/to91_w41427_copycps264.c"
-    },
-    {
-      "cpu": "ARM9",
-      "module": "main",
-      "object": "to91_w41438_pic_run01.o",
-      "bytes": 296,
-      "status": "c",
-      "source": "src/to91_w41438_pic_run01.c"
     },
     {
       "cpu": "ARM9",

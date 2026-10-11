@@ -2,26 +2,26 @@
 	.include "unk_02016EDC.inc"
 	.include "global.inc"
 	.text
-	.public sub_02017808
-	.public sub_0201783C
-	.public sub_02017874
-	.public sub_020178BC
-	.public sub_0201790C
-	.public sub_020179D4
-	.public sub_02017A1C
-	.public sub_02017A84
-	.public sub_02017AD8
-	.public sub_02017AEC
-	.public sub_02017B2C
-	thumb_func_start sub_02017808
-sub_02017808: ; 0x02017808
+	.public PokepicScriptAnimCmd_Sin
+	.public PokepicScriptAnimCmd_Cos
+	.public PokepicScriptAnimCmd_SetPosFromVar
+	.public PokepicScriptAnimCmd_AddPosFromVar
+	.public PokepicScriptAnimCmd_SetOrAddTransform
+	.public PokepicScriptAnimCmd_ApplyPosition
+	.public PokepicScriptAnimCmd_ApplyTransform
+	.public PokepicScriptAnimCmd_SetOffsetFromVar
+	.public PokepicScriptAnimCmd_Wait
+	.public PokepicScriptAnimCmd_StartPaletteFade
+	.public PokepicScriptAnimCmd_WaitPaletteFade
+	thumb_func_start PokepicScriptAnimCmd_Sin
+PokepicScriptAnimCmd_Sin: ; 0x02017808
 	push {r3, r4, lr}
 	sub sp, #0xc
 	add r1, sp, #0
 	add r2, sp, #8
 	add r3, sp, #4
 	add r4, r0, #0
-	bl sub_020173C8
+	bl PokepicScriptAnim_ReadDestAngleAndAmplitude
 	ldr r0, [sp, #8]
 	ldr r2, [sp, #4]
 	asr r0, r0, #4
@@ -39,16 +39,16 @@ sub_02017808: ; 0x02017808
 	pop {r3, r4, pc}
 	nop
 _02017838: .word FX_SinCosTable_
-	thumb_func_end sub_02017808
-	thumb_func_start sub_0201783C
-sub_0201783C: ; 0x0201783C
+	thumb_func_end PokepicScriptAnimCmd_Sin
+	thumb_func_start PokepicScriptAnimCmd_Cos
+PokepicScriptAnimCmd_Cos: ; 0x0201783C
 	push {r3, r4, lr}
 	sub sp, #0xc
 	add r1, sp, #0
 	add r2, sp, #8
 	add r3, sp, #4
 	add r4, r0, #0
-	bl sub_020173C8
+	bl PokepicScriptAnim_ReadDestAngleAndAmplitude
 	ldr r1, [sp, #8]
 	ldr r0, [sp, #4]
 	asr r1, r1, #4
@@ -68,18 +68,18 @@ sub_0201783C: ; 0x0201783C
 	pop {r3, r4, pc}
 	nop
 _02017870: .word FX_SinCosTable_
-	thumb_func_end sub_0201783C
-	thumb_func_start sub_02017874
-sub_02017874: ; 0x02017874
+	thumb_func_end PokepicScriptAnimCmd_Cos
+	thumb_func_start PokepicScriptAnimCmd_SetPosFromVar
+PokepicScriptAnimCmd_SetPosFromVar: ; 0x02017874
 	push {r3, r4, lr}
 	sub sp, #4
 	add r1, sp, #0
 	add r4, r0, #0
 	add r1, #1
-	bl sub_02017294
+	bl PokepicScriptAnim_ReadVarIndex
 	add r0, r4, #0
 	add r1, sp, #0
-	bl sub_02017280
+	bl PokepicScriptAnim_ReadArgByte
 	add r0, sp, #0
 	ldrb r1, [r0]
 	cmp r1, #8
@@ -106,18 +106,18 @@ _020178B2:
 	add sp, #4
 	pop {r3, r4, pc}
 	.balign 4, 0
-	thumb_func_end sub_02017874
-	thumb_func_start sub_020178BC
-sub_020178BC: ; 0x020178BC
+	thumb_func_end PokepicScriptAnimCmd_SetPosFromVar
+	thumb_func_start PokepicScriptAnimCmd_AddPosFromVar
+PokepicScriptAnimCmd_AddPosFromVar: ; 0x020178BC
 	push {r3, r4, lr}
 	sub sp, #4
 	add r1, sp, #0
 	add r4, r0, #0
 	add r1, #1
-	bl sub_02017294
+	bl PokepicScriptAnim_ReadVarIndex
 	add r0, r4, #0
 	add r1, sp, #0
-	bl sub_02017280
+	bl PokepicScriptAnim_ReadArgByte
 	add r0, sp, #0
 	ldrb r1, [r0]
 	cmp r1, #8
@@ -148,15 +148,15 @@ _02017902:
 	add sp, #4
 	pop {r3, r4, pc}
 	.balign 4, 0
-	thumb_func_end sub_020178BC
-	thumb_func_start sub_0201790C
-sub_0201790C: ; 0x0201790C
+	thumb_func_end PokepicScriptAnimCmd_AddPosFromVar
+	thumb_func_start PokepicScriptAnimCmd_SetOrAddTransform
+PokepicScriptAnimCmd_SetOrAddTransform: ; 0x0201790C
 	push {r3, r4, r5, lr}
 	sub sp, #8
 	add r1, sp, #0
 	add r1, #3
 	add r5, r0, #0
-	bl sub_02017280
+	bl PokepicScriptAnim_ReadArgByte
 	add r0, sp, #0
 	ldrb r0, [r0, #3]
 	cmp r0, #8
@@ -206,14 +206,14 @@ _02017968:
 	add r1, sp, #0
 	add r0, r5, #0
 	add r1, #1
-	bl sub_02017280
+	bl PokepicScriptAnim_ReadArgByte
 	add r0, sp, #0
 	ldrb r0, [r0, #1]
 	cmp r0, #0x14
 	bne _02017984
 	add r0, r5, #0
 	add r1, sp, #4
-	bl sub_0201726C
+	bl PokepicScriptAnim_ReadArg
 	b _020179A4
 _02017984:
 	cmp r0, #0x15
@@ -221,7 +221,7 @@ _02017984:
 	add r1, sp, #0
 	add r0, r5, #0
 	add r1, #2
-	bl sub_02017294
+	bl PokepicScriptAnim_ReadVarIndex
 	add r0, sp, #0
 	ldrb r0, [r0, #2]
 	lsl r0, r0, #2
@@ -234,7 +234,7 @@ _020179A0:
 _020179A4:
 	add r0, r5, #0
 	add r1, sp, #0
-	bl sub_02017280
+	bl PokepicScriptAnim_ReadArgByte
 	add r0, sp, #0
 	ldrb r0, [r0]
 	cmp r0, #0x16
@@ -256,9 +256,9 @@ _020179CC:
 	bl GF_AssertFail
 	add sp, #8
 	pop {r3, r4, r5, pc}
-	thumb_func_end sub_0201790C
-	thumb_func_start sub_020179D4
-sub_020179D4: ; 0x020179D4
+	thumb_func_end PokepicScriptAnimCmd_SetOrAddTransform
+	thumb_func_start PokepicScriptAnimCmd_ApplyPosition
+PokepicScriptAnimCmd_ApplyPosition: ; 0x020179D4
 	push {r3, r4, r5, lr}
 	add r4, r0, #0
 	mov r0, #0x73
@@ -294,9 +294,9 @@ _02017A06:
 	bl Pokepic_SetAttr
 	pop {r3, r4, r5, pc}
 	.balign 4, 0
-	thumb_func_end sub_020179D4
-	thumb_func_start sub_02017A1C
-sub_02017A1C: ; 0x02017A1C
+	thumb_func_end PokepicScriptAnimCmd_ApplyPosition
+	thumb_func_start PokepicScriptAnimCmd_ApplyTransform
+PokepicScriptAnimCmd_ApplyTransform: ; 0x02017A1C
 	push {r4, lr}
 	add r4, r0, #0
 	mov r1, #0xc
@@ -327,7 +327,7 @@ sub_02017A1C: ; 0x02017A1C
 	cmp r0, #0
 	bge _02017A7E
 	add r0, r4, #0
-	bl sub_02017488
+	bl PokepicScriptAnim_AdjustYForScale
 	pop {r4, pc}
 _02017A64:
 	cmp r0, #0x1d
@@ -336,7 +336,7 @@ _02017A64:
 	cmp r0, #0
 	beq _02017A7E
 	add r0, r4, #0
-	bl sub_02017488
+	bl PokepicScriptAnim_AdjustYForScale
 	pop {r4, pc}
 _02017A76:
 	cmp r0, #0x1c
@@ -346,18 +346,18 @@ _02017A7E:
 	pop {r4, pc}
 	.balign 4, 0
 _02017A80: .word 0x000001CE
-	thumb_func_end sub_02017A1C
-	thumb_func_start sub_02017A84
-sub_02017A84: ; 0x02017A84
+	thumb_func_end PokepicScriptAnimCmd_ApplyTransform
+	thumb_func_start PokepicScriptAnimCmd_SetOffsetFromVar
+PokepicScriptAnimCmd_SetOffsetFromVar: ; 0x02017A84
 	push {r3, r4, lr}
 	sub sp, #4
 	add r4, r0, #0
 	add r1, sp, #0
-	bl sub_02017294
+	bl PokepicScriptAnim_ReadVarIndex
 	ldr r0, [r4, #0xc]
 	add r0, r0, #4
 	str r0, [r4, #0xc]
-	bl sub_02017214
+	bl PokepicScriptAnim_GetScriptWord
 	lsl r0, r0, #0x18
 	lsr r0, r0, #0x18
 	cmp r0, #8
@@ -392,37 +392,37 @@ _02017ACE:
 	add sp, #4
 	pop {r3, r4, pc}
 	.balign 4, 0
-	thumb_func_end sub_02017A84
-	thumb_func_start sub_02017AD8
-sub_02017AD8: ; 0x02017AD8
+	thumb_func_end PokepicScriptAnimCmd_SetOffsetFromVar
+	thumb_func_start PokepicScriptAnimCmd_Wait
+PokepicScriptAnimCmd_Wait: ; 0x02017AD8
 	push {r4, lr}
 	add r4, r0, #0
 	add r1, r4, #0
 	add r1, #0x54
-	bl sub_0201726C
+	bl PokepicScriptAnim_ReadArg
 	mov r0, #1
 	str r0, [r4, #0x18]
 	pop {r4, pc}
 	.balign 4, 0
-	thumb_func_end sub_02017AD8
-	thumb_func_start sub_02017AEC
-sub_02017AEC: ; 0x02017AEC
+	thumb_func_end PokepicScriptAnimCmd_Wait
+	thumb_func_start PokepicScriptAnimCmd_StartPaletteFade
+PokepicScriptAnimCmd_StartPaletteFade: ; 0x02017AEC
 	push {r3, r4, lr}
 	sub sp, #0xc
 	add r1, sp, #4
 	add r1, #2
 	add r4, r0, #0
-	bl sub_02017280
+	bl PokepicScriptAnim_ReadArgByte
 	add r1, sp, #4
 	add r0, r4, #0
 	add r1, #1
-	bl sub_02017280
+	bl PokepicScriptAnim_ReadArgByte
 	add r0, r4, #0
 	add r1, sp, #4
-	bl sub_02017280
+	bl PokepicScriptAnim_ReadArgByte
 	add r0, r4, #0
 	add r1, sp, #8
-	bl sub_0201726C
+	bl PokepicScriptAnim_ReadArg
 	ldr r0, [sp, #8]
 	add r3, sp, #4
 	str r0, [sp]
@@ -434,9 +434,9 @@ sub_02017AEC: ; 0x02017AEC
 	add sp, #0xc
 	pop {r3, r4, pc}
 	.balign 4, 0
-	thumb_func_end sub_02017AEC
-	thumb_func_start sub_02017B2C
-sub_02017B2C: ; 0x02017B2C
+	thumb_func_end PokepicScriptAnimCmd_StartPaletteFade
+	thumb_func_start PokepicScriptAnimCmd_WaitPaletteFade
+PokepicScriptAnimCmd_WaitPaletteFade: ; 0x02017B2C
 	push {r4, lr}
 	add r4, r0, #0
 	ldr r0, [r4]
@@ -451,4 +451,4 @@ _02017B42:
 	pop {r4, pc}
 	.balign 4, 0
 _02017B44: .word 0x000001CF
-	thumb_func_end sub_02017B2C
+	thumb_func_end PokepicScriptAnimCmd_WaitPaletteFade

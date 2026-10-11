@@ -8,7 +8,7 @@
 #include "pm_string.h"
 #include "sprite_system.h"
 #include "text.h"
-#include "unk_02013534.h"
+#include "font_sprite.h"
 
 typedef struct Ov80TextContext {
     u8 padding00[0x10];
@@ -16,7 +16,7 @@ typedef struct Ov80TextContext {
     u8 padding14[4];
     SpriteManager *spriteManager;
     u8 padding1C[0x14];
-    UnkStruct_02013534 *fontSystem;
+    FontSystem *fontSystem;
 } Ov80TextContext;
 
 typedef struct Ov80TextObject {

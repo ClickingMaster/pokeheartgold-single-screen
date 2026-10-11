@@ -2,14 +2,14 @@
 #include "global.h"
 #include "sprite_system.h"
 #include "bg_window.h"
-#include "unk_02013534.h"
+#include "font_sprite.h"
 #include "obj_char_transfer.h"
 
 typedef struct {
     ManagedSprite *sprite;
     u8 unk4[0x10];
     TextOBJ *textObj;
-    UnkStruct_02013910 *textData;
+    TextOBJLayout *textData;
     UnkStruct_02021AC8 charAlloc;
 } Ov40Choice;
 
@@ -19,7 +19,7 @@ typedef struct {
     u8 unk20[4];
     BgConfig *bgConfig;
     u8 unk28[0x50 - 0x28];
-    UnkStruct_02013534 *fontSystem;
+    FontSystem *fontSystem;
     u8 unk54[0x534 - 0x54];
     Ov40Choice choices[5];
     Ov40Choice subChoices[5];
@@ -61,8 +61,8 @@ void ov40_0222D2A0(Ov40Work *work) {
         for (j = 0; j < 2; j++) {
             InitWindow(&window);
             AddTextWindowTopLeftCorner(work->bgConfig, &window, 20, 2, 0, 0);
-            choices[j]->textData = sub_02013910(&window, HEAP_ID_109);
-            size = sub_02013688(&window, vrams.v[j], HEAP_ID_109);
+            choices[j]->textData = TextOBJLayout_New(&window, HEAP_ID_109);
+            size = FontOAM_GetCharSize(&window, vrams.v[j], HEAP_ID_109);
             sub_02021AC8(size, TRUE, vrams.v[j], &choices[j]->charAlloc);
             ManagedSprite_GetPositionXY(choices[j]->sprite, &x, &y);
             template.fontSystem = work->fontSystem;
@@ -78,7 +78,7 @@ void ov40_0222D2A0(Ov40Work *work) {
             template.vram = vrams.v[j];
             template.heapID = HEAP_ID_109;
             choices[j]->textObj = TextOBJ_Create(&template, choices[j]->textData);
-            sub_020138E0(choices[j]->textObj, 1);
+            TextOBJ_SetPalOffsetRespectVramOffset(choices[j]->textObj, 1);
             RemoveWindow(&window);
             TextOBJ_SetSpritesDrawFlag(choices[j]->textObj, FALSE);
         }

@@ -37,12 +37,12 @@
 .public IsPaletteFadeFinished
 .public sub_0200FB70
 .public sub_0200FC20
-.public sub_020135D8
+.public FontOAM_Create
 .public FontOAM_Delete
-.public sub_02013688
-.public sub_020136B4
-.public sub_02013794
-.public sub_020138B0
+.public FontOAM_GetCharSize
+.public TextOBJ_SetPosition
+.public TextOBJ_GetPosition
+.public TextOBJ_SetPalOffset
 .public BgTilemapRectChangePalette
 .public BgClearTilemapBufferAndCommit
 .public InitWindow

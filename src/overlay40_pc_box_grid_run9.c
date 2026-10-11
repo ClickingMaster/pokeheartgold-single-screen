@@ -14,7 +14,7 @@ void ov40_022330E0(void *p, int a) {
     } else {
         ManagedSprite_SetPositionXY(PTR(w, 0xBC), 0x50, 0xE8);
     }
-    sub_020136B4(PTR(w, 0xC0), 0x24, -8);
+    TextOBJ_SetPosition(PTR(w, 0xC0), 0x24, -8);
 }
 
 void ov40_0223311C(void *p, u32 vram) {

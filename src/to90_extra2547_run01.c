@@ -28,7 +28,7 @@ extern void ov07_02233ECC(void*);
 extern int ov07_0221C394(u8 *);
 extern int ov07_0221C3B0(void*);
 extern void ov07_0221C3C0(void*);
-extern int sub_02017068(void*,int);
+extern int PokepicAnimManager_GetAnimState(void*,int);
 extern void ov12_02261F38(void*,int,int,void*,void*,int,int,int,u32);
 extern void BattleController_InitMoveAnimData(void*,int,Message*,int,int,int,int,int);
 extern void ov12_02261B80(void*,void*,void*,Message*);

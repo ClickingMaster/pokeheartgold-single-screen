@@ -4,11 +4,11 @@
 #include "palette.h"
 #include "heap.h"
 #include "math_util.h"
-#include "unk_02013534.h"
+#include "font_sprite.h"
 
 void ManagedSprite_SetPositonFxXY(ManagedSprite *managedSprite, fx32 x, fx32 y);
 void ManagedSprite_GetSpritePositionFxXY(ManagedSprite *managedSprite, fx32 *x, fx32 *y);
-void sub_020136B4(TextOBJ *textOBJ, int a1, int a2);
+void TextOBJ_SetPosition(TextOBJ *textOBJ, int a1, int a2);
 BOOL sub_02087948(void *p, s16 x, s16 y);
 BOOL sub_020878B8(void *p, s16 x, s16 y);
 BOOL sub_020879E0(void *p, int flag);
@@ -85,7 +85,7 @@ BOOL ov40_0223142C(Ov40Work *work) {
             ov40_0222D288(work->subChoices[i].sprite, 42, (5 - work->count) * 16 + 169);
             ManagedSprite_GetSpritePositionFxXY(work->subChoices[i].sprite, &data->anims[i].baseX, &posY);
             ManagedSprite_SetPositonFxXY(work->subChoices[i].sprite, data->anims[i].baseX, ((5 - work->count) * 16 + 169) * FX32_ONE);
-            sub_020136B4(work->subChoices[i].textObj, 36, -8);
+            TextOBJ_SetPosition(work->subChoices[i].textObj, 36, -8);
             TextOBJ_SetSpritesDrawFlag(work->subChoices[i].textObj, TRUE);
         }
         work->state++;
@@ -116,7 +116,7 @@ BOOL ov40_0223142C(Ov40Work *work) {
             x = data->anims[j].baseX + GF_SinDeg(0xFFFF * data->anims[j].angle / 360) * 16;
             data->anims[j].angle -= 4;
             ManagedSprite_SetPositonFxXY(work->subChoices[j].sprite, x, y);
-            sub_020136B4(work->subChoices[j].textObj, 36, -8);
+            TextOBJ_SetPosition(work->subChoices[j].textObj, 36, -8);
         }
         if (done == work->count) {
             work->state++;

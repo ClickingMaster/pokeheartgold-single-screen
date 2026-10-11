@@ -41,7 +41,7 @@ void ManagedSprite_SetPositionXY(void *sprite, s16 x, s16 y);
 void ManagedSprite_GetPositionXY(void *sprite, s16 *x, s16 *y);
 void ManagedSprite_SetPositonFxXY(void *sprite, s32 x, s32 y);
 void TextOBJ_SetSpritesDrawFlag(void *obj, BOOL draw);
-void sub_020136B4(void *p, s32 a, s32 b);
+void TextOBJ_SetPosition(void *p, s32 a, s32 b);
 void SpriteSystem_LoadCharResObjFromOpenNarc(void *system, void *manager, void *narc, u32 member, u32 compressed, u32 vramType, u32 resourceId);
 void SpriteSystem_LoadCellResObjFromOpenNarc(void *system, void *manager, void *narc, u32 member, u32 compressed, u32 resourceId);
 void SpriteSystem_LoadAnimResObjFromOpenNarc(void *system, void *manager, void *narc, u32 member, u32 compressed, u32 resourceId);

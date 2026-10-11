@@ -24,7 +24,7 @@ BOOL PokemonSummary_Init(void *manager, u32 *state) {
     *(void **)(data + 0x22c) = OverlayManager_GetArgs(manager);
     *(void **)data = BgConfig_Alloc(0x13);
     *(u32 *)((u8 *)*(void **)(data + 0x22c) + 0x38) = 0;
-    *(void **)(data + 0x2cc) = sub_02016EDC(0x13, 1, 1);
+    *(void **)(data + 0x2cc) = PokepicAnimManager_New(0x13, 1, 1);
     *(void **)(data + 0x7b8) = NARC_New(0xb4, 0x13);
     FontID_SetAccessDirect(0, 0x13);
     GF_TouchpadResetSampling();

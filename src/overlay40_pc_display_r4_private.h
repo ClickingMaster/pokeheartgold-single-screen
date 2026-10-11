@@ -13,7 +13,7 @@ void SysTask_Destroy(void *);
 void SpriteManager_UnloadCharObjById(void *, int);
 void ManagedSprite_SetDrawFlag(void *, int);
 void TextOBJ_SetSpritesDrawFlag(void *, int);
-void sub_02013FD0(void *, void *);
+void TextOBJ_SetParentSprite(void *, void *);
 
 void ov40_0222C6C8(void *, int, int);
 void ov40_0222C710(void *, int);

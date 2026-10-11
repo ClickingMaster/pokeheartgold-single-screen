@@ -13,6 +13,6 @@ void ov40_022368EC(void *p, int a) {
         TextOBJ_SetSpritesDrawFlag(PTR(w, 0x36C), 0);
         ManagedSprite_SetPositionXY(PTR(w, 0x34C), 0x50, 0xE8);
     }
-    sub_020136B4(PTR(w, 0x350), 0x24, -8);
-    sub_020136B4(PTR(w, 0x36C), 0x24, -8);
+    TextOBJ_SetPosition(PTR(w, 0x350), 0x24, -8);
+    TextOBJ_SetPosition(PTR(w, 0x36C), 0x24, -8);
 }

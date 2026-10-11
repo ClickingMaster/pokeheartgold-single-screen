@@ -430,7 +430,7 @@ _0223AD38:
 	lsl r0, r0, #2
 	ldr r0, [r4, r0]
 	mov r1, #0
-	bl sub_02017068
+	bl PokepicAnimManager_GetAnimState
 	cmp r0, #1
 	bne _0223AD64
 	mov r0, #0x72

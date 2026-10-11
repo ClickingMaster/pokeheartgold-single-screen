@@ -11,7 +11,7 @@ void ov102_021E937C(u8 *work) {
         obj += 0x10;
         aux += 0x10;
     }
-    sub_02013938(PTR(work, 0x200));
+    TextOBJLayout_Delete(PTR(work, 0x200));
     RemoveWindow(work + 0x204);
-    sub_020135AC(PTR(work, 0x1FC));
+    FontSystem_Delete(PTR(work, 0x1FC));
 }

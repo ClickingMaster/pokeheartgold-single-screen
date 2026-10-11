@@ -79,12 +79,12 @@
 .public ResetVisibleHardwareWindows
 .public SetMasterBrightnessByColor
 .public FontSystem_NewInit
-.public sub_020135AC
+.public FontSystem_Delete
 .public TextOBJ_SetSpritesDrawFlag
 .public TextOBJ_SetPaletteNum
-.public sub_02013910
-.public sub_02013938
-.public sub_02013948
+.public TextOBJLayout_New
+.public TextOBJLayout_Delete
+.public TextOBJLayout_GetCharSize
 .public TextOBJ_Create
 .public TextOBJ_Destroy
 .public GF_RTC_GetTimeOfDayByHour

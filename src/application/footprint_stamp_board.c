@@ -494,7 +494,7 @@ void FootprintStamp_CreateTextSprite(FootprintStamp *work, FootprintStampTextSpr
     InitWindow(&window);
     AddTextWindowTopLeftCorner(bgConfig, &window, (u8)tiles, 2, 0, 0);
     AddTextPrinterParameterizedWithColorAndSpacing(&window, font, string, 0, 0, TEXT_SPEED_NOTRANSFER, color, 0, 0, NULL);
-    sub_02021AC8(sub_02013688(&window, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_125), TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &charTransfer);
+    sub_02021AC8(FontOAM_GetCharSize(&window, NNS_G2D_VRAM_TYPE_2DMAIN, HEAP_ID_125), TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &charTransfer);
     if (centered == TRUE) {
         x -= width / 2;
     }
@@ -510,9 +510,9 @@ void FootprintStamp_CreateTextSprite(FootprintStamp *work, FootprintStampTextSpr
     template.unk_24 = 51;
     template.vram = NNS_G2D_VRAM_TYPE_2DMAIN;
     template.heapID = HEAP_ID_125;
-    textObj = sub_020135D8(&template);
-    sub_020138E0(textObj, priority);
-    sub_020136B4(textObj, x, y - 8);
+    textObj = FontOAM_Create(&template);
+    TextOBJ_SetPalOffsetRespectVramOffset(textObj, priority);
+    TextOBJ_SetPosition(textObj, x, y - 8);
     RemoveWindow(&window);
     text->textObj = textObj;
     text->charTransfer = charTransfer;

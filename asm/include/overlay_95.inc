@@ -100,9 +100,9 @@
 .public ParticleSystem_GetHeap
 .public ParticleSystem_GetCamera
 .public ParticleSystem_SetPerspectiveType
-.public sub_02016EDC
-.public sub_02016F2C
-.public sub_02017068
+.public PokepicAnimManager_New
+.public PokepicAnimManager_Delete
+.public PokepicAnimManager_GetAnimState
 .public Main_SetVBlankIntrCB
 .public HBlankInterruptDisable
 .public Heap_Create

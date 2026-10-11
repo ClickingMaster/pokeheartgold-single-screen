@@ -28,8 +28,8 @@ void ov05_0221D890(Ov05R10 *);
 void ov05_0221D904(Ov05R10 *);
 void *FontSystem_NewInit(int, int);
 void FontOAM_Delete(void *);
-void sub_020135AC(void *);
-void sub_020136B4(void *, int, int);
+void FontSystem_Delete(void *);
+void TextOBJ_SetPosition(void *, int, int);
 int ov05_0221CCF4(void);
 void TextOBJ_SetSpritesDrawFlag(void *, int);
 #endif

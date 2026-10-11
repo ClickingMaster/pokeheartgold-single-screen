@@ -2,8 +2,8 @@
 	.include "unk_02016EDC.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_02017220
-sub_02017220: ; 0x02017220
+	thumb_func_start PokepicScriptAnim_AllocMotion
+PokepicScriptAnim_AllocMotion: ; 0x02017220
 	push {r3, r4, r5, lr}
 	add r5, r1, #0
 	mov r3, #0
@@ -25,7 +25,7 @@ _0201722A:
 	mov r0, #0xc
 	add r1, r5, #0
 	mul r1, r0
-	ldr r0, _02017268 ; =_020F61BC
+	ldr r0, _02017268 ; =gPokepicMotionTypes
 	ldr r0, [r0, r1]
 	str r0, [r4, #0x50]
 	add r0, r4, #0
@@ -40,5 +40,5 @@ _02017254:
 	mov r0, #0
 	pop {r3, r4, r5, pc}
 	nop
-_02017268: .word _020F61BC
-	thumb_func_end sub_02017220
+_02017268: .word gPokepicMotionTypes
+	thumb_func_end PokepicScriptAnim_AllocMotion

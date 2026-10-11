@@ -39,7 +39,7 @@ void ov40_022318C8(SysTask *task, void *arg) {
             }
         }
         ov40_0222D288(PTR(w, 0x20), x, y);
-        sub_020136B4(PTR(w, 0x24), 0x24, 0x24 - 0x2C);
+        TextOBJ_SetPosition(PTR(w, 0x24), 0x24, 0x24 - 0x2C);
         WORD(PTR(w, 0x2C), 0) = 1;
         break;
     default:

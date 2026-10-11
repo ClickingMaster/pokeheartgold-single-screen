@@ -85,7 +85,7 @@ PokemonSummary_Init: ; 0x02088298
 	mov r1, #1
 	mov r0, #0x13
 	add r2, r1, #0
-	bl sub_02016EDC
+	bl PokepicAnimManager_New
 	mov r1, #0xb3
 	lsl r1, r1, #2
 	str r0, [r4, r1]

@@ -2,8 +2,8 @@
 	.include "unk_02016EDC.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_020170FC
-sub_020170FC: ; 0x020170FC
+	thumb_func_start PokepicScriptAnim_RunFrame
+PokepicScriptAnim_RunFrame: ; 0x020170FC
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	mov r6, #0
@@ -58,9 +58,9 @@ _02017154:
 	cmp r1, #0
 	beq _0201716A
 	add r0, r5, #0
-	bl sub_020179D4
+	bl PokepicScriptAnimCmd_ApplyPosition
 	add r0, r5, #0
-	bl sub_02017A1C
+	bl PokepicScriptAnimCmd_ApplyTransform
 	pop {r3, r4, r5, r6, r7, pc}
 _0201716A:
 	add r0, r0, #2
@@ -77,7 +77,7 @@ _0201716A:
 _02017182:
 	add r6, r5, #0
 	add r4, r5, #0
-	ldr r7, _020171F0 ; =_020F61F8
+	ldr r7, _020171F0 ; =gPokepicAnimCommands
 	add r6, #0xc
 	add r4, #0x44
 _0201718C:
@@ -110,9 +110,9 @@ _0201719E:
 	cmp r0, #0
 	beq _020171D2
 	add r0, r5, #0
-	bl sub_020179D4
+	bl PokepicScriptAnimCmd_ApplyPosition
 	add r0, r5, #0
-	bl sub_02017A1C
+	bl PokepicScriptAnimCmd_ApplyTransform
 	pop {r3, r4, r5, r6, r7, pc}
 _020171D2:
 	mov r0, #1
@@ -128,5 +128,5 @@ _020171E4:
 	nop
 _020171E8: .word 0x000001CD
 _020171EC: .word 0x000001CF
-_020171F0: .word _020F61F8
-	thumb_func_end sub_020170FC
+_020171F0: .word gPokepicAnimCommands
+	thumb_func_end PokepicScriptAnim_RunFrame

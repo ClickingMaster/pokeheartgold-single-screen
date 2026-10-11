@@ -29,7 +29,7 @@
 #include "text.h"
 #include "sound_playback.h"
 #include "oam_manager.h"
-#include "unk_02013534.h"
+#include "font_sprite.h"
 #include "palette_blink.h"
 #include "vram_transfer_manager.h"
 
@@ -1557,7 +1557,7 @@ static void NamingScreen_PrintCharacterOnWindowAndOBJ(Window *windows, const u16
     DC_FlushRange(ptr, 0x800);
 
     for (i = 0; i < 4; ++i) {
-        sub_02013A50(&windows[3], 4, 2, i * 4, 0, charBuf);
+        FontOAM_CopyWindowChars(&windows[3], 4, 2, i * 4, 0, charBuf);
         DC_FlushRange(charBuf, 0x100);
         GXS_LoadOBJ(charBuf, _02101D3C[i] * 32, 0x100);
     }

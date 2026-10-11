@@ -19,7 +19,7 @@ void ov40_0222D55C(u8 *work) {
         j = 0;
         cursor = local.rows;
         while (j < 2) {
-            sub_02013938(PTR(*cursor, 0x18));
+            TextOBJLayout_Delete(PTR(*cursor, 0x18));
             TextOBJ_Destroy(PTR(*cursor, 0x14));
             sub_02021B5C(*cursor + 0x1c);
             j++;
@@ -42,8 +42,8 @@ void ov40_0222D5AC(u8 *entry, u8 *ctx, int variant) {
     }
     InitWindow(window);
     AddTextWindowTopLeftCorner(PTR(ctx, 0x10), window, 0x14, 2, 0, 0);
-    PTR(entry, 0xc) = sub_02013910(window, 0x6d);
-    sub_02021AC8(sub_02013688(window, variant, 0x6d), 1, variant, entry + 0x10);
+    PTR(entry, 0xc) = TextOBJLayout_New(window, 0x6d);
+    sub_02021AC8(FontOAM_GetCharSize(window, variant, 0x6d), 1, variant, entry + 0x10);
     ManagedSprite_GetPositionXY(PTR(entry, 4), &position[1], &position[0]);
     create.charData = PTR(ctx, 0x3c);
     create.window = window;
@@ -58,7 +58,7 @@ void ov40_0222D5AC(u8 *entry, u8 *ctx, int variant) {
     create.variant = variant;
     create.heapId = 0x6d;
     PTR(entry, 8) = TextOBJ_Create(&create, PTR(entry, 0xc));
-    sub_020138E0(PTR(entry, 8), 1);
+    TextOBJ_SetPalOffsetRespectVramOffset(PTR(entry, 8), 1);
     RemoveWindow(window);
     TextOBJ_SetSpritesDrawFlag(PTR(entry, 8), 0);
 }
@@ -77,7 +77,7 @@ void ov40_0222D66C(u8 *entry, u8 *ctx, int msgId) {
 }
 
 void ov40_0222D6D0(u8 *entry) {
-    sub_02013938(PTR(entry, 0xc));
+    TextOBJLayout_Delete(PTR(entry, 0xc));
     TextOBJ_Destroy(PTR(entry, 8));
     sub_02021B5C(entry + 0x10);
 }

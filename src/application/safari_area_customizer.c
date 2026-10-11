@@ -34,7 +34,7 @@
 #include "touchscreen_list_menu.h"
 #include "unk_02009D48.h"
 #include "oam_manager.h"
-#include "unk_02013534.h"
+#include "font_sprite.h"
 #include "touchpad.h"
 #include "unk_0208805C.h"
 #include "unk_02097268.h"
@@ -83,8 +83,8 @@ typedef struct SafariAreaCustomizer {
     SpriteManager *spriteManager;                             // 0x00350
     Sprite *sprites[6];                                       // 0x00354: 0 slot cursor, 1 area cursor, 4/5 page arrows
     ManagedSprite *areaSprites[2 * NUM_AREA_SLOTS];           // 0x0036C: 2 banks of 6, swapped when the page changes
-    UnkStruct_02013534 *fontSystem;                           // 0x0039C
-    UnkStruct_02013910 *fontLayout;                           // 0x003A0
+    FontSystem *fontSystem;                           // 0x0039C
+    TextOBJLayout *fontLayout;                           // 0x003A0
     TextOBJ *textObj;                                         // 0x003A4
     UnkStruct_02021AC8 charTransfer;                          // 0x003A8
     Window windows[15];                                       // 0x003B4
@@ -1285,7 +1285,7 @@ void SafariAreaCustomizer_InitSprites(SafariAreaCustomizer *s) {
 }
 
 void SafariAreaCustomizer_FreeSprites(SafariAreaCustomizer *s) {
-    sub_020135AC(s->fontSystem);
+    FontSystem_Delete(s->fontSystem);
     TouchscreenListMenuSpawner_Destroy(s->listMenuSpawner);
     SafariAreaCustomizer_DestroySpriteManager(s);
     SafariAreaCustomizerSpriteRes_Delete(s->spriteRes);
@@ -1341,8 +1341,8 @@ void SafariAreaCustomizer_CreateCancelTextObj(SafariAreaCustomizer *s) {
     u32 width;
     u32 x;
 
-    s->fontLayout = sub_02013910(&s->textObjWindow, s->heapId);
-    size = sub_02013948(s->fontLayout, NNS_G2D_VRAM_TYPE_2DMAIN);
+    s->fontLayout = TextOBJLayout_New(&s->textObjWindow, s->heapId);
+    size = TextOBJLayout_GetCharSize(s->fontLayout, NNS_G2D_VRAM_TYPE_2DMAIN);
     width = GetWindowWidth(&s->textObjWindow);
     x = (width * 8 - FontID_String_GetWidth(0, s->labelStrings[0], 0)) / 2;
     AddTextPrinterParameterizedWithColor(&s->textObjWindow, 0, s->labelStrings[0], x, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(11, 6, 0), NULL);
@@ -1368,7 +1368,7 @@ void SafariAreaCustomizer_DeleteCancelTextObj(SafariAreaCustomizer *s) {
     TextOBJ_Destroy(s->textObj);
     sub_02021B5C(&s->charTransfer);
     s->textObj = NULL;
-    sub_02013938(s->fontLayout);
+    TextOBJLayout_Delete(s->fontLayout);
 }
 
 #pragma force_active on

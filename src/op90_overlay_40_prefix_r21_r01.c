@@ -13,7 +13,7 @@
 #include "unk_02009D48.h"
 #include "unk_0203A3B0.h"
 #include "heap.h"
-#include "unk_02013534.h"
+#include "font_sprite.h"
 #include "msgdata.h"
 
 typedef struct {

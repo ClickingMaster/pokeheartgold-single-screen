@@ -34,7 +34,7 @@
 #include "touchscreen.h"
 #include "sound_playback.h"
 #include "oam_manager.h"
-#include "unk_02013534.h"
+#include "font_sprite.h"
 #include "touchpad.h"
 #include "vram_transfer_manager.h"
 #include "yes_no_prompt.h"
@@ -406,7 +406,7 @@ void TrainerCardSignature_CreateWindows(TrainerCardSignature *signature, Overlay
     vramOffset = x;
     buffer = signature->objTextBuffer;
     for (; i < 2; i++) {
-        sub_02013A50(&signature->doneButtonWindow, 4, 2, x, 0, buffer);
+        FontOAM_CopyWindowChars(&signature->doneButtonWindow, 4, 2, x, 0, buffer);
         DC_FlushRange(buffer, 0x100);
         GX_LoadOBJ(buffer, vramOffset, 0x100);
         vramOffset += 0x100;

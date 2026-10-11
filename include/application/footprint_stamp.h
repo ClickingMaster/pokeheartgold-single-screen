@@ -15,7 +15,7 @@
 #include "palette.h"
 #include "save.h"
 #include "sprite_system.h"
-#include "unk_02013534.h"
+#include "font_sprite.h"
 #include "yes_no_prompt.h"
 
 #define FOOTPRINT_STAMP_PARTY_SLOTS   6
@@ -295,7 +295,7 @@ typedef struct FootprintStamp {
     SaveData *saveData;
     BgConfig *bgConfig;
     PaletteData *plttData;
-    UnkStruct_02013534 *fontSystem;
+    FontSystem *fontSystem;
     GF3DVramMan *vramMan3d;
     SysTask *task;
     SpriteSystem *spriteSystem;

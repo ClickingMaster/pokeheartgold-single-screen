@@ -25,7 +25,7 @@ extern void Heap_Free(void *);
 extern void *Heap_AllocAtEnd(u32, u32);
 extern void *AllocAtEndAndReadWholeNarcMemberByIdPair(u32, u32, u32);
 extern u32 PCStorage_IsBonusWallpaperUnlocked(void *, u32);
-extern void sub_020136B4(void *, s32, s32);
+extern void TextOBJ_SetPosition(void *, s32, s32);
 extern void TextOBJ_SetSpritesDrawFlag(void *, u32);
 
 extern void ManagedSprite_SetPositionXY(void *, s16, s16);

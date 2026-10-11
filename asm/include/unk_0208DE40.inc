@@ -6,8 +6,8 @@
 .public Pokepic_StartAnim
 .public PokepicManager_CreatePokepic
 .public Pokepic_SetAttr
-.public sub_02016F2C
-.public sub_02017088
+.public PokepicAnimManager_Delete
+.public PokepicAnimManager_StopAnim
 .public GfGfx_EngineATogglePlanes
 .public Camera_New
 .public Camera_Delete

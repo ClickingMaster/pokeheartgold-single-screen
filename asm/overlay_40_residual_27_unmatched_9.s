@@ -9,7 +9,7 @@
 	.public ov40_0222D6EC
 	.public ov40_0222D800
 	.public ov40_02233044
-	.public sub_020136B4
+	.public TextOBJ_SetPosition
 	.text
 
 	thumb_func_start ov40_02233044
@@ -57,7 +57,7 @@ ov40_02233044: ; 0x02233044
 	add r2, r1, #0
 	ldr r0, [r4, r0]
 	sub r2, #0x2c
-	bl sub_020136B4
+	bl TextOBJ_SetPosition
 	mov r0, #0x16
 	lsl r0, r0, #4
 	ldr r0, [r4, r0]

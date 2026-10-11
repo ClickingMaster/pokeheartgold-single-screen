@@ -20,9 +20,9 @@ void ov96_021F8D98(u8 *obj, u8 *window, s32 corner) {
     void *printer;
     InitWindow(window);
     AddTextWindowTopLeftCorner(PTR(obj,8), window, corner, 2, 0, 0);
-    printer = sub_02013910(window, PTR(obj,0));
+    printer = TextOBJLayout_New(window, PTR(obj,0));
     PTR(window,0x10) = printer;
-    PTR(window,0x14) = sub_02013948(printer, 1);
+    PTR(window,0x14) = TextOBJLayout_GetCharSize(printer, 1);
 }
 
 void ov96_021F8DD4(u8 *obj) {

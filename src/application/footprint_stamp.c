@@ -296,7 +296,7 @@ BOOL FootprintStamp_Exit(OverlayManager *man, int *state) {
     FootprintStampBoard_Free(&work->board);
     String_Delete(work->string);
     FontID_Release(2);
-    sub_020135AC(work->fontSystem);
+    FontSystem_Delete(work->fontSystem);
     DestroyMsgData(work->msgData);
     MessageFormat_Delete(work->msgFormat);
     FootprintStamp_FreeWindows(work);

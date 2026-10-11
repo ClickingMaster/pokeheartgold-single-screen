@@ -50,7 +50,7 @@ void ov40_0222B934(BattleAppWorkRaw *work) {
             walker = (BattleAppWorkRaw *)((u8 *)walker + 4);
         } while (i < 4);
     }
-    sub_020135AC(OV40_PTR(work, 0x50));
+    FontSystem_Delete(OV40_PTR(work, 0x50));
     DestroyMsgData(OV40_PTR(work, 0x48));
     DestroyMsgData(OV40_PTR(work, 0x4c));
     GF_3DVramMan_Delete(OV40_PTR(work, 0x60));

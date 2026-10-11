@@ -11,7 +11,7 @@ extern void Main_SetVBlankIntrCB(void *, void *);
 extern void RemoveWindow(void *);
 extern void GfGfx_EngineATogglePlanes(u32, u32);
 extern void FreeBgTilemapBuffer(void *, u32);
-extern void sub_020135AC(void *);
+extern void FontSystem_Delete(void *);
 extern void SpriteSystem_FreeResourcesAndManager(void *, void *);
 extern void SpriteSystem_Free(void *);
 extern void GF_DestroyVramTransferManager(void);
@@ -368,7 +368,7 @@ u32 ov93_0225CD10(void *man) {
     FreeBgTilemapBuffer(PAT(p, 0x2c), 5);
     FreeBgTilemapBuffer(PAT(p, 0x2c), 6);
     FreeBgTilemapBuffer(PAT(p, 0x2c), 7);
-    sub_020135AC(PAT(p, 0x90));
+    FontSystem_Delete(PAT(p, 0x90));
     SpriteSystem_FreeResourcesAndManager(PAT(p, 0x24), PAT(p, 0x28));
     SpriteSystem_Free(PAT(p, 0x24));
     GF_DestroyVramTransferManager();

@@ -9,6 +9,6 @@ void ov40_02233044(void *work) {
     ov40_0222D66C(inner + 0x158, raw + 0x14, 3);
     ManagedSprite_SetAnim(*(void **)(inner + 0x15c), 0);
     ManagedSprite_SetPositionXY(*(void **)(inner + 0x15c), 0x50, 0xe8);
-    sub_020136B4(*(void **)(inner + 0x160), 0x24, -8);
+    TextOBJ_SetPosition(*(void **)(inner + 0x160), 0x24, -8);
     TextOBJ_SetSpritesDrawFlag(*(void **)(inner + 0x160), 1);
 }

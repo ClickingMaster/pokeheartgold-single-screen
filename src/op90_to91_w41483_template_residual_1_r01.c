@@ -7,7 +7,7 @@
 #include "sprite_transfer.h"
 #include "unk_02009D48.h"
 #include "unk_0200A090.h"
-#include "unk_02013534.h"
+#include "font_sprite.h"
 
 typedef struct Ov41SpriteTmpl {
     SpriteList *spriteList;
@@ -71,7 +71,7 @@ void ov41_0224A734(Ov41Work *work, int id, Ov41Res *res, u32 a3, Window *window,
     textTmpl.unk1C = 0;
     textTmpl.unk20 = 19;
     textTmpl.plttProxy = SpriteTransfer_GetPaletteProxy(SpriteResourceCollection_Find(res->resMan[1], 1), NULL);
-    GF_ASSERT(sub_02021AC8(sub_02013688(window, NNS_G2D_VRAM_TYPE_2DMAIN, 13), TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &work->charData));
+    GF_ASSERT(sub_02021AC8(FontOAM_GetCharSize(window, NNS_G2D_VRAM_TYPE_2DMAIN, 13), TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &work->charData));
     textTmpl.unk24 = work->charData.offset;
     ov41_0224A15C(work, &textTmpl);
 }

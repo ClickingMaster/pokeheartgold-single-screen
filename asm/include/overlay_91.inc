@@ -50,12 +50,12 @@
 .public sub_0200FB70
 .public sub_0200FC20
 .public FontSystem_NewInit
-.public sub_020135AC
-.public sub_02013728
+.public FontSystem_Delete
+.public TextOBJ_UpdatePosition
 .public TextOBJ_SetSpritesDrawFlag
-.public sub_02013910
-.public sub_02013938
-.public sub_02013948
+.public TextOBJLayout_New
+.public TextOBJLayout_Delete
+.public TextOBJLayout_GetCharSize
 .public TextOBJ_Create
 .public TextOBJ_Destroy
 .public TextOBJ_CopyFromBGWindow

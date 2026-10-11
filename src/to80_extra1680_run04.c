@@ -15,8 +15,8 @@ typedef struct { u8 p0[60]; u32 attributes; Emitter *emitter; MtxFx43 *matrix; }
 typedef struct {u16 alpha:5,modifier:5,id:6;} Polygon;
 typedef struct { u8 p0[8]; VecFx32 position; u8 p14[12]; u16 angle; u8 p22[12]; Polygon polygon; fx32 scale; s16 factor; u16 color; VecFx32 offset; } Particle;
 extern void G3_LoadMtx43(const MtxFx43*), G3_MultMtx43(const MtxFx43*);
-extern void (*_021105E4[])(fx16,fx16,MtxFx43*);
-extern void (*_021105DC[])(s16,s16,s16,s16);
+extern void (*gSplRotateFuncs[])(fx16,fx16,MtxFx43*);
+extern void (*gSplDrawPlaneFuncs[])(s16,s16,s16,s16);
 void spl_draw_pol(Renderer*,Particle*);
 void spl_draw_pol(Renderer *r, Particle *p) {
  MtxFx43 matrix,rotation,scale;
@@ -26,7 +26,7 @@ void spl_draw_pol(Renderer *r, Particle *p) {
  *(vu32*)0x040004A4= (p->polygon.id<<24)|(attributes|0xC0)|(alpha<<16);
  (void)*(vu32*)0x040004A4;
  if(alpha==0)return;
- _021105E4[r->emitter->resource->definition->flags.rotation](FX_SinCosTable_[(p->angle>>4)*2],FX_SinCosTable_[(p->angle>>4)*2+1],&rotation);
+ gSplRotateFuncs[r->emitter->resource->definition->flags.rotation](FX_SinCosTable_[(p->angle>>4)*2],FX_SinCosTable_[(p->angle>>4)*2+1],&rotation);
  {
  s64 sy=p->scale;
  fx32 sx=((s64)p->scale*r->emitter->resource->definition->aspect+2048)>>12;
@@ -53,5 +53,5 @@ void spl_draw_pol(Renderer *r, Particle *p) {
  int a=p->color,b=r->emitter->color;
  *(vu32*)0x04000480=(u16)((((a&31)*(b&31))>>5)|((((a&0x3E0)*(b&0x3E0))>>15)<<5)|((((a&0x7C00)*(b&0x7C00))>>25)<<10));
  }
- _021105DC[r->emitter->resource->definition->flags.type](r->emitter->x,r->emitter->y,r->emitter->resource->definition->x,r->emitter->resource->definition->y);
+ gSplDrawPlaneFuncs[r->emitter->resource->definition->flags.type](r->emitter->x,r->emitter->y,r->emitter->resource->definition->x,r->emitter->resource->definition->y);
 }

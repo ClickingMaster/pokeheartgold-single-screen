@@ -29,7 +29,7 @@ void ov80_0223A62C(Ov80TextContext *context, Ov80TextObject *output, String *str
         window = cache->window;
     }
 
-    sub_02021AC8(sub_02013688(&window, NNS_G2D_VRAM_TYPE_2DMAIN, 0x65), TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &charTransfer);
+    sub_02021AC8(FontOAM_GetCharSize(&window, NNS_G2D_VRAM_TYPE_2DMAIN, 0x65), TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &charTransfer);
     if (center == 1) {
         x -= fontLength / 2;
     }
@@ -47,9 +47,9 @@ void ov80_0223A62C(Ov80TextContext *context, Ov80TextObject *output, String *str
     textObjTemplate.vram = NNS_G2D_VRAM_TYPE_2DMAIN;
     textObjTemplate.heapID = HEAP_ID_101;
 
-    textObj = sub_020135D8(&textObjTemplate);
-    sub_020138E0(textObj, palette);
-    sub_020136B4(textObj, x, y - 8);
+    textObj = FontOAM_Create(&textObjTemplate);
+    TextOBJ_SetPalOffsetRespectVramOffset(textObj, palette);
+    TextOBJ_SetPosition(textObj, x, y - 8);
 
     if (cache == NULL) {
         RemoveWindow(&window);

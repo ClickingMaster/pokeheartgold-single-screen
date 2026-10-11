@@ -1,7 +1,7 @@
 #include <nitro/fs/overlay.h>
 #pragma once
-.public sub_02027010
-.public sub_02027098
+.public SystemCard_InitRomArchive
+.public SystemCard_RebootIntoFile
 .public OS_ResetSystem
 .public OS_Terminate
 .public MI_CpuCopy8

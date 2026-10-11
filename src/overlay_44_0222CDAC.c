@@ -31,7 +31,7 @@
 #include "sound_playback.h"
 #include "unk_0200A090.h"
 #include "oam_manager.h"
-#include "unk_02013534.h"
+#include "font_sprite.h"
 #include "touchpad.h"
 #include "unk_0202C034.h"
 #include "unk_02030A98.h"
@@ -949,7 +949,7 @@ void ov44_0222A68C(UnkStruct_ov44_022319EC *arg0) {
         ov44_0222FA28(arg0);
     }
     ov44_0222ABB8(&arg0->unkB0C);
-    sub_020135AC(arg0->unk2CC);
+    FontSystem_Delete(arg0->unk2CC);
     for (int i = 0; i < 4; i++) {
         Destroy2DGfxResObjMan(arg0->unk2BC[i]);
     }
@@ -4852,8 +4852,8 @@ void ov44_02231420(UnkStruct_ov44_022319EC *arg0, NARC *arg1, enum HeapID arg2) 
     ReadMsgDataIntoString(arg0->unk168, msg_0778_00073, string);
     AddTextPrinterParameterizedWithColor(&window, 2, string, FontID_String_GetCenterAlignmentX(2, string, 0, 64), 0, 255, MAKE_TEXT_COLOR(1, 2, 0), 0);
     String_Delete(string);
-    UnkStruct_02013910 *temp_r0_4 = sub_02013910(&window, arg2);
-    GF_ASSERT(sub_02021AC8(sub_02013948(temp_r0_4, NNS_G2D_VRAM_TYPE_2DSUB), TRUE, NNS_G2D_VRAM_TYPE_2DSUB, &arg0->unkB1C.unk228) != 0);
+    TextOBJLayout *temp_r0_4 = TextOBJLayout_New(&window, arg2);
+    GF_ASSERT(sub_02021AC8(TextOBJLayout_GetCharSize(temp_r0_4, NNS_G2D_VRAM_TYPE_2DSUB), TRUE, NNS_G2D_VRAM_TYPE_2DSUB, &arg0->unkB1C.unk228) != 0);
 
     TextOBJTemplate textObjTemplate;
     textObjTemplate.fontSystem = arg0->unk2CC;
@@ -4869,7 +4869,7 @@ void ov44_02231420(UnkStruct_ov44_022319EC *arg0, NARC *arg1, enum HeapID arg2) 
     textObjTemplate.vram = 2;
     textObjTemplate.heapID = arg2;
     arg0->unkB1C.unk234 = TextOBJ_Create(&textObjTemplate, temp_r0_4);
-    sub_02013938(temp_r0_4);
+    TextOBJLayout_Delete(temp_r0_4);
     RemoveWindow(&window);
     FontID_Release(2);
     arg0->unkB1C.unk244 = TouchHitboxController_Create(ov44_02235394, 3, (TouchHitboxControllerCallback)ov44_022317F0, arg0, arg2);
@@ -4934,7 +4934,7 @@ void ov44_02231800(UnkStruct_ov44_02231800 *arg0, s32 arg1) {
     Sprite_SetAnimCtrlSeq(arg0->unk21C[arg1], ov44_0223535C[arg1]);
     Sprite_SetAnimationFrame(arg0->unk21C[arg1], 4);
     if (arg1 == 1) {
-        sub_020136B4(arg0->unk234, -32, -8);
+        TextOBJ_SetPosition(arg0->unk234, -32, -8);
     }
 }
 
@@ -4950,7 +4950,7 @@ s32 ov44_0223183C(UnkStruct_ov44_02231800 *arg0, s32 arg1, s32 arg2, s32 arg3) {
                 Sprite_UpdateAnim(arg0->unk21C[arg1], 2 * FX32_ONE);
                 u16 temp_r4_2 = Sprite_GetAnimationFrame(arg0->unk21C[arg1]);
                 if (arg1 == 1) {
-                    sub_020136B4(arg0->unk234, -32, ov44_0223536C[temp_r4_2]);
+                    TextOBJ_SetPosition(arg0->unk234, -32, ov44_0223536C[temp_r4_2]);
                 }
                 if (temp_r4_2 >= 3) {
                     sp8 = 1;

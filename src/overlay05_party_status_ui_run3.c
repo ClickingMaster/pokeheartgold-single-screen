@@ -19,7 +19,7 @@ void ov05_0221D5DC(Ov05R10 *s) {
 
 void ov05_0221D664(Ov05R10 *s, int index, int x, int y) {
     Ov05R10Layout *work = (Ov05R10Layout *)s;
-    sub_020136B4(work->text[index], x + work->x[index], y + work->y[index]);
+    TextOBJ_SetPosition(work->text[index], x + work->x[index], y + work->y[index]);
 }
 
 void ov05_0221D690(Ov05R10 *s) {
@@ -32,6 +32,6 @@ void ov05_0221D690(Ov05R10 *s) {
             FontOAM_Delete(*(void **)(walker + 0xB48));
             walker += 4;
         }
-        sub_020135AC(PTR(s, 0xB44));
+        FontSystem_Delete(PTR(s, 0xB44));
     }
 }

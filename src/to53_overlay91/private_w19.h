@@ -54,7 +54,7 @@ void ov91_0225FEFC(void);
 void Sprite_SetDrawFlag(void *, BOOL);
 void FreeBgTilemapBuffer(void *, int);
 void Heap_Free(void *);
-void sub_020135AC(void *);
+void FontSystem_Delete(void *);
 void SpriteList_Delete(void *);
 void Destroy2DGfxResObjMan(void *);
 void ObjCharTransfer_Destroy(void);

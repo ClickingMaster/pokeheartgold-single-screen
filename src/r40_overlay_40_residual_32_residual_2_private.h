@@ -66,7 +66,7 @@ void Sprite_DeleteAndFreeResources(void *sprite);
 void ManagedSprite_SetDrawFlag(void *sprite, BOOL draw);
 void ManagedSprite_SetPositionXY(void *sprite, s16 x, s16 y);
 void TextOBJ_SetSpritesDrawFlag(void *obj, BOOL draw);
-void sub_020136B4(void *p, s32 a, s32 b);
+void TextOBJ_SetPosition(void *p, s32 a, s32 b);
 
 void *TouchHitboxController_Create(const void *hitboxes, int numTemplates, Ov40HitboxCb cb, void *arg, int heapId);
 void TouchHitboxController_Destroy(void *controller);

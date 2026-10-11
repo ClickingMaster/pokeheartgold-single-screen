@@ -95,7 +95,7 @@ void ov14_021F43F4(void *p, u32 a1) {
 }
 
 void ov14_021F4410(void *q) {
-    sub_020136B4(PTR_AT(q, 0x414), -0x30, -8);
+    TextOBJ_SetPosition(PTR_AT(q, 0x414), -0x30, -8);
 }
 
 void ov14_021F4428(void *p) {
@@ -195,8 +195,8 @@ void ov14_021F46B0(void *p, u8 *buf, u32 wallpaper, u32 match, u32 size) {
 }
 
 void ov14_021F46F4(void *q) {
-    sub_020136B4(PTR_AT(q, 0x414), -0x48, -8);
-    sub_020136B4(PTR_AT(q, 0x424), 0x20, -8);
+    TextOBJ_SetPosition(PTR_AT(q, 0x414), -0x48, -8);
+    TextOBJ_SetPosition(PTR_AT(q, 0x424), 0x20, -8);
 }
 
 void ov14_021F4720(void *p) {

@@ -42,7 +42,7 @@ void sub_02086FE8(ModuleState *state) {
     sub_02021B5C(&state->raw[0x384]);
     FontOAM_Delete(PTR(state, 0x380, void));
     sub_02021B5C(&state->raw[0x390]);
-    sub_020135AC(PTR(state, 0x378, void));
+    FontSystem_Delete(PTR(state, 0x378, void));
 }
 
 void sub_02087028(ModuleState *state) {

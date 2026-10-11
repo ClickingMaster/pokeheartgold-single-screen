@@ -183,7 +183,7 @@
 .public CopyU16ArrayToString
 .public CopyU16ArrayToStringN
 .public CopyStringToU16Array
-.public sub_02027098
+.public SystemCard_RebootIntoFile
 .public Save_MysteryGift_Get
 .public Save_MigratedPokemon_Get
 .public SaveGameNormal

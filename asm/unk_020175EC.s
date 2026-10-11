@@ -2,13 +2,13 @@
 	.include "unk_02016EDC.inc"
 	.include "global.inc"
 	.text
-	thumb_func_start sub_020175EC
-sub_020175EC: ; 0x020175EC
+	thumb_func_start PokepicScriptAnimCmd_SetVarIfCompare
+PokepicScriptAnimCmd_SetVarIfCompare: ; 0x020175EC
 	push {r3, r4, r5, lr}
 	sub sp, #0x10
 	add r1, sp, #0
 	add r5, r0, #0
-	bl sub_02017280
+	bl PokepicScriptAnim_ReadArgByte
 	add r0, sp, #0
 	ldrb r0, [r0]
 	cmp r0, #0x14
@@ -16,7 +16,7 @@ sub_020175EC: ; 0x020175EC
 	add r1, sp, #0
 	add r0, r5, #0
 	add r1, #3
-	bl sub_02017294
+	bl PokepicScriptAnim_ReadVarIndex
 	add r0, sp, #0
 	ldrb r0, [r0, #3]
 	add r1, sp, #8
@@ -25,7 +25,7 @@ sub_020175EC: ; 0x020175EC
 	ldr r0, [r0, #0x24]
 	str r0, [sp, #0xc]
 	add r0, r5, #0
-	bl sub_0201726C
+	bl PokepicScriptAnim_ReadArg
 	b _0201764E
 _02017620:
 	cmp r0, #0x15
@@ -35,7 +35,7 @@ _02017620:
 	add r0, r5, #0
 	add r1, #3
 	add r2, #2
-	bl sub_020172B4
+	bl PokepicScriptAnim_ReadVarIndexPair
 	add r0, sp, #0
 	ldrb r1, [r0, #3]
 	lsl r1, r1, #2
@@ -54,7 +54,7 @@ _0201764E:
 	add r1, sp, #0
 	add r0, r5, #0
 	add r1, #1
-	bl sub_02017280
+	bl PokepicScriptAnim_ReadArgByte
 	add r0, sp, #0
 	ldrb r0, [r0, #1]
 	cmp r0, #0x11
@@ -63,11 +63,11 @@ _0201764E:
 _02017664:
 	add r0, sp, #0xc
 	add r1, sp, #8
-	bl sub_02017470
+	bl PokepicScriptAnim_Compare
 	add r4, r0, #0
 	add r0, r5, #0
 	add r1, sp, #0
-	bl sub_02017280
+	bl PokepicScriptAnim_ReadArgByte
 	add r0, sp, #0
 	ldrb r0, [r0]
 	cmp r0, #0x14
@@ -75,10 +75,10 @@ _02017664:
 	add r1, sp, #0
 	add r0, r5, #0
 	add r1, #3
-	bl sub_02017294
+	bl PokepicScriptAnim_ReadVarIndex
 	add r0, r5, #0
 	add r1, sp, #4
-	bl sub_0201726C
+	bl PokepicScriptAnim_ReadArg
 	b _020176B6
 _02017692:
 	cmp r0, #0x15
@@ -88,7 +88,7 @@ _02017692:
 	add r0, r5, #0
 	add r1, #3
 	add r2, #2
-	bl sub_020172B4
+	bl PokepicScriptAnim_ReadVarIndexPair
 	add r0, sp, #0
 	ldrb r0, [r0, #2]
 	lsl r0, r0, #2
@@ -111,4 +111,4 @@ _020176B6:
 _020176C8:
 	add sp, #0x10
 	pop {r3, r4, r5, pc}
-	thumb_func_end sub_020175EC
+	thumb_func_end PokepicScriptAnimCmd_SetVarIfCompare

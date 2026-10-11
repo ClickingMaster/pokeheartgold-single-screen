@@ -56,7 +56,7 @@
 .public WaitingIcon_Delete
 .public sub_02014540
 .public PaletteBlink_SetState
-.public sub_02017068
+.public PokepicAnimManager_GetAnimState
 .public Heap_Alloc
 .public Heap_Free
 .public ToggleBgLayer

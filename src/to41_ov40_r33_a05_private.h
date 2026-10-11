@@ -9,7 +9,7 @@
 void ManagedSprite_SetDrawFlag(void *, BOOL);
 void TextOBJ_SetSpritesDrawFlag(void *, BOOL);
 void ManagedSprite_SetPositionXY(void *, int, int);
-void sub_020136B4(void *, int, int);
+void TextOBJ_SetPosition(void *, int, int);
 void ClearWindowTilemapAndCopyToVram(void *);
 void RemoveWindow(void *);
 void *Heap_Alloc(int, u32);

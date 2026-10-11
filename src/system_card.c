@@ -1,12 +1,13 @@
+#include "system_card.h"
+
 #include "global.h"
 
+// The NitroSDK headers below need the types from global.h.
 #include <nitro/card.h>
 #include <nitro/fs.h>
 #include <nitro/hw/ARM9/mmap.h>
 #include <nitro/mi.h>
 #include <nitro/os.h>
-
-#include "unk_02027010.h"
 
 #define HW_ROM_HEADER_MIRROR   ((void *)0x027FF000)
 #define HW_ROM_HEADER_MIRROR_2 ((void *)0x027FFA80)
@@ -27,7 +28,7 @@ typedef struct RomHeaderFields {
 
 extern const char sRomArchiveName[];
 
-void sub_02027010(void) {
+void SystemCard_InitRomArchive(void) {
     FSArchive *archive;
     RomHeaderFields *header = HW_ROM_HEADER_MIRROR;
 
@@ -53,7 +54,7 @@ void sub_02027010(void) {
     }
 }
 
-void sub_02027098(const char *path) {
+void SystemCard_RebootIntoFile(const char *path) {
     FSFile file;
 
     FS_InitFile(&file);

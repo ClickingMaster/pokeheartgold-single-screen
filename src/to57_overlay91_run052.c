@@ -30,7 +30,7 @@ void ov91_0225FA9C(u8 *work, enum HeapID heapId) {
 void ov91_0225FB48(u8 *work) {
     int i;
     u8 *walker;
-    sub_020135AC((UnkStruct_02013534 *)PTR_AT(work, 0x18c));
+    FontSystem_Delete((FontSystem *)PTR_AT(work, 0x18c));
     SpriteList_Delete((SpriteList *)PTR_AT(work, 0x1c));
     walker = work;
     for (i = 0; i < 4; i++) {

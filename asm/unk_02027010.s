@@ -9,8 +9,8 @@ _020F6458:
 
 	.text
 
-	thumb_func_start sub_02027010
-sub_02027010: ; 0x02027010
+	thumb_func_start SystemCard_InitRomArchive
+SystemCard_InitRomArchive: ; 0x02027010
 	push {r3, lr}
 	bl FS_IsAvailable
 	cmp r0, #0
@@ -69,10 +69,10 @@ _02027088: .word 0x027FFA80
 _0202708C: .word 0x4A414441
 _02027090: .word _020F6458
 _02027094: .word 0x00003130
-	thumb_func_end sub_02027010
+	thumb_func_end SystemCard_InitRomArchive
 
-	thumb_func_start sub_02027098
-sub_02027098: ; 0x02027098
+	thumb_func_start SystemCard_RebootIntoFile
+SystemCard_RebootIntoFile: ; 0x02027098
 	push {r4, lr}
 	sub sp, #0x48
 	add r4, r0, #0
@@ -93,4 +93,4 @@ _020270BC:
 	pop {r4, pc}
 	.balign 4, 0
 _020270C0: .word 0x027FFC2C
-	thumb_func_end sub_02027098
+	thumb_func_end SystemCard_RebootIntoFile

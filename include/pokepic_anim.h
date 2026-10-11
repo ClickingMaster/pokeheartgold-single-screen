@@ -1,5 +1,5 @@
-#ifndef POKEHEARTGOLD_UNK_02016EDC_H
-#define POKEHEARTGOLD_UNK_02016EDC_H
+#ifndef POKEHEARTGOLD_POKEPIC_ANIM_H
+#define POKEHEARTGOLD_POKEPIC_ANIM_H
 
 #include "global.h"
 
@@ -25,6 +25,6 @@ struct UnkStruct_0207294C {
     u8 unk_4;
 };
 
-void sub_02016F40(void *, void *, struct UnkStruct_0207294C *, u8);
+void PokepicAnimManager_StartAnim(void *, void *, struct UnkStruct_0207294C *, u8);
 
-#endif // POKEHEARTGOLD_UNK_02016EDC_H
+#endif // POKEHEARTGOLD_POKEPIC_ANIM_H

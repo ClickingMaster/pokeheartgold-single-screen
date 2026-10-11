@@ -17,8 +17,8 @@ typedef struct { u8 p0[8]; VecFx32 position; VecFx32 velocity; u16 angle; u8 p22
 extern void VEC_CrossProduct(const VecFx32*,const VecFx32*,VecFx32*);
 extern void MTX_Identity43_(MtxFx43*);
 extern void G3_LoadMtx43(const MtxFx43*), G3_MultMtx43(const MtxFx43*);
-extern void (*_021105E4[])(fx16,fx16,MtxFx43*);
-extern void (*_021105DC[])(s16,s16,s16,s16);
+extern void (*gSplRotateFuncs[])(fx16,fx16,MtxFx43*);
+extern void (*gSplDrawPlaneFuncs[])(s16,s16,s16,s16);
 void spl_draw_dpl(Renderer*,Particle*);
 void spl_draw_dpl(Renderer *r, Particle *p) {
  MtxFx43 matrix,rotation,scale;VecFx32 direction,cross1,cross2,up;MtxFx43 basis;
@@ -28,7 +28,7 @@ void spl_draw_dpl(Renderer *r, Particle *p) {
  *(vu32*)0x040004A4= (p->polygon.id<<24)|(attributes|0xC0)|(alpha<<16);
  (void)*(vu32*)0x040004A4;
  if(alpha==0)return;
- _021105E4[r->emitter->resource->definition->flags.rotation](FX_SinCosTable_[(p->angle>>4)*2],FX_SinCosTable_[(p->angle>>4)*2+1],&rotation);
+ gSplRotateFuncs[r->emitter->resource->definition->flags.rotation](FX_SinCosTable_[(p->angle>>4)*2],FX_SinCosTable_[(p->angle>>4)*2+1],&rotation);
  MTX_Identity43_(&basis);
  if(!r->emitter->resource->definition->flags2.direction) VEC_Normalize(&p->velocity,&direction);
  else {VEC_Normalize(&p->position,&direction);direction.x=-direction.x;direction.y=-direction.y;direction.z=-direction.z;}
@@ -65,5 +65,5 @@ void spl_draw_dpl(Renderer *r, Particle *p) {
  int a=p->color,b=r->emitter->color;
  *(vu32*)0x04000480=(u16)((((a&31)*(b&31))>>5)|((((a&0x3E0)*(b&0x3E0))>>15)<<5)|((((a&0x7C00)*(b&0x7C00))>>25)<<10));
  }
- _021105DC[r->emitter->resource->definition->flags.type](r->emitter->x,r->emitter->y,r->emitter->resource->definition->x,r->emitter->resource->definition->y);
+ gSplDrawPlaneFuncs[r->emitter->resource->definition->flags.type](r->emitter->x,r->emitter->y,r->emitter->resource->definition->x,r->emitter->resource->definition->y);
 }

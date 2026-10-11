@@ -28,7 +28,7 @@ void sub_0208E444(UnkStruct_0208DE40 *a) {
 }
 
 void sub_0208E4B4(UnkStruct_0208DE40 *a) {
-    sub_02017088(a->unk_2CC, 0);
+    PokepicAnimManager_StopAnim(a->unk_2CC, 0);
     PokepicManager_Delete(a->unk_2A0);
     sub_0208E3AC(a);
     sub_0208E444(a);

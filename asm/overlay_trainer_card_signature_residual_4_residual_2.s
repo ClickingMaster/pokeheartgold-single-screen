@@ -157,7 +157,7 @@ _021E8A8A:
 	mov r2, #2
 	add r3, r4, #0
 	str r6, [sp, #4]
-	bl sub_02013A50
+	bl FontOAM_CopyWindowChars
 	mov r1, #1
 	add r0, r6, #0
 	lsl r1, r1, #8

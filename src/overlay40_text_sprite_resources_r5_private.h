@@ -33,7 +33,7 @@ typedef struct TextObjCreateR19 {
     int heapId;
 } TextObjCreateR19;
 
-extern void sub_02013938(void *);
+extern void TextOBJLayout_Delete(void *);
 extern void TextOBJ_Destroy(void *);
 extern void sub_02021B5C(void *);
 extern void SpriteSystem_LoadCharResObjFromOpenNarc(void *, void *, void *, int, int, int, int);
@@ -53,14 +53,14 @@ extern void AddTextPrinterParameterizedWithColor(void *, int, void *, int, int, 
 extern void TextOBJ_CopyFromBGWindow(void *, void *, void *, int);
 extern void String_Delete(void *);
 extern void RemoveWindow(void *);
-extern void *sub_02013910(void *, int);
-extern void *sub_02013688(void *, int, int);
+extern void *TextOBJLayout_New(void *, int);
+extern void *FontOAM_GetCharSize(void *, int, int);
 extern void sub_02021AC8(void *, int, int, void *);
 extern void ManagedSprite_GetPositionXY(void *, s16 *, s16 *);
 extern void *SpriteManager_GetSpriteList(void *);
 extern void *SpriteManager_FindPlttResourceProxy(void *, int);
 extern void *TextOBJ_Create(const TextObjCreateR19 *, void *);
-extern void sub_020138E0(void *, int);
+extern void TextOBJ_SetPalOffsetRespectVramOffset(void *, int);
 extern void TextOBJ_SetSpritesDrawFlag(void *, int);
 
 void ov40_0222D55C(u8 *);

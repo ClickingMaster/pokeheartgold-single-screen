@@ -425,7 +425,7 @@ void PokegearMap_BeginScrollMarkingsPanelBottomScreen(PokegearMapAppData *mapApp
         }
         PokegearObjectsManager_UpdateAllSpritesPos(mapApp->objManager);
         for (i = 0; i < 4; ++i) {
-            sub_020136B4(mapApp->unk_044[i].textOBJ, 4, -6);
+            TextOBJ_SetPosition(mapApp->unk_044[i].textOBJ, 4, -6);
         }
     } else {
         BgSetPosTextAndCommit(mapApp->pokegear->bgConfig, GF_BG_LYR_MAIN_1, BG_POS_OP_SUB_Y, 0);
@@ -459,7 +459,7 @@ BOOL PokegearMap_RunScrollMarkingsPanelBottomScreen(PokegearMapAppData *mapApp, 
     }
     PokegearObjectsManager_UpdateAllSpritesPos(mapApp->objManager);
     for (i = 0; i < 4; ++i) {
-        sub_020136B4(mapApp->unk_044[i].textOBJ, 4, -6);
+        TextOBJ_SetPosition(mapApp->unk_044[i].textOBJ, 4, -6);
     }
     if (++mapApp->markingsPanelScrollStep < 4) {
         return FALSE;

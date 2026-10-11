@@ -5,7 +5,7 @@
 #include "heap.h"
 #include "math_util.h"
 #include "touchpad.h"
-#include "unk_02027010.h"
+#include "system_card.h"
 
 struct System gSystem;
 struct FSCacheEntry gFileCache[128];
@@ -133,7 +133,7 @@ void InitSystemForTheGame(void) {
     OS_EnableIrq();
     GX_VBlankIntr(TRUE);
     FS_Init(1);
-    sub_02027010();
+    SystemCard_InitRomArchive();
     table_size = FS_TryLoadTable(NULL, 0);
     fsTable = OS_AllocFromArenaLo(OS_ARENA_MAIN, table_size, 4);
     GF_ASSERT(fsTable != NULL);

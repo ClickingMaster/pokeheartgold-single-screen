@@ -3,7 +3,7 @@
 
 #include "pokemon_types_def.h"
 #include "sprite_system.h"
-#include "unk_02016EDC.h"
+#include "pokepic_anim.h"
 // Enums
 
 #include "constants/pokemon.h"

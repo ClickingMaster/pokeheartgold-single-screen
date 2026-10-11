@@ -1,6 +1,6 @@
 #include "global.h"
 #include "sprite_system.h"
-#include "unk_02013534.h"
+#include "font_sprite.h"
 #pragma force_active on
 typedef struct Choice {int enabled,reserved04,message,anim,action,reserved14;u32 selection;int reserved1c;const struct Choice *child;} Choice;
 typedef struct SpriteRow {void *sprite;u8 gap04[16];void *text;u8 gap18[16];} SpriteRow;

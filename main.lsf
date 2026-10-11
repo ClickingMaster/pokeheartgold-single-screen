@@ -106,7 +106,7 @@ Static main
     Object src/unk_02012A90_opus_partial_1.o
     Object src/screen_window_wipe.o
     Object src/font_sprite.o
-    Object asm/unk_02013534.o
+    Object asm/font_sprite_data.o
     Object src/unk_02013FDC.o
     Object src/gf_rtc.o
     Object src/list_menu_items.o
@@ -119,23 +119,8 @@ Static main
     Object src/graphics_object_manager.o
     Object src/palette_blink.o
     Object src/yes_no_prompt.o
-    Object src/pokepic_animation.o
-    Object asm/to91_w41438_pic_data_anchor.o
-    Object src/to91_w41438_pic_run01.o
-    Object src/pokepic_animation_2.o
-    Object src/r40_unk_020170FC_run1.o
-    Object src/pokepic_animation_3.o
-    Object src/r40_unk_02017220_run1.o
-    Object src/pokepic_animation_4.o
-    Object src/pokepic_animation_decode_1.o
-    Object src/r40_unk_020172C8_run1.o
-    Object src/pokepic_animation_decode_2.o
-    Object src/pokepic_animation_5.o
-    Object src/r40_unk_020175EC_run1.o
-    Object src/pokepic_animation_6.o
-    Object src/pokepic_animation_commands_1.o
-    Object src/pokepic_animation_7.o
-    Object src/motion_state_update.o
+    Object asm/pokepic_anim_data.o
+    Object src/pokepic_anim.o
     Object asm/map_section_data.o
     Object src/map_section.o
     Object src/model_animation.o
@@ -914,25 +899,9 @@ Static main
     ### Vendor libraries ###
     Object asm/middleware.o
     Object lib/asm/to70_jn_spl_extra07_anchor.o
-    Object src/to70_jn_spl_extra07_run01.o
-    Object src/to70_jn_spl_extra07_run02.o
-    Object src/to70_jn_spl_extra07_run03.o
-    Object src/to70_jn_spl_extra07_run04.o
-    Object src/to70_jn_spl_extra07_run05.o
-    Object src/to80_extra1860_run01.o
-    Object src/to70_jn_spl_extra07_run06.o
-    Object src/to70_jn_spl_extra07_run07.o
-    Object src/to70_jn_spl_extra07_run08.o
-    Object src/to70_jn_spl_extra07_run09.o
-    Object src/op90_to80_extra1469_residual_1_r01.o
-    Object src/to80_extra1469_run01.o
-    Object src/to70_jn_spl_extra07_run10.o
-    Object src/to70_jn_spl_extra07_run11.o
-    Object src/to70_jn_spl_extra07_run12.o
-    Object src/to70_jn_spl_extra07_run13.o
-    Object src/to80_extra1470_run01.o
-    Object src/op90_to80_extra1470_residual_1_r01.o
-    Object src/to80_extra1470_run02.o
+    Object lib/src/spl_manager.o
+    Object lib/src/spl_draw.o
+    Object lib/src/spl_emitter.o
     Object src/to70_jn_spl_extra07_run14.o
     Object src/op90_to80_extra1680_residual_1_r01.o
     Object src/to80_extra1680_run01.o

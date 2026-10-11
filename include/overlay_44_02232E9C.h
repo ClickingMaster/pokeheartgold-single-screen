@@ -12,7 +12,7 @@
 #include "render_window.h"
 #include "sprite.h"
 #include "unk_02009D48.h"
-#include "unk_02013534.h"
+#include "font_sprite.h"
 #include "unk_0202C034.h"
 #include "yes_no_prompt.h"
 

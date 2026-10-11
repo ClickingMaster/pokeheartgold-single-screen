@@ -24,7 +24,7 @@
 #include "pm_string.h"
 #include "pokemon.h"
 #include "pokepic.h"
-#include "pokepic_animation_internal.h"
+#include "pokepic_anim_internal.h"
 #include "render_text.h"
 #include "render_window.h"
 #include "screen_fade.h"
@@ -90,7 +90,7 @@ typedef struct HatchEggApp {
     u8 filler_48[8];                // 0x48
     SpriteManager *spriteManager;   // 0x50
     SpriteSystem *spriteSystem;     // 0x54
-    PicManager *picManager;         // 0x58
+    PokepicAnimManager *picManager;         // 0x58
     u32 sceneType;                  // 0x5C: index into ov95_021E7810
     u32 state;                      // 0x60
     s32 timer;                      // 0x64
@@ -678,7 +678,7 @@ BOOL HatchEggApp_RunEggScene(HatchEggApp *app) {
         if (TextPrinterCheckActive(app->printerId)) {
             break;
         }
-        if (sub_02017068(app->picManager, 0) != TRUE) {
+        if (PokepicAnimManager_GetAnimState(app->picManager, 0) != TRUE) {
             break;
         }
         if (Pokepic_IsAnimFinished(app->pokepic)) {
@@ -791,7 +791,7 @@ BOOL HatchEggApp_RunManaphyEggScene(HatchEggApp *app) {
         if (TextPrinterCheckActive(app->printerId)) {
             break;
         }
-        if (sub_02017068(app->picManager, 0) != TRUE) {
+        if (PokepicAnimManager_GetAnimState(app->picManager, 0) != TRUE) {
             break;
         }
         if (Pokepic_IsAnimFinished(app->pokepic)) {
@@ -1142,7 +1142,7 @@ BOOL HatchEggApp_Init(OverlayManager *man, int *state) {
     app->narc = NARC_New(NARC_a_1_8_0, HEAP_ID_70);
     app->bgConfig = BgConfig_Alloc(HEAP_ID_70);
     GF_CreateVramTransferManager(64, HEAP_ID_70);
-    app->picManager = sub_02016EDC(HEAP_ID_70, 1, 0);
+    app->picManager = PokepicAnimManager_New(HEAP_ID_70, 1, 0);
     PaletteData_SetAutoTransparent(app->paletteData = PaletteData_Init(HEAP_ID_70), TRUE);
     PaletteData_AllocBuffers(app->paletteData, PLTTBUF_MAIN_BG, 0x200, HEAP_ID_70);
     PaletteData_AllocBuffers(app->paletteData, PLTTBUF_MAIN_OBJ, 0x200, HEAP_ID_70);
@@ -1214,7 +1214,7 @@ BOOL HatchEggApp_Exit(OverlayManager *man, int *state) {
     Heap_Free(app->bgConfig);
     GF_DestroyVramTransferManager();
     PokepicManager_Delete(app->pokepicManager);
-    sub_02016F2C(app->picManager);
+    PokepicAnimManager_Delete(app->picManager);
     NARC_Delete(app->narc);
     HatchEggApp_FreeSpriteSystem((HatchEggAppFromBgConfig *)&app->bgConfig);
     OverlayManager_FreeData(man);

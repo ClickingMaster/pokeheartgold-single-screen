@@ -163,12 +163,12 @@ void ov96_021F8728(void *arg) {
     i = 0;
     p = w + 0x2fc;
     do {
-        sub_02013938(*(void **)(p + 0x10));
+        TextOBJLayout_Delete(*(void **)(p + 0x10));
         RemoveWindow(p);
         i++;
         p += 0x18;
     } while (i < 2);
-    sub_020135AC(*(void **)(w + 0x10));
+    FontSystem_Delete(*(void **)(w + 0x10));
     SpriteTransfer_DeleteCharTransferTask(*(void **)(w + 0x2c0));
     SpriteTransfer_DeletePlttTransferTask(*(void **)(w + 0x2c4));
     {

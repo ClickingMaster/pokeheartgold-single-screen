@@ -116,7 +116,7 @@ extern void RemoveWindow(void *);
 extern void PaletteData_FreeBuffers(void *, int);
 extern void PaletteData_Free(void *);
 extern void PokepicManager_Delete(void *);
-extern void sub_02016F2C(void *);
+extern void PokepicAnimManager_Delete(void *);
 extern void GF_3DVramMan_Delete(void *);
 extern void DestroyMsgData(void *);
 extern void MessageFormat_Delete(void *);

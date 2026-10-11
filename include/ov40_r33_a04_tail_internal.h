@@ -35,7 +35,7 @@ void ov40_0222D78C(void *, int);
 void *ov40_0222D800(void *, int);
 void ov40_0222D5AC(void *, void *, int);
 void ManagedSprite_SetPositionXY(void *, s16, s16);
-void sub_020136B4(void *, int, int);
+void TextOBJ_SetPosition(void *, int, int);
 void TextOBJ_SetSpritesDrawFlag(void *, BOOL);
 void ov40_0222D6D0(void *);
 void Sprite_DeleteAndFreeResources(void *);

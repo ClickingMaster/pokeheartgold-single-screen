@@ -46,7 +46,7 @@
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
 .public SetMasterBrightnessByColor
-.public sub_02013A50
+.public FontOAM_CopyWindowChars
 .public YesNoPrompt_Create
 .public YesNoPrompt_Destroy
 .public YesNoPrompt_InitFromTemplate

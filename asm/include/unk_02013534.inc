@@ -2,28 +2,28 @@
 #pragma once
 .public GfGfxLoader_GetCellBank
 .public FontSystem_NewInit
-.public sub_020135AC
-.public sub_020135D8
+.public FontSystem_Delete
+.public FontOAM_Create
 .public FontOAM_Delete
-.public sub_02013688
-.public sub_020136B4
-.public sub_02013728
-.public sub_02013794
+.public FontOAM_GetCharSize
+.public TextOBJ_SetPosition
+.public TextOBJ_UpdatePosition
+.public TextOBJ_GetPosition
 .public TextOBJ_SetSpritesDrawFlag
-.public sub_020137F0
-.public sub_02013820
+.public TextOBJ_SetPriority
+.public TextOBJ_SetDrawPriority
 .public TextOBJ_SetPaletteNum
-.public sub_02013880
-.public sub_020138B0
-.public sub_020138E0
-.public sub_02013910
-.public sub_02013938
-.public sub_02013948
+.public TextOBJ_SetPalIndexRespectVramOffset
+.public TextOBJ_SetPalOffset
+.public TextOBJ_SetPalOffsetRespectVramOffset
+.public TextOBJLayout_New
+.public TextOBJLayout_Delete
+.public TextOBJLayout_GetCharSize
 .public TextOBJ_Create
 .public TextOBJ_Destroy
 .public TextOBJ_CopyFromBGWindow
-.public sub_02013A50
-.public sub_02013FD0
+.public FontOAM_CopyWindowChars
+.public TextOBJ_SetParentSprite
 .public Heap_Alloc
 .public Heap_AllocAtEnd
 .public Heap_Free
@@ -50,12 +50,12 @@
 .public memcpy
 .public memset
 
-.public sub_02013AC0
+.public TextOBJ_Clear
 
-.public sub_02013AD0
+.public FontSystem_GetFreeTextOBJ
 
-.public sub_02013AF8
+.public FontOAM_GetCellSizeIndex
 
-.public sub_02013B24
+.public FontOAM_SplitRect
 
-.public sub_02013BD4
+.public FontOAM_BuildLayout

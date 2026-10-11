@@ -5,7 +5,7 @@
 #include <stddef.h>
 #include "sprite_system.h"
 #include "palette.h"
-#include "unk_02013534.h"
+#include "font_sprite.h"
 typedef struct {int blend,count,started,done;} Work;typedef struct {s16 x,y,tx,ty,dx,dy;u8 pad0c[0x10];u8 speed,state,pad1e[2];void *sprite,*text,*cursor,*count,*done;} Motion;typedef struct Choice {int enabled, reserved04, message, anim, action, reserved14;u32 selection;int reserved1c;const struct Choice *child;} Choice;
 extern void ov40_0222D294(void *,s16 *,s16 *);
 extern void ov40_022318C8(SysTask *,void *);

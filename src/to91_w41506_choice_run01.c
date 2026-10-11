@@ -1,6 +1,6 @@
 #include "global.h"
 #include "sprite_system.h"
-#include "unk_02013534.h"
+#include "font_sprite.h"
 #pragma force_active on
 typedef struct Choice {int enabled,reserved04,message,anim,action,reserved14;u32 selection;int reserved1c;const struct Choice *child;} Choice;
 typedef struct SpriteRow {void *sprite;u8 gap04[16];void *text;u8 gap18[16];} SpriteRow;
@@ -24,7 +24,7 @@ void ov40_0222CF10(void *argument) {
      for(i=0;i<owner->selected;i++) {
          ManagedSprite_SetAnim(owner->left[i].sprite,((const Choice*)owner->path[i])->anim);
          ov40_0222D3E8((u8*)owner,(u8*)&owner->left[i],((const Choice*)owner->path[i])->message,(u8*)owner->path[i]);
-         sub_020136B4(owner->left[i].text,36,-8);
+         TextOBJ_SetPosition(owner->left[i].text,36,-8);
          TextOBJ_SetSpritesDrawFlag(owner->left[i].text,1);
          ManagedSprite_SetDrawFlag(owner->left[i].sprite,1);
      }

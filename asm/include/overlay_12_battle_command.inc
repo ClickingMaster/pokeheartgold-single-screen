@@ -42,11 +42,11 @@
 .public EraseFrameAndWindow1
 .public SetMasterBrightnessByColor
 .public FontSystem_NewInit
-.public sub_020135AC
-.public sub_020135D8
+.public FontSystem_Delete
+.public FontOAM_Create
 .public FontOAM_Delete
-.public sub_02013688
-.public sub_020138E0
+.public FontOAM_GetCharSize
+.public TextOBJ_SetPalOffsetRespectVramOffset
 .public PaletteBlink_SetState
 .public Heap_Alloc
 .public Heap_Free

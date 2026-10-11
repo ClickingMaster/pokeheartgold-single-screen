@@ -18,7 +18,7 @@
 #include "render_window.h"
 #include "touchscreen.h"
 #include "sound_playback.h"
-#include "unk_02013534.h"
+#include "font_sprite.h"
 #include "unk_02077678.h"
 #include "unk_0208805C.h"
 
@@ -1389,7 +1389,7 @@ void BattleInput_Free(BattleInput *battleInput) {
     BattleInput_FreeBallGaugeResources(battleInput);
     BattleInput_FreeDefaultResources(battleInput);
 
-    sub_020135AC(battleInput->fontSystem);
+    FontSystem_Delete(battleInput->fontSystem);
     SysTask_Destroy(battleInput->fadeTask);
 
     for (int i = 0; i < 7; i++) {
@@ -1931,7 +1931,7 @@ static void BattleInput_CreateMainMenuObjects(BattleInput *battleInput, int a1, 
         ManagedSprite *spriteMonIcon = BattleInput_SetPokemonIcon(battleInput, pokemon, battlerType, menu->hp, menu->maxHp, menu->monIconStatus);
 
         int x, y;
-        sub_02013794(battleInput->textObj[MENUTXT_FIGHT].textObj, &x, &y);
+        TextOBJ_GetPosition(battleInput->textObj[MENUTXT_FIGHT].textObj, &x, &y);
 
         if (battlerType == 4) {
             x += battleInput->textObj[MENUTXT_FIGHT].fontLength + 32 / 2;
@@ -2749,7 +2749,7 @@ static void BattleInput_CreateTextObject(BattleInput *battleInput, BattleInputTe
         window = param10->window;
     }
 
-    size = sub_02013688(&window, NNS_G2D_VRAM_TYPE_2DSUB, 5);
+    size = FontOAM_GetCharSize(&window, NNS_G2D_VRAM_TYPE_2DSUB, 5);
     sub_02021AC8(size, 1, NNS_G2D_VRAM_TYPE_2DSUB, &charTransferAlloc);
 
     if (centerText == 1) {
@@ -2771,10 +2771,10 @@ static void BattleInput_CreateTextObject(BattleInput *battleInput, BattleInputTe
     textObjTemplate.vram = NNS_G2D_VRAM_TYPE_2DSUB;
     textObjTemplate.heapID = HEAP_ID_BATTLE;
 
-    textObj = sub_020135D8(&textObjTemplate);
+    textObj = FontOAM_Create(&textObjTemplate);
 
-    sub_020138E0(textObj, palOffset);
-    sub_020136B4(textObj, x, y);
+    TextOBJ_SetPalOffsetRespectVramOffset(textObj, palOffset);
+    TextOBJ_SetPosition(textObj, x, y);
 
     if (param10 == NULL) {
         RemoveWindow(&window);
@@ -3184,8 +3184,8 @@ static void Task_ButtonFeedback(SysTask *task, void *data) {
     case 0:
         // Button down
         ov12_02268EE4(battleInput, battleInput->feedback.button.screenOffsets, battleInput->feedback.button.touchscreenHitbox, battleInput->feedback.button.unk10, 2);
-        sub_02013794(battleInput->textObj[battleInput->feedback.button.textObjId].textObj, &x, &y);
-        sub_020136B4(battleInput->textObj[battleInput->feedback.button.textObjId].textObj, x, y - 2);
+        TextOBJ_GetPosition(battleInput->textObj[battleInput->feedback.button.textObjId].textObj, &x, &y);
+        TextOBJ_SetPosition(battleInput->textObj[battleInput->feedback.button.textObjId].textObj, x, y - 2);
 
         if ((battleInput->feedback.button.pokemonIconIndex != 0xFF) && (battleInput->spritePokemonIcons[battleInput->feedback.button.pokemonIconIndex] != NULL)) {
             ManagedSprite_OffsetPositionXY(battleInput->spritePokemonIcons[battleInput->feedback.button.pokemonIconIndex], 0, -2);
@@ -3207,8 +3207,8 @@ static void Task_ButtonFeedback(SysTask *task, void *data) {
     case 2:
         // Button up
         ov12_02268EE4(battleInput, battleInput->feedback.button.screenOffsets, battleInput->feedback.button.touchscreenHitbox, battleInput->feedback.button.unk10, 1);
-        sub_02013794(battleInput->textObj[battleInput->feedback.button.textObjId].textObj, &x, &y);
-        sub_020136B4(battleInput->textObj[battleInput->feedback.button.textObjId].textObj, x, y + 1);
+        TextOBJ_GetPosition(battleInput->textObj[battleInput->feedback.button.textObjId].textObj, &x, &y);
+        TextOBJ_SetPosition(battleInput->textObj[battleInput->feedback.button.textObjId].textObj, x, y + 1);
 
         if ((battleInput->feedback.button.pokemonIconIndex != 0xFF) && (battleInput->spritePokemonIcons[battleInput->feedback.button.pokemonIconIndex] != NULL)) {
             ManagedSprite_OffsetPositionXY(battleInput->spritePokemonIcons[battleInput->feedback.button.pokemonIconIndex], 0, 1);
@@ -3284,12 +3284,12 @@ static void Task_FightMenuButtonFeedback(SysTask *task, void *data) {
         ov12_02268EE4(battleInput, battleInput->feedback.button.screenOffsets, battleInput->feedback.button.touchscreenHitbox, battleInput->feedback.button.unk10, 2);
 
         if (battleInput->feedback.button.ret != BATTLE_INPUT_CANCEL) {
-            sub_02013794(battleInput->textObj[moveTextObjId].textObj, &x, &y);
-            sub_020136B4(battleInput->textObj[moveTextObjId].textObj, x, y - 2);
-            sub_02013794(battleInput->textObj[ppMaxTextObjId].textObj, &x, &y);
-            sub_020136B4(battleInput->textObj[ppMaxTextObjId].textObj, x, y - 2);
-            sub_02013794(battleInput->textObj[ppTextObjId].textObj, &x, &y);
-            sub_020136B4(battleInput->textObj[ppTextObjId].textObj, x, y - 2);
+            TextOBJ_GetPosition(battleInput->textObj[moveTextObjId].textObj, &x, &y);
+            TextOBJ_SetPosition(battleInput->textObj[moveTextObjId].textObj, x, y - 2);
+            TextOBJ_GetPosition(battleInput->textObj[ppMaxTextObjId].textObj, &x, &y);
+            TextOBJ_SetPosition(battleInput->textObj[ppMaxTextObjId].textObj, x, y - 2);
+            TextOBJ_GetPosition(battleInput->textObj[ppTextObjId].textObj, &x, &y);
+            TextOBJ_SetPosition(battleInput->textObj[ppTextObjId].textObj, x, y - 2);
 
             if (moveNo != MOVE_NONE) {
                 Sprite_OffsetPositionXY(battleInput->spriteTypeIcons[spriteIndex]->sprite, 0, -2);
@@ -3299,8 +3299,8 @@ static void Task_FightMenuButtonFeedback(SysTask *task, void *data) {
                 }
             }
         } else {
-            sub_02013794(battleInput->textObj[4].textObj, &x, &y);
-            sub_020136B4(battleInput->textObj[4].textObj, x, y - 2);
+            TextOBJ_GetPosition(battleInput->textObj[4].textObj, &x, &y);
+            TextOBJ_SetPosition(battleInput->textObj[4].textObj, x, y - 2);
         }
 
         battleInput->feedback.state++;
@@ -3318,12 +3318,12 @@ static void Task_FightMenuButtonFeedback(SysTask *task, void *data) {
         ov12_02268EE4(battleInput, battleInput->feedback.button.screenOffsets, battleInput->feedback.button.touchscreenHitbox, battleInput->feedback.button.unk10, 1);
 
         if (battleInput->feedback.button.ret != 0xff) {
-            sub_02013794(battleInput->textObj[moveTextObjId].textObj, &x, &y);
-            sub_020136B4(battleInput->textObj[moveTextObjId].textObj, x, y + 1);
-            sub_02013794(battleInput->textObj[ppMaxTextObjId].textObj, &x, &y);
-            sub_020136B4(battleInput->textObj[ppMaxTextObjId].textObj, x, y + 1);
-            sub_02013794(battleInput->textObj[ppTextObjId].textObj, &x, &y);
-            sub_020136B4(battleInput->textObj[ppTextObjId].textObj, x, y + 1);
+            TextOBJ_GetPosition(battleInput->textObj[moveTextObjId].textObj, &x, &y);
+            TextOBJ_SetPosition(battleInput->textObj[moveTextObjId].textObj, x, y + 1);
+            TextOBJ_GetPosition(battleInput->textObj[ppMaxTextObjId].textObj, &x, &y);
+            TextOBJ_SetPosition(battleInput->textObj[ppMaxTextObjId].textObj, x, y + 1);
+            TextOBJ_GetPosition(battleInput->textObj[ppTextObjId].textObj, &x, &y);
+            TextOBJ_SetPosition(battleInput->textObj[ppTextObjId].textObj, x, y + 1);
 
             if (moveNo != 0) {
                 Sprite_OffsetPositionXY(battleInput->spriteTypeIcons[spriteIndex]->sprite, 0, 1);
@@ -3333,8 +3333,8 @@ static void Task_FightMenuButtonFeedback(SysTask *task, void *data) {
                 }
             }
         } else {
-            sub_02013794(battleInput->textObj[4].textObj, &x, &y);
-            sub_020136B4(battleInput->textObj[4].textObj, x, y + 1);
+            TextOBJ_GetPosition(battleInput->textObj[4].textObj, &x, &y);
+            TextOBJ_SetPosition(battleInput->textObj[4].textObj, x, y + 1);
         }
 
         battleInput->feedback.state++;
@@ -3369,8 +3369,8 @@ static void Task_TargetMenuButtonFeedback(SysTask *task, void *data) {
                 ov12_02268EE4(battleInput, sTargetMenuButtonsScreenOffsets[i], &ov12_0226E348[i], 4, 2);
 
                 if (battleInput->textObj[0 + i].textObj != 0) {
-                    sub_02013794(battleInput->textObj[0 + i].textObj, &x, &y);
-                    sub_020136B4(battleInput->textObj[0 + i].textObj, x, y + -2);
+                    TextOBJ_GetPosition(battleInput->textObj[0 + i].textObj, &x, &y);
+                    TextOBJ_SetPosition(battleInput->textObj[0 + i].textObj, x, y + -2);
                 }
 
                 if (battleInput->spritePokemonIcons[i] != 0) {
@@ -3398,8 +3398,8 @@ static void Task_TargetMenuButtonFeedback(SysTask *task, void *data) {
                 ov12_02268EE4(battleInput, sTargetMenuButtonsScreenOffsets[i], &ov12_0226E348[i], 4, 1);
 
                 if (battleInput->textObj[0 + i].textObj != 0) {
-                    sub_02013794(battleInput->textObj[0 + i].textObj, &x, &y);
-                    sub_020136B4(battleInput->textObj[0 + i].textObj, x, y + 1);
+                    TextOBJ_GetPosition(battleInput->textObj[0 + i].textObj, &x, &y);
+                    TextOBJ_SetPosition(battleInput->textObj[0 + i].textObj, x, y + 1);
                 }
 
                 if (battleInput->spritePokemonIcons[i] != 0) {

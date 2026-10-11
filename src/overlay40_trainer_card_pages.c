@@ -460,8 +460,8 @@ void ov40_02241F74(void *p, int a) {
         TextOBJ_SetSpritesDrawFlag(PTR(w, 0x18), 0);
         ManagedSprite_SetPositionXY(PTR(w, 0x30), 0x50, 0xA8);
     }
-    sub_020136B4(PTR(w, 0x18), 0x24, -8);
-    sub_020136B4(PTR(w, 0x34), 0x24, -8);
+    TextOBJ_SetPosition(PTR(w, 0x18), 0x24, -8);
+    TextOBJ_SetPosition(PTR(w, 0x34), 0x24, -8);
 }
 
 void ov40_02241FD0(void *p) {
@@ -475,8 +475,8 @@ void ov40_02241FD0(void *p) {
     ov40_0222D66C((u8 *)w + 0x2C, (u8 *)p + 0x14, 0x6F);
     ManagedSprite_SetPositionXY(PTR(w, 0x14), 0x20, 0xA8);
     ManagedSprite_SetPositionXY(PTR(w, 0x30), 0x80, 0xA8);
-    sub_020136B4(PTR(w, 0x18), 0x24, -8);
-    sub_020136B4(PTR(w, 0x34), 0x24, -8);
+    TextOBJ_SetPosition(PTR(w, 0x18), 0x24, -8);
+    TextOBJ_SetPosition(PTR(w, 0x34), 0x24, -8);
     TextOBJ_SetSpritesDrawFlag(PTR(w, 0x18), 1);
     TextOBJ_SetSpritesDrawFlag(PTR(w, 0x34), 1);
     ManagedSprite_SetAnim(PTR(w, 0x14), 0);
@@ -504,8 +504,8 @@ void ov40_022420B4(void *p, int a) {
         TextOBJ_SetSpritesDrawFlag(PTR(w, 0x34), 0);
         ManagedSprite_SetPositionXY(PTR(w, 0x14), 0x50, 0xE8);
     }
-    sub_020136B4(PTR(w, 0x18), 0x24, -8);
-    sub_020136B4(PTR(w, 0x34), 0x24, -8);
+    TextOBJ_SetPosition(PTR(w, 0x18), 0x24, -8);
+    TextOBJ_SetPosition(PTR(w, 0x34), 0x24, -8);
 }
 
 void ov40_02242110(void *p) {
@@ -528,8 +528,8 @@ void ov40_02242110(void *p) {
     }
     ManagedSprite_SetPositionXY(PTR(w, 0x14), 0x20, 0xE8);
     ManagedSprite_SetPositionXY(PTR(w, 0x30), 0x80, 0xE8);
-    sub_020136B4(PTR(w, 0x18), 0x24, -8);
-    sub_020136B4(PTR(w, 0x34), 0x24, -8);
+    TextOBJ_SetPosition(PTR(w, 0x18), 0x24, -8);
+    TextOBJ_SetPosition(PTR(w, 0x34), 0x24, -8);
     TextOBJ_SetSpritesDrawFlag(PTR(w, 0x18), 1);
     TextOBJ_SetSpritesDrawFlag(PTR(w, 0x34), 1);
     ov40_022420B4(p, 0);

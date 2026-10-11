@@ -10,7 +10,7 @@ void ov91_02261790(void *p, void *manager) {
     SpriteTransfer_DeletePlttTransferTask(PTR_AT(p, 0x60));
     DestroySingle2DGfxResObj(PTR_AT(manager, 0x14c), PTR_AT(p, 0x60));
     sub_02021B5C((u8 *)p + 0x50);
-    sub_02013938(PTR_AT(p, 0x4c));
+    TextOBJLayout_Delete(PTR_AT(p, 0x4c));
     String_Delete(PTR_AT(p, 0x5c));
     Sprite_Delete(PTR_AT(p, 0x34));
     SpriteTransfer_DeleteCharTransferTask(PTR_AT(p, 0));
@@ -97,5 +97,5 @@ void ov91_02261928(void *p) {
         mtx[1] = *(u32 *)((u8 *)p + 0x7c);
         Sprite_SetMatrix(PTR_AT(p, 0x34), mtx);
     }
-    sub_02013728(PTR_AT(p, 0x48));
+    TextOBJ_UpdatePosition(PTR_AT(p, 0x48));
 }

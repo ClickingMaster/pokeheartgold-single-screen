@@ -2,16 +2,16 @@
 	.include "unk_02016EDC.inc"
 	.include "global.inc"
 	.text
-	.public sub_020173C8
-	.public sub_020172C8
-	.public sub_0201733C
-	.public sub_02017470
-	.public sub_02017488
-	.public sub_020174A4
-	.public sub_020174B4
-	.public sub_020174BC
-	thumb_func_start sub_020173C8
-sub_020173C8: ; 0x020173C8
+	.public PokepicScriptAnim_ReadDestAngleAndAmplitude
+	.public PokepicScriptAnim_ReadDestVarAndOperands
+	.public PokepicScriptAnim_ReadDestAndOperands
+	.public PokepicScriptAnim_Compare
+	.public PokepicScriptAnim_AdjustYForScale
+	.public PokepicScriptAnimCmd_End
+	.public PokepicScriptAnimCmd_Yield
+	.public PokepicScriptAnimCmd_ResetTransform
+	thumb_func_start PokepicScriptAnim_ReadDestAngleAndAmplitude
+PokepicScriptAnim_ReadDestAngleAndAmplitude: ; 0x020173C8
 	push {r3, r4, r5, r6, r7, lr}
 	sub sp, #8
 	add r4, r2, #0
@@ -19,7 +19,7 @@ sub_020173C8: ; 0x020173C8
 	add r2, #3
 	add r5, r0, #0
 	add r6, r3, #0
-	bl sub_020172B4
+	bl PokepicScriptAnim_ReadVarIndexPair
 	add r0, sp, #0
 	ldrb r0, [r0, #3]
 	add r1, sp, #0
@@ -27,14 +27,14 @@ sub_020173C8: ; 0x020173C8
 	add r0, r5, r0
 	ldr r7, [r0, #0x24]
 	add r0, r5, #0
-	bl sub_02017280
+	bl PokepicScriptAnim_ReadArgByte
 	add r0, sp, #0
 	ldrb r0, [r0]
 	cmp r0, #0x14
 	bne _020173FE
 	add r0, r5, #0
 	add r1, r6, #0
-	bl sub_0201726C
+	bl PokepicScriptAnim_ReadArg
 	b _0201741E
 _020173FE:
 	cmp r0, #0x15
@@ -42,7 +42,7 @@ _020173FE:
 	add r1, sp, #0
 	add r0, r5, #0
 	add r1, #2
-	bl sub_02017294
+	bl PokepicScriptAnim_ReadVarIndex
 	add r0, sp, #0
 	ldrb r0, [r0, #2]
 	lsl r0, r0, #2
@@ -55,14 +55,14 @@ _0201741A:
 _0201741E:
 	add r0, r5, #0
 	add r1, sp, #0
-	bl sub_02017280
+	bl PokepicScriptAnim_ReadArgByte
 	add r0, sp, #0
 	ldrb r0, [r0]
 	cmp r0, #0x14
 	bne _02017438
 	add r0, r5, #0
 	add r1, sp, #4
-	bl sub_0201726C
+	bl PokepicScriptAnim_ReadArg
 	b _02017458
 _02017438:
 	cmp r0, #0x15
@@ -70,7 +70,7 @@ _02017438:
 	add r1, sp, #0
 	add r0, r5, #0
 	add r1, #1
-	bl sub_02017294
+	bl PokepicScriptAnim_ReadVarIndex
 	add r0, sp, #0
 	ldrb r0, [r0, #1]
 	lsl r0, r0, #2
@@ -93,4 +93,4 @@ _02017458:
 	add sp, #8
 	pop {r3, r4, r5, r6, r7, pc}
 	.balign 4, 0
-	thumb_func_end sub_020173C8
+	thumb_func_end PokepicScriptAnim_ReadDestAngleAndAmplitude

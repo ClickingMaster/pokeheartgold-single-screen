@@ -24,7 +24,7 @@
 #include "sprite_system.h"
 #include "trainer_data.h"
 #include "trainer_memo.h"
-#include "unk_02016EDC.h"
+#include "pokepic_anim.h"
 #include "unk_02078834.h"
 
 void MonEncryptSegment(void *data, u32 size, u32 key);
@@ -4200,7 +4200,7 @@ void sub_0207294C(NARC *narc, void *a1, void *a2, u16 a3, int a4, int a5, int a6
     sp4.unk_0 = spA.unk0[r4].unk_1;
     sp4.unk_2 = spA.unk0[r4].unk_2;
     sp4.unk_4 = a5;
-    sub_02016F40(a1, a2, &sp4, a6);
+    PokepicAnimManager_StartAnim(a1, a2, &sp4, a6);
 }
 
 void sub_020729A4(NARC *narc, u8 *ret, u16 species, u16 isFrontpic) {

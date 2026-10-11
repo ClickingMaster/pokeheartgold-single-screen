@@ -9,7 +9,7 @@
 #include "obj_char_transfer.h"
 #include "sys_task_api.h"
 #include "touchscreen.h"
-#include "unk_02013534.h"
+#include "font_sprite.h"
 
 typedef struct BattleInputMainMenu {
     u8 battlerType;

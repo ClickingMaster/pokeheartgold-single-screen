@@ -8,7 +8,7 @@
 #include "obj_char_transfer.h"
 #include "safari_zone.h"
 #include "touchscreen_list_menu.h"
-#include "unk_02013534.h"
+#include "font_sprite.h"
 
 #define PGMAP_NUM_FLYPOINTS 27
 #define PGMAP_NUM_LOCATIONS 100
@@ -190,8 +190,8 @@ typedef struct PokegearMapAppData {
     int markingsPanelScrollActive;                // 0x030
     int markingsPanelScrollStep;                  // 0x034
     MAPDATA *mapData;                             // 0x038
-    UnkStruct_02013534 *unk_03C;                  // 0x03C
-    UnkStruct_02013910 *unk_040;                  // 0x040
+    FontSystem *unk_03C;                  // 0x03C
+    TextOBJLayout *unk_040;                  // 0x040
     PokegearMapAppData_Sub044 unk_044[4];         // 0x044
     PokegearObjectsManager *objManager;           // 0x084
     MsgData *msgData;                             // 0x088

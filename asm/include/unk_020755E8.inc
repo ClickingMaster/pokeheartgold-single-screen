@@ -87,9 +87,9 @@
 .public PaletteBlink_New
 .public PaletteBlink_SetState
 .public PaletteBlink_Delete
-.public sub_02016EDC
-.public sub_02016F2C
-.public sub_02017068
+.public PokepicAnimManager_New
+.public PokepicAnimManager_Delete
+.public PokepicAnimManager_GetAnimState
 .public Main_SetVBlankIntrCB
 .public Heap_Alloc
 .public Heap_Free

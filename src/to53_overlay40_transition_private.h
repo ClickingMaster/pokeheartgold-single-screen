@@ -28,7 +28,7 @@ void ManagedSprite_SetAnim(void *sprite, int anim);
 void ManagedSprite_SetDrawFlag(void *sprite, int flag);
 void ManagedSprite_SetPaletteOverrideOffset(void *sprite, int offset);
 void PaletteData_BlendPalettes(void *data, int buffer, u16 selected, u8 amount, u16 color);
-void sub_020136B4(void *p, int x, int y);
+void TextOBJ_SetPosition(void *p, int x, int y);
 void ov40_0222D288(void *sprite, s16 x, s16 y);
 void ov40_0222D294(void *sprite, s16 *x, s16 *y);
 void ov40_0222D3E8(u8 *work, u8 *entry, int msgId, u8 *selection);

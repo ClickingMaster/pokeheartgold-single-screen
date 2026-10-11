@@ -4,8 +4,8 @@
 
 	.rodata
 
-	.public _020F5F2C
-_020F5F2C:
+	.public gFontOAMCellSizes
+gFontOAMCellSizes:
 	.byte 0x08
 _020F5F2D:
 	.byte 0x08, 0x08, 0x04

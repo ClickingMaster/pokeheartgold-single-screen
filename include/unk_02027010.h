@@ -1,7 +1,0 @@
-#ifndef POKEHEARTGOLD_UNK_02027010_H
-#define POKEHEARTGOLD_UNK_02027010_H
-
-void sub_02027010(void);
-void sub_02027098(const char *path);
-
-#endif // POKEHEARTGOLD_UNK_02027010_H

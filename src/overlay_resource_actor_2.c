@@ -33,7 +33,7 @@ void sub_02075D4C(Work *work) {
     PaletteData_FreeBuffers(work->palette, 2);
     PaletteData_Free(work->palette);
     PokepicManager_Delete(work->pokepicMgr);
-    sub_02016F2C(work->unk44);
+    PokepicAnimManager_Delete(work->unk44);
     GF_3DVramMan_Delete(work->vramMan);
     sub_020771A0(work->bg);
     DestroyMsgData(work->msgData);

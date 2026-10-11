@@ -33,7 +33,7 @@ void ov41_0224AF8C(void *);
 void ov41_02249CF8(void *, s32);
 void PlaySE(u16);
 void ov41_0224A9BC(void *);
-void sub_02013728(void *);
+void TextOBJ_UpdatePosition(void *);
 void ov41_0224A254(void *);
 void ov41_0224AD7C(void *);
 void ov41_0224B5C8(void *);

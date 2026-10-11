@@ -47,7 +47,7 @@
 #include "text.h"
 #include "touchscreen.h"
 #include "sound_playback.h"
-#include "unk_02013534.h"
+#include "font_sprite.h"
 #include "palette_blink.h"
 #include "unk_0208805C.h"
 
@@ -8045,7 +8045,7 @@ static void BattleSystem_LoadLevelUpNameplate(BattleSystem *battleSystem, Getter
     InitWindow(&window);
     AddTextWindowTopLeftCorner(bgConfig, &window, 12, 4, 0, 0);
     AddTextPrinterParameterizedWithColor(&window, 0, messageBuffer, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL); // Second param should be something like FONT_ID_0.
-    sub_02021AC8(sub_02013688(&window, NNS_G2D_VRAM_TYPE_2DMAIN, 5), TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &unkStruct);
+    sub_02021AC8(FontOAM_GetCharSize(&window, NNS_G2D_VRAM_TYPE_2DMAIN, 5), TRUE, NNS_G2D_VRAM_TYPE_2DMAIN, &unkStruct);
     textObjTemplate.fontSystem = data->tempPointers[POINTER_LEVEL_UP_NAMEPLATE_FONT_SYSTEM];
     textObjTemplate.window = &window;
     textObjTemplate.spriteList = SpriteManager_GetSpriteList(spriteManager);
@@ -8058,9 +8058,9 @@ static void BattleSystem_LoadLevelUpNameplate(BattleSystem *battleSystem, Getter
     textObjTemplate.vram = 1;
     textObjTemplate.heapID = HEAP_ID_BATTLE;
     textObjTemplate.unk_20 = 0;
-    data->unk14 = sub_020135D8(&textObjTemplate);
+    data->unk14 = FontOAM_Create(&textObjTemplate);
     data->unk18 = unkStruct;
-    sub_020138E0(data->unk14, 1);
+    TextOBJ_SetPalOffsetRespectVramOffset(data->unk14, 1);
     RemoveWindow(&window);
 }
 
@@ -8078,7 +8078,7 @@ static void BattleSystem_UnloadLevelUpNameplate(BattleSystem *battleSystem, Gett
     SpriteManager_UnloadPlttObjById(spriteManager, 0x4E31);
     SpriteManager_UnloadCellObjById(spriteManager, 0x4E2E);
     SpriteManager_UnloadAnimObjById(spriteManager, 0x4E2E);
-    sub_020135AC(data->tempPointers[POINTER_LEVEL_UP_NAMEPLATE_FONT_SYSTEM]);
+    FontSystem_Delete(data->tempPointers[POINTER_LEVEL_UP_NAMEPLATE_FONT_SYSTEM]);
 }
 
 static void UpdateFriendshipFainted(BattleSystem *battleSystem, BattleContext *ctx, int battlerID) {

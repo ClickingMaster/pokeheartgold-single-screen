@@ -35,7 +35,7 @@ extern void WirelessStatusIcon_Destroy(void);
 extern void GF_TouchpadStopSampling(void);
 extern void TouchHitboxController_Destroy(void *);
 extern void TextFlags_SetCanTouchSpeedUpPrint(BOOL);
-extern void sub_020135AC(void *);
+extern void FontSystem_Delete(void *);
 extern void DestroyMsgData(void *);
 extern void GF_3DVramMan_Delete(void *);
 extern void PokepicManager_Delete(void *);

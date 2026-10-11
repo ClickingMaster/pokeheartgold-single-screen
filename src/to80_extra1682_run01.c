@@ -7,12 +7,12 @@
 typedef struct { u32 pad:6;u32 axis:2;u32 tail:24; } Header;
 typedef struct { Header *header; } Res;
 typedef struct {u8 pad0[0x20];Res *res;u8 pad24[0x2c];VecFx16 axis;u8 pad56[0x2e];VecFx16 cross,other;} Work;
-extern const VecFx16 _021105EC;
+extern const VecFx16 gSplAxisY;
 extern fx32 VEC_Fx16DotProduct(const VecFx16 *,const VecFx16 *);
 extern void VEC_Fx16Normalize(const VecFx16 *,VecFx16 *);
 void spl_set_cross_to_axis(Work *);
 void spl_set_cross_to_axis(Work *w) {
- VecFx16 base=_021105EC,axis; fx32 d;
+ VecFx16 base=gSplAxisY,axis; fx32 d;
  switch(w->res->header->axis) {
  case 2:axis.x=FX32_ONE;axis.y=0;axis.z=0;break;
  case 1:axis.x=0;axis.y=FX32_ONE;axis.z=0;break;

@@ -4,8 +4,8 @@
 #define S8AT(p, o) (*(s8 *)((u8 *)(p) + (o)))
 #define PAT(p, o)  (*(void **)((u8 *)(p) + (o)))
 
-void sub_02013794(void *, s32 *, s32 *);
-void sub_020136B4(void *, s32, s32);
+void TextOBJ_GetPosition(void *, s32 *, s32 *);
+void TextOBJ_SetPosition(void *, s32, s32);
 u32 ov93_02262108(void *);
 u32 ov93_02262130(void *);
 void ov93_02261FC8(void *);
@@ -36,9 +36,9 @@ void ov93_02261FC8(void *work) {
             a = 0x40 - value;
             b = a - 0x50;
         }
-        sub_02013794(PAT(slot, 4), &x, &y);
-        sub_020136B4(PAT(slot, 4), x, 0xA8 - a);
-        sub_020136B4(PAT(slot, 0x18), x, 0xA8 - b);
+        TextOBJ_GetPosition(PAT(slot, 4), &x, &y);
+        TextOBJ_SetPosition(PAT(slot, 4), x, 0xA8 - a);
+        TextOBJ_SetPosition(PAT(slot, 0x18), x, 0xA8 - b);
     }
 }
 

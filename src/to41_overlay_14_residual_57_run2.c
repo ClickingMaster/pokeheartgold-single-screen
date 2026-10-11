@@ -118,8 +118,8 @@ void ov14_021F4BC0(void *p) {
     ov14_021F46F4(PTR_AT(p, 0x34));
     TextOBJ_SetSpritesDrawFlag(PTR_AT(PTR_AT(p, 0x34), 0x414), 1);
     TextOBJ_SetSpritesDrawFlag(PTR_AT(PTR_AT(p, 0x34), 0x424), 1);
-    sub_020137F0(PTR_AT(PTR_AT(p, 0x34), 0x414), 0);
-    sub_020137F0(PTR_AT(PTR_AT(p, 0x34), 0x424), 0);
+    TextOBJ_SetPriority(PTR_AT(PTR_AT(p, 0x34), 0x414), 0);
+    TextOBJ_SetPriority(PTR_AT(PTR_AT(p, 0x34), 0x424), 0);
 }
 
 void ov14_021F4CA0(void *p) {
@@ -146,7 +146,7 @@ void ov14_021F4D10(void *q) {
     slot = (u8 *)q + 0x414;
     InitWindow(window);
     AddTextWindowTopLeftCorner(PTR_AT(q, 0x14), window, 0xc, 2, 0, 2);
-    sub_02021AC8(sub_02013688(window, 1, 0xa), 1, 1, slot + 4);
+    sub_02021AC8(FontOAM_GetCharSize(window, 1, 0xa), 1, 1, slot + 4);
     param.font = PTR_AT(q, 0x410);
     param.window = window;
     param.spriteList = SpriteManager_GetSpriteList(PTR_AT(q, 0x2f8));
@@ -159,15 +159,15 @@ void ov14_021F4D10(void *q) {
     param.unk24 = 4;
     param.unk28 = 1;
     param.unk2c = 0xa;
-    U32_AT(q, 0x414) = (u32)sub_020135D8(&param);
-    sub_020138B0(PTR_AT(q, 0x414), 1);
-    sub_020138E0(PTR_AT(q, 0x414), 1);
+    U32_AT(q, 0x414) = (u32)FontOAM_Create(&param);
+    TextOBJ_SetPalOffset(PTR_AT(q, 0x414), 1);
+    TextOBJ_SetPalOffsetRespectVramOffset(PTR_AT(q, 0x414), 1);
     RemoveWindow(window);
 
     slot = (u8 *)q + 0x424;
     InitWindow(window);
     AddTextWindowTopLeftCorner(PTR_AT(q, 0x14), window, 5, 2, 0, 2);
-    sub_02021AC8(sub_02013688(window, 1, 0xa), 1, 1, slot + 4);
+    sub_02021AC8(FontOAM_GetCharSize(window, 1, 0xa), 1, 1, slot + 4);
     param.font = PTR_AT(q, 0x410);
     param.window = window;
     param.spriteList = SpriteManager_GetSpriteList(PTR_AT(q, 0x2f8));
@@ -180,9 +180,9 @@ void ov14_021F4D10(void *q) {
     param.unk24 = 4;
     param.unk28 = 1;
     param.unk2c = 0xa;
-    PTR_AT(slot, 0) = sub_020135D8(&param);
-    sub_020138B0(PTR_AT(slot, 0), 1);
-    sub_020138E0(PTR_AT(slot, 0), 1);
+    PTR_AT(slot, 0) = FontOAM_Create(&param);
+    TextOBJ_SetPalOffset(PTR_AT(slot, 0), 1);
+    TextOBJ_SetPalOffsetRespectVramOffset(PTR_AT(slot, 0), 1);
     RemoveWindow(window);
 }
 
@@ -200,15 +200,15 @@ void ov14_021F4E68(void *q) {
         a += 0x10;
         b += 0x10;
     }
-    sub_020135AC(PTR_AT(q, 0x410));
+    FontSystem_Delete(PTR_AT(q, 0x410));
 }
 
 void ov14_021F4EA0(void *q, void *window, u32 i) {
     void *tmp;
 
-    tmp = sub_02013910(window, 0xa);
+    tmp = TextOBJLayout_New(window, 0xa);
     TextOBJ_CopyFromBGWindow(PTR_AT(q, 0x414 + i * 0x10), tmp, window, 0xa);
-    sub_02013938(tmp);
+    TextOBJLayout_Delete(tmp);
 }
 
 void ov14_021F4ED0(void *p) {

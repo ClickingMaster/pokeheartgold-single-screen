@@ -13,7 +13,7 @@ extern Ov40PositionTable ov40_0224557C;
 void ManagedSprite_SetPositionXY(void *sprite, s16 x, s16 y);
 void ManagedSprite_SetAnim(void *sprite, int anim);
 void TextOBJ_SetSpritesDrawFlag(void *obj, BOOL draw);
-void sub_020136B4(void *obj, int x, int y);
+void TextOBJ_SetPosition(void *obj, int x, int y);
 void ov40_0222D6EC(void *p, int which);
 void *ov40_0222D800(void *p, int which);
 void ov40_0222D5AC(void *dst, void *src, int id);

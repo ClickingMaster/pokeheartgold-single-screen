@@ -17,7 +17,7 @@ void TouchHitboxController_IsTriggered(void *controller);
 void ManagedSprite_SetDrawFlag(void *sprite, BOOL draw);
 void TextOBJ_SetSpritesDrawFlag(void *obj, BOOL draw);
 void ManagedSprite_SetPositionXY(void *sprite, int x, int y);
-void sub_020136B4(void *obj, int x, int y);
+void TextOBJ_SetPosition(void *obj, int x, int y);
 void InitWindow(void *window);
 void AddWindowParameterized(void *bgConfig, void *window, int bgId, int x, int y, int width, int height, int palette, u16 baseTile);
 void FillWindowPixelBuffer(void *window, u8 fill);

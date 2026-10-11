@@ -3,8 +3,8 @@
 #include "global.h"
 void TextOBJ_Destroy(void *);
 void sub_02021B5C(void *);
-void sub_02013938(void *);
+void TextOBJLayout_Delete(void *);
 void RemoveWindow(void *);
-void sub_020135AC(void *);
+void FontSystem_Delete(void *);
 void ov102_021E937C(u8 *);
 #endif

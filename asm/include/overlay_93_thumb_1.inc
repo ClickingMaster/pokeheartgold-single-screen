@@ -65,7 +65,7 @@
 .public sub_0200FB70
 .public sub_0200FC20
 .public FontSystem_NewInit
-.public sub_020135AC
+.public FontSystem_Delete
 .public ParticleSystem_ZeroAll
 .public ParticleSystem_New
 .public ParticleSystem_Free

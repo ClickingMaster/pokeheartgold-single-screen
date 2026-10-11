@@ -8,7 +8,7 @@ void sub_0208DEDC(UnkStruct_0208DE40 *a) {
 
 void sub_0208DEFC(UnkStruct_0208DE40 *a) {
     Camera_Delete(a->unk_29C);
-    sub_02017088(a->unk_2CC, 0);
-    sub_02016F2C(a->unk_2CC);
+    PokepicAnimManager_StopAnim(a->unk_2CC, 0);
+    PokepicAnimManager_Delete(a->unk_2CC);
     PokepicManager_Delete(a->unk_2A0);
 }

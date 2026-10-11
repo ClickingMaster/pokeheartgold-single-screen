@@ -26,7 +26,7 @@
 #include "sys_task_api.h"
 #include "trainer_data.h"
 #include "unk_0200CE7C.h"
-#include "unk_02013534.h"
+#include "font_sprite.h"
 
 typedef struct BattleMessage {
     u8 unk0;

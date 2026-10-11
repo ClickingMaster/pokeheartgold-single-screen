@@ -35,9 +35,9 @@ void *ov96_021F8EB0(u32 heapId, void *bg, void *value) {
     window = obj + 0xc;
     InitWindow(window);
     AddTextWindowTopLeftCorner(bg, window, 8, 2, 0, 0);
-    printer = sub_02013910(window, PTR(obj,0));
+    printer = TextOBJLayout_New(window, PTR(obj,0));
     PTR(window,0x10) = printer;
-    PTR(window,0x14) = sub_02013948(printer, 2);
+    PTR(window,0x14) = TextOBJLayout_GetCharSize(printer, 2);
     return obj;
 }
 
@@ -50,9 +50,9 @@ void ov96_021F8F0C(u8 *obj) {
     p += 0x34;
     for (;i<4;i++,p+=0x28) ov96_021F91CC(p);
     window = obj + 0xc;
-    sub_02013938(PTR(window,0x10));
+    TextOBJLayout_Delete(PTR(window,0x10));
     RemoveWindow(window);
-    sub_020135AC(PTR(obj,8));
+    FontSystem_Delete(PTR(obj,8));
     Heap_Free(obj);
 }
 

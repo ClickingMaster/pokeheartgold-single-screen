@@ -14,7 +14,7 @@ void ov40_0222CBE0(void *w) {
 
     for (i = 0, a = (u8 *)w + 0x534, b = w; i < 5; i++, a += 0x28, b += 0x28) {
         ov40_0222D288(PTR(a, 0), 0x32, (5 - SWORD(w, 0x6E0)) * 16 + 0xD9);
-        sub_020136B4(PTR(b, 0x548), 0x24, 0x24 - 0x2C);
+        TextOBJ_SetPosition(PTR(b, 0x548), 0x24, 0x24 - 0x2C);
     }
 
     j = 0;

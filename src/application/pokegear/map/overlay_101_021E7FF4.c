@@ -9,7 +9,7 @@
 #include "screen_fade.h"
 #include "text.h"
 #include "sound_playback.h"
-#include "unk_02013534.h"
+#include "font_sprite.h"
 #include "unk_0208805C.h"
 
 static void PokegearMap_InitBGs(PokegearMapAppData *mapApp);
@@ -727,7 +727,7 @@ static void PokegearMap_CreateObjectsManager(PokegearMapAppData *mapApp) {
 
 static void PokegearMap_DestroyObjectsManager(PokegearMapAppData *mapApp) {
     G2dRenderer_SetSubSurfaceCoords(SpriteSystem_GetRenderer(mapApp->pokegear->spriteSystem), 0, FX32_CONST(192));
-    sub_020135AC(mapApp->unk_03C);
+    FontSystem_Delete(mapApp->unk_03C);
     PokegearObjectsManager_Release(mapApp->objManager);
     PokegearApp_DestroySpriteManager(mapApp->pokegear);
 }
@@ -876,8 +876,8 @@ static void PokegearMap_CreateMarkingsECWordTextOBJs(PokegearMapAppData *mapApp)
     u32 size;
     int i;
 
-    mapApp->unk_040 = sub_02013910(&mapApp->windows[8], mapApp->heapID);
-    size = sub_02013948(mapApp->unk_040, NNS_G2D_VRAM_TYPE_2DMAIN);
+    mapApp->unk_040 = TextOBJLayout_New(&mapApp->windows[8], mapApp->heapID);
+    size = TextOBJLayout_GetCharSize(mapApp->unk_040, NNS_G2D_VRAM_TYPE_2DMAIN);
     AddTextPrinterParameterizedWithColor(&mapApp->windows[8], 0, mapApp->regionNameStrings[1], 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(1, 2, 0), NULL);
 
     template.fontSystem = mapApp->unk_03C;
@@ -909,7 +909,7 @@ static void PokegearMap_DestroyMarkingsECWordTextOBJs(PokegearMapAppData *mapApp
         sub_02021B5C(&mapApp->unk_044[i].unk_4);
         mapApp->unk_044[i].textOBJ = NULL;
     }
-    sub_02013938(mapApp->unk_040);
+    TextOBJLayout_Delete(mapApp->unk_040);
 }
 
 static void PokegearMap_CreateAuxSprites_MarkingsMode(PokegearMapAppData *mapApp) {

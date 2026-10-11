@@ -36,7 +36,7 @@
 #include "touch_hitbox_controller.h"
 #include "touchscreen.h"
 #include "touchscreen_list_menu.h"
-#include "unk_02013534.h"
+#include "font_sprite.h"
 #include "particle_system.h"
 #include "touchpad.h"
 #include "unk_02026E30.h"
@@ -128,11 +128,11 @@ typedef struct BallCapsuleEditor {
     void *pokepicEffect;                                     // 0x250, ov07_02232694
     UnkBallData *ballData;                                   // 0x254
     GF3DVramMan *vramMan;                                    // 0x258
-    UnkStruct_02013534 *fontSystem;                          // 0x25C
+    FontSystem *fontSystem;                          // 0x25C
     TextOBJ *buttonLabels[2];                                // 0x260, OK / CANCEL
     UnkStruct_02021AC8 buttonLabelChars[2];                  // 0x268
     u32 unk_280;                                             // 0x280
-    void *pokepicAnim;                                       // 0x284, sub_02016EDC
+    void *pokepicAnim;                                       // 0x284, PokepicAnimManager_New
     BOOL sortSeals;                                          // 0x288
     BallCapsuleEditorCapsuleIcon capsuleIcons[MAX_CAPSULES]; // 0x28C
     ManagedSprite *cursors[2];                               // 0x31C
@@ -222,9 +222,9 @@ BOOL ov07_02233EA0(UnkBallData *data);
 s32 ov07_022344E4(s32 x1, s32 y1, s32 x2, s32 y2);
 
 // Defined in pokepic_animation.c / render_window.c; not declared in a public header.
-void *sub_02016EDC(enum HeapID heapID, int count, int flag);
-void sub_02016F2C(void *mgr);
-BOOL sub_02017068(void *mgr, int index);
+void *PokepicAnimManager_New(enum HeapID heapID, int count, int flag);
+void PokepicAnimManager_Delete(void *mgr);
+BOOL PokepicAnimManager_GetAnimState(void *mgr, int index);
 u32 GetUserFrameGfx2PaletteMember(u32 frame);
 
 // ov07_02232694 argument
@@ -471,7 +471,7 @@ BOOL BallCapsuleEditor_Init(OverlayManager *manager, int *state) {
     BallCapsuleEditor_InitBgs(editor->display.bgConfig);
     BallCapsuleEditor_Alloc3DVram();
     editor->display.pokepicManager = PokepicManager_Create(HEAP_ID_52);
-    editor->pokepicAnim = sub_02016EDC(HEAP_ID_52, 1, 0);
+    editor->pokepicAnim = PokepicAnimManager_New(HEAP_ID_52, 1, 0);
     i = Options_GetFrame(editor->args->options);
     BallCapsuleEditor_LoadMainBgGraphics(editor->display.bgConfig, editor->display.paletteData, i);
     BallCapsuleEditor_LoadSubBgGraphics(editor->display.bgConfig, editor->display.paletteData, i);
@@ -525,7 +525,7 @@ BOOL BallCapsuleEditor_Exit(OverlayManager *manager, int *state) {
     BallCapsuleEditor_RemoveAllSeals(editor);
     TouchHitboxController_Destroy(editor->display.hitboxController);
     PokepicManager_Delete(editor->display.pokepicManager);
-    sub_02016F2C(editor->pokepicAnim);
+    PokepicAnimManager_Delete(editor->pokepicAnim);
     BallCapsuleEditor_FreeFonts(editor);
     BallCapsuleEditor_FreeSpriteSystem(&editor->display);
     GF_DestroyVramTransferManager();
@@ -1042,7 +1042,7 @@ void BallCapsuleEditor_FreeFonts(BallCapsuleEditor *editor) {
     sub_02021B5C(&editor->buttonLabelChars[0]);
     FontOAM_Delete(editor->buttonLabels[1]);
     sub_02021B5C(&editor->buttonLabelChars[1]);
-    sub_020135AC(editor->fontSystem);
+    FontSystem_Delete(editor->fontSystem);
 }
 
 void BallCapsuleEditor_LoadButtonLabelPalette(BallCapsuleEditor *editor) {
@@ -1072,7 +1072,7 @@ void BallCapsuleEditor_CreateButtonLabel(BallCapsuleEditor *editor, int index, i
     InitWindow(&window);
     AddTextWindowTopLeftCorner(editor->display.bgConfig, &window, 10, 2, 0, 0);
     AddTextPrinterParameterizedWithColor(&window, 2, string, 0, 0, TEXT_SPEED_NOTRANSFER, MAKE_TEXT_COLOR(15, 13, 2), NULL);
-    chars = sub_02013688(&window, NNS_G2D_VRAM_TYPE_2DSUB, HEAP_ID_52);
+    chars = FontOAM_GetCharSize(&window, NNS_G2D_VRAM_TYPE_2DSUB, HEAP_ID_52);
     sub_02021AC8(chars, TRUE, NNS_G2D_VRAM_TYPE_2DSUB, &editor->buttonLabelChars[index]);
     template.fontSystem = editor->fontSystem;
     template.window = &window;
@@ -1086,8 +1086,8 @@ void BallCapsuleEditor_CreateButtonLabel(BallCapsuleEditor *editor, int index, i
     template.unk_24 = 40;
     template.vram = NNS_G2D_VRAM_TYPE_2DSUB;
     template.heapID = HEAP_ID_52;
-    editor->buttonLabels[index] = sub_020135D8(&template);
-    sub_020138E0(editor->buttonLabels[index], palette);
+    editor->buttonLabels[index] = FontOAM_Create(&template);
+    TextOBJ_SetPalOffsetRespectVramOffset(editor->buttonLabels[index], palette);
     String_Delete(string);
     DestroyMsgData(msgData);
     RemoveWindow(&window);
@@ -2488,7 +2488,7 @@ int BallCapsuleEditor_PreviewCapsule(BallCapsuleEditor *editor) {
         }
         break;
     case 5:
-        if (ov07_02232A54(editor->pokepicEffect) == FALSE && sub_02017068(editor->pokepicAnim, 0) == TRUE && Pokepic_IsAnimFinished(editor->display.pokepic) == FALSE) {
+        if (ov07_02232A54(editor->pokepicEffect) == FALSE && PokepicAnimManager_GetAnimState(editor->pokepicAnim, 0) == TRUE && Pokepic_IsAnimFinished(editor->display.pokepic) == FALSE) {
             ov07_02232AB8(editor->pokepicEffect);
             editor->subState++;
         }
@@ -3087,8 +3087,8 @@ void BallCapsuleEditor_MoveButtonLabel(TextOBJ *label, s32 dx, s32 dy) {
     s32 x, y;
 
     if (label) {
-        sub_02013794(label, &x, &y);
-        sub_020136B4(label, x + dx, y + dy);
+        TextOBJ_GetPosition(label, &x, &y);
+        TextOBJ_SetPosition(label, x + dx, y + dy);
     }
 }
 

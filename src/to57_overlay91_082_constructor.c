@@ -58,8 +58,8 @@ void ov91_02261580(Ov91Work82 *work, Ov91Mgr82 *mgr, NARC *narc, int heapId) {
     Sprite_SetDrawFlag(work->sprite, FALSE);
     work->string = String_New(0x10, heapId);
     AddTextWindowTopLeftCorner(mgr->bgConfig, &work->window, 3, 2, 0, 0);
-    work->fontLayout = sub_02013910(&work->window, heapId);
-    GF_ASSERT(sub_02021AC8(sub_02013948(work->fontLayout, 1), TRUE, 1, &work->charTransfer) == TRUE);
+    work->fontLayout = TextOBJLayout_New(&work->window, heapId);
+    GF_ASSERT(sub_02021AC8(TextOBJLayout_GetCharSize(work->fontLayout, 1), TRUE, 1, &work->charTransfer) == TRUE);
     work->textPltt = AddPlttResObjFromNarc(mgr->resMan[1], 0x10, 7, FALSE, 0x96, 1, 1, heapId);
     GF_ASSERT(SpriteTransfer_CreatePlttTransferTask(work->textPltt));
     sub_0200A740(work->textPltt);

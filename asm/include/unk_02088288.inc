@@ -38,7 +38,7 @@
 .public thunk_Sprite_SetPaletteOverride
 .public LoadUserFrameGfx2
 .public IsPaletteFadeFinished
-.public sub_02016EDC
+.public PokepicAnimManager_New
 .public MenuInputStateMgr_SetState
 .public BgCellManager_New
 .public BgCellManager_Delete

@@ -52,7 +52,7 @@ extern void *OverlayManager_CreateAndGetData(void *, u32, u32);
 extern void *OverlayManager_GetArgs(void *);
 extern void *memset(void *, int, u32);
 extern void *BgConfig_Alloc(u32);
-extern void *sub_02016EDC(u32, u32, u32);
+extern void *PokepicAnimManager_New(u32, u32, u32);
 extern void FontID_SetAccessDirect(u32, u32);
 extern void GF_TouchpadResetSampling(void);
 extern void GF_TouchpadStartSampling(u32);

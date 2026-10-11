@@ -36,7 +36,7 @@
 #include "pokedex.h"
 #include "pokemon.h"
 #include "pokemon_mood.h"
-#include "pokepic_animation_internal.h"
+#include "pokepic_anim_internal.h"
 #include "render_text.h"
 #include "render_window.h"
 #include "sound_system.h"
@@ -217,7 +217,7 @@ void Battle_BattleInit(OverlayManager *manager) {
     battleSystem->unk2438 = -51;
     BattleSystem_SetupTextFlags(battleSystem);
     BagCursor_Battle_Init(BattleSystem_GetBagCursor(battleSystem));
-    battleSystem->unk1C8 = sub_02016EDC(HEAP_ID_BATTLE, 4, 0);
+    battleSystem->unk1C8 = PokepicAnimManager_New(HEAP_ID_BATTLE, 4, 0);
     battleSystem->unk1CC = (void *)sub_02020654(4, HEAP_ID_BATTLE);
     if (battleSystem->battleSpecial & BATTLE_SPECIAL_RECORDING) {
         for (i = 0; i < 4; i++) {
@@ -329,7 +329,7 @@ void Battle_BattleExit(OverlayManager *man) {
     DestroyMsgData(battleSystem->msgData);
     DestroyMsgData((MsgData *)battleSystem->unk10);
     MessageFormat_Delete(battleSystem->msgFormat);
-    sub_02016F2C(battleSystem->unk1C8);
+    PokepicAnimManager_Delete(battleSystem->unk1C8);
     ParticleSystem_FreeAll();
     ov07_0221BFE0(battleSystem->unk8C);
     BattleContext_Delete(battleSystem->ctx);

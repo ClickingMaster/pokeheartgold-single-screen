@@ -935,7 +935,7 @@ int PokegearMap_HandleTouchInput_SelectMarkingsSlot(PokegearMapAppData *mapApp, 
                 mapApp->draggingWordX = ((index % 2) * 104 + 40) - gSystem.touchX;
                 mapApp->draggingWordY = ((index / 2) * 21 + 31) - gSystem.touchY;
                 PokegearManagedObject_SetPriority(&objects[index + PGMAP_SPRITE_MARKINGS_MENU_SLOT_WORD_0], 1);
-                sub_02013820(mapApp->unk_044[index].textOBJ, 0);
+                TextOBJ_SetDrawPriority(mapApp->unk_044[index].textOBJ, 0);
             }
             mapApp->draggingType = PGMAP_DRAG_FROM_SET;
             PlaySE(SEQ_SE_GS_GEARSEALGRAB);
@@ -1088,8 +1088,8 @@ static void ov101_021ED204(PokegearMapAppData *mapApp, u8 slot) {
         index = slot - 4;
         PokegearManagedObject_SetCoordUpdateSprite(&objects[index + PGMAP_SPRITE_MARKINGS_MENU_SLOT_WORD_0], 104 * (index % 2) + 40, 21 * (index / 2) + 31);
         PokegearManagedObject_SetPriority(&objects[index + PGMAP_SPRITE_MARKINGS_MENU_SLOT_WORD_0], 4);
-        sub_020136B4(mapApp->unk_044[index].textOBJ, 4, -6);
-        sub_02013820(mapApp->unk_044[index].textOBJ, 3);
+        TextOBJ_SetPosition(mapApp->unk_044[index].textOBJ, 4, -6);
+        TextOBJ_SetDrawPriority(mapApp->unk_044[index].textOBJ, 3);
     }
 }
 
@@ -1136,7 +1136,7 @@ int PokegearMap_HandleTouchInput_DragMarkingSlot(PokegearMapAppData *mapApp) {
     }
     PokegearManagedObject_SetCoordUpdateSprite(&mapApp->objManager->objects[mapApp->draggingIcon + PGMAP_SPRITE_MARKINGS_MENU_SLOT_MARK_0], gSystem.touchX + mapApp->draggingWordX, gSystem.touchY + mapApp->draggingWordY);
     if (mapApp->draggingIcon >= 4) {
-        sub_020136B4(mapApp->unk_044[mapApp->draggingIcon - 4].textOBJ, 4, -6);
+        TextOBJ_SetPosition(mapApp->unk_044[mapApp->draggingIcon - 4].textOBJ, 4, -6);
     }
     if (TouchscreenHitbox_PointIsIn(&touchscreenHitboxes[8], gSystem.touchX, gSystem.touchY) != mapApp->trashcanIconState) {
         PokegearMap_MarkingsMenu_SetTrashcanIconState(mapApp, mapApp->trashcanIconState ^ TRUE);

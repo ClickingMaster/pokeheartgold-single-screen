@@ -52,7 +52,7 @@ void ManagedSprite_SetPositionXY(void *sprite, s16 x, s16 y);
 void ManagedSprite_SetAnim(void *sprite, int anim);
 void Sprite_DeleteAndFreeResources(void *sprite);
 void TextOBJ_SetSpritesDrawFlag(void *textOBJ, int draw);
-void sub_020136B4(void *p, s32 a, s32 b);
+void TextOBJ_SetPosition(void *p, s32 a, s32 b);
 
 void *sub_020307F8(void);
 u64 sub_0203088C(void *a, int b, int c);

@@ -127,7 +127,7 @@ typedef struct MainMenuButton {
 } MainMenuButton;
 
 extern void sub_02005AF8(u32 a0);
-extern void sub_02027098(const char *path);
+extern void SystemCard_RebootIntoFile(const char *path);
 extern void sub_02038D28(SaveData *saveData);
 extern void sub_02038D64(void);
 extern u32 sub_02038D80(void);
@@ -1500,7 +1500,7 @@ static void MainMenu_QueueSelectedApp(MainMenuAppData *data) {
         RegisterMainOverlay(FS_OVERLAY_ID(OVY_74), &gApp_MainMenu_SelectOption_ConnectToRanger);
         break;
     case APPOPTION_CONNECT_TO_WII:
-        sub_02027098("data/eoo.dat");
+        SystemCard_RebootIntoFile("data/eoo.dat");
         break;
     case APPOPTION_WFC:
         Sound_Stop();

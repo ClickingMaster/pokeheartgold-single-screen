@@ -2,7 +2,7 @@
 #include "global.h"
 #include "battle_controller_opponent_r2_exact_private.h"
 #include "pokemon.h"
-#include "pokepic_animation_internal.h"
+#include "pokepic_anim_internal.h"
 #include "opus10_overlay07_callback_suffix_private.h"
 #pragma force_active on
 typedef struct {void *data;u32 narc,pal;int height;} Render;
@@ -73,7 +73,7 @@ void ov12_0225C18C(SysTask *task,void *data) {
  break;
  case 5:if(ov07_02232A54(work->object8)==0)work->state=6;break;
  case 6:
- if(sub_02017068(ov12_0223B750(work->system),work->battler)==1 &&Pokepic_IsAnimFinished(work->context->pic)==0) {
+ if(PokepicAnimManager_GetAnimState(ov12_0223B750(work->system),work->battler)==1 &&Pokepic_IsAnimFinished(work->context->pic)==0) {
  ov07_02233ECC(work->objectC);ov07_02232AB8(work->object8);
  if(work->shiny){BattleController_InitMoveAnimData(work->system,0,&message1,1,11,work->battler,work->battler,0);ov12_02261B80(work->system,(u8*)work->context,engine,&message1.source);work->state=7;}else work->state=8;
  }break;
@@ -101,7 +101,7 @@ void ov12_0225C6C8(SysTask *task,void *data) {
  if(work->facing==2)Pokepic_SetAttr(work->context->pic,45,0);
  ov12_02261F38(work->system,work->battler,work->type,work->context->pic,work->context->narc,work->species,work->form,work->facing,work->personality);work->state=4;break;
  case 4:
- if(sub_02017068(ov12_0223B750(work->system),work->battler)==1 && Pokepic_IsAnimFinished(work->context->pic)==0) {
+ if(PokepicAnimManager_GetAnimState(ov12_0223B750(work->system),work->battler)==1 && Pokepic_IsAnimFinished(work->context->pic)==0) {
  if(work->shiny) {BattleController_InitMoveAnimData(work->system,0,&message2,1,11,work->battler,work->battler,0);ov12_02261B80(work->system,(u8*)work->context,engine,&message2.source);work->state=5;}
  else work->state=6;
  }break;

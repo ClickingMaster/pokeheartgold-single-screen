@@ -40,7 +40,7 @@ void sub_02086BB4(ModuleState *state) {
 
 void sub_02086C80(void *obj, int x, int y) {
     if (obj != 0) {
-        sub_020136B4(obj, x, y);
+        TextOBJ_SetPosition(obj, x, y);
     }
 }
 

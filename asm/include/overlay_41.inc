@@ -75,12 +75,12 @@
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
 .public FontSystem_NewInit
-.public sub_020135AC
-.public sub_020135D8
+.public FontSystem_Delete
+.public FontOAM_Create
 .public FontOAM_Delete
-.public sub_02013688
-.public sub_020136B4
-.public sub_02013728
+.public FontOAM_GetCharSize
+.public TextOBJ_SetPosition
+.public TextOBJ_UpdatePosition
 .public TextOBJ_SetPaletteNum
 .public GraphicsManager_New
 .public GraphicsManager_Delete

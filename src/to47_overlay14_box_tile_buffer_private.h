@@ -89,16 +89,16 @@ extern void TextOBJ_CopyFromBGWindow(void *, void *, void *, u32);
 extern void FontOAM_Delete(void *);
 extern void *SpriteManager_GetSpriteList(void *);
 extern void *SpriteManager_FindPlttResourceProxy(void *, u32);
-extern void *sub_02013910(void *, u32);
-extern void sub_02013938(void *);
-extern void *sub_02013688(void *, u32, u32);
+extern void *TextOBJLayout_New(void *, u32);
+extern void TextOBJLayout_Delete(void *);
+extern void *FontOAM_GetCharSize(void *, u32, u32);
 extern void sub_02021AC8(void *, u32, u32, void *);
 extern void sub_02021B5C(void *);
-extern void *sub_020135D8(void *);
-extern void sub_020135AC(void *);
-extern void sub_020138B0(void *, u32);
-extern void sub_020138E0(void *, u32);
-extern void sub_020137F0(void *, u32);
+extern void *FontOAM_Create(void *);
+extern void FontSystem_Delete(void *);
+extern void TextOBJ_SetPalOffset(void *, u32);
+extern void TextOBJ_SetPalOffsetRespectVramOffset(void *, u32);
+extern void TextOBJ_SetPriority(void *, u32);
 extern void sub_0200CDAC(void *, u32, void *, u32, u32);
 
 /* ---- graphics loader ---- */

@@ -15,8 +15,8 @@ typedef struct { u8 p0[60]; u32 attributes; Emitter *emitter; MtxFx43 *matrix; }
 typedef struct {u16 alpha:5,modifier:5,id:6;} Polygon;
 typedef struct { u8 p0[8]; VecFx32 position; u8 p14[12]; u16 angle; u8 p22[12]; Polygon polygon; fx32 scale; s16 factor; u16 color; VecFx32 offset; } Particle;
 extern void G3_LoadMtx43(const MtxFx43*), G3_MultMtx43(const MtxFx43*);
-extern void (*_021105E4[])(fx16,fx16,MtxFx43*);
-extern void (*_021105DC[])(s16,s16,s16,s16);
+extern void (*gSplRotateFuncs[])(fx16,fx16,MtxFx43*);
+extern void (*gSplDrawPlaneFuncs[])(s16,s16,s16,s16);
 
 extern void MTX_MultVec43(const VecFx32 *, const MtxFx43 *, VecFx32 *);
 extern void G3_MultMtx43(const MtxFx43 *);

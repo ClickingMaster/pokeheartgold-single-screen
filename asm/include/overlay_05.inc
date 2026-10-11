@@ -65,10 +65,10 @@
 .public BeginNormalPaletteFade
 .public IsPaletteFadeFinished
 .public FontSystem_NewInit
-.public sub_020135AC
-.public sub_020135D8
+.public FontSystem_Delete
+.public FontOAM_Create
 .public FontOAM_Delete
-.public sub_020136B4
+.public TextOBJ_SetPosition
 .public TextOBJ_SetSpritesDrawFlag
 .public TextOBJ_SetPaletteNum
 .public ParticleSystem_ZeroAll

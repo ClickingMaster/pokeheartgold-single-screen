@@ -87,7 +87,7 @@ void Sprite_DeleteAndFreeResources(void *sprite);
 void ManagedSprite_SetPositionXY(void *sprite, s16 x, s16 y);
 void ManagedSprite_SetDrawFlag(void *sprite, int draw);
 void TextOBJ_SetSpritesDrawFlag(void *textOBJ, int draw);
-void sub_020136B4(void *p, s32 a, s32 b);
+void TextOBJ_SetPosition(void *p, s32 a, s32 b);
 u32 sub_02031620(void *card);
 u32 sub_0203162C(void *card);
 
