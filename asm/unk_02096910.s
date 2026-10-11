@@ -38,14 +38,14 @@ _02108594:
 	.word ov80_0222B8F8, sub_020342B8, 0
 	.word ov80_0222B940, sub_020342B8, 0
 	.word ov80_0222B9CC, sub_020342B8, ov80_0222BA5C
-	.word ov83_0224140C, sub_020342B8, 0
-	.word ov83_02241474, sub_020342B8, 0
-	.word ov83_022414DC, sub_020342B8, 0
-	.word ov83_02241510, sub_020342B8, 0
-	.word ov83_0224514C, sub_020342B8, 0
-	.word ov83_022451B8, sub_020342B8, 0
-	.word ov83_02245220, sub_020342B8, 0
-	.word ov83_02245254, sub_020342B8, 0
+	.word BattleCastlePartyApp_ReceiveRanks, sub_020342B8, 0
+	.word BattleCastlePartyApp_ReceiveAction, sub_020342B8, 0
+	.word BattleCastlePartyApp_ReceiveCursor, sub_020342B8, 0
+	.word BattleCastlePartyApp_ReceiveExit, sub_020342B8, 0
+	.word BattleCastleOpponentApp_ReceiveRanks, sub_020342B8, 0
+	.word BattleCastleOpponentApp_ReceiveAction, sub_020342B8, 0
+	.word BattleCastleOpponentApp_ReceiveCursor, sub_020342B8, 0
+	.word BattleCastleOpponentApp_ReceiveExit, sub_020342B8, 0
 	.word sub_02096A7C, sub_020342B8, 0
 	.word sub_02096ACC, sub_020342B8, 0
 	.word sub_02096BB8, sub_020342B8, 0

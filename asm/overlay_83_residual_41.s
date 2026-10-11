@@ -1293,9 +1293,9 @@
 	.public _02247D00
 	.public _02247D08
 	.public _02247D0C
-	.public ov83_0223DD60
-	.public ov83_0223DE60
-	.public ov83_0223DFBC
+	.public BattleCastlePartyApp_Init
+	.public BattleCastlePartyApp_Main
+	.public BattleCastlePartyApp_Exit
 	.public BattleCastlePartyApp_FadeIn
 	.public BattleCastlePartyApp_DrawScreen
 	.public BattleCastlePartyApp_HandleMenu
@@ -1373,13 +1373,13 @@
 	.public BattleCastlePartyApp_CloseWindow
 	.public BattleCastlePartyApp_SendLinkCommand
 	.public BattleCastlePartyApp_PrepareLinkRanks
-	.public ov83_0224140C
+	.public BattleCastlePartyApp_ReceiveRanks
 	.public BattleCastlePartyApp_PrepareLinkAction
-	.public ov83_02241474
+	.public BattleCastlePartyApp_ReceiveAction
 	.public BattleCastlePartyApp_PrepareLinkCursor
-	.public ov83_022414DC
+	.public BattleCastlePartyApp_ReceiveCursor
 	.public BattleCastlePartyApp_PrepareLinkExit
-	.public ov83_02241510
+	.public BattleCastlePartyApp_ReceiveExit
 	.public BattleCastlePartyApp_UseItemOnMon
 	.public BattleCastlePartyApp_PrintTrainerNames
 	.public BattleCastlePartyApp_HealMon
@@ -1415,9 +1415,9 @@
 	.public BattleCastlePartyApp_PrintRentalMenuHelp
 	.public BattleCastlePartyApp_StartButtonAnim
 	.public BattleCastlePartyApp_AnimatePressedButton
-	.public ov83_02242FE8
-	.public ov83_02243108
-	.public ov83_02243268
+	.public BattleCastleOpponentApp_Init
+	.public BattleCastleOpponentApp_Main
+	.public BattleCastleOpponentApp_Exit
 	.public BattleCastleOpponentApp_FadeIn
 	.public BattleCastleOpponentApp_DrawScreen
 	.public BattleCastleOpponentApp_HandleMenu
@@ -1470,13 +1470,13 @@
 	.public BattleCastleOpponentApp_CloseWindow
 	.public BattleCastleOpponentApp_SendLinkCommand
 	.public BattleCastleOpponentApp_PrepareLinkRanks
-	.public ov83_0224514C
+	.public BattleCastleOpponentApp_ReceiveRanks
 	.public BattleCastleOpponentApp_PrepareLinkAction
-	.public ov83_022451B8
+	.public BattleCastleOpponentApp_ReceiveAction
 	.public BattleCastleOpponentApp_PrepareLinkCursor
-	.public ov83_02245220
+	.public BattleCastleOpponentApp_ReceiveCursor
 	.public BattleCastleOpponentApp_PrepareLinkExit
-	.public ov83_02245254
+	.public BattleCastleOpponentApp_ReceiveExit
 	.public BattleCastleOpponentApp_SetStatsBought
 	.public BattleCastleOpponentApp_BuyStats
 	.public BattleCastleOpponentApp_SetMovesBought
@@ -1655,7 +1655,7 @@
 	.public BattleCastlePartyApp_CloseWindow
 	.public BattleCastlePartyApp_PrepareLinkCursor
 	.public BattleCastlePartyApp_PrepareLinkExit
-	.public ov83_02241510
+	.public BattleCastlePartyApp_ReceiveExit
 	.public BattleCastlePartyApp_UseItemOnMon
 	.public BattleCastlePartyApp_ReturnToItemList
 	.public BattleCastlePartyApp_HideSummaryPanel
@@ -1684,7 +1684,7 @@
 	.public BattleCastleOpponentApp_CloseWindow
 	.public BattleCastleOpponentApp_PrepareLinkCursor
 	.public BattleCastleOpponentApp_PrepareLinkExit
-	.public ov83_02245254
+	.public BattleCastleOpponentApp_ReceiveExit
 	.public BattleCastleOpponentApp_SetStatsBought
 	.public BattleCastleOpponentApp_SetMovesBought
 	.public BattleCastleOpponentApp_OpenMessageBox

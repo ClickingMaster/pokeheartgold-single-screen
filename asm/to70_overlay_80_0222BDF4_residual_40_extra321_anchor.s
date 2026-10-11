@@ -779,15 +779,15 @@ ov80_0223BE24: ; 0x0223BE24
 	.byte 0x53, 0x00, 0x00, 0x00
 
 ov80_0223BE34: ; 0x0223BE34
-	.word ov83_0223DD60
-	.word ov83_0223DE60
-	.word ov83_0223DFBC
+	.word BattleCastlePartyApp_Init
+	.word BattleCastlePartyApp_Main
+	.word BattleCastlePartyApp_Exit
 	.word FS_OVERLAY_ID(OVY_83)
 
 ov80_0223BE44: ; 0x0223BE44
-	.word ov83_02242FE8
-	.word ov83_02243108
-	.word ov83_02243268
+	.word BattleCastleOpponentApp_Init
+	.word BattleCastleOpponentApp_Main
+	.word BattleCastleOpponentApp_Exit
 	.word FS_OVERLAY_ID(OVY_83)
 
 ov80_0223BE54: ; 0x0223BE54

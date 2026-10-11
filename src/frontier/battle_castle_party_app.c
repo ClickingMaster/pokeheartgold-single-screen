@@ -267,14 +267,14 @@ int ov80_02237B24(u8 frontierType, int kind);
 void ov80_02237FA4(FrontierSave *frontierSave, int frontierType, int points);
 
 // Entry points and link receive callbacks (their names are referenced from asm)
-BOOL ov83_0223DD60(OverlayManager *manager, int *state);
-int ov83_0223DE60(OverlayManager *manager, int *state);
-BOOL ov83_0223DFBC(OverlayManager *manager);
+BOOL BattleCastlePartyApp_Init(OverlayManager *manager, int *state);
+int BattleCastlePartyApp_Main(OverlayManager *manager, int *state);
+BOOL BattleCastlePartyApp_Exit(OverlayManager *manager);
 void ov83_0223FAF0(void);
-void ov83_0224140C(int netId, void *unused, void *data, BattleCastlePartyApp *app);
-void ov83_02241474(int netId, int unused, u16 *data, BattleCastlePartyApp *app);
-void ov83_022414DC(int netId, int unused, u16 *data, BattleCastlePartyApp *app);
-void ov83_02241510(int netId, int unused, u16 *data, BattleCastlePartyApp *app);
+void BattleCastlePartyApp_ReceiveRanks(int netId, void *unused, void *data, BattleCastlePartyApp *app);
+void BattleCastlePartyApp_ReceiveAction(int netId, int unused, u16 *data, BattleCastlePartyApp *app);
+void BattleCastlePartyApp_ReceiveCursor(int netId, int unused, u16 *data, BattleCastlePartyApp *app);
+void BattleCastlePartyApp_ReceiveExit(int netId, int unused, u16 *data, BattleCastlePartyApp *app);
 
 BOOL BattleCastlePartyApp_FadeIn(BattleCastlePartyApp *app);
 void BattleCastlePartyApp_DrawScreen(BattleCastlePartyApp *app);
@@ -391,7 +391,7 @@ void BattleCastlePartyApp_PrintRentalMenuHelp(BattleCastlePartyApp *app);
 void BattleCastlePartyApp_StartButtonAnim(BattleCastlePartyApp *app, u16 button);
 
 // BattleCastlePartyApp init
-BOOL ov83_0223DD60(OverlayManager *manager, int *state) {
+BOOL BattleCastlePartyApp_Init(OverlayManager *manager, int *state) {
     BattleCastlePartyApp *app;
     BattleCastlePartyAppArgs *args;
     int i;
@@ -434,7 +434,7 @@ BOOL ov83_0223DD60(OverlayManager *manager, int *state) {
 
 #pragma force_active on
 // BattleCastlePartyApp main
-int ov83_0223DE60(OverlayManager *manager, int *state) {
+int BattleCastlePartyApp_Main(OverlayManager *manager, int *state) {
     BattleCastlePartyApp *app = OverlayManager_GetData(manager);
 
     if (app->unk_7FE == 1) {
@@ -496,7 +496,7 @@ int ov83_0223DE60(OverlayManager *manager, int *state) {
 #pragma force_active reset
 
 // BattleCastlePartyApp exit
-BOOL ov83_0223DFBC(OverlayManager *manager) {
+BOOL BattleCastlePartyApp_Exit(OverlayManager *manager) {
     BattleCastlePartyApp *app = OverlayManager_GetData(manager);
 
     *app->selectionOut = app->cursorPos;
@@ -2420,7 +2420,7 @@ void BattleCastlePartyApp_PrepareLinkRanks(BattleCastlePartyApp *app, int comman
 }
 
 // Link receive: the partner's three Castle ranks (sent by BattleCastlePartyApp_PrepareLinkRanks)
-void ov83_0224140C(int netId, void *unused, void *data, BattleCastlePartyApp *app) {
+void BattleCastlePartyApp_ReceiveRanks(int netId, void *unused, void *data, BattleCastlePartyApp *app) {
     int i;
     u16 *rank;
 
@@ -2446,7 +2446,7 @@ void BattleCastlePartyApp_PrepareLinkAction(BattleCastlePartyApp *app, int comma
 #pragma force_active on
 // Link receive: the partner's menu action (sent by BattleCastlePartyApp_PrepareLinkAction).
 // The parent decides whose action wins; the child takes the parent's decision.
-void ov83_02241474(int netId, int unused, u16 *data, BattleCastlePartyApp *app) {
+void BattleCastlePartyApp_ReceiveAction(int netId, int unused, u16 *data, BattleCastlePartyApp *app) {
     app->linkRecvCount++;
     if (netId != Comm_GetLocalNetId()) {
         app->unk_7FD = data[1];
@@ -2474,7 +2474,7 @@ void BattleCastlePartyApp_PrepareLinkCursor(BattleCastlePartyApp *app, int comma
 
 #pragma force_active on
 // Link receive: the partner's cursor position (sent by BattleCastlePartyApp_PrepareLinkCursor)
-void ov83_022414DC(int netId, int unused, u16 *data, BattleCastlePartyApp *app) {
+void BattleCastlePartyApp_ReceiveCursor(int netId, int unused, u16 *data, BattleCastlePartyApp *app) {
     if (netId != Comm_GetLocalNetId()) {
         app->partnerCursorPos = data[1];
         BattleCastlePartyApp_DrawCursor(app, app->partnerCursorPos, TRUE);
@@ -2487,7 +2487,7 @@ void BattleCastlePartyApp_PrepareLinkExit(BattleCastlePartyApp *app, int command
 }
 
 // Link receive: the partner chose to exit (sent by BattleCastlePartyApp_PrepareLinkExit)
-void ov83_02241510(int netId, int unused, u16 *data, BattleCastlePartyApp *app) {
+void BattleCastlePartyApp_ReceiveExit(int netId, int unused, u16 *data, BattleCastlePartyApp *app) {
     if (netId != Comm_GetLocalNetId()) {
         app->unk_7FE = data[0];
     }

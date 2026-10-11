@@ -330,13 +330,13 @@ u8 ov80_02237B58(u8 frontierType, int kind); // number of opponent mons (defined
 void ov80_02237FA4(FrontierSave *frontierSave, int frontierType, int points);
 
 // Entry points and link receive callbacks (their names are referenced from asm)
-BOOL ov83_02242FE8(OverlayManager *manager, int *state);
-BOOL ov83_02243108(OverlayManager *manager, int *state);
-BOOL ov83_02243268(OverlayManager *manager);
-void ov83_0224514C(int netId, void *unused, u16 *data, BattleCastleOpponentApp *app);
-void ov83_022451B8(int netId, int unused, u16 *data, BattleCastleOpponentApp *app);
-void ov83_02245220(int netId, int unused, u16 *data, BattleCastleOpponentApp *app);
-void ov83_02245254(int netId, int unused, u16 *data, BattleCastleOpponentApp *app);
+BOOL BattleCastleOpponentApp_Init(OverlayManager *manager, int *state);
+BOOL BattleCastleOpponentApp_Main(OverlayManager *manager, int *state);
+BOOL BattleCastleOpponentApp_Exit(OverlayManager *manager);
+void BattleCastleOpponentApp_ReceiveRanks(int netId, void *unused, u16 *data, BattleCastleOpponentApp *app);
+void BattleCastleOpponentApp_ReceiveAction(int netId, int unused, u16 *data, BattleCastleOpponentApp *app);
+void BattleCastleOpponentApp_ReceiveCursor(int netId, int unused, u16 *data, BattleCastleOpponentApp *app);
+void BattleCastleOpponentApp_ReceiveExit(int netId, int unused, u16 *data, BattleCastleOpponentApp *app);
 
 BOOL BattleCastleOpponentApp_FadeIn(BattleCastleOpponentApp *app);
 void BattleCastleOpponentApp_DrawScreen(BattleCastleOpponentApp *app);
@@ -478,7 +478,7 @@ BOOL BattleCastlePartyApp_AnimatePressedButton(BattleCastlePartyApp *app) {
 }
 
 // BattleCastleOpponentApp init
-BOOL ov83_02242FE8(OverlayManager *manager, int *state) {
+BOOL BattleCastleOpponentApp_Init(OverlayManager *manager, int *state) {
     BattleCastleOpponentApp *app;
     BattleCastleOpponentAppArgs *args;
     int i;
@@ -520,7 +520,7 @@ BOOL ov83_02242FE8(OverlayManager *manager, int *state) {
 }
 
 // BattleCastleOpponentApp main
-BOOL ov83_02243108(OverlayManager *manager, int *state) {
+BOOL BattleCastleOpponentApp_Main(OverlayManager *manager, int *state) {
     BattleCastleOpponentApp *app = OverlayManager_GetData(manager);
 
     if (app->partnerExited == TRUE) {
@@ -584,7 +584,7 @@ BOOL ov83_02243108(OverlayManager *manager, int *state) {
 }
 
 // BattleCastleOpponentApp exit
-BOOL ov83_02243268(OverlayManager *manager) {
+BOOL BattleCastleOpponentApp_Exit(OverlayManager *manager) {
     BattleCastleOpponentApp *app = OverlayManager_GetData(manager);
 
     *app->selectionOut = app->cursorPos;
@@ -1882,7 +1882,7 @@ void BattleCastleOpponentApp_PrepareLinkRanks(BattleCastleOpponentApp *app, int 
 }
 
 // Link receive callback: the partner's info ranks
-void ov83_0224514C(int netId, void *unused, u16 *data, BattleCastleOpponentApp *app) {
+void BattleCastleOpponentApp_ReceiveRanks(int netId, void *unused, u16 *data, BattleCastleOpponentApp *app) {
     int i;
     u16 *rank;
 
@@ -1911,7 +1911,7 @@ void BattleCastleOpponentApp_PrepareLinkAction(BattleCastleOpponentApp *app, int
 
 #pragma force_active on
 // Link receive callback: the action the partner chose (the host decides when both act at once)
-void ov83_022451B8(int netId, int unused, u16 *data, BattleCastleOpponentApp *app) {
+void BattleCastleOpponentApp_ReceiveAction(int netId, int unused, u16 *data, BattleCastleOpponentApp *app) {
     app->linkRecvCount++;
     if (netId != Comm_GetLocalNetId()) {
         app->partnerSlot = data[1];
@@ -1939,7 +1939,7 @@ void BattleCastleOpponentApp_PrepareLinkCursor(BattleCastleOpponentApp *app, int
 
 #pragma force_active on
 // Link receive callback: the partner's cursor
-void ov83_02245220(int netId, int unused, u16 *data, BattleCastleOpponentApp *app) {
+void BattleCastleOpponentApp_ReceiveCursor(int netId, int unused, u16 *data, BattleCastleOpponentApp *app) {
     if (netId != Comm_GetLocalNetId()) {
         app->partnerCursorPos = data[1];
         BattleCastleOpponentApp_DrawCursor(app, app->partnerCursorPos, TRUE);
@@ -1952,7 +1952,7 @@ void BattleCastleOpponentApp_PrepareLinkExit(BattleCastleOpponentApp *app, int c
 }
 
 // Link receive callback: the partner left
-void ov83_02245254(int netId, int unused, u16 *data, BattleCastleOpponentApp *app) {
+void BattleCastleOpponentApp_ReceiveExit(int netId, int unused, u16 *data, BattleCastleOpponentApp *app) {
     if (netId != Comm_GetLocalNetId()) {
         app->partnerExited = data[0];
     }
