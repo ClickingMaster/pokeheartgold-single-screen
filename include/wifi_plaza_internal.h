@@ -5,11 +5,18 @@
 
 #include "global.h"
 
+#include "billboard_lists.h"
 #include "easy_chat.h"
+#include "filesystem.h"
 #include "friend_roster.h"
+#include "gf_3d_loader.h"
+#include "gf_3d_render.h"
+#include "gf_gfx_loader.h"
 #include "heap.h"
 #include "message_format.h"
+#include "model_animation.h"
 #include "msgdata.h"
+#include "overlay_42.h"
 #include "overlay_manager.h"
 #include "player_data.h"
 #include "pm_string.h"
@@ -425,13 +432,31 @@ typedef struct WiFiPlazaLobbyMatch {
     int hostId; // own id when hosting (ov45_0222F028)
 } WiFiPlazaLobbyMatch;
 
+typedef struct WiFiPlazaLobbyKeyValue {
+    u32 value;
+    u32 key;
+} WiFiPlazaLobbyKeyValue;
+
+typedef struct WiFiPlazaLobbyIdValue {
+    u32 id;
+    u32 value;
+} WiFiPlazaLobbyIdValue;
+
+// Overlays the first 8 bytes of WiFiPlazaLobbyClient.unk_6a0 (ov45_022303E4).
+typedef struct WiFiPlazaLobbyIdValueList {
+    WiFiPlazaLobbyIdValue *items;
+    u16 capacity;
+    volatile u16 count;
+} WiFiPlazaLobbyIdValueList;
+
 typedef struct WiFiPlazaLobbyClientUnk1B4 {
     u32 unk_00;
     u32 unk_04;
     u32 unk_08; // bit 0: ov45_0222ECDC field 4
     u8 unk_0c;
     u8 unk_0d;
-    u8 unk_0e[0x3F2];
+    volatile u16 count;
+    WiFiPlazaLobbyKeyValue values[126]; // ov45_022303BC
 } WiFiPlazaLobbyClientUnk1B4;
 
 // ov45_0222F544 / ov45_0222F628 / ov45_0222F6B0 read the two halves.
@@ -451,6 +476,78 @@ typedef struct WiFiPlazaLobbyClientUnk6A0 {
     u32 unk_2c8[3];
     u32 unk_2d4[3];
 } WiFiPlazaLobbyClientUnk6A0;
+
+// A player on the plaza map (overlay 49): a billboard sprite of the field character models with a model under it.
+typedef struct WiFiPlazaPlayerObject {
+    u8 mode : 4;         // 0: plays `effect` (ov45_02230CB0), else follows the player's action (ov45_02230ACC)
+    u8 culled : 2;       // ov45_02230DF4
+    u8 visible : 2;      // ov45_02230978
+    u8 effectActive : 1; // ov45_0223093C
+    u8 effect : 7;       // index into ov45_02254F1C
+    u8 timer;
+    u8 step;
+    UnkStruct_ov42_02228110 *player; // NULL = free slot
+    void *sprite;                    // billboard object
+    ModelInstance model;
+    u8 action;        // ov42_02228188 field 5
+    u8 savedSequence; // sequence and frame when an action of ov45_02230DC4 ended
+    u16 actionFrame;  // ov42_02228188 field 8
+    u32 savedFrame;
+    u32 lightFlags;
+} WiFiPlazaPlayerObject;
+
+typedef struct WiFiPlazaObjectModel {
+    ModelResource resource;
+    int alpha; // 0 = the models are not drawn (ov45_022306B4)
+} WiFiPlazaObjectModel;
+
+// The player objects (ov45_02230498).
+typedef struct WiFiPlazaPlayerObjects {
+    GF_2DGfxRawResMan *models;    // the billboard model
+    GF_2DGfxRawResMan *sequences; // 2 sprite sequences (ov45_02254C38)
+    GF_3DGfxRawResMan *textures;  // 20 sprites (ov45_02254C48)
+    void *billboards;
+    WiFiPlazaPlayerObject *objects;
+    u32 count;
+    WiFiPlazaObjectModel model;
+    u32 lightFlags; // of the billboard model
+} WiFiPlazaPlayerObjects;
+
+typedef struct WiFiPlazaSpriteConfig {
+    u16 spriteId; // ov42_02228188 field 7
+    u16 fileId : 15;
+    u16 ownTexture : 1; // texture loaded per object instead of once into VRAM
+} WiFiPlazaSpriteConfig;
+
+typedef struct WiFiPlazaBillboardParams {
+    u32 count;
+    u32 heapID;
+} WiFiPlazaBillboardParams;
+
+// Same layout as the billboard code's gfx sequence (billboard_gfx_sequence.c).
+typedef struct WiFiPlazaBillboardSequence {
+    const u16 *startFrame;
+    const u8 *textureIdx;
+    const u8 *plttIdx;
+    u32 seqCount;
+} WiFiPlazaBillboardSequence;
+
+typedef struct WiFiPlazaBillboardResource {
+    void *modelFile;
+    NNSG3dResTex *texture;
+    const void *ranges;
+    WiFiPlazaBillboardSequence sequence;
+    NNSG3dTexKey texKey;
+    NNSG3dTexKey tex4x4Key;
+    NNSG3dPlttKey plttKey;
+} WiFiPlazaBillboardResource;
+
+typedef struct WiFiPlazaBillboardCreateParams {
+    void *billboards;
+    WiFiPlazaBillboardResource *resource;
+    VecFx32 position;
+    VecFx32 scale;
+} WiFiPlazaBillboardCreateParams;
 
 // The lobby client (_022577C0, wifi_plaza_lobby_client.c).
 typedef struct WiFiPlazaLobbyClient {
@@ -964,6 +1061,61 @@ void ov45_02230378(WiFiPlazaLobbyMatchInfo *info, const s64 *time);
 void ov45_02230384(const WiFiPlazaLobbyMatchInfo *info, s64 *time);
 void ov45_02230390(int result, void *arg);
 
+// wifi_plaza_player_objects.c
+void ov45_02230394(int result, void *arg);
+u32 ov45_022303BC(WiFiPlazaLobbyClientUnk1B4 *unk, int key);
+void ov45_022303E4(WiFiPlazaLobbyClientUnk6A0 *unk, int count, enum HeapID heapID);
+void ov45_022303FC(WiFiPlazaLobbyClientUnk6A0 *unk);
+void ov45_0223040C(WiFiPlazaLobbyClientUnk6A0 *unk, const void *data, u32 count);
+BOOL ov45_02230434(WiFiPlazaLobbyClientUnk6A0 *unk, int id);
+u32 ov45_0223045C(WiFiPlazaLobbyClientUnk6A0 *unk, int id);
+void ov45_0223048C(u32 *dest, const void *data);
+WiFiPlazaPlayerObjects *ov45_02230498(u32 count, BOOL mode, enum HeapID heapID, enum HeapID loadHeapID);
+void ov45_02230638(WiFiPlazaPlayerObjects *objects);
+void ov45_02230680(WiFiPlazaPlayerObjects *objects);
+void ov45_022306B4(WiFiPlazaPlayerObjects *objects);
+void ov45_022306F4(WiFiPlazaPlayerObjects *objects);
+void ov45_02230700(WiFiPlazaPlayerObjects *objects, int alpha);
+WiFiPlazaPlayerObject *ov45_0223070C(WiFiPlazaPlayerObjects *objects, UnkStruct_ov42_02228110 *player);
+void ov45_02230884(WiFiPlazaPlayerObject *object);
+void ov45_0223089C(WiFiPlazaPlayerObject *object, u32 mode);
+void ov45_022308B0(WiFiPlazaPlayerObject *object, u32 lightFlags);
+u32 ov45_022308B8(WiFiPlazaPlayerObject *object);
+void ov45_022308C0(WiFiPlazaPlayerObject *object, const UnkStruct_ov44_02232914 *gridPos);
+void ov45_022308E4(WiFiPlazaPlayerObject *object, const VecFx32 *position);
+void ov45_02230908(WiFiPlazaPlayerObject *object, VecFx32 *position);
+void ov45_02230920(WiFiPlazaPlayerObject *object, u32 sequence);
+void ov45_0223093C(WiFiPlazaPlayerObject *object, u32 effect);
+void ov45_02230968(WiFiPlazaPlayerObject *object);
+void ov45_02230974(WiFiPlazaPlayerObject *object, u8 step);
+void ov45_02230978(WiFiPlazaPlayerObject *object, int visible);
+u32 ov45_02230994(WiFiPlazaPlayerObject *object);
+const WiFiPlazaSpriteConfig *ov45_0223099C(int spriteId);
+u32 ov45_022309C4(int standing, u32 sequence);
+u32 ov45_022309D0(u32 divisor, u16 value, u32 factor);
+void ov45_022309E8(WiFiPlazaObjectModel *model, NARC *narc, int fileId, enum HeapID heapID);
+void ov45_02230A44(WiFiPlazaObjectModel *model);
+void ov45_02230A4C(WiFiPlazaObjectModel *model, int alpha);
+int ov45_02230A58(WiFiPlazaObjectModel *model);
+void ov45_02230A5C(ModelResource *resource, ModelInstance *instance);
+WiFiPlazaPlayerObject *ov45_02230A6C(WiFiPlazaPlayerObjects *objects);
+BOOL ov45_02230AA4(WiFiPlazaPlayerObject *object);
+void ov45_02230AB4(WiFiPlazaPlayerObject *object);
+void ov45_02230AC0(WiFiPlazaPlayerObject *object);
+void ov45_02230ACC(WiFiPlazaPlayerObject *object);
+void ov45_02230B64(WiFiPlazaPlayerObject *object);
+void ov45_02230B8C(WiFiPlazaPlayerObject *object);
+void ov45_02230BFC(WiFiPlazaPlayerObject *object);
+void ov45_02230C40(WiFiPlazaPlayerObject *object);
+void ov45_02230CB0(WiFiPlazaPlayerObject *object);
+void ov45_02230CD8(WiFiPlazaPlayerObject *object);
+void ov45_02230D20(WiFiPlazaPlayerObject *object);
+void ov45_02230D5C(WiFiPlazaPlayerObject *object);
+BOOL ov45_02230DC4(u32 action);
+void ov45_02230DF4(WiFiPlazaPlayerObject *object);
+void ov45_02230E28(WiFiPlazaPlayerObject *object);
+void ov45_02230E64(void *sprite, WiFiPlazaPlayerObject *object);
+
 // data (asm)
 extern const WiFiPlazaTimerPhase _02254A28[5];
 extern const u8 ov45_02254BB4[];
@@ -980,14 +1132,6 @@ extern const s32 ov45_02254A3C[9];
 extern void (*const ov45_02254A60[9])(WiFiPlazaWork *work, WiFiPlazaLobbyMessage *msg);
 
 // defined in the other overlay 45 files
-void ov45_02230394(int result, void *arg);
-u32 ov45_022303BC(WiFiPlazaLobbyClientUnk1B4 *unk, int bit);
-void ov45_022303E4(WiFiPlazaLobbyClientUnk6A0 *unk, int count, enum HeapID heapID);
-void ov45_022303FC(WiFiPlazaLobbyClientUnk6A0 *unk);
-int ov45_02230434(WiFiPlazaLobbyClientUnk6A0 *unk, int id);
-int ov45_0223045C(WiFiPlazaLobbyClientUnk6A0 *unk, int id);
-void ov45_0223040C(WiFiPlazaLobbyClientUnk6A0 *unk, const void *data, u32 size);
-void ov45_0223048C(u32 *a0, const void *data);
 // lobby library
 int ov45_02232170(WiFiPlazaLobbyClientUnk1B4 *data, u32 *size);
 int ov45_022322A4(int a0, int a1, const char *key, const void *data, u32 size);
@@ -1019,7 +1163,39 @@ void ov45_022320C4(void *a0);
 extern const WiFiPlazaAvatarEntry ov45_02254A84[16];
 extern u8 ov45_02254AC4[];
 
+extern const u8 ov45_02254C34[4];   // sprite directions of effect ov45_02230CD8
+extern const u16 ov45_02254C38[2];  // sprite sequence files
+extern const VecFx32 ov45_02254C3C; // sprite scale
+extern WiFiPlazaSpriteConfig ov45_02254C48[20];
+extern const u8 ov45_02254C98[];
+extern void (*ov45_02254F1C[3])(WiFiPlazaPlayerObject *object);      // effects
+extern void (*const ov45_02254F28[])(WiFiPlazaPlayerObject *object); // per player action
+
 // defined in other overlays / the ARM9 static part
+void WiFiPlazaMap_PosToVecFx32(const s16 *gridPos, s32 *position);
+void WiFiPlazaMap_LoadModelFile(NNSG3dResFileHeader **file, NARC *narc, int fileId, enum HeapID heapID);
+BOOL ov45_02230E78(void *sprite);
+// billboards
+void *Billboard_Create(WiFiPlazaBillboardParams *params);
+void Billboard_Delete(void *billboards);
+void *BillboardObject_Create(WiFiPlazaBillboardCreateParams *params);
+void BillboardObject_Delete(void *sprite);
+void BillboardObject_SetCallback(void *sprite, void (*callback)(void *sprite, WiFiPlazaPlayerObject *object), WiFiPlazaPlayerObject *object);
+void BillboardObject_SetPosition(void *sprite, const VecFx32 *position);
+const VecFx32 *BillboardObject_GetPosition(void *sprite);
+void BillboardObject_SetSequence(void *sprite, u32 sequence);
+void BillboardObject_SetSequenceFrame(void *sprite, fx32 frame);
+void BillboardObject_AdvanceFrame(void *sprite, fx32 frames);
+u8 BillboardObject_GetSequence(void *sprite);
+u32 BillboardObject_GetSequenceFrame(void *sprite);
+void *BillboardObject_GetModelNoCast(void *sprite);
+void BillboardGfxSequence_Init(const void *data, WiFiPlazaBillboardSequence *sequence);
+void BillboardResource_Init(WiFiPlazaBillboardResource *resource, void *modelFile, NNSG3dResTex *texture, const void *ranges, WiFiPlazaBillboardSequence *sequence);
+void BillboardResource_InitWithKeys(WiFiPlazaBillboardResource *resource, void *modelFile, NNSG3dResTex *texture, const void *ranges, WiFiPlazaBillboardSequence *sequence, NNSG3dTexKey texKey, NNSG3dTexKey tex4x4Key, NNSG3dPlttKey plttKey);
+u32 NNS_G3dMdlGetMdlLightEnableFlag(const NNSG3dResMdl *pResMdl, u32 matID);
+void NNS_G3dMdlSetMdlLightEnableFlagAll(NNSG3dResMdl *pResMdl, u32 light);
+void NNS_G3dMdlSetMdlPolygonIDAll(NNSG3dResMdl *pResMdl, u32 polygonID);
+void NNS_G3dMdlSetMdlAlphaAll(NNSG3dResMdl *pResMdl, u32 alpha);
 void *Save_PlazaSurvey_Get(SaveData *save);
 void PlazaSurvey_SetSurveyId(void *a0, u32 a1);
 void PlazaSurvey_SetAnswer(void *a0, u32 a1);

@@ -3,6 +3,7 @@
 #include "frontier/frontier.h"
 #include "frontier/frontier_map.h"
 #include "frontier/frontier_script_context.h"
+#include "frontier/frontier_script_ui.h"
 #include "frontier/frontier_system.h"
 
 #include "communication_player_state.h"
@@ -30,24 +31,6 @@
 #define FRONTIER_ID_PLAYER    0xEEEE
 #define FRONTIER_ID_LINK_MONS 0xEEEF
 
-// Text options of a message (speed, auto scroll, font).
-typedef struct FrontierMessageParams {
-    u8 speed;
-    u8 autoScroll;
-    u8 font;
-    u8 unk_03;
-} FrontierMessageParams;
-
-// Work of a map object's movement task (FrtCmd_040).
-typedef struct FrontierMovementTask {
-    u8 filler_00[4];
-    u16 id;                    // 0x04
-    u8 *runningCount;          // 0x08, the frontier system's count of running movements
-    const u8 *script;          // 0x0C
-    void *unk_10;              // 0x10, the map's unk30
-    FrontierMapObject *object; // 0x14
-} FrontierMovementTask;
-
 typedef UnkStruct_ov42_02228110 *(*FrontierMapGetObjectFunc)(UnkStruct_ov42_022280A8 *objectManager, u16 id);
 
 // Result of the comparison commands (0: less, 1: equal, 2: greater) x the condition byte of a jump/call.
@@ -58,16 +41,6 @@ void *Frontier_GetMap(void *frontierWork);
 void Frontier_RequestExit(void *frontierWork);
 void Frontier_ChangeMode(void *frontierWork, u16 mode, u16 taskId);
 u16 ov80_0222A7EC(PlayerProfile *profile);
-void FrontierSystem_PrintMessage(FrontierSystem *system, MsgData *msgData, u16 msgId, u16 canABSpeedUp, const FrontierMessageParams *params);
-void FrontierSystem_CloseMessageWindow(FrontierSystem *system);
-void *FrontierMenu_New(FrontierSystem *system, u8 x, u8 y, u8 initialSelection, u8 canCancel, u16 *result, MessageFormat *msgFormat, MsgData *msgData);
-void FrontierMenu_AddItem(void *menu, u16 msgId, u16 unk2, u16 value);
-void FrontierMenu_Show(void *menu);
-void *FrontierListMenu_New(FrontierSystem *system, u8 x, u8 y, u8 initialSelection, u8 canCancel, u16 *result, MessageFormat *msgFormat, MsgData *msgData);
-void FrontierListMenu_AddItem(void *menu, u16 msgId, u16 unk2, u16 value);
-void FrontierListMenu_Show(void *menu);
-void FrontierListMenu_Cancel(void *menu);
-void FrontierScript_MovementTask(SysTask *task, FrontierMovementTask *data);
 
 u16 *FrontierScript_ReadVarPtr(FrontierScriptContext *ctx);
 u16 FrontierScript_ReadVar(FrontierScriptContext *ctx);
@@ -652,7 +625,7 @@ void FrontierScript_StartMovement(int id, FrontierMapObject *object, const u8 *s
     FrontierMovementTask *data = Heap_Alloc(heapId, sizeof(FrontierMovementTask));
     MI_CpuFill8(data, 0, sizeof(FrontierMovementTask));
     data->object = object;
-    data->script = script;
+    data->script = (const u16 *)script; // (opcode, count) pairs
     data->unk_10 = unk3;
     data->id = id;
     data->runningCount = runningCount;

@@ -115,27 +115,10 @@
     "src/to65_to65_nitro_unified_residual_42_extra25_run04.o",
     "lib/asm/to65_to65_nitro_unified_residual_44_extra26_anchor.o",
     "lib/asm/op90_to65_to65_nitro_unified_residual_44_extra26_residual_1_anchor.o",
-    "src/op90_to65_to65_nitro_unified_residual_44_extra26_residual_1_r01.o",
-    "src/op90_to65_to65_nitro_unified_residual_44_extra26_residual_1_r02.o",
-    "src/to65_to65_nitro_unified_residual_44_extra26_run01.o",
-    "lib/asm/op90_to65_to65_nitro_unified_residual_44_extra26_residual_2_anchor.o",
-    "src/op90_to65_to65_nitro_unified_residual_44_extra26_residual_2_r01.o",
-    "src/to65_to65_nitro_unified_residual_44_extra26_run02.o",
-    "lib/asm/to90_extra2151_anchor.o",
-    "src/to90_extra2151_run01.o",
-    "src/to65_to65_nitro_unified_residual_44_extra26_run03.o",
-    "lib/asm/op90_to65_to65_nitro_unified_residual_44_extra26_residual_4_anchor.o",
-    "src/op90_to65_to65_nitro_unified_residual_44_extra26_residual_4_r01.o",
-    "src/to65_to65_nitro_unified_residual_44_extra26_run04.o",
-    "lib/asm/op90_to65_to65_nitro_unified_residual_44_extra26_residual_5_anchor.o",
-    "src/op90_to65_to65_nitro_unified_residual_44_extra26_residual_5_r01.o",
-    "src/to65_to65_nitro_unified_residual_44_extra26_run05.o",
-    "lib/asm/to90_extra2152_anchor.o",
-    "src/to90_extra2152_run01.o",
-    "src/to65_to65_nitro_unified_residual_44_extra26_run06.o",
-    "lib/asm/to90_extra2153_anchor.o",
-    "src/to90_extra2153_run01.o",
-    "src/to90_extra2153_run02.o",
+    "lib/NitroSDK/src/ctrdg/ctrdg_flash_le39fw512.o",
+    "lib/NitroSDK/src/ctrdg/ctrdg_flash_mx29l010.o",
+    "lib/NitroSDK/src/ctrdg/ctrdg_flash_mn63f805mnp.o",
+    "lib/NitroSDK/src/ctrdg/ctrdg_task.o",
     "lib/asm/to65_to65_nitro_unified_residual_46_extra27_anchor.o",
     "lib/asm/to90_extra2154_anchor.o",
     "lib/asm/op90_to90_extra2154_residual_1_anchor.o",
@@ -778,87 +761,19 @@
         "selector": ".text"
       },
       {
-        "path": "src/op90_to65_to65_nitro_unified_residual_44_extra26_residual_1_r01.o",
+        "path": "lib/NitroSDK/src/ctrdg/ctrdg_flash_le39fw512.o",
         "selector": ".text"
       },
       {
-        "path": "src/op90_to65_to65_nitro_unified_residual_44_extra26_residual_1_r02.o",
+        "path": "lib/NitroSDK/src/ctrdg/ctrdg_flash_mx29l010.o",
         "selector": ".text"
       },
       {
-        "path": "src/to65_to65_nitro_unified_residual_44_extra26_run01.o",
+        "path": "lib/NitroSDK/src/ctrdg/ctrdg_flash_mn63f805mnp.o",
         "selector": ".text"
       },
       {
-        "path": "lib/asm/op90_to65_to65_nitro_unified_residual_44_extra26_residual_2_anchor.o",
-        "selector": ".text"
-      },
-      {
-        "path": "src/op90_to65_to65_nitro_unified_residual_44_extra26_residual_2_r01.o",
-        "selector": ".text"
-      },
-      {
-        "path": "src/to65_to65_nitro_unified_residual_44_extra26_run02.o",
-        "selector": ".text"
-      },
-      {
-        "path": "lib/asm/to90_extra2151_anchor.o",
-        "selector": ".text"
-      },
-      {
-        "path": "src/to90_extra2151_run01.o",
-        "selector": ".text"
-      },
-      {
-        "path": "src/to65_to65_nitro_unified_residual_44_extra26_run03.o",
-        "selector": ".text"
-      },
-      {
-        "path": "lib/asm/op90_to65_to65_nitro_unified_residual_44_extra26_residual_4_anchor.o",
-        "selector": ".text"
-      },
-      {
-        "path": "src/op90_to65_to65_nitro_unified_residual_44_extra26_residual_4_r01.o",
-        "selector": ".text"
-      },
-      {
-        "path": "src/to65_to65_nitro_unified_residual_44_extra26_run04.o",
-        "selector": ".text"
-      },
-      {
-        "path": "lib/asm/op90_to65_to65_nitro_unified_residual_44_extra26_residual_5_anchor.o",
-        "selector": ".text"
-      },
-      {
-        "path": "src/op90_to65_to65_nitro_unified_residual_44_extra26_residual_5_r01.o",
-        "selector": ".text"
-      },
-      {
-        "path": "src/to65_to65_nitro_unified_residual_44_extra26_run05.o",
-        "selector": ".text"
-      },
-      {
-        "path": "lib/asm/to90_extra2152_anchor.o",
-        "selector": ".text"
-      },
-      {
-        "path": "src/to90_extra2152_run01.o",
-        "selector": ".text"
-      },
-      {
-        "path": "src/to65_to65_nitro_unified_residual_44_extra26_run06.o",
-        "selector": ".text"
-      },
-      {
-        "path": "lib/asm/to90_extra2153_anchor.o",
-        "selector": ".text"
-      },
-      {
-        "path": "src/to90_extra2153_run01.o",
-        "selector": ".text"
-      },
-      {
-        "path": "src/to90_extra2153_run02.o",
+        "path": "lib/NitroSDK/src/ctrdg/ctrdg_task.o",
         "selector": ".text"
       },
       {

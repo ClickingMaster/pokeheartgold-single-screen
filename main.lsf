@@ -1334,27 +1334,10 @@ Object lib/NitroSystem/src/g3d_cgtool_xsi_texmtx_t.o
     Object src/to65_to65_nitro_unified_residual_42_extra25_run04.o
     Object lib/asm/to65_to65_nitro_unified_residual_44_extra26_anchor.o
     Object lib/asm/op90_to65_to65_nitro_unified_residual_44_extra26_residual_1_anchor.o
-    Object src/op90_to65_to65_nitro_unified_residual_44_extra26_residual_1_r01.o
-    Object src/op90_to65_to65_nitro_unified_residual_44_extra26_residual_1_r02.o
-    Object src/to65_to65_nitro_unified_residual_44_extra26_run01.o
-    Object lib/asm/op90_to65_to65_nitro_unified_residual_44_extra26_residual_2_anchor.o
-    Object src/op90_to65_to65_nitro_unified_residual_44_extra26_residual_2_r01.o
-    Object src/to65_to65_nitro_unified_residual_44_extra26_run02.o
-    Object lib/asm/to90_extra2151_anchor.o
-    Object src/to90_extra2151_run01.o
-    Object src/to65_to65_nitro_unified_residual_44_extra26_run03.o
-    Object lib/asm/op90_to65_to65_nitro_unified_residual_44_extra26_residual_4_anchor.o
-    Object src/op90_to65_to65_nitro_unified_residual_44_extra26_residual_4_r01.o
-    Object src/to65_to65_nitro_unified_residual_44_extra26_run04.o
-    Object lib/asm/op90_to65_to65_nitro_unified_residual_44_extra26_residual_5_anchor.o
-    Object src/op90_to65_to65_nitro_unified_residual_44_extra26_residual_5_r01.o
-    Object src/to65_to65_nitro_unified_residual_44_extra26_run05.o
-    Object lib/asm/to90_extra2152_anchor.o
-    Object src/to90_extra2152_run01.o
-    Object src/to65_to65_nitro_unified_residual_44_extra26_run06.o
-    Object lib/asm/to90_extra2153_anchor.o
-    Object src/to90_extra2153_run01.o
-    Object src/to90_extra2153_run02.o
+    Object lib/NitroSDK/src/ctrdg/ctrdg_flash_le39fw512.o
+    Object lib/NitroSDK/src/ctrdg/ctrdg_flash_mx29l010.o
+    Object lib/NitroSDK/src/ctrdg/ctrdg_flash_mn63f805mnp.o
+    Object lib/NitroSDK/src/ctrdg/ctrdg_task.o
     Object lib/asm/to65_to65_nitro_unified_residual_46_extra27_anchor.o
     Object lib/asm/to90_extra2154_anchor.o
     Object lib/asm/op90_to90_extra2154_residual_1_anchor.o
@@ -3477,22 +3460,7 @@ Overlay OVY_45
     Object src/wifi_plaza_lobby_players.o
     Object src/wifi_plaza_lobby_events.o
     Object src/wifi_plaza_lobby_matches.o
-    Object src/to45_overlay45_resource_manager_36.o
-    Object src/overlay45_helpers_36.o
-    Object src/overlay45_object_create.o
-    Object src/overlay45_helpers_37.o
-    Object src/to45_overlay45_object_bridge_r38.o
-    Object src/overlay45_helpers_38.o
-    Object src/overlay45_resource_flags_r39.o
-    Object src/overlay45_helpers_39.o
-    Object src/overlay45_model_helpers_r40.o
-    Object src/overlay45_helpers_40.o
-    Object src/to45_overlay45_model_pool_r41.o
-    Object src/overlay45_helpers_41.o
-    Object src/to80_extra1879_run01.o
-    Object src/overlay45_entry_render_run1.o
-    Object src/to70_overlay_45_thumb_residual_42_gap_extra967_run01.o
-    Object src/overlay45_entry_render_run2.o
+    Object src/wifi_plaza_player_objects.o
     Object asm/to80_extra1528_anchor.o
     Object src/to80_extra1528_run01.o
     Object src/op90_to80_extra1528_residual_1_r01.o
@@ -4363,7 +4331,7 @@ Overlay OVY_80
     Object src/frontier/frontier_cmd_arcade.o
     Object src/frontier/battle_arcade_data.o
     Object asm/battle_arcade_data_tables.o
-    Object src/overlay_80_02235390.o
+    Object src/frontier/frontier_cmd_sound.o
     Object src/frontier/frontier_script_commands_misc.o
     Object src/frontier/frontier_save_data_helpers.o
     Object src/ov80_35900_partial_1.o
