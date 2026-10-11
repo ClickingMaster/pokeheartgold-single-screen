@@ -337,8 +337,8 @@
 .public ov40_02244920
 .public ov40_02244B3C
 .public ov40_02244B70
-.public ov41_0224B530
-.public ov41_0224B554
-.public ov41_0224B57C
-.public ov41_0224B5C8
-.public ov41_0224B5D0
+.public AccessoryPortrait_Create
+.public AccessoryPortrait_Draw
+.public AccessoryPortrait_Destroy
+.public AccessoryPortrait_VBlank
+.public AccessoryPortrait_SetMonVisible

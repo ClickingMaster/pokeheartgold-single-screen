@@ -12,7 +12,7 @@
 .public GetMoveMaxPP
 .public Party_GetCount
 .public Party_GetMonByIndex
-.public sub_02074F9C
+.public BattleLink_QueueSendData
 .public MIi_CpuClearFast
 .public MI_CpuFill8
 .public _s32_div_f

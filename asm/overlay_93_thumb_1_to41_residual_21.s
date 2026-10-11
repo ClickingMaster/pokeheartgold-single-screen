@@ -33,7 +33,7 @@ _022629F8:
 	.word WobbuffetPop_Init, WobbuffetPop_Main, WobbuffetPop_Exit, 0xFFFFFFFF
 
 ov93_02262A08: ; 0x02262A08
-	.word ov93_02262598, ov93_022625BC, ov93_022626E8, 0xFFFFFFFF
+	.word WobbuffetPopPlazaScreen_Init, WobbuffetPopPlazaScreen_Main, WobbuffetPopPlazaScreen_Exit, 0xFFFFFFFF
 
 ov93_02262A18: ; 0x02262A18
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00

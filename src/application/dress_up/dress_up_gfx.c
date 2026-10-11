@@ -37,16 +37,16 @@ typedef struct DressUpSignedPoint {
     s16 y;
 } DressUpSignedPoint;
 
-extern const GraphicsManagerTemplate ov41_0224BFB4;
-extern const ObjCharTransferTemplate ov41_0224BFA4;
-extern const BgTemplate ov41_0224BFC4;
-extern const BgTemplate ov41_0224BFE0;
-extern const BgTemplate ov41_0224BFFC;
-extern const BgTemplate ov41_0224C018;
-extern const BgTemplate ov41_0224C034;
-extern const BgTemplate ov41_0224C050;
-extern const GraphicsBanks ov41_0224C06C;
-extern const GraphicsModes _0224BF94;
+extern const GraphicsManagerTemplate sDressUpGraphicsManagerTemplate;
+extern const ObjCharTransferTemplate sDressUpObjCharTransferTemplate;
+extern const BgTemplate sDressUpBgTemplate_Sub0;
+extern const BgTemplate sDressUpBgTemplate_Main1;
+extern const BgTemplate sDressUpBgTemplate_Main2;
+extern const BgTemplate sAccessoryPortraitBgTemplate_Main2;
+extern const BgTemplate sDressUpBgTemplate_Main3;
+extern const BgTemplate sDressUpBgTemplate_Sub1;
+extern const GraphicsBanks sDressUpGraphicsBanks;
+extern const GraphicsModes sDressUpGraphicsModes;
 
 DressUpSlotList *DressUpGfx_CreateSlotList(int count, enum HeapID heapID) {
     DressUpSlotList *list = Heap_Alloc(heapID, sizeof(DressUpSlotList));
@@ -238,7 +238,7 @@ void DressUpGfx_ResetDisplay(void) {
 }
 
 void DressUp_InitGfxCore(DressUpGfx *gfx) {
-    GraphicsManagerTemplate template = ov41_0224BFB4;
+    GraphicsManagerTemplate template = sDressUpGraphicsManagerTemplate;
 
     gfx->narc = NARC_New(NARC_a_0_2_6, HEAP_ID_14);
     DressUpGfx_CreateGraphicsManager(gfx, &template);
@@ -427,7 +427,7 @@ void AccessoryPortrait_InitBg(DressUpGfx *gfx, BgConfig *bgConfig, enum HeapID h
     BgTemplate template;
 
     gfx->bgConfig = bgConfig;
-    template = ov41_0224C018;
+    template = sAccessoryPortraitBgTemplate_Main2;
     FreeBgTilemapBuffer(gfx->bgConfig, GF_BG_LYR_MAIN_2);
     InitBgFromTemplate(gfx->bgConfig, GF_BG_LYR_MAIN_2, &template, GF_BG_TYPE_TEXT);
     BG_ClearCharDataRange(GF_BG_LYR_MAIN_2, 0x20, 0, heapID);
@@ -478,7 +478,7 @@ void AccessoryPortrait_DrawTransformed(DressUpGfx *gfx, int x, int y, u16 angle,
     reg_G3_MTX_POP = 1;
 }
 
-void AccessoryPortrait_InitAppGfx(DressUpGfx *gfx) {
+void AccessoryPortrait_InitAppGfx(DressUpGfx *gfx, enum HeapID heapID) {
     gfx->narc = NARC_New(NARC_a_0_2_6, HEAP_ID_14);
     DressUpGfx_InitSpriteSystem(gfx);
     gfx->bgConfig = BgConfig_Alloc(HEAP_ID_14);
@@ -502,7 +502,7 @@ void AccessoryPortrait_RenderSprites(DressUpGfx *gfx) {
 }
 
 void DressUpGfx_SetVramBanks(void) {
-    GraphicsBanks banks = ov41_0224C06C;
+    GraphicsBanks banks = sDressUpGraphicsBanks;
     GfGfx_SetBanks(&banks);
 }
 
@@ -523,7 +523,7 @@ void DressUpGfx_Init3D(void) {
 }
 
 void DressUpGfx_Init2DModes(void) {
-    GraphicsModes modes = _0224BF94;
+    GraphicsModes modes = sDressUpGraphicsModes;
     SetBothScreensModesAndDisable(&modes);
     reg_GX_DISPCNT = (reg_GX_DISPCNT & 0xFFCFFFEF) | GX_PLANEMASK_OBJ;
     NNS_G2dInitOamManagerModule();
@@ -614,31 +614,31 @@ void DressUpGfx_AddPalettes(DressUpGfx *gfx, GraphicsPaletteTemplate *templates,
 
 void DressUpGfx_InitBgs(DressUpGfx *gfx) {
     {
-        BgTemplate template = ov41_0224BFE0;
+        BgTemplate template = sDressUpBgTemplate_Main1;
         InitBgFromTemplate(gfx->bgConfig, GF_BG_LYR_MAIN_1, &template, GF_BG_TYPE_TEXT);
         BG_ClearCharDataRange(GF_BG_LYR_MAIN_1, 0x20, 0, HEAP_ID_14);
         BgClearTilemapBufferAndCommit(gfx->bgConfig, GF_BG_LYR_MAIN_1);
     }
     {
-        BgTemplate template = ov41_0224BFFC;
+        BgTemplate template = sDressUpBgTemplate_Main2;
         InitBgFromTemplate(gfx->bgConfig, GF_BG_LYR_MAIN_2, &template, GF_BG_TYPE_TEXT);
         BG_ClearCharDataRange(GF_BG_LYR_MAIN_2, 0x20, 0, HEAP_ID_14);
         BgClearTilemapBufferAndCommit(gfx->bgConfig, GF_BG_LYR_MAIN_2);
     }
     {
-        BgTemplate template = ov41_0224C034;
+        BgTemplate template = sDressUpBgTemplate_Main3;
         InitBgFromTemplate(gfx->bgConfig, GF_BG_LYR_MAIN_3, &template, GF_BG_TYPE_TEXT);
         BG_ClearCharDataRange(GF_BG_LYR_MAIN_3, 0x20, 0, HEAP_ID_14);
         BgClearTilemapBufferAndCommit(gfx->bgConfig, GF_BG_LYR_MAIN_3);
     }
     {
-        BgTemplate template = ov41_0224BFC4;
+        BgTemplate template = sDressUpBgTemplate_Sub0;
         InitBgFromTemplate(gfx->bgConfig, GF_BG_LYR_SUB_0, &template, GF_BG_TYPE_TEXT);
         BG_ClearCharDataRange(GF_BG_LYR_SUB_0, 0x20, 0, HEAP_ID_14);
         BgClearTilemapBufferAndCommit(gfx->bgConfig, GF_BG_LYR_SUB_0);
     }
     {
-        BgTemplate template = ov41_0224C050;
+        BgTemplate template = sDressUpBgTemplate_Sub1;
         InitBgFromTemplate(gfx->bgConfig, GF_BG_LYR_SUB_1, &template, GF_BG_TYPE_TEXT);
         BG_ClearCharDataRange(GF_BG_LYR_SUB_1, 0x20, 0, HEAP_ID_14);
         BgClearTilemapBufferAndCommit(gfx->bgConfig, GF_BG_LYR_SUB_1);
@@ -667,7 +667,7 @@ void DressUp_DestroyCharRawResMan(DressUpGfx *gfx) {
 }
 
 void DressUpGfx_InitSpriteSystem(DressUpGfx *gfx) {
-    ObjCharTransferTemplate template = ov41_0224BFA4;
+    ObjCharTransferTemplate template = sDressUpObjCharTransferTemplate;
 
     ObjCharTransfer_InitEx(&template, GX_OBJVRAMMODE_CHAR_1D_32K, GX_OBJVRAMMODE_CHAR_1D_32K);
     ObjPlttTransfer_Init(5, HEAP_ID_14);

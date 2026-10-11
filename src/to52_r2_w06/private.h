@@ -52,7 +52,7 @@ void ov40_0222DAA8(void *);
 void ov40_0222D88C(void *);
 void ov40_0222FB90(void *, int);
 int ov40_0222FBB4(void *);
-void ov41_0224B57C(void);
+void AccessoryPortrait_Destroy(void);
 void ov40_0222BC54(void *);
 void ov40_02235994(void);
 void ov40_0222DD08(void *);

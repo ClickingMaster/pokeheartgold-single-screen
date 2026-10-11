@@ -27,7 +27,7 @@ int ov40_02235434(void *p) {
         if (ov40_0222DA00(w, (u8 *)w + 4, 1, 1)) {
             if (S32(w, 0xC) == 0) {
                 if (PTR(w, 0x228) != NULL) {
-                    ov41_0224B57C();
+                    AccessoryPortrait_Destroy();
                     ov40_0222BC54(p);
                     SetBgPriority(2, 0);
                     PTR(w, 0x228) = NULL;
@@ -51,8 +51,8 @@ int ov40_02235434(void *p) {
             ov40_022307DC(p, 0x50, 3);
         } else {
             GlobalTerminalNet_UnpackDressUpPhoto((u8 *)PTR((u8 *)w + S32(w, 0x234) * 4, 0x23C) + 0x80, PTR(w, 0x238));
-            PTR(w, 0x228) = ov41_0224B530((u8 *)w + 0x218, PTR(w, 0x238));
-            ov41_0224B5D0(PTR(w, 0x228), 0);
+            PTR(w, 0x228) = AccessoryPortrait_Create((u8 *)w + 0x218, PTR(w, 0x238));
+            AccessoryPortrait_SetMonVisible(PTR(w, 0x228), 0);
             ov40_02235940();
             ov40_022307DC(p, 0x23, 3);
             GfGfx_EngineBTogglePlanes(8, 1);
@@ -77,7 +77,7 @@ int ov40_02235434(void *p) {
                 GfGfx_EngineATogglePlanes(4, 1);
             } else {
                 ov40_02235C7C(p, S32(w, 0x234));
-                ov41_0224B5D0(PTR(w, 0x228), 1);
+                AccessoryPortrait_SetMonVisible(PTR(w, 0x228), 1);
                 GfGfx_EngineATogglePlanes(4, 1);
                 GfGfx_EngineATogglePlanes(1, 1);
             }
@@ -114,7 +114,7 @@ int ov40_02235644(void *p) {
         if (ov40_0222DA00(w, (u8 *)w + 4, 1, 1)) {
             if (S32(w, 0xC) == 0) {
                 if (PTR(w, 0x228) != NULL) {
-                    ov41_0224B57C();
+                    AccessoryPortrait_Destroy();
                     ov40_0222BC54(p);
                     SetBgPriority(2, 0);
                     PTR(w, 0x228) = NULL;
@@ -132,8 +132,8 @@ int ov40_02235644(void *p) {
         ov40_02230964(p, 1);
         if (S32(w, 0xC) == 0) {
             GlobalTerminalNet_UnpackDressUpPhoto((u8 *)PTR((u8 *)w + S32(w, 0x234) * 4, 0x23C) + 0x80, PTR(w, 0x238));
-            PTR(w, 0x228) = ov41_0224B530((u8 *)w + 0x218, PTR(w, 0x238));
-            ov41_0224B5D0(PTR(w, 0x228), 0);
+            PTR(w, 0x228) = AccessoryPortrait_Create((u8 *)w + 0x218, PTR(w, 0x238));
+            AccessoryPortrait_SetMonVisible(PTR(w, 0x228), 0);
             ov40_02235940();
             ov40_022307DC(p, 0x23, 3);
             GfGfx_EngineBTogglePlanes(8, 1);
@@ -162,7 +162,7 @@ int ov40_02235644(void *p) {
         if (ov40_0222DA00(w, (u8 *)w + 4, 0, 1)) {
             if (S32(w, 0xC) == 0) {
                 ov40_02235C7C(p, S32(w, 0x234));
-                ov41_0224B5D0(PTR(w, 0x228), 1);
+                AccessoryPortrait_SetMonVisible(PTR(w, 0x228), 1);
                 GfGfx_EngineATogglePlanes(4, 1);
                 GfGfx_EngineATogglePlanes(1, 1);
             } else {

@@ -52,7 +52,7 @@ u32 ov40_0223480C(void *p) {
             if (ov40_0222DA84((u8 *)work + 8, 0) != 0) {
                 ov40_02230964(p, 1);
                 if (PTR(work, 0x228) != NULL) {
-                    ov41_0224B57C(PTR(work, 0x228));
+                    AccessoryPortrait_Destroy(PTR(work, 0x228));
                     ov40_0222BC54(p);
                     SetBgPriority(2, 0);
                     ov40_02235994();

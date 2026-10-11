@@ -159,8 +159,8 @@ int ov40_02234330(void *p) {
         ov40_02230964(p, 1);
         PTR(inner, 0x22C) = Save_FashionData_GetEntry(Save_FashionData_Get(PTR(p, 0x830)), 0);
         if (PTR(inner, 0x228) == NULL) {
-            PTR(inner, 0x228) = ov41_0224B530((u8 *)inner + 0x218, PTR(inner, 0x22C));
-            ov41_0224B5D0(PTR(inner, 0x228), 1);
+            PTR(inner, 0x228) = AccessoryPortrait_Create((u8 *)inner + 0x218, PTR(inner, 0x22C));
+            AccessoryPortrait_SetMonVisible(PTR(inner, 0x228), 1);
         }
         ov40_02230964(p, 0);
         GfGfx_EngineATogglePlanes(4, 0);
@@ -191,7 +191,7 @@ int ov40_02234330(void *p) {
     }
     if (PTR(inner, 0x228) != NULL) {
         Thunk_G3X_Reset();
-        ov41_0224B554(PTR(inner, 0x228));
+        AccessoryPortrait_Draw(PTR(inner, 0x228));
         RequestSwap3DBuffers(0, 0);
     }
     return 0;

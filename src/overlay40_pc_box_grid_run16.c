@@ -26,7 +26,7 @@ void ov40_022358C0(void *p) {
 void ov40_02235900(void *p) {
     volatile u32 *a = (volatile u32 *)0x027E0000;
     if (PTR(PTR(p, 0x860), 0x228) != NULL) {
-        ov41_0224B5C8(PTR(PTR(p, 0x860), 0x228));
+        AccessoryPortrait_VBlank(PTR(PTR(p, 0x860), 0x228));
     }
     GF_RunVramTransferTasks();
     PaletteData_PushTransparentBuffers(PTR(p, 0x28));

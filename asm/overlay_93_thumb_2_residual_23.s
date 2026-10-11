@@ -4,51 +4,51 @@
 
 	.text
 	.public _02262C6C
-	.public ov93_0225FBF0
-	.public ov93_0225FCA4
-	.public ov93_0225FD8C
-	.public ov93_0225FE08
-	.public ov93_0225FEC4
-	.public ov93_0225FF1C
-	.public ov93_0225FFF8
-	.public ov93_02260080
-	.public ov93_0226027C
-	.public ov93_02260314
-	.public ov93_02260608
-	.public ov93_02260660
-	.public ov93_02260908
-	.public ov93_02260984
-	.public ov93_02260A8C
-	.public ov93_02260AD8
-	.public ov93_02260BB0
-	.public ov93_02260BF0
-	.public ov93_02260CF8
-	.public ov93_02260E1C
-	.public ov93_02260F3C
-	.public ov93_02260FB8
-	.public ov93_022610B0
-	.public ov93_02261164
-	.public ov93_02261310
-	.public ov93_02261354
-	.public ov93_02261554
-	.public ov93_02261744
-	.public ov93_022618C4
-	.public ov93_02261BBC
-	.public ov93_02261C58
-	.public ov93_02261D3C
-	.public ov93_02261EB8
-	.public ov93_02261FC8
-	.public ov93_02262034
-	.public ov93_02262098
-	.public ov93_022620D4
-	.public ov93_02262130
-	.public ov93_02262250
-	.public ov93_02262374
-	.public ov93_0226249C
-	.public ov93_02262540
-	.public ov93_022625BC
-	.public ov93_02262760
-	.public ov93_022627C0
+	.public WobbuffetPopInflation_Start
+	.public WobbuffetPopInflation_UpdateBg
+	.public WobbuffetPopInflation_CalcScale
+	.public WobbuffetPopInflation_AddAir
+	.public WobbuffetPop_LaunchPuff
+	.public WobbuffetPopPuff_Init
+	.public WobbuffetPop_UpdatePuffs
+	.public WobbuffetPopPuff_Move
+	.public WobbuffetPop_CreatePuffSprite
+	.public WobbuffetPopConfetti_Create
+	.public WobbuffetPop_FreeConfetti
+	.public WobbuffetPop_UpdateConfetti
+	.public WobbuffetPop_PopBalloon
+	.public WobbuffetPop_CreateBalloonIconSprite
+	.public WobbuffetPopBalloonIcon_Slide
+	.public WobbuffetPopBalloonIcon_Update
+	.public WobbuffetPop_SetupThreePlayerSubBg
+	.public WobbuffetPop_SetPlayerSubBgColors
+	.public WobbuffetPop_SetPlayerSubObjPalettes
+	.public WobbuffetPop_SetPlayerSubObjColors
+	.public WobbuffetPop_QueuePump
+	.public WobbuffetPop_SetPumpBonus
+	.public WobbuffetPop_CreateSeatSprites
+	.public WobbuffetPopBonusRing_CreateSprites
+	.public WobbuffetPopBonusRing_Init
+	.public WobbuffetPopBonusRing_Update
+	.public WobbuffetPopBonusTarget_Enter
+	.public WobbuffetPopBonusTarget_Walk
+	.public WobbuffetPopBonusTarget_Hit
+	.public WobbuffetPop_CreateBonusPopupSprites
+	.public WobbuffetPop_ShowBonusPopup
+	.public WobbuffetPopBonusPopup_Update
+	.public WobbuffetPop_NewTextObj
+	.public WobbuffetPopScoreDisplay_PlaceDigits
+	.public WobbuffetPopScoreDisplay_Update
+	.public WobbuffetPopScoreDisplay_SetScore
+	.public WobbuffetPopScoreDisplay_StartRoll
+	.public WobbuffetPopScoreDisplay_RollDigits
+	.public WobbuffetPop_CreateScoreLabels
+	.public WobbuffetPop_RunDemo
+	.public WobbuffetPopDust_Start
+	.public WobbuffetPopDust_Update
+	.public WobbuffetPopPlazaScreen_Main
+	.public WobbuffetPop_RecvPlayerValue
+	.public WobbuffetPop_RunEvent
 	.public ov93_02262C72
 	.public ov93_02262C7A
 	.public ov93_02262C82
@@ -83,61 +83,61 @@
 	.public ov93_02263010
 	.public ov93_022630E4
 	.public ov93_02263114
-	.public ov93_0225FC8C
-	.public ov93_0225FDF4
-	.public ov93_0225FE5C
-	.public ov93_0225FE80
-	.public ov93_0225FEAC
-	.public ov93_022602E4
-	.public ov93_022609E0
-	.public ov93_02260A14
-	.public ov93_02260A30
-	.public ov93_02260A58
-	.public ov93_02260B70
-	.public ov93_02260B84
-	.public ov93_02260F14
-	.public ov93_02260F84
-	.public ov93_0226114C
-	.public ov93_022612E0
-	.public ov93_022614F4
-	.public ov93_02261528
-	.public ov93_02261538
-	.public ov93_0226154C
-	.public ov93_02261C3C
-	.public ov93_02261D1C
-	.public ov93_02261FB0
-	.public ov93_02262108
-	.public ov93_02262230
-	.public ov93_02262310
-	.public ov93_02262338
-	.public ov93_02262344
-	.public ov93_02262368
-	.public ov93_02262444
-	.public ov93_02262484
-	.public ov93_02262598
-	.public ov93_022626E8
-	.public ov93_022626FC
-	.public ov93_02262710
-	.public ov93_02262714
-	.public ov93_02262718
-	.public ov93_02262724
-	.public ov93_0226273C
-	.public ov93_02262748
-	.public ov93_022627A4
-	.public ov93_022627E8
-	.public ov93_02262814
-	.public ov93_02262830
-	.public ov93_02262860
-	.public ov93_02262884
-	.public ov93_022628B8
-	.public ov93_022628F4
-	.public ov93_02262920
-	.public ov93_02262934
-	.public ov93_02262960
-	.public ov93_0226297C
-	.public ov93_022629A8
-	.public ov93_022629B8
-	.public ov93_022629E4
+	.public WobbuffetPopInflation_Stop
+	.public WobbuffetPop_GetBalloonSize
+	.public WobbuffetPopInflation_StepAir
+	.public WobbuffetPop_UpdateInflation
+	.public WobbuffetPop_GetInflationPercent
+	.public WobbuffetPop_FreePuffs
+	.public WobbuffetPop_InitBalloonIcons
+	.public WobbuffetPop_FreeBalloonIcons
+	.public WobbuffetPop_UpdateBalloonIcons
+	.public WobbuffetPopBalloonIcon_Init
+	.public WobbuffetPopBalloonIcon_GetSize
+	.public WobbuffetPop_PopBalloonIcon
+	.public WobbuffetPop_InitPump
+	.public WobbuffetPop_DequeuePump
+	.public WobbuffetPop_FreeSeatSprites
+	.public WobbuffetPopBonusRing_FreeSprites
+	.public WobbuffetPop_FindBonusTargetAtFront
+	.public WobbuffetPopBonusTarget_SetState
+	.public WobbuffetPopBonusTarget_Run
+	.public WobbuffetPopBonusTarget_Idle
+	.public WobbuffetPop_FreeBonusPopupSprites
+	.public WobbuffetPop_UpdateBonusPopups
+	.public WobbuffetPopTextObj_Free
+	.public WobbuffetPopScoreDisplay_IsSettled
+	.public WobbuffetPop_CreateScoreFrameSprite
+	.public WobbuffetPop_FreeScoreLabels
+	.public WobbuffetPop_DeleteScoreFrameSprite
+	.public WobbuffetPop_CreateDemoStylusSprite
+	.public WobbuffetPop_DeleteDemoStylusSprite
+	.public WobbuffetPopDust_Create
+	.public WobbuffetPopDust_Free
+	.public WobbuffetPopPlazaScreen_Init
+	.public WobbuffetPopPlazaScreen_Exit
+	.public WobbuffetPop_RegisterCommands
+	.public WobbuffetPop_GetEventCommandSize
+	.public WobbuffetPop_GetPlayerValueCommandSize
+	.public WobbuffetPop_RecvEvent
+	.public WobbuffetPop_SendEvent
+	.public WobbuffetPop_RecvFinished
+	.public WobbuffetPop_SendFinished
+	.public WobbuffetPop_SendPlayerValue
+	.public WobbuffetPop_QueuePumpEvent
+	.public WobbuffetPop_HandlePumpEvent
+	.public WobbuffetPop_QueuePopEvent
+	.public WobbuffetPop_HandlePopEvent
+	.public WobbuffetPop_QueueNewBalloonEvent
+	.public WobbuffetPop_HandleNewBalloonEvent
+	.public WobbuffetPop_QueueCountdownEvent
+	.public WobbuffetPop_HandleCountdownEvent
+	.public WobbuffetPop_QueueFinishEvent
+	.public WobbuffetPop_HandleFinishEvent
+	.public WobbuffetPop_QueueSyncEvent
+	.public WobbuffetPop_HandleSyncEvent
+	.public WobbuffetPop_QueueDemoEvent
+	.public WobbuffetPop_HandleDemoEvent
 	.rodata
 
 _02262C6C:
@@ -159,10 +159,10 @@ ov93_02262C8A: ; 0x02262C8A
 	.byte 0x40, 0x00, 0x00, 0x00
 
 ov93_02262C94: ; 0x02262C94
-	.word ov93_0226154C
-	.word ov93_02261554
-	.word ov93_02261744
-	.word ov93_022618C4
+	.word WobbuffetPopBonusTarget_Idle
+	.word WobbuffetPopBonusTarget_Enter
+	.word WobbuffetPopBonusTarget_Walk
+	.word WobbuffetPopBonusTarget_Hit
 
 ov93_02262CA4: ; 0x02262CA4
 	.byte 0x00, 0x10, 0x00, 0x00, 0x00, 0x18, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00
@@ -316,23 +316,23 @@ ov93_022630E4: ; 0x022630E4
 	.word 0
 	.word sub_020342C0
 	.word 0
-	.word ov93_02262760
-	.word ov93_02262714
+	.word WobbuffetPop_RecvPlayerValue
+	.word WobbuffetPop_GetPlayerValueCommandSize
 	.word 0
-	.word ov93_02262718
-	.word ov93_02262710
+	.word WobbuffetPop_RecvEvent
+	.word WobbuffetPop_GetEventCommandSize
 	.word 0
-	.word ov93_0226273C
+	.word WobbuffetPop_RecvFinished
 	.word sub_020342C0
 	.word 0
 
 ov93_02263114: ; 0x02263114
 	.word 0
-	.word ov93_02262814
-	.word ov93_02262860
-	.word ov93_022628B8
-	.word ov93_02262920
-	.word ov93_02262960
-	.word ov93_022629A8
-	.word ov93_022629E4
+	.word WobbuffetPop_HandlePumpEvent
+	.word WobbuffetPop_HandlePopEvent
+	.word WobbuffetPop_HandleNewBalloonEvent
+	.word WobbuffetPop_HandleCountdownEvent
+	.word WobbuffetPop_HandleFinishEvent
+	.word WobbuffetPop_HandleSyncEvent
+	.word WobbuffetPop_HandleDemoEvent
 	; 0x02263134

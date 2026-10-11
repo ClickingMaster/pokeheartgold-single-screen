@@ -52,8 +52,8 @@ void RequestSwap3DBuffers(int a, int b);
 u64 BattleRecordHeader_GetField(void *summary, int field, int index);
 void sub_020878B8(void *p, s16 x, s16 y);
 BOOL sub_020879E0(void *p, int flag);
-void ov41_0224B554(void *p);
-void ov41_0224B5C8(void *p);
+void AccessoryPortrait_Draw(void *p);
+void AccessoryPortrait_VBlank(void *p);
 
 void ov40_0222BF80(void *p, int value);
 void ov40_0222C474(void *p);
@@ -144,7 +144,7 @@ void ov40_0222DD08(void *);
 void ov40_0222BF64(void *, u32, u32, void *);
 void ov40_0222FB90(void *, u32);
 BOOL ov40_0222FBB4(void *);
-void ov41_0224B57C(void *);
+void AccessoryPortrait_Destroy(void *);
 void FrontierCard_Delete(void *);
 void ov40_02230964(void *, u32);
 

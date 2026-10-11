@@ -253,11 +253,11 @@
 .public DressUp_Exit
 .public DressUpMon_GetPriority
 .public DressUpMon_GetCenterPos
-.public ov41_0224B530
-.public ov41_0224B554
-.public ov41_0224B57C
-.public ov41_0224B5C8
-.public ov41_0224B5D0
+.public AccessoryPortrait_Create
+.public AccessoryPortrait_Draw
+.public AccessoryPortrait_Destroy
+.public AccessoryPortrait_VBlank
+.public AccessoryPortrait_SetMonVisible
 .public AccessoryPortrait_Init
 .public AccessoryPortrait_Main
 .public AccessoryPortrait_Exit

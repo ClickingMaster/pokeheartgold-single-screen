@@ -43,53 +43,6 @@ void sub_0200FC20(u16 a0);
 void WobbuffetPopBalloon_Update(WobbuffetPop *game, WobbuffetPopBalloon *balloon);
 void WobbuffetPopBalloon_Draw(WobbuffetPopBalloon *balloon);
 void WobbuffetPopBalloon_LoadTexture(WobbuffetPopBalloon *balloon);
-int ov93_0225FDF4(int index);
-void ov93_0225FE80(WobbuffetPop *game, BgConfig *bgConfig, void *arg);
-BOOL ov93_0225FEC4(WobbuffetPop *game, const void *request);
-void ov93_0225FFF8(WobbuffetPop *game);
-void ov93_022602E4(WobbuffetPop *game);
-void ov93_02260608(WobbuffetPop *game);
-void ov93_02260660(WobbuffetPop *game);
-void ov93_022609E0(WobbuffetPop *game);
-void ov93_02260A14(WobbuffetPop *game);
-void ov93_02260A30(WobbuffetPop *game);
-void ov93_02260BB0(WobbuffetPop *game);
-void ov93_02260BF0(WobbuffetPop *game);
-void ov93_02260CF8(WobbuffetPop *game);
-void ov93_02260E1C(WobbuffetPop *game);
-void ov93_02260F14(WobbuffetPop *game, u32 balloonIndex, u32 amount, void *dest);
-u32 ov93_02260F3C(WobbuffetPop *game, const void *message);
-void ov93_022610B0(WobbuffetPop *game, void *arg);
-void ov93_0226114C(WobbuffetPop *game, void *arg);
-void ov93_02261164(WobbuffetPop *game, void *arg);
-void ov93_022612E0(WobbuffetPop *game, void *arg);
-void ov93_02261310(WobbuffetPop *game, void *arg);
-void ov93_02261354(WobbuffetPop *game, void *arg);
-void ov93_02261BBC(WobbuffetPop *game, void *arg);
-void ov93_02261C3C(WobbuffetPop *game, void *arg);
-void ov93_02261D1C(WobbuffetPop *game, void *arg);
-void ov93_02261EB8(BgConfig *bgConfig, SpriteManager *spriteManager, FontSystem *fontSystem, void *dest, String *string, int a5, u32 color, int a7, int resId, int x, int y, int a11, int a12, int a13, int a14);
-void ov93_02261FB0(void *record);
-void ov93_02261FC8(void *dest);
-void ov93_02262034(WobbuffetPop *game, void *arg);
-void *ov93_02262230(WobbuffetPop *game);
-void ov93_02262250(WobbuffetPop *game);
-void ov93_02262310(WobbuffetPop *game);
-void ov93_02262338(WobbuffetPop *game, void *arg);
-void *ov93_02262344(WobbuffetPop *game);
-void ov93_02262368(WobbuffetPop *game, void *arg);
-BOOL ov93_02262374(WobbuffetPop *game, void *arg);
-void ov93_022626FC(WobbuffetPop *game);
-BOOL ov93_02262724(WobbuffetPop *game, WobbuffetPopEvent *event);
-BOOL ov93_02262748(WobbuffetPop *game);
-BOOL ov93_022627A4(void);
-BOOL ov93_022627C0(WobbuffetPop *game, WobbuffetPopEvent *event);
-void ov93_02262830(WobbuffetPop *game, u32 balloonIndex, u8 syncId);
-void ov93_02262884(WobbuffetPop *game, int index, int value, u8 syncId);
-void ov93_022628F4(WobbuffetPop *game, u8 syncId);
-void ov93_02262934(WobbuffetPop *game, u8 syncId);
-void ov93_0226297C(WobbuffetPop *game, int a1, u8 syncId);
-void ov93_022629B8(WobbuffetPop *game, u8 syncId);
 
 // Defined in this file.
 BOOL WobbuffetPopApp_CheckConnectionLost(WobbuffetPopApp *app);
@@ -166,23 +119,6 @@ void WobbuffetPopBalloon_SetMaterial(u32 diffuseIsVertexColor, u32 useShininess)
 typedef struct WobbuffetPopModelFiles {
     int files[5];
 } WobbuffetPopModelFiles;
-
-// The pump request a touch produced, as sent to the other players.
-typedef struct WobbuffetPopPumpMessage {
-    u8 id;
-    u8 side;
-    u16 value;
-    u32 payload4;
-    u32 payload8;
-} WobbuffetPopPumpMessage;
-
-typedef union WobbuffetPopMessage {
-    struct {
-        u32 a, b, c, d;
-    } words;
-    WobbuffetPopPumpMessage pump;
-    u8 raw[16];
-} WobbuffetPopMessage;
 
 extern const OverlayManagerTemplate _022629F8;
 extern const OverlayManagerTemplate ov93_02262A08;
@@ -350,7 +286,7 @@ BOOL WobbuffetPop_Init(OverlayManager *man, int *state) {
     HeapExp_FndInitAllocator(&game->allocator, HEAP_ID_117, 32);
     game->vramMan = WobbuffetPop_Create3DVramMan(HEAP_ID_117);
     game->app = OverlayManager_GetArgs(man);
-    ov93_022626FC(game);
+    WobbuffetPop_RegisterCommands(game);
     game->paletteData = PaletteData_Init(HEAP_ID_117);
     PaletteData_SetAutoTransparent(game->paletteData, TRUE);
     PaletteData_AllocBuffers(game->paletteData, PLTTBUF_MAIN_BG, 0x200, HEAP_ID_117);
@@ -377,7 +313,7 @@ BOOL WobbuffetPop_Init(OverlayManager *man, int *state) {
     game->msgFormat = MessageFormat_New(HEAP_ID_117);
     game->string = String_New(320, HEAP_ID_117);
     game->fontSystem = FontSystem_NewInit(19, HEAP_ID_117);
-    ov93_02261310(game, &game->unk_1468);
+    WobbuffetPopBonusRing_Init(game, &game->bonusRing);
     narc = NARC_New(NARC_a_1_9_9, HEAP_ID_117);
     WobbuffetPop_LoadMainBgGraphics(game, narc);
     WobbuffetPop_LoadSubBgGraphics(game, narc);
@@ -451,7 +387,7 @@ BOOL WobbuffetPop_Main(OverlayManager *man, int *state) {
         }
         break;
     case 3:
-        if (ov93_022627A4() == TRUE) {
+        if (WobbuffetPop_SendPlayerValue() == TRUE) {
             (*state)++;
         }
         break;
@@ -463,7 +399,7 @@ BOOL WobbuffetPop_Main(OverlayManager *man, int *state) {
         break;
     case 5:
         if (game->finished == TRUE) {
-            ov93_02262250(game);
+            WobbuffetPop_CreateScoreLabels(game);
             BeginNormalPaletteFade(FADE_BOTH_SCREENS, (enum FadeType)26, (enum FadeType)26, RGB_BLACK, 6, 1, HEAP_ID_117);
             (*state)++;
         }
@@ -474,11 +410,11 @@ BOOL WobbuffetPop_Main(OverlayManager *man, int *state) {
             G2_SetWnd1Position(4, 168, 76, 184);
             G2_SetWnd1InsidePlane(GX_WND_PLANEMASK_OBJ, FALSE);
             G2_SetWndOutsidePlane(GX_WND_PLANEMASK_BG0 | GX_WND_PLANEMASK_BG1 | GX_WND_PLANEMASK_BG2 | GX_WND_PLANEMASK_BG3 | GX_WND_PLANEMASK_OBJ, TRUE);
-            ov93_02262310(game);
+            WobbuffetPop_FreeScoreLabels(game);
             game->gameState = 2;
         case 2:
-            if (ov93_02262374(game, &game->unk_174C) == TRUE) {
-                game->unk_1768 = TRUE;
+            if (WobbuffetPop_RunDemo(game, &game->demo) == TRUE) {
+                game->demoDone = TRUE;
                 game->gameState = 0;
             }
             break;
@@ -489,7 +425,7 @@ BOOL WobbuffetPop_Main(OverlayManager *man, int *state) {
         case 4:
             if (PlazaGameSign_IsDone(game->sign) == TRUE) {
                 game->started = TRUE;
-                game->unk_1468.unk_F1 = 0;
+                game->bonusRing.done = 0;
                 game->gameState = 5;
                 WobbuffetPop_HideMessageWindow(game);
                 ov93_0225D5AC(game, TRUE);
@@ -507,7 +443,7 @@ BOOL WobbuffetPop_Main(OverlayManager *man, int *state) {
         }
         WobbuffetPop_UpdateSync(game);
         WobbuffetPop_ProcessPlayerEvents(game);
-        if (game->unk_2FBC != TRUE) {
+        if (game->gameOver != TRUE) {
             if (WobbuffetPop_ProcessEvent(game) == TRUE) {
                 game->eventDelay = 13;
             }
@@ -535,8 +471,8 @@ BOOL WobbuffetPop_Exit(OverlayManager *man, int *state) {
     game = OverlayManager_GetData(man);
     game->app->results.total = game->total;
     PlazaGameSign_Free(game->sign);
-    ov93_022602E4(game);
-    ov93_02260608(game);
+    WobbuffetPop_FreePuffs(game);
+    WobbuffetPop_FreeConfetti(game);
     Main_SetVBlankIntrCB(NULL, NULL);
     WobbuffetPop_DestroyParticleSystem(game);
     WobbuffetPop_FreeMainObjGraphics(game);
@@ -594,12 +530,12 @@ void WobbuffetPop_VBlankCB(void *data) {
     GF_RunVramTransferTasks();
     SpriteSystem_TransferOam();
     PaletteData_PushTransparentBuffers(game->paletteData);
-    if (game->unk_1428.showBg == TRUE) {
+    if (game->inflation.showBg == TRUE) {
         ToggleBgLayer(GF_BG_LYR_SUB_3, GF_PLANE_TOGGLE_ON);
-        game->unk_1428.showBg = FALSE;
-    } else if (game->unk_1428.hideBg == TRUE) {
+        game->inflation.showBg = FALSE;
+    } else if (game->inflation.hideBg == TRUE) {
         ToggleBgLayer(GF_BG_LYR_SUB_3, GF_PLANE_TOGGLE_OFF);
-        game->unk_1428.hideBg = FALSE;
+        game->inflation.hideBg = FALSE;
     }
     DoScheduledBgGpuUpdates(game->bgConfig);
     // OS_SetIrqCheckFlag(OS_IE_V_BLANK), with the DTCM address as a constant
@@ -663,14 +599,14 @@ void WobbuffetPop_DrawTask(SysTask *task, void *data) {
     trans.y = 0;
     trans.z = 0;
     MTX_Identity33_(&rot);
-    ov93_02262034(game, &game->unk_15A8);
-    ov93_02261354(game, &game->unk_1468);
-    ov93_02261D1C(game, game->unk_1560);
-    ov93_0225FFF8(game);
-    ov93_0225FE80(game, game->bgConfig, &game->unk_1428);
-    ov93_02260660(game);
+    WobbuffetPopScoreDisplay_Update(game, &game->scoreDisplay);
+    WobbuffetPopBonusRing_Update(game, &game->bonusRing);
+    WobbuffetPop_UpdateBonusPopups(game, game->bonusPopups);
+    WobbuffetPop_UpdatePuffs(game);
+    WobbuffetPop_UpdateInflation(game, game->bgConfig, &game->inflation);
+    WobbuffetPop_UpdateConfetti(game);
     WobbuffetPop_AnimateModelSlots(game);
-    ov93_02260A30(game);
+    WobbuffetPop_UpdateBalloonIcons(game);
     Thunk_G3X_Reset();
     Camera_SetStaticPtr(game->camera);
     Camera_ApplyPerspectiveType(1, game->camera);
@@ -889,58 +825,58 @@ void WobbuffetPop_LoadMainObjGraphics(WobbuffetPop *game, NARC *narc) {
     int i;
     String *string0;
     u32 x;
-    u8 *record0;
-    u8 *record1;
+    WobbuffetPopTextObj *top;
+    WobbuffetPopTextObj *bottom;
 
     SpriteSystem_LoadPaletteBufferFromOpenNarc(game->paletteData, PLTTBUF_MAIN_OBJ, game->spriteSystem, game->spriteManager, narc, 27, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 10003);
     string = NewString_ReadMsgData(game->msgData, msg_0012_00002);
     x = ((30 - FontID_String_GetWidth(0, string, 0)) >> 1) + 6;
-    ov93_02261EB8(game->bgConfig, game->spriteManager, game->fontSystem, game->unk_169C, string, 0, MAKE_TEXT_COLOR(14, 15, 0), 0, 10003, x + 36, 168, 0, 1, 12, 2);
+    WobbuffetPop_NewTextObj(game->bgConfig, game->spriteManager, game->fontSystem, &game->scoreDisplay.title, string, 0, MAKE_TEXT_COLOR(14, 15, 0), 0, 10003, x + 36, 168, 0, 1, 12, 2);
     String_Delete(string);
     string0 = NewString_ReadMsgData(game->msgData, msg_0012_00000);
     string1 = NewString_ReadMsgData(game->msgData, msg_0012_00001);
     i = 0;
-    record0 = game->unk_15AC[0];
-    record1 = game->unk_15AC[0] + 20;
+    top = &game->scoreDisplay.digits[0].top;
+    bottom = &game->scoreDisplay.digits[0].bottom;
     for (; i < 6; i++) {
-        ov93_02261EB8(game->bgConfig, game->spriteManager, game->fontSystem, record0, string0, 0, MAKE_TEXT_COLOR(14, 15, 0), 0, 10003, x, 168, 0, 3, 12, 10);
-        ov93_02261EB8(game->bgConfig, game->spriteManager, game->fontSystem, record1, string1, 0, MAKE_TEXT_COLOR(14, 15, 0), 0, 10003, x, 168, 0, 3, 12, 10);
+        WobbuffetPop_NewTextObj(game->bgConfig, game->spriteManager, game->fontSystem, top, string0, 0, MAKE_TEXT_COLOR(14, 15, 0), 0, 10003, x, 168, 0, 3, 12, 10);
+        WobbuffetPop_NewTextObj(game->bgConfig, game->spriteManager, game->fontSystem, bottom, string1, 0, MAKE_TEXT_COLOR(14, 15, 0), 0, 10003, x, 168, 0, 3, 12, 10);
         x += 6;
-        record0 += 40;
-        record1 += 40;
+        top += 2; // next digit: skip its top and bottom text
+        bottom += 2;
     }
     String_Delete(string0);
     String_Delete(string1);
-    ov93_02261FC8(&game->unk_15A8);
-    ov93_02262250(game);
+    WobbuffetPopScoreDisplay_PlaceDigits(&game->scoreDisplay);
+    WobbuffetPop_CreateScoreLabels(game);
     SpriteSystem_LoadPaletteBufferFromOpenNarc(game->paletteData, PLTTBUF_MAIN_OBJ, game->spriteSystem, game->spriteManager, narc, 27, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 10004);
     SpriteSystem_LoadCharResObjFromOpenNarc(game->spriteSystem, game->spriteManager, narc, 24, FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, 10002);
     SpriteSystem_LoadCellResObjFromOpenNarc(game->spriteSystem, game->spriteManager, narc, 26, FALSE, 10002);
     SpriteSystem_LoadAnimResObjFromOpenNarc(game->spriteSystem, game->spriteManager, narc, 25, FALSE, 10002);
-    game->unk_15A8 = ov93_02262230(game);
+    game->scoreDisplay.frame = WobbuffetPop_CreateScoreFrameSprite(game);
     SpriteSystem_LoadPaletteBuffer(game->paletteData, PLTTBUF_MAIN_OBJ, game->spriteSystem, game->spriteManager, NARC_a_1_9_8, 20, FALSE, 1, NNS_G2D_VRAM_TYPE_2DMAIN, 10002);
     SpriteSystem_LoadCharResObj(game->spriteSystem, game->spriteManager, NARC_a_1_9_8, 21, FALSE, NNS_G2D_VRAM_TYPE_2DMAIN, 10001);
     SpriteSystem_LoadCellResObj(game->spriteSystem, game->spriteManager, NARC_a_1_9_8, 22, FALSE, 10001);
     SpriteSystem_LoadAnimResObj(game->spriteSystem, game->spriteManager, NARC_a_1_9_8, 23, FALSE, 10001);
-    game->unk_174C = ov93_02262344(game);
+    game->demo.stylus = WobbuffetPop_CreateDemoStylusSprite(game);
 }
 #pragma force_active off
 
 void WobbuffetPop_FreeMainObjGraphics(WobbuffetPop *game) {
     int i;
-    u8 *record0;
-    u8 *record1;
+    WobbuffetPopTextObj *top;
+    WobbuffetPopTextObj *bottom;
 
-    record0 = game->unk_15AC[0];
-    record1 = game->unk_15AC[0] + 20;
-    for (i = 0; i < 6; i++, record0 += 40, record1 += 40) {
-        ov93_02261FB0(record0);
-        ov93_02261FB0(record1);
+    top = &game->scoreDisplay.digits[0].top;
+    bottom = &game->scoreDisplay.digits[0].bottom;
+    for (i = 0; i < 6; i++, top += 2, bottom += 2) {
+        WobbuffetPopTextObj_Free(top);
+        WobbuffetPopTextObj_Free(bottom);
     }
-    ov93_02261FB0(game->unk_169C);
-    ov93_02262310(game);
-    ov93_02262338(game, game->unk_15A8);
-    ov93_02262368(game, game->unk_174C);
+    WobbuffetPopTextObj_Free(&game->scoreDisplay.title);
+    WobbuffetPop_FreeScoreLabels(game);
+    WobbuffetPop_DeleteScoreFrameSprite(game, game->scoreDisplay.frame);
+    WobbuffetPop_DeleteDemoStylusSprite(game, game->demo.stylus);
 }
 
 #pragma force_active on
@@ -949,20 +885,20 @@ void WobbuffetPop_LoadSubObjGraphics(WobbuffetPop *game, NARC *narc) {
     SpriteSystem_LoadCharResObjFromOpenNarc(game->spriteSystem, game->spriteManager, narc, 20, FALSE, NNS_G2D_VRAM_TYPE_2DSUB, 10004);
     SpriteSystem_LoadCellResObjFromOpenNarc(game->spriteSystem, game->spriteManager, narc, 22, FALSE, 10004);
     SpriteSystem_LoadAnimResObjFromOpenNarc(game->spriteSystem, game->spriteManager, narc, 21, FALSE, 10004);
-    ov93_022609E0(game);
-    ov93_022610B0(game, game->unk_1458);
-    ov93_02261164(game, &game->unk_1468);
-    ov93_02261BBC(game, game->unk_1560);
-    ov93_02260CF8(game);
-    ov93_02260E1C(game);
+    WobbuffetPop_InitBalloonIcons(game);
+    WobbuffetPop_CreateSeatSprites(game, game->seatSprites);
+    WobbuffetPopBonusRing_CreateSprites(game, &game->bonusRing);
+    WobbuffetPop_CreateBonusPopupSprites(game, game->bonusPopups);
+    WobbuffetPop_SetPlayerSubObjPalettes(game);
+    WobbuffetPop_SetPlayerSubObjColors(game);
 }
 #pragma force_active off
 
 void WobbuffetPop_FreeSubObjGraphics(WobbuffetPop *game) {
-    ov93_02260A14(game);
-    ov93_0226114C(game, game->unk_1458);
-    ov93_022612E0(game, &game->unk_1468);
-    ov93_02261C3C(game, game->unk_1560);
+    WobbuffetPop_FreeBalloonIcons(game);
+    WobbuffetPop_FreeSeatSprites(game, game->seatSprites);
+    WobbuffetPopBonusRing_FreeSprites(game, &game->bonusRing);
+    WobbuffetPop_FreeBonusPopupSprites(game, game->bonusPopups);
 }
 
 #pragma force_active on
@@ -999,8 +935,8 @@ void WobbuffetPop_LoadSubBgGraphics(WobbuffetPop *game, NARC *narc) {
     }
     GfGfxLoader_LoadCharDataFromOpenNarc(narc, 18, game->bgConfig, GF_BG_LYR_SUB_0, 0, 0, FALSE, HEAP_ID_117);
     GfGfxLoader_LoadScrnDataFromOpenNarc(narc, 19, game->bgConfig, GF_BG_LYR_SUB_0, 0, 0, FALSE, HEAP_ID_117);
-    ov93_02260BF0(game);
-    ov93_02260BB0(game);
+    WobbuffetPop_SetPlayerSubBgColors(game);
+    WobbuffetPop_SetupThreePlayerSubBg(game);
     LoadUserFrameGfx1(game->bgConfig, GF_BG_LYR_SUB_0, 0x350, 6, 0, HEAP_ID_117);
     PaletteData_LoadPaletteSlotFromHardware(game->paletteData, PLTTBUF_SUB_BG, 0x60, 0x20);
     PaletteData_FillPaletteInBuffer(game->paletteData, PLTTBUF_SUB_BG, PLTTSEL_BOTH, RGB_BLACK, 0, 1);
@@ -1320,7 +1256,7 @@ BOOL WobbuffetPop_ProcessEvent(WobbuffetPop *game) {
         return FALSE;
     }
     if (game->currentEvent.kind != 0) {
-        if (ov93_02262724(game, &game->currentEvent) == TRUE) {
+        if (WobbuffetPop_SendEvent(game, &game->currentEvent) == TRUE) {
             game->currentEvent.kind = 0;
             return TRUE;
         }
@@ -1330,7 +1266,7 @@ BOOL WobbuffetPop_ProcessEvent(WobbuffetPop *game) {
     if (event == NULL) {
         return FALSE;
     }
-    if (ov93_02262724(game, event) == TRUE) {
+    if (WobbuffetPop_SendEvent(game, event) == TRUE) {
         event->kind = 0;
         game->eventReadCount++;
         return TRUE;
@@ -1342,7 +1278,7 @@ void WobbuffetPop_ProcessPlayerEvents(WobbuffetPop *game) {
     int i;
     WobbuffetPopEvent *event;
 
-    if (ov93_022627C0(game, &game->pendingEvent) == TRUE) {
+    if (WobbuffetPop_RunEvent(game, &game->pendingEvent) == TRUE) {
         return;
     }
     i = 0;
@@ -1352,7 +1288,7 @@ void WobbuffetPop_ProcessPlayerEvents(WobbuffetPop *game) {
             if (event == NULL) {
                 break;
             }
-            ov93_022627C0(game, event);
+            WobbuffetPop_RunEvent(game, event);
         } while (TRUE);
     }
 }
@@ -1437,17 +1373,17 @@ BOOL WobbuffetPop_UpdateSync(WobbuffetPop *game) {
         ready = TRUE;
         break;
     case 4:
-        if (game->unk_2FCC == TRUE) {
+        if (game->balloonInPlay == TRUE) {
             ready = TRUE;
         }
         break;
     case 5:
-        if (game->unk_339C == FALSE) {
+        if (game->confetti.active == FALSE) {
             ready = TRUE;
         }
         break;
     case 6:
-        if (game->unk_1768 == TRUE) {
+        if (game->demoDone == TRUE) {
             ready = TRUE;
         }
         break;
@@ -1484,7 +1420,7 @@ BOOL WobbuffetPop_IsSyncDone(WobbuffetPop *game, u8 syncId) {
 BOOL WobbuffetPop_HostStartGame(WobbuffetPop *game, WobbuffetPopSequence *sequence) {
     switch (sequence->state) {
     case 0:
-        ov93_0226297C(game, 1, sequence->syncId);
+        WobbuffetPop_QueueSyncEvent(game, 1, sequence->syncId);
         sequence->state++;
         break;
     case 1:
@@ -1494,7 +1430,7 @@ BOOL WobbuffetPop_HostStartGame(WobbuffetPop *game, WobbuffetPopSequence *sequen
         }
         break;
     case 2:
-        ov93_022629B8(game, sequence->syncId);
+        WobbuffetPop_QueueDemoEvent(game, sequence->syncId);
         sequence->state++;
         break;
     case 3:
@@ -1504,7 +1440,7 @@ BOOL WobbuffetPop_HostStartGame(WobbuffetPop *game, WobbuffetPopSequence *sequen
         }
         break;
     case 4:
-        ov93_022628F4(game, sequence->syncId);
+        WobbuffetPop_QueueCountdownEvent(game, sequence->syncId);
         sequence->state++;
         break;
     case 5:
@@ -1523,8 +1459,8 @@ BOOL WobbuffetPop_HostPlayGame(WobbuffetPop *game, WobbuffetPopSequence *sequenc
     }
     switch (sequence->state) {
     case 0: {
-        int value = ov93_0225FDF4(game->balloonIndex);
-        ov93_02262884(game, game->balloonIndex, value, sequence->syncId);
+        int value = WobbuffetPop_GetBalloonSize(game->balloonIndex);
+        WobbuffetPop_QueueNewBalloonEvent(game, game->balloonIndex, value, sequence->syncId);
         sequence->state++;
         break;
     }
@@ -1535,9 +1471,9 @@ BOOL WobbuffetPop_HostPlayGame(WobbuffetPop *game, WobbuffetPopSequence *sequenc
         }
         break;
     case 2:
-        if (game->unk_1428.unk_0C != 0 && game->unk_1428.unk_08 >= game->unk_1428.unk_0C) {
+        if (game->inflation.capacity != 0 && game->inflation.air >= game->inflation.capacity) {
             game->balloonIndex++;
-            ov93_02262830(game, WobbuffetPop_GetBalloonIndex(game), sequence->syncId);
+            WobbuffetPop_QueuePopEvent(game, WobbuffetPop_GetBalloonIndex(game), sequence->syncId);
             sequence->state++;
         }
         break;
@@ -1555,7 +1491,7 @@ BOOL WobbuffetPop_HostPlayGame(WobbuffetPop *game, WobbuffetPopSequence *sequenc
 BOOL WobbuffetPop_HostFinishGame(WobbuffetPop *game, WobbuffetPopSequence *sequence) {
     switch (sequence->state) {
     case 0:
-        ov93_02262934(game, sequence->syncId);
+        WobbuffetPop_QueueFinishEvent(game, sequence->syncId);
         sequence->state++;
         break;
     case 1:
@@ -1571,7 +1507,7 @@ BOOL WobbuffetPop_HostFinishGame(WobbuffetPop *game, WobbuffetPopSequence *seque
         break;
     case 3:
         sequence->timer++;
-        if (sequence->timer >= 90 && ov93_02262748(game) == TRUE) {
+        if (sequence->timer >= 90 && WobbuffetPop_SendFinished(game) == TRUE) {
             return TRUE;
         }
         break;
@@ -1643,15 +1579,15 @@ void WobbuffetPopBalloon_Free(WobbuffetPop *game, WobbuffetPopBalloon *balloon) 
 
 #pragma force_active on
 void WobbuffetPopBalloon_Update(WobbuffetPop *game, WobbuffetPopBalloon *balloon) {
-    WobbuffetPopMessage message;
+    WobbuffetPopPump pump;
 
     balloon->pumpStrength = 0;
     if (game->gameState == 2) {
-        balloon->touch[0] = game->demoTouch[0];
-        balloon->touch[1] = game->demoTouch[1];
-        balloon->touch[2] = game->demoTouch[2];
-        balloon->touch[3] = game->demoTouch[3];
-    } else if (game->started == FALSE || game->unk_2FBC == TRUE) {
+        balloon->touch[0] = game->demo.touch[0];
+        balloon->touch[1] = game->demo.touch[1];
+        balloon->touch[2] = game->demo.touch[2];
+        balloon->touch[3] = game->demo.touch[3];
+    } else if (game->started == FALSE || game->gameOver == TRUE) {
         balloon->touch[0] = 0;
         balloon->touch[1] = 0;
         balloon->touch[2] = 0;
@@ -1681,7 +1617,7 @@ void WobbuffetPopBalloon_Update(WobbuffetPop *game, WobbuffetPopBalloon *balloon
         }
         WobbuffetPopBalloon_UpdateFlash(balloon);
     }
-    if (game->unk_2FBC == FALSE && game->started == TRUE && balloon->pumpStrength > 0) {
+    if (game->gameOver == FALSE && game->started == TRUE && balloon->pumpStrength > 0) {
         int bonus = 0;
         int amount;
         if (balloon->air < 800) {
@@ -1699,9 +1635,9 @@ void WobbuffetPopBalloon_Update(WobbuffetPop *game, WobbuffetPopBalloon *balloon
         if (bonus == 1) {
             amount += 25 * amount / 100;
         }
-        ov93_02260F14(game, game->balloonIndex, amount, &message);
-        ov93_02260F3C(game, &message.words);
-        ov93_0225FEC4(game, &message.pump);
+        WobbuffetPop_InitPump(game, game->balloonIndex, amount, &pump);
+        WobbuffetPop_QueuePump(game, &pump);
+        WobbuffetPop_LaunchPuff(game, &pump);
         WobbuffetPopBalloon_UpdateReboundSpeed(balloon, balloon->pumpStrength);
         WobbuffetPopBalloon_EmitPumpParticles(game, balloon, balloon->pumpStrength, bonus);
         balloon->pumpStrength = 0;

@@ -24,24 +24,24 @@
 .public LinkSync_IsSynced
 .public PartyCore_sizeof
 .public Party_Copy
-.public sub_02074E5C
-.public sub_02074EC4
-.public sub_02074F9C
-.public sub_02075074
-.public sub_020750E0
-.public sub_02075108
-.public sub_0207514C
-.public sub_02075178
-.public sub_020751B8
-.public sub_020751DC
-.public sub_02075220
-.public sub_02075248
-.public sub_0207527C
-.public sub_020752D8
-.public sub_0207531C
-.public sub_02075350
-.public sub_020753A8
-.public sub_020753D4
+.public BattleLink_Start
+.public BattleLink_RegisterSetupCommands
+.public BattleLink_QueueSendData
+.public BattleLink_SendAiFlags
+.public BattleLink_PrepareProfile
+.public BattleLink_SendProfile
+.public BattleLink_PrepareTrainer
+.public BattleLink_SendTrainer
+.public BattleLink_PrepareParty
+.public BattleLink_SendParty
+.public BattleLink_PrepareChatot
+.public BattleLink_SendChatot
+.public BattleLink_PreparePalPad
+.public BattleLink_SendPalPad
+.public BattleLink_PreparePartnerTrainer
+.public BattleLink_SendPartnerTrainer
+.public BattleLink_PreparePartnerParty
+.public BattleLink_SendPartnerParty
 .public BattleSystem_GetSendBufferPtr
 .public BattleSystem_GetRecvBufferPtr
 .public ov12_0223A954
@@ -58,32 +58,32 @@
 .public ov12_0223BC2C
 .public BattleController_RecvLinkData
 
-	.public sub_02074ED8
-	.public sub_02074EDC
-	.public sub_02074EE4
-	.public sub_02074EEC
-	.public sub_02074EF4
-	.public sub_02074EF8
-	.public sub_02074F18
-	.public sub_02074F38
-	.public sub_02074F54
-	.public sub_02074F74
-	.public sub_02074F7C
-	.public sub_02074F84
-	.public sub_02074F8C
-	.public sub_02074F94
-	.public sub_02075028
-	.public sub_020750B4
-	.public sub_0207513C
-	.public sub_020751A8
-	.public sub_02075210
-	.public sub_0207530C
-	.public sub_02075398
-	.public sub_02075424
-	.public sub_02075534
-	.public sub_02075554
-	.public sub_020755B4
-	.public sub_020755E4
+	.public BattleLink_GetAiFlagsSize
+	.public BattleLink_GetProfileSize
+	.public BattleLink_GetPartySize
+	.public BattleLink_GetChatotSize
+	.public BattleLink_GetTrainerSize
+	.public BattleLink_GetProfileRecvBuffer
+	.public BattleLink_GetTrainerRecvBuffer
+	.public BattleLink_GetPartyRecvBuffer
+	.public BattleLink_GetChatotRecvBuffer
+	.public BattleLink_GetTrainer1RecvBuffer
+	.public BattleLink_GetTrainer3RecvBuffer
+	.public BattleLink_GetParty1RecvBuffer
+	.public BattleLink_GetParty3RecvBuffer
+	.public BattleLink_GetPalPadRecvBuffer
+	.public BattleLink_RecvData
+	.public BattleLink_RecvAiFlags
+	.public BattleLink_RecvProfile
+	.public BattleLink_RecvTrainer
+	.public BattleLink_RecvParty
+	.public BattleLink_RecvChatot
+	.public BattleLink_RecvPartnerTrainer
+	.public BattleLink_RecvPartnerParty
+	.public BattleLink_RecvEnd
+	.public BattleLink_BuildPalPad
+	.public BattleLink_RecvPalPad
+	.public BattleLink_GetPalPadSize
 
-	.public sub_02075434
-	.public sub_020754C0
+	.public BattleLink_SendTask
+	.public BattleLink_RecvTask

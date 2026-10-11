@@ -52,7 +52,7 @@ int ov40_02234D94(void *p) {
             if (ov40_0222DA84((u8 *)w + 8, 0)) {
                 ov40_02230964(p, 1);
                 if (PTR(w, 0x228) != NULL) {
-                    ov41_0224B57C();
+                    AccessoryPortrait_Destroy();
                     ov40_0222BC54(p);
                     SetBgPriority(2, 0);
                     ov40_02235994();

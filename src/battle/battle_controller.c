@@ -11,7 +11,7 @@
 #include "battle/battle_system.h"
 #include "battle/overlay_12_0224E4FC.h"
 
-#include "battle_link_internal.h"
+#include "battle_link_comm.h"
 #include "move.h"
 #include "party.h"
 #include "pokemon.h"
@@ -405,7 +405,7 @@ void BattleController_SendData(BattleSystem *battleSystem, int direction, int ba
     u8 *buffer;
     u16 *writePos;
     u16 *endPos;
-    LinkHeader header;
+    BattleLinkHeader header;
     u32 i;
     int j;
     u8 *headerBytes;
@@ -427,7 +427,7 @@ void BattleController_SendData(BattleSystem *battleSystem, int direction, int ba
     header.battler = battlerId;
     header.size = size;
     headerBytes = (u8 *)&header;
-    for (i = 0; i < sizeof(LinkHeader); i++) {
+    for (i = 0; i < sizeof(BattleLinkHeader); i++) {
         buffer[*writePos] = headerBytes[i];
         (*writePos)++;
     }
@@ -493,7 +493,7 @@ void BattleController_ProcessQueue(BattleSystem *battleSystem, int direction) {
             *endPos = 0;
         }
         if (BattleController_RecvData(battleSystem, &buffer[*readPos]) == TRUE) {
-            *readPos += (buffer[*readPos + 2] | (buffer[*readPos + 3] << 8)) + sizeof(LinkHeader);
+            *readPos += (buffer[*readPos + 2] | (buffer[*readPos + 3] << 8)) + sizeof(BattleLinkHeader);
         }
     }
 }
@@ -507,7 +507,7 @@ void BattleController_EmitPacket(BattleSystem *battleSystem, int direction, int 
                 ov12_0224ECC4(battleSystem->ctx, i, battlerId, *(const u8 *)data);
             }
         }
-        sub_02074F9C(battleSystem, direction, battlerId, (u8 *)data, size);
+        BattleLink_QueueSendData(battleSystem, direction, battlerId, (u8 *)data, size);
     } else {
         if (direction == 1) {
             ov12_0224ECC4(battleSystem->ctx, 0, battlerId, *(const u8 *)data);

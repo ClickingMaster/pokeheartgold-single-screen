@@ -26,9 +26,9 @@ void ov40_02235940(void);
 void ov40_02235994(void);
 void ov40_02235C7C(void *, int);
 void ov40_02236130(void *);
-void *ov41_0224B530(void *, void *);
-void ov41_0224B57C(void);
-void ov41_0224B5D0(void *, int);
+void *AccessoryPortrait_Create(void *, void *);
+void AccessoryPortrait_Destroy(void);
+void AccessoryPortrait_SetMonVisible(void *, int);
 
 int ov40_02235434(void *);
 int ov40_02235644(void *);

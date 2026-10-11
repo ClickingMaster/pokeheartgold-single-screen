@@ -627,11 +627,7 @@ Static main
     Object src/party.o
     Object src/pokedex_util.o
     Object src/battle_regulation.o
-    Object src/battle_link.o
-    Object src/to50_battle_link_send_buffer.o
-    Object src/battle_link_exchange.o
-    Object src/r40_unk_0207527C_run1.o
-    Object src/battle_link_tasks.o
+    Object src/battle_link_comm.o
     Object src/overlay_resource_actor_1.o
     Object asm/to80_extra1373_anchor.o
     Object src/to80_extra1373_run01.o
@@ -3723,42 +3719,9 @@ Overlay OVY_41
     Object src/application/dress_up/dress_up_touch.o
     Object src/application/dress_up/dress_up_objects.o
     Object src/application/dress_up/dress_up_buttons.o
-    Object src/overlay41_accessors_7.o
-    Object src/to58_r3_ov41_r2_overlay_41_residual_50_residual_8.o
-    Object src/overlay41_accessors_8.o
-    Object src/to58_r3_ov41_r2_overlay_41_residual_50_residual_9.o
-    Object src/overlay41_accessors_9.o
-    Object src/to70_to70_overlay_41_residual_50_residual_10_extra148_residual_1_extra1275_run01.o
-    Object src/to70_overlay_41_residual_50_residual_10_extra148_run01.o
-    Object src/overlay41_accessors_10.o
-    Object src/to58_r3_ov41_ov41_residual_50_residual_11.o
-    Object src/overlay41_accessors_11.o
-    Object src/to52_r6_overlay41_window_helpers_r50_12.o
-    Object src/overlay41_accessors_12.o
-    Object src/overlay41_ui_helpers_1.o
-    Object src/to91_w15_sprite_native_z180.o
-    Object src/to90_extra2487_run01.o
-    Object src/overlay41_ui_helpers_2.o
-    Object src/to58_r3_ov41_r2_overlay_41_residual_50_residual_13_residual_2.o
-    Object src/overlay41_ui_helpers_3.o
-    Object src/to70_overlay_41_residual_50_residual_13_residual_3_extra235_run01.o
-    Object src/to70_to70_overlay_41_residual_50_residual_13_residual_3_extra235_residual_1_extra1276_run01.o
-    Object src/overlay41_ui_helpers_4.o
-    Object src/to90_extra2375_run01.o
-    Object src/overlay41_accessors_13.o
-    Object src/to52_overlay41_tween_animation.o
-    Object src/overlay41_accessors_14.o
-    Object src/to58_r3_ov41_ov41_residual_50_residual_15.o
-    Object src/overlay41_accessors_15.o
-    Object src/r45_overlay_41_tail.o
-    Object src/overlay41_accessors_16.o
-    Object src/to58_r3_ov41_50_res17_head.o
-    Object src/to70_to58_r3_ov41_50_res17_tail_extra1068_run01.o
-    Object src/overlay41_accessors_17.o
-    Object src/overlay41_accessory_portrait_r4.o
-    Object src/overlay41_accessors_18.o
-    Object src/to45_overlay41_r50_r19.o
-    Object asm/to45_overlay41_r50_r19_data.o
+    Object src/application/dress_up/dress_up_hud.o
+    Object src/application/dress_up/accessory_portrait.o
+    Object asm/dress_up_rodata.o
 }
 Overlay OVY_42
 {
@@ -4904,63 +4867,7 @@ Overlay OVY_93
     Object asm/overlay_93_thumb_1_to41_residual_21.o
     Object src/application/wobbuffet_pop_balloon_mesh.o
     Object asm/overlay_93_arm_residual_3.o
-    Object src/to90_extra2230_run01.o
-    Object src/overlay93_helpers_1.o
-    Object src/to70_overlay_93_thumb_2_residual_2_extra244_run01.o
-    Object src/overlay93_helpers_2.o
-    Object src/to58_r3_ov93_overlay_93_thumb_2_residual_3.o
-    Object src/overlay93_helpers_3.o
-    Object src/overlay93_entry_motion_r4_run1.o
-    Object src/overlay93_entry_motion_middle_60080.o
-    Object src/overlay93_entry_motion_r4_run2.o
-    Object src/overlay93_helpers_4.o
-    Object src/op90_overlay_93_thumb_2_residual_5_r01.o
-    Object src/overlay93_ui_r39_5_1.o
-    Object src/to80_extra1575_run01.o
-    Object src/overlay93_ui_r39_5_2.o
-    Object src/overlay93_helpers_5.o
-    Object src/overlay93_thumb2_motion_pair.o
-    Object src/overlay93_helpers_6.o
-    Object src/to50_overlay93_palette_tilemap_r7.o
-    Object src/op90_overlay_93_thumb_2_residual_7_tail_to50_r01.o
-    Object src/op90_overlay_93_thumb_2_residual_7_tail_to50_r02.o
-    Object src/op90_op90_overlay_93_thumb_2_residual_7_tail_to50_residual_1_r01.o
-    Object src/overlay93_helpers_7.o
-    Object src/to58_r3_ov93_overlay_93_thumb_2_residual_8.o
-    Object src/overlay93_helpers_8.o
-    Object src/to70_overlay_93_thumb_2_residual_9_extra204_run01.o
-    Object src/overlay93_helpers_9.o
-    Object src/to91_w41542_trig_run01.o
-    Object src/overlay93_helpers_10.o
-    Object src/to90_extra2428_run01.o
-    Object src/to90_extra2054_run01.o
-    Object src/overlay93_helpers_11.o
-    Object src/to90_extra2499_run01.o
-    Object src/to45_overlay93_t2_r12_exact.o
-    Object src/op90_overlay_93_thumb_2_residual_12_suffix_r01.o
-    Object src/overlay93_ui_r39_12_1.o
-    Object src/overlay93_helpers_12.o
-    Object src/to90_extra2231_run01.o
-    Object src/overlay93_helpers_13.o
-    Object src/to53_overlay93_anim_step.o
-    Object src/to70_to53_overlay93_thumb_2_tail_extra391_run01.o
-    Object src/overlay93_helpers_14.o
-    Object src/overlay93_score_digits_r15.o
-    Object src/overlay93_helpers_15.o
-    Object src/to90_extra2395_run01.o
-    Object src/overlay93_helpers_16.o
-    Object src/to70_overlay_93_thumb_2_residual_17_extra653_run01.o
-    Object src/overlay93_helpers_17.o
-    Object src/to70_overlay_93_thumb_2_residual_18_extra654_run01.o
-    Object src/overlay93_helpers_18.o
-    Object src/to70_overlay_93_thumb_2_residual_19_extra388_run01.o
-    Object src/overlay93_helpers_19.o
-    Object src/to90_extra2055_run01.o
-    Object src/overlay93_helpers_20.o
-    Object src/op90_overlay_93_thumb_2_residual_21_r01.o
-    Object src/overlay93_helpers_21.o
-    Object src/to58_r3_ov93_overlay_93_thumb_2_residual_22.o
-    Object src/overlay93_helpers_22.o
+    Object src/application/wobbuffet_pop_scene.o
     Object asm/overlay_93_thumb_2_residual_23.o
 }
 Overlay OVY_94

@@ -6,8 +6,8 @@
 
 
 	.text
-	thumb_func_start sub_0207527C
-sub_0207527C: ; 0x0207527C
+	thumb_func_start BattleLink_PreparePalPad
+BattleLink_PreparePalPad: ; 0x0207527C
 	push {r3, r4, r5, r6, r7, lr}
 	add r5, r0, #0
 	bl sub_02037190
@@ -38,7 +38,7 @@ _020752A8:
 	ldr r0, [r0]
 	ldr r1, [r4, r1]
 	add r2, #0x20
-	bl sub_02075554
+	bl BattleLink_BuildPalPad
 	mov r4, #0
 	mov r6, #5
 	mov r7, #0x88
@@ -53,4 +53,4 @@ _020752C2:
 	blt _020752C2
 	mov r0, #1
 	pop {r3, r4, r5, r6, r7, pc}
-	thumb_func_end sub_0207527C
+	thumb_func_end BattleLink_PreparePalPad

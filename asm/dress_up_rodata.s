@@ -2,7 +2,7 @@
 	.public AccessoryPortrait_Exit
 	.public AccessoryPortrait_Init
 	.public AccessoryPortrait_Main
-	.public _0224BF94
+	.public sDressUpGraphicsModes
 	.public DressUpGfx_CreateSlotList
 	.public DressUpGfx_FreeSlotList
 	.public DressUpGfx_AddSlotObject
@@ -297,63 +297,63 @@
 	.public DressUpHud_PrintMsg
 	.public DressUpHud_FreeMsgString
 	.public DressUpHud_SetAccessoryCount
-	.public ov41_0224ACA4
-	.public ov41_0224ACDC
-	.public ov41_0224AD0C
-	.public ov41_0224AD7C
-	.public ov41_0224AD84
-	.public ov41_0224AD90
-	.public ov41_0224ADD8
-	.public ov41_0224AE24
-	.public ov41_0224AE78
-	.public ov41_0224AED8
-	.public ov41_0224AF8C
-	.public ov41_0224AFD4
-	.public ov41_0224AFF8
-	.public ov41_0224B084
-	.public ov41_0224B0B8
-	.public ov41_0224B118
-	.public ov41_0224B21C
-	.public ov41_0224B250
-	.public ov41_0224B270
-	.public ov41_0224B298
-	.public ov41_0224B310
-	.public ov41_0224B31C
-	.public ov41_0224B32C
-	.public ov41_0224B374
-	.public ov41_0224B450
+	.public DressUpHud_LoadSubBg
+	.public DressUpHud_LoadFrameAndFontPal
+	.public DressUpHud_AddWindow
+	.public DressUpHud_UnloadSubBg
+	.public DressUpHud_DeleteWindow
+	.public DressUp_PrintMsgFramed
+	.public DressUp_PrintMsgFramedKeepString
+	.public DressUp_PrintMsg
+	.public DressUp_PrintMsgKeepString
+	.public DressUpHud_CreateCountIcons
+	.public DressUpHud_SetCountIcons
+	.public DressUpHud_DestroyCountIcons
+	.public DressUp_LoadSpriteRes
+	.public DressUp_FreeSpriteRes
+	.public DressUp_MakeSpriteHeader
+	.public DressUpCountdown_Create
+	.public DressUpCountdown_Destroy
+	.public DressUpCountdown_Update
+	.public DressUpCountdown_Sync
+	.public DressUpCountdown_DrawDigits
+	.public DressUpCountdown_DecFrames
+	.public DressUpTween_Init
+	.public DressUpTween_Step
+	.public DressUpCountdown_StartPulse
+	.public DressUpCountdown_UpdatePulse
 	.public DressUp_StartBackdropAnim
 	.public DressUp_UpdateBackdropAnim
 	.public DressUp_StopBackdropAnim
-	.public ov41_0224B530
-	.public ov41_0224B554
-	.public ov41_0224B57C
-	.public ov41_0224B5C8
-	.public ov41_0224B5D0
-	.public ov41_0224B5D8
-	.public ov41_0224B630
-	.public ov41_0224B6CC
-	.public ov41_0224B720
-	.public ov41_0224B754
-	.public ov41_0224B780
-	.public ov41_0224B848
-	.public ov41_0224B85C
-	.public ov41_0224B878
-	.public ov41_0224B888
-	.public ov41_0224B8DC
-	.public ov41_0224B8F0
-	.public ov41_0224B938
-	.public ov41_0224B958
-	.public ov41_0224BBF0
-	.public ov41_0224BFA4
-	.public ov41_0224BFB4
-	.public ov41_0224BFC4
-	.public ov41_0224BFE0
-	.public ov41_0224BFFC
-	.public ov41_0224C018
-	.public ov41_0224C034
-	.public ov41_0224C050
-	.public ov41_0224C06C
+	.public AccessoryPortrait_Create
+	.public AccessoryPortrait_Draw
+	.public AccessoryPortrait_Destroy
+	.public AccessoryPortrait_VBlank
+	.public AccessoryPortrait_SetMonVisible
+	.public AccessoryPortrait_SetPosition
+	.public AccessoryPortrait_CreateFromArgs
+	.public AccessoryPortrait_InitGfx
+	.public AccessoryPortrait_DrawMon
+	.public AccessoryPortrait_FreeGfx
+	.public AccessoryPortrait_InitCanvas
+	.public AccessoryPortrait_SetBackground
+	.public AccessoryPortrait_FreeCanvas
+	.public AccessoryPortrait_ClearBackground
+	.public AccessoryPortrait_InitTransform
+	.public AccessoryPortrait_CopyConfig
+	.public AccessoryPortrait_ReadFashionData
+	.public AccessoryPortrait_LoadAccessoryGfx
+	.public AccessoryPortrait_LoadAccessoryCharsAndPltt
+	.public AccessoryPortrait_VBlankCB
+	.public sDressUpObjCharTransferTemplate
+	.public sDressUpGraphicsManagerTemplate
+	.public sDressUpBgTemplate_Sub0
+	.public sDressUpBgTemplate_Main1
+	.public sDressUpBgTemplate_Main2
+	.public sAccessoryPortraitBgTemplate_Main2
+	.public sDressUpBgTemplate_Main3
+	.public sDressUpBgTemplate_Sub1
+	.public sDressUpGraphicsBanks
 	.public ov41_0224C094
 	.include "overlay_41.inc"
 	.include "global.inc"
@@ -473,61 +473,61 @@
 	.public DressUpHud_UpdateCountdown
 	.public DressUpHud_FreeMsgString
 	.public DressUpHud_SetAccessoryCount
-	.public ov41_0224AD7C
-	.public ov41_0224AD84
-	.public ov41_0224B310
-	.public ov41_0224B31C
+	.public DressUpHud_UnloadSubBg
+	.public DressUpHud_DeleteWindow
+	.public DressUpCountdown_DecFrames
+	.public DressUpTween_Init
 	.public DressUp_UpdateBackdropAnim
 	.public DressUp_StopBackdropAnim
-	.public ov41_0224B5C8
-	.public ov41_0224B5D0
-	.public ov41_0224B848
-	.public ov41_0224B85C
-	.public ov41_0224B8DC
-	.public ov41_0224BBF0
+	.public AccessoryPortrait_VBlank
+	.public AccessoryPortrait_SetMonVisible
+	.public AccessoryPortrait_SetBackground
+	.public AccessoryPortrait_FreeCanvas
+	.public AccessoryPortrait_CopyConfig
+	.public AccessoryPortrait_VBlankCB
 
 
 	.rodata
 
-_0224BF94:
+sDressUpGraphicsModes:
 	.byte 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x00, 0x00
 
-ov41_0224BFA4: ; 0x0224BFA4
+sDressUpObjCharTransferTemplate: ; 0x0224BFA4
 	.byte 0x08, 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00
 	.byte 0x0E, 0x00, 0x00, 0x00
 
-ov41_0224BFB4: ; 0x0224BFB4
+sDressUpGraphicsManagerTemplate: ; 0x0224BFB4
 	.byte 0xCE, 0x02, 0x00, 0x00, 0x76, 0x00, 0x00, 0x00, 0x13, 0x00, 0x00, 0x00
 	.byte 0x0E, 0x00, 0x00, 0x00
 
-ov41_0224BFC4: ; 0x0224BFC4
+sDressUpBgTemplate_Sub0: ; 0x0224BFC4
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x0F, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov41_0224BFE0: ; 0x0224BFE0
+sDressUpBgTemplate_Main1: ; 0x0224BFE0
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x1F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov41_0224BFFC: ; 0x0224BFFC
+sDressUpBgTemplate_Main2: ; 0x0224BFFC
 	.byte 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1E, 0x01
 	.byte 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov41_0224C018: ; 0x0224C018
+sAccessoryPortraitBgTemplate_Main2: ; 0x0224C018
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1E, 0x01, 0x00, 0x02, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00
 
-ov41_0224C034: ; 0x0224C034
+sDressUpBgTemplate_Main3: ; 0x0224C034
 	.byte 0x00, 0x00, 0x00, 0x00, 0x6F, 0xFF, 0xFF, 0xFF, 0x00, 0x08, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x1D, 0x02, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov41_0224C050: ; 0x0224C050
+sDressUpBgTemplate_Sub1: ; 0x0224C050
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x01, 0x00, 0x0E, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 
-ov41_0224C06C: ; 0x0224C06C
+sDressUpGraphicsBanks: ; 0x0224C06C
 	.byte 0x04, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x60, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00

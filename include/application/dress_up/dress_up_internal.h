@@ -3,6 +3,8 @@
 
 #include "global.h"
 
+#include "application/dress_up/accessory_portrait.h"
+
 #include "bg_window.h"
 #include "fashion_case.h"
 #include "filesystem.h"
@@ -342,18 +344,78 @@ typedef struct DressUpHudTemplate {
     SpriteList *spriteList;   // 0x04
     GF_2DGfxResMan **resMans; // 0x08, DressUpGfx.charResMan..animResMan
     Options *options;         // 0x0C
-    int countMax;             // 0x10
-    u32 unk_14;               // 0x14
-    u32 unk_18;               // 0x18
-    u32 unk_1C;               // 0x1C
-    u32 unk_20;               // 0x20
+    int countMax;             // 0x10, accessories the meter shows
+    u32 infoMsgBank;          // 0x14, info window (flag 0x20)
+    u32 infoMsgId;            // 0x18
+    int countdownSeconds;     // 0x1C, countdown (flag 0x10)
+    int *countdownOutput;     // 0x20
     NARC *narc;               // 0x24
 } DressUpHudTemplate;
 
-// message box, accessory count meter and countdown
+// DressUpHud_Init flags
+#define DRESS_UP_HUD_CLEAR       (1 << 0)
+#define DRESS_UP_HUD_SUB_BG      (1 << 1)
+#define DRESS_UP_HUD_MSG_WINDOW  (1 << 2)
+#define DRESS_UP_HUD_COUNT_ICONS (1 << 3)
+#define DRESS_UP_HUD_COUNTDOWN   (1 << 4) // never set
+#define DRESS_UP_HUD_INFO_WINDOW (1 << 5) // never set
+
+#define DRESS_UP_COUNT_ICON_NUM 20
+
+// linear fx32 interpolation
+typedef struct DressUpTween {
+    fx32 value;    // 0x00
+    fx32 start;    // 0x04
+    fx32 distance; // 0x08
+    s32 frame;     // 0x0C
+    s32 frames;    // 0x10
+} DressUpTween;
+
+// the countdown digits shrinking back to normal size after each tick of the last ten seconds
+typedef struct DressUpCountdownPulse {
+    BOOL active;          // 0x00
+    Sprite *digits[2];    // 0x04
+    VecFx32 positions[2]; // 0x0C
+    DressUpTween scale;   // 0x24
+    DressUpTween x;       // 0x38
+    DressUpTween y;       // 0x4C
+} DressUpCountdownPulse;  // size 0x60
+
+// accessories placed, as a 10x2 grid of icons on the sub screen
+typedef struct DressUpCountIcons {
+    SpriteResource *resources[4];             // 0x00, char, pltt, cell, anim
+    Sprite *sprites[DRESS_UP_COUNT_ICON_NUM]; // 0x10
+    int count;                                // 0x60
+    u32 unk_64;                               // 0x64
+} DressUpCountIcons;                          // size 0x68
+
+// two-digit countdown (unused: DressUp_InitHud never sets DRESS_UP_HUD_COUNTDOWN)
+typedef struct DressUpCountdown {
+    SpriteResource *resources[4]; // 0x00
+    Sprite *digits[2];            // 0x10
+    Window *window;               // 0x18
+    int value;                    // 0x1C, seconds shown
+    int frames;                   // 0x20
+    SysTask *tasks[2];            // 0x24, never created
+    int *output;                  // 0x2C, [0] seconds left (set by the owner), [2] start value
+    DressUpCountdownPulse pulse;  // 0x30
+    BOOL warning;                 // 0x90, digits switched to the warning palette
+} DressUpCountdown;               // size 0x94
+
+// sub screen of the editor: message box, accessory count meter and countdown
 typedef struct DressUpHud {
-    u8 unk_000[0x148];
-} DressUpHud;
+    DressUpBgScreen subBg;        // 0x000
+    Window *msgWindow;            // 0x02C
+    SpriteList *spriteList;       // 0x030
+    GF_2DGfxResMan **resMans;     // 0x034
+    DressUpCountIcons countIcons; // 0x038
+    DressUpCountdown countdown;   // 0x0A0
+    Window *infoWindow;           // 0x134
+    u32 flags;                    // 0x138
+    u32 frame;                    // 0x13C, Options frame
+    u32 textFrameDelay;           // 0x140
+    String *msgString;            // 0x144
+} DressUpHud;                     // size 0x148
 
 typedef struct DressUpWork {
     DressUpGfx gfx;                                                // 0x000
@@ -380,6 +442,50 @@ typedef struct DressUpWork {
     MessageFormat *msgFormat;                                      // 0x6E8, never set
     MenuInputState menuInputState;                                 // 0x6EC
 } DressUpWork;                                                     // size 0x6F0
+
+// the 0x6C argument block of the Accessory Portrait renderer: one saved design plus the caller's config
+typedef struct AccessoryPortraitArgs {
+    struct SaveFashionMon *mon; // 0x00
+    u8 *items[20];              // 0x04, the placed accessories
+    int count;                  // 0x54
+    BgConfig *bgConfig;         // 0x58
+    u32 background;             // 0x5C
+    int x;                      // 0x60
+    int y;                      // 0x64
+    enum HeapID heapID;         // 0x68
+} AccessoryPortraitArgs;
+
+// renders a saved dress-up design (Accessory Portrait app, VS Recorder dress-up photos)
+struct AccessoryPortrait {
+    DressUpGfx gfx;                   // 0x000
+    DressUpNodePool nodePool;         // 0x184
+    DressUpSlotList *slotList;        // 0x18C
+    DressUpCanvas canvas;             // 0x190
+    DressUpBackdropAnim backdropAnim; // 0x218
+    Pokemon *mon;                     // 0x234
+    enum HeapID heapID;               // 0x238
+    int x;                            // 0x23C
+    int y;                            // 0x240
+    int monOffsetX;                   // 0x244
+    int monOffsetY;                   // 0x248
+    u16 rotation;                     // 0x24C
+    DressUpScale scale;               // 0x250
+    u16 unk_25C;                      // 0x25C
+    BOOL bgEnabled;                   // 0x260
+    BOOL monVisible;                  // 0x264
+}; // size 0x268
+
+// work of the Accessory Portrait app
+typedef struct AccessoryPortraitAppWork {
+    SaveFashionDataSub *fashionData; // 0x000
+    u32 unk_004;                     // 0x004
+    int selection;                   // 0x008
+    int mode;                        // 0x00C, stored, never read
+    AccessoryPortrait *portrait;     // 0x010
+    DressUpGfx gfx;                  // 0x014
+    Sprite *icon;                    // 0x198
+    Window *captionWindow;           // 0x19C
+} AccessoryPortraitAppWork;          // size 0x1A0
 
 DressUpSlotList *DressUpGfx_CreateSlotList(int count, enum HeapID heapID);
 void DressUpGfx_FreeSlotList(DressUpSlotList *list);
@@ -425,7 +531,7 @@ void AccessoryPortrait_FreeGfxCore(DressUpGfx *gfx);
 void AccessoryPortrait_FreeBg(DressUpGfx *gfx);
 void DressUpGfx_HandlePokepicLoad(DressUpGfx *gfx);
 void AccessoryPortrait_DrawTransformed(DressUpGfx *gfx, int x, int y, u16 angle, const DressUpScale *scale);
-void AccessoryPortrait_InitAppGfx(DressUpGfx *gfx);
+void AccessoryPortrait_InitAppGfx(DressUpGfx *gfx, enum HeapID heapID);
 void AccessoryPortrait_FreeAppGfx(DressUpGfx *gfx);
 void AccessoryPortrait_AppVBlank(DressUpGfx *gfx);
 void AccessoryPortrait_RenderSprites(DressUpGfx *gfx);
@@ -668,7 +774,7 @@ void DressUpButtonPanel_FreeResources(DressUpGfx *gfx);
 void DressUpButton_SetAnimByTouchState(DressUpButton *button, u32 state);
 void DressUpButton_SetTextByState(DressUpTextButton *button, u32 state);
 
-// HUD, backdrop animation (next objects)
+// dress_up_hud.c
 void DressUpButton_PlaySE(DressUpButton *button, u32 se, u32 trigger, u32 state);
 Window *DressUpButton_CreateTextBitmap(DressUpGfx *gfx, NarcId narcId, int bank, int msgId, int width, int height);
 void DressUpButton_DeleteTextBitmap(Window *window);
@@ -681,8 +787,58 @@ void DressUpHud_PrintMsgInstant(DressUpHud *hud, NarcId narcId, int bank, int ms
 u8 DressUpHud_PrintMsg(DressUpHud *hud, NarcId narcId, int bank, int msgId);
 void DressUpHud_FreeMsgString(DressUpHud *hud);
 void DressUpHud_SetAccessoryCount(DressUpHud *hud, int count);
+void DressUpHud_LoadSubBg(DressUpHud *hud, BgConfig *bgConfig);
+void DressUpHud_LoadFrameAndFontPal(BgConfig *bgConfig, Options *options);
+void DressUpHud_AddWindow(Window **window, BgConfig *bgConfig, int x, int y, int width, int height, int baseTile, BOOL drawFrame);
+void DressUpHud_UnloadSubBg(DressUpHud *hud);
+void DressUpHud_DeleteWindow(Window *window);
+u8 DressUp_PrintMsgFramed(Window *window, NarcId narcId, int bank, int msgId, int x, int y, int textSpeed);
+u8 DressUp_PrintMsgFramedKeepString(Window *window, NarcId narcId, int bank, int msgId, int x, int y, int textSpeed, String **string);
+u8 DressUp_PrintMsg(Window *window, NarcId narcId, int bank, int msgId, int x, int y, u32 color, int textSpeed);
+u8 DressUp_PrintMsgKeepString(Window *window, NarcId narcId, int bank, int msgId, int x, int y, u32 color, int textSpeed, String **string);
+void DressUpHud_CreateCountIcons(DressUpCountIcons *icons, SpriteList *spriteList, GF_2DGfxResMan **resMans, int count, NARC *narc);
+void DressUpHud_SetCountIcons(DressUpCountIcons *icons, int count);
+void DressUpHud_DestroyCountIcons(DressUpCountIcons *icons, GF_2DGfxResMan **resMans);
+void DressUp_LoadSpriteRes(SpriteResource **resources, GF_2DGfxResMan **resMans, enum HeapID heapID, NARC *narc, int charFileId, int plttFileId, int cellFileId, int animFileId, int plttCount, int baseId);
+void DressUp_FreeSpriteRes(SpriteResource **resources, GF_2DGfxResMan **resMans);
+void DressUp_MakeSpriteHeader(SpriteResource **resources, GF_2DGfxResMan **resMans, SpriteResourcesHeader *header, int priority);
+void DressUpCountdown_Create(DressUpCountdown *countdown, SpriteList *spriteList, GF_2DGfxResMan **resMans, int seconds, BgConfig *bgConfig, int *output, NARC *narc);
+void DressUpCountdown_Destroy(DressUpCountdown *countdown, GF_2DGfxResMan **resMans);
+void DressUpCountdown_Update(DressUpCountdown *countdown);
+void DressUpCountdown_Sync(DressUpCountdown *countdown);
+void DressUpCountdown_DrawDigits(DressUpCountdown *countdown);
+void DressUpCountdown_DecFrames(DressUpCountdown *countdown);
+void DressUpTween_Init(DressUpTween *tween, fx32 start, fx32 end, int frames);
+BOOL DressUpTween_Step(DressUpTween *tween);
+void DressUpCountdown_StartPulse(DressUpCountdown *countdown, DressUpCountdownPulse *pulse);
+void DressUpCountdown_UpdatePulse(DressUpCountdownPulse *pulse);
 void DressUp_StartBackdropAnim(DressUpBackdropAnim *anim, DressUpCanvas *canvas, enum HeapID heapID);
 void DressUp_UpdateBackdropAnim(DressUpBackdropAnim *anim);
 void DressUp_StopBackdropAnim(DressUpBackdropAnim *anim);
+
+// accessory_portrait.c
+void AccessoryPortrait_SetPosition(AccessoryPortrait *portrait, int x, int y);
+AccessoryPortrait *AccessoryPortrait_CreateFromArgs(AccessoryPortraitArgs *args);
+void AccessoryPortrait_InitGfx(AccessoryPortrait *portrait, AccessoryPortraitArgs *args);
+void AccessoryPortrait_DrawMon(AccessoryPortrait *portrait);
+void AccessoryPortrait_FreeGfx(AccessoryPortrait *portrait);
+void AccessoryPortrait_InitCanvas(AccessoryPortrait *portrait, AccessoryPortraitArgs *args);
+void AccessoryPortrait_SetBackground(AccessoryPortrait *portrait, AccessoryPortraitArgs *args);
+void AccessoryPortrait_FreeCanvas(AccessoryPortrait *portrait);
+void AccessoryPortrait_ClearBackground(AccessoryPortrait *portrait);
+void AccessoryPortrait_InitTransform(AccessoryPortrait *portrait, AccessoryPortraitArgs *args);
+void AccessoryPortrait_CopyConfig(AccessoryPortraitArgs *args, const AccessoryPortraitConfig *config);
+void AccessoryPortrait_ReadFashionData(AccessoryPortraitArgs *args, SaveFashionDataSub *fashionData);
+void AccessoryPortrait_LoadAccessoryGfx(AccessoryPortrait *portrait, DressUpGfxResources *resources, AccessoryPortraitArgs *args, enum HeapID heapID);
+void AccessoryPortrait_LoadAccessoryCharsAndPltt(AccessoryPortrait *portrait, DressUpGfxResources *resources, AccessoryPortraitArgs *args, enum HeapID heapID);
+void AccessoryPortrait_VBlankCB(void *data);
+void AccessoryPortrait_LoadFrameBg(AccessoryPortraitAppWork *work);
+void AccessoryPortrait_LoadSubBg(AccessoryPortraitAppWork *work);
+void AccessoryPortrait_CreateIconSprite(AccessoryPortraitAppWork *work);
+void AccessoryPortrait_FreeIconSprite(AccessoryPortraitAppWork *work);
+void AccessoryPortrait_CreateCaptionWindow(AccessoryPortraitAppWork *work);
+void AccessoryPortrait_FreeCaptionWindow(AccessoryPortraitAppWork *work);
+void AccessoryPortrait_DrawCaption(AccessoryPortraitAppWork *work);
+void AccessoryPortrait_PrintCaption(AccessoryPortraitAppWork *work);
 
 #endif // POKEHEARTGOLD_APPLICATION_DRESS_UP_DRESS_UP_INTERNAL_H

@@ -17,7 +17,7 @@
 
 #include "bag.h"
 #include "bag_cursor.h"
-#include "battle_link_internal.h"
+#include "battle_link_comm.h"
 #include "filesystem_files_def.h"
 #include "font.h"
 #include "game_stats.h"
@@ -61,7 +61,7 @@ FS_EXTERN_OVERLAY(OVY_5);
 FS_EXTERN_OVERLAY(OVY_6);
 FS_EXTERN_OVERLAY(OVY_18);
 
-// Work of the link data exchange stage (BSTATE_LINK_INIT/MAIN). battle_link*.c sees it as LinkWork, which
+// Work of the link data exchange stage (BSTATE_LINK_INIT/MAIN). battle_link*.c sees it as BattleLinkWork, which
 // declares only the members those functions use.
 typedef struct BattlerInitData {
     u8 battler;
@@ -73,7 +73,7 @@ typedef struct BattleLinkStageWork {
     BgConfig *bgConfig;       // 0x04
     Window *window;           // 0x08
     PaletteData *palette;     // 0x0C
-    u8 unk_10[0x1010];        // 0x10, LinkWork.friends / exchange buffer
+    u8 unk_10[0x1010];        // 0x10, BattleLinkWork.friends / exchange buffer
     u8 syncCount;             // 0x1020
     u8 state;                 // 0x1021
     u16 timer;                // 0x1022
@@ -539,7 +539,7 @@ void BattleSystem_InitFromSetup(BattleSystem *battleSystem, BattleSetup *setup) 
     }
 
     if (battleSystem->battleType & BATTLE_TYPE_LINK) {
-        sub_02074E5C(battleSystem);
+        BattleLink_Start(battleSystem);
         u8 networkID = ov12_0223BFC0(battleSystem);
 
         ov12_0223A664(battleSystem, setup);
@@ -1019,7 +1019,7 @@ void Battle_LinkInit(OverlayManager *man, BattleSetup *setup) {
     PaletteData_FillPaletteInBuffer(work->palette, (PaletteBufferId)0, (PaletteSelector)2, 0, 0, 0x100);
     work->bgConfig = BgConfig_Alloc(HEAP_ID_BATTLE);
     work->window = AllocWindows(HEAP_ID_BATTLE, 1);
-    sub_02074EC4((LinkWork *)work);
+    BattleLink_RegisterSetupCommands((BattleLinkWork *)work);
     GfGfx_DisableEngineAPlanes();
     banks = sLinkGraphicsBanks;
     GfGfx_SetBanks(&banks);
@@ -1091,72 +1091,72 @@ BOOL Battle_LinkMain(OverlayManager *man) {
         }
         break;
     case 4:
-        if (sub_02075074((LinkWork *)work, 0x140) == TRUE) {
+        if (BattleLink_SendAiFlags((BattleLinkWork *)work, 0x140) == TRUE) {
             work->state++;
         }
         break;
     case 5:
         goto common;
     case 6:
-        if (sub_020750E0((LinkWork *)work) == TRUE) {
+        if (BattleLink_PrepareProfile((BattleLinkWork *)work) == TRUE) {
             LinkSync_StartSync(0x34);
             work->state++;
         }
         break;
     case 7:
-        if (sub_02075108((LinkWork *)work) == TRUE) {
+        if (BattleLink_SendProfile((BattleLinkWork *)work) == TRUE) {
             work->state++;
         }
         break;
     case 8:
         goto common;
     case 9:
-        if (sub_0207514C((LinkWork *)work) == TRUE) {
+        if (BattleLink_PrepareTrainer((BattleLinkWork *)work) == TRUE) {
             LinkSync_StartSync(0x35);
             work->state++;
         }
         break;
     case 10:
-        if (sub_02075178((LinkWork *)work) == TRUE) {
+        if (BattleLink_SendTrainer((BattleLinkWork *)work) == TRUE) {
             work->state++;
         }
         break;
     case 11:
         goto common;
     case 12:
-        if (sub_020751B8((LinkWork *)work) == TRUE) {
+        if (BattleLink_PrepareParty((BattleLinkWork *)work) == TRUE) {
             LinkSync_StartSync(0x36);
             work->state++;
         }
         break;
     case 13:
-        if (sub_020751DC((LinkWork *)work) == TRUE) {
+        if (BattleLink_SendParty((BattleLinkWork *)work) == TRUE) {
             work->state++;
         }
         break;
     case 14:
         goto common;
     case 15:
-        if (sub_02075220((LinkWork *)work) == TRUE) {
+        if (BattleLink_PrepareChatot((BattleLinkWork *)work) == TRUE) {
             LinkSync_StartSync(0x37);
             work->state++;
         }
         break;
     case 16:
-        if (sub_02075248((LinkWork *)work) == TRUE) {
+        if (BattleLink_SendChatot((BattleLinkWork *)work) == TRUE) {
             work->state++;
         }
         break;
     case 17:
         goto common;
     case 18:
-        if (sub_0207527C((LinkWork *)work) == TRUE) {
+        if (BattleLink_PreparePalPad((BattleLinkWork *)work) == TRUE) {
             LinkSync_StartSync(0x38);
             work->state++;
         }
         break;
     case 19:
-        if (sub_020752D8((LinkWork *)work) == TRUE) {
+        if (BattleLink_SendPalPad((BattleLinkWork *)work) == TRUE) {
             work->state++;
         }
         break;
@@ -1168,7 +1168,7 @@ BOOL Battle_LinkMain(OverlayManager *man) {
         } else if (Comm_GetLocalNetId() != 0) {
             LinkSync_StartSync(0x39);
             work->state++;
-        } else if (sub_0207531C((LinkWork *)work, 1) == TRUE) {
+        } else if (BattleLink_PreparePartnerTrainer((BattleLinkWork *)work, 1) == TRUE) {
             LinkSync_StartSync(0x39);
             work->state++;
         }
@@ -1179,7 +1179,7 @@ BOOL Battle_LinkMain(OverlayManager *man) {
             if (LinkSync_IsSynced(0x39) == TRUE) {
                 work->state++;
             }
-        } else if (sub_02075350((LinkWork *)work, 1, 0x39) == TRUE) {
+        } else if (BattleLink_SendPartnerTrainer((BattleLinkWork *)work, 1, 0x39) == TRUE) {
             work->state++;
         }
         break;
@@ -1189,7 +1189,7 @@ BOOL Battle_LinkMain(OverlayManager *man) {
         if (Comm_GetLocalNetId() != 0) {
             LinkSync_StartSync(0x3A);
             work->state++;
-        } else if (sub_0207531C((LinkWork *)work, 3) == TRUE) {
+        } else if (BattleLink_PreparePartnerTrainer((BattleLinkWork *)work, 3) == TRUE) {
             LinkSync_StartSync(0x3A);
             work->state++;
         }
@@ -1200,7 +1200,7 @@ BOOL Battle_LinkMain(OverlayManager *man) {
             if (LinkSync_IsSynced(0x3A) == TRUE) {
                 work->state++;
             }
-        } else if (sub_02075350((LinkWork *)work, 3, 0x3A) == TRUE) {
+        } else if (BattleLink_SendPartnerTrainer((BattleLinkWork *)work, 3, 0x3A) == TRUE) {
             work->state++;
         }
         break;
@@ -1210,7 +1210,7 @@ BOOL Battle_LinkMain(OverlayManager *man) {
         if (Comm_GetLocalNetId() != 0) {
             LinkSync_StartSync(0x3B);
             work->state++;
-        } else if (sub_020753A8((LinkWork *)work, 1) == TRUE) {
+        } else if (BattleLink_PreparePartnerParty((BattleLinkWork *)work, 1) == TRUE) {
             LinkSync_StartSync(0x3B);
             work->state++;
         }
@@ -1221,7 +1221,7 @@ BOOL Battle_LinkMain(OverlayManager *man) {
             if (LinkSync_IsSynced(0x3B) == TRUE) {
                 work->state++;
             }
-        } else if (sub_020753D4((LinkWork *)work, 1, 0x3B) == TRUE) {
+        } else if (BattleLink_SendPartnerParty((BattleLinkWork *)work, 1, 0x3B) == TRUE) {
             work->state++;
         }
         break;
@@ -1231,7 +1231,7 @@ BOOL Battle_LinkMain(OverlayManager *man) {
         if (Comm_GetLocalNetId() != 0) {
             LinkSync_StartSync(0x3C);
             work->state++;
-        } else if (sub_020753A8((LinkWork *)work, 3) == TRUE) {
+        } else if (BattleLink_PreparePartnerParty((BattleLinkWork *)work, 3) == TRUE) {
             LinkSync_StartSync(0x3C);
             work->state++;
         }
@@ -1242,7 +1242,7 @@ BOOL Battle_LinkMain(OverlayManager *man) {
             if (LinkSync_IsSynced(0x3C) == TRUE) {
                 work->state++;
             }
-        } else if (sub_020753D4((LinkWork *)work, 3, 0x3C) == TRUE) {
+        } else if (BattleLink_SendPartnerParty((BattleLinkWork *)work, 3, 0x3C) == TRUE) {
             work->state++;
         }
         break;
@@ -1251,7 +1251,7 @@ common:
         if (work->syncCount == Comm_CountConnected()) {
             if (work->state == 20) {
                 for (i = 0; i < 4; i++) {
-                    Heap_Free(((LinkWork *)work)->friends[i]);
+                    Heap_Free(((BattleLinkWork *)work)->friends[i]);
                 }
             }
             work->syncCount = 0;

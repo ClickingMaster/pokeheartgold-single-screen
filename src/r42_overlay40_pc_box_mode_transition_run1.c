@@ -9,9 +9,9 @@ int ov40_0223512C(void *work) {
         {
             void *resource = PTR(inner, 0x23C + S32(inner, 0x234) * 4);
             GlobalTerminalNet_UnpackDressUpPhoto((u8 *)resource + 0x80, PTR(inner, 0x238));
-            PTR(inner, 0x228) = ov41_0224B530((u8 *)inner + 0x218, PTR(inner, 0x238));
+            PTR(inner, 0x228) = AccessoryPortrait_Create((u8 *)inner + 0x218, PTR(inner, 0x238));
         }
-        ov41_0224B5D0(PTR(inner, 0x228), 0);
+        AccessoryPortrait_SetMonVisible(PTR(inner, 0x228), 0);
         ov40_02235940();
         ov40_022307DC(work, 0x23, 3);
         ov40_022307DC(work, 0x24, 7);
@@ -32,7 +32,7 @@ int ov40_0223512C(void *work) {
     case 2:
         ov40_0222DA84((u8 *)inner + 8, 0);
         if (ov40_0222DA00(inner, (u8 *)inner + 4, 0, 0)) {
-            ov41_0224B5D0(PTR(inner, 0x228), 1);
+            AccessoryPortrait_SetMonVisible(PTR(inner, 0x228), 1);
             GfGfx_EngineATogglePlanes(4, 1);
             GfGfx_EngineATogglePlanes(1, 1);
             ov40_02235C7C(work, S32(inner, 0x234));
@@ -48,7 +48,7 @@ int ov40_0223512C(void *work) {
     }
     if (PTR(inner, 0x228) != NULL) {
         Thunk_G3X_Reset();
-        ov41_0224B554(PTR(inner, 0x228));
+        AccessoryPortrait_Draw(PTR(inner, 0x228));
         RequestSwap3DBuffers(0, 0);
     }
     return 0;
@@ -84,7 +84,7 @@ int ov40_0223527C(void *work) {
     }
     if (PTR(inner, 0x228) != NULL) {
         Thunk_G3X_Reset();
-        ov41_0224B554(PTR(inner, 0x228));
+        AccessoryPortrait_Draw(PTR(inner, 0x228));
         RequestSwap3DBuffers(0, 0);
     }
     return 0;
@@ -112,7 +112,7 @@ int ov40_0223534C(void *work) {
         ov40_0222DA84((u8 *)inner + 8, 1);
         if (ov40_0222DA00(inner, (u8 *)inner + 4, 1, 0)) {
             if (PTR(inner, 0x228) != NULL) {
-                ov41_0224B57C();
+                AccessoryPortrait_Destroy();
                 ov40_0222BC54(work);
                 SetBgPriority(2, 0);
                 PTR(inner, 0x228) = NULL;

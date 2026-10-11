@@ -12,7 +12,7 @@ int ov40_02234470(void *p) {
     }
     if (PTR(w, 0x228) != NULL) {
         Thunk_G3X_Reset();
-        ov41_0224B554(PTR(w, 0x228));
+        AccessoryPortrait_Draw(PTR(w, 0x228));
         RequestSwap3DBuffers(0, 0);
     }
     return 0;
